@@ -585,9 +585,9 @@ without this stronger one-sided estimate.\footnote{The formal anchors are
     \leanid{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_anticommutator_local_term_bounds}.
     The finite-overlap reductions are
     \leanid{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_anticommutator},
-    \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator},
+    \leanid{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_finite_overlap_anticommutator},
     and
-    \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}.
+    \leanid{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator}.
     The final gap statement is
     \leanid{MPSTensor.hamiltonian_parentRingInteraction_gapped_of_anticommutator} in
     \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}.
@@ -777,7 +777,7 @@ and the transport of the $7/16$ adjacent anticommutator estimate to every
 cyclic overlap.
 
 The source-matching entry \path{thm:anticommutator_gap_bound} points to
-\leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}
+\leanid{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator}
 in \path{TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean}; its hypothesis
 is (\ref{eq:cpgsv21_martingale_overlap_cyclic_anticommutator_target}).
 The Blueprint entries that recorded the special and constant-$\eta$
@@ -2171,7 +2171,7 @@ The replacement for all of them is the source-anchored anticommutator route,
 whose public statement is
 \leanid{MPSTensor.hamiltonian_parentRingInteraction_gapped_of_anticommutator} and whose
 cyclic-window reduction is
-\leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}.
+\leanid{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator}.
 None of the removed theorems had a consumer, the all-vector estimate they
 assume has no discharger, and the operator-product form is unsatisfiable
 whenever the overlapping excitation ranges share a nonzero vector.  The nine

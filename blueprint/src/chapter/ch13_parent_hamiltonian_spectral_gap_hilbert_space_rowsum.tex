@@ -231,10 +231,10 @@
 
 \begin{lemma}[Adjacent three-site kernels and excitation projections]
     \label{thm:adjacent_two_site_local_terms_open_chain}
-    \lean{MPSTensor.ker_localTermES_two_three_zero,
-        MPSTensor.ker_localTermES_two_three_one,
-        MPSTensor.openChainLeftGroundSpaceES_orthogonal_starProjection_eq_localTermES,
-        MPSTensor.openChainTailGroundSpaceES_orthogonal_starProjection_eq_localTermES}
+    \lean{MPSTensor.ker_toEuclideanLin_parentRingInteraction_term_two_three_zero,
+        MPSTensor.ker_toEuclideanLin_parentRingInteraction_term_two_three_one,
+        MPSTensor.openChainLeftGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term,
+        MPSTensor.openChainTailGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term}
     \leanok
     \uses{def:open_chain_ground_subspaces_es, rem:euclidean_local_projector_ingredients}
     For a tensor $B$, let $h_0$ and $h_1$ be the two translated length-two parent
@@ -449,8 +449,8 @@
 
 \begin{lemma}[Parent-Hamiltonian quadratic-form reduction]
     \label{lem:parent_hamiltonian_es_quadratic_reduction}
-    \lean{MPSTensor.parentHamiltonianES_norm_bound_of_quadratic_form}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_quadratic_form}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_norm_bound_of_quadratic_form}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_quadratic_form}
     \leanok
     \uses{lem:transported_es_positive, thm:parent_ground_space_es_kernel, lem:quadratic_form_to_norm_bound}
     Let $H_{N,L}^{\mathrm{ES}}(A)$ be the Hilbert-space representative of the

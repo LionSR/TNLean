@@ -213,7 +213,7 @@
 \begin{lemma}[Parent-Hamiltonian finite-overlap anticommutator reduction]
     \label{lem:parent_hamiltonian_finite_overlap_anticommutator_gap}
     \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_anticommutator}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_finite_overlap_anticommutator}
     \leanok
     \uses{lem:finite_overlap_projection_anticommutator_reduction, lem:parent_hamiltonian_es_quadratic_reduction, lem:transported_es_local_projections}
     Fix $L>1$ and set $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ that
@@ -416,7 +416,7 @@
 
 \begin{lemma}[Parent-Hamiltonian gap from a cyclic anticommutator estimate]
     \label{lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator}
     \leanok
     \uses{lem:parent_hamiltonian_finite_overlap_anticommutator_gap, lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive, lem:cyclic_windows_overlap_symmetry}
     Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
