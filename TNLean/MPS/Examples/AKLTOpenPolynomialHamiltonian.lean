@@ -43,29 +43,54 @@ def akltOpenHamiltonianES (N : ℕ) :
   (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).symm.toLinearMap ∘ₗ
     akltOpenHamiltonian N ∘ₗ (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap
 
+/-- The starts of the two-site windows of the open chain, as the indices of the terms of the
+parent interaction on the open chain. -/
+private def twoSiteStartEquiv (N : ℕ) : Fin (N + 1 - 2) ≃ NonwrappingStart 2 N where
+  toFun i := ⟨⟨i.val, by have := i.isLt; omega⟩, by
+    change i.val + 2 ≤ N
+    have := i.isLt
+    omega⟩
+  invFun i := ⟨i.1.val, by have := i.2; omega⟩
+  left_inv _ := rfl
+  right_inv _ := rfl
+
 private theorem card_twoSite_nonwrappingStart (N : ℕ) :
-    Fintype.card (NonwrappingStart 2 N) = N - 1 := by
-  let e : NonwrappingStart 2 N ≃ Fin (N - 1) :=
-    { toFun := fun i => ⟨i.1.val, by have := i.2; omega⟩
-      invFun := fun i => ⟨⟨i.val, by have := i.isLt; omega⟩, by
-        change i.val + 2 ≤ N
-        have := i.isLt
-        omega⟩
-      left_inv := by intro i; rfl
-      right_inv := by intro i; rfl }
-  exact (Fintype.card_congr e).trans (Fintype.card_fin _)
+    Fintype.card (NonwrappingStart 2 N) = N - 1 :=
+  (Fintype.card_congr (twoSiteStartEquiv N).symm).trans
+    ((Fintype.card_fin _).trans (by omega))
+
+/-- The operator of the two-site parent Hamiltonian of the open AKLT chain is the sum of the
+translated local terms over the nonwrapping starts. -/
+private theorem toLin'_hamiltonian_parentChainInteraction_aklt {N : ℕ} (hN : 2 ≤ N) :
+    Matrix.toLin' (parentChainInteraction akltTensor 2 N).hamiltonian =
+      ∑ i : NonwrappingStart 2 N, localTerm akltTensor 2 N i.1 := by
+  rw [ManyBody.Interaction.hamiltonian, map_sum]
+  refine Fintype.sum_equiv (twoSiteStartEquiv N) _ _ fun i ↦ ?_
+  have hi : i.val + 2 ≤ N := by have := i.isLt; omega
+  have hw : ManyBody.chainWindow i.val hi =
+      ManyBody.ringWindow hN ((twoSiteStartEquiv N i).1) := by
+    ext j
+    have hj : i.val + j.val < N := by have := j.isLt; omega
+    rw [ManyBody.val_chainWindow, ManyBody.ringWindow_apply, Fin.val_add, Fin.val_castLE]
+    exact (Nat.mod_eq_of_lt hj).symm
+  rw [localTerm_of_le akltTensor hN, ManyBody.Interaction.translates_term,
+    ManyBody.Interaction.translates_term, hw]
 
 /-- The exact open-chain shift is \(2(N-1)/3\), one contribution per
 nonwrapping bond. This follows from the local spin-two projector identity
 of arXiv:quant-ph/0608197, equation `HAKLT`. -/
 theorem akltOpenHamiltonianES_add_eq_parent {N : ℕ} (hN : 2 ≤ N) :
     akltOpenHamiltonianES N + (2 * (N - 1) / 3 : ℂ) • LinearMap.id =
-      (2 : ℂ) • openParentHamiltonianES akltTensor 2 N := by
+      (2 : ℂ) • Matrix.toEuclideanLin (parentChainInteraction akltTensor 2 N).hamiltonian := by
+  change _ = (2 : ℂ) • ((WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).symm.toLinearMap ∘ₗ
+    Matrix.toLin' (parentChainInteraction akltTensor 2 N).hamiltonian ∘ₗ
+      (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap)
+  rw [toLin'_hamiltonian_parentChainInteraction_aklt hN]
   refine LinearMap.ext fun ψ => ?_
   apply (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).injective
   ext σ
-  simp only [akltOpenHamiltonianES, akltOpenHamiltonian, openParentHamiltonianES,
-    localTermES, LinearMap.add_apply, LinearMap.smul_apply, LinearMap.id_apply,
+  simp only [akltOpenHamiltonianES, akltOpenHamiltonian,
+    LinearMap.add_apply, LinearMap.smul_apply, LinearMap.id_apply,
     LinearMap.sum_apply, LinearMap.comp_apply, map_add, map_smul, map_sum,
     LinearEquiv.coe_toLinearMap, LinearEquiv.apply_symm_apply,
     Finset.sum_apply, Pi.add_apply, Pi.smul_apply, smul_eq_mul,
@@ -81,7 +106,8 @@ Source: arXiv:2011.12127, lines 1171--1174; the energy shift is derived here. -/
 theorem akltOpenHamiltonianES_add_isPositive {N : ℕ} (hN : 2 ≤ N) :
     (akltOpenHamiltonianES N + (2 * (N - 1) / 3 : ℂ) • LinearMap.id).IsPositive := by
   rw [akltOpenHamiltonianES_add_eq_parent hN]
-  exact (openParentHamiltonianES_isPositive akltTensor 2 N).smul_of_nonneg
+  exact (Matrix.isPositive_toEuclideanLin_iff.mpr
+    (posSemidef_hamiltonian_parentChainInteraction akltTensor 2 N)).smul_of_nonneg
     (by norm_num [Complex.le_def])
 
 /-- Every eigenvalue is bounded below by the open-chain ground energy.
@@ -102,7 +128,7 @@ the open AKLT matrix-product space. Source: arXiv:2011.12127, lines 1171--1174. 
 theorem akltOpenHamiltonianES_eigenspace_eq_groundSpaceES {N : ℕ} (hN : 2 ≤ N) :
     Module.End.eigenspace (akltOpenHamiltonianES N) (-(2 * (N - 1) / 3) : ℂ) =
       groundSpaceES akltTensor N := by
-  rw [← aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES hN]
+  rw [← aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN]
   ext v
   have hv := LinearMap.congr_fun (akltOpenHamiltonianES_add_eq_parent hN) v
   simp only [LinearMap.add_apply, LinearMap.smul_apply, LinearMap.id_apply] at hv
@@ -116,8 +142,8 @@ theorem akltOpenHamiltonianES_groundSpace_finrank {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ
       (Module.End.eigenspace (akltOpenHamiltonianES N) (-(2 * (N - 1) / 3) : ℂ)) = 4 := by
   rw [akltOpenHamiltonianES_eigenspace_eq_groundSpaceES hN,
-    ← aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES hN]
-  exact aklt_finrank_ker_openParentHamiltonianES_two hN
+    ← aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN]
+  exact aklt_finrank_ker_hamiltonian_parentChainInteraction_two hN
 
 /-- The lower energy bound is attained on the open AKLT chain.
 Source: arXiv:2011.12127, lines 1171--1174; the value is derived here. -/
