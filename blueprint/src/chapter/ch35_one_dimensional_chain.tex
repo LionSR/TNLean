@@ -1617,8 +1617,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{definition}[Finite domains, supports and admissible Hamiltonians]
     \label{def:domain_model}
-    \lean{
-        ManyBody.sitePos,
+    \lean{ManyBody.sitePos,
         ManyBody.sitePos_mem,
         ManyBody.exists_sitePos_eq,
         ManyBody.sub_le_sitePos_sub,
@@ -1634,12 +1633,10 @@ Theorem~B a second way, by a sequential preparation protocol.
         ManyBody.Interaction.extend,
         ManyBody.Interaction.isHermitian_extend_term,
         ManyBody.Interaction.norm_extend_term_le,
-        ManyBody.Interaction.hamiltonian_extend,
         TNLean.MPS.AreaLaw.domainBoundaryEdges,
         TNLean.MPS.AreaLaw.domainRegion,
         TNLean.MPS.AreaLaw.IsDomainEdge,
-        TNLean.MPS.AreaLaw.card_domainBoundaryEdges
-    }
+        TNLean.MPS.AreaLaw.card_domainBoundaryEdges}
     \leanok
     \uses{def:chain_model,def:area_law_hamiltonian}
     A finite set $\Lambda\subset\mathbb Z$ carries the induced path graph, whose
@@ -1666,7 +1663,6 @@ Theorem~B a second way, by a sequential preparation protocol.
     \lean{TNLean.MPS.AreaLaw.IsDomainSupport.singleton,
         ManyBody.DomainSupport.toChainSupport,
         ManyBody.DomainSupport.toChainSupport_injective,
-        ManyBody.Interaction.extend_term_apply,
         ManyBody.DomainInteraction.norm_bound_nonneg,
         ManyBody.DomainInteraction.sum_norm_terms_containing_le}\leanok
     \uses{def:domain_model}
