@@ -333,3 +333,64 @@ torus.
     the positive normalization, and the same region map and constant apply
     to every choice of coefficients.
 \end{proof}
+
+\begin{lemma}[Open-region Gram equality for central insertions]
+    \label{lem:peps_central_twist_open_gram}
+    \lean{TNLean.PEPS.regularTwistedOpenRegionMatrix_gram_eq_of_central}\leanok
+    Let every original site be regular $G$-isometric and every inserted
+    edge label $u_e$ be central in $G$. For every finite region $R$ and
+    every numbering of its crossing bonds,
+    \begin{align}
+        (T_R^u)^\dagger T_R^u=T_R^\dagger T_R.
+    \end{align}
+    No connectivity or spanning-tree hypothesis is required.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_regular_twisted_gram_expansion}
+    Write $\theta_v^u,\eta_v^u$ for the configurations after the local edge twists.
+    Centrality gives
+    \begin{align}
+        \eta_v^u=g\cdot\theta_v^u\quad\Longleftrightarrow\quad
+        \eta_v=g\cdot\theta_v.
+        \label{eq:peps_central_twist_translation}
+    \end{align}
+    The regular-isometric site kernel therefore satisfies
+    \begin{align}
+        \sum_s\overline{a_v(\eta_v^u)_s}a_v(\theta_v^u)_s
+        =\sum_s\overline{a_v(\eta_v)_s}a_v(\theta_v)_s.
+        \label{eq:peps_central_twist_site_gram}
+    \end{align}
+    Substitute these identities into the open-region cross Gram expansion.
+\end{proof}
+
+\begin{lemma}[Vacuum reduced matrix for central complementary insertions]
+    \label{lem:peps_central_twist_reduced_matrix}
+    \lean{TNLean.PEPS.regularPhysicalCutMatrix_reduced_eq_of_central,
+        TNLean.PEPS.regularPhysicalCutMatrix_normalized_reduced_eq_of_central}\leanok
+    Under the regular-isometry and centrality assumptions of
+    Lemma~\ref{lem:peps_central_twist_open_gram},
+    suppose $u_e=1$ on every bond incident to an observation region $R$.
+    Let $K_u$ and $K_0$ be the actual physical cuts with those insertions
+    and with identity insertions. Then
+    \begin{align}
+        K_uK_u^\dagger & =K_0K_0^\dagger,                                           \\
+        \frac{K_uK_u^\dagger}{\operatorname{tr}(K_uK_u^\dagger)}
+                       & =\frac{K_0K_0^\dagger}{\operatorname{tr}(K_0K_0^\dagger)}.
+    \end{align}
+    The unnormalized identity holds without a nonzero-cut assumption;
+    inverse normalization is interpreted as inverse scalar multiplication.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_central_twist_open_gram,
+        thm:peps_regular_twisted_cut_entropy,thm:peps_regular_open_region_projector}
+    The observed open-region matrix is unchanged because every incident
+    insertion is identity. The complementary open-region Gram matrix is
+    unchanged by Lemma~\ref{lem:peps_central_twist_open_gram}. The two physical cuts factor as
+    \[
+        K_u=T_R^u(T_{R^c}^u)^{\mathsf T},\qquad
+        K_0=T_R T_{R^c}^{\mathsf T}.
+    \]
+    Substituting the observed-region equality and complementary Gram equality
+    gives $K_uK_u^\dagger=K_0K_0^\dagger$.
+    Equality of traces then gives the normalized formula.
+\end{proof}
