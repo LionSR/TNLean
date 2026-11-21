@@ -12605,3 +12605,27 @@ length-one word indices is needed.
   and the stationary equation.
 - **Candidate status:** Below the three-occurrence promotion threshold. Record
   a possible shared mathematical lemma; no abstraction or new tactic yet.
+
+### Eigenvalue-form gaps read from norm bounds on the kernel complement — candidate (2026-11-21)
+
+- **Seen:** `PeriodicShortGapContinuity.lean`, `CompactNormalParentGap.lean`,
+  `BlockPeriodicGroundSpaceContinuity.lean` and
+  `Martingale/CompactOpenIntervalGap.lean` (compact families);
+  `Martingale/CanonicalGapToInteractionGap.lean` and
+  `Martingale/ResidueCoverGapCriterion.lean` (some positive gap of one
+  positive semidefinite matrix); `Martingale/OpenHamiltonian.lean` and
+  `PEPS/ParentHamiltonian/RegionFullGroundSpace.lean` (unit gap of an
+  orthogonal projection).
+- **Pattern:** Prove a bound `δ ‖v‖ ≤ ‖H v‖` on the orthogonal complement of
+  the kernel by the abstract operator lemma, then pass to the statement that
+  every eigenvalue is `0` or at least `δ` through
+  `ManyBody.forall_hasEigenvalue_iff_norm` (or to `ManyBody.IsGapped` through
+  `ManyBody.isGapped_zero_iff_norm`), and compare two constants by
+  `Or.imp_right` with `Complex.real_le_real`.
+- **Candidate status:** The repeated steps are statements about one matrix and
+  belong with `ManyBody.forall_hasEigenvalue_iff_norm` in QICLean: existence
+  of a positive gap of a positive semidefinite matrix, antitonicity of the
+  eigenvalue form in the gap, the compact-family gap in the eigenvalue form,
+  the unit gap of an orthogonal projection, and the characterization of
+  `IsGapped H 0 Δ` by a nonzero kernel and the eigenvalue form. No TNLean
+  lemma is added; the call sites are replaced when those lemmas exist.
