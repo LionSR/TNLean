@@ -19,6 +19,11 @@ The argument is the open-segment part of PGVWC07, arXiv:quant-ph/0608197,
 Theorem 12, proof lines 1442--1452. For the trace-preserving normalization,
 the boundary matrix is obtained by multiplying the compatibility relation on
 the left by the adjoint and summing over the physical letter.
+
+**Transitional (#10948).** `ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES`, the
+kernel identification for the Euclidean-space operator, is kept until its users are converted;
+the statement for the Hamiltonian of the parent interaction on the open chain is
+`ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES`.
 -/
 
 open scoped Matrix BigOperators
@@ -137,5 +142,24 @@ theorem ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
   simpa [cyclicRestrictES,
     cyclicRestrictₗ_eq_contiguousRestrictₗ (Fin.pos i.1) hLN i.2] using
     (mem_groundSpaceES_iff _ L _).mp hrestrictES
+
+/-- The kernel of the Hamiltonian of the parent interaction on the open chain of a weighted
+direct sum is its full boundary-condition space once the interaction range exceeds the
+simultaneous word-span threshold. This is the open-chain conclusion of PGVWC07, Theorem 12,
+proof lines 1430--1454, used in Nachtergaele, arXiv:cond-mat/9410110,
+equations (3.12)--(3.16). -/
+theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
+    [NeZero d] (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
+    (hμ : ∀ j, μ j ≠ 0) (hTP : ∀ j, ∑ a, (A j a)ᴴ * A j a = 1)
+    {L₀ L N : ℕ} (hSpan : ∀ n ≥ L₀, WordTupleSpanTop A n)
+    (hL : L₀ + 1 ≤ L) (hLN : L ≤ N) :
+    LinearMap.ker (Matrix.toEuclideanLin
+        (parentChainInteraction (toTensorFromBlocks μ A) L N).hamiltonian) =
+      groundSpaceES (toTensorFromBlocks μ A) N := by
+  apply le_antisymm ?_ (groundSpaceES_le_ker_hamiltonian_parentChainInteraction _ L N)
+  exact fun v hv ↦ (mem_groundSpaceES_iff _ N v).mpr
+    (contiguous_mem_groundSpace_toTensorFromBlocks μ A hμ hTP hSpan hL hLN fun s hs τ ↦
+      contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction _ hv
+        s hs τ)
 
 end MPSTensor
