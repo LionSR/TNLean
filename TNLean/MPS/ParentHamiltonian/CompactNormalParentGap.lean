@@ -424,15 +424,28 @@ theorem continuous_hamiltonian_parentRingInteraction_kernelProjection_family_of_
 
 /-- A compact continuous family injective at length \(p\) has a uniform positive gap of the
 Hamiltonian of the parent interaction on the ring at each fixed periodic volume and interaction
-range \(p<R\le N\). Source: arXiv:1010.3732, Appendix A, lines 2575--2578. -/
+range \(p<R\le N\): every member is gapped above its zero ground energy. Source:
+arXiv:1010.3732, Appendix A, lines 2575--2578. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_gap_fixed_volume_of_isNBlkInjective
     {X : Type*} [TopologicalSpace X] [NeZero D] {p R N : ℕ}
     (A : X → MPSTensor d D) (hA : Continuous A) (hp : 0 < p)
     (hInj : ∀ x, Kraus.IsNBlkInjective (A x) p) {S : Set X} (hS : IsCompact S)
     (hR : p < R) (hRN : R ≤ N) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S,
-      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction (A x) hRN).hamiltonian))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction (A x) hRN).hamiltonian v‖ := by
+      ManyBody.IsGapped (parentRingInteraction (A x) hRN).hamiltonian 0 δ := by
+  have hne (x : X) :
+      ManyBody.groundSpace (parentRingInteraction (A x) hRN).hamiltonian 0 ≠ ⊥ := by
+    rw [ManyBody.groundSpace_zero,
+      ker_hamiltonian_parentRingInteraction_eq_range_periodicMpvLineMap_of_isNBlkInjective
+        (A x) hp (hInj x) hR hRN]
+    exact range_periodicMpvLineMap_ne_bot
+      (periodicMpvLineMap_injective_of_isNBlkInjective (A x) hp (hInj x) (by omega))
+  suffices hnorm : ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S, ∀ v ∈ (LinearMap.ker
+      (Matrix.toEuclideanLin (parentRingInteraction (A x) hRN).hamiltonian))ᗮ,
+      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction (A x) hRN).hamiltonian v‖ by
+    obtain ⟨δ, hδ, hgap⟩ := hnorm
+    exact ⟨δ, hδ, fun x hx ↦ (ManyBody.isGapped_zero_iff_norm
+      (posSemidef_hamiltonian_parentRingInteraction (A x) hRN)).mpr ⟨hne x, hgap x hx⟩⟩
   have hBlock (x : X) : Kraus.IsNBlkInjective (A x) R :=
     isNBlkInjective_of_le hp (hInj x) hR.le
   let e := (Matrix.toEuclideanCLM : Matrix (Cfg d N) (Cfg d N) ℂ ≃⋆ₐ[ℂ] _)

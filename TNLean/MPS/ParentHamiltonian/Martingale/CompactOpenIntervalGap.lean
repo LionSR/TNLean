@@ -28,9 +28,10 @@ namespace MPSTensor
 
 variable {d : ℕ}
 
-/-- A compact continuous family of simultaneously injective blocks has one positive gap of the
-Hamiltonian of the parent interaction on the open chain on each fixed admissible interval.
-Nonzero block weights need no continuity assumption. Source: arXiv:1010.3732, Appendix A,
+/-- A compact continuous family of simultaneously injective blocks has one positive gap above the
+kernel of the Hamiltonian of the parent interaction on the open chain on each fixed admissible
+interval: every eigenvalue is `0` or at least the gap. Nonzero block weights need no continuity
+assumption. Source: arXiv:1010.3732, Appendix A,
 lines 2575--2578, for the finite-window continuity argument. -/
 theorem exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_fixed_volume
     {X : Type*} [TopologicalSpace X] {r : ℕ} {dim : Fin r → ℕ}
@@ -39,10 +40,16 @@ theorem exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x ↦ A x j)
     {S R N : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     {K : Set X} (hK : IsCompact K) (hR : S + 1 ≤ R) (hRN : R ≤ N) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
+    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ ν : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian) ν →
+      ν = 0 ∨ (δ : ℂ) ≤ ν := by
+  suffices hnorm : ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
         (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian))ᗮ,
       δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian v‖ := by
+        (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian v‖ by
+    obtain ⟨δ, hδ, hgap⟩ := hnorm
+    exact ⟨δ, hδ, fun x hx ↦ (ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentChainInteraction _ R N)).mpr (hgap x hx)⟩
   have hProjR := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
     μ A hμ hA R (fun x ↦ wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega))
   have hProjN := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
@@ -64,9 +71,9 @@ theorem exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap
       (fun x ↦ toTensorFromBlocks (μ x) (A x)) hProjR))
     hKernel hK
 
-/-- A finite upper bound on the interval length gives one positive gap of the Hamiltonian of the
-parent interaction on the open chain, uniform over the compact tensor family and every
-admissible interval below that bound. The constant may depend on the upper bound. Source:
+/-- A finite upper bound on the interval length gives one positive gap above the kernel of the
+Hamiltonian of the parent interaction on the open chain, uniform over the compact tensor family
+and every admissible interval below that bound. The constant may depend on the upper bound. Source:
 arXiv:1010.3732, Appendix A, lines 2575--2578, by finite minima. -/
 theorem exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_bounded_volumes
     {X : Type*} [TopologicalSpace X] {r : ℕ} {dim : Fin r → ℕ}
@@ -75,20 +82,16 @@ theorem exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x ↦ A x j)
     {S R : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     {K : Set X} (hK : IsCompact K) (hR : S + 1 ≤ R) (M : ℕ) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, N ≤ M → R ≤ N → ∀ x ∈ K, ∀ v ∈ (LinearMap.ker
+    ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, N ≤ M → R ≤ N → ∀ x ∈ K, ∀ ν : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (parentChainInteraction
-          (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian))ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian v‖ := by
+          (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian) ν → ν = 0 ∨ (δ : ℂ) ≤ ν := by
   refine Nat.exists_pos_forall_of_eventually
-    (P := fun N δ ↦ N ≤ M → R ≤ N → ∀ x ∈ K, ∀ v ∈ (LinearMap.ker
-        (Matrix.toEuclideanLin
-          (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian))ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian v‖)
+    (P := fun N δ ↦ N ≤ M → R ≤ N → ∀ x ∈ K, ∀ ν : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentChainInteraction
+          (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian) ν → ν = 0 ∨ (δ : ℂ) ≤ ν)
     ?_ ?_ (M := M + 1) zero_lt_one ?_
-  · exact fun N γ δ hle hgap hNM hRN x hx v hv ↦
-      (mul_le_mul_of_nonneg_right hle (norm_nonneg v)).trans (hgap hNM hRN x hx v hv)
+  · exact fun N γ δ hle hgap hNM hRN x hx ν hν ↦
+      (hgap hNM hRN x hx ν hν).imp_right (Complex.real_le_real.mpr hle).trans
   · intro N
     by_cases hN : R ≤ N
     · exact (exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_fixed_volume

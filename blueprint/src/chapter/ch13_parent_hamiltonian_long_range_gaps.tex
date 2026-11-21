@@ -2025,13 +2025,9 @@ tensors.
     parameter, where $S>0$. Set $B_x=\bigoplus_j\mu_j(x)A_x^j$, with
     all weights nonzero; the weights need not be continuous.
     Fix $R\geq S+1$ and a finite upper length $M$.
-    There is $\delta>0$ such that
-    \begin{align}
-        \delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(B_x)v\|
-        \notag
-    \end{align}
-    for every $x\in K$, every $R\leq N\leq M$, and every
-    $v\perp\ker H^{\mathrm{open}}_{N,R}(B_x)$.
+    There is $\delta>0$ such that, for every $x\in K$ and every
+    $R\leq N\leq M$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,R}(B_x)$ is at least $\delta$.
     The constant may depend on $M$.
 \end{lemma}
 \begin{proof}\leanok
@@ -2041,7 +2037,9 @@ tensors.
     local ground projections at lengths $R$ and $N$. The open Hamiltonian
     depends continuously on the first projection, and its kernel is $G_N$.
     The compact finite-dimensional norm-gap theorem gives one positive
-    bound at this $N$. Taking the minimum over $R\leq N\leq M$ gives the
+    bound at this $N$; for the positive operator
+    $H^{\mathrm{open}}_{N,R}(B_x)$ a norm bound on the complement of the
+    kernel is a lower bound on the nonzero eigenvalues. Taking the minimum over $R\leq N\leq M$ gives the
     claim. Nonzero weights preserve every local ground space.
 \end{proof}
 

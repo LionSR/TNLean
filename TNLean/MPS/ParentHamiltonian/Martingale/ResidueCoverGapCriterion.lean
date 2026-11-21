@@ -254,14 +254,14 @@ theorem IsPeriodic.exists_pos_openParentHamiltonianES_gap_all_of_residue_cover_d
 /-! ### The Hamiltonian of the parent interaction on the open chain -/
 
 /-- The finitely many terminal volumes W+r, with r<m, of the Hamiltonian of the parent
-interaction on the open chain have a common positive norm gap on their actual kernel
-complements. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, Lemma commutation (ii),
-and equations (3.12)--(3.16). -/
+interaction on the open chain have a common positive gap above their actual kernels: every
+eigenvalue is `0` or at least the gap. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6,
+Lemma commutation (ii), and equations (3.12)--(3.16). -/
 theorem exists_pos_hamiltonian_parentChainInteraction_gap_over_residues
     (A : MPSTensor d D) (R W m : ℕ) (hm : 0 < m) :
-    ∃ η : ℝ, 0 < η ∧ ∀ r < m, ∀ v ∈
-      (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R (W + r)).hamiltonian))ᗮ,
-      η * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A R (W + r)).hamiltonian v‖ := by
+    ∃ η : ℝ, 0 < η ∧ ∀ r < m, ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A R (W + r)).hamiltonian) μ →
+        μ = 0 ∨ (η : ℂ) ≤ μ := by
   classical
   let : NeZero m := ⟨Nat.ne_of_gt hm⟩
   choose δ hδ hGap using fun r : Fin m =>
@@ -271,7 +271,8 @@ theorem exists_pos_hamiltonian_parentChainInteraction_gap_over_residues
   have hη : 0 < η := by
     simp only [η, Finset.lt_inf'_iff, Finset.mem_univ, forall_const]
     exact hδ
-  refine ⟨η, hη, fun r hr v hv => ?_⟩
+  refine ⟨η, hη, fun r hr => (ManyBody.forall_hasEigenvalue_iff_norm
+    (posSemidef_hamiltonian_parentChainInteraction A R (W + r))).mpr fun v hv => ?_⟩
   exact (mul_le_mul_of_nonneg_right
     (Finset.inf'_le δ (Finset.mem_univ (⟨r, hr⟩ : Fin m))) (norm_nonneg v)).trans
     (hGap ⟨r, hr⟩ v hv)
@@ -282,13 +283,11 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, Lemma commutation (ii),
 (3.12)--(3.16). -/
 theorem hamiltonian_parentChainInteraction_gap_all_large_of_residue_gaps
     (A : MPSTensor d D) {R m M K₀ : ℕ} (hm : 0 < m) {δ : ℝ}
-    (hGap : ∀ K ≥ K₀, ∀ r < m, ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-        (parentChainInteraction A R (K * m + M * m + r)).hamiltonian))ᗮ,
-      δ * ‖v‖ ≤
-        ‖Matrix.toEuclideanLin (parentChainInteraction A R (K * m + M * m + r)).hamiltonian v‖) :
-    ∀ N, (K₀ + M) * m ≤ N → ∀ v ∈
-      (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian))ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian v‖ := by
+    (hGap : ∀ K ≥ K₀, ∀ r < m, ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (parentChainInteraction A R (K * m + M * m + r)).hamiltonian) μ → μ = 0 ∨ (δ : ℂ) ≤ μ) :
+    ∀ N, (K₀ + M) * m ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ := by
   intro N hN
   have hquot : K₀ + M ≤ N / m := (Nat.le_div_iff_mul_le hm).mpr hN
   have hEq : (N / m - M) * m + M * m + N % m = N := by

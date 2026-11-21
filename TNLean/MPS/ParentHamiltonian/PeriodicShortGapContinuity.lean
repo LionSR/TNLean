@@ -59,6 +59,16 @@ theorem continuous_periodicMpvLineMap_family
   exact (ContinuousLinearMap.smulRightL ℂ ℂ (EuclideanSpace ℂ (Cfg d N))
     (1 : ℂ →L[ℂ] ℂ)).continuous.comp (continuous_mpvES_family A hA N)
 
+/-- The line spanned by the periodic vector is nonzero when the scalar-to-state map is
+injective. -/
+theorem range_periodicMpvLineMap_ne_bot {d D N : ℕ} {A : MPSTensor d D}
+    (h : Function.Injective (periodicMpvLineMap A N)) :
+    (periodicMpvLineMap A N).range ≠ ⊥ := by
+  intro hbot
+  have hv : periodicMpvLineMap A N 1 ∈ (periodicMpvLineMap A N).range := ⟨1, rfl⟩
+  rw [hbot] at hv
+  exact one_ne_zero (h (by simpa using hv))
+
 /-- One-site injectivity makes the scalar-to-state map injective at every
 periodic length at least two. -/
 theorem periodicMpvLineMap_injective_of_isInjective
@@ -203,17 +213,28 @@ theorem continuous_hamiltonian_parentRingInteraction_two_kernelProjection_family
   exact hProj
 
 /-- For each fixed periodic length at least two, a continuous compact family of one-site
-injective tensors has one positive gap bound for the Hamiltonian of the two-site parent
-interaction on the ring. The bound may depend on the length. Source: arXiv:1010.3732,
-Appendix A. -/
+injective tensors has one positive gap for the Hamiltonian of the two-site parent interaction on
+the ring: every member is gapped above its zero ground energy. The bound may depend on the
+length. Source: arXiv:1010.3732, Appendix A. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_two_gap_fixed_volume
     {X : Type*} [TopologicalSpace X] {d D : ℕ} [NeZero D]
     (A : X → MPSTensor d D) (hA : Continuous A)
     (hInj : ∀ x, Kraus.IsInjective (A x)) {S : Set X} (hS : IsCompact S)
     {N : ℕ} (hN : 2 ≤ N) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S,
-      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction (A x) hN).hamiltonian))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction (A x) hN).hamiltonian v‖ := by
+      ManyBody.IsGapped (parentRingInteraction (A x) hN).hamiltonian 0 δ := by
+  have hne (x : X) :
+      ManyBody.groundSpace (parentRingInteraction (A x) hN).hamiltonian 0 ≠ ⊥ := by
+    rw [ManyBody.groundSpace_zero,
+      ker_hamiltonian_parentRingInteraction_two_eq_range_periodicMpvLineMap (A x) (hInj x) hN]
+    exact range_periodicMpvLineMap_ne_bot
+      (periodicMpvLineMap_injective_of_isInjective (A x) (hInj x) hN)
+  suffices hnorm : ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S, ∀ v ∈ (LinearMap.ker
+      (Matrix.toEuclideanLin (parentRingInteraction (A x) hN).hamiltonian))ᗮ,
+      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction (A x) hN).hamiltonian v‖ by
+    obtain ⟨δ, hδ, hgap⟩ := hnorm
+    exact ⟨δ, hδ, fun x hx ↦ (ManyBody.isGapped_zero_iff_norm
+      (posSemidef_hamiltonian_parentRingInteraction (A x) hN)).mpr ⟨hne x, hgap x hx⟩⟩
   have hBlock (x : X) : Kraus.IsNBlkInjective (A x) 2 :=
     isNBlkInjective_of_le (by omega : 0 < 1)
       (Kraus.isNBlkInjective_one_of_isInjective (hInj x))

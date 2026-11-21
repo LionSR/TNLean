@@ -29,7 +29,7 @@ stated for the Euclidean-space operator, are kept until their users are converte
 section states them for the Hamiltonian of the parent interaction on the ring.
 -/
 
-open scoped BigOperators Matrix Topology
+open scoped BigOperators Matrix Topology ComplexOrder
 
 namespace MPSTensor
 
@@ -246,20 +246,27 @@ theorem continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_kernelPr
     ← hKernel] using hProj
 
 /-- At every fixed periodic volume containing an interaction longer than a common simultaneous
-injectivity length, a continuous compact family of block tensors has one positive gap bound for
-the Hamiltonian of the parent interaction on the ring. Nonzero weights need no continuity
-assumption. Source: arXiv:1010.3732, Appendix A, lines 2575--2578. -/
+injectivity length, a continuous compact family of block tensors has one positive gap above the
+kernel of the Hamiltonian of the parent interaction on the ring: every eigenvalue is `0` or at
+least the gap. Nonzero weights need no continuity assumption. Source: arXiv:1010.3732,
+Appendix A, lines 2575--2578. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_wordTupleSpanTop
     {X : Type*} [TopologicalSpace X] [NeZero d] [∀ j, NeZero (dim j)]
     (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     {S R N : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     {K : Set X} (hK : IsCompact K) (hR : S + 1 ≤ R) (hRN : R ≤ N) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K,
+    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ ν : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+      (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) hRN).hamiltonian) ν →
+        ν = 0 ∨ (δ : ℂ) ≤ ν := by
+  suffices hnorm : ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K,
       ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
         (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) hRN).hamiltonian))ᗮ,
         δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-          (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) hRN).hamiltonian v‖ := by
+          (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) hRN).hamiltonian v‖ by
+    obtain ⟨δ, hδ, hgap⟩ := hnorm
+    exact ⟨δ, hδ, fun x hx ↦ (ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentRingInteraction _ hRN)).mpr (hgap x hx)⟩
   have hSpanR (x : X) : WordTupleSpanTop (A x) R :=
     wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega : S ≤ R)
   have hGround := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
