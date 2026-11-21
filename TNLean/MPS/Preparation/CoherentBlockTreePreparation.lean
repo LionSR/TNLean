@@ -55,7 +55,8 @@ private theorem isZeroOn_pairLayerOp_windowGHZState {d D b M N s : ℕ}
   rw [Matrix.mulVec_smul]
   apply Submodule.smul_mem
   obtain ⟨W₀, -, hW₀⟩ := exists_pairUnitary (NeZero.pos d) hdig (ω j) (hω j)
-  rw [pairLayerOp_mulVec_registerCfg_eq hN hr dig (dig₀ j) (ω j) (fun u => hW u j) hW₀]
+  rw [pairLayerOp_mulVec_registerCfg_eq hN hr dig (dig₀ j) (fun _ => ω j)
+    (fun _ u => hW u j) (fun _ => hW₀)]
   exact isZeroOn_pairLayerOp_mulVec_productVector hN hr (fun _ => W₀)
 
 /-- A coherent family of supported block states is prepared in depth `C(h+1)`.

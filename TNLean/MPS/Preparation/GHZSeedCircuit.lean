@@ -60,23 +60,24 @@ theorem exists_pairFamilyUnitary {D b r₁ : ℕ}
   obtain ⟨W, hW, hWV⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq hV emb
   exact ⟨W, hW, fun u j => hWV u j⟩
 
-/-- A pair-window map on an encoded GHZ label produces the same pair state as preparing
-that pair from zero in each window. The equality specifies all physical sites. -/
-theorem pairLayerOp_mulVec_registerCfg_eq {D r₁ M N : ℕ} [NeZero M] [NeZero N]
+/-- The pair-window maps on an encoded GHZ label produce the same state as preparing
+the corresponding pair from zero in each window. The pairs may depend on the window.
+The equality specifies all physical sites. -/
+theorem pairLayerOp_mulVec_registerCfg_eq {D r₁ M N : ℕ}
     {ℓ : Fin M → ℕ} (hN : ∑ k, ℓ k = N) (hr : ∀ k, r₁ + r₁ ≤ ℓ k)
-    (dig : Fin D → Cfg d r₁) (u₀ : Cfg d r₁) (ω : Fin D × Fin D → ℂ)
-    {W W₀ : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ}
-    (hW : ∀ u, W u (windowInput u₀) =
-      Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) ω 0 u)
-    (hW₀ : ∀ u, W₀ u (fun _ => ⟨0, NeZero.pos d⟩) =
-      Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) ω 0 u) :
-    pairLayerOp hN hr (fun _ => W) *ᵥ Pi.single (registerCfg hN hr u₀) 1 =
-      pairLayerOp hN hr (fun _ => W₀) *ᵥ
+    (dig : Fin D → Cfg d r₁) (u₀ : Cfg d r₁) (ω : Fin M → Fin D × Fin D → ℂ)
+    {W W₀ : Fin M → Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ}
+    (hW : ∀ k u, W k u (windowInput u₀) =
+      Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) (ω k) 0 u)
+    (hW₀ : ∀ k u, W₀ k u (fun _ => ⟨0, NeZero.pos d⟩) =
+      Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) (ω k) 0 u) :
+    pairLayerOp hN hr W *ᵥ Pi.single (registerCfg hN hr u₀) 1 =
+      pairLayerOp hN hr W₀ *ᵥ
         productVector fun _ => Pi.single ⟨0, NeZero.pos d⟩ 1 := by
   classical
   have h0 : (⟨0, NeZero.pos d⟩ : Fin d) = 0 := Fin.ext (by simp)
   funext y
-  rw [pairLayerOp_mulVec_apply (NeZero.pos d) hN hr (fun _ => W₀) y]
+  rw [pairLayerOp_mulVec_apply (NeZero.pos d) hN hr W₀ y]
   simp only [mulVec, dotProduct, Pi.single_apply, mul_ite, mul_one, mul_zero,
     Finset.sum_ite_eq', Finset.mem_univ, ite_true]
   rw [pairLayerOp_apply]
@@ -113,7 +114,8 @@ theorem blockLayerOp_pairLayerOp_mulVec_registerCfg {D r₁ M N : ℕ}
         exact hU k _ _ τ (hωS c (by rwa [pairFamilyState_const] at hc) k))
       (W := fun _ => W₀) (fun _ => hW₀) s,
     ← mulVec_mulVec, ← mulVec_mulVec,
-    pairLayerOp_mulVec_registerCfg_eq hN hr dig u₀ ω hW hW₀]
+    pairLayerOp_mulVec_registerCfg_eq hN hr dig u₀ (fun _ => ω)
+      (fun _ => hW) (fun _ => hW₀)]
 
 /-- The coherent unitary stage of the non-normal preparation, simultaneously
 on all sector labels. Source: arXiv:2307.01696, "Long-range MPS using
@@ -209,15 +211,14 @@ theorem exists_isLocalCircuitOfDepth_registerCfg_of_isInjectiveOn
 superposition with the same amplitudes. No normalization hypothesis is needed.
 Source: arXiv:2307.01696, the GHZ expression of the non-normal fixed point. -/
 theorem mulVec_windowGHZState_of_registerCfg
-    {b D r₁ M N : ℕ} [NeZero M] [NeZero N] {ℓ : Fin M → ℕ}
+    {b r₁ M N : ℕ} [NeZero M] [NeZero N] {ℓ : Fin M → ℕ}
     {hN : ∑ k, ℓ k = N} {hr : ∀ k, r₁ + r₁ ≤ ℓ k}
     {dig₀ : Fin b → Cfg d r₁} (hdig₀ : Function.Injective dig₀)
-    {A : MPSTensor d D} {ω : Fin b → Fin D × Fin D → ℂ}
+    {v : Fin b → Cfg d N → ℂ}
     {U : Matrix (Cfg d N) (Cfg d N) ℂ}
-    (hj : ∀ j, U *ᵥ Pi.single (registerCfg hN hr (dig₀ j)) 1 =
-      fun s => blockIsometryState A (ω j) hN s) (α : Fin b → ℂ) :
+    (hj : ∀ j, U *ᵥ Pi.single (registerCfg hN hr (dig₀ j)) 1 = v j) (α : Fin b → ℂ) :
     U *ᵥ windowGHZState hN hr (Function.extend dig₀ α 0) =
-      fun s => ∑ j, α j * blockIsometryState A (ω j) hN s := by
+      fun s => ∑ j, α j * v j s := by
   classical
   rw [windowGHZState_extend hN hr hdig₀ α]
   have hsum : (fun x => ∑ j, α j * if x = registerCfg hN hr (dig₀ j) then (1 : ℂ) else 0) =

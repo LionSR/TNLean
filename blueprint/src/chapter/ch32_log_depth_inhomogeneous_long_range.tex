@@ -1,0 +1,113 @@
+\section{Inhomogeneous long-range correlated states}
+\label{sec:ldp_inhomogeneous_long_range}
+
+The concluding sentence of the paragraph ``Long-range MPS using measurements''
+in~\cite{Malz2024Preparation} extends the construction to inhomogeneous
+long-range correlated matrix product states by comparison with the short-range
+case. Combining its pair products with its coherent sum in (19) gives the
+following explicit input on $M$ blocks:
+\begin{align}
+    \ket{\Omega'}=\sum_{j=1}^b\alpha_j
+    \bigotimes_{k=1}^M\ket{\omega_j^k}_{R_kL_{k+1}},
+    \qquad \sum_{j=1}^b|\alpha_j|^2=1,
+    \qquad \langle\omega_i^k,\omega_j^k\rangle=\delta_{ij}.
+    \label{eq:ldp_inhomogeneous_long_range_pairs}
+\end{align}
+The pairs may depend on the window $k$. The source does not separately define
+the inhomogeneous long-range class or give a uniform approximation rate for it.
+Thus (\ref{eq:ldp_inhomogeneous_long_range_pairs}) is an explicit hypothesis in
+the result below. The remaining existence and rate questions are recorded
+in~\cite{gap:mswc24_inhomogeneous_long_range}.
+
+\begin{lemma}[Isometric extensions with a chosen register size]
+    \label{lem:ldp_isometric_extension_encoding}
+    \lean{MPSPreparation.exists_blockUnitary_isometricExtension_of_encoding}
+    \leanok
+    \uses{thm:ldp_sequential_factorization_general}
+    Let $D\ge1$, $r\ge1$ and $d\ge1$, and encode the $D$ bond indices
+    injectively in $r$ sites of dimension $d$. There is $C$, depending only on
+    these dimensions and the encoding, such that every chain of $q\ge3r$
+    tensors of bond dimension $D$ has a unitary $U$ on its $q$ sites and an
+    isometry $X\colon\C^{D^2}\to\C^{d^q}$ satisfying $X\Pi=V$ for the
+    blocked polar factor $V$ and its initial projection $\Pi$. The unitary
+    sends the encoded input $\ket{l,0\cdots0,r'}$ to $X\ket{l,r'}$ and is
+    a product of at most $Cq$ gates on neighbouring sites.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Diagonalize $\Pi=T\Lambda T^\dagger$, factor the first $\operatorname{rank}\Pi$
+    columns of $VT$ sequentially, and apply $T^\dagger$ on the input registers.
+    The unused columns of the resulting unitary complete $V$ to an isometry.
+\end{proof}
+
+\begin{lemma}[Overlap under the isometric extensions]
+    \label{lem:ldp_inhomogeneous_long_range_overlap}
+    \lean{MPSPreparation.inner_blockMatVector_normalizedChainState}
+    \leanok
+    \uses{thm:ldp_chain_state_eq_pos, thm:ldp_chain_block_iso_inner}
+    Let $\ket\phi$ be the state of an inhomogeneous chain cut into blocks,
+    with blocked polar decompositions $B_k=V_kP_k$, initial projections
+    $\Pi_k=V_k^\dagger V_k$ and positive-part state $\ket{\phi_{\rm pos}}$.
+    For isometries $X_k$ satisfying $X_k\Pi_k=V_k$ and every vector $\ket\Omega$
+    on the bond-pair spaces,
+    \begin{align}
+        \left\langle\left(\bigotimes_kX_k\right)\Omega,
+        \frac{\phi}{\|\phi\|}\right\rangle
+        =\left\langle\Omega,
+        \frac{\phi_{\rm pos}}{\|\phi_{\rm pos}\|}\right\rangle.
+        \label{eq:ldp_inhomogeneous_long_range_overlap}
+    \end{align}
+    Division by the norm of the zero vector is read as the zero vector.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since $\Pi_kP_k=P_k$, one has $X_kP_k=V_kP_k=B_k$ and hence
+    $\phi=(\bigotimes_kX_k)\phi_{\rm pos}$. Isometries preserve norms and
+    inner products, giving (\ref{eq:ldp_inhomogeneous_long_range_overlap}).
+\end{proof}
+
+\begin{lemma}[Norm of a coherent sum of inhomogeneous pair products]
+    \label{lem:ldp_inhomogeneous_long_range_norm}
+    \lean{MPSPreparation.norm_sum_pairFamilyVector}
+    \leanok
+    \uses{def:ldp_chain_pos_state}
+    For $M\ge1$, the vector $\Omega'$ of
+    (\ref{eq:ldp_inhomogeneous_long_range_pairs}) has norm one.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Regrouping the bond indices gives
+    $\langle\bigotimes_k\omega_i^k,\bigotimes_k\omega_j^k\rangle
+        =\prod_k\langle\omega_i^k,\omega_j^k\rangle=\delta_{ij}$.
+    Therefore $\|\Omega'\|^2=\sum_j|\alpha_j|^2=1$.
+\end{proof}
+
+\begin{lemma}[Preparation from coherent products of inhomogeneous pairs]
+    \label{lem:ldp_inhomogeneous_long_range_preparation}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_inhomogeneousLongRange}
+    \leanok
+    \uses{lem:ldp_isometric_extension_encoding, thm:ldp_window_ghz_measurement,
+        lem:ldp_inhomogeneous_long_range_overlap, lem:ldp_inhomogeneous_long_range_norm}
+    Fix $d\ge2$, $D\ge1$ and $b\ge0$. There are $C$ and $L_0$ depending
+    only on $d,D,b$ with the following property. Cut a ring of $N\ge1$ sites
+    into $M\ge1$ consecutive blocks with $L_0\le\ell_k\le L$, and let $A$
+    be an arbitrary chain of bond dimension $D$. There are isometries $X_k$
+    satisfying $X_k\Pi_k=V_k$, chosen independently of the pairs and the
+    amplitudes, such that every input
+    (\ref{eq:ldp_inhomogeneous_long_range_pairs}) gives the state
+    unit vector $\ket\psi=(\bigotimes_kX_k)\ket{\Omega'}$ prepared with measurements
+    followed by a circuit in depth at most $CL$. Its overlap with the
+    normalized chain state is
+    (\ref{eq:ldp_inhomogeneous_long_range_overlap}) with $\Omega=\Omega'$.
+    No blocked tensor is assumed injective.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Use registers of $r=b+D+2$ sites and $L_0=3r$. Prepare the coherent label
+    state $\sum_j\alpha_j\ket j^{\otimes M}$ on the registers. On window $k$,
+    orthonormality allows a unitary sending the encoded label $j$ to
+    $\omega_j^k$. Apply these unitaries in parallel and then the block
+    unitaries implementing $X_k$. The same block unitaries act on every
+    label, preserving the amplitudes. The three depths are bounded by
+    $C_gL$, $C_w$ and $C_bL$, independently of $N$ and $M$.
+\end{proof}

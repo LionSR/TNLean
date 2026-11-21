@@ -65,6 +65,8 @@ import TNLean.MPS.Preparation.InhomogeneousChoiResidual
 import TNLean.MPS.Preparation.InhomogeneousDoeblin
 import TNLean.MPS.Preparation.InhomogeneousDoeblinPreparation
 import TNLean.MPS.Preparation.InhomogeneousExactPreparation
+import TNLean.MPS.Preparation.InhomogeneousLongRange
+import TNLean.MPS.Preparation.InhomogeneousLongRangeRate
 import TNLean.MPS.Preparation.InhomogeneousMixingPreparation
 import TNLean.MPS.Preparation.InhomogeneousOverlap
 import TNLean.MPS.Preparation.InhomogeneousPositivePartRate
@@ -74,6 +76,7 @@ import TNLean.MPS.Preparation.InhomogeneousUniformRate
 import TNLean.MPS.Preparation.InjectivityCutoff
 import TNLean.MPS.Preparation.IsometricChain
 import TNLean.MPS.Preparation.IsometricExtension
+import TNLean.MPS.Preparation.IsometricPolarMerge
 import TNLean.MPS.Preparation.IsometryTree
 import TNLean.MPS.Preparation.IsometryTreePreparation
 import TNLean.MPS.Preparation.LogDepthPreparation
@@ -91,6 +94,7 @@ import TNLean.MPS.Preparation.MinimalCutRepresentationPadding
 import TNLean.MPS.Preparation.MixedPolarFullInputCounterexample
 import TNLean.MPS.Preparation.MixedSequentialFactorization
 import TNLean.MPS.Preparation.MixedSequentialSupport
+import TNLean.MPS.Preparation.NonCoordinateSupport
 import TNLean.MPS.Preparation.NonNormalCanonicalForm
 import TNLean.MPS.Preparation.NonNormalFixedPoint
 import TNLean.MPS.Preparation.NonNormalMeasurementPreparation
@@ -136,6 +140,7 @@ import TNLean.MPS.Preparation.PolarUniqueness
 import TNLean.MPS.Preparation.PolynomialAccuracy
 import TNLean.MPS.Preparation.PositivePartRate
 import TNLean.MPS.Preparation.QCccClassification
+import TNLean.MPS.Preparation.QualitativeBlockingObstruction
 import TNLean.MPS.Preparation.RectangularBlocks
 import TNLean.MPS.Preparation.RectangularIntervalBlocks
 import TNLean.MPS.Preparation.RectangularPreparation
