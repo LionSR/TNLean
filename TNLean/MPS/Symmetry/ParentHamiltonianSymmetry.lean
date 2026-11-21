@@ -16,6 +16,12 @@ preserves every finite-window MPS ground space. A unitary physical action
 therefore commutes with the canonical parent projection.
 
 Source: arXiv:1010.3732, Section II.F.2 and Appendix A.
+
+**Transitional (#10948).** `parentInteractionES_commute_onSiteTensorPow` states the commutation
+for the Euclidean-space operator of the canonical parent projection; it is kept until its last
+user is converted. The matrix form is `parentInteraction_matrix_commute_onSiteTensorPow`, and
+the last section states the commutation for the terms and the Hamiltonian of the parent
+interaction on the ring (`parentRingInteraction`).
 -/
 
 open scoped Matrix Kronecker
@@ -166,46 +172,78 @@ theorem parentInteraction_matrix_commute_onSiteTensorPow {d D : ℕ}
     (hCov : GaugeEquiv A (rotatePhysical U A)) (L : ℕ) :
     Commute (LinearMap.toMatrix' (parentInteraction A L))
       (onSiteTensorPow L U) := by
-  let K := LinearMap.toMatrix' (parentInteraction A L)
-  have hES := parentInteractionES_commute_onSiteTensorPow A U hU hCov L
-  rw [parentInteractionES_eq_toEuclideanLin_parentMatrix] at hES
-  apply (commute_iff_eq _ _).2
-  apply Matrix.toEuclideanLin.injective
-  simpa only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same,
-    Module.End.mul_eq_comp] using hES.eq
+  refine (commute_iff_eq _ _).2 (Matrix.toEuclideanLin.injective ?_)
+  rw [Matrix.toEuclideanLin_mul, Matrix.toEuclideanLin_mul,
+    toEuclideanLin_toMatrix'_parentInteraction]
+  let T := Matrix.toEuclideanLin (onSiteTensorPow L U)
+  let G := groundSpaceES A L
+  have hadj : T.adjoint ∘ₗ T = 1 := by
+    apply LinearMap.ext
+    intro v
+    change T.adjoint (T v) = v
+    dsimp only [T]
+    rw [← Matrix.toEuclideanLin_conjTranspose_eq_adjoint]
+    rw [onSiteTensorPow_conjTranspose,
+      toEuclideanLin_onSiteTensorPow_mul_apply]
+    have hU' : Uᴴ * U = 1 := (Matrix.mem_unitaryGroup_iff').mp hU
+    rw [hU', onSiteTensorPow_one]
+    simp [Matrix.toEuclideanLin, Matrix.toLpLin_one]
+  have hinner (x y : EuclideanSpace ℂ (Cfg d L)) :
+      inner ℂ (T x) (T y) = inner ℂ x y := by
+    have hy : T.adjoint (T y) = y := by
+      simpa only [LinearMap.comp_apply, Module.End.one_apply] using
+        congrArg (fun f ↦ f y) hadj
+    calc
+      inner ℂ (T x) (T y) = inner ℂ x (T.adjoint (T y)) :=
+        (LinearMap.adjoint_inner_right T x (T y)).symm
+      _ = inner ℂ x y := by rw [hy]
+  let I := T.isometryOfInner hinner
+  have hG : G.map I.toLinearMap = G := by
+    simpa only [I, LinearMap.isometryOfInner_toLinearMap] using
+      groundSpaceES_invariant_of_gauge_covariance A U hCov L
+  let : G.HasOrthogonalProjection := groundSpaceES_hasOrthogonalProjection A L
+  let : (G.map I.toLinearMap).HasOrthogonalProjection := by rw [hG]; infer_instance
+  have hproj (v : EuclideanSpace ℂ (Cfg d L)) :
+      T (G.starProjection v) = G.starProjection (T v) := by
+    have h := I.map_starProjection G v
+    have h' : I (G.starProjection v) = G.starProjection (I v) := by
+      simpa only [hG] using h
+    exact h'
+  apply LinearMap.ext
+  intro v
+  change (Gᗮ).starProjection (T v) = T ((Gᗮ).starProjection v)
+  rw [Submodule.starProjection_orthogonal]
+  simp only [sub_apply, ContinuousLinearMap.id_apply]
+  rw [map_sub, hproj]
+
+/-! ### The parent interaction on the ring -/
+
+section RingInteraction
 
 /-- Every cyclic translate of the canonical parent interaction commutes with
 the on-site physical symmetry. Source: arXiv:1010.3732, Section II.F.2. -/
-theorem localTermES_commute_onSiteTensorPow {d D N : ℕ}
+theorem commute_parentRingInteraction_term_onSiteTensorPow {d D N : ℕ}
     (A : MPSTensor d D) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hCov : GaugeEquiv A (rotatePhysical U A))
-    (L : ℕ) (hLN : L ≤ N) (i : Fin N) :
-    Commute (localTermES A L i)
-      (Matrix.toEuclideanLin (onSiteTensorPow N U)) := by
-  rw [localTermES_eq_toEuclideanLin_placeAlong_ringWindow A hLN i]
-  have hmat := placeAlong_ringWindow_commute_onSiteTensorPow U L hLN i
+    {L : ℕ} (hLN : L ≤ N) (i : Fin N) :
+    Commute ((parentRingInteraction A hLN).term i) (onSiteTensorPow N U) :=
+  placeAlong_ringWindow_commute_onSiteTensorPow U L hLN i
     (LinearMap.toMatrix' (parentInteraction A L))
     (parentInteraction_matrix_commute_onSiteTensorPow A U hU hCov L)
-  apply (commute_iff_eq _ _).2
-  simpa only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same,
-    Module.End.mul_eq_comp] using
-    congrArg Matrix.toEuclideanLin hmat.eq
 
 /-- On every periodic chain at least as long as the interaction range, the
 canonical parent Hamiltonian commutes with the on-site tensor power.
 Source: arXiv:1010.3732, Section II.F.2 and Appendix A. -/
-theorem parentHamiltonianES_commute_onSiteTensorPow {d D N : ℕ}
+theorem commute_hamiltonian_parentRingInteraction_onSiteTensorPow {d D N : ℕ}
     (A : MPSTensor d D) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hCov : GaugeEquiv A (rotatePhysical U A))
-    (L : ℕ) (hLN : L ≤ N) :
-    Commute (parentHamiltonianES A L N)
-      (Matrix.toEuclideanLin (onSiteTensorPow N U)) := by
-  rw [parentHamiltonianES_eq_sum_localTermES]
-  apply (commute_iff_eq _ _).2
-  rw [Finset.sum_mul, Finset.mul_sum]
-  exact Finset.sum_congr rfl fun i _ ↦
-    (localTermES_commute_onSiteTensorPow A U hU hCov L hLN i).eq
+    {L : ℕ} (hLN : L ≤ N) :
+    Commute (parentRingInteraction A hLN).hamiltonian (onSiteTensorPow N U) :=
+  Commute.sum_left _ _ _ fun i _ ↦
+    commute_parentRingInteraction_term_onSiteTensorPow A U hU hCov hLN i
+
+end RingInteraction
 
 end MPSTensor
