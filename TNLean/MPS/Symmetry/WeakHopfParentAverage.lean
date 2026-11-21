@@ -48,6 +48,11 @@ puts a nonzero element in this ideal unless the MPS vanishes.
 * Garre-Rubio--Lootens--Molnár, arXiv:2203.12563v3, `eq:compatible`,
   lines 431--469; Section 5, lines 1276--1320; Appendix B, lines 2463--2466.
 * Molnár et al., arXiv:2204.05940v1, Section 4 and Section 6.
+
+**Transitional (#10948).** `weakHopfAverage_parentInteractionES` and
+`one_sub_weakHopfAverage_starProjection` state the averages for the Euclidean-space operator
+`parentInteractionES` of the canonical parent; they are kept until their last users are
+converted. The last section states them for the operator of the matrix of the canonical parent.
 -/
 
 open scoped Matrix TensorProduct
@@ -441,6 +446,36 @@ theorem one_sub_weakHopfAverage_starProjection {A : MPSTensor d Dₐ}
     Submodule.starProjection_orthogonal']
   rfl
 
+/-! ### The averages for the matrix of the canonical parent -/
+
+/-- The literal average of the canonical parent term is
+\(E_n(I-P_n)=Q_n-P_n\), which may vanish. Source: arXiv:2203.12563v3,
+lines 2463--2466; the distinction from the ambient complement is recorded
+in `docs/paper-gaps/glm23_wha_parent_completion.tex`. -/
+theorem weakHopfAverage_toEuclideanLin_toMatrix'_parentInteraction {A : MPSTensor d Dₐ}
+    (h : IsBoundaryCompatible W.tensor A) (hInj : Kraus.IsNBlkInjective A L) (hn : 0 < n) :
+    W.weakHopfAverage n
+        (Matrix.toEuclideanLin (LinearMap.toMatrix' (MPSTensor.parentInteraction A n))) =
+      Matrix.toEuclideanLin (W.rep n 1) -
+        (MPSTensor.groundSpaceES A n).starProjection.toLinearMap := by
+  rw [MPSTensor.toEuclideanLin_toMatrix'_parentInteraction, Submodule.starProjection_orthogonal']
+  change W.weakHopfAverage n
+      (1 - (MPSTensor.groundSpaceES A n).starProjection.toLinearMap) = _
+  rw [W.weakHopfAverage_sub, W.weakHopfAverage_one hn,
+    W.weakHopfAverage_starProjection h hInj hn]
+
+/-- The ambient complement of the averaged support is the canonical parent
+term: \(I-E_n(P_n)=I-P_n\). This is the parent term chosen in GLM23
+Appendix B, lines 2463--2466. -/
+theorem one_sub_weakHopfAverage_starProjection_eq_toEuclideanLin_toMatrix'_parentInteraction
+    {A : MPSTensor d Dₐ}
+    (h : IsBoundaryCompatible W.tensor A) (hInj : Kraus.IsNBlkInjective A L) (hn : 0 < n) :
+    1 - W.weakHopfAverage n (MPSTensor.groundSpaceES A n).starProjection.toLinearMap =
+      Matrix.toEuclideanLin (LinearMap.toMatrix' (MPSTensor.parentInteraction A n)) := by
+  rw [W.weakHopfAverage_starProjection h hInj hn,
+    MPSTensor.toEuclideanLin_toMatrix'_parentInteraction, Submodule.starProjection_orthogonal']
+  rfl
+
 /-- The symmetrized parent term \(I-E_n(P_n)\) is nonzero when
 \(d^n>D^2\), the nonvanishing claim of GLM23 Appendix B, lines 2453--2466,
 for the ambient complement. -/
@@ -448,8 +483,10 @@ theorem one_sub_weakHopfAverage_starProjection_ne_zero {A : MPSTensor d Dₐ}
     (h : IsBoundaryCompatible W.tensor A) (hInj : Kraus.IsNBlkInjective A L) (hn : 0 < n)
     (hDim : d ^ n > Dₐ ^ 2) :
     1 - W.weakHopfAverage n (MPSTensor.groundSpaceES A n).starProjection.toLinearMap ≠ 0 := by
-  rw [W.one_sub_weakHopfAverage_starProjection h hInj hn]
-  exact MPSTensor.parentInteractionES_ne_zero A n hDim
+  rw [W.one_sub_weakHopfAverage_starProjection_eq_toEuclideanLin_toMatrix'_parentInteraction
+    h hInj hn]
+  exact fun h0 ↦ MPSTensor.toMatrix'_parentInteraction_ne_zero A n hDim
+    (Matrix.toEuclideanLin.injective (h0.trans (map_zero _).symm))
 
 /-- The symmetrized parent term commutes with every boundary operator of the
 representation, at every positive length. -/
@@ -458,10 +495,15 @@ theorem commute_one_sub_weakHopfAverage_mpoWithBoundary {A : MPSTensor d Dₐ}
     (X : Matrix (Fin D) (Fin D) ℂ) :
     Commute (1 - W.weakHopfAverage n (MPSTensor.groundSpaceES A n).starProjection.toLinearMap)
       (Matrix.toEuclideanLin (mpoWithBoundary W.tensor X n)) := by
-  rw [W.one_sub_weakHopfAverage_starProjection h hInj hn]
-  apply h.parentInteractionES_commute_mpoWithBoundary hn ?_ X
-  intro Z
-  obtain ⟨Z', hZ'⟩ := W.exists_conjTranspose_mpoWithBoundary_eq Z
-  exact ⟨Z', hZ' n⟩
+  rw [W.one_sub_weakHopfAverage_starProjection_eq_toEuclideanLin_toMatrix'_parentInteraction
+    h hInj hn]
+  have hc := MPSTensor.commute_toMatrix'_parentInteraction_of_starAlgebra_invariant A
+    (StarAlgebra.adjoin ℂ (Set.range (fun Y ↦ mpoWithBoundary W.tensor Y n)))
+    (h.groundSpaceES_invariant_boundaryStarAlgebra hn fun Z ↦
+      let ⟨Z', hZ'⟩ := W.exists_conjTranspose_mpoWithBoundary_eq Z
+      ⟨Z', hZ' n⟩)
+    (StarAlgebra.subset_adjoin ℂ _ ⟨X, rfl⟩)
+  rw [commute_iff_eq, Module.End.mul_eq_comp, Module.End.mul_eq_comp,
+    ← Matrix.toEuclideanLin_mul, ← Matrix.toEuclideanLin_mul, hc.eq]
 
 end MPOTensor.WeakHopfRepresentation

@@ -36,14 +36,13 @@ variable {d r D L N : ℕ} {dim : Fin r → ℕ}
 the canonical parent with every periodic block. Adjoint closure of the whole
 assembled boundary range is derived, rather than assumed. No normality or
 injectivity hypothesis on the compatible state tensor is needed. -/
-theorem IsBoundaryCompatible.parentHamiltonianES_commute_mpo_block_of_periodicAdjoint
+theorem IsBoundaryCompatible.commute_hamiltonian_parentRingInteraction_mpo_block_of_periodicAdjoint
     (h : IsBoundaryCompatible (blockSum O) A)
     (hAdjoint : IsPeriodicAdjointFamily O dual) (hdual : Function.Involutive dual)
     (hNormal : ∀ a, Kraus.IsNormal (O a).toMPSTensor)
     (hDim : ∀ a, 0 < dim a) (hL : 0 < L) (hLN : L ≤ N) (a : Fin r) :
-    Commute (MPSTensor.parentHamiltonianES A L N)
-      (Matrix.toEuclideanLin (mpo (O a) N)) := by
-  apply h.parentHamiltonianES_commute_mpo_block hL hLN ?_ a
+    Commute (MPSTensor.parentRingInteraction A hLN).hamiltonian (mpo (O a) N) := by
+  apply h.commute_hamiltonian_parentRingInteraction_mpo_block hL hLN ?_ a
   intro X
   obtain ⟨Y, hY⟩ := hAdjoint.isBoundaryAdjointClosed_blockSum hdual hNormal hDim X
   exact ⟨Y, hY L hL⟩

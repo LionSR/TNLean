@@ -35,7 +35,7 @@ variable {d D Dₐ L N : ℕ}
 /-- The canonical local interaction commutes with every boundary operator of
 a compatible star-coalgebra dual representation. Its adjoint closure is
 derived from the representation, not supplied as a premise. -/
-theorem IsBoundaryCompatible.parentInteractionES_commute_of_dualRepresentation
+theorem IsBoundaryCompatible.commute_toMatrix'_parentInteraction_of_dualRepresentation
     (hcomul : ∀ x : H,
       Coalgebra.comul (R := ℂ) (star x) = star (Coalgebra.comul (R := ℂ) x))
     (φ : H →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ)
@@ -44,9 +44,9 @@ theorem IsBoundaryCompatible.parentInteractionES_commute_of_dualRepresentation
     (hψ : Function.Injective ψ) {A : MPSTensor d Dₐ}
     (h : IsBoundaryCompatible (ofDualRepresentation φ ψ) A)
     (hL : 0 < L) (X : Matrix (Fin D) (Fin D) ℂ) :
-    Commute (MPSTensor.parentInteractionES A L)
-      (Matrix.toEuclideanLin (mpoWithBoundary (ofDualRepresentation φ ψ) X L)) := by
-  apply h.parentInteractionES_commute_mpoWithBoundary hL ?_ X
+    Commute (LinearMap.toMatrix' (MPSTensor.parentInteraction A L))
+      (mpoWithBoundary (ofDualRepresentation φ ψ) X L) := by
+  apply h.parentInteraction_matrix_commute_mpoWithBoundary hL ?_ X
   intro Y
   obtain ⟨Z, hZ⟩ := exists_adjointBoundary_of_dualRepresentation hcomul φ hφ ψ hψ Y
   exact ⟨Z, hZ L⟩
@@ -54,7 +54,7 @@ theorem IsBoundaryCompatible.parentInteractionES_commute_of_dualRepresentation
 /-- The periodic canonical parent commutes with every represented boundary
 that commutes with the tensor letters. This includes wrapping interaction
 windows and retains their necessary centralizer condition. -/
-theorem IsBoundaryCompatible.parentHamiltonianES_commute_of_dualRepresentation
+theorem IsBoundaryCompatible.commute_hamiltonian_parentRingInteraction_of_dualRepresentation
     (hcomul : ∀ x : H,
       Coalgebra.comul (R := ℂ) (star x) = star (Coalgebra.comul (R := ℂ) x))
     (φ : H →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ)
@@ -64,9 +64,9 @@ theorem IsBoundaryCompatible.parentHamiltonianES_commute_of_dualRepresentation
     (h : IsBoundaryCompatible (ofDualRepresentation φ ψ) A)
     (hL : 0 < L) (hLN : L ≤ N) {X : Matrix (Fin D) (Fin D) ℂ}
     (hX : X ∈ commutingBoundaryAlgebra (ofDualRepresentation φ ψ)) :
-    Commute (MPSTensor.parentHamiltonianES A L N)
-      (Matrix.toEuclideanLin (mpoWithBoundary (ofDualRepresentation φ ψ) X N)) := by
-  apply h.parentHamiltonianES_commute_mpoWithBoundary hL hLN ?_ hX
+    Commute (MPSTensor.parentRingInteraction A hLN).hamiltonian
+      (mpoWithBoundary (ofDualRepresentation φ ψ) X N) := by
+  apply h.commute_hamiltonian_parentRingInteraction_mpoWithBoundary hL hLN ?_ hX
   intro Y
   obtain ⟨Z, hZ⟩ := exists_adjointBoundary_of_dualRepresentation hcomul φ hφ ψ hψ Y
   exact ⟨Z, hZ L⟩

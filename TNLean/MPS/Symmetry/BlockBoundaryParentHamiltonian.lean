@@ -31,16 +31,15 @@ variable {d r D L N : ℕ} {dim : Fin r → ℕ}
 local boundary range imply commutation of the periodic parent with every
 individual periodic MPO block. Source: GLM23, arXiv:2203.12563v3, `defsym` and
 Section 5, lines 1276--1320, with the assembled adjoint-closure hypothesis explicit. -/
-theorem IsBoundaryCompatible.parentHamiltonianES_commute_mpo_block
+theorem IsBoundaryCompatible.commute_hamiltonian_parentRingInteraction_mpo_block
     (h : IsBoundaryCompatible (blockSum O) A) (hL : 0 < L) (hLN : L ≤ N)
     (hstar : ∀ X : Matrix (Fin (∑ a : Fin r, dim a)) (Fin (∑ a : Fin r, dim a)) ℂ,
       ∃ Y : Matrix (Fin (∑ a : Fin r, dim a)) (Fin (∑ a : Fin r, dim a)) ℂ,
         (mpoWithBoundary (blockSum O) X L)ᴴ = mpoWithBoundary (blockSum O) Y L)
     (a : Fin r) :
-    Commute (MPSTensor.parentHamiltonianES A L N)
-      (Matrix.toEuclideanLin (mpo (O a) N)) := by
+    Commute (MPSTensor.parentRingInteraction A hLN).hamiltonian (mpo (O a) N) := by
   simpa only [mpoWithBoundary_blockSum_blockBoundarySelector] using
-    h.parentHamiltonianES_commute_mpoWithBoundary hL hLN hstar
+    h.commute_hamiltonian_parentRingInteraction_mpoWithBoundary hL hLN hstar
       (blockBoundarySelector_mem_commutingBoundaryAlgebra O a)
 
 end MPOTensor

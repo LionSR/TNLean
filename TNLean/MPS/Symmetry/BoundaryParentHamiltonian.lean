@@ -45,13 +45,11 @@ theorem IsBoundaryCompatible.parentInteraction_matrix_commute_mpoWithBoundary
         (mpoWithBoundary T X L)ᴴ = mpoWithBoundary T Y L)
     (X : Matrix (Fin D₁) (Fin D₁) ℂ) :
     Commute (LinearMap.toMatrix' (MPSTensor.parentInteraction A L))
-      (mpoWithBoundary T X L) := by
-  have hES := h.parentInteractionES_commute_mpoWithBoundary hL hstar X
-  rw [MPSTensor.parentInteractionES_eq_toEuclideanLin_parentMatrix] at hES
-  apply (commute_iff_eq _ _).2
-  apply Matrix.toEuclideanLin.injective
-  simpa only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same,
-    Module.End.mul_eq_comp] using hES.eq
+      (mpoWithBoundary T X L) :=
+  MPSTensor.commute_toMatrix'_parentInteraction_of_starAlgebra_invariant A
+    (StarAlgebra.adjoin ℂ (Set.range (fun Y ↦ mpoWithBoundary T Y L)))
+    (h.groundSpaceES_invariant_boundaryStarAlgebra hL hstar)
+    (StarAlgebra.subset_adjoin ℂ _ ⟨X, rfl⟩)
 
 /-- The matrix of the canonical local parent commutes with every boundary
 operator of a family of compatible operator tensors, when the union of their
@@ -65,52 +63,43 @@ theorem parentInteraction_matrix_commute_mpoWithBoundary_of_forall_isBoundaryCom
     (i : ι) (X : Matrix (Fin D₁) (Fin D₁) ℂ) :
     Commute (LinearMap.toMatrix' (MPSTensor.parentInteraction A L))
       (mpoWithBoundary (T i) X L) := by
-  have hES := parentInteractionES_commute_mpoWithBoundary_of_forall_isBoundaryCompatible
-    h hL hstar i X
-  rw [MPSTensor.parentInteractionES_eq_toEuclideanLin_parentMatrix] at hES
-  apply (commute_iff_eq _ _).2
-  apply Matrix.toEuclideanLin.injective
-  simpa only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same,
-    Module.End.mul_eq_comp] using hES.eq
+  refine MPSTensor.commute_toMatrix'_parentInteraction_of_conjTranspose_mem A
+    {B | ∃ i X, mpoWithBoundary (T i) X L = B} ?_ ?_ ⟨i, X, rfl⟩
+  · rintro B ⟨i, X, rfl⟩
+    obtain ⟨j, Y, hY⟩ := hstar i X
+    exact ⟨j, Y, hY.symm⟩
+  · rintro B ⟨i, X, rfl⟩
+    exact (h i).groundSpaceES_mem_invtSubmodule X hL
 
 /-- Every cyclic translate, including a wrapping window, of the canonical local
 parent commutes with each globally commuting-boundary MPO. Source: GLM23,
 arXiv:2203.12563v3, Section 5, lines 1276--1320, with adjoint closure explicit. -/
-theorem IsBoundaryCompatible.localTermES_commute_mpoWithBoundary
+theorem IsBoundaryCompatible.commute_parentRingInteraction_term_mpoWithBoundary
     (h : IsBoundaryCompatible T A) (hL : 0 < L) (hLN : L ≤ N)
     (hstar : ∀ X : Matrix (Fin D₁) (Fin D₁) ℂ,
       ∃ Y : Matrix (Fin D₁) (Fin D₁) ℂ,
         (mpoWithBoundary T X L)ᴴ = mpoWithBoundary T Y L)
     (i : Fin N) {X : Matrix (Fin D₁) (Fin D₁) ℂ}
     (hX : X ∈ commutingBoundaryAlgebra T) :
-    Commute (MPSTensor.localTermES A L i)
-      (Matrix.toEuclideanLin (mpoWithBoundary T X N)) := by
-  rw [MPSTensor.localTermES_eq_toEuclideanLin_placeAlong_ringWindow A hLN i]
-  have hmat := placeAlong_ringWindow_commute_mpoWithBoundary T hLN i
+    Commute ((MPSTensor.parentRingInteraction A hLN).term i) (mpoWithBoundary T X N) :=
+  placeAlong_ringWindow_commute_mpoWithBoundary T hLN i
     (LinearMap.toMatrix' (MPSTensor.parentInteraction A L))
     (h.parentInteraction_matrix_commute_mpoWithBoundary hL hstar) hX
-  apply (commute_iff_eq _ _).2
-  simpa only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same,
-    Module.End.mul_eq_comp] using congrArg Matrix.toEuclideanLin hmat.eq
 
 /-- On every periodic chain at least as long as the interaction range, the
 canonical parent Hamiltonian commutes with each globally commuting-boundary
 MPO. Adjoint closure is required only at the local interaction length, for the
 entire assembled boundary range. Source: GLM23, arXiv:2203.12563v3, Section 5,
 lines 1276--1320; see the module's scope restriction. -/
-theorem IsBoundaryCompatible.parentHamiltonianES_commute_mpoWithBoundary
+theorem IsBoundaryCompatible.commute_hamiltonian_parentRingInteraction_mpoWithBoundary
     (h : IsBoundaryCompatible T A) (hL : 0 < L) (hLN : L ≤ N)
     (hstar : ∀ X : Matrix (Fin D₁) (Fin D₁) ℂ,
       ∃ Y : Matrix (Fin D₁) (Fin D₁) ℂ,
         (mpoWithBoundary T X L)ᴴ = mpoWithBoundary T Y L)
     {X : Matrix (Fin D₁) (Fin D₁) ℂ} (hX : X ∈ commutingBoundaryAlgebra T) :
-    Commute (MPSTensor.parentHamiltonianES A L N)
-      (Matrix.toEuclideanLin (mpoWithBoundary T X N)) := by
-  rw [MPSTensor.parentHamiltonianES_eq_sum_localTermES]
-  apply (commute_iff_eq _ _).2
-  rw [Finset.sum_mul, Finset.mul_sum]
-  exact Finset.sum_congr rfl fun i _ ↦
-    (h.localTermES_commute_mpoWithBoundary hL hLN hstar i hX).eq
+    Commute (MPSTensor.parentRingInteraction A hLN).hamiltonian (mpoWithBoundary T X N) :=
+  Commute.sum_left _ _ _ fun i _ ↦
+    h.commute_parentRingInteraction_term_mpoWithBoundary hL hLN hstar i hX
 
 /-- The periodic commutation conclusion in the original function-space
 coordinates. Source: GLM23, arXiv:2203.12563v3, Section 5, lines 1276--1320,
@@ -123,34 +112,25 @@ theorem IsBoundaryCompatible.parentHamiltonian_commute_mpoWithBoundary
     {X : Matrix (Fin D₁) (Fin D₁) ℂ} (hX : X ∈ commutingBoundaryAlgebra T) :
     Commute (MPSTensor.parentHamiltonian A L N)
       (Matrix.toLin' (mpoWithBoundary T X N)) := by
-  rw [MPSTensor.parentHamiltonian_eq_sum_localTerm]
-  apply (commute_iff_eq _ _).2
-  rw [Finset.sum_mul, Finset.mul_sum]
-  apply Finset.sum_congr rfl
-  intro i _
-  rw [MPSTensor.localTerm_eq_toLin'_placeAlong_ringWindow A hLN i]
-  have hmat := placeAlong_ringWindow_commute_mpoWithBoundary T hLN i
-    (LinearMap.toMatrix' (MPSTensor.parentInteraction A L))
-    (h.parentInteraction_matrix_commute_mpoWithBoundary hL hstar) hX
-  simpa only [Matrix.toLin'_mul, Module.End.mul_eq_comp] using
-    congrArg Matrix.toLin' hmat.eq
+  rw [MPSTensor.parentHamiltonian_of_le A hLN]
+  exact (h.commute_hamiltonian_parentRingInteraction_mpoWithBoundary hL hLN hstar hX).map
+    Matrix.toLinAlgEquiv'
 
 /-- Compatibility with an adjoint-closed assembled boundary range produces a
 nonzero canonical local interaction and a symmetric periodic parent Hamiltonian
 whenever the local physical dimension exceeds the square of the state bond
 dimension. Source: GLM23, arXiv:2203.12563v3, Section 5, lines 1276--1320.
 This does not assert nonzeroness of the literal weak-Hopf-averaged interaction. -/
-theorem IsBoundaryCompatible.nonzero_parentInteractionES_and_parentHamiltonianES_commute
+theorem IsBoundaryCompatible.nonzero_parentInteraction_and_hamiltonian_parentRingInteraction_commute
     (h : IsBoundaryCompatible T A) (hL : 0 < L) (hLN : L ≤ N)
     (hstar : ∀ X : Matrix (Fin D₁) (Fin D₁) ℂ,
       ∃ Y : Matrix (Fin D₁) (Fin D₁) ℂ,
         (mpoWithBoundary T X L)ᴴ = mpoWithBoundary T Y L)
     (hDim : d ^ L > D₂ ^ 2) :
-    MPSTensor.parentInteractionES A L ≠ 0 ∧
+    LinearMap.toMatrix' (MPSTensor.parentInteraction A L) ≠ 0 ∧
       ∀ X ∈ commutingBoundaryAlgebra T,
-        Commute (MPSTensor.parentHamiltonianES A L N)
-          (Matrix.toEuclideanLin (mpoWithBoundary T X N)) :=
-  ⟨MPSTensor.parentInteractionES_ne_zero A L hDim,
-    fun _ hX ↦ h.parentHamiltonianES_commute_mpoWithBoundary hL hLN hstar hX⟩
+        Commute (MPSTensor.parentRingInteraction A hLN).hamiltonian (mpoWithBoundary T X N) :=
+  ⟨MPSTensor.toMatrix'_parentInteraction_ne_zero A L hDim,
+    fun _ hX ↦ h.commute_hamiltonian_parentRingInteraction_mpoWithBoundary hL hLN hstar hX⟩
 
 end MPOTensor
