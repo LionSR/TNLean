@@ -1,0 +1,83 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Noncentral Tree Gauges with a Fixed Untwisted Component}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3}~\cite{Schuch2010PEPS},
+Lemma 6.14 and the exterior-block decomposition preceding Theorem 6.7, source
+\path{Papers/1001.3807/paper_v3.tex}, lines 1935--1990 and 2199--2214,
+motivate removing complementary tree operators while keeping the boundary
+coordinates fixed. Centrality cannot be discarded from the local Gram
+argument: for noncentral insertions a different contraction argument is
+required.
+
+Let $\Gamma$ be a finite graph, $G$ a finite group, $R$ the observation
+region and $S=R^c$ its connected complement. Write $u_{vw}\in G$ for
+directed bond transport, with $u_{wv}=u_{vw}^{-1}$. Let $U$ be a subgraph
+of the induced graph on $S$ whose directed transports are all identity,
+and choose a root $o\in S$. Extend a spanning forest of $U$ to a spanning
+tree of $S$. Its root-normalized vertex gauge satisfies
+\begin{align}
+    k_o=1,\qquad u_{vw}=k_wk_v^{-1}\text{ on tree edges},\qquad
+    k_v=1\text{ if }v\text{ is }U\text{-reachable from }o.
+    \label{eq:scp10_anchored_tree_fixed}
+\end{align}
+The last identity follows by propagating $k_w=k_v$ on forest edges.
+
+Centrality was needed in the earlier site-Gram argument because a twist
+must commute with the common left translation. If $u,h$ do not commute,
+\begin{align}
+    u(hx)\ne h(ux)\qquad(x\in G).
+    \label{eq:scp10_anchored_tree_noncentral}
+\end{align}
+Thus that translation argument cannot be reused for arbitrary $u$.
+This is an obstruction to that proof step, not by itself a density counterexample.
+
+If every complementary boundary endpoint belongs to the rooted component
+of $U$ and every bond incident to $R$ has label one, extend $k$ by one on $R$.
+For site coefficients invariant under simultaneous left translation,
+\begin{align}
+    u'_e=k_{t(e)}^{-1}u_ek_{s(e)},\qquad
+    \Psi(a,u')=\Psi(a,u),\qquad
+    u'_e=1\text{ on bonds incident to }R.
+    \label{eq:scp10_anchored_tree_global}
+\end{align}
+
+The theorem
+\leanid{TNLean.PEPS.exists_regularRegionTreeGauge_fixed_on_untwisted_component}
+constructs a spanning tree and a root-normalized gauge from a connected
+region and a supplied untwisted subgraph. It first takes a spanning forest
+of the untwisted subgraph and then extends the forest to a tree of the
+region. The resulting gauge fixes every vertex in the root's untwisted
+component and removes every internal tree operator. No commutativity,
+tree, forest, gauge, factorization or density equality is supplied as a
+hypothesis.
+
+The theorem
+\leanid{TNLean.PEPS.exists_regularComplementGauge_fixed_on_incident}
+then assumes that every complementary boundary endpoint is in the root's
+untwisted component, together with identity on every original incident
+bond. It extends the derived complementary gauge by the identity on the
+observation region, proves preservation of identity on every incident
+bond and removal of all complementary tree operators, and derives equality
+of the actual closed PEPS vectors from local regular invariance.
+
+These establish noncentral algebraic steps. To apply them to an actual open
+flux pair, the physical exterior collar must still be shown to project to
+one untwisted component containing every complementary boundary endpoint.
+The induced gauge must then be composed with the actual contraction
+identities. These theorems do not assume or
+assert those geometric and density conclusions, and it does not identify
+arbitrary endpoint-free annular observations with the vacuum. The remaining
+source-level conclusions stay under \ghissue{8703}. The full-lattice
+Hamiltonian work of \ghissue{8947} is unaffected.
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
