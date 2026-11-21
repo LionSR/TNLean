@@ -99,7 +99,7 @@ theorem physicalSpectatorBondInteraction_spectrum_gap_one {N : ℕ}
       (Interaction.translationInvariant N
         (physicalSpectatorBondInteraction K d₀ d₁ B)).hamiltonian,
       0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   exact sectorBondInteraction_spectrum_gap_one _ _ _ _
     (Matrix.physicalSpectatorEdgeInteraction_isStarProjection K d₀ d₁ B hB) hN
 

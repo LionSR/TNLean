@@ -194,6 +194,12 @@ def displayedSourceFactors : SourceFactors tensor ((1 / 2 : ℂ) • 1) := by
     X₂_isometry := ?_
     Y₁_mul_Z₁ := ?_
     Y₂_mul_Z₂ := ?_ }
+  case refine_1 =>
+    rw [Matrix.submatrix_mul_equiv, displayed_cuts.1]
+    rfl
+  case refine_2 =>
+    rw [Matrix.submatrix_mul_equiv, displayed_cuts.2]
+    rfl
   case refine_3 =>
     rw [Matrix.conjTranspose_submatrix]
     change displayedX₁ᴴ.submatrix displayedRightEquiv (Equiv.refl _) *
@@ -204,9 +210,8 @@ def displayedSourceFactors : SourceFactors tensor ((1 / 2 : ℂ) • 1) := by
       displayed_normalizations.2.2, Matrix.submatrix_one_equiv]
   all_goals
     simp only [Matrix.IsIsometry, Matrix.conjTranspose_submatrix,
-      Matrix.submatrix_mul_equiv, displayed_cuts.1, displayed_cuts.2,
-      displayed_grams.2.1, displayed_normalizations.1, displayed_normalizations.2.1,
-      Matrix.submatrix_one_equiv] <;> rfl
+      Matrix.submatrix_mul_equiv, displayed_grams.2.1, displayed_normalizations.1,
+      displayed_normalizations.2.1, Matrix.submatrix_one_equiv]
 
 /-- All six coordinates of the explicit witness, with the factor leg pulled
 back to the displayed four-dimensional space. Source: arXiv:2502.20257,

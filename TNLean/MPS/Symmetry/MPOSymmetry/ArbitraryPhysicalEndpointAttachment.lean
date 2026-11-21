@@ -52,7 +52,7 @@ theorem hamiltonian_translationInvariant_affine_norm_gap_of_order {d N : ℕ}
       (Interaction.translationInvariant N (A + t • (B - A))).hamiltonian))ᗮ,
       δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
         (Interaction.translationInvariant N (A + t • (B - A))).hamiltonian v‖ := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   have hAC : A ≤ A + t • (B - A) := by
     rw [Matrix.le_iff]
     simpa using (Matrix.le_iff.mp hAB).smul ht
@@ -213,7 +213,7 @@ theorem arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent
       (arbitraryPhysicalMixedInteraction A₀ A₁ (if right then 1 else 0))).hamiltonian) =
     LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
       (arbitraryPhysicalEndpointParentInteraction A₀ A₁ right)).hamiltonian) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   have hline := arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv
     A₀ A₁ h₀ h₁ (if right then (1 : unitInterval) else 0) hN
   cases right
@@ -285,7 +285,7 @@ theorem arbitraryPhysicalEndpointAttachment_ker_eq_parent
       (arbitraryPhysicalEndpointAttachment A₀ A₁ right t)).hamiltonian) =
     LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
       (arbitraryPhysicalEndpointParentInteraction A₀ A₁ right)).hamiltonian) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   have hker := arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent A₀ A₁ h₀ h₁ right hN
   exact (hamiltonian_translationInvariant_affine_ker_eq_of_order _ _
     (arbitraryPhysicalMixedInteraction_posSemidef A₀ A₁ _)
@@ -308,7 +308,7 @@ theorem arbitraryPhysicalEndpointAttachment_groundSpace_eq_span_mpv
           (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁)
         else mpv (N := N)
           (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀)))} := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   rw [arbitraryPhysicalEndpointAttachment_ker_eq_parent A₀ A₁ h₀ h₁ right ht hN]
   cases right
   · exact hamiltonian_translationInvariant_parent_groundSpace_eq_span_mpv _
@@ -329,7 +329,7 @@ theorem arbitraryPhysicalEndpointAttachment_groundSpace_finrank
     haveI : NeZero N := ⟨by omega⟩;
     Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
       (arbitraryPhysicalEndpointAttachment A₀ A₁ right t)).hamiltonian)) = 1 := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   have hker := (arbitraryPhysicalEndpointAttachment_ker_eq_parent
     A₀ A₁ h₀ h₁ right ht hN).trans
       (arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent A₀ A₁ h₀ h₁ right hN).symm

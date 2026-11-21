@@ -183,7 +183,7 @@ theorem mixedSptAction_mul [NeZero D]
     have hu : φ (g * h) = parityUnitary (t g) (φ h) * φ g := hφ g h
     have hc := congrArg (fun z : unitary ℂ => (z : ℂ)) hu
     simpa only [Submonoid.coe_mul, parityUnitary_coe, mul_comm] using hc
-  simp only [mixedSptAction, map_mul, hphase]
+  simp only [mixedSptAction, _root_.map_mul, hphase]
   exact (mixedSptMatrix_mul _ _ _ _ _ (ω (g, h) : ℂ) _ _ _
     (ρ.map_mul g h) (ρ.factor_unitary (Nat.pos_of_ne_zero (NeZero.ne D)) g h)).symm
 

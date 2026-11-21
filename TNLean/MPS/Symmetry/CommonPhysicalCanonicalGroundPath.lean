@@ -39,7 +39,7 @@ theorem hamiltonian_translationInvariant_affine_ker_eq_of_order {d N : ℕ}
     haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
       (Interaction.translationInvariant N (A + t • (B - A))).hamiltonian) =
     LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   have hHA : (Interaction.translationInvariant N A).hamiltonian.PosSemidef :=
     Interaction.posSemidef_hamiltonian fun _ ↦
       Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _)

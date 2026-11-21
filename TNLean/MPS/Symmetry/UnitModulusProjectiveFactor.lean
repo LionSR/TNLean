@@ -76,7 +76,7 @@ theorem exists_unitary_rephase_of_unitary_cohomologous
       map_mul' := fun g k => by simpa only [e₁] using ρ₁.map_mul g k }
   obtain ⟨σ, φ, hσ, hX⟩ := exists_unitary_rephase_of_cohomologous
     (ω₀ := ω₁) (ω₁ := ω₀) τ
-      ((H2π_eq_iff_isMulCoboundary₂_div _ _).mp h.symm) h₁
+      ((ScalarCohomology.H2π_eq_iff_isMulCoboundary₂_div _ _).mp h.symm) h₁
   exact ⟨{ X := σ.X
            map_mul' := fun g k => by simpa only [e₀] using σ.map_mul g k },
     φ, hσ, hX⟩

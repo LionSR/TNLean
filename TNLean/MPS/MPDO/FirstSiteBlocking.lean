@@ -123,7 +123,7 @@ theorem insertedTensor_firstSiteActionOnBlock_blockTensor
   intro j _
   rw [Fintype.sum_eq_single
     (fun k : Fin L => decodeBlock d (L + 1) I k.succ)]
-  · simp [firstSiteActionOnBlock, Kraus.blockTensor, Kraus.wordOfBlock,
+  · simp [firstSiteActionOnBlock, Kraus.blockTensor, Kraus.reindexPhysical,
       List.ofFn_succ, Kraus.evalWord_cons]
   · intro w hw
     simp only [Fin.consEquiv_apply, firstSiteActionOnBlock,

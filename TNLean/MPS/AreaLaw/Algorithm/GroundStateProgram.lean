@@ -50,7 +50,7 @@ noncomputable def groundStateProgram {L : ℕ} (hq : 2 ≤ q)
   let hi : L ≤ N := Nat.le_add_right _ _
   let z : Fin q := ⟨0, by omega⟩
   open Classical in do
-    let S ← sweepProgram hq Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z)
+    let S ← sweepProgram hq (Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z))
       (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
         fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
       (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
@@ -72,7 +72,7 @@ theorem eval_groundStateProgram {L : ℕ} (hq : 2 ≤ q)
     FreeM.eval honestOracle (groundStateProgram hq Φ h0 h1 Delta R) =
       open Classical in
       energyMinimizer Φ.hamiltonian
-        ((lvvSweep hq Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z)
+        ((lvvSweep hq (Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z))
           (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
             fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
           (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
@@ -174,7 +174,7 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
     let chain := ManyBody.BondInteraction.toChainInteraction Φ
     have hchain : chain.hamiltonian = Φ.hamiltonian := ManyBody.Interaction.hamiltonian_extend
     have hspanC : groundSpace chain.hamiltonian E = Submodule.span ℂ {Γ} := by
-      rw [hchain]; assumption
+      rwa [hchain]
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
         (ManyBody.Interaction.isHermitian_extend_term fun j ↦
           (IsSelfAdjoint.of_nonneg (h0 j)).isHermitian)

@@ -20,7 +20,7 @@ Source: Hastings–Koma, arXiv:math-ph/0507008, Section 3; applied to the
 exact MPS path of SPC11, arXiv:1010.3732, Section II.F, lines 929–953.
 -/
 
-open ManyBody Matrix QuantumCircuit MPSPreparation GaussianFilter
+open ManyBody Matrix GaussianFilter
 open scoped Matrix.Norms.L2Operator InnerProductSpace NNReal
 
 namespace MPSTensor

@@ -8,6 +8,7 @@ import TNLean.MPS.Symmetry.ExactMPSGappedPhase
 import TNLean.MPS.Symmetry.PositiveLengthSymmetryCharacter
 import TNLean.MPS.Symmetry.PhysicalCharacterTwist
 import TNLean.MPS.Symmetry.GlobalVirtualGauge
+import QICLean.Analysis.FiniteKroneckerPowers
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.CStarAlgebra.Spectrum
 import Mathlib.Topology.Connected.TotallyDisconnected
@@ -187,6 +188,7 @@ theorem ExactMPSGroundPath.exists_chain_character
   apply Matrix.exists_constant_character_of_continuous_invariant_line V hV v hv hne
     (t₀ := 0)
   intro t g
+  have : NeZero N := ⟨by omega⟩
   obtain ⟨E, _, _, hline⟩ := Q.ground_line t t.property N hN
   exact mem_span_mpv_of_commute_ground_line (Q.tensor t)
     (ManyBody.Interaction.translationInvariant N (P.interaction t)).hamiltonian (V g) E

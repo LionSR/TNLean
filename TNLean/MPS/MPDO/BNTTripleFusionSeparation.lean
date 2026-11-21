@@ -185,11 +185,11 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
     intro w
     induction w with
     | nil =>
-        simp only [Kraus.evalWord, Kraus.evalWord_nil]
+        simp only [Kraus.evalWord]
         rw [hone]
         exact Matrix.blockDiagonal'_one.symm
     | cons ij w ih =>
-        simp only [Kraus.evalWord, Kraus.evalWord_cons, ih, D]
+        simp only [Kraus.evalWord, ih, D]
         rw [← Matrix.blockDiagonal'_mul]
         congr 1
         funext γ

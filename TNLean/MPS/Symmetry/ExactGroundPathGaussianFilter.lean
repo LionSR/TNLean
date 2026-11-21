@@ -63,6 +63,7 @@ theorem ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap
   obtain ⟨Δ, hΔ, hgap⟩ := P.gap
   refine ⟨Δ, hΔ, ?_⟩
   intro γ hγ N hN
+  have : NeZero N := ⟨by omega⟩
   obtain ⟨E, hEspec, hEmin, hline⟩ := Q.ground_line γ hγ N hN
   obtain ⟨E', hE'spec, hE'gap⟩ := hgap γ hγ N hN
   have hEE : E' = E := le_antisymm
@@ -98,6 +99,7 @@ theorem ExactMPSGroundPath.exists_uniform_gaussian_ground_bounds
     (Q : ExactMPSGroundPath P) :
     ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) (hN : 2 ≤ N),
       ∀ (q : ℝ), 0 ≤ q → ∀ W : MPOTensor.ChainOperator d N,
+        haveI : NeZero N := ⟨by omega⟩
         let H := (Interaction.translationInvariant N (P.interaction γ)).hamiltonian
         let ψ := mpvState (Q.tensor γ) N
         let y := Matrix.toEuclideanLin (ManyBody.gaussianFilteredTerm q Δ H W) ψ
@@ -109,6 +111,7 @@ theorem ExactMPSGroundPath.exists_uniform_gaussian_ground_bounds
   obtain ⟨Δ, hΔ, hdata⟩ := Q.exists_uniform_ground_line_spectral_gap
   refine ⟨Δ, hΔ, ?_⟩
   intro γ hγ N hN q hq W
+  have : NeZero N := ⟨by omega⟩
   obtain ⟨E, hH, hline, hgap⟩ := hdata γ hγ N hN
   let H := (Interaction.translationInvariant N (P.interaction γ)).hamiltonian
   let ψ := mpvState (Q.tensor γ) N

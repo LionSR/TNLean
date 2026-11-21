@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.FiniteKroneckerProduct
+import QICLean.Analysis.FiniteKroneckerPowers
 
 /-!
 # The commutator of two truncated symmetries and its expectation value

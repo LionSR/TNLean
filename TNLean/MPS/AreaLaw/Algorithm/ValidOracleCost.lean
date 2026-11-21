@@ -209,7 +209,7 @@ theorem cost_groundStateProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL
   set z : Fin q := ⟨0, by omega⟩ with hz
   set e := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (leftConfigOfFinEquiv (q := q) hi) with he
   set S := FreeM.eval o (sweepProgram hq
-    Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z)
+    (Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z))
     (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
       fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
     (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
@@ -217,7 +217,7 @@ theorem cost_groundStateProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL
   set B := sweepStepCostBound q (min Delta 1) N (max 1 (lvvSuccessiveCardBound q (min Delta 1) N))
     with hB
   have hsweep := cost_sweepProgram_le_of_valid hv (by omega) hq
-    Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z)
+    (Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z))
     (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
       fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
     (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
@@ -226,7 +226,7 @@ theorem cost_groundStateProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL
       max 1 (lvvSuccessiveCardBound q (min Delta 1) N) := by
     refine Finset.card_image_le.trans ?_
     refine (sweepProgram_spec_of_valid hv hq
-      Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z)
+      (Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z))
       (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
         fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
       (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1

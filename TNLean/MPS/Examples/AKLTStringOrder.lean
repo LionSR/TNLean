@@ -127,7 +127,8 @@ the single-site letters propagates to length-`2` words. -/
 theorem akltBlocked_transferMap_one : Kraus.transferMap akltBlocked 1 = 1 := by
   classical
   rw [Kraus.transferMap_apply]
-  simp only [Matrix.mul_one, akltBlocked, Kraus.blockTensor, Kraus.wordOfBlock]
+  simp only [Matrix.mul_one, akltBlocked, Kraus.blockTensor, Kraus.reindexPhysical,
+    Kraus.block_apply, Kraus.decodeBlockEquiv_apply]
   rw [Fintype.sum_equiv (Kraus.decodeBlockEquiv 3 2)
     (fun I => Kraus.evalWord akltTensor (List.ofFn (Kraus.decodeBlock 3 2 I)) *
       (Kraus.evalWord akltTensor (List.ofFn (Kraus.decodeBlock 3 2 I)))ᴴ)

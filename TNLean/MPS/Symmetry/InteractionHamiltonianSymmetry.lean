@@ -25,7 +25,8 @@ theorem hamiltonian_translationInvariant_commute_onSiteTensorPow {d N : ℕ}
     haveI : NeZero N := ⟨by omega⟩;
     Commute (ManyBody.Interaction.translationInvariant N A).hamiltonian
       (onSiteTensorPow N U) :=
-  haveI : NeZero N := ⟨by omega⟩; Commute.sum_left _ _ _ fun i _ =>
-    placeAlong_ringWindow_commute_onSiteTensorPow U 2 hN i A hA
+  haveI : NeZero N := ⟨by omega⟩; Commute.sum_left _ _ _ fun i _ => by
+    rw [ManyBody.Interaction.translationInvariant_term_of_le A hN i]
+    exact placeAlong_ringWindow_commute_onSiteTensorPow U 2 hN i A hA
 
 end MPSTensor

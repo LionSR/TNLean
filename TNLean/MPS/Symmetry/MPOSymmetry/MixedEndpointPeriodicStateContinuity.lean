@@ -153,9 +153,7 @@ theorem mpv_mixedEndpointInterpolation_one
   calc
     mpv (mixedEndpointInterpolation A₀ A₁ 1) σ =
         mpv (Kraus.reindexPhysical e (mixedEndpointInterpolation A₁ A₀ 0)) σ := by
-      change Matrix.trace (Kraus.evalWord _ (List.ofFn σ)) =
-        Matrix.trace (Kraus.evalWord _ (List.ofFn σ))
-      rw [hword, htrace]
+      rw [mpv_eq, mpv_eq, coeff_eq, coeff_eq, hword, htrace]
     _ = mpv (mixedEndpointRightTensor A₁ D₀) σ := by
       rw [mpv_reindexPhysical, mixedEndpointRightTensor, mpv_reindexPhysical]
       exact congrFun (mpv_mixedEndpointInterpolation_zero A₁ A₀ hN) _

@@ -211,7 +211,8 @@ theorem stationaryBlockDensity_eq_of_unitary_gaugePhase
   simp only [Matrix.mul_assoc, ← Matrix.mul_assoc Vᴴ V, hV', Matrix.one_mul]
   calc
     _ = Matrix.trace ((Vᴴ * Λ * V) * blockTensor A N s * (blockTensor A N t)ᴴ) := by
-      simpa only [Matrix.mul_assoc, Kraus.blockTensor] using Matrix.trace_mul_comm
+      simpa only [Matrix.mul_assoc, Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply,
+        Kraus.decodeBlockEquiv_apply, wordOfBlock] using Matrix.trace_mul_comm
         (Λ * V * blockTensor A N s * (blockTensor A N t)ᴴ) Vᴴ
     _ = _ := by simp only [hΛ, Matrix.mul_assoc]
 

@@ -78,7 +78,7 @@ theorem repeatedCopyTensor_toMPSTensor :
   rfl
 
 private lemma scalarBNT_evalWord (w : List (Fin 1)) :
-    Kraus.evalWord scalarBNT.toMPSTensor w = 1 := by
+    Kraus.evalWord (ι := Fin 1) scalarBNT.toMPSTensor w = 1 := by
   induction w with
   | nil => rfl
   | cons i w ih =>
@@ -103,7 +103,7 @@ theorem repeatedCopyDecomposition_isBNTCanonicalForm :
         scalarBNT, toMPSTensor]
     basis_normalized_self_overlap := by
       intro j
-      simp [MPSTensor.mpvOverlap, MPSTensor.mpv, scalarBNT_evalWord,
+      simp [MPSTensor.mpvOverlap, MPSTensor.mpv, MPSTensor.coeff, scalarBNT_evalWord,
         Matrix.trace]
     bnt_data := by
       refine ⟨0, ?_⟩
@@ -112,7 +112,7 @@ theorem repeatedCopyDecomposition_isBNTCanonicalForm :
       intro hzero
       have h := congrArg
         (fun v : MPSTensor.MPVSpace 1 N ↦ v (fun _ ↦ (0 : Fin 1))) hzero
-      simp [MPSTensor.mpvState_apply, MPSTensor.mpv, scalarBNT_evalWord,
+      simp [MPSTensor.mpvState_apply, MPSTensor.mpv, MPSTensor.coeff, scalarBNT_evalWord,
         Matrix.trace] at h
     basis_distinct := by
       intro j k hjk
@@ -128,7 +128,7 @@ theorem repeatedCopyDecomposition_isBNTCanonicalForm :
 
 private lemma scalarBNT_mpv {N : ℕ} (σ : Fin N → Fin 1) :
     MPSTensor.mpv scalarBNT.toMPSTensor σ = 1 := by
-  simp [MPSTensor.mpv, scalarBNT_evalWord, Matrix.trace]
+  simp [MPSTensor.mpv, MPSTensor.coeff, scalarBNT_evalWord, Matrix.trace]
 
 /-- Every periodic contraction of the repeated-copy MPO is
 $1+(1/2)^N$.

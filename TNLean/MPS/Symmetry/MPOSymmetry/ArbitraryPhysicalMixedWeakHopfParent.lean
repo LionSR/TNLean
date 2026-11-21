@@ -127,7 +127,7 @@ theorem hamiltonian_arbitraryPhysicalMixedWeakHopfParent_commute
     haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedWeakHopfParent A₀ A₁ W γ)).hamiltonian
       (MPOTensor.mpo (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) N) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   rw [arbitraryPhysicalMixedWeakHopfParent_eq
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ W hInj₀ hInj₁ h₀ h₁ hW hγ]
   apply hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo

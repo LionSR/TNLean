@@ -60,7 +60,7 @@ theorem isometricInteractionExtension_zero_ker_eq_range {d m N : ℕ}
     haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
       (Interaction.translationInvariant N (isometricInteractionExtension E 0)).hamiltonian) =
         LinearMap.range (Matrix.toEuclideanLin (Matrix.tensorPower N E)) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   have hzero : (Interaction.translationInvariant N
       (0 : MPOTensor.ChainOperator d 2)).hamiltonian = 0 := by
     simp only [Interaction.hamiltonian_translationInvariant_of_le _ hN, placeAlong_zero,
@@ -99,7 +99,7 @@ theorem isometricInteractionExtension_inactive_energy_lower_bound {d m N : ℕ}
     haveI : NeZero N := ⟨by omega⟩; ‖v‖ ^ 2 ≤ (⟪Matrix.toEuclideanLin
       (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian v,
         v⟫_ℂ).re := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   let P := (Interaction.translationInvariant N (isometricInteractionExtension E 0)).hamiltonian
   let H := (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian
   have hProjection := isometricInteractionExtension_isStarProjection E hE 0
@@ -160,7 +160,7 @@ private theorem physicalChainLinearIsometry_intertwines {d m N : ℕ}
         (physicalChainLinearIsometry E hE N x) =
       physicalChainLinearIsometry E hE N
         (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian x) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   have h := congrArg (fun M => Matrix.toEuclideanLin M x)
     (hamiltonian_translationInvariant_isometricInteractionExtension_intertwiner E hE A hA hN)
   change Matrix.toEuclideanLin _
@@ -177,7 +177,7 @@ private theorem physicalChainLinearIsometry_inactive_bound {d m N : ℕ}
     haveI : NeZero N := ⟨by omega⟩; (1 : ℝ) * ‖v‖ ^ 2 ≤ (⟪Matrix.toEuclideanLin
       (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian v,
         v⟫_ℂ).re := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   rw [one_mul]
   apply isometricInteractionExtension_inactive_energy_lower_bound E hE hA hN v
   rw [Submodule.mem_orthogonal]
@@ -196,7 +196,7 @@ theorem isometricInteractionExtension_ker_eq_map_of_posSemidef {d m N : ℕ}
       (LinearMap.ker
         (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian)).map
         (Matrix.toEuclideanLin (Matrix.tensorPower N E)) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   simpa only [physicalChainLinearIsometry_toLinearMap] using
     (physicalChainLinearIsometry E hE N).ker_eq_map_of_intertwines_of_inactive_bound
       (physicalChainLinearIsometry_intertwines E hE hA.isHermitian hN)
@@ -215,7 +215,7 @@ theorem isometricInteractionExtension_ker_eq_span_of_posSemidef {d m N : ℕ}
     haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
       (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian) =
       Submodule.span ℂ {Matrix.toEuclideanLin (Matrix.tensorPower N E) ψ} := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   rw [isometricInteractionExtension_ker_eq_map_of_posSemidef E hE hA hN,
     hground, Submodule.map_span, Set.image_singleton]
 
@@ -234,7 +234,7 @@ theorem isometricInteractionExtension_quadratic_gap {d m N : ℕ}
       min δ 1 * ‖v‖ ^ 2 ≤ (⟪Matrix.toEuclideanLin
         (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian v,
           v⟫_ℂ).re := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   exact (physicalChainLinearIsometry E hE N).re_inner_ge_of_intertwines
     (Matrix.isSymmetric_toEuclideanLin_iff.mpr
       (Interaction.posSemidef_hamiltonian fun _ ↦
@@ -258,7 +258,7 @@ theorem isometricInteractionExtension_norm_gap {d m N : ℕ}
       min δ 1 * ‖v‖ ≤ ‖Matrix.toEuclideanLin
         (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian
           v‖ := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   exact (physicalChainLinearIsometry E hE N).norm_gap_of_intertwines
     (Matrix.isPositive_toEuclideanLin_iff.mpr
       (Interaction.posSemidef_hamiltonian fun _ ↦
@@ -282,7 +282,7 @@ theorem isometricInteractionExtension_spectrum_gap {d m N : ℕ}
     haveI : NeZero N := ⟨by omega⟩; ∀ z ∈ spectrum ℂ
       (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian,
       0 ≤ z.re ∧ (z.re = 0 ∨ min δ 1 ≤ z.re) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   have hHA : (Interaction.translationInvariant N A).hamiltonian.PosSemidef :=
     Interaction.posSemidef_hamiltonian fun _ ↦
       Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _)

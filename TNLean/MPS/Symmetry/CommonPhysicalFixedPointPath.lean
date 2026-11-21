@@ -176,7 +176,7 @@ theorem isometricInteractionExtension_ker_le_of_ker_le {d m N : ℕ}
       (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian) ≤
       LinearMap.ker (Matrix.toEuclideanLin
         (Interaction.translationInvariant N (isometricInteractionExtension E B)).hamiltonian) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   rw [isometricInteractionExtension_ker_eq_map E hE A hA hN hcommOld hcommNew]
   rintro x ⟨y, hy, rfl⟩
   have hyB := LinearMap.mem_ker.mp (hker hy)
@@ -205,7 +205,7 @@ theorem commonPhysicalNormalizedBondInteraction_zero_mem_spectrum
     (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩; (0 : ℂ) ∈ spectrum ℂ (Interaction.translationInvariant N
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   have hdet : Matrix.det
       (Interaction.translationInvariant N (normalizedBondInteraction D₀ D₁ γ)).hamiltonian =
         0 := by
@@ -255,7 +255,7 @@ theorem commonPhysicalNormalizedBondInteraction_spectrum_gap_one
     haveI : NeZero N := ⟨by omega⟩; ∀ z ∈ spectrum ℂ (Interaction.translationInvariant N
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian,
       0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   simpa only [physicalSpectatorBondInteraction_eq_isometricInteractionExtension,
     commonPhysicalNormalizedBondInteraction, normalizedBondInteraction] using
     physicalSpectatorBondInteraction_spectrum_gap_one (D₀ + D₁) d₀ d₁ _
@@ -274,7 +274,7 @@ theorem commonPhysicalNormalizedBondInteraction_groundSpace
       Submodule.span ℂ {(Matrix.toEuclideanLin
         (Matrix.tensorPower N (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁))
         (WithLp.toLp 2 (mpv (N := N) (weightedMatrixUnitInterpolation D₀ D₁ γ))))} := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   have : NeZero N := ⟨by omega⟩
   exact isometricInteractionExtension_ker_eq_span _
     (commonFixedPointInclusion_isometry _ d₀ d₁) _
@@ -308,7 +308,7 @@ theorem commonPhysicalNormalizedBondInteraction_groundSpace_eq_span_mpv
       Submodule.span ℂ {(WithLp.toLp 2 (mpv (N := N)
         (rotatePhysical (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁)
           (weightedMatrixUnitInterpolation D₀ D₁ γ))))} := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   rw [commonPhysicalNormalizedBondInteraction_groundSpace h₀ h₁ d₀ d₁ γ hN,
     toEuclideanLin_tensorPower_mpv_rotatePhysical]
 
@@ -331,7 +331,7 @@ theorem commonPhysicalNormalizedBondInteraction_ker_le_parent
         (LinearMap.toMatrix' (parentInteraction
           (rotatePhysical (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁) B)
             2))).hamiltonian) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   have : NeZero N := ⟨by omega⟩
   rw [parentInteraction_matrix_rotatePhysical_eq_isometricInteractionExtension _
     (commonFixedPointInclusion_isometry _ d₀ d₁)]
@@ -364,7 +364,7 @@ theorem commonPhysicalParentInteraction_commute_onSite
         2))).hamiltonian
       (Matrix.finKronecker fun _ : Fin N =>
         (commonSptPhysicalAction ρ₀ ρ₁ h₀ h₁ U₀ U₁ g : Matrix _ _ ℂ)) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   let V := sptFixedPointUnitaryAction (ρ₀.directSum ρ₁)
     (fun g => ρ₀.directSum_mem_unitaryGroup ρ₁ g (h₀ g) (h₁ g))
   let U := commonSptPhysicalAction ρ₀ ρ₁ h₀ h₁ U₀ U₁
@@ -424,7 +424,7 @@ theorem commonPhysicalNormalizedBondInteraction_commute_onSite
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian
       (Matrix.finKronecker fun _ : Fin N =>
         (commonSptPhysicalAction ρ₀ ρ₁ h₀ h₁ U₀ U₁ g : Matrix _ _ ℂ)) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   let Ug : Matrix (Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁))
       (Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁)) ℂ :=
     commonSptPhysicalAction ρ₀ ρ₁ h₀ h₁ U₀ U₁ g

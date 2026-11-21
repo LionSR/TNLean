@@ -236,7 +236,7 @@ theorem hamiltonian_mixedWeakHopfCompletedInteraction_commute
     haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (mixedWeakHopfCompletedInteraction A₀ A₁ W γ)).hamiltonian
       (MPOTensor.mpo W.tensor N) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   rw [← MPOTensor.mpoWithBoundary_one]
   exact Commute.sum_left _ _ _ fun i _ =>
     MPOTensor.placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
@@ -253,7 +253,7 @@ theorem hamiltonian_averageMatrix_mixedEndpointInteraction_commute
     haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
       (W.averageMatrix 2 (mixedEndpointInteractionMatrix A₀ A₁ γ))).hamiltonian
       (MPOTensor.mpo W.tensor N) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   rw [← MPOTensor.mpoWithBoundary_one]
   exact Commute.sum_left _ _ _ fun i _ =>
     MPOTensor.placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _

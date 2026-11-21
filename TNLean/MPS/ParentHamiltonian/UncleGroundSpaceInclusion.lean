@@ -64,7 +64,7 @@ theorem groundSpaceMap_uncleTensor_left
   simp only [groundSpaceMap_apply, List.ofFn_succ, List.ofFn_zero,
     Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one]
   rw [uncleTensor, trace_mul_uncleBlockMatrix]
-  simp [blockTensor, Kraus.blockTensor, Kraus.wordOfBlock, List.ofFn_succ,
+  simp [blockTensor, Kraus.blockTensor, Kraus.reindexPhysical, List.ofFn_succ,
     Kraus.evalWord, decodeBlock]
 
 /-- A boundary matrix supported on the second diagonal block recovers the
@@ -81,7 +81,7 @@ theorem groundSpaceMap_uncleTensor_right
   simp only [groundSpaceMap_apply, List.ofFn_succ, List.ofFn_zero,
     Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one]
   rw [uncleTensor, trace_mul_uncleBlockMatrix]
-  simp [blockTensor, Kraus.blockTensor, Kraus.wordOfBlock, List.ofFn_succ,
+  simp [blockTensor, Kraus.blockTensor, Kraus.reindexPhysical, List.ofFn_succ,
     Kraus.evalWord, decodeBlock]
 
 /-- The first blocked local parent space lies in the uncle boundary space.

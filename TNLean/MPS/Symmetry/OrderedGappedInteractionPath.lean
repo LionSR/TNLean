@@ -74,7 +74,7 @@ noncomputable def orderedGappedInteractionPath
         (Interaction.translationInvariant N A).hamiltonian +
           γ • ((Interaction.translationInvariant N B).hamiltonian -
             (Interaction.translationInvariant N A).hamiltonian) := by
-    haveI : NeZero N := ⟨by omega⟩
+    have : NeZero N := ⟨by omega⟩
     have hmap (i : Fin N) :
         placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) (A + γ • (B - A)) =
           placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A +
@@ -110,7 +110,7 @@ noncomputable def orderedGappedInteractionPath
   · obtain ⟨δ, hδ, hSpec⟩ := hgap
     refine ⟨δ, hδ, ?_⟩
     intro γ hγ N hN
-    haveI : NeZero N := ⟨by omega⟩
+    have : NeZero N := ⟨by omega⟩
     have hHA : (Interaction.translationInvariant N A).hamiltonian.PosSemidef :=
       Interaction.posSemidef_hamiltonian fun _ ↦
         Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _)
@@ -145,13 +145,16 @@ noncomputable def orderedGappedInteractionPath
         hker N hN _ (by simpa using mem_groundSpace_iff_mulVec.mp hx)
       rw [mem_groundSpace_iff_mulVec, Complex.ofReal_zero, zero_smul] at hx ⊢
       simp [Matrix.add_mulVec, Matrix.smul_mulVec, Matrix.sub_mulVec, hx, hxB]
-    rw [hHam]
+    rw [hHam N hN]
     refine ⟨0, ?_, fun z hz ↦ ?_⟩
     · obtain ⟨x, hx, hx0⟩ := (Submodule.ne_bot_iff _).mp hgapC.1
       rw [← Matrix.spectrum_toLpLin (p := 2)]
       exact Module.End.hasEigenvalue_iff_mem_spectrum.mp
         (Module.End.hasEigenvalue_of_hasEigenvector ⟨hx, hx0⟩)
-    have hμ : Module.End.HasEigenvalue (Matrix.toEuclideanLin _) z := by
+    have hμ : Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        ((Interaction.translationInvariant N A).hamiltonian +
+          γ • ((Interaction.translationInvariant N B).hamiltonian -
+            (Interaction.translationInvariant N A).hamiltonian))) z := by
       rw [← Matrix.spectrum_toLpLin (p := 2)] at hz
       exact Module.End.hasEigenvalue_iff_mem_spectrum.mpr hz
     obtain ⟨k, rfl⟩ := hHC.isHermitian.hasEigenvalue_toEuclideanLin_iff.mp hμ
@@ -160,8 +163,8 @@ noncomputable def orderedGappedInteractionPath
     · left; simpa using h
     · right; simpa using Complex.real_le_real.mp h
   · intro γ hγ g N hN
-    haveI : NeZero N := ⟨by omega⟩
-    rw [hHam]
+    have : NeZero N := ⟨by omega⟩
+    rw [hHam N hN]
     exact (hSymA N hN g).add_left (((hSymB N hN g).sub_left (hSymA N hN g)).smul_left γ)
 
 end MPSTensor

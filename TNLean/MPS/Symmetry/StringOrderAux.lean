@@ -109,14 +109,16 @@ noncomputable def twistedTPGaugeSetup_of_irreducible [NeZero D]
     Kraus.isChannel_mapLM (fun i => (A i)ᴴ) hAadjNorm
   let hσ_exists :=
     IsChannel.exists_unique_density_fixedPoint_of_irreducible
-      (E := Kraus.transferMap (ι := Fin d) (n := Fin D) fun i => (A i)ᴴ) hChAdj hIrrAdj (NeZero.pos D)
+      (E := Kraus.transferMap (ι := Fin d) (n := Fin D) fun i => (A i)ᴴ) hChAdj hIrrAdj
+      (NeZero.pos D)
   let σ := Classical.choose hσ_exists
   have hσ_spec := Classical.choose_spec hσ_exists
   have hσ_pd : σ.PosDef := hσ_spec.2.1
-  have hσ_fixA : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ = σ := hσ_spec.2.2.1
+  have hσ_fixA : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ = σ :=
+    hσ_spec.2.2.1
   have hσ_fixB : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (B i)ᴴ) σ = σ := by
     calc
-      Kraus.transferMap (d := d) (D := D) (fun i => (B i)ᴴ) σ
+      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (B i)ᴴ) σ
           = Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ := by
               simpa [B, Kraus.transferMap_apply, Matrix.mul_assoc] using
                 kraus_dual_eq_of_map_eq B A

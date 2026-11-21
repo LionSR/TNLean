@@ -33,11 +33,12 @@ theorem hamiltonian_translationInvariant_parent_groundSpace_eq_span_mpv
       (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian) =
       Submodule.span ℂ
         {(WithLp.linearEquiv 2 ℂ ((Fin N → Fin d) → ℂ)).symm (mpv A)} := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   have hH : parentHamiltonianES A 2 N = Matrix.toEuclideanLin
       (ManyBody.Interaction.translationInvariant N
-        (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian :=
-    parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow A hN
+        (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian := by
+    rw [ManyBody.Interaction.hamiltonian_translationInvariant_of_le _ hN]
+    exact parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow A hN
   rw [← hH, ker_parentHamiltonianES_two_eq_range_periodicMpvLineMap A hA hN]
   simpa only [periodicMpvLineMap] using
     ContinuousLinearMap.range_smulRight_apply

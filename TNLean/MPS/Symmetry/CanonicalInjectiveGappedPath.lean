@@ -82,14 +82,17 @@ theorem hamiltonian_translationInvariant_parent_spectrum_gap
     (hN : 2 ≤ N) {δ : ℝ}
     (hGap : ∀ v ∈ (LinearMap.ker (parentHamiltonianES A 2 N))ᗮ,
       δ * ‖v‖ ≤ ‖parentHamiltonianES A 2 N v‖) :
+    haveI : NeZero N := ⟨by omega⟩
     let H := (ManyBody.Interaction.translationInvariant N
       (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian
     (0 : ℂ) ∈ spectrum ℂ H ∧
       ∀ z ∈ spectrum ℂ H, 0 ≤ z.re ∧ (z.re = 0 ∨ δ ≤ z.re) := by
+  have : NeZero N := ⟨by omega⟩
   let H := (ManyBody.Interaction.translationInvariant N
     (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian
-  have hH : parentHamiltonianES A 2 N = Matrix.toEuclideanLin H :=
-    parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow A hN
+  have hH : parentHamiltonianES A 2 N = Matrix.toEuclideanLin H := by
+    simp only [H, ManyBody.Interaction.hamiltonian_translationInvariant_of_le _ hN]
+    exact parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow A hN
   constructor
   · change (0 : ℂ) ∈ spectrum ℂ H
     rw [← Matrix.spectrum_toLpLin (p := 2)]

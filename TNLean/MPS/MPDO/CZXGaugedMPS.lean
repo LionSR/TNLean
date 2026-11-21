@@ -396,7 +396,10 @@ theorem unmodifiedPlacedGaussOperator_mulVec_gaugedMPS_ne (N : ℕ) (hN : 2 ≤ 
     funext k
     fin_cases k <;>
       simp +decide [gaugedSite, unmodifiedPerm, GaussLaw.gaussLegAction_apply]
-  rw [himg, Function.comp_apply, hwin] at hs
+  have hcc : (fun _ : Fin 2 ↦ c) = ![c, c] := by
+    funext k
+    fin_cases k <;> rfl
+  rw [himg, Function.comp_apply, hcc, hwin] at hs
   obtain ⟨R, h1, h2⟩ := gaugedMPS_replaceWindow hN j (fun _ ↦ c)
     ![gaugedSite.symm (3, gen), gaugedSite.symm (0, gen)] (by simp +decide [c, gaugedLeftBond])
   have hR : R = 1 := by
@@ -479,8 +482,9 @@ theorem not_commute_placedGaussOperator (N : ℕ) [NeZero N] (hN : 3 ≤ N) (j :
     intro k
     rw [extractWindow_two hN2 k, localPhase_gaugedSite_window]
     rfl
-  have hentry := congrFun (congrFun h ((ManyBody.placeAlongPerm (ManyBody.ringWindow hN2 j) π *
-    ManyBody.placeAlongPerm (ManyBody.ringWindow hN2 (j + 1)) π) s)) s
+  have hentry := congrFun (congrFun h
+    ((ManyBody.placeAlongPerm (X := fun _ ↦ Gs) (ManyBody.ringWindow hN2 j) π *
+      ManyBody.placeAlongPerm (X := fun _ ↦ Gs) (ManyBody.ringWindow hN2 (j + 1)) π) s)) s
   rw [monomial_apply, monomial_apply, ite_eq_left rfl] at hentry
   simp only [Equiv.Perm.mul_apply] at hentry
   rw [hΦj1, hΦ, hΦ] at hentry

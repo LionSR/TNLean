@@ -150,7 +150,7 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian) =
       Submodule.span ℂ {(WithLp.toLp 2
         (mpv (N := N) (arbitraryPhysicalMixedInterpolation A₀ A₁ γ)))} := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   rw [arbitraryPhysicalMixedInteraction,
     isometricInteractionExtension_ker_eq_map_of_posSemidef _
       (commonFixedPointInclusion_isometry _ d₀ d₁)
@@ -183,7 +183,7 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_finrank
     haveI : NeZero N := ⟨by omega⟩; Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
       (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian)) = 1 := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   rw [arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv A₀ A₁ h₀ h₁ γ hN]
   apply finrank_span_singleton
   intro hzero

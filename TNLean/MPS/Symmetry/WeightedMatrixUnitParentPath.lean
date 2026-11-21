@@ -42,7 +42,7 @@ theorem hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_
     ∀ z ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant N
       (normalizedBondInteraction D₀ D₁ γ)).hamiltonian,
       0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   have : NeZero N := ⟨by omega⟩
   simpa only [normalizedBondInteraction, hamiltonian_translationInvariant_twoSiteBondPenalty] using
     normalizedPhysicalBondInterpolation_parent_spectrum_gap_one h₀ h₁ γ (by omega : 1 ≤ N)

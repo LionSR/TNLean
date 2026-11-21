@@ -37,7 +37,7 @@ theorem isMulCoboundary₂_div_of_eventually_at_all_points
   have hf : IsLocallyConstant f :=
     (IsLocallyConstant.iff_eventually_eq f).mpr
       (fun t₀ ↦ (hω t₀).mono
-        (fun t ht ↦ (isMulCoboundary₂_div_iff_quotient_mk_eq _ _).mp ht))
+        (fun t ht ↦ (ScalarCohomology.isMulCoboundary₂_div_iff_quotient_mk_eq _ _).mp ht))
   exact (ScalarCohomology.isMulCoboundary₂_div_iff_quotient_mk_eq _ _).mpr
     (hf.apply_eq_of_preconnectedSpace t₁ t₀)
 

@@ -527,7 +527,7 @@ theorem groundStateProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 
     let chain := ManyBody.BondInteraction.toChainInteraction Φ
     have hchain : chain.hamiltonian = Φ.hamiltonian := ManyBody.Interaction.hamiltonian_extend
     have hspanC : groundSpace chain.hamiltonian E = Submodule.span ℂ {Γ} := by
-      rw [hchain]; assumption
+      rwa [hchain]
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
         (ManyBody.Interaction.isHermitian_extend_term fun j ↦
           (IsSelfAdjoint.of_nonneg (h0 j)).isHermitian)

@@ -71,13 +71,14 @@ private theorem fusionAction_finite_calculation (x : Fin 2) :
   rw [fusionActionLetter_coordinates]
   fin_cases x <;> refine ⟨?_, ?_, ?_, ?_⟩
   all_goals
-    first | apply Matrix.ext; intro i j; fin_cases i <;> fin_cases j | skip
+    try (apply Matrix.ext; intro i j; fin_cases i <;> fin_cases j)
     all_goals
       norm_num +decide [sequentialActionBra, sequentialActionKet,
         printedActionBra, printedActionKet, fusionW, Matrix.mul_apply,
         Fin.sum_univ_four, finProdFinEquiv, Fin.divNat, Fin.modNat, Complex.I_sq,
         Fin.reduceEq, Matrix.cons_val_two, Matrix.cons_val_three, Matrix.vecMul, dotProduct]
-      <;> ring_nf <;> norm_num [Complex.I_sq]
+      try ring_nf
+      try norm_num [Complex.I_sq]
 
 /-- The two values of the explicit fusion/action contraction. Source:
 arXiv:2502.20257, literal caps/actions in lines 4671–4694. -/

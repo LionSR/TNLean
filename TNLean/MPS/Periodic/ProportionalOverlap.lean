@@ -69,7 +69,7 @@ the prescribed periodic-basis expansions are projectively proportional.
 Source: arXiv:1708.00029, proof of theorem `thm:bd`, lines 630--631. -/
 private lemma exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
     {rA rB D₁ D₂ : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    [hneA : ∀ j, NeZero (dimA j)] [hneB : ∀ k, NeZero (dimB k)]
+    [∀ j, NeZero (dimA j)] [∀ k, NeZero (dimB k)]
     (A : (j : Fin rA) → MPSTensor d (dimA j))
     (B : (k : Fin rB) → MPSTensor d (dimB k))
     (periodA : Fin rA → ℕ) (periodB : Fin rB → ℕ)

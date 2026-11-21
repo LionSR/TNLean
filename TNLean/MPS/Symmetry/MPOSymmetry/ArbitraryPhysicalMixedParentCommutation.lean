@@ -181,7 +181,7 @@ theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
     haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpo (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) N) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   rw [← MPOTensor.mpoWithBoundary_one]
   exact hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁ hstar hγ hN (Subalgebra.one_mem _)

@@ -62,7 +62,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-open TNLean.Algebra
+open ScalarCohomology
 open scoped ScalarCohomology
 
 variable {d D : ℕ} {G : Type} [Group G]

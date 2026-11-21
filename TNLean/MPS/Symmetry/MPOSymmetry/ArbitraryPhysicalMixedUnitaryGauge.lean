@@ -457,7 +457,7 @@ theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary
     haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (mpo (arbitraryPhysicalMixedMPO A₀ A₁ (T₀ g) (T₁ g) (V₀ g) (V₁ g) (W₀ g) (W₁ g)) N) := by
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   rw [← mpoWithBoundary_one]
   exact hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_unitary
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ u₀ u₁ hT₀ hT₁ h₀ h₁ hY₀ hY₁ hγ hN g
