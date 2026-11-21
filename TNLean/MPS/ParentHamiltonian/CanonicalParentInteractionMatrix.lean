@@ -16,6 +16,10 @@ interactions and when evaluating their local commutators.
 
 Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma existenceinteraction,
 lines 2195--2230; PGVWC07, arXiv:quant-ph/0608197, Theorem 12.
+
+**Transitional (#10948).** This matrix is `LinearMap.toMatrix' (parentInteraction A R)`
+(`canonicalParentInteractionMatrix_eq_toMatrix'_parentInteraction`); the file is kept until its
+users are moved to that spelling, then emptied.
 -/
 
 open scoped ComplexOrder
@@ -39,6 +43,16 @@ theorem toEuclideanLin_canonicalParentInteractionMatrix (A : MPSTensor d D) (R :
     (canonicalParentInteractionMatrix A R)).toLinearMap = _
   rw [canonicalParentInteractionMatrix, StarAlgEquiv.apply_symm_apply]
   rfl
+
+/-- The canonical interaction matrix is the matrix of the canonical parent interaction. -/
+theorem canonicalParentInteractionMatrix_eq_toMatrix'_parentInteraction (A : MPSTensor d D)
+    (R : ℕ) :
+    canonicalParentInteractionMatrix A R = LinearMap.toMatrix' (parentInteraction A R) := by
+  apply Matrix.toEuclideanLin.injective
+  rw [toEuclideanLin_toMatrix'_parentInteraction]
+  change (Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)
+    (canonicalParentInteractionMatrix A R)).toLinearMap = _
+  rw [canonicalParentInteractionMatrix, StarAlgEquiv.apply_symm_apply]
 
 /-- The canonical interaction matrix is positive semidefinite.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma existenceinteraction,

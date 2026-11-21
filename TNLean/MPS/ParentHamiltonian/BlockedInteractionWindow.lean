@@ -37,7 +37,7 @@ open scoped ComplexOrder MatrixOrder
 open Kraus (blockPhysDim)
 open ManyBody (placeAlong chainWindow)
 
-open ManyBody.Interaction (chainTranslates)
+open ManyBody.Interaction (chainTranslates hamiltonian_chainTranslates_eq_sum_range)
 
 namespace MPSTensor
 

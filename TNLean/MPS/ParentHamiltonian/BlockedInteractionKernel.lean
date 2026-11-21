@@ -38,7 +38,7 @@ No normality, primitivity, or translation-invariance hypothesis is imposed.
 open scoped ComplexOrder MatrixOrder
 open Kraus (blockPhysDim blockTensor)
 open ManyBody (placeAlong chainWindow)
-open ManyBody.Interaction (chainTranslates)
+open ManyBody.Interaction (chainTranslates hamiltonian_chainTranslates_eq_sum_range)
 
 namespace MPSTensor
 variable {d R L K N : ℕ}

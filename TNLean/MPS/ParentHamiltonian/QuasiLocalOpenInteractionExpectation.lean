@@ -22,7 +22,7 @@ equation (3.12), and lines 1469--1482.
 open MPSTensor
 open scoped Matrix BigOperators
 
-open ManyBody.Interaction (chainTranslates)
+open ManyBody.Interaction (chainTranslates hamiltonian_chainTranslates_eq_sum_range)
 
 namespace SpinChain
 

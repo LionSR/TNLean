@@ -17,7 +17,7 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12).
 -/
 
 open scoped Matrix BigOperators
-open ManyBody.Interaction (chainTranslates)
+open ManyBody.Interaction (chainTranslates hamiltonian_chainTranslates_eq_sum_range)
 
 namespace MPSTensor
 variable {d R N : ℕ}

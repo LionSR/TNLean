@@ -28,7 +28,7 @@ The interaction is arbitrary; positivity and self-adjointness are not needed.
 open scoped Matrix BigOperators
 open ManyBody (placeAlong chainWindow)
 
-open ManyBody.Interaction (chainTranslates)
+open ManyBody.Interaction (chainTranslates hamiltonian_chainTranslates_eq_sum_range)
 
 namespace MPSTensor
 variable {d R k N a : ℕ}
@@ -44,20 +44,6 @@ private theorem sum_range_eq_sum_range_shift {α : Type*} [AddCommMonoid α]
       (by simpa only [Finset.mem_Ico, not_and_or, not_le, not_lt] using hnot)
   · simpa only [Nat.Ico_zero_eq_range, zero_add, Nat.add_comm] using
       (Finset.sum_Ico_add f 0 m a).symm
-
-/-- The Hamiltonian of the open-chain translates of `h` as a sum over the starts
-`0, …, N - R`: the interaction placed on each of the \(N+1-R\) windows of \(R\)
-consecutive sites of the open chain. Every start in the summation range gives such a
-window; the conditional only records this. Source: Nachtergaele, arXiv:cond-mat/9410110,
-equation (3.12). -/
-theorem hamiltonian_chainTranslates_eq_sum_range (h : Matrix (Cfg d R) (Cfg d R) ℂ) (N : ℕ) :
-    (chainTranslates R N h).hamiltonian =
-      ∑ i ∈ Finset.range (N + 1 - R),
-        if hi : i + R ≤ N then placeAlong (X := fun _ ↦ Fin d) (chainWindow i hi) h else 0 := by
-  rw [ManyBody.Interaction.hamiltonian, Finset.sum_range]
-  refine Fintype.sum_congr _ _ fun i ↦ ?_
-  rw [dite_eq_left (by have := i.isLt; omega)]
-  rfl
 
 /-- The fixed local observable \(X^\dagger[H,X]\) on the interval obtained by
 adding \(R-1\) sites on either side of the support of \(X\). This definition

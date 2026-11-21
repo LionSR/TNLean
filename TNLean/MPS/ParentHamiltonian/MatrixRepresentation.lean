@@ -16,6 +16,13 @@ matrix descriptions in the configuration basis and the Euclidean Hilbert
 space. These identities connect the parent-Hamiltonian gap estimates to
 the matrix formulation of local interactions used in arXiv:1010.3732,
 Section II.B (`Papers/1010.3732/paper_v3.tex`, lines 357--390).
+
+**Transitional (#10948).** The identities between the Euclidean-space operators
+(`parentInteractionES`, `localTermES`, `parentHamiltonianES`) and the matrices, and
+`localTerm_eq_toLin'_placeAlong_ringWindow` (which is `localTerm_of_le`), are kept until their
+last users are converted, then deleted with those operators.
+`parentInteraction_toMatrix'_isStarProjection` is `isStarProjection_toMatrix'_parentInteraction`
+(Martingale/Transport.lean); its users move to that name in the cleanup.
 -/
 
 open scoped Matrix.Norms.L2Operator
@@ -83,11 +90,8 @@ theorem parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow
 /-- The matrix of a canonical parent interaction is an orthogonal projection.
 Source: arXiv:1010.3732, Section II.B, the choice of the local term as a projector. -/
 theorem parentInteraction_toMatrix'_isStarProjection (A : MPSTensor d D) (L : ℕ) :
-    IsStarProjection (LinearMap.toMatrix' (parentInteraction A L)) := by
-  rw [parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix]
-  exact ((LinearMap.isStarProjection_iff_isSymmetricProjection).2
-    (parentInteractionES_isSymmetricProjection A L)).map
-    (LinearMap.toMatrixOrthonormal (EuclideanSpace.basisFun (Cfg d L) ℂ))
+    IsStarProjection (LinearMap.toMatrix' (parentInteraction A L)) :=
+  isStarProjection_toMatrix'_parentInteraction A L
 
 /-- Canonical parent interactions have Hilbert-space operator norm at most
 one, as do the projector local terms of arXiv:1010.3732, Section II.B. -/

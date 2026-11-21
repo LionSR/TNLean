@@ -16,6 +16,12 @@ than the chain give zero, matching the existing parent-Hamiltonian convention.
 
 These are the local-to-global comparisons for positive parent interactions
 in CPGSV21, arXiv:2011.12127, Section IV.C, lines 1995--2007 and 2183--2187.
+
+**Transitional (#10948).** The declarations about `periodicLocalInteractionES` and
+`periodicInteractionHamiltonianES` are kept until their last users are converted; those whose
+statements lack `R ≤ N` are converted once QICLean has a ring interaction defined for every
+range. The last section states the facts for the terms of
+`ManyBody.Interaction.translationInvariant`.
 -/
 
 open scoped BigOperators ComplexOrder
@@ -155,5 +161,64 @@ theorem periodicInteractionHamiltonianES_parentInteractionES
       parentHamiltonianES A R N := by
   simp only [periodicInteractionHamiltonianES,
     periodicLocalInteractionES_parentInteractionES A hR, parentHamiltonianES_eq_sum_localTermES]
+
+/-! ### Translates of a local matrix on the ring
+
+The same facts for the terms of the translation-invariant interaction of a local matrix `h`
+(`ManyBody.Interaction.translationInvariant`), for `R ≤ N`. The statements about
+`periodicLocalInteractionES` and `periodicInteractionHamiltonianES` without `R ≤ N` wait for the
+total ring interaction of QICLean. -/
+
+/-- A term of the translates of `h` on the ring acts at a configuration \(σ\) as `h` on the
+cyclic restriction to its window, read at the window of \(σ\). -/
+theorem toEuclideanLin_translationInvariant_term_apply {R N : ℕ} (hRN : R ≤ N)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N))
+    (σ : Cfg d N) :
+    Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant hRN h).term i) v σ =
+      Matrix.toEuclideanLin h (cyclicRestrictES (Fin.pos i) R i σ v) (extractWindow R i σ) := by
+  rw [ManyBody.Interaction.translates_term, Matrix.toLpLin_apply, Matrix.toLpLin_apply]
+  change Matrix.mulVec (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hRN i) h)
+    (WithLp.ofLp v) σ = Matrix.mulVec h _ _
+  rw [ManyBody.placeAlong_mulVec_apply_of _ _ _ σ (replaceWindow R hRN i σ)
+    (replaceWindow_ringWindow hRN i σ)
+    (fun τ _ hv ↦ replaceWindow_of_forall_ringWindow_ne hRN i σ τ hv)]
+  rfl
+
+/-- In the cyclic active-block coordinates of its window, a term of the translates of `h` on the
+ring is `h` on the active block, acting independently on every spectator configuration. Source:
+PGVWC07, arXiv:quant-ph/0608197, Theorem 11 proof, lines 1418–1422. -/
+theorem cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply {R N : ℕ}
+    (hRN : R ≤ N) (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N)
+    (ψ : EuclideanSpace ℂ (Cfg d N)) :
+    cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
+        (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant hRN h).term i) ψ) =
+      ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R))
+        (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin h))
+        (cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i ψ) := by
+  let U := cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
+  let e := cyclicActiveBlockConfigEquiv d R hRN i
+  apply U.symm.injective
+  rw [LinearIsometryEquiv.symm_apply_apply]
+  ext σ
+  rw [toEuclideanLin_translationInvariant_term_apply,
+    cyclicActiveBlockConfigLinearIsometryEquiv_symm_apply_apply]
+  change Matrix.toEuclideanLin h _ (extractWindow R i σ) =
+    Matrix.toEuclideanLin h (ContinuousLinearMap.rightFiber (U ψ) (e σ).2) (extractWindow R i σ)
+  apply congrArg
+    (fun w : EuclideanSpace ℂ (Cfg d R) => Matrix.toEuclideanLin h w (extractWindow R i σ))
+  ext ω
+  change ψ (cyclicCfg (Fin.pos i) R i ω σ) = ψ (e.symm (ω, (e σ).2))
+  rcases Nat.eq_zero_or_pos R with rfl | hR
+  · have hω : ω = (e σ).1 := Subsingleton.elim _ _
+    rw [hω, Prod.mk.eta, Equiv.symm_apply_apply]
+    exact congrArg ψ (funext fun k ↦ by simp [cyclicCfg])
+  · have hfull (ξ : Cfg d R) : cyclicCfg hR R (⟨0, hR⟩ : Fin R) ω ξ = ω := by
+      funext j
+      simp [cyclicCfg, Nat.mod_eq_of_lt j.isLt]
+    have hj := cyclicCfg_join_cyclicActiveBlock hRN i (⟨0, hR⟩ : Fin R)
+      (by simp) ω (e σ).1 (e σ).2
+    simp only [cyclicForwardSite_zero, hfull, Prod.mk.eta] at hj
+    rw [Equiv.symm_apply_apply] at hj
+    exact congrArg ψ hj
 
 end MPSTensor

@@ -821,7 +821,8 @@ theorem isSymmetricProjection_toEuclideanLin_toMatrix'_parentInteraction (A : MP
   toEuclideanLin_toMatrix'_parentInteraction A L ▸
     Submodule.isSymmetricProjection_starProjection _
 
-/-- The local parent interaction is an orthogonal projection. -/
+/-- The local parent interaction is an orthogonal projection. Source: arXiv:1010.3732,
+Section II.B, the choice of the local term as a projector. -/
 theorem isStarProjection_toMatrix'_parentInteraction (A : MPSTensor d D) (L : ℕ) :
     IsStarProjection (LinearMap.toMatrix' (parentInteraction A L)) := by
   have h := isSymmetricProjection_toEuclideanLin_toMatrix'_parentInteraction A L

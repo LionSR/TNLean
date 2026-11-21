@@ -16,6 +16,13 @@ ground-space projection gives the canonical open parent Hamiltonian.
 
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12); CPGSV21,
 arXiv:2011.12127, Section IV.C, lines 1996--1999 and 2170--2172.
+
+**Transitional (#10948).** Every declaration of this file is kept only until its last user is
+converted. For a local matrix `h` the open-chain sum is the Hamiltonian of
+`ManyBody.Interaction.chainTranslates R N h`; its monotonicity, linearity, zero and positivity
+are `ManyBody.Interaction.hamiltonian_chainTranslates_mono`, `…_smul`, `…_zero` and
+`posSemidef_hamiltonian_chainTranslates` (ParentHamiltonian/Defs.lean), and for the canonical
+local projection it is `parentChainInteraction A R N` by definition.
 -/
 
 open scoped BigOperators ComplexOrder
