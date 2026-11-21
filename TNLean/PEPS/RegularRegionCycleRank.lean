@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularRegionGram
 import Mathlib.Combinatorics.SimpleGraph.Acyclic
-import Mathlib.Data.Sym.Sym2.Order
+import Mathlib.Order.Sym2
 
 /-!
 # The cycle exponent in a connected regular region
