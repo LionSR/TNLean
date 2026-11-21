@@ -72,7 +72,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.openInteraction_commutator_en
   intro N H B
   apply (hP.localCommutatorObservable_expectation_tendsto hρ h X hR
     N (fun n => by dsimp [N]; omega) ψ hGround hUnit).congr'
-  filter_upwards [] with n
+  filter_upwards [eventually_ge_atTop 1] with n hn
   have hH : Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
       (openInteractionMatrix h (N n)) = (H n).toContinuousLinearMap :=
     congrArg LinearMap.toContinuousLinearMap
