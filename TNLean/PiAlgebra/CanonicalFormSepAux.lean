@@ -94,7 +94,8 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Build `HasPrimitiveBlocks` from pointwise peripheral primitivity. -/
-theorem ofForall (hA : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (A k))) :
+theorem ofForall
+    (hA : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (A k))) :
     HasPrimitiveBlocks (d := d) A where
   block_primitive := hA
 

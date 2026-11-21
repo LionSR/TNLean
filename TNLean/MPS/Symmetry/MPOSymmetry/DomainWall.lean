@@ -455,7 +455,8 @@ for all words `u`, `v` longer than a fixed buffer. The target blocks are identif
 
 The source draws this identity with one site on each side of the wall (lines 774--832), in the
 setting of the renormalization fixed point (lines 1351 and 1358); the buffer here plays the
-role of the blocked sites of line 1358. The scalar `c` is `c_{AB}` of `eq:localcdef` for `ℤ₂` and `B^g_{x,y}` of
+role of the blocked sites of line 1358. The scalar `c` is `c_{AB}` of `eq:localcdef` for `ℤ₂` and
+`B^g_{x,y}` of
 `eq:localcdefG` for a general group. Both walls and the phase are nonzero, the convention of
 the module docstring. -/
 structure IsDomainWallAction (g : G) {x y x' y' : X} (hx : g • x = x') (hy : g • y = y')

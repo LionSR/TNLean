@@ -136,8 +136,7 @@ theorem blockTensor_toTensorFromBlocks_apply {r : ℕ} {dim : Fin r → ℕ}
         (fun k ↦ μ k ^ p)
         (fun k ↦ blockTensor (d := d) (n := Fin (dim k)) (blocks k) p) i := by
   simp [Kraus.blockTensor, Kraus.reindexPhysical, toTensorFromBlocks,
-    evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal,
-    Kraus.length_wordOfBlock]
+    evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal]
 
 namespace CPSVCanonicalFormData
 
