@@ -18,6 +18,21 @@ interval of a longer open chain. Summing these comparisons controls the
 longer-range open parent Hamiltonian by the shorter-range one. This is the
 open-boundary counterpart of the periodic comparison used in the finite-range
 gap argument.
+
+The equality of the open-chain parent interactions from equal local spaces is stated, in the
+last section, for the parent interaction on the open chain (`parentChainInteraction`).
+
+**Transitional (#10948).** `openParentHamiltonianES_comparison_of_local`,
+`openParentHamiltonianES_gap_of_long_gap_at_length`, `openParentHamiltonianES_gap_of_long_gap`,
+`openParentHamiltonianES_two_gap_of_long_gap`, `openParentHamiltonianES_eq_of_groundSpace_eq`,
+`exists_openParentHamiltonianES_two_uniform_gap_of_isInjective` and
+`exists_strict_openParentHamiltonianES_two_window_of_isInjective` are kept, unchanged, for
+unconverted users and are deleted when their last user is converted; the first two are replaced
+by `hamiltonian_chainTranslates_comparison_of_local` and
+`toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length`, from which the matrix
+forms of the next two follow and are stated where they are first used. The suffix Hamiltonian
+`openSuffixParentHamiltonianES` and the declarations about it are converted with it in a later
+package; the last two kept theorems rest on the open-chain martingale gap, which uses it.
 -/
 
 open scoped ComplexOrder
@@ -392,5 +407,23 @@ theorem exists_strict_openParentHamiltonianES_two_window_of_isInjective
   refine ⟨m, hm, δ, hnum, ?_⟩
   intro v hv
   exact hGap (m + 1) (by dsimp [m]; omega) v hv
+
+/-! ### The parent interaction on the open chain
+
+For the matrices, the comparison from one window and the gap transfer are
+`hamiltonian_chainTranslates_comparison_of_local` and
+`toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length`
+(`OpenInteractionRangeComparison`, which imports this file) with the local parent interaction as
+the local matrix, since `parentChainInteraction A R N` is the open-chain translates of that
+matrix. -/
+
+/-- Equality of the local MPS spaces at one length makes the parent interactions on the open
+chain equal at every volume. -/
+theorem parentChainInteraction_eq_of_groundSpace_eq
+    {A B : MPSTensor d D} {L : ℕ}
+    (h : groundSpace A L = groundSpace B L) (N : ℕ) :
+    parentChainInteraction A L N = parentChainInteraction B L N := by
+  unfold parentChainInteraction
+  rw [parentInteraction_eq_of_groundSpace_eq h]
 
 end MPSTensor
