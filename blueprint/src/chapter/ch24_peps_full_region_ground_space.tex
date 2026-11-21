@@ -57,11 +57,11 @@ A term on this region acts on the entire graph.
     \label{thm:peps_region_projector_unit_gap}
     \lean{TNLean.PEPS.canonicalRegionParentInteraction_isIdempotentElem,
         TNLean.PEPS.canonicalRegionParentInteraction_apply_eq_self,
-        TNLean.PEPS.canonicalRegionParentInteraction_unit_norm_gap,
+        TNLean.PEPS.canonicalRegionParentInteraction_eigenvalue_gap_one,
         TNLean.PEPS.canonicalRegionParentInteraction_spectrum_subset,
         TNLean.PEPS.place_canonical_isIdempotentElem,
         TNLean.PEPS.place_canonical_isSymmetricProjection,
-        TNLean.PEPS.place_canonical_unit_norm_gap}
+        TNLean.PEPS.place_canonical_eigenvalue_gap_one}
     \leanok
     \uses{thm:peps_canonical_region_interaction,
         def:peps_region_parent_hamiltonian}
@@ -69,7 +69,7 @@ A term on this region acts on the entire graph.
     $\widetilde P_R$ are orthogonal projections. Their spectra
     contain only zero and one. On the orthogonal complement of
     either kernel the corresponding projector is the identity,
-    and hence has unit norm gap.
+    and hence every eigenvalue is zero or at least one.
 \end{lemma}
 
 \begin{proof}\leanok
