@@ -32,6 +32,8 @@ intertwiner is already visible in elementary block matrix multiplication.
 
 \begin{proof}
     \leanok
+    This is~\cite[``Diagonal blocks of block-triangular
+        products'']{QICLean2026Blueprint}.
     For two block upper-triangular matrices $X,Y$,
     $(XY)_{kk}=\sum_l X_{kl}Y_{lk}$; the terms with $l<k$ vanish because
     $X_{kl}=0$, and those with $l>k$ vanish because $Y_{lk}=0$, leaving
@@ -88,6 +90,7 @@ intertwiner is already visible in elementary block matrix multiplication.
     zero; on a basis word $w$, $\mathrm{aug}(w)=1$ if $w$ is empty and $0$
     otherwise. The \emph{positive ideal} is the two-sided ideal
     $F_+=\ker(\mathrm{aug})$ of elements with zero constant term.
+    This is~\cite[``Word algebra and positive ideal'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{definition}[Word-algebra module of a tensor]
@@ -108,6 +111,7 @@ intertwiner is already visible in elementary block matrix multiplication.
     For a finite-dimensional $F$-module $M$, the \emph{trace character} is
     the linear functional $p\mapsto\tr(\rho_M(p))$ on $F$, and the
     \emph{word trace} of a word $w$ is $\tr(\rho_M(w))$.
+    This is~\cite[``Word traces'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Word traces of a tensor]
@@ -181,6 +185,8 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 
 \begin{proof}
     \leanok
+    This is~\cite[``Positive-ideal separation of linear
+        functionals'']{QICLean2026Blueprint}.
     Their difference agrees with $(\chi_1(1)-\chi_2(1))\cdot\mathrm{aug}$ on
     every basis word, by induction on the monoid-algebra presentation, hence
     on all of $F$ by linearity; on $F_+$ the augmentation vanishes, so the
@@ -284,6 +290,8 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 
 \begin{proof}
     \leanok
+    This is~\cite[``Nilpotency from vanishing trace
+        powers'']{QICLean2026Blueprint}.
     The characteristic polynomial is determined by the power sums of its
     roots (Newton's identities), so vanishing trace powers force it to
     equal $X^{\dim}$; the Cayley--Hamilton theorem then gives nilpotency.

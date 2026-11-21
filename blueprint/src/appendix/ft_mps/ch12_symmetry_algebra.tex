@@ -304,9 +304,9 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
 
 \begin{lemma}[Cohomology relation is an equivalence relation]%
     \label{thm:cohomologous_equivalence}
-    \lean{TNLean.Algebra.isMulCoboundary₂_div_self,
-        TNLean.Algebra.isMulCoboundary₂_div_symm,
-        TNLean.Algebra.isMulCoboundary₂_div_trans}
+    \lean{ScalarCohomology.isMulCoboundary₂_div_self,
+        ScalarCohomology.isMulCoboundary₂_div_symm,
+        ScalarCohomology.isMulCoboundary₂_div_trans}
     \leanok
     \uses{def:cohomologous_to}
     The relation ``cohomologous to'' is reflexive, symmetric, and
@@ -324,7 +324,7 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
 
 \begin{lemma}[Cohomologous cochains differ by a coboundary]%
     \label{thm:coboundary_iff_cohomologous_one}
-    \lean{TNLean.Algebra.isMulCoboundary₂_div_iff_quotient_mk_eq}
+    \lean{ScalarCohomology.isMulCoboundary₂_div_iff_quotient_mk_eq}
     \leanok
     \uses{def:is_coboundary, def:cohomologous_to}
     Two scalar $2$-cochains satisfy $\omega_1\sim\omega_2$ if and only if
@@ -349,7 +349,7 @@ $\omega_1,\omega_2:G\times G\to\C^\times$ be arbitrary scalar $2$-cochains.
 
 \begin{lemma}[Coboundary changes preserve the cocycle equation]%
     \label{thm:cochain_coboundary_preserves_cocycle}
-    \lean{TNLean.Algebra.isMulCocycle₂_of_isMulCoboundary₂_div}
+    \lean{ScalarCohomology.isMulCocycle₂_of_isMulCoboundary₂_div}
     \leanok
     \uses{def:cohomologous_to, def:is_cocycle}
     If two scalar two-cochains $\omega_1$ and $\omega_2$ are

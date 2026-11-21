@@ -58,22 +58,11 @@ IMPORT_COMMAND_RE = re.compile(
 SITE_MODULES_IN_CIRCUIT: frozenset[str] = frozenset(
     f"TNLean.Circuit.{name}"
     for name in (
-        "EmbeddedProduct",
-        "ExpectationBounds",
-        "ProductVector",
         "RegionSplit",
         "RegionalSwap",
-        "SiteEmbedding",
-        "SiteOscillation",
         "SitePermutation",
-        "SitePermutationSupport",
         "SitewiseTensorSupport",
-        "SpectatorOscillationSupport",
-        "SpectatorSiteExpectation",
-        "SupportProjection",
-        "SupportedComplementProduct",
         "SupportedGroundSpace",
-        "SupportedMatrixElements",
         "SupportedNormalizedGroundSpace",
         "SupportedOperators",
     )
@@ -162,7 +151,6 @@ MUTUAL_DIRECTORIES: frozenset[str] = frozenset(
         "MPS/ParentHamiltonian <-> MPS/Symmetry",
         "MPS/Periodic <-> MPS/SharedInfra",
         "MPS/Preparation <-> MPS/SharedInfra",
-        "MPS/Preparation <-> MPS/Symmetry",
         "MPS/Preparation <-> Spectral",
         "MPS/SharedInfra <-> Spectral",
         "MPS/Structure <-> MPS/Symmetry",

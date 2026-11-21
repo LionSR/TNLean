@@ -197,7 +197,7 @@ canonical realization is inferred from a physical spectral gap here.
 
 \begin{lemma}[Cancellation of a unitary projective factor]
     \label{thm:spc_aux_unitary_factor_cancel}
-    \lean{TNLean.Algebra.ProjectiveRepresentation.factor_mul_star_eq_one_of_unitary}
+    \lean{ProjectiveRepresentation.factor_mul_star_eq_one_of_unitary}
     \leanok
     \uses{def:projective_rep}
     Let $\rho:G\to\mathrm{GL}(D,\C)$ be a projective representation
@@ -213,7 +213,7 @@ canonical realization is inferred from a physical spectral gap here.
 
 \begin{definition}[Projective action on the intertwiner space]
     \label{def:spc_aux_projective_hom_action}
-    \lean{TNLean.Algebra.ProjectiveRepresentation.homMatrix}
+    \lean{ProjectiveRepresentation.homMatrix}
     \leanok
     \uses{def:projective_rep}
     For projective representations $\rho_0:G\to\mathrm{GL}(D_0,\C)$
@@ -225,7 +225,7 @@ canonical realization is inferred from a physical spectral gap here.
 
 \begin{lemma}[Unitarity on the intertwiner space]
     \label{thm:spc_aux_projective_hom_unitary}
-    \lean{TNLean.Algebra.ProjectiveRepresentation.homMatrix_mem_unitaryGroup}
+    \lean{ProjectiveRepresentation.homMatrix_mem_unitaryGroup}
     \leanok
     \uses{def:spc_aux_projective_hom_action}
     If all matrices of $\rho_0$ and $\rho_1$ are unitary, then every
@@ -239,7 +239,7 @@ canonical realization is inferred from a physical spectral gap here.
 
 \begin{lemma}[Multiplication on the intertwiner space]
     \label{thm:spc_aux_projective_hom_product}
-    \lean{TNLean.Algebra.ProjectiveRepresentation.homMatrix_mul}
+    \lean{ProjectiveRepresentation.homMatrix_mul}
     \leanok
     \uses{def:spc_aux_projective_hom_action}
     If $\rho_a$ has factor $\omega_a$, then
@@ -256,7 +256,7 @@ canonical realization is inferred from a physical spectral gap here.
 
 \begin{lemma}[Exact composition of conjugations on intertwiners]
     \label{thm:spc_aux_projective_hom_conjugation}
-    \lean{TNLean.Algebra.ProjectiveRepresentation.homMatrix_conjugation_mul}
+    \lean{ProjectiveRepresentation.homMatrix_conjugation_mul}
     \leanok
     \uses{def:spc_aux_projective_hom_action}
     Suppose $D_0,D_1>0$ and both projective representations are unitary.
@@ -274,7 +274,7 @@ canonical realization is inferred from a physical spectral gap here.
 
 \begin{lemma}[Uniform rigidity of a unitary projective class]
     \label{thm:spc_aux_uniform_projective_rigidity}
-    \lean{TNLean.Algebra.ProjectiveRepresentation.exists_uniform_adjoint_rigidity_radius}
+    \lean{ProjectiveRepresentation.exists_uniform_adjoint_rigidity_radius}
     \leanok
     \uses{def:spc_aux_adjoint_coordinates, def:projective_rep, def:cohomologous_to}
     For every $D>0$ there is $\delta_D>0$ such that the following holds
@@ -1008,15 +1008,16 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 
 \begin{definition}[Ring support distance]
     \label{aux:ring-support-distance}
-    \lean{MPSPreparation.ringSupportDistance}\leanok
+    \lean{ManyBody.ringSupportDistance}\leanok
     For nonempty $X,Y\subseteq\Lambda$, let $d(X,Y)$ be the least integer $r\geq0$
     for which there exist $x\in X$, $y\in Y$, and $m\in\mathbb Z$ such that
     $|m|\leq r$ and $y=x+m\pmod N$.
+    This is~\cite[``Distance on the ring'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Displacement characterization]
     \label{aux:ring-support-distance-separation}
-    \lean{MPSPreparation.isGraphSeparated_iff_lt_ringSupportDistance}\leanok
+    \lean{ManyBody.isGraphSeparated_iff_lt_ringSupportDistance}\leanok
     \uses{aux:ring-support-distance, aux:ring-support-distance-cycle}
     For nonempty supports and $r\in\mathbb N$, every site of $X$ is at distance
     larger than $r$ from every site of $Y$ in the cycle graph on $\Lambda$ if and
@@ -1030,7 +1031,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 
 \begin{lemma}[Ring distance and cycle-graph distance]
     \label{aux:ring-support-distance-cycle}
-    \lean{MPSPreparation.ringSupportDistance_le_edist}\leanok
+    \lean{ManyBody.ringSupportDistance_le_edist}\leanok
     \uses{aux:ring-support-distance}
     For nonempty supports, $x\in X$ and $y\in Y$, the ring distance $d(X,Y)$ is at most
     the distance from $x$ to $y$ in the cycle graph on $\Lambda$.
@@ -1042,7 +1043,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 
 \begin{lemma}[Finite-ring Lieb--Robinson estimate]
     \label{aux:finite-ring-lieb-robinson}
-    \lean{MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint}\leanok
+    \lean{ManyBody.norm_heisenberg_commutator_le_ringSupportDistance}\leanok
     \uses{aux:ring-support-distance}
     Let $H=\sum_j h_j$, with Hermitian $h_j\in\mathcal A_{e_j}$ and
     $\|h_j\|\leq1$. Suppose $A\in\mathcal A_X$ and $B\in\mathcal A_Y$,
@@ -1102,7 +1103,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 
 \begin{lemma}[Translation-invariant finite-ring propagation bound]
     \label{aux:interaction-hamiltonian-lieb-robinson}
-    \lean{MPSTensor.norm_hamiltonian_translationInvariant_commutator_le_exp_abs_of_disjoint}\leanok
+    \lean{ManyBody.Interaction.norm_hamiltonian_translationInvariant_commutator_le_exp_abs_of_disjoint}\leanok
     \uses{aux:finite-ring-lieb-robinson,aux:cyclic-local-embedding-norm,
         aux:cyclic-two-site-embedding-support}
     Let $h$ be a Hermitian two-site interaction with $\|h\|\leq1$, and let
@@ -1124,8 +1125,8 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 \begin{lemma}[Gaussian-filtered finite-ring commutators]
     \label{lem:spt_finite_ring_gaussian_commutator}
     \lean{ManyBody.Interaction.isHermitian_translates_term,
-        MPSTensor.norm_gaussianFilteredTerm_hamiltonian_translationInvariant_commutator_le,
-        MPSTensor.norm_gaussianFilteredTerm_hamiltonian_translationInvariant_commutator_le_exp}
+        ManyBody.Interaction.norm_gaussianFilteredTerm_hamiltonian_translationInvariant_commutator_le,
+        ManyBody.Interaction.norm_gaussianFilteredTerm_hamiltonian_translationInvariant_commutator_le_exp}
     \leanok
     \discussion{9879}
     \uses{aux:interaction-hamiltonian-lieb-robinson}
@@ -1244,7 +1245,7 @@ argument below.
 
 \begin{lemma}[Actual finite-ring regularized-frequency locality]
     \label{cor:spt_finite_ring_regularized_frequency_locality}
-    \lean{MPSTensor.norm_negativeFrequency_hamiltonian_translationInvariant_commutator_le}
+    \lean{ManyBody.Interaction.norm_negativeFrequency_hamiltonian_translationInvariant_commutator_le}
     \leanok
     \discussion{9879}
     \uses{aux:interaction-hamiltonian-lieb-robinson}

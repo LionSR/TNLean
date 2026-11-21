@@ -252,11 +252,11 @@ is recorded in
 
 \begin{lemma}[Spectral gap along an ordered interpolation]
     \label{thm:common_kernel_spectral_gap_interpolation}
-    \lean{Matrix.gap_interpolation_of_le,
-        Matrix.orthogonal_quadratic_gap_of_spectrum_separated,
-        Matrix.spectrum_separated_of_orthogonal_quadratic_gap,
-        Matrix.spectrum_gap_interpolation_of_le,
-        Matrix.spectrum_gap_interpolation_of_le_of_nontrivial_kernel}
+    \lean{ManyBody.mul_norm_sq_le_re_inner_of_hasEigenvalue,
+        ManyBody.forall_hasEigenvalue_iff_re_inner,
+        ManyBody.groundSpace_zero_eq_of_le,
+        ManyBody.forall_hasEigenvalue_of_le,
+        ManyBody.IsGapped.of_le}
     \leanok
     If every eigenvalue $z$ of a Hermitian matrix $M$ has $\operatorname{Re}z=0$
     or $\operatorname{Re}z\geq\delta$, then
@@ -264,11 +264,12 @@ is recorded in
     $x\perp\ker M$. Conversely, if $M\geq0$ satisfies this quadratic-form bound,
     then every eigenvalue $z$ of $M$ has $\operatorname{Re}z\geq0$, and
     $\operatorname{Re}z=0$ or $\operatorname{Re}z\geq\delta$.
-    Let $0\leq A\leq B$ be matrices with $\ker A\subseteq\ker B$ and such a
-    gap $\delta$ for $A$, and let $t\geq0$. Then $C_t=A+t(B-A)$ is positive
-    semidefinite, $\ker C_t=\ker A$, and every eigenvalue $z$ of $C_t$
-    satisfies $\operatorname{Re}z=0$ or $\operatorname{Re}z\geq\delta$. If
-    $\ker A\neq0$, then $0$ is an eigenvalue of every $C_t$.
+    Let $0\leq A\leq C$ be matrices with $\ker A\subseteq\ker C$ and such a
+    gap $\delta$ for $A$. Then $\ker C=\ker A$, and every eigenvalue $z$ of
+    $C$ satisfies $\operatorname{Re}z=0$ or $\operatorname{Re}z\geq\delta$.
+    In particular, if $0\leq A\leq B$ with $\ker A\subseteq\ker B$ and
+    $t\geq0$, this applies to $C_t=A+t(B-A)$, which is positive semidefinite;
+    if $\ker A\neq0$, then $0$ is an eigenvalue of every $C_t$.
 \end{lemma}
 
 \begin{proof}

@@ -1527,9 +1527,9 @@ the three-cocycle and fusion-gauge conventions follow
 
 \begin{definition}[Two scalar three-cochains]
     \label{def:asymex_z2_cocycles}
-    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle,
-        TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_generator,
-        TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_zero}
+    \lean{ScalarThreeCochain.cyclicTwoCocycle,
+        ScalarThreeCochain.cyclicTwoCocycle_generator,
+        ScalarThreeCochain.cyclicTwoCocycle_zero}
     \leanok
     \uses{def:mpug_three_cocycle}
     Write $\Z_2=\{e,s\}$ multiplicatively, with $s^2=e$.
@@ -1540,13 +1540,14 @@ the three-cocycle and fusion-gauge conventions follow
     \end{align}
     Thus $\omega_p(s,s,s)=(-1)^p$, all other values are one,
     and $\omega_0$ is the constant cochain one.
+    This is~\cite[``Two scalar three-cochains'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Normalization, cocycle equation, and unit modulus]
     \label{thm:asymex_z2_properties}
-    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_isNormalized,
-        TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_isCocycle,
-        TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_norm}
+    \lean{ScalarThreeCochain.cyclicTwoCocycle_isNormalized,
+        ScalarThreeCochain.cyclicTwoCocycle_isCocycle,
+        ScalarThreeCochain.cyclicTwoCocycle_norm}
     \leanok
     \uses{def:asymex_z2_cocycles}
     Each $\omega_p$ is normalized, has unit modulus, and satisfies,
@@ -1560,6 +1561,8 @@ the three-cocycle and fusion-gauge conventions follow
 \begin{proof}
     \leanok
     \uses{def:asymex_z2_cocycles}
+    This is~\cite[``Normalization, cocycle equation, and unit
+        modulus'']{QICLean2026Blueprint}.
     An identity argument excludes the triple $(s,s,s)$, proving
     normalization, and checking the two choices for each of $a,b,c,d$
     and for $p$ with $s^2=e$ verifies the cocycle equation.
@@ -1568,10 +1571,10 @@ the three-cocycle and fusion-gauge conventions follow
 
 \begin{lemma}[Distinct scalar gauge classes]
     \label{thm:asymex_z2_classes}
-    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_cohomologousTo_iff,
-        TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_one_not_isTrivialGaugeClass,
-        TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_sigma_generator,
-        TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_fusionGauge_generator}
+    \lean{ScalarThreeCochain.cyclicTwoCocycle_cohomologousTo_iff,
+        ScalarThreeCochain.cyclicTwoCocycle_one_not_isTrivialGaugeClass,
+        ScalarThreeCochain.cyclicTwoCocycle_sigma_generator,
+        ScalarThreeCochain.cyclicTwoCocycle_fusionGauge_generator}
     \leanok
     \uses{def:asymex_z2_cocycles,def:mpug_cohomologous_to,def:mpug_inversion_cochains}
     The cochains $\omega_p$ and $\omega_q$ are cohomologous if and

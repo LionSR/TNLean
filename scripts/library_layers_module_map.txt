@@ -2062,11 +2062,8 @@ TNLean.MPS.ParentHamiltonian.Martingale.CanonicalGapToInteractionGap -> TNLean.M
 TNLean.MPS.ParentHamiltonian.Martingale.CanonicalOpenGap -> TNLean.MPS.ParentHamiltonian.Gap.CanonicalOpenGap  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.CompactOpenIntervalGap -> TNLean.MPS.ParentHamiltonian.Continuity.OpenGapContinuity @0  # tn; merged into MPS.ParentHamiltonian.Martingale.OpenGapContinuity
 TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian -> TNLean.MPS.ParentHamiltonian.Gap.Comparison.CyclicWindowOpenHamiltonian  # tn
-TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorGapEquivalence -> TNLean.MPS.ParentHamiltonian.Gap.Spectator.DependentSpectatorGapEquivalence  # qiclean:analysis
-TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorProjections -> TNLean.MPS.ParentHamiltonian.Gap.Spectator.DependentSpectatorProjections  # qiclean:analysis
 TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2 -> TNLean.MPS.ParentHamiltonian.ParentInteraction.EmbeddedC2  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.EventualKernelOpenGap -> TNLean.MPS.ParentHamiltonian.Interaction.EventualKernelOpenGap  # tn
-TNLean.MPS.ParentHamiltonian.Martingale.FiberwiseQuadraticFormGap -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.FiberwiseQuadraticFormGap  # qiclean:analysis
 TNLean.MPS.ParentHamiltonian.Martingale.FiniteIntervalGapComparison -> TNLean.MPS.ParentHamiltonian.ParentInteraction.FiniteIntervalGapComparison @0  # tn; merge target
 TNLean.MPS.ParentHamiltonian.Martingale.FiniteRangeKnabeGap -> TNLean.MPS.ParentHamiltonian.Gap.Comparison.FiniteRangeKnabeGap @0  # tn; merge target
 TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbient -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.FixedAmbient  # tn
@@ -2112,10 +2109,6 @@ TNLean.MPS.ParentHamiltonian.Martingale.Reduction -> TNLean.MPS.ParentHamiltonia
 TNLean.MPS.ParentHamiltonian.Martingale.ResidueCoverGapCriterion -> TNLean.MPS.ParentHamiltonian.Blocking.ResidueCoverGapCriterion @0  # tn; merge target
 TNLean.MPS.ParentHamiltonian.Martingale.ResidueCoverGapLimit -> TNLean.MPS.ParentHamiltonian.Blocking.ResidueCoverGapCriterion @2  # tn; merged into MPS.ParentHamiltonian.Martingale.ResidueCoverGapCriterion
 TNLean.MPS.ParentHamiltonian.Martingale.SparseGroupedOpenGap -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.SparseGroupedOpenGap  # tn
-TNLean.MPS.ParentHamiltonian.Martingale.SpectatorGapEquivalence -> TNLean.MPS.ParentHamiltonian.Gap.Spectator.SpectatorGapEquivalence  # qiclean:analysis
-TNLean.MPS.ParentHamiltonian.Martingale.SpectatorMaps -> TNLean.MPS.ParentHamiltonian.Gap.Spectator.SpectatorMaps  # qiclean:analysis
-TNLean.MPS.ParentHamiltonian.Martingale.SpectatorOrder -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.SpectatorOrder  # qiclean:analysis
-TNLean.MPS.ParentHamiltonian.Martingale.SpectatorPhysicalEmbedding -> TNLean.MPS.ParentHamiltonian.Gap.Spectator.SpectatorPhysicalEmbedding  # qiclean:analysis
 TNLean.MPS.ParentHamiltonian.Martingale.SpectatorTransport -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.SpectatorTransport  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.Transport -> TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport @0  # tn; merge target
 TNLean.MPS.ParentHamiltonian.Martingale.WholeIncrementSpectatorTransport -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.WholeIncrementSpectatorTransport  # tn
@@ -2417,8 +2410,6 @@ TNLean.MPS.Preparation.ExactFixedPointPolar -> TNLean.MPS.Preparation.Polar.Exac
 TNLean.MPS.Preparation.ExactSectorEncoder -> TNLean.MPS.Preparation.SectorEncoder.ExactSectorEncoder  # tn
 TNLean.MPS.Preparation.ExplicitPreparationScale -> TNLean.MPS.Preparation.Inhomogeneous.ExplicitPreparationScale @0  # tn
 TNLean.MPS.Preparation.FiniteRingCorrelationLimit -> TNLean.MPS.CanonicalForm.Correlation.FiniteRingCorrelationLimit  # tn
-TNLean.MPS.Preparation.FiniteRingGaussianFilter -> TNLean.MPS.Operator.Interaction.FiniteRingLiebRobinson @1  # qiclean:hamiltonian
-TNLean.MPS.Preparation.FiniteRingLiebRobinson -> TNLean.MPS.Operator.Interaction.FiniteRingLiebRobinson @0  # qiclean:hamiltonian
 TNLean.MPS.Preparation.FixedPointPairState -> TNLean.MPS.Transfer.RenormalizationFixedPoint.FixedPointPairState  # tn; override up with RFP.Defs (forced)
 TNLean.MPS.Preparation.FixedPointPairs -> TNLean.MPS.CanonicalForm.FixedPointApproximation.FixedPointPairs  # tn
 TNLean.MPS.Preparation.GHZSectorObstruction -> TNLean.MPS.Preparation.Circuit.GHZSectorObstruction  # qiclean:circuit

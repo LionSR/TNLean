@@ -51,6 +51,8 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
 \begin{proof}
     \leanok
     \uses{def:qc_spectator_expectation,lem:qc_site_expectation_properties}
+    This is~\cite[``Physical support and spectator
+        expectation'']{QICLean2026Blueprint}.
     By~(\ref{eq:qc_spectator_blocks}), $E_S^{\mathcal K}(B)=B$ is equivalent
     to $E_S(B_{ab})=B_{ab}$ for all $a,b\in J$, which holds if and only if
     $B_{ab}\in\mathcal A_S$ by Lemma~\ref{lem:qc_site_expectation_properties}.
@@ -68,6 +70,8 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
     \leanok
     \uses{thm:al_spectator_support_fixed,thm:qc_spectator_commutant,
         thm:qc_site_oscillation_commutant}
+    This is~\cite[``Vanishing oscillation outside the physical
+        support'']{QICLean2026Blueprint}.
     By Lemma~\ref{thm:al_spectator_support_fixed}, $E_S^{\mathcal K}(B)=B$.
     For $U\in\mathcal A_{\{y\}}\subseteq\mathcal A_{I\setminus S}$,
     Lemma~\ref{thm:qc_spectator_commutant} gives

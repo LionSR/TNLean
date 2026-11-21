@@ -157,8 +157,8 @@
 
 \begin{lemma}[L-symbols of matrix action tensors]
     \label{thm:mpug_l_symbols_action_matrices}
-    \lean{TNLean.Algebra.LSymbol.isCompatible_one_of_mul_eq_smul,
-        TNLean.Algebra.LSymbol.isNormalized_of_mul_eq_smul}
+    \lean{LSymbol.isCompatible_one_of_mul_eq_smul,
+        LSymbol.isNormalized_of_mul_eq_smul}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_l_normalized}
     Let $G$ act on $\mathsf X$, and let $S_{g,x}$ be nonzero square matrices
@@ -688,6 +688,7 @@ three defect domains and maps, which the displayed matrices do not specify.
     \end{align}
     Its entry in row $\sigma(s)$ and column $s$ is $\varphi(s)$, and every
     other entry vanishes.
+    This is~\cite[``Monomial matrix'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Calculus of monomial matrices]
@@ -725,6 +726,7 @@ three defect domains and maps, which the displayed matrices do not specify.
 
 \begin{proof}\leanok
     \uses{def:mpug_monomial_matrix}
+    This is~\cite[``Calculus of monomial matrices'']{QICLean2026Blueprint}.
     The action of $M(\sigma,\varphi)$ on a vector is
     $(M(\sigma,\varphi)v)_t=\varphi(\sigma^{-1}(t))v_{\sigma^{-1}(t)}$, which
     gives the fixed-vector criterion after the substitution $t=\sigma(s)$.
@@ -740,8 +742,8 @@ three defect domains and maps, which the displayed matrices do not specify.
 
 \begin{lemma}[Flat phases on the hypercube have a potential]
     \label{thm:mpug_hypercube_potential}
-    \lean{TNLean.Algebra.hypercube_induction,
-        TNLean.Algebra.exists_potential_of_flat}
+    \lean{Hypercube.hypercube_induction,
+        Hypercube.exists_potential_of_flat}
     \leanok
     Let $M$ be a commutative group and let
     $\varphi_j\colon\mathbb F_2^r\to M$ for $0\leq j<r$ be phases attached
@@ -762,6 +764,8 @@ three defect domains and maps, which the displayed matrices do not specify.
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``Flat phases on the hypercube have a
+        potential'']{QICLean2026Blueprint}.
     For the connectivity claim, every $\gamma$ is the sum of the $e_j$ over
     its support, so induction on the support carries the property from $0$ to
     $\gamma$.
@@ -790,9 +794,9 @@ three defect domains and maps, which the displayed matrices do not specify.
 
 \begin{definition}[Trivial holonomy on a fiber]
     \label{def:mpug_trivial_holonomy}
-    \lean{TNLean.Algebra.fiberFlip,
-        TNLean.Algebra.fiberFlip_apply,
-        TNLean.Algebra.IsTrivialHolonomy}
+    \lean{Hypercube.fiberFlip,
+        Hypercube.fiberFlip_apply,
+        Hypercube.IsTrivialHolonomy}
     \leanok
     Let $X$ be a finite set and consider the basis $X\times\mathbb F_2^r$.
     For $0\leq j<r$ let $\sigma_j$ be the coordinate flip
@@ -805,16 +809,17 @@ three defect domains and maps, which the displayed matrices do not specify.
         \label{eq:mpug_trivial_holonomy}
     \end{align}
     for all $j,k$ and $\gamma\in\mathbb F_2^r$.
+    This is~\cite[``Trivial holonomy on a fiber'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Monomial fixed-space criterion]
     \label{thm:mpug_monomial_fixed_space_criterion}
-    \lean{TNLean.Algebra.reindex_mulVec,
-        TNLean.Algebra.commonFixedSubmodule_reindex,
-        TNLean.Algebra.finrank_commonFixedSubmodule_reindex,
-        TNLean.Algebra.add_self_eq_zero_pi_zmod_two,
-        TNLean.Algebra.eq_zero_of_mem_commonFixedSubmodule_monomial_fiberFlip,
-        TNLean.Algebra.finrank_commonFixedSubmodule_monomial_fiberFlip}
+    \lean{Matrix.reindex_mulVec,
+        Matrix.commonFixedSubmodule_reindex,
+        Matrix.finrank_commonFixedSubmodule_reindex,
+        Hypercube.add_self_eq_zero_pi_zmod_two,
+        Hypercube.eq_zero_of_mem_commonFixedSubmodule_monomial_fiberFlip,
+        Hypercube.finrank_commonFixedSubmodule_monomial_fiberFlip}
     \leanok
     \uses{def:mpug_monomial_matrix, def:mpug_trivial_holonomy,
         def:mpug_common_fixed_subspace}
@@ -871,10 +876,10 @@ three defect domains and maps, which the displayed matrices do not specify.
 
 \begin{lemma}[Local Gauss operator of monomial matter unitaries]
     \label{thm:mpug_gauss_operator_monomial}
-    \lean{TNLean.Algebra.gaussMonomialPerm,
-        TNLean.Algebra.gaussMonomialPerm_apply,
-        TNLean.Algebra.gaussMonomialPhase,
-        TNLean.Algebra.gaussOperator_eq_monomial}
+    \lean{GaussLaw.gaussMonomialPerm,
+        GaussLaw.gaussMonomialPerm_apply,
+        GaussLaw.gaussMonomialPhase,
+        GaussLaw.gaussOperator_eq_monomial}
     \leanok
     \uses{def:mpug_gauss_operator, def:mpug_monomial_matrix}
     Suppose that every matter unitary of the tuple $R$ is monomial,
@@ -899,9 +904,9 @@ three defect domains and maps, which the displayed matrices do not specify.
 
 \begin{lemma}[Periodic placement of monomial operators]
     \label{thm:mpug_embed_monomial}
-    \lean{MPOTensor.windowPerm,
-        MPOTensor.windowPerm_apply,
-        MPOTensor.placeAlong_ringWindow_monomial,
+    \lean{ManyBody.placeAlongPerm,
+        ManyBody.placeAlongPerm_apply_apply,
+        ManyBody.placeAlong_monomial,
         MPOTensor.extractWindow_two,
         MPOTensor.replaceWindow_two_apply}
     \leanok

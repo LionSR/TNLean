@@ -587,9 +587,9 @@ labelling the cohomology classes.
 
 \begin{definition}[The cocycles of the cyclic groups]
     \label{def:asymex_group_cocycle_cyclic}
-    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicCocycle,
-        TNLean.Algebra.ScalarThreeCochain.rootOfUnity,
-        TNLean.Algebra.ScalarThreeCochain.rootOfUnity_pow,
+    \lean{ScalarThreeCochain.cyclicCocycle,
+        ScalarThreeCochain.rootOfUnity,
+        ScalarThreeCochain.rootOfUnity_pow,
         MPOTensor.GroupCocycle.residueEquiv}
     \leanok
     \uses{def:mpug_scalar_cochains}
@@ -605,10 +605,10 @@ labelling the cohomology classes.
 
 \begin{lemma}[The cyclic instances]
     \label{thm:asymex_group_cocycle_cyclic}
-    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_val,
-        TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_isCocycle,
-        TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_isNormalized,
-        TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_norm,
+    \lean{ScalarThreeCochain.cyclicCocycle_val,
+        ScalarThreeCochain.cyclicCocycle_isCocycle,
+        ScalarThreeCochain.cyclicCocycle_isNormalized,
+        ScalarThreeCochain.cyclicCocycle_norm,
         MPOTensor.GroupCocycle.mpo_tensor_cyclic_apply,
         MPOTensor.GroupCocycle.cyclic_operator_laws}
     \leanok
@@ -661,8 +661,8 @@ class of $\omega$.
 
 \begin{definition}[The domain-wall phase]
     \label{def:asymex_group_cocycle_domain_wall_phase}
-    \lean{TNLean.Algebra.ScalarThreeCochain.domainWallPhase,
-        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_eq_inv_cyclicInvariant}
+    \lean{ScalarThreeCochain.domainWallPhase,
+        ScalarThreeCochain.domainWallPhase_eq_inv_cyclicInvariant}
     \leanok
     \uses{def:mpug_cyclic_invariant}
     For a scalar three-cochain $\omega$ of a group $G$ and $g\in G$ of order
@@ -672,11 +672,12 @@ class of $\omega$.
         =I_{g,o(g)}(\omega)^{-1}.
         \notag
     \end{align}
+    This is~\cite[``The domain-wall phase'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Gauge invariance of the domain-wall phase]
     \label{thm:asymex_group_cocycle_domain_wall_phase_gauge}
-    \lean{TNLean.Algebra.ScalarThreeCochain.CohomologousTo.domainWallPhase_eq}
+    \lean{ScalarThreeCochain.CohomologousTo.domainWallPhase_eq}
     \leanok
     \uses{def:asymex_group_cocycle_domain_wall_phase}
     Cohomologous three-cochains have the same phase $P_g$ for every $g\in G$.
@@ -685,6 +686,8 @@ class of $\omega$.
 \begin{proof}
     \leanok
     \uses{thm:mpug_cyclic_invariant_gauge}
+    This is~\cite[``Gauge invariance of the domain-wall
+        phase'']{QICLean2026Blueprint}.
     Because $P_g(\omega)=I_{g,o(g)}(\omega)^{-1}$,
     Lemma~\ref{thm:mpug_cyclic_invariant_gauge} implies that cohomologous
     three-cochains share the same domain-wall phase.
@@ -692,19 +695,19 @@ class of $\omega$.
 
 \begin{lemma}[Domain-wall phases of the cyclic cocycles]
     \label{thm:asymex_group_cocycle_cyclic_domain_wall}
-    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_cyclicCocycle,
-        TNLean.Algebra.ScalarThreeCochain.val_toAdd_pow,
-        TNLean.Algebra.ScalarThreeCochain.sum_carry,
-        TNLean.Algebra.ScalarThreeCochain.orderOf_eq_div_gcd,
-        TNLean.Algebra.ScalarThreeCochain.orderOf_mul_val,
-        TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_cyclicCocycle_one,
-        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_eq_exp,
-        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_eq_exp_sum,
-        TNLean.Algebra.ScalarThreeCochain.sum_carry_orderOf,
-        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle,
-        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_three,
-        TNLean.Algebra.ScalarThreeCochain.domainWallPhase_cyclicCocycle_four,
-        TNLean.Algebra.ScalarThreeCochain.not_cohomologousTo_cyclicCocycle}
+    \lean{ScalarThreeCochain.cyclicInvariant_cyclicCocycle,
+        ScalarThreeCochain.val_toAdd_pow,
+        ScalarThreeCochain.sum_carry,
+        ScalarThreeCochain.orderOf_eq_div_gcd,
+        ScalarThreeCochain.orderOf_mul_val,
+        ScalarThreeCochain.cyclicInvariant_cyclicCocycle_one,
+        ScalarThreeCochain.domainWallPhase_cyclicCocycle_eq_exp,
+        ScalarThreeCochain.domainWallPhase_cyclicCocycle_eq_exp_sum,
+        ScalarThreeCochain.sum_carry_orderOf,
+        ScalarThreeCochain.domainWallPhase_cyclicCocycle,
+        ScalarThreeCochain.domainWallPhase_cyclicCocycle_three,
+        ScalarThreeCochain.domainWallPhase_cyclicCocycle_four,
+        ScalarThreeCochain.not_cohomologousTo_cyclicCocycle}
     \leanok
     \uses{def:asymex_group_cocycle_domain_wall_phase,
         thm:asymex_group_cocycle_cyclic}
@@ -731,6 +734,8 @@ class of $\omega$.
 \begin{proof}
     \leanok
     \uses{thm:mpug_cyclic_invariant_gauge, thm:asymex_group_cocycle_cyclic}
+    This is~\cite[``Domain-wall phases of the cyclic
+        cocycles'']{QICLean2026Blueprint}.
     By Lemma~\ref{thm:asymex_group_cocycle_cyclic},
     $\omega_j(a,[ka],a)=\zeta^{ja\lfloor([ka]+a)/n\rfloor}$. Writing
     $[ka]+a=[(k+1)a]+n\lfloor([ka]+a)/n\rfloor$ and summing over $k<m$, the
@@ -745,25 +750,25 @@ class of $\omega$.
 
 \begin{lemma}[The classes of the cyclic cocycles]
     \label{thm:asymex_group_cocycle_cyclic_classes}
-    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicCocycleSubtype,
-        TNLean.Algebra.ScalarThreeCochain.isPrimitiveRoot_rootOfUnity,
-        TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_eq_of_modEq,
-        TNLean.Algebra.ScalarThreeCochain.cyclicCocycle_zero,
-        TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_cyclicCocycle_iff,
-        TNLean.Algebra.ScalarThreeCochain.anomalyClass_cyclicCocycle_eq_zero_iff,
-        TNLean.Algebra.ScalarThreeCochain.anomalyClass_cyclicCocycle_eq_iff,
-        TNLean.Algebra.ScalarThreeCochain.mem_zpowers_ofAdd_one,
-        TNLean.Algebra.ScalarThreeCochain.norm_scalarRepresentation_apply,
-        TNLean.Algebra.ScalarThreeCochain.applyAsHom_ofAdd_one_sub_id,
-        TNLean.Algebra.ScalarThreeCochain.normKerEquivRootsOfUnity,
-        TNLean.Algebra.ScalarThreeCochain.nat_card_groupCohomology_three_cyclic,
-        TNLean.Algebra.ScalarThreeCochain.exists_anomalyClass_cyclicCocycle_eq,
-        TNLean.Algebra.ScalarThreeCochain.exists_cohomologousTo_cyclicCocycle,
-        TNLean.Algebra.ScalarThreeCochain.ofAdd_one_pow_self,
-        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_of_cyclicInvariant_eq,
-        TNLean.Algebra.ScalarThreeCochain.orderOf_ofAdd_one,
-        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_domainWallPhase_eq,
-        TNLean.Algebra.ScalarThreeCochain.anomalyClass_eq_iff_domainWallPhase_eq}
+    \lean{ScalarThreeCochain.cyclicCocycleSubtype,
+        ScalarThreeCochain.isPrimitiveRoot_rootOfUnity,
+        ScalarThreeCochain.cyclicCocycle_eq_of_modEq,
+        ScalarThreeCochain.cyclicCocycle_zero,
+        ScalarThreeCochain.isTrivialGaugeClass_cyclicCocycle_iff,
+        ScalarThreeCochain.anomalyClass_cyclicCocycle_eq_zero_iff,
+        ScalarThreeCochain.anomalyClass_cyclicCocycle_eq_iff,
+        ScalarThreeCochain.mem_zpowers_ofAdd_one,
+        ScalarThreeCochain.norm_scalarRepresentation_apply,
+        ScalarThreeCochain.applyAsHom_ofAdd_one_sub_id,
+        ScalarThreeCochain.normKerEquivRootsOfUnity,
+        ScalarThreeCochain.nat_card_groupCohomology_three_cyclic,
+        ScalarThreeCochain.exists_anomalyClass_cyclicCocycle_eq,
+        ScalarThreeCochain.exists_cohomologousTo_cyclicCocycle,
+        ScalarThreeCochain.ofAdd_one_pow_self,
+        ScalarThreeCochain.cohomologousTo_of_cyclicInvariant_eq,
+        ScalarThreeCochain.orderOf_ofAdd_one,
+        ScalarThreeCochain.cohomologousTo_iff_domainWallPhase_eq,
+        ScalarThreeCochain.anomalyClass_eq_iff_domainWallPhase_eq}
     \leanok
     \uses{thm:asymex_group_cocycle_cyclic_domain_wall,
         thm:mpug_h3_group_cohomology}
@@ -782,6 +787,7 @@ class of $\omega$.
     \uses{thm:asymex_group_cocycle_cyclic_domain_wall,
         thm:mpug_h3_group_cohomology,
         thm:asymex_group_cocycle_domain_wall_phase_gauge}
+    This is~\cite[``The classes of the cyclic cocycles'']{QICLean2026Blueprint}.
     The value $\omega_j(a,b,c)=\zeta^{ja\lfloor(b+c)/n\rfloor}$ depends on $j$
     only modulo $n$, and $\omega_0=1$. By
     Lemma~\ref{thm:asymex_group_cocycle_cyclic_domain_wall} the classes of
@@ -812,7 +818,7 @@ $b=(0,1)$. That source does not apply the periodic construction to it.
 
 \begin{definition}[The mixed cocycle of type II]
     \label{def:asymex_group_cocycle_klein}
-    \lean{TNLean.Algebra.ScalarThreeCochain.kleinCocycle,
+    \lean{ScalarThreeCochain.kleinCocycle,
         MPOTensor.GroupCocycle.kleinEquiv}
     \leanok
     \uses{def:mpug_scalar_cochains}
@@ -822,9 +828,9 @@ $b=(0,1)$. That source does not apply the periodic construction to it.
 
 \begin{lemma}[The instance for the group of order four]
     \label{thm:asymex_group_cocycle_klein}
-    \lean{TNLean.Algebra.ScalarThreeCochain.kleinCocycle_isCocycle,
-        TNLean.Algebra.ScalarThreeCochain.kleinCocycle_isNormalized,
-        TNLean.Algebra.ScalarThreeCochain.kleinCocycle_norm,
+    \lean{ScalarThreeCochain.kleinCocycle_isCocycle,
+        ScalarThreeCochain.kleinCocycle_isNormalized,
+        ScalarThreeCochain.kleinCocycle_norm,
         MPOTensor.GroupCocycle.mpo_tensor_klein_apply,
         MPOTensor.GroupCocycle.klein_operator_laws}
     \leanok

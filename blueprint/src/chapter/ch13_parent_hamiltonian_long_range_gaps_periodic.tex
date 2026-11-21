@@ -2291,13 +2291,14 @@
 
 \begin{definition}[Finite Euclidean direct-sum operators]
     \label{def:euclidean_fiberwise_operator}
-    \lean{EuclideanSpace.fiberₗ,EuclideanSpace.fiberwiseMap,
-        EuclideanSpace.fiberₗ_apply,EuclideanSpace.fiberwiseMap_apply,
-        EuclideanSpace.fiberₗ_fiberwiseMap}
+    \lean{ContinuousLinearMap.rightFiber,
+        ContinuousLinearMap.rightFiberwiseMap,
+        ContinuousLinearMap.rightFiber_apply,
+        ContinuousLinearMap.rightFiberwiseMap_apply_apply,
+        ContinuousLinearMap.rightFiber_rightFiberwiseMap}
     \leanok
-    Let $S,I,J$ be finite sets and let the scalar field be $\R$ or $\C$.
-    For a vector $x\in\ell^2(S\times I)$, its $s$th fiber is
-    $x_s=(x_{s,i})_{i\in I}$. For a linear operator
+    Let $S,I,J$ be finite sets. For a vector $x\in\ell^2(I\times S)$ over
+    $\C$, its $s$th fiber is $x_s=(x_{i,s})_{i\in I}$. For a linear operator
     $G:\ell^2(I)\to\ell^2(J)$, define $G^{\oplus S}$ by
     $(G^{\oplus S}x)_s=Gx_s$.
     The fiber projection itself is defined without a finiteness assumption.
@@ -2305,25 +2306,22 @@
 
 \begin{lemma}[Finite direct-sum operator identities]
     \label{thm:euclidean_fiberwise_operator}
-    \lean{EuclideanSpace.norm_fiberwiseMap_le,
-        EuclideanSpace.inner_fiberwiseMap,
-        EuclideanSpace.fiberwiseMap_adjoint,
-        EuclideanSpace.fiberwiseMap_comp,
-        EuclideanSpace.fiberwiseMap_id,
-        EuclideanSpace.fiberwiseMap_sub}
+    \lean{ContinuousLinearMap.rightFiberwiseMap_adjoint,
+        ContinuousLinearMap.rightFiberwiseMap_id}
     \leanok
     Finite direct sums preserve adjoints, composition, identity operators, and
     operator differences. They satisfy
     $\lVert G^{\oplus S}\rVert\leq\lVert G\rVert$ and
     $\langle y,G^{\oplus S}x\rangle=\sum_s\langle y_s,Gx_s\rangle$.
     These statements include empty coordinate sets.
-    \uses{def:euclidean_fiberwise_operator}
+    \uses{def:euclidean_fiberwise_operator,lem:right-spectator-extension,
+        thm:ph_spectator_operator_order}
 \end{lemma}
 \begin{proof}\leanok
     The squared norm is the sum of the squared fiber norms. Applying
     $\lVert Gx_s\rVert\leq\lVert G\rVert\lVert x_s\rVert$ to every fiber gives
     the norm bound. The inner-product identity follows by splitting the sum
-    over $S\times I$. Apply the adjoint identity in each fiber to obtain the
+    over $I\times S$. Apply the adjoint identity in each fiber to obtain the
     adjoint formula. Composition, identity, and subtraction hold coordinatewise.
 \end{proof}
 
@@ -2906,6 +2904,8 @@
     \cite[Lemma~commutation(ii)]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
+    This is~\cite[``Uniform upper bounds from all
+        selections'']{QICLean2026Blueprint}.
     For each $i$, select a parameter violating the upper bound if one exists;
     otherwise select any element of $X$.
     Convergence along this selection gives $e(i,x_i)<\varepsilon$ eventually.
@@ -2914,18 +2914,17 @@
 
 \begin{lemma}[Orthogonal projections on finite Euclidean families]
     \label{thm:euclidean_fiberwise_projection}
-    \lean{EuclideanSpace.mem_range_fiberwiseMap_iff,
-        EuclideanSpace.mem_orthogonal_range_fiberwiseMap_iff,
-        EuclideanSpace.fiberwiseMap_range_starProjection,
-        EuclideanSpace.iSup_range_fiberwiseMap_eq,
-        EuclideanSpace.fiberwiseMap_iSup_range_starProjection,
-        EuclideanSpace.fiberwiseMap_sum,
-        EuclideanSpace.norm_sum_fiberwiseMap_range_starProjection_sub_iSup_le}
+    \lean{ContinuousLinearMap.mem_range_rightFiberwiseMap_iff,
+        ContinuousLinearMap.mem_orthogonal_range_rightFiberwiseMap_iff,
+        ContinuousLinearMap.rightFiberwiseMap_range_starProjection,
+        ContinuousLinearMap.iSup_range_rightFiberwiseMap_eq,
+        ContinuousLinearMap.rightFiberwiseMap_iSup_range_starProjection,
+        ContinuousLinearMap.norm_sum_rightFiberwiseMap_range_starProjection_sub_iSup_le}
     \leanok
-    \uses{def:euclidean_fiberwise_operator}
+    \uses{def:euclidean_fiberwise_operator,lem:right-spectator-extension}
     Let $S,I,J$ be finite coordinate sets and let $T\colon\C^I\to\C^J$.
     Write $\mathcal F_S(T)$ for the operator applying $T$ to every fiber
-    of $\C^{S\times I}$. Then
+    of $\C^{I\times S}$. Then
     \begin{align}
         x\in\operatorname{ran}\mathcal F_S(T)
          & \Longleftrightarrow \forall s,\ x_s\in\operatorname{ran}T,         \\
@@ -3243,6 +3242,8 @@
     No finite-dimensional or completeness hypothesis is required.
 \end{lemma}
 \begin{proof}\leanok
+    This is~\cite[``Three-operator perturbation
+        estimate'']{QICLean2026Blueprint}.
     Use $ABC-abc=(A-a)BC+a(B-b)C+ab(C-c)$, the triangle inequality,
     and submultiplicativity of the operator norm.
 \end{proof}
@@ -3260,6 +3261,8 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:three_operator_perturbation}
+    This is~\cite[``Vanishing three-operator
+        perturbations'']{QICLean2026Blueprint}.
     Bound the product difference by the common bound times the sum of the
     three individual norm differences, and apply the squeeze theorem.
 \end{proof}
@@ -3390,6 +3393,8 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
+    This is~\cite[``Isometric conjugation of a projection
+        defect'']{QICLean2026Blueprint}.
     Orthogonal projections are conjugated by $F$, and conjugation by a
     surjective isometry preserves the operator norm. Taking the adjoint
     reverses the order of the two projections and preserves the norm.

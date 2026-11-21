@@ -133,18 +133,9 @@
     Rearranging proves~(\ref{eq:physical_detectability_spectral_gap}).
 \end{proof}
 
-\begin{lemma}[Support of a range projection]
-    \label{thm:physical_range_projection_support}
-    \lean{QuantumCircuit.supportProj_mem_supportedOperators}
-    \leanok
-    Let the local dimension be positive. If a Hermitian operator $A$ acts on
-    a set $K$ of sites, its range projection $P_A$ acts on $K$ as well.
-\end{lemma}
-\begin{proof}\leanok
-    Every operator acting outside $K$ commutes with $A$ and hence with every
-    real function of $A$. The commutant characterization of support applies
-    to $P_A=\mathbf1_{\mathbb R\setminus\{0\}}(A)$.
-\end{proof}
+By Lemma~\ref{thm:frustration_free_area_law_range_projection}, if a positive
+semidefinite operator $A$ acts on a set $K$ of sites, its range projection
+$P_A$ acts on $K$ as well.
 
 \begin{lemma}[Detectability for positive contraction chains]
     \label{thm:physical_range_detectability}
@@ -161,7 +152,7 @@
     No condition on the dimension of $\ker H$ is required.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:physical_range_projection_support,thm:physical_detectability_kernel,
+    \uses{thm:frustration_free_area_law_range_projection,thm:physical_detectability_kernel,
         thm:physical_detectability_energy}
     The range projections have the original bond supports. Their sum dominates
     $H$ and has exactly the same kernel. The even/odd product preserves the

@@ -135,7 +135,7 @@ From here on the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 \begin{lemma}[Trace norm of a difference of pure states]
     \label{lem:qc_pure_state_trace_norm}
     \lean{Matrix.traceNorm_vecMulVec_le, Matrix.traceNorm_pureStateProj_sub_le,
-        Matrix.traceNormPureSub, Matrix.traceNormPureSub_le}
+        Matrix.rectangularTraceNorm_vecMulVec_sub_le}
     \leanok
     For vectors $\ket u,\ket v$, $\lVert\ket u\bra v\rVert_1\leq\lVert u\rVert\,\lVert v\rVert$. For unit vectors $\ket\psi,\ket\varphi$,
     \begin{align}

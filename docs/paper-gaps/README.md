@@ -925,10 +925,6 @@ For the MPU action on injective MPS blocks in arXiv:2502.20257:
   form; and shows that rescaled tensors realize every scalar gauge, so the
   single-block, stabilizer-form and block-independence arguments hold
   verbatim.
-- `fbc25_circle_complex_units_cohomology.tex` distinguishes the source
-  footnote's sheaf-cohomology comparison from the algebraic group cohomology
-  of a finite discrete group and records the direct phase-and-radial proof of
-  $H^2(G,U(1)) \cong H^2(G,\mathbb C^\times)$ in the latter setting.
 - `fbc25_mpu_action_stabilizer_source_audit.tex` separates the
   positive-length MPS reduction route to action tensors from the stronger
   arbitrary-boundary MPO-algebra route, records the nilpotency and tailwise
@@ -986,20 +982,12 @@ For the group matrix product operators of arXiv:2203.12563:
   $U_g=\bigotimes_i (L_g^i\otimes L_g^{i+1})W_g^{i,i+1}$, read literally,
   shifts every site twice, and that the printed tensor and the printed
   $\mathbb Z_2$ example fix one left shift per site.
-- `glm23_eq20_fusion_gauge.tex` records that the stabilizer reconstruction
-  formula, Equation (20), is compatible exactly as printed only in a fusion
-  gauge in which the three-cocycle is one on the stabilizer, gives a
-  $\mathbb Z_3$ example where it fails for a nonconstant trivializer, and
-  states the torsor of solutions for action-tensor gauge classes.
 - `glm23_klein_printed_anomaly_scope.tex` records that the printed sentence
   on the one-qubit $\mathbb Z_2\times\mathbb Z_2$ symmetry, "the only
   non-trivial 3-cocycle element is $\omega(ab,ab,ab)=-1$", is read through the
   diagonal values $(+1,+1,-1)$, which are formalized for every choice of fusion
   tensors (class $(0,0,1)$), and that the printed $L$-symbol relations for $a$
   and $b$ are forced between the two blocks exchanged by the generator.
-- `glm23_klein_h3_circle_coefficients.tex` records that the Klein-four
-  three-cocycle classification is formalized with $\mathbb C^\times$
-  coefficients, while the source states it for $U(1)$.
 - `glm23_z2z2_anomaly_detector_scope.tex` records that the two-qubit
   $\mathbb Z_2\times\mathbb Z_2$ tensors, dressed by the on-site
   $Z$ on the second qubit, form an exact normal representation whose

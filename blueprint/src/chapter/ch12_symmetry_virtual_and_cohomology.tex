@@ -341,14 +341,15 @@ gauge transformations form a projective representation on the bond space.
 \end{proof}
 
 \begin{definition}[Scalar 2-cochain]\label{def:scalar_cocycle}
-    \lean{TNLean.Algebra.ScalarCocycle}
+    \lean{ScalarCocycle}
     \leanok
     A \emph{scalar 2-cochain} on a group $G$ is a function
     $\omega : G \times G \to \C^{\times}$.
+    This is~\cite[``Scalar 2-cochain'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{definition}[Projective representation]\label{def:projective_rep}
-    \lean{TNLean.Algebra.ProjectiveRepresentation}
+    \lean{ProjectiveRepresentation}
     \leanok
     \uses{def:scalar_cocycle}
     Given a scalar 2-cochain $\omega$, a \emph{projective representation}
@@ -359,11 +360,12 @@ gauge transformations form a projective representation on the bond space.
          & =\omega(g,h) \rho(gh).
         \label{eq:symmetry_projective_law}
     \end{align}
+    This is~\cite[``Projective representation'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Associativity forces the cocycle condition]%
     \label{lem:cocycle_of_assoc}
-    \lean{TNLean.Algebra.ProjectiveRepresentation.cocycle_of_assoc}
+    \lean{ProjectiveRepresentation.cocycle_of_assoc}
     \leanok
     \uses{def:projective_rep, def:scalar_cocycle}
     If $\rho$ is a projective representation with factor system $\omega$
@@ -376,6 +378,8 @@ gauge transformations form a projective representation on the bond space.
 \end{lemma}
 
 \begin{proof}\leanok\uses{def:projective_rep}
+    This is~\cite[``Associativity forces the cocycle
+        condition'']{QICLean2026Blueprint}.
     Expanding $\rho(g)\,(\rho(h)\rho(k))$ and
     $(\rho(g)\rho(h))\rho(k)$ with the projective multiplication law
     (\ref{eq:symmetry_projective_law}) and equating the results by matrix
@@ -521,7 +525,7 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
 \end{definition}
 
 \begin{definition}[Cohomologous cochains]\label{def:cohomologous_to}
-    \lean{TNLean.Algebra.isMulCoboundary₂_div_iff}
+    \lean{ScalarCohomology.isMulCoboundary₂_div_iff}
     \leanok
     \uses{def:scalar_cocycle}
     Two scalar two-cochains $\omega_1,\omega_2$ are \emph{cohomologous}
@@ -532,6 +536,7 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
          & =\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h).
         \label{eq:symmetry_cohomologous}
     \end{align}
+    This is~\cite[``Cohomologous cochains'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Gauge independence of the cocycle class]%
@@ -618,11 +623,12 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
          & =\omega(g,hk) \omega(h,k).
         \notag
     \end{align}
+    This is~\cite[``Multiplicative 2-cocycle condition'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[A projective factor system is a cocycle]
     \label{thm:is_cocycle_of_projective_rep}
-    \lean{TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep}
+    \lean{ScalarCocycle.isMulCocycle₂_of_projRep}
     \leanok
     \uses{def:is_cocycle, def:projective_rep, lem:cocycle_of_assoc}
     If $D>0$ and $\rho:G\to\GL_D(\C)$ obeys
@@ -631,6 +637,8 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``A projective factor system is a
+        cocycle'']{QICLean2026Blueprint}.
     By Lemma~\ref{lem:cocycle_of_assoc}, associativity gives the scalar
     cocycle identity in $\C$.  Because the inclusion
     $\C^\times\hookrightarrow\C$ is injective, the same identity holds in
@@ -660,16 +668,17 @@ under a change of cocycle representative, so a value different from $1$
 establishes non-triviality of the class.
 
 \begin{definition}[Commutator phase]\label{def:comm_phase}
-    \lean{TNLean.Algebra.ScalarCocycle.commPhase}
+    \lean{ScalarCocycle.commPhase}
     \leanok
     \uses{def:scalar_cocycle}
     The \emph{commutator phase} of a $2$-cochain $\omega$ at a pair $g,h$ is
     $\beta_\omega(g,h):=\omega(g,h) \omega(h,g)^{-1}$, defined for any
     $\C^{\times}$-valued $2$-cochain.
+    This is~\cite[``Commutator phase'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[The commutator phase is a class invariant]\label{thm:comm_phase_invariant}
-    \lean{TNLean.Algebra.ScalarCocycle.commPhase_eq_of_isMulCoboundary₂_div}
+    \lean{ScalarCocycle.commPhase_eq_of_isMulCoboundary₂_div}
     \leanok
     \uses{def:comm_phase, def:cohomologous_to}
     If $\omega_1\sim\omega_2$ and $gh=hg$, then
@@ -677,6 +686,8 @@ establishes non-triviality of the class.
 \end{lemma}
 
 \begin{proof}\leanok\uses{def:comm_phase, def:cohomologous_to}
+    This is~\cite[``The commutator phase is a class
+        invariant'']{QICLean2026Blueprint}.
     For a cochain $\varphi$ with
     $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$,
     substituting into the ratio and using
@@ -703,8 +714,8 @@ establishes non-triviality of the class.
 \end{definition}
 
 \begin{lemma}[The trivial class]\label{thm:trivial_class}
-    \lean{TNLean.Algebra.ScalarCocycle.H2π_one,
-        TNLean.Algebra.H2π_eq_zero_iff_isMulCoboundary₂}
+    \lean{ScalarCocycle.H2π_one,
+        ScalarCohomology.H2π_eq_zero_iff_isMulCoboundary₂}
     \leanok
     \uses{def:cohomologous_to, def:h2_cx}
     The class of the constant cocycle $1$ is zero, and $[\omega]=0$ exactly
@@ -713,6 +724,7 @@ establishes non-triviality of the class.
 
 \begin{proof}\leanok
     \uses{thm:mpug_h2_trivial_coefficients}
+    This is~\cite[``The trivial class'']{QICLean2026Blueprint}.
     The constant cocycle $1$ is the identity of the group of cocycles, so its
     class is zero. By (\ref{eq:mpug_h2_class_comparison}) of
     Lemma~\ref{thm:mpug_h2_trivial_coefficients}, $\omega\sim1$ exactly
@@ -720,7 +732,7 @@ establishes non-triviality of the class.
 \end{proof}
 
 \begin{lemma}[Commutator-phase non-triviality test]\label{thm:nontrivial_of_comm_phase}
-    \lean{TNLean.Algebra.ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one}
+    \lean{ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one}
     \leanok
     \uses{def:nontrivial_class, def:comm_phase, thm:comm_phase_invariant}
     If a $2$-cocycle $\omega$ has $\beta_\omega(g,h)\neq 1$ at a commuting
@@ -728,6 +740,8 @@ establishes non-triviality of the class.
 \end{lemma}
 
 \begin{proof}\leanok\uses{thm:comm_phase_invariant, thm:trivial_class}
+    This is~\cite[``Commutator-phase non-triviality
+        test'']{QICLean2026Blueprint}.
     The trivial cocycle has commutator phase $1$ at every pair, so by
     Lemma~\ref{thm:comm_phase_invariant} and
     (\ref{eq:symmetry_comm_phase_invariance}), any cocycle cohomologous to it
@@ -738,13 +752,13 @@ establishes non-triviality of the class.
 
 \begin{lemma}[The commutator phase of a cocycle is a bicharacter]
     \label{thm:comm_phase_bicharacter}
-    \lean{TNLean.Algebra.ScalarCocycle.commPhase_swap,
-        TNLean.Algebra.ScalarCocycle.apply_one_right,
-        TNLean.Algebra.ScalarCocycle.apply_one_left,
-        TNLean.Algebra.ScalarCocycle.commPhase_one_right,
-        TNLean.Algebra.ScalarCocycle.commPhase_mul_right,
-        TNLean.Algebra.ScalarCocycle.commPhase_mul_left,
-        TNLean.Algebra.ScalarCocycle.commPhase_pow_left}
+    \lean{ScalarCocycle.commPhase_swap,
+        ScalarCocycle.apply_one_right,
+        ScalarCocycle.apply_one_left,
+        ScalarCocycle.commPhase_one_right,
+        ScalarCocycle.commPhase_mul_right,
+        ScalarCocycle.commPhase_mul_left,
+        ScalarCocycle.commPhase_pow_left}
     \leanok
     \uses{def:comm_phase, def:is_cocycle}
     For every $2$-cochain, $\beta_\omega(h,g)=\beta_\omega(g,h)^{-1}$. If
@@ -760,6 +774,8 @@ establishes non-triviality of the class.
 
 \begin{proof}\leanok
     \uses{def:comm_phase, def:is_cocycle}
+    This is~\cite[``The commutator phase of a cocycle is a
+        bicharacter'']{QICLean2026Blueprint}.
     The cocycle equation at $(g,e,e)$ and $(e,e,g)$ gives the values at the
     identity. For (\ref{eq:symmetry_comm_phase_bicharacter}), the cocycle
     equation at $(g,h,k)$, $(h,g,k)$ and $(h,k,g)$ reads

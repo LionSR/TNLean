@@ -12,9 +12,8 @@ a definition of phase or exclude conversion of compatible coherent seeds.
     \label{thm:ldp_offsupport_matrix_elements}
     \lean{ManyBody.apply_eq_zero_of_mem_supportedOperators,
         QuantumCircuit.productVector_single,
-        QuantumCircuit.expect_single,
         QuantumCircuit.mul_apply_eq_mul_of_mem_supportedOperators,
-        QuantumCircuit.expect_smul_single_add_of_offDiag_zero}
+        Matrix.star_dotProduct_mulVec_smul_single_add_of_apply_eq_zero}
     \leanok
     \uses{def:qc_local_circuit}
     Let $A$ act on $S$. If configurations $\sigma,\tau$ differ at a site
@@ -34,11 +33,11 @@ a definition of phase or exclude conversion of compatible coherent seeds.
 
 \begin{lemma}[Stability of connected correlations]
     \label{thm:ldp_covariance_stability}
-    \lean{QuantumCircuit.expect_eq_inner,
-        QuantumCircuit.norm_expect_le_one,
-        QuantumCircuit.norm_expect_sub_le,
-        QuantumCircuit.expect_smul_state,
-        QuantumCircuit.norm_covariance_sub_le}
+    \lean{Matrix.star_dotProduct_mulVec_eq_inner,
+        Matrix.norm_star_dotProduct_mulVec_le_one,
+        Matrix.norm_star_dotProduct_mulVec_sub_le,
+        Matrix.star_smul_dotProduct_mulVec_smul,
+        Matrix.norm_covariance_sub_le}
     \leanok
     For unit vectors $\psi,\phi$ and unitary observables $A,B$, let
     $\operatorname{Cov}_\psi(A,B)=

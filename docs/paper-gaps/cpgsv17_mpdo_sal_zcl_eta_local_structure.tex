@@ -808,7 +808,7 @@ Reachability by reflexive transitive closure is equivalent to the existence of
 a finite directed walk. Recurrence is therefore exactly the return-walk
 hypothesis used by the closed-walk coboundary theorem.\footnote{The formal
 declarations are
-\leanid{TNLean.Algebra.DirectedWalk.reaches_iff_reflTransGen},
+\leanid{DirectedWalk.reaches_iff_reflTransGen},
 \leanid{MPOTensor.sectorReaches_iff_directedWalkReaches}, and
 \leanid{MPOTensor.isRecurrentSupport_iff_directedWalkReturns}.}
 
@@ -817,9 +817,9 @@ family of its source vertices. Consecutive vertices are connected by the
 corresponding edges, including the final return to the initial vertex, and the
 cyclic product of edge weights equals the walk weight.\footnote{The formal
 declarations are
-\leanid{TNLean.Algebra.DirectedWalk.closedConsVertices},
-\leanid{TNLean.Algebra.DirectedWalk.closedConsVertices_edge}, and
-\leanid{TNLean.Algebra.DirectedWalk.weight_closedCons_eq_fin_prod}.}
+\leanid{DirectedWalk.closedConsVertices},
+\leanid{DirectedWalk.closedConsVertices_edge}, and
+\leanid{DirectedWalk.weight_closedCons_eq_fin_prod}.}
 
 The required finite-factor rescaling is a general matrix lemma. If a finite
 Kronecker product
@@ -976,7 +976,7 @@ definition is path-independent.
 The graph-theoretic statement is formalized for a recurrent directed relation:
 any group-valued edge assignment whose product is one around every closed
 directed walk is a vertex coboundary.\footnote{The formal declaration is
-\leanid{TNLean.Algebra.DirectedWalk.exists_vertex_of_closedWalk_weight_eq_one}.}
+\leanid{DirectedWalk.exists_vertex_of_closedWalk_weight_eq_one}.}
 The proof chooses one representative in each reachability component and
 defines vertex weights by path multiplication; a common return path proves
 independence of the selected path.

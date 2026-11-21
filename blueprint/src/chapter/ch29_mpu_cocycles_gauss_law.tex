@@ -661,6 +661,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     In that corollary, $I=G$ and comparisons are used when $ab=cd$; this
     equality selects the factorizations and is not needed in the unitary
     calculation.
+    This is~\cite[``Unitary factorization comparison'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Identity, inverse, composition, and right-reference laws]
@@ -701,6 +702,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{proof}\leanok
     \uses{def:mpug_unitary_factorization_comparison}
+    This is~\cite[``Identity, inverse, composition, and right-reference
+        laws'']{QICLean2026Blueprint}.
     The identity, inverse, and right-reference formulas follow from
     $R_{a,b}^{-1}R_{a,b}=\mathbf 1$, inversion of a product, and
     $\mathbf 1^{-1}R_{a,b}=R_{a,b}$. For composition, inserting the identity at
@@ -715,8 +718,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{definition}[Gauss action on the gauge legs]
     \label{def:mpug_gauss_leg_action}
-    \lean{TNLean.Algebra.gaussLegAction,
-        TNLean.Algebra.gaussLegAction_apply}
+    \lean{GaussLaw.gaussLegAction,
+        GaussLaw.gaussLegAction_apply}
     \leanok
     \discussion{7503}
     Let $G$ be a group. Following the two gauge-leg labels in the local Gauss
@@ -730,8 +733,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{lemma}[Composition of the Gauss leg action]
     \label{thm:mpug_gauss_leg_action_mul}
-    \lean{TNLean.Algebra.gaussLegAction_one,
-        TNLean.Algebra.gaussLegAction_mul}
+    \lean{GaussLaw.gaussLegAction_one,
+        GaussLaw.gaussLegAction_mul}
     \leanok
     \discussion{7503}
     \uses{def:mpug_gauss_leg_action}
@@ -745,6 +748,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{proof}\leanok
     \uses{def:mpug_gauss_leg_action}
+    This is~\cite[``Composition of the Gauss action'']{QICLean2026Blueprint}.
     The two coordinates give
     \begin{align}
         T_g(T_h(a,b))
@@ -755,9 +759,9 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{definition}[Local Gauss operator]
     \label{def:mpug_gauss_operator}
-    \lean{TNLean.Algebra.gaussOperator,
-        TNLean.Algebra.gaussOperator_apply_target,
-        TNLean.Algebra.gaussOperator_apply_of_ne}
+    \lean{GaussLaw.gaussOperator,
+        GaussLaw.gaussOperator_apply_target,
+        GaussLaw.gaussOperator_apply_of_ne}
     \leanok
     \discussion{7503}
     \uses{def:mpug_unitary_factorization_comparison,
@@ -776,16 +780,17 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     Equivalently, the block from $(a,b)$ to $T_g(a,b)$ is
     $(R_{T_g(a,b)})^{-1}R_{a,b}$ and every other block in that column
     vanishes.
+    This is~\cite[``Local Gauss operator'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Gauss operators form a unitary representation]
     \label{thm:mpug_gauss_representation}
-    \lean{TNLean.Algebra.gaussOperator_one,
-        TNLean.Algebra.gaussOperator_mul,
-        TNLean.Algebra.star_gaussOperator,
-        TNLean.Algebra.gaussOperator_mem_unitaryGroup,
-        TNLean.Algebra.gaussRepresentation,
-        TNLean.Algebra.gaussRepresentation_coe}
+    \lean{GaussLaw.gaussOperator_one,
+        GaussLaw.gaussOperator_mul,
+        GaussLaw.star_gaussOperator,
+        GaussLaw.gaussOperator_mem_unitaryGroup,
+        GaussLaw.gaussRepresentation,
+        GaussLaw.gaussRepresentation_coe}
     \leanok
     \discussion{7503}
     \uses{def:mpug_gauss_operator}
@@ -829,8 +834,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{definition}[Unplaced local Gauss projector kernel]
     \label{def:mpug_gauss_projector}
-    \lean{TNLean.Algebra.gaussProjector,
-        TNLean.Algebra.gaussProjector_eq_average}
+    \lean{GaussLaw.gaussProjector,
+        GaussLaw.gaussProjector_eq_average}
     \leanok
     \discussion{7578}
     \uses{def:mpug_finite_group_unitary_average,
@@ -850,7 +855,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{lemma}[The local Gauss average is a projection]
     \label{thm:mpug_gauss_projector_projection}
-    \lean{TNLean.Algebra.isStarProjection_gaussProjector}
+    \lean{GaussLaw.isStarProjection_gaussProjector}
     \leanok
     \discussion{7578}
     \uses{def:mpug_gauss_projector}
@@ -1006,6 +1011,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{proof}\leanok
     \uses{def:mpug_common_fixed_subspace}
+    This is~\cite[``Membership in the common fixed
+        subspace'']{QICLean2026Blueprint}.
     Membership in an indexed intersection is equivalent to membership in
     every factor, and membership in $\ker(P_j-\Id_{\mathcal H})$ is equivalent
     to $P_j\psi=\psi$.
@@ -1021,6 +1028,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``Nonzero-vector lower bound'']{QICLean2026Blueprint}.
     The common fixed subspace is nonzero because it contains $\psi$, so its
     dimension is at least one.
 \end{proof}
@@ -1029,7 +1037,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{definition}[Prescribed defect maps]
     \label{def:mpug_defect_maps}
-    \lean{TNLean.Algebra.DefectMaps}
+    \lean{GaussLaw.DefectMaps}
     \leanok
     \discussion{7569}
     Let $\mathcal H_{\mathrm m}$ be the matter space of two sites. Prescribed
@@ -1054,9 +1062,9 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{definition}[Full unitary completion class]
     \label{def:mpug_completion_class}
-    \lean{TNLean.Algebra.DefectMaps.IsCompletion,
-        TNLean.Algebra.DefectMaps.completionClass,
-        TNLean.Algebra.DefectMaps.mem_completionClass_iff}
+    \lean{GaussLaw.DefectMaps.IsCompletion,
+        GaussLaw.DefectMaps.completionClass,
+        GaussLaw.DefectMaps.mem_completionClass_iff}
     \leanok
     \discussion{7569}
     \uses{def:mpug_defect_maps}
@@ -1072,12 +1080,13 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     As noted in~\cite[lines~4215--4326]{FrancoRubio2025MPUGauging}, when
     $\mathcal K_{a,b}$ is a proper subspace of the matter space, the unitary
     extension of $D_{a,b}$ is non-unique.
+    This is~\cite[``Full unitary completion class'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Existence of full unitary completions]
     \label{thm:mpug_completion_class_nonempty}
-    \lean{TNLean.Algebra.DefectMaps.completionClass_nonempty,
-        TNLean.Algebra.DefectMaps.exists_completion}
+    \lean{GaussLaw.DefectMaps.completionClass_nonempty,
+        GaussLaw.DefectMaps.exists_completion}
     \leanok
     \discussion{7702}
     \uses{def:mpug_defect_maps, def:mpug_completion_class}
@@ -1117,10 +1126,10 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \begin{lemma}[Comparison identity for a completion]
     \label{thm:mpug_completion_transport}
-    \lean{TNLean.Algebra.DefectMaps.IsCompletion.mulVec_eq_prescribed,
-        TNLean.Algebra.DefectMaps.IsCompletion.mulVec_eq_mulVec,
-        TNLean.Algebra.DefectMaps.IsCompletion.unitaryFactorizationComparison_mulVec,
-        TNLean.Algebra.DefectMaps.IsCompletion.unitaryFactorizationComparison_gaussLegAction_mulVec}
+    \lean{GaussLaw.DefectMaps.IsCompletion.mulVec_eq_prescribed,
+        GaussLaw.DefectMaps.IsCompletion.mulVec_eq_mulVec,
+        GaussLaw.DefectMaps.IsCompletion.unitaryFactorizationComparison_mulVec,
+        GaussLaw.DefectMaps.IsCompletion.unitaryFactorizationComparison_gaussLegAction_mulVec}
     \leanok
     \discussion{7569}
     \uses{def:mpug_completion_class,
@@ -1148,6 +1157,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \begin{proof}\leanok
     \uses{def:mpug_completion_class,
         thm:mpug_unitary_factorization_comparison_laws}
+    This is~\cite[``Comparison identity for a
+        completion'']{QICLean2026Blueprint}.
     Identity~(\ref{eq:mpug_completion_agrees}) is the defining property of a
     completion on the defect subspace. Applying it at $(a,b)$ and at $(c,d)$
     and inserting~(\ref{eq:mpug_prescribed_covariance})

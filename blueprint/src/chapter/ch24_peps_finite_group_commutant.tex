@@ -1,22 +1,24 @@
 \begin{definition}[Finite signed permutation representations]%
     \label{def:peps_signed_permutation_representation}
-    \lean{TNLean.signedPermutationSubgroup,
-        TNLean.instFiniteSignedPermutationSubgroup,
-        TNLean.signedPermutationRepresentation,
-        TNLean.signedPermutationRepresentation_mem_unitaryGroup,
-        TNLean.signedPermutationRepresentation_range}
+    \lean{Matrix.signedPermutationSubgroup,
+        Matrix.instFiniteSignedPermutationSubgroup,
+        Matrix.signedPermutationRepresentation,
+        Matrix.signedPermutationRepresentation_mem_unitaryGroup,
+        Matrix.signedPermutationRepresentation_range}
     \leanok
     For a finite index set $I$, let $G_I$ be the group of matrices sending
     each standard basis vector to another standard basis vector with sign
     $+1$ or $-1$. Its defining representation is unitary, and $G_I$ is finite,
     providing the finite-dimensional matrix representations in the construction
     of \cite[Theorem~4.1]{Schuch2010PEPS}.
+    This is~\cite[``Finite signed permutation
+        representations'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Matrix units from signed permutations]%
     \label{thm:peps_signed_permutation_span}
-    \lean{TNLean.exists_signedPermutationRepresentation_sub_eq_single,
-        TNLean.span_signedPermutationRepresentation}
+    \lean{Matrix.exists_signedPermutationRepresentation_sub_eq_single,
+        Matrix.span_signedPermutationRepresentation}
     \leanok
     \uses{def:peps_signed_permutation_representation}
     Every matrix unit $E_{ij}$ is of the form $(P-Q)/2$ for two signed
@@ -25,6 +27,8 @@
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``Matrix units from signed
+        permutations'']{QICLean2026Blueprint}.
     For any permutation taking $j$ to $i$ with permutation matrix $P$,
     negating only column $j$ produces a signed permutation matrix $Q$ with
     $P-Q=2E_{ij}$. Since the matrix units span all matrices, $G_I$ spans
@@ -33,19 +37,21 @@
 
 \begin{definition}[Independent groups on multiplicity factors]%
     \label{def:peps_block_signed_permutation_representation}
-    \lean{TNLean.blockSignedPermutationRepresentation,
-        TNLean.blockSignedPermutationRepresentation_mem_unitaryGroup}
+    \lean{Matrix.blockSignedPermutationRepresentation,
+        Matrix.blockSignedPermutationRepresentation_mem_unitaryGroup}
     \leanok
     \uses{def:peps_signed_permutation_representation}
     For finitely many pairs of dimensions $(m_k,d_k)$, the finite group
     $G=\prod_kG_{m_k}$ has the unitary representation
     $U(g)=\bigoplus_k g_k\otimes I_{d_k}$ on
     $\bigoplus_k\mathbb C^{m_k}\otimes\mathbb C^{d_k}$.
+    This is~\cite[``Independent groups on multiplicity
+        factors'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Commutant of independent multiplicity actions]%
     \label{thm:peps_block_signed_permutation_commutant}
-    \lean{TNLean.commutes_blockSignedPermutationRepresentation_iff}
+    \lean{Matrix.commutes_blockSignedPermutationRepresentation_iff}
     \leanok
     \uses{def:peps_block_signed_permutation_representation,
         thm:peps_signed_permutation_span}
@@ -54,6 +60,8 @@
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``Commutant of independent multiplicity
+        actions'']{QICLean2026Blueprint}.
     Two group elements which agree on all factors except $k$ produce,
     by their half-difference, $E_{ij}\otimes I_{d_k}$ supported on block $k$.
     Thus the span of $U(G)$ contains every
@@ -78,6 +86,8 @@
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``Unital matrix algebras as finite-group
+        commutants'']{QICLean2026Blueprint}.
     The unitary block-decomposition theorem for matrix C*-algebras
     \cite[Theorem~6.14]{Wolf2012Quantum} gives a unitary $W$ with
     $W^*SW=\bigoplus_k I_{m_k}\otimes M_{d_k}(\mathbb C)$.
