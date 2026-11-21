@@ -25,6 +25,13 @@ normal block; the common injectivity length is proved rather than assumed.
 The several-block results in `CompactBlockParentGap`, applied to the
 blocked source path in `IsometricDeformation`, remove this restriction;
 documented in `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
+
+**Transitional (#10948).** `ker_parentHamiltonianES_eq_range_periodicMpvLineMap_of_isNBlkInjective`,
+`continuous_parentHamiltonianES_kernelProjection_family_of_isNBlkInjective` and
+`exists_uniform_parentHamiltonianES_gap_fixed_volume_of_isNBlkInjective`, stated for the
+Euclidean-space operator, are kept for the uniform-gap theorems, which rest on the finite-range
+Knabe estimate and the open-chain martingale gap and are restated with them in a later package;
+the last section states these three for the Hamiltonian of the parent interaction on the ring.
 -/
 
 open scoped Topology ComplexOrder
@@ -361,5 +368,81 @@ theorem exists_uniform_parentHamiltonianES_gap_of_compact_isNormal_at_range
   exists_uniform_parentHamiltonianES_gap_of_compact_isNBlkInjective_at_range
     A hA (pow_pos (NeZero.pos D) 4)
     (fun x => isNBlkInjective_pow_four_of_isNormal (A x) (hNormal x)) (by omega) hS
+
+/-! ### The parent interaction on the ring -/
+
+/-- Above a positive injectivity length \(p\), the kernel of the Hamiltonian of the parent
+interaction on the ring is the range of the scalar-to-state map at every volume containing the
+interaction. Source: arXiv:2011.12127, Section IV.C, lines 2078--2090. -/
+theorem ker_hamiltonian_parentRingInteraction_eq_range_periodicMpvLineMap_of_isNBlkInjective
+    [NeZero D] (A : MPSTensor d D) {p R N : ℕ} (hp : 0 < p)
+    (hA : Kraus.IsNBlkInjective A p) (hR : p < R) (hRN : R ≤ N) :
+    LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A hRN).hamiltonian) =
+      (periodicMpvLineMap A N).range := by
+  rw [← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction,
+    parentHamiltonianGroundSpaceES,
+    ker_parentHamiltonian_eq_chainGroundSpace A (by omega : 0 < N) hRN,
+    chainGroundSpace_eq_mpvSubmodule_normal ⟨p, hp, hA⟩ hA hp
+      (by omega : 2 ≤ N) hR hRN (by omega : p + 1 ≤ N)]
+  simp only [mpvSubmodule, periodicMpvLineMap]
+  rw [Submodule.map_span]
+  simp only [Set.image_singleton]
+  change (ℂ ∙ ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A))) = _
+  exact
+    (ContinuousLinearMap.range_smulRight_apply
+      (by norm_num : (1 : ℂ →L[ℂ] ℂ) ≠ 0)
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A))).symm
+
+/-- For an interaction range larger than a common positive injectivity length, the projection
+onto the kernel of the Hamiltonian of the parent interaction on the ring is continuous at every
+fixed volume containing the interaction. Source: arXiv:1010.3732, Appendix A,
+lines 2575--2578, single-block case. -/
+theorem continuous_hamiltonian_parentRingInteraction_kernelProjection_family_of_isNBlkInjective
+    {X : Type*} [TopologicalSpace X] [NeZero D] {p R N : ℕ}
+    (A : X → MPSTensor d D) (hA : Continuous A) (hp : 0 < p)
+    (hInj : ∀ x, Kraus.IsNBlkInjective (A x) p) (hR : p < R) (hRN : R ≤ N) :
+    Continuous fun x => (LinearMap.ker
+      (Matrix.toEuclideanLin (parentRingInteraction (A x) hRN).hamiltonian)).starProjection := by
+  have hT := continuous_periodicMpvLineMap_family A hA N
+  have hTinj (x : X) : Function.Injective (periodicMpvLineMap (A x) N) :=
+    periodicMpvLineMap_injective_of_isNBlkInjective (A x) hp (hInj x) (by omega)
+  have hProj := ContinuousLinearMap.continuous_injectiveRangeProjector
+    (fun x => periodicMpvLineMap (A x) N) hT hTinj
+  have heq :
+      (fun x => ContinuousLinearMap.injectiveRangeProjector
+        (periodicMpvLineMap (A x) N) (hTinj x)) =
+      (fun x => (LinearMap.ker (Matrix.toEuclideanLin
+        (parentRingInteraction (A x) hRN).hamiltonian)).starProjection) := by
+    funext x
+    rw [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection]
+    exact congrArg
+      (fun K : Submodule ℂ (EuclideanSpace ℂ (Cfg d N)) => K.starProjection)
+      (ker_hamiltonian_parentRingInteraction_eq_range_periodicMpvLineMap_of_isNBlkInjective
+        (A x) hp (hInj x) hR hRN).symm
+  rw [← heq]
+  exact hProj
+
+/-- A compact continuous family injective at length \(p\) has a uniform positive gap of the
+Hamiltonian of the parent interaction on the ring at each fixed periodic volume and interaction
+range \(p<R\le N\). Source: arXiv:1010.3732, Appendix A, lines 2575--2578. -/
+theorem exists_uniform_hamiltonian_parentRingInteraction_gap_fixed_volume_of_isNBlkInjective
+    {X : Type*} [TopologicalSpace X] [NeZero D] {p R N : ℕ}
+    (A : X → MPSTensor d D) (hA : Continuous A) (hp : 0 < p)
+    (hInj : ∀ x, Kraus.IsNBlkInjective (A x) p) {S : Set X} (hS : IsCompact S)
+    (hR : p < R) (hRN : R ≤ N) :
+    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S,
+      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction (A x) hRN).hamiltonian))ᗮ,
+        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction (A x) hRN).hamiltonian v‖ := by
+  have hBlock (x : X) : Kraus.IsNBlkInjective (A x) R :=
+    isNBlkInjective_of_le hp (hInj x) hR.le
+  let e := (Matrix.toEuclideanCLM : Matrix (Cfg d N) (Cfg d N) ℂ ≃⋆ₐ[ℂ] _)
+  have hH : Continuous fun x ↦ e (parentRingInteraction (A x) hRN).hamiltonian :=
+    e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp
+      (continuous_hamiltonian_parentRingInteraction_family A hA hRN hBlock)
+  have hK := continuous_hamiltonian_parentRingInteraction_kernelProjection_family_of_isNBlkInjective
+    A hA hp hInj hR hRN
+  simp only [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin] at hK ⊢
+  exact ContinuousLinearMap.exists_uniform_norm_gap_of_compact
+    (fun x ↦ e (parentRingInteraction (A x) hRN).hamiltonian) hH hK hS
 
 end MPSTensor
