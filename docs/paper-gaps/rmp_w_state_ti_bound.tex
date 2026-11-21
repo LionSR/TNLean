@@ -332,6 +332,23 @@ statements attributed to the review.\footnote{Formal declarations:
 \leanid{MPSTensor.rectKronecker_wBlockEncoding_mulVec_normalized} and
 \leanid{MPSTensor.prime_divisor_lt_of_mpv_eq_smul_wIndicator}.}
 
+The same compression bounds any divisor $m\ge2$ of $N$ having no divisor
+between $2$ and $D$, rather than only prime divisors. Write
+$B_D=2\max\{(D^2+1)^2,3(D-1)((D^2+1)^2+1)\}$. If $N$ is squarefree, then
+$m=N/\gcd(N,D!)$ is coprime to $D!$ and therefore has no divisor between
+$2$ and $D$. The divisor bound, with $m=1$ treated directly, gives
+\begin{align}
+    N & <\gcd(N,D!)B_D\le D!B_D.
+    \label{eq:rmp_w_state_ti_bound_squarefree}
+\end{align}
+This includes squarefree lengths with small prime factors. The factorial
+dependence does not yield the review's polynomial lower bound, and the
+argument does not cover arbitrary powers of small primes.
+The corresponding declarations are
+\leanid{MPSTensor.divisor_lt_of_mpv_eq_smul_wIndicator_of_no_small_divisor},
+\leanid{MPSTensor.lt_gcd_factorial_mul_of_mpv_eq_smul_wIndicator_of_squarefree}, and
+\leanid{MPSTensor.lt_factorial_mul_of_mpv_eq_smul_wIndicator_of_squarefree}.
+
 \section{Local fix: the single-block threshold}
 
 For $b=1$ the printed inequality $N/2\leq 3(b-1)(L_0+1)$ reads $N\leq0$. It
@@ -454,6 +471,8 @@ $2$ and $D$, including some composite lengths. By isometric blocking, every
 prime divisor $p$ of a represented length satisfies
 (\ref{eq:rmp_w_state_ti_bound_prime_divisor}), which covers lengths such as
 $N=2p$.
+For squarefree lengths, the additional arithmetic reduction gives the
+factorial estimate (\ref{eq:rmp_w_state_ti_bound_squarefree}).
 The review's bound
 (\ref{eq:rmp_w_state_ti_bound_asymptotic_lower_bound}) and the source's
 unconditional $D\succeq O(N^{1/3})$ remain unformalized: they need the
