@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Restricted Dual Homotopy Needs More Than Winding}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3}~\cite{Schuch2010PEPS},
+Lemma 6.14, source \path{Papers/1001.3807/paper_v3.tex}, lines 2199--2214,
+uses virtual invariance to deform a connecting flux string. The generated
+Lean homotopy records the primal vertices allowed to support square moves.
+Completeness on the full torus does not imply completeness after some
+square moves are forbidden.
+
+The definition \leanid{TNLean.PEPS.torusDualSeamWord} reads a path's ordered
+seam crossings in an arbitrary coefficient group, assigning $u,v$ to its eastward
+and northward seam crossings and inverses to reverse crossings.
+The theorem
+\leanid{TNLean.PEPS.TorusDualHomotopy.seamWord_eq_of_origin_not_mem}
+proves invariance of this nonabelian word under every generated homotopy
+whose swept support excludes the origin. Backtracks cancel, and a square
+can interchange both seam generators only when its enclosed primal vertex
+is the forbidden origin.
+
+Consequently
+\leanid{TNLean.PEPS.torusDualSquareLoop_obstructs_restricted_completeness}
+proves that the square loop based at $(-1,-1)$ has zero lifted displacement
+but cannot contract by moves away from the origin, using any noncommuting
+pair $u,v$ in a coefficient group. Its word is $uvu^{-1}v^{-1}\ne1$, whereas the
+constant path has word $1$. Noncommuting transpositions in the symmetric
+group on three elements give a concrete choice of coefficient group. The Lean
+theorem is stated for every such noncommuting pair and all torus periods.
+The unconditional version
+\leanid{TNLean.PEPS.torusDualSquareLoop_not_homotopic_avoiding_origin}
+constructs that pair internally and proves noncommutation by finite
+kernel-checked computation. No noncommuting witness or physical flux group
+is supplied to this version.
+
+Thus equality of lifted displacement is insufficient for restricted-support
+homotopy completeness. A positive classification must retain the additional
+nonabelian information arising from forbidden cells. Neither this invariant
+nor the obstruction theorem asserts such completeness. The seam word is
+not a physical flux insertion or a statement that the two physical PEPS
+states differ. In particular, full-support virtual-invariance arguments
+can still identify physical coefficient vectors. Restricted completeness
+and vacuum reduced-density equality for open strings with noncentral insertion elements remain under \ghissue{8703}.
+The full-lattice Hamiltonian scope of \ghissue{8947} is unchanged.
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
