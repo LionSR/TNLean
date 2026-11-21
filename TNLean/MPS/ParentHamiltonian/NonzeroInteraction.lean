@@ -10,7 +10,11 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 
 The local MPS ground space has dimension at most \(D^2\). When the ambient
 dimension \(d^L\) is larger, its complementary orthogonal projection is nonzero,
-both in Euclidean and in function-space coordinates.
+both as a matrix and in function-space coordinates.
+
+**Transitional (#10948).** `parentInteractionES_ne_zero`, the same fact for the Euclidean-space
+operator, is kept until its users are converted; the matrix form is
+`toMatrix'_parentInteraction_ne_zero`.
 -/
 
 namespace MPSTensor
@@ -29,19 +33,22 @@ theorem parentInteractionES_ne_zero (A : MPSTensor d D) (L : ℕ)
       (by simp only [hzero, LinearMap.zero_apply])
   simpa using (mem_groundSpaceES_iff A L _).mp hmem
 
+/-- If \(d^L > D^2\), the matrix of the canonical parent interaction is nonzero. -/
+theorem toMatrix'_parentInteraction_ne_zero (A : MPSTensor d D) (L : ℕ)
+    (hDim : d ^ L > D ^ 2) : LinearMap.toMatrix' (parentInteraction A L) ≠ 0 := by
+  intro hzero
+  apply groundSpace_ne_top A L hDim
+  apply top_unique
+  intro v _
+  have hmem := (toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff A L
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v)).mp
+      (by simp only [hzero, map_zero, LinearMap.zero_apply])
+  simpa using (mem_groundSpaceES_iff A L _).mp hmem
+
 /-- If \(d^L > D^2\), the canonical parent interaction is nonzero in the
 original function-space coordinates. -/
 theorem parentInteraction_ne_zero (A : MPSTensor d D) (L : ℕ)
-    (hDim : d ^ L > D ^ 2) : parentInteraction A L ≠ 0 := by
-  intro hzero
-  apply parentInteractionES_ne_zero A L hDim
-  apply LinearMap.ext
-  intro v
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
-  have hv := LinearMap.congr_fun hzero (e v)
-  change e (parentInteractionES A L (e.symm (e v))) = 0 at hv
-  rw [LinearEquiv.symm_apply_apply] at hv
-  apply e.injective
-  simpa only [LinearMap.zero_apply, map_zero] using hv
+    (hDim : d ^ L > D ^ 2) : parentInteraction A L ≠ 0 := fun hzero ↦
+  toMatrix'_parentInteraction_ne_zero A L hDim (by rw [hzero, map_zero])
 
 end MPSTensor
