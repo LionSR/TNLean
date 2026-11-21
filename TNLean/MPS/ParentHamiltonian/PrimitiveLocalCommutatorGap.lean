@@ -177,7 +177,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_g
         atTop (nhds (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re) := by
     apply (hP.localCommutatorObservable_expectation_tendsto hρ h X hR
       N (fun n => by dsimp [N]; omega) ψ hGround hUnit).congr'
-    filter_upwards [] with n
+    filter_upwards [eventually_ge_atTop 1] with n hn
     have hH : Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
         (openInteractionMatrix h (N n)) =
         (openParentHamiltonianES A R (N n)).toContinuousLinearMap :=

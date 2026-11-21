@@ -249,7 +249,7 @@ private noncomputable def actualSelectedMiddleWordStatement
         have hx := mem_interval.mp x.property
         have hp := p.isLt
         constructor <;> omega)⟩ : E),
-        fun x y hxy ↦ Subtype.ext (congrArg Subtype.val hxy)⟩
+        fun x y hxy ↦ Subtype.ext (by simpa using congrArg Subtype.val hxy)⟩
     let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
       (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
         Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
@@ -306,7 +306,7 @@ private theorem exists_actual_selected_middle_word_mpo_family
       have hx := mem_interval.mp x.property
       have hp := p.isLt
       constructor <;> omega)⟩ : E),
-      fun x y hxy ↦ Subtype.ext (congrArg Subtype.val hxy)⟩
+      fun x y hxy ↦ Subtype.ext (by simpa using congrArg Subtype.val hxy)⟩
   let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
