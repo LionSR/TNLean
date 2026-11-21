@@ -22,6 +22,14 @@ resulting conjugacies prepare the fixed-final-volume form of condition C3.
 
 * Nachtergaele, arXiv:cond-mat/9410110, condition C3, lines 1083--1094.
 * Nachtergaele, arXiv:cond-mat/9410110, proof of Theorem 2.1(i), lines 1178--1259.
+
+The right-spectator conjugacy of a single local term is also stated, in the last section, for
+the terms of the parent interaction on the open chain (`parentChainInteraction`).
+
+**Transitional (#10948).** `localTermES_conj_rightSpectatorConfigLinearIsometryEquiv` is kept,
+unchanged, for unconverted users and is deleted when its last user is converted. The prefix and
+suffix Hamiltonians (`openPrefixParentHamiltonianES`, `openSuffixParentHamiltonianES`) and the
+declarations about them are converted with those Hamiltonians in a later package.
 -/
 
 open scoped BigOperators ComplexOrder
@@ -623,5 +631,73 @@ theorem openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEq
         A (K := K) (L := l + 1) (by omega))] at hproj
   simpa only [openIntervalGroundProjectionES, openChainTailGroundProjectionES,
     G, hKl] using hproj
+
+/-! ### Terms of the parent interaction on the open chain with right spectators -/
+
+section ChainInteraction
+
+open scoped Matrix
+
+/-- A term of the parent interaction on the open chain of the first \(n\) sites acts
+independently on every configuration of the final \(r\) right-spectator sites: under the
+spectator split, the term starting at `j` on \(n + r\) sites is the fiberwise extension of the
+term starting at `j` on \(n\) sites. -/
+theorem toEuclideanLin_parentChainInteraction_term_conj_rightSpectatorConfigLinearIsometryEquiv
+    (A : MPSTensor d D) {n r L : ℕ} (j : Fin (n + 1 - L)) :
+    (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
+        ((Matrix.toEuclideanLin ((parentChainInteraction A L (n + r)).term
+            ⟨j.val, by omega⟩)).comp
+          (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (LinearMap.toContinuousLinearMap
+          (Matrix.toEuclideanLin ((parentChainInteraction A L n).term j)))).toLinearMap := by
+  have hj : j.val + L ≤ n := by omega
+  have hj' : j.val + L ≤ n + r := by omega
+  apply LinearMap.ext
+  intro x
+  apply PiLp.ext
+  rintro ⟨σ, s⟩
+  change (Matrix.toEuclideanLin ((parentChainInteraction A L (n + r)).term ⟨j.val, by omega⟩)
+      ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)) (Fin.appendEquiv n r (σ, s)) =
+    Matrix.toEuclideanLin ((parentChainInteraction A L n).term j)
+      (ContinuousLinearMap.rightFiber x s) σ
+  rw [Matrix.toLpLin_apply, Matrix.toLpLin_apply, PiLp.toLp_apply, PiLp.toLp_apply,
+    ManyBody.Interaction.translates_term, ManyBody.Interaction.translates_term,
+    placeAlong_chainWindow_mulVec_apply hj', placeAlong_chainWindow_mulVec_apply hj]
+  have hcfg (ω : Cfg d L) :
+      rightSpectatorConfigEquiv d n r (contiguousCfg j.val L ω (Fin.appendEquiv n r (σ, s))) =
+        (contiguousCfg j.val L ω σ, s) := by
+    apply Prod.ext
+    · funext k
+      simp only [rightSpectatorConfigEquiv]
+      simp [contiguousCfg, Fin.appendEquiv]
+    · funext k
+      simp only [rightSpectatorConfigEquiv]
+      change contiguousCfg j.val L ω (Fin.append σ s) (Fin.natAdd n k) = s k
+      simp only [contiguousCfg]
+      split
+      · rename_i hwindow
+        have hkval : (Fin.natAdd n k).val = n + k.val := rfl
+        exfalso
+        omega
+      · exact Fin.append_right σ s k
+  have hres : contiguousRestrictₗ j.val L hj' (Fin.appendEquiv n r (σ, s))
+      (WithLp.ofLp ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)) =
+      contiguousRestrictₗ j.val L hj σ (WithLp.ofLp (ContinuousLinearMap.rightFiber x s)) := by
+    funext ω
+    change ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)
+        (contiguousCfg j.val L ω (Fin.appendEquiv n r (σ, s))) =
+      x (contiguousCfg j.val L ω σ, s)
+    rw [rightSpectatorConfigLinearIsometryEquiv_symm_apply_apply, hcfg]
+  have hwin : (fun u ↦ Fin.appendEquiv n r (σ, s) (ManyBody.chainWindow j.val hj' u)) =
+      fun u ↦ σ (ManyBody.chainWindow j.val hj u) := by
+    funext u
+    have hu : ManyBody.chainWindow (N := n + r) j.val hj' u =
+        Fin.castAdd r (ManyBody.chainWindow j.val hj u) := Fin.ext (by simp)
+    rw [hu]
+    exact Fin.append_left σ s _
+  rw [hres, hwin]
+
+end ChainInteraction
 
 end MPSTensor
