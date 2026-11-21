@@ -25,6 +25,15 @@ statements assume \(R\geq S+1\); the dimension-bound statement assumes
 short-range claim are documented in
 `docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex` and
 `docs/paper-gaps/cpgsv21_short_range_parent_gap.tex`.
+
+The identification with the representatives and the kernel identification are also stated, in
+the last section, for the parent interaction on the open chain (`parentChainInteraction`).
+
+**Transitional (#10948).** `CPSVCanonicalFormData.openParentHamiltonianES_eq_representatives` and
+`CPSVCanonicalFormData.ker_openParentHamiltonianES_eq_groundSpaceES_of_wordTupleSpanTop` are kept,
+unchanged, for unconverted users and are deleted when their last user is converted. The gap
+theorems of this file rest on the open-chain martingale gap through the prefix and suffix
+Hamiltonians and are converted with those in a later package.
 -/
 
 namespace MPSTensor
@@ -122,6 +131,43 @@ theorem CPSVCanonicalFormData.ker_openParentHamiltonianES_eq_groundSpaceES_of_wo
     groundSpaceES, data.groundSpace_eq_toTensorFromBlocks_representatives
       (by omega : 0 < N)] using
     ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_wordTupleSpanTop
+      (fun _ ↦ 1) (fun j ↦ data.blocks (data.representativeIndex j))
+      (by simp) hS hSpan hR hRN
+
+/-! ### The parent interaction on the open chain -/
+
+omit [NeZero d] in
+/-- Multiplicities and ambient reconstruction preserve every positive-range parent interaction
+on the open chain: it is the parent interaction of the block sum of the distinct normal
+representatives. Source: CPSV16, arXiv:1606.00608, equations `II_CF1`,
+`eq:II_ABasicTensors`, and `decBSV`. -/
+theorem CPSVCanonicalFormData.parentChainInteraction_eq_representatives
+    {A : MPSTensor d D} (data : CPSVCanonicalFormData A)
+    {R : ℕ} (hR : 0 < R) (N : ℕ) :
+    parentChainInteraction A R N = parentChainInteraction
+      (toTensorFromBlocks (fun _ ↦ 1)
+        (fun j ↦ data.blocks (data.representativeIndex j))) R N := by
+  simp only [parentChainInteraction, parentInteraction, groundSpaceES,
+    data.groundSpace_eq_toTensorFromBlocks_representatives hR]
+
+/-- At an admissible simultaneous injectivity range, the kernel of the Hamiltonian of the parent
+interaction on the open chain of a canonical tensor is its full boundary-condition space,
+including multiplicities and ambient reconstruction. Source: CPGSV21, arXiv:2011.12127,
+Section IV.C, lines 2114--2129; CPSV16, arXiv:1606.00608, equations `II_CF1` and `decBSV`. -/
+theorem CPSVCanonicalFormData.ker_hamiltonian_parentChainInteraction_eq_of_wordTupleSpanTop
+    {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {S R N : ℕ}
+    (hS : 0 < S)
+    (hSpan : WordTupleSpanTop
+      (fun j ↦ data.blocks (data.representativeIndex j)) S)
+    (hR : S + 1 ≤ R) (hRN : R ≤ N) :
+    LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
+      groundSpaceES A N := by
+  let : ∀ j, NeZero (data.dim (data.representativeIndex j)) :=
+    fun j ↦ ⟨(data.dim_pos (data.representativeIndex j)).ne'⟩
+  simpa only [← data.parentChainInteraction_eq_representatives (by omega : 0 < R) N,
+    groundSpaceES, data.groundSpace_eq_toTensorFromBlocks_representatives
+      (by omega : 0 < N)] using
+    ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
       (fun _ ↦ 1) (fun j ↦ data.blocks (data.representativeIndex j))
       (by simp) hS hSpan hR hRN
 
