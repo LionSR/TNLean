@@ -72,7 +72,7 @@ theorem card_label_shell_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S₀
   classical
   rcases isEmpty_or_nonempty ι with hι | ⟨⟨x₀⟩⟩
   · have : IsEmpty κ := ⟨fun i => hι.false (a i)⟩
-    simp [Finset.univ_eq_empty, Finset.eq_empty_of_isEmpty S₀]
+    simp [Finset.eq_empty_of_isEmpty S₀]
   have hμ : 0 ≤ μ := (Nat.cast_nonneg _).trans (hMult x₀)
   set T := Finset.univ.filter fun x => ManyBody.setEdist G S₀ x = d
   -- Sites at distance `d` lie in the balls of radius `d` about the points of `S₀`.

@@ -75,7 +75,7 @@ def complRelabel (σ : V ≃ W) (S : Finset V) :
       ManyBody.ComplConfig (fun _ : W => F) (S.map σ.toEmbedding) :=
   Equiv.arrowCongr (σ.subtypeEquiv fun v => by simp) (Equiv.refl F)
 
-omit [Fintype F] [DecidableEq F] in
+omit [Fintype F] [DecidableEq F] [Fintype V] [Fintype W] in
 theorem cutEquiv_symm_comp_relabel (σ : V ≃ W) (S : Finset V)
     (a : ManyBody.RegionConfig (fun _ : V => F) S) (d : ManyBody.ComplConfig (fun _ : V => F) S) :
     (ManyBody.cutEquiv (fun _ : V => F) S).symm (a, d) ∘ σ.symm =

@@ -293,14 +293,17 @@ def merge (h : Disjoint T E) (ab : (T → Fin q) × ({v // v ∉ T ∪ E} → Fi
     ι → Fin q :=
   (threeSplit q T E h).symm ((ab.1, fun x : E => c x), ab.2)
 
+omit [Fintype ι] in
 theorem merge_restrict_T (h : Disjoint T E) (ab : (T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
     (c : ι → Fin q) : (fun x : T => merge h ab c x) = ab.1 :=
   funext fun x => threeSplit_symm_apply_of_mem_left h _ _ _ x.2
 
+omit [Fintype ι] in
 theorem merge_restrict_U (h : Disjoint T E) (ab : (T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
     (c : ι → Fin q) : (fun x : {v // v ∉ T ∪ E} => merge h ab c x) = ab.2 :=
   funext fun x => threeSplit_symm_apply_of_notMem h _ _ _ x.2
 
+omit [Fintype ι] in
 theorem merge_of_mem_E (h : Disjoint T E) (ab : (T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
     (c : ι → Fin q) {x : ι} (hx : x ∈ E) : merge h ab c x = c x :=
   threeSplit_symm_apply_of_mem_right h _ _ _ hx
@@ -377,6 +380,7 @@ theorem eval_place (own own' : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈
       fun x hx => (merge_of_mem_E h ab c ((mem_listE hall h x).mp hx)).symm]
   exact eval_ungroupWord own' hS hall ℓ₀ hA' hB' t (merge h ab c)
 
+omit [Fintype ι] in
 theorem merge_eq_iff (h : Disjoint T E) (ab : (T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
     (c c' : ι → Fin q) : c' = merge h ab c ↔
       ab = ((fun x : T => c' x), (fun x : {v // v ∉ T ∪ E} => c' x)) ∧

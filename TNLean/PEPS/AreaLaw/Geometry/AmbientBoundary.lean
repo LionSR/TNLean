@@ -97,8 +97,7 @@ theorem mem_ambientBoundary_iff {S : Finset (ℤ × ℤ)} {e : Sym2 (ℤ × ℤ)
     let b : Site (ambientDilation S 1) := ⟨q, hqD⟩
     refine Finset.mem_image.mpr ⟨s(a, b), ?_, rfl⟩
     refine ManyBody.mk_mem_edgeBoundary_iff.mpr ⟨?_, Or.inl ⟨?_, ?_⟩⟩
-    · change (planeDomainGraph (ambientDilation S 1)).Adj a b
-      exact mem_latticeNeighbors_iff.mp hpq
+    · exact mem_latticeNeighbors_iff.mp hpq
     · simpa [ambientBoundaryRegion, a] using hp
     · simpa [ambientBoundaryRegion, b] using hq
 
