@@ -850,6 +850,15 @@
       "corollaries": [],
       "notes": {}
     },
+    "ch:peps_area_law_frustration_free": {
+      "theorems": [
+        "thm:frustration_free_area_law"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:frustration_free_area_law": "The frustration-free area law, the result the chapter exists to prove (frustration-free note, eq. (goal))"
+      }
+    },
     "ch:peps_area_law_amplification_and_shells": {
       "theorems": [
         "thm:area_law_amplification"

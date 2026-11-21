@@ -127,3 +127,105 @@ localization errors of the amplification stage.
     at energy zero. This proof passes through the general amplification stage;
     the shorter proof of the note is assembled in the following sections.
 \end{proof}
+
+\section{The exact light cone of the sweep}
+\label{sec:frustration_free_area_law_light_cone}
+
+\begin{lemma}[Greedy colouring]
+    \label{thm:frustration_free_area_law_greedy_colouring}
+    \lean{SimpleGraph.exists_coloring_list_of_forall_degree_le, SimpleGraph.colorable_succ_of_forall_degree_le}
+    \leanok
+    A finite graph in which every vertex has at most $d$ neighbours has a
+    proper colouring with $d+1$ colours.
+\end{lemma}
+
+\begin{proof}\leanok
+    Colour the vertices one at a time; at most $d$ colours are used by the
+    neighbours of the next vertex.
+\end{proof}
+
+\begin{lemma}[Colour layers of the supports]
+    \label{thm:frustration_free_area_law_colour_layers}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.overlapDegreeBound, TNLean.PEPS.AreaLaw.FrustrationFree.degree_overlapGraph_le, TNLean.PEPS.AreaLaw.FrustrationFree.exists_overlapColoring, TNLean.PEPS.AreaLaw.FrustrationFree.sweepWord, TNLean.PEPS.AreaLaw.FrustrationFree.mem_sweepWord, TNLean.PEPS.AreaLaw.FrustrationFree.nodup_sweepWord, TNLean.PEPS.AreaLaw.FrustrationFree.pairwise_disjoint_colorLayer, TNLean.PEPS.AreaLaw.FrustrationFree.supportOverlapGraph, TNLean.PEPS.AreaLaw.FrustrationFree.colorLayer}
+    \leanok
+    \uses{thm:frustration_free_area_law_greedy_colouring,def:area_law_hamiltonian}
+    On a finite domain of the square lattice, a support of graph diameter at
+    most $R$ meets at most $d_R=v_R\mu_R$ other supports, with
+    $v_R=1+2R(R+1)$ and $\mu_R=2^{v_R-1}$. Hence the supports have a colouring
+    with $\chi=d_R+1$ colours in which supports of equal colour are disjoint,
+    and listing them colour by colour lists every support once.
+\end{lemma}
+
+\begin{proof}\leanok
+    A support has at most $v_R$ sites and every site lies in at most $\mu_R$
+    supports. Apply Lemma~\ref{thm:frustration_free_area_law_greedy_colouring}.
+\end{proof}
+
+\begin{lemma}[The light cone of a word of local factors]
+    \label{thm:frustration_free_area_law_light_cone}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.sweepProd, TNLean.PEPS.AreaLaw.FrustrationFree.retainedProd, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet, TNLean.PEPS.AreaLaw.FrustrationFree.kronecker_one_mulVec_eq_self, TNLean.PEPS.AreaLaw.FrustrationFree.kronecker_one_mulVec_sweep_eq_retained, TNLean.PEPS.AreaLaw.FrustrationFree.subset_retainedSet, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_append, TNLean.PEPS.AreaLaw.FrustrationFree.retainedProd_mem_supportedOperators, TNLean.PEPS.AreaLaw.FrustrationFree.retainedProd_mulVec_eq_self, TNLean.PEPS.AreaLaw.FrustrationFree.conjTranspose_retainedProd_mulVec_eq_self, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_subset_of_pairwise_disjoint, TNLean.PEPS.AreaLaw.FrustrationFree.mulVec_prod_apply, TNLean.PEPS.AreaLaw.FrustrationFree.kronecker_one_mulVec_apply, TNLean.PEPS.AreaLaw.FrustrationFree.submatrix_kronecker_one_mul}
+    \leanok
+    Let $f_1,\dots,f_m$ be operators on a system of sites, $f_k$ acting on
+    $T_k$ and fixing a vector $\Omega$. Let $B$ act on the sites and a
+    register so that every block $B_{ab}$ acts on $U$, and put
+    $\zeta=B(\Omega\otimes\xi)$. Process the factors in order, keeping $f_k$
+    when $T_k$ meets the current region and then enlarging the region by
+    $T_k$. If $L$ is the product of the kept factors, then
+    $(f_m\cdots f_1\otimes I)\zeta=(L\otimes I)\zeta$, $L$ acts on the final
+    region, and $L\Omega=\Omega$; if the adjoints fix $\Omega$, so does
+    $L^\dagger$. If the regions $T_k$ are pairwise disjoint, the final region
+    lies in any set containing $U$ and every $T_k$ that meets $U$.
+\end{lemma}
+
+\begin{proof}\leanok
+    A factor acting away from $U$ commutes with every block of $B$ and fixes
+    $\Omega$, so it fixes $\zeta$; the blocks of $(f_k\otimes I)B$ are
+    $f_kB_{ab}$, which act on $T_k\cup U$. Induct on the word. For the second
+    claim, a factor of a disjoint layer that meets the current region meets
+    $U$, because it is disjoint from the other kept factors.
+\end{proof}
+
+\begin{lemma}[The light cone of $t$ sweeps]
+    \label{thm:frustration_free_area_law_sweep_light_cone}
+    \lean{TNLean.Lattice.mem_graphNeighborhood, TNLean.Lattice.subset_graphNeighborhood, TNLean.Lattice.graphNeighborhood_mono, TNLean.Lattice.graphNeighborhood_graphNeighborhood_subset, TNLean.Lattice.subset_graphNeighborhood_of_isAdmissibleSupport, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_colorLayer_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_flatten_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_sweepWord_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_sweepWord_pow_subset}
+    \leanok
+    \uses{thm:frustration_free_area_law_colour_layers,thm:frustration_free_area_law_light_cone}
+    For the word of $t$ sweeps of the supports, colour by colour, the final
+    region of Lemma~\ref{thm:frustration_free_area_law_light_cone} started from $U$ lies in
+    the graph neighbourhood $N_{R\chi t}(U)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    A support meeting a set lies in its $R$-neighbourhood, so each of the
+    $\chi t$ colour layers enlarges the region by at most $R$.
+\end{proof}
+
+\begin{lemma}[The sweep of a frustration-free Hamiltonian]
+    \label{thm:frustration_free_area_law_sweep}
+    \lean{ContinuousLinearMap.complementProd_congr, TNLean.PEPS.AreaLaw.FrustrationFree.wordProjections, TNLean.PEPS.AreaLaw.FrustrationFree.sum_range_option_elim, TNLean.PEPS.AreaLaw.FrustrationFree.toEuclideanCLM_sweepProd, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_nonneg, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_lt_one, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_pos, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.termProj, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp_mulVec_self, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp_pow_mulVec_self, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.mul_norm_sq_le_re_inner_sum_termProj, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_sweepOp_pow_apply_le, TNLean.PEPS.AreaLaw.FrustrationFree.sweepProd_append, TNLean.PEPS.AreaLaw.FrustrationFree.sweepProd_flatten_replicate, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.exists_sweepOp_pow_lightCone, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.termProj_mem, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.termProj_mulVec, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.factor_mem, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.factor_mulVec, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.conjTranspose_factor_mulVec}
+    \leanok
+    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_model_gapped,thm:frustration_free_area_law_sweep_contraction,thm:frustration_free_area_law_range_projection,thm:frustration_free_area_law_light_cone,thm:frustration_free_area_law_sweep_light_cone}
+    In the model of Definition~\ref{def:frustration_free_area_law_model} with $J,\Delta>0$,
+    let $D=\prod_X(I-\Pi_X)$ be the product over the supports, colour by
+    colour, of the complements of the range projections of the terms. Then
+    $D\Omega=\Omega$ and $\|D^tv\|\le\theta^t\|v\|$ for $v\perp\Omega$, with
+    \[
+        \theta=\bigl(1+(\Delta/J)/(d_R+1)^2\bigr)^{-1/2}<1.
+    \]
+    If every block of an operator $B$ on the sites and a register acts on $U$,
+    there is an operator $L$ acting on $N_{R\chi t}(U)$ with $L\Omega=\Omega$,
+    $L^\dagger\Omega=\Omega$ and $(D^t\otimes I)B(\Omega\otimes\xi)
+        =(L\otimes I)B(\Omega\otimes\xi)$. These are
+    \cite[eqs.~(sweep) and (cone)]{TNLean2026FrustrationFreeNote}, with the
+    range projections in place of the square roots of the note
+    \cite{gap:frustrationfree_sweep_range_projections}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The range projections are projections annihilating $\Omega$, a pair of
+    them fails to commute only when their supports meet, and their sum is at
+    least $(\Delta/J)(I-|\Omega\rangle\langle\Omega|)$
+    (Lemma~\ref{thm:frustration_free_area_law_model_gapped}). Apply
+    Lemma~\ref{thm:frustration_free_area_law_sweep_contraction} with $d=d_R$ and
+    Lemma~\ref{thm:frustration_free_area_law_sweep_light_cone}.
+\end{proof}
