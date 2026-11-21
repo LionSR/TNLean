@@ -22,6 +22,11 @@ ambient dilation `ManyBody.ambientDilation` are QICLean's, as are the graph neig
 * `Site`: the sites of a finite domain.
 * `Configuration`: the configurations of a domain with local dimension `q`.
 
+## Main statements
+
+* `subset_graphNeighborhood_of_isAdmissibleSupport`: a support of diameter at most `R` meeting
+  `S` lies in `N_R(S)`.
+
 ## References
 
 * OpenAI, *A two-dimensional area law from a global spectral gap*,
@@ -45,5 +50,13 @@ Source: area-law Section 1, the site Hilbert spaces. -/
 @[simp] theorem card_configuration (Λ : Finset (ℤ × ℤ)) (q : ℕ) :
     Fintype.card (Configuration Λ q) = q ^ Λ.card := by
   simp [Configuration, Site]
+
+/-- A support of graph diameter at most `R` meeting `S` lies in `N_R(S)`. -/
+theorem subset_graphNeighborhood_of_isAdmissibleSupport {Λ : Finset (ℤ × ℤ)} {R : ℕ}
+    {X : Finset (Site Λ)} (hX : ManyBody.IsAdmissibleSupport Λ R X) {S : Finset (Site Λ)}
+    (hXS : ¬Disjoint X S) : X ⊆ ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ) S R :=
+  fun y hy ↦ by
+    obtain ⟨x, hxX, hxS⟩ := Finset.not_disjoint_iff.mp hXS
+    exact ManyBody.mem_graphNeighborhood_iff_exists_walk.mpr ⟨x, hxS, hX.2 x hxX y hy⟩
 
 end TNLean.Lattice
