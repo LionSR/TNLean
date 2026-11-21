@@ -261,7 +261,6 @@ def pass_throughs(sources: Mapping[str, str]) -> dict[str, str]:
 # use the original declaration at the call site.
 PASS_THROUGH: frozenset[str] = frozenset(
     {
-        "MPSPreparation.permOp_conjTranspose",
         "MPSTensor.HasNNCPHGroundSpaces.hasParentHamiltonianGroundSpaceSpanning",
         "TNLean.Algebra.RestrictedFusionGauge.fusionGauge_one",
         "TNLean.Algebra.RestrictedScalarGauge.gauge_one",
