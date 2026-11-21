@@ -17,6 +17,12 @@ For an injective one-site tensor and every periodic chain of length at least
 two, the ground space is the line spanned by its nonzero matrix product
 vector. The line projection varies continuously with the tensor. This
 controls the finitely many lengths below a large-chain uniform gap threshold.
+
+**Transitional (#10948).** `ker_parentHamiltonianES_two_eq_range_periodicMpvLineMap`,
+`continuous_parentHamiltonianES_two_kernelProjection_family` and
+`exists_uniform_parentHamiltonianES_two_gap_fixed_volume`, stated for the Euclidean-space
+operator, are kept until their users are converted; the last section states them for the
+Hamiltonian of the parent interaction on the ring.
 -/
 
 namespace MPSTensor
@@ -143,5 +149,83 @@ theorem exists_uniform_parentHamiltonianES_two_gap_fixed_volume
   exact ContinuousLinearMap.exists_uniform_norm_gap_of_compact
     (fun x => LinearMap.toContinuousLinearMap (parentHamiltonianES (A x) 2 N))
     hH hK hS
+
+/-! ### The parent interaction on the ring -/
+
+/-- The kernel of the Hamiltonian of the two-site parent interaction on the ring is precisely
+the range of the scalar-to-state map when the tensor is one-site injective and the chain has at
+least two sites. -/
+theorem ker_hamiltonian_parentRingInteraction_two_eq_range_periodicMpvLineMap
+    {d D N : ℕ} [NeZero D] (A : MPSTensor d D)
+    (hA : Kraus.IsInjective A) (hN : 2 ≤ N) :
+    LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A hN).hamiltonian) =
+      (periodicMpvLineMap A N).range := by
+  rw [← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction,
+    parentHamiltonianGroundSpaceES,
+    ker_parentHamiltonian_eq_chainGroundSpace A (by omega : 0 < N) hN,
+    chainGroundSpace_eq_mpvSubmodule hA hN (by norm_num : 1 < 2) hN]
+  simp only [mpvSubmodule, periodicMpvLineMap]
+  rw [Submodule.map_span]
+  simp only [Set.image_singleton]
+  change (ℂ ∙ ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A))) = _
+  exact
+    (ContinuousLinearMap.range_smulRight_apply
+      (by norm_num : (1 : ℂ →L[ℂ] ℂ) ≠ 0)
+      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A))).symm
+
+/-- At every fixed periodic length at least two, the orthogonal projector onto the kernel of the
+Hamiltonian of the two-site parent interaction on the ring is continuous along a continuous
+family of one-site injective tensors. -/
+theorem continuous_hamiltonian_parentRingInteraction_two_kernelProjection_family
+    {X : Type*} [TopologicalSpace X] {d D : ℕ} [NeZero D]
+    (A : X → MPSTensor d D) (hA : Continuous A)
+    (hInj : ∀ x, Kraus.IsInjective (A x)) {N : ℕ} (hN : 2 ≤ N) :
+    Continuous fun x =>
+      (LinearMap.ker
+        (Matrix.toEuclideanLin (parentRingInteraction (A x) hN).hamiltonian)).starProjection := by
+  have hT := continuous_periodicMpvLineMap_family A hA N
+  have hTinj (x : X) : Function.Injective (periodicMpvLineMap (A x) N) :=
+    periodicMpvLineMap_injective_of_isInjective (A x) (hInj x) hN
+  have hProj := ContinuousLinearMap.continuous_injectiveRangeProjector
+    (fun x => periodicMpvLineMap (A x) N) hT hTinj
+  have heq :
+      (fun x => ContinuousLinearMap.injectiveRangeProjector
+        (periodicMpvLineMap (A x) N) (hTinj x)) =
+      (fun x => (LinearMap.ker
+        (Matrix.toEuclideanLin (parentRingInteraction (A x) hN).hamiltonian)).starProjection) := by
+    funext x
+    rw [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection]
+    exact congrArg
+      (fun K : Submodule ℂ (EuclideanSpace ℂ (Cfg d N)) => K.starProjection)
+      (ker_hamiltonian_parentRingInteraction_two_eq_range_periodicMpvLineMap
+        (A x) (hInj x) hN).symm
+  rw [← heq]
+  exact hProj
+
+/-- For each fixed periodic length at least two, a continuous compact family of one-site
+injective tensors has one positive gap bound for the Hamiltonian of the two-site parent
+interaction on the ring. The bound may depend on the length. Source: arXiv:1010.3732,
+Appendix A. -/
+theorem exists_uniform_hamiltonian_parentRingInteraction_two_gap_fixed_volume
+    {X : Type*} [TopologicalSpace X] {d D : ℕ} [NeZero D]
+    (A : X → MPSTensor d D) (hA : Continuous A)
+    (hInj : ∀ x, Kraus.IsInjective (A x)) {S : Set X} (hS : IsCompact S)
+    {N : ℕ} (hN : 2 ≤ N) :
+    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S,
+      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction (A x) hN).hamiltonian))ᗮ,
+        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction (A x) hN).hamiltonian v‖ := by
+  have hBlock (x : X) : Kraus.IsNBlkInjective (A x) 2 :=
+    isNBlkInjective_of_le (by omega : 0 < 1)
+      (Kraus.isNBlkInjective_one_of_isInjective (hInj x))
+      (by omega : 1 ≤ 2)
+  let e := (Matrix.toEuclideanCLM : Matrix (Cfg d N) (Cfg d N) ℂ ≃⋆ₐ[ℂ] _)
+  have hH : Continuous fun x ↦ e (parentRingInteraction (A x) hN).hamiltonian :=
+    e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp
+      (continuous_hamiltonian_parentRingInteraction_family A hA hN hBlock)
+  have hK := continuous_hamiltonian_parentRingInteraction_two_kernelProjection_family
+    A hA hInj hN
+  simp only [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin] at hK ⊢
+  exact ContinuousLinearMap.exists_uniform_norm_gap_of_compact
+    (fun x ↦ e (parentRingInteraction (A x) hN).hamiltonian) hH hK hS
 
 end MPSTensor
