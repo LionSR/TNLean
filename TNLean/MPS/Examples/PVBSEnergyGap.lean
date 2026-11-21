@@ -10,8 +10,8 @@ import TNLean.MPS.Examples.PVBSPeriodicGroundSpace
 # Uniform periodic PVBS gap from particle number
 
 The periodic decomposition into the positive critical parent and particle number
-bounds the energy away from the vacuum. The conclusion uses the existing norm-gap
-formulation on the orthogonal complement of the actual Hamiltonian kernel.
+bounds the energy away from the vacuum. The conclusion is that the Hamiltonian is
+gapped above its zero ground energy (`ManyBody.IsGapped`).
 
 **Scope restriction (one species, zero phase, periodic boundary):** the general
 multi-species thermodynamic gap conjecture is not asserted. See
@@ -112,17 +112,22 @@ theorem pvbs_zero_of_mem_orthogonal_parent_kernel (q : ℂ) {N : ℕ} (hN : 2 �
   have h := hv (WithLp.toLp 2 (pvbsVacuum N)) hΩ
   simpa [pvbsVacuum, PiLp.inner_apply, RCLike.inner_apply, Pi.single_apply] using h
 
-/-- The periodic one-species PVBS parent has the uniform norm-gap bound
-`(μ - 1)² / (1 + μ²)` for nonnegative real hopping. The bound is positive
-when the hopping is noncritical. -/
-theorem hamiltonian_parentRingInteraction_pvbs_gap (μ : ℝ) (hμ : 0 ≤ μ) {N : ℕ}
+/-- The periodic one-species PVBS parent is gapped above its zero ground energy
+with the uniform gap `(μ - 1)² / (1 + μ²)` for nonnegative real hopping. The
+bound is positive when the hopping is noncritical. -/
+theorem isGapped_hamiltonian_parentRingInteraction_pvbs (μ : ℝ) (hμ : 0 ≤ μ) {N : ℕ}
     (hN : 2 ≤ N) :
-    ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-        (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian))ᗮ,
-      ((μ - 1) ^ 2 / (1 + μ ^ 2)) * ‖v‖ ≤
-        ‖Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian v‖ := by
+    ManyBody.IsGapped (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian 0
+      ((μ - 1) ^ 2 / (1 + μ ^ 2)) := by
+  rw [ManyBody.isGapped_zero_iff_norm
+    (posSemidef_hamiltonian_parentRingInteraction (pvbsTensor (μ : ℂ)) hN),
+    ManyBody.groundSpace_zero]
   set H := Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian
-  intro v hv
+  refine ⟨fun hbot ↦ ?_, fun v hv ↦ ?_⟩
+  · have h := pvbs_zero_of_mem_orthogonal_parent_kernel (μ : ℂ) hN
+      (v := WithLp.toLp 2 (pvbsVacuum N))
+      (by rw [hbot, Submodule.bot_orthogonal_eq_top]; exact Submodule.mem_top)
+    exact one_ne_zero ((pvbsVacuum_zero N).symm.trans h)
   have henergy := hamiltonian_parentRingInteraction_pvbs_energy_lower_bound μ hμ hN v
     (pvbs_zero_of_mem_orthogonal_parent_kernel (μ : ℂ) hN hv)
   have hCS := @re_inner_le_norm ℂ _ _ _ _ v (H v)
