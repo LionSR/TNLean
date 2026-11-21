@@ -8,21 +8,10 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Circuit
 
-import QICLean.Circuit.Compile.ChainPlacement
-import QICLean.ManyBody.Sites.ConfigurationMap
-import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.Analysis.UnitaryExpectation
-import TNLean.Circuit.Gates
-import TNLean.Circuit.Measurement
-import QICLean.ManyBody.Sites.ProductVector
 import TNLean.Circuit.RegionSplit
 import TNLean.Circuit.RegionalSwap
-import QICLean.ManyBody.Sites.SiteOscillation
 import TNLean.Circuit.SitePermutation
 import TNLean.Circuit.SitewiseTensorSupport
-import QICLean.ManyBody.Sites.SpectatorSiteExpectation
-import QICLean.ManyBody.Sites.Twirl
-import QICLean.ManyBody.Sites.SupportedComplementProduct
 import TNLean.Circuit.SupportedGroundSpace
 import TNLean.Circuit.SupportedNormalizedGroundSpace
 import TNLean.Circuit.SupportedOperators
