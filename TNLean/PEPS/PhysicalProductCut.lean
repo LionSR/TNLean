@@ -73,7 +73,7 @@ theorem reindex_cutEquiv_physicalProductMatrix (F : Matrix Out Phys ℂ) :
         physicalProductMatrix {v : Site // v ∉ R} F := by
   ext ⟨τ, ν⟩ ⟨σ, μ⟩
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.kroneckerMap_apply]
-  exact physicalProductMatrix_split (· ∈ R) F τ ν σ μ
+  convert physicalProductMatrix_split (· ∈ R) F τ ν σ μ using 3
 
 /-- Across a cut, a product of physical maps multiplies the coefficient matrix
 on the left and by the ordinary transpose on the right.
