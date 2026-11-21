@@ -29,10 +29,7 @@ import TNLean.Algebra.CommonBufferLength
 import TNLean.Algebra.CommonFixedSubmodule
 import TNLean.Algebra.CommonKernelGapInterpolation
 import TNLean.Algebra.CommonKernelSpectralGap
-import TNLean.Algebra.CommutingProjectionProduct
 import TNLean.Algebra.CommutingStarSubalgebraProduct
-import TNLean.Algebra.CompactGapBounds
-import TNLean.Algebra.CompactKernelGap
 import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.ConjClassesConjugation
@@ -96,8 +93,6 @@ import TNLean.Algebra.IntegerHasseGraph
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.IsometricFrameEmbedding
-import TNLean.Algebra.IsometricGapTransfer
-import TNLean.Algebra.IsometricProjection
 import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.Algebra.KleinCocycleCompleteness
 import TNLean.Algebra.KleinCocyclePhase
@@ -157,7 +152,6 @@ import TNLean.Algebra.OrderedIdempotentTracePerturbation
 import TNLean.Algebra.OrthogonalComplexStructure
 import TNLean.Algebra.OrthogonalComplexStructureBasis
 import TNLean.Algebra.OrthogonalGroupJoined
-import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.Algebra.OrthogonalResolution
 import TNLean.Algebra.OrthogonalSkewNormalForm
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
