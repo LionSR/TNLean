@@ -206,7 +206,8 @@ theorem IsParentInteraction.exists_pos_hamiltonian_chainTranslates_comparison
 
 /-- A two-sided comparison of the Hamiltonian of the open-chain translates of a positive
 semidefinite matrix with the Hamiltonian of the canonical parent interaction on the open chain
-transfers a gap of the latter to the former. -/
+transfers a gap above the kernel of the latter to the former: every eigenvalue is `0` or at least
+the gap. -/
 private theorem toEuclideanLin_hamiltonian_chainTranslates_gap_of_comparison
     {R N : ℕ} (A : MPSTensor d D) {h : Matrix (Cfg d R) (Cfg d R) ℂ} (hh : h.PosSemidef)
     {κ C γ : ℝ} (hκ : 0 < κ) (hC : 0 < C) (hγ : 0 < γ)
@@ -214,11 +215,12 @@ private theorem toEuclideanLin_hamiltonian_chainTranslates_gap_of_comparison
       (chainTranslates R N h).hamiltonian)
     (hUpper : (chainTranslates R N h).hamiltonian ≤
       (C : ℂ) • (parentChainInteraction A R N).hamiltonian)
-    (hGap : ∀ v ∈
-      (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian))ᗮ,
-      γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian v‖) :
-    ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian))ᗮ,
-      κ * γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian v‖ := by
+    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
+        μ = 0 ∨ ((κ * γ : ℝ) : ℂ) ≤ μ := by
   have hLower' : (κ : ℂ) • Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian ≤
       ((1 : ℝ) : ℂ) • Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian := by
     rw [Complex.ofReal_one, one_smul, ← map_smul, Matrix.toEuclideanLin_le_toEuclideanLin_iff]
@@ -227,24 +229,29 @@ private theorem toEuclideanLin_hamiltonian_chainTranslates_gap_of_comparison
       (C : ℂ) • Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian := by
     rw [Complex.ofReal_one, one_smul, ← map_smul, Matrix.toEuclideanLin_le_toEuclideanLin_iff]
     exact hUpper
+  refine (ManyBody.forall_hasEigenvalue_iff_norm
+    (posSemidef_hamiltonian_chainTranslates hh N)).mpr ?_
   simpa only [div_one] using
     (Matrix.isPositive_toEuclideanLin_iff.mpr
       (posSemidef_hamiltonian_parentChainInteraction A R N)).norm_gap_of_smul_le_of_le_smul
       (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_chainTranslates hh N))
-      hκ zero_lt_one hC hγ hLower' hUpper' hGap
+      hκ zero_lt_one hC hγ hLower' hUpper'
+      ((ManyBody.forall_hasEigenvalue_iff_norm
+        (posSemidef_hamiltonian_parentChainInteraction A R N)).mp hGap)
 
 /-- A uniform gap of the Hamiltonian of the canonical parent interaction on the open chain
-transfers to the open-chain translates of a fixed positive parent interaction.
+transfers to the open-chain translates of a fixed positive parent interaction. Each gap is stated
+above the kernel: every eigenvalue is `0` or at least the gap.
 Source: CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
 theorem IsParentInteraction.exists_hamiltonian_chainTranslates_uniform_gap_of_canonical_gap
     {R : ℕ} {A : MPSTensor d D} {h : Matrix (Cfg d R) (Cfg d R) ℂ}
     (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) {γ : ℝ} (hγ : 0 < γ)
-    (hGap : ∀ N : ℕ, R ≤ N → ∀ v ∈
-      (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian))ᗮ,
-      γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian v‖) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N → ∀ v ∈
-      (LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian))ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian v‖ := by
+    (hGap : ∀ N : ℕ, R ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ) :
+    ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨κ, C, hκ, hC, hComp⟩ := hh.exists_pos_hamiltonian_chainTranslates_comparison
   exact ⟨κ * γ, mul_pos hκ hγ, fun N hN ↦
     toEuclideanLin_hamiltonian_chainTranslates_gap_of_comparison A
@@ -253,7 +260,8 @@ theorem IsParentInteraction.exists_hamiltonian_chainTranslates_uniform_gap_of_ca
 
 /-- A supplied uniform gap of the Hamiltonians of the canonical parent interactions on the open
 chain transfers to the open-chain translates of a compact continuous family of positive parent
-interactions with continuous local ground projections. This proves the positive comparison step;
+interactions with continuous local ground projections. Each gap is stated above the kernel: every
+eigenvalue is `0` or at least the gap. This proves the positive comparison step;
 the canonical family gap is supplied. Source: CPGSV21, arXiv:2011.12127, lines 2170--2172;
 arXiv:1010.3732, Appendix A, lines 2477--2480 and 2575--2578. -/
 theorem exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap
@@ -263,12 +271,12 @@ theorem exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap
     (H : X → Matrix (Cfg d R) (Cfg d R) ℂ) (hH : Continuous H)
     (hParent : ∀ x, IsParentInteraction (A x) R (Matrix.toEuclideanLin (H x)))
     {K : Set X} (hK : IsCompact K) {γ : ℝ} (hγ : 0 < γ)
-    (hGap : ∀ x ∈ K, ∀ N : ℕ, N₀ ≤ N → ∀ v ∈ (LinearMap.ker
-        (Matrix.toEuclideanLin (parentChainInteraction (A x) R N).hamiltonian))ᗮ,
-      γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction (A x) R N).hamiltonian v‖) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, N₀ ≤ N →
-      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N (H x)).hamiltonian))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (chainTranslates R N (H x)).hamiltonian v‖ := by
+    (hGap : ∀ x ∈ K, ∀ N : ℕ, N₀ ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction (A x) R N).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ) :
+    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, N₀ ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (chainTranslates R N (H x)).hamiltonian) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ := by
   let e := (Matrix.toEuclideanCLM : Matrix (Cfg d R) (Cfg d R) ℂ ≃⋆ₐ[ℂ] _)
   have hE : Continuous fun x ↦ e (H x) :=
     e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp hH
