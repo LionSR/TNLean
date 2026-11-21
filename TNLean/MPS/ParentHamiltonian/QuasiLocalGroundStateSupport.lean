@@ -111,14 +111,10 @@ theorem quasiLocalState_groundSpaceProjection_eq_one_of_isParentInteraction_word
       (groundSpaceProjectionMatrix (toTensorFromBlocks (d := d) (μ := μ) A) N)) = 1 := by
   refine quasiLocalState_groundSpaceProjection_eq_one_of_interval_eq_zero
     (toTensorFromBlocks (d := d) (μ := μ) A) φ hφ a ((chainTranslates R N h).hamiltonian) ?_ ?_ ?_
-  · apply Matrix.isPositive_toEuclideanLin_iff.mp
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
-      h (by omega) hN]
-    exact openInteractionHamiltonianES_isPositive hh.isPositive N
-  · rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
-      h (by omega) hN,
-      hh.ker_openInteractionHamiltonianES_eq_ker_openParentHamiltonianES (by omega)]
-    exact ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_wordTupleSpanTop
+  · exact ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
+      (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive) N
+  · rw [hh.ker_hamiltonian_chainTranslates_eq_ker_parentChainInteraction]
+    exact ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
       μ A hμ hS hSpan hR hN
   · exact apply_quasiLocalIntervalObservable_hamiltonian_chainTranslates_eq_zero
       φ.toLinearMap h hzero a N

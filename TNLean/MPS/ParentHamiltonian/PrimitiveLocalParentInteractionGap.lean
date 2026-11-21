@@ -24,6 +24,12 @@ unconditional existence theorem assumes range at least \(D^4+1\).
 The quasi-local formulation, construction of the GNS Hamiltonian, and the
 pure multiblock conclusion are not treated here; see
 docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
+
+**Transitional (#10948).**
+`IsParentInteraction.ker_openInteractionHamiltonianES_eq_ker_openParentHamiltonianES`, stated for
+the Euclidean-space operators, is kept until its last users are converted; the last section states
+it for the Hamiltonians of the open-chain translates and of `parentChainInteraction`. The
+commutator theorems rest on the open-chain gap at the Wielandt range and are converted with it.
 -/
 
 open Filter
@@ -163,5 +169,26 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_ga
   · exact Eventually.of_forall fun n => hgap (N n) (by dsimp [N]; omega)
   · exact Eventually.of_forall hg
   · exact hu
+
+/-! ### The open-chain interaction Hamiltonians -/
+
+/-- The Hamiltonians of the open-chain translates of a positive parent interaction and of the
+canonical parent interaction on the open chain have identical kernels at every length.
+Source: CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
+theorem IsParentInteraction.ker_hamiltonian_chainTranslates_eq_ker_parentChainInteraction
+    {A : MPSTensor d D} {h : Matrix (Cfg d R) (Cfg d R) ℂ}
+    (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) (N : ℕ) :
+    LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) := by
+  obtain ⟨κ, C, hκ, hC, hComparison⟩ := hh.exists_pos_hamiltonian_chainTranslates_comparison
+  refine ((Matrix.isPositive_toEuclideanLin_iff.mpr
+    (posSemidef_hamiltonian_parentChainInteraction A R N)).ker_eq_of_smul_le_of_le_smul
+    (Matrix.isPositive_toEuclideanLin_iff.mpr
+      (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
+        (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive) N)) hκ zero_lt_one hC ?_ ?_).symm
+  · rw [Complex.ofReal_one, one_smul, ← map_smul, Matrix.toEuclideanLin_le_toEuclideanLin_iff]
+    exact (hComparison N).1
+  · rw [Complex.ofReal_one, one_smul, ← map_smul, Matrix.toEuclideanLin_le_toEuclideanLin_iff]
+    exact (hComparison N).2
 
 end MPSTensor
