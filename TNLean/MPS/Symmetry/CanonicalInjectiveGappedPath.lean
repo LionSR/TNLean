@@ -37,18 +37,9 @@ theorem isGapped_hamiltonian_translationInvariant_parent
       δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction A hN).hamiltonian v‖) :
     ManyBody.IsGapped (ManyBody.Interaction.translationInvariant hN
       (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian 0 δ := by
-  refine (ManyBody.isGapped_zero_iff_norm
-    (posSemidef_hamiltonian_parentRingInteraction A hN)).mpr ⟨?_, hGap⟩
-  rw [ManyBody.groundSpace_zero,
-    ker_hamiltonian_parentRingInteraction_two_eq_range_periodicMpvLineMap A hInj hN]
-  intro hbot
-  have hv : periodicMpvLineMap A N 1 ∈ (periodicMpvLineMap A N).range :=
-    ⟨1, rfl⟩
-  rw [hbot] at hv
-  have heq : periodicMpvLineMap A N 1 = periodicMpvLineMap A N 0 := by
-    simpa using hv
-  exact one_ne_zero (periodicMpvLineMap_injective_of_isInjective A
-    hInj hN heq)
+  exact (ManyBody.isGapped_zero_iff_norm
+    (posSemidef_hamiltonian_parentRingInteraction A hN)).mpr
+      ⟨groundSpace_hamiltonian_parentRingInteraction_two_ne_bot A hInj hN, hGap⟩
 
 /-- A continuous one-site injective tensor path with fixed unitary on-site
 symmetry determines a symmetric uniformly gapped path of its canonical

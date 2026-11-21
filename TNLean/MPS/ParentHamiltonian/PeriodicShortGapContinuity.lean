@@ -183,6 +183,17 @@ theorem ker_hamiltonian_parentRingInteraction_two_eq_range_periodicMpvLineMap
       (by norm_num : (1 : ℂ →L[ℂ] ℂ) ≠ 0)
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A))).symm
 
+/-- For a one-site injective tensor, zero is an eigenvalue of the Hamiltonian of the two-site
+parent interaction on every ring of at least two sites: the periodic vector is a nonzero
+zero-energy vector. -/
+theorem groundSpace_hamiltonian_parentRingInteraction_two_ne_bot
+    {d D N : ℕ} [NeZero D] (A : MPSTensor d D)
+    (hA : Kraus.IsInjective A) (hN : 2 ≤ N) :
+    ManyBody.groundSpace (parentRingInteraction A hN).hamiltonian 0 ≠ ⊥ := by
+  rw [ManyBody.groundSpace_zero,
+    ker_hamiltonian_parentRingInteraction_two_eq_range_periodicMpvLineMap A hA hN]
+  exact range_periodicMpvLineMap_ne_bot (periodicMpvLineMap_injective_of_isInjective A hA hN)
+
 /-- At every fixed periodic length at least two, the orthogonal projector onto the kernel of the
 Hamiltonian of the two-site parent interaction on the ring is continuous along a continuous
 family of one-site injective tensors. -/
@@ -223,18 +234,13 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_two_gap_fixed_volume
     {N : ℕ} (hN : 2 ≤ N) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S,
       ManyBody.IsGapped (parentRingInteraction (A x) hN).hamiltonian 0 δ := by
-  have hne (x : X) :
-      ManyBody.groundSpace (parentRingInteraction (A x) hN).hamiltonian 0 ≠ ⊥ := by
-    rw [ManyBody.groundSpace_zero,
-      ker_hamiltonian_parentRingInteraction_two_eq_range_periodicMpvLineMap (A x) (hInj x) hN]
-    exact range_periodicMpvLineMap_ne_bot
-      (periodicMpvLineMap_injective_of_isInjective (A x) (hInj x) hN)
   suffices hnorm : ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S, ∀ v ∈ (LinearMap.ker
       (Matrix.toEuclideanLin (parentRingInteraction (A x) hN).hamiltonian))ᗮ,
       δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction (A x) hN).hamiltonian v‖ by
     obtain ⟨δ, hδ, hgap⟩ := hnorm
     exact ⟨δ, hδ, fun x hx ↦ (ManyBody.isGapped_zero_iff_norm
-      (posSemidef_hamiltonian_parentRingInteraction (A x) hN)).mpr ⟨hne x, hgap x hx⟩⟩
+      (posSemidef_hamiltonian_parentRingInteraction (A x) hN)).mpr
+        ⟨groundSpace_hamiltonian_parentRingInteraction_two_ne_bot (A x) (hInj x) hN, hgap x hx⟩⟩
   have hBlock (x : X) : Kraus.IsNBlkInjective (A x) 2 :=
     isNBlkInjective_of_le (by omega : 0 < 1)
       (Kraus.isNBlkInjective_one_of_isInjective (hInj x))

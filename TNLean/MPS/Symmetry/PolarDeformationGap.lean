@@ -12,8 +12,8 @@ import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
 
 The polar path of a one-site injective tensor is continuous and remains
 injective on the compact interval `[0, 1]`. The compact-family parent gap
-therefore gives one positive lower bound for every parameter and every
-periodic chain of at least two sites.
+therefore gives one positive gap above the zero ground energy for every
+parameter and every periodic chain of at least two sites.
 
 **Scope restriction (one-site injective tensors):** this is the single-block,
 one-site injective case of arXiv:1010.3732, Section II.C and Appendix A,
@@ -32,15 +32,13 @@ open scoped Matrix
 namespace MPSTensor
 
 /-- The canonical parent Hamiltonians along the polar deformation of a
-one-site injective tensor have a gap uniform in the parameter and the chain
-length. Source: arXiv:1010.3732, Section II.C and Appendix A. -/
+one-site injective tensor are gapped above their zero ground energy, with a
+gap uniform in the parameter and the chain length. Source: arXiv:1010.3732,
+Section II.C and Appendix A. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_gap_polarDeformation
     {d D : ℕ} [NeZero D] {A : MPSTensor d D} (hA : Kraus.IsInjective A) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ N : ℕ, ∀ hN : 2 ≤ N,
-      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-          (parentRingInteraction (polarDeformation A γ) hN).hamiltonian))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-          (parentRingInteraction (polarDeformation A γ) hN).hamiltonian v‖ := by
+      ManyBody.IsGapped (parentRingInteraction (polarDeformation A γ) hN).hamiltonian 0 δ := by
   let B : Set.Icc (0 : ℝ) 1 → MPSTensor d D := fun γ => polarDeformation A γ
   have hB : Continuous B := (continuous_polarDeformation A).comp continuous_subtype_val
   have hInj (γ : Set.Icc (0 : ℝ) 1) : Kraus.IsInjective (B γ) :=
@@ -52,6 +50,9 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_gap_polarDeformation
   have hH : parentHamiltonianES (polarDeformation A γ) 2 N =
       Matrix.toEuclideanLin (parentRingInteraction (polarDeformation A γ) hN).hamiltonian :=
     parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow _ hN
+  refine (ManyBody.isGapped_zero_iff_norm
+    (posSemidef_hamiltonian_parentRingInteraction (polarDeformation A γ) hN)).mpr
+      ⟨groundSpace_hamiltonian_parentRingInteraction_two_ne_bot _ (hInj ⟨γ, hγ⟩) hN, ?_⟩
   rw [← hH]
   exact hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN
 
