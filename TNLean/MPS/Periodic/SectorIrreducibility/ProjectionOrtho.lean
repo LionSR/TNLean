@@ -67,8 +67,8 @@ theorem preservesCorner_of_adjoint_fixed_projection
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     {P : MatrixAlg D}
     (hP : IsOrthogonalProjection P)
-    (hFix : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) P = P) :
-    PreservesCorner P (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) := by
+    (hFix : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) P = P) :
+    PreservesCorner P (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) := by
   have hComm : ∀ i : Fin d, P * A i = A i * P :=
     MPSTensor.commutes_letters_of_adjoint_fixed_projection (A := A) hTP (hP := hP) hFix
   have hCommAdj : ∀ i : Fin d, P * (A i)ᴴ = (A i)ᴴ * P := by

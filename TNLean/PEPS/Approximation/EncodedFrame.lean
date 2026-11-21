@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.MatrixL2Contraction
-import TNLean.Circuit.SiteEmbedding
+import QICLean.Analysis.MatrixL2Contraction
+import QICLean.ManyBody.Sites.PlacedConfiguration
 import TNLean.Circuit.RegionSplit
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.Lattice.Sheet.Operators

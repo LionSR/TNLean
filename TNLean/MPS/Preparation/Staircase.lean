@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.IsometryUnitaryExtension
+import QICLean.Circuit.Gate.UnitaryExtension
 import TNLean.MPS.Preparation.IsometricChain
-import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.Circuit.Compile.WindowUniversality
 import TNLean.MPS.Overlap.Basic
 

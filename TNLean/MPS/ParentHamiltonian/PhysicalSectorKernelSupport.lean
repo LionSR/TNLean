@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteractionSections
-import TNLean.Algebra.FinCyclicInduction
-import TNLean.Algebra.EuclideanExtendByZero
+import QICLean.Algebra.IndexInduction
+import QICLean.Analysis.EuclideanExtendByZero
 import Mathlib.Data.Fin.Embedding
 
 /-!

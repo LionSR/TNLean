@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.UnitaryMulVecInner
+import QICLean.Algebra.UnitaryMulVecInner
 import TNLean.MPS.MPU.FiniteGroupDetectorTransport
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallStringGroup
 
@@ -33,7 +33,6 @@ https://sirui-lu.com/TNLean/paper-gaps/gs24_truncation_detector_endpoint_depende
 
 open Matrix
 open scoped Matrix
-open TNLean.Algebra
 
 namespace MPOTensor.GroupFamily.BlockActionData
 

@@ -328,7 +328,7 @@ theorem
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
@@ -378,7 +378,7 @@ theorem
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
@@ -423,7 +423,7 @@ theorem
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
@@ -455,7 +455,7 @@ theorem
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)
@@ -494,7 +494,7 @@ theorem
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, Matrix.PosDef (Λ j))
     (hDualFixed : ∀ j,
-      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     (hBlk : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
     (hUnital : ∀ j : Fin r, ∑ a : Fin d, A j a * (A j a)ᴴ = 1)

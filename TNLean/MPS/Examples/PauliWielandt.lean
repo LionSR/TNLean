@@ -7,6 +7,7 @@ import QICLean.Algebra.SpinCover.Basic
 import QICLean.Channel.Semigroup.PauliDissipation
 import QICLean.Algebra.ComplexSqrt
 import TNLean.Wielandt.Primitivity.Definitions
+import TNLean.MPS.Tensor
 
 /-!
 # The three-Pauli channel has different primitivity and matrix-span indices

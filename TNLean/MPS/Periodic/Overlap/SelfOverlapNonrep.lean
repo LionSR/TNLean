@@ -65,15 +65,15 @@ lemma offDiag_eigenvector_eq_zero_of_isPeriodic
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hCyclic :
-      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+      ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     {u v : Fin m} (hOrth : P u * P v = 0)
     {U : MatrixAlg D} {ζ : ℂ} (hζ : ‖ζ‖ = 1)
     (hSupp : U = P u * U * P v)
-    (hEig : ((Kraus.transferMap (d := d) (D := D) A) ^ m) U = ζ • U) :
+    (hEig : ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ m) U = ζ • U) :
     U = 0 := by
   have : NeZero D := ⟨hP.bondDim_ne_zero⟩
   classical
-  set E := Kraus.transferMap (d := d) (D := D) A with hE_def
+  set E := Kraus.transferMap (ι := Fin d) (n := Fin D) A with hE_def
   -- The original transfer map is irreducible and trace preserving.
   have hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1 := hP.leftCanonical
   -- Trace preservation: `tr (E X) = tr X` for every `X`.

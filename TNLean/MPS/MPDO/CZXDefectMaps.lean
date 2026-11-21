@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Dimension.Constructions
-import TNLean.Algebra.UnitaryCompletionClass
+import QICLean.Representation.UnitaryCompletionClass
 import TNLean.MPS.MPDO.CZXGaussCircuitTuple
 
 /-!
@@ -210,7 +210,7 @@ theorem defectVector_one_gen_zero : defectVector 1 gen 0 = matterKet ![1, 1, 0, 
 
 /-- $v(e,g,1)=-i\ket{0011}$. -/
 theorem defectVector_one_gen_one : defectVector 1 gen 1 = (-I) • matterKet ![0, 0, 1, 1] := by
-  rw [defectVector_one_gen, MPSTensor.zmod2_one_add_one, identityDefect_zero, flipDefect_one,
+  rw [defectVector_one_gen, ZMod.zmod2_one_add_one, identityDefect_zero, flipDefect_one,
     twoSiteTensor_smul_right, twoSiteTensor_siteKet]
 
 /-- $v(g,e,0)=\ket{0000}$. -/
@@ -229,7 +229,7 @@ theorem defectVector_gen_gen_zero : defectVector gen gen 0 = (-I) • matterKet 
 
 /-- $v(g,g,1)=-i\ket{0011}$. -/
 theorem defectVector_gen_gen_one : defectVector gen gen 1 = (-I) • matterKet ![0, 0, 1, 1] := by
-  rw [defectVector_gen_gen, MPSTensor.zmod2_one_add_one, flipDefect_zero, flipDefect_one,
+  rw [defectVector_gen_gen, ZMod.zmod2_one_add_one, flipDefect_zero, flipDefect_one,
     twoSiteTensor_smul_right, twoSiteTensor_siteKet]
 
 /-- For every label pair the two defect vectors form an orthonormal pair, the
@@ -238,10 +238,10 @@ orthogonality required by the modified-fusion lemma of FBC25
 theorem star_defectVector_dotProduct_defectVector (a b : Multiplicative (ZMod 2))
     (x y : ZMod 2) :
     star (defectVector a b y) ⬝ᵥ defectVector a b x = if x = y then 1 else 0 := by
-  rcases MPSTensor.zmod2_cases a with rfl | rfl <;>
-    rcases MPSTensor.zmod2_cases b with rfl | rfl <;>
-    rcases TNLean.Algebra.zmod_two_eq_zero_or_one x with rfl | rfl <;>
-      rcases TNLean.Algebra.zmod_two_eq_zero_or_one y with rfl | rfl <;>
+  rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
+    rcases Multiplicative.zmod2_cases b with rfl | rfl <;>
+    rcases Hypercube.zmod_two_eq_zero_or_one x with rfl | rfl <;>
+      rcases Hypercube.zmod_two_eq_zero_or_one y with rfl | rfl <;>
         simp +decide [defectVector_one_one_zero, defectVector_one_one_one,
           defectVector_one_gen_zero, defectVector_one_gen_one, defectVector_gen_one_zero,
           defectVector_gen_one_one, defectVector_gen_gen_zero, defectVector_gen_gen_one,
@@ -311,8 +311,8 @@ theorem defectDomain_gen_gen : defectDomain gen gen = oddTarget := by
 for $b=e$ and the odd target for $b=g$. -/
 theorem defectDomain_eq (a b : Multiplicative (ZMod 2)) :
     defectDomain a b = if Multiplicative.toAdd b = 0 then evenTarget else oddTarget := by
-  rcases MPSTensor.zmod2_cases a with rfl | rfl <;>
-    rcases MPSTensor.zmod2_cases b with rfl | rfl <;>
+  rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
+    rcases Multiplicative.zmod2_cases b with rfl | rfl <;>
     simp +decide [defectDomain_one_one, defectDomain_one_gen, defectDomain_gen_one,
       defectDomain_gen_gen]
 
@@ -362,8 +362,8 @@ theorem finrank_oddTarget : Module.finrank ℂ oddTarget = 2 := by
 /-- Every CZX defect domain is a plane. -/
 theorem finrank_defectDomain (a b : Multiplicative (ZMod 2)) :
     Module.finrank ℂ (defectDomain a b) = 2 := by
-  rcases MPSTensor.zmod2_cases a with rfl | rfl <;>
-    rcases MPSTensor.zmod2_cases b with rfl | rfl
+  rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
+    rcases Multiplicative.zmod2_cases b with rfl | rfl
   · rw [defectDomain_one_one]
     exact finrank_evenTarget
   · rw [defectDomain_one_gen]
@@ -401,14 +401,14 @@ theorem prescribedMap_mulVec_defectVector (a b : Multiplicative (ZMod 2)) (x : Z
   rw [prescribedMap, add_mulVec, Matrix.vecMulVec_mulVec, Matrix.vecMulVec_mulVec,
     op_smul_eq_smul, op_smul_eq_smul,
     star_defectVector_dotProduct_defectVector, star_defectVector_dotProduct_defectVector]
-  rcases TNLean.Algebra.zmod_two_eq_zero_or_one x with rfl | rfl <;> simp +decide
+  rcases Hypercube.zmod_two_eq_zero_or_one x with rfl | rfl <;> simp +decide
 
 theorem star_prescribedMap_mulVec_defectVector (a b : Multiplicative (ZMod 2)) (x : ZMod 2) :
     star (prescribedMap a b) *ᵥ defectVector 1 (a * b) x = defectVector a b x := by
   rw [star_prescribedMap, add_mulVec, Matrix.vecMulVec_mulVec, Matrix.vecMulVec_mulVec,
     op_smul_eq_smul, op_smul_eq_smul,
     star_defectVector_dotProduct_defectVector, star_defectVector_dotProduct_defectVector]
-  rcases TNLean.Algebra.zmod_two_eq_zero_or_one x with rfl | rfl <;> simp +decide
+  rcases Hypercube.zmod_two_eq_zero_or_one x with rfl | rfl <;> simp +decide
 
 theorem starMul_prescribedMap_mulVec_defectVector (a b : Multiplicative (ZMod 2))
     (x : ZMod 2) :
@@ -494,7 +494,7 @@ theorem prescribedMap_gen_gen_mulVec_one :
 the four prescribed defect maps derived from the tensors displayed in FBC25
 (arXiv:2502.20257, lines 4503--5183) in
 `docs/paper-gaps/fbc25_czx_defect_domains.tex`. -/
-def defectMaps : TNLean.Algebra.DefectMaps (Multiplicative (ZMod 2)) (Fin 2 → Fin 4) where
+def defectMaps : GaussLaw.DefectMaps (Multiplicative (ZMod 2)) (Fin 2 → Fin 4) where
   domain := defectDomain
   prescribed := prescribedMap
   isometry_on_domain := isometry_on_defectDomain

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.BlockSites
 import TNLean.MPS.Preparation.BlockUnitary
-import TNLean.Circuit.EmbeddedProduct
+import QICLean.ManyBody.Sites.PlacedConfiguration
 import TNLean.MPS.Preparation.FixedPointPairState
 
 /-!

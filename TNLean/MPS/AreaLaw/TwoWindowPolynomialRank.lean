@@ -15,14 +15,13 @@ import Mathlib.Data.List.OfFn
 import Mathlib.Basic.Complex.Basic
 import TNLean.MPS.AreaLaw.TwoWindowOperatorForms
 import QICLean.Algebra.WeightedFrequencySchmidtRank
-import TNLean.Algebra.FrequencyCounts
+import QICLean.Algebra.TwoWindowCounts
 import TNLean.MPS.AreaLaw.IntervalSymmDiff
 import QICLean.Algebra.LowFrequencyWordPartition
 import QICLean.Algebra.OperatorSchmidtBounds
 import QICLean.Algebra.OperatorSchmidtProducts
 import Mathlib.Algebra.Polynomial.AlgebraMap
 import QICLean.Algebra.OperatorSchmidt
-import TNLean.Algebra.TwoWindowRankBounds
 import TNLean.Algebra.TwoWindowPolynomialRecovery
 
 /-!
@@ -61,7 +60,7 @@ noncomputable section
 up to a change of coordinates on the exterior factor.
 ALVV, arXiv:1602.08828v2, `eq:H-mid-cut`, lines 810–831. -/
 private theorem threeSplit_middle_rotation_eq
-    {ι : Type*} [Fintype ι] [DecidableEq ι] (q : ℕ)
+    {ι : Type*} [DecidableEq ι] (q : ℕ)
     (T E : Finset ι) (hTE : Disjoint T E) :
     let c :=
       (ManyBody.complementUnionEquiv (fun _ : ι ↦ Fin q) E T hTE.symm).trans
@@ -92,7 +91,7 @@ open TNLean.Lattice.Sheet
 The exterior change of coordinates is local to the right factor.
 ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1331–1333. -/
 private theorem middle_threeSplit_rank_eq
-    {ι : Type*} [Fintype ι] [DecidableEq ι] (q : ℕ)
+    {ι : Type*} [Finite ι] [DecidableEq ι] (q : ℕ)
     (T E : Finset ι) (hTE : Disjoint T E)
     (M : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
     let g := threeSplit q T E hTE
@@ -106,6 +105,7 @@ private theorem middle_threeSplit_rank_eq
       operatorSchmidtRank (M.reindex (TNLean.Lattice.sheetSplit q E)
         (TNLean.Lattice.sheetSplit q E)) := by
   intro g a e
+  have := Fintype.ofFinite ι
   let c :=
     (ManyBody.complementUnionEquiv (fun _ : ι ↦ Fin q) E T hTE.symm).trans
       ((Equiv.refl (T → Fin q)).prodCongr

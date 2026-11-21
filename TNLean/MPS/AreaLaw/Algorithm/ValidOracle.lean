@@ -469,9 +469,11 @@ theorem groundStateProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 
   let z : Fin q := ⟨0, by omega⟩
   let e := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (leftConfigOfFinEquiv (q := q) hi)
   let Φ' : ManyBody.BondInteraction N q :=
-    ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
-  let h0' := fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1
-  let h1' := fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2
+    Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z)
+  let h0' := ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
+    fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg
+  let h1' := ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
+    fun _ ↦ ManyBody.siteBasisPenalty_le_one z
   set S := FreeM.eval o (sweepProgram hq Φ' h0' h1' (min Delta 1) L)
     with hSdef
   have hψ : ψ = o (LinearAlgebraQuery.energyMinimizer L (lvvSuccessiveBondBound q (min Delta 1) N)
@@ -525,7 +527,7 @@ theorem groundStateProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 
     let chain := ManyBody.BondInteraction.toChainInteraction Φ
     have hchain : chain.hamiltonian = Φ.hamiltonian := ManyBody.Interaction.hamiltonian_extend
     have hspanC : groundSpace chain.hamiltonian E = Submodule.span ℂ {Γ} := by
-      rw [hchain]; assumption
+      rwa [hchain]
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
         (ManyBody.Interaction.isHermitian_extend_term fun j ↦
           (IsSelfAdjoint.of_nonneg (h0 j)).isHermitian)

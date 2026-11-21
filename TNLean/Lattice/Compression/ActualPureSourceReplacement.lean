@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceCompressedDensity
 import TNLean.Lattice.Compression.ActualPureSourceMatrix
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-! # Source replacement on the recorded product input
 

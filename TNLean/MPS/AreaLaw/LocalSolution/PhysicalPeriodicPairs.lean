@@ -9,7 +9,7 @@ import QICLean.ManyBody.Hamiltonian.GaussianFilterTruncation
 import QICLean.ManyBody.Hamiltonian.Translation
 import QICLean.Algebra.ZModDisplacement
 import QICLean.ManyBody.Sites.GraphBall
-import TNLean.Algebra.MatrixHermitianSum
+import QICLean.Algebra.HermitianPartSum
 
 /-!
 # Periodic neighbouring-block operators from local Gaussian filters

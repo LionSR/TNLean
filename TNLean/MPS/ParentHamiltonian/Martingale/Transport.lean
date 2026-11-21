@@ -646,7 +646,7 @@ theorem localTermES_isPositive {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin 
   · rw [localTermES_eq_average_localTermESSummand A hLN i]
     exact (localTermESSummand_sum_isPositive A (Fin.pos i) L i).smul_of_nonneg
       (by positivity)
-  · simp [localTermES, localTerm, hLN]
+  · simp [localTermES, localTerm_of_not_le A hLN]
 
 private theorem localTermES_isIdempotentElem {N : ℕ} (A : MPSTensor d D) (L : ℕ)
     (i : Fin N) : IsIdempotentElem (localTermES A L i) := by
@@ -666,7 +666,7 @@ private theorem localTermES_isIdempotentElem {N : ℕ} (A : MPSTensor d D) (L : 
           (parentInteractionES_isSymmetricProjection A L).isIdempotentElem.eq
           ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v)
     rw [hPapply]
-  · simpa [localTermES, localTerm, hLN] using
+  · simpa [localTermES, localTerm_of_not_le A hLN] using
       (IsIdempotentElem.zero :
         IsIdempotentElem
           (0 : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N)))

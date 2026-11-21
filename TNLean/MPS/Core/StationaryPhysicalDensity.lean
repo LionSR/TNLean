@@ -62,8 +62,8 @@ theorem stationaryBlockDensity_word (A : MPSTensor d D)
         ((decodeBlockEquiv d N).symm s) ((decodeBlockEquiv d N).symm t) =
       Matrix.trace (Λ * Kraus.evalWord A (List.ofFn s) *
         (Kraus.evalWord A (List.ofFn t))ᴴ) := by
-  simp only [stationaryBlockDensity_apply, Kraus.blockTensor, Kraus.wordOfBlock,
-    decodeBlock_decodeBlockEquiv_symm]
+  simp only [stationaryBlockDensity_apply, Kraus.blockTensor, Kraus.reindexPhysical,
+    Equiv.apply_symm_apply, Kraus.block_apply]
 
 /-- The stationary physical density represents the existing observable-transfer
 functional on arbitrary block observables. The physical coefficients have the
@@ -211,7 +211,8 @@ theorem stationaryBlockDensity_eq_of_unitary_gaugePhase
   simp only [Matrix.mul_assoc, ← Matrix.mul_assoc Vᴴ V, hV', Matrix.one_mul]
   calc
     _ = Matrix.trace ((Vᴴ * Λ * V) * blockTensor A N s * (blockTensor A N t)ᴴ) := by
-      simpa only [Matrix.mul_assoc, Kraus.blockTensor] using Matrix.trace_mul_comm
+      simpa only [Matrix.mul_assoc, Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply,
+        Kraus.decodeBlockEquiv_apply, wordOfBlock] using Matrix.trace_mul_comm
         (Λ * V * blockTensor A N s * (blockTensor A N t)ᴴ) Vᴴ
     _ = _ := by simp only [hΛ, Matrix.mul_assoc]
 

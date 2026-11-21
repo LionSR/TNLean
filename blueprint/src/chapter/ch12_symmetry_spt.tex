@@ -611,7 +611,7 @@ of the virtual projective representation.
 
 \begin{definition}[Direct sum with a common factor system]
     \label{def:spt_projective_direct_sum}
-    \lean{TNLean.Algebra.ProjectiveRepresentation.directSum}
+    \lean{ProjectiveRepresentation.directSum}
     \leanok
     \uses{def:projective_rep}
     Let $V^0$ and $V^1$ be projective representations on
@@ -629,7 +629,7 @@ of the virtual projective representation.
 
 \begin{lemma}[Unitarity of the virtual direct sum]
     \label{thm:spt_projective_direct_sum_unitary}
-    \lean{TNLean.Algebra.ProjectiveRepresentation.directSum_mem_unitaryGroup}
+    \lean{ProjectiveRepresentation.directSum_mem_unitaryGroup}
     \leanok
     \uses{def:spt_projective_direct_sum}
     If $V_g^0$ and $V_g^1$ are unitary, then $V_g^0\oplus V_g^1$ is unitary.
@@ -848,7 +848,7 @@ of the virtual projective representation.
 
 \begin{lemma}[Virtual class under gauge preparation]
     \label{thm:spt_virtual_class_gauge_preparation}
-    \lean{TNLean.Algebra.ProjectiveRepresentation.conjugate,
+    \lean{ProjectiveRepresentation.conjugate,
         MPSTensor.twistedTensor_covariance_of_smul_gauge,
         MPSTensor.cohomologousTo_of_smul_gaugeEquiv}
     \leanok
@@ -1162,15 +1162,15 @@ virtual factor system \cite{gap:rmp_spt_fixed_point_onsite_scope}.
 
 \begin{lemma}[The SPT fixed point of a character and cocycle class]
     \label{thm:spt_fixed_point_from_cocycle}
-    \lean{TNLean.Algebra.ScalarCocycle.inverse,
-        TNLean.Algebra.ScalarCocycle.inverse_isCocycle,
-        TNLean.Algebra.ScalarCocycle.inverse_circlePhaseInclusion,
-        TNLean.Algebra.ScalarCocycle.twistedLeftRegularGL,
-        TNLean.Algebra.ScalarCocycle.twistedLeftRegularGL_mul,
-        TNLean.Algebra.ScalarCocycle.twistedLeftRegularProjective,
-        TNLean.Algebra.ScalarCocycle.twistedLeftRegularProjective_mem_unitaryGroup,
-        TNLean.Algebra.ScalarCocycle.regularProjectiveForClass,
-        TNLean.Algebra.ScalarCocycle.regularProjectiveForClass_mem_unitaryGroup,
+    \lean{ScalarCocycle.inverse,
+        ScalarCocycle.inverse_isCocycle,
+        ScalarCocycle.inverse_circlePhaseInclusion,
+        ScalarCocycle.twistedLeftRegularGL,
+        ScalarCocycle.twistedLeftRegularGL_mul,
+        ScalarCocycle.twistedLeftRegularProjective,
+        ScalarCocycle.twistedLeftRegularProjective_mem_unitaryGroup,
+        ScalarCocycle.regularProjectiveForClass,
+        ScalarCocycle.regularProjectiveForClass_mem_unitaryGroup,
         MPSTensor.exists_unitary_sptFixedPoint_of_isCocycle}
     \leanok
     \uses{thm:spt_fixed_point_class, thm:mpug_twisted_regular_multiplication,
@@ -1357,6 +1357,7 @@ and the regrouping of physical registers into bonds.
 \begin{lemma}[Order and interpolation of periodic Hamiltonians]
     \label{thm:spt_periodic_hamiltonian_order}
     \lean{ManyBody.placeAlong_add, ManyBody.placeAlong_smul,
+        ManyBody.placeAlong_le_placeAlong_iff,
         ManyBody.Interaction.translates_term_nonneg}
     \leanok
     \uses{def:spt_common_space_gapped_path, thm:lvv_placement_order,
@@ -2146,8 +2147,8 @@ and the regrouping of physical registers into bonds.
         MPSTensor.groundSpace_embeddedSptFixedPointRight_le,
         MPSTensor.mpv_embeddedSptFixedPointLeft,
         MPSTensor.mpv_embeddedSptFixedPointRight,
-        TNLean.Algebra.ProjectiveRepresentation.directSum_coordinateInclusion_left,
-        TNLean.Algebra.ProjectiveRepresentation.directSum_coordinateInclusion_right,
+        ProjectiveRepresentation.directSum_coordinateInclusion_left,
+        ProjectiveRepresentation.directSum_coordinateInclusion_right,
         MPSTensor.twistedTensor_embeddedSptFixedPointLeft,
         MPSTensor.twistedTensor_embeddedSptFixedPointRight}
     \leanok
@@ -2301,7 +2302,7 @@ $\E_A$ itself is used, describes the same spectrum.
 
 \begin{lemma}[No one-dimensional eigenspace for a commutant of a non-trivial projective representation]
     \label{lem:projective_commutant_eigenspace}
-    \lean{TNLean.Algebra.ProjectiveRepresentation.finrank_eigenspace_ne_one_of_commute}
+    \lean{ProjectiveRepresentation.finrank_eigenspace_ne_one_of_commute}
     \leanok
     \uses{def:projective_rep, def:scalar_cocycle, def:nontrivial_class}
     Let $\rho$ be a projective representation of $G$ on $\C^D$ whose factor system

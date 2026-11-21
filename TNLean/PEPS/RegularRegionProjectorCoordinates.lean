@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.ComplexSqrt
 import TNLean.PEPS.RegularRegionCoordinates
 import TNLean.PEPS.RegularProjectorOpenRegion
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Canonical blocked-region coefficients in spanning-tree coordinates

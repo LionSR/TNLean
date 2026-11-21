@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.Lattice.FiniteDomain
 import TNLean.PEPS.NormalBlocking
 import TNLean.Lattice.StateSpace
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.SupportedMatrixElements
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.ManyBody.Sites.ProductVector
 import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Sites.Lattice.Rectangle
 import QICLean.ManyBody.Hamiltonian.Models

@@ -10,6 +10,7 @@ import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 import QICLean.Kraus.Transfer
 import TNLean.MPS.Structure.PrimitiveFixedPoint
 import TNLean.Wielandt.Primitivity.Definitions
+import TNLean.MPS.Tensor
 
 /-!
 # Normality from an irreducible transfer map without peripheral spectrum
@@ -52,8 +53,8 @@ Source: arXiv:0909.5347, Proposition 3, proof of (c)⟹(b). -/
 theorem isNormal_of_isIrreducibleMap_of_isPrimitive [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A))
-    (hPrim : IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
+    (hIrr : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
+    (hPrim : IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) :
     Kraus.IsNormal A := by
   have hTP : Kraus.IsTP A := hNorm
   exact (Kraus.hasEventuallyFullWordSpan_iff_exists_pos_of_isTP A hTP).mp
@@ -76,8 +77,8 @@ convergence theory. The proof chains:
 theorem exists_hasComplementaryFixedPointGap_posDef_of_isIrreducibleMap_of_isPrimitive [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A))
-    (hPrim : IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
+    (hIrr : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
+    (hPrim : IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
       Kraus.HasComplementaryFixedPointGap A ρ ∧ ρ.PosDef := by
   have hIrrT : Kraus.IsIrreducibleFamily A :=

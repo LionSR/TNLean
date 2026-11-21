@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.RepresentationTheta
-import TNLean.Algebra.RepresentationDeltaPositive
+import QICLean.Representation.Character.Theta
+import QICLean.Representation.Character.DeltaPositive
 
 /-!
 # Positive fourth-root representation weights

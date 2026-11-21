@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.BondRegroupingLocality
-import TNLean.Algebra.MatrixProjectionReindex
+import QICLean.Algebra.MatrixStarProjection
 import TNLean.MPS.Symmetry.BondProductPhysicalParentHamiltonian
 import TNLean.MPS.Symmetry.GappedInteractionPath
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicCore
@@ -207,12 +207,12 @@ translation-invariant two-site interaction. Source: arXiv:1010.3732,
 Section II.D.2, `eq:phase-nosym:iso-hamiltonian`. -/
 theorem hamiltonian_translationInvariant_twoSiteBondPenalty {D N : ℕ} [NeZero N]
     (hN : 2 ≤ N) (η : Fin (D * D) → ℂ) :
-    (Interaction.translationInvariant hN
+    (Interaction.translationInvariant N
       (twoSiteBondInteraction (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
         (bondPenalty η)))).hamiltonian =
       physicalBondProductParentHamiltonian η (by omega) := by
   unfold physicalBondProductParentHamiltonian bondProductParentHamiltonian
-  simp_rw [Interaction.hamiltonian, Interaction.translates_term,
+  simp_rw [Interaction.hamiltonian_translationInvariant_of_le _ hN,
     embed_twoSiteBondInteraction_eq_conj]
   simp only [Matrix.reindex_apply, Matrix.submatrix_submatrix, Equiv.symm_comp_self,
     Matrix.submatrix_id_id]

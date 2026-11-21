@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.FinKronecker
-import TNLean.Circuit.ProductVector
+import QICLean.Algebra.FiniteKroneckerProduct
+import QICLean.ManyBody.Sites.ProductVector
 import QICLean.ManyBody.Sites.Placement
 import Mathlib.Algebra.Algebra.Bilinear
 import Mathlib.Algebra.Algebra.Operations
@@ -12,35 +12,31 @@ import Mathlib.Algebra.Star.BigOperators
 import Mathlib.LinearAlgebra.Matrix.Trace
 
 /-!
-# Product operators and expectations on sets of sites
+# Product operators on sets of sites
 
 On a finite type of sites `ι` with local dimension `d`, the operators acting on a set of sites
 `S` are `ManyBody.supportedOperators (fun _ ↦ Fin d) S`, the operators that act as the identity
 off `S`. This file places the product operators `⊗ᵢ mᵢ` with `mᵢ = 1` off `S` in it, and proves
-the factorization of expectations in product vectors and of traces against product operators
-for operators on disjoint sets.
+the factorization of traces against product operators for operators on disjoint sets.
 
-No layer, gate or circuit occurs here: the circuits built from supported operators are in
-QICLean's `QICLean.Circuit.Model.Unitary`.
-
-## Main definitions
-
-* `QuantumCircuit.expect` — the expectation `⟨ψ|A|ψ⟩`, without normalization.
+The expectations `star ψ ⬝ᵥ (A *ᵥ ψ)` in product vectors, and their factorization for
+operators on disjoint sets, are in QICLean's `QICLean.ManyBody.Sites.ProductVector`
+(`QuantumCircuit.star_productVector_dotProduct_prodOp_mulVec`) and
+`QICLean.Circuit.Model.Unitary` (`QuantumCircuit.dotProduct_prod_mul_mul`). No layer, gate or
+circuit occurs here: the circuits built from supported operators are in QICLean's
+`QICLean.Circuit.Model.Unitary`.
 
 ## Main results
 
 * `QuantumCircuit.rectKronecker_mem_supportedOperators` — product operators that are the
   identity off `S` act on `S`.
-* `QuantumCircuit.expect_productVector_mul` — product vectors factorize expectations of
+* `QuantumCircuit.trace_rectKronecker_mul_mul` — product densities factorize traces of
   products of operators on disjoint sets.
-* `QuantumCircuit.trace_rectKronecker_mul_mul` — the same for traces against a product
-  operator.
 
 ## References
 
 * arXiv:2307.01696 (Malz, Styliaris, Wei, Cirac), Supplemental Material, proof of Theorem 1.
 -/
-
 open Matrix
 open scoped BigOperators
 
@@ -84,72 +80,6 @@ theorem linearMap_ext_rectKronecker {M : Type*} [AddCommMonoid M] [Module ℂ M]
   | prod m _ => exact h m
   | add A B _ _ hA hB => rw [map_add, map_add, hA, hB]
   | smul c A _ hA => rw [map_smul, map_smul, hA]
-
-/-! ### Expectations in product vectors -/
-
-/-- The expectation `⟨ψ|A|ψ⟩` of an operator on the sites `ι`, without normalization.
-
-Source: arXiv:2307.01696, Supplemental Material, proof of Theorem 1
-(`b_Q = ⟨ψ|Q|ψ⟩`). -/
-def expect (ψ : (ι → Fin d) → ℂ) (A : Matrix (ι → Fin d) (ι → Fin d) ℂ) : ℂ :=
-  star ψ ⬝ᵥ (A *ᵥ ψ)
-
-theorem expect_add (ψ : (ι → Fin d) → ℂ) (A B : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
-    expect ψ (A + B) = expect ψ A + expect ψ B := by
-  simp [expect, add_mulVec, dotProduct_add]
-
-theorem expect_smul (ψ : (ι → Fin d) → ℂ) (c : ℂ)
-    (A : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
-    expect ψ (c • A) = c * expect ψ A := by
-  simp [expect, smul_mulVec, dotProduct_smul]
-
-theorem expect_one (ψ : (ι → Fin d) → ℂ) :
-    expect ψ (1 : Matrix (ι → Fin d) (ι → Fin d) ℂ) = star ψ ⬝ᵥ ψ := by
-  simp [expect]
-
-/-- Expectations in `U ψ` are expectations of `U† A U` in `ψ`. -/
-theorem expect_mulVec (U A : Matrix (ι → Fin d) (ι → Fin d) ℂ) (ψ : (ι → Fin d) → ℂ) :
-    expect (U *ᵥ ψ) A = expect ψ (star U * A * U) := by
-  simp only [expect, star_mulVec, ← dotProduct_mulVec, mulVec_mulVec, star_eq_conjTranspose,
-    Matrix.mul_assoc]
-
-/-- The expectation of a product operator `⊗ᵢ mᵢ` in a product vector `⊗ᵢ |vᵢ⟩` is
-`∏ᵢ ⟨vᵢ|mᵢ|vᵢ⟩`. -/
-theorem expect_productVector_rectKronecker (v : ι → Fin d → ℂ)
-    (m : ι → Matrix (Fin d) (Fin d) ℂ) :
-    expect (productVector v) (rectKronecker m) = ∏ i, star (v i) ⬝ᵥ (m i *ᵥ v i) := by
-  simp only [expect, productVector, rectKronecker, dotProduct, mulVec, of_apply, Pi.star_apply,
-    star_prod, Finset.mul_sum]
-  rw [Fintype.prod_sum]
-  refine Finset.sum_congr rfl fun σ _ ↦ ?_
-  rw [Fintype.prod_sum]
-  refine Finset.sum_congr rfl fun τ _ ↦ ?_
-  rw [← Finset.prod_mul_distrib, ← Finset.prod_mul_distrib]
-
-/-- Product vectors factorize expectations of products of operators on disjoint sets of
-sites: `⟨AB⟩⟨1⟩ = ⟨A⟩⟨B⟩`. -/
-theorem expect_productVector_mul {S S' : Finset ι} (hSS' : Disjoint S S')
-    (v : ι → Fin d → ℂ) {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
-    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S') :
-    expect (productVector v) (A * B) * expect (productVector v) 1 =
-      expect (productVector v) A * expect (productVector v) B := by
-  let φ : Matrix (ι → Fin d) (ι → Fin d) ℂ →ₗ[ℂ] ℂ :=
-    { toFun := expect (productVector v), map_add' := expect_add _, map_smul' := expect_smul _ }
-  rw [mul_comm]
-  refine ManyBody.eq_of_mem_supportedOperators₂
-    (expect (productVector v) 1 • (LinearMap.mul ℂ _).compr₂ φ)
-    ((LinearMap.mul ℂ ℂ).compl₁₂ φ φ) (fun m m' hm hm' ↦ ?_) hA hB
-  change expect (productVector v) 1 *
-      expect (productVector v) (rectKronecker m * rectKronecker m') =
-    expect (productVector v) (rectKronecker m) * expect (productVector v) (rectKronecker m')
-  rw [rectKronecker_mul, ← rectKronecker_one, expect_productVector_rectKronecker,
-    expect_productVector_rectKronecker, expect_productVector_rectKronecker,
-    expect_productVector_rectKronecker, ← Finset.prod_mul_distrib, ← Finset.prod_mul_distrib]
-  refine Finset.prod_congr rfl fun i _ ↦ ?_
-  by_cases hi : i ∈ S
-  · simp [hm' i (Finset.disjoint_left.mp hSS' hi), mul_comm]
-  · simp [hm i hi]
 
 /-! ### Traces against product operators -/
 

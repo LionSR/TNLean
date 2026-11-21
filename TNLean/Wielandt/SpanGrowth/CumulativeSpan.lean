@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Kraus.Injectivity
 import QICLean.Kraus.Wielandt.SpanGrowth.CumulativeSpan
 import QICLean.Kraus.Word
+import TNLean.MPS.Tensor
 
 /-!
 # Cumulative word spans and TN injectivity

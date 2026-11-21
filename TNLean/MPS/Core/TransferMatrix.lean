@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.TransferMatrix
 import QICLean.Kraus.Transfer
+import TNLean.MPS.Tensor
 
 /-!
 # Transfer-matrix representation of MPS transfer maps

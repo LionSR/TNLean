@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing
-import TNLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.MPDO.IdentityTensor
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 

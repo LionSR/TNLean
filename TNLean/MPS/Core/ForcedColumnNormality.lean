@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 import QICLean.Kraus.Injectivity
-import TNLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.MatrixSingleSpan
 
 /-!
 # Normality of tensors with a forced outgoing bond

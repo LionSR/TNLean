@@ -7,8 +7,8 @@ import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.ChainNeighborhood
 import TNLean.MPS.AreaLaw.DomainGraphGeometry
 import QICLean.ManyBody.Sites.Lattice.PathGraph
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.SupportedMatrixElements
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.ManyBody.Sites.ProductVector
 import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Dynamics.GraphLocalization
 

@@ -342,14 +342,14 @@ theorem leftCanonical_blockTensor
     (A : Fin d → Matrix (Fin D) (Fin D) ℂ) (L : ℕ)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
     ∑ i : Fin (blockPhysDim d L),
-      (blockTensor (d := d) (D := D) A L i)ᴴ *
-        blockTensor (d := d) (D := D) A L i = 1 := by
+      (blockTensor (d := d) (n := Fin D) A L i)ᴴ *
+        blockTensor (d := d) (n := Fin D) A L i = 1 := by
   let e : Fin (blockPhysDim d L) ≃ (Fin L → Fin d) :=
     (finCongr (blockPhysDim_eq_pow d L)).trans finFunctionFinEquiv.symm
   calc
     ∑ i : Fin (blockPhysDim d L),
-        (blockTensor (d := d) (D := D) A L i)ᴴ *
-          blockTensor (d := d) (D := D) A L i
+        (blockTensor (d := d) (n := Fin D) A L i)ᴴ *
+          blockTensor (d := d) (n := Fin D) A L i
       = ∑ σ : Fin L → Fin d,
           (Kraus.evalWord A (List.ofFn σ))ᴴ * Kraus.evalWord A (List.ofFn σ) := by
             change
@@ -370,15 +370,15 @@ variable {d D : ℕ}
 
 @[simp] lemma mpv_blockTensor_one (A : MPSTensor d D) {N : ℕ}
     (σ : Fin N → Fin (blockPhysDim d 1)) :
-    mpv (blockTensor (d := d) (D := D) A 1) σ =
+    mpv (blockTensor (d := d) (n := Fin D) A 1) σ =
       mpv A (fun n => singleBlockEquiv d (σ n)) := by
   simp [mpv, coeff, evalWord_blockTensor, List.map_ofFn]
   rfl
 
 /-- Physical blocking preserves the `SameMPV` relation. -/
 theorem SameMPV.blockTensor {A B : MPSTensor d D} (hSame : SameMPV A B) (L : ℕ) :
-    SameMPV (Kraus.blockTensor (d := d) (D := D) A L)
-      (Kraus.blockTensor (d := d) (D := D) B L) := by
+    SameMPV (Kraus.blockTensor (d := d) (n := Fin D) A L)
+      (Kraus.blockTensor (d := d) (n := Fin D) B L) := by
   intro N σ
   classical
   -- Use the same flattened configuration for both tensors.
@@ -395,11 +395,11 @@ theorem SameMPV.blockTensor {A B : MPSTensor d D} (hSame : SameMPV A B) (L : ℕ
         (fun i : Fin (N * L) => flat.get (Fin.cast hlen.symm i)))
     simpa [Function.comp, Fin.cast_cast] using hcongr
   have hblock (T : MPSTensor d D) :
-      mpv (Kraus.blockTensor (d := d) (D := D) T L) σ = mpv T σflat := by
+      mpv (Kraus.blockTensor (d := d) (n := Fin D) T L) σ = mpv T σflat := by
     simp [mpv, coeff, hofFn, flat_def, evalWord_blockTensor]
   calc
-    mpv (Kraus.blockTensor (d := d) (D := D) A L) σ = mpv A σflat := hblock A
+    mpv (Kraus.blockTensor (d := d) (n := Fin D) A L) σ = mpv A σflat := hblock A
     _ = mpv B σflat := hSame (N * L) σflat
-    _ = mpv (Kraus.blockTensor (d := d) (D := D) B L) σ := (hblock B).symm
+    _ = mpv (Kraus.blockTensor (d := d) (n := Fin D) B L) σ := (hblock B).symm
 
 end MPSTensor

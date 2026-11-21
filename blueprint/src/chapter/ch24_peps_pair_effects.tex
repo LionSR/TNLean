@@ -86,6 +86,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
         P_m & =|\eta^{\otimes m}\rangle\langle\eta|.
         \label{eq:peps_cyclic_insertion}
     \end{align}
+    This is~\cite[``Cyclic insertion map'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Insertions as register permutations]
@@ -103,6 +104,8 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``Insertions as permutations of the
+        factors'']{QICLean2026Blueprint}.
     Verify $I_{\sigma(k)}=U_\sigma I_k$ and the pair-coordinate action of
     $U_\sigma$ on product basis vectors.
 \end{proof}
@@ -117,6 +120,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``Contractivity and the fixed vector'']{QICLean2026Blueprint}.
     Since $\|\eta\|=1$, each $I_k$ is an isometry with $I_k\eta=\eta^{\otimes m}$,
     so (\ref{eq:peps_cyclic_insertion}) gives $\|T_m\|\le m^{-1}\sum_{k=0}^{m-1}\|I_k\|=1$
     and $T_m\eta=\eta^{\otimes m}$.
@@ -140,6 +144,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 
 \begin{proof}\leanok
     \uses{thm:peps_cyclic_insertion_basic}
+    This is~\cite[``One-effect estimate'']{QICLean2026Blueprint}.
     For $v\perp\eta$ and $j\neq k$, $\langle I_jv,I_kv\rangle=|\langle v,\eta\rangle|^2\|\eta\|^{2(m-2)}=0$
     and $\|I_kv\|=\|v\|$, so $\|\sum_{k=0}^{m-1}I_kv\|^2=m\|v\|^2$ and
     $\|T_mv\|=\|v\|/\sqrt m$. For any $v\in\mathcal W$, set
@@ -295,6 +300,7 @@ Hilbert space (typically $\mathcal W=\mathcal U\otimes\mathcal V$) and $m\ge1$.
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``Combining pair vectors'']{QICLean2026Blueprint}.
     Regrouping the product coordinates factors
     $\|\eta\otimes\eta'\|^2=\|\eta\|^2\|\eta'\|^2$.
 \end{proof}

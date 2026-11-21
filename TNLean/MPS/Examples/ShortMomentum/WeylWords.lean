@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Channel.WeylTwirl
 import QICLean.Kraus.Word
 import TNLean.MPS.Examples.ShortMomentum.Charges
+import TNLean.MPS.Tensor
 
 /-!
 # Fifth-root Weyl words with an exceptional central degree

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.CommonBufferLength
+import QICLean.Algebra.CommonBufferLength
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.ReductionResidual
 
@@ -21,7 +21,7 @@ $$
 for every nonempty central word $\mathbf c$.  A residual nilpotency bound $N$
 of MGSC18 supplies the buffer length $N-1$, and blocking by $L\geq N-1$ sites
 makes one blocked exterior site suffice.  For a finite family of reductions,
-the common buffer length of `TNLean.Algebra.CommonBufferLength` is one such
+the common buffer length of `QICLean.Algebra.CommonBufferLength` is one such
 $L$ for every member.
 
 **Local fix (arXiv:2502.20257, `main.tex` line 1498; arXiv:2405.00439v2,

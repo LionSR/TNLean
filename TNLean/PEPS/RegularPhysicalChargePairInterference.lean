@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularPhysicalChargePairCreation
 import TNLean.PEPS.RegularWeightedOpenContraction
-import TNLean.Algebra.ScaledProjectionTransport
+import QICLean.Algebra.BinaryProjectionFamily
 
 /-!
 # Return measurement on the original physical charge-pair block

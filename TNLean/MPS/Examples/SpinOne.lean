@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.ComplexSqrt
-import TNLean.Algebra.FinVecEta
+import QICLean.Algebra.TupleEquiv
 import TNLean.MPS.Examples.SpinOperator
 
 /-!

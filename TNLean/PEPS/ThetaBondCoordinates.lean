@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.BlockDiagonalGauge
+import QICLean.Algebra.DirectSumBlockDiagonal
 import TNLean.PEPS.SemiRegularBondIsometry
-import TNLean.Algebra.RepresentationThetaSquared
+import QICLean.Representation.Character.Theta
 
 /-!
 # Weighted bond coefficients in multiplicity-one sector coordinates

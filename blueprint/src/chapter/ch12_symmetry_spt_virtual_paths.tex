@@ -8,13 +8,13 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{lemma}[Unitary rephasing of cohomologous virtual actions]
     \label{thm:spt_unitary_rephasing}
-    \lean{TNLean.Algebra.ProjectiveRepresentation.rephase,
+    \lean{ProjectiveRepresentation.rephase,
         TNLean.Algebra.circleScalar_mem_unitaryGroup,
-        TNLean.Algebra.ProjectiveRepresentation.rephase_mem_unitaryGroup,
-        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous,
-        TNLean.Algebra.ProjectiveRepresentation.norm_factorSystem,
-        TNLean.Algebra.ProjectiveRepresentation.circlePhaseInclusion_eq,
-        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem}
+        ProjectiveRepresentation.rephase_mem_unitaryGroup,
+        ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous,
+        ProjectiveRepresentation.norm_factorSystem,
+        ProjectiveRepresentation.circlePhaseInclusion_eq,
+        ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem}
     \leanok
     \uses{def:projective_rep, def:cohomologous_to}
     Multiplying each matrix $V_g$ of a projective representation with factor system
@@ -408,9 +408,9 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{lemma}[Aligning unitary virtual factors]
     \label{thm:spt_unitary_factor_alignment}
-    \lean{TNLean.Algebra.ProjectiveRepresentation.norm_factor_eq_one_of_unitary,
-        TNLean.Algebra.ProjectiveRepresentation.circlePhaseInclusion_eq_of_unitary,
-        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_rephase_of_unitary_cohomologous}
+    \lean{ProjectiveRepresentation.norm_factor_eq_one_of_unitary,
+        ProjectiveRepresentation.circlePhaseInclusion_eq_of_unitary,
+        ProjectiveRepresentation.exists_unitary_rephase_of_unitary_cohomologous}
     \leanok
     A unitary projective representation on a nonzero finite-dimensional
     space has a unit-modulus factor system. Two such representations with
@@ -1296,8 +1296,8 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{lemma}[Continuous invariant compression preserves the factor]
     \label{thm:spt_continuous_invariant_compression}
-    \lean{TNLean.Algebra.ProjectiveRepresentation.exists_local_continuous_unitary_compression,
-        TNLean.Algebra.ProjectiveRepresentation.continuous_factor_family}
+    \lean{ProjectiveRepresentation.exists_local_continuous_unitary_compression,
+        ProjectiveRepresentation.continuous_factor_family}
     \leanok
 
     Suppose unitary projective matrices, continuous in the parameter for
@@ -1416,7 +1416,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_invariant_bond_compression}
     \lean{Matrix.isometry_compression_mul_of_commute,
         Matrix.isometry_compression_mem_unitaryGroup,
-        TNLean.Algebra.ProjectiveRepresentation.exists_unitary_compression}
+        ProjectiveRepresentation.exists_unitary_compression}
     \leanok
     \uses{def:projective_rep}
     Let $V_g$ be a unitary projective representation on $\C^D$ with
@@ -1479,6 +1479,8 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \leanok
     For an isometry $K:\C^D\to\C^k$ and a matrix $X\in\MN{D}$, set
     $\widetilde X=KXK^\dagger+(I-KK^\dagger)$.
+    This is~\cite[``Extension of a matrix along an
+        isometry'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Comparison of supported bond frames]
@@ -1813,6 +1815,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     For a continuous family with independent columns, $H$ is continuous.
 \end{lemma}
 \begin{proof}\leanok
+    This is~\cite[``Gram left inverses'']{QICLean2026Blueprint}.
     The Gram matrix is positive definite and hence invertible.
     Matrix inversion is continuous on the invertible matrices.
 \end{proof}
@@ -1826,6 +1829,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $(x\otimes y)_{(a,b)}=x_a y_b$.
 \end{lemma}
 \begin{proof}\leanok
+    This is~\cite[``Coordinates of a bilinear map'']{QICLean2026Blueprint}.
     Expand both sides in the coordinate basis.
 \end{proof}
 
@@ -1848,6 +1852,8 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
+    This is~\cite[``Polynomial correction of an
+        idempotent'']{QICLean2026Blueprint}.
     Polynomial expansion gives the identities, including
     $2x_{n+1}-1=(2x_n-1)(1-2d_n)$.
     Induction gives $\|d_n\|\le4^{-n}\|d_0\|$ and
@@ -1885,6 +1891,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     locally constant, including for non-Hermitian idempotents.
 \end{lemma}
 \begin{proof}\leanok
+    This is~\cite[``Rank of an idempotent'']{QICLean2026Blueprint}.
     The associated linear map is the projection onto its range.
     Its trace is the dimension of that range. Continuity of the trace
     and discreteness of the integer ranks give local constancy.
@@ -1920,6 +1927,8 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     isomorphism.
 \end{lemma}
 \begin{proof}\leanok
+    This is~\cite[``Dimension of a primitive left
+        ideal'']{QICLean2026Blueprint}.
     The ideal consists of matrices supported in column $i$.
     That column is an arbitrary vector in $\C^D$.
 \end{proof}

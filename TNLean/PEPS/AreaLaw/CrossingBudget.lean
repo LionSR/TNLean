@@ -68,6 +68,7 @@ noncomputable def designatedSupport (G : SimpleGraph ι) (S₀ : Finset ι) (r�
   if ManyBody.setEdist G S₀ a = ⊤ then componentFinset G a
   else ManyBody.graphBall G a (truncationRadius r₀ (ManyBody.setEdist G S₀ a).toNat)
 
+omit [DecidableEq ι] in
 /-- **Crossing supports have radius `r₀`** (`03-quasilocal.tex`, lines 439–440 and
 507–510): if the designated support of a label meets `X ⊆ S₀` and its complement, the
 anchor has finite distance from `S₀` and its truncation radius is `r₀`. -/
@@ -170,6 +171,7 @@ theorem card_crossingTerms_designatedSupport_le {κ : Type*} [Fintype κ] (G : S
     _ ≤ (2 * E.card) * (Kb * ((r₀ : ℝ) + 1) ^ 2) * μ := by gcongr
     _ = 2 * μ * Kb * ((r₀ : ℝ) + 1) ^ 2 * E.card := by ring
 
+omit [DecidableEq ι] in
 /-- **Support dimensions of crossing labels** (`eq:quasilocal-crossing-count`,
 `03-quasilocal.tex`, lines 447–448): `log dᵢ = |Sᵢ| log q ≤ K_b (r₀ + 1)² log q`. -/
 theorem log_dim_le_of_mem_crossingTerms {κ : Type*} [Fintype κ] {q : ℕ} (hq : 1 ≤ q)

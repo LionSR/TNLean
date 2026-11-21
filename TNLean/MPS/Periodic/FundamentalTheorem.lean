@@ -172,15 +172,15 @@ lines 276--284; the spectral invariance supports the last clause of proposition
 `equal-or-orthogonal-generalized`, lines 602--604. -/
 theorem RepeatedBlocks.peripheralEigenvalues_transferMap_eq {D : ℕ}
     {A B : MPSTensor d D} (h : RepeatedBlocks A B) :
-    peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) =
-      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B) := by
+    peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) =
+      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) B) := by
   obtain ⟨ξ, Y, hξ, hRel⟩ := h
   have hGauge : GaugeEquiv B (fun i =>
       (Y : Matrix (Fin D) (Fin D) ℂ) * B i *
         (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) :=
     ⟨Y, fun _ => rfl⟩
-  have hSmul : Kraus.transferMap (d := d) (D := D) A =
-      Kraus.transferMap (d := d) (D := D) (fun i =>
+  have hSmul : Kraus.transferMap (ι := Fin d) (n := Fin D) A =
+      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i =>
         (Y : Matrix (Fin D) (Fin D) ℂ) * B i *
           (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) := by
     have hAeq : A = fun i => ξ • ((Y : Matrix (Fin D) (Fin D) ℂ) * B i *

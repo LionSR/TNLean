@@ -187,7 +187,7 @@ theorem negReindex_paper_shift
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     {P : Fin m → MatrixAlg D}
     (hproj : ∀ k, IsOrthogonalProjection (P k))
-    (hShift : ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hShift : ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (k : Fin m) (i : Fin d) :
     P (-k) * A i = A i * P (-(k + 1)) := by
   have h := offDiag_shift_of_adjoint_cyclic_shift A hLeft hproj hShift (-(k + 1)) i

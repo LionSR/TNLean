@@ -49,12 +49,12 @@ private theorem exists_circle_smul_posSemidef_of_sectorEdge
     (hkh : IsSectorEdge eta k h) :
     ∃ u : Circle, (((u : Circle) : ℂ) • eta k h).PosSemidef := by
   obtain ⟨w⟩ := (sectorReaches_iff_directedWalkReaches eta h k).mp (hrec k h hkh)
-  let q := TNLean.Algebra.DirectedWalk.closedConsVertices (IsSectorEdge eta) hkh w
-  have : NeZero (TNLean.Algebra.DirectedWalk.edgeCount (IsSectorEdge eta) w + 1) :=
+  let q := DirectedWalk.closedConsVertices (IsSectorEdge eta) hkh w
+  have : NeZero (DirectedWalk.edgeCount (IsSectorEdge eta) w + 1) :=
     ⟨by omega⟩
   have hne : ∀ n, eta (q n) (q (n + 1)) ≠ 0 := by
     intro n
-    exact TNLean.Algebra.DirectedWalk.closedConsVertices_edge
+    exact DirectedWalk.closedConsVertices_edge
       (IsSectorEdge eta) hkh w n
   obtain ⟨c, hc, -, hcpos⟩ :=
     exists_pi_smul_posSemidef_of_cyclicEtaTensorProduct_posSemidef
@@ -62,9 +62,9 @@ private theorem exists_circle_smul_posSemidef_of_sectorEdge
   refine ⟨Complex.phase (c 0) (hc 0), ?_⟩
   have hpos := Complex.phase_smul_posSemidef (hc 0) (hcpos 0)
   have hqzero : q 0 = k :=
-    TNLean.Algebra.DirectedWalk.closedConsVertices_zero (IsSectorEdge eta) hkh w
+    DirectedWalk.closedConsVertices_zero (IsSectorEdge eta) hkh w
   have hqone : q (0 + 1) = h :=
-    TNLean.Algebra.DirectedWalk.closedConsVertices_zero_add_one
+    DirectedWalk.closedConsVertices_zero_add_one
       (IsSectorEdge eta) hkh w
   rw [hqzero, hqone] at hpos
   exact hpos
@@ -105,19 +105,19 @@ theorem exists_vertexPhase_smul_posSemidef
     · simpa only [κ, dite_eq_left hkh] using Classical.choose_spec (hedge hkh)
     · exact smul_posSemidef_of_not_sectorEdge eta _ hkh
   have hclosed : ∀ (a : Fin hη.m)
-      (w : TNLean.Algebra.DirectedWalk (IsSectorEdge eta) a a),
-      TNLean.Algebra.DirectedWalk.weight (IsSectorEdge eta) κ w = 1 := by
+      (w : DirectedWalk (IsSectorEdge eta) a a),
+      DirectedWalk.weight (IsSectorEdge eta) κ w = 1 := by
     intro a w
     cases w with
     | nil => rfl
     | @cons a b _ hab w =>
-        let q := TNLean.Algebra.DirectedWalk.closedConsVertices
+        let q := DirectedWalk.closedConsVertices
           (IsSectorEdge eta) hab w
-        have : NeZero (TNLean.Algebra.DirectedWalk.edgeCount (IsSectorEdge eta) w + 1) :=
+        have : NeZero (DirectedWalk.edgeCount (IsSectorEdge eta) w + 1) :=
           ⟨by omega⟩
         have hne : ∀ n, eta (q n) (q (n + 1)) ≠ 0 := by
           intro n
-          exact TNLean.Algebra.DirectedWalk.closedConsVertices_edge
+          exact DirectedWalk.closedConsVertices_edge
             (IsSectorEdge eta) hab w n
         obtain ⟨c, hc, hcprod, hcpos⟩ :=
           exists_pi_smul_posSemidef_of_cyclicEtaTensorProduct_posSemidef
@@ -138,7 +138,7 @@ theorem exists_vertexPhase_smul_posSemidef
                 (fun n ↦ Units.mk0 (c n) (hc n)) Finset.univ).symm
             _ = Complex.unitsPhase 1 := congrArg Complex.unitsPhase hcUnits
             _ = 1 := map_one Complex.unitsPhase
-        rw [TNLean.Algebra.DirectedWalk.weight_closedCons_eq_fin_prod]
+        rw [DirectedWalk.weight_closedCons_eq_fin_prod]
         calc
           ∏ n, κ (q n) (q (n + 1)) = ∏ n, Complex.phase (c n) (hc n) := by
             apply Finset.prod_congr rfl
@@ -147,9 +147,9 @@ theorem exists_vertexPhase_smul_posSemidef
           _ = 1 := hphaseProd
   have hreturn :
       ∀ {k h : Fin hη.m}, IsSectorEdge eta k h →
-        TNLean.Algebra.DirectedWalk.Reaches (IsSectorEdge eta) h k :=
+        DirectedWalk.Reaches (IsSectorEdge eta) h k :=
     (isRecurrentSupport_iff_directedWalkReturns eta).mp hrec
-  obtain ⟨z, hz⟩ := TNLean.Algebra.DirectedWalk.exists_vertex_of_closedWalk_weight_eq_one
+  obtain ⟨z, hz⟩ := DirectedWalk.exists_vertex_of_closedWalk_weight_eq_one
     (IsSectorEdge eta) κ hreturn hclosed
   refine ⟨z, fun k h ↦ ?_⟩
   by_cases hkh : IsSectorEdge eta k h

@@ -95,16 +95,16 @@ lemma trace_fromBlocks_diag (X : Matrix ι₁ ι₁ ℂ) (Z : Matrix ι₂ ι₂
 lemma evalWord_fromBlocks_diag [DecidableEq ι₁] [DecidableEq ι₂]
     (A11 : Fin d → Matrix ι₁ ι₁ ℂ) (A22 : Fin d → Matrix ι₂ ι₂ ℂ) :
     ∀ w : List (Fin d),
-      _root_.evalWord (fun i => Matrix.fromBlocks (A11 i) 0 0 (A22 i)) w =
-        Matrix.fromBlocks (_root_.evalWord A11 w) 0 0 (_root_.evalWord A22 w) := by
+      Kraus.evalWord (fun i => Matrix.fromBlocks (A11 i) 0 0 (A22 i)) w =
+        Matrix.fromBlocks (Kraus.evalWord A11 w) 0 0 (Kraus.evalWord A22 w) := by
   classical
   intro w
   induction w with
   | nil =>
       -- empty word: `Kraus.evalWord _ [] = 1` and `fromBlocks 1 0 0 1 = 1`
-      simp [_root_.evalWord, Matrix.fromBlocks_one]
+      simp [Kraus.evalWord, Matrix.fromBlocks_one]
   | cons i w ih =>
-      simp [_root_.evalWord, ih, Matrix.fromBlocks_multiply]
+      simp [Kraus.evalWord, ih, Matrix.fromBlocks_multiply]
 
 end BlockDiagAux
 
@@ -120,17 +120,17 @@ This is a variant of `MPSTensor.evalWord_reindex` (which goes in the opposite di
 -/
 lemma evalWord_reindex_fin (e : Fin D ≃ m) (A : MPSTensor d D) :
     ∀ w : List (Fin d),
-      _root_.evalWord (fun i => Matrix.reindex e e (A i)) w =
+      Kraus.evalWord (fun i => Matrix.reindex e e (A i)) w =
         Matrix.reindex e e (Kraus.evalWord A w) := by
   classical
   intro w
   induction w with
   | nil =>
       -- Empty word: `Kraus.evalWord` returns `1`, and reindexing preserves `1`.
-      simp [_root_.evalWord, Kraus.evalWord]
+      simp [Kraus.evalWord]
   | cons i w ih =>
       -- One more letter: unfold both recursions.
-      simp only [_root_.evalWord, Kraus.evalWord]
+      simp only [Kraus.evalWord]
       -- Rewrite the tail using the inductive hypothesis.
       rw [ih]
       -- Reindexing respects multiplication (in `submatrix` form).

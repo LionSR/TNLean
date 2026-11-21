@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.PrimitiveFixedPoint
 import QICLean.Kraus.Transfer
+import TNLean.MPS.Tensor
 
 /-!
 # Rescaling the fixed point of a complementary fixed-point gap

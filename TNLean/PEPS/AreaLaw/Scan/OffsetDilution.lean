@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scan.ActualHistory
 import Mathlib.Data.Int.Interval
 import Mathlib.Tactic.Linarith
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Uniform-offset dilution for actual scanner fronts

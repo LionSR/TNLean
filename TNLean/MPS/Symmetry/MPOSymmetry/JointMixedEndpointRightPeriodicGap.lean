@@ -89,9 +89,7 @@ theorem mpv_jointMixedEndpointInterpolation_reflect_swap
           (jointMixedEndpointInterpolation A₁ A₀ (1 - γ) x)) σ :=
       (mpv_reindexPhysical e _ σ).symm
     _ = mpv (jointMixedEndpointInterpolation A₀ A₁ γ x) σ := by
-      change Matrix.trace (Kraus.evalWord _ (List.ofFn σ)) =
-        Matrix.trace (Kraus.evalWord _ (List.ofFn σ))
-      rw [hword]
+      rw [mpv_eq, mpv_eq, coeff_eq, coeff_eq, hword]
       exact Matrix.trace_reindex (mixedEndpointBondSwap (D₀ x) (D₁ x)) _
 
 /-- The full common periodic component map intertwines the physical

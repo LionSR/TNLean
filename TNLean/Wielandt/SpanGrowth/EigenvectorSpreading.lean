@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.Wielandt.SpanGrowth.EigenvectorSpreading
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
+import TNLean.MPS.Tensor
 
 /-!
 # Eigenvector spreading for MPS tensors

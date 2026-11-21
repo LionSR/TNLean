@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.Overlap.SectorMatch.CyclicTrace
 import TNLean.MPS.Periodic.Overlap.SectorMatch.CyclicTransport
-import TNLean.Algebra.FiniteCycleCoboundary
-import TNLean.Algebra.PiTensorProductPhase
+import QICLean.Algebra.FiniteCycleCoboundary
+import QICLean.Algebra.PiTensorProductPhase
 import TNLean.MPS.Periodic.GlobalGauge
 import TNLean.MPS.Periodic.SectorContraction
 
@@ -58,11 +58,11 @@ The available chain inputs are `blockDecompositionMap` /
 (realizing Ω_u for a chosen injective word length) and the two-site
 proportionality theorem `tensor_proportional` in `MPS/Chain/TensorEquality.lean`.
 The finite-cycle phase choice in lines 1093--1102 is now isolated as
-`TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_of_prod_eq_one`; the
+`Fin.exists_complex_unit_cyclic_coboundary_of_prod_eq_one`; the
 offset-indexed form needed for the sector match `(u, u + q)` is
-`TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one`.
+`Fin.exists_complex_unit_cyclic_coboundary_shift_of_prod_eq_one`.
 The product-one scalar extraction in lines 1072--1080 is isolated as
-`PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul`.
+`PiTensorProduct.exists_kappa_product_one_of_tprod_eq_root_smul`.
 The `m`-factor cyclic contraction below produces the uniform product-tensor
 identity and the unit-modulus
 normalization of the resulting sector phases; after that, the algebraic scalar
@@ -599,7 +599,7 @@ lemma sectorTensor_proportional_of_blockedMatch
   have href_entry : ∀ k, T k (ref k) (r k) (s k) ≠ 0 :=
     fun k => (hentry k).choose_spec.choose_spec
   obtain ⟨κ, hκ_prod, hκ⟩ :=
-    TNLean.Algebra.PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul
+    PiTensorProduct.exists_kappa_product_one_of_tprod_eq_root_smul
         (fun k i => cornerLetter P A k i) T z ξ hz hξ_pow
         ref r s href_entry hresult
   let γ : Fin m → ℂ := fun k => κ k * ξ
@@ -693,7 +693,7 @@ lemma sectorTensor_proportional_of_blockedMatch
     convert (Equiv.prod_comp (Equiv.subRight q') κ).trans hκ_prod using 1;
       rfl
   obtain ⟨φ, hφ_norm, hφ⟩ :=
-    TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_shift_of_prod_eq_one
+    Fin.exists_complex_unit_cyclic_coboundary_shift_of_prod_eq_one
       κB hκB_norm hκB_prod q'
   have hφ_ne : ∀ v, φ v ≠ 0 := by
     intro v

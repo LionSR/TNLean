@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Chain.VaryingBondChain
-import TNLean.Algebra.FinCyclicInduction
+import QICLean.Algebra.IndexInduction
 import QICLean.Kraus.RectangularChain
 import QICLean.Channel.WindowMinorization
 

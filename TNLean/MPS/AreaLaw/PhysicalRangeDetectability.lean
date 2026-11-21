@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.SupportProjection
+import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.AreaLaw.PhysicalDetectabilityGap
 import QICLean.Analysis.WeightedProjection
+import QICLean.Algebra.MatrixToEuclidean
 
 /-!
 # Detectability after replacing positive contractions by range projections
@@ -63,7 +64,7 @@ theorem norm_sq_physicalDetectability_supportProj_le
       (⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian y⟫_ℂ).re ≤
         (⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) PΦ.hamiltonian y⟫_ℂ).re := by
     have hc := (ContinuousLinearMap.le_def.mp
-      (Matrix.toEuclideanCLM_le_of_le hdom)).re_inner_nonneg_right y
+      (Matrix.toEuclideanCLM_le_toEuclideanCLM_iff.mpr hdom)).re_inner_nonneg_right y
     exact sub_nonneg.mp (by
       simpa only [_root_.sub_apply, inner_sub_right, map_sub, RCLike.re_to_complex] using hc)
   rw [div_mul_eq_mul_div, le_div_iff₀ (show 0 < 4 + gamma by linarith only [hgamma])]

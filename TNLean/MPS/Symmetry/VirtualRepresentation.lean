@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.GaugeUniqueness
-import TNLean.Algebra.ProjectiveRepresentation
+import QICLean.Algebra.Cohomology.ProjectiveRepresentation
 
 /-!
 # Virtual representation theorem for injective MPS
@@ -55,8 +55,6 @@ private abbrev invMat (Y : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
 /-! ### Virtual representation theorem -/
 
 section VirtualRep
-
-open TNLean.Algebra
 
 variable {G : Type} [Group G]
 

@@ -9,7 +9,7 @@ import TNLean.MPS.MPDO.PhysicalSectorVirtualSpanning
 import TNLean.MPS.MPDO.SectorEtaOperator
 import TNLean.MPS.MPDO.SectorRecurrence
 import TNLean.MPS.MPDO.RecurrentSectorRephasing
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Recurrence after reparameterizing zero-weight sectors

@@ -140,11 +140,11 @@ of unity. -/
 theorem IsSpectrallyPeriodic.pow_eq_one_of_mem_gaugeScalars {m : ℕ}
     (hR : IsSpectrallyPeriodic m R) (hc : c ∈ gaugeScalars R) : c ^ m = 1 := by
   -- `1` is a peripheral eigenvalue; let `v` be an eigenvector
-  have h1 : (1 : ℂ) ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) R) := by
+  have h1 : (1 : ℂ) ∈ peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) R) := by
     rw [hR.peripheral_eq]
     exact one_pow m
   obtain ⟨v, hv⟩ := h1.1.exists_hasEigenvector
-  have hEv : Kraus.transferMap (d := d) (D := D) R v = v := by
+  have hEv : Kraus.transferMap (ι := Fin d) (n := Fin D) R v = v := by
     rw [Module.End.mem_eigenspace_iff.mp hv.1, one_smul]
   have hv0 : v ≠ 0 := hv.2
   have hc' : IsGaugeRelated (c • R) R := hc
@@ -159,7 +159,7 @@ theorem IsSpectrallyPeriodic.pow_eq_one_of_mem_gaugeScalars {m : ℕ}
           simp only [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_assoc]
       _ = c • (Y * R i) := by rw [hXY, Matrix.mul_one]
   -- `c` is an eigenvalue, with eigenvector `Y v`
-  have hEY : Kraus.transferMap (d := d) (D := D) R (Y * v) = c • (Y * v) := by
+  have hEY : Kraus.transferMap (ι := Fin d) (n := Fin D) R (Y * v) = c • (Y * v) := by
     rw [Kraus.transferMap_apply]
     calc ∑ i, R i * (Y * v) * (R i)ᴴ = ∑ i, c • (Y * (R i * v * (R i)ᴴ)) :=
           Finset.sum_congr rfl fun i _ => by
@@ -168,7 +168,7 @@ theorem IsSpectrallyPeriodic.pow_eq_one_of_mem_gaugeScalars {m : ℕ}
       _ = c • (Y * ∑ i, R i * v * (R i)ᴴ) := by rw [Matrix.mul_sum, Finset.smul_sum]
       _ = c • (Y * v) := by rw [← Kraus.transferMap_apply, hEv]
   -- `c • E (X v) = X v`
-  have hEX : c • Kraus.transferMap (d := d) (D := D) R (X * v) = X * v := by
+  have hEX : c • Kraus.transferMap (ι := Fin d) (n := Fin D) R (X * v) = X * v := by
     rw [Kraus.transferMap_apply]
     calc c • ∑ i, R i * (X * v) * (R i)ᴴ = ∑ i, X * (R i * v * (R i)ᴴ) := by
           rw [Finset.smul_sum]
@@ -187,9 +187,9 @@ theorem IsSpectrallyPeriodic.pow_eq_one_of_mem_gaugeScalars {m : ℕ}
     exact hXv hEX.symm
   have hle : ‖c‖ ≤ 1 := norm_le_one_of_hasEigenvalue hR.spectral_radius_one
     (hasEigenvalue_of_eigenvector_eq _ c _ hEY hYv)
-  have hEX' : Kraus.transferMap (d := d) (D := D) R (X * v) = c⁻¹ • (X * v) := by
-    calc Kraus.transferMap (d := d) (D := D) R (X * v)
-        = c⁻¹ • (c • Kraus.transferMap (d := d) (D := D) R (X * v)) := by
+  have hEX' : Kraus.transferMap (ι := Fin d) (n := Fin D) R (X * v) = c⁻¹ • (X * v) := by
+    calc Kraus.transferMap (ι := Fin d) (n := Fin D) R (X * v)
+        = c⁻¹ • (c • Kraus.transferMap (ι := Fin d) (n := Fin D) R (X * v)) := by
           rw [smul_smul, inv_mul_cancel₀ hc0, one_smul]
       _ = c⁻¹ • (X * v) := by rw [hEX]
   have hle' : ‖c⁻¹‖ ≤ 1 := norm_le_one_of_hasEigenvalue hR.spectral_radius_one
@@ -200,7 +200,7 @@ theorem IsSpectrallyPeriodic.pow_eq_one_of_mem_gaugeScalars {m : ℕ}
     have : 1 ≤ ‖c‖ := by
       rwa [inv_le_one₀ hpos] at hle'
     linarith
-  have hmem : c ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) R) :=
+  have hmem : c ∈ peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) R) :=
     ⟨hasEigenvalue_of_eigenvector_eq _ c _ hEY hYv, hnorm⟩
   rw [hR.peripheral_eq] at hmem
   exact hmem

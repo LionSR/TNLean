@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.Algebra.NatSquarePlusOne
+import QICLean.Algebra.NatSquarePlusOne
 import TNLean.MPS.Examples.Fibonacci.FibonacciAction
 import TNLean.MPS.Examples.Fibonacci.FibonacciUnit
 import TNLean.MPS.Symmetry.MPOSymmetry.Character

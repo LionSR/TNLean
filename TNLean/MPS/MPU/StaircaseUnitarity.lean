@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixIsometryKronecker
-import TNLean.Algebra.UnitaryKronecker
+import QICLean.Algebra.UnitaryKronecker
 import TNLean.MPS.MPU.SimpleTensorEquivalence
 import TNLean.MPS.MPU.StaircaseGates
 

@@ -150,7 +150,7 @@ theorem inner_single_groundSpaceGram_single_eq_rectangularChoi
     (A : MPSTensor d D) (L : ℕ) (a b c e : Fin D) :
     inner ℂ (EuclideanSpace.single (b, a) 1)
       (groundSpaceGram A L (EuclideanSpace.single (e, c) 1)) =
-      Matrix.rectangularChoi ((Kraus.transferMap (d := d) (D := D) A) ^ L)
+      Matrix.rectangularChoi ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L)
         (c, e) (a, b) := by
   classical
   rw [groundSpaceGram, ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_inner_right]

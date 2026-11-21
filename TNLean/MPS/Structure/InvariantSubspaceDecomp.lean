@@ -191,7 +191,7 @@ private theorem exists_twoBlock_decomp_of_lowerZero_aux
       (A := Kraus.diagPart (d := d) (D := D) Aconj Pdiag) w
   have hTrace_reindex :
       Matrix.trace (Kraus.evalWord (Kraus.diagPart (d := d) (D := D) Aconj Pdiag) w) =
-        Matrix.trace (_root_.evalWord (fun i => Matrix.reindex eST eST
+        Matrix.trace (Kraus.evalWord (fun i => Matrix.reindex eST eST
           ((Kraus.diagPart (d := d) (D := D) Aconj Pdiag) i)) w) := by
     -- use `trace_reindex` and `hEval_reindex`
     calc
@@ -200,7 +200,7 @@ private theorem exists_twoBlock_decomp_of_lowerZero_aux
               (Kraus.evalWord (Kraus.diagPart (d := d) (D := D) Aconj Pdiag) w)) := by
                 simpa using (Matrix.trace_reindex eST
                   (Kraus.evalWord (Kraus.diagPart (d := d) (D := D) Aconj Pdiag) w)).symm
-      _ = Matrix.trace (_root_.evalWord (fun i => Matrix.reindex eST eST
+      _ = Matrix.trace (Kraus.evalWord (fun i => Matrix.reindex eST eST
               ((Kraus.diagPart (d := d) (D := D) Aconj Pdiag) i)) w) := by
                 simpa using congrArg Matrix.trace hEval_reindex.symm
   -- Show that the reindexed diagonal-part tensor is block diagonal with
@@ -247,9 +247,9 @@ private theorem exists_twoBlock_decomp_of_lowerZero_aux
     simpa [φ] using hφ_diag
   -- Evaluate the reindexed block-diagonal tensor on `w`.
   have hEval_block :
-      _root_.evalWord (fun i => Matrix.reindex eST eST
+      Kraus.evalWord (fun i => Matrix.reindex eST eST
         ((Kraus.diagPart (d := d) (D := D) Aconj Pdiag) i)) w =
-        Matrix.fromBlocks (_root_.evalWord A11raw w) 0 0 (_root_.evalWord A22raw w) := by
+        Matrix.fromBlocks (Kraus.evalWord A11raw w) 0 0 (Kraus.evalWord A22raw w) := by
     have hfun :
         (fun i => Matrix.reindex eST eST
           ((Kraus.diagPart (d := d) (D := D) Aconj Pdiag) i))
@@ -265,40 +265,40 @@ private theorem exists_twoBlock_decomp_of_lowerZero_aux
     -- Expand mpv and use the trace computation above.
     simp only [MPSTensor.mpv, MPSTensor.coeff]
     have htr_blocks :
-        Matrix.trace (_root_.evalWord (fun i => Matrix.reindex eST eST
+        Matrix.trace (Kraus.evalWord (fun i => Matrix.reindex eST eST
             ((Kraus.diagPart (d := d) (D := D) Aconj Pdiag) i)) w)
-          = Matrix.trace (_root_.evalWord A11raw w) + Matrix.trace (_root_.evalWord A22raw w) := by
+          = Matrix.trace (Kraus.evalWord A11raw w) + Matrix.trace (Kraus.evalWord A22raw w) := by
       -- Rewrite the evaluated word using `hEval_block`, then take traces.
       rw [hEval_block]
       simpa using
         (trace_fromBlocks_diag (ι₁ := S) (ι₂ := T)
-          (_root_.evalWord A11raw w) (_root_.evalWord A22raw w))
+          (Kraus.evalWord A11raw w) (Kraus.evalWord A22raw w))
     -- Express `mpv A₁` and `mpv A₂` via the direct blocks.
-    have hmpv₁ : mpv A₁ σ = Matrix.trace (_root_.evalWord A11raw w) := by
+    have hmpv₁ : mpv A₁ σ = Matrix.trace (Kraus.evalWord A11raw w) := by
       have hEval₁ := MPSTensor.evalWord_reindex (d := d) (D := n) (e := eS) (A := A11raw) w
-      have : Kraus.evalWord A₁ w = Matrix.reindex eS eS (_root_.evalWord A11raw w) := by
+      have : Kraus.evalWord A₁ w = Matrix.reindex eS eS (Kraus.evalWord A11raw w) := by
         simpa [A₁] using hEval₁
       calc
         mpv A₁ σ = Matrix.trace (Kraus.evalWord A₁ w) := by rfl
-        _ = Matrix.trace (Matrix.reindex eS eS (_root_.evalWord A11raw w)) := by simp [this]
-        _ = Matrix.trace (_root_.evalWord A11raw w) := by
-              simpa using (Matrix.trace_reindex eS (_root_.evalWord A11raw w))
-    have hmpv₂ : mpv A₂ σ = Matrix.trace (_root_.evalWord A22raw w) := by
+        _ = Matrix.trace (Matrix.reindex eS eS (Kraus.evalWord A11raw w)) := by simp [this]
+        _ = Matrix.trace (Kraus.evalWord A11raw w) := by
+              simpa using (Matrix.trace_reindex eS (Kraus.evalWord A11raw w))
+    have hmpv₂ : mpv A₂ σ = Matrix.trace (Kraus.evalWord A22raw w) := by
       have hEval₂ := MPSTensor.evalWord_reindex (d := d) (D := m) (e := eT) (A := A22raw) w
-      have : Kraus.evalWord A₂ w = Matrix.reindex eT eT (_root_.evalWord A22raw w) := by
+      have : Kraus.evalWord A₂ w = Matrix.reindex eT eT (Kraus.evalWord A22raw w) := by
         simpa [A₂] using hEval₂
       calc
         mpv A₂ σ = Matrix.trace (Kraus.evalWord A₂ w) := by rfl
-        _ = Matrix.trace (Matrix.reindex eT eT (_root_.evalWord A22raw w)) := by simp [this]
-        _ = Matrix.trace (_root_.evalWord A22raw w) := by
-              simpa using (Matrix.trace_reindex eT (_root_.evalWord A22raw w))
+        _ = Matrix.trace (Matrix.reindex eT eT (Kraus.evalWord A22raw w)) := by simp [this]
+        _ = Matrix.trace (Kraus.evalWord A22raw w) := by
+              simpa using (Matrix.trace_reindex eT (Kraus.evalWord A22raw w))
     -- Put it together.
     calc
       Matrix.trace (Kraus.evalWord (Kraus.diagPart (d := d) (D := D) Aconj Pdiag) w)
-          = Matrix.trace (_root_.evalWord (fun i => Matrix.reindex eST eST
+          = Matrix.trace (Kraus.evalWord (fun i => Matrix.reindex eST eST
               ((Kraus.diagPart (d := d) (D := D) Aconj Pdiag) i)) w) := hTrace_reindex
-      _ = Matrix.trace (_root_.evalWord A11raw w) +
-            Matrix.trace (_root_.evalWord A22raw w) := htr_blocks
+      _ = Matrix.trace (Kraus.evalWord A11raw w) +
+            Matrix.trace (Kraus.evalWord A22raw w) := htr_blocks
       _ = mpv A₁ σ + mpv A₂ σ := by rw [← hmpv₁, ← hmpv₂]
   -- MPV of the explicit block-diagonal tensor is the sum of block MPVs.
   have hmpv_twoBlockTensor :

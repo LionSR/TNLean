@@ -407,6 +407,7 @@ def sheetPlace {T E : Finset ι} (h : Disjoint T E)
   ((1 : Matrix (E → Fin q) (E → Fin q) ℂ) ⊗ₖ M).submatrix
     (teuShuffle _ _ _ ∘ threeSplit q T E h) (teuShuffle _ _ _ ∘ threeSplit q T E h)
 
+omit [Fintype ι] in
 theorem sheetPlace_apply {T E : Finset ι} (h : Disjoint T E)
     (M : Matrix ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
       ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)

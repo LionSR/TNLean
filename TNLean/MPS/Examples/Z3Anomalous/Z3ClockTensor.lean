@@ -79,7 +79,7 @@ open scoped BigOperators Matrix
 
 namespace Z3Clock
 
-open MPOTensor TNLean.Algebra TNLean.Algebra.ScalarThreeCochain
+open MPOTensor ScalarThreeCochain
 
 /-! ### The phase character -/
 

@@ -23,7 +23,7 @@ correlations to limiting minimal transfer contractions remains separate.
 
 noncomputable section
 
-open ManyBody Matrix QuantumCircuit MPSPreparation GaussianFilter
+open ManyBody Matrix GaussianFilter
 open scoped Matrix.Norms.L2Operator InnerProductSpace NNReal
 
 namespace MPSTensor

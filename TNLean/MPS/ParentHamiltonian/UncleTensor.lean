@@ -108,8 +108,7 @@ theorem twoBlockVirtualScale_blockTensor {d a b : ℕ}
   have hb : blockTensor (twoBlockPerturbation A P B Q R L ε) 2 σ =
       twoBlockPerturbation A P B Q R L ε (decodeBlock d 2 σ 0) *
         twoBlockPerturbation A P B Q R L ε (decodeBlock d 2 σ 1) := by
-    simp [blockTensor, Kraus.blockTensor, Kraus.wordOfBlock, List.ofFn_succ,
-      Kraus.evalWord, decodeBlock]
+    simp [blockTensor, Kraus.blockTensor, Kraus.reindexPhysical, List.ofFn_succ, decodeBlock]
   rw [hb]
   simp only [twoBlockPerturbation, uncleBlockMatrix_mul,
     twoBlockVirtualScale_uncleBlockMatrix, uncleTensorInterpolant]

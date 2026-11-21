@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.KramersWannier.KramersWannierPhysical
-import TNLean.Algebra.BinaryCharacterSum
+import QICLean.Algebra.BinaryCharacterSum
 import QICLean.Algebra.ComplexSqrt
-import TNLean.Algebra.GeneralizeDecide
-import TNLean.Algebra.FinCyclicInduction
+import QICLean.Algebra.GeneralizeDecide
+import QICLean.Algebra.IndexInduction
 
 /-!
 # Kramers–Wannier duality: the relations of the source

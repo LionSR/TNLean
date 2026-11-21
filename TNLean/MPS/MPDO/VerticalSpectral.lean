@@ -69,7 +69,7 @@ theorem IsHorizontalCF.exists_normal_verticalBlockDecomp_with_isometry
   have hPF : ∀ k : Fin r₀, (∃ v, blocks₀ k v ≠ 0) →
       ∃ (ρ : Matrix (Fin (dim₀ k)) (Fin (dim₀ k)) ℂ) (t : ℝ),
         ρ.PosDef ∧ 0 < t ∧
-        Kraus.transferMap (d := D * D) (D := dim₀ k) (blocks₀ k) ρ =
+        Kraus.transferMap (ι := Fin (D * D)) (n := Fin (dim₀ k)) (blocks₀ k) ρ =
           (t : ℂ) • ρ := by
     intro k hk
     have : NeZero (dim₀ k) := ⟨(hpos k).ne'⟩

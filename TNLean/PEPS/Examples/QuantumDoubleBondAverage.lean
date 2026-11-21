@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Examples.QuantumDoubleLocalConstraint
-import TNLean.Algebra.RepresentationTensorProduct
-import TNLean.Algebra.FiniteGroupUnitaryAverage
+import QICLean.Representation.Character.TensorProduct
+import QICLean.Representation.FiniteGroupUnitaryAverage
 import QICLean.Algebra.PermutationMatrixUnitary
-import TNLean.Algebra.PermutationMatrixCommutation
+import QICLean.Algebra.PermutationMatrixCommute
 
 /-!
 # The coherent physical bond action of the blocked quantum double
@@ -125,7 +125,7 @@ theorem quantumDoubleKBondAverage_isStarProjection :
       map_mul' u v := Subtype.ext (by
         change Matrix.permMatrixHom (quantumDoubleKBondPermutation (u * v)) = _
         rw [map_mul, map_mul]; rfl) }
-  exact TNLean.Algebra.isStarProjection_inv_card_smul_sum ρ
+  exact Matrix.isStarProjection_inv_card_smul_sum ρ
 
 /-- The actual Hamiltonian term is the complementary orthogonal projector. -/
 theorem quantumDoubleKBondTerm_isStarProjection :

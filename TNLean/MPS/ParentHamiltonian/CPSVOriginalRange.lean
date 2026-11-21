@@ -80,7 +80,7 @@ private theorem IsNormalTensor.exists_pgvwc07_unital_dualFixedPoint_gauge
       GaugeEquiv A B ∧
       Λ.PosDef ∧
       (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
-      Kraus.transferMap (d := d) (D := D) (fun i => (B i)ᴴ) Λ = Λ := by
+      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (B i)ᴴ) Λ = Λ := by
   let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.linftyOpNormedAddCommGroup
@@ -90,23 +90,23 @@ private theorem IsNormalTensor.exists_pgvwc07_unital_dualFixedPoint_gauge
   obtain ⟨ρ, r, hρ, hr, hρeig⟩ :=
     exists_posDef_transferMap_eigenvector_of_irreducible
       A hIrr hA.exists_apply_ne_zero
-  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
+  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
     Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr
   have hradius :
       (spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (Kraus.transferMap (d := d) (D := D) A))).toReal = r :=
+          (Kraus.transferMap (ι := Fin d) (n := Fin D) A))).toReal = r :=
     spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp
-      (Kraus.transferMap (d := d) (D := D) A) (Kraus.transferMap_isCPMap A)
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) A) (Kraus.transferMap_isCPMap A)
       hIrrMap ρ r hρ hr hρeig
   have hradius_one :
       (spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (Kraus.transferMap (d := d) (D := D) A))).toReal = 1 := by
+          (Kraus.transferMap (ι := Fin d) (n := Fin D) A))).toReal = 1 := by
     rw [hA.spectral_radius_one]
     simp
   have hr_one : r = 1 := hradius.symm.trans hradius_one
-  have hρfix : Kraus.transferMap (d := d) (D := D) A ρ = ρ := by
+  have hρfix : Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ := by
     simpa [hr_one] using hρeig
   let C : MPSTensor d D := Kraus.unitalGauge A ρ
   have hCUnital : ∑ i : Fin d, C i * (C i)ᴴ = 1 := by

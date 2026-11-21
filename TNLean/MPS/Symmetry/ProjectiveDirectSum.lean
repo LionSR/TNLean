@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ProjectiveRepresentation
+import QICLean.Algebra.Cohomology.ProjectiveRepresentation
 import Mathlib.Data.Matrix.Block
 import Mathlib.LinearAlgebra.Matrix.Reindex
 import QICLean.Algebra.MatrixReindexUnitary
@@ -18,8 +18,6 @@ rephasing and preceding the interpolation of the bond state.
 -/
 
 open scoped Matrix
-
-namespace TNLean.Algebra
 
 private def sumGL {D₀ D₁ : ℕ} (X : GL (Fin D₀) ℂ) (Y : GL (Fin D₁) ℂ) :
     GL (Fin D₀ ⊕ Fin D₁) ℂ where
@@ -67,5 +65,3 @@ theorem ProjectiveRepresentation.directSum_mem_unitaryGroup
   simp only [Matrix.fromBlocks_conjTranspose, Matrix.fromBlocks_multiply]
   simp [← Matrix.star_eq_conjTranspose, Matrix.mem_unitaryGroup_iff.mp h₀,
     Matrix.mem_unitaryGroup_iff.mp h₁]
-
-end TNLean.Algebra

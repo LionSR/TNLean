@@ -57,18 +57,20 @@ noncomputable def orderedGappedInteractionPath
     (hgap : ∃ δ : ℝ, 0 < δ ∧ ∀ (N : ℕ) (hN : 2 ≤ N),
       IsGapped (Interaction.translationInvariant hN A).hamiltonian 0 δ)
     (hSymA : ∀ (N : ℕ) (hN : 2 ≤ N) (g : G),
-      Commute (Interaction.translationInvariant hN A).hamiltonian
+      haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N A).hamiltonian
         (Matrix.finKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ)))
     (hSymB : ∀ (N : ℕ) (hN : 2 ≤ N) (g : G),
-      Commute (Interaction.translationInvariant hN B).hamiltonian
+      haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N B).hamiltonian
         (Matrix.finKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ))) :
     SymmetricGappedInteractionPath U A B := by
   have hAffine (γ : ℝ) : A + γ • (B - A) = (1 - γ) • A + γ • B := by module
   have hHam (N : ℕ) (hN : 2 ≤ N) (γ : ℝ) :
-      (Interaction.translationInvariant hN (A + γ • (B - A))).hamiltonian =
-        (Interaction.translationInvariant hN A).hamiltonian +
-          γ • ((Interaction.translationInvariant hN B).hamiltonian -
-            (Interaction.translationInvariant hN A).hamiltonian) := by
+      haveI : NeZero N := ⟨by omega⟩
+      (Interaction.translationInvariant N (A + γ • (B - A))).hamiltonian =
+        (Interaction.translationInvariant N A).hamiltonian +
+          γ • ((Interaction.translationInvariant N B).hamiltonian -
+            (Interaction.translationInvariant N A).hamiltonian) := by
+    have : NeZero N := ⟨by omega⟩
     have hmap (i : Fin N) :
         placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) (A + γ • (B - A)) =
           placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A +
@@ -78,7 +80,7 @@ noncomputable def orderedGappedInteractionPath
         |>.restrictScalars ℝ
       change f (A + γ • (B - A)) = f A + γ • (f B - f A)
       simp only [map_add, map_smul, map_sub]
-    simp only [Interaction.hamiltonian, Interaction.translates_term, hmap]
+    simp only [Interaction.hamiltonian_translationInvariant_of_le _ hN, hmap]
     simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib, Finset.smul_sum, smul_sub]
   refine {
     interaction := fun γ => A + γ • (B - A)
@@ -118,7 +120,8 @@ noncomputable def orderedGappedInteractionPath
     · rw [mem_groundSpace_iff_mulVec, Complex.ofReal_zero, zero_smul] at hx ⊢
       simp [Matrix.add_mulVec, Matrix.smul_mulVec, Matrix.sub_mulVec, hx, hker N hN _ hx]
   · intro γ hγ g N hN
-    rw [hHam]
+    have : NeZero N := ⟨by omega⟩
+    rw [hHam N hN]
     exact (hSymA N hN g).add_left (((hSymB N hN g).sub_left (hSymA N hN g)).smul_left γ)
 
 end MPSTensor

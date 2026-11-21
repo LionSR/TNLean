@@ -56,9 +56,9 @@ private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
   have : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨X, ζ, hζ_ne, hBi⟩ := hGPE
   -- Transfer map scaling: B = ζ • (X A X⁻¹) implies E_B = |ζ|² E_{XAX⁻¹}
-  have hEB_eq : ∀ Y, Kraus.transferMap (d := d) (D := D) B Y =
+  have hEB_eq : ∀ Y, Kraus.transferMap (ι := Fin d) (n := Fin D) B Y =
       (ζ * starRingEnd ℂ ζ) •
-        (X.val * Kraus.transferMap (d := d) (D := D) A
+        (X.val * Kraus.transferMap (ι := Fin d) (n := Fin D) A
           (X⁻¹.val * Y * X⁻¹.valᴴ) * X.valᴴ) := by
     intro Y
     simp only [Kraus.transferMap_apply]
@@ -78,15 +78,15 @@ private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
   have hRepeated : RepeatedBlocks A B :=
     repeatedBlocks_of_gaugePhaseData_norm_one X hζ_norm hBi
   -- Peripheral eigenvalue equality via conjugation
-  have hSpec : peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) =
-      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B) := by
-    have hEB_is_conj : Kraus.transferMap (d := d) (D := D) B =
-        (glConjEquiv X).conj (Kraus.transferMap (d := d) (D := D) A) := by
+  have hSpec : peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) =
+      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) B) := by
+    have hEB_is_conj : Kraus.transferMap (ι := Fin d) (n := Fin D) B =
+        (glConjEquiv X).conj (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
       apply LinearMap.ext; intro Y
       rw [hEB_eq, hζζ_real, show (↑(‖ζ‖ ^ 2) : ℂ) = (1 : ℂ) from by simp [h_eig_eq],
         one_smul,
-        show (glConjEquiv X).conj (Kraus.transferMap (d := d) (D := D) A) Y =
-          X.val * (Kraus.transferMap (d := d) (D := D) A
+        show (glConjEquiv X).conj (Kraus.transferMap (ι := Fin d) (n := Fin D) A) Y =
+          X.val * (Kraus.transferMap (ι := Fin d) (n := Fin D) A
             (X⁻¹.val * (Y * X⁻¹.valᴴ)) * X.valᴴ) from by
           rw [LinearEquiv.conj_apply_apply]
           simp only [glConjEquiv, LinearEquiv.trans_apply, LinearEquiv.symm_trans_apply,
@@ -96,7 +96,7 @@ private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
       simp only [Matrix.mul_assoc]
     rw [hEB_is_conj]
     exact (peripheralEigenvalues_conj (glConjEquiv X)
-      (Kraus.transferMap (d := d) (D := D) A)).symm
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) A)).symm
   exact IsPeriodic.period_eq_of_repeatedBlocks hA hB hRepeated hSpec
 
 /-- If two periodic tensors have different periods `m_a ≠ m_b`, their overlap

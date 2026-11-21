@@ -67,13 +67,17 @@ private theorem reindex_reassocTailBoundaryMapES_eq_fiberwise
     (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
       (residualCoverConfigEquiv d L K M r).symm).toContinuousLinearMap.comp
         (reassocTailBoundaryMapES A (K * L) (M * L) r) =
-    (EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) K)
-      ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (residualBoundaryConfigEquiv d L M r).symm).toContinuousLinearMap.comp
-          (groundSpaceMapES A (M * L + r)))).comp
+    ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+      (Equiv.prodComm (Cfg (blockPhysDim d L) M × Cfg d r)
+        (Cfg (blockPhysDim d L) K))).toContinuousLinearMap.comp
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
+        ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+          (residualBoundaryConfigEquiv d L M r).symm).toContinuousLinearMap.comp
+            (groundSpaceMapES A (M * L + r))))).comp
       (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (Equiv.prodCongr (blockedConfigEquiv d K L)
-          (Equiv.refl (Fin D × Fin D))).symm).toContinuousLinearMap := by
+        ((Equiv.prodComm (Fin D × Fin D) (Cfg (blockPhysDim d L) K)).trans
+          (Equiv.prodCongr (blockedConfigEquiv d K L)
+            (Equiv.refl (Fin D × Fin D)))).symm).toContinuousLinearMap := by
   ext x ⟨u, v, τ⟩
   change reassocTailBoundaryMapES A (K * L) (M * L) r x
       (residualCoverConfigEquiv d L K M r (u, v, τ)) =
@@ -100,7 +104,8 @@ theorem iSup_range_residualWindowRightMapES_eq_reindex_reassocTailBoundaryMapES
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
           (residualCoverConfigEquiv d L K M r).symm).toLinearEquiv.toLinearMap := by
   simp_rw [residualWindowRightMapES_eq_fiberwise]
-  rw [EuclideanSpace.iSup_range_fiberwiseMap_eq]
+  simp only [ContinuousLinearMap.toLinearMap_comp, LinearMap.range_comp, ← Submodule.map_iSup]
+  rw [ContinuousLinearMap.iSup_range_rightFiberwiseMap_eq]
   have hJoint :
       (⨆ j, ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
         (residualBoundaryConfigEquiv d L M r).symm).toContinuousLinearMap.comp
@@ -112,7 +117,7 @@ theorem iSup_range_residualWindowRightMapES_eq_reindex_reassocTailBoundaryMapES
       ← Submodule.map_iSup]
     rw [← groundSpaceES_eq_iSup_range_blockedResidualBoundaryMapES A B V hSum hInt M r,
       range_groundSpaceMapES]
-  rw [hJoint, ← EuclideanSpace.fiberwiseMap_range_starProjection,
+  rw [hJoint, ← ContinuousLinearMap.rightFiberwiseMap_range_starProjection,
     Submodule.range_starProjection]
   simpa only [ContinuousLinearMap.toLinearMap_comp, LinearMap.range_comp,
     LinearMap.coe_toContinuousLinearMap, LinearEquiv.range, Submodule.map_top] using

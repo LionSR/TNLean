@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ScalarThreeCocycleCyclicExamples
-import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicExamples
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicTwo
 import TNLean.MPS.Chain.BinaryPhase
 import TNLean.MPS.MPU.GroupCocycleMPO
 
@@ -17,7 +17,7 @@ three-cocycle of `ℤ₂` the periodic operator is `U_g = ∏ CZ_{i,i+1} Z_i ∏
 `W_g = CZ (1 ⊗ Z)` and `L_g = X`. Garre-Rubio, Schuch 2024 (arXiv:2405.00439), Section IV.D,
 `Papers/2405.00439/MPU-DW.tex` line 2040: the three-cocycles
 `ω_j(a,b,c) = exp{2πi j a (b + c − [b + c]) / n²}` of `ℤ_n`, with `[b + c] = b + c mod n`
-(their cocycle facts are in `TNLean.Algebra.ScalarThreeCocycleCyclicExamples`).
+(their cocycle facts are in `QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicExamples`).
 
 **Formalized here.** The periodic operators of the construction in `GroupCocycleMPO` for
 three groups: for `ℤ₂` with the cocycle `ω(g,g,g) = −1`, the operator of the generator
@@ -61,7 +61,7 @@ open scoped BigOperators Matrix
 
 namespace MPOTensor.GroupCocycle
 
-open TNLean.Algebra TNLean.Algebra.ScalarThreeCochain
+open ScalarThreeCochain
 
 /-! ### The group `ℤ₂` -/
 
@@ -174,7 +174,6 @@ theorem cyclic_operator_laws (m j : ℕ) :
           mpo ((family (residueEquiv m) (cyclicCocycle (m + 1) j)).tensor g⁻¹) N) :=
   family_operator_laws (residueEquiv m) (cyclicCocycle_isCocycle (m + 1) j)
     (cyclicCocycle_isNormalized (m + 1) j) (cyclicCocycle_norm (m + 1) j)
-
 
 /-- Project result: the identification of `ℤ₂ × ℤ₂` with `Fin 4`. -/
 def kleinEquiv : Multiplicative (ZMod 2 × ZMod 2) ≃ Fin 4 :=

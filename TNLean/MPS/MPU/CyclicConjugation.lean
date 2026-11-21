@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.AreaLaw
-import TNLean.Algebra.SupportedOperatorsSitePermutation
+import QICLean.ManyBody.Sites.Relabel
 
 /-!
 # Cyclic relocation of actual finite MPO conjugation

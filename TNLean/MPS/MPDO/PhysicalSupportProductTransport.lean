@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.KroneckerFactorPositivity
 import QICLean.Channel.SingleKrausPositivity
-import TNLean.Algebra.FinKronecker
+import QICLean.Algebra.FiniteKroneckerProduct
+import QICLean.Analysis.FiniteKroneckerPowers
 import TNLean.MPS.MPDO.PhysicalSupportBondCommutativity
 import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex

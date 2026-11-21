@@ -58,12 +58,12 @@ then the MPV self-overlap converges to `1`.
 theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : Kraus.transferMap (d := d) (D := D) A ρ = ρ)
+    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ)
     (hρ_ne : ρ ≠ 0) (hρ_psd : ρ.PosSemidef)
     (hSpect :
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-            ((Kraus.transferMap (d := d) (D := D) A) - fixedPointProj (D := D) ρ
+            ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) - fixedPointProj (D := D) ρ
               (by
                 -- `trace ρ ≠ 0` for PSD nonzero `ρ`.
                 intro htr0
@@ -71,7 +71,7 @@ theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
                 exact hρ_ne this))) < 1) :
     Filter.Tendsto (fun N => mpvOverlap (d := d) A A N) Filter.atTop (nhds (1 : ℂ)) := by
   -- First derive `trace((Kraus.transferMap A)^N) → 1`.
-  have hTP : IsTracePreservingMap (Kraus.transferMap (d := d) (D := D) A) := by
+  have hTP : IsTracePreservingMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
     intro X
     exact Kraus.isTracePreservingMap_mapLM_of_isTP A hNorm X
   have htrρ : Matrix.trace ρ ≠ 0 := by
@@ -80,10 +80,10 @@ theorem mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one
   have hTrace :
       Filter.Tendsto
         (fun N => (LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ))
-          ((Kraus.transferMap (d := d) (D := D) A) ^ N))
+          ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ N))
         Filter.atTop (nhds (1 : ℂ)) :=
     LinearMap.trace_pow_tendsto_one_of_spectralRadius_compl_lt_one (D := D)
-      (E := Kraus.transferMap (d := d) (D := D) A) (ρ := ρ) (htr := htrρ) hTP hρ hSpect
+      (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) (ρ := ρ) (htr := htrρ) hTP hρ hSpect
   -- Rewrite the transfer-map trace as a mixed-transfer trace (self-case).
   have hTrace' :
       Filter.Tendsto

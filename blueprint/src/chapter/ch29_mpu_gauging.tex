@@ -19,8 +19,8 @@
 
 \begin{lemma}[Finite-group unitary average is an orthogonal projection]
     \label{thm:mpug_finite_group_unitary_average_projection}
-    \lean{TNLean.Algebra.isStarProjection_inv_card_smul_sum,
-        TNLean.Algebra.isOrthogonalProjection_inv_card_smul_sum}
+    \lean{Matrix.isStarProjection_inv_card_smul_sum,
+        Matrix.isOrthogonalProjection_inv_card_smul_sum}
     \leanok
     \discussion{7458}
     \uses{def:mpug_finite_group_unitary_average}
@@ -2579,6 +2579,8 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
 
 \begin{proof}\leanok
     \uses{thm:mpug_unitary_entrywise_paired_scalars}
+    This is~\cite[``Sign dichotomy in the self
+        relation'']{QICLean2026Blueprint}.
     Applying Lemma~\ref{thm:mpug_unitary_entrywise_paired_scalars} with $S=T$
     and $\tau=\sigma$ gives $\sigma^2=1$, so
     $\sigma=1$ or $\sigma=-1$.
@@ -3265,6 +3267,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``Kronecker product of unitary maps'']{QICLean2026Blueprint}.
     The adjoint and multiplication identities for Kronecker products give
     \begin{align}
         (M\otimes P)^\dagger(M\otimes P)

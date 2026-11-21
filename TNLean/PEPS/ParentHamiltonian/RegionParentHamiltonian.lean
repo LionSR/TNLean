@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.RegionGroundSpace
-import TNLean.Algebra.SubmoduleStarProjectionMatrix
+import QICLean.Algebra.MatrixStarProjection
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.Matrix.Hermitian
 import QICLean.ManyBody.Sites.Placement

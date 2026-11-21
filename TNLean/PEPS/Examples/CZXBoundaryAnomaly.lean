@@ -68,7 +68,7 @@ Documented in `docs/paper-gaps/rmp_peps_czx_boundary_chain.tex`.
 noncomputable section
 
 open scoped BigOperators Matrix
-open TNLean.Algebra MPOTensor MPOTensor.GroupFamily
+open MPOTensor MPOTensor.GroupFamily
 
 namespace TNLean.PEPS
 

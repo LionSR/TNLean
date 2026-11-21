@@ -32,7 +32,7 @@ noncomputable def commonPeriodBlocking
     {dim : Fin k → ℕ}
     (blocks : (i : Fin k) → MPSTensor d (dim i)) (periods : Fin k → ℕ) :
     (i : Fin k) → MPSTensor (blockPhysDim d (lcmPeriod periods)) (dim i) :=
-  fun i => blockTensor (d := d) (D := dim i) (blocks i) (lcmPeriod periods)
+  fun i => blockTensor (d := d) (n := Fin (dim i)) (blocks i) (lcmPeriod periods)
 
 /-- If each block has a primitive transfer map at its own period, then blocking the whole family
 to the common LCM period preserves that primitivity witness for every member. -/
@@ -43,11 +43,11 @@ theorem isPrimitive_transferMap_commonPeriodBlocking
     (hPeriodsPos : ∀ i, 0 < periods i)
     (hPrim : ∀ i,
       _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d (periods i)) (D := dim i)
-          (blockTensor (d := d) (D := dim i) (blocks i) (periods i)))) :
+        (Kraus.transferMap (ι := Fin (blockPhysDim d (periods i))) (n := Fin (dim i))
+          (blockTensor (d := d) (n := Fin (dim i)) (blocks i) (periods i)))) :
     ∀ i,
       _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d (lcmPeriod periods)) (D := dim i)
+        (Kraus.transferMap (ι := Fin (blockPhysDim d (lcmPeriod periods))) (n := Fin (dim i))
           (commonPeriodBlocking (d := d) blocks periods i)) := by
   intro i
   let : NeZero (dim i) := ⟨Nat.ne_of_gt (hDim i)⟩

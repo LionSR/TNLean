@@ -34,8 +34,8 @@ provided by later modules.
 
 The paper derives the $\{0, 1\}$ membership from the power-sum uniqueness
 lemma of its appendix (lines 1155--1163, formalized in
-`TNLean.Algebra.ScalarPowerSumIdentity`); the proofs here use the elementary
-constant-power-sum dichotomy from `TNLean.Algebra.ConstantPowerSums`, which
+`QICLean.Algebra.ScalarPowerSumIdentity`); the proofs here use the elementary
+constant-power-sum dichotomy from `QICLean.Algebra.ConstantPowerSums`, which
 suffices for this specialization.
 
 ## References

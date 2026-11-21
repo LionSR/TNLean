@@ -59,8 +59,8 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
       (∀ (N : ℕ) (σ : Fin N → Fin d),
         mpv C σ = Matrix.trace (P * Kraus.evalWord A (List.ofFn σ))) ∧
       (∀ X : Matrix (Fin n) (Fin n) ℂ,
-        (φ (Kraus.transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X)).1 =
-          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
+        (φ (Kraus.transferMap (ι := Fin d) (n := Fin n) (fun i => (C i)ᴴ) X)).1 =
+          Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
       (∀ X Y : Matrix (Fin n) (Fin n) ℂ,
         (φ (X * Y)).1 = (φ X).1 * (φ Y).1) ∧
       (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) ∧

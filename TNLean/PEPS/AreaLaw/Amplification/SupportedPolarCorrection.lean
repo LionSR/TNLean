@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Amplification.GoodRealizationUnitary
 import TNLean.PEPS.Approximation.SheetSplitting
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Algebra.MatrixKroneckerContraction
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.Analysis.MatrixKroneckerContraction
 import QICLean.Entropy.MutualInformationPerturbation
 
 /-!

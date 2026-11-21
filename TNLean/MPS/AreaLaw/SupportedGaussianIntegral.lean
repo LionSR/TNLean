@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.RelativeGeneratorLocalization
 import QICLean.ManyBody.Dynamics.SupportedGaussianIntegral
-import TNLean.Algebra.ExpMulSubMonotone
+import QICLean.Analysis.ExplicitThresholds
 
 /-!
 # Supported Gaussian averaging

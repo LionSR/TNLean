@@ -104,7 +104,7 @@ private theorem ofFn_blockedFlatConfig (p : ℕ) {N : ℕ}
 theorem mpv_blockTensor_eq_mpv_blockedFlatConfig
     {D' : ℕ} (T : MPSTensor d D') (p : ℕ) {N : ℕ}
     (σ : Fin N → Fin (blockPhysDim d p)) :
-    mpv (blockTensor (d := d) (D := D') T p) σ =
+    mpv (blockTensor (d := d) (n := Fin D') T p) σ =
       mpv T (blockedFlatConfig (d := d) p σ) := by
   simp [mpv, coeff, ofFn_blockedFlatConfig (d := d) p σ,
     blockedFlatWord, evalWord_blockTensor]
@@ -123,28 +123,28 @@ theorem sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
     (hSame : SameMPV₂ A (toTensorFromBlocks μ blocks))
     (p : ℕ) :
     SameMPV₂
-      (blockTensor (d := d) (D := D) A p)
+      (blockTensor (d := d) (n := Fin D) A p)
       (toTensorFromBlocks (d := blockPhysDim d p)
-        (fun k => (μ k) ^ p) (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) := by
+        (fun k => (μ k) ^ p) (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) := by
   mpv_ext
   let σflat := blockedFlatConfig (d := d) p σ
   calc
-    mpv (blockTensor (d := d) (D := D) A p) σ
+    mpv (blockTensor (d := d) (n := Fin D) A p) σ
         = mpv A σflat := mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ
     _ = mpv (toTensorFromBlocks μ blocks) σflat := hSame (N * p) σflat
     _ = ∑ k : Fin r, (μ k) ^ (N * p) • mpv (blocks k) σflat :=
           mpv_toTensorFromBlocks_eq_sum μ blocks σflat
     _ = ∑ k : Fin r,
-          ((μ k) ^ p) ^ N • mpv (blockTensor (d := d) (D := dim k) (blocks k) p) σ := by
+          ((μ k) ^ p) ^ N • mpv (blockTensor (d := d) (n := Fin (dim k)) (blocks k) p) σ := by
           refine Finset.sum_congr rfl fun k _ => ?_
           have hpow : (μ k) ^ (N * p) = ((μ k) ^ p) ^ N := by
             rw [Nat.mul_comm, pow_mul]
           rw [hpow, (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) (blocks k) p σ).symm]
     _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
-          (fun k => (μ k) ^ p) (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ :=
+          (fun k => (μ k) ^ p) (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) σ :=
           (mpv_toTensorFromBlocks_eq_sum
             (fun k => (μ k) ^ p)
-            (fun k => blockTensor (d := d) (D := dim k) (blocks k) p) σ).symm
+            (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) p) σ).symm
 
 /-- Blocking the assembled weighted block tensor is MPV-equivalent to assembling the
 blocked blocks with powered weights. -/
@@ -153,11 +153,11 @@ theorem sameMPV₂_blockTensor_toTensorFromBlocks
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (p : ℕ) :
     SameMPV₂
-      (blockTensor (d := d) (D := ∑ k : Fin r, dim k)
+      (blockTensor (d := d) (n := Fin (∑ k : Fin r, dim k))
         (toTensorFromBlocks (d := d) (μ := μ) blocks) p)
       (toTensorFromBlocks (d := blockPhysDim d p)
         (fun k => (μ k) ^ p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) :=
+        (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) :=
   sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
     (d := d) (D := ∑ k : Fin r, dim k) (dim := dim)
     (A := toTensorFromBlocks (d := d) (μ := μ) blocks)
@@ -169,15 +169,15 @@ theorem sameMPV₂Pos_blockTensor
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (hSame : SameMPV₂Pos A B) (p : ℕ) (hp : 0 < p) :
     SameMPV₂Pos
-      (blockTensor (d := d) (D := D₁) A p)
-      (blockTensor (d := d) (D := D₂) B p) := by
+      (blockTensor (d := d) (n := Fin D₁) A p)
+      (blockTensor (d := d) (n := Fin D₂) B p) := by
   mpv_ext
   let σflat := blockedFlatConfig (d := d) p σ
   calc
-    mpv (blockTensor (d := d) (D := D₁) A p) σ
+    mpv (blockTensor (d := d) (n := Fin D₁) A p) σ
         = mpv A σflat := mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ
     _ = mpv B σflat := hSame (N * p) (Nat.mul_pos hN hp) σflat
-    _ = mpv (blockTensor (d := d) (D := D₂) B p) σ :=
+    _ = mpv (blockTensor (d := d) (n := Fin D₂) B p) σ :=
           (mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) B p σ).symm
 
 /-- Eventual nonzero MPV proportionality is preserved by positive physical blocking. -/
@@ -185,8 +185,8 @@ theorem EventuallyNonzeroProportionalMPV₂.blockTensor
     {D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (h : EventuallyNonzeroProportionalMPV₂ A B) (p : ℕ) (hp : 0 < p) :
     EventuallyNonzeroProportionalMPV₂
-      (blockTensor (d := d) (D := D₁) A p)
-      (blockTensor (d := d) (D := D₂) B p) := by
+      (blockTensor (d := d) (n := Fin D₁) A p)
+      (blockTensor (d := d) (n := Fin D₂) B p) := by
   unfold EventuallyNonzeroProportionalMPV₂ at h ⊢
   rw [Filter.eventually_atTop] at h ⊢
   rcases h with ⟨N₀, hN₀⟩
@@ -195,11 +195,11 @@ theorem EventuallyNonzeroProportionalMPV₂.blockTensor
   rcases hN₀ (N * p) (hN.trans hNle) with ⟨c, hc, hEq⟩
   refine ⟨c, hc, fun σ => ?_⟩
   calc
-    mpv (Kraus.blockTensor (d := d) (D := D₁) A p) σ =
+    mpv (Kraus.blockTensor (d := d) (n := Fin D₁) A p) σ =
         mpv A (blockedFlatConfig (d := d) p σ) :=
       mpv_blockTensor_eq_mpv_blockedFlatConfig (d := d) A p σ
     _ = c * mpv B (blockedFlatConfig (d := d) p σ) := hEq _
-    _ = c * mpv (Kraus.blockTensor (d := d) (D := D₂) B p) σ := by
+    _ = c * mpv (Kraus.blockTensor (d := d) (n := Fin D₂) B p) σ := by
       rw [mpv_blockTensor_eq_mpv_blockedFlatConfig]
 
 /-- Positive-length equality with a weighted nonzero-block tensor is preserved by
@@ -211,13 +211,13 @@ theorem sameMPV₂Pos_blockTensor_toTensorFromBlocks
     (hSame : SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks))
     (p : ℕ) (hp : 0 < p) :
     SameMPV₂Pos
-      (blockTensor (d := d) (D := D) A p)
+      (blockTensor (d := d) (n := Fin D) A p)
       (toTensorFromBlocks (d := blockPhysDim d p)
         (fun k => (μ k) ^ p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) := by
+        (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) := by
   have hBlock : SameMPV₂Pos
-      (blockTensor (d := d) (D := D) A p)
-      (blockTensor (d := d) (D := ∑ k : Fin r, dim k)
+      (blockTensor (d := d) (n := Fin D) A p)
+      (blockTensor (d := d) (n := Fin (∑ k : Fin r, dim k))
         (toTensorFromBlocks (d := d) (μ := μ) blocks) p) :=
     sameMPV₂Pos_blockTensor
       (d := d) A (toTensorFromBlocks (d := d) (μ := μ) blocks) hSame p hp
@@ -225,12 +225,12 @@ theorem sameMPV₂Pos_blockTensor_toTensorFromBlocks
     (d := d) (dim := dim) μ blocks p
   mpv_ext
   calc
-    mpv (blockTensor (d := d) (D := D) A p) σ =
-        mpv (blockTensor (d := d) (D := ∑ k : Fin r, dim k)
+    mpv (blockTensor (d := d) (n := Fin D) A p) σ =
+        mpv (blockTensor (d := d) (n := Fin (∑ k : Fin r, dim k))
           (toTensorFromBlocks (d := d) (μ := μ) blocks) p) σ := hBlock N hN σ
     _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
         (fun k => (μ k) ^ p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) p)) σ := hCanon N σ
+        (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) σ := hCanon N σ
 
 /-- Positive-length equality of weighted nonzero-block tensors is preserved after
 positive common blocking, with each weight transported to the corresponding power. -/
@@ -245,18 +245,18 @@ theorem sameMPV₂Pos_toTensorFromBlocks_blockPower
     SameMPV₂Pos
       (toTensorFromBlocks (d := blockPhysDim d p)
         (fun k => (μA k) ^ p)
-        (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p))
+        (fun k => blockTensor (d := d) (n := Fin (dimA k)) (blocksA k) p))
       (toTensorFromBlocks (d := blockPhysDim d p)
         (fun k => (μB k) ^ p)
-        (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) := by
+        (fun k => blockTensor (d := d) (n := Fin (dimB k)) (blocksB k) p)) := by
   have hA := sameMPV₂_blockTensor_toTensorFromBlocks
     (d := d) (dim := dimA) μA blocksA p
   have hB := sameMPV₂_blockTensor_toTensorFromBlocks
     (d := d) (dim := dimB) μB blocksB p
   have hBlock : SameMPV₂Pos
-      (blockTensor (d := d) (D := ∑ k : Fin rA, dimA k)
+      (blockTensor (d := d) (n := Fin (∑ k : Fin rA, dimA k))
         (toTensorFromBlocks (d := d) (μ := μA) blocksA) p)
-      (blockTensor (d := d) (D := ∑ k : Fin rB, dimB k)
+      (blockTensor (d := d) (n := Fin (∑ k : Fin rB, dimB k))
         (toTensorFromBlocks (d := d) (μ := μB) blocksB) p) :=
     sameMPV₂Pos_blockTensor
       (d := d)
@@ -266,14 +266,14 @@ theorem sameMPV₂Pos_toTensorFromBlocks_blockPower
   calc
     mpv (toTensorFromBlocks (d := blockPhysDim d p)
         (fun k => (μA k) ^ p)
-        (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p)) σ
-        = mpv (blockTensor (d := d) (D := ∑ k : Fin rA, dimA k)
+        (fun k => blockTensor (d := d) (n := Fin (dimA k)) (blocksA k) p)) σ
+        = mpv (blockTensor (d := d) (n := Fin (∑ k : Fin rA, dimA k))
             (toTensorFromBlocks (d := d) (μ := μA) blocksA) p) σ := (hA N σ).symm
-    _ = mpv (blockTensor (d := d) (D := ∑ k : Fin rB, dimB k)
+    _ = mpv (blockTensor (d := d) (n := Fin (∑ k : Fin rB, dimB k))
             (toTensorFromBlocks (d := d) (μ := μB) blocksB) p) σ := hBlock N hN σ
     _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
         (fun k => (μB k) ^ p)
-        (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) σ := hB N σ
+        (fun k => blockTensor (d := d) (n := Fin (dimB k)) (blocksB k) p)) σ := hB N σ
 
 end SameMPV₂Blocking
 
@@ -466,10 +466,10 @@ theorem wordOfBlock_cast_length (d : ℕ) {L₁ L₂ : ℕ} (h : L₁ = L₂)
 index relabeling from iterated blocks to flattened blocks. -/
 theorem blockTensor_blockTensor_apply {D : ℕ} (A : MPSTensor d D) (m n : ℕ)
     (i : Fin (blockPhysDim (blockPhysDim d m) n)) :
-    blockTensor (d := blockPhysDim d m) (D := D)
-        (blockTensor (d := d) (D := D) A m) n i =
-      blockTensor (d := d) (D := D) A (m * n) (iteratedBlockIndex d m n i) := by
-  change Kraus.evalWord (Kraus.blockTensor (d := d) (D := D) A m)
+    blockTensor (d := blockPhysDim d m) (n := Fin D)
+        (blockTensor (d := d) (n := Fin D) A m) n i =
+      blockTensor (d := d) (n := Fin D) A (m * n) (iteratedBlockIndex d m n i) := by
+  change Kraus.evalWord (Kraus.blockTensor (d := d) (n := Fin D) A m)
       (Kraus.wordOfBlock (Kraus.blockPhysDim d m) n i) =
     Kraus.evalWord A
       (Kraus.wordOfBlock d (m * n) (iteratedBlockIndex d m n i))
@@ -479,10 +479,10 @@ theorem blockTensor_blockTensor_apply {D : ℕ} (A : MPSTensor d D) (m n : ℕ)
 
 /-- Tensor form of iterated blocking versus direct blocking with physical relabeling. -/
 theorem blockTensor_blockTensor_eq_reindex {D : ℕ} (A : MPSTensor d D) (m n : ℕ) :
-    blockTensor (d := blockPhysDim d m) (D := D)
-        (blockTensor (d := d) (D := D) A m) n =
+    blockTensor (d := blockPhysDim d m) (n := Fin D)
+        (blockTensor (d := d) (n := Fin D) A m) n =
       Kraus.reindexPhysical (iteratedBlockIndex d m n)
-        (blockTensor (d := d) (D := D) A (m * n)) := by
+        (blockTensor (d := d) (n := Fin D) A (m * n)) := by
   funext i
   exact blockTensor_blockTensor_apply (d := d) A m n i
 
@@ -491,10 +491,10 @@ the natural relabeling of physical indices. -/
 theorem sameMPV₂_blockTensor_blockTensor_mul_reindex {D : ℕ}
     (A : MPSTensor d D) (m n : ℕ) :
     SameMPV₂
-      (blockTensor (d := blockPhysDim d m) (D := D)
-        (blockTensor (d := d) (D := D) A m) n)
+      (blockTensor (d := blockPhysDim d m) (n := Fin D)
+        (blockTensor (d := d) (n := Fin D) A m) n)
       (Kraus.reindexPhysical (iteratedBlockIndex d m n)
-        (blockTensor (d := d) (D := D) A (m * n))) := by
+        (blockTensor (d := d) (n := Fin D) A (m * n))) := by
   rw [blockTensor_blockTensor_eq_reindex]
   mpv_ext
   rfl
@@ -508,18 +508,18 @@ and direct blocking without an additional coordinate-grouping hypothesis. -/
 theorem reindexPhysical_directToIteratedBlockIndex_blockTensor {D : ℕ}
     (A : MPSTensor d D) (m n : ℕ) :
     Kraus.reindexPhysical (directToIteratedBlockIndex d m n)
-      (blockTensor (d := blockPhysDim d m) (D := D)
-        (blockTensor (d := d) (D := D) A m) n) =
-    blockTensor (d := d) (D := D) A (m * n) := by
+      (blockTensor (d := blockPhysDim d m) (n := Fin D)
+        (blockTensor (d := d) (n := Fin D) A m) n) =
+    blockTensor (d := d) (n := Fin D) A (m * n) := by
   calc
     Kraus.reindexPhysical (directToIteratedBlockIndex d m n)
-        (blockTensor (d := blockPhysDim d m) (D := D)
-          (blockTensor (d := d) (D := D) A m) n) =
+        (blockTensor (d := blockPhysDim d m) (n := Fin D)
+          (blockTensor (d := d) (n := Fin D) A m) n) =
       Kraus.reindexPhysical (directToIteratedBlockIndex d m n)
         (Kraus.reindexPhysical (iteratedBlockIndex d m n)
-          (blockTensor (d := d) (D := D) A (m * n))) := by
+          (blockTensor (d := d) (n := Fin D) A (m * n))) := by
       rw [blockTensor_blockTensor_eq_reindex A m n]
-    _ = blockTensor (d := d) (D := D) A (m * n) := by
+    _ = blockTensor (d := d) (n := Fin D) A (m * n) := by
       ext i
       simp [Kraus.reindexPhysical, iteratedBlockIndex_directToIteratedBlockIndex d m n]
 
@@ -534,7 +534,7 @@ noncomputable def flattenedIteratedBlockTensor
     (A : MPSTensor (blockPhysDim d p) D) (L : ℕ) :
     MPSTensor (blockPhysDim d (p * L)) D :=
   Kraus.reindexPhysical (directToIteratedBlockIndex d p L)
-    (blockTensor (d := blockPhysDim d p) (D := D) A L)
+    (blockTensor (d := blockPhysDim d p) (n := Fin D) A L)
 
 /-- Flattened iterated blocking of an already `p`-blocked tensor agrees with direct blocking by
 `p * L` of the original tensor. -/
@@ -542,8 +542,8 @@ theorem flattenedIteratedBlockTensor_blockTensor
     {d D : ℕ} (A : MPSTensor d D) (p L : ℕ) :
     flattenedIteratedBlockTensor
         (d := d) (p := p) (D := D)
-        (blockTensor (d := d) (D := D) A p) L =
-      blockTensor (d := d) (D := D) A (p * L) :=
+        (blockTensor (d := d) (n := Fin D) A p) L =
+      blockTensor (d := d) (n := Fin D) A (p * L) :=
   reindexPhysical_directToIteratedBlockIndex_blockTensor (d := d) A p L
 
 /-- Assembling flattened iterated blocks is the physical reindexing of assembling the
@@ -557,7 +557,7 @@ theorem toTensorFromBlocks_flattenedIteratedBlockTensor
           (d := d) (p := p) (D := dim k) (blocks k) L) =
       Kraus.reindexPhysical (directToIteratedBlockIndex d p L)
         (toTensorFromBlocks (d := blockPhysDim (blockPhysDim d p) L) (μ := μ)
-          (fun k => blockTensor (d := blockPhysDim d p) (D := dim k) (blocks k) L)) := by
+          (fun k => blockTensor (d := blockPhysDim d p) (n := Fin (dim k)) (blocks k) L)) := by
   funext i
   rfl
 
@@ -632,9 +632,9 @@ theorem leftCanonical_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
 theorem isPrimitive_transferMap_cast_physDim {d₁ d₂ D : ℕ} (h : d₁ = d₂)
     (A : MPSTensor d₁ D) :
     _root_.IsPrimitive
-        (Kraus.transferMap (d := d₂) (D := D)
+        (Kraus.transferMap (ι := Fin d₂) (n := Fin D)
           (cast (congr_arg (fun d' => MPSTensor d' D) h) A)) ↔
-      _root_.IsPrimitive (Kraus.transferMap (d := d₁) (D := D) A) := by
+      _root_.IsPrimitive (Kraus.transferMap (ι := Fin d₁) (n := Fin D) A) := by
   subst h
   rfl
 
@@ -697,9 +697,9 @@ theorem isPrimitive_transferMap_blockTensor_of_dvd
     [NeZero D]
     (A : MPSTensor d D) (p q : ℕ) (hpq : p ∣ q) (hq : 0 < q)
     (hPrim : _root_.IsPrimitive
-      (Kraus.transferMap (d := blockPhysDim d p) (D := D) (blockTensor (d := d) (D := D) A p))) :
+      (Kraus.transferMap (blockTensor (d := d) (n := Fin D) A p))) :
     _root_.IsPrimitive
-      (Kraus.transferMap (d := blockPhysDim d q) (D := D) (blockTensor (d := d) (D := D) A q)) := by
+      (Kraus.transferMap (blockTensor (d := d) (n := Fin D) A q)) := by
   obtain ⟨m, rfl⟩ := hpq
   -- p > 0 since p * m > 0
   have hp : 0 < p := by
@@ -754,19 +754,19 @@ theorem exists_common_blocking_all_primitive
     (hDim : ∀ k, 0 < dim k)
     (hPer : ∀ k, ∃ p, 0 < p ∧
       _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d p) (D := dim k)
-          (blockTensor (d := d) (D := dim k) (blocks k) p))) :
+        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k))
+          (blockTensor (d := d) (n := Fin (dim k)) (blocks k) p))) :
     ∃ p, 0 < p ∧ ∀ k,
       _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d p) (D := dim k)
-          (blockTensor (d := d) (D := dim k) (blocks k) p)) := by
+        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k))
+          (blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) := by
   classical
   -- Choose a period for each block.
   let pk : Fin r → ℕ := fun k => (hPer k).choose
   have pk_pos : ∀ k, 0 < pk k := fun k => (hPer k).choose_spec.1
   have pk_prim : ∀ k, _root_.IsPrimitive
-      (Kraus.transferMap (d := blockPhysDim d (pk k)) (D := dim k)
-        (blockTensor (d := d) (D := dim k) (blocks k) (pk k))) :=
+      (Kraus.transferMap (ι := Fin (blockPhysDim d (pk k))) (n := Fin (dim k))
+        (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (pk k))) :=
     fun k => (hPer k).choose_spec.2
   -- Take the LCM of all periods.
   let P := lcmPeriod pk
@@ -788,12 +788,12 @@ theorem exists_common_blocking_all_primitive_of_TP_irr
     (hDim : ∀ k, 0 < dim k) :
     ∃ p, 0 < p ∧ ∀ k,
       _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d p) (D := dim k)
-          (blockTensor (d := d) (D := dim k) (blocks k) p)) := by
+        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k))
+          (blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) := by
   have hPer : ∀ k, ∃ p, 0 < p ∧
       _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d p) (D := dim k)
-          (blockTensor (d := d) (D := dim k) (blocks k) p)) := by
+        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k))
+          (blockTensor (d := d) (n := Fin (dim k)) (blocks k) p)) := by
     intro k
     have : NeZero (dim k) := ⟨Nat.ne_of_gt (hDim k)⟩
     exact exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor

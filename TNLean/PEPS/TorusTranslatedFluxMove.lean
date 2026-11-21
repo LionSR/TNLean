@@ -7,7 +7,7 @@ import TNLean.PEPS.TranslatedTwoPlaquetteGeometry
 import TNLean.PEPS.RegularTwoCycleGlobalFluxMove
 import TNLean.PEPS.RegularTorusEntropy
 import TNLean.PEPS.TorusPlaquetteFluxMeasurement
-import TNLean.Algebra.ZModSmallDifference
+import QICLean.Algebra.ZModIntCast
 
 /-!
 # A six-spin flux movement at every torus position

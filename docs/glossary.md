@@ -630,7 +630,7 @@ out.
 
 - **Declaration:** `Representation.IsSemiRegular (ρ : Representation ℂ G V) : Prop`,
   for `G : Type u`.
-- **Defined in:** `TNLean/Algebra/RepresentationDelta.lean`.
+- **Defined in:** `QICLean/Representation/Character/Delta.lean`.
 - **Meaning:** every finite-dimensional irreducible complex representation of
   `G` on a type in the universe of `G` admits a nonzero intertwining map into
   `ρ`.
@@ -1415,10 +1415,10 @@ The following notions use different transfer objects and are not interchangeable
 
 ## State-level gauging
 
-### `TNLean.Algebra.DefectMaps.IsCompletion`
+### `GaussLaw.DefectMaps.IsCompletion`
 
-- **Declaration:** `TNLean.Algebra.DefectMaps.IsCompletion D R : Prop`.
-- **Defined in:** `TNLean/Algebra/UnitaryCompletionClass.lean`.
+- **Declaration:** `GaussLaw.DefectMaps.IsCompletion D R : Prop`.
+- **Defined in:** `QICLean/Representation/UnitaryCompletionClass.lean`.
 - **Meaning:** the whole family of unitaries $R=(U_{a,b})_{a,b\in G}$ agrees
   with the prescribed defect maps $D_{a,b}$ on every defect subspace
   $\mathcal K_{a,b}$.
@@ -1821,7 +1821,7 @@ in `MPS/Preparation/` uses it.
   `IsGraphSeparated.disjoint_graphNeighborhood`,
   `isGraphSeparated_cycleGraph_of_val_bounds` (two windows of consecutive sites
   with gaps of at least `s` on both sides of the ring), and, for nonempty sets,
-  `MPSPreparation.isGraphSeparated_iff_lt_ringSupportDistance`.
+  `ManyBody.isGraphSeparated_iff_lt_ringSupportDistance`.
 - **Caveat:** the inequality is strict, so separation by `2T` excludes sets at
   ring distance exactly `2T`, whose light cones of radius `T` share a site.
 
@@ -1908,7 +1908,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.AgreeOff {ι κ : Type*} (e : κ → ι) (x y : ι → Fin d) : Prop`.
-- **Defined in:** `TNLean/Circuit/SiteEmbedding.lean`.
+- **Defined in:** `QICLean/ManyBody/Sites/PlacedConfiguration.lean`.
 - **Meaning:** the configurations `x` and `y` of the sites `ι` agree at every
   site outside the range of `e`; for chains, `e : Fin m → Fin n`.
 - **Source:** no separate source notion; it is the condition in the entries of
@@ -1964,7 +1964,7 @@ in `MPS/Preparation/` uses it.
 
 - **Declaration:**
   `QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth (f : ℕ → ℝ) (φ : (N : ℕ) → EuclideanSpace ℂ (Fin N → Fin d)) : Prop`.
-- **Defined in:** `TNLean/Circuit/Measurement/Asymptotic.lean`.
+- **Defined in:** `QICLean/Circuit/Model/AsymptoticPreparation.lean`.
 - **Meaning:** there are unit vectors `ψ_N`, each converted for all large `N`
   from a product vector by `QuantumCircuit.IsOneRoundConversion (Geometry.ring N) T₁ T₂`
   with `T₁ + T₂ ≤ T` for some `T ≤ f N`, with
@@ -1975,7 +1975,7 @@ in `MPS/Preparation/` uses it.
 - **Sanctioned bridges:**
   `QuantumCircuit.isAsymptoticallyPreparedWithMeasurementsInDepth_of_one_sub_norm_inner_le`
   (overlap errors `1 - |⟨ψ_N|φ_N⟩|` tending to zero give trace-norm
-  convergence, via `Matrix.traceNormPureSub_le`) and
+  convergence, via `Matrix.rectangularTraceNorm_vecMulVec_sub_le`) and
   `MPSPreparation.isAsymptoticallyPreparedWithMeasurementsInDepth_normalizedMPVState`
   (the normalized periodic states of a translation-invariant MPS in depth
   `C log N`).
@@ -2199,7 +2199,7 @@ operators on the configurations. The scope of the local channel model relative t
   interaction budget), and
   `ManyBody.heisenberg_commutator_eq_zero_of_edist_eq_top` (exact
   vanishing between connected components). The finite-ring estimate
-  `MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint` is a
+  `ManyBody.norm_heisenberg_commutator_le_ringSupportDistance` is a
   nearest-neighbor ring consumer of the same recursion.
 - **Caveat:** the graph theorems take the per-support size bound and the
   per-site norm budget as hypotheses. On a finite induced square-lattice domain
@@ -2493,11 +2493,11 @@ lift, for correctness, the honest-oracle restriction recorded in
 
 ## Scalar L-symbols of group matrix product operators
 
-### `TNLean.Algebra.LSymbol.ActionGaugeEquiv`
+### `LSymbol.ActionGaugeEquiv`
 
 - **Declaration:** `LSymbol.ActionGaugeEquiv L₁ L₂`, for scalar L-symbols of a
   group `G` acting on a set `X`.
-- **Defined in:** `TNLean/Algebra/StabilizerCocycleReconstruction.lean`.
+- **Defined in:** `QICLean/Algebra/Cohomology/StabilizerCocycleReconstruction.lean`.
 - **Meaning:** `L₁ = LSymbol.gauge 1 γ L₂` for some action-tensor gauge
   `γ : G → X → ℂˣ`, that is,
   $L_1{}^x_{g,h}=\gamma^x_{gh}(\gamma^{hx}_g\gamma^x_h)^{-1}L_2{}^x_{g,h}$
@@ -2518,7 +2518,7 @@ lift, for correctness, the honest-oracle restriction recorded in
   relation. Allowing fusion gauges that preserve `ω` gives a coarser relation,
   under which the classes collapse to the quotient of `H²(H, ℂˣ)` by the
   restriction of `H²(G, ℂˣ)`; that coarser relation is not formalized. See
-  `docs/paper-gaps/glm23_eq20_fusion_gauge.tex`.
+  <https://sirui-lu.com/QICLean/paper-gaps/glm23_eq20_fusion_gauge.pdf>.
 
 ### `MPSTensor.IsOnSiteSymmetricUpToPhase`
 
@@ -3026,7 +3026,7 @@ involve no boundary.
   derives endpoint cohomology for a continuous one-site injective tensor path
   of fixed positive bond dimension and exact symmetry, without a supplied
   virtual path or a finiteness assumption on the group.
-  `TNLean.Algebra.ProjectiveRepresentation.exists_unitary_compression`
+  `ProjectiveRepresentation.exists_unitary_compression`
   preserves the factor system on a supplied invariant nonzero bond subspace.
   `MPSTensor.ExactMPSGroundPath.exists_rephasing_endpoint_cohomology_of_isInjective`
   proves the physical converse when the continuous ambient tensors are all

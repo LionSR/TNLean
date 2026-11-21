@@ -9,7 +9,7 @@ import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.Endpoints
 import TNLean.MPS.Preparation.IsometricChain
-import TNLean.Algebra.FinsetNormSumCauchySchwarz
+import QICLean.Algebra.FiniteCauchySchwarz
 import QICLean.Analysis.TraceNormContractivity
 import QICLean.Analysis.TraceNormNet
 import QICLean.Analysis.RectangularTraceNormTopology

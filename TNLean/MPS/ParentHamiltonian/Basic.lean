@@ -107,7 +107,7 @@ theorem localTerm_idempotent (A : MPSTensor d D) (L N : ℕ) (i : Fin N) :
       parentInteraction A L f (extractWindow L i σ)
     exact congr_fun (LinearMap.congr_fun (parentInteraction_idempotent A L) f)
       (extractWindow L i σ)
-  · simp [localTerm, hLN]
+  · simp [localTerm_of_not_le A hLN]
 
 /-! ### Parent interaction kills ground space elements -/
 

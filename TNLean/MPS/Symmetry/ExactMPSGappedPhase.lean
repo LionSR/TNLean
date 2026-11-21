@@ -94,14 +94,14 @@ structure ExactMPSGroundPath {G : Type} [Group G] {d : ℕ}
   exactly the MPS line. No exact symmetry of the tensor is assumed.
   Source: Section II.F.2, lines 930–954. -/
   ground_line : ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) (hN : 2 ≤ N),
-    ∃ E : ℝ,
+    haveI : NeZero N := ⟨by omega⟩; ∃ E : ℝ,
       (E : ℂ) ∈
-          spectrum ℂ (ManyBody.Interaction.translationInvariant hN (P.interaction γ)).hamiltonian ∧
+          spectrum ℂ (ManyBody.Interaction.translationInvariant N (P.interaction γ)).hamiltonian ∧
       (∀ z ∈ spectrum ℂ
-          (ManyBody.Interaction.translationInvariant hN (P.interaction γ)).hamiltonian,
+          (ManyBody.Interaction.translationInvariant N (P.interaction γ)).hamiltonian,
         E ≤ z.re) ∧
       LinearMap.ker (Matrix.toEuclideanLin
-        ((ManyBody.Interaction.translationInvariant hN (P.interaction γ)).hamiltonian -
+        ((ManyBody.Interaction.translationInvariant N (P.interaction γ)).hamiltonian -
           (E : ℂ) • 1)) =
         Submodule.span ℂ
           {(WithLp.linearEquiv 2 ℂ ((Fin N → Fin d) → ℂ)).symm (mpv (tensor γ))}

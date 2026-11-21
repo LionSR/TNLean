@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Kraus.Wielandt.SpanGrowth.InvertibleWordSpan
 import TNLean.Wielandt.Primitivity.Definitions
 import Mathlib.LinearAlgebra.Dimension.Finrank
+import TNLean.MPS.Tensor
 
 /-!
 # Invertible-element word span growth for MPS tensors

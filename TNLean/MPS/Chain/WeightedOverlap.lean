@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Chain.BlockTensor
-import TNLean.Algebra.FinKronecker
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FiniteKroneckerProduct
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Weighted overlaps of two site-dependent matrix product chains

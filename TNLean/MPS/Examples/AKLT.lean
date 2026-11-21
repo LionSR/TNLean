@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Examples.ZMod2
-import TNLean.Algebra.CocycleCohomology
+import QICLean.Algebra.Cohomology.CocycleCohomology
 import QICLean.Algebra.ComplexSqrt
 
 /-!
@@ -39,7 +39,7 @@ and proves its key properties.
 * RMP review (arXiv:2011.12127) Section III.A
 -/
 
-open scoped Matrix BigOperators TNLean.Algebra.ScalarCohomology
+open scoped Matrix BigOperators ScalarCohomology
 open Matrix Finset MPSTensor
 
 noncomputable section
@@ -215,9 +215,10 @@ def akltZ2Action :
     else !![(-1 : ℂ), 0, 0; 0, 0, 1; 0, 1, 0]
   map_one' := by simp [toAdd_one]
   map_mul' a b := by
-    rcases zmod2_cases a with rfl | rfl <;> rcases zmod2_cases b with rfl | rfl <;>
+    rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
+      rcases Multiplicative.zmod2_cases b with rfl | rfl <;>
       simp only [one_mul, mul_one, toAdd_one, toAdd_ofAdd, toAdd_mul,
-        zmod2_one_add_one, one_ne_zero, ↓reduceIte]
+        ZMod.zmod2_one_add_one, one_ne_zero, ↓reduceIte]
     ext i j; fin_cases i <;> fin_cases j <;>
       simp [Matrix.mul_apply, Fin.sum_univ_three, Matrix.of_apply,
         Matrix.cons_val_zero, Matrix.cons_val_one]
@@ -276,7 +277,7 @@ private lemma aklt_gaugeEquiv_twisted :
 theorem aklt_isOnSiteSymmetric_Z2 :
     IsOnSiteSymmetric akltTensor akltZ2Action := by
   intro g
-  rcases zmod2_cases g with rfl | rfl
+  rcases Multiplicative.zmod2_cases g with rfl | rfl
   · rw [twistedTensor_one]; exact fun _ _ => rfl
   · exact aklt_gaugeEquiv_twisted.sameMPV
 
@@ -329,23 +330,23 @@ private lemma akltPhysP2_conjTranspose : akltPhysP2ᴴ = akltPhysP2 := by
 generators act by two commuting spin-1 `π`-rotations about orthogonal axes. -/
 def akltZ2Z2Action :
     Multiplicative (ZMod 2 × ZMod 2) →* Matrix (Fin 3) (Fin 3) ℂ :=
-  ofCommutingInvolutions akltPhysP1 akltPhysP2
+  Matrix.ofCommutingInvolutions akltPhysP1 akltPhysP2
     akltPhysP1_sq akltPhysP2_sq akltPhysP1P2_comm
 
 @[simp] private lemma akltZ2Z2Action_10 :
     akltZ2Z2Action (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) = akltPhysP1 :=
-  ofCommutingInvolutions_ofAdd_10 akltPhysP1 akltPhysP2
+  Matrix.ofCommutingInvolutions_ofAdd_10 akltPhysP1 akltPhysP2
     akltPhysP1_sq akltPhysP2_sq akltPhysP1P2_comm
 
 @[simp] private lemma akltZ2Z2Action_01 :
     akltZ2Z2Action (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) = akltPhysP2 :=
-  ofCommutingInvolutions_ofAdd_01 akltPhysP1 akltPhysP2
+  Matrix.ofCommutingInvolutions_ofAdd_01 akltPhysP1 akltPhysP2
     akltPhysP1_sq akltPhysP2_sq akltPhysP1P2_comm
 
 @[simp] private lemma akltZ2Z2Action_11 :
     akltZ2Z2Action (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) =
       akltPhysP1 * akltPhysP2 :=
-  ofCommutingInvolutions_ofAdd_11 akltPhysP1 akltPhysP2
+  Matrix.ofCommutingInvolutions_ofAdd_11 akltPhysP1 akltPhysP2
     akltPhysP1_sq akltPhysP2_sq akltPhysP1P2_comm
 
 /-! #### Virtual gauges `σz` and `iσy σz` -/
@@ -472,7 +473,7 @@ discussed in `docs/paper-gaps/rmp_aklt_continuous_rotation_gap.tex`. -/
 theorem aklt_isOnSiteSymmetric_Z2Z2 :
     IsOnSiteSymmetric akltTensor akltZ2Z2Action := by
   intro g
-  rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
+  rcases Multiplicative.zmod2sq_cases g with rfl | rfl | rfl | rfl
   · rw [twistedTensor_one]; exact fun _ _ => rfl
   · exact GaugeEquiv.sameMPV ⟨akltGaugeGL, aklt_twist_P1⟩
   · exact GaugeEquiv.sameMPV ⟨akltGaugeZ, aklt_twist_P2⟩
@@ -483,7 +484,7 @@ generators act by real symmetric involutive matrices, so each group element equa
 its own adjoint inverse. -/
 theorem aklt_isUnitary_Z2Z2 (g : Multiplicative (ZMod 2 × ZMod 2)) :
     akltZ2Z2Action g * (akltZ2Z2Action g)ᴴ = 1 := by
-  exact ofCommutingInvolutions_mul_conjTranspose akltPhysP1 akltPhysP2
+  exact Matrix.ofCommutingInvolutions_mul_conjTranspose akltPhysP1 akltPhysP2
     akltPhysP1_sq akltPhysP2_sq akltPhysP1P2_comm
     (by rw [akltPhysP1_conjTranspose, akltPhysP1_sq])
     (by rw [akltPhysP2_conjTranspose, akltPhysP2_sq]) g
@@ -498,7 +499,6 @@ the extra diagonal term over the cluster case reflects `(iσy)² = -I`.  Its
 commutator phase on the two generators is `-1`, so the commutator-phase test
 shows its class is the non-trivial element of `H²(Z₂ × Z₂, ℂˣ) = Z₂`. -/
 
-open TNLean.Algebra in
 /-- The AKLT factor system on `Z₂ × Z₂`: `ω(g, h) = (-1)^{(g₁ + g₂) h₁}`, the
 value `-1` when `g₁ + g₂ = 1` and `h₁ = 1`, and `1` otherwise. -/
 def akltOmega : ScalarCocycle (Multiplicative (ZMod 2 × ZMod 2)) :=
@@ -518,7 +518,6 @@ private lemma akltOmega_apply_val (g h : Multiplicative (ZMod 2 × ZMod 2)) :
           (Multiplicative.toAdd h).1 = 1 then -1 else 1 := by
   rw [akltOmega]; split <;> simp
 
-open TNLean.Algebra in
 /-- The explicit `Z₂ × Z₂` projective representation on the bond space carrying
 `akltOmega`.  The two generators act by the anticommuting gauges `iσy` and `σz`;
 the third nontrivial element acts by their product `iσy σz`. -/
@@ -537,7 +536,7 @@ def akltProjRep : ProjectiveRepresentation (D := 2) akltOmega where
           if p then 1 else !![(1 : ℂ), 0; 0, -1] := by
       split <;> simp
     simp only [akltRepX, Units.val_mul, hY, hZ]
-    exact mul_of_anticommuting_neg_involution _ _
+    exact Matrix.mul_of_anticommuting_neg_involution _ _
       akltGaugeMat_sq akltGaugeZ_sq aklt_gauge_anticomm' g h
 
 /-- The virtual action `akltProjRep` implements the on-site symmetry of the
@@ -555,7 +554,7 @@ theorem akltTensor_twist_intertwine (g : Multiplicative (ZMod 2 × ZMod 2)) (i :
     ext a b
     simp only [Units.val_mul, akltGaugeGL_val, akltGaugeZ_val, akltGaugeYZ_val, akltGaugeMat]
     fin_cases a <;> fin_cases b <;> simp [Matrix.mul_apply, Fin.sum_univ_two]
-  rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
+  rcases Multiplicative.zmod2sq_cases g with rfl | rfl | rfl | rfl
   · simp [akltProjRep, akltRepX, twistedTensor_one]
   · simpa [akltProjRep, akltRepX] using key _ (aklt_twist_P1 i)
   · simpa [akltProjRep, akltRepX] using key _ (aklt_twist_P2 i)
@@ -570,14 +569,12 @@ theorem akltProjRep_generators_anticomm :
         akltProjRep.X (Multiplicative.ofAdd (1, 0))) := by
   simp [akltProjRep, akltRepX, akltGaugeMat]
 
-open TNLean.Algebra in
 /-- `akltOmega` is a genuine `2`-cocycle: it is the factor system of the
 projective representation `akltProjRep`, so its class lives in
 `H²(Z₂ × Z₂, ℂˣ)`. -/
 lemma akltOmega_isCocycle : groupCohomology.IsMulCocycle₂ akltOmega :=
   ScalarCocycle.isMulCocycle₂_of_projRep akltProjRep (by norm_num)
 
-open TNLean.Algebra in
 /-- The commutator phase of `akltOmega` on the two generators is `-1`. -/
 lemma aklt_commPhase_eq_neg_one :
     ScalarCocycle.commPhase akltOmega
@@ -586,7 +583,6 @@ lemma aklt_commPhase_eq_neg_one :
   apply Units.ext
   norm_num
 
-open TNLean.Algebra in
 /-- The AKLT factor system represents the non-trivial element of
 `H²(Z₂ × Z₂, ℂˣ) = Z₂`: the AKLT state is a non-trivial SPT phase. -/
 theorem aklt_isNontrivialSPT :

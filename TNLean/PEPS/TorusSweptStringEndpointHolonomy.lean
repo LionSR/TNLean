@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.TorusSweptStringDeformation
 import TNLean.PEPS.TorusSweptPatchEndpointGeometry
 import TNLean.PEPS.TorusPlaquetteFluxMeasurement
-import TNLean.Algebra.ZModSmallDifference
+import QICLean.Algebra.ZModIntCast
 
 /-!
 # Four actual endpoint holonomies of the swept string presentations

@@ -25,14 +25,14 @@ zero-correlation-length representative.\footnote{Source traceability:
 The earlier formalization handled linear on-site symmetries only.
 \leanid{MPSTensor.mixedTensorAction} now conjugates tensor letters for time
 reversal and transposes them for reflection. The ordered-product theorem
-\leanid{TNLean.Algebra.symmetryLetter_list_prod} and
+\leanid{SymmetryParity.symmetryLetter_list_prod} and
 \leanid{MPSTensor.mpv_mixedTensorAction} show that reflection reverses the
 actual finite-chain site order. Both effects are included simultaneously.
 
 The coefficient group is the existing unitary scalar group, literally
 $\mathrm U(1)$, with its conjugation action. The classes
-\leanid{TNLean.Algebra.parityUnitaryH1Class} and
-\leanid{TNLean.Algebra.parityUnitaryH2Class} use Mathlib's group cohomology;
+\leanid{ConjugateProjectiveRepresentation.parityUnitaryH1Class} and
+\leanid{ConjugateProjectiveRepresentation.parityUnitaryH2Class} use Mathlib's group cohomology;
 they are not a second hand-built quotient or a relabeling of all complex
 units. The equations are
 \begin{align}
@@ -45,7 +45,7 @@ virtual gauge through transposition, but does not conjugate a scalar phase.
 
 For finite $G$, the unitary regular matrices
 $L_g(x,y)=\omega(g,y)\delta_{x,gy}$ realize the chosen factor system exactly.
-\leanid{TNLean.Algebra.conjugateRegularUnitaryRepresentation} does not assume
+\leanid{ConjugateProjectiveRepresentation.conjugateRegularUnitaryRepresentation} does not assume
 that the cocycle representative is normalized. The cocycle equation itself
 gives $L_gC_{t(g)+r(g)}(L_h)=\omega(g,h)L_{gh}$.
 

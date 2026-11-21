@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ResidualWindowMixedGramDecay
 import TNLean.MPS.ParentHamiltonian.ResidualWindowRightSectorSum
-import TNLean.Algebra.SupportedRangeProjectorNorm
+import QICLean.Analysis.SupportedRangeProjector
 
 /-!
 # Supported cancellation for residual window projections
@@ -52,7 +52,7 @@ theorem residualWindow_supported_projector_factorization
     let T := residualWindowRightMapES A B V K M r
     let F := residualWindowLeftMapES B K M r
     let C := residualWindowMapES A B V K M r
-    let HT := EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) K)
+    let HT := ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
       (residualBoundaryGramInverse A B V ρ Q M r)
     let HL := boundaryFiberwiseMap (Cfg d r) (Ring.inverse (groundSpaceGram B (K + M)))
     T.range.starProjection.comp F.range.starProjection - C.range.starProjection =
@@ -64,27 +64,28 @@ theorem residualWindow_supported_projector_factorization
     (residualWindowMapES A B V K M r)
     (residualWindowRightVirtualMapES (d := d) (L := L) (D := D) B K)
     (correlatedTailMapES A V r)
-    (EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) K)
+    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
       (residualBoundaryGramInverse A B V ρ Q M r))
-    (EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) K) (rectangularRowProjection E Q))
+    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
+      (rectangularRowProjection E Q))
     (boundaryFiberwiseMap (Cfg d r) (Ring.inverse (groundSpaceGram B (K + M))))
     (ContinuousLinearMap.id ℂ (BoundaryFamilySpace (D := E) (Cfg d r)))
     (residualBoundaryGramInverse A B V ρ Q (K + M) r) (rectangularRowProjection E Q)
     ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_
-  · rw [EuclideanSpace.fiberwiseMap_adjoint, ← ContinuousLinearMap.star_eq_adjoint, hHM.star_eq]
-  · rw [EuclideanSpace.fiberwiseMap_adjoint, ← ContinuousLinearMap.star_eq_adjoint,
+  · rw [ContinuousLinearMap.rightFiberwiseMap_adjoint, ← ContinuousLinearMap.star_eq_adjoint,
+      hHM.star_eq]
+  · rw [ContinuousLinearMap.rightFiberwiseMap_adjoint, ← ContinuousLinearMap.star_eq_adjoint,
       (rectangularRowProjection_isStarProjection (E := E) hQ).isSelfAdjoint.star_eq]
-  · rw [residualWindowRightMapES_eq_fiberwise, EuclideanSpace.fiberwiseMap_comp,
-      ContinuousLinearMap.comp_assoc,
+  · rw [residualWindowRightMapES_eq_fiberwise, ContinuousLinearMap.comp_assoc,
+      ContinuousLinearMap.rightFiberwiseMap_comp, ContinuousLinearMap.comp_assoc,
       blockedResidualBoundaryMapES_comp_rowProjection A B V M r Q hQ hGram]
-  · rw [residualWindowRightMapES_adjoint_comp_self, EuclideanSpace.fiberwiseMap_comp, hGM]
+  · rw [residualWindowRightMapES_adjoint_comp_self, ContinuousLinearMap.rightFiberwiseMap_comp,
+      hGM]
   · exact ContinuousLinearMap.adjoint_id
   · exact ContinuousLinearMap.comp_id _
   · rw [residualWindowLeftMapES_adjoint_comp_self]
-    change (EuclideanSpace.fiberwiseMap (Cfg d r) (groundSpaceGram B (K + M))).comp
-      (EuclideanSpace.fiberwiseMap (Cfg d r) (Ring.inverse (groundSpaceGram B (K + M)))) = _
-    rw [EuclideanSpace.fiberwiseMap_comp, ← ContinuousLinearMap.mul_def,
-      Ring.mul_inverse_cancel _ hUnit, ContinuousLinearMap.one_def, EuclideanSpace.fiberwiseMap_id]
+    rw [boundaryFiberwiseMap_comp, ← ContinuousLinearMap.mul_def,
+      Ring.mul_inverse_cancel _ hUnit, ContinuousLinearMap.one_def, boundaryFiberwiseMap_id]
   · rw [← ContinuousLinearMap.star_eq_adjoint]
     exact (rectangularRowProjection_isStarProjection (E := E) hQ).isSelfAdjoint.star_eq
   · rw [residualWindowMapES_eq_reindex_blockedResidualBoundaryMapES,
@@ -126,7 +127,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindow_projection_com
     (fun i => residualWindowRightMapES A B V (K i) (M i) (r i))
     (fun i => residualWindowLeftMapES B (K i) (M i) (r i))
     (fun i => residualWindowMapES A B V (K i) (M i) (r i))
-    (fun i => EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) (K i))
+    (fun i => ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) (K i))
       (residualBoundaryGramInverse A B V ρ (Q (r i)) (M i) (r i)))
     (fun i => boundaryFiberwiseMap (Cfg d (r i))
       (Ring.inverse (groundSpaceGram B (K i + M i))))
@@ -143,7 +144,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindow_projection_com
       with i hiM hiOrd hiSmall
     have hT := (norm_residualWindowRightMapES_le A B V (K i) (M i) (r i)).trans
       (hiM (r i)).2.2.2.2.2
-    have hHT := (EuclideanSpace.norm_fiberwiseMap_le (Cfg (blockPhysDim d L) (K i))
+    have hHT := (ContinuousLinearMap.norm_rightFiberwiseMap_le
+      (S := Cfg (blockPhysDim d L) (K i))
       (residualBoundaryGramInverse A B V ρ (Q (r i)) (M i) (r i))).trans
       (hiM (r i)).2.2.2.2.1
     have hInv : ‖Ring.inverse (groundSpaceGram B (K i + M i)) - Ring.inverse Kinf‖ ≤

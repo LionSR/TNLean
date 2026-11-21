@@ -8,7 +8,7 @@ import TNLean.MPS.Core.TransferMatrix
 import TNLean.MPS.MPDO.PureAreaLaw
 import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.RFP.Defs
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Pure-state equivalence for the MPDO renormalization fixed-point condition

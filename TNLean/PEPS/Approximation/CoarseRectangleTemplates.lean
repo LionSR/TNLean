@@ -7,7 +7,7 @@ import TNLean.PEPS.AreaLaw.Geometry.Templates
 import TNLean.PEPS.AreaLaw.Scan.AmbientDepth
 import Mathlib.Analysis.Convex.Segment
 import Mathlib.Analysis.Convex.Combination
-import Mathlib.Data.Int.ConditionallyCompleteOrder
+import Mathlib.Order.Int.ConditionallyCompleteOrder
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Positivity
 

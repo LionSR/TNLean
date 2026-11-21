@@ -5,10 +5,10 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.AreaLaw.Huang.ChainGrid
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.SupportedMatrixElements
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.ManyBody.Sites.ProductVector
 import QICLean.Entropy.RegionUnion
-import TNLean.Algebra.MatrixHermitianSum
+import QICLean.Algebra.HermitianPartSum
 
 /-!
 # The Hamiltonian decomposition associated with the uniform grid

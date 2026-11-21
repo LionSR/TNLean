@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.DirectedWalkCoboundary
+import QICLean.Algebra.DirectedWalkCoboundary
 import TNLean.MPS.MPDO.SectorEtaPositivity
 
 /-!
@@ -125,8 +125,8 @@ the elimination plan for coherent sector rephasing. -/
 theorem sectorReaches_iff_directedWalkReaches {hη : EtaStructure ρ}
     (eta : etaOperators hη) (k h : Fin hη.m) :
     SectorReaches eta k h ↔
-      TNLean.Algebra.DirectedWalk.Reaches (IsSectorEdge eta) k h :=
-  (TNLean.Algebra.DirectedWalk.reaches_iff_reflTransGen _).symm
+      DirectedWalk.Reaches (IsSectorEdge eta) k h :=
+  (DirectedWalk.reaches_iff_reflTransGen _).symm
 
 /-- Recurrence of the nonzero sector support is exactly the return-walk
 hypothesis for its directed edge relation.
@@ -137,7 +137,7 @@ theorem isRecurrentSupport_iff_directedWalkReturns {hη : EtaStructure ρ}
     (eta : etaOperators hη) :
     IsRecurrentSupport eta ↔
       ∀ {k h : Fin hη.m}, IsSectorEdge eta k h →
-        TNLean.Algebra.DirectedWalk.Reaches (IsSectorEdge eta) h k := by
+        DirectedWalk.Reaches (IsSectorEdge eta) h k := by
   constructor
   · intro hrec k h hkh
     exact (sectorReaches_iff_directedWalkReaches eta h k).mp (hrec k h hkh)

@@ -28,9 +28,7 @@ limit `D₁`. See `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
   states and projected entangled pair states*, Section II.F.2
 -/
 
-open scoped Matrix Matrix.Norms.L2Operator TNLean.Algebra.ScalarCohomology
-
-namespace TNLean.Algebra
+open scoped Matrix Matrix.Norms.L2Operator ScalarCohomology
 
 /-- A factor system of a unitary projective representation has unit modulus.
 Source: arXiv:1010.3732, Section II.F.2, lines 886--896, the unitary virtual
@@ -66,9 +64,9 @@ theorem ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem
     (ρ₀ : ProjectiveRepresentation (D := D₀) ω₀)
     (ρ₁ : ProjectiveRepresentation (D := D₁) ω₁)
     (h : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D₁))) =
+        (ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D₁))) =
       groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D₀))))
+        (ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D₀))))
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ) :
     ∃ (ρ₀' : ProjectiveRepresentation (D := D₀) ω₁) (φ : G → Circle),
@@ -78,9 +76,7 @@ theorem ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem
   have hRephase := @ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous
     G _ D₀ ω₀ ω₁
   rw [ρ₀.circlePhaseInclusion_eq h₀, ρ₁.circlePhaseInclusion_eq h₁] at hRephase
-  exact hRephase ρ₀ ((H2π_eq_iff_isMulCoboundary₂_div _ _).mp h) h₀
-
-end TNLean.Algebra
+  exact hRephase ρ₀ ((ScalarCohomology.H2π_eq_iff_isMulCoboundary₂_div _ _).mp h) h₀
 
 namespace MPSTensor
 
@@ -88,9 +84,9 @@ namespace MPSTensor
 physical action. Source: arXiv:1010.3732, Section II.F.2, lines 880--896,
 where the scalar cancels between the two virtual factors. -/
 theorem sptFixedPointAction_eq_of_forall_eq_smul
-    {G : Type} [Group G] {D : ℕ} {ω₀ ω₁ : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D) ω₀)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D) ω₁)
+    {G : Type} [Group G] {D : ℕ} {ω₀ ω₁ : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D) ω₀)
+    (ρ₁ : ProjectiveRepresentation (D := D) ω₁)
     (c : G → ℂ)
     (h : ∀ g, (ρ₁.X g : Matrix (Fin D) (Fin D) ℂ) =
       c g • (ρ₀.X g : Matrix (Fin D) (Fin D) ℂ))
@@ -106,16 +102,16 @@ its physical fixed-point action is preserved. Source: arXiv:1010.3732,
 Section II.F.2, `eq:1d-sym:jointsym` and `eq:sym:omega-gamma`. -/
 theorem exists_symmetricGappedInteractionPath_of_cohomologous_fixedPoint
     {G : Type} [Group G] {D₀ D₁ : ℕ} [NeZero D₀] [NeZero D₁]
-    {ω₀ ω₁ : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω₀)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω₁)
+    {ω₀ ω₁ : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω₀)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω₁)
     (h : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D₁))) =
+        (ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D₁))) =
       groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D₀))))
+        (ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D₀))))
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ) :
-    ∃ (ρ₀' : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω₁)
+    ∃ (ρ₀' : ProjectiveRepresentation (D := D₀) ω₁)
       (h₀' : ∀ g, (ρ₀'.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈
         Matrix.unitaryGroup _ ℂ),
       sptFixedPointAction ρ₀' 1 = sptFixedPointAction ρ₀ 1 ∧

@@ -73,9 +73,10 @@ theorem arbitraryPhysicalMixedInteraction_commute_of_endpoint_adjoint
 length at least two commutes with the periodic common MPO. -/
 theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_of_endpoint_adjoint
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) {N : ℕ} (hN : 2 ≤ N) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpo (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) N) := by
+  have : NeZero N := ⟨by omega⟩
   apply hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁ _ hγ hN
   intro Y

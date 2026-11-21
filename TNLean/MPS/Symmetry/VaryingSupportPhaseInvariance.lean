@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ProjectiveRepresentation
+import QICLean.Algebra.Cohomology.ProjectiveRepresentation
 import QICLean.Algebra.MatrixUnitaryBetween
 import Mathlib.LinearAlgebra.UnitaryGroup
 
@@ -58,8 +58,6 @@ theorem isometry_compression_mem_unitaryGroup {D r : ℕ}
 
 end Matrix
 
-namespace TNLean.Algebra
-
 /-- Restriction of a unitary projective representation to a nonzero
 invariant single-bond subspace retains its factor system and unitarity.
 The isometric inclusion is supplied here, not derived from a physical
@@ -94,5 +92,3 @@ theorem ProjectiveRepresentation.exists_unitary_compression
       simp only [Matrix.mul_smul, Matrix.smul_mul]
   }
   exact ⟨σ, fun _ => rfl, hW⟩
-
-end TNLean.Algebra

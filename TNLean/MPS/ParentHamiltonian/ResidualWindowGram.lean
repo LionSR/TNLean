@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.EuclideanFiberwiseMap
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Analysis.EuclideanFiberwiseMap
+import QICLean.Algebra.FinSumPermutation
 import TNLean.MPS.ParentHamiltonian.ResidualWindowCoordinates
 import TNLean.MPS.ParentHamiltonian.ResidualBoundaryGram
 
@@ -44,12 +44,13 @@ theorem residualWindowRightMapES_adjoint_comp_self
     (V : Matrix (Fin D) (Fin E) ℂ) (K M r : ℕ) :
     (residualWindowRightMapES A B V K M r).adjoint.comp
         (residualWindowRightMapES A B V K M r) =
-      EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) K)
+      ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
         ((blockedResidualBoundaryMapES A L B V M r).adjoint.comp
           (blockedResidualBoundaryMapES A L B V M r)) := by
   refine ContinuousLinearMap.ext fun x => ext_inner_left ℂ fun y => ?_
   rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_inner_right,
-    EuclideanSpace.inner_fiberwiseMap]
+    ContinuousLinearMap.inner_eq_sum_inner_rightFiber y]
+  simp_rw [ContinuousLinearMap.rightFiber_rightFiberwiseMap]
   simp_rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_inner_right]
   change ⟪residualWindowRightMapES A B V K M r y,
       residualWindowRightMapES A B V K M r x⟫_ℂ =
@@ -109,7 +110,7 @@ theorem norm_residualWindowRightMapES_le
   refine (sq_le_sq₀ (norm_nonneg _) (norm_nonneg _)).mp ?_
   rw [sq, ← ContinuousLinearMap.norm_adjoint_comp_self, sq,
     ← ContinuousLinearMap.norm_adjoint_comp_self, residualWindowRightMapES_adjoint_comp_self]
-  exact EuclideanSpace.norm_fiberwiseMap_le _ _
+  exact ContinuousLinearMap.norm_rightFiberwiseMap_le _
 
 /-- Original-tail spectators do not increase the norm of the aligned boundary
 map. The bound is uniform in the tail length and includes zero lengths. -/
@@ -145,11 +146,11 @@ theorem norm_residualWindowRightMapES_gram_sub_limit_le
     (hC : ‖correlatedTailMapES A V r‖ ≤ 1) :
     ‖(residualWindowRightMapES A B V K M r).adjoint.comp
         (residualWindowRightMapES A B V K M r) -
-      EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) K)
+      ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
         (residualBoundaryGramLimit A V ρ htr r)‖ ≤
       ‖groundSpaceGram B M - Matrix.gramReshuffle (fixedPointProj ρ htr)‖ := by
-  rw [residualWindowRightMapES_adjoint_comp_self, ← EuclideanSpace.fiberwiseMap_sub]
-  exact (EuclideanSpace.norm_fiberwiseMap_le _ _).trans
+  rw [residualWindowRightMapES_adjoint_comp_self, ← ContinuousLinearMap.rightFiberwiseMap_sub]
+  exact (ContinuousLinearMap.norm_rightFiberwiseMap_le _).trans
     (norm_blockedResidualBoundaryMapES_gram_sub_limit_le A B V ρ htr M r hC)
 
 /-- Original-tail spectators preserve the coefficient-one ordinary prefix
@@ -163,11 +164,8 @@ theorem norm_residualWindowLeftMapES_gram_sub_limit_le
         (residualWindowLeftMapES B K M r) -
       boundaryFiberwiseMap (Cfg d r) (Matrix.gramReshuffle (fixedPointProj ρ htr))‖ ≤
       ‖groundSpaceGram B (K + M) - Matrix.gramReshuffle (fixedPointProj ρ htr)‖ := by
-  rw [residualWindowLeftMapES_adjoint_comp_self]
-  change ‖EuclideanSpace.fiberwiseMap (Cfg d r) (groundSpaceGram B (K + M)) -
-    EuclideanSpace.fiberwiseMap (Cfg d r) (Matrix.gramReshuffle (fixedPointProj ρ htr))‖ ≤ _
-  rw [← EuclideanSpace.fiberwiseMap_sub]
-  exact EuclideanSpace.norm_fiberwiseMap_le _ _
+  rw [residualWindowLeftMapES_adjoint_comp_self, ← boundaryFiberwiseMap_sub]
+  exact norm_boundaryFiberwiseMap_le _ _
 
 /-- Physical reindexing preserves the full residual window Gram.
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,

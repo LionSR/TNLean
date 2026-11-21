@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SelectedCoefficientDecomposition
-import TNLean.Algebra.MatrixFactorExchange
+import QICLean.Algebra.MatrixFactorExchange
 import QICLean.ManyBody.Sites.RegionMatrix
 import TNLean.Lattice.Sheet.Splitting
 import Mathlib.Data.Fintype.EquivFin
@@ -42,7 +42,7 @@ namespace TNLean.MPS.AreaLaw
 /-- Recombine the two exterior pieces as the actual complement of the middle.
 This is a configuration identity for the regional decomposition used in ALVV,
 arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
-private def threeSplitExteriorConfigEquiv {Ω : Type*} [Fintype Ω] [DecidableEq Ω]
+private def threeSplitExteriorConfigEquiv {Ω : Type*} [DecidableEq Ω]
     (q : ℕ) (T E : Finset Ω) (hTE : Disjoint T E) :
     ManyBody.ComplConfig (fun _ : Ω ↦ Fin q) E ≃
       ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) :=
@@ -55,7 +55,7 @@ private def threeSplitExteriorConfigEquiv {Ω : Type*} [Fintype Ω] [DecidableEq
 middle and then reading its actual complement. Supporting ALVV,
 arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
 private theorem exteriorMiddle_threeSplit_apply
-    {Ω : Type*} [Fintype Ω] [DecidableEq Ω]
+    {Ω : Type*} [DecidableEq Ω]
     (q : ℕ) (T E : Finset Ω) (hTE : Disjoint T E) (x : Ω → Fin q) :
     exteriorMiddleEquiv (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)
         (threeSplit q T E hTE x) =
@@ -78,7 +78,7 @@ Only exterior coefficients are pulled back. This closes the regional
 coordinate identification in ALVV, arXiv:1602.08828v2,
 Proposition 5.7, lines 1324–1333. -/
 private theorem exists_regional_exterior_of_threeSplit_decomposition
-    {Ω ι R : Type*} [Fintype Ω] [DecidableEq Ω] [Fintype ι] [Semiring R]
+    {Ω ι R : Type*} [DecidableEq Ω] [Fintype ι] [Semiring R]
     (q : ℕ) (T E : Finset Ω) (hTE : Disjoint T E)
     (X : Matrix (Ω → Fin q) (Ω → Fin q) R)
     (V : ι → Matrix (E → Fin q) (E → Fin q) R)
@@ -113,7 +113,7 @@ an operator identity on the actual middle region and its complement. The
 middle family is prescribed before exterior coefficients. Supporting ALVV,
 arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
 theorem exists_regional_exterior_of_natural_threeSplit_decomposition
-    {Ω ι R : Type*} [Fintype Ω] [DecidableEq Ω] [Fintype ι] [Semiring R]
+    {Ω ι R : Type*} [DecidableEq Ω] [Fintype ι] [Semiring R]
     {q N : ℕ} (T E : Finset Ω) (hTE : Disjoint T E) (eE : Fin N ≃ E)
     (X : Matrix (Ω → Fin q) (Ω → Fin q) R)
     (V : ι → Matrix (Fin N → Fin q) (Fin N → Fin q) R)
@@ -165,7 +165,7 @@ end TNLean.MPS.AreaLaw
 
 namespace TNLean.MPS.AreaLaw
 
-variable {V : Type*} [Fintype V] [DecidableEq V] (β : V → Type*)
+variable {V : Type*} [DecidableEq V] (β : V → Type*)
 
 /-- Split the old middle into its removed sites and the intersection. -/
 def changingOldMiddleConfigEquiv (E J : Finset V) :
@@ -279,7 +279,7 @@ end TNLean.MPS.AreaLaw
 
 namespace TNLean.MPS.AreaLaw
 
-variable {Ω : Type*} [Fintype Ω] [DecidableEq Ω] (β : Ω → Type*)
+variable {Ω : Type*} [DecidableEq Ω] (β : Ω → Type*)
 
 /-- Transfer an old middle family to a prescribed new region using only the
 old middle operators and standard matrix-unit labels. The configurations
@@ -364,7 +364,7 @@ Auxiliary to ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333.
 No positivity, interval, spectral, bond-dimension or running-time assertion
 is required for this finite matrix identity. -/
 theorem exists_changingRegional_family_fin
-    {Ω ι : Type*} [Fintype Ω] [DecidableEq Ω] [Fintype ι]
+    {Ω ι : Type*} [DecidableEq Ω] [Fintype ι]
     (q : ℕ) (E J : Finset Ω)
     (V : ι → Matrix (E → Fin q) (E → Fin q) ℂ) :
     ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),

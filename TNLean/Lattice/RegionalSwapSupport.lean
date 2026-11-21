@@ -9,6 +9,7 @@ import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.Circuit.RegionalSwap
 import QICLean.Analysis.DoubledSystemGap
 import QICLean.ManyBody.Dynamics.InteractionOperations
+import QICLean.ManyBody.Sites.ConfigurationMap
 import QICLean.ManyBody.Sites.PairSwap
 
 /-!

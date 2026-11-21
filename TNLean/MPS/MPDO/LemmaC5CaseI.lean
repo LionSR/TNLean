@@ -64,7 +64,7 @@ The singleton-sector proof is by contradiction, following the source-facing repa
 documented in <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>: the overlap formula and
 normality (`MPSTensor.IsNormalTensor.selfOverlap_tendsto_one`, the `equalMPS`
 self-overlap limit) give `tr(S^N) → 1`.  Conjugating the primitive `T` by its
-Perron vector (`TNLean/Algebra/PerronFrobenius/PerronVector.lean`) gives a
+Perron vector (`QICLean/Algebra/PerronFrobenius/PerronVector.lean`) gives a
 stochastic matrix `P`, while the matching squared conjugation of `S` is bounded
 entrywise by `P ⊙ P`.  If more than one sector were active, a positive power of
 `P ⊙ P` would have $L^∞$ operator norm below one, forcing `tr(S^N) → 0`
@@ -374,7 +374,6 @@ theorem trace_pow_similarity_squared_diagonal (S : Matrix n n ℝ) (v : n → �
 
 end traceSimilarity
 
-
 section overlapFormula
 
 /-- The **sitewise product matrix** `W σ σ' = ∏ n, U (σ n) (σ' n)` used to
@@ -578,7 +577,7 @@ formula and normality give `tr(S^N) → 1`; positivity bounds `S` entrywise by t
 square of the primitive stochastic conjugate `P` of `T`; if there were more than one active
 sector, `P` would be irreducible substochastic on a nontrivial index set, forcing
 `tr(S^N) → 0`, a contradiction. Prerequisite Perron-vector infrastructure:
-`TNLean/Algebra/PerronFrobenius/PerronVector.lean`.
+`QICLean/Algebra/PerronFrobenius/PerronVector.lean`.
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499; normal-tensor
 self-overlap limit (`equalMPS`) at lines 1080--1100. -/

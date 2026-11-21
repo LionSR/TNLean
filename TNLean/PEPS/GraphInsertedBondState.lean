@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.GraphAveragingBondState
 import TNLean.PEPS.RegularTwistedRegion
-import TNLean.Algebra.MonoidHomCommutingWeight
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.MonoidAux
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Closed contractions with inserted oriented bond matrices

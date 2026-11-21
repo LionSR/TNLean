@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.MatrixGramUnitary
 import TNLean.MPS.CanonicalForm.PhaseCover
 import TNLean.MPS.MPDO.VerticalCF
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Normalized maps for grouped vertical sectors

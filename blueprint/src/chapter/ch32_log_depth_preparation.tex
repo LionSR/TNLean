@@ -115,6 +115,8 @@ remaining eigenvalues have modulus strictly less than $1$.
 \end{lemma}
 \begin{proof}
     \leanok
+    This is~\cite[``Scalar lower bound for the square
+        root'']{QICLean2026Blueprint}.
     The element $\sqrt c\,\Id$ is positive and its square is $c\,\Id\le b$, so
     operator monotonicity of the square root gives
     $\sqrt c\,\Id=\sqrt{c\,\Id}\le\sqrt b$.
@@ -136,6 +138,8 @@ remaining eigenvalues have modulus strictly less than $1$.
 \begin{proof}
     \leanok
     \uses{thm:ldp_sqrt_scalar_lower_bound}
+    This is~\cite[``One-sided bounds for the square root above a scalar
+        floor'']{QICLean2026Blueprint}.
     For every real $t$,
     $(\sqrt b+t)^2=b+2t\sqrt b+t^2$. By
     Lemma~\ref{thm:ldp_sqrt_scalar_lower_bound}, $\sqrt b\ge\sqrt c$, and
@@ -149,7 +153,7 @@ remaining eigenvalues have modulus strictly less than $1$.
 
 \begin{lemma}[H\"older bound for the square root]
     \label{thm:ldp_sqrt_holder}
-    \lean{CFC.norm_sqrt_sub_sqrt_le, CFC.sqrt_sub_sqrt_le_algebraMap}
+    \lean{CFC.norm_sqrt_sub_sqrt_le, CFC.sqrt_le_sqrt_add_sqrt_norm_sub}
     \leanok
     Let $a,b$ be positive elements of a C$^*$-algebra. Then the operator
     inequality quoted from Bhatia in
@@ -180,6 +184,8 @@ remaining eigenvalues have modulus strictly less than $1$.
 \begin{proof}
     \leanok
     \uses{thm:ldp_sqrt_holder, lem:ldp_sqrt_floor_bounds}
+    This is~\cite[``Square root near a positive definite
+        element'']{QICLean2026Blueprint}.
     Write $\varepsilon=\lVert a-b\rVert$. If $\varepsilon>c$, the bound
     $\lVert\sqrt a-\sqrt b\rVert\le\sqrt\varepsilon$ of
     Lemma~\ref{thm:ldp_sqrt_holder} suffices, since
@@ -203,6 +209,8 @@ remaining eigenvalues have modulus strictly less than $1$.
 \begin{proof}
     \leanok
     \uses{thm:ldp_sqrt_lipschitz}
+    This is~\cite[``Lipschitz constant of the square root at an invertible
+        positive element'']{QICLean2026Blueprint}.
     If the algebra is zero, take $K=0$. Otherwise the spectrum of $b$ is a
     compact subset of $(0,\infty)$, so $b\ge c\,\Id$ for some real $c>0$, and
     Lemma~\ref{thm:ldp_sqrt_lipschitz} gives the bound with
@@ -825,6 +833,8 @@ and $\xi$ is read as the correlation length at $\lambda_2'$.
 \end{lemma}
 \begin{proof}
     \leanok
+    This is~\cite[``Powers of a perturbed idempotent without first-order
+        term'']{QICLean2026Blueprint}.
     Put $T=e+Z$, $W=fZf$, $\beta=\lVert fZe\rVert$, $\beta'=\lVert eZf\rVert$,
     $\zeta=\lVert W\rVert$, and $\rho=1+\beta\beta'/(1-\zeta)$. For $P\in\{e,f\}$
     the blocks $x_M=PT^Me$ and $y_M=PT^Mf$ satisfy

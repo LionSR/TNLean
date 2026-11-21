@@ -56,8 +56,7 @@
 \begin{lemma}[Parent commuting Hamiltonian--complex-linear decorrelation equivalence]
     \label{thm:tripartite_parent_iff_complex_linear_decorrelated}
     \lean{ManyBody.HasCommutingParentHamiltonian.isDecorrelated,
-        ManyBody.hasCommutingParentHamiltonian_of_isDecorrelated,
-        ManyBody.hasCommutingParentHamiltonian_iff_isDecorrelated}
+        ManyBody.hasCommutingParentHamiltonian_of_isDecorrelated}
     \leanok
     \uses{def:tripartite_decorrelation, def:tripartite_parent_commuting_hamiltonian, thm:tripartite_support_products, thm:tripartite_ground_space_intersection_iff_product}
     Let $P=P^\dagger=P^2$. Then $P$ is the ground-space projector of a
@@ -89,15 +88,16 @@
 
 \begin{theorem}[Parent commuting Hamiltonian--observable decorrelation equivalence]
     \label{thm:tripartite_parent_iff_decorrelated}
-    \lean{ManyBody.hasCommutingParentHamiltonian_iff_isDecorrelated,
-        TripartiteDecorrelation.isObservableDecorrelated_iff}
+    \lean{ManyBody.hasCommutingParentHamiltonian_iff_isDecorrelated}
     \leanok
     \uses{def:tripartite_observable_decorrelation, thm:tripartite_observable_decorrelation_iff, thm:tripartite_parent_iff_complex_linear_decorrelated}
     For $P=P^\dagger=P^2$,
     \cite[Proposition~D.3, lines 2221--2289]{Cirac2016MPDO_arXiv} states that
     $P$ is the ground-space projector of a parent commuting Hamiltonian on $AX$
     and $XB$ if and only if regions $A$ and $B$ are decorrelated when tested on
-    Hermitian observables.
+    Hermitian observables. By
+    Lemma~\ref{thm:tripartite_observable_decorrelation_iff}, the latter
+    condition is complex-linear decorrelation.
 \end{theorem}
 
 \begin{proof}

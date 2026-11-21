@@ -124,10 +124,8 @@ theorem mpo_verticalBNTMPO_eq_pow_smul_of_unitary_reindex
       (List.ofFn σ)
     calc
       Matrix.trace (Kraus.evalWord A₁ (List.ofFn σ)) =
-          Matrix.trace (_root_.evalWord A₁ (List.ofFn σ)) := by
-            rw [MPSTensor.evalWord_aux_eq]
-      _ = Matrix.trace (Matrix.reindex (finCongr hDim) (finCongr hDim)
-          (_root_.evalWord A₁ (List.ofFn σ))) := by
+          Matrix.trace (Matrix.reindex (finCongr hDim) (finCongr hDim)
+          (Kraus.evalWord A₁ (List.ofFn σ))) := by
             symm
             apply Matrix.trace_reindex
       _ = Matrix.trace (Kraus.evalWord

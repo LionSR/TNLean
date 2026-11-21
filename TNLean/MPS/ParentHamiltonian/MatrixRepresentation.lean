@@ -63,8 +63,10 @@ theorem localTerm_eq_toLin'_placeAlong_ringWindow (A : MPSTensor d D)
     {L N : ℕ} (hLN : L ≤ N) (i : Fin N) :
     localTerm A L N i = Matrix.toLin'
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hLN i)
-        (LinearMap.toMatrix' (parentInteraction A L))) :=
-  localTerm_of_le A hLN i
+        (LinearMap.toMatrix' (parentInteraction A L))) := by
+  have : NeZero N := NeZero.of_pos i.pos
+  rw [localTerm_eq_toLin'_term A L i,
+    ManyBody.Interaction.translationInvariant_term_of_le _ hLN i]
 
 /-- Euclidean form of the placed cyclic parent term. Source:
 arXiv:1010.3732, Section II.B, the local Hamiltonian sum. -/

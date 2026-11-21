@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.MonomialMatrix
-import TNLean.Algebra.ScalarThreeCocycle
+import QICLean.Algebra.MonomialMatrix
+import QICLean.Algebra.Cohomology.ScalarThreeCocycle
 import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPU.GroupRepresentation
 
@@ -124,8 +124,6 @@ end MPOTensor.GroupCocycle
 `Type`. -/
 
 namespace MPOTensor.GroupCocycle
-
-open TNLean.Algebra
 
 variable {G : Type} [Group G] {n : ℕ}
 
@@ -304,8 +302,6 @@ theorem mpo_tensor_conjTranspose {ω : ScalarThreeCochain G}
 end MPOTensor.GroupCocycle
 
 namespace MPOTensor.GroupCocycle
-
-open TNLean.Algebra
 
 variable {G : Type} [Group G] {n : ℕ} (e : G ≃ Fin n)
 

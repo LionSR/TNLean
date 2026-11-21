@@ -42,16 +42,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Fiberwise lifting preserves subtraction. -/
-theorem boundaryFiberwiseMap_sub (S : Type*) [Fintype S]
-    (G H : EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ]
-      EuclideanSpace ℂ (Fin D × Fin D)) :
-    boundaryFiberwiseMap (D := D) S (G - H) =
-      boundaryFiberwiseMap (D := D) S G - boundaryFiberwiseMap (D := D) S H := by
-  apply ContinuousLinearMap.ext
-  intro x
-  rfl
-
 /-- Injectivity of the finite-volume ground-space map makes its Gram a unit. -/
 theorem groundSpaceGram_isUnit_of_groundSpaceMapES_injective
     {A : MPSTensor d D} {n : ℕ}

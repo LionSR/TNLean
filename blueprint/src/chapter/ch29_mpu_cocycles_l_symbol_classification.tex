@@ -99,18 +99,20 @@
 
 \begin{definition}[Unimodular square root and modulus of a phase]
     \label{def:mpug_phase_root}
-    \lean{TNLean.Algebra.phaseRoot,
-        TNLean.Algebra.modulusUnit}
+    \lean{Units.phaseRoot,
+        Units.modulusUnit}
     \leanok
     For $u\in\C^\times$, let $s_u=e^{i\arg(u)/2}$ be the unimodular square root
     of the phase of $u$, with $|u|$ viewed as an element of $\C^\times$.
+    This is~\cite[``Unimodular square root and modulus of a
+        phase'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Unimodular square roots of phases]
     \label{thm:mpug_phase_root}
-    \lean{TNLean.Algebra.star_phaseRoot,
-        TNLean.Algebra.phaseRoot_mul_phaseRoot_mul_modulusUnit,
-        TNLean.Algebra.star_eq_self_of_star_eq_ofReal_mul}
+    \lean{Units.star_phaseRoot,
+        Units.phaseRoot_mul_phaseRoot_mul_modulusUnit,
+        Units.star_eq_self_of_star_eq_ofReal_mul}
     \leanok
     \uses{def:mpug_phase_root}
     For $u\in\C^\times$, $\overline{s_u}=s_u^{-1}$ and $u=s_u^2\,|u|$. If
@@ -119,6 +121,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``Unimodular square roots of phases'']{QICLean2026Blueprint}.
     The first two claims are $\overline{e^{i\theta}}=e^{-i\theta}$ and the
     polar form $u=|u|e^{i\arg u}$. For the third, taking absolute values in
     $\overline w=p\,w$ gives $p=1$.
@@ -126,11 +129,11 @@
 
 \begin{lemma}[Time reversal makes the anomaly real]
     \label{thm:mpug_time_reversal_real_anomaly}
-    \lean{TNLean.Algebra.ScalarThreeCochain.coboundary_mul,
-        TNLean.Algebra.ScalarThreeCochain.star_fusionGauge,
-        TNLean.Algebra.ScalarThreeCochain.coboundary_modulusUnit_pos,
-        TNLean.Algebra.ScalarThreeCochain.star_fusionGauge_phaseRoot,
-        TNLean.Algebra.ScalarThreeCochain.exists_cohomologousTo_star_eq_self}
+    \lean{ScalarThreeCochain.coboundary_mul,
+        ScalarThreeCochain.star_fusionGauge,
+        ScalarThreeCochain.coboundary_modulusUnit_pos,
+        ScalarThreeCochain.star_fusionGauge_phaseRoot,
+        ScalarThreeCochain.exists_cohomologousTo_star_eq_self}
     \leanok
     \uses{def:mpug_fusion_gauge, def:mpug_cohomologous_to,
         def:mpug_phase_root}
@@ -170,10 +173,10 @@
 
 \begin{lemma}[Time reversal makes the anomaly and the L-symbols jointly real]
     \label{thm:mpug_time_reversal_real_l_symbols}
-    \lean{TNLean.Algebra.LSymbol.star_gauge,
-        TNLean.Algebra.LSymbol.gauge_modulusUnit_pos,
-        TNLean.Algebra.LSymbol.star_gauge_phaseRoot,
-        TNLean.Algebra.LSymbol.exists_gauge_star_eq_self}
+    \lean{LSymbol.star_gauge,
+        LSymbol.gauge_modulusUnit_pos,
+        LSymbol.star_gauge_phaseRoot,
+        LSymbol.exists_gauge_star_eq_self}
     \leanok
     \uses{def:mpug_fusion_gauge, def:mpug_l_gauge, def:mpug_phase_root}
     Let $\omega$ be a scalar $3$-cochain, $L$ an $L$-symbol, $\beta$ a
@@ -207,8 +210,8 @@
 
 \begin{lemma}[The L-symbol relation imposed by time reversal]
     \label{thm:mpug_time_reversal_l_symbol_relation}
-    \lean{TNLean.Algebra.LSymbol.star_apply_eq_gauge_one_apply,
-        TNLean.Algebra.LSymbol.phase_sq_eq_of_gauge_eq_star}
+    \lean{LSymbol.star_apply_eq_gauge_one_apply,
+        LSymbol.phase_sq_eq_of_gauge_eq_star}
     \leanok
     \uses{def:mpug_l_gauge}
     Let $T\neq0$ and $P$ be vectors in a complex vector space and let
@@ -463,10 +466,10 @@
 
 \begin{definition}[Pullback of scalar cohomology]
     \label{def:mpug_h2_pullback}
-    \lean{TNLean.Algebra.ScalarCocycle.comap,
-        TNLean.Algebra.ScalarCocycle.comap_apply,
-        TNLean.Algebra.ScalarCocycle.mapCocycles₂_cocyclesOfIsMulCocycle₂,
-        TNLean.Algebra.ScalarCocycle.map_H2π}
+    \lean{ScalarCocycle.comap,
+        ScalarCocycle.comap_apply,
+        ScalarCocycle.mapCocycles₂_cocyclesOfIsMulCocycle₂,
+        ScalarCocycle.map_H2π}
     \leanok
     \uses{def:h2_cx}
     Let $f:K\to G$ be a group homomorphism. For a scalar $2$-cochain
@@ -476,12 +479,13 @@
     $f^*:H^2(G,\C^\times)\to H^2(K,\C^\times)$ induced by $f$, with the
     identity of $\C^\times$ as coefficient map, satisfies
     $f^*[\omega]=[f^*\omega]$ for every $2$-cocycle $\omega$.
+    This is~\cite[``Pullback of scalar cohomology'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Pullback preserves cocycles and cohomology]
     \label{thm:mpug_h2_pullback_preserves}
-    \lean{TNLean.Algebra.ScalarCocycle.isMulCocycle₂_comap,
-        TNLean.Algebra.isMulCoboundary₂_div_comap}
+    \lean{ScalarCocycle.isMulCocycle₂_comap,
+        ScalarCohomology.isMulCoboundary₂_div_comap}
     \leanok
     \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
     Let $f:K\to G$ be a group homomorphism. If $\omega$ is a scalar
@@ -492,6 +496,8 @@
 
 \begin{proof}\leanok
     \uses{def:mpug_h2_pullback, def:cohomologous_to, def:is_cocycle}
+    This is~\cite[``Pullback preserves cocycles and
+        cohomology'']{QICLean2026Blueprint}.
     For $a,b,c\in K$, substituting $f(a),f(b),f(c)$ into the cocycle equation
     for $\omega$ and using $f(ab)=f(a)f(b)$ and $f(bc)=f(b)f(c)$ shows that
     $f^*\omega$ is a $2$-cocycle.
@@ -503,9 +509,9 @@
 
 \begin{lemma}[Restriction is the inhomogeneous restriction map]
     \label{lem:mpug_restriction_inhomogeneous}
-    \lean{TNLean.Algebra.scalarRepresentationRes,
-        TNLean.Algebra.ScalarCocycle.toInhomogeneousCochain_comap,
-        TNLean.Algebra.ScalarThreeCochain.toInhomogeneousCochain_comap}
+    \lean{ScalarCohomology.scalarRepresentationRes,
+        ScalarCocycle.toInhomogeneousCochain_comap,
+        ScalarThreeCochain.toInhomogeneousCochain_comap}
     \leanok
     \uses{def:mpug_h2_pullback, def:mpug_cochain_restriction,
         def:mpug_h3_group_cohomology}
@@ -527,8 +533,8 @@
 % No U(1) restriction naturality or tensor-level block-independence claim.
 \begin{lemma}[Exact extension of a subgroup cocycle]
     \label{thm:mpug_h2_exact_extension}
-    \lean{TNLean.Algebra.ScalarCocycle.H2π_mem_range_map_subtype_iff,
-        TNLean.Algebra.ScalarCocycle.isMulCocycle₂_coboundary_mul}
+    \lean{ScalarCocycle.H2π_mem_range_map_subtype_iff,
+        ScalarCocycle.isMulCocycle₂_coboundary_mul}
     \leanok
     \uses{def:mpug_h2_pullback, def:is_cocycle}
     Let $H\le G$ be any subgroup, let $\iota:H\hookrightarrow G$ be its
@@ -561,15 +567,15 @@
 
 \begin{lemma}[Circle and nonzero-complex coefficients in degree two]
     \label{thm:mpug_circle_complex_units_h2}
-    \lean{TNLean.Algebra.Complex.div_toUnits_unitsPhase,
-        TNLean.Algebra.ScalarCocycle.circlePhase_isMulCocycle₂,
-        TNLean.Algebra.ScalarCocycle.circlePhaseInclusion_isMulCocycle₂,
-        TNLean.Algebra.ScalarCocycle.H2π_circlePhaseInclusion,
-        TNLean.Algebra.ScalarCocycle.circlePhaseMathlibCocycle,
-        TNLean.Algebra.ScalarCocycle.H2π_map_circlePhaseMathlibCocycle,
-        TNLean.Algebra.circleToComplexUnits_map_injective,
-        TNLean.Algebra.circleToComplexUnits_map_surjective,
-        TNLean.Algebra.circleToComplexUnits_map_bijective}
+    \lean{Complex.div_toUnits_unitsPhase,
+        ScalarCocycle.circlePhase_isMulCocycle₂,
+        ScalarCocycle.circlePhaseInclusion_isMulCocycle₂,
+        ScalarCocycle.H2π_circlePhaseInclusion,
+        ScalarCocycle.circlePhaseMathlibCocycle,
+        ScalarCocycle.H2π_map_circlePhaseMathlibCocycle,
+        ScalarCohomology.circleToComplexUnits_map_injective,
+        ScalarCohomology.circleToComplexUnits_map_surjective,
+        ScalarCohomology.circleToComplexUnits_map_bijective}
     \leanok
     \uses{thm:mpug_h2_group_cohomology_comparison,
         thm:mpug_positive_generalized_cocycle}
@@ -604,6 +610,8 @@
 
 \begin{proof}\leanok
     \uses{thm:mpug_positive_generalized_cocycle}
+    This is~\cite[``Circle and nonzero-complex coefficients in degree
+        two'']{QICLean2026Blueprint}.
     The phase map $q(z)=z/|z|$ is multiplicative and satisfies
     $q(u)=u$ for $u\in U(1)$, so it preserves the cocycle equation and
     retracts inclusion.  The polar identity in
@@ -619,9 +627,9 @@
 
 \begin{definition}[Cocycle-twisted regular matrices]
     \label{def:mpug_twisted_regular_matrices}
-    \lean{TNLean.Algebra.ScalarCocycle.phase,
-        TNLean.Algebra.ScalarCocycle.twistedLeftRegular,
-        TNLean.Algebra.ScalarCocycle.twistedRightRegular}
+    \lean{ScalarCocycle.phase,
+        ScalarCocycle.twistedLeftRegular,
+        ScalarCocycle.twistedRightRegular}
     \leanok
     \uses{def:scalar_cocycle, thm:mpug_circle_complex_units_h2}
     Let $G$ be a group and let $\omega$ be a $\C^\times$-valued scalar
@@ -645,7 +653,7 @@
 
 \begin{lemma}[Cocycle equation for the circle phase]
     \label{lem:mpug_circle_phase_cocycle}
-    \lean{TNLean.Algebra.ScalarCocycle.phase_isCocycle}
+    \lean{ScalarCocycle.phase_isCocycle}
     \leanok
     \uses{def:is_cocycle, thm:mpug_circle_complex_units_h2}
     If $\omega$ is a cocycle, then its circle phase satisfies
@@ -658,14 +666,16 @@
 
 \begin{proof}\leanok
     \uses{thm:mpug_circle_complex_units_h2}
+    This is~\cite[``Cocycle equation for the circle
+        phase'']{QICLean2026Blueprint}.
     The pointwise phase map $z\mapsto z/|z|$ is multiplicative, so it preserves
     the cocycle equation.
 \end{proof}
 
 \begin{lemma}[Action of the twisted regular matrices]
     \label{thm:mpug_twisted_regular_action}
-    \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_mulVec_apply,
-        TNLean.Algebra.ScalarCocycle.twistedRightRegular_mulVec_apply}
+    \lean{ScalarCocycle.twistedLeftRegular_mulVec_apply,
+        ScalarCocycle.twistedRightRegular_mulVec_apply}
     \leanok
     \uses{def:mpug_twisted_regular_matrices}
     If $G$ is finite, then for $v\in\C^G$ and $g,h\in G$,
@@ -681,14 +691,16 @@
 
 \begin{proof}\leanok
     \uses{def:mpug_twisted_regular_matrices}
+    This is~\cite[``Action of the twisted regular
+        matrices'']{QICLean2026Blueprint}.
     In each matrix-vector product, exactly one summand is nonzero: the column
     indexed by $h$.
 \end{proof}
 
 \begin{lemma}[Multiplication laws for twisted regular matrices]
     \label{thm:mpug_twisted_regular_multiplication}
-    \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_mul,
-        TNLean.Algebra.ScalarCocycle.twistedRightRegular_mul}
+    \lean{ScalarCocycle.twistedLeftRegular_mul,
+        ScalarCocycle.twistedRightRegular_mul}
     \leanok
     \uses{def:mpug_twisted_regular_matrices,
         lem:mpug_circle_phase_cocycle}
@@ -706,13 +718,15 @@
 
 \begin{proof}\leanok
     \uses{lem:mpug_circle_phase_cocycle}
+    This is~\cite[``Multiplication laws for twisted regular
+        matrices'']{QICLean2026Blueprint}.
     Expanding the matrix products entrywise reduces the two scalar identities
     to the cocycle equation at $(g,h,k)$ and $(k,h^{-1},g^{-1})$, respectively.
 \end{proof}
 
 \begin{lemma}[Commutation of twisted left and right actions]
     \label{thm:mpug_twisted_regular_commutation}
-    \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_commute}
+    \lean{ScalarCocycle.twistedLeftRegular_commute}
     \leanok
     \uses{def:mpug_twisted_regular_matrices}
     If $G$ is finite and $\omega$ is a cocycle, then
@@ -728,14 +742,16 @@
 
 \begin{proof}\leanok
     \uses{lem:mpug_circle_phase_cocycle}
+    This is~\cite[``Commutation of twisted left and right
+        actions'']{QICLean2026Blueprint}.
     Expanding both matrix products entrywise and applying the cocycle equation
     at $(g,k,h^{-1})$ yields the equality.
 \end{proof}
 
 \begin{lemma}[Unitarity of twisted regular matrices]
     \label{thm:mpug_twisted_regular_unitary}
-    \lean{TNLean.Algebra.ScalarCocycle.twistedLeftRegular_mem_unitaryGroup,
-        TNLean.Algebra.ScalarCocycle.twistedRightRegular_mem_unitaryGroup}
+    \lean{ScalarCocycle.twistedLeftRegular_mem_unitaryGroup,
+        ScalarCocycle.twistedRightRegular_mem_unitaryGroup}
     \leanok
     \uses{def:mpug_twisted_regular_matrices}
     If $G$ is finite, the matrices $L_g^\phi$ and $R_g^\phi$ are unitary for
@@ -746,6 +762,8 @@
 
 \begin{proof}\leanok
     \uses{def:mpug_twisted_regular_matrices}
+    This is~\cite[``Unitarity of twisted regular
+        matrices'']{QICLean2026Blueprint}.
     Each matrix is a permutation matrix whose nonzero entries have modulus
     one.  Distinct columns therefore have disjoint support, while every column
     has squared norm one.
@@ -753,7 +771,7 @@
 
 \begin{lemma}[Onsite Gauss coefficient identity]
     \label{thm:mpug_onsite_gauss_phase}
-    \lean{TNLean.Algebra.ScalarCocycle.onsiteGauss_phase_div}
+    \lean{ScalarCocycle.onsiteGauss_phase_div}
     \leanok
     \uses{def:mpug_twisted_regular_matrices,
         lem:mpug_circle_phase_cocycle}
@@ -775,6 +793,8 @@
 
 \begin{proof}\leanok
     \uses{lem:mpug_circle_phase_cocycle}
+    This is~\cite[``A coefficient identity for the circle
+        phase'']{QICLean2026Blueprint}.
     Applying the cocycle equation first at $(a,g^{-1},gb)$ and then at
     $(g^{-1},g,b)$, together with $\phi(e,b)=1$ from the normalization at
     $t=e$, yields the identity.
@@ -784,8 +804,8 @@
 
 \begin{definition}[Block scalar and block independence]
     \label{def:mpug_block_independence_factor}
-    \lean{TNLean.Algebra.LSymbol.ell,
-        TNLean.Algebra.LSymbol.IsBlockIndependentEll}
+    \lean{LSymbol.ell,
+        LSymbol.IsBlockIndependentEll}
     \leanok
     \uses{def:mpug_l_symbols}
     For an $L$-symbol, define
@@ -806,13 +826,13 @@
 
 \begin{definition}[Four scalar gauge formulations]
     \label{def:mpug_block_independence_gauge_forms}
-    \lean{TNLean.Algebra.LSymbol.IsBlockConstant,
-        TNLean.Algebra.LSymbol.IsTrivialEll,
-        TNLean.Algebra.LSymbol.IsTrivial,
-        TNLean.Algebra.LSymbol.HasTrivialGauge,
-        TNLean.Algebra.LSymbol.HasBlockConstantGauge,
-        TNLean.Algebra.LSymbol.HasTrivialEllGauge,
-        TNLean.Algebra.LSymbol.IsBlockIndependent}
+    \lean{LSymbol.IsBlockConstant,
+        LSymbol.IsTrivialEll,
+        LSymbol.IsTrivial,
+        LSymbol.HasTrivialGauge,
+        LSymbol.HasBlockConstantGauge,
+        LSymbol.HasTrivialEllGauge,
+        LSymbol.IsBlockIndependent}
     \leanok
     \uses{def:mpug_l_gauge, def:mpug_block_independence_factor}
     Writing $L'=(\beta,\gamma)\mathbin{\triangleright}L$ for a joint scalar
@@ -834,13 +854,14 @@
         \label{eq:mpug_block_form_independent_ell}
     \end{align}
     % Source anchor: arXiv:2502.20257, prop:technical01, lines 6975--6989.
+    This is~\cite[``Four scalar gauge formulations'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Corrected block factorization]
     \label{thm:mpug_block_factorization}
-    \lean{TNLean.Algebra.LSymbol.IsCompatible.apply_right_one,
-        TNLean.Algebra.LSymbol.blockFactor,
-        TNLean.Algebra.LSymbol.factorization_of_isBlockIndependentEll}
+    \lean{LSymbol.IsCompatible.apply_right_one,
+        LSymbol.blockFactor,
+        LSymbol.factorization_of_isBlockIndependentEll}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_block_independence_factor}
     Suppose that $L$ is compatible with $\omega$ and that $\ell$ is
@@ -859,12 +880,13 @@
         \label{eq:mpug_corrected_block_factorization}
     \end{align}
     % Local correction:
-    % docs/paper-gaps/fbc25_block_independence_reciprocal_errors.tex.
+    % https://sirui-lu.com/QICLean/paper-gaps/fbc25_block_independence_reciprocal_errors.pdf.
     % Source anchor: arXiv:2502.20257, eq:Lfact, lines 6994--7002.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_block_independence_factor}
+    This is~\cite[``Corrected block factorization'']{QICLean2026Blueprint}.
     Definition~\ref{def:mpug_block_independence_factor} gives
     \begin{align}
         L^x_{g,h}
@@ -879,10 +901,10 @@
 
 \begin{lemma}[Relative block character]
     \label{thm:mpug_relative_block_character}
-    \lean{TNLean.Algebra.LSymbol.IsCompatible.apply_left_one,
-        TNLean.Algebra.LSymbol.relativeCharacter,
-        TNLean.Algebra.LSymbol.relativeCharacter_mul_base,
-        TNLean.Algebra.LSymbol.relativeCharacter_mul}
+    \lean{LSymbol.IsCompatible.apply_left_one,
+        LSymbol.relativeCharacter,
+        LSymbol.relativeCharacter_mul_base,
+        LSymbol.relativeCharacter_mul}
     \leanok
     \uses{thm:mpug_block_factorization}
     Under the hypotheses of Lemma~\ref{thm:mpug_block_factorization}, define
@@ -906,12 +928,13 @@
     Thus $\rho\colon G\to\C^\times$ is a one-dimensional character. No
     transitivity or finiteness assumption on the action is required.
     % Local correction:
-    % docs/paper-gaps/fbc25_block_independence_reciprocal_errors.tex.
+    % https://sirui-lu.com/QICLean/paper-gaps/fbc25_block_independence_reciprocal_errors.pdf.
     % Source anchor: arXiv:2502.20257, eq:defrho, lines 7003--7018.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_block_factorization}
+    This is~\cite[``Relative block character'']{QICLean2026Blueprint}.
     Compatibility at $(e,e,g)$ gives
     $L^x_{e,g}=\omega(e,e,g)L^{g x}_{e,e}$, and comparing this with
     (\ref{eq:mpug_corrected_block_factorization}) at $(e,g)$ yields
@@ -922,11 +945,11 @@
 
 \begin{lemma}[Explicit inverse gauge]
     \label{thm:mpug_block_independence_inverse_gauge}
-    \lean{TNLean.Algebra.LSymbol.factorFusionGauge,
-        TNLean.Algebra.LSymbol.factorActionGauge,
-        TNLean.Algebra.LSymbol.gauge_one_eq_of_isBlockIndependentEll,
-        TNLean.Algebra.LSymbol.gauge_inv_eq_one_of_isBlockIndependentEll,
-        TNLean.Algebra.LSymbol.hasTrivialGauge_of_isBlockIndependentEll}
+    \lean{LSymbol.factorFusionGauge,
+        LSymbol.factorActionGauge,
+        LSymbol.gauge_one_eq_of_isBlockIndependentEll,
+        LSymbol.gauge_inv_eq_one_of_isBlockIndependentEll,
+        LSymbol.hasTrivialGauge_of_isBlockIndependentEll}
     \leanok
     \uses{def:mpug_l_gauge, thm:mpug_l_gauge_composition,
         thm:mpug_block_factorization, thm:mpug_relative_block_character}
@@ -959,13 +982,14 @@
     trivializing joint scalar gauge for every compatible block-independent
     $L$-symbol.
     % Local correction:
-    % docs/paper-gaps/fbc25_block_independence_reciprocal_errors.tex.
+    % https://sirui-lu.com/QICLean/paper-gaps/fbc25_block_independence_reciprocal_errors.pdf.
     % Source anchor: arXiv:2502.20257, eq:Lgauge and lines 7019--7027.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:mpug_l_gauge_composition, thm:mpug_block_factorization,
         thm:mpug_relative_block_character}
+    This is~\cite[``Explicit inverse gauge'']{QICLean2026Blueprint}.
     Substituting (\ref{eq:mpug_forward_fusion_gauge}) and
     (\ref{eq:mpug_forward_action_gauge}) into
     (\ref{eq:mpug_l_gauge}), equation
@@ -978,11 +1002,11 @@
 
 \begin{lemma}[Trivial and block-constant gauges]
     \label{thm:mpug_trivial_iff_block_constant}
-    \lean{TNLean.Algebra.LSymbol.IsTrivial.isBlockConstant,
-        TNLean.Algebra.LSymbol.IsBlockConstant.isBlockIndependentEll,
-        TNLean.Algebra.LSymbol.HasTrivialGauge.hasBlockConstantGauge,
-        TNLean.Algebra.LSymbol.HasBlockConstantGauge.isBlockIndependent,
-        TNLean.Algebra.LSymbol.hasTrivialGauge_iff_hasBlockConstantGauge}
+    \lean{LSymbol.IsTrivial.isBlockConstant,
+        LSymbol.IsBlockConstant.isBlockIndependentEll,
+        LSymbol.HasTrivialGauge.hasBlockConstantGauge,
+        LSymbol.HasBlockConstantGauge.isBlockIndependent,
+        LSymbol.hasTrivialGauge_iff_hasBlockConstantGauge}
     \leanok
     \uses{def:mpug_block_independence_gauge_forms,
         thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
@@ -997,6 +1021,7 @@
 \begin{proof}\leanok
     \uses{thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
+    This is~\cite[``Trivial and block-constant gauges'']{QICLean2026Blueprint}.
     A trivial $L$-symbol is block-constant. Conversely, a block-constant
     representative has block-independent $\ell$, so applying
     Lemma~\ref{thm:mpug_block_independence_inverse_gauge} to that
@@ -1005,11 +1030,11 @@
 
 \begin{lemma}[Trivial gauges and trivial block scalars]
     \label{thm:mpug_trivial_iff_trivial_ell}
-    \lean{TNLean.Algebra.LSymbol.IsTrivial.isTrivialEll,
-        TNLean.Algebra.LSymbol.IsTrivialEll.isBlockIndependentEll,
-        TNLean.Algebra.LSymbol.HasTrivialGauge.hasTrivialEllGauge,
-        TNLean.Algebra.LSymbol.HasTrivialEllGauge.isBlockIndependent,
-        TNLean.Algebra.LSymbol.hasTrivialGauge_iff_hasTrivialEllGauge}
+    \lean{LSymbol.IsTrivial.isTrivialEll,
+        LSymbol.IsTrivialEll.isBlockIndependentEll,
+        LSymbol.HasTrivialGauge.hasTrivialEllGauge,
+        LSymbol.HasTrivialEllGauge.isBlockIndependent,
+        LSymbol.hasTrivialGauge_iff_hasTrivialEllGauge}
     \leanok
     \uses{def:mpug_block_independence_gauge_forms,
         thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
@@ -1024,6 +1049,8 @@
 \begin{proof}\leanok
     \uses{thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
+    This is~\cite[``Trivial gauges and trivial block
+        scalars'']{QICLean2026Blueprint}.
     A trivial $L$-symbol has $\ell=1$. Conversely, the identity $\ell=1$
     implies block independence, so applying
     Lemma~\ref{thm:mpug_block_independence_inverse_gauge} and composing the
@@ -1032,8 +1059,8 @@
 
 \begin{lemma}[Scalar gauge triviality and block independence]
     \label{thm:mpug_trivial_iff_block_independent}
-    \lean{TNLean.Algebra.LSymbol.IsBlockIndependent.hasTrivialGauge,
-        TNLean.Algebra.LSymbol.hasTrivialGauge_iff_isBlockIndependent}
+    \lean{LSymbol.IsBlockIndependent.hasTrivialGauge,
+        LSymbol.hasTrivialGauge_iff_isBlockIndependent}
     \leanok
     \uses{def:mpug_block_independence_gauge_forms,
         thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
@@ -1048,6 +1075,8 @@
 \begin{proof}\leanok
     \uses{thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
+    This is~\cite[``Scalar gauge triviality and block
+        independence'']{QICLean2026Blueprint}.
     Gauge triviality implies block constancy and hence block independence.
     For the converse, apply
     Lemma~\ref{thm:mpug_block_independence_inverse_gauge} to the
@@ -1057,7 +1086,7 @@
 
 \begin{lemma}[Four scalar gauge formulations of block independence]
     \label{thm:mpug_block_independence_four_forms}
-    \lean{TNLean.Algebra.LSymbol.hasTrivialGauge_tfae}
+    \lean{LSymbol.hasTrivialGauge_tfae}
     \leanok
     \uses{def:mpug_block_independence_gauge_forms,
         thm:mpug_trivial_iff_block_constant,
@@ -1096,12 +1125,12 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{lemma}[Stabilizer transition elements]
     \label{thm:mpug_stabilizer_transition}
-    \lean{TNLean.Algebra.StabilizerRepresentatives.transitionElement_mul,
-        TNLean.Algebra.StabilizerRepresentatives,
-        TNLean.Algebra.StabilizerRepresentatives.ofPretransitive,
-        TNLean.Algebra.StabilizerRepresentatives.transitionElement,
-        TNLean.Algebra.StabilizerRepresentatives.coe_transitionElement,
-        TNLean.Algebra.StabilizerRepresentatives.transitionElement_stabilizer}
+    \lean{StabilizerRepresentatives.transitionElement_mul,
+        StabilizerRepresentatives,
+        StabilizerRepresentatives.ofPretransitive,
+        StabilizerRepresentatives.transitionElement,
+        StabilizerRepresentatives.coe_transitionElement,
+        StabilizerRepresentatives.transitionElement_stabilizer}
     \leanok
     Suppose that $G$ acts transitively on $\mathsf X$, and fix
     $x_0\in\mathsf X$. There are representatives $k_x\in G$ satisfying
@@ -1131,12 +1160,13 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     representative in $h_1$ corrects the printed $k_{g_1x}$. No finiteness or
     normality assumption is required.
     % Local correction:
-    % docs/paper-gaps/fbc25_stabilizer_transition_index_typo.tex.
+    % https://sirui-lu.com/QICLean/paper-gaps/fbc25_stabilizer_transition_index_typo.pdf.
     % Source anchor: arXiv:2502.20257, lemma:h1h2 and eq:h1h2,
     % lines 7028--7042.
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``Stabilizer transition elements'']{QICLean2026Blueprint}.
     Transitivity gives one element carrying $x_0$ to each $x$, with the
     identity chosen at $x=x_0$. Acting with (\ref{eq:mpug_stabilizer_transition})
     on $x_0$ gives
@@ -1149,12 +1179,12 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{lemma}[L-symbol induced by a stabilizer cocycle]
     \label{thm:mpug_stabilizer_cocycle_l_symbol}
-    \lean{TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isCompatible,
-        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol,
-        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_base,
-        TNLean.Algebra.StabilizerRepresentatives.inducedActionGauge,
-        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_eq_gauge,
-        TNLean.Algebra.StabilizerRepresentatives.isMulCoboundary₂_div_iff_exists_actionGauge_inducedLSymbol_eq}
+    \lean{StabilizerRepresentatives.inducedLSymbol_isCompatible,
+        StabilizerRepresentatives.inducedLSymbol,
+        StabilizerRepresentatives.inducedLSymbol_base,
+        StabilizerRepresentatives.inducedActionGauge,
+        StabilizerRepresentatives.inducedLSymbol_eq_gauge,
+        StabilizerRepresentatives.isMulCoboundary₂_div_iff_exists_actionGauge_inducedLSymbol_eq}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_l_gauge, def:is_cocycle,
         def:cohomologous_to, thm:mpug_stabilizer_transition}
@@ -1247,9 +1277,9 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{lemma}[Explicit gauge from a stabilizer cocycle extension]
     \label{thm:mpug_stabilizer_extension_gauge}
-    \lean{TNLean.Algebra.StabilizerRepresentatives.extensionActionGauge,
-        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_eq_extensionActionGauge,
-        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_hasTrivialGauge_of_extension}
+    \lean{StabilizerRepresentatives.extensionActionGauge,
+        StabilizerRepresentatives.inducedLSymbol_eq_extensionActionGauge,
+        StabilizerRepresentatives.inducedLSymbol_hasTrivialGauge_of_extension}
     \leanok
     \uses{thm:mpug_stabilizer_cocycle_l_symbol, def:mpug_l_gauge,
         def:mpug_block_independence_gauge_forms}
@@ -1302,11 +1332,11 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{lemma}[Exact extension from trivializing scalar gauges]
     \label{lem:mpug_trivializing_extension}
-    \lean{TNLean.Algebra.LSymbol.isMulCocycle₂_of_isTrivial_gauge,
-        TNLean.Algebra.LSymbol.basepointExtension,
-        TNLean.Algebra.LSymbol.basepointExtension_isMulCocycle₂,
-        TNLean.Algebra.StabilizerRepresentatives.basepointExtension_restrict,
-        TNLean.Algebra.StabilizerRepresentatives.exists_extension_of_inducedLSymbol_hasTrivialGauge}
+    \lean{LSymbol.isMulCocycle₂_of_isTrivial_gauge,
+        LSymbol.basepointExtension,
+        LSymbol.basepointExtension_isMulCocycle₂,
+        StabilizerRepresentatives.basepointExtension_restrict,
+        StabilizerRepresentatives.exists_extension_of_inducedLSymbol_hasTrivialGauge}
     \leanok
     \uses{thm:mpug_stabilizer_cocycle_l_symbol, def:mpug_l_gauge}
     Let $G$ act on $\mathsf X$ with basepoint $x_0$, stabilizer
@@ -1333,6 +1363,8 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 \begin{proof}\leanok
     \uses{thm:mpug_stabilizer_cocycle_l_symbol, def:mpug_l_gauge,
         thm:mpug_h2_exact_extension}
+    This is~\cite[``Exact extension from trivializing scalar
+        gauges'']{QICLean2026Blueprint}.
     Compatibility of $L[\psi]$ with $\omega=1$ transports under
     $(\beta,\gamma)$ to compatibility of the constant symbol $1$ with
     $d\beta$. Thus $d\beta=1$, which is the two-cocycle equation for
@@ -1347,8 +1379,8 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{lemma}[Block independence extends the stabilizer cocycle]
     \label{lem:mpug_bi_basepoint_extension}
-    \lean{TNLean.Algebra.LSymbol.basepointExtension_apply_of_isTrivial_gauge,
-        TNLean.Algebra.LSymbol.exists_extension_of_isBlockIndependent}
+    \lean{LSymbol.basepointExtension_apply_of_isTrivial_gauge,
+        LSymbol.exists_extension_of_isBlockIndependent}
     \leanok
     \uses{lem:mpug_trivializing_extension, thm:mpug_block_independence_four_forms,
         def:mpug_block_independence_gauge_forms}
@@ -1364,6 +1396,8 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{proof}\leanok
     \uses{lem:mpug_trivializing_extension, thm:mpug_block_independence_four_forms}
+    This is~\cite[``Block independence extends the stabilizer
+        cocycle'']{QICLean2026Blueprint}.
     By Lemma~\ref{thm:mpug_block_independence_four_forms}, some joint scalar
     gauge $(\beta,\gamma)$ trivializes $L$. The cochain
     (\ref{eq:mpug_trivializing_extension}) is a two-cocycle by
@@ -1375,8 +1409,8 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 % Scalar criterion; the circle-coefficient and tensor forms follow below.
 \begin{lemma}[Scalar block independence and restriction of the stabilizer class]
     \label{lem:mpug_scalar_bi_restriction}
-    \lean{TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_exists_extension,
-        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_H2π_mem_range_map_subtype}
+    \lean{StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_exists_extension,
+        StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_H2π_mem_range_map_subtype}
     \leanok
     \uses{lem:mpug_trivializing_extension, thm:mpug_stabilizer_extension_gauge,
         thm:mpug_h2_exact_extension, thm:mpug_block_independence_four_forms}
@@ -1415,14 +1449,14 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{lemma}[Reconstruction of stabilizer L-symbols]
     \label{thm:mpug_stabilizer_reconstruction}
-    \lean{TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol,
-        TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_isCompatible,
-        TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_one_isCompatible,
-        TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_eq_mul,
-        TNLean.Algebra.StabilizerRepresentatives.reconstructedLSymbol_base,
-        TNLean.Algebra.StabilizerRepresentatives.gauge_reconstructedLSymbol_isCompatible,
-        TNLean.Algebra.ScalarThreeCochain.exists_fusionGauge_eq_one_of_isTrivialGaugeClass_comap,
-        TNLean.Algebra.LSymbol.IsCompatible.mul}
+    \lean{StabilizerRepresentatives.reconstructedLSymbol,
+        StabilizerRepresentatives.reconstructedLSymbol_isCompatible,
+        StabilizerRepresentatives.reconstructedLSymbol_one_isCompatible,
+        StabilizerRepresentatives.reconstructedLSymbol_eq_mul,
+        StabilizerRepresentatives.reconstructedLSymbol_base,
+        StabilizerRepresentatives.gauge_reconstructedLSymbol_isCompatible,
+        ScalarThreeCochain.exists_fusionGauge_eq_one_of_isTrivialGaugeClass_comap,
+        LSymbol.IsCompatible.mul}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_l_gauge, def:mpug_three_cocycle,
         def:mpug_fusion_gauge, def:mpug_trivial_gauge_class, def:is_cocycle,
@@ -1454,7 +1488,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     \cite{gap:glm23_eq20_fusion_gauge}, for a general
     $\omega$ with $\omega|_H=d\beta$ the printed formula can fail.
     No normalization of $\omega$ is required.
-    % Local fix: docs/paper-gaps/glm23_eq20_fusion_gauge.tex.
+    % Local fix: https://sirui-lu.com/QICLean/paper-gaps/glm23_eq20_fusion_gauge.pdf.
     % Source anchor: arXiv:2203.12563, REsubmission.tex lines 740--761.
 \end{lemma}
 
@@ -1484,24 +1518,24 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{lemma}[Classification and torsor of stabilizer L-symbols]
     \label{thm:mpug_stabilizer_torsor}
-    \lean{TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_eq_inducedLSymbol,
-        TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_eq_reconstructedLSymbol,
-        TNLean.Algebra.StabilizerRepresentatives.exists_actionGauge_gauge_eq_reconstructedLSymbol,
-        TNLean.Algebra.StabilizerRepresentatives.isCompatible_iff_exists_actionGauge_mul_inducedLSymbol,
-        TNLean.Algebra.StabilizerRepresentatives.actionGaugeEquiv_mul_inducedLSymbol_iff,
-        TNLean.Algebra.StabilizerRepresentatives.solutionSetoid,
-        TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses,
-        TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses_H2π,
-        TNLean.Algebra.StabilizerRepresentatives.h2EquivSolutionClasses_apply,
-        TNLean.Algebra.StabilizerRepresentatives.solutionAddAction,
-        TNLean.Algebra.StabilizerRepresentatives.existsUnique_vadd_eq,
-        TNLean.Algebra.LSymbol.ActionGaugeEquiv,
-        TNLean.Algebra.LSymbol.actionGaugeEquiv_equivalence,
-        TNLean.Algebra.LSymbol.IsCompatible.inv,
-        TNLean.Algebra.LSymbol.IsCompatible.mul_inv_one,
-        TNLean.Algebra.LSymbol.IsCompatible.gauge_one,
-        TNLean.Algebra.LSymbol.IsCompatible.isCocycle_restrict,
-        TNLean.Algebra.LSymbol.gauge_one_mul}
+    \lean{StabilizerRepresentatives.exists_actionGauge_eq_inducedLSymbol,
+        StabilizerRepresentatives.exists_actionGauge_eq_reconstructedLSymbol,
+        StabilizerRepresentatives.exists_actionGauge_gauge_eq_reconstructedLSymbol,
+        StabilizerRepresentatives.isCompatible_iff_exists_actionGauge_mul_inducedLSymbol,
+        StabilizerRepresentatives.actionGaugeEquiv_mul_inducedLSymbol_iff,
+        StabilizerRepresentatives.solutionSetoid,
+        StabilizerRepresentatives.h2EquivSolutionClasses,
+        StabilizerRepresentatives.h2EquivSolutionClasses_H2π,
+        StabilizerRepresentatives.h2EquivSolutionClasses_apply,
+        StabilizerRepresentatives.solutionAddAction,
+        StabilizerRepresentatives.existsUnique_vadd_eq,
+        LSymbol.ActionGaugeEquiv,
+        LSymbol.actionGaugeEquiv_equivalence,
+        LSymbol.IsCompatible.inv,
+        LSymbol.IsCompatible.mul_inv_one,
+        LSymbol.IsCompatible.gauge_one,
+        LSymbol.IsCompatible.isCocycle_restrict,
+        LSymbol.gauge_one_mul}
     \leanok
     \uses{thm:mpug_stabilizer_reconstruction, def:mpug_l_gauge,
         thm:mpug_h2_group_cohomology_comparison, def:cohomologous_to}
@@ -1583,12 +1617,12 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{lemma}[Scalar block independence with circle coefficients]
     \label{lem:mpug_scalar_bi_restriction_circle}
-    \lean{TNLean.Algebra.circleRepresentationRes,
-        TNLean.Algebra.circleToComplexUnits_map_comp_map_res,
-        TNLean.Algebra.circleToComplexUnits_map_res_apply,
-        TNLean.Algebra.mem_range_map_circleRepresentationRes_iff,
-        TNLean.Algebra.LSymbol.isBlockIndependent_gauge_iff,
-        TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_circle}
+    \lean{ScalarCohomology.circleRepresentationRes,
+        ScalarCohomology.circleToComplexUnits_map_comp_map_res,
+        ScalarCohomology.circleToComplexUnits_map_res_apply,
+        ScalarCohomology.mem_range_map_circleRepresentationRes_iff,
+        LSymbol.isBlockIndependent_gauge_iff,
+        StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_circle}
     \leanok
     \uses{lem:mpug_scalar_bi_restriction, thm:mpug_circle_complex_units_h2}
     Restriction along a group homomorphism $f\colon S\to G$ commutes with
@@ -1612,6 +1646,8 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 \begin{proof}\leanok
     \uses{lem:mpug_scalar_bi_restriction, thm:mpug_circle_complex_units_h2,
         thm:mpug_l_gauge_composition}
+    This is~\cite[``Scalar block independence with circle
+        coefficients'']{QICLean2026Blueprint}.
     Both composites of restriction and inclusion are induced by the same
     homomorphism $S\to G$ and the same coefficient map
     $U(1)\to\C^\times$, so they agree. If $c=\operatorname{res}(a)$, then
@@ -1719,12 +1755,12 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{definition}[Generalized coboundary and cocycle]
     \label{def:mpug_generalized_cocycle}
-    \lean{TNLean.Algebra.GeneralizedThreeCochain,
-        TNLean.Algebra.GeneralizedFourCochain,
-        TNLean.Algebra.ActionTensorGauge.coboundary,
-        TNLean.Algebra.LSymbol.coboundary,
-        TNLean.Algebra.GeneralizedThreeCochain.coboundary,
-        TNLean.Algebra.LSymbol.IsGeneralizedCocycle}
+    \lean{GeneralizedThreeCochain,
+        GeneralizedFourCochain,
+        ActionTensorGauge.coboundary,
+        LSymbol.coboundary,
+        GeneralizedThreeCochain.coboundary,
+        LSymbol.IsGeneralizedCocycle}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_l_gauge}
     Let $\chi\colon G\times\mathsf X\to\C^\times$ be block-dependent. Its
@@ -1768,14 +1804,14 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     (\ref{eq:mpug_generalized_three_coboundary}).
     No transitivity or finiteness assumption is imposed on $\mathsf X$.
 
-    % Local fix: docs/paper-gaps/fbc25_two_cochain_coboundary_index_typo.tex.
+    % Local fix: https://sirui-lu.com/QICLean/paper-gaps/fbc25_two_cochain_coboundary_index_typo.pdf.
     % Source anchor: arXiv:2502.20257, lines 5914--5922 and lemma:G_cocycle.
 \end{definition}
 
 \begin{lemma}[Generalized coboundaries square to one]
     \label{thm:mpug_generalized_coboundary_squared}
-    \lean{TNLean.Algebra.ActionTensorGauge.isGeneralizedCocycle_coboundary,
-        TNLean.Algebra.GeneralizedThreeCochain.coboundary_coboundary}
+    \lean{ActionTensorGauge.isGeneralizedCocycle_coboundary,
+        GeneralizedThreeCochain.coboundary_coboundary}
     \leanok
     \uses{def:mpug_generalized_cocycle}
     The generalized coboundary of every block-dependent scalar $1$-cochain
@@ -1799,10 +1835,10 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{definition}[Positive block-dependent cochains]
     \label{def:mpug_positive_generalized_cochains}
-    \lean{TNLean.Algebra.PositiveUnits.embedding,
-        TNLean.Algebra.PositiveUnits.IsPositive,
-        TNLean.Algebra.ActionTensorGauge.IsPositiveValued,
-        TNLean.Algebra.LSymbol.IsPositiveValued}
+    \lean{PositiveUnits.embedding,
+        PositiveUnits.IsPositive,
+        ActionTensorGauge.IsPositiveValued,
+        LSymbol.IsPositiveValued}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_l_gauge}
     Let $\iota\colon\mathbb R_{>0}\to\C^\times$ be the natural
@@ -1825,8 +1861,8 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{definition}[Hat operation on block-dependent cochains]
     \label{def:mpug_generalized_hat}
-    \lean{TNLean.Algebra.ActionTensorGauge.hat,
-        TNLean.Algebra.LSymbol.hat}
+    \lean{ActionTensorGauge.hat,
+        LSymbol.hat}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_l_gauge}
     Following the one-index and two-index cases of the hat operation in
@@ -1847,9 +1883,9 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{lemma}[Hat involution and generalized coboundaries]
     \label{thm:mpug_generalized_hat_coboundary}
-    \lean{TNLean.Algebra.ActionTensorGauge.hat_hat,
-        TNLean.Algebra.LSymbol.hat_hat,
-        TNLean.Algebra.LSymbol.hat_coboundary}
+    \lean{ActionTensorGauge.hat_hat,
+        LSymbol.hat_hat,
+        LSymbol.hat_coboundary}
     \leanok
     \uses{def:mpug_generalized_cocycle, def:mpug_generalized_hat}
     The block-dependent hat operation is an involution:
@@ -1893,7 +1929,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{definition}[Regular-action matrices]
     \label{def:mpug_generalized_regular_matrices}
-    \lean{TNLean.Algebra.LSymbol.regularMatrix}
+    \lean{LSymbol.regularMatrix}
     \leanok
     \uses{def:mpug_l_symbols}
     Let $\Omega\colon\mathsf X\times G^2\to\C^\times$ be an $L$-symbol.
@@ -1905,11 +1941,12 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         \label{eq:mpug_generalized_regular_matrix}
     \end{align}
     % Source anchor: arXiv:2502.20257, lines 5938--5942.
+    This is~\cite[``Regular-action matrices'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Generalized projective multiplication law]
     \label{thm:mpug_generalized_regular_multiplication}
-    \lean{TNLean.Algebra.LSymbol.regularMatrix_mul}
+    \lean{LSymbol.regularMatrix_mul}
     \leanok
     \uses{def:mpug_generalized_cocycle,
         def:mpug_generalized_regular_matrices}
@@ -1929,6 +1966,8 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 \begin{proof}\leanok
     \uses{def:mpug_generalized_cocycle,
         def:mpug_generalized_regular_matrices}
+    This is~\cite[``Generalized projective multiplication
+        law'']{QICLean2026Blueprint}.
     Applying the left side to $\ket{k}$ yields the coefficient
     \begin{align}
         \Omega^{(hk)^{-1}h x}_{g,hk}\Omega^{k^{-1}x}_{h,k}
@@ -1943,11 +1982,11 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{lemma}[Finite-group power trivialization]
     \label{thm:mpug_generalized_cocycle_power}
-    \lean{TNLean.Algebra.LSymbol.regularMatrix_eq_permutation_mul_diagonal,
-        TNLean.Algebra.LSymbol.regularDeterminant_ne_zero,
-        TNLean.Algebra.LSymbol.determinantCochain,
-        TNLean.Algebra.LSymbol.pow_card_eq_coboundary_apply,
-        TNLean.Algebra.LSymbol.pow_card_eq_coboundary}
+    \lean{LSymbol.regularMatrix_eq_permutation_mul_diagonal,
+        LSymbol.regularDeterminant_ne_zero,
+        LSymbol.determinantCochain,
+        LSymbol.pow_card_eq_coboundary_apply,
+        LSymbol.pow_card_eq_coboundary}
     \leanok
     \uses{def:mpug_generalized_cocycle,
         def:mpug_generalized_regular_matrices}
@@ -1972,13 +2011,14 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     (\ref{eq:mpug_generalized_power_coboundary}) carries the index $h$,
     correcting the printed formula.
 
-    % Local fix: docs/paper-gaps/fbc25_generalized_cocycle_determinant_typo.tex.
+    % Local fix: https://sirui-lu.com/QICLean/paper-gaps/fbc25_generalized_cocycle_determinant_typo.pdf.
     % Source anchor: arXiv:2502.20257, lemma:G_cocycle, lines 5931--5948.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{def:mpug_generalized_regular_matrices,
         thm:mpug_generalized_regular_multiplication}
+    This is~\cite[``Finite-group power trivialization'']{QICLean2026Blueprint}.
     Let $P_g$ be the regular-action permutation matrix defined by
     $P_g\ket{k}=\ket{gk}$, and set
     $D^x_g=\operatorname{diag}(\Omega^{k^{-1}x}_{g,k})_{k\in G}$.
@@ -2007,12 +2047,12 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{lemma}[Positive generalized cocycles are coboundaries]
     \label{thm:mpug_positive_generalized_cocycle}
-    \lean{TNLean.Algebra.PositiveUnits.positiveRpow,
-        TNLean.Algebra.PositiveUnits.positiveRpow_inv_natCast_pow,
-        TNLean.Algebra.ActionTensorGauge.positiveRpow,
-        TNLean.Algebra.LSymbol.positivePrimitive,
-        TNLean.Algebra.LSymbol.isPositiveValued_positivePrimitive,
-        TNLean.Algebra.LSymbol.exists_positive_coboundary}
+    \lean{PositiveUnits.positiveRpow,
+        PositiveUnits.positiveRpow_inv_natCast_pow,
+        ActionTensorGauge.positiveRpow,
+        LSymbol.positivePrimitive,
+        LSymbol.isPositiveValued_positivePrimitive,
+        LSymbol.exists_positive_coboundary}
     \leanok
     \uses{def:mpug_generalized_cocycle,
         def:mpug_positive_generalized_cochains,
@@ -2036,7 +2076,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     through (\ref{eq:mpug_generalized_determinant_cochain}) and the block label
     $x$ is therefore retained.
     % Local correction:
-    % docs/paper-gaps/fbc25_positive_generalized_cocycle_block_index.tex.
+    % https://sirui-lu.com/QICLean/paper-gaps/fbc25_positive_generalized_cocycle_block_index.pdf.
     % Source anchor: arXiv:2502.20257, cor:positive_trivial, lines 5950--5956.
 \end{lemma}
 
@@ -2071,14 +2111,14 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
     and the $\lvert G\rvert$-th power is injective on $\mathbb R_{>0}$. Hence
     $d\chi_0=\Omega$.
     % Consolidated clarification:
-    % docs/paper-gaps/fbc25_positive_generalized_cocycle_determinant_sign.tex.
+    % https://sirui-lu.com/QICLean/paper-gaps/fbc25_positive_generalized_cocycle_determinant_sign.pdf.
 \end{proof}
 
 \begin{lemma}[Hat-compatible positive primitive]
     \label{thm:mpug_positive_generalized_cocycle_hat}
-    \lean{TNLean.Algebra.ActionTensorGauge.coboundary_div,
-        TNLean.Algebra.ActionTensorGauge.coboundary_positiveRpow,
-        TNLean.Algebra.LSymbol.exists_positive_coboundary_hat_mul_eq_one}
+    \lean{ActionTensorGauge.coboundary_div,
+        ActionTensorGauge.coboundary_positiveRpow,
+        LSymbol.exists_positive_coboundary_hat_mul_eq_one}
     \leanok
     \uses{def:mpug_generalized_hat,
         def:mpug_positive_generalized_cochains,
@@ -2111,6 +2151,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 \begin{proof}\leanok
     \uses{thm:mpug_generalized_hat_coboundary,
         thm:mpug_positive_generalized_cocycle}
+    This is~\cite[``Hat-compatible positive primitive'']{QICLean2026Blueprint}.
     Let $\chi_0$ satisfy $d\chi_0=\Omega$ as in
     Lemma~\ref{thm:mpug_positive_generalized_cocycle}. Define
     \begin{align}
@@ -2146,12 +2187,12 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{definition}[Inversion cochains]
     \label{def:mpug_inversion_cochains}
-    \lean{TNLean.Algebra.ScalarOneCochain,
-        TNLean.Algebra.ScalarOneCochain.coboundary,
-        TNLean.Algebra.ScalarCocycle.hat,
-        TNLean.Algebra.ScalarThreeCochain.hat,
-        TNLean.Algebra.ScalarThreeCochain.Xi,
-        TNLean.Algebra.ScalarThreeCochain.sigma}
+    \lean{ScalarOneCochain,
+        ScalarOneCochain.coboundary,
+        ScalarCocycle.hat,
+        ScalarThreeCochain.hat,
+        ScalarThreeCochain.Xi,
+        ScalarThreeCochain.sigma}
     \leanok
     \uses{def:mpug_scalar_cochains}
     These conventions and inversion cochains follow
@@ -2183,12 +2224,13 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         \label{eq:mpug_intro_sigma}
     \end{align}
     % Source anchors: arXiv:2502.20257, lines 5910--5916 and eq:introXi.
+    This is~\cite[``Inversion cochains'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[The hat operation is an involution]
     \label{thm:mpug_scalar_hat_involution}
-    \lean{TNLean.Algebra.ScalarCocycle.hat_hat,
-        TNLean.Algebra.ScalarThreeCochain.hat_hat}
+    \lean{ScalarCocycle.hat_hat,
+        ScalarThreeCochain.hat_hat}
     \leanok
     \uses{def:mpug_inversion_cochains}
     Let $G$ be an arbitrary group. Every scalar $2$-cochain $\beta$ and every
@@ -2207,6 +2249,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{proof}\leanok
     \uses{def:mpug_inversion_cochains}
+    This is~\cite[``The hat operation is an involution'']{QICLean2026Blueprint}.
     Reversing the arguments of (\ref{eq:mpug_two_hat}) and inverting each of
     them twice restores the original arguments, and likewise for
     (\ref{eq:mpug_three_hat}).
@@ -2214,8 +2257,8 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{lemma}[Two inversion-cochain formulas]
     \label{thm:mpug_inversion_cochain_formulas}
-    \lean{TNLean.Algebra.ScalarThreeCochain.Xi_eq_second_formula,
-        TNLean.Algebra.ScalarThreeCochain.sigma_inv}
+    \lean{ScalarThreeCochain.Xi_eq_second_formula,
+        ScalarThreeCochain.sigma_inv}
     \leanok
     \uses{def:mpug_scalar_cochains, def:mpug_three_cocycle,
         def:mpug_inversion_cochains}
@@ -2243,6 +2286,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 \begin{proof}\leanok
     \uses{def:mpug_scalar_cochains, def:mpug_three_cocycle,
         def:mpug_inversion_cochains}
+    This is~\cite[``Two inversion-cochain formulas'']{QICLean2026Blueprint}.
     Applying (\ref{eq:mpug_three_cocycle}) to $(h^{-1},g^{-1},g,h)$ and using
     (\ref{eq:mpug_three_normalized}) gives the second quotient in
     (\ref{eq:mpug_Xi_two_formulas}). Applying
@@ -2254,8 +2298,8 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 
 \begin{lemma}[Inversion identities for a normalized three-cocycle]
     \label{thm:mpug_omega_Xi}
-    \lean{TNLean.Algebra.ScalarThreeCochain.hat_eq_mul_coboundary_Xi,
-        TNLean.Algebra.ScalarThreeCochain.Xi_eq_hat_mul_coboundary_sigma}
+    \lean{ScalarThreeCochain.hat_eq_mul_coboundary_Xi,
+        ScalarThreeCochain.Xi_eq_hat_mul_coboundary_sigma}
     \leanok
     \uses{def:mpug_scalar_cochains, def:mpug_three_cocycle,
         def:mpug_fusion_gauge, def:mpug_inversion_cochains}
@@ -2277,6 +2321,8 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 \begin{proof}\leanok
     \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge,
         def:mpug_inversion_cochains, thm:mpug_inversion_cochain_formulas}
+    This is~\cite[``Inversion identities for a normalized
+        three-cocycle'']{QICLean2026Blueprint}.
     For (\ref{eq:mpug_hat_omega}), multiplying the cocycle identities at
     \begin{align}
          & (k^{-1},h^{-1},g^{-1},g),\quad
@@ -2301,7 +2347,7 @@ Let $\Z_2=\{e,s\}$ with $s^2=e$.
 
 \begin{lemma}[Normalized $L$-symbol ratio]
     \label{thm:mpug_sigma_l_ratio}
-    \lean{TNLean.Algebra.LSymbol.sigma_eq_div}
+    \lean{LSymbol.sigma_eq_div}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_l_normalized,
         def:mpug_inversion_cochains}
@@ -2320,6 +2366,7 @@ Let $\Z_2=\{e,s\}$ with $s^2=e$.
 \begin{proof}\leanok
     \uses{def:mpug_l_symbols, def:mpug_l_normalized,
         def:mpug_inversion_cochains}
+    This is~\cite[``Normalized $L$-symbol ratio'']{QICLean2026Blueprint}.
     Applying the compatibility relation
     (\ref{eq:mpug_l_compatibility}) to $(g,g^{-1},g)$, the two factors with an
     identity argument are $1$ by normalization, leaving
@@ -2328,7 +2375,7 @@ Let $\Z_2=\{e,s\}$ with $s^2=e$.
 
 \begin{lemma}[Trivial scalar gauge class for $\Z_2$]
     \label{thm:mpug_z2_trivial_scalar_class}
-    \lean{TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_iff_sigma_generator_eq_one}
+    \lean{ScalarThreeCochain.isTrivialGaugeClass_iff_sigma_generator_eq_one}
     \leanok
     \uses{def:mpug_scalar_cochains, def:mpug_fusion_gauge,
         def:mpug_trivial_gauge_class, def:mpug_inversion_cochains}
@@ -2367,7 +2414,7 @@ Let $\Z_2=\{e,s\}$ with $s^2=e$.
 
 \begin{lemma}[Sign dichotomy for the $\Z_2$ inversion scalar]
     \label{thm:mpug_z2_sigma_sign}
-    \lean{TNLean.Algebra.ScalarThreeCochain.sigma_generator_eq_one_or_eq_neg_one}
+    \lean{ScalarThreeCochain.sigma_generator_eq_one_or_eq_neg_one}
     \leanok
     \uses{def:mpug_three_cocycle, def:mpug_inversion_cochains}
     Let $\omega$ be a normalized scalar $3$-cocycle on $\Z_2$. Then
@@ -2379,6 +2426,8 @@ Let $\Z_2=\{e,s\}$ with $s^2=e$.
 
 \begin{proof}\leanok
     \uses{thm:mpug_inversion_cochain_formulas}
+    This is~\cite[``Sign dichotomy for the $\Z_2$ inversion
+        scalar'']{QICLean2026Blueprint}.
     Since $s^{-1}=s$, formula (\ref{eq:mpug_sigma_inverse}) gives
     $\sigma(s)=\sigma(s)^{-1}$. Hence $\sigma(s)^2=1$, whose two solutions in
     $\C^\times$ are $1$ and $-1$.
@@ -2441,7 +2490,7 @@ $\xi_g(x)\xi_g(g\mathbin{\cdot}x)=-1$ because $g^{-1}=g$.
 
 \begin{lemma}[Nontrivial scalar gauge class for $\Z_2$]
     \label{thm:mpug_z2_nontrivial_scalar_class}
-    \lean{TNLean.Algebra.ScalarThreeCochain.not_isTrivialGaugeClass_iff_sigma_generator_eq_neg_one}
+    \lean{ScalarThreeCochain.not_isTrivialGaugeClass_iff_sigma_generator_eq_neg_one}
     \leanok
     \uses{def:mpug_three_cocycle, def:mpug_trivial_gauge_class,
         def:mpug_inversion_cochains}
@@ -2458,6 +2507,8 @@ $\xi_g(x)\xi_g(g\mathbin{\cdot}x)=-1$ because $g^{-1}=g$.
 
 \begin{proof}\leanok
     \uses{thm:mpug_z2_trivial_scalar_class, thm:mpug_z2_sigma_sign}
+    This is~\cite[``Nontrivial scalar gauge class for
+        $\Z_2$'']{QICLean2026Blueprint}.
     By Lemma~\ref{thm:mpug_z2_trivial_scalar_class}, a nontrivial class has
     $\sigma(s)\neq1$. The dichotomy
     (\ref{eq:mpug_z2_sigma_sign}) then forces $\sigma(s)=-1$, and the converse

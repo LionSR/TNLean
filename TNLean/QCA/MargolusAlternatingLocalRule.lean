@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.QCA.MargolusUnitaryGates
 import TNLean.QCA.TranslationCovariance
 import Mathlib.Data.Matrix.Basis
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # The actual alternating rule on every even-pair observable

@@ -99,8 +99,8 @@ lemma norm_choose_MPVBlockPhaseEquiv_eq_one
     {X : MPSTensor d DX} {Y : MPSTensor d DY}
     (hTPX : IsLeftCanonical X)
     (hTPY : IsLeftCanonical Y)
-    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DX) X))
-    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DY) Y))
+    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DX) X))
+    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DY) Y))
     (hIrrX : Kraus.IsIrreducibleFamily X)
     (hIrrY : Kraus.IsIrreducibleFamily Y)
     (h : MPVBlockPhaseEquiv X Y) :
@@ -151,8 +151,8 @@ theorem dim_eq_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
     {X : MPSTensor d DX} {Y : MPSTensor d DY}
     (hTPX : IsLeftCanonical X)
     (hTPY : IsLeftCanonical Y)
-    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DX) X))
-    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DY) Y))
+    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DX) X))
+    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DY) Y))
     (hIrrX : Kraus.IsIrreducibleFamily X)
     (hIrrY : Kraus.IsIrreducibleFamily Y)
     (h : MPVBlockPhaseEquiv X Y) :
@@ -202,8 +202,8 @@ theorem gaugePhaseEquiv_of_MPVBlockPhaseEquiv_of_tp_primitive_irr
     {X : MPSTensor d DX} {Y : MPSTensor d DY}
     (hTPX : IsLeftCanonical X)
     (hTPY : IsLeftCanonical Y)
-    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DX) X))
-    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DY) Y))
+    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DX) X))
+    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DY) Y))
     (hIrrX : Kraus.IsIrreducibleFamily X)
     (hIrrY : Kraus.IsIrreducibleFamily Y)
     (h : MPVBlockPhaseEquiv X Y) :
@@ -247,8 +247,8 @@ lemma exists_gauge_choose_MPVBlockPhaseEquiv_of_tp_primitive_irr
     {X : MPSTensor d DX} {Y : MPSTensor d DY}
     (hTPX : IsLeftCanonical X)
     (hTPY : IsLeftCanonical Y)
-    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DX) X))
-    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DY) Y))
+    (hPrimX : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DX) X))
+    (hPrimY : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DY) Y))
     (hIrrX : Kraus.IsIrreducibleFamily X)
     (hIrrY : Kraus.IsIrreducibleFamily Y)
     (h : MPVBlockPhaseEquiv X Y) :
@@ -628,7 +628,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
       (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
       (∀ k, Kraus.IsInjective (blocks k)) ∧
       (∀ k, μ k ≠ 0) ∧
-      SameMPV₂Pos (blockTensor (d := d) (D := D) A p)
+      SameMPV₂Pos (blockTensor (d := d) (n := Fin D) A p)
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) := by
   classical
   -- Step 1: arbitrary-input two-sided reduction at `B = A`.
@@ -655,26 +655,26 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
   -- IsLeftCanonical of each flattened-iterated block.
   · intro k
     have hLCBlocked : ∑ i : Fin (blockPhysDim (blockPhysDim d p₀) L),
-        (blockTensor (d := blockPhysDim d p₀) (D := dimA k) (blocksA k) L i)ᴴ *
-          blockTensor (d := blockPhysDim d p₀) (D := dimA k) (blocksA k) L i = 1 :=
+        (blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L i)ᴴ *
+          blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L i = 1 :=
       (hBlocked k).2.1
     change IsLeftCanonical
       (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
         (blocksA k) L)
     exact (leftCanonical_reindexPhysical_equiv
       (directIteratedBlockEquiv d p₀ L)
-      (blockTensor (d := blockPhysDim d p₀) (D := dimA k) (blocksA k) L)).mpr
+      (blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L)).mpr
         hLCBlocked
   -- Transfer-map primitivity of each flattened-iterated block.
   · intro k
     have hPrimBlocked := (hBlocked k).2.2.1
     change _root_.IsPrimitive
-      (Kraus.transferMap (d := blockPhysDim d (p₀ * L)) (D := dimA k)
+      (Kraus.transferMap (ι := Fin (blockPhysDim d (p₀ * L))) (n := Fin (dimA k))
         (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
           (blocksA k) L))
     exact (isPrimitive_transferMap_reindexPhysical_equiv
       (directIteratedBlockEquiv d p₀ L)
-      (blockTensor (d := blockPhysDim d p₀) (D := dimA k) (blocksA k) L)).mpr
+      (blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L)).mpr
         hPrimBlocked
   -- Tensor irreducibility of each flattened-iterated block.
   · intro k
@@ -684,7 +684,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
         (blocksA k) L)
     exact (isIrreducibleTensor_reindexPhysical_equiv
       (directIteratedBlockEquiv d p₀ L)
-      (blockTensor (d := blockPhysDim d p₀) (D := dimA k) (blocksA k) L)).mpr
+      (blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L)).mpr
         hIrrBlocked
   -- One-site injectivity of each flattened-iterated block.
   · intro k
@@ -694,7 +694,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
         (blocksA k) L)
     exact (isInjective_reindexPhysical_equiv
       (directIteratedBlockEquiv d p₀ L)
-      (blockTensor (d := blockPhysDim d p₀) (D := dimA k) (blocksA k) L)).mpr
+      (blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L)).mpr
         hInjBlocked
   -- Nonzero weights at the power.
   · intro k; exact pow_ne_zero L (hμA k)
@@ -702,34 +702,34 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
   · -- (i) blocked Pos:
     have hBlockPos :
         SameMPV₂Pos
-          (blockTensor (d := blockPhysDim d p₀) (D := D)
-            (blockTensor (d := d) (D := D) A p₀) L)
-          (blockTensor (d := blockPhysDim d p₀) (D := ∑ k : Fin rA, dimA k)
+          (blockTensor (d := blockPhysDim d p₀) (n := Fin D)
+            (blockTensor (d := d) (n := Fin D) A p₀) L)
+          (blockTensor (d := blockPhysDim d p₀) (n := Fin (∑ k : Fin rA, dimA k))
             (toTensorFromBlocks (d := blockPhysDim d p₀) (μ := μA) blocksA) L) :=
       sameMPV₂Pos_blockTensor
         (d := blockPhysDim d p₀)
-        (blockTensor (d := d) (D := D) A p₀)
+        (blockTensor (d := d) (n := Fin D) A p₀)
         (toTensorFromBlocks (d := blockPhysDim d p₀) (μ := μA) blocksA)
         hAPos L hL
     -- (ii) blocking distributes over toTensorFromBlocks (full-length SameMPV₂):
     have hDistr : SameMPV₂
-        (blockTensor (d := blockPhysDim d p₀) (D := ∑ k : Fin rA, dimA k)
+        (blockTensor (d := blockPhysDim d p₀) (n := Fin (∑ k : Fin rA, dimA k))
           (toTensorFromBlocks (d := blockPhysDim d p₀) (μ := μA) blocksA) L)
         (toTensorFromBlocks
           (d := blockPhysDim (blockPhysDim d p₀) L)
           (fun k => (μA k) ^ L)
-          (fun k => blockTensor (d := blockPhysDim d p₀) (D := dimA k)
+          (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
             (blocksA k) L)) :=
       sameMPV₂_blockTensor_toTensorFromBlocks
         (d := blockPhysDim d p₀) (dim := dimA) μA blocksA L
     -- (iii) combine the two on the iterated phys-dim alphabet:
     have hIter : SameMPV₂Pos
-        (blockTensor (d := blockPhysDim d p₀) (D := D)
-          (blockTensor (d := d) (D := D) A p₀) L)
+        (blockTensor (d := blockPhysDim d p₀) (n := Fin D)
+          (blockTensor (d := d) (n := Fin D) A p₀) L)
         (toTensorFromBlocks
           (d := blockPhysDim (blockPhysDim d p₀) L)
           (fun k => (μA k) ^ L)
-          (fun k => blockTensor (d := blockPhysDim d p₀) (D := dimA k)
+          (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
             (blocksA k) L)) := by
       intro N hN σ
       exact (hBlockPos N hN σ).trans (hDistr N σ)
@@ -738,13 +738,13 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
     have hReindex :
         SameMPV₂Pos
           (Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
-            (blockTensor (d := blockPhysDim d p₀) (D := D)
-              (blockTensor (d := d) (D := D) A p₀) L))
+            (blockTensor (d := blockPhysDim d p₀) (n := Fin D)
+              (blockTensor (d := d) (n := Fin D) A p₀) L))
           (Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
             (toTensorFromBlocks
               (d := blockPhysDim (blockPhysDim d p₀) L)
               (fun k => (μA k) ^ L)
-              (fun k => blockTensor (d := blockPhysDim d p₀) (D := dimA k)
+              (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
                 (blocksA k) L))) :=
       sameMPV₂Pos_reindexPhysical_aux
         (f := (directIteratedBlockEquiv d p₀ L : _ → _)) hIter
@@ -752,16 +752,16 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
     -- and `toTensorFromBlocks_flattenedIteratedBlockTensor`.
     have hLeft :
         Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
-          (blockTensor (d := blockPhysDim d p₀) (D := D)
-            (blockTensor (d := d) (D := D) A p₀) L) =
-          blockTensor (d := d) (D := D) A (p₀ * L) :=
+          (blockTensor (d := blockPhysDim d p₀) (n := Fin D)
+            (blockTensor (d := d) (n := Fin D) A p₀) L) =
+          blockTensor (d := d) (n := Fin D) A (p₀ * L) :=
       flattenedIteratedBlockTensor_blockTensor (d := d) (D := D) A p₀ L
     have hRight :
         Kraus.reindexPhysical (directIteratedBlockEquiv d p₀ L)
           (toTensorFromBlocks
             (d := blockPhysDim (blockPhysDim d p₀) L)
             (fun k => (μA k) ^ L)
-            (fun k => blockTensor (d := blockPhysDim d p₀) (D := dimA k)
+            (fun k => blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k))
               (blocksA k) L)) =
           toTensorFromBlocks
             (d := blockPhysDim d (p₀ * L))

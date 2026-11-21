@@ -7,7 +7,7 @@ import TNLean.MPS.MPDO.ZCL
 import QICLean.Algebra.OrthogonalProjection
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Commuting-form and GSNNCH data for simple MPDOs

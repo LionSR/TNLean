@@ -32,18 +32,20 @@ arXiv:1010.3732, Section II.F.2, the parent-interaction comparison. -/
 theorem hamiltonian_translationInvariant_affine_ker_eq_of_order {d N : ℕ}
     (A B : MPOTensor.ChainOperator d 2) (hA : A.PosSemidef) (hAB : A ≤ B)
     (hN : 2 ≤ N)
-    (hker : LinearMap.ker
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) ≤
-      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN B).hamiltonian))
+    (hker : haveI : NeZero N := ⟨by omega⟩; LinearMap.ker
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) ≤
+      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N B).hamiltonian))
     (t : ℝ) (ht : 0 ≤ t) :
-    LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian) =
-    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) := by
-  have hHA : (Interaction.translationInvariant hN A).hamiltonian.PosSemidef :=
-    Interaction.posSemidef_hamiltonian fun _ ↦ posSemidef_placeAlong (X := fun _ ↦ Fin d) _ hA
-  have hAB' : (Interaction.translationInvariant hN A).hamiltonian ≤
-      (Interaction.translationInvariant hN B).hamiltonian := by
-    simp only [Interaction.hamiltonian, Interaction.translates_term]
+    haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+      (Interaction.translationInvariant N (A + t • (B - A))).hamiltonian) =
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) := by
+  have : NeZero N := ⟨by omega⟩
+  have hHA : (Interaction.translationInvariant N A).hamiltonian.PosSemidef :=
+    Interaction.posSemidef_hamiltonian fun _ ↦
+      Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _)
+  have hAB' : (Interaction.translationInvariant N A).hamiltonian ≤
+      (Interaction.translationInvariant N B).hamiltonian := by
+    simp only [Interaction.hamiltonian_translationInvariant_of_le _ hN]
     exact Finset.sum_le_sum fun _ _ ↦ placeAlong_le_placeAlong _ hAB
   have hker' : ∀ x, (Interaction.translationInvariant hN A).hamiltonian.mulVec x = 0 →
       (Interaction.translationInvariant hN B).hamiltonian.mulVec x = 0 := by
@@ -81,13 +83,16 @@ noncomputable def ExactMPSGroundPath.of_ordered_affine
     (hR : ∀ t, R.interaction t = A + t • (B - A))
     (hA : A.PosSemidef) (hAB : A ≤ B)
     (hker : ∀ (N : ℕ) (hN : 2 ≤ N),
-      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) ≤
+      haveI : NeZero N := ⟨by omega⟩;
+      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) ≤
         LinearMap.ker
-          (Matrix.toEuclideanLin (Interaction.translationInvariant hN B).hamiltonian))
+          (Matrix.toEuclideanLin (Interaction.translationInvariant N B).hamiltonian))
     (hzero : ∀ (N : ℕ) (hN : 2 ≤ N),
-      (0 : ℂ) ∈ spectrum ℂ (Interaction.translationInvariant hN A).hamiltonian)
+      haveI : NeZero N := ⟨by omega⟩;
+      (0 : ℂ) ∈ spectrum ℂ (Interaction.translationInvariant N A).hamiltonian)
     (hline : ∀ (N : ℕ) (hN : 2 ≤ N),
-      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) =
+      haveI : NeZero N := ⟨by omega⟩;
+      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) =
       Submodule.span ℂ {(WithLp.toLp 2 (mpv (N := N) (Q.tensor γ)))}) :
     ExactMPSGroundPath R where
   bondDimension := Q.bondDimension
@@ -98,24 +103,26 @@ noncomputable def ExactMPSGroundPath.of_ordered_affine
   nonzero _ _ := Q.nonzero γ hγ
   ground_line := by
     intro t ht N hN
+    have : NeZero N := ⟨by omega⟩
     rw [hR t]
     have hkerEq := hamiltonian_translationInvariant_affine_ker_eq_of_order
       A B hA hAB hN (hker N hN) t ht.1
     have hz : (0 : ℂ) ∈ spectrum ℂ
-        (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian := by
+        (Interaction.translationInvariant N (A + t • (B - A))).hamiltonian := by
       have hzA := hzero N hN
       rw [← Matrix.spectrum_toLpLin (p := 2),
         ← Module.End.hasEigenvalue_iff_mem_spectrum,
         Module.End.hasEigenvalue_iff, Module.End.eigenspace_zero] at hzA ⊢
       change LinearMap.ker (Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian) ≠ ⊥
+        (Interaction.translationInvariant N (A + t • (B - A))).hamiltonian) ≠ ⊥
       rw [hkerEq]
       exact hzA
     refine ⟨0, hz, ?_, ?_⟩
     · have hpos :
-          (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian.PosSemidef :=
+          (Interaction.translationInvariant N (A + t • (B - A))).hamiltonian.PosSemidef :=
         Interaction.posSemidef_hamiltonian fun _ ↦
-          posSemidef_placeAlong (X := fun _ ↦ Fin d) _ (hA.add ((Matrix.le_iff.mp hAB).smul ht.1))
+          Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg
+            (hA.add ((Matrix.le_iff.mp hAB).smul ht.1)).nonneg _)
       intro z hz
       have hznonneg : (0 : ℂ) ≤ z :=
         (Matrix.posSemidef_iff_isHermitian_and_spectrum_nonneg.mp hpos).2 hz
@@ -128,9 +135,9 @@ constant weighted MPS ground line of its initial bond interaction.
 Source: arXiv:1010.3732, Section II.F.2, the parent-interaction comparison. -/
 noncomputable def commonPhysicalBondCanonicalParentComparisonExactMPSGroundPath
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ R : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
@@ -141,10 +148,10 @@ noncomputable def commonPhysicalBondCanonicalParentComparisonExactMPSGroundPath
     (horder : normalizedBondInteraction D₀ D₁ γ ≤
       LinearMap.toMatrix' (parentInteraction B 2))
     (hker : ∀ (N : ℕ) (hN : 2 ≤ N),
-      LinearMap.ker (Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN
+      haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+        (Interaction.translationInvariant N
           (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) ≤
-        LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+        LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
           (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian))
     (hCov : ∀ g, GaugeEquiv B
       (rotatePhysical (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) B)) :
@@ -169,9 +176,9 @@ weighted tensor as its exact ground-state representative. Source:
 arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/
 noncomputable def commonPhysicalLeftParentComparisonExactMPSGroundPath
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
@@ -195,9 +202,9 @@ weighted tensor as its exact ground-state representative. Source:
 arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/
 noncomputable def commonPhysicalRightParentComparisonExactMPSGroundPath
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
@@ -257,9 +264,9 @@ realization with the common ambient bond dimension. Source:
 arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/
 noncomputable def commonPhysicalCanonicalFixedPointExactMPSGroundPath
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
@@ -282,9 +289,9 @@ included weighted endpoint tensor. Source: arXiv:1010.3732,
 Section II.F.2, `eq:sym:omega-gamma`. -/
 theorem commonPhysicalCanonicalFixedPointExactMPSGroundPath_tensor_zero
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
@@ -312,9 +319,9 @@ included weighted endpoint tensor. Source: arXiv:1010.3732,
 Section II.F.2, `eq:sym:omega-gamma`. -/
 theorem commonPhysicalCanonicalFixedPointExactMPSGroundPath_tensor_one
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)

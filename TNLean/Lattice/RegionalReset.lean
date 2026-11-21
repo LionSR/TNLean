@@ -62,6 +62,7 @@ section Coordinates
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
+omit [Fintype ι] in
 /-- In the coordinates of two disjoint regions `R, C` and their complement, swapping the two
 replicas on `R` exchanges the two retained `R` registers and fixes everything else.
 Source: `02-information.tex`, lines 362–365 and 398–410. -/
@@ -217,6 +218,7 @@ theorem reindex_regional_partialSwap (q : ℕ) (R C : Finset ι) (hRC : Disjoint
   ext x y
   rfl
 
+omit [Fintype ι] in
 /-- Two regional copies of a vector form the doubled vector in any coordinates of the two
 replicas. -/
 theorem doubledRegroup_splitTwoRegionsState_comp (q : ℕ) (R C : Finset ι) (hRC : Disjoint R C)

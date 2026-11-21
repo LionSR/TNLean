@@ -198,7 +198,7 @@ theorem wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1_of_d
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
-      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hBlk1 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) (L₀ + 1))
@@ -305,7 +305,7 @@ theorem wordTupleSpanTop_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFixedPo
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
-      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -386,7 +386,7 @@ theorem groundSpace_iSupIndep_of_ge_of_bnt_directSum_unital_c1_pgvwc07_of_dualFi
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
-      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)
@@ -477,7 +477,7 @@ theorem
     (Λ : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hΛ : ∀ j, (Λ j).PosDef)
     (hDualFixed : ∀ j,
-      Kraus.transferMap (d := d) (D := dim j) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
+      Kraus.transferMap (ι := Fin d) (n := Fin (dim j)) (fun a => (A j a)ᴴ) (Λ j) = Λ j)
     {L₀ : ℕ}
     (hBlk0 : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L₀)
     (hL₀ : 0 < L₀)

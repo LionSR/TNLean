@@ -8,8 +8,8 @@ import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Core.PhysicalIndexMixing
 import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.RFP.Defs
-import TNLean.Algebra.MatrixCyclicPathSum
-import TNLean.Algebra.ProjectiveRepresentation
+import QICLean.Algebra.MatrixCyclicPathSum
+import QICLean.Algebra.Cohomology.ProjectiveRepresentation
 
 /-!
 # Cluster state: the review tensor and the controlled-`Z` construction
@@ -367,7 +367,6 @@ Hadamard conjugate `H V(g) H⁻¹` of the virtual action `clusterRepX` of
 def clusterRepXRMP (g : Multiplicative (ZMod 2 × ZMod 2)) : GL (Fin 2) ℂ :=
   hadamardGauge * clusterRepX g * hadamardGauge⁻¹
 
-open TNLean.Algebra in
 /-- The virtual action of the blocked review tensor is a projective
 representation with the cluster factor system `clusterOmega`, whose class is
 non-trivial (`cluster_isNontrivialSPT`); it is the Hadamard conjugate of

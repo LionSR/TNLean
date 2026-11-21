@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.PeriodicResidualGroundSpace
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram
 import Mathlib.LinearAlgebra.Matrix.Bilinear
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Three-window coordinates for correlated residual boundaries
@@ -33,14 +33,40 @@ open Kraus (blockPhysDim)
 namespace MPSTensor
 variable {d D E L : ℕ}
 
+/-- A surjective linear isometry of the common target preserves the error between a finite
+sum of range projections and the projection onto their joint span. -/
+theorem norm_sum_isometric_range_projection_sub_iSup_le
+    {ι J J' : Type*} [Fintype ι] [Fintype J] [Fintype J']
+    {I : ι → Type*} [∀ j, Finite (I j)]
+    (U : EuclideanSpace ℂ J ≃ₗᵢ[ℂ] EuclideanSpace ℂ J')
+    (T : (j : ι) → EuclideanSpace ℂ (I j) →L[ℂ] EuclideanSpace ℂ J) :
+    ‖(∑ j, (U.toContinuousLinearMap.comp (T j)).range.starProjection) -
+      (⨆ j, (U.toContinuousLinearMap.comp (T j)).range).starProjection‖ ≤
+      ‖(∑ j, (T j).range.starProjection) - (⨆ j, (T j).range).starProjection‖ := by
+  have hRange (j : ι) : (U.toContinuousLinearMap.comp (T j)).range =
+      ((T j).range).map U.toLinearEquiv.toLinearMap := by
+    exact LinearMap.range_comp (T j).toLinearMap U.toLinearEquiv.toLinearMap
+  apply ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _)
+  intro x
+  have hEq : ((∑ j, (U.toContinuousLinearMap.comp (T j)).range.starProjection) -
+      (⨆ j, (U.toContinuousLinearMap.comp (T j)).range).starProjection) x =
+      U (((∑ j, (T j).range.starProjection) -
+        (⨆ j, (T j).range).starProjection) (U.symm x)) := by
+    simp only [hRange, ← Submodule.map_iSup, sub_apply,
+      sum_apply, Submodule.starProjection_map_apply, map_sub, map_sum]
+  rw [hEq, U.norm_map]
+  exact (((∑ j, (T j).range.starProjection) -
+    (⨆ j, (T j).range).starProjection).le_opNorm (U.symm x)).trans_eq
+      (by rw [U.symm.norm_map])
+
 /-- Extract one rectangular matrix from a flattened Euclidean boundary family.
-The flattened coordinates are ordered as family index, column, then row.
+The flattened coordinates are ordered as column, row, then family index.
 These are the Frobenius coordinates used in the residual version of
 Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii). -/
 noncomputable def rectangularBoundaryFamilyFiberₗ {S : Type*} [Fintype S] (u : S) :
-    EuclideanSpace ℂ (S × (Fin E × Fin D)) →ₗ[ℂ] Matrix (Fin D) (Fin E) ℂ :=
-  (LinearMap.pi fun i => LinearMap.pi fun j => LinearMap.proj (u, (j, i))).comp
-    (WithLp.linearEquiv 2 ℂ (S × (Fin E × Fin D) → ℂ)).toLinearMap
+    EuclideanSpace ℂ ((Fin E × Fin D) × S) →ₗ[ℂ] Matrix (Fin D) (Fin E) ℂ :=
+  (LinearMap.pi fun i => LinearMap.pi fun j => LinearMap.proj ((j, i), u)).comp
+    (WithLp.linearEquiv 2 ℂ ((Fin E × Fin D) × S → ℂ)).toLinearMap
 
 /-- Right multiplication by the blocked prefix word in each rectangular
 boundary fiber. Source: the boundary-word factorization underlying
@@ -48,12 +74,12 @@ Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii), lines 2442--2531. 
 noncomputable def residualWindowRightVirtualMapES
     (B : MPSTensor (blockPhysDim d L) E) (K : ℕ) :
     EuclideanSpace ℂ (Fin E × Fin D) →L[ℂ]
-      EuclideanSpace ℂ (Cfg (blockPhysDim d L) K × (Fin E × Fin D)) :=
+      EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K) :=
   LinearMap.toContinuousLinearMap <|
     (WithLp.linearEquiv 2 ℂ
-      (Cfg (blockPhysDim d L) K × (Fin E × Fin D) → ℂ)).symm.toLinearMap.comp
-    (LinearMap.pi fun p => ((LinearMap.proj p.2.1).comp (LinearMap.proj p.2.2)).comp
-      ((mulRightLinearMap (l := Fin D) ℂ (Kraus.evalWord B (List.ofFn p.1))).comp
+      ((Fin E × Fin D) × Cfg (blockPhysDim d L) K → ℂ)).symm.toLinearMap.comp
+    (LinearMap.pi fun p => ((LinearMap.proj p.1.1).comp (LinearMap.proj p.1.2)).comp
+      ((mulRightLinearMap (l := Fin D) ℂ (Kraus.evalWord B (List.ofFn p.2))).comp
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm.toLinearEquiv.toLinearMap))
 
 /-- The right residual window with a blocked prefix spectator.
@@ -63,7 +89,7 @@ lines 434--451; Nachtergaele, Lemma commutation (ii). -/
 noncomputable def residualWindowRightMapES
     (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
     (V : Matrix (Fin D) (Fin E) ℂ) (K M r : ℕ) :
-    EuclideanSpace ℂ (Cfg (blockPhysDim d L) K × (Fin E × Fin D)) →L[ℂ]
+    EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K) →L[ℂ]
       EuclideanSpace ℂ (Cfg (blockPhysDim d L) K ×
         (Cfg (blockPhysDim d L) M × Cfg d r)) :=
   LinearMap.toContinuousLinearMap <|
@@ -161,7 +187,7 @@ Lemma commutation (ii), lines 2442--2531. -/
 theorem inner_residualWindowRightMapES_leftMapES
     (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
     (V : Matrix (Fin D) (Fin E) ℂ) (K M r : ℕ)
-    (x : EuclideanSpace ℂ (Cfg (blockPhysDim d L) K × (Fin E × Fin D)))
+    (x : EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K))
     (y : BoundaryFamilySpace (D := E) (Cfg d r)) :
     ⟪residualWindowRightMapES A B V K M r x, residualWindowLeftMapES B K M r y⟫_ℂ =
       ∑ u : Cfg (blockPhysDim d L) K, ∑ τ : Cfg d r,

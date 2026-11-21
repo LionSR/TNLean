@@ -112,7 +112,7 @@ theorem IsNormal.mapStar {A : MPSTensor d D} (hA : IsNormal A) :
   have hConj := hInj.mapStar
   convert hConj using 1
   ext σ β α
-  simp [Kraus.blockTensor, MPSTensor.evalWord_mapStar]
+  simp [Kraus.blockTensor, Kraus.reindexPhysical, MPSTensor.evalWord_mapStar]
 
 end Kraus
 
@@ -165,7 +165,7 @@ the transfer map of arXiv:1606.00608, lines 219--225, by the entrywise-conjugati
 involution on both sides. -/
 theorem transferMap_mapStar_eq_entrywiseConjTransport (A : MPSTensor d D) :
     Kraus.transferMap (mapStar A) =
-      entrywiseConjTransport (Kraus.transferMap (d := d) (D := D) A) := by
+      entrywiseConjTransport (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
   classical
   apply LinearMap.ext
   intro X

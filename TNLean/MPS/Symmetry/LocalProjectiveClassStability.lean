@@ -22,7 +22,7 @@ is not asserted here.
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
-open scoped TNLean.Algebra.ScalarCohomology
+open scoped ScalarCohomology
 open scoped Matrix Matrix.Norms.Frobenius Topology
 
 namespace MPSTensor
@@ -38,8 +38,8 @@ theorem eventually_cohomologousTo_of_continuousAt_exact_unitary_covariance
     {d D : ℕ} [NeZero D] (C : T → MPSTensor d D) (t₀ : T)
     (hC : ContinuousAt C t₀) (hInject : Kraus.IsInjective (C t₀))
     (U : G → Matrix.unitaryGroup (Fin d) ℂ)
-    (ω : T → TNLean.Algebra.ScalarCocycle G)
-    (ρ : ∀ t, TNLean.Algebra.ProjectiveRepresentation (D := D) (ω t))
+    (ω : T → ScalarCocycle G)
+    (ρ : ∀ t, ProjectiveRepresentation (D := D) (ω t))
     (hUnitary : ∀ t g, ((ρ t).X g : Matrix (Fin D) (Fin D) ℂ) ∈
       Matrix.unitaryGroup _ ℂ)
     (hCov : ∀ t g i, ∑ j, (U g : Matrix (Fin d) (Fin d) ℂ) i j • C t j =
@@ -47,11 +47,11 @@ theorem eventually_cohomologousTo_of_continuousAt_exact_unitary_covariance
         ((ρ t).X g⁻¹ : Matrix (Fin D) (Fin D) ℂ)ᴴ) :
     ∀ᶠ t in 𝓝 t₀,
       groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep (ρ t) (NeZero.pos D))) =
+        (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t) (NeZero.pos D))) =
         groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-          (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀) (NeZero.pos D))) := by
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ t₀) (NeZero.pos D))) := by
   obtain ⟨δ, hδ, hRigidity⟩ :=
-    TNLean.Algebra.ProjectiveRepresentation.exists_uniform_adjoint_rigidity_radius (D := D)
+    ProjectiveRepresentation.exists_uniform_adjoint_rigidity_radius (D := D)
   have hEstimate := eventually_uniform_conjugationEuclideanCLM_of_covariance
     (C t₀) hInject U (fun g => ((ρ t₀).X g⁻¹ : Matrix (Fin D) (Fin D) ℂ)) (hCov t₀) δ hδ
   filter_upwards [hC.eventually hEstimate] with t ht

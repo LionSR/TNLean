@@ -34,8 +34,8 @@ theorem blockTensor_ghzSectorTensor_apply (x : Fin 2) (i : Fin 4) :
     Kraus.blockTensor (MPSTensor.ghzSectorTensor x) 2 (twoSiteBlockEquiv 2 i) =
       if i = finProdFinEquiv (x, x) then 1 else 0 := by
   fin_cases x <;> fin_cases i <;>
-    norm_num [Kraus.blockTensor, Kraus.blockTensor, twoSiteBlockEquiv,
-      Kraus.wordOfBlock, MPSTensor.ghzSectorTensor, finProdFinEquiv, Fin.divNat, Fin.modNat]
+    norm_num [Kraus.blockTensor, Kraus.reindexPhysical, twoSiteBlockEquiv,
+      MPSTensor.ghzSectorTensor, finProdFinEquiv, Fin.divNat, Fin.modNat]
 
 /-- Each letter of the blocked GHZ tensor is the diagonal projector onto the
 GHZ sector that it encodes. Source: arXiv:2502.20257, lines 4660–4670. -/
@@ -43,8 +43,7 @@ theorem blockedGHZTensor_apply (i : Fin 4) :
     blockedGHZTensor i = Matrix.diagonal (fun x : Fin 2 ↦
       if i = finProdFinEquiv (x, x) then (1 : ℂ) else 0) := by
   fin_cases i <;>
-    norm_num [blockedGHZTensor, Kraus.reindexPhysical, Kraus.blockTensor,
-      Kraus.blockTensor, twoSiteBlockEquiv, Kraus.wordOfBlock,
+    norm_num [blockedGHZTensor, Kraus.reindexPhysical, Kraus.blockTensor, twoSiteBlockEquiv,
       finProdFinEquiv, Fin.divNat, Fin.modNat, Pi.single_apply]
 
 private theorem evalWord_blockedGHZTensor {N : ℕ} (s : Fin N → Fin 4) :

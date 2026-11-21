@@ -421,11 +421,7 @@
 % proof of Theorem 2.1(i), lines 1178--1259.
 \begin{lemma}[Right-spectator extension]
     \label{lem:right-spectator-extension}
-    \lean{ContinuousLinearMap.rightFiber,
-        ContinuousLinearMap.rightFiberwiseMap,
-        ContinuousLinearMap.rightFiberwiseMap_apply_apply,
-        ContinuousLinearMap.rightFiber_rightFiberwiseMap,
-        ContinuousLinearMap.rightFiberwiseMap_zero,
+    \lean{ContinuousLinearMap.rightFiberwiseMap_zero,
         ContinuousLinearMap.singleRightFiber,
         ContinuousLinearMap.norm_singleRightFiber,
         ContinuousLinearMap.rightFiberwiseMap_add,
@@ -436,6 +432,7 @@
         ContinuousLinearMap.norm_rightFiberwiseMap_le,
         ContinuousLinearMap.norm_rightFiberwiseMap}
     \leanok
+    \uses{def:euclidean_fiberwise_operator}
     Let $T$ and $U$ be operators on a finite-dimensional active Hilbert space,
     and let $S$ be a finite set of right-spectator configurations.  The operator
     $T^{\oplus S}$, defined by applying $T$ independently at every $s\in S$,

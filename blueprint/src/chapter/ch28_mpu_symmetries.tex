@@ -316,6 +316,8 @@
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``Determinant of $i$ times a traceless Hermitian
+        involution'']{QICLean2026Blueprint}.
     Let $\mu_1,\dots,\mu_{|I|}$ be the real eigenvalues of $H$. Applying
     $H^2=\Id$ to an eigenvector gives $\mu_j^2=1$, so $\mu_j=\pm1$ and
     $i\mu_j=e^{i\pi\mu_j/2}$. The trace condition gives $\sum_j\mu_j=0$.
@@ -575,6 +577,7 @@
     Every real skew-symmetric orthogonal matrix supplies such an isometry.
 \end{lemma}
 \begin{proof}\leanok
+    This is~\cite[``Invariant orthogonal planes'']{QICLean2026Blueprint}.
     Isometry and $J^2=-\Id$ give
     $\langle x,Jy\rangle=-\langle Jx,y\rangle$. Taking $x=y=v$ shows
     $\langle v,Jv\rangle=0$. The identities $Jv=-(-Jv)$ and
@@ -601,6 +604,8 @@
     ordered blocks on $\{0,\ldots,2m-1\}$.
 \end{lemma}
 \begin{proof}\leanok
+    This is~\cite[``Sign and indexing of the standard skew
+        form'']{QICLean2026Blueprint}.
     Compare the four choices of the two binary coordinates. The two diagonal
     blocks vanish, and the off-diagonal blocks are $\Id_I$ and $-\Id_I$
     in that order. Reindexing preserves these entries.
@@ -618,6 +623,7 @@
     $Je_{i,0}=-e_{i,1}$ and $Je_{i,1}=e_{i,0}$.
 \end{lemma}
 \begin{proof}\leanok
+    This is~\cite[``Paired orthonormal basis'']{QICLean2026Blueprint}.
     Induct on $m$. The empty basis covers $m=0$. Otherwise choose a unit
     vector $v$ and use the ordered orthonormal pair $(v,-Jv)$.
     Its invariant orthogonal complement has dimension $2m-2$.
@@ -642,6 +648,7 @@
     % Source lines: paper_v2.tex 1129--1140.
 \end{lemma}
 \begin{proof}\leanok
+    This is~\cite[``Real skew-orthogonal normal form'']{QICLean2026Blueprint}.
     The action of $A$ is an isometry squaring to $-\Id$. In the paired
     orthonormal basis of Lemma~\ref{lem:mpu_skew_paired_orthonormal_basis},
     its matrix is $\Sigma_m$. The orthogonal change of coordinates from
@@ -661,6 +668,7 @@
     % Source lines: paper_v2.tex 1129--1140.
 \end{lemma}
 \begin{proof}\leanok
+    This is~\cite[``Complex skew-unitary normal form'']{QICLean2026Blueprint}.
     The skew congruence factorization gives $x=S^T\Lambda S$ with $S$
     unitary and $\Lambda$ real, skew-symmetric and unitary.
     The real normal form gives $\Lambda=O^T\Sigma_m O$ with $O$ orthogonal.

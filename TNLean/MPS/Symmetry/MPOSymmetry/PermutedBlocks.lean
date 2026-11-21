@@ -46,7 +46,6 @@ simplicity, transitivity, nor finiteness is used.
 -/
 
 open scoped Matrix Kronecker
-open TNLean.Algebra
 
 universe u v
 

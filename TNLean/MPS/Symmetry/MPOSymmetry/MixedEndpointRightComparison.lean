@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSwap
-import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorOrder
+import QICLean.Analysis.EuclideanFiberwiseMap
 
 /-!
 # Local interaction comparison at the second mixed endpoint

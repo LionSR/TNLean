@@ -60,7 +60,7 @@ structure TwistedTPGaugeSetup [NeZero D]
   hB_eq : ∀ X : Matrix (Fin D) (Fin D) ℂ, Kraus.transferMap B X = Kraus.transferMap A X
   σ : Matrix (Fin D) (Fin D) ℂ
   hσ_pd : σ.PosDef
-  hσ_fixB : Kraus.transferMap (d := d) (D := D) (fun i => (B i)ᴴ) σ = σ
+  hσ_fixB : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (B i)ᴴ) σ = σ
   S : Matrix (Fin D) (Fin D) ℂ
   hS_def : S = CFC.sqrt σ
   hS_herm : Sᴴ = S
@@ -94,30 +94,32 @@ noncomputable def twistedTPGaugeSetup_of_irreducible [NeZero D]
     intro X
     simpa [B] using transferMap_twistedMixedCompanion_eq (A := A) (u := u) hu X
   have hEqBA : Kraus.transferMap B = Kraus.transferMap A := LinearMap.ext hB_eq
-  have hIrrB : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) B) := by
+  have hIrrB : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) B) := by
     simpa [hEqBA] using hIrrA
   have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrrA
-  have hIrrAdj : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
+  have hIrrAdj : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) fun i => (A i)ᴴ) :=
     Kraus.isIrreducibleMap_mapLM_conjTranspose A
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrrTensor)
   have hAadjNorm : ∑ i : Fin d, (((fun i => (A i)ᴴ) i)ᴴ) * ((fun i => (A i)ᴴ) i) = 1 := by
     simpa using
       kraus_sum_mul_conjTranspose_of_unital A (Kraus.transferMap A)
         (fun X => by simp) hNorm
-  have hChAdj : IsChannel (Kraus.transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
+  have hChAdj : IsChannel (Kraus.transferMap (ι := Fin d) (n := Fin D) fun i => (A i)ᴴ) :=
     Kraus.isChannel_mapLM (fun i => (A i)ᴴ) hAadjNorm
   let hσ_exists :=
     IsChannel.exists_unique_density_fixedPoint_of_irreducible
-      (E := Kraus.transferMap (d := d) (D := D) fun i => (A i)ᴴ) hChAdj hIrrAdj (NeZero.pos D)
+      (E := Kraus.transferMap (ι := Fin d) (n := Fin D) fun i => (A i)ᴴ) hChAdj hIrrAdj
+      (NeZero.pos D)
   let σ := Classical.choose hσ_exists
   have hσ_spec := Classical.choose_spec hσ_exists
   have hσ_pd : σ.PosDef := hσ_spec.2.1
-  have hσ_fixA : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = σ := hσ_spec.2.2.1
-  have hσ_fixB : Kraus.transferMap (d := d) (D := D) (fun i => (B i)ᴴ) σ = σ := by
+  have hσ_fixA : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ = σ :=
+    hσ_spec.2.2.1
+  have hσ_fixB : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (B i)ᴴ) σ = σ := by
     calc
-      Kraus.transferMap (d := d) (D := D) (fun i => (B i)ᴴ) σ
-          = Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ := by
+      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (B i)ᴴ) σ
+          = Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ := by
               simpa [B, Kraus.transferMap_apply, Matrix.mul_assoc] using
                 kraus_dual_eq_of_map_eq B A
                   (fun X => by simpa [Kraus.transferMap_apply] using hB_eq X) σ
@@ -423,7 +425,7 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted_of_irreducible
            _ = (X * Xᴴ) * Xinᴴ := (Matrix.mul_assoc X Xᴴ Xinᴴ).symm
            _ = 0 := hQXin
     simp [X, Xin, hX_zero] at hX_mul_inv
-  have hCPA : IsCPMap (Kraus.transferMap (d := d) (D := D) A) :=
+  have hCPA : IsCPMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
     Kraus.transferMap_isCPMap A
   have hone_psd : (1 : Matrix (Fin D) (Fin D) ℂ).PosSemidef := Matrix.PosSemidef.one
   have hζ_sq_eq_one : Complex.normSq ζ = 1 := by
@@ -431,7 +433,7 @@ theorem virtualUnitary_of_gaugePhaseEquiv_twisted_of_irreducible
       simpa using hNorm
     exact
       eigenvalue_unique_of_irreducible_cp
-        (E := Kraus.transferMap (d := d) (D := D) A) hCPA hIrrA
+        (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) hCPA hIrrA
         (1 : Matrix (Fin D) (Fin D) ℂ) Q 1 (Complex.normSq ζ)
         hone_psd one_ne_zero (by norm_num) hQ_psd hQ_ne
         (Complex.normSq_pos.2 hζ) hone_eig hQ_eigA |>.symm
@@ -682,7 +684,7 @@ theorem boundaryState_invariant_of_virtualUnitary_of_irreducible
   have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrrA
   have hIrrAdj :
-      IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) fun i => (A i)ᴴ) :=
+      IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) fun i => (A i)ᴴ) :=
     Kraus.isIrreducibleMap_mapLM_conjTranspose A
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrrTensor)
   have hΛ_ne : Λ ≠ 0 := by

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.Compression.PreparedSourceTransport
 import TNLean.Lattice.Compression.SourceCorrectedContractionIdentity
 import TNLean.Lattice.Compression.SourceGaussianDensity
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Actual corrected terms in Gaussian Schmidt coordinates

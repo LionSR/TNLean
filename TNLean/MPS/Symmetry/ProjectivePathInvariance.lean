@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.CocycleCohomology
+import QICLean.Algebra.Cohomology.CocycleCohomology
 import Mathlib.Analysis.Complex.CoveringMap
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.Topology.Homotopy.Lifting
@@ -29,9 +29,9 @@ physical Hamiltonian path produces such a continuous virtual family.
 
 namespace MPSTensor
 
-open scoped TNLean.Algebra.ScalarCohomology
+open scoped ScalarCohomology
 open scoped Matrix
-open TNLean.Algebra
+open ScalarCohomology
 
 /-- A continuous family of `D`th roots of unity on the unit interval is
 constant. This is the discreteness step in the virtual-path argument of
@@ -112,7 +112,7 @@ algebraic core of the fixed-dimension obstruction argument in
 arXiv:1010.3732, Section II.F.2. -/
 theorem projectiveFactor_endpoints_cohomologous_of_det_path
     {G : Type} [Group G] {D : ℕ} (hD : 0 < D)
-    (ω : unitInterval → TNLean.Algebra.ScalarCocycle G)
+    (ω : unitInterval → ScalarCocycle G)
     (d : unitInterval → G → ℂ)
     (hωcont : ∀ g h, Continuous fun t => (ω t (g, h) : ℂ))
     (hdcont : ∀ g, Continuous fun t => d t g)
@@ -174,7 +174,7 @@ physical gapped path to a continuous virtual path is a separate theorem. -/
 theorem unitary_projectivePath_factor_endpoints_cohomologous
     {G : Type} [Group G] {D : ℕ} (hD : 0 < D)
     (V : unitInterval → G → Matrix (Fin D) (Fin D) ℂ)
-    (ω : unitInterval → TNLean.Algebra.ScalarCocycle G)
+    (ω : unitInterval → ScalarCocycle G)
     (hV : ∀ g, Continuous fun t => V t g)
     (hunitary : ∀ t g, V t g ∈ Matrix.unitaryGroup (Fin D) ℂ)
     (hmul : ∀ t g h, V t g * V t h = (ω t (g, h) : ℂ) • V t (g * h)) :

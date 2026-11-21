@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.PiTensorProductPhase
+import QICLean.Algebra.PiTensorProductPhase
 import TNLean.MPS.Chain.OneSidedInverse
 
 import Mathlib.Algebra.BigOperators.Ring.Finset
@@ -296,7 +296,7 @@ theorem exists_scalars_of_openAlternatingNetwork_eq
     piTensorProduct_eq_of_forall_matrix_entry_prod_eq B B' hentries
   choose r c hrc using fun i ↦ exists_matrix_entry_ne_zero (B i) (hB i)
   obtain ⟨κ, hκprod, hκ⟩ :=
-    TNLean.Algebra.PiTensorProductPhase.exists_kappa_of_piTensorProduct_eq_smul
+    PiTensorProduct.exists_kappa_of_tprod_eq_smul
       (fun i (_ : Fin 1) ↦ B' i) (fun i (_ : Fin 1) ↦ B i)
       1 one_ne_zero (fun _ ↦ 0) r c (fun i ↦ by simpa using hrc i)
       (fun _ ↦ by simpa using htensor.symm)

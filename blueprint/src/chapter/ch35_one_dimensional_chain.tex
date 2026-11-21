@@ -144,7 +144,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{definition}[Regionally swapped doubled Hamiltonian]
     \label{def:chain_swapped_doubled_hamiltonian}
     \lean{ManyBody.pairSwapOp, ManyBody.Interaction.conj,
-        ManyBody.Interaction.norm_doubled_term_le,
+        ManyBody.Interaction.isHermitian_conj_term,
+        ManyBody.Interaction.norm_conj_term,
         TNLean.Lattice.reindex_sheetSwapOp_eq_reindex_pairSwapOp,
         TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled}
     \leanok
@@ -1321,8 +1322,6 @@ Theorem~B a second way, by a sequential preparation protocol.
     \lean{
         ManyBody.regionEntropy_union_le,
         ManyBody.regionEntropy_le_union_add,
-        ManyBody.regionEntropy_empty,
-        ManyBody.regionEntropy_univ,
         TNLean.MPS.AreaLaw.boundaryEdges,
         TNLean.MPS.AreaLaw.mem_boundaryEdges,
         TNLean.MPS.AreaLaw.boundaryEdges_empty,
@@ -1332,10 +1331,12 @@ Theorem~B a second way, by a sequential preparation protocol.
         TNLean.MPS.AreaLaw.card_boundaryEdges_prefix_le
     }
     \leanok
-    \uses{def:chain_model}
+    \uses{def:chain_model,thm:area_law_regional_state_identities}
     For a unit vector $\Omega$ on the chain and disjoint sets of sites $X,T$,
     $S(X\cup T)\le S(X)+S(T)$ and $S(X)\le S(X\cup T)+S(T)$; the empty set and
-    the whole chain have entropy zero, and $S(A)\le|A|\log q$. The
+    the whole chain have entropy zero, as on any finite set of sites
+    (Lemma~\ref{thm:area_law_regional_state_identities}), and
+    $S(A)\le|A|\log q$. The
     \emph{boundary edges} of a set $A$ are the edges $\{p,p+1\}$ of the chain
     with exactly one endpoint in $A$. A prefix $[0,k)$ has at most one boundary edge.
     If every interval has entropy at most
@@ -1710,45 +1711,28 @@ Theorem~B a second way, by a sequential preparation protocol.
     $|\partial_{\mathrm{ch}}D|\le |\Lambda|$ and multiply by two.
 \end{proof}
 
-\begin{definition}[Doubled domain interactions and regional swaps]
-    \label{def:domain_doubled_swapped_hamiltonian}
-    \lean{ManyBody.Interaction.doubledFin, ManyBody.Interaction.relabel,
-        TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled}\leanok
-    \uses{def:domain_model,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
-    Let $H=\sum_Xh_X$ be an admissible domain Hamiltonian and let
-    $D\subseteq V=\{0,\ldots,|\Lambda|-1\}$. Let $p$ pair the two replica
-    coordinates at each site and put $F=p_*F_D$. Define
-    \begin{align}
-        \widehat h_X  & =p_*(h_X\otimes\mathbb 1+\mathbb 1\otimes h_X),\notag                \\
-        \widehat h'_X & =F\widehat h_XF^\dagger,\notag                                       \\
-        \widehat H    & =\sum_X\widehat h_X=p_*(H\otimes\mathbb 1+\mathbb 1\otimes H),\notag \\
-        \widehat H'   & =\sum_X\widehat h'_X=F\widehat H F^\dagger.
-        \label{eq:domain_doubled_swapped}
-    \end{align}
-    Both families are indexed by the original admissible domain supports.
-    Their terms are Hermitian, supported on $X$, and have norm at most $2J$.
-    Thus they have local dimension $q^2$, range $R$ and interaction bound $2J$.
-    Empty domains and $q=0$ are allowed. These are the two-replica operators
-    in \cite[Part~IIa]{TNLean2026OneDimensional}.
-\end{definition}
-\begin{proof}\leanok
-    \uses{def:domain_model,def:chain_doubled_hamiltonian,
-        def:chain_swapped_doubled_hamiltonian,lem:domain_site_norm_budget,
-        thm:peps_sheet_swap_conjugate_support}
-    At each original nonempty support $X$, choose a site of $X$ to obtain
-    $J\ge0$. Extending the original interactions by zero to the chain of
-    increasing labels preserves the term at $X$ and its support. The
-    doubled and swapped chain estimates therefore apply at that same $X$.
-    Conjugation preserves Hermiticity and the regional swap preserves support.
-    Distributing the finite sums proves (\ref{eq:domain_doubled_swapped}).
-\end{proof}
+For an admissible domain Hamiltonian $H=\sum_Xh_X$ of
+Definition~\ref{def:domain_model} and $D\subseteq V=\{0,\ldots,|\Lambda|-1\}$,
+let $p$ pair the two replica coordinates at each site and put $F=p_*F_D$.
+The doubled terms
+$\widehat h_X=p_*(h_X\otimes\mathbb 1+\mathbb 1\otimes h_X)$, the swapped
+terms $\widehat h'_X=F\widehat h_XF^\dagger$, and their sums
+$\widehat H=p_*(H\otimes\mathbb 1+\mathbb 1\otimes H)$ and
+$\widehat H'=F\widehat HF^\dagger$ are formed as in
+Definitions~\ref{def:chain_doubled_hamiltonian}
+and~\ref{def:chain_swapped_doubled_hamiltonian}, with both families indexed
+by the original admissible domain supports. These constructions and their
+bounds use only the supports of the terms, so the terms are Hermitian,
+supported on $X$, and have norm at most $2J$; empty domains and $q=0$ are
+allowed. These are the two-replica operators in
+\cite[Part~IIa]{TNLean2026OneDimensional}.
 
 \begin{lemma}[Crossing decomposition for a domain regional swap]
     \label{thm:domain_partial_swap_crossing}
     \lean{ManyBody.DomainInteraction.partialSwap_term_difference_spec,
         ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing}\leanok
-    \uses{def:domain_doubled_swapped_hamiltonian,lem:domain_crossing_count}
-    With the notation of Definition~\ref{def:domain_doubled_swapped_hamiltonian},
+    \uses{def:chain_swapped_doubled_hamiltonian,lem:domain_crossing_count}
+    With the notation above,
     put $T_{X,0}=p_*(h_X\otimes\mathbb 1)$,
     $T_{X,1}=p_*(\mathbb 1\otimes h_X)$, and
     $K_{X,b}=FT_{X,b}F^\dagger-T_{X,b}$.
@@ -1763,7 +1747,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     The count here is a bound by the total number of domain sites.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:domain_doubled_swapped_hamiltonian,thm:chain_partial_swap_boundary,
+    \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
         thm:peps_sheet_swap_doubled_cancellation,lem:domain_crossing_count}
     The per-replica support, Hermiticity and norm estimates follow from
     the corresponding chain estimates at the same original support.
@@ -1781,7 +1765,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     \label{thm:domain_relative_generator_localization}
     \lean{ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpectation_le}
     \leanok
-    \uses{def:domain_doubled_swapped_hamiltonian,thm:domain_partial_swap_crossing,
+    \uses{def:chain_swapped_doubled_hamiltonian,thm:domain_partial_swap_crossing,
         def:qc_site_expectation,thm:domain_interval_neighborhood}
     Let $H$ be an admissible domain Hamiltonian with local dimension $q\ge1$,
     range $R$ and real interaction bound $J$. For $D\subseteq V$, put
@@ -1824,7 +1808,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{lemma}[Supported Gaussian averaging on a finite integer domain]
     \label{thm:domain_supported_gaussian_integral}
     \lean{TNLean.MPS.AreaLaw.exists_supported_gaussian_integral_domain}\leanok
-    \uses{def:domain_doubled_swapped_hamiltonian,def:qc_site_expectation}
+    \uses{def:domain_model,def:chain_swapped_doubled_hamiltonian,def:qc_site_expectation}
     For every range $R$ and real interaction bound $J$ there are constants
     $C,v>0$ with the following property. Let $q\ge1$, let $H$ be an admissible
     Hamiltonian on a finite integer domain $\Lambda$, let $D\subseteq V$, and
@@ -1854,7 +1838,7 @@ Theorem~B a second way, by a sequential preparation protocol.
     \cite[Part~IIa]{TNLean2026OneDimensional}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:domain_doubled_swapped_hamiltonian,lem:graph_supported_gaussian_integral,
+    \uses{def:chain_swapped_doubled_hamiltonian,lem:graph_supported_gaussian_integral,
         thm:domain_relative_generator_localization,lem:domain_site_norm_budget}
     Use the constants $a,v$ from the domain generator estimate and put
     $d=4|J|a(R+1)^2N_R$, $C=a+d$. The actual doubled and swapped operators

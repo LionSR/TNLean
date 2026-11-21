@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicInvariant
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousInverseFusion
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyTreeUDU
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyTreeUUU
@@ -47,7 +47,7 @@ three-cochain of arXiv:2502.20257 used here.
 noncomputable section
 
 open scoped Matrix Kronecker
-open TNLean.Algebra MPOTensor MPSTensor EisensteinInt
+open MPOTensor MPSTensor EisensteinInt
 
 namespace Z3Anomalous
 

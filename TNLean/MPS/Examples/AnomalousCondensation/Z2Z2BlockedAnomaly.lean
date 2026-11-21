@@ -40,7 +40,7 @@ fusion choice, and `KleinCocycleCompleteness` identifies the class.
 noncomputable section
 
 open scoped Matrix Kronecker
-open MPOTensor MPSTensor TNLean.Algebra
+open MPOTensor MPSTensor
 
 namespace Z2Z2Condensation
 

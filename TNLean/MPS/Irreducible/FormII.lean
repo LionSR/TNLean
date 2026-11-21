@@ -51,15 +51,15 @@ section CFII
 private theorem transferMap_unitaryConj_of_decidable [DecidableEq (Fin D)]
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    Kraus.transferMap (d := d) (D := D)
+    Kraus.transferMap (ι := Fin d) (n := Fin D)
       (fun i => (↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) X =
     (↑U : Matrix _ _ ℂ)ᴴ *
-      (Kraus.transferMap (d := d) (D := D) A
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) A
         ((↑U : Matrix _ _ ℂ) * X * (↑U : Matrix _ _ ℂ)ᴴ)) *
     (↑U : Matrix _ _ ℂ) := by
   set V : Matrix (Fin D) (Fin D) ℂ := ↑U with hV_def
-  change Kraus.transferMap (d := d) (D := D) (fun i => Vᴴ * A i * V) X =
-    Vᴴ * (Kraus.transferMap (d := d) (D := D) A (V * X * Vᴴ)) * V
+  change Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => Vᴴ * A i * V) X =
+    Vᴴ * (Kraus.transferMap (ι := Fin d) (n := Fin D) A (V * X * Vᴴ)) * V
   simp only [Kraus.transferMap_apply, Finset.mul_sum, Finset.sum_mul]
   congr 1; ext1 i
   rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
@@ -74,10 +74,10 @@ For `B i = U† A i U`, we have `E_B(X) = U† E_A(U X U†) U`. -/
 theorem transferMap_unitaryConj
     (A : MPSTensor d D) (U : Matrix.unitaryGroup (Fin D) ℂ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    Kraus.transferMap (d := d) (D := D)
+    Kraus.transferMap (ι := Fin d) (n := Fin D)
       (fun i => (↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) X =
     (↑U : Matrix _ _ ℂ)ᴴ *
-      (Kraus.transferMap (d := d) (D := D) A
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) A
         ((↑U : Matrix _ _ ℂ) * X * (↑U : Matrix _ _ ℂ)ᴴ)) *
     (↑U : Matrix _ _ ℂ) := by
   exact transferMap_unitaryConj_of_decidable A U X
@@ -133,16 +133,16 @@ theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
         Λ.PosDef ∧ Λ.IsDiag ∧
         (∑ i : Fin d, ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ))ᴴ
                       * ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) = 1) ∧
-        Kraus.transferMap (d := d) (D := D)
+        Kraus.transferMap (ι := Fin d) (n := Fin D)
           (fun i => (↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) Λ = Λ := by
   -- Step 1: The transfer map is a channel (from TP hypothesis).
-  have hCh : IsChannel (Kraus.transferMap (d := d) (D := D) A) :=
+  have hCh : IsChannel (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
     Kraus.isChannel_mapLM A (by unfold Kraus.IsTP; convert hTP)
   -- Step 2: Get a PSD fixed point ρ ≠ 0 from the channel.
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
-    hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (d := d) (D := D) A) hD
+    hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) hD
   -- Step 3: Convert irreducibility: tensor → CP map.
-  have hIrrCP : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
+  have hIrrCP : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
     Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr
   -- Step 4: Upgrade PSD to PD via quantum Perron–Frobenius.
   have hρ_pd : ρ.PosDef :=
@@ -184,7 +184,7 @@ theorem exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
       (Umatᴴ * A i * Umat)ᴴ * (Umatᴴ * A i * Umat) = 1 :=
     tp_of_unitaryConj A U_raw (by convert hTP)
   -- Step 9: Λ is a fixed point of the conjugated transfer map.
-  have hΛ_fix : Kraus.transferMap (d := d) (D := D)
+  have hΛ_fix : Kraus.transferMap (ι := Fin d) (n := Fin D)
       (fun i => Umatᴴ * A i * Umat) Λ = Λ := by
     rw [transferMap_unitaryConj_of_decidable A U_raw Λ, ← h_spectral, hρ_fix, ← hΛ_eq]
   -- Step 10: Assemble

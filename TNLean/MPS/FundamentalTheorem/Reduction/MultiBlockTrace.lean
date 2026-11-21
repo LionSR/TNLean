@@ -63,18 +63,18 @@ theorem trace_evalWord_eq_sum (P : MultiBlockCompression B S C) (w : List (Fin d
     P.trace_conjMatrix (Kraus.evalWord B w)
   set T : Fin d → Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ :=
     fun i => conjMatrix P.gauge (B i) with hTdef
-  rw [← hconj, ← evalWord_conjMatrix, trace_eq_sum_blockDiag' (_root_.evalWord T w),
+  rw [← hconj, ← evalWord_conjMatrix, trace_eq_sum_blockDiag' (Kraus.evalWord T w),
     Fintype.sum_sum_type]
   have hleft : ∀ s : {s // s ∈ S},
-      Matrix.trace ((_root_.evalWord T w).blockDiag' (Sum.inl s)) =
+      Matrix.trace ((Kraus.evalWord T w).blockDiag' (Sum.inl s)) =
         Matrix.trace (Kraus.evalWord (C s.1) w) := by
     intro s
     rw [Matrix.blockDiag'_evalWord P.ord.injective P.triangular w (Sum.inl s)]
     have hs : (fun i => (T i).blockDiag' (Sum.inl s)) = fun i => C s.1 i :=
       funext fun i => P.matched i s
-    rw [hs, MPSTensor.evalWord_aux_eq]
+    rw [hs]
   have hright : ∀ t : Fin P.z,
-      Matrix.trace ((_root_.evalWord T w).blockDiag' (Sum.inr t)) = 0 := by
+      Matrix.trace ((Kraus.evalWord T w).blockDiag' (Sum.inr t)) = 0 := by
     intro t
     rw [Matrix.blockDiag'_evalWord P.ord.injective P.triangular w (Sum.inr t)]
     have ht : (fun i => (T i).blockDiag' (Sum.inr t)) =
@@ -82,7 +82,7 @@ theorem trace_evalWord_eq_sum (P : MultiBlockCompression B S C) (w : List (Fin d
       funext fun i => P.unmatched i t
     rw [ht]
     obtain ⟨i, w', rfl⟩ := List.exists_cons_of_ne_nil hw
-    simp [_root_.evalWord]
+    simp [Kraus.evalWord]
   rw [Finset.sum_congr rfl fun s _ => hleft s, Finset.sum_congr rfl fun t _ => hright t,
     Finset.sum_const_zero, add_zero]
   exact Finset.sum_attach S fun s => Matrix.trace (Kraus.evalWord (C s) w)

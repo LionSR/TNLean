@@ -8,7 +8,7 @@ import QICLean.Analysis.SpectralRadiusPowerDecay
 import QICLean.Channel.Peripheral.IrreducibleChannel
 import QICLean.Channel.Primitive
 import QICLean.Kraus.InvariantProjection
-import TNLean.Algebra.MatrixCyclicPathSum
+import QICLean.Algebra.MatrixCyclicPathSum
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Core.CanonicalNormalization

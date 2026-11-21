@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Kraus.Word
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Analysis.Complex.Circle
-import TNLean.Algebra.FinStepOrbit
+import QICLean.Algebra.FinStepOrbit
 import TNLean.MPS.Core.CanonicalNormalization
 
 /-!

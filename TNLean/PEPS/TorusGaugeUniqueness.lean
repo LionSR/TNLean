@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.TorusCovariantAbsorbedFamily
 import TNLean.PEPS.NormalTorusRectanglePEPS
 import TNLean.PEPS.TorusFundamentalTheorem
-import TNLean.Algebra.ZModSmallDifference
+import QICLean.Algebra.ZModIntCast
 
 /-!
 # Uniqueness of the torus gauge family up to a multiplicative constant

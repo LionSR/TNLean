@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.PVBSPureWindowHamiltonian
 import TNLean.MPS.ParentHamiltonian.CyclicTranslation
-import TNLean.Algebra.FinCyclicInduction
+import QICLean.Algebra.IndexInduction
 
 /-!
 # The pure particle projector at its matching periodic volume

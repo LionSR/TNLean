@@ -59,7 +59,7 @@ theorem entry_evalWord_eq_zero_of_blockDiag'_eq_zero (hb : Function.Injective b)
     (hT : ∀ i, (T i).BlockTriangular fun x => b x.1) :
     ∀ (w : List (Fin d)) (x y : Σ k, Fin (n k)),
       (∀ k, b x.1 ≤ b k → b k ≤ b y.1 → ∀ i, (T i).blockDiag' k = 0) →
-      (b y.1 : ℕ) < (b x.1 : ℕ) + w.length → evalWord T w x y = 0 := by
+      (b y.1 : ℕ) < (b x.1 : ℕ) + w.length → Kraus.evalWord T w x y = 0 := by
   intro w
   induction w with
   | nil =>
@@ -68,13 +68,13 @@ theorem entry_evalWord_eq_zero_of_blockDiag'_eq_zero (hb : Function.Injective b)
       have hxy : x ≠ y := by
         rintro rfl
         exact absurd h (lt_irrefl _)
-      simp [evalWord, hxy]
+      simp [Kraus.evalWord, hxy]
   | cons i w' ih =>
       intro x y hdiag h
       simp only [List.length_cons] at h
       rcases lt_or_ge (b y.1) (b x.1) with hyx | hxy
       · exact blockTriangular_evalWord hT (i :: w') hyx
-      simp only [evalWord, Matrix.mul_apply]
+      simp only [Kraus.evalWord, Matrix.mul_apply]
       refine Finset.sum_eq_zero fun z _ => ?_
       rcases lt_trichotomy (b z.1) (b x.1) with hzx | hzx | hzx
       · rw [hT i hzx, zero_mul]

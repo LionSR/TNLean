@@ -8,9 +8,9 @@ import QICLean.Analysis.ComplementProdKernel
 import QICLean.Analysis.ComplementProdPartition
 import QICLean.Analysis.ProjectionGeometry
 import QICLean.ManyBody.Hamiltonian.Models
-import TNLean.Algebra.MatrixHermitianSum
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Algebra.HermitianPartSum
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.ManyBody.Sites.ProductVector
 import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.ManyBody.Hamiltonian.GroundSpace

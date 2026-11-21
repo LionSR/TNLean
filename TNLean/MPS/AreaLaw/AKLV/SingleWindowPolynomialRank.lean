@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.TwoWindowPolynomialRank
-import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.Algebra.OperatorSchmidtSubmatrix
 import QICLean.Entropy.SupportedMarginalTails
 import QICLean.Entropy.FilterMoment
@@ -42,10 +42,11 @@ private local instance configurationDecidableEq {V : Type*} (q : ℕ) :
 /-- The regional split with the finite-set complement and the entropy
 cut coordinates have the same operator Schmidt rank. -/
 theorem operatorSchmidtRank_sheetSplit_eq_cutOperator
-    {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ} (A : Finset V)
+    {V : Type*} [Finite V] [DecidableEq V] {q : ℕ} (A : Finset V)
     (K : Matrix (V → Fin q) (V → Fin q) ℂ) :
     operatorSchmidtRank (K.reindex (sheetSplit q A) (sheetSplit q A)) =
-      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) A K) :=
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) A K) := by
+  have := Fintype.ofFinite V
   rfl
 
 private theorem one_eq_classical {n : Type*} (d : DecidableEq n) :

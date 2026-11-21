@@ -1,6 +1,6 @@
 \begin{lemma}[Sector scalars from a product tensor identity]
     \label{thm:periodic_product_tensor_phase_extraction}
-    \lean{TNLean.Algebra.PiTensorProductPhase.exists_kappa_of_piTensorProduct_eq_smul}
+    \lean{PiTensorProduct.exists_kappa_of_tprod_eq_smul}
     \leanok
     Let $z\in\C$ be nonzero. For each sector $v=0,\ldots,m-1$, let
     $\{A_v^i\}_i$ and $\{B_v^i\}_i$ be families of complex matrices with the
@@ -45,7 +45,7 @@
 
 \begin{lemma}[Product-one sector scalars after choosing a root]
     \label{thm:periodic_product_one_phase_extraction}
-    \lean{TNLean.Algebra.PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul}
+    \lean{PiTensorProduct.exists_kappa_product_one_of_tprod_eq_root_smul}
     \leanok
     \uses{thm:periodic_product_tensor_phase_extraction}
     Let $m>0$, let $z\in\C$ be nonzero, and choose $\xi\in\C$ with

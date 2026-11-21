@@ -46,7 +46,7 @@ theorem tailVirtualMapES_adjoint_comp_self_apply (A : MPSTensor d D) (K : ℕ)
   simp_rw [boundaryFamilyEquiv_tailVirtualMapES_apply,
     (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm_apply_apply]
   have hsum : (∑ u : Cfg d K, Kraus.evalWord A (List.ofFn u) * (Kraus.evalWord A (List.ofFn u))ᴴ) =
-      ((Kraus.transferMap (d := d) (D := D) A) ^ K) 1 := by
+      ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ K) 1 := by
     symm
     simpa only [Matrix.mul_one] using Kraus.mapLM_pow_apply A K 1
   simpa only [Matrix.mul_assoc, Matrix.mul_sum] using
@@ -81,8 +81,8 @@ theorem tailVirtualMapES_norm_four_pow_le_transferMap_pow_one_entry_norm_sq
     (A : MPSTensor d D) (K : ℕ) :
     ‖tailVirtualMapES A K‖ ^ 4 ≤
       ∑ p : (Fin D × Fin D),
-        ‖(((Kraus.transferMap (d := d) (D := D) A) ^ K) 1) p.1 p.2‖ ^ 2 := by
-  let M := ((Kraus.transferMap (d := d) (D := D) A) ^ K) 1
+        ‖(((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ K) 1) p.1 p.2‖ ^ 2 := by
+  let M := ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ K) 1
   let U := Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)
   have hnorm_adj_sq : ‖(tailVirtualMapES A K).adjoint ∘L (tailVirtualMapES A K)‖ =
       ‖tailVirtualMapES A K‖ * ‖tailVirtualMapES A K‖ :=
@@ -134,7 +134,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.tailVirtualMapES_norm_four_po
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
     ∃ C : ℝ, 0 < C ∧ ∀ K : ℕ, ‖tailVirtualMapES A K‖ ^ 4 ≤ C := by
   let : NormedRing (Matrix (Fin D) (Fin D) ℂ) := Matrix.instL2OpNormedRing
-  let E := Kraus.transferMap (d := d) (D := D) A
+  let E := Kraus.transferMap (ι := Fin d) (n := Fin D) A
   have htr : Matrix.trace ρ ≠ 0 := by
     intro h
     exact hP.fixedPoint_ne_zero

@@ -102,15 +102,13 @@ rectangular and vertex-boundary implication in
     semidefiniteness. Summing the placed matrices therefore gives $UHU^*$.
 \end{proof}
 
-\begin{definition}[Native vertex boundaries]
-    \label{def:rectangular_vertex_boundaries}
-    \lean{ManyBody.innerBoundary,
-        ManyBody.endpointBoundary}
-    \leanok
-    For $A\subseteq V$, the inner boundary is the set of $x\in A$ with
-    a neighbor outside $A$. The set $Z_A$ consists of both endpoints of
-    every edge crossing $A$.
-\end{definition}
+For $A\subseteq V$, the inner boundary $\partial_{\rm in}A$ and the endpoint
+set $Z_A$ are defined by (\ref{eq:area_vertex_inner}) and
+(\ref{eq:area_vertex_endpoints}) of
+Definition~\ref{def:area_law_vertex_boundaries}, with the native edges of $V$
+in place of the induced edges of $\Lambda$: the inner boundary is the set of
+$x\in A$ with a neighbor outside $A$, and $Z_A$ consists of both endpoints of
+every edge crossing $A$.
 
 \begin{lemma}[Exact edge and vertex boundary counts]
     \label{thm:rectangular_boundary_transport}
@@ -130,7 +128,7 @@ rectangular and vertex-boundary implication in
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:rectangular_vertex_boundaries}
+    \uses{def:area_law_vertex_boundaries}
     The coordinate bijection preserves adjacency and cut membership.
     Sorting the two native endpoints counts each undirected edge exactly
     once. The degree bounds on the induced domain then apply with unchanged

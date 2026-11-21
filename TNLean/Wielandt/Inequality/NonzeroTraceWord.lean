@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Wielandt.Primitivity.Equivalence
 import TNLean.Wielandt.SpanGrowth.NonzeroTraceProduct
+import TNLean.MPS.Tensor
 
 /-!
 # Lemma 1 — nonzero-trace word (arXiv:0909.5347)

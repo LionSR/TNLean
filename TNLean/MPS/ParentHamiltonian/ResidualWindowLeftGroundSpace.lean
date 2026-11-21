@@ -68,12 +68,19 @@ theorem iSup_range_residualWindowLeftMapES_eq_of_groundSpaceES_eq_iSup
       (residualWindowConfigEquiv d L K M r).symm).toContinuousLinearMap.comp
         (leftBoundaryMapES A ((K + M) * L) r)).range
   rw [← residualWindowLeftMapES_blockTensor_eq_reindex_leftBoundaryMapES A K M r]
-  simp only [residualWindowLeftMapES_eq_fiberwise, ContinuousLinearMap.toLinearMap_comp,
-    LinearMap.range_comp, ← Submodule.map_iSup]
+  have hR {n : ℕ} (T : EuclideanSpace ℂ ((Fin n × Fin n) × Cfg d r) →L[ℂ]
+      EuclideanSpace ℂ (Cfg (blockPhysDim d L) K × (Cfg (blockPhysDim d L) M × Cfg d r))) :
+      (T.comp (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+        (Equiv.prodComm (Cfg d r) (Fin n × Fin n))).toContinuousLinearMap).range = T.range :=
+    LinearMap.range_comp_of_range_eq_top T.toLinearMap
+      (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+        (Equiv.prodComm (Cfg d r) (Fin n × Fin n))).toLinearEquiv.range
+  simp_rw [residualWindowLeftMapES_eq_fiberwise, ← ContinuousLinearMap.comp_assoc, hR]
+  simp only [ContinuousLinearMap.toLinearMap_comp, LinearMap.range_comp, ← Submodule.map_iSup]
   congr 1
-  rw [EuclideanSpace.iSup_range_fiberwiseMap_eq]
+  rw [ContinuousLinearMap.iSup_range_rightFiberwiseMap_eq]
   ext x
-  simp only [EuclideanSpace.mem_range_fiberwiseMap_iff, Submodule.range_starProjection,
+  simp only [ContinuousLinearMap.mem_range_rightFiberwiseMap_iff, Submodule.range_starProjection,
     range_groundSpaceMapES, hGS]
 
 /-- An isometric virtual resolution and blocked letter intertwining derive the original

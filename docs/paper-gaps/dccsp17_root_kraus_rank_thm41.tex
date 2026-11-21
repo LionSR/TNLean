@@ -290,7 +290,7 @@ $(p-1)$st power. This proves bounded-root selection whenever some root has
 that property. It does not settle the general case: the unequal sector
 dimensions of the cyclic example above force every element of its original
 Kraus span to be singular. The rank identity and multiplication argument are formalized in
-\path{TNLean/Algebra/KrausSpanRank.lean} and
+\path{QICLean/Kraus/ChoiRankSpan.lean} and
 \path{TNLean/MPS/Periodic/RootWordSpan.lean}. The theorem
 \leanid{MPSTensor.isPRefinable_of_root_isUnit_mem_wordSpan_pred}
 in \path{TNLean/MPS/Periodic/Symmetry/RefinementFromInvertibleWordSpan.lean}
@@ -316,7 +316,7 @@ has been established here.
 \section{Invertible targets admit the required rank bound}
 
 The following reduction is formalized in
-\path{TNLean/Algebra/InjectivePositiveMapRank.lean}.
+\path{QICLean/Channel/InjectivePositiveMapRank.lean}.
 Here invertibility means invertibility as a linear endomorphism of
 $M_D(\C)$, not invertibility of the Choi matrix. If
 $\mathcal E=\mathcal F^p$ is invertible and $p>0$, then every completely

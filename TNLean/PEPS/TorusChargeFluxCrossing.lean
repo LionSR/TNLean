@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.TorusChargeStringDeformation
 import TNLean.PEPS.ThreePlaquetteGeometry
 import TNLean.PEPS.RegularChargeFluxPhysicalTransport
-import TNLean.Algebra.ZModSmallDifference
+import QICLean.Algebra.ZModIntCast
 
 /-!
 # An original-spin charge crossing beside an actual flux endpoint

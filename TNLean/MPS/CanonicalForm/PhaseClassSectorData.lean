@@ -168,7 +168,7 @@ theorem collapsedBntSectorDecomp_hasBNT
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
-    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (d := d) (D := dim k) (blocks k)))
+    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k)))
     (hμne : ∀ k, μ k ≠ 0) :
     HasBNTSectorData (d := d) (collapsedBntSectorDecomp (d := d) μ blocks hμne) := by
   classical

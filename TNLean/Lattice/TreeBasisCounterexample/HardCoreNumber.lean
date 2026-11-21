@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.PlaceAlong
 import QICLean.Algebra.MatrixAux
-import TNLean.Algebra.ToEuclideanLinApply
+import QICLean.Algebra.MatrixToEuclidean
 import Mathlib.Analysis.CStarAlgebra.Projection
 
 /-!

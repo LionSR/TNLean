@@ -113,8 +113,8 @@ theorem CPSVCanonicalFormData.groundSpace_blockTensor_eq_iSup_representatives
               (cast (congr_arg (MPSTensor s) (ref.copyDimEq k))
                 (data.blocks (data.representativeIndex (data.classCopy k).1))) p := by
       funext i
-      simp [Kraus.blockTensor, ref.regroupedBlocksEq, Kraus.evalWord_smul,
-        Kraus.length_wordOfBlock]
+      simp [Kraus.blockTensor, Kraus.reindexPhysical, ref.regroupedBlocksEq,
+        Kraus.evalWord_smul]
     calc
       groundSpace (Kraus.blockTensor (data.blocks k) p) L =
           groundSpace (Kraus.blockTensor (ref.regroupedBlocks k) p) L :=

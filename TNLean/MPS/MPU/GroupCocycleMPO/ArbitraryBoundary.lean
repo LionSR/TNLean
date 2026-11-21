@@ -57,8 +57,6 @@ open scoped BigOperators Matrix
 
 namespace MPOTensor.GroupCocycle
 
-open TNLean.Algebra
-
 variable {G : Type} [Group G] {n : ℕ} (e : G ≃ Fin n)
 
 /-! ### The tensor -/

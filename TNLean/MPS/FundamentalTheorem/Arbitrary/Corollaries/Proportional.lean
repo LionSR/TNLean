@@ -117,14 +117,14 @@ dimension. -/
 private theorem spectralRadius_transferMap_smul_of_ne_zero {D : ℕ} (hD : D ≠ 0) (c : ℂ)
     (A : MPSTensor d D) :
     spectralRadius ℂ ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (Kraus.transferMap (d := d) (D := D) (c • A))) =
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) (c • A))) =
       (‖c‖₊ : ENNReal) ^ 2 * spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (Kraus.transferMap (d := d) (D := D) A)) := by
+          (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) := by
   have : Nonempty (Fin D) := ⟨⟨0, Nat.pos_of_ne_zero hD⟩⟩
   by_cases hc : c = 0
   · subst hc
-    have h0 : Kraus.transferMap (d := d) (D := D) ((0 : ℂ) • A) = 0 :=
+    have h0 : Kraus.transferMap (ι := Fin d) (n := Fin D) ((0 : ℂ) • A) = 0 :=
       LinearMap.ext fun X => by simp
     rw [h0, map_zero, spectrum.spectralRadius_zero]
     simp
@@ -437,8 +437,8 @@ theorem IsSpectrallyPeriodic.period_eq_of_isGaugeRelated_smul {D₁ D₂ m m' : 
     hC.spectral_radius_one, mul_one] at hr
   have hb := norm_eq_one_of_coe_nnnorm_sq_eq_one hr
   have hper := peripheralEigenvalues_conj_cross e (Kraus.transferMap (a • C))
-  rw [← he, show Kraus.transferMap (d := d) (D := D₂) ((a * c / a') • (a' • C')) =
-      Kraus.transferMap (d := d) (D := D₂) (a' • C') from
+  rw [← he, show Kraus.transferMap (ι := Fin d) (n := Fin D₂) ((a * c / a') • (a' • C')) =
+      Kraus.transferMap (ι := Fin d) (n := Fin D₂) (a' • C') from
       transferMap_smul_eq_of_norm_eq_one _ _ hb, hC'.peripheral_eq, hC.peripheral_eq] at hper
   exact (period_eq_of_setOf_pow_eq_one hC'.period_pos hC.period_pos hper).symm
 
@@ -448,10 +448,10 @@ theorem norm_eq_one_of_isGaugeRelated_smul {D₁ D₂ : ℕ} {C : MPSTensor d D�
     {C' : MPSTensor d D₂} {c : ℂ}
     (hC : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D₁) (Fin D₁) ℂ))
-        (Kraus.transferMap (d := d) (D := D₁) C)) = 1)
+        (Kraus.transferMap (ι := Fin d) (n := Fin D₁) C)) = 1)
     (hC' : spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D₂) (Fin D₂) ℂ))
-        (Kraus.transferMap (d := d) (D := D₂) C')) = 1)
+        (Kraus.transferMap (ι := Fin d) (n := Fin D₂) C')) = 1)
     (h : IsGaugeRelated C (c • C')) : ‖c‖ = 1 := by
   have hD₂ : D₂ ≠ 0 := matrix_dim_ne_zero_of_spectralRadius_eq_one _ hC'
   obtain ⟨e, he⟩ := exists_transferMap_eq_conj_of_isGaugeRelated h

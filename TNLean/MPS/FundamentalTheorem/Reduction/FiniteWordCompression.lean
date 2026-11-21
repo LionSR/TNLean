@@ -6,6 +6,7 @@ Authors: Sirui Lu
 import Mathlib.LinearAlgebra.Projection
 import Mathlib.Tactic
 import QICLean.Kraus.Word
+import TNLean.MPS.Tensor
 
 /-!
 # Finite certificates for word compression

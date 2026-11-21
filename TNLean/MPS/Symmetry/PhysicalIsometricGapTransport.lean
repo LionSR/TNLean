@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.IsometricGapTransfer
+import QICLean.ManyBody.Hamiltonian.KernelGap
 import TNLean.MPS.Symmetry.IsometricParentInteraction
 import TNLean.MPS.Symmetry.PhysicalInteractionGroundSpace
 
@@ -56,12 +57,13 @@ theorem isometricInteractionExtension_zero_translate_commute {d m N : ℕ}
 the tensor power of the physical inclusion. -/
 theorem isometricInteractionExtension_zero_ker_eq_range {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1) (hN : 2 ≤ N) :
-    LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (isometricInteractionExtension E 0)).hamiltonian) =
+    haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+      (Interaction.translationInvariant N (isometricInteractionExtension E 0)).hamiltonian) =
         LinearMap.range (Matrix.toEuclideanLin (Matrix.tensorPower N E)) := by
-  have hzero : (Interaction.translationInvariant hN
+  have : NeZero N := ⟨by omega⟩
+  have hzero : (Interaction.translationInvariant N
       (0 : MPOTensor.ChainOperator d 2)).hamiltonian = 0 := by
-    simp only [Interaction.hamiltonian, Interaction.translates_term, placeAlong_zero,
+    simp only [Interaction.hamiltonian_translationInvariant_of_le _ hN, placeAlong_zero,
       Finset.sum_const_zero]
   have hcomm (i j : Fin N) :
       Commute (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
@@ -94,11 +96,12 @@ theorem isometricInteractionExtension_inactive_energy_lower_bound {d m N : ℕ}
     (v : EuclideanSpace ℂ (Cfg m N))
     (hv : v ∈ (LinearMap.range
       (Matrix.toEuclideanLin (Matrix.tensorPower N E)))ᗮ) :
-    ‖v‖ ^ 2 ≤ (⟪Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian v,
+    haveI : NeZero N := ⟨by omega⟩; ‖v‖ ^ 2 ≤ (⟪Matrix.toEuclideanLin
+      (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian v,
         v⟫_ℂ).re := by
-  let P := (Interaction.translationInvariant hN (isometricInteractionExtension E 0)).hamiltonian
-  let H := (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian
+  have : NeZero N := ⟨by omega⟩
+  let P := (Interaction.translationInvariant N (isometricInteractionExtension E 0)).hamiltonian
+  let H := (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian
   have hProjection := isometricInteractionExtension_isStarProjection E hE 0
     (IsStarProjection.zero _)
   have hP : P.PosSemidef := Interaction.posSemidef_hamiltonian fun _ ↦
@@ -113,7 +116,7 @@ theorem isometricInteractionExtension_inactive_energy_lower_bound {d m N : ℕ}
   have hEnergy : ‖v‖ ^ 2 ≤ (⟪Matrix.toEuclideanLin P v, v⟫_ℂ).re := by
     rwa [one_mul, ← RCLike.re_eq_complex_re, inner_re_symm, RCLike.re_eq_complex_re] at hGap
   have hOrder : P ≤ H := by
-    simp only [P, H, Interaction.hamiltonian, Interaction.translates_term]
+    simp only [P, H, Interaction.hamiltonian_translationInvariant_of_le _ hN]
     exact Finset.sum_le_sum fun _ _ ↦ placeAlong_le_placeAlong _
       (isometricInteractionExtension_mono E (Matrix.nonneg_iff_posSemidef.mpr hA))
   have hPositive := Matrix.isPositive_toEuclideanLin_iff.mpr (Matrix.le_iff.mp hOrder)
@@ -144,11 +147,12 @@ private theorem physicalChainLinearIsometry_intertwines {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     {A : MPOTensor.ChainOperator d 2} (hA : A.IsHermitian) (hN : 2 ≤ N)
     (x : EuclideanSpace ℂ (Cfg d N)) :
-    Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian
+    haveI : NeZero N := ⟨by omega⟩; Matrix.toEuclideanLin
+        (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian
         (physicalChainLinearIsometry E hE N x) =
       physicalChainLinearIsometry E hE N
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian x) := by
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian x) := by
+  have : NeZero N := ⟨by omega⟩
   have h := congrArg (fun M => Matrix.toEuclideanLin M x)
     (hamiltonian_translationInvariant_isometricInteractionExtension_intertwiner E hE A hA hN)
   change Matrix.toEuclideanLin _
@@ -162,9 +166,10 @@ private theorem physicalChainLinearIsometry_inactive_bound {d m N : ℕ}
     {A : MPOTensor.ChainOperator d 2} (hA : A.PosSemidef) (hN : 2 ≤ N)
     (v : EuclideanSpace ℂ (Cfg m N))
     (hv : (physicalChainLinearIsometry E hE N).toLinearMap.adjoint v = 0) :
-    (1 : ℝ) * ‖v‖ ^ 2 ≤ (⟪Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian v,
+    haveI : NeZero N := ⟨by omega⟩; (1 : ℝ) * ‖v‖ ^ 2 ≤ (⟪Matrix.toEuclideanLin
+      (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian v,
         v⟫_ℂ).re := by
+  have : NeZero N := ⟨by omega⟩
   rw [one_mul]
   apply isometricInteractionExtension_inactive_energy_lower_bound E hE hA hN v
   rw [Submodule.mem_orthogonal]
@@ -178,11 +183,12 @@ terms are assumed to commute. -/
 theorem isometricInteractionExtension_ker_eq_map_of_posSemidef {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     {A : MPOTensor.ChainOperator d 2} (hA : A.PosSemidef) (hN : 2 ≤ N) :
-    LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian) =
+    haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+      (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian) =
       (LinearMap.ker
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian)).map
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian)).map
         (Matrix.toEuclideanLin (Matrix.tensorPower N E)) := by
+  have : NeZero N := ⟨by omega⟩
   simpa only [physicalChainLinearIsometry_toLinearMap] using
     (physicalChainLinearIsometry E hE N).ker_eq_map_of_intertwines_of_inactive_bound
       (physicalChainLinearIsometry_intertwines E hE hA.isHermitian hN)
@@ -195,12 +201,13 @@ theorem isometricInteractionExtension_ker_eq_span_of_posSemidef {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     {A : MPOTensor.ChainOperator d 2} (hA : A.PosSemidef) (hN : 2 ≤ N)
     (ψ : EuclideanSpace ℂ (Cfg d N))
-    (hground : LinearMap.ker
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) =
+    (hground : haveI : NeZero N := ⟨by omega⟩; LinearMap.ker
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) =
       Submodule.span ℂ {ψ}) :
-    LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian) =
+    haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+      (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian) =
       Submodule.span ℂ {Matrix.toEuclideanLin (Matrix.tensorPower N E) ψ} := by
+  have : NeZero N := ⟨by omega⟩
   rw [isometricInteractionExtension_ker_eq_map_of_posSemidef E hE hA hN,
     hground, Submodule.map_span, Set.image_singleton]
 

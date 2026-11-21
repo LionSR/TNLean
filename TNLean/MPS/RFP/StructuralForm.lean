@@ -135,10 +135,10 @@ theorem rfp_nt_cfii_diagonal_fixedPoint [NeZero D]
         Λ.PosDef ∧ Λ.IsDiag ∧
         (∑ i : Fin d, ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ))ᴴ
                       * ((↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) = 1) ∧
-        Kraus.transferMap (d := d) (D := D)
+        Kraus.transferMap (ι := Fin d) (n := Fin D)
           (fun i => (↑U : Matrix _ _ ℂ)ᴴ * A i * (↑U : Matrix _ _ ℂ)) Λ = Λ := by
   have hInj : Kraus.IsInjective A := rfp_nt_structural_of_leftCanonical A hNT hRFP hLeft
-  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
+  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
     Kraus.injective_implies_irreducibleCP A hInj
   have hIrrTensor : Kraus.IsIrreducibleFamily (d := d) (D := D) A :=
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrrMap

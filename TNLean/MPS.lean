@@ -29,3 +29,4 @@ import TNLean.MPS.SharedInfra
 import TNLean.MPS.Structure
 import TNLean.MPS.Symmetry
 import TNLean.MPS.Tactic
+import TNLean.MPS.Tensor

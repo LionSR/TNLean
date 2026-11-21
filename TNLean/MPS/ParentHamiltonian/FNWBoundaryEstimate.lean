@@ -5,10 +5,10 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.WeightedSupertrace
 import QICLean.Kraus.TracePairing
-import TNLean.Algebra.ListOfFn
+import QICLean.Algebra.OrderedProduct
 import TNLean.MPS.ParentHamiltonian.FNWBoundaryConvention
 import TNLean.MPS.ParentHamiltonian.FNWTransferDecay
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # FNW boundary scalar-product identities

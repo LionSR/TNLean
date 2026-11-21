@@ -98,8 +98,9 @@ noncomputable def z2PhysicalAction :
   toFun g := if Multiplicative.toAdd g = 0 then 1 else pauliX
   map_one' := by simp [toAdd_one]
   map_mul' a b := by
-    rcases zmod2_cases a with rfl | rfl <;> rcases zmod2_cases b with rfl | rfl <;>
-      simp [toAdd_ofAdd, zmod2_one_add_one, pauliX_sq]
+    rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
+      rcases Multiplicative.zmod2_cases b with rfl | rfl <;>
+      simp [toAdd_ofAdd, ZMod.zmod2_one_add_one, pauliX_sq]
 
 /-- σx as an element of GL(2,ℂ). -/
 private noncomputable def swapGL : GL (Fin 2) ℂ :=
@@ -141,7 +142,7 @@ private lemma ghz_gaugeEquiv_twisted :
 theorem ghz_isOnSiteSymmetric_Z2 :
     IsOnSiteSymmetric ghzTensor z2PhysicalAction := by
   intro g
-  rcases zmod2_cases g with rfl | rfl
+  rcases Multiplicative.zmod2_cases g with rfl | rfl
   · rw [twistedTensor_one]; exact fun _ _ => rfl
   · exact ghz_gaugeEquiv_twisted.sameMPV
 
@@ -175,8 +176,9 @@ noncomputable def ghzVirtualZ2Action :
   toFun g := if Multiplicative.toAdd g = 0 then 1 else pauliZ
   map_one' := by simp [toAdd_one]
   map_mul' a b := by
-    rcases zmod2_cases a with rfl | rfl <;> rcases zmod2_cases b with rfl | rfl <;>
-      simp [toAdd_ofAdd, zmod2_one_add_one, pauliZ_sq]
+    rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
+      rcases Multiplicative.zmod2_cases b with rfl | rfl <;>
+      simp [toAdd_ofAdd, ZMod.zmod2_one_add_one, pauliZ_sq]
 
 /-- The virtual Z₂ symmetry of the GHZ tensor: `σz` commutes with every GHZ
 matrix.  A non-scalar matrix commuting with all `Aⁱ` is the hallmark of a

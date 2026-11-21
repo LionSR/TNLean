@@ -50,7 +50,7 @@ theorem norm_residualWindowRightVirtualMapES_le_sqrt
   have hnorm : ‖residualWindowRightVirtualMapES (d := d) (L := L) (D := D) B K
       (Matrix.frobeniusEquivEuclidean (Fin D) (Fin E) Y)‖ ^ 2 =
       ∑ u : Cfg (blockPhysDim d L) K, ‖Y * Kraus.evalWord B (List.ofFn u)‖ ^ 2 := by
-    rw [EuclideanSpace.norm_sq_eq, Fintype.sum_prod_type]
+    rw [EuclideanSpace.norm_sq_eq, Fintype.sum_prod_type_right]
     change (∑ u : Cfg (blockPhysDim d L) K, ∑ p : Fin E × Fin D,
       ‖(Y * Kraus.evalWord B (List.ofFn u)) p.2 p.1‖ ^ 2) = _
     apply Finset.sum_congr rfl

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
 import TNLean.MPS.MPDO.BNTTheoremData
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Multiplicity normalization in the BNT algebra-to-RFP implication

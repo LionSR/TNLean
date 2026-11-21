@@ -63,7 +63,7 @@ open scoped BigOperators Matrix
 
 namespace Z2Z2Condensation
 
-open MPOTensor MPOTensor.GroupCocycle TNLean.Algebra.ScalarThreeCochain
+open MPOTensor MPOTensor.GroupCocycle ScalarThreeCochain
 
 /-- The site label `kleinEquiv h` of a group element `h = (h₁, h₂)` is `2 h₁ + h₂`, and the
 table `gmul` is the group law in these labels. -/

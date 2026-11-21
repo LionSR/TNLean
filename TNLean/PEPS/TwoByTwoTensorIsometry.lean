@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.TorusTwoByTwoBlocking
 import TNLean.PEPS.RegularSiteGram
 import TNLean.PEPS.GIsometricCoordinateTransport
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # G-isometry of the explicit four-site contraction

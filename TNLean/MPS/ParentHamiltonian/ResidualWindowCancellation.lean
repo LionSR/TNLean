@@ -57,10 +57,10 @@ theorem inner_residualWindow_limitingMixedGramIntertwining [NeZero E]
     (hρ : ρ.PosDef) (Q : Matrix (Fin D) (Fin D) ℂ) (hQ : IsOrthogonalProjection Q)
     (K r : ℕ) (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ *
       (V * Vᴴ) * Kraus.evalWord A (List.ofFn τ) = Q)
-    (x : EuclideanSpace ℂ (Cfg (blockPhysDim d L) K × (Fin E × Fin D)))
+    (x : EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K))
     (y : BoundaryFamilySpace (D := E) (Cfg d r)) :
     let Kinf := Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-    let Ktail := EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) K)
+    let Ktail := ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
       (residualBoundaryGramLimit A V ρ (ne_of_gt hρ.trace_pos) r)
     let Kleft := boundaryFiberwiseMap (Cfg d r) Kinf
     inner ℂ x (Ktail.comp ((residualWindowRightVirtualMapES (D := D) B K).comp
@@ -75,7 +75,8 @@ theorem inner_residualWindow_limitingMixedGramIntertwining [NeZero E]
   have hCancel := congrArg (fun F => F y)
     (rectangularRightGramMetric_inverse_comp_correlatedTailMapES_adjoint A V ρ hρ r)
   simp only [ContinuousLinearMap.comp_apply] at hCancel ⊢
-  rw [hCancel, EuclideanSpace.inner_fiberwiseMap]
+  rw [hCancel, ContinuousLinearMap.inner_eq_sum_inner_rightFiber x]
+  simp_rw [ContinuousLinearMap.rightFiber_rightFiberwiseMap]
   have hAdj : (rectangularRowProjection E Q).comp (correlatedTailMapES A V r).adjoint =
       (correlatedTailMapES A V r).adjoint := by
     have h := congrArg ContinuousLinearMap.adjoint
@@ -115,10 +116,10 @@ theorem inner_residualWindow_centeredMixedGram_eq_gramError [NeZero E]
     (hρ : ρ.PosDef) (Q : Matrix (Fin D) (Fin D) ℂ) (hQ : IsOrthogonalProjection Q)
     (K M r : ℕ) (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ *
       (V * Vᴴ) * Kraus.evalWord A (List.ofFn τ) = Q)
-    (x : EuclideanSpace ℂ (Cfg (blockPhysDim d L) K × (Fin E × Fin D)))
+    (x : EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K))
     (y : BoundaryFamilySpace (D := E) (Cfg d r)) :
     let Kinf := Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-    let Ktail := EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) K)
+    let Ktail := ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
       (residualBoundaryGramLimit A V ρ (ne_of_gt hρ.trace_pos) r)
     let Kleft := boundaryFiberwiseMap (Cfg d r) Kinf
     let Iinf := (rectangularRowProjection E Q).comp (Ring.inverse (rectangularRightGramMetric D ρ))
