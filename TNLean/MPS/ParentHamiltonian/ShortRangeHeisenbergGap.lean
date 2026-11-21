@@ -22,6 +22,13 @@ lines 2183--2187. The example has interaction range two and simultaneous
 injectivity length two, whereas the sufficient-range theorems require a
 range strictly larger than that length. See
 `docs/paper-gaps/cpgsv21_short_range_parent_gap.tex`.
+
+**Transitional (#10948).** `parentHamiltonianES_shortRangeHeisenbergMagnon`, the eigenvector
+equation for the Euclidean-space operator, is kept for
+`not_exists_eventual_uniform_gap_shortRangeHeisenbergTensor_two`, whose quantifier over all
+long rings does not provide \(2 ≤ N\) and is restated once QICLean has a ring interaction
+defined for every range. The eigenvector equation for the Hamiltonian of the parent interaction
+on the ring is `toEuclideanLin_hamiltonian_parentRingInteraction_shortRangeHeisenbergMagnon`.
 -/
 
 open scoped InnerProductSpace ComplexOrder
@@ -112,5 +119,38 @@ theorem not_exists_eventual_uniform_gap_shortRangeHeisenbergTensor_two :
     hη (shortRangeHeisenbergMagnon_ne_zero N)
     (parentHamiltonianES_shortRangeHeisenbergMagnon hN) (hgap N hN₀)
   exact (not_le_of_gt hsmall) hbound
+
+/-- On a ring of at least two sites the first Fourier magnon is an eigenvector of the Hamiltonian
+of the two-site parent interaction on the ring, with eigenvalue \(1-\cos(2\pi/N)\). This is the
+periodic version of the one-magnon recurrence in Koma--Nachtergaele, arXiv:cond-mat/9512120,
+Lemma 4, equation (3.13). -/
+theorem toEuclideanLin_hamiltonian_parentRingInteraction_shortRangeHeisenbergMagnon {N : ℕ}
+    [NeZero N] (hN : 2 ≤ N) :
+    Matrix.toEuclideanLin (parentRingInteraction shortRangeHeisenbergTensor hN).hamiltonian
+        (shortRangeHeisenbergMagnon N) =
+      (ZMod.cycleFourierGap N : ℂ) • shortRangeHeisenbergMagnon N := by
+  apply PiLp.ext
+  intro σ
+  rw [toEuclideanLin_hamiltonian_parentRingInteraction_apply_of_singlet_parentInteraction
+    shortRangeHeisenbergTensor
+    toEuclideanLin_toMatrix'_parentInteraction_shortRangeHeisenbergTensor_two_apply hN]
+  change (∑ i : Fin N,
+    (SpinChain.oneMagnon (fun j => ZMod.stdAddChar (ZMod.finEquiv N j)) σ -
+      SpinChain.oneMagnon (fun j => ZMod.stdAddChar (ZMod.finEquiv N j))
+        (σ ∘ Equiv.swap i (cyclicForwardSite i 1)))) / 2 =
+    (ZMod.cycleFourierGap N : ℂ) *
+      SpinChain.oneMagnon (fun j => ZMod.stdAddChar (ZMod.finEquiv N j)) σ
+  simp_rw [← cyclicSuccessorEquiv_apply]
+  rw [SpinChain.oneMagnon_edge_sum (cyclicSuccessorEquiv N) (cyclicSuccessorEquiv_ne hN)]
+  have hc (j : Fin N) :
+      ZMod.stdAddChar (ZMod.finEquiv N j) -
+        (ZMod.stdAddChar (ZMod.finEquiv N (cyclicSuccessorEquiv N j)) +
+          ZMod.stdAddChar (ZMod.finEquiv N ((cyclicSuccessorEquiv N).symm j))) / 2 =
+        (ZMod.cycleFourierGap N : ℂ) * ZMod.stdAddChar (ZMod.finEquiv N j) := by
+    simpa only [ZMod.cycleLaplacian, finEquiv_cyclicSuccessorEquiv,
+      finEquiv_cyclicSuccessorEquiv_symm] using
+      ZMod.cycleLaplacian_stdAddChar (ZMod.finEquiv N j)
+  simp_rw [hc]
+  exact SpinChain.oneMagnon_smul _ _ _
 
 end MPSTensor
