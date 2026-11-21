@@ -143,8 +143,7 @@ noncomputable def termProj (X : AdmissibleSupport Λ R) :
   (hff.isHermitian X).supportProj
 
 /-- The sweep `D = ∏_X (1 - Π_X)`, the supports taken colour by colour. -/
-noncomputable def sweepOp
-    (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1))) :
+noncomputable def sweepOp (c : SupportColouring Λ R) :
     Matrix (Configuration Λ q) (Configuration Λ q) ℂ :=
   sweepProd (fun X ↦ 1 - hff.termProj X) (sweepWord c)
 
@@ -174,7 +173,7 @@ theorem conjTranspose_factor_mulVec (X : AdmissibleSupport Λ R) :
 
 /-- The sweep fixes `Ω`. -/
 theorem sweepOp_mulVec_self
-    (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1))) :
+    (c : SupportColouring Λ R) :
     hff.sweepOp c *ᵥ WithLp.ofLp Ω = WithLp.ofLp Ω := by
   have := retainedProd_mulVec_eq_self (T := fun X : AdmissibleSupport Λ R ↦ X.1)
     hff.factor_mulVec ∅ (sweepWord c)
@@ -187,7 +186,7 @@ theorem sweepOp_mulVec_self
   | cons k l ih => rw [sweepProd, ← mulVec_mulVec, hff.factor_mulVec, ih]
 
 theorem sweepOp_pow_mulVec_self
-    (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1))) (t : ℕ) :
+    (c : SupportColouring Λ R) (t : ℕ) :
     (hff.sweepOp c ^ t) *ᵥ WithLp.ofLp Ω = WithLp.ofLp Ω := by
   induction t with
   | zero => simp
@@ -222,7 +221,7 @@ open scoped Classical in
 `docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`, "Contraction in one sweep".
 -/
 theorem norm_sweepOp_pow_apply_le (hJ : 0 < J) (hΔ : 0 < Δ)
-    (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1))) (t : ℕ)
+    (c : SupportColouring Λ R) (t : ℕ)
     {v : StateSpace Λ q} (hv : ⟪Ω, v⟫_ℂ = 0) :
     ‖clm (hff.sweepOp c ^ t) v‖ ≤ sweepContraction R J Δ ^ t * ‖v‖ := by
   set w := sweepWord c
@@ -288,7 +287,7 @@ acting on `N_{R χ t}(U)`, `χ = d_R + 1`, with `L Ω = Ω`, `Lᴴ Ω = Ω` and
 `docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`, "Exact localization on the
 perturbed vector". -/
 theorem exists_sweepOp_pow_lightCone
-    (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1))) (t : ℕ)
+    (c : SupportColouring Λ R) (t : ℕ)
     {α : Type*} [Fintype α] [DecidableEq α] {U : Finset (Site Λ)}
     {B : Matrix (Configuration Λ q × α) (Configuration Λ q × α) ℂ}
     (hB : ∀ a b, B.submatrix (fun σ ↦ (σ, a)) (fun τ ↦ (τ, b)) ∈

@@ -148,6 +148,12 @@ theorem graphNeighborhood_mono (r : ℕ) {S S' : Finset (Site Λ)} (h : S ⊆ S'
   obtain ⟨x, hx, p, hp⟩ := hy
   exact ⟨x, h hx, p, hp⟩
 
+/-- `N_r` is monotone in the radius. -/
+theorem graphNeighborhood_mono_radius {a b : ℕ} (hab : a ≤ b) (S : Finset (Site Λ)) :
+    graphNeighborhood Λ a S ⊆ graphNeighborhood Λ b S := fun y hy ↦ by
+  obtain ⟨x, hx, p, hp⟩ := mem_graphNeighborhood.mp hy
+  exact mem_graphNeighborhood.mpr ⟨x, hx, p, hp.trans hab⟩
+
 /-- `N_a(N_b(S)) ⊆ N_{b+a}(S)`. -/
 theorem graphNeighborhood_graphNeighborhood_subset (a b : ℕ) (S : Finset (Site Λ)) :
     graphNeighborhood Λ a (graphNeighborhood Λ b S) ⊆ graphNeighborhood Λ (b + a) S :=
