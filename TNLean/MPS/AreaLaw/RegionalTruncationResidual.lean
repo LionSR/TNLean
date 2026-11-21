@@ -32,17 +32,12 @@ No conjugation or residual estimate is supplied as a hypothesis. -/
 private theorem norm_exp_conjugation_nearestNeighbour_boundary_sum_le
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
     (Φ : ManyBody.BondInteraction L q)
-    (hs : ∀ i ∈ I ∪ J, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Φ.term i)
-      (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ I ∪ J, 0 ≤ Φ.term i) (h1 : ∀ i ∈ I ∪ J, Φ.term i ≤ 1)
     (z : ℂ) (t : ℝ) (ht0 : 0 ≤ t) (ht : t ≤ 1 / 8) :
     let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.partialHamiltonian I
     ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * (Φ.partialHamiltonian J) *
       NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 * (J.card : ℝ) := by
   intro H
-  have hsI : ∀ i ∈ I, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Φ.term i)
-      (interval L i.val (i.val + 2)) :=
-    fun i hi ↦ hs i (Finset.mem_union_left J hi)
   have h0I : ∀ i ∈ I, 0 ≤ Φ.term i := fun i hi ↦ h0 i (Finset.mem_union_left J hi)
   have h1I : ∀ i ∈ I, Φ.term i ≤ 1 := fun i hi ↦ h1 i (Finset.mem_union_left J hi)
   have hnorm1 : ‖(1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)‖ ≤ 1 :=
@@ -59,7 +54,7 @@ private theorem norm_exp_conjugation_nearestNeighbour_boundary_sum_le
       ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * Φ.term j *
           NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 * ‖Φ.term j‖ :=
         norm_exp_conjugation_nearest_neighbour_shift_le_two (c := j.val)
-          I Φ hsI h0I h1I (Φ.term j) (hs j hjunion) z t ht0 ht
+          I Φ h0I h1I (Φ.term j) (Φ.mem j) z t ht0 ht
       _ ≤ 2 * 1 := mul_le_mul_of_nonneg_left hjnorm (by norm_num)
       _ = 2 := mul_one 2
   calc
@@ -86,8 +81,6 @@ truncation-error or subspace-closeness theorem. -/
 theorem exists_nearestNeighbour_weighted_low_restriction
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
     (Φ : ManyBody.BondInteraction L q)
-    (hs : ∀ i ∈ I ∪ J, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Φ.term i)
-      (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ I ∪ J, 0 ≤ Φ.term i) (h1 : ∀ i ∈ I ∪ J, Φ.term i ≤ 1)
     (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (r u e s : ℝ)
     (hs0 : 0 < s) (hs1 : s ≤ 1 / 8)
@@ -114,7 +107,7 @@ theorem exists_nearestNeighbour_weighted_low_restriction
     (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i hi ↦
       h0 i (Finset.mem_union_left J hi))).isHermitian
   have hconj := norm_exp_conjugation_nearestNeighbour_boundary_sum_le
-    I J Φ hs h0 h1 ((r + u : ℝ) : ℂ) s hs0.le hs1
+    I J Φ h0 h1 ((r + u : ℝ) : ℂ) s hs0.le hs1
   simp only [Complex.coe_smul] at hconj
   exact Matrix.exists_weighted_low_restriction_of_conjugation_le A X _ hA r u e s _ hs0
     hXA horder b a hEigen hconj hgap
@@ -152,7 +145,7 @@ theorem norm_consecutive_regional_truncation_low_le
   have hconj := norm_exp_conjugation_nearestNeighbour_boundary_sum_le
     ((Finset.univ : Finset (Fin (L - 1))).filter
       (fun r ↦ k j.castSucc ≤ r.val ∧ r.val + 1 < k j.succ)) J Φ
-    (fun r _ ↦ Φ.mem r) (fun r _ ↦ h0 r) (fun r _ ↦ h1 r) ((e j + u : ℝ) : ℂ) s hs0.le hs1
+    (fun r _ ↦ h0 r) (fun r _ ↦ h1 r) ((e j + u : ℝ) : ℂ) s hs0.le hs1
   simp only [Complex.coe_smul] at hconj
   exact Matrix.norm_partially_clipped_truncation_low_le A hA
     (pairwise_commute_sum_internal_consecutive_regions k hk Φ) e he T j _ u ε s t _

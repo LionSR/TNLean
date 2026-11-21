@@ -211,7 +211,7 @@ theorem norm_boundary_spectral_offDiagonal_le {L q : ℕ}
       (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
   have hnorm : ‖O‖ ≤ (1 / 2 : ℝ) := norm_sub_half_one_le (Φ.term a) (h0 a) (h1 a)
   have hconj := norm_exp_conjugation_nearest_neighbour_shift_le_two I Φ
-    (fun i _ ↦ Φ.mem i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) O hO (z : ℂ)
+    (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) O hO (z : ℂ)
     (1 / 8) (by norm_num) le_rfl
   have hzero := hB.spectralProjectionGE_mul_one_sub_eq_zero hut
   have hcenter : Matrix.spectralProjectionGE B t * Φ.term a *

@@ -226,7 +226,7 @@ theorem exists_single_region_soft_truncation_residuals {L q l r : ℕ}
       rw [← hmid]
       exact hproj U hU0
     have htail := norm_hard_residual_low_of_barrier I J Φ
-      (fun i _ ↦ Φ.mem i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) B
+      (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) B
       (e 1 + U) b0 (mu + eta) (1 / 8) (e 1 + T)
       (by norm_num) (by norm_num) (_root_.add_le_add (le_refl (e 1)) hUT)
       hBA' hproj' hG.eigenvectorBasis hG.eigenvalues hEigen hgap

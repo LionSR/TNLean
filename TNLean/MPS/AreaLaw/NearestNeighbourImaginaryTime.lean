@@ -115,8 +115,6 @@ Supporting AKL14, arXiv:1406.3898, low70.tex, lines 817–877. -/
 private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
     (s : Finset (Fin (L - 1)))
     (Φ : ManyBody.BondInteraction L q)
-    (hs : ∀ i ∈ s, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Φ.term i)
-      (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ s, 0 ≤ Φ.term i) (h1 : ∀ i ∈ s, Φ.term i ≤ 1)
     (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X
@@ -137,13 +135,13 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
     by_cases hd : Disjoint (interval L i.val (i.val + 2))
         (interval L (c - m) (c + 2 + m))
     · have hc : Commute (Φ.term i) X := ManyBody.commute_of_mem_supportedOperators_of_disjoint
-        (hs i hi) hX hd
+        (Φ.mem i) hX hd
       rw [sub_eq_zero.mpr hc.eq]
       exact zero_mem _
     · have hhJ : Φ.term i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J :=
         ManyBody.supportedOperators_mono
           (by simpa only [Finset.coe_subset] using bond_subset_enlarged_interval_succ hd)
-          (hs i hi)
+          (Φ.mem i)
       exact sub_mem (mul_mem hhJ hXJ) (mul_mem hXJ hhJ)
   have hsupport : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       ((Φ.partialHamiltonian s) * X - X * (Φ.partialHamiltonian s)) J := by
@@ -172,7 +170,7 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
       interval L i.val (i.val + 2)) :=
     ⟨fun i ↦ if i ∈ s then Φ.term i else 0, fun i ↦ by
       by_cases hi : i ∈ s
-      · simpa only [hi, ↓reduceIte] using (show Φ.term i ∈ _ from hs i hi)
+      · simpa only [hi, ↓reduceIte] using (Φ.mem i)
       · simpa only [hi, ↓reduceIte] using zero_mem _⟩
   have hsumΦ : ∑ i ∈ s, Ψ.term i = Φ.partialHamiltonian s :=
     Finset.sum_congr rfl fun i hi ↦ by simp only [Ψ, hi, ↓reduceIte]
@@ -196,8 +194,6 @@ arXiv:1406.3898, low70.tex, lines 804–877; no imaginary-time sum is asserted. 
 private theorem iterated_nearest_neighbour_commutator_support_norm {L q c : ℕ}
     (s : Finset (Fin (L - 1)))
     (Φ : ManyBody.BondInteraction L q)
-    (hs : ∀ i ∈ s, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Φ.term i)
-      (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ s, 0 ≤ Φ.term i) (h1 : ∀ i ∈ s, Φ.term i ≤ 1)
     (O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hO : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) O (interval L c (c + 2))) (m : ℕ) :
@@ -213,7 +209,7 @@ private theorem iterated_nearest_neighbour_commutator_support_norm {L q c : ℕ}
     simpa only [Function.iterate_zero_apply, Nat.sub_zero, Nat.add_zero, pow_zero,
       Nat.factorial_zero, Nat.cast_one, one_mul] using And.intro hO (le_refl ‖O‖)
   | succ m ih =>
-    obtain ⟨hsupport, hnorm⟩ := nearest_neighbour_commutator_step s Φ hs h0 h1
+    obtain ⟨hsupport, hnorm⟩ := nearest_neighbour_commutator_step s Φ h0 h1
       (ad^[m] O) ih.1
     refine ⟨?_, ?_⟩
     · simpa only [Function.iterate_succ_apply'] using hsupport
@@ -240,8 +236,6 @@ property of a clipped Hamiltonian is required. -/
 theorem norm_exp_conjugation_nearest_neighbour_shift_le_two {L q c : ℕ}
     (I : Finset (Fin (L - 1)))
     (Φ : ManyBody.BondInteraction L q)
-    (hs : ∀ i ∈ I, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Φ.term i)
-      (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ I, 0 ≤ Φ.term i) (h1 : ∀ i ∈ I, Φ.term i ≤ 1)
     (O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hO : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) O (interval L c (c + 2)))
@@ -265,6 +259,6 @@ theorem norm_exp_conjugation_nearest_neighbour_shift_le_two {L q c : ℕ}
     funext X
     rfl
   rw [hcoe, had]
-  exact (iterated_nearest_neighbour_commutator_support_norm I Φ hs h0 h1 O hO m).2
+  exact (iterated_nearest_neighbour_commutator_support_norm I Φ h0 h1 O hO m).2
 
 end TNLean.MPS.AreaLaw

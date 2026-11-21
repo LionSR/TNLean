@@ -32,8 +32,6 @@ Auxiliary to ALVV, arXiv:1602.08828v2, `lem:exp-approx`, lines 1195–1255. -/
 theorem norm_hard_residual_low_of_barrier
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
     (Φ : ManyBody.BondInteraction L q)
-    (hs : ∀ i ∈ I ∪ J, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (Φ.term i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ I ∪ J, 0 ≤ Φ.term i) (h1 : ∀ i ∈ I ∪ J, Φ.term i ≤ 1)
     (B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (c b0 energy s cut : ℝ) (hs0 : 0 < s) (hs1 : s ≤ 1 / 8) (hcut : c ≤ cut)
@@ -54,7 +52,7 @@ theorem norm_hard_residual_low_of_barrier
   have hproj' : b0 • spectralProjectionGE A ((c - b0) + b0) ≤ B := by
     simpa only [sub_add_cancel] using hproj
   obtain ⟨Z, hZ, hZn⟩ := exists_nearestNeighbour_weighted_low_restriction
-    I J Φ hs h0 h1 B (c - b0) b0 energy s hs0 hs1 hBA hproj' basis a hEigen hgap
+    I J Φ h0 h1 B (c - b0) b0 energy s hs0 hs1 hBA hproj' basis a hEigen hgap
   have hA : A.IsHermitian :=
     (isSelfAdjoint_sum I fun i hi ↦
       IsSelfAdjoint.of_nonneg (h0 i (Finset.mem_union_left J hi))).isHermitian
@@ -72,8 +70,6 @@ arXiv:1602.08828v2, `lem:exp-approx`, lines 1195–1255. -/
 theorem norm_soft_residual_low_of_barrier
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
     (Φ : ManyBody.BondInteraction L q)
-    (hs : ∀ i ∈ I ∪ J, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (Φ.term i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ I ∪ J, 0 ≤ Φ.term i) (h1 : ∀ i ∈ I ∪ J, Φ.term i ≤ 1)
     (B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (p c b0 energy s t T : ℝ) (m : ℕ)
@@ -94,7 +90,7 @@ theorem norm_soft_residual_low_of_barrier
         ((2 * (J.card : ℝ)) / (b0 - energy - 2 * (J.card : ℝ))) +
           (t / (m : ℝ)) * (T / t) ^ m := by
   intro A S
-  have htail := norm_hard_residual_low_of_barrier I J Φ hs h0 h1 B
+  have htail := norm_hard_residual_low_of_barrier I J Φ h0 h1 B
     c b0 energy s (p + T) hs0 hs1 hcut hBA hproj basis a hEigen hgap
   have hA : A.IsHermitian :=
     (isSelfAdjoint_sum I fun i hi ↦

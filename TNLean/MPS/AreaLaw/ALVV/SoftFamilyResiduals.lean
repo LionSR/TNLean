@@ -144,7 +144,7 @@ theorem norm_simultaneous_soft_reverse_residual
     have hcomm' : Commute (B + (D : ℂ) • 1) (A j) :=
       (hBA j).add_left ((Commute.one_left (A j)).smul_left (D : ℂ))
     have htail := norm_soft_residual_low_of_barrier (I j) J Φ
-      (fun i _ ↦ Φ.mem i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) (B + (D : ℂ) • 1)
+      (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) (B + (D : ℂ) • 1)
       (p j) (p j + U) b0 (mu + eta + D) (1 / 8) t T m hp
       (by norm_num) (by norm_num) ht hm' hT0
       (_root_.add_le_add (le_refl (p j)) hT) hcomm' (hproj j hj U hU0)
@@ -255,7 +255,7 @@ theorem norm_simultaneous_soft_original_residual
       dsimp only [u]
       linarith only [hpj, hT]
     have htail := norm_soft_residual_low_of_barrier (I j) J Φ
-      (fun i _ ↦ Φ.mem i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) Braw
+      (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) Braw
       (p j) (e j + u) u (E + eta) (1 / 8) t T m hp
       (by norm_num) (by norm_num) ht hm hT0 hcut hBA hproj
       basis a hEigen hgap

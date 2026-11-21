@@ -137,7 +137,7 @@ theorem exists_interval_regional_exponential_moment
     dsimp only [u, C]
     linarith
   obtain ⟨Z, hZ, hZn⟩ := exists_nearestNeighbour_weighted_low_restriction
-    (I 1) J Φ (fun i _ ↦ Φ.mem i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
+    (I 1) J Φ (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
     X (e 1) u (E0 + eta) (1 / 8) (by norm_num) (by norm_num)
     (hcomm 1) (horder 1 u hu0 le_rfl)
     hHc.eigenvectorBasis hHc.eigenvalues hEigen hgap
