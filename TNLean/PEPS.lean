@@ -407,6 +407,7 @@ import TNLean.PEPS.TorusDualCollar
 import TNLean.PEPS.TorusDualFluxDetection
 import TNLean.PEPS.TorusDualFluxString
 import TNLean.PEPS.TorusDualHomotopy
+import TNLean.PEPS.TorusDualHomotopyClassification
 import TNLean.PEPS.TorusDualOpenDeformation
 import TNLean.PEPS.TorusDualPath
 import TNLean.PEPS.TorusDualRectangle

@@ -178,6 +178,46 @@ of bonds incident to $s=(x+1,y+1)$.
     $d(p^{-1})=-d(p)$ gives $d(p)=d(q)$.
 \end{proof}
 
+\begin{lemma}[Enlarging the allowed swept support]
+    \label{lem:peps_dual_homotopy_mono}
+    \lean{TNLean.PEPS.TorusDualHomotopy.mono}\leanok
+    \uses{def:peps_dual_flux_homotopy}
+    For $R\subseteq S\subseteq X$ and labelled paths with common endpoints,
+    $p\sim_Rq$ implies $p\sim_Sq$.
+\end{lemma}
+\begin{proof}\leanok
+    Every permitted square support in $R$ also belongs to $S$.
+    The remaining generating moves are independent of the support set.
+\end{proof}
+
+\begin{lemma}[Classification of full-support deformations]
+    \label{lem:peps_dual_full_support_classification}
+    \lean{TNLean.PEPS.torusDualHomotopy_univ_iff_displacement_eq}
+    \leanok
+    \uses{def:peps_dual_flux_homotopy,def:peps_dual_flux_displacement}
+    For finite labelled dual paths $p,q:a\to b$, the generated relation with
+    every primal vertex allowed satisfies
+    \begin{align}
+        p\sim_Xq\quad\Longleftrightarrow\quad d(p)=d(q).
+        \label{eq:peps_full_support_classification}
+    \end{align}
+    Distinct winding sectors remain distinct.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_dual_flux_displacement,thm:peps_dual_rectangle_comb,
+        lem:peps_dual_homotopy_mono}
+    The forward implication of (\ref{eq:peps_full_support_classification}) is
+    Lemma~\ref{thm:peps_dual_flux_displacement}. For the converse, set
+    $N=|p|+|q|$ and translate the lifted origin by $(-N,-N)$ from $a$.
+    Lift each path from $(N,N)$ into $[0,2N]^2$, preserving its four step
+    labels. A prefix of length $k$ changes either coordinate by at most $k$,
+    so each nonfinal lifted vertex has the margin needed for its next step.
+    The lifted final vertices are $(N,N)+d(p)$ and $(N,N)+d(q)$, hence agree.
+    Lemma~\ref{thm:peps_dual_rectangle_comb} normalizes both projected paths by
+    squares and backtracks. Allowing their swept vertices in $X$ gives
+    $p\sim_Xq$.
+\end{proof}
+
 \begin{definition}[Native flux matrices and unchanged exterior data]%
     \label{def:peps_dual_flux_matrices}
     \lean{TNLean.PEPS.torusFluxPowerLabels,
