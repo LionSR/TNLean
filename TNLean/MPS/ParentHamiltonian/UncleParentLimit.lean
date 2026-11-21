@@ -15,6 +15,11 @@ This is the perturbative limit in arXiv:1210.6613, Theorem
 family. Injectivity of its value at zero ensures continuity of its actual
 range projector. Off-diagonal virtual rescaling preserves the physical
 range away from zero, giving the punctured limit of the original parent.
+
+**Transitional (#10948).** `continuousAt_parentInteractionES_of_isNBlkInjective`, stated for the
+Euclidean-space operator, is kept for the uncle limits below, which are restated with the uncle
+interaction and Hamiltonian in a later package; the continuity of the matrix of the canonical
+parent interaction is `continuousAt_toMatrix'_parentInteraction_of_isNBlkInjective`.
 -/
 
 open scoped Matrix Topology
@@ -195,5 +200,24 @@ theorem tendsto_parentHamiltonianES_twoBlockPerturbation_real {d a b : ℕ}
   apply (tendsto_parentHamiltonianES_twoBlockPerturbation A P B Q R L hU hN).comp
   exact Complex.continuous_ofReal.continuousWithinAt.tendsto_nhdsWithin
     fun ε hε => by simpa using hε
+
+/-! ### The matrix of the canonical parent interaction -/
+
+/-- The matrix of the actual canonical interaction on \(L\) sites is continuous when the tensor
+family is continuous and injective after blocking \(L\) sites at the base point. -/
+theorem continuousAt_toMatrix'_parentInteraction_of_isNBlkInjective
+    {X : Type*} [TopologicalSpace X] {d D : ℕ}
+    (A : X → MPSTensor d D) {x₀ : X} (hA : ContinuousAt A x₀) (L : ℕ)
+    (hInj : Kraus.IsNBlkInjective (A x₀) L) :
+    ContinuousAt (fun x => LinearMap.toMatrix' (parentInteraction (A x) L)) x₀ := by
+  let e := (Matrix.toEuclideanCLM : Matrix (Cfg d L) (Cfg d L) ℂ ≃⋆ₐ[ℂ] _).symm
+  have he : Continuous e := e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional
+  have heq : (fun x => LinearMap.toMatrix' (parentInteraction (A x) L)) =
+      fun x => e (1 - (groundSpaceES (A x) L).starProjection) := by
+    funext x
+    rw [← toEuclideanCLM_toMatrix'_parentInteraction, StarAlgEquiv.symm_apply_apply]
+  rw [heq]
+  exact he.continuousAt.comp (continuousAt_const.sub
+    (continuousAt_groundSpaceES_starProjection_of_isNBlkInjective A hA L hInj))
 
 end MPSTensor

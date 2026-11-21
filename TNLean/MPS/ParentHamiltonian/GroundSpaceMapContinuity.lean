@@ -237,7 +237,7 @@ private theorem continuous_placeAlong {V W : Type*} [Fintype V] [DecidableEq V] 
 
 /-- The continuous operator of the local parent matrix is the identity minus the orthogonal
 projection onto the local ground space. -/
-private theorem toEuclideanCLM_toMatrix'_parentInteraction {d D : ℕ} (A : MPSTensor d D)
+theorem toEuclideanCLM_toMatrix'_parentInteraction {d D : ℕ} (A : MPSTensor d D)
     (L : ℕ) :
     (Matrix.toEuclideanCLM : Matrix (Cfg d L) (Cfg d L) ℂ ≃⋆ₐ[ℂ] _)
         (LinearMap.toMatrix' (parentInteraction A L)) =
