@@ -82,14 +82,16 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
   classical
   intro config H hH G J P M
   let : Nonempty (Fin L → Fin q) := config
-  let hp := intervalBondRestriction l r Φ
+  let Ψ := Φ.restrict fun i ↦ l ≤ i.val ∧ i.val + 1 < r
   let k : Fin 6 → ℕ := ![0, l, u, v, r, L]
   let I := fun j : Fin 5 ↦ Finset.univ.filter
     (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-  let A := fun j : Fin 5 ↦ ∑ i ∈ I j, hp i
+  let A := fun j : Fin 5 ↦ Ψ.partialHamiltonian (I j)
   obtain ⟨e, x, z, E, hx, hxe, he, _he0, hz, hHz, hE, _hE0, _hE4, hfamily⟩ :=
     exists_soft_parent_structure hq hlu huv hvr hrL hleft hright Φ h0 h1
-  have hAM : A 2 = M := sum_internal_intervalBondRestriction_eq hlu hvr Φ
+  have hAM : A 2 = M := ManyBody.Interaction.partialHamiltonian_restrict_of_forall
+    (s := Finset.univ.filter fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v)
+    fun i hi ↦ by have := (Finset.mem_filter.mp hi).2; omega
   let s := ∑ j, e j
   let eP := E + s
   have hPz : P *ᵥ z = (eP : ℂ) • z := by

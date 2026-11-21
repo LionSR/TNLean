@@ -119,7 +119,7 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
   let HR := outsidePiece Φ a b (fun i ↦ k ≤ i.val)
   let HC := outsidePiece Φ a b (fun i ↦ i.val + 1 = k)
   let Q := fun p ↦ (T).symm (physicalParityProduct
-    ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ p)
+    (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p)
   let U := ManyBody.supportedOperators (fun _ ↦ Fin q) (leftBlock L k : Finset (Fin L))
   let V := ManyBody.supportedOperators (fun _ ↦ Fin q) ((leftBlock L k)ᶜ : Finset (Fin L))
   have hHL : HL ∈ U :=
@@ -186,7 +186,7 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
       (Nat.add_le_add_right (operatorSchmidtRank_add_le (cut X) (cut Y)) _)
     omega
   · have hQ := sum_operatorSchmidtRank_physicalParityProduct_le hq
-      ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ k
+      (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) k
     change operatorSchmidtRank (cut (Q 0)) + operatorSchmidtRank (cut (Q 1)) ≤ q ^ 2 + 1 at hQ
     let X := HL + 1 + 1
     have hX : X ∈ U := add_mem (add_mem hHL hU1) hU1

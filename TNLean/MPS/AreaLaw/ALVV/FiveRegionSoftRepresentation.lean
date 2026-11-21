@@ -22,8 +22,6 @@ or running-time claim is made; see `docs/paper-gaps/alvv16_cluster_approximation
 `docs/paper-gaps/alvv16_soft_regional_residuals.tex`.
 -/
 
-open ManyBody (interval mem_interval)
-
 open Matrix
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
@@ -159,20 +157,8 @@ theorem exists_five_region_soft_representation {N q k1 k2 k3 k4 : ℕ}
         _ = (Braw + Y) - (Braw - B) := by dsimp only [G]; abel
         _ = H - ∑ j ∈ S, (A j - F j) := by rw [← hcenter, hdiff]
         _ = _ := by rw [Finset.sum_sub_distrib, Finset.sum_sub_distrib]; abel
-    have hsites (i : Fin N) :
-        interval (N + 1) i.val (i.val + 2) ⊆ {i.castSucc, i.succ} := by
-      intro j hj
-      have hj' := mem_interval.mp hj
-      simp only [Finset.mem_insert, Finset.mem_singleton]
-      by_cases hji : j.val = i.val
-      · left
-        exact Fin.ext hji
-      · right
-        apply Fin.ext
-        change j.val = i.val + 1
-        omega
     have hs' (i : Fin N) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (Φ.term i) {i.castSucc, i.succ} := (Φ.mem i).mono (hsites i)
+        (Φ.term i) {i.castSucc, i.succ} := Φ.term_mem_supportedOperators_chainBond i
     have hherm (i : Fin N) : (Φ.term i).IsHermitian := (h0 i).posSemidef.isHermitian
     have hnorm (i : Fin N) : ‖Φ.term i‖ ≤ 1 :=
       (CStarAlgebra.norm_le_one_iff_of_nonneg (Φ.term i) (h0 i)).mpr (h1 i)

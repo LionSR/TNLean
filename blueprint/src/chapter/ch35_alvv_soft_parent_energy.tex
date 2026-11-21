@@ -11,18 +11,18 @@ scalar-centering distinctions are recorded in
 
 \begin{definition}[Interactions restricted to an interval]
     \label{def:interval_bond_restriction}
-    \lean{TNLean.MPS.AreaLaw.intervalBondRestriction}
+    \lean{ManyBody.Interaction.restrict, ManyBody.Interaction.restrict_term}
     \leanok
     For a chain with $L$ sites, define $h_i^{[l,r)}=h_i$ if
     $l\le i$ and $i+1<r$, and $h_i^{[l,r)}=0$ otherwise.
 \end{definition}
 \begin{lemma}[The actual internal interaction sum]
     \label{lem:interval_bond_restriction}
-    \lean{TNLean.MPS.AreaLaw.intervalBondRestriction_supported,
-        TNLean.MPS.AreaLaw.intervalBondRestriction_bounds,
-        TNLean.MPS.AreaLaw.sum_intervalBondRestriction,
-        TNLean.MPS.AreaLaw.sum_internal_intervalBondRestriction_eq,
-        TNLean.MPS.AreaLaw.sum_exterior_intervalBondRestriction}
+    \lean{ManyBody.Interaction.restrict_term_nonneg,
+        ManyBody.Interaction.restrict_term_le_one,
+        ManyBody.Interaction.hamiltonian_restrict,
+        ManyBody.Interaction.partialHamiltonian_restrict_of_forall,
+        ManyBody.Interaction.partialHamiltonian_restrict_eq_zero}
     \leanok
     \uses{def:interval_bond_restriction}
     The restricted interactions retain their designated two-site supports

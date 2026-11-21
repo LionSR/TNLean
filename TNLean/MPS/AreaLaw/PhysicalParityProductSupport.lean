@@ -51,15 +51,12 @@ lines 1467--1487. -/
 theorem isSupportedOn_regionalParityProduct
     (Φ : ManyBody.BondInteraction L q) (a b p : ℕ) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      ((T).symm (physicalParityProduct
-        ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ p))
+      ((T).symm (physicalParityProduct (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p))
       (interval L a b) := by
   change _ ∈ ManyBody.supportedOperators _ _
-  classical
   apply isSupportedOn_physicalParityProduct
   intro i _
-  change ManyBody.IsSupportedOn (intervalBondRestriction a b Φ i) _
-  unfold intervalBondRestriction
+  rw [ManyBody.Interaction.restrict_term]
   split_ifs with hi
   · apply ManyBody.IsSupportedOn.mono (Φ.mem i)
     intro v hv

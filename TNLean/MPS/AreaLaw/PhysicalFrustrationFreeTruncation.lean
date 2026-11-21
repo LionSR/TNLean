@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalDetectability
 import TNLean.MPS.AreaLaw.PhysicalDetectabilityGap
-import TNLean.MPS.AreaLaw.RegionalBondRestriction
+import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import QICLean.Algebra.MatrixAux
 import QICLean.Analysis.ProjectionResidual
 
@@ -18,8 +18,6 @@ actual projection products. The construction is ALVV, arXiv:1602.08828v2,
 `def:FF-tH`, lines 1467–1487. Positivity and the common kernel are proved
 without a uniqueness or gap hypothesis.
 -/
-
-open ManyBody (interval)
 
 open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator InnerProductSpace
 
@@ -36,17 +34,16 @@ noncomputable def physicalFrustrationFreeTruncation
   (∑ i, if a ≤ i.val ∧ i.val + 1 < b then 0 else Φ.term i) +
     (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
       (1 - physicalParityProduct
-        ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ 0) +
+        (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) 0) +
     (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
       (1 - physicalParityProduct
-        ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ 1)
+        (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) 1)
 
-private theorem intervalBondRestriction_isStarProjection
+private theorem restrict_term_isStarProjection
     (Φ : ManyBody.BondInteraction L q)
-    (hp : ∀ i, IsStarProjection (Φ.term i)) (a b : ℕ) (i : Fin (L - 1)) :
-    IsStarProjection (intervalBondRestriction a b Φ i) := by
-  unfold intervalBondRestriction
-  split_ifs <;> first | exact hp i | exact IsStarProjection.zero _
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (s : Fin (L - 1) → Prop) [DecidablePred s]
+    (i : Fin (L - 1)) : IsStarProjection ((Φ.restrict s).term i) :=
+  ManyBody.Interaction.forall_restrict_term (IsStarProjection.zero _) (hp i)
 
 private theorem regionalParityComplement_isStarProjection
     (Φ : ManyBody.BondInteraction L q)
@@ -54,10 +51,10 @@ private theorem regionalParityComplement_isStarProjection
     IsStarProjection
       ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
         (1 - physicalParityProduct
-          ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ p)) := by
+          (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p)) := by
   exact (physicalParityProduct_isStarProjection
-    ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩
-    (intervalBondRestriction_isStarProjection Φ hp a b) p).one_sub.map
+    (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b)
+    (restrict_term_isStarProjection Φ hp _) p).one_sub.map
       (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm.toStarAlgHom
 
 /-- The actual regional frustration-free truncation is positive semidefinite.
@@ -83,7 +80,7 @@ private noncomputable def regionalTruncationTerm
   | .inl i => if a ≤ i.val ∧ i.val + 1 < b then 0 else
       Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Φ.term i)
   | .inr p => 1 - physicalParityProduct
-      ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ p.val
+      (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p.val
 
 private theorem sum_regionalTruncationTerm
     (Φ : ManyBody.BondInteraction L q) (a b : ℕ) :
@@ -106,8 +103,8 @@ private theorem regionalTruncationTerm_isStarProjection
       | exact (hp i).map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
   case inr p =>
     exact (physicalParityProduct_isStarProjection
-      ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩
-      (intervalBondRestriction_isStarProjection Φ hp a b) p.val).one_sub
+      (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b)
+      (restrict_term_isStarProjection Φ hp _) p.val).one_sub
 
 /-- The actual regional truncation preserves the full kernel of the original
 Hamiltonian. This does not require a ground vector, uniqueness, or a gap.
@@ -130,16 +127,16 @@ theorem physicalFrustrationFreeTruncation_kernel_iff
           (regionalTruncationTerm_isStarProjection Φ hp a b j)) hsum i
     have hfix (p : Fin 2) :
         physicalParityProduct
-          ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ p.val x = x := by
+          (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p.val x = x := by
       exact (sub_eq_zero.mp (hterm (.inr p))).symm
     have hzero (i : Fin (L - 1)) :
         Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Φ.term i) x = 0 := by
       by_cases hi : a ≤ i.val ∧ i.val + 1 < b
       · have hm := (physicalParityProduct_apply_eq_self_iff
-          ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩
-          (intervalBondRestriction_isStarProjection Φ hp a b) (i.val % 2) x).mp
+          (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b)
+          (restrict_term_isStarProjection Φ hp _) (i.val % 2) x).mp
             (hfix ⟨i.val % 2, Nat.mod_lt _ (by decide)⟩) i rfl
-        simpa only [intervalBondRestriction, ite_eq_left hi] using hm
+        simpa only [ManyBody.Interaction.restrict_term, ite_eq_left hi] using hm
       · simpa only [regionalTruncationTerm, ite_eq_right hi] using hterm (.inl i)
     simp only [ManyBody.Interaction.hamiltonian, map_sum, _root_.sum_apply, hzero,
       Finset.sum_const_zero]
@@ -154,15 +151,16 @@ theorem physicalFrustrationFreeTruncation_kernel_iff
         (by simpa only [ManyBody.Interaction.hamiltonian, map_sum, _root_.sum_apply,
           LinearMap.sum_apply, ContinuousLinearMap.coe_coe] using hx) i
     have hmask : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-        (∑ i, intervalBondRestriction a b Φ i) x = 0 := by
-      simp only [map_sum, _root_.sum_apply, intervalBondRestriction, apply_ite,
+        (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b).hamiltonian x = 0 := by
+      simp only [ManyBody.Interaction.hamiltonian, map_sum, _root_.sum_apply,
+        ManyBody.Interaction.restrict_term, apply_ite,
         map_zero, DFunLike.ite_apply, _root_.zero_apply, hzero, ite_self, Finset.sum_const_zero]
     have hfix (p : Fin 2) :
         physicalParityProduct
-          ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ p.val x = x :=
+          (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p.val x = x :=
       physicalParityProduct_fixes_kernel
-        ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩
-        (intervalBondRestriction_isStarProjection Φ hp a b) hmask p.val
+        (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b)
+        (restrict_term_isStarProjection Φ hp _) hmask p.val
     suffices hterm : ∀ i, regionalTruncationTerm Φ a b i x = 0 by
       simp only [← sum_regionalTruncationTerm, _root_.sum_apply, hterm, Finset.sum_const_zero]
     rintro (i | p) <;> simp [regionalTruncationTerm, DFunLike.ite_apply, hzero, hfix]
@@ -175,10 +173,10 @@ theorem norm_physicalFrustrationFreeTruncation_region_le_two
     (hp : ∀ i, IsStarProjection (Φ.term i)) (a b : ℕ) :
     ‖(Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
         (1 - physicalParityProduct
-          ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ 0) +
+          (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) 0) +
       (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
         (1 - physicalParityProduct
-          ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ 1)‖ ≤ 2 := by
+          (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) 1)‖ ≤ 2 := by
   simpa only [one_add_one_eq_two] using (norm_add_le _ _).trans
     (add_le_add
       (IsStarProjection.norm_le _ (regionalParityComplement_isStarProjection Φ hp a b 0))
@@ -195,23 +193,11 @@ theorem sum_norm_sq_sub_physicalParityProduct_le_truncation
       ‖x - physicalParityProduct Φ 1 x‖ ^ 2 ≤
         (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
           (physicalFrustrationFreeTruncation Φ a b) x⟫_ℂ).re := by
-  let g (i : Fin (L - 1)) := if a ≤ i.val ∧ i.val + 1 < b then 0 else Φ.term i
-  have hgp (i : Fin (L - 1)) : IsStarProjection (g i) := by
-    dsimp only [g]
-    split_ifs <;> first | exact IsStarProjection.zero _ | exact hp i
-  have hgs (i : Fin (L - 1)) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (g i) (interval L i.val (i.val + 2)) := by
-    change _ ∈ ManyBody.supportedOperators _ _
-    dsimp only [g]
-    split_ifs <;> first
-      | exact (zero_mem _)
-      | exact Φ.mem i
-  let Ψ : ManyBody.BondInteraction L q :=
-    ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩
-  let Ψg : ManyBody.BondInteraction L q := ⟨g, hgs⟩
+  let Ψ := Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b
+  let Ψg := Φ.restrict fun i ↦ ¬(a ≤ i.val ∧ i.val + 1 < b)
   have hP (p : ℕ) : IsStarProjection (physicalParityProduct Ψ p) :=
     physicalParityProduct_isStarProjection Ψ
-      (intervalBondRestriction_isStarProjection Φ hp a b) p
+      (restrict_term_isStarProjection Φ hp _) p
   have hsplit (p : ℕ) : physicalParityProduct Φ p =
       physicalParityProduct Ψ p * physicalParityProduct Ψg p := by
     exact physicalParityProduct_partition Φ
@@ -222,7 +208,13 @@ theorem sum_norm_sq_sub_physicalParityProduct_le_truncation
     rw [hsplit p]
     exact ContinuousLinearMap.IsStarProjection.norm_sub_apply_sq_le (hP p) x
       (physicalParityProduct Ψg p x)
-  have hout := sum_norm_sq_sub_physicalParityProduct_le Ψg hgp x
+  have hout := sum_norm_sq_sub_physicalParityProduct_le Ψg
+    (restrict_term_isStarProjection Φ hp _) x
+  have hg : Ψg.hamiltonian = ∑ i, if a ≤ i.val ∧ i.val + 1 < b then 0 else Φ.term i :=
+    Finset.sum_congr rfl fun i _ ↦ by
+      by_cases hi : a ≤ i.val ∧ i.val + 1 < b
+      · rw [ManyBody.Interaction.restrict_term, ite_eq_right (not_not_intro hi), ite_eq_left hi]
+      · rw [ManyBody.Interaction.restrict_term, ite_eq_left hi, ite_eq_right hi]
   have hnorm (p : ℕ) :
       (⟪x, (1 - physicalParityProduct Ψ p) x⟫_ℂ).re =
         ‖x - physicalParityProduct Ψ p x‖ ^ 2 :=
@@ -233,7 +225,7 @@ theorem sum_norm_sq_sub_physicalParityProduct_le_truncation
       (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Ψg.hamiltonian x⟫_ℂ).re +
         ‖x - physicalParityProduct Ψ 0 x‖ ^ 2 +
           ‖x - physicalParityProduct Ψ 1 x‖ ^ 2 := by
-    rw [← hnorm 0, ← hnorm 1]
+    rw [← hnorm 0, ← hnorm 1, hg]
     simp only [physicalFrustrationFreeTruncation, map_add, StarAlgEquiv.apply_symm_apply,
       _root_.add_apply, inner_add_right, Complex.add_re]
     rfl

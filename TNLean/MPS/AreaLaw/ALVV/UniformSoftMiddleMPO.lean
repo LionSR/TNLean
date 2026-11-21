@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.NativeIntervalMPOApproximation
 import TNLean.MPS.AreaLaw.SoftTruncationMPOAccuracy
-import TNLean.MPS.AreaLaw.RegionalBondRestriction
+import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.MPDO.TraceChainHermitian
 import QICLean.ManyBody.Sites.Twirl
 import QICLean.Analysis.SoftTruncationHeatExpansion
@@ -29,7 +29,7 @@ normalization. See `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 The physical lower-estimate convention remains that of `def:soft-trunc`.
 -/
 
-open ManyBody (interval mem_interval)
+open ManyBody (interval)
 
 open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder
@@ -91,18 +91,14 @@ theorem exists_uniform_native_soft_middle_mpo {N q l r m : ℕ}
           ‖P - Zphys (z : ℂ)‖ ≤ xi := by
   classical
   intro A sigma0 insert eJ W base order bond
-  let g := intervalBondRestriction (L := N + 1) l r Φ
+  let Ψ := Φ.restrict fun i : Fin N ↦ l ≤ i.val ∧ i.val + 1 < r
   have hgs (i : Fin N) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (g i) {i.castSucc, i.succ} := by
-    apply (intervalBondRestriction_supported (L := N + 1) (q := q) l r Φ i).mono
-    intro j hj
-    have hj' := mem_interval.mp hj
-    simp only [Finset.mem_insert, Finset.mem_singleton, Fin.ext_iff]
-    change j.val = i.val ∨ j.val = i.val + 1
-    omega
-  have hgb (i : Fin N) : 0 ≤ g i ∧ g i ≤ 1 :=
-    intervalBondRestriction_bounds (L := N + 1) (q := q) l r Φ h0 h1 i
-  have hsumg : (∑ i, g i) = A := sum_intervalBondRestriction (L := N + 1) l r Φ
+      (Ψ.term i) {i.castSucc, i.succ} :=
+    ManyBody.BondInteraction.term_mem_supportedOperators_chainBond Ψ i
+  have hgb (i : Fin N) : 0 ≤ Ψ.term i ∧ Ψ.term i ≤ 1 :=
+    ⟨ManyBody.Interaction.restrict_term_nonneg (h0 i),
+      ManyBody.Interaction.restrict_term_le_one (h1 i)⟩
+  have hsumg : (∑ i, Ψ.term i) = A := ManyBody.Interaction.hamiltonian_restrict Φ _
   have hA : A.IsHermitian := by
     rw [← hsumg]
     exact isHermitian_sum _ (fun i _ ↦ (hgb i).1.posSemidef.isHermitian)
@@ -142,15 +138,15 @@ theorem exists_uniform_native_soft_middle_mpo {N q l r m : ℕ}
         (MPOTensor.traceChainOperator B 1).IsHermitian ∧
           ‖heat a - MPOTensor.traceChainOperator B 1‖ ≤ delta := by
     obtain ⟨B, hB⟩ := exists_shifted_heat_mpo (N := N) (q := q) (r := order)
-      (by omega) hbudget.1 g hgs
+      (by omega) hbudget.1 Ψ.term hgs
       (fun i ↦ (hgb i).1.posSemidef.isHermitian)
-      (fun i ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg (g i) (hgb i).1).mpr (hgb i).2)
+      (fun i ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg (Ψ.term i) (hgb i).1).mpr (hgb i).2)
       e ((a.val : ℝ) / t) (hlo.trans_eq hsumg.symm) (htime a).1
       ((mul_le_mul_of_nonneg_left
         (sub_le_sub_right (Real.exp_le_exp.mpr (htime a).2) 1) (by norm_num)).trans hb.2.le)
     have hErr : ‖heat a - MPOTensor.traceChainOperator B 1‖ ≤ delta := by
       change ‖NormedSpace.exp (-(((a.val : ℝ) / t) •
-        ((∑ i, g i) - (e : ℂ) • 1))) - _‖ ≤ _ at hB
+        ((∑ i, Ψ.term i) - (e : ℂ) • 1))) - _‖ ≤ _ at hB
       rw [hsumg] at hB
       refine hB.trans ?_
       have hba : 0 ≤ 2 * (Real.exp ((a.val : ℝ) / t) - 1) :=

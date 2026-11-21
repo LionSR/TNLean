@@ -166,24 +166,21 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
   have hcardReal : (active.card : ℝ) ≤ (4 : ℝ) * ((m : ℝ) + 1) := by
     exact_mod_cast hcard
   classical
-  let Ψ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) (fun i : Fin (L - 1) ↦
-      interval L i.val (i.val + 2)) :=
-    ⟨fun i ↦ if i ∈ s then Φ.term i else 0, fun i ↦ by
-      by_cases hi : i ∈ s
-      · simpa only [hi, ↓reduceIte] using (Φ.mem i)
-      · simpa only [hi, ↓reduceIte] using zero_mem _⟩
+  let Ψ := Φ.restrict (· ∈ s)
   have hsumΦ : ∑ i ∈ s, Ψ.term i = Φ.partialHamiltonian s :=
-    Finset.sum_congr rfl fun i hi ↦ by simp only [Ψ, hi, ↓reduceIte]
+    ManyBody.Interaction.partialHamiltonian_restrict_of_forall fun _ hi ↦ hi
   have hbound := ManyBody.Interaction.norm_commutator_sum_le_card Ψ s
     (fun i ↦ by
       by_cases hi : i ∈ s
-      · simpa only [Ψ, hi, ↓reduceIte] using h0 i hi
-      · simp only [Ψ, hi, ↓reduceIte, le_refl])
+      · rw [ManyBody.Interaction.restrict_term, ite_eq_left hi]
+        exact h0 i hi
+      · rw [ManyBody.Interaction.restrict_term, ite_eq_right hi])
     (fun i ↦ by
       by_cases hi : i ∈ s
-      · simpa only [Ψ, hi, ↓reduceIte] using h1 i hi
-      · simpa only [Ψ, hi, ↓reduceIte] using (zero_le_one : (0 : Matrix (Fin L → Fin q)
-          (Fin L → Fin q) ℂ) ≤ 1))
+      · rw [ManyBody.Interaction.restrict_term, ite_eq_left hi]
+        exact h1 i hi
+      · rw [ManyBody.Interaction.restrict_term, ite_eq_right hi]
+        exact zero_le_one)
     (S := interval L (c - m) (c + 2 + m)) hX
   rw [hsumΦ] at hbound
   exact hbound.trans (mul_le_mul_of_nonneg_right hcardReal (norm_nonneg X))

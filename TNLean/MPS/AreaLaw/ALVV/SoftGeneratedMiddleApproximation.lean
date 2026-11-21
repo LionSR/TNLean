@@ -7,7 +7,7 @@ import TNLean.MPS.AreaLaw.SoftTruncatedHamiltonianMPO
 import TNLean.MPS.AreaLaw.NativeIntervalMPOApproximation
 import TNLean.MPS.AreaLaw.RetainedCoreFamilies
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
-import TNLean.MPS.AreaLaw.RegionalBondRestriction
+import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import QICLean.ManyBody.Sites.PlaceAlong
 import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.MPDO.TraceChainHermitian
@@ -32,7 +32,7 @@ rather than the false printed physical-support estimate; see
 `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
-open ManyBody (interval mem_interval)
+open ManyBody (interval)
 
 open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder
@@ -78,32 +78,27 @@ theorem exists_native_soft_middle_mpo_approximation {N q l r m : ℕ}
         ‖P.submatrix insert insert - Z‖ ≤ xi ∧ ‖P - Zphys‖ ≤ xi := by
   classical
   intro A P sigma0 insert eJ W b order bond
-  let g := intervalBondRestriction (L := N + 1) l r Φ
+  let Ψ := Φ.restrict fun i : Fin N ↦ l ≤ i.val ∧ i.val + 1 < r
   have hgs (i : Fin N) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (g i) {i.castSucc, i.succ} := by
-    apply (intervalBondRestriction_supported (L := N + 1) (q := q) l r Φ i).mono
-    intro j hj
-    have hj' := mem_interval.mp hj
-    simp only [Finset.mem_insert, Finset.mem_singleton, Fin.ext_iff]
-    change j.val = i.val ∨ j.val = i.val + 1
-    omega
-  have hsumg : (∑ i, g i) = A :=
-    sum_intervalBondRestriction (L := N + 1) (q := q) l r Φ
+      (Ψ.term i) {i.castSucc, i.succ} :=
+    ManyBody.BondInteraction.term_mem_supportedOperators_chainBond Ψ i
+  have hsumg : (∑ i, Ψ.term i) = A := ManyBody.Interaction.hamiltonian_restrict Φ _
   obtain ⟨Aglobal, hGlobal⟩ :=
-    let hb : ∀ i : Fin N, 0 ≤ g i ∧ g i ≤ 1 := fun i ↦
-      intervalBondRestriction_bounds (L := N + 1) (q := q) l r Φ h0 h1 i
+    let hb : ∀ i : Fin N, 0 ≤ Ψ.term i ∧ Ψ.term i ≤ 1 := fun i ↦
+      ⟨ManyBody.Interaction.restrict_term_nonneg (h0 i),
+        ManyBody.Interaction.restrict_term_le_one (h1 i)⟩
     exists_softTruncatedHamiltonian_mpo_of_accuracy (N := N) (q := q) (m := m)
-      (by omega) hm g hgs
+      (by omega) hm Ψ.term hgs
       (fun i ↦ (hb i).1.posSemidef.isHermitian)
-      (fun i ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg (g i) (hb i).1).mpr (hb i).2)
+      (fun i ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg (Ψ.term i) (hb i).1).mpr (hb i).2)
       Finset.univ p t xi
       (hlo.trans_eq hsumg.symm) hscale hxi
   have hP : P.IsHermitian :=
     (isHermitian_one.smul (by simp [isSelfAdjoint_iff])).add
       (cfc_predicate (Real.softTruncation t m) (A - (p : ℂ) • 1))
   have hGlobalError : ‖P - MPOTensor.traceChainOperator Aglobal 1‖ ≤ xi := by
-    change ‖((∑ i, g i) - (∑ i, g i) + (p : ℂ) • 1 +
-      cfc (Real.softTruncation t m) ((∑ i, g i) - (p : ℂ) • 1)) -
+    change ‖((∑ i, Ψ.term i) - (∑ i, Ψ.term i) + (p : ℂ) • 1 +
+      cfc (Real.softTruncation t m) ((∑ i, Ψ.term i) - (p : ℂ) • 1)) -
       MPOTensor.traceChainOperator Aglobal 1‖ ≤ xi at hGlobal
     rw [sub_self, zero_add, hsumg] at hGlobal
     exact hGlobal

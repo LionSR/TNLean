@@ -248,26 +248,20 @@ theorem physicalParityProduct_partition
     (Φ : ManyBody.BondInteraction L q)
     (s : Fin (L - 1) → Prop) [DecidablePred s] (p : ℕ) :
     physicalParityProduct Φ p =
-      physicalParityProduct ⟨fun i ↦ if s i then Φ.term i else 0,
-          fun i ↦ by split_ifs <;> first | exact Φ.mem i | exact zero_mem _⟩ p *
-        physicalParityProduct ⟨fun i ↦ if s i then 0 else Φ.term i,
-          fun i ↦ by split_ifs <;> first | exact Φ.mem i | exact zero_mem _⟩ p := by
+      physicalParityProduct (Φ.restrict s) p * physicalParityProduct (Φ.restrict (¬ s ·)) p := by
   classical
   let t (k : ℕ) : Prop := if hk : k < L - 1 then s ⟨k, hk⟩ else False
   have heq := ContinuousLinearMap.complementProd_partition (parityTerm_commute Φ p)
     t (L - 1)
-  let Φs : ManyBody.BondInteraction L q := ⟨fun i ↦ if s i then Φ.term i else 0,
-    fun i ↦ by split_ifs <;> first | exact Φ.mem i | exact zero_mem _⟩
-  let Φn : ManyBody.BondInteraction L q := ⟨fun i ↦ if s i then 0 else Φ.term i,
-    fun i ↦ by split_ifs <;> first | exact Φ.mem i | exact zero_mem _⟩
-  have hu : (fun k ↦ if t k then parityTerm Φ p k else 0) = parityTerm Φs p := by
+  have hu : (fun k ↦ if t k then parityTerm Φ p k else 0) = parityTerm (Φ.restrict s) p := by
     funext k
     unfold parityTerm
-    split_ifs <;> simp_all [t, Φs]
-  have hv : (fun k ↦ if t k then 0 else parityTerm Φ p k) = parityTerm Φn p := by
+    split_ifs <;> simp_all [t]
+  have hv : (fun k ↦ if t k then 0 else parityTerm Φ p k) =
+      parityTerm (Φ.restrict (¬ s ·)) p := by
     funext k
     unfold parityTerm
-    split_ifs <;> simp_all [t, Φn]
+    split_ifs <;> simp_all [t]
   simpa only [physicalParityProduct, hu, hv] using heq
 
 /-- The actual product on one parity is an orthogonal projection. Its

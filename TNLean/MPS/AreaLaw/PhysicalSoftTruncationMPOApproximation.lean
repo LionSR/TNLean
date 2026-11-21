@@ -25,8 +25,6 @@ false printed estimate nor a computational running time is asserted; see
 that range. See `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
-open ManyBody (interval mem_interval)
-
 open Matrix
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
@@ -98,16 +96,8 @@ theorem exists_interval_physical_soft_closeness_and_mpo
   let I : Finset (Fin N) := Finset.univ.filter
     (fun i ↦ p ≤ i.val ∧ i.val + 1 < v)
   have hI : (∑ i ∈ I, Φ.term i) = A 1 := by rfl
-  have hpair (i : Fin N) : interval (N + 1) i.val (i.val + 2) =
-      ({i.castSucc, i.succ} : Finset (Fin (N + 1))) := by
-    ext z
-    simp only [mem_interval, Finset.mem_insert, Finset.mem_singleton, Fin.ext_iff,
-      Fin.val_castSucc, Fin.val_succ]
-    omega
-  have hs' (i : Fin N) : ManyBody.IsSupportedOn (Φ.term i) {i.castSucc, i.succ} := by
-    have hmem := Φ.mem i
-    simp only [hpair] at hmem
-    exact hmem
+  have hs' (i : Fin N) : ManyBody.IsSupportedOn (Φ.term i) {i.castSucc, i.succ} :=
+    Φ.term_mem_supportedOperators_chainBond i
   have hh (i : Fin N) : (Φ.term i).IsHermitian := (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian
   have hn (i : Fin N) : ‖Φ.term i‖ ≤ 1 :=
     (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 i)).mpr (h1 i)

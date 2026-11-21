@@ -18,8 +18,6 @@ of the original kernel with its original gap. This is the reduction in ALVV,
 arXiv:1602.08828v2, Section 6.1, lines 1457–1460, followed by `lem:dl`.
 -/
 
-open ManyBody (interval)
-
 open Matrix
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
@@ -39,26 +37,17 @@ theorem norm_sq_physicalDetectability_supportProj_le
     (horth : ∀ z : EuclideanSpace ℂ (Fin L → Fin q),
       Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian z = 0 →
         ⟪z, x⟫_ℂ = 0) :
-    ‖physicalDetectability ⟨fun i ↦ (hh i).supportProj, fun i ↦
-        QuantumCircuit.supportProj_mem_supportedOperators _ (hh i).isHermitian (Φ.mem i)⟩ x‖ ^ 2 ≤
-      (4 / (4 + gamma)) * ‖x‖ ^ 2 := by
-  let P := fun i ↦ (hh i).supportProj
-  have hp (i : Fin (L - 1)) : IsStarProjection (P i) :=
-    (hh i).isHermitian.isStarProjection_supportProj
-  have hps (i : Fin (L - 1)) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (P i) (interval L i.val (i.val + 2)) :=
-    (QuantumCircuit.supportProj_mem_supportedOperators _ (hh i).isHermitian
-        ((Φ.mem i)))
-  let PΦ : ManyBody.BondInteraction L q := ⟨P, hps⟩
-  change ‖physicalDetectability PΦ x‖ ^ 2 ≤ _
+    ‖physicalDetectability (Φ.supportProj hh) x‖ ^ 2 ≤ (4 / (4 + gamma)) * ‖x‖ ^ 2 := by
+  let PΦ := Φ.supportProj hh
+  have hp := ManyBody.Interaction.isStarProjection_supportProj_term Φ hh
   have hker (z : EuclideanSpace ℂ (Fin L → Fin q)) :
-      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, P i) z = 0 ↔
+      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) PΦ.hamiltonian z = 0 ↔
         Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian z = 0 := by
-    have hk := Matrix.PosSemidef.sum_supportProj_mulVec_eq_zero_iff hh (WithLp.ofLp z)
-    simpa only [← Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_eq_zero,
-      ManyBody.Interaction.hamiltonian] using hk
-  have hdom : Φ.hamiltonian ≤ ∑ i, P i :=
-    Finset.sum_le_sum fun i _ ↦ (hh i).le_supportProj_of_norm_le_one (hn i)
+    have hk := ManyBody.Interaction.hamiltonian_supportProj_mulVec_eq_zero_iff Φ hh
+      (WithLp.ofLp z)
+    simpa only [← Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_eq_zero] using hk
+  have hdom : Φ.hamiltonian ≤ PΦ.hamiltonian :=
+    ManyBody.Interaction.hamiltonian_le_hamiltonian_supportProj Φ hh hn
   set y := physicalDetectability PΦ x
   have hyorth (z : EuclideanSpace ℂ (Fin L → Fin q))
       (hz : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian z = 0) :
@@ -67,12 +56,12 @@ theorem norm_sq_physicalDetectability_supportProj_le
   have hH : Φ.hamiltonian.IsHermitian :=
     (isSelfAdjoint_sum _ fun i _ ↦ (hh i).isHermitian.isSelfAdjoint).isHermitian
   have hlo := hH.mul_norm_sq_le_re_inner_of_spectral_gap hgap y hyorth
-  have henergy : (⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, P i) y⟫_ℂ).re ≤
+  have henergy : (⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) PΦ.hamiltonian y⟫_ℂ).re ≤
       4 * (‖x‖ ^ 2 - ‖y‖ ^ 2) :=
     re_inner_physicalDetectability_le PΦ hp x
   have hcomparison :
       (⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian y⟫_ℂ).re ≤
-        (⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, P i) y⟫_ℂ).re := by
+        (⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) PΦ.hamiltonian y⟫_ℂ).re := by
     have hc := (ContinuousLinearMap.le_def.mp
       (Matrix.toEuclideanCLM_le_of_le hdom)).re_inner_nonneg_right y
     exact sub_nonneg.mp (by
