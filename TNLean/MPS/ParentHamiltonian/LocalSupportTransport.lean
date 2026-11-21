@@ -38,6 +38,11 @@ arXiv:1606.00608, Theorem 3.10 and the local relation
 
 * arXiv:2011.12127, Section IV.C.
 * arXiv:1606.00608, Definition 3.9 and Appendix D, Definition D.2.
+
+**Transitional (#10948).** `re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite` and
+`re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite`, stated for the Euclidean-space
+local terms, are kept until their users are converted; the last section states them for the
+terms of the parent interaction on the ring.
 -/
 
 open scoped BigOperators ComplexOrder InnerProductSpace
@@ -63,10 +68,13 @@ theorem adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ
     localTerm A L (L + 1) (0 : Fin (L + 1)) v = 0 ∧
         localTerm A L (L + 1) (1 : Fin (L + 1)) v = 0 ↔
       v ∈ groundSpace A (L + 1) := by
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))
-  have h := adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ
-    hA hL (v := e.symm v)
-  simpa [localTermES, e, mem_groundSpaceES_iff] using h
+  have h := parentRingInteraction_term_zero_one_eq_zero_iff_mem_groundSpaceES_succ
+    hA hL (v := WithLp.toLp 2 v)
+  rw [mem_groundSpaceES_iff, Matrix.toLpLin_apply, Matrix.toLpLin_apply, WithLp.toLp_eq_zero,
+    WithLp.toLp_eq_zero] at h
+  rw [localTerm_of_le A L.le_succ, localTerm_of_le A L.le_succ, Matrix.toLin'_apply,
+    Matrix.toLin'_apply]
+  exact h
 
 /-- The three-site MPS ground space of an injective tensor is the intersection
 of the kernels of the two adjacent canonical two-site parent interactions:
@@ -462,5 +470,113 @@ theorem localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute
   rw [cyclicRestrictₗ_three_extractWindow hN i σ,
     cyclicRestrictₗ_three_extractWindow hN i σ] at hvalue
   simpa only [Module.End.mul_apply] using hvalue
+
+/-! ### The parent interaction on the ring -/
+
+private theorem cyclicRestrictES_three_parentRingInteraction_term_left
+    {A : MPSTensor d D} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N)
+    (v : EuclideanSpace ℂ (Cfg d N)) :
+    LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i τ)
+        (Matrix.toEuclideanLin ((parentRingInteraction A (by omega : 2 ≤ N)).term i) v) =
+      Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 0)
+        (LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i τ) v) := by
+  have h := cyclicRestrictₗ_three_localTerm_left (A := A) hN i τ (WithLp.ofLp v)
+  rw [localTerm_of_le A (by omega : 2 ≤ N), localTerm_of_le A (by norm_num : 2 ≤ 3),
+    Matrix.toLin'_apply, Matrix.toLin'_apply] at h
+  simpa [LinearMap.withLpMap, Matrix.toLpLin_apply] using congrArg (WithLp.toLp 2) h
+
+private theorem cyclicRestrictES_three_parentRingInteraction_term_right
+    {A : MPSTensor d D} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N)
+    (v : EuclideanSpace ℂ (Cfg d N)) :
+    LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i τ)
+        (Matrix.toEuclideanLin
+          ((parentRingInteraction A (by omega : 2 ≤ N)).term (cyclicForwardSite i 1)) v) =
+      Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 1)
+        (LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i τ) v) := by
+  have h := cyclicRestrictₗ_three_localTerm_right (A := A) hN i τ (WithLp.ofLp v)
+  rw [localTerm_of_le A (by omega : 2 ≤ N), localTerm_of_le A (by norm_num : 2 ≤ 3),
+    Matrix.toLin'_apply, Matrix.toLin'_apply] at h
+  simpa [LinearMap.withLpMap, Matrix.toLpLin_apply] using congrArg (WithLp.toLp 2) h
+
+/-- A three-site anticommutator quadratic-form estimate for the adjacent range-two terms of the
+parent interaction on the ring transports to every forward adjacent pair on a periodic chain
+with \(3 \leq N\), with the same coefficient.
+
+The restriction begins at the arbitrary site \(i\), so it also covers the two forward pairs
+whose three-site window crosses the periodic cut. This is the source form
+\(h_i h_j + h_j h_i \geq -c(h_i+h_j)\) from arXiv:2011.12127, Section IV.C,
+lines 2170--2180. -/
+theorem re_inner_parentRingInteraction_term_adjacent_twoSite_forward_ge_of_threeSite
+    [NeZero d] {A : MPSTensor d D} {c : ℝ}
+    (h₃ : ∀ w : EuclideanSpace ℂ (Cfg d 3),
+      -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 0) w,
+            w⟫_ℂ).re +
+          (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 1) w,
+            w⟫_ℂ).re) ≤
+        (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 0) w,
+            Matrix.toEuclideanLin
+              ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 1) w⟫_ℂ).re +
+          (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 1) w,
+            Matrix.toEuclideanLin
+              ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 0) w⟫_ℂ).re)
+    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) :
+    -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A (by omega : 2 ≤ N)).term i) v,
+          v⟫_ℂ).re +
+        (⟪Matrix.toEuclideanLin
+            ((parentRingInteraction A (by omega : 2 ≤ N)).term (cyclicForwardSite i 1)) v,
+          v⟫_ℂ).re) ≤
+      (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by omega : 2 ≤ N)).term i) v,
+          Matrix.toEuclideanLin
+            ((parentRingInteraction A (by omega : 2 ≤ N)).term (cyclicForwardSite i 1)) v⟫_ℂ).re +
+        (⟪Matrix.toEuclideanLin
+            ((parentRingInteraction A (by omega : 2 ≤ N)).term (cyclicForwardSite i 1)) v,
+          Matrix.toEuclideanLin ((parentRingInteraction A (by omega : 2 ≤ N)).term i) v⟫_ℂ).re := by
+  simp_rw [re_inner_eq_sum_cyclicRestrict_three hN i]
+  rw [← Finset.sum_add_distrib, ← Finset.sum_add_distrib]
+  change -c * (∑ τ, _) ≤ ∑ τ, _
+  rw [Finset.mul_sum]
+  apply Finset.sum_le_sum
+  intro τ _
+  let outside := cyclicWindowCfgEquiv hN i ((fun _ ↦ 0), τ)
+  rw [cyclicRestrictES_three_parentRingInteraction_term_left hN i outside v,
+    cyclicRestrictES_three_parentRingInteraction_term_right hN i outside v]
+  exact h₃ _
+
+/-- The same three-site anticommutator estimate transports to every backward adjacent pair of
+terms of the parent interaction on a periodic chain with \(3 \leq N\), with unchanged
+coefficient. The proof starts the forward three-site window at the cyclic predecessor of
+\(i\); when \(i = 0\), this is the wrapping pair between sites \(0\) and \(N-1\). Source:
+arXiv:2011.12127, Section IV.C, lines 2170--2180. -/
+theorem re_inner_parentRingInteraction_term_adjacent_twoSite_backward_ge_of_threeSite
+    [NeZero d] {A : MPSTensor d D} {c : ℝ}
+    (h₃ : ∀ w : EuclideanSpace ℂ (Cfg d 3),
+      -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 0) w,
+            w⟫_ℂ).re +
+          (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 1) w,
+            w⟫_ℂ).re) ≤
+        (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 0) w,
+            Matrix.toEuclideanLin
+              ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 1) w⟫_ℂ).re +
+          (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 1) w,
+            Matrix.toEuclideanLin
+              ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 0) w⟫_ℂ).re)
+    {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) :
+    -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A (by omega : 2 ≤ N)).term i) v,
+          v⟫_ℂ).re +
+        (⟪Matrix.toEuclideanLin
+            ((parentRingInteraction A (by omega : 2 ≤ N)).term (cyclicBackwardSite i 1)) v,
+          v⟫_ℂ).re) ≤
+      (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by omega : 2 ≤ N)).term i) v,
+          Matrix.toEuclideanLin
+            ((parentRingInteraction A (by omega : 2 ≤ N)).term (cyclicBackwardSite i 1)) v⟫_ℂ).re +
+        (⟪Matrix.toEuclideanLin
+            ((parentRingInteraction A (by omega : 2 ≤ N)).term (cyclicBackwardSite i 1)) v,
+          Matrix.toEuclideanLin ((parentRingInteraction A (by omega : 2 ≤ N)).term i) v⟫_ℂ).re := by
+  let j := cyclicBackwardSite i 1
+  have hj : cyclicForwardSite j 1 = i := cyclicForwardSite_backwardSite_one (by omega) i
+  have h := re_inner_parentRingInteraction_term_adjacent_twoSite_forward_ge_of_threeSite
+    h₃ hN j v
+  rw [hj] at h
+  exact le_of_eq_of_le (by ring) (h.trans_eq (by ring))
 
 end MPSTensor
