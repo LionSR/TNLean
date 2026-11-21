@@ -186,7 +186,7 @@ theorem exists_physical_twoMarkerCoefficient_prescribed_middle_decomposition
       (L := L) (a := a) (b := b) p s).1
     let ME := ManyBody.placeAlong (X := fun _ ↦ Fin q)
       ⟨fun x : K ↦ (⟨x.val, hKE x.property⟩ : E),
-        fun _ _ h ↦ Subtype.ext (congrArg Subtype.val h)⟩ M
+        fun _ _ h ↦ Subtype.ext (by simpa using congrArg Subtype.val h)⟩ M
     let Pmid := ManyBody.place (X := fun _ ↦ Fin q) K M
     let O : Finset ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) :=
       (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
