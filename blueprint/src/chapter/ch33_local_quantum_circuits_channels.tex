@@ -167,8 +167,8 @@ change the local dimension act on single sites.
     \label{lem:qc_protocol_light_cone}
     \uses{def:qc_local_channel_conversion, lem:qc_onsite_channel_locality,
         lem:qc_channel_light_cone, lem:qc_channel_light_cone_correlations}
-    \lean{QuantumCircuit.IsProtocol.traceAdjointMap_mem_supportedOperators_ringBall,
-        QuantumCircuit.IsProtocol.traceAdjointMap_mul_of_disjoint_ringBall,
+    \lean{QuantumCircuit.IsProtocol.traceAdjointMap_mem_supportedOperators_graphNeighborhood,
+        QuantumCircuit.IsProtocol.traceAdjointMap_mul_of_disjoint_graphNeighborhood,
         Matrix.trace_traceAdjointMap_mul}
     \leanok
     Extending~\cite[Theorem~1]{Malz2024Preparation}, every depth-$T$ local channel protocol $\Psi$ has a dual $\Psi^\dagger$ satisfying $\Tr(\Psi(\rho)A)=\Tr(\rho\,\Psi^\dagger(A))$, mapping $\mathcal A_X$ into $\mathcal A_{\mathcal L_T(X)}$, and satisfying
@@ -186,7 +186,7 @@ change the local dimension act on single sites.
 \begin{lemma}[No connected correlations after a conversion]
     \label{lem:qc_local_channel_conversion_correlations}
     \uses{def:qc_local_channel_conversion, lem:qc_protocol_light_cone}
-    \lean{QuantumCircuit.IsConversion.trace_mul_mul_eq_of_isRingSeparated}
+    \lean{QuantumCircuit.IsConversion.trace_mul_mul_eq_of_isGraphSeparated}
     \leanok
     If $\sigma$ is converted in depth $T$ from $\rho=\bigotimes_i\sigma_i$ ($\Tr\sigma_i=1$) and $Z\in\mathcal A_X$, $Z'\in\mathcal A_{X'}$ with $d_{\rm ring}(X,X')>2T$, then $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$~\cite{Piroli2021LOCC}.
 \end{lemma}
@@ -220,7 +220,7 @@ change the local dimension act on single sites.
     \uses{def:qc_blocked_local_channel_conversion}
     \lean{ManyBody.reindex_blockConfigEquiv_place,
         ManyBody.exists_eq_place_of_mem_supportedOperators,
-        ManyBody.preimage_ringBall_subset}
+        ManyBody.preimage_graphNeighborhood_cycleGraph_subset}
     \leanok
     Let $\pi_k\colon\Z_{Mk}\to\Z_M$ map $jk+t\mapsto j$ ($0\le t<k$). An operator $K$ placed on a
     set $Y$ of blocks is, under $\beta_k^{-1}$, the same operator placed on the sites
@@ -240,8 +240,8 @@ change the local dimension act on single sites.
     \uses{def:qc_blocked_local_channel_conversion, lem:qc_blocking_supports,
         lem:qc_protocol_light_cone, lem:qc_local_channel_conversion_correlations,
         lem:qc_local_channel_conversion_properties,
-        lem:qc_local_channel_conversion_trans}
-    \lean{QuantumCircuit.IsProtocol.traceAdjointMap_comp_block_mem_supportedOperators_ringBall,
+        lem:qc_local_channel_conversion_trans, lem:qc_light_cone_geometries}
+    \lean{QuantumCircuit.IsProtocol.traceAdjointMap_comp_block_mem_supportedOperators_graphNeighborhood,
         QuantumCircuit.IsProtocol.traceAdjointMap_comp_block_mul,
         ManyBody.trace_prodOp}
     \leanok

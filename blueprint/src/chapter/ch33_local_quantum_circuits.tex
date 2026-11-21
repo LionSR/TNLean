@@ -117,11 +117,12 @@ preparation of matrix product states.
 \begin{lemma}[Light cones of the ring, the open chain and a graph]
     \label{lem:qc_light_cone_geometries}
     \uses{def:qc_light_cone_geometry}
-    \lean{QuantumCircuit.Geometry.neighbourhood_ring, ManyBody.graphNeighborhood_succ,
+    \lean{QuantumCircuit.Geometry.neighbourhood_ring,
+        QuantumCircuit.Geometry.iterate_neighbourhood_ring, ManyBody.graphNeighborhood_succ,
         ManyBody.IsGraphSeparated.disjoint_graphNeighborhood,
         QuantumCircuit.Geometry.iterate_neighbourhood_pathGraph_subset,
         QuantumCircuit.Geometry.disjoint_iterate_neighbourhood_pathGraph,
-        QuantumCircuit.Geometry.iterate_neighbourhood_graph_subset,
+        QuantumCircuit.Geometry.iterate_neighbourhood_graph,
         QuantumCircuit.Geometry.iterate_neighbourhood_graph_subset_dist,
         QuantumCircuit.Geometry.disjoint_iterate_neighbourhood_graph,
         QuantumCircuit.Geometry.disjoint_iterate_neighbourhood_graph_of_dist,
@@ -144,7 +145,7 @@ preparation of matrix product states.
     \label{lem:qc_light_cone}
     \uses{def:qc_local_circuit, def:qc_light_cone_geometry,
         lem:qc_light_cone_geometries}
-    \lean{QuantumCircuit.IsUnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators_ringBall,
+    \lean{QuantumCircuit.IsUnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators_graphNeighborhood_cycleGraph,
         QuantumCircuit.IsUnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators,
         QuantumCircuit.UnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators_lightCone,
         QuantumCircuit.UnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators}
@@ -159,8 +160,8 @@ preparation of matrix product states.
 \begin{lemma}[No connected correlations beyond the light cone]
     \label{lem:qc_light_cone_correlations}
     \uses{lem:qc_light_cone}
-    \lean{QuantumCircuit.IsPreparedInDepth.dotProduct_mul_eq_of_isRingSeparated,
-        QuantumCircuit.IsPreparedInDepth.dotProduct_mul_mul_of_isRingSeparated,
+    \lean{QuantumCircuit.IsPreparedInDepth.dotProduct_mul_eq_of_isGraphSeparated,
+        QuantumCircuit.IsPreparedInDepth.dotProduct_mul_mul_of_isGraphSeparated,
         QuantumCircuit.IsPreparedInDepth.dotProduct_mul_eq,
         QuantumCircuit.IsPreparedInDepth.dotProduct_mul_mul,
         QuantumCircuit.expect_productVector_rectKronecker,

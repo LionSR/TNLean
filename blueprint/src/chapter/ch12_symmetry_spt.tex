@@ -1360,9 +1360,10 @@ and the regrouping of physical registers into bonds.
 \begin{lemma}[Order and interpolation of periodic Hamiltonians]
     \label{thm:spt_periodic_hamiltonian_order}
     \lean{ManyBody.placeAlong_add, ManyBody.placeAlong_smul,
-        ManyBody.Interaction.posSemidef_hamiltonian}
+        ManyBody.Interaction.translates_term_nonneg}
     \leanok
-    \uses{def:spt_common_space_gapped_path, thm:lvv_placement_order}
+    \uses{def:spt_common_space_gapped_path, thm:lvv_placement_order,
+        thm:peps_region_parent_common_kernel}
     For a two-site interaction $h$, let $H_N(h)$ be the sum of its
     translates on the periodic chain of length $N\ge2$.
     If $h\ge0$, then $H_N(h)\ge0$; if $h\le k$, then

@@ -301,18 +301,6 @@
     agree. Substitute the local complement projection for the canonical case.
 \end{proof}
 
-\begin{lemma}[Commutation on disjoint intervals]
-    \label{thm:disjoint_interval_observables_commute}
-    \leanok
-    \uses{lem:qc_placed_operators}
-    Observables supported on two disjoint nonwrapping intervals of a finite
-    chain commute. No self-adjointness assumption is required.
-\end{lemma}
-\begin{proof}\leanok
-    Operators on the two tensor factors commute; each acts as the identity
-    on the support of the other.
-\end{proof}
-
 \begin{definition}[The fixed local commutator observable]
     \label{def:fixed_local_commutator_observable}
     \lean{MPSTensor.localCommutatorObservable}
@@ -349,7 +337,7 @@
 \begin{proof}\leanok
     \uses{def:finite_open_interaction_matrix,
         def:fixed_local_commutator_observable,
-        thm:disjoint_interval_observables_commute, thm:bulk_observable_algebra}
+        lem:qc_placed_operators, thm:bulk_observable_algebra}
     Terms disjoint from the support of $X$ have zero commutator. The remaining
     terms are precisely the translates in the enlarged interval. Reindex
     their sum and use multiplicativity of the interval inclusion. Multiplying
@@ -773,7 +761,7 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:ground_prefix_projection_identity,thm:disjoint_interval_observables_commute}
+    \uses{thm:ground_prefix_projection_identity,lem:qc_placed_operators}
     The observable commutes with both prefix projections. The preceding
     identity therefore gives
     $P_AX_{\ell,r}P_B=P_AQ_AQ_BX_{\ell,r}P_B$.

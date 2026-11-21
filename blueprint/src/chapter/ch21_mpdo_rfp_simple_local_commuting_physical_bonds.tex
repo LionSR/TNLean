@@ -294,17 +294,20 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
     \leanok
     \uses{lem:cyclic_window_support_offsets, lem:cyclic_windows_overlap_symmetry,
         lem:qc_placed_operators}
-    Let $L\leq N$, and let $W_i^L$ and $W_j^L$ be disjoint cyclic windows in
-    an $N$-site periodic chain. For arbitrary operators $B$ and $C$ on $L$
-    sites, $E_i^L(B)E_j^L(C)=E_j^L(C)E_i^L(B)$.
+    Let $L\leq N$, and let the cyclic windows $W_i^L$ and $W_j^L$ of an
+    $N$-site periodic chain have no common site. Then the embeddings of $L$
+    sites onto $W_i^L$ and onto $W_j^L$ have disjoint images. Consequently,
+    for arbitrary operators $B$ and $C$ on $L$ sites,
+    $E_i^L(B)E_j^L(C)=E_j^L(C)E_i^L(B)$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Evaluating both sides on a chain amplitude expresses the first order of
-    application as a double sum over replacements on $W_i^L$ and $W_j^L$. Since
-    the windows are disjoint, each replacement leaves the other restricted
-    configuration unchanged, so the two replacements commute and interchanging
-    the two finite sums gives the reverse order.
+    The embedding onto $W_i^L$ sends the $l$th site to $i+l$ with $l<L$, a
+    site of cyclic offset below $L$ from $i$, which lies in the cyclic support
+    of $W_i^L$ by Lemma~\ref{lem:cyclic_window_support_offsets}. A common site
+    of the two images would therefore be a common site of the two windows.
+    Operators placed along injections with disjoint images commute by
+    Lemma~\ref{lem:qc_placed_operators}.
 \end{proof}
 
 \begin{lemma}[Adjacent physical bonds on periodic chains]

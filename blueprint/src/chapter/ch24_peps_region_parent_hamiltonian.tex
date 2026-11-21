@@ -68,10 +68,11 @@ tensors. Different interaction terms may act on different regions.
     \lean{ManyBody.posSemidef_place,
         TNLean.PEPS.place_mulVec_assemble,
         TNLean.PEPS.place_mulVec_eq_zero_iff,
+        ManyBody.Interaction.posSemidef_hamiltonian,
         ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff,
         TNLean.PEPS.ker_regionParentHamiltonian}
     \leanok
-    \uses{def:peps_region_parent_hamiltonian, thm:spt_periodic_hamiltonian_order}
+    \uses{def:peps_region_parent_hamiltonian}
     The parent Hamiltonian is positive semidefinite and satisfies
     \begin{align}
         \ker H & =\bigcap_{i\in I}\ker\widetilde h_i=\mathcal K.
