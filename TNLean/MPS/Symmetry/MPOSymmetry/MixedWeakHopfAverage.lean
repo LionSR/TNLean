@@ -238,11 +238,12 @@ theorem hamiltonian_mixedWeakHopfCompletedInteraction_commute
       (MPOTensor.mpo W.tensor N) := by
   have : NeZero N := ⟨by omega⟩
   rw [← MPOTensor.mpoWithBoundary_one]
-  exact Commute.sum_left _ _ _ fun i _ =>
-    MPOTensor.placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
-      (mixedWeakHopfCompletedInteraction_commute
-        A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ W h₀ h₁ hW hInj₀ hInj₁ hγ)
-      (Subalgebra.one_mem _)
+  exact Commute.sum_left _ _ _ fun i _ => by
+    rw [ManyBody.Interaction.translationInvariant_term_of_le _ hN i]
+    exact MPOTensor.placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
+        (mixedWeakHopfCompletedInteraction_commute
+          A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ W h₀ h₁ hW hInj₀ hInj₁ hγ)
+        (Subalgebra.one_mem _)
 
 include h₀ h₁ hW hInj₀ hInj₁ in
 /-- The periodic sum of literal active averages commutes with the periodic
@@ -255,10 +256,11 @@ theorem hamiltonian_averageMatrix_mixedEndpointInteraction_commute
       (MPOTensor.mpo W.tensor N) := by
   have : NeZero N := ⟨by omega⟩
   rw [← MPOTensor.mpoWithBoundary_one]
-  exact Commute.sum_left _ _ _ fun i _ =>
-    MPOTensor.placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
-      (averageMatrix_mixedEndpointInteraction_commute
-        A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ W h₀ h₁ hW hInj₀ hInj₁ hγ)
-      (Subalgebra.one_mem _)
+  exact Commute.sum_left _ _ _ fun i _ => by
+    rw [ManyBody.Interaction.translationInvariant_term_of_le _ hN i]
+    exact MPOTensor.placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
+        (averageMatrix_mixedEndpointInteraction_commute
+          A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ W h₀ h₁ hW hInj₀ hInj₁ hγ)
+        (Subalgebra.one_mem _)
 
 end MPSTensor.MPOSymmetry

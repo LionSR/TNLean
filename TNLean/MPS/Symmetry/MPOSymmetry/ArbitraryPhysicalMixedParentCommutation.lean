@@ -156,10 +156,11 @@ theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
     haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) X N) :=
-  haveI : NeZero N := ⟨by omega⟩; Commute.sum_left _ _ _ fun i _ =>
-    MPOTensor.placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
-      (arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
-        A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁ hstar hγ) hX
+  haveI : NeZero N := ⟨by omega⟩; Commute.sum_left _ _ _ fun i _ => by
+    rw [ManyBody.Interaction.translationInvariant_term_of_le _ hN i]
+    exact MPOTensor.placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
+        (arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
+          A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁ hstar hγ) hX
 
 /-- On every periodic ring of length at least two and at every parameter of
 the closed interval, the enlarged mixed path Hamiltonian commutes with the
