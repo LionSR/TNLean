@@ -1,0 +1,64 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Simply Connected Forbidden Regions and Torus Walk Detours}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3},
+Lemma 6.14~\cite[Lemma~6.14]{Schuch2010PEPS}, source \path{Papers/1001.3807/paper_v3.tex}, lines 2199--2214,
+asserts that a fixed-endpoint flux string may be deformed freely. The $L$-shaped block construction
+preceding Theorem 6.7~\cite{Schuch2010PEPS}, equations
+\texttt{eq:iso:L-shape-scenario} and \texttt{eq:iso:block-disent-decomposition},
+lines 1935--1996, motivates the exterior-collar replacement used here.
+The detours with prescribed seam crossing numbers are derived below.
+
+Let $X=\mathbb Z_w\times\mathbb Z_h$ with $w,h\geq3$, and let $\Gamma$
+join native horizontal and vertical nearest neighbours. A finite walk
+$p:a\to b$ is a sequence of adjacent vertices. Define
+$\operatorname{wind}(p)\in\mathbb Z^2$ by adding $+1$ for each positively
+oriented crossing of a periodic seam, $-1$ for its reverse, and $0$
+for every other edge, separately in the horizontal and vertical directions.
+Let $R\subseteq X$ be the forbidden vertex set with simply
+connected closed-cell realization. For every finite graph walk $p:a\to b$
+with $a,b\notin R$, there exists a walk $q:a\to b$ in the induced complement
+such that
+\begin{align}
+    \operatorname{wind}(q)=\operatorname{wind}(p).
+    \label{eq:flux_avoidance_winding}
+\end{align}
+No exterior
+walk or winding identity is supplied. The proof replaces each maximal
+interior segment by a genuine collar detour and inducts on the remaining
+length. The covering lift and collar connectivity are derived from simple
+connectedness of the actual region.
+
+The declaration is
+\leanid{TNLean.PEPS.exists_complementWalk_same_winding_of_isSimplyConnected}.
+The definition \leanid{TNLean.PEPS.torusDualPathGraphWalk} encodes the four
+native direction labels as graph edges. The theorem
+\leanid{TNLean.PEPS.exists_torusDualPath_avoiding_of_isSimplyConnected}
+replaces any native dual path by one whose visited plaquettes avoid $R$ and
+whose lifted displacement is unchanged. Decoding the complementary graph walk
+and the seam-coordinate formula
+\begin{align}
+    d(r)=\bigl(\bar b_1-\bar a_1+w\,\operatorname{wind}_1(r),
+              \bar b_2-\bar a_2+h\,\operatorname{wind}_2(r)\bigr)
+    \quad(r:a\to b)
+    \label{eq:flux_avoidance_displacement}
+\end{align}
+establish this, where $d(r)$ sums the signed labelled unit steps and
+$\bar a_i,\bar b_i$ are the standard coordinate representatives. This gives arbitrary-shape simply connected forbidden-plaquette
+avoidance. It does not yet impose the physical crossed-bond incidence
+condition or prove vacuum reduced-density equality for open flux pairs. Those steps remain
+under \ghissue{8703}. Arbitrary forbidden regions need not admit such a detour:
+they may disconnect the endpoints or obstruct the requested winding class.
+The full-lattice Hamiltonian work under \ghissue{8947} is unchanged.
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

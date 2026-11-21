@@ -56,3 +56,61 @@
     theorem, so the preceding replacement construction applies to the
     chosen two-tree routes.
 \end{proof}
+
+\begin{lemma}[Avoiding a simply connected region with prescribed winding]
+    \label{lem:peps_simply_connected_walk_avoidance}
+    \lean{TNLean.PEPS.exists_complementWalk_same_winding_of_isSimplyConnected}
+    \leanok
+    Let both torus periods be at least three, let $R$ have simply connected
+    closed-cell realization, and let $a,b\notin R$. Every finite torus
+    graph walk $p:a\to b$ has a walk $q:a\to b$ wholly in the induced
+    complement, with the same integer seam crossing numbers:
+    \begin{align}
+        \operatorname{wind}(q)=\operatorname{wind}(p).
+        \label{eq:peps_walk_avoidance_winding}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_torus_complement_path_replacement,
+        thm:peps_integer_boundary_contour_connected,
+        thm:peps_torus_integer_cell_lift}
+    Induct on the length of $p$. An exterior first edge is retained and
+    the remaining walk is treated inductively. If the first edge enters
+    $R$, split at the first subsequent exit. The finite interior segment
+    has a complementary detour with the same winding, by the integer-cell
+    lift, connected exterior collar, and exterior replacement lemma.
+    Apply the induction hypothesis to the shorter remaining walk and
+    concatenate. Additivity of winding gives
+    (\ref{eq:peps_walk_avoidance_winding}).
+\end{proof}
+
+
+\begin{definition}[Native dual path as a graph walk]
+    \label{def:peps_dual_path_graph_walk}
+    \lean{TNLean.PEPS.torusDualPathGraphWalk}\leanok
+    Replace each labelled east, west, north, or south dual step by its
+    corresponding native graph edge and concatenate in path order.
+\end{definition}
+
+\begin{lemma}[Native dual avoidance with fixed displacement]
+    \label{lem:peps_simply_connected_dual_avoidance}
+    \lean{TNLean.PEPS.exists_torusDualPath_avoiding_of_isSimplyConnected}\leanok
+    Under the preceding hypotheses on the forbidden plaquette set $R$,
+    every four-labelled dual path $p:a\to b$ with $a,b\notin R$ admits
+    a dual path $q:a\to b$ with the same lifted integer displacement,
+    all of whose visited plaquettes lie outside $R$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_simply_connected_walk_avoidance,
+        def:peps_dual_path_graph_walk}
+    Encode $p$ as a graph walk and use the complementary detour. Every
+    native graph edge has a corresponding direction label, so decode
+    the detour as $q$. For either path $r:a\to b$,
+    \begin{align}
+        d(r)=\bigl(\bar b_1-\bar a_1+w\,\operatorname{wind}_1(r),
+        \bar b_2-\bar a_2+h\,\operatorname{wind}_2(r)\bigr),
+        \label{eq:peps_dual_avoidance_displacement}
+    \end{align}
+    where $\bar a_i,\bar b_i$ are the representatives in $[0,w)$ or $[0,h)$.
+    Equal seam crossing numbers therefore give $d(q)=d(p)$.
+\end{proof}

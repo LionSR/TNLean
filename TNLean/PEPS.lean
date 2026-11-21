@@ -490,6 +490,7 @@ import TNLean.PEPS.TorusSemiRegularStateNorm
 import TNLean.PEPS.TorusSimplyConnectedComplement
 import TNLean.PEPS.TorusSimplyConnectedPhysicalDensity
 import TNLean.PEPS.TorusSimplyConnectedRegionRank
+import TNLean.PEPS.TorusSimplyConnectedWalkAvoidance
 import TNLean.PEPS.TorusSingletonRegion
 import TNLean.PEPS.TorusSiteTensor
 import TNLean.PEPS.TorusStateTranslationInvariant
