@@ -40,18 +40,18 @@ variable {width height : ℕ} [NeZero width] [NeZero height]
 variable {Phys : Type*} [Finite Phys] {S : Type*} [Fintype S]
 
 /-- Every finite superposition of actual regular G-injective torus closures has the same
-Schmidt rank across any vertex partition as the corresponding canonical projector
+Schmidt rank across any region as the corresponding canonical projector
 superposition. No nonvanishing, commutativity, or isometry hypothesis is needed.
 Source: SCP10, the local-deformation argument of Corollary 6.10, lines 2074–2090. -/
-theorem IsGInjective.rank_physicalCutMatrix_torusGClosure_sum
+theorem IsGInjective.rank_cutMatrix_torusGClosure_sum
     {a : G → G → G → G → Phys → ℂ}
     (ha : IsGInjective (torusLegRep (leftRegularMatrix G)) (siteMap a))
-    (χ : TorusVertex width height → Prop) [DecidablePred χ]
+    (R : Finset (TorusVertex width height))
     (p : S → G × G) (w : S → ℂ) :
     let _ := Fintype.ofFinite Phys
-    (physicalCutMatrix χ
+    (ManyBody.cutMatrix R
       (∑ s, w s • torusGClosure (leftRegularMatrix G) a (p s).1 (p s).2)).rank =
-    (physicalCutMatrix χ
+    (ManyBody.cutMatrix R
       (∑ s, w s • torusGClosure (leftRegularMatrix G)
         (averagingSite (leftRegularMatrix G)) (p s).1 (p s).2)).rank := by
   let _ := Fintype.ofFinite Phys
@@ -71,7 +71,7 @@ theorem IsGInjective.rank_physicalCutMatrix_torusGClosure_sum
     change torusPhysicalMap (LinearMap.toMatrix' (siteMap a)) _ = _
     simp only [map_sum, map_smul,
       torusPhysicalMap_averagingSite (leftRegularMatrix G) a ha.invariant]
-  exact (rank_physicalCutMatrix_eq_of_physicalProductMaps χ F
+  exact (rank_cutMatrix_eq_of_physicalProductMaps R F
     (LinearMap.toMatrix' (siteMap a)) _ _ hforward hreverse).symm
 
 end TNLean.PEPS

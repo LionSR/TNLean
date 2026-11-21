@@ -29,11 +29,10 @@ already proves the all-length statement in this form.
 
 \begin{lemma}[Coherent supported block trees from sparse labels]
     \label{thm:ldp_coherent_supported_blocks}
-    \lean{QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth.apply_implementation,
-        MPSPreparation.exists_pairFamilyUnitary,
+    \lean{MPSPreparation.exists_pairFamilyUnitary,
         MPSPreparation.pairLayerOp_mulVec_registerCfg_eq,
         MPSPreparation.blockLayerOp_pairLayerOp_mulVec_registerCfg,
-        MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_sum_blockIsometryState,
+        MPSPreparation.exists_isMeasurementConversion_sum_blockIsometryState,
         MPSPreparation.exists_supported_block_preparation_constants}
     \leanok
     \uses{thm:ldp_sparse_window_ghz, thm:ldp_supported_tree_rounds,
@@ -133,9 +132,9 @@ already proves the all-length statement in this form.
 
 \begin{lemma}[Non-normal canonical preparation in double-logarithmic depth]
     \label{thm:ldp_nonnormal_loglog}
-    \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpv_eq_sum,
-        MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_repeatedBlockSum_le_log_log,
-        MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_repeatedBlockSum_le_log_log_of_inequivalent}
+    \lean{MPSPreparation.exists_isMeasurementConversion_le_log_log_of_mpv_eq_sum,
+        MPSPreparation.exists_isMeasurementConversion_repeatedBlockSum_le_log_log,
+        MPSPreparation.exists_isMeasurementConversion_repeatedBlockSum_le_log_log_of_inequivalent}
     \leanok
     \uses{thm:ldp_inequivalent_mixed_gap, thm:ldp_supported_loglog_compilation,
         def:ldp_repeated_block_sum, lem:ldp_common_mixed_gap,

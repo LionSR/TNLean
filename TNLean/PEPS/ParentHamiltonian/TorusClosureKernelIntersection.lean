@@ -137,7 +137,7 @@ theorem IsGInjective.inf_parentKernel_span_torusGClosureClass_eq_commutingSpan
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hQ : ∀ i, IsRegionParentInteraction (groupBondTensor (torusIncidentSite a)) (R i) (Q i))
     (i₀ : ι) (hi₀ : R i₀ = R₀) :
-    (Matrix.mulVecLin (regionParentHamiltonian R Q)).ker ⊓
+    (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d) R Q).hamiltonian).ker ⊓
       Submodule.span ℂ (Set.range (torusGClosureClass (width := width) (height := height)
         (leftRegularMatrix G) a ha.invariant)) =
       Submodule.span ℂ (Set.range (fun p : {p : G × G // Commute p.1 p.2} =>
@@ -162,8 +162,9 @@ theorem IsGInjective.inf_parentKernel_span_torusGClosureClass_eq_commutingSpan
     · exact S.zero_mem
   apply le_antisymm
   · intro Ψ hΨ
-    have hlocal := (regionParentHamiltonian_mulVec_eq_zero_iff R Q
-      (fun i => (hQ i).1) Ψ).mp hΨ.1 i₀
+    have hlocal := (ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff
+      (Φ := ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d) R Q) (ψ := Ψ)
+      fun i ↦ ManyBody.posSemidef_place («X» := fun _ ↦ Fin _) (hQ i).1).mp hΨ.1 i₀
     have hslices := (place_mulVec_eq_zero_iff
       (groupBondTensor (torusIncidentSite a)) (R i₀) (hQ i₀) Ψ).mp hlocal
     rw [hi₀] at hslices
@@ -192,7 +193,8 @@ theorem IsGInjective.finrank_parentKernel_inf_closureSpan
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hQ : ∀ i, IsRegionParentInteraction (groupBondTensor (torusIncidentSite a)) (R i) (Q i))
     (i₀ : ι) (hi₀ : R i₀ = R₀) :
-    Module.finrank ℂ ↥((Matrix.mulVecLin (regionParentHamiltonian R Q)).ker ⊓
+    Module.finrank ℂ ↥((Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d) R Q).hamiltonian).ker ⊓
       Submodule.span ℂ (Set.range (torusGClosureClass (width := width) (height := height)
         (leftRegularMatrix G) a ha.invariant))) =
       Nat.card (CommutingPairConjugacyClass G) := by

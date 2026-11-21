@@ -737,8 +737,8 @@ identically false predicate both sides of
 
 \begin{definition}[Canonical extended graph pseudometric]
     \label{def:al_graph_extended_metric}
-    \lean{TNLean.PEPS.AreaLaw.graphPseudoEMetricSpace,
-        TNLean.PEPS.AreaLaw.graphPseudoEMetricSpace_edist}
+    \lean{ManyBody.graphPseudoEMetricSpace,
+        ManyBody.graphPseudoEMetricSpace_edist}
     \leanok
     For a simple graph $G$ on $V$, let $d_G(x,y)\in\N\cup\{\infty\}$ be the
     shortest-path distance and $\iota:\N\cup\{\infty\}\to[0,\infty]$ the
@@ -762,7 +762,7 @@ identically false predicate both sides of
 \begin{lemma}[Finite distance and connected components]
     \label{thm:al_graph_extended_components}
     \uses{def:al_graph_extended_metric}
-    \lean{TNLean.PEPS.AreaLaw.graphPseudoEMetricSpace_edist_ne_top,
+    \lean{ManyBody.graphPseudoEMetricSpace_edist_ne_top,
         TNLean.PEPS.AreaLaw.graphPseudoEMetricSpace_edist_eq_top}
     \leanok
     For all $x,y\in V$, $\rho_G(x,y)\ne\infty$ if and only if $x$ and $y$ are
@@ -780,7 +780,7 @@ For $r\in[0,\infty]$, write $r_{\R}=r$ for $r<\infty$ and $\infty_{\R}=0$.
 \begin{lemma}[Real value of the extended graph distance]
     \label{thm:al_graph_extended_real_value}
     \uses{def:al_graph_extended_metric}
-    \lean{TNLean.PEPS.AreaLaw.graphPseudoEMetricSpace_edist_toReal}
+    \lean{ManyBody.graphPseudoEMetricSpace_edist_toReal}
     \leanok
     For every $x,y\in V$,
     \begin{align}

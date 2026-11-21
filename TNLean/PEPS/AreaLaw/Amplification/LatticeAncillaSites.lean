@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Amplification.LatticeAncillaTransport
 import TNLean.Lattice.SiteRelabelEntropy
 import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlaceAlong
 
 /-!
 # The physical sites enlarged by two copies of the target
@@ -91,24 +92,28 @@ theorem kronecker_one_submatrix_ancillaSplit (X : Finset (Site Λ))
     (L : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
     (L ⊗ₖ (1 : Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
       (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)).submatrix
-        (ancillaSplit q X) (ancillaSplit q X) = embedOp Sum.inl L := by
+        (ancillaSplit q X) (ancillaSplit q X) =
+      ManyBody.placeAlong (X := fun _ ↦ Fin q)
+        (Function.Embedding.inl : Site Λ ↪ AncillaSites Λ X) L := by
   ext c c'
-  simp only [submatrix_apply, kroneckerMap_apply, one_apply, embedOp_apply, ancillaSplit_apply]
-  have hagree : AgreeOff (Sum.inl : Site Λ → AncillaSites Λ X) c c' ↔
-      (c ∘ Sum.inr ∘ Sum.inl, c ∘ Sum.inr ∘ Sum.inr) =
-        (c' ∘ Sum.inr ∘ Sum.inl, c' ∘ Sum.inr ∘ Sum.inr) := by
+  simp only [submatrix_apply, kroneckerMap_apply, one_apply, ManyBody.placeAlong_apply]
+  have hagree : (ancillaSplit q X c).2 = (ancillaSplit q X c').2 ↔
+      ∀ v, (∀ u, (Function.Embedding.inl : Site Λ ↪ AncillaSites Λ X) u ≠ v) →
+        c v = c' v := by
+    rw [ancillaSplit_apply, ancillaSplit_apply]
     constructor
-    · intro h
-      exact Prod.ext (funext fun x => h _ fun j => Sum.inl_ne_inr)
-        (funext fun x => h _ fun j => Sum.inl_ne_inr)
     · intro h i hi
       rcases i with i | i | i
       · exact absurd rfl (hi i)
       · exact congrFun (Prod.ext_iff.mp h).1 i
       · exact congrFun (Prod.ext_iff.mp h).2 i
-  by_cases h : AgreeOff (Sum.inl : Site Λ → AncillaSites Λ X) c c'
-  · simp only [h, hagree.mp h, ite_true, mul_one]
-  · simp only [h, hagree.not.mp h, ite_false, mul_zero]
+    · intro h
+      exact Prod.ext (funext fun x => h _ fun j => Sum.inl_ne_inr)
+        (funext fun x => h _ fun j => Sum.inl_ne_inr)
+  by_cases h : (ancillaSplit q X c).2 = (ancillaSplit q X c').2
+  · rw [if_pos h, if_pos (hagree.mp h), mul_one]
+    rfl
+  · rw [if_neg h, if_neg (mt hagree.mpr h), mul_zero]
 
 /-- An operator on the copy `s'` alone is placed on the sites of `s'`. -/
 theorem one_kronecker_submatrix_ancillaSplit (X : Finset (Site Λ))
@@ -116,26 +121,33 @@ theorem one_kronecker_submatrix_ancillaSplit (X : Finset (Site Λ))
     ((1 : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) ⊗ₖ
       (b ⊗ₖ (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ))).submatrix
         (ancillaSplit q X) (ancillaSplit q X) =
-      embedOp (Sum.inr ∘ Sum.inl : ↥X → AncillaSites Λ X) b := by
+      ManyBody.placeAlong (X := fun _ ↦ Fin q)
+        (⟨Sum.inr ∘ Sum.inl, Sum.inr_injective.comp Sum.inl_injective⟩ :
+          ↥X ↪ AncillaSites Λ X) b := by
   ext c c'
-  simp only [submatrix_apply, kroneckerMap_apply, one_apply, embedOp_apply, ancillaSplit_apply]
-  have hagree : AgreeOff (Sum.inr ∘ Sum.inl : ↥X → AncillaSites Λ X) c c' ↔
-      c ∘ Sum.inl = c' ∘ Sum.inl ∧ c ∘ Sum.inr ∘ Sum.inr = c' ∘ Sum.inr ∘ Sum.inr := by
+  simp only [submatrix_apply, kroneckerMap_apply, one_apply, ManyBody.placeAlong_apply]
+  have hagree : (ancillaSplit q X c).1 = (ancillaSplit q X c').1 ∧
+      (ancillaSplit q X c).2.2 = (ancillaSplit q X c').2.2 ↔
+      ∀ v, (∀ u, (⟨Sum.inr ∘ Sum.inl, Sum.inr_injective.comp Sum.inl_injective⟩ :
+        ↥X ↪ AncillaSites Λ X) u ≠ v) → c v = c' v := by
+    rw [ancillaSplit_apply, ancillaSplit_apply]
     constructor
+    · rintro ⟨h1, h2⟩ i hi
+      rcases i with i | i | i
+      · exact congrFun h1 i
+      · exact absurd rfl (hi i)
+      · exact congrFun h2 i
     · intro h
       exact ⟨funext fun x => h _ fun j => by simp,
         funext fun x => h _ fun j => by simp⟩
-    · intro h i hi
-      rcases i with i | i | i
-      · exact congrFun h.1 i
-      · exact absurd rfl (hi i)
-      · exact congrFun h.2 i
-  by_cases h : AgreeOff (Sum.inr ∘ Sum.inl : ↥X → AncillaSites Λ X) c c'
-  · obtain ⟨h1, h2⟩ := hagree.mp h
-    simp only [h, h1, h2, ite_true, one_mul, mul_one]
-  · rcases not_and_or.mp (hagree.not.mp h) with h1 | h2
-    · simp [h, h1]
-    · simp [h, h2]
+  by_cases h : (ancillaSplit q X c).1 = (ancillaSplit q X c').1 ∧
+      (ancillaSplit q X c).2.2 = (ancillaSplit q X c').2.2
+  · rw [if_pos h.1, if_pos h.2, if_pos (hagree.mp h), one_mul, mul_one]
+    rfl
+  · rw [if_neg (mt hagree.mpr h)]
+    rcases not_and_or.mp h with h1 | h2
+    · rw [if_neg h1, zero_mul]
+    · rw [if_neg h2, mul_zero, mul_zero]
 
 /-- **Supports on the enlarged sites.** An operator `P ⊗ (b ⊗ 1_{e'})`, with `P` acting on a
 physical region `S` and `b` acting on `s'`, acts on `S ⊔ s'`.
@@ -157,14 +169,16 @@ theorem kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset (S
   rw [hsplit, ← submatrix_mul_equiv _ _ _ (ancillaSplit q X),
     kronecker_one_submatrix_ancillaSplit, one_kronecker_submatrix_ancillaSplit]
   refine mul_mem (ManyBody.supportedOperators_mono ?_
-    (embedOp_mem_supportedOperators_image Sum.inl_injective hP))
-    (ManyBody.supportedOperators_mono ?_ (embedOp_mem_supportedOperators
-      (Sum.inr_injective.comp Sum.inl_injective) b))
+    (ManyBody.placeAlong_mem_supportedOperators_map (X := fun _ ↦ Fin q)
+      (Function.Embedding.inl : Site Λ ↪ AncillaSites Λ X) hP))
+    (ManyBody.supportedOperators_mono ?_ (ManyBody.placeAlong_mem_supportedOperators
+      (X := fun _ ↦ Fin q) (⟨Sum.inr ∘ Sum.inl, Sum.inr_injective.comp Sum.inl_injective⟩ :
+        ↥X ↪ AncillaSites Λ X) b))
   · intro _ h
-    obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp h
+    obtain ⟨v, hv, rfl⟩ := Finset.mem_map.mp h
     simpa using hv
   · intro _ h
-    obtain ⟨x, -, rfl⟩ := Finset.mem_image.mp h
+    obtain ⟨x, -, rfl⟩ := Finset.mem_map.mp h
     simp
 
 /-- **Physical operators on the enlarged sites.** A physical operator acting on a region `S`,
@@ -179,9 +193,10 @@ theorem kronecker_one_submatrix_ancillaSplit_mem_supportedOperators {X S : Finse
           (S.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) := by
   rw [kronecker_one_submatrix_ancillaSplit]
   refine ManyBody.supportedOperators_mono ?_
-      (embedOp_mem_supportedOperators_image Sum.inl_injective hL)
+      (ManyBody.placeAlong_mem_supportedOperators_map (X := fun _ ↦ Fin q)
+        (Function.Embedding.inl : Site Λ ↪ AncillaSites Λ X) hL)
   intro _ h
-  obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp h
+  obtain ⟨v, hv, rfl⟩ := Finset.mem_map.mp h
   simpa using hv
 
 /-! ### Vectors and mutual information -/
@@ -193,16 +208,16 @@ theorem restoringSplit_symm_replace (X Y : Finset (Site Λ)) (hXY : Disjoint X Y
         (restoringSplit q X Y hXY c).2) =
       fun v => if hv : v ∈ X then e ⟨v, hv⟩ else c v := by
   funext v
-  change (ManyBody.splitEquiv (fun _ : Site Λ ↦ Fin q) (X ∪ Y)).symm
-    ((ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
+  change (ManyBody.cutEquiv (fun _ : Site Λ ↦ Fin q) (X ∪ Y)).symm
+    ((ManyBody.regionUnionEquiv (β := fun _ : Site Λ ↦ Fin q) hXY).symm
       (e, fun w : ↥Y => c w), fun w => c w) v = _
   by_cases hv : v ∈ X ∪ Y
-  · rw [ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _ hv]
+  · rw [ManyBody.cutEquiv_symm_apply_mem _ _ hv]
     by_cases hvX : v ∈ X
-    · simp [ManyBody.unionEquiv, hvX]
-    · simp [ManyBody.unionEquiv, hvX]
+    · simp [ManyBody.regionUnionEquiv, hvX]
+    · simp [ManyBody.regionUnionEquiv, hvX]
   · have hvX : v ∉ X := fun h => hv (Finset.mem_union_left Y h)
-    rw [ManyBody.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hv]
+    rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ hv]
     simp [hvX]
 
 /-- The swap of each site of the target `X` with its copy in `e'`. -/
@@ -278,7 +293,7 @@ theorem mutualInformation_ancillaCopy_eq {X Y : Finset (Site Λ)} (hXY : Disjoin
       RegionalConfiguration q X) => a c.2.1 * b (restoringSplit q X Y hXY c.1).1.1 *
         Ω ((restoringSplit q X Y hXY).symm ((c.2.2, (restoringSplit q X Y hXY c.1).1.2),
           (restoringSplit q X Y hXY c.1).2))) ∘ ancillaSplit q X) =
-      FiniteProduct.relabelSites (ancillaSwap X) (ManyBody.sumSitesProduct
+      ManyBody.relabelSites (ancillaSwap X) (ManyBody.sumSitesProduct
         (X := fun _ : AncillaSites Λ X => Fin q) Ω g) := by
     congr 1
     funext c
@@ -328,7 +343,7 @@ theorem mutualInformation_ancillaCopy_eq {X Y : Finset (Site Λ)} (hXY : Disjoin
     · simp [ancillaSwapFun, ancillaPhysicalRegion]
     · have hyJ : (y : Site Λ) ∉ J := fun h => Finset.disjoint_left.mp hJ h y.2
       simp [ancillaSwapFun, ancillaPhysicalRegion, hyJ]
-  rw [hvec, FiniteProduct.mutualInformation_relabelSites, hcopy, hphys]
+  rw [hvec, ManyBody.regionMutualInformation_relabelSites, hcopy, hphys]
   exact ManyBody.regionMutualInformation_sumSitesProduct_inl
     (X := fun _ : AncillaSites Λ X => Fin q) (f := Ω) (g := g) hΩ hg _ _
 

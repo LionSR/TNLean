@@ -44,26 +44,29 @@ measurements.
           it.
     \item \emph{Teleportation.} For qudits of any dimension $d$, any number of
           registers is moved along chains of nearest-neighbour hops of any
-          length, in one round of depth $2$; for every outcome the round acts
+          length, in one round of depth at most $2$; for every outcome the round acts
           as $d^{-H}$ times the permutation of sites, $H$ the number of hops.
     \item \emph{One layer.} Two-site gates on pairwise disjoint stretches
           $a,\dots,a+2L+1$, with the sites strictly inside each stretch in
-          $\ket0$, are applied in two rounds of total depth $5$, whatever $L$.
+          $\ket0$, are applied in two rounds of total depth at most $5$,
+          whatever $L$.
           A gate joins the sites $a$ and $a+2L+1$, at odd separation along the
           ring; gates at even separation, or on overlapping stretches, are not
           covered, and the tree needs neither.
     \item \emph{The tree.} A binary tree of two-site gates with $k$ levels, on the
           complete blocks of $2^k$ sites and on the complete smaller blocks
-          after them, is applied with measurements in depth $5k$, on the vectors
+          after them, is applied with measurements in depth at most $5k$, on the
+          vectors
           with $\ket0$ strictly inside the complete blocks of every level.
     \item \emph{Registers of several sites.} A register is $s$ consecutive
           sites. A unitary on two registers $a,\dots,a+s-1$ and
           $a+2L+s,\dots,a+2L+2s-1$ is applied by teleporting the first register
-          site by site, the site $a+s-1$ first, in $s$ rounds of depth $2$,
-          applying the unitary to $2s$ consecutive sites by a local circuit of
-          depth $K$, and teleporting back; a layer of such unitaries on disjoint
-          stretches takes depth $4s+K+2$, whatever $L$. Trees of such unitaries
-          on the $M$ blocks of $q=s2^{k+1}$ sites take depth $(k+1)(4s+K+2)$.
+          site by site, the site $a+s-1$ first, in $s$ rounds of depth at most
+          $2$, applying the unitary to $2s$ consecutive sites by a local circuit
+          of depth $K$, and teleporting back; a layer of such unitaries on
+          disjoint stretches takes depth at most $4s+K$, whatever $L$. Trees of
+          such unitaries on the $M$ blocks of $q=s2^{k+1}$ sites take depth at
+          most $(k+1)(4s+K)$.
     \item \emph{The approximating state.} If the blocked tensor of $A$ over $s$
           sites is injective, a register carries $\mathbb{C}^{D^2}$, every layer
           of the tree factorization of the blocked tensor over $s$ sites is an
@@ -85,22 +88,22 @@ The blocking over $s$ sites makes the two-site injectivity assumed for the
 multiscale network of~\cite{gap:mswc24_tree_mera_scope} unnecessary here: the
 tree is that of the blocked tensor, whose sites are the registers.
 The formal statements\footnote{Formal declarations:
-    \leanid{QuantumCircuit.TeleportHop.isImplementationOn_round} in
-    \doclink{TNLean/Circuit/Teleportation/Round},
-    \leanid{QuantumCircuit.LongRangeGate.isRoundsImplementationOn_rounds} in
-    \doclink{TNLean/Circuit/Teleportation/LongRangeGates}, and
-    \leanid{MPSPreparation.isPreparedWithMeasurementRoundsInDepth_treeOp} in
+    \leanid{QuantumCircuit.TeleportHop.isImplementationOn_round} in QICLean's
+    \path{QICLean/Circuit/Protocol/Teleportation/Round},
+    \leanid{QuantumCircuit.LongRangeGate.isImplementationOn_rounds} in QICLean's
+    \path{QICLean/Circuit/Protocol/Teleportation/LongRangeGates}, and
+    \leanid{MPSPreparation.exists_isMeasurementConversion_treeOp} in
     \doclink{TNLean/MPS/Preparation/TreeMeasurement},
-    \leanid{QuantumCircuit.RegisterGate.exists_rounds} in
-    \doclink{TNLean/Circuit/Teleportation/RegisterGates},
+    \leanid{QuantumCircuit.RegisterGate.exists_rounds} in QICLean's
+    \path{QICLean/Circuit/Protocol/Teleportation/RegisterGates},
     \leanid{MPSPreparation.exists_rounds_blockLayerOp_regTreeOp} in
     \doclink{TNLean/MPS/Preparation/RegisterTree},
     \leanid{MPSPreparation.regTreeOp_apply_blockInputCfg} in
     \doclink{TNLean/MPS/Preparation/RegisterTreeState}, and
-    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_approximatingMPVState},
-    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_approximationError_le}
+    \leanid{MPSPreparation.exists_isMeasurementConversion_approximatingMPVState},
+    \leanid{MPSPreparation.exists_isMeasurementConversion_approximationError_le}
     and
-    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_logb_log}
+    \leanid{MPSPreparation.exists_isMeasurementConversion_le_logb_log}
     in \doclink{TNLean/MPS/Preparation/LogLogDepthPreparation}.}
 are exact, and no outcome is post-selected.
 
@@ -130,11 +133,11 @@ widths.\footnote{Formal declarations:
     \doclink{TNLean/MPS/Preparation/UnequalRegisterTree},
     \leanid{MPSPreparation.treeBlockOp_apply} in
     \doclink{TNLean/MPS/Preparation/UnequalRegisterTreeState},
-    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState}
+    \leanid{MPSPreparation.exists_isMeasurementConversion_blockIsometryState}
     in \doclink{TNLean/MPS/Preparation/UnequalTreePreparation}, and
-    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero}
+    \leanid{MPSPreparation.exists_isMeasurementConversion_le_log_log_of_mpvState_ne_zero}
     and
-    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log}
+    \leanid{MPSPreparation.exists_isMeasurementConversion_le_log_log}
     in \doclink{TNLean/MPS/Preparation/LogLogDepthEveryLength}.}
 \begin{enumerate}
     \item \emph{Halves of unequal lengths.} For polar decompositions
@@ -214,7 +217,7 @@ trace-one transfer fixed points.\footnote{Formal declarations:
     \doclink{TNLean/MPS/Preparation/CoherentBlockTreePreparation},
     \leanid{MPSPreparation.exists_log_log_preparation_of_supported_block_approximation} in
     \doclink{TNLean/MPS/Preparation/SupportedLogLogPreparation}, and
-    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_repeatedBlockSum_le_log_log_of_inequivalent}
+    \leanid{MPSPreparation.exists_isMeasurementConversion_repeatedBlockSum_le_log_log_of_inequivalent}
     in \doclink{TNLean/MPS/Preparation/OverlappingLogLogPreparation}.}
 The same constant precedes $N$ and $\varepsilon$. It covers every $N\ge2$
 with nonzero periodic vector and $0<\varepsilon\le1$, finite-block overlap,

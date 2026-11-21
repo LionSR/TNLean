@@ -8,7 +8,7 @@ import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.ManyBody.Hamiltonian.GaussianFilterTruncation
 import QICLean.ManyBody.Hamiltonian.Translation
 import QICLean.Algebra.ZModDisplacement
-import QICLean.ManyBody.Dynamics.GraphBall
+import QICLean.ManyBody.Sites.GraphBall
 import TNLean.Algebra.MatrixHermitianSum
 
 /-!

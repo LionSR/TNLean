@@ -100,7 +100,7 @@ theorem measurableSet_isViable_independentIntervalTree
       (balancedIntervalSpace (independentIntervalOperation parent U) width hwidth p r)
       (G.map (Entropy.regionTensorCoordinates q (interval L p r)).toLinearEquiv.toLinearMap)} :=
   Submodule.measurableSet_isViable_of_measurable_projectionMatrix
-    (σ := interval L p r → Fin q) (β := ↥((interval L p r)ᶜ) → Fin q)
+    (σ := interval L p r → Fin q) (β := {v // v ∉ interval L p r} → Fin q)
     (fun U ↦ balancedIntervalSpace (independentIntervalOperation parent U) width hwidth p r)
     (measurable_projectionMatrix_and_dependsOn_independentIntervalTree
       parent hparent hwidth p r hpr hrL).1 delta _

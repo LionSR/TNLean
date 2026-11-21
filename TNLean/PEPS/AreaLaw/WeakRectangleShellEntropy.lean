@@ -30,7 +30,7 @@ namespace TNLean.PEPS.AreaLaw
 /-- The actual shell entropy under a pointwise estimate on safe rectangles.
 Source: proof of Proposition 9.5, 08-scanner.tex, lines 717–729.
 The explicit scalar budget supplies the selected squares' clearance. -/
-theorem IntRect.regionalEntropy_shell_le_of_safe_box
+theorem IntRect.regionEntropy_shell_le_of_safe_box
     (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     (A : Finset (Site Λ)) (Q : IntRect) (hsafe : IsSafe Λ A D₀ Q)
     (j L K : ℕ) (hj : j ≤ L) (hL : L ≤ Q.size)
@@ -47,7 +47,7 @@ theorem IntRect.regionalEntropy_shell_le_of_safe_box
       IsSafe Λ A D₀ (Geometry.latticeDyadicRect c.1 c.2) := by
     intro c hc
     exact hsafe.isSafe_cappedDyadicPartition_shell j L K c.1 c.2 hj hlo hbudget hc
-  have hcover := Geometry.regionalEntropy_filter_le_weighted_cover
+  have hcover := Geometry.regionEntropy_filter_le_weighted_cover
     Λ q D₀ Ω hΩ A ((Q.dilate j).toFinset \ Q.toFinset) K e C hsafeCells hbox
   have hweighted := mul_le_mul_of_nonneg_left
     (Q.sum_rpow_cappedDyadicPartition_shell_le j L K hj hL hlo hhi e he) hC

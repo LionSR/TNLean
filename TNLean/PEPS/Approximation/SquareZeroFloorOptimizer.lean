@@ -49,7 +49,7 @@ open Matrix
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.Approximation
 
@@ -71,8 +71,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
     (hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j)
     (hsingle : ∀ e : Edge (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L)),
       ∀ i j : Fin m,
-        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (ManyBody.rectangularDomain L L) (D i) →
-        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (ManyBody.rectangularDomain L L) (D j) →
+        s(e.1.1, e.1.2) ∈ edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L)) (D i) →
+        s(e.1.1, e.1.2) ∈ edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L)) (D j) →
         i = j)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) (ha1 : ∀ j, a j ≤ 1) :
     ∃ K : (j : Fin m) → Matrix
@@ -95,10 +95,12 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
             (ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart).hamiltonian
               φ⟫_ℂ).re - E₀| ≤
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
-            a j ^ 2 * (Lattice.edgeBoundary (ManyBody.rectangularDomain L L) (D j)).card ∧
+            a j ^ 2 *
+              (edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L)) (D j)).card ∧
         Δ * (1 - ‖⟪AreaLaw.rectangleAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
-            a j ^ 2 * (Lattice.edgeBoundary (ManyBody.rectangularDomain L L) (D j)).card := by
+            a j ^ 2 *
+              (edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L)) (D j)).card := by
   classical
   obtain ⟨T, hT, hTH, hTJ, hsum⟩ := h.exists_nearestNeighbor_terms hh hhJ
   obtain ⟨hΩ, hgs, hspan⟩ := h.isGapped_toPlaneInteraction_hermitianPart hh hΩn hΩg hΩs
@@ -136,7 +138,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
             (fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
             (D j) (AreaLaw.nearestNeighborSupport i)) : ℝ) ^ 2 * J) =
         (q : ℝ) ^ 2 * J * ∑ j : Fin m,
-          a j ^ 2 * (Lattice.edgeBoundary (ManyBody.rectangularDomain L L) (D j)).card := by
+          a j ^ 2 *
+            (edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L)) (D j)).card := by
     simp_rw [ManyBody.card_innerConfig]
     simpa only [Finset.prod_const, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe] using
       AreaLaw.nearestNeighbor_crossing_budget q J (fun j : Fin m ↦ D j) a

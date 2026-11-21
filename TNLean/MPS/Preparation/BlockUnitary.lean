@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.PairProduct
+import QICLean.Circuit.Compile.SwapRouting
 import TNLean.MPS.Preparation.Staircase
 
 /-!
@@ -26,7 +26,7 @@ with `C` depending only on `d`, `D` and `r₁`.
 open Matrix MPSTensor
 open MPSChainTensor (eval)
 open scoped BigOperators
-open QuantumCircuit
+open QuantumCircuit ManyBody
 
 namespace MPSPreparation
 
@@ -102,15 +102,24 @@ theorem routePerm_apply {n a : ℕ} :
       (fun h => hp2 (congrArg Fin.val h)), ih]
     split_ifs <;> omega
 
-theorem isPairProduct_permOp_routePerm (n a : ℕ) :
-    ∀ j, IsPairProduct d n (j * (2 * n)) (permOp (routePerm n a j))
-  | 0 => by simpa [routePerm] using IsPairProduct.one (d := d) (n := n) 0
+/-- The routing permutation is a product of at most `2 n` gates on neighbouring sites for each
+transposition, `j * (2 n)` in all. -/
+theorem isGateProduct_sitePermOp_routePerm (n a : ℕ) :
+    ∀ j, IsGateProduct (Geometry.graph (SimpleGraph.pathGraph n)) (j * (2 * n))
+      (sitePermOp (α := Fin d) (routePerm n a j))
+  | 0 => by
+    simpa [routePerm, sitePermOp_one] using
+      IsGateProduct.one (Geometry.graph (SimpleGraph.pathGraph n)) (fun _ : Fin n ↦ Fin d) 0
   | j + 1 => by
-    rw [routePerm, permOp_mul, Nat.succ_mul]
-    refine (isPairProduct_permOp_routePerm n a j).mul ?_
+    rw [routePerm, ← sitePermOp_mul, Nat.succ_mul]
+    refine (isGateProduct_sitePermOp_routePerm n a j).mul ?_
     split_ifs with h
-    · exact isPairProduct_permOp_swap _ _
-    · simpa using IsPairProduct.one (d := d) (n := n) (2 * n)
+    · refine (isGateProduct_sitePermOp_swap (α := Fin d) _ _).mono ?_
+      simp only [Nat.dist]
+      omega
+    · simpa [sitePermOp_one] using
+        IsGateProduct.one (Geometry.graph (SimpleGraph.pathGraph n)) (fun _ : Fin n ↦ Fin d)
+          (2 * n)
 
 /-- Moving the left register next to the right one: the configuration `|0 ⋯ 0, l, r⟩`, read
 through the routing permutation, is `|l, 0 ⋯ 0, r⟩`. -/
@@ -153,7 +162,8 @@ theorem exists_blockUnitary_of_equiv (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r�
     ∃ C : ℕ, ∀ q, 3 * r₁ ≤ q → ∀ (b : Fin (q + 1) → ℕ) (Q : MPSChainTensor d (D * D) q),
       b 0 = 1 → (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) →
       (∀ p, IsIsometryOn (b p.succ) (Q p)) →
-      ∃ U : Matrix (Cfg d q) (Cfg d q) ℂ, IsPairProduct d q (C * q) U ∧
+      ∃ U : Matrix (Cfg d q) (Cfg d q) ℂ,
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph q)) (C * q) U ∧
         ∀ x : Fin (D * D), x.val < b (Fin.last q) → ∀ σ,
           U σ (blockInputCfg hd q dig (π x).1 (π x).2) = eval Q σ ⟨0, Nat.mul_pos hD hD⟩ x := by
   classical
@@ -165,10 +175,10 @@ theorem exists_blockUnitary_of_equiv (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r�
     hencinj
   refine ⟨K₀ + K₁ + 2 * r₁, fun q hq b Q hb0 hrow hiso => ?_⟩
   obtain ⟨U, hU, hUQ⟩ := hK q (by omega) b Q hb0 hrow hiso
-  have hτpp := isPairProduct_permOp_routePerm (d := d) q (q - (r₁ + r₁)) r₁
+  have hτpp := isGateProduct_sitePermOp_routePerm (d := d) q (q - (r₁ + r₁)) r₁
   have hin := inputCfg_comp_routePerm hd hq dig
   generalize routePerm q (q - (r₁ + r₁)) r₁ = τ at hτpp hin
-  refine ⟨U * permOp τ, ?_, fun x hx σ => ?_⟩
+  refine ⟨U * sitePermOp τ, ?_, fun x hx σ => ?_⟩
   · refine (hU.mul hτpp).mono ?_
     have h1 : (q - (r₁ + r₁)) * K₁ ≤ q * K₁ := Nat.mul_le_mul_right _ (by omega)
     have h2 : K₀ ≤ q * K₀ := Nat.le_mul_of_pos_left _ (by omega)
@@ -178,10 +188,10 @@ theorem exists_blockUnitary_of_equiv (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r�
       _ = (K₀ + K₁ + 2 * r₁) * q := by ring
   · have hin := hin (π x).1 (π x).2
     rw [mul_apply, Finset.sum_eq_single (inputCfg hd q (twoCfg dig (π x).1 (π x).2))]
-    · rw [permOp, of_apply, ite_eq_left hin.symm, mul_one]
+    · rw [sitePermOp_apply, ite_eq_left hin.symm, mul_one]
       exact hUQ x hx σ
     · intro z _ hz
-      rw [permOp, of_apply, ite_eq_right, mul_zero]
+      rw [sitePermOp_apply, ite_eq_right, mul_zero]
       intro h
       apply hz
       funext p
@@ -204,7 +214,8 @@ theorem exists_blockUnitary (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁) {dig 
       b 0 = 1 → b (Fin.last q) = D * D →
       (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) →
       (∀ p, IsIsometryOn (b p.succ) (Q p)) →
-      ∃ U : Matrix (Cfg d q) (Cfg d q) ℂ, IsPairProduct d q (C * q) U ∧
+      ∃ U : Matrix (Cfg d q) (Cfg d q) ℂ,
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph q)) (C * q) U ∧
         ∀ l r σ, U σ (blockInputCfg hd q dig l r) =
           eval Q σ ⟨0, Nat.mul_pos hD hD⟩ (finProdFinEquiv (l, r)) := by
   obtain ⟨C, hC⟩ := exists_blockUnitary_of_equiv hd hr₁ hdig hD finProdFinEquiv.symm

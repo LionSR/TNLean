@@ -54,7 +54,7 @@ input and has an explicit neighboring-pair gate bound.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem placed_leaf_circuit_isCleanImplementation {d D N K : ℕ} [NeZero d]
-    (hd : 0 < d) (hN : 2 ≤ N) (i : Fin N)
+    (hN : 2 ≤ N) (i : Fin N)
     {Z : Matrix
       (Cfg d (1 + (cutBondRegisterWidth d D N i.succ + cutBondRegisterWidth d D N i.castSucc)))
       (Cfg d (1 + (cutBondRegisterWidth d D N i.succ + cutBondRegisterWidth d D N i.castSucc))) ℂ}
@@ -63,20 +63,21 @@ theorem placed_leaf_circuit_isCleanImplementation {d D N K : ℕ} [NeZero d]
         cutBondRegisterWidth d D N i.castSucc)) + 1))
       (Cfg d ((1 + (cutBondRegisterWidth d D N i.succ +
         cutBondRegisterWidth d D N i.castSucc)) + 1)) ℂ}
-    (hC : IsPairProduct d
-      ((1 + (cutBondRegisterWidth d D N i.succ + cutBondRegisterWidth d D N i.castSucc)) + 1) K C)
+    (hC : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph
+      ((1 + (cutBondRegisterWidth d D N i.succ + cutBondRegisterWidth d D N i.castSucc)) + 1))) K C)
     (hclean : IsCleanImplementation
-      (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d)
+      (basisInclusion (workspaceEmbedding
         (n := 1 + (cutBondRegisterWidth d D N i.succ + cutBondRegisterWidth d D N i.castSucc))
-        (a := 1))) C Z) :
-    IsPairProduct d (globalSiteCount d D N) (K * (2 * globalSiteCount d D N))
-        (embedOp (leafCleanPlacementSites d D N hN i) C) ∧
+        (0 : Fin 1 → Fin d))) C Z) :
+    IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (globalSiteCount d D N)))
+        (K * (2 * globalSiteCount d D N))
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (leafCleanPlacementSites d D N hN i) C) ∧
       IsCleanImplementation
-        (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d)
-          (n := logicalSiteCount d D N) (a := auxiliarySiteCount d D N)))
-        (embedOp (leafCleanPlacementSites d D N hN i) C)
-        (embedOp (leafConsecutiveSites d D N i) Z) :=
-  isPairProduct_isCleanImplementation_embedOp hd (leafConsecutiveSites d D N i)
+        (basisInclusion (workspaceEmbedding
+          (n := logicalSiteCount d D N) (0 : Fin (auxiliarySiteCount d D N) → Fin d)))
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (leafCleanPlacementSites d D N hN i) C)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (leafConsecutiveSites d D N i) Z) :=
+  isGateProduct_isCleanImplementation_placeAlong (leafConsecutiveSites d D N i)
     (leafWorkspaceSites d D N hN) hC hclean
 
 
@@ -134,26 +135,26 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_circuits_of_un
                 cutBondRegisterWidth d D N i.castSucc)))
               (Cfg d (1 + (cutBondRegisterWidth d D N i.succ +
                 cutBondRegisterWidth d D N i.castSucc))) ℂ) ∧
-            Z * initializedBasisMatrix (leafInputEmbedding (d := d)
+            Z * basisInclusion (leafInputEmbedding (d := d)
                 (qρ := cutBondRegisterWidth d D N i.succ)
                 (qσ := cutBondRegisterWidth d D N i.castSucc)) =
-              initializedBasisMatrix (leafOutputEmbedding
+              basisInclusion (leafOutputEmbedding
                   (ρ := Fin (cutCoefficientRank (operatorCoefficientTensor U) (i.val + 1)))
                   (σ := Fin (cutCoefficientRank (operatorCoefficientTensor U) i.val))
                   (minimalCutBondRegisterEncoding hd U hU hbound i.succ)
                   (minimalCutBondRegisterEncoding hd U hU hbound i.castSucc)) *
                 minimalLeafInterval U B P i ∧
-            IsPairProduct d (globalSiteCount d D N)
+            IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (globalSiteCount d D N)))
               ((38 * (d ^ 4 * D ^ 2) ^ 6) * (2 * globalSiteCount d D N)) C ∧
             C ∈ unitary
               (Matrix (Cfg d (globalSiteCount d D N)) (Cfg d (globalSiteCount d D N)) ℂ) ∧
             IsCleanImplementation
-              (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d)
-                (n := logicalSiteCount d D N) (a := auxiliarySiteCount d D N)))
-              C (embedOp (leafConsecutiveSites d D N i) Z) ∧
-            embedOp (leafConsecutiveSites d D N i) Z ∈ unitary
+              (basisInclusion (workspaceEmbedding
+                (n := logicalSiteCount d D N) (0 : Fin (auxiliarySiteCount d D N) → Fin d)))
+              C (ManyBody.placeAlong (X := fun _ ↦ Fin d) (leafConsecutiveSites d D N i) Z) ∧
+            ManyBody.placeAlong (X := fun _ ↦ Fin d) (leafConsecutiveSites d D N i) Z ∈ unitary
               (Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ) ∧
-            embedOp (leafConsecutiveSites d D N i) Z ∈
+            ManyBody.placeAlong (X := fun _ ↦ Fin d) (leafConsecutiveSites d D N i) Z ∈
               ManyBody.supportedOperators (fun _ ↦ Fin d)
                   (intervalConsecutiveSupport d D N i.val (i.val + 1)) := by
   obtain ⟨B, hB0, hBN, P, hP, hIntervals, h0, hlast, hfull, hLeaves⟩ :=
@@ -162,16 +163,16 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_circuits_of_un
   refine ⟨B, hB0, hBN, P, hP, hIntervals, h0, hlast, hfull, ?_⟩
   intro i
   obtain ⟨Z, C, hZ, hcolumns, hC, hclean⟩ := hLeaves i
-  have hplaced := placed_leaf_circuit_isCleanImplementation (by omega : 0 < d) hN i hC hclean
+  have hplaced := placed_leaf_circuit_isCleanImplementation hN i hC hclean
   have hD : 0 < D := (cutCoefficientRank_pos (operatorCoefficientTensor U)
     (operatorCoefficientTensor_ne_zero (by omega : 0 < d) U hU) 0).trans_le (hbound 0)
   have hdim := leaf_workspace_dimension_le_of_width_le hd hD
     (cutBondRegisterWidth_le d D N i.succ) (cutBondRegisterWidth_le d D N i.castSucc)
   have hcost := Nat.mul_le_mul_left 38 (Nat.pow_le_pow_left hdim 6)
   have hpair := hplaced.1.mono (Nat.mul_le_mul_right (2 * globalSiteCount d D N) hcost)
-  exact ⟨Z, embedOp (leafCleanPlacementSites d D N hN i) C,
-    hZ, hcolumns, hpair, hpair.mem_unitary, hplaced.2,
-    embedOp_mem_unitary (leafConsecutiveSites d D N i).injective hZ,
-    leaf_embedOp_mem_supportedOperators i Z⟩
+  exact ⟨Z, ManyBody.placeAlong (X := fun _ ↦ Fin d) (leafCleanPlacementSites d D N hN i) C,
+    hZ, hcolumns, hpair, hpair.mem_unitaryGroup, hplaced.2,
+    ManyBody.placeAlong_mem_unitaryGroup _ hZ,
+    leaf_placeAlong_mem_supportedOperators i Z⟩
 
 end MPUCircuit

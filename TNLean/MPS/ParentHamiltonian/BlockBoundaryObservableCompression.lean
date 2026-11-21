@@ -41,7 +41,7 @@ theorem bulkObservable_iSup_groundSpace_compression_tendsto_zero
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
-    (α : ι) {k : ℕ} (hk : 0 < k) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (α : ι) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     (hcenter : observableInsertionExpectation (A α) (ρ α) X = 0)
     {κ : Type*} {f : Filter κ} {ℓ r : κ → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
@@ -68,13 +68,13 @@ theorem bulkObservable_iSup_groundSpace_compression_tendsto_zero
       eventually_all.2 fun hij =>
         (hP i).eventually_norm_inner_groundSpaceES_le_of_inequivalent
           (hP j) (hρ i) (hρ j) (hDistinct i j hij) hε)
-  · exact Eventually.of_forall fun n => norm_toEuclideanCLM_bulkObservable_le hk X (ℓ n) (r n)
+  · exact Eventually.of_forall fun n => norm_toEuclideanCLM_bulkObservable_le X (ℓ n) (r n)
   · intro i
     by_cases hi : i = α
     · subst i
       exact (hP α).bulkObservable_groundSpace_compression_tendsto_zero
         (hρ α) X hcenter hℓ hr
     · exact (hP i).bulkObservable_cross_groundSpace_compression_tendsto_zero_of_inequivalent
-        (hP α) (hρ i) (hρ α) (hDistinct i α hi) hk X hℓ
+        (hP α) (hρ i) (hρ α) (hDistinct i α hi) X hℓ
 
 end MPSTensor

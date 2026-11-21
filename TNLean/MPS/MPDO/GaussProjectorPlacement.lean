@@ -10,8 +10,8 @@ import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
 # Finite-chain placement of the local Gauss projector
 
 The local Gauss projector is reindexed from a two-site matter configuration
-and two gauge-leg labels into two chain-site coordinates. It is then embedded
-on the periodic window beginning at `j`. This is the position-dependent
+and two gauge-leg labels into two chain-site coordinates. It is then placed
+on the periodic window of two consecutive sites beginning at `j`. This is the position-dependent
 projector of FBC25, Equation `eq:gauge_projs` (arXiv:2502.20257,
 lines 3494--3499).
 
@@ -96,7 +96,8 @@ def placedGaussProjector
     (N : ℕ) (hN : 2 ≤ N) (j : Fin N)
     (R : G → G → Matrix.unitaryGroup (Fin 2 → Fin d) ℂ) :
     MPOTensor.ChainOperator (Fintype.card (Fin d × G)) N :=
-  MPOTensor.embedLocalOperator 2 N hN j (gaussWindowProjector d G R)
+  ManyBody.placeAlong (X := fun _ ↦ Fin (Fintype.card (Fin d × G))) (ManyBody.ringWindow hN j)
+    (gaussWindowProjector d G R)
 
 /-- The Gauss projector placed on any periodic two-site window is a star
 projection. -/
@@ -104,7 +105,8 @@ theorem isStarProjection_placedGaussProjector
     (N : ℕ) (hN : 2 ≤ N) (j : Fin N)
     (R : G → G → Matrix.unitaryGroup (Fin 2 → Fin d) ℂ) :
     IsStarProjection (placedGaussProjector d G N hN j R) :=
-  MPOTensor.embedLocalOperator_isStarProjection 2 N hN j
-    (isStarProjection_gaussWindowProjector d G R)
+  (isStarProjection_gaussWindowProjector d G R).map
+    (ManyBody.placeAlongHom (X := fun _ ↦ Fin (Fintype.card (Fin d × G)))
+      (ManyBody.ringWindow hN j))
 
 end MPOTensor

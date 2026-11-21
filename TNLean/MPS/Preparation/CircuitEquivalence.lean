@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.UnitaryMulVecInner
 import TNLean.MPS.Preparation.StateApproximationError
 import TNLean.MPS.Preparation.LogDepthPreparation
-import TNLean.Circuit.ProductStateCircuit
+import QICLean.Circuit.Model.ProductPreparation
 
 /-!
 # Normal MPS are transformed into each other by circuits of depth `O(log(N/ε))`
@@ -26,10 +26,10 @@ Write `|φ_N(A)⟩` for the periodic state of `A` and `|φ_N(A)⟩/‖φ_N(A)‖
 when it is nonzero. If `U_A |0⋯0⟩` approximates `|φ_N(A)⟩/‖φ_N(A)‖` and `U_B |0⋯0⟩` approximates
 `|φ_N(B)⟩/‖φ_N(B)‖`, up to scalars, then `U_B U_A†` maps the first normalized state close to the
 second. The adjoint of a local circuit is a local
-circuit of the same depth (`QuantumCircuit.IsBondCircuitOfDepth.star`), depths add in series
-(`QuantumCircuit.IsBondCircuitOfDepth.mul`), and the two product vectors are replaced by
-`|0⋯0⟩` with two more layers each
-(`QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero`).
+circuit of the same depth (`QuantumCircuit.IsUnitaryCircuit.conjTranspose`), depths add in series
+(`QuantumCircuit.IsUnitaryCircuit.mul`), and the two product vectors are replaced by `|0⋯0⟩` at
+no cost in depth, the one-site unitaries forming a layer of depth `0`
+(`QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_prod_single`).
 
 The error is measured as in eq. (1), by `ε(ψ, φ) = 1 - |⟨ψ|φ⟩|`. It is not a metric, but it
 satisfies `ε(x, z) ≤ 2 (ε(x, y) + ε(y, z))` on unit vectors
@@ -38,12 +38,12 @@ from `x` to the closest unit multiple of `y`.
 
 ## Main results
 
-* `MPSPreparation.exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero`: for normal tensors
+* `MPSPreparation.exists_isUnitaryCircuit_le_log_of_mpvState_ne_zero`: for normal tensors
   `A` and `B` with the same physical dimension there is `c`, depending only on `A` and `B`, such
   that for `N ≥ 2`, `0 < ε ≤ 1`, `|φ_N(A)⟩ ≠ 0` and `|φ_N(B)⟩ ≠ 0`, a local circuit of depth at
   most `c log(N/ε)` maps `|φ_N(A)⟩/‖φ_N(A)‖` to a vector `ψ` with
   `1 - |⟨ψ|φ_N(B)⟩|/‖φ_N(B)‖ ≤ ε`.
-* `MPSPreparation.exists_isLocalCircuitOfDepth_le_log`: the same for every `N ≥ N₀`, without the
+* `MPSPreparation.exists_isUnitaryCircuit_le_log`: the same for every `N ≥ N₀`, without the
   conditions `|φ_N(A)⟩ ≠ 0` and `|φ_N(B)⟩ ≠ 0`.
 -/
 
@@ -72,11 +72,11 @@ The circuit is `U_B U_A†`, where `U_A |0⋯0⟩` and `U_B |0⋯0⟩` prepare t
 nonzero, as in that theorem; see the Local fix (nonvanishing periodic state) of
 `TNLean.MPS.Preparation.LogDepthPreparation`, documented in
 `docs/paper-gaps/mswc24_depth_upper_bound_nonzero_state.tex`. -/
-theorem exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero {D D' : ℕ} (A : MPSTensor d D)
+theorem exists_isUnitaryCircuit_le_log_of_mpvState_ne_zero {D D' : ℕ} (A : MPSTensor d D)
     (B : MPSTensor d D') (hA : Kraus.IsNormal A) (hB : Kraus.IsNormal B) :
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N → mpvState A N ≠ 0 →
       mpvState B N ≠ 0 → ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
-        IsLocalCircuitOfDepth U T ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
+        IsUnitaryCircuit (Geometry.ring N) T U ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
         ∃ ψ : MPVSpace d N, (fun s => ψ s) = U *ᵥ (fun s => normalizedMPVState A N s) ∧
           1 - ‖⟪ψ, normalizedMPVState B N⟫_ℂ‖ ≤ ε := by
   rcases Nat.eq_zero_or_pos d with rfl | hd
@@ -96,17 +96,17 @@ theorem exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero {D D' : ℕ} (A 
     rw [this, norm_zero] at hv
     exact zero_ne_one hv
   obtain ⟨UA, hUA, a, ha⟩ :=
-    hpA.exists_eq_smul_mulVec_productVector_single_zero hd (hne ψA hψA)
+    hpA.exists_eq_smul_mulVec_prod_single (fun _ => ⟨0, hd⟩) (hne ψA hψA)
   obtain ⟨UB, hUB, b, hb⟩ :=
-    hpB.exists_eq_smul_mulVec_productVector_single_zero hd (hne ψB hψB)
+    hpB.exists_eq_smul_mulVec_prod_single (fun _ => ⟨0, hd⟩) (hne ψB hψB)
   have hb0 : b ≠ 0 := by
     rintro rfl
     exact hne ψB hψB (by rw [hb, zero_smul])
   set U := UB * star UA
-  have hU : IsLocalCircuitOfDepth U (TA + 2 + (TB + 2)) := hUA.star.mul hUB
-  have hUu := hU.mem_unitary
+  have hU : IsUnitaryCircuit (Geometry.ring N) (TB + TA) U := hUB.mul hUA.conjTranspose
+  have hUu := hU.mem_unitaryGroup
   -- `U` maps `ψA` to the multiple `(a / b) ψB` of `ψB`.
-  have hUA' : star UA * UA = 1 := Unitary.star_mul_self_of_mem hUA.mem_unitary
+  have hUA' : star UA * UA = 1 := Unitary.star_mul_self_of_mem hUA.mem_unitaryGroup
   have hUψ : U *ᵥ (fun s => ψA s) = fun s => ((a / b) • ψB) s := by
     have : (fun s => ((a / b) • ψB) s) = (a / b) • fun s => ψB s := rfl
     rw [this, hb, ha, mulVec_smul, mulVec_mulVec, Matrix.mul_assoc, hUA', Matrix.mul_one,
@@ -119,7 +119,7 @@ theorem exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero {D D' : ℕ} (A 
   have hψ : (fun s => ψ s) = U *ᵥ fun s => φA s := rfl
   have hχ := Matrix.norm_eq_of_mulVec_eq hUu hUψ.symm
   have hκ : ‖(a / b) • ψB‖ = 1 := hχ.trans hψA
-  refine ⟨U, TA + 2 + (TB + 2), hU, ?_, ψ, hψ, ?_⟩
+  refine ⟨U, TB + TA, hU, ?_, ψ, hψ, ?_⟩
   · -- `log(4N/ε) ≤ 3 log(N/ε)` and `4 ≤ (4 / log 2) log(N/ε)`.
     have hN2 : (2 : ℝ) ≤ N := by exact_mod_cast hN
     have hlog : Real.log 2 ≤ Real.log (N / ε) :=
@@ -169,16 +169,16 @@ and `B`, such that for every `N ≥ N₀` and `0 < ε ≤ 1` some local circuit 
 `c log(N/ε)` maps the normalized state `|φ_N(A)⟩/‖φ_N(A)‖` to a vector `ψ` with
 `1 - |⟨ψ|φ_N(B)⟩|/‖φ_N(B)‖ ≤ ε`.
 
-This is `exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero` together with
+This is `exists_isUnitaryCircuit_le_log_of_mpvState_ne_zero` together with
 `exists_mpvState_ne_zero_of_le`, as `exists_isPreparedInDepth_le_log` is for eq. (1). -/
-theorem exists_isLocalCircuitOfDepth_le_log {D D' : ℕ} [NeZero D] [NeZero D']
+theorem exists_isUnitaryCircuit_le_log {D D' : ℕ} [NeZero D] [NeZero D']
     (A : MPSTensor d D) (B : MPSTensor d D') (hA : Kraus.IsNormal A) (hB : Kraus.IsNormal B) :
     ∃ (c : ℝ) (N₀ : ℕ), ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
-        IsLocalCircuitOfDepth U T ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
+        IsUnitaryCircuit (Geometry.ring N) T U ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
         ∃ ψ : MPVSpace d N, (fun s => ψ s) = U *ᵥ (fun s => normalizedMPVState A N s) ∧
           1 - ‖⟪ψ, normalizedMPVState B N⟫_ℂ‖ ≤ ε := by
-  obtain ⟨c, hc⟩ := exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero A B hA hB
+  obtain ⟨c, hc⟩ := exists_isUnitaryCircuit_le_log_of_mpvState_ne_zero A B hA hB
   obtain ⟨NA, hNA⟩ := exists_mpvState_ne_zero_of_le A hA
   obtain ⟨NB, hNB⟩ := exists_mpvState_ne_zero_of_le B hB
   exact ⟨c, max (max NA NB) 2, fun ε hε hε1 N _ hN =>

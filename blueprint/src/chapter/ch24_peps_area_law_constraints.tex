@@ -122,8 +122,8 @@ at most $\mu$ labels share any anchor.
 \begin{lemma}[Volume-free truncation error]
     \label{lem:al_truncation_error}
     \lean{TNLean.PEPS.AreaLaw.exists_one_add_pow_mul_exp_neg_rpow_le,
-        TNLean.PEPS.AreaLaw.exists_sum_shell_le, TNLean.PEPS.AreaLaw.setDist,
-        TNLean.PEPS.AreaLaw.exists_mem_edist_eq_setDist,
+        TNLean.PEPS.AreaLaw.exists_sum_shell_le, ManyBody.setEdist,
+        ManyBody.exists_mem_edist_eq_setEdist,
         TNLean.PEPS.AreaLaw.truncationRadius, TNLean.PEPS.AreaLaw.truncatedConstraint,
         TNLean.PEPS.AreaLaw.card_label_shell_le,
         TNLean.PEPS.AreaLaw.norm_sum_truncatedConstraint_sub_le}
@@ -325,16 +325,17 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
 
 \begin{lemma}[Crossing count and cut parameter]
     \label{thm:al_crossing_budget}
-    \lean{TNLean.PEPS.AreaLaw.cutEdges, TNLean.PEPS.AreaLaw.componentFinset,
-        TNLean.PEPS.AreaLaw.designatedSupport, TNLean.PEPS.AreaLaw.crossingLabels,
-        TNLean.PEPS.AreaLaw.exists_cut_edge_near,
-        TNLean.PEPS.AreaLaw.truncationRadius_eq_of_mem_crossingLabels,
-        TNLean.PEPS.AreaLaw.card_crossingLabels_le, TNLean.PEPS.AreaLaw.cutBudget,
-        TNLean.PEPS.AreaLaw.log_dim_le_of_mem_crossingLabels,
-        TNLean.PEPS.AreaLaw.cutBudget_le, TNLean.PEPS.AreaLaw.le_of_cutBudget_le,
+    \lean{SimpleGraph.interedges, TNLean.PEPS.AreaLaw.componentFinset,
+        TNLean.PEPS.AreaLaw.designatedSupport, ManyBody.crossingTerms,
+        ManyBody.exists_edgeBoundary_near,
+        TNLean.PEPS.AreaLaw.truncationRadius_eq_of_mem_crossingTerms,
+        TNLean.PEPS.AreaLaw.card_crossingTerms_designatedSupport_le, ManyBody.cutLogBudget,
+        TNLean.PEPS.AreaLaw.log_dim_le_of_mem_crossingTerms,
+        TNLean.PEPS.AreaLaw.cutLogBudget_designatedSupport_le,
+        TNLean.PEPS.AreaLaw.le_of_cutBudget_le,
         TNLean.PEPS.AreaLaw.truncatedConstraint_empty,
-        TNLean.PEPS.AreaLaw.crossingLabels_empty,
-        TNLean.PEPS.AreaLaw.truncatedConstraint_of_setDist_eq_top,
+        ManyBody.crossingTerms_empty,
+        TNLean.PEPS.AreaLaw.truncatedConstraint_of_setEdist_eq_top,
         TNLean.PEPS.AreaLaw.truncatedConstraint_mem_supportedOperators}
     \leanok
     \uses{thm:al_truncation}
@@ -360,13 +361,13 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
 % These identities do not assert the lattice-specialized budget producer.
 \begin{lemma}[Cut parameter and complementary cuts]
     \label{thm:al_exact_cut_budget}
-    \lean{TNLean.PEPS.AreaLaw.cutBudget_eq_cutLogBudget,
-        TNLean.PEPS.AreaLaw.crossingLabels_compl,
-        TNLean.PEPS.AreaLaw.cutBudget_compl,
-        TNLean.PEPS.AreaLaw.one_le_cutBudget,
-        TNLean.PEPS.AreaLaw.crossingLabels_univ,
-        TNLean.PEPS.AreaLaw.cutBudget_empty,
-        TNLean.PEPS.AreaLaw.cutBudget_univ}
+    \lean{Entropy.supportDim_const,
+        ManyBody.crossingTerms_compl,
+        ManyBody.cutLogBudget_compl,
+        Entropy.one_le_cutLogBudget,
+        ManyBody.crossingTerms_univ,
+        ManyBody.cutLogBudget_empty,
+        ManyBody.cutLogBudget_univ}
     \leanok
     \uses{thm:al_crossing_budget}
     For any finite graph on $V$, finite label set $I$ with anchors $a_i\in V$,
@@ -410,7 +411,7 @@ only on the parameters named below.
     \label{thm:al_lattice_counts}
     \lean{TNLean.PEPS.AreaLaw.card_graphBall_domainGraph_le,
         TNLean.PEPS.AreaLaw.card_anchor_fiber_le,
-        TNLean.PEPS.AreaLaw.card_cutEdges_le_card_edgeBoundary}
+        TNLean.PEPS.AreaLaw.card_interedges_compl_le_card_edgeBoundary}
     \leanok
     \uses{def:area_law_hamiltonian, thm:area_diamond_count, thm:area_diamond_budget,
         lem:area_domain_graph_counts, thm:area_law_crossing_supports}

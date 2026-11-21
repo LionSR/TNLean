@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.ComplexSqrt
-import TNLean.Circuit.RingSeparation
+import QICLean.Circuit.Model.UnitaryRing
+import TNLean.Circuit.ExpectationBounds
 import TNLean.Circuit.WeightedGHZ
 import TNLean.MPS.Preparation.StateApproximationError
 
@@ -35,16 +36,16 @@ to `(1/2,1/2)` on a ring with `N > 4T + 4` at overlap error smaller than `9/5000
 The observable obstruction concerns selected vectors, rather than their common groundspace. -/
 theorem ghz_sector_weight_infidelity_lower_bound {T : ℕ}
     {U : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ}
-    (hU : IsLocalCircuitOfDepth U T) (hN : 4 * T + 4 < N) :
+    (hU : IsUnitaryCircuit (Geometry.ring N) T U) (hN : 4 * T + 4 < N) :
     (9 : ℝ) / 5000 ≤ 1 - ‖⟪
-      (WithLp.toLp 2 (U *ᵥ ghzState (M := N)
+      (WithLp.toLp 2 (U *ᵥ ghzState (ι := Fin N)
         ![2 / (Real.sqrt 5 : ℂ), 1 / (Real.sqrt 5 : ℂ)]) :
           EuclideanSpace ℂ (Fin N → Fin 2)),
-      WithLp.toLp 2 (ghzState (M := N) ![Complex.invSqrtTwo, Complex.invSqrtTwo])⟫_ℂ‖ := by
+      WithLp.toLp 2 (ghzState (ι := Fin N) ![Complex.invSqrtTwo, Complex.invSqrtTwo])⟫_ℂ‖ := by
   let a : ℂ := 2 / (Real.sqrt 5 : ℂ)
   let b : ℂ := 1 / (Real.sqrt 5 : ℂ)
-  let ψ := U *ᵥ ghzState (M := N) ![a, b]
-  let φ := ghzState (M := N) ![Complex.invSqrtTwo, Complex.invSqrtTwo]
+  let ψ := U *ᵥ ghzState (ι := Fin N) ![a, b]
+  let φ := ghzState (ι := Fin N) ![Complex.invSqrtTwo, Complex.invSqrtTwo]
   have ha : ‖a‖ ^ 2 = (4 : ℝ) / 5 := by
     norm_num [a, norm_div, Complex.norm_real, Real.norm_eq_abs,
       abs_of_nonneg (Real.sqrt_nonneg _), div_pow, Real.sq_sqrt]
@@ -59,10 +60,19 @@ theorem ghz_sector_weight_infidelity_lower_bound {T : ℕ}
     simp only [Complex.star_invSqrtTwo, Complex.invSqrtTwo_mul_self]
     norm_num
   have hψ : ‖(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Fin N → Fin 2))‖ = 1 :=
-    (Matrix.norm_eq_of_mulVec_eq hU.mem_unitary rfl).trans (norm_ghzState_two hab)
+    (Matrix.norm_eq_of_mulVec_eq hU.mem_unitaryGroup rfl).trans (norm_ghzState_two hab)
   have hφ : ‖(WithLp.toLp 2 φ : EuclideanSpace ℂ (Fin N → Fin 2))‖ = 1 :=
     norm_ghzState_two hbal
-  obtain ⟨i, j, k, hsep, hk⟩ := exists_separated_singletons_notMem_neighbourhood hN
+  obtain ⟨i, j, k, hsep, hk⟩ := ManyBody.exists_isGraphSeparated_cycleGraph_singletons_notMem hN
+  have hRR' : Disjoint ((Geometry.ring N).neighbourhood^[T] {i})
+      ((Geometry.ring N).neighbourhood^[T] {j}) := by
+    rw [Geometry.iterate_neighbourhood_ring, Geometry.iterate_neighbourhood_ring]
+    exact hsep.disjoint_graphNeighborhood
+  have hcover : ∃ k, k ∉ (Geometry.ring N).neighbourhood^[T] {i} ∪
+      (Geometry.ring N).neighbourhood^[T] {j} := by
+    refine ⟨k, ?_⟩
+    rw [Geometry.iterate_neighbourhood_ring, Geometry.iterate_neighbourhood_ring]
+    exact hk
   let Z (l : Fin N) : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ :=
     diagonal (fun σ => if σ l = 0 then 1 else -1)
   have hZu (l : Fin N) : Z l ∈ unitary _ := by
@@ -73,21 +83,23 @@ theorem ghz_sector_weight_infidelity_lower_bound {T : ℕ}
     funext σ
     split_ifs with h <;> simp [h]
   have hZs (l : Fin N) : Z l ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) {l} :=
-    diagonal_comp_eval_mem_supportedOperators l (fun x => if x = 0 then 1 else -1)
-  have hcov := norm_covariance_mulVec_ghzState_two_le hU hsep ⟨k, hk⟩
+    ManyBody.diagonal_mem_supportedOperators fun σ τ h ↦ by
+      simp only [h l (Finset.mem_singleton_self l)]
+  have hcov := norm_covariance_mulVec_ghzState_two_le Geometry.ring_cost_pos hU hRR' hcover
     (hZs i) (hZs j) (hZu i) (hZu j) hab
-  rw [ha, hb] at hcov
-  have hcov' : ‖expect ψ (Z i * Z j) - expect ψ (Z i) * expect ψ (Z j)‖ ≤ 16 / 25 := by
-    convert hcov using 1; norm_num
+  have hcov' : ‖expect ψ (Z i * Z j) - expect ψ (Z i) * expect ψ (Z j)‖ ≤ 16 / 25 :=
+    hcov.trans_eq (by rw [ha, hb]; norm_num)
   have hZφ (l : Fin N) : expect φ (Z l) = 0 := by
-    rw [show φ = ghzState (M := N) ![Complex.invSqrtTwo, Complex.invSqrtTwo] from rfl,
-      show Z l = diagonal (fun σ => if σ l = 0 then 1 else -1) from rfl,
-      expect_ghzState_two_diagonal]
+    change star (ghzState (ι := Fin N) ![Complex.invSqrtTwo, Complex.invSqrtTwo]) ⬝ᵥ
+      (diagonal (fun σ : Fin N → Fin 2 => if σ l = 0 then (1 : ℂ) else -1) *ᵥ
+        ghzState (ι := Fin N) ![Complex.invSqrtTwo, Complex.invSqrtTwo]) = 0
+    rw [dotProduct_ghzState_diagonal_mulVec, Fin.sum_univ_two]
     simp [Complex.invSqrtTwo_mul_self]
   have hZZφ : expect φ (Z i * Z j) = 1 := by
-    change expect (ghzState (M := N) ![Complex.invSqrtTwo, Complex.invSqrtTwo])
-      (diagonal _ * diagonal _) = 1
-    rw [diagonal_mul_diagonal, expect_ghzState_two_diagonal]
+    change star (ghzState (ι := Fin N) ![Complex.invSqrtTwo, Complex.invSqrtTwo]) ⬝ᵥ
+      ((diagonal _ * diagonal _) *ᵥ
+        ghzState (ι := Fin N) ![Complex.invSqrtTwo, Complex.invSqrtTwo]) = 1
+    rw [diagonal_mul_diagonal, dotProduct_ghzState_diagonal_mulVec, Fin.sum_univ_two]
     norm_num [Complex.invSqrtTwo_mul_self]
   obtain ⟨c, hc, heq⟩ := exists_norm_sub_smul_sq_eq hψ hφ
   have hcφ : ‖(WithLp.toLp 2 (c • φ) : EuclideanSpace ℂ (Fin N → Fin 2))‖ = 1 := by

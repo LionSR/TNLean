@@ -175,7 +175,7 @@ designated support coincides with its radius-$r_0$ ball, so the same expected
 lower bound holds for designated-support incidences.\footnote{Designated-support
     sampling:
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.good_designated_split_sampling_domainGraph},
-    using \leanid{TNLean.PEPS.AreaLaw.truncationRadius_eq_of_mem_crossingLabels}.}
+    using \leanid{TNLean.PEPS.AreaLaw.truncationRadius_eq_of_mem_crossingTerms}.}
 Moreover, the assigned-site lead and consumed-row coverage confine each
 receiving--middle incidence (which contains the terminal metric split event of
 \path{06-transport.tex}, lines~336--352) to an anchor interval of width
@@ -374,7 +374,7 @@ and the marginal log-moment bound holds on $|u|\le c_0/\sqrt{\mathcal B}$ with
 $C_0=512\mathrm e(2/g)$ and $c_0=[32\sqrt{1+2/g}]^{-1}$ while retaining
 (\ref{eq:arealaw2d_scanner_inputs_marginal_closeness}).\footnote{Truncated
     marginal moment and tail declarations:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_reducedState_moment_tail_bounds},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_regionState_moment_tail_bounds},
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_statusMarginal_moment_bounds},
     and \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_source_statusMarginal_moment_bounds}.}
 
@@ -396,7 +396,7 @@ $S_0=\{x\in A:\operatorname{dist}_\infty(x,T)\le L\}$ satisfy\footnote{Target
 \end{align}
 Because $|\partial_\Lambda X|\le 4n$, the crossing capacity $\mathcal B_X$ of
 $X$ has no factor of $D$ and satisfies\footnote{Target crossing capacity:
-    \leanid{TNLean.PEPS.AreaLaw.one_le_cutBudget} and
+    \leanid{Entropy.one_le_cutLogBudget} and
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_typical_window}.}
 \begin{align}
     1\le\mathcal B_X\le C_Bn(\log n)^{12}.

@@ -40,9 +40,9 @@ of error at most $\varepsilon$ in depth at most $c\log(N/\varepsilon)$, for
 $N\geq2$, $0<\varepsilon\leq1$, and block lengths $q$ with
 $a\log(N/\varepsilon)+b'\leq q\leq2(a\log(N/\varepsilon)+b')$ under three
 restrictions.\footnote{Formal declarations:
-    \leanid{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum}
+    \leanid{MPSPreparation.exists_isOneRoundConversion_le_log_repeatedBlockSum}
     and
-    \leanid{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector}
+    \leanid{MPSPreparation.exists_isOneRoundConversion_copyApproxVector}
     in \doclink{TNLean/MPS/Preparation/NonNormalMeasurementPreparation}.}
 \begin{enumerate}
     \item The $q$-site states of distinct blocks are orthogonal. Without this the
@@ -64,9 +64,9 @@ restrictions.\footnote{Formal declarations:
 \paragraph{Overlapping blocks and every chain length.}
 The second formal statement removes the three restrictions above.\footnote{Formal
     declarations:
-    \leanid{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero}
+    \leanid{MPSPreparation.exists_isOneRoundConversion_le_log_of_mpvState_ne_zero}
     and
-    \leanid{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log}
+    \leanid{MPSPreparation.exists_isOneRoundConversion_le_log}
     in \doclink{TNLean/MPS/Preparation/OverlappingMeasurementPreparation}.}
 For $A$ as above, with every fixed point positive definite and the mixed
 transfer maps of distinct blocks of spectral radius below one, there is $c$
@@ -131,13 +131,13 @@ The one-round construction uses SWAP routing and has depth $O(q)$. With
 additional measurement rounds the GHZ-type state is prepared in constant
 depth on the original chain itself, for arbitrary cyclic block lengths
 $\ell_k\ge3r_1$ and $r_1\ge2$.\footnote{Formal declarations:
-    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_windowGHZState}
+    \leanid{MPSPreparation.exists_isMeasurementConversion_windowGHZState}
     and \leanid{MPSPreparation.exists_rounds_sparseBlockShift}
     in \doclink{TNLean/MPS/Preparation/SparseWindowGHZ}.}
 For an odd block, a unitary on its first $r_1+1$ sites moves the first
 register one site to the right, leaving an even scratch gap. The two
 registers are then joined by a teleportation-assisted controlled subtraction
-of depth $4r_1+K+2$, independent of their separation, and the padding rotation
+of depth at most $4r_1+K$, independent of their separation, and the padding rotation
 is undone. All stretches lie inside disjoint blocks, so they run in parallel.
 The same construction covers the singleton cyclic ring and arbitrary parity
 patterns. The original cyclic measurement and corrections finish the GHZ
@@ -171,9 +171,9 @@ The preparation constants and $p$ are independent of $M$ and the accuracy.
 The empty family and vanishing individual power sums are allowed.\footnote{
     Declarations:
     \leanid{MPSTensor.exists_blockTensor_normal_sectors_fixedPoints},
-    \leanid{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_blockTensor_le_log},
+    \leanid{MPSPreparation.exists_isOneRoundConversion_blockTensor_le_log},
     and
-    \leanid{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_blockTensor_le_log_log}.}
+    \leanid{MPSPreparation.exists_isMeasurementConversion_blockTensor_le_log_log}.}
 
 \paragraph{Remaining scope restriction.}
 The circuits act on $M$ grouped sites of dimension $d^p$. To obtain the source

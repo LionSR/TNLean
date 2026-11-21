@@ -91,12 +91,12 @@ theorem exists_fixed_bandwidth_five_region_canonical_low_energy_family
       ‖B (ell : ℝ) e K‖ ≤ 7 * (ell : ℝ) ∧
       let J := interval L (a + ell) (b + ell + 1)
       let beta := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
       ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ), N ≤ D ^ 2 ∧
         ∀ eta : ℝ, 6 * w ≤ eta → eta ≤ etaLD →
@@ -115,21 +115,21 @@ theorem exists_fixed_bandwidth_five_region_canonical_low_energy_family
           (minEigenvalue hRaw + eta - 3 * w)) ∧
       (D : ℝ) ^ 12 * Delta ≤ 1 / 100000 ∧
         ∃ p : Polynomial ℝ, p.natDegree = ell ^ 2 ∧ p.eval (E0 + eta - 2 * w) = 1 ∧
-          ∃ M : Fin N → Matrix (↥(Jᶜ) → Fin q) (↥(Jᶜ) → Fin q) ℂ,
+          ∃ M : Fin N → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ,
             Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
                 Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
                   (Polynomial.aeval (B (ell : ℝ) e K) (p.map (algebraMap ℝ ℂ))) ∘L
                 Tm.symm.toContinuousLinearEquiv.toContinuousLinearMap =
               ∑ j, TensorProduct.mapL
                 (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j))
-                (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := ↥(Jᶜ) → Fin q) (M j)) ∧
+                (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := {v // v ∉ J} → Fin q) (M j)) ∧
             ∀ (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (delta : ℝ),
-              Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) delta S
+              Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) delta S
                 (higher.map Tm.toLinearEquiv.toLinearMap) → delta < 1 →
               let grow := ⨆ j : Fin N, S.map
                 (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j)).toLinearMap
               Module.finrank ℂ grow ≤ N * Module.finrank ℂ S ∧
-                Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+                Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q))
                   (Delta / (1 - delta) ^ 2) grow (lower.map Tm.toLinearEquiv.toLinearMap) := by
   have :=
     exists_fixed_bandwidth_five_region_low_energy_family etaLD hLD

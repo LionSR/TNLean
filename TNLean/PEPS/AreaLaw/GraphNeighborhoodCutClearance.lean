@@ -24,6 +24,9 @@ from the earlier pieces are further geometric inputs.
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph graphNeighborhood ambientDilation mem_ambientDilation_iff
+  exists_edgeBoundary_of_walk)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- A graph neighborhood of the part of an ambient target collar inside a cut
@@ -40,11 +43,11 @@ theorem graphNeighborhood_subset_of_cut_clearance
     (Λ T : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (L R : ℕ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
       ((L + R : ℕ) : ℤ) < Scan.ambientSupDistance t z) :
-    graphNeighborhood Λ R (A.filter fun x ↦ x.val ∈ ambientDilation T L) ⊆
+    graphNeighborhood (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T L) R ⊆
       A.filter (fun x ↦ x.val ∈ ambientDilation T (L + R)) := by
   classical
   intro x hx
-  obtain ⟨y, hy, p, hp⟩ := (Finset.mem_filter.mp hx).2
+  obtain ⟨y, hy, p, hp⟩ := ManyBody.mem_graphNeighborhood_iff_exists_walk.mp hx
   rcases Finset.mem_filter.mp hy with ⟨hyA, hyDil⟩
   have hT : T.Nonempty :=
     let ⟨t, ht, _⟩ := Finset.mem_biUnion.mp hyDil
@@ -89,7 +92,8 @@ theorem exterior_union_subset_graphNeighborhood_compl_of_clearance
     (hremote : ∀ t ∈ T, ∀ x ∈ J,
       ((L + R : ℕ) : ℤ) < Scan.ambientSupDistance t x.val) :
     Aᶜ ∪ J ⊆
-      (graphNeighborhood Λ R (A.filter fun x ↦ x.val ∈ ambientDilation T L))ᶜ := by
+      (graphNeighborhood (planeDomainGraph Λ)
+        (A.filter fun x ↦ x.val ∈ ambientDilation T L) R)ᶜ := by
   have hN := graphNeighborhood_subset_of_cut_clearance Λ T A L R hcut
   simp_all only [Finset.subset_iff, Finset.mem_compl, Finset.mem_union, Finset.mem_filter,
     mem_ambientDilation_iff, Scan.ambientSupDistance, lt_max_iff, lt_abs]

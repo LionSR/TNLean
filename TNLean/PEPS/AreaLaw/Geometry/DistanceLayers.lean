@@ -32,6 +32,7 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
 open TNLean.Lattice
+open ManyBody (ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 private theorem interval_dist_le {o r u v C x y : ℝ} (hr : 0 ≤ r)

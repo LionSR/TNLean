@@ -25,16 +25,18 @@ namespace MPSTensor
 /-- The periodic two-site parent of a one-site injective tensor has the
 periodic MPS line as its kernel. Source: arXiv:1010.3732, Appendix A,
 single-block parent-Hamiltonian argument. -/
-theorem interactionHamiltonian_parent_groundSpace_eq_span_mpv
+theorem hamiltonian_translationInvariant_parent_groundSpace_eq_span_mpv
     {d D N : ℕ} [NeZero D] (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (hN : 2 ≤ N) :
-    LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
-      (LinearMap.toMatrix' (parentInteraction A 2)) hN)) =
+    LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hN
+      (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian) =
       Submodule.span ℂ
         {(WithLp.linearEquiv 2 ℂ ((Fin N → Fin d) → ℂ)).symm (mpv A)} := by
-  rw [interactionHamiltonian,
-    ← parentHamiltonianES_eq_toEuclideanLin_sum_embedLocalOperator A hN,
-    ker_parentHamiltonianES_two_eq_range_periodicMpvLineMap A hA hN]
+  have hH : parentHamiltonianES A 2 N = Matrix.toEuclideanLin
+      (ManyBody.Interaction.translationInvariant hN
+        (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian :=
+    parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow A hN
+  rw [← hH, ker_parentHamiltonianES_two_eq_range_periodicMpvLineMap A hA hN]
   simpa only [periodicMpvLineMap] using
     ContinuousLinearMap.range_smulRight_apply
       (by norm_num : (1 : ℂ →L[ℂ] ℂ) ≠ 0)
@@ -64,11 +66,11 @@ noncomputable def exactMPSGroundPath_of_canonicalInjective
     exact fun hz => hσ (congrFun hz σ)
   ground_line γ hγ N hN := by
     rw [hP γ hγ]
-    have hSpec := interactionHamiltonian_parent_spectrum_gap (A γ) (hInj γ hγ) hN
+    have hSpec := hamiltonian_translationInvariant_parent_spectrum_gap (A γ) (hInj γ hγ) hN
       (δ := 0) (fun v _ => by
         simpa only [zero_mul] using norm_nonneg (parentHamiltonianES (A γ) 2 N v))
     refine ⟨0, hSpec.1, fun z hz => (hSpec.2 z hz).1, ?_⟩
     simpa only [Complex.ofReal_zero, zero_smul, sub_zero] using
-      interactionHamiltonian_parent_groundSpace_eq_span_mpv (A γ) (hInj γ hγ) hN
+      hamiltonian_translationInvariant_parent_groundSpace_eq_span_mpv (A γ) (hInj γ hγ) hN
 
 end MPSTensor

@@ -40,7 +40,8 @@ tensors. Different interaction terms may act on different regions.
         TNLean.PEPS.place_eq_regionConfigEquiv,
         TNLean.PEPS.regionSliceMap,
         TNLean.PEPS.regionParentGroundSpace,
-        TNLean.PEPS.regionParentHamiltonian}
+        ManyBody.Interaction.ofPlace,
+        ManyBody.Interaction.hamiltonian}
     \leanok
     \uses{def:peps_region_parent_interaction, def:peps_regional_operator_extension}
     Let $(R_i)_{i\in I}$ be a finite family of regions, and let $h_i$
@@ -67,11 +68,10 @@ tensors. Different interaction terms may act on different regions.
     \lean{ManyBody.posSemidef_place,
         TNLean.PEPS.place_mulVec_assemble,
         TNLean.PEPS.place_mulVec_eq_zero_iff,
-        TNLean.PEPS.regionParentHamiltonian_posSemidef,
-        TNLean.PEPS.regionParentHamiltonian_mulVec_eq_zero_iff,
+        ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff,
         TNLean.PEPS.ker_regionParentHamiltonian}
     \leanok
-    \uses{def:peps_region_parent_hamiltonian}
+    \uses{def:peps_region_parent_hamiltonian, thm:spt_periodic_hamiltonian_order}
     The parent Hamiltonian is positive semidefinite and satisfies
     \begin{align}
         \ker H & =\bigcap_{i\in I}\ker\widetilde h_i=\mathcal K.

@@ -55,27 +55,27 @@ theorem exists_threeSplit_two_window_factors
     ∃ (HL : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → Matrix (T → Fin q) (T → Fin q) ℂ)
       (HM : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → Matrix (E → Fin q) (E → Fin q) ℂ)
       (HR : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
-        Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)
+        Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)
       (UL : Matrix ((T → Fin q) × (E → Fin q))
         ((T → Fin q) × (E → Fin q)) ℂ)
-      (VR : Matrix ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-        ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ),
+      (VR : Matrix ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+        ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ),
       (∀ r, r ≠ Sum.inl (Sum.inl p) → r ≠ Sum.inl (Sum.inr s) →
         (F r).submatrix g.symm g.symm =
           (HL r ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
-              (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
+              (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
             ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ HM r) ⊗ₖ
-              (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
+              (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
             (1 : Matrix ((T → Fin q) × (E → Fin q))
               ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ HR r) ∧
       (F (Sum.inl (Sum.inl p))).submatrix g.symm g.symm =
-        UL ⊗ₖ (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) ∧
+        UL ⊗ₖ (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) ∧
       (F (Sum.inl (Sum.inr s))).submatrix g.symm g.symm =
         ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ VR).reindex
           (Equiv.prodAssoc (T → Fin q) (E → Fin q)
-            (↥(T ∪ E)ᶜ → Fin q)).symm
+            ({v // v ∉ T ∪ E} → Fin q)).symm
           (Equiv.prodAssoc (T → Fin q) (E → Fin q)
-            (↥(T ∪ E)ᶜ → Fin q)).symm ∧
+            ({v // v ∉ T ∪ E} → Fin q)).symm ∧
       operatorSchmidtRank UL ≤ q ^ 2 ∧ operatorSchmidtRank VR ≤ q ^ 2 := by
   classical
   intro T E hTE g
@@ -148,13 +148,13 @@ theorem exists_threeSplit_two_window_factors
   have hlocal : ∀ r : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3),
       ∃ (B : Matrix (T → Fin q) (T → Fin q) ℂ)
         (C : Matrix (E → Fin q) (E → Fin q) ℂ)
-        (D : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ),
+        (D : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ),
         r ≠ Sum.inl (Sum.inl p) → r ≠ Sum.inl (Sum.inr s) →
           (F r).submatrix g.symm g.symm =
             (B ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
-                (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
+                (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
               ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ C) ⊗ₖ
-                (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
+                (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
               (1 : Matrix ((T → Fin q) × (E → Fin q))
                 ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ D := by
     intro r

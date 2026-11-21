@@ -108,7 +108,7 @@ end Geometry.OrderedTwoFamilyPartition
 
 /-- The physical finite-domain specialization of OpenAI's Lemma 11.1 using the
 model's existing regional entropy. -/
-theorem regionalEntropy_le_residual_add_half_sum
+theorem regionEntropy_le_residual_add_half_sum
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     (A : Finset (Site Λ)) (P : Geometry.OrderedTwoFamilyPartition A)
     (ε : Fin P.pieceCount → ℝ)

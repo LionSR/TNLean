@@ -38,7 +38,8 @@ theorem IsGInjective.commutingClosureSpan_le_torusParentKernel
     Submodule.span ℂ (Set.range (fun p : {p : G × G // Commute p.1 p.2} =>
       torusGClosure (width := width) (height := height)
         (leftRegularMatrix G) a p.1.1 p.1.2)) ≤
-      (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion P)).ker :=
+      (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+        torusPlaquetteRegion P).hamiltonian).ker :=
   ha.span_torusGClosure_commuting_le_parentKernel torusPlaquetteRegion
     connected_torusPlaquetteRegion isSimplyConnected_torusRegionRealization_plaquette P hP
 

@@ -20,6 +20,8 @@ Source: arXiv:1010.3732, Section II.F.2 and Appendix A.
 
 open scoped Matrix Kronecker
 
+open ManyBody
+
 namespace MPSTensor
 
 /-- The tensor power of a unitary on-site matrix is unitary on the finite
@@ -129,26 +131,27 @@ theorem onSiteTensorPow_reindex_windowComplement {d N : ℕ}
   simp only [e] at hactive hactive' hcomp hcomp'
   simp only [hactive, hactive', hcomp, hcomp']
 
-/-- A cyclically embedded local matrix commutes with the global on-site
-tensor power whenever it commutes with the corresponding local tensor power.
-Source: arXiv:1010.3732, Section II.F.2. -/
-theorem embedLocalOperator_commute_onSiteTensorPow {d N : ℕ}
+/-- A local matrix placed on the window of `L` consecutive sites starting at
+`i` (`ManyBody.placeAlong` along `ManyBody.ringWindow`) commutes with the
+global on-site tensor power whenever it commutes with the corresponding local
+tensor power. Source: arXiv:1010.3732, Section II.F.2. -/
+theorem placeAlong_ringWindow_commute_onSiteTensorPow {d N : ℕ}
     (U : Matrix (Fin d) (Fin d) ℂ) (L : ℕ) (hLN : L ≤ N)
     (i : Fin N) (K : Matrix (Cfg d L) (Cfg d L) ℂ)
     (hcomm : Commute K (onSiteTensorPow L U)) :
-    Commute (MPOTensor.embedLocalOperator L N hLN i K)
+    Commute (placeAlong (X := fun _ ↦ Fin d) (ringWindow hLN i) K)
       (onSiteTensorPow N U) := by
   let e := MPOTensor.windowComplementEquiv (d := d) L N hLN i
   apply (commute_iff_eq _ _).2
   apply (Matrix.reindex e e).injective
   change (Matrix.reindexLinearEquiv ℂ ℂ e e)
-      (MPOTensor.embedLocalOperator L N hLN i K * onSiteTensorPow N U) =
+      (placeAlong (X := fun _ ↦ Fin d) (ringWindow hLN i) K * onSiteTensorPow N U) =
     (Matrix.reindexLinearEquiv ℂ ℂ e e)
-      (onSiteTensorPow N U * MPOTensor.embedLocalOperator L N hLN i K)
+      (onSiteTensorPow N U * placeAlong (X := fun _ ↦ Fin d) (ringWindow hLN i) K)
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ e e e,
     ← Matrix.reindexLinearEquiv_mul ℂ ℂ e e e]
   simp only [Matrix.coe_reindexLinearEquiv, e]
-  rw [MPOTensor.reindex_embedLocalOperator_windowComplement,
+  rw [MPOTensor.reindex_placeAlong_ringWindow_windowComplement,
     onSiteTensorPow_reindex_windowComplement]
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
   simpa only [Matrix.one_mul, Matrix.mul_one] using congrArg
@@ -180,8 +183,8 @@ theorem localTermES_commute_onSiteTensorPow {d D N : ℕ}
     (L : ℕ) (hLN : L ≤ N) (i : Fin N) :
     Commute (localTermES A L i)
       (Matrix.toEuclideanLin (onSiteTensorPow N U)) := by
-  rw [localTermES_eq_toEuclideanLin_embedLocalOperator A hLN i]
-  have hmat := embedLocalOperator_commute_onSiteTensorPow U L hLN i
+  rw [localTermES_eq_toEuclideanLin_placeAlong_ringWindow A hLN i]
+  have hmat := placeAlong_ringWindow_commute_onSiteTensorPow U L hLN i
     (LinearMap.toMatrix' (parentInteraction A L))
     (parentInteraction_matrix_commute_onSiteTensorPow A U hU hCov L)
   apply (commute_iff_eq _ _).2

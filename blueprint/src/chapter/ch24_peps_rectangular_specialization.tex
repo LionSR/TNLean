@@ -104,8 +104,8 @@ rectangular and vertex-boundary implication in
 
 \begin{definition}[Native vertex boundaries]
     \label{def:rectangular_vertex_boundaries}
-    \lean{TNLean.PEPS.AreaLaw.rectangleInnerBoundary,
-        TNLean.PEPS.AreaLaw.rectangleEndpointBoundary}
+    \lean{ManyBody.innerBoundary,
+        ManyBody.endpointBoundary}
     \leanok
     For $A\subseteq V$, the inner boundary is the set of $x\in A$ with
     a neighbor outside $A$. The set $Z_A$ consists of both endpoints of
@@ -115,9 +115,9 @@ rectangular and vertex-boundary implication in
 \begin{lemma}[Exact edge and vertex boundary counts]
     \label{thm:rectangular_boundary_transport}
     \lean{TNLean.PEPS.AreaLaw.card_edgeBoundary_rectangular,
-        TNLean.PEPS.AreaLaw.mem_endpointBoundary_iff_adj,
-        TNLean.PEPS.AreaLaw.map_rectangleInnerBoundary,
-        TNLean.PEPS.AreaLaw.map_rectangleEndpointBoundary,
+        ManyBody.mem_endpointBoundary,
+        ManyBody.innerBoundary_map,
+        ManyBody.endpointBoundary_map,
         TNLean.PEPS.AreaLaw.card_innerBoundary_rectangular,
         TNLean.PEPS.AreaLaw.card_endpointBoundary_rectangular,
         TNLean.PEPS.AreaLaw.rectangleEdgeBoundary_card_le_four_mul_innerBoundary_card,
@@ -156,7 +156,7 @@ rectangular and vertex-boundary implication in
 
 \begin{lemma}[Rectangular bounds from the uniform finite-domain area law]
     \label{thm:rectangular_entropy_from_uniform}
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_rectangleAreaLawState,
+    \lean{TNLean.PEPS.AreaLaw.regionEntropy_rectangleAreaLawState,
         TNLean.PEPS.AreaLaw.UniformAreaLaw.rectangularEntropyAreaLaw}
     \leanok
     Assume the uniform finite-domain area law of

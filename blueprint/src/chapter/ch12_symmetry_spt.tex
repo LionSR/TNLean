@@ -153,7 +153,7 @@ of the virtual projective representation.
 \begin{lemma}[Canonical interactions along a symmetric injective path]
     \label{thm:spt_canonical_injective_gapped_path}
     \lean{MPSTensor.continuous_parentInteraction_matrix_family,
-        MPSTensor.interactionHamiltonian_parent_spectrum_gap,
+        MPSTensor.hamiltonian_translationInvariant_parent_spectrum_gap,
         MPSTensor.canonicalInjectiveGappedPath}
     \leanok
     \uses{def:spt_common_space_gapped_path}
@@ -396,8 +396,8 @@ of the virtual projective representation.
         MPSTensor.physicalSpectatorBondInteraction_isStarProjection,
         MPSTensor.physicalSpectatorBondInteraction_translate_commute,
         MPSTensor.physicalSpectatorBondInteraction_spectrum_gap_one,
-        MPSTensor.interactionHamiltonian_quadratic_gap_of_commuting_projection,
-        MPSTensor.interactionHamiltonian_spectrum_gap_one_of_commuting_projection}
+        MPSTensor.hamiltonian_translationInvariant_quadratic_gap_of_commuting_projection,
+        MPSTensor.hamiltonian_translationInvariant_spectrum_gap_one_of_commuting_projection}
     \leanok
     \uses{def:spt_sector_bond_interaction}
     If every $\eta_{q,h}$ is an orthogonal projection, so is the
@@ -441,7 +441,7 @@ of the virtual projective representation.
 
 \begin{lemma}[Local symmetry of the normalized bond interaction]
     \label{thm:spt_normalized_bond_local_symmetry}
-    \lean{MPOTensor.embedLocalOperator_full_zero,
+    \lean{ManyBody.placeAlong_refl,
         MPSTensor.normalizedBondInteraction_commute_onSite}
     \leanok
 
@@ -485,9 +485,9 @@ of the virtual projective representation.
 
 \begin{lemma}[Periodic intertwining and zero modes under isometric extension]
     \label{thm:spt_isometric_interaction_zero_modes}
-    \lean{MPSTensor.embedLocalOperator_isometry_intertwiner,
+    \lean{MPSTensor.placeAlong_ringWindow_isometry_intertwiner,
         MPSTensor.embed_isometricInteractionExtension_intertwiner,
-        MPSTensor.interactionHamiltonian_isometricInteractionExtension_intertwiner,
+        MPSTensor.hamiltonian_translationInvariant_isometricInteractionExtension_intertwiner,
         MPSTensor.isometricInteractionExtension_zero_mode,
         MPSTensor.isometricInteractionExtension_zero_mem_spectrum}
     \leanok
@@ -532,7 +532,7 @@ of the virtual projective representation.
 \begin{lemma}[Exact ground-space image for commuting projections]
     \label{thm:spt_isometric_interaction_ground_space}
     \lean{Matrix.range_toEuclideanLin_singleKrausMap_of_isometry,
-        MPSTensor.interactionHamiltonian_ker_eq_range_groundProduct,
+        MPSTensor.hamiltonian_translationInvariant_ker_eq_range_groundProduct,
         MPSTensor.isometricInteractionExtension_isStarProjection,
         MPSTensor.isometricInteractionExtension_groundProduct,
         MPSTensor.isometricInteractionExtension_ker_eq_map,
@@ -1218,7 +1218,8 @@ and the regrouping of physical registers into bonds.
 
 \begin{definition}[Symmetric gapped paths on a common physical space]
     \label{def:spt_common_space_gapped_path}
-    \lean{MPSTensor.interactionHamiltonian, MPSTensor.SymmetricGappedInteractionPath}
+    \lean{ManyBody.Interaction.translationInvariant,
+        MPSTensor.SymmetricGappedInteractionPath}
     \leanok
     Fix a unitary representation $U:G\to\mathrm U(d)$ and two
     two-site interactions $h_0,h_1$.  A symmetric gapped path between them
@@ -1358,11 +1359,10 @@ and the regrouping of physical registers into bonds.
 
 \begin{lemma}[Order and interpolation of periodic Hamiltonians]
     \label{thm:spt_periodic_hamiltonian_order}
-    \lean{MPSTensor.interactionHamiltonian_add_smul_sub,
-        MPSTensor.interactionHamiltonian_posSemidef,
-        MPSTensor.interactionHamiltonian_mono}
+    \lean{ManyBody.placeAlong_add, ManyBody.placeAlong_smul,
+        ManyBody.Interaction.posSemidef_hamiltonian}
     \leanok
-    \uses{def:spt_common_space_gapped_path}
+    \uses{def:spt_common_space_gapped_path, thm:lvv_placement_order}
     For a two-site interaction $h$, let $H_N(h)$ be the sum of its
     translates on the periodic chain of length $N\ge2$.
     If $h\ge0$, then $H_N(h)\ge0$; if $h\le k$, then
@@ -1382,7 +1382,7 @@ and the regrouping of physical registers into bonds.
         MPSTensor.groundSpaceES_invariant_of_gauge_covariance,
         MPSTensor.parentInteractionES_commute_onSiteTensorPow,
         MPSTensor.onSiteTensorPow_reindex_windowComplement,
-        MPSTensor.embedLocalOperator_commute_onSiteTensorPow,
+        MPSTensor.placeAlong_ringWindow_commute_onSiteTensorPow,
         MPSTensor.parentInteractionES_eq_toEuclideanLin_parentMatrix,
         MPSTensor.parentInteraction_matrix_commute_onSiteTensorPow,
         MPSTensor.localTermES_commute_onSiteTensorPow,
@@ -1779,7 +1779,7 @@ and the regrouping of physical registers into bonds.
     \lean{MPSTensor.twoSiteBondInteraction_isStarProjection,
         MPSTensor.twoSiteBondInteraction_norm_le_one,
         MPSTensor.embed_twoSiteBondInteraction_eq_conj,
-        MPSTensor.interactionHamiltonian_twoSiteBondPenalty}
+        MPSTensor.hamiltonian_translationInvariant_twoSiteBondPenalty}
     \leanok
     \uses{thm:spt_incoming_bond_locality, thm:spt_physical_bond_parent_gap}
     For a bond matrix $K$, let $h(K)$ act as $K$ on the middle
@@ -1953,9 +1953,9 @@ and the regrouping of physical registers into bonds.
         MPSTensor.twoSiteBondInteraction_le_parentInteractionES_weightedMatrixUnitInterpolation,
         MPSTensor.twoSiteBondInteraction_le_parentInteraction_weightedMatrixUnitInterpolation,
         MPSTensor.incomingBondUnitaryLin_normalizedBondInterpolation_state,
-        MPSTensor.interactionHamiltonian_normalizedBondInteraction_groundSpace,
-        MPSTensor.ker_interactionHamiltonian_normalizedBondInteraction_le_parent,
-        MPSTensor.interactionHamiltonian_parent_mulVec_eq_zero_of_normalizedBondInteraction}
+        MPSTensor.hamiltonian_translationInvariant_normalizedBondInteraction_groundSpace,
+        MPSTensor.ker_hamiltonian_translationInvariant_normalizedBondInteraction_le_parent,
+        MPSTensor.hamiltonian_translationInvariant_parent_mulVec_eq_zero_of_normalizedBondInteraction}
     \leanok
     \uses{thm:spt_direct_sum_fixed_point_path,
         thm:spt_weighted_matrix_unit_bond_product, def:parent_interaction,
@@ -1990,7 +1990,7 @@ and the regrouping of physical registers into bonds.
 
 \begin{definition}[Symmetric paths between weighted canonical parents]
     \label{def:spt_weighted_canonical_parent_path}
-    \lean{MPSTensor.interactionHamiltonian_normalizedBondInteraction_spectrum_gap_one,
+    \lean{MPSTensor.hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one,
         MPSTensor.weightedMatrixUnitParentComparisonPath,
         MPSTensor.weightedCanonicalFixedPointGappedPath}
     \leanok
@@ -2191,8 +2191,8 @@ and the regrouping of physical registers into bonds.
     \label{thm:spt_embedded_parent_comparison}
     \lean{MPSTensor.twoSiteBondInteraction_le_parentInteraction_of_groundSpaceMap,
         MPSTensor.normalizedBondInteraction_le_parent_of_isometric_bond_intertwiner,
-        MPSTensor.ker_interactionHamiltonian_normalizedBondInteraction_le_parent_of_mpv_eq,
-        MPSTensor.interactionHamiltonian_parent_mulVec_eq_zero_of_normalizedBondInteraction_of_mpv_eq,
+        MPSTensor.ker_hamiltonian_translationInvariant_normalizedBondInteraction_le_parent_of_mpv_eq,
+        MPSTensor.hamiltonian_translationInvariant_parent_mulVec_eq_zero_of_normalizedBondInteraction_of_mpv_eq,
         MPSTensor.normalizedBondCanonicalParentComparisonPath}
     \leanok
     \uses{thm:spt_weighted_matrix_unit_parent_comparison,

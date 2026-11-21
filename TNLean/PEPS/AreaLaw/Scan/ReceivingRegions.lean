@@ -32,6 +32,8 @@ OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (ambientDilation_zero)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- If the target remains near and contains every nonpositive-depth near or middle

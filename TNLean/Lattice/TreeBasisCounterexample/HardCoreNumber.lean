@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.SiteOperators
+import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlaceAlong
 import QICLean.Algebra.MatrixAux
 import TNLean.Algebra.ToEuclideanLinApply
 import Mathlib.Analysis.CStarAlgebra.Projection
@@ -11,7 +12,7 @@ import Mathlib.Analysis.CStarAlgebra.Projection
 /-!
 # Actual hard-core qubit lowering and particle number
 
-The lowering matrix is `|0⟩⟨1|`, lifted to each physical site with `siteOp`. Its squared
+The lowering matrix is `|0⟩⟨1|`, lifted to each physical site with `ManyBody.placeAt`. Its squared
 modulus is the local occupation projection. Their sum is exactly the diagonal matrix
 counting occupied qubits, and its eigenspaces satisfy the sum-of-squared-lowering-norm
 identity. These facts do not assume a gap or any bosonic commutation relations.
@@ -21,7 +22,7 @@ They are ingredients of the tree example discussed in
 of Hastings, arXiv:cond-mat/0508554v3, lines 1690–1694.
 -/
 
-open Matrix QuantumCircuit
+open Matrix
 open scoped Matrix.Norms.L2Operator InnerProductSpace MatrixOrder ComplexOrder
 
 namespace TNLean.Lattice.TreeBasisCounterexample
@@ -39,7 +40,7 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-- Lower a qubit at one physical site. -/
 noncomputable def lowering (v : ι) : Matrix (ι → Fin 2) (ι → Fin 2) ℂ :=
-  siteOp v qubitLowering
+  ManyBody.placeAt (X := fun _ ↦ Fin 2) v qubitLowering
 
 /-- The physical total particle number. -/
 noncomputable def numberOperator : Matrix (ι → Fin 2) (ι → Fin 2) ℂ :=
@@ -51,7 +52,21 @@ def occupation (σ : ι → Fin 2) : ℕ := ∑ v, (σ v : ℕ)
 theorem lowering_number (v : ι) : (lowering v)ᴴ * lowering v =
     diagonal (fun σ : ι → Fin 2 ↦ ((σ v : ℕ) : ℂ)) := by
   unfold lowering
-  rw [siteOp_conjTranspose, siteOp_mul, qubitLowering_number, siteOp_diagonal]
+  rw [← ManyBody.placeAt_conjTranspose, ← ManyBody.placeAt_mul, qubitLowering_number]
+  ext σ τ
+  rw [ManyBody.placeAt_apply, diagonal_apply, diagonal_apply]
+  by_cases h : σ = τ
+  · subst h
+    simp
+  · rw [ite_eq_right h]
+    split_ifs with h1 h2
+    · refine absurd (funext fun u ↦ ?_) h
+      by_cases hu : u = v
+      · subst hu
+        exact h2
+      · exact h1 u hu
+    · rfl
+    · rfl
 
 theorem numberOperator_eq_diagonal : (numberOperator : Matrix (ι → Fin 2) (ι → Fin 2) ℂ) =
     diagonal (fun σ ↦ (occupation σ : ℂ)) := by

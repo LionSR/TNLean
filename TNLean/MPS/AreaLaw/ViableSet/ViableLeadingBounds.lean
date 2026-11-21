@@ -664,7 +664,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_uniform_leading_bounds_of_isViab
       (W : Matrix (CutRight L q k) (Fin m) ℂ)
       (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ),
       ‖w‖ = 1 ∧ w ∈ leftSupportSubmodule S ∧
-      (cutMatrix w k).rank ≤ D ∧
+      (ManyBody.cutMatrix (leftBlock L k) w).rank ≤ D ∧
       (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √c ∧
       Wᴴ * W = 1 ∧ m ≤ D ∧
       WithLp.ofLp w ∘ (gluingCut L q k).symm =

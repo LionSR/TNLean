@@ -30,14 +30,17 @@ variable {d : ℕ} [NeZero d]
 translated interaction observables. Source: Nachtergaele,
 arXiv:cond-mat/9410110, equation (3.12). -/
 theorem quasiLocalIntervalObservable_openInteractionMatrix (a : ℤ) {R : ℕ}
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (N : ℕ) :
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (N : ℕ) :
     quasiLocalIntervalObservable d a N (openInteractionMatrix h N) =
       ∑ i ∈ Finset.range (N + 1 - R),
         quasiLocalIntervalObservable d (a + (i : ℤ)) R h := by
   rw [openInteractionMatrix, map_sum]
   refine Finset.sum_congr rfl fun i hi ↦ ?_
-  exact quasiLocalIntervalObservable_chainWindowOperator a N i h hR
-    (by have hi' := Finset.mem_range.mp hi; omega)
+  have hi' : i + R ≤ N := by
+    have hi'' := Finset.mem_range.mp hi
+    omega
+  simp only [dif_pos hi']
+  exact quasiLocalIntervalObservable_placeAlong_chainWindow a N i h hi'
 
 /-- Vanishing expectation on every local translate implies vanishing
 expectation on every finite open interaction sum. The functional need only
@@ -46,11 +49,11 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12) and the
 zero-energy face in Theorem 1.1. -/
 theorem apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero
     (φ : QuasiLocalAlgebra d →ₗ[ℂ] ℂ) {R : ℕ}
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hzero : ∀ a : ℤ, φ (quasiLocalIntervalObservable d a R h) = 0)
     (a : ℤ) (N : ℕ) :
     φ (quasiLocalIntervalObservable d a N (openInteractionMatrix h N)) = 0 := by
-  simp only [quasiLocalIntervalObservable_openInteractionMatrix a h hR N,
+  simp only [quasiLocalIntervalObservable_openInteractionMatrix a h N,
     map_sum, hzero, Finset.sum_const_zero]
 
 end SpinChain

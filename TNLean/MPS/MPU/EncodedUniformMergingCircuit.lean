@@ -8,9 +8,9 @@ import TNLean.MPS.MPU.CompatibleBondDilationCircuit
 import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.ExactCleanAmplificationCircuit
 import TNLean.MPS.MPU.SupportedAmplification
-import TNLean.Circuit.ArbitrarySiteGateEmbedding
-import TNLean.Circuit.InitializedRegisterProjection
-import TNLean.Circuit.CleanImplementationPlacement
+import QICLean.Circuit.Model.UnitaryPlacement
+import QICLean.Circuit.Protocol.ZeroRegister.GateCount
+import TNLean.MPS.MPU.SingleSiteCircuit
 import Mathlib.Logic.Equiv.Fin.Basic
 
 /-!
@@ -54,16 +54,29 @@ def appendBasisEmbedding {d a b : ℕ} {ρ κ : Type*}
       have hj := congrFun h (Fin.natAdd a j)
       simpa only [Fin.append_right] using hj
 
+/-- A product of gates on an open chain of `m` sites, placed on sites of an open chain of `n`
+sites along an injection carrying neighbouring sites to neighbouring sites, is a product of the
+same number of gates. -/
+theorem isGateProduct_placeAlong_of_succ {d m n K : ℕ} (w : Fin m ↪ Fin n)
+    (hw : ∀ p p' : Fin m, p'.val = p.val + 1 → (w p').val = (w p).val + 1)
+    {V : Matrix (Cfg d m) (Cfg d m) ℂ}
+    (hV : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph m)) K V) :
+    IsGateProduct (Geometry.graph (SimpleGraph.pathGraph n)) K
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) w V) :=
+  hV.place_pathGraph (X := fun _ : Fin n ↦ Fin d) (ManyBody.windowEquiv w)
+    (fun p p' h ↦ by simpa only [ManyBody.coe_windowEquiv] using hw p p' h)
+
 /-- A placed suffix operator is the tensor product with the identity on the prefix. -/
-theorem embedOp_suffix_eq_reindex {d a b : ℕ}
+theorem placeAlong_natAddEmb_eq_reindex {d a b : ℕ}
     (U : Matrix (Cfg d b) (Cfg d b) ℂ) :
-    embedOp (Fin.natAdd a) U =
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.natAddEmb a) U =
       Matrix.reindex (Fin.appendEquiv a b) (Fin.appendEquiv a b)
         ((1 : Matrix (Cfg d a) (Cfg d a) ℂ) ⊗ₖ U) := by
   ext x y
-  simp only [embedOp_apply, Matrix.reindex_apply, Matrix.submatrix_apply,
+  rw [ManyBody.placeAlong_apply]
+  simp only [Fin.natAddEmb_apply, Matrix.reindex_apply, Matrix.submatrix_apply,
     Matrix.kroneckerMap_apply, Matrix.one_apply, Fin.appendEquiv_symm_apply]
-  have hAg : AgreeOff (Fin.natAdd a) x y ↔
+  have hAg : (∀ v, (∀ u, Fin.natAdd a u ≠ v) → x v = y v) ↔
       (fun i : Fin a ↦ x (Fin.castAdd b i)) = (fun i ↦ y (Fin.castAdd b i)) := by
     constructor
     · intro h
@@ -77,19 +90,20 @@ theorem embedOp_suffix_eq_reindex {d a b : ℕ}
       | left j => exact congrFun h j
       | right j => exact (hi j rfl).elim
   simp only [hAg]
-  split_ifs <;> simp only [one_mul, zero_mul, Function.comp_def]
+  split_ifs <;> simp only [one_mul, zero_mul]
+  rfl
 
 /-- Basis inclusions respect concatenation of prescribed product encodings. -/
-theorem initializedBasisMatrix_appendBasisEmbedding {d a b : ℕ}
+theorem basisInclusion_appendBasisEmbedding {d a b : ℕ}
     {ρ κ : Type*}
     (e : ρ ↪ Cfg d a) (f : κ ↪ Cfg d b) :
-    initializedBasisMatrix (appendBasisEmbedding e f) =
-      (initializedBasisMatrix e ⊗ₖ initializedBasisMatrix f).submatrix
+    basisInclusion (appendBasisEmbedding e f) =
+      (basisInclusion e ⊗ₖ basisInclusion f).submatrix
         (Fin.appendEquiv a b).symm id := by
   classical
   ext x p
   obtain ⟨⟨x₁, x₂⟩, rfl⟩ := (Fin.appendEquiv a b).surjective x
-  simp only [initializedBasisMatrix, Matrix.submatrix_apply,
+  simp only [basisInclusion, Matrix.submatrix_apply,
     Matrix.kroneckerMap_apply, Matrix.one_apply, appendBasisEmbedding]
   have h : Fin.append x₁ x₂ = Fin.append (e p.1) (f p.2) ↔
       x₁ = e p.1 ∧ x₂ = f p.2 := by
@@ -101,40 +115,43 @@ theorem initializedBasisMatrix_appendBasisEmbedding {d a b : ℕ}
   split_ifs <;> simp_all
 
 /-- A clean packet action is unchanged when arbitrary encoded spectators are prefixed. -/
-theorem isCleanImplementation_embedOp_suffix {d a b : ℕ}
+theorem isCleanImplementation_placeAlong_natAddEmb {d a b : ℕ}
     {ρ κ : Type*} [Fintype ρ] [Fintype κ] [DecidableEq ρ]
     (e : ρ ↪ Cfg d a) (f : κ ↪ Cfg d b)
     {U : Matrix (Cfg d b) (Cfg d b) ℂ} {Z : Matrix κ κ ℂ}
-    (h : IsCleanImplementation (initializedBasisMatrix f) U Z) :
-    IsCleanImplementation (initializedBasisMatrix (appendBasisEmbedding e f))
-      (embedOp (Fin.natAdd a) U) ((1 : Matrix ρ ρ ℂ) ⊗ₖ Z) := by
+    (h : IsCleanImplementation (basisInclusion f) U Z) :
+    IsCleanImplementation (basisInclusion (appendBasisEmbedding e f))
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.natAddEmb a) U)
+      ((1 : Matrix ρ ρ ℂ) ⊗ₖ Z) := by
   classical
-  change embedOp (Fin.natAdd a) U * initializedBasisMatrix (appendBasisEmbedding e f) = _
-  rw [embedOp_suffix_eq_reindex, initializedBasisMatrix_appendBasisEmbedding]
+  change ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.natAddEmb a) U *
+    basisInclusion (appendBasisEmbedding e f) = _
+  rw [placeAlong_natAddEmb_eq_reindex, basisInclusion_appendBasisEmbedding]
   simp only [Matrix.reindex_apply]
   rw [Matrix.submatrix_mul_equiv, ← Matrix.mul_kronecker_mul]
-  change ((1 * initializedBasisMatrix e) ⊗ₖ (U * initializedBasisMatrix f)).submatrix
+  change ((1 * basisInclusion e) ⊗ₖ (U * basisInclusion f)).submatrix
     (Fin.appendEquiv a b).symm id =
-    ((initializedBasisMatrix e ⊗ₖ initializedBasisMatrix f) *
+    ((basisInclusion e ⊗ₖ basisInclusion f) *
       ((1 : Matrix ρ ρ ℂ) ⊗ₖ Z)).submatrix (Fin.appendEquiv a b).symm id
   rw [← Matrix.mul_kronecker_mul]
-  change ((1 * initializedBasisMatrix e) ⊗ₖ (U * initializedBasisMatrix f)).submatrix
+  change ((1 * basisInclusion e) ⊗ₖ (U * basisInclusion f)).submatrix
     (Fin.appendEquiv a b).symm id =
-    ((initializedBasisMatrix e * 1) ⊗ₖ (initializedBasisMatrix f * Z)).submatrix
+    ((basisInclusion e * 1) ⊗ₖ (basisInclusion f * Z)).submatrix
       (Fin.appendEquiv a b).symm id
   simpa only [Matrix.one_mul, Matrix.mul_one] using congrArg
-    (fun V ↦ (initializedBasisMatrix e ⊗ₖ V).submatrix (Fin.appendEquiv a b).symm id) h
+    (fun V ↦ (basisInclusion e ⊗ₖ V).submatrix (Fin.appendEquiv a b).symm id) h
 
 /-- A placed prefix operator is the tensor product with the identity on the suffix. -/
-theorem embedOp_prefix_eq_reindex {d a b : ℕ}
+theorem placeAlong_castAddEmb_eq_reindex {d a b : ℕ}
     (U : Matrix (Cfg d a) (Cfg d a) ℂ) :
-    embedOp (Fin.castAdd b) U =
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.castAddEmb b) U =
       Matrix.reindex (Fin.appendEquiv a b) (Fin.appendEquiv a b)
         (U ⊗ₖ (1 : Matrix (Cfg d b) (Cfg d b) ℂ)) := by
   ext x y
-  simp only [embedOp_apply, Matrix.reindex_apply, Matrix.submatrix_apply,
+  rw [ManyBody.placeAlong_apply]
+  simp only [Fin.castAddEmb_apply, Matrix.reindex_apply, Matrix.submatrix_apply,
     Matrix.kroneckerMap_apply, Matrix.one_apply, Fin.appendEquiv_symm_apply]
-  have hAg : AgreeOff (Fin.castAdd b) x y ↔
+  have hAg : (∀ v, (∀ u, Fin.castAdd b u ≠ v) → x v = y v) ↔
       (fun i : Fin b ↦ x (Fin.natAdd a i)) = (fun i ↦ y (Fin.natAdd a i)) := by
     constructor
     · intro h
@@ -148,32 +165,34 @@ theorem embedOp_prefix_eq_reindex {d a b : ℕ}
       | left j => exact (hi j rfl).elim
       | right j => exact congrFun h j
   simp only [hAg]
-  split_ifs <;> simp only [mul_one, mul_zero, Function.comp_def]
+  split_ifs <;> simp only [mul_one, mul_zero]
 
 /-- A clean prefix action is unchanged when arbitrary encoded spectators are appended. -/
-theorem isCleanImplementation_embedOp_prefix {d a b : ℕ}
+theorem isCleanImplementation_placeAlong_castAddEmb {d a b : ℕ}
     {ρ κ : Type*} [Fintype ρ] [Fintype κ] [DecidableEq κ]
     (e : ρ ↪ Cfg d a) (f : κ ↪ Cfg d b)
     {U : Matrix (Cfg d a) (Cfg d a) ℂ} {Z : Matrix ρ ρ ℂ}
-    (h : IsCleanImplementation (initializedBasisMatrix e) U Z) :
-    IsCleanImplementation (initializedBasisMatrix (appendBasisEmbedding e f))
-      (embedOp (Fin.castAdd b) U) (Z ⊗ₖ (1 : Matrix κ κ ℂ)) := by
+    (h : IsCleanImplementation (basisInclusion e) U Z) :
+    IsCleanImplementation (basisInclusion (appendBasisEmbedding e f))
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.castAddEmb b) U)
+      (Z ⊗ₖ (1 : Matrix κ κ ℂ)) := by
   classical
-  change embedOp (Fin.castAdd b) U * initializedBasisMatrix (appendBasisEmbedding e f) = _
-  rw [embedOp_prefix_eq_reindex, initializedBasisMatrix_appendBasisEmbedding]
+  change ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.castAddEmb b) U *
+    basisInclusion (appendBasisEmbedding e f) = _
+  rw [placeAlong_castAddEmb_eq_reindex, basisInclusion_appendBasisEmbedding]
   simp only [Matrix.reindex_apply]
   rw [Matrix.submatrix_mul_equiv, ← Matrix.mul_kronecker_mul]
-  change ((U * initializedBasisMatrix e) ⊗ₖ (1 * initializedBasisMatrix f)).submatrix
+  change ((U * basisInclusion e) ⊗ₖ (1 * basisInclusion f)).submatrix
     (Fin.appendEquiv a b).symm id =
-    ((initializedBasisMatrix e ⊗ₖ initializedBasisMatrix f) *
+    ((basisInclusion e ⊗ₖ basisInclusion f) *
       (Z ⊗ₖ (1 : Matrix κ κ ℂ))).submatrix (Fin.appendEquiv a b).symm id
   rw [← Matrix.mul_kronecker_mul]
-  change ((U * initializedBasisMatrix e) ⊗ₖ (1 * initializedBasisMatrix f)).submatrix
+  change ((U * basisInclusion e) ⊗ₖ (1 * basisInclusion f)).submatrix
     (Fin.appendEquiv a b).symm id =
-    ((initializedBasisMatrix e * Z) ⊗ₖ (initializedBasisMatrix f * 1)).submatrix
+    ((basisInclusion e * Z) ⊗ₖ (basisInclusion f * 1)).submatrix
       (Fin.appendEquiv a b).symm id
   simpa only [Matrix.one_mul, Matrix.mul_one] using congrArg
-    (fun V ↦ (V ⊗ₖ initializedBasisMatrix f).submatrix (Fin.appendEquiv a b).symm id) h
+    (fun V ↦ (V ⊗ₖ basisInclusion f).submatrix (Fin.appendEquiv a b).symm id) h
 
 /-- The compatible bond and dilation registers, before appending attenuation. -/
 def compatibleBondFlagEmbedding {d r q : ℕ} (hd : 2 ≤ d) (e : Fin r ↪ Cfg d q) :
@@ -228,12 +247,14 @@ theorem compatibleBondDilationEmbedding_eq_append {d r q : ℕ}
 /-- Every one-qudit matrix has its exact clean action under the one-site basis encoding. -/
 theorem isCleanImplementation_oneSiteBasis {d : ℕ}
     (U : Matrix (Fin d) (Fin d) ℂ) :
-    IsCleanImplementation (initializedBasisMatrix oneSiteBasisEmbedding)
+    IsCleanImplementation (basisInclusion oneSiteBasisEmbedding)
       (U.submatrix (Equiv.funUnique (Fin 1) (Fin d))
         (Equiv.funUnique (Fin 1) (Fin d))) U := by
   classical
-  change _ * initializedBasisMatrix oneSiteBasisEmbedding = _
-  rw [mul_initializedBasisMatrix]
+  change _ * basisInclusion oneSiteBasisEmbedding = _
+  rw [show ∀ M : Matrix (Cfg d 1) (Cfg d 1) ℂ, M * basisInclusion oneSiteBasisEmbedding =
+      M.submatrix id oneSiteBasisEmbedding from
+    fun M ↦ Matrix.mul_submatrix_one (Equiv.refl _) _ M]
   change (U.submatrix (Equiv.funUnique (Fin 1) (Fin d))
     (Equiv.funUnique (Fin 1) (Fin d))).submatrix id oneSiteBasisEmbedding = _
   simp only [Matrix.submatrix_submatrix, Function.comp_def,
@@ -244,24 +265,39 @@ theorem isCleanImplementation_oneSiteBasis {d : ℕ}
   rw [Matrix.one_submatrix_mul]
   rfl
 
+/-- The matrix at the last site of `n + 1` sites is its one-site matrix placed on the suffix of
+one site. -/
+theorem placeAt_last_eq_placeAlong_natAddEmb {d n : ℕ} (A : Matrix (Fin d) (Fin d) ℂ) :
+    ManyBody.placeAt (X := fun _ ↦ Fin d) (Fin.last n) A =
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.natAddEmb n)
+        (A.submatrix (Equiv.funUnique (Fin 1) (Fin d)) (Equiv.funUnique (Fin 1) (Fin d))) := by
+  ext σ τ
+  rw [ManyBody.placeAt_apply, ManyBody.placeAlong_apply]
+  have hc : (∀ u, u ≠ Fin.last n → σ u = τ u) ↔
+      ∀ v, (∀ u, Fin.natAddEmb n u ≠ v) → σ v = τ v := by
+    refine ⟨fun h v hv ↦ h v fun hv' ↦ hv 0 (by subst hv'; rfl),
+      fun h u hu ↦ h u fun j hj ↦ hu ?_⟩
+    rw [← hj, Subsingleton.elim j 0]
+    rfl
+  by_cases h : ∀ u, u ≠ Fin.last n → σ u = τ u
+  · rw [ite_eq_left h, ite_eq_left (hc.mp h)]
+    rfl
+  · rw [ite_eq_right h, ite_eq_right (mt hc.mpr h)]
+
 /-- The physical attenuation site acts on the full encoded qudit, including
 all nonbinary levels, while retaining every bond and dilation label. -/
 theorem isCleanImplementation_compatible_attenuation {d r q : ℕ}
     (hd : 2 ≤ d) (e : Fin r ↪ Cfg d q) (t : ℝ) :
-    IsCleanImplementation (initializedBasisMatrix (compatibleBondDilationEmbedding hd e))
-      (siteOp ⟨2 * q + 1, by omega⟩ (attenuationQuditRotation hd t))
+    IsCleanImplementation (basisInclusion (compatibleBondDilationEmbedding hd e))
+      (ManyBody.placeAt (X := fun _ ↦ Fin d) ⟨2 * q + 1, by omega⟩
+        (attenuationQuditRotation hd t))
       ((1 : Matrix ((Fin r × Fin r) ⊕ (Fin r × Fin r))
         ((Fin r × Fin r) ⊕ (Fin r × Fin r)) ℂ) ⊗ₖ attenuationQuditRotation hd t) := by
   rw [compatibleBondDilationEmbedding_eq_append]
-  have h := isCleanImplementation_embedOp_suffix (compatibleBondFlagEmbedding hd e)
+  have h := isCleanImplementation_placeAlong_natAddEmb (compatibleBondFlagEmbedding hd e)
     oneSiteBasisEmbedding (isCleanImplementation_oneSiteBasis (attenuationQuditRotation hd t))
   convert h using 1
-  unfold siteOp
-  congr 1
-  funext j
-  have hj : j = 0 := Subsingleton.elim _ _
-  subst j
-  rfl
+  exact placeAt_last_eq_placeAlong_natAddEmb (n := 2 * q + 1) (attenuationQuditRotation hd t)
 
 /-- Both fixed-size merger primitives have one actual circuit on the prescribed
 child product encoding. The complete attenuation qudit remains in the logical
@@ -271,42 +307,45 @@ theorem exists_compatible_merging_preparation_circuit {d r q : ℕ}
     (he : e ⟨0, hr⟩ = fun _ ↦ Fin.castLE hd 0)
     {P : Matrix (Fin r) (Fin r) ℂ} (hP : P.PosDef) :
     ∃ U : Matrix (Cfg d (2 * q + 2)) (Cfg d (2 * q + 2)) ℂ,
-      IsPairProduct d (2 * q + 2)
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (2 * q + 2)))
         (2 * (2 * q + 2) + 38 * (d ^ (2 * q + 2)) ^ 6) U ∧
-      IsCleanImplementation (initializedBasisMatrix (compatibleBondDilationEmbedding hd e)) U
+      IsCleanImplementation (basisInclusion (compatibleBondDilationEmbedding hd e)) U
         (normalizedBondDilation P (⟨0, hr⟩, ⟨0, hr⟩) ⊗ₖ
           attenuationQuditRotation hd (mergingAttenuation r)) := by
   obtain ⟨D, _, hD, hDclean⟩ := exists_compatibleNormalizedBondDilation_circuit hd hr e he hP
   let T : Matrix (Cfg d (2 * q + 2)) (Cfg d (2 * q + 2)) ℂ :=
-    siteOp ⟨2 * q + 1, by omega⟩
-    (attenuationQuditRotation hd (mergingAttenuation r))
-  have hT := isPairProduct_siteOp_mergingAttenuation hd (by omega : 2 ≤ 2 * q + 2)
-    ⟨2 * q + 1, by omega⟩ r hr
+    ManyBody.placeAt (X := fun _ ↦ Fin d) ⟨2 * q + 1, by omega⟩
+      (attenuationQuditRotation hd (mergingAttenuation r))
+  have hT := isGateProduct_placeAt_mergingAttenuation hd (n := 2 * q + 2)
+    ⟨2 * q + 1, by omega⟩ r hr (2 * (2 * q + 2))
   have hTclean := isCleanImplementation_compatible_attenuation hd e (mergingAttenuation r)
   refine ⟨T * D, hT.mul hD, ?_⟩
   simpa only [← Matrix.mul_kronecker_mul, Matrix.one_mul, Matrix.mul_one] using
     hTclean.mul hDclean
 
 /-- The derived merger primitives are placed beside arbitrary encoded spectators.
-The packet gate count is multiplied only by the linear routing cost. -/
+The packet occupies consecutive sites, so its gate count is unchanged; the stated bound
+retains a linear routing factor. -/
 theorem exists_placed_compatible_merging_preparation_circuit {d r q a : ℕ}
     {ρ : Type*} [Fintype ρ] [DecidableEq ρ]
     (hd : 2 ≤ d) (hr : 0 < r) (f : ρ ↪ Cfg d a) (e : Fin r ↪ Cfg d q)
     (he : e ⟨0, hr⟩ = fun _ ↦ Fin.castLE hd 0)
     {P : Matrix (Fin r) (Fin r) ℂ} (hP : P.PosDef) :
     ∃ U : Matrix (Cfg d (a + (2 * q + 2))) (Cfg d (a + (2 * q + 2))) ℂ,
-      IsPairProduct d (a + (2 * q + 2))
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (a + (2 * q + 2))))
         ((2 * (2 * q + 2) + 38 * (d ^ (2 * q + 2)) ^ 6) *
           (2 * (a + (2 * q + 2)))) U ∧
       IsCleanImplementation
-        (initializedBasisMatrix (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e))) U
+        (basisInclusion (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e))) U
         ((1 : Matrix ρ ρ ℂ) ⊗ₖ
           (normalizedBondDilation P (⟨0, hr⟩, ⟨0, hr⟩) ⊗ₖ
             attenuationQuditRotation hd (mergingAttenuation r))) := by
   obtain ⟨U, hU, hclean⟩ := exists_compatible_merging_preparation_circuit hd hr e he hP
-  exact ⟨embedOp (Fin.natAdd a) U,
-    hU.embedOp_injective (by omega) (Fin.natAdd_injective _ _),
-    isCleanImplementation_embedOp_suffix f _ hclean⟩
+  exact ⟨ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.natAddEmb a) U,
+    (isGateProduct_placeAlong_of_succ (Fin.natAddEmb a) (fun p p' h ↦ by
+      simp only [Fin.natAddEmb_apply, Fin.val_natAdd]; omega) hU).mono
+      (Nat.le_mul_of_pos_right _ (by omega)),
+    isCleanImplementation_placeAlong_natAddEmb f _ hclean⟩
 
 /-- Joining bonds with both physical flags initialized to zero. -/
 def joiningChildBasisEmbedding {d r : ℕ} (hd : 2 ≤ d) :
@@ -327,16 +366,20 @@ theorem joiningSuccessProjection_merging_preparation {d r : ℕ}
     joiningSuccessProjection (r := r) hd *
         (normalizedBondDilation P (⟨0, hr⟩, ⟨0, hr⟩) ⊗ₖ
           attenuationQuditRotation hd (mergingAttenuation r)) *
-        initializedBasisMatrix (joiningChildBasisEmbedding (r := r) hd) =
+        basisInclusion (joiningChildBasisEmbedding (r := r) hd) =
       (mergingAttenuation r : ℂ) •
-        (initializedBasisMatrix (joiningChildBasisEmbedding (r := r) hd) *
+        (basisInclusion (joiningChildBasisEmbedding (r := r) hd) *
           normalizedBondReset P (⟨0, hr⟩, ⟨0, hr⟩)) := by
   have ht : attenuationQuditRotation hd (mergingAttenuation r)
       (Fin.castLE hd 0) (Fin.castLE hd 0) = (mergingAttenuation r : ℂ) := by
     have h := congrFun (attenuationQuditRotation_mulVec_zero hd (mergingAttenuation r))
       (Fin.castLE hd 0)
     simpa [Matrix.mulVec_single_one, Pi.single_apply, Fin.ext_iff] using h
-  rw [Matrix.mul_assoc, mul_initializedBasisMatrix]
+  rw [Matrix.mul_assoc, show ∀ M : Matrix (((Fin r × Fin r) ⊕ (Fin r × Fin r)) × Fin d)
+      (((Fin r × Fin r) ⊕ (Fin r × Fin r)) × Fin d) ℂ,
+      M * basisInclusion (joiningChildBasisEmbedding (r := r) hd) =
+        M.submatrix id (joiningChildBasisEmbedding (r := r) hd) from
+    fun M ↦ Matrix.mul_submatrix_one (Equiv.refl _) _ M]
   simp only [joiningSuccessProjection]
   ext ⟨s, a⟩ p
   cases s with
@@ -344,7 +387,7 @@ theorem joiningSuccessProjection_merging_preparation {d r : ℕ}
     rw [Matrix.diagonal_mul]
     simp only [Sum.inl.injEq, exists_eq', Fin.isValue, true_and, submatrix_apply,
       id_eq, kroneckerMap_apply, ite_mul, one_mul, zero_mul, Matrix.smul_apply, smul_eq_mul]
-    simp only [initializedBasisMatrix, Matrix.mul_apply, Matrix.submatrix_apply,
+    simp only [basisInclusion, Matrix.mul_apply, Matrix.submatrix_apply,
       Matrix.one_apply, id_eq, ite_mul, one_mul, zero_mul]
     change (if a = Fin.castLE hd 0 then
       normalizedBondDilation P (⟨0, hr⟩, ⟨0, hr⟩) (Sum.inl x) (Sum.inl p) *
@@ -363,7 +406,7 @@ theorem joiningSuccessProjection_merging_preparation {d r : ℕ}
       submatrix_apply, id_eq, kroneckerMap_apply, zero_mul, Matrix.smul_apply,
       smul_eq_mul, zero_eq_mul, Complex.ofReal_eq_zero]
     right
-    simp only [initializedBasisMatrix, Matrix.mul_apply, Matrix.submatrix_apply,
+    simp only [basisInclusion, Matrix.mul_apply, Matrix.submatrix_apply,
       Matrix.one_apply, id_eq, ite_mul, one_mul, zero_mul]
     change (∑ j, if ((Sum.inr x : (Fin r × Fin r) ⊕ (Fin r × Fin r)), a) =
       (Sum.inl j, Fin.castLE hd 0) then
@@ -371,11 +414,11 @@ theorem joiningSuccessProjection_merging_preparation {d r : ℕ}
     simp
 
 /-- A diagonal physical operator restricts to its exact values on encoded basis states. -/
-theorem diagonal_mul_initializedBasisMatrix {ι κ : Type*}
+theorem diagonal_mul_basisInclusion {ι κ : Type*}
     [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
     (e : κ ↪ ι) (f : ι → ℂ) :
-    diagonal f * initializedBasisMatrix e =
-      initializedBasisMatrix e * diagonal (f ∘ e) := by
+    diagonal f * basisInclusion e =
+      basisInclusion e * diagonal (f ∘ e) := by
   ext x k
   rw [Matrix.diagonal_mul, Matrix.mul_diagonal]
   by_cases h : x = e k
@@ -421,12 +464,12 @@ successful branch on the prescribed child product encoding. -/
 theorem mergingFlagProjection_mul_encoded_basis {d r q a : ℕ}
     {ρ : Type*} [Fintype ρ] [DecidableEq ρ] [NeZero d]
     (hd : 2 ≤ d) (f : ρ ↪ Cfg d a) (e : Fin r ↪ Cfg d q) :
-    (initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)) *
-        (initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)))ᴴ) *
-      initializedBasisMatrix (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e)) =
-      initializedBasisMatrix (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e)) *
+    (basisInclusion (zeroFlagEmbedding (d := d) (mergingFlagSites a q)) *
+        (basisInclusion (zeroFlagEmbedding (d := d) (mergingFlagSites a q)))ᴴ) *
+      basisInclusion (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e)) =
+      basisInclusion (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e)) *
         ((1 : Matrix ρ ρ ℂ) ⊗ₖ joiningSuccessProjection (r := r) hd) := by
-  rw [zeroFlagEmbedding_range_projection, diagonal_mul_initializedBasisMatrix]
+  rw [zeroFlagEmbedding_range_projection, diagonal_mul_basisInclusion]
   congr 1
   rw [show (1 : Matrix ρ ρ ℂ) = diagonal (fun _ ↦ (1 : ℂ)) by simp]
   rw [joiningSuccessProjection, Matrix.diagonal_kronecker_diagonal]
@@ -446,22 +489,22 @@ theorem encoded_merging_preparation_success {d r q a : ℕ}
     (E : Matrix (Cfg d (a + (2 * q + 2))) m ℂ)
     (V : Matrix (ρ × (Fin r × Fin r)) m ℂ)
     (hU : IsCleanImplementation
-      (initializedBasisMatrix (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e))) U
+      (basisInclusion (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e))) U
       ((1 : Matrix ρ ρ ℂ) ⊗ₖ
         (normalizedBondDilation P (⟨0, hr⟩, ⟨0, hr⟩) ⊗ₖ
           attenuationQuditRotation hd (mergingAttenuation r))))
     (hchild : C * E =
-      initializedBasisMatrix
+      basisInclusion
         (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e)) *
         ((1 : Matrix ρ ρ ℂ) ⊗ₖ
-          initializedBasisMatrix (joiningChildBasisEmbedding (r := r) hd)) * V) :
-    (initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)) *
-        (initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)))ᴴ) *
+          basisInclusion (joiningChildBasisEmbedding (r := r) hd)) * V) :
+    (basisInclusion (zeroFlagEmbedding (d := d) (mergingFlagSites a q)) *
+        (basisInclusion (zeroFlagEmbedding (d := d) (mergingFlagSites a q)))ᴴ) *
       (U * C) * E =
       (Real.sin (amplificationAngle r) : ℂ) •
-        (initializedBasisMatrix (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e)) *
+        (basisInclusion (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e)) *
           ((1 : Matrix ρ ρ ℂ) ⊗ₖ
-            initializedBasisMatrix (joiningChildBasisEmbedding (r := r) hd)) *
+            basisInclusion (joiningChildBasisEmbedding (r := r) hd)) *
           ((r : ℂ) • (((1 : Matrix ρ ρ ℂ) ⊗ₖ
             normalizedBondReset P (⟨0, hr⟩, ⟨0, hr⟩)) * V))) := by
   have hb := joiningSuccessProjection_merging_preparation hd hr P
@@ -470,23 +513,23 @@ theorem encoded_merging_preparation_success {d r q a : ℕ}
         (normalizedBondDilation P (⟨0, hr⟩, ⟨0, hr⟩) ⊗ₖ
           attenuationQuditRotation hd (mergingAttenuation r))) *
       ((1 : Matrix ρ ρ ℂ) ⊗ₖ
-        initializedBasisMatrix (joiningChildBasisEmbedding (r := r) hd)) =
+        basisInclusion (joiningChildBasisEmbedding (r := r) hd)) =
     (mergingAttenuation r : ℂ) •
       (((1 : Matrix ρ ρ ℂ) ⊗ₖ
-          initializedBasisMatrix (joiningChildBasisEmbedding (r := r) hd)) *
+          basisInclusion (joiningChildBasisEmbedding (r := r) hd)) *
         ((1 : Matrix ρ ρ ℂ) ⊗ₖ normalizedBondReset P (⟨0, hr⟩, ⟨0, hr⟩))) := by
     simp only [← Matrix.mul_kronecker_mul, Matrix.one_mul, hb, Matrix.kronecker_smul]
-  let J := initializedBasisMatrix
+  let J := basisInclusion
     (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e))
   let E₀ := (1 : Matrix ρ ρ ℂ) ⊗ₖ
-    initializedBasisMatrix (joiningChildBasisEmbedding (r := r) hd)
+    basisInclusion (joiningChildBasisEmbedding (r := r) hd)
   let D := (1 : Matrix ρ ρ ℂ) ⊗ₖ
     (normalizedBondDilation P (⟨0, hr⟩, ⟨0, hr⟩) ⊗ₖ
       attenuationQuditRotation hd (mergingAttenuation r))
   let Q := (1 : Matrix ρ ρ ℂ) ⊗ₖ joiningSuccessProjection (r := r) hd
   let A := (1 : Matrix ρ ρ ℂ) ⊗ₖ normalizedBondReset P (⟨0, hr⟩, ⟨0, hr⟩)
-  let S₀ := initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)) *
-    (initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)))ᴴ
+  let S₀ := basisInclusion (zeroFlagEmbedding (d := d) (mergingFlagSites a q)) *
+    (basisInclusion (zeroFlagEmbedding (d := d) (mergingFlagSites a q)))ᴴ
   change C * E = J * E₀ * V at hchild
   change U * J = J * D at hU
   change Q * D * E₀ = (mergingAttenuation r : ℂ) • (E₀ * A) at hbt
@@ -511,9 +554,9 @@ Lifting it to a larger common workspace preserves every logical input. -/
 theorem isCleanImplementation_zeroWorkspace_empty {d n : ℕ} [NeZero d]
     (U : Matrix (Cfg d n) (Cfg d n) ℂ) :
     IsCleanImplementation
-      (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := n) (a := 0))) U U := by
-  have hJ : initializedBasisMatrix
-      (zeroWorkspaceEmbedding (d := d) (n := n) (a := 0)) =
+      (basisInclusion (workspaceEmbedding (n := n) (0 : Fin 0 → Fin d))) U U := by
+  have hJ : basisInclusion
+      (workspaceEmbedding (n := n) (0 : Fin 0 → Fin d)) =
         (1 : Matrix (Cfg d n) (Cfg d n) ℂ) := by
     ext x y
     change (if x = Fin.append y (0 : Cfg d 0) then (1 : ℂ) else 0) =
@@ -538,13 +581,13 @@ theorem exists_clean_encoded_merging_preparation {d r q a A : ℕ}
     ∃ Z : Matrix (Cfg d (a + (2 * q + 2))) (Cfg d (a + (2 * q + 2))) ℂ,
     ∃ U : Matrix (Cfg d ((a + (2 * q + 2)) + A))
         (Cfg d ((a + (2 * q + 2)) + A)) ℂ,
-      IsPairProduct d ((a + (2 * q + 2)) + A)
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph ((a + (2 * q + 2)) + A)))
         (mergingPreparationGateCount d q (a + (2 * q + 2)) A) U ∧
       IsCleanImplementation
-        (initializedBasisMatrix
-          (zeroWorkspaceEmbedding (d := d) (n := a + (2 * q + 2)) (a := A))) U Z ∧
+        (basisInclusion
+          (workspaceEmbedding (n := a + (2 * q + 2)) (0 : Fin A → Fin d))) U Z ∧
       IsCleanImplementation
-        (initializedBasisMatrix
+        (basisInclusion
           (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e))) Z
         ((1 : Matrix ρ ρ ℂ) ⊗ₖ
           (normalizedBondDilation P (⟨0, hr⟩, ⟨0, hr⟩) ⊗ₖ
@@ -552,15 +595,16 @@ theorem exists_clean_encoded_merging_preparation {d r q a A : ℕ}
       Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
         (Finset.univ.image (Fin.natAdd a : Fin (2 * q + 2) → Fin (a + (2 * q + 2)))) := by
   obtain ⟨T, hT, hTactive⟩ := exists_compatible_merging_preparation_circuit hd hr e he hP
-  let sites : Fin (2 * q + 2) ↪ Fin (a + (2 * q + 2)) :=
-    ⟨Fin.natAdd a, Fin.natAdd_injective _ _⟩
-  let scratch : Fin 0 ↪ Fin A := ⟨Fin.elim0, fun i ↦ Fin.elim0 i⟩
-  have hplaced := isPairProduct_isCleanImplementation_embedOp (by omega : 0 < d)
-    sites scratch hT (isCleanImplementation_zeroWorkspace_empty T)
-  refine ⟨embedOp sites T, embedOp (cleanImplementationSites sites scratch) T,
-    hplaced.1, hplaced.2, ?_, ?_⟩
-  · exact isCleanImplementation_embedOp_suffix f _ hTactive
-  · exact embedOp_mem_supportedOperators sites.injective T
+  let Z := ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.natAddEmb a) T
+  have hZ := isGateProduct_placeAlong_of_succ (Fin.natAddEmb a) (fun p p' h ↦ by
+    simp only [Fin.natAddEmb_apply, Fin.val_natAdd]; omega) hT
+  have hU := isGateProduct_placeAlong_of_succ (Fin.castAddEmb A)
+    (fun p p' h ↦ by simpa only [Fin.castAddEmb_apply, Fin.val_castAdd] using h) hZ
+  refine ⟨Z, ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.castAddEmb A) Z,
+    hU.mono (Nat.le_mul_of_pos_right _ (by omega)), isCleanImplementation_placeAlong_workspace Z,
+    isCleanImplementation_placeAlong_natAddEmb f _ hTactive, ?_⟩
+  have h := ManyBody.placeAlong_mem_supportedOperators (X := fun _ ↦ Fin d) (Fin.natAddEmb a) T
+  rwa [Finset.map_eq_image] at h
 
 /-- A uniform projected column identity determines the exact postselection
 probability from the normalized parent Gram. -/
@@ -593,17 +637,19 @@ noncomputable def encodedJoiningParent {d r q a : ℕ} {ρ m : Type*}
     (hd : 2 ≤ d) (hr : 0 < r) (f : ρ ↪ Cfg d a) (e : Fin r ↪ Cfg d q)
     (P : Matrix (Fin r) (Fin r) ℂ) (V : Matrix (ρ × (Fin r × Fin r)) m ℂ) :
     Matrix (Cfg d (a + (2 * q + 2))) m ℂ :=
-  initializedBasisMatrix (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e)) *
-    ((1 : Matrix ρ ρ ℂ) ⊗ₖ initializedBasisMatrix (joiningChildBasisEmbedding (r := r) hd)) *
+  basisInclusion (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e)) *
+    ((1 : Matrix ρ ρ ℂ) ⊗ₖ basisInclusion (joiningChildBasisEmbedding (r := r) hd)) *
       normalizedJoiningParent hr P V
 
 /-- The gate budget of an encoded merger, with the two child costs left as
-induction data and both zero-register reflections constructed in the common pool. -/
+induction data and both zero-register reflections constructed in the common pool.
+The budget reserves one gate per amplification round beyond the circuit, whose global
+phase is free. -/
 noncomputable def encodedUniformMergingGateCount (d q n A b K₁ K₂ r : ℕ) : ℕ :=
   let K := mergingPreparationGateCount d q n A + (K₁ + K₂)
   amplificationRounds r *
-      (1 + (2 * K + selectedZeroRegisterReflectionPoolGateCount d n b A +
-        selectedZeroRegisterReflectionPoolGateCount d n 2 A)) + K
+      (1 + (2 * K + 2 * (n + A) * zeroRegisterReflectionGateCount d b +
+        2 * (n + A) * zeroRegisterReflectionGateCount d 2)) + K
 
 /-- Two full clean child circuits and their explicit joint-output column identity
 give an actual exact merger circuit. The parent isometry is the normalized
@@ -626,39 +672,39 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
     (C₁ C₂ : Matrix (Cfg d (a + (2 * q + 2))) (Cfg d (a + (2 * q + 2))) ℂ)
     (U₁ U₂ : Matrix (Cfg d ((a + (2 * q + 2)) + A))
       (Cfg d ((a + (2 * q + 2)) + A)) ℂ)
-    (hU₁ : IsPairProduct d ((a + (2 * q + 2)) + A) K₁ U₁)
-    (hU₂ : IsPairProduct d ((a + (2 * q + 2)) + A) K₂ U₂)
+    (hU₁ : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph ((a + (2 * q + 2)) + A))) K₁ U₁)
+    (hU₂ : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph ((a + (2 * q + 2)) + A))) K₂ U₂)
     (hclean₁ : IsCleanImplementation
-      (initializedBasisMatrix
-        (zeroWorkspaceEmbedding (d := d) (n := a + (2 * q + 2)) (a := A))) U₁ C₁)
+      (basisInclusion
+        (workspaceEmbedding (n := a + (2 * q + 2)) (0 : Fin A → Fin d))) U₁ C₁)
     (hclean₂ : IsCleanImplementation
-      (initializedBasisMatrix
-        (zeroWorkspaceEmbedding (d := d) (n := a + (2 * q + 2)) (a := A))) U₂ C₂)
+      (basisInclusion
+        (workspaceEmbedding (n := a + (2 * q + 2)) (0 : Fin A → Fin d))) U₂ C₂)
     (V : Matrix (ρ × (Fin r × Fin r))
       ({i : Fin (a + (2 * q + 2)) // i ∉ Set.range s} → Fin d) ℂ)
-    (hchild : (C₁ * C₂) * initializedBasisMatrix (zeroFlagEmbedding (d := d) s) =
-      initializedBasisMatrix
+    (hchild : (C₁ * C₂) * basisInclusion (zeroFlagEmbedding (d := d) s) =
+      basisInclusion
         (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e)) *
         ((1 : Matrix ρ ρ ℂ) ⊗ₖ
-          initializedBasisMatrix (joiningChildBasisEmbedding (r := r) hd)) * V)
+          basisInclusion (joiningChildBasisEmbedding (r := r) hd)) * V)
     (hparent : (normalizedJoiningParent hr P V).IsIsometry) :
     ∃ Z : Matrix (Cfg d (a + (2 * q + 2))) (Cfg d (a + (2 * q + 2))) ℂ,
     ∃ W : Matrix (Cfg d ((a + (2 * q + 2)) + A))
         (Cfg d ((a + (2 * q + 2)) + A)) ℂ,
-      IsPairProduct d ((a + (2 * q + 2)) + A)
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph ((a + (2 * q + 2)) + A)))
         (encodedUniformMergingGateCount d q (a + (2 * q + 2)) A b K₁ K₂ r) W ∧
       Z ∈ unitary (Matrix (Cfg d (a + (2 * q + 2))) (Cfg d (a + (2 * q + 2))) ℂ) ∧
       IsCleanImplementation
-        (initializedBasisMatrix
-          (zeroWorkspaceEmbedding (d := d) (n := a + (2 * q + 2)) (a := A))) W Z ∧
+        (basisInclusion
+          (workspaceEmbedding (n := a + (2 * q + 2)) (0 : Fin A → Fin d))) W Z ∧
       IsCleanImplementation
-        (initializedBasisMatrix
-          (zeroWorkspaceEmbedding (d := d) (n := a + (2 * q + 2)) (a := A))) Wᴴ Zᴴ ∧
-      W * (initializedBasisMatrix
-          (zeroWorkspaceEmbedding (d := d) (n := a + (2 * q + 2)) (a := A)) *
-        initializedBasisMatrix (zeroFlagEmbedding (d := d) s)) =
-        initializedBasisMatrix
-          (zeroWorkspaceEmbedding (d := d) (n := a + (2 * q + 2)) (a := A)) *
+        (basisInclusion
+          (workspaceEmbedding (n := a + (2 * q + 2)) (0 : Fin A → Fin d))) Wᴴ Zᴴ ∧
+      W * (basisInclusion
+          (workspaceEmbedding (n := a + (2 * q + 2)) (0 : Fin A → Fin d)) *
+        basisInclusion (zeroFlagEmbedding (d := d) s)) =
+        basisInclusion
+          (workspaceEmbedding (n := a + (2 * q + 2)) (0 : Fin A → Fin d)) *
           encodedJoiningParent hd hr f e P V ∧
       ∀ support : Finset (Fin (a + (2 * q + 2))),
         C₁ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support →
@@ -668,12 +714,12 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
         Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support := by
   obtain ⟨T, U, hU, hUclean, hTactive, hTsupport⟩ :=
     exists_clean_encoded_merging_preparation (A := A) hd hr f e he hP
-  let J := initializedBasisMatrix
-    (zeroWorkspaceEmbedding (d := d) (n := a + (2 * q + 2)) (a := A))
-  let E := initializedBasisMatrix (zeroFlagEmbedding (d := d) s)
+  let J := basisInclusion
+    (workspaceEmbedding (n := a + (2 * q + 2)) (0 : Fin A → Fin d))
+  let E := basisInclusion (zeroFlagEmbedding (d := d) s)
   let F := encodedJoiningParent hd hr f e P V
-  let S := initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)) *
-    (initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)))ᴴ
+  let S := basisInclusion (zeroFlagEmbedding (d := d) (mergingFlagSites a q)) *
+    (basisInclusion (zeroFlagEmbedding (d := d) (mergingFlagSites a q)))ᴴ
   let Z₀ := T * (C₁ * C₂)
   have hjoint := hU.mul (hU₁.mul hU₂)
   have hjointClean := hUclean.mul (hclean₁.mul hclean₂)
@@ -682,10 +728,10 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
   change S * Z₀ * E = (Real.sin (amplificationAngle r) : ℂ) • F at hsuccess
   have hI : (1 : Matrix ρ ρ ℂ).IsIsometry := by simp [Matrix.IsIsometry]
   have hflag := Matrix.IsIsometry.kronecker (1 : Matrix ρ ρ ℂ)
-    (initializedBasisMatrix (joiningChildBasisEmbedding (r := r) hd)) hI
-    (initializedBasisMatrix_isIsometry _)
+    (basisInclusion (joiningChildBasisEmbedding (r := r) hd)) hI
+    (basisInclusion_isIsometry _)
   have hF : F.IsIsometry :=
-    ((initializedBasisMatrix_isIsometry
+    ((basisInclusion_isIsometry
       (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e))).mul _ _ hflag).mul
         _ _ hparent
   have hS : IsStarProjection S :=
@@ -693,12 +739,12 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
   have hprob := success_gram_of_encoded_columns (Z₀ * E) F S hS hF
     (Real.sin (amplificationAngle r))
     (by simpa only [Matrix.mul_assoc] using hsuccess)
-  have hJ : J.IsIsometry := initializedBasisMatrix_isIsometry _
-  have hE : E.IsIsometry := initializedBasisMatrix_isIsometry _
-  obtain ⟨R, hR, hRclean⟩ := exists_isPairProduct_isCleanImplementation_zeroFlagReflection
-    hd (by omega : 2 ≤ a + (2 * q + 2)) s hpool
-  obtain ⟨G, hG, hGclean⟩ := exists_isPairProduct_isCleanImplementation_zeroFlagReflection
-    hd (by omega : 2 ≤ a + (2 * q + 2)) (mergingFlagSites a q) hpool₂
+  have hJ : J.IsIsometry := basisInclusion_isIsometry _
+  have hE : E.IsIsometry := basisInclusion_isIsometry _
+  obtain ⟨R, hR, hRclean⟩ := exists_isGateProduct_isCleanImplementation_zeroFlagReflection
+    hd (by omega : 0 < a + (2 * q + 2)) s hpool
+  obtain ⟨G, hG, hGclean⟩ := exists_isGateProduct_isCleanImplementation_zeroFlagReflection
+    hd (by omega : 0 < a + (2 * q + 2)) (mergingFlagSites a q) hpool₂
   obtain ⟨W, hW, hWclean, hcolumns⟩ := exists_exact_clean_amplification_circuit
     (by omega : 2 ≤ (a + (2 * q + 2)) + A) J hJ E hE Z₀ (U * (U₁ * U₂)) R G
     hjoint hjointClean hR hRclean S hS hG hGclean
@@ -709,15 +755,16 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
   have hnorm : postselectionSuccess (Z₀ * E) S (Real.sin (amplificationAngle r)) = F := by
     rw [postselectionSuccess, ← Matrix.mul_assoc, hsuccess, smul_smul,
       inv_mul_cancel₀ (Complex.ofReal_ne_zero.mpr hs), one_smul]
-  have hZ := hWclean.logical_mem_unitary hJ hW.mem_unitary
+  have hZ := hWclean.logical_mem_unitaryGroup hJ hW.mem_unitaryGroup
   refine ⟨postselectionAmplificationStep (Z₀ * E) S ^ amplificationRounds r * Z₀,
-    W, hW, hZ, hWclean, hWclean.conjTranspose_of_isometry hJ hW.mem_unitary, ?_, ?_⟩
+    W, hW.mono (Nat.add_le_add_right (Nat.mul_le_mul_left _ (Nat.le_add_left _ _)) _), hZ,
+    hWclean, hWclean.conjTranspose_of_isometry hJ hW.mem_unitaryGroup, ?_, ?_⟩
   · change W * (J * E) = J * F
     change W * (J * E) = J * postselectionSuccess (Z₀ * E) S
       (Real.sin (amplificationAngle r)) at hcolumns
     simpa only [hnorm] using hcolumns
   · intro support hC₁support hC₂support hinputSupport hpacketSupport
-    have hZ₀unitary := hjointClean.logical_mem_unitary hJ hjoint.mem_unitary
+    have hZ₀unitary := hjointClean.logical_mem_unitaryGroup hJ hjoint.mem_unitaryGroup
     have hZ₀support : Z₀ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support :=
       mul_mem (ManyBody.supportedOperators_mono (fun x hx => by
           obtain ⟨i, -, rfl⟩ := Finset.mem_image.mp hx
@@ -726,11 +773,11 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
     have hinputReflection :
         subspaceReflection (E * Eᴴ) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support := by
       change subspaceReflection
-        (initializedBasisMatrix (zeroFlagEmbedding (d := d) s) *
-          (initializedBasisMatrix (zeroFlagEmbedding (d := d) s))ᴴ) ∈ _
+        (basisInclusion (zeroFlagEmbedding (d := d) s) *
+          (basisInclusion (zeroFlagEmbedding (d := d) s))ᴴ) ∈ _
       rw [← selectedZeroRegisterLogical_eq_subspaceReflection]
-      exact selectedZeroRegisterLogical_mem_supportedOperators_of_range_subset s
-        (Finset.coe_subset.mp (by simpa using hinputSupport))
+      exact ManyBody.supportedOperators_mono (Finset.coe_subset.mp (by simpa using hinputSupport))
+        (selectedZeroRegisterLogical_mem_supportedOperators s)
     have hsuccessSupport : Set.range (mergingFlagSites a q) ⊆ support := by
       rintro i ⟨p, rfl⟩
       apply hpacketSupport
@@ -741,11 +788,12 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
     have hsuccessReflection :
         subspaceReflection S ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support := by
       change subspaceReflection
-        (initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)) *
-          (initializedBasisMatrix (zeroFlagEmbedding (d := d) (mergingFlagSites a q)))ᴴ) ∈ _
+        (basisInclusion (zeroFlagEmbedding (d := d) (mergingFlagSites a q)) *
+          (basisInclusion (zeroFlagEmbedding (d := d) (mergingFlagSites a q)))ᴴ) ∈ _
       rw [← selectedZeroRegisterLogical_eq_subspaceReflection]
-      exact selectedZeroRegisterLogical_mem_supportedOperators_of_range_subset _
+      exact ManyBody.supportedOperators_mono
         (Finset.coe_subset.mp (by simpa using hsuccessSupport))
+        (selectedZeroRegisterLogical_mem_supportedOperators (mergingFlagSites a q))
     exact postselectionAmplification_mem_supportedOperators Z₀ E S hZ₀unitary hZ₀support
       hinputReflection hsuccessReflection (amplificationRounds r)
 

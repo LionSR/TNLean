@@ -23,6 +23,7 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 noncomputable section
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -39,7 +40,7 @@ theorem card_repairStageExceptionalSites_le_prefix (N : ℕ)
     [IsEmpty (𝔇 N).markIndex] :
     ((repairStageExceptionalSites o Λ A C k₀ hC h₀ Sstar N).card : ℝ) ≤
       ((2 * (2 * ((C + 1) * 2 ^ k₀) + 1) ^ 2 : ℕ) : ℝ) *
-        ((edgeBoundary Λ A).card : ℝ) +
+        ((edgeBoundary (planeDomainGraph Λ) A).card : ℝ) +
       (2 * Sstar + 1) ^ 2 *
         ∑ j ∈ Finset.range N, (Nat.card (𝔇 j).markIndex : ℝ) := by
   classical
@@ -54,7 +55,7 @@ theorem card_repairStageExceptionalSites_le_prefix (N : ℕ)
       Set.mem_union, Finset.filter_or, hterminal]
   have hdummy : (((𝔇 N).regionSites Λ A (𝔇 N).dummy).card : ℝ) ≤
       ((2 * (2 * ((C + 1) * 2 ^ k₀) + 1) ^ 2 : ℕ) : ℝ) *
-        ((edgeBoundary Λ A).card : ℝ) := by
+        ((edgeBoundary (planeDomainGraph Λ) A).card : ℝ) := by
     exact_mod_cast card_repairStage_dummySites_le o Λ A C k₀ hC h₀ Sstar N
   rw [hsplit]
   calc

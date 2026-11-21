@@ -26,7 +26,7 @@ entropy decreases as `D₀` increases, so the estimate at `D₀ = 2 * R + 11` su
 
 **Scope restriction (integer safety parameter):** the theorems of this file take `D₀ : ℕ`,
 whereas the source allows every real `D₀ > 2 R + 10`. The real case is the clearance transfer
-`boxEntropy_power_le_of_succ_clearance` and `exists_regionalEntropy_safe_rect_le_boxError`,
+`boxEntropy_power_le_of_succ_clearance` and `exists_regionEntropy_safe_rect_le_boxError`,
 recorded in `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`, section "Arbitrary real
 clearance".
 
@@ -116,7 +116,7 @@ theorem bddAbove_boxEntropyValues (hq : 1 ≤ q) (r : ℕ) :
 theorem nonneg_of_mem_boxEntropyValues {r : ℕ} {s : ℝ}
     (hs : s ∈ boxEntropyValues q R J Δ D₀ r) : 0 ≤ s := by
   obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hspan, -, -, rfl⟩ := hs
-  exact regionalEntropy_nonneg Λ q Ω hΩ _
+  exact regionEntropy_nonneg Λ q Ω hΩ _
 
 theorem boxEntropy_nonneg (r : ℕ) : 0 ≤ boxEntropy q R J Δ D₀ r :=
   Real.sSup_nonneg fun _ hs ↦ nonneg_of_mem_boxEntropyValues hs
@@ -128,7 +128,7 @@ theorem boxEntropy_le_sq_mul_log (hq : 1 ≤ q) (r : ℕ) :
     (mul_nonneg (sq_nonneg _) (Real.log_nonneg (by exact_mod_cast hq)))
 
 /-- Every safe-box entropy is at most `F_box(r)`. -/
-theorem regionalEntropy_le_boxEntropy (hq : 1 ≤ q) {Λ : Finset (ℤ × ℤ)}
+theorem regionEntropy_le_boxEntropy (hq : 1 ≤ q) {Λ : Finset (ℤ × ℤ)}
     (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         {E₀ : ℝ} {Ω : StateSpace Λ q}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
@@ -144,7 +144,7 @@ theorem boxEntropy_mono (hq : 1 ≤ q) : Monotone (boxEntropy q R J Δ D₀) := 
   intro r r' hrr
   refine Real.sSup_le (fun s hs ↦ ?_) (boxEntropy_nonneg r')
   obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hspan, hsafe, hQ, rfl⟩ := hs
-  exact regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe (hQ.trans hrr)
+  exact regionEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe (hQ.trans hrr)
 
 /-- The safe-box entropy decreases with the safety parameter. Increasing the threshold
 in the safety condition (`02-initial.tex`, lines 220–228) reduces the collection of
@@ -154,7 +154,7 @@ theorem boxEntropy_antitone (hq : 1 ≤ q) (r : ℕ) :
   intro D₀ D₁ hD
   refine Real.sSup_le (fun s hs ↦ ?_) (boxEntropy_nonneg (D₀ := D₀) r)
   obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hspan, hsafe, hQ, rfl⟩ := hs
-  exact regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan
+  exact regionEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan
     (fun e he z hz p hp ↦
       (Nat.mul_le_mul_right Q.size hD).trans_lt (hsafe e he z hz p hp)) hQ
 
@@ -206,7 +206,7 @@ For a safe parent `Q` of size at most `M r`, with `P = 2 C_pad + 1`, `N = P²` a
 `p = 1/(2N)`,
 `S(A ∩ Q) ≤ ((1 - p) M² + p · 2 (2 C_pad + 1) M) F_box(r) + C_buf M² r`.
 Source: `02-initial.tex`, lines 606–646. -/
-theorem regionalEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {Cbuf : ℝ}
+theorem regionEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {Cbuf : ℝ}
     (hCbuf : 0 ≤ Cbuf)
     (hbuf : ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
         (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
@@ -293,15 +293,15 @@ theorem regionalEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {C
     simp only [good, Finset.mem_filter, Finset.mem_univ, true_and] at hi
     exact hbuf Λ h hh hhJ E₀ Ω hΩ hgap hspan A Q hsafe r hr (ch i) (IntRect.size_child_le _ _ hr)
       (IntRect.child_dilate_subset hr hi.1.2 hi.2.2 hi.1.1 hi.2.1)
-  have key := regionalEntropy_biUnion_le_rotations Ω hΩ Xs hdisj col hcol good T
+  have key := regionEntropy_biUnion_le_rotations Ω hΩ Xs hdisj col hcol good T
     (Cbuf * r) hT hbuf'
   rw [hunion] at key
   -- bounds on the children
   have hXF : ∀ i, ManyBody.regionEntropy Ω (Xs i) ≤ F := fun i ↦
-    regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan (hchsafe i)
+    regionEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan (hchsafe i)
         (IntRect.size_child_le _ _ hr)
   have hX0 : ∀ i, 0 ≤ ManyBody.regionEntropy Ω (Xs i) := fun i ↦
-    regionalEntropy_nonneg Λ q Ω hΩ _
+    regionEntropy_nonneg Λ q Ω hΩ _
   have hcard : (Finset.univ : Finset ι).card ≤ M ^ 2 := by
     rw [Finset.card_univ, Fintype.card_prod, Fintype.card_fin, Fintype.card_fin, sq]
     exact Nat.mul_le_mul hnx hny
@@ -397,7 +397,7 @@ theorem boxEntropy_le_of_scale (hq : 1 ≤ q) {Cpad : ℕ} {Cbuf : ℝ} (hCbuf :
           boxEntropy q R J Δ D₀ r + Cbuf * M ^ 2 * r := by
   refine Real.sSup_le (fun s hs ↦ ?_) ?_
   · obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hspan, hsafe, hQ, rfl⟩ := hs
-    exact regionalEntropy_rectRegion_le_of_children hq hCbuf hbuf h hh hhJ hΩ hgap hspan hsafe hr hQ
+    exact regionEntropy_rectRegion_le_of_children hq hCbuf hbuf h hh hhJ hΩ hgap hspan hsafe hr hQ
   · have hF := boxEntropy_nonneg (q := q) (R := R) (J := J) (Δ := Δ) (D₀ := D₀) r
     have hp : (0 : ℝ) ≤ 1 / (2 * ((2 * Cpad + 1) ^ 2 : ℕ)) := by positivity
     have hp1 : 1 / (2 * (((2 * Cpad + 1) ^ 2 : ℕ) : ℝ)) ≤ 1 := by

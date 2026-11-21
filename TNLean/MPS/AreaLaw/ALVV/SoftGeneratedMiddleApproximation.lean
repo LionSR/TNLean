@@ -8,7 +8,7 @@ import TNLean.MPS.AreaLaw.NativeIntervalMPOApproximation
 import TNLean.MPS.AreaLaw.RetainedCoreFamilies
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.RegionalBondRestriction
-import TNLean.Circuit.SiteEmbeddingNorm
+import QICLean.ManyBody.Sites.PlaceAlong
 import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.MPDO.TraceChainHermitian
 import QICLean.Analysis.PrincipalSubmatrixNorm
@@ -69,13 +69,12 @@ theorem exists_native_soft_middle_mpo_approximation {N q l r m : ℕ}
     ∃ (Acore : Fin (r - l) → MPOTensor q bond)
       (C0 : Matrix (Fin bond) (Fin bond) ℂ),
       let Z := MPOTensor.traceChainOperator Acore C0
-      let Zphys := QuantumCircuit.embedOp
-        (Subtype.val : interval (N + 1) l r → Fin (N + 1))
-        (QuantumCircuit.embedOp eJ Z)
+      let Zphys := ManyBody.place (X := fun _ ↦ Fin q) (interval (N + 1) l r)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin q) eJ.toEquiv.toEmbedding Z)
       Z.IsHermitian ∧ Zphys.IsHermitian ∧
-        P = QuantumCircuit.embedOp
-          (Subtype.val : interval (N + 1) l r → Fin (N + 1))
-          (QuantumCircuit.embedOp eJ (P.submatrix insert insert)) ∧
+        P = ManyBody.place (X := fun _ ↦ Fin q) (interval (N + 1) l r)
+          (ManyBody.placeAlong (X := fun _ ↦ Fin q) eJ.toEquiv.toEmbedding
+            (P.submatrix insert insert)) ∧
         ‖P.submatrix insert insert - Z‖ ≤ xi ∧ ‖P - Zphys‖ ≤ xi := by
   classical
   intro A P sigma0 insert eJ W b order bond
@@ -123,12 +122,12 @@ theorem exists_native_soft_middle_mpo_approximation {N q l r m : ℕ}
   obtain ⟨Acore, C0, hZ, hZphys, hRecon, hNativeError, hPlacedError⟩ :=
     exists_native_interval_slice_of_mpo_approximation hq hlr hrL P hPs Ah hAh xi hAhError
   refine ⟨Acore, C0, hZ, ?_, ?_, hNativeError, ?_⟩
-  · simpa only [QuantumCircuit.embedOp_embedOp Subtype.val_injective,
-      eJ, insert, sigma0, Function.comp_def] using hZphys
-  · simpa only [QuantumCircuit.embedOp_embedOp Subtype.val_injective,
-      eJ, insert, sigma0, Function.comp_def] using hRecon
-  · simpa only [QuantumCircuit.embedOp_embedOp Subtype.val_injective,
-      eJ, insert, sigma0, Function.comp_def] using hPlacedError
+  · simpa only [← ManyBody.placeAlong_subtype, ManyBody.placeAlong_placeAlong,
+      eJ, insert, sigma0] using hZphys
+  · simpa only [← ManyBody.placeAlong_subtype, ManyBody.placeAlong_placeAlong,
+      eJ, insert, sigma0] using hRecon
+  · simpa only [← ManyBody.placeAlong_subtype, ManyBody.placeAlong_placeAlong,
+      eJ, insert, sigma0] using hPlacedError
 
 /-- Replacing only the middle term by its constructed native approximation
 preserves the exact exterior soft terms, all unchanged regions and the actual
@@ -167,9 +166,8 @@ theorem exists_five_region_soft_middle_mpo_approximation {N q k1 k2 k3 k4 m : �
     ∃ (Acore : Fin (k3 - k2) → MPOTensor q bond)
       (C0 : Matrix (Fin bond) (Fin bond) ℂ),
       let Z := MPOTensor.traceChainOperator Acore C0
-      let Zphys := QuantumCircuit.embedOp
-        (Subtype.val : interval (N + 1) k2 k3 → Fin (N + 1))
-        (QuantumCircuit.embedOp eJ Z)
+      let Zphys := ManyBody.place (X := fun _ ↦ Fin q) (interval (N + 1) k2 k3)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin q) eJ.toEquiv.toEmbedding Z)
       let Ghat := (∑ j, ((if j = 2 then Zphys else
         if j ∈ S then F j else A j) - (e j : ℂ) • 1)) + Y
       Z.IsHermitian ∧ G.IsHermitian ∧ Ghat.IsHermitian ∧
@@ -180,9 +178,8 @@ theorem exists_five_region_soft_middle_mpo_approximation {N q k1 k2 k3 k4 m : �
     exists_native_soft_middle_mpo_approximation hq h23 (h34.trans h4L) hm
       Φ h0 h1 (p 2) t xi hlo hscale hxi
   let Z := MPOTensor.traceChainOperator Acore C0
-  let Zphys := QuantumCircuit.embedOp
-    (Subtype.val : interval (N + 1) k2 k3 → Fin (N + 1))
-    (QuantumCircuit.embedOp eJ Z)
+  let Zphys := ManyBody.place (X := fun _ ↦ Fin q) (interval (N + 1) k2 k3)
+    (ManyBody.placeAlong (X := fun _ ↦ Fin q) eJ.toEquiv.toEmbedding Z)
   change Z.IsHermitian at hZ
   change Zphys.IsHermitian at hZphys
   change ‖F 2 - Zphys‖ ≤ xi at hMiddleError

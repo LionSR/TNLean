@@ -71,8 +71,8 @@ theorem exists_soft_low_density_polynomial_core
         (Nat.le_mul_of_pos_left ell (by decide : 0 < 2)) b).trans hb))
     let beta := fun _ : Fin (N + 1) ↦ Fin q
     let midConfig := ManyBody.RegionConfig beta J
-    let extConfig := ManyBody.RegionConfig beta Jᶜ
-    let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let extConfig := ManyBody.ComplConfig beta J
+    let split := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
     let heatWeight := t * (2 : ℝ) ^ (m + 1)
     let clusterBase := 2 * (Real.exp (1 / 3 : ℝ) - 1)
     let order := max 1 ⌈(Real.log (max 1 ((N : ℝ) ^ 2)) -
@@ -93,8 +93,8 @@ theorem exists_soft_low_density_polynomial_core
         (C : Fin (m + 1) → Matrix (Fin bond) (Fin bond) ℂ),
         let Z := fun z : ℂ ↦ MPOTensor.traceChainOperator Acore
           (∑ j : Fin (m + 1), z ^ j.val • C j)
-        let Zphys := fun z : ℂ ↦ QuantumCircuit.embedOp
-          (Subtype.val : Ksites → Fin (N + 1)) (QuantumCircuit.embedOp eK (Z z))
+        let Zphys := fun z : ℂ ↦ ManyBody.place (X := fun _ ↦ Fin q) Ksites
+          (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding (Z z))
         ∃ (n : ℕ) (W : Fin n → Matrix midConfig midConfig ℂ),
           n ≤ D ∧
           (∀ i, IsOpenMPS ((b + ell + 1) - (a + ell)) (q * q)

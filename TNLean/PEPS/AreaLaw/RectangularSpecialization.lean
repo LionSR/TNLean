@@ -41,6 +41,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace rectangularDomain rectangleSiteEquiv)
 
+open ManyBody (innerBoundary endpointBoundary)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Native rectangular entropy, with one constant for the edge and both
@@ -59,13 +61,13 @@ def RectangularEntropyAreaLaw : Prop :=
               C * Fintype.card
                 {e : Edge (squareLatticeGraph width height) // IsRegionBoundaryEdge A e} ∧
             ManyBody.regionEntropy Ω A ≤
-              4 * C * (rectangleInnerBoundary A).card ∧
+              4 * C * (innerBoundary (squareLatticeGraph width height) A).card ∧
             ManyBody.regionEntropy Ω A ≤
-              2 * C * (rectangleEndpointBoundary A).card
+              2 * C * (endpointBoundary (squareLatticeGraph width height) A).card
 
 /-- The original regional entropy is exactly the transported domain entropy.
 Source: Corollary 1.2, relabeling the same tensor factors. -/
-theorem regionalEntropy_rectangleAreaLawState {width height q : ℕ}
+theorem regionEntropy_rectangleAreaLawState {width height q : ℕ}
     (Ω : RectangleStateSpace width height q) (A : Finset (SquareLatticeVertex width height)) :
     ManyBody.regionEntropy (rectangleAreaLawState Ω)
         (A.map (rectangleSiteEquiv width height).toEmbedding) =
@@ -88,11 +90,11 @@ theorem UniformAreaLaw.rectangularEntropyAreaLaw (harea : UniformAreaLaw) :
     h.isHermitian_toPlaneInteraction_hermitianPart_term
     (h.norm_toPlaneInteraction_hermitianPart_term_le hΦ) E₀
     (rectangleAreaLawState Ω) hΩ' hgap' hspan' (A.map (rectangleSiteEquiv width height).toEmbedding)
-  have hi := regionalEntropy_le_four_mul_innerBoundary_card hC h
-  have he := regionalEntropy_le_two_mul_endpointBoundary_card hC h
-  rw [regionalEntropy_rectangleAreaLawState, card_edgeBoundary_rectangular] at h
-  rw [regionalEntropy_rectangleAreaLawState, card_innerBoundary_rectangular] at hi
-  rw [regionalEntropy_rectangleAreaLawState, card_endpointBoundary_rectangular] at he
+  have hi := regionEntropy_le_four_mul_innerBoundary_card hC h
+  have he := regionEntropy_le_two_mul_endpointBoundary_card hC h
+  rw [regionEntropy_rectangleAreaLawState, card_edgeBoundary_rectangular] at h
+  rw [regionEntropy_rectangleAreaLawState, card_innerBoundary_rectangular] at hi
+  rw [regionEntropy_rectangleAreaLawState, card_endpointBoundary_rectangular] at he
   exact ⟨h, hi, he⟩
 
 /-- The rectangular result supplies the accepted square statement, the equal-side case,

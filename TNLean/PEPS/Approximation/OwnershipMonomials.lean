@@ -103,8 +103,9 @@ theorem birth_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
       (∀ x ∉ T ∪ F.birthEnv P, F.owner x = P ∧ (F.changeOwner T Q).owner x = P) ∧
       (∀ x ∈ T, (F.changeOwner T Q).owner x = Q) ∧
       ∀ ℓ : Lattice.PartyCircuit.Layout Party,
-        ∃ w : Word (⟨P, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩ :: ℓ)
-            (⟨Q, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩ :: ℓ),
+        ∃ w : Word
+            (⟨P, euc (T → Fin q)⟩ :: ⟨P, euc ({v // v ∉ T ∪ F.birthEnv P} → Fin q)⟩ :: ℓ)
+            (⟨Q, euc (T → Fin q)⟩ :: ⟨P, euc ({v // v ∉ T ∪ F.birthEnv P} → Fin q)⟩ :: ℓ),
           w.IsAllowed ∧ w.UsesOnly {P, Q} ∧ w.sourceCount ≤ 1 ∧
           ∀ z, pairHeadIso ℓ (w.eval z) =
             (act ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).rTensor (Mem ℓ)
@@ -148,8 +149,9 @@ theorem death_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
       (∀ x ∉ T ∪ F.birthEnv P, F.owner x = P ∧ (F.changeOwner T Q).owner x = P) ∧
       (∀ x ∈ T, (F.changeOwner T Q).owner x = Q) ∧
       ∀ ℓ : Lattice.PartyCircuit.Layout Party,
-        ∃ M : PartyChain (⟨Q, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩ :: ℓ)
-            (⟨P, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ F.birthEnv P)ᶜ → Fin q)⟩ :: ℓ),
+        ∃ M : PartyChain
+            (⟨Q, euc (T → Fin q)⟩ :: ⟨P, euc ({v // v ∉ T ∪ F.birthEnv P} → Fin q)⟩ :: ℓ)
+            (⟨P, euc (T → Fin q)⟩ :: ⟨P, euc ({v // v ∉ T ∪ F.birthEnv P} → Fin q)⟩ :: ℓ),
           M.IsAllowed ∧ M.UsesOnly {P, Q} ∧ M.sourceCount = 0 ∧
           M.toEffectChain.effectCount ≤ 1 ∧
           ∀ z, pairHeadIso ℓ (M.toEffectChain.eval z) =
@@ -193,10 +195,10 @@ theorem exchange_correction_monomial (σ : SplittingData q (X.tSet P) (X.eSet P)
       (∀ x ∉ X.tSet P ∪ X.eSet P, (X.owner₁ x = P ∧ X.owner₂ x = P) ∧
         (X.newFrame₁.owner x = P ∧ X.newFrame₂.owner x = P)) ∧
       ∀ ℓ : Lattice.PartyCircuit.Layout Party,
-        ∃ w : Word (⟨P, euc (↥(X.tSet P ∪ X.eSet P)ᶜ → Fin q)⟩ ::
-              ⟨P, euc (↥(X.tSet P ∪ X.eSet P)ᶜ → Fin q)⟩ :: ℓ)
-            (⟨P, euc (↥(X.tSet P ∪ X.eSet P)ᶜ → Fin q)⟩ ::
-              ⟨P, euc (↥(X.tSet P ∪ X.eSet P)ᶜ → Fin q)⟩ :: ℓ),
+        ∃ w : Word (⟨P, euc ({v // v ∉ X.tSet P ∪ X.eSet P} → Fin q)⟩ ::
+              ⟨P, euc ({v // v ∉ X.tSet P ∪ X.eSet P} → Fin q)⟩ :: ℓ)
+            (⟨P, euc ({v // v ∉ X.tSet P ∪ X.eSet P} → Fin q)⟩ ::
+              ⟨P, euc ({v // v ∉ X.tSet P ∪ X.eSet P} → Fin q)⟩ :: ℓ),
           w.IsAllowed ∧ w.UsesOnly {P} ∧ w.sourceCount = 0 ∧
           ∀ z, pairHeadIso ℓ (w.eval z) =
             (act (correctionMatrix σ (X.aSet P))).rTensor (Mem ℓ) (pairHeadIso ℓ z) := by

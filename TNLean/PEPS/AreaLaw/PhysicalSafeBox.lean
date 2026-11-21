@@ -48,7 +48,7 @@ is defined in lines 590–594, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 This pointwise statement is the bound defining the source's safe-box supremum;
 no second safety predicate or entropy supremum is introduced. -/
-theorem exists_regionalEntropy_safe_rect_le_boxError
+theorem exists_regionEntropy_safe_rect_le_boxError
     (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ C : ℝ, 0 < C ∧ ∀ D₀ : ℝ, 2 * (R : ℝ) + 10 < D₀ →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
@@ -83,7 +83,7 @@ theorem exists_regionalEntropy_safe_rect_le_boxError
     have hcast : ((d * Q.size : ℕ) : ℝ) < (supDist t z.val : ℝ) := by
       simpa only [Nat.cast_mul] using hle.trans_lt hreal
     exact_mod_cast hcast
-  exact regionalEntropy_le_of_boxEntropy_power (e := (Exponents.boxError : ℝ)) hq
+  exact regionEntropy_le_of_boxEntropy_power (e := (Exponents.boxError : ℝ)) hq
     (by norm_num [Exponents.boxError]) hweak h hh hhJ hΩ hgap hspan A Q hsafe
 
 end TNLean.PEPS.AreaLaw

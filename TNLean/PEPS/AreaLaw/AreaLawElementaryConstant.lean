@@ -45,6 +45,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
+open ManyBody (planeDomainGraph edgeBoundary)
+
 namespace TNLean.PEPS.AreaLaw
 
 open Scan
@@ -98,7 +100,8 @@ theorem uniformAreaLaw_elementary (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
           ManyBody.regionEntropy Ω A ≤
-            uniformAreaLawConstantElementary q R J Δ * (edgeBoundary Λ A).card :=
+            uniformAreaLawConstantElementary q R J Δ *
+              (edgeBoundary (planeDomainGraph Λ) A).card :=
   uniformAreaLaw_closed_of_le q R hq hJ hΔ (physicalBoxConstantClosed_le_elementary q R hq hJ hΔ)
 
 end TNLean.PEPS.AreaLaw

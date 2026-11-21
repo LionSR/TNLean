@@ -34,6 +34,8 @@ part2b_mps_protocol.tex, lines 605–614.
 
 noncomputable section
 
+open ManyBody (cutMatrix)
+
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
 variable {L w q : ℕ}
@@ -105,12 +107,12 @@ private theorem cutMatrix_eq_flattening_submatrix
     (ψ : EuclideanSpace ℂ ((p : Party L w) → Fin (physicalDimension L w q p)))
     (k : ℕ) (T : Finset (Party L w))
     (h : ∀ x, x ∈ leftBlock L k ↔ mainOwner L w x ∈ T) :
-    cutMatrix (WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))) k =
+    cutMatrix (leftBlock L k) (WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))) =
       (TNLean.Lattice.WholeGroup.flattening (fun y ↦ ψ y) T).submatrix
         (blockCutEquiv h) (blockCutEquiv (fun x ↦ not_congr (h x))) := by
   classical
   ext a b
-  rw [cutMatrix_apply]
+  rw [ManyBody.cutMatrix_apply]
   change ψ (mainConfigurationEquiv L w q
     ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm (a, b))) = _
   exact congrArg (fun y ↦ ψ y) (mainConfigurationEquiv_glue (leftBlock L k) T h a b)
@@ -140,7 +142,7 @@ theorem rank_partyPrefix_eq_cutMatrix
     let T := Finset.univ.filter fun p : Party L w ↦ partyLevel p < r
     let Φ := WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))
     (TNLean.Lattice.WholeGroup.flattening (fun y ↦ ψ y) T).rank =
-      (cutMatrix Φ (r * (20 * w))).rank := by
+      (cutMatrix (leftBlock L (r * (20 * w))) Φ).rank := by
   classical
   dsimp only
   let T := Finset.univ.filter fun p : Party L w ↦ partyLevel p < r
@@ -148,7 +150,8 @@ theorem rank_partyPrefix_eq_cutMatrix
     intro x
     simpa only [mem_leftBlock, T, Finset.mem_filter, Finset.mem_univ, true_and] using
       (partyLevel_mainOwner_lt_iff r hr x).symm
-  rw [cutMatrix_eq_flattening_submatrix ψ (r * (20 * w)) T h, Matrix.rank_submatrix]
+  exact (Matrix.rank_submatrix _ _ _).symm.trans
+    (congrArg Matrix.rank (cutMatrix_eq_flattening_submatrix ψ (r * (20 * w)) T h).symm)
 
 /-- The prefix after all m+1 levels includes the actual final remainder party,
 and corresponds to the original-site full-chain cut. No party is removed.
@@ -157,7 +160,8 @@ theorem rank_partyPrefix_last_eq_cutMatrix
     (ψ : EuclideanSpace ℂ ((p : Party L w) → Fin (physicalDimension L w q p))) :
     let T := Finset.univ.filter fun p : Party L w ↦ partyLevel p < stageCount L w + 1
     let Φ := WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))
-    (TNLean.Lattice.WholeGroup.flattening (fun y ↦ ψ y) T).rank = (cutMatrix Φ L).rank := by
+    (TNLean.Lattice.WholeGroup.flattening (fun y ↦ ψ y) T).rank =
+      (cutMatrix (leftBlock L L) Φ).rank := by
   classical
   dsimp only
   let T := Finset.univ.filter fun p : Party L w ↦ partyLevel p < stageCount L w + 1
@@ -169,7 +173,8 @@ theorem rank_partyPrefix_last_eq_cutMatrix
     intro x
     simp only [mem_leftBlock, x.isLt, T, Finset.mem_filter, Finset.mem_univ, true_and,
       hlevel, iff_self]
-  rw [cutMatrix_eq_flattening_submatrix ψ L T h, Matrix.rank_submatrix]
+  exact (Matrix.rank_submatrix _ _ _).symm.trans
+    (congrArg Matrix.rank (cutMatrix_eq_flattening_submatrix ψ L T h).symm)
 
 /-- Actual internal physical party-prefix rank bounds imply the uniform
 original-site cut bound. The endpoint ranks are at most one for every vector.
@@ -183,11 +188,11 @@ theorem rank_cutMatrix_le_of_partyPrefix_bounds
         (Finset.univ.filter fun p : Party L w ↦ partyLevel p < r)).rank ≤ R)
     (k : ℕ) (hk : k ≤ L) :
     let Φ := WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))
-    (cutMatrix Φ k).rank ≤ q ^ (40 * w) * R := by
+    (cutMatrix (leftBlock L k) Φ).rank ≤ q ^ (40 * w) * R := by
   classical
   let Φ : EuclideanSpace ℂ (Fin L → Fin q) :=
     WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))
-  change (cutMatrix Φ k).rank ≤ _
+  change (cutMatrix (leftBlock L k) Φ).rank ≤ _
   let m := stageCount L w
   let t := 20 * w
   have ht : 0 < t := by dsimp [t]; omega
@@ -197,7 +202,7 @@ theorem rank_cutMatrix_le_of_partyPrefix_bounds
   have hmL : m * t ≤ L := by omega
   have hterminal := (terminal_length_bounds L w hw hgeometry).2
   change L - m * t < 4 * t at hterminal
-  have hcut (r : ℕ) (hr : r ≤ m) : (cutMatrix Φ (r * t)).rank ≤ R := by
+  have hcut (r : ℕ) (hr : r ≤ m) : (cutMatrix (leftBlock L (r * t)) Φ).rank ≤ R := by
     by_cases hr0 : r = 0
     · subst r
       rw [Nat.zero_mul]

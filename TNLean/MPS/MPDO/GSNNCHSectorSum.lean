@@ -40,8 +40,7 @@ basis of normal tensors remains open; see the same note.
 
 ## Main declarations
 
-* `MPOTensor.embedLocalOperator_submatrix_rotateConfig`
-* `MPOTensor.embedLocalOperator_posSemidef`
+* `MPOTensor.placeAlong_ringWindow_submatrix_rotateConfig`
 * `MPOTensor.GSNNCHData.bondAt_posSemidef`
 * `MPOTensor.GSNNCHData.bondAt_comm`
 * `MPOTensor.GSNNCHData.sectorProduct_posSemidef`
@@ -61,93 +60,30 @@ basis of normal tensors remains open; see the same note.
 -/
 
 open scoped Matrix Kronecker ComplexOrder
-open Matrix
+open Matrix ManyBody
 
 namespace MPOTensor
 
-attribute [local instance] Classical.decEq Classical.propDecidable
-
 variable {d D N : ℕ}
 
-/-! ## Transport of embedded local operators along the cyclic shift -/
+/-! ## Transport of placed local operators along the cyclic shift -/
 
-/-- The cyclic shift moves the residue offset of a site from a window base
-the same way it moves the base. -/
-private theorem rotate_offset_eq {N : ℕ} (k i : Fin N) :
-    (((finRotate N) k).val + N - ((finRotate N) i).val) % N
-      = (k.val + N - i.val) % N := by
-  have hkN := k.isLt
-  have hiN := i.isLt
-  rw [coe_finRotate_mod, coe_finRotate_mod]
-  rcases Nat.lt_or_ge (k.val + 1) N with hk1 | hk1 <;>
-    rcases Nat.lt_or_ge (i.val + 1) N with hi1 | hi1
-  · rw [Nat.mod_eq_of_lt hk1, Nat.mod_eq_of_lt hi1]
-    congr 1
-    omega
-  · have h2 : (i.val + 1) % N = 0 := by
-      rw [show i.val + 1 = N by omega, Nat.mod_self]
-    rw [Nat.mod_eq_of_lt hk1, h2,
-      show k.val + 1 + N - 0 = k.val + 1 + N by omega, Nat.add_mod_right,
-      show k.val + N - i.val = k.val + 1 by omega]
-  · have h1 : (k.val + 1) % N = 0 := by
-      rw [show k.val + 1 = N by omega, Nat.mod_self]
-    rw [h1, Nat.mod_eq_of_lt hi1,
-      show 0 + N - (i.val + 1) = N - i.val - 1 by omega,
-      show k.val + N - i.val = N + (N - i.val - 1) by omega, Nat.add_mod_left]
-  · rw [show k.val = i.val by omega,
-      show (i.val + 1) % N + N - (i.val + 1) % N = N by omega,
-      show i.val + N - i.val = N by omega]
-
-/-- Extracting a cyclic window from a shifted configuration extracts the
-window at the shifted base site. -/
-private theorem extractWindow_comp_finRotate {N : ℕ} (L : ℕ) (i : Fin N)
-    (σ : Fin N → Fin d) :
-    MPSTensor.extractWindow L i (σ ∘ (finRotate N : Fin N → Fin N))
-      = MPSTensor.extractWindow L (finRotate N i) σ := by
-  funext j
-  simp only [MPSTensor.extractWindow, Function.comp_apply]
-  congr 1
-  apply Fin.ext
-  simp only [coe_finRotate_mod]
-  rw [Nat.mod_add_mod, Nat.mod_add_mod]
-  congr 1
-  omega
-
-/-- Two shifted configurations agree outside the window at `i` exactly when
-the original configurations agree outside the window at the shifted base. -/
-private theorem agreesOutsideWindow_comp_finRotate {N : ℕ} (L : ℕ) (hLN : L ≤ N)
-    (i : Fin N) (σ τ : Fin N → Fin d) :
-    AgreesOutsideWindow (d := d) L hLN i
-        (σ ∘ (finRotate N : Fin N → Fin N)) (τ ∘ (finRotate N : Fin N → Fin N))
-      ↔ AgreesOutsideWindow (d := d) L hLN (finRotate N i) σ τ := by
-  rw [agreesOutsideWindow_iff, agreesOutsideWindow_iff]
-  constructor
-  · intro h k hk
-    have hk' : ¬ ((((finRotate N).symm k).val + N - i.val) % N < L) := by
-      rw [← rotate_offset_eq ((finRotate N).symm k) i, Equiv.apply_symm_apply]
-      exact hk
-    have := h ((finRotate N).symm k) hk'
-    rwa [Function.comp_apply, Function.comp_apply, Equiv.apply_symm_apply] at this
-  · intro h k hk
-    have hk' : ¬ ((((finRotate N) k).val + N - ((finRotate N) i).val) % N < L) := by
-      rw [rotate_offset_eq]
-      exact hk
-    exact h ((finRotate N) k) hk'
-
-/-- **Transport of an embedded local operator along the cyclic shift.**
-Reindexing both configurations of $\tau_i(B)$ by the cyclic shift gives the
-translate at the shifted base site.
+/-- **Transport of a placed local operator along the cyclic shift.**
+Reindexing both configurations of $\tau_i(B)$, the operator `B` placed on the window of `L`
+consecutive sites starting at `i`, by the cyclic shift gives the translate at the shifted
+base site.
 
 Source: arXiv:1606.00608, Definition 4.8, lines 829--842: the translates
 $\tau_j(B)$ are the cyclic shifts of one two-site operator. -/
-theorem embedLocalOperator_submatrix_rotateConfig (L : ℕ) {N : ℕ} (hLN : L ≤ N)
+theorem placeAlong_ringWindow_submatrix_rotateConfig (L : ℕ) {N : ℕ} (hLN : L ≤ N)
     (i : Fin N) (B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    (embedLocalOperator (d := d) L N hLN i B).submatrix
+    (placeAlong (X := fun _ ↦ Fin d) (ringWindow hLN i) B).submatrix
         (rotateConfig N d) (rotateConfig N d)
-      = embedLocalOperator (d := d) L N hLN (finRotate N i) B := by
-  ext σ τ
-  simp only [Matrix.submatrix_apply, rotateConfig_apply, embedLocalOperator_apply,
-    extractWindow_comp_finRotate, agreesOutsideWindow_comp_finRotate]
+      = placeAlong (X := fun _ ↦ Fin d) (ringWindow hLN (finRotate N i)) B := by
+  have : NeZero N := NeZero.of_pos (Fin.pos i)
+  have hrot : ⇑(rotateConfig N d) = (· ∘ ⇑(finRotate N)) :=
+    funext (rotateConfig_apply N d)
+  rw [hrot, placeAlong_submatrix_comp, ringWindow_trans_finRotate, finRotate_apply]
 
 /-- Reindexing by the cyclic shift is multiplicative on chain operators. -/
 private theorem submatrix_rotateConfig_mul (A B : ChainOperator d N) :
@@ -155,25 +91,6 @@ private theorem submatrix_rotateConfig_mul (A B : ChainOperator d N) :
       = A.submatrix (rotateConfig N d) (rotateConfig N d)
         * B.submatrix (rotateConfig N d) (rotateConfig N d) :=
   (Matrix.submatrix_mul_equiv A B _ (rotateConfig N d) _).symm
-
-/-! ## Positivity of embedded local operators -/
-
-/-- An embedded positive-semidefinite local operator is positive semidefinite:
-in cyclic-window coordinates it is the Kronecker product of the local operator
-with the identity on the complement. -/
-theorem embedLocalOperator_posSemidef (L : ℕ) {N : ℕ} (hLN : L ≤ N) (i : Fin N)
-    {B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ} (hB : B.PosSemidef) :
-    (embedLocalOperator (d := d) L N hLN i B).PosSemidef := by
-  have h := reindex_embedLocalOperator_windowComplement (d := d) L N hLN i B
-  have h2 : embedLocalOperator (d := d) L N hLN i B
-      = (B ⊗ₖ (1 : Matrix (Fin (N - L) → Fin d) (Fin (N - L) → Fin d) ℂ)).submatrix
-          (windowComplementEquiv (d := d) L N hLN i)
-          (windowComplementEquiv (d := d) L N hLN i) := by
-    rw [← h]
-    ext σ τ
-    simp [Matrix.reindex_apply]
-  rw [h2]
-  exact (hB.kronecker Matrix.PosSemidef.one).submatrix _
 
 namespace GSNNCHData
 
@@ -185,7 +102,7 @@ Source: arXiv:1606.00608, lines 843--850: each $B^{(x)}$ is positive
 semidefinite. -/
 theorem bondAt_posSemidef (data : GSNNCHData d N) (x : Fin data.sectorCount)
     (i : Fin N) : (data.bondAt x i).PosSemidef :=
-  embedLocalOperator_posSemidef 2 data.hN i (data.bond_pos x)
+  posSemidef_placeAlong _ (data.bond_pos x)
 
 /-- **All cyclic translates of one sector bond commute pairwise.** Translates
 with disjoint windows commute by locality; the neighboring commutation
@@ -211,7 +128,7 @@ theorem bondAt_comm (data : GSNNCHData d N) (x : Fin data.sectorCount)
         have h := congrArg (fun A : ChainOperator d N =>
           A.submatrix (rotateConfig N d) (rotateConfig N d)) ih
         simp only [submatrix_rotateConfig_mul, GSNNCHData.bondAt,
-          embedLocalOperator_submatrix_rotateConfig] at h
+          placeAlong_ringWindow_submatrix_rotateConfig] at h
         simpa [GSNNCHData.bondAt, Function.iterate_succ_apply'] using h
   have hstep : ∀ k : Fin N,
       data.bondAt x k * data.bondAt x (MPSTensor.cyclicForwardSite k 1)
@@ -233,9 +150,9 @@ theorem bondAt_comm (data : GSNNCHData d N) (x : Fin data.sectorCount)
     · rfl
     · exact hstep i
     · exact (hstep j).symm
-  · simpa [GSNNCHData.bondAt] using
-      embedLocalOperator_commute_of_not_cyclicWindowsOverlap 2 N data.hN hover
-        (data.bond x) (data.bond x)
+  · exact (commute_placeAlong_of_disjoint (X := fun _ ↦ Fin d) (ringWindow data.hN i)
+      (disjoint_map_ringWindow_of_not_cyclicWindowsOverlap data.hN hover)
+      (data.bond x) (data.bond x)).eq
 
 /-- **Each sector product is positive semidefinite**: it is a product of
 pairwise commuting positive-semidefinite translates of one sector bond.
@@ -293,7 +210,7 @@ theorem sectorProduct_submatrix_rotateConfig (data : GSNNCHData d N)
       = fun i => data.bondAt x (finRotate N i) := by
     funext i
     simp only [Function.comp_apply, GSNNCHData.bondAt,
-      embedLocalOperator_submatrix_rotateConfig]
+      placeAlong_ringWindow_submatrix_rotateConfig]
   rw [hshift]
   have hperm : (List.ofFn fun i => data.bondAt x (finRotate N i)).Perm
       (List.ofFn fun i => data.bondAt x i) :=

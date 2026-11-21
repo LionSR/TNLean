@@ -99,7 +99,7 @@ theorem IsGInjective.range_torusClosureSuperpositionCut_eq_regionGroundSpace_int
     ha.torusPhysicalCut_rank_zeroEntropy_of_isSimplyConnected R hR hSC pairs hcomm μ hne
   let Ψ := ∑ i, μ i • torusGClosure (width := width) (height := height)
     (leftRegularMatrix G) a (pairs i).1 (pairs i).2
-  let K := physicalCutMatrix (fun v => v ∈ R) Ψ
+  let K := ManyBody.cutMatrix R Ψ
   have ht : (K * K.conjTranspose).trace ≠ 0 := ne_of_gt hpos
   have hKrank : K.rank = Fintype.card G ^
       (Fintype.card {f : Edge (torusGraph width height) // IsRegionBoundaryEdge R f} - 1) := by

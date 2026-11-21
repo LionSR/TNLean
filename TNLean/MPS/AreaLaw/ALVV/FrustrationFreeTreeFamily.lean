@@ -121,20 +121,20 @@ theorem exists_frustrationFree_improving_family_words_regionTensorCoordinates :
   rw [hker] at himprove
   have himprove' : ∀ (k : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (δ : ℝ),
       Submodule.IsViable δ S ((ℂ ∙ Γ).map (((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+        ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
           (Equiv.prodComm _ _))).trans
-            (Submodule.euclideanTensorEquiv (↥(Jᶜ) → Fin q) (J → Fin q))).trans
-          (TensorProduct.commIsometry ℂ (EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+            (Submodule.euclideanTensorEquiv ({v // v ∉ J} → Fin q) (J → Fin q))).trans
+          (TensorProduct.commIsometry ℂ (EuclideanSpace ℂ ({v // v ∉ J} → Fin q))
             (EuclideanSpace ℂ (J → Fin q)))).toLinearEquiv.toLinearMap) → δ < 1 →
       Submodule.IsViable (Δ ^ k / (1 - δ) ^ 2)
         (⨆ w : Fin k → Fin N, S.map ((List.ofFn fun j ↦
           Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W (w j))).prod :
             EuclideanSpace ℂ (J → Fin q) →ₗ[ℂ] EuclideanSpace ℂ (J → Fin q)))
         ((ℂ ∙ Γ).map (((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+        ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
           (Equiv.prodComm _ _))).trans
-            (Submodule.euclideanTensorEquiv (↥(Jᶜ) → Fin q) (J → Fin q))).trans
-          (TensorProduct.commIsometry ℂ (EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+            (Submodule.euclideanTensorEquiv ({v // v ∉ J} → Fin q) (J → Fin q))).trans
+          (TensorProduct.commIsometry ℂ (EuclideanSpace ℂ ({v // v ∉ J} → Fin q))
             (EuclideanSpace ℂ (J → Fin q)))).toLinearEquiv.toLinearMap) :=
     himprove
   rw [hcoords] at himprove'

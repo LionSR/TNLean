@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.TwoFamilies
-import QICLean.Entropy.FiniteProductContinuity
+import QICLean.Entropy.RegionEntropyContinuity
 
 /-!
 # Regional entropy continuity on a finite lattice
@@ -32,7 +32,7 @@ namespace TNLean.PEPS.AreaLaw
 /-- Regional entropy continuity with the dimension of the actual region.
 Source: Lemma 2.1, `01-preliminaries.tex`, lines 33–46, and its application
 in `08-scanner.tex`, lines 399–404. -/
-theorem abs_regionalEntropy_sub_le_sqrt_traceDistance
+theorem abs_regionEntropy_sub_le_sqrt_traceDistance_card
     (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω Φ : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hΦ : ‖Φ‖ = 1)
     (A : Finset (Site Λ)) :

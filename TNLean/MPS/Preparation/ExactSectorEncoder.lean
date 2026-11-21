@@ -19,7 +19,7 @@ linear combination of periodic states.
 * `MPSTensor.sectorEncoder_eq_polarIso_mul` factors the entire encoder through virtual pairs.
 * `MPSTensor.injective_sectorColumnMatrix_of_isInjectiveOn` derives independence of the
   actual periodic columns from supported injectivity.
-* `MPSPreparation.exists_isLocalCircuitOfDepth_sectorEncoder_exact` gives a genuine
+* `MPSPreparation.exists_isUnitaryCircuit_sectorEncoder_exact` gives a genuine
   linear-depth physical unitary on all logical inputs simultaneously.
 
 ## References
@@ -271,7 +271,7 @@ variable {d D b r : ℕ} [NeZero d]
 exactly, with a depth linear in the physical ring length and a constant fixed before that
 length and the tensor entries. The virtual normalization is performed in dimension `D²`.
 Only pair support at the actual single block is used. -/
-theorem exists_isLocalCircuitOfDepth_sectorEncoder_exact
+theorem exists_isUnitaryCircuit_sectorEncoder_exact
     (hr : 2 ≤ r) {dig : Fin D → Cfg d r} (hdig : Function.Injective dig)
     {dig₀ : Fin b → Cfg d r} (hdig₀ : Function.Injective dig₀) (hD : 0 < D) :
     ∃ C : ℕ, ∀ {Dj : Fin b → ℕ} (A : (j : Fin b) → MPSTensor d (Dj j))
@@ -282,11 +282,11 @@ theorem exists_isLocalCircuitOfDepth_sectorEncoder_exact
       IsInjectiveOn (blockTensor (blockSum A ι fun _ => 1) N)
         (blockPairs ι : Set (Fin D × Fin D)) →
       ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
-        IsLocalCircuitOfDepth U T ∧ T ≤ C * N ∧
+        IsUnitaryCircuit (Geometry.ring N) T U ∧ T ≤ C * N ∧
         U * registerEncoder (ℓ := fun _ : Fin 1 => N) (by simp)
           (fun _ => by omega) dig₀ = sectorEncoder A N := by
   classical
-  obtain ⟨C, hC⟩ := exists_isLocalCircuitOfDepth_registerCfg_of_pairProductState_supported
+  obtain ⟨C, hC⟩ := exists_isUnitaryCircuit_registerCfg_of_pairProductState_supported
     hr hdig hdig₀ hD
   refine ⟨C, fun {Dj} A ι hι hdisj hDj N _ hsize hinj => ?_⟩
   let S := blockPairs ι

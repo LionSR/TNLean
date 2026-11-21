@@ -11,265 +11,114 @@ It does not identify the unrestricted local-channel model with the source's phas
 
 \begin{definition}[Physical-port channel protocols]
     \label{def:qc_physical_port_protocol}
-    \lean{QuantumCircuit.PhysicalPortLayout,
-        QuantumCircuit.IsPhysicalPortUnitary,
-        QuantumCircuit.IsPhysicalPortUnitary.mem_unitary,
-        QuantumCircuit.IsPhysicalPortUnitary.conjTranspose,
-        QuantumCircuit.IsPhysicalPortUnitary.one,
-        QuantumCircuit.IsPhysicalPortUnitary.onsite_swap,
-        QuantumCircuit.IsPhysicalPortProtocol,
-        QuantumCircuit.IsPhysicalPortProtocol.isKrausCPTP,
-        QuantumCircuit.IsPhysicalPortProtocol.one}
+    \lean{QuantumCircuit.Geometry.portRing,
+        QuantumCircuit.portDataEmbedding,
+        QuantumCircuit.IsUnitaryDilation}
     \leanok
-    Each wire in $W$ carries $\C^d$. A layout assigns a spatial owner $s(w)\in\Z_N$ to each wire $w\in W$ and selects a physical port $p_i\in s^{-1}(i)$ at each site $i\in\Z_N$. Free (depth-$0$) operations are unitaries supported inside $s^{-1}(i)$, wire permutations $\pi$ with $s\circ\pi=s$, and normalized Kraus channels $\Phi(X)=\sum_j K_j X K_j^\dagger$ with $K_j$ supported inside $s^{-1}(i)$ and $\sum_j K_j^\dagger K_j=I$. A counted (depth-$1$) layer places a nearest-neighbor unitary layer $L$ on $\{p_i\}_{i\in\Z_N}$ as $L\otimes I_{W\setminus\{p_i\}}$. Composition adds physical depths $\operatorname{depth}(\Phi_2\circ\Phi_1)\le\operatorname{depth}(\Phi_2)+\operatorname{depth}(\Phi_1)$, depth bounds are upwards closed, $\operatorname{depth}(U^\dagger)=\operatorname{depth}(U)$, and every protocol is CPTP.
+    Fix $d,W\ge1$. The ring with physical ports carries $W$ wires of dimension $d$ at every
+    site $i\in\Z_N$, the wire $p_i=(i,0)$ being the physical port of $i$. Its cells are the set
+    of all wires of a site, of cost $0$, and the pair of ports $\{p_i,p_{i+1}\}$, of cost $1$.
+    For $W=2k+1$, the data embedding places a register $x\in\{0,\dots,d-1\}^k$ of the site $i$
+    on the data wires $d_{i,t}=(i,1+t)$, with $0$ on the port and on the scratch wires
+    $q_{i,t}=(i,1+k+t)$. Let $D$ be a set of wires containing a wire of every site. A map
+    $\Phi$ is a \emph{physical-port protocol of depth at most $T$ with environments in $D$} if
+    there are finite environment bases at the wires, with at most one element at every wire
+    outside $D$, basis vectors $e$ of the input environments, and an unbranched circuit of
+    unitary gates of depth at most $T$ on the ring with ports, with Kraus operator $U$ and every
+    wire outside $D$ of dimension at most $d$ throughout, such that
+    \begin{align}
+        \Phi(X) & =\tr_F\bigl(U(X\otimes\ketbra{e}{e})U^\dagger\bigr),\notag
+    \end{align}
+    where $F$ are the output environments.
 \end{definition}
 
 \begin{lemma}[Register codes and completed decoding]
     \label{lem:qc_register_code_completion}
-    \lean{QuantumCircuit.registerEncoding_isKrausCPTP,
-        QuantumCircuit.registerDecoding,
-        QuantumCircuit.registerDecoding_isKrausCPTP,
-        QuantumCircuit.registerDecoding_encoding,
-        QuantumCircuit.registerDecoding_comp_encoding,
-        QuantumCircuit.registerDecoding_encoding_reference,
-        QuantumCircuit.registerEncodedMap,
-        QuantumCircuit.registerEncodedMap_isKrausCPTP,
-        QuantumCircuit.registerEncodedMap_encoding,
-        QuantumCircuit.le_registerDimension,
-        QuantumCircuit.registerBasisEmbedding,
-        QuantumCircuit.pairRegisterBasisEmbedding,
-        QuantumCircuit.pairRegisterBasisEmbedding_apply,
-        QuantumCircuit.registerEncoding_apply,
-        QuantumCircuit.registerEncoding_pair}
+    \lean{KrausFamily.embed,
+        KrausFamily.decode,
+        KrausFamily.isTP_embed,
+        KrausFamily.isTP_decode,
+        KrausFamily.map_decode_apply,
+        KrausFamily.map_decode_map_embed,
+        KrausFamily.encode,
+        KrausFamily.IsTP.encode,
+        KrausFamily.map_encode_map_embed}
     \leanok
     \uses{def:mpu_initialized_basis_inclusion, thm:mpu_initialized_isometry_synthesis}
-    An injection $e\colon\{0,\dots,m-1\}\hookrightarrow\{0,\dots,d^k-1\}$ defines an isometry $E=\sum_a\ket{e(a)}\bra{a}$ ($E^\dagger E=I_m$) and encoding $\mathcal E(X)=EXE^\dagger$. For a density matrix $\rho$, the completed decoder
+    An injection $e\colon\alpha\hookrightarrow\beta$ of finite sets defines an isometry $E=\sum_a\ket{e(a)}\bra{a}$ ($E^\dagger E=I$) and the encoding $\mathcal E(X)=EXE^\dagger$. For $x_0\in\alpha$, the completed decoder
     \begin{align}
-        D(Y) & =E^\dagger YE+\operatorname{tr}[(I-EE^\dagger)Y(I-EE^\dagger)]\rho\notag
+        D(Y) & =E^\dagger YE+\sum_{b\notin e(\alpha)}\bra{b}Y\ket{b}\,\ketbra{x_0}{x_0}\notag
     \end{align}
-    is CPTP and satisfies $D\circ\mathcal E=\operatorname{id}$ and $(D\otimes\operatorname{id}_R)\circ(\mathcal E\otimes\operatorname{id}_R)=\operatorname{id}$. On a pair of registers, $E_{e_1\times e_2}=E_{e_1}\otimes E_{e_2}$. If $m\le B$ and $d\ge2$, $k=\lceil\log_d B\rceil$ satisfies $m\le d^k$. A CPTP map $\Phi$ extends to $\widehat\Phi=\mathcal E_{\rm out}\circ\Phi\circ D_{\rm in}$, which is CPTP and satisfies $\widehat\Phi\circ\mathcal E_{\rm in}=\mathcal E_{\rm out}\circ\Phi$.
+    is CPTP and satisfies $D\circ\mathcal E=\operatorname{id}$. For a CPTP map $\Phi$ with Kraus operators $K_j$ from $\C^\alpha$ to $\C^\gamma$, an injection $f$ of $\gamma$ with isometry $F$, and a point $y_0$ of the target of $f$, the map $\widehat\Phi$ with the Kraus operators $FK_jE^\dagger$ and $\ket{y_0}\bra{b}(I-EE^\dagger)$ for every $b$ is CPTP and satisfies $\widehat\Phi\circ\mathcal E=\mathcal E_f\circ\Phi$, where $\mathcal E_f(X)=FXF^\dagger$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Since $E^\dagger E=I_m$, $(I-EE^\dagger)EXE^\dagger=0$, so $D(EXE^\dagger)=E^\dagger EXE^\dagger E=X$, which extends under $-\otimes\operatorname{id}_R$. The pair basis map $(a,b)\mapsto(e_1(a),e_2(b))$ factors as $E_{e_1}\otimes E_{e_2}$, and $m\le B\le d^{\lceil\log_d B\rceil}$.
+    Since $E^\dagger E=I$, the operators $\ket{x_0}\bra{b}$ with $b\notin e(\alpha)$ vanish on the range of $E$, so $D(EXE^\dagger)=E^\dagger EXE^\dagger E=X$. The effect of $\widehat\Phi$ is $E(\sum_jK_j^\dagger K_j)E^\dagger+(I-EE^\dagger)=I$, and on $EXE^\dagger$ only the operators $FK_jE^\dagger$ contribute, giving $F\Phi(X)F^\dagger$.
 \end{proof}
 
 \begin{lemma}[Parallel physical SWAP layers]
     \label{lem:qc_port_matching_swaps}
     \uses{def:qc_local_circuit}
-    \lean{QuantumCircuit.permOpHom,
-        QuantumCircuit.permOp_one,
-        QuantumCircuit.permOp_mul,
-        QuantumCircuit.permOp_conjTranspose,
-        QuantumCircuit.permOp_eq_permMatrix,
-        QuantumCircuit.PortMatching.perm,
-        QuantumCircuit.PortMatching.perm_apply_of_notMem,
-        QuantumCircuit.PortMatching.perm_apply_of_mem,
-        QuantumCircuit.PortMatching.perm_apply_left,
-        QuantumCircuit.PortMatching.perm_apply_right,
-        QuantumCircuit.PortMatching.perm_involutive,
-        QuantumCircuit.PortMatching.perm_symm,
-        QuantumCircuit.PortMatching.layer,
-        QuantumCircuit.PortMatching.layer_op,
-        QuantumCircuit.PortMatching.layer_op_one_site}
+    \lean{QuantumCircuit.permGate,
+        QuantumCircuit.isUnitary_permGate,
+        QuantumCircuit.kraus_ofCells_permGate}
     \leanok
-    A matching $M$ of ring bonds defines an involution $\sigma_M\in\mathfrak S_N$ exchanging $i\leftrightarrow i+1$ for each $\{i,i+1\}\in M$ and fixing unmatched sites. The layer $L_M$ of SWAP gates on $M$ has operator $P(\sigma_M)$ where $P(\sigma)\ket{x}=\ket{x\circ\sigma^{-1}}$ satisfies $P(1)=I$, $P(\sigma\tau)=P(\sigma)P(\tau)$, and $P(\sigma)^\dagger=P(\sigma^{-1})$. For $N=1$, $L_M=I$.
+    Let $\pi$ be a permutation of the wires that maps each cell of a family of pairwise disjoint cells onto itself and fixes every other wire, such as the involution exchanging the two ends of every bond of a matching. On each cell $C$ let $g_C$ be the operator with the entries $(g_C)_{u'u}=[u=u'\circ\pi]$ on the configurations of $C$. Every $g_C$ is unitary, and the layer of the gates $g_C$ has the single Kraus operator $P(\pi)$, where $P(\pi)\ket{x}=\ket{x\circ\pi^{-1}}$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Disjoint bond transpositions commute and multiply to $\sigma_M$, and the homomorphism $P$ identifies the product of placed two-site SWAP matrices with $P(\sigma_M)$.
-\end{proof}
-
-\begin{lemma}[Selected-memory routing at unchanged physical depth]
-    \label{thm:qc_port_register_routing}
-    \uses{def:qc_physical_port_protocol}
-    \lean{QuantumCircuit.PhysicalPortLayout.selectionPermutation,
-        QuantumCircuit.PhysicalPortLayout.selectionPermutation_site,
-        QuantumCircuit.PhysicalPortLayout.selectionPermutation_port,
-        QuantumCircuit.PhysicalPortLayout.selectionPermutation_symm,
-        QuantumCircuit.IsPhysicalPortUnitary.selected_layer,
-        QuantumCircuit.embedOp_permOp_viaEmbedding,
-        QuantumCircuit.IsPhysicalPortUnitary.selected_permutation_layer,
-        QuantumCircuit.registerPermutation,
-        QuantumCircuit.registerPermutation_apply,
-        QuantumCircuit.registerPermutation_apply_of_notMem,
-        QuantumCircuit.registerPermutation_involutive,
-        QuantumCircuit.IsPhysicalPortUnitary.register_matching}
-    \leanok
-    Given $w_i\in s^{-1}(i)$ for each $i\in\Z_N$, the onsite swap $\pi_w=\prod_i(p_i\,w_i)$ is free, and $P(\pi_w)(L\otimes I)P(\pi_w)^\dagger$ places a physical layer $L$ on $\{w_i\}_{i\in\Z_N}$ at physical depth $1$. Repeating this for $k$ sitewise-disjoint wire selections $w^{(1)},\dots,w^{(k)}$ and a matching $M$ implements $\prod_{r=1}^k P(\sigma_{M,r})$ at physical depth at most $k$, acting as $\sigma_M$ on each digit $r$ and as the identity on all unselected wires.
-\end{lemma}
-\begin{proof}
-    \uses{lem:qc_port_matching_swaps, lem:qc_placed_operators}
-    \leanok
-    Since $s\circ\pi_w=s$, $P(\pi_w)$ has depth $0$, and conjugation by $P(\pi_w)$ reindexes port placement to $\{w_i\}$ by Lemma~\ref{lem:qc_placed_operators}. By Lemma~\ref{lem:qc_port_matching_swaps}, each digit permutation $P(\sigma_{M,r})$ has depth $1$, and the $k$ factors have disjoint supports and multiply to depth at most $k$.
-\end{proof}
-
-\begin{lemma}[Data and scratch placement]
-    \label{lem:qc_port_data_scratch}
-    \uses{def:qc_physical_port_protocol, thm:qc_port_register_routing}
-    \lean{QuantumCircuit.PortRegisters.layout,
-        QuantumCircuit.PortRegisters.wire,
-        QuantumCircuit.PortRegisters.site_wire,
-        QuantumCircuit.PortRegisters.data,
-        QuantumCircuit.PortRegisters.scratch,
-        QuantumCircuit.PortRegisters.site_data,
-        QuantumCircuit.PortRegisters.site_scratch,
-        QuantumCircuit.PortRegisters.data_ne_scratch,
-        QuantumCircuit.PortRegisters.selection,
-        QuantumCircuit.PortRegisters.selection_apply,
-        QuantumCircuit.PortRegisters.site_selection,
-        QuantumCircuit.PortRegisters.selection_ranges_disjoint,
-        QuantumCircuit.PortRegisters.pairData,
-        QuantumCircuit.PortRegisters.pairData_left,
-        QuantumCircuit.PortRegisters.pairData_right,
-        QuantumCircuit.PortMatching.right_notMem,
-        QuantumCircuit.PortRegisters.routingPermutation,
-        QuantumCircuit.PortRegisters.data_notMem_selection,
-        QuantumCircuit.PortRegisters.routingPermutation_data_left,
-        QuantumCircuit.PortRegisters.routingPermutation_data_of_notMem,
-        QuantumCircuit.PortRegisters.routingPermutation_pairData_site,
-        QuantumCircuit.PortRegisters.routingPermutation_isPhysicalPortUnitary,
-        QuantumCircuit.PortRegisters.pairData_isPhysicalPortProtocol}
-    \leanok
-    With $1+2k$ wires per site $i\in\Z_N$ (port $p_i$, data $d_{i,r}$, scratch $q_{i,r}$ for $1\le r\le k$), selecting $w^{(r)}_i=d_{i,r}$ for $i\in M$, $w^{(r)}_{i+1}=q_{i+1,r}$ for $i\in M$, and $w^{(r)}_j=q_{j,r}$ otherwise defines a depth-$k$ routing unitary $R_M$ sending $d_{i,r}\leftrightarrow q_{i+1,r}$ and fixing $d_{i+1,r}$ for every nontrivial bond $\{i,i+1\}$ ($i\in M$). Thus $R_M$ colocates $(d_i,d_{i+1})$ onto $(q_{i+1},d_{i+1})\subseteq s^{-1}(i+1)$, and $R_M^\dagger$ restores all wires.
-\end{lemma}
-\begin{proof}
-    \uses{thm:qc_port_register_routing}
-    \leanok
-    For a matching $M$ on $N\ge2$ sites, $i\in M\implies i+1\notin M$, so the selections $w^{(r)}$ are well-defined and disjoint across $r$, and Lemma~\ref{thm:qc_port_register_routing} gives the stated wire action and depth $k$.
-\end{proof}
-
-\begin{lemma}[One shared routing for a channel family]
-    \label{thm:qc_port_shared_channel_routing}
-    \uses{def:qc_physical_port_protocol, lem:qc_placed_operators}
-    \lean{QuantumCircuit.sum_conjTranspose_embedOp_mul,
-        QuantumCircuit.routingMatrixEquiv,
-        QuantumCircuit.routingMatrixEquiv_apply,
-        QuantumCircuit.routingMatrixEquiv_symm_apply,
-        QuantumCircuit.routingChannelConj,
-        QuantumCircuit.routingChannelConj_apply,
-        QuantumCircuit.routingChannelConj_embeddedKraus,
-        QuantumCircuit.IsPhysicalPortProtocol.of_routed_map,
-        QuantumCircuit.IsPhysicalPortProtocol.of_register_routing,
-        QuantumCircuit.IsPhysicalPortProtocol.of_routed_family}
-    \leanok
-    If a wire permutation $\pi$ with $\operatorname{depth}(P(\pi))\le T$ maps the support of each channel $\Phi_b$ ($b\in M$) in a commuting family into a single spatial site $s^{-1}(i_b)$, then
-    \begin{align}
-        \prod_{b\in M}\Phi_b & =\operatorname{Ad}_{P(\pi)^\dagger}\circ\Bigl(\prod_{b\in M}\operatorname{Ad}_{P(\pi)}\circ\Phi_b\circ\operatorname{Ad}_{P(\pi)^\dagger}\Bigr)\circ\operatorname{Ad}_{P(\pi)}\notag
-    \end{align}
-    has physical depth at most $2T$, independently of $|M|$.
-\end{lemma}
-\begin{proof}
-    \leanok
-    Conjugation by $P(\pi)$ is an algebra automorphism, so it distributes over $\prod_{b\in M}\Phi_b$ and reindexes each placed Kraus family $\{K_{b,j}\}$ to $\{P(\pi)K_{b,j}P(\pi)^\dagger\}$ supported inside $s^{-1}(i_b)$ with $\sum_j(P(\pi)K_{b,j}P(\pi)^\dagger)^\dagger(P(\pi)K_{b,j}P(\pi)^\dagger)=I$. Each conjugated factor has depth $0$, leaving only $P(\pi)$ and $P(\pi)^\dagger$ of total depth $2T$.
-\end{proof}
-
-\begin{lemma}[Uniform bounded-register matching simulation]
-    \label{thm:qc_bounded_physical_port_simulation}
-    \uses{def:qc_physical_port_protocol, lem:qc_register_code_completion, lem:qc_port_data_scratch}
-    \lean{QuantumCircuit.Layer.exists_portRing,
-        QuantumCircuit.IsBoundedProtocol.exists_portRing}
-    \leanok
-    Fix $d\ge1$ and $k\ge0$, and consider a ring of $N\ge2$ sites with $2k+1$ qudits of dimension
-    $d$ at every site: the physical port, $k$ data qudits and $k$ scratch qudits. Let
-    $\mathcal E_{\rm data}$ place a register of $k$ digits at every site into its data qudits.
-    Every layer $L$ of CPTP pair channels on a matching of the ring of registers of $k$ digits has
-    a physical-port protocol $\Gamma_L$ of depth at most $2k$ with
-    $\Gamma_L\circ\mathcal E_{\rm data}=\mathcal E_{\rm data}\circ L$. Consequently, if $\Psi$ is
-    a native protocol of depth $T$ whose local dimensions along the protocol are at most
-    $B\le d^k$, and its input and output bases are encoded into registers by $\mathcal E_{\rm in}$
-    and $\mathcal E_{\rm out}$, there is a physical-port protocol $\Gamma$ of depth at most $2kT$
-    with
-    $\Gamma\circ\mathcal E_{\rm data}\circ\mathcal E_{\rm in}
-        =\mathcal E_{\rm data}\circ\mathcal E_{\rm out}\circ\Psi$;
-    for $d\ge2$ one may take $k=\lceil\log_d B\rceil$.
-\end{lemma}
-\begin{proof}
-    \uses{lem:qc_register_code_completion, lem:qc_port_data_scratch, thm:qc_port_shared_channel_routing}
-    \leanok
-    By Lemma~\ref{lem:qc_port_data_scratch}, the depth-$k$ routing $R_M$ colocates the registers
-    of $i$ and $i+1$ inside $s^{-1}(i+1)$ for all $i\in M$ simultaneously, so
-    Lemma~\ref{thm:qc_port_shared_channel_routing} gives depth at most $2k$ for one layer. For the
-    protocol, encode the bases of every intermediate step into registers by
-    Lemma~\ref{lem:qc_register_code_completion}, so that each encoded layer acts on the code as
-    the original layer; the $T$ layers then compose to depth at most $2kT$.
+    Since $\pi$ maps $C$ onto itself, $g_C$ is the permutation matrix of the bijection $u\mapsto u\circ\pi^{-1}$ of the configurations of $C$. The entry of the layer at $(y,x)$ is the product of the entries $[x|_C=y|_C\circ\pi]$ over the cells and of $[x_w=y_w]$ over the other wires, which is the entry of $P(\pi)$.
 \end{proof}
 
 \begin{lemma}[Product onsite coding on arbitrary chain inputs]
     \label{lem:qc_product_register_encoding}
     \uses{def:qc_onsite_channel, lem:qc_register_code_completion}
-    \lean{QuantumCircuit.OnsiteChannel.ofSiteMaps,
-        QuantumCircuit.OnsiteChannel.ofSiteMaps_siteMap,
-        QuantumCircuit.OnsiteChannel.comp,
-        QuantumCircuit.OnsiteChannel.comp_map,
-        QuantumCircuit.OnsiteChannel.map_eq_id_of_siteMap_eq_id,
-        QuantumCircuit.OnsiteChannel.encodeRegisters,
-        QuantumCircuit.OnsiteChannel.encodeRegisters_siteMap,
-        QuantumCircuit.OnsiteChannel.encodeRegisters_map,
-        QuantumCircuit.OnsiteChannel.decodeRegisters,
-        QuantumCircuit.OnsiteChannel.decodeRegisters_encodeRegisters,
-        QuantumCircuit.OnsiteChannel.decodeRegisters_encodeRegisters_reference,
-        QuantumCircuit.OnsiteChannel.encoded,
-        QuantumCircuit.OnsiteChannel.encoded_map_encodeRegisters}
+    \lean{QuantumCircuit.encodeCircuit,
+        QuantumCircuit.decodeCircuit,
+        QuantumCircuit.map_encodeCircuit,
+        QuantumCircuit.map_encodeCircuit_congr,
+        QuantumCircuit.map_encodeCircuit_trans,
+        QuantumCircuit.map_decodeCircuit_comp_map_encodeCircuit}
     \leanok
-    Sitewise CPTP maps $\Phi_i$ assemble into an onsite channel $\bigotimes_i\Phi_i$ satisfying $(\bigotimes_i\Psi_i)\circ(\bigotimes_i\Phi_i)=\bigotimes_i(\Psi_i\circ\Phi_i)$ and $\bigotimes_i\operatorname{id}=\operatorname{id}$. For sitewise encodings $\mathcal E_i(X_i)=E_i X_i E_i^\dagger$ and completed decoders $D_i$, $\mathcal E=\bigotimes_i\mathcal E_i$ and $\mathcal D=\bigotimes_i D_i$ satisfy $\mathcal D\circ\mathcal E=\operatorname{id}$, $(\mathcal D\otimes\operatorname{id}_R)\circ(\mathcal E\otimes\operatorname{id}_R)=\operatorname{id}$, and $\widehat\Phi\circ\mathcal E_{\rm in}=\mathcal E_{\rm out}\circ\Phi$ where $\widehat\Phi=\bigotimes_i(\mathcal E_{{\rm out},i}\circ\Phi_i\circ D_{{\rm in},i})$.
+    For injections $e_i$ of the local bases at every site $i$, with isometries $E_i$, the
+    sitewise encoding $\mathcal E_e=\bigotimes_i\mathcal E_{e_i}$ and the sitewise decoding
+    $\mathcal D_e=\bigotimes_iD_{e_i}$ of Lemma~\ref{lem:qc_register_code_completion} are onsite
+    channels, so they cost no depth. The encoding is the conjugation by $E=\bigotimes_iE_i$ and
+    does not depend on the bonds; for further injections $g_i$,
+    $\mathcal E_{g\circ e}=\mathcal E_g\circ\mathcal E_e$; and
+    $\mathcal D_e\circ\mathcal E_e=\operatorname{id}$ on every chain operator.
 \end{lemma}
 \begin{proof}
     \uses{lem:qc_register_code_completion}
     \leanok
-    Kronecker products of local Kraus operators satisfy $\bigotimes_i\Phi_i(\bigotimes_i X_i)=\bigotimes_i\Phi_i(X_i)$, so Lemma~\ref{lem:qc_register_code_completion} gives the identities on product operators $\bigotimes_i X_i$ (and $\bigotimes_i X_i\otimes Z_R$), which span the full matrix algebra by linearity.
+    Both maps are layers without bonds whose Kraus families at the sites are those of
+    Lemma~\ref{lem:qc_register_code_completion}. A Kraus operator of the sitewise decoding times
+    $E$ is the product of the sitewise operators times the $E_i$, which is $I$ for the operators
+    $E_i^\dagger$ at every site and $0$ otherwise. Finally $E_{g\circ e}=E_gE_e$.
 \end{proof}
 
-\begin{lemma}[Representation-independent placement of register channels]
-    \label{lem:qc_register_channel_lift}
-    \uses{lem:qc_placed_operators}
-    \lean{QuantumCircuit.registerConfigurationSplit,
-        QuantumCircuit.registerConfigurationSplit_apply,
-        QuantumCircuit.registerConfigurationSplit_symm_comp,
-        QuantumCircuit.registerMatrixSplit,
-        QuantumCircuit.registerMatrixSplit_conjTranspose,
-        QuantumCircuit.registerMatrixSplit_embedOp,
-        QuantumCircuit.registerMatrixSplit_embedOp_reindex_complement,
-        QuantumCircuit.registerComplementOfSum,
-        QuantumCircuit.registerComplementOfSum_apply_val,
-        QuantumCircuit.registerSumConfigurationSplit,
-        QuantumCircuit.registerSumConfigurationSplit_eq,
-        QuantumCircuit.registerSumConfigurationSplit_embedOp,
-        QuantumCircuit.registerChannelLift,
-        QuantumCircuit.registerMatrixSplit_channelLift,
-        QuantumCircuit.registerChannelLift_id,
-        QuantumCircuit.registerChannelLift_comp,
-        QuantumCircuit.registerChannelLift_kraus,
-        QuantumCircuit.rectangularKrausMap_embedOp_congr}
+\begin{lemma}[Encoding a native channel layer]
+    \label{thm:qc_encode_native_channel_layer}
+    \uses{def:qc_local_channel_circuit, lem:qc_product_register_encoding}
+    \lean{QuantumCircuit.Layer.exists_encoded}
     \leanok
-    For an injective wire map $e\colon S\hookrightarrow W$, the configuration split $x\mapsto(x\circ e,x|_{W\setminus e(S)})$ induces a $*$-algebra isomorphism $\Theta_e$ with $\Theta_e(\operatorname{embed}_e(A))=A\otimes I_{W\setminus e(S)}$, invariant under reindexing $W\setminus e(S)$ (including across disjoint sums $W=W_1\sqcup W_2$). Consequently, the lifted channel $\operatorname{Lift}_e(\Phi)=\Theta_e^{-1}\circ(\Phi\otimes\operatorname{id}_{W\setminus e(S)})\circ\Theta_e$ satisfies $\operatorname{Lift}_e(\operatorname{id})=\operatorname{id}$, $\operatorname{Lift}_e(\Psi\circ\Phi)=\operatorname{Lift}_e(\Psi)\circ\operatorname{Lift}_e(\Phi)$, and
-    \begin{align}
-        \operatorname{Lift}_e\Bigl(\sum_j K_j\cdot K_j'\Bigr)(X) & =\sum_j\operatorname{embed}_e(K_j)\,X\,\operatorname{embed}_e(K_j'),\notag
-    \end{align}
-    which is independent of the Kraus representation of $\Phi$.
+    Let $\Lambda$ be a layer of CPTP channels on pairwise disjoint bonds and onsite channels at
+    the remaining sites, on nonempty input bases, and let $e_i$ and $f_i$ be injections of its
+    input and output bases at every site. Then there is a layer $\widehat\Lambda$ of CPTP
+    channels on the same bonds and onsite channels at the remaining sites with
+    $\widehat\Lambda\circ\mathcal E_e=\mathcal E_f\circ\Lambda$.
 \end{lemma}
 \begin{proof}
-    \uses{lem:qc_placed_operators}
+    \uses{lem:qc_register_code_completion, lem:qc_product_register_encoding}
     \leanok
-    By Lemma~\ref{lem:qc_placed_operators}, $\operatorname{embed}_e(A)_{x,y}=A_{x\circ e,y\circ e}\delta_{x|_{e(S)^c},y|_{e(S)^c}}=(A\otimes I)_{(x\circ e,x|_{e(S)^c}),(y\circ e,y|_{e(S)^c})}$. Linearity and multiplicativity of $\Theta_e$ extend this to $\sum_j\operatorname{embed}_e(K_j)X\operatorname{embed}_e(K_j')$.
-\end{proof}
-
-\begin{lemma}[Intertwining of placed encoded channels]
-    \label{thm:qc_encoded_channel_placement}
-    \uses{lem:qc_product_register_encoding, lem:qc_register_channel_lift}
-    \lean{QuantumCircuit.reindex_rectKronecker_registerSplit,
-        QuantumCircuit.registerMatrixSplit_encodeRegisters,
-        QuantumCircuit.registerChannelLift_encodeRegisters}
-    \leanok
-    Let $\mathcal E_S=\bigotimes_{i\in S}\mathcal E_i$ and $\mathcal E=\bigotimes_{i\in W}\mathcal E_i$ be product encodings along $e\colon S\hookrightarrow W$. If $\widehat\Phi\circ\mathcal E_S=\mathcal E_S\circ\Phi$, then
-    \begin{align}
-        \operatorname{Lift}_e(\widehat\Phi)\circ\mathcal E & =\mathcal E\circ\operatorname{Lift}_e(\Phi).\notag
-    \end{align}
-\end{lemma}
-\begin{proof}
-    \uses{lem:qc_product_register_encoding, lem:qc_register_channel_lift}
-    \leanok
-    Under $\Theta_e$, the global encoding matrix $E=\bigotimes_{i\in W}E_i$ factors as $E_S\otimes E_{W\setminus e(S)}$, so $\Theta_e\circ\mathcal E=(\mathcal E_S\otimes\mathcal E_{W\setminus e(S)})\circ\Theta_e$. Then $(\widehat\Phi\otimes\operatorname{id})\circ(\mathcal E_S\otimes\mathcal E_{W\setminus e(S)})=(\mathcal E_S\otimes\mathcal E_{W\setminus e(S)})\circ(\Phi\otimes\operatorname{id})$ by Lemma~\ref{lem:qc_register_channel_lift}.
+    The output bases of a CPTP map are nonempty, so the target of every $f_i$ has a point in
+    the image of $f_i$. Carry every channel on a bond and every onsite channel along the
+    injections of its sites as in Lemma~\ref{lem:qc_register_code_completion}, with such a
+    fallback point. A Kraus operator $\widehat L_p$ of the new layer satisfies
+    $\widehat L_pE=FL_p$ when all its factors are of the form $FK_jE^\dagger$, with $L_p$ the
+    corresponding Kraus operator of $\Lambda$, and $\widehat L_pE=0$ otherwise. The indices of
+    the first kind are in bijection with the Kraus indices of $\Lambda$, so
+    $\sum_p\widehat L_pEXE^\dagger\widehat L_p^\dagger=F\Lambda(X)F^\dagger$.
 \end{proof}
 
 \subsection{Compiling bounded native protocols}
@@ -293,158 +142,119 @@ alphabet, and then realizes those operations on the fixed physical ports.
     A native local-channel protocol $\Psi$ is \emph{$B$-dimension-bounded} of depth $T$ if it is generated by onsite channels (depth $0$) and nearest-neighbor pair-channel layers (depth $1$) whose input, output, and intermediate local dimensions all satisfy $1\le d_t\le B$. The predicate is monotonic in $B$, additive in $T$ under composition, and every finite native protocol with $d_{\rm in}\ge1$ admits some finite bound $B$ (not necessarily uniform in $N$).
 \end{definition}
 
-\begin{lemma}[Encoding a native channel layer]
-    \label{thm:qc_encode_native_channel_layer}
-    \uses{def:qc_local_channel_circuit, lem:qc_product_register_encoding}
-    \lean{QuantumCircuit.ChannelLayer.exists_pairKraus,
-        QuantumCircuit.ChannelLayer.exists_encodedRegisters}
-    \leanok
-    On a ring with $N\ge2$ and local dimension $1\le m\le q$, every native channel layer $\Lambda=\prod_{i\in M}\operatorname{Lift}_{\{i,i+1\}}(\Phi_i)$ encodes under any product code $\mathcal E\colon\MN{m}^{\otimes N}\to\MN{q}^{\otimes N}$ to a native channel layer $\widehat\Lambda=\prod_{i\in M}\operatorname{Lift}_{\{i,i+1\}}(\widehat\Phi_i)$ on the same matching $M$ satisfying $\widehat\Lambda\circ\mathcal E=\mathcal E\circ\Lambda$.
-\end{lemma}
-\begin{proof}
-    \uses{thm:qc_encoded_channel_placement, lem:qc_register_channel_lift}
-    \leanok
-    Injectivity of $\operatorname{embed}_{\{i,i+1\}}$ extracts normalized two-site Kraus families for each $\Phi_i$. Defining $\widehat\Phi_i=(\mathcal E_i\otimes\mathcal E_{i+1})\circ\Phi_i\circ(D_i\otimes D_{i+1})$ gives $\operatorname{Lift}_{\{i,i+1\}}(\widehat\Phi_i)\circ\mathcal E=\mathcal E\circ\operatorname{Lift}_{\{i,i+1\}}(\Phi_i)$ by Lemma~\ref{thm:qc_encoded_channel_placement}, and induction over $i\in M$ gives $\widehat\Lambda\circ\mathcal E=\mathcal E\circ\Lambda$.
-\end{proof}
-
 \begin{lemma}[A fixed-register word for a bounded native protocol]
     \label{thm:qc_fixed_register_word}
     \uses{def:qc_dimension_bounded_protocol, lem:qc_product_register_encoding}
-    \lean{QuantumCircuit.FixedRegisterOperation,
-        QuantumCircuit.FixedRegisterOperation.map,
-        QuantumCircuit.FixedRegisterOperation.depth,
-        QuantumCircuit.FixedRegisterOperation.wordMap,
-        QuantumCircuit.FixedRegisterOperation.wordDepth,
-        QuantumCircuit.FixedRegisterOperation.wordMap_isLocalChannelProtocol,
-        QuantumCircuit.registerFallbackDensity,
-        QuantumCircuit.registerFallbackDensity_posSemidef,
-        QuantumCircuit.trace_registerFallbackDensity,
-        QuantumCircuit.boundedAlphabetCode,
-        QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_fixedRegisterWord}
+    \lean{QuantumCircuit.Circuit.exists_seq_encoded,
+        QuantumCircuit.IsBoundedProtocol.exists_seq_encoded}
     \leanok
-    For any $q\ge B$, every $B$-dimension-bounded native protocol $\Psi$ of depth $T$ compiles into a word $w=(O_1,\dots,O_r)$ of $q$-level onsite channels and native pair-channel layers containing at most $T$ pair layers such that its composed map $\Phi_w=O_r\circ\cdots\circ O_1$ satisfies $\Phi_w\circ\mathcal E_{\rm in}=\mathcal E_{\rm out}\circ\Psi$.
+    Let $q\ge B$, let $\Psi$ be a $B$-dimension-bounded native protocol of depth $T$, and let
+    $e_i$ and $f_i$ be injections of its input and output bases into $\{0,\dots,q-1\}$. Then
+    there are layers $O_1,\dots,O_r$ of CPTP channels on pairwise disjoint bonds and onsite
+    channels, every intermediate local basis being $\{0,\dots,q-1\}$, of total depth at most
+    $T$, whose composed map $\Phi_w=O_r\circ\cdots\circ O_1$ satisfies
+    $\Phi_w\circ\mathcal E_e=\mathcal E_f\circ\Psi$.
 \end{lemma}
 \begin{proof}
     \uses{thm:qc_encode_native_channel_layer, lem:qc_product_register_encoding}
     \leanok
-    By structural induction on Definition~\ref{def:qc_dimension_bounded_protocol}, each onsite step is encoded by Lemma~\ref{lem:qc_product_register_encoding} (using $\rho_0=\ketbra{0}{0}$ for completed decoding) and each pair layer by Lemma~\ref{thm:qc_encode_native_channel_layer}; concatenating words composes the intertwiners and adds the layer counts.
+    By induction on the layers of $\Psi$. The protocol without layers is replaced by the encoding
+    of the identity layer along $e$ and $f$ (Lemma~\ref{thm:qc_encode_native_channel_layer}), a
+    single layer without bonds. For a first layer $\Lambda$, embed the bases after $\Lambda$ into
+    $\{0,\dots,q-1\}$ by injections $g_i$, which exist because they have at most $B\le q$
+    elements, encode $\Lambda$ along $e$ and $g$ on its own bonds
+    (Lemma~\ref{thm:qc_encode_native_channel_layer}), and put it in front of the sequence given
+    by induction for the rest of $\Psi$ along $g$ and $f$. The encoded layer has the bonds, hence
+    the depth, of $\Lambda$.
 \end{proof}
 
-\begin{lemma}[Onsite channels factor into one-site channel lifts]
-    \label{lem:qc_onsite_channel_product}
-    \uses{lem:qc_register_channel_lift, lem:qc_product_register_encoding}
-    \lean{QuantumCircuit.singletonSite,
-        QuantumCircuit.singletonSite_apply,
-        QuantumCircuit.range_singletonSite,
-        QuantumCircuit.registerMatrixSplit_rectKronecker,
-        QuantumCircuit.OnsiteChannel.map_congr,
-        QuantumCircuit.OnsiteChannel.onSites,
-        QuantumCircuit.OnsiteChannel.onSites_siteMap,
-        QuantumCircuit.OnsiteChannel.onSites_univ_map,
-        QuantumCircuit.OnsiteChannel.onSites_empty_map,
-        QuantumCircuit.OnsiteChannel.onSites_insert_map,
-        QuantumCircuit.OnsiteChannel.prod_onSites_singleton,
-        QuantumCircuit.OnsiteChannel.map_eq_prod_onSites_singleton,
-        QuantumCircuit.OnsiteChannel.oneSite,
-        QuantumCircuit.OnsiteChannel.oneSite_siteMap,
-        QuantumCircuit.OnsiteChannel.onSites_singleton_map_eq_lift}
+\begin{lemma}[Channels on complete spatial-site wire blocks]
+    \label{lem:qc_whole_site_channels}
+    \uses{def:qc_physical_port_protocol}
+    \lean{QuantumCircuit.Geometry.sites,
+        QuantumCircuit.Layer.exists_portRing_sites}
     \leanok
-    Every onsite channel $\bigotimes_{i\in\Z_N}\Phi_i$ factors as the ordered composition $\prod_{i\in\Z_N}\operatorname{Lift}_{\{i\}}(\Phi_i)$ on all chain operators.
+    Read every site of the ring with ports, with its $2k+1$ wires, as one site whose basis is
+    the set of configurations of its wires, and let $D$ be a set of wires containing a wire of
+    every site. Every product $\bigotimes_{i\in\Z_N}\Phi_i$ of CPTP channels on these sites is
+    realized on the wires by a physical-port protocol of depth $0$ with environments in $D$.
 \end{lemma}
 \begin{proof}
-    \uses{lem:qc_register_channel_lift, lem:qc_product_register_encoding}
+    \uses{thm:qc_fresh_onsite_unitary_dilation}
     \leanok
-    For $S\subseteq\Z_N$, let $\Phi_S=\bigotimes_{i\in S}\Phi_i\otimes\bigotimes_{i\notin S}\operatorname{id}$. By Lemma~\ref{lem:qc_register_channel_lift}, $\Phi_{\{i\}}=\operatorname{Lift}_{\{i\}}(\Phi_i)$ and $\Phi_{\{i\}\cup S}=\Phi_{\{i\}}\circ\Phi_S$ for $i\notin S$ on product matrices $\bigotimes_j X_j$, hence on all operators by linearity; induction over $S$ gives $\Phi_{\Z_N}=\prod_{i\in\Z_N}\operatorname{Lift}_{\{i\}}(\Phi_i)$.
-\end{proof}
-
-\begin{lemma}[Native register maps on physical data wires]
-    \label{lem:qc_native_register_wires}
-    \uses{lem:qc_register_channel_lift, lem:qc_port_data_scratch}
-    \lean{QuantumCircuit.PortRegisters.selectedData,
-        QuantumCircuit.PortRegisters.selectedData_apply,
-        QuantumCircuit.PortRegisters.allData,
-        QuantumCircuit.PortRegisters.allData_apply,
-        QuantumCircuit.PortRegisters.groupedConfigurations,
-        QuantumCircuit.PortRegisters.dataConfiguration,
-        QuantumCircuit.PortRegisters.selectedData_configuration,
-        QuantumCircuit.PortRegisters.allData_configuration,
-        QuantumCircuit.PortRegisters.nativeMatrixEquiv,
-        QuantumCircuit.PortRegisters.nativeMatrixEquiv_apply,
-        QuantumCircuit.PortRegisters.nativeMatrixEquiv_conjTranspose,
-        QuantumCircuit.PortRegisters.dataOperator,
-        QuantumCircuit.PortRegisters.dataOperator_apply,
-        QuantumCircuit.PortRegisters.dataOperator_embedOp,
-        QuantumCircuit.PortRegisters.nativeChannelReindex,
-        QuantumCircuit.PortRegisters.nativeChannelReindex_kraus,
-        QuantumCircuit.PortRegisters.dataChannelLift,
-        QuantumCircuit.PortRegisters.dataChannelLift_kraus}
-    \leanok
-    Identifying each $d^k$-level native site $i\in\Z_N$ with its $k$ physical data wires $d_i=(d_{i,1},\dots,d_{i,k})$ via the base-$d$ digit bijection $\delta\colon(\{0,\dots,d-1\}^k)^{\Z_N}\xrightarrow{\sim}\{0,\dots,d^k-1\}^{\Z_N}$ induces a $*$-isomorphism $\Delta$ on data-wire matrices and a channel lift $\operatorname{Lift}_{\rm data}(\Phi)=\operatorname{Lift}_{d}(\Delta^{-1}\circ\Phi\circ\Delta)$ on all $W=(1+2k)N$ wires that preserves $\operatorname{id}$ and composition, acts as $\operatorname{id}_R$ on all port/scratch wires $R$, and sends a native operator placed on $S\subseteq\Z_N$ to the corresponding operator placed on $\{d_{i,r}:i\in S,\,1\le r\le k\}$.
-\end{lemma}
-\begin{proof}
-    \uses{lem:qc_register_channel_lift, lem:qc_port_data_scratch}
-    \leanok
-    Since $\delta$ acts sitewise on $S$ and $\Z_N\setminus S$, $\Delta^{-1}(\operatorname{embed}_S(A))=\operatorname{embed}_{d_S}(\Delta_S^{-1}(A))$, and composing with $\operatorname{Lift}_d$ of Lemma~\ref{lem:qc_register_channel_lift} gives the functorial channel lift and Kraus placement formula.
+    Read each $\Phi_i$ as a gate on the cell of all the wires of the site $i$, of cost $0$.
+    The resulting layer has the Kraus operators of $\bigotimes_i\Phi_i$ read on the wires, and
+    each of its gates acts on a cell meeting $D$; every basis at a wire is
+    $\{0,\dots,d-1\}$. Lemma~\ref{thm:qc_fresh_onsite_unitary_dilation} dilates it in depth $0$
+    with environments in $D$.
 \end{proof}
 
 \begin{lemma}[Physical costs of native register operations]
     \label{thm:qc_native_port_layer}
-    \uses{lem:qc_native_register_wires, def:qc_physical_port_protocol}
-    \lean{QuantumCircuit.PortRegisters.nativeMatrixEquiv_complete,
-        QuantumCircuit.PortRegisters.dataChannelLift_register_kraus,
-        QuantumCircuit.PortRegisters.dataChannelLift_local,
-        QuantumCircuit.PortRegisters.dataChannelLift_onsiteChannel,
-        QuantumCircuit.PortRegisters.dataChannelLift_channelLayer}
+    \uses{def:qc_physical_port_protocol}
+    \lean{QuantumCircuit.Layer.exists_portRing}
     \leanok
-    On $d^k$-level native registers ($d\ge1$, $N\ge2$), $\operatorname{Lift}_{\rm data}(\Phi)$ has physical-port depth $0$ for every onsite channel $\Phi$, and physical-port depth at most $2k$ for every native matching layer $\Lambda$.
+    Let $N\ge2$ and $d\ge1$, let $\Lambda$ be a layer of CPTP channels on pairwise disjoint bonds
+    and onsite channels on the ring of $N$ sites, with the register $\{0,\dots,d-1\}^k$ at every
+    site, let $\iota$ be the data embedding of the registers into the ring with ports with
+    $2k+1$ wires per site, and let $D$ be a set of wires containing a wire of every site. Then
+    some physical-port protocol $\Gamma_\Lambda$ with environments in $D$, of depth at most $2k$,
+    and of depth $0$ when $\Lambda$ has no bonds, satisfies
+    $\Gamma_\Lambda\circ\iota=\iota\circ\Lambda$.
 \end{lemma}
 \begin{proof}
-    \uses{lem:qc_onsite_channel_product, thm:qc_port_shared_channel_routing, lem:qc_port_data_scratch}
+    \uses{lem:qc_port_matching_swaps, thm:qc_encode_native_channel_layer,
+        lem:qc_whole_site_channels, thm:qc_physical_port_unitary_dilation,
+        thm:qc_appended_environment_composition}
     \leanok
-    By Lemma~\ref{lem:qc_onsite_channel_product}, $\operatorname{Lift}_{\rm data}(\bigotimes_i\Phi_i)=\prod_i\operatorname{Lift}_{\rm data}(\operatorname{Lift}_{\{i\}}(\Phi_i))$, where each factor places normalized Kraus operators on $d_i\subseteq s^{-1}(i)$ at depth $0$. For a matching layer $\Lambda=\prod_{i\in M}\operatorname{Lift}_{\{i,i+1\}}(\Phi_i)$, $\operatorname{Lift}_{\rm data}(\Lambda)$ is a commuting product of channels on $(d_i,d_{i+1})$, which the depth-$k$ routing $R_M$ of Lemma~\ref{lem:qc_port_data_scratch} colocates into $s^{-1}(i+1)$, giving depth at most $2k$ by Lemma~\ref{thm:qc_port_shared_channel_routing}.
+    Let $C$ be the set of the left ends $j$ of the bonds $\{j,j+1\}$ of $\Lambda$. Since $N\ge2$,
+    the disjointness of the bonds gives $j+1\notin C$ for $j\in C$. For each $t<k$ run three
+    layers of exchanges of wires: the port with $d_{j,t}$ at the sites $j\in C$, the ports of $j$
+    and $j+1$ for $j\in C$, and the port with $q_{j+1,t}$ at the sites $j+1$. Each layer has the
+    single Kraus operator of a wire permutation (Lemma~\ref{lem:qc_port_matching_swaps}) and
+    only the middle one has cost, so the routing $R$ formed by the $3k$ layers has depth at most
+    $k$. It sends $d_{j,t}$ to $q_{j+1,t}$ for $j\in C$ and fixes the data wires of the other
+    sites, so the registers of $j$ and $j+1$ both lie at the site $j+1$. Carry $\Lambda$ to the
+    sites $j+1$ along these moved codes (Lemma~\ref{thm:qc_encode_native_channel_layer}) and read
+    its channels as gates on all the wires of a site, of cost $0$
+    (Lemma~\ref{lem:qc_whole_site_channels}); then undo $R$ by its adjoint. The three parts
+    realize $\iota\circ\Lambda$ on the image of $\iota$, have depths $k$, $0$ and $k$, and have
+    unitary realizations with environments in $D$
+    (Lemmas~\ref{thm:qc_physical_port_unitary_dilation}
+    and~\ref{thm:qc_appended_environment_composition}).
 \end{proof}
 
-\begin{lemma}[Physical encodings retain the complementary reference]
-    \label{lem:qc_physical_register_encoding}
-    \uses{lem:qc_native_register_wires}
-    \lean{QuantumCircuit.PortRegisters.DataReference,
-        QuantumCircuit.PortRegisters.physicalEncoding,
-        QuantumCircuit.PortRegisters.physicalDecoding,
-        QuantumCircuit.PortRegisters.physicalEncoding_isKrausCPTP,
-        QuantumCircuit.PortRegisters.physicalDecoding_isKrausCPTP,
-        QuantumCircuit.PortRegisters.physicalDecoding_encoding,
-        QuantumCircuit.PortRegisters.dataChannelLift_physicalEncoding}
+\begin{lemma}[Uniform bounded-register matching simulation]
+    \label{thm:qc_bounded_physical_port_simulation}
+    \uses{def:qc_physical_port_protocol, lem:qc_register_code_completion,
+        thm:qc_native_port_layer}
+    \lean{QuantumCircuit.IsBoundedProtocol.exists_portRing}
     \leanok
-    Passing a native product encoding $\mathcal E$ and completed decoder $\mathcal D$ through the data/reference split $\Theta_d\circ(\Delta^{-1}\otimes\operatorname{id}_R)$ defines CPTP maps $\mathcal E_{\rm phys}=\Theta_d^{-1}\circ(\Delta^{-1}\circ\mathcal E\otimes\operatorname{id}_R)$ and $\mathcal D_{\rm phys}=((\mathcal D\circ\Delta)\otimes\operatorname{id}_R)\circ\Theta_d$ satisfying $\mathcal D_{\rm phys}\circ\mathcal E_{\rm phys}=\operatorname{id}$ and
+    Fix $d\ge1$ and $k\ge0$, and consider a ring of $N\ge2$ sites with $2k+1$ qudits of dimension
+    $d$ at every site: the physical port, $k$ data qudits and $k$ scratch qudits. Let $\iota$
+    place a register of $k$ digits at every site into its data qudits, with the port and the
+    scratch qudits in $0$, and let $D$ be a set of wires containing a wire of every site. If
+    $\Psi$ is a native protocol of depth $T$ whose local dimensions along the protocol are
+    between $1$ and $B\le d^k$, and $e$ and $f$ are sitewise injections of its input and output
+    bases into the registers, there is a physical-port protocol $\Gamma$ of depth at most $2kT$
+    with environments in $D$ such that
     \begin{align}
-        \widehat\Phi\circ\mathcal E_{\rm in}=\mathcal E_{\rm out}\circ\Phi
-        \implies
-        \operatorname{Lift}_{\rm data}(\widehat\Phi)\circ\mathcal E_{{\rm phys,in}}=\mathcal E_{{\rm phys,out}}\circ(\Phi\otimes\operatorname{id}_R).\notag
+        \Gamma\circ\iota\circ\mathcal E_e & =\iota\circ\mathcal E_f\circ\Psi.\notag
     \end{align}
+    For $d\ge2$ one may take $k=\lceil\log_d B\rceil$. Every wire outside $D$ has dimension at
+    most $d$ throughout; for $k\ge1$ and $D$ the wires other than the ports, every counted gate
+    acts on the two port wires alone and the environments stay at their sites.
 \end{lemma}
 \begin{proof}
-    \uses{lem:qc_native_register_wires, lem:qc_register_channel_lift}
+    \uses{lem:qc_register_code_completion, thm:qc_encode_native_channel_layer,
+        thm:qc_native_port_layer, thm:qc_appended_environment_composition}
     \leanok
-    By Lemma~\ref{lem:qc_native_register_wires}, $\operatorname{Lift}_{\rm data}(\widehat\Phi)=\Theta_d^{-1}\circ((\Delta^{-1}\circ\widehat\Phi\circ\Delta)\otimes\operatorname{id}_R)\circ\Theta_d$, so $\Theta_d$ and $\Delta$ cancel against $\mathcal E_{{\rm phys,in}}$ and $\mathcal D_{\rm phys}$.
-\end{proof}
-
-\begin{lemma}[Encoded physical-port simulation of bounded native protocols]
-    \label{thm:qc_bounded_physical_protocol_compilation}
-    \uses{thm:qc_fixed_register_word, lem:qc_physical_register_encoding, def:qc_physical_port_protocol}
-    \lean{QuantumCircuit.PortRegisters.dataChannelLift_word,
-        QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation}
-    \leanok
-    Fix $d\ge2$, $N\ge2$, $B\ge1$, and $k=\lceil\log_d B\rceil$. Every $B$-dimension-bounded native protocol $\Psi$ of depth $T$ has a physical-port protocol $\Gamma=\operatorname{Lift}_{\rm data}(\Phi_w)$ of depth at most $2kT$ satisfying
-    \begin{align}
-        \Gamma\,\mathcal E_{\mathrm{in}}
-         & =\mathcal E_{\mathrm{out}}(\Psi\otimes\operatorname{id}_{R}),\notag
-    \end{align}
-    where $R$ is the complementary port/scratch reference and $\mathcal E_{\mathrm{in}},\mathcal E_{\mathrm{out}}$ are physical encodings from sitewise codes. Uniform family overhead requires fixing $d,B$ independently of $N$.
-\end{lemma}
-\begin{proof}
-    \uses{thm:qc_fixed_register_word, thm:qc_native_port_layer, lem:qc_physical_register_encoding}
-    \leanok
-    Compile $\Psi$ to a $d^k$-level word $w$ with at most $T$ pair layers by Lemma~\ref{thm:qc_fixed_register_word}. By Lemma~\ref{thm:qc_native_port_layer}, $\Gamma=\operatorname{Lift}_{\rm data}(\Phi_w)$ has depth at most $2kT$, and Lemma~\ref{lem:qc_physical_register_encoding} lifts $\Phi_w\circ\mathcal E_{\rm in}=\mathcal E_{\rm out}\circ\Psi$ to $\Gamma\,\mathcal E_{\mathrm{in}}=\mathcal E_{\mathrm{out}}(\Psi\otimes\operatorname{id}_{R})$ (leaving physical-port initialization and QCcc block representations to the next subsections).
+    By induction on the layers of $\Psi$. Every basis along $\Psi$ has between $1$ and
+    $B\le d^k$ elements, so it has an injection into the registers. Encode each layer along the
+    injections of its input and output bases
+    (Lemma~\ref{thm:qc_encode_native_channel_layer}), route the encoded layer through the ports
+    (Lemma~\ref{thm:qc_native_port_layer}), and compose the resulting protocols
+    (Lemma~\ref{thm:qc_appended_environment_composition}); the depths add to at most $2kT$.
 \end{proof}
 
 \subsection{Original physical-port input and output}
@@ -452,298 +262,215 @@ alphabet, and then realizes those operations on the fixed physical ports.
 The source treats onsite local unitaries and ancillas as free
 resources~\cite[main text, p.~1]{Piroli2021LOCC}. The following bound counts
 only intersite layers through the fixed physical ports; it is not a count
-that also charges every onsite operation. The local CPTP primitives retain
-a separate unitary-dilation representation obligation.
-
-\begin{lemma}[Channels on complete spatial-site wire blocks]
-    \label{lem:qc_whole_site_channels}
-    \uses{lem:qc_native_register_wires, def:qc_physical_port_protocol}
-    \lean{QuantumCircuit.PortRegisters.blockDigits,
-        QuantumCircuit.PortRegisters.blockDigits_apply,
-        QuantumCircuit.PortRegisters.nativeMatrixEquiv_embedOp,
-        QuantumCircuit.PortRegisters.nativeChannelReindex_register_kraus,
-        QuantumCircuit.PortRegisters.wholeSite_local,
-        QuantumCircuit.PortRegisters.wholeSite_onsiteChannel}
-    \leanok
-    Under the sitewise $(1+2k)$-digit grouping $s^{-1}(i)=\{p_i\}\cup d_i\cup q_i$, every onsite channel $\bigotimes_{i\in\Z_N}\Phi_i$ on $(\C^{d^{1+2k}})^{\otimes N}$ reindexes to a physical-port protocol of depth $0$ whose Kraus operators are supported inside $s^{-1}(i)$.
-\end{lemma}
-\begin{proof}
-    \uses{lem:qc_native_register_wires, lem:qc_onsite_channel_product}
-    \leanok
-    With formal scratch width $0$ and block width $1+2k$, the all-block placement of Lemma~\ref{lem:qc_native_register_wires} is a bijection on $W$, and factoring $\bigotimes_i\Phi_i$ into single-site lifts by Lemma~\ref{lem:qc_onsite_channel_product} places each site's normalized Kraus family inside $s^{-1}(i)$ at depth $0$.
-\end{proof}
+that also charges every onsite operation.
 
 \begin{lemma}[Product-zero port and data codes]
     \label{thm:qc_physical_port_codes}
-    \uses{lem:qc_native_register_wires, lem:qc_product_register_encoding, def:qc_physical_port_protocol}
-    \lean{QuantumCircuit.PortRegisters.nativeWordCode,
-        QuantumCircuit.PortRegisters.wordCodeConfiguration,
-        QuantumCircuit.PortRegisters.wordCodeConfiguration_apply,
-        QuantumCircuit.PortRegisters.wordInitialization,
-        QuantumCircuit.PortRegisters.wordInitialization_isKrausCPTP,
-        QuantumCircuit.PortRegisters.wordInitialization_eq,
-        QuantumCircuit.PortRegisters.wordCodeChange,
-        QuantumCircuit.PortRegisters.wordCodeChangeMap,
-        QuantumCircuit.PortRegisters.wordCodeChangeMap_initialization,
-        QuantumCircuit.PortRegisters.wordCodeChangeMap_isPhysicalPortProtocol,
-        QuantumCircuit.PortRegisters.portWordCode,
-        QuantumCircuit.PortRegisters.dataWordCode,
-        QuantumCircuit.PortRegisters.portWordCode_apply,
-        QuantumCircuit.PortRegisters.dataWordCode_apply,
-        QuantumCircuit.PortRegisters.portWordCode_port,
-        QuantumCircuit.PortRegisters.portWordCode_data,
-        QuantumCircuit.PortRegisters.portWordCode_scratch,
-        QuantumCircuit.PortRegisters.dataWordCode_port,
-        QuantumCircuit.PortRegisters.dataWordCode_data,
-        QuantumCircuit.PortRegisters.dataWordCode_scratch,
-        QuantumCircuit.PortRegisters.exists_portDataTransfers}
+    \uses{lem:qc_product_register_encoding, def:qc_physical_port_protocol}
+    \lean{QuantumCircuit.portWireEmbedding,
+        QuantumCircuit.exists_portRing_recode}
     \leanok
-    Let $J_{\rm port}(X)=E_{\rm port}XE_{\rm port}^\dagger$ place the input on $p_i$ with $0$ on $(d_i,q_i)$, and let $J_{\rm data}(X)=E_{\rm data}XE_{\rm data}^\dagger$ place the register encoding on $d_i$ with $0$ on $(p_i,q_i)$. There exist depth-$0$ physical-port protocols $T_{{\rm port}\to{\rm data}}$ and $T_{{\rm data}\to{\rm port}}$ satisfying
+    A code of a site of the ring with ports is an injection of a finite set into the
+    configurations of the wires of the site. Let $J_{\rm port}$ be the sitewise encoding along
+    the port code, which places the logical qudit of each site on $p_i$ with $0$ on $(d_i,q_i)$,
+    and let $J_{\rm data}$ be the sitewise encoding along a data code, which places the register
+    encoding on $d_i$ with $0$ on $(p_i,q_i)$. For any two codes $a$, $a'$ of nonempty sets at
+    the sites, with sitewise encodings $J_a$, $J_{a'}$, and any set $D$ of wires containing a
+    wire of every site, some physical-port protocol $T_{a\to a'}$ of depth $0$ with environments
+    in $D$ satisfies $T_{a\to a'}\circ J_a=J_{a'}$. In particular there are depth-$0$
+    physical-port protocols $T_{{\rm port}\to{\rm data}}$ and $T_{{\rm data}\to{\rm port}}$ with
     \begin{align}
         T_{{\rm port}\to{\rm data}}\circ J_{\rm port} & =J_{\rm data},       &
         T_{{\rm data}\to{\rm port}}\circ J_{\rm data} & =J_{\rm port}.\notag
     \end{align}
 \end{lemma}
 \begin{proof}
-    \uses{lem:qc_whole_site_channels, lem:qc_product_register_encoding}
+    \uses{thm:qc_encode_native_channel_layer, lem:qc_whole_site_channels,
+        lem:qc_product_register_encoding}
     \leanok
-    Under the $(1+2k)$-digit site coordinates, $J_{\rm port}$ and $J_{\rm data}$ are product isometric encodings $\bigotimes_i\mathcal E_{{\rm port},i}$ and $\bigotimes_i\mathcal E_{{\rm data},i}$, so $T_{{\rm port}\to{\rm data}}=\bigotimes_i(\mathcal E_{{\rm data},i}\circ D_{{\rm port},i})$ and $T_{{\rm data}\to{\rm port}}=\bigotimes_i(\mathcal E_{{\rm port},i}\circ D_{{\rm data},i})$ intertwine them by Lemma~\ref{lem:qc_product_register_encoding} and have depth $0$ by Lemma~\ref{lem:qc_whole_site_channels}.
+    Encode the identity layer on the single sites along $a$ and $a'$
+    (Lemma~\ref{thm:qc_encode_native_channel_layer}) and realize the encoded layer of channels on
+    whole sites by Lemma~\ref{lem:qc_whole_site_channels}; the sitewise encodings do not depend on
+    the bonds (Lemma~\ref{lem:qc_product_register_encoding}).
 \end{proof}
 
-\begin{lemma}[Concrete data initialization and the zero reference]
-    \label{lem:qc_data_initialization}
-    \uses{thm:qc_physical_port_codes, lem:qc_physical_register_encoding}
-    \lean{QuantumCircuit.PortRegisters.bareDataCode,
-        QuantumCircuit.PortRegisters.nativeWordCode_bareDataCode,
-        QuantumCircuit.PortRegisters.zeroDataReferencePrep,
-        QuantumCircuit.PortRegisters.wordInitialization_data_eq_physicalEncoding,
-        QuantumCircuit.PortRegisters.tensorMapId_comp_zeroDataReferencePrep}
+\begin{lemma}[Bounded protocols between codes on the wires]
+    \label{lem:qc_physical_register_encoding}
+    \uses{thm:qc_bounded_physical_port_simulation, thm:qc_physical_port_codes,
+        def:qc_dimension_bounded_protocol}
+    \lean{QuantumCircuit.IsBoundedProtocol.exists_portRing_of_code}
     \leanok
-    With $\mathcal Z_R(X)=X\otimes\ketbra{0^R}{0^R}$ on the complementary port/scratch wires $R$, the data initializer satisfies $J_{\rm data}=\mathcal E_{\rm phys}\circ\mathcal Z_R$, and $(\Psi\otimes\operatorname{id}_R)\circ\mathcal Z_R=\mathcal Z_R\circ\Psi$ for every linear map $\Psi$.
-\end{lemma}
-\begin{proof}
-    \uses{thm:qc_physical_port_codes, lem:qc_physical_register_encoding}
-    \leanok
-    Under $\Theta_d$, each data codeword splits into its encoded data configuration and $0^R$ on $R$, giving $J_{\rm data}(\ketbra{x}{y})=\mathcal E_{\rm phys}(\ketbra{x}{y}\otimes\ketbra{0^R}{0^R})$ on matrix units and hence on all operators; $(\Psi\otimes\operatorname{id}_R)(X\otimes\ketbra{0^R}{0^R})=\Psi(X)\otimes\ketbra{0^R}{0^R}$.
-\end{proof}
-
-\begin{lemma}[Bounded simulation on the original physical ports]
-    \label{thm:qc_bounded_physical_port_io}
-    \uses{def:qc_dimension_bounded_protocol, thm:qc_physical_port_codes}
-    \lean{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortIO}
-    \leanok
-    Let $d\ge2$, $N\ge2$, and let $\Psi$ be a $B$-dimension-bounded native protocol of depth $T$ with $d_{\rm in}=d_{\rm out}=d$. With $k=\lceil\log_d B\rceil$, there exists a physical-port protocol $\Gamma_{\mathrm{port}}$ satisfying
+    Let $N\ge2$, $d\ge1$ and $B\le d^k$, and let $\Psi$ be a native protocol of depth $T$ whose
+    local dimensions along the protocol are between $1$ and $B$. Let $a$ and $b$ be codes of its
+    input and output bases in the wires of the ring with ports with $2k+1$ wires per site, with
+    sitewise encodings $J_a$ and $J_b$, and let $D$ be a set of wires containing a wire of every
+    site. Then some physical-port protocol $\Gamma$ of depth at most $2kT$ with environments in
+    $D$ satisfies
+    \begin{align}
+        \Gamma\circ J_a & =J_b\circ\Psi.\notag
+    \end{align}
+    The identity concerns inputs in the code $a$, which fixes every wire of a site: the memory
+    wires are part of the code, and no identity is asserted for an arbitrary state of the memory
+    wires carried along as a complementary reference. In particular, let $d\ge2$,
+    $k=\lceil\log_d B\rceil$, and let $\Psi$ have physical input and output dimension $d$. With
+    $a=b$ the port code, whose encoding $J_{\mathrm{port}}$ places the input on the physical ports
+    $\{p_i\}$ and initializes all designated memory $(d_i,q_i)$ in $\ketbra{0}{0}$, some
+    physical-port protocol $\Gamma_{\mathrm{port}}$ with environments in $D$ satisfies
     \begin{align}
         \Gamma_{\mathrm{port}} J_{\mathrm{port}}
          & = J_{\mathrm{port}}\Psi,
          & \operatorname{depth}_{\mathrm{intersite}}(\Gamma_{\mathrm{port}})
-         & \leq 2kT,\notag
+         & \leq 2kT.\notag
     \end{align}
-    where $J_{\mathrm{port}}$ places the input on the physical ports $\{p_i\}$ and initializes all designated memory $(d_i,q_i)$ in $\ketbra{0}{0}$.
+    For $D$ the wires other than the ports, the counted gates act on the port wires alone and
+    every environment stays at its site.
 \end{lemma}
 \begin{proof}
-    \uses{thm:qc_bounded_physical_protocol_compilation, thm:qc_physical_port_codes, lem:qc_data_initialization}
+    \uses{thm:qc_physical_port_codes, thm:qc_bounded_physical_port_simulation,
+        thm:qc_appended_environment_composition}
     \leanok
-    Set $\Gamma_{\mathrm{port}}=T_{{\rm data}\to{\rm port}}\circ\Gamma\circ T_{{\rm port}\to{\rm data}}$, where $\Gamma$ is the depth-$2kT$ protocol of Lemma~\ref{thm:qc_bounded_physical_protocol_compilation}. By Lemma~\ref{thm:qc_physical_port_codes} and Lemma~\ref{lem:qc_data_initialization},
-    \begin{align}
-        \Gamma_{\mathrm{port}}J_{\mathrm{port}}
-         & =T_{{\rm data}\to{\rm port}}\Gamma\mathcal E_{\rm in}\mathcal Z_R
-        =T_{{\rm data}\to{\rm port}}\mathcal E_{\rm out}(\Psi\otimes\operatorname{id}_R)\mathcal Z_R
-        =T_{{\rm data}\to{\rm port}}J_{\rm data}\Psi
-        =J_{\mathrm{port}}\Psi,\notag
-    \end{align}
-    with depth $0+2kT+0=2kT$.
+    The bases of $\Psi$ have between $1$ and $B\le d^k$ elements, so they have sitewise
+    injections $e$ and $f$ into the registers. Change the code $a$ into the data code of $e$
+    (Lemma~\ref{thm:qc_physical_port_codes}), apply
+    Lemma~\ref{thm:qc_bounded_physical_port_simulation}, and change the data code of $f$ into $b$;
+    the protocols compose (Lemma~\ref{thm:qc_appended_environment_composition}) with depth
+    $0+2kT+0$. The data code of $e$ is the data embedding after $\mathcal E_e$.
+    For $d\ge2$ the integer $k=\lceil\log_d B\rceil$ satisfies $B\le d^k$, and the port code is
+    the one of Lemma~\ref{thm:qc_physical_port_codes}.
 \end{proof}
 
 \subsection{Unitary circuits with one final environment discard}
 
-The finite reduced-channel protocols have unitary realizations with the
-same physical-port intersite depth. Every extra environment wire has a
-specified spatial owner, is initialized in the zero basis state at the
-start, and is discarded only after the circuit has finished.
-
-\begin{definition}[Port-preserving wire embeddings]
-    \label{def:qc_physical_port_embedding}
-    \uses{def:qc_physical_port_protocol}
-    \lean{QuantumCircuit.PhysicalPortEmbedding,
-        QuantumCircuit.PhysicalPortLayout.append,
-        QuantumCircuit.PhysicalPortLayout.appendEmbedding}
-    \leanok
-    A port-preserving embedding between layouts on $W$ and $W'$ is an injection $\iota\colon W\hookrightarrow W'$ satisfying $s'\circ\iota=s$ and $\iota(p_i)=p'_i$ for all $i\in\Z_N$. Appending $A$ environment wires with assigned spatial owners $s_A\colon A\to\Z_N$ defines the layout $W\sqcup A$ and canonical embedding $\iota\colon W\hookrightarrow W\sqcup A$.
-\end{definition}
-
-\begin{lemma}[Preservation of physical depth under wire embeddings]
-    \label{thm:qc_physical_port_embedding}
-    \uses{def:qc_physical_port_embedding}
-    \lean{QuantumCircuit.PhysicalPortEmbedding.unitary}
-    \leanok
-    If $U$ has a physical-port unitary circuit of depth at most $T$ on $W$ and $\iota\colon W\hookrightarrow W'$ is a port-preserving embedding, then $\operatorname{embed}_\iota(U)$ has a physical-port unitary circuit of depth at most $T$ on $W'$ and acts as $I_{W'\setminus\iota(W)}$ on the new wires.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{def:qc_physical_port_protocol, lem:qc_placed_operators}
-    By induction on $U$ using Lemma~\ref{lem:qc_placed_operators}: onsite unitaries stay inside $s'^{-1}(i)$, onsite permutations $\pi$ extend by the identity outside $\iota(W)$, physical layers on $\{p_i\}$ map to physical layers on $\{p'_i\}=\{\iota(p_i)\}$, and $\operatorname{embed}_\iota$ is a homomorphism.
-\end{proof}
+A physical-port protocol is by definition a unitary circuit, with the same
+physical ports and intersite depth, between a preparation of basis vectors on
+local environments and one final trace over them. The following results show
+that every protocol of channels has such a realization at no extra depth, with
+its environments at prescribed wires.
 
 \begin{definition}[Environment input and discard]
     \label{def:qc_appended_environment}
-    \lean{QuantumCircuit.appendConfigurationSplit,
-        QuantumCircuit.appendConfigurationSplit_append,
-        QuantumCircuit.appendMatrixSplit,
-        QuantumCircuit.appendEnvironmentInput,
-        QuantumCircuit.discardAppendedEnvironment}
+    \lean{QuantumCircuit.prepareCircuit,
+        QuantumCircuit.traceCircuit,
+        QuantumCircuit.relabelCircuit}
     \leanok
-    Write $\mathcal H_W=(\C^d)^{\otimes W}$ ($d\ge1$). Under $\mathcal H_{W\sqcup A}\simeq\mathcal H_W\otimes\mathcal H_A$, define the environment initialization and discard maps by $\mathcal I_A(X)=X\otimes Z_A$ and $\mathcal D_A(Y)=\tr_A Y$, where $Z_A=\ketbra{0^A}{0^A}$.
+    For finite environment bases $E_s$ at the wires and basis vectors $e_s\in E_s$, the
+    environment initialization $\mathcal I_E$ is the onsite encoding along $a\mapsto(a,e_s)$, and
+    for finite bases $F_s$ the environment discard $\mathcal D_F$ is the onsite partial trace over
+    $\C^{F_s}$. The relabelling along bijections of the local bases is the onsite encoding along
+    them.
 \end{definition}
 
 \begin{lemma}[Operators on original wires with an appended environment]
     \label{thm:qc_appended_environment_operators}
-    \uses{def:qc_appended_environment, lem:qc_register_channel_lift}
-    \lean{QuantumCircuit.appendMatrixSplit_embedOp,
-        QuantumCircuit.discardAppendedEnvironment_conj,
-        QuantumCircuit.discardAppendedEnvironment_lift}
+    \uses{def:qc_appended_environment, lem:qc_product_register_encoding}
+    \lean{QuantumCircuit.map_prepareCircuit_apply,
+        QuantumCircuit.map_traceCircuit_apply,
+        QuantumCircuit.map_relabelCircuit_apply,
+        QuantumCircuit.depth_relabelCircuit,
+        QuantumCircuit.map_traceCircuit_kronecker,
+        QuantumCircuit.map_traceCircuit_map_tensorRight}
     \leanok
-    Under $\mathcal H_{W\sqcup A}\simeq\mathcal H_W\otimes\mathcal H_A$, $\operatorname{embed}_W(U)=U\otimes I_A$, $\mathcal D_A(\operatorname{Ad}_V(\mathcal I_A(X)))=\tr_A(V(X\otimes Z_A)V^\dagger)$ for any $V$ on $W\sqcup A$, and $\mathcal D_A\circ\operatorname{Ad}_{\operatorname{embed}_W(U)}\circ\mathcal I_A=\operatorname{Ad}_U$.
+    The initialization acts as $\mathcal I_E(X)=X\otimes\ketbra{e}{e}$ and the discard as
+    $\mathcal D_F(Y)=\tr_FY$; a relabelling is an unbranched unitary circuit of depth $0$. The
+    discard satisfies $\tr_F(A\otimes\omega)=(\tr\omega)A$, and for every circuit $\Phi$ and
+    every $Y$,
+    \begin{align}
+        \tr_F\bigl((\Phi\otimes\operatorname{id}_F)(Y)\bigr) & =\Phi(\tr_FY).\notag
+    \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:qc_register_channel_lift}
-    By Lemma~\ref{lem:qc_register_channel_lift}, $\operatorname{embed}_W(U)=U\otimes I_A$, and $\tr_A((U\otimes I_A)(X\otimes Z_A)(U\otimes I_A)^\dagger)=UXU^\dagger\tr(Z_A)=UXU^\dagger$.
-\end{proof}
-
-\begin{definition}[Disjoint appended environments]
-    \label{def:qc_disjoint_appended_environments}
-    \uses{def:qc_physical_port_embedding, def:qc_appended_environment}
-    \lean{QuantumCircuit.PhysicalPortEmbedding.appendEnvironment,
-        QuantumCircuit.PhysicalPortEmbedding.appendEnvironment_wires_old,
-        QuantumCircuit.PhysicalPortEmbedding.appendEnvironment_wires_new,
-        QuantumCircuit.PhysicalPortLayout.appendLeftEmbedding,
-        QuantumCircuit.PhysicalPortLayout.appendRightEmbedding,
-        QuantumCircuit.appendEnvironmentConfigurationSplit,
-        QuantumCircuit.appendEnvironmentConfigurationSplit_symm_apply}
-    \leanok
-    The embeddings $\iota_L\colon W\sqcup A\hookrightarrow W\sqcup(A\sqcup B)$ and $\iota_R\colon W\sqcup B\hookrightarrow W\sqcup(A\sqcup B)$ act as the identity on $W$ and include $A,B$ into the two summands of $A\sqcup B$, with configuration space ordered as $(\mathcal H_W\otimes\mathcal H_A)\otimes\mathcal H_B$.
-\end{definition}
-
-\begin{lemma}[Coordinates of the two environment extensions]
-    \label{thm:qc_two_environment_coordinates}
-    \uses{def:qc_disjoint_appended_environments}
-    \lean{QuantumCircuit.reindex_appendLeft_embedOp,
-        QuantumCircuit.reindex_appendRight_embedOp,
-        QuantumCircuit.discardAppendedEnvironment_eq_iterated,
-        QuantumCircuit.reindex_appendEnvironmentInput}
-    \leanok
-    In $(\mathcal H_W\otimes\mathcal H_A)\otimes\mathcal H_B$, $\operatorname{embed}_{\iota_L}(U)=U\otimes I_B$ and $\operatorname{embed}_{\iota_R}(V)=\Sigma^\dagger(V\otimes I_A)\Sigma$ where $\Sigma(s,a,b)=(s,b,a)$, while $\mathcal I_{A\sqcup B}(X)=(X\otimes Z_A)\otimes Z_B$ and $\mathcal D_{A\sqcup B}=\tr_A\circ\tr_B$.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:qc_register_channel_lift}
-    Reindexing Lemma~\ref{lem:qc_register_channel_lift} along the wire-sum bijections for $\iota_L$ and $\iota_R$ gives $U\otimes I_B$ and $\Sigma^\dagger(V\otimes I_A)\Sigma$, while $0^{A\sqcup B}=(0^A,0^B)$ gives $Z_{A\sqcup B}=Z_A\otimes Z_B$ and $\tr_{A\sqcup B}=\tr_A\circ\tr_B$.
+    \uses{lem:qc_product_register_encoding}
+    The three circuits are single layers without bonds, so their maps are tensor products of
+    the local maps (Lemma~\ref{lem:qc_product_register_encoding}). Both sides of the last
+    identity are linear in $Y$, and for $Y=A\otimes\omega$ the left side is
+    $\tr_F(\Phi(A)\otimes\omega)=(\tr\omega)\Phi(A)$.
 \end{proof}
 
 \begin{lemma}[Composition with disjoint fresh environments]
     \label{thm:qc_appended_environment_composition}
-    \uses{def:qc_disjoint_appended_environments}
-    \lean{QuantumCircuit.IsPhysicalPortUnitary.appendEnvironment_comp,
-        QuantumCircuit.appendEnvironment_comp_trace,
-        QuantumCircuit.appendEnvironment_comp_channel}
+    \uses{def:qc_physical_port_protocol, thm:qc_appended_environment_operators}
+    \lean{QuantumCircuit.isUnitaryDilation_id,
+        QuantumCircuit.IsUnitaryDilation.mono,
+        QuantumCircuit.IsUnitaryDilation.comp}
     \leanok
-    Let $\overline U=\operatorname{embed}_{\iota_L}(U)$, $\overline V=\operatorname{embed}_{\iota_R}(V)$, and $C=\overline V\overline U$. Then
+    The identity is a physical-port protocol of depth $0$, and a physical-port protocol of
+    depth at most $T$ is one of every larger depth. If $\Phi_1$ and $\Phi_2$ are physical-port
+    protocols of depths at most $T$ and $S$ with environments in $D$, realized by $U_1$ with
+    environments $E_1,F_1$ and $U_2$ with environments $E_2,F_2$, then $\Phi_2\circ\Phi_1$ is
+    realized with environments $E_1\times E_2$ and $F_2\times F_1$ by a unitary circuit $C$ of
+    depth at most $T+S$, and
     \begin{align}
-        \mathcal D_{A+B}\circ\operatorname{Ad}_C\circ\mathcal I_{A+B}
-         & =(\mathcal D_B\circ\operatorname{Ad}_V\circ\mathcal I_B)
-        \circ(\mathcal D_A\circ\operatorname{Ad}_U\circ\mathcal I_A),
+        \mathcal D_{F_2\times F_1}\circ\operatorname{Ad}_C\circ\mathcal I_{E_1\times E_2}
+         & =(\mathcal D_{F_2}\circ\operatorname{Ad}_{U_2}\circ\mathcal I_{E_2})
+        \circ(\mathcal D_{F_1}\circ\operatorname{Ad}_{U_1}\circ\mathcal I_{E_1}).
         \label{eq:qc_appended_environment_composition}
     \end{align}
-    and $\operatorname{depth}(U)\le T,\,\operatorname{depth}(V)\le S\implies\operatorname{depth}(C)\le T+S$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:qc_two_environment_coordinates, thm:qc_physical_port_embedding}
-    By Lemma~\ref{thm:qc_two_environment_coordinates}, $\overline U$ maps $(X\otimes Z_A)\otimes Z_B$ to $(U(X\otimes Z_A)U^\dagger)\otimes Z_B$, and since $\overline V=\Sigma^\dagger(V\otimes I_A)\Sigma$ acts as $I_A$ on $\mathcal H_A$, $\tr_A$ commutes with $\operatorname{Ad}_{\overline V}$, yielding~(\ref{eq:qc_appended_environment_composition}). Lemma~\ref{thm:qc_physical_port_embedding} gives $\operatorname{depth}(C)\le T+S$.
-\end{proof}
-
-\begin{definition}[Selected local wires and their fresh environment]
-    \label{def:qc_selected_environment}
-    \uses{def:qc_physical_port_embedding}
-    \lean{QuantumCircuit.selectedEnvironmentEmbedding,
-        QuantumCircuit.selectedEnvironmentEmbedding_old,
-        QuantumCircuit.selectedEnvironmentEmbedding_new,
-        QuantumCircuit.append_comp_selectedEnvironment,
-        QuantumCircuit.PhysicalPortLayout.siteRegister,
-        QuantumCircuit.PhysicalPortLayout.site_siteRegister,
-        QuantumCircuit.PhysicalPortLayout.image_univ_siteRegister}
-    \leanok
-    Given a register $e\colon S\hookrightarrow W$ of $m$ original wires and $A$ fresh environment wires, $\iota_{e,A}\colon S\sqcup A\hookrightarrow W\sqcup A$ embeds $S$ via $e$ and $A$ identically. For $i\in\Z_N$, the site register $e_i$ enumerates $s^{-1}(i)\subseteq W$.
-\end{definition}
-
-\begin{lemma}[Placement of a local environment reduction]
-    \label{thm:qc_selected_environment_reduction}
-    \uses{def:qc_selected_environment, def:qc_appended_environment}
-    \lean{QuantumCircuit.environmentKraus_selectedEnvironment,
-        QuantumCircuit.reduced_selectedEnvironment}
-    \leanok
-    For any matrix $V$ on $S\sqcup A$ with environment-column blocks $K_a(x)=V(x,a;-,0^A)$, the placed matrix $\widetilde V=\operatorname{embed}_{\iota_{e,A}}(V)$ has column blocks $\operatorname{embed}_e(K_a)$ and satisfies
-    \begin{align}
-        \mathcal D_A\circ\operatorname{Ad}_{\widetilde V}\circ\mathcal I_A
-         & =\operatorname{Lift}_e(\mathcal D_A\circ\operatorname{Ad}_V\circ\mathcal I_A).\notag
-    \end{align}
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:qc_register_channel_lift}
-    Restricting $\widetilde V$ to input environment $0^A$ and output environment $a$ gives $\operatorname{embed}_e(K_a)$, so $\mathcal D_A(\widetilde V(X\otimes Z_A)\widetilde V^\dagger)=\sum_a\operatorname{embed}_e(K_a)X\operatorname{embed}_e(K_a)^\dagger=\operatorname{Lift}_e(\sum_a K_a\cdot K_a^\dagger)(X)$ by Lemma~\ref{lem:qc_register_channel_lift}.
+    \uses{thm:qc_appended_environment_operators}
+    Prepare both environments, apply $U_1\otimes I_{E_2}$, relabel, apply $U_2\otimes I_{F_1}$
+    and relabel; the relabellings have depth $0$. The trace over $F_2\times F_1$ is the trace
+    over $F_2$ after the one over $F_1$, which commutes with $U_2\otimes I_{F_1}$ by
+    Lemma~\ref{thm:qc_appended_environment_operators}, and the trace over $F_1$ of the first
+    output gives $\Phi_1$. Outside $D$ every environment has at most one element, so the
+    product environments do too.
 \end{proof}
 
 \begin{lemma}[Fresh onsite unitary dilations]
     \label{thm:qc_fresh_onsite_unitary_dilation}
-    \uses{def:qc_appended_environment, def:qc_selected_environment}
-    \lean{QuantumCircuit.exists_qudit_freshEnvironment_unitary,
-        QuantumCircuit.exists_selected_onsite_dilation,
-        QuantumCircuit.exists_onsite_appended_dilation}
+    \uses{def:qc_appended_environment, def:qc_physical_port_protocol}
+    \lean{KrausFamily.IsTP.exists_unitary_dilation,
+        QuantumCircuit.Layer.IsUnitaryOff,
+        QuantumCircuit.Layer.isUnitaryDilation}
     \leanok
-    Every CPTP map $\Phi$ on $m$ $d$-level qudits admits a unitary $V$ on $m+2m$ qudits with $\Phi=\mathcal D_{2m}\circ\operatorname{Ad}_V\circ\mathcal I_{2m}$. Placing $V$ on $e_i\colon s^{-1}(i)\hookrightarrow W$ and $2|s^{-1}(i)|$ fresh wires owned by site $i$ realizes any normalized Kraus channel supported inside $s^{-1}(i)$ as $\mathcal D_A\circ\operatorname{Ad}_{\widetilde V}\circ\mathcal I_A$ with $\operatorname{depth}(\widetilde V)=0$.
+    Every CPTP map $\Phi$ from $\C^\alpha$ to $\C^\beta$ with Kraus operators
+    $K_1,\dots,K_r$, on a nonempty basis $\alpha$, satisfies
+    $\Phi(X)=\tr_{\alpha\times[r]}\bigl(V(X\otimes\ketbra{e_0}{e_0})V^\dagger\bigr)$ for a
+    unitary $V$ from $\C^{\alpha\times\beta\times[r]}$ to $\C^{\beta\times\alpha\times[r]}$ and a
+    basis vector $e_0$ of $\C^{\beta\times[r]}$. Consequently, let $D$ be a set of wires and let
+    a layer of CPTP gates and onsite channels on nonempty input bases have unitary gates on the
+    cells disjoint from $D$ and unitary onsite channels outside $D$. Then it is a physical-port
+    protocol of its own depth with environments in $D$, realized by one layer of unitary gates
+    on the same cells.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:qc_selected_environment_reduction, lem:qc_placed_operators}
-    Since $\operatorname{rank}(C_\Phi)\le(d^m)^2=d^{2m}$, Stinespring dilation and unitary extension~\cite[Theorems~2.2 and~2.5]{Wolf2012Quantum} yield $V$ on $m+2m$ wires. For a Kraus channel supported in $s^{-1}(i)$, injectivity of $\operatorname{embed}_{e_i}$ gives local normalization on $s^{-1}(i)$, and Lemma~\ref{thm:qc_selected_environment_reduction} places $V$ inside $s^{-1}(i)\sqcup A$ at depth $0$.
+    \uses{lem:qc_placed_operators}
+    The first statement is Stinespring dilation followed by a unitary extension of the isometry
+    $X\mapsto\sum_jK_jX\otimes\ket{j}$~\cite[Theorems~2.2 and~2.5]{Wolf2012Quantum}. For the
+    layer, keep every unitary gate and onsite channel and replace every other one by its
+    dilation, placing the environment of a gate at one site of its cell, a site of $D$ if the
+    cell meets $D$. The entries of the dilated layer factor over the cells and the remaining
+    sites (Lemma~\ref{lem:qc_placed_operators}), and on every factor the trace over the
+    environment gives back the original gate or channel.
 \end{proof}
 
 \begin{lemma}[Same-depth unitary realization with one final discard]
     \label{thm:qc_physical_port_unitary_dilation}
     \uses{def:qc_physical_port_protocol, def:qc_appended_environment}
-    \lean{QuantumCircuit.IsPhysicalPortProtocol.exists_appended_unitary_dilation,
-        QuantumCircuit.IsPhysicalPortProtocol.exists_appended_unitary_dilation_reference}
+    \lean{QuantumCircuit.Circuit.IsUnitaryOff,
+        QuantumCircuit.Circuit.isUnitaryOff_of_forall_isUnitary,
+        QuantumCircuit.Circuit.isUnitaryDilation}
     \leanok
-    Fix $d\ge1$ and a layout on $N\ge1$ sites. Every physical-port protocol $\Phi$ of depth at most $T$ admits a finite fresh environment $A$ and a unitary $U$ on $W\sqcup A$ such that
+    Let $D$ be a set of wires, and let $\Phi$ be realized by a sequence of layers of CPTP
+    gates and onsite channels on nonempty input bases, of depth at most $T$, each with unitary
+    gates on the cells disjoint from $D$ and unitary onsite channels outside $D$, and with every
+    wire outside $D$ of dimension at most $d$. Then there are environments in $D$ and a unitary
+    circuit $U$ on the ring with ports with
     \begin{align}
-        \mathcal D_A\circ\operatorname{Ad}_U\circ\mathcal I_A & =\Phi,
+        \mathcal D_F\circ\operatorname{Ad}_U\circ\mathcal I_E & =\Phi,
                                                               & \operatorname{depth}_{\mathrm{intersite}}(U) & \leq T,
         \label{eq:qc_physical_port_dilation}
     \end{align}
-    and $((\mathcal D_A\circ\operatorname{Ad}_U\circ\mathcal I_A)\otimes\operatorname{id}_R)=\Phi\otimes\operatorname{id}_R$ for any reference $R$.
+    and hence $((\mathcal D_F\circ\operatorname{Ad}_U\circ\mathcal I_E)\otimes\operatorname{id}_R)=\Phi\otimes\operatorname{id}_R$ for any reference $R$. A circuit of unitary gates satisfies the hypothesis for every $D$, and every protocol of depth at most $T$ on nonempty input bases satisfies~(\ref{eq:qc_physical_port_dilation}) with $D$ the set of all wires.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:qc_appended_environment_operators, thm:qc_fresh_onsite_unitary_dilation,
         thm:qc_appended_environment_composition}
-    By induction on Definition~\ref{def:qc_physical_port_protocol}: unitary primitives take $A=\varnothing$ (Lemma~\ref{thm:qc_appended_environment_operators}), onsite Kraus channels take $2|s^{-1}(i)|$ fresh wires at site $i$ of depth $0$ (Lemma~\ref{thm:qc_fresh_onsite_unitary_dilation}), and compositions combine disjoint environments via~(\ref{eq:qc_appended_environment_composition}).
+    By induction on the layers: the sequence without layers is the identity, of depth $0$
+    (Lemma~\ref{thm:qc_appended_environment_composition}), every layer is dilated at its own
+    depth by Lemma~\ref{thm:qc_fresh_onsite_unitary_dilation}, and the dilations compose
+    via~(\ref{eq:qc_appended_environment_composition}).
 \end{proof}
-
-\begin{lemma}[Bounded unitary simulation on the original ports]
-    \label{thm:qc_bounded_unitary_port_io}
-    \uses{def:qc_dimension_bounded_protocol, def:qc_appended_environment,
-        thm:qc_physical_port_codes}
-    \lean{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortUnitaryIO}
-    \leanok
-    Let $d\ge2$, $N\ge2$, and let $\Psi$ be a $B$-dimension-bounded native protocol of depth $T$ with $d_{\rm in}=d_{\rm out}=d$. With $k=\lceil\log_d B\rceil$, there exists a unitary $U$ on the physical ports, designated memory, and fresh local environments $A$ such that
-    \begin{align}
-        \mathcal D_A\circ\operatorname{Ad}_U\circ\mathcal I_A\circ J_{\mathrm{port}}
-         & =J_{\mathrm{port}}\circ\Psi,
-         & \operatorname{depth}_{\mathrm{intersite}}(U) & \leq2kT.
-        \label{eq:qc_bounded_unitary_port_io}
-    \end{align}
-    Uniform family overhead requires $B$ and $d$ to be fixed independently of $N$.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:qc_bounded_physical_port_io, thm:qc_physical_port_unitary_dilation}
-    Apply Lemma~\ref{thm:qc_physical_port_unitary_dilation} to the protocol $\Gamma_{\mathrm{port}}$ of Lemma~\ref{thm:qc_bounded_physical_port_io} and compose~(\ref{eq:qc_physical_port_dilation}) with $J_{\mathrm{port}}$; the source's QCcc block/control and pure-output system--ancilla conditions remain separate (see~\cite{gap:psc21_physical_port_simulation_scope}).
-\end{proof}
-
 
 \begin{lemma}[Pure output and environment decoupling]
     \label{thm:qc_physical_port_pure_output}
@@ -814,27 +541,29 @@ start, and is discarded only after the circuit has finished.
 
 
 
+
 \begin{lemma}[Bounded pure-state conversion on the original ports]
     \label{lem:qc_bounded_port_pure_output}
     \discussion{8640}
     \uses{def:qc_dimension_bounded_protocol, thm:qc_physical_port_codes,
-        thm:qc_bounded_physical_port_io, thm:qc_physical_port_pure_output}
+        lem:qc_physical_register_encoding, thm:qc_physical_port_pure_output}
     Fix $d\ge2$ and an intermediate dimension bound $B$. Let $N\ge2$,
     let $\Psi$ be a $B$-dimension-bounded native protocol of depth $T$,
     and suppose
     $\Psi(\ketbra{\psi}{\psi})=\ketbra{\phi}{\phi}$ with
-    $\langle\phi,\phi\rangle=1$ and physical input and output dimension $d$.
-    Set $k=\lceil\log_d B\rceil$. Let $V_{\rm port}$ store each original
+    $\langle\psi,\psi\rangle=\langle\phi,\phi\rangle=1$ and physical input and output
+    dimension $d$. Set $k=\lceil\log_d B\rceil$. Let $V_{\rm port}$ store each original
     physical qudit on its port and set its data and scratch digits to zero,
-    so $J_{\rm port}(X)=V_{\rm port}XV_{\rm port}^\dagger$.
-    There are fresh local environment wires, a physical-port unitary $U$,
-    and a unit environment vector $\eta$ such that
+    so $J_{\rm port}(X)=V_{\rm port}XV_{\rm port}^\dagger$, and let $D$ be a set of wires
+    containing a wire of every site.
+    There are local environments at the wires of $D$, basis vectors $e$ of them, a
+    physical-port unitary $U$, and a unit environment vector $\eta$ such that
     \begin{align}
-        U(V_{\rm port}\psi\otimes\ket{0^A})
+        U(V_{\rm port}\psi\otimes e)
          & =V_{\rm port}\phi\otimes\eta,
          & \operatorname{depth}_{\rm intersite}(U) & \le2kT,
         \label{eq:qc_bounded_port_pure_vector}               \\
-        \mathcal D_A\circ\operatorname{Ad}_U\circ\mathcal I_A\circ J_{\rm port}
+        \mathcal D_F\circ\operatorname{Ad}_U\circ\mathcal I_E\circ J_{\rm port}
          & =J_{\rm port}\circ\Psi.
         \label{eq:qc_bounded_port_pure_channel}
     \end{align}
@@ -844,39 +573,40 @@ start, and is discarded only after the circuit has finished.
     of $N$. No adaptive protocol-block or control condition is asserted.
 \end{lemma}
 \begin{proof}
-    \uses{lem:qc_register_code_completion, thm:qc_bounded_physical_port_io,
+    \uses{lem:qc_register_code_completion, lem:qc_physical_register_encoding,
         thm:qc_physical_port_pure_output}
-    The explicit port code is an isometry, so $V_{\rm port}\phi$ is
+    The explicit port code is an isometry, so $V_{\rm port}\psi$ and $V_{\rm port}\phi$ are
     normalized. The channel identity of
-    Lemma~\ref{thm:qc_bounded_physical_port_io} gives
+    Lemma~\ref{lem:qc_physical_register_encoding} gives
     $\Gamma J_{\rm port}(\ketbra{\psi}{\psi})
         =J_{\rm port}(\ketbra{\phi}{\phi})$.
-    Apply Lemma~\ref{thm:qc_physical_port_pure_output} to this compiled
-    channel and these two encoded vectors. It derives $\eta$ with
-    $U(V_{\rm port}\psi\otimes\ket{0^A})=V_{\rm port}\phi\otimes\eta$
+    Apply Lemma~\ref{thm:qc_physical_port_pure_output} with $\varepsilon=0$ to the unitary
+    realization of this compiled channel and these two encoded vectors. It derives $\eta$ with
+    $U(V_{\rm port}\psi\otimes e)=V_{\rm port}\phi\otimes\eta$
     in~(\ref{eq:qc_bounded_port_pure_vector}), without changing the
-    unitary's physical depth. Compose its full channel
-    identity with $J_{\rm port}$ to obtain
+    unitary's physical depth, and its channel identity composed with $J_{\rm port}$ is
     (\ref{eq:qc_bounded_port_pure_channel}).
 \end{proof}
 
 
 \begin{lemma}[Approximate pure-state conversion on the original ports]
     \label{lem:qc_bounded_port_approximate_output}
-    \notready
     \discussion{8640}
     \uses{def:qc_dimension_bounded_protocol, thm:qc_physical_port_codes,
         def:qc_approx_local_channel_conversion}
+    \lean{QuantumCircuit.IsBoundedProtocol.exists_portRing_unit_product_approx}
+    \leanok
     Fix $d\ge2$ and an intermediate dimension bound $B$. Let $N\ge2$ and
     let $\Psi$ be a $B$-dimension-bounded native channel of depth $T$ with
     physical input and output dimension $d$. For unit vectors $\psi,\phi$,
     suppose
     $\|\Psi(\ketbra{\psi}{\psi})-\ketbra{\phi}{\phi}\|_1\le\varepsilon$.
-    Set $k=\lceil\log_d B\rceil$, and let $V_{\rm port}$ be the explicit
-    original-port isometry with zero designated memory. There is a unitary
-    $U$ and a unit environment vector $\eta$ such that
+    Set $k=\lceil\log_d B\rceil$, let $V_{\rm port}$ be the explicit
+    original-port isometry with zero designated memory, and let $D$ be a set of wires
+    containing a wire of every site. There are local environments at the wires of $D$, basis
+    vectors $e$ of them, a unitary $U$ and a unit environment vector $\eta$ such that
     \begin{align}
-        \|U(V_{\rm port}\psi\otimes\ket{0_A})
+        \|U(V_{\rm port}\psi\otimes e)
         -V_{\rm port}\phi\otimes\eta\|_2        & \le\sqrt{2\varepsilon},
         \label{eq:qc_bounded_port_approximate_vector}                     \\
         \operatorname{depth}_{\rm intersite}(U) & \le2kT.
@@ -889,8 +619,8 @@ start, and is discarded only after the circuit has finished.
     $B$ before the chain length.
 \end{lemma}
 \begin{proof}
-    \notready
-    \uses{thm:qc_bounded_physical_port_io, thm:qc_physical_port_unitary_dilation}
+    \uses{lem:qc_physical_register_encoding, thm:qc_physical_port_unitary_dilation}
+    \leanok
     Construct the actual port channel and its unitary dilation. The full
     dilation identity identifies the marginal of its actual output, while
     trace preservation and normalization of $\psi$ give a unit joint vector.

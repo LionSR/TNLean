@@ -124,8 +124,11 @@ theorem torusParentHamiltonian_annihilates_torusGClosure_of_invariant
     (hP : ∀ v, IsRegionParentInteraction (groupBondTensor (torusNativeIncidentSite a))
       (torusPlaquetteRegion v) (P v))
     (g h : G) (hgh : Commute g h) :
-    regionParentHamiltonian torusPlaquetteRegion P *ᵥ torusGClosure U a g h = 0 := by
-  apply (regionParentHamiltonian_mulVec_eq_zero_iff _ _ (fun v => (hP v).1) _).mpr
+    (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) torusPlaquetteRegion P).hamiltonian *ᵥ
+      torusGClosure U a g h = 0 := by
+  apply (ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff
+    (Φ := ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) torusPlaquetteRegion P)
+    fun v ↦ ManyBody.posSemidef_place (X := fun _ ↦ Fin _) (hP v).1).mpr
   intro v
   exact torusParent_annihilates_torusGClosure_of_invariant U a ha g h hgh v (P v) (hP v)
 
@@ -141,7 +144,8 @@ theorem span_torusGClosure_commuting_le_torusParentKernel_of_invariant
       (torusPlaquetteRegion v) (P v)) :
     Submodule.span ℂ (Set.range (fun p : {p : G × G // Commute p.1 p.2} =>
       torusGClosure (width := width) (height := height) U a p.1.1 p.1.2)) ≤
-      (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion P)).ker := by
+      (Matrix.mulVecLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d)
+        torusPlaquetteRegion P).hamiltonian).ker := by
   apply Submodule.span_le.mpr
   rintro ψ ⟨p, rfl⟩
   exact torusParentHamiltonian_annihilates_torusGClosure_of_invariant

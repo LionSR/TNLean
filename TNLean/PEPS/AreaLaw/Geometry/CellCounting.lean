@@ -21,6 +21,7 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 
 open scoped BigOperators
 open TNLean.Lattice
+open ManyBody (ambientDilation edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -40,12 +41,12 @@ lines 163–185. These are the source set `Z`, not an ambient boundary. -/
 noncomputable def boundaryEndpoints (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) :
     Finset (ℤ × ℤ) := by
   classical
-  exact ((edgeBoundary Λ A).biUnion Sym2.toFinset).image Subtype.val
+  exact ((edgeBoundary (planeDomainGraph Λ) A).biUnion Sym2.toFinset).image Subtype.val
 
 /-- A physical crossing edge contributes both endpoints to the source set `Z`.
 Source: Lemma 9.4, final proof paragraph, and the definition of `Z`. -/
 theorem mem_boundaryEndpoints_of_mem_edgeBoundary {Λ : Finset (ℤ × ℤ)}
-    {A : Finset (Site Λ)} {e : Sym2 (Site Λ)} (he : e ∈ edgeBoundary Λ A)
+    {A : Finset (Site Λ)} {e : Sym2 (Site Λ)} (he : e ∈ edgeBoundary (planeDomainGraph Λ) A)
     {x : Site Λ} (hx : x ∈ e) : x.1 ∈ boundaryEndpoints Λ A := by
   classical
   exact Finset.mem_image.mpr
@@ -55,16 +56,17 @@ theorem mem_boundaryEndpoints_of_mem_edgeBoundary {Λ : Finset (ℤ × ℤ)}
 is empty. Source: Section 11, lines 179–185, `|Z| ≤ 2b`, absorbed into the
 numerical constant there. This does not assert the layer-cell bound. -/
 theorem card_boundaryEndpoints_le (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) :
-    (boundaryEndpoints Λ A).card ≤ 2 * (edgeBoundary Λ A).card := by
+    (boundaryEndpoints Λ A).card ≤ 2 * (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
   unfold boundaryEndpoints
   refine Finset.card_image_le.trans (Finset.card_biUnion_le.trans ?_)
   calc
-    ∑ a ∈ edgeBoundary Λ A, a.toFinset.card ≤ ∑ _ ∈ edgeBoundary Λ A, 2 := by
+    ∑ a ∈ edgeBoundary (planeDomainGraph Λ) A, a.toFinset.card ≤
+        ∑ _ ∈ edgeBoundary (planeDomainGraph Λ) A, 2 := by
       refine Finset.sum_le_sum fun a _ ↦ ?_
       rw [Sym2.card_toFinset]
       split_ifs <;> omega
-    _ = 2 * (edgeBoundary Λ A).card := by simp [Nat.mul_comm]
+    _ = 2 * (edgeBoundary (planeDomainGraph Λ) A).card := by simp [Nat.mul_comm]
 
 /-- Integer indices of the four dyadic children of a parent cell.
 Source: area-law Section 11, dyadic cells, lines 157–181. -/

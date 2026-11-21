@@ -26,11 +26,11 @@ cut.
 
 ## Main results
 
-* `ManyBody.PlaneInteraction.log_surprisalMoment_reducedState_le`:
+* `ManyBody.PlaneInteraction.log_surprisalMoment_regionState_le`:
   `eq:initial-tail-mgf` for the regional state.
-* `ManyBody.PlaneInteraction.surprisalTail_reducedState_le`:
+* `ManyBody.PlaneInteraction.surprisalTail_regionState_le`:
   `eq:initial-tail-probability` for the regional state.
-* `ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedState`: the
+* `ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_regionState`: the
   typical marginal spectrum at QICLean's concentration width `Entropy.concentrationWidth`.
 
 ## References
@@ -52,28 +52,25 @@ namespace TNLean.Lattice
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
 
-/-- The parameter `ℬ = 1 + ∑ log² (e q^{|X|})` of Lemma 3.1 for a finite-range Hamiltonian
-and a cut `A`, the sum running over the admissible supports that meet both sides.
-Area-law manuscript, Lemma 3.1, `02-initial.tex`, lines 47–55. -/
-noncomputable def cutLogBudget (Λ : Finset (ℤ × ℤ)) (q R : ℕ) (A : Finset (Site Λ)) : ℝ :=
-  Entropy.cutLogBudget (ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A)
-    (Entropy.supportDim (fun _ ↦ q) ∘ fun X : AdmissibleSupport Λ R ↦ X.1)
-
 /-- **Lemma 3.1 for a finite-range lattice Hamiltonian, moment bound.** For a gapped
 ground vector `Ω` with gap `Δ > 0` of a finite-range Hamiltonian with term norms at most
 `J ≥ 0`, and any cut `A`, the surprisal of the regional state satisfies
-`log E e^{uK} ≤ u S(A) + 512 e (J/Δ) ℬ u²` for `|u| ≤ 1/(32 √((1 + J/Δ) ℬ))`.
+`log E e^{uK} ≤ u S(A) + 512 e (J/Δ) ℬ u²` for `|u| ≤ 1/(32 √((1 + J/Δ) ℬ))`, where
+`ℬ = 1 + ∑ log² (e q^{|X|})` is the cut budget `ManyBody.cutLogBudget` of the admissible
+supports `X` meeting both sides of the cut.
 Area-law manuscript, Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 34–63,
 `eq:initial-tail-mgf`. -/
-theorem _root_.ManyBody.PlaneInteraction.log_surprisalMoment_reducedState_le
+theorem _root_.ManyBody.PlaneInteraction.log_surprisalMoment_regionState_le
     (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q} (hΔ : 0 < Δ)
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ)) {u : ℝ}
-    (hu : |u| ≤ Entropy.tailRadius (J / Δ) (cutLogBudget Λ q R A)) :
+    (hu : |u| ≤ Entropy.tailRadius (J / Δ)
+      (ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A)) :
     Real.log (Entropy.surprisalMoment (ManyBody.regionState_isHermitian A Ω).eigenvalues u) ≤
       u * ManyBody.regionEntropy Ω A +
-        512 * Real.exp 1 * (J / Δ) * cutLogBudget Λ q R A * u ^ 2 := by
+        512 * Real.exp 1 * (J / Δ) *
+          ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A * u ^ 2 := by
   have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
     mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   exact Entropy.log_surprisalMoment_cut_le (n := fun _ ↦ q) (B := A)
@@ -84,12 +81,12 @@ theorem _root_.ManyBody.PlaneInteraction.log_surprisalMoment_reducedState_le
     (ManyBody.regionState_isHermitian A Ω) hu
 
 /-- **Lemma 3.1 for a finite-range lattice Hamiltonian, tail bound.** Under the hypotheses
-of `ManyBody.PlaneInteraction.log_surprisalMoment_reducedState_le`, for every real `w` (the
+of `ManyBody.PlaneInteraction.log_surprisalMoment_regionState_le`, for every real `w` (the
 manuscript states `w ≥ 0`),
 `Pr {|K - S(A)| > w} ≤ min {1, 2 e^{e/2} exp (-w / (32 √((1 + J/Δ) ℬ)))}`.
 Area-law manuscript, Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 64–69,
 `eq:initial-tail-probability`. -/
-theorem _root_.ManyBody.PlaneInteraction.surprisalTail_reducedState_le (h : PlaneInteraction Λ q R)
+theorem _root_.ManyBody.PlaneInteraction.surprisalTail_regionState_le (h : PlaneInteraction Λ q R)
     (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q} (hΔ : 0 < Δ)
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
@@ -97,7 +94,8 @@ theorem _root_.ManyBody.PlaneInteraction.surprisalTail_reducedState_le (h : Plan
     Entropy.surprisalTail (ManyBody.regionState_isHermitian A Ω).eigenvalues
         (ManyBody.regionEntropy Ω A) w ≤
       min 1 (2 * Real.exp (Real.exp 1 / 2) *
-        Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A))))) := by
+        Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) *
+          ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A))))) := by
   have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
     mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   exact Entropy.surprisalTail_cut_le (n := fun _ ↦ q) (B := A)
@@ -112,7 +110,7 @@ surprisal lies within the concentration width of `S_Ω(A)` carry mass at least
 `1 - (n + 2)^{-M}`.
 Area-law manuscript, `02-initial.tex`, lines 209–219, the concentration statement after
 Lemma 3.1, before the lattice budget `ℬ_A ≤ C (1 + |∂_Λ A|)` is inserted. -/
-theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedState
+theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_regionState
     (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q} (hΔ : 0 < Δ)
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
@@ -121,7 +119,8 @@ theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedStat
     1 - ((n : ℝ) + 2) ^ (-M) ≤
       Entropy.typicalMass (ManyBody.regionState_isHermitian A Ω).eigenvalues
         (ManyBody.regionEntropy Ω A)
-        (Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M) := by
+        (Entropy.concentrationWidth (J / Δ)
+          (ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A) n M) := by
   have hpsd := ManyBody.regionState_posSemidef A Ω
   have hp : ∀ i, 0 ≤ (ManyBody.regionState_isHermitian A Ω).eigenvalues i :=
     hpsd.eigenvalues_nonneg
@@ -133,19 +132,27 @@ theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedStat
     simp only [Complex.one_re, Complex.re_sum] at h2
     rw [h2]
     exact Finset.sum_congr rfl fun i _ ↦ by simp
-  have htail := h.surprisalTail_reducedState_le hh hhJ hJ hΔ hΩ hgap hspan A
-    (Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M)
+  have htail := h.surprisalTail_regionState_le hh hhJ hJ hΔ hΩ hgap hspan A
+    (Entropy.concentrationWidth (J / Δ)
+      (ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A) n M)
   have hmass := Entropy.one_sub_surprisalTail_le_typicalMass hp hs (ManyBody.regionEntropy Ω A)
-    (Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M)
-  set Rr := Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A)
-  have hB : 1 ≤ cutLogBudget Λ q R A := Entropy.one_le_cutLogBudget _ _
+    (Entropy.concentrationWidth (J / Δ)
+      (ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A) n M)
+  set Rr := Real.sqrt ((1 + J / Δ) *
+    ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A)
+  have hB : 1 ≤ ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A :=
+    Entropy.one_le_cutLogBudget _ _
   have hR : 0 < Rr := Real.sqrt_pos.mpr (by
     have : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
     positivity)
   have hexp : 2 * Real.exp (Real.exp 1 / 2) *
-      Real.exp (-(Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M / (32 * Rr))) =
+      Real.exp (-(Entropy.concentrationWidth (J / Δ)
+        (ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A) n M /
+          (32 * Rr))) =
         ((n : ℝ) + 2) ^ (-M) := by
-    have hw : Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M / (32 * Rr) =
+    have hw : Entropy.concentrationWidth (J / Δ)
+        (ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A) n M /
+          (32 * Rr) =
         M * Real.log (n + 2) + Real.exp 1 / 2 + Real.log 2 := by
       unfold Entropy.concentrationWidth
       change 32 * Rr * _ / (32 * Rr) = _

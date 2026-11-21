@@ -64,7 +64,7 @@ noncomputable section
 namespace TNLean.PEPS.Approximation
 
 open TNLean.Lattice AreaLaw
-open ManyBody (crossingSites exists_walks_of_mem_crossingSites)
+open ManyBody (crossingSites exists_walks_of_mem_crossingSites graphNeighborhood planeDomainGraph)
 
 /-! ### The constants -/
 
@@ -107,11 +107,11 @@ theorem notMem_rangeResetSupport {Λ : Finset (ℤ × ℤ)} {R : ℕ} {A C A₀ 
     (hℓ : (ℓ : ℝ) + R ≤ w)
     (hAw : ∀ x ∈ A₀, ∀ y, y ∉ A → w < (supDist x.1 y.1 : ℝ))
     (hCw : ∀ x ∈ C₀, ∀ y, y ∉ C → w < (supDist x.1 y.1 : ℝ)) :
-    ∀ v ∈ A₀ ∪ C₀, v ∉ graphNeighborhood Λ ℓ ((A ∪ C)ᶜ ∪ crossingSites Λ R A) := by
+    ∀ v ∈ A₀ ∪ C₀,
+      v ∉ graphNeighborhood (planeDomainGraph Λ) ((A ∪ C)ᶜ ∪ crossingSites Λ R A) ℓ := by
   classical
   intro v hv hB
-  simp only [graphNeighborhood, Finset.mem_filter, Finset.mem_univ, true_and] at hB
-  obtain ⟨x, hx, p, hp⟩ := hB
+  obtain ⟨x, hx, p, hp⟩ := ManyBody.mem_graphNeighborhood_iff_exists_walk.mp hB
   have hd : (supDist v.1 x.1 : ℝ) ≤ ℓ := by
     rw [supDist_comm]
     exact_mod_cast supDist_le_of_walk p hp

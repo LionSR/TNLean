@@ -65,7 +65,7 @@ open TNLean.PEPS.AreaLaw
 open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace SquareInteraction PlaneInteraction rectangleEmbedding
-  rectangleSiteEquiv rectangleSiteEquiv_val)
+  rectangleSiteEquiv rectangleSiteEquiv_val graphNeighborhood planeDomainGraph ambientDilation)
 
 namespace TNLean.PEPS.Approximation
 
@@ -74,11 +74,8 @@ Source: polynomial-PEPS proof of Proposition 3.1, `02-information.tex` lines 115
 private theorem boundaryEndpoints_univ (Λ : Finset (ℤ × ℤ)) :
     Geometry.boundaryEndpoints Λ (Finset.univ : Finset (Site Λ)) = ∅ := by
   classical
-  have : edgeBoundary Λ (Finset.univ : Finset (Site Λ)) = ∅ := by
-    ext e
-    simp [edgeBoundary]
   unfold Geometry.boundaryEndpoints
-  rw [this]
+  rw [ManyBody.edgeBoundary_univ]
   simp
 
 /-- The mutual information of the empty region with any region vanishes. -/
@@ -268,9 +265,9 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
           rw [Real.mul_rpow hK0.le hu0, ← mul_assoc, hη,
             inv_mul_cancel₀ (Real.rpow_pos_of_pos hK0 _).ne', one_mul]
   -- Every remote set avoids the graph neighborhood of the collar.
-  have hdisj : Disjoint E (graphNeighborhood Λ (2 * r)
+  have hdisj : Disjoint E (graphNeighborhood (planeDomainGraph Λ)
       (Finset.univ.filter fun x : Site Λ ↦ x.val ∈ ambientDilation Tt.points
-        ⌊(n : ℝ) ^ (1 - ε)⌋₊)) := by
+        ⌊(n : ℝ) ^ (1 - ε)⌋₊) (2 * r)) := by
     rw [Finset.disjoint_left]
     intro y hyE hyN
     obtain ⟨t, ht, hdist⟩ := exists_ambientSupDistance_le_of_mem_graphNeighborhood

@@ -60,13 +60,13 @@ theorem exists_long_middle_actual_dg_family :
       ∀ (L p r : ℕ), p ≤ r → r ≤ L → 4 * ell < r - p →
       let Jtarget := interval L p r
       let β := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv β Jtarget).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv β Jtarget).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtargetᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig β Jtarget) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtarget) ℂ)).repr
       let Tcoord := U.trans Phi.symm
       let Tm := Tcoord.trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtargetᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig β Jtarget))
         (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtarget)))
       ∀ (Φ : ManyBody.BondInteraction L q)
         (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu : ℝ),
@@ -84,18 +84,18 @@ theorem exists_long_middle_actual_dg_family :
         0 < Delta ∧ (D : ℝ) ^ 12 * Delta ≤ 1 / 100000 ∧
         ∀ (S : Submodule ℂ (EuclideanSpace ℂ (Jtarget → Fin q))) (δ : ℝ),
           Submodule.IsViable (𝕜 := ℂ) (E := EuclideanSpace ℂ (Jtarget → Fin q))
-            (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)) δ S
+            (F := EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)) δ S
             (T.map (Tm.toLinearEquiv : EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ]
               (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
-                EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) → δ < 1 →
+                EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)))) → δ < 1 →
           let grow := ⨆ i : Fin (D ^ 2), S.map (F i : _ →ₗ[ℂ] _)
           Module.finrank ℂ grow ≤ D ^ 2 * Module.finrank ℂ S ∧
             Submodule.IsViable (𝕜 := ℂ) (E := EuclideanSpace ℂ (Jtarget → Fin q))
-              (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q))
+              (F := EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q))
               (Delta / (1 - δ) ^ 2) grow
               (T.map (Tm.toLinearEquiv : EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ]
                 (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
-                  EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) := by
+                  EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)))) := by
   classical
   obtain ⟨A, hA, hA21, hall⟩ := exists_five_region_dg_cluster_parameters
   refine ⟨A, hA, hA21, ?_⟩
@@ -184,7 +184,7 @@ theorem exists_long_middle_actual_dg_family :
     exact hdimension
   · change Submodule.IsViable (𝕜 := ℂ)
       (E := EuclideanSpace ℂ (Jtarget → Fin q))
-      (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q))
+      (F := EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q))
       (Delta / (1 - δ) ^ 2)
       ((⨆ i : Fin (D ^ 2), S.map ((F i).toLinearMap)) :
         Submodule ℂ (EuclideanSpace ℂ (Jtarget → Fin q)))
@@ -223,13 +223,13 @@ theorem exists_accuracy_long_middle_actual_dg_family :
       ∀ (L p r : ℕ), p ≤ r → r ≤ L → 4 * ell < r - p →
       let Jtarget := interval L p r
       let β := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv β Jtarget).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv β Jtarget).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtargetᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig β Jtarget) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtarget) ℂ)).repr
       let Tcoord := U.trans Phi.symm
       let Tm := Tcoord.trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtargetᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig β Jtarget))
         (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtarget)))
       ∀ (Φ : ManyBody.BondInteraction L q)
         (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu : ℝ),
@@ -248,18 +248,18 @@ theorem exists_accuracy_long_middle_actual_dg_family :
         0 < Delta ∧ (D : ℝ) ^ 12 * Delta ≤ 1 / 100000 ∧
         ∀ (S : Submodule ℂ (EuclideanSpace ℂ (Jtarget → Fin q))) (δ : ℝ),
           Submodule.IsViable (𝕜 := ℂ) (E := EuclideanSpace ℂ (Jtarget → Fin q))
-            (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)) δ S
+            (F := EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)) δ S
             (T.map (Tm.toLinearEquiv : EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ]
               (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
-                EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) → δ < 1 →
+                EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)))) → δ < 1 →
           let grow := ⨆ i : Fin (D ^ 2), S.map (F i : _ →ₗ[ℂ] _)
           Module.finrank ℂ grow ≤ D ^ 2 * Module.finrank ℂ S ∧
             Submodule.IsViable (𝕜 := ℂ) (E := EuclideanSpace ℂ (Jtarget → Fin q))
-              (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q))
+              (F := EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q))
               (Delta / (1 - δ) ^ 2) grow
               (T.map (Tm.toLinearEquiv : EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ]
                 (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
-                  EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) := by
+                  EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)))) := by
   classical
   obtain ⟨A, hA, hA21, _hAM, _hAlog, hall⟩ :=
     Real.exists_dg_accuracy_scalar_parameters
@@ -374,7 +374,7 @@ theorem exists_accuracy_long_middle_actual_dg_family :
     exact hdimension
   · change Submodule.IsViable (𝕜 := ℂ)
       (E := EuclideanSpace ℂ (Jtarget → Fin q))
-      (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q))
+      (F := EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q))
       (Delta / (1 - δ) ^ 2)
       ((⨆ i : Fin (D ^ 2), S.map ((F i).toLinearMap)) :
         Submodule ℂ (EuclideanSpace ℂ (Jtarget → Fin q)))

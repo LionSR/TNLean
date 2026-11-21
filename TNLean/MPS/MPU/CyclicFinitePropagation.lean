@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.CyclicConjugation
 import TNLean.MPS.MPU.FiniteWindowSupport
 import TNLean.Algebra.FinCyclicInduction
-import TNLean.Circuit.Geometry
+import QICLean.ManyBody.Sites.Lattice.Ring
 
 /-!
 # Uniform finite-ring propagation from a supplied standard form
@@ -41,23 +41,27 @@ theorem mpo_conjugation_singleton_propagation_of_one
     {d D N : ℕ} [NeZero N] (U : MPOTensor d D) (x₀ : Fin N) (r : ℕ)
     (h₀ : ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({x₀} : Finset (Fin N)),
       mpo U N * A * (mpo U N)ᴴ ∈
-        ManyBody.supportedOperators (fun _ ↦ Fin d) (QuantumCircuit.neighbourhood {x₀} r)) :
+        ManyBody.supportedOperators (fun _ ↦ Fin d)
+          (ManyBody.graphNeighborhood (SimpleGraph.cycleGraph N) {x₀} r)) :
     ∀ x : Fin N, ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({x} : Finset (Fin N)),
       mpo U N * A * (mpo U N)ᴴ ∈
-        ManyBody.supportedOperators (fun _ ↦ Fin d) (QuantumCircuit.neighbourhood {x} r) := by
+        ManyBody.supportedOperators (fun _ ↦ Fin d)
+          (ManyBody.graphNeighborhood (SimpleGraph.cycleGraph N) {x} r) := by
   classical
   have hbase : ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({x₀ + 0} : Finset (Fin N)),
       mpo U N * A * (mpo U N)ᴴ ∈
-        ManyBody.supportedOperators (fun _ ↦ Fin d) (QuantumCircuit.neighbourhood {x₀ + 0} r) := by
+        ManyBody.supportedOperators (fun _ ↦ Fin d)
+          (ManyBody.graphNeighborhood (SimpleGraph.cycleGraph N) {x₀ + 0} r) := by
     simpa only [add_zero] using h₀
   have hstep (i : Fin N)
       (hi : ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({x₀ + i} : Finset (Fin N)),
         mpo U N * A * (mpo U N)ᴴ ∈
-          ManyBody.supportedOperators (fun _ ↦ Fin d) (QuantumCircuit.neighbourhood {x₀ + i} r)) :
+          ManyBody.supportedOperators (fun _ ↦ Fin d)
+            (ManyBody.graphNeighborhood (SimpleGraph.cycleGraph N) {x₀ + i} r)) :
       ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({x₀ + (i + 1)} : Finset (Fin N)),
         mpo U N * A * (mpo U N)ᴴ ∈
           ManyBody.supportedOperators (fun _ ↦ Fin d)
-            (QuantumCircuit.neighbourhood {x₀ + (i + 1)} r) := by
+            (ManyBody.graphNeighborhood (SimpleGraph.cycleGraph N) {x₀ + (i + 1)} r) := by
     intro A hA
     let A₀ := A.submatrix (fun σ => σ ∘ (finRotate N).symm)
       (fun σ => σ ∘ (finRotate N).symm)
@@ -72,7 +76,7 @@ theorem mpo_conjugation_singleton_propagation_of_one
       simp only [A₀, Matrix.submatrix_apply, rotateConfig_apply, Function.comp_def,
         Equiv.apply_symm_apply]
     have h := mpo_conjugation_mem_supportedOperators_rotate U (hi A₀ hA₀)
-    rw [QuantumCircuit.neighbourhood_finRotate, Finset.image_singleton] at h
+    rw [ManyBody.graphNeighborhood_cycleGraph_image_finRotate, Finset.image_singleton] at h
     simpa only [hcancel, finRotate_apply, add_assoc] using h
   intro x
   have h := Fin.cyclic_induction hbase hstep (x - x₀)
@@ -94,7 +98,7 @@ theorem mpo_conjugation_mem_supportedOperators_singleton
     (x : Fin N) {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({x} : Finset (Fin N))) :
     mpo U N * A * (mpo U N)ᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
-      (QuantumCircuit.neighbourhood {x} (4 * k)) := by
+      (ManyBody.graphNeighborhood (SimpleGraph.cycleGraph N) {x} (4 * k)) := by
   classical
   obtain ⟨s, rfl⟩ : ∃ s, N = 0 + (3 * (2 * k) + s) := ⟨N - 3 * (2 * k), by omega⟩
   let x₀ : Fin (0 + (3 * (2 * k) + s)) := ⟨2 * k, by omega⟩
@@ -113,7 +117,7 @@ theorem mpo_conjugation_mem_supportedOperators_singleton
   apply ManyBody.supportedOperators_mono ?_ hForward
   intro j hj
   have hj' : j.val < 0 + 3 * (2 * k) := (Finset.mem_filter.mp hj).2.2
-  refine QuantumCircuit.mem_neighbourhood.mpr
+  refine ManyBody.mem_graphNeighborhood_cycleGraph.mpr
     ⟨x₀, Finset.mem_singleton_self x₀, (j.val : ℤ) - x₀.val, ?_, ?_⟩
   · apply abs_le.mpr
     change -((4 * k : ℕ) : ℤ) ≤ (j.val : ℤ) - (2 * k : ℕ) ∧

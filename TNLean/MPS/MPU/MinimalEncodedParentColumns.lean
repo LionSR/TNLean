@@ -35,13 +35,13 @@ namespace MPUCircuit
 /-- Returning the physical rows of a transported basis inclusion to their
 original site coordinates recovers its original initialized basis matrix.
 Source: the coordinate changes in Section 5 of the local MPU circuit audit. -/
-theorem initializedBasisMatrix_pullback_rows {d a n : ℕ} {α : Type*}
+theorem basisInclusion_pullback_rows {d a n : ℕ} {α : Type*}
     (E : α ↪ Cfg d n) (e : Fin a ≃ Fin n) :
-    (initializedBasisMatrix (pullbackBasisEmbedding E e)).submatrix
-      (fun x : Cfg d n ↦ x ∘ e) id = initializedBasisMatrix E := by
+    (basisInclusion (pullbackBasisEmbedding E e)).submatrix
+      (fun x : Cfg d n ↦ x ∘ e) id = basisInclusion E := by
   classical
   ext x p
-  simp only [initializedBasisMatrix, Matrix.submatrix_apply, id_eq, Matrix.one_apply,
+  simp only [basisInclusion, Matrix.submatrix_apply, id_eq, Matrix.one_apply,
     pullbackBasisEmbedding_apply]
   have h : x ∘ e = E p ∘ e ↔ x = E p := by
     constructor
@@ -73,18 +73,18 @@ theorem encodedJoiningParent_pullback_columns {d r q a n : ℕ} {ρ μ β : Type
     (u : μ ≃ β) :
     (encodedJoiningParent hd hr f e P (V.submatrix id u.symm)).submatrix
       (fun x : Cfg d n ↦ x ∘ siteEquiv) u =
-      initializedBasisMatrix E * normalizedJoiningParent hr P V := by
+      basisInclusion E * normalizedJoiningParent hr P V := by
   rw [encodedJoiningParent,
-    ← initializedBasisMatrix_append_joiningChild hd f e, ← hEncoding]
-  change (initializedBasisMatrix (pullbackBasisEmbedding E siteEquiv) *
+    ← basisInclusion_append_joiningChild hd f e, ← hEncoding]
+  change (basisInclusion (pullbackBasisEmbedding E siteEquiv) *
     (normalizedJoiningParent hr P V).submatrix id u.symm).submatrix
       (fun x : Cfg d n ↦ x ∘ siteEquiv) u = _
   rw [← Matrix.submatrix_mul_equiv _ _ _ (Equiv.refl _) u]
   simp only [Equiv.coe_refl, Matrix.submatrix_submatrix, Function.comp_def,
     id_eq, Equiv.symm_apply_apply]
-  change (initializedBasisMatrix (pullbackBasisEmbedding E siteEquiv)).submatrix
+  change (basisInclusion (pullbackBasisEmbedding E siteEquiv)).submatrix
     (fun x : Cfg d n ↦ x ∘ siteEquiv) id * normalizedJoiningParent hr P V = _
-  rw [initializedBasisMatrix_pullback_rows]
+  rw [basisInclusion_pullback_rows]
 
 
 
@@ -166,11 +166,11 @@ actual weighted parent columns. The bond reset and physical-output equality
 are derived from the concrete interval encodings and the positive joining
 metric. No parent-column or reset witness is assumed.
 Source: Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem initializedBasisMatrix_regroupedOutput_mul_normalizedParent
+theorem basisInclusion_regroupedOutput_mul_normalizedParent
     (hP : (P m).PosDef) :
-    initializedBasisMatrix E *
+    basisInclusion E *
       normalizedJoiningParent hr (P m) (joiningSpectatorColumns (τ := RemainingCfg) child) =
-      (initializedBasisMatrix (minimalIntervalOutputEmbedding hd U hU hbound j k) *
+      (basisInclusion (minimalIntervalOutputEmbedding hd U hU hbound j k) *
         (parent ⊗ₖ (1 : Matrix parentOutside parentOutside ℂ))).submatrix id
           (intervalJointInputConfigEquiv j m k hjm hmk) := by
   classical
@@ -181,9 +181,9 @@ theorem initializedBasisMatrix_regroupedOutput_mul_normalizedParent
   have hspectator := congrArg (joiningSpectatorColumns (τ := RemainingCfg)) hminimal
   have hnormal := hcontract.trans hspectator
   have hcolumns := congrArg
-    (fun V : Matrix ChildRows ChildColumns ℂ ↦ initializedBasisMatrix E * V) hnormal
+    (fun V : Matrix ChildRows ChildColumns ℂ ↦ basisInclusion E * V) hnormal
   rw [joiningSpectatorColumns_basisResetOutput,
-    initializedBasisMatrix_mul_basisResetOutput] at hcolumns
+    basisInclusion_mul_basisResetOutput] at hcolumns
   let eout : ((ChildPhysical × OuterLabels) × RemainingCfg) ≃
       ((CutIntervalConfig d N j.val k.val × OuterLabels) × parentOutside) := Equiv.prodCongr
     (Equiv.prodCongr (cutIntervalSplitEquiv d N j.val (Fin.val m) k.val hjm.le hmk.le).symm
@@ -224,13 +224,13 @@ theorem initializedBasisMatrix_regroupedOutput_mul_normalizedParent
           ((Equiv.arrowCongr (intervalJointRemainingSiteEquiv (d := d) (D := D)
             j m k hjm hmk) (Equiv.refl (Fin d))) w)
     simp only [Matrix.one_apply, Equiv.apply_eq_iff_eq]
-  have htransport : initializedBasisMatrix
+  have htransport : basisInclusion
       (eout.toEmbedding.trans (minimalIntervalOutputEmbedding hd U hU hbound j k)) *
         (Wsplit ⊗ₖ (1 : Matrix RemainingCfg RemainingCfg ℂ)) =
-      (initializedBasisMatrix (minimalIntervalOutputEmbedding hd U hU hbound j k) *
+      (basisInclusion (minimalIntervalOutputEmbedding hd U hU hbound j k) *
         (parent ⊗ₖ (1 : Matrix parentOutside parentOutside ℂ))).submatrix id
           (intervalJointInputConfigEquiv (d := d) (D := D) j m k hjm hmk) := by
-    change (initializedBasisMatrix (minimalIntervalOutputEmbedding hd U hU hbound j k)).submatrix
+    change (basisInclusion (minimalIntervalOutputEmbedding hd U hU hbound j k)).submatrix
       id eout * (Wsplit ⊗ₖ (1 : Matrix RemainingCfg RemainingCfg ℂ)) = _
     rw [hweighted, Matrix.submatrix_mul_equiv]
   convert hcolumns.trans htransport using 1
@@ -258,13 +258,13 @@ theorem encodedJoiningParent_minimalIntervalColumns {a : ℕ} {β : Type*}
     (encodedJoiningParent hd hr f em (P m)
       ((joiningSpectatorColumns (τ := RemainingCfg) child).submatrix id u.symm)).submatrix
         (fun x : Cfg d (logicalSiteCount d D N) ↦ x ∘ siteEquiv) u =
-      (initializedBasisMatrix (minimalIntervalOutputEmbedding hd U hU hbound j k) *
+      (basisInclusion (minimalIntervalOutputEmbedding hd U hU hbound j k) *
         (parent ⊗ₖ (1 : Matrix parentOutside parentOutside ℂ))).submatrix id
           (intervalJointInputConfigEquiv j m k hjm hmk) := by
   classical
   have htransport := encodedJoiningParent_pullback_columns hd hr E siteEquiv f em
     hEncoding (P m) (joiningSpectatorColumns (τ := RemainingCfg) child) u
-  have hparent := initializedBasisMatrix_regroupedOutput_mul_normalizedParent
+  have hparent := basisInclusion_regroupedOutput_mul_normalizedParent
     hd U hU hbound B P c j k hjm hmk hP
   exact htransport.trans hparent
 

@@ -38,7 +38,7 @@ open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix.Norms.L2Operator
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -99,7 +99,7 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
             1 ≤ S.K ∧ 0 < S.m ∧ 8 * S.K * S.m ≤ L ∧
             1 ≤ B ∧ 0 < C₀ ∧ 0 < c₀ ∧
             ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
-            X ⊆ S.truncationSet L ∧ (edgeBoundary Λ X).card ≤ 4 * S.n ∧
+            X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
             ∃ (e : ℝ) (Ωt : StateSpace Λ q),
               (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
                 groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
@@ -112,18 +112,26 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
                 Real.sqrt (2 * ε / g) ∧
               (∀ (Y : Finset (Site Λ)) (u : ℝ),
                 |u| ≤ Entropy.tailRadius (2 / g)
-                  (cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y) →
+                  (ManyBody.cutLogBudget
+                    (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                    (fun _ ↦ q) Y) →
                 Real.log (Entropy.surprisalMoment
                   (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
                     u * ManyBody.regionEntropy Ωt Y +
-                      C₀ * cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y * u ^ 2) ∧
+                      C₀ * ManyBody.cutLogBudget
+                        (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                        (fun _ ↦ q) Y * u ^ 2) ∧
               (∀ (Y : Finset (Site Λ)) (v : ℝ),
                 Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
                   (ManyBody.regionEntropy Ωt Y) v ≤
                     min 1 (2 * Real.exp (Real.exp 1 / 2) *
                       Real.exp (-(v / (32 * Real.sqrt ((1 + 2 / g) *
-                        cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y)))))) ∧
-              cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
+                        ManyBody.cutLogBudget
+                          (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                          (fun _ ↦ q) Y)))))) ∧
+              ManyBody.cutLogBudget
+                  (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                  (fun _ ↦ q) X ≤
                 targetBudgetConstant q R Ctr * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
               Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
                 (ManyBody.regionEntropy Ωt X) w ≤ δ ∧
@@ -206,10 +214,10 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
   · intro s hist band
     constructor
     · intro hs Q hQ u hu
-      exact S.log_surprisalMoment_truncated_reducedState_le_common h hh hhJ Ω
+      exact S.log_surprisalMoment_truncated_regionState_le_common h hh hhJ Ω
         hgraph hanchor hΔ hΩ L htrgs.1 htrgs.2.1 htrgs.2.2 Q ((hcut s hist band).1 hs Q hQ) hu
     · intro hs Q hQ u hu
-      exact S.log_surprisalMoment_truncated_reducedState_le_common h hh hhJ Ω
+      exact S.log_surprisalMoment_truncated_regionState_le_common h hh hhJ Ω
         hgraph hanchor hΔ hΩ L htrgs.1 htrgs.2.1 htrgs.2.2 Q ((hcut s hist band).2 hs Q hQ) hu
   · intro W hW hWle a
     have hBupper : B ≤ CB * (S.n : ℝ) * (F.D S.n : ℝ) *
@@ -280,7 +288,7 @@ theorem exists_truncated_target_sharp_moments_of_targetSharpMomentThreshold_le {
             1 ≤ S.K ∧ 0 < S.m ∧ 8 * S.K * S.m ≤ L ∧
             1 ≤ B ∧ 0 < C₀ ∧ 0 < c₀ ∧
             ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
-            X ⊆ S.truncationSet L ∧ (edgeBoundary Λ X).card ≤ 4 * S.n ∧
+            X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
             ∃ (e : ℝ) (Ωt : StateSpace Λ q),
               (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
                 groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
@@ -293,18 +301,26 @@ theorem exists_truncated_target_sharp_moments_of_targetSharpMomentThreshold_le {
                 Real.sqrt (2 * ε / g) ∧
               (∀ (Y : Finset (Site Λ)) (u : ℝ),
                 |u| ≤ Entropy.tailRadius (2 / g)
-                  (cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y) →
+                  (ManyBody.cutLogBudget
+                    (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                    (fun _ ↦ q) Y) →
                 Real.log (Entropy.surprisalMoment
                   (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
                     u * ManyBody.regionEntropy Ωt Y +
-                      C₀ * cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y * u ^ 2) ∧
+                      C₀ * ManyBody.cutLogBudget
+                        (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                        (fun _ ↦ q) Y * u ^ 2) ∧
               (∀ (Y : Finset (Site Λ)) (v : ℝ),
                 Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
                   (ManyBody.regionEntropy Ωt Y) v ≤
                     min 1 (2 * Real.exp (Real.exp 1 / 2) *
                       Real.exp (-(v / (32 * Real.sqrt ((1 + 2 / g) *
-                        cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y)))))) ∧
-              cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
+                        ManyBody.cutLogBudget
+                          (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                          (fun _ ↦ q) Y)))))) ∧
+              ManyBody.cutLogBudget
+                  (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                  (fun _ ↦ q) X ≤
                 targetBudgetConstant q R Ctr * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
               Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
                 (ManyBody.regionEntropy Ωt X) w ≤ δ ∧
@@ -381,7 +397,7 @@ theorem exists_truncated_target_sharp_moments {q : ℕ} [NeZero q]
             1 ≤ S.K ∧ 0 < S.m ∧ 8 * S.K * S.m ≤ L ∧
             1 ≤ B ∧ 0 < C₀ ∧ 0 < c₀ ∧
             ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
-            X ⊆ S.truncationSet L ∧ (edgeBoundary Λ X).card ≤ 4 * S.n ∧
+            X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
             ∃ (e : ℝ) (Ωt : StateSpace Λ q),
               (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
                 groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
@@ -394,18 +410,26 @@ theorem exists_truncated_target_sharp_moments {q : ℕ} [NeZero q]
                 Real.sqrt (2 * ε / g) ∧
               (∀ (Y : Finset (Site Λ)) (u : ℝ),
                 |u| ≤ Entropy.tailRadius (2 / g)
-                  (cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y) →
+                  (ManyBody.cutLogBudget
+                    (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                    (fun _ ↦ q) Y) →
                 Real.log (Entropy.surprisalMoment
                   (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
                     u * ManyBody.regionEntropy Ωt Y +
-                      C₀ * cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y * u ^ 2) ∧
+                      C₀ * ManyBody.cutLogBudget
+                        (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                        (fun _ ↦ q) Y * u ^ 2) ∧
               (∀ (Y : Finset (Site Λ)) (v : ℝ),
                 Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
                   (ManyBody.regionEntropy Ωt Y) v ≤
                     min 1 (2 * Real.exp (Real.exp 1 / 2) *
                       Real.exp (-(v / (32 * Real.sqrt ((1 + 2 / g) *
-                        cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y)))))) ∧
-              cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
+                        ManyBody.cutLogBudget
+                          (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                          (fun _ ↦ q) Y)))))) ∧
+              ManyBody.cutLogBudget
+                  (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                  (fun _ ↦ q) X ≤
                 Ctarget * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
               Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
                 (ManyBody.regionEntropy Ωt X) w ≤ δ ∧

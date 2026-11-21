@@ -33,6 +33,8 @@ open-boundary rank theorem associated with Part IIa, prop:VC, lines 39–62.
 
 noncomputable section
 
+open ManyBody (cutMatrix)
+
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
 /-- Both ceiling errors give a polynomial bound with constants independent of
@@ -109,7 +111,7 @@ theorem isOpenMPS_of_polynomial_partyPrefix_bounds
       WithLp.toLp 2 (fun x ↦ ψ (mainConfigurationEquiv L w q x))
     let B := q ^ (40 * w) * (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ χ
     let n := max 1 (⌈40 * D * Real.log q⌉₊ + χ * α)
-    ‖Φ‖ = 1 ∧ (∀ k : ℕ, k ≤ L → (cutMatrix Φ k).rank ≤ B) ∧
+    ‖Φ‖ = 1 ∧ (∀ k : ℕ, k ≤ L → (cutMatrix (leftBlock L k) Φ).rank ≤ B) ∧
       IsOpenMPS L q B (fun x ↦ Φ x) ∧ 1 ≤ n ∧
         (B : ℝ) ≤ (q : ℝ) ^ 40 * (Cp + 1) ^ χ * (L : ℝ) ^ n := by
   classical
@@ -118,7 +120,7 @@ theorem isOpenMPS_of_polynomial_partyPrefix_bounds
   let R := (max 1 ⌈Cp * (L : ℝ) ^ α⌉₊) ^ χ
   let B := q ^ (40 * w) * R
   let n := max 1 (⌈40 * D * Real.log q⌉₊ + χ * α)
-  change ‖Φ‖ = 1 ∧ (∀ k : ℕ, k ≤ L → (cutMatrix Φ k).rank ≤ B) ∧
+  change ‖Φ‖ = 1 ∧ (∀ k : ℕ, k ≤ L → (cutMatrix (leftBlock L k) Φ).rank ≤ B) ∧
     IsOpenMPS L q B (fun x ↦ Φ x) ∧ 1 ≤ n ∧
       (B : ℝ) ≤ (q : ℝ) ^ 40 * (Cp + 1) ^ χ * (L : ℝ) ^ n
   have hw1 : 1 ≤ w := by
@@ -132,7 +134,7 @@ theorem isOpenMPS_of_polynomial_partyPrefix_bounds
     change ‖LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
       (mainConfigurationEquiv L w q).symm ψ‖ = 1
     rw [LinearIsometryEquiv.norm_map, hψ]
-  have hcuts (k : ℕ) (hk : k ≤ L) : (cutMatrix Φ k).rank ≤ B :=
+  have hcuts (k : ℕ) (hk : k ≤ L) : (cutMatrix (leftBlock L k) Φ).rank ≤ B :=
     rank_cutMatrix_le_of_partyPrefix_bounds ψ hq hw1 hlarge hR hprefix k hk
   have hmps : IsOpenMPS L q B (fun x ↦ Φ x) :=
     isOpenMPS_of_internal_cutMatrix_rank_le Φ (fun k _ hk ↦ hcuts k hk.le)

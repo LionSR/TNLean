@@ -13,9 +13,9 @@ A gate `X` on `m` sites *acts by a configuration map* `f` when `X v = v ∘ f` f
 `v`; a permutation matrix acts this way (`Matrix.permMatrix_mulVec`). This file shows that placing
 such gates on pairwise disjoint sets of sites of a chain gives an operator that acts by the
 configuration map changing each set of sites by its gate and leaving the other sites alone
-(`QuantumCircuit.noncommProd_embedOp_mulVec_eq_comp`), with the cases of a single gate
-(`QuantumCircuit.embedOp_mulVec_eq_comp`) and of a permutation of the sites
-(`QuantumCircuit.permOp_mulVec`).
+(`QuantumCircuit.noncommProd_placeAlong_mulVec_eq_comp`), with the cases of a single gate
+(`QuantumCircuit.placeAlong_mulVec_eq_comp`) and of a permutation of the sites
+(`QuantumCircuit.permOp_mulVec`). The gates are placed with `ManyBody.placeAlong`.
 
 These are the controlled shifts of the measurement-assisted preparation of GHZ-type states
 (arXiv:2103.13367, Example 1; arXiv:2307.01696, paragraph "Long-range MPS using measurements"),
@@ -24,9 +24,9 @@ which act on computational basis states by adding the value of one register to a
 ## Main declarations
 
 * `QuantumCircuit.layerCfg` — the configuration map of a layer.
-* `QuantumCircuit.noncommProd_embedOp_mulVec_eq_comp` — a layer of gates acting by
+* `QuantumCircuit.noncommProd_placeAlong_mulVec_eq_comp` — a layer of gates acting by
   configuration maps acts by `layerCfg`.
-* `QuantumCircuit.embedOp_mulVec_productVector` — a gate applied to a product vector that is
+* `QuantumCircuit.placeAlong_mulVec_productVector` — a gate applied to a product vector that is
   `|0⟩` on its sites.
 -/
 
@@ -110,13 +110,16 @@ theorem eq_layerCfg_iff (x y : Fin n → Fin d) :
 include he hdisj in
 /-- **A layer of gates acting by configuration maps.** Gates `X k` placed on pairwise disjoint
 sets of sites `e k`, each acting by a configuration map `f k`, together act by `layerCfg e f`. -/
-theorem noncommProd_embedOp_mulVec_eq_comp
+theorem noncommProd_placeAlong_mulVec_eq_comp
     (X : ∀ k, Matrix (Fin (m k) → Fin d) (Fin (m k) → Fin d) ℂ) (hX : ∀ k v, X k *ᵥ v = v ∘ f k)
     (hcomm : ((Finset.univ : Finset ι) : Set ι).Pairwise
-      (Function.onFun Commute fun k => embedOp (e k) (X k))) (v : (Fin n → Fin d) → ℂ) :
-    Finset.univ.noncommProd (fun k => embedOp (e k) (X k)) hcomm *ᵥ v = v ∘ layerCfg e f := by
+      (Function.onFun Commute fun k =>
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨e k, he k⟩ (X k)))
+    (v : (Fin n → Fin d) → ℂ) :
+    Finset.univ.noncommProd (fun k => ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨e k, he k⟩ (X k))
+        hcomm *ᵥ v = v ∘ layerCfg e f := by
   classical
-  have happ := noncommProd_embedOp_apply e he X Finset.univ
+  have happ := noncommProd_placeAlong_apply e he X Finset.univ
     (fun k _ k' _ h => hdisj k k' h) hcomm
   funext x
   simp only [mulVec, dotProduct, Function.comp_apply, happ]
@@ -143,11 +146,12 @@ variable {m₀ : ℕ}
 
 /-- A gate on the sites `e`, acting by a configuration map `f`, acts by the configuration map
 changing these sites by `f`. -/
-theorem embedOp_mulVec_eq_comp {e₀ : Fin m₀ → Fin n} (he₀ : Function.Injective e₀)
+theorem placeAlong_mulVec_eq_comp {e₀ : Fin m₀ → Fin n} (he₀ : Function.Injective e₀)
     {X : Matrix (Fin m₀ → Fin d) (Fin m₀ → Fin d) ℂ} {f₀ : (Fin m₀ → Fin d) → (Fin m₀ → Fin d)}
     (hX : ∀ v, X *ᵥ v = v ∘ f₀) (v : (Fin n → Fin d) → ℂ) :
-    embedOp e₀ X *ᵥ v = v ∘ layerCfg (fun _ : Unit => e₀) fun _ => f₀ := by
-  have h := noncommProd_embedOp_mulVec_eq_comp (ι := Unit) (m := fun _ => m₀)
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨e₀, he₀⟩ X *ᵥ v =
+      v ∘ layerCfg (fun _ : Unit => e₀) fun _ => f₀ := by
+  have h := noncommProd_placeAlong_mulVec_eq_comp (ι := Unit) (m := fun _ => m₀)
     (e := fun _ => e₀) (fun _ => he₀) (fun k k' h => absurd (Subsingleton.elim k k') h)
     (fun _ => f₀) (fun _ => X) (fun _ => hX) (fun _ _ _ _ h => absurd (Subsingleton.elim _ _) h)
     v
@@ -156,10 +160,10 @@ theorem embedOp_mulVec_eq_comp {e₀ : Fin m₀ → Fin n} (he₀ : Function.Inj
 /-- **A gate applied to a product vector that is `|z⟩` on its sites.** If the site vectors of
 `v` at the sites of `e₀` are `|z⟩`, then `(X ⊗ 1) |v⟩` has amplitude `X(y|_e, z ⋯ z)` times the
 amplitude at `y` of the product vector with all-ones site vectors on the sites of `e₀`. -/
-theorem embedOp_mulVec_productVector {e₀ : Fin m₀ → Fin n} (he₀ : Function.Injective e₀)
+theorem placeAlong_mulVec_productVector {e₀ : Fin m₀ → Fin n} (he₀ : Function.Injective e₀)
     (X : Matrix (Fin m₀ → Fin d) (Fin m₀ → Fin d) ℂ) {v : Fin n → Fin d → ℂ} {z : Fin d}
     (hv : ∀ j, v (e₀ j) = Pi.single z 1) (y : Fin n → Fin d) :
-    (embedOp e₀ X *ᵥ productVector v) y =
+    (ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨e₀, he₀⟩ X *ᵥ productVector v) y =
       X (y ∘ e₀) (fun _ => z) *
         productVector (fun i => if ∃ j, e₀ j = i then fun _ => 1 else v i) y := by
   classical
@@ -192,11 +196,16 @@ theorem embedOp_mulVec_productVector {e₀ : Fin m₀ → Fin n} (he₀ : Functi
     by_cases hi : ∃ j, e₀ j = i
     · simp [w, hi]
     · rw [h i fun j hj => hi ⟨j, hj⟩]
+  have happ : ∀ x y' : Fin n → Fin d,
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨e₀, he₀⟩ X x y' =
+        if AgreeOff e₀ x y' then X (x ∘ e₀) (y' ∘ e₀) else 0 := fun x y' ↦
+    (ManyBody.placeAlong_apply (X := fun _ ↦ Fin d) ⟨e₀, he₀⟩ X x y').trans
+      (by congr 1)
   set F : (Fin m₀ → Fin d) → ℂ := fun u => X (y ∘ e₀) u * (if u = fun _ => z then 1 else 0) *
     productVector w y with hF
   rw [mulVec, dotProduct]
   refine (Finset.sum_congr rfl fun y' _ => ?_).trans ((sum_agreeOff he₀ y F).trans ?_)
-  · rw [embedOp_apply, hsplit]
+  · rw [happ, hsplit]
     by_cases h : AgreeOff e₀ y y'
     · rw [ite_eq_left h, ite_eq_left h, hoff y' h, hF]; ring
     · rw [ite_eq_right h, ite_eq_right h, zero_mul]

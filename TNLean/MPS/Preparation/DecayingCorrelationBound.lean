@@ -392,8 +392,8 @@ theorem exists_decayingCorrelations {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L
       ‖Matrix.toEuclideanCLM (n := Fin L → Fin d) (𝕜 := ℂ) O‖ = 1 ∧
       ‖Matrix.toEuclideanCLM (n := Fin L → Fin d) (𝕜 := ℂ) O'‖ = 1 ∧
       ∃ c : ℝ, 0 < c ∧ ∃ K : ℕ, 1 ≤ K ∧ K ≤ 2 ∧ (star lam₂ = lam₂ → K = 1) ∧
-        ∃ s₀ : ℕ, L + 2 ≤ s₀ ∧
-          ∀ s, s₀ ≤ s → ∃ s', s ≤ s' ∧ s' < s + K ∧ ∀ N, 3 * s' ≤ N →
+        ∃ s₀ : ℕ, ∃ _ : L + 2 ≤ s₀,
+          ∀ s (_ : s₀ ≤ s), ∃ s', ∃ _ : s ≤ s', s' < s + K ∧ ∀ N (_ : 3 * s' ≤ N),
             c * Real.exp (-((s' : ℝ) - 1) / correlationLength lam₂) ≤
               ‖mpvConnectedCorrelator A N 0 (s' - 1) O O'‖ := by
   classical
@@ -512,7 +512,8 @@ theorem exists_decayingCorrelations {A : MPSTensor d D} {L : ℕ} (hL1 : 1 ≤ L
   obtain ⟨n, rfl⟩ : ∃ n, N = L + t' + L + n := ⟨N - (L + t' + L), by omega⟩
   have hn : 2 * t' ≤ n := by omega
   have hn1 : 1 ≤ n := by omega
-  rw [hs'1, mpvConnectedCorrelator_eq_of_compl hL1 hA hρfix hρtr htr O O' ht'1 hn1]
+  simp only [hs'1]
+  rw [mpvConnectedCorrelator_eq_of_compl hA hρfix hρtr htr O O' ht'1 hn1]
   /- Bounds on the finite-size corrections. -/
   have hrpow : ∀ k, n ≤ k → r ^ k ≤ r ^ n := fun k hk ↦
     pow_le_pow_of_le_one hr0.le hrlt1.le hk

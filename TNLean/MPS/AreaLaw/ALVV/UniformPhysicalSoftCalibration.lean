@@ -191,11 +191,11 @@ theorem exists_calibrated_uniform_physical_soft_improving_family
           (Nat.le_mul_of_pos_left ell (by decide : 0 < 2)) b).trans hb))
       let beta := fun _ : Fin (N + 1) ↦ Fin q
       let midConfig := ManyBody.RegionConfig beta J
-      let extConfig := ManyBody.RegionConfig beta Jᶜ
+      let extConfig := ManyBody.ComplConfig beta J
       let HM := EuclideanSpace ℂ midConfig
       let HE := EuclideanSpace ℂ extConfig
       let HT := HM ⊗[ℂ] HE
-      let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let split := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
       let Phi := ((EuclideanSpace.basisFun (extConfig) ℂ).tensorProduct
         (EuclideanSpace.basisFun (midConfig) ℂ)).repr
@@ -215,8 +215,8 @@ theorem exists_calibrated_uniform_physical_soft_improving_family
           (C : Fin (m + 1) → Matrix (Fin bond) (Fin bond) ℂ),
           let Z := fun z : ℂ ↦ MPOTensor.traceChainOperator Acore
             (∑ j : Fin (m + 1), z ^ j.val • C j)
-          let Zphys := fun z : ℂ ↦ QuantumCircuit.embedOp
-            (Subtype.val : Ksites → Fin (N + 1)) (QuantumCircuit.embedOp eK (Z z))
+          let Zphys := fun z : ℂ ↦ ManyBody.place (X := fun _ ↦ Fin q) Ksites
+            (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding (Z z))
           ∃ (n : ℕ) (W : Fin n → Matrix (midConfig)
               (midConfig) ℂ),
             let Fops : Fin n → HM →L[ℂ]

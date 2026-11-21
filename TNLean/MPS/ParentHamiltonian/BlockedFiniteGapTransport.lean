@@ -47,8 +47,8 @@ variable {d R L K N : ℕ} [NeZero d] [NeZero L]
 positive window comparison. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Section 3, equations (3.12)--(3.14). -/
 theorem openInteractionMatrix_gap_of_blocked_gap
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef) (hR : 0 < R)
-    (hK : 0 < K) (hKN : K ≤ N) (hcover : R + L ≤ K * L + 1)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
+    (hKN : K ≤ N) (hcover : R + L ≤ K * L + 1)
     {γ : ℝ} (hγ : 0 < γ)
     (hGap : ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
       (openInteractionMatrix (blockedInteractionMatrix h L K) N)))ᗮ,
@@ -59,7 +59,7 @@ theorem openInteractionMatrix_gap_of_blocked_gap
       (γ / (K * L + 1 - R : ℕ)) * ‖v‖ ≤
         ‖Matrix.toEuclideanLin (openInteractionMatrix h (N * L)) v‖ := by
   obtain ⟨hLower, hUpper⟩ :=
-    openInteractionMatrix_blockedInteractionMatrix_comparison h hh hR hK hKN hcover
+    openInteractionMatrix_blockedInteractionMatrix_comparison h hh hKN hcover
   have hLower' : Matrix.toEuclideanLin (openInteractionMatrix h (N * L)) ≤
       Matrix.toEuclideanLin (Matrix.reindex (blockedConfigEquiv d N L)
         (blockedConfigEquiv d N L)
@@ -74,7 +74,7 @@ theorem openInteractionMatrix_gap_of_blocked_gap
     rw [← map_smul, LinearMap.le_def, ← map_sub, Matrix.isPositive_toEuclideanLin_iff]
     exact Matrix.le_iff.mp hUpper
   have hQ := Matrix.isPositive_toEuclideanLin_iff.mpr
-    (openInteractionMatrix_posSemidef h hh hR (N * L))
+    (openInteractionMatrix_posSemidef h hh (N * L))
   have hP := LinearMap.nonneg_iff_isPositive.mp
     ((LinearMap.nonneg_iff_isPositive.mpr hQ).trans hLower')
   have hM : 0 < ((K * L + 1 - R : ℕ) : ℝ) := by
@@ -117,7 +117,7 @@ theorem exists_aligned_openInteractionMatrix_gap_of_blocked_primitive_family
       A h hh hR hK hcover hker
   obtain ⟨γ, hγ, hGap⟩ := exists_openInteractionMatrix_gap_of_eventual_kernel
     μ B hμ ρ hP hρ hDistinct hK (blockedInteractionMatrix h L K)
-    (blockedInteractionMatrix_posSemidef h hh hR L K)
+    (blockedInteractionMatrix_posSemidef h hh L K)
     (hker'.mono fun N hN => hN.trans (hJoint N))
   have hM : 0 < ((K * L + 1 - R : ℕ) : ℝ) := by
     have hL := NeZero.pos L
@@ -132,7 +132,7 @@ theorem exists_aligned_openInteractionMatrix_gap_of_blocked_primitive_family
       (Matrix.toEuclideanLin (openInteractionMatrix h (N * L))))
     (M := K) (δ := γ / (K * L + 1 - R : ℕ)) (div_pos hγ hM) ?_
   intro N hKN
-  apply openInteractionMatrix_gap_of_blocked_gap h hh hR hK hKN hcover hγ
+  apply openInteractionMatrix_gap_of_blocked_gap h hh hKN hcover hγ
   simpa only [openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix
     (blockedInteractionMatrix h L K) hK hKN] using hGap N
 /-- A periodic tensor and the eventual original open-chain kernel identity

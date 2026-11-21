@@ -24,11 +24,8 @@ statements that use them. A gapped ground vector is a unit eigenvector `Ω` of t
 
 The marginal tail bound of the area-law manuscript holds on any finite tensor product;
 the chain model instantiates it directly, with the cut budget
-`ℬ_A = 1 + ∑ log² (e q^{|X|})` over the supports split by the cut `A`.
-
-## Main definitions
-
-* `cutLogBudget L q R A`: the budget `ℬ_A` of the marginal tail bound at the cut `A`.
+`ℬ_A = 1 + ∑ log² (e q^{|X|})` over the supports split by the cut `A`. The budget is
+QICLean's `ManyBody.cutLogBudget` of the family of chain supports with local dimension `q`.
 
 ## Main results
 
@@ -77,17 +74,6 @@ lemma _root_.ManyBody.ChainInteraction.norm_bound_nonneg (h : ChainInteraction L
   let X : ChainSupport L R := ⟨{x}, by simp [IsChainSupport]⟩
   exact (norm_nonneg (h.term X)).trans (hhJ X)
 
-/-- The budget `ℬ_A = 1 + ∑ log² (e q^{|X|})` of the marginal tail bound at the cut `A`,
-the sum running over the supports of range `R` that meet both `A` and its complement.
-Area-law manuscript, Lemma 3.1, `02-initial.tex`, lines 47–55. -/
-noncomputable def cutLogBudget (L q R : ℕ) (A : Finset (Fin L)) : ℝ :=
-  Entropy.cutLogBudget (ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) A)
-    (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ fun X : ChainSupport L R ↦ X.1)
-
-/-- The cut budget is at least one. -/
-theorem one_le_cutLogBudget (L q R : ℕ) (A : Finset (Fin L)) : 1 ≤ cutLogBudget L q R A :=
-  Entropy.one_le_cutLogBudget _ _
-
 /-- **The marginal tail bound on a chain.** For a gapped ground vector `Ω` with gap `Δ > 0`
 of a finite-range Hamiltonian with term norms at most `J ≥ 0`, and any cut `A`, the
 surprisal of the regional state on `A` satisfies, for every real `w`,
@@ -102,7 +88,8 @@ theorem _root_.ManyBody.ChainInteraction.surprisalTail_regionState_le (h : Chain
     Entropy.surprisalTail (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) A Ω).eigenvalues
         (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A) w ≤
       min 1 (2 * Real.exp (Real.exp 1 / 2) *
-        Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * cutLogBudget L q R A))))) := by
+        Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) *
+          ManyBody.cutLogBudget (fun X : ChainSupport L R ↦ X.1) (fun _ ↦ q) A))))) := by
   have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
     ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   have hgap := hgap.posSemidef_sub_smul_one

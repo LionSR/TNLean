@@ -308,9 +308,9 @@ structure RankOneBlock where
   /-- The first part of the block lies in the block. -/
   disj : Disjoint T E
   /-- The output vector. -/
-  ket : EuclideanSpace ℂ ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
+  ket : EuclideanSpace ℂ ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
   /-- The input vector. -/
-  bra : EuclideanSpace ℂ ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
+  bra : EuclideanSpace ℂ ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
 
 namespace RankOneBlock
 
@@ -322,11 +322,11 @@ def op : Matrix (ι → Fin q) (ι → Fin q) ℂ :=
 
 /-- The output vector read on a configuration of all sites. -/
 def ketAt (c : ι → Fin q) : ℂ :=
-  b.ket ((fun x : b.T => c x), (fun x : ↥(b.T ∪ b.E)ᶜ => c x))
+  b.ket ((fun x : b.T => c x), (fun x : {v // v ∉ b.T ∪ b.E} => c x))
 
 /-- The input vector read on a configuration of all sites. -/
 def braAt (c : ι → Fin q) : ℂ :=
-  b.bra ((fun x : b.T => c x), (fun x : ↥(b.T ∪ b.E)ᶜ => c x))
+  b.bra ((fun x : b.T => c x), (fun x : {v // v ∉ b.T ∪ b.E} => c x))
 
 /-- The entries of the operator of a block. -/
 theorem op_apply (c' c : ι → Fin q) :
@@ -343,9 +343,9 @@ private theorem notMem_E_of_mem_T {x : ι} (hx : x ∈ b.T) : x ∉ b.E :=
 /-- Two configurations agreeing outside `E` agree on both parts of the block. -/
 private theorem restrict_congr {c c' : ι → Fin q} (h : ∀ x ∉ b.E, c x = c' x) :
     ((fun x : b.T => c x) = fun x : b.T => c' x) ∧
-      ((fun x : ↥(b.T ∪ b.E)ᶜ => c x) = fun x : ↥(b.T ∪ b.E)ᶜ => c' x) :=
+      ((fun x : {v // v ∉ b.T ∪ b.E} => c x) = fun x : {v // v ∉ b.T ∪ b.E} => c' x) :=
   ⟨funext fun x => h x (b.notMem_E_of_mem_T x.2),
-    funext fun x => h x fun hx => Finset.mem_compl.mp x.2 (Finset.mem_union_right _ hx)⟩
+    funext fun x => h x fun hx => x.2 (Finset.mem_union_right _ hx)⟩
 
 theorem ketAt_congr {c c' : ι → Fin q} (h : ∀ x ∉ b.E, c x = c' x) : b.ketAt c = b.ketAt c' := by
   obtain ⟨h₁, h₂⟩ := b.restrict_congr h
@@ -407,7 +407,7 @@ end RankOneBlock
 /-- The basis vector of the zero configuration on `(T → Fin q) × (U → Fin q)`, the analogue of
 `zeroVec` on the two parts of a block. -/
 def zeroPair [NeZero q] (T E : Finset ι) :
-    EuclideanSpace ℂ ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) :=
+    EuclideanSpace ℂ ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) :=
   EuclideanSpace.single (0, 0) 1
 
 theorem norm_zeroPair [NeZero q] (T E : Finset ι) : ‖zeroPair (q := q) T E‖ = 1 := by
@@ -416,7 +416,7 @@ theorem norm_zeroPair [NeZero q] (T E : Finset ι) : ‖zeroPair (q := q) T E‖
 /-- The zero basis vector read on a configuration: `1` if the configuration vanishes on
 `T ∪ U`, and `0` otherwise. -/
 theorem zeroPair_apply [NeZero q] (T E : Finset ι) (h : Disjoint T E) (c : ι → Fin q) :
-    zeroPair (q := q) T E ((fun x : T => c x), (fun x : ↥(T ∪ E)ᶜ => c x)) =
+    zeroPair (q := q) T E ((fun x : T => c x), (fun x : {v // v ∉ T ∪ E} => c x)) =
       if ∀ x ∉ E, c x = 0 then 1 else 0 := by
   rw [zeroPair, PiLp.single_apply]
   congr 1
@@ -428,7 +428,7 @@ theorem zeroPair_apply [NeZero q] (T E : Finset ι) (h : Disjoint T E) (c : ι �
     · exact congrFun (congrArg Prod.snd hc) ⟨x, by simp [hT, hx]⟩
   · intro hc
     refine Prod.ext (funext fun x => hc x (Finset.disjoint_left.mp h x.2))
-      (funext fun x => hc x fun hx => Finset.mem_compl.mp x.2 (Finset.mem_union_right _ hx))
+      (funext fun x => hc x fun hx => x.2 (Finset.mem_union_right _ hx))
 
 /-- **A vector on a group of sites, read on two parts.** Let the group be the set of sites
 satisfying `O`, with complement `E`, and let `T` be part of it. Every vector `f` on the
@@ -436,25 +436,27 @@ configurations of the group is a vector of the same norm on `(T → Fin q) × (U
 `U = (T ∪ E)ᶜ`, with the same values on every configuration. -/
 theorem exists_pairVec (O : ι → Prop) [DecidablePred O] {T : Finset ι} (hT : ∀ x ∈ T, O x)
     (f : EuclideanSpace ℂ ({x // O x} → Fin q)) :
-    ∃ v : EuclideanSpace ℂ ((T → Fin q) × (↥(T ∪ Finset.univ.filter fun x => ¬O x)ᶜ → Fin q)),
+    ∃ v : EuclideanSpace ℂ
+        ((T → Fin q) × ({v // v ∉ T ∪ Finset.univ.filter fun x => ¬O x} → Fin q)),
       ‖v‖ = ‖f‖ ∧ ∀ c : ι → Fin q,
         v ((fun x : T => c x),
-          (fun x : ↥(T ∪ Finset.univ.filter fun x => ¬O x)ᶜ => c x)) = f fun x => c x.1 := by
+          (fun x : {v // v ∉ T ∪ Finset.univ.filter fun x => ¬O x} => c x)) =
+          f fun x => c x.1 := by
   set E := Finset.univ.filter fun x => ¬O x
-  have hU : ∀ x : {x // O x}, x.1 ∉ T → x.1 ∈ (T ∪ E)ᶜ := fun x hx => by
+  have hU : ∀ x : {x // O x}, x.1 ∉ T → x.1 ∉ T ∪ E := fun x hx => by
     simp [E, hx, x.2]
-  have hO : ∀ x : ↥(T ∪ E)ᶜ, O x.1 := fun x => by
-    have := Finset.mem_compl.mp x.2
+  have hO : ∀ x : {v // v ∉ T ∪ E}, O x.1 := fun x => by
+    have : (x : ι) ∉ T ∪ E := x.2
     simp only [Finset.mem_union, Finset.mem_filter, Finset.mem_univ, true_and, not_or,
       not_not, E] at this
     exact this.2
-  let e : ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ≃ ({x // O x} → Fin q) :=
+  let e : ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ≃ ({x // O x} → Fin q) :=
     { toFun := fun ab x => if hx : x.1 ∈ T then ab.1 ⟨x.1, hx⟩ else ab.2 ⟨x.1, hU x hx⟩
       invFun := fun d => (fun x => d ⟨x.1, hT x.1 x.2⟩, fun x => d ⟨x.1, hO x⟩)
       left_inv := fun ab => by
         refine Prod.ext (funext fun x => ?_) (funext fun x => ?_)
         · simp [x.2]
-        · have hx : x.1 ∉ T := fun h => Finset.mem_compl.mp x.2 (Finset.mem_union_left _ h)
+        · have hx : x.1 ∉ T := fun h => x.2 (Finset.mem_union_left _ h)
           simp [hx]
       right_inv := fun d => funext fun x => by
         by_cases hx : x.1 ∈ T <;> simp [hx] }
@@ -500,11 +502,11 @@ theorem exists_rankOneBlock_chain [NeZero q] (l : List (Hole pos q Party)) (own 
   obtain ⟨g₁, g₂, g₃⟩ := groupWord_props (q := q) own nodup_sites mem_sites (tagRegs l) hA hB
     (V := S) hSA hSB
   have r := isReordering_relabelRest (q := q) own own' mem_sites b.disj hE (tagRegs l)
-    ⟨pA', euc (b.T → Fin q)⟩ ⟨pB', euc (↥(b.T ∪ b.E)ᶜ → Fin q)⟩
+    ⟨pA', euc (b.T → Fin q)⟩ ⟨pB', euc ({v // v ∉ b.T ∪ b.E} → Fin q)⟩
   obtain ⟨u₁, u₂, u₃⟩ := ungroupWord_props (q := q) own' nodup_sites mem_sites (tagRegs l)
     hA' hB' (V := S) hSA' hSB'
   let tail := (relabelRest own own' mem_sites b.disj hE (tagRegs l)
-    ⟨pA', euc (b.T → Fin q)⟩ ⟨pB', euc (↥(b.T ∪ b.E)ᶜ → Fin q)⟩).comp
+    ⟨pA', euc (b.T → Fin q)⟩ ⟨pB', euc ({v // v ∉ b.T ∪ b.E} → Fin q)⟩).comp
       (ungroupWord own' nodup_sites mem_sites (tagRegs l) hA' hB')
   obtain ⟨p₁, p₂, p₃, p₄⟩ := PartyChain.postcomp_props S Mm tail ⟨r.isAllowed, u₁⟩
     ⟨r.usesOnly _, u₂⟩ m₁ m₂

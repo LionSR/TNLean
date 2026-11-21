@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.IntervalJointSuffixFactorization
-import TNLean.Circuit.InitializedRegisterProjection
+import QICLean.Circuit.Protocol.ZeroRegister.Projection
 
 /-!
 # Initialized basis coordinates under a site bijection

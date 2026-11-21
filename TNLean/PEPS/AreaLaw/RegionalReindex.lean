@@ -53,7 +53,7 @@ noncomputable def relabelState {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
 preserves the chosen region. No normalization or lattice-adjacency assumption
 is required. Source: area-law `sec:prelim`, lines 10–25, finite tensor-factor
 conventions. -/
-theorem reducedState_relabel {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
+theorem regionState_relabelState {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
     (A : Finset (Site Λ)) (A' : Finset (Site Λ'))
     (e : Site Λ ≃ Site Λ') (hA : ∀ x, x ∈ A ↔ e x ∈ A')
     (Ω : StateSpace Λ q) :
@@ -66,7 +66,7 @@ theorem reducedState_relabel {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
 
 /-- Regional entropy is unchanged by relabelling the physical sites and region.
 Source: area-law `sec:prelim`, lines 10–25, finite tensor-factor conventions. -/
-theorem regionalEntropy_relabel {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
+theorem regionEntropy_relabelState {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
     (A : Finset (Site Λ)) (A' : Finset (Site Λ'))
     (e : Site Λ ≃ Site Λ') (hA : ∀ x, x ∈ A ↔ e x ∈ A')
     (Ω : StateSpace Λ q) :

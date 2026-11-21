@@ -66,17 +66,16 @@ a definition of phase or exclude conversion of compatible coherent seeds.
 
 \begin{lemma}[Separated correlations in a weighted GHZ vector]
     \label{thm:ldp_weighted_ghz_covariance}
-    \lean{QuantumCircuit.ghzState_two_eq,
-        QuantumCircuit.zero_config_ne_one,
+    \lean{QuantumCircuit.ghzState_eq_sum,
         QuantumCircuit.norm_ghzState_two,
-        QuantumCircuit.norm_ghzState_two_sq,
-        QuantumCircuit.ghzState_smul_two,
-        QuantumCircuit.expect_ghzState_two_diagonal,
-        QuantumCircuit.expect_ghzState_two,
+        QuantumCircuit.norm_ghzState_sq,
+        QuantumCircuit.ghzState_smul,
+        QuantumCircuit.dotProduct_ghzState_diagonal_mulVec,
+        QuantumCircuit.dotProduct_ghzState_mulVec_of_mem_supportedOperators,
         QuantumCircuit.covariance_ghzState_two,
         QuantumCircuit.norm_covariance_ghzState_two_le,
         QuantumCircuit.norm_covariance_mulVec_ghzState_two_le,
-        QuantumCircuit.diagonal_comp_eval_mem_supportedOperators}
+        ManyBody.diagonal_mem_supportedOperators}
     \leanok
     Let $|a|^2+|b|^2=1$, $N\ge1$, and
     $\chi=a|0^N\rangle+b|1^N\rangle$.
@@ -175,10 +174,10 @@ a definition of phase or exclude conversion of compatible coherent seeds.
     \lean{MPSPreparation.ghz_sector_weight_infidelity_lower_bound,
         MPSTensor.repeatedBlockTensor_infidelity_lower_bound,
         MPSTensor.length_le_of_repeatedBlockTensor_infidelity_lt,
-        QuantumCircuit.isSeparatedBy_of_val_bounds,
-        QuantumCircuit.IsSeparatedBy.symm,
-        QuantumCircuit.IsSeparatedBy.notMem_neighbourhood,
-        QuantumCircuit.exists_separated_singletons_notMem_neighbourhood}
+        ManyBody.isGraphSeparated_cycleGraph_of_val_bounds,
+        ManyBody.IsGraphSeparated.symm,
+        ManyBody.IsGraphSeparated.notMem_graphNeighborhood,
+        ManyBody.exists_isGraphSeparated_cycleGraph_singletons_notMem}
     \leanok
     \uses{def:qc_local_circuit}
     For the normalized periodic vectors

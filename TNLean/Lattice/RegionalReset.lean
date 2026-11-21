@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.GaussianFilter.PhysicalBufferUniform
 import QICLean.Analysis.GaussianFilter.LocalizationParameters
 import QICLean.Analysis.GaussianFilter.Reindex
-import QICLean.Entropy.FiniteProductSplitting
+import QICLean.Entropy.RegionPurificationSplitting
 import QICLean.Entropy.ProductMarginals
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.Circuit.RegionalSwap
@@ -67,20 +67,19 @@ replicas on `R` exchanges the two retained `R` registers and fixes everything el
 Source: `02-information.tex`, lines 362–365 and 398–410. -/
 theorem splitTwoRegions_sheetSwap (q : ℕ) (R C : Finset ι) (hRC : Disjoint R C)
     (x : (ι → Fin q) × (ι → Fin q)) :
-    let Q := (R ∪ C)ᶜ
     let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
     let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
-    let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (Q → Fin q))
+    let g := (s.prodCongr s).trans (Equiv.doubledRegroup P ({v // v ∉ R ∪ C} → Fin q))
     g (sheetSwap q R x) =
       (Equiv.partialSwap (Fin (Fintype.card (R → Fin q))) (Fin (Fintype.card (C → Fin q)))
         (g x).1, (g x).2) := by
-  intro Q P s g
+  intro P s g
   have hC : ∀ v : C, (v : ι) ∉ R := fun v hv ↦ Finset.disjoint_left.mp hRC hv v.2
-  have hQ : ∀ v : Q, (v : ι) ∉ R := fun v hv ↦
-    Finset.mem_compl.mp v.2 (Finset.mem_union_left C hv)
+  have hQ : ∀ v : {v // v ∉ R ∪ C}, (v : ι) ∉ R := fun v hv ↦
+    v.2 (Finset.mem_union_left C hv)
   simp only [g, s, Equiv.trans_apply, Equiv.prodCongr_apply, Prod.map,
     Equiv.doubledRegroup, Equiv.bipartiteRegroup, Equiv.coe_fn_mk,
-    ManyBody.splitTwoRegionsEquiv, ManyBody.unionEquiv, Equiv.refl_apply,
+    ManyBody.splitTwoRegionsEquiv, ManyBody.regionUnionEquiv, Equiv.refl_apply,
     Equiv.partialSwap_apply, sheetSwap]
   refine Prod.ext (Prod.ext (Prod.ext ?_ ?_) (Prod.ext ?_ ?_)) (Prod.ext ?_ ?_) <;>
     dsimp only
@@ -96,14 +95,14 @@ the identity on the two copies of the buffer.
 Source: `02-information.tex`, lines 362–365 and 398–410. -/
 theorem submatrix_partialSwap_kronecker_one_eq_sheetSwapOp (q : ℕ) (R C : Finset ι)
     (hRC : Disjoint R C) :
-    let Q := (R ∪ C)ᶜ
     let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
     let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
-    let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (Q → Fin q))
+    let g := (s.prodCongr s).trans (Equiv.doubledRegroup P ({v // v ∉ R ∪ C} → Fin q))
     (partialSwap (Fin (Fintype.card (R → Fin q))) (Fin (Fintype.card (C → Fin q))) ⊗ₖ
-        (1 : Matrix ((Q → Fin q) × (Q → Fin q)) ((Q → Fin q) × (Q → Fin q)) ℂ)).submatrix
+        (1 : Matrix (({v // v ∉ R ∪ C} → Fin q) × ({v // v ∉ R ∪ C} → Fin q))
+          (({v // v ∉ R ∪ C} → Fin q) × ({v // v ∉ R ∪ C} → Fin q)) ℂ)).submatrix
         g g = sheetSwapOp q R := by
-  intro Q P s g
+  intro P s g
   ext x y
   have hiff : (g y).1 = Equiv.partialSwap _ _ (g x).1 ∧ (g x).2 = (g y).2 ↔
       sheetSwap q R x = y := by
@@ -189,10 +188,11 @@ theorem reindex_regional_doubledHamiltonian (q : ℕ) (R C : Finset ι) (hRC : D
     (t : (ι → Fin q) × (ι → Fin q) ≃ N) (H : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
     let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
     let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
-    let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q))
+    let g := (s.prodCongr s).trans (Equiv.doubledRegroup P ({v // v ∉ R ∪ C} → Fin q))
     reindex (g.symm.trans t) (g.symm.trans t)
-        (reindex (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q))
-          (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q)) (doubledHamiltonian (reindex s s H))) =
+        (reindex (Equiv.doubledRegroup P ({v // v ∉ R ∪ C} → Fin q))
+          (Equiv.doubledRegroup P ({v // v ∉ R ∪ C} → Fin q))
+          (doubledHamiltonian (reindex s s H))) =
       reindex t t (doubledHamiltonian H) := by
   intro P s g
   rw [← reindex_prodCongr_doubledHamiltonian]
@@ -206,11 +206,11 @@ theorem reindex_regional_partialSwap (q : ℕ) (R C : Finset ι) (hRC : Disjoint
     (t : (ι → Fin q) × (ι → Fin q) ≃ N) :
     let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
     let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
-    let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q))
+    let g := (s.prodCongr s).trans (Equiv.doubledRegroup P ({v // v ∉ R ∪ C} → Fin q))
     reindex (g.symm.trans t) (g.symm.trans t)
         (partialSwap (Fin (Fintype.card (R → Fin q))) (Fin (Fintype.card (C → Fin q))) ⊗ₖ
-          (1 : Matrix ((↥(R ∪ C)ᶜ → Fin q) × (↥(R ∪ C)ᶜ → Fin q))
-            ((↥(R ∪ C)ᶜ → Fin q) × (↥(R ∪ C)ᶜ → Fin q)) ℂ)) =
+          (1 : Matrix (({v // v ∉ R ∪ C} → Fin q) × ({v // v ∉ R ∪ C} → Fin q))
+            (({v // v ∉ R ∪ C} → Fin q) × ({v // v ∉ R ∪ C} → Fin q)) ℂ)) =
       reindex t t (sheetSwapOp q R) := by
   intro P s g
   rw [← submatrix_partialSwap_kronecker_one_eq_sheetSwapOp q R C hRC]
@@ -223,7 +223,7 @@ theorem doubledRegroup_splitTwoRegionsState_comp (q : ℕ) (R C : Finset ι) (hR
     (t : (ι → Fin q) × (ι → Fin q) ≃ N) (Ω : EuclideanSpace ℂ (ι → Fin q)) :
     let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
     let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
-    let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q))
+    let g := (s.prodCongr s).trans (Equiv.doubledRegroup P ({v // v ∉ R ∪ C} → Fin q))
     doubledRegroup (ManyBody.splitTwoRegionsState (fun _ : ι ↦ Fin q) Ω R C hRC) ∘
         (g.symm.trans t).symm =
       fun c ↦ Ω (t.symm c).1 * Ω (t.symm c).2 := by
@@ -279,13 +279,13 @@ theorem regional_physicalBuffer_filter {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r
       ManyBody.regionMutualInformation Ω R C ≤ b →
       let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
       let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
-      let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q))
+      let g := (s.prodCongr s).trans (Equiv.doubledRegroup P ({v // v ∉ R ∪ C} → Fin q))
       let K := reindex t t (doubledHamiltonian H)
       let F := reindex t t (sheetSwapOp q R)
       let ψ : N → ℂ := fun c ↦ Ω (t.symm c).1 * Ω (t.symm c).2
       ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-      ∃ (W : Matrix ((↥(R ∪ C)ᶜ → Fin q) × (↥(R ∪ C)ᶜ → Fin q))
-          ((↥(R ∪ C)ᶜ → Fin q) × (↥(R ∪ C)ᶜ → Fin q)) ℂ) (z : ℝ),
+      ∃ (W : Matrix (({v // v ∉ R ∪ C} → Fin q) × ({v // v ∉ R ∪ C} → Fin q))
+          (({v // v ∉ R ∪ C} → Fin q) × ({v // v ∉ R ∪ C} → Fin q)) ℂ) (z : ℝ),
         ‖W‖ ≤ 1 ∧ Real.exp (-2 * b) ≤ z ∧
         ∀ L : ℝ, 1 ≤ L →
           let B := 1 + b + Real.log L
@@ -319,13 +319,14 @@ theorem regional_physicalBuffer_filter {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r
     hRC).trans_le hI
   obtain ⟨-, -, hψ1, hφ1, -⟩ := physicalBuffer_ground_pair hunit heigs hgaps hΔ.le
   have hK : reindex (g.symm.trans t) (g.symm.trans t)
-      (reindex (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q))
-        (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q)) (doubledHamiltonian (reindex s s H))) = K :=
+      (reindex (Equiv.doubledRegroup P ({v // v ∉ R ∪ C} → Fin q))
+        (Equiv.doubledRegroup P ({v // v ∉ R ∪ C} → Fin q))
+        (doubledHamiltonian (reindex s s H))) = K :=
     reindex_regional_doubledHamiltonian q R C hRC t H
   have hS : reindex (g.symm.trans t) (g.symm.trans t)
       (partialSwap (Fin (Fintype.card (R → Fin q))) (Fin (Fintype.card (C → Fin q))) ⊗ₖ
-        (1 : Matrix ((↥(R ∪ C)ᶜ → Fin q) × (↥(R ∪ C)ᶜ → Fin q))
-          ((↥(R ∪ C)ᶜ → Fin q) × (↥(R ∪ C)ᶜ → Fin q)) ℂ)) = F :=
+        (1 : Matrix (({v // v ∉ R ∪ C} → Fin q) × ({v // v ∉ R ∪ C} → Fin q))
+          (({v // v ∉ R ∪ C} → Fin q) × ({v // v ∉ R ∪ C} → Fin q)) ℂ)) = F :=
     reindex_regional_partialSwap q R C hRC t
   have hψ : doubledRegroup Ωs ∘ (g.symm.trans t).symm = ψ :=
     doubledRegroup_splitTwoRegionsState_comp q R C hRC t Ω
@@ -336,11 +337,11 @@ theorem regional_physicalBuffer_filter {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r
   refine ⟨by rw [← hψ, hnorm]; exact hψ1, by rw [← hφ, hnorm]; exact hφ1, ?_⟩
   obtain ⟨W, z, -, hW, hz, -, hfil⟩ :=
     hfilter (Fin (Fintype.card (R → Fin q))) (Fin (Fintype.card (C → Fin q)))
-      (↥(R ∪ C)ᶜ → Fin q) (reindex s s H) Ωs E₀ b hunit heigs hgaps hb hbound
+      ({v // v ∉ R ∪ C} → Fin q) (reindex s s H) Ωs E₀ b hunit heigs hgaps hb hbound
   refine ⟨W, z, hW, hz, fun L hL ↦ ?_⟩
   obtain ⟨-, -, hT, -, hfwd, hrev⟩ := hfil L hL
-  have hmul (X Y : Matrix ((P × P) × ((↥(R ∪ C)ᶜ → Fin q) × (↥(R ∪ C)ᶜ → Fin q)))
-      ((P × P) × ((↥(R ∪ C)ᶜ → Fin q) × (↥(R ∪ C)ᶜ → Fin q))) ℂ) :
+  have hmul (X Y : Matrix ((P × P) × (({v // v ∉ R ∪ C} → Fin q) × ({v // v ∉ R ∪ C} → Fin q)))
+      ((P × P) × (({v // v ∉ R ∪ C} → Fin q) × ({v // v ∉ R ∪ C} → Fin q))) ℂ) :
       reindex (g.symm.trans t) (g.symm.trans t) (X * Y) =
         reindex (g.symm.trans t) (g.symm.trans t) X *
           reindex (g.symm.trans t) (g.symm.trans t) Y := by
@@ -378,13 +379,13 @@ theorem exists_regional_physicalBuffer_filter {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 
         ManyBody.regionMutualInformation Ω R C ≤ b →
         let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
         let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
-        let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q))
+        let g := (s.prodCongr s).trans (Equiv.doubledRegroup P ({v // v ∉ R ∪ C} → Fin q))
         let K := reindex t t (doubledHamiltonian H)
         let F := reindex t t (sheetSwapOp q R)
         let ψ : N → ℂ := fun c ↦ Ω (t.symm c).1 * Ω (t.symm c).2
         ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-        ∃ (W : Matrix ((↥(R ∪ C)ᶜ → Fin q) × (↥(R ∪ C)ᶜ → Fin q))
-            ((↥(R ∪ C)ᶜ → Fin q) × (↥(R ∪ C)ᶜ → Fin q)) ℂ) (z : ℝ),
+        ∃ (W : Matrix (({v // v ∉ R ∪ C} → Fin q) × ({v // v ∉ R ∪ C} → Fin q))
+            (({v // v ∉ R ∪ C} → Fin q) × ({v // v ∉ R ∪ C} → Fin q)) ℂ) (z : ℝ),
           ‖W‖ ≤ 1 ∧ Real.exp (-2 * b) ≤ z ∧
           ∀ L : ℝ, 1 ≤ L →
             let B := 1 + b + Real.log L

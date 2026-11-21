@@ -133,12 +133,8 @@ def op : Matrix (ι → Fin q) (ι → Fin q) ℂ :=
 theorem op_apply (ρ ρ' : ι → Fin q) :
     s.op ρ ρ' = if ∀ x ∉ s.sites, ρ x = ρ' x then
       s.ketVec (fun x => ρ x) * star (s.braVec (fun x => ρ' x)) else 0 := by
-  rw [op, QuantumCircuit.place_eq_embedOp, embedOp_apply]
-  have h : AgreeOff (Subtype.val : s.sites → ι) ρ ρ' ↔ ∀ x ∉ s.sites, ρ x = ρ' x :=
-    forall_congr' fun x => imp_congr_left
-      ⟨fun h hx => h ⟨x, hx⟩ rfl, fun h j hj => h (hj ▸ j.2)⟩
-  simp only [h, vecMulVec_apply, Pi.star_apply]
-  rfl
+  rw [op, ManyBody.place_apply]
+  exact if_congr Iff.rfl rfl rfl
 
 end Step
 

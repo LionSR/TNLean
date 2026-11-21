@@ -43,16 +43,16 @@ arXiv:1602.08828v2, Lemma l:er, lines 606–622. -/
 private theorem native_filter_image {V : Type*} [Fintype V] [DecidableEq V]
     (q : ℕ) (J : Finset V) (n : ℕ)
     (W : Fin n → Matrix (J → Fin q) (J → Fin q) ℂ)
-    (M : Fin n → Matrix (↥(Jᶜ) → Fin q) (↥(Jᶜ) → Fin q) ℂ)
+    (M : Fin n → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ)
     (T : Submodule ℂ (EuclideanSpace ℂ (V → Fin q))) (Delta : ℝ) (hDelta : 0 ≤ Delta)
     (Kwhole : EuclideanSpace ℂ (V → Fin q) →L[ℂ] EuclideanSpace ℂ (V → Fin q)) :
     let HM := EuclideanSpace ℂ (J → Fin q)
-    let HE := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)
+    let HE := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)
     let Fops := fun i ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W i)
-    let Rop := fun i ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := ↥(Jᶜ) → Fin q) (M i)
-    let split := (ManyBody.splitEquiv (fun _ : V ↦ Fin q) J).trans (Equiv.prodComm _ _)
+    let Rop := fun i ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := {v // v ∉ J} → Fin q) (M i)
+    let split := (ManyBody.cutEquiv (fun _ : V ↦ Fin q) J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
-    let Phi := ((EuclideanSpace.basisFun (↥(Jᶜ) → Fin q) ℂ).tensorProduct
+    let Phi := ((EuclideanSpace.basisFun ({v // v ∉ J} → Fin q) ℂ).tensorProduct
       (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
     let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ HE HM)
     let K0 := Tm.toContinuousLinearEquiv.conjContinuousAlgEquiv Kwhole
@@ -129,10 +129,10 @@ theorem exists_uniform_native_long_interval_soft_improving_family
     let J := interval (N + 1) p r
     let eJ := intervalShiftOrderIso hpr hrN
     let midConfig := J → Fin q
-    let extConfig := ↥(Jᶜ) → Fin q
+    let extConfig := {v // v ∉ J} → Fin q
     let HM := EuclideanSpace ℂ midConfig
     let Hfull := EuclideanSpace ℂ (Fin (N + 1) → Fin q)
-    let split := (ManyBody.splitEquiv (fun _ : Fin (N + 1) ↦ Fin q) J).trans
+    let split := (ManyBody.cutEquiv (fun _ : Fin (N + 1) ↦ Fin q) J).trans
       (Equiv.prodComm _ _)
     let coords := Entropy.regionTensorCoordinates q J
     let order := max 1 ⌈(Real.log (max 1 ((N : ℝ) ^ 2)) -

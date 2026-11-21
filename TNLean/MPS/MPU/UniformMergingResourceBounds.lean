@@ -49,8 +49,8 @@ theorem permutedEncodedUniformMergingGateCount_le_uniform
         uniformPacketGateCount d D N := by
     simpa only [mergingPreparationGateCount, globalSiteCount] using
       joiningPacketGateCount_le_uniform hd hD N
-  have href₁ := selectedZeroRegisterReflectionPoolGateCount_le_uniform d D N b hb
-  have href₂ := selectedZeroRegisterReflectionPoolGateCount_le_uniform d D N 2 hpool
+  have href₁ := zeroRegisterReflectionPoolGateCount_le_uniform d D N b hb
+  have href₂ := zeroRegisterReflectionPoolGateCount_le_uniform d D N 2 hpool
   let M := uniformPacketGateCount d D N + 8 * (globalSiteCount d D N) ^ 2
   have hpre : mergingPreparationGateCount d (bondRegisterWidth d D)
         (logicalSiteCount d D N) (auxiliarySiteCount d D N) +

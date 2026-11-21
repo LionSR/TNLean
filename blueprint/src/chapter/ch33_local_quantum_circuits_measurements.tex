@@ -23,28 +23,19 @@ outcomes.
 
 \begin{definition}[Preparation with measurements]
     \label{def:qc_measurement_preparation}
-    \lean{QuantumCircuit.outcomeProj, QuantumCircuit.outcomeProj_eq_ctrlProj,
-        QuantumCircuit.MeasurementProtocol,
-        QuantumCircuit.MeasurementProtocol.preMeasurement,
-        QuantumCircuit.MeasurementProtocol.postMeasurement,
-        QuantumCircuit.MeasurementProtocol.output,
-        QuantumCircuit.MeasurementProtocol.IsPreparationOf,
-        QuantumCircuit.IsPreparedWithMeasurementsInDepth}
+    \lean{QuantumCircuit.Circuit.measureCorrect,
+        QuantumCircuit.IsOneRoundConversion}
     \leanok
     \uses{def:qc_local_circuit}
-    For $S\subseteq\Z_N$ and $m\colon S\to\{0,\dots,d-1\}$, let $P_m$ be the computational-basis projection onto $\operatorname{span}\{\ket x:x|_S=m\}$. A \emph{measurement protocol} $(\ket\pi,U,S,(v_{m,i}))$ consists of a product vector $\ket\pi$, a depth-$T_1$ local circuit $U$, a measured site set $S$, and single-site unitaries $v_{m,i}\in\mathrm U(d)$ forming $V_m=\bigotimes_i v_{m,i}$ (representing $\mathrm{QCcc}$ of~\cite{Piroli2021LOCC} with free classical communication and single-site corrections). It \emph{prepares} $\ket\psi$ if $\ket\pi\neq0$ and $\forall m,\,P_mU\ket\pi\neq0\implies\exists c\in\C,\,V_mP_mU\ket\pi=c\ket\psi$. A vector $\ket\psi$ is \emph{prepared with measurements in depth $T$} if prepared by a protocol with $T_1\leq T$.
+    For $S\subseteq\Z_N$ and $m\colon S\to\{0,\dots,d-1\}$, let $P_m$ be the computational-basis projection onto $\operatorname{span}\{\ket x:x|_S=m\}$. A \emph{measurement protocol} $(\ket\pi,U,S,(v_{m,i}))$ consists of a product vector $\ket\pi$, a depth-$T_1$ local circuit $U$, a measured site set $S$, and single-site unitaries $v_{m,i}\in\mathrm U(d)$ forming $V_m=\bigotimes_i v_{m,i}$ (representing $\mathrm{QCcc}$ of~\cite{Piroli2021LOCC} with free classical communication and single-site corrections). It \emph{prepares} $\ket\psi$ if $\ket\pi\neq0$ and $\forall m,\,\exists c\in\C,\,V_mP_mU\ket\pi=c\ket\psi$; an outcome of probability zero gives $c=0$. A vector $\ket\psi$ is \emph{prepared with measurements in depth $T$} if prepared by a protocol with $T_1\leq T$.
 \end{definition}
 
 \begin{lemma}[Outcomes of nonzero probability]
     \label{lem:qc_measurement_outcomes}
-    \lean{QuantumCircuit.outcomeProj_mulVec_apply,
-        QuantumCircuit.sum_outcomeProj, Matrix.finKronecker_mem_unitary,
-        Matrix.eq_zero_of_mem_unitary_of_mulVec_eq_zero,
-        QuantumCircuit.MeasurementProtocol.sum_postMeasurement,
-        QuantumCircuit.MeasurementProtocol.preMeasurement_ne_zero,
-        QuantumCircuit.MeasurementProtocol.exists_postMeasurement_ne_zero,
-        QuantumCircuit.MeasurementProtocol.output_ne_zero,
-        QuantumCircuit.MeasurementProtocol.IsPreparationOf.ne_zero}
+    \lean{QuantumCircuit.place_single_self_mulVec_apply,
+        QuantumCircuit.Circuit.exists_kraus_mulVec_ne_zero,
+        QuantumCircuit.IsMeasurementConversion.ne_zero,
+        QuantumCircuit.IsOneRoundConversion.isMeasurementConversion}
     \leanok
     \uses{def:qc_measurement_preparation}
     Since $\sum_m P_m=\mathbb 1$ and $U,V_m$ are unitary, every protocol with $\ket\pi\neq0$ has some outcome $m$ with $P_mU\ket\pi\neq0$ and $V_mP_mU\ket\pi\neq0$, so every vector $\ket\psi$ prepared by the protocol satisfies $\ket\psi\neq0$.
@@ -56,99 +47,86 @@ outcomes.
 
 \begin{lemma}[Protocols without measurements]
     \label{lem:qc_measurement_unitary_case}
-    \lean{QuantumCircuit.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth,
-        QuantumCircuit.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty,
+    \lean{QuantumCircuit.IsUnitaryCircuit.isOneRoundConversion,
+        QuantumCircuit.IsUnitaryCircuit.isMeasurementConversion,
+        QuantumCircuit.IsPreparedInDepth.exists_isMeasurementConversion,
         QuantumCircuit.smul_productVector}
     \leanok
     \uses{def:qc_measurement_preparation, lem:qc_measurement_outcomes}
-    Every nonzero vector prepared in depth $T$ is prepared with measurements in depth $T$ ($S=\varnothing$, $v_{m,i}=\mathbb 1$). Conversely, if a protocol with $S=\varnothing$ and $T_1\leq T$ prepares $\ket\psi$, then $\bigotimes_i u_i\ket\psi$ is prepared in depth $T$ for single-site unitaries $u_i=v_{\varnothing,i}^\dagger$.
+    Every nonzero vector prepared in depth $T$ is prepared with measurements in depth $T$ ($S=\varnothing$, $v_{m,i}=\mathbb 1$).
 \end{lemma}
 \begin{proof}
     \leanok
-    When $S=\varnothing$, the unique outcome has $P_\varnothing=\mathbb 1$, so $V_\varnothing U\ket\pi=c\ket\psi$ with $c\neq0$ by Lemma~\ref{lem:qc_measurement_outcomes}, giving $(\bigotimes_i v_{\varnothing,i}^\dagger)\ket\psi=U(c^{-1}\ket\pi)$ at depth $T$ (padding $U$ with $T-T_1$ empty layers).
+    When $S=\varnothing$, the unique outcome has $P_\varnothing=\mathbb 1$, so $V_\varnothing P_\varnothing U\ket\pi=U\ket\pi$.
 \end{proof}
 
-\begin{lemma}[Layers of permutation gates]
+\begin{lemma}[Permutation gates]
     \label{lem:qc_permutation_layers}
     \lean{QuantumCircuit.IsLocalPerm,
         QuantumCircuit.IsLocalPerm.permMatrix_mem_supportedOperators,
-        QuantumCircuit.shiftPerm, QuantumCircuit.shiftPerm_apply,
-        QuantumCircuit.isLocalPerm_shiftPerm, QuantumCircuit.permLayer,
-        QuantumCircuit.exists_permLayer_op_mulVec,
-        QuantumCircuit.exists_shiftLayer_op_mulVec,
         Matrix.finKronecker_permMatrix_mulVec}
     \leanok
     \uses{def:qc_local_circuit}
-    Let $\sigma$ be a configuration permutation supported on $X\subseteq I$ (i.e., $\sigma(x)|_{X^c}=x|_{X^c}$ and $\sigma(x)|_X$ depends only on $x|_X$, such as a shift $x\mapsto x+f(x|_{X\setminus\{t\}})e_t$ in $\mathbb Z_d$ at $t\in X$). Then $(P_\sigma v)(x)=v(\sigma x)$ defines a unitary $P_\sigma\in\mathcal A_X$. For pairwise disjoint ring bonds $\{k,k+1\}$ ($k\in K$) and local permutations $\sigma_k$, the layer of gates $P_{\sigma_k}$ acts as $v\mapsto v\circ\rho$, where $\rho|_{\{k,k+1\}}=\sigma_k|_{\{k,k+1\}}$ and $\rho$ fixes sites outside $\bigcup_{k\in K}\{k,k+1\}$. For single-site label permutations $\tau_i$, $(\bigotimes_i P_{\tau_i}v)(x)=v(\tau_0(x_0),\dots,\tau_{N-1}(x_{N-1}))$.
+    Let $\sigma$ be a configuration permutation supported on $X\subseteq I$ (i.e., $\sigma(x)|_{X^c}=x|_{X^c}$ and $\sigma(x)|_X$ depends only on $x|_X$, such as a shift $x\mapsto x+f(x|_{X\setminus\{t\}})e_t$ in $\mathbb Z_d$ at $t\in X$). Then $(P_\sigma v)(x)=v(\sigma x)$ defines a unitary $P_\sigma\in\mathcal A_X$. For single-site label permutations $\tau_i$, $(\bigotimes_i P_{\tau_i}v)(x)=v(\tau_0(x_0),\dots,\tau_{N-1}(x_{N-1}))$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Under $I=X\sqcup X^c$, $P_\sigma=Y\otimes\mathbb 1_{X^c}\in\mathcal A_X$ is a permutation matrix and hence unitary. By induction on $K$, $P_{\sigma_a}P_\rho=P_{\rho\sigma_a}$ acts as $\sigma_k$ on each disjoint bond $\{k,k+1\}$, and $(\bigotimes_i P_{\tau_i})_{x,y}=\prod_i\delta_{y_i,\tau_i(x_i)}$.
+    The entry $(P_\sigma)_{x,y}=\delta_{y,\sigma(x)}$ vanishes when $x$ and $y$ differ outside $X$, and it depends only on $x|_X$ and $y|_X$ when $x|_{X^c}=y|_{X^c}$, so $P_\sigma\in\mathcal A_X$; it is a permutation matrix and hence unitary. Finally $(\bigotimes_i P_{\tau_i})_{x,y}=\prod_i\delta_{y_i,\tau_i(x_i)}$.
 \end{proof}
 
 From here on the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{definition}[Measurement rounds]
     \label{def:qc_measurement_rounds}
-    \lean{QuantumCircuit.MeasurementRound, QuantumCircuit.MeasurementRound.kraus,
-        QuantumCircuit.MeasurementRound.depth,
-        QuantumCircuit.MeasurementRound.toProtocol,
-        QuantumCircuit.MeasurementRound.outputs,
-        QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth}
+    \lean{KrausFamily.IsUnitaryOrMeasurement,
+        QuantumCircuit.IsMeasurementConversion}
     \leanok
     \uses{def:qc_measurement_preparation}
-    A \emph{measurement round} $R=(U,S,(v_{m,i}))$ of depth $\operatorname{depth}(R)=\operatorname{depth}(U)$ has outcome operators $K_m=V_mP_mU$ ($V_m=\bigotimes_i v_{m,i}$). The \emph{outputs} of rounds $R_1,\dots,R_n$ from $\ket v$ are the vectors $K_{m_n}^{(n)}\cdots K_{m_1}^{(1)}\ket v$. A vector $\ket\psi$ is \emph{prepared with measurement rounds in depth $T$} if there exist a product vector $\ket\pi\neq0$ and rounds $R_1,\dots,R_n$ with $\sum_{j=1}^n\operatorname{depth}(R_j)\le T$ such that every nonzero output from $\ket\pi$ is a scalar multiple of $\ket\psi$ (iterating the single-round $\mathrm{QCcc}_\ell$ scheme of~\cite{Piroli2021LOCC}).
+    A \emph{measurement circuit} is a sequence of layers, each consisting of unitary gates on pairwise disjoint neighbouring pairs and single-site unitaries, or of a measurement of some sites in the computational basis followed by a relabelling of the outcome, where every layer may depend on the outcomes of the earlier measurements. Its depth is the largest number, along a sequence of outcomes, of layers containing a gate on a pair. A sequence $p$ of outcomes is a \emph{branch}, and its operator $K_p$ is the product of the operators of the layers along $p$. A \emph{measurement round} $R=(U,S,(v_{m,i}))$ of depth $\operatorname{depth}(U)$ is the measurement circuit with branch operators $K_m=V_mP_mU$ ($V_m=\bigotimes_i v_{m,i}$), and rounds $R_1,\dots,R_n$ applied in turn form a measurement circuit of depth at most $\sum_j\operatorname{depth}(R_j)$. A vector $\ket\psi$ is \emph{prepared with measurement rounds in depth $T$} if there exist a product vector $\ket\pi\neq0$ and a measurement circuit of depth at most $T$ such that every output $K_p\ket\pi$ is a scalar multiple of $\ket\psi$ (iterating the single-round $\mathrm{QCcc}_\ell$ scheme of~\cite{Piroli2021LOCC}).
 \end{definition}
 
 \begin{lemma}[Outputs of rounds]
     \label{lem:qc_measurement_rounds_outputs}
-    \lean{QuantumCircuit.MeasurementRound.toProtocol_output,
-        QuantumCircuit.MeasurementRound.exists_kraus_mulVec_ne_zero,
-        QuantumCircuit.MeasurementRound.outputs_nil,
-        QuantumCircuit.MeasurementRound.mem_outputs_cons,
-        QuantumCircuit.MeasurementRound.mem_outputs_smul,
-        QuantumCircuit.MeasurementRound.mem_outputs_append,
-        QuantumCircuit.MeasurementRound.exists_mem_outputs_ne_zero,
-        QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth.ne_zero,
-        QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth.mono,
-        QuantumCircuit.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth}
+    \lean{QuantumCircuit.Circuit.kraus_comp,
+        QuantumCircuit.IsMeasurementConversion.mono,
+        QuantumCircuit.IsMeasurementConversion.smul,
+        QuantumCircuit.IsMeasurementConversion.trans}
     \leanok
     \uses{def:qc_measurement_rounds, lem:qc_measurement_outcomes}
-    Every $\ket v\neq0$ produces at least one nonzero output under any sequence of rounds $\mathcal R$, so any vector prepared with measurement rounds is nonzero. Outputs scale linearly with $c\ket v$, compose under concatenation $\mathcal R_1\mathbin{+\!+}\mathcal R_2$, and a $1$-round preparation coincides with Definition~\ref{def:qc_measurement_preparation}.
+    Every $\ket v\neq0$ has a nonzero output $K_p\ket v$ under any measurement circuit, so any vector prepared with measurement rounds is nonzero. The branches of a circuit $\mathcal R_1$ followed by $\mathcal R_2$ are the pairs $(p,q)$ of branches, with $K_{(p,q)}=K^{(2)}_qK^{(1)}_p$; a preparation in depth $T_1$ followed by a conversion in depth $T_2$ is a preparation in depth $T_1+T_2$, a scalar multiple of a prepared vector is prepared in the same depth, and a $1$-round preparation in the sense of Definition~\ref{def:qc_measurement_preparation} is a preparation with measurement rounds in the same depth.
 \end{lemma}
 \begin{proof}
     \leanok
-    Since $\sum_m P_m=\mathbb 1$ and $U,V_m$ are unitary, $\ket v\neq0\implies\exists m,\,V_mP_mU\ket v\neq0$; induction on $\mathcal R$ and linearity of $K_m$ yield the remaining claims.
+    Measurements and unitaries preserve the norm summed over the outcomes, so $\sum_p\lVert K_p\ket v\rVert^2=\lVert v\rVert^2$ and some $K_p\ket v\neq0$; the composition of branches is the product of their operators, and the remaining claims follow by linearity of $K_p$.
 \end{proof}
 
 \begin{definition}[Implementation by rounds]
     \label{def:qc_round_implementation}
-    \lean{QuantumCircuit.MeasurementRound.IsImplementationOn,
-        QuantumCircuit.MeasurementRound.IsRoundsImplementationOn}
+    \lean{QuantumCircuit.Circuit.IsImplementationOn}
     \leanok
     \uses{def:qc_measurement_rounds}
-    A round $R$ \emph{implements} $W$ on a vector set $E$ if $\forall m,\exists c\in\C,\forall\ket v\in E,\,V_mP_mU\ket v=cW\ket v$. A round sequence $\mathcal R$ \emph{implements} $W$ on $E$ if every output of $\mathcal R$ from $\ket v\in E$ is a scalar multiple of $W\ket v$.
+    A measurement circuit \emph{implements} $W$ on a vector set $E$ if for every $\ket v\in E$ and every branch $p$, the output $K_p\ket v$ is a scalar multiple of $W\ket v$.
 \end{definition}
 
 \begin{lemma}[Implementations compose]
     \label{lem:qc_round_implementation_compose}
-    \lean{QuantumCircuit.MeasurementRound.IsImplementationOn.exists_mem_outputs,
-        QuantumCircuit.MeasurementRound.isRoundsImplementationOn_nil,
-        QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.mono,
-        QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.append,
-        QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth}
+    \lean{QuantumCircuit.Circuit.isImplementationOn_done,
+        QuantumCircuit.Circuit.IsImplementationOn.mono,
+        QuantumCircuit.Circuit.IsImplementationOn.comp,
+        QuantumCircuit.Circuit.IsImplementationOn.isMeasurementConversion}
     \leanok
     \uses{def:qc_round_implementation, lem:qc_measurement_rounds_outputs}
-    The empty sequence implements $\mathbb 1$, implementation is downward closed in $E$, and if $\mathcal R$ implements $W$ on $E$ with $W(E)\subseteq E'$ and $\mathcal R'$ implements $W'$ on $E'$, then $\mathcal R\mathbin{+\!+}\mathcal R'$ implements $W'W$ on $E$. In particular, if $\ket\pi\in E$ is a nonzero product vector, $W\ket\pi$ is prepared with measurement rounds in depth $\sum_{R\in\mathcal R}\operatorname{depth}(R)$.
+    The empty circuit implements $\mathbb 1$, implementation is downward closed in $E$, and if $\mathcal R$ implements $W$ on $E$ with $W(E)\subseteq E'$ and $\mathcal R'$ implements $W'$ on $E'$, then $\mathcal R$ followed by $\mathcal R'$ implements $W'W$ on $E$. In particular, if $\mathcal R$ has depth at most $T$ and $\ket\pi\in E$ is a nonzero product vector, $W\ket\pi$ is prepared with measurement rounds in depth $T$.
 \end{lemma}
 \begin{proof}
     \leanok
-    By Lemma~\ref{lem:qc_measurement_rounds_outputs}, any output of $\mathcal R\mathbin{+\!+}\mathcal R'$ from $\ket v\in E$ is an output of $\mathcal R'$ from $cW\ket v$ ($W\ket v\in E'$), hence equals $cc'W'W\ket v$.
+    By Lemma~\ref{lem:qc_measurement_rounds_outputs}, the output of the branch $(p,q)$ from $\ket v\in E$ is $K'_q(cW\ket v)$ with $W\ket v\in E'$, hence equals $cc'W'W\ket v$.
 \end{proof}
 
 \begin{definition}[Preparation with measurements and a circuit]
     \label{def:qc_measurement_circuit_preparation}
-    \lean{QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth}
+    \lean{QuantumCircuit.IsOneRoundConversion.mulVec,
+        QuantumCircuit.IsOneRoundConversion.mono}
     \leanok
     \uses{def:qc_measurement_preparation, def:qc_local_circuit}
     A vector $\ket\psi$ is \emph{prepared with measurements and a circuit in depth $T$} if $\ket\psi=U\ket\varphi$ for $\ket\varphi$ prepared with measurements in depth $T_1$ and a local circuit $U$ (independent of measurement outcomes) of depth $T_2$ with $T_1+T_2\leq T$.
@@ -202,9 +180,9 @@ From here on the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.sigmaSite_injective, QuantumCircuit.layerCfg,
         QuantumCircuit.layerCfg_apply, QuantumCircuit.layerCfg_comp,
         QuantumCircuit.layerCfg_apply_of_forall_ne, QuantumCircuit.eq_layerCfg_iff,
-        QuantumCircuit.noncommProd_embedOp_mulVec_eq_comp,
-        QuantumCircuit.embedOp_mulVec_eq_comp, QuantumCircuit.permOp_mulVec,
-        QuantumCircuit.embedOp_mulVec_productVector}
+        QuantumCircuit.noncommProd_placeAlong_mulVec_eq_comp,
+        QuantumCircuit.placeAlong_mulVec_eq_comp, QuantumCircuit.permOp_mulVec,
+        QuantumCircuit.placeAlong_mulVec_productVector}
     \leanok
     \uses{def:qc_local_circuit, lem:qc_permutation_layers}
     If operators $X_k$ on pairwise disjoint site sets $S_k$ act by $(X_k v)(u)=v(f_k(u))$ (so $(X_k)_{u,w}=\delta_{w,f_k(u)}$), then $\prod_k\operatorname{embed}_{S_k}(X_k)$ acts by $v\mapsto v\circ\rho$, where $\rho(x)|_{S_k}=f_k(x|_{S_k})$ and $\rho(x)|_{(\bigcup_k S_k)^c}=x|_{(\bigcup_k S_k)^c}$. A site permutation $\tau$ acts by $v\mapsto v\circ(x\mapsto x\circ\tau)$. If $X\in\mathcal A_S$ and $\ket\pi=\bigotimes_i\ket{v_i}$ has $\ket{v_i}=\ket z$ for all $i\in S$, then $(X\ket\pi)(y)=X_{y|_S,(z,\dots,z)}\prod_{i\notin S}v_i(y_i)$.
@@ -223,18 +201,19 @@ From here on the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{theorem}[GHZ-type states in constant depth with measurements]
     \label{thm:qc_ghz_measurement}
-    \lean{QuantumCircuit.ghzSite, QuantumCircuit.withZeroAncillas,
-        QuantumCircuit.ghzInitial, QuantumCircuit.ghzProtocol,
-        QuantumCircuit.ghzProtocol_output,
-        QuantumCircuit.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState}
+    \lean{QuantumCircuit.withZeroAncillas,
+        QuantumCircuit.ghzInitial, QuantumCircuit.ghzCircuit,
+        QuantumCircuit.depth_ghzCircuit_le, QuantumCircuit.ghzMeasured,
+        QuantumCircuit.ghzCorrection, QuantumCircuit.ghzProtocol_output,
+        QuantumCircuit.isOneRoundConversion_withZeroAncillas_ghzState}
     \leanok
     \uses{def:qc_measurement_preparation, lem:qc_permutation_layers,
-        def:qc_ghz_state}
+        lem:qc_configuration_layers, def:qc_ghz_state}
     Generalizing~\cite[Example~1]{Piroli2021LOCC} and~\cite[paragraph ``Long-range MPS using measurements'']{Malz2024Preparation}, let $M,b\geq1$ and $0\neq\alpha\in\mathbb C^b$. On the ring of $2M$ sites of dimension $b$ with system sites $2n$ and ancilla sites $2n+1$ ($0\le n<M$), $\ket{\chi_M}_{\rm sys}\otimes\ket{0}^{\otimes M}_{\rm anc}$ is prepared with measurements in depth $2$, deterministically across all outcomes.
 \end{theorem}
 \begin{proof}
     \leanok
-    Start from $\bigl(\sum_{i\in\mathbb Z_b}\alpha_i\ket i\bigr)_0\otimes\bigotimes_{n=1}^{M-1}\bigl(\sum_{i\in\mathbb Z_b}\ket i\bigr)_{2n}\otimes\bigotimes_{n=0}^{M-1}\ket 0_{2n+1}\neq0$. Applying the layer of shifts $\ket k_{2n}\ket a_{2n+1}\mapsto\ket k_{2n}\ket{a+k}_{2n+1}$ ($0\le n<M$) and the layer $\ket a_{2n+1}\ket k_{2n+2}\mapsto\ket{a-k}_{2n+1}\ket k_{2n+2}$ ($0\le n<M-1$) produces
+    Start from $\bigl(\sum_{i\in\mathbb Z_b}\alpha_i\ket i\bigr)_0\otimes\bigotimes_{n=1}^{M-1}\bigl(\sum_{i\in\mathbb Z_b}\ket i\bigr)_{2n}\otimes\bigotimes_{n=0}^{M-1}\ket 0_{2n+1}\neq0$. Applying the layer of shifts $\ket k_{2n}\ket a_{2n+1}\mapsto\ket k_{2n}\ket{a+k}_{2n+1}$ ($0\le n<M$) and the layer $\ket a_{2n+1}\ket k_{2n+2}\mapsto\ket{a-k}_{2n+1}\ket k_{2n+2}$ ($0\le n<M-1$), whose gates act on disjoint bonds by permutations of configurations (Lemma~\ref{lem:qc_configuration_layers}), produces
     \begin{align}
         \sum_{k\in\mathbb Z_b^M}\alpha_{k_0}\bigotimes_{n=0}^{M-1}\ket{k_n}_{2n}
         \bigotimes_{n=0}^{M-2}\ket{k_n-k_{n+1}}_{2n+1}\otimes\ket{0}_{2M-1}.\notag

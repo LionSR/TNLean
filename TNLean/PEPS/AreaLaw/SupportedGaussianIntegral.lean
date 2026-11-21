@@ -31,7 +31,7 @@ two input supports, as in the support conclusion of that argument.
 Independently formalized; no upstream Lean proof text is reused.
 -/
 
-open ManyBody (PlaneInteraction)
+open ManyBody (PlaneInteraction graphNeighborhood planeDomainGraph)
 
 open MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped Matrix Matrix.Norms.L2Operator NNReal
@@ -48,14 +48,15 @@ private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 �
     (hlocal : ∀ (S : Finset (Site Λ)) (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
       A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S → ∀ (l : ℕ) (t : ℝ),
       ‖ManyBody.heisenbergEvolution g.hamiltonian t A -
-          ManyBody.regionExpectation (graphNeighborhood Λ l S) (ManyBody.heisenbergEvolution
+          ManyBody.regionExpectation (graphNeighborhood (planeDomainGraph Λ) S l)
+            (ManyBody.heisenbergEvolution
               g.hamiltonian t
               A)‖ ≤
         ‖A‖ * min 2 (C * (Λ.card : ℝ) * Real.exp (v * |t| - c * l)))
     (H W : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hH : H.IsHermitian)
     (Q Z : Finset (Site Λ)) (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Q)
     (hD : g.hamiltonian - H ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Z) (l : ℕ) :
-    let B := graphNeighborhood Λ l (Q ∪ Z)
+    let B := graphNeighborhood (planeDomainGraph Λ) (Q ∪ Z) l
     ∃ U : ℝ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
       U 0 = 1 ∧
       (∀ t, HasDerivAt U
@@ -118,7 +119,7 @@ theorem supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q) (R : ℕ) {J : ℝ}
     (H W : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hH : H.IsHermitian)
     (Q Z : Finset (Site Λ)) (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Q)
     (hD : g.hamiltonian - H ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Z) (l : ℕ) :
-    let B := graphNeighborhood Λ l (Q ∪ Z)
+    let B := graphNeighborhood (planeDomainGraph Λ) (Q ∪ Z) l
     ∃ U : ℝ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
       U 0 = 1 ∧
       (∀ t, HasDerivAt U
@@ -157,7 +158,7 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
           W ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Q →
           g.hamiltonian - H ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Z →
           ∀ l : ℕ,
-            let B := graphNeighborhood Λ l (Q ∪ Z)
+            let B := graphNeighborhood (planeDomainGraph Λ) (Q ∪ Z) l
             ∃ U : ℝ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
               U 0 = 1 ∧
               (∀ t, HasDerivAt U

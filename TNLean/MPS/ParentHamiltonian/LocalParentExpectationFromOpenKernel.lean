@@ -44,7 +44,7 @@ theorem quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
     (α : Fin b) (hTP : ∑ i, (A α i)ᴴ * A α i = 1)
     {ρ : Matrix (Fin (dim α)) (Fin (dim α)) ℂ} (hρ : ρ.PosSemidef)
     (hfix : Kraus.transferMap (A α) ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
-    {R N : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hRN : R ≤ N)
+    {R N : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hRN : R ≤ N)
     (hker : groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N ≤
       LinearMap.ker (Matrix.toEuclideanLin (openInteractionMatrix h N))) (a : ℤ) :
     quasiLocalExpectation (A α) hTP hρ hfix htr
@@ -55,7 +55,7 @@ theorem quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
     exact groundSpaceES_block_le_toTensorFromBlocks μ A hμ α N
   have hzero := quasiLocalExpectation_interval_eq_zero_of_groundSpaceES_le_ker
     (A α) hTP hρ hfix htr a (openInteractionMatrix h N) hkerα
-  rw [quasiLocalIntervalObservable_openInteractionMatrix a h hR N, map_sum] at hzero
+  rw [quasiLocalIntervalObservable_openInteractionMatrix a h N, map_sum] at hzero
   simp only [quasiLocalExpectation_quasiLocalIntervalObservable, Finset.sum_const, Finset.card_range, nsmul_eq_mul] at hzero ⊢
   exact (mul_eq_zero.mp hzero).resolve_left (Nat.cast_ne_zero.mpr (by omega))
 
@@ -77,7 +77,7 @@ theorem quasiLocalExpectation_interval_eq_zero_of_eventually_open_kernel
       (quasiLocalIntervalObservable d a R h) = 0 := by
   obtain ⟨N, hN, hRN⟩ := (hker.and (Filter.eventually_ge_atTop R)).exists
   apply quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
-    μ A hμ α hTP hρ hfix htr h hR hRN (a := a)
+    μ A hμ α hTP hρ hfix htr h hRN (a := a)
   rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix h hR hRN, hN]
 
 end MPSTensor

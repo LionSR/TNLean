@@ -43,6 +43,7 @@ open Matrix Polynomial Real
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 open ManyBody (IsGapped groundSpace)
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -67,7 +68,7 @@ theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
     ∃ y : EuclideanSpace ℂ (Fin L → Fin q), ‖y‖ = 1 ∧
       ‖y - Ω‖ ^ 2 ≤
         8 * (2 * exp (-2 * ((s ^ 2 : ℕ) : ℝ) * sqrt ((g / 2) / (2 * (1024 / g) + s)))) ^ 2 ∧
-      (cutMatrix y (a + s / 2)).rank ≤
+      (cutMatrix (leftBlock L (a + s / 2)) y).rank ≤
         (q * (s0 ^ 2 + 1)) ^ (32 * (2 * s0 + 1)) * (q * (s ^ 2 + 1)) ^ (32 * (2 * s + 1)) := by
   classical
   let t := 1024 / g
@@ -158,9 +159,10 @@ theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
       intro hz0
       simp only [hz0, norm_zero, zero_ne_one] at hc
     have hyrank := normalized_cut_schmidtRank_le (k := k) K1 x c hc0 hK1x
-    change (cutMatrix (c • (‖toEuclideanLin K1 x‖⁻¹ : ℂ) • toEuclideanLin K1 x) k).rank ≤
-      _ * (cutMatrix x k).rank at hyrank
-    change (cutMatrix x k).rank ≤ D0 at hxrank
+    change (cutMatrix (leftBlock L k)
+      ⇑(c • (‖toEuclideanLin K1 x‖⁻¹ : ℂ) • toEuclideanLin K1 x)).rank ≤
+      _ * (cutMatrix (leftBlock L k) x).rank at hyrank
+    change (cutMatrix (leftBlock L k) x).rank ≤ D0 at hxrank
     change _ ≤ D0 * D1
     exact hyrank.trans ((Nat.mul_le_mul hrank1' hxrank).trans_eq (Nat.mul_comm _ _))
 
@@ -184,7 +186,8 @@ theorem exists_aklv_frustrationFree_per_cut_approximation :
       ∃ D : ℕ, log (D : ℝ) ≤
           C * (u ^ 3 / g + (z ^ 2 / g) ^ ((1 : ℝ) / 3) * (u + log (z + 1))) ∧
         ∀ k : ℕ, k ≤ L → ∃ y : EuclideanSpace ℂ (Fin L → Fin q),
-          ‖y‖ = 1 ∧ ‖y - Ω‖ ^ 2 ≤ rho ∧ (cutMatrix y k).rank ≤ D := by
+          ‖y‖ = 1 ∧ ‖y - Ω‖ ^ 2 ≤ rho ∧
+            (cutMatrix (leftBlock L k) y).rank ≤ D := by
   obtain ⟨A, hA, _hA21, hscalar⟩ := exists_aklv_frustrationFree_scalar_parameters
   let W := 8192 * (A + 1) * (1 + log 8192) ^ 2
   let R := 8192 * (198 * (A + 1) * (6 + 2 * log (A + 1))) * (1 + log 8192) ^ 3

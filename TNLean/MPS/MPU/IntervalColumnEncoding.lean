@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.EndpointBondEncoding
 import TNLean.MPS.MPU.MinimalCutIntervals
-import TNLean.Circuit.CleanUnitaryImplementation
+import QICLean.Circuit.Model.CleanWorkspace
 import Mathlib.Logic.Equiv.Fintype
 
 /-!

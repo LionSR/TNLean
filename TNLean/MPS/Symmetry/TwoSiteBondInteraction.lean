@@ -22,6 +22,8 @@ arXiv:1010.3732, Section II.D.2, `eq:phase-nosym:iso-hamiltonian`.
 
 open scoped Matrix Kronecker Matrix.Norms.L2Operator
 
+open ManyBody
+
 namespace MPSTensor
 
 /-- Enumerate the four registers of two physical sites in the order
@@ -120,14 +122,15 @@ private theorem twoSiteBondInteraction_etaPair {D : ℕ}
   simp [Matrix.reindex_apply, Matrix.etaPairSpatialBlockEquiv, singleSectorRegisterEquiv,
     twoSiteBondInteraction_apply, Matrix.kroneckerMap_apply, Matrix.one_apply]
 
-/-- Embedding the two-site interaction acts on the outgoing bond and is
-identity on every other bond. Source: arXiv:1010.3732, Section II.D.2,
+/-- The two-site interaction placed on the window of two consecutive sites
+starting at `i` (`ManyBody.placeAlong` along `ManyBody.ringWindow`) acts on the
+outgoing bond and is identity on every other bond. Source: arXiv:1010.3732, Section II.D.2,
 `eq:phase-nosym:iso-hamiltonian`. -/
 theorem embed_twoSiteBondInteraction_apply {D N : ℕ} [NeZero N]
     (hN : 2 ≤ N) (i : Fin N)
     (K : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)
     (s t : Fin N → Fin (D * D)) :
-    MPOTensor.embedLocalOperator 2 N hN i (twoSiteBondInteraction K) s t =
+    placeAlong (X := fun _ ↦ Fin (D * D)) (ringWindow hN i) (twoSiteBondInteraction K) s t =
       ∏ n, if n = i then
         K ((finProdFinEquiv.symm (s n)).2, (finProdFinEquiv.symm (s (n + 1))).1)
           ((finProdFinEquiv.symm (t n)).2, (finProdFinEquiv.symm (t (n + 1))).1)
@@ -155,7 +158,7 @@ theorem embed_twoSiteBondInteraction_apply {D N : ℕ} [NeZero N]
     rw [Matrix.etaCyclicEdgeEquiv_symm_apply]
     simp only [y, Equiv.symm_apply_apply]
     exact finProdFinEquiv.apply_symm_apply (t n)
-  have h := MPOTensor.reindex_embedLocalOperator_etaPairBond hN
+  have h := MPOTensor.reindex_placeAlong_ringWindow_etaPairBond hN
     (fun _ : Fin 1 => D) (fun _ => D) e (fun _ _ => K)
     (Matrix.reindex (finTwoArrowEquiv (Fin (D * D)))
       (finTwoArrowEquiv (Fin (D * D))) (twoSiteBondInteraction K))
@@ -171,7 +174,7 @@ theorem embed_twoSiteBondInteraction_apply {D N : ℕ} [NeZero N]
   rw [hcancel] at hentry
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, hs, ht,
     Matrix.blockDiagonal'_apply_eq] at hentry
-  change MPOTensor.embedLocalOperator 2 N hN i (twoSiteBondInteraction K) s t =
+  change placeAlong (X := fun _ ↦ Fin (D * D)) (ringWindow hN i) (twoSiteBondInteraction K) s t =
     ∏ n, if n ∈ ({i} : Finset (Fin N)) then K (x n) (y n)
       else if x n = y n then 1 else 0 at hentry
   simpa only [Finset.mem_singleton, x, y, Matrix.etaFixedSectorCyclicEdgeEquiv_apply,
@@ -183,13 +186,13 @@ arXiv:1010.3732, Section II.D.2, `eq:phase-nosym:iso-hamiltonian`. -/
 theorem embed_twoSiteBondInteraction_eq_conj {D N : ℕ} [NeZero N]
     (hN : 2 ≤ N) (i : Fin N)
     (K : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
-    MPOTensor.embedLocalOperator 2 N hN i (twoSiteBondInteraction K) =
+    placeAlong (X := fun _ ↦ Fin (D * D)) (ringWindow hN i) (twoSiteBondInteraction K) =
       (incomingBondPerm D N).permMatrix ℂ *
-        MPOTensor.embedLocalOperator 1 N (by omega) (finRotate N i)
+        placeAlong (X := fun _ ↦ Fin (D * D)) (ringWindow (by omega : 1 ≤ N) (finRotate N i))
           (MPOTensor.oneSiteOperator (Matrix.reindex finProdFinEquiv finProdFinEquiv K)) *
         ((incomingBondPerm D N).permMatrix ℂ).conjTranspose := by
   classical
-  ext s t
+  refine Matrix.ext fun (s t : Fin N → Fin (D * D)) ↦ ?_
   rw [embed_twoSiteBondInteraction_apply, incomingBondPerm_conj_local_apply]
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_apply_apply]
   rw [← Equiv.prod_comp (finRotate N) (fun j =>
@@ -202,14 +205,15 @@ theorem embed_twoSiteBondInteraction_eq_conj {D N : ℕ} [NeZero N]
 /-- The transported independent-bond parent Hamiltonian is the sum of one
 translation-invariant two-site interaction. Source: arXiv:1010.3732,
 Section II.D.2, `eq:phase-nosym:iso-hamiltonian`. -/
-theorem interactionHamiltonian_twoSiteBondPenalty {D N : ℕ} [NeZero N]
+theorem hamiltonian_translationInvariant_twoSiteBondPenalty {D N : ℕ} [NeZero N]
     (hN : 2 ≤ N) (η : Fin (D * D) → ℂ) :
-    interactionHamiltonian
+    (Interaction.translationInvariant hN
       (twoSiteBondInteraction (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
-        (bondPenalty η))) hN =
+        (bondPenalty η)))).hamiltonian =
       physicalBondProductParentHamiltonian η (by omega) := by
-  unfold interactionHamiltonian physicalBondProductParentHamiltonian bondProductParentHamiltonian
-  simp_rw [embed_twoSiteBondInteraction_eq_conj]
+  unfold physicalBondProductParentHamiltonian bondProductParentHamiltonian
+  simp_rw [Interaction.hamiltonian, Interaction.translates_term,
+    embed_twoSiteBondInteraction_eq_conj]
   simp only [Matrix.reindex_apply, Matrix.submatrix_submatrix, Equiv.symm_comp_self,
     Matrix.submatrix_id_id]
   rw [Matrix.mul_sum, Matrix.sum_mul]

@@ -25,6 +25,7 @@ The endpoint cuts have rank at most one and impose no condition on `D`.
 
 open scoped BigOperators
 open Matrix
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -151,12 +152,12 @@ private theorem exists_cutMatrix_factorization {L q D : ℕ}
         (Fin (A.bondDim k)) ℂ)
       (V : Matrix (Fin (A.bondDim k))
         ((v : {v : Fin L // v ∉ leftBlock L k}) → Fin q) ℂ),
-      cutMatrix ψ k = U * V := by
+      cutMatrix (leftBlock L k) ψ = U * V := by
   classical
   refine ⟨Matrix.of (fun a z ↦ c * leftContraction A k a z),
     Matrix.of (fun z b ↦ rightContraction A k b z), ?_⟩
   ext a b
-  rw [cutMatrix_apply, hψ, Matrix.mul_apply]
+  rw [ManyBody.cutMatrix_apply, hψ, Matrix.mul_apply]
   simp only [Matrix.of_apply, mul_assoc, ← Finset.mul_sum]
   exact congrArg (c * ·) (coeff_eq_sum_left_mul_right A k a b)
 
@@ -166,7 +167,7 @@ Source: SWVC07, arXiv:0705.0292v2, lines 234–264; the one-dimensional note,
 Part IIa, Proposition `prop:VC`, lines 39–62. -/
 theorem rank_cutMatrix_le_bondDim {L q D : ℕ} (A : OBCChainTensor q D L) (c : ℂ)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ∀ x, ψ x = c * A.coeff x)
-    (k : Fin (L + 1)) : (cutMatrix ψ k).rank ≤ A.bondDim k := by
+    (k : Fin (L + 1)) : (cutMatrix (leftBlock L k) ψ).rank ≤ A.bondDim k := by
   obtain ⟨U, V, hUV⟩ := exists_cutMatrix_factorization A c ψ hψ k
   rw [hUV]
   simpa using (rank_mul_le_left U V).trans (rank_le_card_width U)
@@ -178,7 +179,7 @@ Part IIa, Proposition `prop:VC`, lines 39–62. -/
 theorem IsOpenMPS.rank_cutMatrix_le {L q D : ℕ}
     {ψ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hψ : IsOpenMPS L q D (fun x ↦ ψ x)) {k : ℕ} (hk0 : 0 < k) (hkL : k < L) :
-    (cutMatrix ψ k).rank ≤ D := by
+    (cutMatrix (leftBlock L k) ψ).rank ≤ D := by
   obtain ⟨A, c, hD, hA⟩ := hψ
   exact (rank_cutMatrix_le_bondDim A c ψ hA ⟨k, by omega⟩).trans
     (hD ⟨k, by omega⟩ hk0 hkL)
@@ -190,7 +191,7 @@ Part IIa, Proposition `prop:VC`, lines 39–62. -/
 theorem isOpenMPS_iff_internal_cutMatrix_rank_le {L q D : ℕ}
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
     IsOpenMPS L q D (fun x ↦ ψ x) ↔
-      ∀ k : ℕ, 0 < k → k < L → (cutMatrix ψ k).rank ≤ D := by
+      ∀ k : ℕ, 0 < k → k < L → (cutMatrix (leftBlock L k) ψ).rank ≤ D := by
   exact ⟨fun h k hk0 hkL ↦ h.rank_cutMatrix_le hk0 hkL,
     isOpenMPS_of_internal_cutMatrix_rank_le ψ⟩
 
@@ -232,11 +233,11 @@ theorem IsOpenMPS.snoc {n q b : ℕ} (hb : 0 < b) {w : (Fin n → Fin q) → ℂ
   let R : Matrix ((v : {v : Fin n // v ∉ leftBlock n j}) → Fin q)
       ((v : {v : Fin (n + 1) // v ∉ leftBlock (n + 1) j}) → Fin q) ℂ :=
     Matrix.of fun c b ↦ if c = rb b then f (b ⟨Fin.last n, hlast⟩) else 0
-  have hcut : cutMatrix W' j = Lm * cutMatrix W j * R := by
+  have hcut : cutMatrix (leftBlock (n + 1) j) W' = Lm * cutMatrix (leftBlock n j) W * R := by
     ext a b
     rw [Matrix.mul_apply, Finset.sum_eq_single (rb b) (fun c _ hc ↦ by simp [R, hc]) (by simp),
       Matrix.mul_apply, Finset.sum_eq_single (ra a) (fun a' _ ha ↦ by simp [Lm, ha]) (by simp)]
-    simp only [Lm, R, Matrix.of_apply, ite_true, one_mul, cutMatrix_apply]
+    simp only [Lm, R, Matrix.of_apply, ite_true, one_mul, ManyBody.cutMatrix_apply]
     change w _ * f _ = w _ * f _
     congr 1
     · congr 1

@@ -24,6 +24,8 @@ Source context: arXiv:2203.12563v3, Section 5, lines 1687–1692.
 
 open scoped Matrix
 
+open ManyBody
+
 namespace MPSTensor.MPOSymmetry
 
 variable {d₀ d₁ D₀ D₁ χ₀ χ₁ m : ℕ}
@@ -69,11 +71,12 @@ theorem arbitraryPhysicalMixedInteraction_commute_of_endpoint_adjoint
 
 /-- Under endpoint slice adjoints, every periodic mixed path Hamiltonian of
 length at least two commutes with the periodic common MPO. -/
-theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_of_endpoint_adjoint
+theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_of_endpoint_adjoint
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) {N : ℕ} (hN : 2 ≤ N) :
-    Commute (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)
+    Commute (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpo (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) N) := by
-  apply interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
+  apply hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁ _ hγ hN
   intro Y
   exact ⟨Y.map (starRingEnd ℂ),

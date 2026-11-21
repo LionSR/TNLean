@@ -17,12 +17,9 @@ of a local circuit that may add product ancillas and discard them
 \begin{definition}[Local channel circuit of depth $T$]
     \label{def:qc_local_channel_circuit}
     \uses{def:qc_local_circuit}
-    \lean{QuantumCircuit.ChannelLayer, QuantumCircuit.BondChannelLayer,
-        QuantumCircuit.BondChannelLayer.map,
-        QuantumCircuit.BondChannelLayer.dual, QuantumCircuit.channelCircuitMap,
-        QuantumCircuit.channelCircuitDual,
-        QuantumCircuit.IsChannelPreparedInDepth,
-        QuantumCircuit.IsBondChannelPreparedInDepth}
+    \lean{QuantumCircuit.Layer, QuantumCircuit.Layer.dual,
+        QuantumCircuit.Circuit.seq, QuantumCircuit.Circuit.map_seq_cons,
+        QuantumCircuit.Circuit.depth_seq_le_length, QuantumCircuit.Circuit.dual}
     \leanok
     Fix a bond geometry $(B_b)_{b\in\beta}$. A \emph{channel on bond $B$} is a map $\Phi_B(\rho)=\sum_j K_j\rho K_j^\dagger$ with $K_j\in\mathcal A_B$ and $\sum_j K_j^\dagger K_j=\mathbb 1$, with Heisenberg dual $\Phi_B^\dagger(A)=\sum_j K_j^\dagger AK_j$. A \emph{channel layer} is a composition of channels on pairwise disjoint bonds, a \emph{local channel circuit of depth $T$} is a composition $\Phi=\Phi_T\circ\cdots\circ\Phi_1$ of $T$ channel layers with dual $\Phi^\dagger=\Phi_1^\dagger\circ\cdots\circ\Phi_T^\dagger$, and $\rho$ is \emph{prepared in depth $T$ by local channels} if $\rho=\Phi(\bigotimes_i\sigma_i)$ for single-site density matrices $\sigma_i$.
 \end{definition}
@@ -30,9 +27,9 @@ of a local circuit that may add product ancillas and discard them
 \begin{lemma}[Duality and complete positivity of local channel circuits]
     \label{lem:qc_local_channel_circuit_properties}
     \uses{def:qc_local_channel_circuit, def:qc_local_circuit}
-    \lean{QuantumCircuit.channelCircuitMap_isKrausCPTP,
-        QuantumCircuit.trace_channelCircuitMap_mul,
-        QuantumCircuit.channelCircuitMap_map_toChannelLayer}
+    \lean{QuantumCircuit.Circuit.isKrausCPTP_map,
+        QuantumCircuit.Circuit.trace_map_mul,
+        QuantumCircuit.Circuit.map_eq_of_subsingleton}
     \leanok
     Every local channel circuit $\Phi$ is CPTP and satisfies
     \begin{align}
@@ -51,7 +48,7 @@ of a local circuit that may add product ancillas and discard them
     \uses{def:qc_local_channel_circuit, def:qc_light_cone_geometry,
         lem:qc_light_cone_geometries}
     \lean{QuantumCircuit.Circuit.dual_mem_supportedOperators_lightCone,
-        QuantumCircuit.BondChannelLayer.dual_mem_supportedOperators}
+        QuantumCircuit.Layer.dual_mem_supportedOperators_lightCone}
     \leanok
     If $\Phi$ is a local channel circuit of depth $T$ and $Z\in\mathcal A_X$, then $\Phi^\dagger(Z)\in\mathcal A_{\mathcal L_T(X)}$ (on the ring, within ring distance $T$ of $X$).
 \end{theorem}
@@ -64,8 +61,8 @@ of a local circuit that may add product ancillas and discard them
     \label{lem:qc_channel_light_cone_correlations}
     \uses{lem:qc_channel_light_cone, lem:qc_local_channel_circuit_properties}
     \lean{QuantumCircuit.Circuit.dual_mul_of_disjoint_lightCone,
-        QuantumCircuit.BondChannelLayer.dual_mul,
-        QuantumCircuit.trace_rectKronecker_mul_mul}
+        QuantumCircuit.Layer.dual_mul_of_disjoint_lightCone,
+        QuantumCircuit.IsConversion.trace_mul_mul_eq}
     \leanok
     If $\rho$ is prepared in depth $T$ by local channels and $Z\in\mathcal A_X$, $Z'\in\mathcal A_{X'}$ with $\mathcal L_T(X)\cap\mathcal L_T(X')=\varnothing$ (e.g., $d_{\rm ring}(X,X')>2T$), then $\Tr(\rho ZZ')=\Tr(\rho Z)\Tr(\rho Z')$.
 \end{lemma}
@@ -79,14 +76,11 @@ change the local dimension act on single sites.
 
 \begin{definition}[Onsite channel]
     \label{def:qc_onsite_channel}
-    \lean{Matrix.rectKronecker, Matrix.rectKronecker_one,
-        QuantumCircuit.OnsiteChannel,
-        QuantumCircuit.OnsiteChannel.map, QuantumCircuit.OnsiteChannel.dual,
-        QuantumCircuit.OnsiteChannel.id, QuantumCircuit.OnsiteChannel.attach,
-        QuantumCircuit.OnsiteChannel.attachZero,
-        QuantumCircuit.OnsiteChannel.attach_siteMap_apply,
-        QuantumCircuit.OnsiteChannel.discard,
-        QuantumCircuit.OnsiteChannel.discard_siteMap_apply}
+    \lean{ManyBody.prodOp, ManyBody.prodFamily,
+        QuantumCircuit.IsProtocol.ofOnsite,
+        KrausFamily.ancillaState, KrausFamily.attach,
+        KrausFamily.attach_op_apply, KrausFamily.map_attach,
+        KrausFamily.traceRight}
     \leanok
     An \emph{onsite channel} $\Phi=\bigotimes_i\Phi_i$ from local dimension $d$ to $e$ is defined by sitewise Kraus operators $K_{ij}\colon\C^d\to\C^e$ with $\sum_j K_{ij}^\dagger K_{ij}=\mathbb 1_d$:
     \begin{align}
@@ -100,11 +94,10 @@ change the local dimension act on single sites.
 \begin{lemma}[Onsite channels are product channels]
     \label{lem:qc_onsite_channel_properties}
     \uses{def:qc_onsite_channel}
-    \lean{QuantumCircuit.OnsiteChannel.map_isKrausCPTP,
-        QuantumCircuit.OnsiteChannel.map_rectKronecker,
-        QuantumCircuit.OnsiteChannel.map_finKronecker,
-        QuantumCircuit.OnsiteChannel.trace_map_mul,
-        QuantumCircuit.OnsiteChannel.discard_siteMap_attach_siteMap}
+    \lean{QuantumCircuit.Circuit.map_ofLayer_ofOnsite_prodOp,
+        ManyBody.map_prodFamily_prodOp,
+        KrausFamily.isTP_attach,
+        KrausFamily.map_traceRight_map_attach}
     \leanok
     Every onsite channel $\Phi$ is CPTP, satisfies $\Phi(\bigotimes_i\sigma_i)=\bigotimes_i\Phi_i(\sigma_i)$ and $\Tr(\Phi(\rho)A)=\Tr(\rho\,\Phi^\dagger(A))$, and satisfies $\operatorname{discard}_\tau\circ\operatorname{attach}_\tau=\operatorname{id}$.
 \end{lemma}
@@ -116,23 +109,19 @@ change the local dimension act on single sites.
 \begin{lemma}[Onsite channels do not spread supports]
     \label{lem:qc_onsite_channel_locality}
     \uses{def:qc_onsite_channel}
-    \lean{QuantumCircuit.OnsiteChannel.dual_mem_supportedOperators,
-        QuantumCircuit.OnsiteChannel.dual_mul,
-        QuantumCircuit.OnsiteChannel.dual_rectKronecker,
-        QuantumCircuit.OnsiteChannel.dual_finKronecker,
-        QuantumCircuit.rectangularKrausMap_rectKronecker_rectKronecker}
+    \lean{QuantumCircuit.Layer.lightCone_ofOnsite}
     \leanok
-    For any onsite channel $\Phi$, $\Phi^\dagger(\bigotimes_i m_i)=\bigotimes_i\Phi_i^\dagger(m_i)$. Consequently, $Z\in\mathcal A_X\implies\Phi^\dagger(Z)\in\mathcal A_X$, and if $Z\in\mathcal A_X$, $Z'\in\mathcal A_Y$ with $X\cap Y=\varnothing$, then $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$.
+    For any onsite channel $\Phi$, the backward light cone of a region $X$ is $X$ itself. Consequently, $Z\in\mathcal A_X\implies\Phi^\dagger(Z)\in\mathcal A_X$, and if $Z\in\mathcal A_X$, $Z'\in\mathcal A_Y$ with $X\cap Y=\varnothing$, then $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Since $\Phi_i^\dagger(\mathbb 1_e)=\sum_j K_{ij}^\dagger K_{ij}=\mathbb 1_d$, $\Phi^\dagger(\bigotimes_i m_i)=\bigotimes_i\Phi_i^\dagger(m_i)$ preserves identity factors outside $X$; for $X\cap Y=\varnothing$, at least one of $m_i,m'_i$ is $\mathbb 1_e$ at each site $i$, so $\Phi_i^\dagger(m_im'_i)=\Phi_i^\dagger(m_i)\Phi_i^\dagger(m'_i)$.
+    An onsite channel is a layer without bonds, so no bond enlarges a region. Since $\Phi_i^\dagger(\mathbb 1_e)=\sum_j K_{ij}^\dagger K_{ij}=\mathbb 1_d$, $\Phi^\dagger$ preserves identity factors outside $X$; for $X\cap Y=\varnothing$, at least one of the two operators is the identity at each site $i$, so the dual factors over the sites.
 \end{proof}
 
 \begin{definition}[Local channel conversion]
     \label{def:qc_local_channel_conversion}
     \uses{def:qc_local_channel_circuit, def:qc_onsite_channel}
-    \lean{QuantumCircuit.IsLocalChannelProtocol,
+    \lean{QuantumCircuit.IsProtocol,
         QuantumCircuit.IsConversion}
     \leanok
     Modeling the ancilla-assisted circuits $V'=U_\ell V_\ell\cdots U_1V_1U_0$ of~\cite{Piroli2021LOCC}, a \emph{local channel protocol of depth $T$} is a composition
@@ -147,9 +136,9 @@ change the local dimension act on single sites.
     \uses{def:qc_local_channel_conversion, def:qc_local_channel_circuit,
         lem:qc_onsite_channel_properties}
     \lean{QuantumCircuit.IsProtocol.isKrausCPTP,
-        QuantumCircuit.IsLocalChannelProtocol.channelCircuitMap_comp,
-        QuantumCircuit.isLocalChannelConversion_circuit,
-        QuantumCircuit.IsChannelPreparedInDepth.exists_isLocalChannelConversion,
+        QuantumCircuit.IsProtocol.ofLayer,
+        QuantumCircuit.IsProtocol.seq,
+        QuantumCircuit.IsConversion.ofOnsite_seq,
         QuantumCircuit.IsConversion.refl,
         QuantumCircuit.IsConversion.mono,
         QuantumCircuit.IsConversion.density}
@@ -254,7 +243,6 @@ change the local dimension act on single sites.
         lem:qc_local_channel_conversion_trans}
     \lean{QuantumCircuit.IsProtocol.traceAdjointMap_comp_block_mem_supportedOperators_ringBall,
         QuantumCircuit.IsProtocol.traceAdjointMap_comp_block_mul,
-        QuantumCircuit.Geometry.iterate_neighbourhood_ring,
         ManyBody.trace_prodOp}
     \leanok
     Let $\Psi$ be a local channel protocol of depth $T$ on the blocked ring $\Z_M$. The dual of

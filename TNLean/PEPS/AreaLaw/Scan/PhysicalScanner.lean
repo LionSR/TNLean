@@ -52,7 +52,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -144,7 +144,9 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
         (∀ j ≤ X.L n, ManyBody.regionEntropy Ω (S.shell T j) ≤
           κ.Ce * (n * (X.L n : ℝ) ^ X.e + n)) →
         let B : Finset (Site Λ) → ℝ :=
-          fun Y ↦ cutBudget q S.graph (S.truncationSet (X.L n)) S.r₀ S.anchor Y
+          fun Y ↦ ManyBody.cutLogBudget
+            (fun i ↦ designatedSupport S.graph (S.truncationSet (X.L n)) S.r₀ (S.anchor i))
+            (fun _ ↦ q) Y
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
           (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e (κ.g / 2) ∧
             groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e = Submodule.span ℂ {Ωt}) ∧

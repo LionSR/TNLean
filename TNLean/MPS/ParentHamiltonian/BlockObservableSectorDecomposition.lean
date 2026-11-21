@@ -106,7 +106,7 @@ theorem bulkObservable_iSup_groundSpace_column_tendsto_scalar
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
-    (α : ι) {k : ℕ} (hk : 0 < k) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (α : ι) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     {κ : Type*} {f : Filter κ} {ℓ r : κ → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n =>
@@ -126,9 +126,8 @@ theorem bulkObservable_iSup_groundSpace_column_tendsto_scalar
     exact sub_self c
   have hbulk (n : κ) : bulkObservable (X - c • 1) (ℓ n) (r n) =
       bulkObservable X (ℓ n) (r n) - c • 1 := by
-    rw [bulkObservable_eq_chainWindowOperator hk,
-      chainWindowOperator_sub_smul_one (by omega) (by omega),
-      ← bulkObservable_eq_chainWindowOperator hk]
+    rw [bulkObservable_eq_placeAlong_chainWindow, bulkObservable_eq_placeAlong_chainWindow,
+      ManyBody.placeAlong_sub, ManyBody.placeAlong_smul, ManyBody.placeAlong_one]
   have hPP (n : κ) :
       (⨆ i, groundSpaceES (A i) ((ℓ n + k) + r n)).starProjection.comp
         (groundSpaceES (A α) ((ℓ n + k) + r n)).starProjection =
@@ -141,7 +140,7 @@ theorem bulkObservable_iSup_groundSpace_column_tendsto_scalar
     ContinuousLinearMap.comp_sub, ContinuousLinearMap.comp_smul,
     ContinuousLinearMap.one_def, ContinuousLinearMap.id_comp, hPP] using
     bulkObservable_iSup_groundSpace_compression_tendsto_zero A ρ hP hρ hDistinct
-      α hk (X - c • 1) hcenter hℓ hr
+      α (X - c • 1) hcenter hℓ hr
 end MPSTensor
 
 namespace MPSTensor
@@ -157,7 +156,7 @@ theorem bulkObservable_iSup_groundSpace_sector_decomposition_tendsto_zero
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
-    {k : ℕ} (hk : 0 < k) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     {κ : Type*} {f : Filter κ} {ℓ r : κ → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n =>
@@ -181,7 +180,7 @@ theorem bulkObservable_iSup_groundSpace_sector_decomposition_tendsto_zero
       eventually_all.2 fun hij =>
         (hP i).eventually_norm_inner_groundSpaceES_le_of_inequivalent
           (hP j) (hρ i) (hρ j) (hDistinct i j hij) hε)
-  · exact Eventually.of_forall fun n => norm_toEuclideanCLM_bulkObservable_le hk X (ℓ n) (r n)
+  · exact Eventually.of_forall fun n => norm_toEuclideanCLM_bulkObservable_le X (ℓ n) (r n)
   · exact fun i => bulkObservable_iSup_groundSpace_column_tendsto_scalar
-      A ρ hP hρ hDistinct i hk X hℓ hr
+      A ρ hP hρ hDistinct i X hℓ hr
 end MPSTensor

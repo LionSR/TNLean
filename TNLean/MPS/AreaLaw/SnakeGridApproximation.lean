@@ -69,10 +69,12 @@ the side length. No entropy or interaction-count estimate is assumed.
 Source: area-law `eq:initial-local-tail-parameter` and the square-grid
 cutwidth comparison in the polynomial-PEPS manuscript, Section 1. -/
 theorem cutLogBudget_snakeGridPrefix_le {q : ℕ} (hq : 1 ≤ q) (R L k : ℕ) :
-    cutLogBudget (ManyBody.rectangularDomain L L) q R (snakeGridPrefix L k) ≤
+    ManyBody.cutLogBudget (fun X : AdmissibleSupport (ManyBody.rectangularDomain L L) R ↦ X.1)
+        (fun _ ↦ q) (snakeGridPrefix L k) ≤
       PEPS.AreaLaw.tailParameterConstant q R * ((L : ℝ) + 2) := by
   have hC := PEPS.AreaLaw.one_le_tailParameterConstant hq R
-  have hcard : ((edgeBoundary (ManyBody.rectangularDomain L L)
+  have hcard : ((ManyBody.edgeBoundary
+      (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L))
       (snakeGridPrefix L k)).card : ℝ) ≤ (L : ℝ) + 1 := by
     exact_mod_cast card_edgeBoundary_snakeGridPrefix_le L k
   exact (PEPS.AreaLaw.cutLogBudget_le_edgeBoundary hq R _).trans
@@ -155,11 +157,13 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     exact Entropy.regionState_relabel _ _ e (hA k) _ Ω
   have hS (k : ℕ) : S k ≤ C₀ * ((L : ℝ) + 1) := by
     have h := harea _ H hH hHJ E₀ Ω hΩ hgap hspan (A k)
-    have hc : ((edgeBoundary _ (A k)).card : ℝ) ≤ (L : ℝ) + 1 := by
+    have hc : ((ManyBody.edgeBoundary (ManyBody.planeDomainGraph _) (A k)).card : ℝ) ≤
+        (L : ℝ) + 1 := by
       exact_mod_cast card_edgeBoundary_snakeGridPrefix_le L k
     exact h.trans (mul_le_mul_of_nonneg_left hc hC₀)
   have hbudget (k : ℕ) :
-      Real.sqrt ((1 + J / Δ) * cutLogBudget _ q R (A k)) ≤ s := by
+      Real.sqrt ((1 + J / Δ) *
+        ManyBody.cutLogBudget (fun X : AdmissibleSupport _ R ↦ X.1) (fun _ ↦ q) (A k)) ≤ s := by
     apply Real.sqrt_le_sqrt
     dsimp [a]
     rw [mul_assoc]
@@ -175,16 +179,16 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     rw [htrace]
     refine (Matrix.PosSemidef.trace_complement_spectralProjectionGE_le_surprisalTail
       (ManyBody.regionState_posSemidef (A k) Ω) (S k) w).trans ?_
-    refine (H.surprisalTail_reducedState_le hH hHJ hJ.le hΔ hΩ hgap hspan (A k) w |>.trans
+    refine (H.surprisalTail_regionState_le hH hHJ hJ.le hΔ hΩ hgap hspan (A k) w |>.trans
       (min_le_right _ _)).trans ?_
     apply mul_le_mul_of_nonneg_left _ (by positivity)
     apply Real.exp_le_exp.mpr
     apply neg_le_neg
-    have ht : 0 < Real.sqrt ((1 + J / Δ) * cutLogBudget _ q R (A k)) := by
-      have hb' := Entropy.one_le_cutLogBudget
-        (ManyBody.crossingTerms (fun X : AdmissibleSupport _ R ↦ X.1) (A k))
-        (Entropy.supportDim (fun _ ↦ q) ∘ fun X : AdmissibleSupport _ R ↦ X.1)
-      change 1 ≤ cutLogBudget _ q R (A k) at hb'
+    have ht : 0 < Real.sqrt ((1 + J / Δ) *
+        ManyBody.cutLogBudget (fun X : AdmissibleSupport _ R ↦ X.1) (fun _ ↦ q) (A k)) := by
+      have hb' : 1 ≤
+          ManyBody.cutLogBudget (fun X : AdmissibleSupport _ R ↦ X.1) (fun _ ↦ q) (A k) :=
+        Entropy.one_le_cutLogBudget _ _
       apply Real.sqrt_pos.mpr
       positivity
     exact div_le_div_of_nonneg_left hw (by positivity)
@@ -240,7 +244,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     apply isOpenMPS_of_internal_cutMatrix_rank_le
     intro k hk hkN
     apply Nat.le_floor
-    have hr : ((cutMatrix Ψ k).rank : ℝ) ≤ ((P k).rank : ℝ) := by
+    have hr : ((ManyBody.cutMatrix (leftBlock (L * L) k) Ψ).rank : ℝ) ≤ ((P k).rank : ℝ) := by
       exact_mod_cast hrank k hk hkN
     refine hr.trans ?_
     have htrace : (ρ k).trace = 1 := by

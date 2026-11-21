@@ -321,7 +321,7 @@ theorem bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_frustrationFree
     bntMPSVectorSpan A N ≤ LinearMap.ker (parentHamiltonian B L N) := by
   refine bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_annihilates ?_
   intro j
-  simp only [parentHamiltonian, LinearMap.sum_apply]
+  rw [parentHamiltonian_eq_sum_localTerm, LinearMap.sum_apply]
   exact Finset.sum_eq_zero fun i _ => h j i
 
 /-- The commuting condition is symmetric: if `h i j` holds, then `h j i` holds. -/
@@ -336,7 +336,7 @@ theorem IsCommutingParentHam.ham_comm_localTerm {A : MPSTensor d D} {L N : ℕ}
     (_h : IsCommutingParentHam A L N) (i : Fin N) :
     parentHamiltonian A L N * localTerm A L N i =
       localTerm A L N i * parentHamiltonian A L N := by
-  simp only [parentHamiltonian, Finset.sum_mul, Finset.mul_sum]
+  simp only [parentHamiltonian_eq_sum_localTerm, Finset.sum_mul, Finset.mul_sum]
   congr 1
   ext j : 1
   exact _h j i

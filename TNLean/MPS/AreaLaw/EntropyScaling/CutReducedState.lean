@@ -17,6 +17,7 @@ Schuch–Wolf–Verstraete–Cirac, arXiv:0705.0292v2, Eq. (eps-lower), lines 24
 -/
 
 open scoped ComplexOrder
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -27,9 +28,8 @@ theorem IsOpenMPS.rank_regionState_leftBlock_le {L q D : ℕ}
     {φ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hφ : IsOpenMPS L q D (fun x ↦ φ x)) {k : ℕ} (hk0 : 0 < k) (hkL : k < L) :
     (ManyBody.regionState (X := fun _ ↦ Fin q) φ (leftBlock L k)).rank ≤ D := by
-  simpa only [ManyBody.regionState_eq_partialTraceRight_cutVector, ManyBody.cutVector,
-    Matrix.partialTraceRight_vecMulVec_eq,
-    Matrix.rank_self_mul_conjTranspose, cutMatrix] using hφ.rank_cutMatrix_le hk0 hkL
+  rw [ManyBody.rank_regionState_eq_cutRank]
+  exact hφ.rank_cutMatrix_le hk0 hkL
 
 /-- Taking a reduced state at a chain cut cannot increase the full trace-norm
 error of two pure states, without normalization assumptions.
@@ -65,7 +65,7 @@ theorem IsOpenMPS.rank_regionState_leftBlock_le_max {L q D : ℕ}
     {φ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hφ : IsOpenMPS L q D (fun x ↦ φ x)) (k : ℕ) :
     (ManyBody.regionState (X := fun _ ↦ Fin q) φ (leftBlock L k)).rank ≤ max 1 D := by
-  have hcut : (cutMatrix φ k).rank ≤ max 1 D := by
+  have hcut : (cutMatrix (leftBlock L k) φ).rank ≤ max 1 D := by
     by_cases hk0 : k = 0
     · subst k
       exact (rank_cutMatrix_zero_le φ).trans (le_max_left _ _)
@@ -73,9 +73,8 @@ theorem IsOpenMPS.rank_regionState_leftBlock_le_max {L q D : ℕ}
     · exact (rank_cutMatrix_le_one_of_le hkL φ).trans (le_max_left _ _)
     exact (hφ.rank_cutMatrix_le (Nat.pos_of_ne_zero hk0) (Nat.lt_of_not_ge hkL)).trans
       (le_max_right _ _)
-  simpa only [ManyBody.regionState_eq_partialTraceRight_cutVector, ManyBody.cutVector,
-    Matrix.partialTraceRight_vecMulVec_eq,
-    Matrix.rank_self_mul_conjTranspose, cutMatrix] using hcut
+  rw [ManyBody.rank_regionState_eq_cutRank]
+  exact hcut
 
 /-- The rank bound for an arbitrary contiguous block, including endpoint cuts,
 empty blocks, and chains of length zero or one. This is an elementary consequence

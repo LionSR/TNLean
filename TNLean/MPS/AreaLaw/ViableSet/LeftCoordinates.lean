@@ -32,7 +32,7 @@ def leftConfigOfFinEquiv (hi : i ≤ L) :
 /-- Reading a left-block vector on `Fin i` preserves every internal cut rank.
 Source: LVV13, `algo53.tex`, the bond-trimming step, lines 549–559. -/
 theorem rank_cutMatrix_leftConfigOfFin (hi : i ≤ L) (u : LeftBlockVector L q i) (j : ℕ) :
-    (cutMatrix (WithLp.toLp 2 (fun x ↦ u (leftConfigOfFin x))) j).rank =
+    (ManyBody.cutMatrix (leftBlock i j) (WithLp.toLp 2 (fun x ↦ u (leftConfigOfFin x)))).rank =
       Matrix.schmidtRank (WithLp.ofLp (ManyBody.cutVector
         (Finset.univ.filter fun v : {v : Fin L // v ∈ leftBlock L i} ↦ v.1.val < j) u)) := by
   classical
@@ -48,7 +48,7 @@ theorem rank_cutMatrix_leftConfigOfFin (hi : i ≤ L) (u : LeftBlockVector L q i
   let e₂ : {v : Fin i // v ∉ leftBlock i j} ≃
       {v : {v : Fin L // v ∈ leftBlock L i} // v ∉ D} :=
     e.subtypeEquiv (by intro v; simp [D, e])
-  have h : cutMatrix (WithLp.toLp 2 (fun x ↦ u (leftConfigOfFin x))) j =
+  have h : ManyBody.cutMatrix (leftBlock i j) (WithLp.toLp 2 (fun x ↦ u (leftConfigOfFin x))) =
       (Matrix.schmidtCoeffMatrix (WithLp.ofLp (ManyBody.cutVector D u))).submatrix
         (e₁.arrowCongr (Equiv.refl (Fin q))) (e₂.arrowCongr (Equiv.refl (Fin q))) := by
     ext a b

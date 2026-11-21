@@ -9,7 +9,7 @@ conditional two-family theorem with exactly the exterior disjointness conditions
 The second form agrees exactly with the QIC theorem because
 `C ∪ (G ∪ B ∪ C)ᶜ = (G ∪ B)ᶜ`. No conditioning monotonicity is assumed.
 
-`regionalEntropy_conditional_le_residual_add_sum` rewrites the result using the
+`regionEntropy_conditional_le_residual_add_sum` rewrites the result using the
 four existing finite-domain regional entropy terms. It introduces no new CMI,
 state, or partition definition. Canonical tripartite CMI API identification remains
 separate; the native four-entropy statement is independently meaningful now.

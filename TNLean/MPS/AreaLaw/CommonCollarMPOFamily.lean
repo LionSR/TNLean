@@ -42,37 +42,37 @@ theorem exists_common_collar_mpo_tensor_family
     let E := interval L c d
     let J := interval L p r
     let ep := intervalShiftOrderIso (hpc.trans (hcd.trans hdr)) hrL
-    let tau := (ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _)
+    let tau := (ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-    let Phi := ((EuclideanSpace.basisFun (↥(Jᶜ) → Fin q) ℂ).tensorProduct
+    let Phi := ((EuclideanSpace.basisFun ({v // v ∉ J} → Fin q) ℂ).tensorProduct
       (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
     let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) (EuclideanSpace ℂ (J → Fin q)))
+      (EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) (EuclideanSpace ℂ (J → Fin q)))
     ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),
       N = n * q ^ (2 * (J \ E).card) ∧
       (∀ j, IsOpenMPS (r - p) (q * q) (max 1 B) (fun x ↦ W j
         (fun z ↦ (finProdFinEquiv.symm (x (ep.symm z))).1)
         (fun z ↦ (finProdFinEquiv.symm (x (ep.symm z))).2))) ∧
       ∀ Z : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-        (∃ M0 : Fin n → Matrix (↥(Eᶜ) → Fin q) (↥(Eᶜ) → Fin q) ℂ,
+        (∃ M0 : Fin n → Matrix ({v // v ∉ E} → Fin q) ({v // v ∉ E} → Fin q) ℂ,
           Z = (∑ j, M0 j ⊗ₖ W0 j).submatrix
-            ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))
-            ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))) →
-        ∃ M : Fin N → Matrix (↥(Jᶜ) → Fin q) (↥(Jᶜ) → Fin q) ℂ,
+            ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))
+            ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))) →
+        ∃ M : Fin N → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ,
           Z = (∑ j, M j ⊗ₖ W j).submatrix tau tau ∧
           Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
               Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) Z ∘L
               Tm.symm.toContinuousLinearEquiv.toContinuousLinearMap =
             ∑ j, TensorProduct.mapL
               (Matrix.toEuclideanCLM (n := J → Fin q) (𝕜 := ℂ) (W j))
-              (Matrix.toEuclideanCLM (n := ↥(Jᶜ) → Fin q) (𝕜 := ℂ) (M j)) := by
+              (Matrix.toEuclideanCLM (n := {v // v ∉ J} → Fin q) (𝕜 := ℂ) (M j)) := by
   classical
   intro E J ep tau U Phi Tm
   let beta := fun _ : Fin L ↦ Fin q
   let I := Fin n × (ManyBody.RegionConfig beta (E \ J) ×
     ManyBody.RegionConfig beta (E \ J)) ×
     (ManyBody.RegionConfig beta (J \ E) × ManyBody.RegionConfig beta (J \ E))
-  let Wall := FiniteProduct.changingRegionalMiddleFamily beta E J W0
+  let Wall := changingRegionalMiddleFamily beta E J W0
   let number := Fintype.equivFin I
   have hsub : E ⊆ J := interval_mono hpc hdr
   have hEmpty : E \ J = ∅ := Finset.sdiff_eq_empty_iff_subset.mpr hsub

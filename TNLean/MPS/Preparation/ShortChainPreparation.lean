@@ -51,18 +51,20 @@ every unit vector on a ring of `N` sites, `2 ≤ N ≤ n₀`, is prepared in dep
 product state.
 
 The proof writes `ψ` as the first column of a unitary on the `N ≤ n₀` sites and decomposes that
-unitary into boundedly many two-site gates by `exists_isPairProduct`. arXiv:2307.01696, caption of
+unitary into boundedly many two-site gates by `isGateProduct_pathGraph_unitaryGateCount`.
+arXiv:2307.01696, caption of
 Fig. 1(b), says the analogous thing of the circuit for the isometry `V`: it "can be further
 expressed with a low-depth circuit of local gates". -/
 theorem exists_isPreparedInDepth_of_norm_eq_one (hd : 0 < d) (n₀ : ℕ) :
     ∃ K : ℕ, ∀ N [NeZero N], 2 ≤ N → N ≤ n₀ → ∀ ψ : MPVSpace d N, ‖ψ‖ = 1 →
-      IsPreparedInDepth K fun s => ψ s := by
+      IsPreparedInDepth (Geometry.ring N) K fun s => ψ s := by
   classical
   have h : ∀ n : Fin (n₀ + 1), ∃ K : ℕ, 2 ≤ n.val →
-      ∀ X ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ), IsPairProduct d n K X := fun n => by
+      ∀ X ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ),
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph n)) K X := fun n => by
     by_cases hn : 2 ≤ n.val
-    · obtain ⟨K, hK⟩ := exists_isPairProduct hd hn
-      exact ⟨K, fun _ => hK⟩
+    · have : NeZero n.val := ⟨by omega⟩
+      exact ⟨_, fun _ X hX => isGateProduct_pathGraph_unitaryGateCount hX⟩
     · exact ⟨0, fun h => absurd h hn⟩
   choose K hK using h
   refine ⟨∑ n, K n, fun N _ hN hNn₀ ψ hψ => ?_⟩
@@ -76,14 +78,19 @@ theorem exists_isPreparedInDepth_of_norm_eq_one (hd : 0 < d) (n₀ : ℕ) :
   let emb : Unit ↪ Cfg d N := ⟨fun _ _ => ⟨0, hd⟩, fun _ _ _ => rfl⟩
   obtain ⟨U, hU, hUV⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq hV emb
   have hpp := hK ⟨N, by omega⟩ hN U hU
-  have hc := hpp.isCircuitOn (e := id) Function.injective_id fun i j h => by
-    ext
-    rw [id, id, Fin.val_add_one_of_lt' (by omega), h]
-  rw [embedOp_id] at hc
-  refine ⟨U, (hc.mono (Finset.single_le_sum (fun _ _ => Nat.zero_le _)
-    (Finset.mem_univ (⟨N, by omega⟩ : Fin (n₀ + 1))))).isBondCircuitOfDepth,
+  have hc : IsUnitaryCircuitOn (Geometry.ring N)
+      (Finset.univ.map (Function.Embedding.refl (Fin N))) (K ⟨N, by omega⟩)
+      (ManyBody.placeAlong (X := fun _ : Fin N ↦ Fin d) (Function.Embedding.refl (Fin N)) U) :=
+    IsGateProduct.isUnitaryCircuitOn_ring (ManyBody.windowEquiv (Function.Embedding.refl (Fin N)))
+      (fun i j h => by
+        change j = i + 1
+        ext
+        rw [Fin.val_add_one_of_lt' (by omega), h]) hpp
+  rw [ManyBody.placeAlong_refl] at hc
+  refine ⟨U, (hc.isUnitaryCircuit.mono (Finset.single_le_sum (fun _ _ => Nat.zero_le _)
+    (Finset.mem_univ (⟨N, by omega⟩ : Fin (n₀ + 1))))),
     fun _ => Pi.single ⟨0, hd⟩ 1, funext fun s => ?_⟩
-  rw [mulVec_productVector_single_zero hd]
+  rw [mulVec_prod_single_zero hd]
   exact (hUV s ()).symm
 
 /-! ### One block -/
@@ -126,7 +133,7 @@ point. -/
 theorem exists_isPreparedInDepth_normalizedMPVState (d D : ℕ) :
     ∃ C : ℕ, ∀ (A : MPSTensor d D) (N : ℕ) [NeZero N], 3 * D ≤ N →
       Kraus.IsInjective (blockTensor A N) → mpvState A N ≠ 0 →
-        IsPreparedInDepth (C * N) fun s => normalizedMPVState A N s := by
+        IsPreparedInDepth (Geometry.ring N) (C * N) fun s => normalizedMPVState A N s := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_blockIsometryState d D
   refine ⟨C, fun A N _ hN3 hinj h0 => ?_⟩
   have hN : ∑ _ : Fin 1, N = N := by simp

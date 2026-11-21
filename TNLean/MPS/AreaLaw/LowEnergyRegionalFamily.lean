@@ -82,12 +82,12 @@ theorem exists_five_region_low_energy_family_on_larger_region
         (E0 + eta - w)
       let J := Jtarget
       let beta := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
       let D := (q * ell ^ 2) ^ (22 * ell)
       let Delta := (2 * Real.exp (-2 * ((ell ^ 2 : ℕ) : ℝ) *
@@ -99,12 +99,12 @@ theorem exists_five_region_low_energy_family_on_larger_region
         (Submodule.spectralSpanLE hO.eigenvectorBasis hO.eigenvalues (E0 + eta - 3 * w)) ∧
       ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ), N ≤ D ^ 2 ∧
         ∀ (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (delta : ℝ),
-          Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) delta S
+          Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) delta S
             (higher.map Tm.toLinearEquiv.toLinearMap) → delta < 1 →
           let grow := ⨆ j : Fin N, S.map
             (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j)).toLinearMap
           Module.finrank ℂ grow ≤ N * Module.finrank ℂ S ∧
-            Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+            Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q))
               (Delta / (1 - delta) ^ 2) grow (lower.map Tm.toLinearEquiv.toLinearMap) := by
   classical
   intro k A Cross Y K B

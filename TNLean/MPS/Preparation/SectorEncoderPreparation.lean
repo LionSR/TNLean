@@ -53,13 +53,13 @@ theorem exists_sectorEncoder_preparation_bounds
         (hN : ∑ k, ℓ k = N) (q : ℕ) (hLq : L ≤ q) (hℓ : ∀ k, q ≤ ℓ k),
         (∀ k, ℓ k ≤ 2 * q) → (N : ℝ) * Real.exp (-(-(1 / 2 * Real.log t) * q)) ≤ 1 →
         ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
-          IsLocalCircuitOfDepth U T ∧ T ≤ C * q ∧
+          IsUnitaryCircuit (Geometry.ring N) T U ∧ T ≤ C * q ∧
           ‖sectorEncoder A N - U * registerEncoder hN
             (fun k => by have := hℓ k; omega) dig₀‖ ≤
               K * Real.sqrt ((N : ℝ) * Real.exp (-(-(1 / 2 * Real.log t) * q)))) ∧
       (∀ (N : ℕ) [NeZero N] (hLN : L ≤ N),
         ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
-          IsLocalCircuitOfDepth U T ∧ T ≤ C * N ∧
+          IsUnitaryCircuit (Geometry.ring N) T U ∧ T ≤ C * N ∧
           U * registerEncoder (ℓ := fun _ : Fin 1 => N) (by simp)
             (fun _ => by omega) dig₀ = sectorEncoder A N) := by
   classical
@@ -69,8 +69,8 @@ theorem exists_sectorEncoder_preparation_bounds
     hfix ht hlam hmix (γ := 1 / 2) (by norm_num) (by norm_num)
   obtain ⟨KZ, hKZ, hZ⟩ := exists_norm_cross_blockIsometryEncoder_sectorColumnMatrix_sub_one_le
     hι hdisj hnormal hA hσ htr hfix ht hlam hmix (γ := 1 / 2) (by norm_num) (by norm_num)
-  obtain ⟨Cp, hp⟩ := exists_isLocalCircuitOfDepth_registerEncoder hr₀ hdig hdig₀ hD
-  obtain ⟨Ce, he⟩ := exists_isLocalCircuitOfDepth_sectorEncoder_exact hr₀ hdig hdig₀ hD
+  obtain ⟨Cp, hp⟩ := exists_isUnitaryCircuit_registerEncoder hr₀ hdig hdig₀ hD
+  obtain ⟨Ce, he⟩ := exists_isUnitaryCircuit_sectorEncoder_exact hr₀ hdig hdig₀ hD
   set K := Real.sqrt (KG + 2 * KZ * Real.exp KZ) + KG + 1
   have hK : 1 ≤ K := by dsimp [K]; have := Real.sqrt_nonneg (KG + 2 * KZ * Real.exp KZ); linarith
   set r := -(1 / 2 * Real.log t)

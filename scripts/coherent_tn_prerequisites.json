@@ -2,7 +2,6 @@
   "baseline_commit": "152f3c81984a0d25599471bf700ecc967e13777f",
   "modules": [
     "TNLean.Algebra.MatrixTensorPower",
-    "TNLean.Circuit.Measurement.GHZ",
     "TNLean.MPS.BNT.Construction",
     "TNLean.MPS.BNT.Separation",
     "TNLean.MPS.CanonicalForm.Existence",

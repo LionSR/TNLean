@@ -30,7 +30,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -61,7 +61,7 @@ variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ} [NeZero q]
 include hh hhJ in
 /-- A common upper bound for the geometric budget gives the comparator's exact
 real-u interval, without changing the truncated physical ground vector. -/
-theorem log_surprisalMoment_truncated_reducedState_le_common
+theorem log_surprisalMoment_truncated_regionState_le_common
     (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) {e B : ℝ} {Ωt : StateSpace Λ q}
     (hΩt : ‖Ωt‖ = 1)
@@ -69,7 +69,9 @@ theorem log_surprisalMoment_truncated_reducedState_le_common
       ((Δ / positiveNormalization 1 (Δ / 2) J) / 2))
     (hspant : groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt})
     (Q : Finset (Site Λ))
-    (hB : cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤ B) {u : ℝ}
+    (hB : ManyBody.cutLogBudget
+      (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) Q ≤ B)
+    {u : ℝ}
     (hu : |u| ≤ (1 / (32 * Real.sqrt
       (1 + 2 / (Δ / positiveNormalization 1 (Δ / 2) J)))) / Real.sqrt B) :
     Real.log (Entropy.surprisalMoment (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
@@ -79,13 +81,12 @@ theorem log_surprisalMoment_truncated_reducedState_le_common
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   have hϑ : 0 ≤ 2 / (Δ / positiveNormalization 1 (Δ / 2) J) := by positivity
   have hr := tailRadius_antitone_budget hϑ
-    (lt_of_lt_of_le zero_lt_one
-      (one_le_cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q)) hB
+    (lt_of_lt_of_le zero_lt_one (Entropy.one_le_cutLogBudget _ _)) hB
   have hu' : |u| ≤ Entropy.tailRadius
       (2 / (Δ / positiveNormalization 1 (Δ / 2) J)) B := by
     rw [tailRadius_eq_div_sqrt hϑ]
     exact hu
-  refine (S.log_surprisalMoment_truncated_reducedState_le h hh hhJ Ω hgraph hanchor hΔ hΩ L
+  refine (S.log_surprisalMoment_truncated_regionState_le h hh hhJ Ω hgraph hanchor hΔ hΩ L
     hΩt hgapt hspant Q (hu'.trans hr)).trans ?_
   gcongr
 
@@ -148,7 +149,7 @@ theorem exists_truncated_statusMarginal_moment_bounds
                       (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
                       u * ManyBody.regionEntropy Ωt Q + C₀ * B * u ^ 2) := by
   classical
-  obtain ⟨Ctr, hCtr, htr⟩ := exists_truncated_reducedState_moment_tail_bounds R hJ hΔ hCcard
+  obtain ⟨Ctr, hCtr, htr⟩ := exists_truncated_regionState_moment_tail_bounds R hJ hΔ hCcard
   refine ⟨Ctr, hCtr, ?_⟩
   intro q _
   obtain ⟨CB, hCB, hbudget⟩ := exists_statusMarginal_cutBudget_le_log
@@ -169,10 +170,10 @@ theorem exists_truncated_statusMarginal_moment_bounds
   intro k hist band
   constructor
   · intro hk Q hQ u hu
-    exact S.log_surprisalMoment_truncated_reducedState_le_common h hh hhJ Ω hgraph hanchor hΔ
+    exact S.log_surprisalMoment_truncated_regionState_le_common h hh hhJ Ω hgraph hanchor hΔ
       hΩ L htrgs.1 htrgs.2.1 htrgs.2.2 Q ((hb k hist band).1 hk Q hQ) hu
   · intro hk Q hQ u hu
-    exact S.log_surprisalMoment_truncated_reducedState_le_common h hh hhJ Ω hgraph hanchor hΔ
+    exact S.log_surprisalMoment_truncated_regionState_le_common h hh hhJ Ω hgraph hanchor hΔ
       hΩ L htrgs.1 htrgs.2.1 htrgs.2.2 Q ((hb k hist band).2 hk Q hQ) hu
 
 end CollarScan

@@ -60,11 +60,11 @@ theorem exists_clean_pair_circuit_of_siteCount_eq
     (hEF : ∀ x, E x = F x ∘ Fin.cast h)
     (U : Matrix (Cfg d k) (Cfg d k) ℂ)
     (hC : ∃ C : Matrix (Cfg d n) (Cfg d n) ℂ,
-      IsPairProduct d n K C ∧
-        C * initializedBasisMatrix E = initializedBasisMatrix E * U) :
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph n)) K C ∧
+        C * basisInclusion E = basisInclusion E * U) :
     ∃ C : Matrix (Cfg d m) (Cfg d m) ℂ,
-      IsPairProduct d m K C ∧
-        C * initializedBasisMatrix F = initializedBasisMatrix F * U := by
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph m)) K C ∧
+        C * basisInclusion F = basisInclusion F * U := by
   subst m
   have hEF' : E = F := by
     apply Function.Embedding.ext
@@ -103,12 +103,12 @@ theorem exists_singleSite_complete_clean_pair_circuit
     (hU : U ∈ unitary (Matrix (Cfg d 1) (Cfg d 1) ℂ)) :
     ∃ C : Matrix (Cfg d (completeCircuitSiteCount d D 1))
         (Cfg d (completeCircuitSiteCount d D 1)) ℂ,
-      IsPairProduct d (completeCircuitSiteCount d D 1) 1 C ∧
-        C * initializedBasisMatrix (completePhysicalConfigEmbedding (D := D)) =
-          initializedBasisMatrix (completePhysicalConfigEmbedding (D := D)) * U := by
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (completeCircuitSiteCount d D 1))) 1 C ∧
+        C * basisInclusion (completePhysicalConfigEmbedding (D := D)) =
+          basisInclusion (completePhysicalConfigEmbedding (D := D)) * U := by
   apply exists_clean_pair_circuit_of_siteCount_eq
     (completeCircuitSiteCount_one d D).symm
-    (zeroWorkspaceEmbedding (d := d) (n := 1) (a := 1))
+    (workspaceEmbedding (n := 1) (0 : Fin 1 → Fin d))
     (completePhysicalConfigEmbedding (D := D))
   · intro x
     have hc : 2 = 1 + auxiliarySiteCount d D 1 + auxiliarySiteCount d D 1 +
@@ -153,14 +153,14 @@ Source: the complete-register transport in Section 5 of
 theorem exists_complete_clean_pair_circuit_of_global [NeZero d]
     (hN : 2 ≤ N) {K : ℕ} (U : Matrix (Cfg d N) (Cfg d N) ℂ)
     (C : Matrix (Cfg d (globalSiteCount d D N)) (Cfg d (globalSiteCount d D N)) ℂ)
-    (hC : IsPairProduct d (globalSiteCount d D N) K C)
-    (hcolumns : C * initializedBasisMatrix (physicalGlobalConfigEmbedding (D := D)) =
-      initializedBasisMatrix (physicalGlobalConfigEmbedding (D := D)) * U) :
+    (hC : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (globalSiteCount d D N))) K C)
+    (hcolumns : C * basisInclusion (physicalGlobalConfigEmbedding (D := D)) =
+      basisInclusion (physicalGlobalConfigEmbedding (D := D)) * U) :
     ∃ W : Matrix (Cfg d (completeCircuitSiteCount d D N))
         (Cfg d (completeCircuitSiteCount d D N)) ℂ,
-      IsPairProduct d (completeCircuitSiteCount d D N) K W ∧
-        W * initializedBasisMatrix (completePhysicalConfigEmbedding (D := D)) =
-          initializedBasisMatrix (completePhysicalConfigEmbedding (D := D)) * U :=
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (completeCircuitSiteCount d D N))) K W ∧
+        W * basisInclusion (completePhysicalConfigEmbedding (D := D)) =
+          basisInclusion (completePhysicalConfigEmbedding (D := D)) * U :=
   exists_clean_pair_circuit_of_siteCount_eq
     (completeCircuitSiteCount_eq_global_of_two_le hN).symm
     (physicalGlobalConfigEmbedding (D := D)) (completePhysicalConfigEmbedding (D := D))

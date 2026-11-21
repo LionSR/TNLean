@@ -22,6 +22,8 @@ trace factorization, a Markov decomposition, nor saturation of the area law.
 
 open scoped BigOperators ComplexOrder Kronecker Matrix
 
+open ManyBody
+
 namespace Matrix
 
 /-- A one-site sector index in the coordinate order
@@ -282,7 +284,7 @@ private theorem mem_cyclicWindowSupport_two {N : ℕ} (i q : Fin N) :
 
 /-- In cyclic edge coordinates, one translated pair bond is block diagonal in the sector
 configuration and acts only on the edge beginning at the translation site. -/
-theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
+theorem reindex_placeAlong_ringWindow_etaPairBond {K N : ℕ} [NeZero N]
     (hN : 2 ≤ N) (dl dr : Fin K → ℕ)
     (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
     (η : (q h : Fin K) →
@@ -297,14 +299,15 @@ theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
     (i : Fin N) :
     Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
         (Matrix.etaCyclicEdgeEquiv dl dr e)
-        (embedLocalOperator (d := d) 2 N hN i
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
           (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
             (finTwoArrowEquiv (Fin d)).symm B)) =
       Matrix.blockDiagonal' fun k ↦ etaEdgePartialProduct dl dr η k {i} := by
   classical
   ext ⟨k, x⟩ ⟨h, y⟩
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    embedLocalOperator_apply]
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, placeAlong_apply]
+  rw [← MPSTensor.extractWindow_eq_comp_ringWindow hN,
+    ← MPSTensor.extractWindow_eq_comp_ringWindow hN]
   by_cases hkh : k = h
   · subst h
     rw [Matrix.blockDiagonal'_apply_eq]
@@ -367,8 +370,7 @@ theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
       simp [MPSTensor.cyclicForwardSite, Fin.add_def]
     have hij : i + 1 ≠ i := add_one_ne_self_of_two_le hN i
     have hcondition :
-        (AgreesOutsideWindow 2 hN i (fun n ↦ e ⟨k n, sx n⟩)
-            (fun n ↦ e ⟨k n, sy n⟩) ∧
+        ((∀ v, (∀ u, ringWindow hN i u ≠ v) → e ⟨k v, sx v⟩ = e ⟨k v, sy v⟩) ∧
           ((sx i).2, (sx (i + 1)).1) = ((sy i).2, (sy (i + 1)).1)) ↔
           ∀ n : Fin N, n ≠ i → x n = y n := by
       constructor
@@ -378,7 +380,8 @@ theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
         · by_cases hnj : n = i + 1
           · subst n
             exact congrArg (fun z ↦ z.2) hb
-          · have hs := (agreesOutsideWindow_iff 2 hN i _ _).mp ha n (by
+          · have hs := (MPSTensor.forall_ringWindow_ne_imp_iff hN i
+                (fun n ↦ e ⟨k n, sx n⟩) (fun n ↦ e ⟨k n, sy n⟩)).mp ha n (by
                 rw [← MPSTensor.mem_cyclicWindowSupport_iff hN,
                   mem_cyclicWindowSupport_two, hj]
                 simp [hni, hnj])
@@ -393,7 +396,8 @@ theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
           · have hn1j : n + 1 ≠ i + 1 := by
               intro hn
               exact hni (add_right_cancel hn)
-            have hs := (agreesOutsideWindow_iff 2 hN i _ _).mp ha (n + 1) (by
+            have hs := (MPSTensor.forall_ringWindow_ne_imp_iff hN i
+                (fun n ↦ e ⟨k n, sx n⟩) (fun n ↦ e ⟨k n, sy n⟩)).mp ha (n + 1) (by
                 rw [← MPSTensor.mem_cyclicWindowSupport_iff hN,
                   mem_cyclicWindowSupport_two, hj]
                 simp [hn1i, hn1j])
@@ -404,7 +408,7 @@ theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
               (eq_of_heq hs').symm
       · intro he
         constructor
-        · rw [agreesOutsideWindow_iff]
+        · rw [MPSTensor.forall_ringWindow_ne_imp_iff hN]
           intro q hq
           have hqi : q ≠ i := by
             intro h
@@ -457,8 +461,8 @@ theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
       · intro n _ hni
         rw [ite_eq_right hni, ite_eq_left (he n hni)]
       · simp
-    · have hnot : ¬ (AgreesOutsideWindow 2 hN i
-            (fun n ↦ e ⟨k n, sx n⟩) (fun n ↦ e ⟨k n, sy n⟩) ∧
+    · have hnot : ¬ ((∀ v, (∀ u, ringWindow hN i u ≠ v) →
+            e ⟨k v, sx v⟩ = e ⟨k v, sy v⟩) ∧
           ((sx i).2, (sx (i + 1)).1) = ((sy i).2, (sy (i + 1)).1)) :=
         fun hc ↦ he (hcondition.mp hc)
       push Not at he
@@ -469,8 +473,8 @@ theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
         apply Finset.prod_eq_zero (Finset.mem_univ n)
         simp [hni, hnxy]
       rw [hprod]
-      by_cases ha : AgreesOutsideWindow 2 hN i
-          (fun n ↦ e ⟨k n, sx n⟩) (fun n ↦ e ⟨k n, sy n⟩)
+      by_cases ha : ∀ v, (∀ u, ringWindow hN i u ≠ v) →
+          e ⟨k v, sx v⟩ = e ⟨k v, sy v⟩
       · rw [ite_eq_left ha]
         have hb : ((sx i).2, (sx (i + 1)).1) ≠
             ((sy i).2, (sy (i + 1)).1) := fun hb ↦ hnot ⟨ha, hb⟩
@@ -503,8 +507,8 @@ theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
       ext
       simp [Fin.add_def]
     rw [hi0, hi1]
-    by_cases ha : AgreesOutsideWindow 2 hN i
-        (fun n ↦ e ⟨k n, sx n⟩) (fun n ↦ e ⟨h n, ty n⟩)
+    by_cases ha : ∀ v, (∀ u, ringWindow hN i u ≠ v) →
+        e ⟨k v, sx v⟩ = e ⟨h v, ty v⟩
     · rw [ite_eq_left ha]
       have hpairs : (k i, k (i + 1)) ≠ (h i, h (i + 1)) := by
         intro hp
@@ -521,7 +525,8 @@ theorem reindex_embedLocalOperator_etaPairBond {K N : ℕ} [NeZero N]
             rw [hj] at hq
             subst q
             exact congrArg Prod.snd hp
-        · have hs := (agreesOutsideWindow_iff 2 hN i _ _).mp ha q hq
+        · have hs := (MPSTensor.forall_ringWindow_ne_imp_iff hN i
+            (fun n ↦ e ⟨k n, sx n⟩) (fun n ↦ e ⟨h n, ty n⟩)).mp ha q hq
           have hs' := congrArg e.symm hs
           simpa only [Equiv.symm_apply_apply] using (congrArg Sigma.fst hs').symm
       have hentry := congrFun (congrFun hB
@@ -539,7 +544,7 @@ consequence of the same cyclic edge coordinates used in Beigi's finite-chain
 decomposition.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)--(3), pages 3--4. -/
-theorem embedLocalOperator_commute_of_etaPair_decomposition
+theorem placeAlong_ringWindow_commute_of_etaPair_decomposition
     {K N : ℕ} [NeZero N] (hN : 2 ≤ N) (dl dr : Fin K → ℕ)
     (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
     (η : (q h : Fin K) →
@@ -552,16 +557,16 @@ theorem embedLocalOperator_commute_of_etaPair_decomposition
           η qh.1 qh.2) ⊗ₖ
             (1 : Matrix (Fin (dr qh.2)) (Fin (dr qh.2)) ℂ))
     (i j : Fin N) :
-    embedLocalOperator (d := d) 2 N hN i
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
           (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
             (finTwoArrowEquiv (Fin d)).symm B) *
-        embedLocalOperator (d := d) 2 N hN j
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j)
           (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
             (finTwoArrowEquiv (Fin d)).symm B) =
-      embedLocalOperator (d := d) 2 N hN j
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j)
           (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
             (finTwoArrowEquiv (Fin d)).symm B) *
-        embedLocalOperator (d := d) 2 N hN i
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
           (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
             (finTwoArrowEquiv (Fin d)).symm B) := by
   classical
@@ -569,18 +574,18 @@ theorem embedLocalOperator_commute_of_etaPair_decomposition
     (Matrix.etaCyclicEdgeEquiv dl dr e)).injective
   change (Matrix.reindexLinearEquiv ℂ ℂ (Matrix.etaCyclicEdgeEquiv dl dr e)
       (Matrix.etaCyclicEdgeEquiv dl dr e))
-        (embedLocalOperator (d := d) 2 N hN i
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm B) *
-          embedLocalOperator (d := d) 2 N hN j
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm B)) =
     (Matrix.reindexLinearEquiv ℂ ℂ (Matrix.etaCyclicEdgeEquiv dl dr e)
       (Matrix.etaCyclicEdgeEquiv dl dr e))
-        (embedLocalOperator (d := d) 2 N hN j
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm B) *
-          embedLocalOperator (d := d) 2 N hN i
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm B))
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ (Matrix.etaCyclicEdgeEquiv dl dr e)
@@ -588,8 +593,8 @@ theorem embedLocalOperator_commute_of_etaPair_decomposition
     ← Matrix.reindexLinearEquiv_mul ℂ ℂ (Matrix.etaCyclicEdgeEquiv dl dr e)
       (Matrix.etaCyclicEdgeEquiv dl dr e) (Matrix.etaCyclicEdgeEquiv dl dr e),
     Matrix.coe_reindexLinearEquiv,
-    reindex_embedLocalOperator_etaPairBond hN dl dr e η B hB i,
-    reindex_embedLocalOperator_etaPairBond hN dl dr e η B hB j,
+    reindex_placeAlong_ringWindow_etaPairBond hN dl dr e η B hB i,
+    reindex_placeAlong_ringWindow_etaPairBond hN dl dr e η B hB j,
     ← Matrix.blockDiagonal'_mul, ← Matrix.blockDiagonal'_mul]
   congr 1
   funext k
@@ -631,7 +636,7 @@ equivalence records both orientations explicitly.
 
 Source: arXiv:1606.00608, Appendix C.2, equation sigmaNK2, lines 1581--1605.
 Documented in `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-theorem reindex_product_embedLocalOperator_of_etaPair_decomposition
+theorem reindex_product_placeAlong_ringWindow_of_etaPair_decomposition
     {K N : ℕ} [NeZero N] (hN : 2 ≤ N) (dl dr : Fin K → ℕ)
     (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
     (η : (q h : Fin K) →
@@ -646,7 +651,7 @@ theorem reindex_product_embedLocalOperator_of_etaPair_decomposition
     Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
         (Matrix.etaCyclicEdgeEquiv dl dr e)
         (List.ofFn fun i : Fin N ↦
-          embedLocalOperator (d := d) 2 N hN i
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm B)).prod =
       Matrix.blockDiagonal' fun k : Fin N → Fin K ↦
@@ -654,7 +659,7 @@ theorem reindex_product_embedLocalOperator_of_etaPair_decomposition
   classical
   rw [reindex_list_prod]
   rw [show (List.ofFn fun i : Fin N ↦
-      embedLocalOperator (d := d) 2 N hN i
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
         (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
           (finTwoArrowEquiv (Fin d)).symm B)).map
         (fun A ↦ Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
@@ -662,7 +667,7 @@ theorem reindex_product_embedLocalOperator_of_etaPair_decomposition
       List.ofFn (fun i : Fin N ↦
         Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
           (Matrix.etaCyclicEdgeEquiv dl dr e)
-          (embedLocalOperator (d := d) 2 N hN i
+          (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm B))) by
     simp
@@ -671,13 +676,13 @@ theorem reindex_product_embedLocalOperator_of_etaPair_decomposition
       (List.ofFn fun i : Fin N ↦
         Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
           (Matrix.etaCyclicEdgeEquiv dl dr e)
-          (embedLocalOperator (d := d) 2 N hN i
+          (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm B))) =
       List.ofFn (fun i : Fin N ↦
         Matrix.blockDiagonal' fun k ↦ etaEdgePartialProduct dl dr η k {i}) := by
     exact congrArg List.ofFn (funext fun i ↦
-      reindex_embedLocalOperator_etaPairBond hN dl dr e η B hB i)
+      reindex_placeAlong_ringWindow_etaPairBond hN dl dr e η B hB i)
   rw [hmap]
   rw [show List.ofFn (fun i : Fin N ↦
       Matrix.blockDiagonal' fun k ↦ etaEdgePartialProduct dl dr η k {i}) =

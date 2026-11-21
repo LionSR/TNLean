@@ -29,6 +29,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open TNLean.Lattice
+open ManyBody (ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 

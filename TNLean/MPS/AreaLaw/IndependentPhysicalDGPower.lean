@@ -53,13 +53,13 @@ theorem exists_independent_long_middle_actual_dg_filter_family :
       ∀ (L p r : ℕ), p ≤ r → r ≤ L → 4 * ell < r - p →
       let Jtarget := interval L p r
       let β := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv β Jtarget).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv β Jtarget).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtargetᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig β Jtarget) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtarget) ℂ)).repr
       let Tcoord := U.trans Phi.symm
       let Tm := Tcoord.trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtargetᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig β Jtarget))
         (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtarget)))
       ∀ (Φ : ManyBody.BondInteraction L q)
         (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu : ℝ),
@@ -77,11 +77,11 @@ theorem exists_independent_long_middle_actual_dg_filter_family :
         Submodule.IsCloseTo (epsilon / 200 : ℝ) G T ∧
         Module.finrank ℂ T = Module.finrank ℂ G ∧
         ∃ (Kphys : (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
-            EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)) →L[ℂ]
+            EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)) →L[ℂ]
           (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
-            EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))
-          (Rop : Fin N → EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q) →L[ℂ]
-            EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)),
+            EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)))
+          (Rop : Fin N → EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q) →L[ℂ]
+            EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)),
         let Tc := T.map Tm.toLinearEquiv.toLinearMap
         Kphys = ∑ i, TensorProduct.mapL (F i) (Rop i) ∧
         (∀ x ∈ Tc, Kphys x ∈ Tc) ∧ (∀ z ∈ Tcᗮ, Kphys z ∈ Tcᗮ) ∧
@@ -89,19 +89,19 @@ theorem exists_independent_long_middle_actual_dg_filter_family :
         (∀ z ∈ Tcᗮ, ‖Kphys z‖ ^ 2 ≤ Delta * ‖z‖ ^ 2) ∧
         ∀ (power : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (Jtarget → Fin q))) (δ : ℝ),
           Submodule.IsViable (𝕜 := ℂ) (E := EuclideanSpace ℂ (Jtarget → Fin q))
-            (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)) δ S
+            (F := EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)) δ S
             (T.map (Tm.toLinearEquiv : EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ]
               (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
-                EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) → δ < 1 →
+                EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)))) → δ < 1 →
           let grow := ⨆ w : Fin power → Fin N,
             S.map ((List.ofFn (fun j ↦ F (w j))).prod : _ →ₗ[ℂ] _)
           Module.finrank ℂ grow ≤ (D ^ 2) ^ power * Module.finrank ℂ S ∧
             Submodule.IsViable (𝕜 := ℂ) (E := EuclideanSpace ℂ (Jtarget → Fin q))
-              (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q))
+              (F := EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q))
               (Delta ^ power / (1 - δ) ^ 2) grow
               (T.map (Tm.toLinearEquiv : EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ]
                 (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
-                  EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) := by
+                  EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)))) := by
   classical
   intro m q ell t g epsilon Delta hq hqm hell ht hg hg1 hepsilon hepsilon1 htail hfilter
     D L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm Φ h0 h1 mu H hH G hmu hgap
@@ -216,13 +216,13 @@ theorem exists_independent_long_middle_actual_dg_word_family :
       ∀ (L p r : ℕ), p ≤ r → r ≤ L → 4 * ell < r - p →
       let Jtarget := interval L p r
       let β := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv β Jtarget).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv β Jtarget).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtargetᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig β Jtarget) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtarget) ℂ)).repr
       let Tcoord := U.trans Phi.symm
       let Tm := Tcoord.trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtargetᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig β Jtarget))
         (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtarget)))
       ∀ (Φ : ManyBody.BondInteraction L q)
         (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu : ℝ),
@@ -241,19 +241,19 @@ theorem exists_independent_long_middle_actual_dg_word_family :
         Module.finrank ℂ T = Module.finrank ℂ G ∧
         ∀ (power : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (Jtarget → Fin q))) (δ : ℝ),
           Submodule.IsViable (𝕜 := ℂ) (E := EuclideanSpace ℂ (Jtarget → Fin q))
-            (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)) δ S
+            (F := EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)) δ S
             (T.map (Tm.toLinearEquiv : EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ]
               (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
-                EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) → δ < 1 →
+                EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)))) → δ < 1 →
           let grow := ⨆ w : Fin power → Fin N,
             S.map ((List.ofFn (fun j ↦ F (w j))).prod : _ →ₗ[ℂ] _)
           Module.finrank ℂ grow ≤ (D ^ 2) ^ power * Module.finrank ℂ S ∧
             Submodule.IsViable (𝕜 := ℂ) (E := EuclideanSpace ℂ (Jtarget → Fin q))
-              (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q))
+              (F := EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q))
               (Delta ^ power / (1 - δ) ^ 2) grow
               (T.map (Tm.toLinearEquiv : EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ]
                 (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
-                  EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) := by
+                  EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)))) := by
   intro m q ell t g epsilon Delta hq hqm hell ht hg hg1 hepsilon hepsilon1
     htail hfilter D L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm
     Φ h0 h1 mu H hH G hmu hgap

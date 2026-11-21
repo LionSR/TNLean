@@ -131,7 +131,7 @@ private theorem exists_bipartite_effect {c : ℕ} {A B : Finset (Fin L)} (hAB : 
       ext y y'
       simp only [submatrix_apply, Matrix.sub_apply, Matrix.one_apply, hf.eq_iff]
     exact h1 ▸ hE1.submatrix _
-  · rw [Entropy.trace_regionState_submatrix_mul, huu]
+  · rw [ManyBody.trace_regionState_submatrix_mul, huu]
   · rw [← trace_cutProductState_mul_localLift_union hAB hA hB Ω M, huu]
 
 /-- **Binary relative entropy across the cut and the mutual information of two intervals.**
@@ -172,7 +172,7 @@ theorem binaryRelativeEntropy_le_intervalMutualInformation
     rw [trace_submatrix_equiv, ManyBody.trace_regionState, hΩ]
     simp
   have hR : partialTraceRight ρ = ManyBody.regionState Ω A :=
-    Entropy.partialTraceRight_regionState_union hAB Ω
+    ManyBody.partialTraceRight_regionState_union hAB Ω
   have hL : partialTraceLeft ρ = ManyBody.regionState Ω B :=
     Entropy.partialTraceLeft_regionState_union hAB Ω
   have h := binaryRelativeEntropy_le_mutualInformation hρ hρ1 hM0 (hM1 hE1)
@@ -209,7 +209,7 @@ theorem re_trace_cutProductState_mul_pos {c l : ℕ} {Ω : EuclideanSpace ℂ (F
     (Entropy.regionUnionEquiv hAB).symm
   have hρ : ρ.PosSemidef := (ManyBody.regionState_posSemidef _ Ω).submatrix _
   have hR : partialTraceRight ρ = ManyBody.regionState Ω A :=
-    Entropy.partialTraceRight_regionState_union hAB Ω
+    ManyBody.partialTraceRight_regionState_union hAB Ω
   have hL : partialTraceLeft ρ = ManyBody.regionState Ω B :=
     Entropy.partialTraceLeft_regionState_union hAB Ω
   have hσ : (partialTraceRight ρ ⊗ₖ partialTraceLeft ρ).PosSemidef :=

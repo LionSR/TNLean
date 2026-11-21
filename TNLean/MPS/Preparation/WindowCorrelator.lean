@@ -8,6 +8,8 @@ import QICLean.Kraus.MapIterate
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.RFP.ZeroCorrelationLength
+import QICLean.ManyBody.Sites.PlaceAlong
+import QICLean.ManyBody.Sites.Lattice.Chain
 
 /-!
 # Correlators of block observables in a translation-invariant matrix product state
@@ -22,14 +24,14 @@ on virtual matrices.
 
 ## Main declarations
 
-* `chainWindowOperator N a X`: the operator `X` on the sites `a+1, …, a+L`
-  of a chain of `N` sites, identity elsewhere.
+* `placeAlong_chainWindow_apply`: entries of the operator `X` placed on the sites
+  `a+1, …, a+L` of a chain of `N` sites, identity elsewhere.
 * `mpvExpectation A N O`: the expectation of `O` in the normalized vector `φ_N`.
 * `mpvConnectedCorrelator`: the connected correlator of two window operators.
 * `inner_mpvState_toEuclideanLin`: `⟨φ_N|O|φ_N⟩ = tr E_O`.
 * `physicalObservableTransfer_appendObservable`: the inserted transfer map of a
   tensor product of block observables is the composition of the two maps.
-* `inner_mpvState_chainWindowOperator_mul`: the two-window trace formula.
+* `inner_mpvState_placeAlong_chainWindow_mul`: the two-window trace formula.
 -/
 
 open scoped Matrix BigOperators InnerProductSpace Kronecker
@@ -166,58 +168,43 @@ theorem inner_mpvState_self_eq_trace (A : MPSTensor d D) (N : ℕ) :
 
 /-! ### Operators on windows of consecutive sites -/
 
-/-- The operator `X` on the `L` consecutive sites `a+1, …, a+L` of a periodic chain
-of `N` sites, acting as the identity elsewhere; it is `0` when the window start
-`a` is not a site or `L > N`. This is the operator `O_s` of arXiv:2307.01696,
+/-- Entries of the operator `X` placed on the window of the `L` consecutive sites
+`a, …, a + L - 1` of a chain of `N` sites, a window that does not wrap around the ring: `X`
+on the window and the identity elsewhere. This is the operator `O_s` of arXiv:2307.01696,
 Supplemental Material, Lemma 2, on the block of sites starting at `s = a + 1`. -/
-noncomputable def chainWindowOperator {L : ℕ} (N a : ℕ)
-    (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    Matrix (Cfg d N) (Cfg d N) ℂ :=
-  if h : L ≤ N ∧ a < N then MPOTensor.embedLocalOperator L N h.1 ⟨a, h.2⟩ X else 0
-
-/-- On a window that does not wrap around the ring, the operator acts as `X` on the
-window and as the identity elsewhere. This is used for the correlators of
-arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
-theorem chainWindowOperator_apply {L N a : ℕ} (ha : a < N) (haL : a + L ≤ N)
+theorem placeAlong_chainWindow_apply {L N a : ℕ} (haL : a + L ≤ N)
     (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) (τ σ : Cfg d N) :
-    chainWindowOperator N a X τ σ =
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a haL) X τ σ =
       if ∀ k : Fin N, ¬ (a ≤ k.val ∧ k.val < a + L) → τ k = σ k then
         X (fun j ↦ τ ⟨a + j.val, by omega⟩) (fun j ↦ σ ⟨a + j.val, by omega⟩)
       else 0 := by
-  have hLN : L ≤ N := by omega
-  rw [chainWindowOperator, dite_eq_left ⟨hLN, ha⟩, MPOTensor.embedLocalOperator_apply]
-  have hoff : ∀ k : Fin N, (k.val + N - a) % N < L ↔ a ≤ k.val ∧ k.val < a + L := by
-    intro k
-    by_cases hk : a ≤ k.val
-    · have h1 : k.val + N - a = (k.val - a) + N := by omega
-      rw [h1, Nat.add_mod_right, Nat.mod_eq_of_lt (by omega)]
-      omega
-    · rw [Nat.mod_eq_of_lt (by omega)]
-      omega
-  have hcond : MPOTensor.AgreesOutsideWindow (d := d) L hLN ⟨a, ha⟩ τ σ ↔
+  have hc : (∀ v, (∀ u, ManyBody.chainWindow a haL u ≠ v) → τ v = σ v) ↔
       ∀ k : Fin N, ¬ (a ≤ k.val ∧ k.val < a + L) → τ k = σ k := by
-    rw [MPOTensor.agreesOutsideWindow_iff]
-    refine forall_congr' fun k ↦ ?_
-    rw [hoff k, eq_comm]
-  have hext : ∀ ν : Cfg d N, MPSTensor.extractWindow L ⟨a, ha⟩ ν =
-      fun j ↦ ν ⟨a + j.val, by omega⟩ := by
-    intro ν
-    funext j
-    simp only [MPSTensor.extractWindow]
-    congr 1
-    exact Fin.ext (Nat.mod_eq_of_lt (by omega))
-  simp only [hcond, hext]
+    refine ⟨fun h k hk ↦ h k fun u hu ↦ hk ?_, fun h v hv ↦ h v fun hk ↦ ?_⟩
+    · subst hu
+      have := u.isLt
+      simp only [ManyBody.val_chainWindow]
+      omega
+    · exact hv ⟨v.val - a, by omega⟩
+        (Fin.ext (by simp only [ManyBody.val_chainWindow]; omega))
+  rw [ManyBody.placeAlong_apply]
+  by_cases h : ∀ k : Fin N, ¬ (a ≤ k.val ∧ k.val < a + L) → τ k = σ k
+  · rw [ite_eq_left (hc.2 h), ite_eq_left h]
+    rfl
+  · rw [ite_eq_right (mt hc.1 h), ite_eq_right h]
 
 /-- A window in the first `p` sites of a chain of `p + q` sites. This is used for the
 correlators of arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
-theorem chainWindowOperator_add_left {L p q a : ℕ} (ha : a < p) (haL : a + L ≤ p)
+theorem placeAlong_chainWindow_add_left {L p q a : ℕ} (haL : a + L ≤ p)
     (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    chainWindowOperator (p + q) a X =
-      appendObservable (chainWindowOperator p a X) 1 := by
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a (by omega : a + L ≤ p + q))
+        X =
+      appendObservable (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a haL) X)
+        1 := by
   classical
   ext τ σ
-  rw [chainWindowOperator_apply (by omega) (by omega), appendObservable_apply,
-    chainWindowOperator_apply ha haL, Matrix.one_apply]
+  rw [placeAlong_chainWindow_apply, appendObservable_apply, placeAlong_chainWindow_apply haL,
+    Matrix.one_apply]
   have hiff : (∀ k : Fin (p + q), ¬ (a ≤ k.val ∧ k.val < a + L) → τ k = σ k) ↔
       (∀ k : Fin p, ¬ (a ≤ k.val ∧ k.val < a + L) →
         τ (Fin.castAdd q k) = σ (Fin.castAdd q k)) ∧
@@ -239,14 +226,15 @@ theorem chainWindowOperator_add_left {L p q a : ℕ} (ha : a < p) (haL : a + L �
 
 /-- A window in the last `q` sites of a chain of `p + q` sites. This is used for the
 correlators of arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
-theorem chainWindowOperator_add_right {L p q a : ℕ} (hpa : p ≤ a) (ha : a < p + q)
-    (haL : a + L ≤ p + q) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    chainWindowOperator (p + q) a X =
-      appendObservable 1 (chainWindowOperator q (a - p) X) := by
+theorem placeAlong_chainWindow_add_right {L p q a : ℕ} (hpa : p ≤ a) (haL : a + L ≤ p + q)
+    (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a haL) X =
+      appendObservable 1 (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow (a - p) (by omega : a - p + L ≤ q)) X) := by
   classical
   ext τ σ
-  rw [chainWindowOperator_apply ha haL, appendObservable_apply,
-    chainWindowOperator_apply (by omega) (by omega), Matrix.one_apply]
+  rw [placeAlong_chainWindow_apply haL, appendObservable_apply, placeAlong_chainWindow_apply,
+    Matrix.one_apply]
   have hiff : (∀ k : Fin (p + q), ¬ (a ≤ k.val ∧ k.val < a + L) → τ k = σ k) ↔
       ((fun i ↦ τ (Fin.castAdd q i)) = fun i ↦ σ (Fin.castAdd q i)) ∧
       (∀ k : Fin q, ¬ (a - p ≤ k.val ∧ k.val < a - p + L) →
@@ -277,36 +265,39 @@ theorem chainWindowOperator_add_right {L p q a : ℕ} (hpa : p ≤ a) (ha : a < 
 
 /-- A window covering the whole chain. This is used for the correlators of
 arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
-theorem chainWindowOperator_self {L : ℕ} (hL : 0 < L)
-    (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    chainWindowOperator L 0 X = X := by
+theorem placeAlong_chainWindow_self {L : ℕ} (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow 0 (by omega : 0 + L ≤ L))
+      X = X := by
   classical
   ext τ σ
-  rw [chainWindowOperator_apply hL (by omega)]
+  rw [placeAlong_chainWindow_apply]
   rw [ite_eq_left fun k hk ↦ absurd ⟨Nat.zero_le _, by simp⟩ hk]
   congr 1 <;> funext j <;> exact congrArg _ (Fin.ext (by simp))
 
 /-- The window at the first `L` sites of a chain of `L + m + L + n` sites, written as a
 tensor product over the four blocks. This is used for the correlators of
 arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
-theorem chainWindowOperator_zero_eq_appendObservable {L : ℕ} (hL : 0 < L) (m n : ℕ)
+theorem placeAlong_chainWindow_zero_eq_appendObservable {L : ℕ} (m n : ℕ)
     (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    chainWindowOperator (L + m + L + n) 0 X =
+    ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow 0 (by omega : 0 + L ≤ L + m + L + n)) X =
       appendObservable (appendObservable (appendObservable X 1) 1) 1 := by
-  rw [chainWindowOperator_add_left (by omega) (by omega),
-    chainWindowOperator_add_left (by omega) (by omega),
-    chainWindowOperator_add_left (by omega) (by omega), chainWindowOperator_self hL]
+  rw [placeAlong_chainWindow_add_left (by omega : 0 + L ≤ L + m + L),
+    placeAlong_chainWindow_add_left (by omega : 0 + L ≤ L + m),
+    placeAlong_chainWindow_add_left (by omega : 0 + L ≤ L), placeAlong_chainWindow_self]
 
 /-- The window at the sites `L + m + 1, …, 2L + m` of a chain of `L + m + L + n` sites,
 written as a tensor product over the four blocks. This is used for the correlators of
 arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
-theorem chainWindowOperator_add_eq_appendObservable {L : ℕ} (hL : 0 < L) (m n : ℕ)
+theorem placeAlong_chainWindow_add_eq_appendObservable {L : ℕ} (m n : ℕ)
     (Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    chainWindowOperator (L + m + L + n) (L + m) Y =
+    ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow (L + m) (by omega : L + m + L ≤ L + m + L + n)) Y =
       appendObservable (appendObservable (appendObservable 1 1) Y) 1 := by
-  rw [chainWindowOperator_add_left (by omega) (by omega),
-    chainWindowOperator_add_right le_rfl (by omega) (by omega), Nat.sub_self,
-    chainWindowOperator_self hL, appendObservable_one_one]
+  rw [placeAlong_chainWindow_add_left (by omega : L + m + L ≤ L + m + L),
+    placeAlong_chainWindow_add_right le_rfl (by omega : L + m + L ≤ L + m + L)]
+  simp only [Nat.sub_self]
+  rw [placeAlong_chainWindow_self, appendObservable_one_one]
 
 /-- The two-window trace formula: on a chain of `N = L + m + L + n` sites, with `X`
 on the sites `1, …, L` and `Y` on the sites `L + m + 1, …, 2L + m`,
@@ -318,17 +309,19 @@ connected correlator in arXiv:2307.01696, Supplemental Material, proof of Lemma 
 where the source writes `Tr(E_1^{N-s-1} E_O E_1^{s-1} E_{O'})` for one-site
 observables at the sites `1` and `s`; the number of transfer maps between the two
 sites is `s - 2`, which is `m` here for `L = 1`. -/
-theorem inner_mpvState_chainWindowOperator_mul (A : MPSTensor d D) {L : ℕ} (hL : 0 < L)
-    (m n : ℕ) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+theorem inner_mpvState_placeAlong_chainWindow_mul (A : MPSTensor d D) {L : ℕ} (m n : ℕ)
+    (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     ⟪mpvState A (L + m + L + n), Matrix.toEuclideanLin
-        (chainWindowOperator (L + m + L + n) 0 X *
-          chainWindowOperator (L + m + L + n) (L + m) Y)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow 0 (by omega : 0 + L ≤ L + m + L + n)) X *
+          ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (L + m) (by omega : L + m + L ≤ L + m + L + n)) Y)
         (mpvState A (L + m + L + n))⟫_ℂ =
       LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
         (physicalObservableTransfer A L X * Kraus.transferMap A ^ m *
           physicalObservableTransfer A L Y * Kraus.transferMap A ^ n) := by
-  rw [chainWindowOperator_zero_eq_appendObservable hL,
-    chainWindowOperator_add_eq_appendObservable hL, appendObservable_mul, appendObservable_mul,
+  rw [placeAlong_chainWindow_zero_eq_appendObservable,
+    placeAlong_chainWindow_add_eq_appendObservable, appendObservable_mul, appendObservable_mul,
     appendObservable_mul, mul_one, mul_one, one_mul, mul_one, inner_mpvState_toEuclideanLin,
     physicalObservableTransfer_appendObservable,
     physicalObservableTransfer_appendObservable, physicalObservableTransfer_appendObservable,
@@ -337,40 +330,19 @@ theorem inner_mpvState_chainWindowOperator_mul (A : MPSTensor d D) {L : ℕ} (hL
 /-- The two-window expectation is the two-observable transfer trace
 `physicalTwoPointExpectation` of arXiv:1606.00608, lines 490--496, with the gaps `m`
 after the first window and `n` after the second. -/
-theorem inner_mpvState_chainWindowOperator_mul_eq_physicalTwoPointExpectation
-    (A : MPSTensor d D) {L : ℕ} (hL : 0 < L) (m n : ℕ)
+theorem inner_mpvState_placeAlong_chainWindow_mul_eq_physicalTwoPointExpectation
+    (A : MPSTensor d D) {L : ℕ} (m n : ℕ)
     (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     ⟪mpvState A (L + m + L + n), Matrix.toEuclideanLin
-        (chainWindowOperator (L + m + L + n) 0 X *
-          chainWindowOperator (L + m + L + n) (L + m) Y)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow 0 (by omega : 0 + L ≤ L + m + L + n)) X *
+          ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (L + m) (by omega : L + m + L ≤ L + m + L + n)) Y)
         (mpvState A (L + m + L + n))⟫_ℂ =
       physicalTwoPointExpectation A L L X Y m n := by
-  rw [inner_mpvState_chainWindowOperator_mul A hL, physicalTwoPointExpectation,
+  rw [inner_mpvState_placeAlong_chainWindow_mul A, physicalTwoPointExpectation,
     mul_assoc _ _ (Kraus.transferMap A ^ n), LinearMap.trace_mul_comm]
   rfl
-
-/-- The window operator of the identity is the identity. This is used for the
-correlators of arXiv:2307.01696, Supplemental Material, proof of Lemma 2. -/
-theorem chainWindowOperator_one {L N a : ℕ} (ha : a < N) (haL : a + L ≤ N) :
-    chainWindowOperator N a (1 : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) = 1 := by
-  classical
-  ext τ σ
-  rw [chainWindowOperator_apply ha haL, Matrix.one_apply, Matrix.one_apply]
-  by_cases h : ∀ k : Fin N, ¬ (a ≤ k.val ∧ k.val < a + L) → τ k = σ k
-  · rw [ite_eq_left h]
-    by_cases hτσ : τ = σ
-    · subst hτσ
-      simp
-    · rw [ite_eq_right hτσ, ite_eq_right]
-      intro hw
-      refine hτσ (funext fun k ↦ ?_)
-      by_cases hk : a ≤ k.val ∧ k.val < a + L
-      · have := congrFun hw ⟨k.val - a, by omega⟩
-        simpa [show a + (k.val - a) = k.val by omega] using this
-      · exact h k hk
-  · rw [ite_eq_right h, ite_eq_right]
-    rintro rfl
-    exact h fun _ _ ↦ rfl
 
 /-! ### Normalized expectations and the connected correlator -/
 
@@ -396,14 +368,16 @@ theorem mpvExpectation_eq_div (A : MPSTensor d D) (N : ℕ)
 
 /-- The connected correlator
 `G_N(X,Y) = ⟨X_{a+1} Y_{b+1}⟩ - ⟨X_{a+1}⟩⟨Y_{b+1}⟩` in the normalized vector `φ_N`, with
-`X` on the sites `a+1, …, a+L` and `Y` on the sites `b+1, …, b+L`. With `a = 0`
-and `b = s - 1` this is `G_N(X,Y;s)` of the chapter display
-`eq:ldp_connected_correlator`, the quantity bounded in arXiv:2307.01696,
-Supplemental Material, Lemma 2, eq. (auxform2). -/
+`X` placed on the window of sites `a+1, …, a+L` and `Y` on the window of sites
+`b+1, …, b+L`, windows that do not wrap around the ring. With `a = 0` and `b = s - 1` this
+is `G_N(X,Y;s)` of the chapter display `eq:ldp_connected_correlator`, the quantity bounded in
+arXiv:2307.01696, Supplemental Material, Lemma 2, eq. (auxform2). -/
 noncomputable def mpvConnectedCorrelator (A : MPSTensor d D) (N : ℕ) {L : ℕ} (a b : ℕ)
-    (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) : ℂ :=
-  mpvExpectation A N (chainWindowOperator N a X * chainWindowOperator N b Y) -
-    mpvExpectation A N (chainWindowOperator N a X) *
-      mpvExpectation A N (chainWindowOperator N b Y)
+    (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) (ha : a + L ≤ N := by omega)
+    (hb : b + L ≤ N := by omega) : ℂ :=
+  mpvExpectation A N (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a ha) X *
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow b hb) Y) -
+    mpvExpectation A N (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a ha) X) *
+      mpvExpectation A N (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow b hb) Y)
 
 end MPSTensor

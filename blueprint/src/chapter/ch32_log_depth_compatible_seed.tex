@@ -2,8 +2,8 @@
 
 \begin{lemma}[A coherent circuit for all encoded sectors]
     \label{thm:ldp_coherent_sector_circuit}
-    \lean{MPSPreparation.exists_isLocalCircuitOfDepth_registerCfg_of_pairProductState_supported,
-        MPSPreparation.exists_isLocalCircuitOfDepth_registerCfg_of_isInjectiveOn,
+    \lean{MPSPreparation.exists_isUnitaryCircuit_registerCfg_of_pairProductState_supported,
+        MPSPreparation.exists_isUnitaryCircuit_registerCfg_of_isInjectiveOn,
         MPSPreparation.mulVec_windowGHZState_of_registerCfg}
     \leanok
     Fix $d\geq1$, $D\geq1$, a register length $r\geq2$, and injective
@@ -41,8 +41,8 @@
 \begin{lemma}[Conversion through compatible coherent seeds]
     \label{thm:ldp_compatible_seed_conversion}
     \uses{def:qc_local_circuit}
-    \lean{MPSPreparation.exists_isLocalCircuitOfDepth_of_compatible_seeds,
-        MPSPreparation.exists_isLocalCircuitOfDepth_of_common_seed}
+    \lean{MPSPreparation.exists_isUnitaryCircuit_of_compatible_seeds,
+        MPSPreparation.exists_isUnitaryCircuit_of_common_seed}
     \leanok
     Let $a,b,\chi_A,\chi_B$ be unit vectors in the same physical ring
     space $\mathcal H_N=(\mathbb C^d)^{\otimes N}$. Let $U_A,U_B,R$ be
@@ -101,7 +101,7 @@
 
 \begin{lemma}[Uniform logarithmic-depth conversion]
     \label{thm:ldp_compatible_seed_log_depth}
-    \lean{MPSPreparation.exists_isLocalCircuitOfDepth_le_log_of_compatible_seeds}
+    \lean{MPSPreparation.exists_isUnitaryCircuit_le_log_of_compatible_seeds}
     \leanok
     Fix normalized target families $a_N,b_N$, constants $c_A,c_B,c_R$,
     and $N_0$. Suppose that for every $0<\varepsilon\leq1$ and positive

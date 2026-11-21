@@ -143,10 +143,10 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{definition}[Regionally swapped doubled Hamiltonian]
     \label{def:chain_swapped_doubled_hamiltonian}
-    \lean{ManyBody.ChainInteraction.swappedDoubled,
-        ManyBody.ChainInteraction.isHermitian_swappedDoubled_term,
-        ManyBody.ChainInteraction.norm_swappedDoubled_term_le,
-        ManyBody.ChainInteraction.swappedDoubled_hamiltonian}
+    \lean{ManyBody.pairSwapOp, ManyBody.Interaction.conj,
+        ManyBody.Interaction.norm_doubled_term_le,
+        TNLean.Lattice.reindex_sheetSwapOp_eq_reindex_pairSwapOp,
+        TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled}
     \leanok
     \uses{def:chain_doubled_hamiltonian,def:peps_frame_sheet_swap}
     Let $H=\sum_Xh_X$ be a range-$R$ Hamiltonian on the contiguous chain
@@ -1716,10 +1716,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{definition}[Doubled domain interactions and regional swaps]
     \label{def:domain_doubled_swapped_hamiltonian}
-    \lean{ManyBody.DomainInteraction.swappedDoubled,
-        ManyBody.DomainInteraction.isHermitian_swappedDoubled_term,
-        ManyBody.DomainInteraction.norm_swappedDoubled_term_le,
-        ManyBody.DomainInteraction.swappedDoubled_hamiltonian}\leanok
+    \lean{ManyBody.Interaction.doubledFin, ManyBody.Interaction.relabel,
+        TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled}\leanok
     \uses{def:domain_model,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     Let $H=\sum_Xh_X$ be an admissible domain Hamiltonian and let
     $D\subseteq V=\{0,\ldots,|\Lambda|-1\}$. Let $p$ pair the two replica

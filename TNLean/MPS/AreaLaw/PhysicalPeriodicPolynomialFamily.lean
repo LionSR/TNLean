@@ -52,10 +52,10 @@ theorem exists_common_physical_aeval_periodic_family_fin
   let Ksites := interval L (a + 2 * ell) (b + 1)
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let J := interval L (a + ell) (b + ell + 1)
   let eJ := intervalShiftOrderIso
     (show a + ell ≤ b + ell + 1 by omega)
@@ -84,12 +84,12 @@ theorem exists_common_physical_aeval_periodic_family_fin
             Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
         ∀ P : Polynomial ℂ, P.natDegree ≤ k →
-          ∃ M : Fin N → Matrix ((Jᶜ : Finset (Fin L)) → Fin q) ((Jᶜ : Finset (Fin L)) → Fin q) ℂ,
+          ∃ M : Fin N → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ,
             Polynomial.aeval (∑ a, F a) P =
               (∑ r, M r ⊗ₖ W r).submatrix
-                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _))
-                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _)) := by
   obtain ⟨N, W, hN, hW, hTrace, hdecomp⟩ :=
     exists_common_physical_aeval_mpo_family_fin

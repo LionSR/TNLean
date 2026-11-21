@@ -34,15 +34,15 @@ namespace MPSTensor
 /-- The periodic normalized-bond Hamiltonian has zero ground energy and
 spectral gap at least one for every real parameter. Source:
 arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/
-theorem interactionHamiltonian_normalizedBondInteraction_spectrum_gap_one
+theorem hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N) :
-    (0 : ℂ) ∈ spectrum ℂ (interactionHamiltonian
-      (normalizedBondInteraction D₀ D₁ γ) hN) ∧
-    ∀ z ∈ spectrum ℂ (interactionHamiltonian
-      (normalizedBondInteraction D₀ D₁ γ) hN),
+    (0 : ℂ) ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant hN
+      (normalizedBondInteraction D₀ D₁ γ)).hamiltonian ∧
+    ∀ z ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant hN
+      (normalizedBondInteraction D₀ D₁ γ)).hamiltonian,
       0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
   have : NeZero N := ⟨by omega⟩
-  simpa only [normalizedBondInteraction, interactionHamiltonian_twoSiteBondPenalty] using
+  simpa only [normalizedBondInteraction, hamiltonian_translationInvariant_twoSiteBondPenalty] using
     normalizedPhysicalBondInterpolation_parent_spectrum_gap_one h₀ h₁ γ (by omega : 1 ≤ N)
 
 /-- For a fixed bond parameter, affine interpolation to a covariant
@@ -64,8 +64,10 @@ noncomputable def normalizedBondCanonicalParentComparisonPath
     (horder : normalizedBondInteraction D₀ D₁ γ ≤
       LinearMap.toMatrix' (parentInteraction B 2))
     (hker : ∀ (N : ℕ) (hN : 2 ≤ N) (x : Cfg ((D₀ + D₁) * (D₀ + D₁)) N → ℂ),
-      (interactionHamiltonian (normalizedBondInteraction D₀ D₁ γ) hN).mulVec x = 0 →
-        (interactionHamiltonian (LinearMap.toMatrix' (parentInteraction B 2)) hN).mulVec x = 0)
+      (ManyBody.Interaction.translationInvariant hN
+          (normalizedBondInteraction D₀ D₁ γ)).hamiltonian.mulVec x = 0 →
+        (ManyBody.Interaction.translationInvariant hN
+          (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian.mulVec x = 0)
     (hCov : ∀ g, GaugeEquiv B (rotatePhysical (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) B)) :
     SymmetricGappedInteractionPath
       (sptFixedPointUnitaryAction (ρ₀.directSum ρ₁)
@@ -83,7 +85,7 @@ noncomputable def normalizedBondCanonicalParentComparisonPath
     hker ?_ ?_ ?_ ?_
   case refine_4 =>
     intro N hN g
-    exact interactionHamiltonian_commute_onSiteTensorPow
+    exact hamiltonian_translationInvariant_commute_onSiteTensorPow
       (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) _ hN
         (parentInteraction_matrix_commute_onSiteTensorPow _ _
           (sptFixedPointAction_mem_unitaryGroup _ 1
@@ -92,20 +94,21 @@ noncomputable def normalizedBondCanonicalParentComparisonPath
   case refine_3 =>
     intro N hN g
     have : NeZero N := ⟨by omega⟩
-    simpa only [normalizedBondInteraction, interactionHamiltonian_twoSiteBondPenalty,
+    simpa only [normalizedBondInteraction, hamiltonian_translationInvariant_twoSiteBondPenalty,
       sptFixedPointUnitaryAction, MonoidHom.codRestrict_apply, Subtype.coe_mk] using
       (normalizedPhysicalBondInterpolation_parent_commute_onSite
         ρ₀ ρ₁ h₀ h₁ g γ (by omega : 1 ≤ N)).symm
   case refine_2 =>
     exact ⟨1, zero_lt_one, fun N hN z hz =>
-      ((interactionHamiltonian_normalizedBondInteraction_spectrum_gap_one
+      ((hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one
         hD₀ hD₁ γ hN).2 z hz).2⟩
   case refine_1 =>
     intro N hN
     have hspec : (0 : ℂ) ∈ spectrum ℂ (Matrix.toEuclideanLin
-        (interactionHamiltonian (normalizedBondInteraction D₀ D₁ γ) hN)) := by
+        (ManyBody.Interaction.translationInvariant hN
+          (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) := by
       rw [Matrix.spectrum_toLpLin]
-      exact (interactionHamiltonian_normalizedBondInteraction_spectrum_gap_one
+      exact (hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one
         hD₀ hD₁ γ hN).1
     obtain ⟨x, hx⟩ :=
       (Module.End.HasEigenvalue.of_mem_spectrum hspec).exists_hasEigenvector
@@ -135,7 +138,7 @@ noncomputable def weightedMatrixUnitParentComparisonPath
     (weightedMatrixUnitInterpolation D₀ D₁ γ)
     (twoSiteBondInteraction_le_parentInteraction_weightedMatrixUnitInterpolation hD₀ hD₁ γ)
     (fun _ hN x hx =>
-      interactionHamiltonian_parent_mulVec_eq_zero_of_normalizedBondInteraction
+      hamiltonian_translationInvariant_parent_mulVec_eq_zero_of_normalizedBondInteraction
         hD₀ hD₁ γ hN x hx)
     (fun g => ⟨sptGauge (ρ₀.directSum ρ₁) g,
       twistedTensor_weightedMatrixUnitInterpolation ρ₀ ρ₁ g γ⟩)

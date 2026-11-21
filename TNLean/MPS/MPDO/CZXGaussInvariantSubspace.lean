@@ -328,7 +328,8 @@ $(j,j+1)$ of the periodic chain; this is the operator $G_j$ whose common fixed
 space is $\mathcal V_N(R^{\mathrm{CZX}})$. -/
 def placedGaussOperator (N : ℕ) (hN : 2 ≤ N) (j : Fin N) :
     ChainOperator (Fintype.card (Fin 4 × Multiplicative (ZMod 2))) N :=
-  embedLocalOperator 2 N hN j
+  ManyBody.placeAlong (X := fun _ ↦ Fin (Fintype.card (Fin 4 × Multiplicative (ZMod 2))))
+    (ManyBody.ringWindow hN j)
     (Matrix.reindexAlgEquiv ℂ ℂ windowCoordinates
       (TNLean.Algebra.gaussOperator circuitTuple gen))
 
@@ -352,10 +353,8 @@ theorem placedGaussProjector_circuitTuple (N : ℕ) (hN : 2 ≤ N) (j : Fin N) :
     placedGaussProjector 4 (Multiplicative (ZMod 2)) N hN j circuitTuple =
       (2 : ℂ)⁻¹ • (1 + placedGaussOperator N hN j) := by
   rw [placedGaussProjector, gaussWindowProjector, gaussProjector_circuitTuple, map_smul, map_add,
-    map_one, placedGaussOperator]
-  change embedLocalOperatorAlgHom 2 N hN j _ = _
-  rw [map_smul, map_add, map_one]
-  rfl
+    map_one, placedGaussOperator, ManyBody.placeAlong_smul, ManyBody.placeAlong_add,
+    ManyBody.placeAlong_one]
 
 /-- A vector is fixed by $(\mathrm{id}+G)/2$ exactly when it is fixed by $G$. -/
 theorem inv_two_smul_add_mulVec_eq_iff {ι : Type*} [Fintype ι] [DecidableEq ι]
@@ -384,7 +383,7 @@ theorem placedGaussOperator_eq_monomial (N : ℕ) (hN : 2 ≤ N) (j : Fin N) :
         (windowPerm 2 hN j (windowCoordinates.symm.trans (localPerm.trans windowCoordinates)))
         fun t ↦ localPhase (windowCoordinates.symm (MPSTensor.extractWindow 2 j t)) := by
   rw [placedGaussOperator, gaussOperator_circuitTuple_gen, Matrix.coe_reindexAlgEquiv,
-    reindex_monomial, embedLocalOperator_monomial]
+    reindex_monomial, placeAlong_ringWindow_monomial]
   rfl
 
 theorem siteBits_eq_localBits_zero (m : Fin 2 → Fin 4) :

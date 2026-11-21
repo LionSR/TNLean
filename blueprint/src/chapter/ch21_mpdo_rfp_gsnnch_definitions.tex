@@ -1113,7 +1113,7 @@ without sector projections.
 
 \begin{lemma}[Cyclic-shift action on an embedded local operator]
     \label{lem:mpdo_gsnnch_shift_transport}
-    \lean{MPOTensor.embedLocalOperator_submatrix_rotateConfig}
+    \lean{MPOTensor.placeAlong_ringWindow_submatrix_rotateConfig}
     \leanok
     \uses{def:mpdo_commuting_form_data}
     Let $B$ act on $L$ consecutive spins of the periodic $N$-site chain,
@@ -1157,10 +1157,10 @@ without sector projections.
 
 \begin{lemma}[Positivity of the sector-bond translates]
     \label{lem:mpdo_gsnnch_translate_pos}
-    \lean{MPOTensor.embedLocalOperator_posSemidef}
     \lean{MPOTensor.GSNNCHData.bondAt_posSemidef}
     \leanok
-    \uses{def:mpdo_source_gsnnch, def:mpdo_commuting_form_data}
+    \uses{def:mpdo_source_gsnnch, def:mpdo_commuting_form_data,
+        thm:lvv_placement_order}
     An operator embedded into the periodic chain from a positive
     semidefinite local factor is positive semidefinite; in particular every
     translate $\tau_i(B^{(x)})$ of a sector bond is positive semidefinite.

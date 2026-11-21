@@ -57,15 +57,15 @@ theorem exists_fixed_bandwidth_long_interval_low_energy_family
       ∀ _hlong : 4 * ell < r - p,
       let J := interval L p r
       let beta := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
       let EM := EuclideanSpace ℂ (J → Fin q)
-      let EE := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)
+      let EE := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)
       ∃ A : Fin (D ^ 2) → EM →L[ℂ] EM,
         ∀ eta : ℝ, 6 * w ≤ eta → eta ≤ etaLD →
         ∃ (Tlo Thi : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q))) (Delta : ℝ),

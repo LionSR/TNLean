@@ -79,8 +79,10 @@ local kernels.\footnote{Local source:
 Eqs.~(\cpsvref{PAXQAX}), (\cpsvref{PXBQXB}), and~(\cpsvref{arrggg}).}
 
 The tripartite formal development formalizes this range-intersection
-condition directly.\footnote{Formal structure:
-\leanid{TripartiteDecorrelation.CommutingParentHamiltonian}.} For commuting
+condition directly.\footnote{Formal predicate:
+\leanid{ManyBody.HasCommutingParentHamiltonian}, a two-term interaction on the
+complements of the two outer regions with commuting projector terms whose
+common kernel is the range of $P_{AXB}$.} For commuting
 orthogonal projectors,
 \begin{align}
     \operatorname{ran}P_{AXB}
@@ -90,49 +92,19 @@ orthogonal projectors,
         \widehat P_{AX}\widehat P_{XB}=P_{AXB}.
     \label{eq:cpsv16_parent_commuting_hamiltonian_scope_range_product_equivalence}
 \end{align}
-\footnote{Formal equivalence:
-\leanid{TripartiteDecorrelation.hasGroundSpaceIntersection_iff_product_eq};
-forward direction:
-\leanid{TripartiteDecorrelation.CommutingParentHamiltonian.hproduct}.}
+\footnote{Range of a product of commuting idempotents:
+\leanid{TripartiteDecorrelation.range_mul_eq_inter}; the product identity:
+\leanid{ManyBody.HasCommutingParentHamiltonian.eq_mul}.}
 
 \section{Current boundary}
 
-The algebraic decorrelation predicate captures only the idempotent-product
-part of the source condition.\footnote{Formal predicate:
-\leanid{Decorrelation.HasCommutingParentHam} in
-\doclink{TNLean/MPS/ParentHamiltonian/Decorrelation}.} On a complex vector
-space $E$, it requires endomorphisms $P_{AX},P_{XB}:E\to E$ satisfying
-\begin{align}
-    P_{AX}^{2}
-        &=P_{AX},
-    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_abstract_pax_idempotent}\\
-    P_{XB}^{2}
-        &=P_{XB},
-    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_abstract_pxb_idempotent}\\
-    P_{AX}P_{XB}
-        &=P_{XB}P_{AX},
-    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_abstract_commutation}\\
-    P_{AX}P_{XB}
-        &=P_K.
-    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_abstract_product}
-\end{align}
-The predicate does not assume a tensor decomposition of $E$, local factor
-actions on $AX$ and $XB$, self-adjointness, orthogonality, or the existence of
-the source projectors $Q_{AX}$ and $Q_{XB}$. Every idempotent $P_K$ therefore
-admits the tautological choice
-\begin{align}
-    P_{AX}
-        &=P_K,
-    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_tautological_pax}\\
-    P_{XB}
-        &=P_K,
-    \label{eq:cpsv16_parent_commuting_hamiltonian_scope_tautological_pxb}
-\end{align}
-\footnote{Formal constructor:
-\leanid{Decorrelation.HasCommutingParentHam.ofIdem}.} This formal condition is
-thus not Definition~D.2 of Ref.~\cite{Cirac2016MPDO_arXiv}, but rather the
-algebraic consequence sufficient for the proved backward decorrelation
-implication.
+An earlier algebraic predicate on an abstract complex vector space recorded
+only the idempotent-product consequence
+(\ref{eq:cpsv16_parent_commuting_hamiltonian_scope_projector_product}) of the
+source condition, without tensor-product locality, self-adjointness, or
+orthogonality, and every idempotent $P_K$ satisfied it with
+$P_{AX}=P_{XB}=P_K$. It carried no content beyond idempotence and has been
+removed; Definition~D.2 is formalized only by the tripartite condition above.
 
 A separate three-site support layer formalizes the $AX$ and $XB$ faces and
 their overlapping commutation.\footnote{Formal declarations:
@@ -277,12 +249,12 @@ hypotheses supply the required injectivity.\footnote{Formal declarations:
 
 The general finite-dimensional tripartite equivalence is proved
 unconditionally.\footnote{Formal theorem:
-\leanid{TripartiteDecorrelation.parentHamiltonian_iff_decorrelated}.} Its parent
-condition uses orthogonal projectors on the explicit factors and asserts their
-lifted range intersection. This intersection equals
+\leanid{ManyBody.hasCommutingParentHamiltonian_iff_isDecorrelated}.} Its parent
+condition uses commuting orthogonal projector terms on the two complements and
+asserts that their common kernel is the range of $P_{AXB}$. This intersection equals
 (\ref{eq:cpsv16_parent_commuting_hamiltonian_scope_projector_product}):\footnote{Formal
-equivalence:
-\leanid{TripartiteDecorrelation.hasGroundSpaceIntersection_iff_product_eq}.}
+theorem:
+\leanid{ManyBody.HasCommutingParentHamiltonian.eq_mul}.}
 the forward direction constructs the projectors as supports of the two
 marginals, while the reverse direction derives and uses the product identity.
 The local correction to the marginal-support expansion at source
@@ -296,9 +268,7 @@ isolates this remaining identification.\footnote{Formal theorem:
 \leanid{MPSTensor.AppendixBStructuralData.hasOverlappingTwoSiteCommutation_of_appendixD2_identified_projectors}.}
 
 This comparison belongs to the RFP application rather than to the general
-decorrelation equivalence. The algebraic predicate\footnote{Formal predicate:
-\leanid{Decorrelation.HasCommutingParentHam}.} isolates only the algebraic
-idempotent-product consequence, and the local three-site
+decorrelation equivalence. The local three-site
 condition\footnote{Formal structure:
 \leanid{MPSTensor.HasAppendixD2ParentCommutingHamiltonian}.} does not itself
 assert self-adjointness. By contrast, the explicit tripartite condition

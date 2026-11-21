@@ -32,6 +32,8 @@ lines 1584–1601 and 1687–1692.
 
 open scoped Matrix MatrixOrder ComplexOrder InnerProductSpace
 
+open ManyBody
+
 namespace MPSTensor
 namespace MPOSymmetry
 
@@ -144,14 +146,15 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (γ : unitInterval) (hN : 2 ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin
-      (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)) =
+      (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian) =
       Submodule.span ℂ {(WithLp.toLp 2
         (mpv (N := N) (arbitraryPhysicalMixedInterpolation A₀ A₁ γ)))} := by
   rw [arbitraryPhysicalMixedInteraction,
     isometricInteractionExtension_ker_eq_map_of_posSemidef _
       (commonFixedPointInclusion_isometry _ d₀ d₁)
       (mixedEndpointInteractionMatrix_posSemidef _ _ γ) hN,
-    ← periodicInteractionHamiltonianES_eq_toEuclideanLin_interactionHamiltonian,
+    ← periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian,
     toEuclideanLin_mixedEndpointInteractionMatrix,
     mixedEndpoint_periodic_ker_eq_range_periodicMpvLineMap _ _
       (isInjective_polarPosTensor h₀) (isInjective_polarPosTensor h₁) γ hN]
@@ -177,7 +180,8 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_finrank
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (γ : unitInterval) (hN : 2 ≤ N) :
     Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
-      (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN))) = 1 := by
+      (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian)) = 1 := by
   rw [arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv A₀ A₁ h₀ h₁ γ hN]
   apply finrank_span_singleton
   intro hzero
@@ -196,9 +200,11 @@ theorem exists_uniform_arbitraryPhysicalMixed_periodic_path_gap
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁) :
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ γ : unitInterval, ∀ N : ℕ, ∀ hN : 2 ≤ N,
       ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-        (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)))ᗮ,
+        (Interaction.translationInvariant hN
+          (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian))ᗮ,
         δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-          (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN) v‖ := by
+          (Interaction.translationInvariant hN
+            (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian v‖ := by
   obtain ⟨δ, hδ, hgap⟩ := exists_uniform_mixedEndpoint_periodic_path_gap
     (polarPosTensor A₀) (polarPosTensor A₁)
     (isInjective_polarPosTensor h₀) (isInjective_polarPosTensor h₁)
@@ -207,7 +213,7 @@ theorem exists_uniform_arbitraryPhysicalMixed_periodic_path_gap
   apply isometricInteractionExtension_norm_gap _
     (commonFixedPointInclusion_isometry _ d₀ d₁)
     (mixedEndpointInteractionMatrix_posSemidef _ _ γ) hN hδ.le
-  rw [← periodicInteractionHamiltonianES_eq_toEuclideanLin_interactionHamiltonian,
+  rw [← periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian,
     toEuclideanLin_mixedEndpointInteractionMatrix]
   exact hgap γ N hN
 

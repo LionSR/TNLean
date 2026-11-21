@@ -194,11 +194,11 @@ private theorem exists_actual_clipped_polynomial_family_fin
     ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),
       N ≤ D ^ 2 ∧
       ∀ Q : Polynomial ℂ, Q.natDegree ≤ degree →
-        ∃ M : Fin N → Matrix (↥(Jᶜ) → Fin q) (↥(Jᶜ) → Fin q) ℂ,
+        ∃ M : Fin N → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ,
           Polynomial.aeval B Q = (∑ r, M r ⊗ₖ W r).submatrix
-            ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+            ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
               (Equiv.prodComm _ _))
-            ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+            ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
               (Equiv.prodComm _ _)) := by
   classical
   intro k A Cross Y K B J D
@@ -215,10 +215,9 @@ private theorem exists_actual_clipped_polynomial_family_fin
   obtain ⟨bond, Acore, C0, hcore⟩ :=
     exists_traceChainOperator_of_supported_interval
       (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega) Pmid hPmid
-  let Pcore := QuantumCircuit.embedOp
-    (Subtype.val : interval L (a + 2 * ell) (b + 1) → Fin L)
-    (QuantumCircuit.embedOp (intervalShiftOrderIso
-      (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega))
+  let Pcore := ManyBody.place (X := fun _ ↦ Fin q) (interval L (a + 2 * ell) (b + 1))
+    (ManyBody.placeAlong (X := fun _ ↦ Fin q) (intervalShiftOrderIso
+      (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)).toEquiv.toEmbedding
       (MPOTensor.traceChainOperator Acore C0))
   have hPcore : Pcore = Pmid := hcore.symm
   obtain ⟨N, W, hN, _hW, _hTrace, hdecomp⟩ :=
@@ -232,8 +231,8 @@ private theorem exists_actual_clipped_polynomial_family_fin
     exact hsum
   change Polynomial.aeval (∑ r, Sum.elim (Sum.elim WL WR) ![PL, Pcore, PR] r) Q =
     (∑ r, M r ⊗ₖ W r).submatrix
-      ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _))
-      ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _)) at hM
+      ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _))
+      ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _)) at hM
   exact ⟨M, hsumCore ▸ hM⟩
 end TNLean.MPS.AreaLaw
 end
@@ -273,18 +272,18 @@ theorem exists_actual_regional_clipped_polynomial_family_fin
     let J0 := interval L (a + ell) (b + ell + 1)
     let D0 := (q * degree) ^ (18 * ell + 2 * (degree / ell))
     let β := fun _ : Fin L ↦ Fin q
-    let tau := (ManyBody.splitEquiv β Jtarget).trans (Equiv.prodComm _ _)
+    let tau := (ManyBody.cutEquiv β Jtarget).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-    let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtargetᶜ) ℂ).tensorProduct
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig β Jtarget) ℂ).tensorProduct
       (EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtarget) ℂ)).repr
     let T := U.trans Phi.symm
     let Tm := T.trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtargetᶜ))
+      (EuclideanSpace ℂ (ManyBody.ComplConfig β Jtarget))
       (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtarget)))
     ∃ (N : ℕ) (W : Fin N → Matrix (Jtarget → Fin q) (Jtarget → Fin q) ℂ),
       N ≤ D0 ^ 2 * q ^ (2 * (J0 \ Jtarget).card + 2 * (Jtarget \ J0).card) ∧
       ∀ Q : Polynomial ℂ, Q.natDegree ≤ degree →
-        ∃ M : Fin N → Matrix (↥(Jtargetᶜ) → Fin q) (↥(Jtargetᶜ) → Fin q) ℂ,
+        ∃ M : Fin N → Matrix ({v // v ∉ Jtarget} → Fin q) ({v // v ∉ Jtarget} → Fin q) ℂ,
           Polynomial.aeval B Q = (∑ r, M r ⊗ₖ W r).submatrix tau tau ∧
           Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
               Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
@@ -292,14 +291,14 @@ theorem exists_actual_regional_clipped_polynomial_family_fin
               Tm.symm.toContinuousLinearEquiv.toContinuousLinearMap =
             ∑ r, TensorProduct.mapL
               (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Jtarget → Fin q) (W r))
-              (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := ↥(Jtargetᶜ) → Fin q) (M r)) := by
+              (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := {v // v ∉ Jtarget} → Fin q) (M r)) := by
   classical
   intro k A Cross Y K B J0 D0 β tau U Phi T Tm
   obtain ⟨N0, W0, hN0, hpoly⟩ :=
     exists_actual_clipped_polynomial_family_fin L q a b ell degree hell hq
       hdegree hab hb Φ e t
   obtain ⟨N, W, hN, htransport⟩ :=
-    FiniteProduct.exists_changingRegional_family_fin q J0 Jtarget W0
+    exists_changingRegional_family_fin q J0 Jtarget W0
   refine ⟨N, W, ?_, ?_⟩
   · calc
       N = N0 * q ^ (2 * (J0 \ Jtarget).card + 2 * (Jtarget \ J0).card) := by
@@ -313,7 +312,7 @@ theorem exists_actual_regional_clipped_polynomial_family_fin
       hM0.trans hM
     have hconj := Matrix.toEuclideanCLM_middleFirst_conjugation_of_kronecker_sum
       (Z := Fin L → Fin q)
-      (X := ManyBody.RegionConfig β Jtargetᶜ)
+      (X := ManyBody.ComplConfig β Jtarget)
       (Y := ManyBody.RegionConfig β Jtarget) (ι := Fin N)
       tau M W (Polynomial.aeval B Q) hmatrix
     exact ⟨M, hmatrix, hconj⟩

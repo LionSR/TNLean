@@ -40,13 +40,13 @@ preparation of matrix product states.
 
 \begin{definition}[Local circuit of depth $T$]
     \label{def:qc_local_circuit}
-    \lean{QuantumCircuit.IsLocalCircuitOfDepth, QuantumCircuit.IsPreparedInDepth,
-        QuantumCircuit.RingLayer, QuantumCircuit.circuitOp,
-        QuantumCircuit.BondLayer, QuantumCircuit.IsBondCircuitOfDepth,
-        QuantumCircuit.IsBondPreparedInDepth, QuantumCircuit.ringBond,
+    \lean{QuantumCircuit.IsUnitaryCircuit, QuantumCircuit.IsPreparedInDepth,
+        QuantumCircuit.UnitaryCircuit, QuantumCircuit.UnitaryCircuit.op,
+        QuantumCircuit.UnitaryCircuit.depth, QuantumCircuit.Geometry,
+        QuantumCircuit.Geometry.ring, QuantumCircuit.Geometry.ring_cell,
         QuantumCircuit.rectKronecker_mem_supportedOperators}
     \leanok
-    A \emph{bond geometry} on a finite site set $I$ is a family $(B_b)_{b\in\beta}$ of subsets $B_b\subseteq I$. An operator on $(\C^d)^{\otimes I}$ \emph{acts on} $X\subseteq I$ if it lies in $\mathcal A_X=\MN{d}^{\otimes X}\otimes\mathbb 1_{I\setminus X}=\operatorname{span}\{\bigotimes_{i\in I}m_i:m_i=\mathbb 1\text{ for }i\notin X\}$. A \emph{layer} is a product of unitaries on pairwise disjoint bonds, a \emph{local circuit of depth $T$} is a product $U=W_T\cdots W_1$ of $T$ layers, and a state $\ket\psi$ is \emph{prepared in depth $T$} if $\ket\psi=U\bigotimes_{i\in I}\ket{v_i}$.
+    A \emph{bond geometry} on a finite site set $I$ is a family $(B_b)_{b\in\beta}$ of subsets $B_b\subseteq I$. An operator on $(\C^d)^{\otimes I}$ \emph{acts on} $X\subseteq I$ if it lies in $\mathcal A_X=\MN{d}^{\otimes X}\otimes\mathbb 1_{I\setminus X}=\operatorname{span}\{\bigotimes_{i\in I}m_i:m_i=\mathbb 1\text{ for }i\notin X\}$. A \emph{layer} is a product of unitaries on pairwise disjoint bonds and of one-site unitaries on the remaining sites; it has depth $1$ if it contains a gate on a bond and depth $0$ otherwise. A \emph{local circuit of depth $T$} is a product $U=W_k\cdots W_1$ of layers of total depth at most $T$, and a state $\ket\psi$ is \emph{prepared in depth $T$} if $\ket\psi=U\bigotimes_{i\in I}\ket{v_i}$.
 
     On the $N$-site chain $I=\{1,\dots,N\}$, the ring bonds are $\{k,k+1\}\pmod N$ ($\{1\}$ for $N=1$), the open-chain bonds are $\{k,k+1\}$ ($1\le k<N$), and graph bonds are the edges~\cite{Piroli2021LOCC}.
 \end{definition}
@@ -108,9 +108,8 @@ preparation of matrix product states.
 \begin{definition}[Light cone of a bond geometry]
     \label{def:qc_light_cone_geometry}
     \uses{def:qc_local_circuit}
-    \lean{QuantumCircuit.bondNeighbourhood, QuantumCircuit.lightCone,
-        QuantumCircuit.neighbourhood, QuantumCircuit.IsSeparatedBy,
-        QuantumCircuit.openBond, QuantumCircuit.edgeBond}
+    \lean{QuantumCircuit.Geometry.neighbourhood,
+        ManyBody.IsGraphSeparated, QuantumCircuit.Geometry.graph}
     \leanok
     For a bond geometry $(B_b)_{b\in\beta}$ on $I$ and $X\subseteq I$, the \emph{one-step neighbourhood} is $\mathcal N_1(X)=X\cup\bigcup_{B_b\cap X\ne\varnothing}B_b$, and the \emph{light cone of radius $r$} is the $r$-fold iterate $\mathcal L_r(X)=\mathcal N_1^r(X)$. On the ring, the $r$-neighbourhood of $X$ is $\{i+m\pmod N:i\in X,\,|m|\le r\}$, and $X,Y$ are separated by $s$ if $d_{\rm ring}(X,Y)>s$. On a graph, bonds are edges and distance is the path metric $d_G$~\cite{Piroli2021LOCC}.
 \end{definition}
@@ -118,15 +117,15 @@ preparation of matrix product states.
 \begin{lemma}[Light cones of the ring, the open chain and a graph]
     \label{lem:qc_light_cone_geometries}
     \uses{def:qc_light_cone_geometry}
-    \lean{QuantumCircuit.lightCone_ringBond,
-        QuantumCircuit.bondNeighbourhood_ringBond, QuantumCircuit.neighbourhood_succ,
-        QuantumCircuit.disjoint_lightCone_ringBond_of_isSeparatedBy,
-        QuantumCircuit.lightCone_openBond_subset, QuantumCircuit.disjoint_lightCone_openBond,
-        QuantumCircuit.lightCone_edgeBond_subset,
-        QuantumCircuit.lightCone_edgeBond_subset_dist,
-        QuantumCircuit.disjoint_lightCone_edgeBond,
-        QuantumCircuit.disjoint_lightCone_edgeBond_of_dist,
-        QuantumCircuit.lightCone_lightCone}
+    \lean{QuantumCircuit.Geometry.neighbourhood_ring, ManyBody.graphNeighborhood_succ,
+        ManyBody.IsGraphSeparated.disjoint_graphNeighborhood,
+        QuantumCircuit.Geometry.iterate_neighbourhood_pathGraph_subset,
+        QuantumCircuit.Geometry.disjoint_iterate_neighbourhood_pathGraph,
+        QuantumCircuit.Geometry.iterate_neighbourhood_graph_subset,
+        QuantumCircuit.Geometry.iterate_neighbourhood_graph_subset_dist,
+        QuantumCircuit.Geometry.disjoint_iterate_neighbourhood_graph,
+        QuantumCircuit.Geometry.disjoint_iterate_neighbourhood_graph_of_dist,
+        Function.iterate_add_apply}
     \leanok
     For every bond geometry, $\mathcal L_s(\mathcal L_r(X))=\mathcal L_{r+s}(X)$. Furthermore:
     \begin{enumerate}
@@ -145,10 +144,10 @@ preparation of matrix product states.
     \label{lem:qc_light_cone}
     \uses{def:qc_local_circuit, def:qc_light_cone_geometry,
         lem:qc_light_cone_geometries}
-    \lean{QuantumCircuit.conj_circuitOp_mem_supportedOperators,
-        QuantumCircuit.IsBondCircuitOfDepth.conj_mem_supportedOperators,
-        QuantumCircuit.conj_circuitOp_mem_supportedOperators_lightCone,
-        QuantumCircuit.BondLayer.conj_op_mem_supportedOperators}
+    \lean{QuantumCircuit.IsUnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators_ringBall,
+        QuantumCircuit.IsUnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators,
+        QuantumCircuit.UnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators_lightCone,
+        QuantumCircuit.UnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators}
     \leanok
     As in~\cite[Theorem~1]{Malz2024Preparation}, if $U$ is a local circuit of depth $T$ on a bond geometry and $Z\in\mathcal A_X$, then $U^\dagger ZU\in\mathcal A_{\mathcal L_T(X)}$ (on the ring, within ring distance $T$ of $X$).
 \end{lemma}
@@ -160,10 +159,10 @@ preparation of matrix product states.
 \begin{lemma}[No connected correlations beyond the light cone]
     \label{lem:qc_light_cone_correlations}
     \uses{lem:qc_light_cone}
-    \lean{QuantumCircuit.expect_mul_eq_of_isPreparedInDepth,
-        QuantumCircuit.expect_mul_mul_expect_one_of_isPreparedInDepth,
-        QuantumCircuit.IsBondPreparedInDepth.expect_mul_eq,
-        QuantumCircuit.IsBondPreparedInDepth.expect_mul_mul_expect_one,
+    \lean{QuantumCircuit.IsPreparedInDepth.dotProduct_mul_eq_of_isRingSeparated,
+        QuantumCircuit.IsPreparedInDepth.dotProduct_mul_mul_of_isRingSeparated,
+        QuantumCircuit.IsPreparedInDepth.dotProduct_mul_eq,
+        QuantumCircuit.IsPreparedInDepth.dotProduct_mul_mul,
         QuantumCircuit.expect_productVector_rectKronecker,
         QuantumCircuit.expect_productVector_mul}
     \leanok
@@ -182,12 +181,13 @@ preparation of matrix product states.
 \begin{lemma}[Inverses and series composition of local circuits]
     \label{lem:qc_circuit_inverse_composition}
     \uses{def:qc_local_circuit}
-    \lean{QuantumCircuit.BondLayer.adjoint, QuantumCircuit.BondLayer.adjoint_partialOp,
-        QuantumCircuit.BondLayer.adjoint_op, QuantumCircuit.circuitOp_append,
-        QuantumCircuit.circuitOp_map_adjoint_reverse,
-        QuantumCircuit.IsBondCircuitOfDepth.mem_unitary,
-        QuantumCircuit.IsBondCircuitOfDepth.star,
-        QuantumCircuit.IsBondCircuitOfDepth.mul}
+    \lean{QuantumCircuit.Layer.adjoint, QuantumCircuit.UnitaryCircuit.adjoint,
+        QuantumCircuit.UnitaryCircuit.op_adjoint, QuantumCircuit.UnitaryCircuit.depth_adjoint,
+        QuantumCircuit.UnitaryCircuit.comp, QuantumCircuit.UnitaryCircuit.op_comp,
+        QuantumCircuit.UnitaryCircuit.depth_comp,
+        QuantumCircuit.IsUnitaryCircuit.mem_unitaryGroup,
+        QuantumCircuit.IsUnitaryCircuit.conjTranspose,
+        QuantumCircuit.IsUnitaryCircuit.mul}
     \leanok
     For a layer $W=\prod_k g_k$, replacing each gate $g_k$ by $g_k^\dagger$ on the same bond implements $W^\dagger$ (and likewise on any bond subset). If $U=W_T\cdots W_1$ has depth $T$ and $U'=W'_{T'}\cdots W'_1$ has depth $T'$, then $U$ is unitary, $U^\dagger=W_1^\dagger\cdots W_T^\dagger$ has depth $T$, and $U'U=W'_{T'}\cdots W'_1 W_T\cdots W_1$ has depth $T+T'$.
 \end{lemma}
@@ -201,34 +201,34 @@ preparation of matrix product states.
     \uses{def:qc_local_circuit}
     \lean{QuantumCircuit.rectKronecker_mulVec_productVector,
         QuantumCircuit.finKronecker_mulVec_productVector,
-        Matrix.exists_mem_unitary_eq_smul_mulVec_single_zero,
+        Matrix.exists_mem_unitaryGroup_eq_smul_mulVec_single,
         QuantumCircuit.productVector_pi_smul,
-        QuantumCircuit.exists_productVector_eq_smul_finKronecker_mulVec,
-        QuantumCircuit.isLocalCircuitOfDepth_finKronecker,
-        QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero}
+        QuantumCircuit.exists_prod_eq_smul_prodOp_mulVec,
+        QuantumCircuit.IsUnitaryCircuit.prodOp,
+        QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_prod_single}
     \leanok
-    Let $d\ge1$. On any finite site set, $(\bigotimes_i m_i)(\bigotimes_i\ket{v_i})=\bigotimes_i m_i\ket{v_i}$ and $\bigotimes_i c_i\ket{v_i}=(\prod_i c_i)\bigotimes_i\ket{v_i}$. Every nonzero $\ket v\in\C^d$ equals $c\,u\ket 0$ ($c=\|v\|\ne0$, $u\in\mathrm U(d)$), every nonzero product vector equals $c(\bigotimes_i u_i)\ket{0\cdots0}$, $\bigotimes_i u_i$ has depth $2$, and every nonzero vector prepared in depth $T$ equals $c\,U\ket{0\cdots0}$ for a local circuit $U$ of depth $T+2$.
+    Let $d\ge1$. On any finite site set, $(\bigotimes_i m_i)(\bigotimes_i\ket{v_i})=\bigotimes_i m_i\ket{v_i}$ and $\bigotimes_i c_i\ket{v_i}=(\prod_i c_i)\bigotimes_i\ket{v_i}$. Every nonzero $\ket v\in\C^d$ equals $c\,u\ket 0$ ($c\ne0$, $u\in\mathrm U(d)$), every nonzero product vector equals $c(\bigotimes_i u_i)\ket{0\cdots0}$, $\bigotimes_i u_i$ is one layer of one-site unitaries, of depth $0$, and every nonzero vector prepared in depth $T$ equals $c\,U\ket{0\cdots0}$ for a local circuit $U$ of depth $T$.
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{lem:qc_circuit_inverse_composition}
-    Factoring $\ket{v_i}=\|v_i\|u_i\ket0$ gives $\bigotimes_i\ket{v_i}=(\prod_i\|v_i\|)(\bigotimes_i u_i)\ket{0\cdots0}$. The product $\bigotimes_i u_i$ is implemented in $2$ layers (applying $u_k\otimes u_{k+1}$ on odd bonds $\{k,k+1\}$ with $k<N$, then $u_N$ on $\{N\}$ when $N$ is odd), and Lemma~\ref{lem:qc_circuit_inverse_composition} gives depth $T+2$.
+    Factoring $\ket{v_i}=c_iu_i\ket0$ gives $\bigotimes_i\ket{v_i}=(\prod_i c_i)(\bigotimes_i u_i)\ket{0\cdots0}$. The product $\bigotimes_i u_i$ is a layer without gates on bonds, of depth $0$, and Lemma~\ref{lem:qc_circuit_inverse_composition} gives depth $T$.
 \end{proof}
 
 \begin{lemma}[Operators placed on sets of sites]
     \label{lem:qc_placed_operators}
-    \lean{QuantumCircuit.embedOp, QuantumCircuit.embedOp_embedOp,
-        QuantumCircuit.embedOp_rectKronecker,
-        QuantumCircuit.commute_embedOp_of_disjoint,
-        QuantumCircuit.noncommProd_embedOp_apply}
+    \lean{ManyBody.placeAlong, ManyBody.placeAlong_apply, ManyBody.placeAlong_placeAlong,
+        ManyBody.placeAlong_prodOp,
+        ManyBody.commute_placeAlong_of_disjoint,
+        QuantumCircuit.noncommProd_placeAlong_apply}
     \leanok
     \uses{def:qc_local_circuit}
-    For a map $e\colon J\to I$ between finite site sets and $X$ on $(\C^d)^{\otimes J}$, the \emph{placed operator} $\operatorname{embed}_e(X)$ has entries
+    For an injective map $e\colon J\to I$ between finite site sets and $X$ on $(\C^d)^{\otimes J}$, the \emph{placed operator} $\operatorname{embed}_e(X)$ has entries
     \begin{align}
         \operatorname{embed}_e(X)_{x,y}
          & =\begin{cases}X_{x\circ e,\,y\circ e},&\text{if }x|_{I\setminus e(J)}=y|_{I\setminus e(J)},\\0,&\text{otherwise.}\end{cases}\notag
     \end{align}
-    For injective $e$ and $f\colon I\hookrightarrow K$, $\operatorname{embed}_e(\bigotimes_{j\in J}m_j)$ has factor $m_j$ at $e(j)$ and $\mathbb 1$ outside $e(J)$, and $\operatorname{embed}_f(\operatorname{embed}_e(X))=\operatorname{embed}_{f\circ e}(X)$. If $\{e_k\colon J_k\hookrightarrow I\}_{k\in K}$ have pairwise disjoint ranges, the operators $\operatorname{embed}_{e_k}(X_k)$ commute and
+    For an injective $f\colon I\hookrightarrow K$, $\operatorname{embed}_e(\bigotimes_{j\in J}m_j)$ has factor $m_j$ at $e(j)$ and $\mathbb 1$ outside $e(J)$, and $\operatorname{embed}_f(\operatorname{embed}_e(X))=\operatorname{embed}_{f\circ e}(X)$. If $\{e_k\colon J_k\hookrightarrow I\}_{k\in K}$ have pairwise disjoint ranges, the operators $\operatorname{embed}_{e_k}(X_k)$ commute and
     \begin{align}
         \Bigl(\prod_{k\in K}\operatorname{embed}_{e_k}(X_k)\Bigr)_{x,y}
          & =\begin{cases}\prod_{k\in K}(X_k)_{x\circ e_k,\,y\circ e_k},&\text{if }x|_{I\setminus\bigcup_k e_k(J_k)}=y|_{I\setminus\bigcup_k e_k(J_k)},\\0,&\text{otherwise.}\end{cases}\notag
@@ -241,7 +241,7 @@ preparation of matrix product states.
 
 \begin{lemma}[Norm under placement on additional sites]
     \label{lem:qc_placement_norm}
-    \lean{QuantumCircuit.norm_embedOp_le}
+    \lean{ManyBody.norm_placeAlong_le}
     \leanok
     Let $e:J\hookrightarrow I$ be an injection of finite site sets, and
     let $X$ be a matrix on $(\C^q)^{\otimes J}$. Placing $X$ on these
@@ -258,7 +258,7 @@ preparation of matrix product states.
 
 \begin{lemma}[Operators supported on a set of sites]
     \label{thm:qc_supported_operator_placement}
-    \lean{QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators}
+    \lean{ManyBody.exists_eq_placeAlong_of_mem_supportedOperators}
     \leanok
     \uses{def:qc_local_circuit,lem:qc_placed_operators}
     For any injective $e\colon\{0,\ldots,m-1\}\to\{0,\ldots,n-1\}$ ($m,n,d\ge 0$),
@@ -280,7 +280,7 @@ preparation of matrix product states.
         QuantumCircuit.placeCfg_comp, QuantumCircuit.placeCfg_apply_of_notMem,
         QuantumCircuit.eq_placeCfg, QuantumCircuit.placeCfg_injective,
         QuantumCircuit.injective_window, QuantumCircuit.disjoint_range_window,
-        QuantumCircuit.list_prod_embedOp_placeCfg, Matrix.mul_apply_extend}
+        QuantumCircuit.list_prod_placeAlong_placeCfg, Matrix.mul_apply_extend}
     \leanok
     \uses{lem:qc_placed_operators}
     Let $d\ge1$, and let $W_1,\dots,W_n\colon\{1,\dots,m\}\to I$ be windows such that $(p,t)\mapsto W_p(t)$ is injective. For $c=(c_1,\dots,c_n)$ with $c_p\in\{0,\dots,d-1\}^m$, define $\operatorname{place}(c)\in\{0,\dots,d-1\}^I$ by $\operatorname{place}(c)(W_p(t))=c_p(t)$ and $0$ outside $\bigcup_p\operatorname{im}W_p$; then $\operatorname{place}$ is injective and fixes every configuration vanishing outside $\bigcup_p\operatorname{im}W_p$ upon restricting to $(W_p)_p$.
@@ -300,16 +300,16 @@ preparation of matrix product states.
 
 \begin{lemma}[Circuits inside sets of sites, in series and in parallel]
     \label{lem:qc_parallel_circuits}
-    \lean{QuantumCircuit.BondLayer.IsIn, QuantumCircuit.IsBondCircuitOn,
-        QuantumCircuit.IsCircuitOn, QuantumCircuit.IsBondCircuitOn.mul,
-        QuantumCircuit.IsBondCircuitOn.finset_noncommProd,
-        QuantumCircuit.IsCircuitOn.finset_noncommProd,
-        QuantumCircuit.IsPairProduct.isCircuitOn,
-        QuantumCircuit.isCircuitOn_list_prod_embedOp}
+    \lean{QuantumCircuit.Layer.IsIn, QuantumCircuit.UnitaryCircuit.IsIn,
+        QuantumCircuit.IsUnitaryCircuitOn, QuantumCircuit.IsUnitaryCircuitOn.mul,
+        QuantumCircuit.IsUnitaryCircuitOn.par,
+        QuantumCircuit.IsUnitaryCircuitOn.finset_noncommProd,
+        QuantumCircuit.IsUnitaryCircuitOn.list_prod,
+        QuantumCircuit.IsGateProduct.isUnitaryCircuitOn_ring}
     \leanok
     \uses{def:qc_local_circuit, lem:qc_circuit_inverse_composition,
         lem:qc_placed_operators}
-    A layer acts \emph{inside} $R\subseteq I$ if all its bonds lie in $R$, and $U$ is a \emph{local circuit of depth $T$ inside $R$} if $U=W_T\cdots W_1$ with each $W_t$ acting inside $R$.
+    A layer acts \emph{inside} $R\subseteq I$ if all its bonds lie in $R$ and its one-site unitaries outside $R$ are $\mathbb 1$, and $U$ is a \emph{local circuit of depth $T$ inside $R$} if $U=W_k\cdots W_1$ with each $W_t$ acting inside $R$ and total depth at most $T$.
     \begin{enumerate}
         \item Series composition inside $R$ adds depths: $T$ and $T'$ give $T+T'$.
         \item If all bonds are nonempty and $\{U_i\}_{i\in K}$ are commuting depth-$T$ circuits inside pairwise disjoint sets $R_i$, then $\prod_{i\in K}U_i$ has depth $T$ inside $\bigcup_{i\in K}R_i$.
@@ -318,7 +318,7 @@ preparation of matrix product states.
 \end{lemma}
 \begin{proof}
     \leanok
-    Item (1) is layer concatenation (Lemma~\ref{lem:qc_circuit_inverse_composition}). For (2), merging the $t$-th layers across $i\in K$ forms a single layer inside $\bigcup_i R_i$ because nonempty bonds in disjoint $R_i$ are disjoint. For (3), placing each of the $K$ gates of $X_i$ by $e_i$ (padded with empty layers) gives depth $K$ inside $\operatorname{im}e_i$, and (2) merges them in parallel.
+    Item (1) is layer concatenation (Lemma~\ref{lem:qc_circuit_inverse_composition}). For (2), merging the $t$-th layers across $i\in K$ forms a single layer inside $\bigcup_i R_i$ because nonempty bonds in disjoint $R_i$ are disjoint. For (3), placing each of the at most $K$ gates of $X_i$ by $e_i$ gives depth at most $K$ inside $\operatorname{im}e_i$, and (2) merges them in parallel.
 \end{proof}
 
 \section{Two-site gates suffice}
@@ -327,12 +327,13 @@ preparation of matrix product states.
 \begin{theorem}[Unitaries on a bounded number of sites]
     \label{thm:qc_bounded_unitary_two_site_gates}
     \uses{def:qc_local_circuit}
-    \lean{QuantumCircuit.exists_isPairProduct,
+    \lean{QuantumCircuit.exists_isGateProduct,
         QuantumCircuit.isTwoLevelWord_of_det_eq_one,
-        QuantumCircuit.exists_isPairProduct_ctrlOp,
-        QuantumCircuit.isPairProduct_embedOp_pairSites}
+        QuantumCircuit.twoLevel_conj_quarterTwo,
+        QuantumCircuit.ctrlOp_insert_commutator,
+        QuantumCircuit.isGateProduct_of_mem_supportedOperators_pair}
     \leanok
-    Realizing~\cite[caption of Fig.~1]{Malz2024Preparation}, for every $d\ge1$ and $n\ge2$ there exists $K$ such that every $U\in\mathrm U((\C^d)^{\otimes n})$ is a product of at most $K$ nearest-neighbour two-site unitaries on the open chain $\{1,\dots,n\}$.
+    Realizing~\cite[caption of Fig.~1]{Malz2024Preparation}, for every $d\ge1$ and $n\ge2$ there exists $K$ such that every $U\in\mathrm U((\C^d)^{\otimes n})$ is a product of at most $K$ nearest-neighbour two-site unitaries on the open chain $\{1,\dots,n\}$, one-site unitaries being free.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -352,32 +353,32 @@ preparation of matrix product states.
 
 \begin{definition}[Gates on windows of consecutive sites]
     \label{def:qc_window_gate}
-    \lean{QuantumCircuit.windowSites, QuantumCircuit.IsWindowGate,
-        QuantumCircuit.IsWindowProduct}
+    \lean{QuantumCircuit.Geometry.window, QuantumCircuit.IsGateProduct}
     \leanok
     \uses{def:qc_local_circuit}
-    Modeling the sequential-RG gates of~\cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}, a \emph{gate on a window of $m$ sites} on $\{1,\dots,n\}$ is a unitary supported on $\{p:a\le p<\min(a+m,n+1)\}$ for some $a$. An operator is a \emph{product of at most $K$ window-$m$ gates} if it factors into at most $K$ such gates.
+    Modeling the sequential-RG gates of~\cite[paragraph ``The sequential-RG circuit'']{Malz2024Preparation}, a \emph{gate on a window of $m$ sites} on $\{1,\dots,n\}$ is a unitary supported on $\{p:a\le p<\min(a+m,n+1)\}$ for some $a\in\{1,\dots,n\}$. An operator is a \emph{product of at most $K$ window-$m$ gates} if it factors into at most $K$ such gates.
 \end{definition}
 
 \begin{lemma}[Products of gates on windows]
     \label{lem:qc_window_products}
-    \lean{QuantumCircuit.isWindowGate_embedOp, QuantumCircuit.isWindowGate_of_le,
-        QuantumCircuit.IsWindowProduct.mul, QuantumCircuit.IsWindowProduct.embedOp,
-        QuantumCircuit.IsWindowGate.isNeighbourGate,
-        QuantumCircuit.IsWindowProduct.isPairProduct_two,
-        QuantumCircuit.IsWindowProduct.exists_isPairProduct}
+    \lean{QuantumCircuit.IsGateProduct.window_of_mem_supportedOperators,
+        QuantumCircuit.IsGateProduct.mul,
+        QuantumCircuit.IsGateProduct.place_window_two,
+        QuantumCircuit.IsGateProduct.of_window_two,
+        QuantumCircuit.isGateProduct_pathGraph_of_mem_supportedOperators_interval,
+        QuantumCircuit.IsGateProduct.of_window}
     \leanok
     \uses{def:qc_window_gate, lem:qc_placed_operators,
         thm:qc_bounded_unitary_two_site_gates}
     On the open chain of $n$ sites:
     \begin{enumerate}
-        \item Any unitary placed on $l\le m$ consecutive sites (and any chain unitary when $n\le m$) is a window-$m$ gate.
-        \item Products of $K$ and $K'$ window-$m$ gates multiply to at most $K+K'$ window-$m$ gates and are preserved under contiguous subchain placement.
+        \item Any unitary supported on a window of $m$ consecutive sites is a window-$m$ gate.
+        \item Products of $K$ and $K'$ window-$m$ gates multiply to at most $K+K'$ window-$m$ gates.
         \item For $n\ge2$, a window-$2$ gate is a nearest-neighbour two-site gate.
-        \item For $m\ge2$, there exists $C(d,m)$ such that for all $n\ge2$, any product of at most $K$ window-$m$ gates is a product of at most $KC(d,m)$ nearest-neighbour two-site gates.
+        \item For $d\ge2$ and $m\ge1$, any product of at most $K$ window-$m$ gates is a product of at most $12\,(d^m)^5K$ nearest-neighbour two-site gates, one-site unitaries being free.
     \end{enumerate}
 \end{lemma}
 \begin{proof}
     \leanok
-    Items (1)--(2) follow from Lemma~\ref{lem:qc_placed_operators}. For (3), a window of length $2$ lies in $\{a',a'+1\}$ with $a'=\min(a,n-1)$. For (4), each gate lies in a contiguous window of length $\min(m,n)\ge2$, hence factors into at most $K_{\min(m,n)}$ nearest-neighbour gates by Theorem~\ref{thm:qc_bounded_unitary_two_site_gates}, so $C(d,m)=\sum_{l=2}^m K_l$ suffices.
+    Items (1)--(2) follow from the definition. For (3), a window of length $2$ lies in $\{a',a'+1\}$ with $a'=\min(a,n-1)$. For (4), each gate is a unitary on a window of at most $m$ consecutive sites, that is, a unitary on a chain of at most $m$ sites placed on consecutive sites; by Theorem~\ref{thm:qc_bounded_unitary_two_site_gates} on that shorter chain, with the count of Lemma~\ref{thm:mpu_quantitative_unitary_synthesis}, it is a product of at most $12\,(d^m)^5$ nearest-neighbour gates.
 \end{proof}

@@ -27,7 +27,7 @@ open Matrix
 open scoped BigOperators
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -76,7 +76,7 @@ theorem source_actualTerminal_preEntropy_bounds_of_truncationEntropyThreshold_le
         let Gpre := (∑ g, ∑ j, tree.weight j * gpre j g) / (S.K : ℝ)
         0 ≤ Gpre ∧ Gpre ≤ B := by
   classical
-  have htransfer := regionalEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le
+  have htransfer := regionEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le
     q hq gap Cvol hgap hthr
   intro I _ _ Λ T hT S hSn hgraph hdepth hn hK hr hDpos hD
     L hL hrows Ω Ωt hΩ hΩt hcard htrace Ce η hsource X σ gpre gaps gmax Bsh B

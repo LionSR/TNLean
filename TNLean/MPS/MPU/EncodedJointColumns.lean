@@ -39,16 +39,16 @@ theorem encodedJointColumns_of_coordinate_identities
     (X Y : Matrix ι ι ℂ) (W : Matrix γ α ℂ)
     (V : Matrix (ρ × (Fin r × Fin r)) β ℂ)
     (hW : Matrix.reindex g u W = V)
-    (h : (X * Y) * initializedBasisMatrix E = initializedBasisMatrix G * W) :
-    (Matrix.reindex ec ec X * Matrix.reindex ec ec Y) * initializedBasisMatrix F =
-      initializedBasisMatrix (appendBasisEmbedding f (compatibleBondDilationEmbedding hd eb)) *
+    (h : (X * Y) * basisInclusion E = basisInclusion G * W) :
+    (Matrix.reindex ec ec X * Matrix.reindex ec ec Y) * basisInclusion F =
+      basisInclusion (appendBasisEmbedding f (compatibleBondDilationEmbedding hd eb)) *
         ((1 : Matrix ρ ρ ℂ) ⊗ₖ
-          initializedBasisMatrix (joiningChildBasisEmbedding (r := r) hd)) * V := by
+          basisInclusion (joiningChildBasisEmbedding (r := r) hd)) * V := by
   have ht := matrix_columns_reindex ec u g E G F
     (appendBasisEmbedding f ((joiningChildBasisEmbedding (r := r) hd).trans
       (compatibleBondDilationEmbedding hd eb))) hE hG (X * Y) W h
-  rw [hW, initializedBasisMatrix_append_joiningChild] at ht
-  change Matrix.reindexLinearEquiv ℂ ℂ ec ec (X * Y) * initializedBasisMatrix F = _ at ht
+  rw [hW, basisInclusion_append_joiningChild] at ht
+  change Matrix.reindexLinearEquiv ℂ ℂ ec ec (X * Y) * basisInclusion F = _ at ht
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ ec ec ec X Y] at ht
   exact ht
 

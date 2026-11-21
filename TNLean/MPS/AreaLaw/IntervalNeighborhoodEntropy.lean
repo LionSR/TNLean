@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.ChainNeighborhood
-import QICLean.Entropy.FiniteProductInformation
+import QICLean.Entropy.RegionStrongSubadditivity
 import Mathlib.Algebra.Order.Floor.Semiring
 import Mathlib.Data.Nat.Dist
 

@@ -25,6 +25,7 @@ in `02-initial.tex`, line 225. No upstream Lean proof text is reused.
 -/
 
 open TNLean.Lattice
+open ManyBody (ambientDilation ambientDilation_zero)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 

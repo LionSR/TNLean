@@ -191,7 +191,7 @@ theorem exists_physical_dg_canonical_interval_parent_failure :
     dsimp only [w]
     ring
   have hsampling := Submodule.rankUnitaryHaar_not_isViable_native_randomRangeSubspace_uniform_le
-    (F := EuclideanSpace ℂ (↥((interval L p endR)ᶜ) → Fin q)) e hD hrG hbeta hbeta1
+    (F := EuclideanSpace ℂ ({x // x ∉ interval L p endR} → Fin q)) e hD hrG hbeta hbeta1
   rw [hscale] at hsampling
   obtain ⟨_hs, _hsize, hprob⟩ := hsampling
   have hbadSample := hprob W hQ (T.map coords.toLinearEquiv.toLinearMap) hdimTc.le hWT

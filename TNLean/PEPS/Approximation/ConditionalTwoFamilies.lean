@@ -97,7 +97,7 @@ namespace TNLean.PEPS.AreaLaw
 /-- The source conditional-information bound written with the four native
 regional entropy terms. Canonical tripartite CMI identification is separate;
 this theorem uses only the existing model entropy and its proved QICLean equality. -/
-theorem regionalEntropy_conditional_le_residual_add_sum
+theorem regionEntropy_conditional_le_residual_add_sum
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     (G B C : Finset (Site Λ)) (P : Geometry.OrderedTwoFamilyPartition G)
     (hGB : Disjoint G B) (hGC : Disjoint G C) (hBC : Disjoint B C)
@@ -120,7 +120,7 @@ exterior and the earlier pieces of its family, then
 remainder. Each remainder site costs at most `2 log q`.
 Source: Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`, lines 197–222,
 `eq:info-tile-cost`. -/
-theorem regionalEntropy_conditional_le_card_residual_add_pieceCount
+theorem regionEntropy_conditional_le_card_residual_add_pieceCount
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     (G B C : Finset (Site Λ)) (P : Geometry.OrderedTwoFamilyPartition G)
     (hGB : Disjoint G B) (hGC : Disjoint G C) (hBC : Disjoint B C) (C₂ : ℝ)
@@ -133,7 +133,7 @@ theorem regionalEntropy_conditional_le_card_residual_add_pieceCount
     ManyBody.regionEntropy Ω (G ∪ B) + ManyBody.regionEntropy Ω (C ∪ B) -
         ManyBody.regionEntropy Ω B - ManyBody.regionEntropy Ω (G ∪ C ∪ B) ≤
       2 * (P.residual.card : ℝ) * Real.log q + P.pieceCount * C₂ := by
-  have h := regionalEntropy_conditional_le_residual_add_sum Λ q Ω hΩ G B C P
+  have h := regionEntropy_conditional_le_residual_add_sum Λ q Ω hΩ G B C P
     hGB hGC hBC (fun _ ↦ C₂) h₀ h₁
   have hD := ManyBody.regionEntropy_le_card_mul_log hΩ P.residual
   simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul] at h
@@ -143,7 +143,7 @@ theorem regionalEntropy_conditional_le_card_residual_add_pieceCount
 `B`, `C`, `I(G : C | B) ≤ 2 |G| log q`. This is the counting form for the
 partition of `G` with no pieces and remainder `G`.
 Source: Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`, lines 310–311. -/
-theorem regionalEntropy_conditional_le_two_mul_card_mul_log
+theorem regionEntropy_conditional_le_two_mul_card_mul_log
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     (G B C : Finset (Site Λ))
     (hGB : Disjoint G B) (hGC : Disjoint G C) (hBC : Disjoint B C) :
@@ -158,7 +158,7 @@ theorem regionalEntropy_conditional_le_two_mul_card_mul_log
       disjoint := fun i ↦ i.elim0
       residual_disjoint := fun i ↦ i.elim0
       cover := by simp }
-  simpa [P] using regionalEntropy_conditional_le_card_residual_add_pieceCount Λ q Ω hΩ
+  simpa [P] using regionEntropy_conditional_le_card_residual_add_pieceCount Λ q Ω hΩ
     G B C P hGB hGC hBC 0 (fun i ↦ i.elim0) (fun i ↦ i.elim0)
 
 end TNLean.PEPS.AreaLaw

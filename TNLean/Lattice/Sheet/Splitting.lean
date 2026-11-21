@@ -94,9 +94,9 @@ theorem one_kronecker_mul_stack {τ n : Type*} [Fintype τ] [DecidableEq τ] [Fi
 /-- The raw configurations of a sheet as triples `((t, e), u)` of configurations on `T`, on `E`
 and on `U = (T ∪ E)ᶜ`, for disjoint `T` and `E`. -/
 def threeSplit (q : ℕ) (T E : Finset ι) (h : Disjoint T E) :
-    (ι → Fin q) ≃ ((T → Fin q) × (E → Fin q)) × (↥(T ∪ E)ᶜ → Fin q) :=
+    (ι → Fin q) ≃ ((T → Fin q) × (E → Fin q)) × ({v // v ∉ T ∪ E} → Fin q) :=
   (sheetSplit q (T ∪ E)).trans
-    ((ManyBody.unionEquiv (fun _ : ι => Fin q) T E h).prodCongr (Equiv.refl _))
+    ((ManyBody.regionUnionEquiv (β := fun _ : ι => Fin q) h).prodCongr (Equiv.refl _))
 
 section ThreeSplit
 
@@ -111,34 +111,36 @@ theorem threeSplit_apply_fst_snd (x : ι → Fin q) (v : E) : (threeSplit q T E 
   rfl
 
 @[simp]
-theorem threeSplit_apply_snd (x : ι → Fin q) (v : ↥(T ∪ E)ᶜ) :
+theorem threeSplit_apply_snd (x : ι → Fin q) (v : {v // v ∉ T ∪ E}) :
     (threeSplit q T E h x).2 v = x v :=
   rfl
 
 theorem threeSplit_symm_apply_of_mem_left (t : T → Fin q) (e : E → Fin q)
-    (u : ↥(T ∪ E)ᶜ → Fin q) {v : ι} (hv : v ∈ T) :
+    (u : {v // v ∉ T ∪ E} → Fin q) {v : ι} (hv : v ∈ T) :
     (threeSplit q T E h).symm ((t, e), u) v = t ⟨v, hv⟩ := by
-  simp [threeSplit, ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _
-    (Finset.mem_union_left E hv), ManyBody.unionEquiv, hv]
+  simp [threeSplit, ManyBody.cutEquiv_symm_apply_mem _ _
+    (Finset.mem_union_left E hv), ManyBody.regionUnionEquiv, hv]
 
 theorem threeSplit_symm_apply_of_mem_right (t : T → Fin q) (e : E → Fin q)
-    (u : ↥(T ∪ E)ᶜ → Fin q) {v : ι} (hv : v ∈ E) :
+    (u : {v // v ∉ T ∪ E} → Fin q) {v : ι} (hv : v ∈ E) :
     (threeSplit q T E h).symm ((t, e), u) v = e ⟨v, hv⟩ := by
   have hvT : v ∉ T := fun hvT => Finset.disjoint_left.mp h hvT hv
-  simp [threeSplit, ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _
-    (Finset.mem_union_right T hv), ManyBody.unionEquiv, hvT]
+  simp [threeSplit, ManyBody.cutEquiv_symm_apply_mem _ _
+    (Finset.mem_union_right T hv), ManyBody.regionUnionEquiv, hvT, hv]
 
 theorem threeSplit_symm_apply_of_notMem (t : T → Fin q) (e : E → Fin q)
-    (u : ↥(T ∪ E)ᶜ → Fin q) {v : ι} (hv : v ∉ T ∪ E) :
-    (threeSplit q T E h).symm ((t, e), u) v = u ⟨v, Finset.mem_compl.mpr hv⟩ := by
-  simp [threeSplit, ManyBody.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hv]
+    (u : {v // v ∉ T ∪ E} → Fin q) {v : ι} (hv : v ∉ T ∪ E) :
+    (threeSplit q T E h).symm ((t, e), u) v = u ⟨v, hv⟩ := by
+  change (sheetSplit q (T ∪ E)).symm
+    ((ManyBody.regionUnionEquiv (β := fun _ : ι => Fin q) h).symm (t, e), u) v = _
+  exact ManyBody.cutEquiv_symm_apply_not_mem _ _ hv
 
 /-- A product operator in the coordinates of `threeSplit T E` is the Kronecker product of its
 restrictions to `T`, to `E` and to `(T ∪ E)ᶜ`. -/
 theorem rectKronecker_submatrix_threeSplit (m : ι → Matrix (Fin q) (Fin q) ℂ) :
     (rectKronecker m).submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
       (rectKronecker (fun v : T => m v) ⊗ₖ rectKronecker (fun v : E => m v)) ⊗ₖ
-        rectKronecker (fun v : ↥(T ∪ E)ᶜ => m v) := by
+        rectKronecker (fun v : {v // v ∉ T ∪ E} => m v) := by
   ext ⟨⟨t, e⟩, u⟩ ⟨⟨t', e'⟩, u'⟩
   simp only [submatrix_apply, rectKronecker_apply, kroneckerMap_apply]
   rw [← Finset.prod_mul_prod_compl (T ∪ E), Finset.prod_union (M := ℂ) h, ← Finset.prod_coe_sort T,
@@ -151,9 +153,10 @@ theorem rectKronecker_submatrix_threeSplit (m : ι → Matrix (Fin q) (Fin q) �
     · refine Finset.prod_congr rfl fun v _ => ?_
       rw [threeSplit_symm_apply_of_mem_right h _ _ _ v.2,
         threeSplit_symm_apply_of_mem_right h _ _ _ v.2]
-  · refine Finset.prod_congr rfl fun v _ => ?_
+  · refine Fintype.prod_equiv (Finset.complSubtypeEquiv (T ∪ E)).symm _ _ fun v => ?_
     rw [threeSplit_symm_apply_of_notMem h _ _ _ (Finset.mem_compl.mp v.2),
       threeSplit_symm_apply_of_notMem h _ _ _ (Finset.mem_compl.mp v.2)]
+    rfl
 
 end ThreeSplit
 
@@ -186,18 +189,19 @@ theorem exists_threeSplit_eq_kronecker_one {T E : Finset ι} (h : Disjoint T E)
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (T ∪ E : Finset ι)) :
     ∃ A' : Matrix ((T → Fin q) × (E → Fin q)) ((T → Fin q) × (E → Fin q)) ℂ,
       A.submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
-        A' ⊗ₖ (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) := by
+        A' ⊗ₖ (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) := by
   refine exists_eq_of_mem_supportedOperators (threeSplit q T E h)
-    ((kroneckerBilinear (R := ℂ)).flip (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ))
+    ((kroneckerBilinear (R := ℂ)).flip
+      (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ))
     (fun m hm => ?_) hA
   refine ⟨rectKronecker (fun v : T => m v) ⊗ₖ rectKronecker (fun v : E => m v), ?_⟩
   rw [rectKronecker_submatrix_threeSplit h]
-  change _ = _ ⊗ₖ (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)
+  change _ = _ ⊗ₖ (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)
   congr 1
-  rw [← rectKronecker_one (ν := ↥(T ∪ E)ᶜ) (ι := Fin q)]
+  rw [← rectKronecker_one (ν := {v // v ∉ T ∪ E}) (ι := Fin q)]
   congr 1
   funext v
-  exact hm v (Finset.mem_compl.mp v.2)
+  exact hm v v.2
 
 /-- An operator acting on a subset of `E` is `(1_T ⊗ A') ⊗ 1_U` in the coordinates of
 `threeSplit T E`. -/
@@ -207,20 +211,20 @@ theorem exists_threeSplit_eq_one_kronecker_kronecker_one {T E : Finset ι} (h : 
     ∃ A' : Matrix (E → Fin q) (E → Fin q) ℂ,
       A.submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
         ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ A') ⊗ₖ
-          (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) := by
+          (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) := by
   refine exists_eq_of_mem_supportedOperators (threeSplit q T E h)
     (((kroneckerBilinear (R := ℂ)).flip
-      (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)).comp
+      (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)).comp
       (kroneckerBilinear (R := ℂ) (1 : Matrix (T → Fin q) (T → Fin q) ℂ)))
     (fun m hm => ?_) hA
   have hT : ∀ v : T, m v = 1 := fun v =>
     hm v fun hv => Finset.disjoint_left.mp h v.2 (hD hv)
-  have hU : ∀ v : ↥(T ∪ E)ᶜ, m v = 1 := fun v =>
-    hm v fun hv => (Finset.mem_compl.mp v.2) (Finset.mem_union_right T (hD hv))
+  have hU : ∀ v : {v // v ∉ T ∪ E}, m v = 1 := fun v =>
+    hm v fun hv => v.2 (Finset.mem_union_right T (hD hv))
   refine ⟨rectKronecker (fun v : E => m v), ?_⟩
   rw [rectKronecker_submatrix_threeSplit h]
   change _ = ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ _) ⊗ₖ
-    (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)
+    (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)
   simp only [hT, hU, rectKronecker_one]
 
 /-- An operator supported disjointly from T is `1_T ⊗ V` in the existing
@@ -234,14 +238,14 @@ theorem exists_threeSplit_eq_reindex_one_kronecker
     (hD : Disjoint D T)
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) :
-    ∃ V : Matrix ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-        ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ,
+    ∃ V : Matrix ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+        ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ,
       A.submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
         ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ V).reindex
           (Equiv.prodAssoc (T → Fin q) (E → Fin q)
-            (↥(T ∪ E)ᶜ → Fin q)).symm
+            ({v // v ∉ T ∪ E} → Fin q)).symm
           (Equiv.prodAssoc (T → Fin q) (E → Fin q)
-            (↥(T ∪ E)ᶜ → Fin q)).symm := by
+            ({v // v ∉ T ∪ E} → Fin q)).symm := by
   obtain ⟨B, hB⟩ :=
     TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators
       (q := q) (S := T) hD hA
@@ -249,10 +253,10 @@ theorem exists_threeSplit_eq_reindex_one_kronecker
   refine ⟨B.submatrix c.symm c.symm, ?_⟩
   ext ⟨⟨t, e⟩, u⟩ ⟨⟨t', e'⟩, u'⟩
   change A
-      ((ManyBody.splitEquiv (fun _ : ι ↦ Fin q) (T ∪ E)).symm
-        ((ManyBody.unionEquiv (fun _ : ι ↦ Fin q) T E h).symm (t, e), u))
-      ((ManyBody.splitEquiv (fun _ : ι ↦ Fin q) (T ∪ E)).symm
-        ((ManyBody.unionEquiv (fun _ : ι ↦ Fin q) T E h).symm (t', e'), u')) =
+      ((ManyBody.cutEquiv (fun _ : ι ↦ Fin q) (T ∪ E)).symm
+        ((ManyBody.regionUnionEquiv (β := fun _ : ι ↦ Fin q) h).symm (t, e), u))
+      ((ManyBody.cutEquiv (fun _ : ι ↦ Fin q) (T ∪ E)).symm
+        ((ManyBody.regionUnionEquiv (β := fun _ : ι ↦ Fin q) h).symm (t', e'), u')) =
     (1 : Matrix (T → Fin q) (T → Fin q) ℂ) t t' *
       B (c.symm (e, u)) (c.symm (e', u'))
   rw [ManyBody.split_union_symm (fun _ : ι ↦ Fin q) T E h t e u,
@@ -268,7 +272,7 @@ variable {T E : Finset ι} (h : Disjoint T E)
 
 /-- A vector on the sheet in the coordinates of `threeSplit T E`. -/
 abbrev splitVec (Ω : EuclideanSpace ℂ (ι → Fin q)) :
-    ((T → Fin q) × (E → Fin q)) × (↥(T ∪ E)ᶜ → Fin q) → ℂ :=
+    ((T → Fin q) × (E → Fin q)) × ({v // v ∉ T ∪ E} → Fin q) → ℂ :=
   fun w => Ω ((threeSplit q T E h).symm w)
 
 theorem star_splitVec_dotProduct_splitVec {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) :
@@ -281,8 +285,8 @@ coordinate vector `splitVec Ω`. -/
 theorem partialTraceRight_splitVec (Ω : EuclideanSpace ℂ (ι → Fin q)) :
     partialTraceRight (vecMulVec (splitVec h Ω) (star (splitVec h Ω))) =
       (ManyBody.regionState Ω (T ∪ E)).submatrix
-        (ManyBody.unionEquiv (fun _ : ι => Fin q) T E h).symm
-        (ManyBody.unionEquiv (fun _ : ι => Fin q) T E h).symm := by
+        (ManyBody.regionUnionEquiv (β := fun _ : ι => Fin q) h).symm
+        (ManyBody.regionUnionEquiv (β := fun _ : ι => Fin q) h).symm := by
   ext a b
   rfl
 
@@ -319,11 +323,12 @@ theorem quantumRelativeEntropy_splitVec_eq_mutualInformation (Ω : EuclideanSpac
 Polynomial-PEPS manuscript, Lemma 6.4 `lem:splitting`, `05-frames.tex`, lines 352–365. -/
 structure SplittingData (q : ℕ) (T E : Finset ι) where
   /-- The isometry `V : H_U → B_T ⊗ B_E`. -/
-  V : Matrix ((T → Fin q) × ((E → Fin q) ⊕ (↥(T ∪ E)ᶜ → Fin q))) (↥(T ∪ E)ᶜ → Fin q) ℂ
+  V : Matrix ((T → Fin q) × ((E → Fin q) ⊕ ({v // v ∉ T ∪ E} → Fin q)))
+    ({v // v ∉ T ∪ E} → Fin q) ℂ
   /-- The unit vector `s` on `T × B_T`. -/
   s : (T → Fin q) × (T → Fin q) → ℂ
   /-- The unit vector `s'` on `E × B_E`. -/
-  s' : (E → Fin q) × ((E → Fin q) ⊕ (↥(T ∪ E)ᶜ → Fin q)) → ℂ
+  s' : (E → Fin q) × ((E → Fin q) ⊕ ({v // v ∉ T ∪ E} → Fin q)) → ℂ
   /-- `V` is an isometry. -/
   isIsometry : V.IsIsometry
   /-- `s` is a unit vector. -/

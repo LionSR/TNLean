@@ -102,13 +102,13 @@ private theorem designatedSupport_not_near_far_domainGraph
   obtain ⟨hyD, hyF⟩ := Finset.mem_inter.mp hy
   have hxσ := (Finset.mem_filter.mp hxP).2
   have hyσ := (Finset.mem_filter.mp hyF).2
-  have hcross : () ∈ crossingLabels S.graph (S.truncationSet L) S.r₀
-      (fun _ : Unit ↦ S.anchor i) (receiving σ false) := by
-    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, ⟨x, hxD, hxP⟩,
-      y, hyD, by simp [receiving, hyσ]⟩
+  have hcross : () ∈ ManyBody.crossingTerms
+      (fun _ : Unit ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+      (receiving σ false) := by
+    exact ManyBody.mem_crossingTerms.mpr ⟨⟨x, hxD, hxP⟩, y, hyD, by simp [receiving, hyσ]⟩
   have heq : designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) =
       S.ball i := by
-    exact (truncationRadius_eq_of_mem_crossingLabels hnear hcross).2.2.trans
+    exact (truncationRadius_eq_of_mem_crossingTerms hnear hcross).2.2.trans
       (Finset.ext fun _ ↦ by simp [ball, ManyBody.mem_graphBall])
   rw [heq] at hxD hyD
   have hxcompact := Finset.mem_filter.mp (hnear hxP)

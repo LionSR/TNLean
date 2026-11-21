@@ -26,6 +26,7 @@ normalization conventions are recorded in
 -/
 
 open ManyBody (interval)
+open ManyBody (cutMatrix)
 
 open Matrix Real
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
@@ -41,7 +42,8 @@ theorem aklv_regionEntropy_le_short_side {L q k : ℕ}
   have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) (leftBlock L k) Ω
   have htrace : ρ.trace = 1 := ManyBody.trace_regionState_eq_one hΩ
   have hrank : ρ.rank ≤ q ^ min k (L - k) := by
-    rw [show ρ = cutMatrix Ω k * (cutMatrix Ω k)ᴴ from regionState_leftBlock_eq Ω k]
+    rw [show ρ = cutMatrix (leftBlock L k) Ω * (cutMatrix (leftBlock L k) Ω)ᴴ from
+      ManyBody.regionState_eq_cutMatrix_mul_conjTranspose Ω (leftBlock L k)]
     exact (rank_mul_le_left _ _).trans (aklv_rank_cutMatrix_le_pow_min hk Ω)
   have hpos : 0 < (ρ.rank : ℝ) := by exact_mod_cast hρ.rank_pos_of_trace_one htrace
   change vonNeumannEntropy ρ _ ≤ _
@@ -100,7 +102,8 @@ theorem exists_aklv_physical_entropy_bound :
     have htail (i : ℕ) : 1 - H.kyFanNorm (aklvSequenceRankBound q g s i) ≤
         aklvSequenceWeight i / 16 := by
       obtain ⟨hunit, herror, hrank⟩ := hstates i
-      change (cutMatrix (ψ i) (a + s / 2)).rank ≤ aklvSequenceRankBound q g s i at hrank
+      change (cutMatrix (leftBlock L (a + s / 2)) (ψ i)).rank ≤
+        aklvSequenceRankBound q g s i at hrank
       rw [hcenter] at hrank
       exact one_sub_kyFanNorm_le_of_unit_cut_rank_approximation Ω (ψ i)
         hΩ hunit herror hrank

@@ -65,12 +65,12 @@ theorem exists_actualScan_schmidtBellPrevector_sharp_upper
     let X := S.A.filter fun x ↦ x.val ∈ T
     let β := fun _ : Site Λ ↦ Fin q
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (ManyBody.splitEquiv β X) Ωt
+      (ManyBody.cutEquiv β X) Ωt
     let z := Matrix.IsHermitian.spectralRestrictionMass
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
     0 < z →
     let d := E.card
-    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
       let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
@@ -102,11 +102,11 @@ theorem exists_actualScan_schmidtBellPrevector_sharp_upper
       (∀ᶠ k : ℕ in Filter.atTop,
         (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
           ‖WithLp.toLp 2
-            (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
-              (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
+            (((1 : Matrix (Fin k → ManyBody.ComplConfig β X)
+              (Fin k → ManyBody.ComplConfig β X) ℂ) ⊗ₖ
               PermutationRepresentation.labelProj
                 (TensorPower.copyPerm (Fin E.card) k) (ell k)) *ᵥ
-              (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
+              (fun x : (Fin k → ManyBody.ComplConfig β X) ×
                 (Fin k → Fin E.card) => ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) ∧
       (Asymptotics.IsLittleO Filter.atTop
         (fun k : ℕ => Real.log (ell k).dim - (k : ℝ) *

@@ -68,31 +68,31 @@ theorem exists_common_physical_chebyshev_viable_family_fin
       let Ksites := interval L (a + 2 * ell) (b + 1)
       let eK := intervalShiftOrderIso
         (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
-      let Mphys := QuantumCircuit.embedOp eK
+      let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
         (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
           Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
-      let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+      let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
       let J := interval L (a + ell) (b + ell + 1)
       let eJ := intervalShiftOrderIso
         (show a + ell ≤ b + ell + 1 by omega)
         (show b + ell + 1 ≤ L by omega)
       let D : ℕ := (q * k) ^ (18 * ell + 2 * (k / ell))
       let β := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig β J) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig β J) ℂ)).repr
       let T : EuclideanSpace ℂ (Fin L → Fin q) ≃ₗᵢ[ℂ]
-          (EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ) ⊗[ℂ]
+          (EuclideanSpace ℂ (ManyBody.ComplConfig β J) ⊗[ℂ]
             EuclideanSpace ℂ (ManyBody.RegionConfig β J)) := U.trans Phi.symm
       let Tm : EuclideanSpace ℂ (Fin L → Fin q) ≃ₗᵢ[ℂ]
           (EuclideanSpace ℂ (ManyBody.RegionConfig β J) ⊗[ℂ]
-            EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ)) :=
+            EuclideanSpace ℂ (ManyBody.ComplConfig β J)) :=
         T.trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig β J))
         (EuclideanSpace ℂ (ManyBody.RegionConfig β J)))
       let HM := EuclideanSpace ℂ (ManyBody.RegionConfig β J)
-      let HE := EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ)
+      let HE := EuclideanSpace ℂ (ManyBody.ComplConfig β J)
       let Hspace : Type := HM ⊗[ℂ] HE
       ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),
         let A : Fin N → HM →L[ℂ] HM := fun r ↦
@@ -145,7 +145,7 @@ theorem exists_common_physical_chebyshev_viable_family_fin
     hsep hupperEndpoint hupper hgap G Δ
   exact Matrix.chebyshev_viability_of_conjugated_polynomial_family_of_card_le
     (σ := Fin L → Fin q) (m := ManyBody.RegionConfig β J)
-    (e := ManyBody.RegionConfig β Jᶜ) (N := N) (k := k)
+    (e := ManyBody.ComplConfig β J) (N := N) (k := k)
     Hphys W Tm (by
       intro Q hQ
       obtain ⟨M, _hmatrix, _hinter, hK⟩ := hdecomp PL PR hPL hPR Q hQ

@@ -23,17 +23,17 @@ translation-invariant MPS are asymptotically prepared with measurements in depth
 trace-norm error tending to zero
 (`MPSPreparation.isAsymptoticallyPreparedWithMeasurementsInDepth_normalizedMPVState`). It
 follows from the preparation of a state of error `ε` in depth `c log(N/ε)`
-(`MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`)
+(`MPSPreparation.exists_isOneRoundConversion_le_log_of_mpvState_ne_zero`)
 at `ε = 1/N`.
 
 **Scope restriction (one direction, canonical form):** only the direction `trivial ↦ MPS` of the
 equivalence is proved; the converse direction `MPS ↦ trivial` needs channels of `QCcc` acting on
-arbitrary input states, which the preparation model of `TNLean.Circuit.Measurement.Protocol`
-does not include. The tensor is taken in the canonical form `⊕ⱼ diag(μ_{j,k}) ⊗ A_j` with
-normal blocks in the gauge `∑ᵢ (A_jⁱ)† A_jⁱ = 1`, `E_{A_j}(σ_j) = σ_j > 0`, and with the mixed
-transfer maps of distinct blocks of spectral radius below one, and the periodic states are
-assumed nonzero for all large `N`, as a sequence of states presupposes. Documented in
-`docs/paper-gaps/psc21_mps_classification_scope.tex`.
+arbitrary input states, which the preparation statements here, conversions from product vectors
+(`QuantumCircuit.IsOneRoundConversion`), do not include. The tensor is taken in the canonical form
+`⊕ⱼ diag(μ_{j,k}) ⊗ A_j` with normal blocks in the gauge `∑ᵢ (A_jⁱ)† A_jⁱ = 1`,
+`E_{A_j}(σ_j) = σ_j > 0`, and with the mixed transfer maps of distinct blocks of spectral radius
+below one, and the periodic states are assumed nonzero for all large `N`, as a sequence of states
+presupposes. Documented in `docs/paper-gaps/psc21_mps_classification_scope.tex`.
 
 ## Main results
 
@@ -71,7 +71,7 @@ with measurements and a circuit in depth at most `C log N`, satisfy
 
 The depth `C log N` is polylogarithmic in `N`, as the paragraph "Phases of matter" of
 arXiv:2103.13367 requires of `f(M)`. The proof takes the error `ε = 1/N` in
-`exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`, whose depth
+`exists_isOneRoundConversion_le_log_of_mpvState_ne_zero`, whose depth
 is then `c log(N²) = 2c log N`. The hypotheses beyond the source are those of the module's
 scope restriction. -/
 theorem isAsymptoticallyPreparedWithMeasurementsInDepth_normalizedMPVState
@@ -87,7 +87,7 @@ theorem isAsymptoticallyPreparedWithMeasurementsInDepth_normalizedMPVState
     (h0 : ∀ᶠ N in atTop, mpvState (repeatedBlockSum Aj ι μ) N ≠ 0) :
     ∃ C : ℝ, IsAsymptoticallyPreparedWithMeasurementsInDepth (fun N => C * Real.log N)
       (fun N => normalizedMPVState (repeatedBlockSum Aj ι μ) N) := by
-  obtain ⟨c, hc⟩ := exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero
+  obtain ⟨c, hc⟩ := exists_isOneRoundConversion_le_log_of_mpvState_ne_zero
     hι hdisj μ hN hA hσ htr hfix hmix
   refine ⟨2 * c, isAsymptoticallyPreparedWithMeasurementsInDepth_of_one_sub_norm_inner_le
     (ε := fun N => 1 / (N : ℝ)) tendsto_one_div_atTop_nhds_zero_nat

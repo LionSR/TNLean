@@ -22,6 +22,7 @@ gap `min gamma 1`; see `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
 open ManyBody (interval)
+open ManyBody (cutMatrix)
 
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
 
@@ -107,7 +108,7 @@ theorem exists_physical_ground_isOpenMPS_reference_subspace :
       apply (isOpenMPS_iff_internal_cutMatrix_rank_le v).mpr
       intro k _ _
       calc
-        (cutMatrix v k).rank ≤
+        (cutMatrix (leftBlock L k) v).rank ≤
             Fintype.card ((w : {w : Fin L // w ∈ leftBlock L k}) → Fin q) :=
           Matrix.rank_le_card_height _
         _ = q ^ Fintype.card {w : Fin L // w ∈ leftBlock L k} := by simp

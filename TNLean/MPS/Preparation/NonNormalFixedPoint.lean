@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixTensorPower
-import TNLean.Circuit.Measurement.GHZ
+import QICLean.Circuit.Protocol.GHZ
 import TNLean.MPS.Preparation.BlockedPolar
 import TNLean.MPS.Preparation.FixedPointPairs
 
@@ -62,7 +62,7 @@ which is made in `TNLean.MPS.Preparation.NonNormalCanonicalForm`.
   isometry for orthonormal pairs.
 * `MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState` — the GHZ form
   `|Ω'⟩ = W^{⊗M} |χ_M⟩`, with `|χ_M⟩` the state `QuantumCircuit.ghzState` of
-  `TNLean.Circuit.Measurement.GHZ`; `W^{⊗M}` is `Matrix.tensorPower`, an isometry by
+  `QICLean.Circuit.Protocol.GHZ`; `W^{⊗M}` is `Matrix.tensorPower`, an isometry by
   `Matrix.IsIsometry.tensorPower`.
 * `MPSTensor.nonNormalFixedPointState_norm_sq` — `⟨Ω'|Ω'⟩ = 1` when some `βₗ ≠ 0`.
 * `MPSTensor.nonNormalApproxState` — the approximating state

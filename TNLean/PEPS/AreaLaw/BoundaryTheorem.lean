@@ -37,7 +37,7 @@ two-family entropy cancellation and the regional dimension bound.
 
 ## Main statements
 
-* `regionalEntropy_le_of_collar_amplification_twoFamilies_constants`: the
+* `regionEntropy_le_of_collar_amplification_twoFamilies_constants`: the
   proof of Theorem 1.1 at given constants and thresholds of the three
   propositions, with the constant `uniformAreaLawConstantOf`.
 * `uniformAreaLaw_of_collar_amplification_twoFamilies`: the three propositions
@@ -59,6 +59,8 @@ open scoped BigOperators
 open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
+
+open ManyBody (planeDomainGraph edgeBoundary graphNeighborhood ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -83,11 +85,12 @@ def SublinearCollarBound (q R : ℕ) (J Δ D₀ Ctpl : ℝ) : Prop :=
               (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
             C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) ∧
-          ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ C * n ∧
-          ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+          ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
+            C * n ∧
+          ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T.points
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
             C * n ∧
-          ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+          ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
               A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ C * n ∧
           ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
@@ -118,11 +121,11 @@ def AmplificationBound (q R : ℕ) (J Δ : ℝ) : Prop :=
             ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
               C₀ * (n : ℝ) ^ 2 →
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
-            ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+            ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
                 A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
               C₀ * n →
             ManyBody.regionMutualInformation Ω
@@ -132,18 +135,18 @@ def AmplificationBound (q R : ℕ) (J Δ : ℝ) : Prop :=
               C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
             ∃ r : ℕ, (r : ℝ) ≤ C * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
               (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
-                Disjoint Jset (graphNeighborhood Λ (2 * r)
+                Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
-                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
+                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
                 ManyBody.regionMutualInformation Ω X Jset ≤
                   C * ((n : ℝ) ^ M)⁻¹) ∧
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
                     (Scan.ambientSupDistance t z : ℝ)) →
-                graphNeighborhood Λ (2 * r)
+                graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
-                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A)
+                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A)
 
 /-- **Proposition 9.6 at a given constant and threshold** (`prop:collar`, `08-scanner.tex`
 lines 808–827). The assertion of `SublinearCollarBound` with its constant `C` and threshold
@@ -165,11 +168,12 @@ def SublinearCollarBoundAt (q R : ℕ) (J Δ D₀ Ctpl C : ℝ) (N : ℕ) : Prop
               (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
             C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) ∧
-          ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ C * n ∧
-          ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+          ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
+            C * n ∧
+          ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T.points
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
             C * n ∧
-          ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+          ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
               A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ C * n ∧
           ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
@@ -200,11 +204,11 @@ def AmplificationBoundAt (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) (C : ℝ) (N : 
           ((A.filter fun x ↦ x.val ∈ ambientDilation T
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
             C₀ * (n : ℝ) ^ 2 →
-          ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
-          ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T
+          ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+          ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
               A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
-          ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
+          ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
             C₀ * n →
           ManyBody.regionMutualInformation Ω
@@ -214,18 +218,18 @@ def AmplificationBoundAt (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) (C : ℝ) (N : 
             C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
           ∃ r : ℕ, (r : ℝ) ≤ C * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
             (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
-              Disjoint Jset (graphNeighborhood Λ (2 * r)
+              Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T
-                  ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
+                  ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
               ManyBody.regionMutualInformation Ω X Jset ≤
                 C * ((n : ℝ) ^ M)⁻¹) ∧
             ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                 (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                     (n : ℝ) ^ (Exponents.beta : ℝ) <
                   (Scan.ambientSupDistance t z : ℝ)) →
-              graphNeighborhood Λ (2 * r)
+              graphNeighborhood (planeDomainGraph Λ)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
-                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A)
+                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A)
 
 /-- The amplification bound is, for every admissible input constant and order, the existence
 of a constant and a threshold at which it holds. Source: `09-amplification.tex`,
@@ -247,10 +251,10 @@ induced domain with `b = |∂_Λ A| > 0` has an ordered partition
 `∑ᵢ nᵢ^(-100) ≤ C b`. The constant is chosen before the domain and the cut. -/
 def TwoFamilyDecomposition (D₀ Ctpl : ℝ) : Prop :=
   ∀ nstar : ℕ, 1 ≤ nstar → ∃ C : ℝ,
-    ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset (Site Λ), 0 < (edgeBoundary Λ A).card →
+    ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset (Site Λ), 0 < (edgeBoundary (planeDomainGraph Λ) A).card →
       ∃ P : Geometry.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
         ∃ T : ∀ i, Geometry.Template Ctpl (n i) (s i),
-          (P.residual.card : ℝ) ≤ C * (edgeBoundary Λ A).card ∧
+          (P.residual.card : ℝ) ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card ∧
           (∀ i, (P.piece i).Nonempty) ∧
           (∀ i, P.piece i ⊆ A.filter fun x ↦ x.val ∈ (T i).points) ∧
           (∀ i, (T i).IsSeparated D₀ (Geometry.boundaryEndpoints Λ A)) ∧
@@ -260,7 +264,7 @@ def TwoFamilyDecomposition (D₀ Ctpl : ℝ) : Prop :=
             2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ)) ∧
           (∀ i, ∀ t ∈ (T i).points, ∀ x ∈ P.earlierSameFamily i,
             2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t x.val : ℝ)) ∧
-          ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C * (edgeBoundary Λ A).card
+          ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card
 
 /-- A graph neighborhood of the part of an ambient collar inside a domain stays
 within the enlarged ambient collar: every graph step moves by at most one in
@@ -268,10 +272,10 @@ sup-norm. Source: proof of Theorem 1.1, `10-geometry.tex` lines 830–832. -/
 theorem exists_ambientSupDistance_le_of_mem_graphNeighborhood
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty) {S : Finset (Site Λ)} {L k : ℕ}
     (hS : ∀ x ∈ S, x.val ∈ ambientDilation T L) {y : Site Λ}
-    (hy : y ∈ graphNeighborhood Λ k S) :
+    (hy : y ∈ graphNeighborhood (planeDomainGraph Λ) S k) :
     ∃ t ∈ T, Scan.ambientSupDistance t y.val ≤ L + k := by
   classical
-  obtain ⟨x, hx, p, hp⟩ := (Finset.mem_filter.mp hy).2
+  obtain ⟨x, hx, p, hp⟩ := ManyBody.mem_graphNeighborhood_iff_exists_walk.mp hy
   have hxd := (Scan.ambientDepth_le_iff_mem_dilation T hT x.val L).mpr (hS x hx)
   have hvar := Scan.abs_ambientDepth_sub_le_walk_length T hT Subtype.val
     (fun _ _ ↦ Scan.ambientSupDistance_le_one_of_domainGraph_adj) p
@@ -322,7 +326,7 @@ has regional entropy at most `uniformAreaLawConstantOf q C₂ C₃` times the nu
 cut edges. The source asserts only that some constant exists; this statement
 records the constant its proof produces from those of Propositions 9.6, 10.2
 and 11.2. Source: proof of Theorem 1.1, `10-geometry.tex`, lines 803–857. -/
-theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
+theorem regionEntropy_le_of_collar_amplification_twoFamilies_constants
     {q R : ℕ} (hq : 1 ≤ q) {J Δ D₀ Ctpl C₁ C₂ C₃ : ℝ} {N₁ N₂ : ℕ} (hΔ : 0 < Δ)
     (hcol : ∀ n s₀ : ℕ, N₁ ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
@@ -337,11 +341,12 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
                 (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
               C₁ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) ∧
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ C₁ * n ∧
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
+              C₁ * n ∧
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
               C₁ * n ∧
-            ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+            ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
                 A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ C₁ * n ∧
             ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
@@ -356,11 +361,12 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
             ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
               max C₁ 1 * (n : ℝ) ^ 2 →
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ max C₁ 1 * n →
-            ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤
+              max C₁ 1 * n →
+            ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
                 A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ max C₁ 1 * n →
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
               max C₁ 1 * n →
             ManyBody.regionMutualInformation Ω
@@ -370,22 +376,23 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
               max C₁ 1 * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
             ∃ r : ℕ, (r : ℝ) ≤ C₂ * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
               (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
-                Disjoint Jset (graphNeighborhood Λ (2 * r)
+                Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
-                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
+                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
                 ManyBody.regionMutualInformation Ω X Jset ≤
                   C₂ * ((n : ℝ) ^ 100)⁻¹) ∧
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
                     (Scan.ambientSupDistance t z : ℝ)) →
-                graphNeighborhood Λ (2 * r)
+                graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
-                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A))
-    (htwo : ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset (Site Λ), 0 < (edgeBoundary Λ A).card →
+                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A))
+    (htwo : ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset (Site Λ),
+      0 < (edgeBoundary (planeDomainGraph Λ) A).card →
       ∃ P : Geometry.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
         ∃ T : ∀ i, Geometry.Template Ctpl (n i) (s i),
-          (P.residual.card : ℝ) ≤ C₃ * (edgeBoundary Λ A).card ∧
+          (P.residual.card : ℝ) ≤ C₃ * (edgeBoundary (planeDomainGraph Λ) A).card ∧
           (∀ i, (P.piece i).Nonempty) ∧
           (∀ i, P.piece i ⊆ A.filter fun x ↦ x.val ∈ (T i).points) ∧
           (∀ i, (T i).IsSeparated D₀ (Geometry.boundaryEndpoints Λ A)) ∧
@@ -395,13 +402,13 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
             2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ)) ∧
           (∀ i, ∀ t ∈ (T i).points, ∀ x ∈ P.earlierSameFamily i,
             2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t x.val : ℝ)) ∧
-          ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C₃ * (edgeBoundary Λ A).card) :
+          ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C₃ * (edgeBoundary (planeDomainGraph Λ) A).card) :
     ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
         (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
       ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
         ManyBody.regionEntropy Ω A ≤ uniformAreaLawConstantOf q C₂ C₃ *
-            (edgeBoundary Λ A).card := by
+            (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
   set cD := max C₃ 0 with hcD
   set cM := max C₂ 0 with hcM
@@ -412,8 +419,8 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
     (le_max_right _ _).trans (le_max_right _ _)
   have h2 := two_le_uniformAreaLawScale N₁ N₂ C₂
   intro Λ h hh hhJ E₀ Ω hΩ hgap hspan A
-  rcases Nat.eq_zero_or_pos (edgeBoundary Λ A).card with hb | hb
-  · rw [regionalEntropy_eq_zero_of_edgeBoundary_eq_empty h hh hΔ hΩ hgap hspan
+  rcases Nat.eq_zero_or_pos (edgeBoundary (planeDomainGraph Λ) A).card with hb | hb
+  · rw [regionEntropy_eq_zero_of_edgeBoundary_eq_empty h hh hΔ hΩ hgap hspan
       (Finset.card_eq_zero.mp hb), hb]
     simp
   obtain ⟨P, n, s, T, hD, -, hsub, hsep, hL, hn, hcut, hord, hsum⟩ := htwo Λ A hb
@@ -446,9 +453,9 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
     have hA := hclear fun t ht z hz ↦ by
       have := hcut i t ht z hz
       linarith only [this, hsmall, hr0]
-    have hdisj : Disjoint (Aᶜ ∪ P.earlierSameFamily i) (graphNeighborhood Λ (2 * r)
+    have hdisj : Disjoint (Aᶜ ∪ P.earlierSameFamily i) (graphNeighborhood (planeDomainGraph Λ)
         (A.filter fun x ↦ x.val ∈ ambientDilation (T i).points
-          ⌊(n i : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) := by
+          ⌊(n i : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) := by
       rw [Finset.disjoint_union_left]
       refine ⟨disjoint_compl_left.mono_right hA, Finset.disjoint_left.mpr ?_⟩
       intro y hy hyN
@@ -463,14 +470,15 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
         ≤ C₂ * ((n i : ℝ) ^ 100)⁻¹ := hinfo (P.piece i) (hsub i) _ hdisj
       _ ≤ cM * ((n i : ℝ) ^ 100)⁻¹ :=
           mul_le_mul_of_nonneg_right (le_max_left _ _) (by positivity)
-  have hbR : (0 : ℝ) ≤ (edgeBoundary Λ A).card := Nat.cast_nonneg _
-  have hD' : (P.residual.card : ℝ) ≤ cD * (edgeBoundary Λ A).card :=
+  have hbR : (0 : ℝ) ≤ (edgeBoundary (planeDomainGraph Λ) A).card := Nat.cast_nonneg _
+  have hD' : (P.residual.card : ℝ) ≤ cD * (edgeBoundary (planeDomainGraph Λ) A).card :=
     hD.trans (mul_le_mul_of_nonneg_right (le_max_left _ _) hbR)
-  have hE : (∑ i, cM * ((n i : ℝ) ^ 100)⁻¹) ≤ cM * cD * (edgeBoundary Λ A).card := by
+  have hE : (∑ i, cM * ((n i : ℝ) ^ 100)⁻¹) ≤
+      cM * cD * (edgeBoundary (planeDomainGraph Λ) A).card := by
     rw [← Finset.mul_sum, mul_assoc]
     exact mul_le_mul_of_nonneg_left
       (hsum.trans (mul_le_mul_of_nonneg_right (le_max_left _ _) hbR)) hcM0
-  exact regionalEntropy_le_boundary_of_partition_estimates Λ q hq Ω hΩ A P
+  exact regionEntropy_le_boundary_of_partition_estimates Λ q hq Ω hΩ A P
     (fun i ↦ cM * ((n i : ℝ) ^ 100)⁻¹) hpiece cD (cM * cD) hD' hE
 
 /-- **Theorem 1.1 from Propositions 9.6, 10.2 and 11.2.** If, for every choice of
@@ -493,6 +501,6 @@ theorem uniformAreaLaw_of_collar_amplification_twoFamilies
   obtain ⟨C₃, hdec⟩ := htwo (uniformAreaLawScale N₁ N₂ C₂)
     (one_le_two.trans (two_le_uniformAreaLawScale N₁ N₂ C₂))
   exact ⟨_, uniformAreaLawConstantOf_nonneg hq C₂ C₃,
-    regionalEntropy_le_of_collar_amplification_twoFamilies_constants hq hΔ hcol hampl hdec⟩
+    regionEntropy_le_of_collar_amplification_twoFamilies_constants hq hΔ hcol hampl hdec⟩
 
 end TNLean.PEPS.AreaLaw

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.ObservableTransferBound
-import TNLean.MPS.Preparation.WindowOperatorSupport
+import TNLean.MPS.Preparation.WindowCorrelator
 
 /-!
 # Clustering of block observables in a normal matrix product state
@@ -24,8 +24,8 @@ source's proof of Theorem 1 uses instead the approximation of `φ_N` by a produc
 
 ## Main results
 
-* `inner_mpvState_chainWindowOperator_offset`,
-  `inner_mpvState_chainWindowOperator_mul_offset`: the trace formulas for windows at an
+* `inner_mpvState_placeAlong_chainWindow_offset`,
+  `inner_mpvState_placeAlong_chainWindow_mul_offset`: the trace formulas for windows at an
   arbitrary offset, which make `φ_N` translation invariant on windows.
 * `exists_norm_mpvExpectation_mul_sub_mul_le`: the clustering estimate.
 -/
@@ -41,15 +41,17 @@ variable {d D : ℕ}
 /-- The inserted transfer map of two windows, `E_{X_1 Y_{L+m+1}} = E_X E_A^m E_Y E_A^n`
 on a chain of `L + m + L + n` sites (arXiv:2307.01696, Supplemental Material, proof of
 Lemma 2, trace expansion of the correlator). -/
-theorem physicalObservableTransfer_chainWindowOperator_mul (A : MPSTensor d D) {L : ℕ}
-    (hL : 0 < L) (m n : ℕ) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+theorem physicalObservableTransfer_placeAlong_chainWindow_mul (A : MPSTensor d D) {L : ℕ}
+    (m n : ℕ) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     physicalObservableTransfer A (L + m + L + n)
-        (chainWindowOperator (L + m + L + n) 0 X *
-          chainWindowOperator (L + m + L + n) (L + m) Y) =
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow 0 (by omega : 0 + L ≤ L + m + L + n)) X *
+          ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (L + m) (by omega : L + m + L ≤ L + m + L + n)) Y) =
       physicalObservableTransfer A L X * Kraus.transferMap A ^ m *
         physicalObservableTransfer A L Y * Kraus.transferMap A ^ n := by
-  rw [chainWindowOperator_zero_eq_appendObservable hL,
-    chainWindowOperator_add_eq_appendObservable hL, appendObservable_mul, appendObservable_mul,
+  rw [placeAlong_chainWindow_zero_eq_appendObservable,
+    placeAlong_chainWindow_add_eq_appendObservable, appendObservable_mul, appendObservable_mul,
     appendObservable_mul, mul_one, mul_one, one_mul, mul_one,
     physicalObservableTransfer_appendObservable,
     physicalObservableTransfer_appendObservable, physicalObservableTransfer_appendObservable,
@@ -59,16 +61,18 @@ theorem physicalObservableTransfer_chainWindowOperator_mul (A : MPSTensor d D) {
 operator `X` on the window `a, …, a + L - 1` is `tr(E_X E_A^{n+a})`, independent of the
 offset `a`. This is the translation invariance of the vectors `φ_N` of arXiv:2307.01696,
 eq. (TI-MPS2), used in the chapter's proof of `thm:ldp_depth_lower_bound`. -/
-theorem inner_mpvState_chainWindowOperator_offset (A : MPSTensor d D) {L : ℕ} (hL : 0 < L)
+theorem inner_mpvState_placeAlong_chainWindow_offset (A : MPSTensor d D) {L : ℕ}
     (a n : ℕ) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     ⟪mpvState A (a + (L + n)),
-        Matrix.toEuclideanLin (chainWindowOperator (a + (L + n)) a X)
+        Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow a (by omega : a + L ≤ a + (L + n))) X)
           (mpvState A (a + (L + n)))⟫_ℂ =
       LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
         (physicalObservableTransfer A L X * Kraus.transferMap A ^ (n + a)) := by
-  rw [chainWindowOperator_add_right (p := a) (q := L + n) (a := a) le_rfl (by omega) (by omega),
-    Nat.sub_self, chainWindowOperator_add_left (p := L) (q := n) (a := 0) hL (by omega),
-    chainWindowOperator_self hL,
+  rw [placeAlong_chainWindow_add_right (p := a) (q := L + n) le_rfl]
+  simp only [Nat.sub_self]
+  rw [placeAlong_chainWindow_add_left (p := L) (q := n) (a := 0) (by omega),
+    placeAlong_chainWindow_self,
     inner_mpvState_toEuclideanLin, physicalObservableTransfer_appendObservable,
     physicalObservableTransfer_appendObservable, physicalObservableTransfer_one,
     physicalObservableTransfer_one, LinearMap.trace_mul_comm, mul_assoc, ← pow_add]
@@ -78,22 +82,24 @@ the window starting at `a` and `Y` on the window starting at `a + L + m`,
 `⟨φ|X Y|φ⟩ = tr(E_X E_A^m E_Y E_A^{n+a})`. This is the trace expansion of arXiv:2307.01696,
 Supplemental Material, proof of Lemma 2, at an arbitrary position on the ring, used in
 the chapter's proof of `thm:ldp_depth_lower_bound`. -/
-theorem inner_mpvState_chainWindowOperator_mul_offset (A : MPSTensor d D) {L : ℕ}
-    (hL : 0 < L) (a m n : ℕ) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+theorem inner_mpvState_placeAlong_chainWindow_mul_offset (A : MPSTensor d D) {L : ℕ}
+    (a m n : ℕ) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     ⟪mpvState A (a + (L + m + L + n)),
-        Matrix.toEuclideanLin (chainWindowOperator (a + (L + m + L + n)) a X *
-          chainWindowOperator (a + (L + m + L + n)) (a + (L + m)) Y)
+        Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow a (by omega : a + L ≤ a + (L + m + L + n))) X *
+          ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (a + (L + m))
+            (by omega : a + (L + m) + L ≤ a + (L + m + L + n))) Y)
           (mpvState A (a + (L + m + L + n)))⟫_ℂ =
       LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
         (physicalObservableTransfer A L X * Kraus.transferMap A ^ m *
           physicalObservableTransfer A L Y * Kraus.transferMap A ^ (n + a)) := by
-  rw [chainWindowOperator_add_right (p := a) (q := L + m + L + n) (a := a) le_rfl (by omega)
-      (by omega), Nat.sub_self,
-    chainWindowOperator_add_right (p := a) (q := L + m + L + n) (a := a + (L + m)) (by omega)
-      (by omega) (by omega), Nat.add_sub_cancel_left,
-    appendObservable_mul, one_mul, inner_mpvState_toEuclideanLin,
+  rw [placeAlong_chainWindow_add_right (p := a) (q := L + m + L + n) (a := a) le_rfl,
+    placeAlong_chainWindow_add_right (p := a) (q := L + m + L + n) (a := a + (L + m))
+      (by omega)]
+  simp only [Nat.sub_self, Nat.add_sub_cancel_left]
+  rw [appendObservable_mul, one_mul, inner_mpvState_toEuclideanLin,
     physicalObservableTransfer_appendObservable, physicalObservableTransfer_one,
-    physicalObservableTransfer_chainWindowOperator_mul A hL, LinearMap.trace_mul_comm,
+    physicalObservableTransfer_placeAlong_chainWindow_mul A, LinearMap.trace_mul_comm,
     pow_add]
   simp only [mul_assoc]
 
@@ -135,64 +141,81 @@ theorem _root_.Matrix.norm_toEuclideanCLM_mul_le {n : Type*} [Fintype n] [Decida
 /-- The numerator of the expectation of an operator `X` on the window `a, …, a + L - 1` of a
 chain of `N` sites is `tr(E_X E_A^{N-L})`, independent of `a` (arXiv:2307.01696, Supplemental
 Material, proof of Lemma 2, trace expansion). -/
-theorem inner_mpvState_chainWindowOperator_eq_trace (A : MPSTensor d D) {L N a : ℕ}
-    (hL : 0 < L) (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    ⟪mpvState A N, Matrix.toEuclideanLin (chainWindowOperator N a X) (mpvState A N)⟫_ℂ =
+theorem inner_mpvState_placeAlong_chainWindow_eq_trace (A : MPSTensor d D) {L N a : ℕ}
+    (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    ⟪mpvState A N, Matrix.toEuclideanLin
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a haL) X)
+        (mpvState A N)⟫_ℂ =
       LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
         (physicalObservableTransfer A L X * Kraus.transferMap A ^ (N - L)) := by
   obtain ⟨n, rfl⟩ : ∃ n, N = a + (L + n) := ⟨N - a - L, by omega⟩
-  rw [inner_mpvState_chainWindowOperator_offset A hL a n X]
+  rw [inner_mpvState_placeAlong_chainWindow_offset A a n X]
   congr 3
   omega
 
 /-- The numerator of the two-window expectation, with `X` on the window starting at `a` and
 `Y` on the window starting at `a + L + m`, is `tr(E_X E_A^m E_Y E_A^{N-2L-m})`, independent of
 `a` (arXiv:2307.01696, Supplemental Material, proof of Lemma 2, trace expansion). -/
-theorem inner_mpvState_chainWindowOperator_mul_eq_trace (A : MPSTensor d D) {L N a m : ℕ}
-    (hL : 0 < L) (haL : a + (L + m + L) ≤ N) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+theorem inner_mpvState_placeAlong_chainWindow_mul_eq_trace (A : MPSTensor d D) {L N a m : ℕ}
+    (haL : a + (L + m + L) ≤ N) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     ⟪mpvState A N, Matrix.toEuclideanLin
-        (chainWindowOperator N a X * chainWindowOperator N (a + (L + m)) Y) (mpvState A N)⟫_ℂ =
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a (by omega)) X *
+          ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (a + (L + m)) (by omega)) Y) (mpvState A N)⟫_ℂ =
       LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ)
         (physicalObservableTransfer A L X * Kraus.transferMap A ^ m *
           physicalObservableTransfer A L Y * Kraus.transferMap A ^ (N - (L + m + L))) := by
   obtain ⟨n, rfl⟩ : ∃ n, N = a + (L + m + L + n) := ⟨N - a - (L + m + L), by omega⟩
-  rw [inner_mpvState_chainWindowOperator_mul_offset A hL a m n X Y]
+  rw [inner_mpvState_placeAlong_chainWindow_mul_offset A a m n X Y]
   congr 3
   omega
 
 /-- **Translation invariance of one-window expectations** (arXiv:2307.01696, eq. (TI-MPS2):
 the vectors `φ_N` are translation invariant). -/
-theorem mpvExpectation_chainWindowOperator_eq (A : MPSTensor d D) {L N a : ℕ} (hL : 0 < L)
+theorem mpvExpectation_placeAlong_chainWindow_eq (A : MPSTensor d D) {L N a : ℕ}
     (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    mpvExpectation A N (chainWindowOperator N a X) =
-      mpvExpectation A N (chainWindowOperator N 0 X) := by
+    mpvExpectation A N
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a haL) X) =
+      mpvExpectation A N (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow 0 (by omega : 0 + L ≤ N)) X) := by
   rw [mpvExpectation_eq_div, mpvExpectation_eq_div,
-    inner_mpvState_chainWindowOperator_eq_trace A hL haL,
-    inner_mpvState_chainWindowOperator_eq_trace A hL (by omega)]
+    inner_mpvState_placeAlong_chainWindow_eq_trace A haL,
+    inner_mpvState_placeAlong_chainWindow_eq_trace A (by omega)]
 
 /-- **Translation invariance of two-window expectations** (arXiv:2307.01696, eq. (TI-MPS2)). -/
-theorem mpvExpectation_chainWindowOperator_mul_eq (A : MPSTensor d D) {L N a m : ℕ}
-    (hL : 0 < L) (haL : a + (L + m + L) ≤ N) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    mpvExpectation A N (chainWindowOperator N a X * chainWindowOperator N (a + (L + m)) Y) =
-      mpvExpectation A N (chainWindowOperator N 0 X * chainWindowOperator N (L + m) Y) := by
-  have h0 := inner_mpvState_chainWindowOperator_mul_eq_trace A hL (a := 0) (m := m) (N := N)
+theorem mpvExpectation_placeAlong_chainWindow_mul_eq (A : MPSTensor d D) {L N a m : ℕ}
+    (haL : a + (L + m + L) ≤ N) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    mpvExpectation A N
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a (by omega)) X *
+          ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (a + (L + m)) (by omega)) Y) =
+      mpvExpectation A N
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow 0 (by omega)) X *
+          ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (L + m) (by omega : L + m + L ≤ N)) Y) := by
+  have h0 := inner_mpvState_placeAlong_chainWindow_mul_eq_trace A (a := 0) (m := m) (N := N)
     (by omega) X Y
-  rw [zero_add] at h0
+  simp only [zero_add] at h0
   rw [mpvExpectation_eq_div, mpvExpectation_eq_div,
-    inner_mpvState_chainWindowOperator_mul_eq_trace A hL haL, h0]
+    inner_mpvState_placeAlong_chainWindow_mul_eq_trace A haL, h0]
 
 /-- The connected correlation of two window operators is invariant under translating both
 windows (arXiv:2307.01696, eq. (TI-MPS2)). -/
 theorem mpvExpectation_mul_sub_mul_eq_mpvConnectedCorrelator (A : MPSTensor d D) {L N a m : ℕ}
-    (hL : 0 < L) (haL : a + (L + m + L) ≤ N) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    mpvExpectation A N (chainWindowOperator N a X * chainWindowOperator N (a + (L + m)) Y) -
-        mpvExpectation A N (chainWindowOperator N a X) *
-          mpvExpectation A N (chainWindowOperator N (a + (L + m)) Y) =
+    (haL : a + (L + m + L) ≤ N) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
+    mpvExpectation A N
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a (by omega)) X *
+          ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (a + (L + m)) (by omega)) Y) -
+        mpvExpectation A N
+            (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a (by omega)) X) *
+          mpvExpectation A N (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (a + (L + m)) (by omega : a + (L + m) + L ≤ N)) Y) =
       mpvConnectedCorrelator A N 0 (L + m) X Y := by
-  rw [mpvConnectedCorrelator, mpvExpectation_chainWindowOperator_mul_eq A hL haL,
-    mpvExpectation_chainWindowOperator_eq A hL (a := a) (by omega),
-    mpvExpectation_chainWindowOperator_eq A hL (a := a + (L + m)) (by omega),
-    mpvExpectation_chainWindowOperator_eq A hL (a := L + m) (by omega)]
+  rw [mpvConnectedCorrelator, mpvExpectation_placeAlong_chainWindow_mul_eq A haL,
+    mpvExpectation_placeAlong_chainWindow_eq A (a := a) (by omega),
+    mpvExpectation_placeAlong_chainWindow_eq A (a := a + (L + m)) (by omega),
+    mpvExpectation_placeAlong_chainWindow_eq A (a := L + m) (by omega)]
 
 /-! ### The clustering estimate -/
 
@@ -243,10 +266,15 @@ theorem exists_norm_mpvExpectation_mul_sub_mul_le [NeZero D] {A : MPSTensor d D}
       ∀ X Y : Matrix (Fin w → Fin d) (Fin w → Fin d) ℂ,
         ‖Matrix.toEuclideanCLM (n := Fin w → Fin d) (𝕜 := ℂ) X‖ ≤ M →
         ‖Matrix.toEuclideanCLM (n := Fin w → Fin d) (𝕜 := ℂ) Y‖ ≤ M →
-        ∀ a g h N : ℕ, a + (w + g + w + h) = N → 1 ≤ g → 1 ≤ h + a →
-          ‖mpvExpectation A N (chainWindowOperator N a X * chainWindowOperator N (a + (w + g)) Y) -
-              mpvExpectation A N (chainWindowOperator N a X) *
-                mpvExpectation A N (chainWindowOperator N (a + (w + g)) Y)‖ ≤
+        ∀ (a g h N : ℕ) (_ : a + (w + g + w + h) = N), 1 ≤ g → 1 ≤ h + a →
+          ‖mpvExpectation A N
+                (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a (by omega)) X *
+                  ManyBody.placeAlong (X := fun _ ↦ Fin d)
+                    (ManyBody.chainWindow (a + (w + g)) (by omega)) Y) -
+              mpvExpectation A N (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+                  (ManyBody.chainWindow a (by omega : a + w ≤ N)) X) *
+                mpvExpectation A N (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+                  (ManyBody.chainWindow (a + (w + g)) (by omega : a + (w + g) + w ≤ N)) Y)‖ ≤
             C * (r ^ g + r ^ (h + a)) := by
   classical
   have htr : Matrix.trace ρ ≠ 0 := by rw [hρtr]; exact one_ne_zero
@@ -310,9 +338,9 @@ theorem exists_norm_mpvExpectation_mul_sub_mul_le [NeZero D] {A : MPSTensor d D}
       _ ≤ K * r ^ k := by rw [hK_def, add_mul, one_mul, mul_assoc]; linarith [hrk0 k]
   clear_value K B κ Q P E
   refine ⟨(4 * (K + 2) ^ 2 + 1) * K + 4 * M ^ 2 * K + 1, by positivity, ?_⟩
-  intro w hw X Y hX hY a g h N hN hg hh
+  intro w _ X Y hX hY a g h N hN hg hh
   set h' := h + a with hh'_def
-  rw [mpvExpectation_mul_sub_mul_eq_mpvConnectedCorrelator A hw (by omega)]
+  rw [mpvExpectation_mul_sub_mul_eq_mpvConnectedCorrelator A (by omega)]
   obtain rfl : N = w + g + w + h' := by omega
   set ε : ℝ := K * (r ^ g + r ^ h') with hε_def
   have hS : 0 ≤ r ^ g + r ^ h' := add_nonneg (hrk0 _) (hrk0 _)
@@ -322,10 +350,14 @@ theorem exists_norm_mpvExpectation_mul_sub_mul_le [NeZero D] {A : MPSTensor d D}
   swap
   · /- Large `ε`: the trivial bound `2M²`. -/
     push Not at hsmall
-    have hwX := (norm_toEuclideanCLM_chainWindowOperator_le (N := w + g + w + h') (a := 0)
-      (by omega) (by omega) X).trans hX
-    have hwY := (norm_toEuclideanCLM_chainWindowOperator_le (N := w + g + w + h')
-      (a := w + g) (by omega) (by omega) Y).trans hY
+    have hwX : ‖Matrix.toEuclideanCLM (n := Cfg d (w + g + w + h')) (𝕜 := ℂ)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+          (ManyBody.chainWindow 0 (by omega : 0 + w ≤ w + g + w + h')) X)‖ ≤ M :=
+      (ManyBody.norm_placeAlong_le (X := fun _ ↦ Fin d) _ X).trans hX
+    have hwY : ‖Matrix.toEuclideanCLM (n := Cfg d (w + g + w + h')) (𝕜 := ℂ)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+          (ManyBody.chainWindow (w + g) (by omega : w + g + w ≤ w + g + w + h')) Y)‖ ≤ M :=
+      (ManyBody.norm_placeAlong_le (X := fun _ ↦ Fin d) _ Y).trans hY
     refine (norm_mpvExpectation_mul_sub_mul_le A hwX hwY).trans ?_
     have h4 : 2 * M ^ 2 ≤ 4 * M ^ 2 * ε := by
       have := mul_le_mul_of_nonneg_left hsmall.le (by positivity : (0 : ℝ) ≤ 4 * M ^ 2)
@@ -403,7 +435,7 @@ theorem exists_norm_mpvExpectation_mul_sub_mul_le [NeZero D] {A : MPSTensor d D}
     refine htrK _ _ ((hmul _ _ (hmul _ _ (hmul _ _ hEX (hEkB g hg)) hEY) (hQk h')).trans ?_)
     calc B * B * B * (B * r ^ h') = B ^ 4 * r ^ h' := by ring
       _ ≤ B ^ 4 * r ^ h' := le_rfl
-  have hG := mpvConnectedCorrelator_eq_of_compl hw hA (by rw [← hE_def]; exact hρfix) hρtr htr
+  have hG := mpvConnectedCorrelator_eq_of_compl hA (by rw [← hE_def]; exact hρfix) hρtr htr
     X Y hg hh
   rw [← hE_def, ← hP_def, ← hQ_def, ← hEX_def, ← hEY_def] at hG
   rw [hG]

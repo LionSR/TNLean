@@ -194,10 +194,10 @@ theorem exists_native_soft_word_compressed_energy_estimate
   obtain ⟨hdimV, hV⟩ := hword W hWT
   refine ⟨hdimV, ?_⟩
   let U := (V.tensorProd
-    (⊤ : Submodule ℂ (EuclideanSpace ℂ (↥(Jᶜ) → Fin q)))).comap
+    (⊤ : Submodule ℂ (EuclideanSpace ℂ ({v // v ∉ J} → Fin q)))).comap
       coords.toLinearEquiv.toLinearMap
   have hmapU : U.map coords.toLinearEquiv.toLinearMap = V.tensorProd
-      (⊤ : Submodule ℂ (EuclideanSpace ℂ (↥(Jᶜ) → Fin q))) :=
+      (⊤ : Submodule ℂ (EuclideanSpace ℂ ({v // v ∉ J} → Fin q))) :=
     Submodule.map_comap_eq_of_surjective coords.surjective _
   have hUT : Submodule.IsCloseTo loss U T := by
     apply (Submodule.isCloseTo_map_iff coords).mp
@@ -233,8 +233,8 @@ theorem exists_native_soft_word_compressed_energy_estimate
   have hConj := Entropy.regionTensorCoordinates_conjugation_localLift q J Kraw
   have hTA : coords (toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) R z) =
       TensorProduct.mapL (toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) Kraw)
-        (1 : EuclideanSpace ℂ (↥(Jᶜ) → Fin q) →L[ℂ]
-          EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) (coords z) := by
+        (1 : EuclideanSpace ℂ ({v // v ∉ J} → Fin q) →L[ℂ]
+          EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) (coords z) := by
     have hh := congrArg (fun f ↦ f (coords z)) hConj
     change coords (toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
       (ManyBody.place (X := fun _ ↦ Fin q) J Kraw) (coords.symm (coords z))) = _ at hh
@@ -242,8 +242,8 @@ theorem exists_native_soft_word_compressed_energy_estimate
     exact hh
   have hTensorEnergy : (inner ℂ
       (TensorProduct.mapL (toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) Kraw)
-        (1 : EuclideanSpace ℂ (↥(Jᶜ) → Fin q) →L[ℂ]
-          EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) (coords z)) (coords z)).re ≤
+        (1 : EuclideanSpace ℂ ({v // v ∉ J} → Fin q) →L[ℂ]
+          EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) (coords z)) (coords z)).re ≤
       (eSoft + 3) * ‖coords z‖ ^ 2 := by
     rw [← hTA, coords.inner_map_map, coords.norm_map]
     exact hRawEnergy

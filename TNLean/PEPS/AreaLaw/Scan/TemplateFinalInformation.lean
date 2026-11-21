@@ -38,7 +38,7 @@ open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped Matrix.Norms.L2Operator
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport)
+open ManyBody (AdmissibleSupport ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

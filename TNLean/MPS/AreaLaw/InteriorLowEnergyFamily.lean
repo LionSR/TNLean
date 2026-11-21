@@ -76,12 +76,12 @@ theorem exists_interior_low_energy_original_filter_family
         ‖B t e K‖ ≤ 3 * t + 4 * (ell : ℝ) ∧
         let J := interval L (a + ell) (b + ell + 1)
         let beta := fun _ : Fin L ↦ Fin q
-        let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+        let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
         let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-        let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+        let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
           (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
         let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-          (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+          (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
           (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
         let D := (q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))
         let Delta := (2 * Real.exp (-2 * ((ell ^ 2 : ℕ) : ℝ) *
@@ -93,13 +93,13 @@ theorem exists_interior_low_energy_original_filter_family
         ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ), N ≤ D ^ 2 ∧
           ∀ (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (delta : ℝ),
             0 ≤ delta → 2 * (delta + (1 / 200 : ℝ)) < 1 →
-            Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) delta S
+            Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) delta S
               ((Submodule.spectralSpanLE hO.eigenvectorBasis hO.eigenvalues
                 (E0 + eta)).map Tm.toLinearEquiv.toLinearMap) →
             let grow := ⨆ j : Fin N, S.map
               (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j)).toLinearMap
             Module.finrank ℂ grow ≤ N * Module.finrank ℂ S ∧
-              Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+              Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q))
                 (2 * (Delta / (1 - 2 * (delta + (1 / 200 : ℝ))) ^ 2 + (1 / 200 : ℝ))) grow
                 ((Submodule.spectralSpanLE hO.eigenvectorBasis hO.eigenvalues
                   (E0 + eta - 3 * w)).map Tm.toLinearEquiv.toLinearMap) := by

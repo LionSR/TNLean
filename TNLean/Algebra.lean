@@ -58,7 +58,6 @@ import TNLean.Algebra.ExpMulSubMonotone
 import TNLean.Algebra.ExpectationOverlap
 import TNLean.Algebra.ExplicitThresholds
 import TNLean.Algebra.ExponentialSumWindow
-import TNLean.Algebra.FinCastAddNatAdd
 import TNLean.Algebra.FinCyclicInduction
 import TNLean.Algebra.FinKronecker
 import TNLean.Algebra.FinOrderedProduct

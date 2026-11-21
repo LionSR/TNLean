@@ -117,11 +117,12 @@ theorem layoutIso_place {T E : Finset ι} (l : List (Hole pos q Party)) (own own
     (hA : ∀ x ∈ T, own x = pA) (hB : ∀ x ∈ (T ∪ E)ᶜ, own x = pB)
     (hA' : ∀ x ∈ T, own' x = pA') (hB' : ∀ x ∈ (T ∪ E)ᶜ, own' x = pB')
     (hE : ∀ x ∈ E, own x = own' x)
-    (f : Mem (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
+    (f : Mem (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc ({v // v ∉ T ∪ E} → Fin q)⟩ ::
         (tagRegs l ++ siteRegs q own (listE (sites ι) T E))) →L[ℂ]
-      Mem (⟨pA', euc (T → Fin q)⟩ :: ⟨pB', euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
+      Mem (⟨pA', euc (T → Fin q)⟩ :: ⟨pB', euc ({v // v ∉ T ∪ E} → Fin q)⟩ ::
         (tagRegs l ++ siteRegs q own (listE (sites ι) T E))))
-    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (M : Matrix ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
     (hf : ∀ z, pairHeadIso _ (f z) = (act M).rTensor _ (pairHeadIso _ z))
     (z : Mem (layoutRegs q l own)) :
     layoutIso l own' ((ungroupWord own' nodup_sites mem_sites (tagRegs l) hA' hB').eval

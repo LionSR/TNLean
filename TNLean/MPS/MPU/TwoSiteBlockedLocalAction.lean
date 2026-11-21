@@ -100,11 +100,11 @@ theorem bufferedMPUQuasiLocalAut_central_interval_four_output
           (MPOTensor.originalSiteHeisenbergOutputCentreEquiv d k)
             (MPOTensor.twoLinkOutputObservable u v A)) := by
   rw [bufferedMPUQuasiLocalAut_central_interval hU k hk S a A,
-    MPOTensor.originalSiteHeisenbergOutputWindow_eq_chainWindowOperator k hk u v A]
-  exact quasiLocalIntervalObservable_chainWindowOperator a (3 * (2 * k)) k
+    MPOTensor.originalSiteHeisenbergOutputWindow_eq_placeAlong_chainWindow k u v A]
+  exact quasiLocalIntervalObservable_placeAlong_chainWindow a (3 * (2 * k)) k
     (Matrix.reindex (MPOTensor.originalSiteHeisenbergOutputCentreEquiv d k)
       (MPOTensor.originalSiteHeisenbergOutputCentreEquiv d k)
-        (MPOTensor.twoLinkOutputObservable u v A)) (by omega) (by omega)
+        (MPOTensor.twoLinkOutputObservable u v A)) (by omega)
 
 /-- After the actual supplied physical blocking, an arbitrary pair
 observable has precisely the four-site two-link output matrix. The

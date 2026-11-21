@@ -89,15 +89,16 @@ theorem exists_physical_soft_middle_cluster {g tau : ℝ}
           ∃ (Acore : Fin ((b + 1) - (a + 2 * ell)) → MPOTensor q bond)
             (C0 : Matrix (Fin bond) (Fin bond) ℂ),
             let Z := MPOTensor.traceChainOperator Acore C0
-            let Zphys := QuantumCircuit.embedOp
-              (Subtype.val : interval (N + 1) (a + 2 * ell) (b + 1) → Fin (N + 1))
-              (QuantumCircuit.embedOp eJ Z)
+            let Zphys := ManyBody.place (X := fun _ ↦ Fin q)
+              (interval (N + 1) (a + 2 * ell) (b + 1))
+              (ManyBody.placeAlong (X := fun _ ↦ Fin q) eJ.toEquiv.toEmbedding Z)
             let Ghat := G - F 2 + Zphys
             ∃ hGhat : Ghat.IsHermitian,
               Z.IsHermitian ∧ Zphys.IsHermitian ∧
-              F 2 = QuantumCircuit.embedOp
-                (Subtype.val : interval (N + 1) (a + 2 * ell) (b + 1) → Fin (N + 1))
-                (QuantumCircuit.embedOp eJ ((F 2).submatrix insert insert)) ∧
+              F 2 = ManyBody.place (X := fun _ ↦ Fin q)
+                (interval (N + 1) (a + 2 * ell) (b + 1))
+                (ManyBody.placeAlong (X := fun _ ↦ Fin q) eJ.toEquiv.toEmbedding
+                  ((F 2).submatrix insert insert)) ∧
               ‖(F 2).submatrix insert insert - Z‖ ≤ xi ∧ ‖F 2 - Zphys‖ ≤ xi ∧
               Ghat = G - F 2 + Zphys ∧ ‖G - Ghat‖ ≤ xi ∧ ‖Ghat‖ ≤ M + xi ∧
               let Hraw := Φ.hamiltonian

@@ -19,6 +19,7 @@ replacement separates a chain into consecutive blocks.
 -/
 
 noncomputable section
+open ManyBody (cutMatrix)
 namespace TNLean.MPS.AreaLaw
 
 variable {T L q : ℕ}
@@ -53,8 +54,9 @@ private def suffixMap (a j : ℕ) (σ₀ : Fin T → Fin q)
 /-- An interval slice at a local cut is a submatrix at the corresponding full cut. -/
 private theorem cutMatrix_intervalSlice (ψ : EuclideanSpace ℂ (Fin T → Fin q))
     (a j : ℕ) (hj : j ≤ L) (σ₀ : Fin T → Fin q) :
-    cutMatrix (intervalSlice (L := L) ψ a σ₀) j =
-      (cutMatrix ψ (a + j)).submatrix (prefixMap a j hj σ₀) (suffixMap a j σ₀) := by
+    cutMatrix (leftBlock L j) (intervalSlice (L := L) ψ a σ₀) =
+      (cutMatrix (leftBlock T (a + j)) ψ).submatrix (prefixMap a j hj σ₀)
+        (suffixMap a j σ₀) := by
   ext x y
   change ψ (insertInterval a σ₀
     ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L j)).symm (x, y))) =
@@ -83,7 +85,8 @@ private theorem cutMatrix_intervalSlice (ψ : EuclideanSpace ℂ (Fin T → Fin 
 /-- Fixing the coordinates outside an interval cannot increase its internal cut ranks. -/
 theorem rank_cutMatrix_intervalSlice_le (ψ : EuclideanSpace ℂ (Fin T → Fin q))
     (a j : ℕ) (hj : j ≤ L) (σ₀ : Fin T → Fin q) :
-    (cutMatrix (intervalSlice (L := L) ψ a σ₀) j).rank ≤ (cutMatrix ψ (a + j)).rank := by
+    (cutMatrix (leftBlock L j) (intervalSlice (L := L) ψ a σ₀)).rank ≤
+      (cutMatrix (leftBlock T (a + j)) ψ).rank := by
   rw [cutMatrix_intervalSlice ψ a j hj σ₀]
   exact Matrix.rank_submatrix_le _ _ _
 

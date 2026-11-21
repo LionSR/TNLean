@@ -61,7 +61,7 @@ configurations `(v : V) → Out v`, the same space as the physical state, so no
 coordinate identification between two state spaces is needed.
 
 For the existing normalized output `φ = normalizedRegularizedPatchOutput …`,
-the regional matrix is exactly the existing `FiniteProduct.reducedPure`
+the regional matrix is exactly the existing `ManyBody.regionState`
 applied to the coordinate image of `φ`. Every region uses this same `φ`.
 It is not a marginal of the intermediate vector preceding that region's filter,
 and it is not a freely supplied trace-pairing hypothesis.

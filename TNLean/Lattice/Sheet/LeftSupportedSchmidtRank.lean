@@ -43,14 +43,14 @@ theorem exists_threeSplit_eq_kronecker_one_rank_le
     ∃ B : Matrix ((T → Fin q) × (E → Fin q))
         ((T → Fin q) × (E → Fin q)) ℂ,
       A.submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
-        B ⊗ₖ (1 : Matrix (↥(T ∪ E)ᶜ → Fin q)
-          (↥(T ∪ E)ᶜ → Fin q) ℂ) ∧
+        B ⊗ₖ (1 : Matrix ({v // v ∉ T ∪ E} → Fin q)
+          ({v // v ∉ T ∪ E} → Fin q) ℂ) ∧
       operatorSchmidtRank B ≤ q ^ (2 * (D ∩ T).card) := by
   classical
   by_cases hconfig : Nonempty (ι → Fin q)
   · let σ₀ : ι → Fin q := Classical.choice hconfig
     let t₀ : T → Fin q := fun v ↦ σ₀ v
-    let u₀ : ↥(T ∪ E)ᶜ → Fin q := fun v ↦ σ₀ v
+    let u₀ : {v // v ∉ T ∪ E} → Fin q := fun v ↦ σ₀ v
     have hDset : (D : Set ι) ⊆ (↑(T ∪ E) : Set ι) := Finset.coe_subset.mpr hD
     obtain ⟨B, hB⟩ := exists_threeSplit_eq_kronecker_one hTE
       (ManyBody.supportedOperators_mono hDset hA)
@@ -91,7 +91,7 @@ theorem exists_threeSplit_eq_kronecker_one_rank_le
       change A ((threeSplit q T E hTE).symm ((t, e), u₀))
           ((threeSplit q T E hTE).symm ((t', e'), u₀)) =
         B (t, e) (t', e') *
-          (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) u₀ u₀ at hentry
+          (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) u₀ u₀ at hentry
       simpa only [Matrix.one_apply_eq, mul_one] using hentry
     have hsupp : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A D :=
       hA

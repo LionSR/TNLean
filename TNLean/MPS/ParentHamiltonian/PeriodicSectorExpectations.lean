@@ -85,19 +85,20 @@ theorem blockedQuasiLocalExpectation_window
     (hTP : ∑ i, (B i)ᴴ * B i = 1) {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hρ : ρ.PosSemidef) (hfix : Kraus.transferMap B ρ = ρ)
     (htr : Matrix.trace ρ ≠ 0) (a : ℤ) (N b : ℕ) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hk : 0 < k) (hb : b + k ≤ N * L) :
+    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hb : b + k ≤ N * L) :
     quasiLocalBlockingFunctional d L (quasiLocalExpectation B hTP hρ hfix htr)
       (quasiLocalIntervalObservable d (a * L + (b : ℤ)) k X) =
       observableInsertionExpectation B ρ
         (Matrix.reindex (blockedConfigEquiv d N L).symm (blockedConfigEquiv d N L).symm
-          (chainWindowOperator (N * L) b X)) := by
-  rw [← quasiLocalIntervalObservable_chainWindowOperator (a * L) (N * L) b X hk hb]
+          (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow b hb) X)) := by
+  rw [← quasiLocalIntervalObservable_placeAlong_chainWindow (a * L) (N * L) b X hb]
   have h := blockedQuasiLocalExpectation_interval B hTP hρ hfix htr a N
     (Matrix.reindex (blockedConfigEquiv d N L).symm (blockedConfigEquiv d N L).symm
-      (chainWindowOperator (N * L) b X))
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow b hb) X))
   have hidx : Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
       (Matrix.reindex (blockedConfigEquiv d N L).symm (blockedConfigEquiv d N L).symm
-        (chainWindowOperator (N * L) b X)) = chainWindowOperator (N * L) b X := by
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow b hb) X)) =
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow b hb) X := by
     ext σ τ
     simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
       Equiv.symm_symm, Equiv.apply_symm_apply]

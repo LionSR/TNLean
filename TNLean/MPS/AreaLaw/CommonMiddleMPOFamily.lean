@@ -166,7 +166,7 @@ private theorem selected_middle_fixed_mpo_family
     let B := J \ E
     let I := ι × (ManyBody.RegionConfig β A × ManyBody.RegionConfig β A) ×
       (ManyBody.RegionConfig β B × ManyBody.RegionConfig β B)
-    let W := FiniteProduct.changingRegionalMiddleFamily β E J V
+    let W := changingRegionalMiddleFamily β E J V
     let eJ := intervalShiftOrderIso
       ((selected_middle_fixed_interval_bounds hab hb p s).2.2.1)
       ((selected_middle_fixed_interval_bounds hab hb p s).2.2.2.1)
@@ -175,16 +175,16 @@ private theorem selected_middle_fixed_mpo_family
           (max 1 (D r.1)) (fun x ↦
         W r (fun z ↦ (finProdFinEquiv.symm (x (eJ.symm z))).1)
           (fun z ↦ (finProdFinEquiv.symm (x (eJ.symm z))).2))) ∧
-      ∀ M : ι → Matrix (ManyBody.RegionConfig β Eᶜ)
-          (ManyBody.RegionConfig β Eᶜ) ℂ,
-        ∃ Mnew : I → Matrix (ManyBody.RegionConfig β Jᶜ)
-            (ManyBody.RegionConfig β Jᶜ) ℂ,
+      ∀ M : ι → Matrix (ManyBody.ComplConfig β E)
+          (ManyBody.ComplConfig β E) ℂ,
+        ∃ Mnew : I → Matrix (ManyBody.ComplConfig β J)
+            (ManyBody.ComplConfig β J) ℂ,
           (∑ t, M t ⊗ₖ V t).submatrix
-            ((ManyBody.splitEquiv β E).trans (Equiv.prodComm _ _))
-            ((ManyBody.splitEquiv β E).trans (Equiv.prodComm _ _)) =
+            ((ManyBody.cutEquiv β E).trans (Equiv.prodComm _ _))
+            ((ManyBody.cutEquiv β E).trans (Equiv.prodComm _ _)) =
           (∑ r, Mnew r ⊗ₖ W r).submatrix
-            ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
-            ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
+            ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _))
+            ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _)) := by
   have hbounds := selected_middle_fixed_interval_bounds hab hb p s
   obtain ⟨_hcard, hW, hglobal⟩ :=
     changingRegionalMiddleFamily_mpo_and_global_decomposition hq
@@ -230,10 +230,10 @@ private noncomputable def actualCommonFixedMiddleMPOFamilyStatement
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega)
     (show b + 1 ≤ L by have hs := s.isLt; omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) :=
     (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
   let RetDim := Fintype.card (MPOTensor.actualAffineRetainedConfig Nnat Lnat q aNat)
@@ -251,7 +251,7 @@ private noncomputable def actualCommonFixedMiddleMPOFamilyStatement
     let I := Fin n ×
       (ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E \ J)) ×
       (ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (J \ E))
-    let W := FiniteProduct.changingRegionalMiddleFamily β E J Vphys
+    let W := changingRegionalMiddleFamily β E J Vphys
     Fintype.card I ≤ oldBound * q ^ (4 * ell) ∧
       (∀ r : I, IsOpenMPS ((b + ell + 1) - (a + ell)) (q * q)
         (max 1 ((B ^ (deg r.1).val) ^ 2)) (fun w ↦ W r
@@ -270,13 +270,13 @@ private noncomputable def actualCommonFixedMiddleMPOFamilyStatement
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
         let Dphys := ∑ t ∈ O, z t • F t
         ∀ cPoly : Fin (k + 1) → ℂ,
-          ∃ Mnew : I → Matrix (ManyBody.RegionConfig β Jᶜ)
-              (ManyBody.RegionConfig β Jᶜ) ℂ,
+          ∃ Mnew : I → Matrix (ManyBody.ComplConfig β J)
+              (ManyBody.ComplConfig β J) ℂ,
             (∑ r : Fin (k + 1),
               cPoly r • twoMarkerCoefficient Dphys (WL p) (WR s) r.val i j) =
                 (∑ r, Mnew r ⊗ₖ W r).submatrix
-                  ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
-                  ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
+                  ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _))
+                  ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _))
 
 /-- The actual coefficient family admits a single decomposition over the
 prescribed middle and its actual complement. The original two-window
@@ -317,10 +317,10 @@ private theorem exists_common_fixed_middle_twoMarkerCoefficient_mpo_family
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega)
     (show b + 1 ≤ L by have hs := s.isLt; omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) :=
     (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
   let RetDim := Fintype.card (MPOTensor.actualAffineRetainedConfig Nnat Lnat q aNat)
@@ -339,7 +339,7 @@ private theorem exists_common_fixed_middle_twoMarkerCoefficient_mpo_family
   let I := Fin n ×
     (ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E \ J)) ×
     (ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (J \ E))
-  let W := FiniteProduct.changingRegionalMiddleFamily β E J Vphys
+  let W := changingRegionalMiddleFamily β E J Vphys
   have hcancel (σ : Fin Nnat → Fin q) : (σ ∘ eE.symm) ∘ eE = σ := by
     funext v
     exact congrArg σ (eE.symm_apply_apply v)
@@ -494,10 +494,10 @@ theorem exists_common_fixed_middle_grid_mpo_family
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega)
     (show b + 1 ≤ L by have hs := s.isLt; omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) :=
     (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
   let RetDim := Fintype.card (MPOTensor.actualAffineRetainedConfig Nnat Lnat q aNat)
@@ -515,7 +515,7 @@ theorem exists_common_fixed_middle_grid_mpo_family
     let I := fun u : ζ ↦ Fin (n u) ×
       (ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E \ J)) ×
       (ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (J \ E))
-    let W := fun u : ζ ↦ FiniteProduct.changingRegionalMiddleFamily β E J (Vphys u)
+    let W := fun u : ζ ↦ changingRegionalMiddleFamily β E J (Vphys u)
     let Iall := Σ u : ζ, I u
     let Wall := fun r : Iall ↦ W r.1 r.2
     Fintype.card Iall ≤ Fintype.card ζ * oldBound * q ^ (4 * ell) ∧
@@ -536,13 +536,13 @@ theorem exists_common_fixed_middle_grid_mpo_family
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
         let Dphys := fun u : ζ ↦ ∑ t ∈ O, z u t • F t
         ∀ c : ζ → Fin (k + 1) → ℂ,
-          ∃ M : Iall → Matrix (ManyBody.RegionConfig β Jᶜ)
-              (ManyBody.RegionConfig β Jᶜ) ℂ,
+          ∃ M : Iall → Matrix (ManyBody.ComplConfig β J)
+              (ManyBody.ComplConfig β J) ℂ,
             (∑ u : ζ, ∑ r : Fin (k + 1),
               c u r • twoMarkerCoefficient (Dphys u) (WL p) (WR s) r.val i j) =
                 (∑ r, M r ⊗ₖ Wall r).submatrix
-                  ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
-                  ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
+                  ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _))
+                  ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _)) := by
   classical
   let Ksites := interval L (a + 2 * ell) (b + 1)
   let E := interval L (a + p.val + 1) (b + s.val + 1)
@@ -555,10 +555,10 @@ theorem exists_common_fixed_middle_grid_mpo_family
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega)
     (show b + 1 ≤ L by have hs := s.isLt; omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) :=
     (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
   let RetDim := Fintype.card (MPOTensor.actualAffineRetainedConfig Nnat Lnat q aNat)
@@ -577,7 +577,7 @@ theorem exists_common_fixed_middle_grid_mpo_family
   let I := fun u : ζ ↦ Fin (n u) ×
     (ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E \ J)) ×
     (ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (J \ E))
-  let W := fun u : ζ ↦ FiniteProduct.changingRegionalMiddleFamily β E J (Vphys u)
+  let W := fun u : ζ ↦ changingRegionalMiddleFamily β E J (Vphys u)
   let Iall := Σ u : ζ, I u
   let Wall := fun r : Iall ↦ W r.1 r.2
   have hcountAll : Fintype.card Iall ≤ Fintype.card ζ * oldBound * q ^ (4 * ell) := by
@@ -615,8 +615,8 @@ theorem exists_common_fixed_middle_grid_mpo_family
     (∑ u : ζ, ∑ r : Fin (k + 1),
       c u r • twoMarkerCoefficient (Dphys u) (WL p) (WR s) r.val i j) =
         ∑ u : ζ, (∑ r : I u, M u r ⊗ₖ W u r).submatrix
-          ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
-          ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
+          ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _))
+          ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _)) := by
       apply Finset.sum_congr rfl
       intro u _hu
       exact hM u

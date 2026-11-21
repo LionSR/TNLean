@@ -120,28 +120,12 @@ variable {Λ : Finset (ℤ × ℤ)} {q : ℕ}
 complement. -/
 theorem place_eq_kronecker_one_submatrix (S : Finset (Site Λ))
     (K : Matrix (RegionalConfiguration q S) (RegionalConfiguration q S) ℂ) :
-    ManyBody.place S K = (K ⊗ₖ (1 : Matrix (RegionalConfiguration q Sᶜ)
-      (RegionalConfiguration q Sᶜ) ℂ)).submatrix
-        (ManyBody.splitEquiv (fun _ : Site Λ ↦ Fin q) S)
-        (ManyBody.splitEquiv (fun _ : Site Λ ↦ Fin q) S) := by
-  ext c c'
-  simp only [QuantumCircuit.place_eq_embedOp, QuantumCircuit.embedOp_apply, submatrix_apply,
-    kroneckerMap_apply, one_apply]
-  have hagree : QuantumCircuit.AgreeOff (fun x : ↥S ↦ x.val) c c' ↔
-      (ManyBody.splitEquiv (fun _ : Site Λ ↦ Fin q) S c).2 =
-        (ManyBody.splitEquiv (fun _ : Site Λ ↦ Fin q) S c').2 := by
-    constructor
-    · intro h
-      funext v
-      exact h v fun j hj => (Finset.mem_compl.mp v.2) (hj ▸ j.2)
-    · intro h i hi
-      have hiS : i ∉ S := fun hiS => hi ⟨i, hiS⟩ rfl
-      exact congrFun h ⟨i, Finset.mem_compl.mpr hiS⟩
-  by_cases h : QuantumCircuit.AgreeOff (fun x : ↥S ↦ x.val) c c'
-  · rw [ite_eq_left_iff.mpr (fun h' => absurd h h'), ite_eq_left_iff.mpr
-      (fun h' => absurd (hagree.mp h) h'), mul_one]
-    rfl
-  · simp only [h, hagree.not.mp h, ite_false, mul_zero]
+    ManyBody.place S K = (K ⊗ₖ (1 : Matrix (ManyBody.ComplConfig (fun _ : Site Λ ↦ Fin q) S)
+      (ManyBody.ComplConfig (fun _ : Site Λ ↦ Fin q) S) ℂ)).submatrix
+        (ManyBody.cutEquiv (fun _ : Site Λ ↦ Fin q) S)
+        (ManyBody.cutEquiv (fun _ : Site Λ ↦ Fin q) S) := by
+  rw [ManyBody.place, reindex_apply]
+  rfl
 
 /-- The physical operator obtained from an operator on `X × Y` acts on `X ∪ Y`.
 Source: `09-amplification.tex`, lines 348–364. -/
@@ -151,7 +135,7 @@ theorem ancillaPhysical_mem_supportedOperators (X Y : Finset (Site Λ)) (hXY : D
       (RegionalConfiguration q X × RegionalConfiguration q Y) ℂ) :
     ancillaPhysical U (restoringSplit q X Y hXY) M ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q) (X ∪ Y : Finset (Site Λ)) := by
-  set uE := ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY
+  set uE := ManyBody.regionUnionEquiv (β := fun _ : Site Λ ↦ Fin q) hXY
   have h : ancillaPhysical U (restoringSplit q X Y hXY) M =
       ManyBody.place (X ∪ Y) (((U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
         (RegionalConfiguration q Y) ℂ)) * M * (U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
@@ -183,7 +167,7 @@ noncomputable def restoringTransport (Ω : StateSpace Λ q) (X Y : Finset (Site 
     Matrix (Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X))
       (((RegionalConfiguration q X × RegionalConfiguration q X) ×
         (RegionalConfiguration q X × RegionalConfiguration q Y)) ×
-          RegionalConfiguration q (X ∪ Y)ᶜ) ℂ :=
+          ({v // v ∉ X ∪ Y} → Fin q)) ℂ :=
   ancillaTransport (restoringEigenbasis Ω X) (restoringSplit q X Y hXY)
 
 theorem restoringTransport_unitary (Ω : StateSpace Λ q) (X Y : Finset (Site Λ))
@@ -232,8 +216,8 @@ theorem restoringTransport_restoringGlobal_eq_sum (Ω : StateSpace Λ q)
     ∃ P : RegionalConfiguration q X → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
       (∀ x, P x ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
         (X ∪ Y : Finset (Site Λ))) ∧
-      restoringTransport Ω X Y hXY * Entropy.restoringGlobal (Z := RegionalConfiguration q
-          (X ∪ Y)ᶜ) E p sBlank xBlank Q T * (restoringTransport Ω X Y hXY)ᴴ =
+      restoringTransport Ω X Y hXY * Entropy.restoringGlobal (Z := {v // v ∉ X ∪ Y} → Fin q)
+          E p sBlank xBlank Q T * (restoringTransport Ω X Y hXY)ᴴ =
         ∑ x ∈ E, P x ⊗ₖ (Entropy.basisColumn x sBlank ⊗ₖ
           (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)) := by
   refine ⟨fun x => Entropy.restoringWeight (p x) • ancillaPhysical (restoringEigenbasis Ω X)
@@ -260,8 +244,9 @@ theorem restoringTransport_restoringColumnGlobal_eq_sum (Ω : StateSpace Λ q)
           (RegionalConfiguration q X × RegionalConfiguration q X) ℂ),
       (∀ i, P i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
         (X ∪ Y : Finset (Site Λ))) ∧
-      restoringTransport Ω X Y hXY * Entropy.restoringColumnGlobal (Z := RegionalConfiguration q
-          (X ∪ Y)ᶜ) E p sBlank eBlank Q T * (restoringTransport Ω X Y hXY)ᴴ =
+      restoringTransport Ω X Y hXY * Entropy.restoringColumnGlobal
+          (Z := {v // v ∉ X ∪ Y} → Fin q) E p sBlank eBlank Q T *
+            (restoringTransport Ω X Y hXY)ᴴ =
         ∑ i ∈ E ×ˢ Finset.univ, P i ⊗ₖ A i := by
   refine ⟨fun i => ancillaPhysical (restoringEigenbasis Ω X) (restoringSplit q X Y hXY)
       (Q * (single i.1 i.2 1 ⊗ₖ T)),
@@ -320,14 +305,14 @@ theorem restoringTransport_estimates (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     hδS sBlank xBlank eBlank hs hx he
   -- The rotation `(Uᴴ ⊗ 1) ⊗ 1` relating `ψ` to `Ω`.
   set Uh := (Uᴴ ⊗ₖ (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ)) ⊗ₖ
-    (1 : Matrix (RegionalConfiguration q (X ∪ Y)ᶜ) (RegionalConfiguration q (X ∪ Y)ᶜ) ℂ)
+    (1 : Matrix ({v // v ∉ X ∪ Y} → Fin q) ({v // v ∉ X ∪ Y} → Fin q) ℂ)
     with hUhdef
   have hUh : Uhᴴ * Uh = 1 := by
     simp only [hUhdef, conjTranspose_kronecker, conjTranspose_conjTranspose, conjTranspose_one,
       ← mul_kronecker_mul, hU, Matrix.one_mul, one_kronecker_one]
   have hUhH : Uhᴴ = (U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
-      (RegionalConfiguration q Y) ℂ)) ⊗ₖ (1 : Matrix (RegionalConfiguration q (X ∪ Y)ᶜ)
-        (RegionalConfiguration q (X ∪ Y)ᶜ) ℂ) := by
+      (RegionalConfiguration q Y) ℂ)) ⊗ₖ (1 : Matrix ({v // v ∉ X ∪ Y} → Fin q)
+        ({v // v ∉ X ∪ Y} → Fin q) ℂ) := by
     simp only [hUhdef, conjTranspose_kronecker, conjTranspose_conjTranspose, conjTranspose_one]
   have hψdef : ψ.ofLp = Uh *ᵥ fun i => Ω (rs.symm i) := rfl
   -- The physical operators in the eigenbasis coordinates.
@@ -348,7 +333,7 @@ theorem restoringTransport_estimates (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     have hp0 : ∀ x, 0 ≤ p x := (ManyBody.regionState_posSemidef X Ω).eigenvalues_nonneg
     have hpsum : ∑ x, p x = 1 := by
       have h := (ManyBody.regionState_isHermitian X Ω).trace_eq_sum_eigenvalues
-      rw [trace_reducedState Ω hΩ X] at h
+      rw [ManyBody.trace_regionState_eq_one hΩ (D := X)] at h
       have h' : ((∑ x, p x : ℝ) : ℂ) = 1 := by push_cast; exact h.symm
       exact_mod_cast h'
     have hU1 : ((1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ) ⊗ₖ U)ᴴ *
@@ -399,10 +384,10 @@ theorem restoringTransport_estimates (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
   · intro L
     have h := hadj (Uh * L.submatrix rs.symm rs.symm * Uhᴴ)
     set LG := Uh * L.submatrix rs.symm rs.symm * Uhᴴ with hLG
-    set RG := Entropy.restoringGlobal (Z := RegionalConfiguration q (X ∪ Y)ᶜ) E p sBlank xBlank Q T
+    set RG := Entropy.restoringGlobal (Z := {v // v ∉ X ∪ Y} → Fin q) E p sBlank xBlank Q T
     have key : ∀ {κ : Type} (M : Matrix (((RegionalConfiguration q X ×
         RegionalConfiguration q X) × (RegionalConfiguration q X × RegionalConfiguration q Y)) ×
-          RegionalConfiguration q (X ∪ Y)ᶜ) κ ℂ), 𝒲ᴴ * (𝒲 * M) = M := by
+          ({v // v ∉ X ∪ Y} → Fin q)) κ ℂ), 𝒲ᴴ * (𝒲 * M) = M := by
       intro κ M
       rw [← Matrix.mul_assoc, h𝒲, Matrix.one_mul]
     have hconj : (L ⊗ₖ (1 : Matrix (RegionalConfiguration q X × RegionalConfiguration q X)

@@ -56,25 +56,26 @@ theorem isGapped_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
   let H := Φ.hamiltonian
   let b0 : (v : {v : Fin N // v ∉ leftBlock N L}) → Fin q := fun _ ↦ z
   let A := Matrix.reindex e e H
-  let B := QuantumCircuit.productBasisPenalty b0
+  let B := ManyBody.productBasisPenalty b0
   let c := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N L)
   have hpad : ManyBody.cutOperator (leftBlock N L) (∑ j, paddedInteraction hi z Φ j) =
       A ⊗ₖ 1 + 1 ⊗ₖ B := by
     rw [sum_paddedInteraction hL hi z Φ]
-    change ManyBody.cutOperator (leftBlock N L) (QuantumCircuit.embedOp (Fin.castLE hi) H) +
+    change ManyBody.cutOperator (leftBlock N L)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin q) (Fin.castLEEmb hi) H) +
       ManyBody.cutOperator (leftBlock N L)
         (∑ v : {v : Fin N // v ∉ leftBlock N L},
-          QuantumCircuit.siteOp v.val (QuantumCircuit.siteBasisPenalty z)) = _
-    rw [cutOperator_embedOp_prefix hi b0 H,
+          ManyBody.placeAt (X := fun _ ↦ Fin q) v.val (ManyBody.siteBasisPenalty z)) = _
+    rw [cutOperator_placeAlong_castLEEmb hi b0 H,
       cutOperator_appended_penalty z (fun _ ↦ z)]
   have hA : A.IsHermitian := hH.submatrix _
-  have hB : B.IsHermitian := QuantumCircuit.isHermitian_productBasisPenalty b0
+  have hB : B.IsHermitian := ManyBody.isHermitian_productBasisPenalty b0
   have hgA : IsGapped A E Delta := (ManyBody.isGapped_reindex_iff e).mpr hgap
-  have hgB := QuantumCircuit.isGapped_productBasisPenalty b0
+  have hgB := ManyBody.isGapped_productBasisPenalty b0
   have hgK := hgA.kronecker_add hA hB hgB (Or.inl hDelta.le)
   have hsK := ManyBody.groundSpace_kronecker_add_eq_span hA hB hgA hgB hDelta.le zero_le_one
     (ManyBody.groundSpace_reindex_eq_span e hspan)
-    (QuantumCircuit.groundSpace_productBasisPenalty b0)
+    (ManyBody.groundSpace_productBasisPenalty b0)
   rw [add_zero, ← hpad] at hgK hsK
   have hsP := ManyBody.groundSpace_reindex_eq_span c.symm hsK
   rw [show Matrix.reindex c.symm c.symm (ManyBody.cutOperator (leftBlock N L)

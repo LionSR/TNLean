@@ -95,10 +95,14 @@ structure ExactMPSGroundPath {G : Type} [Group G] {d : ℕ}
   Source: Section II.F.2, lines 930–954. -/
   ground_line : ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) (hN : 2 ≤ N),
     ∃ E : ℝ,
-      (E : ℂ) ∈ spectrum ℂ (interactionHamiltonian (P.interaction γ) hN) ∧
-      (∀ z ∈ spectrum ℂ (interactionHamiltonian (P.interaction γ) hN), E ≤ z.re) ∧
+      (E : ℂ) ∈
+          spectrum ℂ (ManyBody.Interaction.translationInvariant hN (P.interaction γ)).hamiltonian ∧
+      (∀ z ∈ spectrum ℂ
+          (ManyBody.Interaction.translationInvariant hN (P.interaction γ)).hamiltonian,
+        E ≤ z.re) ∧
       LinearMap.ker (Matrix.toEuclideanLin
-        (interactionHamiltonian (P.interaction γ) hN - (E : ℂ) • 1)) =
+        ((ManyBody.Interaction.translationInvariant hN (P.interaction γ)).hamiltonian -
+          (E : ℂ) • 1)) =
         Submodule.span ℂ
           {(WithLp.linearEquiv 2 ℂ ((Fin N → Fin d) → ℂ)).symm (mpv (tensor γ))}
 

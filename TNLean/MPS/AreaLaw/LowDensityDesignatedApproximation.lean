@@ -25,6 +25,7 @@ invariance is assumed. The capped-width comparison is documented in
 -/
 
 open ManyBody (interval)
+open ManyBody (cutMatrix)
 
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace Matrix
 
@@ -64,7 +65,7 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
         ψ ∈ G (etaLD - v) → ‖ψ‖ = 1 →
       ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
         IsOpenMPS L q (Module.finrank ℂ (G etaLD) * Bg) (fun x ↦ Φ x) ∧
-        (cutMatrix Φ k0).rank ≤ Module.finrank ℂ (G etaLD) * Bs ∧
+        (cutMatrix (leftBlock L k0) Φ).rank ≤ Module.finrank ℂ (G etaLD) * Bs ∧
         1 - delta < ‖⟪Φ, ψ⟫_ℂ‖ ∧ ‖Φ - ψ‖ ^ 2 ≤ delta / 2 := by
   classical
   obtain ⟨K, hK, hfixed⟩ :=

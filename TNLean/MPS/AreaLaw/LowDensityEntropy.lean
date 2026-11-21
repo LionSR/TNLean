@@ -74,15 +74,15 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_capped
   let : Nonempty (Fin L → Fin q) := config
   intro J G b g m u ψ hψG hψ
   let beta := fun _ : Fin L ↦ Fin q
-  let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+  let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-  let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+  let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
     (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
   let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-    (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+    (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
     (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
   let EM := EuclideanSpace ℂ (J → Fin q)
-  let EE := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)
+  let EE := EuclideanSpace ℂ ({x // x ∉ J} → Fin q)
   have hb : 0 < b := lt_min hv (by positivity)
   have hbv : b ≤ v := min_le_left _ _
   have hbcap : b ≤ etaLD / 2 := min_le_right _ _
@@ -145,7 +145,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_capped
     (Real.polynomial_filter_count_bounds Cf (m * 2 ^ i) g hCf1 (hmi i) hg hg1).2.2.2.2.2
   obtain ⟨hp, hsum, hentropy, htailOfViable⟩ :=
     Submodule.unit_cut_spectral_probability Tm (G (etaLD - v)) ψ hψG hψ
-  let coord := (Submodule.euclideanTensorEquiv (J → Fin q) (↥(Jᶜ) → Fin q)).symm (Tm ψ)
+  let coord := (Submodule.euclideanTensorEquiv (J → Fin q) ({x // x ∉ J} → Fin q)).symm (Tm ψ)
   let Cψ := Matrix.schmidtCoeffMatrix (WithLp.ofLp coord)
   let hρ := Matrix.posSemidef_self_mul_conjTranspose Cψ
   let probability := hρ.isHermitian.eigenvalues₀

@@ -45,7 +45,7 @@ Source: `07-comparators.tex`, `comparator:typical-entropies`, lines 37–55,
 and `comparator:rough-upper` and `comparator:rough-lower`, lines 154–166, and
 `comparator:high-label`, lines 240–270;
 `08-scanner.tex`, `scanner:bootstrap-comparison`, lines 755–769. -/
-theorem regionalEntropy_le_of_rough_typical_comparisons
+theorem regionEntropy_le_of_rough_typical_comparisons
     {Λ : Finset (ℤ × ℤ)} {q : ℕ}
     (Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1)
     (X : Finset (Site Λ))
@@ -67,10 +67,10 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
     (hrₑ : Tendsto rₑ atTop (𝓝 0))
     (hdefect : ∀ᶠ k in atTop, d k ≤ Edef + rₑ k) :
     let β := fun _ : Site Λ => Fin q
-    let split := ManyBody.splitEquiv β X
+    let split := ManyBody.cutEquiv β X
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split Ωt
     let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
-    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x =>
+    let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x =>
       Matrix.compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     let S := ManyBody.regionEntropy Ωt X
     let S' := vonNeumannEntropy
@@ -90,7 +90,7 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
     Ωt hΩt X E w hz hE
   have hρ : ManyBody.regionState Ωt X = Matrix.partialTraceRight
       (Matrix.vecMulVec ΩX (star ΩX)) :=
-    ManyBody.regionState_eq_partialTrace β Ωt X
+    ManyBody.regionState_eq_partialTraceRight_cutVector X Ωt
   have hS' : 0 ≤ S' :=
     let hp := (Matrix.posSemidef_vecMulVec_self_star ΩX).partialTraceRight
     let hzX : 0 < hp.isHermitian.spectralRestrictionMass E :=

@@ -71,16 +71,16 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     a unitary $X_{j,p}$ on $2s$ sites acts on its first and its last register.
     Let $T$ be the product of the depths $k,\dots,0$ of a block, the depth $0$
     applied first. If every $X_{j,p}$ is a product of at most $K$ unitaries on
-    neighbouring sites, measurement rounds of total depth $(k+1)(4s+K+2)$
-    implement $T$ on every block, $T^{\otimes M}$, on the vectors with $\ket0$
+    neighbouring sites, a measurement circuit of depth at most $(k+1)(4s+K)$
+    implements $T$ on every block, $T^{\otimes M}$, on the vectors with $\ket0$
     at every site of every block other than its first and its last $s$ sites.
 \end{lemma}
 \begin{proof}
     \leanok
     The unitaries of depth $j$ of all the blocks are register gates whose
     stretches are their sub-blocks, which are pairwise disjoint, so
-    Lemma~\ref{thm:qc_register_layer} applies the depth $j$ in depth
-    $4s+K+2$ on the vectors with $\ket0$ at the sites strictly inside the
+    Lemma~\ref{thm:qc_register_layer} applies the depth $j$ in depth at most
+    $4s+K$ on the vectors with $\ket0$ at the sites strictly inside the
     sub-blocks of depth $j$ between their first and last registers. A unitary
     of depth $j'<j$ acts on the first and the last register of a sub-block of
     depth $j'$, which are the first or the last register of a sub-block of
@@ -182,7 +182,7 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
 \begin{lemma}[The approximating state with measurements in depth $O(k)$]
     \label{thm:ldp_register_tree_approximating_state}
     \lean{MPSPreparation.isZeroOn_regCentralSites_pairLayerOp_mulVec,
-        MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_approximatingMPVState}
+        MPSPreparation.exists_isMeasurementConversion_approximatingMPVState}
     \leanok
     \uses{thm:ldp_register_tree_isometry, thm:ldp_register_tree_rounds,
         thm:ldp_approximating_state_depth, def:ldp_approximating_state,
@@ -204,21 +204,21 @@ $N$, the local labels are $\mathbb Z_d$ with $d\ge1$, and $s\ge1$.
     Theorem~\ref{thm:qc_bounded_unitary_two_site_gates} there is $K$,
     depending on $d$ and $s$, such that every unitary on $2s$ sites is a
     product of at most $K$ unitaries on neighbouring sites. A local circuit of
-    depth $K$, applied in one round of depth $K+2$, prepares the pairs
+    depth at most $K$, without measurements, prepares the pairs
     $\ket\omega$ of the fixed point on the last register of every block and the
     first of the next, from the all-$\ket0$ product state; the other sites keep
     $\ket0$. Lemma~\ref{thm:ldp_register_tree_rounds}, with the unitaries of
     Lemma~\ref{thm:ldp_register_tree_isometry}, then applies the trees of all
-    the blocks in depth $(k+1)(4s+K+2)$. The output is
+    the blocks in depth at most $(k+1)(4s+K)$. The output is
     $T^{\otimes M}\bigotimes\ket\omega=V^{\otimes M}\bigotimes\ket\omega$, the
     approximating state, as in Lemma~\ref{thm:ldp_approximating_state_depth};
-    the total depth is at most $(2K+4s+4)(k+1)$.
+    the total depth is at most $(2K+4s)(k+1)$.
 \end{proof}
 
 \begin{lemma}[Preparation with measurements in depth $O(\log\log(N/\varepsilon))$]
     \label{thm:ldp_loglog_depth}
-    \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_approximationError_le,
-        MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_logb_log}
+    \lean{MPSPreparation.exists_isMeasurementConversion_approximationError_le,
+        MPSPreparation.exists_isMeasurementConversion_le_logb_log}
     \leanok
     \uses{thm:ldp_register_tree_approximating_state,
         lem:ldp_approximation_error_slope_threshold,

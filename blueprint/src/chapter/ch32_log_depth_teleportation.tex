@@ -13,8 +13,8 @@ The isometries of the tree circuit act on registers that are far apart. They
 \cite{Malz2024Preparation}, so that every layer of the tree takes constant
 depth. Theorem~\ref{thm:qc_long_range_layer} applies a layer of two-site gates
 joining the sites $a$ and $a+2L+1$, on pairwise disjoint stretches
-$\{a,\dots,a+2L+1\}$, with measurements in depth $5$ for every $L$. When every register is one site of the ring, composing these layers implements a binary tree of two-site gates with $k$ levels
-with measurements in depth $5k$. Because the registers of a general tree circuit carry $\mathbb C^{D^2}$, Section~\ref{sec:ldp_register_tree} extends this construction to multi-site registers and establishes the resulting depth $O(\log\log(N/\varepsilon))$ for
+$\{a,\dots,a+2L+1\}$, with measurements in depth at most $5$ for every $L$. When every register is one site of the ring, composing these layers implements a binary tree of two-site gates with $k$ levels
+with measurements in depth at most $5k$. Because the registers of a general tree circuit carry $\mathbb C^{D^2}$, Section~\ref{sec:ldp_register_tree} extends this construction to multi-site registers and establishes the resulting depth $O(\log\log(N/\varepsilon))$ for
 matrix product states.
 
 Throughout, the sites of the ring are $\{0,\dots,N-1\}$ with addition modulo
@@ -42,11 +42,12 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         MPSPreparation.levelGates, MPSPreparation.treeGate_a_val,
         MPSPreparation.treeGate_far_val, MPSPreparation.pairwise_levelGates,
         MPSPreparation.levelOp, MPSPreparation.treeOp,
-        MPSPreparation.treeRounds, MPSPreparation.sum_depth_treeRounds,
+        MPSPreparation.treeRounds, MPSPreparation.depth_treeRounds_le,
+        MPSPreparation.forall_treeRounds,
         MPSPreparation.isZeroOn_levelOp_mulVec,
         MPSPreparation.interior_subset_blockInterior,
-        MPSPreparation.isRoundsImplementationOn_treeRounds,
-        MPSPreparation.isPreparedWithMeasurementRoundsInDepth_treeOp}
+        MPSPreparation.isImplementationOn_treeRounds,
+        MPSPreparation.exists_isMeasurementConversion_treeOp}
     \leanok
     \uses{thm:qc_long_range_layer, lem:qc_round_implementation_compose,
         lem:ldp_zero_sites_product_vector}
@@ -57,9 +58,9 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     $0,\dots,k-1$, the level $k-1$ applied first. Let $I_B$ be the set of
     sites $x$ whose residue modulo $B$ lies in $\{1,\dots,B-2\}$ and whose
     block $\{qB,\dots,(q+1)B-1\}$, $q=\lfloor x/B\rfloor$, satisfies
-    $(q+1)B\le N$, and let $J_k=I_2\cup I_4\cup\dots\cup I_{2^k}$. Then $2k$
-    rounds of total depth $5k$ implement $T_k$ on the vectors with $\ket0$ at
-    the sites of $J_k$. In particular, for a nonzero product vector $\ket\pi$
+    $(q+1)B\le N$, and let $J_k=I_2\cup I_4\cup\dots\cup I_{2^k}$. Then a
+    measurement circuit of $2k$ rounds and depth at most $5k$ implements $T_k$ on the
+    vectors with $\ket0$ at the sites of $J_k$. In particular, for a nonzero product vector $\ket\pi$
     whose site vectors on $J_k$ are multiples of $\ket0$, the vector
     $T_k\ket\pi$ is prepared with measurement rounds in depth $5k$.
 \end{lemma}
@@ -68,7 +69,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     The gate of the block $p$ of level $i$ is a distant gate with $a=p2^{i+1}$
     and $L=2^i-1$. Its stretch is the block, so the stretches of a level are
     pairwise disjoint, and its interior lies in $I_{2^{i+1}}\subseteq J_{i+1}$.
-    By Theorem~\ref{thm:qc_long_range_layer} two rounds of depth $5$ implement
+    By Theorem~\ref{thm:qc_long_range_layer} two rounds of depth at most $5$ implement
     level $i$ on the vectors with $\ket0$ at $J_{i+1}$. The gates of level $i$
     act on sites $x$ with $x\equiv0$ or $x+1\equiv0$ modulo $2^{i+1}$, hence
     modulo $2^{j+1}$ for every $j<i$, so on no site of $J_i$; and

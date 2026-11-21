@@ -19,6 +19,8 @@ Source: Schuch, Wolf, Verstraete, and Cirac, arXiv:0705.0292v2,
 
 noncomputable section
 
+open ManyBody (cutMatrix)
+
 namespace TNLean.MPS.AreaLaw
 
 variable {K L q : ℕ}
@@ -120,8 +122,9 @@ theorem IsOpenMPS.exists_rank_one_at_copy_boundaries {D : ℕ}
     ∃ χ : EuclideanSpace ℂ (Fin (K * L) → Fin q),
       IsOpenMPS (K * L) q D (fun x ↦ χ x) ∧ ‖χ‖ = 1 ∧
       ‖inner ℂ (copyProduct η) ψ‖ ≤ ‖inner ℂ (copyProduct η) χ‖ ∧
-      (∀ j, (cutMatrix χ j).rank ≤ (cutMatrix ψ j).rank) ∧
-      ∀ t ≤ K, (cutMatrix χ (t * L)).rank ≤ 1 := by
+      (∀ j, (cutMatrix (leftBlock (K * L) j) χ).rank ≤
+        (cutMatrix (leftBlock (K * L) j) ψ).rank) ∧
+      ∀ t ≤ K, (cutMatrix (leftBlock (K * L) (t * L)) χ).rank ≤ 1 := by
   classical
   let S := (Finset.range (K + 1)).image (fun t ↦ t * L)
   have hf : ∀ k ∈ S,
@@ -249,8 +252,9 @@ private def spliceSites {T q : ℕ} (k : ℕ) (σ τ : Fin T → Fin q) : Fin T 
 /-- A cut matrix entry is the coefficient of the corresponding joined configuration. -/
 private theorem cutMatrix_restrictions {T q : ℕ} (ψ : EuclideanSpace ℂ (Fin T → Fin q))
     (k : ℕ) (σ τ : Fin T → Fin q) :
-    cutMatrix ψ k (fun i ↦ σ i.1) (fun i ↦ τ i.1) = ψ (spliceSites k σ τ) := by
-  rw [cutMatrix_apply]
+    cutMatrix (leftBlock T k) ψ (fun i ↦ σ i.1) (fun i ↦ τ i.1) =
+      ψ (spliceSites k σ τ) := by
+  rw [ManyBody.cutMatrix_apply]
   apply congrArg ψ
   funext i
   by_cases hi : i.val < k
@@ -261,9 +265,9 @@ private theorem cutMatrix_restrictions {T q : ℕ} (ψ : EuclideanSpace ℂ (Fin
 
 /-- A rank-one physical cut gives the cross-multiplication identity for joined words. -/
 private theorem cross_mul_eq_of_cut_rank_le_one {T q : ℕ} (ψ : EuclideanSpace ℂ (Fin T → Fin q))
-    (k : ℕ) (hk : (cutMatrix ψ k).rank ≤ 1) (σ τ : Fin T → Fin q) :
+    (k : ℕ) (hk : (cutMatrix (leftBlock T k) ψ).rank ≤ 1) (σ τ : Fin T → Fin q) :
     ψ σ * ψ τ = ψ (spliceSites k σ τ) * ψ (spliceSites k τ σ) := by
-  have hc := cross_mul_eq_of_rank_le_one (cutMatrix ψ k) hk
+  have hc := cross_mul_eq_of_rank_le_one (cutMatrix (leftBlock T k) ψ) hk
     (fun i ↦ σ i.1) (fun i ↦ τ i.1) (fun i ↦ σ i.1) (fun i ↦ τ i.1)
   have hself : ∀ x : Fin T → Fin q, spliceSites k x x = x := by
     intro x
@@ -290,7 +294,7 @@ product of normalized block vectors. The block length may be zero.
 Source: arXiv:0705.0292v2, lines 421–470. -/
 theorem exists_unit_block_factors {K L q : ℕ} (hK : 0 < K)
     (ψ : EuclideanSpace ℂ (Fin (K * L) → Fin q)) (hψ : ‖ψ‖ = 1)
-    (hcuts : ∀ n, 0 < n → n < K → (cutMatrix ψ (n * L)).rank ≤ 1) :
+    (hcuts : ∀ n, 0 < n → n < K → (cutMatrix (leftBlock (K * L) (n * L)) ψ).rank ≤ 1) :
     ∃ u : Fin K → EuclideanSpace ℂ (Fin L → Fin q),
       (∀ i, ‖u i‖ = 1) ∧ ψ = copyProduct u := by
   let Ψ : EuclideanSpace ℂ (Fin K → Fin L → Fin q) :=
@@ -302,7 +306,7 @@ theorem exists_unit_block_factors {K L q : ℕ} (hK : 0 < K)
         congr 1
         exact Equiv.sum_comp (copyConfigurationEquiv K L q).symm (fun σ ↦ ‖ψ σ‖ ^ 2)
       _ = 1 := hψ
-  have hr : ∀ n, (cutMatrix ψ (n * L)).rank ≤ 1 := by
+  have hr : ∀ n, (cutMatrix (leftBlock (K * L) (n * L)) ψ).rank ≤ 1 := by
     intro n
     by_cases hn0 : n = 0
     · subst n

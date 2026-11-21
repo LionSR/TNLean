@@ -43,6 +43,7 @@ namespace TNLean.MPS.AreaLaw.ChainSweep
 open TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 
 open ManyBody (IsGapped groundSpace ChainInteraction)
+open ManyBody (cutMatrix)
 
 /-- The protocol's density error permits column extraction and the source's
 final phase error for every L≥2. Source: Part II, `thm:B`, lines 587–593. -/
@@ -125,7 +126,7 @@ private theorem exact_isOpenMPS_of_length_le {L q N : ℕ}
   apply isOpenMPS_of_internal_cutMatrix_rank_le
   intro k _ _
   calc
-    (cutMatrix Ω k).rank ≤
+    (cutMatrix (leftBlock L k) Ω).rank ≤
         Fintype.card ((v : {v : Fin L // v ∈ leftBlock L k}) → Fin q) :=
       Matrix.rank_le_card_height _
     _ = q ^ Fintype.card {v : Fin L // v ∈ leftBlock L k} := by simp

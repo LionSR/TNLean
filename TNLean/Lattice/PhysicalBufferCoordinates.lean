@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.Circuit.RegionSplit
-import QICLean.Entropy.FiniteProductSplitting
+import QICLean.Entropy.RegionPurificationSplitting
 import QICLean.Entropy.PhysicalBufferOverlap
 
 /-!
@@ -39,36 +39,37 @@ theorem reindex_physicalBuffer_eq_place
     let Q := (R ∪ C)ᶜ
     let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
     let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
-    let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (Q → Fin q))
+    let g := (s.prodCongr s).trans (Equiv.doubledRegroup P ({v // v ∉ R ∪ C} → Fin q))
     let p := QuantumCircuit.sitePairConfigurationEquiv ι q q
-    let pQ := QuantumCircuit.sitePairConfigurationEquiv Q q q
+    let pQ := (QuantumCircuit.sitePairConfigurationEquiv {v // v ∉ R ∪ C} q q).trans
+      (ManyBody.complementEquiv (fun _ : ι ↦ Fin (q * q)) (R ∪ C))
     let e := g.symm.trans p
-    ∀ W : Matrix ((Q → Fin q) × (Q → Fin q)) ((Q → Fin q) × (Q → Fin q)) ℂ,
+    ∀ W : Matrix (({v // v ∉ R ∪ C} → Fin q) × ({v // v ∉ R ∪ C} → Fin q))
+        (({v // v ∉ R ∪ C} → Fin q) × ({v // v ∉ R ∪ C} → Fin q)) ℂ,
       Matrix.reindex e e ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) =
         ManyBody.place Q (Matrix.reindex pQ pQ W) := by
   classical
   intro Q P s g p pQ e W
   ext x y
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
-    Matrix.one_apply, QuantumCircuit.place_eq_embedOp, QuantumCircuit.embedOp_apply]
-  have hcondition : (e.symm x).1 = (e.symm y).1 ↔
-      QuantumCircuit.AgreeOff (Subtype.val : Q → ι) x y := by
+    Matrix.one_apply, ManyBody.place_apply]
+  have hcondition : (e.symm x).1 = (e.symm y).1 ↔ ∀ i ∉ Q, x i = y i := by
     simp only [P, e, g, s, Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.trans_apply,
       Equiv.doubledRegroup, Equiv.bipartiteRegroup, Equiv.prodCongr_apply, Prod.map,
-      ManyBody.splitTwoRegionsEquiv, ManyBody.unionEquiv,
-      Equiv.coe_fn_mk, ManyBody.splitEquiv_apply_fst, Equiv.refl_apply, Prod.mk.injEq,
+      ManyBody.splitTwoRegionsEquiv, ManyBody.regionUnionEquiv,
+      Equiv.coe_fn_mk, Equiv.piEquivPiSubtypeProd_apply, Equiv.refl_apply, Prod.mk.injEq,
       Equiv.apply_eq_iff_eq]
     constructor
     · intro h i hi
       have hiRC : i ∈ R ∪ C :=
-        not_not.mp (fun hn ↦ hi ⟨i, Finset.mem_compl.mpr hn⟩ rfl)
+        not_not.mp (fun hn ↦ hi (Finset.mem_compl.mpr hn))
       exact finProdFinEquiv.symm.injective <|
         (Finset.mem_union.mp hiRC).elim
           (fun hiR ↦ Prod.ext (congrFun h.1.1 ⟨i, hiR⟩) (congrFun h.2.1 ⟨i, hiR⟩))
           (fun hiC ↦ Prod.ext (congrFun h.1.2 ⟨i, hiC⟩) (congrFun h.2.2 ⟨i, hiC⟩))
     · intro h
       have hxy (i : ι) (hi : i ∈ R ∪ C) : x i = y i :=
-        h i (fun j hij ↦ (Finset.mem_compl.mp (hij ▸ j.property)) hi)
+        h i (fun hiQ ↦ Finset.mem_compl.mp hiQ hi)
       exact ⟨⟨funext fun v ↦ congrArg (fun z : Fin (q * q) ↦ (finProdFinEquiv.symm z).1)
           (hxy v (Finset.mem_union_left C v.property)),
         funext fun v ↦ congrArg (fun z : Fin (q * q) ↦ (finProdFinEquiv.symm z).1)

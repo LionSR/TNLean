@@ -28,6 +28,7 @@ assembly remain separate. See
 -/
 
 open ManyBody (interval)
+open ManyBody (cutMatrix)
 
 open Matrix Polynomial
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
@@ -80,7 +81,7 @@ theorem exists_aklv_physical_accuracy_window :
       let u : ℝ := 1 + Real.log (q : ℝ) + Real.log (1 / g)
       let s0 : ℕ := ⌈A * u ^ 2 / g⌉₊
       ∃ y : EuclideanSpace ℂ (Fin L → Fin q), ‖y‖ = 1 ∧ ‖y - Ω‖ ^ 2 ≤ rho ∧
-        (cutMatrix y k).rank ≤ aklvAccuracyRankBound q s0 g rho ∧
+        (cutMatrix (leftBlock L k) y).rank ≤ aklvAccuracyRankBound q s0 g rho ∧
         (y = Ω ∨ IsAKLVAccuracyFilteredOutput k s0 Φ g rho Ω y) := by
   classical
   obtain ⟨A, hA, hA21, hsequence⟩ := exists_aklv_physical_changing_target_sequence
@@ -124,12 +125,12 @@ theorem exists_aklv_physical_accuracy_window :
     let y := c • (‖toEuclideanLin K x‖⁻¹ : ℂ) • toEuclideanLin K x
     refine ⟨y, hyunit, hyΩ.trans (aklvAccuracy_refinement_error_le hg hg1 hrho hrho1 s),
       ?_, Or.inr ?_⟩
-    · have hxrank' : (cutMatrix x (a + s / 2)).rank ≤
+    · have hxrank' : (cutMatrix (leftBlock L (a + s / 2)) x).rank ≤
           (q * (s0 ^ 2 + 1)) ^ (32 * (2 * s0 + 1)) := by
         rw [hcenter]
         exact hxrank
-      change (cutMatrix y (a + s / 2)).rank ≤
-        _ * (cutMatrix x (a + s / 2)).rank at hyrank
+      change (cutMatrix (leftBlock L (a + s / 2)) y).rank ≤
+        _ * (cutMatrix (leftBlock L (a + s / 2)) x).rank at hyrank
       have hr := hyrank.trans (Nat.mul_le_mul_left _ hxrank')
       rw [hcenter] at hr
       apply hr.trans

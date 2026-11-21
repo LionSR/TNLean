@@ -20,12 +20,14 @@ specified cut may use a sharper accuracy budget than the remaining cuts.
 -/
 
 open scoped BigOperators ComplexOrder InnerProductSpace Matrix
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw
 
-/-- Scalar multiplication acts entrywise on each cut matrix. -/
+/-- Scalar multiplication of a chain vector acts entrywise on each cut matrix. -/
 theorem cutMatrix_smul {L q : ℕ} (ψ : EuclideanSpace ℂ (Fin L → Fin q))
-    (c : ℂ) (k : ℕ) : cutMatrix (c • ψ) k = c • cutMatrix ψ k := by
+    (c : ℂ) (k : ℕ) :
+    cutMatrix (leftBlock L k) ⇑(c • ψ) = c • cutMatrix (leftBlock L k) ψ := by
   ext a b
   rfl
 
@@ -46,7 +48,7 @@ theorem normalized_sequentialTruncation_of_prefix_mass
     0 < ‖Φ0‖ ∧
       let Φ := (‖Φ0‖ : ℂ)⁻¹ • Φ0
       ‖Φ‖ = 1 ∧
-      (∀ k : ℕ, 0 < k → k < L → (cutMatrix Φ k).rank ≤ D k) ∧
+      (∀ k : ℕ, 0 < k → k < L → (cutMatrix (leftBlock L k) Φ).rank ≤ D k) ∧
       1 - delta < ‖⟪Φ, ψ⟫_ℂ‖ ∧ ‖Φ - ψ‖ ^ 2 ≤ delta / 2 := by
   classical
   intro P Φ0
@@ -92,7 +94,7 @@ theorem normalized_sequentialTruncation_of_prefix_mass
     nlinarith only [hs, herr]
   refine ⟨hΦ, ?_, ?_, hsq⟩
   · intro k hk hkL
-    change (cutMatrix ((‖Φ0‖ : ℂ)⁻¹ • Φ0) k).rank ≤ D k
+    change (cutMatrix (leftBlock L k) ⇑((‖Φ0‖ : ℂ)⁻¹ • Φ0)).rank ≤ D k
     rw [cutMatrix_smul, Matrix.rank_smul_of_mem_nonZeroDivisors _
       (mem_nonZeroDivisors_of_ne_zero
         (inv_ne_zero (Complex.ofReal_ne_zero.mpr hpos.ne')))]

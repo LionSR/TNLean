@@ -38,8 +38,9 @@ Module `FrustrationFree/Model.lean`.
   `0 ≤ h_X` and `h_X ≤ J • 1` in the Loewner order and the gap as
   `Δ • (1 - vecMulVec Ω (star Ω)) ≤ h.hamiltonian`.
 * `IsFrustrationFreeGapped.isGapped : IsGapped h.hamiltonian 0 Δ` and
-  `IsFrustrationFreeGapped.groundSpace_eq : groundSpace h.hamiltonian 0 = span {Ω}`, from
-  `ManyBody.isGapped_and_groundSpace_eq_span_iff`.
+  `IsFrustrationFreeGapped.zeroSpace_eq : h.zeroSpace = span {Ω}`, stated through QICLean's
+  `ManyBody.Interaction.zeroSpace`; `IsFrustrationFreeGapped.groundSpace_eq` follows by
+  `ManyBody.Interaction.zeroSpace_eq_groundSpace`.
 * `IsFrustrationFreeGapped.isHermitian`, `.norm_term_le : ‖h_X‖ ≤ J`.
 * `FrustrationFreeAreaLaw : Prop`: `eq:goal` for every `q ≥ 1`, `R`, `J, Δ > 0`.
 * `frustrationFreeAreaLaw_of_uniformAreaLaw : FrustrationFreeAreaLaw`, a corollary of the
@@ -48,7 +49,7 @@ Module `FrustrationFree/Model.lean`.
 
 ## Step 1: sweep contraction, `eq:sweep`
 
-Module `FrustrationFree/SweepContraction.lean`, abstract (an inner product space, no sites).
+Module `QICLean/Analysis/SweepContraction.lean` (moved from TNLean), abstract (an inner product space, no sites).
 
 The note writes the sweep with `G_i = (1 - k_i)^{1/2}`. We use instead the orthogonal
 projections `Π_i` onto the ranges of the terms and the factors `1 - Π_i`, so that QICLean's
@@ -66,7 +67,8 @@ contribution vanishes after its factor, so the bound has `d²` in place of `(d+1
 3. `norm_pow_complementProd_le`: `‖D^t v‖ ≤ θ^t ‖v‖` for `v ⊥ Ω`, with
    `θ = (1 + γ/(d+1)²)^{-1/2}`, the constant of `eq:sweep`.
 
-Module `FrustrationFree/RangeProjection.lean`, on matrices.
+Modules `QICLean/Analysis/SupportProjectionOrder.lean` and `QICLean/ManyBody/Sites/Twirl.lean`
+(moved from TNLean), on matrices.
 
 4. QICLean's support projection `Π_A = hA.supportProj` of a positive semidefinite `A`
    (`QICLean/Analysis/SupportProjectionOrder.lean`, `QICLean/Algebra/PosSemidefSupport.lean`)
@@ -106,7 +108,7 @@ Module `FrustrationFree/Amplification.lean`.
 
 Module `FrustrationFree/AreaLaw.lean`.
 
-10. An instance-wise form of `regionalEntropy_le_of_collar_amplification_twoFamilies_constants`
+10. An instance-wise form of `regionEntropy_le_of_collar_amplification_twoFamilies_constants`
     taking the collar and amplification conclusions for the given `h, Ω` only.
 11. `frustrationFreeAreaLaw : FrustrationFreeAreaLaw`, from `sublinearCollarBound_real`
     (Proposition 9.6, valid for every gapped instance, so for `eq:model`), Step 3 and

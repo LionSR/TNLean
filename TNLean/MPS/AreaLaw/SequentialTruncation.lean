@@ -60,6 +60,7 @@ for arbitrary vectors. Empty and one-site chains have no internal projections.
 
 open Matrix
 open scoped ComplexOrder InnerProductSpace Kronecker
+open ManyBody (cutMatrix)
 
 namespace Entropy
 
@@ -232,11 +233,12 @@ private theorem isStarProjection_prefixBasisProjection
 /-- A lifted operator on the left block acts on the cut matrix by left multiplication. -/
 theorem cutMatrix_localLift (k : ℕ) (K : LeftBlockMatrix L q k)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
-    cutMatrix (toEuclideanLin (ManyBody.place (leftBlock L k) K) ψ) k = K * cutMatrix ψ k := by
+    cutMatrix (leftBlock L k) (toEuclideanLin (ManyBody.place (leftBlock L k) K) ψ) =
+      K * cutMatrix (leftBlock L k) ψ := by
   ext a b
-  rw [mul_apply, cutMatrix_apply]
+  rw [mul_apply, ManyBody.cutMatrix_apply]
   simp only [toLpLin_apply, PiLp.toLp_apply, mulVec, dotProduct, ManyBody.place, ManyBody.place,
-    reindex_apply, submatrix_apply, Equiv.symm_symm, cutMatrix_apply]
+    reindex_apply, submatrix_apply, Equiv.symm_symm, ManyBody.cutMatrix_apply]
   rw [← Equiv.sum_comp (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm]
   simp [Fintype.sum_prod_type, one_apply]
 
@@ -244,7 +246,8 @@ theorem cutMatrix_localLift (k : ℕ) (K : LeftBlockMatrix L q k)
 operator. -/
 theorem rank_cutMatrix_localLift_le (k : ℕ) (K : LeftBlockMatrix L q k)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
-    (cutMatrix (toEuclideanLin (ManyBody.place (leftBlock L k) K) ψ) k).rank ≤ K.rank := by
+    (cutMatrix (leftBlock L k) (toEuclideanLin (ManyBody.place (leftBlock L k) K) ψ)).rank ≤
+      K.rank := by
   rw [cutMatrix_localLift]
   exact rank_mul_le_left _ _
 
@@ -353,7 +356,8 @@ theorem exists_sequentialTruncation_eq_localLift (ψ : EuclideanSpace ℂ (Fin L
 rank at most the rank of the truncation on that cut. -/
 theorem rank_cutMatrix_sequentialTruncation_le (ψ : EuclideanSpace ℂ (Fin L → Fin q))
     {i j : ℕ} (hij : i < j) :
-    (cutMatrix (sequentialTruncation P j ψ) (L - 1 - i)).rank ≤ (P (L - 1 - i)).rank := by
+    (cutMatrix (leftBlock L (L - 1 - i)) (sequentialTruncation P j ψ)).rank ≤
+      (P (L - 1 - i)).rank := by
   obtain ⟨M, hM⟩ := exists_sequentialTruncation_eq_localLift P ψ hij
   rw [hM]
   exact (rank_cutMatrix_localLift_le _ _ _).trans (rank_mul_le_right _ _)
@@ -370,7 +374,7 @@ theorem sequentialTruncation_prefix_rank_error
     (ψ : EuclideanSpace ℂ (Fin L → Fin q))
     (hP : ∀ k, IsStarProjection (P k)) :
     (∀ k, 1 ≤ k → k < L →
-      (cutMatrix (sequentialTruncation P (L - 1) ψ) k).rank ≤ (P k).rank) ∧
+      (cutMatrix (leftBlock L k) (sequentialTruncation P (L - 1) ψ)).rank ≤ (P k).rank) ∧
     ‖ψ - sequentialTruncation P (L - 1) ψ‖ ≤
       ∑ k ∈ Finset.Ico 1 L, Real.sqrt
         (((1 - P k) * ManyBody.regionState
@@ -507,7 +511,7 @@ is at most the sum over the cuts of the square roots of the surprisal tails. -/
 theorem exists_sequentialTruncation (ψ : EuclideanSpace ℂ (Fin L → Fin q))
     (hψ : ‖ψ‖ = 1) (w : ℝ) :
     ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q),
-      (∀ k, ((cutMatrix Φ k).rank : ℝ) ≤ max 1
+      (∀ k, ((cutMatrix (leftBlock L k) Φ).rank : ℝ) ≤ max 1
         (Real.exp (ManyBody.regionEntropy (X := fun _ ↦ Fin q) ψ (leftBlock L k) + w))) ∧
       ‖ψ - Φ‖ ≤ ∑ k ∈ Finset.Ico 1 L, Real.sqrt (Entropy.surprisalTail
         (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k) ψ).eigenvalues

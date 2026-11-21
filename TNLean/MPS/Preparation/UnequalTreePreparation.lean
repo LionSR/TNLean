@@ -16,7 +16,7 @@ same size, `q_N`, except for the last one, which may be larger". This file prepa
 `(⊗ₖ V_k) ⊗ₖ |ω⟩` of eq. (10) for blocks of unequal lengths with measurements: for blocks of
 lengths between `2^{h+2} s` and `2^{h+1} c` the depth is at most `C (h + 1)`, with `C` depending
 only on `d`, `s` and `c`
-(`MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState`).
+(`MPSPreparation.exists_isMeasurementConversion_blockIsometryState`).
 
 ## The protocol
 
@@ -44,7 +44,7 @@ an even number of sites apart. After every sequence of outcomes the output is a 
 ## Main results
 
 * `MPSPreparation.isTreeLayout_balancedWidths`.
-* `MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState`.
+* `MPSPreparation.exists_isMeasurementConversion_blockIsometryState`.
 
 ## References
 
@@ -59,7 +59,6 @@ open Kraus (blockTensor)
 
 namespace MPSPreparation
 
-open TeleportHop
 
 /-! ### Leaves of a block of any length -/
 
@@ -200,23 +199,27 @@ for the blocks of unequal lengths of the Supplemental Material, proof of Theorem
 property. Let `A` be a tensor whose blocked tensors over `m ≥ s` sites are injective, and `ω` a
 unit vector on the pair space. For every `h` and every cutting of a ring of `N` sites into
 `M ≥ 1` blocks of lengths `2^{h+2} s ≤ ℓ_k ≤ 2^{h+1} c`, the state `(⊗ₖ V_k) ⊗ₖ |ω⟩` is prepared
-with measurement rounds in depth at most `C (h + 1)`: the pairs and the leaves of the trees by
+with measurements in depth at most `C (h + 1)`: the pairs and the leaves of the trees by
 local circuits, and the depths `0, …, h` of the trees one at a time with measurements. No outcome
 is post-selected. -/
-theorem exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState (d s c : ℕ) [NeZero d]
+theorem exists_isMeasurementConversion_blockIsometryState (d s c : ℕ) [NeZero d]
     (hs : 2 ≤ s) :
     ∃ C : ℕ, ∀ {D : ℕ} (A : MPSTensor d D), (∀ m, s ≤ m → Kraus.IsInjective (blockTensor A m)) →
       ∀ (ω : Fin D × Fin D → ℂ), ∑ p, star (ω p) * ω p = 1 →
       ∀ (h : ℕ) {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ b, ℓ b = N),
         (∀ b, 2 ^ (h + 2) * s ≤ ℓ b) → (∀ b, ℓ b ≤ 2 ^ (h + 1) * c) →
-          IsPreparedWithMeasurementRoundsInDepth (C * (h + 1))
-            fun x => blockIsometryState A ω hN x := by
+          ∃ v : Fin N → Fin d → ℂ, IsMeasurementConversion (Geometry.ring N) (C * (h + 1))
+            (fun x ↦ ∏ i, v i (x i)) fun x => blockIsometryState A ω hN x := by
   classical
   have hd : 0 < d := NeZero.pos d
   have : NeZero s := ⟨by omega⟩
-  obtain ⟨K, hK⟩ := exists_isPairProduct (n := s + s) hd (by omega)
+  have : NeZero (s + s) := ⟨by omega⟩
+  obtain ⟨K, hK⟩ : ∃ K, ∀ X : Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ,
+      X ∈ unitary (Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ) →
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (s + s))) K X :=
+    ⟨_, fun X hX ↦ isGateProduct_pathGraph_unitaryGateCount hX⟩
   obtain ⟨C, hC⟩ := exists_rounds_blockLayerOp_treeBlockOp d s (c + 3)
-  refine ⟨K + C + 2, fun {D} A hinj ω hω h M _ ℓ N _ hN hℓ₁ hℓ₂ => ?_⟩
+  refine ⟨K + C, fun {D} A hinj ω hω h M _ ℓ N _ hN hℓ₁ hℓ₂ => ?_⟩
   rcases Nat.eq_zero_or_pos D with rfl | hD
   · exact absurd hω (by simp)
   -- the legs on the first `s - 1` sites of a register, and `ℂ^{D²}` on a register
@@ -255,22 +258,20 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState (d s c 
     rw [this.1, this.2]
   -- the pairs
   obtain ⟨W, hWu, hW⟩ := exists_pairUnitary hd hdig ω hω
-  obtain ⟨Ls, hLs, -, hLsW⟩ := isCircuitOn_pairLayerOp hN hr fun _ => hK W hWu
+  obtain ⟨u, -, hud, huop⟩ := isUnitaryCircuitOn_pairLayerOp hN hr fun _ => hK W hWu
   -- The same coherent tree implementation is used for all root inputs.
-  obtain ⟨Rs, hRs, hRsE, -⟩ := hC (cfgPolarIso A) (mergeIso A) h ℓ hN
+  obtain ⟨R, hRf, hRd, hRE, -⟩ := hC (cfgPolarIso A) (mergeIso A) h ℓ hN
     (fun b => balancedWidths (2 ^ (h + 1)) (ℓ b)) hT
     (fun b p => leafLen_balancedWidths_le (hℓ₂ b) p.val) ι₀ enc
   set v₀ : Fin N → Fin d → ℂ := fun _ => Pi.single ⟨0, hd⟩ 1
-  have hv₀ : productVector v₀ ≠ 0 := fun h0 => by
+  set φ₀ : Cfg d N → ℂ := fun x => ∏ i, v₀ i (x i) with hφ₀
+  have hv₀ : φ₀ ≠ 0 := fun h0 => by
     have := congrFun h0 fun _ => ⟨0, hd⟩
-    rw [productVector_single_zero_apply hd] at this
-    simp at this
-  have h₀ : MeasurementRound.IsRoundsImplementationOn [round Ls [] valid_nil] {productVector v₀}
-      (pairLayerOp hN hr fun _ => W) := by
-    have := (isImplementationOn_round (d := d) Ls (valid_nil (N := N))).isRoundsImplementationOn
-    rw [chainPerm_nil, Matrix.one_mul, ← hLsW] at this
-    exact this.mono fun v _ => fun _ _ _ h => by simp [TeleportHop.pairSites] at h
-  have hall := (h₀.append hRsE fun v hv => by
+    simp [φ₀, v₀] at this
+  have h₀ : u.toCircuit.IsImplementationOn KrausGate.ev {φ₀} (pairLayerOp hN hr fun _ => W) := by
+    rw [← huop]
+    exact Circuit.isImplementationOn_of_kraus_eq (fun p ↦ u.kraus_eq_op p) _
+  have hall := (h₀.comp hRE fun v hv => by
     rw [Set.mem_singleton_iff] at hv
     subst hv
     refine (isZeroOn_pairLayerOp_mulVec_productVector hN hr _).mono ?_
@@ -278,16 +279,16 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState (d s c 
     obtain ⟨b, y, hy1, hy2, rfl⟩ := mem_treeCentralSites.mp hx
     exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, b, y, hy1,
       by have := (hT b).le; omega, rfl⟩)
-  have hprep := hall.isPreparedWithMeasurementRoundsInDepth hv₀ rfl
-  have hdepth : (([round Ls [] valid_nil] ++ Rs).map MeasurementRound.depth).sum ≤
-      (K + C + 2) * (h + 1) := by
-    simp only [List.map_append, List.sum_append, List.map_cons, List.map_nil,
-      List.sum_cons, List.sum_nil, depth_round, hLs]
+  have hdepth : (u.toCircuit.comp R).depth ≤ (K + C) * (h + 1) := by
+    have hu : u.toCircuit.depth ≤ K := hud
+    refine (Circuit.depth_comp _ _).trans ?_
     nlinarith
+  have hprep := hall.isMeasurementConversion
+    ((u.forall_isUnitary.mono fun _ hK ↦ Or.inl hK).comp _ hRf) hdepth hv₀ rfl
   have hψ : (fun x => blockIsometryState A ω hN x) =
       ((blockLayerOp hN fun b =>
         treeBlockOp (hT b) (cfgPolarIso A) (mergeIso A) (ι₀ b) enc) *
-        pairLayerOp hN hr fun _ => W) *ᵥ productVector v₀ := by
+        pairLayerOp hN hr fun _ => W) *ᵥ φ₀ := by
     funext x
     exact blockIsometryState_eq_mulVec hd hN hr hdig A ω
       (U := fun b => treeBlockOp (hT b) (cfgPolarIso A) (mergeIso A) (ι₀ b) enc) (fun b l r τ => by
@@ -297,6 +298,6 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState (d s c 
           (fun _ _ hn τ x => cfgPolarIso_split A hn τ x) (hι₀ b) enc.injective]
         rfl) hW x
   rw [hψ]
-  exact hprep.mono hdepth
+  exact ⟨v₀, hprep⟩
 
 end MPSPreparation

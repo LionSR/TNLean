@@ -42,7 +42,8 @@ theorem IsGInjective.torusParentKernel_eq_commutingClosureSpan
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hP : ∀ v, IsRegionParentInteraction (groupBondTensor (torusIncidentSite a))
       (torusPlaquetteRegion v) (P v)) :
-    (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion P)).ker =
+    (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+        torusPlaquetteRegion P).hamiltonian).ker =
       Submodule.span ℂ (Set.range (fun p : {p : G × G // Commute p.1 p.2} =>
         torusGClosure (width := width) (height := height)
           (leftRegularMatrix G) a p.1.1 p.1.2)) :=
@@ -59,7 +60,8 @@ theorem IsGInjective.finrank_torusParentKernel
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hP : ∀ v, IsRegionParentInteraction (groupBondTensor (torusIncidentSite a))
       (torusPlaquetteRegion v) (P v)) :
-    Module.finrank ℂ (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion P)).ker =
+    Module.finrank ℂ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+        torusPlaquetteRegion P).hamiltonian).ker =
       Nat.card (CommutingPairConjugacyClass G) := by
   rw [ha.torusParentKernel_eq_commutingClosureSpan P hP,
     range_torusGClosure_commuting_eq_range_torusGClosureClass _ _ ha.invariant]

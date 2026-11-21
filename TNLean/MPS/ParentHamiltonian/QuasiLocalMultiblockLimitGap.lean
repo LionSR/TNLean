@@ -76,7 +76,7 @@ theorem exists_pos_multiblock_quasiLocalCommutator_limit_gap
         ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X)), ?_, ?_⟩
   · exact tendsto_apply_quasiLocalIntervalObservable_commutator
       (quasiLocalExpectation (A α) (hP α).norm (hP α).fixedPoint_psd
-        (hP α).fixedPoint_is_fixed (hP α).trace_ne_zero) a h X (by omega) hk hℓ hr
+        (hP α).fixedPoint_is_fixed (hP α).trace_ne_zero) a h X (by omega) hℓ hr
   · rw [Complex.le_def]
     constructor
     · simpa only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,

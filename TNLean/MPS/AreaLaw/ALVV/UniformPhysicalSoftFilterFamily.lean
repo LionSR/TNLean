@@ -68,10 +68,10 @@ theorem exists_uniform_physical_soft_filter_family
         (Nat.le_mul_of_pos_left ell (by decide : 0 < 2)) b).trans hb))
     let beta := fun _ : Fin (N + 1) ↦ Fin q
     let midConfig := ManyBody.RegionConfig beta J
-    let extConfig := ManyBody.RegionConfig beta Jᶜ
+    let extConfig := ManyBody.ComplConfig beta J
     let HM := EuclideanSpace ℂ midConfig
     let HE := EuclideanSpace ℂ extConfig
-    let split := (ManyBody.splitEquiv beta J).trans
+    let split := (ManyBody.cutEquiv beta J).trans
       (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
     let Phi := ((EuclideanSpace.basisFun extConfig ℂ).tensorProduct

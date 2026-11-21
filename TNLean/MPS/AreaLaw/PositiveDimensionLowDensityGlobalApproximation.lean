@@ -22,6 +22,7 @@ data; the capped-width comparison is recorded in
 -/
 
 open ManyBody (interval)
+open ManyBody (cutMatrix)
 
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace Matrix
 
@@ -106,7 +107,7 @@ theorem exists_fixed_bandwidth_low_energy_strict_isOpenMPS_approximation
       have hmps : IsOpenMPS L 1 (Module.finrank ℂ (G etaLD) * 1) (fun x ↦ ψ x) := by
         apply isOpenMPS_of_cutMatrix_rank_le ψ
         intro k
-        have hrank := Matrix.rank_le_card_height (cutMatrix ψ k)
+        have hrank := Matrix.rank_le_card_height (cutMatrix (leftBlock L k) ψ)
         have hcard : Fintype.card
             (ManyBody.RegionConfig (fun _ ↦ Fin 1)
             (leftBlock L k)) = 1 := by simp [ManyBody.RegionConfig]

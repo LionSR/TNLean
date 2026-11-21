@@ -77,8 +77,8 @@ theorem norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
     (P : γ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (hP : ∀ c ∈ C, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (P c) (U c))
     (ε : ℝ) (hPε : ∀ c ∈ C, ‖P c‖ ≤ ε) (ℓ t : ℝ) :
-    let B := Z.biUnion fun x ↦ ManyBody.graphBall G x ⌊ℓ⌋₊
-    let E := ManyBody.heisenbergEvolution Φ.hamiltonian t (∑ c ∈ C, P c)
+    let B := ManyBody.graphNeighborhood G Z ⌊ℓ⌋₊
+    let E :=ManyBody.heisenbergEvolution Φ.hamiltonian t (∑ c ∈ C, P c)
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
       (1 - Real.exp (-(1 / 2)))
     let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
@@ -95,8 +95,8 @@ theorem norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
       ‖ManyBody.heisenbergEvolution Φ.hamiltonian t (P c) - ManyBody.regionExpectation B
         (ManyBody.heisenbergEvolution Φ.hamiltonian t (P c))‖ ≤
           2 * (a * (R + 1 : ℝ) ^ 2 * ε * Real.exp (v * |t| - ℓ / 2)) := by
-    let N := (U c).biUnion fun x ↦ ManyBody.graphBall G x ⌊ℓ⌋₊
-    have hNB : N ⊆ B := Finset.biUnion_subset_biUnion_of_subset_left _ (hUZ c hc)
+    let N := ManyBody.graphNeighborhood G (U c) ⌊ℓ⌋₊
+    have hNB : N ⊆ B := ManyBody.graphNeighborhood_mono_left (hUZ c hc)
     have hloc :=
       ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_two
         G Φ hHerm R hDiam hCard hSphere b₀ hBudget (U c) (hP c hc) ℓ t
@@ -137,7 +137,9 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpect
         (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (D : Finset (Fin L)) (hq : 1 ≤ q) (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
     let K := h.doubledFin.hamiltonian
-    let K' := (h.swappedDoubled D).hamiltonian
+    let e := sitePairConfigurationEquiv (Fin L) q q
+    let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
+    let K' := F * K * Fᴴ
     let C := ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
     let Z := C.biUnion (fun X ↦ X.1)
     let B := chainNeighborhood Z ℓ
@@ -150,34 +152,44 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpect
       (4 * |J| * a * (R + 1 : ℝ) ^ 2 * (chainCrossConst R : ℝ)) *
         (L : ℝ) * Real.exp (v * |t| - ℓ / 2) := by
   classical
-  intro K K' C Z B G b₀ a v
+  intro K e F K' C Z B G b₀ a v
   have : NeZero (q * q) := ⟨Nat.pos_iff_ne_zero.mp (Nat.mul_pos hq hq)⟩
-  let g := h.swappedDoubled D
   let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin (q * q)) (fun X : ChainSupport L R ↦ X.1) :=
-    ⟨g.term, g.mem⟩
-  let e := sitePairConfigurationEquiv (Fin L) q q
-  let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
+    (h.doubled.conj (ManyBody.pairSwapOp (X := fun _ ↦ Fin q) D) fun X ↦
+        ManyBody.pairSwapOp_mul_mul_conjTranspose_mem_supportedOperators D
+          (h.doubled.mem X)).relabel (X' := fun _ ↦ Fin (q * q)) (Equiv.refl _)
+      (fun _ ↦ finProdFinEquiv) (fun X : ChainSupport L R ↦ X.1) fun _ _ ↦ Iff.rfl
+  have hΦ : Φ.hamiltonian = K' :=
+    (TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled h D _).trans
+      (congrArg (fun M ↦ F * M * Fᴴ) h.hamiltonian_doubledFin.symm)
+  have hΦh : ∀ X, (Φ.term X).IsHermitian := fun X ↦
+    ManyBody.Interaction.isHermitian_relabel_term _ _ _ _
+      (ManyBody.Interaction.isHermitian_conj_term _ _
+        (ManyBody.Interaction.isHermitian_doubled_term (hh X)))
+  have hΦn : ∀ X, ‖Φ.term X‖ ≤ 2 * J := fun X ↦
+    ((ManyBody.Interaction.norm_relabel_term _ _ _ _ _ X).trans
+      (ManyBody.Interaction.norm_conj_term _ (ManyBody.pairSwapOp_mem_unitaryGroup D) _
+        X)).trans_le ((ManyBody.Interaction.norm_doubled_term_le h X).trans
+          (by linarith [hhJ X]))
   let T (X : ChainSupport L R) (b : Bool) := Matrix.reindex e e
     (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
   let A (p : ChainSupport L R × Bool) := F * T p.1 p.2 * Fᴴ - T p.1 p.2
   obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing D
   have hdiff : K' - K = ∑ p ∈ C ×ˢ Finset.univ, A p := by
-    rw [Finset.sum_product, show K' = F * h.doubledFin.hamiltonian * Fᴴ from
-      h.swappedDoubled_hamiltonian D]
+    rw [Finset.sum_product]
     exact hsum
   have hgen := norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
     (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
-    (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le)
-        (h.isHermitian_swappedDoubled_term hh D) b₀
-    (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ)
+    (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le) hΦh b₀
+    (Φ.sum_norm_terms_containing_le hΦn) (C ×ˢ Finset.univ)
         (fun p ↦ p.1.1) Z
     (fun p hp ↦ Finset.subset_biUnion_of_mem (fun X ↦ X.1) (Finset.mem_product.mp hp).1)
     (fun p _ ↦ p.1.2.card_le) A (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).1)
     (2 * |J|) (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).2.2.trans
       (mul_le_mul_of_nonneg_left (le_abs_self J) (by norm_num))) ℓ t
   dsimp only at hgen
-  rw [biUnion_graphBall_pathGraph_eq_chainNeighborhood Z hℓ, ← hdiff] at hgen
+  rw [graphNeighborhood_pathGraph_eq_chainNeighborhood Z hℓ, hΦ, ← hdiff] at hgen
   have hb : (boundaryEdges L D).card ≤ L := by
     calc
       _ ≤ (Finset.range (L - 1)).card := Finset.card_filter_le _ _
@@ -204,10 +216,12 @@ theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpec
         (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (D : Finset (Fin Λ.card)) (hq : 1 ≤ q) (m : ℕ) (t : ℝ) :
     let K := h.doubledFin.hamiltonian
-    let K' := (h.swappedDoubled D).hamiltonian
+    let e := sitePairConfigurationEquiv (Fin Λ.card) q q
+    let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
+    let K' := F * K * Fᴴ
     let C := ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
     let Z := C.biUnion (fun X ↦ X.1)
-    let B := Z.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)
+    let B := ManyBody.graphNeighborhood (lineDomainGraph Λ) Z m
     let G := ManyBody.heisenbergEvolution K' t (K' - K)
     let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * (2 * J)
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
@@ -217,13 +231,26 @@ theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpec
       (4 * |J| * a * (R + 1 : ℝ) ^ 2 * (chainCrossConst R : ℝ)) *
         (Λ.card : ℝ) * Real.exp (v * |t| - (m : ℝ) / 2) := by
   classical
-  intro K K' C Z B G b₀ a v
+  intro K e F K' C Z B G b₀ a v
   have : NeZero (q * q) := ⟨Nat.pos_iff_ne_zero.mp (Nat.mul_pos hq hq)⟩
-  let g := h.swappedDoubled D
   let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin (q * q))
-      (fun X : DomainSupport Λ R ↦ X.1) := ⟨g.term, g.mem⟩
-  let e := sitePairConfigurationEquiv (Fin Λ.card) q q
-  let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
+      (fun X : DomainSupport Λ R ↦ X.1) :=
+    (h.doubled.conj (ManyBody.pairSwapOp (X := fun _ ↦ Fin q) D) fun X ↦
+        ManyBody.pairSwapOp_mul_mul_conjTranspose_mem_supportedOperators D
+          (h.doubled.mem X)).relabel (X' := fun _ ↦ Fin (q * q)) (Equiv.refl _)
+      (fun _ ↦ finProdFinEquiv) (fun X : DomainSupport Λ R ↦ X.1) fun _ _ ↦ Iff.rfl
+  have hΦ : Φ.hamiltonian = K' :=
+    (TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled h D _).trans
+      (congrArg (fun M ↦ F * M * Fᴴ) h.hamiltonian_doubledFin.symm)
+  have hΦh : ∀ X, (Φ.term X).IsHermitian := fun X ↦
+    ManyBody.Interaction.isHermitian_relabel_term _ _ _ _
+      (ManyBody.Interaction.isHermitian_conj_term _ _
+        (ManyBody.Interaction.isHermitian_doubled_term (hh X)))
+  have hΦn : ∀ X, ‖Φ.term X‖ ≤ 2 * J := fun X ↦
+    ((ManyBody.Interaction.norm_relabel_term _ _ _ _ _ X).trans
+      (ManyBody.Interaction.norm_conj_term _ (ManyBody.pairSwapOp_mem_unitaryGroup D) _
+        X)).trans_le ((ManyBody.Interaction.norm_doubled_term_le h X).trans
+          (by linarith [hhJ X]))
   let T (X : DomainSupport Λ R) (b : Bool) := Matrix.reindex e e
     (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ))
@@ -234,8 +261,8 @@ theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpec
     exact hsum
   have hgen := norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
     (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) Φ
-    (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) (h.isHermitian_swappedDoubled_term hh D) b₀
-    (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ)
+    (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) hΦh b₀
+    (Φ.sum_norm_terms_containing_le hΦn) (C ×ˢ Finset.univ)
         (fun p ↦ p.1.1) Z
     (fun p hp ↦ Finset.subset_biUnion_of_mem (fun X ↦ X.1) (Finset.mem_product.mp hp).1)
     (fun p _ ↦ p.1.2.isChainSupport.card_le) A
@@ -243,7 +270,7 @@ theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpec
     (2 * |J|) (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).2.2.trans
       (mul_le_mul_of_nonneg_left (le_abs_self J) (by norm_num))) (m : ℝ) t
   dsimp only at hgen
-  rw [Nat.floor_natCast, ← hdiff] at hgen
+  rw [Nat.floor_natCast, hΦ, ← hdiff] at hgen
   have hc : ((C ×ˢ (Finset.univ : Finset Bool)).card : ℝ) ≤
       (chainCrossConst R : ℝ) * Λ.card := by
     rw [Finset.card_product, Finset.card_univ, Fintype.card_bool]

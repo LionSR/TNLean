@@ -35,6 +35,7 @@ estimate.
 
 open Matrix
 open scoped BigOperators Kronecker
+open ManyBody (cutMatrix)
 
 noncomputable section
 
@@ -82,9 +83,9 @@ theorem isOpenMPS_trace_closed_chain {L q D : ℕ}
       (Fin D × Fin D) ℂ := fun a ij ↦ (C * P a) ij.1 ij.2
   let V : Matrix (Fin D × Fin D)
       ({v : Fin L // v ∉ leftBlock L k} → Fin q) ℂ := fun ij b ↦ Q b ij.2 ij.1
-  have hfactor : cutMatrix ψ k = U * V := by
+  have hfactor : cutMatrix (leftBlock L k) ψ = U * V := by
     ext a b
-    rw [cutMatrix_apply]
+    rw [ManyBody.cutMatrix_apply]
     change Matrix.trace (C * Fin.prod (fun v ↦ A v
       ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm (a, b) v))) = _
     rw [Fin.prod_eq_prod_map_finRange, ← List.ofFn_eq_map,

@@ -24,14 +24,14 @@ theorem continuous_bondPenalty (q : ℕ) :
   intro i j
   exact continuous_const.sub ((continuous_apply i).mul (continuous_apply j).star)
 
-/-- Embedding a bond penalty at a fixed position preserves its continuous
+/-- Placing a bond penalty at a fixed position preserves its continuous
 parameter dependence. Source: arXiv:1010.3732, Section II.F.2,
 `eq:sym:omega-gamma`. -/
 theorem continuous_bondPenaltyAt {q N : ℕ} (hN : 1 ≤ N) (i : Fin N) :
     Continuous (fun η : Fin q → ℂ => bondPenaltyAt η hN i) := by
   apply continuous_matrix
   intro s t
-  simp only [bondPenaltyAt, MPOTensor.embedLocalOperator_apply,
+  simp only [bondPenaltyAt, ManyBody.placeAlong_apply,
     MPOTensor.oneSiteOperator]
   split_ifs
   · exact (continuous_apply _).comp ((continuous_apply _).comp (continuous_bondPenalty q))

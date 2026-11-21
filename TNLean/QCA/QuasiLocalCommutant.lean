@@ -34,6 +34,7 @@ private lemma reindex_one_kronecker_eq_localInclusion_sdiff {d : ℕ} [NeZero d]
       ((1 : Matrix (Config d Λ) (Config d Λ) ℂ) ⊗ₖ B) =
       localInclusion (d := d) (Finset.sdiff_subset : Δ \ Λ ⊆ Δ) B := by
   ext x y
+  rw [localInclusion_apply]
   change (if (Config.splitEquiv h x).1 = (Config.splitEquiv h y).1 then 1 else 0) *
       B (Config.splitEquiv h x).2 (Config.splitEquiv h y).2 =
     B (Config.restrict Finset.sdiff_subset x) (Config.restrict Finset.sdiff_subset y) *
@@ -71,6 +72,7 @@ private lemma reindex_kronecker_one_eq_localInclusion {d : ℕ} [NeZero d]
       (B ⊗ₖ (1 : Matrix (Config d (Δ \ Λ)) (Config d (Δ \ Λ)) ℂ)) =
       localInclusion (d := d) h B := by
   ext x y
+  rw [localInclusion_apply]
   change B (Config.restrict h x) (Config.restrict h y) *
       (if (Config.splitEquiv h x).2 = (Config.splitEquiv h y).2 then 1 else 0) =
     B (Config.restrict h x) (Config.restrict h y) *

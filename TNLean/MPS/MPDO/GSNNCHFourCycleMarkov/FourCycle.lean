@@ -26,6 +26,7 @@ positive-overlapping-product criterion.
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kronecker
+open ManyBody
 
 namespace MPOTensor
 
@@ -115,21 +116,21 @@ private def fourCycleBCWindowEquiv (d : ℕ) :
 
 /-- A three-site operator on sites (3,0,1) becomes an (A B)-operator tensored
 with the identity on C in the four-cycle tripartition. -/
-private theorem reindex_embedLocalOperator_three_eq_leftOverlappingLift
+private theorem reindex_placeAlong_ringWindow_three_eq_leftOverlappingLift
     (T : Matrix (Fin 3 → Fin d) (Fin 3 → Fin d) ℂ) :
     Matrix.reindex (fourCycleOverlappingEquiv d).symm
         (fourCycleOverlappingEquiv d).symm
-        (embedLocalOperator (d := d) 3 4 (by decide) (3 : Fin 4) T) =
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 3 ≤ 4) (3 : Fin 4)) T) =
       Matrix.leftOverlappingLift
         (Matrix.reindex (fourCycleABWindowEquiv d).symm
           (fourCycleABWindowEquiv d).symm T) := by
   ext ⟨⟨a, b⟩, c⟩ ⟨⟨a', b'⟩, c'⟩
   have hAgree :
-      AgreesOutsideWindow (d := d) 3 (by decide) (3 : Fin 4)
-          (fourCycleOverlappingEquiv d ⟨⟨a, b⟩, c⟩)
-          (fourCycleOverlappingEquiv d ⟨⟨a', b'⟩, c'⟩) ↔
+      (∀ v, (∀ u, ringWindow (by decide : 3 ≤ 4) (3 : Fin 4) u ≠ v) →
+          fourCycleOverlappingEquiv d ⟨⟨a, b⟩, c⟩ v =
+            fourCycleOverlappingEquiv d ⟨⟨a', b'⟩, c'⟩ v) ↔
         c' = c := by
-    rw [agreesOutsideWindow_iff]
+    rw [MPSTensor.forall_ringWindow_ne_imp_iff]
     constructor
     · intro h
       simpa [fourCycleOverlappingEquiv, fourCycleTripartiteEquiv] using
@@ -149,9 +150,10 @@ private theorem reindex_embedLocalOperator_three_eq_leftOverlappingLift
         fourCycleABFactorEquiv, threeSiteOverlappingEquiv,
         fourCycleMiddlePair]
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    embedLocalOperator_apply, Matrix.leftOverlappingLift,
+    placeAlong_apply, Matrix.leftOverlappingLift,
     Matrix.one_apply, Equiv.symm_symm]
-  rw [hExtract, hExtract]
+  rw [← MPSTensor.extractWindow_eq_comp_ringWindow,
+    ← MPSTensor.extractWindow_eq_comp_ringWindow, hExtract, hExtract]
   by_cases h : c' = c
   · rw [ite_eq_left (hAgree.mpr h), ite_eq_left h.symm, mul_one]
   · rw [ite_eq_right (hAgree.not.mpr h),
@@ -159,21 +161,21 @@ private theorem reindex_embedLocalOperator_three_eq_leftOverlappingLift
 
 /-- A three-site operator on sites (1,2,3) becomes a (B C)-operator tensored
 with the identity on A in the four-cycle tripartition. -/
-private theorem reindex_embedLocalOperator_three_eq_rightOverlappingLift
+private theorem reindex_placeAlong_ringWindow_three_eq_rightOverlappingLift
     (T : Matrix (Fin 3 → Fin d) (Fin 3 → Fin d) ℂ) :
     Matrix.reindex (fourCycleOverlappingEquiv d).symm
         (fourCycleOverlappingEquiv d).symm
-        (embedLocalOperator (d := d) 3 4 (by decide) (1 : Fin 4) T) =
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 3 ≤ 4) (1 : Fin 4)) T) =
       Matrix.rightOverlappingLift
         (Matrix.reindex (fourCycleBCWindowEquiv d).symm
           (fourCycleBCWindowEquiv d).symm T) := by
   ext ⟨⟨a, b⟩, c⟩ ⟨⟨a', b'⟩, c'⟩
   have hAgree :
-      AgreesOutsideWindow (d := d) 3 (by decide) (1 : Fin 4)
-          (fourCycleOverlappingEquiv d ⟨⟨a, b⟩, c⟩)
-          (fourCycleOverlappingEquiv d ⟨⟨a', b'⟩, c'⟩) ↔
+      (∀ v, (∀ u, ringWindow (by decide : 3 ≤ 4) (1 : Fin 4) u ≠ v) →
+          fourCycleOverlappingEquiv d ⟨⟨a, b⟩, c⟩ v =
+            fourCycleOverlappingEquiv d ⟨⟨a', b'⟩, c'⟩ v) ↔
         a' = a := by
-    rw [agreesOutsideWindow_iff]
+    rw [MPSTensor.forall_ringWindow_ne_imp_iff]
     constructor
     · intro h
       simpa [fourCycleOverlappingEquiv, fourCycleTripartiteEquiv] using
@@ -193,9 +195,10 @@ private theorem reindex_embedLocalOperator_three_eq_rightOverlappingLift
         fourCycleBCFactorEquiv, threeSiteOverlappingEquiv,
         fourCycleMiddlePair]
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    embedLocalOperator_apply, Matrix.rightOverlappingLift,
+    placeAlong_apply, Matrix.rightOverlappingLift,
     Matrix.one_apply, Equiv.symm_symm]
-  rw [hExtract, hExtract]
+  rw [← MPSTensor.extractWindow_eq_comp_ringWindow,
+    ← MPSTensor.extractWindow_eq_comp_ringWindow, hExtract, hExtract]
   by_cases h : a' = a
   · rw [ite_eq_left (hAgree.mpr h), ite_eq_left h.symm, one_mul]
   · rw [ite_eq_right (hAgree.not.mpr h),
@@ -369,14 +372,14 @@ zero product.
 Source: arXiv:1606.00608, Definition 4.8, lines 838--850. -/
 private theorem localAdjacentBonds_mul_eq_zero
     (data : GSNNCHData d 4) {x y : Fin data.sectorCount} (hxy : x ≠ y) :
-    embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3) (data.bond x) *
-        embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) (data.bond y) =
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3)) (data.bond x) *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3)) (data.bond y) =
       0 := by
   have h := data.overlappingLifts_pairBondFour_mul_eq_zero hxy
   change Matrix.leftOverlappingLift (pairBondMatrix (data.bond x)) *
     Matrix.rightOverlappingLift (pairBondMatrix (data.bond y)) = 0 at h
-  rw [← reindex_embedLocalOperator_zero_eq_leftOverlappingLift,
-    ← reindex_embedLocalOperator_one_eq_rightOverlappingLift] at h
+  rw [← reindex_placeAlong_ringWindow_zero_eq_leftOverlappingLift,
+    ← reindex_placeAlong_ringWindow_one_eq_rightOverlappingLift] at h
   let E := Matrix.reindexAlgEquiv ℂ ℂ
     (threeSiteOverlappingEquiv (Fin d))
   apply E.injective
@@ -391,16 +394,12 @@ private theorem bondAt_zero_mul_one_eq_zero
     (data : GSNNCHData d 4) {x y : Fin data.sectorCount} (hxy : x ≠ y) :
     data.bondAt x 0 * data.bondAt y 1 = 0 := by
   have h := congrArg
-    (embedLocalOperator (d := d) 3 4 (by decide) (0 : Fin 4))
+    (placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 3 ≤ 4) (0 : Fin 4)))
     (data.localAdjacentBonds_mul_eq_zero hxy)
-  have hzero : embedLocalOperator (d := d) 3 4 (by decide) (0 : Fin 4)
-      (0 : Matrix (Fin 3 → Fin d) (Fin 3 → Fin d) ℂ) = 0 := by
-    ext σ τ
-    simp [embedLocalOperator_apply]
-  rw [hzero] at h
-  simpa [GSNNCHData.bondAt, embedLocalOperator_mul,
-    PhysicalSectorFactorization.embedLocalOperator_two_zero_nested,
-    PhysicalSectorFactorization.embedLocalOperator_two_one_nested] using h
+  rw [placeAlong_zero] at h
+  simpa [GSNNCHData.bondAt, placeAlong_mul,
+    PhysicalSectorFactorization.placeAlong_ringWindow_two_zero_nested,
+    PhysicalSectorFactorization.placeAlong_ringWindow_two_one_nested] using h
 
 /-- Complementary adjacent-bond products from distinct sectors vanish.
 
@@ -508,11 +507,13 @@ private theorem fourCycleABFactor_eq_reindex_windowProduct
     data.fourCycleABFactor x =
       Matrix.reindex (fourCycleABWindowEquiv d).symm
         (fourCycleABWindowEquiv d).symm
-        (embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3) (data.bond x) *
-          embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) (data.bond x)) := by
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3))
+            (data.bond x) *
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3))
+            (data.bond x)) := by
   rw [fourCycleABFactor, threeSiteBondProduct, pairBondFour,
-    ← reindex_embedLocalOperator_zero_eq_leftOverlappingLift,
-    ← reindex_embedLocalOperator_one_eq_rightOverlappingLift]
+    ← reindex_placeAlong_ringWindow_zero_eq_leftOverlappingLift,
+    ← reindex_placeAlong_ringWindow_one_eq_rightOverlappingLift]
   change (Matrix.reindex (fourCycleABFactorEquiv d)
       (fourCycleABFactorEquiv d))
       ((Matrix.reindexLinearEquiv ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
@@ -534,11 +535,13 @@ private theorem fourCycleBCFactor_eq_reindex_windowProduct
     data.fourCycleBCFactor x =
       Matrix.reindex (fourCycleBCWindowEquiv d).symm
         (fourCycleBCWindowEquiv d).symm
-        (embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3) (data.bond x) *
-          embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) (data.bond x)) := by
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3))
+            (data.bond x) *
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3))
+            (data.bond x)) := by
   rw [fourCycleBCFactor, threeSiteBondProduct, pairBondFour,
-    ← reindex_embedLocalOperator_zero_eq_leftOverlappingLift,
-    ← reindex_embedLocalOperator_one_eq_rightOverlappingLift]
+    ← reindex_placeAlong_ringWindow_zero_eq_leftOverlappingLift,
+    ← reindex_placeAlong_ringWindow_one_eq_rightOverlappingLift]
   change (Matrix.reindex (fourCycleBCFactorEquiv d)
       (fourCycleBCFactorEquiv d))
       ((Matrix.reindexLinearEquiv ℂ ℂ (threeSiteOverlappingEquiv (Fin d))
@@ -562,10 +565,10 @@ private theorem reindex_bondAt_three_mul_zero_eq_leftOverlappingLift
         (data.bondAt x 3 * data.bondAt x 0) =
       Matrix.leftOverlappingLift (data.fourCycleABFactor x) := by
   rw [fourCycleABFactor_eq_reindex_windowProduct]
-  rw [← reindex_embedLocalOperator_three_eq_leftOverlappingLift]
-  rw [embedLocalOperator_mul]
-  rw [PhysicalSectorFactorization.embedLocalOperator_two_zero_nested,
-    PhysicalSectorFactorization.embedLocalOperator_two_one_nested]
+  rw [← reindex_placeAlong_ringWindow_three_eq_leftOverlappingLift]
+  rw [placeAlong_mul]
+  rw [PhysicalSectorFactorization.placeAlong_ringWindow_two_zero_nested,
+    PhysicalSectorFactorization.placeAlong_ringWindow_two_one_nested]
   rfl
 
 /-- In the four-cycle tripartition, the global bonds at sites 1 and 2 are
@@ -577,10 +580,10 @@ private theorem reindex_bondAt_one_mul_two_eq_rightOverlappingLift
         (data.bondAt x 1 * data.bondAt x 2) =
       Matrix.rightOverlappingLift (data.fourCycleBCFactor x) := by
   rw [fourCycleBCFactor_eq_reindex_windowProduct]
-  rw [← reindex_embedLocalOperator_three_eq_rightOverlappingLift]
-  rw [embedLocalOperator_mul]
-  rw [PhysicalSectorFactorization.embedLocalOperator_two_zero_nested,
-    PhysicalSectorFactorization.embedLocalOperator_two_one_nested]
+  rw [← reindex_placeAlong_ringWindow_three_eq_rightOverlappingLift]
+  rw [placeAlong_mul]
+  rw [PhysicalSectorFactorization.placeAlong_ringWindow_two_zero_nested,
+    PhysicalSectorFactorization.placeAlong_ringWindow_two_one_nested]
   rfl
 
 /-- Regrouping the weighted (3,0),(0,1) bond sum gives the natural lift of

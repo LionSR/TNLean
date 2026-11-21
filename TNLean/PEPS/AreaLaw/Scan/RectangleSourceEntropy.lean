@@ -76,7 +76,7 @@ theorem weakRectangle_source_entropy_bounds
           (Real.rpow_le_rpow (Nat.cast_nonneg _) (Nat.cast_le.mpr hsize) (by linarith)) hCbox
       _ ≤ _ := mul_le_mul_of_nonneg_right hCtarget (Real.rpow_nonneg (Nat.cast_nonneg n) _)
   · intro j hj
-    have hshell := IntRect.regionalEntropy_shell_le_of_safe_box
+    have hshell := IntRect.regionEntropy_shell_le_of_safe_box
       Λ q D₀ Ω hΩ A Q hsafe j L (Nat.log 2 L) hj hL
       (Nat.pow_log_le_self 2 (by omega))
       (Nat.lt_pow_succ_log_self (b := 2) (by decide) L) hbudget e Cbox he hCbox hbox

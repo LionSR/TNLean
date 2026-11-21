@@ -61,7 +61,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_trimmed_witness_of_isViable
       (W : Matrix (CutRight L q k) (Fin m) ℂ)
       (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ),
       ‖w‖ = 1 ∧ w ∈ leftSupportSubmodule S ∧
-      (cutMatrix w k).rank ≤ constantCutBond q 1 1 Δ ((Δ / 169) ^ 2) ∧
+      (ManyBody.cutMatrix (leftBlock L k) w).rank ≤ constantCutBond q 1 1 Δ ((Δ / 169) ^ 2) ∧
       (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2) ∧
       Wᴴ * W = 1 ∧ m ≤ constantCutBond q 1 1 Δ ((Δ / 169) ^ 2) ∧
       WithLp.ofLp w ∘ (gluingCut L q k).symm =
@@ -91,7 +91,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_trimmed_witness_of_isViable
   have hB := h.one_sub_le_re_inner_chainTrim hh hhJ (by omega : 1 ≤ q) (by norm_num)
     hΔ hΩ hgap hspan hc0 k hPΓ
   have hu : ‖u‖ = 1 := norm_normalized_chainTrim_eq_one (by linarith : c < 1) hB
-  have huD : (cutMatrix u k).rank ≤ D := rank_cutMatrix_normalized_chainTrim_le hPΓ
+  have huD : (ManyBody.cutMatrix (leftBlock L k) u).rank ≤ D :=
+    rank_cutMatrix_normalized_chainTrim_le hPΓ
   have huΓ : 1 - c ≤ ‖⟪u, Γ⟫_ℂ‖ := hB.trans (Complex.re_le_norm _)
   have huψ : 1 - 4 * c ≤ ‖⟪u, ψ⟫_ℂ‖ := by
     have hov := one_sub_two_mul_add_le_norm_inner hu hψ hΩ hc0.le

@@ -11,7 +11,7 @@ import QICLean.Analysis.SupportProjectionOrder
 import QICLean.Analysis.ViableSubspaceCoordinates
 import QICLean.Analysis.WeightedProjection
 import QICLean.ManyBody.Hamiltonian.Models
-import QICLean.ManyBody.Sites.SplitOperatorSchmidt
+import QICLean.Algebra.OperatorSchmidtPartition
 import TNLean.Algebra.CommonKernelSpectralGap
 import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeThreeRegion
@@ -197,7 +197,7 @@ theorem operatorSchmidtRank_aeval_threeRegion_region_le
   have hk : 1 ≤ ℓ ^ 2 := Nat.one_le_pow _ _ hℓ
   have htwo := operatorSchmidtRank_aeval_two_window_le_pow _ hWL hWR hPL hPM hPR hab hb hℓ
     (ℓ ^ 2) hk P hdeg 0
-  have hchange := ManyBody.operatorSchmidtRank_splitEquiv_le q J0 J
+  have hchange := Matrix.operatorSchmidtRank_reindex_piEquivPiSubtypeProd_finset_le q J0 J
     (Polynomial.aeval (∑ α, threeRegionFamily h a b ℓ α) P)
   have hsymm : symmDiff J0 J = J \ J0 := by
     rw [symmDiff_def, Finset.sdiff_eq_empty_iff_subset.mpr hsub, Finset.sup_eq_union,
@@ -328,14 +328,14 @@ private theorem exists_long_frustrationFree_family
         (4 * Real.exp (-(4 * (ℓ : ℝ) ^ 2 * Real.sqrt ((4 * g / 5) / R)))) ≤ 1 / 100000) :
     let D : ℕ := (d * ℓ ^ 2) ^ (22 * ℓ)
     let J := interval L p r
-    let tau := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) (↥Jᶜ → Fin q))
+    let tau := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-    let Phi := ((EuclideanSpace.basisFun (↥Jᶜ → Fin q) ℂ).tensorProduct
+    let Phi := ((EuclideanSpace.basisFun ({v // v ∉ J} → Fin q) ℂ).tensorProduct
       (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
     let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (↥Jᶜ → Fin q)) (EuclideanSpace ℂ (J → Fin q)))
+      (EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) (EuclideanSpace ℂ (J → Fin q)))
     let EM := EuclideanSpace ℂ (J → Fin q)
-    let EE := EuclideanSpace ℂ (↥Jᶜ → Fin q)
+    let EE := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)
     let G := G₀.map
       (Tm.toLinearEquiv : EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ] EM ⊗[ℂ] EE)
     let cut : ℕ → Finset ↥J := fun c ↦
@@ -450,7 +450,7 @@ private theorem exists_long_frustrationFree_family
   have hconj := Matrix.toEuclideanCLM_middleFirst_conjugation_of_kronecker_sum tau M slice P hdec
   have hKdec : Polynomial.aeval Hm Qc = ∑ r, TensorProduct.mapL
       (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (slice r))
-      (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := ↥Jᶜ → Fin q) (M r)) := hfilter.trans hconj
+      (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := {v // v ∉ J} → Fin q) (M r)) := hfilter.trans hconj
   have hNle : N ≤ D ^ 2 := by
     rw [hN]
     exact operatorSchmidtRank_aeval_threeRegion_region_le hq1 Φ.mem hell hab hb Qc hQdeg J hsub
@@ -468,7 +468,7 @@ private theorem exists_long_frustrationFree_family
     exact (Submodule.IsViable.word_power_of_tensor_decomposition (M := EM) (R := EE)
       (T := G) (Polynomial.aeval Hm Qc)
       (fun r ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (slice r))
-      (fun r ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := ↥Jᶜ → Fin q) (M r))
+      (fun r ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := {v // v ∉ J} → Fin q) (M r))
       hKdec (sq_nonneg _) hKT hKTo hlow hhigh k S δ hS hδ).2
 
 /-- On a regional space of dimension at most one, a viable subspace for a nonzero target is the
@@ -542,14 +542,14 @@ private theorem exists_improving_family_core :
       let ℓ : ℕ := ⌈A * u ^ 2 / g⌉₊
       let D : ℕ := (d * ℓ ^ 2) ^ (22 * ℓ)
       let J := interval L p r
-      let tau := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) (↥Jᶜ → Fin q))
+      let tau := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (↥Jᶜ → Fin q) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun ({v // v ∉ J} → Fin q) ℂ).tensorProduct
         (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (↥Jᶜ → Fin q)) (EuclideanSpace ℂ (J → Fin q)))
+        (EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) (EuclideanSpace ℂ (J → Fin q)))
       let EM := EuclideanSpace ℂ (J → Fin q)
-      let EE := EuclideanSpace ℂ (↥Jᶜ → Fin q)
+      let EE := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)
       let G := G₀.map (Tm.toLinearEquiv :
         EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ] EM ⊗[ℂ] EE)
       let cut : ℕ → Finset ↥J := fun c ↦
@@ -701,14 +701,14 @@ theorem exists_frustrationFree_improving_family_words :
       let ℓ : ℕ := ⌈A * u ^ 2 / g⌉₊
       let D : ℕ := (d * ℓ ^ 2) ^ (22 * ℓ)
       let J := interval L p r
-      let tau := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) (↥Jᶜ → Fin q))
+      let tau := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (↥Jᶜ → Fin q) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun ({v // v ∉ J} → Fin q) ℂ).tensorProduct
         (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (↥Jᶜ → Fin q)) (EuclideanSpace ℂ (J → Fin q)))
+        (EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) (EuclideanSpace ℂ (J → Fin q)))
       let EM := EuclideanSpace ℂ (J → Fin q)
-      let EE := EuclideanSpace ℂ (↥Jᶜ → Fin q)
+      let EE := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)
       let G := (LinearMap.ker H.toLinearMap).map (Tm.toLinearEquiv :
         EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ] EM ⊗[ℂ] EE)
       let cut : ℕ → Finset ↥J := fun c ↦
@@ -808,14 +808,14 @@ theorem exists_frustrationFree_improving_family :
       let ℓ : ℕ := ⌈A * u ^ 2 / g⌉₊
       let D : ℕ := (d * ℓ ^ 2) ^ (22 * ℓ)
       let J := interval L p r
-      let tau := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) (↥Jᶜ → Fin q))
+      let tau := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (↥Jᶜ → Fin q) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun ({v // v ∉ J} → Fin q) ℂ).tensorProduct
         (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (↥Jᶜ → Fin q)) (EuclideanSpace ℂ (J → Fin q)))
+        (EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) (EuclideanSpace ℂ (J → Fin q)))
       let EM := EuclideanSpace ℂ (J → Fin q)
-      let EE := EuclideanSpace ℂ (↥Jᶜ → Fin q)
+      let EE := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)
       let G := (LinearMap.ker H.toLinearMap).map (Tm.toLinearEquiv :
         EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ] EM ⊗[ℂ] EE)
       let cut : ℕ → Finset ↥J := fun c ↦

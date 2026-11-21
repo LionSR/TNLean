@@ -12,7 +12,8 @@ import Mathlib.Analysis.Normed.Algebra.MatrixExponential
 # Generic physical Gibbs embedding
 
 This file develops generic one-site and first-site two-site operators, their
-periodic embeddings, and the exponential of a sum of commuting one-site
+placements on the windows of a ring (`ManyBody.placeAlong` along
+`ManyBody.ringWindow`), and the exponential of a sum of commuting one-site
 energies.
 
 ## References
@@ -22,6 +23,7 @@ energies.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
+open ManyBody
 
 noncomputable section
 
@@ -29,8 +31,7 @@ namespace MPOTensor
 
 variable {d N : ℕ}
 
-/-- A one-site matrix in the configuration indexing used by
-`embedLocalOperator`.
+/-- A one-site matrix in the configuration indexing of the windows of one site.
 
 This wrapper will carry the physical one-site energy in the complement
 construction for CPSV16, Definition 4.8, lines 831–847. See
@@ -91,26 +92,28 @@ theorem twoSiteFirstOperator_isHermitian
   rw [hk.apply]
   split <;> split <;> simp_all
 
-/-- Embedding a two-site operator which acts only on its first site is the
-one-site embedding at the same periodic position.
+/-- Placing a two-site operator which acts only on its first site on a ring window is
+placing the one-site operator on the window of one site at the same position.
 
 This identifies the periodic translates in CPSV16, Definition 4.8,
 lines 831–847, for the physical-complement local term. See
 `docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
-theorem embedLocalOperator_twoSite_first
+theorem placeAlong_ringWindow_twoSiteFirstOperator
     (hN : 2 ≤ N) (i : Fin N) (k : Matrix (Fin d) (Fin d) ℂ) :
-    embedLocalOperator 2 N hN i (twoSiteFirstOperator k) =
-      embedLocalOperator 1 N (by omega) i (oneSiteOperator k) := by
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) (twoSiteFirstOperator k) =
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 1 ≤ N) i)
+        (oneSiteOperator k) := by
   ext σ τ
-  simp only [embedLocalOperator_apply, twoSiteFirstOperator, oneSiteOperator]
+  rw [placeAlong_apply, placeAlong_apply]
+  simp only [twoSiteFirstOperator, oneSiteOperator]
   let j : Fin N := MPSTensor.cyclicForwardSite i 1
   have hjOffset : (j.val + N - i.val) % N = 1 := by
     simpa only [j, MPSTensor.cyclicForwardSite] using
       MPSTensor.offset_mod_eq i.isLt (by omega : 1 < N)
   have hAgree :
-      AgreesOutsideWindow (d := d) 1 (by omega) i σ τ ↔
-        AgreesOutsideWindow (d := d) 2 hN i σ τ ∧ τ j = σ j := by
-    rw [agreesOutsideWindow_iff, agreesOutsideWindow_iff]
+      (∀ v, (∀ u, ringWindow (by omega : 1 ≤ N) i u ≠ v) → σ v = τ v) ↔
+        (∀ v, (∀ u, ringWindow hN i u ≠ v) → σ v = τ v) ∧ τ j = σ j := by
+    rw [MPSTensor.forall_ringWindow_ne_imp_iff, MPSTensor.forall_ringWindow_ne_imp_iff]
     constructor
     · intro h
       constructor
@@ -123,134 +126,22 @@ theorem embedLocalOperator_twoSite_first
         have hqj : q = j := by
           rw [MPSTensor.eq_cyclic_site_of_offset_eq (Fin.pos i) hqOffset]
           exact Fin.ext (by simp only [j, MPSTensor.cyclicForwardSite])
-        simpa only [hqj] using hj
+        rw [hqj]
+        exact hj
       · exact h q hqTwo
-  have hσZeroTwo :
-      MPSTensor.extractWindow 2 i σ ⟨0, by omega⟩ = σ i := by
-    simp [MPSTensor.extractWindow, Nat.mod_eq_of_lt i.isLt]
-  have hτZeroTwo :
-      MPSTensor.extractWindow 2 i τ ⟨0, by omega⟩ = τ i := by
-    simp [MPSTensor.extractWindow, Nat.mod_eq_of_lt i.isLt]
-  have hσZeroOne :
-      MPSTensor.extractWindow 1 i σ ⟨0, by omega⟩ = σ i := by
-    simp [MPSTensor.extractWindow, Nat.mod_eq_of_lt i.isLt]
-  have hτZeroOne :
-      MPSTensor.extractWindow 1 i τ ⟨0, by omega⟩ = τ i := by
-    simp [MPSTensor.extractWindow, Nat.mod_eq_of_lt i.isLt]
-  have hσOneTwo :
-      MPSTensor.extractWindow 2 i σ ⟨1, by omega⟩ = σ j := by
-    rfl
-  have hτOneTwo :
-      MPSTensor.extractWindow 2 i τ ⟨1, by omega⟩ = τ j := by
-    rfl
-  rw [hσZeroTwo, hτZeroTwo, hσZeroOne, hτZeroOne, hσOneTwo, hτOneTwo,
-    Matrix.one_apply]
-  by_cases hOne : AgreesOutsideWindow (d := d) 1 (by omega) i σ τ
+  rw [MPSTensor.ringWindow_zero, MPSTensor.ringWindow_zero, Matrix.one_apply]
+  have h1 : (if σ (ringWindow hN i ⟨1, by omega⟩) = τ (ringWindow hN i ⟨1, by omega⟩)
+      then (1 : ℂ) else 0) = if σ j = τ j then 1 else 0 := rfl
+  rw [h1]
+  by_cases hOne : ∀ v, (∀ u, ringWindow (by omega : 1 ≤ N) i u ≠ v) → σ v = τ v
   · obtain ⟨hTwo, hj⟩ := hAgree.mp hOne
     rw [ite_eq_left hTwo, ite_eq_left hOne, ite_eq_left hj.symm, mul_one]
-  · by_cases hTwo : AgreesOutsideWindow (d := d) 2 hN i σ τ
+  · by_cases hTwo : ∀ v, (∀ u, ringWindow hN i u ≠ v) → σ v = τ v
     · have hne : σ j ≠ τ j := by
         intro hj
         exact hOne (hAgree.mpr ⟨hTwo, hj.symm⟩)
       rw [ite_eq_left hTwo, ite_eq_right hOne, ite_eq_right hne, mul_zero]
     · rw [ite_eq_right hTwo, ite_eq_right hOne]
-
-/-- Embedding a local zero operator gives the zero chain operator. -/
-@[simp]
-private theorem embedLocalOperator_zero
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
-  embedLocalOperator (d := d) L N hLN i 0 = 0 := by
-  ext σ τ
-  simp [embedLocalOperator_apply]
-
-/-- Embedding preserves addition of local operators. -/
-private theorem embedLocalOperator_add
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    (A B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    embedLocalOperator (d := d) L N hLN i (A + B) =
-      embedLocalOperator L N hLN i A + embedLocalOperator L N hLN i B := by
-  ext σ τ
-  simp only [embedLocalOperator_apply, Matrix.add_apply]
-  by_cases h : AgreesOutsideWindow (d := d) L hLN i σ τ <;> simp [h]
-
-/-- Embedding the local identity gives the chain identity. -/
-@[simp]
-private theorem embedLocalOperator_one
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
-    embedLocalOperator (d := d) L N hLN i 1 = 1 := by
-  let e := windowComplementEquiv (d := d) L N hLN i
-  apply (Matrix.reindex e e).injective
-  rw [reindex_embedLocalOperator_windowComplement]
-  ext x y
-  simp only [Matrix.reindex_apply, Matrix.one_apply, Matrix.kroneckerMap_apply,
-    mul_ite, mul_one, mul_zero]
-  change (if x.2 = y.2 then if x.1 = y.1 then 1 else 0 else 0) =
-    if e.symm x = e.symm y then 1 else 0
-  simp only [e.symm.injective.eq_iff]
-  by_cases hfst : x.1 = y.1 <;> by_cases hsnd : x.2 = y.2 <;>
-    simp_all [Prod.ext_iff]
-
-/-- Embedding into a cyclic window commutes with conjugate transpose. -/
-@[simp]
-theorem embedLocalOperator_conjTranspose
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    (A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    embedLocalOperator (d := d) L N hLN i Aᴴ =
-      (embedLocalOperator L N hLN i A)ᴴ := by
-  let e := windowComplementEquiv (d := d) L N hLN i
-  apply (Matrix.reindex e e).injective
-  rw [reindex_embedLocalOperator_windowComplement,
-    ← Matrix.conjTranspose_reindex,
-    reindex_embedLocalOperator_windowComplement,
-    Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one]
-
-/-- Embedding into a cyclic window preserves Hermitian matrices. -/
-theorem embedLocalOperator_isHermitian
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    {A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ} (hA : A.IsHermitian) :
-    (embedLocalOperator (d := d) L N hLN i A).IsHermitian := by
-  rw [Matrix.IsHermitian, ← embedLocalOperator_conjTranspose, hA.eq]
-
-/-- Embedding into a cyclic window preserves orthogonal projections, expressed
-by the type-generic star-projection predicate. -/
-theorem embedLocalOperator_isStarProjection
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    {A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ}
-    (hA : IsStarProjection A) :
-    IsStarProjection (embedLocalOperator (d := d) L N hLN i A) := by
-  rw [isStarProjection_iff'] at hA ⊢
-  constructor
-  · rw [← embedLocalOperator_mul, hA.1]
-  · have hA' : Aᴴ = A := by
-      simpa [Matrix.star_eq_conjTranspose] using hA.2
-    rw [Matrix.star_eq_conjTranspose, ← embedLocalOperator_conjTranspose, hA']
-
-/-- Embedding into a fixed cyclic window is a complex algebra homomorphism. -/
-def embedLocalOperatorAlgHom
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
-    Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ →ₐ[ℂ]
-      ChainOperator d N where
-  toFun := embedLocalOperator L N hLN i
-  map_one' := embedLocalOperator_one L N hLN i
-  map_mul' A B := embedLocalOperator_mul L N hLN i A B
-  map_zero' := embedLocalOperator_zero L N hLN i
-  map_add' A B := embedLocalOperator_add L N hLN i A B
-  commutes' c := by
-    rw [Algebra.algebraMap_eq_smul_one, Algebra.algebraMap_eq_smul_one,
-      embedLocalOperator_smul, embedLocalOperator_one]
-
-open scoped Matrix.Norms.Operator in
-/-- Matrix exponential commutes with embedding into a cyclic window. -/
-theorem exp_embedLocalOperator
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    (A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    NormedSpace.exp (embedLocalOperator L N hLN i A) =
-      embedLocalOperator L N hLN i (NormedSpace.exp A) := by
-  symm
-  exact NormedSpace.map_exp
-    (embedLocalOperatorAlgHom (d := d) L N hLN i)
-    (LinearMap.continuous_of_finiteDimensional
-      (embedLocalOperatorAlgHom (d := d) L N hLN i).toLinearMap) A
 
 private def rectKroneckerMonoidHom :
     (Fin N → Matrix (Fin d) (Fin d) ℂ) →*
@@ -259,23 +150,18 @@ private def rectKroneckerMonoidHom :
   map_one' := Matrix.rectKronecker_one
   map_mul' A B := (Matrix.rectKronecker_mul A B).symm
 
-/-- A one-site matrix embedded at `i` is the tensor product of that matrix
+/-- A one-site matrix placed at `i` is the tensor product of that matrix
 at `i` and identities at every other site. -/
 theorem rectKronecker_mulSingle
     (hN : 1 ≤ N) (i : Fin N) (A : Matrix (Fin d) (Fin d) ℂ) :
     Matrix.rectKronecker (Pi.mulSingle i A) =
-      embedLocalOperator 1 N hN i (oneSiteOperator A) := by
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) (oneSiteOperator A) := by
   classical
   ext σ τ
-  simp only [Matrix.rectKronecker_apply, embedLocalOperator_apply, oneSiteOperator]
-  have hσ :
-      MPSTensor.extractWindow 1 i σ ⟨0, by omega⟩ = σ i := by
-    simp [MPSTensor.extractWindow, Nat.mod_eq_of_lt i.isLt]
-  have hτ :
-      MPSTensor.extractWindow 1 i τ ⟨0, by omega⟩ = τ i := by
-    simp [MPSTensor.extractWindow, Nat.mod_eq_of_lt i.isLt]
-  rw [hσ, hτ]
-  by_cases hAgree : AgreesOutsideWindow (d := d) 1 hN i σ τ
+  rw [placeAlong_apply]
+  simp only [Matrix.rectKronecker_apply, oneSiteOperator]
+  rw [MPSTensor.ringWindow_zero]
+  by_cases hAgree : ∀ v, (∀ u, ringWindow hN i u ≠ v) → σ v = τ v
   · rw [ite_eq_left hAgree]
     let S : Fin N → Matrix (Fin d) (Fin d) ℂ := Pi.mulSingle i A
     change (∏ n, S n (σ n) (τ n)) = A (σ i) (τ i)
@@ -286,7 +172,7 @@ theorem rectKronecker_mulSingle
           rw [show S q = 1 by
             simp only [S, Pi.mulSingle_eq_of_ne hqi],
             Matrix.one_apply, ite_eq_left]
-          rw [agreesOutsideWindow_iff] at hAgree
+          rw [MPSTensor.forall_ringWindow_ne_imp_iff] at hAgree
           exact (hAgree q (fun hq ↦ hqi (by
             have hqOffset : (q.val + N - i.val) % N = 0 := by omega
             simpa [Nat.mod_eq_of_lt i.isLt] using
@@ -297,7 +183,7 @@ theorem rectKronecker_mulSingle
       _ = A (σ i) (τ i) := by
         rw [show S i = A by simp only [S, Pi.mulSingle_eq_same]]
   · rw [ite_eq_right hAgree]
-    rw [agreesOutsideWindow_iff] at hAgree
+    rw [MPSTensor.forall_ringWindow_ne_imp_iff] at hAgree
     push Not at hAgree
     obtain ⟨q, hqOutside, hq⟩ := hAgree
     apply Finset.prod_eq_zero (Finset.mem_univ q)
@@ -308,23 +194,24 @@ theorem rectKronecker_mulSingle
     rw [Pi.mulSingle_eq_of_ne hqi, Matrix.one_apply, ite_eq_right]
     exact fun h ↦ hq h.symm
 
-/-- Periodic embeddings of one-site operators commute at every pair of
+/-- Placements of one-site operators on the ring commute at every pair of
 positions.
 
 This is the generic disjoint one-site commutation used to realize the local
 two-site convention of CPSV16, Definition 4.8, lines 831–847. Its use in the
 physical-complement construction is documented in
 `docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
-theorem embedLocalOperator_one_commute
+theorem commute_placeAlong_ringWindow_oneSiteOperator
     (hN : 1 ≤ N) (A : Matrix (Fin d) (Fin d) ℂ)
     (i j : Fin N) :
     Commute
-      (embedLocalOperator 1 N hN i (oneSiteOperator A))
-      (embedLocalOperator 1 N hN j (oneSiteOperator A)) := by
+      (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) (oneSiteOperator A))
+      (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) (oneSiteOperator A)) := by
   by_cases hij : i = j
   · subst j
     exact Commute.refl _
-  · apply embedLocalOperator_commute_of_not_cyclicWindowsOverlap
+  · refine commute_placeAlong_of_disjoint _
+      (disjoint_map_ringWindow_of_not_cyclicWindowsOverlap hN ?_) _ _
     intro hover
     rcases hover with ⟨q, hqi, hqj⟩
     rw [MPSTensor.mem_cyclicWindowSupport_iff hN] at hqi hqj
@@ -338,15 +225,15 @@ theorem embedLocalOperator_one_commute
         MPSTensor.eq_cyclic_site_of_offset_eq (Fin.pos j) hqjOffset
     exact hij (hqiEq.symm.trans hqjEq)
 
-/-- The product of one-site embeddings of a matrix is its tensor power in
+/-- The product of the one-site placements of a matrix is its tensor power in
 configuration coordinates. -/
-theorem prod_embedLocalOperator_one_eq_rectKronecker
+theorem noncommProd_placeAlong_ringWindow_oneSiteOperator
     (hN : 1 ≤ N) (A : Matrix (Fin d) (Fin d) ℂ) :
     (Finset.univ : Finset (Fin N)).noncommProd
-      (fun i => embedLocalOperator 1 N hN i (oneSiteOperator A))
+      (fun i => placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) (oneSiteOperator A))
       (by
         intro i _ j _ _
-        exact embedLocalOperator_one_commute hN A i j) =
+        exact commute_placeAlong_ringWindow_oneSiteOperator hN A i j) =
       Matrix.rectKronecker (fun _ : Fin N => A) := by
   classical
   let x : Fin N → Matrix (Fin d) (Fin d) ℂ := fun _ => A
@@ -376,30 +263,30 @@ theorem prod_embedLocalOperator_one_eq_rectKronecker
 
 /-- The exponential of a sum of identical one-site energies is their
 sitewise tensor power. -/
-theorem exp_sum_embedLocalOperator_one
+theorem exp_sum_placeAlong_ringWindow_oneSiteOperator
     (hN : 1 ≤ N) (A : Matrix (Fin d) (Fin d) ℂ) :
     NormedSpace.exp
         (∑ i : Fin N,
-          embedLocalOperator 1 N hN i (oneSiteOperator A)) =
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) (oneSiteOperator A)) =
       Matrix.tensorPower N (NormedSpace.exp A) := by
   let f : Fin N → ChainOperator d N := fun i ↦
-    embedLocalOperator 1 N hN i (oneSiteOperator A)
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) (oneSiteOperator A)
   have hpair :
       ((Finset.univ : Finset (Fin N)) : Set (Fin N)).Pairwise
         (fun i j ↦ Commute (f i) (f j)) := by
     intro i _ j _ _
-    exact embedLocalOperator_one_commute hN A i j
+    exact commute_placeAlong_ringWindow_oneSiteOperator hN A i j
   change NormedSpace.exp (∑ i ∈ Finset.univ, f i) = _
   rw [Matrix.exp_sum_of_commute Finset.univ f hpair]
   calc
     _ = Finset.univ.noncommProd
-        (fun i ↦ embedLocalOperator 1 N hN i
+        (fun i ↦ placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
           (oneSiteOperator (NormedSpace.exp A)))
         (fun i _ j _ _ ↦
-          embedLocalOperator_one_commute hN (NormedSpace.exp A) i j) :=
+          commute_placeAlong_ringWindow_oneSiteOperator hN (NormedSpace.exp A) i j) :=
       Finset.noncommProd_congr rfl (fun i _ ↦ by
-        rw [exp_embedLocalOperator, exp_oneSiteOperator]) _
+        rw [← placeAlong_exp, exp_oneSiteOperator]) _
     _ = Matrix.tensorPower N (NormedSpace.exp A) :=
-      prod_embedLocalOperator_one_eq_rectKronecker hN _
+      noncommProd_placeAlong_ringWindow_oneSiteOperator hN _
 
 end MPOTensor

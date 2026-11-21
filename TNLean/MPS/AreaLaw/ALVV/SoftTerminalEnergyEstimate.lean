@@ -56,12 +56,12 @@ theorem exists_native_soft_terminal_compressed_energy_estimate
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues (minEigenvalue hH)
     let J := interval L l r
     let beta := fun _ : Fin L ↦ Fin q
-    let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let split := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
-    let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
       (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
     let coords := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+      (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
       (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
     let P := Φ.partialHamiltonian (Finset.univ.filter
       (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r))
@@ -161,10 +161,10 @@ theorem exists_native_soft_terminal_compressed_energy_estimate
   have hrho0 : 0 ≤ rho := by dsimp only [rho]; positivity
   have hloss0 : 0 ≤ loss := div_nonneg hDelta (sq_nonneg _)
   let U := (Y.tensorProd
-    (⊤ : Submodule ℂ (EuclideanSpace ℂ (↥(Jᶜ) → Fin q)))).comap
+    (⊤ : Submodule ℂ (EuclideanSpace ℂ ({v // v ∉ J} → Fin q)))).comap
       coords.toLinearEquiv.toLinearMap
   have hmapU : U.map coords.toLinearEquiv.toLinearMap = Y.tensorProd
-      (⊤ : Submodule ℂ (EuclideanSpace ℂ (↥(Jᶜ) → Fin q))) :=
+      (⊤ : Submodule ℂ (EuclideanSpace ℂ ({v // v ∉ J} → Fin q))) :=
     Submodule.map_comap_eq_of_surjective coords.surjective _
   have hUT : Submodule.IsCloseTo loss U T := by
     apply (Submodule.isCloseTo_map_iff coords).mp
@@ -201,14 +201,14 @@ theorem exists_native_soft_terminal_compressed_energy_estimate
         toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) R ∘L
         coords.symm.toContinuousLinearEquiv.toContinuousLinearMap =
       TensorProduct.mapL (toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) Rnat)
-        (1 : EuclideanSpace ℂ (↥(Jᶜ) → Fin q) →L[ℂ]
-          EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) := by
+        (1 : EuclideanSpace ℂ ({v // v ∉ J} → Fin q) →L[ℂ]
+          EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) := by
     rw [hRawLift]
     exact Entropy.localLift_middleFirst_conjugation J Rnat
   have hTA : coords (toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) R z) =
       TensorProduct.mapL (toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) Rnat)
-        (1 : EuclideanSpace ℂ (↥(Jᶜ) → Fin q) →L[ℂ]
-          EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) (coords z) := by
+        (1 : EuclideanSpace ℂ ({v // v ∉ J} → Fin q) →L[ℂ]
+          EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) (coords z) := by
     have hh := congrArg (fun f ↦ f (coords z)) hConj
     change coords (toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
       R (coords.symm (coords z))) = _ at hh
@@ -216,8 +216,8 @@ theorem exists_native_soft_terminal_compressed_energy_estimate
     exact hh
   have hTensorEnergy : (inner ℂ
       (TensorProduct.mapL (toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) Rnat)
-        (1 : EuclideanSpace ℂ (↥(Jᶜ) → Fin q) →L[ℂ]
-          EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) (coords z)) (coords z)).re ≤
+        (1 : EuclideanSpace ℂ ({v // v ∉ J} → Fin q) →L[ℂ]
+          EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) (coords z)) (coords z)).re ≤
       (eSoft + 3) * ‖coords z‖ ^ 2 := by
     rw [← hTA, coords.inner_map_map, coords.norm_map]
     exact hRawEnergy

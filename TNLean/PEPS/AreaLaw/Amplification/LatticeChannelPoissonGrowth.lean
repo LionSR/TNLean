@@ -60,7 +60,7 @@ theorem exists_latticeChannelWord_spatial_growth {p : ℕ} (hp : 1 ≤ p)
         (∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (t : ℝ≥0) (y : Site Λ),
-        letI := graphPseudoEMetricSpace (planeDomainGraph Λ)
+        letI := ManyBody.graphPseudoEMetricSpace (planeDomainGraph Λ)
         let α := kernelExponent p
         let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
           (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))

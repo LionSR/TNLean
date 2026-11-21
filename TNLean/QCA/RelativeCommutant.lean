@@ -36,7 +36,9 @@ variable {d : ℕ} {Λ Γ : Finset ℤ}
 private lemma reindex_localInclusion (h : Λ ⊆ Γ) (A : LocalAlgebra d Λ) :
     CStarMatrix.reindexₐ ℂ ℂ (Config.splitEquiv h) (localInclusion h A) =
       CStarMatrix.leftKroneckerEmbed (n := Config d (Γ \ Λ)) A := by
-  rw [localInclusion]
+  ext p q
+  rw [CStarMatrix.reindexₐ_apply, CStarMatrix.leftKroneckerEmbed_apply_apply]
+  change localInclusion h A ((Config.splitEquiv h).symm p) ((Config.splitEquiv h).symm q) = _
   simp
 
 private lemma reindex_localInclusion_sdiff (h : Λ ⊆ Γ)

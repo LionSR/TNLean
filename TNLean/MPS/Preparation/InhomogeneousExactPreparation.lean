@@ -42,7 +42,8 @@ its normalized positive-part state as the initial pair. -/
 theorem exists_isPreparedInDepth_normalizedChainState (d D : ℕ) (hd : 0 < d) :
     ∃ C : ℕ, ∀ (N : ℕ) [NeZero N] (A : MPSChainTensor d D N), chainState A ≠ 0 →
       ∃ T : ℕ, T ≤ C * N ∧
-        IsPreparedInDepth T (fun s => ((‖chainState A‖ : ℂ)⁻¹ • chainState A) s) := by
+        IsPreparedInDepth (Geometry.ring N) T
+          (fun s => ((‖chainState A‖ : ℂ)⁻¹ • chainState A) s) := by
   classical
   by_cases hd1 : d ≤ 1
   · exact ⟨0, fun N _ A _ => ⟨0, by simp, isPreparedInDepth_zero_of_le_one hd1 _⟩⟩

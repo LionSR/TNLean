@@ -62,7 +62,7 @@ theorem exists_log_le_of_infidelity_le_one_half {A : MPSTensor d D} {L : ℕ} (h
     (hmax : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     (hξ : 0 < correlationLength lam₂) :
     ∃ C : ℝ, ∀ (T N : ℕ) [NeZero N] (ψ : Cfg d N → ℂ),
-      IsPreparedInDepth T ψ → star ψ ⬝ᵥ ψ = 1 →
+      IsPreparedInDepth (Geometry.ring N) T ψ → star ψ ⬝ᵥ ψ = 1 →
         1 - ‖⟪normalizedMPVState A N, (WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N))⟫_ℂ‖ ≤
           1 / 2 →
           correlationLength lam₂ / 4 * Real.log N ≤
@@ -123,7 +123,7 @@ theorem exists_log_le_of_infidelity_le_one_half_of_isNormal {A : MPSTensor d D}
     (hmax : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ lam₁ → ‖μ‖ ≤ ‖lam₂‖)
     (hξ : 0 < correlationLength (lam₂ / lam₁)) :
     ∃ C : ℝ, ∀ (T N : ℕ) [NeZero N] (ψ : Cfg d N → ℂ),
-      IsPreparedInDepth T ψ → star ψ ⬝ᵥ ψ = 1 →
+      IsPreparedInDepth (Geometry.ring N) T ψ → star ψ ⬝ᵥ ψ = 1 →
         1 - ‖⟪normalizedMPVState A N, (WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N))⟫_ℂ‖ ≤
           1 / 2 →
           correlationLength (lam₂ / lam₁) / 4 * Real.log N ≤
@@ -163,7 +163,7 @@ theorem exists_mul_log_le_of_infidelity_le_one_half_of_isNormal {A : MPSTensor d
     (hξ : 0 < correlationLength (lam₂ / lam₁)) {a : ℝ} (ha : 0 < a)
     (haξ : a < correlationLength (lam₂ / lam₁) / 4) :
     ∃ C : ℝ, ∀ (T N : ℕ) [NeZero N] (ψ : Cfg d N → ℂ),
-      IsPreparedInDepth T ψ → star ψ ⬝ᵥ ψ = 1 →
+      IsPreparedInDepth (Geometry.ring N) T ψ → star ψ ⬝ᵥ ψ = 1 →
         1 - ‖⟪normalizedMPVState A N, (WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N))⟫_ℂ‖ ≤
           1 / 2 →
           a * Real.log N ≤ T + C := by
@@ -222,8 +222,10 @@ theorem exists_depth_isTheta_log {A : MPSTensor d D}
     (hξ : 0 < correlationLength (lam₂ / lam₁)) {ε : ℝ} (hε : 0 < ε) (hε2 : ε ≤ 1 / 2) :
     ∃ a c C : ℝ, ∃ N₀ : ℕ, 0 < a ∧ ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       (∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log N ∧
-          IsPreparedInDepth T (fun s => ψ s) ∧ 1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε) ∧
-      ∀ (T : ℕ) (ψ : Cfg d N → ℂ), IsPreparedInDepth T ψ → star ψ ⬝ᵥ ψ = 1 →
+          IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
+            1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε) ∧
+      ∀ (T : ℕ) (ψ : Cfg d N → ℂ), IsPreparedInDepth (Geometry.ring N) T ψ →
+        star ψ ⬝ᵥ ψ = 1 →
         1 - ‖⟪normalizedMPVState A N, (WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N))⟫_ℂ‖ ≤ ε →
           a * Real.log N - C ≤ T := by
   have : NeZero D := ⟨by

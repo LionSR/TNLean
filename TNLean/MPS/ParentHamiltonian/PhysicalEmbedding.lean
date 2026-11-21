@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinKronecker
-import TNLean.Algebra.IsometricProjection
+import QICLean.Analysis.IsometricProjection
 import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.ParentHamiltonian.MatrixRepresentation
 

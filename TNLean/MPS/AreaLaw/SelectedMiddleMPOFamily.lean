@@ -244,15 +244,16 @@ private noncomputable def actualSelectedMiddleWordStatement
     let eE := intervalShiftOrderIso
       (show cE ≤ dE by have hp := p.isLt; omega)
       (show dE ≤ L by have hs := s.isLt; omega)
-    let inc := fun x : ↥(interval L (a + 2 * ell) (b + 1)) ↦
-      (⟨x.val, mem_interval.mpr (by
+    let inc : ↥(interval L (a + 2 * ell) (b + 1)) ↪ E :=
+      ⟨fun x ↦ (⟨x.val, mem_interval.mpr (by
         have hx := mem_interval.mp x.property
         have hp := p.isLt
-        constructor <;> omega)⟩ : E)
-    let Mphys := QuantumCircuit.embedOp eK
+        constructor <;> omega)⟩ : E),
+        fun x y hxy ↦ Subtype.ext (congrArg Subtype.val hxy)⟩
+    let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
       (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
         Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
-    let ME := QuantumCircuit.embedOp inc Mphys
+    let ME := ManyBody.placeAlong (X := fun _ ↦ Fin q) inc Mphys
     ∀ (K : Matrix (E → Fin q) (E → Fin q) ℂ)
       (U : Fin rU → Matrix (E → Fin q) (E → Fin q) ℂ)
       (W : Fin rV → Matrix (E → Fin q) (E → Fin q) ℂ),
@@ -300,15 +301,16 @@ private theorem exists_actual_selected_middle_word_mpo_family
   let eE := intervalShiftOrderIso
     (show cE ≤ dE by have hp := p.isLt; omega)
     (show dE ≤ L by have hs := s.isLt; omega)
-  let inc := fun x : ↥(interval L (a + 2 * ell) (b + 1)) ↦
-    (⟨x.val, mem_interval.mpr (by
+  let inc : ↥(interval L (a + 2 * ell) (b + 1)) ↪ E :=
+    ⟨fun x ↦ (⟨x.val, mem_interval.mpr (by
       have hx := mem_interval.mp x.property
       have hp := p.isLt
-      constructor <;> omega)⟩ : E)
-  let Mphys := QuantumCircuit.embedOp eK
+      constructor <;> omega)⟩ : E),
+      fun x y hxy ↦ Subtype.ext (congrArg Subtype.val hxy)⟩
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
-  let ME := QuantumCircuit.embedOp inc Mphys
+  let ME := ManyBody.placeAlong (X := fun _ ↦ Fin q) inc Mphys
   intro K U W hK hU hW
   have hp := p.isLt
   have hs := s.isLt
@@ -417,7 +419,7 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
   let E := interval L (a + p.val + 1) (b + s.val + 1)
   let hTE : Disjoint T E := disjoint_interval_interval (L := L) 0 _ _
   let g := threeSplit q T E hTE
-  let e := exteriorMiddleEquiv (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)
+  let e := exteriorMiddleEquiv (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)
   let Nnat := (b + s.val + 1) - (a + p.val + 1)
   let aNat := (a + 2 * ell + 1) - (a + p.val + 1)
   let Lnat := b - (a + 2 * ell + 1)
@@ -427,10 +429,10 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega)
     (show b + 1 ≤ L by have hs := s.isLt; omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) :=
     (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
   let RetDim := Fintype.card (MPOTensor.actualAffineRetainedConfig Nnat Lnat q aNat)
@@ -453,14 +455,14 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
       let Dphys := ∑ t ∈ O, z t • F t
       ∀ cPoly : Fin (k + 1) → ℂ,
         ∃ B_out : Fin n →
-            Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-              ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ,
+            Matrix ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+              ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ,
           ((∑ r : Fin (k + 1),
               cPoly r • twoMarkerCoefficient Dphys (WL p) (WR s) r.val i j).reindex
               (g.trans e) (g.trans e)).submatrix
-                (fun x : ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ×
+                (fun x : ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ×
                     (Fin Nnat → Fin q) ↦ (x.1, x.2 ∘ eE.symm))
-                (fun x : ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ×
+                (fun x : ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ×
                     (Fin Nnat → Fin q) ↦ (x.1, x.2 ∘ eE.symm)) =
             ∑ r, B_out r ⊗ₖ V r := by
   classical
@@ -469,7 +471,7 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
   let E := interval L (a + p.val + 1) (b + s.val + 1)
   let hTE : Disjoint T E := disjoint_interval_interval (L := L) 0 _ _
   let g := threeSplit q T E hTE
-  let e := exteriorMiddleEquiv (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)
+  let e := exteriorMiddleEquiv (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)
   let Nnat := (b + s.val + 1) - (a + p.val + 1)
   let aNat := (a + 2 * ell + 1) - (a + p.val + 1)
   let Lnat := b - (a + 2 * ell + 1)
@@ -479,15 +481,16 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega)
     (show b + 1 ≤ L by have hs := s.isLt; omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun v ↦ Acore v (σ v) (τ v))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) :=
     (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
   let RetDim := Fintype.card (MPOTensor.actualAffineRetainedConfig Nnat Lnat q aNat)
   let Nmid := fun (e₀ : E) (t : Fin (q * q)) ↦
-    QuantumCircuit.embedOp (fun _ : Fin 1 ↦ e₀)
+    ManyBody.placeAlong (X := fun _ ↦ Fin q)
+      ⟨fun _ : Fin 1 ↦ e₀, fun a b _ ↦ Subsingleton.elim a b⟩
       (Matrix.single
         (fun _ : Fin 1 ↦ (finProdFinEquiv.symm t).1)
         (fun _ : Fin 1 ↦ (finProdFinEquiv.symm t).2) (1 : ℂ))
@@ -573,7 +576,7 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
   refine ⟨n, deg, V, hcount, hV, hTrace, ?_⟩
   intro PL PR hPL hPR F Dphys cPoly
   obtain ⟨Bword, hBword⟩ := hphysical PL PR hPL hPR cPoly
-  let Ext := (T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)
+  let Ext := (T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)
   let readMiddle : Ext × (Fin Nnat → Fin q) → Ext × (E → Fin q) :=
     fun x ↦ (x.1, x.2 ∘ eE.symm)
   let Xnat : Matrix (Ext × (Fin Nnat → Fin q)) (Ext × (Fin Nnat → Fin q)) ℂ :=

@@ -111,8 +111,10 @@ theorem nonempty_ker_regionParentHamiltonian_semiRegularGInjective_equiv
     (hH : ∀ i, IsRegionParentInteraction (groupBondTensor a) (R i) (H i))
     (hK : ∀ i, IsRegionParentInteraction (numberedGraphDressedAveragingTensor
       (leftRegularMatrix G) 1 (countedIncidentEnumeration G k hk)) (R i) (K i)) :
-    Nonempty ((Matrix.mulVecLin (regionParentHamiltonian R H)).ker ≃ₗ[ℂ]
-      (Matrix.mulVecLin (regionParentHamiltonian R K)).ker) := by
+    Nonempty ((Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin p) R H).hamiltonian).ker ≃ₗ[ℂ]
+      (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin _) R K).hamiltonian).ker) := by
   rw [ker_regionParentHamiltonian _ R H hH, ker_regionParentHamiltonian _ R K hK]
   exact nonempty_semiRegularGInjectiveParentEquiv U hU hSemi a ha k hk R hv he
 

@@ -380,7 +380,7 @@ theorem unmodifiedPlacedGaussOperator_mulVec_gaugedMPS_ne (N : ℕ) (hN : 2 ≤ 
   have : NeZero N := ⟨by omega⟩
   rw [MPOTensor.placedGaussOperator, gaussWindowOperator,
     TNLean.Algebra.gaussOperator_eq_monomial _ _ _ unmodifiedCircuitTuple_eq_monomial,
-    Matrix.coe_reindexAlgEquiv, reindex_monomial, embedLocalOperator_monomial, Ne,
+    Matrix.coe_reindexAlgEquiv, reindex_monomial, placeAlong_ringWindow_monomial, Ne,
     monomial_mulVec_eq_self_iff]
   intro h
   set c : Gs := gaugedSite.symm (0, 1)

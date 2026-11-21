@@ -32,6 +32,7 @@ rescaling and the reciprocal-length convention of the printed bound.
 open scoped Matrix.Norms.L2Operator
 
 open ManyBody (interval ChainInteraction)
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -57,7 +58,7 @@ theorem entropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt (hq : 2 �
     (hfact : ∀ m : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       IsFactorizationAt Ω j m (C₁ * Real.exp (-(m / ξ'))) OB OL OR)
     {k r : ℕ} (hk : 1 ≤ k) (w : Fin r → ℝ) (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q))
-    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (ψ i) j).rank ≤ k)
+    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k)
     (hnorm : ∑ i, w i * ‖ψ i‖ ^ 2 = 1) {P : ℝ} (hP : 0 < P)
     (hPdef : ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) ≤
@@ -95,7 +96,8 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
-        (∀ i, (cutMatrix (ψ i) j).rank ≤ k) → ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
+        (∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k) →
+        ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
         ∀ {P : ℝ}, 0 < P → ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P →
         ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) ≤
           Real.log k + 6 * lemmaOneEndpointLength R J ΔE *

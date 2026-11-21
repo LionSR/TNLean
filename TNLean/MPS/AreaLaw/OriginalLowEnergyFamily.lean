@@ -77,12 +77,12 @@ theorem exists_five_region_original_low_energy_filter_family
       ‖B t e K‖ ≤ 3 * t + 4 * (ell : ℝ) ∧
       let J := interval L (a + ell) (b + ell + 1)
       let beta := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
       let D := (q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))
       let Delta := (2 * Real.exp (-2 * ((ell ^ 2 : ℕ) : ℝ) *
@@ -90,13 +90,13 @@ theorem exists_five_region_original_low_energy_filter_family
       ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ), N ≤ D ^ 2 ∧
         ∀ (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (delta : ℝ),
           0 ≤ delta → 2 * (delta + epsilon) < 1 →
-          Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) delta S
+          Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) delta S
             ((Submodule.spectralSpanLE hO.eigenvectorBasis hO.eigenvalues
               (E0 + eta)).map Tm.toLinearEquiv.toLinearMap) →
           let grow := ⨆ j : Fin N, S.map
             (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j)).toLinearMap
           Module.finrank ℂ grow ≤ N * Module.finrank ℂ S ∧
-            Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+            Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q))
               (2 * (Delta / (1 - 2 * (delta + epsilon)) ^ 2 + epsilon)) grow
               ((Submodule.spectralSpanLE hO.eigenvectorBasis hO.eigenvalues
                 (E0 + eta - 3 * w)).map Tm.toLinearEquiv.toLinearMap) := by
@@ -114,7 +114,7 @@ theorem exists_five_region_original_low_energy_filter_family
   obtain ⟨_hnest, hupper, hlower, N, W, hN, _p, _hdegree, _hp0, _M, _hM, himprove⟩ := htargets
   refine ⟨N, W, hN, ?_⟩
   intro S delta hdelta hbudget hS
-  have hstart : Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+  have hstart : Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q))
       (2 * (delta + epsilon)) S
         ((Submodule.spectralSpanLE hC.eigenvectorBasis hC.eigenvalues
           (E0 + eta - w)).map Tm.toLinearEquiv.toLinearMap) :=

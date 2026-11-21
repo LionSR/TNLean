@@ -116,11 +116,11 @@ theorem exists_uniform_long_interval_soft_improving_family
     let J := interval (N + 1) p r
     let eJ := intervalShiftOrderIso hpr hrN
     let midConfig := J → Fin q
-    let extConfig := ↥(Jᶜ) → Fin q
+    let extConfig := {v // v ∉ J} → Fin q
     let HM := EuclideanSpace ℂ midConfig
     let HE := EuclideanSpace ℂ extConfig
     let Hfull := EuclideanSpace ℂ (Fin (N + 1) → Fin q)
-    let split := (ManyBody.splitEquiv (fun _ : Fin (N + 1) ↦ Fin q) J).trans
+    let split := (ManyBody.cutEquiv (fun _ : Fin (N + 1) ↦ Fin q) J).trans
       (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
     let Phi := ((EuclideanSpace.basisFun extConfig ℂ).tensorProduct
@@ -230,7 +230,7 @@ theorem exists_uniform_long_interval_soft_improving_family
   have hTO := spectral.2.2.2.1
   have hOT := spectral.2.2.2.2.1
   refine ⟨hshift, hclosed, hdim, hTO, hOT, ?_⟩
-  let split0 := (ManyBody.splitEquiv (fun _ : Fin (N + 1) ↦ Fin q)
+  let split0 := (ManyBody.cutEquiv (fun _ : Fin (N + 1) ↦ Fin q)
     (interval (N + 1) (a + ell) (b + ell + 1))).trans
     (Equiv.prodComm _ _)
   unfold Fops Tc target Tm Phi U split Hfull HM HE midConfig extConfig J

@@ -50,7 +50,7 @@ theorem IntRect.partial_row_entropy_le
   have hXY : Disjoint ((Q.dilate (j - 1)).toFinset \ Q.toFinset) Y :=
     Finset.disjoint_left.mpr fun x hx hy ↦
       (Finset.mem_sdiff.mp (hY hy)).2 (Finset.mem_sdiff.mp hx).1
-  refine (abs_regionalEntropy_filter_union_sub_le Λ q hq Ω hΩ A _ Y hXY).trans ?_
+  refine (abs_regionEntropy_filter_union_sub_le Λ q hq Ω hΩ A _ Y hXY).trans ?_
   have hcard := (Finset.card_le_card hY).trans hcardLayer
   exact mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
     (Real.log_nonneg (by exact_mod_cast hq))

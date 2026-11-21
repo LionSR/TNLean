@@ -372,7 +372,7 @@ private theorem BeigiSectorGraphData.eventually_mpvState_mem_span_normalizedMini
   have hGround : mpvState (d := d) B N ∈ parentHamiltonianGroundSpaceES B 2 N := by
     rw [parentHamiltonianGroundSpaceES, Submodule.mem_map]
     refine ⟨(mpv B : NSiteSpace d N), ?_, rfl⟩
-    rw [LinearMap.mem_ker, parentHamiltonian]
+    rw [LinearMap.mem_ker, parentHamiltonian_eq_sum_localTerm]
     rw [LinearMap.sum_apply]
     apply Finset.sum_eq_zero
     intro i _hi

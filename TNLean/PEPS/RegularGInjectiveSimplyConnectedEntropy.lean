@@ -80,30 +80,31 @@ private theorem cut_rank_relabel_physical {Phys Out : Type*}
     [Fintype Phys] [Fintype Out] (e : Phys ≃ Out)
     (a : G → G → G → G → Phys → ℂ)
     (R : Finset X) {I : Type*} [Fintype I] (pairs : I → G × G) (μ : I → ℂ) :
-    (physicalCutMatrix (fun v => v ∈ R)
+    (ManyBody.cutMatrix R
       (∑ i, μ i • torusGClosure (leftRegularMatrix G)
         (fun t r b l s => a t r b l (e.symm s)) (pairs i).1 (pairs i).2)).rank =
-    (physicalCutMatrix (fun v => v ∈ R)
+    (ManyBody.cutMatrix R
       (∑ i, μ i • torusGClosure (leftRegularMatrix G) a (pairs i).1 (pairs i).2)).rank := by
   let eR : ({v : X // v ∈ R} → Out) ≃ ({v : X // v ∈ R} → Phys) :=
     Equiv.piCongrRight (fun _ => e.symm)
   let eS : ({v : X // ¬v ∈ R} → Out) ≃ ({v : X // ¬v ∈ R} → Phys) :=
     Equiv.piCongrRight (fun _ => e.symm)
-  have hmat : physicalCutMatrix (fun v => v ∈ R)
+  have hmat : ManyBody.cutMatrix R
       (∑ i, μ i • torusGClosure (leftRegularMatrix G)
         (fun t r b l s => a t r b l (e.symm s)) (pairs i).1 (pairs i).2) =
-      (physicalCutMatrix (fun v => v ∈ R)
+      (ManyBody.cutMatrix R
         (∑ i, μ i • torusGClosure (leftRegularMatrix G) a (pairs i).1 (pairs i).2)).submatrix
         eR eS := by
     ext σ τ
-    simp only [physicalCutMatrix, Matrix.submatrix_apply, Finset.sum_apply, Pi.smul_apply]
+    simp only [ManyBody.cutMatrix_apply, Matrix.submatrix_apply, Finset.sum_apply,
+      Pi.smul_apply]
     apply Finset.sum_congr rfl
     intro i _
     congr 1
     unfold torusGClosure
     congr 1
     funext v c
-    simp only [Equiv.piEquivPiSubtypeProd_symm_apply]
+    simp only [ManyBody.cutEquiv, Equiv.piEquivPiSubtypeProd_symm_apply]
     split_ifs <;> rfl
   rw [hmat, Matrix.rank_submatrix]
 
@@ -119,7 +120,7 @@ private theorem rank_canonical_cut_of_isSimplyConnected
     (hne : (∑ i, μ i • torusGClosure (width := width) (height := height)
       (leftRegularMatrix G) (averagingSite (leftRegularMatrix G))
       (pairs i).1 (pairs i).2) ≠ 0) :
-    (physicalCutMatrix (fun v => v ∈ R)
+    (ManyBody.cutMatrix R
       (∑ i, μ i • torusGClosure (leftRegularMatrix G)
         (averagingSite (leftRegularMatrix G)) (pairs i).1 (pairs i).2)).rank =
       Fintype.card G ^ (Fintype.card {f : Edge (torusGraph width height) //
@@ -138,16 +139,8 @@ private theorem rank_canonical_cut_of_isSimplyConnected
     have h := congrFun hz (fun v => e (σ v))
     simpa only [Ψ, b, Finset.sum_apply, Pi.smul_apply, torusGClosure,
       Equiv.symm_apply_apply, Pi.zero_apply] using h
-  let K := physicalCutMatrix (fun v => v ∈ R) Ψ
-  have hK : K ≠ 0 := by
-    intro hz
-    apply hΨ
-    funext σ
-    let π := Equiv.piEquivPiSubtypeProd (fun v : X => v ∈ R)
-      (fun _ => Fin (Fintype.card (G × G × G × G)))
-    have h := congrFun (congrFun hz (π σ).1) (π σ).2
-    simpa only [K, physicalCutMatrix, π, Prod.mk.eta, Equiv.symm_apply_apply,
-      Matrix.zero_apply, Pi.zero_apply] using h
+  let K := ManyBody.cutMatrix R Ψ
+  have hK : K ≠ 0 := fun hz => hΨ (ManyBody.cutMatrix_eq_zero_iff.mp hz)
   let eD : {v : X // v ∈ Finset.univ \ R} ≃ {v : X // ¬v ∈ R} :=
     Equiv.subtypeEquivRight (fun v => by simp)
   let eS := eD.arrowCongr (Equiv.refl (Fin (Fintype.card (G × G × G × G))))
@@ -199,7 +192,7 @@ theorem IsGInjective.torusPhysicalCut_rank_zeroEntropy_of_isSimplyConnected
       (leftRegularMatrix G) a (pairs i).1 (pairs i).2) ≠ 0) :
     let _ := Classical.decEq Phys
     let b := Fintype.card {f : Edge (torusGraph width height) // IsRegionBoundaryEdge R f}
-    let M := physicalCutMatrix (fun v => v ∈ R)
+    let M := ManyBody.cutMatrix R
       (∑ i, μ i • torusGClosure (leftRegularMatrix G) a (pairs i).1 (pairs i).2)
     let ρ := (M * M.conjTranspose).trace⁻¹ • (M * M.conjTranspose)
     0 < (M * M.conjTranspose).trace ∧ ρ.PosSemidef ∧ ρ.trace = 1 ∧
@@ -220,18 +213,11 @@ theorem IsGInjective.torusPhysicalCut_rank_zeroEntropy_of_isSimplyConnected
     apply hne
     rw [hz, map_zero] at hrecover
     exact hrecover.symm
-  have hrank := (ha.rank_physicalCutMatrix_torusGClosure_sum
-    (fun v => v ∈ R) pairs μ).trans
+  have hrank := (ha.rank_cutMatrix_torusGClosure_sum R pairs μ).trans
       (rank_canonical_cut_of_isSimplyConnected R hR hSC pairs hcomm μ hΨ₀)
-  let M := physicalCutMatrix (fun v => v ∈ R) Ψ
+  let M := ManyBody.cutMatrix R Ψ
   let ρ := (M * M.conjTranspose).trace⁻¹ • (M * M.conjTranspose)
-  have hM : M ≠ 0 := by
-    intro hz
-    apply hne
-    let π := Equiv.piEquivPiSubtypeProd (fun v : X => v ∈ R) (fun _ => Phys)
-    apply π.symm.surjective.injective_comp_right
-    funext p
-    exact congrFun (congrFun hz p.1) p.2
+  have hM : M ≠ 0 := fun hz => hne (ManyBody.cutMatrix_eq_zero_iff.mp hz)
   have ht : (M * M.conjTranspose).trace ≠ 0 :=
     mt Matrix.trace_mul_conjTranspose_self_eq_zero_iff.mp hM
   have hpos : 0 < (M * M.conjTranspose).trace :=

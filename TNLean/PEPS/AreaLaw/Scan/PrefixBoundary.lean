@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scan.PrefixComparison
 import TNLean.PEPS.AreaLaw.Scan.AmbientDepth
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary
-import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
+import TNLean.PEPS.AreaLaw.Geometry.AmbientBoundary
 
 /-!
 # Physical edge boundaries of deterministic depth prefixes
@@ -23,6 +23,9 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 -/
 
 open TNLean.Lattice
+
+open ManyBody (ambientDilation ambientDilation_zero edgeBoundary mem_ambientDilation_iff
+  planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -69,7 +72,8 @@ theorem card_edgeBoundary_depthPrefix_le (Λ T : Finset (ℤ × ℤ))
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
       ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientSupDistance t z)
     {j : ℤ} (hj : j ≤ L) :
-    (edgeBoundary Λ (depthPrefix A (fun x ↦ ambientDepth T hT x.val) j)).card ≤ 4 * n := by
+    (edgeBoundary (planeDomainGraph Λ)
+      (depthPrefix A (fun x ↦ ambientDepth T hT x.val) j)).card ≤ 4 * n := by
   by_cases hj0 : 0 ≤ j
   · lift j to ℕ using hj0
     have hjL : j ≤ L := by exact_mod_cast hj
@@ -127,15 +131,15 @@ theorem card_edgeBoundary_positiveDepthPrefix_le (Λ T : Finset (ℤ × ℤ))
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
       ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientSupDistance t z)
     {j : ℤ} (hj : j ≤ L) :
-    (edgeBoundary Λ (positiveDepthPrefix A (fun x ↦ ambientDepth T hT x.val) j)).card ≤
-      8 * n := by
+    (edgeBoundary (planeDomainGraph Λ)
+      (positiveDepthPrefix A (fun x ↦ ambientDepth T hT x.val) j)).card ≤ 8 * n := by
   rw [positiveDepthPrefix_eq_sdiff]
   have hjbound := card_edgeBoundary_depthPrefix_le Λ T hT A hL hrow hclear hj
   have hzero := card_edgeBoundary_depthPrefix_le Λ T hT A hL hrow hclear
     (j := 0) (by omega)
-  have hdiff := card_edgeBoundary_sdiff_le Λ
-    (depthPrefix A (fun x ↦ ambientDepth T hT x.val) j)
-    (depthPrefix A (fun x ↦ ambientDepth T hT x.val) 0)
+  have hdiff := ManyBody.card_edgeBoundary_sdiff_le (G := planeDomainGraph Λ)
+    (A := depthPrefix A (fun x ↦ ambientDepth T hT x.val) j)
+    (B := depthPrefix A (fun x ↦ ambientDepth T hT x.val) 0)
   omega
 
 end TNLean.PEPS.AreaLaw.Scan

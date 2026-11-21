@@ -78,7 +78,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -183,7 +183,9 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
       let C₀ := 512 * Real.exp 1 * (2 / g)
       let c₀ := 1 / (32 * Real.sqrt (1 + 2 / g))
       let B : Finset (Site Λ) → ℝ :=
-        fun Y ↦ cutBudget q S.graph (S.truncationSet (X.L n)) S.r₀ S.anchor Y
+        fun Y ↦ ManyBody.cutLogBudget
+          (fun i ↦ designatedSupport S.graph (S.truncationSet (X.L n)) S.r₀ (S.anchor i))
+          (fun _ ↦ q) Y
       ∃ (e : ℝ) (Ωt : StateSpace Λ q),
         (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e (g / 2) ∧
           groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e = Submodule.span ℂ {Ωt}) ∧
@@ -201,8 +203,8 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
         let d := E.card
         let β := fun _ : Site Λ ↦ Fin q
         let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-          (ManyBody.splitEquiv β (S.target T)) Ωt
-        let ψ : ManyBody.RegionConfig β (S.target T)ᶜ × Fin d → ℂ := fun x ↦
+          (ManyBody.cutEquiv β (S.target T)) Ωt
+        let ψ : ManyBody.ComplConfig β (S.target T) × Fin d → ℂ := fun x ↦
           compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
         let Sent := _root_.vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
           (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -331,7 +333,7 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   obtain ⟨Ne, hprefix⟩ := eventually_atTop.mp
-    (eventually_regionalEntropy_positiveDepthPrefix_le q (by omega)
+    (eventually_regionEntropy_positiveDepthPrefix_le q (by omega)
       (Δ / positiveNormalization 1 (Δ / 2) J) (CT + 1) hg)
   refine ⟨3 * (μ : ℝ) + 1, Cb, 12, Cδ, Clδ, Cδ, Clδ, c, hC₁, hCδ, hCδ, hc, ?_⟩
   filter_upwards [eventually_ge_atTop (max N Ne)] with n hn
@@ -383,7 +385,7 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
     hyp.rows_le hyp.clearance
   have hρ : ManyBody.regionState Ωt (S.target T) =
       Matrix.partialTraceRight (Matrix.vecMulVec ΩX (star ΩX)) :=
-    ManyBody.regionState_eq_partialTrace β Ωt (S.target T)
+    ManyBody.regionState_eq_partialTraceRight_cutVector (S.target T) Ωt
   have hzEq :
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian.spectralRestrictionMass E =
         z := by simp only [← hρ, z]
@@ -554,7 +556,7 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
           2 * (1 / 4) * W * (2 * Bsh / z + 2 * Bexc) +
           Real.bellOverlapRemainder d cEnd S.K k := by ring
   refine ⟨Bsh, Bexc, Bmarg, hBsh, hBexc, hBnorm.trans hBnorm_le, hBmarg_upper,
-    (fun Y u hu ↦ S.log_surprisalMoment_truncated_reducedState_le h hh hhJ Ω
+    (fun Y u hu ↦ S.log_surprisalMoment_truncated_regionState_le h hh hhJ Ω
       hyp.graph_eq hyp.anchor_mem hΔ hyp.norm_eq_one (X.L S.n) htrgs.1 htrgs.2.1 htrgs.2.2 Y hu),
     hstatus, hendpoint, (fun k ↦ ρD k + ρE k), cRU, cRL, CfRL, cSU, cSL, CfSL,
     hρSumLimit, hcRU, hcRL, hCfRL, hcSU, hcSL, hCfSL,

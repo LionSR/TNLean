@@ -27,21 +27,17 @@ ring is needed.
 
 open scoped Matrix Matrix.Norms.L2Operator
 
-namespace MPSTensor
+open ManyBody
 
-/-- The translation-invariant nearest-neighbor Hamiltonian of a two-site
-interaction on a periodic chain. Source: arXiv:1010.3732,
-`sec:phases-definition-no-sym`, lines 407–427. -/
-noncomputable def interactionHamiltonian {d N : ℕ}
-    (h : MPOTensor.ChainOperator d 2) (hN : 2 ≤ N) :
-    MPOTensor.ChainOperator d N :=
-  ∑ i : Fin N, MPOTensor.embedLocalOperator 2 N hN i h
+namespace MPSTensor
 
 /-- A common-space symmetric gapped path between two nearest-neighbor
 interactions. This is the path required after blocking and embedding in
 arXiv:1010.3732, `sec:def-sym-phases`, lines 439–453. The gap is measured
 above the entire ground eigenspace; it does not assume a unique ground
-state or zero ground energy. -/
+state or zero ground energy. The Hamiltonian on the ring of `N` sites is that
+of the translation-invariant interaction of the two-site term
+(`ManyBody.Interaction.translationInvariant`), source lines 407–427. -/
 structure SymmetricGappedInteractionPath {G : Type} [Group G] {d : ℕ}
     (U : G →* Matrix.unitaryGroup (Fin d) ℂ)
     (h₀ h₁ : MPOTensor.ChainOperator d 2) where
@@ -62,15 +58,16 @@ structure SymmetricGappedInteractionPath {G : Type} [Group G] {d : ℕ}
   spectral values are at least `E + δ`; source lines 424–426. -/
   gap : ∃ δ : ℝ, 0 < δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1,
     ∀ (N : ℕ) (hN : 2 ≤ N), ∃ E : ℝ,
-      (E : ℂ) ∈ spectrum ℂ (interactionHamiltonian (interaction γ) hN) ∧
-      ∀ z ∈ spectrum ℂ (interactionHamiltonian (interaction γ) hN),
+      (E : ℂ) ∈
+          spectrum ℂ (Interaction.translationInvariant hN (interaction γ)).hamiltonian ∧
+      ∀ z ∈ spectrum ℂ (Interaction.translationInvariant hN (interaction γ)).hamiltonian,
         E ≤ z.re ∧ (z.re = E ∨ E + δ ≤ z.re)
   /-- The full periodic Hamiltonian commutes with the on-site symmetry
   on every chain. This does not impose the stronger condition that each
   chosen local term separately commutes; source lines 439–453. -/
   symmetric : ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ g : G,
     ∀ (N : ℕ) (hN : 2 ≤ N),
-      Commute (interactionHamiltonian (interaction γ) hN)
+      Commute (Interaction.translationInvariant hN (interaction γ)).hamiltonian
         (Matrix.finKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ))
 
 /-- Reversing the parameter of a symmetric gapped interaction path exchanges

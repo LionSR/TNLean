@@ -67,7 +67,7 @@ open scoped Kronecker NNReal ComplexOrder MatrixOrder InnerProductSpace Matrix.N
 open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport IsAdmissibleSupport graphBall planeDomainGraph
-  PlaneInteraction)
+  PlaneInteraction edgeBoundary graphNeighborhood ambientDilation mem_ambientDilation_iff)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -199,11 +199,11 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
             ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
               C₀ * (n : ℝ) ^ 2 →
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
-            ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+            ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
                 A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
               C₀ * n →
             ManyBody.regionMutualInformation Ω
@@ -214,18 +214,18 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
             ∃ r : ℕ, (r : ℝ) ≤ amplificationConstant q R J Δ C₀ C₃ c₃ M *
                 (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
               (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
-                Disjoint Jset (graphNeighborhood Λ (2 * r)
+                Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
-                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
+                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
                 ManyBody.regionMutualInformation Ω X Jset ≤
                   amplificationConstant q R J Δ C₀ C₃ c₃ M * ((n : ℝ) ^ M)⁻¹) ∧
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
                     (Scan.ambientSupDistance t z : ℝ)) →
-                graphNeighborhood Λ (2 * r)
+                graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
-                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A) := by
+                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A) := by
   intro n hn2 hnN Λ h hh hhJ E₀ Ω hΩ hgap hspan A T hcard hXcut hYcut hScut hI
   have hC₂0 := amplificationConstant_nonneg q R J Δ hC₀.le C₃ c₃ M
   have hcol := fun r hr ↦ graphNeighborhood_collar_subset_of_threshold_le _
@@ -403,7 +403,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
       hhJ a ha E₀ Ω hΩ
       hgap hspan
   have hk : ∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0 := hk
-  let Pr := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S₀
+  let Pr := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood (planeDomainGraph Λ) S₀ r
   let tt : ℝ≥0 := ⟨t, ht0⟩
   have htt : (tt : ℝ) = t := rfl
   let μ := PoissonWord.measure (AdmissibleSupport Λ R) tt
@@ -481,7 +481,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   have hZle : (∫ u, ‖Dret u - Lt u‖ ∂μ) ≤ Ct * t * S₀.card * (1 + (r : ℝ)) ^ 2 *
       Real.exp (-(ct * (r : ℝ) ^ α)) := hZle
   have hLt : ∀ u, ‖Lt u‖ ≤ 1 ∧ Lt u ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-      (graphNeighborhood Λ (2 * r) S₀ : Finset (Site Λ)) := hLt
+      (graphNeighborhood (planeDomainGraph Λ) S₀ (2 * r) : Finset (Site Λ)) := hLt
   -- Markov's inequality and a union bound: a good realization.
   have hrα : 0 ≤ (r : ℝ) ^ α := Real.rpow_nonneg (Nat.cast_nonneg r) α
   have hS0 : (0 : ℝ) ≤ S₀.card := Nat.cast_nonneg _
@@ -526,11 +526,8 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   have hε1 : ε ≤ 1 := inv_le_one_of_one_le₀ (one_le_pow₀ (by exact_mod_cast hn1))
   -- The enlarged sites and the transported operators and vectors.
   let sp := ancillaSplit q X
-  let N := graphNeighborhood Λ (2 * r) S₀
-  have hS₀N : S₀ ⊆ N := by
-    classical
-    exact fun x hx => Finset.mem_filter.mpr ⟨Finset.mem_univ _, x, hx, SimpleGraph.Walk.nil,
-      by simp⟩
+  let N := graphNeighborhood (planeDomainGraph Λ) S₀ (2 * r)
+  have hS₀N : S₀ ⊆ N := ManyBody.subset_graphNeighborhood
   let I₂ := (1 : Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
     (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)
   have hsubk (A B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
@@ -630,11 +627,11 @@ theorem amplificationBound_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ)
             ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
               C₀ * (n : ℝ) ^ 2 →
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
-            ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+            ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
                 A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
               C₀ * n →
             ManyBody.regionMutualInformation Ω
@@ -645,18 +642,18 @@ theorem amplificationBound_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ)
             ∃ r : ℕ, (r : ℝ) ≤ amplificationConstantExplicit q R J Δ C₀ M *
                 (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
               (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
-                Disjoint Jset (graphNeighborhood Λ (2 * r)
+                Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
-                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
+                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
                 ManyBody.regionMutualInformation Ω X Jset ≤
                   amplificationConstantExplicit q R J Δ C₀ M * ((n : ℝ) ^ M)⁻¹) ∧
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
                     (Scan.ambientSupDistance t z : ℝ)) →
-                graphNeighborhood Λ (2 * r)
+                graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
-                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A) := by
+                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A) := by
   have hpw : 1 ≤ Exponents.amplificationPower := by norm_num [Exponents.amplificationPower]
   exact amplificationBound_of_locality (q := q) (R := R)
     (C₃ := latticePositiveConstraintConst R J Δ Exponents.amplificationPower)

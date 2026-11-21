@@ -21,6 +21,8 @@ The maximum accounts for empty and one-site intervals, whose internal bond
 conditions allow `D = 0` even for a nonzero state.
 -/
 
+open ManyBody (cutMatrix)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- Extend an interval state by a fixed configuration on its complement, with
@@ -63,8 +65,8 @@ theorem IsOpenMPS.extend_interval_by_configuration {T L q D : ℕ}
       (hv : v.val ∉ leftBlock T j), y ⟨v.val, hv⟩ = η v
   let u := fun x ↦ if P x then (1 : ℂ) else 0
   let v := fun y ↦ if Q y then (1 : ℂ) else 0
-  let M := (cutMatrix ψ k).submatrix f g
-  have hfactor : cutMatrix χ j = Matrix.diagonal u * M * Matrix.diagonal v := by
+  let M := (cutMatrix (leftBlock L k) ψ).submatrix f g
+  have hfactor : cutMatrix (leftBlock T j) χ = Matrix.diagonal u * M * Matrix.diagonal v := by
     ext x y
     have hmatch :
         (fun w : {w : Fin T // ¬(a ≤ w.val ∧ w.val < a + L)} ↦
@@ -104,21 +106,21 @@ theorem IsOpenMPS.extend_interval_by_configuration {T L q D : ℕ}
           exact hr (mem_leftBlock.mpr ((hcut r).mpr (mem_leftBlock.mp hv)))
         rw [ManyBody.cutEquiv_symm_apply_not_mem (X := fun _ ↦ Fin q) x y hv,
           ManyBody.cutEquiv_symm_apply_not_mem (X := fun _ ↦ Fin q) (f x) (g y) hr]
-    rw [Matrix.mul_diagonal, Matrix.diagonal_mul, cutMatrix_apply]
+    rw [Matrix.mul_diagonal, Matrix.diagonal_mul, ManyBody.cutMatrix_apply]
     change (if
       (fun w : {w : Fin T // ¬(a ≤ w.val ∧ w.val < a + L)} ↦
         (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock T j)).symm (x, y) w.val) = η
       then ψ (fun r : Fin L ↦
         (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock T j)).symm (x, y)
           ⟨a + r.val, by omega⟩) else 0) =
-        (if P x then 1 else 0) * (cutMatrix ψ k) (f x) (g y) * (if Q y then 1 else 0)
-    simp only [hmatch, hcore, cutMatrix_apply]
+        (if P x then 1 else 0) * (cutMatrix (leftBlock L k) ψ) (f x) (g y) * (if Q y then 1 else 0)
+    simp only [hmatch, hcore, ManyBody.cutMatrix_apply]
     by_cases hp : P x <;> by_cases hq : Q y <;> simp [hp, hq]
-  have hrank : (cutMatrix χ j).rank ≤ (cutMatrix ψ k).rank := by
+  have hrank : (cutMatrix (leftBlock T j) χ).rank ≤ (cutMatrix (leftBlock L k) ψ).rank := by
     rw [hfactor]
     exact ((Matrix.rank_mul_le_left (Matrix.diagonal u * M) (Matrix.diagonal v)).trans
       (Matrix.rank_mul_le_right (Matrix.diagonal u) M)).trans
-        (Matrix.rank_submatrix_le (cutMatrix ψ k) f g)
+        (Matrix.rank_submatrix_le (cutMatrix (leftBlock L k) ψ) f g)
   apply hrank.trans
   by_cases hk0 : k = 0
   · rw [hk0]

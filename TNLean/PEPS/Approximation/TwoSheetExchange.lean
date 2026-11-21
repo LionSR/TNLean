@@ -240,7 +240,7 @@ theorem norm_rename_le_one : ‖X.rename‖ ≤ 1 :=
 /-- The raw part of the encoding of the holes outside `Y` acts off `Y`. -/
 theorem exists_out_form [NeZero q] {o : List (Hole pos q Party)}
     (ho : ∀ h ∈ o, h ∈ X.out₁ ++ X.out₂) (a : TagSpace o) :
-    ∃ O' : Matrix (↥X.regionᶜ → Fin q) (↥X.regionᶜ → Fin q) ℂ,
+    ∃ O' : Matrix ({v // v ∉ X.region} → Fin q) ({v // v ∉ X.region} → Fin q) ℂ,
       (rawProd o a).submatrix (sheetSplit q X.region).symm (sheetSplit q X.region).symm =
         1 ⊗ₖ O' :=
   exists_one_kronecker_of_mem_supportedOperators
@@ -433,7 +433,7 @@ theorem sheetBufferCorrection_mul_sheetSwapOp (σ : SplittingData q (X.tSet P) (
     sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.tSet P) =
       Matrix.submatrix ((((1 : Matrix _ _ ℂ) ⊗ₖ σ.V) ⊗ₖ ((1 : Matrix _ _ ℂ) ⊗ₖ σ.V))ᴴ *
           ((tbSwap (X.tSet P → Fin q) (X.eSet P → Fin q) (X.tSet P → Fin q)
-            ((X.eSet P → Fin q) ⊕ (↥(X.tSet P ∪ X.eSet P)ᶜ → Fin q))).toPEquiv.toMatrix :
+            ((X.eSet P → Fin q) ⊕ ({v // v ∉ X.tSet P ∪ X.eSet P} → Fin q))).toPEquiv.toMatrix :
               Matrix _ _ ℂ) *
           (((1 : Matrix _ _ ℂ) ⊗ₖ σ.V) ⊗ₖ ((1 : Matrix _ _ ℂ) ⊗ₖ σ.V)))
         (threeSplit₂ (X.disjoint_tSet_eSet P)) (threeSplit₂ (X.disjoint_tSet_eSet P)) := by

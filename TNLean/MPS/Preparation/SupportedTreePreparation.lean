@@ -14,8 +14,9 @@ measurement implementation with depth proportional to the height of a bounded-le
 The coordinate inclusion of the support is fixed before the block lengths. One choice of
 gates works for all support labels and all their superpositions, including different sectors.
 
-The resource model counts nearest-neighbor unitary layers. Measurement outcomes and on-site
-corrections are those of the register teleportation protocol; no branch is post-selected.
+The resource model counts the layers of nearest-neighbor gates of a measurement circuit.
+Measurement outcomes and on-site corrections are those of the register teleportation protocol;
+no branch is post-selected.
 
 Source: arXiv:2307.01696, eq. (16), "Tree-RG circuit with measurements", and
 "Long-range MPS using measurements".
@@ -52,7 +53,7 @@ theorem treeBlockOp_apply_supportedCfgPolarIso {d D χ s h n : ℕ} [NeZero d] [
     (fun hm₁ hm₂ hn τ x => supportedCfgPolarIso_split (hinj _ hm₁) (hinj _ hm₂) hn τ x)
     hι₀ henc x τ
 
-/-- Supported polar trees on all blocks are implemented by measurement rounds with one
+/-- Supported polar trees on all blocks are implemented by a measurement circuit with one
 constant fixed before the tensor, tree height, block lengths and supported input vector.
 The branch scalar is independent of that vector, and the full physical output is specified.
 
@@ -68,23 +69,24 @@ theorem exists_rounds_blockLayerOp_supportedPolarTree (d s c : ℕ) [NeZero d] [
         ∀ (ι₀ : Fin M → Fin χ → Cfg d (s + s)) (enc : Fin χ → Cfg d s),
         (∀ b, Function.Injective (ι₀ b)) → Function.Injective enc →
         ∃ (U : ∀ b, Matrix (Cfg d (ℓ b)) (Cfg d (ℓ b)) ℂ)
-          (Rs : List (MeasurementRound d N)),
-          (Rs.map MeasurementRound.depth).sum ≤ C * (h + 1) ∧
-          MeasurementRound.IsRoundsImplementationOn Rs
+          (R : Circuit (Geometry.ring N) KrausGate (ManyBody.Qudits (Fin N) d)
+            (ManyBody.Qudits (Fin N) d)),
+          R.Forall KrausGate.ev KrausFamily.IsUnitaryOrMeasurement ∧ R.depth ≤ C * (h + 1) ∧
+          R.IsImplementationOn KrausGate.ev
             {v | IsZeroOn (treeCentralSites h s hN w) v} (blockLayerOp hN U) ∧
-          (∀ m : MeasurementRound.OutcomeHistory Rs, ∃ a : ℂ,
+          (∀ m : R.Index, ∃ a : ℂ,
             ∀ v, IsZeroOn (treeCentralSites h s hN w) v →
-              MeasurementRound.historyKraus Rs m *ᵥ v = a • ((blockLayerOp hN U) *ᵥ v)) ∧
+              R.kraus KrausGate.ev m *ᵥ v = a • ((blockLayerOp hN U) *ᵥ v)) ∧
           ∀ b x τ, U b τ
             (placeCfg (fun p : Fin (2 ^ 0) => nodeWindow (hT b) 0 p) fun _ => ι₀ b x) =
               cfgPolarIso A (ℓ b) τ (e x) := by
   obtain ⟨C, hC⟩ := exists_rounds_blockLayerOp_treeBlockOp d s c
   refine ⟨C, fun {D χ} A e hinj h {M N} _ ℓ hN w hT hbound ι₀ enc hι₀ henc => ?_⟩
-  obtain ⟨Rs, hRs, himpl, hscalar⟩ := hC (supportedCfgPolarIso A e) (supportedMergeIso A e)
+  obtain ⟨R, hRf, hRd, himpl, hscalar⟩ := hC (supportedCfgPolarIso A e) (supportedMergeIso A e)
     h ℓ hN w hT hbound ι₀ enc
   exact ⟨fun b => treeBlockOp (hT b) (supportedCfgPolarIso A e)
       (supportedMergeIso A e) (ι₀ b) enc,
-    Rs, hRs, himpl, hscalar, fun b x τ =>
+    R, hRf, hRd, himpl, hscalar, fun b x τ =>
       treeBlockOp_apply_supportedCfgPolarIso (hT b) A e hinj (hι₀ b) henc x τ⟩
 
 end MPSPreparation

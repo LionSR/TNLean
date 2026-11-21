@@ -178,13 +178,11 @@ theorem treeBlockOp_mem_unitary : treeBlockOp hT V W ι₀ enc ∈
       treeLevelOp hT (treeNodeGate (h := h) (n := n) (w := w) W ι₀ enc) j ∈
         unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
     intro j hj
+    rw [treeLevelOp, dite_eq_left hj]
     apply Submonoid.list_prod_mem
     intro X hX
     obtain ⟨p, -, rfl⟩ := List.mem_map.mp hX
-    exact embedOp_mem_unitary
-      (fun a b hab => (Prod.mk.inj (nodeWindow_injective₂ hT hj
-        (show nodeWindow hT j p a = nodeWindow hT j p b from hab))).2)
-      (treeNodeGate_mem_unitary W ι₀ enc j p)
+    exact ManyBody.placeAlong_mem_unitaryGroup _ (treeNodeGate_mem_unitary W ι₀ enc j p)
   have hlevels : ∀ m, m ≤ h + 1 →
       treeLevelsOp hT (treeNodeGate (h := h) (n := n) (w := w) W ι₀ enc) 0 m ∈
         unitary (Matrix (Cfg d n) (Cfg d n) ℂ) := by
@@ -199,8 +197,7 @@ theorem treeBlockOp_mem_unitary : treeBlockOp hT V W ι₀ enc ∈
     apply Submonoid.list_prod_mem
     intro X hX
     obtain ⟨p, -, rfl⟩ := List.mem_map.mp hX
-    exact embedOp_mem_unitary (leafWindow_injective hT p.isLt)
-      (treeLeafGate_mem_unitary hT V ι₀ enc p)
+    exact ManyBody.placeAlong_mem_unitaryGroup _ (treeLeafGate_mem_unitary hT V ι₀ enc p)
   exact Submonoid.mul_mem _ hleaf (hlevels (h + 1) le_rfl)
 
 /-! ### Lengths of the nodes -/
@@ -396,11 +393,14 @@ theorem treeLeafOp_apply_nodeCfg (hV : ∀ m, s ≤ m → (V m).IsIsometry)
   classical
   have hcomm : ((List.finRange (2 ^ (h + 1))).toFinset : Set (Fin (2 ^ (h + 1)))).Pairwise
       (Function.onFun Commute fun p : Fin (2 ^ (h + 1)) =>
-        embedOp (leafWindow hT p) (treeLeafGate hT V ι₀ enc p)) := fun p _ p' _ hne =>
-    commute_embedOp_of_disjoint (leafWindow_injective hT p.isLt) (leafWindow_injective hT p'.isLt)
-      (disjoint_range_leafWindow hT p.isLt p'.isLt fun h' => hne (Fin.ext h')) _ _
+        ManyBody.placeAlong (X := fun _ : Fin n ↦ Fin d)
+          ⟨leafWindow hT p, leafWindow_injective hT p.isLt⟩ (treeLeafGate hT V ι₀ enc p)) :=
+      fun p _ p' _ hne =>
+    ManyBody.commute_placeAlong_of_disjoint _ (by
+      rw [← Finset.disjoint_coe]
+      simpa using disjoint_range_leafWindow hT p.isLt p'.isLt fun h' => hne (Fin.ext h')) _ _
   rw [treeLeafOp, ← Finset.noncommProd_toFinset (List.finRange _) _ hcomm
-    (List.nodup_finRange _), noncommProd_embedOp_apply (fun p : Fin (2 ^ (h + 1)) =>
+    (List.nodup_finRange _), noncommProd_placeAlong_apply (fun p : Fin (2 ^ (h + 1)) =>
       leafWindow hT p) (fun p => leafWindow_injective hT p.isLt) _ _
       (fun p _ p' _ hne => disjoint_range_leafWindow hT p.isLt p'.isLt fun h' => hne (Fin.ext h'))]
   have hcond : ∀ i : Fin n, (∀ k ∈ (List.finRange (2 ^ (h + 1))).toFinset,
@@ -465,8 +465,9 @@ theorem treeLevelsOp_apply_nodeCfg (hV : ∀ m, s ≤ m → (V m).IsIsometry)
         Function.extend (fun e : Fin (2 ^ j) → Fin (blockPhysDim χ 2) =>
           placeCfg (fun p : Fin (2 ^ j) => nodeWindow hT j p) fun p => coarseOutput enc (e p))
           (fun e => ∏ p : Fin (2 ^ j), W (nodeLen h n w (j + 1) (2 * p))
-            (nodeLen h n w (j + 1) (2 * p + 1)) (e p) (x p)) 0 c := fun c =>
-      list_prod_embedOp_placeCfg (nodeWindow_injective₂ hT (by omega)) _
+            (nodeLen h n w (j + 1) (2 * p + 1)) (e p) (x p)) 0 c := fun c => by
+      rw [treeLevelOp, dite_eq_left (by omega)]
+      exact list_prod_placeAlong_placeCfg (nodeWindow_injective₂ hT (by omega)) _
         (fun p => treeInput ι₀ enc j p) (fun _ => coarseOutput enc)
         (fun _ => coarseOutput_injective henc) _ (fun p c z => by
           refine extUnitary_apply (hW _ _ ?_ ?_)

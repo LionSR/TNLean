@@ -11,8 +11,9 @@ import QICLean.Channel.MaximalOverlap
 # Regional density matrices of pure vectors
 
 Partial trace preserves positivity and the squared-norm trace of a pure-state
-matrix. Consequently a unit vector gives trace-one regional density matrices,
-nonnegative regional entropy, and zero entropy on the empty and full regions.
+matrix. Consequently a unit vector gives trace-one regional density matrices and
+nonnegative regional entropy; the zero entropy of the empty and full regions is
+QICLean's `ManyBody.regionEntropy_empty` and `ManyBody.regionEntropy_univ`.
 The configuration splitting includes the one-dimensional empty tensor product.
 No gap or locality assumption is needed for these finite-dimensional identities.
 
@@ -33,31 +34,17 @@ namespace TNLean.PEPS.AreaLaw
 /-- The trace of a reduced pure-state matrix is the squared norm of its vector.
 Source: area-law `sec:prelim`, lines 10–25, normalization of density operators
 and the one-dimensional empty tensor product. -/
-theorem trace_reducedState_eq_norm_sq (Λ : Finset (ℤ × ℤ)) (q : ℕ)
+theorem trace_regionState_eq_norm_sq (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
     (ManyBody.regionState Ω A).trace = (‖Ω‖ : ℂ) ^ 2 := by
   rw [ManyBody.trace_regionState A Ω, Complex.ofReal_pow]
 
 /-- Regional entropy of a unit vector is nonnegative.
 Source: area-law `sec:prelim`, lines 10–25, entropy of normalized density operators. -/
-theorem regionalEntropy_nonneg (Λ : Finset (ℤ × ℤ)) (q : ℕ)
+theorem regionEntropy_nonneg (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ)) :
     0 ≤ ManyBody.regionEntropy Ω A :=
   vonNeumannEntropy_nonneg_of_posSemidef_trace_one
-    (ManyBody.regionState_posSemidef A Ω) (trace_reducedState Ω hΩ A)
-
-/-- The empty region has zero entropy for a unit vector.
-Source: area-law `sec:prelim`, lines 23–25, empty tensor products. -/
-@[simp] theorem regionalEntropy_empty (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) :
-    ManyBody.regionEntropy Ω ∅ = 0 := by
-  exact ManyBody.regionEntropy_empty _ Ω hΩ
-
-/-- The full region has zero entropy for a unit pure vector.
-Source: area-law `sec:prelim`, lines 23–25, purity and empty complements. -/
-@[simp] theorem regionalEntropy_univ (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) :
-    ManyBody.regionEntropy Ω Finset.univ = 0 := by
-  exact ManyBody.regionEntropy_univ _ Ω hΩ
+    (ManyBody.regionState_posSemidef A Ω) (ManyBody.trace_regionState_eq_one hΩ (D := A))
 
 end TNLean.PEPS.AreaLaw

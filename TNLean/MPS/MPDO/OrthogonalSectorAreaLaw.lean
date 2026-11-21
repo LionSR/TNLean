@@ -23,23 +23,24 @@ commuting bond products to the entropy decomposition for a finite direct sum.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
+open ManyBody
 
 namespace MPOTensor
 
 variable {d D g : ℕ} {dim : Fin g → ℕ}
 
-private theorem firstSiteMatrix_mul_embed_twoSiteSectorProjection_zero
+private theorem firstSiteMatrix_mul_placeAlong_twoSiteSectorProjection_zero
     (P : Matrix (Fin d) (Fin d) ℂ) (hP : P * P = P)
     (n : ℕ) (hn : 0 < n) :
     firstSiteMatrix P n *
-        embedLocalOperator (d := d) 2 (n + 1) (by omega) (0 : Fin (n + 1))
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ n + 1) (0 : Fin (n + 1)))
           (twoSiteSectorProjection P) =
-      embedLocalOperator (d := d) 2 (n + 1) (by omega) (0 : Fin (n + 1))
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ n + 1) (0 : Fin (n + 1)))
         (twoSiteSectorProjection P) := by
   classical
   ext σ τ
   rw [firstSiteMatrix_mul_apply]
-  simp only [embedLocalOperator_apply]
+  simp only [placeAlong_apply]
   have hcons (x : Fin d) (k : Fin (n + 1))
       (hk : ¬ ((k.val + (n + 1) - (0 : Fin (n + 1)).val) % (n + 1) < 2)) :
       (Fin.cons x (fun j : Fin n ↦ σ j.succ) : Fin (n + 1) → Fin d) k = σ k := by
@@ -51,10 +52,11 @@ private theorem firstSiteMatrix_mul_embed_twoSiteSectorProjection_zero
         (Fin.cons x (fun j : Fin n ↦ σ j.succ) : Fin (n + 1) → Fin d) k = σ k)
       (fun hkzero ↦ (hkzero rfl).elim) (fun j _ ↦ by simp) k hk0
   have hagree (x : Fin d) :
-      AgreesOutsideWindow (d := d) 2 (by omega) (0 : Fin (n + 1))
-          (Fin.cons x (σ ∘ Fin.succ)) τ ↔
-        AgreesOutsideWindow (d := d) 2 (by omega) (0 : Fin (n + 1)) σ τ := by
-    rw [agreesOutsideWindow_iff, agreesOutsideWindow_iff]
+      (∀ v, (∀ u, ringWindow (by omega : 2 ≤ n + 1) (0 : Fin (n + 1)) u ≠ v) →
+          (Fin.cons x (σ ∘ Fin.succ) : Fin (n + 1) → Fin d) v = τ v) ↔
+        ∀ v, (∀ u, ringWindow (by omega : 2 ≤ n + 1) (0 : Fin (n + 1)) u ≠ v) →
+          σ v = τ v := by
+    rw [MPSTensor.forall_ringWindow_ne_imp_iff, MPSTensor.forall_ringWindow_ne_imp_iff]
     constructor
     · intro h k hk
       rw [← hcons x k hk]
@@ -63,11 +65,10 @@ private theorem firstSiteMatrix_mul_embed_twoSiteSectorProjection_zero
       rw [h k hk]
       exact (hcons x k hk).symm
   by_cases hAgree :
-      AgreesOutsideWindow (d := d) 2 (by omega) (0 : Fin (n + 1)) σ τ
+      ∀ v, (∀ u, ringWindow (by omega : 2 ≤ n + 1) (0 : Fin (n + 1)) u ≠ v) → σ v = τ v
   · simp_rw [ite_eq_left ((hagree _).mpr hAgree)]
     rw [ite_eq_left hAgree]
-    simp only [twoSiteSectorProjection, MPSTensor.extractWindow,
-      finTwoArrowEquiv, Matrix.reindex_apply]
+    simp only [twoSiteSectorProjection, finTwoArrowEquiv, Matrix.reindex_apply]
     let i₁ : Fin (n + 1) :=
       ⟨1 % (n + 1), Nat.mod_lt _ (by omega)⟩
     change (∑ x : Fin d, P (σ 0) x *
@@ -108,13 +109,13 @@ private theorem ProportionalOrthogonalCommutingSectorFamily.firstSiteMatrix_mul_
   let hN : 2 ≤ n + 1 := by omega
   let Q := twoSiteSectorProjection (F.projection s)
   let B := (F.bondData s).bond
-  let Q₀ := embedLocalOperator (d := d) 2 (n + 1) hN (0 : Fin (n + 1)) Q
-  let B₀ := embedLocalOperator (d := d) 2 (n + 1) hN (0 : Fin (n + 1)) B
+  let Q₀ := placeAlong (X := fun _ ↦ Fin d) (ringWindow hN (0 : Fin (n + 1))) Q
+  let B₀ := placeAlong (X := fun _ ↦ Fin d) (ringWindow hN (0 : Fin (n + 1))) B
   have hP₀Q₀ : firstSiteMatrix (F.projection s) n * Q₀ = Q₀ := by
-    exact firstSiteMatrix_mul_embed_twoSiteSectorProjection_zero
+    exact firstSiteMatrix_mul_placeAlong_twoSiteSectorProjection_zero
       (F.projection s) (F.projection_isOrthogonal s).2 n hn
   have hQ₀B₀Q₀ : Q₀ * B₀ * Q₀ = B₀ := by
-    rw [← embedLocalOperator_mul, ← embedLocalOperator_mul,
+    rw [← placeAlong_mul, ← placeAlong_mul,
       F.bond_supported s]
   have hP₀B₀ : firstSiteMatrix (F.projection s) n * B₀ = B₀ := by
     calc
@@ -134,16 +135,16 @@ private theorem ProportionalOrthogonalCommutingSectorFamily.firstSiteMatrix_mul_
       TranslationInvariantBondData.toCommutingFormData_bondAt]
     change firstSiteMatrix (F.projection s) n *
         (List.ofFn fun i : Fin (n + 1) ↦
-          embedLocalOperator (d := d) 2 (n + 1) hN i B).prod = _
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) B).prod = _
     rw [List.ofFn_succ, List.prod_cons, ← Matrix.mul_assoc]
     change firstSiteMatrix (F.projection s) n * B₀ *
         (List.ofFn fun i : Fin n ↦
-          embedLocalOperator (d := d) 2 (n + 1) hN i.succ B).prod =
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i.succ) B).prod =
       B₀ * (List.ofFn fun i : Fin n ↦
-        embedLocalOperator (d := d) 2 (n + 1) hN i.succ B).prod
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i.succ) B).prod
     exact congrArg (fun X ↦ X *
       (List.ofFn fun i : Fin n ↦
-        embedLocalOperator (d := d) 2 (n + 1) hN i.succ B).prod) hP₀B₀
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i.succ) B).prod) hP₀B₀
   rw [hreal, Matrix.mul_smul, hproduct]
 
 /-- A proportionally realized commuting bond product supported on a one-site

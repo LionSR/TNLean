@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.RegisterLayout
 import Mathlib.Tactic.FinCases
-import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlaceAlong
 
 /-!
 # Logical supports of the recursive interval construction
@@ -22,7 +22,6 @@ auxiliaries give an initialized parent interior.
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5.
 -/
 
-open QuantumCircuit
 
 namespace MPUCircuit
 
@@ -506,18 +505,18 @@ theorem leafConsecutiveSites_range {d D N : ℕ} (i : Fin N) :
 arbitrary logical states.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-theorem leaf_embedOp_mem_supportedOperators {d D N : ℕ} (i : Fin N)
+theorem leaf_placeAlong_mem_supportedOperators {d D N : ℕ} (i : Fin N)
     (X : Matrix
       (MPSTensor.Cfg d
         (1 + (cutBondRegisterWidth d D N i.succ + cutBondRegisterWidth d D N i.castSucc)))
       (MPSTensor.Cfg d
         (1 + (cutBondRegisterWidth d D N i.succ + cutBondRegisterWidth d D N i.castSucc))) ℂ) :
-    QuantumCircuit.embedOp (leafConsecutiveSites d D N i) X ∈
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (leafConsecutiveSites d D N i) X ∈
       ManyBody.supportedOperators (fun _ ↦ Fin d)
           (intervalConsecutiveSupport d D N i.val (i.val + 1)) := by
-  have h := QuantumCircuit.embedOp_mem_supportedOperators
-    (leafConsecutiveSites d D N i).injective X
-  rw [leafConsecutiveSites_range] at h
+  have h := ManyBody.placeAlong_mem_supportedOperators (X := fun _ ↦ Fin d)
+    (leafConsecutiveSites d D N i) X
+  rw [Finset.map_eq_image, leafConsecutiveSites_range] at h
   exact h
 
 end MPUCircuit

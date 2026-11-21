@@ -56,7 +56,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.openInteraction_commutator_en
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R) (hk : 0 < k)
+    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
     (hGround : ∀ᶠ n in atTop,
       ψ n ∈ groundSpaceES A ((n + (R - 1) + k) + (R - 1 + n)))
@@ -70,7 +70,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.openInteraction_commutator_en
         (ψ n)) (ψ n)).re) atTop
       (nhds (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re) := by
   intro N H B
-  apply (hP.localCommutatorObservable_expectation_tendsto hρ h X hR hk
+  apply (hP.localCommutatorObservable_expectation_tendsto hρ h X hR
     N (fun n => by dsimp [N]; omega) ψ hGround hUnit).congr'
   filter_upwards [] with n
   have hH : Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
@@ -81,7 +81,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.openInteraction_commutator_en
   dsimp only
   rw [map_mul, map_sub, map_mul, map_mul, ← Matrix.star_eq_conjTranspose,
     map_star, ContinuousLinearMap.star_eq_adjoint, hH,
-    ← bulkObservable_eq_chainWindowOperator hk X (n + (R - 1)) (R - 1 + n)]
+    ← bulkObservable_eq_placeAlong_chainWindow X (n + (R - 1)) (R - 1 + n)]
   rfl
 
 /-- The local commutator inequality for a positive open interaction follows
@@ -93,7 +93,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_openIn
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : (Matrix.toEuclideanLin h).IsPositive)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R) (hk : 0 < k)
+    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
     (hcenter : observableInsertionExpectation A ρ X = 0)
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
     {γ : ℝ} (hγ : 0 ≤ γ)
@@ -113,7 +113,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_openIn
       (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re := by
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
   let H (n : ℕ) := openInteractionHamiltonianES (Matrix.toEuclideanLin h) (N n)
-  have hEnergy := hP.openInteraction_commutator_energy_tendsto hρ h X hR hk ψ hGround hUnit
+  have hEnergy := hP.openInteraction_commutator_energy_tendsto hρ h X hR ψ hGround hUnit
   exact hP.commutator_gap_of_bulkObservable_energy_limit hρ X hcenter
     (ℓ := fun n : ℕ => n + (R - 1)) (r := fun n => (R - 1) + n)
     (tendsto_add_atTop_nat (R - 1))
@@ -144,7 +144,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_ga
   obtain ⟨γ, hγ, hgap⟩ :=
     hh.exists_open_uniform_gap_of_canonical_gap hRpos hδ hcanonicalGap
   refine ⟨γ, hγ, ?_⟩
-  intro k X hk hcenter
+  intro k X _ hcenter
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
   have hN : Tendsto N atTop atTop :=
     tendsto_atTop_mono (fun n => by dsimp [N]; omega) tendsto_id
@@ -152,7 +152,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_ga
   have hInj : Kraus.IsNBlkInjective A (R - 1) :=
     isNBlkInjective_of_le hD (isNBlkInjective_pow_four_of_isNormal A hNormal) (by omega)
   have hRange : R - 1 + 1 = R := by omega
-  apply hP.localCommutator_gap_of_openInteraction_gap hρ h hh.isPositive X hRpos hk
+  apply hP.localCommutator_gap_of_openInteraction_gap hρ h hh.isPositive X hRpos
     hcenter ψ hγ.le
   · exact Eventually.of_forall fun n => by
       rw [hh.ker_openInteractionHamiltonianES_eq_ker_openParentHamiltonianES hRpos]

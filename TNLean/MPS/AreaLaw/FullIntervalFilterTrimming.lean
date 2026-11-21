@@ -137,12 +137,12 @@ theorem isCloseTo_nativeFullIntervalSpace_filterTrimStep
     change F (K (F.symm (F x))) = F (K x)
     rw [F.symm_apply_apply]
   have hSprod : Submodule.IsCloseTo delta
-      (Submodule.prodExt S (↥((interval L 0 L)ᶜ) → Fin q))
+      (Submodule.prodExt S ({v // v ∉ interval L 0 L} → Fin q))
       (G.map F.toLinearEquiv.toLinearMap) := by
     rw [← map_nativeFullIntervalSpace_regionConfigurationSplit S]
     exact (Submodule.isCloseTo_map_iff F).mpr hS
-  have himage : (Submodule.prodExt S (↥((interval L 0 L)ᶜ) → Fin q)).map Kprod.toLinearMap ≤
-      Submodule.prodExt V (↥((interval L 0 L)ᶜ) → Fin q) := by
+  have himage : (Submodule.prodExt S ({v // v ∉ interval L 0 L} → Fin q)).map Kprod.toLinearMap ≤
+      Submodule.prodExt V ({v // v ∉ interval L 0 L} → Fin q) := by
     rw [← map_nativeFullIntervalSpace_regionConfigurationSplit S,
       ← map_nativeFullIntervalSpace_regionConfigurationSplit V,
       nativeFullIntervalSpace_filter_image K S, ← Submodule.map_comp, ← Submodule.map_comp]
@@ -186,7 +186,7 @@ theorem isCloseTo_nativeFullIntervalSpace_filterTrimStep
     hepsilonBudget hxiBudget
   change Submodule.IsCloseTo ((1 - c / 4) * delta + c * eta / 8)
     (Submodule.prodExt (fullIntervalFilterTrimStep L q K xi S)
-      (↥((interval L 0 L)ᶜ) → Fin q))
+      ({v // v ∉ interval L 0 L} → Fin q))
     (G.map F.toLinearEquiv.toLinearMap) at hstep
   rw [← map_nativeFullIntervalSpace_regionConfigurationSplit
     (fullIntervalFilterTrimStep L q K xi S)] at hstep

@@ -8,7 +8,7 @@ import Mathlib.Data.Finset.SymmDiff
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Logic.Equiv.Basic
 import QICLean.ManyBody.Sites.RegionMatrix
-import QICLean.ManyBody.Sites.SplitOperatorSchmidt
+import QICLean.Algebra.OperatorSchmidtPartition
 import TNLean.Lattice.Sheet.Splitting
 import Mathlib.LinearAlgebra.Matrix.Reindex
 import Mathlib.Data.List.OfFn
@@ -66,14 +66,14 @@ private theorem threeSplit_middle_rotation_eq
     let c :=
       (ManyBody.complementUnionEquiv (fun _ : ι ↦ Fin q) E T hTE.symm).trans
         ((Equiv.refl (T → Fin q)).prodCongr
-          (ManyBody.configurationCongr (fun _ : ι ↦ Fin q)
-            (show (E ∪ T)ᶜ = (T ∪ E)ᶜ by rw [Finset.union_comm E T])))
-    let a := Equiv.prodAssoc (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)
+          (Equiv.arrowCongr (Equiv.subtypeEquivRight (q := fun x ↦ x ∉ T ∪ E)
+            fun _ ↦ by rw [Finset.union_comm E T]) (Equiv.refl (Fin q))))
+    let a := Equiv.prodAssoc (T → Fin q) (E → Fin q) ({x // x ∉ T ∪ E} → Fin q)
     let e := a.trans
-      ((Equiv.prodComm (T → Fin q) ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))).trans
-        ((Equiv.prodAssoc (E → Fin q) (↥(T ∪ E)ᶜ → Fin q) (T → Fin q)).trans
+      ((Equiv.prodComm (T → Fin q) ((E → Fin q) × ({x // x ∉ T ∪ E} → Fin q))).trans
+        ((Equiv.prodAssoc (E → Fin q) ({x // x ∉ T ∪ E} → Fin q) (T → Fin q)).trans
           (Equiv.prodCongr (Equiv.refl (E → Fin q))
-            (Equiv.prodComm (↥(T ∪ E)ᶜ → Fin q) (T → Fin q)))))
+            (Equiv.prodComm ({x // x ∉ T ∪ E} → Fin q) (T → Fin q)))))
     (TNLean.Lattice.Sheet.threeSplit q T E hTE).trans e =
       (TNLean.Lattice.sheetSplit q E).trans ((Equiv.refl (E → Fin q)).prodCongr c) := by
   intro c a e
@@ -84,10 +84,7 @@ private theorem threeSplit_middle_rotation_eq
   · apply Prod.ext
     · rfl
     · funext y
-      exact (ManyBody.configurationCongr_apply (fun _ : ι ↦ Fin q)
-        (show (E ∪ T)ᶜ = (T ∪ E)ᶜ by rw [Finset.union_comm E T])
-        ((ManyBody.complementUnionEquiv (fun _ : ι ↦ Fin q) E T hTE.symm)
-          ((TNLean.Lattice.sheetSplit q E) x).2).2 y).symm
+      rfl
 open Matrix
 open TNLean.Lattice.Sheet
 
@@ -99,12 +96,12 @@ private theorem middle_threeSplit_rank_eq
     (T E : Finset ι) (hTE : Disjoint T E)
     (M : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
     let g := threeSplit q T E hTE
-    let a := Equiv.prodAssoc (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)
+    let a := Equiv.prodAssoc (T → Fin q) (E → Fin q) ({x // x ∉ T ∪ E} → Fin q)
     let e := a.trans
-      ((Equiv.prodComm (T → Fin q) ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))).trans
-        ((Equiv.prodAssoc (E → Fin q) (↥(T ∪ E)ᶜ → Fin q) (T → Fin q)).trans
+      ((Equiv.prodComm (T → Fin q) ((E → Fin q) × ({x // x ∉ T ∪ E} → Fin q))).trans
+        ((Equiv.prodAssoc (E → Fin q) ({x // x ∉ T ∪ E} → Fin q) (T → Fin q)).trans
           (Equiv.prodCongr (Equiv.refl (E → Fin q))
-            (Equiv.prodComm (↥(T ∪ E)ᶜ → Fin q) (T → Fin q)))))
+            (Equiv.prodComm ({x // x ∉ T ∪ E} → Fin q) (T → Fin q)))))
     operatorSchmidtRank ((M.reindex g g).reindex e e) =
       operatorSchmidtRank (M.reindex (TNLean.Lattice.sheetSplit q E)
         (TNLean.Lattice.sheetSplit q E)) := by
@@ -112,8 +109,8 @@ private theorem middle_threeSplit_rank_eq
   let c :=
     (ManyBody.complementUnionEquiv (fun _ : ι ↦ Fin q) E T hTE.symm).trans
       ((Equiv.refl (T → Fin q)).prodCongr
-        (ManyBody.configurationCongr (fun _ : ι ↦ Fin q)
-          (show (E ∪ T)ᶜ = (T ∪ E)ᶜ by rw [Finset.union_comm E T])))
+        (Equiv.arrowCongr (Equiv.subtypeEquivRight (q := fun x ↦ x ∉ T ∪ E)
+          fun _ ↦ by rw [Finset.union_comm E T]) (Equiv.refl (Fin q))))
   have he : g.trans e = (TNLean.Lattice.sheetSplit q E).trans
       ((Equiv.refl (E → Fin q)).prodCongr c) :=
     threeSplit_middle_rotation_eq q T E hTE
@@ -209,7 +206,7 @@ private theorem operatorSchmidtRank_two_window_full_counts_le
     let v : (Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3 := Sum.inl (Sum.inr s)
     let A := T → Fin q
     let B := E → Fin q
-    let C := ↥(T ∪ E)ᶜ → Fin q
+    let C := {x // x ∉ T ∪ E} → Fin q
     let assoc := Equiv.prodAssoc A B C
     let e := assoc.trans ((Equiv.prodComm A (B × C)).trans
       ((Equiv.prodAssoc B C A).trans
@@ -300,12 +297,12 @@ private theorem operatorSchmidtRank_two_window_regional_full_counts_le
     omega
   let g := threeSplit q T E hTE
   let H := fun α ↦ (F α).submatrix g.symm g.symm
-  let assoc := Equiv.prodAssoc (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)
+  let assoc := Equiv.prodAssoc (T → Fin q) (E → Fin q) ({x // x ∉ T ∪ E} → Fin q)
   let e := assoc.trans
-    ((Equiv.prodComm (T → Fin q) ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))).trans
-      ((Equiv.prodAssoc (E → Fin q) (↥(T ∪ E)ᶜ → Fin q) (T → Fin q)).trans
+    ((Equiv.prodComm (T → Fin q) ((E → Fin q) × ({x // x ∉ T ∪ E} → Fin q))).trans
+      ((Equiv.prodAssoc (E → Fin q) ({x // x ∉ T ∪ E} → Fin q) (T → Fin q)).trans
         (Equiv.prodCongr (Equiv.refl (E → Fin q))
-          (Equiv.prodComm (↥(T ∪ E)ᶜ → Fin q) (T → Fin q)))))
+          (Equiv.prodComm ({x // x ∉ T ∪ E} → Fin q) (T → Fin q)))))
   let coefficientH := fun α ↦
     ∑ w ∈ (Finset.univ : Finset (Fin r → ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3))).filter
         (fun w ↦ (WordMultiplicity.countsFinsupp w : _ → ℕ) = α),
@@ -373,7 +370,7 @@ private theorem operatorSchmidtRank_two_window_target_full_counts_le
   intro E u v S coefficient
   have hregional := operatorSchmidtRank_two_window_regional_full_counts_le
     F hleft hright hL hM hR hab hb p s r i j weight
-  have hmove := ManyBody.operatorSchmidtRank_splitEquiv_le q E J
+  have hmove := Matrix.operatorSchmidtRank_reindex_piEquivPiSubtypeProd_finset_le q E J
     (∑ α ∈ S, weight α • coefficient α)
   exact hmove.trans (Nat.mul_le_mul_left _ hregional)
 

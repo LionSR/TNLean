@@ -278,7 +278,7 @@ theorem exists_isPreparedInDepth_inhomogeneous (d D : ℕ) :
       (∀ k, ∑ p, star (ω k p) * ω k p = 1) → ∀ L : ℕ,
         (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) → IsBlockInjective A hN →
           ‖chainBlockIsometryState (zeroPad A) (padPairs A ℓ ω) hN‖ = 1 ∧
-          IsPreparedInDepth (C * L)
+          IsPreparedInDepth (Geometry.ring N) (C * L)
             (fun s => chainBlockIsometryState (zeroPad A) (padPairs A ℓ ω) hN s) ∧
           1 - ‖⟪chainBlockIsometryState (zeroPad A) (padPairs A ℓ ω) hN,
               (‖state A‖ : ℂ)⁻¹ • state A⟫_ℂ‖ =

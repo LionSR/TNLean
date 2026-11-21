@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
-import QICLean.Entropy.FiniteProductInformation
+import QICLean.Entropy.RegionStrongSubadditivity
 
 /-!
 # A boundary entropy estimate from information on birth targets
@@ -27,6 +27,7 @@ Independently formalized; no OpenAI Lean proof text is reused.
 
 open scoped BigOperators
 open TNLean.Lattice
+open ManyBody (planeDomainGraph edgeBoundary)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -41,7 +42,7 @@ pairwise disjoint: only their disjointness from the same-family past is used.
 The partition, birth-target information bounds, residual-size bound and scale
 sum are explicit premises. This statement does not construct them, prove their
 uniformity, or establish the full ground-state area law. -/
-theorem regionalEntropy_le_boundary_of_birth_information_estimates
+theorem regionEntropy_le_boundary_of_birth_information_estimates
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (hq : 1 ≤ q)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
     (P : Geometry.OrderedTwoFamilyPartition A)
@@ -54,11 +55,11 @@ theorem regionalEntropy_le_boundary_of_birth_information_estimates
     (hMI : ∀ i,
       ManyBody.regionMutualInformation Ω (Y i)
         (Aᶜ ∪ P.earlierSameFamily i) ≤ cI * (n i : ℝ) ^ (-100 : ℝ))
-    (hD : (P.residual.card : ℝ) ≤ cD * (edgeBoundary Λ A).card)
-    (hS : (∑ i, (n i : ℝ) ^ (-100 : ℝ)) ≤ cS * (edgeBoundary Λ A).card) :
+    (hD : (P.residual.card : ℝ) ≤ cD * (edgeBoundary (planeDomainGraph Λ) A).card)
+    (hS : (∑ i, (n i : ℝ) ^ (-100 : ℝ)) ≤ cS * (edgeBoundary (planeDomainGraph Λ) A).card) :
     ManyBody.regionEntropy Ω A ≤
-      (cD * Real.log q + cI * cS / 2) * (edgeBoundary Λ A).card := by
-  exact regionalEntropy_le_boundary_of_partition_estimates Λ q hq Ω hΩ A P
+      (cD * Real.log q + cI * cS / 2) * (edgeBoundary (planeDomainGraph Λ) A).card := by
+  exact regionEntropy_le_boundary_of_partition_estimates Λ q hq Ω hΩ A P
     (fun i ↦ cI * (n i : ℝ) ^ (-100 : ℝ))
     (fun i ↦
       (ManyBody.regionMutualInformation_mono_left (fun _ : Site Λ ↦ Fin q) Ω
@@ -68,6 +69,6 @@ theorem regionalEntropy_le_boundary_of_birth_information_estimates
     cD (cI * cS) hD
     ((Finset.mul_sum Finset.univ (fun i ↦ (n i : ℝ) ^ (-100 : ℝ)) cI).symm.trans_le
       ((mul_le_mul_of_nonneg_left hS hcI).trans_eq
-        (mul_assoc cI cS ((edgeBoundary Λ A).card : ℝ)).symm))
+        (mul_assoc cI cS ((edgeBoundary (planeDomainGraph Λ) A).card : ℝ)).symm))
 
 end TNLean.PEPS.AreaLaw

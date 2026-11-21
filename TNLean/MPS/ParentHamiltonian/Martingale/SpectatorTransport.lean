@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbient
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorMaps
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
 import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
-import TNLean.MPS.ParentHamiltonian.Martingale.IsometricConjugationGap
+import QICLean.Analysis.IsometricConjugationGap
 
 /-!
 # Spectator transport for the open-chain C3 estimate

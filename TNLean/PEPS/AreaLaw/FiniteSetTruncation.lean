@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.PositiveConstraints
 import TNLean.PEPS.AreaLaw.TruncationSeries
 import QICLean.Analysis.GapPerturbation
+import QICLean.ManyBody.Sites.GraphBall
 
 /-!
 # Truncation of the positive constraints near a finite set
@@ -17,9 +18,10 @@ graph distance `d` from `S₀` is replaced by its expectation onto the graph bal
 a constant times `|S₀| e^{-(c/2) r₀^α}`, with no factor involving the total volume. Components
 not meeting `S₀` contribute exactly zero error.
 
+The graph distance `d_Λ(x, S₀)` from a site to `S₀` is QICLean's `ManyBody.setEdist`.
+
 ## Main definitions
 
-* `TNLean.PEPS.AreaLaw.setDist`: the graph distance from a site to `S₀`.
 * `TNLean.PEPS.AreaLaw.truncationRadius`: `max {r₀, ⌊d/2⌋}`.
 * `TNLean.PEPS.AreaLaw.truncatedConstraint`: the variable-radius truncation.
 
@@ -45,22 +47,6 @@ open QuantumCircuit
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
-/-- The graph distance `d_Λ(x, S₀) = min_{y ∈ S₀} d_Λ(x, y)`, infinite when `x` cannot reach
-`S₀` (`03-quasilocal.tex`, line 418). -/
-noncomputable def setDist (G : SimpleGraph ι) (S₀ : Finset ι) (x : ι) : ℕ∞ :=
-  S₀.inf fun y => G.edist x y
-
-omit [Fintype ι] [DecidableEq ι] in
-/-- A finite distance to `S₀` is attained at a point of `S₀`. -/
-theorem exists_mem_edist_eq_setDist {G : SimpleGraph ι} {S₀ : Finset ι} {x : ι}
-    (hx : setDist G S₀ x ≠ ⊤) : ∃ y ∈ S₀, G.edist x y = setDist G S₀ x := by
-  have hne : S₀.Nonempty := by
-    by_contra h
-    rw [Finset.not_nonempty_iff_eq_empty] at h
-    simp [setDist, h] at hx
-  obtain ⟨y, hy, he⟩ := Finset.exists_mem_eq_inf S₀ hne fun y => G.edist x y
-  exact ⟨y, hy, he.symm⟩
-
 /-- The truncation radius `r = max {r₀, ⌊d/2⌋}` (`eq:quasilocal-variable-radius`). -/
 def truncationRadius (r₀ d : ℕ) : ℕ := max r₀ (d / 2)
 
@@ -70,9 +56,9 @@ def truncationRadius (r₀ d : ℕ) : ℕ := max r₀ (d / 2)
 anchor cannot reach `S₀`. -/
 noncomputable def truncatedConstraint (q : ℕ) (G : SimpleGraph ι) (S₀ : Finset ι) (r₀ : ℕ)
     (a : ι) (k : Matrix (ι → Fin q) (ι → Fin q) ℂ) : Matrix (ι → Fin q) (ι → Fin q) ℂ :=
-  if setDist G S₀ a = ⊤ then k
-  else ManyBody.regionExpectation (ManyBody.graphBall G a (truncationRadius r₀ (setDist G S₀
-      a).toNat)) k
+  if ManyBody.setEdist G S₀ a = ⊤ then k
+  else ManyBody.regionExpectation
+    (ManyBody.graphBall G a (truncationRadius r₀ (ManyBody.setEdist G S₀ a).toNat)) k
 
 /-- **Shell count** (`03-quasilocal.tex`, lines 460–463): if every graph ball of radius `d`
 has at most `K_b (d + 1)²` sites and every site anchors at most `μ` labels, then at most
@@ -81,19 +67,19 @@ theorem card_label_shell_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S₀
     (a : κ → ι) {Kb μ : ℝ}
     (hBall : ∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2)
     (hMult : ∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) (d : ℕ) :
-    ((Finset.univ.filter fun i => setDist G S₀ (a i) = d).card : ℝ) ≤
+    ((Finset.univ.filter fun i => ManyBody.setEdist G S₀ (a i) = d).card : ℝ) ≤
       μ * (S₀.card * (Kb * ((d : ℝ) + 1) ^ 2)) := by
   classical
   rcases isEmpty_or_nonempty ι with hι | ⟨⟨x₀⟩⟩
   · have : IsEmpty κ := ⟨fun i => hι.false (a i)⟩
     simp [Finset.univ_eq_empty, Finset.eq_empty_of_isEmpty S₀]
   have hμ : 0 ≤ μ := (Nat.cast_nonneg _).trans (hMult x₀)
-  set T := Finset.univ.filter fun x => setDist G S₀ x = d
+  set T := Finset.univ.filter fun x => ManyBody.setEdist G S₀ x = d
   -- Sites at distance `d` lie in the balls of radius `d` about the points of `S₀`.
   have hT : T ⊆ S₀.biUnion fun y => ManyBody.graphBall G y d := by
     intro x hx
     simp only [T, Finset.mem_filter, Finset.mem_univ, true_and] at hx
-    obtain ⟨y, hy, he⟩ := exists_mem_edist_eq_setDist (x := x) (G := G) (S₀ := S₀)
+    obtain ⟨y, hy, he⟩ := ManyBody.exists_mem_edist_eq_setEdist (x := x) (G := G) (S := S₀)
       (by rw [hx]; exact ENat.natCast_ne_top d)
     refine Finset.mem_biUnion.mpr ⟨y, hy, ManyBody.mem_graphBall.mpr ?_⟩
     rw [SimpleGraph.edist_comm, he, hx]
@@ -105,7 +91,7 @@ theorem card_label_shell_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S₀
       _ ≤ ∑ _y ∈ S₀, Kb * ((d : ℝ) + 1) ^ 2 := Finset.sum_le_sum fun y _ => hBall y d
       _ = S₀.card * (Kb * ((d : ℝ) + 1) ^ 2) := by rw [Finset.sum_const, nsmul_eq_mul]
   -- Each site anchors at most `μ` labels.
-  have hlab : (Finset.univ.filter fun i => setDist G S₀ (a i) = d) =
+  have hlab : (Finset.univ.filter fun i => ManyBody.setEdist G S₀ (a i) = d) =
       T.biUnion fun x => Finset.univ.filter fun i => a i = x := by
     ext i; simp [T]
   rw [hlab]
@@ -136,13 +122,13 @@ theorem norm_sum_truncatedConstraint_sub_le {q : ℕ} {κ : Type*} [Fintype κ]
     ‖∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i) - ∑ i, k i‖ ≤
       C * μ * Kb * S₀.card * A * Real.exp (-(c / 2 * (r₀ : ℝ) ^ α)) := by
   classical
-  set D : κ → ℕ := fun i => (setDist G S₀ (a i)).toNat
-  set F := Finset.univ.filter fun i => setDist G S₀ (a i) ≠ ⊤
+  set D : κ → ℕ := fun i => (ManyBody.setEdist G S₀ (a i)).toNat
+  set F := Finset.univ.filter fun i => ManyBody.setEdist G S₀ (a i) ≠ ⊤
   set f : ℕ → ℝ := fun d => C * Real.exp (-(c * ((max r₀ (d / 2) : ℕ) : ℝ) ^ α))
   have hterm : ∀ i, ‖truncatedConstraint q G S₀ r₀ (a i) (k i) - k i‖ ≤
-      if setDist G S₀ (a i) ≠ ⊤ then f (D i) else 0 := by
+      if ManyBody.setEdist G S₀ (a i) ≠ ⊤ then f (D i) else 0 := by
     intro i
-    by_cases hi : setDist G S₀ (a i) = ⊤
+    by_cases hi : ManyBody.setEdist G S₀ (a i) = ⊤
     · simp [truncatedConstraint, hi]
     · simp only [truncatedConstraint, hi, ite_false, ne_eq, not_false_eq_true, ite_true]
       rw [norm_sub_rev]
@@ -151,7 +137,8 @@ theorem norm_sum_truncatedConstraint_sub_le {q : ℕ} {κ : Type*} [Fintype κ]
       = ‖∑ i, (truncatedConstraint q G S₀ r₀ (a i) (k i) - k i)‖ := by
         rw [Finset.sum_sub_distrib]
     _ ≤ ∑ i, ‖truncatedConstraint q G S₀ r₀ (a i) (k i) - k i‖ := norm_sum_le _ _
-    _ ≤ ∑ i, if setDist G S₀ (a i) ≠ ⊤ then f (D i) else 0 := Finset.sum_le_sum fun i _ => hterm i
+    _ ≤ ∑ i, if ManyBody.setEdist G S₀ (a i) ≠ ⊤ then f (D i) else 0 :=
+        Finset.sum_le_sum fun i _ => hterm i
     _ = ∑ i ∈ F, f (D i) := by rw [Finset.sum_filter]
     _ = ∑ d ∈ F.image D, ((F.filter fun i => D i = d).card : ℝ) * f d := by
         rw [Finset.sum_comp]; simp [nsmul_eq_mul]

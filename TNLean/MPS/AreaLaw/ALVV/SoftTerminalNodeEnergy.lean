@@ -53,12 +53,12 @@ theorem exists_calibrated_soft_terminal_node_energy_update
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues (minEigenvalue hH)
     let J := interval L l r
     let beta := fun _ : Fin L ↦ Fin q
-    let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let split := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
-    let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
       (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
     let coords := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+      (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
       (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
     let P := Φ.partialHamiltonian (Finset.univ.filter
       (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r))

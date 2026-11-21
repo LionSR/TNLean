@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.MinimalIntervalColumns
-import TNLean.Circuit.CleanUnitaryImplementation
+import QICLean.Circuit.Geometry.Graph
+import QICLean.Circuit.Model.CleanWorkspace
 
 /-!
 # Circuit implementations of the actual minimal intervals
@@ -43,10 +44,10 @@ def IsMinimalIntervalCircuitImplementation {d D N : ℕ} [NeZero d]
   Z ∈ unitary (Matrix (Cfg d (logicalSiteCount d D N))
       (Cfg d (logicalSiteCount d D N)) ℂ) ∧
     Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (intervalConsecutiveSupport d D N j.val k.val) ∧
-    IsPairProduct d (globalSiteCount d D N) K C ∧
+    IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (globalSiteCount d D N))) K C ∧
     IsCleanImplementation
-      (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d)
-        (n := logicalSiteCount d D N) (a := auxiliarySiteCount d D N))) C Z ∧
+      (basisInclusion (workspaceEmbedding (n := logicalSiteCount d D N)
+        (0 : Fin (auxiliarySiteCount d D N) → Fin d))) C Z ∧
     IsMinimalIntervalColumnImplementation hd U hU hbound B P j k hjk Z
 
 namespace IsMinimalIntervalCircuitImplementation

@@ -46,6 +46,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
+open ManyBody (planeDomainGraph edgeBoundary graphNeighborhood ambientDilation)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- **The cut-clearance clause of Proposition 10.2, with an explicit threshold.** For every
@@ -61,9 +63,9 @@ theorem graphNeighborhood_collar_subset_of_threshold_le (C : ℝ) {n : ℕ}
       (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
           (n : ℝ) ^ (Exponents.beta : ℝ) <
         (Scan.ambientSupDistance t z : ℝ)) :
-    graphNeighborhood Λ (2 * r)
+    graphNeighborhood (planeDomainGraph Λ)
         (A.filter fun x ↦ x.val ∈ ambientDilation T
-          ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A := by
+          ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A := by
   refine (graphNeighborhood_subset_of_cut_clearance Λ T A _ (2 * r) ?_).trans
     (Finset.filter_subset _ _)
   intro t ht z hz
@@ -90,9 +92,9 @@ theorem exists_threshold_graphNeighborhood_collar_subset (C : ℝ) :
           (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
               (n : ℝ) ^ (Exponents.beta : ℝ) <
             (Scan.ambientSupDistance t z : ℝ)) →
-        graphNeighborhood Λ (2 * r)
+        graphNeighborhood (planeDomainGraph Λ)
             (A.filter fun x ↦ x.val ∈ ambientDilation T
-              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A :=
+              ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A :=
   ⟨_, fun _ hn r hr Λ A T ↦ graphNeighborhood_collar_subset_of_threshold_le C hn r hr Λ A T⟩
 
 /-- **Reduction of Proposition 10.2 to its radius and output bounds.** If, under the
@@ -112,11 +114,11 @@ theorem amplificationBound_of_radius_output {q R : ℕ} {J Δ : ℝ}
               ((A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
                 C₀ * (n : ℝ) ^ 2 →
-              ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
-              ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T
+              ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+              ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
                   A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
-              ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
+              ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
                 C₀ * n →
               ManyBody.regionMutualInformation Ω
@@ -126,9 +128,9 @@ theorem amplificationBound_of_radius_output {q R : ℕ} {J Δ : ℝ}
                 C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
               ∃ r : ℕ, (r : ℝ) ≤ C * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
                 ∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
-                  Disjoint Jset (graphNeighborhood Λ (2 * r)
+                  Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
-                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
+                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
                   ManyBody.regionMutualInformation Ω X Jset ≤
                     C * ((n : ℝ) ^ M)⁻¹) :
     AmplificationBound q R J Δ := by

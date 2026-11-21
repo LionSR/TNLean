@@ -83,7 +83,7 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
     (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a
     (fun _ ↦ div_nonneg hκ.le (Nat.cast_nonneg m)) hb Ψᵤ
     (hΩ) hx
-  have hgap := FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy
+  have hgap := ManyBody.re_trace_abs_regionState_sub_le_one_sixteenth_of_energy
     (fun _ : Lattice.Site Λ ↦ Fin q) (ManyBody.Interaction.isHermitian_hamiltonian hH)
         hΩ hgap hspan hΔ
     (hnorm) henergy X

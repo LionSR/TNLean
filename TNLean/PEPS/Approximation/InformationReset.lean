@@ -57,7 +57,7 @@ open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareInteraction)
 open Matrix QuantumCircuit
 
 open ManyBody (IsGapped groundSpace rectangleEmbedding rectangularDomain rectangleSiteEquiv
-  rectangleSiteEquiv_val)
+  rectangleSiteEquiv_val graphNeighborhood planeDomainGraph)
 open scoped Kronecker
 open TNLean.Lattice
 
@@ -104,11 +104,11 @@ theorem notMem_resetSupport {L : ℕ} {R C R₀ C₀ : Finset (SquareLatticeVert
       Finset.univ.filter (IsRegionBoundaryEdge R)
     let Z := boundary.biUnion fun x ↦ ({x.1.1, x.1.2} : Finset (SquareLatticeVertex L L))
     ∀ v ∈ R₀ ∪ C₀,
-      a v ∉ graphNeighborhood (rectangularDomain L L) ℓ ((R ∪ C)ᶜ.image a ∪ Z.image a) := by
+      a v ∉ graphNeighborhood (planeDomainGraph (rectangularDomain L L))
+        ((R ∪ C)ᶜ.image a ∪ Z.image a) ℓ := by
   intro a boundary Z v hv hB
   classical
-  simp only [graphNeighborhood, Finset.mem_filter, Finset.mem_univ, true_and] at hB
-  obtain ⟨x, hx, p, hp⟩ := hB
+  obtain ⟨x, hx, p, hp⟩ := ManyBody.mem_graphNeighborhood_iff_exists_walk.mp hB
   have hd : (supDist (rectangleEmbedding v) (x.1) : ℝ) ≤ ℓ := by
     rw [supDist_comm]
     have := supDist_le_of_walk p hp
@@ -201,7 +201,7 @@ theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V
   have hU'u : U'ᴴ * U' = 1 :=
     (Matrix.mem_unitaryGroup_iff').mp (reindex_mem_unitaryGroup Pe.symm U hUu)
   set Ψ := ManyBody.sumSitesProduct (X := fun _ : V ⊕ V ↦ Fin q) Ω Ω with hΨdef
-  set Φ := FiniteProduct.relabelSites (replicaSwap A) Ψ with hΦdef
+  set Φ := ManyBody.relabelSites (replicaSwap A) Ψ with hΦdef
   have hΨ : Ψ = WithLp.toLp 2 (ψ ∘ Pe) := by
     apply WithLp.ofLp_injective 2
     exact (doubledVector_comp_sumArrow p Ω).symm
@@ -275,11 +275,16 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
   set e := rectangleConfigurationEquiv L L (q * q)
   set S := B.image a.symm
   have hU₀s : reindex e.symm e.symm U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
-    have h₀ : reindex e.symm e.symm U = embedOp a.symm U := by
-      rw [embedOp_equiv_eq_reindex]
+    have h₀ : reindex e.symm e.symm U =
+        ManyBody.placeAlong (X := fun _ ↦ Fin (q * q)) a.symm.toEmbedding U := by
+      ext x y
+      rw [ManyBody.placeAlong_apply, ite_eq_left fun v hv ↦
+        absurd (a.symm.apply_symm_apply v) (hv (a.symm.symm v))]
       rfl
-    rw [h₀]
-    exact embedOp_mem_supportedOperators_image a.symm.injective hUs
+    have hS : B.map a.symm.toEmbedding = S := (Finset.map_eq_image _ _).trans rfl
+    rw [h₀, ← hS]
+    exact ManyBody.placeAlong_mem_supportedOperators_map (X := fun _ ↦ Fin (q * q))
+      a.symm.toEmbedding hUs
   have hnot' : ∀ v ∈ R₀ ∪ C₀, v ∉ S := by
     intro v hv hvS
     obtain ⟨u, hu, huv⟩ := Finset.mem_image.mp hvS

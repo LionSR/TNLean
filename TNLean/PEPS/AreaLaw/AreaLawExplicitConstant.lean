@@ -52,6 +52,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
+open ManyBody (planeDomainGraph edgeBoundary)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The constant of Theorem 1.1 at the template constants `D₀ = 2R + 11` and `C_tpl = 24`, as
@@ -115,7 +117,7 @@ theorem uniformAreaLaw_explicit_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (h
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
           ManyBody.regionEntropy Ω A ≤
             uniformAreaLawConstantAt q R J Δ B c₀ Cent eent Cen een *
-              (edgeBoundary Λ A).card := by
+              (edgeBoundary (planeDomainGraph Λ) A).card := by
   have hB₀ : 0 ≤ B :=
     (Scan.physicalBoxConstantExplicit_nonneg q R hq hJ hΔ c₀ Cent eent Cen een).trans hB
   have hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ (2 * R + 11) r ≤
@@ -123,7 +125,7 @@ theorem uniformAreaLaw_explicit_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (h
     (Scan.boxEntropy_le_boxError_explicit q R hq hJ hΔ hc₀ htr _ (by omega) r hr).trans
       (mul_le_mul_of_nonneg_right hB (Real.rpow_nonneg (Nat.cast_nonneg r) _))
   refine ⟨uniformAreaLawConstantOf_nonneg hq _ _, ?_⟩
-  exact regionalEntropy_le_of_collar_amplification_twoFamilies_constants hq hΔ
+  exact regionEntropy_le_of_collar_amplification_twoFamilies_constants hq hΔ
     (sublinearCollarBound_real_of_boxEntropy_explicit (D₀ := 2 * (R : ℝ) + 11) (Ctpl := 24) q R
       hq hJ hΔ (by linarith) le_rfl hB₀ hbox hc₀ htr)
     (amplificationBound_explicit (J := J) (C₀ := max (sublinearCollarConstant q J Δ B) 1)
@@ -156,7 +158,7 @@ theorem uniformAreaLaw_explicit (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
           ManyBody.regionEntropy Ω A ≤
             uniformAreaLawConstantExplicit q R J Δ c₀ Cent eent Cen een *
-              (edgeBoundary Λ A).card :=
+              (edgeBoundary (planeDomainGraph Λ) A).card :=
   uniformAreaLaw_explicit_of_le q R hq hJ hΔ hc₀ htr le_rfl
 
 /-- The constant of Theorem 1.1 as a closed-form function of `q, R, J, Δ` alone:
@@ -187,7 +189,7 @@ theorem uniformAreaLaw_closed (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 �
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
           ManyBody.regionEntropy Ω A ≤
-            uniformAreaLawConstantClosed q R J Δ * (edgeBoundary Λ A).card :=
+            uniformAreaLawConstantClosed q R J Δ * (edgeBoundary (planeDomainGraph Λ) A).card :=
   uniformAreaLaw_explicit q R hq hJ hΔ TensorPower.ReplicaTransport.transportThreshold_pos
     Scan.CollarScan.finiteFamilyTransportBound_explicit
 
@@ -236,7 +238,8 @@ theorem uniformAreaLaw_closed_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ 
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
           ManyBody.regionEntropy Ω A ≤
-            uniformAreaLawConstantClosedAt q R J Δ B * (edgeBoundary Λ A).card :=
+            uniformAreaLawConstantClosedAt q R J Δ B *
+              (edgeBoundary (planeDomainGraph Λ) A).card :=
   uniformAreaLaw_explicit_of_le q R hq hJ hΔ TensorPower.ReplicaTransport.transportThreshold_pos
     Scan.CollarScan.finiteFamilyTransportBound_explicit hB
 

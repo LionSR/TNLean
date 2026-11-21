@@ -98,7 +98,7 @@ theorem rightApply_mem_leftSupportSubmodule_of_columns {β : Type*} [Fintype β]
       (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z))) k b =
       WithLp.toLp 2 (((schmidtCoeffMatrix (WithLp.ofLp u)) * Wᵀ).col b) := by
     ext a
-    simp only [cutColumn_apply, cutMatrix_apply, Equiv.apply_symm_apply]
+    simp only [cutColumn_apply, ManyBody.cutMatrix_apply, Equiv.apply_symm_apply]
     exact congrFun (congrFun (schmidtCoeffMatrix_ofLp_rightApply W u) a) b
   rw [hcol, Matrix.col_mul_eq_mulVec_col, Matrix.mulVec_eq_sum, WithLp.toLp_sum]
   simp only [op_smul_eq_smul, WithLp.toLp_smul]
