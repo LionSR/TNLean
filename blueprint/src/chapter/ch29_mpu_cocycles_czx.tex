@@ -637,8 +637,9 @@ $s(a,b)$ is the phase of $\mathrm{CZ}\ket{a,b}$.
     behind the remark of \cite[line~3970]{FrancoRubio2025MPUGauging} that the
     state lies in the nontrivial symmetry-protected phase of the combined
     $\Z_2\times\Z_2$ symmetry. That this class labels the phase of a state
-    protected by a symmetry that is not onsite is the classification of
-    \cite{Stephen2024SIMPS}, which is not proved here; see
+    protected by a symmetry that is not onsite requires a physical phase
+    argument. The circuit obstruction of \cite{Stephen2024SIMPS} and the
+    gapped-path statement are not proved here; see
     \cite{gap:fbc25_controlled_z_split_index_class_scope}.
 \end{lemma}
 
@@ -651,6 +652,112 @@ $s(a,b)$ is the phase of $\mathrm{CZ}\ket{a,b}$.
     the factor system on the two generators is $-1$, and the class is
     nontrivial by Lemma~\ref{thm:cluster_nontrivial_spt}.
 \end{proof}
+
+\begin{definition}[Diagonal on-site twists of a group family]
+    \label{def:mpug_diagonal_twist}
+    \lean{MPOTensor.GroupFamily.onsiteDiagonal,
+        MPOTensor.GroupFamily.diagonalTwist}
+    \leanok
+    Let $g\mapsto T_g$ be a group family of matrix product operators on
+    $d$-level sites, and let $c:G\to(\C^\times)^d$ be a homomorphism.
+    Define
+    \begin{align}
+        D_g^{(N)}           & =\operatorname{diag}\left(\prod_{k=0}^{N-1}c_g(t_k)\right)_{t}, \\
+        \widetilde T_g^{ij} & =c_g(j)T_g^{ij}.
+    \end{align}
+    The bond dimensions of $T_g$ and $\widetilde T_g$ agree.
+\end{definition}
+
+\begin{lemma}[Normality and invariant states under a commuting diagonal twist]
+    \label{lem:mpug_diagonal_twist_normal}
+    \lean{MPOTensor.GroupFamily.onsiteDiagonal_mul,
+        MPOTensor.GroupFamily.mpo_diagonalTwist,
+        MPOTensor.GroupFamily.IsNormalRepresentation.diagonalTwist,
+        MPOTensor.GroupFamily.fixesMPV_diagonalTwist}
+    \leanok
+    \uses{def:mpug_diagonal_twist}
+    Suppose $T$ is an exact normal group representation, and $D_g^{(N)}$
+    commutes with $O_h^{(N)}$ for every $g,h$ and every $N\geq1$. Then
+    \begin{align}
+        \widetilde O_g^{(N)} & =O_g^{(N)}D_g^{(N)},
+        \label{eq:mpug_twist_operator}                   \\
+        D_g^{(N)}D_h^{(N)}   & =D_{gh}^{(N)},
+        \label{eq:mpug_twist_character}                  \\
+        \widetilde O_g^{(N)}\widetilde O_h^{(N)}
+                             & =\widetilde O_{gh}^{(N)},
+        \label{eq:mpug_twist_multiplication}
+    \end{align}
+    and every $\widetilde T_g$ is normal. Any periodic state fixed by every
+    $O_g^{(N)}$ and $D_g^{(N)}$ is fixed by every $\widetilde O_g^{(N)}$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Pulling the scalar factors out of the ordered product gives
+    (\ref{eq:mpug_twist_operator}), and the homomorphism law for $c$ gives
+    (\ref{eq:mpug_twist_character}). Commuting
+    the middle factors in
+    $(O_g^{(N)}D_g^{(N)})(O_h^{(N)}D_h^{(N)})$ gives
+    (\ref{eq:mpug_twist_multiplication}).
+    Each doubled-index letter is multiplied by a nonzero scalar, so the
+    spans of words at every length are unchanged. Applying the two
+    operators successively proves the assertion about invariant states.
+\end{proof}
+
+\begin{lemma}[The combined controlled-$Z$ representation on the qubit chain]
+    \label{lem:mpug_controlled_z_combined_representation}
+    \lean{ControlledZGauging.combinedCZProjection,
+        ControlledZGauging.combinedZCharacter,
+        ControlledZGauging.combinedZCharacter_val,
+        ControlledZGauging.combinedFamily,
+        ControlledZGauging.combinedFamily_isNormalRepresentation,
+        ControlledZGauging.mpo_combinedFamily,
+        ControlledZGauging.mpo_combinedFamily_one,
+        ControlledZGauging.combinedRepresentation,
+        ControlledZGauging.star_splitLegPhase_mul,
+        ControlledZGauging.mpo_combinedFamily_mem_unitaryGroup,
+        ControlledZGauging.combinedFamily_isMPUPos,
+        ControlledZGauging.fixesMPV_combinedFamily_stateTensor,
+        ControlledZGauging.fixesMPV_combinedFamily_zeroState,
+        ControlledZGauging.nonempty_combinedFamily_stateActionData,
+        ControlledZGauging.nonempty_combinedFamily_zeroActionData,
+        ControlledZGauging.combinedFamily_anomalyClass_eq_zero}
+    \leanok
+    \uses{lem:mpug_diagonal_twist_normal, lem:mpug_controlled_z_combined_class}
+    For $g=(p,q)\in\Z_2\times\Z_2$, choose the tensor of $U^q$ and dress its
+    input leg with $c_g(a)=(-1)^{pa}$, as in the combined symmetry of
+    \cite[line~3970]{FrancoRubio2025MPUGauging}. The resulting tensors have
+    bond dimension $1$ when $q=0$ and $2$ when $q=1$. They form an exact
+    normal representation, with unitary operators on every nonempty ring:
+    \begin{align}
+        O_g^{(N)} & =U^q\left(\prod_jZ_j\right)^p
+        =\operatorname{diag}\left(
+        \prod_{k=0}^{N-1}\chi_g(t_k,t_{k+1})\right)_{t},
+        \qquad t_N=t_0.
+    \end{align}
+    Here $\chi_g(a,b)=(-1)^{pa+qab}$ is the two-leg phase, while
+    $c_g(a)=(-1)^{pa}$ is the on-site character. At $N=1$ the periodic
+    convention gives the controlled-$Z$ factor $(-1)^{t_0^2}$.
+    Both $\ket{\psi_N(A)}$ and $\ket{0\cdots0}$ are invariant. Each state
+    admits action reductions for this same family, and the family's anomaly
+    class vanishes. Their relative action class is computed in
+    Lemma~\ref{lem:mpug_controlled_z_relative_l_class}. Its identification
+    with a physical gapped-path phase remains to be proved; see
+    \cite{gap:fbc25_controlled_z_split_index_class_scope}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The controlled-$Z$ family is normal, and its diagonal periodic operators
+    commute with the on-site diagonal operators. Apply
+    Lemma~\ref{lem:mpug_diagonal_twist_normal}. The displayed diagonal entry
+    follows by multiplying the two phase products. Every factor is $1$ or
+    $-1$, proving unitarity, including on a ring of one site. The two known
+    symmetries of $A$ imply its invariance. The product state is fixed
+    because every nonzero amplitude has all physical labels zero.
+    Normality and invariance give action reductions, and the invariant
+    normal product state forces the anomaly class to vanish.
+\end{proof}
+
+\input{chapter/ch29_controlled_z_relative_l}
 
 \section{The gauge-invariant subspace of the CZX circuit tuple}
 \label{sec:mpug_czx_gauge_invariant}
