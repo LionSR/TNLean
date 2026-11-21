@@ -32,11 +32,7 @@ theorem hamiltonian_translationInvariant_parent_groundSpace_eq_span_mpv
       (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian) =
       Submodule.span ℂ
         {(WithLp.linearEquiv 2 ℂ ((Fin N → Fin d) → ℂ)).symm (mpv A)} := by
-  have hH : parentHamiltonianES A 2 N = Matrix.toEuclideanLin
-      (ManyBody.Interaction.translationInvariant hN
-        (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian :=
-    parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow A hN
-  rw [← hH, ker_parentHamiltonianES_two_eq_range_periodicMpvLineMap A hA hN]
+  refine (ker_hamiltonian_parentRingInteraction_two_eq_range_periodicMpvLineMap A hA hN).trans ?_
   simpa only [periodicMpvLineMap] using
     ContinuousLinearMap.range_smulRight_apply
       (by norm_num : (1 : ℂ →L[ℂ] ℂ) ≠ 0)
@@ -67,8 +63,7 @@ noncomputable def exactMPSGroundPath_of_canonicalInjective
   ground_line γ hγ N hN := by
     rw [hP γ hγ]
     have hGap := isGapped_hamiltonian_translationInvariant_parent (A γ) (hInj γ hγ) hN
-      (δ := 0) (fun v _ => by
-        simpa only [zero_mul] using norm_nonneg (parentHamiltonianES (A γ) 2 N v))
+      (δ := 0) (fun v _ => by rw [zero_mul]; exact norm_nonneg _)
     have hmem (μ : ℂ) : μ ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant hN
         (LinearMap.toMatrix' (parentInteraction (A γ) 2))).hamiltonian ↔
         Module.End.HasEigenvalue (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant
