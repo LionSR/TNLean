@@ -158,7 +158,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
         (star_pow (x := Kraus.transferMap (ι := Fin d) (n := Fin D) A) (n := p))
     -- Rearrange to match the goal.
     simpa only using hpow.symm
-  have hprim_adj : _root_.IsPrimitive (((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ p).adjoint) := by
+  have hprim_adj : _root_.IsPrimitive (((Kraus.transferMap A) ^ p).adjoint) := by
     rw [_root_.isPrimitive_iff]
     -- `hprim_pow_adj` is exactly the peripheral eigenvalue statement.
     simpa only [hpow_adj] using hprim_pow_adj

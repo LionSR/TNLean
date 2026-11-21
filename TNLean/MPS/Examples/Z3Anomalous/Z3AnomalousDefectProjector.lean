@@ -55,7 +55,7 @@ open scoped Matrix
 
 namespace Z3Anomalous
 
-open MPOTensor TNLean.Algebra
+open MPOTensor
 
 variable {L : ℕ} [NeZero L]
 
@@ -119,7 +119,7 @@ theorem defectProjector_eq_inv_card_smul_sum :
 idempotent (`lem:asymex_z3_defect_projector`). -/
 lemma isStarProjection_defectProjector : IsStarProjection (defectProjector L) := by
   rw [defectProjector_eq_inv_card_smul_sum]
-  exact isStarProjection_inv_card_smul_sum _
+  exact Matrix.isStarProjection_inv_card_smul_sum _
 
 /-- `U_L P_L = P_L`: the normalized defect absorbs the forward operator. -/
 theorem mpo_uTensor_mul_defectProjector :

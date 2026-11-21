@@ -59,8 +59,6 @@ end Matrix
 
 namespace MPSTensor
 
-open TNLean.Algebra
-
 /-- A continuous injective tensor family obtained by pointwise invariant
 single-bond compression has constant virtual class. Neither the original
 bond dimensions nor their tensors, frames, projective matrices, or factor

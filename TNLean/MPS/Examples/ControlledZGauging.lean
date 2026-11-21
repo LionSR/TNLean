@@ -107,7 +107,7 @@ open scoped BigOperators Matrix
 
 namespace ControlledZGauging
 
-open MPOTensor MPSTensor TNLean.Algebra
+open MPOTensor MPSTensor
 
 /-! ### The controlled-`Z` matrix product unitary -/
 
@@ -598,7 +598,7 @@ theorem stateZGauge_mul_stateTensor_mul_inv (i : Fin 2) :
 periodic vectors. -/
 theorem stateTensor_isOnSiteSymmetric_zAction : IsOnSiteSymmetric stateTensor zAction := by
   intro g
-  rcases zmod2_cases g with rfl | rfl
+  rcases Multiplicative.zmod2_cases g with rfl | rfl
   · rw [twistedTensor_one]
     exact fun _ _ ↦ rfl
   · exact GaugeEquiv.sameMPV ⟨stateZGauge, fun i ↦

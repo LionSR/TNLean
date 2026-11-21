@@ -73,7 +73,7 @@ noncomputable def onSiteTensorPow (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
 
 /-- The tensor power is the constant-family finite Kronecker product
 \(\bigotimes_{n<L}\Lambda\); the algebra of the latter is in
-`TNLean/Algebra/FinKronecker.lean`. -/
+`QICLean/Algebra/FiniteKroneckerProduct.lean`. -/
 lemma onSiteTensorPow_eq_finKronecker (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
     onSiteTensorPow L Λ = Matrix.finKronecker fun _ : Fin L => Λ := by
   ext σ τ

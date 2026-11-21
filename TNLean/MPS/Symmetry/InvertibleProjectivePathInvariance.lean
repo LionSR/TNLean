@@ -34,7 +34,7 @@ namespace MPSTensor
 
 open scoped ScalarCohomology
 open scoped Matrix
-open TNLean.Algebra
+open ScalarCohomology
 
 /-- A continuous family of invertible projective matrices has continuous
 factor systems. An entry of the product with the adjugate extracts each

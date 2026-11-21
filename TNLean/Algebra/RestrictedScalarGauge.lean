@@ -43,15 +43,15 @@ theorem isInverseNormalized_one : IsInverseNormalized (1 : ScalarCocycle G) :=
 
 /-- Pointwise multiplication preserves the restricted fusion convention. -/
 theorem IsInverseNormalized.mul {β₁ β₂ : ScalarCocycle G}
-    (hβ₁ : β₁.IsInverseNormalized) (hβ₂ : β₂.IsInverseNormalized) :
-    (β₁ * β₂).IsInverseNormalized := by
+    (hβ₁ : IsInverseNormalized β₁) (hβ₂ : IsInverseNormalized β₂) :
+    IsInverseNormalized (β₁ * β₂) := by
   refine ⟨⟨fun g => by simp [hβ₁.1.1 g, hβ₂.1.1 g],
     fun g => by simp [hβ₁.1.2 g, hβ₂.1.2 g]⟩, fun g => ?_⟩
   simp [hβ₁.2 g, hβ₂.2 g]
 
 /-- Pointwise inversion preserves the restricted fusion convention. -/
 theorem IsInverseNormalized.inv {β : ScalarCocycle G}
-    (hβ : β.IsInverseNormalized) : β⁻¹.IsInverseNormalized := by
+    (hβ : IsInverseNormalized β) : IsInverseNormalized β⁻¹ := by
   refine ⟨⟨fun g => by simp [hβ.1.1 g], fun g => by simp [hβ.1.2 g]⟩, fun g => ?_⟩
   simp [hβ.2 g]
 
@@ -64,7 +64,7 @@ structure RestrictedFusionGauge (G : Type) [Group G] where
   /-- The scalar fusion gauge `β`. -/
   beta : ScalarCocycle G
   /-- Normalization on the identity axes and inverse pairs. -/
-  isInverseNormalized : beta.IsInverseNormalized
+  isInverseNormalized : ScalarCocycle.IsInverseNormalized beta
 
 namespace RestrictedFusionGauge
 
@@ -150,19 +150,20 @@ namespace ActionTensorGauge
 omit [MulAction G X] in
 /-- The identity action scalar is normalized. -/
 @[simp]
-theorem isNormalized_one : IsNormalized (1 : ActionTensorGauge G X) :=
+theorem isNormalized_one : ActionTensorGauge.IsNormalized (1 : ActionTensorGauge G X) :=
   fun _ => rfl
 
 omit [MulAction G X] in
 /-- Pointwise multiplication preserves normalized action scalars. -/
 theorem IsNormalized.mul {γ₁ γ₂ : ActionTensorGauge G X}
-    (hγ₁ : γ₁.IsNormalized) (hγ₂ : γ₂.IsNormalized) : (γ₁ * γ₂).IsNormalized :=
+    (hγ₁ : γ₁.IsNormalized) (hγ₂ : γ₂.IsNormalized) :
+    ActionTensorGauge.IsNormalized (γ₁ * γ₂) :=
   fun x => by simp [hγ₁ x, hγ₂ x]
 
 omit [MulAction G X] in
 /-- Pointwise inversion preserves normalized action scalars. -/
 theorem IsNormalized.inv {γ : ActionTensorGauge G X}
-    (hγ : γ.IsNormalized) : γ⁻¹.IsNormalized :=
+    (hγ : γ.IsNormalized) : ActionTensorGauge.IsNormalized γ⁻¹ :=
   fun x => by simp [hγ x]
 
 end ActionTensorGauge
@@ -190,13 +191,14 @@ def one : RestrictedScalarGauge G X where
 def mul (κ₁ κ₂ : RestrictedScalarGauge G X) : RestrictedScalarGauge G X where
   fusion := κ₁.fusion * κ₂.fusion
   gamma := κ₁.gamma * κ₂.gamma
-  gamma_isNormalized := κ₁.gamma_isNormalized.mul κ₂.gamma_isNormalized
+  gamma_isNormalized :=
+    ActionTensorGauge.IsNormalized.mul κ₁.gamma_isNormalized κ₂.gamma_isNormalized
 
 /-- Pointwise inversion of a restricted scalar gauge. -/
 def inv (κ : RestrictedScalarGauge G X) : RestrictedScalarGauge G X where
   fusion := κ.fusion⁻¹
   gamma := κ.gamma⁻¹
-  gamma_isNormalized := κ.gamma_isNormalized.inv
+  gamma_isNormalized := ActionTensorGauge.IsNormalized.inv κ.gamma_isNormalized
 
 instance : One (RestrictedScalarGauge G X) := ⟨one⟩
 instance : Mul (RestrictedScalarGauge G X) := ⟨mul⟩

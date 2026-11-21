@@ -62,7 +62,7 @@ The finite-cycle phase choice in lines 1093--1102 is now isolated as
 offset-indexed form needed for the sector match `(u, u + q)` is
 `Fin.exists_complex_unit_cyclic_coboundary_shift_of_prod_eq_one`.
 The product-one scalar extraction in lines 1072--1080 is isolated as
-`PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul`.
+`PiTensorProduct.exists_kappa_product_one_of_tprod_eq_root_smul`.
 The `m`-factor cyclic contraction below produces the uniform product-tensor
 identity and the unit-modulus
 normalization of the resulting sector phases; after that, the algebraic scalar

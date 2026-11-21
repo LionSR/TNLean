@@ -31,14 +31,13 @@ open scoped Matrix Matrix.Norms.Frobenius ComplexOrder InnerProductSpace
 open Kraus (blockPhysDim)
 namespace MPSTensor
 variable {d E L : ℕ}
-/-- Move the original tail to the spectator coordinate and concatenate the two blocked
-intervals. The coordinate bijection includes all zero lengths. -/
+/-- Split the concatenated blocked interval, keeping the original tail as the spectator
+coordinate. The coordinate bijection includes all zero lengths. -/
 noncomputable def residualWindowLeftConfigEquiv (d L K M r : ℕ) :
-    Cfg d r × Cfg (blockPhysDim d L) (K + M) ≃
+    Cfg (blockPhysDim d L) (K + M) × Cfg d r ≃
       Cfg (blockPhysDim d L) K × (Cfg (blockPhysDim d L) M × Cfg d r) :=
-  (Equiv.prodComm _ _).trans
-    ((Equiv.prodCongr (Fin.appendEquiv K M).symm (Equiv.refl (Cfg d r))).trans
-      (Equiv.prodAssoc _ _ _))
+  (Equiv.prodCongr (Fin.appendEquiv K M).symm (Equiv.refl (Cfg d r))).trans
+    (Equiv.prodAssoc _ _ _)
 
 /-- The aligned left window is a physical reindexing of the ordinary full-prefix boundary map
 applied independently to each tail configuration. -/
@@ -47,7 +46,10 @@ theorem residualWindowLeftMapES_eq_fiberwise
     residualWindowLeftMapES B K M r =
       (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
         (residualWindowLeftConfigEquiv d L K M r)).toContinuousLinearMap.comp
-          (EuclideanSpace.fiberwiseMap (Cfg d r) (groundSpaceMapES B (K + M))) := by
+          ((ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+            (groundSpaceMapES B (K + M))).comp
+            (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+              (Equiv.prodComm (Cfg d r) (Fin E × Fin E))).toContinuousLinearMap) := by
   ext x ⟨u, v, τ⟩
   change Matrix.trace ((Kraus.evalWord B (List.ofFn u) * Kraus.evalWord B (List.ofFn v)) *
     boundaryFamilyEquiv (D := E) (Cfg d r) x τ) = _
@@ -55,30 +57,6 @@ theorem residualWindowLeftMapES_eq_fiberwise
     boundaryFamilyEquiv (D := E) (Cfg d r) x τ) =
     groundSpaceMap B (K + M) (boundaryFamilyEquiv (D := E) (Cfg d r) x τ) (Fin.append u v)
   rw [groundSpaceMap_apply, List.ofFn_fin_append, Kraus.evalWord_append]
-
-private theorem norm_sum_isometric_range_projection_sub_iSup_le
-    {ι J J' : Type*} [Fintype ι] [Fintype J] [Fintype J']
-    {I : ι → Type*} [∀ j, Finite (I j)]
-    (U : EuclideanSpace ℂ J ≃ₗᵢ[ℂ] EuclideanSpace ℂ J')
-    (T : (j : ι) → EuclideanSpace ℂ (I j) →L[ℂ] EuclideanSpace ℂ J) :
-    ‖(∑ j, (U.toContinuousLinearMap.comp (T j)).range.starProjection) -
-      (⨆ j, (U.toContinuousLinearMap.comp (T j)).range).starProjection‖ ≤
-      ‖(∑ j, (T j).range.starProjection) - (⨆ j, (T j).range).starProjection‖ := by
-  have hRange (j : ι) : (U.toContinuousLinearMap.comp (T j)).range =
-      ((T j).range).map U.toLinearEquiv.toLinearMap := by
-    exact LinearMap.range_comp (T j).toLinearMap U.toLinearEquiv.toLinearMap
-  apply ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _)
-  intro x
-  have hEq : ((∑ j, (U.toContinuousLinearMap.comp (T j)).range.starProjection) -
-      (⨆ j, (U.toContinuousLinearMap.comp (T j)).range).starProjection) x =
-      U (((∑ j, (T j).range.starProjection) -
-        (⨆ j, (T j).range).starProjection) (U.symm x)) := by
-    simp only [hRange, ← Submodule.map_iSup, sub_apply,
-      sum_apply, Submodule.starProjection_map_apply, map_sub, map_sum]
-  rw [hEq, U.norm_map]
-  exact (((∑ j, (T j).range.starProjection) -
-    (⨆ j, (T j).range).starProjection).le_opNorm (U.symm x)).trans_eq
-      (by rw [U.symm.norm_map])
 
 /-- The aligned left-window sector projection-sum error is at most the ordinary sector
 projection-sum error on the combined blocked prefix. The estimate is independent of the
@@ -91,12 +69,22 @@ theorem norm_residualWindowLeft_sector_projection_sum_sub_iSup_le
       ‖(∑ j, (groundSpaceES (B j) (K + M)).starProjection) -
         (⨆ j, groundSpaceES (B j) (K + M)).starProjection‖ := by
   simp only [residualWindowLeftMapES_eq_fiberwise]
-  have hFiber := EuclideanSpace.norm_sum_fiberwiseMap_range_starProjection_sub_iSup_le
-    (Cfg d r) (fun j : ι => groundSpaceMapES (B j) (K + M))
-  exact (norm_sum_isometric_range_projection_sub_iSup_le
-    (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (residualWindowLeftConfigEquiv d L K M r))
-    (fun j => EuclideanSpace.fiberwiseMap (Cfg d r) (groundSpaceMapES (B j) (K + M)))).trans
-      (by simpa only [range_groundSpaceMapES] using hFiber)
+  have hFiber := ContinuousLinearMap.norm_sum_rightFiberwiseMap_range_starProjection_sub_iSup_le
+    (S := Cfg d r) (fun j : ι => groundSpaceMapES (B j) (K + M))
+  have hR (j : ι) : ((ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+      (groundSpaceMapES (B j) (K + M))).comp (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+        (Equiv.prodComm (Cfg d r) (Fin (dim j) × Fin (dim j)))).toContinuousLinearMap).range =
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (groundSpaceMapES (B j) (K + M))).range :=
+    LinearMap.range_comp_of_range_eq_top
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (groundSpaceMapES (B j) (K + M))).toLinearMap
+      (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+        (Equiv.prodComm (Cfg d r) (Fin (dim j) × Fin (dim j)))).toLinearEquiv.range
+  refine (norm_sum_isometric_range_projection_sub_iSup_le
+    (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (residualWindowLeftConfigEquiv d L K M r)) _).trans ?_
+  simp only [hR]
+  simpa only [range_groundSpaceMapES] using hFiber
 
 /-- For primitive inequivalent sectors with faithful invariant matrices, the aligned left-window
 projection-sum error is uniformly small for all outer-prefix and original-tail lengths once

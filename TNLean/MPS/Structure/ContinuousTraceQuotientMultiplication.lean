@@ -22,7 +22,7 @@ trace data R then give multiplication coefficients (C† C)⁻¹ C† R.
 
 This file establishes continuity of those coefficients on a constant-rank
 neighborhood where a fixed section persists (see
-`TNLean.Algebra.MatrixFixedSection`). Identifying the coefficients with the
+`QICLean.Analysis.ContinuousIdempotentFrames`). Identifying the coefficients with the
 quotient product is a separate algebraic step.
 Auxiliary context: arXiv:1010.3732, Section II.F.2, lines 953–993.
 -/

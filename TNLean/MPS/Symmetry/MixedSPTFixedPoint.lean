@@ -29,7 +29,7 @@ claimed at source line 1157. The deviation is documented in
 -/
 
 open scoped Matrix Kronecker
-open TNLean.Algebra
+open SymmetryParity ConjugateProjectiveRepresentation
 
 namespace MPSTensor
 

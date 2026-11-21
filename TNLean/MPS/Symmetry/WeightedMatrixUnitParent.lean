@@ -141,11 +141,12 @@ endpoints. Source: arXiv:1010.3732, Section II.F.2,
 `eq:sym:omega-gamma`. -/
 theorem hamiltonian_translationInvariant_normalizedBondInteraction_groundSpace
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N) :
-    LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) =
+    haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+      (Interaction.translationInvariant N (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) =
       Submodule.span ℂ
         ({WithLp.toLp 2 (mpv (N := N) (weightedMatrixUnitInterpolation D₀ D₁ γ))} :
           Set (EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) N))) := by
+  haveI : NeZero N := ⟨by omega⟩
   have : NeZero N := ⟨by omega⟩
   rw [normalizedBondInteraction, hamiltonian_translationInvariant_twoSiteBondPenalty,
     ← bondMatrixEquiv_symm_eq_toEuclideanLin,
@@ -162,19 +163,20 @@ theorem ker_hamiltonian_translationInvariant_normalizedBondInteraction_le_parent
     (B : MPSTensor ((D₀ + D₁) * (D₀ + D₁)) E)
     (hmpv : ∀ σ : Cfg ((D₀ + D₁) * (D₀ + D₁)) N,
       mpv (weightedMatrixUnitInterpolation D₀ D₁ γ) σ = mpv B σ) :
-    LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) ≤
-    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+      (Interaction.translationInvariant N (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) ≤
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
       (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian) := by
+  haveI : NeZero N := ⟨by omega⟩
   rw [hamiltonian_translationInvariant_normalizedBondInteraction_groundSpace h₀ h₁ γ hN,
     show mpv (N := N) (weightedMatrixUnitInterpolation D₀ D₁ γ) = mpv B from funext hmpv]
   apply Submodule.span_le.mpr
   rintro x (rfl : x = WithLp.toLp 2 (mpv B))
   have hH : parentHamiltonianES B 2 N = Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN
+      (Interaction.translationInvariant N
         (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian :=
     parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow B hN
-  change Matrix.toEuclideanLin (Interaction.translationInvariant hN
+  change Matrix.toEuclideanLin (Interaction.translationInvariant N
     (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian
     (WithLp.toLp 2 (mpv B)) = 0
   rw [← hH]
@@ -186,11 +188,12 @@ its canonical parent. Source: arXiv:1010.3732, Section II.F.2,
 `eq:sym:omega-gamma`, comparison with the canonical parent. -/
 theorem ker_hamiltonian_translationInvariant_normalizedBondInteraction_le_parent
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N) :
-    LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) ≤
-    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+      (Interaction.translationInvariant N (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) ≤
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
       (LinearMap.toMatrix' (parentInteraction
         (weightedMatrixUnitInterpolation D₀ D₁ γ) 2))).hamiltonian) :=
+  haveI : NeZero N := ⟨by omega⟩;
   ker_hamiltonian_translationInvariant_normalizedBondInteraction_le_parent_of_mpv_eq
     h₀ h₁ γ hN _ (fun _ => rfl)
 
@@ -203,13 +206,14 @@ theorem
     (hmpv : ∀ σ : Cfg ((D₀ + D₁) * (D₀ + D₁)) N,
       mpv (weightedMatrixUnitInterpolation D₀ D₁ γ) σ = mpv B σ)
     (x : Cfg ((D₀ + D₁) * (D₀ + D₁)) N → ℂ)
-    (hx : (Interaction.translationInvariant hN
+    (hx : haveI : NeZero N := ⟨by omega⟩; (Interaction.translationInvariant N
       (normalizedBondInteraction D₀ D₁ γ)).hamiltonian.mulVec x = 0) :
-    (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; (Interaction.translationInvariant N
       (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian.mulVec x = 0 := by
+  haveI : NeZero N := ⟨by omega⟩
   have hxES : WithLp.toLp 2 x ∈ LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) := by
-    change WithLp.toLp 2 ((Interaction.translationInvariant hN
+      (Interaction.translationInvariant N (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) := by
+    change WithLp.toLp 2 ((Interaction.translationInvariant N
       (normalizedBondInteraction D₀ D₁ γ)).hamiltonian.mulVec x) = 0
     rw [hx, WithLp.toLp_zero]
   have hparent :=
@@ -223,10 +227,12 @@ arXiv:1010.3732, Section II.F.2, canonical parent comparison. -/
 theorem hamiltonian_translationInvariant_parent_mulVec_eq_zero_of_normalizedBondInteraction
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N)
     (x : Cfg ((D₀ + D₁) * (D₀ + D₁)) N → ℂ)
-    (hx : (Interaction.translationInvariant hN
+    (hx : haveI : NeZero N := ⟨by omega⟩; (Interaction.translationInvariant N
       (normalizedBondInteraction D₀ D₁ γ)).hamiltonian.mulVec x = 0) :
-    (Interaction.translationInvariant hN (LinearMap.toMatrix' (parentInteraction
+    haveI : NeZero N := ⟨by omega⟩;
+    (Interaction.translationInvariant N (LinearMap.toMatrix' (parentInteraction
       (weightedMatrixUnitInterpolation D₀ D₁ γ) 2))).hamiltonian.mulVec x = 0 :=
+  haveI : NeZero N := ⟨by omega⟩;
   hamiltonian_translationInvariant_parent_mulVec_eq_zero_of_normalizedBondInteraction_of_mpv_eq
     h₀ h₁ γ hN _ (fun _ => rfl) x hx
 

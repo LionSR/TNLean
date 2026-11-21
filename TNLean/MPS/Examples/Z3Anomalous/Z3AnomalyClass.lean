@@ -47,7 +47,7 @@ three-cochain of arXiv:2502.20257 used here.
 noncomputable section
 
 open scoped Matrix Kronecker
-open TNLean.Algebra MPOTensor MPSTensor EisensteinInt
+open MPOTensor MPSTensor EisensteinInt
 
 namespace Z3Anomalous
 

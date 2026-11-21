@@ -86,7 +86,7 @@ end Set.Icc
 
 namespace MPSTensor
 
-open TNLean.Algebra
+open ScalarCohomology
 
 /-- Pointwise invariant single-bond compressions have locally constant
 factor-system classes when the compressed tensors are continuous and
@@ -133,7 +133,6 @@ theorem eventually_cohomologousTo_of_continuousOn_pointwise_compression
       (fun s => C (Set.Icc.convexComb t₀ t s))
       (hC.comp_continuous (Set.Icc.continuous_convexComb t₀ t) hts) ht
       (fun s => hCompress (Set.Icc.convexComb t₀ t s) (hts s))
-
 
 /-- Pointwise invariant single-bond compressions have locally constant
 factor-system classes when the compressed tensors are continuous and

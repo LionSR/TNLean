@@ -124,7 +124,8 @@ theorem exists_nat_eq_of_forall_trace_evalWord_eq_sum_mul {DB : ℕ} {D : κ →
       rw [traceWord_wordModule, h w hw, LinearMap.sum_apply]
       refine Finset.sum_congr rfl fun y _ => ?_
       rw [LinearMap.smul_apply, traceChar_wordModule_ofWord, smul_eq_mul]
-    rw [traceChar_eq_of_traceWord_eq hχ (aug_pow hu0 hk), LinearMap.sum_apply]
+    rw [linearMap_eq_on_ker_aug (χ₁ := traceChar B.WordModule) hχ (aug_pow hu0 hk),
+      LinearMap.sum_apply]
     rfl
   have hblock : ∀ k : ℕ, 0 < k → ∀ y,
       traceChar (A y).WordModule (u ^ k) = if y = y₀ then 1 else 0 := by

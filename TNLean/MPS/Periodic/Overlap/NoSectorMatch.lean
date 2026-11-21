@@ -105,7 +105,7 @@ private theorem gaugePhaseEquiv_blockTensor
       (evalWord_gauge (A := A) (B := C) X (by intro j; rfl)
         (wordOfBlock d L i))
   calc
-    blockTensor (d := d) (D := D) B L i
+    blockTensor (d := d) (n := Fin D) B L i
         = Kraus.evalWord B (wordOfBlock d L i) := rfl
     _ = Kraus.evalWord (fun j => ζ • C j) (wordOfBlock d L i) := by simp [hB]
     _ = (ζ ^ (wordOfBlock d L i).length) •

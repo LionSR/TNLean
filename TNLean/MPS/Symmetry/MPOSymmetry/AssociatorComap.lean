@@ -46,7 +46,6 @@ subgroups of order two.
 -/
 
 open scoped Matrix Kronecker
-open TNLean.Algebra
 
 namespace MPOTensor.GroupFamily
 

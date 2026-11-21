@@ -125,8 +125,6 @@ end MPOTensor.GroupCocycle
 
 namespace MPOTensor.GroupCocycle
 
-open TNLean.Algebra
-
 variable {G : Type} [Group G] {n : ℕ}
 
 /-! ### The local gates -/
@@ -304,8 +302,6 @@ theorem mpo_tensor_conjTranspose {ω : ScalarThreeCochain G}
 end MPOTensor.GroupCocycle
 
 namespace MPOTensor.GroupCocycle
-
-open TNLean.Algebra
 
 variable {G : Type} [Group G] {n : ℕ} (e : G ≃ Fin n)
 

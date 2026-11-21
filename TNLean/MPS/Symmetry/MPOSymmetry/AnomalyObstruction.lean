@@ -55,7 +55,6 @@ than injective, and neither unitarity nor simplicity of the operators is used.
 -/
 
 open scoped Matrix Kronecker
-open TNLean.Algebra
 
 namespace MPOTensor
 

@@ -62,8 +62,8 @@ theorem stationaryBlockDensity_word (A : MPSTensor d D)
         ((decodeBlockEquiv d N).symm s) ((decodeBlockEquiv d N).symm t) =
       Matrix.trace (Λ * Kraus.evalWord A (List.ofFn s) *
         (Kraus.evalWord A (List.ofFn t))ᴴ) := by
-  simp only [stationaryBlockDensity_apply, Kraus.blockTensor, Kraus.wordOfBlock,
-    decodeBlock_decodeBlockEquiv_symm]
+  simp only [stationaryBlockDensity_apply, Kraus.blockTensor, Kraus.reindexPhysical,
+    Equiv.apply_symm_apply, Kraus.block_apply]
 
 /-- The stationary physical density represents the existing observable-transfer
 functional on arbitrary block observables. The physical coefficients have the

@@ -336,7 +336,7 @@ theorem sectorFixedPointAlgebraRigidity_of_irreducible_cyclicDecomp
       (D := D) (m := m)
       (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) P := by
   let T : MatrixEnd D := Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)
-  change SectorFixedPointAlgebraRigidity (n := Fin D) (m := m) T P
+  change SectorFixedPointAlgebraRigidity (D := D) (m := m) T P
   intro k X Y hXP hPX hYP hPY hXfix hYfix
   obtain ⟨c, hcX⟩ :=
     sector_supported_pow_fixed_eq_smul_projection
@@ -629,10 +629,12 @@ theorem cyclic_projection_mem_multiplicativeDomain
     simp [K, KadisonSchwarz.krausMap]
   intro k
   have hPk_star : (P k)ᴴ = P k := (hPproj k).1.eq
-  have hTPk_eq : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P k) = P (k - 1) := by
+  have hTPk_eq :
+      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P k) = P (k - 1) := by
     simpa [show k - 1 + 1 = k by abel] using hcyclic (k - 1)
   have hTPk_proj :
-      IsOrthogonalProjection (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P k)) := by
+      IsOrthogonalProjection
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P k)) := by
     simpa [hTPk_eq] using hPproj (k - 1)
   have hRight :
       KadisonSchwarz.krausMap K (P k * (P k)ᴴ) =

@@ -100,7 +100,6 @@ noncomputable section
 
 namespace MPSTensor
 
-open TNLean.Algebra
 open scoped ScalarCohomology
 
 variable {D : ℕ}

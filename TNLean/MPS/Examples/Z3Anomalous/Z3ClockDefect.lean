@@ -78,7 +78,7 @@ open scoped BigOperators Matrix
 
 namespace Z3Clock
 
-open MPOTensor TNLean.Algebra ScalarThreeCochain
+open MPOTensor ScalarThreeCochain
 
 /-! ### The defect -/
 

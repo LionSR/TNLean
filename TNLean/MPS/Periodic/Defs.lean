@@ -324,7 +324,8 @@ theorem ZGaugeEquiv.blockTensor_gaugeEquiv {m : ℕ} {A B : MPSTensor d D}
   have := congrArg (fun M =>
     (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * M *
       (Y : Matrix (Fin D) (Fin D) ℂ))) hWord
-  simpa [Kraus.blockTensor, Matrix.mul_assoc] using this.symm
+  simpa [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.wordOfBlock, Matrix.mul_assoc] using
+    this.symm
 
 /-- Full-period blocking turns a `ℤ_m`-gauge equivalence into MPV equality. -/
 theorem ZGaugeEquiv.blockTensor_sameMPV {m : ℕ} {A B : MPSTensor d D}

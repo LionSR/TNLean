@@ -33,7 +33,6 @@ https://sirui-lu.com/TNLean/paper-gaps/gs24_truncation_detector_endpoint_depende
 
 open Matrix
 open scoped Matrix
-open TNLean.Algebra
 
 namespace MPOTensor.GroupFamily.BlockActionData
 

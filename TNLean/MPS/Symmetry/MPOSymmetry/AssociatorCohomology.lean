@@ -33,8 +33,6 @@ namespace MPOTensor
 
 namespace GroupFamily
 
-open TNLean.Algebra
-
 open scoped ScalarCohomology
 
 variable {d : ℕ} {G : Type} [Group G] {F : GroupFamily G d}

@@ -45,7 +45,7 @@ of fusion tensors.
 noncomputable section
 
 open scoped Matrix Kronecker
-open TNLean.Algebra MPOTensor MPSTensor
+open MPOTensor MPSTensor
 
 namespace CZXCompression
 

@@ -171,13 +171,6 @@ noncomputable def residualBoundaryGramLimit (A : MPSTensor d D)
     ((boundaryFiberwiseMap (Cfg d r) (Matrix.gramReshuffle (fixedPointProj ρ htr))).comp
       (correlatedTailMapES A V r))
 
-private theorem boundaryFiberwiseMap_sub (S : Type*) [Fintype S]
-    (G H : EuclideanSpace ℂ (Fin E × Fin E) →L[ℂ]
-      EuclideanSpace ℂ (Fin E × Fin E)) :
-    boundaryFiberwiseMap S (G - H) = boundaryFiberwiseMap S G - boundaryFiberwiseMap S H := by
-  ext x p
-  rfl
-
 /-- A contractive correlated tail does not increase the prefix Gram error.
 The coefficient is one, independently of the tail length. -/
 theorem norm_blockedResidualBoundaryMapES_gram_sub_limit_le

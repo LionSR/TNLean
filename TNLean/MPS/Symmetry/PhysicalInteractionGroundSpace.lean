@@ -56,10 +56,12 @@ theorem hamiltonian_translationInvariant_ker_eq_range_groundProduct {d N : ℕ}
     (hcomm : ∀ i j : Fin N,
       Commute (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A)
         (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) A)) :
-    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) =
       LinearMap.range (Matrix.toEuclideanLin
         (List.ofFn fun i : Fin N =>
           1 - placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A).prod) := by
+  haveI : NeZero N := ⟨by omega⟩
   let P (i : Fin N) := (bondMatrixEquiv d N).symm
     (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A)
   have hP (i : Fin N) : (P i).IsSymmetricProjection :=
@@ -75,7 +77,7 @@ theorem hamiltonian_translationInvariant_ker_eq_range_groundProduct {d N : ℕ}
     simp only [map_list_prod, List.map_ofFn, Function.comp_def, map_sub, map_one, P]
   rw [← hProd] at h
   simpa only [P, ← map_sum, bondMatrixEquiv_symm_eq_toEuclideanLin,
-    Interaction.hamiltonian, Interaction.translates_term] using h
+    Interaction.hamiltonian_translationInvariant_of_le _ hN] using h
 
 /-- Extending a local parent projection through a physical isometry and
 penalizing unused physical states again gives an orthogonal projection.
@@ -147,11 +149,12 @@ theorem isometricInteractionExtension_ker_eq_map {d m N : ℕ}
           (isometricInteractionExtension E A))
         (placeAlong (X := fun _ ↦ Fin m) (ringWindow hN j)
           (isometricInteractionExtension E A))) :
-    LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian) =
+    haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+      (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian) =
       (LinearMap.ker
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian)).map
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian)).map
         (Matrix.toEuclideanLin (Matrix.tensorPower N E)) := by
+  haveI : NeZero N := ⟨by omega⟩
   rw [hamiltonian_translationInvariant_ker_eq_range_groundProduct _
     (isometricInteractionExtension_isStarProjection E hE A hA) hN hcommNew]
   rw [isometricInteractionExtension_groundProduct E hE A
@@ -174,12 +177,13 @@ theorem isometricInteractionExtension_ker_eq_span {d m N : ℕ}
         (placeAlong (X := fun _ ↦ Fin m) (ringWindow hN j)
           (isometricInteractionExtension E A)))
     (ψ : EuclideanSpace ℂ (Fin N → Fin d))
-    (hground : LinearMap.ker
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) =
+    (hground : haveI : NeZero N := ⟨by omega⟩; LinearMap.ker
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) =
       Submodule.span ℂ {ψ}) :
-    LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian) =
+    haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+      (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian) =
       Submodule.span ℂ {Matrix.toEuclideanLin (Matrix.tensorPower N E) ψ} := by
+  haveI : NeZero N := ⟨by omega⟩
   rw [isometricInteractionExtension_ker_eq_map E hE A hA hN hcommOld hcommNew,
     hground, Submodule.map_span, Set.image_singleton]
 

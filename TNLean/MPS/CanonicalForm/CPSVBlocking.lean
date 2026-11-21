@@ -56,7 +56,8 @@ theorem blockTensor {A B : MPSTensor d D} (h : GaugeEquiv A B) (p : ℕ) :
       (blockTensor (d := d) (n := Fin D) B p) := by
   obtain ⟨X, hX⟩ := h
   refine ⟨X, fun i ↦ ?_⟩
-  simpa [Kraus.blockTensor, Matrix.GeneralLinearGroup.coe_inv] using
+  simpa [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.wordOfBlock,
+    Matrix.GeneralLinearGroup.coe_inv] using
     evalWord_gauge (A := A) (B := B) X hX (Kraus.wordOfBlock d p i)
 
 end GaugeEquiv
@@ -134,7 +135,7 @@ theorem blockTensor_toTensorFromBlocks_apply {r : ℕ} {dim : Fin r → ℕ}
       toTensorFromBlocks (d := blockPhysDim d p)
         (fun k ↦ μ k ^ p)
         (fun k ↦ blockTensor (d := d) (n := Fin (dim k)) (blocks k) p) i := by
-  simp [Kraus.blockTensor, toTensorFromBlocks,
+  simp [Kraus.blockTensor, Kraus.reindexPhysical, toTensorFromBlocks,
     evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal,
     Kraus.length_wordOfBlock]
 
@@ -168,12 +169,12 @@ noncomputable def blockTensor {A : MPSTensor d D}
       have hlen := congrArg List.length hnil
       simp [Kraus.length_wordOfBlock, hp.ne'] at hlen
     calc
-      Kraus.blockTensor (d := d) (D := D) A p i =
+      Kraus.blockTensor (d := d) (n := Fin D) A p i =
           data.ambient_coisometryᴴ *
             Kraus.evalWord (toTensorFromBlocks (d := d) data.weights data.blocks)
               (Kraus.wordOfBlock d p i) *
             data.ambient_coisometry := by
-            simpa [Kraus.blockTensor] using
+            simpa [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.wordOfBlock] using
               evalWord_eq_coisometry_reconstruction_of_ne_nil
                 data.ambient_coisometry data.coisometric data.reconstruct
                 (Kraus.wordOfBlock d p i) hword_ne

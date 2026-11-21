@@ -380,10 +380,11 @@ window by $\sigma$ and its phase is read off the window. -/
 theorem placedGaussOperator_eq_monomial (N : ℕ) (hN : 2 ≤ N) (j : Fin N) :
     placedGaussOperator N hN j =
       monomial
-        (windowPerm 2 hN j (windowCoordinates.symm.trans (localPerm.trans windowCoordinates)))
+        (ManyBody.placeAlongPerm (ManyBody.ringWindow hN j)
+          (windowCoordinates.symm.trans (localPerm.trans windowCoordinates)))
         fun t ↦ localPhase (windowCoordinates.symm (MPSTensor.extractWindow 2 j t)) := by
   rw [placedGaussOperator, gaussOperator_circuitTuple_gen, Matrix.coe_reindexAlgEquiv,
-    reindex_monomial, placeAlong_ringWindow_monomial]
+    reindex_monomial, ManyBody.placeAlong_monomial]
   rfl
 
 theorem siteBits_eq_localBits_zero (m : Fin 2 → Fin 4) :
@@ -446,13 +447,14 @@ coordinates. -/
 theorem chainDecode_windowPerm (hN : 2 ≤ N) (j : Fin N)
     (t : Fin N → Fin (Fintype.card (Fin 4 × Multiplicative (ZMod 2)))) :
     chainDecode N
-        (windowPerm 2 hN j (windowCoordinates.symm.trans (localPerm.trans windowCoordinates)) t) =
+        (ManyBody.placeAlongPerm (ManyBody.ringWindow hN j)
+          (windowCoordinates.symm.trans (localPerm.trans windowCoordinates)) t) =
       chainFlip j (chainDecode N t) := by
   obtain ⟨hj, hj1⟩ := chainDecode_window hN j t
   set y := windowCoordinates.symm (MPSTensor.extractWindow 2 j t) with hy
   funext k
-  rw [chainDecode_apply, windowPerm_apply, replaceWindow_two_apply hN, chainFlip_apply,
-    Pi.add_apply, Equiv.trans_apply, Equiv.trans_apply, ← hy]
+  rw [chainDecode_apply, placeAlongPerm_ringWindow_apply, replaceWindow_two_apply hN,
+    chainFlip_apply, Pi.add_apply, Equiv.trans_apply, Equiv.trans_apply, ← hy]
   by_cases hkj : k = j
   · subst hkj
     rw [ite_eq_left rfl, gaussLocalCoordinateEquiv_apply_zero, siteDecode_equivFin,

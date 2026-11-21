@@ -58,7 +58,7 @@ private theorem transferMap_unitaryConj_of_decidable [DecidableEq (Fin D)]
         ((↑U : Matrix _ _ ℂ) * X * (↑U : Matrix _ _ ℂ)ᴴ)) *
     (↑U : Matrix _ _ ℂ) := by
   set V : Matrix (Fin D) (Fin D) ℂ := ↑U with hV_def
-  change Kraus.transferMap (d := d) (D := D) (fun i => Vᴴ * A i * V) X =
+  change Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => Vᴴ * A i * V) X =
     Vᴴ * (Kraus.transferMap (ι := Fin d) (n := Fin D) A (V * X * Vᴴ)) * V
   simp only [Kraus.transferMap_apply, Finset.mul_sum, Finset.sum_mul]
   congr 1; ext1 i

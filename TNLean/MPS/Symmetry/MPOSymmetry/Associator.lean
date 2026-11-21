@@ -54,7 +54,6 @@ The three-cochain is not normalized here.
 -/
 
 open scoped Matrix Kronecker
-open TNLean.Algebra
 
 namespace MPOTensor
 

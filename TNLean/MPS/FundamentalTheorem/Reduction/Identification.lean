@@ -42,7 +42,7 @@ lemma traceChar_eq_sum_of_traceWord_eq (M : Type*) [AddCommGroup M] [Module ℂ 
     intro w hw
     rw [htr w hw, LinearMap.sum_apply]
     exact Finset.sum_congr rfl fun s _ => (MPSTensor.traceChar_wordModule_ofWord (C s) w).symm
-  rw [traceChar_eq_of_traceWord_eq h hp, LinearMap.sum_apply]
+  rw [linearMap_eq_on_ker_aug (χ₁ := traceChar M) h hp, LinearMap.sum_apply]
 
 end WordAlgebra
 

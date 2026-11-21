@@ -65,7 +65,6 @@ family with the same bond dimensions; it shows that the associator is unchanged.
 -/
 
 open scoped Matrix Kronecker BigOperators
-open TNLean.Algebra
 
 /-! ### Recombining and conjugating letters -/
 

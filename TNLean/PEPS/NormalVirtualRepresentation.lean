@@ -115,7 +115,7 @@ end TNLean.PEPS
 
 namespace TNLean.PEPS
 
-open TNLean.Lattice TNLean.Algebra
+open TNLean.Lattice
 open scoped BigOperators Matrix
 
 variable {V : Type*} [Fintype V] [LinearOrder V]

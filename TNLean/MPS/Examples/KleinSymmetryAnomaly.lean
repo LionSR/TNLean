@@ -47,7 +47,7 @@ by the generator. Documented in `docs/paper-gaps/glm23_klein_printed_anomaly_sco
 
 noncomputable section
 
-open CZXCompression MPOTensor MPSTensor TNLean.Algebra
+open CZXCompression MPOTensor MPSTensor
 
 namespace KleinSymmetry
 

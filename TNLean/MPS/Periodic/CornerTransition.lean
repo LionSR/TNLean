@@ -33,7 +33,7 @@ These are the `A_u^i`/`F_u` building blocks for the sector-match case. In
 `TNLean.MPS.Periodic.Overlap.SectorMatch.Contraction`, the theorem
 `sectorTensor_proportional_of_blockedMatch` uses their right-inverse contraction
 to obtain the uniform product-tensor identity, applies
-`PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul`,
+`PiTensorProduct.exists_kappa_product_one_of_tprod_eq_root_smul`,
 and assembles the global gauge.
 
 ## References

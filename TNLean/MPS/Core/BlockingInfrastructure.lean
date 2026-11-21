@@ -697,9 +697,9 @@ theorem isPrimitive_transferMap_blockTensor_of_dvd
     [NeZero D]
     (A : MPSTensor d D) (p q : ℕ) (hpq : p ∣ q) (hq : 0 < q)
     (hPrim : _root_.IsPrimitive
-      (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin D) (blockTensor (d := d) (n := Fin D) A p))) :
+      (Kraus.transferMap (blockTensor (d := d) (n := Fin D) A p))) :
     _root_.IsPrimitive
-      (Kraus.transferMap (ι := Fin (blockPhysDim d q)) (n := Fin D) (blockTensor (d := d) (n := Fin D) A q)) := by
+      (Kraus.transferMap (blockTensor (d := d) (n := Fin D) A q)) := by
   obtain ⟨m, rfl⟩ := hpq
   -- p > 0 since p * m > 0
   have hp : 0 < p := by

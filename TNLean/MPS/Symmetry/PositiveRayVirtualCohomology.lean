@@ -21,7 +21,6 @@ Source: arXiv:1010.3732, Sections II.C.2 and II.F.2, and Appendix C.
 -/
 
 open scoped Matrix ScalarCohomology
-open TNLean.Algebra
 
 namespace MPSTensor
 

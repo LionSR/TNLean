@@ -29,11 +29,11 @@ variable {d R N : ℕ}
 /-- The full Euclidean periodic sum agrees with the Hamiltonian of the translation-invariant
 interaction of the local matrix, for every interaction range that fits in the chain. -/
 theorem periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian
-    (h : MPOTensor.ChainOperator d R) (hRN : R ≤ N) :
+    [NeZero N] (h : MPOTensor.ChainOperator d R) (hRN : R ≤ N) :
     periodicInteractionHamiltonianES (Matrix.toEuclideanLin h) N =
-      Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRN h).hamiltonian := by
+      Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N h).hamiltonian := by
   rw [periodicInteractionHamiltonianES, ManyBody.Interaction.hamiltonian, map_sum]
-  simp_rw [periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow hRN _ h]
-  rfl
+  simp_rw [periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow hRN _ h,
+    ManyBody.Interaction.translationInvariant_term_of_le h hRN]
 
 end MPSTensor

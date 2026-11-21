@@ -477,10 +477,11 @@ theorem commonFixedSubmodule_placedGaussProjector_circuitTupleStar (N : ℕ) (hN
 theorem placedGaussOperatorStar_eq_monomial (N : ℕ) (hN : 2 ≤ N) (j : Fin N) :
     placedGaussOperatorStar N hN j =
       monomial
-        (windowPerm 2 hN j (windowCoordinates.symm.trans (localPerm.trans windowCoordinates)))
+        (ManyBody.placeAlongPerm (ManyBody.ringWindow hN j)
+          (windowCoordinates.symm.trans (localPerm.trans windowCoordinates)))
         fun t ↦ localPhaseStar (windowCoordinates.symm (MPSTensor.extractWindow 2 j t)) := by
   rw [placedGaussOperatorStar, gaussOperator_circuitTupleStar_gen, Matrix.coe_reindexAlgEquiv,
-    reindex_monomial, placeAlong_ringWindow_monomial]
+    reindex_monomial, ManyBody.placeAlong_monomial]
   rfl
 
 /-- The phase of the placed Gauss operator of the second displayed tuple is the

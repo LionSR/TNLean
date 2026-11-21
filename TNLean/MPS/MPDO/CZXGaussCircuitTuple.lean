@@ -246,7 +246,7 @@ theorem tildeLambda_mem_unitaryGroup :
   refine monomial_mem_unitaryGroup _ _ fun s ↦ ?_
   have hstar : star (-I * (-1 : ℂ) ^ (fExponent (localBits s)).val) =
       I * (-1) ^ (fExponent (localBits s)).val := by
-    simp [Complex.star_def]
+    simp
   rw [Function.comp_apply, hstar]
   calc I * (-1 : ℂ) ^ (fExponent (localBits s)).val *
         (-I * (-1) ^ (fExponent (localBits s)).val)
@@ -431,7 +431,7 @@ theorem gaussOperator_circuitTuple_gen :
     rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
       rcases Multiplicative.zmod2_cases b with rfl | rfl
     · simp [gen_inv, matterBarFlip_symm, fExponent_barFlip, phaseExponent_zero_zero,
-        iPow_add, iPow_two_mul_cast, ZMod.neg_one_pow_val_add, Complex.star_def,
+        iPow_add, iPow_two_mul_cast, ZMod.neg_one_pow_val_add,
         show ((1 : ZMod 2)).val = 1 from rfl]
     · simp [gen_inv, gen_mul_gen, matterBarFlip_symm, eExponent_barFlip, phaseExponent_zero_one,
         iPow_add, iPow_two_mul_cast, ZMod.neg_one_pow_val_add, show ((1 : ZMod 2)).val = 1 from rfl]

@@ -24,7 +24,6 @@ case is documented in `docs/paper-gaps/spc11_uniform_gap_injective_scope.tex`.
 -/
 
 open scoped Matrix ScalarCohomology
-open TNLean.Algebra
 
 namespace MPSTensor
 

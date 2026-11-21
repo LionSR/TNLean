@@ -22,9 +22,10 @@ identity. Source context: arXiv:1010.3732, Sections II.C.2 and II.F.2. -/
 theorem hamiltonian_translationInvariant_commute_onSiteTensorPow {d N : ℕ}
     (U : Matrix (Fin d) (Fin d) ℂ) (A : MPOTensor.ChainOperator d 2)
     (hN : 2 ≤ N) (hA : Commute A (onSiteTensorPow 2 U)) :
-    Commute (ManyBody.Interaction.translationInvariant hN A).hamiltonian
+    haveI : NeZero N := ⟨by omega⟩;
+    Commute (ManyBody.Interaction.translationInvariant N A).hamiltonian
       (onSiteTensorPow N U) :=
-  Commute.sum_left _ _ _ fun i _ =>
+  haveI : NeZero N := ⟨by omega⟩; Commute.sum_left _ _ _ fun i _ =>
     placeAlong_ringWindow_commute_onSiteTensorPow U 2 hN i A hA
 
 end MPSTensor

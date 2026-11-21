@@ -9,6 +9,7 @@ import TNLean.MPS.MPU.SuccessAttenuationCircuit
 import TNLean.MPS.MPU.ExactCleanAmplificationCircuit
 import TNLean.MPS.MPU.SupportedAmplification
 import QICLean.Circuit.Model.UnitaryPlacement
+import QICLean.Circuit.Compile.ChainPlacement
 import QICLean.Circuit.Protocol.ZeroRegister.GateCount
 import TNLean.MPS.MPU.SingleSiteCircuit
 import Mathlib.Logic.Equiv.Fin.Basic
@@ -53,18 +54,6 @@ def appendBasisEmbedding {d a b : ℕ} {ρ κ : Type*}
       funext j
       have hj := congrFun h (Fin.natAdd a j)
       simpa only [Fin.append_right] using hj
-
-/-- A product of gates on an open chain of `m` sites, placed on sites of an open chain of `n`
-sites along an injection carrying neighbouring sites to neighbouring sites, is a product of the
-same number of gates. -/
-theorem isGateProduct_placeAlong_of_succ {d m n K : ℕ} (w : Fin m ↪ Fin n)
-    (hw : ∀ p p' : Fin m, p'.val = p.val + 1 → (w p').val = (w p).val + 1)
-    {V : Matrix (Cfg d m) (Cfg d m) ℂ}
-    (hV : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph m)) K V) :
-    IsGateProduct (Geometry.graph (SimpleGraph.pathGraph n)) K
-      (ManyBody.placeAlong (X := fun _ ↦ Fin d) w V) :=
-  hV.place_pathGraph (X := fun _ : Fin n ↦ Fin d) (ManyBody.windowEquiv w)
-    (fun p p' h ↦ by simpa only [ManyBody.coe_windowEquiv] using hw p p' h)
 
 /-- A placed suffix operator is the tensor product with the identity on the prefix. -/
 theorem placeAlong_natAddEmb_eq_reindex {d a b : ℕ}
@@ -342,7 +331,7 @@ theorem exists_placed_compatible_merging_preparation_circuit {d r q a : ℕ}
             attenuationQuditRotation hd (mergingAttenuation r))) := by
   obtain ⟨U, hU, hclean⟩ := exists_compatible_merging_preparation_circuit hd hr e he hP
   exact ⟨ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.natAddEmb a) U,
-    (isGateProduct_placeAlong_of_succ (Fin.natAddEmb a) (fun p p' h ↦ by
+    (IsGateProduct.placeAlong_pathGraph_of_succ (Fin.natAddEmb a) (fun p p' h ↦ by
       simp only [Fin.natAddEmb_apply, Fin.val_natAdd]; omega) hU).mono
       (Nat.le_mul_of_pos_right _ (by omega)),
     isCleanImplementation_placeAlong_natAddEmb f _ hclean⟩
@@ -596,9 +585,9 @@ theorem exists_clean_encoded_merging_preparation {d r q a A : ℕ}
         (Finset.univ.image (Fin.natAdd a : Fin (2 * q + 2) → Fin (a + (2 * q + 2)))) := by
   obtain ⟨T, hT, hTactive⟩ := exists_compatible_merging_preparation_circuit hd hr e he hP
   let Z := ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.natAddEmb a) T
-  have hZ := isGateProduct_placeAlong_of_succ (Fin.natAddEmb a) (fun p p' h ↦ by
+  have hZ := IsGateProduct.placeAlong_pathGraph_of_succ (Fin.natAddEmb a) (fun p p' h ↦ by
     simp only [Fin.natAddEmb_apply, Fin.val_natAdd]; omega) hT
-  have hU := isGateProduct_placeAlong_of_succ (Fin.castAddEmb A)
+  have hU := IsGateProduct.placeAlong_pathGraph_of_succ (Fin.castAddEmb A)
     (fun p p' h ↦ by simpa only [Fin.castAddEmb_apply, Fin.val_castAdd] using h) hZ
   refine ⟨Z, ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.castAddEmb A) Z,
     hU.mono (Nat.le_mul_of_pos_right _ (by omega)), isCleanImplementation_placeAlong_workspace Z,

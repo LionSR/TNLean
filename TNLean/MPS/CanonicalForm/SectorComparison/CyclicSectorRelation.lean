@@ -86,8 +86,9 @@ lemma adjointTransferMap_pow_fixes_cyclic_projection
         intro k
         rw [pow_succ', cyclicShift_succ_left]
         change
-          Kraus.transferMap (d := d) (D := D) K
-            (((Kraus.transferMap (ι := Fin d) (n := Fin D) K) ^ n) (P (cyclicShift (k + 1) n))) = P k
+          Kraus.transferMap (ι := Fin d) (n := Fin D) K
+            (((Kraus.transferMap (ι := Fin d) (n := Fin D) K) ^ n) (P (cyclicShift (k + 1) n))) =
+              P k
         rw [ih (k + 1)]
         exact hcyclic k
   simpa using hiter m k
@@ -115,7 +116,7 @@ theorem transferMap_adjoint_blocked_eq_pow
     Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
   have hBlockedAdj :
       Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D) (fun j => (blockTensor A m j)ᴴ) =
-        (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D) (blockTensor A m)).adjoint := by
+        (Kraus.transferMap (blockTensor A m)).adjoint := by
     simpa using
       (Kraus.mapLM_conjTranspose_eq_adjoint (K := blockTensor A m))
   have hAdj :
@@ -133,8 +134,9 @@ theorem transferMap_adjoint_blocked_eq_pow
         (star_pow (x := Kraus.transferMap (ι := Fin d) (n := Fin D) A) (n := m))
     simpa using hpow.symm
   calc
-    Kraus.transferMap (d := blockPhysDim d m) (D := D) (fun j => (blockTensor A m j)ᴴ) X
-        = ((Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D) (blockTensor A m)).adjoint) X := by
+    Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D) (fun j => (blockTensor A m j)ᴴ) X
+        = ((Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D)
+            (blockTensor A m)).adjoint) X := by
             rw [hBlockedAdj]
     _ = (((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ m).adjoint) X := by
           rw [transferMap_blockTensor]
@@ -167,7 +169,8 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry
     (hρfix : Kraus.adjointMap (fun i : Fin d => (A i)ᴴ) ρ = ρ)
     (hIrrMap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)))
     {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
-    (hperiph : peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) =
+    (hperiph : peripheralEigenvalues
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) =
       Set.range (fun j : Fin m => γ ^ (j : ℕ))) :
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
       (P : Fin m → MatrixAlg D)

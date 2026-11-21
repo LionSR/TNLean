@@ -685,6 +685,16 @@ theorem boundaryFiberwiseMap_id (S : Type*) [Fintype S] :
   rintro ⟨s, p⟩
   rfl
 
+/-- Fiberwise lifting preserves subtraction. -/
+theorem boundaryFiberwiseMap_sub (S : Type*) [Fintype S]
+    (G H : EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ]
+      EuclideanSpace ℂ (Fin D × Fin D)) :
+    boundaryFiberwiseMap (D := D) S (G - H) =
+      boundaryFiberwiseMap (D := D) S G - boundaryFiberwiseMap (D := D) S H := by
+  apply ContinuousLinearMap.ext
+  intro x
+  rfl
+
 /-- Inner products against a fiberwise map split exactly as a finite direct sum. -/
 theorem inner_boundaryFiberwiseMap (S : Type*) [Fintype S]
     (G : EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ]

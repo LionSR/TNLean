@@ -154,7 +154,8 @@ theorem physicalMatrix_blockTensor_blockSum (hι : ∀ j, Function.Injective (ι
   ext w p
   have hw : Kraus.wordOfBlock d q w ≠ [] := by
     rw [← List.length_pos_iff, Kraus.length_wordOfBlock]; omega
-  simp only [physicalMatrix, blockTensor, Kraus.blockTensor]
+  simp only [physicalMatrix, blockTensor, Kraus.blockTensor, Kraus.reindexPhysical,
+    Kraus.block_apply, Kraus.decodeBlockEquiv_apply, ← Kraus.wordOfBlock]
   rw [evalWord_blockSum hι hdisj μ _ hw, Kraus.length_wordOfBlock, Matrix.sum_apply,
     Matrix.sum_apply]
   refine Finset.sum_congr rfl fun j _ => ?_

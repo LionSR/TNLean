@@ -114,8 +114,7 @@ theorem wordSpan_le_wordSpan_blockTensor (A : MPSTensor d D) (L n : ℕ) :
     set B := blockTensor (d := d) (n := Fin D) A L
     set σ₀_enc := Fin.cast (blockPhysDim_eq_pow d L).symm (finFunctionFinEquiv σ₀)
     have hfirst_eq : Kraus.evalWord A (List.ofFn σ₀) = B σ₀_enc := by
-      simp [B, Kraus.blockTensor, Kraus.wordOfBlock, Kraus.decodeBlock,
-        σ₀_enc, Fin.cast_cast]
+      simp [B, Kraus.blockTensor, Kraus.reindexPhysical, Kraus.decodeBlockEquiv, σ₀_enc]
     have hfirst : Kraus.evalWord A (List.ofFn σ₀) ∈ Kraus.wordSpan B 1 := by
       rw [hfirst_eq]
       apply Submodule.subset_span
@@ -164,8 +163,7 @@ theorem blockTensor_apply_encodeBlock (A : MPSTensor d D) (L : ℕ)
     (blockTensor (d := d) (n := Fin D) A L) (encodeBlock d L σ₀) =
       Kraus.evalWord A (List.ofFn σ₀) := by
   classical
-  simp [Kraus.blockTensor, Kraus.wordOfBlock, Kraus.decodeBlock, encodeBlock,
-    Fin.cast_cast]
+  simp [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.decodeBlockEquiv, encodeBlock]
 
 /-- **Word eigenvector → single-index eigenvector of the blocked tensor.** -/
 theorem blockTensor_single_eigenvector (A : MPSTensor d D)

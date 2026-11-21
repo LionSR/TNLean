@@ -85,9 +85,10 @@ theorem ExactMPSGroundPath.exists_uniform_window_correlation_bound
     simp [F', window, hL]
   have hSep : ManyBody.IsGraphSeparated (SimpleGraph.cycleGraph N) F F' t := by
     exact isGraphSeparated_window (by omega) (by dsimp only [N]; omega)
-  have hDist : (t : ℝ) ≤ ringSupportDistance (F : Set (Fin N))
+  have hDist : (t : ℝ) ≤ ManyBody.ringSupportDistance (F : Set (Fin N))
       (F' : Set (Fin N)) hF hF' := by
-    exact_mod_cast ((isGraphSeparated_iff_lt_ringSupportDistance _ _ hF hF' t).mp hSep).le
+    exact_mod_cast
+      ((ManyBody.isGraphSeparated_iff_lt_ringSupportDistance _ _ hF hF' t).mp hSep).le
   have hDisj : Disjoint (F : Set (Fin N)) (F' : Set (Fin N)) := by
     apply Set.disjoint_left.mpr
     intro k hk hk'

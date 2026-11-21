@@ -50,26 +50,31 @@ noncomputable def orderedGappedInteractionPath
     (hA : A.PosSemidef) (hB : B.PosSemidef) (hAB : A ≤ B)
     (hAnorm : ‖A‖ ≤ 1) (hBnorm : ‖B‖ ≤ 1)
     (hker : ∀ (N : ℕ) (hN : 2 ≤ N) (x : Cfg d N → ℂ),
-      (Interaction.translationInvariant hN A).hamiltonian.mulVec x = 0 →
-        (Interaction.translationInvariant hN B).hamiltonian.mulVec x = 0)
-    (hzero : ∀ (N : ℕ) (hN : 2 ≤ N), ∃ x : EuclideanSpace ℂ (Cfg d N),
-      x ≠ 0 ∧ Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian x = 0)
+      haveI : NeZero N := ⟨by omega⟩;
+      (Interaction.translationInvariant N A).hamiltonian.mulVec x = 0 →
+        (Interaction.translationInvariant N B).hamiltonian.mulVec x = 0)
+    (hzero : ∀ (N : ℕ) (hN : 2 ≤ N), haveI : NeZero N := ⟨by omega⟩;
+      ∃ x : EuclideanSpace ℂ (Cfg d N),
+      x ≠ 0 ∧ Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian x = 0)
     (hgap : ∃ δ : ℝ, 0 < δ ∧ ∀ (N : ℕ) (hN : 2 ≤ N),
-      ∀ z ∈ spectrum ℂ (Interaction.translationInvariant hN A).hamiltonian,
+      haveI : NeZero N := ⟨by omega⟩;
+      ∀ z ∈ spectrum ℂ (Interaction.translationInvariant N A).hamiltonian,
         z.re = 0 ∨ δ ≤ z.re)
     (hSymA : ∀ (N : ℕ) (hN : 2 ≤ N) (g : G),
-      Commute (Interaction.translationInvariant hN A).hamiltonian
+      haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N A).hamiltonian
         (Matrix.finKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ)))
     (hSymB : ∀ (N : ℕ) (hN : 2 ≤ N) (g : G),
-      Commute (Interaction.translationInvariant hN B).hamiltonian
+      haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N B).hamiltonian
         (Matrix.finKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ))) :
     SymmetricGappedInteractionPath U A B := by
   have hAffine (γ : ℝ) : A + γ • (B - A) = (1 - γ) • A + γ • B := by module
   have hHam (N : ℕ) (hN : 2 ≤ N) (γ : ℝ) :
-      (Interaction.translationInvariant hN (A + γ • (B - A))).hamiltonian =
-        (Interaction.translationInvariant hN A).hamiltonian +
-          γ • ((Interaction.translationInvariant hN B).hamiltonian -
-            (Interaction.translationInvariant hN A).hamiltonian) := by
+      haveI : NeZero N := ⟨by omega⟩
+      (Interaction.translationInvariant N (A + γ • (B - A))).hamiltonian =
+        (Interaction.translationInvariant N A).hamiltonian +
+          γ • ((Interaction.translationInvariant N B).hamiltonian -
+            (Interaction.translationInvariant N A).hamiltonian) := by
+    haveI : NeZero N := ⟨by omega⟩
     have hmap (i : Fin N) :
         placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) (A + γ • (B - A)) =
           placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A +
@@ -79,7 +84,7 @@ noncomputable def orderedGappedInteractionPath
         |>.restrictScalars ℝ
       change f (A + γ • (B - A)) = f A + γ • (f B - f A)
       simp only [map_add, map_smul, map_sub]
-    simp only [Interaction.hamiltonian, Interaction.translates_term, hmap]
+    simp only [Interaction.hamiltonian_translationInvariant_of_le _ hN, hmap]
     simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib, Finset.smul_sum, smul_sub]
   refine {
     interaction := fun γ => A + γ • (B - A)
@@ -105,23 +110,57 @@ noncomputable def orderedGappedInteractionPath
   · obtain ⟨δ, hδ, hSpec⟩ := hgap
     refine ⟨δ, hδ, ?_⟩
     intro γ hγ N hN
-    have hHA : (Interaction.translationInvariant hN A).hamiltonian.PosSemidef :=
-      Interaction.posSemidef_hamiltonian fun i ↦
-        posSemidef_placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) hA
-    have hHAB : (Interaction.translationInvariant hN A).hamiltonian ≤
-        (Interaction.translationInvariant hN B).hamiltonian := by
-      simp only [Interaction.hamiltonian]
+    haveI : NeZero N := ⟨by omega⟩
+    have hHA : (Interaction.translationInvariant N A).hamiltonian.PosSemidef :=
+      Interaction.posSemidef_hamiltonian fun _ ↦
+        Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _)
+    have hHAB : (Interaction.translationInvariant N A).hamiltonian ≤
+        (Interaction.translationInvariant N B).hamiltonian := by
+      simp only [Interaction.hamiltonian_translationInvariant_of_le _ hN]
       exact Finset.sum_le_sum fun i _ ↦
         placeAlong_le_placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) hAB
-    have h := Matrix.spectrum_gap_interpolation_of_le_of_nontrivial_kernel
-      (Interaction.translationInvariant hN A).hamiltonian
-      (Interaction.translationInvariant hN B).hamiltonian
-      hHA hHAB (hker N hN) δ γ hγ.1
-      (Matrix.orthogonal_quadratic_gap_of_spectrum_separated _ hHA.isHermitian
-        (hSpec N hN)) (hzero N hN)
-    rw [← hHam] at h
-    exact ⟨0, h.1, by simpa using h.2⟩
+    have hAC : (Interaction.translationInvariant N A).hamiltonian ≤
+        (Interaction.translationInvariant N A).hamiltonian +
+          γ • ((Interaction.translationInvariant N B).hamiltonian -
+            (Interaction.translationInvariant N A).hamiltonian) := by
+      rw [Matrix.le_iff]
+      simpa using (Matrix.le_iff.mp hHAB).smul hγ.1
+    have hHC := Matrix.nonneg_iff_posSemidef.mp
+      ((Matrix.nonneg_iff_posSemidef.mpr hHA).trans hAC)
+    have hgapA : IsGapped (Interaction.translationInvariant N A).hamiltonian 0 δ := by
+      refine ⟨?_, fun μ hμ ↦ ?_⟩
+      · obtain ⟨x, hx, hxA⟩ := hzero N hN
+        rw [groundSpace_zero]
+        exact fun hbot ↦ hx (by simpa [hbot] using LinearMap.mem_ker.mpr hxA)
+      obtain ⟨k, rfl⟩ := hHA.isHermitian.hasEigenvalue_toEuclideanLin_iff.mp hμ
+      have hz : ((hHA.isHermitian.eigenvalues k : ℝ) : ℂ) ∈
+          spectrum ℂ (Interaction.translationInvariant N A).hamiltonian := by
+        rw [← Matrix.spectrum_toLpLin (p := 2)]
+        exact Module.End.hasEigenvalue_iff_mem_spectrum.mp hμ
+      rcases hSpec N hN _ hz with h | h
+      · left; simpa using h
+      · right; exact Complex.real_le_real.mpr (by simpa using h)
+    have hgapC := hgapA.of_le hHA hAC fun x hx ↦ by
+      have hxB : (Interaction.translationInvariant N B).hamiltonian *ᵥ x.ofLp = 0 :=
+        hker N hN _ (by simpa using mem_groundSpace_iff_mulVec.mp hx)
+      rw [mem_groundSpace_iff_mulVec, Complex.ofReal_zero, zero_smul] at hx ⊢
+      simp [Matrix.add_mulVec, Matrix.smul_mulVec, Matrix.sub_mulVec, hx, hxB]
+    rw [hHam]
+    refine ⟨0, ?_, fun z hz ↦ ?_⟩
+    · obtain ⟨x, hx, hx0⟩ := (Submodule.ne_bot_iff _).mp hgapC.1
+      rw [← Matrix.spectrum_toLpLin (p := 2)]
+      exact Module.End.hasEigenvalue_iff_mem_spectrum.mp
+        (Module.End.hasEigenvalue_of_hasEigenvector ⟨hx, hx0⟩)
+    have hμ : Module.End.HasEigenvalue (Matrix.toEuclideanLin _) z := by
+      rw [← Matrix.spectrum_toLpLin (p := 2)] at hz
+      exact Module.End.hasEigenvalue_iff_mem_spectrum.mpr hz
+    obtain ⟨k, rfl⟩ := hHC.isHermitian.hasEigenvalue_toEuclideanLin_iff.mp hμ
+    refine ⟨by simpa using hHC.eigenvalues_nonneg k, ?_⟩
+    rcases hgapC.2 _ hμ with h | h
+    · left; simpa using h
+    · right; simpa using Complex.real_le_real.mp h
   · intro γ hγ g N hN
+    haveI : NeZero N := ⟨by omega⟩
     rw [hHam]
     exact (hSymA N hN g).add_left (((hSymB N hN g).sub_left (hSymA N hN g)).smul_left γ)
 

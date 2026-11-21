@@ -31,7 +31,7 @@ namespace MPSTensor
 
 open scoped ScalarCohomology
 open scoped Matrix
-open TNLean.Algebra
+open ScalarCohomology
 
 /-- A continuous family of `D`th roots of unity on the unit interval is
 constant. This is the discreteness step in the virtual-path argument of

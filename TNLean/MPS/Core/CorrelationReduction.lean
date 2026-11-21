@@ -47,7 +47,7 @@ theorem connectedCorrelator_eq_trace_transfer_tracelessPart
     (A : MPSTensor d D) (ρ X Y : Mat D) (n : ℕ)
     (hFix : Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ) :
     connectedCorrelator (d := d) (D := D) A ρ X Y n =
-      Matrix.trace (Y * (((Kraus.transferMap (ι := Fin d) (n := Fin D) A)) ^ n) (tracelessPart ρ X)) := by
+      Matrix.trace (Y * (((Kraus.transferMap A)) ^ n) (tracelessPart ρ X)) := by
   set E := Kraus.transferMap (ι := Fin d) (n := Fin D) A
   have hE_ρ_n : ∀ k : ℕ, (E ^ k) ρ = ρ := by
     intro k

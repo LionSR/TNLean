@@ -84,7 +84,7 @@ records, not the source.
 noncomputable section
 
 open scoped Matrix Kronecker
-open TNLean.Algebra MPOTensor MPSTensor MPOTensor.GroupCocycle
+open MPOTensor MPSTensor MPOTensor.GroupCocycle
 
 namespace Z2Z2Condensation
 

@@ -233,9 +233,10 @@ include h₀ h₁ hW hInj₀ hInj₁ in
 on rings of length at least two. -/
 theorem hamiltonian_mixedWeakHopfCompletedInteraction_commute
     [NeZero D₀] [NeZero D₁] {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (mixedWeakHopfCompletedInteraction A₀ A₁ W γ)).hamiltonian
       (MPOTensor.mpo W.tensor N) := by
+  haveI : NeZero N := ⟨by omega⟩
   rw [← MPOTensor.mpoWithBoundary_one]
   exact Commute.sum_left _ _ _ fun i _ =>
     MPOTensor.placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
@@ -249,9 +250,10 @@ common MPO on every ring of length at least two. No spectral claim is made. -/
 theorem hamiltonian_averageMatrix_mixedEndpointInteraction_commute
     [FiniteDimensional ℂ H] [NeZero D₀] [NeZero D₁]
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
       (W.averageMatrix 2 (mixedEndpointInteractionMatrix A₀ A₁ γ))).hamiltonian
       (MPOTensor.mpo W.tensor N) := by
+  haveI : NeZero N := ⟨by omega⟩
   rw [← MPOTensor.mpoWithBoundary_one]
   exact Commute.sum_left _ _ _ fun i _ =>
     MPOTensor.placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _

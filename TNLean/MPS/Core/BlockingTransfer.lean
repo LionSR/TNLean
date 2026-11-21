@@ -32,13 +32,14 @@ variable {d D : ℕ}
 original transfer map (apply form). -/
 theorem transferMap_blockTensor_apply
     (A : MPSTensor d D) (L : ℕ) (X : Matrix (Fin D) (Fin D) ℂ) :
-    Kraus.transferMap (ι := Fin (blockPhysDim d L)) (n := Fin D) (blockTensor (d := d) (n := Fin D) A L) X =
+    Kraus.transferMap (ι := Fin (blockPhysDim d L)) (n := Fin D)
+        (blockTensor (d := d) (n := Fin D) A L) X =
       ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L) X := by
   classical
   -- Expand the RHS as a sum over length-`L` words.
   rw [Kraus.mapLM_pow_apply (K := A) (N := L) X]
   -- Expand the LHS as a sum over blocked physical indices.
-  simp only [Kraus.transferMap_apply, Kraus.blockTensor, Kraus.wordOfBlock]
+  simp only [Kraus.transferMap_apply, Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply]
   -- Reindex the blocked sum by the equivalence `Fin (blockPhysDim d L) ≃ (Fin L → Fin d)`.
   let e : Fin (blockPhysDim d L) ≃ (Fin L → Fin d) :=
     decodeBlockEquiv d L
@@ -56,7 +57,8 @@ theorem transferMap_blockTensor_apply
 original transfer map (as linear maps). -/
 theorem transferMap_blockTensor
     (A : MPSTensor d D) (L : ℕ) :
-    Kraus.transferMap (ι := Fin (blockPhysDim d L)) (n := Fin D) (blockTensor (d := d) (n := Fin D) A L) =
+    Kraus.transferMap (ι := Fin (blockPhysDim d L)) (n := Fin D)
+        (blockTensor (d := d) (n := Fin D) A L) =
       (Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L := by
   ext X : 1
   simpa using transferMap_blockTensor_apply (A := A) (L := L) (X := X)
@@ -65,7 +67,8 @@ theorem transferMap_blockTensor
 blocking length. -/
 theorem transferMap_blockTensor_quasi_idempotent
     (A : MPSTensor d D) (L : ℕ) (c : ℂ)
-    (h : Kraus.transferMap (ι := Fin d) (n := Fin D) A * Kraus.transferMap (ι := Fin d) (n := Fin D) A =
+    (h : Kraus.transferMap (ι := Fin d) (n := Fin D) A *
+        Kraus.transferMap (ι := Fin d) (n := Fin D) A =
       c • Kraus.transferMap (ι := Fin d) (n := Fin D) A) :
     Kraus.transferMap (ι := Fin (blockPhysDim d L)) (n := Fin D)
         (blockTensor (d := d) (n := Fin D) A L) *
@@ -84,15 +87,16 @@ theorem transferMap_blockTensor_quasi_idempotent
     _ = (c • Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L := by rw [pow_two, h]
     _ = c ^ L • (Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L := by rw [smul_pow]
 
-/-- Eigenvalues transport along physical blocking: if `μ` is an eigenvalue of `Kraus.transferMap A`,
-then `μ ^ L` is an eigenvalue of the transfer map of the blocked tensor. -/
+/-- Eigenvalues transport along physical blocking: if `μ` is an eigenvalue of
+`Kraus.transferMap A`, then `μ ^ L` is an eigenvalue of the transfer map of the blocked tensor. -/
 @[deprecated "Rewrite with `transferMap_blockTensor`, then apply `Module.End.HasEigenvalue.pow`."
   (since := "2026-08-15")]
 theorem transferMap_blockTensor_hasEigenvalue
     (A : MPSTensor d D) (L : ℕ) {μ : ℂ}
     (hμ : Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin d) (n := Fin D) A) μ) :
     Module.End.HasEigenvalue
-        (Kraus.transferMap (ι := Fin (blockPhysDim d L)) (n := Fin D) (blockTensor (d := d) (n := Fin D) A L))
+        (Kraus.transferMap (ι := Fin (blockPhysDim d L)) (n := Fin D)
+          (blockTensor (d := d) (n := Fin D) A L))
         (μ ^ L) := by
   -- Rewrite the blocked transfer map as an iterate and apply the standard power lemma.
   -- (We use `rw` rather than `simp` to ensure the rewrite happens under the eigenvalue predicate.)
@@ -136,7 +140,7 @@ theorem mixedMapLM_blockTensor_apply {D₁ D₂ : ℕ} (X : MPSTensor d D₁) (Y
     Kraus.mixedMapLM (blockTensor X L) (blockTensor Y L) Z = (Kraus.mixedMapLM X Y ^ L) Z := by
   classical
   rw [Kraus.mixedMapLM_pow_apply, Kraus.mixedMapLM_apply]
-  simp only [Kraus.blockTensor, Kraus.wordOfBlock]
+  simp only [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply]
   let e : Fin (blockPhysDim d L) ≃ (Fin L → Fin d) := decodeBlockEquiv d L
   simpa [Kraus.decodeBlockEquiv_apply, e] using
     (Fintype.sum_equiv e

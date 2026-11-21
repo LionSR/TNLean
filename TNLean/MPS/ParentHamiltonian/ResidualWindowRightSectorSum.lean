@@ -37,23 +37,27 @@ noncomputable def residualBoundaryConfigEquiv (d L M r : ℕ) :
     (Fin.appendEquiv (M * L) r)
 
 /-- The right window is a finite direct sum of the residual boundary map,
-after decoding each common-interval configuration. This includes zero lengths.
+after decoding each common-interval configuration and moving the blocked prefix to the
+front. This includes zero lengths.
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, Lemma commutation (i), lines 2442--2531. -/
 theorem residualWindowRightMapES_eq_fiberwise
     (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
     (V : Matrix (Fin D) (Fin E) ℂ) (K M r : ℕ) :
     residualWindowRightMapES A B V K M r =
-      EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) K)
-        ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-          (residualBoundaryConfigEquiv d L M r).symm).toContinuousLinearMap.comp
-            (blockedResidualBoundaryMapES A L B V M r)) := by
+      (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+        (Equiv.prodComm (Cfg (blockPhysDim d L) M × Cfg d r)
+          (Cfg (blockPhysDim d L) K))).toContinuousLinearMap.comp
+        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
+          ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+            (residualBoundaryConfigEquiv d L M r).symm).toContinuousLinearMap.comp
+              (blockedResidualBoundaryMapES A L B V M r))) := by
   ext x ⟨u, v, τ⟩
   change Matrix.trace ((Kraus.evalWord B (List.ofFn v) * Vᴴ *
     Kraus.evalWord A (List.ofFn τ)) * rectangularBoundaryFamilyFiberₗ u x) =
     blockedResidualBoundaryMap A L B V M r
       ((Matrix.frobeniusEquivEuclidean (Fin D) (Fin E)).symm
-        (EuclideanSpace.fiberₗ u x))
+        (ContinuousLinearMap.rightFiber x u))
       (Fin.append (blockedConfigEquiv d M L v) τ)
   simp [blockedResidualBoundaryMap, Function.comp_def]
   rfl
@@ -122,9 +126,10 @@ theorem tendsto_norm_residualWindowRight_sector_projection_sum_sub_iSup_zero
     A B V ρ hP hρ hDistinct U hM
   apply squeeze_zero (fun n => norm_nonneg _) (fun n => ?_) hBase
   simp_rw [residualWindowRightMapES_eq_fiberwise]
-  exact EuclideanSpace.norm_sum_fiberwiseMap_range_starProjection_sub_iSup_le
-    (Cfg (blockPhysDim d L) (K n))
-    (fun j => (U n).toContinuousLinearMap.comp
-      (blockedResidualBoundaryMapES A L (B j) (V j) (M n) (r n)))
+  exact (norm_sum_isometric_range_projection_sub_iSup_le _ _).trans
+    (ContinuousLinearMap.norm_sum_rightFiberwiseMap_range_starProjection_sub_iSup_le
+      (S := Cfg (blockPhysDim d L) (K n))
+      (fun j => (U n).toContinuousLinearMap.comp
+        (blockedResidualBoundaryMapES A L (B j) (V j) (M n) (r n))))
 
 end MPSTensor

@@ -144,8 +144,10 @@ private lemma sectorOverlap_succ_eq {m : ℕ} [NeZero m]
     (PA PB : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hPAproj : ∀ k, IsOrthogonalProjection (PA k))
     (hPBproj : ∀ k, IsOrthogonalProjection (PB k))
-    (hShiftA : ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (PA (k + 1)) = PA k)
-    (hShiftB : ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (B i)ᴴ) (PB (k + 1)) = PB k)
+    (hShiftA : ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (PA (k + 1)) =
+      PA k)
+    (hShiftB : ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (B i)ᴴ) (PB (k + 1)) =
+      PB k)
     (hTraceA : ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
       mpv (blocksA k) σ = (PA k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace)
     (hTraceB : ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),

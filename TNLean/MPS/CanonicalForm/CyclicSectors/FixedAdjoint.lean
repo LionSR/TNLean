@@ -71,7 +71,8 @@ theorem exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry
     (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hFix : ∀ k : Fin m, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P k) = P k) :
+    (hFix : ∀ k : Fin m,
+      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P k) = P k) :
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor d (dim k))
       (φ : (k : Fin m) →
         Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k))

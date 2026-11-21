@@ -77,7 +77,6 @@ the source's convention.
 -/
 
 open scoped Matrix Kronecker
-open TNLean.Algebra
 
 namespace MPOTensor
 
@@ -379,7 +378,6 @@ theorem physAct_twoWallChain (T : MPOTensor d D₁) (σ : Fin k → Fin d) (i : 
   rw [physAct_single, physAct_wallChain] at h'
   rw [physAct_evalWord, h'] at h
   exact h
-
 
 /-- A word of length at least `2M + 1` splits into two outer pieces of length `M` and a nonempty
 middle. -/

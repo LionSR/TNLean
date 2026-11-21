@@ -28,12 +28,14 @@ single-block parent-Hamiltonian argument. -/
 theorem hamiltonian_translationInvariant_parent_groundSpace_eq_span_mpv
     {d D N : ℕ} [NeZero D] (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (hN : 2 ≤ N) :
-    LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N
       (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian) =
       Submodule.span ℂ
         {(WithLp.linearEquiv 2 ℂ ((Fin N → Fin d) → ℂ)).symm (mpv A)} := by
+  haveI : NeZero N := ⟨by omega⟩
   have hH : parentHamiltonianES A 2 N = Matrix.toEuclideanLin
-      (ManyBody.Interaction.translationInvariant hN
+      (ManyBody.Interaction.translationInvariant N
         (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian :=
     parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow A hN
   rw [← hH, ker_parentHamiltonianES_two_eq_range_periodicMpvLineMap A hA hN]

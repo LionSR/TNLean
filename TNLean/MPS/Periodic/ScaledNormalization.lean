@@ -66,7 +66,7 @@ theorem exists_leftCanonical_periodic_scale_of_irreducible
             (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) =
         ENNReal.ofReal r :=
     spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
-      (Kraus.transferMap (ι := Fin d) (n := Fin D) A) (Kraus.transferMap_isCPMap A) hIrrMap ρ r hρ hr hEig
+      (Kraus.transferMap A) (Kraus.transferMap_isCPMap A) hIrrMap ρ r hρ hr hEig
   set ζ : ℂ := (↑((Real.sqrt r)⁻¹) : ℂ) with hζ_def
   have hsqrt_pos : 0 < Real.sqrt r := Real.sqrt_pos.2 hr
   have hζ : ζ ≠ 0 := by

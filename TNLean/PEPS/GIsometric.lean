@@ -172,7 +172,7 @@ positive density normalization from the local site maps.
 this supported physical embedding. `TNLean.PEPS.TorusPhysicalCutDensity` consequently
 obtains one density on the original physical region, chosen before all closure
 labels and coefficients, with rank equal to the expected boundary power.
-`TNLean.Algebra.FlatDensityRenyiEntropy` computes all nonnegative finite Rényi
+`QICLean.Entropy.FlatDensityEntropy` computes all nonnegative finite Rényi
 orders from the genuine spectral trace powers, including rank at order zero
 and von Neumann entropy at order one. `TNLean.PEPS.TorusSimplyConnectedPhysicalDensity`
 combines these steps for contiguous regions with simply connected closed-cell

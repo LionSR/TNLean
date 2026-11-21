@@ -19,8 +19,6 @@ rephasing and preceding the interpolation of the bond state.
 
 open scoped Matrix
 
-namespace TNLean.Algebra
-
 private def sumGL {D₀ D₁ : ℕ} (X : GL (Fin D₀) ℂ) (Y : GL (Fin D₁) ℂ) :
     GL (Fin D₀ ⊕ Fin D₁) ℂ where
   val := Matrix.fromBlocks X.val 0 0 Y.val
@@ -67,5 +65,3 @@ theorem ProjectiveRepresentation.directSum_mem_unitaryGroup
   simp only [Matrix.fromBlocks_conjTranspose, Matrix.fromBlocks_multiply]
   simp [← Matrix.star_eq_conjTranspose, Matrix.mem_unitaryGroup_iff.mp h₀,
     Matrix.mem_unitaryGroup_iff.mp h₁]
-
-end TNLean.Algebra

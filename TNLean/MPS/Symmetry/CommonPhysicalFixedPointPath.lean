@@ -169,30 +169,31 @@ theorem isometricInteractionExtension_ker_le_of_ker_le {d m N : ℕ}
           (isometricInteractionExtension E A))
         (placeAlong (X := fun _ ↦ Fin m) (ringWindow hN j)
           (isometricInteractionExtension E A)))
-    (hker : LinearMap.ker
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) ≤
-      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN B).hamiltonian)) :
-    LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian) ≤
+    (hker : haveI : NeZero N := ⟨by omega⟩; LinearMap.ker
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) ≤
+      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N B).hamiltonian)) :
+    haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+      (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian) ≤
       LinearMap.ker (Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN (isometricInteractionExtension E B)).hamiltonian) := by
+        (Interaction.translationInvariant N (isometricInteractionExtension E B)).hamiltonian) := by
+  haveI : NeZero N := ⟨by omega⟩
   rw [isometricInteractionExtension_ker_eq_map E hE A hA hN hcommOld hcommNew]
   rintro x ⟨y, hy, rfl⟩
   have hyB := LinearMap.mem_ker.mp (hker hy)
   have hInt : Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (isometricInteractionExtension E B)).hamiltonian ∘ₗ
+      (Interaction.translationInvariant N (isometricInteractionExtension E B)).hamiltonian ∘ₗ
         Matrix.toEuclideanLin (Matrix.tensorPower N E) =
       Matrix.toEuclideanLin (Matrix.tensorPower N E) ∘ₗ
-        Matrix.toEuclideanLin (Interaction.translationInvariant hN B).hamiltonian := by
+        Matrix.toEuclideanLin (Interaction.translationInvariant N B).hamiltonian := by
     simpa only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same] using
       congrArg Matrix.toEuclideanLin
         (hamiltonian_translationInvariant_isometricInteractionExtension_intertwiner E hE B hB hN)
   change Matrix.toEuclideanLin
-    (Interaction.translationInvariant hN (isometricInteractionExtension E B)).hamiltonian
+    (Interaction.translationInvariant N (isometricInteractionExtension E B)).hamiltonian
       (Matrix.toEuclideanLin (Matrix.tensorPower N E) y) = 0
   calc
     _ = Matrix.toEuclideanLin (Matrix.tensorPower N E)
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN B).hamiltonian y) :=
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N B).hamiltonian y) :=
       LinearMap.congr_fun hInt y
     _ = 0 := by rw [hyB, map_zero]
 
@@ -202,10 +203,11 @@ Section II.F.2, eq:sym:omega-gamma. -/
 theorem commonPhysicalNormalizedBondInteraction_zero_mem_spectrum
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁)
     (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N) :
-    (0 : ℂ) ∈ spectrum ℂ (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; (0 : ℂ) ∈ spectrum ℂ (Interaction.translationInvariant N
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian := by
+  haveI : NeZero N := ⟨by omega⟩
   have hdet : Matrix.det
-      (Interaction.translationInvariant hN (normalizedBondInteraction D₀ D₁ γ)).hamiltonian =
+      (Interaction.translationInvariant N (normalizedBondInteraction D₀ D₁ γ)).hamiltonian =
         0 := by
     simpa only [spectrum.mem_iff, map_zero, zero_sub, IsUnit.neg_iff,
       Matrix.isUnit_iff_isUnit_det, isUnit_iff_ne_zero, not_not] using
@@ -250,9 +252,10 @@ one above zero. Source: arXiv:1010.3732, Section II.F.2, eq:sym:omega-gamma. -/
 theorem commonPhysicalNormalizedBondInteraction_spectrum_gap_one
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁)
     (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N) :
-    ∀ z ∈ spectrum ℂ (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; ∀ z ∈ spectrum ℂ (Interaction.translationInvariant N
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian,
       0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
+  haveI : NeZero N := ⟨by omega⟩
   simpa only [physicalSpectatorBondInteraction_eq_isometricInteractionExtension,
     commonPhysicalNormalizedBondInteraction, normalizedBondInteraction] using
     physicalSpectatorBondInteraction_spectrum_gap_one (D₀ + D₁) d₀ d₁ _
@@ -265,11 +268,13 @@ Section II.F.2, eq:sym:omega-gamma and eq:1d-sym:jointsym. -/
 theorem commonPhysicalNormalizedBondInteraction_groundSpace
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁)
     (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N) :
-    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian) =
       Submodule.span ℂ {(Matrix.toEuclideanLin
         (Matrix.tensorPower N (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁))
         (WithLp.toLp 2 (mpv (N := N) (weightedMatrixUnitInterpolation D₀ D₁ γ))))} := by
+  haveI : NeZero N := ⟨by omega⟩
   have : NeZero N := ⟨by omega⟩
   exact isometricInteractionExtension_ker_eq_span _
     (commonFixedPointInclusion_isometry _ d₀ d₁) _
@@ -297,11 +302,13 @@ eq:sym:omega-gamma and eq:1d-sym:jointsym. -/
 theorem commonPhysicalNormalizedBondInteraction_groundSpace_eq_span_mpv
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁)
     (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N) :
-    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian) =
       Submodule.span ℂ {(WithLp.toLp 2 (mpv (N := N)
         (rotatePhysical (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁)
           (weightedMatrixUnitInterpolation D₀ D₁ γ))))} := by
+  haveI : NeZero N := ⟨by omega⟩
   rw [commonPhysicalNormalizedBondInteraction_groundSpace h₀ h₁ d₀ d₁ γ hN,
     toEuclideanLin_tensorPower_mpv_rotatePhysical]
 
@@ -312,17 +319,19 @@ theorem commonPhysicalNormalizedBondInteraction_ker_le_parent
     {D₀ D₁ R N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁)
     (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N)
     (B : MPSTensor ((D₀ + D₁) * (D₀ + D₁)) R)
-    (hker : LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN
+    (hker : haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+      (Interaction.translationInvariant N
         (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) ≤
-      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
         (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian)) :
-    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian) ≤
-      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
         (LinearMap.toMatrix' (parentInteraction
           (rotatePhysical (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁) B)
             2))).hamiltonian) := by
+  haveI : NeZero N := ⟨by omega⟩
   have : NeZero N := ⟨by omega⟩
   rw [parentInteraction_matrix_rotatePhysical_eq_isometricInteractionExtension _
     (commonFixedPointInclusion_isometry _ d₀ d₁)]
@@ -349,11 +358,13 @@ theorem commonPhysicalParentInteraction_commute_onSite
     (hCov : GaugeEquiv B
       (rotatePhysical (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) B))
     (hN : 2 ≤ N) :
-    Commute (Interaction.translationInvariant hN (LinearMap.toMatrix' (parentInteraction
+    haveI : NeZero N := ⟨by omega⟩;
+    Commute (Interaction.translationInvariant N (LinearMap.toMatrix' (parentInteraction
       (rotatePhysical (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁) B)
         2))).hamiltonian
       (Matrix.finKronecker fun _ : Fin N =>
         (commonSptPhysicalAction ρ₀ ρ₁ h₀ h₁ U₀ U₁ g : Matrix _ _ ℂ)) := by
+  haveI : NeZero N := ⟨by omega⟩
   let V := sptFixedPointUnitaryAction (ρ₀.directSum ρ₁)
     (fun g => ρ₀.directSum_mem_unitaryGroup ρ₁ g (h₀ g) (h₁ g))
   let U := commonSptPhysicalAction ρ₀ ρ₁ h₀ h₁ U₀ U₁
@@ -368,7 +379,7 @@ theorem commonPhysicalParentInteraction_commute_onSite
       (commonFixedPointInclusion_intertwiner V U₀ U₁ g) hCov
   have hLocal := parentInteraction_matrix_commute_onSiteTensorPow A Ug
     (SetLike.coe_mem (U g)) hCovA 2
-  change Commute (Interaction.translationInvariant hN
+  change Commute (Interaction.translationInvariant N
     (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian (onSiteTensorPow N Ug)
   exact hamiltonian_translationInvariant_commute_onSiteTensorPow Ug _ hN hLocal
 
@@ -409,16 +420,17 @@ theorem commonPhysicalNormalizedBondInteraction_commute_onSite
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ)
     (U₁ : G →* Matrix.unitaryGroup (Fin d₁) ℂ) (g : G) (γ : ℝ) (hN : 2 ≤ N) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian
       (Matrix.finKronecker fun _ : Fin N =>
         (commonSptPhysicalAction ρ₀ ρ₁ h₀ h₁ U₀ U₁ g : Matrix _ _ ℂ)) := by
+  haveI : NeZero N := ⟨by omega⟩
   let Ug : Matrix (Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁))
       (Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁)) ℂ :=
     commonSptPhysicalAction ρ₀ ρ₁ h₀ h₁ U₀ U₁ g
   have hLocal := commonPhysicalNormalizedBondInteraction_commute_onSiteTensorPow
     ρ₀ ρ₁ h₀ h₁ U₀ U₁ g γ
-  change Commute (Interaction.translationInvariant hN
+  change Commute (Interaction.translationInvariant N
     (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian
     (onSiteTensorPow N Ug)
   exact hamiltonian_translationInvariant_commute_onSiteTensorPow Ug _ hN hLocal
@@ -478,10 +490,10 @@ noncomputable def commonPhysicalBondCanonicalParentComparisonPath
     (horder : normalizedBondInteraction D₀ D₁ γ ≤
       LinearMap.toMatrix' (parentInteraction B 2))
     (hker : ∀ (N : ℕ) (hN : 2 ≤ N),
-      LinearMap.ker (Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN
+      haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+        (Interaction.translationInvariant N
           (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) ≤
-        LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+        LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
           (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian))
     (hCov : ∀ g, GaugeEquiv B
       (rotatePhysical (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) B)) :
@@ -507,8 +519,8 @@ noncomputable def commonPhysicalBondCanonicalParentComparisonPath
       commonPhysicalParentInteraction_commute_onSite ρ₀ ρ₁ h₀ h₁ U₀ U₁ B g (hCov g) hN)
   · intro N hN x hx
     have hxES : WithLp.toLp 2 x ∈ LinearMap.ker
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) := by
-      change WithLp.toLp 2 ((Interaction.translationInvariant hN A).hamiltonian.mulVec x) = 0
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) := by
+      change WithLp.toLp 2 ((Interaction.translationInvariant N A).hamiltonian.mulVec x) = 0
       rw [hx, WithLp.toLp_zero]
     have hparent := commonPhysicalNormalizedBondInteraction_ker_le_parent
       hD₀ hD₁ d₀ d₁ γ hN B (hker N hN) hxES
@@ -516,7 +528,7 @@ noncomputable def commonPhysicalBondCanonicalParentComparisonPath
       WithLp.ofLp_toLp, WithLp.toLp_eq_zero] using hparent
   · intro N hN
     have hspec : (0 : ℂ) ∈ spectrum ℂ
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) := by
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) := by
       rw [Matrix.spectrum_toLpLin]
       exact commonPhysicalNormalizedBondInteraction_zero_mem_spectrum hD₀ hD₁ d₀ d₁ γ hN
     obtain ⟨x, hx⟩ :=

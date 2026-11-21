@@ -23,8 +23,6 @@ construction remains open, as recorded in
 
 open scoped Matrix
 
-namespace TNLean.Algebra
-
 /-- Continuous local compression to a nonzero invariant projection range
 preserves the factor system exactly. Source context: arXiv:1010.3732,
 Appendix C, lines 2653–2717. -/
@@ -88,5 +86,3 @@ theorem ProjectiveRepresentation.continuous_factor_family
     (hρ (g * h)).matrix_adjugate).matrix_elem i i).div
       (hρ (g * h)).matrix_det (fun t => ((ρ t).X (g * h)).det_ne_zero)
   exact hc.congr (fun t => (hformula t).symm)
-
-end TNLean.Algebra

@@ -42,10 +42,12 @@ theorem hamiltonian_translationInvariant_quadratic_gap_of_commuting_projection
       Commute (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A)
         (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) A))
     (v : EuclideanSpace ℂ (Cfg d N)) :
-    (⟪Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian v,
+    haveI : NeZero N := ⟨by omega⟩;
+    (⟪Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian v,
       v⟫_ℂ).re ≤
-      (⟪Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian v,
-        Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian v⟫_ℂ).re := by
+      (⟪Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian v,
+        Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian v⟫_ℂ).re := by
+  haveI : NeZero N := ⟨by omega⟩
   let P (i : Fin N) := (bondMatrixEquiv d N).symm
     (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A)
   have hP (i : Fin N) : (P i).IsSymmetricProjection :=
@@ -61,7 +63,7 @@ theorem hamiltonian_translationInvariant_quadratic_gap_of_commuting_projection
     (γ := 1) (by norm_num) P hP (fun _ _ => (0 : ℝ))
     (by intro i; simp)
     (by intro i j hj w; simpa using hcross i j w) v
-  simpa only [one_mul, P, ← map_sum, Interaction.hamiltonian, Interaction.translates_term,
+  simpa only [one_mul, P, ← map_sum, Interaction.hamiltonian_translationInvariant_of_le _ hN,
     bondMatrixEquiv_symm_eq_toEuclideanLin] using h
 
 /-- The spectrum of a periodic sum of commuting projection-valued local
@@ -73,11 +75,12 @@ theorem hamiltonian_translationInvariant_spectrum_gap_one_of_commuting_projectio
     (hcomm : ∀ i j : Fin N,
       Commute (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A)
         (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) A)) :
-    ∀ z ∈ spectrum ℂ (Interaction.translationInvariant hN A).hamiltonian,
+    haveI : NeZero N := ⟨by omega⟩;
+    ∀ z ∈ spectrum ℂ (Interaction.translationInvariant N A).hamiltonian,
       0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) :=
-  spectrum_separated_of_quadratic_gap _
+  haveI : NeZero N := ⟨by omega⟩; spectrum_separated_of_quadratic_gap _
     (Interaction.posSemidef_hamiltonian fun _ ↦
-      posSemidef_placeAlong (X := fun _ ↦ Fin d) _ (Matrix.nonneg_iff_posSemidef.mp hA.nonneg))
+      Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _))
     (hamiltonian_translationInvariant_quadratic_gap_of_commuting_projection A hA hN hcomm)
 
 private theorem sectorBondBlock_isStarProjection {p q : ℕ} {ι : Type*}
@@ -163,9 +166,10 @@ theorem sectorBondInteraction_spectrum_gap_one {K d N : ℕ}
     (η : (q h : Fin K) →
       Matrix (Matrix.EtaEdgeIndex dl dr q h) (Matrix.EtaEdgeIndex dl dr q h) ℂ)
     (hη : ∀ q h, IsStarProjection (η q h)) (hN : 2 ≤ N) :
-    ∀ z ∈ spectrum ℂ
-      (Interaction.translationInvariant hN (sectorBondInteraction dl dr e η)).hamiltonian,
+    haveI : NeZero N := ⟨by omega⟩; ∀ z ∈ spectrum ℂ
+      (Interaction.translationInvariant N (sectorBondInteraction dl dr e η)).hamiltonian,
       0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
+  haveI : NeZero N := ⟨by omega⟩
   let : NeZero N := ⟨by omega⟩
   exact hamiltonian_translationInvariant_spectrum_gap_one_of_commuting_projection _
     (sectorBondInteraction_isStarProjection dl dr e η hη) hN
@@ -242,10 +246,12 @@ Section II.F.2, equation eq:1d-sym:jointsym. -/
 theorem hamiltonian_translationInvariant_isometricInteractionExtension_intertwiner
     {d m N : ℕ} (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     (A : MPOTensor.ChainOperator d 2) (hA : A.IsHermitian) (hN : 2 ≤ N) :
-    (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian *
+    haveI : NeZero N := ⟨by omega⟩;
+    (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian *
         Matrix.tensorPower N E =
-      Matrix.tensorPower N E * (Interaction.translationInvariant hN A).hamiltonian := by
-  simpa only [Interaction.hamiltonian, Interaction.translates_term, Matrix.sum_mul,
+      Matrix.tensorPower N E * (Interaction.translationInvariant N A).hamiltonian := by
+  haveI : NeZero N := ⟨by omega⟩
+  simpa only [Interaction.hamiltonian_translationInvariant_of_le _ hN, Matrix.sum_mul,
     Matrix.mul_sum] using
     Finset.sum_congr rfl (fun i _ =>
       embed_isometricInteractionExtension_intertwiner E hE A hA hN i)
@@ -258,10 +264,12 @@ theorem isometricInteractionExtension_zero_mode {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     (A : MPOTensor.ChainOperator d 2) (hA : A.IsHermitian) (hN : 2 ≤ N)
     (ψ : Cfg d N → ℂ) (hψ : ψ ≠ 0)
-    (hzero : (Interaction.translationInvariant hN A).hamiltonian.mulVec ψ = 0) :
-    (Matrix.tensorPower N E).mulVec ψ ≠ 0 ∧
-      (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian.mulVec
+    (hzero : haveI : NeZero N := ⟨by omega⟩;
+      (Interaction.translationInvariant N A).hamiltonian.mulVec ψ = 0) :
+    haveI : NeZero N := ⟨by omega⟩; (Matrix.tensorPower N E).mulVec ψ ≠ 0 ∧
+      (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian.mulVec
         ((Matrix.tensorPower N E).mulVec ψ) = 0 := by
+  haveI : NeZero N := ⟨by omega⟩
   have h := congrArg (fun M => M.mulVec ψ)
     (hamiltonian_translationInvariant_isometricInteractionExtension_intertwiner E hE A hA hN)
   simp only [← Matrix.mulVec_mulVec, hzero, Matrix.mulVec_zero] at h
@@ -279,9 +287,11 @@ theorem isometricInteractionExtension_zero_mem_spectrum {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     (A : MPOTensor.ChainOperator d 2) (hA : A.IsHermitian) (hN : 2 ≤ N)
     (ψ : Cfg d N → ℂ) (hψ : ψ ≠ 0)
-    (hzero : (Interaction.translationInvariant hN A).hamiltonian.mulVec ψ = 0) :
-    (0 : ℂ) ∈ spectrum ℂ
-      (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian := by
+    (hzero : haveI : NeZero N := ⟨by omega⟩;
+      (Interaction.translationInvariant N A).hamiltonian.mulVec ψ = 0) :
+    haveI : NeZero N := ⟨by omega⟩; (0 : ℂ) ∈ spectrum ℂ
+      (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian := by
+  haveI : NeZero N := ⟨by omega⟩
   obtain ⟨hne, hz⟩ := isometricInteractionExtension_zero_mode E hE A hA hN ψ hψ hzero
   simpa only [spectrum.mem_iff, map_zero, zero_sub, IsUnit.neg_iff,
     Matrix.isUnit_iff_isUnit_det, isUnit_iff_ne_zero, not_not] using

@@ -105,7 +105,7 @@ theorem gaugePhase_scalar_norm_eq_one_of_leftCanonical_irreducible
     Kraus.exists_posSemidef_fixedPoint B hB_left (NeZero.pos D)
   have hB_irrMap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) B) :=
     Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B hB_irr
-  have hB_cp : IsCPMap (Kraus.transferMap (ι := Fin d) (n := Fin D) B) := Kraus.transferMap_isCPMap B
+  have hB_cp : IsCPMap (Kraus.transferMap B) := Kraus.transferMap_isCPMap B
   have hEB_eq : ∀ Y, Kraus.transferMap (ι := Fin d) (n := Fin D) B Y =
       (ζ * starRingEnd ℂ ζ) •
         (X.val * Kraus.transferMap (ι := Fin d) (n := Fin D) A

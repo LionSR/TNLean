@@ -33,7 +33,7 @@ open scoped Matrix ScalarCohomology
 
 namespace MPSTensor
 
-open TNLean.Algebra
+open ScalarCohomology
 
 variable {d D : ℕ} {G : Type} [Group G]
 

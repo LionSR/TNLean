@@ -44,8 +44,6 @@ end ProjectiveRepresentation
 
 namespace MPSTensor
 
-open TNLean.Algebra
-
 /-- Virtual covariance survives a nonzero rescaling and a bond gauge,
 with the virtual matrices conjugated by that gauge. Source:
 arXiv:1010.3732, Section II.C, standard-form preparation. -/

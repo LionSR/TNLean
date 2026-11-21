@@ -416,8 +416,8 @@ theorem isGInjective_mpsSiteMap_blockTensor (ρ : Representation ℂ G (Fin D �
   obtain ⟨n, rfl⟩ : ∃ n, L = n + 1 := ⟨L - 1, by omega⟩
   exact (hA.mpsSiteMap_wordTensor n).mpsSiteMap_reindex (decodeBlockEquiv d (n + 1))
     fun I => by
-      simp only [Kraus.blockTensor, Kraus.wordOfBlock, toLin'_evalWord, List.map_ofFn,
-        wordTensor, decodeBlockEquiv_apply]
+      simp only [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply, toLin'_evalWord,
+        List.map_ofFn, wordTensor]
       rfl
 
 end MPSTensor

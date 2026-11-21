@@ -189,7 +189,7 @@ theorem ExactMPSGroundPath.exists_chain_character
   intro t g
   obtain ⟨E, _, _, hline⟩ := Q.ground_line t t.property N hN
   exact mem_span_mpv_of_commute_ground_line (Q.tensor t)
-    (ManyBody.Interaction.translationInvariant hN (P.interaction t)).hamiltonian (V g) E
+    (ManyBody.Interaction.translationInvariant N (P.interaction t)).hamiltonian (V g) E
     (P.symmetric t t.property g N hN) hline
 
 /-- The constant finite-chain character acts on periodic MPS coefficients.
@@ -264,8 +264,6 @@ theorem ExactMPSGroundPath.exists_exact_symmetry_of_isInjective
   obtain ⟨χ, hχ, hSame⟩ := Q.exists_single_character_of_isInjective hInj
   exact ⟨χ, hχ, fun t => isOnSiteSymmetric_physicalCharacterUntwist χ hχ U (Q.tensor t)
     (hSame t)⟩
-
-open TNLean.Algebra
 
 /-- Continuous virtual projective data and endpoint cohomology can be
 derived from the independent physical ground-state realization when its

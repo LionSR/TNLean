@@ -628,15 +628,15 @@ lemma primitive_and_irreducible_sectorBlocks_of_cyclicDecomp
     Matrix.toMatrixInnerProductSpace (n := Fin (dim u)) (𝕜 := ℂ) 1 hM.posSemidef
   have hAdj :
       Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim u)) (fun i => (blocks u i)ᴴ) =
-        (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim u)) (blocks u)).adjoint := by
+        (Kraus.transferMap (blocks u)).adjoint := by
     simpa only using
       (Kraus.mapLM_conjTranspose_eq_adjoint (K := blocks u))
   have hPrimAdj' :
       _root_.IsPrimitive
-        ((Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim u)) (blocks u)).adjoint) := by
+        ((Kraus.transferMap (blocks u)).adjoint) := by
     simpa only [hAdj] using hPrimAdj
   refine ⟨(IsPrimitive.adjoint_iff
-    (E := Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim u)) (blocks u))).1 hPrimAdj', ?_⟩
+    (E := Kraus.transferMap (blocks u))).1 hPrimAdj', ?_⟩
   exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM (blocks u)
     ((Kraus.isIrreducibleMap_mapLM_conjTranspose_iff (blocks u)).mp hIrrAdj)
 
@@ -778,7 +778,7 @@ private lemma exists_offDiag_eigenvector_of_gaugePhase_same_dim
     exact hPuUPv.symm
   have hEig : Kraus.transferMap (ι := Fin d₀) (n := Fin D) C U = (star η) • U := by
     calc
-      Kraus.transferMap (d := d₀) (D := D) C U =
+      Kraus.transferMap (ι := Fin d₀) (n := Fin D) C U =
           ∑ i : Fin d₀, C i * (Vu * Y * Vvᴴ) * (C i)ᴴ := by
         simp [U]
       _ = ∑ i : Fin d₀, Vu * (Au i * Y * (Av i)ᴴ) * Vvᴴ := by

@@ -129,7 +129,7 @@ theorem exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint
   have hρ_not_pd : ¬ ρ.PosDef := by
     simpa [ρ, c] using max_shift_not_posDef (D := D) hX_herm
   have hρ_fix : Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ := by
-    change Kraus.transferMap (d := d) (D := D) A ((↑c : ℂ) • 1 - X) = (↑c : ℂ) • 1 - X
+    change Kraus.transferMap (ι := Fin d) (n := Fin D) A ((↑c : ℂ) • 1 - X) = (↑c : ℂ) • 1 - X
     rw [map_sub, map_smul, h_unital, hX_fix]
   have hρ_ne : ρ ≠ 0 := by
     intro hρ_zero

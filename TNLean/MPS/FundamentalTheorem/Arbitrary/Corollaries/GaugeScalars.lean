@@ -188,7 +188,7 @@ theorem IsSpectrallyPeriodic.pow_eq_one_of_mem_gaugeScalars {m : ℕ}
   have hle : ‖c‖ ≤ 1 := norm_le_one_of_hasEigenvalue hR.spectral_radius_one
     (hasEigenvalue_of_eigenvector_eq _ c _ hEY hYv)
   have hEX' : Kraus.transferMap (ι := Fin d) (n := Fin D) R (X * v) = c⁻¹ • (X * v) := by
-    calc Kraus.transferMap (d := d) (D := D) R (X * v)
+    calc Kraus.transferMap (ι := Fin d) (n := Fin D) R (X * v)
         = c⁻¹ • (c • Kraus.transferMap (ι := Fin d) (n := Fin D) R (X * v)) := by
           rw [smul_smul, inv_mul_cancel₀ hc0, one_smul]
       _ = c⁻¹ • (X * v) := by rw [hEX]

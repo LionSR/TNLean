@@ -40,9 +40,9 @@ theorem ExactMPSGroundPath.negativeFrequency_connected_identity
     (Q : ExactMPSGroundPath P) (γ : ℝ) (hγ : γ ∈ Set.Icc (0 : ℝ) 1)
     (N : ℕ) (hN : 2 ≤ N) (A B : MPOTensor.ChainOperator d N) :
     let ψ := mpvState (Q.tensor γ) N
-    let H := (Interaction.translationInvariant hN (P.interaction γ)).hamiltonian
+    let H := (Interaction.translationInvariant N (P.interaction γ)).hamiltonian
     let hH : H.IsHermitian := Interaction.isHermitian_hamiltonian
-      (Interaction.isHermitian_translates_term _ (P.hermitian γ hγ))
+      (Interaction.isHermitian_translationInvariant_term (P.hermitian γ hγ))
     ⟪ψ, toEuclideanCLM (𝕜 := ℂ) A (toEuclideanCLM (𝕜 := ℂ) B ψ)⟫_ℂ -
         ⟪ψ, toEuclideanCLM (𝕜 := ℂ) A ψ⟫_ℂ *
           ⟪ψ, toEuclideanCLM (𝕜 := ℂ) B ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) =

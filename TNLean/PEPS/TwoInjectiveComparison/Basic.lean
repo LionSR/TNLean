@@ -558,9 +558,9 @@ theorem existsUnique_virtualOperation_of_endPair
       (∀ (ν : K) (p₁ : V₁), C₁ ν p₁ = ∑ μ : K, A₁ μ p₁ * X μ ν) ∧
         ∀ (μ : K) (p₂ : V₂), C₂ μ p₂ = ∑ ν : K, X μ ν * A₂ ν p₂ := by
   classical
-  obtain ⟨g, hleft⟩ := gauge_eq1
+  obtain ⟨g, hleft⟩ := LinearIndependent.exists_left_eq_sum_of_sum_mul_eq
     (a := C₁) (b := A₁) (a' := A₂) (b' := C₂) hA₂ hcontract
-  have hright := gauge_eq2
+  have hright := LinearIndependent.right_eq_sum_of_sum_mul_eq
     (a := C₁) (b := A₁) (a' := A₂) (b' := C₂) (g := g) hA₁ hcontract hleft
   let X : Matrix K K ℂ := fun μ ν ↦ g ν μ
   have hleftX : ∀ (ν : K) (p₁ : V₁), C₁ ν p₁ = ∑ μ : K, A₁ μ p₁ * X μ ν := by
@@ -632,12 +632,12 @@ theorem exists_bondGauge_of_fullContraction
         ∑ ν : SharedBondConfig bondDim, B₁ p1.1 ν p1.2 * B₂ p2.1 ν p2.2 := by
     intro p1 p2
     exact hfull p1.1 p2.1 p1.2 p2.2
-  obtain ⟨g, hg1⟩ := gauge_eq1
+  obtain ⟨g, hg1⟩ := LinearIndependent.exists_left_eq_sum_of_sum_mul_eq
     (V1 := External₁ × Physical₁) (V2 := External₂ × Physical₂)
     (a := fun μ p => A₁ p.1 μ p.2)
     (b := fun ν p => B₁ p.1 ν p.2) (a' := fun μ p => A₂ p.1 μ p.2)
     (b' := fun ν p => B₂ p.1 ν p.2) hA₂c hcontr
-  have hg2 := gauge_eq2
+  have hg2 := LinearIndependent.right_eq_sum_of_sum_mul_eq
     (V1 := External₁ × Physical₁) (V2 := External₂ × Physical₂)
     (a := fun μ p => A₁ p.1 μ p.2)
     (b := fun ν p => B₁ p.1 ν p.2) (a' := fun μ p => A₂ p.1 μ p.2)
@@ -647,12 +647,12 @@ theorem exists_bondGauge_of_fullContraction
         ∑ ν : SharedBondConfig bondDim, A₁ p1.1 ν p1.2 * A₂ p2.1 ν p2.2 := by
     intro p1 p2
     exact (hcontr p1 p2).symm
-  obtain ⟨g', hg1'⟩ := gauge_eq1
+  obtain ⟨g', hg1'⟩ := LinearIndependent.exists_left_eq_sum_of_sum_mul_eq
     (V1 := External₁ × Physical₁) (V2 := External₂ × Physical₂)
     (a := fun ν p => B₁ p.1 ν p.2)
     (b := fun μ p => A₁ p.1 μ p.2) (a' := fun ν p => B₂ p.1 ν p.2)
     (b' := fun μ p => A₂ p.1 μ p.2) hB₂c hcontr'
-  have hinv := gauge_inv
+  have hinv := LinearIndependent.sum_mul_eq_ite_of_eq_sum
     (V1 := External₁ × Physical₁)
     (a := fun μ p => A₁ p.1 μ p.2)
     (b := fun ν p => B₁ p.1 ν p.2) (g := g) (g' := g') hA₁c hg1 hg1'

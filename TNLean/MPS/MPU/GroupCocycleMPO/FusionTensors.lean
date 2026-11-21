@@ -75,7 +75,7 @@ end MPOTensor.GroupCocycle
 
 namespace MPOTensor.GroupCocycle
 
-open TNLean.Algebra MPOTensor.GroupFamily
+open MPOTensor.GroupFamily
 
 variable {G : Type} [Group G] {n : ℕ} (e : G ≃ Fin n)
 

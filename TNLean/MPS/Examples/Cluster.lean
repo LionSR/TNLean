@@ -318,26 +318,26 @@ private lemma clusterPhysX2_conjTranspose : clusterPhysX2ᴴ = clusterPhysX2 := 
 generators act by `σx ⊗ I` and `I ⊗ σx`. -/
 def clusterZ2Z2Action :
     Multiplicative (ZMod 2 × ZMod 2) →* Matrix (Fin 4) (Fin 4) ℂ :=
-  ofCommutingInvolutions clusterPhysX1 clusterPhysX2
+  Matrix.ofCommutingInvolutions clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
 /-- The first generator acts by `σx ⊗ I`. -/
 @[simp] lemma clusterZ2Z2Action_10 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) = clusterPhysX1 :=
-  ofCommutingInvolutions_ofAdd_10 clusterPhysX1 clusterPhysX2
+  Matrix.ofCommutingInvolutions_ofAdd_10 clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
 /-- The second generator acts by `I ⊗ σx`. -/
 @[simp] lemma clusterZ2Z2Action_01 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) = clusterPhysX2 :=
-  ofCommutingInvolutions_ofAdd_01 clusterPhysX1 clusterPhysX2
+  Matrix.ofCommutingInvolutions_ofAdd_01 clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
 /-- The product of the generators acts by `σx ⊗ σx`. -/
 @[simp] lemma clusterZ2Z2Action_11 :
     clusterZ2Z2Action (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) =
       clusterPhysX1 * clusterPhysX2 :=
-  ofCommutingInvolutions_ofAdd_11 clusterPhysX1 clusterPhysX2
+  Matrix.ofCommutingInvolutions_ofAdd_11 clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
 
 /-! #### Virtual gauges `σz` and `σx` -/
@@ -442,7 +442,7 @@ state as a non-trivial symmetry-protected topological phase. -/
 theorem cluster_isOnSiteSymmetric_Z2Z2 :
     IsOnSiteSymmetric clusterBlocked clusterZ2Z2Action := by
   intro g
-  rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
+  rcases Multiplicative.zmod2sq_cases g with rfl | rfl | rfl | rfl
   · rw [twistedTensor_one]; exact fun _ _ => rfl
   · exact GaugeEquiv.sameMPV ⟨clusterGaugeZ, cluster_twist_X1⟩
   · exact GaugeEquiv.sameMPV ⟨clusterGaugeX, cluster_twist_X2⟩
@@ -458,7 +458,6 @@ and the first component of `h` are both nonzero, the standard commutator cocycle
 `H2π_ne_zero_of_commPhase_ne_one` its class is the non-trivial element of
 `H²(Z₂ × Z₂, ℂˣ) = Z₂`. -/
 
-open TNLean.Algebra in
 /-- The cluster factor system on `Z₂ × Z₂`: `ω(g, h) = (-1)^{g₂ h₁}`, the value
 `-1` when `(g₂, h₁) = (1, 1)` and `1` otherwise. -/
 def clusterOmega : ScalarCocycle (Multiplicative (ZMod 2 × ZMod 2)) :=
@@ -476,7 +475,6 @@ private lemma clusterOmega_apply_val (g h : Multiplicative (ZMod 2 × ZMod 2)) :
       if (Multiplicative.toAdd g).2 = 1 ∧ (Multiplicative.toAdd h).1 = 1 then -1 else 1 := by
   rw [clusterOmega]; split <;> simp
 
-open TNLean.Algebra in
 /-- The explicit `Z₂ × Z₂` projective representation on the bond space carrying
 `clusterOmega`.  The two generators act by the anticommuting gauges `σz` and
 `σx`; the third nontrivial element acts by their product `σz σx`. -/
@@ -495,7 +493,7 @@ def clusterProjRep : ProjectiveRepresentation (D := 2) clusterOmega where
           if p then 1 else pauliX := by
       split <;> simp
     simp only [clusterRepX, Units.val_mul, hZ, hX]
-    exact mul_of_anticommuting_involutions _ _ clusterGaugeZ_sq pauliX_sq
+    exact Matrix.mul_of_anticommuting_involutions _ _ clusterGaugeZ_sq pauliX_sq
       cluster_gauge_anticomm' g h
 
 /-- The virtual action `clusterProjRep` implements the on-site symmetry of the
@@ -509,20 +507,18 @@ theorem clusterBlocked_twist_intertwine (g : Multiplicative (ZMod 2 × ZMod 2)) 
       (h : T = (R : Matrix (Fin 2) (Fin 2) ℂ) * A * ((R⁻¹ : GL (Fin 2) ℂ) : Matrix _ _ ℂ)) :
       T * R = R * A := by
     rw [h, mul_assoc, Units.inv_mul, mul_one]
-  rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
+  rcases Multiplicative.zmod2sq_cases g with rfl | rfl | rfl | rfl
   · simp [clusterProjRep, clusterRepX, twistedTensor_one]
   · simpa [clusterProjRep, clusterRepX] using key _ (cluster_twist_X1 i)
   · simpa [clusterProjRep, clusterRepX] using key _ (cluster_twist_X2 i)
   · simpa [clusterProjRep, clusterRepX] using key _ (cluster_twist_X1X2 i)
 
-open TNLean.Algebra in
 /-- `clusterOmega` is a genuine `2`-cocycle: it is the factor system of the
 projective representation `clusterProjRep`, so its class lives in
 `H²(Z₂ × Z₂, ℂˣ)`. -/
 lemma clusterOmega_isCocycle : groupCohomology.IsMulCocycle₂ clusterOmega :=
   ScalarCocycle.isMulCocycle₂_of_projRep clusterProjRep (by norm_num)
 
-open TNLean.Algebra in
 /-- The commutator phase of `clusterOmega` on the two generators is `-1`. -/
 lemma cluster_commPhase_eq_neg_one :
     ScalarCocycle.commPhase clusterOmega
@@ -531,7 +527,6 @@ lemma cluster_commPhase_eq_neg_one :
   apply Units.ext
   norm_num
 
-open TNLean.Algebra in
 /-- The cluster factor system represents the non-trivial element of
 `H²(Z₂ × Z₂, ℂˣ) = Z₂`: the cluster state is a non-trivial SPT phase. -/
 theorem cluster_isNontrivialSPT :
@@ -610,7 +605,7 @@ two generators act by real symmetric involutive permutation matrices, so each
 group element equals its own adjoint inverse. -/
 theorem clusterZ2Z2Action_unitary (g : Multiplicative (ZMod 2 × ZMod 2)) :
     clusterZ2Z2Action g * (clusterZ2Z2Action g)ᴴ = 1 :=
-  ofCommutingInvolutions_mul_conjTranspose clusterPhysX1 clusterPhysX2
+  Matrix.ofCommutingInvolutions_mul_conjTranspose clusterPhysX1 clusterPhysX2
     clusterPhysX1_sq clusterPhysX2_sq clusterPhysX1X2_comm
     (by rw [clusterPhysX1_conjTranspose, clusterPhysX1_sq])
     (by rw [clusterPhysX2_conjTranspose, clusterPhysX2_sq]) g

@@ -3,16 +3,18 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MonomialMatrix
+import QICLean.ManyBody.Sites.PlaceAlongMonomial
 import TNLean.MPS.MPDO.CommutingForm
 
 /-!
 # Periodic placement of monomial local operators
 
 A monomial operator on an `L`-site window, placed on the periodic window
-beginning at site `i` of an `N`-site chain, is again monomial. Its
-permutation part replaces the window of a chain configuration by the permuted
-window, and its phase is the local phase evaluated on the extracted window.
+beginning at site `i` of an `N`-site chain, is again monomial
+(`ManyBody.placeAlong_monomial`). Its permutation part
+`ManyBody.placeAlongPerm (ManyBody.ringWindow hLN i) σ` replaces the window of a
+chain configuration by the permuted window (`placeAlongPerm_ringWindow_apply`),
+and its phase is the local phase evaluated on the extracted window.
 
 For a two-site window at `j`, the extracted window is $(s_j,s_{j+1})$ and the
 replacement changes exactly the sites $j$ and $j+1$.
@@ -26,48 +28,19 @@ namespace MPOTensor
 
 variable {d : ℕ}
 
-/-- The permutation of chain configurations obtained by permuting the periodic
-window of length `L` beginning at site `i` by `σ`. -/
-def windowPerm (L : ℕ) {N : ℕ} (hLN : L ≤ N) (i : Fin N) (σ : Equiv.Perm (Fin L → Fin d)) :
-    Equiv.Perm (Fin N → Fin d) where
-  toFun s := MPSTensor.replaceWindow L hLN i s (σ (MPSTensor.extractWindow L i s))
-  invFun s := MPSTensor.replaceWindow L hLN i s (σ.symm (MPSTensor.extractWindow L i s))
-  left_inv s := by simp
-  right_inv s := by simp
-
+/-- The permutation `σ` of the configurations of a window, placed along the periodic window of
+length `L` beginning at site `i` (`ManyBody.placeAlongPerm`), replaces the window of a chain
+configuration by `σ` of it. -/
 @[simp]
-theorem windowPerm_apply (L : ℕ) {N : ℕ} (hLN : L ≤ N) (i : Fin N)
+theorem placeAlongPerm_ringWindow_apply (L : ℕ) {N : ℕ} (hLN : L ≤ N) (i : Fin N)
     (σ : Equiv.Perm (Fin L → Fin d)) (s : Fin N → Fin d) :
-    windowPerm L hLN i σ s =
-      MPSTensor.replaceWindow L hLN i s (σ (MPSTensor.extractWindow L i s)) :=
-  rfl
-
-/-- Placing a monomial window operator on a periodic chain gives a monomial chain
-operator whose permutation acts on the window and whose phase is read off the
-window. -/
-theorem placeAlong_ringWindow_monomial (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    (σ : Equiv.Perm (Fin L → Fin d)) (φ : (Fin L → Fin d) → ℂ) :
-    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hLN i) (monomial σ φ) =
-      monomial (windowPerm L hLN i σ) fun s ↦ φ (MPSTensor.extractWindow L i s) := by
-  ext t s
-  rw [ManyBody.placeAlong_apply, monomial_apply, monomial_apply, windowPerm_apply,
-    ← MPSTensor.extractWindow_eq_comp_ringWindow hLN,
-    ← MPSTensor.extractWindow_eq_comp_ringWindow hLN]
-  by_cases h : t = MPSTensor.replaceWindow L hLN i s (σ (MPSTensor.extractWindow L i s))
-  · have hagree : ∀ v, (∀ u, ManyBody.ringWindow hLN i u ≠ v) → t v = s v := by
-      rw [MPSTensor.forall_ringWindow_ne_imp_iff_replaceWindow, h]
-      simp
-    rw [ite_eq_left hagree, ite_eq_left h, ite_eq_left]
-    rw [h]
-    simp
-  · rw [ite_eq_right h]
-    by_cases hagree : ∀ v, (∀ u, ManyBody.ringWindow hLN i u ≠ v) → t v = s v
-    · rw [ite_eq_left hagree, ite_eq_right]
-      intro hw
-      apply h
-      rw [← hw]
-      exact ((MPSTensor.forall_ringWindow_ne_imp_iff_replaceWindow hLN i t s).mp hagree).symm
-    · rw [ite_eq_right hagree]
+    ManyBody.placeAlongPerm (X := fun _ ↦ Fin d) (ManyBody.ringWindow hLN i) σ s =
+      MPSTensor.replaceWindow L hLN i s (σ (MPSTensor.extractWindow L i s)) := by
+  symm
+  rw [ManyBody.eq_placeAlongPerm_iff]
+  refine ⟨fun v hv ↦ MPSTensor.replaceWindow_of_forall_ringWindow_ne hLN i s _ hv, ?_⟩
+  funext u
+  exact MPSTensor.replaceWindow_ringWindow hLN i s _ u
 
 /-! ### Two-site windows -/
 

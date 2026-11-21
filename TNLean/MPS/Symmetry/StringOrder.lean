@@ -373,8 +373,6 @@ separate SPT phases.
 
 section SPTLabels
 
-open TNLean.Algebra
-
 variable {G : Type} [Group G]
 
 /-- Two MPS tensors with the same on-site symmetry are in the **same SPT phase** if

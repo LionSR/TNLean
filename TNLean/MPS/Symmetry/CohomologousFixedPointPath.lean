@@ -30,8 +30,6 @@ limit `D₁`. See `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 
 open scoped Matrix Matrix.Norms.L2Operator ScalarCohomology
 
-namespace TNLean.Algebra
-
 /-- A factor system of a unitary projective representation has unit modulus.
 Source: arXiv:1010.3732, Section II.F.2, lines 886--896, the unitary virtual
 representations in the fixed-point symmetry. -/
@@ -78,9 +76,7 @@ theorem ProjectiveRepresentation.exists_unitary_rephase_with_factorSystem
   have hRephase := @ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous
     G _ D₀ ω₀ ω₁
   rw [ρ₀.circlePhaseInclusion_eq h₀, ρ₁.circlePhaseInclusion_eq h₁] at hRephase
-  exact hRephase ρ₀ ((H2π_eq_iff_isMulCoboundary₂_div _ _).mp h) h₀
-
-end TNLean.Algebra
+  exact hRephase ρ₀ ((ScalarCohomology.H2π_eq_iff_isMulCoboundary₂_div _ _).mp h) h₀
 
 namespace MPSTensor
 

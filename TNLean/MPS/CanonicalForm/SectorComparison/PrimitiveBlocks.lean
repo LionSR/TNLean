@@ -89,7 +89,7 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
       (blockTensor (d := d) (n := Fin D) A P i)ᴴ * blockTensor (d := d) (n := Fin D) A P i = 1 :=
     leftCanonical_blockTensor A P hTP
   -- Step 3: Blocked transfer map is a channel.
-  have hCh : IsChannel (Kraus.transferMap (ι := Fin (blockPhysDim d P)) (n := Fin D) (blockTensor A P)) :=
+  have hCh : IsChannel (Kraus.transferMap (blockTensor A P)) :=
     Kraus.isChannel_mapLM (blockTensor A P) hTP_blocked
   -- Step 4: ρ is fixed by the blocked transfer map.
   have hρ_fix_blocked :

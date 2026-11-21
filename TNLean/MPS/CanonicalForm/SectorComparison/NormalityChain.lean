@@ -298,7 +298,7 @@ Taking `n = N` in (2) and using (1) with `m = P`: `Kraus.wordSpan A (N * P) = �
 `Kraus.wordSpan (blockTensor A P) N ⊇ Kraus.wordSpan A (N * P) = ⊤`. -/
 theorem isNormal_blockTensor_of_isNormal
     (A : MPSTensor d D) {P : ℕ} (hP : 0 < P) (hN : Kraus.IsNormal A) :
-    Kraus.IsNormal (ι := Fin (blockPhysDim d P)) (n := Fin D) (blockTensor (d := d) (n := Fin D) A P) := by
+    Kraus.IsNormal (blockTensor (d := d) (n := Fin D) A P) := by
   obtain ⟨N, hNpos, hNblk⟩ := hN
   have hwordN : Kraus.wordSpan A N = ⊤ :=
     (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk

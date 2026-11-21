@@ -175,8 +175,6 @@ theorem exists_continuous_virtualGauge_of_isOnSiteSymmetric
   choose X hcont hdet hInt using hlocal
   exact ⟨fun t g => X g t, hcont, fun t g => hdet g t, fun t g => hInt g t⟩
 
-open TNLean.Algebra
-
 /-- A continuous one-site injective tensor family with exact on-site
 symmetry admits virtual projective representations whose matrices and
 factor systems are continuous in the interval parameter. Source:

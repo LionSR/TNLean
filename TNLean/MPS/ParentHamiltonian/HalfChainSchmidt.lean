@@ -171,7 +171,8 @@ Source: arXiv:quant-ph/0608197, the display at lines 977--979. -/
 theorem halfChainGram_apply_eq_transferMap_pow (A : MPSTensor d D) (L : ℕ)
     (p q : Fin D × Fin D) :
     halfChainGram A L p q =
-      (((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L) (Matrix.single q.2 p.2 1)) q.1 p.1 := by
+      (((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L)
+        (Matrix.single q.2 p.2 1)) q.1 p.1 := by
   classical
   have hmul (W : Matrix (Fin D) (Fin D) ℂ) (a b c e : Fin D) :
       ((W * Matrix.single c a 1 * Wᴴ : Matrix (Fin D) (Fin D) ℂ) e b) =

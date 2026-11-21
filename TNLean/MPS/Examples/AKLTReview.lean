@@ -45,7 +45,7 @@ for `|+⟩ = -i(|-1⟩+|+1⟩)/√2`. Documented in
 `docs/paper-gaps/rmp_aklt_pauli_basis_sign.tex`.
 
 ## Main definitions
-* `Matrix.singletY` (in `TNLean.Algebra.SingletMatrix`) : the singlet matrix `Y` of
+* `Matrix.singletY` (in `QICLean.Algebra.SingletMatrix`) : the singlet matrix `Y` of
   `eq:app:singlet-Y`
 * `MPSTensor.akltRMPSpinOneState` : the three spin-`1` states as coefficient matrices
 * `MPSTensor.akltTensorRMP` : the review's AKLT tensor
@@ -283,11 +283,11 @@ theorem akltTensorRMP_virtual_projRep :
   refine ⟨fun g i => ?_, aklt_isNontrivialSPT⟩
   change twistedTensor akltTensorRMP akltZ2Z2Action g i * (akltRepX g : Matrix _ _ ℂ) =
     (akltRepX g : Matrix _ _ ℂ) * akltTensorRMP i
-  rcases zmod2sq_cases g with rfl | rfl | rfl | rfl
+  rcases Multiplicative.zmod2sq_cases g with rfl | rfl | rfl | rfl
   · simp [akltRepX, twistedTensor, Matrix.one_apply]
   · have hU : akltZ2Z2Action (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) =
         !![(-1 : ℂ), 0, 0; 0, 0, 1; 0, 1, 0] := by
-      simp only [akltZ2Z2Action, ofCommutingInvolutions_ofAdd_10]; rfl
+      simp only [akltZ2Z2Action, Matrix.ofCommutingInvolutions_ofAdd_10]; rfl
     have hX : ((akltRepX (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) : GL (Fin 2) ℂ) :
         Matrix (Fin 2) (Fin 2) ℂ) = !![0, 1; -1, 0] := by
       simp [akltRepX]; rfl
@@ -298,7 +298,7 @@ theorem akltTensorRMP_virtual_projRep :
         akltTensorRMP_one, akltTensorRMP_two]
   · have hU : akltZ2Z2Action (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) =
         !![(1 : ℂ), 0, 0; 0, -1, 0; 0, 0, -1] := by
-      simp only [akltZ2Z2Action, ofCommutingInvolutions_ofAdd_01]; rfl
+      simp only [akltZ2Z2Action, Matrix.ofCommutingInvolutions_ofAdd_01]; rfl
     have hX : ((akltRepX (Multiplicative.ofAdd ((0, 1) : ZMod 2 × ZMod 2)) : GL (Fin 2) ℂ) :
         Matrix (Fin 2) (Fin 2) ℂ) = !![1, 0; 0, -1] := by
       simp [akltRepX]
@@ -309,7 +309,7 @@ theorem akltTensorRMP_virtual_projRep :
         akltTensorRMP_one, akltTensorRMP_two]
   · have hU : akltZ2Z2Action (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) =
         !![(-1 : ℂ), 0, 0; 0, 0, 1; 0, 1, 0] * !![(1 : ℂ), 0, 0; 0, -1, 0; 0, 0, -1] := by
-      simp only [akltZ2Z2Action, ofCommutingInvolutions_ofAdd_11]; rfl
+      simp only [akltZ2Z2Action, Matrix.ofCommutingInvolutions_ofAdd_11]; rfl
     have hX : ((akltRepX (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) : GL (Fin 2) ℂ) :
         Matrix (Fin 2) (Fin 2) ℂ) = !![0, -1; -1, 0] := by
       simp only [akltRepX, toAdd_ofAdd, Units.val_mul]

@@ -40,7 +40,7 @@ noncomputable def residualWindowMixedGramResidualES
     (V : Matrix (Fin D) (Fin E) ℂ) (ρ : Matrix (Fin E) (Fin E) ℂ)
     (Q : Matrix (Fin D) (Fin D) ℂ) (K M r : ℕ) :
     BoundaryFamilySpace (D := E) (Cfg d r) →L[ℂ]
-      EuclideanSpace ℂ (Cfg (blockPhysDim d L) K × (Fin E × Fin D)) :=
+      EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K) :=
   let T := residualWindowRightMapES A B V K M r
   let F := residualWindowLeftMapES B K M r
   T.adjoint.comp F - (T.adjoint.comp T).comp
@@ -64,7 +64,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindowMixedGramResidu
     Filter.Tendsto (fun i =>
       ‖(residualWindowMixedGramResidualES A B V ρ (Q (r i)) (K i) (M i) (r i) :
         BoundaryFamilySpace (D := E) (Cfg d (r i)) →L[ℂ]
-          EuclideanSpace ℂ (Cfg (blockPhysDim d L) (K i) × (Fin E × Fin D)))‖)
+          EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) (K i)))‖)
       l (nhds 0) := by
   have hKM : Filter.Tendsto (fun i => K i + M i) l Filter.atTop :=
     Filter.tendsto_atTop_mono (fun i => Nat.le_add_left (M i) (K i)) hM
@@ -73,7 +73,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindowMixedGramResidu
     hP.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
   let GT i := (residualWindowRightMapES A B V (K i) (M i) (r i)).adjoint.comp
     (residualWindowRightMapES A B V (K i) (M i) (r i))
-  let KT i := EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) (K i))
+  let KT i := ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) (K i))
     (residualBoundaryGramLimit A V ρ (ne_of_gt hρ.trace_pos) (r i))
   let GLeft i := boundaryFiberwiseMap (Cfg d (r i)) (groundSpaceGram B (K i + M i))
   let KL i := boundaryFiberwiseMap (Cfg d (r i)) Kinf
@@ -98,15 +98,15 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindowMixedGramResidu
   have hGLeft : Filter.Tendsto (fun i => ‖GLeft i - KL i‖) l (nhds 0) := by
     refine squeeze_zero' (Filter.Eventually.of_forall fun i => norm_nonneg _)
       (Filter.Eventually.of_forall fun i => ?_) hδKM
-    change ‖EuclideanSpace.fiberwiseMap (Cfg d (r i)) (groundSpaceGram B (K i + M i)) -
-      EuclideanSpace.fiberwiseMap (Cfg d (r i)) Kinf‖ ≤ _
-    rw [← EuclideanSpace.fiberwiseMap_sub]
-    exact EuclideanSpace.norm_fiberwiseMap_le _ _
+    change ‖boundaryFiberwiseMap (Cfg d (r i)) (groundSpaceGram B (K i + M i)) -
+      boundaryFiberwiseMap (Cfg d (r i)) Kinf‖ ≤ _
+    rw [← boundaryFiberwiseMap_sub]
+    exact norm_boundaryFiberwiseMap_le _ _
   have hH : Filter.Tendsto (fun i => ‖H i - I i‖) l (nhds 0) :=
     hP.residualBoundaryGramInverse_sub_limit_tendsto_zero hρ A V Q hQ hGram hKM
   have hKT : ∀ i, ‖KT i‖ ≤ ‖Kinf‖ := by
     intro i
-    refine (EuclideanSpace.norm_fiberwiseMap_le _ _).trans ?_
+    refine (ContinuousLinearMap.norm_rightFiberwiseMap_le _).trans ?_
     change ‖(C i).adjoint.comp ((KL i).comp (C i))‖ ≤ _
     calc
       _ ≤ ‖(C i).adjoint‖ * (‖KL i‖ * ‖C i‖) :=

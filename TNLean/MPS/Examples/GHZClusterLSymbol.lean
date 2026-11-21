@@ -42,7 +42,7 @@ state-level gauging that follow in the source are not treated here.
 
 **Scope restriction (scalar L-symbols):** block independence is the scalar condition
 `LSymbol.IsBlockIndependent` on the L-symbol computed from the action tensors, with
-`ℂˣ` coefficients, as in `TNLean.Algebra.StabilizerBlockIndependence`; see
+`ℂˣ` coefficients, as in `QICLean.Algebra.Cohomology.StabilizerBlockIndependence`; see
 `docs/paper-gaps/fbc25_mpu_action_stabilizer_source_audit.tex`.
 
 ## Main definitions
@@ -66,7 +66,7 @@ state-level gauging that follow in the source are not treated here.
 -/
 
 open scoped Matrix ScalarCohomology
-open Matrix TNLean.Algebra
+open Matrix
 
 namespace MPSTensor
 
@@ -243,7 +243,7 @@ noncomputable def z4z2StabilizerCocycle : ScalarCocycle z4z2Unbroken :=
 the block `0` and the unbroken subgroup. -/
 theorem z4z2StabilizerCocycle_isMulCocycle₂ :
     groupCohomology.IsMulCocycle₂ z4z2StabilizerCocycle := by
-  refine (isMulCocycle₂_iff _).mpr fun a b c ↦ ?_
+  refine (ScalarCohomology.isMulCocycle₂_iff _).mpr fun a b c ↦ ?_
   have h := z4z2LSymbol_isCompatible 0 a b c
   rw [MulAction.mem_stabilizer_iff.mp c.property, one_mul] at h
   exact h.symm
@@ -301,7 +301,7 @@ theorem z4z2StabilizerCocycle_H2π_not_mem_range :
     groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
         z4z2StabilizerCocycle_isMulCocycle₂) ∉
       Set.range (groupCohomology.map z4z2Unbroken.subtype
-        (scalarRepresentationRes z4z2Unbroken.subtype) 2) := by
+        (ScalarCohomology.scalarRepresentationRes z4z2Unbroken.subtype) 2) := by
   rw [ScalarCocycle.H2π_mem_range_map_subtype_iff]
   exact z4z2StabilizerCocycle_not_extends
 

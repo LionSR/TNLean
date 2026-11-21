@@ -56,8 +56,6 @@ regions; documented in `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
 -/
 
 open scoped Matrix Kronecker
-open TNLean.Algebra
-
 
 namespace MPOTensor.GroupFamily.BlockActionData
 

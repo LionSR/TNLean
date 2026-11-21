@@ -255,7 +255,7 @@ private theorem scalar_fixedPoints_unitaryConj
       _ = X := hX
   have hYfix : Kraus.transferMap (ι := Fin d) (n := Fin D) A Y = Y := by
     calc
-      Kraus.transferMap (d := d) (D := D) A Y
+      Kraus.transferMap (ι := Fin d) (n := Fin D) A Y
           = (V * Vᴴ) * Kraus.transferMap (ι := Fin d) (n := Fin D) A Y * (V * Vᴴ) := by
               simp [hVV']
       _ = V * (Vᴴ * Kraus.transferMap (ι := Fin d) (n := Fin D) A Y * V) * Vᴴ := by

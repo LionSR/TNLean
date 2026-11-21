@@ -36,11 +36,13 @@ spectral gap at least one for every real parameter. Source:
 arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/
 theorem hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N) :
-    (0 : ℂ) ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩;
+    (0 : ℂ) ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant N
       (normalizedBondInteraction D₀ D₁ γ)).hamiltonian ∧
-    ∀ z ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant hN
+    ∀ z ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant N
       (normalizedBondInteraction D₀ D₁ γ)).hamiltonian,
       0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
+  haveI : NeZero N := ⟨by omega⟩
   have : NeZero N := ⟨by omega⟩
   simpa only [normalizedBondInteraction, hamiltonian_translationInvariant_twoSiteBondPenalty] using
     normalizedPhysicalBondInterpolation_parent_spectrum_gap_one h₀ h₁ γ (by omega : 1 ≤ N)
@@ -64,9 +66,9 @@ noncomputable def normalizedBondCanonicalParentComparisonPath
     (horder : normalizedBondInteraction D₀ D₁ γ ≤
       LinearMap.toMatrix' (parentInteraction B 2))
     (hker : ∀ (N : ℕ) (hN : 2 ≤ N) (x : Cfg ((D₀ + D₁) * (D₀ + D₁)) N → ℂ),
-      (ManyBody.Interaction.translationInvariant hN
+      haveI : NeZero N := ⟨by omega⟩; (ManyBody.Interaction.translationInvariant N
           (normalizedBondInteraction D₀ D₁ γ)).hamiltonian.mulVec x = 0 →
-        (ManyBody.Interaction.translationInvariant hN
+        (ManyBody.Interaction.translationInvariant N
           (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian.mulVec x = 0)
     (hCov : ∀ g, GaugeEquiv B (rotatePhysical (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) B)) :
     SymmetricGappedInteractionPath
@@ -105,7 +107,7 @@ noncomputable def normalizedBondCanonicalParentComparisonPath
   case refine_1 =>
     intro N hN
     have hspec : (0 : ℂ) ∈ spectrum ℂ (Matrix.toEuclideanLin
-        (ManyBody.Interaction.translationInvariant hN
+        (ManyBody.Interaction.translationInvariant N
           (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) := by
       rw [Matrix.spectrum_toLpLin]
       exact (hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one

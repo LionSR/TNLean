@@ -153,10 +153,10 @@ theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
     {X : Matrix (Fin (χ₀ + χ₁)) (Fin (χ₀ + χ₁)) ℂ}
     (hX : X ∈ MPOTensor.commutingBoundaryAlgebra
       (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁)) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) X N) :=
-  Commute.sum_left _ _ _ fun i _ =>
+  haveI : NeZero N := ⟨by omega⟩; Commute.sum_left _ _ _ fun i _ =>
     MPOTensor.placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
       (arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
         A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁ hstar hγ) hX
@@ -178,9 +178,10 @@ theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
         (MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) X 2)ᴴ =
           MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) Y 2)
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpo (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) N) := by
+  haveI : NeZero N := ⟨by omega⟩
   rw [← MPOTensor.mpoWithBoundary_one]
   exact hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁ hstar hγ hN (Subalgebra.one_mem _)
@@ -245,9 +246,10 @@ theorem
     {X : Matrix (Fin (1 + 1)) (Fin (1 + 1)) ℂ}
     (hX : X ∈ MPOTensor.commutingBoundaryAlgebra
       (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁)) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) X N) :=
+  haveI : NeZero N := ⟨by omega⟩;
   hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁
     (fun X ↦ exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq
@@ -272,10 +274,10 @@ theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_isHermitian
     (hY₀ : ∃ c : ℂ, c ≠ 0 ∧ (c • bondOneActionGauge (W₀ 0)).IsHermitian)
     (hY₁ : ∃ c : ℂ, c ≠ 0 ∧ (c • bondOneActionGauge (W₁ 0)).IsHermitian)
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpo (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) N) :=
-  hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
+  haveI : NeZero N := ⟨by omega⟩; hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁
     (fun X ↦ exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq
       A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hu₀ hu₁ h₀ h₁ hY₀ hY₁ X 2) hγ hN
@@ -306,9 +308,10 @@ theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_canonical
     (h₁ : IsBiorthogonalDecomposition (MPOTensor.actTensor T₁ A₁)
       (fun _ : Fin 1 => A₁) V₁ W₁)
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpo (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) N) :=
+  haveI : NeZero N := ⟨by omega⟩;
   hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_isHermitian
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁
     (Matrix.isHermitian_of_mem_unitaryGroup_of_mul_self_eq_one hu₀ hu₀2)

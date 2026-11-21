@@ -437,7 +437,7 @@ theorem IsSpectrallyPeriodic.period_eq_of_isGaugeRelated_smul {D₁ D₂ m m' : 
     hC.spectral_radius_one, mul_one] at hr
   have hb := norm_eq_one_of_coe_nnnorm_sq_eq_one hr
   have hper := peripheralEigenvalues_conj_cross e (Kraus.transferMap (a • C))
-  rw [← he, show Kraus.transferMap (d := d) (D := D₂) ((a * c / a') • (a' • C')) =
+  rw [← he, show Kraus.transferMap (ι := Fin d) (n := Fin D₂) ((a * c / a') • (a' • C')) =
       Kraus.transferMap (ι := Fin d) (n := Fin D₂) (a' • C') from
       transferMap_smul_eq_of_norm_eq_one _ _ hb, hC'.peripheral_eq, hC.peripheral_eq] at hper
   exact (period_eq_of_setOf_pow_eq_one hC'.period_pos hC.period_pos hper).symm

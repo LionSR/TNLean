@@ -28,7 +28,7 @@ set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
 
 open scoped Matrix ComplexOrder Topology
-open Filter TNLean.Algebra
+open Filter ScalarCohomology
 
 open scoped ScalarCohomology
 

@@ -328,7 +328,7 @@ theorem isNormalTensor_invSqrt_smul_of_unique_peripheral {n : ℕ} [NeZero n]
       have h1 : (r : ℂ)⁻¹ • Kraus.transferMap (ι := Fin d) (n := Fin n) B X = μ • X := by
         rw [← LinearMap.smul_apply, ← hmap]
         exact hX_eq
-      calc Kraus.transferMap (d := d) (D := n) B X
+      calc Kraus.transferMap (ι := Fin d) (n := Fin n) B X
           = (r : ℂ) • ((r : ℂ)⁻¹ • Kraus.transferMap (ι := Fin d) (n := Fin n) B X) := by
             rw [smul_smul, mul_inv_cancel₀ hr_ne, one_smul]
         _ = (r : ℂ) • (μ • X) := by rw [h1]

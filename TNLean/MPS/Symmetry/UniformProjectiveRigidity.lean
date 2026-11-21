@@ -244,7 +244,7 @@ private theorem exists_radius_invertible_spectral_line
 
 end Matrix
 
-open TNLean.Algebra
+open TNLean.Algebra ScalarCohomology
 private theorem cohomologous_of_projective_intertwiner
     {G : Type} [Group G] {D : ℕ} [NeZero D]
     {ω₀ ω₁ : ScalarCocycle G}

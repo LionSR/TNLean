@@ -56,8 +56,6 @@ private abbrev invMat (Y : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ :=
 
 section VirtualRep
 
-open TNLean.Algebra
-
 variable {G : Type} [Group G]
 
 /-- Virtual covariance on an injective tensor determines a projective

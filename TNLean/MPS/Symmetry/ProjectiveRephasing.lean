@@ -19,8 +19,6 @@ matrix-valued projective representations used in TNLean.
 
 open scoped Matrix ScalarCohomology
 
-namespace TNLean.Algebra
-
 variable {G : Type} [Group G] {D : ℕ}
 
 /-- Multiplying each virtual matrix by a scalar unit changes its factor system
@@ -49,6 +47,8 @@ def ProjectiveRepresentation.rephase {ω : ScalarCocycle G}
           rw [ρ.map_mul]
           simp [smul_smul, mul_assoc, mul_comm, mul_left_comm]
 
+namespace TNLean.Algebra
+
 /-- A scalar matrix with coefficient in the unit circle is unitary. -/
 theorem circleScalar_mem_unitaryGroup {D : ℕ} (z : Circle) :
     (Matrix.GeneralLinearGroup.scalar (Fin D) (Circle.toUnits z) :
@@ -62,6 +62,8 @@ theorem circleScalar_mem_unitaryGroup {D : ℕ} (z : Circle) :
   change (z : ℂ) * star (z : ℂ) = 1
   rw [Complex.star_def, Complex.mul_conj']
   simp [Circle.norm_coe]
+
+end TNLean.Algebra
 
 /-- Rephasing by unit-circle scalars preserves virtual unitarity.
 Schuch–Pérez-García–Cirac, arXiv:1010.3732, Section II.F.2,
@@ -77,7 +79,7 @@ theorem ProjectiveRepresentation.rephase_mem_unitaryGroup
       Matrix (Fin D) (Fin D) ℂ) *
       (ρ.X g : Matrix (Fin D) (Fin D) ℂ)) ∈ _
   exact (Matrix.unitaryGroup (Fin D) ℂ).mul_mem
-    (circleScalar_mem_unitaryGroup (φ g)) hρ
+    (TNLean.Algebra.circleScalar_mem_unitaryGroup (φ g)) hρ
 
 /-- Two unitary virtual actions with cohomologous circle-valued factor
 systems can be aligned to an identical factor system without losing
@@ -96,7 +98,7 @@ theorem ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous
         Matrix.unitaryGroup (Fin D) ℂ) ∧
       (∀ g, ρ₁.X g = Matrix.GeneralLinearGroup.scalar (Fin D)
         (Circle.toUnits (φ g)) * ρ₀.X g) := by
-  obtain ⟨φ, hφ⟩ := (isMulCoboundary₂_div_iff _ _).mp h
+  obtain ⟨φ, hφ⟩ := (ScalarCohomology.isMulCoboundary₂_div_iff _ _).mp h
   let ψ : G → Circle := fun g => Complex.unitsPhase (φ g)
   have hphase : ∀ g k,
       ω₁.circlePhaseInclusion (g, k) =
@@ -119,5 +121,3 @@ theorem ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous
     exact ρ₀.rephase_mem_unitaryGroup ψ g (hρ₀ g)
   · intro g
     rfl
-
-end TNLean.Algebra

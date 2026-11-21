@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.RegionMatrix
+import TNLean.Circuit.SupportedOperators
 
 /-!
 # Operators on a region in the coordinates of the region and its complement

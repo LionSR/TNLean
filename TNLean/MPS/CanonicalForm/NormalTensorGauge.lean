@@ -102,7 +102,7 @@ theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) 
       Matrix.nonsing_inv_nonsing_inv
         ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ) hXstar_det
     calc
-      Kraus.transferMap (d := d) (D := D) B Y =
+      Kraus.transferMap (ι := Fin d) (n := Fin D) B Y =
           ∑ x : Fin d,
             ((X : Matrix (Fin D) (Fin D) ℂ) * A x *
               (X : Matrix (Fin D) (Fin D) ℂ)⁻¹) * Y *
@@ -133,9 +133,10 @@ theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) 
 /-- Gauge equivalence transports quasi-idempotence of the transfer map. -/
 theorem transferMap_comp_self_eq_smul_iff {A B : MPSTensor d D}
     (h : GaugeEquiv A B) (c : ℂ) :
-    Kraus.transferMap (ι := Fin d) (n := Fin D) B ∘ₗ Kraus.transferMap (d := d) (D := D) B =
+    Kraus.transferMap (ι := Fin d) (n := Fin D) B ∘ₗ Kraus.transferMap (ι := Fin d) (n := Fin D) B =
         c • Kraus.transferMap (ι := Fin d) (n := Fin D) B ↔
-      Kraus.transferMap (ι := Fin d) (n := Fin D) A ∘ₗ Kraus.transferMap (d := d) (D := D) A =
+      Kraus.transferMap (ι := Fin d) (n := Fin D) A ∘ₗ
+        Kraus.transferMap (ι := Fin d) (n := Fin D) A =
         c • Kraus.transferMap (ι := Fin d) (n := Fin D) A := by
   obtain ⟨C, hC, hMap⟩ := h.transferMap_eq_similarityMap
   let e := (Matrix.congruenceLinearEquiv C hC).symm.conjAlgEquiv ℂ

@@ -20,7 +20,7 @@ lines 1120–1130 and 1147–1157.
 -/
 
 open scoped Matrix
-open TNLean.Algebra
+open SymmetryParity
 
 namespace MPSTensor
 

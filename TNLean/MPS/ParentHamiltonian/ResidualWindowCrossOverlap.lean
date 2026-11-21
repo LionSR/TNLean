@@ -63,7 +63,7 @@ private theorem sum_norm_sq_windowMiddleFiber {K M r : ℕ}
 private theorem windowMiddleFiber_rightMap
     (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
     (V : Matrix (Fin D) (Fin E) ℂ) (K M r : ℕ)
-    (x : EuclideanSpace ℂ (Cfg (blockPhysDim d L) K × (Fin E × Fin D)))
+    (x : EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K))
     (u : Cfg (blockPhysDim d L) K) (τ : Cfg d r) :
     windowMiddleFiber (residualWindowRightMapES A B V K M r x) u τ =
       groundSpaceMapES B M (Matrix.frobeniusEquivEuclidean (Fin E) (Fin E)
@@ -103,7 +103,7 @@ theorem inner_residualWindowRightMapES_leftMapES_cross_sector
     (A : MPSTensor d D) (B : MPSTensor (blockPhysDim d L) E)
     (B' : MPSTensor (blockPhysDim d L) F) (V : Matrix (Fin D) (Fin E) ℂ)
     (K M r : ℕ)
-    (x : EuclideanSpace ℂ (Cfg (blockPhysDim d L) K × (Fin E × Fin D)))
+    (x : EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K))
     (y : BoundaryFamilySpace (D := F) (Cfg d r)) :
     ⟪residualWindowRightMapES A B V K M r x, residualWindowLeftMapES B' K M r y⟫_ℂ =
       ∑ u : Cfg (blockPhysDim d L) K, ∑ τ : Cfg d r,
