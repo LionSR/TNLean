@@ -564,10 +564,11 @@ original bond-$D_p$ tensors.
     \uses{def:mpo_arbitrary_physical_interaction,def:injective}
     If $D_0,D_1>0$ and $A_0,A_1$ are one-site injective, there is a
     constant $0<\varepsilon\leq1$, depending only on these tensors,
-    such that for every $\gamma\in[0,1]$, every $N\geq2$, and every
-    $v\perp\ker\widetilde H_{\gamma,N}$,
+    such that for every $\gamma\in[0,1]$ and every $N\geq2$, zero is an
+    eigenvalue of $\widetilde H_{\gamma,N}$ and
     \begin{align}
-        \varepsilon\|v\|\leq\|\widetilde H_{\gamma,N}v\|.
+        \text{every other eigenvalue of }\widetilde H_{\gamma,N}
+        \text{ is at least }\varepsilon.
         \label{eq:mpo_arbitrary_uniform_gap}
     \end{align}
 \end{lemma}
@@ -576,7 +577,8 @@ original bond-$D_p$ tensors.
         thm:mpo_mixed_uniform_periodic_path_gap,
         thm:mpo_periodic_interaction_coordinates,
         thm:mpo_arbitrary_interaction_continuity,
-        thm:mpo_isometry_positive_gap}
+        thm:mpo_isometry_positive_gap,
+        thm:mpo_arbitrary_periodic_ground_line}
     For the derived injective tensors $B_0,B_1$, which have square physical
     alphabets, the uniform mixed-path gap theorem gives $\delta>0$,
     independent of $\gamma\in[0,1]$ and $N\geq2$, with
@@ -585,10 +587,10 @@ original bond-$D_p$ tensors.
     this bound to the matrix Hamiltonian. Each $h_\gamma$ is positive,
     so this norm bound says that every eigenvalue of $H_{\gamma,N}$ is $0$
     or at least $\delta$, and Lemma~\ref{thm:mpo_isometry_positive_gap}
-    applies to the fixed inclusion $J$. Read back in norm form for the
-    positive matrix $\widetilde H_{\gamma,N}$, it gives
+    applies to the fixed inclusion $J$. It gives
     (\ref{eq:mpo_arbitrary_uniform_gap}) with
-    $\varepsilon=\min\{\delta,1\}>0$. Both constants are obtained
+    $\varepsilon=\min\{\delta,1\}>0$, and zero is an eigenvalue because
+    the kernel of $\widetilde H_{\gamma,N}$ is a line. Both constants are obtained
     from the endpoint tensors; a support-path gap is not an assumption.
 \end{proof}
 

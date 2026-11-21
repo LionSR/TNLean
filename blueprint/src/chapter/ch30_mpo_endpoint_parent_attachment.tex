@@ -97,7 +97,7 @@ common matrix product operator.
 
 \begin{theorem}[Exact periodic ground states and uniform gap]
     \label{thm:mpo_arbitrary_endpoint_attachment_gap}
-    \lean{MPSTensor.hamiltonian_translationInvariant_affine_norm_gap_of_order,
+    \lean{MPSTensor.hamiltonian_translationInvariant_affine_eigenvalue_gap_of_order,
         MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent,
         MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_ker_eq_parent,
         MPSTensor.MPOSymmetry.arbitraryPhysicalEndpointAttachment_groundSpace_eq_span_mpv,
@@ -115,11 +115,8 @@ common matrix product operator.
         =\C\ket{\psi_{E_pA_p,N}},
         \qquad \dim\ker C_{p,N}(t)=1.
     \end{align}
-    There exists $0<\delta\leq1$, independent of $p,t,N$, such that,
-    for every $v\perp\ker C_{p,N}(t)$,
-    \begin{align}
-        \delta\|v\|\leq\|C_{p,N}(t)v\|.
-    \end{align}
+    There exists $0<\delta\leq1$, independent of $p,t,N$, such that
+    every nonzero eigenvalue of $C_{p,N}(t)$ is at least $\delta$.
     The same lower gap bound that applies to the mixed path may be used
     for both attachments.
 \end{theorem}
@@ -140,14 +137,13 @@ common matrix product operator.
     \begin{align}
         \delta\|v\|^2\leq\langle v,H_{p,N}v\rangle.
     \end{align}
-    Operator order and Cauchy--Schwarz then give
+    Operator order then gives, for the same vectors,
     \begin{align}
-        \delta\|v\|^2
-        \leq\langle v,C_{p,N}(t)v\rangle
-        \leq\|v\|\,\|C_{p,N}(t)v\|.
+        \delta\|v\|^2\leq\langle v,C_{p,N}(t)v\rangle.
     \end{align}
-    Canceling $\|v\|$ when $v\ne0$ (with $v=0$ immediate) gives the bound
-    without any new loss in the lower gap constant.
+    Since $C_{p,N}(t)$ is positive with the same kernel, an eigenvector of
+    a nonzero eigenvalue is orthogonal to that kernel, so the eigenvalue is
+    at least $\delta$, without any new loss in the lower gap constant.
 \end{proof}
 
 The reverse of the first attachment and the second attachment join the

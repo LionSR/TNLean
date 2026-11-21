@@ -189,22 +189,19 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_finrank
   exact congrArg WithLp.ofLp hzero
 
 /-- One positive gap works for the actual enlarged mixed path on the entire
-closed interval and all periodic lengths at least two. Polar support
-injectivity, local positivity, and the support-path gap are all derived
-from the original endpoint tensors. The chosen lower bound is the minimum of the support-path gap
-and the unit unused-space penalty.
-Source: arXiv:2203.12563, Section 5, lines 1584–1601 and 1687–1692. -/
+closed interval and all periodic lengths at least two: every periodic Hamiltonian
+is gapped above its zero ground energy, whose eigenspace is the line of the
+periodic vector. Polar support injectivity, local positivity, and the
+support-path gap are all derived from the original endpoint tensors. The chosen
+lower bound is the minimum of the support-path gap and the unit unused-space
+penalty. Source: arXiv:2203.12563, Section 5, lines 1584–1601 and 1687–1692. -/
 theorem exists_uniform_arbitraryPhysicalMixed_periodic_path_gap
     [NeZero D₀] [NeZero D₁]
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁) :
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ γ : unitInterval, ∀ N : ℕ, ∀ hN : 2 ≤ N,
-      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN
-          (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-          (Interaction.translationInvariant hN
-            (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian v‖ := by
+      IsGapped (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian 0 δ := by
   obtain ⟨δ, hδ, hgap⟩ := exists_uniform_mixedEndpoint_periodic_path_gap
     (polarPosTensor A₀) (polarPosTensor A₁)
     (isInjective_polarPosTensor h₀) (isInjective_polarPosTensor h₁)
@@ -215,20 +212,21 @@ theorem exists_uniform_arbitraryPhysicalMixed_periodic_path_gap
   have hHA : (Interaction.translationInvariant hN h).hamiltonian.PosSemidef :=
     Interaction.posSemidef_hamiltonian fun _ ↦
       posSemidef_placeAlong (X := fun _ ↦ Fin ((D₀ + D₁) * (D₀ + D₁))) _ hA
-  have hHE : (Interaction.translationInvariant hN
-      (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian.PosSemidef :=
-    Interaction.posSemidef_hamiltonian fun _ ↦
-      posSemidef_placeAlong (X := fun _ ↦ Fin ((((D₀ + D₁) * (D₀ + D₁)) + d₀) + d₁)) _
-        (arbitraryPhysicalMixedInteraction_posSemidef A₀ A₁ γ)
   have hnorm : ∀ x ∈ (LinearMap.ker
       (Matrix.toEuclideanLin (Interaction.translationInvariant hN h).hamiltonian))ᗮ,
       δ * ‖x‖ ≤ ‖Matrix.toEuclideanLin (Interaction.translationInvariant hN h).hamiltonian x‖ := by
     rw [← periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian,
       toEuclideanLin_mixedEndpointInteractionMatrix]
     exact hgap γ N hN
-  exact (forall_hasEigenvalue_iff_norm hHE).mp
-    (isometricInteractionExtension_eigenvalue_gap _ (commonFixedPointInclusion_isometry _ d₀ d₁)
-      hA hN ((forall_hasEigenvalue_iff_norm hHA).mpr hnorm))
+  refine ⟨fun hbot ↦ ?_, ?_⟩
+  · have hdim := arbitraryPhysicalMixedInteraction_groundSpace_finrank A₀ A₁ h₀ h₁ γ hN
+    rw [← groundSpace_zero, hbot, finrank_bot] at hdim
+    exact zero_ne_one hdim
+  · intro μ hμ
+    have hμ' := isometricInteractionExtension_eigenvalue_gap _
+      (commonFixedPointInclusion_isometry _ d₀ d₁) hA hN
+      ((forall_hasEigenvalue_iff_norm hHA).mpr hnorm) μ hμ
+    simpa only [Complex.ofReal_zero, zero_add] using hμ'
 
 end MPOSymmetry
 end MPSTensor

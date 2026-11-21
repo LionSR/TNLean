@@ -33,25 +33,24 @@ open ManyBody
 namespace MPSTensor
 
 /-- An ordered affine interpolation with the same periodic kernel preserves
-a uniform norm gap of the smaller interaction. This comparison supplies the
-parent-Hamiltonian attachment used in arXiv:2203.12563, Section 5,
-lines 1328–1331. -/
-theorem hamiltonian_translationInvariant_affine_norm_gap_of_order {d N : ℕ}
+a uniform gap above the kernel of the smaller interaction: if every eigenvalue
+of the smaller Hamiltonian is zero or at least `δ`, the same holds along the
+interpolation. This comparison supplies the parent-Hamiltonian attachment used
+in arXiv:2203.12563, Section 5, lines 1328–1331. -/
+theorem hamiltonian_translationInvariant_affine_eigenvalue_gap_of_order {d N : ℕ}
     (A B : MPOTensor.ChainOperator d 2) (hA : A.PosSemidef) (hAB : A ≤ B)
     (hN : 2 ≤ N)
     (hker : LinearMap.ker
         (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) ≤
       LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN B).hamiltonian))
-    {δ : ℝ} (hδ : 0 ≤ δ)
-    (hgap : ∀ v ∈ (LinearMap.ker
-      (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian))ᗮ,
-      δ * ‖v‖ ≤
-        ‖Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian v‖)
+    {δ : ℝ}
+    (hgap : ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ)
     (t : ℝ) (ht : 0 ≤ t) :
-    ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian))ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian v‖ := by
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+      (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ := by
   have hAC : A ≤ A + t • (B - A) := by
     rw [Matrix.le_iff]
     simpa using (Matrix.le_iff.mp hAB).smul ht
@@ -59,18 +58,11 @@ theorem hamiltonian_translationInvariant_affine_norm_gap_of_order {d N : ℕ}
       (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian := by
     simp only [Interaction.hamiltonian, Interaction.translates_term]
     exact Finset.sum_le_sum fun _ _ ↦ placeAlong_le_placeAlong _ hAC
-  have hHC' : Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian ≤
-      Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian := by
-    change (Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian -
-      Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian).IsPositive
-    rw [← map_sub, Matrix.isPositive_toEuclideanLin_iff]
-    exact Matrix.le_iff.mp hHC
   have hHA : (Interaction.translationInvariant hN A).hamiltonian.PosSemidef :=
     Interaction.posSemidef_hamiltonian fun _ ↦ posSemidef_placeAlong (X := fun _ ↦ Fin d) _ hA
-  exact (Matrix.isPositive_toEuclideanLin_iff.mpr hHA).norm_gap_of_le_of_ker_eq hδ hHC'
-      (hamiltonian_translationInvariant_affine_ker_eq_of_order A B hA hAB hN hker t ht).symm hgap
+  refine forall_hasEigenvalue_of_le hHA hHC ?_ hgap
+  rw [groundSpace_zero, groundSpace_zero]
+  exact (hamiltonian_translationInvariant_affine_ker_eq_of_order A B hA hAB hN hker t ht).ge
 
 namespace MPOSymmetry
 
@@ -329,8 +321,9 @@ theorem arbitraryPhysicalEndpointAttachment_groundSpace_finrank
   cases right <;> exact hdim
 
 /-- One positive gap works for both canonical-parent attachments, all
-parameters in the unit interval, and all rings of length at least two.
-Neither an endpoint gap nor a kernel equality is a premise. Source:
+parameters in the unit interval, and all rings of length at least two: every
+attachment Hamiltonian is gapped above its zero ground energy. Neither an
+endpoint gap nor a kernel equality is a premise. Source:
 arXiv:2203.12563, Section 5, lines 1328–1331 and 1690–1692. -/
 theorem exists_uniform_arbitraryPhysicalEndpointAttachment_gap
     [NeZero D₀] [NeZero D₁]
@@ -338,21 +331,26 @@ theorem exists_uniform_arbitraryPhysicalEndpointAttachment_gap
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁) :
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ right : Bool, ∀ t : unitInterval,
       ∀ N : ℕ, ∀ hN : 2 ≤ N,
-      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
-        (arbitraryPhysicalEndpointAttachment A₀ A₁ right t)).hamiltonian))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (Interaction.translationInvariant hN
-          (arbitraryPhysicalEndpointAttachment A₀ A₁ right t)).hamiltonian v‖ := by
+      IsGapped (Interaction.translationInvariant hN
+        (arbitraryPhysicalEndpointAttachment A₀ A₁ right t)).hamiltonian 0 δ := by
   obtain ⟨δ, hδ, hδone, hgap⟩ :=
     exists_uniform_arbitraryPhysicalMixed_periodic_path_gap A₀ A₁ h₀ h₁
-  refine ⟨δ, hδ, hδone, ?_⟩
-  intro right t N hN
-  apply hamiltonian_translationInvariant_affine_norm_gap_of_order _ _
-    (arbitraryPhysicalMixedInteraction_posSemidef A₀ A₁ _)
-    (arbitraryPhysicalMixedInteraction_endpoint_le_parent A₀ A₁ h₀ h₁ right) hN
-    (arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent A₀ A₁ h₀ h₁ right hN).le
-    hδ.le _ t t.property.1
-  simpa only [apply_ite, Set.Icc.coe_zero, Set.Icc.coe_one] using
-    hgap (if right then (1 : unitInterval) else 0) N hN
+  refine ⟨δ, hδ, hδone, fun right t N hN ↦ ⟨fun hbot ↦ ?_, fun μ hμ ↦ ?_⟩⟩
+  · have hdim := arbitraryPhysicalEndpointAttachment_groundSpace_finrank A₀ A₁ h₀ h₁ right
+      t.property.1 hN
+    rw [← groundSpace_zero, hbot, finrank_bot] at hdim
+    exact zero_ne_one hdim
+  · have hend : ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (Interaction.translationInvariant hN (arbitraryPhysicalMixedInteraction A₀ A₁
+          (if right then 1 else 0))).hamiltonian) μ → μ = 0 ∨ (δ : ℂ) ≤ μ := by
+      have h := (hgap (if right then (1 : unitInterval) else 0) N hN).2
+      cases right <;> simpa using h
+    simpa only [Complex.ofReal_zero, zero_add] using
+      hamiltonian_translationInvariant_affine_eigenvalue_gap_of_order _ _
+        (arbitraryPhysicalMixedInteraction_posSemidef A₀ A₁ _)
+        (arbitraryPhysicalMixedInteraction_endpoint_le_parent A₀ A₁ h₀ h₁ right) hN
+        (arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent A₀ A₁ h₀ h₁ right hN).le
+        hend t t.property.1 μ hμ
 
 end MPOSymmetry
 end MPSTensor
