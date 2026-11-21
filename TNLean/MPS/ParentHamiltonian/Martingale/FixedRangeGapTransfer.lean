@@ -61,18 +61,19 @@ theorem exists_parentHamiltonianES_gap_of_larger_range
 
 /-- A uniform gap of the Hamiltonians of the parent interaction of a longer range on the rings
 transfers to a prescribed range whose open-chain Hamiltonian on that longer interval has the
-full local MPS space as kernel. -/
+full local MPS space as kernel. Each gap is stated above the kernel: every eigenvalue is `0` or
+at least the gap. -/
 theorem exists_hamiltonian_parentRingInteraction_gap_of_larger_range
     {d D R W : ℕ} (A : MPSTensor d D) (hR : 0 < R) (hRW : 2 * R ≤ W)
     (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) =
       groundSpaceES A W)
     {γ : ℝ} (hγ : 0 < γ)
-    (hGap : ∀ᶠ N : ℕ in atTop, ∀ hWN : W ≤ N, ∀ v ∈
-      (LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A hWN).hamiltonian))ᗮ,
-      γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction A hWN).hamiltonian v‖) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ᶠ N : ℕ in atTop, ∀ hRN : R ≤ N, ∀ v ∈
-      (LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A hRN).hamiltonian))ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction A hRN).hamiltonian v‖ := by
+    (hGap : ∀ᶠ N : ℕ in atTop, ∀ hWN : W ≤ N, ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentRingInteraction A hWN).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ) :
+    ∃ δ : ℝ, 0 < δ ∧ ∀ᶠ N : ℕ in atTop, ∀ hRN : R ≤ N, ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentRingInteraction A hRN).hamiltonian) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨κ, C, hκ, hC, hLower, hUpper⟩ :=
     exists_pos_toMatrix'_parentInteraction_hamiltonian_parentChainInteraction_comparison A hker
   have hm : 0 < W - R + 1 := by omega
@@ -92,10 +93,14 @@ theorem exists_hamiltonian_parentRingInteraction_gap_of_larger_range
   have h1 := Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr hComparison.1
   have h2 := Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr hComparison.2
   rw [map_smul, map_smul] at h1 h2
+  refine (ManyBody.forall_hasEigenvalue_iff_norm
+    (posSemidef_hamiltonian_parentRingInteraction A hRN)).mpr ?_
   exact (Matrix.isPositive_toEuclideanLin_iff.mpr
     (posSemidef_hamiltonian_parentRingInteraction A hWN)).norm_gap_of_smul_le_of_le_smul
     (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentRingInteraction A hRN))
     hκ (Nat.cast_pos.mpr hm) hC hγ (by simpa only [Complex.ofReal_natCast] using h1)
-    (by simpa only [Complex.ofReal_natCast] using h2) (hGapN hWN)
+    (by simpa only [Complex.ofReal_natCast] using h2)
+    ((ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentRingInteraction A hWN)).mp (hGapN hWN))
 
 end MPSTensor

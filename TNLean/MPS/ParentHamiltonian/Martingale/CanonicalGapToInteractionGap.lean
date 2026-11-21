@@ -95,7 +95,8 @@ open ManyBody.Interaction (chainTranslates posSemidef_hamiltonian_chainTranslate
 
 /-- Uniform canonical gaps at all sufficiently large ranges transfer to the open-chain translates
 of any positive semidefinite local matrix whose open kernels eventually equal the same MPS
-boundary spaces. The conclusion holds at every volume above the actual kernel; neither a local
+boundary spaces. The gaps are stated above the kernels: every eigenvalue is `0` or at least the
+gap. The conclusion holds at every volume above the actual kernel; neither a local
 parent-kernel identity nor an injectivity hypothesis is required. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2, lines 933--947, condition C1, lines 1030--1041, and
 Section 6, lines 2593--2675. This is a generic finite-window criterion; canonical gaps are
@@ -105,16 +106,15 @@ theorem exists_toEuclideanLin_hamiltonian_chainTranslates_gap_of_canonical_gaps_
     (hCanonical : ∀ W, R₀ ≤ W →
       (∀ N, W ≤ N → LinearMap.ker (Matrix.toEuclideanLin
         (parentChainInteraction A W N).hamiltonian) = groundSpaceES A N) ∧
-      ∃ δ : ℝ, 0 < δ ∧ ∀ N,
-        ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian))ᗮ,
-          δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian v‖)
+      ∃ δ : ℝ, 0 < δ ∧ ∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ)
     {R : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES A N) :
-    ∃ γ : ℝ, 0 < γ ∧ ∀ N,
-      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian))ᗮ,
-        γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian v‖ := by
+    ∃ γ : ℝ, 0 < γ ∧ ∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ → μ = 0 ∨ (γ : ℂ) ≤ μ := by
   obtain ⟨N₀, hN₀⟩ := Filter.eventually_atTop.1 hKernel
   let W := max R (max N₀ R₀)
   have hBounds : R ≤ W ∧ N₀ ≤ W ∧ R₀ ≤ W := by omega
@@ -125,20 +125,20 @@ theorem exists_toEuclideanLin_hamiltonian_chainTranslates_gap_of_canonical_gaps_
   rw [hN₀ W hBounds.2.1, ← toEuclideanLin_toMatrix'_parentInteraction, ← map_smul,
     Matrix.toEuclideanLin_le_toEuclideanLin_iff] at hLocal
   refine Nat.exists_pos_forall_of_eventually
-    (P := fun N γ =>
-      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian))ᗮ,
-        γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian v‖)
-    (fun N γ η hle hgap v hv =>
-      (mul_le_mul_of_nonneg_right hle (norm_nonneg v)).trans (hgap v hv))
-    (fun N => LinearMap.exists_pos_mul_norm_le_of_mem_orthogonal_ker _)
+    (P := fun N γ => ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ → μ = 0 ∨ (γ : ℂ) ≤ μ)
+    (fun N γ η hle hgap μ hμ =>
+      (hgap μ hμ).imp_right (Complex.real_le_real.mpr hle).trans)
+    (fun N => (LinearMap.exists_pos_mul_norm_le_of_mem_orthogonal_ker
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian)).imp fun η hη =>
+        ⟨hη.1, (ManyBody.forall_hasEigenvalue_iff_norm
+          (posSemidef_hamiltonian_chainTranslates hh N)).mpr hη.2⟩)
     (M := W) (δ := κ * δ / (W - R + 1 : ℕ))
     (div_pos (mul_pos hκ hδ) (Nat.cast_pos.mpr (by omega))) ?_
   intro N hN
-  rw [hN₀ N (hBounds.2.1.trans hN)]
-  refine toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
+  exact toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
     A h hh hBounds.1 hκ hδ hLocal
-    (hN₀ N (hBounds.2.1.trans hN)) (hCanonicalKernel N hN) ?_
-  simpa only [hCanonicalKernel N hN] using hCanonicalGap N
+    (hN₀ N (hBounds.2.1.trans hN)) (hCanonicalKernel N hN) (hCanonicalGap N)
 
 end Interaction
 

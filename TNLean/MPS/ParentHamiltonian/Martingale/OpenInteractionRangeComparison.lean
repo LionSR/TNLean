@@ -388,8 +388,9 @@ theorem hamiltonian_chainTranslates_comparison_of_local (A : MPSTensor d D) {R W
 /-- **Gap transfer at a specified volume.** Under the comparison of
 `hamiltonian_chainTranslates_comparison_of_local`, if the open Hamiltonian of `h` and the
 open-chain parent Hamiltonian of range `W` on `N` sites have the same kernel, the MPS
-boundary-condition space, a norm gap \(γ\) of the latter gives the norm gap
-\(κγ/(W-R+1)\) of the former. There is no hypothesis on the kernel of `h`. Nachtergaele,
+boundary-condition space, a gap \(γ\) above the kernel of the latter (every eigenvalue is `0`
+or at least \(γ\)) gives the gap \(κγ/(W-R+1)\) above the kernel of the former. There is no
+hypothesis on the kernel of the local matrix `h` itself. Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
 theorem toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
     (A : MPSTensor d D) {R W N : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
@@ -400,20 +401,23 @@ theorem toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
       groundSpaceES A N)
     (hLongKer : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian) =
       groundSpaceES A N)
-    (hLong : ∀ v ∈ (groundSpaceES A N)ᗮ,
-      γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian v‖) :
-    ∀ v ∈ (groundSpaceES A N)ᗮ,
-      (κ * γ / (W - R + 1 : ℕ)) * ‖v‖ ≤
-        ‖Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian v‖ := by
+    (hLong : ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
+        μ = 0 ∨ ((κ * γ / (W - R + 1 : ℕ) : ℝ) : ℂ) ≤ μ := by
   have hOrder := hamiltonian_chainTranslates_comparison_of_local A h hh hRW (N := N) hLocal
   rw [← Matrix.toEuclideanLin_le_toEuclideanLin_iff, map_smul, map_smul] at hOrder
-  have hTransfer := norm_gap_of_scaled_comparison
+  refine (ManyBody.forall_hasEigenvalue_iff_norm
+    (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh N)).mpr ?_
+  exact norm_gap_of_scaled_comparison
     (E := EuclideanSpace ℂ (Cfg d N))
     (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentChainInteraction A W N))
     hκ hγ (by positivity : 0 < ((W - R + 1 : ℕ) : ℝ)) (by exact_mod_cast hOrder)
     (hLongKer.trans hShortKer.symm)
-    (fun v hv => hLong v (by rwa [hLongKer] at hv))
-  simpa only [hShortKer] using hTransfer
+    ((ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentChainInteraction A W N)).mp hLong)
 
 end Interaction
 

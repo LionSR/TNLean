@@ -540,19 +540,22 @@ theorem norm_toEuclideanLin_hamiltonian_parentChainInteraction_self_of_mem_ortho
       toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff]
   rwa [hker] at hv
 
-/-- The open-chain parent Hamiltonian has unit norm gap at the first full-window volume. This is
-\(γ_{l+1} = 1\) in Nachtergaele, arXiv:cond-mat/9410110, Theorem 2.1(i), for \(L = l + 1\).
+/-- The open-chain parent Hamiltonian has unit gap at the first full-window volume: every
+eigenvalue is `0` or at least `1`. This is \(γ_{l+1} = 1\) in Nachtergaele,
+arXiv:cond-mat/9410110, Theorem 2.1(i), for \(L = l + 1\).
 
 **Scope restriction (single-window volume):** This proves only the volume \(N=L\). It does not
 establish the general-volume C1--C3 martingale gap; see
 `docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
-theorem unit_gap_hamiltonian_parentChainInteraction_self (A : MPSTensor d D) (L : ℕ)
-    (v : EuclideanSpace ℂ (Cfg d L))
-    (hv : v ∈ (LinearMap.ker
-      (Matrix.toEuclideanLin (parentChainInteraction A L L).hamiltonian))ᗮ) :
-    (1 : ℝ) * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A L L).hamiltonian v‖ := by
-  rw [one_mul, norm_toEuclideanLin_hamiltonian_parentChainInteraction_self_of_mem_orthogonal_ker
-    A L v hv]
+theorem unit_gap_hamiltonian_parentChainInteraction_self (A : MPSTensor d D) (L : ℕ) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A L L).hamiltonian) μ →
+        μ = 0 ∨ (1 : ℂ) ≤ μ := by
+  have h := (ManyBody.forall_hasEigenvalue_iff_norm (Δ := 1)
+    (posSemidef_hamiltonian_parentChainInteraction A L L)).mpr fun v hv ↦ by
+      rw [one_mul,
+        norm_toEuclideanLin_hamiltonian_parentChainInteraction_self_of_mem_orthogonal_ker A L v hv]
+  simpa only [Complex.ofReal_one] using h
 
 end ChainInteraction
 
