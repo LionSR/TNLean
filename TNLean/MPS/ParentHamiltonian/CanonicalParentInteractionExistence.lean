@@ -17,6 +17,11 @@ use the constructed interaction.
 
 Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma `existenceinteraction`,
 lines 2195--2230, the orthogonal-complement construction of the interaction.
+
+**Transitional (#10948).** `exists_positive_canonical_parent_interaction_of_exact_open_kernels`,
+stated for the Euclidean-space operators, is kept until its users are converted; the statement
+for the Hamiltonians of the open-chain translates is
+`exists_posSemidef_eq_toMatrix'_parentInteraction_of_ker_hamiltonian_parentChainInteraction`.
 -/
 
 open scoped ComplexOrder
@@ -42,5 +47,23 @@ theorem exists_positive_canonical_parent_interaction_of_exact_open_kernels
   rw [toEuclideanLin_canonicalParentInteractionMatrix,
     openInteractionHamiltonianES_parentInteractionES A hR]
   exact hKernel N hN
+
+open ManyBody.Interaction (chainTranslates) in
+/-- Exact kernels of the Hamiltonians of the parent interaction on the open chain give a positive
+semidefinite interaction equal to the matrix of the canonical parent interaction, with the same
+kernels at every volume at least its range. Source: Nachtergaele, arXiv:cond-mat/9410110,
+Lemma `existenceinteraction`, lines 2195--2230. -/
+theorem exists_posSemidef_eq_toMatrix'_parentInteraction_of_ker_hamiltonian_parentChainInteraction
+    (A : MPSTensor d D)
+    (hKernel : ∀ N, R ≤ N →
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
+        groundSpaceES A N) :
+    ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
+      h = LinearMap.toMatrix' (parentInteraction A R) ∧ h.PosSemidef ∧
+      ∀ N, R ≤ N →
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
+          groundSpaceES A N :=
+  ⟨LinearMap.toMatrix' (parentInteraction A R), rfl, posSemidef_toMatrix'_parentInteraction A R,
+    hKernel⟩
 
 end MPSTensor
