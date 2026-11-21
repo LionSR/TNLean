@@ -36,21 +36,25 @@ namespace MPSTensor
 
 variable {d D : ℕ} {A : MPSTensor d D}
 
-/-- At the source volume bound, any positive periodic interaction annihilating
-the original canonical vector annihilates every block vector.
-The simultaneous span and all individual local annihilation equations are
-derived. Source: PGVWC07, Theorem 11 (`2blocks.1`), lines 1407–1422;
-standing block hypotheses at lines 1314–1330. -/
-theorem PGVWC07CanonicalFormData.periodicInteractionHamiltonianES_blocks_eq_zero
+/-- At the source volume bound, the Hamiltonian of the translates on the ring of any positive
+semidefinite local matrix annihilating the original canonical vector annihilates every block
+vector. The simultaneous span and all individual local annihilation equations are derived.
+Source: PGVWC07, Theorem 11 (`2blocks.1`), lines 1407–1422; standing block hypotheses at
+lines 1314–1330. -/
+theorem PGVWC07CanonicalFormData.toEuclideanLin_hamiltonian_translationInvariant_blocks_eq_zero
     (data : PGVWC07CanonicalFormData A)
     (hr : 2 ≤ data.r)
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := d) data.blocks)
+    (hDistinct : BlocksNotGaugePhaseEquiv data.blocks)
     {L₀ L N : ℕ} (hL₀ : 0 < L₀)
     (hC1 : ∀ j, Kraus.IsNBlkInjective (data.blocks j) L₀)
     (hN : 3 * (data.r - 1) * (L₀ + 1) + L ≤ N)
-    (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L) (hh : h.IsPositive)
-    (hzero : periodicInteractionHamiltonianES h N (mpvState A N) = 0) :
-    ∀ j, periodicInteractionHamiltonianES h N (mpvState (data.blocks j) N) = 0 := by
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
+    (hzero : Matrix.toEuclideanLin
+      (ManyBody.Interaction.translationInvariant (by omega : L ≤ N) h).hamiltonian
+        (mpvState A N) = 0) :
+    ∀ j, Matrix.toEuclideanLin
+      (ManyBody.Interaction.translationInvariant (by omega : L ≤ N) h).hamiltonian
+        (mpvState (data.blocks j) N) = 0 := by
   classical
   have hpred : 1 ≤ data.r - 1 := by omega
   have hL₀Bound : L₀ ≤ 3 * (data.r - 1) * (L₀ + 1) := by
@@ -66,25 +70,28 @@ theorem PGVWC07CanonicalFormData.periodicInteractionHamiltonianES_blocks_eq_zero
     simpa only [mpvState_apply, WithLp.ofLp_sum, Finset.sum_apply,
       PiLp.smul_apply, smul_eq_mul] using data.mpv_eq_sum σ
   rw [hsum] at hzero
-  exact periodicInteractionHamiltonianES_mpvState_eq_zero_of_wordTupleSpanTop
+  exact toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_wordTupleSpanTop
     data.blocks (fun j => (data.weight j : ℂ) ^ N)
     (fun j => pow_ne_zero N (by exact_mod_cast (data.weight_pos j).ne'))
     h hh (by omega) hSpan hzero
 
-/-- The number of separated canonical blocks bounds the ground-space dimension
-of every positive local interaction annihilating the original periodic state,
-at the source volume bound. Source: PGVWC07, Theorem 11, `2blocks.1`,
-lines 1407–1416. -/
-theorem PGVWC07CanonicalFormData.blockCount_le_finrank_ker_periodicInteractionHamiltonianES
+/-- The number of separated canonical blocks bounds the ground-space dimension of the
+Hamiltonian of the translates on the ring of every positive semidefinite local matrix
+annihilating the original periodic state, at the source volume bound. Source: PGVWC07,
+Theorem 11, `2blocks.1`, lines 1407–1416. -/
+theorem PGVWC07CanonicalFormData.blockCount_le_finrank_ker_hamiltonian_translationInvariant
     (data : PGVWC07CanonicalFormData A)
     (hr : 2 ≤ data.r)
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := d) data.blocks)
+    (hDistinct : BlocksNotGaugePhaseEquiv data.blocks)
     {L₀ L N : ℕ} (hL₀ : 0 < L₀)
     (hC1 : ∀ j, Kraus.IsNBlkInjective (data.blocks j) L₀)
     (hN : 3 * (data.r - 1) * (L₀ + 1) + L ≤ N)
-    (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L) (hh : h.IsPositive)
-    (hzero : periodicInteractionHamiltonianES h N (mpvState A N) = 0) :
-    data.r ≤ Module.finrank ℂ (LinearMap.ker (periodicInteractionHamiltonianES h N)) := by
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
+    (hzero : Matrix.toEuclideanLin
+      (ManyBody.Interaction.translationInvariant (by omega : L ≤ N) h).hamiltonian
+        (mpvState A N) = 0) :
+    data.r ≤ Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
+      (ManyBody.Interaction.translationInvariant (by omega : L ≤ N) h).hamiltonian)) := by
   classical
   let : ∀ j, NeZero (data.dim j) := fun j => ⟨(data.dim_pos j).ne'⟩
   have hpred : 1 ≤ data.r - 1 := by omega
@@ -95,9 +102,10 @@ theorem PGVWC07CanonicalFormData.blockCount_le_finrank_ker_periodicInteractionHa
   have hSpan : WordTupleSpanTop data.blocks N :=
     data.wordTupleSpanTop_of_ge hL₀ hC1 hDistinct (by omega)
   have hIndependent := linearIndependent_mpvState_of_wordTupleSpanTop data.blocks hSpan
-  have hblocks := data.periodicInteractionHamiltonianES_blocks_eq_zero
+  have hblocks := data.toEuclideanLin_hamiltonian_translationInvariant_blocks_eq_zero
     hr hDistinct hL₀ hC1 hN h hh hzero
-  let K := LinearMap.ker (periodicInteractionHamiltonianES h N)
+  let K := LinearMap.ker (Matrix.toEuclideanLin
+    (ManyBody.Interaction.translationInvariant (by omega : L ≤ N) h).hamiltonian)
   let states : Fin data.r → K := fun j => ⟨mpvState (data.blocks j) N, hblocks j⟩
   have hIndependentK : LinearIndependent ℂ states :=
     LinearIndependent.of_comp K.subtype hIndependent
