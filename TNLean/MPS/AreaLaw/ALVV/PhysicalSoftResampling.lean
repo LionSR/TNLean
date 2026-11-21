@@ -275,7 +275,7 @@ theorem exists_physical_soft_resampling_tree
             exists_physical_soft_interval_history q ell m k g tau t
               T T
               hq hell hm hk hg htau htau1 le_rfl hT0 htfloor hTfloor hO hR
-              L0 J.val.1 J.val.2 J.property.1 J.property.2.1 J.property.2.2 Φ.term Φ.mem h0 h1
+              L0 J.val.1 J.val.2 J.property.1 J.property.2.1 J.property.2.2 Φ h0 h1
               K rho rounds bRef xiInit (1 / 100000)
               hD hK hThreshold hSmall hepsilon hreverse hxi (by norm_num) le_rfl
               mu hmu hgapg Ref hGRef hRefG

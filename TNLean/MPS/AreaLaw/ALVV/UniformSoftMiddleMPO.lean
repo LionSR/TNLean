@@ -60,16 +60,14 @@ interactions. Supporting ALVV, arXiv:1602.08828v2, `def:soft-trunc`,
 1262–1268 and 1311–1333. -/
 theorem exists_uniform_native_soft_middle_mpo {N q l r m : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ N + 1) (hm : 0 < m)
-    (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval (N + 1) i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction (N + 1) q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (e t xi : ℝ)
-    (hlo : (e : ℂ) • 1 ≤ ∑ i ∈ Finset.univ.filter
-      (fun i : Fin N ↦ l ≤ i.val ∧ i.val + 1 < r), h i)
+    (hlo : (e : ℂ) • 1 ≤ Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin N ↦ l ≤ i.val ∧ i.val + 1 < r)))
     (hscale : 3 * (m : ℝ) ≤ t) (hxi : 0 < xi) :
-    let A := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin N ↦ l ≤ i.val ∧ i.val + 1 < r), h i
+    let A := Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin N ↦ l ≤ i.val ∧ i.val + 1 < r))
     let sigma0 : Fin (N + 1) → Fin q := fun _ ↦ ⟨0, hq⟩
     let insert := insertInterval (L := r - l) l sigma0
     let eJ := intervalShiftOrderIso hlr hrL
@@ -94,7 +92,6 @@ theorem exists_uniform_native_soft_middle_mpo {N q l r m : ℕ}
           ‖P - Zphys (z : ℂ)‖ ≤ xi := by
   classical
   intro A sigma0 insert eJ W base order bond
-  let Φ : ManyBody.BondInteraction (N + 1) q := ⟨h, hs⟩
   let g := intervalBondRestriction (L := N + 1) l r Φ
   have hgs (i : Fin N) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (g i) {i.castSucc, i.succ} := by

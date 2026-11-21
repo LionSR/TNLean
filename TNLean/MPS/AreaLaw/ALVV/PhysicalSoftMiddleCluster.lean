@@ -59,18 +59,16 @@ theorem exists_physical_soft_middle_cluster {g tau : ℝ}
       let order := max 1 ⌈(Real.log (max 1 ((N : ℝ) ^ 2)) -
         Real.log (Real.log (1 + xi / W))) / (-Real.log clusterBase)⌉₊
       let bond := ((1 + N * q ^ 2) + (order ^ 2 * q ^ order) * (m + 1)) * 2
-      ∀ (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval (N + 1) i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1),
+      ∀ (Φ : ManyBody.BondInteraction (N + 1) q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1),
       let cuts : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, N + 1]
       let I := fun j : Fin 5 ↦ Finset.univ.filter
         (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ)
-      let A := fun j : Fin 5 ↦ ∑ i ∈ I j, h i
+      let A := fun j : Fin 5 ↦ Φ.partialHamiltonian (I j)
       let crossings := Finset.univ.filter
         (fun i : Fin N ↦ i.val + 1 ∈
           ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-      let Y := ∑ i ∈ crossings, h i
+      let Y := Φ.partialHamiltonian crossings
       ∃ (e : Fin 5 → ℝ) (x : (Fin (N + 1) → Fin q) → ℂ) (E : ℝ),
         star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
         (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧ 0 ≤ E ∧ E ≤ 4 ∧
@@ -102,7 +100,7 @@ theorem exists_physical_soft_middle_cluster {g tau : ℝ}
                 (QuantumCircuit.embedOp eJ ((F 2).submatrix insert insert)) ∧
               ‖(F 2).submatrix insert insert - Z‖ ≤ xi ∧ ‖F 2 - Zphys‖ ≤ xi ∧
               Ghat = G - F 2 + Zphys ∧ ‖G - Ghat‖ ≤ xi ∧ ‖Ghat‖ ≤ M + xi ∧
-              let Hraw := ∑ i, h i
+              let Hraw := Φ.hamiltonian
               let hRaw : Hraw.IsHermitian :=
                 (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
               ∀ mu0 : ℝ, mu0 ∈ spectrum ℝ Hraw →
@@ -120,13 +118,13 @@ theorem exists_physical_soft_middle_cluster {g tau : ℝ}
     Real.exists_soft_cluster_parameters hg htau
   refine ⟨m, t, T, hm, ht, hscale, hT, hTsmall, hO, hR, ?_⟩
   intro N q ell a b hq hell hab hb M xi W clusterBase order bond
-    h hs h0 h1 cuts I A crossings Y
+    Φ h0 h1 cuts I A crossings Y
   obtain ⟨hcross, e, x, E, hx, hxe, he, hE0, hEC, hfamily⟩ :=
     exists_five_region_soft_uniform_clusters
       (L := N + 1) (q := q) (ell := ell)
       (k1 := a + 1) (k2 := a + 2 * ell) (k3 := b + 1) (k4 := b + 2 * ell)
       (by omega) (by omega) (by omega) (by omega) (by omega)
-      (by omega) (by omega) h hs h0 h1
+      (by omega) (by omega) Φ h0 h1
   refine ⟨e, x, E, hx, hxe, he, hE0, hEC.trans (by exact_mod_cast hcross), ?_⟩
   intro p hpl hpu F G
   obtain ⟨hG, hnorm, hcomparison⟩ :=
@@ -147,7 +145,7 @@ theorem exists_physical_soft_middle_cluster {g tau : ℝ}
   obtain ⟨Acore, C0, hZ, hZphys, hRecon, hNative, hPlaced⟩ :=
     exists_native_soft_middle_mpo_approximation
       (N := N) (q := q) (l := a + 2 * ell) (r := b + 1) (m := m)
-      hq0 (by omega) (by omega) (by omega) h hs h0 h1
+      hq0 (by omega) (by omega) (by omega) Φ h0 h1
       (p 2) t xi hp2 ht.ge hxi
   refine ⟨Acore, C0, ?_⟩
   intro Z Zphys Ghat

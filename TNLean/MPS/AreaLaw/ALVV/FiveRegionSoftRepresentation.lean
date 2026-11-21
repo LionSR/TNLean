@@ -38,21 +38,19 @@ ALVV, arXiv:1602.08828v2, `t:aisefficient`, lines 1373–1392; no efficient-GEN 
 theorem exists_five_region_soft_representation {N q k1 k2 k3 k4 : ℕ}
     (hq : 0 < q) (h12 : k1 ≤ k2) (h23 : k2 ≤ k3)
     (h34 : k3 ≤ k4) (h4L : k4 ≤ N + 1)
-    (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval (N + 1) i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction (N + 1) q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, k1, k2, k3, k4, N + 1]
     let I := fun j : Fin 5 ↦ Finset.univ.filter
       (fun i : Fin N ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-    let A := fun j : Fin 5 ↦ ∑ i ∈ I j, h i
+    let A := fun j : Fin 5 ↦ Φ.partialHamiltonian (I j)
     let J := Finset.univ.filter
       (fun i : Fin N ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
+    let Y := Φ.partialHamiltonian J
     J.card ≤ 4 ∧ ∃ (e : Fin 5 → ℝ) (x z : (Fin (N + 1) → Fin q) → ℂ) (E : ℝ),
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
-      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E : ℂ) • z ∧
       (H - (E : ℂ) • 1).PosSemidef ∧ 0 ≤ E ∧ E ≤ (J.card : ℝ) ∧
       H.IsHermitian ∧
@@ -116,8 +114,8 @@ theorem exists_five_region_soft_representation {N q k1 k2 k3 k4 : ℕ}
   intro k I A J Y
   obtain ⟨hJ, e, x, z, E, hx, hxe, he, hz, hHz, hE, hE0, hEC,
       hH, bH, aH, hEigH, hfamily⟩ :=
-    exists_five_region_soft_residuals hq h12 h23 h34 h4L h hs h0 h1
-  let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+    exists_five_region_soft_residuals hq h12 h23 h34 h4L Φ h0 h1
+  let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
   refine ⟨hJ, e, x, z, E, hx, hxe, he, hz, hHz, hE, hE0, hEC, hH, bH, aH, hEigH, ?_⟩
   intro S p t m hpl hpu ht hm B D G
   obtain ⟨mu, w, hG, hBpos, hGH, hw, hGw, hGlow, hmuD, hmuE, hmuC,
@@ -146,8 +144,8 @@ theorem exists_five_region_soft_representation {N q k1 k2 k3 k4 : ℕ}
       cfc (Real.softTruncation t m) (A j - (p j : ℂ) • 1)
     let Braw := ∑ j, (A j - (e j : ℂ) • 1)
     obtain ⟨_hk, _hR, _hsA, _hA, _hY, _hYC, _hJ, hsumraw⟩ :=
-      five_region_original_bond_data (N + 1) q k1 k2 k3 k4 h12 h23 h34 h4L h hs h0 h1
-    change (∑ i, h i) = (∑ j, A j) + Y at hsumraw
+      five_region_original_bond_data (N + 1) q k1 k2 k3 k4 h12 h23 h34 h4L Φ h0 h1
+    change Φ.hamiltonian = (∑ j, A j) + Y at hsumraw
     have hcenter : H = Braw + Y := by
       dsimp only [H, Braw]
       rw [hsumraw, Finset.sum_sub_distrib]
@@ -174,11 +172,11 @@ theorem exists_five_region_soft_representation {N q k1 k2 k3 k4 : ℕ}
         change j.val = i.val + 1
         omega
     have hs' (i : Fin N) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) {i.castSucc, i.succ} := (hs i).mono (hsites i)
-    have hherm (i : Fin N) : (h i).IsHermitian := (h0 i).posSemidef.isHermitian
-    have hnorm (i : Fin N) : ‖h i‖ ≤ 1 :=
-      (CStarAlgebra.norm_le_one_iff_of_nonneg (h i) (h0 i)).mpr (h1 i)
-    have hlo (j : Fin 5) (hj : j ∈ S) : (p j : ℂ) • 1 ≤ ∑ i ∈ I j, h i := by
+        (Φ.term i) {i.castSucc, i.succ} := (Φ.mem i).mono (hsites i)
+    have hherm (i : Fin N) : (Φ.term i).IsHermitian := (h0 i).posSemidef.isHermitian
+    have hnorm (i : Fin N) : ‖Φ.term i‖ ≤ 1 :=
+      (CStarAlgebra.norm_le_one_iff_of_nonneg (Φ.term i) (h0 i)).mpr (h1 i)
+    have hlo (j : Fin 5) (hj : j ∈ S) : (p j : ℂ) • 1 ≤ A j := by
       have hpe : (p j : ℝ) • (1 : Matrix (Fin (N + 1) → Fin q)
           (Fin (N + 1) → Fin q) ℂ) ≤ (e j : ℝ) • 1 :=
         smul_le_smul_of_nonneg_right (hpu j hj) zero_le_one
@@ -191,15 +189,16 @@ theorem exists_five_region_soft_representation {N q k1 k2 k3 k4 : ℕ}
       simpa only [Complex.coe_smul] using hpe.trans heA
     obtain ⟨tensors, _hM, hMT, herr⟩ :=
       exists_selected_regional_softTruncations_hermitian_mpo_of_accuracy
-        (by omega : 1 ≤ q) (by omega : 0 < m) h hs' hherm hnorm I p S
+        (by omega : 1 ≤ q) (by omega : 0 < m) Φ.term hs' hherm hnorm I p S
         t xi (-∑ j, e j) hlo hscale hxi
-    have hmatrix : (∑ i, h i) + (((-∑ j, e j) : ℝ) : ℂ) • 1 +
+    have hmatrix : Φ.hamiltonian + (((-∑ j, e j) : ℝ) : ℂ) • 1 +
         ∑ j ∈ S, (F j - A j) = G := by
       rw [hGsum]
       dsimp only [H]
       rw [Complex.ofReal_neg, neg_smul]
       abel
-    rw [hmatrix] at herr
-    exact ⟨tensors, hMT, herr⟩
+    refine ⟨tensors, hMT, ?_⟩
+    rw [← hmatrix]
+    exact herr
 
 end TNLean.MPS.AreaLaw.ALVV
