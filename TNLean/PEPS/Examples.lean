@@ -26,6 +26,7 @@ import TNLean.PEPS.Examples.Cluster
 import TNLean.PEPS.Examples.ClusterStabilizer
 import TNLean.PEPS.Examples.GHZ
 import TNLean.PEPS.Examples.HoneycombCluster
+import TNLean.PEPS.Examples.HoneycombPlaquette
 import TNLean.PEPS.Examples.QuantumDouble
 import TNLean.PEPS.Examples.QuantumDoubleBondAverage
 import TNLean.PEPS.Examples.QuantumDoubleBondParent
