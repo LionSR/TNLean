@@ -38,9 +38,10 @@
     \lean{TNLean.MPS.AreaLaw.norm_exp_conjugation_nearest_neighbour_shift_le_two}
     \leanok
     \uses{def:chain_model}
-    Let $L,q,c\in\N$, and let $I$ be a set of nearest-neighbour bonds of the
-    chain $\{0,\ldots,L-1\}$. For each $i\in I$, let $h_i$ act on
-    $\{i,i+1\}$ and satisfy $0\le h_i\le\Id$. Set $H=\sum_{i\in I}h_i$.
+    Let $L,q,c\in\N$, and let $h_i$ act on $\{i,i+1\}$ for each
+    nearest-neighbour bond of the chain $\{0,\ldots,L-1\}$. Let $I$ be a
+    set of bonds with $0\le h_i\le\Id$ for $i\in I$. Set
+    $H=\sum_{i\in I}h_i$.
     Let $O$ act on $\lbrack c,c+2)\cap\lbrack 0,L)$. For every $z\in\C$ and
     $0\le t\le1/8$,
     \begin{align}
