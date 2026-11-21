@@ -329,7 +329,7 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
   obtain ⟨Lt, hLsupp, -, hLadj, hcone⟩ := hff.exists_sweepOp_pow_lightCone c t hBblocks ξb
   let N := graphNeighborhood (planeDomainGraph Λ) S₀ (2 * r)
   have hLN : Lt ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) N :=
-    ManyBody.supportedOperators_mono (graphNeighborhood_mono _ _ (by omega)) hLsupp
+    ManyBody.supportedOperators_mono (ManyBody.graphNeighborhood_mono _ _ (by omega)) hLsupp
   have hS₀N : S₀ ⊆ N := ManyBody.subset_graphNeighborhood
   -- The vector `ζ = R₀ φ` and its excited component.
   let ζ : Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X) → ℂ :=
