@@ -440,7 +440,7 @@ support in the middle region. The two right configurations need not agree
 off the original support. Supporting locality algebra for ALVV,
 arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
 theorem leftBlock_isSupportedOn_of_threeSplit_right
-    {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
+    {V : Type*} [DecidableEq V] {q : ℕ}
     (T E D : Finset V) (hTE : Disjoint T E)
     (P : Matrix (V → Fin q) (V → Fin q) ℂ)
     (hP : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) P D)
@@ -610,7 +610,7 @@ theorem place_submatrix_threeSplit
   rw [ManyBody.place_apply, hrestrict t e r, hrestrict t' e' r']
   split_ifs with h
   · obtain ⟨rfl, rfl⟩ := hagree.mp h
-    simp [Matrix.one_apply]
+    simp
   · rcases not_and_or.mp fun h' ↦ h (hagree.mpr h') with ht | hr
     · simp [Matrix.one_apply, ht]
     · simp [Matrix.one_apply, hr]

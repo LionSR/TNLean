@@ -91,7 +91,7 @@ private theorem placeAlong_chainWindow_openInteractionMatrix {W n b : ℕ}
   have hj' : j + R ≤ W := by
     have hj'' := Finset.mem_range.mp hj
     omega
-  simp only [dif_pos hj', dif_pos (show b + j + R ≤ n by omega)]
+  simp only [dite_eq_left hj', dite_eq_left (show b + j + R ≤ n by omega)]
   rw [ManyBody.placeAlong_placeAlong, ManyBody.chainWindow_trans_chainWindow]
 
 /-- Each term of an open interaction sum of a positive interaction is positive. -/
@@ -139,7 +139,7 @@ theorem openInteractionMatrix_blockedInteractionMatrix_reindex
     omega
   have hiL : i * L + K * L ≤ N * L := by
     simpa only [Nat.add_mul] using Nat.mul_le_mul_right L hi'
-  simp only [dif_pos hiL]
+  simp only [dite_eq_left hiL]
   exact placeAlong_chainWindow_openInteractionMatrix h hiL
 
 

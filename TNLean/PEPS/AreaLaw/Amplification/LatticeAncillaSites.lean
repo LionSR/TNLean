@@ -111,9 +111,9 @@ theorem kronecker_one_submatrix_ancillaSplit (X : Finset (Site Λ))
       exact Prod.ext (funext fun x => h _ fun j => Sum.inl_ne_inr)
         (funext fun x => h _ fun j => Sum.inl_ne_inr)
   by_cases h : (ancillaSplit q X c).2 = (ancillaSplit q X c').2
-  · rw [if_pos h, if_pos (hagree.mp h), mul_one]
+  · rw [ite_eq_left h, ite_eq_left (hagree.mp h), mul_one]
     rfl
-  · rw [if_neg h, if_neg (mt hagree.mpr h), mul_zero]
+  · rw [ite_eq_right h, ite_eq_right (mt hagree.mpr h), mul_zero]
 
 /-- An operator on the copy `s'` alone is placed on the sites of `s'`. -/
 theorem one_kronecker_submatrix_ancillaSplit (X : Finset (Site Λ))
@@ -142,12 +142,12 @@ theorem one_kronecker_submatrix_ancillaSplit (X : Finset (Site Λ))
         funext fun x => h _ fun j => by simp⟩
   by_cases h : (ancillaSplit q X c).1 = (ancillaSplit q X c').1 ∧
       (ancillaSplit q X c).2.2 = (ancillaSplit q X c').2.2
-  · rw [if_pos h.1, if_pos h.2, if_pos (hagree.mp h), one_mul, mul_one]
+  · rw [ite_eq_left h.1, ite_eq_left h.2, ite_eq_left (hagree.mp h), one_mul, mul_one]
     rfl
-  · rw [if_neg (mt hagree.mpr h)]
+  · rw [ite_eq_right (mt hagree.mpr h)]
     rcases not_and_or.mp h with h1 | h2
-    · rw [if_neg h1, zero_mul]
-    · rw [if_neg h2, mul_zero, mul_zero]
+    · rw [ite_eq_right h1, zero_mul]
+    · rw [ite_eq_right h2, mul_zero, mul_zero]
 
 /-- **Supports on the enlarged sites.** An operator `P ⊗ (b ⊗ 1_{e'})`, with `P` acting on a
 physical region `S` and `b` acting on `s'`, acts on `S ⊔ s'`.

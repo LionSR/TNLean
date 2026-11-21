@@ -237,7 +237,7 @@ as its left, middle-region factors. The tensor association is unchanged.
 Supporting locality algebra for ALVV, arXiv:1602.08828v2,
 Proposition 5.7, lines 1324–1333. -/
 private theorem exists_right_crossing_factors_with_fixed_middle_units
-    {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
+    {V : Type*} [DecidableEq V] {q : ℕ}
     (T E D : Finset V) (hTE : Disjoint T E)
     (P : Matrix (V → Fin q) (V → Fin q) ℂ)
     (hP : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) P D)

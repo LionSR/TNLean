@@ -94,7 +94,7 @@ theorem openInteractionMatrix_blocking_reindex {K : ℕ}
     omega
   have hiL : i * L + K * L ≤ N * L := by
     simpa only [Nat.add_mul] using Nat.mul_le_mul_right L hi'
-  simp only [dif_pos hi', dif_pos hiL]
+  simp only [dite_eq_left hi', dite_eq_left hiL]
   exact placeAlong_chainWindow_blocking_reindex h hi'
 
 omit [NeZero d] in
@@ -131,8 +131,8 @@ theorem sum_aligned_placeAlong_chainWindow_le_openInteractionMatrix {K : ℕ}
   refine Finset.sum_le_sum_of_subset_of_nonneg hsub ?_
   intro j _ _
   by_cases hj : j + K * L ≤ N * L
-  · simp only [dif_pos hj]
+  · simp only [dite_eq_left hj]
     exact Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_placeAlong _ hh)
-  · simp only [dif_neg hj, le_refl]
+  · simp only [dite_eq_right hj, le_refl]
 
 end MPSTensor

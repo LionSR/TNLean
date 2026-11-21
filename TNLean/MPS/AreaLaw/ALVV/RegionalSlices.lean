@@ -33,7 +33,7 @@ namespace TNLean.MPS.AreaLaw
 
 open TNLean.Lattice
 
-variable {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
+variable {V : Type*} [DecidableEq V] {q : ℕ}
 
 /-- The matrix entries of `X` between two fixed configurations of the complement of `J`,
 viewed as an operator on `J`. -/
@@ -45,7 +45,7 @@ def regionalSlice (J : Finset V) (X : Matrix (V → Fin q) (V → Fin q) ℂ)
 of `N` products whose factors on `J` are slices of the operator. This is the decomposition
 `K = ∑ A_i ⊗ B_i` behind the improving family of ALVV, arXiv:1602.08828v2, Theorem `t:aisff`,
 lines 1606–1607, with every `A_i` chosen among the slices of `K`. -/
-theorem exists_regionalSlice_decomposition (J : Finset V)
+theorem exists_regionalSlice_decomposition [Finite V] (J : Finset V)
     (X : Matrix (V → Fin q) (V → Fin q) ℂ) :
     ∃ (N : ℕ) (e : Fin N → ({v // v ∉ J} → Fin q) × ({v // v ∉ J} → Fin q))
       (M : Fin N → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ),
@@ -54,6 +54,7 @@ theorem exists_regionalSlice_decomposition (J : Finset V)
         ((sheetSplit q J).trans (Equiv.prodComm _ _))
         ((sheetSplit q J).trans (Equiv.prodComm _ _)) := by
   classical
+  have := Fintype.ofFinite V
   let τ := (sheetSplit q J).trans (Equiv.prodComm (J → Fin q) ({v // v ∉ J} → Fin q))
   let ρ : Matrix (({v // v ∉ J} → Fin q) × (J → Fin q))
       (({v // v ∉ J} → Fin q) × (J → Fin q)) ℂ :=
@@ -83,13 +84,14 @@ theorem exists_regionalSlice_decomposition (J : Finset V)
 rank at most that of `X` at the corresponding cut of the whole chain. Supporting the
 bond-dimension clause of ALVV, arXiv:1602.08828v2, Theorem `t:aisff`, line 1586: the minimal
 open-boundary matrix product operator bond dimension at a cut is the operator Schmidt rank. -/
-theorem operatorSchmidtRank_regionalSlice_le (J C : Finset V)
+theorem operatorSchmidtRank_regionalSlice_le [Finite V] (J C : Finset V)
     (X : Matrix (V → Fin q) (V → Fin q) ℂ) (x y : {v // v ∉ J} → Fin q) :
     operatorSchmidtRank ((regionalSlice J X x y).reindex
         (sheetSplit q (Finset.univ.filter fun v : J ↦ (v : V) ∈ C))
         (sheetSplit q (Finset.univ.filter fun v : J ↦ (v : V) ∈ C))) ≤
       operatorSchmidtRank (X.reindex (sheetSplit q C) (sheetSplit q C)) := by
   classical
+  have := Fintype.ofFinite V
   set C' : Finset ↥J := Finset.univ.filter fun v : J ↦ (v : V) ∈ C with hC'
   obtain ⟨A, B, hX⟩ := hasOperatorSchmidtDecomposition_operatorSchmidtRank
     (X.reindex (sheetSplit q C) (sheetSplit q C))
@@ -142,10 +144,11 @@ theorem operatorSchmidtRank_le_card_sq {m n : Type*} [Fintype m] [Finite n]
 
 /-- The cut coordinates of `ManyBody.cutOperator` and of `sheetSplit` give the same operator
 Schmidt rank. -/
-theorem operatorSchmidtRank_cutOperator_eq (B : Finset V)
+theorem operatorSchmidtRank_cutOperator_eq [Finite V] (B : Finset V)
     (X : Matrix (V → Fin q) (V → Fin q) ℂ) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) B X) =
-      operatorSchmidtRank (X.reindex (sheetSplit q B) (sheetSplit q B)) :=
+      operatorSchmidtRank (X.reindex (sheetSplit q B) (sheetSplit q B)) := by
+  have := Fintype.ofFinite V
   rfl
 
 end TNLean.MPS.AreaLaw

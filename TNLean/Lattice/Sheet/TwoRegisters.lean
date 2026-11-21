@@ -215,6 +215,7 @@ theorem pairUIso_symm_single (h : Disjoint T E) (own₁ own₂ : ι → Party) (
         siteVec own₂ (sitesU T E) (merge h ((fun x : T => c₂ x), u.2) c₂)) := by
   rw [LinearIsometryEquiv.symm_apply_eq, pairUIso_siteVec, merge_restrict_U, merge_restrict_U]
 
+omit [Fintype ι] in
 theorem merge_self_of_mem_union (h : Disjoint T E) (u : {v // v ∉ T ∪ E} → Fin q) (c : ι → Fin q)
     {x : ι} (hx : x ∈ T ∪ E) : merge h ((fun y : T => c y), u) c x = c x := by
   rcases Finset.mem_union.mp hx with hT | hE
@@ -271,10 +272,12 @@ theorem eval_frontCorrectionWord (h : Disjoint T E) (k₁ k₂ : Layout Party)
     Word.eval_exchangeBlocks_appendIso_symm, Word.eval_unassocWord_appendIso_symm,
     eval_unpartWord, eval_unpartWordApp]
 
+omit [Fintype ι] in
 theorem threeSplit_fst (h : Disjoint T E) (c : ι → Fin q) :
     (threeSplit q T E h c).1 = ((fun x : T => c x), (fun x : E => c x)) :=
   rfl
 
+omit [Fintype ι] in
 theorem threeSplit_snd (h : Disjoint T E) (c : ι → Fin q) :
     (threeSplit q T E h c).2 = fun x : {v // v ∉ T ∪ E} => c x :=
   rfl

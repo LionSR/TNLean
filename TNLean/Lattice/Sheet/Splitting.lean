@@ -102,32 +102,38 @@ section ThreeSplit
 
 variable {T E : Finset ι} (h : Disjoint T E)
 
+omit [Fintype ι] in
 @[simp]
 theorem threeSplit_apply_fst_fst (x : ι → Fin q) (v : T) : (threeSplit q T E h x).1.1 v = x v :=
   rfl
 
+omit [Fintype ι] in
 @[simp]
 theorem threeSplit_apply_fst_snd (x : ι → Fin q) (v : E) : (threeSplit q T E h x).1.2 v = x v :=
   rfl
 
+omit [Fintype ι] in
 @[simp]
 theorem threeSplit_apply_snd (x : ι → Fin q) (v : {v // v ∉ T ∪ E}) :
     (threeSplit q T E h x).2 v = x v :=
   rfl
 
+omit [Fintype ι] in
 theorem threeSplit_symm_apply_of_mem_left (t : T → Fin q) (e : E → Fin q)
     (u : {v // v ∉ T ∪ E} → Fin q) {v : ι} (hv : v ∈ T) :
     (threeSplit q T E h).symm ((t, e), u) v = t ⟨v, hv⟩ := by
   simp [threeSplit, ManyBody.cutEquiv_symm_apply_mem _ _
     (Finset.mem_union_left E hv), ManyBody.regionUnionEquiv, hv]
 
+omit [Fintype ι] in
 theorem threeSplit_symm_apply_of_mem_right (t : T → Fin q) (e : E → Fin q)
     (u : {v // v ∉ T ∪ E} → Fin q) {v : ι} (hv : v ∈ E) :
     (threeSplit q T E h).symm ((t, e), u) v = e ⟨v, hv⟩ := by
   have hvT : v ∉ T := fun hvT => Finset.disjoint_left.mp h hvT hv
   simp [threeSplit, ManyBody.cutEquiv_symm_apply_mem _ _
-    (Finset.mem_union_right T hv), ManyBody.regionUnionEquiv, hvT, hv]
+    (Finset.mem_union_right T hv), ManyBody.regionUnionEquiv, hvT]
 
+omit [Fintype ι] in
 theorem threeSplit_symm_apply_of_notMem (t : T → Fin q) (e : E → Fin q)
     (u : {v // v ∉ T ∪ E} → Fin q) {v : ι} (hv : v ∉ T ∪ E) :
     (threeSplit q T E h).symm ((t, e), u) v = u ⟨v, hv⟩ := by

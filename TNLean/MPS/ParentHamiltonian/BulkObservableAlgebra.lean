@@ -65,18 +65,18 @@ theorem bulkObservable_eq_placeAlong_chainWindow {k : ℕ}
       · by_cases hvk : ℓ + k ≤ v.val
         · have h := congrFun h₂ ⟨v.val - (ℓ + k), by omega⟩
           have hv' : Fin.natAdd (ℓ + k) (⟨v.val - (ℓ + k), by omega⟩ : Fin r) = v :=
-            Fin.ext (by simp only [Fin.val_natAdd, Fin.val_mk]; omega)
+            Fin.ext (by simp only [Fin.val_natAdd]; omega)
           simp only [hv'] at h
           exact h
-        · exact absurd (Fin.ext (by simp only [ManyBody.val_chainWindow, Fin.val_mk]; omega))
+        · exact absurd (Fin.ext (by simp only [ManyBody.val_chainWindow]; omega))
             (hv ⟨v.val - ℓ, by omega⟩)
   rw [hw τ, hw σ]
   by_cases h₁ : (fun i ↦ τ (Fin.castAdd r (Fin.castAdd k i))) =
       fun i ↦ σ (Fin.castAdd r (Fin.castAdd k i))
   · by_cases h₂ : (fun i ↦ τ (Fin.natAdd (ℓ + k) i)) = fun i ↦ σ (Fin.natAdd (ℓ + k) i)
-    · rw [if_pos h₁, if_pos h₂, if_pos (hiff.2 ⟨h₁, h₂⟩), one_mul, mul_one]
-    · rw [if_neg h₂, if_neg fun h ↦ h₂ (hiff.1 h).2, mul_zero]
-  · rw [if_neg h₁, if_neg fun h ↦ h₁ (hiff.1 h).1, zero_mul, zero_mul]
+    · rw [ite_eq_left h₁, ite_eq_left h₂, ite_eq_left (hiff.2 ⟨h₁, h₂⟩), one_mul, mul_one]
+    · rw [ite_eq_right h₂, ite_eq_right fun h ↦ h₂ (hiff.1 h).2, mul_zero]
+  · rw [ite_eq_right h₁, ite_eq_right fun h ↦ h₁ (hiff.1 h).1, zero_mul, zero_mul]
 
 /-- Placing two observables on the same interior interval preserves their product. -/
 theorem bulkObservable_mul {k : ℕ}

@@ -39,7 +39,7 @@ theorem quasiLocalIntervalObservable_openInteractionMatrix (a : ℤ) {R : ℕ}
   have hi' : i + R ≤ N := by
     have hi'' := Finset.mem_range.mp hi
     omega
-  simp only [dif_pos hi']
+  simp only [dite_eq_left hi']
   exact quasiLocalIntervalObservable_placeAlong_chainWindow a N i h hi'
 
 /-- Vanishing expectation on every local translate implies vanishing
