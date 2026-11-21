@@ -25,6 +25,15 @@ This is an auxiliary criterion. Its projection-defect hypothesis is explicit;
 no quantitative decay estimate for periodic tensors is asserted here.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 Lemma commutation (ii), and equations (3.12)--(3.16).
+
+The residue bounds that need no prefix or suffix Hamiltonian are also stated, in the last
+section, for the Hamiltonian of the parent interaction on the open chain
+(`parentChainInteraction`).
+
+**Transitional (#10948).** `exists_pos_openParentHamiltonianES_gap_over_residues` and
+`openParentHamiltonianES_gap_all_large_of_residue_gaps` are kept, unchanged, for unconverted users
+and are deleted when their last user is converted. The other declarations use the prefix and
+suffix Hamiltonians and are converted with them in a later package.
 -/
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
@@ -241,5 +250,51 @@ theorem IsPeriodic.exists_pos_openParentHamiltonianES_gap_all_of_residue_cover_d
   obtain ⟨δ, hδ, hResidue⟩ := exists_pos_openParentHamiltonianES_gap_of_aligned_cover_defect
     A hR hA.period_pos hRW hKernel hγ hLeft hDefect
   exact ⟨δ, hδ, openParentHamiltonianES_gap_all_large_of_residue_gaps A hA.period_pos hResidue⟩
+
+/-! ### The Hamiltonian of the parent interaction on the open chain -/
+
+/-- The finitely many terminal volumes W+r, with r<m, of the Hamiltonian of the parent
+interaction on the open chain have a common positive norm gap on their actual kernel
+complements. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, Lemma commutation (ii),
+and equations (3.12)--(3.16). -/
+theorem exists_pos_hamiltonian_parentChainInteraction_gap_over_residues
+    (A : MPSTensor d D) (R W m : ℕ) (hm : 0 < m) :
+    ∃ η : ℝ, 0 < η ∧ ∀ r < m, ∀ v ∈
+      (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R (W + r)).hamiltonian))ᗮ,
+      η * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A R (W + r)).hamiltonian v‖ := by
+  classical
+  let : NeZero m := ⟨Nat.ne_of_gt hm⟩
+  choose δ hδ hGap using fun r : Fin m =>
+    LinearMap.exists_pos_mul_norm_le_of_mem_orthogonal_ker
+      (Matrix.toEuclideanLin (parentChainInteraction A R (W + r.val)).hamiltonian)
+  let η := Finset.univ.inf' (Finset.univ_nonempty : (Finset.univ : Finset (Fin m)).Nonempty) δ
+  have hη : 0 < η := by
+    simp only [η, Finset.lt_inf'_iff, Finset.mem_univ, forall_const]
+    exact hδ
+  refine ⟨η, hη, fun r hr v hv => ?_⟩
+  exact (mul_le_mul_of_nonneg_right
+    (Finset.inf'_le δ (Finset.mem_univ (⟨r, hr⟩ : Fin m))) (norm_nonneg v)).trans
+    (hGap ⟨r, hr⟩ v hv)
+
+/-- Residue bounds of the Hamiltonian of the parent interaction on the open chain beyond a
+common quotient threshold give the same gap at every sufficiently large original length.
+Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, Lemma commutation (ii), and equations
+(3.12)--(3.16). -/
+theorem hamiltonian_parentChainInteraction_gap_all_large_of_residue_gaps
+    (A : MPSTensor d D) {R m M K₀ : ℕ} (hm : 0 < m) {δ : ℝ}
+    (hGap : ∀ K ≥ K₀, ∀ r < m, ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
+        (parentChainInteraction A R (K * m + M * m + r)).hamiltonian))ᗮ,
+      δ * ‖v‖ ≤
+        ‖Matrix.toEuclideanLin (parentChainInteraction A R (K * m + M * m + r)).hamiltonian v‖) :
+    ∀ N, (K₀ + M) * m ≤ N → ∀ v ∈
+      (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian))ᗮ,
+      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian v‖ := by
+  intro N hN
+  have hquot : K₀ + M ≤ N / m := (Nat.le_div_iff_mul_le hm).mpr hN
+  have hEq : (N / m - M) * m + M * m + N % m = N := by
+    rw [← Nat.add_mul, Nat.sub_add_cancel (by omega)]
+    simpa only [Nat.mul_comm] using Nat.div_add_mod N m
+  rw [← hEq]
+  exact hGap (N / m - M) (by omega) (N % m) (Nat.mod_lt N hm)
 
 end MPSTensor
