@@ -148,9 +148,11 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_ga
   have hD : 0 < D ^ 4 := pow_pos (NeZero.pos D) 4
   have hRpos : 0 < R := by omega
   obtain ⟨δ, hδ, hcanonicalGap⟩ :=
-    exists_openParentHamiltonianES_uniform_gap_of_isNormal_of_le A hNormal hR
+    exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNormal_of_le A hNormal hR
   obtain ⟨γ, hγ, hgap⟩ :=
-    hh.exists_open_uniform_gap_of_canonical_gap hRpos hδ hcanonicalGap
+    hh.exists_open_uniform_gap_of_canonical_gap hRpos hδ fun N hN ↦
+      (ManyBody.forall_hasEigenvalue_iff_norm
+        (posSemidef_hamiltonian_parentChainInteraction A R N)).mp (hcanonicalGap N hN)
   refine ⟨γ, hγ, ?_⟩
   intro k X _ hcenter
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)

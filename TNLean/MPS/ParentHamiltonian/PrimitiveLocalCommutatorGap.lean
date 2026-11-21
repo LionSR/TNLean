@@ -215,7 +215,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_ga
               (groundSpaceES A R)ᗮ.starProjection) X)).re := by
   have hNormal := isNormal_of_hasComplementaryFixedPointGap_with_posDef hP hρ
   obtain ⟨γ, hγ, hgap⟩ :=
-    exists_openParentHamiltonianES_uniform_gap_of_isNormal_of_le A hNormal hR
+    exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNormal_of_le A hNormal hR
   refine ⟨γ, hγ, ?_⟩
   intro k X _ hcenter
   have hD : 0 < D ^ 4 := pow_pos (NeZero.pos D) 4
@@ -235,7 +235,9 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_ga
   · exact Eventually.of_forall fun n => by
       simpa only [hRange] using ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
         hInj (by omega : 0 < R - 1) (by dsimp [N]; omega : R - 1 + 1 ≤ N n)
-  · exact Eventually.of_forall fun n => hgap (N n) (by dsimp [N]; omega)
+  · exact Eventually.of_forall fun n => (ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentChainInteraction A R (N n))).mp
+        (hgap (N n) (by dsimp [N]; omega))
   · exact Eventually.of_forall hg
   · exact hu
 
