@@ -603,8 +603,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 
 \begin{lemma}[Physical cut boundaries and changed sites]
     \label{thm:al_physical_cut_calculus}
-    \lean{ManyBody.mk_mem_edgeBoundary_iff,
-        ManyBody.edgeBoundary_compl,
+    \lean{ManyBody.edgeBoundary_compl,
         ManyBody.edgeBoundary_union_subset,
         ManyBody.edgeBoundary_sdiff_subset,
         ManyBody.card_edgeBoundary_union_le,
@@ -612,8 +611,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
         ManyBody.card_edgeBoundary_le_of_endpoint_cover,
         ManyBody.card_edgeBoundary_le_mul_card,
         ManyBody.edgeBoundary_subset_union_symmDiff,
-        ManyBody.card_edgeBoundary_le_add_mul_card_symmDiff,
-        ManyBody.planeDomainGraph_degree_le_four}
+        ManyBody.card_edgeBoundary_le_add_mul_card_symmDiff}
     \leanok
     \uses{def:area_law_hamiltonian}
     For finite $\Lambda\subset\mathbb Z^2$ and $B,C\subseteq\Lambda$ (with
@@ -630,7 +628,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     giving the changed-site bound of \cite[Lemma~9.1(2)]{OpenAI2026AreaLaw}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:area_law_ambient_boundary_crossing}
+    \uses{lem:area_law_ambient_boundary_crossing,thm:area_law_lattice_degree}
     Endpoint case analysis gives the set inclusions, and each site of $\Lambda$
     has degree at most $4$.
 \end{proof}

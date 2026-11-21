@@ -25,12 +25,10 @@ is proved in Chapter~\ref{ch:one_dimensional_chain}.
         ManyBody.IsChainSupport.card_le,
         TNLean.MPS.AreaLaw.supportDim_le,
         TNLean.MPS.AreaLaw.one_le_supportDim,
-        ManyBody.ChainInteraction,
-        ManyBody.cutLogBudget,
-        Entropy.one_le_cutLogBudget
+        ManyBody.ChainInteraction
     }
     \leanok
-    \uses{def:area_law_hamiltonian}
+    \uses{def:area_law_hamiltonian,def:area_law_cut_log_budget,thm:al_exact_cut_budget}
     The \emph{chain of $L$ sites} has sites $0,\ldots,L-1$, each carrying
     $\mathbb C^q$. For natural numbers $a\le b$ the \emph{interval} $[a,b)$ is
     the set of sites with position at least $a$ and less than $b$; it has at
@@ -45,7 +43,9 @@ is proved in Chapter~\ref{ch:one_dimensional_chain}.
     $H-E_0\ge\Delta(1-|\Omega\rangle\langle\Omega|)$. For a cut $A$ the
     \emph{cut budget} is
     $\mathcal B_A=1+\sum_X\log^2(e\,q^{|X|})$ over the supports $X$ meeting
-    both $A$ and its complement; it is at least one.
+    both $A$ and its complement, as in
+    Definition~\ref{def:area_law_cut_log_budget}; it is at least one by
+    Lemma~\ref{thm:al_exact_cut_budget}.
 \end{definition}
 
 \begin{lemma}[A bond sum separated by two windows]

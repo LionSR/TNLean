@@ -148,20 +148,20 @@ on a finite domain $\Lambda$.
 
 \begin{lemma}[The partially swapped Hamiltonian at range $R$]
     \label{thm:peps_swapped_local_hamiltonian}
-    \lean{ManyBody.Interaction.conj,
-        ManyBody.Interaction.isHermitian_conj_term,
-        ManyBody.Interaction.norm_conj_term,
-        TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled,
-        ManyBody.PlaneInteraction.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing,
+    \lean{ManyBody.PlaneInteraction.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing,
         ManyBody.PlaneInteraction.swapped_doubled_boundary_bound}
     \leanok
     \uses{def:area_law_hamiltonian,def:qc_site_pair_coordinates,
-        def:peps_frame_sheet_swap,def:peps_crossing_supports}
+        def:peps_frame_sheet_swap,def:peps_crossing_supports,
+        def:chain_swapped_doubled_hamiltonian}
     Let $H=\sum_Xh_X$ be a range-$R$ Hamiltonian on a finite domain $\Lambda$
     with Hermitian terms satisfying $\|h_X\|\le J$, let $A\subseteq\Lambda$,
     and in paired-site coordinates set $K=H\otimes I+I\otimes H$ and
-    $K'=F_AKF_A^*$. Then $K'$ is a range-$R$ Hamiltonian of local dimension
-    $q^2$ on the same supports with term norms at most $2J$, and $K'-K$ sums
+    $K'=F_AKF_A^*$. The construction of
+    Definition~\ref{def:chain_swapped_doubled_hamiltonian} uses only the
+    supports of the terms; applied to the supports of $\Lambda$, it shows that
+    $K'$ is a range-$R$ Hamiltonian of local dimension
+    $q^2$ on the same supports with term norms at most $2J$. Moreover, $K'-K$ sums
     only over supports crossing $A$, so $\operatorname{supp}(K'-K)\subseteq Z_R(A)$
     and (extending Lemma~\ref{thm:peps_swapped_doubled_boundary_bound})
     \begin{align}
