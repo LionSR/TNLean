@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.ParentHamiltonian.AllLengthOpenInteractionMatrix
 import TNLean.MPS.ParentHamiltonian.Martingale.EventualKernelOpenGap
 import TNLean.MPS.ParentHamiltonian.MultiblockLocalCommutatorGap
 import TNLean.MPS.ParentHamiltonian.LocalCommutatorExpectation
@@ -98,8 +99,17 @@ theorem exists_pos_multiblock_localCommutator_gap_of_eventual_kernel
       0 < k → observableInsertionExpectation (A α) (ρ α) X = 0 →
         γ * (observableInsertionExpectation (A α) (ρ α) (Xᴴ * X)).re ≤
           (observableInsertionExpectation (A α) (ρ α) (localCommutatorObservable h X)).re := by
-  obtain ⟨γ, hγ, hgap⟩ := exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
-    μ A hμ ρ hP hρ hDistinct hR h hh hker
+  obtain ⟨γ, hγ, hgap'⟩ := exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
+    μ A hμ ρ hP hρ hDistinct h hh
+    (hker.mono fun N hN => by
+      rwa [openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates_all h hR N]
+        at hN)
+  have hgap : ∀ N : ℕ, ∀ v ∈ (LinearMap.ker
+      (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
+      γ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖ := fun N ↦ by
+    rw [openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates_all h hR N]
+    exact (ManyBody.forall_hasEigenvalue_iff_norm
+      (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh N)).mp (hgap' N)
   refine ⟨γ, hγ, hgap, ?_⟩
   intro α k X _ hcenter
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)

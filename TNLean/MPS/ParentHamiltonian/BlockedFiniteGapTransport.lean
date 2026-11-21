@@ -118,9 +118,12 @@ theorem exists_aligned_hamiltonian_chainTranslates_gap_of_blocked_primitive_fami
     eventually_ker_openInteractionHamiltonianES_blockedInteractionMatrix_eq_groundSpaceES
       A h hh hR hK hcover hker
   obtain ⟨γ, hγ, hGap⟩ := exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
-    μ B hμ ρ hP hρ hDistinct hK (blockedInteractionMatrix h L K)
+    μ B hμ ρ hP hρ hDistinct (blockedInteractionMatrix h L K)
     (blockedInteractionMatrix_posSemidef h hh L K)
-    (hker'.mono fun N hN => hN.trans (hJoint N))
+    ((hker'.and (Filter.eventually_ge_atTop K)).mono fun N hN => by
+      rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
+        (blockedInteractionMatrix h L K) hK hN.2]
+      exact hN.1.trans (hJoint N))
   have hM : 0 < ((K * L + 1 - R : ℕ) : ℝ) := by
     have hL := NeZero.pos L
     exact_mod_cast (show 0 < K * L + 1 - R by omega)
@@ -135,8 +138,9 @@ theorem exists_aligned_hamiltonian_chainTranslates_gap_of_blocked_primitive_fami
     (M := K) (δ := γ / (K * L + 1 - R : ℕ)) (div_pos hγ hM) ?_
   intro N hKN
   apply hamiltonian_chainTranslates_gap_of_blocked_gap h hh hKN hcover hγ
-  simpa only [openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
-    (blockedInteractionMatrix h L K) hK hKN] using hGap N
+  exact (ManyBody.forall_hasEigenvalue_iff_norm
+    (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
+      (blockedInteractionMatrix_posSemidef h hh L K) N)).mp (hGap N)
 /-- A periodic tensor and the eventual original open-chain kernel identity
 derive a uniform norm gap at every period-divisible volume. No primitive
 sector witnesses are supplied. Source: Nachtergaele,
