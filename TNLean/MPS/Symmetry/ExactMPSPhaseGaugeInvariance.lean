@@ -35,9 +35,9 @@ Source context: arXiv:1010.3732, Section II.B, lines 325–355. -/
 theorem blockTensor_smul {d D : ℕ} (c : ℂ) (A : MPSTensor d D) (k : ℕ) :
     blockTensor (c • A) k = c ^ k • blockTensor A k := by
   funext i
-  simpa only [blockTensor, Kraus.blockTensor, Kraus.length_wordOfBlock, Pi.smul_def,
-    Pi.smul_apply] using
-    Kraus.evalWord_smul c A (Kraus.wordOfBlock d k i)
+  simpa only [blockTensor, Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply,
+    Function.comp_apply, List.length_ofFn, Pi.smul_def, Pi.smul_apply] using
+    Kraus.evalWord_smul c A (List.ofFn (Kraus.decodeBlockEquiv d k i))
 
 /-- Physical inclusion preserves an invertible bond gauge. Source context:
 arXiv:1010.3732, Section II.C.2, lines 440–466. -/

@@ -43,8 +43,8 @@ theorem hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_
       (normalizedBondInteraction D₀ D₁ γ)).hamiltonian,
       0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
   have : NeZero N := ⟨by omega⟩
-  have : NeZero N := ⟨by omega⟩
-  simpa only [normalizedBondInteraction, hamiltonian_translationInvariant_twoSiteBondPenalty] using
+  simpa only [normalizedBondInteraction,
+    hamiltonian_translationInvariant_twoSiteBondPenalty hN] using
     normalizedPhysicalBondInterpolation_parent_spectrum_gap_one h₀ h₁ γ (by omega : 1 ≤ N)
 
 /-- For a fixed bond parameter, affine interpolation to a covariant
@@ -96,16 +96,18 @@ noncomputable def normalizedBondCanonicalParentComparisonPath
   case refine_3 =>
     intro N hN g
     have : NeZero N := ⟨by omega⟩
-    simpa only [normalizedBondInteraction, hamiltonian_translationInvariant_twoSiteBondPenalty,
+    simpa only [normalizedBondInteraction, hamiltonian_translationInvariant_twoSiteBondPenalty hN,
       sptFixedPointUnitaryAction, MonoidHom.codRestrict_apply, Subtype.coe_mk] using
       (normalizedPhysicalBondInterpolation_parent_commute_onSite
         ρ₀ ρ₁ h₀ h₁ g γ (by omega : 1 ≤ N)).symm
   case refine_2 =>
     exact ⟨1, zero_lt_one, fun N hN z hz =>
+      haveI : NeZero N := ⟨by omega⟩
       ((hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one
         hD₀ hD₁ γ hN).2 z hz).2⟩
   case refine_1 =>
     intro N hN
+    have : NeZero N := ⟨by omega⟩
     have hspec : (0 : ℂ) ∈ spectrum ℂ (Matrix.toEuclideanLin
         (ManyBody.Interaction.translationInvariant N
           (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) := by
