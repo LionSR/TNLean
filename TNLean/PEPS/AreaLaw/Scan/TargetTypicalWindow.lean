@@ -42,7 +42,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -65,7 +65,7 @@ theorem target_typicalSet_bounds {Λ : Finset (ℤ × ℤ)} {q : ℕ}
   classical
   obtain ⟨hzδ, hz, hz1, _⟩ :=
     (ManyBody.regionState_posSemidef X Ωt).typicalSet_normalizedSpectralRestriction_bounds
-      w δ (trace_reducedState Ωt hΩt X) htail hδ
+      w δ (ManyBody.trace_regionState_eq_one hΩt (D := X)) htail hδ
   refine ⟨sub_pos.mpr hδ, hzδ, hz, hz1, ?_, ?_⟩
   · apply Finset.nonempty_iff_ne_empty.mpr
     intro hE
@@ -157,9 +157,10 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
         let w := (S.n : ℝ) ^ ((3 : ℝ) / 5)
         let δ := (S.n : ℝ) ^ (-100 : ℝ)
         let B : Finset (Site Λ) → ℝ :=
-          fun Y => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y
+          fun Y => ManyBody.cutLogBudget
+            (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) Y
         ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
-        X ⊆ S.truncationSet L ∧ (edgeBoundary Λ X).card ≤ 4 * S.n ∧
+        X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
           (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
             groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
@@ -191,7 +192,7 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
               p i ≤ Real.exp (-ManyBody.regionEntropy Ωt X + w) := by
   classical
   have hC : (0 : ℝ) ≤ C_T + 1 := by positivity
-  have htr := @truncated_reducedState_moment_tail_bounds_explicit R J Δ (C_T + 1) hJ hΔ hC
+  have htr := @truncated_regionState_moment_tail_bounds_explicit R J Δ (C_T + 1) hJ hΔ hC
   rw [← hCtrEq] at htr
   have hCtr : 0 < Ctr := by rw [hCtrEq]; exact latticeTruncationRadiusConstant_pos R hΔ hC
   intro q _ hq
@@ -211,8 +212,9 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
   obtain ⟨e, Ωt, htrgs, he0, he, hphase, htrace, hmoment, htail⟩ :=
     htr Λ h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor (F.L S.n) hn2 hr hcard
   let X := S.A.filter fun x ↦ x.val ∈ T
-  let B := cutBudget q S.graph (S.truncationSet (F.L S.n)) S.r₀ S.anchor X
-  have hboundaryR : ((edgeBoundary Λ X).card : ℝ) ≤ 4 * (S.n : ℝ) := by
+  let B := ManyBody.cutLogBudget
+    (fun i ↦ designatedSupport S.graph (S.truncationSet (F.L S.n)) S.r₀ (S.anchor i)) (fun _ ↦ q) X
+  have hboundaryR : ((edgeBoundary (planeDomainGraph Λ) X).card : ℝ) ≤ 4 * (S.n : ℝ) := by
     exact_mod_cast hboundary
   have hB : B ≤ max 1 C * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 := by
     have hb := hbudget Λ S.anchor hanchor (S.truncationSet (F.L S.n)) X hX
@@ -226,8 +228,7 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
       _ ≤ max 1 C * ((S.n : ℝ) * Real.log (S.n : ℝ) ^ 12) :=
         mul_le_mul_of_nonneg_right (le_max_right _ _) (by positivity)
       _ = _ := by ring
-  have hBpos : 0 < B := lt_of_lt_of_le zero_lt_one
-    (one_le_cutBudget q S.graph (S.truncationSet (F.L S.n)) S.r₀ S.anchor X)
+  have hBpos : 0 < B := lt_of_lt_of_le zero_lt_one (Entropy.one_le_cutLogBudget _ _)
   have htypical : Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
       (ManyBody.regionEntropy Ωt X) ((S.n : ℝ) ^ ((3 : ℝ) / 5)) ≤
         (S.n : ℝ) ^ (-100 : ℝ) :=
@@ -268,9 +269,10 @@ theorem exists_truncated_target_typical_window_of_targetTypicalWindowThreshold_l
         let w := (S.n : ℝ) ^ ((3 : ℝ) / 5)
         let δ := (S.n : ℝ) ^ (-100 : ℝ)
         let B : Finset (Site Λ) → ℝ :=
-          fun Y => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y
+          fun Y => ManyBody.cutLogBudget
+            (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) Y
         ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
-        X ⊆ S.truncationSet L ∧ (edgeBoundary Λ X).card ≤ 4 * S.n ∧
+        X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
           (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
             groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
@@ -315,7 +317,7 @@ coefficient and threshold may depend on it. This is a proved strengthening of th
 printed truncation proposition: `03-quasilocal.tex`, lines 406–410, permits its
 coefficient to depend on `q`. The scanner uses that radius in `08-scanner.tex`,
 lines 49–59, without asserting uniformity in `q`. Here
-`exists_truncated_reducedState_moment_tail_bounds` supplies `Ctr` before `q`.
+`exists_truncated_regionState_moment_tail_bounds` supplies `Ctr` before `q`.
 For the target window, see `08-scanner.tex`, lines 400–414, and
 `07-comparators.tex`, lines 37–53, at the revision pinned above. The floor scale
 is used literally; neither collar volume, target boundary, cut budget nor target
@@ -346,9 +348,10 @@ theorem exists_truncated_target_typical_window_uniform_in_q (R : ℕ)
         let w := (S.n : ℝ) ^ ((3 : ℝ) / 5)
         let δ := (S.n : ℝ) ^ (-100 : ℝ)
         let B : Finset (Site Λ) → ℝ :=
-          fun Y => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y
+          fun Y => ManyBody.cutLogBudget
+            (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) Y
         ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
-        X ⊆ S.truncationSet L ∧ (edgeBoundary Λ X).card ≤ 4 * S.n ∧
+        X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
           (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
             groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
@@ -412,9 +415,10 @@ theorem exists_truncated_target_typical_window {q : ℕ} [NeZero q]
         let w := (S.n : ℝ) ^ ((3 : ℝ) / 5)
         let δ := (S.n : ℝ) ^ (-100 : ℝ)
         let B : Finset (Site Λ) → ℝ :=
-          fun Y => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y
+          fun Y => ManyBody.cutLogBudget
+            (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) Y
         ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
-        X ⊆ S.truncationSet L ∧ (edgeBoundary Λ X).card ≤ 4 * S.n ∧
+        X ⊆ S.truncationSet L ∧ (edgeBoundary (planeDomainGraph Λ) X).card ≤ 4 * S.n ∧
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
           (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
             groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧

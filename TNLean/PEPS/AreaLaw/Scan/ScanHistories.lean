@@ -49,7 +49,7 @@ open Filter TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators symmDiff
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (ambientDilation edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -147,20 +147,27 @@ structure HistoryProperties {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ)
           3 * S.n * S.D
   /-- Item 2: the cuts of `U`, `UY`, `Y`, `P₀` and `V` have at most `40nD` edges. -/
   cut_bounds : ∀ {k : ℕ} (h : History S.K S.m S.M k) (g : Fin S.K), k ≤ S.n * S.m →
-    (edgeBoundary Λ (positiveNear S.depth (S.state h g))).card ≤ 20 * S.n * S.D ∧
-    (edgeBoundary Λ (positiveNearMiddle S.depth (S.state h g))).card ≤ 20 * S.n * S.D ∧
-    (edgeBoundary Λ (middle (S.state h g))).card ≤ 40 * S.n * S.D ∧
-    (edgeBoundary Λ (receiving (S.state h g) false)).card ≤ 16 * S.n * S.D ∧
-    (edgeBoundary Λ (receiving (S.state h g) true)).card ≤ 16 * S.n * S.D
+    (edgeBoundary (planeDomainGraph Λ) (positiveNear S.depth (S.state h g))).card ≤
+      20 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ) (positiveNearMiddle S.depth (S.state h g))).card ≤
+      20 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ) (middle (S.state h g))).card ≤ 40 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ) (receiving (S.state h g) false)).card ≤
+      16 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ) (receiving (S.state h g) true)).card ≤ 16 * S.n * S.D
   /-- Item 2 for pre-charge statuses. -/
   old_cut_bounds : ∀ {k : ℕ} (h : History S.K S.m S.M k) (g : Fin S.K),
     k + 1 ≤ S.n * S.m →
-    (edgeBoundary Λ (positiveNear S.depth (S.oldChargeState h g))).card ≤ 20 * S.n * S.D ∧
-    (edgeBoundary Λ (positiveNearMiddle S.depth (S.oldChargeState h g))).card ≤
+    (edgeBoundary (planeDomainGraph Λ) (positiveNear S.depth (S.oldChargeState h g))).card ≤
       20 * S.n * S.D ∧
-    (edgeBoundary Λ (middle (S.oldChargeState h g))).card ≤ 40 * S.n * S.D ∧
-    (edgeBoundary Λ (receiving (S.oldChargeState h g) false)).card ≤ 16 * S.n * S.D ∧
-    (edgeBoundary Λ (receiving (S.oldChargeState h g) true)).card ≤ 16 * S.n * S.D
+    (edgeBoundary (planeDomainGraph Λ)
+      (positiveNearMiddle S.depth (S.oldChargeState h g))).card ≤ 20 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ) (middle (S.oldChargeState h g))).card ≤
+      40 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ) (receiving (S.oldChargeState h g) false)).card ≤
+      16 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ) (receiving (S.oldChargeState h g) true)).card ≤
+      16 * S.n * S.D
   /-- Item 2: at most `10μKnD` labelled terms split, counted over bands and sides. -/
   split_count : ∀ {k : ℕ} (h : History S.K S.m S.M k), k ≤ S.n * S.m →
     (∑ g : Fin S.K, ∑ side : Bool,

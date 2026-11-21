@@ -47,26 +47,24 @@ def aklvNormalizationEndpoints (L a s : ℕ) : Fin 3 → ℕ × ℕ :=
 /-- The three actual original reference Hamiltonians whose lowest energies are
 subtracted in AKLV, arXiv:1301.1162v1, Section 6.1, before equation (5). -/
 def aklvNormalizationHamiltonians {L q : ℕ} (a s : ℕ)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
+    (Φ : ManyBody.BondInteraction L q) :
     Fin 3 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   let p := aklvNormalizationEndpoints L a s
   fun j ↦ ∑ i ∈ Finset.univ.filter
-    (fun i : Fin (L - 1) ↦ (p j).1 ≤ i.val ∧ i.val + 1 < (p j).2), h i
+    (fun i : Fin (L - 1) ↦ (p j).1 ≤ i.val ∧ i.val + 1 < (p j).2), Φ.term i
 
 private theorem aklv_normalization_bond_data {L q a s : ℕ}
     (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2))) :
+    (Φ : ManyBody.BondInteraction L q) :
     let p := aklvNormalizationEndpoints L a s
     let R := fun j ↦ interval L (p j).1 (p j).2
-    let A := aklvNormalizationHamiltonians a s h
+    let A := aklvNormalizationHamiltonians a s Φ
     let J := Finset.univ.filter (fun i : Fin (L - 1) ↦
       a ≤ i.val ∧ i.val < a + s ∧
         i.val ∈ ({a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1} : Finset ℕ))
     Pairwise (fun i j ↦ Disjoint (R i) (R j)) ∧
       (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (A j) (R j)) ∧
-      J.card ≤ 6 ∧ (∑ i, h i) = (∑ j, A j) + ∑ i ∈ J, h i := by
+      J.card ≤ 6 ∧ Φ.hamiltonian = (∑ j, A j) + Φ.partialHamiltonian J := by
   intro p R A J
   have hR : Pairwise fun i j ↦ Disjoint (R i) (R j) := by
     intro i j hij
@@ -78,7 +76,7 @@ private theorem aklv_normalization_bond_data {L q a s : ℕ}
     fin_cases i <;> fin_cases j <;> simp_all [p, aklvNormalizationEndpoints] <;> omega
   have hA (j : Fin 3) :
       ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (A j) (R j) := by
-    exact isSupportedOn_sum_internal_bonds L q (p j).1 (p j).2 h hsupp
+    exact isSupportedOn_sum_internal_bonds L q (p j).1 (p j).2 Φ
   have hJ : J.card ≤ 6 := by
     have hc := Finset.card_le_card_of_injOn Fin.val
       (s := J) (t := {a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1})
@@ -87,16 +85,16 @@ private theorem aklv_normalization_bond_data {L q a s : ℕ}
     exact hc.trans Finset.card_le_six
   refine ⟨hR, hA, hJ, ?_⟩
   rw [Fin.sum_univ_three]
-  change (∑ i, h i) =
+  change Φ.hamiltonian =
     (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-      0 ≤ i.val ∧ i.val + 1 < a + 1), h i) +
+      0 ≤ i.val ∧ i.val + 1 < a + 1), Φ.term i) +
     (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-      a + 3 ≤ i.val ∧ i.val + 1 < a + s - 2), h i) +
+      a + 3 ≤ i.val ∧ i.val + 1 < a + s - 2), Φ.term i) +
     (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-      a + s ≤ i.val ∧ i.val + 1 < L), h i) +
+      a + s ≤ i.val ∧ i.val + 1 < L), Φ.term i) +
     ∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
       a ≤ i.val ∧ i.val < a + s ∧
-        i.val ∈ ({a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1} : Finset ℕ)), h i
+        i.val ∈ ({a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1} : Finset ℕ)), Φ.term i
   simp only [Finset.sum_filter, Finset.mem_insert, Finset.mem_singleton,
     ← Finset.sum_add_distrib]
   apply Finset.sum_congr rfl
@@ -111,13 +109,11 @@ relative ground energy lies in `[0,6]`, as in AKLV, arXiv:1301.1162v1, Section 6
 before equation (5). No regional minimum, common vector, or energy budget is supplied. -/
 theorem exists_aklv_energy_normalization {L q a s : ℕ} (hq : 0 < q)
     (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
-    let A := aklvNormalizationHamiltonians a s h
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
+    let A := aklvNormalizationHamiltonians a s Φ
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E0 : ℝ),
-      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star x ⬝ᵥ x = 1 ∧
       (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
@@ -132,15 +128,15 @@ theorem exists_aklv_energy_normalization {L q a s : ℕ} (hq : 0 < q)
   let J := Finset.univ.filter (fun i : Fin (L - 1) ↦
     a ≤ i.val ∧ i.val < a + s ∧
       i.val ∈ ({a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1} : Finset ℕ))
-  let Y := ∑ i ∈ J, h i
-  obtain ⟨hR, hAs, hJ, hH⟩ := aklv_normalization_bond_data hs ha h hsupp
+  let Y := Φ.partialHamiltonian J
+  obtain ⟨hR, hAs, hJ, hH⟩ := aklv_normalization_bond_data hs ha Φ
   have hA (j : Fin 3) : (A j).PosSemidef ∧
       A j ≤ ((I j).card : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :=
-    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms (I j) h
+    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms (I j) Φ.term
       (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
   have hY : Y.PosSemidef ∧
       Y ≤ (J.card : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :=
-    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms J h
+    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms J Φ.term
       (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
   have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hxunit, hx, he, hclip⟩ :=
@@ -151,7 +147,7 @@ theorem exists_aklv_energy_normalization {L q a s : ℕ} (hq : 0 < q)
     hclip 0 le_rfl ∅
   have hcenter :
       (∑ j, (A j - (e j : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))) + Y =
-        (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1 := by
+        Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1 := by
     rw [hH, Finset.sum_sub_distrib]
     push_cast
     rw [Finset.sum_smul]
@@ -168,13 +164,11 @@ reference sums plus their adjacent boundary bonds. Their centered supports are
 of `H^(t)` after equation (5). -/
 theorem aklv_two_block_exterior_data {L q a s : ℕ}
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2))) :
-    let A := aklvNormalizationHamiltonians a s h
-    let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) h
-    C 0 = A 0 + h ⟨a, by omega⟩ ∧
-      C 2 = h ⟨a + s - 1, by omega⟩ + A 2 ∧
+    (Φ : ManyBody.BondInteraction L q) :
+    let A := aklvNormalizationHamiltonians a s Φ
+    let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ
+    C 0 = A 0 + Φ.term ⟨a, by omega⟩ ∧
+      C 2 = Φ.term ⟨a + s - 1, by omega⟩ + A 2 ∧
       ∀ eL eR : ℝ,
         ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (C 0 - (eL : ℂ) • 1) (interval L 0 (a + 2)) ∧
@@ -201,23 +195,23 @@ theorem aklv_two_block_exterior_data {L q a s : ℕ}
       Fin.ext_iff]
     dsimp only [ir]
     omega
-  have hl : C 0 = A 0 + h il := by
+  have hl : C 0 = A 0 + Φ.term il := by
     change (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-      0 ≤ i.val ∧ i.val + 1 < a + 2), h i) =
+      0 ≤ i.val ∧ i.val + 1 < a + 2), Φ.term i) =
       (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-        0 ≤ i.val ∧ i.val + 1 < a + 1), h i) + h il
+        0 ≤ i.val ∧ i.val + 1 < a + 1), Φ.term i) + Φ.term il
     rw [hlset, Finset.sum_insert (by simp [il])]
     exact add_comm _ _
-  have hr : C 2 = h ir + A 2 := by
+  have hr : C 2 = Φ.term ir + A 2 := by
     change (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-      a + s - 1 ≤ i.val ∧ i.val + 1 < L), h i) = h ir +
+      a + s - 1 ≤ i.val ∧ i.val + 1 < L), Φ.term i) = Φ.term ir +
       (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-        a + s ≤ i.val ∧ i.val + 1 < L), h i)
+        a + s ≤ i.val ∧ i.val + 1 < L), Φ.term i)
     rw [hrset, Finset.sum_insert (by simp [ir]; omega)]
   have hsupport (j : Fin 3) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (C j) (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
         ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.succ)) := by
-    exact isSupportedOn_sum_internal_bonds L q _ _ h hsupp
+    exact isSupportedOn_sum_internal_bonds L q _ _ Φ
   have hcenter (j : Fin 3) (e : ℝ) :
       ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (C j - (e : ℂ) • 1)
         (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
@@ -233,11 +227,11 @@ regions, by positivity of the added bonds. AKLV, arXiv:1301.1162v1, Section 6.1,
 normalization at lines 901–925 and the two exterior truncations after equation (5). -/
 theorem aklv_normalization_le_two_block_regions {L q a s : ℕ}
     (hs : 3 ≤ s)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, 0 ≤ h i) (e : Fin 3 → ℝ)
-    (he : ∀ j, (aklvNormalizationHamiltonians a s h j -
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (e : Fin 3 → ℝ)
+    (he : ∀ j, (aklvNormalizationHamiltonians a s Φ j -
       (e j : ℂ) • 1).PosSemidef) :
-    ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians (a + 2) (a + s - 1) h j := by
+    ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ j := by
   intro j
   apply (Matrix.le_iff.mpr (he j)).trans
   apply Finset.sum_le_sum_of_subset_of_nonneg
@@ -255,11 +249,11 @@ whole window. Their lower bounds are therefore lower bounds for this reference
 arrangement, for every window width. AKLV, arXiv:1301.1162v1, Section 6.1,
 normalization at lines 901–925. -/
 theorem aklv_normalization_le_reference_regions {L q a s : ℕ}
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, 0 ≤ h i) (e : Fin 3 → ℝ)
-    (he : ∀ j, (aklvNormalizationHamiltonians a s h j -
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (e : Fin 3 → ℝ)
+    (he : ∀ j, (aklvNormalizationHamiltonians a s Φ j -
       (e j : ℂ) • 1).PosSemidef) :
-    ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians (a + 1) (a + s) h j := by
+    ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians (a + 1) (a + s) Φ j := by
   intro j
   apply (Matrix.le_iff.mpr (he j)).trans
   apply Finset.sum_le_sum_of_subset_of_nonneg
@@ -279,15 +273,13 @@ arXiv:1301.1162v1, Section 6.1, normalization and the two exterior truncations
 after equation (5). -/
 theorem exists_aklv_normalized_cut_residual {L q a s l r : ℕ} (hq : 0 < q)
     (hs : 1 ≤ s) (ha : a + s + 1 ≤ L) (hlr : l ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
-    (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s h j -
-      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians l r h j) :
-    let A := aklvNormalizationHamiltonians a s h
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
+    (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s Φ j -
+      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians l r Φ j) :
+    let A := aklvNormalizationHamiltonians a s Φ
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E0 : ℝ),
-      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star x ⬝ᵥ x = 1 ∧
       (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
@@ -295,7 +287,7 @@ theorem exists_aklv_normalized_cut_residual {L q a s l r : ℕ} (hq : 0 < q)
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E0 : ℂ) • z ∧
       (H - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ η t : ℝ, 0 ≤ η → η + 11 ≤ t →
-        let B := aklvTwoBlockHamiltonian l r h e t
+        let B := aklvTwoBlockHamiltonian l r Φ e t
         ∃ hB : ∀ T, (B T).IsHermitian,
           B ∅ = H ∧ ∀ T : Finset (Fin 2),
             let G := Submodule.spectralSpanLE
@@ -305,11 +297,11 @@ theorem exists_aklv_normalized_cut_residual {L q a s l r : ℕ} (hq : 0 < q)
                 (64 * Real.exp (3 / 4)) * Real.exp (-(t - η) / 8) := by
   intro A
   obtain ⟨e, x, z, E0, hx, hxe, he, he0, hz, hzE, hE, hE0, hE6⟩ :=
-    exists_aklv_energy_normalization hq hs ha h hsupp h0 h1
+    exists_aklv_energy_normalization hq hs ha Φ h0 h1
   refine ⟨e, x, z, E0, hx, hxe, he, he0, hz, hzE, hE, hE0, hE6, ?_⟩
   intro η t hη ht B
   obtain ⟨hB, hcenter, hres⟩ := norm_aklv_two_block_truncation_low_le hlr hrL
-    h hsupp h0 h1 e (E0 + η) t (by linarith) (by linarith) (hcut e he)
+    Φ h0 h1 e (E0 + η) t (by linarith) (by linarith) (hcut e he)
   refine ⟨hB, hcenter, ?_⟩
   intro T G
   have hresT := hres T
@@ -333,13 +325,11 @@ and the two exterior truncations after equation (5). No spectral-gap conclusion
 is asserted here. -/
 theorem exists_aklv_normalized_two_block_residual {L q a s : ℕ} (hq : 0 < q)
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
-    let A := aklvNormalizationHamiltonians a s h
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
+    let A := aklvNormalizationHamiltonians a s Φ
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E0 : ℝ),
-      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star x ⬝ᵥ x = 1 ∧
       (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
@@ -347,7 +337,7 @@ theorem exists_aklv_normalized_two_block_residual {L q a s : ℕ} (hq : 0 < q)
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E0 : ℂ) • z ∧
       (H - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ η t : ℝ, 0 ≤ η → η + 11 ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t
+        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t
         ∃ hB : ∀ T, (B T).IsHermitian,
           B ∅ = H ∧ ∀ T : Finset (Fin 2),
             let G := Submodule.spectralSpanLE
@@ -355,8 +345,8 @@ theorem exists_aklv_normalized_two_block_residual {L q a s : ℕ} (hq : 0 < q)
             ‖((Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
               (H - B Finset.univ)).domRestrict G)‖ ≤
                 (64 * Real.exp (3 / 4)) * Real.exp (-(t - η) / 8) :=
-  exists_aklv_normalized_cut_residual hq (by omega) ha (by omega) (by omega) h hsupp h0 h1
-    (fun e he ↦ aklv_normalization_le_two_block_regions hs h h0 e he)
+  exists_aklv_normalized_cut_residual hq (by omega) ha (by omega) (by omega) Φ h0 h1
+    (fun e he ↦ aklv_normalization_le_two_block_regions hs Φ h0 e he)
 
 open Classical in
 /-- The same normalization and exponential residual for the reference arrangement,
@@ -367,13 +357,11 @@ two interactions, where the enlarged exteriors overlap. AKLV, arXiv:1301.1162v1,
 Section 6.1, normalization and the two exterior truncations after equation (5). -/
 theorem exists_aklv_normalized_reference_residual {L q a s : ℕ} (hq : 0 < q)
     (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
-    let A := aklvNormalizationHamiltonians a s h
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
+    let A := aklvNormalizationHamiltonians a s Φ
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E0 : ℝ),
-      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star x ⬝ᵥ x = 1 ∧
       (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
@@ -381,7 +369,7 @@ theorem exists_aklv_normalized_reference_residual {L q a s : ℕ} (hq : 0 < q)
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E0 : ℂ) • z ∧
       (H - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ η t : ℝ, 0 ≤ η → η + 11 ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) h e t
+        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) Φ e t
         ∃ hB : ∀ T, (B T).IsHermitian,
           B ∅ = H ∧ ∀ T : Finset (Fin 2),
             let G := Submodule.spectralSpanLE
@@ -389,7 +377,7 @@ theorem exists_aklv_normalized_reference_residual {L q a s : ℕ} (hq : 0 < q)
             ‖((Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
               (H - B Finset.univ)).domRestrict G)‖ ≤
                 (64 * Real.exp (3 / 4)) * Real.exp (-(t - η) / 8) :=
-  exists_aklv_normalized_cut_residual hq hs ha (by omega) (by omega) h hsupp h0 h1
-    (fun e he ↦ aklv_normalization_le_reference_regions h h0 e he)
+  exists_aklv_normalized_cut_residual hq hs ha (by omega) (by omega) Φ h0 h1
+    (fun e he ↦ aklv_normalization_le_reference_regions Φ h0 e he)
 
 end TNLean.MPS.AreaLaw

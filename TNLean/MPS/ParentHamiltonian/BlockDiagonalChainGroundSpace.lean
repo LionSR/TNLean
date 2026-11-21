@@ -78,7 +78,7 @@ theorem bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
   refine Submodule.span_le.mpr ?_
   rintro _ ⟨j, rfl⟩
   refine LinearMap.mem_ker.mpr ?_
-  simp only [parentHamiltonian, LinearMap.sum_apply]
+  rw [parentHamiltonian_eq_sum_localTerm, LinearMap.sum_apply]
   refine Finset.sum_eq_zero fun i _ => ?_
   exact isFrustrationFree_of_mem_chainGroundSpace
     (toTensorFromBlocks (d := d) (μ := μ) A) hN hLN

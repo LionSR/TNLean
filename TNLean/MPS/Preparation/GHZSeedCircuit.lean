@@ -71,8 +71,8 @@ theorem pairLayerOp_mulVec_registerCfg_eq {D r₁ M N : ℕ} [NeZero M] [NeZero 
     (hW₀ : ∀ u, W₀ u (fun _ => ⟨0, NeZero.pos d⟩) =
       Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) ω 0 u) :
     pairLayerOp hN hr (fun _ => W) *ᵥ Pi.single (registerCfg hN hr u₀) 1 =
-      pairLayerOp hN hr (fun _ => W₀) *ᵥ
-        productVector fun _ => Pi.single ⟨0, NeZero.pos d⟩ 1 := by
+      pairLayerOp hN hr (fun _ => W₀) *ᵥ fun σ : Cfg d N =>
+        ∏ i, (Pi.single (⟨0, NeZero.pos d⟩ : Fin d) (1 : ℂ) : Fin d → ℂ) (σ i) := by
   classical
   have h0 : (⟨0, NeZero.pos d⟩ : Fin d) = 0 := Fin.ext (by simp)
   funext y
@@ -120,7 +120,7 @@ on all sector labels. Source: arXiv:2307.01696, "Long-range MPS using
 measurements", the pair isometry followed by the blocked isometries.
 The hypotheses are the existing injective-on-support construction; this is
 not an assertion that arbitrary non-normal periodic vectors share a seed. -/
-theorem exists_isLocalCircuitOfDepth_registerCfg_of_pairProductState_supported
+theorem exists_isUnitaryCircuit_registerCfg_of_pairProductState_supported
     {D b : ℕ} {r₁ : ℕ} (hr₁ : 2 ≤ r₁) {dig : Fin D → Cfg d r₁} (hdig : Function.Injective dig)
     {dig₀ : Fin b → Cfg d r₁} (hdig₀ : Function.Injective dig₀) (hD : 0 < D) :
     ∃ C : ℕ, ∀ (A : MPSTensor d D) (S : Finset (Fin D × Fin D))
@@ -131,7 +131,7 @@ theorem exists_isLocalCircuitOfDepth_registerCfg_of_pairProductState_supported
         ∀ hℓ : ∀ k, 3 * r₁ ≤ ℓ k, (∀ k, ℓ k ≤ L) →
         (∀ k, IsInjectiveOn (blockTensor A (ℓ k)) (S : Set (Fin D × Fin D))) →
         ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
-          IsLocalCircuitOfDepth U T ∧ T ≤ C * L ∧
+          IsUnitaryCircuit (Geometry.ring N) T U ∧ T ≤ C * L ∧
           ∀ j, U *ᵥ Pi.single (registerCfg hN (fun k => by have := hℓ k; omega)
             (dig₀ j)) 1 = fun s => blockIsometryState A (ω j) hN s := by
   classical
@@ -139,7 +139,11 @@ theorem exists_isLocalCircuitOfDepth_registerCfg_of_pairProductState_supported
   choose Cπ hCπ using fun π : Fin (D * D) ≃ Fin D × Fin D =>
     exists_blockUnitary_of_equiv hd (r₁ := r₁) (by omega) hdig hD π
   set Cb := Finset.univ.sup Cπ
-  obtain ⟨KW, hKW⟩ := exists_isPairProduct (n := r₁ + r₁) hd (by omega)
+  have : NeZero (r₁ + r₁) := ⟨by omega⟩
+  obtain ⟨KW, hKW⟩ : ∃ KW, ∀ X : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ,
+      X ∈ unitary (Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ) →
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (r₁ + r₁))) KW X :=
+    ⟨_, fun X hX ↦ isGateProduct_pathGraph_unitaryGateCount hX⟩
   refine ⟨KW + Cb, fun A S ω hω M _ ℓ N _ hN L hωS hℓ hL hinj => ?_⟩
   have hr : ∀ k, r₁ + r₁ ≤ ℓ k := fun k => by have := hℓ k; omega
   have hL1 : 1 ≤ L := by
@@ -148,7 +152,8 @@ theorem exists_isLocalCircuitOfDepth_registerCfg_of_pairProductState_supported
     omega
   -- The block unitaries, implementing the isometric factors on the pairs of `S`.
   have hUk : ∀ k, ∃ U : Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ,
-      IsPairProduct d (ℓ k) (Cb * ℓ k) U ∧ ∀ l r τ, (l, r) ∈ S →
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (ℓ k))) (Cb * ℓ k) U ∧
+        ∀ l r τ, (l, r) ∈ S →
         U τ (blockInputCfg hd (ℓ k) dig l r) =
           polarIsoMatrix (blockTensor A (ℓ k)) ((decodeBlockEquiv d (ℓ k)).symm τ)
             (finProdFinEquiv (l, r)) := fun k => by
@@ -170,23 +175,23 @@ theorem exists_isLocalCircuitOfDepth_registerCfg_of_pairProductState_supported
   -- The same pair-window unitary is used for every sector.
   obtain ⟨W, hWu, hW⟩ := exists_pairFamilyUnitary hdig hdig₀ ω hω
   -- The coherent circuit.
-  have hcirc : IsCircuitOn Finset.univ (KW + Cb * L)
+  have hcirc : IsUnitaryCircuitOn (Geometry.ring N) Finset.univ (Cb * L + KW)
       (blockLayerOp hN U * pairLayerOp hN hr fun _ => W) :=
-    (isCircuitOn_pairLayerOp hN hr fun _ => hKW W hWu).mul
-      (isCircuitOn_blockLayerOp hN (K := Cb * L) fun k =>
-        (hUpp k).mono (Nat.mul_le_mul_left Cb (hL k)))
+    (isUnitaryCircuitOn_blockLayerOp hN (K := Cb * L) fun k =>
+        (hUpp k).mono (Nat.mul_le_mul_left Cb (hL k))).mul
+      (isUnitaryCircuitOn_pairLayerOp hN hr fun _ => hKW W hWu)
   -- The circuit takes each configuration of the GHZ-type state to the state of its label.
   have hj : ∀ j, (blockLayerOp hN U * pairLayerOp hN hr fun _ => W) *ᵥ
       Pi.single (registerCfg hN hr (dig₀ j)) 1 = fun s => blockIsometryState A (ω j) hN s := by
     intro j
     exact blockLayerOp_pairLayerOp_mulVec_registerCfg hN hr hdig A S (ω j)
       (by simpa using hω j j) (hωS j) (dig₀ j) hU (fun u => hW u j)
-  exact ⟨blockLayerOp hN U * pairLayerOp hN hr (fun _ => W), KW + Cb * L,
-    hcirc.isBondCircuitOfDepth, by nlinarith, hj⟩
+  exact ⟨blockLayerOp hN U * pairLayerOp hN hr (fun _ => W), Cb * L + KW,
+    hcirc.isUnitaryCircuit, by nlinarith, hj⟩
 
 /-- Compatibility interface with support at every ring size. The actual-ring theorem above
 needs only the support of the input it is asked to compile. -/
-theorem exists_isLocalCircuitOfDepth_registerCfg_of_isInjectiveOn
+theorem exists_isUnitaryCircuit_registerCfg_of_isInjectiveOn
     {D b : ℕ} {r₁ : ℕ} (hr₁ : 2 ≤ r₁) {dig : Fin D → Cfg d r₁} (hdig : Function.Injective dig)
     {dig₀ : Fin b → Cfg d r₁} (hdig₀ : Function.Injective dig₀) (hD : 0 < D) :
     ∃ C : ℕ, ∀ (A : MPSTensor d D) (S : Finset (Fin D × Fin D))
@@ -197,10 +202,10 @@ theorem exists_isLocalCircuitOfDepth_registerCfg_of_isInjectiveOn
         ∀ hℓ : ∀ k, 3 * r₁ ≤ ℓ k, (∀ k, ℓ k ≤ L) →
         (∀ k, IsInjectiveOn (blockTensor A (ℓ k)) (S : Set (Fin D × Fin D))) →
         ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
-          IsLocalCircuitOfDepth U T ∧ T ≤ C * L ∧
+          IsUnitaryCircuit (Geometry.ring N) T U ∧ T ≤ C * L ∧
           ∀ j, U *ᵥ Pi.single (registerCfg hN (fun k => by have := hℓ k; omega)
             (dig₀ j)) 1 = fun s => blockIsometryState A (ω j) hN s := by
-  obtain ⟨C, hC⟩ := exists_isLocalCircuitOfDepth_registerCfg_of_pairProductState_supported
+  obtain ⟨C, hC⟩ := exists_isUnitaryCircuit_registerCfg_of_pairProductState_supported
     hr₁ hdig hdig₀ hD
   exact ⟨C, fun A S ω hω hωS M _ ℓ N _ hN L =>
     hC A S ω hω ℓ hN L (fun j c => hωS j c)⟩

@@ -47,7 +47,7 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -71,8 +71,8 @@ private theorem restored_entropy_le_of_selected_rough_comparisons
     (hrE : Tendsto rE atTop (𝓝 0))
     (hcont : |ManyBody.regionEntropy Ωt X - ManyBody.regionEntropy Ω X| ≤ cont) :
     let β := fun _ : Site Λ ↦ Fin q
-    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.splitEquiv β X) Ωt
-    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.cutEquiv β X) Ωt
+    let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
       (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -101,7 +101,7 @@ private theorem restored_entropy_le_of_selected_rough_comparisons
   choose values defects hchoice using hchoice
   have hpicked : ∀ᶠ k : ℕ in atTop, P k (values k) (defects k) :=
     hselected.mono fun k hk ↦ hchoice k hk
-  have htyp := regionalEntropy_le_of_rough_typical_comparisons
+  have htyp := regionEntropy_le_of_rough_typical_comparisons
     Ωt hΩt X E w hz hE (C := 3) (τ := τ) (a := a) (Edef := Edef)
     (Bsh := Bsh) (Bexc := Bexc) (F := values) (d := defects)
     (by norm_num) hτ hτhalf ha hEdef
@@ -214,7 +214,7 @@ theorem sourceBootstrap_entropy_improvement_explicit
     bootstrap_selected_energy_bound_of_threshold_le he₀pos he₀₁ C Cδ Cl Clt (g / 2)
       (zero_le_one.trans hC) hCδ (half_pos hg) hn
   have htarget := fun n (hn : truncationEntropyThreshold q g (C_T + 1) ≤ n) =>
-    abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le q hq g (C_T + 1) hg hn
+    abs_regionEntropy_sub_le_of_truncationEntropyThreshold_le q hq g (C_T + 1) hg hn
   have hadmissible := fun n (hn : F.roundedAdmissibilityThreshold Ctr ≤ n) =>
     F.rounded_admissibility_of_threshold_le hCtr.le hn
   have hsmall := fun n (hn : F.fixedWeightTransportThreshold q Ctr ct ≤ n) =>
@@ -259,8 +259,8 @@ theorem sourceBootstrap_entropy_improvement_explicit
   obtain ⟨hwindow, hd, hpdata⟩ := hwdata
   let : NeZero E.card := NeZero.of_pos hd
   let d := E.card
-  let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.splitEquiv β X) Ωt
-  let ψ : ManyBody.RegionConfig β Xᶜ × Fin d → ℂ := fun x ↦
+  let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.cutEquiv β X) Ωt
+  let ψ : ManyBody.ComplConfig β X × Fin d → ℂ := fun x ↦
     compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
   let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
     (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian

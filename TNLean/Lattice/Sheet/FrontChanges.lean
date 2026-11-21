@@ -117,7 +117,7 @@ theorem exists_frontBirthWord (k : Layout Party) (i : Mem k ≃ₗᵢ[ℂ] Eucli
   obtain ⟨g₁, g₂, g₃⟩ := groupWord_props (q := q) own nodup_sites mem_sites k hTP hB
     (V := {P, Q}) (Set.mem_insert P _) (Set.mem_insert P _)
   have r := isReordering_relabelRest (q := q) own own' mem_sites h hE k ⟨Q, euc (T → Fin q)⟩
-    ⟨P, euc (↥(T ∪ E)ᶜ → Fin q)⟩
+    ⟨P, euc ({v // v ∉ T ∪ E} → Fin q)⟩
   obtain ⟨u₁, u₂, u₃⟩ := ungroupWord_props (q := q) own' nodup_sites mem_sites k hA' hB'
     (V := {P, Q}) (Set.mem_insert_of_mem P rfl) (Set.mem_insert P _)
   refine ⟨(groupWord own nodup_sites mem_sites k hTP hB).comp <| wm.comp <|
@@ -155,11 +155,11 @@ theorem exists_frontDeathChain (k : Layout Party) (i : Mem k ≃ₗᵢ[ℂ] Eucl
   obtain ⟨g₁, g₂, g₃⟩ := groupWord_props (q := q) own nodup_sites mem_sites k hA hB
     (V := {P, Q}) (Set.mem_insert_of_mem P rfl) (Set.mem_insert P _)
   have r := isReordering_relabelRest (q := q) own own' mem_sites h hE k ⟨P, euc (T → Fin q)⟩
-    ⟨P, euc (↥(T ∪ E)ᶜ → Fin q)⟩
+    ⟨P, euc ({v // v ∉ T ∪ E} → Fin q)⟩
   obtain ⟨u₁, u₂, u₃⟩ := ungroupWord_props (q := q) own' nodup_sites mem_sites k hTP hB'
     (V := {P, Q}) (Set.mem_insert P _) (Set.mem_insert P _)
   let tail := (relabelRest own own' mem_sites h hE k ⟨P, euc (T → Fin q)⟩
-    ⟨P, euc (↥(T ∪ E)ᶜ → Fin q)⟩).comp (ungroupWord own' nodup_sites mem_sites k hTP hB')
+    ⟨P, euc ({v // v ∉ T ∪ E} → Fin q)⟩).comp (ungroupWord own' nodup_sites mem_sites k hTP hB')
   obtain ⟨p₁, p₂, p₃, p₄⟩ := PartyChain.postcomp_props {P, Q} Mm tail ⟨r.isAllowed, u₁⟩
     ⟨r.usesOnly _, u₂⟩ hMA hMU
   let G := groupWord (q := q) own nodup_sites mem_sites k hA hB

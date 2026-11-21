@@ -43,15 +43,13 @@ data. AKLV, arXiv:1301.1162v1, Section 6.1, lines 1016--1024. -/
 theorem exists_aklv_physical_favorable_filter :
     ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧
       ∀ (L q a : ℕ)
-        (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+        (Φ : ManyBody.BondInteraction L q)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) → ‖Ω‖ = 1 →
-      (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
-      ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+      (∀ i, 0 ≤ Φ.term i) → (∀ i, Φ.term i ≤ 1) → ‖Ω‖ = 1 →
+      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
+      (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-      0 < g → mu + g ∈ spectrum ℝ (∑ i, h i) →
+      0 < g → mu + g ∈ spectrum ℝ Φ.hamiltonian →
       let u : ℝ := 1 + Real.log (q : ℝ) + Real.log (1 / g)
       let s : ℕ := ⌈A * u ^ 2 / g⌉₊
       let ell : ℕ := s ^ 2
@@ -65,10 +63,10 @@ theorem exists_aklv_physical_favorable_filter :
       ∃ (e : Fin 3 → ℝ) (E0 E : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q))
         (p : Polynomial ℝ),
         (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
-          (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
-          ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+          (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
+          ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
         E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t0 Finset.univ
+        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t0 Finset.univ
         B.PosSemidef ∧ ‖B‖ ≤ R ∧ 0 ≤ E ∧ ‖φ‖ = 1 ∧
         toEuclideanLin B φ = (E : ℂ) • φ ∧
         (B - (E : ℂ) • 1 - ((9 * g / 10 : ℝ) : ℂ) •
@@ -85,8 +83,8 @@ theorem exists_aklv_physical_favorable_filter :
           ⟪φ, toEuclideanLin K ψ⟫_ℂ = 0 ∧ ‖toEuclideanLin K ψ‖ ^ 2 ≤ delta := by
   obtain ⟨A, hA, hA21, hscalar⟩ := Real.exists_aklv_favorable_scalar_parameters
   refine ⟨A, hA, hA21, ?_⟩
-  intro L q a h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited u s ell t0 R D delta ha
-  have hH : (∑ i, h i).IsHermitian :=
+  intro L q a Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited u s ell t0 R D delta ha
+  have hH : Φ.hamiltonian.IsHermitian :=
     (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
   have hmu := Matrix.mem_spectrum_real_of_mulVec_eq_smul
     (by intro hz; simp only [hz, norm_zero, zero_ne_one] at hΩ) hground
@@ -96,14 +94,14 @@ theorem exists_aklv_physical_favorable_filter :
     ⟨hΩ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
       WithLp.ofLp_smul]; exact hground, hgap⟩
   have hg1 := gap_le_one_of_positive_nearest_neighbor_terms (by omega : 0 < L)
-    hq2 h hsupp h0 h1 hΩ hgapI hspan
+    hq2 Φ h0 h1 hΩ hgapI hspan
   obtain ⟨_hsLower, _hsUpper, hs21, _hsb, hdiv, hsqrt, _hR, _hRup, _hDaux,
       hdelta, htrade, _htradeSmall, hlogD⟩ := hscalar q g hq2 hg hg1
   change 21 ≤ s at hs21
   change ell / s = s at hdiv
   change Nat.sqrt ell = s at hsqrt
   obtain ⟨_hq, _hg, e, E0, hregional, hEeq, hE0, hE6, hfilter⟩ :=
-    exists_aklv_logarithmic_clipped_chebyshev_filter (by omega) ha h hsupp h0 h1
+    exists_aklv_logarithmic_clipped_chebyshev_filter (by omega) ha Φ h0 h1
       mu g Ω hΩ hground hgap hg hexcited
   obtain ⟨hBpos, hBnorm, E, φ, hE, hφ, heigen, hprojector, hclose, hpoly⟩ :=
     hfilter t0 le_rfl
@@ -111,7 +109,7 @@ theorem exists_aklv_physical_favorable_filter :
   have hrankD : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L (a + s / 2))
       (Polynomial.aeval
-        (aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t0 Finset.univ) p)) ≤ D := by
+        (aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t0 Finset.univ) p)) ≤ D := by
     change _ ≤ (q * (ell + 1)) ^ (32 * (2 * s + 1))
     simpa only [hdiv, hsqrt, two_mul] using hrank
   have hDeltaEq :

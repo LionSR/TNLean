@@ -27,8 +27,8 @@ identification and the two Hermitian block actions.
 
 * `MPOTensor.threeSiteOverlappingEquiv`
 * `MPOTensor.pairBondMatrix`
-* `MPOTensor.reindex_embedLocalOperator_zero_eq_leftOverlappingLift`
-* `MPOTensor.reindex_embedLocalOperator_one_eq_rightOverlappingLift`
+* `MPOTensor.reindex_placeAlong_ringWindow_zero_eq_leftOverlappingLift`
+* `MPOTensor.reindex_placeAlong_ringWindow_one_eq_rightOverlappingLift`
 * `MPOTensor.TranslationInvariantBondData.overlappingLifts_pairBond_comm`
 * `MPOTensor.TranslationInvariantBondData.reindex_bondAt_zero_eq_leftOverlappingLift`
 * `MPOTensor.TranslationInvariantBondData.reindex_bondAt_one_eq_rightOverlappingLift`
@@ -42,6 +42,8 @@ identification and the two Hermitian block actions.
 -/
 
 open scoped Matrix ComplexOrder Kronecker
+
+open ManyBody
 
 namespace MPOTensor
 
@@ -67,27 +69,28 @@ def pairBondMatrix (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
     Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
   Matrix.reindex (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d)) B
 
-/-- In the common left-associated three-site coordinates, a two-site operator embedded
-at site zero is its left overlapping lift.
+/-- In the common left-associated three-site coordinates, a two-site operator placed on
+the window of two consecutive sites starting at site zero is its left overlapping lift.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
 Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
-theorem reindex_embedLocalOperator_zero_eq_leftOverlappingLift
+theorem reindex_placeAlong_ringWindow_zero_eq_leftOverlappingLift
     (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
     Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
         (threeSiteOverlappingEquiv (Fin d))
-        (embedLocalOperator (d := d) 2 3 two_le_three (0 : Fin 3) B) =
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow two_le_three (0 : Fin 3)) B) =
       Matrix.leftOverlappingLift (pairBondMatrix B) := by
   ext ⟨⟨i, j⟩, k⟩ ⟨⟨i', j'⟩, k'⟩
   have hAgree :
-      AgreesOutsideWindow (d := d) 2 two_le_three (0 : Fin 3)
-          ((threeSiteOverlappingEquiv (Fin d)).symm ((i, j), k))
-          ((threeSiteOverlappingEquiv (Fin d)).symm ((i', j'), k')) ↔
+      (∀ v, (∀ u, ringWindow two_le_three (0 : Fin 3) u ≠ v) →
+          (threeSiteOverlappingEquiv (Fin d)).symm ((i, j), k) v =
+            (threeSiteOverlappingEquiv (Fin d)).symm ((i', j'), k') v) ↔
         k' = k := by
+    rw [MPSTensor.forall_ringWindow_ne_imp_iff_replaceWindow]
     constructor
     · intro ha
       have h := congrFun ha (2 : Fin 3)
-      simpa [AgreesOutsideWindow, threeSiteOverlappingEquiv,
+      simpa [threeSiteOverlappingEquiv,
         MPSTensor.replaceWindow, MPSTensor.extractWindow] using h
     · intro hk
       funext r
@@ -96,9 +99,10 @@ theorem reindex_embedLocalOperator_zero_eq_leftOverlappingLift
           MPSTensor.extractWindow, hk]
   by_cases h : k' = k
   · have ha := hAgree.mpr h
-    simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-      embedLocalOperator_apply]
-    rw [ite_eq_left ha]
+    simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
+    rw [placeAlong_apply, ite_eq_left ha,
+      ← MPSTensor.extractWindow_eq_comp_ringWindow two_le_three,
+      ← MPSTensor.extractWindow_eq_comp_ringWindow two_le_three]
     subst k'
     simp only [MPSTensor.extractWindow, threeSiteOverlappingEquiv,
       Equiv.symm_trans, Equiv.symm_symm, Fin.isValue,
@@ -117,37 +121,38 @@ theorem reindex_embedLocalOperator_zero_eq_leftOverlappingLift
       funext r
       fin_cases r <;> rfl
     rw [hx, hy]
-  · have ha : ¬ AgreesOutsideWindow (d := d) 2 two_le_three (0 : Fin 3)
-        ((threeSiteOverlappingEquiv (Fin d)).symm ((i, j), k))
-        ((threeSiteOverlappingEquiv (Fin d)).symm ((i', j'), k')) :=
+  · have ha : ¬ ∀ v, (∀ u, ringWindow two_le_three (0 : Fin 3) u ≠ v) →
+        (threeSiteOverlappingEquiv (Fin d)).symm ((i, j), k) v =
+          (threeSiteOverlappingEquiv (Fin d)).symm ((i', j'), k') v :=
       fun ha ↦ h (hAgree.mp ha)
-    simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-      embedLocalOperator_apply]
-    rw [ite_eq_right ha]
+    simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
+    rw [placeAlong_apply, ite_eq_right ha]
     have hk : k ≠ k' := fun hk ↦ h hk.symm
     simp [Matrix.leftOverlappingLift, hk]
 
 /-- In the same common left-associated three-site coordinates, a two-site operator
-embedded at site one is its right overlapping lift.
+placed on the window of two consecutive sites starting at site one is its right
+overlapping lift.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines 1599--1605;
 Beigi, J. Phys. A 45 (2012) 025306, Lemma 2.1 (`lem:comm`), pages 2--3. -/
-theorem reindex_embedLocalOperator_one_eq_rightOverlappingLift
+theorem reindex_placeAlong_ringWindow_one_eq_rightOverlappingLift
     (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
     Matrix.reindex (threeSiteOverlappingEquiv (Fin d))
         (threeSiteOverlappingEquiv (Fin d))
-        (embedLocalOperator (d := d) 2 3 two_le_three (1 : Fin 3) B) =
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow two_le_three (1 : Fin 3)) B) =
       Matrix.rightOverlappingLift (pairBondMatrix B) := by
   ext ⟨⟨i, j⟩, k⟩ ⟨⟨i', j'⟩, k'⟩
   have hAgree :
-      AgreesOutsideWindow (d := d) 2 two_le_three (1 : Fin 3)
-          ((threeSiteOverlappingEquiv (Fin d)).symm ((i, j), k))
-          ((threeSiteOverlappingEquiv (Fin d)).symm ((i', j'), k')) ↔
+      (∀ v, (∀ u, ringWindow two_le_three (1 : Fin 3) u ≠ v) →
+          (threeSiteOverlappingEquiv (Fin d)).symm ((i, j), k) v =
+            (threeSiteOverlappingEquiv (Fin d)).symm ((i', j'), k') v) ↔
         i' = i := by
+    rw [MPSTensor.forall_ringWindow_ne_imp_iff_replaceWindow]
     constructor
     · intro ha
       have h := congrFun ha (0 : Fin 3)
-      simpa [AgreesOutsideWindow, threeSiteOverlappingEquiv,
+      simpa [threeSiteOverlappingEquiv,
         MPSTensor.replaceWindow, MPSTensor.extractWindow] using h
     · intro hi
       funext r
@@ -156,9 +161,10 @@ theorem reindex_embedLocalOperator_one_eq_rightOverlappingLift
           MPSTensor.extractWindow, hi]
   by_cases h : i' = i
   · have ha := hAgree.mpr h
-    simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-      embedLocalOperator_apply]
-    rw [ite_eq_left ha]
+    simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
+    rw [placeAlong_apply, ite_eq_left ha,
+      ← MPSTensor.extractWindow_eq_comp_ringWindow two_le_three,
+      ← MPSTensor.extractWindow_eq_comp_ringWindow two_le_three]
     subst i'
     simp only [MPSTensor.extractWindow, threeSiteOverlappingEquiv,
       Equiv.symm_trans, Equiv.symm_symm, Fin.isValue,
@@ -177,13 +183,12 @@ theorem reindex_embedLocalOperator_one_eq_rightOverlappingLift
       funext r
       fin_cases r <;> rfl
     rw [hx, hy]
-  · have ha : ¬ AgreesOutsideWindow (d := d) 2 two_le_three (1 : Fin 3)
-        ((threeSiteOverlappingEquiv (Fin d)).symm ((i, j), k))
-        ((threeSiteOverlappingEquiv (Fin d)).symm ((i', j'), k')) :=
+  · have ha : ¬ ∀ v, (∀ u, ringWindow two_le_three (1 : Fin 3) u ≠ v) →
+        (threeSiteOverlappingEquiv (Fin d)).symm ((i, j), k) v =
+          (threeSiteOverlappingEquiv (Fin d)).symm ((i', j'), k') v :=
       fun ha ↦ h (hAgree.mp ha)
-    simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-      embedLocalOperator_apply]
-    rw [ite_eq_right ha]
+    simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
+    rw [placeAlong_apply, ite_eq_right ha]
     have hi : i ≠ i' := fun hi ↦ h hi.symm
     simp [Matrix.rightOverlappingLift, hi]
 
@@ -217,7 +222,7 @@ theorem reindex_bondAt_zero_eq_leftOverlappingLift
         (threeSiteOverlappingEquiv (Fin d))
         ((data.toCommutingFormData two_le_three).bondAt (0 : Fin 3)) =
       Matrix.leftOverlappingLift data.pairBond := by
-  exact reindex_embedLocalOperator_zero_eq_leftOverlappingLift data.bond
+  exact reindex_placeAlong_ringWindow_zero_eq_leftOverlappingLift data.bond
 
 /-- The second adjacent translate is the right overlapping lift under the same three-site
 equivalence.
@@ -230,7 +235,7 @@ theorem reindex_bondAt_one_eq_rightOverlappingLift
         (threeSiteOverlappingEquiv (Fin d))
         ((data.toCommutingFormData two_le_three).bondAt (1 : Fin 3)) =
       Matrix.rightOverlappingLift data.pairBond := by
-  exact reindex_embedLocalOperator_one_eq_rightOverlappingLift data.bond
+  exact reindex_placeAlong_ringWindow_one_eq_rightOverlappingLift data.bond
 
 /-- The two abstract overlapping lifts of the pair-indexed fixed bond commute. Thus, together
 with Hermiticity, they satisfy the hypotheses of Beigi's spatial decomposition.

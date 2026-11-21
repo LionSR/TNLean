@@ -4,13 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.TwoSiteBufferedAction
-import TNLean.MPS.Preparation.WindowOperatorSupport
+import TNLean.MPS.Preparation.WindowCorrelator
+import QICLean.ManyBody.Sites.PlaceAlong
+import QICLean.ManyBody.Sites.Lattice.Chain
 
 /-!
 # Actual finite MPU windows in the supported-operator algebra
 
 The identity-tensor inclusions used in the original-site standard-form
-formula are the existing chain-window operators. Their actual matrices
+formula are placements along windows of consecutive sites of the chain
+(`ManyBody.placeAlong` along `ManyBody.chainWindow`). Their actual matrices
 therefore belong to the existing finite supported-operator algebra. This
 connects the standard-form window identity to cyclic transport of support,
 without replacing either notion by a new support predicate.
@@ -22,8 +25,8 @@ finite conjugation eq:appendix-1, lines 2292–2306.
 results `mpo_bufferedWindow_conjugation_mem_supportedOperators`,
 `mpo_chainWindow_conjugation_mem_supportedOperators` and
 `mpo_conjugation_mem_supportedOperators_central` consume actual MPU
-unitarity, a positive block length and supplied two-site standard-form
-data, and their windows are measured in that block length. The window
+unitarity, supplied two-site standard-form data and, for the last two, a
+positive block length; their windows are measured in that block length. The window
 identifications carry no restriction. The standard-form construction
 from bare MPU data and the source bond-dimension radius remain
 separate. See
@@ -34,36 +37,38 @@ open scoped Matrix
 
 namespace MPOTensor
 
-private theorem intervalCoordinates_localInclusion_eq_chainWindowOperator
-    (d n p s : ℕ) (hn : 0 < n) (a : ℤ)
+private theorem intervalCoordinates_localInclusion_eq_placeAlong_chainWindow
+    (d n p s : ℕ) (a : ℤ)
     (A : SpinChain.LocalAlgebra d (SpinChain.finiteChainRegion a n)) :
     SpinChain.intervalCoordinates d (a - p) ((p + n) + s)
       (SpinChain.localInclusion (SpinChain.finiteChainRegion_subset_expanded a n p s) A) =
-      MPSTensor.chainWindowOperator ((p + n) + s) p
+      ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow p (by omega : p + n ≤ (p + n) + s))
         (SpinChain.intervalCoordinates d a n A) := by
   classical
   ext row col
-  rw [MPSTensor.chainWindowOperator_apply (by omega) (by omega)]
+  rw [MPSTensor.placeAlong_chainWindow_apply]
   have h := SpinChain.intervalCoordinates_localInclusion_apply d a n p s A row col
   by_cases hOutside : ∀ i : Fin ((p + n) + s),
       ¬ (p ≤ i.val ∧ i.val < p + n) → row i = col i
   · simpa only [eq_true hOutside, ite_true, mul_one] using h
   · simpa only [eq_false hOutside, ite_false, mul_zero] using h
 
-/-- The actual buffered window matrix is the existing finite chain-window
-inclusion, with every exterior site carrying the identity.
+/-- The actual buffered window matrix is the matrix placed on the window of the `n`
+consecutive sites starting at `p`, with every exterior site carrying the identity.
 Source: arXiv:1703.09188, Appendix, lines 2292–2295. -/
-theorem bufferedWindowMatrix_eq_chainWindowOperator
-    (d n p s : ℕ) (hn : 0 < n)
-    (A : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) :
-    bufferedWindowMatrix d n p s A = MPSTensor.chainWindowOperator (p + (n + s)) p A := by
+theorem bufferedWindowMatrix_eq_placeAlong_chainWindow
+    (d n p s : ℕ) (A : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) :
+    bufferedWindowMatrix d n p s A =
+      ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow p (by omega : p + n ≤ p + (n + s))) A := by
   let B := (SpinChain.intervalCoordinates d 0 n).symm A
   have hA : SpinChain.intervalCoordinates d 0 n B = A := by
     exact StarAlgEquiv.apply_symm_apply _ A
   have hBuffer := SpinChain.intervalCoordinates_localInclusion_eq_bufferedWindowMatrix
     d n p s 0 B
   rw [hA] at hBuffer
-  have hWindow := intervalCoordinates_localInclusion_eq_chainWindowOperator d n p s hn 0 B
+  have hWindow := intervalCoordinates_localInclusion_eq_placeAlong_chainWindow d n p s 0 B
   rw! (castMode := .all) [Nat.add_assoc] at hWindow
   rw [hBuffer, hA] at hWindow
   exact hWindow
@@ -71,12 +76,15 @@ theorem bufferedWindowMatrix_eq_chainWindowOperator
 /-- The buffered actual window acts only on its indicated finite interval.
 Source: arXiv:1703.09188, Appendix, lines 2292–2295. -/
 theorem bufferedWindowMatrix_mem_supportedOperators
-    (d n p s : ℕ) (hn : 0 < n)
+    (d n p s : ℕ)
     (A : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) :
     bufferedWindowMatrix d n p s A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
       (Finset.univ.filter fun (i : Fin (p + (n + s))) ↦ p ≤ i.val ∧ i.val < p + n) := by
-  rw [bufferedWindowMatrix_eq_chainWindowOperator d n p s hn]
-  exact MPSTensor.chainWindowOperator_mem_supportedOperators (by omega) (by omega) A
+  rw [bufferedWindowMatrix_eq_placeAlong_chainWindow d n p s]
+  have hmem := ManyBody.placeAlong_mem_supportedOperators (X := fun _ ↦ Fin d)
+    (ManyBody.chainWindow p (by omega : p + n ≤ p + (n + s))) A
+  rw [ManyBody.map_chainWindow] at hmem
+  exact hmem
 
 /-- The actual forward finite MPU conjugation has the standard-form
 window support in the existing supported-operator algebra. This is the
@@ -85,7 +93,7 @@ Source: arXiv:1703.09188, StandardForm/SF and eq:appendix-1,
 lines 603–622 and 2300–2306. -/
 theorem mpo_bufferedWindow_conjugation_mem_supportedOperators
     {d D ℓ r : ℕ} {U : MPOTensor d D} (hU : U.IsMPU)
-    (k p s : ℕ) (hk : 0 < k) (hN : 1 < p + (3 * (2 * k) + s))
+    (k p s : ℕ) (hN : 1 < p + (3 * (2 * k) + s))
     {u : Matrix (Fin ℓ × Fin r)
       (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
     {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
@@ -100,25 +108,26 @@ theorem mpo_bufferedWindow_conjugation_mem_supportedOperators
         (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦
             p ≤ i.val ∧ i.val < p + 3 * (2 * k)) := by
   rw [mpo_bufferedWindow_conjugation hU k p s hN S A]
-  exact bufferedWindowMatrix_mem_supportedOperators d (3 * (2 * k)) p s (by omega)
+  exact bufferedWindowMatrix_mem_supportedOperators d (3 * (2 * k)) p s
     (originalSiteHeisenbergOutputWindow k u v A)
 
-/-- The source input window is exactly the existing chain-window
-inclusion of its complete central interval. Source: arXiv:1703.09188,
+/-- The source input window is exactly the placement on its complete central
+interval of `2k` consecutive sites. Source: arXiv:1703.09188,
 StandardForm and eq:appendix-1, lines 603–622 and 2300–2306. -/
-theorem originalSiteHeisenbergInputWindow_eq_chainWindowOperator
-    (d k : ℕ) (hk : 0 < k)
+theorem originalSiteHeisenbergInputWindow_eq_placeAlong_chainWindow
+    (d k : ℕ)
     (A : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ) :
     originalSiteHeisenbergInputWindow d k A =
-      MPSTensor.chainWindowOperator (3 * (2 * k)) (2 * k)
+      ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow (2 * k) (by omega : 2 * k + 2 * k ≤ 3 * (2 * k)))
         (Matrix.reindex (originalSiteHeisenbergCentreEquiv d k)
           (originalSiteHeisenbergCentreEquiv d k) A) := by
   let C := Matrix.reindex (originalSiteHeisenbergCentreEquiv d k)
     (originalSiteHeisenbergCentreEquiv d k) A
   let B := (SpinChain.intervalCoordinates d (2 * k : ℕ) (2 * k)).symm C
-  have hWindow := intervalCoordinates_localInclusion_eq_chainWindowOperator
-    d (2 * k) (2 * k) (2 * k) (by omega) (2 * k : ℕ) B
+  have hWindow := intervalCoordinates_localInclusion_eq_placeAlong_chainWindow
+    d (2 * k) (2 * k) (2 * k) (2 * k : ℕ) B
   have hB : SpinChain.intervalCoordinates d (2 * k : ℕ) (2 * k) B = C :=
     StarAlgEquiv.apply_symm_apply _ C
   rw [hB] at hWindow
@@ -144,7 +153,8 @@ theorem mpo_chainWindow_conjugation_mem_supportedOperators
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
     (C : Matrix (Fin (2 * k) → Fin d) (Fin (2 * k) → Fin d) ℂ) :
     mpo U (p + (3 * (2 * k) + s)) *
-        MPSTensor.chainWindowOperator (p + (3 * (2 * k) + s)) (p + 2 * k) C *
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (p + 2 * k)
+          (by omega : p + 2 * k + 2 * k ≤ p + (3 * (2 * k) + s))) C *
         (mpo U (p + (3 * (2 * k) + s)))ᴴ ∈
       ManyBody.supportedOperators (fun _ ↦ Fin d)
         (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦
@@ -157,13 +167,12 @@ theorem mpo_chainWindow_conjugation_mem_supportedOperators
     simp [A, Matrix.reindex_apply]
   have hPlaced : bufferedWindowMatrix d (3 * (2 * k)) p s
       (originalSiteHeisenbergInputWindow d k A) =
-      MPSTensor.chainWindowOperator (p + (3 * (2 * k) + s)) (p + 2 * k) C := by
-    rw [bufferedWindowMatrix_eq_chainWindowOperator d (3 * (2 * k)) p s (by omega),
-      originalSiteHeisenbergInputWindow_eq_chainWindowOperator d k hk,
-      MPSTensor.chainWindowOperator_chainWindowOperator (by omega) (by omega)
-        (by omega) (by omega)]
-    exact congrArg (MPSTensor.chainWindowOperator (p + (3 * (2 * k) + s)) (p + 2 * k)) hA
-  have h := mpo_bufferedWindow_conjugation_mem_supportedOperators hU k p s hk
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (p + 2 * k)
+        (by omega : p + 2 * k + 2 * k ≤ p + (3 * (2 * k) + s))) C := by
+    rw [bufferedWindowMatrix_eq_placeAlong_chainWindow d (3 * (2 * k)) p s,
+      originalSiteHeisenbergInputWindow_eq_placeAlong_chainWindow d k,
+      ManyBody.placeAlong_placeAlong, ManyBody.chainWindow_trans_chainWindow, hA]
+  have h := mpo_bufferedWindow_conjugation_mem_supportedOperators hU k p s
     (by omega) S A
   rw [hPlaced] at h
   exact h
@@ -190,9 +199,12 @@ theorem mpo_conjugation_mem_supportedOperators_central
       ManyBody.supportedOperators (fun _ ↦ Fin d)
         (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦
             p ≤ i.val ∧ i.val < p + 3 * (2 * k)) := by
-  obtain ⟨C, rfl⟩ := MPSTensor.exists_chainWindowOperator_eq_of_mem_supportedOperators
-    (by omega : p + 2 * k < p + (3 * (2 * k) + s))
-    (by omega : (p + 2 * k) + 2 * k ≤ p + (3 * (2 * k) + s)) hA
+  have hA' : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.map
+      (ManyBody.chainWindow (p + 2 * k)
+        (by omega : (p + 2 * k) + 2 * k ≤ p + (3 * (2 * k) + s)))) := by
+    rw [ManyBody.map_chainWindow]
+    exact hA
+  obtain ⟨C, rfl⟩ := ManyBody.exists_eq_placeAlong_of_mem_supportedOperators _ hA'
   exact mpo_chainWindow_conjugation_mem_supportedOperators hU k p s hk S C
 
 end MPOTensor

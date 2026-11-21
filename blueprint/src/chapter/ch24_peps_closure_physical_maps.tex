@@ -54,10 +54,11 @@ and semi-regular $G$-injective tensors.
 \begin{lemma}[Physical product maps and Schmidt rank]%
     \label{thm:peps_physical_product_cut_rank}
     \lean{TNLean.PEPS.physicalProductMatrix_split,
-        TNLean.PEPS.physicalCutMatrix,
-        TNLean.PEPS.physicalCutMatrix_physicalProductMap,
-        TNLean.PEPS.rank_physicalCutMatrix_physicalProductMap_le,
-        TNLean.PEPS.rank_physicalCutMatrix_eq_of_physicalProductMaps}
+        ManyBody.cutMatrix,
+        TNLean.PEPS.reindex_cutEquiv_physicalProductMatrix,
+        TNLean.PEPS.cutMatrix_physicalProductMap,
+        TNLean.PEPS.rank_cutMatrix_physicalProductMap_le,
+        TNLean.PEPS.rank_cutMatrix_eq_of_physicalProductMaps}
     \leanok
     \uses{def:peps_physical_product_map}
     For a partition $\Lambda=R\sqcup R^c$, let $C_R(\psi)$ be the
@@ -415,7 +416,7 @@ and semi-regular $G$-injective tensors.
 
 \begin{lemma}[Schmidt ranks of regular $G$-injective closure superpositions]%
     \label{thm:peps_regular_g_injective_closure_rank_transport}
-    \lean{TNLean.PEPS.IsGInjective.rank_physicalCutMatrix_torusGClosure_sum}
+    \lean{TNLean.PEPS.IsGInjective.rank_cutMatrix_torusGClosure_sum}
     \leanok
     Let $A$ be regular $G$-injective. For every finite family of closure
     pairs and every physical partition $R$, the two vectors

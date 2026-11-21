@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinOrderedProduct
 import TNLean.Algebra.IsometryUnitaryExtension
-import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlaceAlong
 import TNLean.MPS.Preparation.Sequential
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
@@ -182,7 +182,9 @@ other sites. The operation `U^{[k]}` of arXiv:quant-ph/0608197, lines 1580--1586
 sites `k` and `k + 1` is `pairOp (Fin.rev k') (U k')` with `k = k' + 1`. -/
 noncomputable def pairOp {n : ℕ} (p : Fin (n + 1)) (V : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
     Matrix (Fin (n + 2) → Fin d) (Fin (n + 2) → Fin d) ℂ :=
-  QuantumCircuit.embedOp ![p.succ, p.castSucc] (Matrix.of fun x y => V (x 0, x 1) (y 0, y 1))
+  ManyBody.placeAlong (X := fun _ : Fin (n + 2) ↦ Fin d)
+    ⟨![p.succ, p.castSucc], Matrix.injective_pair_iff_ne.mpr (Fin.castSucc_lt_succ (i := p)).ne'⟩
+    (Matrix.of fun x y => V (x 0, x 1) (y 0, y 1))
 
 omit [NeZero d] in
 /-- The components of `pairOp p V *ᵥ v`: `V` acts on the values at the positions `p + 1` and
@@ -194,8 +196,9 @@ theorem pairOp_mulVec_apply {n : ℕ} (p : Fin (n + 1))
       v (Function.update (Function.update τ p.succ a) p.castSucc b) := by
   have hne : p.succ ≠ p.castSucc := (Fin.castSucc_lt_succ (i := p)).ne'
   have he : Function.Injective ![p.succ, p.castSucc] := Matrix.injective_pair_iff_ne.mpr hne
-  rw [pairOp, QuantumCircuit.embedOp_mulVec_apply he, ← (finTwoArrowEquiv (Fin d)).symm.sum_comp,
+  rw [pairOp, ManyBody.placeAlong_mulVec_apply, ← (finTwoArrowEquiv (Fin d)).symm.sum_comp,
     Fintype.sum_prod_type]
+  simp only [Function.Embedding.coeFn_mk]
   refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ => ?_
   congr 2
   funext q

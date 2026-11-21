@@ -46,7 +46,7 @@ the proof; the zero-thickness shell is included. The physical vector is the
 original gapped ground vector throughout.
 Source: `02-initial.tex`, lines 590–604, and `08-scanner.tex`, lines 717–729,
 at the pinned manuscript revision stated above. -/
-theorem exists_regionalEntropy_weak_rectangle_shell_le_rpow
+theorem exists_regionEntropy_weak_rectangle_shell_le_rpow
     (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ C e₀ : ℝ, 0 ≤ C ∧ 0 < e₀ ∧ e₀ < 1 ∧
       ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
@@ -63,14 +63,14 @@ theorem exists_regionalEntropy_weak_rectangle_shell_le_rpow
                 C * (24 + 64 / ((2 : ℝ) ^ e₀ - 1)) *
                   (Q.size : ℝ) * (L : ℝ) ^ e₀ := by
   obtain ⟨C, e₀, hC, he₀, he₀₁, hrect⟩ :=
-    exists_regionalEntropy_safe_rect_le_rpow q R hq hJ hΔ
+    exists_regionEntropy_safe_rect_le_rpow q R hq hJ hΔ
   refine ⟨C, e₀, hC, he₀, he₀₁, ?_⟩
   intro D₀ hD₀ Λ h hh hhJ E₀ Ω hΩ hgap hspan A Q hsafe j L hj hL hbudget
   by_cases hLzero : L = 0
   · have hjzero : j = 0 := by omega
-    simp [hjzero, hLzero, regionalEntropy_empty Λ q Ω hΩ,
+    simp [hjzero, hLzero, ManyBody.regionEntropy_empty _ Ω hΩ,
       Real.zero_rpow (ne_of_gt he₀)]
-  · exact IntRect.regionalEntropy_shell_le_of_safe_box
+  · exact IntRect.regionEntropy_shell_le_of_safe_box
       Λ q D₀ Ω hΩ A Q hsafe j L (Nat.log 2 L) hj hL
       (Nat.pow_log_le_self 2 hLzero)
       (Nat.lt_pow_succ_log_self (b := 2) (by decide) L) hbudget

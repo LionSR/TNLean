@@ -26,7 +26,7 @@ length `N ≥ 2`:
 * for a tensor injective on a set `S` of bond pairs and pairs `ω_j` that are orthonormal and
   supported on `S`, the state `∑ⱼ αⱼ (⊗ₖ V_k) ⊗ₖ |ω_j⟩` is prepared with measurements and a
   circuit in depth `O(L)` for blocks of lengths at most `L`
-  (`exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of_isInjectiveOn`):
+  (`exists_isOneRoundConversion_blockIsometryState_of_isInjectiveOn`):
   the GHZ-type state of the labels with measurements, the isometry `W` on every pair window,
   and on every block one unitary implementing the isometric factor `V_k` on the pairs of `S`;
 * on a chain of one block, the normalized target is such a state
@@ -35,9 +35,9 @@ length `N ≥ 2`:
   (`MPSTensor.exists_one_sub_norm_inner_sum_blockIsometryState_le`), a unit vector of error at
   most `ε` is prepared with measurements in depth `O(log(N/ε))` for every `N ≥ 2` at which the
   periodic state does not vanish
-  (`MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`),
+  (`MPSPreparation.exists_isOneRoundConversion_le_log_of_mpvState_ne_zero`),
   and for every `N ≥ N₀` at which the weights `βⱼ = ∑ₖ μ_{j,k}^N` are not all zero
-  (`MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log`).
+  (`MPSPreparation.exists_isOneRoundConversion_le_log`).
 
 The chain is cut as in the Supplemental Material, proof of Theorem 1: blocks "all of the same
 size, `q_N`, except for the last one, which may be larger". The isometries are those of the
@@ -70,13 +70,13 @@ fixed blocking; the original-site and unrestricted-length source assertion remai
 
 ## Main declarations
 
-* `exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum`
+* `exists_isOneRoundConversion_le_log_of_mpv_eq_sum`
   — logarithmic preparation from an exact normal-sector expansion.
-* `exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of_isInjectiveOn`
+* `exists_isOneRoundConversion_blockIsometryState_of_isInjectiveOn`
   — the preparation of `∑ⱼ αⱼ (⊗ₖ V_k) ⊗ₖ |ω_j⟩` in depth `O(L)`.
 * `MPSPreparation.exists_blockIsometryState_eq_smul` — a chain of one block.
-* `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`,
-  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log` — error `ε` in
+* `MPSPreparation.exists_isOneRoundConversion_le_log_of_mpvState_ne_zero`,
+  `MPSPreparation.exists_isOneRoundConversion_le_log` — error `ε` in
   depth `O(log(N/ε))`.
 
 ## References
@@ -118,7 +118,7 @@ arXiv:2307.01696, paragraph "Long-range MPS using measurements": the GHZ-type st
 with measurements, then the isometry `W : |j⟩ ↦ |ω_j⟩` on the pair windows, then on every block a
 unitary implementing the isometric factor `V_k` on the pairs of `S` (arXiv:2307.01696,
 eqs. (13)–(15), through `exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn`). -/
-private theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_of_encoding_of_isInjectiveOn
+private theorem exists_isOneRoundConversion_of_encoding_of_isInjectiveOn
     {D b : ℕ} {r₁ : ℕ} (hr₁ : 2 ≤ r₁) {dig : Fin D → Cfg d r₁} (hdig : Function.Injective dig)
     {dig₀ : Fin b → Cfg d r₁} (hdig₀ : Function.Injective dig₀) (hD : 0 < D) :
     ∃ C : ℕ, ∀ (A : MPSTensor d D) (S : Finset (Fin D × Fin D))
@@ -129,11 +129,12 @@ private theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_of_encoding_o
       ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N) (L : ℕ),
         (∀ k, 3 * r₁ ≤ ℓ k) → (∀ k, ℓ k ≤ L) →
         (∀ k, IsInjectiveOn (blockTensor A (ℓ k)) (S : Set (Fin D × Fin D))) →
-        IsPreparedWithMeasurementsAndCircuitInDepth (C * L)
-          (fun s => ∑ j, α j * blockIsometryState A (ω j) hN s) := by
+        ∃ T₁ T₂, T₁ + T₂ ≤ C * L ∧ ∃ v : Fin N → Fin d → ℂ,
+          IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s))
+            (fun s => ∑ j, α j * blockIsometryState A (ω j) hN s) := by
   classical
-  obtain ⟨CG, hCG⟩ := exists_isPreparedWithMeasurementsInDepth_windowGHZState (d := d) hr₁
-  obtain ⟨C, hC⟩ := exists_isLocalCircuitOfDepth_registerCfg_of_isInjectiveOn
+  obtain ⟨CG, hCG⟩ := exists_isOneRoundConversion_windowGHZState (d := d) hr₁
+  obtain ⟨C, hC⟩ := exists_isUnitaryCircuit_registerCfg_of_isInjectiveOn
     hr₁ hdig hdig₀ hD
   refine ⟨CG + C, fun A S ω hω hωS α hα M _ ℓ N _ hN L hℓ hL hinj => ?_⟩
   have hr : ∀ k, r₁ + r₁ ≤ ℓ k := fun k => by have := hℓ k; omega
@@ -142,9 +143,13 @@ private theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_of_encoding_o
   have hα' : ∑ u, star (α' u) * α' u = 1 := by
     rw [sum_extend_zero hdig₀ α (fun _ a => star a * a) (by simp)]
     exact hα
-  refine ⟨CG * L, T, windowGHZState hN hr α', U, by nlinarith,
-    hCG ℓ hN hr L hℓ hL α' hα', hU, ?_⟩
-  exact (mulVec_windowGHZState_of_registerCfg hdig₀ hj α).symm
+  obtain ⟨v, hv⟩ := hCG ℓ hN hr L hℓ hL α' hα'
+  refine ⟨CG * L, T, by nlinarith, v, ?_⟩
+  have hU' : U *ᵥ windowGHZState hN hr α' =
+      fun s => ∑ j, α j * blockIsometryState A (ω j) hN s :=
+    mulVec_windowGHZState_of_registerCfg hdig₀ hj α
+  have h := hv.mulVec hU
+  rwa [zero_add, hU'] at h
 
 /-- **The state of a tensor injective on a set of bond pairs, with measurements.** For `d ≥ 2`
 and every bond dimension `D` and number of labels `b` there are `C` and `L₀` such that for every
@@ -156,7 +161,7 @@ the state `∑ⱼ αⱼ (⊗ₖ V_k) ⊗ₖ |ω_j⟩` is prepared with measureme
 
 arXiv:2307.01696, paragraph "Long-range MPS using measurements". The labels and the bond indices
 are encoded in `r₁ = b + D + 2` sites. -/
-theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of_isInjectiveOn
+theorem exists_isOneRoundConversion_blockIsometryState_of_isInjectiveOn
     (hd : 2 ≤ d) (D b : ℕ) :
     ∃ C L₀ : ℕ, ∀ (A : MPSTensor d D) (S : Finset (Fin D × Fin D))
       (ω : Fin b → Fin D × Fin D → ℂ),
@@ -166,8 +171,9 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of
       ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N) (L : ℕ),
         (∀ k, L₀ ≤ ℓ k) → (∀ k, ℓ k ≤ L) →
         (∀ k, IsInjectiveOn (blockTensor A (ℓ k)) (S : Set (Fin D × Fin D))) →
-        IsPreparedWithMeasurementsAndCircuitInDepth (C * L)
-          (fun s => ∑ j, α j * blockIsometryState A (ω j) hN s) := by
+        ∃ T₁ T₂, T₁ + T₂ ≤ C * L ∧ ∃ v : Fin N → Fin d → ℂ,
+          IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s))
+            (fun s => ∑ j, α j * blockIsometryState A (ω j) hN s) := by
   classical
   rcases Nat.eq_zero_or_pos D with rfl | hD
   · -- No unit pair on the zero space; the hypotheses are contradictory.
@@ -184,7 +190,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of
   obtain ⟨dig₀⟩ : Nonempty (Fin b ↪ Cfg d r₁) :=
     Function.Embedding.nonempty_of_card_le (by simp; omega)
   obtain ⟨C, hC⟩ :=
-    exists_isPreparedWithMeasurementsAndCircuitInDepth_of_encoding_of_isInjectiveOn
+    exists_isOneRoundConversion_of_encoding_of_isInjectiveOn
       (D := D) (b := b) (r₁ := r₁) (by omega) dig.injective dig₀.injective hD
   exact ⟨C, 3 * r₁, fun A S ω hω hωS α hα M _ ℓ N _ hN L hℓ hL hinj =>
     hC A S ω hω hωS α hα ℓ hN L hℓ hL hinj⟩
@@ -192,14 +198,16 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of
 end Preparation
 
 /-- **Preparation with measurements contains preparation by circuits.** A nonzero vector
-prepared from a product state by a local circuit of depth `T` is prepared with measurements and a
-circuit in depth `T`: the measurement stage measures no site, and the circuit after it is
-empty. -/
-theorem isPreparedWithMeasurementsAndCircuitInDepth_of_isPreparedInDepth {N : ℕ} [NeZero N]
-    {T : ℕ} {ψ : Cfg d N → ℂ} (hψ : IsPreparedInDepth T ψ) (hψ0 : ψ ≠ 0) :
-    IsPreparedWithMeasurementsAndCircuitInDepth T ψ :=
-  ⟨T, 0, ψ, 1, by omega, isPreparedWithMeasurementsInDepth_of_isPreparedInDepth hψ hψ0,
-    ⟨[], rfl, rfl⟩, (Matrix.one_mulVec ψ).symm⟩
+prepared from a product state by a local circuit of depth `T` is converted from that product
+vector with one round of measurements and a circuit in depth `T`: the measurement stage measures
+no site, and the circuit after it has depth `0`. -/
+theorem exists_isOneRoundConversion_of_isPreparedInDepth {N : ℕ}
+    {T : ℕ} {ψ : Cfg d N → ℂ} (hψ : IsPreparedInDepth (Geometry.ring N) T ψ) (hψ0 : ψ ≠ 0) :
+    ∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v : Fin N → Fin d → ℂ,
+      IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s)) ψ := by
+  obtain ⟨U, hU, v, rfl⟩ := hψ
+  exact ⟨T, 0, (add_zero T).le, v,
+    hU.isOneRoundConversion fun h0 => hψ0 (by rw [h0, mulVec_zero])⟩
 
 /-! ### A chain of one block -/
 
@@ -317,7 +325,7 @@ measurement preparation. The coefficients can be arbitrary complex functions of 
 only the target vector must be nonzero. The proof uses the unweighted sum of the normal
 blocks and is uniform over all sector amplitudes.
 Source: arXiv:2307.01696, "Long-range MPS using measurements", eqs. (S2)--(S4). -/
-theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum
+theorem exists_isOneRoundConversion_le_log_of_mpv_eq_sum
     {D b : ℕ} (A : MPSTensor d D) {Dj : Fin b → ℕ}
     {Aj : (j : Fin b) → MPSTensor d (Dj j)}
     (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
@@ -330,7 +338,9 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N →
       mpvState A N ≠ 0 →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
-        IsPreparedWithMeasurementsAndCircuitInDepth T (fun s => ψ s) ∧
+        (∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v : Fin N → Fin d → ℂ,
+          IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s))
+            (fun s => ψ s)) ∧
         1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   classical
   -- The target itself, used for short chains.
@@ -342,7 +352,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum
   · -- For `d ≤ 1` the target is prepared in depth `0`.
     refine ⟨0, fun ε hε _ N _ _ h0 => ⟨_, 0, norm_normalizedMPVState h0, by simp, ?_,
       hself N _ ε hε (norm_normalizedMPVState h0)⟩⟩
-    refine isPreparedWithMeasurementsAndCircuitInDepth_of_isPreparedInDepth
+    refine exists_isOneRoundConversion_of_isPreparedInDepth
       (isPreparedInDepth_zero_of_le_one (by omega) _) fun h => ?_
     have h1 := norm_normalizedMPVState h0
     rw [show normalizedMPVState A N = 0 from by
@@ -384,7 +394,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum
     htr hfix hlam hmixle (γ := 1 / 4) (by norm_num) (by norm_num)
   have : NeZero d := ⟨hd.ne'⟩
   obtain ⟨Cp, Lp, hCp⟩ :=
-    exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of_isInjectiveOn
+    exists_isOneRoundConversion_blockIsometryState_of_isInjectiveOn
       hd2 D' b
   obtain ⟨Ce, hCe⟩ := exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn d D'
   set Lmin := L₀ + Lp + 3 * D' + 1
@@ -501,7 +511,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum
         hL₀ N (by omega)
       obtain ⟨ω₁, hω₁, hω₁S, heq⟩ := exists_blockIsometryState_eq_smul hι' hdisj' hN1 hinjN β _
         hφ h0
-      have hprep : IsPreparedInDepth (Ce * N) fun s =>
+      have hprep : IsPreparedInDepth (Geometry.ring N) (Ce * N) fun s =>
           normalizedMPVState A N s := by
         rw [hnormφ, ← heq, blockIsometryState_eq_chainBlockIsometryState]
         exact hCe (fun _ : Fin 1 => N) hN1 (fun _ => AJ) (fun _ => blockPairs ι')
@@ -514,7 +524,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum
         calc (Ce : ℝ) * N ≤ Ce * Q := by gcongr
           _ ≤ Ce * (c₀ * Real.log (N / ε)) := by gcongr
           _ = Ce * c₀ * Real.log (N / ε) := by ring
-      · refine isPreparedWithMeasurementsAndCircuitInDepth_of_isPreparedInDepth hprep fun h => ?_
+      · refine exists_isOneRoundConversion_of_isPreparedInDepth hprep fun h => ?_
         have h1 := hψ1
         rw [show normalizedMPVState A N = 0 from by
           ext s; exact congrFun h s] at h1
@@ -523,7 +533,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum
         hc _ (Or.inr (Or.inr ?_)), ?_, hself N _ ε hε hψ1⟩
       · rw [div_mul_eq_mul_div, le_div_iff₀ hl2]
         exact mul_le_mul_of_nonneg_left hlog (Nat.cast_nonneg _)
-      · refine isPreparedWithMeasurementsAndCircuitInDepth_of_isPreparedInDepth
+      · refine exists_isOneRoundConversion_of_isPreparedInDepth
           (hKs N hN2 (by omega) _ hψ1) fun h => ?_
         have h1 := hψ1
         rw [show normalizedMPVState A N = 0 from by
@@ -548,11 +558,11 @@ size, `q_N`, except for the last one, which may be larger" (Supplemental Materia
 Theorem 1), the state `∑ⱼ αⱼ (⊗ₖ V_k) ⊗ₖ |ω_j⟩` of the direct sum with unit weights has error at
 most `ε` (`MPSTensor.exists_one_sub_norm_inner_sum_blockIsometryState_le`) and is prepared in
 depth `O(q)`
-(`exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of_isInjectiveOn`);
+(`exists_isOneRoundConversion_blockIsometryState_of_isInjectiveOn`);
 for `N < q`, `|φ_N⟩` itself is prepared, as the state of one block
 (`exists_blockIsometryState_eq_smul`) or, below a fixed length, in bounded depth. The periodic
 state is assumed nonzero, as the normalization of the source presupposes. -/
-theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero
+theorem exists_isOneRoundConversion_le_log_of_mpvState_ne_zero
     {D b : ℕ} {m : Fin b → ℕ} {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}
     {ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D}
     (hι : ∀ j k, Function.Injective (ι j k))
@@ -565,14 +575,16 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N →
       mpvState (repeatedBlockSum Aj ι μ) N ≠ 0 →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
-        IsPreparedWithMeasurementsAndCircuitInDepth T (fun s => ψ s) ∧
+        (∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v : Fin N → Fin d → ℂ,
+          IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s))
+            (fun s => ψ s)) ∧
         1 - ‖⟪ψ, normalizedMPVState (repeatedBlockSum Aj ι μ) N⟫_ℂ‖ ≤ ε := by
-  exact exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum
+  exact exists_isOneRoundConversion_le_log_of_mpv_eq_sum
     (repeatedBlockSum Aj ι μ) hN hA hσ htr hfix hmix (bntWeight μ)
     (fun N _ s => mpv_repeatedBlockSum hι hdisj μ (NeZero.ne N) s)
 
 /-- **The periodic state does not vanish on long chains.** In the setting of
-`exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`, there is `N₀`
+`exists_isOneRoundConversion_le_log_of_mpvState_ne_zero`, there is `N₀`
 such that `|φ_N(A)⟩ ≠ 0` for every `N ≥ N₀` at which the weights `βⱼ = ∑ₖ μ_{j,k}^N` are not all
 zero: the squared norm of `∑ⱼ βⱼ |φ_N(A_j)⟩` is `∑ⱼ |βⱼ|²` up to the relative error
 `K e^{-γ N/ξ}` (`MPSTensor.exists_abs_sum_norm_sq_sum_mpv_sub_le`; arXiv:2307.01696,
@@ -629,17 +641,17 @@ theorem exists_mpvState_repeatedBlockSum_ne_zero
   nlinarith
 
 /-- **Every translation-invariant MPS with measurements, in depth `O(log(N/ε))`, long chains.**
-In the setting of `exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`
+In the setting of `exists_isOneRoundConversion_le_log_of_mpvState_ne_zero`
 there are `c` and `N₀`, depending only on `A`, such that for every `N ≥ N₀` at which the weights
 `βⱼ = ∑ₖ μ_{j,k}^N` of eq. (S4) are not all zero and every `0 < ε ≤ 1`, some unit vector `|ψ⟩`
 with `1 - |⟨ψ|φ_N⟩| ≤ ε` is prepared with measurements and a circuit in depth at most
 `c log(N/ε)`.
 
 arXiv:2307.01696, paragraph "Long-range MPS using measurements"; the condition on the weights is
-that of `exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum`, which it
+that of `exists_isOneRoundConversion_le_log_repeatedBlockSum`, which it
 replaces for blocks whose states may overlap and for every chain length, and it implies
 `|φ_N(A)⟩ ≠ 0` for `N ≥ N₀` (`exists_mpvState_repeatedBlockSum_ne_zero`). -/
-theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log
+theorem exists_isOneRoundConversion_le_log
     {D b : ℕ} {m : Fin b → ℕ} {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}
     {ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D}
     (hι : ∀ j k, Function.Injective (ι j k))
@@ -652,9 +664,11 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log
     ∃ (c : ℝ) (N₀ : ℕ), ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       bntWeight μ N ≠ 0 →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
-        IsPreparedWithMeasurementsAndCircuitInDepth T (fun s => ψ s) ∧
+        (∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v : Fin N → Fin d → ℂ,
+          IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s))
+            (fun s => ψ s)) ∧
         1 - ‖⟪ψ, normalizedMPVState (repeatedBlockSum Aj ι μ) N⟫_ℂ‖ ≤ ε := by
-  obtain ⟨c, hc⟩ := exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero
+  obtain ⟨c, hc⟩ := exists_isOneRoundConversion_le_log_of_mpvState_ne_zero
     hι hdisj μ hN hA hσ htr hfix hmix
   obtain ⟨N₀, hN₀⟩ := exists_mpvState_repeatedBlockSum_ne_zero hι hdisj μ hN hA hσ htr hfix hmix
   exact ⟨c, max N₀ 2, fun ε hε hε1 N _ hN hβ =>

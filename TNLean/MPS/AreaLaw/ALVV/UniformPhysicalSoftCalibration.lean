@@ -161,10 +161,8 @@ theorem exists_calibrated_uniform_physical_soft_improving_family
     exact (show Prop from
     let Family := fun (ell m k : ℕ) (tau t : ℝ) (N a b : ℕ)
       (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ N)
-      (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-      (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval (N + 1) i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) ↦
+      (Φ : ManyBody.BondInteraction (N + 1) q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) ↦
   (by
     exact (show Prop from
     let Msoft := 3 * t * (1 + Real.log (m : ℝ)) + 4 * (ell : ℝ) + 34
@@ -175,12 +173,12 @@ theorem exists_calibrated_uniform_physical_soft_improving_family
     let Sbulk : Finset (Fin 5) := {0, 2, 4}
       let cuts : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, N + 1]
       let A : Fin 5 → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ :=
-        fun j ↦ ∑ i ∈ Finset.univ.filter
-        (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ), h i
+        fun j ↦ Φ.partialHamiltonian (Finset.univ.filter
+        (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ))
       let crossings := Finset.univ.filter
         (fun i : Fin N ↦ i.val + 1 ∈
           ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-      let Y := ∑ i ∈ crossings, h i
+      let Y := Φ.partialHamiltonian crossings
       let Ksites := interval (N + 1) (a + 2 * ell) (b + 1)
       let eK := intervalShiftOrderIso
         (hab.trans (Nat.le_succ b))
@@ -193,11 +191,11 @@ theorem exists_calibrated_uniform_physical_soft_improving_family
           (Nat.le_mul_of_pos_left ell (by decide : 0 < 2)) b).trans hb))
       let beta := fun _ : Fin (N + 1) ↦ Fin q
       let midConfig := ManyBody.RegionConfig beta J
-      let extConfig := ManyBody.RegionConfig beta Jᶜ
+      let extConfig := ManyBody.ComplConfig beta J
       let HM := EuclideanSpace ℂ midConfig
       let HE := EuclideanSpace ℂ extConfig
       let HT := HM ⊗[ℂ] HE
-      let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let split := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
       let Phi := ((EuclideanSpace.basisFun (extConfig) ℂ).tensorProduct
         (EuclideanSpace.basisFun (midConfig) ℂ)).repr
@@ -217,8 +215,8 @@ theorem exists_calibrated_uniform_physical_soft_improving_family
           (C : Fin (m + 1) → Matrix (Fin bond) (Fin bond) ℂ),
           let Z := fun z : ℂ ↦ MPOTensor.traceChainOperator Acore
             (∑ j : Fin (m + 1), z ^ j.val • C j)
-          let Zphys := fun z : ℂ ↦ QuantumCircuit.embedOp
-            (Subtype.val : Ksites → Fin (N + 1)) (QuantumCircuit.embedOp eK (Z z))
+          let Zphys := fun z : ℂ ↦ ManyBody.place (X := fun _ ↦ Fin q) Ksites
+            (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding (Z z))
           ∃ (n : ℕ) (W : Fin n → Matrix (midConfig)
               (midConfig) ℂ),
             let Fops : Fin n → HM →L[ℂ]
@@ -245,7 +243,7 @@ theorem exists_calibrated_uniform_physical_soft_improving_family
               ∃ hGhat : Ghat.IsHermitian,
                 ‖cfc (Real.softTruncation t m) (A 2 - (p 2 : ℂ) • 1) - Zphys (z : ℂ)‖ ≤ xi ∧
                 ‖G - Ghat‖ ≤ xi ∧ ‖Ghat‖ ≤ Msoft + xi ∧
-                let Hraw := ∑ i, h i
+                let Hraw := Φ.hamiltonian
                 let hRaw : Hraw.IsHermitian :=
                   (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
                 ∀ mu0 : ℝ, mu0 ∈ spectrum ℝ Hraw →
@@ -301,11 +299,9 @@ theorem exists_calibrated_uniform_physical_soft_improving_family
           let B := ((order ^ 2 * q ^ order) * 2) * (m + 1)
           (max 1 B) ^ (2 * k) ≤ Cpoly * (N + 1) ^ ppoly ∧
           ∀ (a b : ℕ) (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ N)
-            (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-            (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-              (h i) (interval (N + 1) i.val (i.val + 2)))
-            (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1),
-            Family ell m k tau t N a b hab hb h hs h0 h1)) := by
+            (Φ : ManyBody.BondInteraction (N + 1) q)
+            (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1),
+            Family ell m k tau t N a b hab hb Φ h0 h1)) := by
   classical
   intro resultType
   unfold resultType
@@ -320,14 +316,12 @@ theorem exists_calibrated_uniform_physical_soft_improving_family
       (hR : 3 * (32 * Real.exp (-(T - 156 - 2 * g) / 8) +
         (t / m) * (T / t) ^ m) ≤ tau * g / 1000000)
       (N a b : ℕ) (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ N)
-      (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-      (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval (N + 1) i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
-      Family ell m k tau t N a b hab hb h hs h0 h1 := by
+      (Φ : ManyBody.BondInteraction (N + 1) q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
+      Family ell m k tau t N a b hab hb Φ h0 h1 := by
     exact exists_uniform_physical_soft_improving_family q ell m k g tau t T T
       hq hell hm hk hg htau htau1 hscale hT0 htfloor hTfloor hO hR
-      N a b hab hb h hs h0 h1
+      N a b hab hb Φ h0 h1
   obtain ⟨u, hu, hparams⟩ := exists_uniform_soft_parameters q hq g hg
   refine ⟨u, hu, ?_⟩
   intro ell m t k T D Msoft tau xi upper Delta
@@ -339,8 +333,8 @@ theorem exists_calibrated_uniform_physical_soft_improving_family
     hDelta, hSampling, hCloseSmall, hDeltaSmall, ?_⟩
   intro N base order B
   refine ⟨hPoly N, ?_⟩
-  intro a b hab hb h hs h0 h1
+  intro a b hab hb Φ h0 h1
   exact hPhysical ell m k tau t T hell hm hk htau htau1 (by rfl)
-    hT0 htfloor hTfloor hO hR N a b hab hb h hs h0 h1
+    hT0 htfloor hTfloor hO hR N a b hab hb Φ h0 h1
 
 end TNLean.MPS.AreaLaw.ALVV

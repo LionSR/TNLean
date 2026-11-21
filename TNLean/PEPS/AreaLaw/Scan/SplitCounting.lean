@@ -20,7 +20,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 namespace CollarScan

@@ -48,7 +48,7 @@ theorem bulkObservable_iSup_groundSpace_projection_norm_sq_tendsto_zero
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
-    (α : ι) {k : ℕ} (hk : 0 < k) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (α : ι) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     (hcenter : observableInsertionExpectation (A α) (ρ α) X = 0)
     {κ : Type*} {f : Filter κ} {ℓ r : κ → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop)
@@ -65,7 +65,7 @@ theorem bulkObservable_iSup_groundSpace_projection_norm_sq_tendsto_zero
           (bulkObservable X (ℓ n) (r n))) (ψ n))‖) f (𝓝 0) := by
     apply squeeze_zero' (Eventually.of_forall fun _ => norm_nonneg _) ?_
       (bulkObservable_iSup_groundSpace_compression_tendsto_zero A ρ hP hρ hDistinct
-        α hk X hcenter hℓ hr)
+        α X hcenter hℓ hr)
     filter_upwards [hψ, hbound] with n hn hb
     have hfix := Submodule.starProjection_eq_self_iff.mpr hn
     let Y := Matrix.toEuclideanCLM (n := Cfg d ((ℓ n + k) + r n)) (𝕜 := ℂ)
@@ -88,7 +88,7 @@ theorem multiblock_commutator_gap_of_bulkObservable_energy_limit
     (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
-    (α : ι) {k : ℕ} (hk : 0 < k) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
+    (α : ι) {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     (hcenter : observableInsertionExpectation (A α) (ρ α) X = 0)
     {ℓ r : ℕ → ℕ} (hℓ : Tendsto ℓ atTop atTop) (hr : Tendsto r atTop atTop)
     (H : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((ℓ n + k) + r n)) →ₗ[ℂ]
@@ -123,7 +123,7 @@ theorem multiblock_commutator_gap_of_bulkObservable_energy_limit
   have hProjection : Tendsto (fun n =>
       ‖(LinearMap.ker (H n)).starProjection (B n (ψ n))‖ ^ 2) atTop (𝓝 0) := by
     apply (bulkObservable_iSup_groundSpace_projection_norm_sq_tendsto_zero
-      A ρ hP hρ hDistinct α hk X hcenter hℓ hr ψ hGround
+      A ρ hP hρ hDistinct α X hcenter hℓ hr ψ hGround
         (hUnit.mono fun _ hn => hn.le)).congr'
     filter_upwards [hKernel] with n hn
     simp only [hn, B, ContinuousLinearMap.coe_coe]
@@ -142,7 +142,7 @@ theorem multiblock_localCommutator_gap_of_openInteraction_gap
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     (α : ι) {R k : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : (Matrix.toEuclideanLin h).IsPositive)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R) (hk : 0 < k)
+    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
     (hcenter : observableInsertionExpectation (A α) (ρ α) X = 0)
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
     {γ : ℝ} (hγ : 0 ≤ γ)
@@ -163,9 +163,9 @@ theorem multiblock_localCommutator_gap_of_openInteraction_gap
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
   let H (n : ℕ) := openInteractionHamiltonianES (Matrix.toEuclideanLin h) (N n)
   have hEnergy :=
-    (hP α).openInteraction_commutator_energy_tendsto (hρ α) h X hR hk ψ hGround hUnit
+    (hP α).openInteraction_commutator_energy_tendsto (hρ α) h X hR ψ hGround hUnit
   exact multiblock_commutator_gap_of_bulkObservable_energy_limit A ρ hP hρ hDistinct
-    α hk X hcenter (ℓ := fun n : ℕ => n + (R - 1)) (r := fun n => (R - 1) + n)
+    α X hcenter (ℓ := fun n : ℕ => n + (R - 1)) (r := fun n => (R - 1) + n)
     (tendsto_add_atTop_nat (R - 1))
     (tendsto_atTop_mono (fun n => Nat.le_add_left n (R - 1)) tendsto_id)
     H ψ hγ (Eventually.of_forall fun n => openInteractionHamiltonianES_isPositive hh (N n))
@@ -210,13 +210,13 @@ theorem exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
       ¬ GaugePhaseEquiv (h ▸ A j) (A i) := fun i j hij h => by
     simpa only [eqRec_eq_cast] using not_gaugePhaseEquiv_of_wordTupleSpanTop A hSpan i j hij h
   refine ⟨γ, hγ, ?_⟩
-  intro α k X hk hcenter
+  intro α k X _ hcenter
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
   have hN : Tendsto N atTop atTop :=
     tendsto_atTop_mono (fun n => by dsimp [N]; omega) tendsto_id
   obtain ⟨ψ, hg, hu⟩ := (hP α).exists_eventually_unit_groundSpaceES (hρ α) N hN
   apply multiblock_localCommutator_gap_of_openInteraction_gap
-    A ρ hP hρ hDistinct α h hh.isPositive X hRpos hk hcenter ψ hγ.le
+    A ρ hP hρ hDistinct α h hh.isPositive X hRpos hcenter ψ hγ.le
   · exact Eventually.of_forall fun n => by
       rw [hh.ker_openInteractionHamiltonianES_eq_ker_openParentHamiltonianES hRpos,
         hKernel (N n) (by dsimp [N]; omega), groundSpaceES_toTensorFromBlocks_eq_iSup μ A hμ]

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusPhysicalMap
+import QICLean.ManyBody.Sites.CutMatrix
 import Mathlib.LinearAlgebra.Matrix.Rank
 import Mathlib.Logic.Equiv.Prod
 
@@ -14,6 +15,10 @@ A product of physical linear maps factors into a map on each side of a partition
 Consequently the coefficient matrix across the partition changes by multiplication
 on its two sides. Its rank cannot increase; if a reverse product map recovers the
 original vector, the rank is unchanged.
+
+The coefficient matrix across a region `R` is the cut matrix `ManyBody.cutMatrix R` of
+QICLean, and the factorization is its lemma
+`ManyBody.cutMatrix_mulVec_of_cutOperator_eq_kronecker` for the product matrix.
 
 This is the Schmidt-rank argument used in Schuch, Cirac, and Pérez-García,
 arXiv:1001.3807, Corollary 6.10, `Papers/1001.3807/paper_v3.tex`, lines 2074–2090.
@@ -26,18 +31,15 @@ physical maps. They do not assume that a PEPS has the rank asserted in the sourc
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
-open scoped BigOperators Matrix
+open scoped BigOperators Matrix Kronecker
 
 namespace TNLean.PEPS
 
 variable {Site Phys Out : Type*} [Fintype Site]
-variable (p : Site → Prop) [DecidablePred p]
 
-/-- The coefficient matrix of a physical vector across a vertex partition.
-Its rank is the Schmidt rank. Source: SCP10, Corollary 6.10, lines 2074–2090. -/
-def physicalCutMatrix (ψ : (Site → Phys) → ℂ) :
-    Matrix ({v : Site // p v} → Phys) ({v : Site // ¬ p v} → Phys) ℂ :=
-  fun σ τ => ψ ((Equiv.piEquivPiSubtypeProd p (fun _ => Phys)).symm (σ, τ))
+section Split
+
+variable (p : Site → Prop) [DecidablePred p]
 
 /-- A physical product matrix factors over the two sides of a partition.
 Source: SCP10, the local-map Schmidt-rank argument of Corollary 6.10. -/
@@ -57,45 +59,54 @@ theorem physicalProductMatrix_split (F : Matrix Out Phys ℂ)
     intro v _
     simp only [Equiv.piEquivPiSubtypeProd_symm_apply, v.property, dite_true, dite_false]
 
+end Split
+
+variable [DecidableEq Site] (R : Finset Site)
+
+/-- In the coordinates of the cut along a region `R`, a physical product matrix is the
+Kronecker product of the product matrices on `R` and outside `R`.
+Source: SCP10, the local-map Schmidt-rank argument of Corollary 6.10. -/
+theorem reindex_cutEquiv_physicalProductMatrix (F : Matrix Out Phys ℂ) :
+    Matrix.reindex (ManyBody.cutEquiv (fun _ : Site => Out) R)
+        (ManyBody.cutEquiv (fun _ : Site => Phys) R) (physicalProductMatrix Site F) =
+      physicalProductMatrix {v : Site // v ∈ R} F ⊗ₖ
+        physicalProductMatrix {v : Site // v ∉ R} F := by
+  ext ⟨τ, ν⟩ ⟨σ, μ⟩
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.kroneckerMap_apply]
+  convert physicalProductMatrix_split (· ∈ R) F τ ν σ μ using 3
+
 /-- Across a cut, a product of physical maps multiplies the coefficient matrix
 on the left and by the ordinary transpose on the right.
 Source: SCP10, the Schmidt-rank argument of Corollary 6.10, lines 2074–2090. -/
-theorem physicalCutMatrix_physicalProductMap [DecidableEq Site] [Fintype Phys]
+theorem cutMatrix_physicalProductMap [Fintype Phys]
     (F : Matrix Out Phys ℂ) (ψ : (Site → Phys) → ℂ) :
-    physicalCutMatrix p (physicalProductMap Site F ψ) =
-      physicalProductMatrix {v : Site // p v} F * physicalCutMatrix p ψ *
-        (physicalProductMatrix {v : Site // ¬ p v} F).transpose := by
-  ext τ ν
-  change (∑ σ, physicalProductMatrix Site F
-      ((Equiv.piEquivPiSubtypeProd p (fun _ => Out)).symm (τ, ν)) σ * ψ σ) = _
-  rw [← Equiv.sum_comp (Equiv.piEquivPiSubtypeProd p (fun _ => Phys)).symm,
-    Fintype.sum_prod_type]
-  simp only [physicalProductMatrix_split, Matrix.mul_apply, Matrix.transpose_apply,
-    physicalCutMatrix, Finset.sum_mul]
-  rw [Finset.sum_comm]
-  simp only [mul_right_comm]
+    ManyBody.cutMatrix R (physicalProductMap Site F ψ) =
+      physicalProductMatrix {v : Site // v ∈ R} F * ManyBody.cutMatrix R ψ *
+        (physicalProductMatrix {v : Site // v ∉ R} F).transpose :=
+  ManyBody.cutMatrix_mulVec_of_cutOperator_eq_kronecker
+    (reindex_cutEquiv_physicalProductMatrix R F) ψ
 
 /-- Local physical maps cannot increase the Schmidt rank of a finite vector.
 Source: SCP10, the rank-preservation argument of Corollary 6.10, lines 2074–2090. -/
-theorem rank_physicalCutMatrix_physicalProductMap_le [DecidableEq Site]
+theorem rank_cutMatrix_physicalProductMap_le
     [Fintype Phys] [Fintype Out] (F : Matrix Out Phys ℂ) (ψ : (Site → Phys) → ℂ) :
-    (physicalCutMatrix p (physicalProductMap Site F ψ)).rank ≤
-      (physicalCutMatrix p ψ).rank := by
-  rw [physicalCutMatrix_physicalProductMap]
-  exact (Matrix.rank_mul_le_left _ _).trans (Matrix.rank_mul_le_right _ _)
+    (ManyBody.cutMatrix R (physicalProductMap Site F ψ)).rank ≤
+      (ManyBody.cutMatrix R ψ).rank :=
+  ManyBody.cutRank_mulVec_le_of_cutOperator_eq_kronecker
+    (reindex_cutEquiv_physicalProductMatrix R F) ψ
 
 /-- If rectangular physical product maps carry two vectors to one another, their
-Schmidt ranks agree across every partition. No global inverse of either map is required.
+Schmidt ranks agree across every region. No global inverse of either map is required.
 Source: SCP10, the local deformation argument of Corollary 6.10, lines 2074–2090. -/
-theorem rank_physicalCutMatrix_eq_of_physicalProductMaps [DecidableEq Site]
+theorem rank_cutMatrix_eq_of_physicalProductMaps
     [Fintype Phys] [Fintype Out] (F : Matrix Out Phys ℂ) (L : Matrix Phys Out ℂ)
     (ψ : (Site → Phys) → ℂ) (φ : (Site → Out) → ℂ)
     (hF : physicalProductMap Site F ψ = φ) (hL : physicalProductMap Site L φ = ψ) :
-    (physicalCutMatrix p φ).rank = (physicalCutMatrix p ψ).rank := by
+    (ManyBody.cutMatrix R φ).rank = (ManyBody.cutMatrix R ψ).rank := by
   apply le_antisymm
   · rw [← hF]
-    exact rank_physicalCutMatrix_physicalProductMap_le p F ψ
+    exact rank_cutMatrix_physicalProductMap_le R F ψ
   · rw [← hL]
-    exact rank_physicalCutMatrix_physicalProductMap_le p L φ
+    exact rank_cutMatrix_physicalProductMap_le R L φ
 
 end TNLean.PEPS

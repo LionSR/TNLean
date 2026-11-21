@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ExpectationOverlap
 import TNLean.MPS.Preparation.BlockVariance
+import QICLean.Circuit.Model.UnitaryRing
 
 /-!
 # The averaging step of the depth lower bound
@@ -174,22 +175,30 @@ theorem _root_.Matrix.norm_toEuclideanCLM_sub_smul_one_le {n : Type*} [Fintype n
 
 This is "`⟨φ_N|𝒪^{(k)} 𝒪'^{(k)}|φ_N⟩ = G_N(𝒪, 𝒪'; s')`" in the chapter's proof of
 `thm:ldp_depth_lower_bound` (arXiv:2307.01696, eq. (TI-MPS2), translation invariance). -/
-theorem mpvExpectation_centred_pair (A : MPSTensor d D) {L N b s : ℕ} (hL : 0 < L)
+theorem mpvExpectation_centred_pair (A : MPSTensor d D) {L N b s : ℕ}
     (hLs : L + 1 ≤ s) (hb : b + (s - 1) + L ≤ N) (hne : mpvState A N ≠ 0)
     (O O' : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) {e e' : ℂ}
-    (he : e = mpvExpectation A N (chainWindowOperator N 0 O))
-    (he' : e' = mpvExpectation A N (chainWindowOperator N (s - 1) O')) :
-    mpvExpectation A N ((chainWindowOperator N b O - e • 1) *
-        (chainWindowOperator N (b + (s - 1)) O' - e' • 1)) =
+    (he : e = mpvExpectation A N
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow 0 (by omega)) O))
+    (he' : e' = mpvExpectation A N
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (s - 1) (by omega)) O')) :
+    mpvExpectation A N
+        ((ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow b (by omega)) O -
+            e • 1) *
+          (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (b + (s - 1)) hb) O' -
+            e' • 1)) =
       mpvConnectedCorrelator A N 0 (s - 1) O O' := by
-  have hmul := mpvExpectation_chainWindowOperator_mul_eq A hL (N := N) (a := b)
+  have hmul := mpvExpectation_placeAlong_chainWindow_mul_eq A (N := N) (a := b)
     (m := s - 1 - L) (by omega) O O'
-  rw [show L + (s - 1 - L) = s - 1 by omega] at hmul
-  have hP : mpvExpectation A N (chainWindowOperator N b O) = e := by
-    rw [he, mpvExpectation_chainWindowOperator_eq A hL (by omega) O]
-  have hQ : mpvExpectation A N (chainWindowOperator N (b + (s - 1)) O') = e' := by
-    rw [he', mpvExpectation_chainWindowOperator_eq A hL (by omega) O',
-      mpvExpectation_chainWindowOperator_eq A hL (a := s - 1) (by omega) O']
+  simp only [show L + (s - 1 - L) = s - 1 by omega] at hmul
+  have hP : mpvExpectation A N
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow b (by omega)) O) = e := by
+    rw [he, mpvExpectation_placeAlong_chainWindow_eq A (by omega) O]
+  have hQ : mpvExpectation A N
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (b + (s - 1)) hb) O') =
+        e' := by
+    rw [he', mpvExpectation_placeAlong_chainWindow_eq A hb O',
+      mpvExpectation_placeAlong_chainWindow_eq A (a := s - 1) (by omega) O']
   simp only [sub_mul, mul_sub, mul_smul_comm, smul_mul_assoc, one_mul, mul_one,
     mpvExpectation_sub, mpvExpectation_smul, mpvExpectation_one A hne, hmul, hP, hQ]
   rw [mpvConnectedCorrelator, ← he, ← he']
@@ -215,24 +224,30 @@ theorem exists_norm_sub_inner_smul_add_le_div_sqrt [NeZero D] {A : MPSTensor d D
     (hmax : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     (hlt1 : ‖lam₂‖ < 1) :
     ∃ S : ℝ, 0 ≤ S ∧ ∀ (T w Δ n N : ℕ) [NeZero N] (ψ : Cfg d N → ℂ),
-      QuantumCircuit.IsPreparedInDepth T ψ → star ψ ⬝ᵥ ψ = 1 → 0 < w → w < Δ →
-      w + 2 * T ≤ Δ → n * Δ ≤ N → 0 < n → mpvState A N ≠ 0 →
+      QuantumCircuit.IsPreparedInDepth (QuantumCircuit.Geometry.ring N) T ψ →
+      star ψ ⬝ᵥ ψ = 1 → ∀ (hw : 0 < w) (hwΔ : w < Δ),
+      w + 2 * T ≤ Δ → ∀ (hnΔ : n * Δ ≤ N), 0 < n → mpvState A N ≠ 0 →
       ∀ X : Matrix (Fin w → Fin d) (Fin w → Fin d) ℂ, X.IsHermitian →
         ‖Matrix.toEuclideanCLM (n := Fin w → Fin d) (𝕜 := ℂ) X‖ ≤ 4 →
         ∀ c : Fin n → ℝ, (∀ k, |c k| ≤ 1 / n) →
-          ‖(∑ k : Fin n, (c k : ℂ) • Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X))
+          ‖(∑ k : Fin n, (c k : ℂ) • Matrix.toEuclideanLin
+                (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (k.val * Δ)
+                  (MPSPreparation.window_lt_and_le hw hwΔ.le hnΔ k.isLt).2) X))
                 (((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N) -
               ⟪((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N,
-                (∑ k : Fin n, (c k : ℂ) •
-                  Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X))
+                (∑ k : Fin n, (c k : ℂ) • Matrix.toEuclideanLin
+                  (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (k.val * Δ)
+                    (MPSPreparation.window_lt_and_le hw hwΔ.le hnΔ k.isLt).2) X))
                   (((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N)⟫_ℂ •
                 (((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N)‖ +
-            ‖(∑ k : Fin n, (c k : ℂ) •
-                  Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X))
+            ‖(∑ k : Fin n, (c k : ℂ) • Matrix.toEuclideanLin
+                  (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (k.val * Δ)
+                    (MPSPreparation.window_lt_and_le hw hwΔ.le hnΔ k.isLt).2) X))
                 (WithLp.toLp 2 ψ) -
               ⟪(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N)),
-                (∑ k : Fin n, (c k : ℂ) •
-                  Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X))
+                (∑ k : Fin n, (c k : ℂ) • Matrix.toEuclideanLin
+                  (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (k.val * Δ)
+                    (MPSPreparation.window_lt_and_le hw hwΔ.le hnΔ k.isLt).2) X))
                   (WithLp.toLp 2 ψ)⟫_ℂ • (WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N))‖ ≤
             S / Real.sqrt n := by
   set r : ℝ := (‖lam₂‖ + 1) / 2 with hr_def
@@ -266,27 +281,34 @@ This is the right-hand inequality of eq. `eq:ldp_depth_contradiction` in the cha
 `thm:ldp_depth_lower_bound` (the chapter's version of arXiv:2307.01696, Theorem 1). -/
 theorem norm_mpvConnectedCorrelator_le_of_overlap {A : MPSTensor d D} {S : ℝ}
     (hS : ∀ (T w Δ n N : ℕ) [NeZero N] (ψ : Cfg d N → ℂ),
-      QuantumCircuit.IsPreparedInDepth T ψ → star ψ ⬝ᵥ ψ = 1 → 0 < w → w < Δ →
-      w + 2 * T ≤ Δ → n * Δ ≤ N → 0 < n → mpvState A N ≠ 0 →
+      QuantumCircuit.IsPreparedInDepth (QuantumCircuit.Geometry.ring N) T ψ →
+      star ψ ⬝ᵥ ψ = 1 → ∀ (hw : 0 < w) (hwΔ : w < Δ),
+      w + 2 * T ≤ Δ → ∀ (hnΔ : n * Δ ≤ N), 0 < n → mpvState A N ≠ 0 →
       ∀ X : Matrix (Fin w → Fin d) (Fin w → Fin d) ℂ, X.IsHermitian →
         ‖Matrix.toEuclideanCLM (n := Fin w → Fin d) (𝕜 := ℂ) X‖ ≤ 4 →
         ∀ c : Fin n → ℝ, (∀ k, |c k| ≤ 1 / n) →
-          ‖(∑ k : Fin n, (c k : ℂ) • Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X))
+          ‖(∑ k : Fin n, (c k : ℂ) • Matrix.toEuclideanLin
+                (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (k.val * Δ)
+                  (MPSPreparation.window_lt_and_le hw hwΔ.le hnΔ k.isLt).2) X))
                 (((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N) -
               ⟪((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N,
-                (∑ k : Fin n, (c k : ℂ) •
-                  Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X))
+                (∑ k : Fin n, (c k : ℂ) • Matrix.toEuclideanLin
+                  (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (k.val * Δ)
+                    (MPSPreparation.window_lt_and_le hw hwΔ.le hnΔ k.isLt).2) X))
                   (((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N)⟫_ℂ •
                 (((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N)‖ +
-            ‖(∑ k : Fin n, (c k : ℂ) •
-                  Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X))
+            ‖(∑ k : Fin n, (c k : ℂ) • Matrix.toEuclideanLin
+                  (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (k.val * Δ)
+                    (MPSPreparation.window_lt_and_le hw hwΔ.le hnΔ k.isLt).2) X))
                 (WithLp.toLp 2 ψ) -
               ⟪(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N)),
-                (∑ k : Fin n, (c k : ℂ) •
-                  Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X))
+                (∑ k : Fin n, (c k : ℂ) • Matrix.toEuclideanLin
+                  (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (k.val * Δ)
+                    (MPSPreparation.window_lt_and_le hw hwΔ.le hnΔ k.isLt).2) X))
                   (WithLp.toLp 2 ψ)⟫_ℂ • (WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N))‖ ≤
             S / Real.sqrt n)
-    {T N L s' : ℕ} [NeZero N] {ψ : Cfg d N → ℂ} (hψ : QuantumCircuit.IsPreparedInDepth T ψ)
+    {T N L s' : ℕ} [NeZero N] {ψ : Cfg d N → ℂ}
+    (hψ : QuantumCircuit.IsPreparedInDepth (QuantumCircuit.Geometry.ring N) T ψ)
     (hψ1 : star ψ ⬝ᵥ ψ = 1) (hne : mpvState A N ≠ 0)
     {O O' : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ} (hOh : O.IsHermitian)
     (hO'h : O'.IsHermitian) (hOn : ‖Matrix.toEuclideanCLM (n := Fin L → Fin d) (𝕜 := ℂ) O‖ = 1)
@@ -308,17 +330,29 @@ theorem norm_mpvConnectedCorrelator_le_of_overlap {A : MPSTensor d D} {S : ℝ}
   have hφ : ‖φ‖ = 1 := norm_normalizedMPVState hne
   have hχ : ‖χ‖ = 1 := MPSPreparation.norm_toLp_eq_one hψ1
   /- The centred observables. -/
-  obtain ⟨e, he⟩ : ∃ e, e = mpvExpectation A N (chainWindowOperator N 0 O) := ⟨_, rfl⟩
-  obtain ⟨e', he'⟩ : ∃ e', e' = mpvExpectation A N (chainWindowOperator N (s' - 1) O') :=
+  have h0 : 0 + L ≤ N := by omega
+  have hs1 : s' - 1 + L ≤ N := by omega
+  obtain ⟨e, he⟩ : ∃ e, e = mpvExpectation A N
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow 0 h0) O) := ⟨_, rfl⟩
+  obtain ⟨e', he'⟩ : ∃ e', e' = mpvExpectation A N
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (s' - 1) hs1) O') :=
     ⟨_, rfl⟩
   have hes : star e = e := he ▸ star_mpvExpectation_of_isHermitian A
-    (chainWindowOperator_isHermitian (by omega) (by omega) hOh)
+    (ManyBody.isHermitian_placeAlong (X := fun _ ↦ Fin d) _ hOh)
   have hes' : star e' = e' := he' ▸ star_mpvExpectation_of_isHermitian A
-    (chainWindowOperator_isHermitian (by omega) (by omega) hO'h)
-  have heN : ‖e‖ ≤ 1 := he ▸ (norm_mpvExpectation_le A N _).trans
-    ((norm_toEuclideanCLM_chainWindowOperator_le (by omega) (by omega) O).trans hOn.le)
-  have he'N : ‖e'‖ ≤ 1 := he' ▸ (norm_mpvExpectation_le A N _).trans
-    ((norm_toEuclideanCLM_chainWindowOperator_le (by omega) (by omega) O').trans hO'n.le)
+    (ManyBody.isHermitian_placeAlong (X := fun _ ↦ Fin d) _ hO'h)
+  have hOw : ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow 0 h0) O)‖ ≤ 1 :=
+    (ManyBody.norm_placeAlong_le (X := fun _ ↦ Fin d) _ O).trans hOn.le
+  have hO'w : ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (s' - 1) hs1) O')‖ ≤ 1 :=
+    (ManyBody.norm_placeAlong_le (X := fun _ ↦ Fin d) _ O').trans hO'n.le
+  have heN : ‖e‖ ≤ 1 := by
+    rw [he]
+    exact (norm_mpvExpectation_le A N _).trans hOw
+  have he'N : ‖e'‖ ≤ 1 := by
+    rw [he']
+    exact (norm_mpvExpectation_le A N _).trans hO'w
   obtain ⟨X, hX_def⟩ : ∃ X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ, X = O - e • 1 :=
     ⟨_, rfl⟩
   obtain ⟨Y, hY_def⟩ : ∃ Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ, Y = O' - e' • 1 :=
@@ -333,28 +367,35 @@ theorem norm_mpvConnectedCorrelator_le_of_overlap {A : MPSTensor d D} {S : ℝ}
     exact (Matrix.norm_toEuclideanCLM_sub_smul_one_le O' e').trans (by rw [hO'n]; linarith)
   /- The pair operator on `w = s' - 1 + L` sites. -/
   obtain ⟨w, hw_def⟩ : ∃ w, w = s' - 1 + L := ⟨_, rfl⟩
+  have hw0 : 0 + L ≤ w := by omega
+  have hws : s' - 1 + L ≤ w := by omega
   obtain ⟨W, hW_def⟩ : ∃ W : Matrix (Fin w → Fin d) (Fin w → Fin d) ℂ,
-      W = chainWindowOperator w 0 X * chainWindowOperator w (s' - 1) Y := ⟨_, rfl⟩
-  have hcomm : Commute (chainWindowOperator w 0 X) (chainWindowOperator w (s' - 1) Y) := by
-    refine ManyBody.commute_of_mem_supportedOperators_of_disjoint
-      (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (by omega) (by omega) X)
-      (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (by omega) (by omega) Y) ?_
-    rw [Finset.disjoint_left]
+      W = ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow 0 hw0) X *
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (s' - 1) hws) Y :=
+    ⟨_, rfl⟩
+  have hcomm : Commute
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow 0 hw0) X)
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (s' - 1) hws) Y) := by
+    refine ManyBody.commute_placeAlong_of_disjoint (X := fun _ ↦ Fin d)
+      (ManyBody.chainWindow 0 hw0) (w' := ManyBody.chainWindow (s' - 1) hws) ?_ X Y
+    rw [ManyBody.map_chainWindow, ManyBody.map_chainWindow, Finset.disjoint_left]
     intro k hk hk'
-    simp only [MPSPreparation.window, Finset.mem_filter, Finset.mem_univ, true_and] at hk hk'
+    rw [ManyBody.mem_interval] at hk hk'
     omega
   have hW : W.IsHermitian := by
     rw [Matrix.IsHermitian, hW_def, Matrix.conjTranspose_mul,
-      (chainWindowOperator_isHermitian (by omega) (by omega) hY).eq,
-      (chainWindowOperator_isHermitian (by omega) (by omega) hX).eq]
+      (ManyBody.isHermitian_placeAlong (X := fun _ ↦ Fin d) _ hY).eq,
+      (ManyBody.isHermitian_placeAlong (X := fun _ ↦ Fin d) _ hX).eq]
     exact hcomm.eq.symm
   have hWn : ‖Matrix.toEuclideanCLM (n := Fin w → Fin d) (𝕜 := ℂ) W‖ ≤ 4 := by
     rw [hW_def]
     refine (Matrix.norm_toEuclideanCLM_mul_le _ _).trans ?_
-    have h1 := (norm_toEuclideanCLM_chainWindowOperator_le (N := w) (a := 0) (by omega)
-      (by omega) X).trans hXn
-    have h2 := (norm_toEuclideanCLM_chainWindowOperator_le (N := w) (a := s' - 1) (by omega)
-      (by omega) Y).trans hYn
+    have h1 : ‖Matrix.toEuclideanCLM (n := Fin w → Fin d) (𝕜 := ℂ)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow 0 hw0) X)‖ ≤ 2 :=
+      (ManyBody.norm_placeAlong_le (X := fun _ ↦ Fin d) _ X).trans hXn
+    have h2 : ‖Matrix.toEuclideanCLM (n := Fin w → Fin d) (𝕜 := ℂ)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (s' - 1) hws) Y)‖ ≤ 2 :=
+      (ManyBody.norm_placeAlong_le (X := fun _ ↦ Fin d) _ Y).trans hYn
     calc _ ≤ 2 * 2 := mul_le_mul h1 h2 (norm_nonneg _) (by norm_num)
       _ = 4 := by norm_num
   /- The block operators. -/
@@ -362,95 +403,119 @@ theorem norm_mpvConnectedCorrelator_le_of_overlap {A : MPSTensor d D} {S : ℝ}
     (by omega) hnΔ k.isLt
   have hwinW := fun k : Fin n ↦ MPSPreparation.window_lt_and_le (N := N) (w := w) (by omega)
     (by omega) hnΔ k.isLt
-  have hQwin : ∀ k : Fin n, k.val * Δ + (s' - 1) < N ∧ k.val * Δ + (s' - 1) + L ≤ N := by
+  have hQwin : ∀ k : Fin n, k.val * Δ + (s' - 1) + L ≤ N := by
     intro k
     have := hwinW k
     omega
-  have hPQ : ∀ k : Fin n, chainWindowOperator N (k.val * Δ) W =
-      chainWindowOperator N (k.val * Δ) X * chainWindowOperator N (k.val * Δ + (s' - 1)) Y := by
+  have hPQ : ∀ k : Fin n,
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (k.val * Δ) (hwinW k).2) W =
+        ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (k.val * Δ) (hwinL k).2) X *
+          ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (k.val * Δ + (s' - 1)) (hQwin k)) Y := by
     intro k
-    rw [hW_def, chainWindowOperator_mul (hwinW k).1 (hwinW k).2,
-      chainWindowOperator_chainWindowOperator (hwinW k).1 (hwinW k).2 (by omega) (by omega),
-      chainWindowOperator_chainWindowOperator (hwinW k).1 (hwinW k).2 (by omega) (by omega),
-      add_zero]
+    simp only [hW_def, ManyBody.placeAlong_mul, ManyBody.placeAlong_placeAlong,
+      ManyBody.chainWindow_trans_chainWindow, add_zero]
   /- The first average: `(1/n) ∑ |x_k| ≤ 2S/√n`. -/
-  have hTsym : ∀ k : Fin n,
-      (Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X)).IsSymmetric := fun k ↦
+  have hTsym : ∀ k : Fin n, (Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+      (ManyBody.chainWindow (k.val * Δ) (hwinL k).2) X)).IsSymmetric := fun k ↦
     Matrix.isSymmetric_toEuclideanLin_iff.mpr
-      (chainWindowOperator_isHermitian (hwinL k).1 (hwinL k).2 hX)
-  have hx0 : ∀ k : Fin n,
-      ⟪φ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X) φ⟫_ℂ = 0 := by
+      (ManyBody.isHermitian_placeAlong (X := fun _ ↦ Fin d) _ hX)
+  have hx0 : ∀ k : Fin n, ⟪φ, Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+      (ManyBody.chainWindow (k.val * Δ) (hwinL k).2) X) φ⟫_ℂ = 0 := by
     intro k
-    change mpvExpectation A N (chainWindowOperator N (k.val * Δ) X) = 0
-    rw [hX_def, chainWindowOperator_sub_smul_one (hwinL k).1 (hwinL k).2, mpvExpectation_sub,
-      mpvExpectation_smul, mpvExpectation_one A hne, he,
-      mpvExpectation_chainWindowOperator_eq A hL0 (hwinL k).2 O, mul_one, sub_self]
+    change mpvExpectation A N (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+      (ManyBody.chainWindow (k.val * Δ) (hwinL k).2) X) = 0
+    rw [hX_def, ManyBody.placeAlong_sub, ManyBody.placeAlong_smul, ManyBody.placeAlong_one,
+      mpvExpectation_sub, mpvExpectation_smul, mpvExpectation_one A hne, he,
+      mpvExpectation_placeAlong_chainWindow_eq A (hwinL k).2 O, mul_one, sub_self]
   have hsum := MPSPreparation.sum_norm_inner_div_le_of_overlap hφ hχ hov _ hTsym hx0
     (S := S / Real.sqrt n) fun c hc ↦ hS T L Δ n N ψ hψ hψ1 hL0 (by omega) (by omega) hnΔ hn1 hne
       X hX (hXn.trans (by norm_num)) c hc
   /- The second average. -/
   have hZ₂sym : (∑ k : Fin n, (((1 : ℝ) / n : ℝ) : ℂ) •
-      Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) W)).IsSymmetric :=
+      Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow (k.val * Δ) (hwinW k).2) W)).IsSymmetric :=
     LinearMap.isSymmetric_sum _ fun k _ ↦
       (Matrix.isSymmetric_toEuclideanLin_iff.mpr
-        (chainWindowOperator_isHermitian (hwinW k).1 (hwinW k).2 hW)).smul (Complex.conj_ofReal _)
+        (ManyBody.isHermitian_placeAlong (X := fun _ ↦ Fin d) _ hW)).smul
+        (Complex.conj_ofReal _)
   have hZ₂φ : ⟪φ, (∑ k : Fin n, (((1 : ℝ) / n : ℝ) : ℂ) •
-      Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) W)) φ⟫_ℂ =
+      Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow (k.val * Δ) (hwinW k).2) W)) φ⟫_ℂ =
       mpvConnectedCorrelator A N 0 (s' - 1) O O' := by
     simp only [LinearMap.sum_apply, LinearMap.smul_apply, inner_sum, inner_smul_right]
     have h0 : ∀ k : Fin n,
-        ⟪φ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) W) φ⟫_ℂ =
+        ⟪φ, Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+          (ManyBody.chainWindow (k.val * Δ) (hwinW k).2) W) φ⟫_ℂ =
           mpvConnectedCorrelator A N 0 (s' - 1) O O' := by
       intro k
-      change mpvExpectation A N (chainWindowOperator N (k.val * Δ) W) = _
-      rw [hPQ k, hX_def, hY_def, chainWindowOperator_sub_smul_one (hwinL k).1 (hwinL k).2,
-        chainWindowOperator_sub_smul_one (hQwin k).1 (hQwin k).2]
-      exact mpvExpectation_centred_pair A hL0 (by omega) (hQwin k).2 hne O O' he he'
+      change mpvExpectation A N (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow (k.val * Δ) (hwinW k).2) W) = _
+      rw [hPQ k, hX_def, hY_def, ManyBody.placeAlong_sub, ManyBody.placeAlong_smul,
+        ManyBody.placeAlong_one, ManyBody.placeAlong_sub, ManyBody.placeAlong_smul,
+        ManyBody.placeAlong_one]
+      exact mpvExpectation_centred_pair A (by omega) (hQwin k) hne O O' he he'
     simp only [h0, Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
     push_cast
     field_simp
   have hZ₂χ : ‖⟪χ, (∑ k : Fin n, (((1 : ℝ) / n : ℝ) : ℂ) •
-      Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) W)) χ⟫_ℂ‖ ≤
-      2 * ((∑ k : Fin n, ‖⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X) χ⟫_ℂ‖) /
-        n) := by
+      Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow (k.val * Δ) (hwinW k).2) W)) χ⟫_ℂ‖ ≤
+      2 * ((∑ k : Fin n, ‖⟪χ, Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow (k.val * Δ) (hwinL k).2) X) χ⟫_ℂ‖) / n) := by
     simp only [LinearMap.sum_apply, LinearMap.smul_apply, inner_sum, inner_smul_right]
     have hfac : ∀ k : Fin n,
-        ⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) W) χ⟫_ℂ =
-          ⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X) χ⟫_ℂ *
-            ⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ + (s' - 1)) Y) χ⟫_ℂ := by
+        ⟪χ, Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+          (ManyBody.chainWindow (k.val * Δ) (hwinW k).2) W) χ⟫_ℂ =
+          ⟪χ, Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (k.val * Δ) (hwinL k).2) X) χ⟫_ℂ *
+            ⟪χ, Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+              (ManyBody.chainWindow (k.val * Δ + (s' - 1)) (hQwin k)) Y) χ⟫_ℂ := by
       intro k
-      have hsep : QuantumCircuit.IsSeparatedBy (MPSPreparation.window N (k.val * Δ) L)
+      have hsep : ManyBody.IsGraphSeparated (SimpleGraph.cycleGraph N)
+          (MPSPreparation.window N (k.val * Δ) L)
           (MPSPreparation.window N (k.val * Δ + (s' - 1)) L) (2 * T) :=
-        MPSPreparation.isSeparatedBy_window (by omega) (by have := hwinW k; omega)
-      have h := QuantumCircuit.expect_mul_eq_of_isPreparedInDepth hψ hψ1 hsep
-        (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (hwinL k).1
-          (hwinL k).2 X)
-        (MPSPreparation.chainWindowOperator_mem_supportedOperators_window (hQwin k).1
-          (hQwin k).2 Y)
+        MPSPreparation.isGraphSeparated_window (by omega) (by have := hwinW k; omega)
+      have hmX := ManyBody.placeAlong_mem_supportedOperators (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow (k.val * Δ) (hwinL k).2) X
+      have hmY := ManyBody.placeAlong_mem_supportedOperators (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow (k.val * Δ + (s' - 1)) (hQwin k)) Y
+      rw [ManyBody.map_chainWindow] at hmX hmY
+      have h := hψ.dotProduct_mul_eq_of_isGraphSeparated hψ1 hsep hmX hmY
       rw [hPQ k, hχ_def, MPSPreparation.inner_toLp_toEuclideanLin,
-        MPSPreparation.inner_toLp_toEuclideanLin, MPSPreparation.inner_toLp_toEuclideanLin, h]
+        MPSPreparation.inner_toLp_toEuclideanLin, MPSPreparation.inner_toLp_toEuclideanLin]
+      exact h
     have hy : ∀ k : Fin n,
-        ‖⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ + (s' - 1)) Y) χ⟫_ℂ‖ ≤
-          2 :=
-      fun k ↦ (MPSPreparation.norm_inner_apply_le (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
-        (chainWindowOperator N (k.val * Δ + (s' - 1)) Y)) hχ).trans
-        ((norm_toEuclideanCLM_chainWindowOperator_le (hQwin k).1 (hQwin k).2 Y).trans hYn)
+        ‖⟪χ, Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+          (ManyBody.chainWindow (k.val * Δ + (s' - 1)) (hQwin k)) Y) χ⟫_ℂ‖ ≤ 2 := by
+      intro k
+      have hYk : ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
+          (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (k.val * Δ + (s' - 1)) (hQwin k)) Y)‖ ≤ 2 :=
+        (ManyBody.norm_placeAlong_le (X := fun _ ↦ Fin d) _ Y).trans hYn
+      exact (MPSPreparation.norm_inner_apply_le (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+          (ManyBody.chainWindow (k.val * Δ + (s' - 1)) (hQwin k)) Y)) hχ).trans hYk
     refine (norm_sum_le _ _).trans ?_
     calc ∑ k : Fin n, ‖(((1 : ℝ) / n : ℝ) : ℂ) *
-          ⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) W) χ⟫_ℂ‖
+          ⟪χ, Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (k.val * Δ) (hwinW k).2) W) χ⟫_ℂ‖
         ≤ ∑ k : Fin n,
-          ‖⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X) χ⟫_ℂ‖ * 2 / n := by
+          ‖⟪χ, Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (k.val * Δ) (hwinL k).2) X) χ⟫_ℂ‖ * 2 / n := by
           refine Finset.sum_le_sum fun k _ ↦ ?_
           rw [norm_mul, hfac k, norm_mul, Complex.norm_real, Real.norm_eq_abs,
             abs_of_nonneg (by positivity)]
-          calc 1 / (n : ℝ) *
-                (‖⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X) χ⟫_ℂ‖ *
-                  ‖⟪χ, Matrix.toEuclideanLin
-                    (chainWindowOperator N (k.val * Δ + (s' - 1)) Y) χ⟫_ℂ‖)
-              ≤ 1 / (n : ℝ) *
-                (‖⟪χ, Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X) χ⟫_ℂ‖ * 2) := by
-                gcongr
-                exact hy k
+          have hyk := hy k
+          have hxk := norm_nonneg ⟪χ, Matrix.toEuclideanLin
+            (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+              (ManyBody.chainWindow (k.val * Δ) (hwinL k).2) X) χ⟫_ℂ
+          have hn0 : (0 : ℝ) ≤ 1 / (n : ℝ) := by positivity
+          calc _ ≤ 1 / (n : ℝ) * (‖⟪χ, Matrix.toEuclideanLin
+                  (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+                    (ManyBody.chainWindow (k.val * Δ) (hwinL k).2) X) χ⟫_ℂ‖ * 2) :=
+                mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hyk hxk) hn0
             _ = _ := by ring
       _ = _ := by rw [← Finset.sum_div, ← Finset.sum_mul]; ring
   have hvar2 := hS T w Δ n N ψ hψ hψ1 (by omega) (by omega) (by omega) hnΔ hn1 hne W hW hWn

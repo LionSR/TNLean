@@ -182,22 +182,20 @@ independent of the chain length. This is derived from the original local
 positive unit terms, as required by AKLV, arXiv:1301.1162v1, Lemma 6.6. -/
 theorem norm_exp_conjugation_two_boundary_le_four {L q : ℕ}
     (I : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (a b : Fin (L - 1)) (z : ℝ) :
     let B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-      (∑ i ∈ I, h i) - (z : ℂ) • 1
-    ‖NormedSpace.exp (((1 / 8 : ℝ) : ℂ) • B) * (h a + h b) *
+      (Φ.partialHamiltonian I) - (z : ℂ) • 1
+    ‖NormedSpace.exp (((1 / 8 : ℝ) : ℂ) • B) * (Φ.term a + Φ.term b) *
       NormedSpace.exp (-(((1 / 8 : ℝ) : ℂ) • B))‖ ≤ 4 := by
   intro B
   have hbound (i : Fin (L - 1)) :=
-    norm_exp_conjugation_nearest_neighbour_shift_le_two I h
-      (fun j _ ↦ hs j) (fun j _ ↦ h0 j) (fun j _ ↦ h1 j)
-      (h i) (hs i) (z : ℂ) (1 / 8) (by norm_num) le_rfl
-  have hnorm (i : Fin (L - 1)) : ‖h i‖ ≤ 1 :=
-    (CStarAlgebra.norm_le_one_iff_of_nonneg (h i) (h0 i)).mpr (h1 i)
+    norm_exp_conjugation_nearest_neighbour_shift_le_two I Φ
+      (fun j _ ↦ h0 j) (fun j _ ↦ h1 j)
+      (Φ.term i) (Φ.mem i) (z : ℂ) (1 / 8) (by norm_num) le_rfl
+  have hnorm (i : Fin (L - 1)) : ‖Φ.term i‖ ≤ 1 :=
+    (CStarAlgebra.norm_le_one_iff_of_nonneg (Φ.term i) (h0 i)).mpr (h1 i)
   rw [mul_add, add_mul]
   exact (norm_add_le _ _).trans (by
     have ha := hbound a
@@ -213,16 +211,15 @@ AKLV, arXiv:1301.1162v1, Lemma 6.7; this proof uses an exponential moment
 instead of the printed shell induction. No energy-tail estimate is assumed. -/
 theorem norm_groundState_highProjection_le_exp {L q : ℕ}
     (I : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (a b : Fin (L - 1)) (z e t : ℝ)
     (x : EuclideanSpace ℂ (Fin L → Fin q))
     (he0 : 0 ≤ e) (he6 : e ≤ 6) :
     let B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-      (∑ i ∈ I, h i) - (z : ℂ) • 1
-    Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) (B + (h a + h b)) x = (e : ℂ) • x →
+      (Φ.partialHamiltonian I) - (z : ℂ) • 1
+    Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) (B + (Φ.term a + Φ.term b)) x =
+        (e : ℂ) • x →
       ‖Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) (Matrix.spectralProjectionGE B t) x‖ ≤
         2 * Real.exp (-(t - 20) / 8) * ‖x‖ := by
   intro B he
@@ -232,10 +229,10 @@ theorem norm_groundState_highProjection_le_exp {L q : ℕ}
     · exact IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)
     · rw [Complex.coe_smul]
       exact (IsSelfAdjoint.all z).smul (IsSelfAdjoint.one _)
-  have hC := norm_exp_conjugation_two_boundary_le_four I h hs h0 h1 a b z
+  have hC := norm_exp_conjugation_two_boundary_le_four I Φ h0 h1 a b z
   have hsmall : |e| + 4 ≤ (20 : ℝ) / 2 := by rw [abs_of_nonneg he0]; linarith
   simpa only [show -(1 / 8 : ℝ) * (t - 20) = -(t - 20) / 8 by ring] using
-    hB.norm_highProjection_eigenvector_le_exp (h a + h b) x e (1 / 8) 20 4 t
+    hB.norm_highProjection_eigenvector_le_exp (Φ.term a + Φ.term b) x e (1 / 8) 20 4 t
       (by norm_num) (by norm_num) he hC hsmall
 
 end TNLean.MPS.AreaLaw.AKLV

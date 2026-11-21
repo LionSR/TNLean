@@ -116,23 +116,21 @@ The regional minima are chosen before the threshold and the clipped ground
 vector before the polynomial degree. -/
 theorem exists_aklv_logarithmic_clipped_chebyshev_filter {L q a s : ℕ}
     (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (hΩ : ‖Ω‖ = 1)
-    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
-    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+    (hground : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
-    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ (∑ i, h i)) :
+    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ Φ.hamiltonian) :
     2 ≤ q ∧ g ≤ 1 ∧ ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
-        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
-        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+        (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, aklvLogarithmicThreshold g ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t Finset.univ
+        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
         B.PosSemidef ∧ ‖B‖ ≤ 2 * t + s ∧
         ∃ (E : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
           0 ≤ E ∧ ‖φ‖ = 1 ∧ toEuclideanLin B φ = (E : ℂ) • φ ∧
@@ -153,14 +151,14 @@ theorem exists_aklv_logarithmic_clipped_chebyshev_filter {L q a s : ℕ}
                 (2 * Real.exp (-2 * (ell : ℝ) *
                   Real.sqrt ((9 * g / 10) / (2 * t + s)))) ^ 2 := by
   obtain ⟨hq2, hg1, e, E0, hregional, hEeq, hE0, hE6, hrobust⟩ :=
-    exists_aklv_logarithmic_robustness (by omega) ha h hsupp h0 h1 mu g Ω hΩ hground hgap hg
+    exists_aklv_logarithmic_robustness (by omega) ha Φ h0 h1 mu g Ω hΩ hground hgap hg
       hexcited
   let : Nonempty (Fin L) := ⟨⟨0, by omega⟩⟩
   let : Nonempty (Fin q) := ⟨⟨0, by omega⟩⟩
   let : Nontrivial (Fin q) := Fin.nontrivial_iff_two_le.mpr hq2
   obtain ⟨x, hxunit, hxeigen, he⟩ := hregional
   have he1 : 0 ≤ e 1 := by
-    have hA : (aklvNormalizationHamiltonians a s h 1).PosSemidef :=
+    have hA : (aklvNormalizationHamiltonians a s Φ 1).PosSemidef :=
       Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)
     exact hA.nonneg_of_normalized_eigenvector (e 1) x (hxeigen 1) hxunit
   refine ⟨hq2, hg1, e, E0, ⟨x, hxunit, hxeigen, he⟩, hEeq, hE0, hE6, ?_⟩
@@ -171,7 +169,7 @@ theorem exists_aklv_logarithmic_clipped_chebyshev_filter {L q a s : ℕ}
     dsimp only [aklvLogarithmicThreshold] at ht
     linarith
   obtain ⟨hBpos, hBnorm⟩ :=
-    aklv_clipped_hamiltonian_posSemidef_norm_le (by omega) ha h h0 h1 e he he1 ht0
+    aklv_clipped_hamiltonian_posSemidef_norm_le (by omega) ha Φ h0 h1 e he he1 ht0
   obtain ⟨hB, j0, φ, hφ, heigen, hnewgap, hclose⟩ := hrobust t ht
   have heigenRaw : B *ᵥ WithLp.ofLp φ =
       (hB.eigenvalues j0 : ℂ) • WithLp.ofLp φ := by
@@ -188,9 +186,9 @@ theorem exists_aklv_logarithmic_clipped_chebyshev_filter {L q a s : ℕ}
     (hnewgap j1 hj1).trans (hupper _ (hB.eigenvalues_mem_spectrum_real j1))
   refine ⟨hBpos, hBnorm, hB.eigenvalues j0, φ, hE, hφ, heigen, hprojector, hclose, ?_⟩
   intro ell
-  let H := fun j : Fin (s - 2) ↦ h ⟨a + 1 + j.val, by omega⟩
+  let H := fun j : Fin (s - 2) ↦ Φ.term ⟨a + 1 + j.val, by omega⟩
   obtain ⟨HL, HR, hL, hR, hmiddle, hdecomp, hcenter⟩ :=
-    aklv_clipped_hamiltonian_decomposition (by omega) ha h hsupp e t
+    aklv_clipped_hamiltonian_decomposition (by omega) ha Φ e t
   have hR' : ManyBody.IsSupportedOn HR (interval L (a + 1 + (s - 2)) L) := by
     convert hR using 1
     congr 1
@@ -231,23 +229,21 @@ AKLV, arXiv:1301.1162v1, Lemmas 4.1--4.2 and Section 6.1 after Theorem `thm:Ht`.
 The ground vector and energy shifts are chosen before the polynomial degree. -/
 theorem exists_aklv_clipped_chebyshev_filter {L q a s : ℕ}
     (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (hΩ : ‖Ω‖ = 1)
-    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
-    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+    (hground : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
-    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ (∑ i, h i)) :
+    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ Φ.hamiltonian) :
     ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
-        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
-        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+        (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, (1024 / g) * (E0 / g + 1) ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t Finset.univ
+        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
         B.PosSemidef ∧ ‖B‖ ≤ 2 * t + s ∧
         ∃ (E : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
           0 ≤ E ∧ ‖φ‖ = 1 ∧ toEuclideanLin B φ = (E : ℂ) • φ ∧
@@ -268,7 +264,7 @@ theorem exists_aklv_clipped_chebyshev_filter {L q a s : ℕ}
                 (2 * Real.exp (-2 * (ell : ℝ) *
                   Real.sqrt ((9 * g / 10) / (2 * t + s)))) ^ 2 := by
   obtain ⟨_hq2, hg1, e, E0, hregional, hEeq, hE0, hE6, hsharp⟩ :=
-    exists_aklv_logarithmic_clipped_chebyshev_filter hs ha h hsupp h0 h1
+    exists_aklv_logarithmic_clipped_chebyshev_filter hs ha Φ h0 h1
       mu g Ω hΩ hground hgap hg hexcited
   refine ⟨e, E0, hregional, hEeq, hE0, hE6, ?_⟩
   intro t ht

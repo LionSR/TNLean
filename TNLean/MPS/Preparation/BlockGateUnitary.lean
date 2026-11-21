@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.MPS.Preparation.BlockUnitary
+import QICLean.Circuit.Compile.ChainUniversality
+import QICLean.Circuit.Model.UnitaryPlacement
 
 /-!
 # The unitary of one block after a change of basis of its input
@@ -41,7 +43,7 @@ product of at most `C q` gates on neighbouring sites, with
 open Matrix MPSTensor
 open MPSChainTensor (eval)
 open scoped BigOperators
-open QuantumCircuit
+open QuantumCircuit ManyBody
 
 namespace MPSPreparation
 
@@ -104,7 +106,7 @@ theorem exists_blockUnitary_of_equiv_mul (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 �
       (∀ p, IsIsometryOn (b p.succ) (Q p)) →
       ∀ G ∈ unitary (Matrix (Fin (D * D)) (Fin (D * D)) ℂ),
       ∃ (U : Matrix (Cfg d q) (Cfg d q) ℂ) (Z : Cfg d q → Fin (D * D) → ℂ),
-        IsPairProduct d q (C * q) U ∧
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph q)) (C * q) U ∧
         (∀ y : Fin (D * D), y.val < b (Fin.last q) → ∀ σ,
           Z σ y = eval Q σ ⟨0, Nat.mul_pos hD hD⟩ y) ∧
         ∀ x σ, U σ (blockInputCfg hd q dig (π x).1 (π x).2) = ∑ y, Z σ y * G y x := by
@@ -115,18 +117,28 @@ theorem exists_blockUnitary_of_equiv_mul (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 �
     exact π.injective (Prod.ext h1 h2)
   obtain ⟨K₀, K₁, hK⟩ := exists_staircase hd (r := r₁ + r₁) (by omega) (Nat.mul_pos hD hD)
     hencinj
-  obtain ⟨Kg, hKg⟩ := exists_isPairProduct (n := r₁ + r₁) hd (by omega)
+  have : NeZero (r₁ + r₁) := ⟨by omega⟩
+  obtain ⟨Kg, hKg⟩ : ∃ Kg, ∀ X : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ,
+      X ∈ unitary (Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ) →
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (r₁ + r₁))) Kg X :=
+    ⟨_, fun X hX ↦ isGateProduct_pathGraph_unitaryGateCount hX⟩
   refine ⟨K₀ + K₁ + 2 * r₁ + Kg, fun q hq b Q hb0 hrow hiso G hG => ?_⟩
   obtain ⟨U, hU, hUQ⟩ := hK q (by omega) b Q hb0 hrow hiso
   obtain ⟨X, hX, hXG⟩ := exists_unitary_apply_encode hencinj hG
   let e : Fin (r₁ + r₁) → Fin q := fun i => ⟨q - (r₁ + r₁) + i.val, by omega⟩
   have he : Function.Injective e := fun i j h => Fin.ext (by simpa [e] using congrArg Fin.val h)
-  have hXe : IsPairProduct d q Kg (embedOp e X) :=
-    (hKg X hX).embedOp he (a := q - (r₁ + r₁)) fun i => rfl
-  have hτpp := isPairProduct_permOp_routePerm (d := d) q (q - (r₁ + r₁)) r₁
+  have hXe : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph q)) Kg
+      (placeAlong (X := fun _ : Fin q ↦ Fin d) ⟨e, he⟩ X) :=
+    IsGateProduct.place_pathGraph (X := fun _ : Fin q ↦ Fin d) (windowEquiv ⟨e, he⟩)
+      (fun p p' h ↦ by
+        simp only [coe_windowEquiv, Function.Embedding.coeFn_mk, e, Fin.val_mk]
+        omega)
+      (hKg X hX)
+  have hτpp := isGateProduct_sitePermOp_routePerm (d := d) q (q - (r₁ + r₁)) r₁
   have hin := inputCfg_comp_routePerm hd hq dig
   generalize routePerm q (q - (r₁ + r₁)) r₁ = τ at hτpp hin
-  refine ⟨U * embedOp e X * permOp τ, fun σ y => U σ (inputCfg hd q (enc y)), ?_,
+  refine ⟨U * placeAlong (X := fun _ : Fin q ↦ Fin d) ⟨e, he⟩ X * sitePermOp τ,
+    fun σ y => U σ (inputCfg hd q (enc y)), ?_,
     fun y hy σ => hUQ y hy σ, fun x σ => ?_⟩
   · refine ((hU.mul hXe).mul hτpp).mono ?_
     have h1 : (q - (r₁ + r₁)) * K₁ ≤ q * K₁ := Nat.mul_le_mul_right _ (by omega)
@@ -139,20 +151,20 @@ theorem exists_blockUnitary_of_equiv_mul (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 �
       _ = (K₀ + K₁ + 2 * r₁ + Kg) * q := by ring
   · have hin := hin (π x).1 (π x).2
     rw [mul_apply, Finset.sum_eq_single (inputCfg hd q (enc x))]
-    · rw [permOp, of_apply, ite_eq_left hin.symm, mul_one, mul_embedOp_apply he]
+    · rw [sitePermOp_apply, ite_eq_left hin.symm, mul_one, mul_placeAlong_apply]
       have hce : inputCfg hd q (enc x) ∘ e = enc x := funext fun i => by
         simp only [Function.comp_apply, inputCfg, e, show q - (r₁ + r₁) ≤
           q - (r₁ + r₁) + i.val by omega, dite_true]
         congr 1; ext; simp
       have hext : ∀ u, Function.extend e u (inputCfg hd q (enc x)) = inputCfg hd q u :=
         extend_inputCfg hd (show r₁ + r₁ ≤ q by omega) _
-      simp only [hce, hext, hXG, Finset.mul_sum]
+      simp only [Function.Embedding.coeFn_mk, hce, hext, hXG, Finset.mul_sum]
       rw [Finset.sum_comm]
       refine Finset.sum_congr rfl fun y _ => ?_
       simp only [mul_ite, ite_mul, mul_zero, zero_mul, Finset.sum_ite_eq', Finset.mem_univ,
         ite_true, one_mul]
     · intro z _ hz
-      rw [permOp, of_apply, ite_eq_right, mul_zero]
+      rw [sitePermOp_apply, ite_eq_right, mul_zero]
       intro h
       apply hz
       funext p

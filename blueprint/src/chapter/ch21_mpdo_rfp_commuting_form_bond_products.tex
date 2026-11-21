@@ -56,8 +56,8 @@
 
 \begin{lemma}[Adjacent translates are the two overlapping lifts]
     \label{thm:mpdo_eta_bond_overlapping_lifts}
-    \lean{MPOTensor.reindex_embedLocalOperator_zero_eq_leftOverlappingLift}
-    \lean{MPOTensor.reindex_embedLocalOperator_one_eq_rightOverlappingLift}
+    \lean{MPOTensor.reindex_placeAlong_ringWindow_zero_eq_leftOverlappingLift}
+    \lean{MPOTensor.reindex_placeAlong_ringWindow_one_eq_rightOverlappingLift}
     \lean{MPOTensor.TranslationInvariantBondData.pairBond_isHermitian}
     \lean{MPOTensor.TranslationInvariantBondData.%
         reindex_bondAt_zero_eq_leftOverlappingLift}
@@ -248,7 +248,7 @@
 \begin{lemma}[Cyclic product of a locally decomposed bond]
     \label{thm:mpdo_eta_pair_bond_cyclic_product_transport}
     \lean{MPOTensor.%
-        reindex_product_embedLocalOperator_of_etaPair_decomposition}
+        reindex_product_placeAlong_ringWindow_of_etaPair_decomposition}
     \leanok
     Suppose that, in one fixed coordinate decomposition
     $H\cong\bigoplus_q H_{q,r}\otimes H_{q,l}$,

@@ -42,13 +42,11 @@ theorem exists_fixed_bandwidth_low_energy_normalized_isOpenMPS_approximation
     (etaLD : ℝ) (hLD : 0 < etaLD) :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q : ℕ) (v : ℝ) (hq : 2 ≤ q), 0 < v →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1),
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let G := fun c : ℝ ↦ Submodule.spectralSpanLE
@@ -70,7 +68,7 @@ theorem exists_fixed_bandwidth_low_energy_normalized_isOpenMPS_approximation
   obtain ⟨K, hK, hfixed⟩ :=
     exists_fixed_bandwidth_interval_low_energy_normalized_approximation etaLD hLD
   refine ⟨K + 1, by linarith only [hK], ?_⟩
-  intro L q v hq hv h hs h0 h1 config H hH G bcap g u
+  intro L q v hq hv Φ h0 h1 config H hH G bcap g u
   let : Nonempty (Fin L → Fin q) := config
   have hg : 0 < g := lt_min (by dsimp only [bcap]; positivity) (by norm_num)
   have hg1 : g ≤ 1 := min_le_right _ _
@@ -131,7 +129,7 @@ theorem exists_fixed_bandwidth_low_energy_normalized_isOpenMPS_approximation
       intro k hk
       have hkL : k ≤ L := (Finset.mem_Ico.mp hk).2.le
       obtain ⟨φ, hφ, hoverlap, hlogrank⟩ :=
-        hfixed L q 0 k v hq (Nat.zero_le k) hkL hv h hs h0 h1
+        hfixed L q 0 k v hq (Nat.zero_le k) hkL hv Φ h0 h1
           deltaCut hcut hcut1 ψ hψG hψ
       rw [hrecip] at hlogrank
       have hregional := one_sub_regional_kyFanNorm_le_twice_error

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.CStarMatrixKronecker
+import QICLean.ManyBody.Sites.Subregion
 import Mathlib.Analysis.CStarAlgebra.Hom
 import Mathlib.Data.Fintype.BigOperators
 
@@ -13,8 +14,10 @@ import Mathlib.Data.Fintype.BigOperators
 For a finite region \(\Lambda \subset \mathbb Z\) and on-site dimension \(d\), this file
 defines the local observable C⋆-algebra on \(\Lambda\) and its canonical inclusion into the
 algebra on a larger finite region.  The inclusion tensors an observable with the identity on
-complementary sites and then reindexes product configurations as configurations on the larger
-region.
+complementary sites. It is the extension `ManyBody.subregionPlaceHom` of the chain with on-site
+basis `Fin d`, transported to the operator-norm C⋆-matrices along
+`CStarMatrix.ofMatrixStarAlgEquiv`; its entries, faithfulness, unit and composition laws are
+those of `ManyBody.subregionPlace`.
 
 This is only the finite directed system.  No quasi-local completion or quantum cellular
 automaton is defined here.
@@ -27,6 +30,7 @@ automaton is defined here.
 
 ## Main results
 
+* `SpinChain.localInclusion_apply` — the entries of the inclusion.
 * `SpinChain.localInclusion_injective` — faithfulness of the inclusion.
 * `SpinChain.localInclusion_norm` — preservation of the operator norm.
 * `SpinChain.localInclusion_isometry` — operator-norm isometry.
@@ -182,16 +186,20 @@ variable {d : ℕ}
 
 /-- The canonical inclusion of local observables for \(\Lambda \subseteq \Gamma\).
 
-It sends \(A\) to \(A \otimes 1\) on configurations of
-\(\Lambda \times (\Gamma \setminus \Lambda)\), then reindexes those configurations as
-configurations of \(\Gamma\).  Thus it is a unital star-algebra homomorphism by
-construction.
+It sends \(A\) to \(A \otimes 1\), acting as \(A\) on the sites of \(\Lambda\) and as the
+identity on the sites of \(\Gamma \setminus \Lambda\). It is the extension
+`ManyBody.subregionPlaceHom` of matrices on the region \(\Lambda\) to the region \(\Gamma\) of
+the chain, read on the operator-norm C⋆-matrices on both sides.
 
 Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
 noncomputable def localInclusion {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) :
     LocalAlgebra d Λ →⋆ₐ[ℂ] LocalAlgebra d Γ :=
-  (CStarMatrix.reindexₐ ℂ ℂ (Config.splitEquiv h).symm).toStarAlgHom.comp
-    (CStarMatrix.leftKroneckerEmbed (n := Config d (Γ \ Λ)))
+  (CStarMatrix.ofMatrixStarAlgEquiv :
+      Matrix (Config d Γ) (Config d Γ) ℂ ≃⋆ₐ[ℂ] LocalAlgebra d Γ).toStarAlgHom.comp
+    ((ManyBody.subregionPlaceHom (X := fun _ : ℤ ↦ Fin d) Λ Γ h :
+        Matrix (Config d Λ) (Config d Λ) ℂ →⋆ₐ[ℂ] Matrix (Config d Γ) (Config d Γ) ℂ).comp
+      (CStarMatrix.ofMatrixStarAlgEquiv :
+        Matrix (Config d Λ) (Config d Λ) ℂ ≃⋆ₐ[ℂ] LocalAlgebra d Λ).symm.toStarAlgHom)
 
 @[simp]
 lemma localInclusion_apply {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) (A : LocalAlgebra d Λ)
@@ -199,19 +207,31 @@ lemma localInclusion_apply {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) (A : LocalAlgebr
     localInclusion h A x y =
       A (Config.restrict h x) (Config.restrict h y) *
         if (Config.splitEquiv h x).2 = (Config.splitEquiv h y).2 then 1 else 0 := by
-  change CStarMatrix.leftKroneckerEmbed A
-    (Config.splitEquiv h x) (Config.splitEquiv h y) = _
-  rw [CStarMatrix.leftKroneckerEmbed_apply_apply]
-  rfl
+  change ManyBody.subregionPlace (X := fun _ : ℤ ↦ Fin d) h A x y = _
+  rw [ManyBody.subregionPlace_apply (X := fun _ : ℤ ↦ Fin d) h A x y]
+  rw [mul_ite, mul_one, mul_zero]
+  have hiff : (∀ w : {v // v ∈ Γ}, w.1 ∉ Λ → x w = y w) ↔
+      (Config.splitEquiv h x).2 = (Config.splitEquiv h y).2 := by
+    constructor
+    · intro hxy
+      funext i
+      exact hxy ⟨i, (Finset.mem_sdiff.mp i.2).1⟩ (Finset.mem_sdiff.mp i.2).2
+    · intro hxy w hw
+      exact congrFun hxy ⟨w.1, Finset.mem_sdiff.mpr ⟨w.2, hw⟩⟩
+  by_cases hc : (Config.splitEquiv h x).2 = (Config.splitEquiv h y).2
+  · rw [ite_eq_left (hiff.mpr hc), ite_eq_left hc]
+    rfl
+  · rw [ite_eq_right (mt hiff.mp hc), ite_eq_right hc]
 
 /-- The local identity-tensor inclusion is injective.
 
 Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
 lemma localInclusion_injective [NeZero d] {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ) :
     Function.Injective (localInclusion (d := d) h) := by
-  apply Function.Injective.comp
-    (CStarMatrix.reindexₐ ℂ ℂ (Config.splitEquiv h).symm).injective
-  exact CStarMatrix.leftKroneckerEmbed_injective
+  intro A B hAB
+  have hAB' : ManyBody.subregionPlace (X := fun _ : ℤ ↦ Fin d) h A =
+      ManyBody.subregionPlace (X := fun _ : ℤ ↦ Fin d) h B := hAB
+  exact ManyBody.subregionPlace_injective (X := fun _ : ℤ ↦ Fin d) h hAB'
 
 /-- The local identity-tensor inclusion preserves the C⋆ operator norm.
 
@@ -235,14 +255,8 @@ Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
 lemma localInclusion_refl (Λ : Finset ℤ) :
     localInclusion (d := d) (show Λ ⊆ Λ from by rfl) =
       StarAlgHom.id ℂ (LocalAlgebra d Λ) := by
-  ext A x y
-  change localInclusion _ A x y = A x y
-  rw [localInclusion_apply]
-  have hcomp : (Config.splitEquiv (show Λ ⊆ Λ from by rfl) x).2 =
-      (Config.splitEquiv (show Λ ⊆ Λ from by rfl) y).2 := by
-    funext i
-    exact False.elim ((Finset.mem_sdiff.mp i.2).2 (Finset.mem_sdiff.mp i.2).1)
-  simp [hcomp]
+  ext A : 1
+  exact ManyBody.subregionPlace_self (X := fun _ : ℤ ↦ Fin d) (R := Λ) A
 
 /-- Canonical local inclusions compose for nested finite regions.
 
@@ -250,38 +264,8 @@ Source: arXiv:1703.09188, Appendix, lines 2285--2292. -/
 lemma localInclusion_trans {Λ Γ Δ : Finset ℤ} (hΛΓ : Λ ⊆ Γ) (hΓΔ : Γ ⊆ Δ) :
     (localInclusion (d := d) hΓΔ).comp (localInclusion hΛΓ) =
       localInclusion (hΛΓ.trans hΓΔ) := by
-  ext A x y
-  simp only [StarAlgHom.comp_apply, localInclusion_apply]
-  rw [Config.restrict_trans, Config.restrict_trans]
-  by_cases hxy : (Config.splitEquiv (hΛΓ.trans hΓΔ) x).2 =
-      (Config.splitEquiv (hΛΓ.trans hΓΔ) y).2
-  · have hxyΓ : (Config.splitEquiv hΓΔ x).2 = (Config.splitEquiv hΓΔ y).2 := by
-      funext i
-      exact congrFun hxy ⟨i, Finset.mem_sdiff.mpr
-        ⟨(Finset.mem_sdiff.mp i.2).1,
-          fun hiΛ ↦ (Finset.mem_sdiff.mp i.2).2 (hΛΓ hiΛ)⟩⟩
-    have hxyΛ :
-        (Config.splitEquiv hΛΓ (Config.restrict hΓΔ x)).2 =
-          (Config.splitEquiv hΛΓ (Config.restrict hΓΔ y)).2 := by
-      funext i
-      exact congrFun hxy ⟨i, Finset.mem_sdiff.mpr
-        ⟨hΓΔ (Finset.mem_sdiff.mp i.2).1,
-          (Finset.mem_sdiff.mp i.2).2⟩⟩
-    simp [hxy, hxyΓ, hxyΛ]
-  · have hor :
-        (Config.splitEquiv hΓΔ x).2 ≠ (Config.splitEquiv hΓΔ y).2 ∨
-          (Config.splitEquiv hΛΓ (Config.restrict hΓΔ x)).2 ≠
-            (Config.splitEquiv hΛΓ (Config.restrict hΓΔ y)).2 := by
-      by_contra hn
-      push Not at hn
-      apply hxy
-      funext i
-      by_cases hiΓ : (i : ℤ) ∈ Γ
-      · exact congrFun hn.2 ⟨i, Finset.mem_sdiff.mpr
-        ⟨hiΓ, (Finset.mem_sdiff.mp i.2).2⟩⟩
-      · exact congrFun hn.1 ⟨i, Finset.mem_sdiff.mpr
-        ⟨(Finset.mem_sdiff.mp i.2).1, hiΓ⟩⟩
-    rcases hor with hne | hne <;> simp [hxy, hne]
+  ext A : 1
+  exact ManyBody.subregionPlace_subregionPlace (X := fun _ : ℤ ↦ Fin d) hΛΓ hΓΔ A
 
 end Inclusion
 

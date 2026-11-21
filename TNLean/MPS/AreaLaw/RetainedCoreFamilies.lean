@@ -39,6 +39,7 @@ Proposition 5.7, lines 1324–1333.
 
 open Matrix
 open scoped BigOperators Kronecker Matrix
+open ManyBody (cutMatrix)
 
 noncomputable section
 
@@ -653,9 +654,10 @@ private theorem retainedStackCore_naturalInsertion_isOpenMPS
       (fun w ↦ (0 : EuclideanSpace ℂ (Fin T → Fin (q * q))) w)
     apply isOpenMPS_of_internal_cutMatrix_rank_le
     intro k hk0 hkT
-    have hcut : cutMatrix (0 : EuclideanSpace ℂ (Fin T → Fin (q * q))) k = 0 := by
+    have hcut :
+        cutMatrix (leftBlock T k) (0 : EuclideanSpace ℂ (Fin T → Fin (q * q))) = 0 := by
       ext x y
-      simp [cutMatrix_apply]
+      simp [ManyBody.cutMatrix_apply]
     rw [hcut, Matrix.rank_zero]
     exact Nat.zero_le _
   · have hdim : 1 ≤ (B ^ t) ^ 2 := by

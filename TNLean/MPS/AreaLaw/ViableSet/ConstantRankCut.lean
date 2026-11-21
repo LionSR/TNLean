@@ -230,8 +230,10 @@ theorem rank_cutMatrix_normalized_chainTrim_le {ψ : EuclideanSpace ℂ (Fin L �
     {k m : ℕ} {P : LeftBlockMatrix L q k}
     (hP : IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ)
       m P) :
-    (cutMatrix (‖chainTrim ψ k P‖⁻¹ • chainTrim ψ k P) k).rank ≤ m := by
-  rw [cutMatrix, cutVector_normalized_chainTrim, RCLike.real_smul_eq_coe_smul (K := ℂ)]
+    (ManyBody.cutMatrix (leftBlock L k) (‖chainTrim ψ k P‖⁻¹ • chainTrim ψ k P)).rank ≤ m := by
+  change (schmidtCoeffMatrix (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q)
+    (leftBlock L k) (‖chainTrim ψ k P‖⁻¹ • chainTrim ψ k P)))).rank ≤ m
+  rw [cutVector_normalized_chainTrim, RCLike.real_smul_eq_coe_smul (K := ℂ)]
   exact hasSchmidtRankLE_smul hP.hasSchmidtRankLE_leftApply _
 
 /-- If the normalized trimmed vector has positive overlap with `ψ`, it is a unit vector. -/
@@ -409,12 +411,12 @@ theorem _root_.ManyBody.ChainInteraction.exists_rank_cutMatrix_le_constantCutBon
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     {δ : ℝ} (hδ0 : 0 < δ) :
     ∃ v : EuclideanSpace ℂ (Fin L → Fin q), ‖v‖ = 1 ∧
-      (cutMatrix v k).rank ≤ constantCutBond q R J Δ (min δ (1 / 12)) ∧
+      (ManyBody.cutMatrix (leftBlock L k) v).rank ≤ constantCutBond q R J Δ (min δ (1 / 12)) ∧
       1 - δ ≤ (⟪v, Ω⟫_ℂ).re ∧
       (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + 6 * √δ := by
   have hsmall {d : ℝ} (hd0 : 0 < d) (hd4 : 4 * d < 1) :
       ∃ v : EuclideanSpace ℂ (Fin L → Fin q), ‖v‖ = 1 ∧
-        (cutMatrix v k).rank ≤ constantCutBond q R J Δ d ∧
+        (ManyBody.cutMatrix (leftBlock L k) v).rank ≤ constantCutBond q R J Δ d ∧
         1 - d ≤ (⟪v, Ω⟫_ℂ).re ∧
         (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + 4 * √d / (1 - 4 * d) := by
     obtain ⟨P, hP⟩ := exists_isTrimmingProjection

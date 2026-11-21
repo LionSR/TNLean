@@ -186,17 +186,17 @@ theorem exists_minimalInterval_merging_circuit {d D N : ℕ} [NeZero d]
       hSupport.1 hSupport.2 (V.submatrix id u.symm)
       (by convert hEncoded using 1; all_goals congr!)
       (by convert hParentEncoded using 1; all_goals congr!)
-  have hLogical := hclean.logical_columns_of_ambient (initializedBasisMatrix_isIsometry _)
+  have hLogical := hclean.logical_columns_of_ambient (basisInclusion_isIsometry _)
     _ _ hAmbient
-  have hJInput := initializedBasisMatrix_reindex_of_mapping ec u Ein
+  have hJInput := basisInclusion_reindex_of_mapping ec u Ein
     (zeroFlagEmbedding (d := d) s) hInputMap
-  have hInputColumns : (initializedBasisMatrix (zeroFlagEmbedding (d := d) s)).submatrix
+  have hInputColumns : (basisInclusion (zeroFlagEmbedding (d := d) s)).submatrix
       (fun x : Cfg d (logicalSiteCount d D N) ↦ x ∘ siteEq) u =
-      initializedBasisMatrix Ein := by
+      basisInclusion Ein := by
     rw [← hJInput]
     simp only [Matrix.reindex_apply, Matrix.submatrix_submatrix, Function.comp_def,
       Equiv.symm_apply_apply]
-    change (initializedBasisMatrix Ein).submatrix (fun x ↦ ec.symm (ec x)) id = _
+    change (basisInclusion Ein).submatrix (fun x ↦ ec.symm (ec x)) id = _
     simp only [Equiv.symm_apply_apply]
     rfl
   have hLogicalOld := congrArg (fun M ↦ M.submatrix id u) hLogical

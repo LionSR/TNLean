@@ -1,126 +1,70 @@
 # Circuit channels and physical-resource compilation
 
-This document describes the interfaces used by the local-channel compiler and the
-boundaries that new circuit and preparation results should preserve.
+TNLean no longer contains a channel-circuit layer: local channel protocols, their encodings
+into bounded registers, the physical-port compiler and its unitary dilations are QICLean's
+(`QICLean/Circuit/Model`, `QICLean/Circuit/Compile`). This document records the QICLean
+interfaces that TNLean consumers and the blueprint chapter `ch33_local_quantum_circuits_*`
+use, and the boundaries that new circuit and preparation results should preserve.
 
 ## Three different semantics
 
 The following objects serve different purposes and should not be identified merely
 because they can describe the same reduced channel.
 
-1. `IsLocalChannelProtocol` permits changes of local dimension. The bounded variant,
-   `IsDimensionBoundedLocalChannelProtocol`, records a common bound at every intermediate
-   dimension. Its depth counts native two-site channel layers.
-2. `FixedRegisterOperation` is the compiler's fixed-alphabet intermediate representation.
-   It separates onsite channel operations from native two-site layers. The compiler
-   preserves the number of two-site layers before physical routing is introduced.
-3. `IsPhysicalPortUnitary` and `IsPhysicalPortProtocol` describe actual operations on a
-   layout with one fixed-dimensional communication port at each site. Memory wires
-   have explicit owners. Only gates on the physical ports count toward intersite depth.
+1. `QuantumCircuit.IsProtocol Γ T Φ` (and `IsConversion`) permits changes of local
+   dimension. The bounded variant `QuantumCircuit.IsBoundedProtocol Γ B T Φ` records a
+   common bound `B` on every basis along the protocol. On `Geometry.ring N` its depth counts
+   native two-site layers.
+2. `QuantumCircuit.Circuit.exists_seq_encoded` and `IsBoundedProtocol.exists_seq_encoded`
+   carry a bounded protocol to a sequence of layers on one fixed alphabet, with all-operator
+   intertwining `Φ' ∘ 𝓔_e = 𝓔_f ∘ Φ` and the same number of counted layers.
+3. A physical-port protocol is a map with a unitary dilation
+   (`QuantumCircuit.IsUnitaryDilation`) on `QuantumCircuit.Geometry.portRing N (2k+1)`:
+   one fixed-dimensional port per site, the cells of all wires of a site at cost `0`, and
+   only gates on two ports counted.
 
 A theorem relating these semantics must supply the actual channel identity and its
 resource bound. A coordinate equivalence alone is not a free physical gate.
 
-History-dependent measurement trees remain in `Circuit/Measurement/AdaptiveConversion`.
-They carry outcome-dependent continuation semantics. Extending this deterministic
-channel compiler to that layer requires explicit classical-control and source-block
-witnesses; the existing quantum-depth index does not supply them.
+History-dependent measurement trees are `QuantumCircuit.IsAdaptiveProtocol`. Extending the
+deterministic channel compiler to that layer requires explicit classical-control and
+source-block witnesses; the quantum-depth index does not supply them.
 
-## Dependency direction and ownership
+## QICLean interfaces
 
-The intended direction is:
+- Codes: `Matrix.basisInclusion`, `KrausFamily.embed`, `KrausFamily.decode` (decoding with a
+  basis-vector fallback, trace preserving on the whole ambient space), `KrausFamily.encode`,
+  and the sitewise circuits `QuantumCircuit.encodeCircuit` and `decodeCircuit`.
+- Layers: `QuantumCircuit.Layer.exists_encoded` encodes a layer on its own cells.
+- Physical ports: `QuantumCircuit.portDataEmbedding`, `portWireEmbedding`,
+  `Layer.exists_portRing_sites` (operations on whole sites are free),
+  `Layer.exists_portRing` (one matching costs `2k`), `IsBoundedProtocol.exists_portRing`,
+  `exists_portRing_recode`, `IsBoundedProtocol.exists_portRing_of_code` and
+  `IsBoundedProtocol.exists_portRing_unit_product_approx`.
+- Dilations: `prepareCircuit`, `traceCircuit`, `IsUnitaryDilation.comp`,
+  `Layer.isUnitaryDilation`, `Circuit.isUnitaryDilation`, `IsProtocol.isUnitaryDilation`,
+  and the pure-output estimate `Circuit.exists_unit_product_approx`.
 
-```
-finite-index matrix/channel algebra (QICLean)
-    -> register placement, configuration coordinates and environments (Circuit)
-site embeddings, supports and wire permutations (Circuit)
-    -> spatial layouts, physical ports and routing (Circuit)
-register algebra + spatial geometry
-    -> local dilations and physical-resource compilation (Circuit)
-    -> preparation-specific states, approximations and source theorems (MPS/Preparation)
-```
-
-`Circuit` must not import `MPS`. A preparation construction should provide
-its state/tensor hypotheses to a reusable circuit theorem, rather than copy routing,
-channel composition or partial-trace proofs into the preparation directory.
-
-Generic results about arbitrary finite matrix index types belong in QICLean. In
-particular, basis-state environment initialization, Choi-bounded local unitary
-dilation, and the interchange of a fresh operation with a deferred partial trace
-have no spatial assumptions. They live in `QICLean.Channel.EnvironmentEmbedding`,
-`QICLean.Channel.EnvironmentDilation` and
-`QICLean.Channel.DeferredEnvironmentTrace`. The established `Matrix.fixedEnvEmbedding`
-name is shared with the Markov-dilation client. TNLean imports these interfaces rather
-than maintaining another copy of the finite-dimensional channel proofs.
-
-TNLean owns the facts that refer to wires, sites, supports, ports, native protocols,
-and counted communication depth. A generic dilation theorem must be placed at an
-actual site before it can be used as a zero-depth operation.
-
-## Reusable interfaces
-
-- The basis inclusion `Matrix.initializedBasisMatrix` (QICLean) and its completed decoder handle local code subspaces. Decoding
-  must be trace preserving on the entire ambient input space, not only on valid codes.
-- `registerChannelLift` places a channel independently of its Kraus representation.
-  Its composition and Kraus identities are the shared entry point for all placements.
-- `registerConfigurationSplit` and complementary-coordinate naturality own the
-  selected-register/complement decomposition. Appended-wire and routing-coordinate
-  specializations should derive their operator formulas from this interface rather
-  than reprove `AgreeOff` calculations.
-- `PhysicalPortLayout` records wire ownership and communication ports.
-  `PhysicalPortEmbedding` preserves both. Enlarging local memory cannot change the
-  physical ports or move an old wire to another site.
-- `RegisterEnvironment` owns nonspatial appended-wire initialization and final trace;
-  it depends on register placement and QIC channel algebra, not spatial layouts.
-- Fresh-environment composition keeps all previous environments as identity factors
-  until the final trace. Its identities must allow correlations between the system
-  and earlier environments; an intermediate product-state assumption is invalid.
-
-Keep definitions near their algebraic laws and introduce a new module for a coherent
-interface or proof layer. Avoid a module per small lemma, numbered sequels, duplicated
-predicates, and broad umbrella imports. Public names should describe mathematical
-roles rather than the order in which a proof was developed.
+The physical-port statements intertwine codes that fix every wire of a site. TNLean once
+also stated the compiled channel on an arbitrary state of the port and scratch wires carried
+along as a reference; that statement is not carried by QICLean's construction and is not
+available.
 
 ## Compiler and preparation extension points
 
-A new native operation first needs a fixed-register realization with an all-operator
-intertwining identity. Its physical realization then needs an explicit support or
-port certificate and a depth calculation. These two proofs have different assumptions
-and should remain separately reusable.
-
-The bounded compiler chooses physical dimension `d` and a bound `B` on every positive
-intermediate local dimension, then uses `k = Nat.clog d B`. One entire matching shares
-one forward/backward routing, costing `2*k` intersite layers. A depth-`T` native
-protocol therefore has bound `2*k*T`. A family-level constant requires fixing `d,B`
-before the chain length. The matching step and the protocol bound are QICLean's
-`QuantumCircuit.Layer.exists_portRing` and `QuantumCircuit.IsBoundedProtocol.exists_portRing`
-on `QuantumCircuit.Geometry.portRing`, and pure or approximately pure outputs of a
-same-depth unitary dilation are `QuantumCircuit.Circuit.exists_unit_product_approx`
-composed with `QuantumCircuit.IsProtocol.isUnitaryDilation`.
+The bounded compiler chooses physical dimension `d` and a bound `B ≤ d ^ k` on every
+intermediate local dimension; for `d ≥ 2` one may take `k = Nat.clog d B`. One entire
+matching shares one forward/backward routing, costing `2*k` intersite layers, so a depth-`T`
+native protocol has bound `2*k*T`. A family-level constant requires fixing `d,B` before the
+chain length.
 
 Preparation adapters should state their additional input/output obligations explicitly:
 encoded logical input, original physical-port input, designated memory reset, and
 conditions on dilation environments are different conclusions. The original-port
-compiler supplies the designated data/scratch reset. Source QCcc block decomposition,
-within-block control restrictions and pure-output ancilla requirements need their own
-witnesses; they do not follow from reduced-channel equality alone.
-
-## Regression expectations
-
-Changes to placement, encoding, layout or compiler interfaces should retain:
-
-- all-operator identities, including off-diagonal matrix units;
-- arbitrary external-reference preservation;
-- non-power local dimensions and genuine intermediate dimension changes;
-- empty environments/registers where the definitions permit them;
-- physical-port ownership, unchanged original ports, and disjoint parallel routing;
-- capstone audits reporting only standard axioms, with strict Lean/linter checks.
-
-The CI suites are `PhysicalProtocolCompilation`, `PhysicalPortIO` and
-`PhysicalPortDilation`. QICLean separately tests correlated old
-environments and distinct fresh environments in its `EnvironmentDilation` suite. Run focused package-option checks during
-development, then the exact published-head root and blueprint checks. A concatenated
-source probe is diagnostic assistance, not a substitute for individual module checks.
+statement (`exists_portRing_of_code` with the port codes) supplies the designated
+data/scratch reset. Source QCcc block decomposition, within-block control restrictions and
+pure-output ancilla requirements need their own witnesses; they do not follow from
+reduced-channel equality alone.
 
 ## Migration policy
 
@@ -128,5 +72,4 @@ source probe is diagnostic assistance, not a substitute for individual module ch
 [`many_body_circuit_architecture.md`](many_body_circuit_architecture.md),
 redesigned around one circuit definition, and moved to QICLean. That document
 gives the layers, the order of the steps and the rules for new modules in the
-meantime, and replaces the earlier policy of keeping reviewed module paths in
-place.
+meantime.

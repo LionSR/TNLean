@@ -335,10 +335,12 @@ theorem map_ker_regionParentHamiltonian_oriented_copy_eq
       (blockMatrixRepresentation d D) (blockMultiplicityRootWeight d m) o eX) (R i) (H i))
     (hK : ∀ i, IsRegionParentInteraction (numberedGraphOrientedAveragingTensor
       (blockMultiplicityRepresentation d m D) 1 o eY) (R i) (K i)) :
-    (Matrix.mulVecLin (regionParentHamiltonian R H)).ker.map
+    (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin p) R H).hamiltonian).ker.map
       (Matrix.mulVecLin (graphNumberedBondMatrix eX eY
         (fullMultiplicityBondMap (fun i => Fin (d i)) (fun i => Fin (m i))))) =
-      (Matrix.mulVecLin (regionParentHamiltonian R K)).ker := by
+      (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin q) R K).hamiltonian).ker := by
   rw [ker_regionParentHamiltonian _ R H hH, ker_regionParentHamiltonian _ R K hK]
   exact map_regionParentGroundSpace_oriented_copy_eq o d m D hm eX eY R hcover
 

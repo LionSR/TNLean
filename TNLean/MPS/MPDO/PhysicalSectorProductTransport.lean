@@ -23,6 +23,8 @@ coordinates to the original physical coordinates.
 
 open scoped Matrix BigOperators Kronecker
 
+open ManyBody
+
 namespace MPOTensor
 
 /-- Splitting a sitewise product over a two-site window and its cyclic
@@ -168,12 +170,12 @@ sector-coordinate bond by the sitewise physical coordinate matrix.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
 1581--1593. -/
-private theorem physicalCoordinateMatrixN_embedLocalOperator_physicalBond
+private theorem physicalCoordinateMatrixN_placeAlong_ringWindow_physicalBond
     (F : PhysicalSectorFactorization K) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
     singleKrausMap (F.physicalCoordinateMatrixN N)
-        (embedLocalOperator (d := d) 2 N hN i F.physicalBond) =
-      embedLocalOperator
-        (d := Fintype.card (SectorSiteIndex F)) 2 N hN i F.sectorBond := by
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) F.physicalBond) =
+      placeAlong (X := fun _ ↦ Fin (Fintype.card (SectorSiteIndex F))) (ringWindow hN i)
+        F.sectorBond := by
   let es := windowComplementEquiv
     (d := Fintype.card (SectorSiteIndex F)) 2 N hN i
   let ep := windowComplementEquiv (d := d) 2 N hN i
@@ -181,14 +183,14 @@ private theorem physicalCoordinateMatrixN_embedLocalOperator_physicalBond
   simp only [singleKrausMap_apply]
   change Matrix.reindexLinearEquiv ℂ ℂ es es
       (F.physicalCoordinateMatrixN N *
-        embedLocalOperator (d := d) 2 N hN i F.physicalBond *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) F.physicalBond *
           (F.physicalCoordinateMatrixN N)ᴴ) = _
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ es ep es,
     ← Matrix.reindexLinearEquiv_mul ℂ ℂ es ep ep]
   simp only [Matrix.coe_reindexLinearEquiv]
   rw [reindex_tensorPower_windowComplement
       F.physicalCoordinateMatrix hN i,
-    reindex_embedLocalOperator_windowComplement]
+    reindex_placeAlong_ringWindow_windowComplement]
   have hVH : Matrix.reindex ep es (F.physicalCoordinateMatrixN N)ᴴ =
       (F.physicalCoordinateMatrixN 2)ᴴ ⊗ₖ
         (F.physicalCoordinateMatrixN (N - 2))ᴴ := by
@@ -196,7 +198,7 @@ private theorem physicalCoordinateMatrixN_embedLocalOperator_physicalBond
       Matrix.conjTranspose_kronecker] using congrArg Matrix.conjTranspose
         (reindex_tensorPower_windowComplement
           F.physicalCoordinateMatrix hN i)
-  rw [hVH, reindex_embedLocalOperator_windowComplement]
+  rw [hVH, reindex_placeAlong_ringWindow_windowComplement]
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
   simp only [Matrix.mul_one]
   rw [← singleKrausMap_apply,
@@ -223,17 +225,17 @@ private theorem physicalCoordinateMatrixN_product_physicalBond
     (F : PhysicalSectorFactorization K) {N : ℕ} (hN : 2 ≤ N) :
     singleKrausMap (F.physicalCoordinateMatrixN N)
         (List.ofFn fun i : Fin N ↦
-          embedLocalOperator (d := d) 2 N hN i F.physicalBond).prod =
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) F.physicalBond).prod =
       (List.ofFn fun i : Fin N ↦
-        embedLocalOperator
-          (d := Fintype.card (SectorSiteIndex F)) 2 N hN i F.sectorBond).prod := by
+        placeAlong (X := fun _ ↦ Fin (Fintype.card (SectorSiteIndex F))) (ringWindow hN i)
+          F.sectorBond).prod := by
   rw [singleKrausMap_list_prod _ (F.physicalCoordinateMatrixN_isometry N)
     (F.physicalCoordinateMatrixN_coisometry N)]
   congr 1
   rw [List.map_ofFn]
   apply congrArg List.ofFn
   funext i
-  exact F.physicalCoordinateMatrixN_embedLocalOperator_physicalBond hN i
+  exact F.physicalCoordinateMatrixN_placeAlong_ringWindow_physicalBond hN i
 
 /-- For every length at least three, the MPO in the original physical
 coordinates is the ordered product of the translated physical-sector bonds.
@@ -251,12 +253,14 @@ private theorem mpo_eq_product_physicalBond_of_three_le
     (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N] (hN : 3 ≤ N) :
     mpo K N =
       (List.ofFn fun i : Fin N ↦
-        embedLocalOperator (d := d) 2 N (by omega) i F.physicalBond).prod := by
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ N) i)
+          F.physicalBond).prod := by
   let V := F.physicalCoordinateMatrixN N
   have htransport : singleKrausMap V (mpo K N) =
       singleKrausMap V
         (List.ofFn fun i : Fin N ↦
-          embedLocalOperator (d := d) 2 N (by omega) i F.physicalBond).prod := by
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ N) i)
+            F.physicalBond).prod := by
     rw [F.physicalCoordinateMatrixN_mpo,
       F.mpo_sectorCoordinateTensor_eq_product_sectorBond hN,
       F.physicalCoordinateMatrixN_product_physicalBond (by omega)]
@@ -268,10 +272,12 @@ private theorem mpo_eq_product_physicalBond_of_three_le
       rw [hiso, Matrix.mul_one, ← Matrix.mul_assoc, hiso, Matrix.one_mul]
     _ = singleKrausMap Vᴴ (singleKrausMap V
         (List.ofFn fun i : Fin N ↦
-          embedLocalOperator (d := d) 2 N (by omega) i F.physicalBond).prod) := by
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ N) i)
+            F.physicalBond).prod) := by
       rw [htransport]
     _ = (List.ofFn fun i : Fin N ↦
-        embedLocalOperator (d := d) 2 N (by omega) i F.physicalBond).prod := by
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ N) i)
+          F.physicalBond).prod := by
       simp only [singleKrausMap_apply, Matrix.conjTranspose_conjTranspose,
         Matrix.mul_assoc]
       rw [hiso, Matrix.mul_one, ← Matrix.mul_assoc, hiso, Matrix.one_mul]
@@ -374,14 +380,14 @@ private theorem mpo_two_eq_product_physicalBond
     (F : PhysicalSectorFactorization K) :
     mpo K 2 =
       (List.ofFn fun i : Fin 2 ↦
-        embedLocalOperator (d := d) 2 2 (by decide) i F.physicalBond).prod := by
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl i) F.physicalBond).prod := by
   have hprod :
       (List.ofFn fun i : Fin 2 ↦
-        embedLocalOperator (d := d) 2 2 (by decide) i F.physicalBond).prod =
-      embedLocalOperator (d := d) 2 2 (by decide)
-          (0 : Fin 2) F.physicalBond *
-        embedLocalOperator (d := d) 2 2 (by decide)
-          (1 : Fin 2) F.physicalBond := by
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl i) F.physicalBond).prod =
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (0 : Fin 2))
+          F.physicalBond *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (1 : Fin 2))
+          F.physicalBond := by
     simp [List.ofFn_succ]
   rw [hprod]
   apply (Matrix.reindex (finTwoArrowEquiv (Fin d))
@@ -390,17 +396,17 @@ private theorem mpo_two_eq_product_physicalBond
       (finTwoArrowEquiv (Fin d)) (mpo K 2) =
     Matrix.reindexLinearEquiv ℂ ℂ (finTwoArrowEquiv (Fin d))
       (finTwoArrowEquiv (Fin d))
-        (embedLocalOperator (d := d) 2 2 (by decide)
-            (0 : Fin 2) F.physicalBond *
-          embedLocalOperator (d := d) 2 2 (by decide)
-            (1 : Fin 2) F.physicalBond)
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (0 : Fin 2))
+            F.physicalBond *
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (1 : Fin 2))
+            F.physicalBond)
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ
       (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d))
       (finTwoArrowEquiv (Fin d))]
   simpa only [Matrix.coe_reindexLinearEquiv,
     reindex_mpo_two_eq_physClose2_one,
-    F.reindex_embedLocalOperator_two_zero,
-    F.reindex_embedLocalOperator_two_one] using
+    F.reindex_placeAlong_ringWindow_two_zero,
+    F.reindex_placeAlong_ringWindow_two_one] using
       F.physClose2_one_eq_physicalPairBond_mul_crossed
 
 /-- At every length at least two, the MPO is exactly the ordered product of
@@ -419,7 +425,7 @@ theorem mpo_eq_product_physicalBond
     (F : PhysicalSectorFactorization K) {N : ℕ} (hN : 2 ≤ N) :
     mpo K N =
       (List.ofFn fun i : Fin N ↦
-        embedLocalOperator (d := d) 2 N hN i F.physicalBond).prod := by
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) F.physicalBond).prod := by
   by_cases htwo : N = 2
   · subst N
     exact F.mpo_two_eq_product_physicalBond
@@ -443,7 +449,7 @@ theorem exists_positive_scalar_mpo_eq_product_physicalBond
     ∃ c : ℝ, 0 < c ∧
       mpo K N = (c : ℂ) •
         (List.ofFn fun i : Fin N ↦
-          embedLocalOperator (d := d) 2 N hN i F.physicalBond).prod := by
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) F.physicalBond).prod := by
   refine ⟨1, by norm_num, ?_⟩
   rw [F.mpo_eq_product_physicalBond hN]
   norm_num

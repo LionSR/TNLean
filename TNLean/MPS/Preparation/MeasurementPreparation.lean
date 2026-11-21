@@ -17,16 +17,16 @@ Ref~\cite{Piroli2021}). Subsequently, apply in parallel the isometries
 depth." The isometries `V` of the blocked tensor then follow, "following the same steps as in the
 tree-RG circuit". The circuit applied after the measurement does not depend on its outcomes.
 
-This file proves this two-stage preparation
-(`QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth`, defined in
-`TNLean.Circuit.Measurement.Protocol`) for the state
+This file proves this two-stage preparation, one round of measurements followed by a unitary
+circuit (`QuantumCircuit.IsOneRoundConversion` of `QICLean.Circuit.Model.Measurement`, from a
+product vector), for the state
 `∑ⱼ αⱼ (⊗ₖ V_{j,k}) ⊗ₖ |ω_j⟩_{R_k L_{k+1}}` of a family of tensors
 `A_j` whose blocked tensors are injective and have orthogonal ranges
-(`MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState`), in
+(`MPSPreparation.exists_isOneRoundConversion_sum_blockIsometryState`), in
 depth `O(L)` for blocks of lengths at most `L`:
 
 * the GHZ-type state on the registers (`MPSPreparation.windowGHZState`), with measurements, in
-  depth `O(L)` (`MPSPreparation.exists_isPreparedWithMeasurementsInDepth_windowGHZState`);
+  depth `O(L)` (`MPSPreparation.exists_isOneRoundConversion_windowGHZState`);
 * on every pair window, one unitary sending the register value `j` to the pair `ω_j` of block `j`,
   placed on the bond indices of block `j` (the isometry `W` of the source);
 * on every block, one unitary implementing all the isometries `V_{j,k}` at once
@@ -40,7 +40,7 @@ isometry of the blocked direct sum only under it. Documented in
 
 ## Main declarations
 
-* `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState` —
+* `MPSPreparation.exists_isOneRoundConversion_sum_blockIsometryState` —
   the preparation in depth `O(L)`.
 
 ## References
@@ -77,7 +77,7 @@ prepared with measurements and a circuit in depth at most `C L`.
 arXiv:2307.01696, paragraph "Long-range MPS using measurements": the GHZ-type state `|χ_{N/q}⟩`
 with measurements, then the isometries `W : |j⟩ ↦ |ω_j⟩` on the pair windows, then the isometries
 of the blocked tensor on the blocks. -/
-theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState_of_encoding
+theorem exists_isOneRoundConversion_sum_blockIsometryState_of_encoding
     {r₁ : ℕ} (hr₁ : 2 ≤ r₁) {dig : Fin (∑ j, Dj j) → Cfg d r₁} (hdig : Function.Injective dig)
     {dig₀ : Fin b → Cfg d r₁} (hdig₀ : Function.Injective dig₀) (hD : 0 < ∑ j, Dj j) :
     ∃ C : ℕ, ∀ (A : (j : Fin b) → MPSTensor d (Dj j))
@@ -88,14 +88,19 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryStat
         (∀ j k, Kraus.IsInjective (blockTensor (A j) (ℓ k))) →
         (∀ j j' k, j ≠ j' → (physicalMatrix (blockTensor (A j) (ℓ k)))ᴴ *
           physicalMatrix (blockTensor (A j') (ℓ k)) = 0) →
-        IsPreparedWithMeasurementsAndCircuitInDepth (C * L)
-          (fun s => ∑ j, α j * blockIsometryState (A j) (ω j) hN s) := by
+        ∃ T₁ T₂, T₁ + T₂ ≤ C * L ∧ ∃ v : Fin N → Fin d → ℂ,
+          IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s))
+            (fun s => ∑ j, α j * blockIsometryState (A j) (ω j) hN s) := by
   classical
   have hd : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
   have h0 : (⟨0, hd⟩ : Fin d) = 0 := Fin.ext (by simp)
-  obtain ⟨CG, hCG⟩ := exists_isPreparedWithMeasurementsInDepth_windowGHZState (d := d) hr₁
+  obtain ⟨CG, hCG⟩ := exists_isOneRoundConversion_windowGHZState (d := d) hr₁
   obtain ⟨CU, hCU⟩ := exists_blockSumUnitary (Dj := Dj) hd (by omega) hdig hD
-  obtain ⟨KW, hKW⟩ := exists_isPairProduct (n := r₁ + r₁) hd (by omega)
+  have : NeZero (r₁ + r₁) := ⟨by omega⟩
+  obtain ⟨KW, hKW⟩ : ∃ KW, ∀ X : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ,
+      X ∈ unitary (Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ) →
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (r₁ + r₁))) KW X :=
+    ⟨_, fun X hX ↦ isGateProduct_pathGraph_unitaryGateCount hX⟩
   refine ⟨CG + KW + CU, fun A ω hω α hα M _ ℓ N _ hN L hℓ hL hinj horth => ?_⟩
   have hr : ∀ k, r₁ + r₁ ≤ ℓ k := fun k => by have := hℓ k; omega
   have hL1 : 1 ≤ L := by have := hℓ 0; have := hL 0; omega
@@ -142,14 +147,17 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryStat
     obtain ⟨W, hW, hWV⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq hV emb
     exact ⟨W, hW, fun u j => hWV u j⟩
   -- The circuit after the measurement.
-  have hcirc : IsCircuitOn Finset.univ (KW + CU * L)
+  have hcirc : IsUnitaryCircuitOn (Geometry.ring N) Finset.univ (CU * L + KW)
       (blockLayerOp hN U * pairLayerOp hN hr fun _ => W) :=
-    (isCircuitOn_pairLayerOp hN hr fun _ => hKW W hWu).mul
-      (isCircuitOn_blockLayerOp hN (K := CU * L) fun k =>
-        (hUpp k).mono (Nat.mul_le_mul_left CU (hL k)))
-  refine ⟨CG * L, KW + CU * L, windowGHZState hN hr α',
-    blockLayerOp hN U * pairLayerOp hN hr (fun _ => W),
-    by nlinarith, hφ, hcirc.isBondCircuitOfDepth, ?_⟩
+    (isUnitaryCircuitOn_blockLayerOp hN (K := CU * L) fun k =>
+        (hUpp k).mono (Nat.mul_le_mul_left CU (hL k))).mul
+      (isUnitaryCircuitOn_pairLayerOp hN hr fun _ => hKW W hWu)
+  obtain ⟨v, hv⟩ := hφ
+  refine ⟨CG * L, CU * L + KW, by nlinarith, v, ?_⟩
+  suffices hψ : (fun s => ∑ j, α j * blockIsometryState (A j) (ω j) hN s) =
+      (blockLayerOp hN U * pairLayerOp hN hr fun _ => W) *ᵥ windowGHZState hN hr α' by
+    have h := hv.mulVec hcirc.isUnitaryCircuit
+    rwa [zero_add, ← hψ] at h
   -- The circuit takes each configuration of the GHZ-type state to the state of its block.
   have hj : ∀ j, (blockLayerOp hN U * pairLayerOp hN hr fun _ => W) *ᵥ
       Pi.single (registerCfg hN hr (dig₀ j)) 1 = fun s => blockIsometryState (A j) (ω j) hN s := by
@@ -161,7 +169,8 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryStat
       (A j) (ω j) (U := U) (fun k l r τ => hU k j l r τ) (W := Wj) hWj s,
       ← mulVec_mulVec, ← mulVec_mulVec]
     have key : pairLayerOp hN hr (fun _ => W) *ᵥ Pi.single (registerCfg hN hr (dig₀ j)) 1 =
-        pairLayerOp hN hr (fun _ => Wj) *ᵥ productVector fun _ => Pi.single ⟨0, hd⟩ 1 := by
+        pairLayerOp hN hr (fun _ => Wj) *ᵥ
+          fun σ : Cfg d N => ∏ i, (Pi.single (⟨0, hd⟩ : Fin d) (1 : ℂ) : Fin d → ℂ) (σ i) := by
       funext y
       rw [pairLayerOp_mulVec_apply hd hN hr (fun _ => Wj) y]
       simp only [mulVec, dotProduct, Pi.single_apply, mul_ite, mul_one, mul_zero,
@@ -193,7 +202,7 @@ measurements and a circuit in depth at most `C L`.
 arXiv:2307.01696, paragraph "Long-range MPS using measurements". The labels of the blocks and the
 bond indices are encoded in `r₁ = b + ∑ⱼ Dⱼ + 2` sites; for `d = 1` such encodings exist because
 the hypotheses force `∑ⱼ Dⱼ² ≤ 1` (`MPSPreparation.sum_mul_self_le_pow`). -/
-theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState
+theorem exists_isOneRoundConversion_sum_blockIsometryState
     (b : ℕ) (Dj : Fin b → ℕ) :
     ∃ C L₀ : ℕ, ∀ (A : (j : Fin b) → MPSTensor d (Dj j))
       (ω : (j : Fin b) → Fin (Dj j) × Fin (Dj j) → ℂ), (∀ j, ∑ p, star (ω j p) * ω j p = 1) →
@@ -203,8 +212,9 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryStat
         (∀ j k, Kraus.IsInjective (blockTensor (A j) (ℓ k))) →
         (∀ j j' k, j ≠ j' → (physicalMatrix (blockTensor (A j) (ℓ k)))ᴴ *
           physicalMatrix (blockTensor (A j') (ℓ k)) = 0) →
-        IsPreparedWithMeasurementsAndCircuitInDepth (C * L)
-          (fun s => ∑ j, α j * blockIsometryState (A j) (ω j) hN s) := by
+        ∃ T₁ T₂, T₁ + T₂ ≤ C * L ∧ ∃ v : Fin N → Fin d → ℂ,
+          IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s))
+            (fun s => ∑ j, α j * blockIsometryState (A j) (ω j) hN s) := by
   classical
   set r₁ := b + ∑ j, Dj j + 2 with hr₁
   have hcard : ∀ n, Fintype.card (Fin n) ≤ d ^ r₁ → Nonempty (Fin n ↪ Cfg d r₁) := fun n h =>
@@ -226,7 +236,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryStat
     · obtain ⟨dig⟩ := hcard _ (by simpa using henc.2)
       obtain ⟨dig₀⟩ := hcard _ (by simpa using henc.1)
       obtain ⟨C, hC⟩ :=
-        exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState_of_encoding
+        exists_isOneRoundConversion_sum_blockIsometryState_of_encoding
           (Dj := Dj) (r₁ := r₁) (by omega) dig.injective dig₀.injective hD
       exact ⟨C, 3 * r₁, fun A ω hω α hα M _ ℓ N _ hN L hℓ hL hinj horth =>
         hC A ω hω α hα ℓ hN L hℓ hL hinj horth⟩

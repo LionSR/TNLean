@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.MPU.JoiningPacketSupport
 import TNLean.MPS.MPU.IntervalInitializationBounds
-import TNLean.Circuit.LocalCircuit
+import QICLean.ManyBody.Sites.Support
 
 /-!
 # Support of an interval merger in joining-packet coordinates
@@ -24,7 +24,7 @@ Source: the interval merger and common-register construction in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
 
-open Matrix MPSTensor QuantumCircuit
+open Matrix MPSTensor
 
 namespace MPUCircuit
 

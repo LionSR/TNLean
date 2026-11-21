@@ -7,6 +7,11 @@ import TNLean.Algebra.FinsetEnumeration
 import TNLean.MPS.Preparation.BlockIsometryState
 import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.SequentialFactorization
+import QICLean.Circuit.Compile.ChainUniversality
+import QICLean.Circuit.Model.UnitaryPlacement
+import QICLean.Circuit.Model.UnitaryRegion
+import QICLean.Circuit.Model.UnitaryRing
+import TNLean.Circuit.EmbeddedProduct
 
 /-!
 # Preparing arbitrary block-isometry states in depth `O(L)`
@@ -59,7 +64,7 @@ neither. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scope.tex`.
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder
-open QuantumCircuit
+open QuantumCircuit ManyBody
 open Kraus (blockPhysDim decodeBlockEquiv blockTensor)
 
 namespace MPSPreparation
@@ -165,33 +170,49 @@ section Layers
 theorem pairwise_commute_blockSite (hN : ∑ k, ℓ k = N)
     (U : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ) :
     ((Finset.univ : Finset (Fin M)) : Set (Fin M)).Pairwise
-      (Function.onFun Commute fun k => embedOp (blockSite hN k) (U k)) :=
-  fun k _ k' _ h => commute_embedOp_of_disjoint (blockSite_injective hN k)
-    (blockSite_injective hN k') (disjoint_range_blockSite hN h) (U k) (U k')
+      (Function.onFun Commute fun k => placeAlong (X := fun _ : Fin N ↦ Fin d)
+        ⟨blockSite hN k, blockSite_injective hN k⟩ (U k)) := by
+  intro k _ k' _ h
+  have hdisj : Disjoint (Finset.univ.map ⟨blockSite hN k, blockSite_injective hN k⟩)
+      (Finset.univ.map ⟨blockSite hN k', blockSite_injective hN k'⟩) := by
+    rw [Finset.disjoint_left]
+    rintro _ ha hb
+    obtain ⟨a, -, rfl⟩ := Finset.mem_map.mp ha
+    obtain ⟨b, -, hb⟩ := Finset.mem_map.mp hb
+    exact Set.disjoint_left.mp (disjoint_range_blockSite hN h) ⟨a, rfl⟩ ⟨b, hb⟩
+  exact commute_placeAlong_of_disjoint (X := fun _ : Fin N ↦ Fin d) _ hdisj (U k) (U k')
 
 theorem pairwise_commute_pairSite (hN : ∑ k, ℓ k = N) (hr : ∀ k, r₁ + r₁ ≤ ℓ k)
     (W : Fin M → Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ) :
     ((Finset.univ : Finset (Fin M)) : Set (Fin M)).Pairwise
-      (Function.onFun Commute fun k => embedOp (pairSite hN hr k) (W k)) :=
-  fun k _ k' _ h => commute_embedOp_of_disjoint (pairSite_injective hN hr k)
-    (pairSite_injective hN hr k') (disjoint_range_pairSite hN hr h) (W k) (W k')
+      (Function.onFun Commute fun k => placeAlong (X := fun _ : Fin N ↦ Fin d)
+        ⟨pairSite hN hr k, pairSite_injective hN hr k⟩ (W k)) := by
+  intro k _ k' _ h
+  have hdisj : Disjoint (Finset.univ.map ⟨pairSite hN hr k, pairSite_injective hN hr k⟩)
+      (Finset.univ.map ⟨pairSite hN hr k', pairSite_injective hN hr k'⟩) := by
+    rw [Finset.disjoint_left]
+    rintro _ ha hb
+    obtain ⟨a, -, rfl⟩ := Finset.mem_map.mp ha
+    obtain ⟨b, -, hb⟩ := Finset.mem_map.mp hb
+    exact Set.disjoint_left.mp (disjoint_range_pairSite hN hr h) ⟨a, rfl⟩ ⟨b, hb⟩
+  exact commute_placeAlong_of_disjoint (X := fun _ : Fin N ↦ Fin d) _ hdisj (W k) (W k')
 
 /-- The unitary `U_k` applied on block `k`, for every block: `⊗ₖ U_k`. -/
 noncomputable def blockLayerOp (hN : ∑ k, ℓ k = N)
     (U : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ) : Matrix (Cfg d N) (Cfg d N) ℂ :=
-  Finset.univ.noncommProd (fun k : Fin M => embedOp (blockSite hN k) (U k))
-    (pairwise_commute_blockSite hN U)
+  Finset.univ.noncommProd (fun k : Fin M => placeAlong (X := fun _ : Fin N ↦ Fin d)
+    ⟨blockSite hN k, blockSite_injective hN k⟩ (U k)) (pairwise_commute_blockSite hN U)
 
 /-- The unitary `W_k` applied on the pair window `k`, for every window. -/
 noncomputable def pairLayerOp (hN : ∑ k, ℓ k = N) (hr : ∀ k, r₁ + r₁ ≤ ℓ k)
     (W : Fin M → Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ) : Matrix (Cfg d N) (Cfg d N) ℂ :=
-  Finset.univ.noncommProd (fun k : Fin M => embedOp (pairSite hN hr k) (W k))
-    (pairwise_commute_pairSite hN hr W)
+  Finset.univ.noncommProd (fun k : Fin M => placeAlong (X := fun _ : Fin N ↦ Fin d)
+    ⟨pairSite hN hr k, pairSite_injective hN hr k⟩ (W k)) (pairwise_commute_pairSite hN hr W)
 
 theorem blockLayerOp_apply (hN : ∑ k, ℓ k = N) (U : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ)
     (x y : Cfg d N) :
     blockLayerOp hN U x y = ∏ k, U k (x ∘ blockSite hN k) (y ∘ blockSite hN k) := by
-  rw [blockLayerOp, noncommProd_embedOp_apply _ (fun k => blockSite_injective hN k) _ _
+  rw [blockLayerOp, noncommProd_placeAlong_apply _ (fun k => blockSite_injective hN k) _ _
     (fun k _ k' _ h => disjoint_range_blockSite hN h), ite_eq_left]
   intro i hi
   obtain ⟨k, j, rfl⟩ := exists_blockSite hN i
@@ -202,26 +223,27 @@ theorem pairLayerOp_apply (hN : ∑ k, ℓ k = N) (hr : ∀ k, r₁ + r₁ ≤ �
     pairLayerOp hN hr W x y =
       if ∀ i, (∀ k j, pairSite hN hr k j ≠ i) → x i = y i then
         ∏ k, W k (x ∘ pairSite hN hr k) (y ∘ pairSite hN hr k) else 0 := by
-  rw [pairLayerOp, noncommProd_embedOp_apply (m := fun _ => r₁ + r₁) _
+  rw [pairLayerOp, noncommProd_placeAlong_apply (m := fun _ => r₁ + r₁) _
     (fun k => pairSite_injective hN hr k) _ _
     (fun k _ k' _ h => disjoint_range_pairSite hN hr h)]
   simp only [Finset.mem_univ, true_implies]
 
 /-- The all-`|0⟩` product state is the basis vector of the configuration `0 ⋯ 0`. -/
-theorem productVector_single_zero_apply (hd : 0 < d) (z : Cfg d N) :
-    productVector (fun _ => Pi.single (⟨0, hd⟩ : Fin d) (1 : ℂ)) z =
+theorem prod_single_zero_apply (hd : 0 < d) (z : Cfg d N) :
+    ∏ i, (Pi.single (⟨0, hd⟩ : Fin d) (1 : ℂ) : Fin d → ℂ) (z i) =
       if z = fun _ => ⟨0, hd⟩ then 1 else 0 := by
   classical
-  simp only [productVector, Pi.single_apply]
+  simp only [Pi.single_apply]
   rw [Finset.prod_ite_zero]
   simp only [Finset.mem_univ, true_implies, Finset.prod_const_one, funext_iff]
 
 /-- A matrix applied to the all-`|0⟩` product state gives its column at `0 ⋯ 0`. -/
-theorem mulVec_productVector_single_zero (hd : 0 < d) (X : Matrix (Cfg d N) (Cfg d N) ℂ)
+theorem mulVec_prod_single_zero (hd : 0 < d) (X : Matrix (Cfg d N) (Cfg d N) ℂ)
     (y : Cfg d N) :
-    (X *ᵥ productVector fun _ => Pi.single ⟨0, hd⟩ 1) y = X y fun _ => ⟨0, hd⟩ := by
+    (X *ᵥ fun σ : Cfg d N => ∏ i, (Pi.single (⟨0, hd⟩ : Fin d) (1 : ℂ) : Fin d → ℂ) (σ i)) y =
+      X y fun _ => ⟨0, hd⟩ := by
   classical
-  simp only [mulVec, dotProduct, productVector_single_zero_apply hd, mul_ite, mul_one, mul_zero,
+  simp only [mulVec, dotProduct, prod_single_zero_apply hd, mul_ite, mul_one, mul_zero,
     Finset.sum_ite_eq', Finset.mem_univ, ite_true]
 
 /-- **The layer of pairs.** Applied to the all-`|0⟩` state, the layer of the unitaries `W_k` has
@@ -233,32 +255,46 @@ pair windows; the paragraph "Inhomogeneous short-range correlated MPS" allows a 
 `ω^k` on each window. -/
 theorem pairLayerOp_mulVec_apply (hd : 0 < d) (hN : ∑ k, ℓ k = N) (hr : ∀ k, r₁ + r₁ ≤ ℓ k)
     (W : Fin M → Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ) (y : Cfg d N) :
-    (pairLayerOp hN hr W *ᵥ productVector fun _ => Pi.single ⟨0, hd⟩ 1) y =
+    (pairLayerOp hN hr W *ᵥ
+        fun σ : Cfg d N => ∏ i, (Pi.single (⟨0, hd⟩ : Fin d) (1 : ℂ) : Fin d → ℂ) (σ i)) y =
       if ∀ i, (∀ k j, pairSite hN hr k j ≠ i) → y i = ⟨0, hd⟩ then
         ∏ k, W k (y ∘ pairSite hN hr k) (fun _ => ⟨0, hd⟩) else 0 := by
   classical
-  rw [mulVec_productVector_single_zero, pairLayerOp_apply]
+  rw [mulVec_prod_single_zero, pairLayerOp_apply]
   rfl
 
-theorem isCircuitOn_blockLayerOp [NeZero N] (hN : ∑ k, ℓ k = N) {K : ℕ}
-    {U : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ} (hU : ∀ k, IsPairProduct d (ℓ k) K (U k)) :
-    IsCircuitOn Finset.univ K (blockLayerOp hN U) := by
-  refine (IsCircuitOn.finset_noncommProd Finset.univ (fun k => Finset.univ.image (blockSite hN k))
-    (fun k _ k' _ h => Finset.disjoint_coe.mp (by simpa using disjoint_range_blockSite hN h)) _
-    (fun k _ =>
-      (hU k).isCircuitOn (blockSite_injective hN k) fun i j h => blockSite_succ hN k i j h)
-      _).mono_set (Finset.subset_univ _)
+/-- The layer of the block unitaries, each a product of at most `K` gates on neighbouring sites
+of its block, is a circuit of depth at most `K` on the ring: the blocks are disjoint and carry
+consecutive sites. -/
+theorem isUnitaryCircuitOn_blockLayerOp [NeZero N] (hN : ∑ k, ℓ k = N) {K : ℕ}
+    {U : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ}
+    (hU : ∀ k, IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (ℓ k))) K (U k)) :
+    IsUnitaryCircuitOn (Geometry.ring N) Finset.univ K (blockLayerOp hN U) := by
+  refine (IsUnitaryCircuitOn.finset_noncommProd Geometry.ring_cell_nonempty Finset.univ
+    (fun k => Finset.univ.map ⟨blockSite hN k, blockSite_injective hN k⟩)
+    (fun k _ k' _ h => Finset.disjoint_coe.mp (by simpa using disjoint_range_blockSite hN h))
+    (fun k => placeAlong (X := fun _ : Fin N ↦ Fin d)
+      ⟨blockSite hN k, blockSite_injective hN k⟩ (U k))
+    (fun k _ => IsGateProduct.isUnitaryCircuitOn_ring
+      (windowEquiv ⟨blockSite hN k, blockSite_injective hN k⟩)
+      (fun i j h => blockSite_succ hN k i j h) (hU k))
+    (pairwise_commute_blockSite hN U)).mono_set (Finset.subset_univ _)
 
-theorem isCircuitOn_pairLayerOp [NeZero N] (hN : ∑ k, ℓ k = N) (hr : ∀ k, r₁ + r₁ ≤ ℓ k)
+/-- The layer of the pair unitaries, each a product of at most `K` gates on neighbouring sites of
+its window, is a circuit of depth at most `K` on the ring. -/
+theorem isUnitaryCircuitOn_pairLayerOp [NeZero N] (hN : ∑ k, ℓ k = N) (hr : ∀ k, r₁ + r₁ ≤ ℓ k)
     {K : ℕ} {W : Fin M → Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ}
-    (hW : ∀ k, IsPairProduct d (r₁ + r₁) K (W k)) :
-    IsCircuitOn Finset.univ K (pairLayerOp hN hr W) := by
-  refine (IsCircuitOn.finset_noncommProd Finset.univ
-    (fun k => Finset.univ.image (pairSite hN hr k))
-    (fun k _ k' _ h => Finset.disjoint_coe.mp (by simpa using disjoint_range_pairSite hN hr h)) _
-    (fun k _ =>
-      (hW k).isCircuitOn (pairSite_injective hN hr k) fun i j h => pairSite_succ hN hr k i j h)
-      _).mono_set (Finset.subset_univ _)
+    (hW : ∀ k, IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (r₁ + r₁))) K (W k)) :
+    IsUnitaryCircuitOn (Geometry.ring N) Finset.univ K (pairLayerOp hN hr W) := by
+  refine (IsUnitaryCircuitOn.finset_noncommProd Geometry.ring_cell_nonempty Finset.univ
+    (fun k => Finset.univ.map ⟨pairSite hN hr k, pairSite_injective hN hr k⟩)
+    (fun k _ k' _ h => Finset.disjoint_coe.mp (by simpa using disjoint_range_pairSite hN hr h))
+    (fun k => placeAlong (X := fun _ : Fin N ↦ Fin d)
+      ⟨pairSite hN hr k, pairSite_injective hN hr k⟩ (W k))
+    (fun k _ => IsGateProduct.isUnitaryCircuitOn_ring
+      (windowEquiv ⟨pairSite hN hr k, pairSite_injective hN hr k⟩)
+      (fun i j h => pairSite_succ hN hr k i j h) (hW k))
+    (pairwise_commute_pairSite hN hr W)).mono_set (Finset.subset_univ _)
 
 /-- **The state is the output of the two layers**, for any matrices on the blocks. If each `U_k`
 implements a matrix `X_k : ℂ^{D²} → ℂ^{d^{ℓ k}}` on the placed inputs `|l, 0 ⋯ 0, r⟩` and `W_k`
@@ -279,12 +315,13 @@ theorem blockMatVector_pairFamilyVector_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ 
     (s : Cfg d N) :
     blockMatVector X hN (pairFamilyVector ω) s =
       ((blockLayerOp hN U * pairLayerOp hN hr W) *ᵥ
-        productVector fun _ => Pi.single ⟨0, hd⟩ 1) s := by
+        fun σ : Cfg d N => ∏ i, (Pi.single (⟨0, hd⟩ : Fin d) (1 : ℂ) : Fin d → ℂ) (σ i)) s := by
   classical
   have hs : Function.Injective (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) :=
     fun p p' h => Prod.ext (twoCfg_injective hdig h).1 (twoCfg_injective hdig h).2
   set g : Cfg d N → ℂ := fun y => blockLayerOp hN U s y *
-    (pairLayerOp hN hr W *ᵥ productVector fun _ => Pi.single ⟨0, hd⟩ 1) y with hg
+    (pairLayerOp hN hr W *ᵥ
+      fun σ : Cfg d N => ∏ i, (Pi.single (⟨0, hd⟩ : Fin d) (1 : ℂ) : Fin d → ℂ) (σ i)) y with hg
   rw [← mulVec_mulVec]
   change _ = ∑ y, g y
   -- only the configurations carrying the pairs contribute
@@ -352,7 +389,7 @@ theorem chainBlockIsometryState_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
     (s : Cfg d N) :
     chainBlockIsometryState A ω hN s =
       ((blockLayerOp hN U * pairLayerOp hN hr W) *ᵥ
-        productVector fun _ => Pi.single ⟨0, hd⟩ 1) s := by
+        fun σ : Cfg d N => ∏ i, (Pi.single (⟨0, hd⟩ : Fin d) (1 : ℂ) : Fin d → ℂ) (σ i)) s := by
   rw [chainBlockIsometryState, blockIsoVector_eq_blockMatVector]
   exact blockMatVector_pairFamilyVector_eq_mulVec hd hN hr hdig _ ω hU hW s
 
@@ -375,7 +412,7 @@ theorem blockIsometryState_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
     (s : Cfg d N) :
     blockIsometryState A ω hN s =
       ((blockLayerOp hN U * pairLayerOp hN hr fun _ => W) *ᵥ
-        productVector fun _ => Pi.single ⟨0, hd⟩ 1) s := by
+        fun σ : Cfg d N => ∏ i, (Pi.single (⟨0, hd⟩ : Fin d) (1 : ℂ) : Fin d → ℂ) (σ i)) s := by
   rw [blockIsometryState_eq_chainBlockIsometryState]
   exact chainBlockIsometryState_eq_mulVec hd hN hr hdig _ _
     (fun c _ k τ => by rw [chainBlockTensor_const]; exact hU k _ _ τ) (fun _ => hW) s
@@ -394,13 +431,14 @@ theorem exists_pairEquiv_val_lt_card_iff_mem (S : Finset (Fin D × Fin D)) :
 /-- For physical dimension `d ≤ 1` every vector on a ring of `N ≥ 1` sites is prepared in depth
 `0`: there is at most one configuration, and a product vector carries any amplitude on it. -/
 theorem isPreparedInDepth_zero_of_le_one [NeZero N] (hd : d ≤ 1) (ψ : Cfg d N → ℂ) :
-    IsPreparedInDepth 0 ψ := by
+    IsPreparedInDepth (Geometry.ring N) 0 ψ := by
   classical
   have h0 : 0 < N := Nat.pos_of_ne_zero (NeZero.ne N)
   have hsub : Subsingleton (Fin d) := ⟨fun a b => Fin.ext (by omega)⟩
-  refine ⟨1, ⟨[], rfl, rfl⟩, fun i a => if i.val = 0 then ψ (fun _ => a) else 1,
+  refine ⟨1, IsUnitaryCircuit.one _ _ 0, fun i a => if i.val = 0 then ψ (fun _ => a) else 1,
     funext fun s => ?_⟩
-  rw [Matrix.one_mulVec, productVector, Finset.prod_eq_single ⟨0, h0⟩
+  simp only [Matrix.one_mulVec]
+  rw [Finset.prod_eq_single ⟨0, h0⟩
     (fun i _ hi => by rw [ite_eq_right fun h => hi (Fin.ext h)]) (by simp)]
   simp only [ite_true]
   exact congrArg ψ (funext fun _ => Subsingleton.elim _ _)
@@ -425,7 +463,8 @@ theorem exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn (d D :
       (∀ c, pairFamilyState ω c ≠ 0 → ∀ k, c k ∈ S k) → ∀ L : ℕ,
         (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) →
         (∀ k, IsInjectiveOn (chainBlockTensor A hN k) (S k : Set (Fin D × Fin D))) →
-          IsPreparedInDepth (C * L) fun s => chainBlockIsometryState A ω hN s := by
+          IsPreparedInDepth (Geometry.ring N) (C * L)
+            fun s => chainBlockIsometryState A ω hN s := by
   classical
   rcases Nat.lt_or_ge d 2 with hd1 | hd2
   · refine ⟨0, fun {M} _ ℓ N _ hN A _ ω _ _ L _ _ _ => ?_⟩
@@ -443,13 +482,18 @@ theorem exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn (d D :
   have hdig : Function.Injective dig := dig.injective
   choose Cπ hCπ using fun π : Fin (D * D) ≃ Fin D × Fin D =>
     exists_blockUnitary_of_equiv hd (r₁ := D) (by omega) hdig hD π
-  obtain ⟨Kw, hKw⟩ := exists_isPairProduct (n := D + D) hd (by omega)
+  have : NeZero (D + D) := ⟨by omega⟩
+  obtain ⟨Kw, hKw⟩ : ∃ Kw, ∀ X : Matrix (Cfg d (D + D)) (Cfg d (D + D)) ℂ,
+      X ∈ unitary (Matrix (Cfg d (D + D)) (Cfg d (D + D)) ℂ) →
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (D + D))) Kw X :=
+    ⟨_, fun X hX ↦ isGateProduct_pathGraph_unitaryGateCount hX⟩
   set Cb := Finset.univ.sup Cπ with hCb
   refine ⟨Cb + Kw, fun {M} _ ℓ N _ hN A S ω hω hωS L hℓ hL hinj => ?_⟩
   choose W hWu hW using fun k => exists_pairUnitary hd hdig (ω k) (hω k)
   have hr : ∀ k, D + D ≤ ℓ k := fun k => by have := hℓ k; omega
   have hUk : ∀ k, ∃ U : Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ,
-      IsPairProduct d (ℓ k) (Cb * ℓ k) U ∧ ∀ l r τ, (l, r) ∈ S k →
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (ℓ k))) (Cb * ℓ k) U ∧
+        ∀ l r τ, (l, r) ∈ S k →
         U τ (blockInputCfg hd (ℓ k) dig l r) =
           polarIsoMatrix (chainBlockTensor A hN k) ((decodeBlockEquiv d (ℓ k)).symm τ)
             (finProdFinEquiv (l, r)) := fun k => by
@@ -474,10 +518,10 @@ theorem exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn (d D :
     omega
   refine ⟨blockLayerOp hN U * pairLayerOp hN hr W, ?_,
     fun _ => Pi.single ⟨0, hd⟩ 1, funext fun s => ?_⟩
-  · have hc := (isCircuitOn_pairLayerOp hN hr fun k => hKw (W k) (hWu k)).mul
-      (isCircuitOn_blockLayerOp hN fun k => (hUpp k).mono
-        (Nat.mul_le_mul_left Cb (hL k)))
-    refine (hc.mono ?_).isBondCircuitOfDepth
+  · have hc := (isUnitaryCircuitOn_blockLayerOp hN fun k => (hUpp k).mono
+        (Nat.mul_le_mul_left Cb (hL k))).mul
+      (isUnitaryCircuitOn_pairLayerOp hN hr fun k => hKw (W k) (hWu k))
+    refine (hc.mono ?_).isUnitaryCircuit
     have : Kw ≤ Kw * L := Nat.le_mul_of_pos_right _ hL1
     nlinarith
   · exact chainBlockIsometryState_eq_mulVec hd hN hr hdig A ω
@@ -502,7 +546,8 @@ theorem exists_isPreparedInDepth_chainBlockIsometryState (d D : ℕ) :
       (A : MPSChainTensor d D N) (ω : Fin M → Fin D × Fin D → ℂ),
       (∀ k, ∑ p, star (ω k p) * ω k p = 1) → ∀ L : ℕ,
         (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) → (∀ k, Kraus.IsInjective (chainBlockTensor A hN k)) →
-          IsPreparedInDepth (C * L) fun s => chainBlockIsometryState A ω hN s := by
+          IsPreparedInDepth (Geometry.ring N) (C * L)
+            fun s => chainBlockIsometryState A ω hN s := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn d D
   exact ⟨C, fun ℓ N _ hN A ω hω L hℓ hL hinj => hC ℓ hN A (fun _ => Finset.univ) ω hω
     (fun _ _ _ => Finset.mem_univ _) L hℓ hL fun k => by
@@ -521,7 +566,7 @@ theorem exists_isPreparedInDepth_blockIsometryState (d D : ℕ) :
     ∃ C : ℕ, ∀ (A : MPSTensor d D) (ω : Fin D × Fin D → ℂ), ∑ p, star (ω p) * ω p = 1 →
       ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N) (L : ℕ),
         (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) → (∀ k, Kraus.IsInjective (blockTensor A (ℓ k))) →
-          IsPreparedInDepth (C * L) fun s => blockIsometryState A ω hN s := by
+          IsPreparedInDepth (Geometry.ring N) (C * L) fun s => blockIsometryState A ω hN s := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_chainBlockIsometryState d D
   refine ⟨C, fun A ω hω M _ ℓ N _ hN L hℓ hL hinj => ?_⟩
   rw [blockIsometryState_eq_chainBlockIsometryState]

@@ -36,6 +36,7 @@ most `D^{2m}`.
 
 open Matrix
 open scoped Kronecker
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -53,24 +54,25 @@ theorem rank_schmidtCoeffMatrix_mulVec_le_of_isOneSided {α β : Type*} [Fintype
 /-- In cut coordinates, applying an operator is applying its cut form. -/
 theorem cutMatrix_toEuclideanLin (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
-    cutMatrix (toEuclideanLin X ψ) k = schmidtCoeffMatrix
+    cutMatrix (leftBlock L k) (toEuclideanLin X ψ) = schmidtCoeffMatrix
       (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) X *ᵥ
         WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ)) := by
   ext a b
-  rw [cutMatrix_apply]
+  rw [ManyBody.cutMatrix_apply]
   simp only [toLpLin_apply, PiLp.toLp_apply, schmidtCoeffMatrix_apply, mulVec, dotProduct,
     reindex_apply, submatrix_apply]
   exact (Equiv.sum_comp (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm _).symm
 
 /-- A chain vector is determined by its cut matrix at any cut. -/
 theorem cutMatrix_injective (k : ℕ) :
-    Function.Injective (fun ψ : EuclideanSpace ℂ (Fin L → Fin q) ↦ cutMatrix ψ k) := by
+    Function.Injective
+      (fun ψ : EuclideanSpace ℂ (Fin L → Fin q) ↦ cutMatrix (leftBlock L k) ψ) := by
   intro ψ φ h
   ext x
   have hx := congrArg (fun M ↦ M
     ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)) x).1
     ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)) x).2) h
-  simpa only [cutMatrix_apply, Prod.mk.eta, Equiv.symm_apply_apply] using hx
+  simpa only [ManyBody.cutMatrix_apply, Prod.mk.eta, Equiv.symm_apply_apply] using hx
 
 /-- Passing to cut coordinates preserves the inner product. -/
 theorem inner_cutVector (k : ℕ) (ψ φ : EuclideanSpace ℂ (Fin L → Fin q)) :
@@ -86,7 +88,8 @@ theorem rank_cutMatrix_toEuclideanLin_le_of_isOneSided
     {X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (ψ : EuclideanSpace ℂ (Fin L → Fin q))
     (k : ℕ) (hX : Matrix.IsOneSided
       (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) X)) :
-    (cutMatrix (toEuclideanLin X ψ) k).rank ≤ (cutMatrix ψ k).rank := by
+    (cutMatrix (leftBlock L k) (toEuclideanLin X ψ)).rank ≤
+      (cutMatrix (leftBlock L k) ψ).rank := by
   rw [cutMatrix_toEuclideanLin]
   exact rank_schmidtCoeffMatrix_mulVec_le_of_isOneSided hX _
 
@@ -96,7 +99,8 @@ theorem rank_cutMatrix_toEuclideanLin_le_of_subset_leftBlock (hq : 1 ≤ q)
     {X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {S : Finset (Fin L)}
     (hX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X S) {k : ℕ} (hS : S ⊆ leftBlock L k)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
-    (cutMatrix (toEuclideanLin X ψ) k).rank ≤ (cutMatrix ψ k).rank :=
+    (cutMatrix (leftBlock L k) (toEuclideanLin X ψ)).rank ≤
+      (cutMatrix (leftBlock L k) ψ).rank :=
   rank_cutMatrix_toEuclideanLin_le_of_isOneSided ψ k
     (hX.isOneSided_of_subset hS (fun _ ↦ ⟨0, hq⟩))
 
@@ -106,7 +110,8 @@ theorem rank_cutMatrix_toEuclideanLin_le_of_disjoint_leftBlock (hq : 1 ≤ q)
     {X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {S : Finset (Fin L)}
     (hX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X S) {k : ℕ}
     (hS : Disjoint S (leftBlock L k)) (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
-    (cutMatrix (toEuclideanLin X ψ) k).rank ≤ (cutMatrix ψ k).rank :=
+    (cutMatrix (leftBlock L k) (toEuclideanLin X ψ)).rank ≤
+      (cutMatrix (leftBlock L k) ψ).rank :=
   rank_cutMatrix_toEuclideanLin_le_of_isOneSided ψ k
     (hX.isOneSided_of_disjoint hS (fun _ ↦ ⟨0, hq⟩))
 
@@ -120,14 +125,15 @@ theorem rank_cutMatrix_toEuclideanLin_le_pow (hq : 1 ≤ q)
     {X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {S : Finset (Fin L)}
     (hX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X S) {k m : ℕ}
     (hS : S ⊆ leftBlock L (k + m)) (hkm : k + m ≤ L) (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
-    (cutMatrix (toEuclideanLin X ψ) k).rank ≤ q ^ (2 * m) * (cutMatrix ψ k).rank := by
-  calc (cutMatrix (toEuclideanLin X ψ) k).rank
-      ≤ q ^ m * (cutMatrix (toEuclideanLin X ψ) (k + m)).rank :=
+    (cutMatrix (leftBlock L k) (toEuclideanLin X ψ)).rank ≤
+      q ^ (2 * m) * (cutMatrix (leftBlock L k) ψ).rank := by
+  calc (cutMatrix (leftBlock L k) (toEuclideanLin X ψ)).rank
+      ≤ q ^ m * (cutMatrix (leftBlock L (k + m)) (toEuclideanLin X ψ)).rank :=
         rank_cutMatrix_le_add _ k m hkm
-    _ ≤ q ^ m * (cutMatrix ψ (k + m)).rank :=
+    _ ≤ q ^ m * (cutMatrix (leftBlock L (k + m)) ψ).rank :=
         Nat.mul_le_mul_left _ (rank_cutMatrix_toEuclideanLin_le_of_subset_leftBlock hq hX hS ψ)
-    _ ≤ q ^ m * (q ^ m * (cutMatrix ψ k).rank) :=
+    _ ≤ q ^ m * (q ^ m * (cutMatrix (leftBlock L k) ψ).rank) :=
         Nat.mul_le_mul_left _ (rank_cutMatrix_add_le ψ k m hkm)
-    _ = q ^ (2 * m) * (cutMatrix ψ k).rank := by ring
+    _ = q ^ (2 * m) * (cutMatrix (leftBlock L k) ψ).rank := by ring
 
 end TNLean.MPS.AreaLaw

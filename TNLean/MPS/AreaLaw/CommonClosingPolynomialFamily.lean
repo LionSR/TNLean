@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
 import TNLean.MPS.MPDO.TraceChainLinearCombination
-import TNLean.Circuit.SiteEmbeddingOrder
+import QICLean.ManyBody.Sites.PlaceAlong
 import QICLean.Algebra.MatrixPolynomialParameter
 
 /-!
@@ -77,14 +77,15 @@ private theorem exists_common_physical_closing_nodes_family_fin
     let Ksites := interval L (a + 2 * ell) (b + 1)
     let eK := intervalShiftOrderIso
       (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
-    let Pmid := fun r ↦ QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L)
-      (QuantumCircuit.embedOp eK (MPOTensor.traceChainOperator Acore (C r)))
+    let Pmid := fun r ↦ ManyBody.place (X := fun _ ↦ Fin q) Ksites
+      (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
+        (MPOTensor.traceChainOperator Acore (C r)))
     let J := interval L (a + ell) (b + ell + 1)
     let eJ := intervalShiftOrderIso
       (show a + ell ≤ b + ell + 1 by omega) (show b + ell + 1 ≤ L by omega)
     let D := (q * k) ^ (18 * ell + 2 * (k / ell))
     let beta := fun _ : Fin L ↦ Fin q
-    let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
     let H := fun PL PR r ↦ ∑ i, Sum.elim (Sum.elim WL WR) ![PL, Pmid r, PR] i
     ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),
       N ≤ Fintype.card alpha * D ^ 2 ∧
@@ -95,8 +96,8 @@ private theorem exists_common_physical_closing_nodes_family_fin
       ∀ PL PR, ManyBody.IsSupportedOn PL (interval L 0 (a + 1)) →
         ManyBody.IsSupportedOn PR (interval L (b + 2 * ell) L) →
         ∀ Q : Polynomial ℂ, Q.natDegree ≤ k → ∀ c : alpha → ℂ,
-        ∃ M : Fin N → Matrix (ManyBody.RegionConfig beta Jᶜ)
-            (ManyBody.RegionConfig beta Jᶜ) ℂ,
+        ∃ M : Fin N → Matrix (ManyBody.ComplConfig beta J)
+            (ManyBody.ComplConfig beta J) ℂ,
           (∑ r, c r • Polynomial.aeval (H PL PR r) Q) =
             (∑ i, M i ⊗ₖ W i).submatrix tau tau := by
   classical
@@ -106,7 +107,7 @@ private theorem exists_common_physical_closing_nodes_family_fin
     WL WR hleft hright hab hb hell hq hk Acore (C r)
   choose n Wnode hn hbond _hTrace hnodePoly using hnodes
   obtain ⟨N, W, hN, hmember, hflatten⟩ :=
-    exists_flattened_kronecker_family (mu := ManyBody.RegionConfig beta Jᶜ) n Wnode
+    exists_flattened_kronecker_family (mu := ManyBody.ComplConfig beta J) n Wnode
   have hcount : N ≤ Fintype.card alpha * D ^ 2 := by
     calc
       N = ∑ r, n r := hN
@@ -123,8 +124,8 @@ private theorem exists_common_physical_closing_nodes_family_fin
   refine ⟨N, W, hcount, hW, ?_⟩
   intro PL PR hPL hPR Q hQ c
   have hnode (r : alpha) :
-      ∃ M : Fin (n r) → Matrix (ManyBody.RegionConfig beta Jᶜ)
-          (ManyBody.RegionConfig beta Jᶜ) ℂ,
+      ∃ M : Fin (n r) → Matrix (ManyBody.ComplConfig beta J)
+          (ManyBody.ComplConfig beta J) ℂ,
         Polynomial.aeval (H PL PR r) Q =
           (∑ i, M i ⊗ₖ Wnode r i).submatrix tau tau :=
     hnodePoly r PL PR hPL hPR Q hQ
@@ -163,20 +164,21 @@ theorem exists_common_physical_polynomial_closing_family_fin
     let eK := intervalShiftOrderIso
       (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
     let Cpoly := fun z : ℂ ↦ ∑ a, z ^ a.val • C a
-    let Pmid := fun z ↦ QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L)
-      (QuantumCircuit.embedOp eK (MPOTensor.traceChainOperator Acore (Cpoly z)))
+    let Pmid := fun z ↦ ManyBody.place (X := fun _ ↦ Fin q) Ksites
+      (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
+        (MPOTensor.traceChainOperator Acore (Cpoly z)))
     let J := interval L (a + ell) (b + ell + 1)
     let eJ := intervalShiftOrderIso
       (show a + ell ≤ b + ell + 1 by omega) (show b + ell + 1 ≤ L by omega)
     let D := (q * k) ^ (18 * ell + 2 * (k / ell))
     let beta := fun _ : Fin L ↦ Fin q
-    let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-    let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
       (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
     let T := U.trans Phi.symm
     let Tm := T.trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+      (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
       (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
     ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),
       N ≤ (m * k + 1) * D ^ 2 ∧
@@ -188,8 +190,8 @@ theorem exists_common_physical_polynomial_closing_family_fin
         ManyBody.IsSupportedOn PR (interval L (b + 2 * ell) L) →
         let H := ∑ i, Sum.elim (Sum.elim WL WR) ![PL, Pmid z, PR] i
         ∀ Q : Polynomial ℂ, Q.natDegree ≤ k →
-        ∃ M : Fin N → Matrix (ManyBody.RegionConfig beta Jᶜ)
-            (ManyBody.RegionConfig beta Jᶜ) ℂ,
+        ∃ M : Fin N → Matrix (ManyBody.ComplConfig beta J)
+            (ManyBody.ComplConfig beta J) ℂ,
           Polynomial.aeval H Q = (∑ i, M i ⊗ₖ W i).submatrix tau tau ∧
           Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
               Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Polynomial.aeval H Q) ∘L
@@ -197,7 +199,7 @@ theorem exists_common_physical_polynomial_closing_family_fin
             ∑ i, TensorProduct.mapL
               (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := ManyBody.RegionConfig beta J) (W i))
               (Matrix.toEuclideanCLM (𝕜 := ℂ)
-                (n := ManyBody.RegionConfig beta Jᶜ) (M i)) := by
+                (n := ManyBody.ComplConfig beta J) (M i)) := by
   classical
   intro Ksites eK Cpoly Pmid J eJ D beta tau U Phi T Tm
   have hnodes := exists_common_physical_closing_nodes_family_fin
@@ -207,12 +209,12 @@ theorem exists_common_physical_polynomial_closing_family_fin
   obtain ⟨N, W, hN, hW, hdecomp⟩ := hnodes
   have hcount : N ≤ (m * k + 1) * D ^ 2 := by
     simpa only [Fintype.card_fin] using hN
-  let Bcoef := fun a : Fin (m + 1) ↦ QuantumCircuit.embedOp
-    (Subtype.val : Ksites → Fin L)
-    (QuantumCircuit.embedOp eK (MPOTensor.traceChainOperator Acore (C a)))
+  let Bcoef := fun a : Fin (m + 1) ↦ ManyBody.place (X := fun _ ↦ Fin q) Ksites
+    (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
+      (MPOTensor.traceChainOperator Acore (C a)))
   have hPmid (z : ℂ) : Pmid z = ∑ a, z ^ a.val • Bcoef a := by
-    let placement := (QuantumCircuit.embedOpLinearMap (d := q)
-      (Subtype.val : Ksites → Fin L)).comp (QuantumCircuit.embedOpLinearMap (d := q) eK)
+    let placement := (ManyBody.placeHom (X := fun _ ↦ Fin q) Ksites).toLinearMap.comp
+      (ManyBody.placeAlongHom (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding).toLinearMap
     change placement (MPOTensor.traceChainOperator Acore (∑ a, z ^ a.val • C a)) =
       ∑ a, z ^ a.val • placement (MPOTensor.traceChainOperator Acore (C a))
     simp only [MPOTensor.traceChainOperator_sum_smul_closing, map_sum, map_smul]

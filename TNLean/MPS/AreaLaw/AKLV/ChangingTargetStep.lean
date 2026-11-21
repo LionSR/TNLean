@@ -29,14 +29,14 @@ open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
 namespace TNLean.MPS.AreaLaw
 
 private theorem aklv_regional_minima_eq {L q a s : ℕ}
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (e e' : Fin 3 → ℝ)
     (he : ∃ z : (Fin L → Fin q) → ℂ, star z ⬝ᵥ z = 1 ∧
-      (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ z = (e j : ℂ) • z) ∧
-      ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef)
+      (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ z = (e j : ℂ) • z) ∧
+      ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef)
     (he' : ∃ z : (Fin L → Fin q) → ℂ, star z ⬝ᵥ z = 1 ∧
-      (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ z = (e' j : ℂ) • z) ∧
-      ∀ j, (aklvNormalizationHamiltonians a s h j - (e' j : ℂ) • 1).PosSemidef) : e = e' := by
+      (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ z = (e' j : ℂ) • z) ∧
+      ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e' j : ℂ) • 1).PosSemidef) : e = e' := by
   obtain ⟨z, hz, hze, hlow⟩ := he
   obtain ⟨z', hz', hze', hlow'⟩ := he'
   funext j
@@ -49,12 +49,12 @@ phase-aligned normalized image of the preceding vector. AKLV, arXiv:1301.1162v1,
 Lemma `l:5`, lines 1025--1052. This predicate is proved from physical data,
 rather than supplied as a hypothesis of the recursive construction. -/
 def IsAKLVSequenceStep {L q : ℕ} (a s : ℕ)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (e : Fin 3 → ℝ) (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (i : ℕ)
     (x y : EuclideanSpace ℂ (Fin L → Fin q)) : Prop :=
   let t := aklvSequenceThreshold g (i + 1)
   let ell := aklvSequenceDegree g s (i + 1)
-  let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t Finset.univ
+  let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
   ∃ (E : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q)) (p : Polynomial ℝ) (c : ℂ),
     0 ≤ E ∧ ‖φ‖ = 1 ∧ toEuclideanLin B φ = (E : ℂ) • φ ∧
     (B - (E : ℂ) • 1 - ((9 * g / 10 : ℝ) : ℂ) •
@@ -70,20 +70,18 @@ while retaining its exact sharp rank multiplier and normalized polynomial image.
 This is the step used in the recursion for AKLV Lemma `l:5`. -/
 theorem exists_aklv_dyadic_filtered_output {L q a s : ℕ}
     (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h j) (interval L j.val (j.val + 2)))
-    (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (hΩ : ‖Ω‖ = 1)
-    (hground : (∑ j, h j) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
-    (hgap : ((∑ j, h j) - (mu : ℂ) • 1 - (g : ℂ) •
+    (hground : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
-    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ (∑ j, h j))
+    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ Φ.hamiltonian)
     (e : Fin 3 → ℝ)
     (he : ∃ z : (Fin L → Fin q) → ℂ, star z ⬝ᵥ z = 1 ∧
-      (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ z = (e j : ℂ) • z) ∧
-      ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef)
+      (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ z = (e j : ℂ) • z) ∧
+      ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef)
     (i : ℕ) (x : EuclideanSpace ℂ (Fin L → Fin q)) (hx : ‖x‖ = 1)
     (hxΩ : ‖x - Ω‖ ^ 2 ≤ aklvSequenceWeight i / 16) :
     ∃ y : EuclideanSpace ℂ (Fin L → Fin q),
@@ -91,18 +89,18 @@ theorem exists_aklv_dyadic_filtered_output {L q a s : ℕ}
       schmidtRank (WithLp.ofLp (ManyBody.cutVector (leftBlock L (a + s / 2)) y)) ≤
         aklvSequenceFilterRank q g s (i + 1) *
           schmidtRank (WithLp.ofLp (ManyBody.cutVector (leftBlock L (a + s / 2)) x)) ∧
-      IsAKLVSequenceStep a s h e g Ω i x y := by
+      IsAKLVSequenceStep a s Φ e g Ω i x y := by
   classical
   let t := aklvSequenceThreshold g (i + 1)
   let ell := aklvSequenceDegree g s (i + 1)
-  let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t Finset.univ
+  let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
   have hxsmall : ‖x - Ω‖ ^ 2 ≤ 1 / 16 := by
     have hw := (aklvSequenceWeight_pos_le_one i).2
     linarith
   obtain ⟨_hq, hg1, e', _E0, he', _hEeq, _hE0, _hE6, hfilter⟩ :=
-    exists_aklv_variable_window_filtered_output hs ha h hsupp h0 h1
+    exists_aklv_variable_window_filtered_output hs ha Φ h0 h1
       mu g Ω hΩ hground hgap hg hexcited x hx hxsmall
-  have heq : e' = e := aklv_regional_minima_eq h e' e he' he
+  have heq : e' = e := aklv_regional_minima_eq Φ e' e he' he
   subst e'
   obtain ⟨_hBpos, _hBnorm, E, φ, hE, hφ, heigen, hprojector, hclose,
       _hxφ, _hoverlap, hpoly⟩ :=

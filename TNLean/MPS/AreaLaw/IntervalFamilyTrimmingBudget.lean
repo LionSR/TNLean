@@ -49,14 +49,14 @@ theorem isViable_intervalFamilyTrimIterate_of_reference_budgets
     (hU : ∀ v ∈ U, IsOpenMPS L q D (fun x ↦ v x))
     (F : Fin N → EuclideanSpace ℂ (interval L p r → Fin q) →L[ℂ]
       EuclideanSpace ℂ (interval L p r → Fin q))
-    (Rop : Fin N → EuclideanSpace ℂ (↥((interval L p r)ᶜ) → Fin q) →L[ℂ]
-      EuclideanSpace ℂ (↥((interval L p r)ᶜ) → Fin q)) :
+    (Rop : Fin N → EuclideanSpace ℂ ({v // v ∉ interval L p r} → Fin q) →L[ℂ]
+      EuclideanSpace ℂ ({v // v ∉ interval L p r} → Fin q)) :
     let Tcoord := T.map
       (Entropy.regionTensorCoordinates q (interval L p r)).toLinearEquiv.toLinearMap
     ∀ (K : (EuclideanSpace ℂ (interval L p r → Fin q) ⊗[ℂ]
-        EuclideanSpace ℂ (↥((interval L p r)ᶜ) → Fin q)) →L[ℂ]
+        EuclideanSpace ℂ ({v // v ∉ interval L p r} → Fin q)) →L[ℂ]
       (EuclideanSpace ℂ (interval L p r → Fin q) ⊗[ℂ]
-        EuclideanSpace ℂ (↥((interval L p r)ᶜ) → Fin q))),
+        EuclideanSpace ℂ ({v // v ∉ interval L p r} → Fin q))),
     K = ∑ i, TensorProduct.mapL (F i) (Rop i) →
     (∀ t ∈ Tcoord, K t ∈ Tcoord) →
     (∀ z ∈ Tcoordᗮ, K z ∈ Tcoordᗮ) →

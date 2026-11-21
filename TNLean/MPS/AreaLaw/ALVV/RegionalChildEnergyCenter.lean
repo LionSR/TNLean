@@ -30,58 +30,56 @@ The exact parent-sum width is 57/8. Supporting ALVV,
 arXiv:1602.08828v2, Figure `fig:algo1`, line 1631 and line 1807. -/
 theorem exists_regional_middle_center_of_child_estimates {L q l u v r : ℕ}
     (hq : 0 < q) (hlu : l ≤ u) (huv : u ≤ v) (hvr : v ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (eP eM : ℝ) (xP xM : (Fin L → Fin q) → ℂ)
     (hxP : star xP ⬝ᵥ xP = 1)
-    (hPxP : aklvRegionalHamiltonians l r h 1 *ᵥ xP = (eP : ℂ) • xP)
-    (hPmin : (aklvRegionalHamiltonians l r h 1 - (eP : ℂ) • 1).PosSemidef)
+    (hPxP : aklvRegionalHamiltonians l r Φ 1 *ᵥ xP = (eP : ℂ) • xP)
+    (hPmin : (aklvRegionalHamiltonians l r Φ 1 - (eP : ℂ) • 1).PosSemidef)
     (hxM : star xM ⬝ᵥ xM = 1)
-    (hMxM : aklvRegionalHamiltonians u v h 1 *ᵥ xM = (eM : ℂ) • xM)
-    (hMmin : (aklvRegionalHamiltonians u v h 1 - (eM : ℂ) • 1).PosSemidef) :
+    (hMxM : aklvRegionalHamiltonians u v Φ 1 *ᵥ xM = (eM : ℂ) • xM)
+    (hMmin : (aklvRegionalHamiltonians u v Φ 1 - (eM : ℂ) • 1).PosSemidef) :
     ∃ (eLeft eRight : ℝ) (xLeft xRight : (Fin L → Fin q) → ℂ),
       star xLeft ⬝ᵥ xLeft = 1 ∧
-      aklvRegionalHamiltonians l u h 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
-      (aklvRegionalHamiltonians l u h 1 - (eLeft : ℂ) • 1).PosSemidef ∧
+      aklvRegionalHamiltonians l u Φ 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
+      (aklvRegionalHamiltonians l u Φ 1 - (eLeft : ℂ) • 1).PosSemidef ∧
       star xRight ⬝ᵥ xRight = 1 ∧
-      aklvRegionalHamiltonians v r h 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
-      (aklvRegionalHamiltonians v r h 1 - (eRight : ℂ) • 1).PosSemidef ∧
+      aklvRegionalHamiltonians v r Φ 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
+      (aklvRegionalHamiltonians v r Φ 1 - (eRight : ℂ) • 1).PosSemidef ∧
       ∀ (k : ℕ), l ≤ k → k ≤ r → ∀ p1 p2 : ℝ,
-        IsRegionalLowerEnergyEstimate h l k (49 / 16) p1 →
-        IsRegionalLowerEnergyEstimate h k r (49 / 16) p2 →
+        IsRegionalLowerEnergyEstimate Φ l k (49 / 16) p1 →
+        IsRegionalLowerEnergyEstimate Φ k r (49 / 16) p2 →
         let center := p1 + p2 - eLeft - eRight - 2
         eM - 10 ≤ center ∧ center ≤ eM ∧
-          IsRegionalLowerEnergyEstimate h u v 10 center ∧
-          IsRegionalLowerEnergyEstimate h l r (57 / 8) (p1 + p2) := by
+          IsRegionalLowerEnergyEstimate Φ u v 10 center ∧
+          IsRegionalLowerEnergyEstimate Φ l r (57 / 8) (p1 + p2) := by
   classical
   obtain ⟨eLeft, eMiddle, eRight, eParent, xLeft, xMiddle, xRight, xParent,
     hxLeft, hLeft, hLeftMin, hxMiddle, hMiddle, hMiddleMin,
     hxRight, hRight, hRightMin, hxParent, hParent, hParentMin,
     _hThreeLower, _hThreeUpper, hcenter⟩ :=
-    exists_regional_central_energy_estimate hq hlu huv hvr hrL h hs h0 h1
+    exists_regional_central_energy_estimate hq hlu huv hvr hrL Φ h0 h1
   have heP : eP = eParent := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians l r h 1) eP eParent xP xParent
+    (aklvRegionalHamiltonians l r Φ 1) eP eParent xP xParent
     hPxP hxP hParent hxParent hPmin hParentMin
   have heM : eM = eMiddle := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians u v h 1) eM eMiddle xM xMiddle
+    (aklvRegionalHamiltonians u v Φ 1) eM eMiddle xM xMiddle
     hMxM hxM hMiddle hxMiddle hMmin hMiddleMin
   refine ⟨eLeft, eRight, xLeft, xRight, hxLeft, hLeft, hLeftMin,
     hxRight, hRight, hRightMin, ?_⟩
   intro k hlk hkr p1 p2 hp1 hp2 center
   obtain ⟨eA, eB, eMerge, x, z, hx, hAx, hBx, hAmin, hBmin,
     hz, hMerge, hMergeMin, hMergeLower, hMergeUpper, _⟩ :=
-    exists_adjacent_interval_energy_merge hq hlk hkr hrL h hs h0 h1
+    exists_adjacent_interval_energy_merge hq hlk hkr hrL Φ h0 h1
   have heMerge : eMerge = eParent := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians l r h 1) eMerge eParent z xParent
+    (aklvRegionalHamiltonians l r Φ 1) eMerge eParent z xParent
     hMerge hz hParent hxParent hMergeMin hParentMin
   obtain ⟨e1, y1, hy1, hAy1, hA1min, hp1l, hp1u⟩ := hp1
   obtain ⟨e2, y2, hy2, hBy2, hB2min, hp2l, hp2u⟩ := hp2
   have he1 : e1 = eA := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians l k h 1) e1 eA y1 x hAy1 hy1 hAx hx hA1min hAmin
+    (aklvRegionalHamiltonians l k Φ 1) e1 eA y1 x hAy1 hy1 hAx hx hA1min hAmin
   have he2 : e2 = eB := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians k r h 1) e2 eB y2 x hBy2 hy2 hBx hx hB2min hBmin
+    (aklvRegionalHamiltonians k r Φ 1) e2 eB y2 x hBy2 hy2 hBx hx hB2min hBmin
   have hsumLower : eParent - 57 / 8 ≤ p1 + p2 := by
     linarith only [hMergeUpper, heMerge, he1, he2, hp1l, hp2l]
   have hsumUpper : p1 + p2 ≤ eParent := by

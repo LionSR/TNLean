@@ -46,28 +46,26 @@ theorem exists_fixed_bandwidth_normalized_low_energy_approximation_of_independen
     (etaLD : ℝ) (hLD : 0 < etaLD) :
     ∃ Kb C : ℝ, 0 < Kb ∧ 21 ≤ C ∧
       ∀ (L q p r : ℕ) (v : ℝ) (hq : 2 ≤ q), p ≤ r → r ≤ L → 0 < v →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ h0 : ∀ i, 0 ≤ h i, (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ h0 : ∀ i, 0 ≤ Φ.term i, (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let J := interval L p r
       let beta := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
       let G := fun c : ℝ ↦ Submodule.spectralSpanLE
         hRaw.eigenvectorBasis hRaw.eigenvalues (minEigenvalue hRaw + c)
       let EM := EuclideanSpace ℂ (J → Fin q)
-      let EE := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)
+      let EE := EuclideanSpace ℂ ({x // x ∉ J} → Fin q)
       let b := min v (etaLD / 2)
       let g := min (b / 6) 1
       ∃ W0 : Submodule ℂ EM,
@@ -82,7 +80,7 @@ theorem exists_fixed_bandwidth_normalized_low_energy_approximation_of_independen
           (ell : ℝ) ≤ 8 / g +
             (7 * C) ^ (1 / 4 : ℝ) * (1 / g) ^ (1 / 4 : ℝ) * u ^ (3 / 4 : ℝ) ∧
         let D1 := (q * ell ^ 2) ^ (22 * ell)
-        let e := Tm.trans (Submodule.euclideanTensorEquiv (J → Fin q) (↥(Jᶜ) → Fin q)).symm
+        let e := Tm.trans (Submodule.euclideanTensorEquiv (J → Fin q) ({x // x ∉ J} → Fin q)).symm
         ∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ψ ∈ G (etaLD - v) → ‖ψ‖ = 1 →
         ∃ φ : EuclideanSpace ℂ (Fin L → Fin q), ‖φ‖ = 1 ∧
           1 - delta ≤ ‖⟪φ, ψ⟫_ℂ‖ ∧
@@ -92,7 +90,7 @@ theorem exists_fixed_bandwidth_normalized_low_energy_approximation_of_independen
     exists_fixed_bandwidth_interval_low_energy_viable_subspace_log_bound etaLD hLD
   obtain ⟨C, hC, hsharp⟩ := exists_fixed_bandwidth_sharp_regional_low_energy_family etaLD hLD
   refine ⟨Kb, C, hKb, hC, ?_⟩
-  intro L q p r v hq hpr hrL hv h hs h0 h1 config H hRaw
+  intro L q p r v hq hpr hrL hv Φ h0 h1 config H hRaw
     J beta tau U Phi Tm G EM EE b g
   let : Nonempty (Fin L → Fin q) := config
   have hb : 0 < b := lt_min hv (by positivity)
@@ -100,7 +98,7 @@ theorem exists_fixed_bandwidth_normalized_low_energy_approximation_of_independen
   have hbv : b ≤ v := min_le_left _ _
   have hw : 0 < b / 6 := by positivity
   obtain ⟨W0, hWdim, hW0⟩ :=
-    hinitial L q p r (b / 2) hq hpr hrL (by positivity) h hs h0 h1
+    hinitial L q p r (b / 2) hq hpr hrL (by positivity) Φ h0 h1
   refine ⟨W0, hWdim, hW0, ?_⟩
   intro delta hdelta hdelta1 u
   obtain ⟨ell, hell, hbound, hregional⟩ := hsharp (b / 6) delta hw hdelta hdelta1
@@ -150,7 +148,7 @@ theorem exists_fixed_bandwidth_normalized_low_energy_approximation_of_independen
       exact hcollar
     obtain ⟨energies, E0, _x, _z, hO, hC, _hxunit, _hx, _hlo, _hcenter,
       _hzunit, _hz, _hE0low, _hE0, _hE04, _hnorm, _hminimum, hidentity, hfamilies⟩ :=
-      hregional L q q a c hq le_rfl hac hcL J hcost h hs h0 h1
+      hregional L q q a c hq le_rfl hac hcL J hcost Φ h0 h1
     obtain ⟨N, W, hN, hfilters⟩ := hfamilies
     let eta1 := etaLD - b / 2
     have hbuffer : 6 * (b / 6) ≤ eta1 := by dsimp only [eta1]; linarith only [hbcap, hb]
@@ -179,13 +177,13 @@ theorem exists_fixed_bandwidth_normalized_low_energy_approximation_of_independen
       Tm (G eta1) (G (etaLD - b)) (G (etaLD - v)) Tlo Thi W0 A delta _
       hdelta hdelta1 (hG (by linarith only [hbv])) hW0 hupperRaw hlowerRaw hDelta himprove
     have hcomp : eCoord.trans (Submodule.euclideanTensorEquiv
-        (J → Fin q) (↥(Jᶜ) → Fin q)) = Tm := by
+        (J → Fin q) ({x // x ∉ J} → Fin q)) = Tm := by
       dsimp only [eCoord]
       rw [← LinearIsometryEquiv.trans_assoc, LinearIsometryEquiv.symm_trans_self,
         LinearIsometryEquiv.trans_refl]
     have hVcoord : Submodule.IsViable (F := EE) (delta / 2) V
         ((G (etaLD - v)).map (eCoord.trans (Submodule.euclideanTensorEquiv
-          (J → Fin q) (↥(Jᶜ) → Fin q))).toLinearEquiv.toLinearMap) := by
+          (J → Fin q) ({x // x ∉ J} → Fin q))).toLinearEquiv.toLinearMap) := by
       rw [hcomp]
       exact hVinner
     obtain ⟨φ, hφ, _hφV, hoverlap, hrank⟩ :=

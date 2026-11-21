@@ -51,9 +51,7 @@ The families are selected before the original ground energy and vector. -/
 theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ q)
     {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ L : ℕ, 1 ≤ L → ∀ R : ℕ, 1 ≤ R →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-          (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (_h1 : ∀ j, h j ≤ 1),
+      ∀ (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (_h1 : ∀ j, Φ.term j ≤ 1),
       let N := L + 2 * R ^ 2
       let hi : L ≤ N := Nat.le_add_right _ _
       let z : Fin q := ⟨0, by omega⟩
@@ -62,13 +60,13 @@ theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ 
         (∀ i : ℕ, i ≤ N → (S i).card ≤ P * (N + 1) ^ d ∧
           (∀ v ∈ S i, IsLeftOpenMPS (P * (N + 1) ^ d) v) ∧
           ∀ (E : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-            ‖Γ‖ = 1 → IsGapped (∑ j, h j) E Delta →
-            groundSpace (∑ j, h j) E = Submodule.span ℂ {Γ} →
+            ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E Delta →
+            groundSpace Φ.hamiltonian E = Submodule.span ℂ {Γ} →
             IsViable (paddedGroundVector hi z Γ)
               (lvvSuccessiveError (min Delta 1) / N) (S i : Set (LeftBlockVector N q i))) ∧
         ∀ (E : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-          ‖Γ‖ = 1 → IsGapped (∑ j, h j) E Delta →
-          groundSpace (∑ j, h j) E = Submodule.span ℂ {Γ} →
+          ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E Delta →
+          groundSpace Φ.hamiltonian E = Submodule.span ℂ {Γ} →
           ∃ w ∈ Submodule.span ℂ (S L : Set (LeftBlockVector N q L)), ‖w‖ = 1 ∧
             ‖(LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (leftConfigOfFinEquiv hi)).symm w - Γ‖ ^ 2 ≤
               1 / (R : ℝ) ^ 2 ∧
@@ -77,19 +75,20 @@ theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ 
   have hg : 0 < min Delta 1 := lt_min hDelta zero_lt_one
   obtain ⟨P, d, hP, hrun⟩ := exists_uniform_positive_chain_successive_approximation hq hg
   refine ⟨P ^ 2, 2 * d, by nlinarith, ?_⟩
-  intro L hL R hR h hs h0 h1
+  intro L hL R hR Φ h0 h1
   dsimp only
   let N := L + 2 * R ^ 2
   have hi : L ≤ N := Nat.le_add_right _ _
   have hN : 1 ≤ N := hL.trans hi
   let z : Fin q := ⟨0, by omega⟩
-  obtain ⟨_, hS, _⟩ := hrun N hN (paddedInteraction hi z h)
-    (paddedInteraction_supported hi z h hs)
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z h h0 h1 j).1)
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z h h0 h1 j).2)
-  let S := lvvSweep hq (paddedInteraction hi z h) (paddedInteraction_supported hi z h hs)
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z h h0 h1 j).1)
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z h h0 h1 j).2) (min Delta 1)
+  let Ψ : ManyBody.BondInteraction N q :=
+    ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
+  obtain ⟨_, hS, _⟩ := hrun N hN Ψ
+    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
+    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2)
+  let S := lvvSweep hq Ψ
+    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
+    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) (min Delta 1)
   have hS0 : S 0 = {emptyLeftVector N q} := rfl
   let B := P * (N + 1) ^ d
   have hB : 1 ≤ B := by
@@ -108,13 +107,13 @@ theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ 
     · intro v hv
       exact (hmps v hv).mono (max_le_max le_rfl (hBB.trans_eq hbudget.symm))
     · intro E Γ hΩ hgap hspan
-      obtain ⟨hpn, hpg, hps⟩ := isGapped_paddedInteraction hL hi z h
+      obtain ⟨hpn, hpg, hps⟩ := isGapped_paddedInteraction hL hi z Φ
         (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap
         hspan hDelta
       exact hviable E _ hpn hpg hps
   · intro E Γ hΩ hgap hspan
     obtain ⟨hcard, hmps, hviable⟩ := hS L hi
-    obtain ⟨hpn, hpg, hps⟩ := isGapped_paddedInteraction hL hi z h
+    obtain ⟨hpn, hpg, hps⟩ := isGapped_paddedInteraction hL hi z Φ
       (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap
       hspan hDelta
     obtain ⟨w, hw, hwnorm, herror, hmpsw⟩ :=

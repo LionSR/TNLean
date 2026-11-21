@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Overlap.Basic
 import TNLean.Circuit.EmbeddedProduct
-import TNLean.Circuit.CleanUnitaryImplementation
+import QICLean.Circuit.Model.CleanWorkspace
 import Mathlib.Data.Fin.Tuple.Embedding
 import Mathlib.Logic.Equiv.Set
 import Mathlib.Logic.Equiv.Fintype
@@ -41,12 +41,13 @@ open scoped Classical in
 delta condition on all remaining sites.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-theorem mul_embedOp_disjoint_apply {d a b n : ℕ}
+theorem mul_placeAlong_disjoint_apply {d a b n : ℕ}
     (e : Fin a ↪ Fin n) (f : Fin b ↪ Fin n)
     (hdisj : Disjoint (Set.range e) (Set.range f))
     (X : Matrix (Cfg d a) (Cfg d a) ℂ) (Y : Matrix (Cfg d b) (Cfg d b) ℂ)
     (x y : Cfg d n) :
-    (embedOp e X * embedOp f Y) x y =
+    (ManyBody.placeAlong (X := fun _ ↦ Fin d) e X *
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) f Y) x y =
       if AgreeOffPair e f x y then X (x ∘ e) (y ∘ e) * Y (x ∘ f) (y ∘ f) else 0 := by
   classical
   let m : Bool → ℕ := fun z ↦ if z then a else b
@@ -65,11 +66,17 @@ theorem mul_embedOp_disjoint_apply {d a b n : ℕ}
     · exact hdisj
     · exact (hzw rfl).elim
   have hC : ((Finset.univ : Finset Bool) : Set Bool).Pairwise
-      (Function.onFun Commute fun z ↦ embedOp (E z) (M z)) := by
+      (Function.onFun Commute fun z ↦
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨E z, (E z).injective⟩ (M z)) := by
     intro z hz w hw hzw
-    exact commute_embedOp_of_disjoint (E z).injective (E w).injective
-      (hD hz hw hzw) (M z) (M w)
-  have h := noncommProd_embedOp_apply (fun z ↦ (E z : Fin (m z) → Fin n))
+    refine ManyBody.commute_placeAlong_of_disjoint (X := fun _ : Fin n ↦ Fin d)
+      ⟨E z, (E z).injective⟩ (w' := ⟨E w, (E w).injective⟩) (Finset.disjoint_left.mpr ?_)
+      (M z) (M w)
+    rintro _ ha hb
+    obtain ⟨u, -, rfl⟩ := Finset.mem_map.mp ha
+    obtain ⟨v, -, hv⟩ := Finset.mem_map.mp hb
+    exact Set.disjoint_left.mp (hD hz hw hzw) ⟨u, rfl⟩ ⟨v, hv⟩
+  have h := noncommProd_placeAlong_apply (fun z ↦ (E z : Fin (m z) → Fin n))
     (fun z ↦ (E z).injective) M Finset.univ hD hC x y
   have hc : (∀ i, (∀ z ∈ (Finset.univ : Finset Bool), ∀ j, E z j ≠ i) → x i = y i) ↔
       AgreeOffPair e f x y := by
@@ -83,8 +90,10 @@ theorem mul_embedOp_disjoint_apply {d a b n : ℕ}
     · intro h i hi
       exact h i (hi true (Finset.mem_univ _)) (hi false (Finset.mem_univ _))
   have hp : (Finset.univ : Finset Bool).noncommProd
-      (fun z ↦ embedOp (E z) (M z)) hC = embedOp e X * embedOp f Y := by
-    simp [Fintype.univ_bool, E, M]
+      (fun z ↦ ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨E z, (E z).injective⟩ (M z)) hC =
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) e X *
+          ManyBody.placeAlong (X := fun _ ↦ Fin d) f Y := by
+    simp [Fintype.univ_bool, E, M, Function.Embedding.mk_coe]
   rw [hp] at h
   simp only [hc] at h
   simpa [E, M] using h
@@ -190,12 +199,13 @@ open scoped Classical in
 identity on all remaining sites.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-theorem reindex_mul_embedOp_of_disjoint {d a b n : ℕ}
+theorem reindex_mul_placeAlong_of_disjoint {d a b n : ℕ}
     (e : Fin a ↪ Fin n) (f : Fin b ↪ Fin n)
     (h : Disjoint (Set.range e) (Set.range f))
     (X : Matrix (Cfg d a) (Cfg d a) ℂ) (Y : Matrix (Cfg d b) (Cfg d b) ℂ) :
     Matrix.reindex (jointPlacedConfigEquiv d e f h) (jointPlacedConfigEquiv d e f h)
-      (embedOp e X * embedOp f Y) =
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) e X *
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) f Y) =
       (X ⊗ₖ Y) ⊗ₖ (1 : Matrix (OutsidePlacedConfig d (Fin.Embedding.append h))
         (OutsidePlacedConfig d (Fin.Embedding.append h)) ℂ) := by
   classical
@@ -205,7 +215,7 @@ theorem reindex_mul_embedOp_of_disjoint {d a b n : ℕ}
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_apply_apply,
     Matrix.kroneckerMap_apply, Matrix.one_apply,
     jointPlacedConfigEquiv_left, jointPlacedConfigEquiv_right]
-  rw [mul_embedOp_disjoint_apply e f h X Y x y, agreeOffPair_iff_outside_eq e f h]
+  rw [mul_placeAlong_disjoint_apply e f h X Y x y, agreeOffPair_iff_outside_eq e f h]
   split_ifs <;> simp only [mul_one, mul_zero]
 
 
@@ -225,14 +235,14 @@ open scoped Classical in
 initialized inclusions.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-theorem initializedBasisMatrix_jointPlacedBasisEmbedding {d a b n : ℕ} {α β τ : Type*}
+theorem basisInclusion_jointPlacedBasisEmbedding {d a b n : ℕ} {α β τ : Type*}
     (e : Fin a ↪ Fin n) (f : Fin b ↪ Fin n)
     (h : Disjoint (Set.range e) (Set.range f))
     (g : α ↪ Cfg d a) (k : β ↪ Cfg d b)
     (t : τ ↪ OutsidePlacedConfig d (Fin.Embedding.append h)) :
-    (initializedBasisMatrix (jointPlacedBasisEmbedding e f h g k t)).submatrix
+    (basisInclusion (jointPlacedBasisEmbedding e f h g k t)).submatrix
       (jointPlacedConfigEquiv d e f h).symm id =
-      (initializedBasisMatrix g ⊗ₖ initializedBasisMatrix k) ⊗ₖ initializedBasisMatrix t := by
+      (basisInclusion g ⊗ₖ basisInclusion k) ⊗ₖ basisInclusion t := by
   classical
   ext p q
   change (if (jointPlacedConfigEquiv d e f h).symm p =
@@ -258,32 +268,35 @@ theorem jointPlacedColumns_of_individual {d a b n : ℕ} {α β γ δ τ : Type*
     (t : τ ↪ OutsidePlacedConfig d (Fin.Embedding.append h))
     (X : Matrix (Cfg d a) (Cfg d a) ℂ) (Y : Matrix (Cfg d b) (Cfg d b) ℂ)
     (V : Matrix γ α ℂ) (W : Matrix δ β ℂ)
-    (hX : X * initializedBasisMatrix g = initializedBasisMatrix g' * V)
-    (hY : Y * initializedBasisMatrix k = initializedBasisMatrix k' * W) :
-    (embedOp e X * embedOp f Y) *
-      initializedBasisMatrix (jointPlacedBasisEmbedding e f h g k t) =
-      initializedBasisMatrix (jointPlacedBasisEmbedding e f h g' k' t) *
+    (hX : X * basisInclusion g = basisInclusion g' * V)
+    (hY : Y * basisInclusion k = basisInclusion k' * W) :
+    (ManyBody.placeAlong (X := fun _ ↦ Fin d) e X *
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) f Y) *
+      basisInclusion (jointPlacedBasisEmbedding e f h g k t) =
+      basisInclusion (jointPlacedBasisEmbedding e f h g' k' t) *
         ((V ⊗ₖ W) ⊗ₖ (1 : Matrix τ τ ℂ)) := by
   classical
   apply (Matrix.reindex (jointPlacedConfigEquiv d e f h) (Equiv.refl _)).injective
-  change ((embedOp e X * embedOp f Y) *
-      initializedBasisMatrix (jointPlacedBasisEmbedding e f h g k t)).submatrix
+  change ((ManyBody.placeAlong (X := fun _ ↦ Fin d) e X *
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) f Y) *
+      basisInclusion (jointPlacedBasisEmbedding e f h g k t)).submatrix
         (jointPlacedConfigEquiv d e f h).symm id =
-    (initializedBasisMatrix (jointPlacedBasisEmbedding e f h g' k' t) *
+    (basisInclusion (jointPlacedBasisEmbedding e f h g' k' t) *
       ((V ⊗ₖ W) ⊗ₖ (1 : Matrix τ τ ℂ))).submatrix
         (jointPlacedConfigEquiv d e f h).symm id
   rw [← Matrix.submatrix_mul_equiv _ _ (jointPlacedConfigEquiv d e f h).symm
       (jointPlacedConfigEquiv d e f h).symm id,
     ← Matrix.submatrix_mul_equiv _ _ (jointPlacedConfigEquiv d e f h).symm (Equiv.refl _) id]
   change Matrix.reindex (jointPlacedConfigEquiv d e f h) (jointPlacedConfigEquiv d e f h)
-      (embedOp e X * embedOp f Y) *
-      (initializedBasisMatrix (jointPlacedBasisEmbedding e f h g k t)).submatrix
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) e X *
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) f Y) *
+      (basisInclusion (jointPlacedBasisEmbedding e f h g k t)).submatrix
         (jointPlacedConfigEquiv d e f h).symm id =
-    (initializedBasisMatrix (jointPlacedBasisEmbedding e f h g' k' t)).submatrix
+    (basisInclusion (jointPlacedBasisEmbedding e f h g' k' t)).submatrix
       (jointPlacedConfigEquiv d e f h).symm id * ((V ⊗ₖ W) ⊗ₖ (1 : Matrix τ τ ℂ))
-  rw [reindex_mul_embedOp_of_disjoint e f h,
-    initializedBasisMatrix_jointPlacedBasisEmbedding e f h g k t,
-    initializedBasisMatrix_jointPlacedBasisEmbedding e f h g' k' t]
+  rw [reindex_mul_placeAlong_of_disjoint e f h,
+    basisInclusion_jointPlacedBasisEmbedding e f h g k t,
+    basisInclusion_jointPlacedBasisEmbedding e f h g' k' t]
   simp only [← Matrix.mul_kronecker_mul, hX, hY, Matrix.one_mul, Matrix.mul_one]
 
 end MPUCircuit

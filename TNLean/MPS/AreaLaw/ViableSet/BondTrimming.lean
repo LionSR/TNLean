@@ -144,7 +144,8 @@ theorem norm_inner_sub_leftColumnwiseSchmidtTrim_le (hi : i ≤ L) (m : ℕ)
     (u v : EuclideanSpace ℂ
       ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) × β)) (D : ℕ)
     (hv : ∀ a k, 0 < k → k < i →
-      (cutMatrix (WithLp.toLp 2 fun x ↦ v (leftConfigOfFin x, a)) k).rank ≤ D) :
+      (ManyBody.cutMatrix (leftBlock i k)
+        (WithLp.toLp 2 fun x ↦ v (leftConfigOfFin x, a))).rank ≤ D) :
     ‖⟪u - leftColumnwiseSchmidtTrim hi m u, v⟫_ℂ‖ ≤
       (i - 1 : ℕ) * ‖u‖ * ‖v‖ * √((D : ℝ) / (m + 1)) := by
   let E := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
@@ -174,9 +175,9 @@ theorem rank_cutMatrix_rightApply_blockSplit_column_le (hi : i ≤ L) {j : ℕ}
     (hj : j + 1 ≤ i)
     (W : Matrix (((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)) β ℂ)
     (v : EuclideanSpace ℂ (Fin L → Fin q)) (a : β) :
-    (cutMatrix (WithLp.toLp 2 fun x ↦
-      rightApply Wᴴ (blockSplit L q i v) (leftConfigOfFin x, a)) (j + 1)).rank ≤
-      (cutMatrix v (j + 1)).rank := by
+    (ManyBody.cutMatrix (leftBlock i (j + 1)) (WithLp.toLp 2 fun x ↦
+      rightApply Wᴴ (blockSplit L q i v) (leftConfigOfFin x, a))).rank ≤
+      (ManyBody.cutMatrix (leftBlock L (j + 1)) v).rank := by
   rw [rank_cutMatrix_leftConfigOfFin hi
     (WithLp.toLp 2 fun x ↦ rightApply Wᴴ (blockSplit L q i v) (x, a)) (j + 1)]
   exact (Entropy.schmidtRank_cutVector_slice_le (blockCut L i j)
@@ -239,14 +240,15 @@ theorem norm_inner_sub_leftColumnwiseSchmidtTrim_rightApply_le [DecidableEq β]
       ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) × β))
     (W : Matrix (((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)) β ℂ)
     (hW : Wᴴ * W = 1) (v : EuclideanSpace ℂ (Fin L → Fin q)) (D : ℕ)
-    (hv : ∀ k, 0 < k → k < i → (cutMatrix v k).rank ≤ D) :
+    (hv : ∀ k, 0 < k → k < i → (ManyBody.cutMatrix (leftBlock L k) v).rank ≤ D) :
     ‖⟪(blockSplit L q i).symm (rightApply W u) -
         (blockSplit L q i).symm (rightApply W (leftColumnwiseSchmidtTrim hi m u)), v⟫_ℂ‖ ≤
       (i - 1 : ℕ) * ‖u‖ * ‖v‖ * √((D : ℝ) / (m + 1)) := by
   let P := blockSplit L q i
   let v' := rightApply Wᴴ (P v)
   have hcol : ∀ a k, 0 < k → k < i →
-      (cutMatrix (WithLp.toLp 2 fun x ↦ v' (leftConfigOfFin x, a)) k).rank ≤ D := by
+      (ManyBody.cutMatrix (leftBlock i k)
+        (WithLp.toLp 2 fun x ↦ v' (leftConfigOfFin x, a))).rank ≤ D := by
     intro a k hk0 hki
     obtain ⟨j, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hk0.ne'
     exact (rank_cutMatrix_rightApply_blockSplit_column_le hi (by omega) W v a).trans
@@ -287,7 +289,7 @@ theorem bondTrimSet_witness_with_reserve [DecidableEq β] (hi : i ≤ L)
     (hΓu : 1 - 1 / 12 ≤ ‖⟪Γ, (blockSplit L q i).symm (rightApply W u)⟫_ℂ‖)
     (v : EuclideanSpace ℂ (Fin L → Fin q)) (hv : ‖v‖ = 1)
     (hΓv : 1 - 1 / 48 ≤ ‖⟪Γ, v⟫_ℂ‖) (D : ℕ)
-    (hvrank : ∀ k, 0 < k → k < i → (cutMatrix v k).rank ≤ D) :
+    (hvrank : ∀ k, 0 < k → k < i → (ManyBody.cutMatrix (leftBlock L k) v).rank ≤ D) :
     let w := (blockSplit L q i).symm
       (rightApply W (leftColumnwiseSchmidtTrim hi (bondTrimmingRadius L D) u))
     let z := ((‖w‖⁻¹ : ℝ) : ℂ) • w
@@ -370,7 +372,7 @@ theorem isViableMPS_bondTrimSet_of_columns_with_reserve [DecidableEq β] (hi : i
     (hΓu : 1 - 1 / 12 ≤ ‖⟪Γ, (blockSplit L q i).symm (rightApply W u)⟫_ℂ‖)
     (v : EuclideanSpace ℂ (Fin L → Fin q)) (hv : ‖v‖ = 1)
     (hΓv : 1 - 1 / 48 ≤ ‖⟪Γ, v⟫_ℂ‖) (D : ℕ)
-    (hvrank : ∀ k, 0 < k → k < i → (cutMatrix v k).rank ≤ D) :
+    (hvrank : ∀ k, 0 < k → k < i → (ManyBody.cutMatrix (leftBlock L k) v).rank ≤ D) :
     IsViableMPS Γ S.card (bondTrimmingRadius L D) (5 / 12)
       (bondTrimSet hi (bondTrimmingRadius L D) S) := by
   obtain ⟨_, _, hz, hoverlap, hsupport⟩ :=
@@ -395,7 +397,7 @@ theorem isViableMPS_bondTrimSet_of_columns [DecidableEq β] (hi : i ≤ L)
     (hΓu : 1 - 1 / 12 ≤ ‖⟪Γ, (blockSplit L q i).symm (rightApply W u)⟫_ℂ‖)
     (v : EuclideanSpace ℂ (Fin L → Fin q)) (hv : ‖v‖ = 1)
     (hΓv : 1 - 1 / 48 ≤ ‖⟪Γ, v⟫_ℂ‖) (D : ℕ)
-    (hvrank : ∀ k, 0 < k → k < i → (cutMatrix v k).rank ≤ D) :
+    (hvrank : ∀ k, 0 < k → k < i → (ManyBody.cutMatrix (leftBlock L k) v).rank ≤ D) :
     IsViableMPS Γ S.card (bondTrimmingRadius L D) (1 / 2)
       (bondTrimSet hi (bondTrimmingRadius L D) S) := by
   obtain ⟨hcard, hbond, z, hz, hoverlap, hsupport⟩ :=

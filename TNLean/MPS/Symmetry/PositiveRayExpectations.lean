@@ -81,8 +81,8 @@ Source: SPC11, arXiv:1010.3732, Section II.F, lines 929–953. -/
 theorem SamePositiveMpvRay.mpvConnectedCorrelator_eq
     {d D E N L : ℕ} {A : MPSTensor d D} {B : MPSTensor d E}
     (hRay : SamePositiveMpvRay A B) (hN : 0 < N) (a b : ℕ)
-    (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    mpvConnectedCorrelator A N a b X Y = mpvConnectedCorrelator B N a b X Y := by
+    (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) (ha : a + L ≤ N) (hb : b + L ≤ N) :
+    mpvConnectedCorrelator A N a b X Y ha hb = mpvConnectedCorrelator B N a b X Y ha hb := by
   simp only [mpvConnectedCorrelator, hRay.mpvExpectation_eq hN]
 
 end MPSTensor

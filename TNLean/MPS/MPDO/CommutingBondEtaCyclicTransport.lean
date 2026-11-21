@@ -81,11 +81,12 @@ theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
     simpa only [Matrix.conjTranspose_conjTranspose] using hUiso
   change mpo M N = (c : ℂ) •
     (List.ofFn fun i : Fin N ↦
-      embedLocalOperator 2 N hN i data.bondData.bond).prod at hreal
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
+        data.bondData.bond).prod at hreal
   have hconj :
       singleKrausMap (Matrix.tensorPower N Uᴴ) (mpo M N) =
         (c : ℂ) • (List.ofFn fun i : Fin N ↦
-          embedLocalOperator 2 N hN i
+          ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm
               (star (U ⊗ₖ U) * data.pairBond * (U ⊗ₖ U)))).prod := by
@@ -103,7 +104,7 @@ theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
           Matrix.tensorPower N U := by
     simp only [singleKrausMap_apply, ← Matrix.conjTranspose_tensorPower,
       Matrix.conjTranspose_conjTranspose, Matrix.star_eq_conjTranspose]
-  have hcyclic := reindex_product_embedLocalOperator_of_etaPair_decomposition
+  have hcyclic := reindex_product_placeAlong_ringWindow_of_etaPair_decomposition
     hN dl dr e η (star (U ⊗ₖ U) * data.pairBond * (U ⊗ₖ U)) hB
   calc
     Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
@@ -118,7 +119,7 @@ theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
     _ = Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
         (Matrix.etaCyclicEdgeEquiv dl dr e)
         ((c : ℂ) • (List.ofFn fun i : Fin N ↦
-          embedLocalOperator 2 N hN i
+          ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm
               (star (U ⊗ₖ U) * data.pairBond * (U ⊗ₖ U)))).prod) :=
@@ -127,7 +128,7 @@ theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
     _ = (c : ℂ) • Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
         (Matrix.etaCyclicEdgeEquiv dl dr e)
         (List.ofFn fun i : Fin N ↦
-          embedLocalOperator 2 N hN i
+          ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm
               (star (U ⊗ₖ U) * data.pairBond * (U ⊗ₖ U)))).prod := by

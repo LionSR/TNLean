@@ -138,7 +138,8 @@ theorem exists_graphSeamBoundary_of_mem_torusPlaquetteParentKernel [Finite G] (A
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hH : ∀ v, IsRegionParentInteraction A (torusPlaquetteRegion v) (H v))
     {ψ : (X → Fin d) → ℂ}
-    (hψ : ψ ∈ (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion H)).ker)
+    (hψ : ψ ∈ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+      torusPlaquetteRegion H).hamiltonian).ker)
     (c : ZMod width) (r : ZMod height) :
     ∃ M : CutConfig (torusGraphSeamCut c r) (graphBondAlphabet A) → ℂ,
       ∀ σ, cutCoeff graphEdgeTail graphEdgeHead (graphBondAlphabet A)

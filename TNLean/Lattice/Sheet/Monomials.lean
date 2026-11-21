@@ -401,17 +401,20 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {Party : Type}
 /-- The matrix `1_E ⊗ M` on a sheet, in the coordinates `((t, e), u)` of `threeSplit T E`: the
 operator `M` on the configurations of `T` and `U = (T ∪ E)ᶜ`, the identity on those of `E`. -/
 def sheetPlace {T E : Finset ι} (h : Disjoint T E)
-    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ) :
+    (M : Matrix ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ) :
     Matrix (ι → Fin q) (ι → Fin q) ℂ :=
   ((1 : Matrix (E → Fin q) (E → Fin q) ℂ) ⊗ₖ M).submatrix
     (teuShuffle _ _ _ ∘ threeSplit q T E h) (teuShuffle _ _ _ ∘ threeSplit q T E h)
 
+omit [Fintype ι] in
 theorem sheetPlace_apply {T E : Finset ι} (h : Disjoint T E)
-    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (M : Matrix ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
     (c' c : ι → Fin q) :
     sheetPlace h M c' c = (if (fun x : E => c' x) = (fun x : E => c x) then 1 else 0) *
-      M ((fun x : T => c' x), (fun x : ↥(T ∪ E)ᶜ => c' x))
-        ((fun x : T => c x), (fun x : ↥(T ∪ E)ᶜ => c x)) := by
+      M ((fun x : T => c' x), (fun x : {v // v ∉ T ∪ E} => c' x))
+        ((fun x : T => c x), (fun x : {v // v ∉ T ∪ E} => c x)) := by
   simp only [sheetPlace, Matrix.submatrix_apply, Function.comp_apply, Matrix.kroneckerMap_apply,
     Matrix.one_apply, teuShuffle, Equiv.coe_fn_mk]
   rfl
@@ -427,8 +430,8 @@ namespace Frame
 /-- The monomial of a birth or a death on the registers of `T` and `U`. -/
 theorem exists_birthWord {T E : Finset ι} (P Q : Party) (σ : SplittingData q T E)
     (ℓ : PartyCircuit.Layout Party) :
-    ∃ w : Word (⟨P, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ E)ᶜ → Fin q)⟩ :: ℓ)
-        (⟨Q, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ E)ᶜ → Fin q)⟩ :: ℓ),
+    ∃ w : Word (⟨P, euc (T → Fin q)⟩ :: ⟨P, euc ({v // v ∉ T ∪ E} → Fin q)⟩ :: ℓ)
+        (⟨Q, euc (T → Fin q)⟩ :: ⟨P, euc ({v // v ∉ T ∪ E} → Fin q)⟩ :: ℓ),
       w.IsAllowed ∧ w.UsesOnly {P, Q} ∧ w.sourceCount ≤ 1 ∧
       ∀ z, pairHeadIso ℓ (w.eval z) =
         (act ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).rTensor (Mem ℓ)
@@ -445,8 +448,8 @@ theorem exists_birthWord {T E : Finset ι} (P Q : Party) (σ : SplittingData q T
 /-- The monomial of a death on the registers of `T` and `U`. -/
 theorem exists_deathChain {T E : Finset ι} (P Q : Party) (σ : SplittingData q T E)
     (ℓ : PartyCircuit.Layout Party) :
-    ∃ M : PartyChain (⟨Q, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ E)ᶜ → Fin q)⟩ :: ℓ)
-        (⟨P, euc (T → Fin q)⟩ :: ⟨P, euc (↥(T ∪ E)ᶜ → Fin q)⟩ :: ℓ),
+    ∃ M : PartyChain (⟨Q, euc (T → Fin q)⟩ :: ⟨P, euc ({v // v ∉ T ∪ E} → Fin q)⟩ :: ℓ)
+        (⟨P, euc (T → Fin q)⟩ :: ⟨P, euc ({v // v ∉ T ∪ E} → Fin q)⟩ :: ℓ),
       M.IsAllowed ∧ M.UsesOnly {P, Q} ∧ M.sourceCount = 0 ∧ M.toEffectChain.effectCount ≤ 1 ∧
       ∀ z, pairHeadIso ℓ (M.toEffectChain.eval z) =
         (act ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).rTensor (Mem ℓ)
@@ -469,9 +472,10 @@ section Correction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ}
 
-/-- The bijection of two copies of the configurations of a set `S` of sites exchanging them at
-the sites of `A`. -/
-def partSwap (q : ℕ) (S A : Finset ι) : Equiv.Perm ((S → Fin q) × (S → Fin q)) where
+/-- The bijection of two copies of the configurations of the sites outside a set `S` exchanging
+them at the sites of `A`. -/
+def partSwap (q : ℕ) (S A : Finset ι) :
+    Equiv.Perm (({v // v ∉ S} → Fin q) × ({v // v ∉ S} → Fin q)) where
   toFun r := (fun v => if (v : ι) ∈ A then r.2 v else r.1 v,
     fun v => if (v : ι) ∈ A then r.1 v else r.2 v)
   invFun r := (fun v => if (v : ι) ∈ A then r.2 v else r.1 v,
@@ -492,12 +496,12 @@ set_option synthInstance.maxSize 512 in
 
 Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 503–515. -/
 def correctionMatrix (σ : SplittingData q T E) (A : Finset ι) :
-    Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ :=
+    Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ :=
   (σ.V ⊗ₖ σ.V)ᴴ *
-      ((bufferSwap (T → Fin q) ((E → Fin q) ⊕ (↥(T ∪ E)ᶜ → Fin q))).toPEquiv.toMatrix :
+      ((bufferSwap (T → Fin q) ((E → Fin q) ⊕ ({v // v ∉ T ∪ E} → Fin q))).toPEquiv.toMatrix :
         Matrix _ _ ℂ) * (σ.V ⊗ₖ σ.V) *
-    ((partSwap q (T ∪ E)ᶜ A).toPEquiv.toMatrix : Matrix _ _ ℂ)
+    ((partSwap q (T ∪ E) A).toPEquiv.toMatrix : Matrix _ _ ℂ)
 
 -- Same fourfold product of function types as in `correctionMatrix`.
 set_option synthInstance.maxSize 512 in
@@ -517,7 +521,7 @@ theorem sheetSwapOp_eq_submatrix_of_subset {A : Finset ι} (hA : A ⊆ (T ∪ E)
     sheetSwapOp q A =
       (((1 : Matrix (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q)))
           (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q))) ℂ) ⊗ₖ
-        ((partSwap q (T ∪ E)ᶜ A).toPEquiv.toMatrix : Matrix _ _ ℂ)).submatrix
+        ((partSwap q (T ∪ E) A).toPEquiv.toMatrix : Matrix _ _ ℂ)).submatrix
           (Equiv.prodProdProdComm _ _ _ _) (Equiv.prodProdProdComm _ _ _ _)).submatrix
         (threeSplit₂ h) (threeSplit₂ h) := by
   have hAT : ∀ v : T, (v : ι) ∉ A := fun v hv =>
@@ -526,7 +530,7 @@ theorem sheetSwapOp_eq_submatrix_of_subset {A : Finset ι} (hA : A ⊆ (T ∪ E)
     Finset.mem_compl.mp (hA hv) (Finset.mem_union_right T v.2)
   have he : (threeSplit₂ (q := q) h).symm.trans ((sheetSwap q A).trans (threeSplit₂ h)) =
       (Equiv.prodProdProdComm _ _ _ _).trans
-        (((Equiv.refl _).prodCongr (partSwap q (T ∪ E)ᶜ A)).trans
+        (((Equiv.refl _).prodCongr (partSwap q (T ∪ E) A)).trans
           (Equiv.prodProdProdComm _ _ _ _).symm) := by
     refine Equiv.ext fun w => ?_
     obtain ⟨⟨⟨t₁, e₁⟩, u₁⟩, ⟨⟨t₂, e₂⟩, u₂⟩⟩ := w
@@ -538,16 +542,16 @@ theorem sheetSwapOp_eq_submatrix_of_subset {A : Finset ι} (hA : A ⊆ (T ∪ E)
     · rw [ite_eq_right (hAT v)]; exact threeSplit_symm_apply_of_mem_left h _ _ _ v.2
     · rw [ite_eq_right (hAE v)]; exact threeSplit_symm_apply_of_mem_right h _ _ _ v.2
     · by_cases hv : (v : ι) ∈ A <;> simp only [hv, ↓reduceIte] <;>
-        exact threeSplit_symm_apply_of_notMem h _ _ _ (Finset.mem_compl.mp v.2)
+        exact threeSplit_symm_apply_of_notMem h _ _ _ v.2
     · rw [ite_eq_right (hAT v)]; exact threeSplit_symm_apply_of_mem_left h _ _ _ v.2
     · rw [ite_eq_right (hAE v)]; exact threeSplit_symm_apply_of_mem_right h _ _ _ v.2
     · by_cases hv : (v : ι) ∈ A <;> simp only [hv, ↓reduceIte] <;>
-        exact threeSplit_symm_apply_of_notMem h _ _ _ (Finset.mem_compl.mp v.2)
+        exact threeSplit_symm_apply_of_notMem h _ _ _ v.2
   have key : ((sheetSwap q A).toPEquiv.toMatrix : Matrix _ _ ℂ).submatrix (threeSplit₂ h).symm
       (threeSplit₂ h).symm =
       ((1 : Matrix (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q)))
           (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q))) ℂ) ⊗ₖ
-        ((partSwap q (T ∪ E)ᶜ A).toPEquiv.toMatrix : Matrix _ _ ℂ)).submatrix
+        ((partSwap q (T ∪ E) A).toPEquiv.toMatrix : Matrix _ _ ℂ)).submatrix
           (Equiv.prodProdProdComm _ _ _ _) (Equiv.prodProdProdComm _ _ _ _) := by
     rw [toMatrix_toPEquiv_submatrix, Equiv.symm_symm, he, ← PEquiv.toMatrix_refl,
       ← Equiv.toPEquiv_refl, ← toMatrix_toPEquiv_prodCongr, toMatrix_toPEquiv_submatrix]

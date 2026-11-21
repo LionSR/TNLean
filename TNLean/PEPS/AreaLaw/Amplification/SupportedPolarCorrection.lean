@@ -66,7 +66,7 @@ theorem exists_supported_unitary_of_good_realization (S : Finset ι)
     ∃ U : Matrix (ι → Fin q) (ι → Fin q) ℂ, U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S ∧
       Uᴴ * U = 1 ∧ ‖WithLp.toLp 2 (U *ᵥ φ) - WithLp.toLp 2 η‖ ≤
         a + √(2 * a + 6 * ε + 9 * ε ^ 2) := by
-  set e := ManyBody.splitEquiv (fun _ : ι => Fin q) S with he
+  set e := ManyBody.cutEquiv (fun _ : ι => Fin q) S with he
   obtain ⟨R', hR'⟩ := TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators hR₀
   obtain ⟨L'', hL''⟩ := TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators hL
   -- Transport of vectors and matrices to the coordinates `S × Sᶜ`.
@@ -82,13 +82,14 @@ theorem exists_supported_unitary_of_good_realization (S : Finset ι)
   have hsubS (A B : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
       A.submatrix e.symm e.symm - B.submatrix e.symm e.symm = (A - B).submatrix e.symm e.symm :=
     rfl
-  have hR'e : R₀.submatrix e.symm e.symm = R' ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ) :=
+  have hR'e : R₀.submatrix e.symm e.symm =
+      R' ⊗ₖ (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ) :=
     hR'
   have hL''e : L'.submatrix e.symm e.symm =
-      L'' ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ) := hL''
-  have hRφ : (R' ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ)) *ᵥ (φ ∘ e.symm) =
+      L'' ⊗ₖ (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ) := hL''
+  have hRφ : (R' ⊗ₖ (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ)) *ᵥ (φ ∘ e.symm) =
       (R₀ *ᵥ φ) ∘ e.symm := by rw [← hR'e, hvec]
-  have hprod : (L'' * R') ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ) =
+  have hprod : (L'' * R') ⊗ₖ (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ) =
       (L' * R₀).submatrix e.symm e.symm := by
     rw [← submatrix_mul_equiv _ _ _ e.symm, hR'e, hL''e, ← mul_kronecker_mul, Matrix.one_mul]
   obtain ⟨U, hU⟩ := exists_unitary_kronecker_sub_le_of_good_realization
@@ -101,7 +102,8 @@ theorem exists_supported_unitary_of_good_realization (S : Finset ι)
     (by rw [hnorm]; exact hgn)
     (by
       have e1 : toEuclideanCLM (𝕜 := ℂ) (D.submatrix e.symm e.symm) (toEuclideanCLM (𝕜 := ℂ)
-          (R' ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ)) (WithLp.toLp 2 (φ ∘ e.symm)) -
+          (R' ⊗ₖ (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ))
+            (WithLp.toLp 2 (φ ∘ e.symm)) -
             WithLp.toLp 2 (g ∘ e.symm)) = WithLp.toLp 2 ((D *ᵥ (R₀ *ᵥ φ - g)) ∘ e.symm) := by
         apply WithLp.ofLp_injective 2
         simp only [ofLp_toEuclideanCLM, WithLp.ofLp_sub, hRφ, ← hcomp, hvec]
@@ -109,7 +111,8 @@ theorem exists_supported_unitary_of_good_realization (S : Finset ι)
       exact hexc)
     (by
       have e1 : toEuclideanCLM (𝕜 := ℂ) (D.submatrix e.symm e.symm - Dret.submatrix e.symm e.symm)
-          (toEuclideanCLM (𝕜 := ℂ) (R' ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ))
+          (toEuclideanCLM (𝕜 := ℂ)
+            (R' ⊗ₖ (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ))
             (WithLp.toLp 2 (φ ∘ e.symm))) =
           WithLp.toLp 2 (((D - Dret) *ᵥ (R₀ *ᵥ φ)) ∘ e.symm) := by
         apply WithLp.ofLp_injective 2
@@ -128,15 +131,16 @@ theorem exists_supported_unitary_of_good_realization (S : Finset ι)
     rw [← star_eq_conjTranspose]
     exact Unitary.coe_star_mul_self U
   refine ⟨((U : Matrix (S → Fin q) (S → Fin q) ℂ) ⊗ₖ
-    (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ)).submatrix e e,
+    (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ)).submatrix e e,
     kronecker_one_submatrix_mem_supportedOperators S _, ?_, ?_⟩
   · rw [conjTranspose_submatrix, submatrix_mul_equiv _ _ _ e, conjTranspose_kronecker,
       ← mul_kronecker_mul, hu, conjTranspose_one, Matrix.one_mul, one_kronecker_one,
       submatrix_one_equiv]
   · have hUe : (((U : Matrix (S → Fin q) (S → Fin q) ℂ) ⊗ₖ
-        (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ)).submatrix e e).submatrix e.symm e.symm =
+        (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ)).submatrix e e).submatrix
+          e.symm e.symm =
           (U : Matrix (S → Fin q) (S → Fin q) ℂ) ⊗ₖ
-            (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ) := by
+            (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ) := by
       simp
     rw [← WithLp.toLp_sub, ← hnorm, hcomp, ← hvec, hUe, WithLp.toLp_sub]
     simpa only [toEuclideanCLM_toLp] using hU

@@ -23,15 +23,15 @@ blocks (eq. (S2)), with the corrected approximating state
 `V^{⊗M} ∑ⱼ αⱼ L_j^{⊗M} |Ω_j⟩` of `TNLean.MPS.Preparation.RepeatedBlockSum`:
 
 * it is prepared with measurements and a circuit in depth `O(q)`
-  (`MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector`), as the
+  (`MPSPreparation.exists_isOneRoundConversion_copyApproxVector`), as the
   state `∑ⱼ αⱼ (⊗ₖ V_{j,k}) ⊗ₖ |ω_j⟩` of the blocks (`MPSPreparation.copyApproxVector_eq_sum`);
 * with its error bound (`MPSTensor.exists_approximationError_le_mul_repeatedBlockSum`), a unit
   vector with error at most `ε` is prepared with measurements in depth `O(log(N/ε))`
-  (`MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum`).
+  (`MPSPreparation.exists_isOneRoundConversion_le_log_repeatedBlockSum`).
 
 Both scope restrictions below are removed, for blocks whose states may overlap and for every
 chain length, by
-`MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`,
+`MPSPreparation.exists_isOneRoundConversion_le_log_of_mpvState_ne_zero`,
 which prepares a different approximating state.
 
 **Scope restriction (orthogonal blocks):** both results take, at the block length `q`, the
@@ -53,9 +53,9 @@ multiplicity `m_j ≥ 2`. Documented in `docs/paper-gaps/mswc24_repeated_block_c
 * `MPSPreparation.copyApproxVector_eq_sum` — the corrected approximating state is
   `∑ⱼ αⱼ (⊗ₖ V_{j,k}) ⊗ₖ |ω_j⟩`.
 * `MPSPreparation.sum_norm_sq_copyApproxVector` — it is a unit vector.
-* `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector` — depth
+* `MPSPreparation.exists_isOneRoundConversion_copyApproxVector` — depth
   `O(q)` with measurements.
-* `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum` —
+* `MPSPreparation.exists_isOneRoundConversion_le_log_repeatedBlockSum` —
   error `ε` in depth `O(log(N/ε))` with measurements.
 
 ## References
@@ -149,7 +149,7 @@ arXiv:2307.01696, paragraph "Long-range MPS using measurements" ("First create `
 can be done in constant depth with measurements ... Subsequently, apply in parallel the
 isometries `W`"), followed by the isometries of the blocked tensor, in the scope of the module
 docstring. -/
-theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector (d b : ℕ)
+theorem exists_isOneRoundConversion_copyApproxVector (d b : ℕ)
     (Dj : Fin b → ℕ) :
     ∃ C L₀ : ℕ, ∀ {D : ℕ} {m : Fin b → ℕ} (Aj : (j : Fin b) → MPSTensor d (Dj j))
       (ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D), (∀ j k, Function.Injective (ι j k)) →
@@ -160,9 +160,10 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector (d b
       (∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
         physicalMatrix (blockTensor (Aj j') q) = 0) →
       ∀ (M : ℕ) [NeZero (M * q)] (α : Fin b → ℂ), ∑ j, star (α j) * α j = 1 →
-        IsPreparedWithMeasurementsAndCircuitInDepth (C * q) fun s =>
-          copyApproxVector (repeatedBlockSum Aj ι μ) q M α (copyIsometry ι μ q) σ
-            ((blockedConfigEquiv d M q).symm s) := by
+        ∃ T₁ T₂, T₁ + T₂ ≤ C * q ∧ ∃ v : Fin (M * q) → Fin d → ℂ,
+          IsOneRoundConversion (Geometry.ring (M * q)) T₁ T₂ (fun x ↦ ∏ i, v i (x i)) fun s =>
+            copyApproxVector (repeatedBlockSum Aj ι μ) q M α (copyIsometry ι μ q) σ
+              ((blockedConfigEquiv d M q).symm s) := by
   rcases Nat.eq_zero_or_pos d with rfl | hd
   · -- No physical states: the hypotheses are contradictory.
     refine ⟨0, 1, fun Aj ι _ _ μ σ _ htr q hq hB _ M _ α hα => ?_⟩
@@ -180,7 +181,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector (d b
       h ▸ Submodule.mem_top
     exact one_ne_zero ((Submodule.mem_bot ℂ).1 h1)
   have : NeZero d := ⟨hd.ne'⟩
-  obtain ⟨C, L₀, hC⟩ := exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState
+  obtain ⟨C, L₀, hC⟩ := exists_isOneRoundConversion_sum_blockIsometryState
     (d := d) b Dj
   refine ⟨C, max L₀ 1, fun Aj ι hι hdisj μ σ hσ htr q hq hB horth M _ α hα => ?_⟩
   have hq0 : q ≠ 0 := by have := le_max_right L₀ 1; omega
@@ -190,7 +191,10 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector (d b
     (fun j => by rw [fixedPointPair_norm_sq (hσ j), htr j]) α hα (fun _ => q) hNq q
     (fun _ => le_of_max_le_left hq) (fun _ => le_rfl) (fun j _ => hB j)
     (fun j j' _ h => horth j j' h)
-  convert key using 2 with s
+  obtain ⟨T₁, T₂, hT, v, hv⟩ := key
+  refine ⟨T₁, T₂, hT, v, ?_⟩
+  convert hv using 1
+  funext s
   exact copyApproxVector_eq_sum hι hdisj hσ htr hq0 hB horth M α hNq s
 
 /-! ### Error `ε` in depth `O(log(N/ε))` -/
@@ -210,9 +214,9 @@ only used for the preparation of `|χ_{N/q}⟩`, the depth is `O(log(N/ε))`", f
 approximating state and in the scope of the module docstring (orthogonal blocks, block length
 dividing `N`). The vector `|ψ⟩` is the corrected approximating state
 `V^{⊗N/q} ∑ⱼ αⱼ L_j^{⊗N/q} |Ω_j⟩`, prepared in depth `O(q)`
-(`exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector`), with the error bound of
+(`exists_isOneRoundConversion_copyApproxVector`), with the error bound of
 Lemma 1'(ii) (`MPSTensor.exists_approximationError_le_mul_repeatedBlockSum`). -/
-theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum [NeZero b]
+theorem exists_isOneRoundConversion_le_log_repeatedBlockSum [NeZero b]
     (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
     (μ : CopyWeights b m) (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
@@ -225,7 +229,9 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockS
           physicalMatrix (blockTensor (Aj j') q) = 0) →
         bntWeight μ N ≠ 0 →
         ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
-          IsPreparedWithMeasurementsAndCircuitInDepth T (fun s => ψ s) ∧
+          (∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v : Fin N → Fin d → ℂ,
+            IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun x ↦ ∏ i, v i (x i))
+              (fun s => ψ s)) ∧
           1 - ‖⟪ψ, normalizedMPVState (repeatedBlockSum Aj ι μ) N⟫_ℂ‖ ≤ ε := by
   classical
   have hDj : ∀ j, NeZero (Dj j) := fun j => Matrix.neZero_of_trace_eq_one (htr j)
@@ -233,7 +239,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockS
   have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
   obtain ⟨K, hK, herr⟩ := exists_approximationError_le_mul_repeatedBlockSum hι hdisj hN
     hA hσ htr hfix (lam₂ := (t : ℂ)) hlam (γ := 1 / 4) (by norm_num) (by norm_num)
-  obtain ⟨Cp, L₀, hCp⟩ := exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector d b Dj
+  obtain ⟨Cp, L₀, hCp⟩ := exists_isOneRoundConversion_copyApproxVector d b Dj
   choose Linj hLpos hLinj using hN
   set Lm : ℕ := ∑ j, Linj j
   set r := -(1 / 4 * Real.log t) with hr

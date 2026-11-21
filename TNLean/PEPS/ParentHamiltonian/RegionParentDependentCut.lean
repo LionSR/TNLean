@@ -143,7 +143,8 @@ theorem exists_cutBoundary_of_mem_regionParentKernel (A : Tensor Γ d)
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hH : ∀ i, IsRegionParentInteraction A (R i) (H i))
     {ψ : (V → Fin d) → ℂ}
-    (hψ : ψ ∈ (Matrix.mulVecLin (regionParentHamiltonian R H)).ker) (i : ι) :
+    (hψ : ψ ∈ (Matrix.mulVecLin
+      (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R H).hamiltonian).ker) (i : ι) :
     ∃ M : CutConfig (regionExteriorCut (R i)) (graphBondAlphabet A) → ℂ,
       ∀ σ, cutCoeff graphEdgeTail graphEdgeHead (graphBondAlphabet A)
         (graphDependentTensor A) (regionExteriorCut (R i)) M σ = ψ σ := by

@@ -38,6 +38,7 @@ noncomputable section
 
 open Filter Topology
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -62,7 +63,7 @@ theorem exists_finitely_supported_sparse_belt_shifts (o : ℝ × ℝ)
         (fineLayerIndices o k (fineScaleIndex k) (boundaryEndpoints Λ A) C)
         (2 ^ (pitchScaleIndex k - fineScaleIndex k)) (a k) (b k)
       (∀ k, ((F k).card : ℝ) ≤
-        64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card *
+        64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card *
           (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * (k : ℝ) / 2)) ∧
       Set.Finite {k | (F k).Nonempty} := by
   classical
@@ -76,7 +77,7 @@ theorem exists_finitely_supported_sparse_belt_shifts (o : ℝ × ℝ)
     simpa using summable_polynomial_dyadic_decay 0
   have hcounts : Summable (fun k => ((F k).card : ℝ)) :=
     Summable.of_nonneg_of_le (fun k => Nat.cast_nonneg _) hab
-      (hdecay.mul_left (64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card))
+      (hdecay.mul_left (64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card))
   simpa [Finset.card_ne_zero, Finset.nonempty_iff_ne_empty, F] using
     finite_support_of_summable_nat_counts (fun k => (F k).card) hcounts
 
@@ -93,12 +94,13 @@ theorem exists_uniform_initial_mark_bound :
           (fineLayerIndices o k (fineScaleIndex k) (boundaryEndpoints Λ A) C)
           (2 ^ (pitchScaleIndex k - fineScaleIndex k)) (a k) (b k)
         (∀ k, ((F k).card : ℝ) ≤
-          64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card *
+          64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card *
             (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * (k : ℝ) / 2)) ∧
         Set.Finite {k | (F k).Nonempty} ∧
         ∃ M : Finset (ℝ × ℝ),
           (∀ x, x ∈ M ↔ ∃ k, k₀ ≤ k ∧ x ∈ beltMarks o (fineScaleIndex k) (F k)) ∧
-          (M.card : ℝ) ≤ B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+          (M.card : ℝ) ≤
+            B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
   obtain ⟨B₀, hB₀, hsum⟩ := exists_uniform_polynomial_dyadic_sum_bound 0
   refine ⟨576 * B₀, mul_pos (by norm_num) hB₀, ?_⟩
@@ -122,7 +124,7 @@ theorem exists_uniform_initial_mark_bound :
         obtain ⟨z, hz, _⟩ := Finset.mem_biUnion.mp hxk
         exact ⟨z, hz⟩
       exact Finset.mem_biUnion.mpr ⟨k, (hK k).mpr ⟨hk, hFk⟩, hxk⟩
-  · let W : ℝ := (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card
+  · let W : ℝ := (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card
     have hW : 0 ≤ W := by dsimp [W]; positivity
     have hmarks (k : ℕ) : ((beltMarks o (fineScaleIndex k) (F k)).card : ℝ) ≤
         576 * W * (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * (k : ℝ) / 2) := by
@@ -131,7 +133,7 @@ theorem exists_uniform_initial_mark_bound :
         exact_mod_cast card_beltMarks_le o (fineScaleIndex k) (F k)
       calc
         _ ≤ 9 * ((F k).card : ℝ) := hmarkcard
-        _ ≤ 9 * (64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card *
+        _ ≤ 9 * (64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card *
             (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * (k : ℝ) / 2)) :=
           mul_le_mul_of_nonneg_left (hcells k) (by norm_num)
         _ = _ := by dsimp [W]; ring
@@ -192,12 +194,12 @@ theorem exists_uniform_separated_initial_marks :
           (fineLayerIndices o k (fineScaleIndex k) (boundaryEndpoints Λ A) C)
           (2 ^ (pitchScaleIndex k - fineScaleIndex k)) (a k) (b k)
         (∀ k, ((F k).card : ℝ) ≤
-          64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card *
+          64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card *
             (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * (k : ℝ) / 2)) ∧
         Set.Finite {k | (F k).Nonempty} ∧
         ∃ M : Finset (ℝ × ℝ),
           (∀ x, x ∈ M ↔ ∃ k, k₀ ≤ k ∧ x ∈ beltMarks o (fineScaleIndex k) (F k)) ∧
-          (M.card : ℝ) ≤ B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card ∧
+          (M.card : ℝ) ≤ B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card ∧
           ∃ S : M → ℝ,
             (∀ v, 0 < S v ∧ ∃ k z, k₀ ≤ k ∧ z ∈ F k ∧
               v.val ∈ beltCellMarks o (fineScaleIndex k) z ∧

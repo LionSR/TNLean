@@ -123,16 +123,16 @@ theorem exists_rough_upper (Ω : EuclideanSpace ℂ ((v : ι) → β v)) (hΩ : 
       E)
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)))
     (hmass :
-      let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.splitEquiv β X) Ω
-      let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
+      let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.cutEquiv β X) Ω
+      let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦
         compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
       ∀ᶠ k : ℕ in atTop,
         (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
           ‖WithLp.toLp 2
-            (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
-              (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
+            (((1 : Matrix (Fin k → ManyBody.ComplConfig β X)
+              (Fin k → ManyBody.ComplConfig β X) ℂ) ⊗ₖ
               labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-              (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
+              (fun x : (Fin k → ManyBody.ComplConfig β X) ×
                 (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2)
     {St : Type} [Finite St] {K : ℕ}
     (U Y V : St → Fin K → Finset ι) (hfam : IsStatusFamily X U Y V)
@@ -206,16 +206,16 @@ theorem exists_sharp_upper (Ω : EuclideanSpace ℂ ((v : ι) → β v)) (hΩ : 
       E)
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)))
     (hmass :
-      let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.splitEquiv β X) Ω
-      let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
+      let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.cutEquiv β X) Ω
+      let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦
         compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
       ∀ᶠ k : ℕ in atTop,
         (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
           ‖WithLp.toLp 2
-            (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
-              (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
+            (((1 : Matrix (Fin k → ManyBody.ComplConfig β X)
+              (Fin k → ManyBody.ComplConfig β X) ℂ) ⊗ₖ
               labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-              (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
+              (fun x : (Fin k → ManyBody.ComplConfig β X) ×
                 (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2)
     {St : Type} [Fintype St] [DecidableEq St] {K : ℕ}
     (U Y V : St → Fin K → Finset ι) (hfam : IsStatusFamily X U Y V)

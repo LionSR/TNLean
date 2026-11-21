@@ -45,7 +45,7 @@ namespace MPSPreparation
 canonical family. The coefficients may be arbitrary complex functions of length, and may
 vanish separately. The mixed-transfer assumption is explicit; no finite-block orthogonality
 is needed. -/
-theorem exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpv_eq_sum
+theorem exists_isMeasurementConversion_le_log_log_of_mpv_eq_sum
     {d D b : ℕ} (A : MPSTensor d D) {Dj : Fin b → ℕ}
     {Aj : (j : Fin b) → MPSTensor d (Dj j)}
     (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
@@ -57,14 +57,14 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpv_eq_sum
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N → mpvState A N ≠ 0 →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧
         (T : ℝ) ≤ c * Real.log (Real.log (N / ε) + 1) ∧
-        IsPreparedWithMeasurementRoundsInDepth T (fun x => ψ x) ∧
+        (∃ v : Fin N → Fin d → ℂ,
+          IsMeasurementConversion (Geometry.ring N) T (fun σ ↦ ∏ i, v i (σ i)) (fun x => ψ x)) ∧
         1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   classical
   rcases Nat.lt_or_ge d 2 with hd1 | hd2
   · refine ⟨0, fun ε hε _ N _ _ h0 => ⟨_, 0, norm_normalizedMPVState h0, by simp, ?_, ?_⟩⟩
-    · apply isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth
-      refine isPreparedWithMeasurementsInDepth_of_isPreparedInDepth
-        (isPreparedInDepth_zero_of_le_one (by omega) _) fun h => ?_
+    · refine (isPreparedInDepth_zero_of_le_one (by omega) _).exists_isMeasurementConversion
+        fun h => ?_
       have h1 := norm_normalizedMPVState h0
       rw [show normalizedMPVState A N = 0 from by ext x; exact congrFun h x] at h1
       simp at h1
@@ -140,7 +140,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpv_eq_sum
 /-- The canonical repeated-block form of eq. (S2), with arbitrary complex copy weights,
 has an all-length double-logarithmic measurement preparation. Aggregate sector amplitudes
 may vanish at individual lengths; only the total periodic vector must be nonzero. -/
-theorem exists_isPreparedWithMeasurementRoundsInDepth_repeatedBlockSum_le_log_log
+theorem exists_isMeasurementConversion_repeatedBlockSum_le_log_log
     {d D b : ℕ} {m : Fin b → ℕ} {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}
     {ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D}
     (hι : ∀ j k, Function.Injective (ι j k))
@@ -153,9 +153,10 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_repeatedBlockSum_le_log_lo
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N →
       mpvState (repeatedBlockSum Aj ι μ) N ≠ 0 →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (Real.log (N / ε) + 1) ∧
-        IsPreparedWithMeasurementRoundsInDepth T (fun s => ψ s) ∧
+        (∃ v : Fin N → Fin d → ℂ,
+          IsMeasurementConversion (Geometry.ring N) T (fun σ ↦ ∏ i, v i (σ i)) (fun s => ψ s)) ∧
         1 - ‖⟪ψ, normalizedMPVState (repeatedBlockSum Aj ι μ) N⟫_ℂ‖ ≤ ε := by
-  exact exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpv_eq_sum
+  exact exists_isMeasurementConversion_le_log_log_of_mpv_eq_sum
     (repeatedBlockSum Aj ι μ) hN hA hσ htr hfix hmix (bntWeight μ)
     (fun N _ x => mpv_repeatedBlockSum hι hdisj μ (NeZero.ne N) x)
 
@@ -164,7 +165,7 @@ No separate mixed spectral hypothesis is needed. This covers all admissible leng
 accuracies, finite-block overlaps, arbitrary complex phases, repetitions, and vanishing
 individual sector amplitudes. Classical communication, measurement and onsite corrections
 are free; nearest-neighbor unitary layers are counted, and no branch is postselected. -/
-theorem exists_isPreparedWithMeasurementRoundsInDepth_repeatedBlockSum_le_log_log_of_inequivalent
+theorem exists_isMeasurementConversion_repeatedBlockSum_le_log_log_of_inequivalent
     {d D b : ℕ} {m : Fin b → ℕ} {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}
     {ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D}
     (hι : ∀ j k, Function.Injective (ι j k))
@@ -177,10 +178,11 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_repeatedBlockSum_le_log_lo
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N →
       mpvState (repeatedBlockSum Aj ι μ) N ≠ 0 →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (Real.log (N / ε) + 1) ∧
-        IsPreparedWithMeasurementRoundsInDepth T (fun s => ψ s) ∧
+        (∃ v : Fin N → Fin d → ℂ,
+          IsMeasurementConversion (Geometry.ring N) T (fun σ ↦ ∏ i, v i (σ i)) (fun s => ψ s)) ∧
         1 - ‖⟪ψ, normalizedMPVState (repeatedBlockSum Aj ι μ) N⟫_ℂ‖ ≤ ε := by
   have hDj : ∀ j, NeZero (Dj j) := fun j => Matrix.neZero_of_trace_eq_one (htr j)
-  exact exists_isPreparedWithMeasurementRoundsInDepth_repeatedBlockSum_le_log_log
+  exact exists_isMeasurementConversion_repeatedBlockSum_le_log_log
     hι hdisj μ hN hA hσ htr hfix (fun j j' hj μ' hμ' =>
       mixedMap_eigenvalue_norm_lt_one_of_normal_inequivalent (Aj j) (Aj j')
         (hN j) (hN j') (hA j) (hA j') (hneq j j' hj) hμ')

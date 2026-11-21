@@ -25,6 +25,8 @@ Source: arXiv:2203.12563v3, Section 5 and Appendix B.
 -/
 
 open scoped Matrix ComplexOrder
+
+open ManyBody
 open MPOTensor.PhysicalSectorFactorization
 
 noncomputable section
@@ -120,13 +122,14 @@ include h₀ h₁ hW hInj₀ hInj₁ in
 /-- The periodic completed enlarged Hamiltonian commutes with the actual
 common MPO at every ring length at least two. The realization is on the active
 space; no realization on the enlarged space or adjoint-closure premise is assumed. -/
-theorem interactionHamiltonian_arbitraryPhysicalMixedWeakHopfParent_commute
+theorem hamiltonian_arbitraryPhysicalMixedWeakHopfParent_commute
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
-    Commute (interactionHamiltonian (arbitraryPhysicalMixedWeakHopfParent A₀ A₁ W γ) hN)
+    Commute (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedWeakHopfParent A₀ A₁ W γ)).hamiltonian
       (MPOTensor.mpo (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) N) := by
   rw [arbitraryPhysicalMixedWeakHopfParent_eq
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ W hInj₀ hInj₁ h₀ h₁ hW hγ]
-  apply interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
+  apply hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁ _ hγ hN
   intro X
   obtain ⟨Y, hY⟩ := W.exists_adjointBoundary_changePhysicalBasis
@@ -141,9 +144,11 @@ uncompleted average. -/
 theorem exists_uniform_arbitraryPhysicalMixedWeakHopfParent_gap :
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ γ : unitInterval, ∀ N : ℕ, ∀ hN : 2 ≤ N,
       ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-        (interactionHamiltonian (arbitraryPhysicalMixedWeakHopfParent A₀ A₁ W γ) hN)))ᗮ,
+        (Interaction.translationInvariant hN
+            (arbitraryPhysicalMixedWeakHopfParent A₀ A₁ W γ)).hamiltonian))ᗮ,
         δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-          (interactionHamiltonian (arbitraryPhysicalMixedWeakHopfParent A₀ A₁ W γ) hN) v‖ := by
+          (Interaction.translationInvariant hN
+              (arbitraryPhysicalMixedWeakHopfParent A₀ A₁ W γ)).hamiltonian v‖ := by
   obtain ⟨δ, hδ, hδ₁, hg⟩ := exists_uniform_arbitraryPhysicalMixed_periodic_path_gap
     A₀ A₁ hInj₀ hInj₁
   refine ⟨δ, hδ, hδ₁, fun γ N hN => ?_⟩

@@ -23,6 +23,7 @@ No zero-length or one-site nearest-neighbor chain occurs.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
+open ManyBody
 
 namespace MPOTensor.PhysicalSupportRestrictionData
 
@@ -37,23 +38,23 @@ Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and
 theorem liftedBond_three_zero_one_comm
     (F : PhysicalSupportRestrictionData P K)
     (data : TranslationInvariantBondData F.supportDim) :
-    embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3)
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3))
           (F.liftedBond data.bond) *
-        embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3)
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3))
           (F.liftedBond data.bond) =
-      embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3)
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3))
           (F.liftedBond data.bond) *
-        embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3)
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3))
           (F.liftedBond data.bond) := by
-  let A := embedLocalOperator (d := F.supportDim) 2 3 (by decide)
-    (0 : Fin 3) data.bond
-  let B := embedLocalOperator (d := F.supportDim) 2 3 (by decide)
-    (1 : Fin 3) data.bond
+  let A := placeAlong (X := fun _ ↦ Fin F.supportDim)
+    (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3)) data.bond
+  let B := placeAlong (X := fun _ ↦ Fin F.supportDim)
+    (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3)) data.bond
   have hcomm : A * B = B * A := data.bond_comm (by decide) 0 1
   have hA : A.IsHermitian :=
-    (embedLocalOperator_posSemidef 2 (by decide) 0 data.bond_pos).1
+    (posSemidef_placeAlong _ data.bond_pos).1
   have hB : B.IsHermitian :=
-    (embedLocalOperator_posSemidef 2 (by decide) 1 data.bond_pos).1
+    (posSemidef_placeAlong _ data.bond_pos).1
   have hrestricted : (A * B).IsHermitian :=
     (hA.commute_iff hB).mp hcomm
   have hambient :
@@ -63,9 +64,9 @@ theorem liftedBond_three_zero_one_comm
   rw [singleKrausMap_adjacentBondProduct
     F.inclusion F.inclusion_isometry data.bond data.bond] at hambient
   refine Commute.eq ((Matrix.IsHermitian.commute_iff ?_ ?_).mpr ?_)
-  · exact (embedLocalOperator_posSemidef 2 (by decide) 0
+  · exact (posSemidef_placeAlong _
       (F.liftedBond_pos data.bond_pos)).1
-  · exact (embedLocalOperator_posSemidef 2 (by decide) 1
+  · exact (posSemidef_placeAlong _
       (F.liftedBond_pos data.bond_pos)).1
   · exact hambient
 
@@ -77,23 +78,23 @@ Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and
 theorem liftedBond_two_zero_one_comm
     (F : PhysicalSupportRestrictionData P K)
     (data : TranslationInvariantBondData F.supportDim) :
-    embedLocalOperator (d := d) 2 2 (by decide) (0 : Fin 2)
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 2) (0 : Fin 2))
           (F.liftedBond data.bond) *
-        embedLocalOperator (d := d) 2 2 (by decide) (1 : Fin 2)
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 2) (1 : Fin 2))
           (F.liftedBond data.bond) =
-      embedLocalOperator (d := d) 2 2 (by decide) (1 : Fin 2)
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 2) (1 : Fin 2))
           (F.liftedBond data.bond) *
-        embedLocalOperator (d := d) 2 2 (by decide) (0 : Fin 2)
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 2) (0 : Fin 2))
           (F.liftedBond data.bond) := by
-  let A := embedLocalOperator (d := F.supportDim) 2 2 (by decide)
-    (0 : Fin 2) data.bond
-  let B := embedLocalOperator (d := F.supportDim) 2 2 (by decide)
-    (1 : Fin 2) data.bond
+  let A := placeAlong (X := fun _ ↦ Fin F.supportDim)
+    (ringWindow (by decide : 2 ≤ 2) (0 : Fin 2)) data.bond
+  let B := placeAlong (X := fun _ ↦ Fin F.supportDim)
+    (ringWindow (by decide : 2 ≤ 2) (1 : Fin 2)) data.bond
   have hcomm : A * B = B * A := data.bond_comm (by decide) 0 1
   have hA : A.IsHermitian :=
-    (embedLocalOperator_posSemidef 2 (by decide) 0 data.bond_pos).1
+    (posSemidef_placeAlong _ data.bond_pos).1
   have hB : B.IsHermitian :=
-    (embedLocalOperator_posSemidef 2 (by decide) 1 data.bond_pos).1
+    (posSemidef_placeAlong _ data.bond_pos).1
   have hrestricted : (A * B).IsHermitian :=
     (hA.commute_iff hB).mp hcomm
   have hambient :
@@ -103,9 +104,9 @@ theorem liftedBond_two_zero_one_comm
   rw [singleKrausMap_crossedTwoSiteBondProduct
     F.inclusion F.inclusion_isometry data.bond data.bond] at hambient
   refine Commute.eq ((Matrix.IsHermitian.commute_iff ?_ ?_).mpr ?_)
-  · exact (embedLocalOperator_posSemidef 2 (by decide) 0
+  · exact (posSemidef_placeAlong _
       (F.liftedBond_pos data.bond_pos)).1
-  · exact (embedLocalOperator_posSemidef 2 (by decide) 1
+  · exact (posSemidef_placeAlong _
       (F.liftedBond_pos data.bond_pos)).1
   · exact hambient
 
@@ -118,22 +119,22 @@ theorem liftedBond_zero_one_comm
     (F : PhysicalSupportRestrictionData P K)
     (data : TranslationInvariantBondData F.supportDim)
     {N : ℕ} (hN : 2 ≤ N) :
-    embedLocalOperator (d := d) 2 N hN ⟨0, by omega⟩
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨0, by omega⟩)
           (F.liftedBond data.bond) *
-        embedLocalOperator (d := d) 2 N hN ⟨1, by omega⟩
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨1, by omega⟩)
           (F.liftedBond data.bond) =
-      embedLocalOperator (d := d) 2 N hN ⟨1, by omega⟩
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨1, by omega⟩)
           (F.liftedBond data.bond) *
-        embedLocalOperator (d := d) 2 N hN ⟨0, by omega⟩
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨0, by omega⟩)
           (F.liftedBond data.bond) := by
   by_cases htwo : N = 2
   · subst N
     exact F.liftedBond_two_zero_one_comm data
   · have hthree : 3 ≤ N := by omega
     let B := F.liftedBond data.bond
-    have hzero := embedLocalOperator_two_zero_nested (d := d)
+    have hzero := placeAlong_ringWindow_two_zero_nested (d := d)
       hthree ⟨0, by omega⟩ B
-    have hone := embedLocalOperator_two_one_nested (d := d)
+    have hone := placeAlong_ringWindow_two_one_nested (d := d)
       hthree ⟨0, by omega⟩ B
     have hsite : finRotate N ⟨0, by omega⟩ = ⟨1, by omega⟩ := by
       apply Fin.ext
@@ -142,14 +143,15 @@ theorem liftedBond_zero_one_comm
       exact Nat.mod_eq_of_lt (by omega)
     rw [hsite] at hone
     have hone' :
-        embedLocalOperator (d := d) 3 N (by omega) ⟨0, by omega⟩
-            (embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) B) =
-          embedLocalOperator (d := d) 2 N (by omega) ⟨1, by omega⟩ B := by
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hthree ⟨0, by omega⟩)
+            (placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3)) B) =
+          placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ N) ⟨1, by omega⟩)
+            B := by
       exact hone
     rw [← hzero, ← hone']
-    rw [← embedLocalOperator_mul, ← embedLocalOperator_mul]
+    rw [← placeAlong_mul, ← placeAlong_mul]
     exact congrArg
-      (embedLocalOperator (d := d) 3 N (by omega) ⟨0, by omega⟩)
+      (placeAlong (X := fun _ ↦ Fin d) (ringWindow hthree ⟨0, by omega⟩))
       (F.liftedBond_three_zero_one_comm data)
 
 private theorem supportProjection_isOrthogonal

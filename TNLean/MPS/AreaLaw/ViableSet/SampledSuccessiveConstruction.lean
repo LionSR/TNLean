@@ -67,27 +67,25 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
     {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p₀ D r₀ : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-        (interval L j (j + 2)))
-      (_ : ∀ j, (h j).PosSemidef) (_ : ∀ j, h j ≤ 1)
+      ∀ (Φ : ManyBody.BondInteraction L q)
+      (_ : ∀ j, (Φ.term j).PosSemidef) (_ : ∀ j, Φ.term j ≤ 1)
       (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-      ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
-      groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
+      ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E₀ Δ →
+      groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
       ∀ (i : ℕ), 0 < i → ∀ (hiL : i ≤ L), ∀ S : Finset (LeftBlockVector L q (i - 1)),
       IsViable Γ (lvvViabilityPrecision Δ η / (L : ℝ) ^ a) (S : Set (LeftBlockVector L q (i - 1))) →
       ∃ (ℓ n N : ℕ) (I : Fin ℓ → Fin n → Fin L)
         (A : Fin N → LeftBlockMatrix L q i) (B' : Fin N → RightBlockMatrix L q i),
-        ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
+        ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
           lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
         ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
-          (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
+          (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         IsViableMPS Γ (C * L ^ (sampledProjectorTotalDegree q a Δ B + p₀))
           (D * L ^ (sampledProjectorTotalDegree q a Δ B + r₀))
           (lvvViabilityPrecision Δ η / (L : ℝ) ^ a)
           (successiveStep hiL (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
             (ManyBody.ChainInteraction.sizeTrimmingSelection
-                (ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩) hq Δ
+                (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ
               (AreaLaw.extend i S))) := by
   classical
   let α := lvvViabilityPrecision Δ η
@@ -105,17 +103,17 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
   let F := (d + 1) * d * (2 * netRadius + 1) ^ k
   refine ⟨max 1 (P * F), k, P * max 1 ⌈M⌉₊, u, le_max_left _ _, ?_, ?_⟩
   · simpa only [one_mul] using Nat.mul_le_mul hP (le_max_left 1 ⌈M⌉₊)
-  · intro L hL h hs h0 h1 E₀ Γ hΩ hgap hspan hEB i hi0 hiL S hviable
+  · intro L hL Φ h0 h1 E₀ Γ hΩ hgap hspan hEB i hi0 hiL S hviable
     let : NeZero L := ⟨by omega⟩
     have hLp : (0 : ℝ) < L := by exact_mod_cast (show 0 < L by omega)
     have hδ : 0 < α / (L : ℝ) ^ a := div_pos hα (pow_pos hLp a)
     have hδ1 : α / (L : ℝ) ^ a ≤ 1 := (div_le_one (pow_pos hLp a)).mpr
       (hα1.trans (one_le_pow₀ (by exact_mod_cast hL)))
-    let chain := ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩
+    let chain := ManyBody.BondInteraction.toChainInteraction Φ
     have hgapC : IsGapped chain.hamiltonian E₀ Δ := by
-      rwa [show chain.hamiltonian = ∑ j, h j from ManyBody.Interaction.hamiltonian_extend]
+      rwa [show chain.hamiltonian = Φ.hamiltonian from ManyBody.Interaction.hamiltonian_extend]
     have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
-      rwa [show chain.hamiltonian = ∑ j, h j from ManyBody.Interaction.hamiltonian_extend]
+      rwa [show chain.hamiltonian = Φ.hamiltonian from ManyBody.Interaction.hamiltonian_extend]
     have hsmall : IsViable Γ (c / L)
         (AreaLaw.extend i S : Set (LeftBlockVector L q i)) := by
       obtain ⟨v, hv, hoverlap, hsupport⟩ := hviable.extend hi0 hiL
@@ -141,10 +139,10 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
             Matrix.PosSemidef.zero h0) (by omega) hq hiL hΔ
           (AreaLaw.extend i S) E₀ Γ hΩ hgapC hspanC hsmall⟩
     obtain ⟨I, hproj, hcuts⟩ := exists_sampled_errorReduction (show 1 ≤ q by omega)
-      h hs h0 h1 hΩ hgap hspan hΔ hδ hδ1
+      Φ h0 h1 hΩ hgap hspan hΔ hδ hδ1
     obtain ⟨N, A, B', _, hdec, _, hgood⟩ := hcuts i hiL
     have hout := hgood _ _ (bondTrimSet hiL m T₀) hT₁
-    obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
+    obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le Φ h0 h1 hΩ hspan
     have hbudgets := hsample L E₀ hL hE₀ hE₀L hEB
     have hηeq : α / (L : ℝ) ^ a / 8 = (α / 8) / (L : ℝ) ^ a := by ring
     simp only [hηeq] at hout
@@ -177,25 +175,23 @@ the length and the ground energy. LVV13, `algo53.tex`, the four steps, lines 379
 theorem exists_sampled_viable_successor_polynomial {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p D r : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-        (interval L j (j + 2)))
-      (_ : ∀ j, (h j).PosSemidef) (_ : ∀ j, h j ≤ 1)
+      ∀ (Φ : ManyBody.BondInteraction L q)
+      (_ : ∀ j, (Φ.term j).PosSemidef) (_ : ∀ j, Φ.term j ≤ 1)
       (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-      ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
-      groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
+      ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E₀ Δ →
+      groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
       ∀ (i : ℕ), 0 < i → ∀ (hiL : i ≤ L), ∀ S : Finset (LeftBlockVector L q (i - 1)),
       IsViable Γ (lvvViabilityPrecision Δ η / (L : ℝ) ^ a) (S : Set (LeftBlockVector L q (i - 1))) →
       ∃ (ℓ n N : ℕ) (I : Fin ℓ → Fin n → Fin L)
         (A : Fin N → LeftBlockMatrix L q i) (B' : Fin N → RightBlockMatrix L q i),
-        ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
+        ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
           lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
         ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
-          (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
+          (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         IsViableMPS Γ (C * L ^ p) (D * L ^ r) (lvvViabilityPrecision Δ η / (L : ℝ) ^ a)
           (successiveStep hiL (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
             (ManyBody.ChainInteraction.sizeTrimmingSelection
-                (ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩) hq Δ
+                (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ
               (AreaLaw.extend i S))) := by
   obtain ⟨C, p₀, D, r₀, hC, hD, hstep⟩ :=
     exists_sampled_viable_successor_polynomial_explicit_energy_degree
@@ -214,26 +210,24 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
     {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p₀ D r₀ : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-        (interval L j (j + 2)))
-      (_ : ∀ j, (h j).PosSemidef) (_ : ∀ j, h j ≤ 1)
+      ∀ (Φ : ManyBody.BondInteraction L q)
+      (_ : ∀ j, (Φ.term j).PosSemidef) (_ : ∀ j, Φ.term j ≤ 1)
       (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-      ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
-      groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
+      ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E₀ Δ →
+      groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
       ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i),
         S 0 = {emptyLeftVector L q} ∧
         (∀ i : ℕ, (hi : i + 1 ≤ L) →
           ∃ (ℓ n N : ℕ) (I : Fin ℓ → Fin n → Fin L)
             (A : Fin N → LeftBlockMatrix L q (i + 1))
             (B' : Fin N → RightBlockMatrix L q (i + 1)),
-            ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
+            ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
               lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
             ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
-              (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
+              (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
             S (i + 1) = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
               Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
-                (ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩) hq Δ
+                (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ
                 (AreaLaw.extend (i + 1) (S i)))) ∧
         ∀ i : ℕ, i ≤ L →
           IsViableMPS Γ (C * L ^ (sampledProjectorTotalDegree q a Δ B + p₀))
@@ -246,7 +240,7 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
   let p := sampledProjectorTotalDegree q a Δ B + p₀
   let r := sampledProjectorTotalDegree q a Δ B + r₀
   refine ⟨C, p₀, D, r₀, hC, hD, ?_⟩
-  intro L hL h hs h0 h1 E₀ Γ hΩ hgap hspan hEB
+  intro L hL Φ h0 h1 E₀ Γ hΩ hgap hspan hEB
   let P := fun i (S : Finset (LeftBlockVector L q i)) ↦
     IsViableMPS Γ (C * L ^ p) (D * L ^ r) (lvvViabilityPrecision Δ η / (L : ℝ) ^ a) S
   have hbase : P 0 {emptyLeftVector L q} := by
@@ -265,13 +259,13 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
       ∃ (ℓ n N : ℕ) (I : Fin ℓ → Fin n → Fin L)
         (A : Fin N → LeftBlockMatrix L q (i + 1))
         (B' : Fin N → RightBlockMatrix L q (i + 1)),
-        ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
+        ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
           lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
         ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
-          (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
+          (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         T = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
           (ManyBody.ChainInteraction.sizeTrimmingSelection
-              (ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩) hq Δ
+              (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ
             (AreaLaw.extend (i + 1) S))
   have hadvance : ∀ (i : ℕ) (S : Finset (LeftBlockVector L q i)), (i ≤ L → P i S) →
       ∃ T : Finset (LeftBlockVector L q (i + 1)), (i + 1 ≤ L → P (i + 1) T) ∧ Step i S T := by
@@ -279,7 +273,7 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
     by_cases hi : i + 1 ≤ L
     · obtain ⟨-, -, hviable⟩ := hS (by omega)
       obtain ⟨ℓ, n, N, I, A, B', hproj, hdec, hT⟩ :=
-        hstep L hL h hs h0 h1 E₀ Γ hΩ hgap hspan hEB (i + 1) (by omega) hi S hviable
+        hstep L hL Φ h0 h1 E₀ Γ hΩ hgap hspan hEB (i + 1) (by omega) hi S hviable
       exact ⟨_, fun _ ↦ hT, fun _ ↦ ⟨ℓ, n, N, I, A, B', hproj, hdec, rfl⟩⟩
     · exact ⟨∅, fun hi' ↦ absurd hi' hi, fun hi' ↦ absurd hi' hi⟩
   let State := fun i : ℕ ↦ {S : Finset (LeftBlockVector L q i) // i ≤ L → P i S}
@@ -302,13 +296,11 @@ theorem exists_sampled_successive_viable_sets_polynomial_total_cardinality
     {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p₀ D r₀ : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-        (interval L j (j + 2))) →
-      (∀ j, (h j).PosSemidef) → (∀ j, h j ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      (∀ j, (Φ.term j).PosSemidef) → (∀ j, Φ.term j ≤ 1) →
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-      ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
-      groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
+      ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E₀ Δ →
+      groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
       ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i), S 0 = {emptyLeftVector L q} ∧
         (∀ i : ℕ, i ≤ L →
           IsViableMPS Γ
@@ -322,8 +314,8 @@ theorem exists_sampled_successive_viable_sets_polynomial_total_cardinality
     exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
       (B := B) hq a ha hΔ hη
   refine ⟨2 * C, p₀, D, r₀, by omega, hD, ?_⟩
-  intro L hL h hs h0 h1 E₀ Γ hΩ hgap hspan hEB
-  obtain ⟨S, hS0, _, hS⟩ := hsets L hL h hs h0 h1 E₀ Γ hΩ hgap hspan hEB
+  intro L hL Φ h0 h1 E₀ Γ hΩ hgap hspan hEB
+  obtain ⟨S, hS0, _, hS⟩ := hsets L hL Φ h0 h1 E₀ Γ hΩ hgap hspan hEB
   refine ⟨S, hS0, ?_, ?_⟩
   · intro i hi
     obtain ⟨hcard, hbond, hviable⟩ := hS i hi
@@ -355,26 +347,24 @@ quantitative scope. -/
 theorem exists_sampled_successive_viable_sets_polynomial {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p D r : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-        (interval L j (j + 2)))
-      (_ : ∀ j, (h j).PosSemidef) (_ : ∀ j, h j ≤ 1)
+      ∀ (Φ : ManyBody.BondInteraction L q)
+      (_ : ∀ j, (Φ.term j).PosSemidef) (_ : ∀ j, Φ.term j ≤ 1)
       (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-      ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
-      groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
+      ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E₀ Δ →
+      groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
       ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i),
         S 0 = {emptyLeftVector L q} ∧
         (∀ i : ℕ, (hi : i + 1 ≤ L) →
           ∃ (ℓ n N : ℕ) (I : Fin ℓ → Fin n → Fin L)
             (A : Fin N → LeftBlockMatrix L q (i + 1))
             (B' : Fin N → RightBlockMatrix L q (i + 1)),
-            ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
+            ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
               lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
             ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
-              (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
+              (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
             S (i + 1) = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
               Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
-                (ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩) hq Δ
+                (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ
                 (AreaLaw.extend (i + 1) (S i)))) ∧
         ∀ i : ℕ, i ≤ L →
           IsViableMPS Γ (C * L ^ p) (D * L ^ r)
@@ -393,13 +383,11 @@ theorem exists_sampled_groundState_openMPS_polynomial_explicit_energy_degree
     {q : ℕ} (hq : 2 ≤ q) (a : ℕ) (ha : 1 ≤ a)
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p₀ : ℕ, 1 ≤ C ∧ ∀ (L : ℕ), 1 ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-        (interval L j (j + 2))) →
-      (∀ j, (h j).PosSemidef) → (∀ j, h j ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      (∀ j, (Φ.term j).PosSemidef) → (∀ j, Φ.term j ≤ 1) →
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-      ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
-      groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
+      ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E₀ Δ →
+      groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
       ∃ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 ∧
         1 - η / (L : ℝ) ^ a ≤ ‖⟪ψ, Γ⟫_ℂ‖ ∧
         IsOpenMPS L q
@@ -412,8 +400,8 @@ theorem exists_sampled_groundState_openMPS_polynomial_explicit_energy_degree
   let p := t + p₀
   let r := t + r₀
   refine ⟨C * D, p₀ + r₀, by simpa only [one_mul] using Nat.mul_le_mul hC hD, ?_⟩
-  intro L hL h hs h0 h1 E₀ Γ hΩ hgap hspan hEB
-  obtain ⟨S, _, _, hS⟩ := hsets L hL h hs h0 h1 E₀ Γ hΩ hgap hspan hEB
+  intro L hL Φ h0 h1 E₀ Γ hΩ hgap hspan hEB
+  obtain ⟨S, _, _, hS⟩ := hsets L hL Φ h0 h1 E₀ Γ hΩ hgap hspan hEB
   obtain ⟨ψ, hψ, hoverlap, hMPS⟩ := (hS L le_rfl).exists_openMPS
   refine ⟨ψ, hψ, ?_, ?_⟩
   · have hprec : lvvViabilityPrecision Δ η ≤ η :=
@@ -435,13 +423,11 @@ theorem exists_sampled_groundState_openMPS_polynomial_explicit_energy_degree
 theorem exists_sampled_groundState_openMPS_polynomial {q : ℕ} (hq : 2 ≤ q)
     (a : ℕ) (ha : 1 ≤ a) {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p : ℕ, 1 ≤ C ∧ ∀ (L : ℕ), 1 ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-        (interval L j (j + 2))) →
-      (∀ j, (h j).PosSemidef) → (∀ j, h j ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      (∀ j, (Φ.term j).PosSemidef) → (∀ j, Φ.term j ≤ 1) →
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-      ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
-      groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
+      ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E₀ Δ →
+      groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
       ∃ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 ∧
         1 - η / (L : ℝ) ^ a ≤ ‖⟪ψ, Γ⟫_ℂ‖ ∧
         IsOpenMPS L q (C * L ^ p) (fun x ↦ ψ x) := by

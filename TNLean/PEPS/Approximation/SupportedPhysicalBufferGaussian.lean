@@ -80,7 +80,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
       let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C₀ → Fin q))
       let s := ManyBody.splitTwoRegionsEquiv
         (fun _ : SquareLatticeVertex L L ↦ Fin q) R C₀ hRC
-      let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (Q → Fin q))
+      let g := (s.prodCongr s).trans (Equiv.doubledRegroup P ({v // v ∉ R ∪ C₀} → Fin q))
       let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
       let Λ := ManyBody.rectangularDomain L L
       let a := ManyBody.rectangleSiteEquiv L L
@@ -92,11 +92,13 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
         Finset.univ.filter (IsRegionBoundaryEdge R)
       let Z := boundary.biUnion fun b ↦
         ({b.1.1, b.1.2} : Finset (SquareLatticeVertex L L))
-      ∀ W : Matrix ((Q → Fin q) × (Q → Fin q)) ((Q → Fin q) × (Q → Fin q)) ℂ,
+      ∀ W : Matrix (({v // v ∉ R ∪ C₀} → Fin q) × ({v // v ∉ R ∪ C₀} → Fin q))
+          (({v // v ∉ R ∪ C₀} → Fin q) × ({v // v ∉ R ∪ C₀} → Fin q)) ℂ,
         let V := reindex (g.symm.trans (p.trans e)) (g.symm.trans (p.trans e))
           ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W)
         ∀ l : ℕ,
-          let B := Lattice.graphNeighborhood Λ l (Q.image a ∪ Z.image a)
+          let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
+            (Q.image a ∪ Z.image a) l
           ∃ U : ℝ → Matrix (Lattice.Configuration Λ (q * q))
               (Lattice.Configuration Λ (q * q)) ℂ,
             U 0 = 1 ∧
@@ -128,10 +130,12 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
       (show h.hamiltonian.IsHermitian from hh).eq]
   have hV₀ : reindex (g.symm.trans p) (g.symm.trans p)
       ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) ∈
-        ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q :=
-    (TNLean.Lattice.reindex_physicalBuffer_eq_place q R C₀ hRC W).symm ▸
-      ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _)
-        (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
+        ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q := by
+    obtain ⟨A, hA⟩ : ∃ A, reindex (g.symm.trans p) (g.symm.trans p)
+        ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) = ManyBody.place (X := fun _ ↦ Fin (q * q)) Q A :=
+      ⟨_, TNLean.Lattice.reindex_physicalBuffer_eq_place q R C₀ hRC W⟩
+    rw [hA]
+    exact ManyBody.place_mem_supportedOperators A
   have hV : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
       (Q.image a : Finset (Lattice.Site Λ)) := by
     have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators
@@ -199,7 +203,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integ
         let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C₀ → Fin q))
         let s := ManyBody.splitTwoRegionsEquiv
           (fun _ : SquareLatticeVertex L L ↦ Fin q) R C₀ hRC
-        let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (Q → Fin q))
+        let g := (s.prodCongr s).trans (Equiv.doubledRegroup P ({v // v ∉ R ∪ C₀} → Fin q))
         let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
         let Λ := ManyBody.rectangularDomain L L
         let a := ManyBody.rectangleSiteEquiv L L
@@ -211,11 +215,13 @@ theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integ
           Finset.univ.filter (IsRegionBoundaryEdge R)
         let Z := boundary.biUnion fun b ↦
           ({b.1.1, b.1.2} : Finset (SquareLatticeVertex L L))
-        ∀ W : Matrix ((Q → Fin q) × (Q → Fin q)) ((Q → Fin q) × (Q → Fin q)) ℂ,
+        ∀ W : Matrix (({v // v ∉ R ∪ C₀} → Fin q) × ({v // v ∉ R ∪ C₀} → Fin q))
+            (({v // v ∉ R ∪ C₀} → Fin q) × ({v // v ∉ R ∪ C₀} → Fin q)) ℂ,
           let V := reindex (g.symm.trans (p.trans e)) (g.symm.trans (p.trans e))
             ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W)
           ∀ l : ℕ,
-            let B := Lattice.graphNeighborhood Λ l (Q.image a ∪ Z.image a)
+            let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
+              (Q.image a ∪ Z.image a) l
             ∃ U : ℝ → Matrix (Lattice.Configuration Λ (q * q))
                 (Lattice.Configuration Λ (q * q)) ℂ,
               U 0 = 1 ∧

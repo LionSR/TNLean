@@ -61,6 +61,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 noncomputable section
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -147,7 +148,8 @@ theorem repairStage_primary_error_sum_le {CP : ℝ} (hCP : 0 < CP) (o : ℝ × �
     ∑ x ∈ S, (((⌈CP *
         repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar (0 + n) x ^
         (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊ : ℕ) : ℝ) ^ 100)⁻¹ ≤
-      primaryErrorSumConstant CP * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+      primaryErrorSumConstant CP * (2 * (C : ℝ) + 1) ^ 2 *
+        (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
   intro hS
   have hsum := primaryPitchIndices_error_sum_le hCP
@@ -217,7 +219,7 @@ theorem exists_uniform_repairStage_primary_error_sum_bound {CP : ℝ} (hCP : 0 <
         ∑ x ∈ S, (((⌈CP *
             repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar (0 + n) x ^
             (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊ : ℕ) : ℝ) ^ 100)⁻¹ ≤
-          M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
+          M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card :=
   ⟨_, primaryErrorSumConstant_pos hCP, repairStage_primary_error_sum_le hCP⟩
 
 end Primary
@@ -236,10 +238,12 @@ Section 11, `geometry:bad-sites`, `10-geometry.tex`, lines 694–707. -/
 theorem card_repairStageExceptionalSites_le_of_isEmpty (N : ℕ)
     [IsEmpty (𝔇 N).markIndex] {M : ℝ}
     (hM : ∑ j ∈ Finset.range N, (Nat.card (𝔇 j).markIndex : ℝ) ≤
-      M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card) :
+      M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card) :
     ((repairStageExceptionalSites dyadicOrigin Λ A C k₀ hC h₀ Sstar N).card : ℝ) ≤
-      (2 * (2 * ((C + 1) * 2 ^ k₀) + 1) ^ 2 : ℕ) * ((edgeBoundary Λ A).card : ℝ) +
-        (2 * Sstar + 1) ^ 2 * (M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card) := by
+      (2 * (2 * ((C + 1) * 2 ^ k₀) + 1) ^ 2 : ℕ) *
+          ((edgeBoundary (planeDomainGraph Λ) A).card : ℝ) +
+        (2 * Sstar + 1) ^ 2 *
+          (M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card) := by
   classical
   have hsplit : repairStageExceptionalSites dyadicOrigin Λ A C k₀ hC h₀ Sstar N ⊆
       (𝔇 N).regionSites Λ A (𝔇 N).dummy ∪
@@ -263,7 +267,8 @@ theorem card_repairStageExceptionalSites_le_of_isEmpty (N : ℕ)
           ⋃ j < N, repairTerminalInteriorSet (𝔇 j).location (𝔇 j).scale Sstar)).card := by
     exact_mod_cast hcard
   have hdummyR : (((𝔇 N).regionSites Λ A (𝔇 N).dummy).card : ℝ) ≤
-      (2 * (2 * ((C + 1) * 2 ^ k₀) + 1) ^ 2 : ℕ) * ((edgeBoundary Λ A).card : ℝ) := by
+      (2 * (2 * ((C + 1) * 2 ^ k₀) + 1) ^ 2 : ℕ) *
+        ((edgeBoundary (planeDomainGraph Λ) A).card : ℝ) := by
     exact_mod_cast hdummy
   have hsq : 0 ≤ (2 * Sstar + 1) ^ 2 := sq_nonneg _
   nlinarith [mul_le_mul_of_nonneg_left hM hsq]
@@ -356,10 +361,10 @@ partition with separated birth templates, `|D| ≤ C b` and `∑ nᵢ^(-100) ≤
 Source: area-law Section 11, `prop:two-families`, `10-geometry.tex`,
 lines 98–141. -/
 def IsTwoFamilyDecompositionConstant (D₀ Ctpl : ℝ) (nstar : ℕ) (C : ℝ) : Prop :=
-  ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset (Site Λ), 0 < (edgeBoundary Λ A).card →
+  ∀ Λ : Finset (ℤ × ℤ), ∀ A : Finset (Site Λ), 0 < (edgeBoundary (planeDomainGraph Λ) A).card →
     ∃ P : Geometry.OrderedTwoFamilyPartition A, ∃ n s : Fin P.pieceCount → ℕ,
       ∃ T : ∀ i, Geometry.Template Ctpl (n i) (s i),
-        (P.residual.card : ℝ) ≤ C * (edgeBoundary Λ A).card ∧
+        (P.residual.card : ℝ) ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card ∧
         (∀ i, (P.piece i).Nonempty) ∧
         (∀ i, P.piece i ⊆ A.filter fun x ↦ x.val ∈ (T i).points) ∧
         (∀ i, (T i).IsSeparated D₀ (Geometry.boundaryEndpoints Λ A)) ∧
@@ -369,7 +374,7 @@ def IsTwoFamilyDecompositionConstant (D₀ Ctpl : ℝ) (nstar : ℕ) (C : ℝ) :
           2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t z : ℝ)) ∧
         (∀ i, ∀ t ∈ (T i).points, ∀ x ∈ P.earlierSameFamily i,
           2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t x.val : ℝ)) ∧
-        ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C * (edgeBoundary Λ A).card
+        ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card
 
 /-- Proposition 11.2 says that every lower scale threshold `n_* ≥ 1` has a
 constant in the sense of `IsTwoFamilyDecompositionConstant`. -/
@@ -457,7 +462,7 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
     (hmark : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (N : ℕ),
       ∑ j ∈ Finset.range N,
           (Nat.card (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar j).markIndex : ℝ) ≤
-        Mt * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card)
+        Mt * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card)
     (hprim : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (n : ℕ)
       (S : Finset (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar (0 + n)).regionIndex),
       (∀ x ∈ S, repairStageBirthRank dyadicOrigin Λ A C k₀ hC h₀ Sstar (0 + n) x = 0 ∧
@@ -465,7 +470,7 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
       ∑ x ∈ S, (((⌈CP *
           repairStageCharacteristicLength dyadicOrigin Λ A C k₀ hC h₀ Sstar (0 + n) x ^
           (1 + 2 * (Exponents.geometryDelta : ℝ))⌉₊ : ℕ) : ℝ) ^ 100)⁻¹ ≤
-        Mp * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card)
+        Mp * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card)
     (hnonprim : ∀ (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (N : ℕ),
       let I : Type :=
         {i : (repairStage dyadicOrigin Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A //
@@ -474,7 +479,7 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
         ⌈CB * repairStageCharacteristicLength dyadicOrigin Λ A C k₀ hC h₀ Sstar N
           i.val.val⌉₊
       (∑ᶠ i : I, (((n i : ℝ) ^ 100)⁻¹)) ≤
-        Lq * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card) :
+        Lq * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card) :
     IsTwoFamilyDecompositionConstant D₀ Ctpl nstar (twoFamilyConstant C k₀ Sstar Mt Mp Lq) := by
   classical
   have hS1 : 1 < Sstar := by linarith
@@ -495,7 +500,7 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
   set Csum : ℝ := Mp * (2 * (C : ℝ) + 1) ^ 2 + Lq * (2 * (C : ℝ) + 1) ^ 2 with hCsum
   change IsTwoFamilyDecompositionConstant D₀ Ctpl nstar (max Cres Csum)
   intro Λ A hb
-  have hb0 : (0 : ℝ) ≤ (edgeBoundary Λ A).card := Nat.cast_nonneg _
+  have hb0 : (0 : ℝ) ≤ (edgeBoundary (planeDomainGraph Λ) A).card := Nat.cast_nonneg _
   -- The repair construction at the prescribed origin, and an empty generation.
   have hmh := hmetric Λ A
   obtain ⟨N₀, hN₀⟩ := hmh.exists_isEmpty_markIndex
@@ -557,8 +562,8 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
     have hexc := card_repairStageExceptionalSites_le_of_isEmpty (hC := hC) (h₀ := h₀)
       (Sstar := Sstar) N (hmark Λ A N)
     calc ((repairStageExceptionalSites dyadicOrigin Λ A C k₀ hC h₀ Sstar N).card : ℝ)
-        ≤ Cres * (edgeBoundary Λ A).card := by rw [hCres]; nlinarith [hexc]
-      _ ≤ max Cres Csum * (edgeBoundary Λ A).card :=
+        ≤ Cres * (edgeBoundary (planeDomainGraph Λ) A).card := by rw [hCres]; nlinarith [hexc]
+      _ ≤ max Cres Csum * (edgeBoundary (planeDomainGraph Λ) A).card :=
         mul_le_mul_of_nonneg_right (le_max_left _ _) hb0
   · -- Nonempty pieces.
     intro i
@@ -670,7 +675,7 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
       exact e.sum_comp g
     -- Primaries.
     have hP : ∑ r : {r : Ret // rank r = 0}, g r.val ≤
-        Mp * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+        Mp * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card := by
       let f : {r : Ret // rank r = 0} → 𝔇N.regionIndex :=
         fun r ↦ r.val.val
       have hf : Function.Injective f := fun r r' h ↦ Subtype.ext (Subtype.ext h)
@@ -685,7 +690,7 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
       rfl
     -- The remaining identifiers.
     have hQ : ∑ r : {r : Ret // ¬ rank r = 0}, g r.val ≤
-        Lq * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+        Lq * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card := by
       have h := hnonprim Λ A N
       simp only at h
       rw [finsum_eq_sum_of_fintype] at h
@@ -698,10 +703,11 @@ theorem isTwoFamilyDecompositionConstant_twoFamilyConstant
       simp only [g, nf, r.property, ite_false]
       rfl
     rw [hsplit]
-    calc _ ≤ Mp * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card +
-          Lq * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := add_le_add hP hQ
-      _ = Csum * (edgeBoundary Λ A).card := by rw [hCsum]; ring
-      _ ≤ max Cres Csum * (edgeBoundary Λ A).card :=
+    calc _ ≤ Mp * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card +
+          Lq * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card :=
+            add_le_add hP hQ
+      _ = Csum * (edgeBoundary (planeDomainGraph Λ) A).card := by rw [hCsum]; ring
+      _ ≤ max Cres Csum * (edgeBoundary (planeDomainGraph Λ) A).card :=
         mul_le_mul_of_nonneg_right (le_max_right _ _) hb0
 
 

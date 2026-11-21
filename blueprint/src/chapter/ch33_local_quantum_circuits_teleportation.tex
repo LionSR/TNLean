@@ -27,21 +27,18 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{definition}[Fourier and generalized Pauli matrices]
     \label{def:qc_qudit_pauli}
-    \lean{QuantumCircuit.quditRoot, QuantumCircuit.Qudit.fourier,
-        QuantumCircuit.quditPauli}
+    \lean{QuantumCircuit.Qudit.fourier}
     \leanok
     Let $\zeta=e^{2\pi i/d}$. For $a,b,x,z\in\mathbb Z_d$, define the Fourier matrix $F_{ab}=d^{-1/2}\zeta^{ab}$ and the generalized Pauli matrix $X^xZ^z\ket q=\zeta^{zq}\ket{q+x}$.
 \end{definition}
 
 \begin{lemma}[Fourier and Pauli matrices are unitary]
     \label{lem:qc_qudit_pauli_unitary}
-    \lean{QuantumCircuit.isPrimitiveRoot_quditRoot,
-        QuantumCircuit.Qudit.fourier_apply_quditRoot,
-        QuantumCircuit.Qudit.fourier_mem_unitaryGroup,
-        QuantumCircuit.quditPauli_apply, QuantumCircuit.quditPauli_mem_unitary}
+    \lean{QuantumCircuit.Qudit.fourier_mem_unitaryGroup,
+        QuantumCircuit.TeleportHop.frame_mem_unitaryGroup}
     \leanok
     \uses{def:qc_qudit_pauli}
-    $\zeta$ is a primitive $d$-th root of unity, $F,X^xZ^z\in\mathrm U(d)$, and $(X^xZ^z)_{pq}=\zeta^{zq}\delta_{p-x,q}$.
+    $F,X^xZ^z\in\mathrm U(d)$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -50,23 +47,19 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{lemma}[Single-site operators, permutations of sites and sites in the state zero]
     \label{lem:qc_site_permutations}
-    \lean{QuantumCircuit.finKronecker_update_one_mulVec_apply,
-        QuantumCircuit.finKronecker_update_one_permMatrix_mulVec,
+    \lean{QuantumCircuit.prodOp_update_one_mulVec_apply,
         QuantumCircuit.IsZeroOn, QuantumCircuit.IsZeroOn.mono,
         QuantumCircuit.IsZeroOn.smul,
-        QuantumCircuit.IsZeroOn.finKronecker_update_one_mulVec,
-        QuantumCircuit.cfgPerm, QuantumCircuit.cfgPerm_apply,
-        QuantumCircuit.permMatrix_cfgPerm_mul_rectKronecker,
-        QuantumCircuit.permMatrix_cfgPerm_mul_finKronecker,
-        QuantumCircuit.IsZeroOn.permMatrix_cfgPerm_mulVec,
+        QuantumCircuit.IsZeroOn.prodOp_update_one_mulVec,
+        QuantumCircuit.cfgPerm,
+        ManyBody.sitePermOp_mul_mul_conjTranspose,
         QuantumCircuit.permMatrix_cfgPerm_mul_permMatrix_cfgPerm,
         QuantumCircuit.permMatrix_cfgPerm_one,
-        QuantumCircuit.permMatrix_cfgPerm_mul_embedOp_mul,
-        QuantumCircuit.IsZeroOn.permMatrix_cfgPerm_mulVec_image,
+        ManyBody.sitePermOp_mul_placeAlong_mul_conjTranspose,
+        QuantumCircuit.IsZeroOn.sitePermOp_mulVec_image,
         QuantumCircuit.IsZeroOn.mulVec_of_mem_supportedOperators,
-        QuantumCircuit.list_prod_mem_supportedOperators,
-        QuantumCircuit.layerOfListGate, QuantumCircuit.layerOfListGate_key,
-        QuantumCircuit.layerOfList, QuantumCircuit.layerOfList_op}
+        QuantumCircuit.Layer.ofList, QuantumCircuit.Layer.kraus_ofList,
+        QuantumCircuit.Layer.forall_isUnitary_ofList}
     \leanok
     \uses{def:qc_local_circuit}
     A vector $\ket v$ has $\ket0$ on $Z\subseteq I$ if $v(x)=0$ whenever $\exists i\in Z,\,x_i\neq0$. A site permutation $\pi$ acts by $(P_\pi v)(x)=v(x\circ\pi)$. Then:
@@ -84,16 +77,15 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{lemma}[One teleportation hop]
     \label{lem:qc_teleport_hop}
-    \lean{QuantumCircuit.TeleportHop, QuantumCircuit.TeleportHop.gate₁,
-        QuantumCircuit.TeleportHop.gate₂,
-        QuantumCircuit.TeleportHop.gate₁_mem_unitary,
-        QuantumCircuit.TeleportHop.gate₂_mem_unitary,
+    \lean{QuantumCircuit.TeleportHop, QuantumCircuit.TeleportHop.pairGate₁,
+        QuantumCircuit.TeleportHop.pairGate₂,
+        QuantumCircuit.TeleportHop.gate₁, QuantumCircuit.TeleportHop.gate₂,
+        QuantumCircuit.TeleportHop.gate₁_mem_unitaryGroup,
+        QuantumCircuit.TeleportHop.gate₂_mem_unitaryGroup,
         QuantumCircuit.TeleportHop.gate₁_mem_supportedOperators,
         QuantumCircuit.TeleportHop.gate₂_mem_supportedOperators,
         QuantumCircuit.TeleportHop.pre, QuantumCircuit.TeleportHop.frame,
-        QuantumCircuit.TeleportHop.frame_mem_unitary,
         QuantumCircuit.TeleportHop.frame_of_ne,
-        QuantumCircuit.TeleportHop.swapPerm,
         QuantumCircuit.TeleportHop.pre_mulVec,
         QuantumCircuit.TeleportHop.pre_mem_supportedOperators}
     \leanok
@@ -125,27 +117,30 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.TeleportHop.pairwise_disjoint_one,
         QuantumCircuit.TeleportHop.pairwise_disjoint_two,
         QuantumCircuit.TeleportHop.layerOne, QuantumCircuit.TeleportHop.layerTwo,
-        QuantumCircuit.TeleportHop.layerOne_op,
-        QuantumCircuit.TeleportHop.layerTwo_op,
+        QuantumCircuit.TeleportHop.kraus_layerOne,
+        QuantumCircuit.TeleportHop.kraus_layerTwo,
         QuantumCircuit.TeleportHop.sitePerm,
-        QuantumCircuit.TeleportHop.chainPerm,
-        QuantumCircuit.TeleportHop.chainPerm_nil,
-        QuantumCircuit.TeleportHop.chainPerm_cons,
+        QuantumCircuit.sitePermOp_mul_prodOp,
         QuantumCircuit.TeleportHop.chainFrame,
         QuantumCircuit.TeleportHop.chainPre,
-        QuantumCircuit.TeleportHop.chainFrame_mem_unitary,
+        QuantumCircuit.TeleportHop.chainFrame_mem_unitaryGroup,
         QuantumCircuit.TeleportHop.chainFrame_of_notMem,
         QuantumCircuit.TeleportHop.prod_gate₂_mem_supportedOperators,
         QuantumCircuit.TeleportHop.chainPre_cons,
-        QuantumCircuit.IsZeroOn.chainPerm_mulVec,
+        QuantumCircuit.IsZeroOn.sitePermOp_sitePerm_mulVec,
         QuantumCircuit.TeleportHop.chainPre_mulVec,
         QuantumCircuit.TeleportHop.extendOutcome,
-        QuantumCircuit.TeleportHop.round, QuantumCircuit.TeleportHop.depth_round,
+        QuantumCircuit.TeleportHop.roundUnitary,
+        QuantumCircuit.TeleportHop.op_roundUnitary,
+        QuantumCircuit.TeleportHop.round,
+        QuantumCircuit.TeleportHop.depth_round_le,
+        QuantumCircuit.TeleportHop.depth_round_id_le,
+        QuantumCircuit.TeleportHop.forall_round,
         QuantumCircuit.TeleportHop.isImplementationOn_round}
     \leanok
     \uses{lem:qc_teleport_hop, def:qc_round_implementation,
         lem:qc_site_permutations}
-    A hop list $\mathcal H=(h_1,\dots,h_H)$ is \emph{valid} if for every $j<k$, $\{e_j,f_j\}\cap\{c_k,e_k,f_k\}=\varnothing$ and $c_j\notin\{c_k,e_k\}$ (allowing $c_j=f_k$, so hops chain as $c_k\to f_k=c_j\to f_j$). For a valid list $\mathcal H$ and a depth-$T$ circuit $U$, the \emph{teleportation round} applies $U$, the layer $\prod_j G_{1,h_j}$, and the layer $\prod_j G_{2,h_j}$, measures $\bigcup_j\{c_j,e_j\}$, and applies the inverse Pauli frame correction. It has depth $T+2$ and implements $P_{(c_1\,f_1)}\cdots P_{(c_H\,f_H)}U$ (with scalar $d^{-H}$ for every outcome) on $\{\ket v:U\ket v\text{ has }\ket0\text{ on }\bigcup_j\{e_j,f_j\}\}$.
+    A hop list $\mathcal H=(h_1,\dots,h_H)$ is \emph{valid} if for every $j<k$, $\{e_j,f_j\}\cap\{c_k,e_k,f_k\}=\varnothing$ and $c_j\notin\{c_k,e_k\}$ (allowing $c_j=f_k$, so hops chain as $c_k\to f_k=c_j\to f_j$). For a valid list $\mathcal H$ and a depth-$T$ circuit $U$, the \emph{teleportation round} applies $U$, the layer $\prod_j G_{1,h_j}$, and the layer $\prod_j G_{2,h_j}$, measures $\bigcup_j\{c_j,e_j\}$, and applies the inverse Pauli frame correction. It has depth at most $T+2$ and implements $P_{(c_1\,f_1)}\cdots P_{(c_H\,f_H)}U$ (with scalar $d^{-H}$ for every outcome) on $\{\ket v:U\ket v\text{ has }\ket0\text{ on }\bigcup_j\{e_j,f_j\}\}$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -156,7 +151,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     \label{lem:qc_teleportation_chains}
     \lean{QuantumCircuit.add_natCast_injective, QuantumCircuit.add_natCast_succ,
         QuantumCircuit.add_natCast_ne,
-        QuantumCircuit.TeleportHop.exists_eq_smul_of_mem_outputs_conj,
+        QuantumCircuit.TeleportHop.isImplementationOn_round_comp_round,
         QuantumCircuit.TeleportHop.chainHop,
         QuantumCircuit.TeleportHop.chainHopBack,
         QuantumCircuit.TeleportHop.forwardChain,
@@ -175,11 +170,11 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.TeleportHop.pairSites_backwardChain_subset,
         QuantumCircuit.TeleportHop.allSites_forwardChain_subset,
         QuantumCircuit.TeleportHop.allSites_backwardChain_subset,
-        QuantumCircuit.TeleportHop.isZeroOn_chainPerm_forwardChain}
+        QuantumCircuit.TeleportHop.isZeroOn_sitePermOp_forwardChain}
     \leanok
     \uses{thm:qc_teleportation_round, lem:qc_round_implementation_compose}
     \begin{enumerate}
-        \item For valid hop lists $\mathcal T,\mathcal B$ and a layer $G$, if $\ket v$ has $\ket0$ on $\bigcup_{h\in\mathcal T}\{e_h,f_h\}$ and $GP_{\mathcal T}\ket v$ has $\ket0$ on $\bigcup_{h\in\mathcal B}\{e_h,f_h\}$, then the depth-$2$ round of $\mathcal T$ followed by the depth-$3$ round of $(\mathcal B,G)$ outputs a scalar multiple of $P_{\mathcal B}GP_{\mathcal T}\ket v$.
+        \item For valid hop lists $\mathcal T,\mathcal B$ and a local circuit $G$ of depth $T$, the round of $\mathcal T$, of depth at most $2$, followed by the round of $(\mathcal B,G)$, of depth at most $T+2$, implements $P_{\mathcal B}GP_{\mathcal T}$ on the vectors $\ket v$ that have $\ket0$ on $\bigcup_{h\in\mathcal T}\{e_h,f_h\}$ and for which $GP_{\mathcal T}\ket v$ has $\ket0$ on $\bigcup_{h\in\mathcal B}\{e_h,f_h\}$.
         \item For $2L<N$ and $a\in\Z_N$, the forward chain $\mathcal F_{a,L}=((a+2j,a+2j+1,a+2j+2))_{j=L-1,\dots,0}$ and backward chain $\mathcal B_{a,L}=((a+2j+2,a+2j+1,a+2j))_{j=0,\dots,L-1}$ are valid inside $\{a,\dots,a+2L\}$, with $P_{\mathcal B_{a,L}}=P_{\mathcal F_{a,L}}^{-1}$, $P_{\mathcal F_{a,L}}(a)=a+2L$, and $P_{\mathcal F_{a,L}}(a+j)=a+j$ for $2L<j<N$. Moreover, $\bigcup_{h\in\mathcal F_{a,L}}\{e_h,f_h\}\subseteq\{a+1,\dots,a+2L\}$, $\bigcup_{h\in\mathcal B_{a,L}}\{e_h,f_h\}\subseteq\{a,\dots,a+2L-1\}$, and if $\ket v$ has $\ket0$ on $\{a+1,\dots,a+2L\}$, then $P_{\mathcal F_{a,L}}\ket v$ has $\ket0$ on $\{a,\dots,a+2L-1\}$.
     \end{enumerate}
 \end{lemma}
@@ -193,7 +188,6 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
     \lean{QuantumCircuit.TeleportHop.sitePerm_apply_of_notMem,
         QuantumCircuit.TeleportHop.mem_allSites_flatMap,
         QuantumCircuit.TeleportHop.mem_pairSites_flatMap,
-        QuantumCircuit.TeleportHop.chainPerm_append,
         QuantumCircuit.TeleportHop.after_of_disjoint,
         QuantumCircuit.TeleportHop.sites_subset_allSites,
         QuantumCircuit.TeleportHop.valid_flatMap,
@@ -217,40 +211,42 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.LongRangeGate.there, QuantumCircuit.LongRangeGate.back,
         QuantumCircuit.LongRangeGate.near_ne_far,
         QuantumCircuit.LongRangeGate.localGate,
-        QuantumCircuit.LongRangeGate.localGate_mem_unitary,
+        QuantumCircuit.LongRangeGate.localGate_mem_unitaryGroup,
         QuantumCircuit.LongRangeGate.localGate_mem_supportedOperators,
         QuantumCircuit.LongRangeGate.a_ne_far,
-        QuantumCircuit.LongRangeGate.op_mem_unitary,
+        QuantumCircuit.LongRangeGate.op_mem_unitaryGroup,
         QuantumCircuit.LongRangeGate.op_mem_supportedOperators,
         QuantumCircuit.LongRangeGate.far_mem_span,
-        QuantumCircuit.LongRangeGate.bond_near_subset_span,
+        QuantumCircuit.LongRangeGate.cell_near_subset_span,
         QuantumCircuit.LongRangeGate.interior_subset_span,
         QuantumCircuit.LongRangeGate.cleared_subset_span,
         QuantumCircuit.LongRangeGate.allSites_there_subset_span,
         QuantumCircuit.LongRangeGate.allSites_back_subset_span,
-        QuantumCircuit.LongRangeGate.disjoint_cleared_bond_near,
+        QuantumCircuit.LongRangeGate.disjoint_cleared_cell_near,
         QuantumCircuit.LongRangeGate.sitePerm_back_near,
         QuantumCircuit.LongRangeGate.sitePerm_back_far,
         QuantumCircuit.LongRangeGate.sitePerm_back_sitePerm_there,
-        QuantumCircuit.LongRangeGate.pairwise_disjoint_bond,
+        QuantumCircuit.LongRangeGate.pairwise_disjoint_cell,
         QuantumCircuit.LongRangeGate.localLayer,
-        QuantumCircuit.LongRangeGate.localLayer_op,
+        QuantumCircuit.LongRangeGate.kraus_localLayer,
+        QuantumCircuit.LongRangeGate.forall_isUnitary_localLayer,
         QuantumCircuit.LongRangeGate.valid_there,
         QuantumCircuit.LongRangeGate.valid_back,
-        QuantumCircuit.LongRangeGate.isZeroOn_chainPerm_there,
-        QuantumCircuit.LongRangeGate.isZeroOn_localLayer,
+        QuantumCircuit.LongRangeGate.isZeroOn_sitePermOp_there,
+        QuantumCircuit.LongRangeGate.isZeroOn_localGates,
         QuantumCircuit.LongRangeGate.sitePerm_there_eq_symm,
-        QuantumCircuit.LongRangeGate.chainPerm_back_mul_localLayer_mul_chainPerm_there,
+        QuantumCircuit.LongRangeGate.sitePermOp_back_mul_localGates_mul_sitePermOp_there,
         QuantumCircuit.LongRangeGate.rounds,
-        QuantumCircuit.LongRangeGate.sum_depth_rounds,
-        QuantumCircuit.LongRangeGate.isRoundsImplementationOn_rounds}
+        QuantumCircuit.LongRangeGate.depth_rounds_le,
+        QuantumCircuit.LongRangeGate.forall_rounds,
+        QuantumCircuit.LongRangeGate.isImplementationOn_rounds}
     \leanok
     \uses{lem:qc_teleportation_chains, lem:qc_parallel_chains}
-    Let $g_1,\dots,g_n$ be distant two-site unitaries $u_r$ on $\{a_r,a_r+2L_r+1\}$ ($2L_r+1<N$) with pairwise disjoint stretches $S_r=\{a_r,\dots,a_r+2L_r+1\}$ and interiors $I_r=\{a_r+1,\dots,a_r+2L_r\}$. Two measurement rounds of total depth $2+3=5$ implement $\prod_{r=1}^n u_r$ on $\{\ket v:\ket v\text{ has }\ket0\text{ on }\bigcup_r I_r\}$ without postselection.
+    Let $g_1,\dots,g_n$ be distant two-site unitaries $u_r$ on $\{a_r,a_r+2L_r+1\}$ ($2L_r+1<N$) with pairwise disjoint stretches $S_r=\{a_r,\dots,a_r+2L_r+1\}$ and interiors $I_r=\{a_r+1,\dots,a_r+2L_r\}$. Two measurement rounds of total depth at most $2+3=5$ implement $\prod_{r=1}^n u_r$ on $\{\ket v:\ket v\text{ has }\ket0\text{ on }\bigcup_r I_r\}$ without postselection.
 \end{theorem}
 \begin{proof}
     \leanok
-    By Lemmas~\ref{lem:qc_teleportation_chains} and~\ref{lem:qc_parallel_chains}, the concatenated forward chains $\mathcal T=\bigsqcup_r\mathcal F_{a_r,L_r}$ and backward chains $\mathcal B=\bigsqcup_r\mathcal B_{a_r,L_r}$ are valid with $P_{\mathcal B}=P_{\mathcal T}^{-1}$, and $P_{\mathcal T}\ket v$ has $\ket0$ on $\bigcup_r\{a_r,\dots,a_r+2L_r-1\}$, which is preserved by the nearest-neighbour layer $G=\prod_r(u_r)_{\{a_r+2L_r,a_r+2L_r+1\}}$. By Lemma~\ref{lem:qc_teleportation_chains}(1) and Lemma~\ref{lem:qc_site_permutations}(2), the two rounds implement $P_{\mathcal T}^{-1}GP_{\mathcal T}=\prod_r(u_r)_{\{a_r,a_r+2L_r+1\}}$ in depth $2+3=5$.
+    By Lemmas~\ref{lem:qc_teleportation_chains} and~\ref{lem:qc_parallel_chains}, the concatenated forward chains $\mathcal T=\bigsqcup_r\mathcal F_{a_r,L_r}$ and backward chains $\mathcal B=\bigsqcup_r\mathcal B_{a_r,L_r}$ are valid with $P_{\mathcal B}=P_{\mathcal T}^{-1}$, and $P_{\mathcal T}\ket v$ has $\ket0$ on $\bigcup_r\{a_r,\dots,a_r+2L_r-1\}$, which is preserved by the nearest-neighbour layer $G=\prod_r(u_r)_{\{a_r+2L_r,a_r+2L_r+1\}}$. By Lemma~\ref{lem:qc_teleportation_chains}(1) and Lemma~\ref{lem:qc_site_permutations}(2), the two rounds implement $P_{\mathcal T}^{-1}GP_{\mathcal T}=\prod_r(u_r)_{\{a_r,a_r+2L_r+1\}}$ in depth at most $2+3=5$.
 \end{proof}
 
 \begin{definition}[Register gates]
@@ -268,7 +264,9 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.RegisterGate.sites_mem_span,
         QuantumCircuit.RegisterGate.localSites_mem_span,
         QuantumCircuit.RegisterGate.zone_subset_span,
-        QuantumCircuit.RegisterGate.op_mem_unitary,
+        QuantumCircuit.RegisterGate.op_mem_unitaryGroup,
+        QuantumCircuit.RegisterGate.sitesEmb,
+        QuantumCircuit.RegisterGate.localSitesEmb,
         QuantumCircuit.RegisterGate.op_mem_supportedOperators,
         QuantumCircuit.RegisterGate.add_eq_add_iff,
         QuantumCircuit.RegisterGate.two_mul_L_lt}
@@ -279,7 +277,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{lemma}[Teleporting registers site by site]
     \label{lem:qc_register_chains}
-    \lean{QuantumCircuit.IsZeroOn.permMatrix_cfgPerm_mulVec_of_mapsTo,
+    \lean{QuantumCircuit.IsZeroOn.sitePermOp_mulVec_of_mapsTo,
         Equiv.Perm.apply_mem_of_forall_notMem,
         QuantumCircuit.RegisterGate.there, QuantumCircuit.RegisterGate.back,
         QuantumCircuit.RegisterGate.allSites_there_subset,
@@ -302,50 +300,52 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.RegisterGate.valid_backAll,
         QuantumCircuit.RegisterGate.sitePerm_thereAll_apply,
         QuantumCircuit.RegisterGate.sitePerm_backAll_apply,
-        QuantumCircuit.RegisterGate.isZeroOn_chainPerm_thereAll,
-        QuantumCircuit.RegisterGate.isZeroOn_chainPerm_backAll,
+        QuantumCircuit.RegisterGate.isZeroOn_sitePermOp_thereAll,
+        QuantumCircuit.RegisterGate.isZeroOn_sitePermOp_backAll,
         QuantumCircuit.RegisterGate.pairSites_thereAll_subset,
         QuantumCircuit.RegisterGate.pairSites_backAll_subset,
         QuantumCircuit.RegisterGate.sitePerm_backAll_eq_inv,
         QuantumCircuit.RegisterGate.therePerm,
         QuantumCircuit.RegisterGate.therePerm_apply,
         QuantumCircuit.RegisterGate.therePerm_comp_sites,
+        QuantumCircuit.RegisterGate.isZeroOn_sitePermOp_therePerm,
+        QuantumCircuit.RegisterGate.isZeroOn_sitePermOp_therePerm_inv,
         QuantumCircuit.TeleportHop.valid_nil,
         QuantumCircuit.RegisterGate.thereRounds,
         QuantumCircuit.RegisterGate.backRounds,
-        QuantumCircuit.RegisterGate.sum_depth_thereRounds,
-        QuantumCircuit.RegisterGate.sum_depth_backRounds,
-        QuantumCircuit.MeasurementRound.IsImplementationOn.isRoundsImplementationOn,
-        QuantumCircuit.RegisterGate.isRoundsImplementationOn_thereRounds,
-        QuantumCircuit.RegisterGate.isRoundsImplementationOn_backRounds}
+        QuantumCircuit.RegisterGate.depth_thereRounds_le,
+        QuantumCircuit.RegisterGate.depth_backRounds_le,
+        QuantumCircuit.RegisterGate.isImplementationOn_thereRounds,
+        QuantumCircuit.RegisterGate.isImplementationOn_backRounds}
     \leanok
     \uses{def:qc_register_gate, thm:qc_teleportation_round,
         lem:qc_teleportation_chains, lem:qc_parallel_chains,
         lem:qc_site_permutations, lem:qc_round_implementation_compose}
-    Let $g_1,\dots,g_n$ be register gates with pairwise disjoint stretches $S_r$. For $t=s-1,\dots,0$, the depth-$2$ round $\mathcal F^{(t)}=\bigsqcup_r\mathcal F_{a_r+t,L_r}$ teleports $a_r+t\mapsto a_r+2L_r+t$ while shifting $\ket0$ from $\bigcup_r Z_{r,t+1}$ to $\bigcup_r Z_{r,t}$. Thus the $s$ forward rounds have total depth $2s$, implement $P=\prod_{t=0}^{s-1}P_{\mathcal F^{(t)}}$ on $\{\ket v:\ket v\text{ has }\ket0\text{ on }\bigcup_r Z_{r,s}\}$, and leave $\ket0$ on $\bigcup_r Z_{r,0}$; the $s$ reverse rounds $\mathcal B^{(t)}=\bigsqcup_r\mathcal B_{a_r+t,L_r}$ ($t=0,\dots,s-1$) implement $P^{-1}$ on $\{\ket w:\ket w\text{ has }\ket0\text{ on }\bigcup_r Z_{r,0}\}$ in depth $2s$.
+    Let $g_1,\dots,g_n$ be register gates with pairwise disjoint stretches $S_r$. For $t=s-1,\dots,0$, the depth-$2$ round $\mathcal F^{(t)}=\bigsqcup_r\mathcal F_{a_r+t,L_r}$ teleports $a_r+t\mapsto a_r+2L_r+t$ while shifting $\ket0$ from $\bigcup_r Z_{r,t+1}$ to $\bigcup_r Z_{r,t}$. Thus the $s$ forward rounds have total depth at most $2s$, implement $P=\prod_{t=0}^{s-1}P_{\mathcal F^{(t)}}$ on $\{\ket v:\ket v\text{ has }\ket0\text{ on }\bigcup_r Z_{r,s}\}$, and leave $\ket0$ on $\bigcup_r Z_{r,0}$; the $s$ reverse rounds $\mathcal B^{(t)}=\bigsqcup_r\mathcal B_{a_r+t,L_r}$ ($t=0,\dots,s-1$) implement $P^{-1}$ on $\{\ket w:\ket w\text{ has }\ket0\text{ on }\bigcup_r Z_{r,0}\}$ in depth at most $2s$.
 \end{lemma}
 \begin{proof}
     \leanok
-    By Lemmas~\ref{lem:qc_teleportation_chains} and~\ref{lem:qc_parallel_chains}, each $\mathcal F^{(t)}$ is valid, requires $\ket0$ on $\bigcup_r\{a_r+t+1,\dots,a_r+t+2L_r\}=\bigcup_r Z_{r,t+1}$, and maps $Z_{r,t+1}\cup\{a_r+t\}$ bijectively onto $Z_{r,t}\cup\{a_r+t+2L_r\}$, leaving $\ket0$ on $\bigcup_r Z_{r,t}$. Lemma~\ref{thm:qc_teleportation_round} and Lemma~\ref{lem:qc_round_implementation_compose} compose the $s$ forward and $s$ backward rounds of depth $2$ each.
+    By Lemmas~\ref{lem:qc_teleportation_chains} and~\ref{lem:qc_parallel_chains}, each $\mathcal F^{(t)}$ is valid, requires $\ket0$ on $\bigcup_r\{a_r+t+1,\dots,a_r+t+2L_r\}=\bigcup_r Z_{r,t+1}$, and maps $Z_{r,t+1}\cup\{a_r+t\}$ bijectively onto $Z_{r,t}\cup\{a_r+t+2L_r\}$, leaving $\ket0$ on $\bigcup_r Z_{r,t}$. Lemma~\ref{thm:qc_teleportation_round} and Lemma~\ref{lem:qc_round_implementation_compose} compose the $s$ forward and $s$ backward rounds of depth at most $2$ each.
 \end{proof}
 
 \begin{lemma}[A layer of register gates in constant depth with measurements]
     \label{thm:qc_register_layer}
     \lean{List.mul_prod_mul_of_mul_eq_one,
         QuantumCircuit.RegisterGate.rounds,
-        QuantumCircuit.RegisterGate.sum_depth_rounds,
+        QuantumCircuit.RegisterGate.depth_rounds_le,
+        QuantumCircuit.RegisterGate.forall_rounds,
         QuantumCircuit.RegisterGate.localProd,
         QuantumCircuit.RegisterGate.isZeroOn_localProd_mulVec,
-        QuantumCircuit.RegisterGate.permMatrix_mul_localProd_mul_permMatrix,
+        QuantumCircuit.RegisterGate.sitePermOp_inv_mul_localProd_mul_sitePermOp,
         QuantumCircuit.RegisterGate.isZeroOn_zoneAll_iff,
-        QuantumCircuit.RegisterGate.isRoundsImplementationOn_rounds,
-        QuantumCircuit.RegisterGate.isCircuitOn_localProd,
+        QuantumCircuit.RegisterGate.isImplementationOn_rounds,
+        QuantumCircuit.RegisterGate.isUnitaryCircuit_localProd,
         QuantumCircuit.RegisterGate.exists_rounds}
     \leanok
     \uses{lem:qc_register_chains, lem:qc_round_implementation_compose}
-    Let $g_1,\dots,g_n$ be register gates with pairwise disjoint stretches, where each $X_r$ is a product of at most $K$ nearest-neighbour unitaries on $\{1,\dots,2s\}$. Then $2s+1$ measurement rounds of total depth $4s+K+2$ implement $\prod_{r=1}^n g_r$ on $\{\ket v:\ket v\text{ has }\ket0\text{ on }\bigcup_r I_r\}$ without postselection.
+    Let $g_1,\dots,g_n$ be register gates with pairwise disjoint stretches, where each $X_r$ is a product of at most $K$ unitaries on neighbouring pairs of $\{1,\dots,2s\}$ and of single-site unitaries. Then a measurement circuit of depth at most $4s+K$ implements $\prod_{r=1}^n g_r$ on $\{\ket v:\ket v\text{ has }\ket0\text{ on }\bigcup_r I_r\}$ without postselection.
 \end{lemma}
 \begin{proof}
     \leanok
-    By Lemma~\ref{lem:qc_parallel_circuits}, the colocated product $G=\prod_r\operatorname{embed}_{\{a_r+2L_r,\dots,a_r+2L_r+2s-1\}}(X_r)$ is a local circuit of depth $K$ supported outside $\bigcup_r Z_{r,0}$, hence preserves $\ket0$ on $\bigcup_r Z_{r,0}$ and runs in a single empty-hop round of depth $K+2$. Composing the $s$ forward rounds, this local round, and the $s$ backward rounds via Lemmas~\ref{lem:qc_register_chains} and~\ref{lem:qc_round_implementation_compose} implements $P^{-1}GP=\prod_{r=1}^n g_r$ in depth $2s+(K+2)+2s=4s+K+2$.
+    By Lemma~\ref{lem:qc_parallel_circuits}, the colocated product $G=\prod_r\operatorname{embed}_{\{a_r+2L_r,\dots,a_r+2L_r+2s-1\}}(X_r)$ is a local circuit of depth at most $K$ supported outside $\bigcup_r Z_{r,0}$, hence preserves $\ket0$ on $\bigcup_r Z_{r,0}$. Composing the $s$ forward rounds, this local circuit, and the $s$ backward rounds via Lemmas~\ref{lem:qc_register_chains} and~\ref{lem:qc_round_implementation_compose} implements $P^{-1}GP=\prod_{r=1}^n g_r$ in depth at most $2s+K+2s=4s+K$.
 \end{proof}

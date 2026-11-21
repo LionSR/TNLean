@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.ExpConjugation
 import QICLean.ManyBody.Dynamics.BoundedDegreeImaginaryTime
+import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Sites.Lattice.Chain
 import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Finset.Disjoint
@@ -113,17 +114,15 @@ a two-site interval by one and costs at most four times the next order.
 Supporting AKL14, arXiv:1406.3898, low70.tex, lines 817–877. -/
 private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
     (s : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i ∈ s, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2)))
-    (h0 : ∀ i ∈ s, 0 ≤ h i) (h1 : ∀ i ∈ s, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i ∈ s, 0 ≤ Φ.term i) (h1 : ∀ i ∈ s, Φ.term i ≤ 1)
     (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X
       (interval L (c - m) (c + 2 + m))) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      ((∑ i ∈ s, h i) * X - X * (∑ i ∈ s, h i))
+      ((Φ.partialHamiltonian s) * X - X * (Φ.partialHamiltonian s))
       (interval L (c - (m + 1)) (c + 2 + (m + 1))) ∧
-    ‖(∑ i ∈ s, h i) * X - X * (∑ i ∈ s, h i)‖ ≤
+    ‖(Φ.partialHamiltonian s) * X - X * (Φ.partialHamiltonian s)‖ ≤
       (4 : ℝ) * ((m : ℝ) + 1) * ‖X‖ := by
   classical
   let J := interval L (c - (m + 1)) (c + 2 + (m + 1))
@@ -132,24 +131,25 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
       (by simpa only [Finset.coe_subset] using enlarged_interval_subset_succ L c m)
       hX
   have hterm (i : Fin (L - 1)) (hi : i ∈ s) :
-      h i * X - X * h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := by
+      Φ.term i * X - X * Φ.term i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := by
     by_cases hd : Disjoint (interval L i.val (i.val + 2))
         (interval L (c - m) (c + 2 + m))
-    · have hc : Commute (h i) X := ManyBody.commute_of_mem_supportedOperators_of_disjoint
-        (hs i hi) hX hd
+    · have hc : Commute (Φ.term i) X := ManyBody.commute_of_mem_supportedOperators_of_disjoint
+        (Φ.mem i) hX hd
       rw [sub_eq_zero.mpr hc.eq]
       exact zero_mem _
-    · have hhJ : h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J :=
+    · have hhJ : Φ.term i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J :=
         ManyBody.supportedOperators_mono
           (by simpa only [Finset.coe_subset] using bond_subset_enlarged_interval_succ hd)
-          (hs i hi)
+          (Φ.mem i)
       exact sub_mem (mul_mem hhJ hXJ) (mul_mem hXJ hhJ)
   have hsupport : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      ((∑ i ∈ s, h i) * X - X * (∑ i ∈ s, h i)) J := by
+      ((Φ.partialHamiltonian s) * X - X * (Φ.partialHamiltonian s)) J := by
     change _ ∈ ManyBody.supportedOperators _ _
     have hsum : _ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := sum_mem hterm
     change _ ∈ ManyBody.supportedOperators _ _
-    simpa only [Finset.sum_sub_distrib, Finset.sum_mul, Finset.mul_sum] using hsum
+    simpa only [ManyBody.Interaction.partialHamiltonian, Finset.sum_sub_distrib, Finset.sum_mul,
+      Finset.mul_sum] using hsum
   refine ⟨hsupport, ?_⟩
   let active := s.filter fun i ↦ ¬Disjoint (interval L i.val (i.val + 2))
     (interval L (c - m) (c + 2 + m))
@@ -166,24 +166,21 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
   have hcardReal : (active.card : ℝ) ≤ (4 : ℝ) * ((m : ℝ) + 1) := by
     exact_mod_cast hcard
   classical
-  let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) (fun i : Fin (L - 1) ↦
-      interval L i.val (i.val + 2)) :=
-    ⟨fun i ↦ if i ∈ s then h i else 0, fun i ↦ by
-      by_cases hi : i ∈ s
-      · simpa only [hi, ↓reduceIte] using (show h i ∈ _ from hs i hi)
-      · simpa only [hi, ↓reduceIte] using zero_mem _⟩
-  have hsumΦ : ∑ i ∈ s, Φ.term i = ∑ i ∈ s, h i :=
-    Finset.sum_congr rfl fun i hi ↦ by simp only [Φ, hi, ↓reduceIte]
-  have hbound := ManyBody.Interaction.norm_commutator_sum_le_card Φ s
+  let Ψ := Φ.restrict (· ∈ s)
+  have hsumΦ : ∑ i ∈ s, Ψ.term i = Φ.partialHamiltonian s :=
+    ManyBody.Interaction.partialHamiltonian_restrict_of_forall fun _ hi ↦ hi
+  have hbound := ManyBody.Interaction.norm_commutator_sum_le_card Ψ s
     (fun i ↦ by
       by_cases hi : i ∈ s
-      · simpa only [Φ, hi, ↓reduceIte] using h0 i hi
-      · simp only [Φ, hi, ↓reduceIte, le_refl])
+      · rw [ManyBody.Interaction.restrict_term, ite_eq_left hi]
+        exact h0 i hi
+      · rw [ManyBody.Interaction.restrict_term, ite_eq_right hi])
     (fun i ↦ by
       by_cases hi : i ∈ s
-      · simpa only [Φ, hi, ↓reduceIte] using h1 i hi
-      · simpa only [Φ, hi, ↓reduceIte] using (zero_le_one : (0 : Matrix (Fin L → Fin q)
-          (Fin L → Fin q) ℂ) ≤ 1))
+      · rw [ManyBody.Interaction.restrict_term, ite_eq_left hi]
+        exact h1 i hi
+      · rw [ManyBody.Interaction.restrict_term, ite_eq_right hi]
+        exact zero_le_one)
     (S := interval L (c - m) (c + 2 + m)) hX
   rw [hsumΦ] at hbound
   exact hbound.trans (mul_le_mul_of_nonneg_right hcardReal (norm_nonneg X))
@@ -193,13 +190,11 @@ sum remain local and have factorial norm growth. Auxiliary to AKL14,
 arXiv:1406.3898, low70.tex, lines 804–877; no imaginary-time sum is asserted. -/
 private theorem iterated_nearest_neighbour_commutator_support_norm {L q c : ℕ}
     (s : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i ∈ s, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2)))
-    (h0 : ∀ i ∈ s, 0 ≤ h i) (h1 : ∀ i ∈ s, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i ∈ s, 0 ≤ Φ.term i) (h1 : ∀ i ∈ s, Φ.term i ≤ 1)
     (O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hO : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) O (interval L c (c + 2))) (m : ℕ) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ s, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.partialHamiltonian s
     let ad : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ →
         Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ H * X - X * H
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (ad^[m] O)
@@ -211,7 +206,7 @@ private theorem iterated_nearest_neighbour_commutator_support_norm {L q c : ℕ}
     simpa only [Function.iterate_zero_apply, Nat.sub_zero, Nat.add_zero, pow_zero,
       Nat.factorial_zero, Nat.cast_one, one_mul] using And.intro hO (le_refl ‖O‖)
   | succ m ih =>
-    obtain ⟨hsupport, hnorm⟩ := nearest_neighbour_commutator_step s h hs h0 h1
+    obtain ⟨hsupport, hnorm⟩ := nearest_neighbour_commutator_step s Φ h0 h1
       (ad^[m] O) ih.1
     refine ⟨?_, ?_⟩
     · simpa only [Function.iterate_succ_apply'] using hsupport
@@ -237,14 +232,12 @@ lines 795–880. The generator is the original regional sum; no locality
 property of a clipped Hamiltonian is required. -/
 theorem norm_exp_conjugation_nearest_neighbour_shift_le_two {L q c : ℕ}
     (I : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i ∈ I, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2)))
-    (h0 : ∀ i ∈ I, 0 ≤ h i) (h1 : ∀ i ∈ I, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i ∈ I, 0 ≤ Φ.term i) (h1 : ∀ i ∈ I, Φ.term i ≤ 1)
     (O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hO : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) O (interval L c (c + 2)))
     (z : ℂ) (t : ℝ) (ht0 : 0 ≤ t) (ht : t ≤ 1 / 8) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ I, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.partialHamiltonian I
     ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * O *
       NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 * ‖O‖ := by
   intro H
@@ -263,6 +256,6 @@ theorem norm_exp_conjugation_nearest_neighbour_shift_le_two {L q c : ℕ}
     funext X
     rfl
   rw [hcoe, had]
-  exact (iterated_nearest_neighbour_commutator_support_norm I h hs h0 h1 O hO m).2
+  exact (iterated_nearest_neighbour_commutator_support_norm I Φ h0 h1 O hO m).2
 
 end TNLean.MPS.AreaLaw

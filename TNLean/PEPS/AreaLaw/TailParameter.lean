@@ -49,7 +49,7 @@ open scoped Matrix.Norms.L2Operator
 open Matrix
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace AdmissibleSupport card_le_diamond_of_walks
+open ManyBody (IsGapped groundSpace AdmissibleSupport card_le_diamond_of_walks edgeBoundary
   latticeL1Distance_le_one_of_planeDomainGraph_adj planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
@@ -65,7 +65,7 @@ of range `R` meet both a region `A` and its complement, where `v_R = 1 + 2R(R + 
 theorem card_crossingTerms_le_edgeBoundary (Λ : Finset (ℤ × ℤ)) (R : ℕ)
     (A : Finset (Site Λ)) :
     (ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card ≤
-      (edgeBoundary Λ A).card *
+      (edgeBoundary (planeDomainGraph Λ) A).card *
         ((1 + 2 * R * (R + 1)) * 2 ^ ((1 + 2 * R * (R + 1)) - 1)) := by
   classical
   -- the supports with a site within distance `R` of the endpoint of `e` inside `A`
@@ -73,19 +73,18 @@ theorem card_crossingTerms_le_edgeBoundary (Λ : Finset (ℤ × ℤ)) (R : ℕ)
     Finset.univ.filter fun X ↦ ∃ z ∈ e, z ∈ A ∧ ∃ v ∈ X.1,
       ∃ p : (planeDomainGraph Λ).Walk z v, p.length ≤ R
   have hcover : ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A ⊆
-      (edgeBoundary Λ A).biUnion near := by
+      (edgeBoundary (planeDomainGraph Λ) A).biUnion near := by
     intro X hX
     simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
     obtain ⟨⟨v, hvX, hvA⟩, w, hwX, hwA⟩ := hX
     obtain ⟨p, hp⟩ := X.2.2 v hvX w hwX
-    obtain ⟨u, u', huA, -, he, p', hp'⟩ := exists_edgeBoundary_of_walk p hvA hwA
+    obtain ⟨u, u', huA, -, he, p', hp'⟩ := ManyBody.exists_edgeBoundary_of_walk p hvA hwA
     exact Finset.mem_biUnion.mpr ⟨s(u, u'), he, Finset.mem_filter.mpr ⟨Finset.mem_univ _, u,
       Sym2.mem_mk_left _ _, huA, v, hvX, p'.reverse, by simpa using hp'.trans hp⟩⟩
-  have hcard : ∀ e ∈ edgeBoundary Λ A,
+  have hcard : ∀ e ∈ edgeBoundary (planeDomainGraph Λ) A,
       (near e).card ≤ (1 + 2 * R * (R + 1)) * 2 ^ ((1 + 2 * R * (R + 1)) - 1) := by
     intro e he
-    simp only [edgeBoundary, Finset.mem_filter] at he
-    obtain ⟨-, x, hx, y, hy, rfl⟩ := he
+    obtain ⟨-, x, hx, y, hy, rfl⟩ := ManyBody.mem_edgeBoundary.mp he
     set ball : Finset (Site Λ) :=
       Finset.univ.filter fun v ↦ ∃ p : (planeDomainGraph Λ).Walk x v, p.length ≤ R
     have hball : ball.card ≤ 1 + 2 * R * (R + 1) :=
@@ -127,18 +126,19 @@ Lemma 3.1 satisfies `ℬ_A ≤ C (1 + |∂_Λ A|)` for every cut `A` of a finite
 with `C = tailParameterConstant q R`.
 Source: `02-initial.tex`, lines 202–206, `eq:initial-local-tail-parameter`. -/
 theorem cutLogBudget_le_edgeBoundary (hq : 1 ≤ q) (R : ℕ) (A : Finset (Site Λ)) :
-    cutLogBudget Λ q R A ≤ tailParameterConstant q R * (1 + (edgeBoundary Λ A).card) := by
+    ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A ≤
+      tailParameterConstant q R * (1 + (edgeBoundary (planeDomainGraph Λ) A).card) := by
   have hC := one_le_tailParameterConstant hq R
   have hcard : ((ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card : ℝ) ≤
-      (edgeBoundary Λ A).card *
+      (edgeBoundary (planeDomainGraph Λ) A).card *
         ((1 + 2 * R * (R + 1)) * 2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) := by
     exact_mod_cast card_crossingTerms_le_edgeBoundary Λ R A
-  have hb : (0 : ℝ) ≤ (edgeBoundary Λ A).card := Nat.cast_nonneg _
-  calc cutLogBudget Λ q R A
+  have hb : (0 : ℝ) ≤ (edgeBoundary (planeDomainGraph Λ) A).card := Nat.cast_nonneg _
+  calc ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A
       ≤ 1 + (ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card *
           Real.log (Real.exp 1 * (q : ℝ) ^ (1 + 2 * R * (R + 1))) ^ 2 :=
         cutLogBudget_le_card hq _
-    _ ≤ 1 + (edgeBoundary Λ A).card * tailParameterConstant q R := by
+    _ ≤ 1 + (edgeBoundary (planeDomainGraph Λ) A).card * tailParameterConstant q R := by
         rw [tailParameterConstant, ← mul_assoc]
         gcongr
     _ ≤ _ := by nlinarith
@@ -156,17 +156,19 @@ noncomputable def typicalWidthConstant (q R : ℕ) (J Δ M : ℝ) : ℝ :=
 Source: `02-initial.tex`, lines 207–212. -/
 theorem concentrationWidth_le (hq : 1 ≤ q) (R : ℕ) (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ)
     (A : Finset (Site Λ)) (n : ℕ) {M : ℝ} (hM : 0 ≤ M) :
-    Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M ≤
-      typicalWidthConstant q R J Δ M * Real.sqrt (1 + (edgeBoundary Λ A).card) *
-        Real.log (n + 2) := by
+    Entropy.concentrationWidth (J / Δ)
+        (ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A) n M ≤
+      typicalWidthConstant q R J Δ M *
+        Real.sqrt (1 + (edgeBoundary (planeDomainGraph Λ) A).card) * Real.log (n + 2) := by
   have hϑ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   have hlog2 : 0 < Real.log 2 := Real.log_pos one_lt_two
   have hL : Real.log 2 ≤ Real.log ((n : ℝ) + 2) :=
     Real.log_le_log two_pos (by linarith [(Nat.cast_nonneg n : (0 : ℝ) ≤ n)])
   have hc : 0 < Real.exp 1 / 2 + Real.log 2 := by positivity
-  have hsqrt : Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A) ≤
+  have hsqrt : Real.sqrt ((1 + J / Δ) *
+      ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A) ≤
       Real.sqrt ((1 + J / Δ) * tailParameterConstant q R) *
-        Real.sqrt (1 + (edgeBoundary Λ A).card) := by
+        Real.sqrt (1 + (edgeBoundary (planeDomainGraph Λ) A).card) := by
     rw [← Real.sqrt_mul (by have := one_le_tailParameterConstant hq R; positivity), mul_assoc]
     exact Real.sqrt_le_sqrt (mul_le_mul_of_nonneg_left (cutLogBudget_le_edgeBoundary hq R A)
       (by positivity))
@@ -180,11 +182,13 @@ theorem concentrationWidth_le (hq : 1 ≤ q) (R : ℕ) (hJ : 0 ≤ J) {Δ : ℝ}
   have hfactor_nonneg : 0 ≤ M * Real.log ((n : ℝ) + 2) + Real.exp 1 / 2 + Real.log 2 := by
     have := mul_nonneg hM (hlog2.le.trans hL)
     linarith
-  calc Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M
-      = 32 * Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A) *
+  calc Entropy.concentrationWidth (J / Δ)
+        (ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A) n M
+      = 32 * Real.sqrt ((1 + J / Δ) *
+          ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A) *
           (M * Real.log ((n : ℝ) + 2) + Real.exp 1 / 2 + Real.log 2) := rfl
     _ ≤ 32 * (Real.sqrt ((1 + J / Δ) * tailParameterConstant q R) *
-          Real.sqrt (1 + (edgeBoundary Λ A).card)) *
+          Real.sqrt (1 + (edgeBoundary (planeDomainGraph Λ) A).card)) *
           ((M + (Real.exp 1 / 2 + Real.log 2) / Real.log 2) * Real.log ((n : ℝ) + 2)) := by
         gcongr
     _ = _ := by
@@ -214,9 +218,9 @@ theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_edgeBoundar
     1 - ((n : ℝ) + 2) ^ (-M) ≤
       Entropy.typicalMass (ManyBody.regionState_isHermitian A Ω).eigenvalues
         (ManyBody.regionEntropy Ω A)
-        (typicalWidthConstant q R J Δ M * Real.sqrt (1 + (edgeBoundary Λ A).card) *
-          Real.log (n + 2)) := by
-  exact (h.one_sub_rpow_le_typicalMass_reducedState hh hhJ hJ hΔ hΩ hgap hspan A n M).trans
+        (typicalWidthConstant q R J Δ M *
+          Real.sqrt (1 + (edgeBoundary (planeDomainGraph Λ) A).card) * Real.log (n + 2)) := by
+  exact (h.one_sub_rpow_le_typicalMass_regionState hh hhJ hJ hΔ hΩ hgap hspan A n M).trans
     (typicalMass_le_typicalMass_of_le (ManyBody.regionState_posSemidef A Ω).eigenvalues_nonneg _
       (concentrationWidth_le hq R hJ hΔ A n hM))
 

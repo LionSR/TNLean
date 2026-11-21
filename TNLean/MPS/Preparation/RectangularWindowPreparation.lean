@@ -51,7 +51,7 @@ theorem exists_isPreparedInDepth_le_log_eventually_of_rectangular_window_dominat
     ∃ N₀ : ℕ, s ≤ N₀ ∧ ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
       ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
-        IsPreparedInDepth T (fun x => ψ x) ∧
+        IsPreparedInDepth (Geometry.ring N) T (fun x => ψ x) ∧
         1 - ‖⟪ψ, (‖state (A N)‖ : ℂ)⁻¹ • state (A N)⟫_ℂ‖ ≤ ε := by
   classical
   have hDpos : 0 < D := by

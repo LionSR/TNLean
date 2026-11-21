@@ -29,6 +29,7 @@ Lemma 2 for a gapped chain once the factorization is supplied.
   as the entropy of `C Cᴴ` for the cut matrix `C`.
 -/
 open ManyBody (interval)
+open ManyBody (cutMatrix)
 
 open Matrix
 open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder
@@ -54,19 +55,20 @@ theorem star_cutVector_dotProduct (j : ℕ) (x y : EuclideanSpace ℂ (Fin L →
 across the cut after `j` sites. -/
 theorem regionEntropy_interval_eq (j : ℕ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) =
-      _root_.vonNeumannEntropy (cutMatrix Ω j * (cutMatrix Ω j)ᴴ)
-        (posSemidef_self_mul_conjTranspose (cutMatrix Ω j)).isHermitian := by
+      _root_.vonNeumannEntropy (cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ)
+        (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian := by
   rw [← leftBlock_eq_interval]
   unfold ManyBody.regionEntropy
-  exact vonNeumannEntropy_congr ((ManyBody.regionState_eq_partialTraceRight_cutVector _ _).trans
-    (partialTraceRight_vecMulVec_eq _)) _ _
+  exact vonNeumannEntropy_congr
+    (ManyBody.regionState_eq_cutMatrix_mul_conjTranspose _ _) _ _
 
 /-- If `j + s` exceeds the length of the chain, the cut matrix after `j` sites has rank at most
 `q^{2s}`: it has at most `q^{L - j}` columns. -/
 theorem rank_cutMatrix_le_pow_of_lt (hq : 1 ≤ q) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
-    {j s : ℕ} (hjs : L < j + s) : (cutMatrix Ω j).rank ≤ q ^ (2 * s) := by
+    {j s : ℕ} (hjs : L < j + s) : (cutMatrix (leftBlock L j) Ω).rank ≤ q ^ (2 * s) := by
   rcases le_or_gt j L with hjL | hLj
-  · calc (cutMatrix Ω j).rank ≤ q ^ (L - j) * (cutMatrix Ω (j + (L - j))).rank :=
+  · calc (cutMatrix (leftBlock L j) Ω).rank ≤
+          q ^ (L - j) * (cutMatrix (leftBlock L (j + (L - j))) Ω).rank :=
           rank_cutMatrix_le_add Ω j (L - j) (by omega)
       _ ≤ q ^ (L - j) * 1 :=
           Nat.mul_le_mul_left _ (rank_cutMatrix_le_one_of_le (by omega) Ω)
@@ -90,12 +92,13 @@ theorem exists_mixture_rank_cutMatrix_le_overlap_of_factorization (hq : 1 ≤ q)
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')))
     {k r : ℕ} (hk : 1 ≤ k) (w : Fin r → ℝ) (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q))
-    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (ψ i) j).rank ≤ k)
+    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k)
     (hnorm : ∑ i, w i * ‖ψ i‖ ^ 2 = 1) {P : ℝ} (hP : 0 < P)
     (hPdef : ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P) {s : ℕ}
     (hs : 2 * C₁ ^ 2 / P * Real.exp (-(2 * s / ξ')) < 1) :
     ∃ (r' : ℕ) (w' : Fin r' → ℝ) (ψ' : Fin r' → EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ i, 0 ≤ w' i) ∧ (∀ i, (cutMatrix (ψ' i) j).rank ≤ k * q ^ (2 * s)) ∧
+      (∀ i, 0 ≤ w' i) ∧
+      (∀ i, (cutMatrix (leftBlock L j) (ψ' i)).rank ≤ k * q ^ (2 * s)) ∧
       0 < ∑ i, w' i * ‖ψ' i‖ ^ 2 ∧
       (1 - 2 * C₁ ^ 2 / P * Real.exp (-(2 * s / ξ'))) * ∑ i, w' i * ‖ψ' i‖ ^ 2 ≤
         ∑ i, w' i * ‖⟪Ω, ψ' i⟫_ℂ‖ ^ 2 := by
@@ -115,14 +118,16 @@ theorem exists_mixture_rank_cutMatrix_le_overlap_of_factorization (hq : 1 ≤ q)
       exact (Real.lt_sqrt hnn).mpr h2
     obtain ⟨hpos, hineq⟩ := overlap_ge_of_norm_sub_vecMulVec_le hΩ w ψ hw hnorm hPdef' hP hO
     refine ⟨r, w, fun i ↦ toEuclideanLin (OB * OL * OR) (ψ i), hw, fun i ↦ ?_, hpos hεP, ?_⟩
-    · change (cutMatrix (toEuclideanLin (OB * OL * OR) (ψ i)) j).rank ≤ k * q ^ (2 * s)
+    · change (cutMatrix (leftBlock L j) (toEuclideanLin (OB * OL * OR) (ψ i))).rank ≤
+        k * q ^ (2 * s)
       rw [Matrix.toEuclideanLin_mul_apply, Matrix.toEuclideanLin_mul_apply]
-      calc _ ≤ q ^ (2 * s) * (cutMatrix (toEuclideanLin OL (toEuclideanLin OR (ψ i))) j).rank :=
+      calc _ ≤ q ^ (2 * s) * (cutMatrix (leftBlock L j)
+              (toEuclideanLin OL (toEuclideanLin OR (ψ i)))).rank :=
             rank_cutMatrix_toEuclideanLin_le_pow hq hOB hSB hjs _
-        _ ≤ q ^ (2 * s) * (cutMatrix (toEuclideanLin OR (ψ i)) j).rank :=
+        _ ≤ q ^ (2 * s) * (cutMatrix (leftBlock L j) (toEuclideanLin OR (ψ i))).rank :=
             Nat.mul_le_mul_left _
               (rank_cutMatrix_toEuclideanLin_le_of_subset_leftBlock hq hOL hSL _)
-        _ ≤ q ^ (2 * s) * (cutMatrix (ψ i) j).rank :=
+        _ ≤ q ^ (2 * s) * (cutMatrix (leftBlock L j) (ψ i)).rank :=
             Nat.mul_le_mul_left _
               (rank_cutMatrix_toEuclideanLin_le_of_disjoint_leftBlock hq hOR hSR _)
         _ ≤ q ^ (2 * s) * k := Nat.mul_le_mul_left _ (hrank i)
@@ -166,7 +171,7 @@ theorem entropy_le_of_overlap_schmidtRank_mixture_of_factorization (hq : 2 ≤ q
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')))
     {k r : ℕ} (hk : 1 ≤ k) (w : Fin r → ℝ) (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q))
-    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (ψ i) j).rank ≤ k)
+    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k)
     (hnorm : ∑ i, w i * ‖ψ i‖ ^ 2 = 1) {P : ℝ} (hP : 0 < P)
     (hPdef : ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) ≤

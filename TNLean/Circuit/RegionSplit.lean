@@ -25,8 +25,8 @@ on a geometry of the sites, so the one-dimensional chain and the square lattice 
   is `A' ⊗ 1` in the coordinates of `sheetSplit S`.
 * `TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators`: an operator acting on a set
   disjoint from `S` is `1 ⊗ A'`.
-* `QuantumCircuit.embedOp_val_eq_kronecker_one_submatrix`: a local matrix placed on `S` is
-  `K ⊗ 1` in the coordinates of `S` and its complement.
+* `QuantumCircuit.kronecker_one_submatrix_mem_supportedOperators`: a matrix `K ⊗ 1` in the
+  coordinates of `S` and its complement acts on `S`.
 
 ## References
 
@@ -50,22 +50,23 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
 /-! ### Two regions -/
 
 /-- The raw configurations of a sheet as pairs of configurations on `S` and on `Sᶜ`. -/
-abbrev sheetSplit (q : ℕ) (S : Finset ι) : (ι → Fin q) ≃ (S → Fin q) × (↥Sᶜ → Fin q) :=
-  ManyBody.splitEquiv (fun _ : ι => Fin q) S
+abbrev sheetSplit (q : ℕ) (S : Finset ι) :
+    (ι → Fin q) ≃ (S → Fin q) × ({v // v ∉ S} → Fin q) :=
+  ManyBody.cutEquiv (fun _ : ι => Fin q) S
 
 /-- A product operator in the coordinates of `sheetSplit S` is the Kronecker product of its
 restrictions to `S` and to `Sᶜ`. -/
 theorem rectKronecker_submatrix_sheetSplit (S : Finset ι) (m : ι → Matrix (Fin q) (Fin q) ℂ) :
     (rectKronecker m).submatrix (sheetSplit q S).symm (sheetSplit q S).symm =
-      rectKronecker (fun v : S => m v) ⊗ₖ rectKronecker (fun v : ↥Sᶜ => m v) := by
+      rectKronecker (fun v : S => m v) ⊗ₖ rectKronecker (fun v : {v // v ∉ S} => m v) := by
   ext ⟨a, c⟩ ⟨a', c'⟩
   simp only [submatrix_apply, rectKronecker_apply, kroneckerMap_apply]
-  rw [← Finset.prod_mul_prod_compl S, ← Finset.prod_coe_sort S, ← Finset.prod_coe_sort Sᶜ]
+  rw [← Fintype.prod_subtype_mul_prod_subtype (· ∈ S)]
   congr 1
+  · refine Finset.prod_congr (Finset.ext fun _ => by simp) fun v _ => ?_
+    simp [ManyBody.cutEquiv_symm_apply_mem _ _ v.2]
   · refine Finset.prod_congr rfl fun v _ => ?_
-    simp [ManyBody.splitEquiv_symm_apply_of_mem _ S _ _ _ v.2]
-  · refine Finset.prod_congr rfl fun v _ => ?_
-    simp [ManyBody.splitEquiv_symm_apply_of_notMem _ S _ _ _ (Finset.mem_compl.mp v.2)]
+    simp [ManyBody.cutEquiv_symm_apply_not_mem _ _ v.2]
 
 /-- An operator acting on `S` is `A' ⊗ 1` in the coordinates of `sheetSplit S`. -/
 theorem exists_kronecker_one_of_mem_supportedOperators {S : Finset ι}
@@ -73,17 +74,17 @@ theorem exists_kronecker_one_of_mem_supportedOperators {S : Finset ι}
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
     ∃ A' : Matrix (S → Fin q) (S → Fin q) ℂ,
       A.submatrix (sheetSplit q S).symm (sheetSplit q S).symm =
-        A' ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ) := by
+        A' ⊗ₖ (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ) := by
   induction hA using ManyBody.supportedOperators_induction with
   | prod m hm =>
     rw [prodOp_eq_rectKronecker]
     refine ⟨rectKronecker fun v : S => m v, ?_⟩
     rw [rectKronecker_submatrix_sheetSplit]
     congr 1
-    rw [← rectKronecker_one (ν := ↥Sᶜ) (ι := Fin q)]
+    rw [← rectKronecker_one (ν := {v // v ∉ S}) (ι := Fin q)]
     congr 1
     funext v
-    exact hm v (Finset.mem_compl.mp v.2)
+    exact hm v v.2
   | add x y _ _ hx hy =>
     obtain ⟨X, hX⟩ := hx
     obtain ⟨Y, hY⟩ := hy
@@ -97,13 +98,13 @@ theorem exists_kronecker_one_of_mem_supportedOperators {S : Finset ι}
 theorem exists_one_kronecker_of_mem_supportedOperators {S : Finset ι} {D : Finset ι}
     (hD : Disjoint D S) {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) :
-    ∃ A' : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ,
+    ∃ A' : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ,
       A.submatrix (sheetSplit q S).symm (sheetSplit q S).symm =
         (1 : Matrix (S → Fin q) (S → Fin q) ℂ) ⊗ₖ A' := by
   induction hA using ManyBody.supportedOperators_induction with
   | prod m hm =>
     rw [prodOp_eq_rectKronecker]
-    refine ⟨rectKronecker fun v : ↥Sᶜ => m v, ?_⟩
+    refine ⟨rectKronecker fun v : {v // v ∉ S} => m v, ?_⟩
     rw [rectKronecker_submatrix_sheetSplit]
     congr 1
     rw [← rectKronecker_one (ν := ↥S) (ι := Fin q)]
@@ -124,38 +125,15 @@ namespace QuantumCircuit
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
 
-/-- A local matrix placed on a region `S` is `K ⊗ 1` in the coordinates of `S` and its
-complement. -/
-theorem embedOp_val_eq_kronecker_one_submatrix (S : Finset ι)
-    (K : Matrix (S → Fin q) (S → Fin q) ℂ) :
-    embedOp (fun x : S => x.val) K = (K ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ)).submatrix
-      (ManyBody.splitEquiv (fun _ : ι => Fin q) S)
-      (ManyBody.splitEquiv (fun _ : ι => Fin q) S) := by
-  ext c c'
-  simp only [embedOp_apply, submatrix_apply, kroneckerMap_apply, one_apply]
-  have hagree : AgreeOff (fun x : S => x.val) c c' ↔
-      (ManyBody.splitEquiv (fun _ : ι => Fin q) S c).2 =
-        (ManyBody.splitEquiv (fun _ : ι => Fin q) S c').2 := by
-    constructor
-    · intro h
-      funext v
-      exact h v fun j hj => (Finset.mem_compl.mp v.2) (hj ▸ j.2)
-    · intro h i hi
-      have hiS : i ∉ S := fun hiS => hi ⟨i, hiS⟩ rfl
-      exact congrFun h ⟨i, Finset.mem_compl.mpr hiS⟩
-  by_cases h : AgreeOff (fun x : S => x.val) c c'
-  · simp only [h, hagree.mp h, ite_true, mul_one]
-    rfl
-  · simp only [h, hagree.not.mp h, ite_false, mul_zero]
-
-/-- A matrix of the form `K ⊗ 1` in the coordinates of `S` acts on `S`. -/
+/-- A matrix of the form `K ⊗ 1` in the coordinates of `S` acts on `S`: it is the placement
+`ManyBody.place S K`. -/
 theorem kronecker_one_submatrix_mem_supportedOperators (S : Finset ι)
     (K : Matrix (S → Fin q) (S → Fin q) ℂ) :
-    (K ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ)).submatrix
-        (ManyBody.splitEquiv (fun _ : ι => Fin q) S)
-        (ManyBody.splitEquiv (fun _ : ι => Fin q) S) ∈
+    (K ⊗ₖ (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ)).submatrix
+        (ManyBody.cutEquiv (fun _ : ι => Fin q) S)
+        (ManyBody.cutEquiv (fun _ : ι => Fin q) S) ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q) S := by
-  rw [← embedOp_val_eq_kronecker_one_submatrix]
-  simpa using embedOp_mem_supportedOperators (e := fun x : S => x.val) Subtype.val_injective K
+  have h := ManyBody.place_mem_supportedOperators (X := fun _ : ι ↦ Fin q) (D := S) K
+  rwa [ManyBody.place, reindex_apply, Equiv.symm_symm] at h
 
 end QuantumCircuit

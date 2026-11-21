@@ -128,7 +128,7 @@ theorem canonicalHalfSampledIntervalHistory_probability
   have hInitialRaw : Submodule.IsCloseTo 0.04
       (Submodule.prodExt ((Matrix.toEuclideanLin P).range.map
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e).toLinearMap)
-          (↥((interval L p endR)ᶜ) → Fin q)) Graw := by
+          ({v // v ∉ interval L p endR} → Fin q)) Graw := by
     rw [hRange]
     exact (Entropy.isCloseTo_prodExt_region_iff_isViable (interval L p endR) W G).mpr hInitial
   have hdimRaw : Module.finrank ℂ Graw ≤ rho := by
@@ -137,10 +137,10 @@ theorem canonicalHalfSampledIntervalHistory_probability
   have hAraw : ∀ x delta, delta < 1 →
       ∀ S : Submodule ℂ (EuclideanSpace ℂ (interval L p endR → Fin q)),
       Submodule.IsCloseTo delta
-        (Submodule.prodExt S (↥((interval L p endR)ᶜ) → Fin q)) (Traw x) →
+        (Submodule.prodExt S ({v // v ∉ interval L p endR} → Fin q)) (Traw x) →
       Submodule.IsCloseTo (Delta / (1 - delta) ^ 2)
         (Submodule.prodExt (⨆ i, S.map (F i).toLinearMap)
-          (↥((interval L p endR)ᶜ) → Fin q)) (Traw x) := by
+          ({v // v ∉ interval L p endR} → Fin q)) (Traw x) := by
     intro x delta hdelta S hS
     exact (Entropy.isCloseTo_prodExt_region_iff_isViable (interval L p endR)
       (⨆ i, S.map (F i).toLinearMap) (T x)).mpr
@@ -149,7 +149,7 @@ theorem canonicalHalfSampledIntervalHistory_probability
   obtain ⟨hGood, hFailure, hParentMeas, hParentFailure, hOnGood, _hRank, _hStop⟩ :=
     Entropy.canonicalHalfSamplingParent_joint_probability_of_threshold
       (n := fun _ : interval L p endR ↦ q)
-      (β := ↥((interval L p endR)ᶜ) → Fin q) (ι := Fin nFamily)
+      (β := {v // v ∉ interval L p endR} → Fin q) (ι := Fin nFamily)
       D a K hD eta hK hThreshold L rho d rounds e (endR - p - 1) bRef
       Delta epsilon epsilonRef xi Graw Rraw x0 Traw F P
       (by simpa only [Fintype.card_fin] using hN)
@@ -165,14 +165,14 @@ theorem canonicalHalfSampledIntervalHistory_probability
     at hFailure
   change MeasurableSet {U : Fin rounds → Matrix.rankUnitaryProduct d |
     Submodule.IsCloseTo (3 / 200)
-      (Submodule.prodExt (parent U) (↥((interval L p endR)ᶜ) → Fin q)) Graw} at hParentMeas
+      (Submodule.prodExt (parent U) ({v // v ∉ interval L p endR} → Fin q)) Graw} at hParentMeas
   change law {U : Fin rounds → Matrix.rankUnitaryProduct d |
     ¬Submodule.IsCloseTo (3 / 200)
-      (Submodule.prodExt (parent U) (↥((interval L p endR)ᶜ) → Fin q)) Graw} ≤
+      (Submodule.prodExt (parent U) ({v // v ∉ interval L p endR} → Fin q)) Graw} ≤
       (rounds : ℝ≥0∞) * ENNReal.ofReal (eta / ((L : ℝ) + 2) ^ a) at hParentFailure
   have hparentIff (U : Fin rounds → Matrix.rankUnitaryProduct d) :
       Submodule.IsCloseTo (3 / 200)
-        (Submodule.prodExt (parent U) (↥((interval L p endR)ᶜ) → Fin q)) Graw ↔
+        (Submodule.prodExt (parent U) ({v // v ∉ interval L p endR} → Fin q)) Graw ↔
       Submodule.IsViable (3 / 200) (parent U)
         (G.map (Entropy.regionTensorCoordinates q (interval L p endR)).toLinearEquiv.toLinearMap) :=
     Entropy.isCloseTo_prodExt_region_iff_isViable (interval L p endR) (parent U) G

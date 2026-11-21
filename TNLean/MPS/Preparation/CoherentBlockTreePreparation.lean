@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.Measurement.PreparedComposition
+import QICLean.Circuit.Model.Measurement
 import TNLean.MPS.Preparation.GHZSeedCircuit
 import TNLean.MPS.Preparation.SparseWindowGHZ
 import TNLean.MPS.Preparation.SupportedTreePreparation
@@ -61,7 +61,7 @@ private theorem isZeroOn_pairLayerOp_windowGHZState {d D b M N s : ℕ}
 /-- A coherent family of supported block states is prepared in depth `C(h+1)`.
 The support condition concerns the actual number of blocks `M`, which permits the arbitrary
 supported one-block pair needed for whole-ring exact preparation. -/
-theorem exists_isPreparedWithMeasurementRoundsInDepth_sum_blockIsometryState
+theorem exists_isMeasurementConversion_sum_blockIsometryState
     (d s c : ℕ) [NeZero d] (hs : 2 ≤ s) :
     ∃ C : ℕ, ∀ {D b χ : ℕ} (A : MPSTensor d D) (S : Finset (Fin D × Fin D))
       (e : Fin χ ↪ Fin (D * D)), Set.range (virtualPairEquiv D ∘ e) = (S : Set _) →
@@ -77,14 +77,18 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_sum_blockIsometryState
         (∀ j j', ∑ p, star (ω j p) * ω j' p = if j = j' then 1 else 0) →
         (∀ j (x : Fin M → Fin D × Fin D), pairProductState (ω j) x ≠ 0 → ∀ k, x k ∈ S) →
         ∀ α : Fin b → ℂ, ∑ j, star (α j) * α j = 1 →
-        IsPreparedWithMeasurementRoundsInDepth (C * (h + 1))
-          (fun x => ∑ j, α j * blockIsometryState A (ω j) hN x) := by
+        ∃ v : Fin N → Fin d → ℂ, IsMeasurementConversion (Geometry.ring N) (C * (h + 1))
+          (fun σ ↦ ∏ i, v i (σ i)) (fun x => ∑ j, α j * blockIsometryState A (ω j) hN x) := by
   classical
   have : NeZero s := ⟨by omega⟩
-  obtain ⟨CG, hCG⟩ := exists_isPreparedWithMeasurementRoundsInDepth_windowGHZState (d := d) hs
-  obtain ⟨K, hK⟩ := exists_isPairProduct (n := s + s) (NeZero.pos d) (by omega)
+  obtain ⟨CG, hCG⟩ := exists_isMeasurementConversion_windowGHZState (d := d) hs
+  have : NeZero (s + s) := ⟨by omega⟩
+  obtain ⟨K, hK⟩ : ∃ K, ∀ X : Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ,
+      X ∈ unitary (Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ) →
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (s + s))) K X :=
+    ⟨_, fun X hX ↦ isGateProduct_pathGraph_unitaryGateCount hX⟩
   obtain ⟨CT, hCT⟩ := exists_rounds_blockLayerOp_supportedPolarTree d s (c + 3)
-  refine ⟨CG + K + CT + 2, fun {D b χ} A S e he hinj dig hdig hdig0 dig₀ hdig₀
+  refine ⟨CG + K + CT, fun {D b χ} A S e he hinj dig hdig hdig0 dig₀ hdig₀
     enc henc h {M N} _ _ ℓ hN hℓ₁ hℓ₂ ω hω hωS α hα => ?_⟩
   have hT : ∀ k, IsTreeLayout h s (ℓ k) (balancedWidths (2 ^ (h + 1)) (ℓ k)) :=
     fun k => isTreeLayout_balancedWidths (hℓ₁ k)
@@ -114,7 +118,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_sum_blockIsometryState
       (l' := (virtualPairEquiv D (e y)).1) (r' := (virtualPairEquiv D (e y)).2)
       (by rw [hroot k x, hroot k y, hxy])
     exact Prod.ext hcfg.1 hcfg.2
-  obtain ⟨U, Rs, hRs, himpl, -, hU⟩ := hCT A e (fun m hm => by rw [he]; exact hinj m hm)
+  obtain ⟨U, R, hRf, hRd, himpl, -, hU⟩ := hCT A e (fun m hm => by rw [he]; exact hinj m hm)
     h ℓ hN (fun k => balancedWidths (2 ^ (h + 1)) (ℓ k)) hT
     (fun k p => leafLen_balancedWidths_le (hℓ₂ k) p) ι₀ enc hι₀ henc
   have hUS : ∀ k l r τ, (l, r) ∈ S →
@@ -132,15 +136,13 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_sum_blockIsometryState
       simpa [virtualPairEquiv] using hx
     simpa only [hex, cfgPolarIso, virtualPairEquiv, Equiv.symm_apply_apply] using hu
   obtain ⟨W, hWu, hW⟩ := exists_pairFamilyUnitary hdig hdig₀ ω hω
-  obtain ⟨Ls, hLs, -, hLsW⟩ := isCircuitOn_pairLayerOp hN hr fun _ => hK W hWu
+  obtain ⟨u, -, hud, huop⟩ := isUnitaryCircuitOn_pairLayerOp hN hr fun _ => hK W hWu
   set seed := windowGHZState hN hr (Function.extend dig₀ α 0)
-  have hpair : MeasurementRound.IsRoundsImplementationOn [TeleportHop.round Ls []
-      TeleportHop.valid_nil] {seed} (pairLayerOp hN hr fun _ => W) := by
-    have := (TeleportHop.isImplementationOn_round (d := d) Ls
-      (TeleportHop.valid_nil (N := N))).isRoundsImplementationOn
-    rw [TeleportHop.chainPerm_nil, Matrix.one_mul, ← hLsW] at this
-    exact this.mono fun v _ => fun _ _ _ h => by simp [TeleportHop.pairSites] at h
-  have hall := hpair.append himpl fun v hv => by
+  have hpair : u.toCircuit.IsImplementationOn KrausGate.ev {seed}
+      (pairLayerOp hN hr fun _ => W) := by
+    rw [← huop]
+    exact Circuit.isImplementationOn_of_kraus_eq (fun p ↦ u.kraus_eq_op p) _
+  have hall := hpair.comp himpl fun v hv => by
     rw [Set.mem_singleton_iff] at hv
     subst v
     refine (isZeroOn_pairLayerOp_windowGHZState hN hr hdig hdig₀ ω
@@ -148,20 +150,17 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_sum_blockIsometryState
     intro x hx
     obtain ⟨k, y, hy₁, hy₂, rfl⟩ := mem_treeCentralSites.mp hx
     exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, k, y, hy₁, by have := (hT k).le; omega, rfl⟩
-  have hseed : IsPreparedWithMeasurementRoundsInDepth CG seed := by
-    apply hCG ℓ hN hr hℓ
+  obtain ⟨v, hseed⟩ := hCG ℓ hN hr hℓ (Function.extend dig₀ α 0) (by
     rw [sum_extend_zero hdig₀ α (fun _ a => star a * a) (by simp)]
-    exact hα
-  have hdepth : (([TeleportHop.round Ls [] TeleportHop.valid_nil] ++ Rs).map
-      MeasurementRound.depth).sum ≤ K + 2 + CT * (h + 1) := by
-    simp only [List.map_append, List.sum_append, List.map_cons, List.map_nil,
-      List.sum_cons, List.sum_nil, TeleportHop.depth_round, hLs]
-    omega
-  have hprep := hseed.apply_implementation hall rfl hdepth
+    exact hα)
+  have hdepth : (u.toCircuit.comp R).depth ≤ K + CT * (h + 1) :=
+    (Circuit.depth_comp _ _).trans (Nat.add_le_add hud hRd)
+  have hprep := hseed.trans (hall.isMeasurementConversion
+    ((u.forall_isUnitary.mono fun _ hK ↦ Or.inl hK).comp _ hRf) hdepth hseed.ne_zero rfl)
   have hj := fun j => blockLayerOp_pairLayerOp_mulVec_registerCfg hN hr hdig A S (ω j)
     (by simpa using hω j j) (hωS j) (dig₀ j) hUS (fun u => hW u j)
   rw [mulVec_windowGHZState_of_registerCfg hdig₀ hj α] at hprep
-  exact hprep.mono (by nlinarith)
+  exact ⟨v, hprep.mono (by nlinarith)⟩
 
 /-- Choose all physical encodings once from the dimensions and a support-injectivity cutoff.
 The same constants apply to every number of labels at most `B`, so a canonical family and
@@ -177,8 +176,8 @@ theorem exists_supported_block_preparation_constants {d D : ℕ} (hd : 2 ≤ d)
         (∀ j j', ∑ p, star (ω j p) * ω j' p = if j = j' then 1 else 0) →
         (∀ j (x : Fin M → Fin D × Fin D), pairProductState (ω j) x ≠ 0 → ∀ k, x k ∈ S) →
         ∀ α : Fin b → ℂ, ∑ j, star (α j) * α j = 1 →
-        IsPreparedWithMeasurementRoundsInDepth (C * (h + 1))
-          (fun x => ∑ j, α j * blockIsometryState A (ω j) hN x) := by
+        ∃ v : Fin N → Fin d → ℂ, IsMeasurementConversion (Geometry.ring N) (C * (h + 1))
+          (fun σ ↦ ∏ i, v i (σ i)) (fun x => ∑ j, α j * blockIsometryState A (ω j) hN x) := by
   classical
   have : NeZero d := ⟨by omega⟩
   set s := L + B + D * D + D + 2 with hsdef
@@ -213,7 +212,7 @@ theorem exists_supported_block_preparation_constants {d D : ℕ} (hd : 2 ≤ d)
     have := congrFun heq ⟨i.val, by omega⟩
     simpa [dig, show i.val < s - 1 from i.isLt] using this)
   have hdig0 : ∀ l, dig l ⟨s - 1, by omega⟩ = 0 := fun l => by simp [dig]
-  obtain ⟨C, hC⟩ := exists_isPreparedWithMeasurementRoundsInDepth_sum_blockIsometryState
+  obtain ⟨C, hC⟩ := exists_isMeasurementConversion_sum_blockIsometryState
     d s (8 * s) hs
   refine ⟨s, C, hs, hLs, fun {b} hb => ?_⟩
   obtain ⟨dig₀⟩ : Nonempty (Fin b ↪ Cfg d s) :=

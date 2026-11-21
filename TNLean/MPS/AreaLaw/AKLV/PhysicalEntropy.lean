@@ -26,6 +26,7 @@ normalization conventions are recorded in
 -/
 
 open ManyBody (interval)
+open ManyBody (cutMatrix)
 
 open Matrix Real
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
@@ -41,7 +42,8 @@ theorem aklv_regionEntropy_le_short_side {L q k : ℕ}
   have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) (leftBlock L k) Ω
   have htrace : ρ.trace = 1 := ManyBody.trace_regionState_eq_one hΩ
   have hrank : ρ.rank ≤ q ^ min k (L - k) := by
-    rw [show ρ = cutMatrix Ω k * (cutMatrix Ω k)ᴴ from regionState_leftBlock_eq Ω k]
+    rw [show ρ = cutMatrix (leftBlock L k) Ω * (cutMatrix (leftBlock L k) Ω)ᴴ from
+      ManyBody.regionState_eq_cutMatrix_mul_conjTranspose Ω (leftBlock L k)]
     exact (rank_mul_le_left _ _).trans (aklv_rank_cutMatrix_le_pow_min hk Ω)
   have hpos : 0 < (ρ.rank : ℝ) := by exact_mod_cast hρ.rank_pos_of_trace_one htrace
   change vonNeumannEntropy ρ _ ≤ _
@@ -56,15 +58,13 @@ bound at every physical cut. Exact finite-dimensional boundary estimates
 cover endpoints and chains shorter than the initial window. -/
 theorem exists_aklv_physical_entropy_bound :
     ∃ C : ℝ, 0 < C ∧ ∀ (L q : ℕ)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (Φ : ManyBody.BondInteraction L q)
       (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h j) (interval L j.val (j.val + 2))) →
-      (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
-      (∑ j, h j) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
-      ((∑ j, h j) - (mu : ℂ) • 1 - (g : ℂ) •
+      (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
+      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
+      (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-      0 < g → mu + g ∈ spectrum ℝ (∑ j, h j) →
+      0 < g → mu + g ∈ spectrum ℝ Φ.hamiltonian →
       ∀ k : ℕ, k ≤ L →
       ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k) ≤
         C / g * (1 + log (q : ℝ) + log (1 / g)) ^ 3 := by
@@ -76,9 +76,9 @@ theorem exists_aklv_physical_entropy_bound :
     unfold aklvInitialRankLogCoefficient
     positivity
   refine ⟨C, by dsimp [C]; positivity, ?_⟩
-  intro L q h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited k hk
+  intro L q Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited k hk
   obtain ⟨_hL, hq, hg1⟩ :=
-    aklv_chain_dimension_and_gap_bounds h hsupp h0 h1 mu g Ω hΩ hground hgap hg hexcited
+    aklv_chain_dimension_and_gap_bounds Φ h0 h1 mu g Ω hΩ hground hgap hg hexcited
   let u := 1 + log (q : ℝ) + log (1 / g)
   let s : ℕ := ⌈A * u ^ 2 / g⌉₊
   obtain ⟨hu, hs, hgapS, _hloggap, hT, hupper, hlogD⟩ :=
@@ -94,7 +94,7 @@ theorem exists_aklv_physical_entropy_bound :
   · obtain ⟨a, hcenter, hfit⟩ := hfit
     obtain ⟨_hq, _hg1, _hs, _hlog, e, E0, ψ,
         _hregional, _henergy, _hE0, _hE6, hstates, _hinit, _hsteps⟩ :=
-      hsequence L q a h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited hfit
+      hsequence L q a Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited hfit
     let ρ := ManyBody.regionState (X := fun _ ↦ Fin q) Ω (leftBlock L k)
     let H := ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k) Ω
     have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) (leftBlock L k) Ω
@@ -102,7 +102,8 @@ theorem exists_aklv_physical_entropy_bound :
     have htail (i : ℕ) : 1 - H.kyFanNorm (aklvSequenceRankBound q g s i) ≤
         aklvSequenceWeight i / 16 := by
       obtain ⟨hunit, herror, hrank⟩ := hstates i
-      change (cutMatrix (ψ i) (a + s / 2)).rank ≤ aklvSequenceRankBound q g s i at hrank
+      change (cutMatrix (leftBlock L (a + s / 2)) (ψ i)).rank ≤
+        aklvSequenceRankBound q g s i at hrank
       rw [hcenter] at hrank
       exact one_sub_kyFanNorm_le_of_unit_cut_rank_approximation Ω (ψ i)
         hΩ hunit herror hrank

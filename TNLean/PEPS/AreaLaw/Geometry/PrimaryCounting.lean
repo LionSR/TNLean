@@ -24,6 +24,7 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 noncomputable section
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -138,12 +139,12 @@ Source: area-law Section 11, lines 237–238. -/
 theorem card_primaryPitchIndices_boundary_le (o : ℝ × ℝ) (k ℓ p : ℕ)
     (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C : ℕ) (a b : ℤ) (hkp : k ≤ p) :
     (primaryPitchIndices o k ℓ p (boundaryEndpoints Λ A) C a b).card ≤
-      32 * (2 * C + 1) ^ 2 * (edgeBoundary Λ A).card := by
+      32 * (2 * C + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card := by
   calc
     _ ≤ 4 * (dyadicLayerIndices o k (boundaryEndpoints Λ A) C).card :=
       card_primaryPitchIndices_le o k ℓ p (boundaryEndpoints Λ A) C a b hkp
-    _ ≤ 4 * (8 * (2 * C + 1) ^ 2 * (edgeBoundary Λ A).card) :=
+    _ ≤ 4 * (8 * (2 * C + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card) :=
       Nat.mul_le_mul_left 4 (card_dyadicLayerIndices_boundary_le o k Λ A C)
-    _ = 32 * (2 * C + 1) ^ 2 * (edgeBoundary Λ A).card := by ring
+    _ = 32 * (2 * C + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card := by ring
 
 end TNLean.PEPS.AreaLaw.Geometry

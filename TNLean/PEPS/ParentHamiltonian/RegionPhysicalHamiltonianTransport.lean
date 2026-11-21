@@ -167,9 +167,11 @@ theorem globalPhysicalMap_regionParentHamiltonian (R : ι → Finset V)
       (RegionPhysicalConfig (d := e) (R i)) ℂ)
     (hF : ∀ i, k i * regionPhysicalProductMatrix (R i) F =
       regionPhysicalProductMatrix (R i) F * h i) (ψ : (V → Fin d) → ℂ) :
-    globalPhysicalMap F (regionParentHamiltonian R h *ᵥ ψ) =
-      regionParentHamiltonian R k *ᵥ globalPhysicalMap F ψ := by
-  simp only [regionParentHamiltonian, Matrix.sum_mulVec, map_sum]
+    globalPhysicalMap F
+        ((ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian *ᵥ ψ) =
+      (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin e) R k).hamiltonian *ᵥ
+        globalPhysicalMap F ψ := by
+  simp only [ManyBody.Interaction.hamiltonian_ofPlace, Matrix.sum_mulVec, map_sum]
   exact Finset.sum_congr rfl fun i _ =>
     globalPhysicalMap_place (R i) F (h i) (k i) (hF i) ψ
 
@@ -182,11 +184,16 @@ theorem globalPhysicalMatrix_regionParentHamiltonian (R : ι → Finset V)
       (RegionPhysicalConfig (d := e) (R i)) ℂ)
     (hF : ∀ i, k i * regionPhysicalProductMatrix (R i) F =
       regionPhysicalProductMatrix (R i) F * h i) :
-    regionParentHamiltonian R k * globalPhysicalMatrix F =
-      globalPhysicalMatrix F * regionParentHamiltonian R h := by
+    (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin e) R k).hamiltonian *
+        globalPhysicalMatrix F =
+      globalPhysicalMatrix F *
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian := by
   classical
-  have hLin : Matrix.mulVecLin (regionParentHamiltonian R k) ∘ₗ globalPhysicalMap F =
-      globalPhysicalMap F ∘ₗ Matrix.mulVecLin (regionParentHamiltonian R h) :=
+  have hLin : Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin e) R k).hamiltonian ∘ₗ
+          globalPhysicalMap F =
+      globalPhysicalMap F ∘ₗ Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian :=
     LinearMap.ext fun ψ => (globalPhysicalMap_regionParentHamiltonian R F h k hF ψ).symm
   simpa only [globalPhysicalMatrix, LinearMap.toMatrix'_comp, ← Matrix.toLin'_apply',
     LinearMap.toMatrix'_toLin'] using
@@ -198,25 +205,30 @@ theorem regionParentHamiltonian_physicalDeform_unitary (R : ι → Finset V)
     (hF : ∀ v, (LinearMap.toMatrix' (F v).toLinearMap).IsUnitaryBetween)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ) :
-    regionParentHamiltonian R (fun i => deformedRegionInteraction (R i) F (h i)) =
+    (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin e) R
+        (fun i => deformedRegionInteraction (R i) F (h i))).hamiltonian =
       globalPhysicalMatrix (fun v => LinearMap.toMatrix' (F v).toLinearMap) *
-        regionParentHamiltonian R h *
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian *
           (globalPhysicalMatrix
             (fun v => LinearMap.toMatrix' (F v).toLinearMap)).conjTranspose := by
   classical
   let M := globalPhysicalMatrix (fun v => LinearMap.toMatrix' (F v).toLinearMap)
-  let K := regionParentHamiltonian R (fun i => deformedRegionInteraction (R i) F (h i))
+  let K := (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin e) R
+    (fun i => deformedRegionInteraction (R i) F (h i))).hamiltonian
   have hMM : M * M.conjTranspose = 1 := (globalPhysicalMatrix_isUnitaryBetween _ hF).2
-  have hInter : K * M = M * regionParentHamiltonian R h := by
+  have hInter :
+      K * M = M * (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian := by
     apply globalPhysicalMatrix_regionParentHamiltonian
     intro i
     rw [deformedRegionInteraction_eq_unitary_conj (R i) F hF,
       Matrix.mul_assoc, Matrix.mul_assoc,
       (regionPhysicalProductMatrix_isUnitaryBetween (R i) _ hF).1, Matrix.mul_one]
-  change K = M * regionParentHamiltonian R h * M.conjTranspose
+  change K = M * (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian *
+    M.conjTranspose
   calc
     K = K * (M * M.conjTranspose) := by rw [hMM, Matrix.mul_one]
-    _ = M * regionParentHamiltonian R h * M.conjTranspose := by
+    _ = M * (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian *
+        M.conjTranspose := by
       rw [← Matrix.mul_assoc, hInter]
 
 /-- Unitary physical deformation preserves the characteristic polynomial of the
@@ -226,8 +238,9 @@ theorem charpoly_regionParentHamiltonian_physicalDeform_unitary (R : ι → Fins
     (hF : ∀ v, (LinearMap.toMatrix' (F v).toLinearMap).IsUnitaryBetween)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ) :
-    (regionParentHamiltonian R (fun i => deformedRegionInteraction (R i) F (h i))).charpoly =
-      (regionParentHamiltonian R h).charpoly := by
+    (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin e) R
+        (fun i => deformedRegionInteraction (R i) F (h i))).hamiltonian.charpoly =
+      (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian.charpoly := by
   classical
   let M := globalPhysicalMatrix (fun v => LinearMap.toMatrix' (F v).toLinearMap)
   have hM := globalPhysicalMatrix_isUnitaryBetween
@@ -235,7 +248,8 @@ theorem charpoly_regionParentHamiltonian_physicalDeform_unitary (R : ι → Fins
   have hCard : Fintype.card (V → Fin e) = Fintype.card (V → Fin d) :=
     Nat.le_antisymm (hM.2.card_le _) (hM.1.card_le _)
   rw [regionParentHamiltonian_physicalDeform_unitary R F hF h]
-  have hchar := Matrix.charpoly_mul_comm_of_le (M * regionParentHamiltonian R h)
+  have hchar := Matrix.charpoly_mul_comm_of_le
+    (M * (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian)
     M.conjTranspose (hM.1.card_le _)
   rw [hCard, Nat.sub_self, pow_zero, one_mul,
     ← Matrix.mul_assoc, hM.1, Matrix.one_mul] at hchar
@@ -247,9 +261,9 @@ theorem spectrum_regionParentHamiltonian_physicalDeform_unitary (R : ι → Fins
     (hF : ∀ v, (LinearMap.toMatrix' (F v).toLinearMap).IsUnitaryBetween)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ) :
-    spectrum ℂ (regionParentHamiltonian R
-      (fun i => deformedRegionInteraction (R i) F (h i))) =
-      spectrum ℂ (regionParentHamiltonian R h) := by
+    spectrum ℂ (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin e) R
+      (fun i => deformedRegionInteraction (R i) F (h i))).hamiltonian =
+      spectrum ℂ (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian := by
   classical
   ext μ
   rw [Matrix.mem_spectrum_iff_isRoot_charpoly,

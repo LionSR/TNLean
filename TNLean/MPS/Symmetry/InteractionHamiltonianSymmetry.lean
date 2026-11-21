@@ -19,11 +19,12 @@ namespace MPSTensor
 /-- Summing the translates of an on-site symmetric two-site interaction
 preserves its on-site symmetry. Unitarity is not needed for this algebraic
 identity. Source context: arXiv:1010.3732, Sections II.C.2 and II.F.2. -/
-theorem interactionHamiltonian_commute_onSiteTensorPow {d N : ℕ}
+theorem hamiltonian_translationInvariant_commute_onSiteTensorPow {d N : ℕ}
     (U : Matrix (Fin d) (Fin d) ℂ) (A : MPOTensor.ChainOperator d 2)
     (hN : 2 ≤ N) (hA : Commute A (onSiteTensorPow 2 U)) :
-    Commute (interactionHamiltonian A hN) (onSiteTensorPow N U) :=
+    Commute (ManyBody.Interaction.translationInvariant hN A).hamiltonian
+      (onSiteTensorPow N U) :=
   Commute.sum_left _ _ _ fun i _ =>
-    embedLocalOperator_commute_onSiteTensorPow U 2 hN i A hA
+    placeAlong_ringWindow_commute_onSiteTensorPow U 2 hN i A hA
 
 end MPSTensor

@@ -57,18 +57,16 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_word_family
       ∀ Jtarget : Finset (Fin L),
       (interval L (a + ell) (b + ell + 1) \ Jtarget).card +
         (Jtarget \ interval L (a + ell) (b + ell + 1)).card ≤ 2 * ell →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      (∀ i, 0 ≤ Φ.term i) → (∀ i, Φ.term i ≤ 1) →
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     let Cross : Finset (Fin (L - 1)) := Finset.univ.filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ Cross, h i
+    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ Cross, Φ.term i
     let K : Finset (Fin 5) := {0, 2, 4}
     let B : ℝ → (Fin 5 → ℝ) → Finset (Fin 5) →
         Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun t e T ↦
@@ -79,18 +77,18 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_word_family
       (hO : (B (ell : ℝ) e ∅).IsHermitian) (hC : (B (ell : ℝ) e K).IsHermitian),
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
-      B (ell : ℝ) e ∅ = (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1 ∧
+      B (ell : ℝ) e ∅ = Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1 ∧
       star z ⬝ᵥ z = 1 ∧ B (ell : ℝ) e ∅ *ᵥ z = (E0 : ℂ) • z ∧
       (B (ell : ℝ) e ∅ - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 4 ∧
       ‖B (ell : ℝ) e K‖ ≤ 7 * (ell : ℝ) ∧
       let J := Jtarget
       let beta := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
       ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ), N ≤ D ^ 2 ∧
         ∀ eta : ℝ, 6 * w ≤ eta → eta ≤ etaLD →
@@ -107,22 +105,22 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_word_family
         (Submodule.spectralSpanLE hO.eigenvectorBasis hO.eigenvalues (E0 + eta - 3 * w)) ∧
       (D : ℝ) ^ 12 * Delta ≤ 1 / 100000 ∧
         ∃ p : Polynomial ℝ, p.natDegree = ell ^ 2 ∧ p.eval (E0 + eta - 2 * w) = 1 ∧
-          ∃ M : Fin N → Matrix (↥(Jᶜ) → Fin q) (↥(Jᶜ) → Fin q) ℂ,
+          ∃ M : Fin N → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ,
             Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
                 Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
                   (Polynomial.aeval (B (ell : ℝ) e K) (p.map (algebraMap ℝ ℂ))) ∘L
                 Tm.symm.toContinuousLinearEquiv.toContinuousLinearMap =
               ∑ j, TensorProduct.mapL
                 (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j))
-                (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := ↥(Jᶜ) → Fin q) (M j)) ∧
+                (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := {v // v ∉ J} → Fin q) (M j)) ∧
             ∀ (a : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (delta : ℝ),
-              Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) delta S
+              Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) delta S
                 (higher.map Tm.toLinearEquiv.toLinearMap) → delta < 1 →
               let grow := ⨆ v : Fin a → Fin N, S.map ((List.ofFn (fun j ↦
                 Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W (v j)))).prod :
                   _ →ₗ[ℂ] _)
               Module.finrank ℂ grow ≤ N ^ a * Module.finrank ℂ S ∧
-                Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+                Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q))
                   (Delta ^ a / (1 - delta) ^ 2) grow
                   (lower.map Tm.toLinearEquiv.toLinearMap) :=
   exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause etaLD hLD _

@@ -183,10 +183,12 @@ theorem map_ker_regionParentHamiltonian_multiplicity_eq
       (blockMatrixRepresentation d D) (blockFourthRootWeight d) eX) (R i) (H i))
     (hK : ∀ i, IsRegionParentInteraction (numberedGraphDressedAveragingTensor
       (multiplicityRestoredRepresentation d D) 1 eY) (R i) (K i)) :
-    (Matrix.mulVecLin (regionParentHamiltonian R H)).ker.map
+    (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin p) R H).hamiltonian).ker.map
       (Matrix.mulVecLin (graphNumberedBondMatrix eX eY
         (fullMultiplicityBondMap (fun i => Fin (d i)) (fun i => Fin (d i))))) =
-      (Matrix.mulVecLin (regionParentHamiltonian R K)).ker := by
+      (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin q) R K).hamiltonian).ker := by
   simpa only [blockMultiplicityRootWeight_self, blockMultiplicityRepresentation_self] using
     map_ker_regionParentHamiltonian_copy_eq d d D hd eX eY R hcover H K hH hK
 

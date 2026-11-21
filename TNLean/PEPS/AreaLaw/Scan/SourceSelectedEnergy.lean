@@ -44,7 +44,7 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -112,7 +112,9 @@ theorem exists_sourceTarget_selected_actualCharge_source_density_energy
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
                 (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp)) ≤ Real.sqrt (2 * ε / g) ∧
-            cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
+            ManyBody.cutLogBudget
+                (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                (fun _ ↦ q) X ≤
               Ctarget * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
             Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
               (ManyBody.regionEntropy Ωt X) w ≤ δtail ∧
@@ -129,8 +131,8 @@ theorem exists_sourceTarget_selected_actualCharge_source_density_energy
             letI : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
             let d := E.card
             let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-              (ManyBody.splitEquiv β X) Ωt
-            let ψ : ManyBody.RegionConfig β Xᶜ × Fin d → ℂ := fun x ↦
+              (ManyBody.cutEquiv β X) Ωt
+            let ψ : ManyBody.ComplConfig β X × Fin d → ℂ := fun x ↦
               compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -146,10 +148,10 @@ theorem exists_sourceTarget_selected_actualCharge_source_density_energy
               (∀ᶠ k : ℕ in atTop,
                 (2 * (((k + 1) ^ (d ^ 2) : ℕ) : ℝ))⁻¹ ≤
                   ‖WithLp.toLp 2
-                    (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
-                      (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
+                    (((1 : Matrix (Fin k → ManyBody.ComplConfig β X)
+                      (Fin k → ManyBody.ComplConfig β X) ℂ) ⊗ₖ
                       labelProj (copyPerm (Fin d) k) (ell k)) *ᵥ
-                      (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
+                      (fun x : (Fin k → ManyBody.ComplConfig β X) ×
                         (Fin k → Fin d) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) ∧
               Asymptotics.IsLittleO atTop
                 (fun k : ℕ ↦ Real.log (ell k).dim - (k : ℝ) * Sent)

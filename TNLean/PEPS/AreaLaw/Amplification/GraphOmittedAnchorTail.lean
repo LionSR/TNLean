@@ -31,6 +31,9 @@ set_option linter.mathlibStandardSet true
 open QuantumCircuit
 open scoped BigOperators ENNReal
 
+open ManyBody (graphPseudoEMetricSpace graphPseudoEMetricSpace_edist
+  graphPseudoEMetricSpace_edist_ne_top graphPseudoEMetricSpace_edist_toReal)
+
 namespace TNLean.PEPS.AreaLaw
 
 private theorem profile_finset_le_sum_singleton {ι : Type*} [PseudoEMetricSpace ι]

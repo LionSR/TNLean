@@ -35,6 +35,7 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 noncomputable section
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -53,7 +54,7 @@ Source: area-law Section 11, lines 565–568 and 777–780. -/
 theorem exists_orderedTwoFamilyPartition_of_isEmpty
     (h : RepairMetricHypotheses (o := dyadicOrigin) (Λ := Λ) (A := A)
       (C := C) (k₀ := k₀) (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀)
-    (hSstar : 1 ≤ Sstar) (hboundary : 0 < (edgeBoundary Λ A).card)
+    (hSstar : 1 ≤ Sstar) (hboundary : 0 < (edgeBoundary (planeDomainGraph Λ) A).card)
     (N : ℕ) [IsEmpty (𝔇 N).markIndex] :
     ∃ P : OrderedTwoFamilyPartition A,
       ∃ e : Fin P.pieceCount ≃ (𝔇 N).RetainedRegionIndex Λ A,

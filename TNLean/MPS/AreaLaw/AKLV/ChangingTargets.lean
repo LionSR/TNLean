@@ -38,9 +38,9 @@ namespace TNLean.MPS.AreaLaw
 vector for the clipped target. AKLV, arXiv:1301.1162v1, lines 1016--1024.
 The product overlap is with the clipped target, as in `Initialization`. -/
 def IsAKLVSequenceInitialization {L q : ℕ} (a s : ℕ)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (e : Fin 3 → ℝ) (g : ℝ) (Ω x : EuclideanSpace ℂ (Fin L → Fin q)) : Prop :=
-  let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e
+  let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e
     (aklvLogarithmicThreshold g) Finset.univ
   ∃ (E : ℝ) (φ χ : EuclideanSpace ℂ (Fin L → Fin q))
       (p : Polynomial ℝ) (c : ℂ)
@@ -62,15 +62,13 @@ available-window and actual-gap scope of the module. -/
 theorem exists_aklv_physical_changing_target_sequence :
     ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧
       ∀ (L q a : ℕ)
-        (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+        (Φ : ManyBody.BondInteraction L q)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h j) (interval L j.val (j.val + 2))) →
-      (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
-      (∑ j, h j) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
-      ((∑ j, h j) - (mu : ℂ) • 1 - (g : ℂ) •
+      (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
+      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
+      (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-      0 < g → mu + g ∈ spectrum ℝ (∑ j, h j) →
+      0 < g → mu + g ∈ spectrum ℝ Φ.hamiltonian →
       let u : ℝ := 1 + Real.log (q : ℝ) + Real.log (1 / g)
       let s : ℕ := ⌈A * u ^ 2 / g⌉₊
       a + s + 1 ≤ L →
@@ -79,28 +77,28 @@ theorem exists_aklv_physical_changing_target_sequence :
         198 * (A + 1) * (6 + 2 * Real.log (A + 1)) / g * u ^ 3 ∧
       ∃ (e : Fin 3 → ℝ) (E0 : ℝ) (ψ : ℕ → EuclideanSpace ℂ (Fin L → Fin q)),
         (∃ z : (Fin L → Fin q) → ℂ, star z ⬝ᵥ z = 1 ∧
-          (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ z = (e j : ℂ) • z) ∧
-          ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+          (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ z = (e j : ℂ) • z) ∧
+          ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
         E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
         (∀ i, ‖ψ i‖ = 1 ∧ ‖ψ i - Ω‖ ^ 2 ≤ aklvSequenceWeight i / 16 ∧
           schmidtRank (WithLp.ofLp (ManyBody.cutVector
             (leftBlock L (a + s / 2)) (ψ i))) ≤ aklvSequenceRankBound q g s i) ∧
-        IsAKLVSequenceInitialization a s h e g Ω (ψ 0) ∧
-        ∀ i, IsAKLVSequenceStep a s h e g Ω i (ψ i) (ψ (i + 1)) := by
+        IsAKLVSequenceInitialization a s Φ e g Ω (ψ 0) ∧
+        ∀ i, IsAKLVSequenceStep a s Φ e g Ω i (ψ i) (ψ (i + 1)) := by
   classical
   obtain ⟨A, hA, hA21, hinit⟩ := exists_aklv_physical_product_initialization
   refine ⟨A, hA, hA21, ?_⟩
-  intro L q a h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited u s ha
+  intro L q a Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited u s ha
   obtain ⟨hq, hg1, hs, hlogD, e, E0, E, φ, p,
       hregional, hEeq, hE0, hE6, _hBpos, _hBnorm, _hE, hφ,
       heigen, _hprojector, hclose, hdegree, hpE, hfix, _hrankK,
       χ, vL, vR, c, hχ, hproduct, _hoverlap, hKχ, hc, hψunit, hψrank, _hψφ, hψΩ⟩ :=
-    hinit L q a h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited ha
-  let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e
+    hinit L q a Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited ha
+  let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e
     (aklvLogarithmicThreshold g) Finset.univ
   let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval B p
   let ψ0 := c • (‖toEuclideanLin K χ‖⁻¹ : ℂ) • toEuclideanLin K χ
-  have hinitRelation : IsAKLVSequenceInitialization a s h e g Ω ψ0 :=
+  have hinitRelation : IsAKLVSequenceInitialization a s Φ e g Ω ψ0 :=
     ⟨E, φ, χ, p, c, vL, vR, hφ, heigen, hclose, hdegree,
       hpE, hχ, hproduct, hfix, hKχ, hc, rfl⟩
   let State (i : ℕ) := {x : EuclideanSpace ℂ (Fin L → Fin q) //
@@ -116,9 +114,9 @@ theorem exists_aklv_physical_changing_target_sequence :
     · rw [(aklvSequenceRankBound_zero_succ q g s 0).1]
       exact hψrank
   have hstep (i : ℕ) (x : State i) :
-      ∃ y : State (i + 1), IsAKLVSequenceStep a s h e g Ω i x.val y.val := by
+      ∃ y : State (i + 1), IsAKLVSequenceStep a s Φ e g Ω i x.val y.val := by
     obtain ⟨y, hyunit, hyΩ, hyrank, hrelation⟩ :=
-      exists_aklv_dyadic_filtered_output (by omega) ha h hsupp h0 h1
+      exists_aklv_dyadic_filtered_output (by omega) ha Φ h0 h1
         mu g Ω hΩ hground hgap hg hexcited e hregional i x.val x.property.1 x.property.2.1
     have hrank : schmidtRank (WithLp.ofLp
         (ManyBody.cutVector (leftBlock L (a + s / 2)) y)) ≤
@@ -128,7 +126,7 @@ theorem exists_aklv_physical_changing_target_sequence :
     exact ⟨⟨y, hyunit, hyΩ, hrank⟩, hrelation⟩
   obtain ⟨run, hrun0, hrunStep⟩ := Nat.exists_dependent_sequence
     (fun i (x : State i) (y : State (i + 1)) ↦
-      IsAKLVSequenceStep a s h e g Ω i x.val y.val) initial hstep
+      IsAKLVSequenceStep a s Φ e g Ω i x.val y.val) initial hstep
   refine ⟨hq, hg1, hs, hlogD, e, E0, (fun i ↦ (run i).val),
     hregional, hEeq, hE0, hE6, (fun i ↦ (run i).property), ?_, ?_⟩
   · simpa only [hrun0] using hinitRelation

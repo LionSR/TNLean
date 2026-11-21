@@ -145,15 +145,16 @@ theorem groundSpaceES_invariant_rotatePhysical_iff_of_commute
           (commute_matrix_inv_of_isUnit hQ hComm) L hInv
   · exact groundSpaceES_invariant_rotatePhysical_of_commute A U Q hComm L
 
-/-- The cyclic extension of a local operator agrees with its matrix embedding in the
+/-- The cyclic extension of a local operator agrees with its matrix placed on the window of
+`R` consecutive sites starting at `i` (`ManyBody.placeAlong` along `ManyBody.ringWindow`), in the
 configuration basis.
 Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
 supplied explicitly where required. -/
-theorem periodicLocalInteractionES_eq_toEuclideanLin_embedLocalOperator
+theorem periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow
     {R N : ℕ} (hRN : R ≤ N) (i : Fin N)
     (K : Matrix (Cfg d R) (Cfg d R) ℂ) :
     periodicLocalInteractionES (Matrix.toEuclideanLin K) i = Matrix.toEuclideanLin
-      (MPOTensor.embedLocalOperator R N hRN i K) := by
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hRN i) K) := by
   apply LinearMap.ext
   intro v
   ext σ
@@ -165,14 +166,17 @@ theorem periodicLocalInteractionES_eq_toEuclideanLin_embedLocalOperator
     (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R))
       (Matrix.toEuclideanLin K).toContinuousLinearMap
       (cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i v))) σ =
-        (Matrix.toEuclideanLin (MPOTensor.embedLocalOperator R N hRN i K) v) σ
+        (Matrix.toEuclideanLin
+          (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hRN i) K) v) σ
   rw [cyclicActiveBlockConfigLinearIsometryEquiv_symm_apply_apply]
   change (Matrix.toEuclideanLin K (ContinuousLinearMap.rightFiber
     (cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i v)
       (cyclicActiveBlockConfigEquiv d R hRN i σ).2))
         (cyclicActiveBlockConfigEquiv d R hRN i σ).1 = _
   simp only [Matrix.toEuclideanLin, Matrix.toLpLin_apply, WithLp.ofLp_toLp]
-  rw [MPOTensor.embedLocalOperator_mulVec_apply]
+  rw [ManyBody.placeAlong_mulVec_apply_of _ _ _ σ (replaceWindow R hRN i σ)
+    (replaceWindow_ringWindow hRN i σ)
+    (fun τ _ hv ↦ replaceWindow_of_forall_ringWindow_ne hRN i σ τ hv)]
   have he : cyclicActiveBlockConfigEquiv d R hRN i =
       MPOTensor.windowComplementEquiv R N hRN i := by
     ext ω r
@@ -203,8 +207,8 @@ theorem periodicLocalInteractionES_commute_onSiteTensorPow
   obtain ⟨K, rfl⟩ := Matrix.toEuclideanLin.surjective h
   have hK : Commute K (onSiteTensorPow R U) :=
     Commute.of_map (Matrix.toLpLinAlgEquiv 2).injective hComm
-  rw [periodicLocalInteractionES_eq_toEuclideanLin_embedLocalOperator hRN i K]
-  exact (embedLocalOperator_commute_onSiteTensorPow U R hRN i K hK).map
+  rw [periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow hRN i K]
+  exact (placeAlong_ringWindow_commute_onSiteTensorPow U R hRN i K hK).map
     (Matrix.toLpLinAlgEquiv 2)
 
 /-- A periodic sum of symmetric local interactions commutes with the global on-site action.

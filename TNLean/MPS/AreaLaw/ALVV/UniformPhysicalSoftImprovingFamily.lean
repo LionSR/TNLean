@@ -118,10 +118,8 @@ private theorem exists_uniform_physical_soft_polynomial_family
     (hR : 3 * (32 * Real.exp (-(T1 - 156 - 2 * g) / 8) +
       (t / m) * (T1 / t) ^ m) ≤ tau * g / 1000000)
     (N a b : ℕ) (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ N)
-      (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-      (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval (N + 1) i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+      (Φ : ManyBody.BondInteraction (N + 1) q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
   (by
     exact (show Prop from
     let Msoft := 3 * t * (1 + Real.log (m : ℝ)) + 4 * (ell : ℝ) + 34
@@ -130,12 +128,12 @@ private theorem exists_uniform_physical_soft_polynomial_family
     let Sbulk : Finset (Fin 5) := {0, 2, 4}
       let cuts : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, N + 1]
       let A : Fin 5 → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ :=
-        fun j ↦ ∑ i ∈ Finset.univ.filter
-        (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ), h i
+        fun j ↦ Φ.partialHamiltonian (Finset.univ.filter
+        (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ))
       let crossings := Finset.univ.filter
         (fun i : Fin N ↦ i.val + 1 ∈
           ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-      let Y := ∑ i ∈ crossings, h i
+      let Y := Φ.partialHamiltonian crossings
       let Ksites := interval (N + 1) (a + 2 * ell) (b + 1)
       let eK := intervalShiftOrderIso
         (hab.trans (Nat.le_succ b))
@@ -148,8 +146,8 @@ private theorem exists_uniform_physical_soft_polynomial_family
           (Nat.le_mul_of_pos_left ell (by decide : 0 < 2)) b).trans hb))
       let beta := fun _ : Fin (N + 1) ↦ Fin q
       let midConfig := ManyBody.RegionConfig beta J
-      let extConfig := ManyBody.RegionConfig beta Jᶜ
-      let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let extConfig := ManyBody.ComplConfig beta J
+      let split := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let heatWeight := t * (2 : ℝ) ^ (m + 1)
       let clusterBase := 2 * (Real.exp (1 / 3 : ℝ) - 1)
       let order := max 1 ⌈(Real.log (max 1 ((N : ℝ) ^ 2)) -
@@ -162,8 +160,8 @@ private theorem exists_uniform_physical_soft_polynomial_family
           (C : Fin (m + 1) → Matrix (Fin bond) (Fin bond) ℂ),
           let Z := fun z : ℂ ↦ MPOTensor.traceChainOperator Acore
             (∑ j : Fin (m + 1), z ^ j.val • C j)
-          let Zphys := fun z : ℂ ↦ QuantumCircuit.embedOp
-            (Subtype.val : Ksites → Fin (N + 1)) (QuantumCircuit.embedOp eK (Z z))
+          let Zphys := fun z : ℂ ↦ ManyBody.place (X := fun _ ↦ Fin q) Ksites
+            (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding (Z z))
           ∃ (n : ℕ) (W : Fin n → Matrix (midConfig)
               (midConfig) ℂ),
             n ≤ D ∧
@@ -186,7 +184,7 @@ private theorem exists_uniform_physical_soft_polynomial_family
               ∃ hGhat : Ghat.IsHermitian,
                 ‖cfc (Real.softTruncation t m) (A 2 - (p 2 : ℂ) • 1) - Zphys (z : ℂ)‖ ≤ xi ∧
                 ‖G - Ghat‖ ≤ xi ∧ ‖Ghat‖ ≤ Msoft + xi ∧
-                let Hraw := ∑ i, h i
+                let Hraw := Φ.hamiltonian
                 let hRaw : Hraw.IsHermitian :=
                   (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
                 ∀ mu0 : ℝ, mu0 ∈ spectrum ℝ Hraw →
@@ -220,22 +218,22 @@ private theorem exists_uniform_physical_soft_polynomial_family
     (L := N + 1) (q := q) (ell := ell)
     (k1 := a + 1) (k2 := a + 2 * ell) (k3 := b + 1) (k4 := b + 2 * ell)
     (by omega) (by omega) (by omega) (by omega) (by omega)
-    (by omega) (by omega) h hs h0 h1
+    (by omega) (by omega) Φ h0 h1
   obtain ⟨hcross, e, x, E, hx, hxe, he, hE0, hEC, hfamily⟩ := hdata
-  have hlo : (e 2 : ℂ) • 1 ≤ ∑ i ∈ Finset.univ.filter
-      (fun i : Fin N ↦ a + 2 * ell ≤ i.val ∧ i.val + 1 < b + 1), h i := by
+  have hlo : (e 2 : ℂ) • 1 ≤ Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin N ↦ a + 2 * ell ≤ i.val ∧ i.val + 1 < b + 1)) := by
     exact Matrix.le_iff.mpr (he 2)
   obtain ⟨Acore, C, hZherm, hZerror⟩ := exists_uniform_native_soft_middle_mpo
     (N := N) (q := q) (l := a + 2 * ell) (r := b + 1) (m := m)
-    (by omega) (by omega) (by omega) (by omega) h hs h0 h1 (e 2) t xi hlo hscale hxi
+    (by omega) (by omega) (by omega) (by omega) Φ h0 h1 (e 2) t xi hlo hscale hxi
   let WL : Fin (2 * ell) → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ :=
-    fun r ↦ h ⟨a + r.val, by omega⟩
+    fun r ↦ Φ.term ⟨a + r.val, by omega⟩
   let WR : Fin (2 * ell) → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ :=
-    fun r ↦ h ⟨b + r.val, by omega⟩
+    fun r ↦ Φ.term ⟨b + r.val, by omega⟩
   have hWL (r : Fin (2 * ell)) : ManyBody.IsSupportedOn (WL r)
-      (interval (N + 1) (a + r.val) (a + r.val + 2)) := hs _
+      (interval (N + 1) (a + r.val) (a + r.val + 2)) := Φ.mem ⟨a + r.val, by omega⟩
   have hWR (r : Fin (2 * ell)) : ManyBody.IsSupportedOn (WR r)
-      (interval (N + 1) (b + r.val) (b + r.val + 2)) := hs _
+      (interval (N + 1) (b + r.val) (b + r.val + 2)) := Φ.mem ⟨b + r.val, by omega⟩
   obtain ⟨n, W, hn, hWbond, hWpoly⟩ :=
     exists_common_physical_polynomial_closing_family_fin
       (L := N + 1) (q := q) (ell := ell) (a := a) (b := b) (B := bond) (k := k)
@@ -296,7 +294,7 @@ private theorem exists_uniform_physical_soft_polynomial_family
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval (N + 1) (cuts j.castSucc) (cuts j.succ) : Finset (Fin (N + 1)))
     have hAmem : A j ∈ V :=
-      isSupportedOn_sum_internal_bonds (N + 1) q (cuts j.castSucc) (cuts j.succ) h hs
+      isSupportedOn_sum_internal_bonds (N + 1) q (cuts j.castSucc) (cuts j.succ) Φ
     exact add_mem (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
       (ManyBody.cfc_mem_supportedOperators _
         (sub_mem hAmem (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))))
@@ -312,7 +310,7 @@ private theorem exists_uniform_physical_soft_polynomial_family
   have hPR : ManyBody.IsSupportedOn (Fraw 4) (interval (N + 1) (b + 2 * ell) (N + 1)) :=
     hFsupport 4
   have hAlphabet : (∑ i, Sum.elim (Sum.elim WL WR) ![PL, Zphys (z : ℂ), Fraw 4] i) = Ghat :=
-    actual_three_bulk_replacement_sum (N + 1) a b ell hell hab (by simpa using hb) h
+    actual_three_bulk_replacement_sum (N + 1) a b ell hell hab (by simpa using hb) Φ.term
       Fraw (fun j ↦ (e j : ℂ) • 1) (Zphys (z : ℂ)) ((p 2 : ℂ) • 1)
   intro Q hQ
   obtain ⟨M, hMatrix, _hTensor⟩ := hWpoly (z : ℂ) PL (Fraw 4) hPL hPR Q hQ
@@ -426,10 +424,8 @@ theorem exists_uniform_physical_soft_improving_family
     (hR : 3 * (32 * Real.exp (-(T1 - 156 - 2 * g) / 8) +
       (t / m) * (T1 / t) ^ m) ≤ tau * g / 1000000)
     (N a b : ℕ) (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ N)
-      (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-      (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval (N + 1) i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+      (Φ : ManyBody.BondInteraction (N + 1) q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
   (by
     exact (show Prop from
     let Msoft := 3 * t * (1 + Real.log (m : ℝ)) + 4 * (ell : ℝ) + 34
@@ -440,12 +436,12 @@ theorem exists_uniform_physical_soft_improving_family
     let Sbulk : Finset (Fin 5) := {0, 2, 4}
       let cuts : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, N + 1]
       let A : Fin 5 → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ :=
-        fun j ↦ ∑ i ∈ Finset.univ.filter
-        (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ), h i
+        fun j ↦ Φ.partialHamiltonian (Finset.univ.filter
+        (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ))
       let crossings := Finset.univ.filter
         (fun i : Fin N ↦ i.val + 1 ∈
           ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-      let Y := ∑ i ∈ crossings, h i
+      let Y := Φ.partialHamiltonian crossings
       let Ksites := interval (N + 1) (a + 2 * ell) (b + 1)
       let eK := intervalShiftOrderIso
         (hab.trans (Nat.le_succ b))
@@ -458,11 +454,11 @@ theorem exists_uniform_physical_soft_improving_family
           (Nat.le_mul_of_pos_left ell (by decide : 0 < 2)) b).trans hb))
       let beta := fun _ : Fin (N + 1) ↦ Fin q
       let midConfig := ManyBody.RegionConfig beta J
-      let extConfig := ManyBody.RegionConfig beta Jᶜ
+      let extConfig := ManyBody.ComplConfig beta J
       let HM := EuclideanSpace ℂ midConfig
       let HE := EuclideanSpace ℂ extConfig
       let HT := HM ⊗[ℂ] HE
-      let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let split := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
       let Phi := ((EuclideanSpace.basisFun (extConfig) ℂ).tensorProduct
         (EuclideanSpace.basisFun (midConfig) ℂ)).repr
@@ -482,8 +478,8 @@ theorem exists_uniform_physical_soft_improving_family
           (C : Fin (m + 1) → Matrix (Fin bond) (Fin bond) ℂ),
           let Z := fun z : ℂ ↦ MPOTensor.traceChainOperator Acore
             (∑ j : Fin (m + 1), z ^ j.val • C j)
-          let Zphys := fun z : ℂ ↦ QuantumCircuit.embedOp
-            (Subtype.val : Ksites → Fin (N + 1)) (QuantumCircuit.embedOp eK (Z z))
+          let Zphys := fun z : ℂ ↦ ManyBody.place (X := fun _ ↦ Fin q) Ksites
+            (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding (Z z))
           ∃ (n : ℕ) (W : Fin n → Matrix (midConfig)
               (midConfig) ℂ),
             let Fops : Fin n → HM →L[ℂ]
@@ -510,7 +506,7 @@ theorem exists_uniform_physical_soft_improving_family
               ∃ hGhat : Ghat.IsHermitian,
                 ‖cfc (Real.softTruncation t m) (A 2 - (p 2 : ℂ) • 1) - Zphys (z : ℂ)‖ ≤ xi ∧
                 ‖G - Ghat‖ ≤ xi ∧ ‖Ghat‖ ≤ Msoft + xi ∧
-                let Hraw := ∑ i, h i
+                let Hraw := Φ.hamiltonian
                 let hRaw : Hraw.IsHermitian :=
                   (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
                 ∀ mu0 : ℝ, mu0 ∈ spectrum ℝ Hraw →
@@ -544,7 +540,7 @@ theorem exists_uniform_physical_soft_improving_family
     beta midConfig extConfig HM HE HT split U Phi Tcoord Tm heatWeight clusterBase order bond
   obtain ⟨e, x, E, hx, hxe, he, hE0, hE4, Acore, C, n, W, hnD, hWbond, hcenter⟩ :=
     exists_uniform_physical_soft_polynomial_family q ell m k g tau t T0 T1
-      hq hell hm hk hg htau htau1 hscale hT0 htfloor hT1 hO hR N a b hab hb h hs h0 h1
+      hq hell hm hk hg htau htau1 hscale hT0 htfloor hT1 hO hR N a b hab hb Φ h0 h1
   refine ⟨e, x, E, hx, hxe, he, hE0, hE4, Acore, C, ?_⟩
   intro Z Zphys
   refine ⟨n, W, hnD, hWbond, ?_⟩

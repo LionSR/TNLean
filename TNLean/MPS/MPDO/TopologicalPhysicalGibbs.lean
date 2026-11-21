@@ -202,7 +202,7 @@ def physicalTopologicalGibbsHamiltonianSuccSucc
     (H : BNTFusionTensorClause M) (N : ℕ) :
     Matrix (Fin (N + 2) → Fin d) (Fin (N + 2) → Fin d) ℂ :=
   ∑ i : Fin (N + 2),
-    MPOTensor.embedLocalOperator 2 (N + 2) (by omega) i
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow (by omega : 2 ≤ N + 2) i)
       H.physicalTopologicalGibbsLocalTerm
 
 /-- Periodic translates of the physical two-site Gibbs term commute
@@ -217,14 +217,14 @@ theorem physicalTopologicalGibbsBondSuccSucc_commute
     (H : BNTFusionTensorClause M) (N : ℕ)
     (i j : Fin (N + 2)) :
     Commute
-      (MPOTensor.embedLocalOperator 2 (N + 2) (by omega) i
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow (by omega : 2 ≤ N + 2) i)
         H.physicalTopologicalGibbsLocalTerm)
-      (MPOTensor.embedLocalOperator 2 (N + 2) (by omega) j
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow (by omega : 2 ≤ N + 2) j)
         H.physicalTopologicalGibbsLocalTerm) := by
   rw [physicalTopologicalGibbsLocalTerm,
-    MPOTensor.embedLocalOperator_twoSite_first,
-    MPOTensor.embedLocalOperator_twoSite_first]
-  exact MPOTensor.embedLocalOperator_one_commute (by omega)
+    MPOTensor.placeAlong_ringWindow_twoSiteFirstOperator,
+    MPOTensor.placeAlong_ringWindow_twoSiteFirstOperator]
+  exact MPOTensor.commute_placeAlong_ringWindow_oneSiteOperator (by omega)
     H.physicalMultiplicityEnergy i j
 
 /-- The physical Gibbs factor is the tensor power of the retained
@@ -241,27 +241,17 @@ theorem exp_neg_physicalTopologicalGibbsHamiltonianSuccSucc
     NormedSpace.exp (-H.physicalTopologicalGibbsHamiltonianSuccSucc N) =
       Matrix.tensorPower (N + 2) H.physicalMultiplicityWeight := by
   have hneg (i : Fin (N + 2)) :
-      -MPOTensor.embedLocalOperator 1 (N + 2) (by omega) i
+      -ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow (by omega : 1 ≤ N + 2) i)
           (MPOTensor.oneSiteOperator H.physicalMultiplicityEnergy) =
-        MPOTensor.embedLocalOperator 1 (N + 2) (by omega) i
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow (by omega : 1 ≤ N + 2) i)
           (MPOTensor.oneSiteOperator (-H.physicalMultiplicityEnergy)) := by
-    calc
-      -MPOTensor.embedLocalOperator 1 (N + 2) (by omega) i
-          (MPOTensor.oneSiteOperator H.physicalMultiplicityEnergy) =
-          MPOTensor.embedLocalOperator 1 (N + 2) (by omega) i
-            (-MPOTensor.oneSiteOperator H.physicalMultiplicityEnergy) :=
-        (map_neg
-          (MPOTensor.embedLocalOperatorAlgHom (d := d) 1 (N + 2)
-            (by omega) i)
-          (MPOTensor.oneSiteOperator H.physicalMultiplicityEnergy)).symm
-      _ = MPOTensor.embedLocalOperator 1 (N + 2) (by omega) i
-          (MPOTensor.oneSiteOperator (-H.physicalMultiplicityEnergy)) := by
-        congr 1
+    rw [← ManyBody.placeAlong_neg]
+    congr 1
   unfold physicalTopologicalGibbsHamiltonianSuccSucc
   rw [← Finset.sum_neg_distrib]
   simp_rw [physicalTopologicalGibbsLocalTerm,
-    MPOTensor.embedLocalOperator_twoSite_first, hneg]
-  rw [MPOTensor.exp_sum_embedLocalOperator_one,
+    MPOTensor.placeAlong_ringWindow_twoSiteFirstOperator, hneg]
+  rw [MPOTensor.exp_sum_placeAlong_ringWindow_oneSiteOperator,
     H.exp_neg_physicalMultiplicityEnergy]
 
 /-- The `Fin d`-indexed terminal projector transported from retained
@@ -575,9 +565,10 @@ def HasPhysicalTopologicalGibbsDecomposition
     ∀ N : ℕ,
       (∀ i j : Fin (N + 2),
         Commute
-          (MPOTensor.embedLocalOperator 2 (N + 2) (by omega) i
-            H.physicalTopologicalGibbsLocalTerm)
-          (MPOTensor.embedLocalOperator 2 (N + 2) (by omega) j
+          (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.ringWindow (by omega : 2 ≤ N + 2) i) H.physicalTopologicalGibbsLocalTerm)
+          (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.ringWindow (by omega : 2 ≤ N + 2) j)
             H.physicalTopologicalGibbsLocalTerm)) ∧
       (∀ i : Fin d,
         0 ≤ H.physicalIndexedTerminalEigenvalue hM i ∧

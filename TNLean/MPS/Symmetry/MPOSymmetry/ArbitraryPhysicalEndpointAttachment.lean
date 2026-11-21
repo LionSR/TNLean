@@ -28,39 +28,49 @@ limiting parent interactions (lines 1690–1692).
 
 open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 
+open ManyBody
+
 namespace MPSTensor
 
 /-- An ordered affine interpolation with the same periodic kernel preserves
 a uniform norm gap of the smaller interaction. This comparison supplies the
 parent-Hamiltonian attachment used in arXiv:2203.12563, Section 5,
 lines 1328–1331. -/
-theorem interactionHamiltonian_affine_norm_gap_of_order {d N : ℕ}
+theorem hamiltonian_translationInvariant_affine_norm_gap_of_order {d N : ℕ}
     (A B : MPOTensor.ChainOperator d 2) (hA : A.PosSemidef) (hAB : A ≤ B)
     (hN : 2 ≤ N)
-    (hker : LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian A hN)) ≤
-      LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian B hN)))
+    (hker : LinearMap.ker
+        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) ≤
+      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN B).hamiltonian))
     {δ : ℝ} (hδ : 0 ≤ δ)
     (hgap : ∀ v ∈ (LinearMap.ker
-      (Matrix.toEuclideanLin (interactionHamiltonian A hN)))ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (interactionHamiltonian A hN) v‖)
+      (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian))ᗮ,
+      δ * ‖v‖ ≤
+        ‖Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian v‖)
     (t : ℝ) (ht : 0 ≤ t) :
     ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-      (interactionHamiltonian (A + t • (B - A)) hN)))ᗮ,
+      (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian))ᗮ,
       δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-        (interactionHamiltonian (A + t • (B - A)) hN) v‖ := by
+        (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian v‖ := by
   have hAC : A ≤ A + t • (B - A) := by
     rw [Matrix.le_iff]
     simpa using (Matrix.le_iff.mp hAB).smul ht
-  have hHC := interactionHamiltonian_mono hAC hN
-  have hHC' : Matrix.toEuclideanLin (interactionHamiltonian A hN) ≤
-      Matrix.toEuclideanLin (interactionHamiltonian (A + t • (B - A)) hN) := by
-    change (Matrix.toEuclideanLin (interactionHamiltonian (A + t • (B - A)) hN) -
-      Matrix.toEuclideanLin (interactionHamiltonian A hN)).IsPositive
+  have hHC : (Interaction.translationInvariant hN A).hamiltonian ≤
+      (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian := by
+    simp only [Interaction.hamiltonian, Interaction.translates_term]
+    exact Finset.sum_le_sum fun _ _ ↦ placeAlong_le_placeAlong _ hAC
+  have hHC' : Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian ≤
+      Matrix.toEuclideanLin
+        (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian := by
+    change (Matrix.toEuclideanLin
+        (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian -
+      Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian).IsPositive
     rw [← map_sub, Matrix.isPositive_toEuclideanLin_iff]
     exact Matrix.le_iff.mp hHC
-  exact (Matrix.isPositive_toEuclideanLin_iff.mpr
-    (interactionHamiltonian_posSemidef hA hN)).norm_gap_of_le_of_ker_eq hδ hHC'
-      (interactionHamiltonian_affine_ker_eq_of_order A B hA hAB hN hker t ht).symm hgap
+  have hHA : (Interaction.translationInvariant hN A).hamiltonian.PosSemidef :=
+    Interaction.posSemidef_hamiltonian fun _ ↦ posSemidef_placeAlong (X := fun _ ↦ Fin d) _ hA
+  exact (Matrix.isPositive_toEuclideanLin_iff.mpr hHA).norm_gap_of_le_of_ker_eq hδ hHC'
+      (hamiltonian_translationInvariant_affine_ker_eq_of_order A B hA hAB hN hker t ht).symm hgap
 
 namespace MPOSymmetry
 
@@ -196,32 +206,32 @@ theorem arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (right : Bool) (hN : 2 ≤ N) :
-    LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
-      (arbitraryPhysicalMixedInteraction A₀ A₁ (if right then 1 else 0)) hN)) =
-    LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
-      (arbitraryPhysicalEndpointParentInteraction A₀ A₁ right) hN)) := by
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+      (arbitraryPhysicalMixedInteraction A₀ A₁ (if right then 1 else 0))).hamiltonian) =
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+      (arbitraryPhysicalEndpointParentInteraction A₀ A₁ right)).hamiltonian) := by
   have hline := arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv
     A₀ A₁ h₀ h₁ (if right then (1 : unitInterval) else 0) hN
   cases right
-  · change LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
-      (arbitraryPhysicalMixedInteraction A₀ A₁ 0) hN)) =
-        LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
+  · change LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+      (arbitraryPhysicalMixedInteraction A₀ A₁ 0)).hamiltonian) =
+        LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
           (LinearMap.toMatrix' (parentInteraction
-            (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀) 2)) hN))
+            (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀) 2))).hamiltonian)
     have hEmbedded : Kraus.IsInjective
         (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀) := by
       exact isInjective_kraus_isometry A₀
         (commonPhysicalEmbeddingLeft d₁ D₁ A₀)
         (commonPhysicalEmbeddingLeft_isometry d₁ D₁ h₀) h₀
-    have hParent := interactionHamiltonian_parent_groundSpace_eq_span_mpv
+    have hParent := hamiltonian_translationInvariant_parent_groundSpace_eq_span_mpv
       (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀) hEmbedded hN
-    change LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
-      (arbitraryPhysicalMixedInteraction A₀ A₁ (0 : ℝ)) hN)) =
+    change LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+      (arbitraryPhysicalMixedInteraction A₀ A₁ (0 : ℝ))).hamiltonian) =
         Submodule.span ℂ {(WithLp.toLp 2
           (mpv (N := N) (arbitraryPhysicalMixedInterpolation A₀ A₁ (0 : ℝ))))} at hline
-    change LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
+    change LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
       (LinearMap.toMatrix' (parentInteraction
-        (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀) 2)) hN)) =
+        (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀) 2))).hamiltonian) =
         Submodule.span ℂ {(WithLp.toLp 2 (mpv (N := N)
           (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀)))} at hParent
     have hmpv := mpv_arbitraryPhysicalMixedInterpolation_zero (N := N)
@@ -230,25 +240,25 @@ theorem arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent
       (fun v : NSiteSpace (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁) N =>
         Submodule.span ℂ {WithLp.toLp 2 v}) hmpv
     exact hline.trans (hspan.trans hParent.symm)
-  · change LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
-      (arbitraryPhysicalMixedInteraction A₀ A₁ 1) hN)) =
-        LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
+  · change LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+      (arbitraryPhysicalMixedInteraction A₀ A₁ 1)).hamiltonian) =
+        LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
           (LinearMap.toMatrix' (parentInteraction
-            (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁) 2)) hN))
+            (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁) 2))).hamiltonian)
     have hEmbedded : Kraus.IsInjective
         (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁) := by
       exact isInjective_kraus_isometry A₁
         (commonPhysicalEmbeddingRight d₀ D₀ A₁)
         (commonPhysicalEmbeddingRight_isometry d₀ D₀ h₁) h₁
-    have hParent := interactionHamiltonian_parent_groundSpace_eq_span_mpv
+    have hParent := hamiltonian_translationInvariant_parent_groundSpace_eq_span_mpv
       (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁) hEmbedded hN
-    change LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
-      (arbitraryPhysicalMixedInteraction A₀ A₁ (1 : ℝ)) hN)) =
+    change LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+      (arbitraryPhysicalMixedInteraction A₀ A₁ (1 : ℝ))).hamiltonian) =
         Submodule.span ℂ {(WithLp.toLp 2
           (mpv (N := N) (arbitraryPhysicalMixedInterpolation A₀ A₁ (1 : ℝ))))} at hline
-    change LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
+    change LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
       (LinearMap.toMatrix' (parentInteraction
-        (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁) 2)) hN)) =
+        (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁) 2))).hamiltonian) =
         Submodule.span ℂ {(WithLp.toLp 2 (mpv (N := N)
           (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁)))} at hParent
     have hmpv := mpv_arbitraryPhysicalMixedInterpolation_one (N := N)
@@ -266,12 +276,12 @@ theorem arbitraryPhysicalEndpointAttachment_ker_eq_parent
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (right : Bool) {t : ℝ} (ht : 0 ≤ t) (hN : 2 ≤ N) :
-    LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
-      (arbitraryPhysicalEndpointAttachment A₀ A₁ right t) hN)) =
-    LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
-      (arbitraryPhysicalEndpointParentInteraction A₀ A₁ right) hN)) := by
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+      (arbitraryPhysicalEndpointAttachment A₀ A₁ right t)).hamiltonian) =
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+      (arbitraryPhysicalEndpointParentInteraction A₀ A₁ right)).hamiltonian) := by
   have hker := arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent A₀ A₁ h₀ h₁ right hN
-  exact (interactionHamiltonian_affine_ker_eq_of_order _ _
+  exact (hamiltonian_translationInvariant_affine_ker_eq_of_order _ _
     (arbitraryPhysicalMixedInteraction_posSemidef A₀ A₁ _)
     (arbitraryPhysicalMixedInteraction_endpoint_le_parent A₀ A₁ h₀ h₁ right)
     hN hker.le t ht).trans hker
@@ -284,8 +294,8 @@ theorem arbitraryPhysicalEndpointAttachment_groundSpace_eq_span_mpv
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (right : Bool) {t : ℝ} (ht : 0 ≤ t) (hN : 2 ≤ N) :
-    LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
-      (arbitraryPhysicalEndpointAttachment A₀ A₁ right t) hN)) =
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+      (arbitraryPhysicalEndpointAttachment A₀ A₁ right t)).hamiltonian) =
       Submodule.span ℂ {(WithLp.toLp 2
         (if right then mpv (N := N)
           (rotatePhysical (commonPhysicalEmbeddingRight d₀ D₀ A₁) A₁)
@@ -293,10 +303,10 @@ theorem arbitraryPhysicalEndpointAttachment_groundSpace_eq_span_mpv
           (rotatePhysical (commonPhysicalEmbeddingLeft d₁ D₁ A₀) A₀)))} := by
   rw [arbitraryPhysicalEndpointAttachment_ker_eq_parent A₀ A₁ h₀ h₁ right ht hN]
   cases right
-  · exact interactionHamiltonian_parent_groundSpace_eq_span_mpv _
+  · exact hamiltonian_translationInvariant_parent_groundSpace_eq_span_mpv _
       (isInjective_kraus_isometry _ _
         (commonPhysicalEmbeddingLeft_isometry d₁ D₁ h₀) h₀) hN
-  · exact interactionHamiltonian_parent_groundSpace_eq_span_mpv _
+  · exact hamiltonian_translationInvariant_parent_groundSpace_eq_span_mpv _
       (isInjective_kraus_isometry _ _
         (commonPhysicalEmbeddingRight_isometry d₀ D₀ h₁) h₁) hN
 
@@ -308,8 +318,8 @@ theorem arbitraryPhysicalEndpointAttachment_groundSpace_finrank
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (right : Bool) {t : ℝ} (ht : 0 ≤ t) (hN : 2 ≤ N) :
-    Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
-      (arbitraryPhysicalEndpointAttachment A₀ A₁ right t) hN))) = 1 := by
+    Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+      (arbitraryPhysicalEndpointAttachment A₀ A₁ right t)).hamiltonian)) = 1 := by
   have hker := (arbitraryPhysicalEndpointAttachment_ker_eq_parent
     A₀ A₁ h₀ h₁ right ht hN).trans
       (arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent A₀ A₁ h₀ h₁ right hN).symm
@@ -328,15 +338,15 @@ theorem exists_uniform_arbitraryPhysicalEndpointAttachment_gap
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁) :
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ right : Bool, ∀ t : unitInterval,
       ∀ N : ℕ, ∀ hN : 2 ≤ N,
-      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
-        (arbitraryPhysicalEndpointAttachment A₀ A₁ right t) hN)))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (interactionHamiltonian
-          (arbitraryPhysicalEndpointAttachment A₀ A₁ right t) hN) v‖ := by
+      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+        (arbitraryPhysicalEndpointAttachment A₀ A₁ right t)).hamiltonian))ᗮ,
+        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (Interaction.translationInvariant hN
+          (arbitraryPhysicalEndpointAttachment A₀ A₁ right t)).hamiltonian v‖ := by
   obtain ⟨δ, hδ, hδone, hgap⟩ :=
     exists_uniform_arbitraryPhysicalMixed_periodic_path_gap A₀ A₁ h₀ h₁
   refine ⟨δ, hδ, hδone, ?_⟩
   intro right t N hN
-  apply interactionHamiltonian_affine_norm_gap_of_order _ _
+  apply hamiltonian_translationInvariant_affine_norm_gap_of_order _ _
     (arbitraryPhysicalMixedInteraction_posSemidef A₀ A₁ _)
     (arbitraryPhysicalMixedInteraction_endpoint_le_parent A₀ A₁ h₀ h₁ right) hN
     (arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent A₀ A₁ h₀ h₁ right hN).le

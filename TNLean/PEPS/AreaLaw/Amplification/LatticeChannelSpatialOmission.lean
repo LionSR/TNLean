@@ -39,7 +39,8 @@ open scoped BigOperators Kronecker ENNReal NNReal Matrix.Norms.L2Operator Matrix
 
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace AdmissibleSupport graphBall planeDomainGraph PlaneInteraction)
+open ManyBody (IsGapped groundSpace AdmissibleSupport graphBall graphNeighborhood planeDomainGraph
+  PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -52,26 +53,6 @@ private theorem norm_toLp_prod_vector {n m : Type*} [Fintype n] [Fintype m]
     EuclideanSpace.norm_sq_eq, EuclideanSpace.norm_sq_eq, EuclideanSpace.norm_sq_eq,
     Fintype.sum_prod_type, Finset.sum_mul_sum]
   simp [mul_pow]
-
-/-- A site outside the graph neighborhood of radius `r` of `S` is at extended
-distance more than `r` from every site of `S`. -/
-private theorem lt_edist_of_notMem_graphNeighborhood {Λ : Finset (ℤ × ℤ)}
-    {S : Finset (Site Λ)} {r : ℕ} {y : Site Λ} (hy : y ∉ graphNeighborhood Λ r S) :
-    ∀ s ∈ S, ENNReal.ofReal (r : ℝ) < ((planeDomainGraph Λ).edist y s : ℝ≥0∞) := by
-  classical
-  intro s hs
-  rw [ENNReal.ofReal_natCast]
-  by_contra hle
-  have hle' : (planeDomainGraph Λ).edist y s ≤ r := by
-    rw [not_lt] at hle
-    exact_mod_cast hle
-  obtain ⟨w, hw⟩ := SimpleGraph.exists_walk_of_edist_ne_top
-    (ne_top_of_le_ne_top (ENat.natCast_ne_top r) hle')
-  apply hy
-  simp only [graphNeighborhood, Finset.mem_filter, Finset.mem_univ, true_and]
-  refine ⟨s, hs, w.reverse, ?_⟩
-  rw [SimpleGraph.Walk.length_reverse]
-  exact_mod_cast hw.le.trans hle'
 
 /-- **Expected channel omission on a lattice domain, with explicit constants**
 (`eq:amplification-channel-omission`, `09-amplification.tex`, lines 203–215). The bound of
@@ -174,7 +155,7 @@ theorem domainConstraintWord_omission
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
-          let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
+          let P := fun i : κ => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r
           let D := fun u : List κ =>
             ((u.reverse.map fun i => CFC.sqrt (1 - k i)).prod ⊗ₖ (1 : Matrix Aux Aux ℂ)) *ᵥ
               (B *ᵥ fun x => WithLp.ofLp Ω x.1 * ξ x.2)
@@ -190,7 +171,10 @@ theorem domainConstraintWord_omission
   classical
   obtain ⟨hint, hle⟩ := domain_integrable_and_integral_channelWordOmissionDefect_le hC hμ hc
     hα hα₁ Λ κ a k hk₀ hk₁ hfiber htail P Aux S B hB (r : ℝ) (Nat.cast_nonneg r)
-    (fun i hi => lt_edist_of_notMem_graphNeighborhood hi) t
+    (fun i hi s hs => by
+      rw [ENNReal.ofReal_natCast, SimpleGraph.edist_comm]
+      exact_mod_cast ManyBody.lt_edist_of_notMem_graphNeighborhood
+        (G := planeDomainGraph Λ) (S := S) (l := r) hi hs) t
   have hunit : ‖WithLp.toLp 2 (fun x : Configuration Λ q × Aux =>
       WithLp.ofLp Ω x.1 * ξ x.2)‖ = 1 := by
     rw [norm_toLp_prod_vector, hξ, mul_one]
@@ -238,7 +222,7 @@ theorem exists_domainConstraintWord_omission
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
             ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
           ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
-            let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
+            let P := fun i : κ => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r
             let D := fun u : List κ =>
               ((u.reverse.map fun i => CFC.sqrt (1 - k i)).prod ⊗ₖ (1 : Matrix Aux Aux ℂ)) *ᵥ
                 (B *ᵥ fun x => WithLp.ofLp Ω x.1 * ξ x.2)
@@ -310,7 +294,7 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
-          let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
+          let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r
           let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
             (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
           let D := fun u : List (AdmissibleSupport Λ R) =>
@@ -369,7 +353,7 @@ theorem latticeConstraintWord_omission_of_locality {p : ℕ} (hp : 1 ≤ p) (R :
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
-          let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
+          let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r
           let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
             (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
           let D := fun u : List (AdmissibleSupport Λ R) =>
@@ -404,7 +388,7 @@ theorem latticeConstraintWord_omission_explicit {p : ℕ} (hp : 1 ≤ p) (R : �
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
-          let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
+          let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r
           let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
             (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
           let D := fun u : List (AdmissibleSupport Λ R) =>
@@ -448,7 +432,8 @@ theorem exists_latticeConstraintWord_omission {p : ℕ} (hp : 1 ≤ p) (R : ℕ)
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
             ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
           ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
-            let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
+            let P := fun i : AdmissibleSupport Λ R =>
+              a i ∈ graphNeighborhood (planeDomainGraph Λ) S r
             let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
               (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
             let D := fun u : List (AdmissibleSupport Λ R) =>

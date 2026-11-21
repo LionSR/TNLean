@@ -80,7 +80,8 @@ theorem exists_isPreparedInDepth_le_log_of_mpvState_ne_zero {D : ℕ} (A : MPSTe
     (hA : Kraus.IsNormal A) :
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N → mpvState A N ≠ 0 →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
-        IsPreparedInDepth T (fun s => ψ s) ∧ 1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
+        IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
+          1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   classical
   -- Degenerate dimensions: the periodic state vanishes.
   rcases Nat.eq_zero_or_pos D with rfl | hD
@@ -249,7 +250,8 @@ theorem exists_isPreparedInDepth_le_log {D : ℕ} [NeZero D] (A : MPSTensor d D)
     (hA : Kraus.IsNormal A) :
     ∃ (c : ℝ) (N₀ : ℕ), ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
-        IsPreparedInDepth T (fun s => ψ s) ∧ 1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
+        IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
+          1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   obtain ⟨c, hc⟩ := exists_isPreparedInDepth_le_log_of_mpvState_ne_zero A hA
   obtain ⟨N₀, hN₀⟩ := exists_mpvState_ne_zero_of_le A hA
   exact ⟨c, max N₀ 2, fun ε hε hε1 N _ hN =>

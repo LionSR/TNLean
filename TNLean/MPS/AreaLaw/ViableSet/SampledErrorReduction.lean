@@ -39,23 +39,21 @@ namespace TNLean.MPS.AreaLaw
 rank bounds for deterministic error reduction. LVV13, Claim `c:errorreduction`,
 lines 580–592, with the documented witness-normalization correction. -/
 theorem exists_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i (i + 2))) (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ)
     {δ : ℝ} (hδ : 0 < δ) (hδ1 : δ ≤ 1) :
     let η := δ / 8
     let m := ⌈((L - E₀) / Δ) * Real.log (1 / η)⌉₊
     let ℓ := sampledProjectorWordCount q L E₀ η m
     let D := q ^ (2 * sampledProjectorLetterBound L ℓ m)
     ∃ I : Fin ℓ → Fin m → Fin L,
-      ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 4 ∧
+      ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 4 ∧
       ∀ i : ℕ, i ≤ L → ∃ (N : ℕ) (A : Fin N → LeftBlockMatrix L q i)
         (B : Fin N → RightBlockMatrix L q i),
         N ≤ ℓ * D ∧ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
-          (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B j ∧
+          (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B j ∧
         (∀ j k, 0 < k → k < i → operatorSchmidtRank
           (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
             ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D) ∧
@@ -65,19 +63,19 @@ theorem exists_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 ≤ q)
   classical
   intro η m ℓ D
   obtain ⟨I, hpower, hsample, hcount, _⟩ :=
-    exists_sampledProjector h hs h0 h1 hΩ hgap hspan hΔ (div_pos hδ (by norm_num)) m (Nat.le_ceil _)
-  have hproj : ‖sampledProjector h E₀ I -
+    exists_sampledProjector Φ h0 h1 hΩ hgap hspan hΔ (div_pos hδ (by norm_num)) m (Nat.le_ceil _)
+  have hproj : ‖sampledProjector Φ E₀ I -
       vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 4 := by
     calc
-      _ ≤ ‖sampledProjector h E₀ I - powerProjector (∑ j, h j) L E₀ m‖ +
-          ‖powerProjector (∑ j, h j) L E₀ m -
+      _ ≤ ‖sampledProjector Φ E₀ I - powerProjector Φ.hamiltonian L E₀ m‖ +
+          ‖powerProjector Φ.hamiltonian L E₀ m -
             vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ :=
           norm_sub_le_norm_sub_add_norm_sub _ _ _
       _ < η + η := add_lt_add_of_lt_of_le hsample hpower
       _ = δ / 4 := by dsimp only [η]; ring
   refine ⟨I, hproj, fun i hi ↦ ?_⟩
-  obtain ⟨N, A, B, hN, hdec, hleft⟩ := exists_sampledProjector_cutDecomposition hi h E₀ I
-    (fun t k ↦ operatorSchmidtRank_cutOperator_bondComplementWord_le_all hq h hs (I t)
+  obtain ⟨N, A, B, hN, hdec, hleft⟩ := exists_sampledProjector_cutDecomposition hi Φ E₀ I
+    (fun t k ↦ operatorSchmidtRank_cutOperator_bondComplementWord_le_all hq Φ (I t)
       (hcount t) k)
   refine ⟨N, A, B, hN, hdec, hleft, fun s b S hS ↦ ?_⟩
   have hout := IsViableMPS.errorReduction_of_norm_sub_groundProjection_le

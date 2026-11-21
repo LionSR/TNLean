@@ -4,15 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DomainInteractionBudget
-import TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian
 import TNLean.MPS.AreaLaw.PartialSwap
 
 /-!
 # Regional swaps of doubled finite-domain Hamiltonians
 
-The doubled family is `ManyBody.Interaction.doubledFin`. It and the regionally swapped family
-retain the original domain supports.
-Their sums are the actual doubled and conjugated operators. The difference of
+The doubled family is `ManyBody.Interaction.doubledFin`; its sum `K` and the conjugate `F K Fᴴ`
+by the regional sheet swap `F` are the actual doubled and swapped operators. The difference of
 these operators is the sum of the two replica perturbations over crossing
 supports. Each perturbation is supported on its original support, is Hermitian,
 and has norm at most twice the interaction bound.
@@ -36,56 +34,6 @@ variable {Λ : Finset ℤ} {q R : ℕ} {J : ℝ}
 private theorem norm_bound_nonneg_of_support (h : ManyBody.DomainInteraction Λ q R)
     (hhJ : ∀ X, ‖h.term X‖ ≤ J) (X : DomainSupport Λ R) : 0 ≤ J :=
   h.norm_bound_nonneg hhJ (Classical.choose X.2.1)
-
-/-- Conjugate each original doubled domain interaction by the actual regional swap.
-Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
-noncomputable def _root_.ManyBody.DomainInteraction.swappedDoubled
-    (h : ManyBody.DomainInteraction Λ q R) (D : Finset (Fin Λ.card)) :
-    ManyBody.DomainInteraction Λ (q * q) R where
-  term X :=
-    let e := sitePairConfigurationEquiv (Fin Λ.card) q q
-    let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
-    F * h.doubledFin.term X * Fᴴ
-  mem X := by
-    exact (TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
-        D X.1 (h.mem X))
-
-/-- The swapped doubled domain terms of Hermitian terms are Hermitian.
-Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
-theorem _root_.ManyBody.DomainInteraction.isHermitian_swappedDoubled_term
-    (h : ManyBody.DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
-    (D : Finset (Fin Λ.card)) (X : DomainSupport Λ R) :
-    ((h.swappedDoubled D).term X).IsHermitian :=
-  Matrix.isHermitian_mul_mul_conjTranspose _
-    ((ManyBody.Interaction.isHermitian_doubled_term (hh X)).reindex _)
-
-/-- Each swapped doubled domain term has norm at most `2 * J`.
-Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
-theorem _root_.ManyBody.DomainInteraction.norm_swappedDoubled_term_le
-    (h : ManyBody.DomainInteraction Λ q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-    (D : Finset (Fin Λ.card)) (X : DomainSupport Λ R) :
-    ‖(h.swappedDoubled D).term X‖ ≤ 2 * J := by
-  have hterm : (h.extend DomainSupport.toChainSupport
-      ManyBody.DomainSupport.toChainSupport_injective (fun Y ↦ Y.1)
-        fun _ ↦ subset_rfl).term X.toChainSupport = h.term X :=
-    ManyBody.DomainSupport.toChainSupport_injective.extend_apply _ _ _
-  simpa only [ManyBody.DomainInteraction.swappedDoubled, ManyBody.ChainInteraction.swappedDoubled,
-    ManyBody.Interaction.doubledFin_term, hterm] using
-    (ManyBody.ChainInteraction.norm_swappedDoubled_term_le
-      (h.extend DomainSupport.toChainSupport ManyBody.DomainSupport.toChainSupport_injective
-        (fun Y ↦ Y.1) fun _ ↦ subset_rfl)
-      (ManyBody.Interaction.norm_extend_term_le (norm_bound_nonneg_of_support h hhJ X) hhJ)
-      D X.toChainSupport)
-
-/-- The sum of the original swapped interactions is the conjugated doubled operator.
-Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
-lemma _root_.ManyBody.DomainInteraction.swappedDoubled_hamiltonian
-    (h : DomainInteraction Λ q R) (D : Finset (Fin Λ.card)) :
-    let e := sitePairConfigurationEquiv (Fin Λ.card) q q
-    let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
-    (h.swappedDoubled D).hamiltonian = F * h.doubledFin.hamiltonian * Fᴴ := by
-  simp only [ManyBody.Interaction.hamiltonian, ManyBody.DomainInteraction.swappedDoubled,
-    Matrix.sum_mul, Matrix.mul_sum]
 
 /-- Each original domain interaction gives two supported Hermitian perturbations
 of norm at most `2J`. Source: TNLean note, part2a_mps_information.tex, 355–363. -/
@@ -125,7 +73,7 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing
       (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
         else h.term X ⊗ₖ (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ))
     let C := ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
-    ((h.swappedDoubled D).hamiltonian - h.doubledFin.hamiltonian =
+    (F * h.doubledFin.hamiltonian * Fᴴ - h.doubledFin.hamiltonian =
       ∑ X ∈ C, ∑ b : Bool, (F * T X b * Fᴴ - T X b)) ∧
       C.card * 2 ≤ chainCrossConst R * Λ.card := by
   classical
@@ -152,7 +100,6 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing
         (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
           ((h.mem X)) hside)
   refine ⟨?_, card_domain_crossingTerms_mul_two_le Λ R D⟩
-  rw [h.swappedDoubled_hamiltonian D]
   change δ h.doubledFin.hamiltonian = ∑ X ∈ C, ∑ b : Bool, δ (T X b)
   change δ (∑ X, h.doubledFin.term X) = _
   rw [map_sum]

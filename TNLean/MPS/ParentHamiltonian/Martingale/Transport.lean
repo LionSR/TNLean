@@ -174,7 +174,7 @@ local terms. -/
 theorem parentHamiltonianES_eq_sum_localTermES (A : MPSTensor d D) (L N : ℕ) :
     parentHamiltonianES A L N = ∑ i : Fin N, localTermES A L i := by
   ext v σ
-  simp [parentHamiltonianES, parentHamiltonian, localTermES]
+  simp [parentHamiltonianES, parentHamiltonian_eq_sum_localTerm, localTermES]
 
 attribute [local instance] Classical.propDecidable
 
@@ -353,16 +353,16 @@ private theorem cyclicRestrictES_adjoint_apply {N : ℕ} (hN : 0 < N) {L : ℕ}
       parentInteractionES A L ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v)
         (extractWindow L i σ) := by
   have hcfg :
-      WithLp.toLp 2 ((LinearMap.pi fun τ =>
-        (LinearMap.proj (replaceWindow L hLN i σ τ) : NSiteSpace d N →ₗ[ℂ] ℂ)) v.ofLp) =
+      WithLp.toLp 2 (fun τ => v.ofLp (replaceWindow L hLN i σ τ)) =
       (cyclicRestrictES (d := d) (Fin.pos i) L i σ) v := by
     ext τ
     simp [cyclicRestrictES, cyclicCfg_eq_replaceWindow, hLN]
-  have hself : cyclicCfg (d := d) (Fin.pos i) L i (extractWindow L i σ) σ = σ := by
-    rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos i) L hLN]
-    exact replaceWindow_extractWindow L hLN i σ
-  simp [localTermES, localTerm, hLN, parentInteraction, parentInteractionES]
-  simp [hcfg, hself]
+  have hloc : localTermES A L i v σ =
+      parentInteraction A L (fun τ => v.ofLp (replaceWindow L hLN i σ τ))
+        (extractWindow L i σ) :=
+    localTerm_apply_of_le A L N hLN i v.ofLp σ
+  rw [hloc]
+  simp [parentInteraction, parentInteractionES, hcfg]
 
 private theorem cyclicRestrictES_localTermES {N : ℕ} (A : MPSTensor d D) {L : ℕ}
     (hLN : L ≤ N) (i : Fin N) (τ : Cfg d N) (v : EuclideanSpace ℂ (Cfg d N)) :

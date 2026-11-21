@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.RegisterLayout
 import TNLean.MPS.MPU.TreeAmplificationGateBounds
-import TNLean.Circuit.SelectedZeroRegisterReflectionPool
+import QICLean.Circuit.Protocol.ZeroRegister.GateCount
 
 /-!
 # Uniform resource bounds for the exact interval construction
@@ -80,7 +80,8 @@ theorem joiningPacketGateCount_le_uniform {d D : ℕ} (hd : 2 ≤ d)
         (2 * globalSiteCount d D N) := Nat.mul_le_mul_right _ hlocal
     _ = _ := by dsimp [uniformPacketGateCount]; ring
 
-/-- A bound including the one-gate phase for an empty selected register.
+/-- A common bound for the zero-register reflections in the shared pool, routed on the open
+chain of all sites, with one spare gate.
 Source: the initialized-register reflections in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 def uniformReflectionGateCount (d D N : ℕ) : ℕ :=
@@ -90,22 +91,18 @@ def uniformReflectionGateCount (d D N : ℕ) : ℕ :=
 /-- Testing any subset of the allocated logical auxiliaries has the common
 reflection budget. Source: the shared-workspace reflections in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem selectedZeroRegisterReflectionPoolGateCount_le_uniform
+theorem zeroRegisterReflectionPoolGateCount_le_uniform
     (d D N a : ℕ) (ha : a ≤ auxiliarySiteCount d D N) :
-    selectedZeroRegisterReflectionPoolGateCount d (logicalSiteCount d D N) a
-        (auxiliarySiteCount d D N) ≤ uniformReflectionGateCount d D N := by
-  rw [selectedZeroRegisterReflectionPoolGateCount]
-  split_ifs
-  · simp [uniformReflectionGateCount]
-  · have hmono : zeroRegisterReflectionGateCount d a ≤
-        zeroRegisterReflectionGateCount d (auxiliarySiteCount d D N) := by
-      rw [zeroRegisterReflectionGateCount_eq, zeroRegisterReflectionGateCount_eq]
-      exact Nat.add_le_add
-        (Nat.mul_le_mul_left _ (Nat.pow_le_pow_left ha 2))
-        (Nat.mul_le_mul_left 4 ha)
-    exact (Nat.mul_le_mul_right _ hmono).trans (by
-      simp only [uniformReflectionGateCount, globalSiteCount]
-      omega)
+    2 * (logicalSiteCount d D N + auxiliarySiteCount d D N) *
+        zeroRegisterReflectionGateCount d a ≤ uniformReflectionGateCount d D N := by
+  have hmono : zeroRegisterReflectionGateCount d a ≤
+      zeroRegisterReflectionGateCount d (auxiliarySiteCount d D N) :=
+    Nat.mul_le_mul_left _ ha
+  calc
+    _ ≤ zeroRegisterReflectionGateCount d (auxiliarySiteCount d D N) *
+        (2 * globalSiteCount d D N) :=
+      (Nat.mul_comm _ _).trans_le (Nat.mul_le_mul_right _ hmono)
+    _ ≤ _ := Nat.le_add_left _ 1
 
 /-- The common reflection budget grows cubically in the physical length
 times the bond-register width. Source: the conservative routed reflection
@@ -125,14 +122,20 @@ theorem uniformReflectionGateCount_le_cubic (d D N : ℕ) (hN : 0 < N) :
         (Nat.mul_le_mul_left 2 (Nat.sub_le N 1))
   have hn : globalSiteCount d D N ≤ 5 * H := by
     simpa only [H, Nat.mul_assoc] using globalSiteCount_le d D N
+  have hx : (d ^ 3) ^ 4 ≤ c := by
+    dsimp only [c]
+    rcases Nat.eq_zero_or_pos (d ^ 3) with h | h
+    · rw [h]
+      norm_num
+    · have := Nat.pow_le_pow_right h (by norm_num : 4 ≤ 6)
+      omega
   have href : zeroRegisterReflectionGateCount d (auxiliarySiteCount d D N) ≤
       32 * c * H ^ 2 + 8 * H := by
-    rw [zeroRegisterReflectionGateCount_eq]
-    calc
-      _ ≤ 8 * c * (2 * H) ^ 2 + 4 * (2 * H) :=
-        Nat.add_le_add (Nat.mul_le_mul_left _ (Nat.pow_le_pow_left hA 2))
-          (Nat.mul_le_mul_left 4 hA)
-      _ = _ := by ring
+    have h₁ : zeroRegisterReflectionGateCount d (auxiliarySiteCount d D N) ≤
+        12 * c * (2 * H) :=
+      Nat.mul_le_mul (Nat.mul_le_mul_left 12 hx) hA
+    have h₂ : c * H ≤ c * H ^ 2 := Nat.mul_le_mul_left c (Nat.le_self_pow (by norm_num) H)
+    nlinarith [h₁, h₂]
   change 1 + zeroRegisterReflectionGateCount d (auxiliarySiteCount d D N) *
       (2 * globalSiteCount d D N) ≤ (400 * c + 1) * H ^ 3
   calc

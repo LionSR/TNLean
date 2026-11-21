@@ -28,7 +28,7 @@ open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix.Norms.L2Operator
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -92,10 +92,10 @@ theorem exists_suppliedTarget_statusMarginal_moment_bounds
   refine ⟨by positivity, by positivity, ?_⟩
   intro s hist band
   exact ⟨fun hs Q hQ u hu ↦
-    S.log_surprisalMoment_truncated_reducedState_le_common h hh hhJ Ω hgraph hanchor hΔ hΩ
+    S.log_surprisalMoment_truncated_regionState_le_common h hh hhJ Ω hgraph hanchor hΔ hΩ
       L hΩt hgapt hspant Q ((hcut s hist band).1 hs Q hQ) hu,
     fun hs Q hQ u hu ↦
-      S.log_surprisalMoment_truncated_reducedState_le_common h hh hhJ Ω hgraph hanchor hΔ hΩ
+      S.log_surprisalMoment_truncated_regionState_le_common h hh hhJ Ω hgraph hanchor hΔ hΩ
         L hΩt hgapt hspant Q ((hcut s hist band).2 hs Q hQ) hu⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

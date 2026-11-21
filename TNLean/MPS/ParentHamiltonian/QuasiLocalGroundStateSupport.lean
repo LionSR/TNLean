@@ -119,7 +119,7 @@ theorem quasiLocalState_groundSpaceProjection_eq_one_of_isParentInteraction_word
     exact ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_wordTupleSpanTop
       μ A hμ hS hSpan hR hN
   · exact apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero
-      φ.toLinearMap h (by omega) hzero a N
+      φ.toLinearMap h hzero a N
 
 /-- Local zero energy gives eventual joint MPS support on the symmetric
 intervals with endpoints tending to both infinities. No invariance is assumed.
@@ -170,6 +170,6 @@ theorem eventually_quasiLocalState_symmetric_groundSpaceProjection_eq_one_of_eve
       h hR (by omega)]
     exact hkerN
   · exact apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero
-      φ.toLinearMap h hR hzero (-(n : ℤ)) (2 * n + 1)
+      φ.toLinearMap h hzero (-(n : ℤ)) (2 * n + 1)
 
 end MPSTensor

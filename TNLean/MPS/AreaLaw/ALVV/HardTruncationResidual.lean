@@ -38,31 +38,29 @@ namespace TNLean.MPS.AreaLaw.ALVV
 
 open Classical in
 private theorem three_region_data {L q l r : ℕ} (hlr : l ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 4 → ℕ := ![0, l, r, L]
     let R := fun j : Fin 3 ↦ interval L (k j.castSucc) (k j.succ)
     let I := fun j : Fin 3 ↦ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-    let A := aklvRegionalHamiltonians l r h
+    let A := aklvRegionalHamiltonians l r Φ
     let J := Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
+    let Y := ∑ i ∈ J, Φ.term i
     Monotone k ∧ (Pairwise fun i j ↦ Disjoint (R i) (R j)) ∧
       (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (A j) (R j)) ∧
       (∀ j, (A j).PosSemidef ∧ A j ≤ ((I j).card : ℝ) • 1) ∧
       Y.PosSemidef ∧ Y ≤ (J.card : ℝ) • 1 ∧ J.card ≤ 2 ∧
-      (∑ i, h i) = (∑ j, A j) + Y := by
+      Φ.hamiltonian = (∑ j, A j) + Y := by
   intro k R I A J Y
   let k5 : Fin 6 → ℕ := ![0, l, l, r, r, L]
   let R5 := fun j : Fin 5 ↦ interval L (k5 j.castSucc) (k5 j.succ)
   let I5 := fun j : Fin 5 ↦ Finset.univ.filter
     (fun i : Fin (L - 1) ↦ k5 j.castSucc ≤ i.val ∧ i.val + 1 < k5 j.succ)
-  let A5 := fun j : Fin 5 ↦ ∑ i ∈ I5 j, h i
+  let A5 := fun j : Fin 5 ↦ ∑ i ∈ I5 j, Φ.term i
   let f := fun j : Fin 3 ↦ (⟨2 * j.val, by omega⟩ : Fin 5)
   obtain ⟨_hk5, hR5, hs5, hA5, hY, hYC, _hJ4, hsum5⟩ :=
-    five_region_original_bond_data L q l l r r le_rfl hlr le_rfl hrL h hs h0 h1
+    five_region_original_bond_data L q l l r r le_rfl hlr le_rfl hrL Φ h0 h1
   have hR (j : Fin 3) : R j = R5 (f j) := by fin_cases j <;> rfl
   have hI (j : Fin 3) : I j = I5 (f j) := by fin_cases j <;> rfl
   have hA (j : Fin 3) : A j = A5 (f j) := by fin_cases j <;> rfl
@@ -144,21 +142,19 @@ revision recorded in `docs/audits/2026-10-29_single_region_hard_truncation.md`.
 Empty regions and coincident or endpoint cuts are included. -/
 theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
-      star x ⬝ᵥ x = 1 ∧ (∀ j, aklvRegionalHamiltonians l r h j *ᵥ x = (e j : ℂ) • x) ∧
-      (∀ j, (aklvRegionalHamiltonians l r h j - (e j : ℂ) • 1).PosSemidef) ∧ (∀ j, 0 ≤ e j) ∧
-      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      star x ⬝ᵥ x = 1 ∧ (∀ j, aklvRegionalHamiltonians l r Φ j *ᵥ x = (e j : ℂ) • x) ∧
+      (∀ j, (aklvRegionalHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef) ∧ (∀ j, 0 ≤ e j) ∧
+      let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E : ℂ) • z ∧
       (H - (E : ℂ) • 1).PosSemidef ∧ 0 ≤ E ∧ E ≤ 2 ∧
       ∀ η t : ℝ, 0 < η → η + 7 ≤ t →
-        let F := energyTruncation (aklvRegionalHamiltonians l r h 1) (e 1 + t) +
-          aklvRegionalHamiltonians l r h 0 + aklvRegionalHamiltonians l r h 2 +
+        let F := energyTruncation (aklvRegionalHamiltonians l r Φ 1) (e 1 + t) +
+          aklvRegionalHamiltonians l r Φ 0 + aklvRegionalHamiltonians l r Φ 2 +
           (∑ i ∈ Finset.univ.filter
-            (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), h i) -
+            (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), Φ.term i) -
           (((∑ j, e j) : ℝ) : ℂ) • 1
         ∃ (hH : H.IsHermitian) (hF : F.IsHermitian)
           (E' : ℝ) (z' : (Fin L → Fin q) → ℂ),
@@ -176,10 +172,10 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
               ((isSymmetric_toEuclideanLin_iff.mpr hF).eigenvectorBasis
                 finrank_euclideanSpace) hF.eigenvalues₀ (E + η))‖ ≤
               32 * Real.exp (-(t - η) / 8) := by
-  set A := aklvRegionalHamiltonians l r h with hAdef
+  set A := aklvRegionalHamiltonians l r Φ with hAdef
   set J := Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))
     with hJdef
-  set Y := ∑ i ∈ J, h i with hYdef
+  set Y := ∑ i ∈ J, Φ.term i with hYdef
   let k : Fin 4 → ℕ := ![0, l, r, L]
   let R := fun j : Fin 3 ↦ interval L (k j.castSucc) (k j.succ)
   let I := fun j : Fin 3 ↦ Finset.univ.filter
@@ -189,8 +185,8 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
         (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (A j) (R j)) ∧
         (∀ j, (A j).PosSemidef ∧ A j ≤ ((I j).card : ℝ) • 1) ∧
         Y.PosSemidef ∧ Y ≤ (J.card : ℝ) • 1 ∧ J.card ≤ 2 ∧
-        (∑ i, h i) = (∑ j, A j) + Y :=
-    three_region_data hlr hrL h hs h0 h1
+        Φ.hamiltonian = (∑ j, A j) + Y :=
+    three_region_data hlr hrL Φ h0 h1
   have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hx, hxe, he, hclip⟩ :=
     ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q) R A
@@ -199,7 +195,7 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
   let B (t : ℝ) (T : Finset (Fin 3)) :=
     (∑ j, ((if j ∈ T then energyTruncation (A j) (e j + t) else A j) -
       (e j : ℂ) • 1)) + Y
-  let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+  let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
   have hcenter (t : ℝ) : B t ∅ = H := by
     simp only [B, H, Finset.notMem_empty, ite_false, Finset.sum_sub_distrib, hsum]
     push_cast
@@ -263,7 +259,7 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
           (hM.eigenvectorBasis v) = (hM.eigenvalues v : ℂ) • hM.eigenvectorBasis v := by
         rw [hBM]
         exact hM.toEuclideanCLM_eigenvectorBasis v
-      have hsingle := norm_consecutive_regional_truncation_low_le k hk h hs h0 h1
+      have hsingle := norm_consecutive_regional_truncation_low_le k hk Φ h0 h1
         e T 1 J (η + 7) (E + η) (1 / 8) t (by norm_num) (by norm_num)
         (by linarith) ht hM.eigenvectorBasis hM.eigenvalues heorder hEigen hgap
       have hsingle' := hsingle.trans (residual_coefficient_le hJreal hE2)

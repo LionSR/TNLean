@@ -31,6 +31,7 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 noncomputable section
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -64,7 +65,8 @@ theorem primaryPitchIndices_error_sum_le {C_P : ℝ} (hC_P : 0 < C_P)
         ((primaryPitchIndices o k (fineScaleIndex k) (pitchScaleIndex k)
           (boundaryEndpoints Λ A) C (a k) (b k)).card : ℝ) *
           (((n k : ℝ) ^ 100)⁻¹) ≤
-      primaryErrorSumConstant C_P * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+      primaryErrorSumConstant C_P * (2 * (C : ℝ) + 1) ^ 2 *
+        (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
   unfold primaryErrorSumConstant
   intro n
@@ -95,14 +97,14 @@ theorem primaryPitchIndices_error_sum_le {C_P : ℝ} (hC_P : 0 < C_P)
   have hc (k : ℕ) :
       ((primaryPitchIndices o k (fineScaleIndex k) (pitchScaleIndex k)
         (boundaryEndpoints Λ A) C (a k) (b k)).card : ℝ) ≤
-        32 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+        32 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card := by
     exact_mod_cast card_primaryPitchIndices_boundary_le o k (fineScaleIndex k)
       (pitchScaleIndex k) Λ A C (a k) (b k) (le_pitchScaleIndex k)
   refine (Finset.sum_le_sum (fun k _ ↦
     mul_le_mul (hc k) (hw k) (by positivity) (by positivity))).trans ?_
   rw [← Finset.mul_sum, ← Finset.mul_sum]
   calc
-    _ ≤ 32 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card *
+    _ ≤ 32 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card *
         ((C_P ^ 100)⁻¹ * B) :=
       mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left
         (by simpa only [Real.rpow_zero, one_mul] using hB F) (by positivity))
@@ -128,7 +130,7 @@ theorem exists_uniform_primaryPitchIndices_error_sum_bound {C_P : ℝ}
             ((primaryPitchIndices o k (fineScaleIndex k) (pitchScaleIndex k)
               (boundaryEndpoints Λ A) C (a k) (b k)).card : ℝ) *
               (((n k : ℝ) ^ 100)⁻¹) ≤
-          M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
+          M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card :=
   ⟨_, primaryErrorSumConstant_pos hC_P, primaryPitchIndices_error_sum_le hC_P⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

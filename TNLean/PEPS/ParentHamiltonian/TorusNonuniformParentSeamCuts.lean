@@ -59,7 +59,8 @@ theorem exists_nonuniform_seamBoundaries_of_mem_torusPlaquetteParentKernel
     (hH : ∀ v, IsRegionParentInteraction (graphPhysicalPaddingTensor N A)
       (torusPlaquetteRegion v) (H v))
     {Ψ : (X → Fin (physicalPaddingDimension (Phys := Phys))) → ℂ}
-    (hΨ : Ψ ∈ (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion H)).ker) :
+    (hΨ : Ψ ∈ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin _)
+      torusPlaquetteRegion H).hamiltonian).ker) :
     ∃ ψ : ((v : X) → Phys v) → ℂ,
       dependentPhysicalProductFamilyMap (physicalPaddingMatrix (Phys := Phys)) ψ = Ψ ∧
       ∀ (c : ZMod width) (r : ZMod height),

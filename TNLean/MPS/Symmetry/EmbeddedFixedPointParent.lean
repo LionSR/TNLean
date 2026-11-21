@@ -70,7 +70,7 @@ noncomputable def embeddedSptFixedPointLeftParentComparisonPath
       (Matrix.coordinateInclusion_isometry (Fin.castAddEmb D₁))
       (weightedMatrixUnitInterpolation_zero_intertwine D₀ D₁))
     (fun _ hN x hx =>
-      interactionHamiltonian_parent_mulVec_eq_zero_of_normalizedBondInteraction_of_mpv_eq
+      hamiltonian_translationInvariant_parent_mulVec_eq_zero_of_normalizedBondInteraction_of_mpv_eq
         hD₀ hD₁ 0 hN _ (mpv_embeddedSptFixedPointLeft (by omega)) x hx)
     (fun g => ⟨sptGauge ρ₀ g, twistedTensor_embeddedSptFixedPointLeft ρ₀ ρ₁ g⟩)
 /-- The second embedded canonical parent is joined to the second bond
@@ -98,7 +98,7 @@ noncomputable def embeddedSptFixedPointRightParentComparisonPath
       (Matrix.coordinateInclusion_isometry (Fin.natAddEmb D₀))
       (weightedMatrixUnitInterpolation_one_intertwine D₀ D₁))
     (fun _ hN x hx =>
-      interactionHamiltonian_parent_mulVec_eq_zero_of_normalizedBondInteraction_of_mpv_eq
+      hamiltonian_translationInvariant_parent_mulVec_eq_zero_of_normalizedBondInteraction_of_mpv_eq
         hD₀ hD₁ 1 hN _ (mpv_embeddedSptFixedPointRight (by omega)) x hx)
     (fun g => ⟨sptGauge ρ₁ g, twistedTensor_embeddedSptFixedPointRight ρ₀ ρ₁ g⟩)
 

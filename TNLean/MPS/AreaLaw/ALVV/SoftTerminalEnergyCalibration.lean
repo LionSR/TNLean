@@ -37,32 +37,30 @@ theorem exists_calibrated_native_soft_terminal_compressed_energy_estimate
     {L q l u v r ell : ℕ} {ι : Type*} [Fintype ι]
     (hq : 0 < q) (hlu : l ≤ u) (huv : u ≤ v) (hvr : v ≤ r) (hrL : r ≤ L)
     (hleft : u - l ≤ 2 * ell) (hright : r - v ≤ 2 * ell)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (g : ℝ) (hg : 0 < g) (t Tcut : ℝ) (m D : ℕ)
     (hm : 2 ≤ m) (hD : 2 ≤ D)
     (ht : 156 + 2 * g ≤ t) (hTcut : 156 + 2 * g ≤ Tcut)
     (Delta : ℝ) (hDelta0 : 0 ≤ Delta) :
     let _ : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
-    let H := ∑ i, h i
+    let H := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues (minEigenvalue hH)
     let J := interval L l r
     let beta := fun _ : Fin L ↦ Fin q
-    let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let split := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
-    let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
       (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
     let coords := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+      (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
       (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
     let P := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), h i
+      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), Φ.term i
     let M := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v), h i
+      (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v), Φ.term i
     let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
     let y0 := ((ManyBody.cutEquiv (fun _ ↦ Fin q) J) sigma0).2
     let native := fun x : J → Fin q ↦
@@ -125,7 +123,7 @@ theorem exists_calibrated_native_soft_terminal_compressed_energy_estimate
     (htauM.trans (by norm_num)) htail
   obtain ⟨eP, eM, xP, xM, hxP, hPxP, hPmin, hxM, hMxM, hMmin, hterminal⟩ :=
     exists_native_soft_terminal_compressed_energy_estimate (ι := ι)
-      hq hlu huv hvr hrL hleft hright h hs h0 h1
+      hq hlu huv hvr hrL hleft hright Φ h0 h1
   refine ⟨eP, eM, xP, xM, hxP, hPxP, hPmin, hxM, hMxM, hMmin, ?_⟩
   intro p hpl hpu
   exact hterminal p t Tcut (3 * tau / 200) Delta m hpl hpu

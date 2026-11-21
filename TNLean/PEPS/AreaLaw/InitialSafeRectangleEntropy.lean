@@ -38,7 +38,7 @@ The constant and exponent depend only on `q, R, J, Δ` and precede every integer
 parameter, domain, Hamiltonian, ground vector, cut and rectangle.
 Source: `02-initial.tex`, lines 590–604 (`prop:initial-box`), at
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
-theorem exists_regionalEntropy_safe_rect_le_rpow
+theorem exists_regionEntropy_safe_rect_le_rpow
     (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ C e₀ : ℝ, 0 ≤ C ∧ 0 < e₀ ∧ e₀ < 1 ∧
       ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
@@ -56,7 +56,7 @@ theorem exists_regionalEntropy_safe_rect_le_rpow
       (boxEntropy_nonneg (q := q) (R := R) (J := J) (Δ := Δ) (D₀ := 2 * R + 11) 1).trans
         (hbox (2 * R + 11) (Nat.lt_succ_self (2 * R + 10)) 1 le_rfl)
   refine ⟨C₀, e₀, hC₀, he₀, he₀', fun D₀ hD₀ Λ h hh hhJ E₀ Ω hΩ hgap hspan A Q hsafe ↦ ?_⟩
-  exact (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe le_rfl).trans
+  exact (regionEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe le_rfl).trans
     (hbox D₀ hD₀ Q.size Q.one_le_size)
 
 end TNLean.PEPS.AreaLaw

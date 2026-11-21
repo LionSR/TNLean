@@ -74,7 +74,7 @@ noncomputable def blockSplit (L q i : ℕ) :
 theorem blockSplit_apply (i : ℕ) (ψ : EuclideanSpace ℂ (Fin L → Fin q))
     (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)))
     (y : (v : {v : Fin L // v ∉ leftBlock L i}) → Fin q) :
-    blockSplit L q i ψ (x, y) = cutMatrix ψ i x y :=
+    blockSplit L q i ψ (x, y) = ManyBody.cutMatrix (leftBlock L i) ψ x y :=
   rfl
 
 /-- Joining the block coordinates restores a vector on the chain. -/
@@ -156,18 +156,20 @@ theorem rank_cutEnvVector_blockSplit {i j : ℕ} (hj : j + 1 ≤ i)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
     Matrix.schmidtRank (WithLp.ofLp
       (Entropy.cutEnvVector (n := fun _ : {v : Fin L // v ∈ leftBlock L i} ↦ q)
-        (blockCut L i j) (blockSplit L q i ψ))) = (cutMatrix ψ (j + 1)).rank := by
+        (blockCut L i j) (blockSplit L q i ψ))) =
+      (ManyBody.cutMatrix (leftBlock L (j + 1)) ψ).rank := by
   classical
   rw [Matrix.schmidtRank]
   have h : schmidtCoeffMatrix (WithLp.ofLp
       (Entropy.cutEnvVector (n := fun _ : {v : Fin L // v ∈ leftBlock L i} ↦ q)
         (blockCut L i j) (blockSplit L q i ψ))) =
-      (cutMatrix ψ (j + 1)).submatrix ((blockCutSubtypeEquiv hj).arrowCongr (Equiv.refl (Fin q)))
+      (ManyBody.cutMatrix (leftBlock L (j + 1)) ψ).submatrix
+        ((blockCutSubtypeEquiv hj).arrowCongr (Equiv.refl (Fin q)))
         ((Equiv.sumArrowEquivProdArrow _ _ (Fin q)).symm.trans
           ((blockRestSubtypeEquiv hj).arrowCongr (Equiv.refl (Fin q)))) := by
     ext x ⟨y, b⟩
     simp only [schmidtCoeffMatrix_apply, Entropy.cutEnvVector_apply, blockSplit_apply,
-      cutMatrix_apply, submatrix_apply]
+      ManyBody.cutMatrix_apply, submatrix_apply]
     refine congrArg (fun c : Fin L → Fin q ↦ ψ c) (funext fun v ↦ ?_)
     by_cases hv : v.val < j + 1
     · have hvi : v ∈ leftBlock L i := mem_leftBlock.2 (lt_of_lt_of_le hv hj)
@@ -219,7 +221,7 @@ theorem isCloseTo_leftSupportSubmodule_chainTrimSubspace {b : ℕ} {ξ δ : ℝ}
     {S : Submodule ℂ (LeftBlockVector L q i)} (u : OrthonormalBasis (Fin s) ℂ S)
     {T : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q))}
     (hT : Submodule.IsCloseTo δ (leftSupportSubmodule (S : Set (LeftBlockVector L q i))) T)
-    (hb : ∀ t ∈ T, ∀ j, 0 < j → j < i → (cutMatrix t j).rank ≤ b) :
+    (hb : ∀ t ∈ T, ∀ j, 0 < j → j < i → (ManyBody.cutMatrix (leftBlock L j) t).rank ≤ b) :
     Submodule.IsCloseTo (δ + 2 * (ξ * √(((i - 1 : ℕ) : ℝ) * b)))
       (leftSupportSubmodule
         (chainTrimSubspace ξ (fun k ↦ (u k : LeftBlockVector L q i)) :

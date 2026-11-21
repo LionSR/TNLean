@@ -28,6 +28,7 @@ assembly remain separate. See
 -/
 
 open ManyBody (interval)
+open ManyBody (cutMatrix)
 
 open Matrix Polynomial
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
@@ -38,7 +39,7 @@ namespace TNLean.MPS.AreaLaw
 image of the actual initialized vector, with both windows at the same cut.
 AKLV, arXiv:1301.1162v1, lines 1503--1517. -/
 def IsAKLVAccuracyFilteredOutput {L q : ℕ} (k s0 : ℕ)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (g rho : ℝ) (Ω y : EuclideanSpace ℂ (Fin L → Fin q)) : Prop :=
   let s := aklvAccuracyWidth s0 g rho
   let t := aklvAccuracyThreshold g rho
@@ -47,13 +48,13 @@ def IsAKLVAccuracyFilteredOutput {L q : ℕ} (k s0 : ℕ)
       (E : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q)) (p : Polynomial ℝ) (c : ℂ),
     a + s / 2 = k ∧ a + s + 1 ≤ L ∧ a0 + s0 / 2 = k ∧
     (∃ z : (Fin L → Fin q) → ℂ, star z ⬝ᵥ z = 1 ∧
-      (∀ j, aklvNormalizationHamiltonians a0 s0 h j *ᵥ z = (e0 j : ℂ) • z) ∧
-      ∀ j, (aklvNormalizationHamiltonians a0 s0 h j - (e0 j : ℂ) • 1).PosSemidef) ∧
+      (∀ j, aklvNormalizationHamiltonians a0 s0 Φ j *ᵥ z = (e0 j : ℂ) • z) ∧
+      ∀ j, (aklvNormalizationHamiltonians a0 s0 Φ j - (e0 j : ℂ) • 1).PosSemidef) ∧
     (∃ z : (Fin L → Fin q) → ℂ, star z ⬝ᵥ z = 1 ∧
-      (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ z = (e j : ℂ) • z) ∧
-      ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
-    IsAKLVSequenceInitialization a0 s0 h e0 g Ω x ∧ ‖x‖ = 1 ∧ ‖x - Ω‖ ^ 2 ≤ 1 / 16 ∧
-    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t Finset.univ
+      (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ z = (e j : ℂ) • z) ∧
+      ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
+    IsAKLVSequenceInitialization a0 s0 Φ e0 g Ω x ∧ ‖x‖ = 1 ∧ ‖x - Ω‖ ^ 2 ≤ 1 / 16 ∧
+    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
     B.PosSemidef ∧ ‖B‖ ≤ 2 * t + s ∧ 0 ≤ E ∧ ‖φ‖ = 1 ∧
     toEuclideanLin B φ = (E : ℂ) • φ ∧
     (B - (E : ℂ) • 1 - ((9 * g / 10 : ℝ) : ℂ) •
@@ -69,25 +70,23 @@ the favorable initialization. No area-law approximation is supplied. -/
 theorem exists_aklv_physical_accuracy_window :
     ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧
       ∀ (L q k : ℕ) (_hq : 2 ≤ q) (_hk : k ≤ L)
-        (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+        (Φ : ManyBody.BondInteraction L q)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h j) (interval L j.val (j.val + 2))) →
-      (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
-      (∑ j, h j) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
-      ((∑ j, h j) - (mu : ℂ) • 1 - (g : ℂ) •
+      (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
+      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
+      (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-      0 < g → mu + g ∈ spectrum ℝ (∑ j, h j) →
+      0 < g → mu + g ∈ spectrum ℝ Φ.hamiltonian →
       ∀ rho : ℝ, 0 < rho → rho ≤ 1 →
       let u : ℝ := 1 + Real.log (q : ℝ) + Real.log (1 / g)
       let s0 : ℕ := ⌈A * u ^ 2 / g⌉₊
       ∃ y : EuclideanSpace ℂ (Fin L → Fin q), ‖y‖ = 1 ∧ ‖y - Ω‖ ^ 2 ≤ rho ∧
-        (cutMatrix y k).rank ≤ aklvAccuracyRankBound q s0 g rho ∧
-        (y = Ω ∨ IsAKLVAccuracyFilteredOutput k s0 h g rho Ω y) := by
+        (cutMatrix (leftBlock L k) y).rank ≤ aklvAccuracyRankBound q s0 g rho ∧
+        (y = Ω ∨ IsAKLVAccuracyFilteredOutput k s0 Φ g rho Ω y) := by
   classical
   obtain ⟨A, hA, hA21, hsequence⟩ := exists_aklv_physical_changing_target_sequence
   refine ⟨A, hA, hA21, ?_⟩
-  intro L q k hq hk h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1 u s0
+  intro L q k hq hk Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1 u s0
   let s := aklvAccuracyWidth s0 g rho
   let m := aklvAccuracyIncrement g rho
   rcases aklv_centered_window_or_exact_rank (by omega) hk Ω (s := s) with hfit | hexact
@@ -96,7 +95,7 @@ theorem exists_aklv_physical_accuracy_window :
     let a0 := a + m
     obtain ⟨_hq, hg1, hs0, _hlogD0, e0, _E0, seq,
         hregional, _hEeq, _hE0, _hE6, hinvariant, hinitial, _hedges⟩ :=
-      hsequence L q a0 h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited hsmall.2
+      hsequence L q a0 Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited hsmall.2
     let x := seq 0
     have hcenter0 : a0 + s0 / 2 = k := hsmall.1.trans hcenter
     have hx : ‖x‖ = 1 := (hinvariant 0).1
@@ -112,11 +111,11 @@ theorem exists_aklv_physical_accuracy_window :
       dsimp only [s, aklvAccuracyWidth]
       omega
     obtain ⟨_hq', _hg1', e, _E0', hregional', _hEeq', _hE0', _hE6', hfilter⟩ :=
-      exists_aklv_variable_window_filtered_output hs ha h hsupp h0 h1
+      exists_aklv_variable_window_filtered_output hs ha Φ h0 h1
         mu g Ω hΩ hground hgap hg hexcited x hx hxΩ
     let t := aklvAccuracyThreshold g rho
     let ell := aklvAccuracyDegree g rho s
-    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t Finset.univ
+    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
     obtain ⟨hBpos, hBnorm, E, φ, hE, hφ, heigen, hprojector, hclose,
         _hxφ, _hoverlap, hpoly⟩ :=
       hfilter t (aklvAccuracyThreshold_bounds hg hg1 hrho hrho1).1
@@ -126,12 +125,12 @@ theorem exists_aklv_physical_accuracy_window :
     let y := c • (‖toEuclideanLin K x‖⁻¹ : ℂ) • toEuclideanLin K x
     refine ⟨y, hyunit, hyΩ.trans (aklvAccuracy_refinement_error_le hg hg1 hrho hrho1 s),
       ?_, Or.inr ?_⟩
-    · have hxrank' : (cutMatrix x (a + s / 2)).rank ≤
+    · have hxrank' : (cutMatrix (leftBlock L (a + s / 2)) x).rank ≤
           (q * (s0 ^ 2 + 1)) ^ (32 * (2 * s0 + 1)) := by
         rw [hcenter]
         exact hxrank
-      change (cutMatrix y (a + s / 2)).rank ≤
-        _ * (cutMatrix x (a + s / 2)).rank at hyrank
+      change (cutMatrix (leftBlock L (a + s / 2)) y).rank ≤
+        _ * (cutMatrix (leftBlock L (a + s / 2)) x).rank at hyrank
       have hr := hyrank.trans (Nat.mul_le_mul_left _ hxrank')
       rw [hcenter] at hr
       apply hr.trans

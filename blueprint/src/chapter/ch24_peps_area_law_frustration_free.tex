@@ -45,7 +45,7 @@ localization errors of the amplification stage.
 
 \begin{lemma}[Range projections of positive local terms]
     \label{thm:frustration_free_area_law_range_projection}
-    \lean{Matrix.PosSemidef.le_smul_supportProj, TNLean.PEPS.AreaLaw.FrustrationFree.supportProj_mem_supportedOperators}
+    \lean{Matrix.PosSemidef.le_smul_supportProj, ManyBody.supportProj_mem_supportedOperators}
     \leanok
     For a positive semidefinite matrix $A$, let $\Pi_A$ be the orthogonal
     projection onto the range of $A$, so that $\Pi_Av=0$ whenever $Av=0$. If
@@ -72,8 +72,9 @@ localization errors of the amplification stage.
     $H=\sum_Xh_X$ have one term for each support $X$ of induced graph
     diameter at most $R$. For $J,\Delta$ and a vector $\Omega$, the
     Hamiltonian is frustration-free and gapped when $0\le h_X\le J$ for every
-    $X$, $\|\Omega\|=1$, and $H$ has ground space $\mathbb C\Omega$ at energy
-    $0$ with every other eigenvalue at least $\Delta$. For $\Delta>0$ these are
+    $X$, $\|\Omega\|=1$, the common kernel $\bigcap_X\ker h_X$ of the terms
+    is $\mathbb C\Omega$, and $H$ is gapped at energy $0$ with every other
+    eigenvalue at least $\Delta$. For $\Delta>0$ these are
     the conditions
     \[
         0\le h_X\le J,\qquad h_X\Omega=0,\qquad\|\Omega\|=1,\qquad
@@ -84,11 +85,12 @@ localization errors of the amplification stage.
 
 \begin{lemma}[The model is gapped]
     \label{thm:frustration_free_area_law_model_gapped}
-    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isHermitian, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.hamiltonian_mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isFrustrationFree, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.gap, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.iff_model, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_term_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.smul_sub_le_sum_supportProj}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isHermitian, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.mem_zeroSpace, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.hamiltonian_mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isFrustrationFree, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.gap, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.iff_model, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_term_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.smul_sub_le_sum_supportProj}
     \leanok
     \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_range_projection}
     In the model of Definition~\ref{def:frustration_free_area_law_model}, every
-    term is Hermitian, $H\Omega=0$ and $h_X\Omega=0$ for every $X$, so $\Omega$
+    term is Hermitian, the ground space of $H$ at energy $0$ is
+    $\mathbb C\Omega$, $H\Omega=0$ and $h_X\Omega=0$ for every $X$, so $\Omega$
     is a common ground vector of the terms at energy zero. If $\Delta>0$, then
     $H\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, and the model is equivalent
     to the four conditions displayed in
@@ -98,9 +100,9 @@ localization errors of the amplification stage.
 \end{lemma}
 
 \begin{proof}\leanok
-    Since $\Omega$ spans the ground space at energy zero, $H\Omega=0$. Each
-    $h_X$ is positive and $\sum_X\langle\Omega,h_X\Omega\rangle=0$, so every
-    $h_X\Omega=0$. For $\Delta>0$, an operator with ground space
+    For positive terms the common kernel of the $h_X$ is the kernel of $H$,
+    which is the ground space at energy zero; so it is $\mathbb C\Omega$, and
+    $h_X\Omega=0$ for every $X$ and $H\Omega=0$. For $\Delta>0$, an operator with ground space
     $\mathbb C\Omega$ at energy zero and the rest of its spectrum at least
     $\Delta$ satisfies $H\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, and
     conversely. A positive operator below $J$ has norm at most $J$. Finally
@@ -187,7 +189,7 @@ localization errors of the amplification stage.
 
 \begin{lemma}[The light cone of $t$ sweeps]
     \label{thm:frustration_free_area_law_sweep_light_cone}
-    \lean{TNLean.Lattice.mem_graphNeighborhood, TNLean.Lattice.subset_graphNeighborhood, TNLean.Lattice.graphNeighborhood_mono, TNLean.Lattice.graphNeighborhood_graphNeighborhood_subset, TNLean.Lattice.subset_graphNeighborhood_of_isAdmissibleSupport, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_colorLayer_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_flatten_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_sweepWord_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_sweepWord_pow_subset}
+    \lean{ManyBody.mem_graphNeighborhood_iff_exists_walk, ManyBody.subset_graphNeighborhood, ManyBody.graphNeighborhood_mono_left, ManyBody.graphNeighborhood_graphNeighborhood_subset, TNLean.Lattice.subset_graphNeighborhood_of_isAdmissibleSupport, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_colorLayer_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_flatten_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_sweepWord_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_sweepWord_pow_subset}
     \leanok
     \uses{thm:frustration_free_area_law_colour_layers,thm:frustration_free_area_law_light_cone}
     For the word of $t$ sweeps of the supports, colour by colour, the final
@@ -304,7 +306,7 @@ localization errors of the amplification stage.
 
 \begin{lemma}[The area law at one Hamiltonian and one cut]
     \label{thm:frustration_free_area_law_assembly_at}
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_of_collar_amplification_twoFamilies_at}
+    \lean{TNLean.PEPS.AreaLaw.regionEntropy_le_of_collar_amplification_twoFamilies_at}
     \leanok
     \uses{thm:area_law_conditional_assembly_constants}
     Fix a finite induced domain $\Lambda$, an admissible Hamiltonian with

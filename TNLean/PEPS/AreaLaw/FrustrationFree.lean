@@ -13,7 +13,5 @@ import TNLean.PEPS.AreaLaw.FrustrationFree.AreaLaw
 import TNLean.PEPS.AreaLaw.FrustrationFree.LightCone
 import TNLean.PEPS.AreaLaw.FrustrationFree.Model
 import TNLean.PEPS.AreaLaw.FrustrationFree.PlanarSweep
-import TNLean.PEPS.AreaLaw.FrustrationFree.RangeProjection
 import TNLean.PEPS.AreaLaw.FrustrationFree.Sweep
-import TNLean.PEPS.AreaLaw.FrustrationFree.SweepContraction
 import TNLean.PEPS.AreaLaw.FrustrationFree.ViaGeneralTheorem

@@ -21,7 +21,7 @@ the factorization of expectations in product vectors and of traces against produ
 for operators on disjoint sets.
 
 No layer, gate or circuit occurs here: the circuits built from supported operators are in
-`TNLean.Circuit.LocalCircuit`.
+QICLean's `QICLean.Circuit.Model.Unitary`.
 
 ## Main definitions
 

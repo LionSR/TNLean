@@ -34,6 +34,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
+open ManyBody (planeDomainGraph edgeBoundary)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The uniform area-law target, with its constant chosen before all physical
@@ -47,6 +49,7 @@ def UniformAreaLaw : Prop :=
         ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-            ∀ A : Finset (Site Λ), ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary Λ A).card
+            ∀ A : Finset (Site Λ),
+              ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card
 
 end TNLean.PEPS.AreaLaw

@@ -151,7 +151,7 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
   rw [AreaLaw.nearestNeighbor_crossing_budget (Λ := Λ) q J
     (fun j : Fin m ↦ D j) a] at henergy
   have hboundary : (∑ j : Fin m, a j ^ 2 *
-      (Lattice.edgeBoundary Λ (D j)).card) ≤ 36 * κ ^ 2 := by
+      (ManyBody.edgeBoundary (ManyBody.planeDomainGraph Λ) (D j)).card) ≤ 36 * κ ^ 2 := by
     simpa only [D, a, m, mul_comm] using
       AreaLaw.Geometry.sum_card_edgeBoundary_nestedPatch_mul_sq_le Λ center (u := u) hu κ
   calc

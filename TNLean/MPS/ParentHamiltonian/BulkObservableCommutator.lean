@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.BulkObservableAlgebra
 import TNLean.MPS.ParentHamiltonian.IsometricDeformationSymmetry
 import Mathlib.Algebra.BigOperators.Intervals
+import QICLean.ManyBody.Sites.Lattice.Ring
 
 /-!
 # Localization of open-chain commutators
@@ -13,8 +14,10 @@ import Mathlib.Algebra.BigOperators.Intervals
 For an interaction of range \(R\), only terms whose supports meet the support
 of a local observable contribute to its commutator with the open Hamiltonian.
 If the observable has at least \(R-1\) free sites on either side, the commutator
-is the inclusion of a fixed operator on the enlarged interval. The same holds
+is the placement of a fixed operator on the enlarged interval. The same holds
 for the operator \(X^\dagger[H,X]\) used in the finite-volume energy estimate.
+Operators are placed on windows of consecutive sites that do not wrap around
+the chain (`ManyBody.placeAlong` along `ManyBody.chainWindow`).
 
 These are finite-dimensional locality identities underlying the passage to
 infinite-volume local expectations in Nachtergaele, arXiv:cond-mat/9410110,
@@ -23,6 +26,7 @@ The interaction is arbitrary; positivity and self-adjointness are not needed.
 -/
 
 open scoped Matrix BigOperators
+open ManyBody (placeAlong chainWindow)
 
 namespace MPSTensor
 variable {d R k N a : ℕ}
@@ -39,24 +43,14 @@ private theorem sum_range_eq_sum_range_shift {α : Type*} [AddCommMonoid α]
   · simpa only [Nat.Ico_zero_eq_range, zero_add, Nat.add_comm] using
       (Finset.sum_Ico_add f 0 m a).symm
 
-/-- Operators on disjoint nonwrapping intervals commute. -/
-theorem chainWindowOperator_commute_of_disjoint {L K N a b : ℕ}
-    (ha : a < N) (haL : a + L ≤ N) (hb : b < N) (hbK : b + K ≤ N)
-    (hSep : a + L ≤ b ∨ b + K ≤ a)
-    (X : Matrix (Cfg d L) (Cfg d L) ℂ) (Y : Matrix (Cfg d K) (Cfg d K) ℂ) :
-    Commute (chainWindowOperator N a X) (chainWindowOperator N b Y) := by
-  refine ManyBody.commute_of_mem_supportedOperators_of_disjoint
-    (chainWindowOperator_mem_supportedOperators ha haL X)
-    (chainWindowOperator_mem_supportedOperators hb hbK Y) ?_
-  refine Finset.disjoint_left.2 (fun i hi hj => ?_)
-  simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi hj
-  omega
-
-/-- The matrix of the open-chain interaction sum. Source: Nachtergaele,
-arXiv:cond-mat/9410110, equation (3.12). -/
+/-- The matrix of the open-chain interaction sum: the interaction placed on each
+of the \(N+1-R\) windows of \(R\) consecutive sites of the open chain. Every
+start in the summation range gives such a window; the conditional only records
+this. Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
 noncomputable def openInteractionMatrix (h : Matrix (Cfg d R) (Cfg d R) ℂ) (N : ℕ) :
     Matrix (Cfg d N) (Cfg d N) ℂ :=
-  ∑ i ∈ Finset.range (N + 1 - R), chainWindowOperator N i h
+  ∑ i ∈ Finset.range (N + 1 - R),
+    if hi : i + R ≤ N then placeAlong (X := fun _ ↦ Fin d) (chainWindow i hi) h else 0
 
 /-- The fixed local observable \(X^\dagger[H,X]\) on the interval obtained by
 adding \(R-1\) sites on either side of the support of \(X\). This definition
@@ -70,81 +64,111 @@ noncomputable def localCommutatorObservable
 
 /-- The commutator of an open-chain interaction sum with an interior observable
 is supported on the interval enlarged by \(R-1\) sites on either side. -/
-theorem openInteractionMatrix_commutator_chainWindowOperator (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R) (hk : 0 < k)
+theorem openInteractionMatrix_commutator_placeAlong_chainWindow
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
     (ha : a + ((R - 1 + k) + (R - 1)) ≤ N) :
-    openInteractionMatrix h N * chainWindowOperator N (a + (R - 1)) X -
-        chainWindowOperator N (a + (R - 1)) X * openInteractionMatrix h N =
-      chainWindowOperator N a
+    openInteractionMatrix h N *
+          placeAlong (X := fun _ ↦ Fin d) (chainWindow (a + (R - 1)) (by omega)) X -
+        placeAlong (X := fun _ ↦ Fin d) (chainWindow (a + (R - 1)) (by omega)) X *
+          openInteractionMatrix h N =
+      placeAlong (X := fun _ ↦ Fin d) (chainWindow a ha)
         (openInteractionMatrix h ((R - 1 + k) + (R - 1)) *
-            chainWindowOperator ((R - 1 + k) + (R - 1)) (R - 1) X -
-          chainWindowOperator ((R - 1 + k) + (R - 1)) (R - 1) X *
+            placeAlong (X := fun _ ↦ Fin d) (chainWindow (R - 1) (by omega)) X -
+          placeAlong (X := fun _ ↦ Fin d) (chainWindow (R - 1) (by omega)) X *
             openInteractionMatrix h ((R - 1 + k) + (R - 1))) := by
+  have hP : a + (R - 1) + k ≤ N := by omega
   simp only [openInteractionMatrix, Finset.sum_mul, Finset.mul_sum, ← Finset.sum_sub_distrib]
-  rw [chainWindowOperator_eq_embedLocalOperatorAlgHom (by omega) ha, map_sum]
-  simp only [map_sub, map_mul]
-  simp only [← chainWindowOperator_eq_embedLocalOperatorAlgHom (by omega) ha]
+  rw [ManyBody.placeAlong_sum]
+  simp only [ManyBody.placeAlong_sub, ManyBody.placeAlong_mul]
+  rw [ManyBody.placeAlong_placeAlong, ManyBody.chainWindow_trans_chainWindow]
   refine (sum_range_eq_sum_range_shift
-    (fun i => chainWindowOperator N i h * chainWindowOperator N (a + (R - 1)) X -
-      chainWindowOperator N (a + (R - 1)) X * chainWindowOperator N i h)
+    (fun i => (if hi : i + R ≤ N then placeAlong (X := fun _ ↦ Fin d) (chainWindow i hi) h
+          else 0) * placeAlong (X := fun _ ↦ Fin d) (chainWindow (a + (R - 1)) hP) X -
+      placeAlong (X := fun _ ↦ Fin d) (chainWindow (a + (R - 1)) hP) X *
+        (if hi : i + R ≤ N then placeAlong (X := fun _ ↦ Fin d) (chainWindow i hi) h else 0))
     (a := a) (m := (R - 1 + k) + (R - 1) + 1 - R) (by omega) ?_).trans ?_
   · intro i hi hsep
     simp only [Finset.mem_range] at hi
-    exact sub_eq_zero.mpr (chainWindowOperator_commute_of_disjoint
-      (by omega) (by omega) (by omega) (by omega) (by omega) h X).eq
-  · refine Finset.sum_congr rfl (fun i hi => ?_)
-    simp only [Finset.mem_range] at hi
-    rw [chainWindowOperator_chainWindowOperator (by omega) ha (by omega) (by omega) h,
-      chainWindowOperator_chainWindowOperator (by omega) ha (by omega) (by omega) X]
+    simp only [dite_eq_left (show i + R ≤ N by omega)]
+    refine sub_eq_zero.mpr (ManyBody.commute_placeAlong_of_disjoint (X := fun _ ↦ Fin d)
+      (chainWindow i (show i + R ≤ N by omega)) ?_ h X).eq
+    rw [ManyBody.map_chainWindow, ManyBody.map_chainWindow, Finset.disjoint_left]
+    intro s hs hs'
+    rw [ManyBody.mem_interval] at hs hs'
+    omega
+  · refine Finset.sum_congr rfl (fun j hj => ?_)
+    simp only [Finset.mem_range] at hj
+    simp only [dite_eq_left (show a + j + R ≤ N by omega),
+      dite_eq_left (show j + R ≤ (R - 1 + k) + (R - 1) by omega)]
+    rw [ManyBody.placeAlong_placeAlong, ManyBody.chainWindow_trans_chainWindow]
 
 /-- Localization of the open-chain commutator for an observable between
 free intervals of lengths at least \(R-1\). -/
 theorem openInteractionMatrix_commutator_bulkObservable {ℓ r : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
-    (hR : 0 < R) (hk : 0 < k) (hℓ : R - 1 ≤ ℓ) (hr : R - 1 ≤ r) :
+    (hR : 0 < R) (hℓ : R - 1 ≤ ℓ) (hr : R - 1 ≤ r) :
     openInteractionMatrix h ((ℓ + k) + r) * bulkObservable X ℓ r -
         bulkObservable X ℓ r * openInteractionMatrix h ((ℓ + k) + r) =
-      chainWindowOperator ((ℓ + k) + r) (ℓ - (R - 1))
+      placeAlong (X := fun _ ↦ Fin d) (chainWindow (ℓ - (R - 1)) (by omega))
         (openInteractionMatrix h ((R - 1 + k) + (R - 1)) *
             bulkObservable X (R - 1) (R - 1) -
           bulkObservable X (R - 1) (R - 1) *
             openInteractionMatrix h ((R - 1 + k) + (R - 1))) := by
-  have hlocal := openInteractionMatrix_commutator_chainWindowOperator
-    (N := (ℓ + k) + r) (a := ℓ - (R - 1)) h X hR hk (by omega)
-  simpa only [bulkObservable_eq_chainWindowOperator hk, Nat.sub_add_cancel hℓ] using hlocal
+  have hlocal := openInteractionMatrix_commutator_placeAlong_chainWindow
+    (N := (ℓ + k) + r) (a := ℓ - (R - 1)) h X hR (by omega)
+  have hw : chainWindow (ℓ - (R - 1) + (R - 1))
+      (show ℓ - (R - 1) + (R - 1) + k ≤ (ℓ + k) + r by omega) =
+        chainWindow ℓ (Nat.le_add_right (ℓ + k) r) := by
+    ext j
+    rw [ManyBody.val_chainWindow, ManyBody.val_chainWindow]
+    omega
+  rw [hw] at hlocal
+  rw [bulkObservable_eq_placeAlong_chainWindow, bulkObservable_eq_placeAlong_chainWindow]
+  exact hlocal
 
-/-- The finite-volume operator \(X^\dagger[H,X]\) is the inclusion of a fixed
+/-- The finite-volume operator \(X^\dagger[H,X]\) is the placement of a fixed
 local observable on the enlarged support interval. -/
-theorem chainWindowOperator_adjoint_mul_openInteractionMatrix_commutator
+theorem placeAlong_chainWindow_adjoint_mul_openInteractionMatrix_commutator
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
-    (hR : 0 < R) (hk : 0 < k) (ha : a + ((R - 1 + k) + (R - 1)) ≤ N) :
-    (chainWindowOperator N (a + (R - 1)) X)ᴴ *
-        (openInteractionMatrix h N * chainWindowOperator N (a + (R - 1)) X -
-          chainWindowOperator N (a + (R - 1)) X * openInteractionMatrix h N) =
-      chainWindowOperator N a (localCommutatorObservable h X) := by
-  simp only [localCommutatorObservable, bulkObservable_eq_chainWindowOperator hk]
-  rw [openInteractionMatrix_commutator_chainWindowOperator h X hR hk ha]
-  rw [chainWindowOperator_mul (by omega) ha, chainWindowOperator_conjTranspose (by omega) ha,
-    chainWindowOperator_chainWindowOperator (by omega) ha (by omega) (by omega) X]
+    (hR : 0 < R) (ha : a + ((R - 1 + k) + (R - 1)) ≤ N) :
+    (placeAlong (X := fun _ ↦ Fin d) (chainWindow (a + (R - 1)) (by omega)) X)ᴴ *
+        (openInteractionMatrix h N *
+            placeAlong (X := fun _ ↦ Fin d) (chainWindow (a + (R - 1)) (by omega)) X -
+          placeAlong (X := fun _ ↦ Fin d) (chainWindow (a + (R - 1)) (by omega)) X *
+            openInteractionMatrix h N) =
+      placeAlong (X := fun _ ↦ Fin d) (chainWindow a ha) (localCommutatorObservable h X) := by
+  rw [openInteractionMatrix_commutator_placeAlong_chainWindow h X hR ha,
+    localCommutatorObservable, bulkObservable_eq_placeAlong_chainWindow,
+    ManyBody.placeAlong_mul, ManyBody.placeAlong_conjTranspose, ManyBody.placeAlong_placeAlong,
+    ManyBody.chainWindow_trans_chainWindow]
 
 /-- For an interior observable, the commutator energy operator is the
-inclusion of the fixed local commutator observable. -/
+placement of the fixed local commutator observable. -/
 theorem bulkObservable_adjoint_mul_openInteractionMatrix_commutator {ℓ r : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
-    (hR : 0 < R) (hk : 0 < k) (hℓ : R - 1 ≤ ℓ) (hr : R - 1 ≤ r) :
+    (hR : 0 < R) (hℓ : R - 1 ≤ ℓ) (hr : R - 1 ≤ r) :
     (bulkObservable X ℓ r)ᴴ *
         (openInteractionMatrix h ((ℓ + k) + r) * bulkObservable X ℓ r -
           bulkObservable X ℓ r * openInteractionMatrix h ((ℓ + k) + r)) =
-      chainWindowOperator ((ℓ + k) + r) (ℓ - (R - 1))
+      placeAlong (X := fun _ ↦ Fin d) (chainWindow (ℓ - (R - 1)) (by omega))
         (localCommutatorObservable h X) := by
-  have hlocal := chainWindowOperator_adjoint_mul_openInteractionMatrix_commutator
-    (N := (ℓ + k) + r) (a := ℓ - (R - 1)) h X hR hk (by omega)
-  simpa only [bulkObservable_eq_chainWindowOperator hk, Nat.sub_add_cancel hℓ] using hlocal
+  have hlocal := placeAlong_chainWindow_adjoint_mul_openInteractionMatrix_commutator
+    (N := (ℓ + k) + r) (a := ℓ - (R - 1)) h X hR (by omega)
+  have hw : chainWindow (ℓ - (R - 1) + (R - 1))
+      (show ℓ - (R - 1) + (R - 1) + k ≤ (ℓ + k) + r by omega) =
+        chainWindow ℓ (Nat.le_add_right (ℓ + k) r) := by
+    ext j
+    rw [ManyBody.val_chainWindow, ManyBody.val_chainWindow]
+    omega
+  rw [hw] at hlocal
+  rw [bulkObservable_eq_placeAlong_chainWindow]
+  exact hlocal
 
 private theorem openInteractionMatrix_eq_sum_nonwrappingStart
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hRN : R ≤ N) :
     openInteractionMatrix h N =
-      ∑ i : NonwrappingStart R N, chainWindowOperator N i.1.val h := by
+      ∑ i : NonwrappingStart R N,
+        placeAlong (X := fun _ ↦ Fin d) (chainWindow i.1.val i.2) h := by
   unfold openInteractionMatrix
   symm
   refine Finset.sum_bij (fun i _ => i.1.val) ?_ ?_ ?_ ?_
@@ -155,7 +179,7 @@ private theorem openInteractionMatrix_eq_sum_nonwrappingStart
   · intro b hb
     simp only [Finset.mem_range] at hb
     exact ⟨⟨⟨b, by omega⟩, by change b + R ≤ N; omega⟩, Finset.mem_univ _, rfl⟩
-  · exact fun _ _ => rfl
+  · exact fun i _ => by rw [dite_eq_left (show i.1.val + R ≤ N from i.2)]
 
 /-- The matrix interaction sum agrees with the Euclidean open-chain
 Hamiltonian. Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
@@ -166,8 +190,15 @@ theorem openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix
   rw [openInteractionMatrix_eq_sum_nonwrappingStart h hR hRN, map_sum,
     openInteractionHamiltonianES]
   refine Finset.sum_congr rfl (fun i _ => ?_)
-  rw [periodicLocalInteractionES_eq_toEuclideanLin_embedLocalOperator hRN i.1]
-  rw [chainWindowOperator, dite_eq_left ⟨hRN, i.1.isLt⟩]
+  rw [periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow hRN i.1]
+  have hw : chainWindow i.1.val i.2 = ManyBody.ringWindow hRN i.1 := by
+    ext j
+    have hj : i.1.val + j.val < N := by
+      have hi := i.2
+      omega
+    rw [ManyBody.val_chainWindow, ManyBody.ringWindow_apply, Fin.val_add, Fin.val_castLE,
+      Nat.mod_eq_of_lt hj]
+  rw [hw]
 
 /-- The canonical local ground-space complement projection gives the
 Euclidean open parent Hamiltonian under the matrix representation. -/

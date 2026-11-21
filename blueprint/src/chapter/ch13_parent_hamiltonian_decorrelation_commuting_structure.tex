@@ -1,8 +1,6 @@
 \begin{definition}[Parent commuting Hamiltonian on the tripartite space]
     \label{def:tripartite_parent_commuting_hamiltonian}
-    \lean{TripartiteDecorrelation.HasGroundSpaceIntersection,
-        TripartiteDecorrelation.CommutingParentHamiltonian,
-        TripartiteDecorrelation.HasCommutingParentHamiltonian}
+    \lean{ManyBody.HasCommutingParentHamiltonian}
     \leanok
     \uses{def:tripartite_local_lifts}
     In \cite[Definition~D.2, lines 2205--2218]{Cirac2016MPDO_arXiv}, there are
@@ -10,14 +8,17 @@
     lifts commute and whose ranges satisfy the source ground-space intersection
     condition $\ran P=\ran\widehat P_{AX}\cap\ran\widehat P_{XB}$, so that
     $Q_{AX}=\Id-P_{AX}$ and $Q_{XB}=\Id-P_{XB}$ are the commuting parent terms.
+    Equivalently, on a system of sites with disjoint regions $A$ and $B$, there
+    is a two-term interaction, one term supported on the complement of $B$ and
+    one on the complement of $A$, whose terms are commuting orthogonal
+    projectors and whose common kernel is $\ran P$.
 \end{definition}
 
 \begin{lemma}[Ground-space intersection and projector product]
     \label{thm:tripartite_ground_space_intersection_iff_product}
     \lean{TripartiteDecorrelation.range_mul_eq_inter,
         TripartiteDecorrelation.hermitian_idempotent_eq_of_range_eq,
-        TripartiteDecorrelation.hasGroundSpaceIntersection_iff_product_eq,
-        TripartiteDecorrelation.CommutingParentHamiltonian.hproduct}
+        ManyBody.HasCommutingParentHamiltonian.eq_mul}
     \leanok
     \uses{def:tripartite_parent_commuting_hamiltonian}
     Let $P$, $P_{AX}$, and $P_{XB}$ be orthogonal projectors, and write their
@@ -54,9 +55,8 @@
 
 \begin{lemma}[Parent commuting Hamiltonian--complex-linear decorrelation equivalence]
     \label{thm:tripartite_parent_iff_complex_linear_decorrelated}
-    \lean{TripartiteDecorrelation.CommutingParentHamiltonian.isDecorrelated,
-        TripartiteDecorrelation.IsDecorrelated.hasCommutingParentHamiltonian,
-        TripartiteDecorrelation.parentHamiltonian_iff_decorrelated}
+    \lean{ManyBody.HasCommutingParentHamiltonian.isDecorrelated,
+        ManyBody.hasCommutingParentHamiltonian_of_isDecorrelated}
     \leanok
     \uses{def:tripartite_decorrelation, def:tripartite_parent_commuting_hamiltonian, thm:tripartite_support_products, thm:tripartite_ground_space_intersection_iff_product}
     Let $P=P^\dagger=P^2$. Then $P$ is the ground-space projector of a
@@ -88,14 +88,16 @@
 
 \begin{theorem}[Parent commuting Hamiltonian--observable decorrelation equivalence]
     \label{thm:tripartite_parent_iff_decorrelated}
-    \lean{TripartiteDecorrelation.parentHamiltonian_iff_observableDecorrelated}
+    \lean{ManyBody.hasCommutingParentHamiltonian_iff_isDecorrelated}
     \leanok
     \uses{def:tripartite_observable_decorrelation, thm:tripartite_observable_decorrelation_iff, thm:tripartite_parent_iff_complex_linear_decorrelated}
     For $P=P^\dagger=P^2$,
     \cite[Proposition~D.3, lines 2221--2289]{Cirac2016MPDO_arXiv} states that
     $P$ is the ground-space projector of a parent commuting Hamiltonian on $AX$
     and $XB$ if and only if regions $A$ and $B$ are decorrelated when tested on
-    Hermitian observables.
+    Hermitian observables. By
+    Lemma~\ref{thm:tripartite_observable_decorrelation_iff}, the latter
+    condition is complex-linear decorrelation.
 \end{theorem}
 
 \begin{proof}
@@ -104,333 +106,4 @@
     $O=H+\mathrm{i}K$ from
     Lemma~\ref{thm:tripartite_observable_decorrelation_iff} gives the
     equivalence.
-\end{proof}
-
-\begin{definition}[Decorrelation]\label{def:is_decorrelated}
-    \lean{Decorrelation.IsDecorrelated}
-    \leanok
-    Given an endomorphism $P_K$ and sets of observables $\mathcal{O}_A$,
-    $\mathcal{O}_B$, regions $A$ and $B$ are \emph{decorrelated} w.r.t.\ $K$
-    when $P_K\circ O_A\circ(\Id-P_K)\circ O_B\circ P_K=0$
-    for all $O_A\in\mathcal{O}_A$ and $O_B\in\mathcal{O}_B$.
-\end{definition}
-
-\begin{definition}[Idempotent-product parent-commuting structure]
-    \label{def:has_commuting_parent_ham}
-    \lean{Decorrelation.HasCommutingParentHam}
-    \leanok
-    The structure used below records only the idempotent-product
-    consequence of the parent commuting Hamiltonian condition of
-    \cite[Appendix~D.2]{Cirac2016MPDO_arXiv}. It consists of commuting
-    idempotent endomorphisms $P_{AX}$ and $P_{XB}$ such that, for the
-    idempotent $P_K$ associated to $K$,
-    $P_{AX}\circ P_{XB}=P_K$.
-    In the source, this is the equation obtained from local projectors
-    $Q_{AX}$ and $Q_{XB}$ satisfying $[Q_{AX},Q_{XB}]=0$ and
-    $K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB})$.
-    % Scope restriction: this definition records only the idempotent-product
-    % part of the source condition. See
-    % docs/paper-gaps/cpsv16_parent_commuting_hamiltonian_scope.tex.
-\end{definition}
-
-\begin{lemma}[Idempotence gives tautological idempotent-product data]%
-    \label{thm:has_commuting_parent_ham_of_idem}
-    \lean{Decorrelation.HasCommutingParentHam.ofIdem}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    If $P_K\circ P_K=P_K$, then $P_K$ has idempotent-product data.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    For $P_{AX}=P_{XB}=P_K$, commutativity is immediate and the product
-    identity reduces to the assumed idempotence of $P_K$.
-\end{proof}
-
-\begin{lemma}[Cancellation for commuting idempotents]
-    \label{lem:comp_complement_comm_zero}
-    \lean{LinearMap.comp_complement_comm_zero}
-    \leanok
-    If $P$ and $Q$ are commuting idempotents, then
-    $Q\circ(\Id-P\circ Q)\circ P=0$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    The cancellation is the computation
-    \begin{align}
-        Q(\Id-PQ)P
-         & =QP-QPQP =QP-QPPQ =QP-QP =0,
-        \notag
-    \end{align}
-    using commutativity and idempotence.
-\end{proof}
-
-\begin{lemma}[Idempotence of the product projector]%
-    \label{thm:pk_idem}
-    \lean{Decorrelation.HasCommutingParentHam.pK_idem}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    If $P_K=P_{AX}\circ P_{XB}$ is idempotent-product data, then
-    $P_K\circ P_K=P_K$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    Since $P_{AX}$ and $P_{XB}$ are idempotent and commute, their product
-    $P_{AX}\circ P_{XB}$ is idempotent. Substituting
-    $P_K=P_{AX}\circ P_{XB}$ gives the claim.
-\end{proof}
-
-\begin{lemma}[Absorption by the left projector]%
-    \label{thm:pAX_comp_pK}
-    \lean{Decorrelation.HasCommutingParentHam.pAX_comp_pK}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    If $P_K=P_{AX}\circ P_{XB}$ is idempotent-product data, then
-    $P_{AX}\circ P_K=P_K$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    Using $P_K=P_{AX}\circ P_{XB}$ and the idempotence of $P_{AX}$,
-    \begin{align}
-        P_{AX}\circ P_K
-         & =P_{AX}\circ P_{AX}\circ P_{XB} =P_{AX}\circ P_{XB} =P_K.
-        \notag
-    \end{align}
-\end{proof}
-
-\begin{lemma}[Absorption by the right projector]%
-    \label{thm:pK_comp_pXB}
-    \lean{Decorrelation.HasCommutingParentHam.pK_comp_pXB}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    If $P_K=P_{AX}\circ P_{XB}$ is idempotent-product data, then
-    $P_K\circ P_{XB}=P_K$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    Using $P_K=P_{AX}\circ P_{XB}$ and the idempotence of $P_{XB}$,
-    \begin{align}
-        P_K\circ P_{XB}
-         & =P_{AX}\circ P_{XB}\circ P_{XB} =P_{AX}\circ P_{XB} =P_K.
-        \notag
-    \end{align}
-\end{proof}
-
-\begin{lemma}[Cross-absorption by the right projector]%
-    \label{thm:pXB_comp_pK}
-    \lean{Decorrelation.HasCommutingParentHam.pXB_comp_pK}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    If $P_K=P_{AX}\circ P_{XB}$ is idempotent-product data, then
-    $P_{XB}\circ P_K=P_K$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    By commutativity and the idempotence of $P_{XB}$,
-    \begin{align}
-        P_{XB}\circ P_K
-         & =P_{XB}\circ P_{AX}\circ P_{XB} =P_{AX}\circ P_{XB}\circ P_{XB} =P_{AX}\circ P_{XB} =P_K.
-        \notag
-    \end{align}
-\end{proof}
-
-\begin{lemma}[Cross-absorption by the left projector]%
-    \label{thm:pK_comp_pAX}
-    \lean{Decorrelation.HasCommutingParentHam.pK_comp_pAX}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    If $P_K=P_{AX}\circ P_{XB}$ is idempotent-product data, then
-    $P_K\circ P_{AX}=P_K$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    By commutativity and the idempotence of $P_{AX}$,
-    \begin{align}
-        P_K\circ P_{AX}
-         & =P_{AX}\circ P_{XB}\circ P_{AX} =P_{AX}\circ P_{AX}\circ P_{XB} =P_{AX}\circ P_{XB} =P_K.
-        \notag
-    \end{align}
-\end{proof}
-
-\begin{lemma}[Reverse product identity]%
-    \label{thm:reverse_product}
-    \lean{Decorrelation.HasCommutingParentHam.reverse_product}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    If $P_K=P_{AX}\circ P_{XB}$ is idempotent-product data, then
-    $P_{XB}\circ P_{AX}=P_K$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    This follows from commutativity of $P_{AX}$ and $P_{XB}$ together
-    with the identity $P_{AX}\circ P_{XB}=P_K$.
-\end{proof}
-
-\begin{lemma}[Commuting complementary projectors]%
-    \label{thm:complement_comm}
-    \lean{Decorrelation.HasCommutingParentHam.complement_comm}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    If $P_K=P_{AX}\circ P_{XB}$ is idempotent-product data and
-    $Q_{AX}=\Id-P_{AX}$ and $Q_{XB}=\Id-P_{XB}$, then
-    $Q_{AX}\circ Q_{XB}=Q_{XB}\circ Q_{AX}$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    Expanding both products and using
-    $P_{AX}\circ P_{XB}=P_{XB}\circ P_{AX}$ shows that the complementary
-    projectors commute.
-\end{proof}
-
-\begin{lemma}[Idempotent-product data imply decorrelation]%
-    \label{thm:commuting_ham_is_decorrelated}
-    \lean{Decorrelation.commutingHam_isDecorrelated}
-    \leanok
-    \uses{def:is_decorrelated, def:has_commuting_parent_ham}
-    In the idempotent-product form of the backward direction of
-    \cite[Appendix~D, Section~D.2, Proposition~D.3]{Cirac2016MPDO_arXiv}, if
-    $P_{AX}$ and $P_{XB}$ are idempotent endomorphisms satisfying
-    $P_{AX}\circ P_{XB}=P_K$ and
-    $P_{AX}\circ P_{XB}=P_{XB}\circ P_{AX}$, and
-    $A$-observables commute with $P_{XB}$ while $B$-observables commute
-    with $P_{AX}$, then regions $A$ and $B$ are decorrelated w.r.t.\ $K$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{lem:comp_complement_comm_zero}
-    The key identity is
-    $P_{XB}\circ(\Id-P_{AX}\circ P_{XB})\circ P_{AX}=0$.
-    Substituting $P_K=P_{AX}\circ P_{XB}$ and using
-    $O_A\circ P_{XB}=P_{XB}\circ O_A$ and
-    $O_B\circ P_{AX}=P_{AX}\circ O_B$ gives
-    \begin{align}
-        P_K\circ O_A\circ(\Id-P_K)\circ O_B\circ P_K
-         & =
-        P_{AX}\circ O_A\circ
-        \bigl[
-            P_{XB}\circ(\Id-P_{AX}\circ P_{XB})\circ P_{AX}
-            \bigr]
-        \circ O_B\circ P_{XB} =0.
-        \notag
-    \end{align}
-\end{proof}
-
-\begin{lemma}[Decorrelating idempotent-product data]%
-    \label{thm:has_commuting_parent_ham_is_decorrelated}
-    \lean{Decorrelation.HasCommutingParentHam.isDecorrelated}
-    \leanok
-    \uses{thm:commuting_ham_is_decorrelated, def:has_commuting_parent_ham, def:is_decorrelated}
-    Corollary of Lemma~\ref{thm:commuting_ham_is_decorrelated}: if
-    $P_K$ has idempotent-product data, the $A$-observables commute with
-    $P_{XB}$, and the $B$-observables commute with $P_{AX}$, then regions
-    $A$ and $B$ are decorrelated w.r.t.\ $K$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{thm:commuting_ham_is_decorrelated}
-    Lemma~\ref{thm:commuting_ham_is_decorrelated} applied to the
-    endomorphisms $P_{AX}$ and $P_{XB}$ from the idempotent-product
-    data gives the result.
-\end{proof}
-
-\begin{lemma}[Frustration-free identity]\label{lem:frustration_free_ham_eq}
-    \lean{LinearMap.frustration_free_ham_eq}
-    \leanok
-    For any endomorphisms $P$ and $Q$,
-    \begin{align}
-        (\Id-P)+(\Id-Q)-(\Id-P)\circ(\Id-Q)
-        =\Id-P\circ Q.
-        \label{eq:parent_frustration_free_identity}
-    \end{align}
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Expanding the left-hand side of
-    (\ref{eq:parent_frustration_free_identity}) and cancelling gives the
-    result.
-\end{proof}
-
-\begin{lemma}[Idempotent-product Hamiltonian identity]%
-    \label{thm:hamiltonian_eq}
-    \lean{Decorrelation.HasCommutingParentHam.hamiltonian_eq}
-    \leanok
-    \uses{def:has_commuting_parent_ham, lem:frustration_free_ham_eq}
-    If $P_K=P_{AX}\circ P_{XB}$ is idempotent-product data, then
-    \begin{align}
-        Q_{AX}+Q_{XB}-Q_{AX}\circ Q_{XB}
-        =\Id-P_K,
-        \label{eq:parent_idempotent_product_hamiltonian}
-    \end{align}
-    where $Q_{AX}=\Id-P_{AX}$ and $Q_{XB}=\Id-P_{XB}$ are the
-    complementary projectors.
-    This is the algebraic identity obtained from the complementary projectors
-    in \cite[Appendix~D, Section~D.2]{Cirac2016MPDO_arXiv}; it is not the full
-    source parent commuting Hamiltonian condition.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{lem:frustration_free_ham_eq}
-    Applying Lemma~\ref{lem:frustration_free_ham_eq} to $P_{AX}$ and $P_{XB}$
-    and substituting $P_{AX}\circ P_{XB}=P_K$ gives
-    (\ref{eq:parent_idempotent_product_hamiltonian}).
-\end{proof}
-
-\begin{lemma}[Ground-space membership]\label{thm:mem_ground_iff}
-    \lean{Decorrelation.HasCommutingParentHam.mem_ground_iff}
-    \leanok
-    \uses{def:has_commuting_parent_ham}
-    If $P_K=P_{AX}\circ P_{XB}$ is idempotent-product data, then
-    \begin{align}
-        P_Kv=v
-        \quad\Longleftrightarrow\quad
-        P_{AX}v=v
-        \text{ and }
-        P_{XB}v=v.
-        \label{eq:parent_ground_space_membership}
-    \end{align}
-    This is the algebraic consequence corresponding to equation~(D.2) from
-    \cite{Cirac2016MPDO_arXiv}:
-    $K_{AXB}=(K_{AX}\otimes H_B)\cap(H_A\otimes K_{XB})$.
-    The source equation itself also carries the tensor-product local-subspace
-    hypotheses.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{def:has_commuting_parent_ham, thm:pAX_comp_pK, thm:pXB_comp_pK}
-    ($\Rightarrow$) If $P_Kv=v$, then
-    \begin{align}
-        P_{AX}(P_Kv)
-         & =(P_{AX}\circ P_K)v =P_Kv =v
-        \notag
-    \end{align}
-    by left absorption, and similarly for $P_{XB}$.
-
-    ($\Leftarrow$) If $P_{AX}v=v$ and $P_{XB}v=v$, then
-    \begin{align}
-        P_Kv
-         & =(P_{AX}\circ P_{XB})v =P_{AX}(P_{XB}v) =P_{AX}v =v.
-        \notag
-    \end{align}
-    This proves (\ref{eq:parent_ground_space_membership}).
 \end{proof}

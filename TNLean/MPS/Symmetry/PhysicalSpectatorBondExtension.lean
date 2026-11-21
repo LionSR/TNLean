@@ -19,6 +19,8 @@ equation eq:1d-sym:jointsym, in coordinates where neighboring terms commute.
 
 open scoped Matrix Kronecker
 
+open ManyBody
+
 namespace Matrix
 
 /-- The active pair carries the prescribed virtual bond; every pair
@@ -80,9 +82,9 @@ equation eq:1d-sym:jointsym. -/
 theorem physicalSpectatorBondInteraction_translate_commute {N : ℕ} [NeZero N]
     (K d₀ d₁ : ℕ) (B : Matrix (Fin K × Fin K) (Fin K × Fin K) ℂ)
     (hN : 2 ≤ N) (i j : Fin N) :
-    Commute (MPOTensor.embedLocalOperator 2 N hN i
+    Commute (placeAlong (X := fun _ ↦ Fin ((K * K + d₀) + d₁)) (ringWindow hN i)
       (physicalSpectatorBondInteraction K d₀ d₁ B))
-      (MPOTensor.embedLocalOperator 2 N hN j
+      (placeAlong (X := fun _ ↦ Fin ((K * K + d₀) + d₁)) (ringWindow hN j)
         (physicalSpectatorBondInteraction K d₀ d₁ B)) := by
   exact sectorBondInteraction_translate_commute _ _ _ _ hN i j
 
@@ -94,7 +96,8 @@ theorem physicalSpectatorBondInteraction_spectrum_gap_one {N : ℕ}
     (K d₀ d₁ : ℕ) (B : Matrix (Fin K × Fin K) (Fin K × Fin K) ℂ)
     (hB : IsStarProjection B) (hN : 2 ≤ N) :
     ∀ z ∈ spectrum ℂ
-      (interactionHamiltonian (physicalSpectatorBondInteraction K d₀ d₁ B) hN),
+      (Interaction.translationInvariant hN
+        (physicalSpectatorBondInteraction K d₀ d₁ B)).hamiltonian,
       0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
   exact sectorBondInteraction_spectrum_gap_one _ _ _ _
     (Matrix.physicalSpectatorEdgeInteraction_isStarProjection K d₀ d₁ B hB) hN

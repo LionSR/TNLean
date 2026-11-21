@@ -26,6 +26,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -71,14 +72,14 @@ theorem exists_fine_belt_shift (o : ℝ × ℝ) (k ℓ p : ℕ)
       2 ^ (p - ℓ) *
           (beltCellIndices (fineLayerIndices o k ℓ (boundaryEndpoints Λ A) C)
             (2 ^ (p - ℓ)) a b).card ≤
-        16 * (2 * C + 1) ^ 2 * (edgeBoundary Λ A).card * 4 ^ (k - ℓ) := by
+        16 * (2 * C + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card * 4 ^ (k - ℓ) := by
   obtain ⟨a, b, hab⟩ := exists_sparse_belt_shift
     (fineLayerIndices o k ℓ (boundaryEndpoints Λ A) C)
     (2 ^ (p - ℓ)) (pow_pos (by norm_num) _)
   refine ⟨a, b, hab.trans ?_⟩
   calc
     2 * (fineLayerIndices o k ℓ (boundaryEndpoints Λ A) C).card ≤
-        2 * (8 * (2 * C + 1) ^ 2 * (edgeBoundary Λ A).card * 4 ^ (k - ℓ)) :=
+        2 * (8 * (2 * C + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card * 4 ^ (k - ℓ)) :=
       Nat.mul_le_mul_left 2 (card_fineLayerIndices_boundary_le o k ℓ Λ A C)
     _ = _ := by ring
 
@@ -91,7 +92,7 @@ theorem exists_sparse_dyadic_belt_shift (o : ℝ × ℝ) (k : ℕ)
       ((beltCellIndices (fineLayerIndices o k (fineScaleIndex k)
           (boundaryEndpoints Λ A) C) (2 ^ (pitchScaleIndex k - fineScaleIndex k))
         a b).card : ℝ) ≤
-      64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card *
+      64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card *
         (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * (k : ℝ) / 2) := by
   obtain ⟨a, b, hab⟩ := exists_fine_belt_shift o k (fineScaleIndex k)
     (pitchScaleIndex k) Λ A C
@@ -100,7 +101,7 @@ theorem exists_sparse_dyadic_belt_shift (o : ℝ × ℝ) (k : ℕ)
   let p := pitchScaleIndex k
   let F := fineLayerIndices o k ℓ (boundaryEndpoints Λ A) C
   let B := beltCellIndices F (2 ^ (p - ℓ)) a b
-  let coeff : ℝ := 16 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card
+  let coeff : ℝ := 16 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card
   have hreal : (2 : ℝ) ^ (p - ℓ) * (B.card : ℝ) ≤ coeff * (4 : ℝ) ^ (k - ℓ) := by
     dsimp [coeff, B, F, ℓ, p]
     exact_mod_cast hab

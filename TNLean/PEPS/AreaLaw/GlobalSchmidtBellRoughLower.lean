@@ -60,13 +60,13 @@ theorem exists_global_schmidtBellPrevector_rough_lower
     (X : Finset ι)
     (E : Finset (ManyBody.RegionConfig (fun _ : ι => Fin q) X)) :
     let β := fun _ : ι => Fin q
-    let split := ManyBody.splitEquiv β X
+    let split := ManyBody.cutEquiv β X
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split Ω
     0 < Matrix.IsHermitian.spectralRestrictionMass
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E →
     let d := E.card
     let ι₀ := addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)
-    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x =>
+    let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x =>
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     let S' := vonNeumannEntropy
       (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
@@ -99,11 +99,11 @@ theorem exists_global_schmidtBellPrevector_rough_lower
       (∀ᶠ k : ℕ in atTop,
         (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
           ‖WithLp.toLp 2
-            (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
-              (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
+            (((1 : Matrix (Fin k → ManyBody.ComplConfig β X)
+              (Fin k → ManyBody.ComplConfig β X) ℂ) ⊗ₖ
               PermutationRepresentation.labelProj
                 (TensorPower.copyPerm (Fin E.card) k) (ell k)) *ᵥ
-              (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
+              (fun x : (Fin k → ManyBody.ComplConfig β X) ×
                 (Fin k → Fin E.card) => ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) ∧
       Asymptotics.IsLittleO atTop
         (fun k : ℕ => Real.log (ell k).dim - (k : ℝ) * S')

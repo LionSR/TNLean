@@ -17,7 +17,7 @@ outputs of the coarser layers (`MPSTensor.binaryTreeMatrix_apply_succ`): the amp
 `2^{k+2}` leaves, grouped into `2^{k+1}` neighbouring pairs `e`, is
 `∑_τ ∏_p W(e_p, τ_p) ⋅ (tree of the coarser layers)(τ)`, with `τ` the outputs of the coarser
 layers grouped into pairs in their turn. The amplitudes of a layer of placed matrices are
-`QuantumCircuit.list_prod_embedOp_placeCfg`.
+`QuantumCircuit.list_prod_placeAlong_placeCfg`.
 
 ## Main definitions
 

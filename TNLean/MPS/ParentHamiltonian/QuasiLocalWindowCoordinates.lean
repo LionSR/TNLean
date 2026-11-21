@@ -38,16 +38,17 @@ theorem quasiLocalIntervalObservable_bulkObservable (a : ℤ) {k : ℕ}
   simpa only [quasiLocalIntervalObservable_apply, StarAlgEquiv.apply_symm_apply,
     StarAlgEquiv.symm_apply_apply, quasiLocalObservable_localInclusion] using h.symm
 
-/-- A nonwrapping finite-chain window has its ordinary translated interval
-image in the quasi-local algebra. Source: Nachtergaele,
-arXiv:cond-mat/9410110, Section 3. -/
-theorem quasiLocalIntervalObservable_chainWindowOperator (a : ℤ) (N b : ℕ) {k : ℕ}
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hk : 0 < k) (hb : b + k ≤ N) :
-    quasiLocalIntervalObservable d a N (chainWindowOperator N b X) =
+/-- An observable placed on a window of a finite chain that does not wrap around
+has its ordinary translated interval image in the quasi-local algebra.
+Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3. -/
+theorem quasiLocalIntervalObservable_placeAlong_chainWindow (a : ℤ) (N b : ℕ) {k : ℕ}
+    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hb : b + k ≤ N) :
+    quasiLocalIntervalObservable d a N
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow b hb) X) =
       quasiLocalIntervalObservable d (a + (b : ℤ)) k X := by
-  have h := quasiLocalIntervalObservable_bulkObservable (a + (b : ℤ)) X b (N - (b + k))
-  rw [bulkObservable_eq_chainWindowOperator hk, Nat.add_sub_of_le hb,
-    add_sub_cancel_right] at h
+  obtain ⟨r, rfl⟩ : ∃ r, N = (b + k) + r := ⟨N - (b + k), (Nat.add_sub_of_le hb).symm⟩
+  have h := quasiLocalIntervalObservable_bulkObservable (a + (b : ℤ)) X b r
+  rw [bulkObservable_eq_placeAlong_chainWindow, add_sub_cancel_right] at h
   exact h
 
 end SpinChain

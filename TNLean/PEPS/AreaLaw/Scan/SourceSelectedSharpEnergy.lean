@@ -42,7 +42,7 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -141,7 +141,9 @@ theorem sourceTarget_selected_actualCharge_sharp_energy_explicit
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
                 (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp)) ≤ Real.sqrt (2 * ε / g) ∧
-            cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
+            ManyBody.cutLogBudget
+                (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                (fun _ ↦ q) X ≤
               targetBudgetConstant q R Ctr * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
             Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
               (ManyBody.regionEntropy Ωt X) w ≤ δtail ∧
@@ -158,8 +160,8 @@ theorem sourceTarget_selected_actualCharge_sharp_energy_explicit
             letI : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
             let d := E.card
             let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-              (ManyBody.splitEquiv β X) Ωt
-            let ψ : ManyBody.RegionConfig β Xᶜ × Fin d → ℂ := fun x ↦
+              (ManyBody.cutEquiv β X) Ωt
+            let ψ : ManyBody.ComplConfig β X × Fin d → ℂ := fun x ↦
               compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -260,7 +262,7 @@ theorem sourceTarget_selected_actualCharge_sharp_energy_explicit
       (zero_le_one.trans hC) hg hP hn).2
   have htarget := fun n (hn : truncationEntropyThreshold q
       (Δ / positiveNormalization 1 (Δ / 2) J) (C_T + 1) ≤ n) =>
-    abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le q hq _ (C_T + 1) hg hn
+    abs_regionEntropy_sub_le_of_truncationEntropyThreshold_le q hq _ (C_T + 1) hg hn
   have hinterval := fun n (hn : Real.natRpowThreshold (Exponents.scannerNu : ℝ) 4 ≤ n) =>
     Real.le_natCast_rpow_of_natRpowThreshold_le
       (by norm_num [Exponents.scannerNu] : 0 < (Exponents.scannerNu : ℝ)) hn
@@ -460,7 +462,9 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy_of_threshold_le
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
                 (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp)) ≤ Real.sqrt (2 * ε / g) ∧
-            cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
+            ManyBody.cutLogBudget
+                (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                (fun _ ↦ q) X ≤
               targetBudgetConstant q R Ctr * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
             Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
               (ManyBody.regionEntropy Ωt X) w ≤ δtail ∧
@@ -477,8 +481,8 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy_of_threshold_le
             letI : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
             let d := E.card
             let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-              (ManyBody.splitEquiv β X) Ωt
-            let ψ : ManyBody.RegionConfig β Xᶜ × Fin d → ℂ := fun x ↦
+              (ManyBody.cutEquiv β X) Ωt
+            let ψ : ManyBody.ComplConfig β X × Fin d → ℂ := fun x ↦
               compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -632,7 +636,9 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
                 (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp)) ≤ Real.sqrt (2 * ε / g) ∧
-            cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
+            ManyBody.cutLogBudget
+                (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                (fun _ ↦ q) X ≤
               Ctarget * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
             Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
               (ManyBody.regionEntropy Ωt X) w ≤ δtail ∧
@@ -649,8 +655,8 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
             letI : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
             let d := E.card
             let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-              (ManyBody.splitEquiv β X) Ωt
-            let ψ : ManyBody.RegionConfig β Xᶜ × Fin d → ℂ := fun x ↦
+              (ManyBody.cutEquiv β X) Ωt
+            let ψ : ManyBody.ComplConfig β X × Fin d → ℂ := fun x ↦
               compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian

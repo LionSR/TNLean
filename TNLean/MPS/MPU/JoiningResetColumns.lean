@@ -24,13 +24,13 @@ namespace MPUCircuit
 /-- Reset columns select the designated output label of a basis inclusion.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-theorem initializedBasisMatrix_mul_basisResetOutput {ι ρ κ μ : Type*}
+theorem basisInclusion_mul_basisResetOutput {ι ρ κ μ : Type*}
     [Fintype ρ] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
     (E : (ρ × κ) ↪ ι) (z : κ) (V : Matrix ρ μ ℂ) :
-    initializedBasisMatrix E * basisResetOutput V z =
-      initializedBasisMatrix ((Function.Embedding.sectL ρ z).trans E) * V := by
+    basisInclusion E * basisResetOutput V z =
+      basisInclusion ((Function.Embedding.sectL ρ z).trans E) * V := by
   ext i b
-  simp [Matrix.mul_apply, initializedBasisMatrix, Matrix.one_apply, basisResetOutput,
+  simp [Matrix.mul_apply, basisInclusion, Matrix.one_apply, basisResetOutput,
     Fintype.sum_prod_type, Pi.single_apply]
 
 /-- A spectator identity commutes with the prescribed joining-pair reset.

@@ -31,7 +31,8 @@ open ManyBody (squareLatticeGraph)
 
 open TNLean.Lattice TNLean.PEPS
 
-open ManyBody (planeDomainGraph rectangularDomain rectangleSiteEquiv rectangleGraphIso)
+open ManyBody (planeDomainGraph rectangularDomain rectangleSiteEquiv rectangleGraphIso
+  edgeBoundary)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -208,20 +209,21 @@ column; the remaining edges are consecutive positions in one row, so at most one
 can cross the prefix. Source: the square-grid cutwidth comparison in
 *Polynomial PEPS approximation of gapped square-grid ground states*, Section 1. -/
 theorem card_edgeBoundary_snakeGridPrefix_le (L k : ℕ) :
-    (edgeBoundary (rectangularDomain L L) (snakeGridPrefix L k)).card ≤ L + 1 := by
+    (edgeBoundary (planeDomainGraph (rectangularDomain L L)) (snakeGridPrefix L k)).card ≤
+      L + 1 := by
   classical
   let f : ((Fin L × Fin L) × (Fin L × Fin L)) →
       Sym2 (Site (rectangularDomain L L)) := fun p ↦
     s(rectangleSiteEquiv L L p.1, rectangleSiteEquiv L L p.2)
-  have hcover : edgeBoundary (rectangularDomain L L) (snakeGridPrefix L k) ⊆
+  have hcover : edgeBoundary (planeDomainGraph (rectangularDomain L L)) (snakeGridPrefix L k) ⊆
       (snakeBoundaryPairs L k).image f := by
     intro e he
-    obtain ⟨he, x, hx, y, hy, rfl⟩ := Finset.mem_filter.mp he
+    obtain ⟨he, x, hx, y, hy, rfl⟩ := ManyBody.mem_edgeBoundary.mp he
     obtain ⟨a, rfl⟩ := (rectangleSiteEquiv L L).surjective x
     obtain ⟨b, rfl⟩ := (rectangleSiteEquiv L L).surjective y
     have hadj : (planeDomainGraph (rectangularDomain L L)).Adj
         (rectangleSiteEquiv L L a) (rectangleSiteEquiv L L b) := by
-      simpa only [SimpleGraph.mem_edgeFinset, SimpleGraph.mem_edgeSet] using he
+      simpa only [SimpleGraph.mem_edgeSet] using he
     have ha : (snakeIndex L a).val < k := by
       simpa only [mem_snakeGridPrefix, snakeGridEquiv, Equiv.symm_trans_apply,
         Equiv.trans_apply, Equiv.symm_apply_apply, snakeIndex] using hx

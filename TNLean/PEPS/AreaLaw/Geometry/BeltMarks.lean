@@ -28,6 +28,7 @@ isolated-star properties are not part of these definitions or estimates.
 noncomputable section
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -97,7 +98,7 @@ theorem exists_sparse_dyadic_belt_marks_shift (o : ℝ × ℝ) (k : ℕ)
         (beltCellIndices (fineLayerIndices o k (fineScaleIndex k)
           (boundaryEndpoints Λ A) C) (2 ^ (pitchScaleIndex k - fineScaleIndex k))
           a b)).card : ℝ) ≤
-        576 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card *
+        576 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card *
           (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * (k : ℝ) / 2) := by
   obtain ⟨a, b, hab⟩ := exists_sparse_dyadic_belt_shift o k Λ A C
   refine ⟨a, b, ?_⟩
@@ -107,7 +108,7 @@ theorem exists_sparse_dyadic_belt_marks_shift (o : ℝ × ℝ) (k : ℕ)
     exact_mod_cast card_beltMarks_le o (fineScaleIndex k) F
   calc
     _ ≤ 9 * (F.card : ℝ) := hmarks
-    _ ≤ 9 * (64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card *
+    _ ≤ 9 * (64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card *
         (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * (k : ℝ) / 2)) :=
       mul_le_mul_of_nonneg_left hab (by norm_num)
     _ = _ := by ring

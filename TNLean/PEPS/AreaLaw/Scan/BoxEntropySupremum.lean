@@ -29,7 +29,7 @@ namespace TNLean.PEPS.AreaLaw
 
 /-- A uniform positive-scale box power supplies every physical rectangle,
 including a possible zero-size rectangle. Source: `02-initial.tex`, lines 590--594. -/
-theorem regionalEntropy_le_of_boxEntropy_power
+theorem regionEntropy_le_of_boxEntropy_power
     {q R D₀ : ℕ} (hq : 1 ≤ q) {J Δ C e : ℝ} (he : 0 < 1 + e)
     (hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ C * (r : ℝ) ^ (1 + e))
     {Λ : Finset (ℤ × ℤ)} (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
@@ -39,7 +39,7 @@ theorem regionalEntropy_le_of_boxEntropy_power
     (A : Finset (Site Λ)) (Q : IntRect) (hsafe : IsSafe Λ A D₀ Q) :
     ManyBody.regionEntropy Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e) := by
   by_cases hs : 1 ≤ Q.size
-  · exact (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe le_rfl).trans
+  · exact (regionEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe le_rfl).trans
       (hbox Q.size hs)
   · have hs0 : Q.size = 0 := by omega
     have hcard : (rectRegion A Q).card = 0 :=

@@ -192,9 +192,9 @@ theorem localTerm_two_three_zero_eq_leftPairLift_parentInteraction
     funext j
     fin_cases j <;> rfl
   have hPi :
-      ((LinearMap.pi fun τ : Cfg d 2 =>
-          (LinearMap.proj (replaceWindow 2 (by decide : 2 ≤ 3) (0 : Fin 3) σ τ) :
-            NSiteSpace d 3 →ₗ[ℂ] ℂ)) (Pi.single ω (1 : ℂ))) =
+      (fun τ : Cfg d 2 =>
+          (Pi.single ω (1 : ℂ) : NSiteSpace d 3)
+            (replaceWindow 2 (by decide : 2 ≤ 3) (0 : Fin 3) σ τ)) =
         (fun α : Cfg d 2 =>
           ((Pi.single ω (1 : ℂ) : NSiteSpace d 3) (replaceAXCfg σ α))) := by
     funext τ
@@ -204,7 +204,8 @@ theorem localTerm_two_three_zero_eq_leftPairLift_parentInteraction
       funext k
       fin_cases k <;> rfl
     simp [hWindow]
-  simp [localTerm, leftPairLift, hExtract, hPi]
+  rw [LinearMap.comp_apply, localTerm_apply_of_le A 2 3 (by decide) (0 : Fin 3)]
+  simp [leftPairLift, hExtract, hPi]
 
 /-- On a three-site window, the translated length-two parent interaction at
 the second site is the \(XB\) lift of the two-site parent interaction. -/
@@ -217,9 +218,9 @@ theorem localTerm_two_three_one_eq_rightPairLift_parentInteraction
     funext j
     fin_cases j <;> rfl
   have hPi :
-      ((LinearMap.pi fun τ : Cfg d 2 =>
-          (LinearMap.proj (replaceWindow 2 (by decide : 2 ≤ 3) (1 : Fin 3) σ τ) :
-            NSiteSpace d 3 →ₗ[ℂ] ℂ)) (Pi.single ω (1 : ℂ))) =
+      (fun τ : Cfg d 2 =>
+          (Pi.single ω (1 : ℂ) : NSiteSpace d 3)
+            (replaceWindow 2 (by decide : 2 ≤ 3) (1 : Fin 3) σ τ)) =
         (fun β : Cfg d 2 =>
           ((Pi.single ω (1 : ℂ) : NSiteSpace d 3) (replaceXBCfg σ β))) := by
     funext τ
@@ -229,7 +230,8 @@ theorem localTerm_two_three_one_eq_rightPairLift_parentInteraction
       funext k
       fin_cases k <;> rfl
     simp [hWindow]
-  simp [localTerm, rightPairLift, hExtract, hPi]
+  rw [LinearMap.comp_apply, localTerm_apply_of_le A 2 3 (by decide) (1 : Fin 3)]
+  simp [rightPairLift, hExtract, hPi]
 
 /-- The algebraic part of the source nearest-neighbor parent-commuting condition
 on one tripartite window.

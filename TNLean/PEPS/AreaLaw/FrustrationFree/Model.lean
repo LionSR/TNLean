@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.TheoremStatements
-import TNLean.PEPS.AreaLaw.FrustrationFree.RangeProjection
+import QICLean.Analysis.SupportProjectionOrder
 import QICLean.ManyBody.Hamiltonian.FrustrationFree
 
 /-!
@@ -29,7 +29,7 @@ of the special case, assembled in later modules of this directory.
 ## Main statements
 
 * `IsFrustrationFreeGapped.isGapped`, `IsFrustrationFreeGapped.groundSpace_eq`: the model has
-  gap `Δ` at energy zero and ground space `span {Ω}`.
+  gap `Δ` at energy zero and ground space `span {Ω}`, the zero space of the interaction.
 * `IsFrustrationFreeGapped.norm_term_le`: `‖h_X‖ ≤ J`.
 * `IsFrustrationFreeGapped.smul_sub_le_sum_supportProj`: the range projections of the terms keep
   the gap, `(Δ/J) (1 - P) ≤ ∑_X Π_{h_X}`.
@@ -48,6 +48,7 @@ open Matrix
 open scoped MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (planeDomainGraph edgeBoundary)
 
 namespace TNLean.PEPS.AreaLaw.FrustrationFree
 
@@ -55,10 +56,12 @@ variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ}
 
 /-- **The frustration-free model** (`eq:model` of the frustration-free area-law note,
 `docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`, "Setting"): every term
-satisfies `0 ≤ h_X ≤ J`, `Ω` is a unit vector, and the Hamiltonian is gapped at energy zero with
-gap `Δ` and ground space the line through `Ω`. The terms then annihilate `Ω`
-(`mulVec_eq_zero`), the interaction is frustration free in the sense of
-`ManyBody.Interaction.IsFrustrationFree` (`isFrustrationFree`), and for `Δ > 0` these are
+satisfies `0 ≤ h_X ≤ J`, `Ω` is a unit vector, the Hamiltonian is gapped at energy zero with gap
+`Δ`, and the zero space of the interaction `ManyBody.Interaction.zeroSpace`, the common kernel of
+the terms, is the line through `Ω`. The terms then annihilate `Ω` (`mulVec_eq_zero`), the ground
+space at energy zero is the line through `Ω` (`groundSpace_eq`), the interaction is frustration
+free in the sense of `ManyBody.Interaction.IsFrustrationFree` (`isFrustrationFree`), and for
+`Δ > 0` these are
 exactly the conditions `0 ≤ h_X ≤ J`, `h_X Ω = 0`, `‖Ω‖ = 1`, `H ≥ Δ (1 - |Ω⟩⟨Ω|)` of the note
 (`iff_model`). -/
 structure IsFrustrationFreeGapped (h : PlaneInteraction Λ q R) (J Δ : ℝ) (Ω : StateSpace Λ q) :
@@ -71,8 +74,9 @@ structure IsFrustrationFreeGapped (h : PlaneInteraction Λ q R) (J Δ : ℝ) (Ω
   norm_eq_one : ‖Ω‖ = 1
   /-- The Hamiltonian is gapped at energy zero with gap `Δ`. -/
   isGapped : IsGapped h.hamiltonian 0 Δ
-  /-- The ground space at energy zero is the line through `Ω`. -/
-  groundSpace_eq : groundSpace h.hamiltonian 0 = Submodule.span ℂ {Ω}
+  /-- The zero space of the interaction, the common kernel of the terms, is the line through
+  `Ω`. -/
+  zeroSpace_eq : h.zeroSpace = Submodule.span ℂ {Ω}
 
 /-- **The frustration-free area law** (`eq:goal` of the frustration-free area-law note): for
 `q ≥ 1`, `R`, and `J, Δ > 0` there is a constant `C`, chosen before the domain, the Hamiltonian
@@ -82,7 +86,8 @@ def FrustrationFreeAreaLaw : Prop :=
     ∃ C : ℝ, 0 ≤ C ∧
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, ∀ Ω : StateSpace Λ q,
         IsFrustrationFreeGapped h J Δ Ω →
-          ∀ A : Finset (Site Λ), ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary Λ A).card
+          ∀ A : Finset (Site Λ),
+            ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card
 
 namespace IsFrustrationFreeGapped
 
@@ -92,26 +97,32 @@ variable {h : PlaneInteraction Λ q R} {J Δ : ℝ} {Ω : StateSpace Λ q}
 theorem isHermitian (hff : IsFrustrationFreeGapped h J Δ Ω) (X) : (h.term X).IsHermitian :=
   (hff.posSemidef X).isHermitian
 
-/-- The Hamiltonian annihilates `Ω`. -/
-theorem hamiltonian_mulVec_eq_zero (hff : IsFrustrationFreeGapped h J Δ Ω) :
-    h.hamiltonian *ᵥ WithLp.ofLp Ω = 0 := by
-  have hmem : Ω ∈ groundSpace h.hamiltonian 0 :=
-    hff.groundSpace_eq ▸ Submodule.mem_span_singleton_self Ω
-  simpa using ManyBody.mem_groundSpace_iff_mulVec.mp hmem
+/-- The ground space at energy zero is the line through `Ω`, since for positive terms it is the
+zero space of the interaction (`ManyBody.Interaction.zeroSpace_eq_groundSpace`). -/
+theorem groundSpace_eq (hff : IsFrustrationFreeGapped h J Δ Ω) :
+    groundSpace h.hamiltonian 0 = Submodule.span ℂ {Ω} :=
+  (ManyBody.Interaction.zeroSpace_eq_groundSpace hff.posSemidef).symm.trans hff.zeroSpace_eq
 
-/-- Every term annihilates `Ω`, since the terms are positive and their sum annihilates `Ω`
-(`ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff`). -/
+/-- `Ω` lies in the zero space of the interaction. -/
+theorem mem_zeroSpace (hff : IsFrustrationFreeGapped h J Δ Ω) : Ω ∈ h.zeroSpace :=
+  hff.zeroSpace_eq ▸ Submodule.mem_span_singleton_self Ω
+
+/-- Every term annihilates `Ω` (`ManyBody.Interaction.mem_zeroSpace_iff`). -/
 theorem mulVec_eq_zero (hff : IsFrustrationFreeGapped h J Δ Ω) (X) :
     h.term X *ᵥ WithLp.ofLp Ω = 0 :=
-  (ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff hff.posSemidef).mp
-    hff.hamiltonian_mulVec_eq_zero X
+  ManyBody.Interaction.mem_zeroSpace_iff.mp hff.mem_zeroSpace X
+
+/-- The Hamiltonian annihilates `Ω`. -/
+theorem hamiltonian_mulVec_eq_zero (hff : IsFrustrationFreeGapped h J Δ Ω) :
+    h.hamiltonian *ᵥ WithLp.ofLp Ω = 0 :=
+  (ManyBody.Interaction.mem_zeroSpace_iff_hamiltonian_mulVec_eq_zero hff.posSemidef).mp
+    hff.mem_zeroSpace
 
 /-- The model is a frustration-free interaction: `Ω` is a common ground vector of the terms,
 all at energy zero. -/
 theorem isFrustrationFree (hff : IsFrustrationFreeGapped h J Δ Ω) : h.IsFrustrationFree := by
-  refine ManyBody.Interaction.isFrustrationFree_of_groundSpace_hamiltonian_zero_ne_bot
-    hff.posSemidef ?_
-  rw [hff.groundSpace_eq, Ne, Submodule.span_singleton_eq_bot]
+  refine ManyBody.Interaction.isFrustrationFree_of_zeroSpace_ne_bot hff.posSemidef ?_
+  rw [hff.zeroSpace_eq, Ne, Submodule.span_singleton_eq_bot]
   intro h0
   have h1 := hff.norm_eq_one
   simp [h0] at h1
@@ -139,7 +150,8 @@ theorem iff_model (hΔ : 0 < Δ) :
     hff.gap hΔ⟩, fun ⟨hpos, hle, hzero, hΩ, hgap⟩ ↦ ?_⟩
   have hiff := (ManyBody.isGapped_and_groundSpace_eq_span_iff (H := h.hamiltonian) (E₀ := 0)
     hΔ Ω).mp ⟨hΩ, ?_, ?_⟩
-  · exact ⟨hpos, hle, hΩ, hiff.2.2.1, hiff.2.2.2⟩
+  · exact ⟨hpos, hle, hΩ, hiff.2.2.1,
+      (ManyBody.Interaction.zeroSpace_eq_groundSpace hpos).trans hiff.2.2.2⟩
   · rw [Complex.ofReal_zero, zero_smul]
     change WithLp.toLp 2 (h.hamiltonian *ᵥ WithLp.ofLp Ω) = 0
     rw [(ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff hpos).mpr hzero]

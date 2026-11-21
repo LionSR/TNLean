@@ -37,7 +37,7 @@ noncomputable section
 
 open Matrix
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace edgeBoundary planeDomainGraph)
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -48,7 +48,7 @@ open Pinned.NestedFilter Pinned.NestedFilter.Energy
 /-- Exact once-counted cardinality, using the two existing count transports. -/
 theorem Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount {L : ℕ}
     (A : Finset (Vertex L)) :
-    (Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
+    (edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L))
       (A.map (ManyBody.rectangleSiteEquiv L L).toEmbedding)).card =
       crossingCount A := by
   classical
@@ -74,7 +74,7 @@ private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
     (A : Finset (Vertex L)) (e : Edge (squareLatticeGraph L L)) :
     s((rectangleForwardEdgeEquiv L e).1.1,
       (rectangleForwardEdgeEquiv L e).1.2) ∈
-        Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
+        edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L))
           (A.map (ManyBody.rectangleSiteEquiv L L).toEmbedding) ↔
       Crosses A e := by
   classical
@@ -87,7 +87,7 @@ private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
       (rectangleForwardEdgeEquiv L e).1.2 = σ e.val.2) ∨
     ((rectangleForwardEdgeEquiv L e).1.1 = σ e.val.2 ∧
       (rectangleForwardEdgeEquiv L e).1.2 = σ e.val.1) at hend
-  rw [AreaLaw.mem_edgeBoundary_pair_iff]
+  rw [ManyBody.mk_mem_edgeBoundary_iff]
   have hadj := (rectangleForwardEdgeEquiv L e).property.2
   simp only [hadj, true_and]
   change (((rectangleForwardEdgeEquiv L e).1.1 ∈ A.map σ.toEmbedding ∧
@@ -106,9 +106,9 @@ private theorem rectangle_singleCrossing {L m : ℕ}
       Crosses (X i) e → Crosses (X j) e → i = j) :
     ∀ e : Edge (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L)),
       ∀ i j : Fin m,
-        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
+        s(e.1.1, e.1.2) ∈ edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L))
           ((X i).map (ManyBody.rectangleSiteEquiv L L).toEmbedding) →
-        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
+        s(e.1.1, e.1.2) ∈ edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L))
           ((X j).map (ManyBody.rectangleSiteEquiv L L).toEmbedding) →
         i = j := by
   intro e i j hi hj
@@ -123,7 +123,7 @@ private theorem canonicalCrossingBudget_eq_original {L q m : ℕ}
     (J : ℝ) (X : Fin m → Finset (Vertex L))
     (a : Fin m → ℝ) :
     (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 *
-      (Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
+      (edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L))
         ((X j).map (ManyBody.rectangleSiteEquiv L L).toEmbedding)).card =
     (q : ℝ) ^ 2 * J * ∑ j : Fin m,
       (crossingCount (X j) : ℝ) * a j ^ 2 := by
@@ -220,16 +220,17 @@ theorem _root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelit
     simpa only [canonicalRegions_fin, Finset.map_subset_map] using hX hij
   have hsep : ∀ e : Edge (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L)),
       ∀ i j : Fin m,
-        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
+        s(e.1.1, e.1.2) ∈ edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L))
           (canonicalRegions X i) →
-        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
+        s(e.1.1, e.1.2) ∈ edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L))
           (canonicalRegions X j) → i = j := by
     simpa only [canonicalRegions_fin] using rectangle_singleCrossing X hsingle
   obtain ⟨K, hK, hmax, hresult⟩ :=
     h.exists_zero_floor_maximizer_energy_fidelity hh hhJ hΩ hgap hspan (canonicalRegions X) hD
       hsep a ha ha1
   have hbudget : (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 *
-      (Lattice.edgeBoundary (ManyBody.rectangularDomain L L) (canonicalRegions X j)).card =
+      (edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L))
+        (canonicalRegions X j)).card =
       (q : ℝ) ^ 2 * J * ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 := by
     simpa only [canonicalRegions_fin] using canonicalCrossingBudget_eq_original (q := q) J X a
   dsimp only at hresult

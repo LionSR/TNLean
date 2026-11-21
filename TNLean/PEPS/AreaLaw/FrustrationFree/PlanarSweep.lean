@@ -119,8 +119,8 @@ theorem retainedSet_colorLayer_subset
     (c : SupportColouring Λ R)
     (i : Fin (overlapDegreeBound R + 1)) (U : Finset (Site Λ)) :
     retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (colorLayer c i) ⊆
-      graphNeighborhood Λ R U :=
-  retainedSet_subset_of_pairwise_disjoint (subset_graphNeighborhood R U)
+      graphNeighborhood (planeDomainGraph Λ) U R :=
+  retainedSet_subset_of_pairwise_disjoint subset_graphNeighborhood
     (pairwise_disjoint_colorLayer c i) fun X _ hXU ↦
       subset_graphNeighborhood_of_isAdmissibleSupport X.2 hXU
 
@@ -129,13 +129,13 @@ theorem retainedSet_flatten_subset
     (c : SupportColouring Λ R)
     (Ls : List (Fin (overlapDegreeBound R + 1))) (U : Finset (Site Λ)) :
     retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (Ls.map (colorLayer c)).flatten ⊆
-      graphNeighborhood Λ (R * Ls.length) U := by
+      graphNeighborhood (planeDomainGraph Λ) U (R * Ls.length) := by
   induction Ls generalizing U with
-  | nil => exact subset_graphNeighborhood _ U
+  | nil => exact subset_graphNeighborhood
   | cons i Ls ih =>
     rw [List.map_cons, List.flatten_cons, retainedSet_append]
-    refine (ih _).trans ((graphNeighborhood_mono _ (retainedSet_colorLayer_subset c i U)).trans
-      ((graphNeighborhood_graphNeighborhood_subset _ _ U).trans ?_))
+    refine (ih _).trans ((graphNeighborhood_mono_left (retainedSet_colorLayer_subset c i U)).trans
+      (graphNeighborhood_graphNeighborhood_subset.trans ?_))
     exact le_of_eq (by rw [List.length_cons]; congr 1; ring)
 
 /-- **The light cone of one sweep** lies in `N_{R χ}(U)`, `χ = d_R + 1`. -/
@@ -143,7 +143,7 @@ theorem retainedSet_sweepWord_subset
     (c : SupportColouring Λ R)
     (U : Finset (Site Λ)) :
     retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (sweepWord c) ⊆
-      graphNeighborhood Λ (R * (overlapDegreeBound R + 1)) U := by
+      graphNeighborhood (planeDomainGraph Λ) U (R * (overlapDegreeBound R + 1)) := by
   have h := retainedSet_flatten_subset c (List.ofFn id) U
   rwa [List.map_ofFn, Function.comp_id, List.length_ofFn] at h
 
@@ -155,13 +155,13 @@ theorem retainedSet_sweepWord_pow_subset
     (c : SupportColouring Λ R)
     (U : Finset (Site Λ)) (t : ℕ) :
     retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (List.replicate t (sweepWord c)).flatten ⊆
-      graphNeighborhood Λ (R * (overlapDegreeBound R + 1) * t) U := by
+      graphNeighborhood (planeDomainGraph Λ) U (R * (overlapDegreeBound R + 1) * t) := by
   induction t generalizing U with
-  | zero => exact subset_graphNeighborhood _ U
+  | zero => exact subset_graphNeighborhood
   | succ t ih =>
     rw [List.replicate_succ, List.flatten_cons, retainedSet_append]
-    refine (ih _).trans ((graphNeighborhood_mono _ (retainedSet_sweepWord_subset c U)).trans
-      ((graphNeighborhood_graphNeighborhood_subset _ _ U).trans ?_))
+    refine (ih _).trans ((graphNeighborhood_mono_left (retainedSet_sweepWord_subset c U)).trans
+      (graphNeighborhood_graphNeighborhood_subset.trans ?_))
     exact le_of_eq (by congr 1; ring)
 
 end TNLean.PEPS.AreaLaw.FrustrationFree

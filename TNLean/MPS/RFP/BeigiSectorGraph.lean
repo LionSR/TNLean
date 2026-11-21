@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicTransport
 import TNLean.MPS.RFP.BeigiSpatialDecomposition
-import TNLean.Algebra.CommutingProjectionProduct
+import QICLean.Analysis.CommutingProjectionProduct
 
 /-!
 # The finite sector graph of a commuting parent Hamiltonian
@@ -228,31 +228,13 @@ private theorem groundBond_eq_one_sub_toMatrix' :
         exact ⟨rfl, rfl⟩
     simp only [hxy]
 
-private theorem embedLocalOperator_groundBond_eq_one_sub {N : ℕ} (hN : 2 ≤ N)
+private theorem placeAlong_ringWindow_groundBond_eq_one_sub {N : ℕ} (hN : 2 ≤ N)
     (i : Fin N) :
-    MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A) =
-      1 - MPOTensor.embedLocalOperator (d := d) 2 N hN i
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A) =
+      1 - ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
         (LinearMap.toMatrix' (parentInteraction A 2)) := by
   classical
-  rw [groundBond_eq_one_sub_toMatrix']
-  ext σ τ
-  by_cases hστ : MPOTensor.AgreesOutsideWindow (d := d) 2 hN i σ τ
-  · simp only [MPOTensor.embedLocalOperator_apply, hστ, ite_true,
-      Matrix.sub_apply, Matrix.one_apply]
-    by_cases hEq : σ = τ
-    · subst τ
-      simp
-    · have hExtract : extractWindow 2 i σ ≠ extractWindow 2 i τ := by
-        intro h
-        apply hEq
-        rw [← replaceWindow_extractWindow 2 hN i τ]
-        rw [← h, hστ]
-      simp [hEq, hExtract]
-  · have hne : σ ≠ τ := by
-      intro hEq
-      subst τ
-      exact hστ (by simp [MPOTensor.AgreesOutsideWindow])
-    simp [MPOTensor.embedLocalOperator_apply, hστ, hne]
+  rw [groundBond_eq_one_sub_toMatrix', ManyBody.placeAlong_sub, ManyBody.placeAlong_one]
 
 private theorem singleKrausMap_groundBond_eq_transformedGroundBond
     (F : BeigiSectorGraphData A) :
@@ -271,12 +253,12 @@ theorem singleKrausMap_groundBondProduct (F : BeigiSectorGraphData A)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     singleKrausMap (Matrix.tensorPower N F.unitaryᴴ)
         ((List.ofFn fun i : Fin N ↦
-          MPOTensor.embedLocalOperator (d := d) 2 N hN i
+          ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm
               (twoSiteParentGroundProjectorMatrix A))).prod) =
       (List.ofFn fun i : Fin N ↦
-        MPOTensor.embedLocalOperator (d := d) 2 N hN i
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
           (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
             (finTwoArrowEquiv (Fin d)).symm
             (star (F.unitary ⊗ₖ F.unitary) *
@@ -294,14 +276,14 @@ theorem singleKrausMap_groundBondProduct (F : BeigiSectorGraphData A)
 private theorem groundBondEmbeddings_commute (F : BeigiSectorGraphData A)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) (i j : Fin N) :
     Commute
-      (MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A))
-      (MPOTensor.embedLocalOperator (d := d) 2 N hN j (groundBond A)) := by
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A))
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN j) (groundBond A)) := by
   classical
   let W := Matrix.tensorPower N F.unitaryᴴ
   let G : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := fun n ↦
-    MPOTensor.embedLocalOperator (d := d) 2 N hN n (groundBond A)
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN n) (groundBond A)
   let T : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := fun n ↦
-    MPOTensor.embedLocalOperator (d := d) 2 N hN n
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN n)
       (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
         (finTwoArrowEquiv (Fin d)).symm F.transformedGroundBond)
   have hUstarU : star F.unitary * F.unitary = 1 :=
@@ -325,14 +307,14 @@ private theorem groundBondEmbeddings_commute (F : BeigiSectorGraphData A)
     exact hWWstar
   have hconj (n : Fin N) : singleKrausMap W (G n) = T n := by
     simp only [G, T]
-    rw [MPOTensor.singleKrausMap_embedLocalOperator_eq_range_mul_lift
+    rw [MPOTensor.singleKrausMap_placeAlong_ringWindow_eq_range_mul_lift
       F.unitaryᴴ (by simpa using hUUstar') hN n,
       singleKrausMap_groundBond_eq_transformedGroundBond]
     rw [show singleKrausMap
       (Matrix.tensorPower N F.unitaryᴴ) 1 = 1 by exact hWone]
     exact Matrix.one_mul _
   have hT : Commute (T i) (T j) := by
-    exact MPOTensor.embedLocalOperator_commute_of_etaPair_decomposition hN
+    exact MPOTensor.placeAlong_ringWindow_commute_of_etaPair_decomposition hN
       F.leftDim F.rightDim F.sectorEquiv F.edgeProjector F.transformedGroundBond
       F.transformedGroundBond_block i j
   rw [← hconj i, ← hconj j] at hT
@@ -348,22 +330,22 @@ private theorem localTerm_commute (F : BeigiSectorGraphData A)
     Commute (localTerm A 2 N i) (localTerm A 2 N j) := by
   classical
   let G : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := fun n ↦
-    MPOTensor.embedLocalOperator (d := d) 2 N hN n (groundBond A)
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN n) (groundBond A)
   have hG : Commute (G i) (G j) := F.groundBondEmbeddings_commute hN i j
   have htoLin (n : Fin N) :
       Matrix.toLin' (G n) = 1 - localTerm A 2 N n := by
     simp only [G]
-    rw [embedLocalOperator_groundBond_eq_one_sub]
+    rw [placeAlong_ringWindow_groundBond_eq_one_sub]
     change (Matrix.toLinAlgEquiv' :
       Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ ≃ₐ[ℂ]
         Module.End ℂ (NSiteSpace d N))
-        (1 - MPOTensor.embedLocalOperator (d := d) 2 N hN n
+        (1 - ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN n)
           (LinearMap.toMatrix' (parentInteraction A 2))) = _
     rw [map_sub, map_one]
     change 1 - Matrix.toLin'
-      (MPOTensor.embedLocalOperator (d := d) 2 N hN n
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN n)
         (LinearMap.toMatrix' (parentInteraction A 2))) = _
-    rw [localTerm_eq_toLin'_embedLocalOperator (A := A) hN n]
+    rw [localTerm_eq_toLin'_placeAlong_ringWindow A hN n]
   have hcomp : Commute
       (1 - localTerm A 2 N i) (1 - localTerm A 2 N j) := by
     rw [← htoLin i, ← htoLin j]
@@ -397,7 +379,7 @@ private theorem transformedGroundBondProduct_trace (F : BeigiSectorGraphData A)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     Matrix.trace
         (List.ofFn fun i : Fin N ↦
-          MPOTensor.embedLocalOperator (d := d) 2 N hN i
+          ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm F.transformedGroundBond)).prod =
       ∑ k : Fin N → Fin F.sectorCount,
@@ -412,22 +394,22 @@ private theorem transformedGroundBondProduct_trace (F : BeigiSectorGraphData A)
       F.edgeProjector (k n) (k (n + 1)) (x n) (y n)
   have hblocks : Matrix.reindex e e
       (List.ofFn fun i : Fin N ↦
-        MPOTensor.embedLocalOperator (d := d) 2 N hN i
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
           (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
             (finTwoArrowEquiv (Fin d)).symm F.transformedGroundBond)).prod =
       Matrix.blockDiagonal' edgeBlock :=
-    MPOTensor.reindex_product_embedLocalOperator_of_etaPair_decomposition
+    MPOTensor.reindex_product_placeAlong_ringWindow_of_etaPair_decomposition
       hN F.leftDim F.rightDim F.sectorEquiv F.edgeProjector F.transformedGroundBond
       F.transformedGroundBond_block
   calc
     Matrix.trace
         (List.ofFn fun i : Fin N ↦
-          MPOTensor.embedLocalOperator (d := d) 2 N hN i
+          ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm F.transformedGroundBond)).prod =
         Matrix.trace (Matrix.reindex e e
           (List.ofFn fun i : Fin N ↦
-            MPOTensor.embedLocalOperator (d := d) 2 N hN i
+            ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
               (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
                 (finTwoArrowEquiv (Fin d)).symm F.transformedGroundBond)).prod) := by
           exact (Matrix.trace_reindex e _).symm
@@ -446,14 +428,14 @@ private theorem groundBondProduct_trace (F : BeigiSectorGraphData A)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     Matrix.trace
         (List.ofFn fun i : Fin N ↦
-          MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)).prod =
+          ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)).prod =
       ∑ k : Fin N → Fin F.sectorCount,
         (↑(∏ n : Fin N,
           Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1)))) : ℂ) := by
   classical
   let W := Matrix.tensorPower N F.unitaryᴴ
   let Q := (List.ofFn fun i : Fin N ↦
-    MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)).prod
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)).prod
   have hUUstar := F.unitary_mul_conjTranspose
   have hWstarW : Wᴴ * W = 1 := by
     simp only [W, Matrix.conjTranspose_tensorPower,
@@ -465,7 +447,7 @@ private theorem groundBondProduct_trace (F : BeigiSectorGraphData A)
   have htrace := F.transformedGroundBondProduct_trace hN
   have hconj : singleKrausMap W Q =
       (List.ofFn fun i : Fin N ↦
-        MPOTensor.embedLocalOperator (d := d) 2 N hN i
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
           (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
             (finTwoArrowEquiv (Fin d)).symm F.transformedGroundBond)).prod := by
     simpa only [W, Q, groundBond, transformedGroundBond] using hprod
@@ -479,23 +461,23 @@ private theorem groundBondProduct_trace (F : BeigiSectorGraphData A)
 
 private theorem toLin'_groundBondProduct {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     Matrix.toLin' ((List.ofFn fun i : Fin N ↦
-      MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)).prod) =
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)).prod) =
       (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod := by
   classical
   have hfactor (i : Fin N) : Matrix.toLin'
-      (MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)) =
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)) =
       1 - localTerm A 2 N i := by
-    rw [embedLocalOperator_groundBond_eq_one_sub]
+    rw [placeAlong_ringWindow_groundBond_eq_one_sub]
     change (Matrix.toLinAlgEquiv' :
       Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ ≃ₐ[ℂ]
         Module.End ℂ (NSiteSpace d N))
-        (1 - MPOTensor.embedLocalOperator (d := d) 2 N hN i
+        (1 - ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
           (LinearMap.toMatrix' (parentInteraction A 2))) = _
     rw [map_sub, map_one]
     change 1 - Matrix.toLin'
-      (MPOTensor.embedLocalOperator (d := d) 2 N hN i
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
         (LinearMap.toMatrix' (parentInteraction A 2))) = _
-    rw [localTerm_eq_toLin'_embedLocalOperator (A := A) hN i]
+    rw [localTerm_eq_toLin'_placeAlong_ringWindow A hN i]
   change (Matrix.toLinAlgEquiv' :
     Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ ≃ₐ[ℂ]
       Module.End ℂ (NSiteSpace d N)) _ = _
@@ -534,7 +516,7 @@ private noncomputable def complementProductTransport (A : MPSTensor d D)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     ComplementProductTransport A N hN where
   qMatrix := (List.ofFn fun i : Fin N ↦
-    MPOTensor.embedLocalOperator (d := d) 2 N hN i (groundBond A)).prod
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)).prod
   qRaw := (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod
   qES := (List.ofFn fun i : Fin N ↦ 1 - localTermES A 2 i).prod
   e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
@@ -596,7 +578,7 @@ theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
     (F : BeigiSectorGraphData A) {N : ℕ} [NeZero N] (hN : 2 ≤ N)
     (v : NSiteSpace d N)
     (hv : ((List.ofFn fun i : Fin N ↦
-      MPOTensor.embedLocalOperator (d := d) 2 N hN i
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
         (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
           (finTwoArrowEquiv (Fin d)).symm
           (twoSiteParentGroundProjectorMatrix A))).prod).mulVec v = v) :

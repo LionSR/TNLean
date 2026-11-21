@@ -219,7 +219,7 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
   have hinfo : ManyBody.conditionalMutualInformation (fun _ : Site Λ ↦ Fin q)
       Ω G E B ≤ 2 * (Q.residual.card : ℝ) * Real.log q + Q.pieceCount * C₂ := by
     simpa only [ManyBody.conditionalMutualInformation] using
-      regionalEntropy_conditional_le_card_residual_add_pieceCount
+      regionEntropy_conditional_le_card_residual_add_pieceCount
         Λ q Ω hΩ G B E Q hGB hdisj.1 hdisj.2 C₂ h₀ h₁
   have hres : (Q.residual.card : ℝ) ≤ P.residual.card :=
     Nat.cast_le.mpr (P.card_residual_comap_le (fun x : Site Λ ↦ x.val)

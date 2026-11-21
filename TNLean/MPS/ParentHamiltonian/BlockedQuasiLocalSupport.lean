@@ -24,16 +24,17 @@ restriction property used in equation (3.12).
 
 open SpinChain
 open scoped Matrix MatrixOrder ComplexOrder
+open ManyBody (placeAlong chainWindow)
 namespace MPSTensor
 variable {d D : ℕ}
 
-/-- The ground projection on a contained nonwrapping window fixes the full
-open-boundary MPS ground projection. No injectivity is required.
+/-- The ground projection placed on a contained window of the open chain fixes
+the full open-boundary MPS ground projection. No injectivity is required.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12), its
 frustration-free restriction direction. -/
-theorem chainWindowOperator_groundSpaceProjection_mul
+theorem placeAlong_chainWindow_groundSpaceProjection_mul
     (A : MPSTensor d D) {k N b : ℕ} (hk : 0 < k) (hb : b + k ≤ N) :
-    chainWindowOperator N b (groundSpaceProjectionMatrix A k) *
+    placeAlong (X := fun _ ↦ Fin d) (chainWindow b hb) (groundSpaceProjectionMatrix A k) *
       groundSpaceProjectionMatrix A N = groundSpaceProjectionMatrix A N := by
   let i : Fin N := ⟨b, by omega⟩
   have hkill : (localTermES A k i).toContinuousLinearMap.comp
@@ -50,21 +51,26 @@ theorem chainWindowOperator_groundSpaceProjection_mul
     rw [map_sub, map_one, groundSpaceProjectionMatrix, StarAlgEquiv.apply_symm_apply]
     rw [parentInteractionES, Submodule.starProjection_orthogonal]
     rfl
-  have hlocal := periodicLocalInteractionES_eq_toEuclideanLin_embedLocalOperator
+  have hlocal := periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow
     (show k ≤ N by omega) i (1 - groundSpaceProjectionMatrix A k)
   rw [hc, periodicLocalInteractionES_parentInteractionES A hk] at hlocal
+  have hw : chainWindow b hb = ManyBody.ringWindow (show k ≤ N by omega) i := by
+    ext j
+    have hj : b + j.val < N := by omega
+    simp only [ManyBody.val_chainWindow, ManyBody.ringWindow_apply, Fin.val_add,
+      Fin.val_castLE, i, Nat.mod_eq_of_lt hj]
   have hwindow : Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
-      (chainWindowOperator N b (1 - groundSpaceProjectionMatrix A k)) =
+      (placeAlong (X := fun _ ↦ Fin d) (chainWindow b hb)
+        (1 - groundSpaceProjectionMatrix A k)) =
         (localTermES A k i).toContinuousLinearMap := by
+    rw [hw]
     exact ContinuousLinearMap.coe_injective (by
-      simpa only [chainWindowOperator, dite_eq_left (show k ≤ N ∧ b < N by omega), i,
-        Matrix.coe_toEuclideanCLM_eq_toEuclideanLin, LinearMap.coe_toContinuousLinearMap]
-        using hlocal.symm)
-  rw [chainWindowOperator_sub (by omega) hb, chainWindowOperator_one (by omega) hb,
-    map_sub, map_one] at hwindow
+      simpa only [Matrix.coe_toEuclideanCLM_eq_toEuclideanLin,
+        LinearMap.coe_toContinuousLinearMap] using hlocal.symm)
+  rw [ManyBody.placeAlong_sub, ManyBody.placeAlong_one, map_sub, map_one] at hwindow
   apply (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)).injective
   change Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
-      (chainWindowOperator N b (groundSpaceProjectionMatrix A k) *
+      (placeAlong (X := fun _ ↦ Fin d) (chainWindow b hb) (groundSpaceProjectionMatrix A k) *
         groundSpaceProjectionMatrix A N) =
     Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) (groundSpaceProjectionMatrix A N)
   simp only [map_mul, groundSpaceProjectionMatrix, StarAlgEquiv.apply_symm_apply]
@@ -87,7 +93,7 @@ theorem quasiLocalState_groundSpaceProjection_eq_one_of_contained_interval
     φ (quasiLocalIntervalObservable d (a + (b : ℤ)) k
       (groundSpaceProjectionMatrix A k)) = 1 := by
   let p := groundSpaceProjectionMatrix A N
-  let q := chainWindowOperator N b (groundSpaceProjectionMatrix A k)
+  let q := placeAlong (X := fun _ ↦ Fin d) (chainWindow b hb) (groundSpaceProjectionMatrix A k)
   let f := intervalStateFunctional φ hφ.2.2 a N
   have hf : f p = f 1 := by
     simpa only [f, p, intervalStateFunctional_apply, map_one, hφ.2.1] using hSupport
@@ -95,11 +101,11 @@ theorem quasiLocalState_groundSpaceProjection_eq_one_of_contained_interval
     (isStarProjection_groundSpaceProjectionMatrix A N).isSelfAdjoint.star_eq
     (isStarProjection_groundSpaceProjectionMatrix A N).isIdempotentElem hf
   have hpqp : p * q * p = p := by
-    rw [mul_assoc, chainWindowOperator_groundSpaceProjection_mul A hk hb,
+    rw [mul_assoc, placeAlong_chainWindow_groundSpaceProjection_mul A hk hb,
       (isStarProjection_groundSpaceProjectionMatrix A N).isIdempotentElem]
   rw [hpqp] at hcomp
   simpa only [f, p, q, intervalStateFunctional_apply,
-    quasiLocalIntervalObservable_chainWindowOperator a N b _ hk hb]
+    quasiLocalIntervalObservable_placeAlong_chainWindow a N b _ hb]
     using hcomp.symm.trans hSupport
 /-- Support in all nonempty original MPS intervals is equivalent to support
 in the intervals aligned with any fixed positive blocking length. No

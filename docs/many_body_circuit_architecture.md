@@ -147,8 +147,8 @@ Taking basis *types* at the sites is the change with the widest effect. A site
 with a qudit and an ancilla has basis `Fin d × Fin a`, a block of `k` sites has
 basis `Fin k → Fin d`, a site holding several wires has the configurations of
 its wires, and none of them is re-encoded as `Fin` of a product. The registers,
-ports, encodings and blockings of `Circuit/Channel` exist largely to carry
-that re-encoding. `SiteConfig n` in QICLean and `ι → Fin d` in TNLean are the
+ports, encodings and blockings of the former `Circuit/Channel` existed largely
+to carry that re-encoding; QICLean's restatement does without them. `SiteConfig n` in QICLean and `ι → Fin d` in TNLean are the
 cases `X v = Fin (n v)` and `X v = Fin d`, by definition.
 
 The specific theorems stay specific. An area law on the chain is a statement
@@ -213,8 +213,9 @@ introduced were repaired by step 0.3, and the set is empty:
   `supportedOperators`, which was defined in `Circuit/SupportedOperators` and
   was replaced by QICLean's `ManyBody.supportedOperators` in follow-up F12;
 - four modules of the Sites and Hamiltonian layers imported gate modules for
-  `siteOp`, `ctrlProj` and local permutations, now in `Circuit/SiteOperators`
-  and `Circuit/SitePermutation`;
+  `siteOp`, `ctrlProj` and local permutations, now QICLean's `ManyBody.placeAt`
+  (`Sites/PlaceAlong`) and `QuantumCircuit.ctrlProj` (`Circuit/Core/SiteControlled`),
+  and TNLean's `Circuit/SitePermutation`;
 - `SupportedGroundSpace` imported `Channel/Layer` for one trace identity of
   product operators, now in `Circuit/SupportedOperators`;
 - `SiteExpectationOrder` imported `LiebRobinson/CommutatorRecursion` for one
@@ -321,17 +322,13 @@ QICLean–TNLean boundary.
 
 | Model | Semantics | Depth convention | Sites |
 |---|---|---|---|
-| `BondLayer`, `circuitOp`, `IsBondCircuitOfDepth` | unitary matrix | exactly `T` layers | any bond family |
-| `IsBondCircuitOn` | unitary matrix | exactly `T`, inside a region | any bond family |
-| `IsPairProduct`, `IsWindowProduct` | unitary matrix | at most `K` gates | open chain `Fin n` |
+| `UnitaryCircuit`, `IsUnitaryCircuit`, `IsGateProduct`, `IsUnitaryCircuitOn` (QICLean; TNLean's `BondLayer`, `IsBondCircuitOn`, `IsPairProduct`, `IsWindowProduct` are deleted) | unitary matrix | at most `T` layers or `K` gates | any geometry |
 | `BondChannelLayer`, `channelCircuitMap` | map on matrices | exactly `T` | any bond family |
 | `OnsiteChannel`, `IsLocalChannelProtocol` | map, dimension-changing | exactly `T` | ring only |
 | `IsDimensionBoundedLocalChannelProtocol` | the same, bounded dimensions | exactly `T` | ring only |
 | `FixedRegisterOperation` words | map, fixed alphabet | sum over the word | ring only |
 | `IsPhysicalPortUnitary`, `IsPhysicalPortProtocol` | unitary; map | at most `T` (`mono` constructor) | ring ports, wires `Fin W` |
-| `MeasurementProtocol` | set of output vectors | at most `T` | ring only |
-| `MeasurementRound` lists | Kraus family by outcome | sum of round depths | ring only |
-| `IsAdaptiveChannelProtocol` | map with outcome branches | at most `T`; layers prepended | ring only |
+| `Circuit` with `IsMeasurementConversion`, `IsOneRoundConversion`, `Circuit.IsImplementationOn`, `IsAdaptiveProtocol` (QICLean; TNLean's `MeasurementProtocol`, `MeasurementRound` lists and `IsAdaptiveChannelProtocol` are deleted) | Kraus family by branch; average map | at most `T` | any geometry |
 | `PartyCircuit.Word`, `OriginalCircuit`, `EffectCircuit`, `SourceCircuit` | contraction between tensor products of Hilbert spaces | participation counts | parties, no geometry |
 
 Identity, composition, monotonicity in the depth, complete positivity and the
@@ -348,7 +345,14 @@ constructor.
 The whole channel stack (`Circuit/Channel`, about 40 modules, and
 `Measurement/AdaptiveConversion`) has no Lean consumer outside `TNLean/Circuit`;
 only blueprint chapter 33 refers to it. It can be restated without touching
-other directories.
+other directories. It has since been restated in QICLean
+(`QICLean/Circuit/Model`, `QICLean/Circuit/Compile`) and `Circuit/Channel` is
+deleted; the five channel rows of the table describe the deleted modules. The
+measurement modules (`Measurement/*` except `Measurement/Asymptotic`),
+`Teleportation/*`, `GHZState`, the zero-register modules and
+`ProductBasisPenalty` are deleted as well, for `QICLean/Circuit/Model/Measurement`,
+`QICLean/Circuit/Protocol` and `QICLean/ManyBody/Hamiltonian/ProductBasisPenalty`;
+`WeightedGHZ` keeps only the normalization `norm_ghzState_two`.
 
 ## The Sites layer
 
@@ -439,11 +443,11 @@ pointing down the list:
 
 | Directory | Content | Present modules |
 |---|---|---|
-| `Gate` | unitary words on a finite basis: two-level and Givens words, controlled elements, permutations, dilations, amplification | `Gates/TwoLevel`, `Givens`, ring part of `Controlled`; `PartialIsometryDilation`, `ExactSubspaceAmplification`, `UniformPostselection`, `UniformSuccessAttenuation`, `ExactAmplificationBudget` |
-| `Geometry` | cells on a set of sites: ring, open chain, graph edges, wires of a site; neighbourhoods and light cones | `Geometry`, `RingSeparation`, `Channel/PhysicalPort` (the layout) |
+| `Gate` | unitary words on a finite basis: two-level and Givens words, controlled elements, permutations, dilations, amplification | `Gates/TwoLevel`, `Givens`; `PartialIsometryDilation`, `ExactSubspaceAmplification`, `UniformPostselection`, `UniformSuccessAttenuation`, `ExactAmplificationBudget` |
+| `Geometry` | cells on a set of sites: ring, open chain, graph edges, wires of a site; neighbourhoods and light cones | `Channel/PhysicalPort` (the layout); `Geometry` and `RingSeparation` deleted for QICLean's |
 | `Core` | `Layer`, `Circuit`, Kraus family and map, depth and gate count, identity, composition, trace preservation, light cone | replaces `LocalCircuit`, `Composition`, `Channel/Layer`, `Channel/Conversion` |
-| `Model` | the restrictions: unitary, channel, bounded dimension, fixed register, measurement and adaptive, ports, gate count with clean workspace | `PairProduct`, `WindowProduct`, `CleanUnitaryImplementation`, `Measurement/Rounds`, `Channel/DimensionBoundedConversion`, ... |
-| `Compile` | theorems between two models: universality, routing, register encoding, compilation to ports, dilation, removal of measurements | `Gates/TwoSiteUniversality`, `Quantitative*`, `Channel/Port*`, `Channel/PhysicalPort*`, `Channel/Regrouped*` |
+| `Model` | the restrictions: unitary, channel, bounded dimension, fixed register, measurement and adaptive, ports, gate count with clean workspace | `Measurement/Rounds`, `Channel/DimensionBoundedConversion`, ... |
+| `Compile` | theorems between two models: universality, routing, register encoding, compilation to ports, dilation, removal of measurements | `Channel/Port*`, `Channel/PhysicalPort*`, `Channel/Regrouped*` |
 | `Protocol` | named constructions: teleportation, long-range and register gates, GHZ preparation, zero-register reflections | `Teleportation`, `Measurement/GHZ`, `WeightedGHZ`, `ZeroRegister*`, `SelectedZeroRegister*` |
 | `Party` | the reusable party calculus | part of `Lattice/PartyCircuit` |
 
@@ -627,7 +631,7 @@ Wave 3, two tracks that share no file:
 
   State after pin move 5: no module of `TNLean/Circuit` is deleted yet. Pin
   move 5 replaces `initializedBasisMatrix`, `registerEncoding` and
-  `quditFourier` by QICLean's `Matrix.initializedBasisMatrix` and
+  `quditFourier` by QICLean's `Matrix.basisInclusion` and
   `QuantumCircuit.Qudit.fourier`, and deletes `SitePermutationSupport` (46
   lines) from the Sites group. The modules wait, by group (counted on `main`
   before pin move 5), for:
@@ -657,6 +661,14 @@ Wave 3, two tracks that share no file:
   `RegisterEnvironment` they keep 23 more port and register modules (3,661
   lines), which go with them.
 
+  The second QICLean circuit batch deletes the rest of `Circuit/Channel`: 31
+  modules and the aggregator, 5,839 lines. Their statements are QICLean's
+  `QICLean/Circuit/Model/{Channel, Protocol, Conversion, Approximate}` and
+  `QICLean/Circuit/Compile/{Encoding, FixedRegister, Port, PortProtocol, PortCode,
+  Dilation, DilationOutput}`, except the identity of the compiled channel on an
+  arbitrary state of the port and scratch wires carried along as a reference,
+  which QICLean's construction does not give and which is dropped.
+
   The directory was not smaller after pin move 5 for two reasons. The ring
   geometry (`ringBall`, ring separation, the ring as a circuit geometry) was
   not yet on QICLean `main`, so the ring-geometry group could not be
@@ -671,8 +683,10 @@ Wave 4, sweeps:
   rest of `Lattice`, `QCA`, `MPS/Symmetry`; one pull request per directory.
   `Lattice.localLift`, `siteLift`, `Pinned.liftLocal`, `regionLocalTerm`,
   `dependentRegionOperatorLift` and `embedLocalOperator` are replaced by the
-  one placement. Done for all of them except `embedLocalOperator` (F12c, in
-  the third pin move, #10905).
+  one placement. Done for all of them; `embedLocalOperator` became
+  `ManyBody.placeAlong` along `ManyBody.ringWindow` (F12c, in the third pin
+  move, #10905), and the periodic Hamiltonian of one window term became
+  `ManyBody.Interaction.translationInvariant` (#10948).
 - **4.2** (TNLean). `MPS/Preparation`, `MPS/MPU`, `MPS/Examples`.
 - **4.3** (TNLean). The abbreviations are deleted and their names retired.
 

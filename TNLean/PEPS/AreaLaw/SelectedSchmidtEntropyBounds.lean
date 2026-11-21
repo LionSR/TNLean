@@ -46,10 +46,10 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
         (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ≤
           Real.exp (-ManyBody.regionEntropy Ωt X + w)) :
     let β := fun _ : Site Λ => Fin q
-    let split := ManyBody.splitEquiv β X
+    let split := ManyBody.cutEquiv β X
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split Ωt
     let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
-    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x =>
+    let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x =>
       Matrix.compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     let η := w - Real.log z
     |Real.log (E.card : ℝ) - ManyBody.regionEntropy Ωt X| ≤ η ∧
@@ -61,7 +61,7 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
   intro β split ΩX z ψ η
   have hρ : ManyBody.regionState Ωt X = Matrix.partialTraceRight
       (Matrix.vecMulVec ΩX (star ΩX)) :=
-    ManyBody.regionState_eq_partialTrace β Ωt X
+    ManyBody.regionState_eq_partialTraceRight_cutVector X Ωt
   have hselected := Matrix.entropy_compressedTypicalPureState_equivFin_swap ΩX E
     (by simpa only [← hρ] using hz)
   have hz1 : z ≤ 1 := (ManyBody.regionState_posSemidef X Ωt).spectralRestrictionMass_le_one

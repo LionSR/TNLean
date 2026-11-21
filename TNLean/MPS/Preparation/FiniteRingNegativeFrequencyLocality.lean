@@ -29,7 +29,7 @@ bound is uniform over positive regularizers, physical dimensions and
 ring lengths. Source: Hastings–Koma, arXiv:math-ph/0507008,
 Section 3 and Appendix A, specialized to the periodic nearest-neighbour
 interaction used in SPC11, arXiv:1010.3732, Section II.F. -/
-theorem norm_negativeFrequency_interactionHamiltonian_commutator_le
+theorem norm_negativeFrequency_hamiltonian_translationInvariant_commutator_le
     {d N : ℕ} [NeZero N] (hN : 2 ≤ N)
     (h : MPOTensor.ChainOperator d 2) (hHerm : h.IsHermitian) (hNorm : ‖h‖ ≤ 1)
     (A B : MPOTensor.ChainOperator d N)
@@ -38,17 +38,20 @@ theorem norm_negativeFrequency_interactionHamiltonian_commutator_le
     (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
     (hXY : Disjoint (X : Set (Fin N)) (Y : Set (Fin N)))
     (s : ℝ≥0) {ε T a : ℝ} (hε : 0 < ε) (hT : 0 < T) (ha : 0 ≤ a) :
-    ‖ManyBody.gaussianNegativeFrequencyOperator s ε (interactionHamiltonian h hN) A * B -
-        B * ManyBody.gaussianNegativeFrequencyOperator s ε (interactionHamiltonian h hN) A‖ ≤
+    ‖ManyBody.gaussianNegativeFrequencyOperator s ε
+          (Interaction.translationInvariant hN h).hamiltonian A * B -
+        B * ManyBody.gaussianNegativeFrequencyOperator s ε
+          (Interaction.translationInvariant hN h).hamiltonian A‖ ≤
       kernel s⁻¹ 0 *
         ((2 * ‖A‖ * ‖B‖ * X.card *
             Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY)) *
             (8 * Real.exp a) * Real.exp ((8 * Real.exp a) * T) +
           (2 * ‖A‖ * ‖B‖ / T) * Real.exp (-T ^ 2 / (2 * (s : ℝ)))) := by
   apply ManyBody.norm_commutator_gaussianNegativeFrequencyOperator_le s
-    (interactionHamiltonian_isHermitian hN hHerm) A B hε hT (by positivity) (by positivity)
+    (Interaction.isHermitian_hamiltonian (Interaction.isHermitian_translates_term _ hHerm))
+    A B hε hT (by positivity) (by positivity)
   intro t
-  exact norm_interactionHamiltonian_commutator_le_exp_abs_of_disjoint hN h hHerm hNorm
+  exact norm_hamiltonian_translationInvariant_commutator_le_exp_abs_of_disjoint hN h hHerm hNorm
     A B X Y hX hY hA hB hXY a ha t
 
 end MPSTensor

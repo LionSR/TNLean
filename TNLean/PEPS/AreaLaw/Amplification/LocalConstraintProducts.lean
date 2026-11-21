@@ -45,7 +45,7 @@ open Matrix MeasureTheory QuantumCircuit
 open scoped Kronecker NNReal Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 open TNLean.Lattice
 
-open ManyBody (graphBall planeDomainGraph)
+open ManyBody (graphBall graphNeighborhood planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -81,7 +81,7 @@ theorem exists_domainLocalConstraintProducts {C μ c α : ℝ} (hC : 0 ≤ C) (h
             i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
-        let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
+        let P := fun i : κ => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r
         let G := fun i : κ => CFC.sqrt (1 - k i)
         let Gr := fun i : κ =>
           CFC.sqrt (1 - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i))
@@ -94,7 +94,7 @@ theorem exists_domainLocalConstraintProducts {C μ c α : ℝ} (hC : 0 ≤ C) (h
             A * t * S.card * (1 + (r : ℝ)) ^ 2 * Real.exp (-(γ * (r : ℝ) ^ α))) ∧
         (∀ w, ‖L w‖ ≤ 1 ∧
           L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-              (graphNeighborhood Λ (2 * r) S : Finset (Site Λ))) ∧
+              (graphNeighborhood (planeDomainGraph Λ) S (2 * r) : Finset (Site Λ))) ∧
         ∀ (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (∀ i, k i *ᵥ WithLp.ofLp Ω = 0) →
         ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux]
           (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),

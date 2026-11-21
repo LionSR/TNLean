@@ -52,7 +52,7 @@ open TNLean.Lattice
 
 open ManyBody (AdmissibleSupport IsAdmissibleSupport latticeL1Distance
   latticeL1Distance_le_one_of_planeDomainGraph_adj latticeL1Distance_le_walk_length
-  planeDomainGraph)
+  planeDomainGraph ambientDilation edgeBoundary exists_edgeBoundary_of_walk)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -198,7 +198,8 @@ end IntRect
 `A` exceeds `D₀ · size Q`; with no crossing edge the condition is vacuous.
 Source: `02-initial.tex`, lines 220–228. -/
 def IsSafe (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (D₀ : ℕ) (Q : IntRect) : Prop :=
-  ∀ e ∈ edgeBoundary Λ A, ∀ z ∈ e, ∀ p ∈ Q.toFinset, D₀ * Q.size < supDist p z.1
+  ∀ e ∈ edgeBoundary (planeDomainGraph Λ) A, ∀ z ∈ e, ∀ p ∈ Q.toFinset,
+    D₀ * Q.size < supDist p z.1
 
 /-- The physical region `A ∩ Q` of an ambient rectangle. Source: `02-initial.tex`,
 lines 232–233. -/

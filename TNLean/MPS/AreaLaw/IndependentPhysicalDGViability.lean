@@ -42,19 +42,17 @@ theorem exists_independent_long_middle_actual_dg_family :
       ∀ (L p r : ℕ), p ≤ r → r ≤ L → 4 * ell < r - p →
       let Jtarget := interval L p r
       let β := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv β Jtarget).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv β Jtarget).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtargetᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig β Jtarget) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtarget) ℂ)).repr
       let Tcoord := U.trans Phi.symm
       let Tm := Tcoord.trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtargetᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig β Jtarget))
         (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtarget)))
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu : ℝ),
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu : ℝ),
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
@@ -68,25 +66,25 @@ theorem exists_independent_long_middle_actual_dg_family :
         Module.finrank ℂ T = Module.finrank ℂ G ∧
         ∀ (S : Submodule ℂ (EuclideanSpace ℂ (Jtarget → Fin q))) (δ : ℝ),
           Submodule.IsViable (𝕜 := ℂ) (E := EuclideanSpace ℂ (Jtarget → Fin q))
-            (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)) δ S
+            (F := EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)) δ S
             (T.map (Tm.toLinearEquiv : EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ]
               (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
-                EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) → δ < 1 →
+                EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)))) → δ < 1 →
           let grow := ⨆ i : Fin (D ^ 2), S.map (F i : _ →ₗ[ℂ] _)
           Module.finrank ℂ grow ≤ D ^ 2 * Module.finrank ℂ S ∧
             Submodule.IsViable (𝕜 := ℂ) (E := EuclideanSpace ℂ (Jtarget → Fin q))
-              (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q))
+              (F := EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q))
               (Delta / (1 - δ) ^ 2) grow
               (T.map (Tm.toLinearEquiv : EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ]
                 (EuclideanSpace ℂ (Jtarget → Fin q) ⊗[ℂ]
-                  EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) := by
+                  EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q)))) := by
   classical
   intro m q ell t g epsilon Delta hq hqm hell ht hg hg1 hepsilon hepsilon1 htail hfilter
-    D L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm h hs h0 h1 mu H hH G hmu hgap
+    D L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm Φ h0 h1 mu H hH G hmu hgap
   obtain ⟨T, N, CW, hN, hTG, hGT, hdim, hpower⟩ :=
     exists_independent_long_middle_actual_dg_word_family m q ell t g epsilon Delta
       hq hqm hell ht hg hg1 hepsilon hepsilon1 htail hfilter
-      L p r hpr hrL hlong h hs h0 h1 mu hmu hgap
+      L p r hpr hrL hlong Φ h0 h1 mu hmu hgap
   obtain ⟨_f, F, _hF, _hzero, hspan⟩ :=
     Submodule.exists_clm_family_extension_of_card_le
       (by simpa only [Fintype.card_fin] using hN) CW
@@ -111,7 +109,7 @@ theorem exists_independent_long_middle_actual_dg_family :
     simpa only [pow_one] using hdimension
   · change Submodule.IsViable (𝕜 := ℂ)
       (E := EuclideanSpace ℂ (Jtarget → Fin q))
-      (F := EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q))
+      (F := EuclideanSpace ℂ ({v // v ∉ Jtarget} → Fin q))
       (Delta / (1 - δ) ^ 2)
       (⨆ i : Fin (D ^ 2), S.map (F i).toLinearMap)
       (T.map Tm.toLinearEquiv.toLinearMap)

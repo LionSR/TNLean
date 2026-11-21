@@ -7,7 +7,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointProjectorComparison
 import TNLean.MPS.ParentHamiltonian.PhysicalReindexProjection
 import TNLean.MPS.Core.PhysicalReindexTransport
 import QICLean.Algebra.TraceReindex
-import TNLean.Algebra.FinCastAddNatAdd
+import QICLean.Algebra.FinCastAddNatAdd
 
 /-!
 # Exchanging the two mixed endpoint sectors

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.ProjectionGeometry
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
-import TNLean.MPS.ParentHamiltonian.Martingale.AbstractCriterion
+import QICLean.ManyBody.Hamiltonian.Martingale.AbstractCriterion
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 
 /-!

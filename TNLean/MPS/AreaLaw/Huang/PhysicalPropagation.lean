@@ -30,29 +30,27 @@ namespace TNLean.MPS.AreaLaw
 the time window and accuracy, with grid width `2r + 2`. Huang, arXiv:1406.6355v6,
 Section 5.4, Lemma 19. -/
 noncomputable def physicalChainPropagator {L q : ℕ}
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hHerm : ∀ i, (h i).IsHermitian) (T epsilon : ℝ) (t : ℝ) :
+    (Φ : ManyBody.BondInteraction L q)
+    (hHerm : ∀ i, (Φ.term i).IsHermitian) (T epsilon : ℝ) (t : ℝ) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   chainGridPropagator (w := 2 * chainPropagationRadius L T epsilon + 2) (by omega)
-    (chainPropagationRadius L T epsilon) h hHerm t
+    (chainPropagationRadius L T epsilon) Φ hHerm t
 
 /-- The physical chain propagator approximates the evolution within the time window at
 the prescribed accuracy, with simultaneous cut-rank bounds. Huang, arXiv:1406.6355v6,
 Section 5.4, Lemma 19. -/
 theorem physicalChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
-    (hnorm : ∀ i, ‖h i‖ ≤ 1) {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
+    (Φ : ManyBody.BondInteraction L q) (hHerm : ∀ i, (Φ.term i).IsHermitian)
+    (hnorm : ∀ i, ‖Φ.term i‖ ≤ 1) {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
-    let K := physicalChainPropagator h hHerm T epsilon
-    (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
+    let K := physicalChainPropagator Φ hHerm T epsilon
+    (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath Φ.hamiltonian (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
         (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K t)) ≤
           q ^ (8 * r + 8) := by
   intro r K
   let w := 2 * r + 2
-  have hK (t : ℝ) := chainGridPropagator_spec (w := w) (r := r) hq le_rfl h hs hHerm hnorm t
+  have hK (t : ℝ) := chainGridPropagator_spec (w := w) (r := r) hq le_rfl Φ hHerm hnorm t
   have hC := chainGridLRPrefactor_pos
   have hv : 0 ≤ chainGridLRVelocity := by unfold chainGridLRVelocity; positivity
   refine ⟨?_, ?_⟩
@@ -78,43 +76,39 @@ theorem physicalChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
 the prescribed accuracy, with simultaneous cut-rank bounds: the existence form of
 `physicalChainPropagator_spec`. Huang, arXiv:1406.6355v6, Section 5.4, Lemma 19. -/
 theorem exists_physical_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
-    (hnorm : ∀ i, ‖h i‖ ≤ 1) {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
+    (Φ : ManyBody.BondInteraction L q) (hHerm : ∀ i, (Φ.term i).IsHermitian)
+    (hnorm : ∀ i, ‖Φ.term i‖ ≤ 1) {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
     ∃ K : ℝ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
+      (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath Φ.hamiltonian (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
         (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K t)) ≤
           q ^ (8 * r + 8) :=
-  ⟨physicalChainPropagator h hHerm T epsilon,
-    physicalChainPropagator_spec hq h hs hHerm hnorm hT hepsilon⟩
+  ⟨physicalChainPropagator Φ hHerm T epsilon,
+    physicalChainPropagator_spec hq Φ hHerm hnorm hT hepsilon⟩
 
 /-- **The propagator of a positive chain**: the physical chain propagator, with
 Hermiticity of the terms derived from positivity. Huang, arXiv:1406.6355v6, Section 2
 and Section 5.4, Lemma 19. -/
 noncomputable def positiveChainPropagator {L q : ℕ}
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ i, 0 ≤ Φ.term i)
     (T epsilon : ℝ) (t : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  physicalChainPropagator h (fun i ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian)
+  physicalChainPropagator Φ (fun i ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian)
     T epsilon t
 
 /-- The propagation conclusion for the original positive-contraction interactions,
 with Hermiticity and norm bounds derived internally. This is the physical normalization
 in Huang, arXiv:1406.6355v6, Section 2 and Section 5.4, Lemma 19. -/
 theorem positiveChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
-    let K := positiveChainPropagator h h0 T epsilon
-    (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
+    let K := positiveChainPropagator Φ h0 T epsilon
+    (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath Φ.hamiltonian (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
         (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K t)) ≤
           q ^ (8 * r + 8) :=
-  physicalChainPropagator_spec hq h hs
+  physicalChainPropagator_spec hq Φ
     (fun i ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian)
     (fun i ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 i)).mpr (h1 i)) hT hepsilon
 
@@ -122,17 +116,15 @@ theorem positiveChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
 existence form of `positiveChainPropagator_spec`. Huang, arXiv:1406.6355v6, Section 2
 and Section 5.4, Lemma 19. -/
 theorem exists_positive_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
     ∃ K : ℝ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
+      (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath Φ.hamiltonian (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
         (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K t)) ≤
           q ^ (8 * r + 8) :=
-  ⟨positiveChainPropagator h h0 T epsilon,
-    positiveChainPropagator_spec hq h hs h0 h1 hT hepsilon⟩
+  ⟨positiveChainPropagator Φ h0 T epsilon,
+    positiveChainPropagator_spec hq Φ h0 h1 hT hepsilon⟩
 
 end TNLean.MPS.AreaLaw

@@ -23,7 +23,7 @@ Source: the one-dimensional note, `part1_arealaw.tex`, Remark `rem:renyi`, lines
 with the moment estimate `eq:mgf` and parameter `eq:theta`, lines 152–166.
 -/
 
-open ManyBody (interval ChainInteraction)
+open ManyBody (interval ChainInteraction ChainSupport)
 
 noncomputable section
 
@@ -56,11 +56,13 @@ private theorem _root_.ManyBody.ChainInteraction.log_surprisalMoment_region_le
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (X : Finset (Fin L)) {u : ℝ}
-    (hu : |u| ≤ Entropy.tailRadius (J / Δ) (cutLogBudget L q R X)) :
+    (hu : |u| ≤ Entropy.tailRadius (J / Δ)
+      (ManyBody.cutLogBudget (fun Y : ChainSupport L R ↦ Y.1) (fun _ ↦ q) X)) :
     Real.log (Entropy.surprisalMoment
       (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) X Ω).eigenvalues u) ≤
     u * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω X +
-      512 * Real.exp 1 * (J / Δ) * cutLogBudget L q R X * u ^ 2 := by
+      512 * Real.exp 1 * (J / Δ) *
+        ManyBody.cutLogBudget (fun Y : ChainSupport L R ↦ Y.1) (fun _ ↦ q) X * u ^ 2 := by
   have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
     ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   have hgap := hgap.posSemidef_sub_smul_one
@@ -151,7 +153,7 @@ theorem _root_.ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds
     have hcut := cutLogBudget_interval_le (L := L) (R := R) hq l r
     have hmoment := h.log_surprisalMoment_region_le hh hhJ hJ hΔ hΩ hgap hspan (interval L l r)
       ((abs_of_pos hu0).le.trans (hu.trans
-        (tailRadius_anti_budget hθ (one_le_cutLogBudget L q R (interval L l r)) hcut)))
+        (tailRadius_anti_budget hθ (Entropy.one_le_cutLogBudget _ _) hcut)))
     have hlog : Real.log (Entropy.surprisalMoment p u) ≤ u * S +
         512 * Real.exp 1 * (J / Δ) * chainBudgetConst q R * u ^ 2 :=
       hmoment.trans (by gcongr)

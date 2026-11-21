@@ -103,7 +103,7 @@ theorem mem_parentGroundStateFace_iff_groundSpace_support_of_eventual_kernel
     have hzero : φ (quasiLocalIntervalObservable d a N (openInteractionMatrix h N)) = 0 := by
       simpa only [Matrix.mul_assoc, hHP, Matrix.mul_zero, map_zero,
         f, intervalStateFunctional_apply] using hcomp.symm
-    rw [quasiLocalIntervalObservable_openInteractionMatrix a h hR N, map_sum] at hzero
+    rw [quasiLocalIntervalObservable_openInteractionMatrix a h N, map_sum] at hzero
     have hnonneg (i : ℕ) :
         0 ≤ φ (quasiLocalIntervalObservable d (a + (i : ℤ)) R h) :=
       (intervalStateFunctional φ hφ.2.2 (a + (i : ℤ)) R).map_nonneg hh.nonneg

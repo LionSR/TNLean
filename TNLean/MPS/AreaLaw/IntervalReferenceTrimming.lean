@@ -39,7 +39,7 @@ theorem schmidtRank_cutEnvVector_interval_reference_le
     {U : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q))}
     (hU : ∀ v ∈ U, IsOpenMPS L q D (fun x ↦ v x)) (p r : ℕ)
     {t : EuclideanSpace ℂ
-      ((interval L p r → Fin q) × (↥((interval L p r)ᶜ) → Fin q))}
+      ((interval L p r → Fin q) × ({v // v ∉ interval L p r} → Fin q))}
     (ht : t ∈ U.map
       (Entropy.regionConfigurationSplit q (interval L p r)).toLinearEquiv.toLinearMap)
     (j : ℕ) (hj : j < r - p - 1) :
@@ -68,14 +68,14 @@ theorem isCloseTo_prodExt_intervalTrimSubspace_of_reference_weighted
     {S : Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q))}
     (u : OrthonormalBasis (Fin s) ℂ S)
     (hS : Submodule.IsCloseTo delta
-      (Submodule.prodExt S (↥((interval L p r)ᶜ) → Fin q))
+      (Submodule.prodExt S ({v // v ∉ interval L p r} → Fin q))
       (G.map (Entropy.regionConfigurationSplit q (interval L p r)).toLinearEquiv.toLinearMap)) :
     Submodule.IsCloseTo
       ((1 + theta) * ((1 + theta) * delta + (1 + 1 / theta) * epsilon +
         2 * (xi * Real.sqrt (((r - p - 1 : ℕ) : ℝ) * (D ^ 2 : ℕ)))) +
         (1 + 1 / theta) * epsilon)
       (Submodule.prodExt (intervalTrimSubspace L q p r xi (fun k ↦ (u k : _)))
-        (↥((interval L p r)ᶜ) → Fin q))
+        ({v // v ∉ interval L p r} → Fin q))
       (G.map (Entropy.regionConfigurationSplit q (interval L p r)).toLinearEquiv.toLinearMap) := by
   let F := Entropy.regionConfigurationSplit q (interval L p r)
   have hGUmap := (Submodule.isCloseTo_map_iff F).mpr hGU

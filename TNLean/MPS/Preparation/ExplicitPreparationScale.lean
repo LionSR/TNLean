@@ -50,7 +50,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_min_of_rate (d D : ℕ) (hd : 
             (∀ j, q ≤ ℓ j) ∧ (∀ j, ℓ j ≤ 2 * q) ∧
             IsPairApproximable A hN (K * ((N : ℝ) ^ k * Real.exp (-(r * q))))) →
           3 * D + 1 ≤ q ∧ ∃ (ψ : MPVSpace d N) (T : ℕ),
-            ‖ψ‖ = 1 ∧ T ≤ C * min N q ∧ IsPreparedInDepth T (fun s => ψ s) ∧
+            ‖ψ‖ = 1 ∧ T ≤ C * min N q ∧ IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
               1 - ‖⟪ψ, (‖state A‖ : ℂ)⁻¹ • state A⟫_ℂ‖ ≤ ε := by
   classical
   obtain ⟨Cb, hCb⟩ := exists_isPreparedInDepth_of_isPairApproximable d D

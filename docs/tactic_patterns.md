@@ -13,7 +13,7 @@
   `refine h.elim fun x hx ↦ ?_` with projections `hx.1`, `hx.2.1`, … avoids the goal
   check altogether; `PhysicalLDTree` went from 30 s to 17 s.
 - **Related:** when an `ActualClippedPolynomialFamily` decomposition is passed to the
-  nested Chebyshev filter, the coordinate types `FiniteProduct.Configuration β J` and
+  nested Chebyshev filter, the coordinate types `ManyBody.RegionConfig β J` and
   `J → Fin q` agree only after unfolding; `have hconj := hM.2; with_reducible exact hconj`
   stops the unifier from unfolding the continuous-linear composition instead.
 - **Abstraction:** none yet; a lint or a short `obtain`-like macro that eliminates and
@@ -61,8 +61,8 @@
 
 - **Seen:** `MPS/Symmetry/MPOSymmetry/JointMixedEndpointEdgeFactors.lean`,
   `MixedEndpointEmbedding.lean`, `MixedEndpointSwap.lean`,
-  `MPS/MPU/SingleSiteCircuit.lean` and `Circuit/ZeroRegisterConjunction.lean`
-  (five copies, found by `scripts/tactic_pattern_scan.py` over the MPO-symmetry modules).
+  `MPS/MPU/SingleSiteCircuit.lean` and the former `Circuit/ZeroRegisterConjunction.lean`,
+  now QICLean's `Circuit/Protocol/ZeroRegister/Conjunction.lean` (five copies, found by `scripts/tactic_pattern_scan.py` over the MPO-symmetry modules).
 - **Pattern:**
   ```lean
   intro h
@@ -72,7 +72,7 @@
   ```
   proving `Fin.castAdd n a ≠ Fin.natAdd m b`.
 - **Abstraction:** `Fin.castAdd_ne_natAdd` and `Fin.natAdd_ne_castAdd` in
-  `Algebra/FinCastAddNatAdd.lean`; all five call sites use them.
+  QICLean's `Algebra/FinCastAddNatAdd.lean` (moved from TNLean); all five call sites use them.
 - **Notes:** Net line delta +18 across the seven Lean files: the call sites lose
   23 lines and the new module with its imports adds 41. The gain is one statement
   of the fact instead of five proofs of it.
@@ -85,7 +85,7 @@
 - **Pattern:** Compare the entries of a regional local lift with placement
   along the inclusion of the same sites, then identify the exterior matching
   condition with agreement away from the inclusion.
-- **Helper:** `QuantumCircuit.place_eq_embedOp` in `Circuit/SiteEmbedding.lean`.
+- **Helper:** `ManyBody.placeAlong_subtype` in QICLean `ManyBody/Sites/PlaceAlong.lean`.
 - **Decision:** The existing coordinate identity is stated once and reused;
   the support characterization and selected singleton calculation retain their
   mathematical statements.
@@ -923,8 +923,8 @@ abstracted — record why, so it is not re-proposed).
   `Scan.ambientDepth_le_iff_mem_dilation` in `Scan/AmbientDepth.lean`, and
   `exterior_union_subset_graphNeighborhood_compl_of_clearance` in
   `GraphNeighborhoodCutClearance.lean`, under `TNLean/PEPS/AreaLaw/`.
-- **Abstraction:** The unchanged public `mem_ambientDilation_iff` now follows
-  `ambientDilation` in the basic `FiniteDomain.lean` module. The ambient-depth
+- **Abstraction:** QICLean's `ManyBody.mem_ambientDilation_iff` follows
+  `ManyBody.ambientDilation` in `QICLean/ManyBody/Sites/Lattice/Plane.lean`. The ambient-depth
   equivalence and the whole-remote exclusion proof simplify with this lemma.
   No alias, new tactic, global attribute or geometric hypothesis is added.
 - **Remaining occurrences:** Direct expansions remain in `BufferedRectangles.lean`
@@ -1129,7 +1129,7 @@ abstracted — record why, so it is not re-proposed).
   `exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact`
   (`CompactBlockParentGap.lean`), all under `TNLean/MPS/ParentHamiltonian/`.
 - **Abstraction:** `IsCompact.exists_uniform_norm_lower_bound_on_tail` in
-  `TNLean/Algebra/CompactGapBounds.lean`; pass `H := fun x N => …` and
+  `QICLean/Analysis/CompactKernelGap.lean` (QICLean dependency); pass `H := fun x N => …` and
   `V := fun x N => (LinearMap.ker …)ᗮ` and prove only the local bound.
 - **Notes:** the three call sites were refactored on 2026-10-10. The open-chain variant in
   `CompactOpenParentGap.lean` fixes the tail at `R ≤ N` and the kernel-gap lemma in
@@ -1357,7 +1357,7 @@ abstracted — record why, so it is not re-proposed).
   `rectangleCorner`, `midpoint_prod_eq` and
   `rectangleCorner_eq_dyadicCellCorner`, now public in
   `Geometry/ElementarySideOpponents.lean`. In `TNLean.PEPS.AreaLaw`:
-  `abs_regionalEntropy_filter_union_sub_le` (`Geometry/TemplateEntropy.lean`).
+  `abs_regionEntropy_filter_union_sub_le` (`Geometry/TemplateEntropy.lean`).
 - **Notes:** about −110 lines over 10 files, together with local compressions
   of `CellContacts.rectangles_contact` and two per-case tactic blocks.
 
@@ -1623,11 +1623,12 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** `subset_of_isSafe` in `TNLean/PEPS/AreaLaw/BufferedRectangles.lean`,
   `card_crossingTerms_le_edgeBoundary` in `TNLean/PEPS/AreaLaw/TailParameter.lean`, and
   `TNLean/PEPS/AreaLaw/Scan/SupportLocalization.lean`.
-- **Abstraction:** the lemma `TNLean.Lattice.exists_edgeBoundary_of_walk` in
-  `TNLean/Lattice/FiniteDomain.lean` returns the boundary edge, its endpoint in the
-  region and the shortened walk; the three call sites use it.
-- **Notes:** `exists_cut_edge_near` in `TNLean/PEPS/AreaLaw/CrossingBudget.lean` is the
-  analogue for an arbitrary graph in the extended graph distance.
+- **Abstraction:** the lemma `ManyBody.exists_edgeBoundary_of_walk` in
+  `QICLean/ManyBody/Sites/GraphBoundary.lean` (QICLean dependency) returns the boundary
+  edge, its endpoint in the region and the shortened walk, for any graph; the three call
+  sites use it.
+- **Notes:** `ManyBody.exists_edgeBoundary_near` in the same file is the analogue in the
+  extended graph distance.
 
 ### Retained pieces of the all-midpoint fan — promoted (2026-10-09)
 
@@ -2486,7 +2487,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   (2026-10-02).
 - **Abstraction:**
   `ContinuousLinearMap.exists_uniform_norm_gap_of_compact` in
-  `TNLean/Algebra/CompactKernelGap.lean`.
+  `QICLean/Analysis/CompactKernelGap.lean` (QICLean dependency).
 - **Notes:** the bound follows from finite dimensionality; positivity,
   self-adjointness, and a supplied pointwise gap are unnecessary.
 
@@ -2589,7 +2590,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** four occurrences in `MPS/Symmetry/CanonicalInjectiveGappedPath.lean`,
   `MPS/Symmetry/WeightedMatrixUnitParentPath.lean`, and
   `MPS/Symmetry/CommonPhysicalFixedPointPath.lean` (2026-10-02).
-- **Abstraction:** `MPSTensor.interactionHamiltonian_commute_onSiteTensorPow`
+- **Abstraction:** `MPSTensor.hamiltonian_translationInvariant_commute_onSiteTensorPow`
   in `MPS/Symmetry/InteractionHamiltonianSymmetry.lean`.
 - **Notes:** all four callers use the common lemma. The on-site matrix need
   not be unitary; local commutation alone gives commutation of the sum.
@@ -2700,7 +2701,8 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
   `expect_productVector_mul` and `trace_rectKronecker_mul_mul` in
   `TNLean/Circuit/SupportedOperators.lean`, and `OnsiteChannel.dual_mul` in
-  `TNLean/Circuit/Channel/Conversion.lean`.
+  `TNLean/Circuit/Channel/Conversion.lean` (deleted; onsite channels are now QICLean
+  layers without cells).
 - **Abstraction:** `ManyBody.eq_of_mem_supportedOperators₂` in QICLean
   (formerly `QuantumCircuit.eq_of_mem_supportedOperators₂`): two bilinear maps
   `f g : M →ₗ[ℂ] M →ₗ[ℂ] P` agree on supported pairs once they agree on pairs of product
@@ -3361,13 +3363,13 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/MPS/MPDO/PhysicalSectorBondTwoSite.lean` and the private generic proof
   in `TNLean/MPS/MPDO/IsometricAdjacentBondTransport.lean` before promotion
   (2026-08-12).
-- **Abstraction:** `MPOTensor.reindex_embedLocalOperator_two_zero` and
-  `MPOTensor.reindex_embedLocalOperator_two_one` in
+- **Abstraction:** `MPOTensor.reindex_placeAlong_ringWindow_two_zero` and
+  `MPOTensor.reindex_placeAlong_ringWindow_two_one` in
   `TNLean/MPS/MPDO/EmbedLocalOperatorTwoSite.lean`.
 - **Notes:** the promoted theorems apply to arbitrary two-site matrices. The
   site-one conclusion states the factor exchange directly with
   `Matrix.reindex (Equiv.prodComm ...)`. The two
-  `PhysicalSectorFactorization.reindex_embedLocalOperator_two_*` declarations
+  `PhysicalSectorFactorization.reindex_placeAlong_ringWindow_two_*` declarations
   remain public sector-specific specializations, while the isometric
   calculation uses the generic identities directly.
 
@@ -3848,7 +3850,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** two implementations: 269 declaration/proof lines in
   `PhysicalSectorProductRealization.lean` and 250 in
   `CommutingBondEtaCyclicTransport.lean` before the refactor.
-- **Abstraction:** `MPOTensor.reindex_embedLocalOperator_etaPairBond` in
+- **Abstraction:** `MPOTensor.reindex_placeAlong_ringWindow_etaPairBond` in
   `TNLean/MPS/MPDO/CommutingBondEtaCyclicCore.lean`; the physical-sector route supplies
   only its coordinate equivalence and local block-decomposition law.
 - **Notes:** the physical specialization is 10 proof lines. Its two coordinate bridges
@@ -4621,8 +4623,8 @@ three-plaquette output measurement, and the routed reunion measurement.
   wrapped equality rewriting solely to erase Hermiticity witnesses.
 - **Reuse:** `PhysicalSectorFactorization.sectorIndex_fst_heq_of_heq` and
   `PhysicalSectorFactorization.sectorIndex_snd_heq_of_heq` now belong to the neutral
-  sector-index API, while `MPOTensor.embedLocalOperator_smul` belongs to the defining
-  local-embedding module. `Entropy.mutualInformation_congr` in the basic entropy API
+  sector-index API, while scalar compatibility of the placement is QICLean's
+  `ManyBody.placeAlong_smul`. `Entropy.mutualInformation_congr` in the basic entropy API
   handles the proof-dependent Hermiticity witnesses for all mutual-information callers.
 - **Result:** the two cyclic-active modules and the two local-embedding consumers retain their
   existing propositions and declaration names with one proof body per shared fact. The local
@@ -5249,7 +5251,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   and the two embedded endpoint comparisons in `MPS/Symmetry/EmbeddedFixedPointParent.lean`.
 - **Abstraction:** `normalizedBondCanonicalParentComparisonPath`, with the
   periodic-vector comparison in
-  `ker_interactionHamiltonian_normalizedBondInteraction_le_parent_of_mpv_eq`
+  `ker_hamiltonian_translationInvariant_normalizedBondInteraction_le_parent_of_mpv_eq`
   and the local comparison in
   `twoSiteBondInteraction_le_parentInteraction_of_groundSpaceMap`.
 - **Notes:** the three constructors share the spectral and symmetry proof.
@@ -5368,10 +5370,9 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 - **Pattern:** `ext x y`, `by_cases hxy : x = y`, `· subst y`, then a diagonal
   computation and an off-diagonal vanishing argument.
-- **Seen:** 18 sites in 11 files by the 2026-11-04 scan, as `x y` with `hxy`
-  (`Circuit/InitializedRegisterProjection.lean`, `Circuit/ProductBasisPenalty.lean`,
-  `Circuit/SelectedZeroRegisterReflection.lean`, `Circuit/SelectedZeroRegisterSupport.lean`,
-  `MPS/MPDO/CPSVExample412FourCycleEntropy.lean` four times,
+- **Seen:** 13 sites in 7 files by the 2026-11-04 scan, after the five sites of four
+  `Circuit/` modules moved to QICLean, as `x y` with `hxy`
+  (`MPS/MPDO/CPSVExample412FourCycleEntropy.lean` four times,
   `MPS/MPDO/PhysicalSupportProductTransport.lean`,
   `MPS/MPU/Examples/ShiftSourceFactors.lean`) and as `σ τ` with `hστ`
   (`MPS/MPDO/CPSVExample412Literal.lean` twice,
@@ -5394,7 +5395,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 - **Pattern:** `congr 1`, `apply propext`, `constructor`, then two
   implications proved by hand.
-- **Seen:** 8 sites in 6 files (`Circuit/Channel/PortMatching.lean`,
+- **Seen:** 8 sites in 6 files (`Circuit/Channel/PortMatching.lean`, since deleted,
   `MPS/AreaLaw/ViableSet/Basic.lean`, `PEPS/Approximation/RankOneBlocks.lean`,
   `PEPS/EdgeMiddlePhysical/KernelDescent.lean` twice,
   `PEPS/RegionBlock/KernelDescent.lean` twice,
@@ -5870,8 +5871,8 @@ no additional helper is proposed.
   of `norm_mul_le_of_le`.
 - **Seen:** Two chain occurrences: the common local argument in
   `ManyBody.ChainInteraction.partialSwap_term_difference_spec` in
-  `MPS/AreaLaw/PartialSwap.lean`, and the norm field of
-  `ManyBody.ChainInteraction.swappedDoubled` in `MPS/AreaLaw/SwappedDoubledHamiltonian.lean`.
+  `MPS/AreaLaw/PartialSwap.lean`, and the norm field of the former chain
+  swapped doubled interaction, now `ManyBody.Interaction.norm_conj_term`.
 - **Abstraction:** The standard norm inequalities suffice for these short
   arguments; no new lemma or tactic is introduced at two occurrences.
 - **Notes:** Contraction is enough for the local norm estimate; spectral
@@ -7681,7 +7682,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   outcome-consistency lemma, the corrections by outcomes and partial sums, and
   the product-state bookkeeping.
 - **Seen:** two occurrences (2026-10-01):
-  `TNLean/Circuit/Measurement/GHZ.lean` (interleaved single qudits of
+  QICLean's `Circuit/Protocol/GHZ.lean`, formerly TNLean's
+  `Circuit/Measurement/GHZ.lean` (interleaved single qudits of
   an open chain, `forall_succ_eq_iff`, `forall_add_ghzCorrection_eq_iff`) and
   `TNLean/MPS/Preparation/WindowGHZ.lean` (registers of `r₁` sites inside
   blocks of a ring, `forall_cyclic_eq_zero_iff`).
@@ -7925,7 +7927,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   `omega` on the accumulated index hypotheses and the remaining branches are
   numeric.
 - **Seen:** five occurrences in
-  `TNLean/MPS/ParentHamiltonian/Martingale/NachtergaeleLowerEndpoint.lean`
+  `TNLean/MPS/ParentHamiltonian/Martingale/NachtergaeleLowerEndpoint.lean`, now
+  `QICLean/ManyBody/Hamiltonian/Martingale/NachtergaeleLowerEndpoint.lean`
   (2026-09-04), all inside one refuting model.
 - **Abstraction (proposed):** none yet. The rule of three asks for occurrences
   across at least two files; if a second coordinate model needs the same
@@ -8139,9 +8142,9 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** `MPU/LeafIntervalCircuit.lean`, `MPU/BondDilationCircuit.lean`, and
   `MPU/CompatibleBondDilationCircuit.lean`.
 - **Abstraction:**
-  `QuantumCircuit.exists_isPairProduct_isCleanImplementation` in
-  `TNLean/Circuit/CleanUnitaryImplementation.lean` derives the actual circuit and
-  its full logical-space clean identity. `IsCleanImplementation.embedOp` in
+  `QuantumCircuit.exists_isGateProduct_isCleanImplementation` in QICLean's
+  `QICLean/Circuit/Model/CleanWorkspace.lean` derives the actual circuit and
+  its full logical-space clean identity. `IsCleanImplementation.placeAlong` in
   `TNLean/Circuit/CleanImplementationPlacement.lean` places this identity into a
   larger shared scratch pool.
 - **Notes:** All three local constructions use the common existence theorem.
@@ -8283,7 +8286,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   remove mixed energy terms by intertwining and symmetry, and combine the
   two quadratic bounds with their minimum.
 - **Seen:** `MPS/Symmetry/MPOSymmetry/MixedEndpointActiveGapTransfer.lean`
-  and `Algebra/IsometricGapTransfer.lean`.
+  and QICLean's `Analysis/IsometricGapTransfer.lean` (moved from TNLean).
 - **Abstraction:** `LinearIsometry.re_inner_ge_of_intertwines` and
   `LinearIsometry.norm_gap_of_intertwines` now serve the noncommuting physical
   isometry transport. The independent kernel theorem only needs intertwining
@@ -9046,7 +9049,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   in a second file; prefer an endpoint-equality lemma if that reuse appears.
 - **Notes:** The current occurrences are all in one proof, below the
   multiple-file promotion threshold. Crossing membership itself is already
-  expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
+  expressed by `ManyBody.mk_mem_edgeBoundary_iff`; no new tactic macro is needed.
 
 ### Physical regional density as a tensor-factor partial trace — candidate (2026-10-11)
 
@@ -9098,7 +9101,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** private copies in `MixedEndpointOpenSectors` and
   `MixedEndpointReducingSectors`, and the joint reducing-sector proofs.
 - **Abstraction:** `Submodule.commute_starProjection_of_invariant` in
-  `MPS/ParentHamiltonian/Martingale/ReducingProjectionGap.lean`; the private
+  QICLean's `Analysis/ReducingProjectionGap.lean` (moved from TNLean); the private
   copies were removed and their call sites use the public theorem.
 
 ### Block-supported mixed tree contractions — promoted (2026-10-06)
@@ -9149,9 +9152,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   argument), `WeakRectangleShellEntropy.lean`, and the real-clearance
   template estimate in `Geometry/TemplateBoxEntropyReal.lean`.
 - **Abstraction:** the shared public theorem
-  `Geometry.regionalEntropy_filter_le_weighted_cover_of_forall` in
+  `Geometry.regionEntropy_filter_le_weighted_cover_of_forall` in
   `Geometry/CappedDyadicEntropyCover.lean`, which takes a bound on each
-  selected square. `Geometry.regionalEntropy_filter_le_weighted_cover`
+  selected square. `Geometry.regionEntropy_filter_le_weighted_cover`
   specializes it to a safe-box estimate with natural clearance; the
   real-clearance estimate derives each square's bound from its own
   clearance argument and calls the general form directly.
@@ -9469,7 +9472,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   use `exact_mod_cast` to obtain integer safety.
 - **Seen:** `exists_condEntropy_le_initialBuffer_real` in
   `PEPS/AreaLaw/InitialBufferReal.lean` and
-  `exists_regionalEntropy_safe_rect_le_boxError` in
+  `exists_regionEntropy_safe_rect_le_boxError` in
   `PEPS/AreaLaw/PhysicalSafeBox.lean`. The separation comparison in
   `sublinearCollarBound_real` in `PEPS/AreaLaw/PhysicalCollarInformation.lean`
   uses the same multiplication and strict-inequality argument over the reals.
@@ -9756,7 +9759,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** `chain_reset_support_separation` in
   `MPS/AreaLaw/ResetSupportSeparation.lean` and
   `reset_graphNeighborhood_disjoint_cores` in
-  `QICLean/ManyBody/Dynamics/GraphBall.lean`.
+  `QICLean/ManyBody/Sites/GraphBall.lean`.
 - **Abstraction:** The graph theorem expresses the common geometric argument
   with natural ball containments. The chain theorem also gives a real-distance
   lower bound and retains its present proof.
@@ -11790,7 +11793,7 @@ removed after the dependency audit exposed it.
   of its encoded vector using `Matrix.mul_vecMulVec`, `Matrix.vecMulVec_mul`
   and `Matrix.star_mulVec`; normalize the target through the code isometry.
 - **Decision:** two occurrences across two files are below the rule of three.
-  Reuse the existing matrix identities and `Matrix.initializedBasisMatrix_isIsometry`.
+  Reuse the existing matrix identities and `Matrix.basisInclusion_isIsometry`.
   Before adding a third copy, expose the pure-initialization identity at the
   existing product-code owner. No verified parent module is refactored here.
 
@@ -12221,8 +12224,8 @@ mathematical arguments and avoids compiling both in the long corollary.
   compression, then by placement contractivity.
 - **Reuse:** The actual retained-interval trace identity, the shared
   supported-operator characterization, `Matrix.l2_opNorm_principal_submatrix_le`
-  and `QuantumCircuit.norm_embedOp_le` give the argument without a second
-  coordinate calculation. Nested placements use `embedOp_embedOp`.
+  and `ManyBody.norm_placeAlong_le` give the argument without a second
+  coordinate calculation. Nested placements use `ManyBody.placeAlong_placeAlong`.
 - **Decision:** The shared coordinate identity and principal-compression
   inequality were placed in their natural owners in separate contributions.
   The interval argument remains a private helper because it currently has

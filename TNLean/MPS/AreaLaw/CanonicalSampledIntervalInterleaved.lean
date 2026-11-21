@@ -92,7 +92,7 @@ theorem measurableSet_isViable_canonicalSampledIntervalInterleavedTrim
         (canonicalSampledIntervalInterleavedTrim L q p r D s F xi (W x.1) x.2)
         (G.map (Entropy.regionTensorCoordinates q (interval L p r)).toLinearEquiv.toLinearMap)} :=
   Submodule.measurableSet_isViable_of_measurable_projectionMatrix
-    (σ := interval L p r → Fin q) (β := ↥((interval L p r)ᶜ) → Fin q)
+    (σ := interval L p r → Fin q) (β := {v // v ∉ interval L p r} → Fin q)
     (X := X × Matrix.rankUnitaryProduct (Fintype.card (interval L p r → Fin q)))
     (fun x ↦ canonicalSampledIntervalInterleavedTrim L q p r D s F xi (W x.1) x.2)
     (measurable_projectionMatrix_canonicalSampledIntervalInterleavedTrim D s F xi W hW) delta _

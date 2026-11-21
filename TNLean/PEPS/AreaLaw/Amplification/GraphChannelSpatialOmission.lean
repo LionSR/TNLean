@@ -153,7 +153,7 @@ theorem graph_integrable_and_integral_channelWordOmissionDefect_le
   intro ι κ Aux _ _ _ _ _ q _ G a k hk₀ hk₁ hk hball hfiber N hN hε
     P _ S B hB r hr hfar T
   classical
-  let := graphPseudoEMetricSpace G
+  let := ManyBody.graphPseudoEMetricSpace G
   let a' (i : {i // P i}) := a i
   let k' (i : {i // P i}) := k i
   have hfiber' (x : ι) :

@@ -119,7 +119,7 @@ theorem measurableSet_isViable_canonicalIntervalSamplingTree {L q width : ℕ}
         width hwidth p r)
       (G.map (Entropy.regionTensorCoordinates q (interval L p r)).toLinearEquiv.toLinearMap)} :=
   Submodule.measurableSet_isViable_of_measurable_projectionMatrix
-    (σ := interval L p r → Fin q) (β := ↥((interval L p r)ᶜ) → Fin q)
+    (σ := interval L p r → Fin q) (β := {v // v ∉ interval L p r} → Fin q)
     (fun U ↦ balancedIntervalSpace (canonicalIntervalSamplingOperation D s N F xi U)
       width hwidth p r)
     (measurable_projectionMatrix_canonicalIntervalSamplingTree D s hwidth N F xi p r hpr hrL)

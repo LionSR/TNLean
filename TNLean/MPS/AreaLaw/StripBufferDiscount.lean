@@ -41,10 +41,8 @@ theorem one_le_stripBudgetConst (q R : ℕ) : 1 ≤ stripBudgetConst q R := by
 /-- Uniform linear-width budget for every column interval. -/
 theorem cutLogBudget_stripInterval_le_mul {q w : ℕ} (hq : 1 ≤ q) (hw : 1 ≤ w)
     (L R a b : ℕ) :
-    Entropy.cutLogBudget
-      (ManyBody.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1)
-        (stripInterval L w a b))
-      (Entropy.supportDim (fun _ : Site (stripDomain L w) ↦ q) ∘ fun X ↦ X.1) ≤
+    ManyBody.cutLogBudget (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1) (fun _ ↦ q)
+        (stripInterval L w a b) ≤
       stripBudgetConst q R * w := by
   have hw' : (1 : ℝ) ≤ w := by exact_mod_cast hw
   refine (cutLogBudget_stripInterval_le hq L w R a b).trans ?_

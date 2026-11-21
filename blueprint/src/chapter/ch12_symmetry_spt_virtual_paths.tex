@@ -393,7 +393,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{lemma}[Local on-site commutation gives periodic symmetry]
     \label{thm:spt_interaction_hamiltonian_symmetry}
-    \lean{MPSTensor.interactionHamiltonian_commute_onSiteTensorPow}
+    \lean{MPSTensor.hamiltonian_translationInvariant_commute_onSiteTensorPow}
     \leanok
     If a two-site interaction commutes with the tensor square of an
     on-site matrix, then its translation-invariant periodic Hamiltonian
@@ -449,7 +449,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{lemma}[Exact MPS ground lines along a canonical injective path]
     \label{thm:spt_canonical_injective_ground_path}
-    \lean{MPSTensor.interactionHamiltonian_parent_groundSpace_eq_span_mpv,
+    \lean{MPSTensor.hamiltonian_translationInvariant_parent_groundSpace_eq_span_mpv,
         MPSTensor.exactMPSGroundPath_of_canonicalInjective}
     \leanok
     \uses{def:spt_exact_mps_gapped_phase}
@@ -517,7 +517,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{lemma}[Exact ground lines through the canonical fixed-point comparisons]
     \label{thm:spt_common_physical_canonical_ground_path}
-    \lean{MPSTensor.interactionHamiltonian_affine_ker_eq_of_order,
+    \lean{MPSTensor.hamiltonian_translationInvariant_affine_ker_eq_of_order,
         MPSTensor.ExactMPSGroundPath.of_ordered_affine,
         MPSTensor.commonPhysicalBondCanonicalParentComparisonExactMPSGroundPath,
         MPSTensor.commonPhysicalLeftParentComparisonExactMPSGroundPath,

@@ -80,14 +80,16 @@ theorem regionParentHamiltonian_comparison (R : ι → Finset V)
       (RegionPhysicalConfig (d := d) (R i)) ℂ) (κ C : ℝ)
     (hLower : ∀ i, (κ : ℂ) • k i ≤ h i)
     (hUpper : ∀ i, h i ≤ (C : ℂ) • k i) :
-    (κ : ℂ) • regionParentHamiltonian R k ≤ regionParentHamiltonian R h ∧
-    regionParentHamiltonian R h ≤ (C : ℂ) • regionParentHamiltonian R k := by
+    (κ : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian ≤
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ∧
+      (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ≤
+        (C : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian := by
   constructor
-  · simp only [regionParentHamiltonian, Finset.smul_sum]
+  · simp only [ManyBody.Interaction.hamiltonian_ofPlace, Finset.smul_sum]
     apply Finset.sum_le_sum
     intro i hi
     simpa only [ManyBody.place_smul] using ManyBody.place_le_place (X := fun _ ↦ Fin _) (hLower i)
-  · simp only [regionParentHamiltonian, Finset.smul_sum]
+  · simp only [ManyBody.Interaction.hamiltonian_ofPlace, Finset.smul_sum]
     apply Finset.sum_le_sum
     intro i hi
     simpa only [ManyBody.place_smul] using ManyBody.place_le_place (X := fun _ ↦ Fin _) (hUpper i)
@@ -111,14 +113,15 @@ theorem exists_pos_regionParentHamiltonian_comparison (A : Tensor Γ d)
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hh : ∀ i, IsRegionParentInteraction A (R i) (h i)) :
     ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧
-      (κ : ℂ) • regionParentHamiltonian R (fun i => canonicalRegionParentInteraction A (R i)) ≤
-        regionParentHamiltonian R h ∧
-      regionParentHamiltonian R h ≤
-        (C : ℂ) • regionParentHamiltonian R
-          (fun i => canonicalRegionParentInteraction A (R i)) := by
+      (κ : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R
+          (fun i => canonicalRegionParentInteraction A (R i))).hamiltonian ≤
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ∧
+      (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ≤
+        (C : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R
+          (fun i => canonicalRegionParentInteraction A (R i))).hamiltonian := by
   classical
   rcases isEmpty_or_nonempty ι with hι | hι
-  · exact ⟨1, 1, zero_lt_one, zero_lt_one, by simp [regionParentHamiltonian]⟩
+  · exact ⟨1, 1, zero_lt_one, zero_lt_one, by simp [ManyBody.Interaction.hamiltonian_ofPlace]⟩
   · choose κ C hκ hC hLower hUpper using fun i => (hh i).exists_pos_comparison
     obtain ⟨iMin, _, hMin⟩ := Finset.exists_min_image Finset.univ κ Finset.univ_nonempty
     obtain ⟨iMax, _, hMax⟩ := Finset.exists_max_image Finset.univ C Finset.univ_nonempty
@@ -142,29 +145,33 @@ theorem exists_pos_regionParentHamiltonian_comparison_between (A : Tensor Γ d)
     (hh : ∀ i, IsRegionParentInteraction A (R i) (h i))
     (hk : ∀ i, IsRegionParentInteraction A (R i) (k i)) :
     ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧
-      (κ : ℂ) • regionParentHamiltonian R k ≤ regionParentHamiltonian R h ∧
-      regionParentHamiltonian R h ≤ (C : ℂ) • regionParentHamiltonian R k := by
+      (κ : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian ≤
+          (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ∧
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ≤
+          (C : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian := by
   obtain ⟨κh, Ch, hκh, hCh, hLowerH, hUpperH⟩ :=
     exists_pos_regionParentHamiltonian_comparison A R h hh
   obtain ⟨κk, Ck, hκk, hCk, hLowerK, hUpperK⟩ :=
     exists_pos_regionParentHamiltonian_comparison A R k hk
   refine ⟨κh / Ck, Ch / κk, div_pos hκh hCk, div_pos hCh hκk, ?_, ?_⟩
   · calc
-      ((κh / Ck : ℝ) : ℂ) • regionParentHamiltonian R k ≤
-          ((κh / Ck : ℝ) : ℂ) • ((Ck : ℂ) • regionParentHamiltonian R
-            (fun i => canonicalRegionParentInteraction A (R i))) :=
+      ((κh / Ck : ℝ) : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian ≤
+          ((κh / Ck : ℝ) : ℂ) • ((Ck : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R
+            (fun i => canonicalRegionParentInteraction A (R i))).hamiltonian) :=
         smul_le_smul_of_nonneg hUpperK (div_nonneg hκh.le hCk.le)
-      _ = (κh : ℂ) • regionParentHamiltonian R
-          (fun i => canonicalRegionParentInteraction A (R i)) := by
+      _ = (κh : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R
+          (fun i => canonicalRegionParentInteraction A (R i))).hamiltonian := by
         rw [smul_smul, ← Complex.ofReal_mul, div_mul_cancel₀ _ hCk.ne']
-      _ ≤ regionParentHamiltonian R h := hLowerH
+      _ ≤ (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian := hLowerH
   · calc
-      regionParentHamiltonian R h ≤ (Ch : ℂ) • regionParentHamiltonian R
-          (fun i => canonicalRegionParentInteraction A (R i)) := hUpperH
-      _ = ((Ch / κk : ℝ) : ℂ) • ((κk : ℂ) • regionParentHamiltonian R
-          (fun i => canonicalRegionParentInteraction A (R i))) := by
+      (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ≤
+          (Ch : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R
+            (fun i => canonicalRegionParentInteraction A (R i))).hamiltonian := hUpperH
+      _ = ((Ch / κk : ℝ) : ℂ) • ((κk : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R
+          (fun i => canonicalRegionParentInteraction A (R i))).hamiltonian) := by
         rw [smul_smul, ← Complex.ofReal_mul, div_mul_cancel₀ _ hκk.ne']
-      _ ≤ ((Ch / κk : ℝ) : ℂ) • regionParentHamiltonian R k :=
+      _ ≤ ((Ch / κk : ℝ) : ℂ) •
+          (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian :=
         smul_le_smul_of_nonneg hLowerK (div_nonneg hCh.le hκk.le)
 
 /-- Changing the positive regional interactions leaves the full Euclidean
@@ -176,8 +183,10 @@ theorem ker_toEuclideanLin_regionParentHamiltonian_eq (A : Tensor Γ d)
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hh : ∀ i, IsRegionParentInteraction A (R i) (h i))
     (hk : ∀ i, IsRegionParentInteraction A (R i) (k i)) :
-    (Matrix.toEuclideanLin (regionParentHamiltonian R h)).ker =
-      (Matrix.toEuclideanLin (regionParentHamiltonian R k)).ker := by
+    (Matrix.toEuclideanLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian).ker =
+      (Matrix.toEuclideanLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian).ker := by
   classical
   ext ψ
   have heq := (ker_regionParentHamiltonian A R h hh).trans
@@ -196,18 +205,27 @@ theorem regionParentHamiltonian_norm_gap_of_comparison (A : Tensor Γ d)
     (hh : ∀ i, IsRegionParentInteraction A (R i) (h i))
     (hk : ∀ i, IsRegionParentInteraction A (R i) (k i))
     {κ γ : ℝ} (hκ : 0 < κ) (hγ : 0 ≤ γ)
-    (hLower : (κ : ℂ) • regionParentHamiltonian R k ≤ regionParentHamiltonian R h)
-    (hGap : ∀ ψ ∈ (Matrix.toEuclideanLin (regionParentHamiltonian R k)).kerᗮ,
-      γ * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin (regionParentHamiltonian R k) ψ‖) :
-    ∀ ψ ∈ (Matrix.toEuclideanLin (regionParentHamiltonian R h)).kerᗮ,
-      (κ * γ) * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin (regionParentHamiltonian R h) ψ‖ := by
+    (hLower : (κ : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian ≤
+      (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian)
+    (hGap : ∀ ψ ∈ (Matrix.toEuclideanLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian).kerᗮ,
+      γ * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian ψ‖) :
+    ∀ ψ ∈ (Matrix.toEuclideanLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian).kerᗮ,
+      (κ * γ) * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ψ‖ := by
   classical
   have hp := Matrix.isPositive_toEuclideanLin_iff.mpr
-    (regionParentHamiltonian_posSemidef R k (fun i => (hk i).1))
+    (ManyBody.Interaction.posSemidef_hamiltonian
+      (Φ := ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k)
+      fun i ↦ ManyBody.posSemidef_place (X := fun _ ↦ Fin _) (hk i).1)
   have hκ0 : (κ : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hκ.ne'
   have hpos := hp.smul_of_nonneg (c := (κ : ℂ)) (by exact_mod_cast hκ.le)
-  have hle : (κ : ℂ) • Matrix.toEuclideanLin (regionParentHamiltonian R k) ≤
-      Matrix.toEuclideanLin (regionParentHamiltonian R h) := by
+  have hle : (κ : ℂ) • Matrix.toEuclideanLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian ≤
+      Matrix.toEuclideanLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian := by
     rw [LinearMap.le_def]
     simpa only [map_sub, map_smul] using
       Matrix.isPositive_toEuclideanLin_iff.mpr (Matrix.le_iff.mp hLower)
@@ -231,11 +249,15 @@ theorem regionParentHamiltonian_has_pos_norm_gap_iff (A : Tensor Γ d)
     (hh : ∀ i, IsRegionParentInteraction A (R i) (h i))
     (hk : ∀ i, IsRegionParentInteraction A (R i) (k i)) :
     (∃ γ : ℝ, 0 < γ ∧
-      ∀ ψ ∈ (Matrix.toEuclideanLin (regionParentHamiltonian R h)).kerᗮ,
-        γ * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin (regionParentHamiltonian R h) ψ‖) ↔
+      ∀ ψ ∈ (Matrix.toEuclideanLin
+          (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian).kerᗮ,
+        γ * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin
+          (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ψ‖) ↔
     (∃ γ : ℝ, 0 < γ ∧
-      ∀ ψ ∈ (Matrix.toEuclideanLin (regionParentHamiltonian R k)).kerᗮ,
-        γ * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin (regionParentHamiltonian R k) ψ‖) := by
+      ∀ ψ ∈ (Matrix.toEuclideanLin
+          (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian).kerᗮ,
+        γ * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin
+          (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian ψ‖) := by
   constructor
   · rintro ⟨γ, hγ, hGap⟩
     obtain ⟨κ, C, hκ, hC, hLower, hUpper⟩ :=

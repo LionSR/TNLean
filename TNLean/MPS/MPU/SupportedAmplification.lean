@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Overlap.Basic
-import TNLean.Circuit.SelectedZeroRegisterSupport
-import TNLean.Circuit.ImageReflectionCircuit
+import QICLean.Circuit.Compile.ImageReflection
+import QICLean.ManyBody.Sites.Support
 
 /-!
 # Logical support is preserved by amplification

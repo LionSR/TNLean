@@ -87,7 +87,6 @@ import TNLean.MPS.Symmetry.GroundLineSymmetryCharacter
 import TNLean.MPS.Symmetry.IndependentBondGap
 import TNLean.MPS.Symmetry.InfinitesimalPhysicalCovariance
 import TNLean.MPS.Symmetry.InjectiveTracePreservingGauge
-import TNLean.MPS.Symmetry.InteractionHamiltonianOrder
 import TNLean.MPS.Symmetry.InteractionHamiltonianSymmetry
 import TNLean.MPS.Symmetry.InvertibleProjectivePathInvariance
 import TNLean.MPS.Symmetry.IsometricParentInteraction

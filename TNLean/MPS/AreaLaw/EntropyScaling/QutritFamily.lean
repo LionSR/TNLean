@@ -25,6 +25,7 @@ Schuch, Wolf, Verstraete and Cirac, arXiv:0705.0292v2,
 
 open Matrix
 open scoped BigOperators InnerProductSpace
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw.EntropyScaling
 
@@ -271,7 +272,7 @@ def qutritRightConfigurationEquiv (N : ℕ) :
 /-- The native chain cut matrix is the explicit middle coefficient matrix after relabelling.
 Source: arXiv:0705.0292v2, `eq:magicstate`, lines 382–386. -/
 theorem cutMatrix_qutritState_reindex (N : ℕ) (p : ℝ) :
-    (cutMatrix (qutritState N p) N).reindex
+    (cutMatrix (leftBlock (N + N) N) (qutritState N p)).reindex
       (qutritLeftConfigurationEquiv N) (qutritRightConfigurationEquiv N) =
         qutritMiddleMatrix N p := by
   ext a b
@@ -294,13 +295,15 @@ theorem regionState_qutritState_reindex (N : ℕ) (p : ℝ) :
           qutritMiddleMarginal N p := by
   rw [ManyBody.regionState_eq_partialTraceRight_cutVector, qutritMiddleMarginal,
     partialTraceRight_vecMulVec_eq, partialTraceRight_vecMulVec_eq]
-  change (cutMatrix (qutritState N p) N * (cutMatrix (qutritState N p) N)ᴴ).reindex
+  change (cutMatrix (leftBlock (N + N) N) (qutritState N p) *
+      (cutMatrix (leftBlock (N + N) N) (qutritState N p))ᴴ).reindex
       (qutritLeftConfigurationEquiv N) (qutritLeftConfigurationEquiv N) =
     qutritMiddleMatrix N p * (qutritMiddleMatrix N p)ᴴ
   have hmul := Matrix.reindexLinearEquiv_mul ℂ ℂ
     (qutritLeftConfigurationEquiv N) (qutritRightConfigurationEquiv N)
     (qutritLeftConfigurationEquiv N)
-    (cutMatrix (qutritState N p) N) (cutMatrix (qutritState N p) N)ᴴ
+    (cutMatrix (leftBlock (N + N) N) (qutritState N p))
+    (cutMatrix (leftBlock (N + N) N) (qutritState N p))ᴴ
   simpa only [Matrix.coe_reindexLinearEquiv, ← Matrix.conjTranspose_reindex,
     cutMatrix_qutritState_reindex] using hmul.symm
 

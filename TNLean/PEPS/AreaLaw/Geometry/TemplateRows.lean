@@ -28,6 +28,7 @@ Original formalization from the mathematical manuscript. No upstream Lean proof 
 
 open scoped BigOperators
 open TNLean.Lattice
+open ManyBody (ambientDilation mem_ambientDilation_iff)
 
 namespace TNLean.PEPS.AreaLaw
 

@@ -6,9 +6,11 @@ Authors: TNLean contributors
 import TNLean.Algebra.IsometryUnitaryExtension
 import QICLean.Algebra.PermutationMatrixUnitary
 import TNLean.MPS.Preparation.ConfigurationLayers
-import TNLean.Circuit.Measurement.Rounds
 import TNLean.Circuit.Gates.Permutation
-import TNLean.Circuit.Gates.TwoSiteUniversality
+import QICLean.Circuit.Model.Measurement
+import QICLean.Circuit.Protocol.Teleportation.Hop
+import QICLean.Circuit.Compile.ChainUniversality
+import QICLean.Circuit.Model.UnitaryPlacement
 
 /-!
 # A GHZ-type state on the registers with measurements, in depth `O(L)`
@@ -46,19 +48,20 @@ construction in `TNLean.MPS.Preparation.SparseWindowGHZ` implements the distant 
 with additional measurement rounds and proves constant depth on the same physical chain,
 without a bound on block lengths and with every scratch site restored.
 
-The protocol `QuantumCircuit.ghzProtocol` of `TNLean.Circuit.Measurement.GHZ` is not
-reused: it acts on interleaved single qudits of an open chain, with one unmeasured last ancilla,
-whereas here every label is a register of `r₁` sites inside a block, the ancillas close the ring,
-and the controlled shift between a register and its ancilla spans a block. The two share the
-partial sums of the outcomes, `Fin.partialSum`.
+The GHZ protocol of `QICLean.Circuit.Protocol.GHZ` is not reused: it acts on interleaved
+single qudits, with one unmeasured last ancilla, whereas here every label is a register of `r₁`
+sites inside a block, the ancillas close the ring, and the controlled shift between a register
+and its ancilla spans a block. The two share the partial sums of the outcomes,
+`Fin.partialSum`.
 
 ## Main declarations
 
 * `MPSPreparation.registerSite`, `MPSPreparation.ancillaSite` — the sites of `R_k` and of
   `L_{k+1}`.
 * `MPSPreparation.windowGHZState` — `∑ᵤ α(u) ⊗ₖ |u⟩_{R_k}` with every other site in `|0⟩`.
-* `MPSPreparation.exists_isPreparedWithMeasurementsInDepth_windowGHZState` — it is prepared
-  with measurements in depth `O(L)`.
+* `MPSPreparation.exists_isOneRoundConversion_windowGHZState` — it is prepared
+  from a product vector with one round of measurements in depth `O(L)`
+  (`QuantumCircuit.IsOneRoundConversion`).
 
 ## References
 
@@ -69,7 +72,7 @@ partial sums of the outcomes, `Fin.partialSum`.
 
 open Matrix MPSTensor
 open scoped BigOperators
-open QuantumCircuit
+open QuantumCircuit ManyBody
 
 namespace MPSPreparation
 
@@ -180,10 +183,14 @@ the controlled shift `blockShift r₁ q` is carried out by a unitary that is a p
 one gate on these `2 r₁` sites shifts, and SWAP gates move them back. -/
 theorem exists_blockShiftUnitary (hr₁ : 1 ≤ r₁) :
     ∃ C : ℕ, ∀ q, 3 * r₁ ≤ q → ∃ Y : Matrix (Cfg d q) (Cfg d q) ℂ,
-      IsPairProduct d q (C * q) Y ∧ ∀ v, Y *ᵥ v = v ∘ blockShift r₁ q := by
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph q)) (C * q) Y ∧
+        ∀ v, Y *ᵥ v = v ∘ blockShift r₁ q := by
   classical
-  obtain ⟨K₀, hK₀⟩ := exists_isPairProduct (n := r₁ + r₁) (d := d)
-    (Nat.pos_of_ne_zero (NeZero.ne d)) (by omega)
+  have : NeZero (r₁ + r₁) := ⟨by omega⟩
+  obtain ⟨K₀, hK₀⟩ : ∃ K₀, ∀ X : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ,
+      X ∈ unitary (Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ) →
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (r₁ + r₁))) K₀ X :=
+    ⟨_, fun X hX ↦ isGateProduct_pathGraph_unitaryGateCount hX⟩
   refine ⟨K₀ + 4 * r₁, fun q hq => ?_⟩
   set a := q - (r₁ + r₁) with ha
   set τ := routePerm q a r₁ with hτ
@@ -191,10 +198,14 @@ theorem exists_blockShiftUnitary (hr₁ : 1 ≤ r₁) :
   have heL : Function.Injective eL := fun i i' h => Fin.ext (by
     have := congrArg Fin.val h; simp [eL] at this; omega)
   let X₀ : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ := (tailShift r₁).permMatrix ℂ
-  refine ⟨permOp τ * embedOp eL X₀ * permOp τ, ?_, fun v => ?_⟩
-  · have h1 := isPairProduct_permOp_routePerm (d := d) q a r₁
-    have h2 := (hK₀ X₀ (Equiv.Perm.permMatrix_mem_unitaryGroup _)).embedOp heL
-      (a := a) fun i => rfl
+  refine ⟨sitePermOp τ * placeAlong (X := fun _ : Fin q ↦ Fin d) ⟨eL, heL⟩ X₀ * sitePermOp τ,
+    ?_, fun v => ?_⟩
+  · have h1 := isGateProduct_sitePermOp_routePerm (d := d) q a r₁
+    have h2 : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph q)) K₀
+        (placeAlong (X := fun _ : Fin q ↦ Fin d) ⟨eL, heL⟩ X₀) :=
+      IsGateProduct.place_pathGraph (X := fun _ : Fin q ↦ Fin d) (windowEquiv ⟨eL, heL⟩)
+        (fun p p' h ↦ by simp only [coe_windowEquiv, Function.Embedding.coeFn_mk, eL]; omega)
+        (hK₀ X₀ (Equiv.Perm.permMatrix_mem_unitaryGroup _))
     refine ((h1.mul h2).mul h1).mono ?_
     nlinarith
   · have hτv : ∀ p : Fin q, (τ p).val = if p.val < r₁ then a + p.val
@@ -206,8 +217,8 @@ theorem exists_blockShiftUnitary (hr₁ : 1 ≤ r₁) :
       fun k k' h => absurd (Subsingleton.elim k k') h
     have hoff : ∀ x : Fin q, x.val < a → ∀ (k : Unit) j, eL j ≠ x := fun x hx _ j h => by
       have := congrArg Fin.val h; simp [eL] at this; omega
-    rw [← mulVec_mulVec, ← mulVec_mulVec, permOp_mulVec, embedOp_mulVec_eq_comp heL
-      (f₀ := tailShift r₁) (fun _ => Matrix.permMatrix_mulVec (tailShift r₁)), permOp_mulVec]
+    rw [← mulVec_mulVec, ← mulVec_mulVec, sitePermOp_mulVec, placeAlong_mulVec_eq_comp heL
+      (f₀ := tailShift r₁) (fun _ => Matrix.permMatrix_mulVec (tailShift r₁)), sitePermOp_mulVec]
     funext u
     simp only [Function.comp_apply]
     congr 1
@@ -434,20 +445,22 @@ theorem windowGHZDifference_eq_mulVec [NeZero M]
     (Y : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ)
     (hY : ∀ k v, Y k *ᵥ v = v ∘ blockShift r₁ (ℓ k)) :
     (blockLayerOp hN Y * pairLayerOp hN hr (fun _ => (copyShift r₁).permMatrix ℂ) *
-        embedOp (registerSite hN hr 0) S) *ᵥ productVector (windowGHZInitial hN hr) =
-      windowGHZDifference hN hr α := by
+        placeAlong (X := fun _ : Fin N ↦ Fin d)
+          ⟨registerSite hN hr 0, registerSite_injective hN hr 0⟩ S) *ᵥ
+      productVector (windowGHZInitial hN hr) = windowGHZDifference hN hr α := by
   classical
   set e₀ := registerSite hN hr (0 : Fin M) with he₀def
   have he₀ : Function.Injective e₀ := registerSite_injective hN hr 0
   funext z
   change ((blockLayerOp hN Y * pairLayerOp hN hr (fun _ => (copyShift r₁).permMatrix ℂ) *
-    embedOp e₀ S) *ᵥ productVector (windowGHZInitial hN hr)) z = _
+    placeAlong (X := fun _ : Fin N ↦ Fin d) ⟨e₀, he₀⟩ S) *ᵥ
+      productVector (windowGHZInitial hN hr)) z = _
   unfold windowGHZDifference
   rw [← mulVec_mulVec, ← mulVec_mulVec, blockLayerOp_mulVec_eq_comp hN hY,
     pairLayerOp_mulVec_eq_comp hN hr (f := fun _ => copyShift r₁)
       (fun _ _ => Matrix.permMatrix_mulVec (copyShift r₁))]
   simp only [Function.comp_apply]
-  rw [embedOp_mulVec_productVector he₀ S (z := 0) fun j => ?_]
+  rw [placeAlong_mulVec_productVector he₀ S (z := 0) fun j => ?_]
   · have hreg0 : ∀ y : Cfg d N, (layerCfg (pairSite hN hr) (fun _ => copyShift r₁)
         (layerCfg (blockSite hN) (fun k => blockShift r₁ (ℓ k)) y)) ∘ e₀ = y ∘ e₀ :=
       fun y => funext fun j => by
@@ -473,13 +486,17 @@ theorem windowGHZDifference_eq_mulVec [NeZero M]
     rintro ⟨k, j', hk, h⟩
     exact hk ((registerSite_inj hN hr).1 h).1
 
-/-- The GHZ correction is independent of the label amplitudes. Every outcome acts with one
-scalar on every coherent label superposition, including the singleton cyclic ring. -/
-theorem exists_windowGHZCorrectionRound [NeZero M] [NeZero N]
+/-- The GHZ correction is independent of the label amplitudes: the measurement of the ancillas
+`D`, followed by the one-site shifts `V m` chosen by the outcome `m`, acts with one scalar on
+every coherent label superposition, including the singleton cyclic ring. -/
+theorem exists_windowGHZCorrectionRound [NeZero M]
     (hN : ∑ k, ℓ k = N) (hr : ∀ k, r₁ + r₁ ≤ ℓ k) :
-    ∃ R : MeasurementRound d N, R.depth = 0 ∧
+    ∃ (D : Finset (Fin N))
+      (V : RegionConfig (fun _ : Fin N ↦ Fin d) D → (i : Fin N) → Matrix (Fin d) (Fin d) ℂ),
+      (∀ m i, V m i ∈ unitaryGroup (Fin d) ℂ) ∧
       ∀ m, ∃ c : ℂ, ∀ α : Cfg d r₁ → ℂ,
-        R.kraus m *ᵥ windowGHZDifference hN hr α = c • windowGHZState hN hr α := by
+        (prodOp (V m) * place (X := fun _ : Fin N ↦ Fin d) D (Matrix.single m m 1)) *ᵥ
+          windowGHZDifference hN hr α = c • windowGHZState hN hr α := by
   classical
   set e₀ := registerSite hN hr (0 : Fin M) with he₀def
   set Sm : Finset (Fin N) :=
@@ -508,23 +525,20 @@ theorem exists_windowGHZCorrectionRound [NeZero M] [NeZero N]
     rw [Function.extend_apply' _ _ _ fun ⟨q, hq⟩ => ha' q.1 q.2 hq,
       Function.extend_apply' _ _ _ fun ⟨q, hq⟩ => hr' q.1 q.2 hq]
     rfl
-  let R : MeasurementRound d N :=
-    { circuit := []
-      measured := Sm
-      correction := fun m j => (Equiv.addRight (δ m j)).permMatrix ℂ
-      correction_mem_unitary := fun _ _ => Equiv.Perm.permMatrix_mem_unitaryGroup _ }
-  refine ⟨R, rfl, fun m => ⟨if ∑ k, mv m k = 0 then 1 else 0, fun α => ?_⟩⟩
-  rw [MeasurementRound.kraus, show circuitOp R.circuit = 1 from rfl, Matrix.mul_one,
-    ← mulVec_mulVec]
+  refine ⟨Sm, fun m j => (Equiv.addRight (δ m j)).permMatrix ℂ,
+    fun _ _ => Equiv.Perm.permMatrix_mem_unitaryGroup _,
+    fun m => ⟨if ∑ k, mv m k = 0 then 1 else 0, fun α => ?_⟩⟩
+  rw [← mulVec_mulVec]
   -- The corrected vector after the outcome `m`.
   funext x
   change (finKronecker (fun j => (Equiv.addRight (δ m j)).permMatrix ℂ) *ᵥ
-    (outcomeProj Sm m *ᵥ windowGHZDifference hN hr α)) x = _
+    (place (X := fun _ : Fin N ↦ Fin d) Sm (Matrix.single m m 1) *ᵥ
+      windowGHZDifference hN hr α)) x = _
   set z : Cfg d N := fun i => x i + δ m i with hz
   rw [finKronecker_permMatrix_mulVec]
   dsimp only
-  rw [show (fun i => (Equiv.addRight (δ m i)) (x i)) = z from rfl, outcomeProj_mulVec_apply,
-    windowGHZDifference]
+  rw [show (fun i => (Equiv.addRight (δ m i)) (x i)) = z from rfl,
+    place_single_self_mulVec_apply, windowGHZDifference]
   simp only [Pi.smul_apply, smul_eq_mul, windowGHZState]
   have hza : ∀ k i, z (ancillaSite hN hr k i) = x (ancillaSite hN hr k i) + mv m k i :=
     fun k i => by rw [hz]; simp only; rw [hδa]
@@ -539,12 +553,12 @@ theorem exists_windowGHZCorrectionRound [NeZero M] [NeZero N]
     rw [hzr, partialSum_zero, Pi.zero_apply, sub_zero]
   rw [hz0]
   -- The measurement condition: every ancilla of `x` is `0`.
-  have hmeas : (∀ s : Sm, z s = m s) ↔ ∀ k i, x (ancillaSite hN hr k i) = 0 := by
+  have hmeas : (∀ i (hi : i ∈ Sm), z i = m ⟨i, hi⟩) ↔ ∀ k i, x (ancillaSite hN hr k i) = 0 := by
     constructor
     · intro h k i
-      have := h ⟨_, hmem k i⟩
+      have := h _ (hmem k i)
       rwa [hza, add_eq_right] at this
-    · rintro h ⟨s, hs⟩
+    · intro h s hs
       obtain ⟨⟨k, i⟩, -, rfl⟩ := Finset.mem_image.1 hs
       rw [hza, h, zero_add]
   -- The value of the layers at the sites.
@@ -577,7 +591,7 @@ theorem exists_windowGHZCorrectionRound [NeZero M] [NeZero N]
         · exact absurd hk (ha k j)
         · exact h
   -- Put together.
-  have hcond : ((∀ s : Sm, z s = m s) ∧ ∀ i, (∀ k j, registerSite hN hr k j ≠ i) →
+  have hcond : ((∀ i (hi : i ∈ Sm), z i = m ⟨i, hi⟩) ∧ ∀ i, (∀ k j, registerSite hN hr k j ≠ i) →
       layerCfg (pairSite hN hr) (fun _ => copyShift r₁)
         (layerCfg (blockSite hN) (fun k => blockShift r₁ (ℓ k)) z) i = 0) ↔
       ∑ k, mv m k = 0 ∧ ((∀ k, x ∘ registerSite hN hr k = x ∘ registerSite hN hr 0) ∧
@@ -617,7 +631,7 @@ theorem exists_windowGHZCorrectionRound [NeZero M] [NeZero N]
         rw [← this]
       · push Not at ha
         exact Or.inr ⟨ha, by rw [hzo i hi ha]; exact hx i hi⟩
-  by_cases hall : (∀ s : Sm, z s = m s) ∧ ∀ i, (∀ k j, registerSite hN hr k j ≠ i) →
+  by_cases hall : (∀ i (hi : i ∈ Sm), z i = m ⟨i, hi⟩) ∧ ∀ i, (∀ k j, registerSite hN hr k j ≠ i) →
       layerCfg (pairSite hN hr) (fun _ => copyShift r₁)
         (layerCfg (blockSite hN) (fun k => blockShift r₁ (ℓ k)) z) i = 0
   · obtain ⟨hsum, hghz⟩ := hcond.1 hall
@@ -625,25 +639,21 @@ theorem exists_windowGHZCorrectionRound [NeZero M] [NeZero N]
       one_mul]
   · have hn : ¬(∑ k, mv m k = 0 ∧ ((∀ k, x ∘ registerSite hN hr k = x ∘ registerSite hN hr 0) ∧
         ∀ i, (∀ k j, registerSite hN hr k j ≠ i) → x i = 0)) := fun h => hall (hcond.2 h)
-    have hl : (if ∀ s : Sm, z s = m s then α (x ∘ e₀) *
-        (if ∀ i, (∀ k j, registerSite hN hr k j ≠ i) →
-          layerCfg (pairSite hN hr) (fun _ => copyShift r₁)
-            (layerCfg (blockSite hN) (fun k => blockShift r₁ (ℓ k)) z) i = 0 then 1 else 0)
-        else 0) = 0 := by
-      by_cases h1 : ∀ s : Sm, z s = m s
+    trans (0 : ℂ)
+    · by_cases h1 : ∀ i (hi : i ∈ Sm), z i = m ⟨i, hi⟩
       · rw [ite_eq_left h1, ite_eq_right (fun h2 => hall ⟨h1, h2⟩), mul_zero]
       · rw [ite_eq_right h1]
-    rw [hl]
-    by_cases hsum : ∑ k, mv m k = 0
-    · rw [ite_eq_left hsum, one_mul, ite_eq_right (fun hg => hn ⟨hsum, hg⟩)]
-    · rw [ite_eq_right hsum, zero_mul]
+    · symm
+      by_cases hsum : ∑ k, mv m k = 0
+      · rw [ite_eq_left hsum, one_mul, ite_eq_right (fun hg => hn ⟨hsum, hg⟩)]
+      · rw [ite_eq_right hsum, zero_mul]
 
 
 /-- **The GHZ-type state on the registers in depth `O(L)` with measurements.** Let `r₁ ≥ 2`.
 There is `C` such that for every chain of `N` sites cut into `M ≥ 1` blocks of lengths
 `3 r₁ ≤ ℓ_k ≤ L` and every unit vector `α` on `(ℂ^d)^{⊗ r₁}`, the state
-`∑ᵤ α(u) ⊗ₖ |u⟩_{R_k}`, with every site outside the registers in `|0⟩`, is prepared with
-measurements in depth at most `C L`.
+`∑ᵤ α(u) ⊗ₖ |u⟩_{R_k}`, with every site outside the registers in `|0⟩`, is converted from a
+product vector by one round of measurements in depth at most `C L`.
 
 arXiv:2307.01696, paragraph "Long-range MPS using measurements": "First create `|χ_{N/q}⟩`,
 which can be done in constant depth with measurements (following, e.g., Ref~\cite{Piroli2021})";
@@ -651,15 +661,23 @@ arXiv:2103.13367, Example 1, for registers of `r₁` sites. The depth is `O(L)` 
 constant because the register of a block and the ancilla at its start are `ℓ_k - r₁` sites apart
 on the chain. `TNLean.MPS.Preparation.SparseWindowGHZ` gives constant depth using additional
 measurement rounds. -/
-theorem exists_isPreparedWithMeasurementsInDepth_windowGHZState (hr₁ : 2 ≤ r₁) :
+theorem exists_isOneRoundConversion_windowGHZState (hr₁ : 2 ≤ r₁) :
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
       (hr : ∀ k, r₁ + r₁ ≤ ℓ k) (L : ℕ), (∀ k, 3 * r₁ ≤ ℓ k) → (∀ k, ℓ k ≤ L) →
       ∀ α : Cfg d r₁ → ℂ, ∑ u, star (α u) * α u = 1 →
-        IsPreparedWithMeasurementsInDepth (C * L) (windowGHZState hN hr α) := by
+        ∃ v : Fin N → Fin d → ℂ, IsOneRoundConversion (Geometry.ring N) (C * L) 0
+          (fun σ ↦ ∏ s, v s (σ s)) (windowGHZState hN hr α) := by
   classical
-  have hd : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
-  obtain ⟨KS, hKS⟩ := exists_isPairProduct (n := r₁) hd hr₁
-  obtain ⟨KA, hKA⟩ := exists_isPairProduct (n := r₁ + r₁) hd (by omega)
+  have : NeZero r₁ := ⟨by omega⟩
+  have : NeZero (r₁ + r₁) := ⟨by omega⟩
+  obtain ⟨KS, hKS⟩ : ∃ KS, ∀ X : Matrix (Cfg d r₁) (Cfg d r₁) ℂ,
+      X ∈ unitary (Matrix (Cfg d r₁) (Cfg d r₁) ℂ) →
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph r₁)) KS X :=
+    ⟨_, fun X hX ↦ isGateProduct_pathGraph_unitaryGateCount hX⟩
+  obtain ⟨KA, hKA⟩ : ∃ KA, ∀ X : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ,
+      X ∈ unitary (Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ) →
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (r₁ + r₁))) KA X :=
+    ⟨_, fun X hX ↦ isGateProduct_pathGraph_unitaryGateCount hX⟩
   obtain ⟨CB, hCB⟩ := exists_blockShiftUnitary (d := d) (r₁ := r₁) (by omega)
   refine ⟨KS + KA + CB, fun {M} _ ℓ {N} _ hN hr L hℓ hL α hα => ?_⟩
   -- The seed unitary on `R₀`.
@@ -671,42 +689,36 @@ theorem exists_isPreparedWithMeasurementsInDepth_windowGHZState (hr₁ : 2 ≤ r
   have hL1 : 1 ≤ L := by
     have := hℓ 0; have := hL 0; omega
   -- The circuit before the measurement.
-  have hcirc : IsCircuitOn Finset.univ (KS + KA + CB * L)
-      (blockLayerOp hN Y * pairLayerOp hN hr (fun _ => WA) * embedOp e₀ S) := by
-    have h1 : IsCircuitOn Finset.univ KS (embedOp e₀ S) := by
-      refine ((hKS S hSu).isCircuitOn he₀ fun i j h => ?_).mono_set (Finset.subset_univ _)
-      rw [he₀def, registerSite_eq, registerSite_eq]
-      exact blockSite_succ hN 0 _ _ (by simp; omega)
-    have h2 := isCircuitOn_pairLayerOp hN hr fun _ =>
+  have hcirc : IsUnitaryCircuitOn (Geometry.ring N) Finset.univ (CB * L + (KA + KS))
+      (blockLayerOp hN Y * pairLayerOp hN hr (fun _ => WA) *
+        placeAlong (X := fun _ : Fin N ↦ Fin d) ⟨e₀, he₀⟩ S) := by
+    have h1 : IsUnitaryCircuitOn (Geometry.ring N) Finset.univ KS
+        (placeAlong (X := fun _ : Fin N ↦ Fin d) ⟨e₀, he₀⟩ S) :=
+      (IsGateProduct.isUnitaryCircuitOn_ring (windowEquiv ⟨e₀, he₀⟩) (fun i j h => by
+        change registerSite hN hr 0 j = registerSite hN hr 0 i + 1
+        rw [registerSite_eq, registerSite_eq]
+        exact blockSite_succ hN 0 _ _ (by simp; omega)) (hKS S hSu)).mono_set
+        (Finset.subset_univ _)
+    have h2 := isUnitaryCircuitOn_pairLayerOp hN hr fun _ =>
       hKA WA (Equiv.Perm.permMatrix_mem_unitaryGroup _)
-    have h3 := isCircuitOn_blockLayerOp hN (K := CB * L) fun k =>
+    have h3 := isUnitaryCircuitOn_blockLayerOp hN (K := CB * L) fun k =>
       (hYpp k).mono (Nat.mul_le_mul_left CB (hL k))
     rw [Matrix.mul_assoc]
-    exact (h1.mul h2).mul h3
-  obtain ⟨Ls, hLs, -, hU⟩ := hcirc
-  obtain ⟨R, hRdepth, hR⟩ := exists_windowGHZCorrectionRound (d := d) hN hr
-  let P : MeasurementProtocol d N :=
-    { initial := windowGHZInitial hN hr
-      first := Ls
-      measured := R.measured
-      correction := R.correction
-      correction_mem_unitary := R.correction_mem_unitary }
-  refine ⟨P, by change Ls.length ≤ _; rw [hLs]; nlinarith, ?_, fun m _ => ?_⟩
-  · intro h0
-    have h1 := congrFun h0 fun _ => 0
-    have h2 : productVector (windowGHZInitial hN hr) (fun _ => (0 : Fin d)) = 1 :=
+    exact h3.mul (h2.mul h1)
+  obtain ⟨D, V, hV, hR⟩ := exists_windowGHZCorrectionRound (d := d) hN hr
+  refine ⟨windowGHZInitial hN hr, fun h0 => ?_,
+    blockLayerOp hN Y * pairLayerOp hN hr (fun _ => WA) *
+      placeAlong (X := fun _ : Fin N ↦ Fin d) ⟨e₀, he₀⟩ S, 1, D, V,
+    hcirc.isUnitaryCircuit.mono (by nlinarith), IsUnitaryCircuit.one _ _ 0, hV, fun m => ?_⟩
+  · have h1 := congrFun h0 fun _ => 0
+    have h2 : ∏ s, windowGHZInitial hN hr s ((fun _ => (0 : Fin d)) s) = 1 :=
       Finset.prod_eq_one fun i _ => by unfold windowGHZInitial; split_ifs <;> simp
     exact one_ne_zero (h2.symm.trans h1)
-  have hpre' : P.preMeasurement = windowGHZDifference hN hr α := by
-    change circuitOp Ls *ᵥ productVector (windowGHZInitial hN hr) = _
-    rw [← hU]
-    exact windowGHZDifference_eq_mulVec hN hr α S hS Y hY
   obtain ⟨c, hc⟩ := hR m
   refine ⟨c, ?_⟩
-  have hRc : R.circuit = [] := List.length_eq_zero_iff.mp hRdepth
-  simpa only [MeasurementRound.kraus, hRc, circuitOp, Matrix.mul_one,
-    ← mulVec_mulVec, MeasurementProtocol.output, MeasurementProtocol.postMeasurement,
-    hpre'] using hc α
+  have hdiff := windowGHZDifference_eq_mulVec hN hr α S hS Y hY
+  rw [Matrix.one_mul, ← mulVec_mulVec, ← hc α, ← hdiff]
+  rfl
 
 end Protocol
 

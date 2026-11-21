@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.BondInterpolation
 import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
-import TNLean.Algebra.CommutingProjectionProduct
+import QICLean.Analysis.CommutingProjectionProduct
 
 /-!
 # Parent Hamiltonian of independent bonds
@@ -22,6 +22,8 @@ the original physical chain and transporting symmetry are separate steps.
 -/
 
 open scoped Matrix BigOperators InnerProductSpace
+
+open ManyBody
 
 namespace MPSTensor
 
@@ -68,11 +70,11 @@ theorem bondPenalty_isStarProjection (η : Fin q → ℂ)
     IsStarProjection (bondPenalty η) :=
   (bondVectorProjection_isStarProjection η hη).one_sub
 
-/-- One independent-bond penalty, embedded at position `i` in the regrouped
+/-- One independent-bond penalty, placed at position `i` in the regrouped
 finite chain. Source: arXiv:1010.3732, Sections II.D.2 and II.F.2. -/
 noncomputable def bondPenaltyAt (η : Fin q → ℂ) (hN : 1 ≤ N) (i : Fin N) :
     MPOTensor.ChainOperator q N :=
-  MPOTensor.embedLocalOperator 1 N hN i
+  placeAlong (X := fun _ ↦ Fin q) (ringWindow hN i)
     (MPOTensor.oneSiteOperator (bondPenalty η))
 
 /-- Sum of the independent-bond penalties on a finite chain.
@@ -96,21 +98,21 @@ private theorem oneSiteOperator_isStarProjection
   · ext x y
     exact congrArg (fun M : Matrix (Fin q) (Fin q) ℂ => M (e x) (e y)) hA.2
 
-/-- Every embedded independent-bond penalty is an orthogonal projection.
+/-- Every placed independent-bond penalty is an orthogonal projection.
 Source: arXiv:1010.3732, Section II.D.2. -/
 theorem bondPenaltyAt_isStarProjection (η : Fin q → ℂ)
     (hη : ∑ x, Complex.normSq (η x) = 1)
     (hN : 1 ≤ N) (i : Fin N) :
     IsStarProjection (bondPenaltyAt η hN i) :=
-  MPOTensor.embedLocalOperator_isStarProjection 1 N hN i
-    (oneSiteOperator_isStarProjection (bondPenalty η) (bondPenalty_isStarProjection η hη))
+  (oneSiteOperator_isStarProjection (bondPenalty η) (bondPenalty_isStarProjection η hη)).map
+    (placeAlongHom (X := fun _ ↦ Fin q) (ringWindow hN i))
 
 /-- Independent-bond parent terms commute.
 Source: arXiv:1010.3732, Sections II.D.2 and II.F.2. -/
 theorem bondPenaltyAt_commute (η : Fin q → ℂ) (hN : 1 ≤ N)
     (i j : Fin N) :
     Commute (bondPenaltyAt η hN i) (bondPenaltyAt η hN j) :=
-  MPOTensor.embedLocalOperator_one_commute hN (bondPenalty η) i j
+  MPOTensor.commute_placeAlong_ringWindow_oneSiteOperator hN (bondPenalty η) i j
 
 /-- The product of identical bond vectors, in independent-bond coordinates.
 Source: arXiv:1010.3732, Sections II.D.2 and II.F.2. -/
@@ -141,14 +143,14 @@ Sections II.D.2 and II.F.2. -/
 theorem bondProductVectorProjection_eq_localProduct
     (η : Fin q → ℂ) (hN : 1 ≤ N) :
     (Finset.univ : Finset (Fin N)).noncommProd
-      (fun i => MPOTensor.embedLocalOperator 1 N hN i
+      (fun i => placeAlong (X := fun _ ↦ Fin q) (ringWindow hN i)
         (MPOTensor.oneSiteOperator (bondVectorProjection η)))
       (by
         intro i _ j _ _
-        exact MPOTensor.embedLocalOperator_one_commute hN
+        exact MPOTensor.commute_placeAlong_ringWindow_oneSiteOperator hN
           (bondVectorProjection η) i j) =
         Matrix.vecMulVec (bondProductVector η N) (star (bondProductVector η N)) := by
-  rw [MPOTensor.prod_embedLocalOperator_one_eq_rectKronecker,
+  rw [MPOTensor.noncommProd_placeAlong_ringWindow_oneSiteOperator,
     sitewise_bondVectorProjection_eq_productVectorProjection]
 
 /-- Matrix coordinates for operators on the independent-bond Hilbert space. -/
@@ -277,12 +279,12 @@ theorem listProd_one_sub_bondPenaltyAtLin_eq_rankOne
         (bondProductState η N) (bondProductState η N)).toLinearMap := by
   let e := bondMatrixEquiv q N
   let Q : Fin N → MPOTensor.ChainOperator q N := fun i =>
-    MPOTensor.embedLocalOperator 1 N hN i
+    placeAlong (X := fun _ ↦ Fin q) (ringWindow hN i)
       (MPOTensor.oneSiteOperator (bondVectorProjection η))
   have hmat (i : Fin N) : 1 - bondPenaltyAt η hN i = Q i := by
-    change 1 - (MPOTensor.embedLocalOperatorAlgHom 1 N hN i)
+    change 1 - (placeAlongHom (X := fun _ ↦ Fin q) (ringWindow hN i))
       (MPOTensor.oneSiteOperator (1 - bondVectorProjection η)) =
-        (MPOTensor.embedLocalOperatorAlgHom 1 N hN i)
+        (placeAlongHom (X := fun _ ↦ Fin q) (ringWindow hN i))
           (MPOTensor.oneSiteOperator (bondVectorProjection η))
     simp only [MPOTensor.oneSiteOperator_eq_reindexAlgEquiv_symm,
       map_sub, map_one]
@@ -294,7 +296,7 @@ theorem listProd_one_sub_bondPenaltyAtLin_eq_rankOne
     change 1 - e.symm (bondPenaltyAt η hN i) = e.symm (Q i)
     rw [← map_one e.symm, ← map_sub, hmat]
   have hcomm : ∀ i j, Commute (Q i) (Q j) := fun i j =>
-    MPOTensor.embedLocalOperator_one_commute hN (bondVectorProjection η) i j
+    MPOTensor.commute_placeAlong_ringWindow_oneSiteOperator hN (bondVectorProjection η) i j
   have hprod : (List.ofFn Q).prod =
       Matrix.vecMulVec (bondProductVector η N) (star (bondProductVector η N)) := by
     rw [listProd_ofFn_eq_noncommProd Q hcomm]

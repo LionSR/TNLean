@@ -22,6 +22,8 @@ is treated separately.
 
 open scoped Matrix Kronecker
 
+open ManyBody
+
 namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D}
@@ -44,10 +46,10 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
 1571--1593. -/
 theorem physicalBond_pairwise_comm (F : PhysicalSectorFactorization K)
     {N : ℕ} (hN : 2 ≤ N) (i j : Fin N) :
-    embedLocalOperator (d := d) 2 N hN i F.physicalBond *
-        embedLocalOperator (d := d) 2 N hN j F.physicalBond =
-      embedLocalOperator (d := d) 2 N hN j F.physicalBond *
-        embedLocalOperator (d := d) 2 N hN i F.physicalBond := by
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) F.physicalBond *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) F.physicalBond =
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) F.physicalBond *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) F.physicalBond := by
   by_cases htwo : N = 2
   · subst N
     fin_cases i <;> fin_cases j

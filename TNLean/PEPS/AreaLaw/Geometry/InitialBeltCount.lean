@@ -24,6 +24,7 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -64,7 +65,7 @@ theorem initial_belt_card_le (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Fi
     Finite I ∧
       (Nat.card I : ℝ) ≤
         initialBeltCountConstant * (2 * (C : ℝ) + 1) ^ 2 *
-          (edgeBoundary Λ A).card := by
+          (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
   unfold initialBeltCountConstant
   intro h a hb b F I
@@ -110,7 +111,7 @@ theorem initial_belt_card_le (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Fi
   have hcount : (Nat.card I : ℝ) ≤ ∑ k ∈ K, 8 * ((F k).card : ℝ) := by
     exact_mod_cast hcard.trans hJ
   have hsparse (k : ℕ) : 8 * ((F k).card : ℝ) ≤
-      512 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card *
+      512 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card *
         (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * k / 2) := by
     convert mul_le_mul_of_nonneg_left (hFcard k) (show (0 : ℝ) ≤ 8 by norm_num) using 1
     ring
@@ -120,7 +121,7 @@ theorem initial_belt_card_le (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Fi
   refine hcount.trans ((Finset.sum_le_sum (fun k _ ↦ hsparse k)).trans ?_)
   rw [← Finset.mul_sum]
   convert mul_le_mul_of_nonneg_left hbudgetK
-    (show 0 ≤ 512 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card by
+    (show 0 ≤ 512 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card by
       positivity) using 1
   ring
 
@@ -161,7 +162,7 @@ theorem exists_uniform_initial_belt_card_bound :
                   hC h₀ k.property z.property)
         Finite I ∧
           (Nat.card I : ℝ) ≤
-            B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
+            B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card :=
   ⟨_, initialBeltCountConstant_pos, initial_belt_card_le⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

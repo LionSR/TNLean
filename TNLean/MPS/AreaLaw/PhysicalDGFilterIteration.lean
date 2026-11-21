@@ -38,9 +38,9 @@ the initial candidate. The iteration count is expressed in terms of that
 projection error, not the final Ritz energy tolerance. Auxiliary to ALVV,
 arXiv:1602.08828v2, proof of `t:alg1`, lines 1809–1817. -/
 theorem physical_dg_filterTrimIterate_ceil_log_isCloseTo
-    {L q : ℕ} (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, 0 ≤ h i) (mu nu gamma : ℝ) (hgamma : 0 < gamma) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    {L q : ℕ} (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (mu nu gamma : ℝ) (hgamma : 0 < gamma) :
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -69,7 +69,7 @@ theorem physical_dg_filterTrimIterate_ceil_log_isCloseTo
   intro H hH hmu hnu hmunu hgap G M K c D hD U epsilon rho xi delta0
     hepsilon hrho hrho1 hxi hdelta0 hdelta0half hGU hUG hU hepsilonBudget hxiBudget S hS n
   obtain ⟨_hM, _hden, hc, hc1, _hfix, _hKGo, _hhigh⟩ :=
-    physical_dg_normalized_ground_filter_spec h h0 mu nu gamma hgamma hmu hnu hmunu hgap
+    physical_dg_normalized_ground_filter_spec Φ h0 mu nu gamma hgamma hmu hnu hmunu hgap
   change 0 < c at hc
   change c ≤ 1 at hc1
   let u : ℕ → ℝ := Nat.rec delta0 (fun _ d ↦ (1 - c / 4) * d + c * rho / 8)
@@ -89,7 +89,7 @@ theorem physical_dg_filterTrimIterate_ceil_log_isCloseTo
     | zero => exact hS
     | succ n ih =>
       exact isCloseTo_nativeFullIntervalSpace_filterTrimStep_of_physical_dg
-        h h0 mu nu gamma hgamma hmu hnu hmunu hgap D hD U epsilon rho xi (u n)
+        Φ h0 mu nu gamma hgamma hmu hnu hmunu hgap D hD U epsilon rho xi (u n)
         hepsilon hxi (hu0 n) (hstable.1 n) hGU hUG hU hepsilonBudget hxiBudget _ ih
   have hterminal : u n ≤ rho :=
     Real.filter_trim_iterate_ceil_log_le hc hc1 hrho hrho1 u hdelta0half hstep
@@ -103,9 +103,9 @@ reference and threshold precede the initial candidate. The terminal space
 is a literal iterate of that candidate, with unchanged dimension budget.
 Supporting ALVV, arXiv:1602.08828v2, proof of `t:alg1`, lines 1809–1817. -/
 theorem exists_physical_dg_filterTrimIterate_isCloseTo
-    {L q : ℕ} (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, 0 ≤ h i) (mu nu gamma : ℝ) (hgamma : 0 < gamma) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    {L q : ℕ} (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (mu nu gamma : ℝ) (hgamma : 0 < gamma) :
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -133,7 +133,7 @@ theorem exists_physical_dg_filterTrimIterate_isCloseTo
   intro H hH hmu hnu hmunu hgap G M K c D hD U epsilon rho xi delta0
     hepsilon hrho hrho1 hxi hdelta0 hdelta0half hGU hUG hU hepsilonBudget hxiBudget S hS
   refine ⟨⌈4 / c * Real.log (1 / rho)⌉₊ + 1, ?_⟩
-  exact physical_dg_filterTrimIterate_ceil_log_isCloseTo h h0 mu nu gamma hgamma
+  exact physical_dg_filterTrimIterate_ceil_log_isCloseTo Φ h0 mu nu gamma hgamma
     hmu hnu hmunu hgap D hD U epsilon rho xi delta0 hepsilon hrho hrho1 hxi
     hdelta0 hdelta0half hGU hUG hU hepsilonBudget hxiBudget S hS
 

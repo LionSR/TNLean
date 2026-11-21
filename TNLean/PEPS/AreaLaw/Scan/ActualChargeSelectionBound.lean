@@ -26,7 +26,7 @@ open scoped Matrix.Norms.L2Operator
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph PlaneInteraction)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 

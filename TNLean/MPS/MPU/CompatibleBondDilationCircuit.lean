@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.NormalizedBondDilation
 import TNLean.MPS.MPU.BondRegisterBounds
-import TNLean.Circuit.CleanUnitaryImplementation
+import QICLean.Circuit.Compile.ChainUniversality
+import QICLean.Circuit.Model.CleanWorkspace
 import TNLean.MPS.Preparation.BlockUnitary
 
 /-!
@@ -132,16 +133,23 @@ theorem exists_compatibleNormalizedBondDilation_circuit {d r q : ℕ}
     ∃ U : Matrix (Cfg d (2 * q + 2)) (Cfg d (2 * q + 2)) ℂ,
       compatibleBondDilationEmbedding hd e
         (Sum.inl (⟨0, hr⟩, ⟨0, hr⟩), Fin.castLE hd 0) = (fun _ ↦ Fin.castLE hd 0) ∧
-      IsPairProduct d (2 * q + 2) (38 * (d ^ (2 * q + 2)) ^ 6) U ∧
-      IsCleanImplementation (initializedBasisMatrix (compatibleBondDilationEmbedding hd e)) U
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (2 * q + 2)))
+        (38 * (d ^ (2 * q + 2)) ^ 6) U ∧
+      IsCleanImplementation (basisInclusion (compatibleBondDilationEmbedding hd e)) U
         (normalizedBondDilation P (⟨0, hr⟩, ⟨0, hr⟩) ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) := by
   let : Nonempty (Fin r) := ⟨⟨0, hr⟩⟩
   have hu := Matrix.kronecker_mem_unitary
     (normalizedBondDilation_mem_unitaryGroup hP (⟨0, hr⟩, ⟨0, hr⟩))
     (one_mem (unitary (Matrix (Fin d) (Fin d) ℂ)))
-  obtain ⟨U, hU, hclean⟩ := exists_isPairProduct_isCleanImplementation hd
-    (by omega : 2 ≤ 2 * q + 2) (compatibleBondDilationEmbedding hd e) hu
-  exact ⟨U, compatibleBondDilationEmbedding_zero hd hr e he, hU, hclean⟩
+  have : NeZero (2 * q + 2) := ⟨by omega⟩
+  obtain ⟨U, hU, hclean⟩ := exists_isGateProduct_isCleanImplementation
+    (fun U hU ↦ isGateProduct_pathGraph_le_card_pow (n := 2 * q + 2) (α := Fin d)
+      (by simpa only [Fintype.card_fin] using hd) hU)
+    (compatibleBondDilationEmbedding hd e) hu
+  refine ⟨U, compatibleBondDilationEmbedding_zero hd hr e he, hU.mono ?_, hclean⟩
+  rw [Fintype.card_fin]
+  exact Nat.mul_le_mul (by norm_num)
+    (Nat.pow_le_pow_right (pow_pos (by omega : 0 < d) _) (by norm_num))
 
 /-- The compatible logarithmic packet has polynomial Hilbert dimension. -/
 theorem compatibleBondDilationPacket_dimension_le {d D : ℕ}
@@ -164,8 +172,9 @@ theorem exists_compatibleNormalizedBondDilation_circuit_bounded {d r D : ℕ}
     ∃ U : Matrix (Cfg d (2 * Nat.clog d D + 2)) (Cfg d (2 * Nat.clog d D + 2)) ℂ,
       compatibleBondDilationEmbedding hd e
         (Sum.inl (⟨0, hr⟩, ⟨0, hr⟩), Fin.castLE hd 0) = (fun _ ↦ Fin.castLE hd 0) ∧
-      IsPairProduct d (2 * Nat.clog d D + 2) (38 * (d ^ 4 * D ^ 2) ^ 6) U ∧
-      IsCleanImplementation (initializedBasisMatrix (compatibleBondDilationEmbedding hd e)) U
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (2 * Nat.clog d D + 2)))
+        (38 * (d ^ 4 * D ^ 2) ^ 6) U ∧
+      IsCleanImplementation (basisInclusion (compatibleBondDilationEmbedding hd e)) U
         (normalizedBondDilation P (⟨0, hr⟩, ⟨0, hr⟩) ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)) := by
   obtain ⟨U, hz, hU, hclean⟩ := exists_compatibleNormalizedBondDilation_circuit hd hr e he hP
   refine ⟨U, hz, hU.mono ?_, hclean⟩

@@ -44,20 +44,18 @@ restricted residual derived. Auxiliary to ALVV, arXiv:1602.08828v2, `lem:exp-app
 lines 1195–1255, and `t:aisefficient`, lines 1373–1420. -/
 theorem exists_single_region_original_soft_truncation_residual {L q l r : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
-      star x ⬝ᵥ x = 1 ∧ (∀ j, aklvRegionalHamiltonians l r h j *ᵥ x = (e j : ℂ) • x) ∧
-      (∀ j, (aklvRegionalHamiltonians l r h j - (e j : ℂ) • 1).PosSemidef) ∧
+      star x ⬝ᵥ x = 1 ∧ (∀ j, aklvRegionalHamiltonians l r Φ j *ᵥ x = (e j : ℂ) • x) ∧
+      (∀ j, (aklvRegionalHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       (∀ j, 0 ≤ e j) ∧
-      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E : ℂ) • z ∧
       (H - (E : ℂ) • 1).PosSemidef ∧ 0 ≤ E ∧ E ≤ 2 ∧
       ∃ hH : H.IsHermitian,
         ∀ η T t : ℝ, ∀ m : ℕ, 0 < η → η + 7 ≤ T → 0 < t → 1 ≤ m →
-          let X := aklvRegionalHamiltonians l r h 1 - (e 1 : ℂ) • 1
+          let X := aklvRegionalHamiltonians l r Φ 1 - (e 1 : ℂ) • 1
           let G := H - X + cfc (Real.softTruncation t m) X
           G.IsHermitian ∧ G ≤ H ∧
             ‖((toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)) H -
@@ -67,17 +65,17 @@ theorem exists_single_region_original_soft_truncation_residual {L q l r : ℕ}
                   finrank_euclideanSpace) hH.eigenvalues₀ (E + η))‖ ≤
               32 * Real.exp (-(T - η) / 8) + (t / (m : ℝ)) * (T / t) ^ m := by
   obtain ⟨e, x, z, E, hx, hxe, he, he0, hz, hHz, hE, hE0, hE2, hhard⟩ :=
-    exists_single_region_hard_truncation_residuals hq hlr hrL h hs h0 h1
-  let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
-  have hraw : (∑ i, h i).IsHermitian :=
+    exists_single_region_hard_truncation_residuals hq hlr hrL Φ h0 h1
+  let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
+  have hraw : Φ.hamiltonian.IsHermitian :=
     (Matrix.posSemidef_sum _ (fun i _ ↦ (h0 i).posSemidef)).isHermitian
   have hH : H.IsHermitian := hraw.sub
     (isHermitian_one.smul (by simp [isSelfAdjoint_iff]))
   refine ⟨e, x, z, E, hx, hxe, he, he0, hz, hHz, hE, hE0, hE2, hH, ?_⟩
   intro η T t m hη hT ht hm X G
-  let A := aklvRegionalHamiltonians l r h
+  let A := aklvRegionalHamiltonians l r Φ
   let Y := ∑ i ∈ Finset.univ.filter
-    (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), h i
+    (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), Φ.term i
   let F := energyTruncation (A 1) (e 1 + T) + A 0 + A 2 + Y -
     (((∑ j, e j) : ℝ) : ℂ) • 1
   let S := Submodule.spectralSpanLE
@@ -105,8 +103,8 @@ theorem exists_single_region_original_soft_truncation_residual {L q l r : ℕ}
     change ‖(toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) H -
       toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) F).domRestrict S‖ ≤
       32 * Real.exp (-(T - η) / 8) at hres
-    have hsum : (∑ i, h i) = (∑ j, A j) + Y :=
-      sum_three_regions_add_crossings hlr h
+    have hsum : Φ.hamiltonian = (∑ j, A j) + Y :=
+      sum_three_regions_add_crossings hlr Φ
     have hdiff : H - F = X - energyTruncation X T := by
       rw [hA1.energyTruncation_sub_smul_one (e 1) T]
       dsimp only [H, F, X]

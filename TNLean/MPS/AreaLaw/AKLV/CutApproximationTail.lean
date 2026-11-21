@@ -18,6 +18,7 @@ inequality, and assumes no area law.
 
 open Matrix
 open scoped InnerProductSpace ComplexOrder
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -25,7 +26,8 @@ namespace TNLean.MPS.AreaLaw
 unit vector of bounded rank at that cut. -/
 theorem one_sub_kyFanNorm_le_of_unit_cut_rank_approximation {L q D k : ℕ}
     (Ω y : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1) (hy : ‖y‖ = 1)
-    {rho : ℝ} (herror : ‖y - Ω‖ ^ 2 ≤ rho) (hrank : (cutMatrix y k).rank ≤ D) :
+    {rho : ℝ} (herror : ‖y - Ω‖ ^ 2 ≤ rho)
+    (hrank : (cutMatrix (leftBlock L k) y).rank ≤ D) :
     1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
       (leftBlock L k) Ω).kyFanNorm D ≤ rho := by
   classical
@@ -44,12 +46,12 @@ theorem one_sub_kyFanNorm_le_of_unit_cut_rank_approximation {L q D k : ℕ}
   · have h := Matrix.normSq_inner_le_kyFanNorm_mul_normSq (U Ω) (U y) hD hrank
     rw [U.inner_map_map, U.norm_map, hy, one_pow, mul_one] at h
     have heq : H.kyFanNorm D =
-        (posSemidef_self_mul_conjTranspose (cutMatrix Ω k)).isHermitian.kyFanNorm D := by
+        (posSemidef_self_mul_conjTranspose
+          (cutMatrix (leftBlock L k) Ω)).isHermitian.kyFanNorm D := by
       congr 1
-      exact (ManyBody.regionState_eq_partialTraceRight_cutVector _ _).trans
-        (partialTraceRight_vecMulVec_eq _)
     change ‖⟪Ω, y⟫_ℂ‖ ^ 2 ≤
-      (posSemidef_self_mul_conjTranspose (cutMatrix Ω k)).isHermitian.kyFanNorm D at h
+      (posSemidef_self_mul_conjTranspose
+        (cutMatrix (leftBlock L k) Ω)).isHermitian.kyFanNorm D at h
     rw [← heq] at h
     linarith
   · have htrace : (ManyBody.regionState (X := fun _ ↦ Fin q)

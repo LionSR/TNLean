@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.WindowGHZ
-import TNLean.Circuit.Teleportation.RegisterGates
+import QICLean.Circuit.Protocol.Teleportation.RegisterGates
+import QICLean.Circuit.Compile.SwapRouting
 import Mathlib.GroupTheory.Perm.ViaEmbedding
 
 /-!
@@ -68,32 +69,33 @@ theorem padding_of_ge (hq : r + 1 ≤ q) (i : Fin q) (hi : r + 1 ≤ i.val) :
   have := j.isLt
   omega
 
-/-- One fixed-size prefix unitary implements each padding rotation, uniformly in block length. -/
-theorem exists_isPairProduct_padding (hd : 0 < d) (hr : 1 ≤ r) :
+/-- One fixed-size prefix circuit implements each padding rotation, uniformly in block length:
+the rotation of the first `r + 1` sites is a product of at most `2 (r + 1)²` gates on neighbouring
+sites. -/
+theorem exists_isGateProduct_padding :
     ∃ K : ℕ, ∀ q (hq : r + 1 ≤ q),
-      IsPairProduct d q K ((cfgPerm (padding hq)).permMatrix ℂ) ∧
-      IsPairProduct d q K ((cfgPerm (padding hq).symm).permMatrix ℂ) := by
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph q)) K
+          (ManyBody.sitePermOp (α := Fin d) (padding hq)) ∧
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph q)) K
+          (ManyBody.sitePermOp (α := Fin d) (padding hq).symm) := by
   classical
-  obtain ⟨K, hK⟩ := exists_isPairProduct (d := d) (n := r + 1) hd (by omega)
-  refine ⟨K, fun q hq => ?_⟩
-  have hπ : ∀ π : Equiv.Perm (Fin q),
-      (∀ i ∉ Finset.univ.image (prefixEmbedding hq), π i = i) →
-      IsPairProduct d q K ((cfgPerm π).permMatrix ℂ) := by
-    intro π hπ
-    have hs : IsLocalPerm (Finset.univ.image (prefixEmbedding hq)) (cfgPerm (d := d) π) := by
-      refine ⟨fun x i hi => congrArg x (hπ i hi), fun x y h i hi => ?_⟩
-      exact h (π i) (π.apply_mem_of_forall_notMem hπ hi)
-    obtain ⟨X, hX⟩ := exists_embedOp_eq_of_mem_supportedOperators
-      (prefixEmbedding hq).injective hs.permMatrix_mem_supportedOperators
-    rw [hX]
-    refine (hK X (mem_unitary_of_embedOp_mem_unitary (prefixEmbedding hq).injective hd ?_)).embedOp
-      (prefixEmbedding hq).injective (a := 0) (fun i => by simp [prefixEmbedding])
-    rw [← hX]
-    exact Equiv.Perm.permMatrix_mem_unitaryGroup _
-  have hfix : ∀ i ∉ Finset.univ.image (prefixEmbedding hq), padding hq i = i :=
-    fun i hi => Equiv.Perm.viaEmbedding_apply_of_notMem _ _ i (by simpa using hi)
-  refine ⟨hπ _ hfix, hπ _ fun i hi => ?_⟩
-  exact (Equiv.symm_apply_eq _).2 (hfix i hi).symm
+  refine ⟨2 * (r + 1) ^ 2, fun q hq => ?_⟩
+  have hπ : ∀ σ : Equiv.Perm (Fin (r + 1)),
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph q)) (2 * (r + 1) ^ 2)
+        (ManyBody.sitePermOp (α := Fin d) (σ.viaEmbedding (prefixEmbedding hq))) := by
+    intro σ
+    rw [← ManyBody.placeAlong_sitePermOp]
+    refine IsGateProduct.place_pathGraph (ManyBody.windowEquiv (prefixEmbedding hq))
+      (fun p p' h => ?_) (isGateProduct_sitePermOp σ)
+    rw [ManyBody.coe_windowEquiv, ManyBody.coe_windowEquiv]
+    simpa [prefixEmbedding] using h
+  refine ⟨hπ _, ?_⟩
+  have hsymm : (padding hq).symm =
+      ((finRotate (r + 1) ^ (q % 2))⁻¹).viaEmbedding (prefixEmbedding hq) := by
+    rw [← Equiv.Perm.viaEmbeddingHom_apply, map_inv, Equiv.Perm.viaEmbeddingHom_apply]
+    rfl
+  rw [hsymm]
+  exact hπ _
 
 /-- The padding rotations act independently inside the blocks. -/
 noncomputable def paddingAll (hN : ∑ k, ℓ k = N) (hq : ∀ k, r + 1 ≤ ℓ k) :
@@ -118,37 +120,43 @@ noncomputable def paddingAll (hN : ∑ k, ℓ k = N) (hq : ∀ k, r + 1 ≤ ℓ 
 /-- A block layer of site permutations is the corresponding permutation of physical sites. -/
 private theorem blockLayerOp_padding (hN : ∑ k, ℓ k = N) (hq : ∀ k, r + 1 ≤ ℓ k)
     (inverse : Bool) :
-    blockLayerOp hN (fun k => (cfgPerm (d := d) (if inverse then (padding (hq k)).symm
-      else padding (hq k))).permMatrix ℂ) =
-      (cfgPerm (d := d) (if inverse then (paddingAll hN hq).symm
-        else paddingAll hN hq)).permMatrix ℂ := by
+    blockLayerOp hN (fun k => ManyBody.sitePermOp (α := Fin d)
+      (if inverse then (padding (hq k)).symm else padding (hq k))) =
+      ManyBody.sitePermOp (α := Fin d)
+        (if inverse then (paddingAll hN hq).symm else paddingAll hN hq) := by
   apply Matrix.mulVec_injective
   funext v
-  rw [blockLayerOp_mulVec_eq_comp hN (fun _ _ => Matrix.permMatrix_mulVec _),
-    Matrix.permMatrix_mulVec]
+  rw [blockLayerOp_mulVec_eq_comp hN
+    (f := fun k x => x ∘ ⇑(show Equiv.Perm (Fin (ℓ k)) from
+      if inverse then (padding (hq k)).symm else padding (hq k)))
+    (fun _ v => ManyBody.sitePermOp_mulVec _ v), ManyBody.sitePermOp_mulVec]
+  funext x
+  simp only [Function.comp_apply]
   congr 1
-  funext x i
+  funext i
   obtain ⟨k, j, rfl⟩ := exists_blockSite hN i
   rw [layerCfg_apply (blockSite_injective hN) (fun _ _ h => disjoint_range_blockSite hN h)]
-  cases inverse <;> simp [cfgPerm]
+  cases inverse <;> simp
 
 /-- Both padding layers have the same bound, independent of block lengths and block count. -/
-theorem exists_isCircuitOn_paddingAll (hd : 0 < d) (hr : 1 ≤ r) :
+theorem exists_isUnitaryCircuitOn_paddingAll :
     ∃ K : ℕ, ∀ {M N : ℕ} [NeZero N] {ℓ : Fin M → ℕ}
       (hN : ∑ k, ℓ k = N) (hq : ∀ k, r + 1 ≤ ℓ k),
-      IsCircuitOn (d := d) Finset.univ K ((cfgPerm (paddingAll hN hq)).permMatrix ℂ) ∧
-      IsCircuitOn (d := d) Finset.univ K ((cfgPerm (paddingAll hN hq).symm).permMatrix ℂ) := by
-  obtain ⟨K, hK⟩ := exists_isPairProduct_padding hd hr
+      IsUnitaryCircuitOn (Geometry.ring N) Finset.univ K
+          (ManyBody.sitePermOp (α := Fin d) (paddingAll hN hq)) ∧
+        IsUnitaryCircuitOn (Geometry.ring N) Finset.univ K
+          (ManyBody.sitePermOp (α := Fin d) (paddingAll hN hq).symm) := by
+  obtain ⟨K, hK⟩ := exists_isGateProduct_padding (d := d) (r := r)
   refine ⟨K, fun {M N} _ {ℓ} hN hq => ?_⟩
   constructor
   · have he := blockLayerOp_padding (d := d) hN hq false
     simp only [Bool.false_eq_true, ↓reduceIte] at he
     rw [← he]
-    exact isCircuitOn_blockLayerOp hN fun k => (hK (ℓ k) (hq k)).1
+    exact isUnitaryCircuitOn_blockLayerOp hN fun k => (hK (ℓ k) (hq k)).1
   · have he := blockLayerOp_padding (d := d) hN hq true
     simp only [↓reduceIte] at he
     rw [← he]
-    exact isCircuitOn_blockLayerOp hN fun k => (hK (ℓ k) (hq k)).2
+    exact isUnitaryCircuitOn_blockLayerOp hN fun k => (hK (ℓ k) (hq k)).2
 
 /-- The original ancilla and register at the two ends of a block. -/
 def ends (hq : r + r ≤ q) (t : Fin (r + r)) : Fin q :=
@@ -168,8 +176,9 @@ variable [NeZero d]
 /-- The shift on the ends of a block is exactly the controlled subtraction used in the GHZ
 protocol, with every central scratch site fixed. -/
 theorem ends_shift_mulVec (hq : r + r ≤ q) (v : Cfg d q → ℂ) :
-    embedOp (ends hq) ((tailShift r).permMatrix ℂ) *ᵥ v = v ∘ blockShift r q := by
-  rw [embedOp_mulVec_eq_comp (ends_injective hq) (fun _ => Matrix.permMatrix_mulVec _)]
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨ends hq, ends_injective hq⟩
+        ((tailShift r).permMatrix ℂ) *ᵥ v = v ∘ blockShift r q := by
+  rw [placeAlong_mulVec_eq_comp (ends_injective hq) (fun _ => Matrix.permMatrix_mulVec _)]
   congr 1
   funext x p
   have hdisj : ∀ k k' : Unit, k ≠ k' → Disjoint (Set.range (ends hq)) (Set.range (ends hq)) :=
@@ -298,37 +307,45 @@ theorem gate_interior (k : Fin M) {i : Fin N} (hi : i ∈ (gate (d := d) hN hr h
 /-- Conjugating the product of the teleported register gates by the two padding layers gives
 exactly the original block-shift layer. This is an operator identity on all states. -/
 theorem padding_conj_gates :
-    (cfgPerm (paddingAll (r := r) hN (fun j => by have := hℓ j; omega)).symm).permMatrix ℂ *
+    ManyBody.sitePermOp (α := Fin d)
+        (paddingAll (r := r) hN (fun j => by have := hℓ j; omega)).symm *
         ((List.ofFn (gate (d := d) hN hr hℓ)).map RegisterGate.op).prod *
-        (cfgPerm (paddingAll (r := r) hN (fun j => by have := hℓ j; omega))).permMatrix ℂ =
-      blockLayerOp hN (fun k => embedOp (ends (by have := hℓ k; omega))
-        ((tailShift r).permMatrix ℂ)) := by
+        ManyBody.sitePermOp (α := Fin d)
+          (paddingAll (r := r) hN (fun j => by have := hℓ j; omega)) =
+      blockLayerOp hN (fun k => ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        ⟨ends (by have := hℓ k; omega), ends_injective _⟩ ((tailShift r).permMatrix ℂ)) := by
   classical
   let π := paddingAll (r := r) hN (fun j => by have := hℓ j; omega)
-  have hPQ : (cfgPerm (d := d) π).permMatrix ℂ * (cfgPerm π.symm).permMatrix ℂ = 1 := by
-    rw [permMatrix_cfgPerm_mul_permMatrix_cfgPerm]
-    change (cfgPerm (d := d) (π * π⁻¹)).permMatrix ℂ = 1
-    rw [mul_inv_cancel, permMatrix_cfgPerm_one]
-  have hQP : (cfgPerm (d := d) π.symm).permMatrix ℂ * (cfgPerm π).permMatrix ℂ = 1 := by
-    rw [permMatrix_cfgPerm_mul_permMatrix_cfgPerm]
-    change (cfgPerm (d := d) (π⁻¹ * π)).permMatrix ℂ = 1
-    rw [inv_mul_cancel, permMatrix_cfgPerm_one]
+  have hPQ : ManyBody.sitePermOp (α := Fin d) π * ManyBody.sitePermOp π.symm = 1 := by
+    rw [ManyBody.sitePermOp_mul]
+    change ManyBody.sitePermOp (π * π⁻¹) = 1
+    rw [mul_inv_cancel, ManyBody.sitePermOp_one]
+  have hQP : ManyBody.sitePermOp (α := Fin d) π.symm * ManyBody.sitePermOp π = 1 := by
+    rw [ManyBody.sitePermOp_mul]
+    change ManyBody.sitePermOp (π⁻¹ * π) = 1
+    rw [inv_mul_cancel, ManyBody.sitePermOp_one]
   rw [List.mul_prod_mul_of_mul_eq_one hPQ hQP, List.map_map, List.map_ofFn]
-  have heq : ∀ k, (cfgPerm (d := d) π.symm).permMatrix ℂ * (gate (d := d) hN hr hℓ k).op *
-        (cfgPerm π).permMatrix ℂ =
-      embedOp (blockSite hN k) (embedOp (ends (by have := hℓ k; omega))
-        ((tailShift r).permMatrix ℂ)) := by
+  have heq : ∀ k, ManyBody.sitePermOp (α := Fin d) π.symm * (gate (d := d) hN hr hℓ k).op *
+        ManyBody.sitePermOp π =
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨blockSite hN k, blockSite_injective hN k⟩
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+          ⟨ends (by have := hℓ k; omega), ends_injective _⟩ ((tailShift r).permMatrix ℂ)) := by
     intro k
-    have hconj := permMatrix_cfgPerm_mul_embedOp_mul (d := d) π.symm
-      (gate (d := d) hN hr hℓ k).sites (gate (d := d) hN hr hℓ k).X
-    simp only [Equiv.symm_symm] at hconj
-    rw [RegisterGate.op, hconj, embedOp_embedOp (blockSite_injective hN k)]
-    congr 1
-    funext t
-    simp [Function.comp_apply, gate_sites, π]
+    have hconj := ManyBody.sitePermOp_mul_placeAlong_mul_conjTranspose (α := Fin d)
+      (gate (d := d) hN hr hℓ k).sitesEmb π.symm (gate (d := d) hN hr hℓ k).X
+    rw [ManyBody.conjTranspose_sitePermOp, Equiv.Perm.inv_def, Equiv.symm_symm] at hconj
+    rw [RegisterGate.op, hconj, ManyBody.placeAlong_placeAlong]
+    have hw : (gate (d := d) hN hr hℓ k).sitesEmb.trans π.symm.toEmbedding =
+        (⟨ends (by have := hℓ k; omega), ends_injective _⟩ : Fin (r + r) ↪ Fin (ℓ k)).trans
+          ⟨blockSite hN k, blockSite_injective hN k⟩ := by
+      ext t
+      simp [RegisterGate.sitesEmb, gate_sites, π]
+    rw [hw]
+    rfl
   simp_rw [Function.comp_def, heq]
-  let f := fun k : Fin M => embedOp (d := d) (blockSite hN k)
-    (embedOp (ends (by have := hℓ k; omega)) ((tailShift r).permMatrix ℂ))
+  let f := fun k : Fin M => ManyBody.placeAlong (X := fun _ ↦ Fin d)
+    ⟨blockSite hN k, blockSite_injective hN k⟩ (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+      ⟨ends (by have := hℓ k; omega), ends_injective _⟩ ((tailShift r).permMatrix ℂ))
   have hl : (List.ofFn (fun k : Fin M => k)).toFinset = Finset.univ := by ext; simp
   have hc : (↑(List.ofFn (fun k : Fin M => k)).toFinset : Set (Fin M)).Pairwise
       (Function.onFun Commute f) := by

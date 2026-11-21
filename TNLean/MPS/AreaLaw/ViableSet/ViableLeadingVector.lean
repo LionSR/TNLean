@@ -72,7 +72,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundary_minimizer_leading_vecto
       ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k) ∧
       ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ ∧
       ‖B‖ ≤ 2 * L ∧ ‖w‖ = 1 ∧ w ∈ leftSupportSubmodule S ∧
-      (cutMatrix w k).rank ≤ D ∧
+      (ManyBody.cutMatrix (leftBlock L k) w).rank ≤ D ∧
       (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √c ∧
       Wᴴ * W = 1 ∧ m ≤ D ∧
       WithLp.ofLp w ∘ (gluingCut L q k).symm =
@@ -111,7 +111,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundary_minimizer_leading_vecto
     (spanProjection S)
   obtain ⟨w, m, W, x, hw, hwS, hwD, hwE, hW, hmD, hwx, hxP⟩ :=
     h.exists_trimmed_witness_of_isViable hh hhJ hpos hL hq hΔ hΩ hgap hspan hviable
-  change (cutMatrix w k).rank ≤ D at hwD
+  change (ManyBody.cutMatrix (leftBlock L k) w).rank ≤ D at hwD
   change m ≤ D at hmD
   obtain ⟨HL, B, hsplit, hHL, hBS, hBn⟩ := h.exists_gluing_decomposition_of_range_one hhJ k
   have hblock (i : ℕ) : interval L 0 i = leftBlock L i := by

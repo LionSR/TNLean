@@ -220,8 +220,7 @@ private theorem isOpenMPS_bond_pow_succ {L q : ℕ} (ψ : EuclideanSpace ℂ (Fi
     IsOpenMPS L q ((q + 1) ^ L) (fun x ↦ ψ x) := by
   apply isOpenMPS_of_internal_cutMatrix_rank_le ψ
   intro k hk hkL
-  have hr := (cutMatrix ψ k).rank_le_card_height
-  simp only [Fintype.card_fun, Fintype.card_fin, Fintype.card_coe] at hr
+  have hr := ManyBody.cutRank_le_pow_card (D := leftBlock L k) ψ
   apply hr.trans
   gcongr
   · omega

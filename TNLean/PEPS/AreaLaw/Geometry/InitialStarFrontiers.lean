@@ -36,6 +36,7 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 noncomputable section
 
 open TNLean.Lattice
+open ManyBody (ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 

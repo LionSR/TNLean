@@ -25,8 +25,8 @@ disconnected components included, from the ambient diamond count `eq:ball-count`
 
 * `TNLean.PEPS.AreaLaw.card_graphBall_domainGraph_le`: `|N_d(x)| ≤ 2 (d + 1)²`.
 * `TNLean.PEPS.AreaLaw.card_anchor_fiber_le`: at most `μ_R` labels per anchor.
-* `TNLean.PEPS.AreaLaw.card_cutEdges_le_card_edgeBoundary`: ordered cut edges are counted by
-  the unordered edge boundary `∂_Λ X`.
+* `TNLean.PEPS.AreaLaw.card_interedges_compl_le_card_edgeBoundary`: ordered cut edges are
+  counted by the unordered edge boundary `∂_Λ X`.
 
 ## References
 
@@ -72,19 +72,18 @@ theorem card_anchor_fiber_le {R : ℕ} (a : AdmissibleSupport Λ R → Site Λ)
 
 /-- Ordered cut edges `(u, v)`, `u ∈ X`, `v ∉ X`, are no more numerous than the unordered
 edges of `∂_Λ X` (`03-quasilocal.tex`, line 436). -/
-theorem card_cutEdges_le_card_edgeBoundary (X : Finset (Site Λ)) :
-    (cutEdges (planeDomainGraph Λ) X).card ≤ (edgeBoundary Λ X).card := by
+theorem card_interedges_compl_le_card_edgeBoundary (X : Finset (Site Λ)) :
+    ((planeDomainGraph Λ).interedges X Xᶜ).card ≤
+      (ManyBody.edgeBoundary (planeDomainGraph Λ) X).card := by
   classical
   refine Finset.card_le_card_of_injOn (fun p => s(p.1, p.2)) ?_ ?_
   · intro p hp
-    simp only [cutEdges, Finset.coe_filter, Finset.mem_univ, true_and, Set.mem_ofPred_eq] at hp
-    simp only [edgeBoundary, Finset.coe_filter, SimpleGraph.mem_edgeFinset,
-      SimpleGraph.mem_edgeSet, Set.mem_ofPred_eq]
-    exact ⟨hp.1, p.1, hp.2.1, p.2, hp.2.2, rfl⟩
+    simp only [Finset.mem_coe, SimpleGraph.mem_interedges_iff, Finset.mem_compl] at hp ⊢
+    exact ManyBody.mk_mem_edgeBoundary_iff.mpr ⟨hp.2.2, Or.inl ⟨hp.1, hp.2.1⟩⟩
   · intro p hp p' hp' he
-    simp only [cutEdges, Finset.coe_filter, Finset.mem_univ, true_and, Set.mem_ofPred_eq] at hp hp'
+    simp only [Finset.mem_coe, SimpleGraph.mem_interedges_iff, Finset.mem_compl] at hp hp'
     rcases Sym2.eq_iff.mp he with ⟨h1, h2⟩ | ⟨h1, h2⟩
     · exact Prod.ext h1 h2
-    · exact absurd (h1 ▸ hp.2.1) hp'.2.2
+    · exact absurd (h1 ▸ hp.1) hp'.2.1
 
 end TNLean.PEPS.AreaLaw

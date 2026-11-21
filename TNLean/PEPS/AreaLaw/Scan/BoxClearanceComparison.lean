@@ -73,7 +73,7 @@ theorem boxEntropy_power_le_of_succ_clearance
         ((Nat.mul_le_mul_left (D + 1) (IntRect.size_child_le (Q := Q) i.1 i.2 hr)).trans
           hclear) (hsafe e he z hz p (hsub i hp))
     have hbound : ∀ i : ι, ManyBody.regionEntropy Ω (Xs i) ≤ C * (Q.size : ℝ) ^ p := fun i ↦
-      (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan (hsafe_child i)
+      (regionEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan (hsafe_child i)
         (IntRect.size_le_of_subset (hsub i))).trans (hbox Q.size Q.one_le_size)
     have hunion : Finset.univ.biUnion Xs = rectRegion A Q := by
       ext x

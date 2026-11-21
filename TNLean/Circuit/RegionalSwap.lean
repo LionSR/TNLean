@@ -88,23 +88,26 @@ theorem sheetSwapOp_mul_sheetSwapOp {A Y T : Finset ι} (hT : ∀ x, x ∈ T ↔
     · simp [sheetSwap, hxA, hA hxA, (hT x).not.mpr (fun h => h.2 hxA)]
     · by_cases hxY : x ∈ Y <;> simp [sheetSwap, hxA, hxY, hT x]
 
+omit [Fintype ι] in
 /-- In the coordinates of `sheetSplit S`, swapping the sheets at `S` swaps the `S`-parts. -/
 theorem sheetSplit_sheetSwap_fst (S : Finset ι) (r : (ι → Fin q) × (ι → Fin q)) :
     sheetSplit q S (sheetSwap q S r).1 = ((sheetSplit q S r.2).1, (sheetSplit q S r.1).2) := by
   refine Prod.ext (funext fun v => ?_) (funext fun v => ?_)
+  · simp [sheetSwap]
   · simp [sheetSwap, v.2]
-  · simp [sheetSwap, Finset.mem_compl.mp v.2]
 
+omit [Fintype ι] in
 theorem sheetSplit_sheetSwap_snd (S : Finset ι) (r : (ι → Fin q) × (ι → Fin q)) :
     sheetSplit q S (sheetSwap q S r).2 = ((sheetSplit q S r.1).1, (sheetSplit q S r.2).2) := by
   refine Prod.ext (funext fun v => ?_) (funext fun v => ?_)
+  · simp [sheetSwap]
   · simp [sheetSwap, v.2]
-  · simp [sheetSwap, Finset.mem_compl.mp v.2]
 
 /-- The product of an operator acting off `S` and an operator acting on `S`, in the coordinates
 of `sheetSplit S`. -/
 theorem mul_submatrix_sheetSplit {S : Finset ι} {O I : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    {O' : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ} {I' : Matrix (S → Fin q) (S → Fin q) ℂ}
+    {O' : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ}
+    {I' : Matrix (S → Fin q) (S → Fin q) ℂ}
     (hO : O.submatrix (sheetSplit q S).symm (sheetSplit q S).symm = 1 ⊗ₖ O')
     (hI : I.submatrix (sheetSplit q S).symm (sheetSplit q S).symm = I' ⊗ₖ 1) :
     (O * I).submatrix (sheetSplit q S).symm (sheetSplit q S).symm = I' ⊗ₖ O' := by

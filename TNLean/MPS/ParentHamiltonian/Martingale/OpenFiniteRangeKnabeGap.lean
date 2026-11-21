@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenKnabePadding
 import TNLean.MPS.ParentHamiltonian.Martingale.IntervalGapTransport
-import TNLean.MPS.ParentHamiltonian.Martingale.QuadraticFormGap
-import TNLean.MPS.ParentHamiltonian.Martingale.AbstractCriterion
+import QICLean.Analysis.QuadraticFormGap
+import QICLean.ManyBody.Hamiltonian.Martingale.AbstractCriterion
 
 /-!
 # A finite-size gap criterion for open parent Hamiltonians

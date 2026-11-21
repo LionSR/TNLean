@@ -55,9 +55,10 @@ spectral data for the physical-gap argument, not its transfer conclusion. -/
 theorem ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap
     (Q : ExactMPSGroundPath P) :
     ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) (hN : 2 ≤ N),
-      ∃ E : ℝ, ∃ hH : (interactionHamiltonian (P.interaction γ) hN).IsHermitian,
-        ManyBody.groundSpace (interactionHamiltonian (P.interaction γ) hN) E =
-            Submodule.span ℂ {mpvState (Q.tensor γ) N} ∧
+      ∃ E : ℝ, ∃ hH :
+          (Interaction.translationInvariant hN (P.interaction γ)).hamiltonian.IsHermitian,
+        ManyBody.groundSpace (Interaction.translationInvariant hN (P.interaction γ)).hamiltonian
+            E = Submodule.span ℂ {mpvState (Q.tensor γ) N} ∧
           ∀ k, hH.eigenvalues k = E ∨ E + Δ ≤ hH.eigenvalues k := by
   obtain ⟨Δ, hΔ, hgap⟩ := P.gap
   refine ⟨Δ, hΔ, ?_⟩
@@ -68,8 +69,9 @@ theorem ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap
     (by simpa using (hE'gap _ hEspec).1)
     (by simpa using hEmin _ hE'spec)
   subst E'
-  let H := interactionHamiltonian (P.interaction γ) hN
-  have hH : H.IsHermitian := interactionHamiltonian_isHermitian hN (P.hermitian γ hγ)
+  let H := (Interaction.translationInvariant hN (P.interaction γ)).hamiltonian
+  have hH : H.IsHermitian := Interaction.isHermitian_hamiltonian
+    (Interaction.isHermitian_translates_term _ (P.hermitian γ hγ))
   refine ⟨E, hH, ?_, ?_⟩
   · have hker : ManyBody.groundSpace H E =
         LinearMap.ker (Matrix.toEuclideanLin (H - (E : ℂ) • 1)) := by
@@ -96,7 +98,7 @@ theorem ExactMPSGroundPath.exists_uniform_gaussian_ground_bounds
     (Q : ExactMPSGroundPath P) :
     ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) (hN : 2 ≤ N),
       ∀ (q : ℝ), 0 ≤ q → ∀ W : MPOTensor.ChainOperator d N,
-        let H := interactionHamiltonian (P.interaction γ) hN
+        let H := (Interaction.translationInvariant hN (P.interaction γ)).hamiltonian
         let ψ := mpvState (Q.tensor γ) N
         let y := Matrix.toEuclideanLin (ManyBody.gaussianFilteredTerm q Δ H W) ψ
         ‖y - (Submodule.span ℂ {ψ}).starProjection y‖ ≤
@@ -108,7 +110,7 @@ theorem ExactMPSGroundPath.exists_uniform_gaussian_ground_bounds
   refine ⟨Δ, hΔ, ?_⟩
   intro γ hγ N hN q hq W
   obtain ⟨E, hH, hline, hgap⟩ := hdata γ hγ N hN
-  let H := interactionHamiltonian (P.interaction γ) hN
+  let H := (Interaction.translationInvariant hN (P.interaction γ)).hamiltonian
   let ψ := mpvState (Q.tensor γ) N
   have hψ : ψ ∈ ManyBody.groundSpace H E := by
     rw [hline]

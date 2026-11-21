@@ -26,6 +26,8 @@ one, and hence gives `MPOTensor.EtaLocalStructureData`.
 
 open scoped ComplexOrder
 
+open ManyBody
+
 namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D}
@@ -56,7 +58,7 @@ noncomputable def etaLocalStructureData
     norm_num
     change mpo K N =
       (List.ofFn fun i : Fin N ↦
-        embedLocalOperator (d := d) 2 N hN i F.physicalBond).prod
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) F.physicalBond).prod
     exact F.mpo_eq_product_physicalBond hN
 
 end MPOTensor.PhysicalSectorFactorization

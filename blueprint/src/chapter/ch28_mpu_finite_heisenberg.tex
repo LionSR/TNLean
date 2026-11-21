@@ -121,7 +121,7 @@
         MPOTensor.originalSiteHeisenbergOutputCentreEquiv,
         MPOTensor.originalSiteHeisenbergOutputWindowEquiv_middle,
         MPOTensor.originalSiteHeisenbergOutputWindowEquiv_outside_eq_iff,
-        MPOTensor.originalSiteHeisenbergOutputWindow_eq_chainWindowOperator,
+        MPOTensor.originalSiteHeisenbergOutputWindow_eq_placeAlong_chainWindow,
         MPOTensor.originalSiteHeisenbergOutputWindow_mem_supportedOperators}
     \leanok
     Let $k>0$. For arbitrary matrices $u,v,A$ of the standard-form gate
@@ -403,12 +403,11 @@
 
 \begin{lemma}[Actual central-window action in the finite support algebras]
     \label{lem:mpu_finite_window_operator_support}
-    \lean{MPSTensor.chainWindowOperator_eq_embedOp,
-        MPSTensor.exists_chainWindowOperator_eq_of_mem_supportedOperators,
-        MPOTensor.bufferedWindowMatrix_eq_chainWindowOperator,
+    \lean{MPSTensor.exists_placeAlong_chainWindow_eq_of_mem_supportedOperators,
+        MPOTensor.bufferedWindowMatrix_eq_placeAlong_chainWindow,
         MPOTensor.bufferedWindowMatrix_mem_supportedOperators,
         MPOTensor.mpo_bufferedWindow_conjugation_mem_supportedOperators,
-        MPOTensor.originalSiteHeisenbergInputWindow_eq_chainWindowOperator,
+        MPOTensor.originalSiteHeisenbergInputWindow_eq_placeAlong_chainWindow,
         MPOTensor.mpo_chainWindow_conjugation_mem_supportedOperators,
         MPOTensor.mpo_conjugation_mem_supportedOperators_central}
     \leanok
@@ -447,7 +446,7 @@
 
 \begin{lemma}[Uniform actual finite-ring singleton propagation]
     \label{lem:mpu_finite_cyclic_singleton_propagation}
-    \lean{QuantumCircuit.neighbourhood_finRotate,
+    \lean{ManyBody.graphNeighborhood_cycleGraph_image_finRotate,
         MPOTensor.mpo_conjugation_singleton_propagation_of_one,
         MPOTensor.mpo_conjugation_mem_supportedOperators_singleton}
     \leanok
@@ -552,7 +551,7 @@
 
 \begin{lemma}[Actual inverse propagation through the periodic seam]
     \label{lem:mpu_finite_cyclic_inverse_propagation}
-    \lean{SpinChain.intervalCoordinates_localInclusion_eq_embedOp,
+    \lean{SpinChain.intervalCoordinates_localInclusion_eq_placeAlong,
         SpinChain.intervalCoordinates_localInclusion_mem_supportedOperators,
         SpinChain.finiteRingNeighbourhood,
         SpinChain.finiteRingNeighbourhood_subset,

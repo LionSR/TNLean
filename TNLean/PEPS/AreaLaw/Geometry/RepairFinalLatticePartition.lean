@@ -32,6 +32,7 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 noncomputable section
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -83,7 +84,7 @@ including the dummy.
 Source: area-law Section 11, positive-boundary convention, lines 102–105;
 replacement instructions, lines 398–417; and lattice partition, lines 545–561. -/
 theorem lattice_mem_terminal_or_unique_final_of_isEmpty
-    (hSstar : 1 ≤ Sstar) (hboundary : 0 < (edgeBoundary Λ A).card)
+    (hSstar : 1 ≤ Sstar) (hboundary : 0 < (edgeBoundary (planeDomainGraph Λ) A).card)
     (N : ℕ) [IsEmpty (𝔇 N).markIndex] (z : ℤ × ℤ) :
     (integerPoint z ∈ repairTerminalInteriors dyadicOrigin Λ A C k₀ hC h₀ Sstar ∧
       ∀ i : (𝔇 N).regionIndex,

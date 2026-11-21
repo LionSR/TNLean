@@ -51,7 +51,7 @@ theorem outsidePlacedConfig_full_subsingleton (d D N : ℕ) :
 private theorem intervalPhysicalZeroConfig_full {d D N : ℕ} [NeZero d]
     (x : Cfg d N) (s : LogicalSite d D N) :
     intervalPhysicalZeroConfig (D := D) 0 N (fullCutIntervalConfigEquiv d N x) s =
-      zeroWorkspaceEmbedding (d := d) (n := N) (a := auxiliarySiteCount d D N) x
+      workspaceEmbedding (n := N) (0 : Fin (auxiliarySiteCount d D N) → Fin d) x
         (logicalSiteEquivFin d D N s) := by
   rcases s with s | s
   · change _ = Fin.append x 0 (Fin.castAdd (auxiliarySiteCount d D N) s)
@@ -75,7 +75,7 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem minimalIntervalInputEmbedding_full_apply {d D N : ℕ} [NeZero d]
     (x : Cfg d N) (z : OutsidePlacedConfig d (intervalPacketSites d D N 0 N)) :
     minimalIntervalInputEmbedding (D := D) 0 N (fullCutIntervalConfigEquiv d N x, z) =
-      zeroWorkspaceEmbedding (d := d) (n := N) (a := auxiliarySiteCount d D N) x := by
+      workspaceEmbedding (n := N) (0 : Fin (auxiliarySiteCount d D N) → Fin d) x := by
   let := outsidePlacedConfig_full_subsingleton d D N
   apply placedBasisEmbedding_eq_of_restriction
   funext i
@@ -113,7 +113,7 @@ theorem minimalIntervalOutputEmbedding_full_apply {d D N : ℕ} [NeZero d]
     (z : OutsidePlacedConfig d (intervalPacketSites d D N 0 N)) :
     minimalIntervalOutputEmbedding hd U hU hbound 0 (Fin.last N)
       ((fullCutIntervalConfigEquiv d N x, (β, α)), z) =
-      zeroWorkspaceEmbedding (d := d) (n := N) (a := auxiliarySiteCount d D N) x := by
+      workspaceEmbedding (n := N) (0 : Fin (auxiliarySiteCount d D N) → Fin d) x := by
   let := outsidePlacedConfig_full_subsingleton d D N
   simp only [minimalIntervalOutputEmbedding, Fin.val_zero, Fin.val_last]
   apply placedBasisEmbedding_eq_of_restriction
@@ -134,7 +134,7 @@ open scoped Classical in
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 def physicalLogicalConfigEmbedding {d D N : ℕ} [NeZero d] :
     Cfg d N ↪ Cfg d (logicalSiteCount d D N) :=
-  zeroWorkspaceEmbedding (d := d) (n := N) (a := auxiliarySiteCount d D N)
+  workspaceEmbedding (n := N) (0 : Fin (auxiliarySiteCount d D N) → Fin d)
 
 open scoped Classical in
 /-- The actual root interval invariant yields the exact physical columns when the weighted full
@@ -159,8 +159,8 @@ theorem minimalIntervalRootColumns_eq_physical_of_fullInterval {d D N : ℕ} [Ne
     (X : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ)
     (hX : IsMinimalIntervalColumnImplementation hd U hU hbound B P 0 (Fin.last N)
       (by simp) X) :
-    X * initializedBasisMatrix (physicalLogicalConfigEmbedding (D := D)) =
-      initializedBasisMatrix (physicalLogicalConfigEmbedding (D := D)) * U := by
+    X * basisInclusion (physicalLogicalConfigEmbedding (D := D)) =
+      basisInclusion (physicalLogicalConfigEmbedding (D := D)) * U := by
   classical
   let := outsidePlacedConfig_full_subsingleton d D N
   let : Unique (OutsidePlacedConfig d (intervalPacketSites d D N 0 N)) :=
@@ -183,9 +183,9 @@ theorem minimalIntervalRootColumns_eq_physical_of_fullInterval {d D N : ℕ} [Ne
       OutsidePlacedConfig d (intervalPacketSites d D N 0 N) :=
     ((fullCutIntervalConfigEquiv d N).trans (Equiv.prodUnique _ _).symm).trans
       (Equiv.prodUnique _ _).symm
-  have hinput : (initializedBasisMatrix
+  have hinput : (basisInclusion
         (minimalIntervalInputEmbedding (d := d) (D := D) (N := N) 0 N)).submatrix id ei =
-      initializedBasisMatrix (physicalLogicalConfigEmbedding (D := D)) := by
+      basisInclusion (physicalLogicalConfigEmbedding (D := D)) := by
     ext z x
     change (1 : Matrix (Cfg d (logicalSiteCount d D N))
       (Cfg d (logicalSiteCount d D N)) ℂ) z (minimalIntervalInputEmbedding 0 N (ei x)) =
@@ -194,9 +194,9 @@ theorem minimalIntervalRootColumns_eq_physical_of_fullInterval {d D N : ℕ} [Ne
     apply congrArg ((1 : Matrix (Cfg d (logicalSiteCount d D N))
       (Cfg d (logicalSiteCount d D N)) ℂ) z)
     exact minimalIntervalInputEmbedding_full_apply x default
-  have houtput : (initializedBasisMatrix
+  have houtput : (basisInclusion
         (minimalIntervalOutputEmbedding hd U hU hbound 0 (Fin.last N))).submatrix id eo =
-      initializedBasisMatrix (physicalLogicalConfigEmbedding (D := D)) := by
+      basisInclusion (physicalLogicalConfigEmbedding (D := D)) := by
     ext z x
     change (1 : Matrix (Cfg d (logicalSiteCount d D N))
       (Cfg d (logicalSiteCount d D N)) ℂ) z
@@ -248,8 +248,8 @@ theorem minimalIntervalRootColumns_eq_physical {d D N : ℕ} [NeZero d]
     (X : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ)
     (hX : IsMinimalIntervalColumnImplementation hd U hU hbound B P 0 (Fin.last N)
       (by simp) X) :
-    X * initializedBasisMatrix (physicalLogicalConfigEmbedding (D := D)) =
-      initializedBasisMatrix (physicalLogicalConfigEmbedding (D := D)) * U := by
+    X * basisInclusion (physicalLogicalConfigEmbedding (D := D)) =
+      basisInclusion (physicalLogicalConfigEmbedding (D := D)) * U := by
   apply minimalIntervalRootColumns_eq_physical_of_fullInterval hd U hU hbound B P _ X hX
   intro α β
   exact weightedMinimalOperatorInterval_full_submatrix (by omega) U hU B hB0 hBN hP0 hPN α β
@@ -259,8 +259,7 @@ theorem minimalIntervalRootColumns_eq_physical {d D N : ℕ} [NeZero d]
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 def logicalGlobalConfigEmbedding {d D N : ℕ} [NeZero d] :
     Cfg d (logicalSiteCount d D N) ↪ Cfg d (globalSiteCount d D N) :=
-  zeroWorkspaceEmbedding (d := d) (n := logicalSiteCount d D N)
-    (a := auxiliarySiteCount d D N)
+  workspaceEmbedding (n := logicalSiteCount d D N) (0 : Fin (auxiliarySiteCount d D N) → Fin d)
 
 /-- Include the physical chain with all logical auxiliary and shared scratch sites initialized
 to zero, in the fixed global register.
@@ -278,20 +277,16 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem physicalGlobalConfigEmbedding_apply {d D N : ℕ} [NeZero d] (x : Cfg d N) :
     physicalGlobalConfigEmbedding (D := D) x = Fin.append (Fin.append x 0) 0 := rfl
 
-private theorem initializedBasisMatrix_trans {α β γ : Type*}
-    [Fintype β] [DecidableEq β] [DecidableEq γ] (e : α ↪ β) (f : β ↪ γ) :
-    initializedBasisMatrix (e.trans f) = initializedBasisMatrix f * initializedBasisMatrix e :=
-  (Matrix.mul_submatrix_one (Equiv.refl β) e (initializedBasisMatrix f)).symm
-
 /-- The physical basis inclusion factors through the logical register and its initialized
 scratch pool.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-theorem initializedBasisMatrix_physicalGlobalConfigEmbedding {d D N : ℕ} [NeZero d] :
-    initializedBasisMatrix (physicalGlobalConfigEmbedding (d := d) (D := D) (N := N)) =
-      initializedBasisMatrix (logicalGlobalConfigEmbedding (d := d) (D := D) (N := N)) *
-        initializedBasisMatrix (physicalLogicalConfigEmbedding (d := d) (D := D) (N := N)) :=
-  initializedBasisMatrix_trans _ _
+theorem basisInclusion_physicalGlobalConfigEmbedding {d D N : ℕ} [NeZero d] :
+    basisInclusion (physicalGlobalConfigEmbedding (d := d) (D := D) (N := N)) =
+      basisInclusion (logicalGlobalConfigEmbedding (d := d) (D := D) (N := N)) *
+        basisInclusion (physicalLogicalConfigEmbedding (d := d) (D := D) (N := N)) :=
+  (basisInclusion_mul_basisInclusion (physicalLogicalConfigEmbedding (d := d) (D := D) (N := N))
+    (logicalGlobalConfigEmbedding (d := d) (D := D) (N := N))).symm
 
 /-- Exact physical columns of the logical operator and full logical workspace cleanup imply
 exact physical columns on the global register, with every auxiliary returned to zero.
@@ -301,15 +296,15 @@ theorem physicalGlobalColumns_of_clean_logicalColumns {d D N : ℕ} [NeZero d]
     {U : Matrix (Cfg d N) (Cfg d N) ℂ}
     {X : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ}
     {W : Matrix (Cfg d (globalSiteCount d D N)) (Cfg d (globalSiteCount d D N)) ℂ}
-    (hX : X * initializedBasisMatrix (physicalLogicalConfigEmbedding (D := D)) =
-      initializedBasisMatrix (physicalLogicalConfigEmbedding (D := D)) * U)
+    (hX : X * basisInclusion (physicalLogicalConfigEmbedding (D := D)) =
+      basisInclusion (physicalLogicalConfigEmbedding (D := D)) * U)
     (hW : IsCleanImplementation
-      (initializedBasisMatrix (logicalGlobalConfigEmbedding (D := D))) W X) :
-    W * initializedBasisMatrix (physicalGlobalConfigEmbedding (D := D)) =
-      initializedBasisMatrix (physicalGlobalConfigEmbedding (D := D)) * U := by
-  change W * initializedBasisMatrix (logicalGlobalConfigEmbedding (D := D)) =
-    initializedBasisMatrix (logicalGlobalConfigEmbedding (D := D)) * X at hW
-  rw [initializedBasisMatrix_physicalGlobalConfigEmbedding, ← Matrix.mul_assoc, hW,
+      (basisInclusion (logicalGlobalConfigEmbedding (D := D))) W X) :
+    W * basisInclusion (physicalGlobalConfigEmbedding (D := D)) =
+      basisInclusion (physicalGlobalConfigEmbedding (D := D)) * U := by
+  change W * basisInclusion (logicalGlobalConfigEmbedding (D := D)) =
+    basisInclusion (logicalGlobalConfigEmbedding (D := D)) * X at hW
+  rw [basisInclusion_physicalGlobalConfigEmbedding, ← Matrix.mul_assoc, hW,
     Matrix.mul_assoc, hX, ← Matrix.mul_assoc]
 
 open scoped Classical in
@@ -338,9 +333,9 @@ theorem minimalIntervalRootColumns_eq_physical_global {d D N : ℕ} [NeZero d]
       (by simp) X)
     (W : Matrix (Cfg d (globalSiteCount d D N)) (Cfg d (globalSiteCount d D N)) ℂ)
     (hW : IsCleanImplementation
-      (initializedBasisMatrix (logicalGlobalConfigEmbedding (D := D))) W X) :
-    W * initializedBasisMatrix (physicalGlobalConfigEmbedding (D := D)) =
-      initializedBasisMatrix (physicalGlobalConfigEmbedding (D := D)) * U :=
+      (basisInclusion (logicalGlobalConfigEmbedding (D := D))) W X) :
+    W * basisInclusion (physicalGlobalConfigEmbedding (D := D)) =
+      basisInclusion (physicalGlobalConfigEmbedding (D := D)) * U :=
   physicalGlobalColumns_of_clean_logicalColumns
     (minimalIntervalRootColumns_eq_physical hd U hU hbound B hB0 hBN P hP0 hPN X hX) hW
 

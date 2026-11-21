@@ -257,7 +257,7 @@ sites and `Y` on the sites `L + t + 1, …, 2L + t`, written through the complem
 This is the expansion of the connected correlator `Δ` in arXiv:2307.01696,
 Supplemental Material, proof of Lemma 2, after substituting
 `E_1^m = |R_1⟩⟨L_1| + (E_1 - |R_1⟩⟨L_1|)^m`. -/
-theorem mpvConnectedCorrelator_eq_of_compl {A : MPSTensor d D} {L : ℕ} (hL0 : 0 < L)
+theorem mpvConnectedCorrelator_eq_of_compl {A : MPSTensor d D} {L : ℕ}
     (hA : ∑ i, (A i)ᴴ * A i = 1) {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hρfix : Kraus.transferMap A ρ = ρ) (hρtr : Matrix.trace ρ = 1)
     (htr : Matrix.trace ρ ≠ 0) (X Y : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ)
@@ -300,19 +300,14 @@ theorem mpvConnectedCorrelator_eq_of_compl {A : MPSTensor d D} {L : ℕ} (hL0 : 
         Matrix.traceLinearMap_apply]
     rw [hFP, LinearMap.trace_smulRight, Matrix.traceLinearMap_apply]
   have hP1 : LinearMap.trace ℂ (Matrix (Fin D) (Fin D) ℂ) P = 1 := fixedPointProj_trace ρ htr
-  have hone0 : chainWindowOperator (L + t + L + n) 0
-      (1 : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) = 1 :=
-    chainWindowOperator_one (by omega) (by omega)
-  have honeb : chainWindowOperator (L + t + L + n) (L + t)
-      (1 : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) = 1 :=
-    chainWindowOperator_one (by omega) (by omega)
-  have eXY := inner_mpvState_chainWindowOperator_mul A hL0 t n X Y
-  have eX := inner_mpvState_chainWindowOperator_mul A hL0 t n X 1
-  rw [honeb, mul_one, physicalObservableTransfer_one] at eX
-  have eY := inner_mpvState_chainWindowOperator_mul A hL0 t n 1 Y
-  rw [hone0, one_mul, physicalObservableTransfer_one] at eY
-  have eZ := inner_mpvState_chainWindowOperator_mul A hL0 t n 1 1
-  rw [hone0, honeb, mul_one, physicalObservableTransfer_one] at eZ
+  have eXY := inner_mpvState_placeAlong_chainWindow_mul A t n X Y
+  have eX := inner_mpvState_placeAlong_chainWindow_mul A t n X 1
+  rw [ManyBody.placeAlong_one, mul_one, physicalObservableTransfer_one] at eX
+  have eY := inner_mpvState_placeAlong_chainWindow_mul A t n 1 Y
+  rw [ManyBody.placeAlong_one, one_mul, physicalObservableTransfer_one] at eY
+  have eZ := inner_mpvState_placeAlong_chainWindow_mul A (L := L) t n 1 1
+  rw [ManyBody.placeAlong_one, ManyBody.placeAlong_one, mul_one,
+    physicalObservableTransfer_one] at eZ
   simp only [Matrix.toEuclideanLin, Matrix.toLpLin_one, LinearMap.id_apply] at eZ
   rw [mpvConnectedCorrelator, mpvExpectation_eq_div, mpvExpectation_eq_div,
     mpvExpectation_eq_div, eXY, eX, eY, eZ]

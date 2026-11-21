@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Representation.ReplicaTransport.Setup
-import QICLean.Entropy.FiniteProductInformation
+import QICLean.Entropy.RegionStrongSubadditivity
 import Mathlib.Tactic.Ring
 import Mathlib.Tactic.Tauto
 

@@ -27,7 +27,7 @@ open Matrix
 open scoped BigOperators
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -92,7 +92,7 @@ theorem terminalPartition_preEntropy_bounds
   have hF := ManyBody.regionEntropy_union_le β Ωt hΩt X (U ∪ Y) hXUY
   obtain ⟨hU, hUY⟩ := terminalPartition_positiveEntropy_le hT S hgraph hdepth hn hr
     hDpos hD L hL hrows Ωt hΩt Bsh hsh j g
-  have hY := regionalEntropy_nonneg Λ q Ωt hΩt Y
+  have hY := regionEntropy_nonneg Λ q Ωt hΩt Y
   rw [← hUYeq] at hUY
   constructor
   · have hV : ManyBody.regionEntropy Ωt V = ManyBody.regionEntropy Ωt (Q ∪ Y)ᶜ := by

@@ -49,21 +49,19 @@ Auxiliary to ALVV, arXiv:1602.08828v2, `t:aisefficient`, lines 1373–1420. -/
 theorem exists_five_region_soft_clusters {L q k1 k2 k3 k4 : ℕ}
     (hq : 0 < q) (h12 : k1 ≤ k2) (h23 : k2 ≤ k3)
     (h34 : k3 ≤ k4) (h4L : k4 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, k1, k2, k3, k4, L]
     let I := fun j : Fin 5 ↦ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-    let A := fun j : Fin 5 ↦ ∑ i ∈ I j, h i
+    let A := fun j : Fin 5 ↦ Φ.partialHamiltonian (I j)
     let J := Finset.univ.filter
       (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
+    let Y := Φ.partialHamiltonian J
     J.card ≤ 4 ∧ ∃ (e : Fin 5 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
-      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E : ℂ) • z ∧
       (H - (E : ℂ) • 1).PosSemidef ∧ 0 ≤ E ∧ E ≤ (J.card : ℝ) ∧
       H.IsHermitian ∧
@@ -97,7 +95,7 @@ theorem exists_five_region_soft_clusters {L q k1 k2 k3 k4 : ℕ}
               (Submodule.spectralSpanLE bG aG (mu + eta))‖ ≤
               (S.card : ℝ) * ((8 * (J.card : ℝ)) * Real.exp (-(T - U) / 8) +
                 (t / (m : ℝ)) * (T / t) ^ m)) ∧
-          (let Hraw := ∑ i, h i
+          (let Hraw := Φ.hamiltonian
           let hRaw : Hraw.IsHermitian :=
             (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
           ∀ mu0 g tau T0 T1 : ℝ, mu0 ∈ spectrum ℝ Hraw → 0 < g →
@@ -137,7 +135,7 @@ theorem exists_five_region_soft_clusters {L q k1 k2 k3 k4 : ℕ}
   intro k I A J Y
   obtain ⟨hJ, e, x, z, E, hx, hxe, he, hz, hHz, hE, hE0, hEC,
     hH, bH, aH, hEigH, hfamily⟩ :=
-    exists_five_region_soft_residuals hq h12 h23 h34 h4L h hs h0 h1
+    exists_five_region_soft_residuals hq h12 h23 h34 h4L Φ h0 h1
   refine ⟨hJ, e, x, z, E, hx, hxe, he, hz, hHz, hE, hE0, hEC,
     hH, bH, aH, hEigH, ?_⟩
   intro S p t m hpl hpu ht hm B D G

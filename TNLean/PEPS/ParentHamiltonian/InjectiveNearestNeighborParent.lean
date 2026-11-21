@@ -123,7 +123,8 @@ theorem ker_regionParentHamiltonian_edgePairs_eq_span
     (H : (e : Edge Γ) → Matrix (RegionPhysicalConfig (d := d) (edgePairRegion e))
       (RegionPhysicalConfig (d := d) (edgePairRegion e)) ℂ)
     (hH : ∀ e, IsRegionParentInteraction A (edgePairRegion e) (H e)) :
-    (Matrix.mulVecLin (regionParentHamiltonian edgePairRegion H)).ker =
+    (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) edgePairRegion H).hamiltonian).ker =
       Submodule.span ℂ {stateCoeff A} :=
   ker_regionParentHamiltonian_eq_span_of_isVertexInjective_of_cover A hA edgePairRegion
     (edgePairRegion_covers_vertices hneighbors) edgePairRegion_covers_edges H hH
@@ -157,7 +158,8 @@ theorem ker_regionParentHamiltonian_edgeAndIsolated_eq_span
       Matrix (RegionPhysicalConfig (d := d) (edgeAndIsolatedRegion i))
         (RegionPhysicalConfig (d := d) (edgeAndIsolatedRegion i)) ℂ)
     (hH : ∀ i, IsRegionParentInteraction A (edgeAndIsolatedRegion i) (H i)) :
-    (Matrix.mulVecLin (regionParentHamiltonian edgeAndIsolatedRegion H)).ker =
+    (Matrix.mulVecLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d)
+        edgeAndIsolatedRegion H).hamiltonian).ker =
       Submodule.span ℂ {stateCoeff A} := by
   classical
   exact ker_regionParentHamiltonian_eq_span_of_isVertexInjective_of_cover A hA
@@ -172,7 +174,9 @@ theorem finrank_ker_regionParentHamiltonian_edgePairs_eq_one
     (H : (e : Edge Γ) → Matrix (RegionPhysicalConfig (d := d) (edgePairRegion e))
       (RegionPhysicalConfig (d := d) (edgePairRegion e)) ℂ)
     (hH : ∀ e, IsRegionParentInteraction A (edgePairRegion e) (H e)) :
-    Module.finrank ℂ (Matrix.mulVecLin (regionParentHamiltonian edgePairRegion H)).ker = 1 := by
+    Module.finrank ℂ (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) edgePairRegion H).hamiltonian).ker =
+      1 := by
   rw [ker_regionParentHamiltonian A edgePairRegion H hH]
   exact finrank_regionParentGroundSpace_edgePairs_eq_one A hA hneighbors
 
@@ -185,7 +189,8 @@ theorem finrank_ker_regionParentHamiltonian_edgeAndIsolated_eq_one
       Matrix (RegionPhysicalConfig (d := d) (edgeAndIsolatedRegion i))
         (RegionPhysicalConfig (d := d) (edgeAndIsolatedRegion i)) ℂ)
     (hH : ∀ i, IsRegionParentInteraction A (edgeAndIsolatedRegion i) (H i)) :
-    Module.finrank ℂ (Matrix.mulVecLin (regionParentHamiltonian edgeAndIsolatedRegion H)).ker =
+    Module.finrank ℂ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d)
+        edgeAndIsolatedRegion H).hamiltonian).ker =
       1 := by
   classical
   rw [ker_regionParentHamiltonian A edgeAndIsolatedRegion H hH]

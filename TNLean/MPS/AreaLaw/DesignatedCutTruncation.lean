@@ -18,6 +18,7 @@ arXiv:1602.08828v2, Theorem `thm:al-ld`, lines 1096–1105.
 -/
 
 open scoped BigOperators ComplexOrder InnerProductSpace Matrix
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -36,7 +37,7 @@ theorem exists_unit_mps_of_designated_prefix_mass
       1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (leftBlock L k) ψ).kyFanNorm Dg ≤ delta / (32 * ((L : ℝ) + 1))) :
     ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
-      IsOpenMPS L q Dg (fun x ↦ Φ x) ∧ (cutMatrix Φ k0).rank ≤ Ds ∧
+      IsOpenMPS L q Dg (fun x ↦ Φ x) ∧ (cutMatrix (leftBlock L k0) Φ).rank ≤ Ds ∧
       1 - delta < ‖⟪Φ, ψ⟫_ℂ‖ ∧ ‖Φ - ψ‖ ^ 2 ≤ delta / 2 := by
   classical
   let D : ℕ → ℕ := fun k ↦ if k = k0 then Ds else Dg

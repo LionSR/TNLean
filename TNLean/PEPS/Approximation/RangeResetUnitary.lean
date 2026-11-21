@@ -131,8 +131,8 @@ theorem reset_localized_filter (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ :
     let p := sitePairConfigurationEquiv (Site Λ) q q
     let F := reindex p p (sheetSwapOp q A)
     let ψ : Configuration Λ (q * q) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
-    let B := graphNeighborhood Λ ⌈rangeResetRadius R J Δ r * (1 + b + Real.log L)⌉₊
-      ((A ∪ C)ᶜ ∪ crossingSites Λ R A)
+    let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
+      ((A ∪ C)ᶜ ∪ crossingSites Λ R A) ⌈rangeResetRadius R J Δ r * (1 + b + Real.log L)⌉₊
     ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
     ∃ (z : ℝ) (M : Matrix (Configuration Λ (q * q)) (Configuration Λ (q * q)) ℂ),
       Real.exp (-2 * b) ≤ z ∧
@@ -230,8 +230,8 @@ theorem reset_unitary (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) 
     let p := sitePairConfigurationEquiv (Site Λ) q q
     let F := reindex p p (sheetSwapOp q A)
     let ψ : Configuration Λ (q * q) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
-    let B := graphNeighborhood Λ ⌈rangeResetRadius R J Δ r * (1 + b + Real.log L)⌉₊
-      ((A ∪ C)ᶜ ∪ crossingSites Λ R A)
+    let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
+      ((A ∪ C)ᶜ ∪ crossingSites Λ R A) ⌈rangeResetRadius R J Δ r * (1 + b + Real.log L)⌉₊
     ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
     ∃ U : Matrix (Configuration Λ (q * q)) (Configuration Λ (q * q)) ℂ,
       U ∈ unitaryGroup (Configuration Λ (q * q)) ℂ ∧

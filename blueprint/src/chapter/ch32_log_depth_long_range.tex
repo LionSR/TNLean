@@ -109,7 +109,7 @@ depth $O(q)$.
 
 \begin{lemma}[The GHZ-type state on the registers with measurements]
     \label{thm:ldp_window_ghz_measurement}
-    \lean{MPSPreparation.exists_isPreparedWithMeasurementsInDepth_windowGHZState}
+    \lean{MPSPreparation.exists_isOneRoundConversion_windowGHZState}
     \leanok
     \uses{def:ldp_window_ghz_state, def:qc_measurement_preparation,
         lem:qc_configuration_layers, lem:ldp_block_layers_configurations,
@@ -149,7 +149,7 @@ depth $O(q)$.
 
 \begin{lemma}[Constant-depth GHZ preparation on sparse registers]
     \label{thm:ldp_sparse_window_ghz}
-    \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_windowGHZState,
+    \lean{MPSPreparation.exists_isMeasurementConversion_windowGHZState,
         MPSPreparation.exists_rounds_sparseBlockShift,
         MPSPreparation.windowCentralSites,
         MPSPreparation.windowGHZInitial,
@@ -161,11 +161,11 @@ depth $O(q)$.
         MPSPreparation.SparseRegister.padding,
         MPSPreparation.SparseRegister.padding_first,
         MPSPreparation.SparseRegister.padding_of_ge,
-        MPSPreparation.SparseRegister.exists_isPairProduct_padding,
+        MPSPreparation.SparseRegister.exists_isGateProduct_padding,
         MPSPreparation.SparseRegister.paddingAll,
         MPSPreparation.SparseRegister.paddingAll_blockSite,
         MPSPreparation.SparseRegister.paddingAll_symm_blockSite,
-        MPSPreparation.SparseRegister.exists_isCircuitOn_paddingAll,
+        MPSPreparation.SparseRegister.exists_isUnitaryCircuitOn_paddingAll,
         MPSPreparation.SparseRegister.ends,
         MPSPreparation.SparseRegister.ends_injective,
         MPSPreparation.SparseRegister.ends_shift_mulVec,
@@ -200,7 +200,7 @@ depth $O(q)$.
     the rotations yields the controlled
     subtraction between the original end registers, with all central sites
     fixed. The padding rotations use only $r_1+1$ sites each, so both have
-    constant depth; the register gates have depth $4r_1+K+2$ for a fixed
+    constant depth; the register gates have depth at most $4r_1+K$ for a fixed
     $2r_1$-site gate bound $K$.
 
     Measuring and correcting the ancillas as in
@@ -278,8 +278,8 @@ depth $O(q)$.
 
 \begin{lemma}[The fixed point of orthogonal blocks with measurements]
     \label{thm:ldp_orthogonal_blocks_measurement}
-    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState_of_encoding,
-        MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState}
+    \lean{MPSPreparation.exists_isOneRoundConversion_sum_blockIsometryState_of_encoding,
+        MPSPreparation.exists_isOneRoundConversion_sum_blockIsometryState}
     \leanok
     \uses{def:qc_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
         thm:ldp_block_sum_unitary, def:ldp_block_isometry_state,
@@ -319,7 +319,7 @@ depth $O(q)$.
     \label{thm:ldp_repeated_block_measurement}
     \lean{MPSPreparation.copyApproxVector_eq_sum,
         MPSPreparation.sum_norm_sq_copyApproxVector,
-        MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_copyApproxVector}
+        MPSPreparation.exists_isOneRoundConversion_copyApproxVector}
     \leanok
     \uses{thm:ldp_orthogonal_blocks_measurement, def:ldp_repeated_block_state,
         thm:ldp_repeated_block_polar, thm:ldp_approximating_state_depth}
@@ -381,7 +381,7 @@ depth $O(q)$.
 \begin{lemma}[Tensors that are not normal, with measurements, in depth
         $O(\log(N/\varepsilon))$]
     \label{thm:ldp_long_range_measurement_depth}
-    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum}
+    \lean{MPSPreparation.exists_isOneRoundConversion_le_log_repeatedBlockSum}
     \leanok
     \uses{thm:ldp_repeated_block_measurement,
         thm:ldp_approximation_error_repeated_orthogonal_blocks, lem:ldp_common_gap,
@@ -473,7 +473,7 @@ depth $O(q)$.
 
 \begin{lemma}[Measurement preparation from a normal-sector expansion]
     \label{lem:ldp_measurement_sector_expansion}
-    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum}
+    \lean{MPSPreparation.exists_isOneRoundConversion_le_log_of_mpv_eq_sum}
     \leanok
     \uses{thm:ldp_injective_on_measurement, thm:ldp_overlapping_unequal_blocks_error,
         lem:ldp_overlapping_block_injectivity, lem:ldp_overlapping_one_block_chain,
@@ -533,7 +533,7 @@ depth $O(q)$.
 
 \begin{lemma}[Arbitrary tensors on grouped sites]
     \label{lem:ldp_arbitrary_blocked_measurement}
-    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_blockTensor_le_log, MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_blockTensor_le_log_log}
+    \lean{MPSPreparation.exists_isOneRoundConversion_blockTensor_le_log, MPSPreparation.exists_isMeasurementConversion_blockTensor_le_log_log}
     \leanok
     \uses{lem:ldp_arbitrary_blocked_sectors, lem:ldp_measurement_sector_expansion,
         thm:ldp_nonnormal_loglog}

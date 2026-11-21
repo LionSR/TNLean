@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.BlockedNormalSectors
 import TNLean.MPS.Preparation.OverlappingLogLogPreparation
+import QICLean.Circuit.Model.Measurement
 
 /-!
 # Measurement preparation of arbitrary tensors after fixed blocking
@@ -37,19 +38,21 @@ at every nonzero blocked length at least two. Only the tensor is supplied; the n
 sectors, multiplicities, faithful fixed points and mixed spectral gaps are derived.
 Circuits and depths are measured on the grouped sites.
 Source: arXiv:2307.01696, "Long-range MPS using measurements" (fixed-blocking restriction). -/
-theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_blockTensor_le_log
+theorem exists_isOneRoundConversion_blockTensor_le_log
     {d D : ℕ} (A : MPSTensor d D) :
     ∃ p : ℕ, 0 < p ∧ ∃ c : ℝ,
       ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (M : ℕ) [NeZero M], 2 ≤ M →
         mpvState (blockTensor A p) M ≠ 0 →
         ∃ (ψ : MPVSpace (blockPhysDim d p) M) (T : ℕ), ‖ψ‖ = 1 ∧
           (T : ℝ) ≤ c * Real.log (M / ε) ∧
-          IsPreparedWithMeasurementsAndCircuitInDepth T (fun s => ψ s) ∧
+          (∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v : Fin M → Fin (blockPhysDim d p) → ℂ,
+            IsOneRoundConversion (Geometry.ring M) T₁ T₂ (fun σ ↦ ∏ i, v i (σ i))
+              (fun s => ψ s)) ∧
           1 - ‖⟪ψ, normalizedMPVState (blockTensor A p) M⟫_ℂ‖ ≤ ε := by
   obtain ⟨p, hp, P, σ, heq, hnormal, hleft, hpos, htr, hfix, hmix⟩ :=
     exists_blockTensor_normal_sectors_fixedPoints A
   refine ⟨p, hp, ?_⟩
-  apply exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum
+  apply exists_isOneRoundConversion_le_log_of_mpv_eq_sum
     (blockTensor A p) hnormal hleft hpos htr hfix hmix P.coeff
   intro M _ s
   exact (heq M (Nat.pos_of_ne_zero (NeZero.ne M)) s).trans (P.mpv_toTensor_eq_sum_coeff s)
@@ -59,19 +62,20 @@ using measurement rounds at every nonzero blocked length at least two. The const
 are uniform in length, accuracy and the resulting sector amplitudes; vanishing individual
 power sums are allowed. Circuits act on grouped sites, not the original physical sites.
 Source: arXiv:2307.01696, "Long-range MPS using measurements" (fixed-blocking restriction). -/
-theorem exists_isPreparedWithMeasurementRoundsInDepth_blockTensor_le_log_log
+theorem exists_isMeasurementConversion_blockTensor_le_log_log
     {d D : ℕ} (A : MPSTensor d D) :
     ∃ p : ℕ, 0 < p ∧ ∃ c : ℝ,
       ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (M : ℕ) [NeZero M], 2 ≤ M →
         mpvState (blockTensor A p) M ≠ 0 →
         ∃ (ψ : MPVSpace (blockPhysDim d p) M) (T : ℕ), ‖ψ‖ = 1 ∧
           (T : ℝ) ≤ c * Real.log (Real.log (M / ε) + 1) ∧
-          IsPreparedWithMeasurementRoundsInDepth T (fun s => ψ s) ∧
+          (∃ v : Fin M → Fin (blockPhysDim d p) → ℂ, IsMeasurementConversion (Geometry.ring M) T
+            (fun σ ↦ ∏ i, v i (σ i)) (fun s => ψ s)) ∧
           1 - ‖⟪ψ, normalizedMPVState (blockTensor A p) M⟫_ℂ‖ ≤ ε := by
   obtain ⟨p, hp, P, σ, heq, hnormal, hleft, hpos, htr, hfix, hmix⟩ :=
     exists_blockTensor_normal_sectors_fixedPoints A
   refine ⟨p, hp, ?_⟩
-  apply exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpv_eq_sum
+  apply exists_isMeasurementConversion_le_log_log_of_mpv_eq_sum
     (blockTensor A p) hnormal hleft hpos htr hfix hmix P.coeff
   intro M _ s
   exact (heq M (Nat.pos_of_ne_zero (NeZero.ne M)) s).trans (P.mpv_toTensor_eq_sum_coeff s)

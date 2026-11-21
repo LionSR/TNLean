@@ -79,8 +79,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
   classical
   -- Work with the conjugate-transposed Kraus family `K i = (A i)ᴴ`.
   let K : MPSTensor d D := fun i => (A i)ᴴ
-  have hTP' : KadisonSchwarz.IsTPKraus (d := d) (D := D) A := by
-    simpa only [KadisonSchwarz.IsTPKraus] using hTP
+  have hTP' : Kraus.IsTP A := hTP
   have h_unitalK : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K :=
     KadisonSchwarz.isUnitalKraus_conjTranspose (d := d) (D := D) (K := A) hTP'
   -- Irreducibility of `Kraus.transferMap K` from tensor-irreducibility of `A`.

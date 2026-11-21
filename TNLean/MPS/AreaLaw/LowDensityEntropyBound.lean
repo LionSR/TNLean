@@ -42,13 +42,11 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound
     (etaLD : ℝ) (hLD : 0 < etaLD) :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q p r : ℕ) (v : ℝ) (hq : 2 ≤ q), p ≤ r → r ≤ L → 0 < v →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ (h0 : ∀ i, 0 ≤ Φ.term i), (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let J := interval L p r
@@ -68,10 +66,10 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound
     (Real.low_density_entropy_cost_le (eta := etaLD) (v := etaLD) (q := 2)
       hLD hLD le_rfl hKb hCf (by decide)).1
   refine ⟨K, hK, ?_⟩
-  intro L q p r v hq hpr hrL hv h hs h0 h1 config H hRaw J G ψ hψG hψ
+  intro L q p r v hq hpr hrL hv Φ h0 h1 config H hRaw J G ψ hψG hψ
   let : Nonempty (Fin L → Fin q) := config
   by_cases hveta : v ≤ etaLD
-  · have hcap := hphysical L q p r v hq hpr hrL hv h hs h0 h1 ψ hψG hψ
+  · have hcap := hphysical L q p r v hq hpr hrL hv Φ h0 h1 ψ hψG hψ
     have hcost := (Real.low_density_entropy_cost_le hLD hv hveta hKb hCf hq).2
     dsimp only at hcap hcost
     linarith only [hcap, hcost]

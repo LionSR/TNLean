@@ -127,10 +127,8 @@ noncomputable def stripPrefixBudgetConst (q R : ℕ) : ℝ :=
 /-- Prefix budgets grow linearly in width, including cuts inside a column. -/
 theorem cutLogBudget_stripSnakePrefix_le {q w : ℕ} (hq : 1 ≤ q) (hw : 1 ≤ w)
     (L R k : ℕ) :
-    Entropy.cutLogBudget
-      (ManyBody.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1)
-        (stripSnakePrefix L w k))
-      (Entropy.supportDim (fun _ : Site (stripDomain L w) ↦ q) ∘ fun X ↦ X.1) ≤
+    ManyBody.cutLogBudget (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1) (fun _ ↦ q)
+        (stripSnakePrefix L w k) ≤
       stripPrefixBudgetConst q R * w := by
   have hc : ((ManyBody.crossingTerms
       (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1)
@@ -164,7 +162,8 @@ theorem surprisalTail_stripSnakePrefix_le {L w q R : ℕ} {J Δ : ℝ}
   let budget := Entropy.cutLogBudget
     (ManyBody.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1) A)
     (Entropy.supportDim (fun _ : Site (stripDomain L w) ↦ q) ∘ fun X ↦ X.1)
-  have hb := cutLogBudget_stripSnakePrefix_le hq hw L R k
+  have hb : budget ≤ stripPrefixBudgetConst q R * w :=
+    cutLogBudget_stripSnakePrefix_le hq hw L R k
   have hb1 : 1 ≤ budget := Entropy.one_le_cutLogBudget _ _
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   have hs : 0 < Real.sqrt ((1 + J / Δ) * budget) := Real.sqrt_pos.mpr (by nlinarith)
@@ -335,7 +334,7 @@ private theorem strip_approximation_of_prefix_bounds
     rw [← hΦ₁def, norm_sub_rev Φ₀ Ω] at h
     linarith
   -- the matrix product structure
-  have hD : ∀ k, (cutMatrix Φ₀ k).rank ≤ ⌊Real.exp (C + w)⌋₊ := by
+  have hD : ∀ k, (ManyBody.cutMatrix (leftBlock L k) Φ₀).rank ≤ ⌊Real.exp (C + w)⌋₊ := by
     intro k
     apply Nat.le_floor
     refine (hrank k).trans (max_le ?_ ?_)

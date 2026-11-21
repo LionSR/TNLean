@@ -18,6 +18,7 @@ replacement argument, before specializing to identical copies.
 -/
 
 open Matrix
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -49,8 +50,8 @@ theorem IsOpenMPS.exists_rank_one_at_product_cuts {D : ℕ}
     ∃ χ : EuclideanSpace ℂ (Fin L → Fin q),
       IsOpenMPS L q D (fun x ↦ χ x) ∧ ‖χ‖ = 1 ∧
       ‖inner ℂ ξ ψ‖ ≤ ‖inner ℂ ξ χ‖ ∧
-      (∀ j, (cutMatrix χ j).rank ≤ (cutMatrix ψ j).rank) ∧
-      ∀ k ∈ S, (cutMatrix χ k).rank ≤ 1 := by
+      (∀ j, (cutMatrix (leftBlock L j) χ).rank ≤ (cutMatrix (leftBlock L j) ψ).rank) ∧
+      ∀ k ∈ S, (cutMatrix (leftBlock L k) χ).rank ≤ 1 := by
   classical
   induction S using Finset.induction_on with
   | empty => exact ⟨ψ, hψ, hnorm, le_rfl, fun _ ↦ le_rfl, by simp⟩

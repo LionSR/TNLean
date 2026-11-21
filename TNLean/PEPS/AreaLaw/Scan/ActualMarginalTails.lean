@@ -17,9 +17,10 @@ state of that same vector satisfies the supported-family moment and tail bounds.
 The term norm bound is one, the gap is `g / 2`, and the resulting parameter is
 `2 / g`, where `g = Δ / positiveNormalization 1 (Δ / 2) J`.
 
-The budget is the literal geometric `cutBudget`, with every original admissible
-support label retained. No cut containment, history condition, termwise kernel
-equation or auxiliary identity extension enters the ground-state hypothesis.
+The budget is QICLean's cut budget `ManyBody.cutLogBudget` of the designated
+supports, with every original admissible support label retained. No cut containment,
+history condition, termwise kernel equation or auxiliary identity extension enters the
+ground-state hypothesis.
 The existential theorem obtains a single truncated ground vector from the original
 Hamiltonian's ground-state hypothesis and the source cardinality and radius bounds.
 The same witness retains its nonnegative small energy and the phase-adjusted vector
@@ -59,7 +60,7 @@ include hh hhJ in
 ground-state premise concerns the sum, while positivity, Hermitian symmetry,
 norm and designated support are derived from the actual terms. The original
 vector `Ω` still centers those terms. Source: `08-scanner.tex`, lines 400–414. -/
-theorem log_surprisalMoment_truncated_reducedState_le
+theorem log_surprisalMoment_truncated_regionState_le
     (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) {e : ℝ} {Ωt : StateSpace Λ q}
     (hΩt : ‖Ωt‖ = 1)
@@ -68,36 +69,38 @@ theorem log_surprisalMoment_truncated_reducedState_le
     (hspant : groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt})
     (X : Finset (Site Λ)) {u : ℝ}
     (hu : |u| ≤ Entropy.tailRadius (2 / (Δ / positiveNormalization 1 (Δ / 2) J))
-      (cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X)) :
+      (ManyBody.cutLogBudget
+        (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) X)) :
     Real.log (Entropy.surprisalMoment (ManyBody.regionState_isHermitian X Ωt).eigenvalues u) ≤
       u * ManyBody.regionEntropy Ωt X +
         512 * Real.exp 1 * (2 / (Δ / positiveNormalization 1 (Δ / 2) J)) *
-          cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X * u ^ 2 := by
+          ManyBody.cutLogBudget
+            (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+            (fun _ ↦ q) X * u ^ 2 := by
   have hc := fun i => S.truncatedEnergyTerm_mem_Icc h hh hhJ Ω hΔ hΩ L i
   have hg : 0 < (Δ / positiveNormalization 1 (Δ / 2) J) / 2 :=
     half_pos (div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J))
   have hθ : (1 : ℝ) / ((Δ / positiveNormalization 1 (Δ / 2) J) / 2) =
       2 / (Δ / positiveNormalization 1 (Δ / 2) J) := by
     rw [div_div_eq_mul_div, one_mul]
-  have hB := cutBudget_eq_cutLogBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
   have heig : toEuclideanLin (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) Ωt = (e : ℂ) • Ωt :=
     ManyBody.mem_groundSpace_iff.mp (hspant ▸ Submodule.mem_span_singleton_self Ωt)
   have hgap := hgapt.posSemidef_sub_smul_one
     (S.isHermitian_sum_truncatedEnergyTerm h hh hhJ Ω hΔ hΩ L) hΩt hspant
-  simpa only [hθ, ← hB, ManyBody.regionEntropy] using
+  simpa only [hθ, ManyBody.regionEntropy] using
     (Entropy.log_surprisalMoment_cut_le (n := fun _ : Site Λ => q) (B := X)
       (fun i => S.truncatedEnergyTerm_isSupportedOn h hh Ω hgraph hanchor hΔ L i)
       (fun i => (Matrix.nonneg_iff_posSemidef.mp (hc i).1).isHermitian)
       (show (0 : ℝ) ≤ 1 by norm_num)
       (fun i => Matrix.norm_le_one_of_nonneg_of_le_one (hc i).1 (hc i).2)
       hΩt hg heig hgap (ManyBody.regionState_eq_partialTraceRight_cutVector X Ωt).symm
-      (ManyBody.regionState_isHermitian X Ωt) (by simpa only [hθ, ← hB] using hu))
+      (ManyBody.regionState_isHermitian X Ωt) (by simpa only [hθ] using hu))
 
 include hh hhJ in
 /-- Lemma 3.1's tail bound for every cut of the same actual truncated ground
 vector. The cut may meet retained components outside the truncation set, and
 the threshold may be any real number. Source: `08-scanner.tex`, lines 400–414. -/
-theorem surprisalTail_truncated_reducedState_le
+theorem surprisalTail_truncated_regionState_le
     (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) {e : ℝ} {Ωt : StateSpace Λ q}
     (hΩt : ‖Ωt‖ = 1)
@@ -110,19 +113,20 @@ theorem surprisalTail_truncated_reducedState_le
       min 1 (2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w / (32 * Real.sqrt
           ((1 + 2 / (Δ / positiveNormalization 1 (Δ / 2) J)) *
-            cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X))))) := by
+            ManyBody.cutLogBudget
+              (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+              (fun _ ↦ q) X))))) := by
   have hc := fun i => S.truncatedEnergyTerm_mem_Icc h hh hhJ Ω hΔ hΩ L i
   have hg : 0 < (Δ / positiveNormalization 1 (Δ / 2) J) / 2 :=
     half_pos (div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J))
   have hθ : (1 : ℝ) / ((Δ / positiveNormalization 1 (Δ / 2) J) / 2) =
       2 / (Δ / positiveNormalization 1 (Δ / 2) J) := by
     rw [div_div_eq_mul_div, one_mul]
-  have hB := cutBudget_eq_cutLogBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
   have heig : toEuclideanLin (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) Ωt = (e : ℂ) • Ωt :=
     ManyBody.mem_groundSpace_iff.mp (hspant ▸ Submodule.mem_span_singleton_self Ωt)
   have hgap := hgapt.posSemidef_sub_smul_one
     (S.isHermitian_sum_truncatedEnergyTerm h hh hhJ Ω hΔ hΩ L) hΩt hspant
-  simpa only [hθ, ← hB, ManyBody.regionEntropy] using
+  simpa only [hθ, ManyBody.regionEntropy] using
     (Entropy.surprisalTail_cut_le (n := fun _ : Site Λ => q) (B := X)
       (fun i => S.truncatedEnergyTerm_isSupportedOn h hh Ω hgraph hanchor hΔ L i)
       (fun i => (Matrix.nonneg_iff_posSemidef.mp (hc i).1).isHermitian)
@@ -136,11 +140,11 @@ constant** (Proposition 4.5, `03-quasilocal.tex`, lines 405–433 and 457–505,
 Proposition 4.3 at `p = 1`, lines 220–334; Lemma 3.1 as used in `08-scanner.tex`,
 lines 400–414). Let `C₃ ≥ 0`, `c₃ > 0` be the filter-locality constants of
 `latticePositiveConstraints_of_locality` at `p = 1`. Then every conclusion of
-`exists_truncated_reducedState_moment_tail_bounds` holds with
+`exists_truncated_regionState_moment_tail_bounds` holds with
 `Ctr = latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃`. At the named constants
 `C₃ = latticePositiveConstraintConst R J Δ 1` and `c₃ = latticePositiveConstraintRate R J Δ 1`
-this is `truncated_reducedState_moment_tail_bounds_explicit`. -/
-theorem truncated_reducedState_moment_tail_bounds_of_locality
+this is `truncated_regionState_moment_tail_bounds_explicit`. -/
+theorem truncated_regionState_moment_tail_bounds_of_locality
     (R : ℕ) {J Δ C₀ C₃ c₃ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀) (hC₃ : 0 ≤ C₃)
     (hc₃ : 0 < c₃)
     (htail : ∀ {n : Type} [Fintype n] [DecidableEq n]
@@ -174,7 +178,8 @@ theorem truncated_reducedState_moment_tail_bounds_of_locality
       let g := Δ / positiveNormalization 1 (Δ / 2) J
       let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
       let B : Finset (Site Λ) → ℝ :=
-        fun X => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
+        fun X => ManyBody.cutLogBudget
+          (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) X
       ∃ (e : ℝ) (Ωt : StateSpace Λ q),
         (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
           groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
@@ -227,18 +232,18 @@ theorem truncated_reducedState_moment_tail_bounds_of_locality
     exact heig
   refine ⟨e, Ωt, htrgs, he0, he, hphase, htrace, ?_, ?_⟩
   · intro X u hu
-    exact S.log_surprisalMoment_truncated_reducedState_le h hh hhJ Ω hgraph hanchor hΔ hΩ L
+    exact S.log_surprisalMoment_truncated_regionState_le h hh hhJ Ω hgraph hanchor hΔ hΩ L
       htrgs.1 htrgs.2.1 htrgs.2.2 X hu
   · intro X w
-    exact S.surprisalTail_truncated_reducedState_le h hh hhJ Ω hgraph hanchor hΔ hΩ L
+    exact S.surprisalTail_truncated_regionState_le h hh hhJ Ω hgraph hanchor hΔ hΩ L
       htrgs.1 htrgs.2.1 htrgs.2.2 X w
 
 /-- **Both marginal estimates for one truncated ground vector, at the named base-radius
 constant** (Proposition 4.5, `03-quasilocal.tex`, lines 405–433 and 457–505, with
 Proposition 4.3 at `p = 1`, lines 220–334; Lemma 3.1 as used in `08-scanner.tex`,
-lines 400–414). Every conclusion of `exists_truncated_reducedState_moment_tail_bounds` holds
+lines 400–414). Every conclusion of `exists_truncated_regionState_moment_tail_bounds` holds
 with `Ctr = latticeTruncationRadiusConstant R J Δ C₀`, which depends only on `R, J, Δ, C₀`. -/
-theorem truncated_reducedState_moment_tail_bounds_explicit
+theorem truncated_regionState_moment_tail_bounds_explicit
     (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ))
       (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
@@ -254,7 +259,8 @@ theorem truncated_reducedState_moment_tail_bounds_explicit
       let g := Δ / positiveNormalization 1 (Δ / 2) J
       let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
       let B : Finset (Site Λ) → ℝ :=
-        fun X => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
+        fun X => ManyBody.cutLogBudget
+          (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) X
       ∃ (e : ℝ) (Ωt : StateSpace Λ q),
         (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
           groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
@@ -274,7 +280,7 @@ theorem truncated_reducedState_moment_tail_bounds_explicit
             (ManyBody.regionEntropy Ωt X) w ≤
             min 1 (2 * Real.exp (Real.exp 1 / 2) *
               Real.exp (-(w / (32 * Real.sqrt ((1 + 2 / g) * B X)))))) :=
-  truncated_reducedState_moment_tail_bounds_of_locality R hJ hΔ hC₀
+  truncated_regionState_moment_tail_bounds_of_locality R hJ hΔ hC₀
     (latticePositiveConstraintConst_nonneg R J Δ 1)
     (latticePositiveConstraintRate_pos (le_refl 1) R J hΔ)
     (fun hH hΩ hh hhJ L hcontr hunit hherm hfix _ hl hτ =>
@@ -293,7 +299,7 @@ Source: Proposition 4.5 (`03-quasilocal.tex`, lines 405–433 and 457–505), fo
 Lemma 3.1 as used in `08-scanner.tex`, lines 400–414. Empty domains, empty truncation
 sets and retained disconnected components are allowed. No auxiliary identity extension
 or truncated ground-state hypothesis is used. -/
-theorem exists_truncated_reducedState_moment_tail_bounds
+theorem exists_truncated_regionState_moment_tail_bounds
     (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀) :
     ∃ Ctr : ℝ, 0 < Ctr ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ))
@@ -310,7 +316,8 @@ theorem exists_truncated_reducedState_moment_tail_bounds
         let g := Δ / positiveNormalization 1 (Δ / 2) J
         let ε := min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4)
         let B : Finset (Site Λ) → ℝ :=
-          fun X => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
+          fun X => ManyBody.cutLogBudget
+            (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) X
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
           (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
             groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
@@ -331,6 +338,6 @@ theorem exists_truncated_reducedState_moment_tail_bounds
               min 1 (2 * Real.exp (Real.exp 1 / 2) *
                 Real.exp (-(w / (32 * Real.sqrt ((1 + 2 / g) * B X)))))) := by
   exact ⟨_, latticeTruncationRadiusConstant_pos (J := J) R hΔ hC₀,
-    truncated_reducedState_moment_tail_bounds_explicit R hJ hΔ hC₀⟩
+    truncated_regionState_moment_tail_bounds_explicit R hJ hΔ hC₀⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

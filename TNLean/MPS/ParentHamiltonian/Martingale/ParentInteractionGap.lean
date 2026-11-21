@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ParentInteractionComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteraction
-import TNLean.MPS.ParentHamiltonian.Martingale.PositiveComparisonGap
+import QICLean.Analysis.PositiveComparisonGap
 import TNLean.MPS.ParentHamiltonian.Martingale.CanonicalGapAtSimultaneousInjectivity
 
 /-!

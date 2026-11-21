@@ -46,41 +46,40 @@ Gaussian error reduction. -/
 theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2 ≤ q)
     {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ L : ℕ, 1 ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-          (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1),
       (∀ i : ℕ, i ≤ L →
-        (gaussianFilterFactors h h0 (lvvSuccessiveError Delta) Delta i).card ≤
+        (gaussianFilterFactors Φ h0 (lvvSuccessiveError Delta) Delta i).card ≤
           P * (L + 1) ^ d ∧
-        ∀ A ∈ gaussianFilterFactors h h0 (lvvSuccessiveError Delta) Delta i,
+        ∀ A ∈ gaussianFilterFactors Φ h0 (lvvSuccessiveError Delta) Delta i,
           ∀ k, k < i → operatorSchmidtRank
             (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
               (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ P * (L + 1) ^ d) ∧
-      (∀ i : ℕ, i ≤ L → (lvvSweep hq h hs h0 h1 Delta i).card ≤ P * (L + 1) ^ d ∧
-        (∀ v ∈ lvvSweep hq h hs h0 h1 Delta i, IsLeftOpenMPS (P * (L + 1) ^ d) v) ∧
+      (∀ i : ℕ, i ≤ L → (lvvSweep hq Φ h0 h1 Delta i).card ≤ P * (L + 1) ^ d ∧
+        (∀ v ∈ lvvSweep hq Φ h0 h1 Delta i, IsLeftOpenMPS (P * (L + 1) ^ d) v) ∧
         ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-          ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Delta →
-          groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} →
+          ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E₀ Delta →
+          groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ} →
           IsViable Γ (lvvSuccessiveError Delta / L)
-            (lvvSweep hq h hs h0 h1 Delta i : Set (LeftBlockVector L q i))) ∧
+            (lvvSweep hq Φ h0 h1 Delta i : Set (LeftBlockVector L q i))) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-        ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Delta →
-        groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} →
+        ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E₀ Delta →
+        groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ} →
         ∃ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 ∧
           1 - lvvSuccessiveError Delta / L ≤ ‖⟪ψ, Γ⟫_ℂ‖ ∧
           IsOpenMPS L q (P * (L + 1) ^ d) (fun x ↦ ψ x) ∧
           fullLeftEquiv L q ψ ∈
-            Submodule.span ℂ (lvvSweep hq h hs h0 h1 Delta L : Set (LeftBlockVector L q L)) := by
+            Submodule.span ℂ (lvvSweep hq Φ h0 h1 Delta L : Set (LeftBlockVector L q L)) := by
   classical
   obtain ⟨P, d, hP, hbudgets⟩ := exists_lvvSuccessive_uniform_polynomial (q := q) (by omega) hDelta
   refine ⟨P, d, hP, ?_⟩
-  intro L hL h hs h0 h1
+  intro L hL Φ h0 h1
   obtain ⟨hcardBudget, hbondBudget, hspanBudget, hfactorBudget, hrankBudget⟩ :=
     hbudgets L hL
-  have hS := lvvSweep_spec hq h hs h0 h1 hDelta
-  refine ⟨fun i hi ↦ ⟨(card_gaussianFilterFactors_le (Nat.le_of_lt hq) h hs h0 h1
+  have hS := lvvSweep_spec hq Φ h0 h1 hDelta
+  refine ⟨fun i hi ↦ ⟨(card_gaussianFilterFactors_le (Nat.le_of_lt hq) Φ h0 h1
       (lvvSuccessiveError_pos hDelta) hDelta).trans hfactorBudget,
-    fun A hA k hki ↦ (operatorSchmidtRank_of_mem_gaussianFilterFactors (Nat.le_of_lt hq) h hs h0
+    fun A hA k hki ↦ (operatorSchmidtRank_of_mem_gaussianFilterFactors (Nat.le_of_lt hq) Φ h0
       h1 (lvvSuccessiveError_pos hDelta) hDelta hi hA k hki).trans hrankBudget⟩, ?_, ?_⟩
   · intro i hi
     obtain ⟨hcard, hMPS, hviable⟩ := hS i hi

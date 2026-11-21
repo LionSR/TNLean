@@ -85,37 +85,35 @@ trim each selected vector independently at the corrected radius, and apply every
 filter factor at the cut after `i + 1` sites. LVV13, `algo53.tex`, algorithm steps 1--4,
 lines 379--592, with Huang, Section 5.4, Lemmas 18--19 for the error-reduction operator. -/
 noncomputable def lvvSweepStep (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, 0 ≤ Φ.term j)
     (Delta : ℝ) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     Finset (LeftBlockVector L q (i + 1)) :=
   successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Delta L))
-    (gaussianFilterFactors h h0 (lvvSuccessiveError Delta) Delta (i + 1)) id
-    ((ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩).sizeTrimmingSelection hq Delta
+    (gaussianFilterFactors Φ h0 (lvvSuccessiveError Delta) Delta (i + 1)) id
+    ((ManyBody.BondInteraction.toChainInteraction Φ).sizeTrimmingSelection hq Delta
       (AreaLaw.extend (i + 1) S))
 
 /-- The output of one step of the sweep has at most `s_L` members.
 LVV13, `algo53.tex`, Claims `c:2` and `c:errorreduction`, lines 520--592. -/
 theorem card_lvvSweepStep_le (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
-    (lvvSweepStep hq h hs h0 Delta hi S).card ≤ lvvSuccessiveCardBound q Delta L := by
+    (lvvSweepStep hq Φ h0 Delta hi S).card ≤ lvvSuccessiveCardBound q Delta L := by
   calc
-    _ ≤ (gaussianFilterFactors h h0 (lvvSuccessiveError Delta) Delta
+    _ ≤ (gaussianFilterFactors Φ h0 (lvvSuccessiveError Delta) Delta
           (i + 1)).card *
-        ((ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩).sizeTrimmingSelection hq Delta
+        ((ManyBody.BondInteraction.toChainInteraction Φ).sizeTrimmingSelection hq Delta
           (AreaLaw.extend (i + 1) S)).card := card_successiveStep_le hi _ _ id _
     _ ≤ (huangEnergyCount (lvvSuccessiveError Delta) Delta L *
           huangFilterRankBound q (lvvSuccessiveError Delta) Delta L) *
         (lvvSizeTrimmingCoefficient q Delta * L ^ lvvSizeTrimmingDegree q Delta) :=
       Nat.mul_le_mul
-        (card_gaussianFilterFactors_le (Nat.le_of_lt hq) h hs h0 h1
+        (card_gaussianFilterFactors_le (Nat.le_of_lt hq) Φ h0 h1
           (lvvSuccessiveError_pos hDelta) hDelta)
         (ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomial
-          (ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩) (by omega) hq hDelta _)
+          (ManyBody.BondInteraction.toChainInteraction Φ) (by omega) hq hDelta _)
     _ = lvvSuccessiveCardBound q Delta L := by
       dsimp only [lvvSuccessiveCardBound]
       ring
@@ -124,14 +122,13 @@ theorem card_lvvSweepStep_le (hq : 2 ≤ q)
 dimension at most `b_L`. LVV13, `algo53.tex`, Claims `c:trim` and `c:errorreduction`,
 lines 549--592. -/
 theorem isLeftOpenMPS_of_mem_lvvSweepStep (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i))
-    {v : LeftBlockVector L q (i + 1)} (hv : v ∈ lvvSweepStep hq h hs h0 Delta hi S) :
+    {v : LeftBlockVector L q (i + 1)} (hv : v ∈ lvvSweepStep hq Φ h0 Delta hi S) :
     IsLeftOpenMPS (lvvSuccessiveBondBound q Delta L) v :=
   isLeftOpenMPS_of_mem_successiveStep hi
-    (fun _ hA k _ hki ↦ operatorSchmidtRank_of_mem_gaussianFilterFactors (Nat.le_of_lt hq) h hs
+    (fun _ hA k _ hki ↦ operatorSchmidtRank_of_mem_gaussianFilterFactors (Nat.le_of_lt hq) Φ
       h0 h1 (lvvSuccessiveError_pos hDelta) hDelta hi hA k hki) _ hv
 
 /-- **One step of the sweep preserves viability.** For every ground pair with the
@@ -140,30 +137,29 @@ prescribed gap, `c_Δ / L`-viability of the family at the cut after `i` sites im
 algorithm steps 1--4, lines 379--592, using Huang, Section 5.4, Lemmas 18--19 for the
 error-reduction operator. -/
 theorem isViable_lvvSweepStep (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i))
     (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Delta)
-    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Delta)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ})
     (hviable : IsViable Γ (lvvSuccessiveError Delta / L) (S : Set (LeftBlockVector L q i))) :
     IsViable Γ (lvvSuccessiveError Delta / L)
-      (lvvSweepStep hq h hs h0 Delta hi S : Set (LeftBlockVector L q (i + 1))) := by
+      (lvvSweepStep hq Φ h0 Delta hi S : Set (LeftBlockVector L q (i + 1))) := by
   classical
-  let chain := ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩
+  let chain := ManyBody.BondInteraction.toChainInteraction Φ
   have hpos : ∀ X, (chain.term X).PosSemidef :=
     ManyBody.Interaction.forall_extend_term (P := Matrix.PosSemidef) Matrix.PosSemidef.zero
       fun j ↦ (h0 j).posSemidef
   have hgapC : IsGapped chain.hamiltonian E₀ Delta := by
-    rwa [show chain.hamiltonian = ∑ j, h j from ManyBody.Interaction.hamiltonian_extend]
+    rwa [show chain.hamiltonian = Φ.hamiltonian from ManyBody.Interaction.hamiltonian_extend]
   have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
-    rwa [show chain.hamiltonian = ∑ j, h j from ManyBody.Interaction.hamiltonian_extend]
+    rwa [show chain.hamiltonian = Φ.hamiltonian from ManyBody.Interaction.hamiltonian_extend]
   have hΓ := hΩ
   have hEig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
   have hgap := hgap.posSemidef_sub_smul_one
     (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hspan
-  exact isViable_errorReductionSet_gaussianFilterFactors (Nat.le_of_lt hq) h hs h0 h1
+  exact isViable_errorReductionSet_gaussianFilterFactors (Nat.le_of_lt hq) Φ h0 h1
     (lvvSuccessiveError_pos hDelta) hDelta (by omega) E₀ Γ hΓ hEig hgap _
     (chain.isViable_bondTrimSet_sizeTrimmingSelection
         (ManyBody.Interaction.isHermitian_extend_term fun j ↦
@@ -179,22 +175,21 @@ left unnamed. The family is selected before every ground pair, with explicit siz
 bond budgets. LVV13, `algo53.tex`, algorithm steps 1--4, lines 379--592, using Huang,
 Section 5.4, Lemmas 18--19 for the error-reduction operator. -/
 theorem exists_positive_chain_successive_step (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
     ∃ T : Finset (LeftBlockVector L q (i + 1)),
       T.card ≤ lvvSuccessiveCardBound q Delta L ∧
       (∀ v ∈ T, IsLeftOpenMPS (lvvSuccessiveBondBound q Delta L) v) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-        ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Delta →
-        groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} →
+        ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E₀ Delta →
+        groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ} →
         IsViable Γ (lvvSuccessiveError Delta / L) (S : Set (LeftBlockVector L q i)) →
         IsViable Γ (lvvSuccessiveError Delta / L) (T : Set (LeftBlockVector L q (i + 1))) :=
-  ⟨lvvSweepStep hq h hs h0 Delta hi S, card_lvvSweepStep_le hq h hs h0 h1 hDelta hi S,
-    fun _ hv ↦ isLeftOpenMPS_of_mem_lvvSweepStep hq h hs h0 h1 hDelta hi S hv,
-    fun E₀ Γ hΩ hgap hspan hviable ↦ isViable_lvvSweepStep hq h hs h0 h1 hDelta hi S E₀ Γ hΩ hgap
+  ⟨lvvSweepStep hq Φ h0 Delta hi S, card_lvvSweepStep_le hq Φ h0 h1 hDelta hi S,
+    fun _ hv ↦ isLeftOpenMPS_of_mem_lvvSweepStep hq Φ h0 h1 hDelta hi S hv,
+    fun E₀ Γ hΩ hgap hspan hviable ↦ isViable_lvvSweepStep hq Φ h0 h1 hDelta hi S E₀ Γ hΩ hgap
       hspan hviable⟩
 
 end TNLean.MPS.AreaLaw

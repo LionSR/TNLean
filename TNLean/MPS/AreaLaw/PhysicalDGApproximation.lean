@@ -44,12 +44,10 @@ Theorem 4.9, fixed-cut conclusion, source lines 1048–1085. -/
 theorem exists_physical_dg_normalized_approximation_of_independent_scales :
     ∃ A C : ℝ, 1 ≤ A ∧ 21 ≤ C ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
       0 < gamma →
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -62,12 +60,12 @@ theorem exists_physical_dg_normalized_approximation_of_independent_scales :
       let cA : ℝ := 6 + 2 * Real.log (A + 1)
       let J := interval L p r
       let beta := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
       2 ≤ D0 ∧
       Real.log (D0 : ℝ) ≤ 22 * (A + 1) * cA / g * u ^ 3 ∧
@@ -77,7 +75,8 @@ theorem exists_physical_dg_normalized_approximation_of_independent_scales :
       (ell1 : ℝ) ≤ 8 / (4 * g / 5) +
         (7 * C) ^ (1 / 4 : ℝ) * (1 / (4 * g / 5)) ^ (1 / 4 : ℝ) * a ^ (3 / 4 : ℝ) ∧
       let D1 : ℕ := (q * ell1 ^ 2) ^ (22 * ell1)
-      let e := Tm.trans (Submodule.euclideanTensorEquiv (J → Fin q) (↥(Jᶜ) → Fin q)).symm
+      let e := Tm.trans
+        (Submodule.euclideanTensorEquiv (J → Fin q) ({v // v ∉ J} → Fin q)).symm
       ∀ (ψ : EuclideanSpace ℂ (Fin L → Fin q)), ψ ∈ G → ‖ψ‖ = 1 →
       ∃ φ : EuclideanSpace ℂ (Fin L → Fin q), ‖φ‖ = 1 ∧
         1 - delta ≤ ‖⟪φ, ψ⟫_ℂ‖ ∧
@@ -86,12 +85,12 @@ theorem exists_physical_dg_normalized_approximation_of_independent_scales :
   obtain ⟨A, hA, _hA21, hphysical⟩ := exists_accuracy_physical_interval_family_and_bootstrap
   obtain ⟨C, hC, hscalar⟩ := Real.exists_sharp_approximation_scalar_parameters
   refine ⟨A, C, hA, hC, ?_⟩
-  intro L q p r hpr hrL h hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q p r hpr hrL Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G g u ell D0 cA J beta tau U Phi Tm
   let EM := EuclideanSpace ℂ (J → Fin q)
-  let EE := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)
+  let EE := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)
   obtain ⟨hD0, hlogD0, W0, hWdim, hW0, _hcoarse⟩ :=
-    hphysical L q p r hpr hrL h hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hphysical L q p r hpr hrL Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   have hq : 2 ≤ q :=
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
   have hg : 0 < g := lt_min hgamma (by norm_num)
@@ -138,7 +137,7 @@ theorem exists_physical_dg_normalized_approximation_of_independent_scales :
   · obtain ⟨T, Fops, hTG, hGT, _hdim, himprove⟩ :=
       exists_independent_long_middle_actual_dg_family q q ell1 t g delta (delta / 8)
         hq le_rfl hell1 ht hg hg1 hdelta hdelta1 htail hfilter
-        L p r hpr hrL (Nat.lt_of_not_ge hshort) h hs h0 h1 mu hmu hgapg
+        L p r hpr hrL (Nat.lt_of_not_ge hshort) Φ h0 h1 mu hmu hgapg
     have hGTmap := (Submodule.isCloseTo_map_iff Tm).mpr hGT
     have hTGmap := (Submodule.isCloseTo_map_iff Tm).mpr hTG
     have hstart : Submodule.IsViable (F := EE) 0.04 W0
@@ -154,13 +153,13 @@ theorem exists_physical_dg_normalized_approximation_of_independent_scales :
     have hV : Submodule.IsViable (F := EE) (delta / 2) V
         (G.map Tm.toLinearEquiv.toLinearMap) :=
       (Submodule.IsCloseTo.trans hsmall hTGmap (by positivity)).of_le (by linarith)
-    have hcomp : e.trans (Submodule.euclideanTensorEquiv (J → Fin q) (↥(Jᶜ) → Fin q)) =
+    have hcomp : e.trans (Submodule.euclideanTensorEquiv (J → Fin q) ({v // v ∉ J} → Fin q)) =
         Tm := by
       ext x
       simp only [e, LinearIsometryEquiv.trans_apply, LinearIsometryEquiv.apply_symm_apply]
     have hV' : Submodule.IsViable (F := EE) (delta / 2) V
         (G.map (e.trans (Submodule.euclideanTensorEquiv
-          (J → Fin q) (↥(Jᶜ) → Fin q))).toLinearEquiv.toLinearMap) := by
+          (J → Fin q) ({v // v ∉ J} → Fin q))).toLinearEquiv.toLinearMap) := by
       rw [hcomp]
       exact hV
     obtain ⟨φ, hφ, _hφV, hoverlap, hrank⟩ :=

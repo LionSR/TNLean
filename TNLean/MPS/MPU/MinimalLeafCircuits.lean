@@ -134,24 +134,25 @@ theorem exists_normalized_minimalInterval_family_with_leaf_circuits_of_unitary
                 cutBondRegisterWidth d D N i.castSucc)))
               (Cfg d (1 + (cutBondRegisterWidth d D N i.succ +
                 cutBondRegisterWidth d D N i.castSucc))) ℂ) ∧
-            Z * initializedBasisMatrix (leafInputEmbedding (d := d)
+            Z * basisInclusion (leafInputEmbedding (d := d)
                 (qρ := cutBondRegisterWidth d D N i.succ)
                 (qσ := cutBondRegisterWidth d D N i.castSucc)) =
-              initializedBasisMatrix
+              basisInclusion
                 (leafOutputEmbedding
                   (ρ := Fin (cutCoefficientRank (operatorCoefficientTensor U) (i.val + 1)))
                   (σ := Fin (cutCoefficientRank (operatorCoefficientTensor U) i.val))
                   (minimalCutBondRegisterEncoding hd U hU hbound i.succ)
                   (minimalCutBondRegisterEncoding hd U hU hbound i.castSucc)) *
                 minimalLeafInterval U B P i ∧
-            IsPairProduct d ((1 + (cutBondRegisterWidth d D N i.succ +
-                cutBondRegisterWidth d D N i.castSucc)) + 1)
+            IsGateProduct (Geometry.graph (SimpleGraph.pathGraph
+                ((1 + (cutBondRegisterWidth d D N i.succ +
+                  cutBondRegisterWidth d D N i.castSucc)) + 1)))
               (38 * (d ^ ((1 + (cutBondRegisterWidth d D N i.succ +
                 cutBondRegisterWidth d D N i.castSucc)) + 1)) ^ 6) C ∧
             IsCleanImplementation
-              (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d)
+              (basisInclusion (workspaceEmbedding
                 (n := 1 + (cutBondRegisterWidth d D N i.succ +
-                  cutBondRegisterWidth d D N i.castSucc)) (a := 1))) C Z := by
+                  cutBondRegisterWidth d D N i.castSucc)) (0 : Fin 1 → Fin d))) C Z := by
   obtain ⟨B, hB0, hBN, P, hP, hIntervals, h0, hlast, hfull⟩ :=
     exists_normalized_minimalInterval_family_of_unitary (by omega : 0 < d) hN U hU
   refine ⟨B, hB0, hBN, P, hP, hIntervals, h0, hlast, hfull, ?_⟩

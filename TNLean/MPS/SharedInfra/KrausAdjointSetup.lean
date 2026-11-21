@@ -40,8 +40,7 @@ theorem conjTranspose_kraus_setup
   classical
   have hDpos : 0 < D := NeZero.pos D
   let K : MPSTensor d D := fun i => (A i)ᴴ
-  have hTP' : IsTPKraus (d := d) (D := D) A := by
-    simpa [IsTPKraus] using hTP
+  have hTP' : Kraus.IsTP A := hTP
   have h_unitalK : IsUnitalKraus (d := d) (D := D) K :=
     isUnitalKraus_conjTranspose (d := d) (D := D) (K := A) hTP'
   have hIrrK : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K) :=

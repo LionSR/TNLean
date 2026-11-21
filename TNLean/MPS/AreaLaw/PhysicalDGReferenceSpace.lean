@@ -40,12 +40,10 @@ construction or entropy bound for the whole reference space is asserted. -/
 theorem exists_physical_dg_isOpenMPS_reference_subspace :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q : ℕ),
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
       0 < gamma →
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -68,7 +66,7 @@ theorem exists_physical_dg_isOpenMPS_reference_subspace :
   classical
   obtain ⟨K, hK, hglobal⟩ := exists_physical_dg_normalized_isOpenMPS_approximation
   refine ⟨K, hK, ?_⟩
-  intro L q h hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G r g u
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G r g u
     epsilon hepsilon hepsilon1 b
   have hG : G ≠ ⊥ := hH.spectralSpanLE_ne_bot_of_mem_spectrum hmu le_rfl
   have hr : 1 ≤ r := Submodule.one_le_finrank_iff.mpr hG
@@ -80,7 +78,7 @@ theorem exists_physical_dg_isOpenMPS_reference_subspace :
     apply (div_le_iff₀ (by positivity : 0 < 2 * (r : ℝ))).2
     linarith only [hepsilon1, hrR]
   obtain ⟨B, hB, hlogB, hvectors⟩ :=
-    hglobal L q h hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hglobal L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       deltaBasis hdelta hdelta1
   have hratio : 16 * ((L : ℝ) + 1) / deltaBasis =
       32 * (r : ℝ) * ((L : ℝ) + 1) / epsilon := by

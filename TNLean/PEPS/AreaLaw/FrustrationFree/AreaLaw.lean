@@ -16,7 +16,7 @@ sublinear collar bound (Proposition 9.6, `sublinearCollarBound_real`, valid for 
 instance and hence for the frustration-free model), the amplification by the exact sweep of the
 range projections of the terms (`frustrationFreeAmplificationBound`), and the two-family
 cancellation of tile entropies (Proposition 11.2, `twoFamilyDecomposition`, and Lemma 11.1 in
-`regionalEntropy_le_of_collar_amplification_twoFamilies_at`). The proof does not use the
+`regionEntropy_le_of_collar_amplification_twoFamilies_at`). The proof does not use the
 time-filtered amplification `amplificationBound` of the general theorem.
 
 The collar bound is still the general one: the note's further replacement of the scanner input
@@ -55,7 +55,7 @@ theorem frustrationFreeAreaLaw : FrustrationFreeAreaLaw := by
     (one_le_two.trans (two_le_uniformAreaLawScale N₁ N₂ C₂))
   refine ⟨uniformAreaLawConstantOf q C₂ C₃, uniformAreaLawConstantOf_nonneg hq C₂ C₃,
     fun Λ h Ω hff A ↦ ?_⟩
-  exact regionalEntropy_le_of_collar_amplification_twoFamilies_at hq hΔ h hff.isHermitian
+  exact regionEntropy_le_of_collar_amplification_twoFamilies_at hq hΔ h hff.isHermitian
     hff.norm_eq_one hff.isGapped hff.groundSpace_eq A
     (fun n s₀ hn ↦ hcol n s₀ hn Λ h hff.isHermitian (hff.norm_term_le hJ.le) 0 Ω
       hff.norm_eq_one hff.isGapped hff.groundSpace_eq A)

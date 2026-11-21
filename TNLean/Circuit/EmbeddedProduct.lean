@@ -10,10 +10,10 @@ import Mathlib.Data.Finset.NoncommProd
 # Products of operators placed on disjoint sets of sites
 
 For injective maps `e_k : Fin m_k → Fin n` with pairwise disjoint ranges and operators `X_k` on
-`m_k` sites, the operators `X_k ⊗ 1` placed by `e_k` commute, and their product has the matrix
-elements
+`m_k` sites, the operators `X_k ⊗ 1` placed along `e_k` (`ManyBody.placeAlong`) commute
+(`ManyBody.commute_placeAlong_of_disjoint`), and their product has the matrix elements
 `⟨x| ∏_k (X_k ⊗ 1) |y⟩ = ∏_k ⟨x ∘ e_k| X_k |y ∘ e_k⟩` when `x` and `y` agree outside the ranges,
-and `0` otherwise (`QuantumCircuit.noncommProd_embedOp_apply`). This is the tensor product
+and `0` otherwise (`QuantumCircuit.noncommProd_placeAlong_apply`). This is the tensor product
 `⊗_k X_k` of the layers of arXiv:2307.01696, eqs. (10)–(12).
 
 The configuration `QuantumCircuit.placeCfg W c` carries the contents `c p` on pairwise disjoint
@@ -21,7 +21,7 @@ windows `W p` and `0` elsewhere. If matrices `Y_p` on the windows `W_p` act on t
 `ι_p(c)` as matrices `V_p` with injective outputs `o_p(e)`, then the product of the placed
 matrices maps the configuration carrying `ι_p(c_p)` on the window `p` and `0` elsewhere to
 `∑_e ∏_p V_p(e_p, c_p) |o_p(e_p) on the windows, 0 elsewhere⟩`
-(`QuantumCircuit.list_prod_embedOp_placeCfg`).
+(`QuantumCircuit.list_prod_placeAlong_placeCfg`).
 -/
 
 open Matrix
@@ -31,24 +31,24 @@ namespace QuantumCircuit
 
 variable {d m n : ℕ}
 
-theorem commute_embedOp_of_disjoint {m' : ℕ} {e : Fin m → Fin n} {e' : Fin m' → Fin n}
-    (he : Function.Injective e) (he' : Function.Injective e')
-    (h : Disjoint (Set.range e) (Set.range e')) (X : Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ)
-    (X' : Matrix (Fin m' → Fin d) (Fin m' → Fin d) ℂ) : Commute (embedOp e X) (embedOp e' X') :=
-  ManyBody.commute_of_mem_supportedOperators_of_disjoint (embedOp_mem_supportedOperators he X)
-      (embedOp_mem_supportedOperators he' X') (by rw [← Finset.disjoint_coe]; simpa using h)
-
 /-- **Matrix elements of a product of placed operators.** -/
-theorem noncommProd_embedOp_apply {ι : Type*} {m : ι → ℕ} (e : ∀ k, Fin (m k) → Fin n)
+theorem noncommProd_placeAlong_apply {ι : Type*} {m : ι → ℕ} (e : ∀ k, Fin (m k) → Fin n)
     (he : ∀ k, Function.Injective (e k))
     (X : ∀ k, Matrix (Fin (m k) → Fin d) (Fin (m k) → Fin d) ℂ) :
     ∀ (s : Finset ι) (_ : (s : Set ι).PairwiseDisjoint fun k => Set.range (e k))
-      (hcomm : (s : Set ι).Pairwise (Function.onFun Commute fun k => embedOp (e k) (X k)))
+      (hcomm : (s : Set ι).Pairwise (Function.onFun Commute fun k =>
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨e k, he k⟩ (X k)))
       (x y : Fin n → Fin d),
-      s.noncommProd (fun k => embedOp (e k) (X k)) hcomm x y =
+      s.noncommProd (fun k => ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨e k, he k⟩ (X k)) hcomm
+          x y =
         if ∀ i, (∀ k ∈ s, ∀ j, e k j ≠ i) → x i = y i then
           ∏ k ∈ s, X k (x ∘ e k) (y ∘ e k) else 0 := by
   classical
+  have happ : ∀ k (x y : Fin n → Fin d),
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨e k, he k⟩ (X k) x y =
+        if AgreeOff (e k) x y then X k (x ∘ e k) (y ∘ e k) else 0 := fun k x y ↦
+    (ManyBody.placeAlong_apply (X := fun _ ↦ Fin d) ⟨e k, he k⟩ (X k) x y).trans
+      (by congr 1)
   intro s
   induction s using Finset.induction_on with
   | empty =>
@@ -71,7 +71,7 @@ theorem noncommProd_embedOp_apply {ι : Type*} {m : ι → ℕ} (e : ∀ k, Fin 
     rw [Finset.sum_eq_single z₀]
     · have hag : AgreeOff (e a) x z₀ := fun i hi => by
         rw [hz₀, Function.extend_apply' _ _ _ fun ⟨j, hj⟩ => hi j hj]
-      rw [embedOp_apply, ite_eq_left hag,
+      rw [happ a, ite_eq_left hag,
         show z₀ ∘ e a = y ∘ e a from Function.extend_comp (he a) _ _]
       have hz₀s : ∀ k ∈ s, z₀ ∘ e k = x ∘ e k := fun k hk => funext fun j => by
         simp only [Function.comp_apply, hz₀]
@@ -99,7 +99,7 @@ theorem noncommProd_embedOp_apply {ι : Type*} {m : ι → ℕ} (e : ∀ k, Fin 
       · rw [ite_eq_left (hcond.mpr h), ite_eq_left h]
       · rw [ite_eq_right (fun h' => h (hcond.mp h')), ite_eq_right h, mul_zero]
     · intro z _ hz
-      rw [embedOp_apply]
+      rw [happ a]
       by_cases h1 : AgreeOff (e a) x z
       · by_cases h2 : ∀ i, (∀ k ∈ s, ∀ j, e k j ≠ i) → z i = y i
         · exfalso
@@ -173,7 +173,7 @@ disjoint windows `W p` acting on the inputs `ι' p c` as the matrices `V p` with
 the placed `Y p` applied to the configuration carrying `ι' p (c p)` on the windows and `0`
 elsewhere has the amplitude `∏_p V p (e p) (c p)` at the configuration carrying `o p (e p)` on
 the windows and `0` elsewhere, and `0` at every other configuration. -/
-theorem list_prod_embedOp_placeCfg {d m n P : ℕ} [NeZero d] {W : Fin P → Fin m → Fin n}
+theorem list_prod_placeAlong_placeCfg {d m n P : ℕ} [NeZero d] {W : Fin P → Fin m → Fin n}
     (hW : Function.Injective fun pt : Fin P × Fin m => W pt.1 pt.2)
     (Y : Fin P → Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ) {α β : Type*}
     (ι' : Fin P → α → Fin m → Fin d) (o : Fin P → β → Fin m → Fin d)
@@ -181,17 +181,21 @@ theorem list_prod_embedOp_placeCfg {d m n P : ℕ} [NeZero d] {W : Fin P → Fin
     (V : Fin P → β → α → ℂ)
     (hY : ∀ p c z, Y p z (ι' p c) = Function.extend (o p) (fun b => V p b c) 0 z)
     (c : Fin P → α) (y : Fin n → Fin d) :
-    ((List.finRange P).map fun p => embedOp (W p) (Y p)).prod y
+    ((List.finRange P).map fun p =>
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨W p, injective_window hW p⟩ (Y p)).prod y
         (placeCfg W fun p => ι' p (c p)) =
       Function.extend (fun e : Fin P → β => placeCfg W fun p => o p (e p))
         (fun e => ∏ p, V p (e p) (c p)) 0 y := by
   classical
-  have hWp := injective_window hW
   have hcomm : ((List.finRange P).toFinset : Set (Fin P)).Pairwise
-      (Function.onFun Commute fun p => embedOp (W p) (Y p)) := fun p _ p' _ h =>
-    commute_embedOp_of_disjoint (hWp p) (hWp p') (disjoint_range_window hW h) _ _
+      (Function.onFun Commute fun p =>
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨W p, injective_window hW p⟩ (Y p)) :=
+      fun p _ p' _ h =>
+    ManyBody.commute_placeAlong_of_disjoint _
+      (by rw [← Finset.disjoint_coe]; simpa using disjoint_range_window hW h) _ _
   rw [← Finset.noncommProd_toFinset (List.finRange P) _ hcomm (List.nodup_finRange P),
-    noncommProd_embedOp_apply W hWp Y _ (fun p _ p' _ h => disjoint_range_window hW h)]
+    noncommProd_placeAlong_apply W (injective_window hW) Y _
+      (fun p _ p' _ h => disjoint_range_window hW h)]
   simp only [List.toFinset_finRange, Finset.mem_univ, true_implies, placeCfg_comp hW, hY]
   have hinj : Function.Injective fun e : Fin P → β => placeCfg (d := d) W fun p => o p (e p) :=
     fun e e' h => funext fun p => ho p (congrFun (placeCfg_injective hW h) p)

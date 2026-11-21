@@ -21,6 +21,7 @@ The estimate includes zero vectors, zero bond bounds and chains with at most one
 -/
 
 open Matrix
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -29,9 +30,9 @@ LVV13, arXiv:1307.5143v1, `algo53.tex`, Claim `c:errorreduction`, lines 584–59
 theorem rank_cutMatrix_toEuclideanLin_le_operatorSchmidtRank_mul {L q : ℕ}
     (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
-    (cutMatrix (toEuclideanLin K ψ) k).rank ≤
+    (cutMatrix (leftBlock L k) (toEuclideanLin K ψ)).rank ≤
       operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K) *
-        (cutMatrix ψ k).rank := by
+        (cutMatrix (leftBlock L k) ψ).rank := by
   rw [cutMatrix_toEuclideanLin]
   exact Matrix.schmidtRank_mulVec_le _ _
 

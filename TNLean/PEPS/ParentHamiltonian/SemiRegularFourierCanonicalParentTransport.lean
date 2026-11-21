@@ -122,9 +122,11 @@ theorem map_ker_regionParentHamiltonian_semiRegular_fourier_eq [Fintype ι]
       (blockMatrixRepresentation d D) (blockFourthRootWeight d) eX) (R i) (H i))
     (hK : ∀ i, IsRegionParentInteraction
       (numberedGraphDressedAveragingTensor (leftRegularMatrix G) 1 eG) (R i) (K i)) :
-    (Matrix.mulVecLin (regionParentHamiltonian R H)).ker.map
+    (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin p) R H).hamiltonian).ker.map
       (semiRegularFourierParentMap d Q eX eR eG) =
-      (Matrix.mulVecLin (regionParentHamiltonian R K)).ker := by
+      (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin r) R K).hamiltonian).ker := by
   rw [ker_regionParentHamiltonian _ R H hH, ker_regionParentHamiltonian _ R K hK]
   exact map_regionParentGroundSpace_semiRegular_fourier_eq d D hd Q hQ hreg eX eR eG R hcover
 

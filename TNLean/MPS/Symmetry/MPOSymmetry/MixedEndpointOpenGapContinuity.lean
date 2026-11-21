@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointOpenKernel
-import TNLean.Algebra.CompactKernelGap
+import QICLean.Analysis.CompactKernelGap
 
 /-!
 # Finite-window gap continuity for the actual mixed interaction

@@ -119,14 +119,14 @@ theorem isCloseTo_prodExt_intervalTrimSubspace_of_reference
     {S : Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q))}
     (u : OrthonormalBasis (Fin s) ℂ S)
     (hS : Submodule.IsCloseTo delta
-      (Submodule.prodExt S (↥((interval L p r)ᶜ) → Fin q))
+      (Submodule.prodExt S ({v // v ∉ interval L p r} → Fin q))
       (G.map (Entropy.regionConfigurationSplit q (interval L p r)).toLinearEquiv.toLinearMap)) :
     Submodule.IsCloseTo
       (4 * delta + 6 * epsilon + 4 * xi * Real.sqrt (((r - p - 1 : ℕ) : ℝ) * D ^ 2))
       (Submodule.prodExt
         (intervalTrimSubspace L q p r xi
           (fun k ↦ (u k : EuclideanSpace ℂ (interval L p r → Fin q))))
-        (↥((interval L p r)ᶜ) → Fin q))
+        ({v // v ∉ interval L p r} → Fin q))
       (G.map (Entropy.regionConfigurationSplit q (interval L p r)).toLinearEquiv.toLinearMap) := by
   let F := Entropy.regionConfigurationSplit q (interval L p r)
   have hGUmap := (Submodule.isCloseTo_map_iff F).mpr hGU
@@ -165,10 +165,10 @@ theorem isViable_intervalTrimSubspace_of_reference
     (hU : ∀ v ∈ U, IsOpenMPS L q D (fun x ↦ v x))
     {S : Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q))}
     (u : OrthonormalBasis (Fin s) ℂ S)
-    (hS : Submodule.IsViable (F := EuclideanSpace ℂ (↥((interval L p r)ᶜ) → Fin q))
+    (hS : Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ interval L p r} → Fin q))
       delta S
       (G.map (Entropy.regionTensorCoordinates q (interval L p r)).toLinearEquiv.toLinearMap)) :
-    Submodule.IsViable (F := EuclideanSpace ℂ (↥((interval L p r)ᶜ) → Fin q))
+    Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ interval L p r} → Fin q))
       (4 * delta + 6 * epsilon + 4 * xi * Real.sqrt (((r - p - 1 : ℕ) : ℝ) * D ^ 2))
       (intervalTrimSubspace L q p r xi
         (fun k ↦ (u k : EuclideanSpace ℂ (interval L p r → Fin q))))

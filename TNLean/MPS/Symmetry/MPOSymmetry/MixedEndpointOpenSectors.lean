@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointOpenKernel
-import TNLean.MPS.ParentHamiltonian.Martingale.ReducingProjectionGap
+import QICLean.Analysis.ReducingProjectionGap
 
 /-!
 # Inner physical-sector penalties on the open mixed chain

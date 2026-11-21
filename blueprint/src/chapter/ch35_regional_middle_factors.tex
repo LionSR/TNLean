@@ -50,7 +50,7 @@ by these regional identities.
 
 \begin{definition}[The old and new middle configuration splittings]
     \label{def:regional_middle_configuration_splittings}
-    \lean{FiniteProduct.changingOldMiddleConfigEquiv,FiniteProduct.changingNewMiddleConfigEquiv}
+    \lean{TNLean.MPS.AreaLaw.changingOldMiddleConfigEquiv,TNLean.MPS.AreaLaw.changingNewMiddleConfigEquiv}
     \leanok
     Let $\Omega$ be finite, let $\beta_v$ be any set for each site, and write
     $\mathcal X_S=\prod_{v\in S}\beta_v$. For regions $E,J\subseteq\Omega$, put
@@ -71,7 +71,7 @@ by these regional identities.
 
 \begin{definition}[The prescribed new regional middle family]
     \label{def:regional_middle_transferred_family}
-    \lean{FiniteProduct.changingRegionalMiddleFamily}
+    \lean{TNLean.MPS.AreaLaw.changingRegionalMiddleFamily}
     \leanok
     \uses{def:regional_middle_configuration_splittings,def:chain_middle_factor_exchange}
     Let $\mathbb S$ be a semiring, let $I$ be any set, and let $V_t$ be
@@ -97,7 +97,7 @@ by these regional identities.
 
 \begin{lemma}[Transfer of a fixed middle family between regions]
     \label{thm:regional_middle_exterior_transfer}
-    \lean{FiniteProduct.exists_changingRegional_exterior_family}
+    \lean{TNLean.MPS.AreaLaw.exists_changingRegional_exterior_family}
     \leanok
     \uses{def:regional_middle_configuration_splittings,
         def:regional_middle_transferred_family,thm:chain_middle_factor_exchange}
@@ -135,7 +135,7 @@ by these regional identities.
 
 \begin{lemma}[A finite enumeration of a transferred regional family]
     \label{thm:changing_regional_family_fin}
-    \lean{FiniteProduct.exists_changingRegional_family_fin}
+    \lean{TNLean.MPS.AreaLaw.exists_changingRegional_family_fin}
     \leanok
     Let $E,J\subseteq\Omega$, where $\Omega$ is finite, let $q\in\N$, and
     fix matrices $V_i$ on the configurations of $E$, indexed by a finite set

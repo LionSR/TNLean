@@ -8,7 +8,7 @@ import QICLean.Entropy.RegionCovariance
 import TNLean.PEPS.AreaLaw.RectangularHamiltonian
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.SquareGridContraction
-import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
+import TNLean.PEPS.AreaLaw.Geometry.AmbientBoundary
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.PEPS.AreaLaw.TwoFamilies
 import TNLean.PEPS.RegionBlock.Basic
@@ -98,7 +98,7 @@ edges of the transported cut in the integer rectangle. Source: polynomial-PEPS
 `01-preliminaries.tex`, lines 47–50, definition of `∂_Λ A`, and area-law
 Section 1. -/
 theorem card_edgeBoundary_rectangle {L : ℕ} (A : Finset (Vertex L)) :
-    (Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
+    (ManyBody.edgeBoundary (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L))
         (A.map (ManyBody.rectangleSiteEquiv L L).toEmbedding)).card =
       Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e} := by
   classical
@@ -113,7 +113,7 @@ theorem card_edgeBoundary_rectangle {L : ℕ} (A : Finset (Vertex L)) :
   refine Finset.card_bij (fun e _ ↦ s(σ e.1.1, σ e.1.2)) ?_ ?_ ?_
   · intro e he
     rw [Finset.mem_filter] at he
-    rw [AreaLaw.mem_edgeBoundary_pair_iff, hadj, hmem, hmem]
+    rw [ManyBody.mk_mem_edgeBoundary_iff, hadj, hmem, hmem]
     refine ⟨e.2.2, ?_⟩
     rcases he.2 with h | h
     · exact Or.inl h
@@ -132,7 +132,7 @@ theorem card_edgeBoundary_rectangle {L : ℕ} (A : Finset (Vertex L)) :
   · intro z hz
     induction z using Sym2.ind with
     | h x y =>
-      rw [AreaLaw.mem_edgeBoundary_pair_iff] at hz
+      rw [ManyBody.mk_mem_edgeBoundary_iff] at hz
       obtain ⟨hxy, hcut⟩ := hz
       obtain ⟨a, rfl⟩ := σ.surjective x
       obtain ⟨b, rfl⟩ := σ.surjective y
@@ -191,7 +191,8 @@ theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
       ∀ Ω : Lattice.StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ A : Finset (Lattice.Site Λ),
-          ManyBody.regionEntropy Ω A ≤ C * (Lattice.edgeBoundary Λ A).card)
+          ManyBody.regionEntropy Ω A ≤
+            C * (ManyBody.edgeBoundary (ManyBody.planeDomainGraph Λ) A).card)
     {L : ℕ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
         {E₀ : ℝ} {Ω : StateSpace L q}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)

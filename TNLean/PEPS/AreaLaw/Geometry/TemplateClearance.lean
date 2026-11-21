@@ -23,6 +23,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 -/
 
 open TNLean.Lattice
+open ManyBody (ambientDilation edgeBoundary mem_ambientDilation_iff planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -96,7 +97,7 @@ theorem Template.IsSeparated.dyadicCell_clearance
     (hsep : T.IsSeparated (D₀ : ℝ) (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
     (hj : j ≤ s₀) (hk : 2 ^ k ≤ s₀) {c : ℤ × ℤ}
     (hcell : latticeDyadicCell k c ⊆ ambientDilation T.points j) :
-    ∀ e ∈ edgeBoundary Λ A, ∀ z ∈ e, ∀ p ∈ latticeDyadicCell k c,
+    ∀ e ∈ edgeBoundary (planeDomainGraph Λ) A, ∀ z ∈ e, ∀ p ∈ latticeDyadicCell k c,
       D₀ * 2 ^ k < max (p.1 - z.1.1).natAbs (p.2 - z.1.2).natAbs := by
   intro e he z hz p hp
   have h := hsep.side_lt_dist_of_mem_ambientDilation

@@ -138,7 +138,7 @@ theorem uniform_boxEntropy_improvement_explicit
   have hnS : Ns ≤ S.n := hQNs.trans hsn
   have hphysical : ∀ Q' : IntRect, IsSafe Λ A D₀ Q' →
       ManyBody.regionEntropy Ω (rectRegion A Q') ≤ Cbox * (Q'.size : ℝ) ^ (1 + e) :=
-    fun Q' hsafe' ↦ regionalEntropy_le_of_boxEntropy_power hq (by linarith)
+    fun Q' hsafe' ↦ regionEntropy_le_of_boxEntropy_power hq (by linarith)
       hbox h hh hhJ hΩ hgap hspan A Q' hsafe'
   obtain ⟨htarget, hprefix⟩ := hentropy Λ q D₀ Ω hΩ A Q hT hsafe
     S.n (F.L S.n) hsn hLpos hL hbudget e he.le hphysical

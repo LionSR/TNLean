@@ -323,7 +323,7 @@ private theorem transformedGroundBondProduct_mulVec_loopCyclicProduct
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     ((List.ofFn fun i : Fin N ↦
-      MPOTensor.embedLocalOperator (d := d) 2 N hN i
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
         (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
           (finTwoArrowEquiv (Fin d)).symm
           (star (F.unitary ⊗ₖ F.unitary) *
@@ -334,7 +334,7 @@ private theorem transformedGroundBondProduct_mulVec_loopCyclicProduct
   let e := Matrix.etaCyclicEdgeEquiv (N := N)
     F.leftDim F.rightDim F.sectorEquiv
   let T := (List.ofFn fun i : Fin N ↦
-    MPOTensor.embedLocalOperator (d := d) 2 N hN i
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
       (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
         (finTwoArrowEquiv (Fin d)).symm
         (star (F.unitary ⊗ₖ F.unitary) *
@@ -345,7 +345,7 @@ private theorem transformedGroundBondProduct_mulVec_loopCyclicProduct
         fun (x y : (n : Fin N) → Matrix.EtaEdgeIndex F.leftDim F.rightDim
           (k n) (k (n + 1))) ↦ ∏ n : Fin N,
             F.edgeProjector (k n) (k (n + 1)) (x n) (y n) := by
-    exact MPOTensor.reindex_product_embedLocalOperator_of_etaPair_decomposition
+    exact MPOTensor.reindex_product_placeAlong_ringWindow_of_etaPair_decomposition
       hN F.leftDim F.rightDim F.sectorEquiv F.edgeProjector
       (star (F.unitary ⊗ₖ F.unitary) *
         twoSiteParentGroundProjectorMatrix A * (F.unitary ⊗ₖ F.unitary))
@@ -443,7 +443,7 @@ private theorem groundBondProduct_mulVec_loopProductState
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     ((List.ofFn fun i : Fin N ↦
-      MPOTensor.embedLocalOperator (d := d) 2 N hN i
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
         (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
           (finTwoArrowEquiv (Fin d)).symm
           (twoSiteParentGroundProjectorMatrix A))).prod).mulVec
@@ -451,12 +451,12 @@ private theorem groundBondProduct_mulVec_loopProductState
   classical
   let W := Matrix.tensorPower N F.unitary
   let Q := (List.ofFn fun i : Fin N ↦
-    MPOTensor.embedLocalOperator (d := d) 2 N hN i
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
       (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
         (finTwoArrowEquiv (Fin d)).symm
         (twoSiteParentGroundProjectorMatrix A))).prod
   let T := (List.ofFn fun i : Fin N ↦
-    MPOTensor.embedLocalOperator (d := d) 2 N hN i
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
       (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
         (finTwoArrowEquiv (Fin d)).symm
         (star (F.unitary ⊗ₖ F.unitary) *

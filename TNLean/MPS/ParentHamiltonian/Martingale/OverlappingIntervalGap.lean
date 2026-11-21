@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbient
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteIntervalGapComparison
-import TNLean.MPS.ParentHamiltonian.Martingale.PositiveComparisonGap
-import TNLean.MPS.ParentHamiltonian.Martingale.TwoGroundProjectionGap
+import QICLean.Analysis.PositiveComparisonGap
+import QICLean.ManyBody.Hamiltonian.Martingale.TwoGroundProjectionGap
 
 /-!
 # Combining gaps on overlapping open intervals

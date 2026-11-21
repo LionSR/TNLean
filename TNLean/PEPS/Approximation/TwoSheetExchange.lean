@@ -86,6 +86,10 @@ open TNLean.Lattice.Sheet
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {Party : Type*}
 
+/-- Shortcut instance, which keeps instance terms on products with the configurations off a
+region small. -/
+instance (A : Finset ι) : DecidableEq ({v // v ∉ A} → Fin q) := inferInstance
+
 /-- **Data of Lemma 6.6.** Two encoded frames on two sheets and the physical sample `Y ∩ Λ` of a
 plane region `Y`. The holes of each frame are listed as the holes whose outer squares lie outside
 `Y`, followed by those whose outer squares lie inside `Y`: every hole's entire outer square lies on
@@ -240,7 +244,7 @@ theorem norm_rename_le_one : ‖X.rename‖ ≤ 1 :=
 /-- The raw part of the encoding of the holes outside `Y` acts off `Y`. -/
 theorem exists_out_form [NeZero q] {o : List (Hole pos q Party)}
     (ho : ∀ h ∈ o, h ∈ X.out₁ ++ X.out₂) (a : TagSpace o) :
-    ∃ O' : Matrix (↥X.regionᶜ → Fin q) (↥X.regionᶜ → Fin q) ℂ,
+    ∃ O' : Matrix ({v // v ∉ X.region} → Fin q) ({v // v ∉ X.region} → Fin q) ℂ,
       (rawProd o a).submatrix (sheetSplit q X.region).symm (sheetSplit q X.region).symm =
         1 ⊗ₖ O' :=
   exists_one_kronecker_of_mem_supportedOperators
@@ -433,7 +437,7 @@ theorem sheetBufferCorrection_mul_sheetSwapOp (σ : SplittingData q (X.tSet P) (
     sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.tSet P) =
       Matrix.submatrix ((((1 : Matrix _ _ ℂ) ⊗ₖ σ.V) ⊗ₖ ((1 : Matrix _ _ ℂ) ⊗ₖ σ.V))ᴴ *
           ((tbSwap (X.tSet P → Fin q) (X.eSet P → Fin q) (X.tSet P → Fin q)
-            ((X.eSet P → Fin q) ⊕ (↥(X.tSet P ∪ X.eSet P)ᶜ → Fin q))).toPEquiv.toMatrix :
+            ((X.eSet P → Fin q) ⊕ ({v // v ∉ X.tSet P ∪ X.eSet P} → Fin q))).toPEquiv.toMatrix :
               Matrix _ _ ℂ) *
           (((1 : Matrix _ _ ℂ) ⊗ₖ σ.V) ⊗ₖ ((1 : Matrix _ _ ℂ) ⊗ₖ σ.V)))
         (threeSplit₂ (X.disjoint_tSet_eSet P)) (threeSplit₂ (X.disjoint_tSet_eSet P)) := by

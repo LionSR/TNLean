@@ -30,14 +30,14 @@ Source: [Theorem 1.1 and Corollary 1.2](https://github.com/openai/math/blob/adc7
 | The induced nearest-neighbor graph | `ManyBody.planeDomainGraph Λ` | Paths remain within the domain. Holes and disconnected components are allowed. |
 | Site space `ℂ^q` | `StateSpace Λ q = EuclideanSpace ℂ (Site Λ → Fin q)` | Exactly `q ^ Λ.card` configuration coordinates. |
 | One term per nonempty support of graph diameter at most `R` | `AdmissibleSupport Λ R` and `ManyBody.PlaneInteraction.term` | The index is a subtype of finite supports, not a family with unrestricted multiplicity. Zero terms are allowed. |
-| Support on `X` | `ManyBody.supportedOperators (fun _ ↦ Fin q) X` | The QICLean site-operator algebra; `localLift` uses the existing placement `embedOp`. |
+| Support on `X` | `ManyBody.supportedOperators (fun _ ↦ Fin q) X` | The QICLean site-operator algebra; local terms are placed with `ManyBody.place`. |
 | `h_X = h_X*` and `‖h_X‖ ≤ J` | The hypotheses `∀ X, (h.term X).IsHermitian` and `∀ X, ‖h.term X‖ ≤ J` | The norm is the Euclidean induced operator norm. |
 | `H = ∑_X h_X` | `ManyBody.Interaction.hamiltonian` | The sum is Hermitian by `ManyBody.Interaction.isHermitian_hamiltonian`. |
 | A unit ground vector at real energy `E₀` | `‖Ω‖ = 1` and `groundSpace h.hamiltonian E₀ = span {Ω}` | For `Δ > 0`, `ManyBody.isGapped_and_groundSpace_eq_span_iff` identifies these hypotheses with the printed eigen-equation and projector-gap inequality. |
 | Unique ground vector up to phase and `H − E₀I ≥ Δ(I − |Ω⟩⟨Ω|)` | `ManyBody.IsGapped h.hamiltonian E₀ Δ` with `groundSpace h.hamiltonian E₀ = span {Ω}` | For `Δ > 0` the QICLean theorem `ManyBody.isGapped_and_groundSpace_eq_span_iff` is the equivalence with the printed inequality. No gap for a restriction is assumed. |
 | Any `A ⊆ Λ` | `A : Finset (Site Λ)` after all physical data | Includes empty, full, and disconnected cuts. |
-| `∂Λ A` consists of unordered crossing edges | `edgeBoundary Λ A : Finset (Sym2 (Site Λ))` | Each edge occurs once; empty and full cuts have empty boundary. |
-| `ρ_A = Tr_(Λ∖A) |Ω⟩⟨Ω|` | `reducedState` | Uses `Matrix.partialTraceRight` after Mathlib's configuration splitting. |
+| `∂Λ A` consists of unordered crossing edges | `edgeBoundary (planeDomainGraph Λ) A : Finset (Sym2 (Site Λ))` | Each edge occurs once; empty and full cuts have empty boundary. |
+| `ρ_A = Tr_(Λ∖A) |Ω⟩⟨Ω|` | `ManyBody.regionState Ω A` | Uses `Matrix.partialTraceRight` after Mathlib's configuration splitting. |
 | Natural logarithms and `0 log 0 = 0` | QICLean's `vonNeumannEntropy` | No independent entropy definition is introduced. Singular marginals are permitted. |
 | `∃ C`, uniformly over `Λ,H,E₀,Ω,A` | `UniformAreaLaw` | The constant precedes all physical data. Requiring `C ≥ 0` merely chooses a nonnegative bound. |
 
@@ -197,14 +197,14 @@ hypothesis to the printed one.
 
 | Appendix A statement | Formal statement | Status on `main` |
 |---|---|---|
-| Model: domain, range-`R` Hermitian terms, unit ground vector with projector gap, natural logarithms | `ManyBody.PlaneInteraction`, `ManyBody.IsGapped` with `groundSpace = span {Ω}`, `regionalEntropy`; equivalence with the projector gap by `ManyBody.isGapped_and_groundSpace_eq_span_iff` | Definitions; equivalence proved. |
+| Model: domain, range-`R` Hermitian terms, unit ground vector with projector gap, natural logarithms | `ManyBody.PlaneInteraction`, `ManyBody.IsGapped` with `groundSpace = span {Ω}`, `ManyBody.regionEntropy`; equivalence with the projector gap by `ManyBody.isGapped_and_groundSpace_eq_span_iff` | Definitions; equivalence proved. |
 | Area-law Theorem 1.1 and Corollary 1.2 | `UniformAreaLaw`, `RectangularEntropyAreaLaw` | Proved (`uniformAreaLaw`, `rectangularEntropyAreaLaw`, `uniformAreaLaw_vertex_boundary_bounds`). |
 | Proposition 2.1 at `Γ = Λ_L`, `R = 1` | `SquareEntropyAreaLaw`, `UniformAreaLaw.squareEntropyAreaLaw`, `RectangularEntropyAreaLaw.squareEntropyAreaLaw`, `ManyBody.Interaction.hamiltonian_hermitianPart` | Proved (`AreaLaw.squareEntropyAreaLaw`). |
 | Positive replacement (area-law Proposition 4.3) | `exists_latticePositiveConstraints`, `card_anchor_fiber_le` | Proved; constants depend on `p, R, J, Δ` only, and `J ≥ 0` suffices. |
 | Template (Definition 9.3) | `Geometry.Template`, `Template.IsSeparated` | Definition. Polygons are read as nondegenerate ([paper-gap note](../paper-gaps/arealaw2d_nondegenerate_templates.tex)). |
 | Sublinear collar bound (Proposition 9.6) | `SublinearCollarBound`, `sublinearCollarBound_real` | Proved for every real `D₀ > 2R + 10` and `C_tpl ≥ 24`. |
 | Amplification (Proposition 10.2) | `AmplificationBound`, `amplificationBound` | Proved. `L + 2r = o(n^β)` follows from the radius bound (`Exponents.collar_add_radius_isLittleO`). The PEPS use with `A = Λ`, `M = 1` is `coarse_mutualInformation_le_of_sublinearCollarBound`, applied with the proved collar bound. |
-| Two-family entropy cancellation (Lemma 11.1) | `OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum`, `regionalEntropy_le_residual_add_half_sum` | Proved. |
+| Two-family entropy cancellation (Lemma 11.1) | `OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum`, `regionEntropy_le_residual_add_half_sum` | Proved. |
 | Two families with separated birth templates (Proposition 11.2) | `TwoFamilyDecomposition`, `twoFamilyDecomposition` | Proved for all real `D₀` and `C_tpl`. |
 | PEPS Lemma 3.2, the local adaptation to a cell | `exists_cell_conditionalMutualInformation_le_square` | Proved under the model and full-system gap alone. The conditional forms `exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound` and `cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt` assume the collar bound; the latter also assumes the amplification bound at fixed constants and states the cell constant and exponent as functions of those constants. |
 

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.BoundaryConventions
+import TNLean.Lattice.FiniteDomain
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
@@ -32,37 +32,47 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
+open ManyBody (planeDomainGraph edgeBoundary innerBoundary endpointBoundary)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The inner-boundary formulation follows from the edge-boundary inequality.
 Source: area-law Corollary 1.2, first displayed entropy bound.
 The edge-boundary inequality is an explicit hypothesis. -/
-theorem regionalEntropy_le_four_mul_innerBoundary_card
+theorem regionEntropy_le_four_mul_innerBoundary_card
     {Λ : Finset (ℤ × ℤ)} {q : ℕ} {Ω : StateSpace Λ q} {A : Finset (Site Λ)}
     {C : ℝ} (hC : 0 ≤ C)
-    (harea : ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary Λ A).card) :
-    ManyBody.regionEntropy Ω A ≤ 4 * C * (innerBoundary Λ A).card := by
-  have hcard : ((edgeBoundary Λ A).card : ℝ) ≤ 4 * (innerBoundary Λ A).card :=
-    by exact_mod_cast edgeBoundary_card_le_four_mul_innerBoundary_card Λ A
+    (harea : ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card) :
+    ManyBody.regionEntropy Ω A ≤ 4 * C * (innerBoundary (planeDomainGraph Λ) A).card := by
+  have hcard : ((edgeBoundary (planeDomainGraph Λ) A).card : ℝ) ≤
+      4 * (innerBoundary (planeDomainGraph Λ) A).card := by
+    exact_mod_cast ManyBody.card_edgeBoundary_le_mul_card_innerBoundary (A := A)
+      (ManyBody.planeDomainGraph_degree_le_four Λ)
   calc
-    _ ≤ C * (edgeBoundary Λ A).card := harea
-    _ ≤ C * (4 * (innerBoundary Λ A).card) := mul_le_mul_of_nonneg_left hcard hC
-    _ = 4 * C * (innerBoundary Λ A).card := by ring
+    _ ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card := harea
+    _ ≤ C * (4 * (innerBoundary (planeDomainGraph Λ) A).card) :=
+      mul_le_mul_of_nonneg_left hcard hC
+    _ = 4 * C * (innerBoundary (planeDomainGraph Λ) A).card := by ring
 
 /-- The endpoint-boundary formulation follows from the edge-boundary inequality.
 Source: area-law Corollary 1.2, second displayed entropy bound.
 The edge-boundary inequality is an explicit hypothesis. -/
-theorem regionalEntropy_le_two_mul_endpointBoundary_card
+theorem regionEntropy_le_two_mul_endpointBoundary_card
     {Λ : Finset (ℤ × ℤ)} {q : ℕ} {Ω : StateSpace Λ q} {A : Finset (Site Λ)}
     {C : ℝ} (hC : 0 ≤ C)
-    (harea : ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary Λ A).card) :
-    ManyBody.regionEntropy Ω A ≤ 2 * C * (endpointBoundary Λ A).card := by
-  have hcard : ((edgeBoundary Λ A).card : ℝ) ≤ 2 * (endpointBoundary Λ A).card :=
-    by exact_mod_cast edgeBoundary_card_le_two_mul_endpointBoundary_card Λ A
+    (harea : ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card) :
+    ManyBody.regionEntropy Ω A ≤ 2 * C * (endpointBoundary (planeDomainGraph Λ) A).card := by
+  have hnat := ManyBody.two_mul_card_edgeBoundary_le_mul_card_endpointBoundary (A := A)
+    (ManyBody.planeDomainGraph_degree_le_four Λ)
+  have hcard : ((edgeBoundary (planeDomainGraph Λ) A).card : ℝ) ≤
+      2 * (endpointBoundary (planeDomainGraph Λ) A).card := by
+    exact_mod_cast (by omega : (edgeBoundary (planeDomainGraph Λ) A).card ≤
+      2 * (endpointBoundary (planeDomainGraph Λ) A).card)
   calc
-    _ ≤ C * (edgeBoundary Λ A).card := harea
-    _ ≤ C * (2 * (endpointBoundary Λ A).card) := mul_le_mul_of_nonneg_left hcard hC
-    _ = 2 * C * (endpointBoundary Λ A).card := by ring
+    _ ≤ C * (edgeBoundary (planeDomainGraph Λ) A).card := harea
+    _ ≤ C * (2 * (endpointBoundary (planeDomainGraph Λ) A).card) :=
+      mul_le_mul_of_nonneg_left hcard hC
+    _ = 2 * C * (endpointBoundary (planeDomainGraph Λ) A).card := by ring
 
 /-- A uniform edge-boundary area law implies both uniform vertex-boundary bounds.
 Source: area-law Corollary 1.2. The area-law theorem is an explicit hypothesis,
@@ -76,12 +86,14 @@ theorem UniformAreaLaw.vertex_boundary_bounds (h : UniformAreaLaw) :
             ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
             groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
               ∀ A : Finset (Site Λ),
-                ManyBody.regionEntropy Ω A ≤ 4 * C * (innerBoundary Λ A).card ∧
-                ManyBody.regionEntropy Ω A ≤ 2 * C * (endpointBoundary Λ A).card := by
+                ManyBody.regionEntropy Ω A ≤
+                    4 * C * (innerBoundary (planeDomainGraph Λ) A).card ∧
+                ManyBody.regionEntropy Ω A ≤
+                    2 * C * (endpointBoundary (planeDomainGraph Λ) A).card := by
   intro q hq R J Δ hJ hΔ
   obtain ⟨C, hC, harea⟩ := h q hq R J Δ hJ hΔ
   exact ⟨C, hC, fun Λ H hH hHJ E₀ Ω hΩ hgap hspan A ↦
-    ⟨regionalEntropy_le_four_mul_innerBoundary_card hC (harea Λ H hH hHJ E₀ Ω hΩ hgap hspan A),
-      regionalEntropy_le_two_mul_endpointBoundary_card hC (harea Λ H hH hHJ E₀ Ω hΩ hgap hspan A)⟩⟩
+    ⟨regionEntropy_le_four_mul_innerBoundary_card hC (harea Λ H hH hHJ E₀ Ω hΩ hgap hspan A),
+      regionEntropy_le_two_mul_endpointBoundary_card hC (harea Λ H hH hHJ E₀ Ω hΩ hgap hspan A)⟩⟩
 
 end TNLean.PEPS.AreaLaw

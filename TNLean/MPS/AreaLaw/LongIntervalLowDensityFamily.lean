@@ -45,13 +45,11 @@ theorem exists_fixed_bandwidth_long_interval_low_energy_family
       let u := 1 + Real.log (m : ℝ) + Real.log (1 / g)
       let ell : ℕ := ⌈C * u ^ 2 / g⌉₊
       let D := (m * ell ^ 2) ^ (22 * ell)
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ (h0 : ∀ i, 0 ≤ Φ.term i), (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       21 ≤ ell ∧
@@ -59,15 +57,15 @@ theorem exists_fixed_bandwidth_long_interval_low_energy_family
       ∀ _hlong : 4 * ell < r - p,
       let J := interval L p r
       let beta := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
       let EM := EuclideanSpace ℂ (J → Fin q)
-      let EE := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)
+      let EE := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)
       ∃ A : Fin (D ^ 2) → EM →L[ℂ] EM,
         ∀ eta : ℝ, 6 * w ≤ eta → eta ≤ etaLD →
         ∃ (Tlo Thi : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q))) (Delta : ℝ),

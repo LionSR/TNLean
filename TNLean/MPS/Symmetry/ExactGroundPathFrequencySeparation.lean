@@ -40,13 +40,14 @@ theorem ExactMPSGroundPath.negativeFrequency_connected_identity
     (Q : ExactMPSGroundPath P) (γ : ℝ) (hγ : γ ∈ Set.Icc (0 : ℝ) 1)
     (N : ℕ) (hN : 2 ≤ N) (A B : MPOTensor.ChainOperator d N) :
     let ψ := mpvState (Q.tensor γ) N
-    let H := interactionHamiltonian (P.interaction γ) hN
-    let hH := interactionHamiltonian_isHermitian hN (P.hermitian γ hγ)
+    let H := (Interaction.translationInvariant hN (P.interaction γ)).hamiltonian
+    let hH : H.IsHermitian := Interaction.isHermitian_hamiltonian
+      (Interaction.isHermitian_translates_term _ (P.hermitian γ hγ))
     ⟪ψ, toEuclideanCLM (𝕜 := ℂ) A (toEuclideanCLM (𝕜 := ℂ) B ψ)⟫_ℂ -
         ⟪ψ, toEuclideanCLM (𝕜 := ℂ) A ψ⟫_ℂ *
           ⟪ψ, toEuclideanCLM (𝕜 := ℂ) B ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) =
-      ⟪ψ, ((ManyBody.negativeFrequencyPart (H := H) hH A).comp (toEuclideanCLM (𝕜 := ℂ) B) -
-        (toEuclideanCLM (𝕜 := ℂ) B).comp (ManyBody.negativeFrequencyPart hH A)) ψ⟫_ℂ := by
+      ⟪ψ, toEuclideanCLM (𝕜 := ℂ) (ManyBody.negativeFrequencyPart (H := H) hH A * B -
+        B * ManyBody.negativeFrequencyPart hH A) ψ⟫_ℂ := by
   obtain ⟨Δ, hΔ, hdata⟩ := Q.exists_uniform_ground_line_spectral_gap
   obtain ⟨E₀, hH, hline, hgap⟩ := hdata γ hγ N hN
   have hmin (i) : E₀ ≤ hH.eigenvalues i := by

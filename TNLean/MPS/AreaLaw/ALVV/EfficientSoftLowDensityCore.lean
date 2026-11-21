@@ -44,10 +44,8 @@ theorem exists_soft_low_density_polynomial_core
     (hq : 2 ≤ q) (hell : 1 ≤ ell) (hm : 2 ≤ m) (hk : 1 ≤ k)
     (hscale : 3 * (m : ℝ) ≤ t) (hxi : 0 < xi)
     (N a b : ℕ) (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ N)
-    (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval (N + 1) i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction (N + 1) q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
   (by
     exact (show Prop from
     let Msoft := 3 * t * (1 + Real.log (m : ℝ)) + 4 * (ell : ℝ) + 34
@@ -55,12 +53,12 @@ theorem exists_soft_low_density_polynomial_core
     let Sbulk : Finset (Fin 5) := {0, 2, 4}
     let cuts : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, N + 1]
     let A : Fin 5 → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ :=
-      fun j ↦ ∑ i ∈ Finset.univ.filter
-        (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ), h i
+      fun j ↦ Φ.partialHamiltonian (Finset.univ.filter
+        (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ))
     let crossings := Finset.univ.filter
       (fun i : Fin N ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y := ∑ i ∈ crossings, h i
+    let Y := Φ.partialHamiltonian crossings
     let Ksites := interval (N + 1) (a + 2 * ell) (b + 1)
     let eK := intervalShiftOrderIso
       (hab.trans (Nat.le_succ b))
@@ -73,8 +71,8 @@ theorem exists_soft_low_density_polynomial_core
         (Nat.le_mul_of_pos_left ell (by decide : 0 < 2)) b).trans hb))
     let beta := fun _ : Fin (N + 1) ↦ Fin q
     let midConfig := ManyBody.RegionConfig beta J
-    let extConfig := ManyBody.RegionConfig beta Jᶜ
-    let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let extConfig := ManyBody.ComplConfig beta J
+    let split := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
     let heatWeight := t * (2 : ℝ) ^ (m + 1)
     let clusterBase := 2 * (Real.exp (1 / 3 : ℝ) - 1)
     let order := max 1 ⌈(Real.log (max 1 ((N : ℝ) ^ 2)) -
@@ -83,7 +81,7 @@ theorem exists_soft_low_density_polynomial_core
     ∃ (e : Fin 5 → ℝ) (x : (Fin (N + 1) → Fin q) → ℂ) (E : ℝ),
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧ 0 ≤ E ∧ E ≤ 4 ∧
-      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       (∃ z : (Fin (N + 1) → Fin q) → ℂ, star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E : ℂ) • z ∧
         (H - (E : ℂ) • 1).PosSemidef) ∧
       ∃ (bH : OrthonormalBasis (Fin (N + 1) → Fin q) ℂ
@@ -95,8 +93,8 @@ theorem exists_soft_low_density_polynomial_core
         (C : Fin (m + 1) → Matrix (Fin bond) (Fin bond) ℂ),
         let Z := fun z : ℂ ↦ MPOTensor.traceChainOperator Acore
           (∑ j : Fin (m + 1), z ^ j.val • C j)
-        let Zphys := fun z : ℂ ↦ QuantumCircuit.embedOp
-          (Subtype.val : Ksites → Fin (N + 1)) (QuantumCircuit.embedOp eK (Z z))
+        let Zphys := fun z : ℂ ↦ ManyBody.place (X := fun _ ↦ Fin q) Ksites
+          (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding (Z z))
         ∃ (n : ℕ) (W : Fin n → Matrix midConfig midConfig ℂ),
           n ≤ D ∧
           (∀ i, IsOpenMPS ((b + ell + 1) - (a + ell)) (q * q)
@@ -148,22 +146,22 @@ theorem exists_soft_low_density_polynomial_core
       hfamily⟩ :=
     exists_five_region_soft_representation (N := N) (q := q)
       (k1 := a + 1) (k2 := a + 2 * ell) (k3 := b + 1) (k4 := b + 2 * ell)
-      (by omega) (by omega) (by omega) (by omega) (by omega) h hs h0 h1
+      (by omega) (by omega) (by omega) (by omega) (by omega) Φ h0 h1
   have hE4 : E ≤ 4 := hEC.trans (by exact_mod_cast hJ)
   have hlo : (e 2 : ℂ) • 1 ≤ ∑ i ∈ Finset.univ.filter
-      (fun i : Fin N ↦ a + 2 * ell ≤ i.val ∧ i.val + 1 < b + 1), h i := by
+      (fun i : Fin N ↦ a + 2 * ell ≤ i.val ∧ i.val + 1 < b + 1), Φ.term i := by
     exact Matrix.le_iff.mpr (he 2)
   obtain ⟨Acore, C, hZherm, hZerror⟩ := exists_uniform_native_soft_middle_mpo
     (N := N) (q := q) (l := a + 2 * ell) (r := b + 1) (m := m)
-    (by omega) (by omega) (by omega) (by omega) h hs h0 h1 (e 2) t xi hlo hscale hxi
+    (by omega) (by omega) (by omega) (by omega) Φ h0 h1 (e 2) t xi hlo hscale hxi
   let WL : Fin (2 * ell) → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ :=
-    fun r ↦ h ⟨a + r.val, by omega⟩
+    fun r ↦ Φ.term ⟨a + r.val, by omega⟩
   let WR : Fin (2 * ell) → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ :=
-    fun r ↦ h ⟨b + r.val, by omega⟩
+    fun r ↦ Φ.term ⟨b + r.val, by omega⟩
   have hWL (r : Fin (2 * ell)) : ManyBody.IsSupportedOn (WL r)
-      (interval (N + 1) (a + r.val) (a + r.val + 2)) := hs _
+      (interval (N + 1) (a + r.val) (a + r.val + 2)) := Φ.mem ⟨a + r.val, by omega⟩
   have hWR (r : Fin (2 * ell)) : ManyBody.IsSupportedOn (WR r)
-      (interval (N + 1) (b + r.val) (b + r.val + 2)) := hs _
+      (interval (N + 1) (b + r.val) (b + r.val + 2)) := Φ.mem ⟨b + r.val, by omega⟩
   obtain ⟨n, W, hn, hWbond, hWpoly⟩ :=
     exists_common_physical_polynomial_closing_family_fin
       (L := N + 1) (q := q) (ell := ell) (a := a) (b := b) (B := bond) (k := k)
@@ -186,7 +184,7 @@ theorem exists_soft_low_density_polynomial_core
     norm_five_region_soft_three_bulk_le (L := N + 1) (q := q)
       (k1 := a + 1) (k2 := a + 2 * ell) (k3 := b + 1) (k4 := b + 2 * ell) (ell := ell)
       (by omega) (by omega) (by omega) (by omega) (by omega) (by omega)
-      h hs h0 h1 e x hx hxe he p t m hpl hpu ht (by omega)
+      Φ h0 h1 e x hx hxe he p t m hpl hpu ht (by omega)
   have hp2upper : p 2 ≤ e 2 :=
     hpu 2 (by exact (by decide : (2 : Fin 5) ∈ ({0, 2, 4} : Finset (Fin 5))))
   obtain ⟨_hz0, _hz1, _hNativeError, hPlacedError⟩ := hZerror (p 2) hp2upper
@@ -216,7 +214,7 @@ theorem exists_soft_low_density_polynomial_core
       let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
         (interval (N + 1) (cuts j.castSucc) (cuts j.succ) : Finset (Fin (N + 1)))
       have hAmem : A j ∈ V :=
-        isSupportedOn_sum_internal_bonds (N + 1) q (cuts j.castSucc) (cuts j.succ) h hs
+        isSupportedOn_sum_internal_bonds (N + 1) q (cuts j.castSucc) (cuts j.succ) Φ
       change _ ∈ ManyBody.supportedOperators _ _
       exact add_mem (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
         (ManyBody.cfc_mem_supportedOperators _
@@ -234,7 +232,7 @@ theorem exists_soft_low_density_polynomial_core
       hFsupport 4
     have hAlphabet :
         (∑ i, Sum.elim (Sum.elim WL WR) ![PL, Zphys (z : ℂ), Fraw 4] i) = Ghat :=
-      actual_three_bulk_replacement_sum (N + 1) a b ell hell hab (by simpa using hb) h
+      actual_three_bulk_replacement_sum (N + 1) a b ell hell hab (by simpa using hb) Φ.term
         Fraw (fun j ↦ (e j : ℂ) • 1) (Zphys (z : ℂ)) ((p 2 : ℂ) • 1)
     intro Q hQ
     obtain ⟨M, hMatrix, _hTensor⟩ := hWpoly (z : ℂ) PL (Fraw 4) hPL hPR Q hQ

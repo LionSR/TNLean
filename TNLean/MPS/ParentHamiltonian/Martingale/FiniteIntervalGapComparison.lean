@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.PositiveGapTransfer
-import TNLean.Algebra.OrthogonalKernelGap
+import QICLean.Analysis.OrthogonalKernelGap
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import Mathlib.Analysis.Normed.Module.FiniteDimension
 

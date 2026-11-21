@@ -170,10 +170,8 @@ theorem card_crossingTerms_stripInterval_le (L w R a b : ℕ) :
 
 /-- The strip cut budget has linear width dependence and corrected support dimension. -/
 theorem cutLogBudget_stripInterval_le {q : ℕ} (hq : 1 ≤ q) (L w R a b : ℕ) :
-    Entropy.cutLogBudget
-      (ManyBody.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1)
-        (stripInterval L w a b))
-      (Entropy.supportDim (fun _ : Site (stripDomain L w) ↦ q) ∘ fun X ↦ X.1) ≤
+    ManyBody.cutLogBudget (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1) (fun _ ↦ q)
+        (stripInterval L w a b) ≤
       1 + (stripCrossConst R * w : ℕ) *
         Real.log (Real.exp 1 * (q : ℝ) ^ (1 + 2 * R * (R + 1))) ^ 2 := by
   refine (TNLean.PEPS.AreaLaw.cutLogBudget_le_card hq _).trans ?_

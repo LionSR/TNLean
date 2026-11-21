@@ -38,34 +38,34 @@ namespace TNLean.MPS.AreaLaw
 open Classical in
 private theorem ff_clipped_hamiltonian_eq {L q a s : ℕ}
     (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (t : ℝ) :
+    (Φ : ManyBody.BondInteraction L q) (t : ℝ) :
     let α : Fin (L - 1) := ⟨a + 1, by omega⟩
     let β : Fin (L - 1) := ⟨a + s - 2, by omega⟩
-    aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h (fun _ ↦ 0) t Finset.univ =
-      AKLV.twoSidedEnergyTruncation (AKLV.leftCutBlock h α 0)
-        (AKLV.middleCutBlock h α β 0 + (h α + h β)) (AKLV.rightCutBlock h β 0) t := by
+    aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ =
+      AKLV.twoSidedEnergyTruncation (AKLV.leftCutBlock Φ α 0)
+        (AKLV.middleCutBlock Φ α β 0 + (Φ.term α + Φ.term β)) (AKLV.rightCutBlock Φ β 0) t := by
   intro α β
-  let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) h
-  have hleft : AKLV.leftCutBlock h α 0 = C 0 := by
-    change (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val < a + 1), h i) -
+  let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ
+  have hleft : AKLV.leftCutBlock Φ α 0 = C 0 := by
+    change (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val < a + 1), Φ.term i) -
       (0 : ℂ) • 1 = ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ 0 ≤ i.val ∧ i.val + 1 < a + 2), h i
+        (fun i : Fin (L - 1) ↦ 0 ≤ i.val ∧ i.val + 1 < a + 2), Φ.term i
     simp only [zero_smul, sub_zero]
     congr 1
-  have hmiddle : AKLV.middleCutBlock h α β 0 = C 1 := by
+  have hmiddle : AKLV.middleCutBlock Φ α β 0 = C 1 := by
     change (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-      a + 1 < i.val ∧ i.val < a + s - 2), h i) - (0 : ℂ) • 1 =
+      a + 1 < i.val ∧ i.val < a + s - 2), Φ.term i) - (0 : ℂ) • 1 =
       ∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-        a + 2 ≤ i.val ∧ i.val + 1 < a + s - 1), h i
+        a + 2 ≤ i.val ∧ i.val + 1 < a + s - 1), Φ.term i
     simp only [zero_smul, sub_zero]
     congr 1
     ext i
     simp only [Finset.mem_filter, Finset.mem_univ, true_and]
     omega
-  have hright : AKLV.rightCutBlock h β 0 = C 2 := by
-    change (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦ a + s - 2 < i.val), h i) -
+  have hright : AKLV.rightCutBlock Φ β 0 = C 2 := by
+    change (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦ a + s - 2 < i.val), Φ.term i) -
       (0 : ℂ) • 1 = ∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-        a + s - 1 ≤ i.val ∧ i.val + 1 < L), h i
+        a + s - 1 ≤ i.val ∧ i.val + 1 < L), Φ.term i
     simp only [zero_smul, sub_zero]
     congr 1
     ext i
@@ -96,8 +96,8 @@ private theorem ff_clipped_hamiltonian_eq {L q a s : ℕ}
     sub_zero]
   rw [AKLV.twoSidedEnergyTruncation, hleft, hmiddle, hright]
   change cfc (fun x : ℝ ↦ min x t) (C 0) + C 1 +
-      cfc (fun x : ℝ ↦ min x t) (C 2) + (h α + h β) =
-    energyTruncation (C 0) t + (C 1 + (h α + h β)) + energyTruncation (C 2) t
+      cfc (fun x : ℝ ↦ min x t) (C 2) + (Φ.term α + Φ.term β) =
+    energyTruncation (C 0) t + (C 1 + (Φ.term α + Φ.term β)) + energyTruncation (C 2) t
   unfold energyTruncation
   abel
 
@@ -121,17 +121,15 @@ AKLV, arXiv:1301.1162v1, Section 4, Lemma `l:agsp`, lines 530–663,
 and the clipping preceding Theorem `t:ent`, lines 810–818. -/
 theorem exists_aklv_frustrationFree_chebyshev_filter {L q a s : ℕ}
     (hq : 1 ≤ q) (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (g t : ℝ) (hg : 0 < g) (hg1 : g ≤ 1) (ht : 1024 / g ≤ t)
-    (hzero : (∑ i, h i) *ᵥ WithLp.ofLp Ω = 0)
-    (hgap : ((∑ i, h i) - (g : ℂ) •
+    (hzero : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0)
+    (hgap : (Φ.hamiltonian - (g : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef) :
-    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h (fun _ ↦ 0) t Finset.univ
-    B.PosSemidef ∧ B ≤ ∑ i, h i ∧ ‖B‖ ≤ 2 * t + s ∧
+    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ
+    B.PosSemidef ∧ B ≤ Φ.hamiltonian ∧ ‖B‖ ≤ 2 * t + s ∧
       B *ᵥ WithLp.ofLp Ω = 0 ∧
       (B - ((g / 2 : ℝ) : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef ∧
@@ -153,17 +151,17 @@ theorem exists_aklv_frustrationFree_chebyshev_filter {L q a s : ℕ}
   intro B
   let α : Fin (L - 1) := ⟨a + 1, by omega⟩
   let β : Fin (L - 1) := ⟨a + s - 2, by omega⟩
-  have heq := ff_clipped_hamiltonian_eq hs ha h t
+  have heq := ff_clipped_hamiltonian_eq hs ha Φ t
   obtain ⟨hBpos, hBH, hBΩ, hBgap⟩ :=
-    AKLV.frustrationFree_twoSidedEnergyTruncation_ground_gap h hsupp h0 h1 α β
+    AKLV.frustrationFree_twoSidedEnergyTruncation_ground_gap Φ h0 h1 α β
       (by dsimp only [α, β]; omega) Ω hΩ g t hg hg1 ht hzero hgap
   rw [← heq] at hBpos hBH hBΩ hBgap
   have ht0 : 0 ≤ t := le_trans (by positivity : 0 ≤ 1024 / g) ht
-  have he (j : Fin 3) : (aklvNormalizationHamiltonians a s h j -
+  have he (j : Fin 3) : (aklvNormalizationHamiltonians a s Φ j -
       (((fun _ : Fin 3 ↦ (0 : ℝ)) j) : ℂ) • 1).PosSemidef := by
     simp only [Complex.ofReal_zero, zero_smul, sub_zero]
     exact Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)
-  have hBnorm := (aklv_clipped_hamiltonian_posSemidef_norm_le (by omega) ha h h0 h1
+  have hBnorm := (aklv_clipped_hamiltonian_posSemidef_norm_le (by omega) ha Φ h0 h1
     (fun _ ↦ 0) he le_rfl ht0).2
   have : Nonempty (Fin q) := ⟨⟨0, by omega⟩⟩
   have hupper (x : ℝ) (hx : x ∈ spectrum ℝ B) : x ≤ 2 * t + s :=
@@ -176,9 +174,9 @@ theorem exists_aklv_frustrationFree_chebyshev_filter {L q a s : ℕ}
     linarith
   refine ⟨hBpos, hBH, hBnorm, hBΩ, hBgap, ?_⟩
   intro ell
-  let H := fun j : Fin (s - 2) ↦ h ⟨a + 1 + j.val, by omega⟩
+  let H := fun j : Fin (s - 2) ↦ Φ.term ⟨a + 1 + j.val, by omega⟩
   obtain ⟨HL, HR, hL, hR, hmiddle, hdecomp, hcenter⟩ :=
-    aklv_clipped_hamiltonian_decomposition (by omega) ha h hsupp (fun _ ↦ 0) t
+    aklv_clipped_hamiltonian_decomposition (by omega) ha Φ (fun _ ↦ 0) t
   have hR' : ManyBody.IsSupportedOn HR (interval L (a + 1 + (s - 2)) L) := by
     convert hR using 1
     congr 1

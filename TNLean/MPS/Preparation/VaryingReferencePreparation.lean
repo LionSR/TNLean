@@ -148,7 +148,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_varying_refe
           (σ N (blockSite hN j ⟨0, hj⟩))))‖ ≤ K * Real.exp (-(r * ℓ j))) :
     ∃ N₀ : ℕ, ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
-        IsPreparedInDepth T (fun s => ψ s) ∧
+        IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
         1 - ‖⟪ψ, (‖chainState (A N)‖ : ℂ)⁻¹ • chainState (A N)⟫_ℂ‖ ≤ ε := by
   classical
   obtain ⟨Kn, hKn, hnorm⟩ := exists_abs_norm_chainState_sq_sub_one_le_corner_reference D

@@ -22,6 +22,7 @@ gap `min gamma 1`; see `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
 open ManyBody (interval)
+open ManyBody (cutMatrix)
 
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
 
@@ -34,12 +35,10 @@ arXiv:1602.08828v2, `t:alg1`, lines 1801–1805. -/
 theorem exists_physical_ground_isOpenMPS_reference_subspace :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q : ℕ), 1 ≤ q →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu gamma : ℝ),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu gamma : ℝ),
       0 < gamma →
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H →
@@ -62,11 +61,11 @@ theorem exists_physical_ground_isOpenMPS_reference_subspace :
   classical
   obtain ⟨K, hK, href⟩ := exists_physical_dg_isOpenMPS_reference_subspace
   refine ⟨K, hK, ?_⟩
-  intro L q hq h hs h0 h1 mu gamma hgamma H hH hmu hgap G r g u
+  intro L q hq Φ h0 h1 mu gamma hgamma H hH hmu hgap G r g u
     epsilon hepsilon hepsilon1 b
   by_cases hnonflat : ∃ nu ∈ spectrum ℝ H, mu < nu
   · obtain ⟨nu, hnu, hmunu⟩ := hnonflat
-    exact href L q h hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    exact href L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       epsilon hepsilon hepsilon1
   · have heig (i) : hH.eigenvalues i = mu := by
       rcases hgap _ (hH.eigenvalues_mem_spectrum_real i) with hi | hi
@@ -109,7 +108,7 @@ theorem exists_physical_ground_isOpenMPS_reference_subspace :
       apply (isOpenMPS_iff_internal_cutMatrix_rank_le v).mpr
       intro k _ _
       calc
-        (cutMatrix v k).rank ≤
+        (cutMatrix (leftBlock L k) v).rank ≤
             Fintype.card ((w : {w : Fin L // w ∈ leftBlock L k}) → Fin q) :=
           Matrix.rank_le_card_height _
         _ = q ^ Fintype.card {w : Fin L // w ∈ leftBlock L k} := by simp

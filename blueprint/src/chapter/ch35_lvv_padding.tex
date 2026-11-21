@@ -7,22 +7,22 @@ original prefix from a viable witness.
 
 \begin{definition}[Linear placement of an operator]
     \label{def:lvv_placement_linear_map}
-    \lean{QuantumCircuit.embedOpLinearMap}
+    \lean{ManyBody.placeAlongHom}
     \leanok
     \uses{lem:qc_placed_operators}
-    For a map $e$ between finite sets of sites, let $\Phi_e(X)$ be the
+    For an injective map $e$ between finite sets of sites, let $\Phi_e(X)$ be the
     operator $X$ placed by $e$, with the matrix entries of
     Lemma~\ref{lem:qc_placed_operators}. The map $\Phi_e$ is complex-linear.
 \end{definition}
 
 \begin{lemma}[Order under placement of sites]
     \label{thm:lvv_placement_order}
-    \lean{QuantumCircuit.embedOp_sub,QuantumCircuit.embedOp_posSemidef,
-        QuantumCircuit.embedOp_le,QuantumCircuit.siteOp_posSemidef,
-        QuantumCircuit.siteOp_le}
+    \lean{ManyBody.placeAlong_sub,ManyBody.posSemidef_placeAlong,
+        ManyBody.placeAlong_le_placeAlong,ManyBody.posSemidef_placeAt,
+        ManyBody.placeAt_le_placeAt}
     \leanok
     \uses{def:lvv_placement_linear_map}
-    Placement respects subtraction. For injective $e$, it preserves positive
+    Placement respects subtraction. It preserves positive
     semidefiniteness and operator inequalities. In particular, placing an
     on-site positive contraction at any site gives a positive contraction.
 \end{lemma}
@@ -38,7 +38,7 @@ original prefix from a viable witness.
 
 \begin{definition}[Penalties for a product basis vector]
     \label{def:lvv_product_basis_penalty}
-    \lean{QuantumCircuit.siteBasisPenalty,QuantumCircuit.productBasisPenalty}
+    \lean{ManyBody.siteBasisPenalty,ManyBody.productBasisPenalty}
     \leanok
     On a finite set of $q$-dimensional sites, fix a basis configuration $b$.
     Let $P_v$ be the on-site matrix diagonal in the standard basis, with
@@ -48,12 +48,12 @@ original prefix from a viable witness.
 
 \begin{lemma}[The actual product-basis penalty]
     \label{thm:lvv_product_basis_penalty}
-    \lean{QuantumCircuit.siteBasisPenalty_posSemidef,
-        QuantumCircuit.siteBasisPenalty_le_one,
-        QuantumCircuit.productBasisPenalty_eq_diagonal,
-        QuantumCircuit.isHermitian_productBasisPenalty,
-        QuantumCircuit.isGapped_productBasisPenalty,
-        QuantumCircuit.groundSpace_productBasisPenalty}
+    \lean{ManyBody.siteBasisPenalty_posSemidef,
+        ManyBody.siteBasisPenalty_le_one,
+        ManyBody.productBasisPenalty_eq_diagonal,
+        ManyBody.isHermitian_productBasisPenalty,
+        ManyBody.isGapped_productBasisPenalty,
+        ManyBody.groundSpace_productBasisPenalty}
     \leanok
     \uses{def:lvv_product_basis_penalty}
     Each $P_v$ is a positive contraction. In the full configuration basis,
@@ -89,7 +89,7 @@ original prefix from a viable witness.
 
 \begin{lemma}[Interval supports under prefix placement]
     \label{thm:lvv_prefix_support}
-    \lean{TNLean.MPS.AreaLaw.isSupportedOn_embedOp_prefix}
+    \lean{TNLean.MPS.AreaLaw.isSupportedOn_placeAlong_castLEEmb}
     \leanok
     \uses{lem:qc_placed_operators}
     Placing an operator from the first $L$ sites into the first $L$ sites of
@@ -194,7 +194,7 @@ original prefix from a viable witness.
 \begin{lemma}[Tensor coordinates of the padded terms]
     \label{thm:lvv_padding_tensor_coordinates}
     \lean{TNLean.MPS.AreaLaw.restrict_prefix_cutEquiv_symm,
-        TNLean.MPS.AreaLaw.cutOperator_embedOp_prefix,
+        TNLean.MPS.AreaLaw.cutOperator_placeAlong_castLEEmb,
         TNLean.MPS.AreaLaw.cutOperator_appended_penalty}
     \leanok
     \uses{thm:lvv_padded_interaction_sum,thm:lvv_product_basis_penalty}

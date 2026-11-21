@@ -27,7 +27,7 @@ least `1/N`.
 ## Main results
 
 * `sum_sub_filter_key_eq`: telescoping along an injective key.
-* `regionalEntropy_biUnion_le_rotations`: the averaged chain rule.
+* `regionEntropy_biUnion_le_rotations`: the averaged chain rule.
 
 ## References
 
@@ -73,21 +73,13 @@ theorem sum_sub_filter_key_eq {ι β : Type*} [LinearOrder β] (κ : ι → β)
 
 variable {Λ : Finset (ℤ × ℤ)} {q : ℕ}
 
-/-- Conditioning reduces entropy, read with the regional entropies of the finite-domain
-model: `S(X | T) ≤ S(X | T')` for `T' ⊆ T` disjoint from `X`. -/
-theorem regionalEntropy_cond_anti (Ω : StateSpace Λ q) {X T' T : Finset (Site Λ)}
-    (hXT : Disjoint X T) (hT' : T' ⊆ T) :
-    ManyBody.regionEntropy Ω (X ∪ T) - ManyBody.regionEntropy Ω T ≤
-      ManyBody.regionEntropy Ω (X ∪ T') - ManyBody.regionEntropy Ω T' := by
-  exact Entropy.regionEntropy_cond_anti (n := fun _ ↦ q) hXT hT' Ω
-
 /-- **The chain rule averaged over rotated color orders.** Let `Ω` be a unit vector, `X_i`
 pairwise disjoint regions, and `col i < N` colors. Suppose every `i ∈ good` has a buffer `T_i`
 contained in the union of the regions of the other colors, with
 `S(X_i | T_i) ≤ S(X_i)/2 + β`. Then
 `S(⋃ X_i) ≤ ∑_i S(X_i) - (1/(2N)) ∑_{i ∈ good} S(X_i) + |good| β / N`.
 Source: `02-initial.tex`, lines 625–646, the expected entropy chain rule. -/
-theorem regionalEntropy_biUnion_le_rotations (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) {ι : Type*}
+theorem regionEntropy_biUnion_le_rotations (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) {ι : Type*}
     [Fintype ι] (Xs : ι → Finset (Site Λ))
     (hdisj : Pairwise fun i j ↦ Disjoint (Xs i) (Xs j)) {N : ℕ} (col : ι → ℕ)
     (hcol : ∀ i, col i < N) (good : Finset ι) (T : ι → Finset (Site Λ)) (β : ℝ)
@@ -101,7 +93,7 @@ theorem regionalEntropy_biUnion_le_rotations (Ω : StateSpace Λ q) (hΩ : ‖Ω
   -- `N > 0` unless the index set is empty
   rcases isEmpty_or_nonempty ι with hι | hι
   · obtain rfl : good = ∅ := Finset.eq_empty_of_isEmpty good
-    simp [Finset.univ_eq_empty, regionalEntropy_empty Λ q Ω hΩ]
+    simp [Finset.univ_eq_empty, ManyBody.regionEntropy_empty _ Ω hΩ]
   have hN : 0 < N := lt_of_le_of_lt (Nat.zero_le _) (hcol (Classical.arbitrary ι))
   set S : Finset (Site Λ) → ℝ := ManyBody.regionEntropy Ω
   -- the key of the `k`-th rotation
@@ -119,7 +111,7 @@ theorem regionalEntropy_biUnion_le_rotations (Ω : StateSpace Λ q) (hΩ : ‖Ω
     intro k
     have h := sum_sub_filter_key_eq (κ k) (hκ k) (fun s ↦ S (s.biUnion Xs)) Finset.univ
     simp only [Finset.biUnion_empty] at h
-    rw [show S ∅ = 0 from regionalEntropy_empty Λ q Ω hΩ, sub_zero] at h
+    rw [show S ∅ = 0 from ManyBody.regionEntropy_empty _ Ω hΩ, sub_zero] at h
     rw [← h]
     refine Finset.sum_congr rfl fun i _ ↦ ?_
     have hins : (Finset.univ.filter fun j ↦ κ k j ≤ κ k i) =
@@ -141,8 +133,9 @@ theorem regionalEntropy_biUnion_le_rotations (Ω : StateSpace Λ q) (hΩ : ‖Ω
     rintro rfl
     simp at hj
   have hterm : ∀ k i, term k i ≤ S (Xs i) := fun k i ↦ by
-    have := regionalEntropy_cond_anti Ω (hpre k i) (Finset.empty_subset (pre k i))
-    simpa [term, S, regionalEntropy_empty Λ q Ω hΩ] using this
+    have := Entropy.regionEntropy_cond_anti (n := fun _ ↦ q) (hpre k i)
+      (Finset.empty_subset (pre k i)) Ω
+    simpa [term, S, ManyBody.regionEntropy_empty _ Ω hΩ] using this
   -- the good rotation of a good index
   have hgood : ∀ i ∈ good, term (N - 1 - col i) i ≤ S (Xs i) / 2 + β := by
     intro i hi
@@ -165,7 +158,7 @@ theorem regionalEntropy_biUnion_le_rotations (Ω : StateSpace Λ q) (hΩ : ‖Ω
       simp only [κ]
       exact Prod.Lex.toLex_lt_toLex.mpr (Or.inl (by rw [hki]; exact hlt))
     have hdisjT : Disjoint (Xs i) (pre k i) := hpre k i
-    have := regionalEntropy_cond_anti Ω hdisjT hsub
+    have := Entropy.regionEntropy_cond_anti (n := fun _ ↦ q) hdisjT hsub Ω
     exact this.trans (hbuf i hi)
   -- sum over the rotations
   have hsumk : (N : ℝ) * S (Finset.univ.biUnion Xs) =

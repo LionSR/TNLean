@@ -45,7 +45,7 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -118,7 +118,9 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_density
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
                 (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp)) ≤ Real.sqrt (2 * ε / g) ∧
-            cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
+            ManyBody.cutLogBudget
+                (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                (fun _ ↦ q) X ≤
               Ctarget * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
             Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
               (ManyBody.regionEntropy Ωt X) w ≤ δtail ∧
@@ -135,8 +137,8 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_density
             letI : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
             let d := E.card
             let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-              (ManyBody.splitEquiv β X) Ωt
-            let ψ : ManyBody.RegionConfig β Xᶜ × Fin d → ℂ := fun x ↦
+              (ManyBody.cutEquiv β X) Ωt
+            let ψ : ManyBody.ComplConfig β X × Fin d → ℂ := fun x ↦
               compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -220,7 +222,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_density
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   obtain ⟨Nt, htarget⟩ := eventually_atTop.mp
-    (eventually_abs_regionalEntropy_sub_le_of_truncation q hq
+    (eventually_abs_regionEntropy_sub_le_of_truncation q hq
       (Δ / positiveNormalization 1 (Δ / 2) J) (C_T + 1) hg)
   obtain ⟨Ni, hinterval⟩ := eventually_atTop.mp
     (eventually_le_natCast_rpow

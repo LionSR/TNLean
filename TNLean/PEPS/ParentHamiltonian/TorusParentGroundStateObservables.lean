@@ -60,7 +60,8 @@ theorem IsGInjective.exists_torusGClosure_sum_of_mem_parentKernel
     (hP : ∀ v, IsRegionParentInteraction (groupBondTensor (torusIncidentSite a))
       (torusPlaquetteRegion v) (P v))
     (ψ : (X → Fin d) → ℂ)
-    (hψ : ψ ∈ (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion P)).ker) :
+    (hψ : ψ ∈ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+      torusPlaquetteRegion P).hamiltonian).ker) :
     ∃ μ : {p : G × G // Commute p.1 p.2} → ℂ,
       ∑ p, μ p • torusGClosure (leftRegularMatrix G) a p.1.1 p.1.2 = ψ := by
   classical
@@ -102,7 +103,8 @@ theorem IsGIsometric.exists_torusParentKernel_common_density_of_isSimplyConnecte
     let b := Fintype.card {f : Edge Γₜ // IsRegionBoundaryEdge R f}
     ∃ ρ : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ,
       ∀ ψ : (X → Fin d) → ℂ,
-        ψ ∈ (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion P)).ker →
+        ψ ∈ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+          torusPlaquetteRegion P).hamiltonian).ker →
         ψ ≠ 0 →
         let M : Matrix (RegionPhysicalConfig (d := d) R)
             (RegionPhysicalConfig (d := d) (Finset.univ \ R)) ℂ :=
@@ -137,8 +139,10 @@ theorem IsGIsometric.torusParentKernel_local_equivalence_of_isSimplyConnected
     (R : Finset X) (hR : ((Γₜ).induce (R : Set X)).Connected)
     (hSC : IsSimplyConnected (torusRegionRealization R))
     (ψ φ : (X → Fin d) → ℂ)
-    (hψ : ψ ∈ (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion P)).ker)
-    (hφ : φ ∈ (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion P)).ker)
+    (hψ : ψ ∈ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+      torusPlaquetteRegion P).hamiltonian).ker)
+    (hφ : φ ∈ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+      torusPlaquetteRegion P).hamiltonian).ker)
     (hneψ : ψ ≠ 0) (hneφ : φ ≠ 0) :
     let A : Matrix (RegionPhysicalConfig (d := d) R)
         (RegionPhysicalConfig (d := d) (Finset.univ \ R)) ℂ :=
@@ -173,8 +177,10 @@ theorem IsGIsometric.torusParentKernel_stripe_local_equivalence
     (hP : ∀ v, IsRegionParentInteraction (groupBondTensor (torusIncidentSite a))
       (torusPlaquetteRegion v) (P v))
     (ψ φ : (X → Fin d) → ℂ)
-    (hψ : ψ ∈ (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion P)).ker)
-    (hφ : φ ∈ (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion P)).ker)
+    (hψ : ψ ∈ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+      torusPlaquetteRegion P).hamiltonian).ker)
+    (hφ : φ ∈ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+      torusPlaquetteRegion P).hamiltonian).ker)
     (hneψ : ψ ≠ 0) (hneφ : φ ≠ 0) :
     let R := torusContiguousRectangle (width := width) (height := height)
       1 1 (width - 1) (height - 1)
@@ -210,11 +216,12 @@ theorem IsGInjective.torusParentKernel_rank_zeroEntropy_of_isSimplyConnected
     (R : Finset X) (hR : ((Γₜ).induce (R : Set X)).Connected)
     (hSC : IsSimplyConnected (torusRegionRealization R))
     (ψ : (X → Fin d) → ℂ)
-    (hψ : ψ ∈ (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion P)).ker)
+    (hψ : ψ ∈ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+      torusPlaquetteRegion P).hamiltonian).ker)
     (hne : ψ ≠ 0) :
     let _ := Classical.decEq (Fin d)
     let b := Fintype.card {f : Edge Γₜ // IsRegionBoundaryEdge R f}
-    let M := physicalCutMatrix (fun v => v ∈ R) ψ
+    let M := ManyBody.cutMatrix R ψ
     let ρ := (M * M.conjTranspose).trace⁻¹ • (M * M.conjTranspose)
     0 < (M * M.conjTranspose).trace ∧ ρ.PosSemidef ∧ ρ.trace = 1 ∧
       ρ.rank = Fintype.card G ^ (b - 1) ∧

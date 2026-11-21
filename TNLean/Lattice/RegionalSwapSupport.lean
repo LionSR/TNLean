@@ -8,6 +8,8 @@ import TNLean.Circuit.SitePermutation
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.Circuit.RegionalSwap
 import QICLean.Analysis.DoubledSystemGap
+import QICLean.ManyBody.Dynamics.InteractionOperations
+import QICLean.ManyBody.Sites.PairSwap
 
 /-!
 # Support of the regional swap and of swapped doubled interactions
@@ -31,6 +33,10 @@ Hermiticity hypothesis is needed.
 * `TNLean.Lattice.reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators`,
   `TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators`: the
   conjugated operators keep their support in paired site coordinates.
+* `TNLean.Lattice.reindex_sheetSwapOp_eq_reindex_pairSwapOp`: in paired site coordinates
+  `F_R` is the exchange `ManyBody.pairSwapOp R` of the two copies on `R`.
+* `TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled`: the doubled interaction
+  conjugated by that exchange, in paired site coordinates, has Hamiltonian `F_R K F_Rᴴ`.
 
 ## References
 
@@ -205,5 +211,112 @@ theorem reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
         (one_mem (ManyBody.supportedOperators _ _)))
       (reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators R S
         (one_mem (ManyBody.supportedOperators _ _)) hA)
+
+/-- **The sheet swap in paired coordinates is the exchange of the two copies.** After pairing
+the two configuration values at every site, the sheet swap `F_R` is the exchange
+`(a, b) ↦ (b, a)` of the two copies at the sites of `R`, relabelled along `finProdFinEquiv` at
+every site.
+
+Source: polynomial-PEPS manuscript, `02-information.tex`, lines 416–424. -/
+theorem reindex_sheetSwapOp_eq_reindex_pairSwapOp
+    {ι : Type*} [Fintype ι] [DecidableEq ι] (q : ℕ) (R : Finset ι) :
+    Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+        (sheetSwapOp q R) =
+      Matrix.reindex
+        (ManyBody.siteConfigurationEquiv (X' := fun _ : ι ↦ Fin (q * q)) (Equiv.refl ι)
+          fun _ ↦ finProdFinEquiv)
+        (ManyBody.siteConfigurationEquiv (X' := fun _ : ι ↦ Fin (q * q)) (Equiv.refl ι)
+          fun _ ↦ finProdFinEquiv)
+        (ManyBody.pairSwapOp (X := fun _ : ι ↦ Fin q) R) := by
+  ext x y
+  let a : ι → Fin q × Fin q := fun i ↦ finProdFinEquiv.symm (x i)
+  let b : ι → Fin q × Fin q := fun i ↦ finProdFinEquiv.symm (y i)
+  have hsite (i : ι) :
+      (if i ∈ R then Equiv.Perm.permMatrix ℂ (Equiv.prodComm (Fin q) (Fin q))
+        else (1 : Matrix (Fin q × Fin q) (Fin q × Fin q) ℂ)) (a i) (b i) =
+        if b i = (if i ∈ R then (a i).swap else a i) then 1 else 0 := by
+    by_cases hi : i ∈ R
+    · simp only [hi, ↓reduceIte, Equiv.Perm.permMatrix, PEquiv.toMatrix_toPEquiv_apply,
+        Equiv.prodComm_apply]
+      by_cases h : b i = (a i).swap <;> simp [h]
+    · simp only [hi, ↓reduceIte, Matrix.one_apply]
+      exact if_congr eq_comm rfl rfl
+  have hL : sheetSwapOp q R ((sitePairConfigurationEquiv ι q q).symm x)
+      ((sitePairConfigurationEquiv ι q q).symm y) =
+      if (sitePairConfigurationEquiv ι q q).symm y =
+        sheetSwap q R ((sitePairConfigurationEquiv ι q q).symm x) then 1 else 0 := by
+    simp only [sheetSwapOp, PEquiv.toMatrix_toPEquiv_apply, Pi.single_apply]
+  have hR : ManyBody.pairSwapOp (X := fun _ : ι ↦ Fin q) R
+      ((ManyBody.siteConfigurationEquiv (X' := fun _ : ι ↦ Fin (q * q)) (Equiv.refl ι)
+        fun _ ↦ finProdFinEquiv).symm x)
+      ((ManyBody.siteConfigurationEquiv (X' := fun _ : ι ↦ Fin (q * q)) (Equiv.refl ι)
+        fun _ ↦ finProdFinEquiv).symm y) =
+      ∏ i, if b i = (if i ∈ R then (a i).swap else a i) then 1 else 0 := by
+    rw [ManyBody.pairSwapOp, ManyBody.prodOp_apply]
+    exact Finset.prod_congr rfl fun i _ ↦ hsite i
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
+  rw [hL, hR, Fintype.prod_boole]
+  refine if_congr ⟨fun h i ↦ ?_, fun h ↦ ?_⟩ rfl rfl
+  · have h1 : (b i).1 = if i ∈ R then (a i).2 else (a i).1 :=
+      congrFun (congrArg Prod.fst h) i
+    have h2 : (b i).2 = if i ∈ R then (a i).1 else (a i).2 :=
+      congrFun (congrArg Prod.snd h) i
+    by_cases hi : i ∈ R
+    · simp only [hi, ↓reduceIte] at h1 h2 ⊢
+      exact Prod.ext h1 h2
+    · simp only [hi, ↓reduceIte] at h1 h2 ⊢
+      exact Prod.ext h1 h2
+  · refine Prod.ext (funext fun i ↦ ?_) (funext fun i ↦ ?_)
+    · change (b i).1 = if i ∈ R then (a i).2 else (a i).1
+      have hi' := h i
+      by_cases hi : i ∈ R
+      · simp only [hi, ↓reduceIte] at hi' ⊢
+        exact congrArg Prod.fst hi'
+      · simp only [hi, ↓reduceIte] at hi' ⊢
+        exact congrArg Prod.fst hi'
+    · change (b i).2 = if i ∈ R then (a i).1 else (a i).2
+      have hi' := h i
+      by_cases hi : i ∈ R
+      · simp only [hi, ↓reduceIte] at hi' ⊢
+        exact congrArg Prod.snd hi'
+      · simp only [hi, ↓reduceIte] at hi' ⊢
+        exact congrArg Prod.snd hi'
+
+/-- **The swapped doubled Hamiltonian.** For an interaction `Φ` of local dimension `q`, conjugate
+the doubled interaction by the exchange of the two copies on `D` and pair the two copies of
+every site into `Fin (q * q)` along `finProdFinEquiv`. Its Hamiltonian is `F_D K F_Dᴴ`, for the
+doubled Hamiltonian `K` and the sheet swap `F_D` in paired coordinates.
+
+Source: polynomial-PEPS manuscript, `02-information.tex`, lines 416–424; TNLean
+one-dimensional note, `part2a_mps_information.tex`, lines 355–363. -/
+theorem hamiltonian_relabel_conj_pairSwapOp_doubled {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {κ : Type*} [Fintype κ] {S : κ → Finset ι} {q : ℕ}
+    (Φ : ManyBody.Interaction (fun _ : ι ↦ Fin q) S) (D : Finset ι)
+    (hP : ∀ k, ManyBody.pairSwapOp (X := fun _ : ι ↦ Fin q) D * Φ.doubled.term k *
+        (ManyBody.pairSwapOp (X := fun _ : ι ↦ Fin q) D)ᴴ ∈
+      ManyBody.supportedOperators (fun _ : ι ↦ Fin q × Fin q) (S k)) :
+    ((Φ.doubled.conj (ManyBody.pairSwapOp (X := fun _ : ι ↦ Fin q) D) hP).relabel
+        (X' := fun _ : ι ↦ Fin (q * q)) (Equiv.refl ι) (fun _ ↦ finProdFinEquiv) S
+        fun _ _ ↦ Iff.rfl).hamiltonian =
+      Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+          (sheetSwapOp q D) *
+        Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+          (doubledHamiltonian Φ.hamiltonian) *
+        (Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+          (sheetSwapOp q D))ᴴ := by
+  have hK : Matrix.reindex
+      (ManyBody.siteConfigurationEquiv (X' := fun _ : ι ↦ Fin (q * q)) (Equiv.refl ι)
+        fun _ ↦ finProdFinEquiv)
+      (ManyBody.siteConfigurationEquiv (X' := fun _ : ι ↦ Fin (q * q)) (Equiv.refl ι)
+        fun _ ↦ finProdFinEquiv) Φ.doubled.hamiltonian =
+      Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
+        (doubledHamiltonian Φ.hamiltonian) := by
+    rw [ManyBody.Interaction.hamiltonian_doubled]
+    ext x y
+    simp [sitePairConfigurationEquiv, ManyBody.siteConfigurationEquiv]
+  refine (ManyBody.Interaction.hamiltonian_relabel _ _ _ _ _).trans ?_
+  rw [ManyBody.Interaction.hamiltonian_conj,
+    reindex_sheetSwapOp_eq_reindex_pairSwapOp, ← hK]
+  simp only [Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv]
 
 end TNLean.Lattice

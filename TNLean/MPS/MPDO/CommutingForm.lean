@@ -31,8 +31,10 @@ This is Proposition C.8 of arXiv:1606.00608, Appendix C.2, lines 1569--1594.
 ## Main declarations
 
 * `MPOTensor.ChainOperator`
-* `MPOTensor.AgreesOutsideWindow`
-* `MPOTensor.embedLocalOperator`
+* `MPOTensor.windowComplementEquiv`,
+  `MPOTensor.reindex_placeAlong_ringWindow_windowComplement` — an operator placed on
+  a window of the ring (`ManyBody.placeAlong` along `ManyBody.ringWindow`) is the
+  window operator tensored with the identity on the complement
 * `MPOTensor.CommutingFormData`
 * `MPOTensor.HasCommutingForm`
 * `MPOTensor.GSNNCHData`
@@ -48,7 +50,7 @@ This is Proposition C.8 of arXiv:1606.00608, Appendix C.2, lines 1569--1594.
 -/
 
 open scoped Matrix Kronecker BigOperators ComplexOrder
-open Matrix Finset
+open Matrix Finset ManyBody
 
 namespace MPOTensor
 
@@ -59,61 +61,6 @@ variable {d D N : ℕ}
 /-- The matrix algebra on an `N`-site chain with local dimension `d`. -/
 abbrev ChainOperator (d N : ℕ) :=
   Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ
-
-/-- Two chain configurations agree outside the translated length-`L` window
-starting at `i` when replacing the window of `τ` by that of `σ` recovers `σ`.
-This is the matrix-entry side condition used to embed an `L`-site operator into
-an `N`-site periodic chain. -/
-def AgreesOutsideWindow (L : ℕ) {N : ℕ} (hLN : L ≤ N) (i : Fin N)
-    (σ τ : Fin N → Fin d) : Prop :=
-  MPSTensor.replaceWindow L hLN i τ (MPSTensor.extractWindow L i σ) = σ
-
-/-- Embed an `L`-site operator into the periodic `N`-site chain at position `i`,
-acting as the given local matrix on the window and as the identity on the
-complement. -/
-noncomputable def embedLocalOperator (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    (B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) : ChainOperator d N :=
-  Matrix.of fun σ τ =>
-    if AgreesOutsideWindow (d := d) L hLN i σ τ then
-      B (MPSTensor.extractWindow L i σ) (MPSTensor.extractWindow L i τ)
-    else 0
-
-@[simp] theorem embedLocalOperator_apply (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    (B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) (σ τ : Fin N → Fin d) :
-    embedLocalOperator (d := d) L N hLN i B σ τ =
-      if AgreesOutsideWindow (d := d) L hLN i σ τ then
-        B (MPSTensor.extractWindow L i σ) (MPSTensor.extractWindow L i τ)
-      else 0 :=
-  rfl
-
-/-- Embedding a local operator preserves complex scalar multiplication. -/
-theorem embedLocalOperator_smul
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N) (c : ℂ)
-    (A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    embedLocalOperator (d := d) L N hLN i (c • A) =
-      c • embedLocalOperator L N hLN i A := by
-  ext σ τ
-  simp [embedLocalOperator_apply]
-
-/-- Two configurations agree outside a cyclic window exactly when their values
-coincide at every site outside that window. -/
-theorem agreesOutsideWindow_iff (L : ℕ) {N : ℕ} (hLN : L ≤ N)
-    (i : Fin N) (σ τ : Fin N → Fin d) :
-    AgreesOutsideWindow (d := d) L hLN i σ τ ↔
-      ∀ k : Fin N, ¬ ((k.val + N - i.val) % N < L) → τ k = σ k := by
-  constructor
-  · intro h k hk
-    have hk' := congrFun h k
-    simpa [AgreesOutsideWindow, MPSTensor.replaceWindow, hk] using hk'
-  · intro h
-    rw [AgreesOutsideWindow]
-    funext k
-    unfold MPSTensor.replaceWindow
-    by_cases hk : (k.val + N - i.val) % N < L
-    · rw [dite_eq_left hk]
-      have hself := congrFun (MPSTensor.replaceWindow_extractWindow L hLN i σ) k
-      simpa [MPSTensor.replaceWindow, hk] using hself
-    · simp [hk, h k hk]
 
 /-- Decompose a periodic configuration into a cyclic window and its cyclic
 complement. -/
@@ -187,14 +134,15 @@ def windowComplementEquiv (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
       omega
     rw [dite_eq_right hnot]
 
-/-- In cyclic-window coordinates, a local operator is the tensor product of
-the window operator with the identity on the complement. -/
-theorem reindex_embedLocalOperator_windowComplement
+/-- In cyclic-window coordinates, an operator placed on the window of `L`
+consecutive sites starting at `i` is the tensor product of the window operator
+with the identity on the complement. -/
+theorem reindex_placeAlong_ringWindow_windowComplement
     (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
     (B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     Matrix.reindex (windowComplementEquiv (d := d) L N hLN i)
         (windowComplementEquiv (d := d) L N hLN i)
-        (embedLocalOperator (d := d) L N hLN i B) =
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow hLN i) B) =
       B ⊗ₖ (1 : Matrix (Fin (N - L) → Fin d) (Fin (N - L) → Fin d) ℂ) := by
   let e := windowComplementEquiv (d := d) L N hLN i
   ext ⟨x, u⟩ ⟨y, v⟩
@@ -204,7 +152,8 @@ theorem reindex_embedLocalOperator_windowComplement
   have heτ : e τ = (y, v) := e.apply_symm_apply (y, v)
   have hx : MPSTensor.extractWindow L i σ = x := congrArg Prod.fst heσ
   have hy : MPSTensor.extractWindow L i τ = y := congrArg Prod.fst heτ
-  have hAgree : AgreesOutsideWindow (d := d) L hLN i σ τ ↔ v = u := by
+  have hAgree : (∀ k, (∀ r, ringWindow hLN i r ≠ k) → σ k = τ k) ↔ v = u := by
+    rw [MPSTensor.forall_ringWindow_ne_imp_iff_replaceWindow]
     constructor
     · intro h
       have heq := congrArg e h
@@ -213,164 +162,35 @@ theorem reindex_embedLocalOperator_windowComplement
     · intro h
       apply e.injective
       rw [windowComplementEquiv_replaceWindow, heσ, heτ, h, hx]
+  change placeAlong (X := fun _ ↦ Fin d) (ringWindow hLN i) B σ τ =
+    B x y * (if u = v then 1 else 0)
+  rw [placeAlong_apply, ← MPSTensor.extractWindow_eq_comp_ringWindow hLN,
+    ← MPSTensor.extractWindow_eq_comp_ringWindow hLN, hx, hy]
   by_cases h : v = u
-  · change (if AgreesOutsideWindow (d := d) L hLN i σ τ then
-        B (MPSTensor.extractWindow L i σ) (MPSTensor.extractWindow L i τ) else 0) =
-      B x y * (if u = v then 1 else 0)
-    rw [ite_eq_left (hAgree.mpr h), hx, hy, ite_eq_left h.symm, mul_one]
-  · change (if AgreesOutsideWindow (d := d) L hLN i σ τ then
-        B (MPSTensor.extractWindow L i σ) (MPSTensor.extractWindow L i τ) else 0) =
-      B x y * (if u = v then 1 else 0)
-    rw [ite_eq_right (hAgree.not.mpr h), ite_eq_right (Ne.symm h), mul_zero]
+  · rw [ite_eq_left (hAgree.mpr h), ite_eq_left h.symm, mul_one]
+  · rw [ite_eq_right (hAgree.not.mpr h), ite_eq_right (Ne.symm h), mul_zero]
 
-/-- Embedding two operators into the same cyclic window preserves their
-product. -/
-theorem embedLocalOperator_mul (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    (B C : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    embedLocalOperator (d := d) L N hLN i (B * C) =
-      embedLocalOperator (d := d) L N hLN i B *
-        embedLocalOperator (d := d) L N hLN i C := by
-  let e := windowComplementEquiv (d := d) L N hLN i
-  apply (Matrix.reindex e e).injective
-  change (Matrix.reindexLinearEquiv ℂ ℂ e e)
-      (embedLocalOperator (d := d) L N hLN i (B * C)) =
-    (Matrix.reindexLinearEquiv ℂ ℂ e e)
-      (embedLocalOperator (d := d) L N hLN i B *
-        embedLocalOperator (d := d) L N hLN i C)
-  rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ e e e,
-    Matrix.coe_reindexLinearEquiv,
-    reindex_embedLocalOperator_windowComplement,
-    reindex_embedLocalOperator_windowComplement,
-    reindex_embedLocalOperator_windowComplement,
-    ← Matrix.mul_kronecker_mul]
-  simp
-
-/-- The action of a cyclically embedded local operator is the sum over
-replacements of the configuration inside its window. -/
-theorem embedLocalOperator_mulVec_apply (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    (B : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ)
-    (v : (Fin N → Fin d) → ℂ) (σ : Fin N → Fin d) :
-    (embedLocalOperator (d := d) L N hLN i B).mulVec v σ =
-      ∑ τ : Fin L → Fin d,
-        B (MPSTensor.extractWindow L i σ) τ *
-          v (MPSTensor.replaceWindow L hLN i σ τ) := by
-  let e := windowComplementEquiv (d := d) L N hLN i
-  rw [Matrix.mulVec, dotProduct]
-  calc
-    (∑ τ : Fin N → Fin d,
-        embedLocalOperator (d := d) L N hLN i B σ τ * v τ) =
-        ∑ x : (Fin L → Fin d) × (Fin (N - L) → Fin d),
-          embedLocalOperator (d := d) L N hLN i B σ (e.symm x) * v (e.symm x) :=
-      Fintype.sum_equiv e _ _ fun x ↦ by rw [e.symm_apply_apply]
-    _ = _ := by
-      rw [Fintype.sum_prod_type]
-      apply Finset.sum_congr rfl
-      intro τ _
-      have heσ : e σ =
-          (MPSTensor.extractWindow L i σ, (e σ).2) := by
-        exact Prod.ext rfl rfl
-      have hreplace :
-          e.symm (τ, (e σ).2) = MPSTensor.replaceWindow L hLN i σ τ := by
-        apply e.injective
-        rw [e.apply_symm_apply, windowComplementEquiv_replaceWindow]
-      have hentry (u : Fin (N - L) → Fin d) :
-          embedLocalOperator (d := d) L N hLN i B σ (e.symm (τ, u)) =
-            B (MPSTensor.extractWindow L i σ) τ *
-              (if (e σ).2 = u then 1 else 0) := by
-        have h := congrFun (congrFun
-          (reindex_embedLocalOperator_windowComplement (d := d) L N hLN i B)
-          (e σ)) (τ, u)
-        simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
-          Matrix.one_apply] at h
-        rw [e.symm_apply_apply] at h
-        rw [show (e σ).1 = MPSTensor.extractWindow L i σ from rfl] at h
-        exact h
-      simp_rw [hentry]
-      rw [Finset.sum_eq_single (e σ).2]
-      · simp [hreplace]
-      · intro u _ hu
-        rw [ite_eq_right (Ne.symm hu), mul_zero, zero_mul]
-      · simp
-
-private theorem cyclicWindowsDisjoint_of_not_overlap {N L : ℕ} (hLN : L ≤ N)
-    {i j : Fin N} (hij : ¬ MPSTensor.cyclicWindowsOverlap N L i j) :
-    ∀ k : Fin N,
-      ((k.val + N - i.val) % N < L) →
-        ((k.val + N - j.val) % N < L) → False := by
-  intro k hki hkj
-  apply hij
-  refine ⟨k, ?_, ?_⟩
-  · exact (MPSTensor.mem_cyclicWindowSupport_iff hLN i k).mpr hki
-  · exact (MPSTensor.mem_cyclicWindowSupport_iff hLN j k).mpr hkj
-
-private theorem extractWindow_replaceWindow_of_not_cyclicWindowsOverlap
-    {N L : ℕ} (hLN : L ≤ N) {i j : Fin N}
-    (hij : ¬ MPSTensor.cyclicWindowsOverlap N L i j)
-    (σ : Fin N → Fin d) (τ : Fin L → Fin d) :
-    MPSTensor.extractWindow L i (MPSTensor.replaceWindow L hLN j σ τ) =
-      MPSTensor.extractWindow L i σ := by
-  funext r
-  unfold MPSTensor.extractWindow MPSTensor.replaceWindow
-  have hi : (((i.val + r.val) % N + N - i.val) % N) < L := by
-    rw [MPSTensor.offset_mod_eq i.isLt (Nat.lt_of_lt_of_le r.isLt hLN)]
-    exact r.isLt
-  have hnotj : ¬ (((i.val + r.val) % N + N - j.val) % N < L) := by
-    intro hj
-    exact cyclicWindowsDisjoint_of_not_overlap hLN hij
-      ⟨(i.val + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩ hi hj
-  rw [dite_eq_right hnotj]
-
-private theorem replaceWindow_commute_of_not_cyclicWindowsOverlap
-    {N L : ℕ} (hLN : L ≤ N) {i j : Fin N}
-    (hij : ¬ MPSTensor.cyclicWindowsOverlap N L i j)
-    (σ : Fin N → Fin d) (α β : Fin L → Fin d) :
-    MPSTensor.replaceWindow L hLN j (MPSTensor.replaceWindow L hLN i σ α) β =
-      MPSTensor.replaceWindow L hLN i (MPSTensor.replaceWindow L hLN j σ β) α := by
-  funext k
-  have hdisjoint := cyclicWindowsDisjoint_of_not_overlap hLN hij
-  by_cases hi : ((k.val + N - i.val) % N < L)
-  · have hnotj : ¬ ((k.val + N - j.val) % N < L) := fun hj => hdisjoint k hi hj
-    simp [MPSTensor.replaceWindow, hi, hnotj]
-  · by_cases hj : ((k.val + N - j.val) % N < L)
-    · simp [MPSTensor.replaceWindow, hi, hj]
-    · simp [MPSTensor.replaceWindow, hi, hj]
-
-/-- Operators embedded into disjoint cyclic windows commute.
-
-The hypothesis is precisely that the two cyclic supports have no common site.
-No positivity, idempotency, or relation between the two local matrices is
-required.
+/-- Cyclic windows that do not overlap have disjoint images, so operators placed on
+them commute (`ManyBody.commute_placeAlong_of_disjoint`).
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
 1571--1593. -/
-theorem embedLocalOperator_commute_of_not_cyclicWindowsOverlap
-    (L N : ℕ) (hLN : L ≤ N) {i j : Fin N}
-    (hij : ¬ MPSTensor.cyclicWindowsOverlap N L i j)
-    (B C : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    embedLocalOperator (d := d) L N hLN i B *
-        embedLocalOperator (d := d) L N hLN j C =
-      embedLocalOperator (d := d) L N hLN j C *
-        embedLocalOperator (d := d) L N hLN i B := by
-  apply Matrix.mulVec_injective
-  funext v σ
-  rw [← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec]
-  rw [embedLocalOperator_mulVec_apply, embedLocalOperator_mulVec_apply]
-  simp_rw [embedLocalOperator_mulVec_apply]
-  simp_rw [extractWindow_replaceWindow_of_not_cyclicWindowsOverlap
-    (d := d) hLN hij]
-  simp_rw [extractWindow_replaceWindow_of_not_cyclicWindowsOverlap
-    (d := d) hLN (fun h ↦ hij ((MPSTensor.cyclicWindowsOverlap_comm N L j i).mp h))]
-  simp_rw [Finset.mul_sum]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr₂ fun β _ α _ ↦ ?_
-  rw [replaceWindow_commute_of_not_cyclicWindowsOverlap (d := d) hLN hij]
-  ring
+theorem disjoint_map_ringWindow_of_not_cyclicWindowsOverlap {L : ℕ} (hLN : L ≤ N)
+    {i j : Fin N} (hij : ¬ MPSTensor.cyclicWindowsOverlap N L i j) :
+    Disjoint (Finset.univ.map (ringWindow hLN i)) (Finset.univ.map (ringWindow hLN j)) := by
+  rw [Finset.disjoint_left]
+  intro k hki hkj
+  exact hij ⟨k, (MPSTensor.mem_cyclicWindowSupport_iff hLN i k).mpr
+      ((MPSTensor.mem_map_ringWindow_iff hLN i k).mp hki),
+    (MPSTensor.mem_cyclicWindowSupport_iff hLN j k).mpr
+      ((MPSTensor.mem_map_ringWindow_iff hLN j k).mp hkj)⟩
 
 /-- Chain-level commuting-form data for the simple-MPDO theorem.
 
 The current structure stores the translation-invariant two-site factor `B` together
 with chain-level commutativity of its translated copies. The intended
-nearest-neighbor support is encoded by `embedLocalOperator`; no separate
+nearest-neighbor support is encoded by placing the bond on the windows of two
+consecutive sites of the ring (`ManyBody.placeAlong`, `ManyBody.ringWindow`); no separate
 factorization structure is required later. -/
 structure CommutingFormData (d N : ℕ) where
   /-- The theorem only makes sense for genuine nearest-neighbor chains. -/
@@ -382,10 +202,10 @@ structure CommutingFormData (d N : ℕ) where
   /-- Pairwise commutativity of the translated factors on the `N`-site chain. -/
   bond_comm :
     ∀ i j : Fin N,
-      embedLocalOperator (d := d) 2 N hN i bond
-        * embedLocalOperator (d := d) 2 N hN j bond
-      = embedLocalOperator (d := d) 2 N hN j bond
-          * embedLocalOperator (d := d) 2 N hN i bond
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) bond
+        * placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) bond
+      = placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) bond
+          * placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) bond
 
 namespace CommutingFormData
 
@@ -394,15 +214,7 @@ variable {N : ℕ}
 /-- The translated copy of the local bond operator at site `i`. -/
 noncomputable def bondAt (data : CommutingFormData d N) (i : Fin N) :
     ChainOperator d N :=
-  embedLocalOperator (d := d) 2 N data.hN i data.bond
-
-@[simp] theorem bondAt_apply (data : CommutingFormData d N) (i : Fin N)
-    (σ τ : Fin N → Fin d) :
-    data.bondAt i σ τ =
-      if AgreesOutsideWindow (d := d) 2 data.hN i σ τ then
-        data.bond (MPSTensor.extractWindow 2 i σ) (MPSTensor.extractWindow 2 i τ)
-      else 0 :=
-  rfl
+  placeAlong (X := fun _ ↦ Fin d) (ringWindow data.hN i) data.bond
 
 /-- Any two translated copies of the local bond commute. -/
 theorem bondAt_comm (data : CommutingFormData d N) (i j : Fin N) :
@@ -509,10 +321,10 @@ structure GSNNCHData (d N : ℕ) where
   /-- The bond commutes with its translate by one site.
   Source: arXiv:1606.00608, Definition 4.8 and equation `rhoNCommv2`. -/
   neighboring_comm : ∀ x : Fin sectorCount,
-    embedLocalOperator (d := d) 2 N hN ⟨0, by omega⟩ (bond x) *
-        embedLocalOperator (d := d) 2 N hN ⟨1, by omega⟩ (bond x) =
-      embedLocalOperator (d := d) 2 N hN ⟨1, by omega⟩ (bond x) *
-        embedLocalOperator (d := d) 2 N hN ⟨0, by omega⟩ (bond x)
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨0, by omega⟩) (bond x) *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨1, by omega⟩) (bond x) =
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨1, by omega⟩) (bond x) *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN ⟨0, by omega⟩) (bond x)
 
 namespace GSNNCHData
 
@@ -521,7 +333,7 @@ variable {N : ℕ}
 /-- The translate `τ_i(B^(x))` of a sector bond. -/
 noncomputable def bondAt (data : GSNNCHData d N)
     (x : Fin data.sectorCount) (i : Fin N) : ChainOperator d N :=
-  embedLocalOperator (d := d) 2 N data.hN i (data.bond x)
+  placeAlong (X := fun _ ↦ Fin d) (ringWindow data.hN i) (data.bond x)
 
 /-- The periodic product of the translated bonds in sector `x`. -/
 noncomputable def sectorProduct (data : GSNNCHData d N)

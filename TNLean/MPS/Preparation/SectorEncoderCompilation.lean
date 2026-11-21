@@ -34,16 +34,16 @@ theorem exists_log_depth_sectorEncoder_conversion_of_block_approximation
     (happrox : ∀ (N : ℕ) [NeZero N], N₀ ≤ N → ∀ q : ℕ, L ≤ q → q ≤ N →
       (N : ℝ) * Real.exp (-(r * q)) ≤ 1 →
       ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
-        IsLocalCircuitOfDepth U T ∧ T ≤ C * q ∧
+        IsUnitaryCircuit (Geometry.ring N) T U ∧ T ≤ C * q ∧
         ‖U * sectorEncoder A N - sectorEncoder B N‖ ≤
           K * Real.sqrt ((N : ℝ) * Real.exp (-(r * q))))
     (hexact : ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
-        IsLocalCircuitOfDepth U T ∧ T ≤ C * N ∧
+        IsUnitaryCircuit (Geometry.ring N) T U ∧ T ≤ C * N ∧
         U * sectorEncoder A N = sectorEncoder B N) :
     ∃ c : ℝ, 0 < c ∧ ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
-        IsLocalCircuitOfDepth U T ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
+        IsUnitaryCircuit (Geometry.ring N) T U ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
         ‖U * sectorEncoder A N - sectorEncoder B N‖ ≤ ε := by
   have hK0 : 0 < K := zero_lt_one.trans_le hK
   have hs : 0 < r / 2 := by positivity

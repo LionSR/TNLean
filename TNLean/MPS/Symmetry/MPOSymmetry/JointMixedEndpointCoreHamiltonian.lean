@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointCoreEdges
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSpectatorGap
-import TNLean.MPS.ParentHamiltonian.Martingale.IsometricConjugationGap
+import QICLean.Analysis.IsometricConjugationGap
 
 /-!
 # The common ordered-pair core of the normalized joint constraint sum

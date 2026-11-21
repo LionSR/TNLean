@@ -40,32 +40,30 @@ theorem exists_calibrated_soft_terminal_node_energy_update
     {L q l u v r ell : ℕ} {ι : Type*} [Fintype ι]
     (hq : 0 < q) (hlu : l ≤ u) (huv : u ≤ v) (hvr : v ≤ r) (hrL : r ≤ L)
     (hleft : u - l ≤ 2 * ell) (hright : r - v ≤ 2 * ell)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (g : ℝ) (hg : 0 < g) (t Tcut : ℝ) (m D : ℕ)
     (hm : 2 ≤ m) (hD : 2 ≤ D)
     (ht : 156 + 2 * g ≤ t) (hTcut : 156 + 2 * g ≤ Tcut)
     (Delta : ℝ) (hDelta0 : 0 ≤ Delta) :
     let _ : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
-    let H := ∑ i, h i
+    let H := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues (minEigenvalue hH)
     let J := interval L l r
     let beta := fun _ : Fin L ↦ Fin q
-    let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let split := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
-    let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
       (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
     let coords := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+      (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
       (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
-    let P := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), h i
-    let M := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v), h i
+    let P := Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r))
+    let M := Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v))
     let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
     let y0 := ((ManyBody.cutEquiv (fun _ ↦ Fin q) J) sigma0).2
     let native := fun x : J → Fin q ↦
@@ -85,16 +83,16 @@ theorem exists_calibrated_soft_terminal_node_energy_update
       (M - (eM : ℂ) • 1).PosSemidef ∧
       ∃ (eLeft eRight : ℝ) (xLeft xRight : (Fin L → Fin q) → ℂ),
         star xLeft ⬝ᵥ xLeft = 1 ∧
-        aklvRegionalHamiltonians l u h 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
-        (aklvRegionalHamiltonians l u h 1 - (eLeft : ℂ) • 1).PosSemidef ∧
+        aklvRegionalHamiltonians l u Φ 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
+        (aklvRegionalHamiltonians l u Φ 1 - (eLeft : ℂ) • 1).PosSemidef ∧
         star xRight ⬝ᵥ xRight = 1 ∧
-        aklvRegionalHamiltonians v r h 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
-        (aklvRegionalHamiltonians v r h 1 - (eRight : ℂ) • 1).PosSemidef ∧
+        aklvRegionalHamiltonians v r Φ 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
+        (aklvRegionalHamiltonians v r Φ 1 - (eRight : ℂ) • 1).PosSemidef ∧
         ∀ (k : ℕ), l ≤ k → k ≤ r → ∀ p1 p2 : ℝ,
-          IsRegionalLowerEnergyEstimate h l k (49 / 16) p1 →
-          IsRegionalLowerEnergyEstimate h k r (49 / 16) p2 →
+          IsRegionalLowerEnergyEstimate Φ l k (49 / 16) p1 →
+          IsRegionalLowerEnergyEstimate Φ k r (49 / 16) p2 →
           let center := p1 + p2 - eLeft - eRight - 2
-          IsRegionalLowerEnergyEstimate h u v 10 center ∧
+          IsRegionalLowerEnergyEstimate Φ u v 10 center ∧
           eM - 10 ≤ center ∧ center ≤ eM ∧
           let R := P - M + (center : ℂ) • 1 +
             cfc (Real.softTruncation t m) (M - (center : ℂ) • 1)
@@ -130,11 +128,11 @@ theorem exists_calibrated_soft_terminal_node_energy_update
     budget Msoft tau rho loss hDelta htail
   obtain ⟨eP, eM, xP, xM, hxP, hPxP, hPmin, hxM, hMxM, hMmin, hterminal⟩ :=
     exists_calibrated_native_soft_terminal_compressed_energy_estimate (ι := ι)
-      hq hlu huv hvr hrL hleft hright h hs h0 h1 g hg t Tcut m D hm hD ht hTcut
+      hq hlu huv hvr hrL hleft hright Φ h0 h1 g hg t Tcut m D hm hD ht hTcut
       Delta hDelta0 hDelta htail
   obtain ⟨eLeft, eRight, xLeft, xRight, hxLeft, hLeft, hLeftMin,
     hxRight, hRight, hRightMin, hcenter⟩ :=
-    exists_regional_middle_center_of_child_estimates hq hlu huv hvr hrL h hs h0 h1
+    exists_regional_middle_center_of_child_estimates hq hlu huv hvr hrL Φ h0 h1
       eP eM xP xM hxP hPxP hPmin hxM hMxM hMmin
   refine ⟨eP, eM, xP, xM, hxP, hPxP, hPmin, hxM, hMxM, hMmin,
     eLeft, eRight, xLeft, xRight, hxLeft, hLeft, hLeftMin,

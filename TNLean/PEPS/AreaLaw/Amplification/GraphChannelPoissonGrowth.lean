@@ -34,6 +34,8 @@ set_option linter.mathlibStandardSet true
 open QuantumCircuit Matrix MeasureTheory
 open scoped BigOperators ENNReal NNReal Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 
+open ManyBody (graphPseudoEMetricSpace graphPseudoEMetricSpace_edist_toReal)
+
 namespace TNLean.PEPS.AreaLaw
 
 variable {q : ℕ} {ι κ Aux : Type*} [Fintype ι] [DecidableEq ι]

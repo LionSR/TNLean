@@ -162,9 +162,11 @@ theorem IsGInjective.regionParentHamiltonian_annihilates_torusGClosure
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hQ : ∀ i, IsRegionParentInteraction (groupBondTensor (torusIncidentSite a)) (R i) (Q i))
     (g h : G) (hgh : Commute g h) :
-    regionParentHamiltonian R Q *ᵥ
+    (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d) R Q).hamiltonian *ᵥ
       torusGClosure (width := width) (height := height) (leftRegularMatrix G) a g h = 0 := by
-  apply (regionParentHamiltonian_mulVec_eq_zero_iff R Q (fun i => (hQ i).1) _).mpr
+  apply (ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff
+    (Φ := ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d) R Q)
+    fun i ↦ ManyBody.posSemidef_place («X» := fun _ ↦ Fin _) (hQ i).1).mpr
   intro i
   exact ha.regionParent_annihilates_torusGClosure_of_isSimplyConnected
     (R i) (hR i) (hSC i) g h hgh (Q i) (hQ i)
@@ -181,7 +183,8 @@ theorem IsGInjective.span_torusGClosure_commuting_le_parentKernel
     (hQ : ∀ i, IsRegionParentInteraction (groupBondTensor (torusIncidentSite a)) (R i) (Q i)) :
     Submodule.span ℂ (Set.range (fun p : {p : G × G // Commute p.1 p.2} =>
       torusGClosure (width := width) (height := height) (leftRegularMatrix G) a p.1.1 p.1.2)) ≤
-      (Matrix.mulVecLin (regionParentHamiltonian R Q)).ker := by
+      (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d) R Q).hamiltonian).ker := by
   apply Submodule.span_le.mpr
   rintro ψ ⟨p, rfl⟩
   exact ha.regionParentHamiltonian_annihilates_torusGClosure R hR hSC Q hQ p.1.1 p.1.2 p.2
@@ -199,14 +202,16 @@ theorem IsGInjective.card_commutingPairConjugacyClass_le_finrank_parentKernel
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hQ : ∀ i, IsRegionParentInteraction (groupBondTensor (torusIncidentSite a)) (R i) (Q i)) :
     Nat.card (CommutingPairConjugacyClass G) ≤
-      Module.finrank ℂ (Matrix.mulVecLin (regionParentHamiltonian R Q)).ker := by
+      Module.finrank ℂ (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d) R Q).hamiltonian).ker := by
   classical
   have hr := range_torusGClosure_commuting_eq_range_torusGClosureClass
     (width := width) (height := height) (leftRegularMatrix G) a ha.invariant
   have hs : Submodule.span ℂ (Set.range (fun C : CommutingPairConjugacyClass G =>
       torusGClosureClass (width := width) (height := height)
         (leftRegularMatrix G) a ha.invariant C.1)) ≤
-      (Matrix.mulVecLin (regionParentHamiltonian R Q)).ker := by
+      (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d) R Q).hamiltonian).ker := by
     rw [← hr]
     exact ha.span_torusGClosure_commuting_le_parentKernel R hR hSC Q hQ
   have hc := ha.finrank_span_torusGClosureClass_commuting_of_isSemiRegular

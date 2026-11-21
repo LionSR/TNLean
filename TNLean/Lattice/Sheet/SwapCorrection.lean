@@ -247,8 +247,8 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {T E : Finset ι} 
 
 /-- The coordinates `threeSplit T E` on both sheets. -/
 abbrev threeSplit₂ : (ι → Fin q) × (ι → Fin q) ≃
-    (((T → Fin q) × (E → Fin q)) × (↥(T ∪ E)ᶜ → Fin q)) ×
-      (((T → Fin q) × (E → Fin q)) × (↥(T ∪ E)ᶜ → Fin q)) :=
+    (((T → Fin q) × (E → Fin q)) × ({v // v ∉ T ∪ E} → Fin q)) ×
+      (((T → Fin q) × (E → Fin q)) × ({v // v ∉ T ∪ E} → Fin q)) :=
   (threeSplit q T E h).prodCongr (threeSplit q T E h)
 
 /-- The buffer correction `D_U` of splitting data on the raw registers of the two sheets
@@ -269,15 +269,16 @@ set_option synthInstance.maxSize 512 in
 /-- In the coordinates `threeSplit T E` of both sheets, swapping the sheets at `T` exchanges the
 `T`-components. -/
 theorem sheetSwapOp_eq_submatrix :
-    sheetSwapOp q T = ((tSwapW (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)).toPEquiv.toMatrix :
-      Matrix _ _ ℂ).submatrix (threeSplit₂ h) (threeSplit₂ h) := by
+    sheetSwapOp q T =
+      ((tSwapW (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)).toPEquiv.toMatrix :
+        Matrix _ _ ℂ).submatrix (threeSplit₂ h) (threeSplit₂ h) := by
   have he : (threeSplit₂ h).symm.trans ((sheetSwap q T).trans (threeSplit₂ h)) =
-      tSwapW (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q) := by
+      tSwapW (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q) := by
     refine Equiv.ext fun w => ?_
     obtain ⟨⟨⟨t₁, e₁⟩, u₁⟩, ⟨⟨t₂, e₂⟩, u₂⟩⟩ := w
     have hE : ∀ v : E, (v : ι) ∉ T := fun v hv => Finset.disjoint_left.mp h hv v.2
-    have hU : ∀ v : ↥(T ∪ E)ᶜ, (v : ι) ∉ T := fun v hv =>
-      Finset.mem_compl.mp v.2 (Finset.mem_union_left E hv)
+    have hU : ∀ v : {v // v ∉ T ∪ E}, (v : ι) ∉ T := fun v hv =>
+      v.2 (Finset.mem_union_left E hv)
     refine Prod.ext (Prod.ext (Prod.ext ?_ ?_) ?_) (Prod.ext (Prod.ext ?_ ?_) ?_) <;>
       funext v <;> simp only [Equiv.trans_apply, Equiv.prodCongr_apply, Equiv.prodCongr_symm,
         Prod.map_fst, Prod.map_snd, threeSplit_apply_fst_fst, threeSplit_apply_fst_snd,
@@ -285,11 +286,11 @@ theorem sheetSwapOp_eq_submatrix :
     · rw [ite_eq_left v.2]; exact threeSplit_symm_apply_of_mem_left h _ _ _ v.2
     · rw [ite_eq_right (hE v)]; exact threeSplit_symm_apply_of_mem_right h _ _ _ v.2
     · rw [ite_eq_right (hU v)]
-      exact threeSplit_symm_apply_of_notMem h _ _ _ (Finset.mem_compl.mp v.2)
+      exact threeSplit_symm_apply_of_notMem h _ _ _ v.2
     · rw [ite_eq_left v.2]; exact threeSplit_symm_apply_of_mem_left h _ _ _ v.2
     · rw [ite_eq_right (hE v)]; exact threeSplit_symm_apply_of_mem_right h _ _ _ v.2
     · rw [ite_eq_right (hU v)]
-      exact threeSplit_symm_apply_of_notMem h _ _ _ (Finset.mem_compl.mp v.2)
+      exact threeSplit_symm_apply_of_notMem h _ _ _ v.2
   have hsub := toMatrix_toPEquiv_submatrix (sheetSwap q T) (threeSplit₂ h).symm
     (threeSplit₂ h).symm
   rw [Equiv.symm_symm, he] at hsub
@@ -309,9 +310,10 @@ theorem commute_sheetBufferCorrection (σ : SplittingData q T E)
   have hR := submatrix_symm_submatrix (R₁ ⊗ₖ R₂) (threeSplit₂ h).symm
   rw [Equiv.symm_symm] at hR
   have hform : (R₁ ⊗ₖ R₂).submatrix (threeSplit₂ h).symm (threeSplit₂ h).symm =
-      ((R₁' ⊗ₖ R₂') ⊗ₖ (1 : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-        ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)).submatrix (Equiv.prodProdProdComm _ _ _ _)
-        (Equiv.prodProdProdComm _ _ _ _) := by
+      ((R₁' ⊗ₖ R₂') ⊗ₖ
+        (1 : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+          (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)).submatrix
+        (Equiv.prodProdProdComm _ _ _ _) (Equiv.prodProdProdComm _ _ _ _) := by
     rw [← one_kronecker_one, ← kronecker_kronecker_eq_submatrix, ← hR₁', ← hR₂']
     rfl
   rw [← hR, hform, sheetBufferCorrection, bufferCorrection]

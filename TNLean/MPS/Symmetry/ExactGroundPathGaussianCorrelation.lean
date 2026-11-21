@@ -61,14 +61,15 @@ theorem ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound
   refine ⟨Δ, hΔ, ?_⟩
   intro γ hγ N _ hN A B X Y hX hY hA hB hXY hcenter q T a hq hT ha
   obtain ⟨E₀, hH, hline, hgap⟩ := hdata γ hγ N hN
-  have hne : ManyBody.groundSpace (interactionHamiltonian (P.interaction γ) hN) E₀ ≠ ⊥ := by
+  have hne : ManyBody.groundSpace
+      (Interaction.translationInvariant hN (P.interaction γ)).hamiltonian E₀ ≠ ⊥ := by
     rw [hline, Ne, Submodule.span_singleton_eq_bot]
     exact ((EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm.map_eq_zero_iff).not.mpr
       (Q.nonzero γ hγ N (by omega))
   apply ManyBody.norm_centered_ground_correlation_le_gaussian hq hΔ hT (by positivity)
     (by positivity) hH ((ManyBody.isGapped_iff_eigenvalues hH).mpr ⟨hne, hgap⟩) hline A B hcenter
   intro t
-  exact norm_interactionHamiltonian_commutator_le_exp_abs_of_disjoint hN (P.interaction γ)
+  exact norm_hamiltonian_translationInvariant_commutator_le_exp_abs_of_disjoint hN (P.interaction γ)
     (P.hermitian γ hγ) (P.norm_le_one γ hγ) A B X Y hX hY hA hB hXY a ha t
 
 /-- The physical gap bounds ordinary connected correlations of arbitrary

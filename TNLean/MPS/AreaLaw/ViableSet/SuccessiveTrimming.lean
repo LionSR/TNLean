@@ -67,7 +67,8 @@ theorem norm_successiveSchmidtTrim_le (m : ℕ) (ψ : EuclideanSpace ℂ (Fin L 
 Source: LVV13, `algo53.tex`, Lemma `l:trim2`, lines 544–553. -/
 theorem rank_cutMatrix_successiveSchmidtTrim_le (m : ℕ)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (j k : ℕ) :
-    (cutMatrix (successiveSchmidtTrim m ψ j) k).rank ≤ (cutMatrix ψ k).rank := by
+    (ManyBody.cutMatrix (leftBlock L k) (successiveSchmidtTrim m ψ j)).rank ≤
+      (ManyBody.cutMatrix (leftBlock L k) ψ).rank := by
   induction j with
   | zero => exact le_rfl
   | succ j ih =>
@@ -78,7 +79,7 @@ theorem rank_cutMatrix_successiveSchmidtTrim_le (m : ℕ)
 Source: LVV13, `algo53.tex`, Lemma `l:trim2` and Claim `c:trim`, lines 544–559. -/
 theorem rank_cutMatrix_successiveSchmidtTrim_le_of_le (m : ℕ)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) {j k : ℕ} (hk0 : 0 < k) (hkj : k ≤ j) :
-    (cutMatrix (successiveSchmidtTrim m ψ j) k).rank ≤ m := by
+    (ManyBody.cutMatrix (leftBlock L k) (successiveSchmidtTrim m ψ j)).rank ≤ m := by
   induction j with
   | zero => omega
   | succ j ih =>
@@ -101,7 +102,7 @@ Source: LVV13, `algo53.tex`, Lemma `l:trim1` and Claim `c:trim`, lines 531–559
 quadratic-radius correction stated in the module docstring. -/
 theorem norm_inner_sub_successiveSchmidtTrim_le (m : ℕ)
     (ψ v : EuclideanSpace ℂ (Fin L → Fin q)) (j D : ℕ)
-    (hv : ∀ k, 0 < k → k ≤ j → (cutMatrix v k).rank ≤ D) :
+    (hv : ∀ k, 0 < k → k ≤ j → (ManyBody.cutMatrix (leftBlock L k) v).rank ≤ D) :
     ‖⟪ψ - successiveSchmidtTrim m ψ j, v⟫_ℂ‖ ≤
       j * ‖ψ‖ * ‖v‖ * √((D : ℝ) / (m + 1)) := by
   induction j with
@@ -176,7 +177,7 @@ environment coordinates. Source: `algo53.tex`, Claim `c:trim`, lines 549–559. 
 theorem norm_inner_sub_columnwiseSchmidtTrim_le (m : ℕ)
     (u v : EuclideanSpace ℂ ((Fin L → Fin q) × β)) (D : ℕ)
     (hv : ∀ a k, 0 < k → k < L →
-      (cutMatrix (WithLp.toLp 2 fun x ↦ v (x, a)) k).rank ≤ D) :
+      (ManyBody.cutMatrix (leftBlock L k) (WithLp.toLp 2 fun x ↦ v (x, a))).rank ≤ D) :
     ‖⟪u - columnwiseSchmidtTrim m u, v⟫_ℂ‖ ≤
       (L - 1 : ℕ) * ‖u‖ * ‖v‖ * √((D : ℝ) / (m + 1)) := by
   classical

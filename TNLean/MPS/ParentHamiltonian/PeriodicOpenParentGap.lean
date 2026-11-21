@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ResidualCoverProjectionDefect
 import TNLean.MPS.ParentHamiltonian.Martingale.ResidueCoverGapLimit
-import TNLean.Algebra.OrthogonalKernelGap
+import QICLean.Analysis.OrthogonalKernelGap
 
 /-!
 # A periodic tensor has a uniform original-chain open-parent gap

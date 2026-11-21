@@ -20,7 +20,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (ambientDilation edgeBoundary planeDomainGraph planeDomainGraph_degree_le_four)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -61,40 +61,46 @@ private theorem physical_status_cut_bounds {Λ T : Finset (ℤ × ℤ)}
     (hU : ((positiveNear depth σ) ∆ positiveDepthPrefix A depth jN).card ≤ 3 * n * D)
     (hUY : ((positiveNearMiddle depth σ) ∆ positiveDepthPrefix A depth jF).card ≤
       3 * n * D) :
-    (edgeBoundary Λ (positiveNear depth σ)).card ≤ 20 * n * D ∧
-    (edgeBoundary Λ (positiveNearMiddle depth σ)).card ≤ 20 * n * D ∧
-    (edgeBoundary Λ (middle σ)).card ≤ 40 * n * D ∧
-    (edgeBoundary Λ (receiving σ false)).card ≤ 16 * n * D ∧
-    (edgeBoundary Λ (receiving σ true)).card ≤ 16 * n * D := by
+    (edgeBoundary (planeDomainGraph Λ) (positiveNear depth σ)).card ≤ 20 * n * D ∧
+    (edgeBoundary (planeDomainGraph Λ) (positiveNearMiddle depth σ)).card ≤ 20 * n * D ∧
+    (edgeBoundary (planeDomainGraph Λ) (middle σ)).card ≤ 40 * n * D ∧
+    (edgeBoundary (planeDomainGraph Λ) (receiving σ false)).card ≤ 16 * n * D ∧
+    (edgeBoundary (planeDomainGraph Λ) (receiving σ true)).card ≤ 16 * n * D := by
   have hbase (j : ℤ) (hj : j ≤ L) :
-      (edgeBoundary Λ (depthPrefix A depth j)).card ≤ 4 * n := by
+      (edgeBoundary (planeDomainGraph Λ) (depthPrefix A depth j)).card ≤ 4 * n := by
     simpa only [hdepth] using card_edgeBoundary_depthPrefix_le Λ T hT A hL hrows hclear hj
   have hpositive (j : ℤ) (hj : j ≤ L) :
-      (edgeBoundary Λ (positiveDepthPrefix A depth j)).card ≤ 8 * n := by
+      (edgeBoundary (planeDomainGraph Λ) (positiveDepthPrefix A depth j)).card ≤ 8 * n := by
     simpa only [hdepth] using
       card_edgeBoundary_positiveDepthPrefix_le Λ T hT A hL hrows hclear hj
   have hnD : n ≤ n * D := by simpa using Nat.mul_le_mul_left n hD
-  have hU' : (edgeBoundary Λ (positiveNear depth σ)).card ≤ 20 * n * D := by
-    have := card_edgeBoundary_le_add_four_mul_symmDiff Λ
-      (positiveNear depth σ) (positiveDepthPrefix A depth jN)
+  have hU' : (edgeBoundary (planeDomainGraph Λ) (positiveNear depth σ)).card ≤ 20 * n * D := by
+    have := ManyBody.card_edgeBoundary_le_add_mul_card_symmDiff
+      (planeDomainGraph_degree_le_four Λ)
+      (A := positiveNear depth σ) (B := positiveDepthPrefix A depth jN)
     have := hpositive jN hjN
     nlinarith
-  have hUY' : (edgeBoundary Λ (positiveNearMiddle depth σ)).card ≤ 20 * n * D := by
-    have := card_edgeBoundary_le_add_four_mul_symmDiff Λ
-      (positiveNearMiddle depth σ) (positiveDepthPrefix A depth jF)
+  have hUY' :
+      (edgeBoundary (planeDomainGraph Λ) (positiveNearMiddle depth σ)).card ≤ 20 * n * D := by
+    have := ManyBody.card_edgeBoundary_le_add_mul_card_symmDiff
+      (planeDomainGraph_degree_le_four Λ)
+      (A := positiveNearMiddle depth σ) (B := positiveDepthPrefix A depth jF)
     have := hpositive jF hjF
     nlinarith
   refine ⟨hU', hUY', ?_, ?_, ?_⟩
   · rw [middle_eq_positiveNearMiddle_sdiff_positiveNear depth σ hpos]
-    have := card_edgeBoundary_sdiff_le Λ (positiveNearMiddle depth σ) (positiveNear depth σ)
+    have := ManyBody.card_edgeBoundary_sdiff_le (G := planeDomainGraph Λ)
+      (A := positiveNearMiddle depth σ) (B := positiveNear depth σ)
     nlinarith
-  · have := card_edgeBoundary_le_add_four_mul_symmDiff Λ
-      (receiving σ false) (depthPrefix A depth jN)
+  · have := ManyBody.card_edgeBoundary_le_add_mul_card_symmDiff
+      (planeDomainGraph_degree_le_four Λ)
+      (A := receiving σ false) (B := depthPrefix A depth jN)
     have := hbase jN hjN
     nlinarith
-  · rw [receiving_far_eq_compl, edgeBoundary_compl]
-    have := card_edgeBoundary_le_add_four_mul_symmDiff Λ
-      (receiving σ false ∪ middle σ) (depthPrefix A depth jF)
+  · rw [receiving_far_eq_compl, ManyBody.edgeBoundary_compl]
+    have := ManyBody.card_edgeBoundary_le_add_mul_card_symmDiff
+      (planeDomainGraph_degree_le_four Λ)
+      (A := receiving σ false ∪ middle σ) (B := depthPrefix A depth jF)
     have := hbase jF hjF
     nlinarith
 
@@ -117,11 +123,15 @@ theorem state_cut_bounds_domainGraph
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) :
-    (edgeBoundary Λ (positiveNear S.depth (S.state h g))).card ≤ 20 * S.n * S.D ∧
-    (edgeBoundary Λ (positiveNearMiddle S.depth (S.state h g))).card ≤ 20 * S.n * S.D ∧
-    (edgeBoundary Λ (middle (S.state h g))).card ≤ 40 * S.n * S.D ∧
-    (edgeBoundary Λ (receiving (S.state h g) false)).card ≤ 16 * S.n * S.D ∧
-    (edgeBoundary Λ (receiving (S.state h g) true)).card ≤ 16 * S.n * S.D := by
+    (edgeBoundary (planeDomainGraph Λ) (positiveNear S.depth (S.state h g))).card ≤
+      20 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ) (positiveNearMiddle S.depth (S.state h g))).card ≤
+      20 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ) (middle (S.state h g))).card ≤ 40 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ) (receiving (S.state h g) false)).card ≤
+      16 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ) (receiving (S.state h g) true)).card ≤
+      16 * S.n * S.D := by
   have hb := S.prefix_uncertainty_rows h.1 g hn hk hr hDpos hD hL
   have ha := state_prefix_approximation_domainGraph hT S hgraph hdepth
     h g hn hk hr hDpos hD hL hrows
@@ -150,11 +160,16 @@ theorem oldChargeState_cut_bounds_domainGraph
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) :
-    (edgeBoundary Λ (positiveNear S.depth (S.oldChargeState h g))).card ≤ 20 * S.n * S.D ∧
-    (edgeBoundary Λ (positiveNearMiddle S.depth (S.oldChargeState h g))).card ≤ 20 * S.n * S.D ∧
-    (edgeBoundary Λ (middle (S.oldChargeState h g))).card ≤ 40 * S.n * S.D ∧
-    (edgeBoundary Λ (receiving (S.oldChargeState h g) false)).card ≤ 16 * S.n * S.D ∧
-    (edgeBoundary Λ (receiving (S.oldChargeState h g) true)).card ≤ 16 * S.n * S.D := by
+    (edgeBoundary (planeDomainGraph Λ) (positiveNear S.depth (S.oldChargeState h g))).card ≤
+      20 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ)
+      (positiveNearMiddle S.depth (S.oldChargeState h g))).card ≤ 20 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ) (middle (S.oldChargeState h g))).card ≤
+      40 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ) (receiving (S.oldChargeState h g) false)).card ≤
+      16 * S.n * S.D ∧
+    (edgeBoundary (planeDomainGraph Λ) (receiving (S.oldChargeState h g) true)).card ≤
+      16 * S.n * S.D := by
   have hb := S.prefix_uncertainty_rows h.1 g hn hk hr hDpos hD hL
   have ha := oldChargeState_prefix_approximation_domainGraph hT S hgraph hdepth
     h g hn hk hr hDpos hD hL hrows

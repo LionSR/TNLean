@@ -49,44 +49,36 @@ theorem parentInteractionES_eq_toEuclideanLin_parentMatrix
   rw [Matrix.toEuclideanLin_eq_toLin_orthonormal,
     parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix, Matrix.toLin_toMatrix]
 
-/-- A cyclic parent term is the matrix embedding of its local interaction.
-Source: arXiv:1010.3732, Section II.B, the local Hamiltonian sum. -/
-theorem localTerm_eq_toLin'_embedLocalOperator (A : MPSTensor d D)
+/-- A cyclic parent term is the matrix of its local interaction placed on the window of `L`
+consecutive sites starting at `i`. Source: arXiv:1010.3732, Section II.B, the local Hamiltonian
+sum. -/
+theorem localTerm_eq_toLin'_placeAlong_ringWindow (A : MPSTensor d D)
     {L N : ℕ} (hLN : L ≤ N) (i : Fin N) :
     localTerm A L N i = Matrix.toLin'
-      (MPOTensor.embedLocalOperator (d := d) L N hLN i
-        (LinearMap.toMatrix' (parentInteraction A L))) := by
-  classical
-  apply LinearMap.ext
-  intro v
-  funext σ
-  rw [localTerm_apply_of_le A L N hLN i, Matrix.toLin'_apply,
-    MPOTensor.embedLocalOperator_mulVec_apply]
-  symm
-  exact congrFun (LinearMap.congr_fun
-    (Matrix.toLin'_toMatrix' (parentInteraction A L))
-    (fun τ ↦ v (replaceWindow L hLN i σ τ))) (extractWindow L i σ)
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hLN i)
+        (LinearMap.toMatrix' (parentInteraction A L))) :=
+  localTerm_of_le A hLN i
 
-/-- Euclidean form of the embedded cyclic parent term. Source:
+/-- Euclidean form of the placed cyclic parent term. Source:
 arXiv:1010.3732, Section II.B, the local Hamiltonian sum. -/
-theorem localTermES_eq_toEuclideanLin_embedLocalOperator (A : MPSTensor d D)
+theorem localTermES_eq_toEuclideanLin_placeAlong_ringWindow (A : MPSTensor d D)
     {L N : ℕ} (hLN : L ≤ N) (i : Fin N) :
     localTermES A L i = Matrix.toEuclideanLin
-      (MPOTensor.embedLocalOperator L N hLN i
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hLN i)
         (LinearMap.toMatrix' (parentInteraction A L))) := by
-  rw [localTermES, localTerm_eq_toLin'_embedLocalOperator A hLN i]
+  rw [localTermES, localTerm_eq_toLin'_placeAlong_ringWindow A hLN i]
   rfl
 
 /-- The full periodic parent Hamiltonian is the Euclidean representative
-of the sum of embedded local parent matrices. Source: arXiv:1010.3732,
-Section II.B, the local Hamiltonian sum. -/
-theorem parentHamiltonianES_eq_toEuclideanLin_sum_embedLocalOperator
+of the Hamiltonian of the parent interaction on the ring, the sum of the placed local parent
+matrices. Source: arXiv:1010.3732, Section II.B, the local Hamiltonian sum. -/
+theorem parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow
     (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N) :
     parentHamiltonianES A L N = Matrix.toEuclideanLin
-      (∑ i : Fin N, MPOTensor.embedLocalOperator L N hLN i
+      (∑ i : Fin N, ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hLN i)
         (LinearMap.toMatrix' (parentInteraction A L))) := by
   rw [parentHamiltonianES_eq_sum_localTermES, map_sum]
-  simp_rw [localTermES_eq_toEuclideanLin_embedLocalOperator A hLN]
+  simp_rw [localTermES_eq_toEuclideanLin_placeAlong_ringWindow A hLN]
 
 /-- The matrix of a canonical parent interaction is an orthogonal projection.
 Source: arXiv:1010.3732, Section II.B, the choice of the local term as a projector. -/

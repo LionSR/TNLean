@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.GHZSeedCircuit
 import TNLean.MPS.Preparation.PolarFrame
-import TNLean.Circuit.CoherentEncoder
+import QICLean.Circuit.Compile.ImageReflection
 
 /-!
 # Canonical sector encoders and coherent block encoders
@@ -23,8 +23,8 @@ isometry on all logical amplitudes, without separate circuits or phase choices b
 
 * `MPSTensor.sectorEncoder` is the polar encoder of the actual sector vectors.
 * `MPSPreparation.isIsometry_registerEncoder` identifies the common isometric seed.
-* `MPSPreparation.exists_isLocalCircuitOfDepth_registerEncoder` implements the whole block
-  encoder by one genuine local unitary with a uniform linear block-length bound.
+* `MPSPreparation.exists_isUnitaryCircuit_registerEncoder` implements the whole block
+  encoder by one unitary circuit with a uniform linear block-length bound.
 * `MPSPreparation.norm_sectorEncoder_conversion_le` converts the fixed polar endpoints from
   phase-sensitive Gram and cross estimates, with one unitary for every logical input.
 
@@ -151,7 +151,7 @@ theorem mul_registerEncoder_eq_blockIsometryEncoder {D : ℕ}
 /-- One genuine local circuit implements the full block encoder from the common seed.
 The constant is chosen before the tensor, pair vectors, partition, and logical amplitudes.
 No preparation cost for the seed is included. -/
-theorem exists_isLocalCircuitOfDepth_registerEncoder
+theorem exists_isUnitaryCircuit_registerEncoder
     {D : ℕ} {r : ℕ} (hr : 2 ≤ r) {dig : Fin D → Cfg d r} (hdig : Function.Injective dig)
     {dig₀ : Fin b → Cfg d r} (hdig₀ : Function.Injective dig₀) (hD : 0 < D) :
     ∃ C : ℕ, ∀ (A : MPSTensor d D) (S : Finset (Fin D × Fin D))
@@ -162,10 +162,10 @@ theorem exists_isLocalCircuitOfDepth_registerEncoder
         ∀ hℓ : ∀ k, 3 * r ≤ ℓ k, (∀ k, ℓ k ≤ L) →
         (∀ k, IsInjectiveOn (blockTensor A (ℓ k)) (S : Set (Fin D × Fin D))) →
         ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
-          IsLocalCircuitOfDepth U T ∧ T ≤ C * L ∧
+          IsUnitaryCircuit (Geometry.ring N) T U ∧ T ≤ C * L ∧
           U * registerEncoder hN (fun k => by have := hℓ k; omega) dig₀ =
             blockIsometryEncoder A ω hN ∧ (blockIsometryEncoder A ω hN).IsIsometry := by
-  obtain ⟨C, hC⟩ := exists_isLocalCircuitOfDepth_registerCfg_of_isInjectiveOn hr hdig hdig₀ hD
+  obtain ⟨C, hC⟩ := exists_isUnitaryCircuit_registerCfg_of_isInjectiveOn hr hdig hdig₀ hD
   refine ⟨C, fun A S ω hω hωS M _ ℓ N _ hN L hℓ hL hinj => ?_⟩
   obtain ⟨U, T, hU, hT, hj⟩ := hC A S ω hω hωS ℓ hN L hℓ hL hinj
   have heq := mul_registerEncoder_eq_blockIsometryEncoder hN
@@ -174,13 +174,14 @@ theorem exists_isLocalCircuitOfDepth_registerEncoder
   rw [← heq]
   change (U * registerEncoder hN _ dig₀)ᴴ * (U * registerEncoder hN _ dig₀) = 1
   rw [Matrix.conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_assoc Uᴴ,
-    (show Uᴴ * U = 1 from Unitary.star_mul_self_of_mem hU.mem_unitary), Matrix.one_mul]
+    (show Uᴴ * U = 1 from mem_unitaryGroup_iff'.mp hU.mem_unitaryGroup), Matrix.one_mul]
   exact isIsometry_registerEncoder hN _ hdig₀
 
 section Conversion
 
-variable [NeZero N] {DA DB : Fin b → ℕ}
+variable {DA DB : Fin b → ℕ}
 
+omit [NeZero d] in
 /-- Phase-sensitive Gram and cross estimates give coherent conversion of the fixed canonical
 sector encoders. This finite-length statement does not yet assert logarithmic depth or
 supply the quantitative estimates from transfer spectra. -/
@@ -189,20 +190,21 @@ theorem norm_sectorEncoder_conversion_le
     (hA : Function.Injective (sectorColumnMatrix A N).mulVec)
     (hB : Function.Injective (sectorColumnMatrix B N).mulVec)
     {UA UB : Matrix (Cfg d N) (Cfg d N) ℂ} {TA TB : ℕ}
-    (hUA : IsLocalCircuitOfDepth UA TA) (hUB : IsLocalCircuitOfDepth UB TB)
+    (hUA : IsUnitaryCircuit (Geometry.ring N) TA UA)
+    (hUB : IsUnitaryCircuit (Geometry.ring N) TB UB)
     (J : Matrix (Cfg d N) (Fin b) ℂ) (hJ : J.IsIsometry)
     {ηA ζA ηB ζB : ℝ}
     (hηA : ‖(sectorColumnMatrix A N)ᴴ * sectorColumnMatrix A N - 1‖ ≤ ηA)
     (hζA : ‖(UA * J)ᴴ * sectorColumnMatrix A N - 1‖ ≤ ζA)
     (hηB : ‖(sectorColumnMatrix B N)ᴴ * sectorColumnMatrix B N - 1‖ ≤ ηB)
     (hζB : ‖(UB * J)ᴴ * sectorColumnMatrix B N - 1‖ ≤ ζB) :
-    IsLocalCircuitOfDepth (UB * UAᴴ) (TA + TB) ∧
+    IsUnitaryCircuit (Geometry.ring N) (TA + TB) (UB * UAᴴ) ∧
       ‖UB * UAᴴ * sectorEncoder A N - sectorEncoder B N‖ ≤
         (Real.sqrt (ηA + 2 * ζA) + ηA) + (Real.sqrt (ηB + 2 * ζB) + ηB) := by
   have hWA : (UA * J).IsIsometry := Matrix.IsIsometry.mul _ _
-    (show UA.IsIsometry from Unitary.star_mul_self_of_mem hUA.mem_unitary) hJ
+    (show UA.IsIsometry from mem_unitaryGroup_iff'.mp hUA.mem_unitaryGroup) hJ
   have hWB : (UB * J).IsIsometry := Matrix.IsIsometry.mul _ _
-    (show UB.IsIsometry from Unitary.star_mul_self_of_mem hUB.mem_unitary) hJ
+    (show UB.IsIsometry from mem_unitaryGroup_iff'.mp hUB.mem_unitaryGroup) hJ
   have hFA := Matrix.norm_polarIso_sub_isometry_le (sectorColumnMatrix A N) hA hWA
   have hFB := Matrix.norm_polarIso_sub_isometry_le (sectorColumnMatrix B N) hB hWB
   have hFA' : ‖sectorEncoder A N - UA * J‖ ≤ Real.sqrt (ηA + 2 * ζA) + ηA := by

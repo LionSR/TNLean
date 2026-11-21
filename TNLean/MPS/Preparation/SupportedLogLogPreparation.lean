@@ -57,7 +57,8 @@ theorem exists_log_log_preparation_of_supported_block_approximation
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N → admissible N →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧
         (T : ℝ) ≤ c * Real.log (Real.log (N / ε) + 1) ∧
-        IsPreparedWithMeasurementRoundsInDepth T (fun x => ψ x) ∧
+        (∃ v : Fin N → Fin d → ℂ,
+          IsMeasurementConversion (Geometry.ring N) T (fun σ ↦ ∏ i, v i (σ i)) (fun x => ψ x)) ∧
         1 - ‖⟪ψ, target N⟫_ℂ‖ ≤ ε := by
   classical
   have hd0 : 0 < d := by omega
@@ -176,9 +177,7 @@ theorem exists_log_log_preparation_of_supported_block_approximation
         simpa only [Fin.sum_univ_one, one_mul, heq] using hp
     · have hψ := htarget N hvalid
       refine ⟨target N, Ks, hψ, hc _ (Or.inr le_rfl),
-        isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth
-          (isPreparedWithMeasurementsInDepth_of_isPreparedInDepth
-            (hKs N hN (by omega) _ hψ) fun h' => ?_), hself⟩
+        (hKs N hN (by omega) _ hψ).exists_isMeasurementConversion fun h' => ?_, hself⟩
       have : target N = 0 := by
         ext x; exact congrFun h' x
       rw [this, norm_zero] at hψ

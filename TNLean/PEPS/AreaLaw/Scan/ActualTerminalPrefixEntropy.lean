@@ -25,7 +25,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -48,7 +48,7 @@ private theorem abs_entropy_sub_le_of_nested
     intro x hx
     exact Finset.mem_symmDiff.mpr (Or.inl (Finset.mem_sdiff.mp hx))
   have hc : (T \ R).card ≤ b := (Finset.card_le_card hdiff).trans hcard
-  have h := abs_regionalEntropy_union_sub_le Λ q Ω hΩ R (T \ R)
+  have h := abs_regionEntropy_union_sub_le Λ q Ω hΩ R (T \ R)
     disjoint_sdiff_self_right
   rw [hunion] at h
   exact h.trans ((ManyBody.regionEntropy_le_card_mul_log hΩ (T \ R)).trans

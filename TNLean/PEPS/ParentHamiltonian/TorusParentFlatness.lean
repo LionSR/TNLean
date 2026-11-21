@@ -100,13 +100,15 @@ theorem IsGInjective.torusPlaquetteHolonomy_eq_one_of_parentHamiltonian_annihila
     (hQ : ∀ v, IsRegionParentInteraction (groupBondTensor (torusIncidentSite a))
       (torusPlaquetteRegion v) (Q v))
     (hne : stateCoeff (groupBondTensor (regularTwistedSite (torusIncidentSite a) u)) ≠ 0)
-    (hground : regionParentHamiltonian torusPlaquetteRegion Q *ᵥ
+    (hground : (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+        torusPlaquetteRegion Q).hamiltonian *ᵥ
       stateCoeff (groupBondTensor (regularTwistedSite (torusIncidentSite a) u)) = 0) :
     ∀ v : X, regularWalkHolonomy u (torusPlaquetteWalk v) = 1 := by
   intro v
   exact ha.torusPlaquetteHolonomy_eq_one_of_parent_annihilates v u (Q v) (hQ v) hne
-    ((regionParentHamiltonian_mulVec_eq_zero_iff torusPlaquetteRegion Q
-      (fun w => (hQ w).1) _).mp hground v)
+    ((ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff
+      (Φ := ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d) torusPlaquetteRegion Q)
+      fun w ↦ ManyBody.posSemidef_place («X» := fun _ ↦ Fin _) (hQ w).1).mp hground v)
 
 omit [Fintype G] [DecidableEq G] in
 /-- Identity plaquette holonomy is precisely equality of the two elementary
@@ -144,7 +146,8 @@ theorem IsGInjective.isTorusFlat_of_parentHamiltonian_annihilates_twistedState
     (hQ : ∀ v, IsRegionParentInteraction (groupBondTensor (torusIncidentSite a))
       (torusPlaquetteRegion v) (Q v))
     (hne : stateCoeff (groupBondTensor (regularTwistedSite (torusIncidentSite a) u)) ≠ 0)
-    (hground : regionParentHamiltonian torusPlaquetteRegion Q *ᵥ
+    (hground : (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+        torusPlaquetteRegion Q).hamiltonian *ᵥ
       stateCoeff (groupBondTensor (regularTwistedSite (torusIncidentSite a) u)) = 0) :
     IsTorusFlat (fun v => regularDirectedTransport u (torusGraph_adj_right v.1 v.2))
       (fun v => regularDirectedTransport u (torusGraph_adj_up v.1 v.2)) := by

@@ -50,7 +50,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
         TNLean.PEPS.AreaLaw.le_of_mem_boxEntropyValues,
         TNLean.PEPS.AreaLaw.bddAbove_boxEntropyValues,
         TNLean.PEPS.AreaLaw.nonneg_of_mem_boxEntropyValues,
-        TNLean.PEPS.AreaLaw.regionalEntropy_le_boxEntropy}
+        TNLean.PEPS.AreaLaw.regionEntropy_le_boxEntropy}
     Every rectangle safe at threshold $D_1$ (Definition~\ref{def:area_law_safe_rectangle})
     is safe at threshold $D_0$, shrinking the set in the supremum.
 \end{proof}
@@ -93,7 +93,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
 
 \begin{lemma}[Averaged entropy chain rule]
     \label{thm:area_law_rotated_chain_rule}
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_biUnion_le_rotations}
+    \lean{TNLean.PEPS.AreaLaw.regionEntropy_biUnion_le_rotations}
     \leanok
     \uses{def:area_law_ground_entropy}
     Let $\Omega$ be a unit vector, write $S=S_\Omega$, and let $X_i$ be
@@ -108,7 +108,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
 \end{lemma}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.sum_sub_filter_key_eq,
-        TNLean.PEPS.AreaLaw.regionalEntropy_cond_anti}
+        Entropy.regionEntropy_cond_anti}
     Ordering the regions by each of the $N$ cyclic color rotations and applying
     the chain rule bounds each term by $S(X_i)$, and by
     $S(X_i\mid T_i)\le S(X_i)/2+\beta$ for $i\in G$ in the rotation placing the
@@ -118,7 +118,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
 
 \begin{lemma}[Scale recurrence at integer clearance]
     \label{thm:area_law_box_recurrence}
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_rectRegion_le_of_children,
+    \lean{TNLean.PEPS.AreaLaw.regionEntropy_rectRegion_le_of_children,
         TNLean.PEPS.AreaLaw.boxEntropy_le_of_scale}
     \leanok
     \uses{thm:area_law_initial_buffer, def:area_law_box_entropy}
@@ -196,7 +196,7 @@ Lemmas~\ref{thm:arealaw-physical-safe-rectangle-real} and
 
 \begin{lemma}[Uniform entropy of physical safe rectangles]
     \label{thm:area_law_initial_safe_rectangle_entropy}
-    \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_rpow}
+    \lean{TNLean.PEPS.AreaLaw.exists_regionEntropy_safe_rect_le_rpow}
     \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_hamiltonian,
         def:area_law_ground_entropy}

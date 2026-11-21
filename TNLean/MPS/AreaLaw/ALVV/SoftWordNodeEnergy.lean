@@ -38,9 +38,9 @@ original regional Hamiltonian. The minimum is certified by an attained unit
 eigenvector and a positive spectral shift. Auxiliary to ALVV,
 arXiv:1602.08828v2, Figure `fig:algo1`, line 1631. -/
 def IsRegionalLowerEnergyEstimate {L q : ℕ}
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (l r : ℕ) (width p : ℝ) : Prop :=
-  let A := aklvRegionalHamiltonians l r h 1
+  let A := aklvRegionalHamiltonians l r Φ 1
   ∃ (e : ℝ) (x : (Fin L → Fin q) → ℂ),
     star x ⬝ᵥ x = 1 ∧ A *ᵥ x = (e : ℂ) • x ∧
     (A - (e : ℂ) • 1).PosSemidef ∧ e - width ≤ p ∧ p ≤ e
@@ -52,15 +52,15 @@ its minimum is known. Auxiliary to ALVV, arXiv:1602.08828v2, Figure
 `fig:algo1`, line 1631; the downward bias is a corrected one-sided update. -/
 def IsSoftWordEnergyUpdate {L q N l k u v r : ℕ} (hq : 0 < q)
     (hlk : l ≤ k) (hkr : k ≤ r)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (F : Fin N → EuclideanSpace ℂ (interval L l r → Fin q) →L[ℂ]
       EuclideanSpace ℂ (interval L l r → Fin q))
     (S1 : Submodule ℂ (EuclideanSpace ℂ (interval L l k → Fin q)))
     (S2 : Submodule ℂ (EuclideanSpace ℂ (interval L k r → Fin q)))
     (center p : ℝ) : Prop :=
   let J := interval L l r
-  let P := aklvRegionalHamiltonians l r h 1
-  let M := aklvRegionalHamiltonians u v h 1
+  let P := aklvRegionalHamiltonians l r Φ 1
+  let M := aklvRegionalHamiltonians u v Φ 1
   let R := P - M + (center : ℂ) • 1 +
     cfc (Real.softTruncation 768 12) (M - (center : ℂ) • 1)
   let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
@@ -87,25 +87,25 @@ three. Corrected auxiliary to ALVV, arXiv:1602.08828v2, Figure
 `fig:algo1`, line 1631. -/
 def HasSoftWordNodeEnergyUpdate {L q N l k u v r : ℕ} (hq : 0 < q)
     (hlk : l ≤ k) (hkr : k ≤ r)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (F : Fin N → EuclideanSpace ℂ (interval L l r → Fin q) →L[ℂ]
       EuclideanSpace ℂ (interval L l r → Fin q))
     (S1 : Submodule ℂ (EuclideanSpace ℂ (interval L l k → Fin q)))
     (S2 : Submodule ℂ (EuclideanSpace ℂ (interval L k r → Fin q))) : Prop :=
 ∃ (eLeft eRight : ℝ) (xLeft xRight : (Fin L → Fin q) → ℂ),
         star xLeft ⬝ᵥ xLeft = 1 ∧
-        aklvRegionalHamiltonians l u h 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
-        (aklvRegionalHamiltonians l u h 1 - (eLeft : ℂ) • 1).PosSemidef ∧
+        aklvRegionalHamiltonians l u Φ 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
+        (aklvRegionalHamiltonians l u Φ 1 - (eLeft : ℂ) • 1).PosSemidef ∧
         star xRight ⬝ᵥ xRight = 1 ∧
-        aklvRegionalHamiltonians v r h 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
-        (aklvRegionalHamiltonians v r h 1 - (eRight : ℂ) • 1).PosSemidef ∧
+        aklvRegionalHamiltonians v r Φ 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
+        (aklvRegionalHamiltonians v r Φ 1 - (eRight : ℂ) • 1).PosSemidef ∧
         ∀ p1 p2 : ℝ,
-          IsRegionalLowerEnergyEstimate h l k (49 / 16) p1 →
-          IsRegionalLowerEnergyEstimate h k r (49 / 16) p2 →
-          IsRegionalLowerEnergyEstimate h u v 10
+          IsRegionalLowerEnergyEstimate Φ l k (49 / 16) p1 →
+          IsRegionalLowerEnergyEstimate Φ k r (49 / 16) p2 →
+          IsRegionalLowerEnergyEstimate Φ u v 10
             (p1 + p2 - eLeft - eRight - 2) ∧
-          ∃ p : ℝ, IsRegionalLowerEnergyEstimate h l r (49 / 16) p ∧
-            IsSoftWordEnergyUpdate (u := u) (v := v) hq hlk hkr h F S1 S2
+          ∃ p : ℝ, IsRegionalLowerEnergyEstimate Φ l r (49 / 16) p ∧
+            IsSoftWordEnergyUpdate (u := u) (v := v) hq hlk hkr Φ F S1 S2
               (p1 + p2 - eLeft - eRight - 2) p
 
 /-- Fixed spaces and their own word-family certificate yield a one-sided
@@ -120,15 +120,13 @@ theorem exists_soft_word_node_energy_update
     (hq : 0 < q) (hlu : l ≤ u) (huv : u ≤ v) (hvr : v ≤ r) (hrL : r ≤ L)
     (hleft : u - l ≤ 2 * ell) (hright : r - v ≤ 2 * ell)
     (hell : 21 ≤ ell) (hD : 2 ≤ D) (hcount : 50 * ell ^ 2 ≤ D) (hsample : 1 ≤ s)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (T : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q)))
     (F : Fin N → EuclideanSpace ℂ (interval L l r → Fin q) →L[ℂ]
       EuclideanSpace ℂ (interval L l r → Fin q)) :
     let _ : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
-    let H := ∑ i, h i
+    let H := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues (minEigenvalue hH)
@@ -154,7 +152,7 @@ theorem exists_soft_word_node_energy_update
       Submodule.IsViable (3 / 200 : ℝ) S2
         (G.map (Entropy.regionTensorCoordinates q
           (interval L k r)).toLinearEquiv.toLinearMap) →
-      HasSoftWordNodeEnergyUpdate (u := u) (v := v) hq hlk hkr h F S1 S2 := by
+      HasSoftWordNodeEnergyUpdate (u := u) (v := v) hq hlk hkr Φ F S1 S2 := by
   classical
   intro config H hH G J coords a tau Delta loss hdimT hGT hword
     k hlk hkr S1 S2 hS1 hS2
@@ -162,23 +160,23 @@ theorem exists_soft_word_node_energy_update
   obtain ⟨hrho0, hrho, eP, eM, xP, xM, hxP, hPxP, hPmin,
     hxM, hMxM, hMmin, hsoft⟩ :=
     exists_native_soft_word_compressed_energy_estimate hq hlu huv hvr hrL
-      hleft hright hell hD hcount hsample h hs h0 h1 T F hdimT hGT hword
+      hleft hright hell hD hcount hsample Φ h0 h1 T F hdimT hGT hword
   obtain ⟨eLeft, eMiddle, eRight, eParent, xLeft, xMiddle, xRight, xParent,
     hxLeft, hLeft, hLeftMin, hxMiddle, hMiddle, hMiddleMin,
     hxRight, hRight, hRightMin, hxParent, hParent, hParentMin,
     _hThreeLower, _hThreeUpper, hcenter⟩ :=
-    exists_regional_central_energy_estimate hq hlu huv hvr hrL h hs h0 h1
+    exists_regional_central_energy_estimate hq hlu huv hvr hrL Φ h0 h1
   have heP : eP = eParent := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians l r h 1) eP eParent xP xParent
+    (aklvRegionalHamiltonians l r Φ 1) eP eParent xP xParent
     hPxP hxP hParent hxParent hPmin hParentMin
   have heM : eM = eMiddle := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians u v h 1) eM eMiddle xM xMiddle
+    (aklvRegionalHamiltonians u v Φ 1) eM eMiddle xM xMiddle
     hMxM hxM hMiddle hxMiddle hMmin hMiddleMin
   obtain ⟨eA, eB, eMerge, x, z, hx, hAx, hBx, hAmin, hBmin,
     hz, hMerge, hMergeMin, hMergeLower, hMergeUpper, _⟩ :=
-    exists_adjacent_interval_energy_merge hq hlk hkr hrL h hs h0 h1
+    exists_adjacent_interval_energy_merge hq hlk hkr hrL Φ h0 h1
   have heMerge : eMerge = eParent := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians l r h 1) eMerge eParent z xParent
+    (aklvRegionalHamiltonians l r Φ 1) eMerge eParent z xParent
     hMerge hz hParent hxParent hMergeMin hParentMin
   refine ⟨eLeft, eRight, xLeft, xRight, hxLeft, hLeft, hLeftMin,
     hxRight, hRight, hRightMin, ?_⟩
@@ -186,9 +184,9 @@ theorem exists_soft_word_node_energy_update
   obtain ⟨e1, y1, hy1, hAy1, hA1min, hp1l, hp1u⟩ := hp1
   obtain ⟨e2, y2, hy2, hBy2, hB2min, hp2l, hp2u⟩ := hp2
   have he1 : e1 = eA := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians l k h 1) e1 eA y1 x hAy1 hy1 hAx hx hA1min hAmin
+    (aklvRegionalHamiltonians l k Φ 1) e1 eA y1 x hAy1 hy1 hAx hx hA1min hAmin
   have he2 : e2 = eB := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians k r h 1) e2 eB y2 x hBy2 hy2 hBx hx hB2min hBmin
+    (aklvRegionalHamiltonians k r Φ 1) e2 eB y2 x hBy2 hy2 hBx hx hB2min hBmin
   have hsumLower : eParent - 8 ≤ p1 + p2 := by
     linarith only [hMergeUpper, heMerge, he1, he2, hp1l, hp2l]
   have hsumUpper : p1 + p2 ≤ eParent := by

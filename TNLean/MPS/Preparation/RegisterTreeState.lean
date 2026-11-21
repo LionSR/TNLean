@@ -590,7 +590,7 @@ theorem regTreeOp_apply_regRegisterCfg (h2 : Kraus.IsInjective (blockTensor B 2)
         (fun e => treeAmp j (regLayer B (k - 1 - j)) (fun m => regLayer B (k - j + m)) e x) 0 y
   | 0, hk, y => by
     rw [regTreeOp, regTreeOp, Matrix.mul_one, regLevelOp,
-      list_prod_embedOp_placeCfg (regWindow_injective₂ (Nat.zero_le k)) _
+      list_prod_placeAlong_placeCfg (regWindow_injective₂ (Nat.zero_le k)) _
         (fun p => regInput dig enc 0 p) (fun _ => coarseOutput enc)
         (fun _ => coarseOutput_injective henc) (fun _ => regLayer B (k - 1 - 0))
         (fun p c z => regTreeGate_apply_of_lt h2 hdig henc hk p c z) (fun _ => x) y]
@@ -610,7 +610,7 @@ theorem regTreeOp_apply_regRegisterCfg (h2 : Kraus.IsInjective (blockTensor B 2)
       simp only [e1, e2]
     · intro e y
       rw [regRegisterCfg_eq_placeCfg dig enc (show j + 1 ≤ k by omega) e, regLevelOp]
-      exact list_prod_embedOp_placeCfg (regWindow_injective₂ (by omega)) _
+      exact list_prod_placeAlong_placeCfg (regWindow_injective₂ (by omega)) _
         (fun p => regInput dig enc (j + 1) p) (fun _ => coarseOutput enc)
         (fun _ => coarseOutput_injective henc) (fun _ => regLayer B (k - 1 - (j + 1)))
         (fun p c z => regTreeGate_apply_of_lt h2 hdig henc hk p c z) (unpair e) y
@@ -627,7 +627,7 @@ theorem regTreeOp_apply_regLeafCfg (h2 : Kraus.IsInjective (blockTensor B 2))
   cases k with
   | zero =>
     rw [regTreeOp, regTreeOp, Matrix.mul_one, regLevelOp,
-      list_prod_embedOp_placeCfg (regWindow_injective₂ le_rfl) _
+      list_prod_placeAlong_placeCfg (regWindow_injective₂ le_rfl) _
         (fun p => regInput dig enc 0 p) (fun _ => fineOutput) (fun _ => fineOutput_bijective.1)
         (fun _ => polarIsoMatrix (blockTensor B 2))
         (fun p c z => regTreeGate_apply_of_le h2 hdig henc le_rfl p c z) (fun _ => x) y]
@@ -647,7 +647,7 @@ theorem regTreeOp_apply_regLeafCfg (h2 : Kraus.IsInjective (blockTensor B 2))
       simp only [e1, e2]
     · intro e y
       rw [regRegisterCfg_eq_placeCfg dig enc (show k + 1 ≤ k + 1 from le_rfl) e, regLevelOp]
-      exact list_prod_embedOp_placeCfg (regWindow_injective₂ le_rfl) _
+      exact list_prod_placeAlong_placeCfg (regWindow_injective₂ le_rfl) _
         (fun p => regInput dig enc (k + 1) p) (fun _ => fineOutput)
         (fun _ => fineOutput_bijective.1) (fun _ => polarIsoMatrix (blockTensor B 2))
         (fun p c z => regTreeGate_apply_of_le h2 hdig henc le_rfl p c z) (unpair e) y

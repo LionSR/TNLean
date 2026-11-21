@@ -85,19 +85,17 @@ and Theorem `t:ais`, lines 1010–1024. -/
 theorem exists_five_region_independent_truncation_residual
     (L q a b ell : ℕ) (t : ℝ) (hq : 0 < q) (hell : 1 ≤ ell) (ht0 : 0 ≤ t)
     (hab : a + 2 * ell ≤ b + 1) (hbL : b + 2 * ell ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let I : Fin 5 → Finset (Fin (L - 1)) := fun j ↦
       Finset.univ.filter (fun i ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-      fun j ↦ ∑ i ∈ I j, h i
+      fun j ↦ ∑ i ∈ I j, Φ.term i
     let J : Finset (Fin (L - 1)) := Finset.univ.filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ J, h i
+    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ J, Φ.term i
     ∃ (e : Fin 5 → ℝ) (E0 : ℝ) (x z : (Fin L → Fin q) → ℂ),
       let S := ∑ j, e j
       let B : Finset (Fin 5) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
@@ -109,7 +107,7 @@ theorem exists_five_region_independent_truncation_residual
       star x ⬝ᵥ x = 1 ∧
       (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
-      B ∅ = (∑ i, h i) - (S : ℂ) • 1 ∧
+      B ∅ = Φ.hamiltonian - (S : ℂ) • 1 ∧
       star z ⬝ᵥ z = 1 ∧ B ∅ *ᵥ z = (E0 : ℂ) • z ∧
       (B ∅ - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 4 ∧
       ‖B K‖ ≤ 3 * t + 4 * (ell : ℝ) ∧
@@ -125,7 +123,7 @@ theorem exists_five_region_independent_truncation_residual
   have h34 : b + 1 ≤ b + 2 * ell := by omega
   obtain ⟨hk, hR, hAs, hAcap, hY, hYC, hJ, hH⟩ :=
     five_region_original_bond_data L q (a + 1) (a + 2 * ell) (b + 1)
-      (b + 2 * ell) h12 hab h34 hbL h hs h0 h1
+      (b + 2 * ell) h12 hab h34 hbL Φ h0 h1
   let R : Fin 5 → Finset (Fin L) := fun j ↦ interval L (k j.castSucc) (k j.succ)
   have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hxunit, hx, hlo, hclip⟩ :=
@@ -141,7 +139,7 @@ theorem exists_five_region_independent_truncation_residual
   have hsumc : (∑ j, (e j : ℂ) •
       (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)) = (S : ℂ) • 1 := by
     simp only [Complex.coe_smul, ← Finset.sum_smul, S]
-  have hcenter : B ∅ = (∑ i, h i) - (S : ℂ) • 1 := by
+  have hcenter : B ∅ = Φ.hamiltonian - (S : ℂ) • 1 := by
     simp only [B, Finset.notMem_empty, ite_false, Finset.sum_sub_distrib, hsumc]
     rw [hH]
     abel
@@ -175,7 +173,7 @@ theorem exists_five_region_independent_truncation_residual
       ‖(ι (A j - cfc (fun r : ℝ ↦ min r (e j + t))
         (A j))).domRestrict G‖ ≤
           96 * Real.exp (11 / 8) * Real.exp (-(t - eta) / 8) := by
-    have htail := norm_consecutive_regional_truncation_low_le k hk h hs h0 h1
+    have htail := norm_consecutive_regional_truncation_low_le k hk Φ h0 h1
       e T j J (19 + eta) (E0 + eta) (1 / 8) t
       (by norm_num) (by norm_num) hu hcut v lam he hEigen hgap
     exact htail.trans hcoef

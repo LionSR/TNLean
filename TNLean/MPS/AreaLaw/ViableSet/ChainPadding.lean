@@ -3,10 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.ProductBasisPenalty
+import QICLean.ManyBody.Hamiltonian.Models
+import QICLean.ManyBody.Hamiltonian.ProductBasisPenalty
 import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
 import TNLean.MPS.AreaLaw.Hamiltonian
 import QICLean.Analysis.DoubledSystemGap
+import QICLean.ManyBody.Sites.PlaceAlong
 
 /-!
 # Product-ancilla padding of a positive nearest-neighbour chain
@@ -29,17 +31,17 @@ open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms
 namespace TNLean.MPS.AreaLaw
 
 /-- Placing an original prefix operator preserves its interval support. -/
-theorem isSupportedOn_embedOp_prefix {L N q a b : ℕ} (hi : L ≤ N)
+theorem isSupportedOn_placeAlong_castLEEmb {L N q a b : ℕ} (hi : L ≤ N)
     {X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X (interval L a b)) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (QuantumCircuit.embedOp (Fin.castLE hi) X) (interval N a b) := by
-  have h := QuantumCircuit.embedOp_mem_supportedOperators_image
-    (Fin.castLE_injective hi) hX
+      (ManyBody.placeAlong (X := fun _ ↦ Fin q) (Fin.castLEEmb hi) X) (interval N a b) := by
+  have h := ManyBody.placeAlong_mem_supportedOperators_map (X := fun _ ↦ Fin q)
+    (Fin.castLEEmb hi) hX
   change _ ∈ ManyBody.supportedOperators _ _
   apply ManyBody.supportedOperators_mono ?_ h
   intro _ hw
-  obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp hw
+  obtain ⟨v, hv, rfl⟩ := Finset.mem_map.mp hw
   exact mem_interval.mpr ((mem_interval (L := L)).mp hv)
 
 /-- Padded bonds are exactly the old bonds together with the new sites on
@@ -80,25 +82,24 @@ def paddingBondEquiv {L N : ℕ} (hL : 1 ≤ L) (hi : L ≤ N) :
 /-- The old bond terms act on the initial sites; each later bond carries the
 penalty on its new right-hand site. All choices precede ground data. -/
 noncomputable def paddedInteraction {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (j : Fin (N - 1)) : Matrix (Fin N → Fin q) (Fin N → Fin q) ℂ :=
-  if hj : j.val < L - 1 then QuantumCircuit.embedOp (Fin.castLE hi) (h ⟨j.val, hj⟩)
-  else QuantumCircuit.siteOp ⟨j.val + 1, by omega⟩ (QuantumCircuit.siteBasisPenalty z)
+  if hj : j.val < L - 1 then
+    ManyBody.placeAlong (X := fun _ ↦ Fin q) (Fin.castLEEmb hi) (Φ.term ⟨j.val, hj⟩)
+  else ManyBody.placeAt (X := fun _ ↦ Fin q) ⟨j.val + 1, by omega⟩ (ManyBody.siteBasisPenalty z)
 
 /-- Every padded term has its actual nearest-neighbour support. -/
 theorem paddedInteraction_supported {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h j) (interval L j.val (j.val + 2))) (j : Fin (N - 1)) :
+    (Φ : ManyBody.BondInteraction L q) (j : Fin (N - 1)) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (paddedInteraction hi z h j) (interval N j.val (j.val + 2)) := by
+      (paddedInteraction hi z Φ j) (interval N j.val (j.val + 2)) := by
   unfold paddedInteraction
   split_ifs with hj
-  · exact isSupportedOn_embedOp_prefix hi (hs ⟨j.val, hj⟩)
+  · exact isSupportedOn_placeAlong_castLEEmb hi (Φ.mem ⟨j.val, hj⟩)
   · change _ ∈ ManyBody.supportedOperators _ _
     apply ManyBody.supportedOperators_mono ?_
-      (QuantumCircuit.siteOp_mem_supportedOperators
-        (⟨j.val + 1, by omega⟩ : Fin N) (QuantumCircuit.siteBasisPenalty z))
+      (ManyBody.placeAt_mem_supportedOperators (X := fun _ ↦ Fin q)
+        (⟨j.val + 1, by omega⟩ : Fin N) (ManyBody.siteBasisPenalty z))
     intro v hv
     rw [Finset.mem_singleton.mp hv]
     apply mem_interval.mpr
@@ -107,45 +108,48 @@ theorem paddedInteraction_supported {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
 
 /-- The padded terms retain both original positive-contraction bounds. -/
 theorem paddedInteraction_nonneg_le_one {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1) (j : Fin (N - 1)) :
-    0 ≤ paddedInteraction hi z h j ∧ paddedInteraction hi z h j ≤ 1 := by
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1) (j : Fin (N - 1)) :
+    0 ≤ paddedInteraction hi z Φ j ∧ paddedInteraction hi z Φ j ≤ 1 := by
   unfold paddedInteraction
   split_ifs with hj
   · constructor
-    · exact (QuantumCircuit.embedOp_posSemidef (Fin.castLE_injective hi)
+    · exact (ManyBody.posSemidef_placeAlong (X := fun _ ↦ Fin q) (Fin.castLEEmb hi)
         (Matrix.nonneg_iff_posSemidef.mp (h0 ⟨j.val, hj⟩))).nonneg
-    · simpa only [QuantumCircuit.embedOp_one] using
-        QuantumCircuit.embedOp_le (Fin.castLE_injective hi) (h1 ⟨j.val, hj⟩)
+    · simpa only [ManyBody.placeAlong_one] using
+        ManyBody.placeAlong_le_placeAlong (X := fun _ ↦ Fin q) (Fin.castLEEmb hi)
+          (h1 ⟨j.val, hj⟩)
   · constructor
-    · exact (QuantumCircuit.siteOp_posSemidef _
-        (QuantumCircuit.siteBasisPenalty_posSemidef z)).nonneg
-    · simpa only [QuantumCircuit.siteOp_one] using
-        QuantumCircuit.siteOp_le _ (QuantumCircuit.siteBasisPenalty_le_one z)
+    · exact (ManyBody.posSemidef_placeAt (X := fun _ ↦ Fin q)
+        (ManyBody.siteBasisPenalty_posSemidef z)).nonneg
+    · simpa only [ManyBody.placeAt_one] using
+        ManyBody.placeAt_le_placeAt (X := fun _ ↦ Fin q) (ManyBody.siteBasisPenalty_le_one z)
 
 /-- The padded Hamiltonian is the embedded original sum plus the actual
 sum of one on-site penalty for every appended site. -/
 theorem sum_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N) (z : Fin q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    ∑ j, paddedInteraction hi z h j = QuantumCircuit.embedOp (Fin.castLE hi) (∑ j, h j) +
+    (Φ : ManyBody.BondInteraction L q) :
+    ∑ j, paddedInteraction hi z Φ j =
+      ManyBody.placeAlong (X := fun _ ↦ Fin q) (Fin.castLEEmb hi) Φ.hamiltonian +
       ∑ v : {v : Fin N // v ∉ leftBlock N L},
-        QuantumCircuit.siteOp v.1 (QuantumCircuit.siteBasisPenalty z) := by
+        ManyBody.placeAt (X := fun _ ↦ Fin q) v.1 (ManyBody.siteBasisPenalty z) := by
   classical
   let f : Fin (L - 1) ⊕ {v : Fin N // v ∉ leftBlock N L} →
       Matrix (Fin N → Fin q) (Fin N → Fin q) ℂ :=
-    Sum.elim (fun j ↦ QuantumCircuit.embedOp (Fin.castLE hi) (h j))
-      (fun v ↦ QuantumCircuit.siteOp v.1 (QuantumCircuit.siteBasisPenalty z))
+    Sum.elim (fun j ↦ ManyBody.placeAlong (X := fun _ ↦ Fin q) (Fin.castLEEmb hi) (Φ.term j))
+      (fun v ↦ ManyBody.placeAt (X := fun _ ↦ Fin q) v.1 (ManyBody.siteBasisPenalty z))
   have heval (j : Fin (N - 1)) :
-      f (paddingBondEquiv hL hi j) = paddedInteraction hi z h j := by
+      f (paddingBondEquiv hL hi j) = paddedInteraction hi z Φ j := by
     simp only [f, paddingBondEquiv, Equiv.coe_fn_mk, paddedInteraction]
     split_ifs <;> rfl
   have hsum := Equiv.sum_comp (paddingBondEquiv hL hi) f
   simp_rw [heval] at hsum
   rw [hsum]
   simp only [Fintype.sum_sum_type, f, Sum.elim_inl, Sum.elim_inr]
-  have hlinear : (∑ j, QuantumCircuit.embedOp (Fin.castLE hi) (h j)) =
-      QuantumCircuit.embedOp (Fin.castLE hi) (∑ j, h j) :=
-    (map_sum (QuantumCircuit.embedOpLinearMap (Fin.castLE hi)) h Finset.univ).symm
+  have hlinear :
+      (∑ j, ManyBody.placeAlong (X := fun _ ↦ Fin q) (Fin.castLEEmb hi) (Φ.term j)) =
+        ManyBody.placeAlong (X := fun _ ↦ Fin q) (Fin.castLEEmb hi) Φ.hamiltonian :=
+    (ManyBody.placeAlong_sum (X := fun _ ↦ Fin q) (Fin.castLEEmb hi) Finset.univ Φ.term).symm
   rw [hlinear]
 
 end TNLean.MPS.AreaLaw

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSectors
-import TNLean.MPS.ParentHamiltonian.Martingale.ReducingProjectionGap
+import QICLean.Analysis.ReducingProjectionGap
 
 /-!
 # Reducing physical sectors of the extended support

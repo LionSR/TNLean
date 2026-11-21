@@ -17,7 +17,7 @@ These are the whole-region coordinates of ALVV, arXiv:1602.08828v2,
 Definition `d:vs`, lines 433–440, and `t:alg1`, lines 1777–1817.
 -/
 
-open ManyBody (interval interval_zero_eq_univ mem_interval)
+open ManyBody (interval mem_interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -56,17 +56,17 @@ noncomputable def nativeFullIntervalSpace (L q : ℕ)
 
 private theorem fullInterval_slice_regionConfigurationSplit {L q : ℕ}
     (ψ : EuclideanSpace ℂ (Fin L → Fin q))
-    (b : ↥((interval L 0 L)ᶜ) → Fin q) :
+    (b : {v // v ∉ interval L 0 L} → Fin q) :
     (WithLp.toLp 2 fun a ↦
       Entropy.regionConfigurationSplit q (interval L 0 L) ψ (a, b)) =
       (fullIntervalEquiv L q).symm ψ := by
   ext a
-  change ψ ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q)
+  change ψ ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q)
       (interval L 0 L)).symm (a, b)) =
     ψ (fullIntervalConfigurationEquiv L q a)
   apply congrArg ψ
   funext v
-  rw [ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _
+  rw [ManyBody.cutEquiv_symm_apply_mem _ _
     (mem_interval.mpr ⟨Nat.zero_le _, v.isLt⟩)]
   rfl
 
@@ -80,7 +80,7 @@ theorem map_nativeFullIntervalSpace_regionConfigurationSplit {L q : ℕ}
     (S : Submodule ℂ (EuclideanSpace ℂ (interval L 0 L → Fin q))) :
     (nativeFullIntervalSpace L q S).map
       (Entropy.regionConfigurationSplit q (interval L 0 L)).toLinearEquiv.toLinearMap =
-      Submodule.prodExt S (↥((interval L 0 L)ᶜ) → Fin q) := by
+      Submodule.prodExt S ({v // v ∉ interval L 0 L} → Fin q) := by
   classical
   ext w
   constructor
@@ -94,10 +94,8 @@ theorem map_nativeFullIntervalSpace_regionConfigurationSplit {L q : ℕ}
       LinearIsometryEquiv.symm_apply_apply]
     exact hu
   · intro hw
-    have hempty : (interval L 0 L)ᶜ = ∅ := by
-      rw [interval_zero_eq_univ (L := L) le_rfl, Finset.compl_univ]
-    let b : ↥((interval L 0 L)ᶜ) → Fin q := fun v ↦
-      False.elim (by simpa only [hempty, Finset.notMem_empty] using v.property)
+    let b : {v // v ∉ interval L 0 L} → Fin q := fun v ↦
+      False.elim (v.property (mem_interval.mpr ⟨Nat.zero_le _, v.val.isLt⟩))
     let ψ := (Entropy.regionConfigurationSplit q (interval L 0 L)).symm w
     have hlocal : (fullIntervalEquiv L q).symm ψ ∈ S := by
       have hs := Submodule.mem_prodExt.mp hw b

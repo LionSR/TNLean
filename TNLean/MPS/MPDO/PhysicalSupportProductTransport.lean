@@ -60,15 +60,17 @@ private noncomputable def cyclicBondProjectionFactor
 
 private theorem embed_twoSiteSectorProjection_eq_finKronecker
     (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
-    embedLocalOperator (d := d) 2 N hN i (twoSiteSectorProjection P) =
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
+        (twoSiteSectorProjection P) =
       Matrix.finKronecker (fun n ↦ cyclicBondProjectionFactor P i n) := by
   rw [← tensorPower_two_eq_twoSiteSectorProjection]
   ext σ τ
-  simp only [embedLocalOperator_apply, Matrix.tensorPower_apply,
-    Matrix.finKronecker_apply]
-  by_cases hAgree : AgreesOutsideWindow (d := d) 2 hN i σ τ
+  rw [ManyBody.placeAlong_apply, ← MPSTensor.extractWindow_eq_comp_ringWindow hN,
+    ← MPSTensor.extractWindow_eq_comp_ringWindow hN]
+  simp only [Matrix.tensorPower_apply, Matrix.finKronecker_apply]
+  by_cases hAgree : ∀ v, (∀ u, ManyBody.ringWindow hN i u ≠ v) → σ v = τ v
   · rw [ite_eq_left hAgree, MPSTensor.prod_cyclicWindow_complement 2 N hN i]
-    rw [agreesOutsideWindow_iff] at hAgree
+    rw [MPSTensor.forall_ringWindow_ne_imp_iff] at hAgree
     apply Eq.symm
     calc
       (∏ r : Fin 2,
@@ -108,7 +110,7 @@ private theorem embed_twoSiteSectorProjection_eq_finKronecker
             (by rw [hoff]; omega)).symm
       _ = _ := by simp [MPSTensor.extractWindow]
   · rw [ite_eq_right hAgree]
-    rw [agreesOutsideWindow_iff] at hAgree
+    rw [MPSTensor.forall_ringWindow_ne_imp_iff] at hAgree
     push Not at hAgree
     obtain ⟨n, hn, hστ⟩ := hAgree
     apply Eq.symm
@@ -121,8 +123,10 @@ operator need not be a projection: at each position the two factors are
 copies of that same operator or the identity. -/
 theorem embed_twoSiteSectorProjection_commute
     (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ} (hN : 2 ≤ N) (i j : Fin N) :
-    Commute (embedLocalOperator 2 N hN i (twoSiteSectorProjection P))
-      (embedLocalOperator 2 N hN j (twoSiteSectorProjection P)) := by
+    Commute (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
+        (twoSiteSectorProjection P))
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN j)
+        (twoSiteSectorProjection P)) := by
   unfold Commute SemiconjBy
   simp only [embed_twoSiteSectorProjection_eq_finKronecker, ← Matrix.finKronecker_mul]
   congr 1
@@ -182,7 +186,7 @@ private noncomputable def openBondProjectionProduct
     (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ} (hN : 2 ≤ N) :
     Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
   (List.ofFn fun i : Fin (N - 1) ↦
-    embedLocalOperator (d := d) 2 N hN ⟨i.val, by omega⟩
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN ⟨i.val, by omega⟩)
       (twoSiteSectorProjection P)).prod
 
 private theorem openBondProjectionProduct_eq_sitewise
@@ -194,7 +198,7 @@ private theorem openBondProjectionProduct_eq_sitewise
     fun i n ↦ cyclicBondProjectionFactor P ⟨i.val, by omega⟩ n
   have hlist :
       (List.ofFn fun i : Fin (N - 1) ↦
-        embedLocalOperator (d := d) 2 N hN ⟨i.val, by omega⟩
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN ⟨i.val, by omega⟩)
           (twoSiteSectorProjection P)) =
         (List.ofFn factors).map Matrix.finKronecker := by
     rw [List.map_ofFn]
@@ -290,20 +294,22 @@ theorem isometricBondProduct_left_supported
     (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ)
     {N : ℕ} (hN : 2 ≤ N)
     (hcomm : ∀ i j : Fin N,
-      Commute (embedLocalOperator 2 N hN i
+      Commute (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
           (singleKrausMap (Matrix.tensorPower 2 V) B))
-        (embedLocalOperator 2 N hN j
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN j)
           (singleKrausMap (Matrix.tensorPower 2 V) B))) :
     Matrix.tensorPower N (V * Vᴴ) *
-        (List.ofFn fun i : Fin N => embedLocalOperator 2 N hN i
-          (singleKrausMap (Matrix.tensorPower 2 V) B)).prod =
-      (List.ofFn fun i : Fin N => embedLocalOperator 2 N hN i
-        (singleKrausMap (Matrix.tensorPower 2 V) B)).prod := by
+        (List.ofFn fun i : Fin N =>
+          ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
+            (singleKrausMap (Matrix.tensorPower 2 V) B)).prod =
+      (List.ofFn fun i : Fin N =>
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
+          (singleKrausMap (Matrix.tensorPower 2 V) B)).prod := by
   let A : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
-    fun i ↦ embedLocalOperator (d := d) 2 N hN i
+    fun i ↦ ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
       (singleKrausMap (Matrix.tensorPower 2 V) B)
   let R : Fin (N - 1) → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
-    fun i ↦ embedLocalOperator (d := d) 2 N hN ⟨i.val, by omega⟩
+    fun i ↦ ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN ⟨i.val, by omega⟩)
       (twoSiteSectorProjection (V * Vᴴ))
   have hpair : (List.ofFn A).Pairwise Commute := by
     rw [List.pairwise_ofFn]
@@ -312,7 +318,7 @@ theorem isometricBondProduct_left_supported
   have hRiAi (i : Fin (N - 1)) :
       R i * A ⟨i.val, by omega⟩ = A ⟨i.val, by omega⟩ := by
     simp only [R, A]
-    rw [← embedLocalOperator_mul,
+    rw [← ManyBody.placeAlong_mul,
       twoSiteSectorProjection_mul_isometricBond V hV B]
   have hRiProduct (i : Fin (N - 1)) : R i * (List.ofFn A).prod =
       (List.ofFn A).prod := by
@@ -347,35 +353,35 @@ theorem isometricBondProduct_left_supported
 
 
 
-/-- The isometric image of one embedded restricted bond is its ambient lift
+/-- The isometric image of one restricted bond placed on a window of two sites is its ambient lift
 multiplied by the range projection on the complete chain.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 and equation
 `generateMPDO`, lines 1571--1593 and 1733--1770. -/
-theorem singleKrausMap_embedLocalOperator_eq_range_mul_lift
+theorem singleKrausMap_placeAlong_ringWindow_eq_range_mul_lift
     (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
     {N : ℕ} (hN : 2 ≤ N) (i : Fin N)
     (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
     singleKrausMap (Matrix.tensorPower N V)
-        (embedLocalOperator (d := e) 2 N hN i B) =
+        (ManyBody.placeAlong (X := fun _ ↦ Fin e) (ManyBody.ringWindow hN i) B) =
       singleKrausMap (Matrix.tensorPower N V) 1 *
-        embedLocalOperator (d := d) 2 N hN i
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
           (singleKrausMap (Matrix.tensorPower 2 V) B) := by
   let ed := windowComplementEquiv (d := d) 2 N hN i
   let ee := windowComplementEquiv (d := e) 2 N hN i
   apply (Matrix.reindex ed ed).injective
   change (Matrix.reindexLinearEquiv ℂ ℂ ed ed)
       (singleKrausMap (Matrix.tensorPower N V)
-        (embedLocalOperator (d := e) 2 N hN i B)) =
+        (ManyBody.placeAlong (X := fun _ ↦ Fin e) (ManyBody.ringWindow hN i) B)) =
     (Matrix.reindexLinearEquiv ℂ ℂ ed ed)
       (singleKrausMap (Matrix.tensorPower N V) 1 *
-        embedLocalOperator (d := d) 2 N hN i
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
           (singleKrausMap (Matrix.tensorPower 2 V) B))
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ ed ed ed]
   simp only [Matrix.coe_reindexLinearEquiv]
   rw [Matrix.reindex_singleKrausMap ee ed,
     reindex_tensorPower_windowComplement,
-    reindex_embedLocalOperator_windowComplement]
+    reindex_placeAlong_ringWindow_windowComplement]
   change singleKrausMap
       (Matrix.tensorPower 2 V ⊗ₖ Matrix.tensorPower (N - 2) V)
         (B ⊗ₖ (1 : Matrix (Fin (N - 2) → Fin e)
@@ -391,7 +397,7 @@ theorem singleKrausMap_embedLocalOperator_eq_range_mul_lift
       simp [Matrix.reindex_apply, hxy, hne]
   rw [Matrix.reindex_singleKrausMap ee ed,
     reindex_tensorPower_windowComplement,
-    reindex_embedLocalOperator_windowComplement, hone]
+    reindex_placeAlong_ringWindow_windowComplement, hone]
   simp only [singleKrausMap_apply, Matrix.mul_one,
     Matrix.conjTranspose_kronecker]
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
@@ -413,12 +419,15 @@ theorem singleKrausMap_bondProduct_of_unitary
     (V : Matrix (Fin d) (Fin d) ℂ) (hV : Vᴴ * V = 1) (hV' : V * Vᴴ = 1)
     {N : ℕ} (hN : 2 ≤ N) (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
     singleKrausMap (Matrix.tensorPower N V)
-        (List.ofFn fun i : Fin N ↦ embedLocalOperator 2 N hN i B).prod =
-      (List.ofFn fun i : Fin N ↦ embedLocalOperator 2 N hN i
-        (singleKrausMap (Matrix.tensorPower 2 V) B)).prod := by
+        (List.ofFn fun i : Fin N ↦
+          ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) B).prod =
+      (List.ofFn fun i : Fin N ↦
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
+          (singleKrausMap (Matrix.tensorPower 2 V) B)).prod := by
   have hW : (Matrix.tensorPower N V)ᴴ * Matrix.tensorPower N V = 1 :=
     tensorPower_isometry V hV N
-  have hne : (List.ofFn fun i : Fin N ↦ embedLocalOperator 2 N hN i B) ≠ [] := by
+  have hne : (List.ofFn fun i : Fin N ↦
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) B) ≠ [] := by
     rw [List.ne_nil_iff_length_pos, List.length_ofFn]
     omega
   rw [singleKrausMap_list_prod_of_ne_nil _ hW _ hne, List.map_ofFn]
@@ -426,8 +435,8 @@ theorem singleKrausMap_bondProduct_of_unitary
   apply congrArg List.ofFn
   funext i
   change singleKrausMap (Matrix.tensorPower N V)
-      (embedLocalOperator 2 N hN i B) = _
-  rw [singleKrausMap_embedLocalOperator_eq_range_mul_lift V hV hN i B]
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) B) = _
+  rw [singleKrausMap_placeAlong_ringWindow_eq_range_mul_lift V hV hN i B]
   simp only [singleKrausMap_apply, Matrix.mul_one]
   rw [tensorPower_mul_conjTranspose, hV']
   rw [Matrix.tensorPower_one, Matrix.one_mul]
@@ -442,21 +451,23 @@ theorem singleKrausMap_bondProduct_of_isometry
     (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) (hB : B.IsHermitian)
     {N : ℕ} (hN : 2 ≤ N)
     (hcomm : ∀ i j : Fin N,
-      Commute (embedLocalOperator 2 N hN i
+      Commute (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
           (singleKrausMap (Matrix.tensorPower 2 V) B))
-        (embedLocalOperator 2 N hN j
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN j)
           (singleKrausMap (Matrix.tensorPower 2 V) B))) :
     singleKrausMap (Matrix.tensorPower N V)
-        (List.ofFn fun i : Fin N => embedLocalOperator 2 N hN i B).prod =
-      (List.ofFn fun i : Fin N => embedLocalOperator 2 N hN i
-        (singleKrausMap (Matrix.tensorPower 2 V) B)).prod := by
+        (List.ofFn fun i : Fin N =>
+          ManyBody.placeAlong (X := fun _ ↦ Fin e) (ManyBody.ringWindow hN i) B).prod =
+      (List.ofFn fun i : Fin N =>
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
+          (singleKrausMap (Matrix.tensorPower 2 V) B)).prod := by
   let W := Matrix.tensorPower N V
   let Q := singleKrausMap W 1
   let X : Fin N → Matrix (Fin N → Fin e)
       (Fin N → Fin e) ℂ :=
-    fun i ↦ embedLocalOperator (d := e) 2 N hN i B
+    fun i ↦ ManyBody.placeAlong (X := fun _ ↦ Fin e) (ManyBody.ringWindow hN i) B
   let A : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
-    fun i ↦ embedLocalOperator (d := d) 2 N hN i
+    fun i ↦ ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
       (singleKrausMap (Matrix.tensorPower 2 V) B)
   have hW : Wᴴ * W = 1 :=
     tensorPower_isometry V hV N
@@ -470,7 +481,7 @@ theorem singleKrausMap_bondProduct_of_isometry
     rw [List.map_ofFn]
     apply congrArg List.ofFn
     funext i
-    exact singleKrausMap_embedLocalOperator_eq_range_mul_lift
+    exact singleKrausMap_placeAlong_ringWindow_eq_range_mul_lift
       V hV hN i B
   have hQherm : Q.IsHermitian :=
     (Matrix.PosSemidef.one.mul_mul_conjTranspose_same W).1
@@ -478,14 +489,14 @@ theorem singleKrausMap_bondProduct_of_isometry
     intro C hC
     rw [List.mem_ofFn] at hC
     obtain ⟨i, rfl⟩ := hC
-    have hleft := singleKrausMap_embedLocalOperator_eq_range_mul_lift
+    have hleft := singleKrausMap_placeAlong_ringWindow_eq_range_mul_lift
       V hV hN i B
     have hXherm : (X i).IsHermitian :=
-      embedLocalOperator_isHermitian 2 N hN i hB
+      ManyBody.isHermitian_placeAlong _ hB
     have hφherm : (singleKrausMap W (X i)).IsHermitian :=
       Matrix.isHermitian_mul_mul_conjTranspose W hXherm
     have hAherm : (A i).IsHermitian :=
-      embedLocalOperator_isHermitian 2 N hN i
+      ManyBody.isHermitian_placeAlong _
         (Matrix.isHermitian_mul_mul_conjTranspose (Matrix.tensorPower 2 V) hB)
     calc
       Q * A i = singleKrausMap W (X i) := hleft.symm
@@ -537,9 +548,10 @@ theorem singleKrausMap_bondProduct_eq_liftedBondProduct
     {N : ℕ} (hN : 2 ≤ N) :
     singleKrausMap (Matrix.tensorPower N F.inclusion)
         (List.ofFn fun i : Fin N ↦
-          embedLocalOperator (d := F.supportDim) 2 N hN i data.bond).prod =
+          ManyBody.placeAlong (X := fun _ ↦ Fin F.supportDim) (ManyBody.ringWindow hN i)
+            data.bond).prod =
       (List.ofFn fun i : Fin N ↦
-        embedLocalOperator (d := d) 2 N hN i
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
           (F.liftedBond data.bond)).prod := by
   exact singleKrausMap_bondProduct_of_isometry F.inclusion F.inclusion_isometry
     data.bond data.bond_pos.isHermitian hN
@@ -563,7 +575,7 @@ noncomputable def liftedEtaLocalStructureData
     refine ⟨c, hc, ?_⟩
     change mpo K N = (c : ℂ) •
       (List.ofFn fun i : Fin N ↦
-        embedLocalOperator (d := d) 2 N hN i
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
           (F.liftedBond data.bondData.bond)).prod
     have hmpo : mpo K N =
         singleKrausMap (Matrix.tensorPower N F.inclusion)
@@ -573,7 +585,7 @@ noncomputable def liftedEtaLocalStructureData
     change mpo (PhysicalSectorFactorization.changePhysicalBasis
       F.inclusionᴴ K) N = (c : ℂ) •
         (List.ofFn fun i : Fin N ↦
-          embedLocalOperator (d := F.supportDim) 2 N hN i
+          ManyBody.placeAlong (X := fun _ ↦ Fin F.supportDim) (ManyBody.ringWindow hN i)
             data.bondData.bond).prod at hreal
     rw [hmpo, hreal]
     rw [(singleKrausMap
@@ -615,12 +627,12 @@ theorem exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactoriza
       (mpo (PhysicalSectorFactorization.changePhysicalBasis
         F.inclusionᴴ K) N) =
     (List.ofFn fun i : Fin N ↦
-      embedLocalOperator (d := d) 2 N hN i
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
         (F.liftedBond restrictedData.bondData.bond)).prod
   rw [show mpo (PhysicalSectorFactorization.changePhysicalBasis
       F.inclusionᴴ K) N =
       (List.ofFn fun i : Fin N ↦
-        embedLocalOperator (d := F.supportDim) 2 N hN i
+        ManyBody.placeAlong (X := fun _ ↦ Fin F.supportDim) (ManyBody.ringWindow hN i)
           restrictedData.bondData.bond).prod by
     exact G.mpo_eq_product_physicalBond hN]
   exact F.singleKrausMap_bondProduct_eq_liftedBondProduct

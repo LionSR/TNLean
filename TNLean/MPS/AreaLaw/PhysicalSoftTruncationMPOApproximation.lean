@@ -25,8 +25,6 @@ false printed estimate nor a computational running time is asserted; see
 that range. See `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
-open ManyBody (interval mem_interval)
-
 open Matrix
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
@@ -42,17 +40,15 @@ theorem exists_interval_physical_soft_closeness_and_mpo
     let rho := min 1 (min (w / 2) (delta * w ^ 2 / (2 * (eta + 2))))
     ∃ m : ℕ, m = ⌈12 + (2 / 3 : ℝ) * eta + (16 / 3 : ℝ) * Real.log (80 / rho)⌉₊ ∧ 0 < m ∧
       ∀ (N q p v : ℕ) (hq : 0 < q) (_hpr : p ≤ v) (_hrL : v ≤ (N + 1))
-        (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ),
-        (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval (N + 1) i.val (i.val + 2))) →
-        (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) →
+        (Φ : ManyBody.BondInteraction (N + 1) q),
+        (∀ i, 0 ≤ Φ.term i) → (∀ i, Φ.term i ≤ 1) →
         let : Nonempty (Fin (N + 1) → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
         let k : Fin 6 → ℕ := ![0, p, v, v, v, (N + 1)]
         let A : Fin 5 → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ := fun j ↦
           ∑ i ∈ Finset.univ.filter
-            (fun i : Fin N ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+            (fun i : Fin N ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
         ∃ (e : Fin 5 → ℝ) (E0 : ℝ) (x : (Fin (N + 1) → Fin q) → ℂ),
-          let H := ∑ i, h i
+          let H := Φ.hamiltonian
           let Hc := H - (((∑ j, e j) : ℝ) : ℂ) • 1
           ∃ hHc : Hc.IsHermitian,
             star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
@@ -87,9 +83,9 @@ theorem exists_interval_physical_soft_closeness_and_mpo
   obtain ⟨m, hmformula, hm, hphysical⟩ :=
     exists_interval_physical_scaled_soft_low_energy_closeness eta w delta heta hw hdelta
   refine ⟨m, hmformula, hm, ?_⟩
-  intro N q p v hq hpv hvL h hs h0 h1 _inst k A
+  intro N q p v hq hpv hvL Φ h0 h1 _inst k A
   obtain ⟨e, E0, x, hO, hxunit, hx, he, hEcan, hE0, hE2, hclose⟩ :=
-    hphysical (N + 1) q p v hq hpv hvL h hs h0 h1
+    hphysical (N + 1) q p v hq hpv hvL Φ h0 h1
   refine ⟨e, E0, x, hO, hxunit, hx, he, hEcan, hE0, hE2, ?_⟩
   intro eps hepslo hepshi Hsoft Hsc
   obtain ⟨Es, hS, hEscan, hsoftH, hshift0, hshift, hforward, hreverse⟩ :=
@@ -99,17 +95,11 @@ theorem exists_interval_physical_soft_closeness_and_mpo
   classical
   let I : Finset (Fin N) := Finset.univ.filter
     (fun i ↦ p ≤ i.val ∧ i.val + 1 < v)
-  have hI : (∑ i ∈ I, h i) = A 1 := by rfl
-  have hpair (i : Fin N) : interval (N + 1) i.val (i.val + 2) =
-      ({i.castSucc, i.succ} : Finset (Fin (N + 1))) := by
-    ext z
-    simp only [mem_interval, Finset.mem_insert, Finset.mem_singleton, Fin.ext_iff,
-      Fin.val_castSucc, Fin.val_succ]
-    omega
-  have hs' (i : Fin N) : ManyBody.IsSupportedOn (h i) {i.castSucc, i.succ} := by
-    simpa only [hpair] using hs i
-  have hh (i : Fin N) : (h i).IsHermitian := (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian
-  have hn (i : Fin N) : ‖h i‖ ≤ 1 :=
+  have hI : (∑ i ∈ I, Φ.term i) = A 1 := by rfl
+  have hs' (i : Fin N) : ManyBody.IsSupportedOn (Φ.term i) {i.castSucc, i.succ} :=
+    Φ.term_mem_supportedOperators_chainBond i
+  have hh (i : Fin N) : (Φ.term i).IsHermitian := (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian
+  have hn (i : Fin N) : ‖Φ.term i‖ ≤ 1 :=
     (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 i)).mpr (h1 i)
   have heps : (eps : ℂ) • (1 : Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ) ≤ A 1 := by
     have heA : (A 1 - (e 1 : ℂ) • 1).PosSemidef := he 1
@@ -121,9 +111,11 @@ theorem exists_interval_physical_soft_closeness_and_mpo
         (Fin (N + 1) → Fin q) ℂ) ≤ (e 1 : ℂ) • 1 := by
       simpa only [Complex.coe_smul] using hlower
     exact hlowerC.trans hmin
-  obtain ⟨T, hT⟩ := exists_softTruncatedHamiltonian_mpo_of_accuracy hq hm h hs' hh hn I eps
+  obtain ⟨T, hT⟩ := exists_softTruncatedHamiltonian_mpo_of_accuracy (N := N) hq hm Φ.term hs'
+    hh hn I eps
     (3 * (m : ℝ)) xi (by simpa only [hI] using heps) le_rfl hxi
   refine ⟨T, ?_⟩
-  simpa only [hI] using hT
+  rw [hI] at hT
+  exact hT
 
 end TNLean.MPS.AreaLaw

@@ -25,6 +25,7 @@ invariance is assumed. The capped-width comparison is documented in
 -/
 
 open ManyBody (interval)
+open ManyBody (cutMatrix)
 
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace Matrix
 
@@ -38,13 +39,11 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
     (etaLD : ℝ) (hLD : 0 < etaLD) :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q : ℕ) (v : ℝ) (hq : 0 < q), 0 < v →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1),
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, hq⟩⟩
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let G := fun c : ℝ ↦ Submodule.spectralSpanLE
@@ -66,13 +65,13 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
         ψ ∈ G (etaLD - v) → ‖ψ‖ = 1 →
       ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
         IsOpenMPS L q (Module.finrank ℂ (G etaLD) * Bg) (fun x ↦ Φ x) ∧
-        (cutMatrix Φ k0).rank ≤ Module.finrank ℂ (G etaLD) * Bs ∧
+        (cutMatrix (leftBlock L k0) Φ).rank ≤ Module.finrank ℂ (G etaLD) * Bs ∧
         1 - delta < ‖⟪Φ, ψ⟫_ℂ‖ ∧ ‖Φ - ψ‖ ^ 2 ≤ delta / 2 := by
   classical
   obtain ⟨K, hK, hfixed⟩ :=
     exists_fixed_bandwidth_interval_low_energy_strict_approximation etaLD hLD
   refine ⟨K + 1, by linarith only [hK], ?_⟩
-  intro L q v hq hv h hs h0 h1 config H hH G bcap g u
+  intro L q v hq hv Φ h0 h1 config H hH G bcap g u
   let : Nonempty (Fin L → Fin q) := config
   have hg : 0 < g := lt_min (by dsimp only [bcap]; positivity) (by norm_num)
   have hg1 : g ≤ 1 := min_le_right _ _
@@ -153,7 +152,7 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
           (Module.finrank ℂ (G etaLD) *
             ⌈Real.exp (F (16 + Real.log (1 / g) + Real.log (2 / eps)))⌉₊) ≤ 2 * eps := by
     obtain ⟨φ, hφ, hoverlap, hlogrank⟩ :=
-      hfixed L q 0 k v hq (Nat.zero_le k) hkL hv h hs h0 h1 eps heps heps1 ψ hψG hψ
+      hfixed L q 0 k v hq (Nat.zero_le k) hkL hv Φ h0 h1 eps heps heps1 ψ hψG hψ
     have hregional := one_sub_regional_kyFanNorm_le_twice_error
       (interval L 0 k) ψ φ hφ eps heps1
       (Module.finrank ℂ (G etaLD) *

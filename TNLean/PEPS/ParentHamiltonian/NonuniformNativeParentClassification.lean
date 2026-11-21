@@ -56,7 +56,8 @@ include hU hA hH
 the faithfully embedded original native commuting-closure span. No local-image
 or support assumption is imposed on kernel vectors. Source: SCP10, Theorem 5.7. -/
 theorem ker_nonuniformTorusPlaquetteParent_eq_map_nativeCommutingClosureSpan :
-    (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion H)).ker =
+    (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin _)
+        torusPlaquetteRegion H).hamiltonian).ker =
       (NativeTorus.commutingClosureSpan (fun e ↦ Fin (N e)) U A).map
         (dependentPhysicalProductFamilyMap (physicalPaddingMatrix (Phys := Phys))) := by
   have hB := isGInjective_graphPhysicalPaddingTensor N
@@ -71,7 +72,8 @@ theorem ker_nonuniformTorusPlaquetteParent_eq_map_nativeCommutingClosureSpan :
 are linearly equivalent by zero extension. This identifies no additional vectors. -/
 def nonuniformNativeParentEquiv :
     NativeTorus.commutingClosureSpan (fun e ↦ Fin (N e)) U A ≃ₗ[ℂ]
-      (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion H)).ker :=
+      (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin _)
+        torusPlaquetteRegion H).hamiltonian).ker :=
   (Submodule.equivMapOfInjective
     (dependentPhysicalProductFamilyMap (physicalPaddingMatrix (Phys := Phys)))
     physicalPaddingProduct_injective _).trans
@@ -88,11 +90,13 @@ def nonuniformNativeParentEquiv :
 
 /-- Product restriction is the explicit inverse on every ambient kernel vector. -/
 @[simp] theorem nonuniformNativeParentEquiv_symm_apply
-    (Ψ : (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion H)).ker) :
+    (Ψ : (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin _)
+      torusPlaquetteRegion H).hamiltonian).ker) :
     ((nonuniformNativeParentEquiv N U hU A hA H hH).symm Ψ : ((v : X) → Phys v) → ℂ) =
       dependentPhysicalProductFamilyMap (physicalRestrictionMatrix (Phys := Phys)) Ψ := by
   have heq := congrArg
-    (fun z : (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion H)).ker =>
+    (fun z : (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin _)
+        torusPlaquetteRegion H).hamiltonian).ker =>
       dependentPhysicalProductFamilyMap (physicalRestrictionMatrix (Phys := Phys)) z)
     ((nonuniformNativeParentEquiv N U hU A hA H hH).apply_symm_apply Ψ)
   simpa only [nonuniformNativeParentEquiv_apply, physicalRestrictionProduct_padding] using heq
@@ -101,7 +105,8 @@ def nonuniformNativeParentEquiv :
 and those representatives belong to the actual native commuting-closure span. -/
 theorem existsUnique_nativeClosureRepresentative_of_mem_nonuniformParentKernel
     {Ψ : (X → Fin (physicalPaddingDimension (Phys := Phys))) → ℂ}
-    (hΨ : Ψ ∈ (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion H)).ker) :
+    (hΨ : Ψ ∈ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin _)
+      torusPlaquetteRegion H).hamiltonian).ker) :
     ∃! ψ : ((v : X) → Phys v) → ℂ,
       ψ ∈ NativeTorus.commutingClosureSpan (fun e ↦ Fin (N e)) U A ∧
       dependentPhysicalProductFamilyMap (physicalPaddingMatrix (Phys := Phys)) ψ = Ψ := by
@@ -114,7 +119,8 @@ theorem existsUnique_nativeClosureRepresentative_of_mem_nonuniformParentKernel
 conjugacy class of commuting pairs, for independent finite physical alphabets.
 Source: SCP10, Theorem 5.9, with explicit original-space equivalence. -/
 theorem finrank_ker_nonuniformTorusPlaquetteParentHamiltonian :
-    Module.finrank ℂ (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion H)).ker =
+    Module.finrank ℂ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin _)
+        torusPlaquetteRegion H).hamiltonian).ker =
       Nat.card (CommutingPairConjugacyClass G) := by
   rw [← (nonuniformNativeParentEquiv N U hU A hA H hH).finrank_eq]
   exact NativeTorus.finrank_commutingClosureSpan (fun e ↦ Fin (N e)) U hU A hA

@@ -26,6 +26,8 @@ hypothesis is imposed.
 
 open scoped ComplexOrder Matrix BigOperators Kronecker
 
+open ManyBody
+
 namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D}
@@ -377,10 +379,9 @@ theorem mpo_sectorCoordinateTensor_eq_product_sectorBond
     (hN : 3 ≤ N) :
     mpo F.sectorCoordinateTensor N =
       (List.ofFn fun i : Fin N ↦
-        embedLocalOperator
-          (d := Fintype.card (SectorSiteIndex F)) 2 N (by omega) i
-            F.sectorBond).prod := by
-  have hcyclic := reindex_product_embedLocalOperator_of_etaPair_decomposition
+        placeAlong (X := fun _ ↦ Fin (Fintype.card (SectorSiteIndex F)))
+          (ringWindow (by omega : 2 ≤ N) i) F.sectorBond).prod := by
+  have hcyclic := reindex_product_placeAlong_ringWindow_of_etaPair_decomposition
     (d := Fintype.card (SectorSiteIndex F)) (N := N) (by omega)
     F.leftDim F.rightDim F.etaSectorFinEquiv F.neighboringOperator
     F.sectorCoordinateBond F.sectorCoordinateBond_etaPair_decomposition

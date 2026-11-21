@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.CompactParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.Martingale.CanonicalOpenGap
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
-import TNLean.MPS.ParentHamiltonian.Martingale.PositiveComparisonGap
+import QICLean.Analysis.PositiveComparisonGap
 
 /-!
 # Uniform open-chain gaps for positive parent interactions

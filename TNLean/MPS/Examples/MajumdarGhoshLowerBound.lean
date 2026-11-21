@@ -160,12 +160,12 @@ theorem majumdarGhosh_parentHamiltonian_three_apply {N : ℕ} (hN3 : 3 ≤ N)
       replaceWindow 3 hN3 i σ (extractWindow 3 i σ ∘ Equiv.swap a b) =
         σ ∘ Equiv.swap (cyclicForwardSite i a.val) (cyclicForwardSite i b.val) :=
     fun i a b => cyclicCfg_extractWindow_comp_swap hN hN3 i σ a b
-  simp only [parentHamiltonian, LinearMap.sum_apply, Finset.sum_apply, Finset.mul_sum]
+  simp only [parentHamiltonian_eq_sum_localTerm, LinearMap.sum_apply, Finset.sum_apply,
+    Finset.mul_sum]
   refine Finset.sum_congr rfl fun i _ => ?_
-  rw [localTerm, dite_eq_left hN3]
-  simp only [LinearMap.pi_apply, LinearMap.comp_apply, LinearMap.proj_apply]
+  rw [localTerm_apply_of_le _ 3 N hN3 i]
   rw [← majumdarGhoshTerm_shift_eq_parentInteraction, majumdarGhoshTerm_shift_apply]
-  simp only [LinearMap.pi_apply, LinearMap.proj_apply, hw]
+  simp only [hw]
   simp [cyclicForwardSite_zero]
 
 /-- Project result: on a periodic chain of \(N\ge3\) sites,

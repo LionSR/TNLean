@@ -4,8 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Overlap.Basic
-import TNLean.Circuit.ImageReflectionCircuit
-import TNLean.Circuit.CleanUnitaryImplementation
+import QICLean.Circuit.Compile.ImageReflection
+import QICLean.Circuit.Geometry.Graph
+import QICLean.Circuit.Model.CleanWorkspace
 
 /-!
 # Exact amplification circuits with a shared initialized workspace
@@ -17,7 +18,8 @@ initialized logical space. The inverse child call is therefore clean,
 and all reflection rounds reuse the same workspace.
 
 The resulting circuit acts exactly as normalized postselection on the
-specified input isometry, with its complete global phase retained.
+specified input isometry, with its complete global phase retained. The phase
+`-1` of each round is a one-site unitary and costs no gate.
 Source: the circuit assembly in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
 -/
@@ -37,35 +39,40 @@ theorem exists_exact_clean_amplification_circuit
     (hn : 2 ≤ n) (J : Matrix (Cfg d n) κ ℂ) (hJ : J.IsIsometry)
     (E : Matrix κ m ℂ) (hE : E.IsIsometry)
     (Z : Matrix κ κ ℂ) (U R S : Matrix (Cfg d n) (Cfg d n) ℂ)
-    (hU : IsPairProduct d n K U) (hUclean : IsCleanImplementation J U Z)
-    (hR : IsPairProduct d n B R)
+    (hU : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph n)) K U)
+    (hUclean : IsCleanImplementation J U Z)
+    (hR : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph n)) B R)
     (hRclean : IsCleanImplementation J R (subspaceReflection (E * Eᴴ)))
     (P : Matrix κ κ ℂ) (hP : IsStarProjection P)
-    (hS : IsPairProduct d n L S)
+    (hS : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph n)) L S)
     (hSclean : IsCleanImplementation J S (subspaceReflection P))
     (ℓ : ℕ) (hℓ : 0 < ℓ)
     (hprob : (Z * E)ᴴ * P * (Z * E) =
       (Real.sin (Real.pi / (4 * (ℓ : ℝ) + 2)) : ℂ) ^ 2 • (1 : Matrix m m ℂ)) :
     ∃ W : Matrix (Cfg d n) (Cfg d n) ℂ,
-      IsPairProduct d n (ℓ * (1 + (2 * K + B + L)) + K) W ∧
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph n)) (ℓ * (2 * K + B + L) + K) W ∧
       IsCleanImplementation J W
         (postselectionAmplificationStep (Z * E) P ^ ℓ * Z) ∧
       W * (J * E) = J * postselectionSuccess (Z * E) P
         (Real.sin (Real.pi / (4 * (ℓ : ℝ) + 2))) := by
-  have hZ := hUclean.logical_mem_unitary hJ hU.mem_unitary
-  have hZgram : Zᴴ * Z = 1 := Unitary.star_mul_self_of_mem hZ
+  have hZ := hUclean.logical_mem_unitaryGroup hJ hU.mem_unitaryGroup
+  have hZgram : Zᴴ * Z = 1 := mem_unitaryGroup_iff'.mp hZ
   have hV : (Z * E)ᴴ * (Z * E) = 1 := by
     simp only [conjTranspose_mul, Matrix.mul_assoc]
     rw [← Matrix.mul_assoc Zᴴ Z, hZgram, Matrix.one_mul, hE]
   let Q : Matrix (Cfg d n) (Cfg d n) ℂ := -(U * R * Uᴴ * S)
-  have hQ : IsPairProduct d n (1 + (2 * K + B + L)) Q := by
-    have hprod := ((hU.mul hR).mul hU.star).mul hS
-    have hphase := QuantumCircuit.isPairProduct_neg_one (d := d) hn
-    simpa only [Q, star_eq_conjTranspose, neg_one_mul,
-      show K + B + K + L = 2 * K + B + L by omega] using hphase.mul hprod
+  have hQ : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph n)) (2 * K + B + L) Q := by
+    have : Nonempty (Fin n) := ⟨⟨0, by omega⟩⟩
+    have hprod := ((hU.mul hR).mul hU.conjTranspose).mul hS
+    have hphase := IsGateProduct.smul_one (Γ := Geometry.graph (SimpleGraph.pathGraph n))
+      (X := fun _ : Fin n ↦ Fin d) (μ := -1) (by simp) 0
+    have h := hphase.mul hprod
+    rw [neg_one_smul, neg_mul, Matrix.one_mul, zero_add,
+      show K + B + K + L = 2 * K + B + L by omega] at h
+    exact h
   have hQclean : IsCleanImplementation J Q (postselectionAmplificationStep (Z * E) P) := by
     have hprod := ((hUclean.mul hRclean).mul
-      (hUclean.conjTranspose_of_isometry hJ hU.mem_unitary)).mul hSclean
+      (hUclean.conjTranspose_of_isometry hJ hU.mem_unitaryGroup)).mul hSclean
     change (U * R * Uᴴ * S) * J =
       J * (Z * subspaceReflection (E * Eᴴ) * Zᴴ * subspaceReflection P) at hprod
     change -(U * R * Uᴴ * S) * J = J *

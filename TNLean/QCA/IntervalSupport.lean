@@ -5,12 +5,14 @@ Authors: TNLean contributors
 -/
 import TNLean.QCA.IntervalCoordinates
 import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlaceAlong
 
 /-!
 # Finite local inclusions in numbered support coordinates
 
 An arbitrary local inclusion into an integer interval is precisely the
-existing finite site embedding after the sites are numbered. Thus its
+placement `ManyBody.placeAlong` along the numbering of the retained sites
+(`SpinChain.finiteChainRegionEmbedding`). Thus its
 matrix belongs to the existing supported-operator algebra on the numbered
 retained sites. No interval shape of the retained region is required.
 
@@ -20,22 +22,37 @@ lines 2285–2295.
 
 namespace SpinChain
 
-/-- Numbering an arbitrary finite local inclusion gives the existing
-finite site embedding. Source: arXiv:1703.09188, Appendix, lines 2285–2295. -/
-theorem intervalCoordinates_localInclusion_eq_embedOp
+/-- The numbering of the sites of a region `Λ` inside the interval of `N` sites starting at
+`a`, as an injection into the numbered sites. Source: arXiv:1703.09188, Appendix,
+lines 2285–2295. -/
+def finiteChainRegionEmbedding {N : ℕ} {a : ℤ} {Λ : Finset ℤ}
+    (hΛ : Λ ⊆ finiteChainRegion a N) : Λ ↪ Fin N where
+  toFun x := (finiteChainSiteEquiv a N).symm ⟨x.val, hΛ x.property⟩
+  inj' x y hxy := by
+    apply Subtype.ext
+    have h := congrArg (fun i => (finiteChainSiteEquiv a N i).val) hxy
+    simpa only [Equiv.apply_symm_apply] using h
+
+theorem finiteChainRegionEmbedding_apply {N : ℕ} {a : ℤ} {Λ : Finset ℤ}
+    (hΛ : Λ ⊆ finiteChainRegion a N) (x : Λ) :
+    finiteChainRegionEmbedding hΛ x = (finiteChainSiteEquiv a N).symm ⟨x.val, hΛ x.property⟩ :=
+  rfl
+
+/-- Numbering an arbitrary finite local inclusion gives the placement along the numbering of
+the region. Source: arXiv:1703.09188, Appendix, lines 2285–2295. -/
+theorem intervalCoordinates_localInclusion_eq_placeAlong
     {d N : ℕ} {a : ℤ} {Λ : Finset ℤ} (hΛ : Λ ⊆ finiteChainRegion a N)
     (A : LocalAlgebra d Λ) :
     intervalCoordinates d a N (localInclusion hΛ A) =
-      QuantumCircuit.embedOp
-        (fun x : Λ => (finiteChainSiteEquiv a N).symm ⟨x.val, hΛ x.property⟩)
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) (finiteChainRegionEmbedding hΛ)
         (CStarMatrix.ofMatrix.symm A) := by
   classical
   let E := finiteChainSiteEquiv a N
-  let e : Λ → Fin N := fun x => E.symm ⟨x.val, hΛ x.property⟩
+  let e := finiteChainRegionEmbedding hΛ
   ext σ τ
   have hAgree : (Config.splitEquiv hΛ (finiteChainConfigEquiv d N a σ)).2 =
       (Config.splitEquiv hΛ (finiteChainConfigEquiv d N a τ)).2 ↔
-      QuantumCircuit.AgreeOff e σ τ := by
+      ∀ i, (∀ x, e x ≠ i) → σ i = τ i := by
     constructor
     · intro h i hi
       have hx : (E i).val ∉ Λ := by
@@ -51,15 +68,15 @@ theorem intervalCoordinates_localInclusion_eq_embedOp
       intro y hy
       have hyx : y.val = x.val := by
         have hval := congrArg (fun j => (E j).val) hy
-        simpa only [e, i, Equiv.apply_symm_apply] using hval
+        simpa only [E, e, i, finiteChainRegionEmbedding_apply, Equiv.apply_symm_apply] using
+          hval
       exact (Finset.mem_sdiff.mp x.property).2 (hyx ▸ y.property)
-  rw [intervalCoordinates_apply, localInclusion_apply, QuantumCircuit.embedOp_apply]
-  change A (σ ∘ e) (τ ∘ e) *
-      (if (Config.splitEquiv hΛ (finiteChainConfigEquiv d N a σ)).2 =
-        (Config.splitEquiv hΛ (finiteChainConfigEquiv d N a τ)).2 then 1 else 0) =
-      if QuantumCircuit.AgreeOff e σ τ then A (σ ∘ e) (τ ∘ e) else 0
-  simp only [hAgree]
-  split_ifs <;> simp only [mul_one, mul_zero]
+  rw [intervalCoordinates_apply, localInclusion_apply, ManyBody.placeAlong_apply, mul_ite,
+    mul_one, mul_zero]
+  by_cases h : ∀ i, (∀ x, e x ≠ i) → σ i = τ i
+  · rw [ite_eq_left (hAgree.mpr h), ite_eq_left h]
+    rfl
+  · rw [ite_eq_right (mt hAgree.mp h), ite_eq_right h]
 
 /-- Every actual local inclusion is supported on the same numbered sites.
 Source: arXiv:1703.09188, Appendix, lines 2285–2295. -/
@@ -70,18 +87,13 @@ theorem intervalCoordinates_localInclusion_mem_supportedOperators
       ManyBody.supportedOperators (fun _ ↦ Fin d)
         (Finset.univ.filter fun (i : Fin N) ↦ (finiteChainSiteEquiv a N i).val ∈ Λ) := by
   classical
-  rw [intervalCoordinates_localInclusion_eq_embedOp]
-  let e : Λ → Fin N := fun x => (finiteChainSiteEquiv a N).symm ⟨x.val, hΛ x.property⟩
-  have he : Function.Injective e := by
-    intro x y hxy
-    apply Subtype.ext
-    have h := congrArg (fun i => (finiteChainSiteEquiv a N i).val) hxy
-    simpa only [e, Equiv.apply_symm_apply] using h
+  rw [intervalCoordinates_localInclusion_eq_placeAlong]
   apply ManyBody.supportedOperators_mono ?_
-    (QuantumCircuit.embedOp_mem_supportedOperators he (CStarMatrix.ofMatrix.symm A))
+    (ManyBody.placeAlong_mem_supportedOperators (X := fun _ ↦ Fin d)
+      (finiteChainRegionEmbedding hΛ) (CStarMatrix.ofMatrix.symm A))
   intro _ hx
-  obtain ⟨x, -, rfl⟩ := Finset.mem_image.mp hx
-  simpa only [e, Finset.mem_filter, Finset.mem_univ, true_and, Equiv.apply_symm_apply] using
-    x.property
+  obtain ⟨x, -, rfl⟩ := Finset.mem_map.mp hx
+  simpa only [finiteChainRegionEmbedding_apply, Finset.mem_filter, Finset.mem_univ, true_and,
+    Equiv.apply_symm_apply] using x.property
 
 end SpinChain

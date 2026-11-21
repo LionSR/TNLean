@@ -51,27 +51,27 @@ theorem exists_threeSplit_edge_factors
     (hE : E = interval L (u.val + 1) (v.val + 1)) (hTE : Disjoint T E) :
     ∃ (HL : Fin (L - 1) → Matrix (T → Fin q) (T → Fin q) ℂ)
       (HM : Fin (L - 1) → Matrix (E → Fin q) (E → Fin q) ℂ)
-      (HR : Fin (L - 1) → Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)
+      (HR : Fin (L - 1) → Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ)
       (UL : Matrix ((T → Fin q) × (E → Fin q))
         ((T → Fin q) × (E → Fin q)) ℂ)
-      (VR : Matrix ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-        ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ),
+      (VR : Matrix ((E → Fin q) × ({x // x ∉ T ∪ E} → Fin q))
+        ((E → Fin q) × ({x // x ∉ T ∪ E} → Fin q)) ℂ),
       (∀ r, r ≠ u → r ≠ v →
         (H r).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
           (HL r ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
-              (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
+              (1 : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ) +
             ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ HM r) ⊗ₖ
-              (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
+              (1 : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ) +
             (1 : Matrix ((T → Fin q) × (E → Fin q))
               ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ HR r) ∧
       (H u).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
-        UL ⊗ₖ (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) ∧
+        UL ⊗ₖ (1 : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ) ∧
       (H v).submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
         ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ VR).reindex
           (Equiv.prodAssoc (T → Fin q) (E → Fin q)
-            (↥(T ∪ E)ᶜ → Fin q)).symm
+            ({x // x ∉ T ∪ E} → Fin q)).symm
           (Equiv.prodAssoc (T → Fin q) (E → Fin q)
-            (↥(T ∪ E)ᶜ → Fin q)).symm ∧
+            ({x // x ∉ T ∪ E} → Fin q)).symm ∧
       operatorSchmidtRank UL ≤ q ^ 2 ∧ operatorSchmidtRank VR ≤ q ^ 2 := by
   classical
   subst hT hE
@@ -92,13 +92,13 @@ theorem exists_threeSplit_edge_factors
   have hlocal : ∀ r : Fin (L - 1),
       ∃ (B : Matrix (T → Fin q) (T → Fin q) ℂ)
         (C : Matrix (E → Fin q) (E → Fin q) ℂ)
-        (D : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ),
+        (D : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ),
         r ≠ u → r ≠ v →
           (H r).submatrix g.symm g.symm =
             (B ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
-                (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
+                (1 : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ) +
               ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ C) ⊗ₖ
-                (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
+                (1 : Matrix ({x // x ∉ T ∪ E} → Fin q) ({x // x ∉ T ∪ E} → Fin q) ℂ) +
               (1 : Matrix ((T → Fin q) × (E → Fin q))
                 ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ D := by
     intro r

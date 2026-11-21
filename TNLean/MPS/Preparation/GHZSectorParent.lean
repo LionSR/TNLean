@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.WeightedGHZ
+import QICLean.Circuit.Protocol.WeightedGHZ
 import TNLean.MPS.Preparation.GHZSectorObstruction
 import TNLean.MPS.Core.GHZ
 import TNLean.MPS.ParentHamiltonian.ChainGroundSpace
@@ -52,7 +52,7 @@ boundary entries of the repeated sector and the entry of the other sector. -/
 theorem groundSpaceMap_repeatedBlockTensor_eq_ghzState (N : ℕ)
     (X : Matrix (Fin 3) (Fin 3) ℂ) :
     groundSpaceMap repeatedBlockTensor N X =
-      ghzState (M := N) ![X 0 0 + X 1 1, X 2 2] := by
+      ghzState (ι := Fin N) ![X 0 0 + X 1 1, X 2 2] := by
   ext σ
   rw [groundSpaceMap_apply, evalWord_diagonal]
   simp only [Matrix.trace, List.map_ofFn, List.prod_ofFn,
@@ -66,7 +66,7 @@ theorem groundSpaceMap_repeatedBlockTensor_eq_ghzState (N : ℕ)
 physical sector coefficients. -/
 theorem groundSpaceMap_ghzTensor_eq_ghzState (N : ℕ)
     (X : Matrix (Fin 2) (Fin 2) ℂ) :
-    groundSpaceMap ghzTensor N X = ghzState (M := N) ![X 0 0, X 1 1] := by
+    groundSpaceMap ghzTensor N X = ghzState (ι := Fin N) ![X 0 0, X 1 1] := by
   ext σ
   rw [groundSpaceMap_apply]
   change Matrix.trace (Kraus.evalWord (fun i => Matrix.diagonal (Pi.single i 1))
@@ -82,14 +82,14 @@ theorem groundSpaceMap_ghzTensor_eq_ghzState (N : ℕ)
 /-- Periodic trace multiplicity gives constant sector amplitudes `(2, 1)` at
 every length; the empty word has amplitude three. -/
 theorem mpv_repeatedBlockTensor_eq_ghzState (N : ℕ) :
-    (mpv repeatedBlockTensor : NSiteSpace 2 N) = ghzState (M := N) ![2, 1] := by
+    (mpv repeatedBlockTensor : NSiteSpace 2 N) = ghzState (ι := Fin N) ![2, 1] := by
   rw [mpv_eq_groundSpaceMap_one, groundSpaceMap_repeatedBlockTensor_eq_ghzState]
   norm_num
 
 /-- The periodic GHZ tensor gives the equal-weight GHZ vector; the empty word
 has amplitude two. -/
 theorem mpv_ghzTensor_eq_ghzState (N : ℕ) :
-    (mpv ghzTensor : NSiteSpace 2 N) = ghzState (M := N) ![1, 1] := by
+    (mpv ghzTensor : NSiteSpace 2 N) = ghzState (ι := Fin N) ![1, 1] := by
   rw [mpv_eq_groundSpaceMap_one, groundSpaceMap_ghzTensor_eq_ghzState]
   norm_num
 
@@ -98,7 +98,7 @@ theorem norm_mpvState_repeatedBlockTensor {N : ℕ} [NeZero N] :
     ‖mpvState repeatedBlockTensor N‖ = Real.sqrt 5 := by
   have h : ‖mpvState repeatedBlockTensor N‖ ^ 2 = 5 := by
     change ‖(WithLp.toLp 2 (mpv repeatedBlockTensor) : MPVSpace 2 N)‖ ^ 2 = _
-    rw [mpv_repeatedBlockTensor_eq_ghzState, norm_ghzState_two_sq]
+    rw [mpv_repeatedBlockTensor_eq_ghzState, norm_ghzState_sq, Fin.sum_univ_two]
     norm_num
   nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 5 by norm_num),
     Real.sqrt_nonneg 5, norm_nonneg (mpvState repeatedBlockTensor N)]
@@ -108,7 +108,7 @@ theorem norm_mpvState_ghzTensor {N : ℕ} [NeZero N] :
     ‖mpvState ghzTensor N‖ = Real.sqrt 2 := by
   have h : ‖mpvState ghzTensor N‖ ^ 2 = 2 := by
     change ‖(WithLp.toLp 2 (mpv ghzTensor) : MPVSpace 2 N)‖ ^ 2 = _
-    rw [mpv_ghzTensor_eq_ghzState, norm_ghzState_two_sq]
+    rw [mpv_ghzTensor_eq_ghzState, norm_ghzState_sq, Fin.sum_univ_two]
     norm_num
   nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num),
     Real.sqrt_nonneg 2, norm_nonneg (mpvState ghzTensor N)]
@@ -117,26 +117,30 @@ theorem norm_mpvState_ghzTensor {N : ℕ} [NeZero N] :
 `(2|0ᴺ⟩ + |1ᴺ⟩)/√5`, with no length-dependent reweighting. -/
 theorem normalizedMPVState_repeatedBlockTensor {N : ℕ} [NeZero N] :
     normalizedMPVState repeatedBlockTensor N =
-      WithLp.toLp 2 (ghzState (M := N)
+      WithLp.toLp 2 (ghzState (ι := Fin N)
         ![2 / (Real.sqrt 5 : ℂ), 1 / (Real.sqrt 5 : ℂ)]) := by
   rw [normalizedMPVState, norm_mpvState_repeatedBlockTensor]
   apply PiLp.ext
   intro σ
   change ((Real.sqrt 5 : ℂ)⁻¹ • (mpv repeatedBlockTensor : NSiteSpace 2 N)) σ = _
-  rw [mpv_repeatedBlockTensor_eq_ghzState, ghzState_smul_two]
-  simp [div_eq_mul_inv, mul_comm]
+  rw [mpv_repeatedBlockTensor_eq_ghzState, ← ghzState_smul]
+  congr 2
+  ext j
+  fin_cases j <;> simp [div_eq_mul_inv, mul_comm]
 
 /-- The normalized periodic GHZ state is `( |0ᴺ⟩ + |1ᴺ⟩ )/√2`. -/
 theorem normalizedMPVState_ghzTensor {N : ℕ} [NeZero N] :
     normalizedMPVState ghzTensor N =
-      WithLp.toLp 2 (ghzState (M := N)
+      WithLp.toLp 2 (ghzState (ι := Fin N)
         ![1 / (Real.sqrt 2 : ℂ), 1 / (Real.sqrt 2 : ℂ)]) := by
   rw [normalizedMPVState, norm_mpvState_ghzTensor]
   apply PiLp.ext
   intro σ
   change ((Real.sqrt 2 : ℂ)⁻¹ • (mpv ghzTensor : NSiteSpace 2 N)) σ = _
-  rw [mpv_ghzTensor_eq_ghzState, ghzState_smul_two]
-  simp [div_eq_mul_inv]
+  rw [mpv_ghzTensor_eq_ghzState, ← ghzState_smul]
+  congr 2
+  ext j
+  fin_cases j <;> simp [div_eq_mul_inv]
 
 /-- Repeating a virtual GHZ sector changes its periodic trace coefficient but
 leaves the entire local boundary-generated space unchanged. -/
@@ -168,13 +172,14 @@ theorem chainGroundSpace_repeatedBlockTensor_eq_ghzTensor (L N : ℕ) :
 periodic MPS vectors carry different sector probabilities. -/
 theorem parentHamiltonian_repeatedBlockTensor_eq_ghzTensor (L N : ℕ) :
     parentHamiltonian repeatedBlockTensor L N = parentHamiltonian ghzTensor L N := by
-  simp [parentHamiltonian, localTerm, parentInteraction_repeatedBlockTensor_eq_ghzTensor]
+  simp [parentHamiltonian, parentRingInteraction,
+    parentInteraction_repeatedBlockTensor_eq_ghzTensor]
 
 /-- The actual normalized periodic vectors of two tensors with identical parent
 Hamiltonians require a linear circuit depth for sufficiently accurate conversion. -/
 theorem repeatedBlockTensor_infidelity_lower_bound {N T : ℕ} [NeZero N]
     {U : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ}
-    (hU : IsLocalCircuitOfDepth U T) (hN : 4 * T + 4 < N) :
+    (hU : IsUnitaryCircuit (Geometry.ring N) T U) (hN : 4 * T + 4 < N) :
     (9 : ℝ) / 5000 ≤ 1 - ‖⟪Matrix.toEuclideanLin U
       (normalizedMPVState repeatedBlockTensor N), normalizedMPVState ghzTensor N⟫_ℂ‖ := by
   rw [normalizedMPVState_repeatedBlockTensor, normalizedMPVState_ghzTensor]
@@ -185,7 +190,7 @@ theorem repeatedBlockTensor_infidelity_lower_bound {N T : ℕ} [NeZero N]
 periodic states forces the ring length to be at most `4T+4`. -/
 theorem length_le_of_repeatedBlockTensor_infidelity_lt {N T : ℕ} [NeZero N]
     {U : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ}
-    (hU : IsLocalCircuitOfDepth U T)
+    (hU : IsUnitaryCircuit (Geometry.ring N) T U)
     (herr : 1 - ‖⟪Matrix.toEuclideanLin U (normalizedMPVState repeatedBlockTensor N),
       normalizedMPVState ghzTensor N⟫_ℂ‖ < (9 : ℝ) / 5000) : N ≤ 4 * T + 4 := by
   by_contra hN

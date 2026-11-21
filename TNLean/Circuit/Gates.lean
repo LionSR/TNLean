@@ -8,7 +8,4 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Circuit.Gates
 
-import TNLean.Circuit.Gates.Controlled
-import TNLean.Circuit.Gates.ControlledProducts
 import TNLean.Circuit.Gates.Permutation
-import TNLean.Circuit.Gates.TwoSiteUniversality

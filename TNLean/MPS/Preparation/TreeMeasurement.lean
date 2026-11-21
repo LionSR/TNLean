@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.Teleportation.LongRangeGates
+import QICLean.Circuit.Protocol.Teleportation.LongRangeGates
 import TNLean.MPS.Overlap.Basic
 
 /-!
@@ -30,17 +30,18 @@ Before level `i` the sites strictly inside the complete blocks of size `2^{i+1}`
 residue modulo `2^{i+1}` lies in `{1, …, 2^{i+1} - 2}` (`MPSPreparation.blockInterior`), carry
 `|0⟩`, and the gates of level `i`, acting on the residues `0` and `2^{i+1} - 1`, act on no site
 strictly inside a complete block of a finer level. So every level is a layer of long-range gates
-in the sense of `TNLean.Circuit.Teleportation.LongRangeGates`, applied in depth `5` with
-measurements, and the tree of `k` levels in depth `5k` on the vectors with `|0⟩` strictly inside the
-complete blocks of all its levels (`MPSPreparation.treeInterior`,
-`MPSPreparation.isRoundsImplementationOn_treeRounds`). No divisibility of `N` is assumed: only
+in the sense of `QICLean.Circuit.Protocol.Teleportation.LongRangeGates`, applied in depth at
+most `5` with measurements, and the tree of `k` levels in depth at most `5k` on the vectors with
+`|0⟩` strictly inside the complete blocks of all its levels (`MPSPreparation.treeInterior`,
+`MPSPreparation.isImplementationOn_treeRounds`). No divisibility of `N` is assumed: only
 complete blocks carry gates, and the sites of an incomplete block need no `|0⟩` on its account.
 
 Every register of this tree is one site of dimension `d` and every node carries a two-site
 unitary, whereas in arXiv:2307.01696, eq. (16), a register above the lowest level carries
-`ℂ^{D²}`. Registers of several sites are the subject of `TNLean.Circuit.Teleportation.RegisterGates`
-and `TNLean.MPS.Preparation.RegisterTree`, and the preparation of matrix product states in depth
-`O(log log(N/ε))` of `TNLean.MPS.Preparation.LogLogDepthPreparation`.
+`ℂ^{D²}`. Registers of several sites are the subject of
+`QICLean.Circuit.Protocol.Teleportation.RegisterGates` and `TNLean.MPS.Preparation.RegisterTree`,
+and the preparation of matrix product states in depth `O(log log(N/ε))` of
+`TNLean.MPS.Preparation.LogLogDepthPreparation`.
 
 ## Main definitions
 
@@ -50,15 +51,15 @@ and `TNLean.MPS.Preparation.RegisterTree`, and the preparation of matrix product
 * `MPSPreparation.treeGate`, `MPSPreparation.levelGates`, `MPSPreparation.levelOp` — the gates
   of a level of the tree and their product.
 * `MPSPreparation.treeOp` — the product of the first `k` levels, the coarsest applied first.
-* `MPSPreparation.treeRounds` — the measurement rounds applying them.
+* `MPSPreparation.treeRounds` — the measurement circuit applying them.
 
 ## Main results
 
-* `MPSPreparation.sum_depth_treeRounds` — the rounds of `k` levels have depth `5k`.
-* `MPSPreparation.isRoundsImplementationOn_treeRounds` — they implement the tree on the vectors
+* `MPSPreparation.depth_treeRounds_le` — the circuit of `k` levels has depth at most `5k`.
+* `MPSPreparation.isImplementationOn_treeRounds` — it implements the tree on the vectors
   with `|0⟩` at the sites of `MPSPreparation.treeInterior N k`.
-* `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_treeOp` — the tree applied to a nonzero
-  product vector with `|0⟩` at these sites is prepared with measurement rounds in depth `5k`.
+* `MPSPreparation.exists_isMeasurementConversion_treeOp` — the tree applied to a nonzero
+  product vector with `|0⟩` at these sites is converted from it with measurements in depth `5k`.
 
 ## References
 
@@ -139,7 +140,7 @@ def treeGate (i p : ℕ) (hp : p < N / 2 ^ (i + 1)) : LongRangeGate d N where
     have h3 := Nat.one_le_two_pow (n := i)
     omega
   u := u i p
-  u_mem_unitary := hu i p
+  u_mem_unitaryGroup := hu i p
 
 /-- The gates of level `i`, one for each block `[p 2^{i+1}, (p + 1) 2^{i+1})` contained in
 `{0, …, N - 1}`. -/
@@ -208,27 +209,38 @@ noncomputable def treeOp : ℕ → Matrix (Cfg d N) (Cfg d N) ℂ
 
 variable [NeZero d]
 
-/-- The measurement rounds applying the levels `0, …, k - 1` of the tree, the coarsest first:
+/-- The measurement circuit applying the levels `0, …, k - 1` of the tree, the coarsest first:
 two rounds for each level (`QuantumCircuit.LongRangeGate.rounds`).
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements". -/
-noncomputable def treeRounds : ℕ → List (MeasurementRound d N)
-  | 0 => []
-  | i + 1 => LongRangeGate.rounds (pairwise_levelGates u hu i) ++ treeRounds i
+noncomputable def treeRounds : ℕ →
+    Circuit (Geometry.ring N) KrausGate (ManyBody.Qudits (Fin N) d) (ManyBody.Qudits (Fin N) d)
+  | 0 => Circuit.done _
+  | i + 1 => (LongRangeGate.rounds (pairwise_levelGates u hu i)).comp (treeRounds i)
 
-/-- The rounds of `k` levels have depth `5k`. -/
-theorem sum_depth_treeRounds (k : ℕ) :
-    ((treeRounds (N := N) u hu k).map MeasurementRound.depth).sum = 5 * k := by
+/-- The circuit of `k` levels has depth at most `5k`. -/
+theorem depth_treeRounds_le (k : ℕ) : (treeRounds (N := N) u hu k).depth ≤ 5 * k := by
   induction k with
-  | zero => rfl
+  | zero => exact Nat.zero_le _
   | succ k ih =>
-    rw [treeRounds, List.map_append, List.sum_append, LongRangeGate.sum_depth_rounds, ih]
-    ring
+    rw [treeRounds]
+    exact (Circuit.depth_comp _ _).trans
+      ((Nat.add_le_add (LongRangeGate.depth_rounds_le _) ih).trans_eq (by ring))
+
+/-- The circuit of the tree is a measurement circuit. -/
+theorem forall_treeRounds (k : ℕ) :
+    (treeRounds (N := N) u hu k).Forall KrausGate.ev KrausFamily.IsUnitaryOrMeasurement := by
+  induction k with
+  | zero => exact trivial
+  | succ k ih =>
+    rw [treeRounds]
+    exact (LongRangeGate.forall_rounds _).comp _ ih
 
 omit [NeZero N] in
 /-- A product vector with `|0⟩` at the sites of `S` has `|0⟩` at the sites of `S`. -/
 theorem isZeroOn_productVector {S : Finset (Fin N)} {v : Fin N → Fin d → ℂ}
-    (hv : ∀ x ∈ S, ∀ j, j ≠ 0 → v x j = 0) : IsZeroOn S (productVector v) := by
+    (hv : ∀ x ∈ S, ∀ j, j ≠ 0 → v x j = 0) :
+    IsZeroOn S (fun σ : Cfg d N => ∏ i, v i (σ i)) := by
   intro y hy x hx
   by_contra h
   exact hy (Finset.prod_eq_zero (Finset.mem_univ x) (hv x hx _ h))
@@ -256,7 +268,7 @@ theorem isZeroOn_levelOp_mulVec (k : ℕ) {v : Cfg d N → ℂ}
     (hv : IsZeroOn (treeInterior N (k + 1)) v) :
     IsZeroOn (treeInterior N k) (levelOp u hu k *ᵥ v) := by
   refine (hv.mono (treeInterior_mono (Nat.le_succ k))).mulVec_of_mem_supportedOperators
-    disjoint_compl_right (list_prod_mem_supportedOperators _ fun A hA => ?_)
+    disjoint_compl_right (list_prod_mem fun A hA => ?_)
   obtain ⟨g, hg, rfl⟩ := List.mem_map.mp hA
   obtain ⟨⟨p, hp⟩, rfl⟩ := List.mem_ofFn.mp hg
   refine ManyBody.supportedOperators_mono ?_ (LongRangeGate.op_mem_supportedOperators _)
@@ -293,37 +305,39 @@ theorem interior_subset_blockInterior {i : ℕ} {g : LongRangeGate d N}
     Nat.div_eq_of_lt_le (by omega) (by rw [Nat.succ_mul]; omega)
   exact mem_blockInterior.mpr ⟨hmod ▸ h1, hmod ▸ h2, hdiv ▸ succ_mul_le_of_lt_div hp⟩
 
-/-- **A binary tree of gates in depth `5k` with measurements.** The rounds of the levels
-`0, …, k - 1`, of total depth `5k`, implement the product of the levels, the coarsest applied
+/-- **A binary tree of gates in depth `5k` with measurements.** The circuit of the levels
+`0, …, k - 1`, of depth at most `5k`, implements the product of the levels, the coarsest applied
 first, on the vectors with `|0⟩` at the sites strictly inside the complete blocks of sizes
 `2, 4, …, 2^k`: whatever the outcomes, every output is a scalar multiple of the tree applied to
 the input.
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("every isometry in
 eq. (16) takes constant time using measurement"). -/
-theorem isRoundsImplementationOn_treeRounds (k : ℕ) :
-    MeasurementRound.IsRoundsImplementationOn (treeRounds u hu k)
+theorem isImplementationOn_treeRounds (k : ℕ) :
+    (treeRounds u hu k).IsImplementationOn KrausGate.ev
       {v | IsZeroOn (treeInterior N k) v} (treeOp u hu k) := by
   induction k with
   | zero =>
-    exact MeasurementRound.isRoundsImplementationOn_nil _
+    exact Circuit.isImplementationOn_done _
   | succ k ih =>
-    refine ((LongRangeGate.isRoundsImplementationOn_rounds (pairwise_levelGates u hu k)).mono
+    rw [treeRounds]
+    exact ((LongRangeGate.isImplementationOn_rounds (pairwise_levelGates u hu k)).mono
       fun v hv g hg => IsZeroOn.mono hv ((interior_subset_blockInterior u hu hg).trans
-        (blockInterior_subset_treeInterior k))).append ih
+        (blockInterior_subset_treeInterior k))).comp ih
       fun v hv => isZeroOn_levelOp_mulVec u hu k hv
 
 /-- **Preparation of a tree state in depth `5k` with measurements.** Let `v` be a nonzero product
 vector with `|0⟩` at the sites strictly inside the complete blocks of sizes `2, 4, …, 2^k`. The
-tree of the levels `0, …, k - 1` applied to it is prepared with measurement rounds in depth
-`5k`.
+tree of the levels `0, …, k - 1` applied to it is converted from it by a measurement circuit of
+depth at most `5k`.
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements". -/
-theorem isPreparedWithMeasurementRoundsInDepth_treeOp (k : ℕ) {v : Fin N → Fin d → ℂ}
-    (hv : productVector v ≠ 0) (hv0 : ∀ x ∈ treeInterior N k, ∀ j, j ≠ 0 → v x j = 0) :
-    IsPreparedWithMeasurementRoundsInDepth (5 * k) (treeOp u hu k *ᵥ productVector v) := by
-  have := (isRoundsImplementationOn_treeRounds u hu k).isPreparedWithMeasurementRoundsInDepth hv
-    (isZeroOn_productVector hv0)
-  rwa [sum_depth_treeRounds] at this
+theorem exists_isMeasurementConversion_treeOp (k : ℕ) {v : Fin N → Fin d → ℂ}
+    (hv : (fun σ : Cfg d N => ∏ i, v i (σ i)) ≠ 0)
+    (hv0 : ∀ x ∈ treeInterior N k, ∀ j, j ≠ 0 → v x j = 0) :
+    ∃ w : Fin N → Fin d → ℂ, IsMeasurementConversion (Geometry.ring N) (5 * k)
+      (fun σ ↦ ∏ i, w i (σ i)) (treeOp u hu k *ᵥ fun σ ↦ ∏ i, v i (σ i)) :=
+  ⟨v, (isImplementationOn_treeRounds u hu k).isMeasurementConversion (forall_treeRounds u hu k)
+    (depth_treeRounds_le u hu k) hv (isZeroOn_productVector hv0)⟩
 
 end MPSPreparation

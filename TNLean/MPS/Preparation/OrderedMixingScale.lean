@@ -49,7 +49,8 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_min_of_ordered_mixing
           ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
             let q := ⌈(1 / r) * Real.log (N / ε) + b⌉₊
             3 * D + 1 ≤ q ∧ ∃ (ψ : MPVSpace d N) (T : ℕ),
-              ‖ψ‖ = 1 ∧ T ≤ C * min N q ∧ IsPreparedInDepth T (fun s => ψ s) ∧
+              ‖ψ‖ = 1 ∧ T ≤ C * min N q ∧
+                IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
                 1 - ‖⟪ψ, (‖chainState A‖ : ℂ)⁻¹ • chainState A⟫_ℂ‖ ≤ ε := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_inhomogeneous_le_min_of_rate d D hd
   refine ⟨C, fun σ hσ htr K r hK hr => ?_⟩

@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.PairProduct
+import QICLean.ManyBody.Sites.PlaceAlong
+import TNLean.Algebra.FinKronecker
 import TNLean.MPS.AreaLaw.OpenMPS
 import Mathlib.Logic.Equiv.Fin.Basic
 
@@ -68,20 +69,24 @@ algebra for ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
 theorem isOpenMPS_operator_entries_embed_one_site {L q : ℕ} (v : Fin L)
     (X : Matrix (Fin 1 → Fin q) (Fin 1 → Fin q) ℂ) :
     IsOpenMPS L (q * q) 1 (fun w ↦
-      QuantumCircuit.embedOp (fun _ : Fin 1 ↦ v) X
+      ManyBody.placeAlong (X := fun _ ↦ Fin q)
+        ⟨fun _ : Fin 1 ↦ v, fun a b _ ↦ Subsingleton.elim a b⟩ X
         (fun t ↦ (w t).divNat) (fun t ↦ (w t).modNat)) := by
   classical
-  let e := fun _ : Fin 1 ↦ v
-  have he : Function.Injective e := fun _ _ _ ↦ Subsingleton.elim _ _
   let N : Fin 1 → Matrix (Fin q) (Fin q) ℂ :=
     fun _ i j ↦ X (fun _ ↦ i) (fun _ ↦ j)
-  have hX : X = Matrix.rectKronecker N := by
+  have hX : X = ManyBody.prodOp (X := fun _ : Fin 1 ↦ Fin q) (Y := fun _ : Fin 1 ↦ Fin q) N := by
     ext x y
-    rw [Matrix.rectKronecker_apply, Fin.prod_univ_one]
+    rw [ManyBody.prodOp_apply, Fin.prod_univ_one]
     change X x y = X (fun _ ↦ x 0) (fun _ ↦ y 0)
     congr 1 <;> funext i <;> congr 1 <;> exact Subsingleton.elim _ _
-  rw [hX, QuantumCircuit.embedOp_rectKronecker he]
-  exact isOpenMPS_operator_entries_rectKronecker (Function.extend e N 1)
+  rw [hX, ManyBody.placeAlong_prodOp (X := fun _ ↦ Fin q)
+    ⟨fun _ : Fin 1 ↦ v, fun a b _ ↦ Subsingleton.elim a b⟩ N
+    (Function.update (fun _ ↦ (1 : Matrix (Fin q) (Fin q) ℂ)) v (N 0))
+    (fun _ ↦ Function.update_self _ _ _)
+    (fun v' hv' ↦ Function.update_of_ne (show v' ≠ v from fun h ↦ hv' 0 h.symm) _ _)]
+  exact isOpenMPS_operator_entries_prod
+    (Function.update (fun _ ↦ (1 : Matrix (Fin q) (Fin q) ℂ)) v (N 0))
 
 /-- Every operator supported on a singleton has bond dimension bound one.
 Supporting locality algebra for ALVV, arXiv:1602.08828v2,
@@ -92,11 +97,14 @@ theorem isOpenMPS_operator_entries_of_supported_singleton {L q : ℕ} (v : Fin L
     IsOpenMPS L (q * q) 1 (fun w ↦
       M (fun t ↦ (w t).divNat) (fun t ↦ (w t).modNat)) := by
   classical
-  let e := fun _ : Fin 1 ↦ v
-  have he : Function.Injective e := fun _ _ _ ↦ Subsingleton.elim _ _
-  have hs : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Finset.univ.image e) := by
-    simpa only [e, Finset.univ_nonempty, Finset.image_const] using hM
-  obtain ⟨X, rfl⟩ := QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators he hs
+  let e : Fin 1 ↪ Fin L := ⟨fun _ : Fin 1 ↦ v, fun a b _ ↦ Subsingleton.elim a b⟩
+  have hmap : Finset.univ.map e = {v} := by
+    rw [Finset.map_eq_image]
+    exact Finset.image_const Finset.univ_nonempty v
+  have hs : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Finset.univ.map e) := by
+    rw [hmap]
+    exact hM
+  obtain ⟨X, rfl⟩ := ManyBody.exists_eq_placeAlong_of_mem_supportedOperators e hs
   exact isOpenMPS_operator_entries_embed_one_site v X
 
 end TNLean.MPS.AreaLaw

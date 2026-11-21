@@ -43,7 +43,7 @@ theorem isViable_of_mem_canonicalHalfSampledIntervalHistory
   have h0 : Submodule.IsCloseTo 0.04
       (Submodule.prodExt ((Matrix.toEuclideanLin P).range.map
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e).toLinearMap)
-          (↥((interval L p r)ᶜ) → Fin q)) Graw :=
+          ({v // v ∉ interval L p r} → Fin q)) Graw :=
     hU.1 ⟨0, Nat.zero_lt_succ rounds⟩
   have hRange : (Matrix.toEuclideanLin P).range.map
       (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e).toLinearMap = W := by

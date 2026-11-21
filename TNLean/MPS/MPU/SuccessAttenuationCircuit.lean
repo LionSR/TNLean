@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.ExactUniformMerging
-import TNLean.Circuit.Gates.ControlledProducts
+import QICLean.Circuit.Gate.TwoLevel
+import QICLean.Circuit.Geometry.Graph
+import QICLean.Circuit.Model.Unitary
 
 /-!
 # A physical qudit circuit for success attenuation
@@ -13,8 +15,9 @@ The binary attenuation rotation is placed on physical levels zero and one of
 a qudit of dimension `d ≥ 2`, and acts as the identity on the other levels.
 Its initialized first column is exactly
 `t |0⟩ + sqrt (1 - t²) |1⟩`. The physical matrix is unitary whenever `t² ≤ 1`.
-Placing it at any site of a chain of `n ≥ 2` sites gives an actual circuit of
-at most `2 * n` neighboring-pair gates, with its phase retained.
+Placed at any site of an open chain it is a one-site unitary, so it is a
+product of gates on neighbouring pairs of every cost, including cost zero,
+with its phase retained.
 
 For the prescribed merger attenuation, feasibility is derived from the exact
 amplification budget. No rotation, unitary, circuit, or additional angle
@@ -53,24 +56,26 @@ theorem attenuationQuditRotation_mulVec_zero {d : ℕ} (hd : 2 ≤ d) (t : ℝ) 
   simp [Matrix.attenuationRotation, Pi.single_apply, Fin.ext_iff, eq_comm]
   split_ifs <;> simp_all
 
-/-- The physically placed rotation has an actual neighboring-pair circuit.
+/-- The physically placed rotation is a one-site unitary, hence a product of
+neighbouring-pair gates of every cost `K`.
 Source: Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem isPairProduct_siteOp_attenuationQuditRotation {d n : ℕ}
-    (hd : 2 ≤ d) (hn : 2 ≤ n) (k : Fin n) (t : ℝ) (ht : t ^ 2 ≤ 1) :
-    IsPairProduct d n (2 * n) (siteOp k (attenuationQuditRotation hd t)) := by
-  exact isPairProduct_of_mem_supportedOperators_card_le_two (by omega) hn
-    (T := {k}) (by simp)
-    (siteOp_mem_unitary k (attenuationQuditRotation_mem_unitary hd t ht))
-    (by simpa using siteOp_mem_supportedOperators k (attenuationQuditRotation hd t))
+theorem isGateProduct_placeAt_attenuationQuditRotation {d n : ℕ}
+    (hd : 2 ≤ d) (k : Fin n) (t : ℝ) (ht : t ^ 2 ≤ 1) (K : ℕ) :
+    IsGateProduct (Geometry.graph (SimpleGraph.pathGraph n)) K
+      (ManyBody.placeAt (X := fun _ ↦ Fin d) k (attenuationQuditRotation hd t)) := by
+  rw [← ManyBody.place_siteEquiv_eq_placeAt]
+  exact IsGateProduct.place_singleton k
+    (submatrix_equiv_mem_unitary.mpr (attenuationQuditRotation_mem_unitary hd t ht)) K
 
 /-- The prescribed merger attenuation has a derived physical circuit, with no
 additional angle or unitary hypothesis.
 Source: Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem isPairProduct_siteOp_mergingAttenuation {d n : ℕ}
-    (hd : 2 ≤ d) (hn : 2 ≤ n) (k : Fin n) (r : ℕ) (hr : 0 < r) :
-    IsPairProduct d n (2 * n)
-      (siteOp k (attenuationQuditRotation hd (mergingAttenuation r))) := by
-  apply isPairProduct_siteOp_attenuationQuditRotation hd hn k
+theorem isGateProduct_placeAt_mergingAttenuation {d n : ℕ}
+    (hd : 2 ≤ d) (k : Fin n) (r : ℕ) (hr : 0 < r) (K : ℕ) :
+    IsGateProduct (Geometry.graph (SimpleGraph.pathGraph n)) K
+      (ManyBody.placeAt (X := fun _ ↦ Fin d) k
+        (attenuationQuditRotation hd (mergingAttenuation r))) := by
+  refine isGateProduct_placeAt_attenuationQuditRotation hd k _ ?_ K
   have ht := mergingAttenuation_pos_le_one r hr
   nlinarith [ht.1, ht.2]
 
