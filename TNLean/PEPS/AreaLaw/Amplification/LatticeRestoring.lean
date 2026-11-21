@@ -251,6 +251,16 @@ configurations small. -/
 instance {Λ : Finset (ℤ × ℤ)} (q : ℕ) (A : Finset (Site Λ)) :
     Fintype (RegionalConfiguration q A) := inferInstance
 
+/-- Shortcut instance, which keeps instance terms on products with the configurations of the
+complement of a region small. -/
+instance {Λ : Finset (ℤ × ℤ)} (q : ℕ) (A : Finset (Site Λ)) :
+    DecidableEq ({v : Site Λ // v ∉ A} → Fin q) := inferInstance
+
+/-- Shortcut instance, which keeps instance terms on products with the configurations of the
+complement of a region small. -/
+instance {Λ : Finset (ℤ × ℤ)} (q : ℕ) (A : Finset (Site Λ)) :
+    Fintype ({v : Site Λ // v ∉ A} → Fin q) := inferInstance
+
 variable {Λ : Finset (ℤ × ℤ)} {q : ℕ}
 
 /-- The coordinates `((X, Y), Z')` of the configuration space for disjoint regions
