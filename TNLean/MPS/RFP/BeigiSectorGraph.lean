@@ -358,14 +358,19 @@ private theorem localTerm_commute (F : BeigiSectorGraphData A)
   abel_nf at hcomp
   exact add_left_cancel (add_left_cancel (add_left_cancel hcomp))
 
-private theorem localTermES_commute (F : BeigiSectorGraphData A)
-    {N : ℕ} [NeZero N] (hN : 2 ≤ N) (i j : Fin N) :
-    Commute (localTermES A 2 i) (localTermES A 2 j) := by
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
+private theorem commute_toEuclideanLin_parentRingInteraction_term
+    (F : BeigiSectorGraphData A) {N : ℕ} [NeZero N] (hN : 2 ≤ N) (i j : Fin N) :
+    Commute (Matrix.toEuclideanLin ((parentRingInteraction A hN).term i))
+      (Matrix.toEuclideanLin ((parentRingInteraction A hN).term j)) := by
   have hraw := F.localTerm_commute hN i j
-  have hmap := hraw.map (LinearEquiv.conjAlgEquiv ℂ e.symm)
-  simpa only [localTermES, e, LinearEquiv.conjAlgEquiv_apply,
-    LinearEquiv.symm_symm] using hmap
+  rw [localTerm_of_le A hN i, localTerm_of_le A hN j] at hraw
+  exact hraw.map (LinearEquiv.conjAlgEquiv ℂ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm)
+
+private theorem sum_toEuclideanLin_parentRingInteraction_term (A : MPSTensor d D)
+    {N : ℕ} (hN : 2 ≤ N) :
+    ∑ i : Fin N, Matrix.toEuclideanLin ((parentRingInteraction A hN).term i) =
+      Matrix.toEuclideanLin (parentRingInteraction A hN).hamiltonian := by
+  rw [ManyBody.Interaction.hamiltonian, map_sum]
 
 private theorem edgeProjector_trace (F : BeigiSectorGraphData A)
     (a b : Fin F.sectorCount) :
@@ -487,17 +492,18 @@ private theorem toLin'_groundBondProduct {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
   funext i
   exact hfactor i
 
-private theorem conj_localComplementProduct {N : ℕ} :
+private theorem conj_localComplementProduct {N : ℕ} (hN : 2 ≤ N) :
     (LinearEquiv.conjAlgEquiv ℂ
       (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm)
         (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod =
-      (List.ofFn fun i : Fin N ↦ 1 - localTermES A 2 i).prod := by
+      (List.ofFn fun i : Fin N ↦
+        1 - Matrix.toEuclideanLin ((parentRingInteraction A hN).term i)).prod := by
   rw [map_list_prod, List.map_ofFn]
   apply congrArg List.prod
   apply congrArg List.ofFn
   funext i
-  simp only [Function.comp_apply, map_sub, map_one, localTermES,
-    LinearEquiv.conjAlgEquiv_apply, LinearEquiv.symm_symm]
+  rw [Function.comp_apply, map_sub, map_one, localTerm_of_le A hN i]
+  rfl
 
 /-- The three realizations of the complete complementary-interaction product,
 together with the canonical identifications between them. -/
@@ -518,15 +524,17 @@ private noncomputable def complementProductTransport (A : MPSTensor d D)
   qMatrix := (List.ofFn fun i : Fin N ↦
     ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)).prod
   qRaw := (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod
-  qES := (List.ofFn fun i : Fin N ↦ 1 - localTermES A 2 i).prod
+  qES := (List.ofFn fun i : Fin N ↦
+    1 - Matrix.toEuclideanLin ((parentRingInteraction A hN).term i)).prod
   e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
   hMatrix := toLin'_groundBondProduct (A := A) hN
-  hES := conj_localComplementProduct (A := A) (N := N)
+  hES := conj_localComplementProduct (A := A) hN
 
 private theorem localComplementProductES_trace (F : BeigiSectorGraphData A)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     LinearMap.trace ℂ (EuclideanSpace ℂ (Cfg d N))
-        (List.ofFn fun i : Fin N ↦ 1 - localTermES A 2 i).prod =
+        (List.ofFn fun i : Fin N ↦
+          1 - Matrix.toEuclideanLin ((parentRingInteraction A hN).term i)).prod =
       ∑ k : Fin N → Fin F.sectorCount,
         (↑(∏ n : Fin N,
           Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1)))) : ℂ) := by
@@ -551,14 +559,14 @@ private theorem parentHamiltonianGroundSpaceES_finrank_eq_all_sequences
         ∏ n : Fin N, Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1))) := by
   classical
   have hproj := LinearMap.isProj_ker_sum_listProd_one_sub
-    (fun i : Fin N ↦ localTermES A 2 i)
-    (fun i ↦ localTermES_isSymmetricProjection A 2 i)
-    (fun i j ↦ F.localTermES_commute hN i j)
-  rw [← parentHamiltonianES_eq_sum_localTermES] at hproj
+    (fun i : Fin N ↦ Matrix.toEuclideanLin ((parentRingInteraction A hN).term i))
+    (fun i ↦ isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A hN i)
+    (fun i j ↦ F.commute_toEuclideanLin_parentRingInteraction_term hN i j)
+  rw [sum_toEuclideanLin_parentRingInteraction_term] at hproj
   have htrace := hproj.trace
   rw [F.localComplementProductES_trace hN] at htrace
   norm_cast at htrace
-  rw [parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES]
+  rw [parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction A hN]
   exact htrace.symm
 
 /-- A vector fixed by the complete product of complementary two-site parent
@@ -595,16 +603,16 @@ theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
       (transport.qRaw (transport.e (transport.e.symm v))) = transport.e.symm v
     rw [transport.e.apply_symm_apply, hraw]
   have hproj := LinearMap.isProj_ker_sum_listProd_one_sub
-    (fun i : Fin N ↦ localTermES A 2 i)
-    (fun i ↦ localTermES_isSymmetricProjection A 2 i)
-    (fun i j ↦ F.localTermES_commute hN i j)
-  rw [← parentHamiltonianES_eq_sum_localTermES] at hproj
+    (fun i : Fin N ↦ Matrix.toEuclideanLin ((parentRingInteraction A hN).term i))
+    (fun i ↦ isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A hN i)
+    (fun i j ↦ F.commute_toEuclideanLin_parentRingInteraction_term hN i j)
+  rw [sum_toEuclideanLin_parentRingInteraction_term] at hproj
   have hkerES : transport.e.symm v ∈
-      LinearMap.ker (parentHamiltonianES A 2 N) :=
+      LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A hN).hamiltonian) :=
     hproj.mem_iff_map_id.mpr hfixES
-  rw [LinearMap.mem_ker] at hkerES ⊢
-  have h := congrArg transport.e hkerES
-  simpa [parentHamiltonianES, transport, complementProductTransport] using h
+  rw [LinearMap.mem_ker, Matrix.toLpLin_apply, WithLp.toLp_eq_zero] at hkerES
+  rw [LinearMap.mem_ker, parentHamiltonian_of_le A hN, Matrix.toLin'_apply]
+  exact hkerES
 
 /-- Beigi's finite-chain ground-space dimension formula: for a periodic chain
 of length at least two, the dimension is the sum over ordered cyclic
