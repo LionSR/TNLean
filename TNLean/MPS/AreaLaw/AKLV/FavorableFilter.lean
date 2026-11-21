@@ -45,8 +45,6 @@ theorem exists_aklv_physical_favorable_filter :
       ∀ (L q a : ℕ)
         (Φ : ManyBody.BondInteraction L q)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (Φ.term i) (interval L i.val (i.val + 2))) →
       (∀ i, 0 ≤ Φ.term i) → (∀ i, Φ.term i ≤ 1) → ‖Ω‖ = 1 →
       Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
       (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
@@ -85,7 +83,7 @@ theorem exists_aklv_physical_favorable_filter :
           ⟪φ, toEuclideanLin K ψ⟫_ℂ = 0 ∧ ‖toEuclideanLin K ψ‖ ^ 2 ≤ delta := by
   obtain ⟨A, hA, hA21, hscalar⟩ := Real.exists_aklv_favorable_scalar_parameters
   refine ⟨A, hA, hA21, ?_⟩
-  intro L q a Φ mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited u s ell t0 R D delta ha
+  intro L q a Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited u s ell t0 R D delta ha
   have hH : Φ.hamiltonian.IsHermitian :=
     (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
   have hmu := Matrix.mem_spectrum_real_of_mulVec_eq_smul
@@ -96,14 +94,14 @@ theorem exists_aklv_physical_favorable_filter :
     ⟨hΩ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
       WithLp.ofLp_smul]; exact hground, hgap⟩
   have hg1 := gap_le_one_of_positive_nearest_neighbor_terms (by omega : 0 < L)
-    hq2 Φ hsupp h0 h1 hΩ hgapI hspan
+    hq2 Φ h0 h1 hΩ hgapI hspan
   obtain ⟨_hsLower, _hsUpper, hs21, _hsb, hdiv, hsqrt, _hR, _hRup, _hDaux,
       hdelta, htrade, _htradeSmall, hlogD⟩ := hscalar q g hq2 hg hg1
   change 21 ≤ s at hs21
   change ell / s = s at hdiv
   change Nat.sqrt ell = s at hsqrt
   obtain ⟨_hq, _hg, e, E0, hregional, hEeq, hE0, hE6, hfilter⟩ :=
-    exists_aklv_logarithmic_clipped_chebyshev_filter (by omega) ha Φ hsupp h0 h1
+    exists_aklv_logarithmic_clipped_chebyshev_filter (by omega) ha Φ h0 h1
       mu g Ω hΩ hground hgap hg hexcited
   obtain ⟨hBpos, hBnorm, E, φ, hE, hφ, heigen, hprojector, hclose, hpoly⟩ :=
     hfilter t0 le_rfl

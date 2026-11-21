@@ -57,7 +57,7 @@ theorem exists_adjacent_interval_energy_merge {L q l m r : ℕ}
       (s := J) (t := {m}) (fun _ hi ↦ by simpa using (Finset.mem_filter.mp hi).2.2.2)
       (by intro i _ j _ hij; apply Fin.ext; change i.val + 1 = j.val + 1 at hij; omega)
     simpa using hc
-  obtain ⟨hY, hYc⟩ := sum_posSemidef_and_le_card_of_positive_unit_terms J Φ
+  obtain ⟨hY, hYc⟩ := sum_posSemidef_and_le_card_of_positive_unit_terms J Φ.term
     (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
   have hY1 : Y ≤ 1 := by
     calc

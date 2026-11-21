@@ -79,8 +79,7 @@ theorem card_internal_bonds_le (L lo hi : ℕ) :
 Auxiliary to ALVV's regional hard truncation, `def:hard-trunc`, lines 873–886.
 This is only a support statement and requires no local dimension hypothesis. -/
 theorem isSupportedOn_sum_internal_bonds (L q lo hi : ℕ)
-    (Φ : ManyBody.BondInteraction L q)
-:
+    (Φ : ManyBody.BondInteraction L q) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
         (fun j ↦ lo ≤ j.val ∧ j.val + 1 < hi), Φ.term i) (interval L lo hi) := by
@@ -122,8 +121,7 @@ Auxiliary to ALVV, arXiv:1602.08828v2, `def:hard-trunc`, lines 873–886,
 and Theorem `t:ais`, lines 1010–1024. -/
 theorem pairwise_commute_sum_internal_consecutive_regions
     {L q m : ℕ} (k : Fin (m + 1) → ℕ) (hk : Monotone k)
-    (Φ : ManyBody.BondInteraction L q)
-:
+    (Φ : ManyBody.BondInteraction L q) :
     Pairwise fun i j : Fin m ↦
       Commute
         (∑ r ∈ (Finset.univ : Finset (Fin (L - 1))).filter
@@ -280,11 +278,11 @@ theorem five_region_original_bond_data
   have hA (j : Fin 5) : (A j).PosSemidef ∧
       A j ≤ ((I j).card : ℝ) •
         (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :=
-    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms (I j) Φ
+    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms (I j) Φ.term
       (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
   have hY : Y.PosSemidef ∧
       Y ≤ (J.card : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :=
-    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms J Φ
+    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms J Φ.term
       (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
   have hJ : J.card ≤ 4 := Finset.card_four_cut_crossing_le L k1 k2 k3 k4
   refine ⟨hk, hR, hAs, hA, hY.1, hY.2, hJ, ?_⟩
@@ -302,7 +300,7 @@ theorem five_region_original_bond_data
       (fun i ↦ k4 ≤ i.val ∧ i.val + 1 < L), Φ.term i) +
     (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
       (fun i ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ)), Φ.term i)
-  exact Finset.sum_five_internal_regions_add_crossings h12 h23 h34 Φ
+  exact Finset.sum_five_internal_regions_add_crossings h12 h23 h34 Φ.term
 end TNLean.MPS.AreaLaw
 end
 

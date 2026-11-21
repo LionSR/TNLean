@@ -61,10 +61,10 @@ theorem exists_fixed_bandwidth_low_energy_strict_isOpenMPS_approximation
   obtain ⟨K, hK, hactual⟩ :=
     exists_fixed_bandwidth_low_energy_normalized_isOpenMPS_approximation etaLD hLD
   refine ⟨K, hK, ?_⟩
-  intro L q v hq hv Φ hs h0 h1 config H hH G bcap g u delta hdelta hdelta1 b
+  intro L q v hq hv Φ h0 h1 config H hH G bcap g u delta hdelta hdelta1 b
   by_cases hq2 : 2 ≤ q
   · obtain ⟨B, hB, hlogB, hvec⟩ :=
-      hactual L q v hq2 hv Φ hs h0 h1
+      hactual L q v hq2 hv Φ h0 h1
         (delta / 2) (by positivity) (by linarith only [hdelta1])
     have hscale : 16 * ((L : ℝ) + 1) / (delta / 2) =
         32 * ((L : ℝ) + 1) / delta := by field_simp; ring

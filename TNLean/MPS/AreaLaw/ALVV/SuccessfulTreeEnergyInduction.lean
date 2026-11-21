@@ -202,7 +202,7 @@ theorem exists_successful_tree_energy_induction
             (interval L a b)).toLinearEquiv.toLinearMap) := by
       intro a b hab
       have hab' : a ≤ b ∧ b ≤ L := by
-        rcases hab with Φ.term | Φ.term <;> simp only [Prod.mk.injEq] at Φ.term <;> obtain ⟨rfl, rfl⟩ := Φ.term <;>
+        rcases hab with h | h <;> simp only [Prod.mk.injEq] at h <;> obtain ⟨rfl, rfl⟩ := h <;>
           dsimp only [l, r, k] <;> omega
       by_cases hshort : b - a ≤ width
       · change Submodule.IsViable (3 / 200 : ℝ) (balancedIntervalSpace _ width hwidth a b) _

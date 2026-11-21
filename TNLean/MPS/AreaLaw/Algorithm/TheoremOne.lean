@@ -138,7 +138,7 @@ theorem exists_theorem_one_of_valid (hq : 2 ≤ q) {Delta : ℝ} (hDelta : 0 < D
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ (o : {ι : Type} → LinearAlgebraQuery q ι → ι), IsValidOracle o →
       ∀ (L : ℕ), 1 ≤ L → ∀ {η : ℝ}, 0 < η → Delta * η ≤ 1 →
       ∀ (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1),
+        (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1),
       let R := lvvAccuracyParameter L Delta η
       let ψ := FreeM.eval o (groundStateProgram hq Φ h0 h1 Delta R)
       (∀ (E : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),

@@ -59,9 +59,9 @@ theorem exists_physical_ground_reference_polynomial
   let C0 := Real.exp (K * (a0 + 5 * a1) * b0)
   let p0 := Nat.ceil (K * (a0 + 5 * a1))
   refine ⟨1 + C0 ^ 2, by positivity, 4 + 2 * p0, ?_⟩
-  intro L Φ hs h0 h1 mu H hH hmu hgap G r
+  intro L Φ h0 h1 mu H hH hmu hgap G r
   obtain ⟨B, hB, hlogB, U, hdim, hUG, hGU, hUMPS⟩ :=
-    href L q hq Φ hs h0 h1 mu gamma hgamma hmu hgap
+    href L q hq Φ h0 h1 mu gamma hgamma hmu hgap
       (1 / 100000) (by norm_num) (by norm_num)
   have hr : 1 ≤ r := Submodule.one_le_finrank_iff.mpr
     (hH.spectralSpanLE_ne_bot_of_mem_spectrum hmu le_rfl)

@@ -55,9 +55,9 @@ theorem exists_regional_minimum_shifts {L q : ℕ} [NeZero q]
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (a b : Fin (L - 1)) (hab : a.val + 2 < b.val) :
     ∃ z : Fin 3 → ℝ,
-      (∀ j, ((Φ.partialHamiltonian (normalizationCoreBonds a b j)) - (z j : ℂ) • 1).PosSemidef) ∧
+      (∀ j, (Φ.partialHamiltonian (normalizationCoreBonds a b j) - (z j : ℂ) • 1).PosSemidef) ∧
       ∃ v : (Fin L → Fin q) → ℂ, star v ⬝ᵥ v = 1 ∧
-        ∀ j, ((Φ.partialHamiltonian (normalizationCoreBonds a b j)) - (z j : ℂ) • 1) *ᵥ v = 0 := by
+        ∀ j, (Φ.partialHamiltonian (normalizationCoreBonds a b j) - (z j : ℂ) • 1) *ᵥ v = 0 := by
   have hmem (i : Fin (L - 1)) := Φ.mem i
   classical
   let C (j : Fin 3) := ∑ i ∈ normalizationCoreBonds a b j, Φ.term i
@@ -127,8 +127,8 @@ boundary interaction. Source: AKLV, Section 6.1. -/
 theorem normalizationCoreBonds_sum {L q : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (a b : Fin (L - 1)) (hab : a.val + 2 < b.val) :
-    (∑ j : Fin 3, ∑ i ∈ normalizationCoreBonds a b j, Φ.term i) +
-      (Φ.partialHamiltonian (normalizationBoundaryBonds a b)) = Φ.hamiltonian := by
+    (∑ j : Fin 3, Φ.partialHamiltonian (normalizationCoreBonds a b j)) +
+      Φ.partialHamiltonian (normalizationBoundaryBonds a b) = Φ.hamiltonian := by
   classical
   have hp (i : Fin (L - 1)) :
       (if i ∈ normalizationCoreBonds a b 0 then Φ.term i else 0) +
@@ -139,7 +139,8 @@ theorem normalizationCoreBonds_sum {L q : ℕ}
       Finset.mem_univ, true_and, Finset.mem_sdiff, Finset.mem_union]
     split_ifs <;> simp_all <;> omega
   have hh := Finset.sum_congr (s₁ := Finset.univ) rfl (fun i _ => hp i)
-  simpa only [Fin.sum_univ_three, Finset.sum_add_distrib, ← Finset.sum_filter,
+  simpa only [ManyBody.Interaction.partialHamiltonian, ManyBody.Interaction.hamiltonian,
+    Fin.sum_univ_three, Finset.sum_add_distrib, ← Finset.sum_filter,
     Finset.filter_mem_eq_inter, Finset.univ_inter] using hh
 
 /-- Enlarging a positive shifted core by original positive bonds preserves
@@ -147,13 +148,14 @@ positivity. Auxiliary to the three blocks of AKLV, Section 6.1. -/
 private theorem shifted_sum_posSemidef_of_subset {L q : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) {S T : Finset (Fin (L - 1))} (hST : S ⊆ T) (z : ℝ)
-    (hS : ((Φ.partialHamiltonian S) - (z : ℂ) • 1).PosSemidef) :
-    ((Φ.partialHamiltonian T) - (z : ℂ) • 1).PosSemidef := by
+    (hS : (Φ.partialHamiltonian S - (z : ℂ) • 1).PosSemidef) :
+    (Φ.partialHamiltonian T - (z : ℂ) • 1).PosSemidef := by
   have hp : (Φ.partialHamiltonian (T \ S)).PosSemidef :=
     Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ => h0 i)
   have hs := Finset.sum_sdiff hST (f := Φ.term)
-  have heq : (Φ.partialHamiltonian T) - (z : ℂ) • 1 =
-      ((Φ.partialHamiltonian S) - (z : ℂ) • 1) + ∑ i ∈ T \ S, Φ.term i := by
+  have heq : Φ.partialHamiltonian T - (z : ℂ) • 1 =
+      (Φ.partialHamiltonian S - (z : ℂ) • 1) + ∑ i ∈ T \ S, Φ.term i := by
+    unfold ManyBody.Interaction.partialHamiltonian
     rw [← hs]
     abel
   rw [heq]
@@ -166,7 +168,7 @@ Source: AKLV, Section 6.1 and the decomposition in Section 6.3. -/
 theorem normalizedCutBlocks_posSemidef_of_core_shifts {L q : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (a b : Fin (L - 1)) (z : Fin 3 → ℝ)
-    (hz : ∀ j, ((Φ.partialHamiltonian (normalizationCoreBonds a b j)) - (z j : ℂ) • 1).PosSemidef) :
+    (hz : ∀ j, (Φ.partialHamiltonian (normalizationCoreBonds a b j) - (z j : ℂ) • 1).PosSemidef) :
     (leftCutBlock Φ a (z 0)).PosSemidef ∧
       (middleCutBlock Φ a b (z 1)).PosSemidef ∧
       (rightCutBlock Φ b (z 2)).PosSemidef := by
@@ -197,8 +199,8 @@ theorem exists_normalized_chain_data {L q : ℕ} [NeZero q]
       0 ≤ E - ∑ j, z j ∧ E - ∑ j, z j ≤ 6 := by
   classical
   obtain ⟨z, hz, v, hv, hzero⟩ := exists_regional_minimum_shifts Φ h0 a b hab
-  let C := ∑ j : Fin 3, ((Φ.partialHamiltonian (normalizationCoreBonds a b j)) - (z j : ℂ) • 1)
-  let B := ∑ i ∈ normalizationBoundaryBonds a b, Φ.term i
+  let C := ∑ j : Fin 3, (Φ.partialHamiltonian (normalizationCoreBonds a b j) - (z j : ℂ) • 1)
+  let B := Φ.partialHamiltonian (normalizationBoundaryBonds a b)
   let e := E - ∑ j, z j
   have hC : C.PosSemidef := Matrix.nonneg_iff_posSemidef.mp
     (Finset.sum_nonneg fun j _ => (hz j).nonneg)
@@ -209,10 +211,10 @@ theorem exists_normalized_chain_data {L q : ℕ} [NeZero q]
     dsimp only [B]
     rw [sub_add_eq_add_sub, hh]
   obtain ⟨hB, hBcap⟩ := Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms
-    (normalizationBoundaryBonds a b) Φ (fun i _ => h0 i) (fun i _ => h1 i)
+    (normalizationBoundaryBonds a b) Φ.term (fun i _ => h0 i) (fun i _ => h1 i)
   have hBcap' : B ≤ ((normalizationBoundaryBonds a b).card : ℂ) •
       (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) := by
-    simpa only [B, Nat.cast_smul_eq_nsmul] using hBcap
+    simpa only [B, ManyBody.Interaction.partialHamiltonian, Nat.cast_smul_eq_nsmul] using hBcap
   have hB6 : B ≤ (6 : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) := by
     refine hBcap'.trans ?_
     rw [← sub_nonneg]

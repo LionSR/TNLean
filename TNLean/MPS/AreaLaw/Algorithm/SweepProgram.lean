@@ -233,7 +233,7 @@ declared for the vectors handled. LVV13, `algo53.tex`, algorithm steps 1--4, lin
 379--592, with Huang, Section 5.4, Lemmas 18--19 for the error-reduction operator. -/
 noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j)
+    (h0 : ∀ j, 0 ≤ Φ.term j)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     LVVProgram q (Finset (LeftBlockVector L q (i + 1))) :=
   let b := lvvSuccessiveBondBound q Delta L
@@ -242,7 +242,7 @@ noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
   do
     let S₁ ← extensionProgram L (i + 1) b S
     let S₂ ← sizeTrimmingProgram L (i + 1) b
-      (ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩) hq Delta S₁
+      (ManyBody.BondInteraction.toChainInteraction Φ) hq Delta S₁
     let S₃ ← bondTrimmingProgram L (i + 1) hi b m S₂
     let F ← FreeM.lift
       (LinearAlgebraQuery.gaussianFilterFactors L (i + 1) (Nat.le_of_lt hq) Φ h0 c Delta)
@@ -251,7 +251,7 @@ noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
 /-- With the honest oracle, one step of the program computes one step of the sweep. -/
 theorem eval_sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j)
+    (h0 : ∀ j, 0 ≤ Φ.term j)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     FreeM.eval honestOracle (sweepStepProgram hq Φ h0 Delta hi S) =
       lvvSweepStep hq Φ h0 Delta hi S := by
@@ -263,7 +263,7 @@ theorem eval_sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
 cut of the chain. LVV13, `algo53.tex`, proof of Theorem 1, lines 652--668. -/
 noncomputable def sweepProgram {L : ℕ} (hq : 2 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (Delta : ℝ) : (i : ℕ) → LVVProgram q (Finset (LeftBlockVector L q i))
   | 0 => pure {emptyLeftVector L q}
   | i + 1 =>
@@ -275,7 +275,7 @@ noncomputable def sweepProgram {L : ℕ} (hq : 2 ≤ q)
 /-- With the honest oracle, the program computes the sweep at every cut. -/
 theorem eval_sweepProgram {L : ℕ} (hq : 2 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (Delta : ℝ) (i : ℕ) :
     FreeM.eval honestOracle (sweepProgram hq Φ h0 h1 Delta i) =
       lvvSweep hq Φ h0 h1 Delta i := by

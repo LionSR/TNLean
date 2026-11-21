@@ -104,7 +104,7 @@ theorem exists_independent_long_middle_actual_dg_filter_family :
                   EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) := by
   classical
   intro m q ell t g epsilon Delta hq hqm hell ht hg hg1 hepsilon hepsilon1 htail hfilter
-    D L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm Φ hs h0 h1 mu H hH G hmu hgap
+    D L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm Φ h0 h1 mu H hH G hmu hgap
   let a := max p ell - ell
   let b := min r (L - ell) - ell - 1
   obtain ⟨_haEnd, _hbEnd, hab, hb, _hpp, _hpq, _hqq, _hlen,
@@ -115,7 +115,7 @@ theorem exists_independent_long_middle_actual_dg_filter_family :
     exists_five_region_independent_scaled_low_cluster L q a b ell t
       (by omega) hell ht
       (hab.trans (Nat.le_succ b)) (hb.trans (Nat.sub_le L 1))
-      Φ hs h0 h1 mu g (epsilon * g / 1000000) epsilon hg hg1 hepsilon hepsilon1
+      Φ h0 h1 mu g (epsilon * g / 1000000) epsilon hg hg1 hepsilon hepsilon1
       htail le_rfl hmu hgap
   let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
   let Areg : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
@@ -167,7 +167,7 @@ theorem exists_independent_long_middle_actual_dg_filter_family :
   let D0 := (q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))
   obtain ⟨N, W, hNraw, hdecomp⟩ :=
     exists_actual_regional_clipped_polynomial_family_fin
-      L q a b ell (ell ^ 2) hell hq hdegree hab hb Φ hs e t Jtarget
+      L q a b ell (ell ^ 2) hell hq hdegree hab hb Φ e t Jtarget
   change N ≤ D0 ^ 2 * q ^
     (2 * (J0 \ Jtarget).card + 2 * (Jtarget \ J0).card) at hNraw
   have hdiff : J0 \ Jtarget = ∅ := Finset.sdiff_eq_empty_iff_subset.mpr hsub
@@ -256,12 +256,12 @@ theorem exists_independent_long_middle_actual_dg_word_family :
                   EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) := by
   intro m q ell t g epsilon Delta hq hqm hell ht hg hg1 hepsilon hepsilon1
     htail hfilter D L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm
-    Φ hs h0 h1 mu H hH G hmu hgap
+    Φ h0 h1 mu H hH G hmu hgap
   obtain ⟨T, N, F, hN, hTG, hGT, hdim, _Kphys, _Rop,
     _hdec, _hKT, _hKTo, _hlow, _hhigh, hwords⟩ :=
     exists_independent_long_middle_actual_dg_filter_family m q ell t g epsilon Delta
       hq hqm hell ht hg hg1 hepsilon hepsilon1 htail hfilter
-      L p r hpr hrL hlong Φ hs h0 h1 mu hmu hgap
+      L p r hpr hrL hlong Φ h0 h1 mu hmu hgap
   exact ⟨T, N, F, hN, hTG, hGT, hdim, hwords⟩
 
 end TNLean.MPS.AreaLaw

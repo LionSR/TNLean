@@ -235,10 +235,10 @@ theorem exists_physical_soft_resampling_tree
     hO, hR, hDelta, hepsilon, hreverse, hSmall,
     1000000 * C, mul_pos (by norm_num) hC, P + 1, ?_⟩
   clear hM hprecision hprecision1
-  intro L Φ hs h0 h1 mu H hH hmu hgap G rho Z threshold rounds count
+  intro L Φ h0 h1 mu H hH hmu hgap G rho Z threshold rounds count
   obtain ⟨B, hB, Ref, hdim, hRefG, hGRef, hRefMPS, hRefBound, hxi,
     hxi1, hbudget, hinv, hcost, hschedule, hRefIntervals⟩ :=
-    href L Φ hs h0 h1 mu hmu hgap
+    href L Φ h0 h1 mu hmu hgap
   clear href hdim hRefMPS hRefBound hcost
   let dRef := rho ^ 2 * B
   let bRef := dRef ^ 2
@@ -275,7 +275,7 @@ theorem exists_physical_soft_resampling_tree
             exists_physical_soft_interval_history q ell m k g tau t
               T T
               hq hell hm hk hg htau htau1 le_rfl hT0 htfloor hTfloor hO hR
-              L0 J.val.1 J.val.2 J.property.1 J.property.2.1 J.property.2.2 Φ hs h0 h1
+              L0 J.val.1 J.val.2 J.property.1 J.property.2.1 J.property.2.2 Φ.term Φ.mem h0 h1
               K rho rounds bRef xiInit (1 / 100000)
               hD hK hThreshold hSmall hepsilon hreverse hxi (by norm_num) le_rfl
               mu hmu hgapg Ref hGRef hRefG
@@ -291,8 +291,10 @@ theorem exists_physical_soft_resampling_tree
           · intro S hS
             have history := hfixed S hS
             refine ⟨?_, fun U hU ↦ (history.2.2.2.2 U hU).2⟩
-            simpa only [beta, Nat.cast_add, Nat.cast_one, add_assoc,
-              show (1 : ℝ) + 2 = 3 by norm_num] using history.2.1)
+            have hhist := history.2.1
+            simp only [beta, Nat.cast_add, Nat.cast_one, add_assoc,
+              show (1 : ℝ) + 2 = 3 by norm_num] at hhist ⊢
+            exact hhist)
   refine ⟨N, F, (fun J ↦ ⟨(hFamilies J).2.1, (hFamilies J).1⟩),
     hGood, ?_, hshort, hcount, hsize, ?_⟩
   · exact hprob.trans (by simpa only [beta, mul_assoc] using htotal)
@@ -301,8 +303,8 @@ theorem exists_physical_soft_resampling_tree
   have hq0 : 0 < q := Nat.lt_of_lt_of_le two_pos hq
   have hm2 : 2 ≤ m := hu.trans (Nat.le_self_pow (by norm_num) u)
   have hlow : ∀ z ∈ spectrum ℝ H, mu ≤ z := fun z hz ↦
-    (hgap z hz).elim (fun Φ.term ↦ Φ.term.ge) (fun Φ.term ↦ by linarith)
-  refine exists_successful_tree_energy_induction (ell := ell) hq0 hwidth Φ hs h0 h1 g hg t T m D
+    (hgap z hz).elim (fun h ↦ h.ge) (fun h ↦ by linarith)
+  refine exists_successful_tree_energy_induction (ell := ell) hq0 hwidth Φ h0 h1 g hg t T m D
     hm2 hD htfloor hTfloor Delta (by positivity) mu rounds _ N F xiInit hmu hlow hDelta hR ?_ U hU
   exact fun J ↦ terminalCertificate_of_isPhysicalTerminalCertificate Φ t m D threshold rounds
     xiInit g precision Msoft tau Delta mu G rho rfl J (N J) (F J) (hFamilies J).1

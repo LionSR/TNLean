@@ -79,9 +79,9 @@ theorem exists_physical_ground_reference_trimming_profile
   obtain ⟨C, hC, P, href⟩ :=
     exists_physical_ground_reference_polynomial q hq gamma hgamma
   refine ⟨C, hC, P, ?_⟩
-  intro L Φ hs h0 h1 mu H hH hmu hgap G r Z
+  intro L Φ h0 h1 mu H hH hmu hgap G r Z
   obtain ⟨B, hB, hbound, U, hdim, hUG, hGU, hUMPS⟩ :=
-    href L Φ hs h0 h1 mu hmu hgap
+    href L Φ h0 h1 mu hmu hgap
   let d := r ^ 2 * B
   let bRef := d ^ 2
   let xi := 1 / (1000 * (d : ℝ) * Real.sqrt ((L : ℝ) + 1))
@@ -95,11 +95,11 @@ theorem exists_physical_ground_reference_trimming_profile
     (L := L) (cuts := 0) (Nat.zero_le L) hd).1
   have hbudget (kCuts : ℕ) (hk : kCuts ≤ L) :
       xi * Real.sqrt ((kCuts : ℝ) * (bRef : ℝ)) ≤ 1 / 1000 := by
-    have Φ.term := (Real.viable_node_trimming_radius_budget hk hd).2
-    change 4 * xi * Real.sqrt ((kCuts : ℝ) * (d : ℝ) ^ 2) ≤ 1 / 250 at Φ.term
+    have h := (Real.viable_node_trimming_radius_budget hk hd).2
+    change 4 * xi * Real.sqrt ((kCuts : ℝ) * (d : ℝ) ^ 2) ≤ 1 / 250 at h
     dsimp only [bRef]
     push_cast
-    linarith only [Φ.term]
+    linarith only [h]
   have hinv : (xi⁻¹) ^ 2 = 1000000 * (bRef : ℝ) * ((L : ℝ) + 1) := by
     dsimp only [xi, bRef]
     rw [one_div, inv_inv, mul_pow, mul_pow, Real.sq_sqrt (by positivity)]

@@ -100,8 +100,8 @@ theorem exists_independent_physical_dg_cluster_parameters :
       (by linarith only [hC]) (by linarith only [hg]) (by linarith only [hg1]) hu
   obtain ⟨ht, htail⟩ := hthreshold g tau hg hg1 htau htau1
   refine ⟨ell, hell, hbound, hfilter, ?_⟩
-  intro L q a b hq hab hbL Φ hs h0 h1 mu H hH G hmu hgap k A J Y
+  intro L q a b hq hab hbL Φ h0 h1 mu H hH G hmu hgap k A J Y
   exact exists_five_region_independent_scaled_low_cluster L q a b ell t hq hell ht hab hbL
-    Φ hs h0 h1 mu g (tau * g / 1000000) tau hg hg1 htau htau1 htail le_rfl hmu hgap
+    Φ h0 h1 mu g (tau * g / 1000000) tau hg hg1 htau htau1 htail le_rfl hmu hgap
 
 end TNLean.MPS.AreaLaw

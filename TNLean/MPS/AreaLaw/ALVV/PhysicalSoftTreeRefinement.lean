@@ -94,14 +94,14 @@ theorem exists_physical_soft_tree_refined_ritz_approximation
   obtain ⟨C, hC, kexp, href⟩ :=
     exists_physical_same_root_polynomial_refinement q 1 (by omega) le_rfl gamma hgamma
   refine ⟨u, Ccount, hu, hCcount, K, hK, C, hC, kexp, ?_⟩
-  intro ell m k D width L Φ hs h0 h1 mu H hH hmu hgap G rho threshold rounds count Kraw
+  intro ell m k D width L Φ h0 h1 mu H hH hmu hgap G rho threshold rounds count Kraw
   obtain ⟨_hD, _hM, _htau, _htau1, _hprec, _hprec1, _htfloor, _hTfloor, _hT0, _hO, _hR,
     _hDelta, _heps, _hrev, _hSmall, _Cxi, _hCxi, _Pxi, hall⟩ := hrest
   obtain ⟨xiInit, hxi, _hxi1, _hinv, hwidth, N, F, _hFam, hGood, hprob, _hshort, hcount,
-    hsize, _henergy⟩ := hall L Φ hs h0 h1 mu hmu hgap
+    hsize, _henergy⟩ := hall L Φ h0 h1 mu hmu hgap
   refine ⟨xiInit, hxi, hwidth, N, F, hGood, hprob, hcount, ?_⟩
   intro eta heta Z
-  obtain ⟨roundsRef, xiRef, Bscale, hxiRef, hB, hout⟩ := href L Φ hs h0 h1 mu hmu hgap eta heta
+  obtain ⟨roundsRef, xiRef, Bscale, hxiRef, hB, hout⟩ := href L Φ h0 h1 mu hmu hgap eta heta
   refine ⟨roundsRef, xiRef, Bscale, hxiRef, hB, ?_⟩
   intro U hU
   have hroot := (hsize U 0 L (Nat.zero_le L) le_rfl).1

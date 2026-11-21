@@ -195,9 +195,9 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
     hspec.elim fun k hspec ↦ hspec.elim fun _hk hspec ↦ ?_
   have hpoly := hspec
   refine ⟨C, hC, k, ?_⟩
-  intro L Φ hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G rG
+  intro L Φ h0 h1 mu nu H hH hmu hnu hmunu hgap G rG
     g0 m0 w v ell D s a tau epsilon t Delta
-  have hfactoryL := hfactory L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+  have hfactoryL := hfactory L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine hfactoryL.elim fun hell hspec ↦ hspec.elim fun hD2 hspec ↦ hspec.elim fun hs hspec ↦
     hspec.elim fun ha hspec ↦ hspec.elim fun haSmall hspec ↦ hspec.elim fun hepsilon hspec ↦
     hspec.elim fun hepsilon1 hspec ↦ hspec.elim fun ht hspec ↦ hspec.elim fun htail hspec ↦
@@ -238,7 +238,7 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
     have hb := mul_le_mul_of_nonneg_right haN (mul_pos hDref0 hroot).le
     nlinarith only [hb, (mul_pos hDref0 hroot).le]
   have :=
-    hauto L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hauto L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       Dtree D hDtree hD1 eta heta
   refine this.elim fun Bfinal hspec ↦ hspec.elim fun hBfinal hspec ↦
     hspec.elim fun hlogBfinal hspec ↦ ?_

@@ -104,8 +104,7 @@ private theorem exists_bond_of_orderedTerm_ne_zero
 
 open scoped Classical in
 private theorem orderedTerm_noncommutation_count
-    (Φ : ManyBody.BondInteraction L q)
-:
+    (Φ : ManyBody.BondInteraction L q) :
     ∀ i < 2 * (L - 1),
       ((Finset.range (2 * (L - 1))).filter
         (fun j ↦ j ≠ i ∧ ¬Commute (orderedTerm Φ i) (orderedTerm Φ j))).card ≤ 2 := by
@@ -161,8 +160,7 @@ private theorem orderedTerm_isStarProjection
   · exact parityTerm_isStarProjection Φ hp _ _
 
 private theorem parityTerm_commute
-    (Φ : ManyBody.BondInteraction L q)
-(p i j : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (p i j : ℕ) :
     Commute (parityTerm Φ p i) (parityTerm Φ p j) := by
   by_cases hi : i < L - 1
   · by_cases hj : j < L - 1
@@ -216,7 +214,7 @@ private theorem sum_parityTerm
     (∑ k ∈ Finset.range (L - 1), parityTerm Φ 0 k) +
       (∑ k ∈ Finset.range (L - 1), parityTerm Φ 1 k) =
       Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian := by
-  rw [← Finset.sum_add_distrib, Finset.sum_range, map_sum]
+  rw [← Finset.sum_add_distrib, Finset.sum_range, ManyBody.Interaction.hamiltonian, map_sum]
   refine Finset.sum_congr rfl ?_
   intro i _
   by_cases hp : i.val % 2 = 0
@@ -250,22 +248,26 @@ theorem physicalParityProduct_partition
     (Φ : ManyBody.BondInteraction L q)
     (s : Fin (L - 1) → Prop) [DecidablePred s] (p : ℕ) :
     physicalParityProduct Φ p =
-      physicalParityProduct (fun i ↦ if s i then Φ.term i else 0) p *
-        physicalParityProduct (fun i ↦ if s i then 0 else Φ.term i) p := by
+      physicalParityProduct ⟨fun i ↦ if s i then Φ.term i else 0,
+          fun i ↦ by split_ifs <;> first | exact Φ.mem i | exact zero_mem _⟩ p *
+        physicalParityProduct ⟨fun i ↦ if s i then 0 else Φ.term i,
+          fun i ↦ by split_ifs <;> first | exact Φ.mem i | exact zero_mem _⟩ p := by
   classical
   let t (k : ℕ) : Prop := if hk : k < L - 1 then s ⟨k, hk⟩ else False
   have heq := ContinuousLinearMap.complementProd_partition (parityTerm_commute Φ p)
     t (L - 1)
-  have hu : (fun k ↦ if t k then parityTerm Φ p k else 0) =
-      parityTerm (fun i ↦ if s i then Φ.term i else 0) p := by
+  let Φs : ManyBody.BondInteraction L q := ⟨fun i ↦ if s i then Φ.term i else 0,
+    fun i ↦ by split_ifs <;> first | exact Φ.mem i | exact zero_mem _⟩
+  let Φn : ManyBody.BondInteraction L q := ⟨fun i ↦ if s i then 0 else Φ.term i,
+    fun i ↦ by split_ifs <;> first | exact Φ.mem i | exact zero_mem _⟩
+  have hu : (fun k ↦ if t k then parityTerm Φ p k else 0) = parityTerm Φs p := by
     funext k
     unfold parityTerm
-    split_ifs <;> simp_all [t]
-  have hv : (fun k ↦ if t k then 0 else parityTerm Φ p k) =
-      parityTerm (fun i ↦ if s i then 0 else Φ.term i) p := by
+    split_ifs <;> simp_all [t, Φs]
+  have hv : (fun k ↦ if t k then 0 else parityTerm Φ p k) = parityTerm Φn p := by
     funext k
     unfold parityTerm
-    split_ifs <;> simp_all [t]
+    split_ifs <;> simp_all [t, Φn]
   simpa only [physicalParityProduct, hu, hv] using heq
 
 /-- The actual product on one parity is an orthogonal projection. Its
@@ -273,8 +275,7 @@ commutation is derived from physical support. ALVV, arXiv:1602.08828v2,
 `def:DLO` and `def:HLeven-odd`, lines 1475–1501. -/
 theorem physicalParityProduct_isStarProjection
     (Φ : ManyBody.BondInteraction L q)
-    (hp : ∀ i, IsStarProjection (Φ.term i))
-(p : ℕ) :
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (p : ℕ) :
     IsStarProjection (physicalParityProduct Φ p) :=
   ContinuousLinearMap.isStarProjection_complementProd
     (parityTerm_isStarProjection Φ hp p) (parityTerm_commute Φ p) (L - 1)
@@ -316,7 +317,7 @@ theorem sum_norm_sq_sub_physicalParityProduct_le
   have h1 := ContinuousLinearMap.norm_sq_sub_norm_sq_complementProd_le
     (parityTerm_isStarProjection Φ hp 1) (parityTerm_commute Φ 1) x (L - 1)
   have hpy (p : ℕ) := ContinuousLinearMap.IsStarProjection.norm_sq_eq
-    (physicalParityProduct_isStarProjection Φ hp Φ.mem p) x
+    (physicalParityProduct_isStarProjection Φ hp p) x
   have hsum :
       (⟪x, (∑ k ∈ Finset.range (L - 1), parityTerm Φ 0 k) x⟫_ℂ).re +
         (⟪x, (∑ k ∈ Finset.range (L - 1), parityTerm Φ 1 k) x⟫_ℂ).re =
@@ -349,8 +350,7 @@ Each bond has at most two noncommuting neighbours, derived from support.
 ALVV, arXiv:1602.08828v2, `lem:dl`, lines 1508–1519. -/
 theorem re_inner_physicalDetectability_le
     (Φ : ManyBody.BondInteraction L q)
-    (hp : ∀ i, IsStarProjection (Φ.term i))
-(x : EuclideanSpace ℂ (Fin L → Fin q)) :
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (x : EuclideanSpace ℂ (Fin L → Fin q)) :
     (⟪physicalDetectability Φ x,
       Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
         Φ.hamiltonian (physicalDetectability Φ x)⟫_ℂ).re ≤
@@ -371,7 +371,7 @@ private theorem bond_apply_eq_zero_of_sum
     (fun j ↦ (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Φ.term j)).toLinearMap)
     (fun j ↦ ContinuousLinearMap.IsStarProjection.isSymmetricProjection
       ((hp j).map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)))) ?_ i
-  simpa only [map_sum, _root_.sum_apply, LinearMap.sum_apply,
+  simpa only [ManyBody.Interaction.hamiltonian, map_sum, _root_.sum_apply, LinearMap.sum_apply,
     ContinuousLinearMap.coe_coe] using hz
 
 /-- Each parity product fixes every vector in the actual Hamiltonian kernel.
@@ -408,9 +408,9 @@ theorem inner_physicalDetectability_eq
     (x : EuclideanSpace ℂ (Fin L → Fin q)) : ⟪z, physicalDetectability Φ x⟫_ℂ = ⟪z, x⟫_ℂ := by
   change ⟪z, physicalParityProduct Φ 1 (physicalParityProduct Φ 0 x)⟫_ℂ = ⟪z, x⟫_ℂ
   rw [← ContinuousLinearMap.IsStarProjection.inner_apply_left
-    (physicalParityProduct_isStarProjection Φ hp Φ.mem 1), physicalParityProduct_fixes_kernel Φ hp hz]
+    (physicalParityProduct_isStarProjection Φ hp 1), physicalParityProduct_fixes_kernel Φ hp hz]
   rw [← ContinuousLinearMap.IsStarProjection.inner_apply_left
-    (physicalParityProduct_isStarProjection Φ hp Φ.mem 0), physicalParityProduct_fixes_kernel Φ hp hz]
+    (physicalParityProduct_isStarProjection Φ hp 0), physicalParityProduct_fixes_kernel Φ hp hz]
 
 /-- A gap above the frustration-free ground vector contracts the orthogonal
 complement under the actual physical detectability operator. The estimate
@@ -431,12 +431,12 @@ theorem norm_sq_physicalDetectability_le_of_gappedGroundState
     rw [Complex.ofReal_zero, zero_smul] at h0
     exact h0
   have horth' : ⟪Gamma, physicalDetectability Φ x⟫_ℂ = 0 :=
-    (inner_physicalDetectability_eq Φ hp Φ.mem hGamma x).trans horth
+    (inner_physicalDetectability_eq Φ hp hGamma x).trans horth
   have hH : Φ.hamiltonian.IsHermitian := Matrix.isHermitian_sum _ fun i _ ↦ (hp i).isSelfAdjoint
   have hgap := (hgap.posSemidef_sub_smul_one hH hΩ hspan).gap_le (physicalDetectability Φ x)
   rw [horth', norm_zero, zero_pow (by decide : (2 : ℕ) ≠ 0), sub_zero,
     zero_mul, sub_zero] at hgap
-  have henergy := re_inner_physicalDetectability_le Φ hp Φ.mem x
+  have henergy := re_inner_physicalDetectability_le Φ hp x
   rw [hx, one_pow] at henergy
   rw [le_div_iff₀ (show 0 < 4 + gamma by linarith only [hgamma])]
   rw [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin] at hgap

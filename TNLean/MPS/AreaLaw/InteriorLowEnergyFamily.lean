@@ -105,7 +105,7 @@ theorem exists_interior_low_energy_original_filter_family
                   (E0 + eta - 3 * w)).map Tm.toLinearEquiv.toLinearMap) := by
   obtain ⟨Aconst, hA, hA21, hscalar⟩ := Real.exists_low_energy_scalar_parameters etaLD hLD
   refine ⟨Aconst, hA, hA21, ?_⟩
-  intro L q mu eta hL hq hmu hetaLower hetaUpper w g u ell a b hab hbL Φ hs h0 h1
+  intro L q mu eta hL hq hmu hetaLower hetaUpper w g u ell a b hab hbL Φ h0 h1
     k A Cross Y K B
   have hlogL : 0 < Real.log (L : ℝ) :=
     Real.log_pos (by exact_mod_cast (show 1 < L by omega))
@@ -133,7 +133,7 @@ theorem exists_interior_low_energy_original_filter_family
   obtain ⟨t, e, E0, x, z, hO, htformula, ht, hcut, hxunit, hx, hlo,
     hcenter, hzunit, hz, hE0low, hE0, hE04, hnorm, hfamily⟩ :=
     exists_five_region_original_low_energy_filter_family L q a b ell eta w (1 / 200)
-      hbuffer hw (by norm_num) hq hell hab hbL Φ hs h0 h1
+      hbuffer hw (by norm_num) hq hell hab hbL Φ h0 h1
   change (B t e ∅).IsHermitian at hO
   refine ⟨t, e, E0, x, z, hO, htformula, ht, hcut, hxunit, hx, hlo,
     hcenter, hzunit, hz, hE0low, hE0, hE04, hnorm, ?_⟩

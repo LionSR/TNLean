@@ -138,11 +138,11 @@ theorem exists_physical_dg_interleaved_interval_tree_with_word_powers :
   obtain ⟨Ctail, C, Kref, hCtail, hC, hKref, hfamily⟩ :=
     exists_physical_dg_interleaved_interval_node_event_with_word_powers
   refine ⟨Ctail, C, Kref, hCtail, hC, hKref, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g m w v ell D s a tau epsilon t Delta
   obtain ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff,
     B, hB, hlogB, Uref, hdimU, hUMPS, hxiMax, hinterval⟩ :=
-    hfamily L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hfamily L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   change 21 ≤ ell at hell
   refine ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff, ?_⟩
   intro u bref
@@ -294,11 +294,11 @@ theorem exists_physical_dg_interleaved_interval_tree :
   obtain ⟨Ctail, C, Kref, hCtail, hC, hKref, hfamily⟩ :=
     exists_physical_dg_interleaved_interval_tree_with_word_powers
   refine ⟨Ctail, C, Kref, hCtail, hC, hKref, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g m w v ell D s a tau epsilon t Delta
   obtain ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff,
     B, hB, hlogB, U, hdimU, hUMPS, hxiMax, hinterval⟩ :=
-    hfamily L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hfamily L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff, ?_⟩
   intro u bref
   refine ⟨B, hB, hlogB, U, hdimU, hUMPS, ?_⟩

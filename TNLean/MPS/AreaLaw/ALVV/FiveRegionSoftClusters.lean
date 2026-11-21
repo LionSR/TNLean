@@ -54,10 +54,10 @@ theorem exists_five_region_soft_clusters {L q k1 k2 k3 k4 : ℕ}
     let k : Fin 6 → ℕ := ![0, k1, k2, k3, k4, L]
     let I := fun j : Fin 5 ↦ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-    let A := fun j : Fin 5 ↦ ∑ i ∈ I j, Φ.term i
+    let A := fun j : Fin 5 ↦ Φ.partialHamiltonian (I j)
     let J := Finset.univ.filter
       (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ))
-    let Y := ∑ i ∈ J, Φ.term i
+    let Y := Φ.partialHamiltonian J
     J.card ≤ 4 ∧ ∃ (e : Fin 5 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧

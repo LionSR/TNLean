@@ -129,10 +129,10 @@ theorem exists_physical_dg_interval_tree_unit_mps :
   classical
   obtain ⟨C, K, hC, hK, hphysical⟩ := exists_physical_dg_interval_tree_mps
   refine ⟨C, K, hC, hK, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g u epsilonRef b m v ell D
   obtain ⟨hell, hlogD, B, hB, hlogB, hfamilies⟩ :=
-    hphysical L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hphysical L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨hell, hlogD, B, hB, hlogB, ?_⟩
   intro Dref xi width hwidth
   obtain ⟨N, F, hN, hparents⟩ := hfamilies

@@ -112,7 +112,7 @@ private theorem actual_clipped_two_window_alphabet
         (A := Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (L := L)
         (k1 := a + 1) (k2 := a + 2 * ell) (k3 := b + 1) (k4 := b + 2 * ell)
         (by omega : a + 1 ≤ a + 2 * ell)
-        (hab.trans (Nat.le_succ b)) (by omega : b + 1 ≤ b + 2 * ell) Φ
+        (hab.trans (Nat.le_succ b)) (by omega : b + 1 ≤ b + 2 * ell) Φ.term
       rw [Fin.sum_univ_five]
       change Φ.hamiltonian =
         (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
@@ -130,7 +130,7 @@ private theorem actual_clipped_two_window_alphabet
             ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)), Φ.term i)
       exact hraw
     have hwin : Φ.hamiltonian = A 0 + (∑ r, WL r) + A 2 + (∑ r, WR r) + A 4 :=
-      Fin.sum_univ_eq_actual_two_window_alphabet L a b ell hab hb Φ
+      Fin.sum_univ_eq_actual_two_window_alphabet L a b ell hab hb Φ.term
     have hbulk : (∑ r, WL r) + (∑ r, WR r) = A 1 + A 3 + Y := by
       calc
         (∑ r, WL r) + (∑ r, WR r) =

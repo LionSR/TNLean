@@ -149,14 +149,14 @@ theorem exists_unique_ground_state_refined_ritz_approximation
   obtain ⟨u, Ccount, hu, hCcount, K, hK, C, hC, kexp, hall⟩ :=
     exists_physical_soft_tree_refined_ritz_approximation q hq gamma hgamma
   refine ⟨u, Ccount, hu, hCcount, K, hK, C, hC, kexp, ?_⟩
-  intro ell m k D width L Φ hs h0 h1 Γ H hΓ0 hΓ huniq hgap
+  intro ell m k D width L Φ h0 h1 Γ H hΓ0 hΓ huniq hgap
   let hH : H.IsHermitian :=
     (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
   have hGeq := spectralSpanLE_zero_eq_span_singleton hH hgamma Γ hΓ huniq hgap
   have hmu := zero_mem_spectrum_of_mulVec_eq_zero hH hgamma Γ hΓ0 hΓ hgap
   have hgap' : ∀ z ∈ spectrum ℝ H, z = 0 ∨ 0 + gamma ≤ z := by
     simpa only [zero_add] using hgap
-  have key := hall L Φ hs h0 h1 0 hmu hgap'
+  have key := hall L Φ h0 h1 0 hmu hgap'
   have hrank : Module.finrank ℂ (ℂ ∙ Γ) = 1 := finrank_span_singleton hΓ0
   dsimp only at key ⊢
   rw [hGeq, hrank] at key

@@ -114,7 +114,7 @@ theorem exists_physical_dg_interval_tree_of_le_radius :
     Real.exists_dg_accuracy_scalar_parameters
   obtain ⟨K, hK, hconditional⟩ := exists_physical_dg_recursive_interval_spaces_of_le_radius
   refine ⟨C, K, hC, hK, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g u epsilonRef b m v ell D
   have hm2 : 2 ≤ m := (by decide : 2 ≤ 50).trans (Nat.le_max_right q 50)
   have hqm : q ≤ m := Nat.le_max_left q 50
@@ -125,7 +125,7 @@ theorem exists_physical_dg_interval_tree_of_le_radius :
     hlogD, htrade, htail⟩ := hparameters m g hm2 hg hg1
   refine ⟨hell, hlogD, ?_⟩
   obtain ⟨B, hB, hlogB, htree⟩ :=
-    hconditional L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hconditional L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨B, hB, hlogB, ?_⟩
   intro Dref xiMax width hwidth
   have hDR : (0 : ℝ) < D := by exact_mod_cast (lt_of_lt_of_le (by decide : 0 < (2 : ℕ)) hD)
@@ -235,10 +235,10 @@ theorem exists_physical_dg_interval_tree :
   classical
   obtain ⟨C, K, hC, hK, hphysical⟩ := exists_physical_dg_interval_tree_of_le_radius
   refine ⟨C, K, hC, hK, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g u epsilonRef b m v ell D
   obtain ⟨hell, hlogD, B, hB, hlogB, hTree⟩ :=
-    hphysical L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hphysical L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨hell, hlogD, B, hB, hlogB, ?_⟩
   intro Dref xi width hwidth
   have hDref : 1 ≤ Dref := by

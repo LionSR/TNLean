@@ -85,7 +85,7 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
           (lvvViabilityPrecision Δ η / (L : ℝ) ^ a)
           (successiveStep hiL (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
             (ManyBody.ChainInteraction.sizeTrimmingSelection
-                (ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩) hq Δ
+                (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ
               (AreaLaw.extend i S))) := by
   classical
   let α := lvvViabilityPrecision Δ η
@@ -109,11 +109,11 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
     have hδ : 0 < α / (L : ℝ) ^ a := div_pos hα (pow_pos hLp a)
     have hδ1 : α / (L : ℝ) ^ a ≤ 1 := (div_le_one (pow_pos hLp a)).mpr
       (hα1.trans (one_le_pow₀ (by exact_mod_cast hL)))
-    let chain := ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩
+    let chain := ManyBody.BondInteraction.toChainInteraction Φ
     have hgapC : IsGapped chain.hamiltonian E₀ Δ := by
-      rwa [show chain.hamiltonian = ∑ j, Φ.term j from ManyBody.Interaction.hamiltonian_extend]
+      rwa [show chain.hamiltonian = Φ.hamiltonian from ManyBody.Interaction.hamiltonian_extend]
     have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
-      rwa [show chain.hamiltonian = ∑ j, Φ.term j from ManyBody.Interaction.hamiltonian_extend]
+      rwa [show chain.hamiltonian = Φ.hamiltonian from ManyBody.Interaction.hamiltonian_extend]
     have hsmall : IsViable Γ (c / L)
         (AreaLaw.extend i S : Set (LeftBlockVector L q i)) := by
       obtain ⟨v, hv, hoverlap, hsupport⟩ := hviable.extend hi0 hiL
@@ -191,7 +191,7 @@ theorem exists_sampled_viable_successor_polynomial {q : ℕ} (hq : 2 ≤ q) (a :
         IsViableMPS Γ (C * L ^ p) (D * L ^ r) (lvvViabilityPrecision Δ η / (L : ℝ) ^ a)
           (successiveStep hiL (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
             (ManyBody.ChainInteraction.sizeTrimmingSelection
-                (ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩) hq Δ
+                (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ
               (AreaLaw.extend i S))) := by
   obtain ⟨C, p₀, D, r₀, hC, hD, hstep⟩ :=
     exists_sampled_viable_successor_polynomial_explicit_energy_degree
@@ -227,7 +227,7 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
               (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
             S (i + 1) = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
               Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
-                (ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩) hq Δ
+                (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ
                 (AreaLaw.extend (i + 1) (S i)))) ∧
         ∀ i : ℕ, i ≤ L →
           IsViableMPS Γ (C * L ^ (sampledProjectorTotalDegree q a Δ B + p₀))
@@ -265,7 +265,7 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
           (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         T = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
           (ManyBody.ChainInteraction.sizeTrimmingSelection
-              (ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩) hq Δ
+              (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ
             (AreaLaw.extend (i + 1) S))
   have hadvance : ∀ (i : ℕ) (S : Finset (LeftBlockVector L q i)), (i ≤ L → P i S) →
       ∃ T : Finset (LeftBlockVector L q (i + 1)), (i + 1 ≤ L → P (i + 1) T) ∧ Step i S T := by
@@ -364,7 +364,7 @@ theorem exists_sampled_successive_viable_sets_polynomial {q : ℕ} (hq : 2 ≤ q
               (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
             S (i + 1) = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
               Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
-                (ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩) hq Δ
+                (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ
                 (AreaLaw.extend (i + 1) (S i)))) ∧
         ∀ i : ℕ, i ≤ L →
           IsViableMPS Γ (C * L ^ p) (D * L ^ r)

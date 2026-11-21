@@ -262,7 +262,7 @@ theorem pow_le_finrank_ground_of_lt_gap :
       let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
       ∀ m : ℕ, (m : ℝ) < gamma → m < L ∧ q ^ m ≤ Module.finrank ℂ G := by
   classical
-  intro L q Φ hs h0 h1 mu nu gamma H hH hmu hnu hmunu hgap G
+  intro L q Φ h0 h1 mu nu gamma H hH hmu hnu hmunu hgap G
   have hq : 2 ≤ q :=
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
   set Hc := (toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) H).toLinearMap
@@ -287,7 +287,8 @@ theorem pow_le_finrank_ground_of_lt_gap :
         Matrix ((({v // v ∈ B}) → Fin q) × (({v // v ∉ B}) → Fin q))
           ((({v // v ∈ B}) → Fin q) × (({v // v ∉ B}) → Fin q)) ℂ :=
       fun X ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) B X
-    have hcut_sum : ∀ (s : Finset (Fin (L - 1))), cut (Φ.partialHamiltonian s) = ∑ i ∈ s, cut (Φ.term i) := by
+    have hcut_sum : ∀ (s : Finset (Fin (L - 1))),
+        cut (Φ.partialHamiltonian s) = ∑ i ∈ s, cut (Φ.term i) := by
       intro s
       exact map_sum (reindexLinearEquiv ℂ ℂ e e) _ s
     have hcut_psd : ∀ X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ, X.PosSemidef →
@@ -302,7 +303,7 @@ theorem pow_le_finrank_ground_of_lt_gap :
       have hterm : ∀ i ∈ S, cut (Φ.term i) =
           (fun x x' ↦ cut (Φ.term i) (x, y₀) (x', y₀)) ⊗ₖ (1 : Matrix _ _ ℂ) := by
         intro i hi
-        exact (hs i).cutOperator_eq_kronecker_one
+        exact ManyBody.IsSupportedOn.cutOperator_eq_kronecker_one (Φ.mem i)
           (interval_subset_interval_zero (Finset.mem_filter.mp hi).2) y₀
       rw [Finset.sum_congr rfl hterm]
       ext p p'
@@ -336,8 +337,8 @@ theorem pow_le_finrank_ground_of_lt_gap :
       rwa [hlin, hcut_one] at h'
     have hHc : cut H = M ⊗ₖ (1 : Matrix _ _ ℂ) + N := by
       rw [← hleft]
-      change cut Φ.hamiltonian = cut (Φ.partialHamiltonian S) + cut (Φ.partialHamiltonian Sᶜ)
-      rw [← Finset.sum_add_sum_compl S Φ]
+      change cut (∑ i, Φ.term i) = cut (∑ i ∈ S, Φ.term i) + cut (∑ i ∈ Sᶜ, Φ.term i)
+      rw [← Finset.sum_add_sum_compl S Φ.term]
       exact map_add (reindexLinearEquiv ℂ ℂ e e) _ _
     -- A nonzero ground vector and its energy.
     have hGne : G ≠ ⊥ := hH.spectralSpanLE_ne_bot_of_mem_spectrum hmu le_rfl

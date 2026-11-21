@@ -153,11 +153,11 @@ theorem exists_physical_dg_interleaved_tree_ritz_approximation :
     exists_physical_dg_interleaved_interval_tree
   obtain ⟨Kfinal, hKfinal, hrefine⟩ := exists_physical_dg_automatic_same_candidate_refinement
   refine ⟨Ctail, C, Ktree, Kfinal, hCtail, hC, hKtree, hKfinal, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g m w v ell D s a tau epsilon t Delta
   obtain ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff,
     B, hB, hlogB, Utree, hdimUtree, hUMPS, hxiMax, hfamilies⟩ :=
-    htree L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    htree L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff, ?_⟩
   intro u bref
   refine ⟨B, hB, hlogB, Utree, hdimUtree, hUMPS, ?_⟩
@@ -188,7 +188,7 @@ theorem exists_physical_dg_interleaved_tree_ritz_approximation :
     have hb := mul_le_mul_of_nonneg_right haN (mul_pos hDref0 hroot).le
     nlinarith only [hb, (mul_pos hDref0 hroot).le]
   obtain ⟨Bfinal, hBfinal, hlogBfinal, hfinal⟩ :=
-    hrefine L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hrefine L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       ETree D hETree hD1 eta heta
   refine ⟨Bfinal, hBfinal, hlogBfinal, ?_⟩
   intro b Dcommon Nfinal xi

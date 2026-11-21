@@ -50,7 +50,7 @@ lemma frustrationFree_twoSidedEnergyTruncation_ground_gap {L q : ℕ}
     let N := middleCutBlock Φ a b 0
     let Y := rightCutBlock Φ b 0
     let K := twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
-    K.PosSemidef ∧ K ≤ ∑ i, Φ.term i ∧ K *ᵥ WithLp.ofLp Ω = 0 ∧
+    K.PosSemidef ∧ K ≤ Φ.hamiltonian ∧ K *ᵥ WithLp.ofLp Ω = 0 ∧
       (K - ((g / 2 : ℝ) : ℂ) •
         (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef := by
   intro X N Y K

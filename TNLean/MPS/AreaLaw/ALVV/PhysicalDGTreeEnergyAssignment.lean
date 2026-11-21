@@ -131,12 +131,12 @@ theorem exists_physical_dg_interleaved_tree_with_recursive_energy :
   obtain ⟨Ctail, C, Kref, hCtail, hC, hKref, hfactory⟩ :=
     exists_physical_dg_interleaved_tree_with_energy_updates
   refine ⟨Ctail, C, Kref, hCtail, hC, hKref, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g m w v ell D s a tau epsilon t Delta
   obtain ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff,
     B, hB, hlogB, Uref, hdimU, hUMPS, hxiMax, hwidth, hq, T, N, F,
     hN, htargets, htrees⟩ :=
-    hfactory L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hfactory L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff, ?_⟩
   intro u bref
   refine ⟨B, hB, hlogB, Uref, hdimU, hUMPS, ?_⟩
@@ -147,7 +147,7 @@ theorem exists_physical_dg_interleaved_tree_with_recursive_energy :
   intro xi hxi hxiMax
   obtain ⟨operation, hspaces, hnodes, hcallbacks⟩ := htrees xi hxi hxiMax
   refine ⟨operation, hspaces, hnodes, hcallbacks, ?_⟩
-  apply ALVV.exists_balanced_regional_energy_assignment hq hwidth Φ hsupp h0 h1 N F operation
+  apply ALVV.exists_balanced_regional_energy_assignment hq hwidth Φ h0 h1 N F operation
   intro J l r k hpk hkr S1 S2
   exact hcallbacks J k hpk hkr
 

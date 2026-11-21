@@ -115,10 +115,10 @@ theorem exists_single_region_hard_truncation_spectral_comparison {L q l r : ℕ}
     hH.groundEnergy_compare_and_isCloseTo_spectralSpanLE_of_norm_domRestrict_le
       hF hFH η ξ δ hη hξ hδ
   have hresult (δ : ℝ) (hδ : 0 < δ) := by
-    have Φ.term := hcompare δ hδ
-    dsimp only at Φ.term
-    rw [hlastH, hlastF] at Φ.term
-    exact Φ.term hresH hresF
+    have h := hcompare δ hδ
+    dsimp only at h
+    rw [hlastH, hlastF] at h
+    exact h hresH hresF
   obtain ⟨hgroundLower, hgroundUpper, _hcloseH, _hcloseF⟩ := hresult 1 zero_lt_one
   refine ⟨hH, hF, E', z', hFH, hz', hFz', hE'low, hE'0, hE'2,
     hresH, hresF, ?_, hgroundLower, hgroundUpper, ?_⟩

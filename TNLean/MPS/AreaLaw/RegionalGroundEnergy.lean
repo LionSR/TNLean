@@ -85,7 +85,7 @@ theorem exists_regional_ground_energy_bound {L q l r : ℕ}
     calc
       A = ∑ i ∈ I, Φ.term i := hAeq
       _ ≤ (I.card : ℝ) • 1 :=
-        (sum_posSemidef_and_le_card_of_positive_unit_terms I Φ
+        (sum_posSemidef_and_le_card_of_positive_unit_terms I Φ.term
           (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)).2
       _ ≤ (L : ℝ) • 1 := smul_le_smul_of_nonneg_right (by exact_mod_cast hcard) zero_le_one
   have hcapC : C ≤ (L : ℝ) • 1 := by

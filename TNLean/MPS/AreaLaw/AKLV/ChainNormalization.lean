@@ -164,8 +164,8 @@ theorem middleCutBlock_le_window {L q : ℕ}
         exact Finset.mem_Ico.mpr ⟨hi'.1.le, hi'.2⟩)
       (by intro i _ j _ hij; exact Fin.ext hij)
     simpa only [Nat.card_Ico] using hh
-  have hsum : (Φ.partialHamiltonian J) ≤ (J.card : ℂ) • 1 := by
-    simpa only [Nat.cast_smul_eq_nsmul ℂ] using Finset.sum_le_card_nsmul J Φ 1
+  have hsum : (∑ i ∈ J, Φ.term i) ≤ (J.card : ℂ) • 1 := by
+    simpa only [Nat.cast_smul_eq_nsmul ℂ] using Finset.sum_le_card_nsmul J Φ.term 1
       (fun i _ ↦ h1 i)
   have hshift : 0 ≤ (m : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :=
     (Matrix.PosSemidef.one.smul (Complex.zero_le_real.mpr hm)).nonneg

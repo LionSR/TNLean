@@ -39,10 +39,10 @@ theorem exists_five_region_soft_structure {L q k1 k2 k3 k4 : ℕ}
     let k : Fin 6 → ℕ := ![0, k1, k2, k3, k4, L]
     let I := fun j : Fin 5 ↦ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-    let A := fun j : Fin 5 ↦ ∑ i ∈ I j, Φ.term i
+    let A := fun j : Fin 5 ↦ Φ.partialHamiltonian (I j)
     let J := Finset.univ.filter
       (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ))
-    let Y := ∑ i ∈ J, Φ.term i
+    let Y := Φ.partialHamiltonian J
     J.card ≤ 4 ∧ ∃ (e : Fin 5 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
@@ -79,7 +79,7 @@ theorem exists_five_region_soft_structure {L q k1 k2 k3 k4 : ℕ}
   let Braw := ∑ j, (A j - (e j : ℂ) • 1)
   let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
   have hHY : H = Braw + Y := by
-    dsimp only [H, Braw]
+    dsimp only [H, Braw, A, Y, ManyBody.Interaction.partialHamiltonian]
     rw [hsum, Finset.sum_sub_distrib]
     push_cast
     rw [Finset.sum_smul]
@@ -104,7 +104,7 @@ theorem exists_five_region_soft_structure {L q k1 k2 k3 k4 : ℕ}
   change (B + (D : ℂ) • 1).PosSemidef at hBpos
   have hGshift : (G + (D : ℂ) • 1).PosSemidef := by
     convert hBpos.add hY using 1
-    dsimp only [G]
+    dsimp only [G, Y, ManyBody.Interaction.partialHamiltonian]
     abel
   have hGH : G ≤ H := by
     rw [hHY]

@@ -220,7 +220,7 @@ private theorem exists_uniform_physical_soft_polynomial_family
     (L := N + 1) (q := q) (ell := ell)
     (k1 := a + 1) (k2 := a + 2 * ell) (k3 := b + 1) (k4 := b + 2 * ell)
     (by omega) (by omega) (by omega) (by omega) (by omega)
-    (by omega) (by omega) h hs h0 h1
+    (by omega) (by omega) ⟨h, hs⟩ h0 h1
   obtain ⟨hcross, e, x, E, hx, hxe, he, hE0, hEC, hfamily⟩ := hdata
   have hlo : (e 2 : ℂ) • 1 ≤ ∑ i ∈ Finset.univ.filter
       (fun i : Fin N ↦ a + 2 * ell ≤ i.val ∧ i.val + 1 < b + 1), h i := by
@@ -296,7 +296,7 @@ private theorem exists_uniform_physical_soft_polynomial_family
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval (N + 1) (cuts j.castSucc) (cuts j.succ) : Finset (Fin (N + 1)))
     have hAmem : A j ∈ V :=
-      isSupportedOn_sum_internal_bonds (N + 1) q (cuts j.castSucc) (cuts j.succ) h hs
+      isSupportedOn_sum_internal_bonds (N + 1) q (cuts j.castSucc) (cuts j.succ) ⟨h, hs⟩
     exact add_mem (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
       (ManyBody.cfc_mem_supportedOperators _
         (sub_mem hAmem (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))))

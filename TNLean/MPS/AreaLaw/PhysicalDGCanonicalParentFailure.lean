@@ -130,11 +130,11 @@ theorem exists_physical_dg_canonical_interval_parent_failure :
   obtain ⟨Ctail, C, Kref, hCtail, hC, hKref, hfamily⟩ :=
     exists_physical_dg_interleaved_interval_iterates_with_word_powers
   refine ⟨Ctail, C, Kref, hCtail, hC, hKref, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g m w v ell D s a tau epsilon t Delta
   obtain ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff,
     B, hB, hlogB, Uref, hdimU, hUMPS, hxiMax, hinterval⟩ :=
-    hfamily L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hfamily L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   change 2 ≤ D at hD
   change 1 ≤ s at hs
   refine ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff, ?_⟩
@@ -176,7 +176,7 @@ theorem exists_physical_dg_canonical_interval_parent_failure :
     exact hdimT
   have hL : 1 ≤ (L : ℝ) + 1 := by
     have h : (0 : ℝ) ≤ L := Nat.cast_nonneg L
-    linarith only [Φ.term]
+    linarith only [h]
   have hbeta : 0 < beta := by dsimp only [beta]; positivity
   have hbeta1 : beta ≤ 1 := by
     dsimp only [beta]
@@ -201,11 +201,11 @@ theorem exists_physical_dg_canonical_interval_parent_failure :
       (Fintype.card (interval L p endR → Fin q)) ↦ ((() : Unit), seed)) :=
     measurable_const.prodMk measurable_id
   have hBad : MeasurableSet Bad := by
-    have Φ.term := hgood.preimage hm
+    have h := hgood.preimage hm
     change MeasurableSet {seed | Submodule.IsViable (3 / 200 : ℝ)
       (canonicalSampledIntervalInterleavedTrim L q p endR D s F xi W seed)
-        (G.map coords.toLinearEquiv.toLinearMap)} at Φ.term
-    exact Φ.term.compl
+        (G.map coords.toLinearEquiv.toLinearMap)} at h
+    exact h.compl
   refine ⟨hBad, ?_⟩
   refine (measure_mono ?_).trans hbadSample
   intro seed hbad hsampleGood

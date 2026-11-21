@@ -79,7 +79,7 @@ theorem exists_physical_dg_interval_entropy_bound :
     dsimp only [Cbound]
     positivity
   refine ⟨Cbound, hC, ?_⟩
-  intro L q p r hpr hrL Φ hs h0 h1 mu nu gamma hgamma H hH
+  intro L q p r hpr hrL Φ h0 h1 mu nu gamma hgamma H hH
     hmu hnu hmunu hgap G g J ψ hψG hψ
   let beta := fun _ : Fin L ↦ Fin q
   let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
@@ -96,7 +96,7 @@ theorem exists_physical_dg_interval_entropy_bound :
   let ellq : ℕ := ⌈A * u ^ 2 / g⌉₊
   let Dq : ℕ := (q * ellq ^ 2) ^ (22 * ellq)
   obtain ⟨_hDq, _hlogDq, W0, hWdim, hW0, haccuracy⟩ :=
-    hphysical L q p r hpr hrL Φ hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hphysical L q p r hpr hrL Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   have hq : 2 ≤ q :=
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
   have hq1 : 1 ≤ q := Nat.le_trans (by decide : 1 ≤ 2) hq

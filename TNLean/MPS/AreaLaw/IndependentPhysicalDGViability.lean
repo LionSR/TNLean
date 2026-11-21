@@ -80,11 +80,11 @@ theorem exists_independent_long_middle_actual_dg_family :
                   EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) := by
   classical
   intro m q ell t g epsilon Delta hq hqm hell ht hg hg1 hepsilon hepsilon1 htail hfilter
-    D L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm Φ hs h0 h1 mu H hH G hmu hgap
+    D L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm Φ h0 h1 mu H hH G hmu hgap
   obtain ⟨T, N, CW, hN, hTG, hGT, hdim, hpower⟩ :=
     exists_independent_long_middle_actual_dg_word_family m q ell t g epsilon Delta
       hq hqm hell ht hg hg1 hepsilon hepsilon1 htail hfilter
-      L p r hpr hrL hlong Φ hs h0 h1 mu hmu hgap
+      L p r hpr hrL hlong Φ h0 h1 mu hmu hgap
   obtain ⟨_f, F, _hF, _hzero, hspan⟩ :=
     Submodule.exists_clm_family_extension_of_card_le
       (by simpa only [Fintype.card_fin] using hN) CW

@@ -51,8 +51,7 @@ The families are selected before the original ground energy and vector. -/
 theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ q)
     {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ L : ℕ, 1 ≤ L → ∀ R : ℕ, 1 ≤ R →
-      ∀ (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (_h1 : ∀ j, Φ.term j ≤ 1),
+      ∀ (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (_h1 : ∀ j, Φ.term j ≤ 1),
       let N := L + 2 * R ^ 2
       let hi : L ≤ N := Nat.le_add_right _ _
       let z : Fin q := ⟨0, by omega⟩
@@ -76,17 +75,18 @@ theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ 
   have hg : 0 < min Delta 1 := lt_min hDelta zero_lt_one
   obtain ⟨P, d, hP, hrun⟩ := exists_uniform_positive_chain_successive_approximation hq hg
   refine ⟨P ^ 2, 2 * d, by nlinarith, ?_⟩
-  intro L hL R hR Φ hs h0 h1
+  intro L hL R hR Φ h0 h1
   dsimp only
   let N := L + 2 * R ^ 2
   have hi : L ≤ N := Nat.le_add_right _ _
   have hN : 1 ≤ N := hL.trans hi
   let z : Fin q := ⟨0, by omega⟩
-  obtain ⟨_, hS, _⟩ := hrun N hN (paddedInteraction hi z Φ)
-    (paddedInteraction_supported hi z Φ hs)
+  let Ψ : ManyBody.BondInteraction N q :=
+    ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
+  obtain ⟨_, hS, _⟩ := hrun N hN Ψ
     (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
     (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2)
-  let S := lvvSweep hq (paddedInteraction hi z Φ) (paddedInteraction_supported hi z Φ hs)
+  let S := lvvSweep hq Ψ
     (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
     (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) (min Delta 1)
   have hS0 : S 0 = {emptyLeftVector N q} := rfl

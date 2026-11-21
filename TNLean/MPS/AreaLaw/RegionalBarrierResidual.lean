@@ -42,9 +42,9 @@ theorem norm_hard_residual_low_of_barrier
     (basis : OrthonormalBasis (Fin L → Fin q) ℂ (EuclideanSpace ℂ (Fin L → Fin q)))
     (a : (Fin L → Fin q) → ℝ)
     (hEigen : ∀ v, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-      (B + ∑ i ∈ J, Φ.term i) (basis v) = (a v : ℂ) • basis v)
+      (B + Φ.partialHamiltonian J) (basis v) = (a v : ℂ) • basis v)
     (hgap : 2 * (J.card : ℝ) < b0 - energy) :
-    let A := ∑ i ∈ I, Φ.term i
+    let A := Φ.partialHamiltonian I
     let S := Submodule.spectralSpanLE basis a energy
     ‖(toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
       (A - energyTruncation A cut)).domRestrict S‖ ≤
@@ -77,16 +77,16 @@ theorem norm_soft_residual_low_of_barrier
     (h0 : ∀ i ∈ I ∪ J, 0 ≤ Φ.term i) (h1 : ∀ i ∈ I ∪ J, Φ.term i ≤ 1)
     (B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (p c b0 energy s t T : ℝ) (m : ℕ)
-    (hp : (p : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ≤ ∑ i ∈ I, Φ.term i)
+    (hp : (p : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ≤ Φ.partialHamiltonian I)
     (hs0 : 0 < s) (hs1 : s ≤ 1 / 8) (ht : 0 < t) (hm : 1 ≤ m) (hT : 0 ≤ T)
     (hcut : c ≤ p + T) (hBA : Commute B (Φ.partialHamiltonian I))
     (hproj : b0 • spectralProjectionGE (Φ.partialHamiltonian I) c ≤ B)
     (basis : OrthonormalBasis (Fin L → Fin q) ℂ (EuclideanSpace ℂ (Fin L → Fin q)))
     (a : (Fin L → Fin q) → ℝ)
     (hEigen : ∀ v, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-      (B + ∑ i ∈ J, Φ.term i) (basis v) = (a v : ℂ) • basis v)
+      (B + Φ.partialHamiltonian J) (basis v) = (a v : ℂ) • basis v)
     (hgap : 2 * (J.card : ℝ) < b0 - energy) :
-    let A := ∑ i ∈ I, Φ.term i
+    let A := Φ.partialHamiltonian I
     let S := Submodule.spectralSpanLE basis a energy
     ‖(toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
       (A - (p : ℂ) • 1 - cfc (Real.softTruncation t m) (A - (p : ℂ) • 1))).domRestrict S‖ ≤

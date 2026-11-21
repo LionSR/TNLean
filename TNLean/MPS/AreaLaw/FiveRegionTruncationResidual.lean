@@ -355,12 +355,12 @@ theorem exists_five_region_dg_cluster_parameters :
   obtain ⟨hell, hD, _hlower, _hupper, _hscale, _hcount, hlogD, htrade, htail⟩ :=
     hall q g hq hg hg1
   refine ⟨hell, hD, hlogD, ?_⟩
-  intro L a b hab hbL Φ hs h0 h1 mu H hH G hmu hgap k Areg J Y
+  intro L a b hab hbL Φ h0 h1 mu H hH G hmu hgap k Areg J Y
   let xi : ℝ := g / 1000000
   obtain ⟨e, E0, hground, horigin, hE0, hE4, hnorm,
     v, lam, heigen, hclosed, hband, hdim, hTG, hGT, hnewgap⟩ :=
     exists_five_region_physical_low_cluster L q a b ell (by omega) hell hab hbL
-      Φ hs h0 h1 mu g xi hg hg1 htail le_rfl hmu hgap
+      Φ h0 h1 mu g xi hg hg1 htail le_rfl hmu hgap
   refine ⟨e, E0, ?_⟩
   intro S K B ι eta0 eta1 upper R Delta
   obtain ⟨hsep, hendpoint, hR0, hR8, _hwidth, hsquare⟩ :=

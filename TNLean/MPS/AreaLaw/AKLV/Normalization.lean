@@ -55,8 +55,7 @@ def aklvNormalizationHamiltonians {L q : ℕ} (a s : ℕ)
 
 private theorem aklv_normalization_bond_data {L q a s : ℕ}
     (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
-    (Φ : ManyBody.BondInteraction L q)
-:
+    (Φ : ManyBody.BondInteraction L q) :
     let p := aklvNormalizationEndpoints L a s
     let R := fun j ↦ interval L (p j).1 (p j).2
     let A := aklvNormalizationHamiltonians a s Φ
@@ -65,7 +64,7 @@ private theorem aklv_normalization_bond_data {L q a s : ℕ}
         i.val ∈ ({a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1} : Finset ℕ))
     Pairwise (fun i j ↦ Disjoint (R i) (R j)) ∧
       (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (A j) (R j)) ∧
-      J.card ≤ 6 ∧ Φ.hamiltonian = (∑ j, A j) + ∑ i ∈ J, Φ.term i := by
+      J.card ≤ 6 ∧ Φ.hamiltonian = (∑ j, A j) + Φ.partialHamiltonian J := by
   intro p R A J
   have hR : Pairwise fun i j ↦ Disjoint (R i) (R j) := by
     intro i j hij
@@ -129,15 +128,15 @@ theorem exists_aklv_energy_normalization {L q a s : ℕ} (hq : 0 < q)
   let J := Finset.univ.filter (fun i : Fin (L - 1) ↦
     a ≤ i.val ∧ i.val < a + s ∧
       i.val ∈ ({a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1} : Finset ℕ))
-  let Y := ∑ i ∈ J, Φ.term i
+  let Y := Φ.partialHamiltonian J
   obtain ⟨hR, hAs, hJ, hH⟩ := aklv_normalization_bond_data hs ha Φ
   have hA (j : Fin 3) : (A j).PosSemidef ∧
       A j ≤ ((I j).card : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :=
-    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms (I j) Φ
+    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms (I j) Φ.term
       (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
   have hY : Y.PosSemidef ∧
       Y ≤ (J.card : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :=
-    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms J Φ
+    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms J Φ.term
       (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
   have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hxunit, hx, he, hclip⟩ :=
@@ -165,8 +164,7 @@ reference sums plus their adjacent boundary bonds. Their centered supports are
 of `H^(t)` after equation (5). -/
 theorem aklv_two_block_exterior_data {L q a s : ℕ}
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
-    (Φ : ManyBody.BondInteraction L q)
-:
+    (Φ : ManyBody.BondInteraction L q) :
     let A := aklvNormalizationHamiltonians a s Φ
     let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ
     C 0 = A 0 + Φ.term ⟨a, by omega⟩ ∧

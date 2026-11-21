@@ -102,7 +102,8 @@ theorem measureReal_goodWords_ge [NeZero L]
     (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
-    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {δ : ℝ} (hδ : 0 < δ) :
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {δ : ℝ}
+    (hδ : 0 < δ) :
     1 - 1 / (2 * (L : ℝ) ^ 3) ≤
       (sampleMeasure (sampledWordCount q L E₀ Δ δ) (sampledPower L E₀ Δ δ) L).real
         {I | GoodWords Φ E₀ (sampledPower L E₀ Δ δ) (δ / 8) (sampledLetterBound q L E₀ Δ δ) I} :=
@@ -123,7 +124,7 @@ noncomputable def sampledSweepStep (hq : 2 ≤ q)
     Finset (LeftBlockVector L q (i + 1)) :=
   successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
     (sampledFactors Φ E₀ I (i + 1)) id
-    ((ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩).sizeTrimmingSelection hq Δ
+    ((ManyBody.BondInteraction.toChainInteraction Φ).sizeTrimmingSelection hq Δ
       (AreaLaw.extend (i + 1) S))
 
 /-- **The sampled sweep** with the words `I i` at the step from cut `i` to cut `i + 1`.
@@ -166,7 +167,7 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
       (q ^ (2 * κ) * max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L))) δ
       (sampledSweepStep hq Φ E₀ Δ I hi S) := by
   classical
-  let chain := ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩
+  let chain := ManyBody.BondInteraction.toChainInteraction Φ
   have hgapC : IsGapped chain.hamiltonian E₀ Δ := by
     rwa [show chain.hamiltonian = ∑ j, Φ.term j from ManyBody.Interaction.hamiltonian_extend]
   have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
@@ -252,7 +253,7 @@ noncomputable def sampledSweepStepProgram (hq : 2 ≤ q)
   do
     let S₁ ← extensionProgram L (i + 1) b S
     let S₂ ← sizeTrimmingProgram L (i + 1) b
-      (ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩) hq Δ S₁
+      (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ S₁
     let S₃ ← bondTrimmingProgram L (i + 1) hi b r S₂
     let F ← FreeM.lift (LinearAlgebraQuery.sampledFactors L (i + 1) Φ E₀ ℓ m D I)
     errorReductionProgram L (i + 1) D (max 1 r) F S₃
@@ -381,7 +382,7 @@ theorem sampledGroundStateProgram_spec (hL : 0 < L) (hq : 2 ≤ q)
         rw [← e.inner_map_map, e.apply_symm_apply]
       rw [← norm_inner_symm, this]
       exact hover
-    let chain := ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩
+    let chain := ManyBody.BondInteraction.toChainInteraction Φ
     have hchain : chain.hamiltonian = Φ.hamiltonian := ManyBody.Interaction.hamiltonian_extend
     have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
@@ -423,7 +424,8 @@ theorem measureReal_forall_goodWords_ge [NeZero L]
     (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
-    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {δ : ℝ} (hδ : 0 < δ) :
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {δ : ℝ}
+    (hδ : 0 < δ) :
     1 - 1 / (2 * (L : ℝ) ^ 2) ≤
       (stepWordsMeasure L (sampledWordCount q L E₀ Δ δ) (sampledPower L E₀ Δ δ)).real
         {I | ∀ i, GoodWords Φ E₀ (sampledPower L E₀ Δ δ) (δ / 8)

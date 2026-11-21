@@ -112,10 +112,10 @@ theorem exists_physical_dg_recursive_interval_spaces_of_le_radius :
   classical
   obtain ⟨K, hK, hphysical⟩ := exists_physical_dg_sampled_interval_node_event_of_le_radius
   refine ⟨K, hK, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g u epsilonRef b
   obtain ⟨B, hB, hlogB, hNodes⟩ :=
-    hphysical L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hphysical L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨B, hB, hlogB, ?_⟩
   intro Dref xiMax m ell t Delta hqm hm hell ht htail hfilter D htrade width hwidth
   have hG : G ≠ ⊥ := hH.spectralSpanLE_ne_bot_of_mem_spectrum hmu le_rfl
@@ -245,10 +245,10 @@ theorem exists_physical_dg_recursive_interval_spaces :
   classical
   obtain ⟨K, hK, hphysical⟩ := exists_physical_dg_recursive_interval_spaces_of_le_radius
   refine ⟨K, hK, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g u epsilonRef b
   obtain ⟨B, hB, hlogB, hTree⟩ :=
-    hphysical L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hphysical L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨B, hB, hlogB, ?_⟩
   intro Dref xi m ell t Delta hqm hm hell ht htail hfilter D htrade width hwidth
   have hrG : 1 ≤ rG := Submodule.one_le_finrank_iff.mpr

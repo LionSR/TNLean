@@ -44,13 +44,13 @@ open LinearAlgebraQuery
 on the original chain. LVV13, `algo53.tex`, lines 652--678. -/
 noncomputable def groundStateProgram {L : ℕ} (hq : 2 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (Delta : ℝ) (R : ℕ) : LVVProgram q (EuclideanSpace ℂ (Fin L → Fin q)) :=
   let N := L + 2 * R ^ 2
   let hi : L ≤ N := Nat.le_add_right _ _
   let z : Fin q := ⟨0, by omega⟩
   open Classical in do
-    let S ← sweepProgram hq (paddedInteraction hi z Φ) (paddedInteraction_supported hi z Φ)
+    let S ← sweepProgram hq ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
       (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
       (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) (min Delta 1) L
     FreeM.lift (LinearAlgebraQuery.energyMinimizer L (lvvSuccessiveBondBound q (min Delta 1) N)
@@ -62,7 +62,7 @@ noncomputable def groundStateProgram {L : ℕ} (hq : 2 ≤ q)
 family of the padded sweep, read on the original chain. -/
 theorem eval_groundStateProgram {L : ℕ} (hq : 2 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (Delta : ℝ) (R : ℕ) :
     let N := L + 2 * R ^ 2
     let hi : L ≤ N := Nat.le_add_right _ _
@@ -70,7 +70,7 @@ theorem eval_groundStateProgram {L : ℕ} (hq : 2 ≤ q)
     FreeM.eval honestOracle (groundStateProgram hq Φ h0 h1 Delta R) =
       open Classical in
       energyMinimizer Φ.hamiltonian
-        ((lvvSweep hq (paddedInteraction hi z Φ) (paddedInteraction_supported hi z Φ)
+        ((lvvSweep hq ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
           (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
           (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) (min Delta 1) L).image
           fun w ↦
@@ -102,7 +102,7 @@ the cardinality budget times the bond budget of the sweep on the padded chain. L
 `algo53.tex`, lines 213--216 and 652--678. -/
 theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {R : ℕ} (hR : 1 ≤ R)
     (E : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E Delta)
@@ -117,15 +117,16 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
   have hi : L ≤ N := Nat.le_add_right _ _
   let z : Fin q := ⟨0, by omega⟩
   let e := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (leftConfigOfFinEquiv (q := q) hi)
-  let hs' := paddedInteraction_supported hi z Φ
+  let Ψ : ManyBody.BondInteraction N q :=
+    ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
   let h0' := fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1
   let h1' := fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2
-  set S := lvvSweep hq (paddedInteraction hi z Φ) hs' h0' h1' (min Delta 1) L with hSdef
+  set S := lvvSweep hq Ψ h0' h1' (min Delta 1) L with hSdef
   have hψ : ψ = energyMinimizer Φ.hamiltonian (S.image fun w ↦ e.symm w) :=
     eval_groundStateProgram hq Φ h0 h1 Delta R
   have hg : 0 < min Delta 1 := lt_min hDelta zero_lt_one
   have hN : 1 ≤ N := hL.trans hi
-  obtain ⟨hcard, hmps, hviable⟩ := lvvSweep_spec hq (paddedInteraction hi z Φ) hs' h0' h1' hg L hi
+  obtain ⟨hcard, hmps, hviable⟩ := lvvSweep_spec hq Ψ h0' h1' hg L hi
   simp only [show L ≠ 0 by omega, ↓reduceIte] at hcard hmps
   obtain ⟨hpn, hpg, hps⟩ := isGapped_paddedInteraction hL hi z Φ
       (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap
@@ -164,7 +165,7 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
       (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hspan
     have hover : 1 - δ ≤ ‖⟪Γ, e.symm w⟫_ℂ‖ :=
       one_sub_le_norm_inner_of_norm_sub_sq_le hw'norm hΩ herror
-    let chain := ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩
+    let chain := ManyBody.BondInteraction.toChainInteraction Φ
     have hchain : chain.hamiltonian = Φ.hamiltonian := ManyBody.Interaction.hamiltonian_extend
     have hspanC : groundSpace chain.hamiltonian E = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption

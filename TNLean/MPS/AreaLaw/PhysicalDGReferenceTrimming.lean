@@ -104,10 +104,10 @@ theorem exists_physical_dg_collective_trimming_bound :
             Set (LeftBlockVector L q i))) G := by
   obtain ⟨K, hK, hreference⟩ := exists_physical_dg_isOpenMPS_reference_subspace
   refine ⟨K, hK, ?_⟩
-  intro L q Φ hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G r g u
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G r g u
     epsilon hepsilon hepsilon1 b
   obtain ⟨B, hB, hlogB, U, _hdim, hUG, hGU, hU⟩ :=
-    hreference L q Φ hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hreference L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       epsilon hepsilon hepsilon1
   refine ⟨B, hB, hlogB, fun i hi S delta hdelta xi hxi hS ↦ ?_⟩
   simpa only [Nat.cast_mul, Nat.cast_pow] using

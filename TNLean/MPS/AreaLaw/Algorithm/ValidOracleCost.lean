@@ -126,7 +126,7 @@ theorem cost_errorReductionProgram_le_of_valid (L i r b : ℕ) (F : Finset (Left
 /-- One step of the sweep under a valid oracle costs at most the honest step budget. -/
 theorem cost_sweepStepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 0 < L)
     (hq : 2 ≤ q) (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
     FreeM.cost o queryCost (sweepStepProgram hq Φ h0 Delta hi S) ≤
@@ -137,7 +137,7 @@ theorem cost_sweepStepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL :
   simp only [sweepStepProgram, FreeM.cost_bind, FreeM.eval_lift, eval_extensionProgram_of_valid hv,
     eval_sizeTrimmingProgram_of_valid hv, eval_bondTrimmingProgram_of_valid hv, FreeM.cost_lift,
     queryCost_gaussianFilterFactors, sweepStepCostBound]
-  set chain := ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩ with hchain
+  set chain := ManyBody.BondInteraction.toChainInteraction Φ with hchain
   set b := lvvSuccessiveBondBound q Delta L with hb
   set m := bondTrimmingRadius L (lvvReferenceBond q Delta L) with hm
   set c := lvvSuccessiveError Delta with hcdef
@@ -174,8 +174,7 @@ theorem cost_sweepStepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL :
 
 /-- The sweep under a valid oracle costs at most `i` honest step budgets. -/
 theorem cost_sweepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (i : ℕ) (hi : i ≤ L) :
     FreeM.cost o queryCost (sweepProgram hq Φ h0 h1 Delta i) ≤
       i * sweepStepCostBound q Delta L (max 1 (lvvSuccessiveCardBound q Delta L)) := by
@@ -197,7 +196,7 @@ theorem cost_sweepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 0 <
 /-- The ground-state program under a valid oracle costs at most the honest budget. -/
 theorem cost_groundStateProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 1 ≤ L)
     (hq : 2 ≤ q) (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (R : ℕ) :
     FreeM.cost o queryCost (groundStateProgram hq Φ h0 h1 Delta R) ≤
       groundStateCostBound q Delta (L + 2 * R ^ 2) := by
@@ -209,21 +208,21 @@ theorem cost_groundStateProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL
   have hi : L ≤ N := Nat.le_add_right _ _
   set z : Fin q := ⟨0, by omega⟩ with hz
   set e := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (leftConfigOfFinEquiv (q := q) hi) with he
-  set S := FreeM.eval o (sweepProgram hq (paddedInteraction hi z Φ)
-    (paddedInteraction_supported hi z Φ)
+  set S := FreeM.eval o (sweepProgram hq
+    ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
     (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
     (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) (min Delta 1) L) with hS
   set B := sweepStepCostBound q (min Delta 1) N (max 1 (lvvSuccessiveCardBound q (min Delta 1) N))
     with hB
-  have hsweep := cost_sweepProgram_le_of_valid hv (by omega) hq (paddedInteraction hi z Φ)
-    (paddedInteraction_supported hi z Φ)
+  have hsweep := cost_sweepProgram_le_of_valid hv (by omega) hq
+    ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
     (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
     (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) hg L hi
   have hcard : (S.image fun w ↦ e.symm w).card ≤
       max 1 (lvvSuccessiveCardBound q (min Delta 1) N) := by
     refine Finset.card_image_le.trans ?_
-    refine (sweepProgram_spec_of_valid hv hq (paddedInteraction hi z Φ)
-      (paddedInteraction_supported hi z Φ)
+    refine (sweepProgram_spec_of_valid hv hq
+      ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
       (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
       (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) hg L hi).1.trans ?_
     split_ifs <;> simp
@@ -238,7 +237,7 @@ theorem exists_groundStateProgram_cost_polynomial_of_valid (hq : 2 ≤ q) {Delta
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ (o : {ι : Type} → LinearAlgebraQuery q ι → ι), IsValidOracle o →
       ∀ (L R : ℕ), 1 ≤ L →
       ∀ (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1),
+        (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1),
       FreeM.countQueries o (groundStateProgram hq Φ h0 h1 Delta R) ≤
         FreeM.cost o queryCost (groundStateProgram hq Φ h0 h1 Delta R) ∧
       FreeM.cost o queryCost (groundStateProgram hq Φ h0 h1 Delta R) ≤

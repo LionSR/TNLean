@@ -46,8 +46,7 @@ and simultaneous internal rank bounds are those of the exact construction.
 Source: LVV13, `algo53.tex`, Claim `c:errorreduction`, lines 580–592, and
 Corollary `c:agsp`, lines 626–649, with the correction stated above. -/
 theorem exists_rational_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
     (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ)

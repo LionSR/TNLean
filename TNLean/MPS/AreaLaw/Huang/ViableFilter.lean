@@ -116,8 +116,7 @@ noncomputable def gaussianFilterFactors {L q : ℕ}
 /-- The Gaussian filter factors number at most `E R`, the energy count times the filter
 rank bound. -/
 theorem card_gaussianFilterFactors_le {L q i : ℕ} (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) :
     (gaussianFilterFactors Φ h0 c Delta i).card ≤
       huangEnergyCount c Delta L * huangFilterRankBound q c Delta L :=
@@ -126,8 +125,7 @@ theorem card_gaussianFilterFactors_le {L q i : ℕ} (hq : 1 ≤ q)
 /-- Every Gaussian filter factor has operator-Schmidt rank at most the filter rank bound
 at every internal left cut. -/
 theorem operatorSchmidtRank_of_mem_gaussianFilterFactors {L q i : ℕ} (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hi : i ≤ L)
     {A : LeftBlockMatrix L q i} (hA : A ∈ gaussianFilterFactors Φ h0 c Delta i)
     (k : ℕ) (hki : k < i) :
@@ -143,8 +141,7 @@ factors are chosen before every ground pair and before `S`. Huang, arXiv:1406.63
 Section 5.4, Lemmas 18--19, composed with the deterministic LVV error-reduction step,
 `algo53.tex`, Claim `c:errorreduction`, lines 580--592. -/
 theorem isViable_errorReductionSet_gaussianFilterFactors {L q i : ℕ} (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hL : 1 ≤ L)
     (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (hΓ : ‖Γ‖ = 1)
     (hHΓ : Φ.hamiltonian *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ)
@@ -215,8 +212,7 @@ prescribed gap, `1/2`-viability of the input family implies `c / L`-viability of
 under every admissible family of factors. Huang, arXiv:1406.6355v6, Section 5.4, Lemmas
 18--19, with LVV13, Claim `c:errorreduction`, lines 584--592. -/
 theorem isViable_errorReductionSet_of_isAdmissibleFilterFactors {L q i : ℕ} (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hL : 1 ≤ L)
     (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (hΓ : ‖Γ‖ = 1)
     (hHΓ : Φ.hamiltonian *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ)
@@ -255,8 +251,7 @@ theorem isViable_errorReductionSet_of_isAdmissibleFilterFactors {L q i : ℕ} (h
 pair and every input family: the existence form of `gaussianFilterFactors` and
 `isViable_errorReductionSet_gaussianFilterFactors`. -/
 theorem exists_positive_chain_error_reduction_factors {L q i : ℕ} (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hL : 1 ≤ L) (hi : i ≤ L) :
     ∃ F : Finset (LeftBlockMatrix L q i),
       F.card ≤ huangEnergyCount c Delta L * huangFilterRankBound q c Delta L ∧
@@ -297,8 +292,7 @@ the existence form of `exists_positive_chain_error_reduction_factors`, with the 
 `{A u : A ∈ F, u ∈ S}` left unnamed. Huang, arXiv:1406.6355v6, Section 5.4,
 Lemmas 18--19, composed with the deterministic LVV error-reduction step. -/
 theorem exists_positive_chain_error_reduced_set {L q i s b : ℕ} (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hL : 1 ≤ L) (hi : i ≤ L)
     (S : Finset (LeftBlockVector L q i)) (hcard : S.card ≤ s)
     (hSmps : ∀ v ∈ S, IsLeftOpenMPS b v) :

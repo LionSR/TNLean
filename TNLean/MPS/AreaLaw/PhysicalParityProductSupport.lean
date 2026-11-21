@@ -49,17 +49,19 @@ on that same site interval. The support is derived from the original
 nearest-neighbour terms. ALVV, arXiv:1602.08828v2, `def:FF-tH`,
 lines 1467--1487. -/
 theorem isSupportedOn_regionalParityProduct
-    (Φ : ManyBody.BondInteraction L q)
-(a b p : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (a b p : ℕ) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      ((T).symm (physicalParityProduct (intervalBondRestriction a b Φ) p)) (interval L a b) := by
+      ((T).symm (physicalParityProduct
+        ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ p))
+      (interval L a b) := by
   change _ ∈ ManyBody.supportedOperators _ _
   classical
   apply isSupportedOn_physicalParityProduct
   intro i _
+  change ManyBody.IsSupportedOn (intervalBondRestriction a b Φ i) _
   unfold intervalBondRestriction
   split_ifs with hi
-  · apply (Φ.mem i).mono
+  · apply ManyBody.IsSupportedOn.mono (Φ.mem i)
     intro v hv
     simp only [mem_interval] at *
     omega

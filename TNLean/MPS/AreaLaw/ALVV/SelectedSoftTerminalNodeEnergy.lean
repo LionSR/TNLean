@@ -60,10 +60,10 @@ theorem exists_selected_soft_terminal_node_energy_update
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
     let J := interval L l r
     let coords := Entropy.regionTensorCoordinates q J
-    let P := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), Φ.term i
-    let M := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v), Φ.term i
+    let P := Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r))
+    let M := Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v))
     let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
     let y0 := ((ManyBody.cutEquiv (fun _ ↦ Fin q) J) sigma0).2
     let native := fun x : J → Fin q ↦

@@ -120,8 +120,8 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_capped
   have hlogInitial : Real.log (Module.finrank ℂ W0 : ℝ) ≤
       Real.log (Module.finrank ℂ (G etaLD) : ℝ) +
         Kb / (b / 2) * (1 + Real.log (q : ℝ) + Real.log (1 + 1 / (b / 2))) ^ 3 := by
-    have Φ.term := Real.log_le_log hr0R hWdim
-    rwa [Real.log_mul hrR.ne' (Real.exp_ne_zero _), Real.log_exp] at Φ.term
+    have h := Real.log_le_log hr0R hWdim
+    rwa [Real.log_mul hrR.ne' (Real.exp_ne_zero _), Real.log_exp] at h
   obtain ⟨hqm, hm, _hlogm, _hlogmup⟩ := Real.regularized_filter_count_base_bounds q hq
   let D : ℕ → ℕ := fun i ↦
     let mi := m * 2 ^ i

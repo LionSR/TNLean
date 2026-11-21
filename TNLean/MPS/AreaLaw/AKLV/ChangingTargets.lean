@@ -64,8 +64,6 @@ theorem exists_aklv_physical_changing_target_sequence :
       ∀ (L q a : ℕ)
         (Φ : ManyBody.BondInteraction L q)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (Φ.term j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
       Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
       (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
@@ -90,12 +88,12 @@ theorem exists_aklv_physical_changing_target_sequence :
   classical
   obtain ⟨A, hA, hA21, hinit⟩ := exists_aklv_physical_product_initialization
   refine ⟨A, hA, hA21, ?_⟩
-  intro L q a Φ mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited u s ha
+  intro L q a Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited u s ha
   obtain ⟨hq, hg1, hs, hlogD, e, E0, E, φ, p,
       hregional, hEeq, hE0, hE6, _hBpos, _hBnorm, _hE, hφ,
       heigen, _hprojector, hclose, hdegree, hpE, hfix, _hrankK,
       χ, vL, vR, c, hχ, hproduct, _hoverlap, hKχ, hc, hψunit, hψrank, _hψφ, hψΩ⟩ :=
-    hinit L q a Φ mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited ha
+    hinit L q a Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited ha
   let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e
     (aklvLogarithmicThreshold g) Finset.univ
   let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval B p
@@ -118,7 +116,7 @@ theorem exists_aklv_physical_changing_target_sequence :
   have hstep (i : ℕ) (x : State i) :
       ∃ y : State (i + 1), IsAKLVSequenceStep a s Φ e g Ω i x.val y.val := by
     obtain ⟨y, hyunit, hyΩ, hyrank, hrelation⟩ :=
-      exists_aklv_dyadic_filtered_output (by omega) ha Φ hsupp h0 h1
+      exists_aklv_dyadic_filtered_output (by omega) ha Φ h0 h1
         mu g Ω hΩ hground hgap hg hexcited e hregional i x.val x.property.1 x.property.2.1
     have hrank : schmidtRank (WithLp.ofLp
         (ManyBody.cutVector (leftBlock L (a + s / 2)) y)) ≤

@@ -74,8 +74,7 @@ private theorem interval_one_sided_of_not_crossing (i : Fin (L - 1)) (k : ℕ)
     omega
 
 private theorem isSupportedOn_bond_complement
-    (Φ : ManyBody.BondInteraction L q)
-(i : Fin (L - 1)) :
+    (Φ : ManyBody.BondInteraction L q) (i : Fin (L - 1)) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (1 - Φ.term i) (interval L i.val (i.val + 2)) := by
   change _ ∈ ManyBody.supportedOperators _ _
@@ -85,8 +84,7 @@ private theorem isSupportedOn_bond_complement
     (Φ.mem i)
 
 private theorem parityFactor_rank_le_one
-    (Φ : ManyBody.BondInteraction L q)
-(p n k : ℕ)
+    (Φ : ManyBody.BondInteraction L q) (p n k : ℕ)
     (hno : n + 1 ≠ k ∨ n % 2 ≠ p) :
     operatorSchmidtRank (C k (parityFactor Φ p n)) ≤ 1 := by
   classical
@@ -99,8 +97,7 @@ private theorem parityFactor_rank_le_one
   · exact operatorSchmidtRank_cut_one_le k
 
 private theorem parityFactor_rank_le_sq (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(p n k : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (p n k : ℕ) :
     operatorSchmidtRank (C k (parityFactor Φ p n)) ≤ q ^ 2 := by
   classical
   unfold parityFactor
@@ -111,8 +108,7 @@ private theorem parityFactor_rank_le_sq (hq : 1 ≤ q)
   · exact (operatorSchmidtRank_cut_one_le k).trans (one_le_pow₀ hq)
 
 private theorem parityPrefix_rank_le_one
-    (Φ : ManyBody.BondInteraction L q)
-(p n k : ℕ)
+    (Φ : ManyBody.BondInteraction L q) (p n k : ℕ)
     (hno : ∀ j < n, j + 1 ≠ k ∨ j % 2 ≠ p) :
     operatorSchmidtRank (C k ((T).symm (parityPrefix Φ p n))) ≤ 1 := by
   classical
@@ -130,8 +126,7 @@ private theorem parityPrefix_rank_le_one
         (ih fun j hj ↦ hno j (Nat.lt_succ_of_lt hj))).trans_eq (by norm_num))
 
 private theorem parityPrefix_rank_le_sq (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(p n k : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (p n k : ℕ) :
     operatorSchmidtRank (C k ((T).symm (parityPrefix Φ p n))) ≤ q ^ 2 := by
   classical
   induction n with
@@ -155,16 +150,14 @@ private theorem parityPrefix_rank_le_sq (hq : 1 ≤ q)
 /-- The actual parity product has cut rank at most the local dimension
 squared. The unique possible crossing factor is derived from its support. -/
 theorem operatorSchmidtRank_physicalParityProduct_le_sq (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(p k : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (p k : ℕ) :
     operatorSchmidtRank (C k ((T).symm (physicalParityProduct Φ p))) ≤ q ^ 2 := by
   exact parityPrefix_rank_le_sq hq Φ p (L - 1) k
 
 /-- The parity not containing the possible crossing bond has rank at most
 one. This also includes cuts beyond the chain and empty configuration spaces. -/
 theorem operatorSchmidtRank_physicalParityProduct_le_one
-    (Φ : ManyBody.BondInteraction L q)
-(p k : ℕ) (hp : (k - 1) % 2 ≠ p) :
+    (Φ : ManyBody.BondInteraction L q) (p k : ℕ) (hp : (k - 1) % 2 ≠ p) :
     operatorSchmidtRank (C k ((T).symm (physicalParityProduct Φ p))) ≤ 1 := by
   apply parityPrefix_rank_le_one Φ p (L - 1) k
   intro j _
@@ -176,8 +169,7 @@ theorem operatorSchmidtRank_physicalParityProduct_le_one
 /-- The sum of the two actual parity-product ranks is at most `q²+1`.
 No decomposition, rank, commutation or projection hypothesis is supplied. -/
 theorem sum_operatorSchmidtRank_physicalParityProduct_le (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(k : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (k : ℕ) :
     operatorSchmidtRank (C k ((T).symm (physicalParityProduct Φ 0))) +
       operatorSchmidtRank (C k ((T).symm (physicalParityProduct Φ 1))) ≤ q ^ 2 + 1 := by
   by_cases hp : (k - 1) % 2 = 0

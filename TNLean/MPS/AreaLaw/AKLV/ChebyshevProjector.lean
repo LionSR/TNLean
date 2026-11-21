@@ -137,10 +137,10 @@ theorem normalized_chain_truncation_bounds {L q : ℕ}
   intro Ht
   classical
   let S := Finset.univ.filter fun i : Fin (L - 1) ↦ a.val < i.val ∧ i.val < b.val
-  have hsum : (Φ.partialHamiltonian S) ≤ (S.card : ℂ) • 1 := by
+  have hsum : (∑ i ∈ S, Φ.term i) ≤ (S.card : ℂ) • 1 := by
     simpa only [Finset.sum_const, nsmul_eq_mul, Nat.cast_smul_eq_nsmul,
       Nat.cast_smul_eq_nsmul ℂ] using
-      (show (Φ.partialHamiltonian S) ≤ ∑ _i ∈ S, (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (show (∑ i ∈ S, Φ.term i) ≤ ∑ _i ∈ S, (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         from Finset.sum_le_sum fun i _ ↦ h1 i)
   have hscalar : (-(m : ℂ)) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ≤
       ((|m| : ℝ) : ℂ) • 1 := by
@@ -151,10 +151,13 @@ theorem normalized_chain_truncation_bounds {L q : ℕ}
           (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ).PosSemidef).nonneg))
   have hcap : middleCutBlock Φ a b m + (Φ.term a + Φ.term b) ≤
       (middleCutBudget a b m : ℂ) • 1 := by
-    have Φ.term := add_le_add (add_le_add hsum hscalar) (add_le_add (h1 a) (h1 b))
-    simpa only [middleCutBlock, S, sub_eq_add_neg, ← neg_smul, middleCutBudget,
-      Complex.ofReal_add, Complex.ofReal_natCast, Complex.ofReal_ofNat,
-      add_smul, two_smul, add_assoc, add_left_comm, add_comm] using Φ.term
+    have h := add_le_add (add_le_add hsum hscalar) (add_le_add (h1 a) (h1 b))
+    convert h using 1
+    · simp only [middleCutBlock, ManyBody.Interaction.partialHamiltonian, S, sub_eq_add_neg,
+        neg_smul]
+    · simp only [middleCutBudget, S, Complex.ofReal_add, Complex.ofReal_natCast,
+        Complex.ofReal_ofNat, add_smul, two_smul]
+      abel
   have hM : (middleCutBlock Φ a b m + (Φ.term a + Φ.term b)).PosSemidef :=
     hN.add (Matrix.nonneg_iff_posSemidef.mp (add_nonneg (h0 a) (h0 b)))
   obtain ⟨hpos, _hle, hbudget⟩ := twoSidedEnergyTruncation_bounds
@@ -208,7 +211,7 @@ theorem exists_normalized_chain_chebyshev_filter {L q : ℕ}
   have ht0 : 0 < t := by nlinarith [sq_pos_of_pos hg]
   have htg : 32768 ≤ t * g := by
     have h : (32768 : ℝ) * g ≤ (t * g) * g := by nlinarith
-    exact le_of_mul_le_mul_right Φ hg
+    exact le_of_mul_le_mul_right h hg
   have htlarge : 32768 ≤ t := htg.trans (mul_le_of_le_one_right ht0.le hg1)
   obtain ⟨e', φ, hφ, heig', he'0, he'e, hgap', hphase⟩ :=
     normalized_chain_robustness Φ h0 h1 a b hab x m y e g t
@@ -261,16 +264,19 @@ theorem exists_frustrationFree_chain_chebyshev_filter {L q : ℕ}
             ‖Matrix.toEuclideanLin K ψ‖ ^ 2 ≤ δ := by
   intro H Ht u heig hgap
   have hX : (leftCutBlock Φ a 0).PosSemidef := by
-    simpa only [leftCutBlock, Complex.ofReal_zero, zero_smul, sub_zero] using
+    simpa only [leftCutBlock, ManyBody.Interaction.partialHamiltonian, Complex.ofReal_zero,
+      zero_smul, sub_zero] using
       Matrix.posSemidef_sum (Finset.univ.filter fun i : Fin (L - 1) ↦ i.val < a.val)
         (fun i _ ↦ Matrix.nonneg_iff_posSemidef.mp (h0 i))
   have hN : (middleCutBlock Φ a b 0).PosSemidef := by
-    simpa only [middleCutBlock, Complex.ofReal_zero, zero_smul, sub_zero] using
+    simpa only [middleCutBlock, ManyBody.Interaction.partialHamiltonian, Complex.ofReal_zero,
+      zero_smul, sub_zero] using
       Matrix.posSemidef_sum
         (Finset.univ.filter fun i : Fin (L - 1) ↦ a.val < i.val ∧ i.val < b.val)
         (fun i _ ↦ Matrix.nonneg_iff_posSemidef.mp (h0 i))
   have hY : (rightCutBlock Φ b 0).PosSemidef := by
-    simpa only [rightCutBlock, Complex.ofReal_zero, zero_smul, sub_zero] using
+    simpa only [rightCutBlock, ManyBody.Interaction.partialHamiltonian, Complex.ofReal_zero,
+      zero_smul, sub_zero] using
       Matrix.posSemidef_sum (Finset.univ.filter fun i : Fin (L - 1) ↦ b.val < i.val)
         (fun i _ ↦ Matrix.nonneg_iff_posSemidef.mp (h0 i))
   have hcut : 32768 * ((0 : ℝ) + g) / g ^ 2 ≤ t := by
@@ -384,7 +390,7 @@ private theorem middleCutBlock_window {L q w : ℕ}
     omega
   have hb : b ∉ M := by simp only [M, Finset.mem_filter, Finset.mem_univ, true_and]; omega
   rw [hsum, hS, Finset.sum_insert ha, Finset.sum_insert hb]
-  dsimp [middleCutBlock, M]
+  dsimp [middleCutBlock, ManyBody.Interaction.partialHamiltonian, M]
   abel
 
 /-- A polynomial of the actual separately clipped normalized chain has

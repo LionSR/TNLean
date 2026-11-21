@@ -95,8 +95,8 @@ theorem exists_fixed_bandwidth_interval_low_energy_strict_approximation
         (u ^ 3 / g + (1 / g) ^ (1 / 4 : ℝ) * a ^ (3 / 4 : ℝ) * u) *
           (1 + Real.log a) := by positivity
     have hrank : Matrix.schmidtRank (WithLp.ofLp (e ψ)) ≤ 1 := by
-      have Φ.term := Matrix.schmidtRank_le_left (WithLp.ofLp (e ψ))
-      simpa only [Fintype.card_fun, Fintype.card_fin, one_pow] using Φ.term
+      have h := Matrix.schmidtRank_le_left (WithLp.ofLp (e ψ))
+      simpa only [Fintype.card_fun, Fintype.card_fin, one_pow] using h
     refine ⟨ψ, hψ, ?_, ?_⟩
     · have hi : ‖⟪ψ, ψ⟫_ℂ‖ = 1 := by norm_num [inner_self_eq_norm_sq_to_K, hψ]
       rw [hi]

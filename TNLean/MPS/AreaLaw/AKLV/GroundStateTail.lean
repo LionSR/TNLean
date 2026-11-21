@@ -218,7 +218,8 @@ theorem norm_groundState_highProjection_le_exp {L q : ℕ}
     (he0 : 0 ≤ e) (he6 : e ≤ 6) :
     let B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
       (Φ.partialHamiltonian I) - (z : ℂ) • 1
-    Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) (B + (Φ.term a + Φ.term b)) x = (e : ℂ) • x →
+    Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) (B + (Φ.term a + Φ.term b)) x =
+        (e : ℂ) • x →
       ‖Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) (Matrix.spectralProjectionGE B t) x‖ ≤
         2 * Real.exp (-(t - 20) / 8) * ‖x‖ := by
   intro B he

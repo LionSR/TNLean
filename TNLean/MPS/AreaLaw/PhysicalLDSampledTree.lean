@@ -121,7 +121,7 @@ theorem exists_physical_ld_sampled_interval_tree (etaLD : ℝ) (hLD : 0 < etaLD)
         ∀ v ∈ S0, IsOpenMPS L q (1000000 * Dref ^ 2 * (L + 1) * count ^ 2)
           (fullIntervalRead L q v))
     (by
-      intro _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ hclose _ hMPS
+      intro _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ hclose _ hMPS
       exact ⟨hclose, hMPS⟩)
 
 end TNLean.MPS.AreaLaw

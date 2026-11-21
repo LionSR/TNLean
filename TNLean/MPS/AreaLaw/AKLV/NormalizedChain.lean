@@ -28,14 +28,15 @@ the removed boundary bond. AKLV, Section 6.1: `H_L + H_1`. -/
 def leftCutBlock {L q : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (a : Fin (L - 1)) (z : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  (Φ.partialHamiltonian (Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val < a.val))) - (z : ℂ) • 1
+  Φ.partialHamiltonian (Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val < a.val)) - (z : ℂ) • 1
 
 /-- The shifted middle after removing the two boundary bonds.
 AKLV, Section 6.3: `H_3 + ⋯ + H_(s-2)`. -/
 def middleCutBlock {L q : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (a b : Fin (L - 1)) (z : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  (Φ.partialHamiltonian (Finset.univ.filter (fun i : Fin (L - 1) ↦ a.val < i.val ∧ i.val < b.val))) -
+  Φ.partialHamiltonian
+      (Finset.univ.filter (fun i : Fin (L - 1) ↦ a.val < i.val ∧ i.val < b.val)) -
     (z : ℂ) • 1
 
 /-- The shifted right exterior after the second removed boundary bond.
@@ -43,7 +44,7 @@ AKLV, Section 6.1: `H_s + H_R`. -/
 def rightCutBlock {L q : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (b : Fin (L - 1)) (z : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  (Φ.partialHamiltonian (Finset.univ.filter (fun i : Fin (L - 1) ↦ b.val < i.val))) - (z : ℂ) • 1
+  Φ.partialHamiltonian (Finset.univ.filter (fun i : Fin (L - 1) ↦ b.val < i.val)) - (z : ℂ) • 1
 
 /-- Regional sums separated by a missing bond commute by their original
 two-site supports. Auxiliary to the source normalization of AKLV. -/
@@ -123,7 +124,8 @@ theorem normalizedCutBlock_sum {L q : ℕ}
   simp only [Finset.sum_add_distrib, Finset.sum_ite_eq',
     Finset.mem_univ, ite_true] at hsum
   simp only [← Finset.sum_filter] at hsum
-  dsimp [leftCutBlock, middleCutBlock, rightCutBlock]
+  dsimp [leftCutBlock, middleCutBlock, rightCutBlock, ManyBody.Interaction.partialHamiltonian,
+    ManyBody.Interaction.hamiltonian]
   simp only [add_smul]
   rw [← hsum]
   abel
@@ -135,7 +137,7 @@ theorem exists_normalizedCutBlock_eq_sum_sub {L q : ℕ}
     (a b : Fin (L - 1)) (hab : a.val < b.val) (x m y : ℝ) :
     ∃ I : Finset (Fin (L - 1)),
       leftCutBlock Φ a x + middleCutBlock Φ a b m + rightCutBlock Φ b y =
-        (Φ.partialHamiltonian I) - ((x + m + y : ℝ) : ℂ) • 1 := by
+        Φ.partialHamiltonian I - ((x + m + y : ℝ) : ℂ) • 1 := by
   classical
   let S := Finset.univ.filter fun i : Fin (L - 1) ↦ i.val < a.val
   let T := Finset.univ.filter fun i : Fin (L - 1) ↦ a.val < i.val ∧ i.val < b.val
@@ -156,8 +158,8 @@ theorem exists_normalizedCutBlock_eq_sum_sub {L q : ℕ}
     simp only [T, U, Finset.mem_filter, Finset.mem_univ, true_and] at hi hj
     omega
   refine ⟨(S ∪ T) ∪ U, ?_⟩
+  dsimp only [leftCutBlock, middleCutBlock, rightCutBlock, ManyBody.Interaction.partialHamiltonian]
   rw [Finset.sum_union (Finset.disjoint_union_left.mpr ⟨hSU, hTU⟩), Finset.sum_union hST]
-  dsimp only [leftCutBlock, middleCutBlock, rightCutBlock]
   simp only [Complex.ofReal_add, add_smul]
   abel
 
@@ -229,7 +231,7 @@ theorem normalized_chain_robustness {L q : ℕ}
   have hAHerm : (Φ.term a + Φ.term b).IsHermitian := IsSelfAdjoint.of_nonneg
     (add_nonneg (h0 a) (h0 b))
   exact ⟨e', φ, hφ, hφeig, he'0, he'e,
-    posSemidef_gap_twoSidedEnergyTruncation_of_quadratic X N Y (Φ.term a + Φ.term b) hN.isHermitian
-      hAHerm t e' (g / 2) φ hquad, θ, hθ⟩
+    posSemidef_gap_twoSidedEnergyTruncation_of_quadratic X N Y (Φ.term a + Φ.term b)
+      hN.isHermitian hAHerm t e' (g / 2) φ hquad, θ, hθ⟩
 
 end TNLean.MPS.AreaLaw.AKLV

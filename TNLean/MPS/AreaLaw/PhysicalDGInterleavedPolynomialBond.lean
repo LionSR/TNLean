@@ -129,7 +129,7 @@ theorem exists_physical_dg_interleaved_ritz_polynomial_approximation_with_consta
     exact hdegree.trans (by
       apply div_le_div_of_nonneg_right _ (sq_nonneg g)
       exact mul_le_mul_of_nonneg_right (le_max_left Cdegree Ccoefficient) (by positivity))
-  intro L Φ hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G r eta heta
+  intro L Φ h0 h1 mu nu H hH hmu hnu hmunu hgap G r eta heta
   let w := 1 + Real.log (r : ℝ) + 2 * Real.log ((L : ℝ) + 1)
   let v := U0 + Real.log (1 + w)
   let ell := Nat.ceil (Cscale * (v ^ 6 / g + Real.sqrt w * v ^ 3 / Real.sqrt g))
@@ -157,7 +157,7 @@ theorem exists_physical_dg_interleaved_ritz_polynomial_approximation_with_consta
       hAlog hg hU0 hw hrawLog
   obtain ⟨hell, hD2, hs, _ha, _haSmall, _hepsilon, _hepsilon1, _ht, _htail, _htrade,
     Btree, hBtree, hlogBtree, _Utree, _hdimU, _hUMPS, _hxiMax, hfamilies⟩ :=
-    hconstruct L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hconstruct L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   have hD : 1 ≤ D := (by decide : 1 ≤ 2).trans hD2
   obtain ⟨_hw, _hs, hsUpper, _hsLog⟩ := Real.interleaved_sample_size_bounds r L D hr hD2
   obtain ⟨_hM, hA, _hc, hc1, _hfix, _hKGo, _hhigh⟩ :=
@@ -168,8 +168,9 @@ theorem exists_physical_dg_interleaved_ritz_polynomial_approximation_with_consta
     (show 0 ≤ H from Finset.sum_nonneg fun i _ ↦ h0 i) hmu
   have hnorm : ‖H‖ ≤ (L : ℝ) + 1 := by
     have hb : ‖H‖ ≤ ((L - 1 : ℕ) : ℝ) := by
-      simpa using norm_sum_le_of_le (Finset.univ : Finset (Fin (L - 1)))
-        (fun i _ ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg (Φ.term i) (h0 i)).mpr (h1 i))
+      simpa [H, ManyBody.Interaction.hamiltonian] using
+        norm_sum_le_of_le (Finset.univ : Finset (Fin (L - 1)))
+          (fun i _ ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg (Φ.term i) (h0 i)).mpr (h1 i))
     exact hb.trans (by exact_mod_cast (show L - 1 ≤ L + 1 by omega))
   have hAL : A ≤ (L : ℝ) + 1 := by dsimp only [A]; linarith only [hnorm, hmu0]
   let Dref := r ^ 2 * Btree

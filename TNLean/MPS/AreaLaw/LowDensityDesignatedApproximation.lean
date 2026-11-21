@@ -70,7 +70,7 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
   obtain ⟨K, hK, hfixed⟩ :=
     exists_fixed_bandwidth_interval_low_energy_strict_approximation etaLD hLD
   refine ⟨K + 1, by linarith only [hK], ?_⟩
-  intro L q v hq hv Φ hs h0 h1 config H hH G bcap g u
+  intro L q v hq hv Φ h0 h1 config H hH G bcap g u
   let : Nonempty (Fin L → Fin q) := config
   have hg : 0 < g := lt_min (by dsimp only [bcap]; positivity) (by norm_num)
   have hg1 : g ≤ 1 := min_le_right _ _
@@ -151,7 +151,7 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
           (Module.finrank ℂ (G etaLD) *
             ⌈Real.exp (F (16 + Real.log (1 / g) + Real.log (2 / eps)))⌉₊) ≤ 2 * eps := by
     obtain ⟨φ, hφ, hoverlap, hlogrank⟩ :=
-      hfixed L q 0 k v hq (Nat.zero_le k) hkL hv Φ hs h0 h1 eps heps heps1 ψ hψG hψ
+      hfixed L q 0 k v hq (Nat.zero_le k) hkL hv Φ h0 h1 eps heps heps1 ψ hψG hψ
     have hregional := one_sub_regional_kyFanNorm_le_twice_error
       (interval L 0 k) ψ φ hφ eps heps1
       (Module.finrank ℂ (G etaLD) *

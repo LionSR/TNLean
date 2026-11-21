@@ -40,8 +40,7 @@ noncomputable def physicalChainPropagator {L q : ℕ}
 the prescribed accuracy, with simultaneous cut-rank bounds. Huang, arXiv:1406.6355v6,
 Section 5.4, Lemma 19. -/
 theorem physicalChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(hHerm : ∀ i, (Φ.term i).IsHermitian)
+    (Φ : ManyBody.BondInteraction L q) (hHerm : ∀ i, (Φ.term i).IsHermitian)
     (hnorm : ∀ i, ‖Φ.term i‖ ≤ 1) {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
     let K := physicalChainPropagator Φ hHerm T epsilon
@@ -77,8 +76,7 @@ theorem physicalChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
 the prescribed accuracy, with simultaneous cut-rank bounds: the existence form of
 `physicalChainPropagator_spec`. Huang, arXiv:1406.6355v6, Section 5.4, Lemma 19. -/
 theorem exists_physical_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(hHerm : ∀ i, (Φ.term i).IsHermitian)
+    (Φ : ManyBody.BondInteraction L q) (hHerm : ∀ i, (Φ.term i).IsHermitian)
     (hnorm : ∀ i, ‖Φ.term i‖ ≤ 1) {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
     ∃ K : ℝ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
@@ -102,8 +100,7 @@ noncomputable def positiveChainPropagator {L q : ℕ}
 with Hermiticity and norm bounds derived internally. This is the physical normalization
 in Huang, arXiv:1406.6355v6, Section 2 and Section 5.4, Lemma 19. -/
 theorem positiveChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
     let K := positiveChainPropagator Φ h0 T epsilon
@@ -119,8 +116,7 @@ theorem positiveChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
 existence form of `positiveChainPropagator_spec`. Huang, arXiv:1406.6355v6, Section 2
 and Section 5.4, Lemma 19. -/
 theorem exists_positive_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
     ∃ K : ℝ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,

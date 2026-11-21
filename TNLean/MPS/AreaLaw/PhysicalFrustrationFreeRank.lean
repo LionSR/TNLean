@@ -38,8 +38,7 @@ private noncomputable def outsidePiece
   exact ∑ i, if ¬ (a ≤ i.val ∧ i.val + 1 < b) ∧ P i then Φ.term i else 0
 
 private theorem isSupportedOn_outsidePiece
-    (Φ : ManyBody.BondInteraction L q)
-(a b : ℕ)
+    (Φ : ManyBody.BondInteraction L q) (a b : ℕ)
     (P : Fin (L - 1) → Prop) (S : Finset (Fin L))
     (hside : ∀ i, P i → interval L i.val (i.val + 2) ⊆ S) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (outsidePiece Φ a b P) S := by
@@ -91,8 +90,7 @@ private theorem outside_crossing_eq_term
     exact False.elim (hi (Finset.mem_univ i))
 
 private theorem outside_left_supported
-    (Φ : ManyBody.BondInteraction L q)
-(a b k : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (a b k : ℕ) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (outsidePiece Φ a b (fun i ↦ i.val + 1 < k)) (leftBlock L k) := by
   apply isSupportedOn_outsidePiece Φ a b _ _
@@ -101,8 +99,7 @@ private theorem outside_left_supported
   omega
 
 private theorem outside_right_supported
-    (Φ : ManyBody.BondInteraction L q)
-(a b k : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (a b k : ℕ) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (outsidePiece Φ a b (fun i ↦ k ≤ i.val)) (leftBlock L k)ᶜ := by
   apply isSupportedOn_outsidePiece Φ a b _ _
@@ -114,15 +111,15 @@ private theorem outside_right_supported
 `q²+3` at every site cut in positive local dimension. This corrects the
 false additive constant in ALVV `thm:FF-tH`; see the module note. -/
 private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(a b k : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (a b k : ℕ) :
     operatorSchmidtRank (C k (physicalFrustrationFreeTruncation Φ a b)) ≤ q ^ 2 + 3 := by
   classical
   let cut := reindexAlgEquiv ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k))
   let HL := outsidePiece Φ a b (fun i ↦ i.val + 1 < k)
   let HR := outsidePiece Φ a b (fun i ↦ k ≤ i.val)
   let HC := outsidePiece Φ a b (fun i ↦ i.val + 1 = k)
-  let Q := fun p ↦ (T).symm (physicalParityProduct (intervalBondRestriction a b Φ) p)
+  let Q := fun p ↦ (T).symm (physicalParityProduct
+    ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ p)
   let U := ManyBody.supportedOperators (fun _ ↦ Fin q) (leftBlock L k : Finset (Fin L))
   let V := ManyBody.supportedOperators (fun _ ↦ Fin q) ((leftBlock L k)ᶜ : Finset (Fin L))
   have hHL : HL ∈ U :=
@@ -185,11 +182,11 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
       dsimp only [X, Y]
       split_ifs <;> abel
     rw [hdecomp, map_add, map_add]
-    have Φ.term := (operatorSchmidtRank_add_le (cut X + cut Y) (cut (Φ.term i))).trans
+    have h := (operatorSchmidtRank_add_le (cut X + cut Y) (cut (Φ.term i))).trans
       (Nat.add_le_add_right (operatorSchmidtRank_add_le (cut X) (cut Y)) _)
     omega
   · have hQ := sum_operatorSchmidtRank_physicalParityProduct_le hq
-      (intervalBondRestriction a b Φ) (intervalBondRestriction_supported a b Φ) k
+      ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ k
     change operatorSchmidtRank (cut (Q 0)) + operatorSchmidtRank (cut (Q 1)) ≤ q ^ 2 + 1 at hQ
     let X := HL + 1 + 1
     have hX : X ∈ U := add_mem (add_mem hHL hU1) hU1
@@ -224,8 +221,7 @@ terms and parity products; no decomposition or rank premise is supplied.
 This is the corrected rank assertion of ALVV `thm:FF-tH`, as recorded
 in `docs/paper-gaps/alvv16_frustration_free_truncation_rank.tex`. -/
 theorem operatorSchmidtRank_physicalFrustrationFreeTruncation_le
-    (Φ : ManyBody.BondInteraction L q)
-(a b k : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (a b k : ℕ) :
     operatorSchmidtRank (C k (physicalFrustrationFreeTruncation Φ a b)) ≤ q ^ 2 + 3 := by
   classical
   by_cases hq : 1 ≤ q

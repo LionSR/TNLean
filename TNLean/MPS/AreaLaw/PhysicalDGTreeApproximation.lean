@@ -149,10 +149,10 @@ theorem exists_physical_dg_tree_ritz_approximation :
   obtain ⟨C, Ktree, hC, hKtree, htree⟩ := exists_physical_dg_interval_tree_of_le_radius
   obtain ⟨Kref, hKref, hrefine⟩ := exists_physical_dg_automatic_same_candidate_refinement
   refine ⟨C, Ktree, Kref, hC, hKtree, hKref, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g u A c Kraw epsilonTree btree m v ell Dfilter
   obtain ⟨hell, hlogD, Btree, hBtree, hlogBtree, hfamilies⟩ :=
-    htree L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    htree L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨hell, hlogD, Btree, hBtree, hlogBtree, ?_⟩
   intro Dtree width hwidth
   have hrG : 1 ≤ rG := Submodule.one_le_finrank_iff.mpr
@@ -168,7 +168,7 @@ theorem exists_physical_dg_tree_ritz_approximation :
   refine ⟨Nfam, F, hNfam, ?_⟩
   intro eta heta rho n epsilonRef bref
   obtain ⟨B, hB, hlogB, hfinal⟩ :=
-    hrefine L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hrefine L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       Dtree Dfilter hDtree hDfilter eta heta
   refine ⟨B, hB, hlogB, ?_⟩
   intro b Dcommon N xi

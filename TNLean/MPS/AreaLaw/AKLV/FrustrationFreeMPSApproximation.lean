@@ -174,8 +174,6 @@ theorem exists_aklv_frustrationFree_per_cut_approximation :
       (Φ : ManyBody.BondInteraction L q)
       (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
       2 ≤ q →
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (Φ.term j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
       Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0 →
       (Φ.hamiltonian - (g : ℂ) •
@@ -195,7 +193,7 @@ theorem exists_aklv_frustrationFree_per_cut_approximation :
   have hW : 0 ≤ W := by dsimp only [W]; positivity
   have hR : 0 ≤ R := by dsimp only [R]; positivity
   refine ⟨10001 * R + W + 8400000, by positivity, ?_⟩
-  intro L q Φ g Ω hq hsupp h0 h1 hΩ hzero hgap hg hg1 rho hrho hrho1 u z
+  intro L q Φ g Ω hq h0 h1 hΩ hzero hgap hg hg1 rho hrho hrho1 u z
   let g0 := g / 8192
   let u0 := 1 + log (q : ℝ) + log (1 / g0)
   let s0 : ℕ := ⌈A * u0 ^ 2 / g0⌉₊
@@ -234,7 +232,7 @@ theorem exists_aklv_frustrationFree_per_cut_approximation :
       hfit | hexact
     · obtain ⟨a, hcenter, ha⟩ := hfit
       obtain ⟨y, hy, hyerror, hyrank⟩ := exists_aklv_frustrationFree_two_filter_approximant
-        (s0 := s0) (m := m) (s := s) (by omega) (by omega) rfl ha Φ hsupp h0 h1 Ω hΩ g hg hg1
+        (s0 := s0) (m := m) (s := s) (by omega) (by omega) rfl ha Φ h0 h1 Ω hΩ g hg hg1
         hzero hgap htrade
       rw [hcenter] at hyrank
       refine ⟨y, hy, ?_, hyrank.trans (le_max_left _ _)⟩
@@ -278,8 +276,6 @@ theorem exists_aklv_frustrationFree_sequential_mps_approximation :
     ∃ C : ℝ, 0 < C ∧ ∀ (L q : ℕ)
       (Φ : ManyBody.BondInteraction L q)
       (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (Φ.term j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
       Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0 →
       (Φ.hamiltonian - (g : ℂ) •
@@ -297,9 +293,9 @@ theorem exists_aklv_frustrationFree_sequential_mps_approximation :
         ‖aklvNormalizedSpectralTruncation Ω D - Ω‖ ≤ epsilon := by
   obtain ⟨C, hC, hcut⟩ := exists_aklv_frustrationFree_per_cut_approximation
   refine ⟨C, hC, ?_⟩
-  intro L q Φ g Ω hsupp h0 h1 hΩ hzero hgap hg hexcited epsilon hepsilon hepsilon1 rho u z
+  intro L q Φ g Ω h0 h1 hΩ hzero hgap hg hexcited epsilon hepsilon hepsilon1 rho u z
   obtain ⟨hq, hg1⟩ :=
-    aklv_frustrationFree_dimension_and_gap_bounds Φ hsupp h0 h1 g Ω hΩ hzero hgap hg hexcited
+    aklv_frustrationFree_dimension_and_gap_bounds Φ h0 h1 g Ω hΩ hzero hgap hg hexcited
   have hrho : 0 < rho := by dsimp only [rho]; positivity
   have hrho1 : rho ≤ 1 := by
     dsimp only [rho]
@@ -307,7 +303,7 @@ theorem exists_aklv_frustrationFree_sequential_mps_approximation :
     have hL : (0 : ℝ) ≤ L := Nat.cast_nonneg _
     have he2 : epsilon ^ 2 ≤ 1 := pow_le_one₀ hepsilon.le hepsilon1
     linarith only [hL, he2]
-  obtain ⟨D, hlog, hcuts⟩ := hcut L q Φ g Ω hq hsupp h0 h1 hΩ hzero hgap hg hg1 rho hrho hrho1
+  obtain ⟨D, hlog, hcuts⟩ := hcut L q Φ g Ω hq h0 h1 hΩ hzero hgap hg hg1 rho hrho hrho1
   refine ⟨D, hlog, ?_⟩
   have htail (k : ℕ) (hk : k ≤ L) :
       1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)

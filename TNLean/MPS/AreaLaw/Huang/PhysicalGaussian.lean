@@ -70,7 +70,7 @@ has cut rank at most the number of nodes times the propagator rank at every cut.
 arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
 theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (variance : ℝ≥0) (energy : ℝ) {T eta rho : ℝ}
     (hT : 0 ≤ T) (heta : 0 < eta) (hrho : 0 < rho) :
     let H := Φ.hamiltonian
@@ -163,7 +163,7 @@ theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
 Lemmas 18--19. -/
 theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (variance : ℝ≥0) (energy : ℝ) {T eta rho : ℝ}
     (hT : 0 ≤ T) (heta : 0 < eta) (hrho : 0 < rho) :
     let H := Φ.hamiltonian

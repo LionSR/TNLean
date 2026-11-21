@@ -82,7 +82,7 @@ theorem robust_ground_of_clipped_ground_gap {L q : ℕ}
     (X N Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hX : X.PosSemidef) (hN : N.PosSemidef) (hY : Y.PosSemidef)
     (hXN : Commute X N) (hXY : Commute X Y) (hNY : Commute N Y)
-    (hB : X + N + Y = (Φ.partialHamiltonian I) - (z : ℂ) • 1)
+    (hB : X + N + Y = Φ.partialHamiltonian I - (z : ℂ) • 1)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (he0 : 0 ≤ e) (he6 : e ≤ 6) (hg : 0 < g) (hg1 : g ≤ 1) (htg : 32768 ≤ t * g)
     (heig : Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
@@ -161,7 +161,7 @@ theorem exists_robust_ground_twoSidedEnergyTruncation {L q : ℕ}
     (X N Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hX : X.PosSemidef) (hN : N.PosSemidef) (hY : Y.PosSemidef)
     (hXN : Commute X N) (hXY : Commute X Y) (hNY : Commute N Y)
-    (hB : X + N + Y = (Φ.partialHamiltonian I) - (z : ℂ) • 1)
+    (hB : X + N + Y = Φ.partialHamiltonian I - (z : ℂ) • 1)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (he0 : 0 ≤ e) (he6 : e ≤ 6) (hg : 0 < g) (hg1 : g ≤ 1)
     (ht : 32768 * (e + g) / g ^ 2 ≤ t)
@@ -195,7 +195,7 @@ theorem exists_robust_ground_twoSidedEnergyTruncation {L q : ℕ}
       (by simpa only [hH] using hgap)
   have htg : 32768 ≤ t * g := by
     have h : (32768 : ℝ) * g ≤ (t * g) * g := by nlinarith
-    exact le_of_mul_le_mul_right Φ hg
+    exact le_of_mul_le_mul_right h hg
   obtain ⟨hweak, θ, hθ⟩ := robust_ground_of_clipped_ground_gap I Φ h0 h1 a b z e g t
     X N Y hX hN hY hXN hXY hNY hB Ω hΩ he0 he6 hg hg1 htg heig e' φ hφ hφeig he'e
     hstrong horth

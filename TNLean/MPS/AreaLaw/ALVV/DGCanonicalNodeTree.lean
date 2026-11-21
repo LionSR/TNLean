@@ -117,7 +117,7 @@ theorem exists_physical_dg_canonical_constant_node_tree_failure_le :
     Real.exists_dg_accuracy_scalar_parameters
   obtain ⟨K, hK, hphysical⟩ := exists_physical_dg_canonical_interval_node_failure_of_power
   refine ⟨C, K, hC, hK, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g u epsilonRef b m v ell D
   have hm2 : 2 ≤ m := (by decide : 2 ≤ 50).trans (Nat.le_max_right q 50)
   have hqm : q ≤ m := Nat.le_max_left q 50
@@ -128,7 +128,7 @@ theorem exists_physical_dg_canonical_constant_node_tree_failure_le :
     hlogD, htrade, htail⟩ := hparameters m g hm2 hg hg1
   refine ⟨hell, hlogD, ?_⟩
   obtain ⟨B, hB, hlogB, hNodes⟩ :=
-    hphysical L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hphysical L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨B, hB, hlogB, ?_⟩
   intro Dref xiMax width hwidth
   have hDR : (0 : ℝ) < D := by exact_mod_cast (lt_of_lt_of_le (by decide : 0 < (2 : ℕ)) hD)

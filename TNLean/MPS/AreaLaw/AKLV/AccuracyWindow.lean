@@ -71,8 +71,6 @@ theorem exists_aklv_physical_accuracy_window :
       ∀ (L q k : ℕ) (_hq : 2 ≤ q) (_hk : k ≤ L)
         (Φ : ManyBody.BondInteraction L q)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (Φ.term j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
       Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
       (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
@@ -87,7 +85,7 @@ theorem exists_aklv_physical_accuracy_window :
   classical
   obtain ⟨A, hA, hA21, hsequence⟩ := exists_aklv_physical_changing_target_sequence
   refine ⟨A, hA, hA21, ?_⟩
-  intro L q k hq hk Φ mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1 u s0
+  intro L q k hq hk Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1 u s0
   let s := aklvAccuracyWidth s0 g rho
   let m := aklvAccuracyIncrement g rho
   rcases aklv_centered_window_or_exact_rank (by omega) hk Ω (s := s) with hfit | hexact
@@ -96,7 +94,7 @@ theorem exists_aklv_physical_accuracy_window :
     let a0 := a + m
     obtain ⟨_hq, hg1, hs0, _hlogD0, e0, _E0, seq,
         hregional, _hEeq, _hE0, _hE6, hinvariant, hinitial, _hedges⟩ :=
-      hsequence L q a0 Φ mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited hsmall.2
+      hsequence L q a0 Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited hsmall.2
     let x := seq 0
     have hcenter0 : a0 + s0 / 2 = k := hsmall.1.trans hcenter
     have hx : ‖x‖ = 1 := (hinvariant 0).1
@@ -112,7 +110,7 @@ theorem exists_aklv_physical_accuracy_window :
       dsimp only [s, aklvAccuracyWidth]
       omega
     obtain ⟨_hq', _hg1', e, _E0', hregional', _hEeq', _hE0', _hE6', hfilter⟩ :=
-      exists_aklv_variable_window_filtered_output hs ha Φ hsupp h0 h1
+      exists_aklv_variable_window_filtered_output hs ha Φ h0 h1
         mu g Ω hΩ hground hgap hg hexcited x hx hxΩ
     let t := aklvAccuracyThreshold g rho
     let ell := aklvAccuracyDegree g rho s

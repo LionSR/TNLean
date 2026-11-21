@@ -95,7 +95,8 @@ theorem chainGridEdge_subset_ownerBlock (hw : 0 < w) (i : Fin (L - 1))
 noncomputable def chainGridBlockHamiltonian (hw : 0 < w)
     (Φ : ManyBody.BondInteraction L q)
     (j : Fin (L / w + 1)) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  ∑ i ∈ Finset.univ.filter (fun i ↦ i ∉ chainGridBoundaryEdges hw ∧ chainGridEdgeOwner w i = j), Φ.term i
+  ∑ i ∈ Finset.univ.filter (fun i ↦ i ∉ chainGridBoundaryEdges hw ∧ chainGridEdgeOwner w i = j),
+    Φ.term i
 
 /-- The retained interaction is the sum of the within-block Hamiltonians. Osborne, Figure 2. -/
 noncomputable def chainGridRetainedHamiltonian (hw : 0 < w)
@@ -129,23 +130,23 @@ theorem sum_eq_chainGridRetained_sub_boundary (hw : 0 < w)
     (Φ : ManyBody.BondInteraction L q) :
     Φ.hamiltonian = chainGridRetainedHamiltonian hw Φ - ∑ k, chainGridBoundaryTerm hw Φ k := by
   classical
-  have himage : (Φ.partialHamiltonian (chainGridBoundaryEdges hw)) =
+  have himage : (∑ i ∈ chainGridBoundaryEdges hw, Φ.term i) =
       ∑ k, Φ.term (chainGridBoundaryEdge hw k) := by
     rw [chainGridBoundaryEdges, Finset.sum_image]
-    exact fun _ _ _ _ Φ ↦ chainGridBoundaryEdge_injective hw Φ
+    exact fun _ _ _ _ h ↦ chainGridBoundaryEdge_injective hw h
   have hfilter : Finset.univ.filter (fun i : Fin (L - 1) ↦ i ∈ chainGridBoundaryEdges hw) =
       chainGridBoundaryEdges hw := by ext i; simp
   have hsplit := Finset.sum_filter_not_add_sum_filter Finset.univ
-    (fun i : Fin (L - 1) ↦ i ∈ chainGridBoundaryEdges hw) Φ
+    (fun i : Fin (L - 1) ↦ i ∈ chainGridBoundaryEdges hw) Φ.term
   rw [hfilter, himage] at hsplit
   rw [chainGridRetainedHamiltonian_eq_sum_filter]
-  simpa only [chainGridBoundaryTerm, Finset.sum_neg_distrib, sub_neg_eq_add] using hsplit.symm
+  simpa only [ManyBody.Interaction.hamiltonian, chainGridBoundaryTerm, Finset.sum_neg_distrib,
+    sub_neg_eq_add] using hsplit.symm
 
 /-- A constructed block Hamiltonian is supported on its own block.
 Osborne, Figure 2. -/
 theorem chainGridBlockHamiltonian_mem_supported (hw : 0 < w)
-    (Φ : ManyBody.BondInteraction L q)
-(j : Fin (L / w + 1)) :
+    (Φ : ManyBody.BondInteraction L q) (j : Fin (L / w + 1)) :
     chainGridBlockHamiltonian hw Φ j ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q) (chainGridBlock L w j.val : Finset (Fin L)) := by
   classical

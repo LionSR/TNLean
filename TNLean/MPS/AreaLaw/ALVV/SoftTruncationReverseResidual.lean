@@ -203,7 +203,7 @@ theorem exists_single_region_soft_truncation_residuals {L q l r : ℕ}
     let S := Submodule.spectralSpanLE hG.eigenvectorBasis hG.eigenvalues (mu + eta)
     let I := Finset.univ.filter
       (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r)
-    have hmid : A 1 = ∑ i ∈ I, Φ.term i := rfl
+    have hmid : A 1 = Φ.partialHamiltonian I := rfl
     have hmargin := Real.softTruncation_reverse_barrier_margin t m eta mu J.card
       hm heta hmu2 hJ hscale
     have hU0 : 0 ≤ U := hmargin.1

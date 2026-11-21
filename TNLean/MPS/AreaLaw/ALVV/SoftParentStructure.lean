@@ -97,8 +97,8 @@ theorem exists_soft_parent_structure {L q l u v r ell : ℕ}
     let I := fun j : Fin 5 ↦ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
     let A := fun j : Fin 5 ↦ ∑ i ∈ I j, hp i
-    let P := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), Φ.term i
+    let P := Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r))
     ∃ (e : Fin 5 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧ (∀ j, 0 ≤ e j) ∧
@@ -125,14 +125,15 @@ theorem exists_soft_parent_structure {L q l u v r ell : ℕ}
   have hps (i) := intervalBondRestriction_supported l r Φ i
   have hp0 (i) := (intervalBondRestriction_bounds l r Φ h0 h1 i).1
   have hp1 (i) := (intervalBondRestriction_bounds l r Φ h0 h1 i).2
+  let Ψ : ManyBody.BondInteraction L q := ⟨hp, hps⟩
   obtain ⟨hCross, e, x, z, E, hx, hxe, he, hz, hHz, hE, hE0, hEC,
       _hH, _bH, _aH, _hEigH, hfamily⟩ :=
-    exists_five_region_soft_residuals hq hlu huv hvr hrL hp hps hp0 hp1
+    exists_five_region_soft_residuals hq hlu huv hvr hrL Ψ hp0 hp1
   obtain ⟨_hk, _hR, _hsA, hA, hYpos, hYcap, _hCross', hsum0⟩ :=
-    five_region_original_bond_data L q l u v r hlu huv hvr hrL hp hps hp0 hp1
+    five_region_original_bond_data L q l u v r hlu huv hvr hrL Ψ hp0 hp1
   have he0 (j : Fin 5) : 0 ≤ e j :=
     (hA j).1.nonneg_of_normalized_eigenvector (e j) x (hxe j) hx
-  have hP : ∑ i, hp i = P := sum_intervalBondRestriction l r Φ
+  have hP : Ψ.hamiltonian = P := sum_intervalBondRestriction l r Φ
   have hsum : P = (∑ j, A j) + Y := hP.symm.trans hsum0
   let s := ∑ j, e j
   let C := P - (s : ℂ) • 1
@@ -190,7 +191,7 @@ theorem exists_soft_parent_structure {L q l u v r ell : ℕ}
       abel
     exact heq ▸ hfull
   have hBC : B ≤ C := by
-    change B0 ≤ (∑ i, hp i) - (s : ℂ) • 1 at hBC0
+    change B0 ≤ Ψ.hamiltonian - (s : ℂ) • 1 at hBC0
     rw [hB0eq, hP] at hBC0
     exact hBC0
   have hBw : B *ᵥ w = (mu : ℂ) • w := hB0eq ▸ hBw0
@@ -255,7 +256,7 @@ theorem exists_soft_parent_structure {L q l u v r ell : ℕ}
         _root_.zero_add] using hU0.trans hT48
     have hrev0 := hreverse 0 T le_rfl hscale hcut
     change ‖(toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-        ((∑ i, hp i) - (s : ℂ) • 1 - B0)).domRestrict
+        (Ψ.hamiltonian - (s : ℂ) • 1 - B0)).domRestrict
         (Submodule.spectralSpanLE bG aG (mu + 0))‖ ≤
       (S.card : ℝ) * (8 * (Cross.card : ℝ) * Real.exp
         (-(T - 2 * (0 + 10 * (S.card : ℝ) + 3 * (Cross.card : ℝ) + 2)) / 8) +

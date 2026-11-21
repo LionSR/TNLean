@@ -72,7 +72,7 @@ theorem exists_rational_sampled_viable_successor_polynomial
         let δ := lvvViabilityPrecision Δ η / (L : ℝ) ^ a
         let V := successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
           Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
-            (ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩) hq Δ (AreaLaw.extend (n + 1) S))
+            (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ (AreaLaw.extend (n + 1) S))
         ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 8 ∧
         ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (n + 1))
           (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
@@ -117,7 +117,7 @@ theorem exists_rational_sampled_viable_successor_polynomial
   have hδ : 0 < δ := div_pos hα (pow_pos hLp a)
   have hδ1 : δ ≤ 1 := (div_le_one (pow_pos hLp a)).mpr
     (hα1.trans (one_le_pow₀ (by exact_mod_cast hL)))
-  let chain := ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩
+  let chain := ManyBody.BondInteraction.toChainInteraction Φ
   have hgapC : IsGapped chain.hamiltonian E₀ Δ := by
     rwa [show chain.hamiltonian = ∑ j, Φ.term j from ManyBody.Interaction.hamiltonian_extend]
   have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
@@ -238,7 +238,7 @@ theorem exists_rational_sampled_successive_viable_sets_polynomial
             let δ := lvvViabilityPrecision Δ η / (L : ℝ) ^ a
             let V := successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
               Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
-                (ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩) hq Δ
+                (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ
                 (AreaLaw.extend (i + 1) (S i)))
             ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 8 ∧
             ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
@@ -282,7 +282,7 @@ theorem exists_rational_sampled_successive_viable_sets_polynomial
         (B' : Fin N → RightBlockMatrix L q (i + 1)),
         let V := successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
           Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
-            (ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩) hq Δ (AreaLaw.extend (i + 1) S))
+            (ManyBody.BondInteraction.toChainInteraction Φ) hq Δ (AreaLaw.extend (i + 1) S))
         ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 8 ∧
         ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
           (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B' j ∧

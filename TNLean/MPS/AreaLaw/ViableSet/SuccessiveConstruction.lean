@@ -46,7 +46,7 @@ function of the chain terms and the gap parameter alone. LVV13, `algo53.tex`,
 lines 652--678, with Huang's Gaussian error reduction. -/
 noncomputable def lvvSweep (hq : 2 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (Delta : ℝ) : (i : ℕ) → Finset (LeftBlockVector L q i)
   | 0 => {emptyLeftVector L q}
   | i + 1 =>
@@ -56,14 +56,14 @@ noncomputable def lvvSweep (hq : 2 ≤ q)
 /-- The sweep starts from the scalar singleton. LVV13, `algo53.tex`, line 655. -/
 theorem lvvSweep_zero (hq : 2 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1) (Delta : ℝ) :
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1) (Delta : ℝ) :
     lvvSweep hq Φ h0 h1 Delta 0 = {emptyLeftVector L q} := rfl
 
 /-- Each family of the sweep is the step applied to the previous one.
 LVV13, `algo53.tex`, lines 652--678. -/
 theorem lvvSweep_succ (hq : 2 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1) (Delta : ℝ)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1) (Delta : ℝ)
     {i : ℕ} (hi : i + 1 ≤ L) :
     lvvSweep hq Φ h0 h1 Delta (i + 1) =
       lvvSweepStep hq Φ h0 Delta hi (lvvSweep hq Φ h0 h1 Delta i) := by
@@ -76,7 +76,7 @@ LVV13, `algo53.tex`, lines 652--678, with the documented quadratic trimming corr
 Huang's Gaussian error reduction. -/
 theorem lvvSweep_spec (hq : 2 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (i : ℕ) (hi : i ≤ L) :
     (lvvSweep hq Φ h0 h1 Delta i).card ≤
         (if i = 0 then 1 else lvvSuccessiveCardBound q Delta L) ∧
@@ -118,7 +118,7 @@ lines 652--678, with the documented quadratic trimming correction and Huang's Ga
 error reduction. -/
 theorem exists_positive_chain_successive_viable_sets (hq : 2 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i),
       S 0 = {emptyLeftVector L q} ∧

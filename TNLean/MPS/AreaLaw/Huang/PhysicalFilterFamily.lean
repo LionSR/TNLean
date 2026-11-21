@@ -47,7 +47,7 @@ cut, and lies within `3 η` of the Gaussian filter at its mesh node. Huang,
 arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
 theorem huangFilterApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (j : Fin (huangEnergyCount c Delta L)) :
     (∀ cut, operatorSchmidtRank
       (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut)
@@ -79,7 +79,7 @@ cut-rank bounds: the existence form of `huangFilterApproximant_spec`. Huang,
 arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
 theorem exists_positive_chain_filter_family {L q : ℕ} (hq : 1 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) :
     ∃ Q : Fin (huangEnergyCount c Delta L) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       (∀ j cut, operatorSchmidtRank
@@ -120,7 +120,7 @@ multiple `a |Γ⟩⟨Γ|`, `1/2 ≤ a ≤ 1`, of the ground projection. Huang, a
 Section 5.4, Lemmas 18--19. -/
 theorem exists_huangFilterApproximant_near_ground {L q : ℕ} (hq : 1 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta)
     (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (hΓ : ‖Γ‖ = 1)
     (hHΓ : Φ.hamiltonian *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ)
@@ -168,7 +168,7 @@ of the ground projection for every gapped ground pair: the existence form of
 arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
 theorem exists_positive_chain_ground_filter_family {L q : ℕ} (hq : 1 ≤ q)
     (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) :
     ∃ Q : Fin (huangEnergyCount c Delta L) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       (∀ j cut, operatorSchmidtRank

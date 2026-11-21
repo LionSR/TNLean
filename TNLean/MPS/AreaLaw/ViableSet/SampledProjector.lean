@@ -162,8 +162,9 @@ lemma groundEnergy_nonneg_and_le [NeZero L]
   set H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
   have hH : H.PosSemidef := posSemidef_sum Finset.univ fun i _ ↦ h0 i
   have hHu : H ≤ ((L - 1 : ℕ) : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) := by
-    simpa only [H, Finset.card_univ, Fintype.card_fin, Nat.cast_smul_eq_nsmul] using
-      Finset.sum_le_card_nsmul Finset.univ Φ 1 fun i _ ↦ h1 i
+    simpa only [H, ManyBody.Interaction.hamiltonian, Finset.card_univ, Fintype.card_fin,
+      Nat.cast_smul_eq_nsmul] using
+      Finset.sum_le_card_nsmul Finset.univ Φ.term 1 fun i _ ↦ h1 i
   have hE : RCLike.re ⟪Γ, toEuclideanLin H Γ⟫_ℂ = E₀ := by
     have : toEuclideanLin H Γ = (E₀ : ℂ) • Γ :=
       ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Γ)
@@ -222,7 +223,8 @@ lemma one_le_powerNormalization [NeZero L] {E₀ : ℝ} (hE₀ : 0 ≤ E₀) (hE
 641. -/
 lemma integral_scaledBondComplementWord [NeZero L]
     (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) (m : ℕ) :
-    ∫ I, scaledBondComplementWord Φ E₀ I ∂wordMeasure m L = powerProjector Φ.hamiltonian L E₀ m := by
+    ∫ I, scaledBondComplementWord Φ E₀ I ∂wordMeasure m L =
+      powerProjector Φ.hamiltonian L E₀ m := by
   rw [integral_fintype (Integrable.of_finite), powerProjector_eq_sum_bondComplementWord
     (Nat.pos_of_neZero L), Finset.smul_sum]
   refine Finset.sum_congr rfl fun I _ ↦ ?_
@@ -536,7 +538,7 @@ theorem one_sub_le_measureReal_sampledProjector [NeZero L]
     (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) {η : ℝ}
     (hη : 0 < η)
     {ℓ κ : ℕ} [NeZero ℓ]
-    (Φ.termℓ : (2 * (powerNormalization L E₀ ^ m + 1) ^ 2 +
+    (hℓ : (2 * (powerNormalization L E₀ ^ m + 1) ^ 2 +
         2 * (powerNormalization L E₀ ^ m + 1) * η / 3) / η ^ 2 *
           Real.log (8 * q ^ L * L ^ 3) ≤ ℓ)
     (hκ : 2 * (m : ℝ) / L + 2 * Real.log (4 * ℓ * L ^ 4) ≤ κ) :
@@ -548,7 +550,7 @@ theorem one_sub_le_measureReal_sampledProjector [NeZero L]
   set R := powerNormalization L E₀ ^ m + 1
   set D := 2 * R ^ 2 + 2 * R * η / 3
   have hL : (0 : ℝ) < L := Nat.cast_pos.mpr (Nat.pos_of_neZero L)
-  have Φ.termℓ0 : (0 : ℝ) < ℓ := Nat.cast_pos.mpr (Nat.pos_of_neZero ℓ)
+  have hℓ0 : (0 : ℝ) < ℓ := Nat.cast_pos.mpr (Nat.pos_of_neZero ℓ)
   obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le Φ h0 h1 hΩ hspan
   have hR1 : 1 ≤ R := le_add_of_nonneg_left
     (pow_nonneg (zero_le_one.trans (one_le_powerNormalization hE₀ (by linarith))) m)
@@ -563,7 +565,7 @@ theorem one_sub_le_measureReal_sampledProjector [NeZero L]
     have hpos : (0 : ℝ) < 8 * (q : ℝ) ^ L * (L : ℝ) ^ 3 := by positivity
     have ha : Real.log (8 * (q : ℝ) ^ L * (L : ℝ) ^ 3) ≤ ℓ * η ^ 2 / D := by
       rw [le_div_iff₀ hD]
-      rw [div_mul_eq_mul_div, div_le_iff₀ (by positivity)] at Φ.termℓ
+      rw [div_mul_eq_mul_div, div_le_iff₀ (by positivity)] at hℓ
       linarith
     calc 2 * (q : ℝ) ^ L * Real.exp (-(ℓ * η ^ 2 / D))
         ≤ 2 * (q : ℝ) ^ L * Real.exp (-Real.log (8 * (q : ℝ) ^ L * (L : ℝ) ^ 3)) := by
@@ -627,14 +629,14 @@ theorem one_sub_inv_pow_three_le_measureReal_sampledProjector [NeZero L]
     (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) {η : ℝ}
     (hη : 0 < η)
     {ℓ κ : ℕ} [NeZero ℓ]
-    (Φ.termℓ : (2 * (powerNormalization L E₀ ^ m + 1) ^ 2 +
+    (hℓ : (2 * (powerNormalization L E₀ ^ m + 1) ^ 2 +
         2 * (powerNormalization L E₀ ^ m + 1) * η / 3) / η ^ 2 *
           Real.log (8 * q ^ L * L ^ 3) ≤ ℓ)
     (hκ : 2 * (m : ℝ) / L + 2 * Real.log (4 * ℓ * L ^ 4) ≤ κ) :
     1 - 1 / (L : ℝ) ^ 3 ≤ (sampleMeasure ℓ m L).real
       {I | ‖sampledProjector Φ E₀ I - powerProjector Φ.hamiltonian L E₀ m‖ < η ∧
         ∀ k j, letterCount (I k) j ≤ κ} := by
-  refine le_trans ?_ (one_sub_le_measureReal_sampledProjector Φ h0 h1 hΩ hgap hspan hΔ m hη Φℓ hκ)
+  refine le_trans ?_ (one_sub_le_measureReal_sampledProjector Φ h0 h1 hΩ hgap hspan hΔ m hη hℓ hκ)
   have : (0 : ℝ) < (L : ℝ) ^ 3 := by have := Nat.pos_of_neZero L; positivity
   gcongr 1 - ?_
   rw [div_le_div_iff_of_pos_left one_pos (by positivity) this]

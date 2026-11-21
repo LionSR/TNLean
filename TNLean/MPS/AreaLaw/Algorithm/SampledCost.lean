@@ -67,8 +67,7 @@ theorem sampledStepCostBound_mono (q : ℕ) (Δ : ℝ) (L : ℕ) {ℓ ℓ' D D' 
 /-- One sampled step costs at most the budget at the cardinality of the input, when the
 sampled factors number at most `ℓ D`. -/
 theorem cost_sampledSweepStepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(E₀ : ℝ)
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ)
         {Δ : ℝ} (hΔ : 0 < Δ)
     {ℓ m : ℕ} (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) (hF : (sampledFactors Φ E₀ I (i + 1)).card ≤ ℓ * D) :
@@ -78,7 +77,7 @@ theorem cost_sampledSweepStepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
   simp only [sampledSweepStepProgram, FreeM.cost_bind, FreeM.eval_lift, eval_extensionProgram,
     eval_sizeTrimmingProgram, eval_bondTrimmingProgram, honestOracle_sampledFactors,
     FreeM.cost_lift, queryCost_sampledFactors, sampledStepCostBound]
-  set chain := ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩ with hchain
+  set chain := ManyBody.BondInteraction.toChainInteraction Φ with hchain
   set m' := bondTrimmingRadius L (lvvReferenceBond q Δ L) with hm'
   set c : ℝ := (Δ / 169) ^ 2 with hc
   set D' := constantCutBond q 1 1 Δ c with hD'
@@ -310,11 +309,11 @@ theorem exists_sampledGroundStateProgram_cost_polynomial (hq : 2 ≤ q) {Δ B η
   refine ⟨countQueries_le_cost honestOracle queryCost one_le_queryCost _, ?_⟩
   have hL : 1 ≤ L := Nat.pos_of_neZero L
   obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le Φ h0 h1 hΩ hspan
-  obtain ⟨Φ.termℓD, hD⟩ := hbud L E₀ hL hE₀ hE₀L hEB
+  obtain ⟨hℓD, hD⟩ := hbud L E₀ hL hE₀ hE₀L hEB
   obtain ⟨hδ0, hδ1, hδc, -⟩ := sampledPrecision_spec hΔ hη hL
   have hD1 : 1 ≤ sampledRankBound q L E₀ Δ δ := Nat.one_le_pow _ _ (by omega)
-  have Φ.termℓ : sampledWordCount q L E₀ Δ δ ≤ C₁ * L ^ p₁ :=
-    (Nat.le_mul_of_pos_right _ hD1).trans ΦℓD
+  have hℓ : sampledWordCount q L E₀ Δ δ ≤ C₁ * L ^ p₁ :=
+    (Nat.le_mul_of_pos_right _ hD1).trans hℓD
   have hpow' : C₁ * L ^ p₁ ≤ max C₁ C * L ^ max p₁ p :=
     Nat.mul_le_mul (le_max_left _ _) (Nat.pow_le_pow_right hL (le_max_left _ _))
   calc
@@ -325,7 +324,7 @@ theorem exists_sampledGroundStateProgram_cost_polynomial (hq : 2 ≤ q) {Δ B η
           I (Nat.le_ceil _) hgood (C * L ^ p) (sampledRankBound q L E₀ Δ δ) le_rfl
     _ ≤ sampledGroundStateCostBound q Δ L (max C₁ C * L ^ max p₁ p) (max C₁ C * L ^ max p₁ p)
           (C * L ^ p) :=
-        sampledGroundStateCostBound_mono q Δ L (Φ.termℓ.trans hpow') (hD.trans hpow') le_rfl
+        sampledGroundStateCostBound_mono q Δ L (hℓ.trans hpow') (hD.trans hpow') le_rfl
     _ ≤ P * (L + 1) ^ d := hbound L hL
 
 end TNLean.MPS.AreaLaw

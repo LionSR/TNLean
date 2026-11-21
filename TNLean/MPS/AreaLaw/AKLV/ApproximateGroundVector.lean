@@ -126,10 +126,10 @@ theorem norm_clipped_lowProjection_residual_le_exp {L q : ℕ}
   have hA : ‖A‖ ≤ 2 := (norm_add_le _ _).trans (by linarith [hnorm a, hnorm b])
   have hherm : B.IsHermitian := (hX.isHermitian.add hN.isHermitian).add hY.isHermitian
   have hagree : K * P = (B + A) * P := by
-    have Φ.term := twoSidedEnergyTruncation_mul_lowProjection_eq_of_commuting
+    have h := twoSidedEnergyTruncation_mul_lowProjection_eq_of_commuting
       X N Y A hX hN hY hXN hXY hNY t
     have hsum : X + (N + A) + Y = B + A := by dsimp [B]; abel
-    simpa only [hsum] using Φ.term
+    simpa only [hsum] using h
   have hoff : ‖Matrix.spectralProjectionGE B t * A *
       (1 - Matrix.spectralProjectionGE B (t / 2))‖ ≤
         2 * Real.exp (-(t - t / 2) / 8) := by
@@ -141,9 +141,9 @@ theorem norm_clipped_lowProjection_residual_le_exp {L q : ℕ}
     have heig' : ι (((Φ.partialHamiltonian I) - (z : ℂ) • 1) + A) Ω = (e : ℂ) • Ω := by
       rw [← hB]
       exact heig
-    have Φ.term := norm_groundState_highProjection_le_exp I Φ h0 h1 a b z e s Ω
+    have h := norm_groundState_highProjection_le_exp I Φ h0 h1 a b z e s Ω
       he0 he6 heig'
-    simpa only [← hB, hΩ, mul_one] using Φ.term
+    simpa only [← hB, hΩ, mul_one] using h
   have hres := hherm.norm_lowProjection_residual_le A K hA Ω e t (t / 2)
     (2 * Real.exp (-(t - t / 2) / 8)) (by linarith) heig hagree hoff
   have htailt : ‖ι (Matrix.spectralProjectionGE B t) Ω‖ ≤

@@ -60,8 +60,7 @@ theorem card_filter_mem_bondSupport_le_two (x : Fin L) :
   omega
 
 private theorem retained_support (hw : 0 < w)
-    (Φ : ManyBody.BondInteraction L q)
-(i : Fin (L - 1)) :
+    (Φ : ManyBody.BondInteraction L q) (i : Fin (L - 1)) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (chainGridRetainedTerm hw Φ i)
       (bondSupport i).val := by
   change _ ∈ ManyBody.supportedOperators _ _
@@ -107,8 +106,7 @@ theorem chainGridRetained_site_budget (hw : 0 < w)
 /-- An omitted term is supported on its actual adjacent pair.
 Osborne, Figure 1 and equation (3). -/
 theorem chainGridBoundaryTerm_supported (hw : 0 < w)
-    (Φ : ManyBody.BondInteraction L q)
-(k : Fin ((L - 1) / w)) :
+    (Φ : ManyBody.BondInteraction L q) (k : Fin ((L - 1) / w)) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (chainGridBoundaryTerm hw Φ k)
       (chainCutPair L (chainGridCut w k.val)) := by
   change _ ∈ ManyBody.supportedOperators _ _
@@ -140,8 +138,7 @@ the original support, Hermiticity and norm bounds. No localization estimate is a
 Osborne, arXiv:quant-ph/0508031v2, equations (6)--(12), and Huang, Lemma 19. -/
 theorem norm_chainGridBoundaryTerm_sub_regionExpectation_le
     (hw : 0 < w)
-    (Φ : ManyBody.BondInteraction L q)
-(hHerm : ∀ i, (Φ.term i).IsHermitian)
+    (Φ : ManyBody.BondInteraction L q) (hHerm : ∀ i, (Φ.term i).IsHermitian)
     (hnorm : ∀ i, ‖Φ.term i‖ ≤ 1) (k : Fin ((L - 1) / w)) (r : ℕ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw Φ) t (chainGridBoundaryTerm hw Φ
         k) -
@@ -152,7 +149,7 @@ theorem norm_chainGridBoundaryTerm_sub_regionExpectation_le
   let C : ℝ := 2 * (2 + 8 * Real.exp 2) * Real.exp 1 / (1 - Real.exp (-(1 / 2)))
   let S := chainCutPair L (chainGridCut w k.val)
   have hden : 0 < 1 - Real.exp (-(1 / 2)) := by
-    have Φ.term := Real.exp_lt_one_iff.mpr (by norm_num : -(1 / 2 : ℝ) < 0)
+    have h := Real.exp_lt_one_iff.mpr (by norm_num : -(1 / 2 : ℝ) < 0)
     linarith
   have hC : 0 ≤ C := by dsimp only [C]; positivity
   have hcard : (S.card : ℝ) ^ 2 ≤ 4 := by

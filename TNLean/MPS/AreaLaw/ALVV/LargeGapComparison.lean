@@ -100,7 +100,7 @@ theorem exists_physical_dg_interval_normalized_approximation_uncapped :
             (1 + Real.log a) := by
   obtain ⟨K, hK, hfixed⟩ := exists_physical_dg_interval_normalized_approximation
   refine ⟨K, hK, ?_⟩
-  intro L q p r hpr hrL Φ hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q p r hpr hrL Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G g u J beta tau U Phi Tm e
   have hq : 2 ≤ q :=
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
@@ -110,7 +110,7 @@ theorem exists_physical_dg_interval_normalized_approximation_uncapped :
   have hlogg : 0 ≤ Real.log (1 / g) := Real.log_nonneg ((one_le_div hg).2 hg1)
   have hu : 0 ≤ u := by dsimp only [u]; linarith only [hlogq, hlogg]
   refine ⟨?_, ?_⟩
-  · have hgapbound := gap_le_one_add_log_div_log L q Φ hs h0 h1 mu nu gamma hmu hnu hmunu hgap
+  · have hgapbound := gap_le_one_add_log_div_log L q Φ h0 h1 mu nu gamma hmu hnu hmunu hgap
     have hGne : G ≠ ⊥ := hH.spectralSpanLE_ne_bot_of_mem_spectrum hmu le_rfl
     have hr : 1 ≤ Module.finrank ℂ G := Submodule.one_le_finrank_iff.mpr hGne
     have hlogr : 0 ≤ Real.log (Module.finrank ℂ G : ℝ) :=
@@ -119,7 +119,7 @@ theorem exists_physical_dg_interval_normalized_approximation_uncapped :
     exact max_le hgapbound (by linarith)
   intro delta hdelta hdelta1 a ψ hψG hψ
   obtain ⟨φ, hφ, hoverlap, hrank⟩ :=
-    hfixed L q p r hpr hrL Φ hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hfixed L q p r hpr hrL Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       delta hdelta hdelta1 ψ hψG hψ
   refine ⟨φ, hφ, hoverlap, hrank.trans ?_⟩
   have ha : 1 ≤ a := by
@@ -171,7 +171,7 @@ theorem exists_physical_dg_normalized_isOpenMPS_approximation_uncapped :
         1 - delta ≤ ‖⟪Φ, ψ⟫_ℂ‖ ∧ ‖Φ - ψ‖ ^ 2 ≤ delta / 2 := by
   obtain ⟨K, hK, hglobal⟩ := exists_physical_dg_normalized_isOpenMPS_approximation
   refine ⟨K, hK, ?_⟩
-  intro L q Φ hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G g u
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G g u
   have hq : 2 ≤ q :=
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
   have hg : 0 < g := lt_min hgamma (by norm_num)
@@ -180,7 +180,7 @@ theorem exists_physical_dg_normalized_isOpenMPS_approximation_uncapped :
   have hlogg : 0 ≤ Real.log (1 / g) := Real.log_nonneg ((one_le_div hg).2 hg1)
   have hu : 0 ≤ u := by dsimp only [u]; linarith only [hlogq, hlogg]
   refine ⟨?_, ?_⟩
-  · have hgapbound := gap_le_one_add_log_div_log L q Φ hs h0 h1 mu nu gamma hmu hnu hmunu hgap
+  · have hgapbound := gap_le_one_add_log_div_log L q Φ h0 h1 mu nu gamma hmu hnu hmunu hgap
     have hGne : G ≠ ⊥ := hH.spectralSpanLE_ne_bot_of_mem_spectrum hmu le_rfl
     have hr : 1 ≤ Module.finrank ℂ G := Submodule.one_le_finrank_iff.mpr hGne
     have hlogr : 0 ≤ Real.log (Module.finrank ℂ G : ℝ) :=
@@ -189,7 +189,7 @@ theorem exists_physical_dg_normalized_isOpenMPS_approximation_uncapped :
     exact max_le hgapbound (by linarith)
   intro delta hdelta hdelta1 b
   obtain ⟨B, hB, hlogB, hvec⟩ :=
-    hglobal L q Φ hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap delta hdelta hdelta1
+    hglobal L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap delta hdelta hdelta1
   refine ⟨B, hB, hlogB.trans ?_, hvec⟩
   have hb : 1 ≤ b := by
     have hL : (1 : ℝ) ≤ 16 * ((L : ℝ) + 1) / delta := by

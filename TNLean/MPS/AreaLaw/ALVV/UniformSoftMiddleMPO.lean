@@ -94,18 +94,19 @@ theorem exists_uniform_native_soft_middle_mpo {N q l r m : ℕ}
           ‖P - Zphys (z : ℂ)‖ ≤ xi := by
   classical
   intro A sigma0 insert eJ W base order bond
-  let g := intervalBondRestriction (L := N + 1) l r h
+  let Φ : ManyBody.BondInteraction (N + 1) q := ⟨h, hs⟩
+  let g := intervalBondRestriction (L := N + 1) l r Φ
   have hgs (i : Fin N) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (g i) {i.castSucc, i.succ} := by
-    apply (intervalBondRestriction_supported (L := N + 1) (q := q) l r h hs i).mono
+    apply (intervalBondRestriction_supported (L := N + 1) (q := q) l r Φ i).mono
     intro j hj
     have hj' := mem_interval.mp hj
     simp only [Finset.mem_insert, Finset.mem_singleton, Fin.ext_iff]
     change j.val = i.val ∨ j.val = i.val + 1
     omega
   have hgb (i : Fin N) : 0 ≤ g i ∧ g i ≤ 1 :=
-    intervalBondRestriction_bounds (L := N + 1) (q := q) l r h h0 h1 i
-  have hsumg : (∑ i, g i) = A := sum_intervalBondRestriction (L := N + 1) l r h
+    intervalBondRestriction_bounds (L := N + 1) (q := q) l r Φ h0 h1 i
+  have hsumg : (∑ i, g i) = A := sum_intervalBondRestriction (L := N + 1) l r Φ
   have hA : A.IsHermitian := by
     rw [← hsumg]
     exact isHermitian_sum _ (fun i _ ↦ (hgb i).1.posSemidef.isHermitian)
@@ -134,7 +135,7 @@ theorem exists_uniform_native_soft_middle_mpo {N q l r m : ℕ}
     change _ ∈ ManyBody.supportedOperators _ _
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval (N + 1) l r : Finset (Fin (N + 1)))
-    have hAs : A ∈ V := isSupportedOn_sum_internal_bonds (N + 1) q l r h hs
+    have hAs : A ∈ V := isSupportedOn_sum_internal_bonds (N + 1) q l r Φ
     have hUs : U ∈ V := sub_mem hAs
       (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
     dsimp only [heat]

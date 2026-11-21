@@ -319,10 +319,10 @@ private theorem exists_long_frustrationFree_family
     (hcollar : (interval L p r \ interval L (a + ℓ) (b + ℓ + 1)).card ≤ 2 * ℓ)
     (Φ : ManyBody.BondInteraction L q)
     (hh : ∀ i, IsStarProjection (Φ.term i)) (g : ℝ) (hg : 0 < g) (hg1 : g ≤ 1)
-    (hgap : ∀ y ∈ (LinearMap.ker (chainOperator Φ).toLinearMap)ᗮ,
-      g * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator Φ y⟫_ℂ)
+    (hgap : ∀ y ∈ (LinearMap.ker (chainOperator Φ.term).toLinearMap)ᗮ,
+      g * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator Φ.term y⟫_ℂ)
     (G₀ : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q)))
-    (hG₀ : LinearMap.ker (chainOperator Φ).toLinearMap = G₀)
+    (hG₀ : LinearMap.ker (chainOperator Φ.term).toLinearMap = G₀)
     (htrade : ∀ R : ℝ, 0 < R → R ≤ 2 * 80 * (ℓ : ℝ) →
       (((d * ℓ ^ 2) ^ (22 * ℓ) : ℕ) : ℝ) ^ 12 *
         (4 * Real.exp (-(4 * (ℓ : ℝ) ^ 2 * Real.sqrt ((4 * g / 5) / R)))) ≤ 1 / 100000) :
@@ -354,7 +354,7 @@ private theorem exists_long_frustrationFree_family
   classical
   have hq1 : 1 ≤ q := by omega
   set Ht : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-    ∑ α, threeRegionFamily Φ a b ℓ α
+    ∑ α, threeRegionFamily Φ.term a b ℓ α
   set C := Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
   have hpos : (C Ht).IsPositive := isPositive_toEuclideanCLM_threeRegion hh Φ.mem a b ℓ
   have hsymC : (Matrix.toEuclideanLin Ht).IsSymmetric := hpos.isSelfAdjoint.isSymmetric
@@ -380,7 +380,7 @@ private theorem exists_long_frustrationFree_family
       have hne : (lam i : ℂ) ≠ 0 := by exact_mod_cast hi.ne'
       change C Ht ((lam i : ℂ)⁻¹ • v i) = v i
       rw [map_smul, hvC, smul_smul, inv_mul_cancel₀ hne, one_smul]
-    have hmem' : v i ∈ (LinearMap.ker (chainOperator Φ).toLinearMap)ᗮ := by
+    have hmem' : v i ∈ (LinearMap.ker (chainOperator Φ.term).toLinearMap)ᗮ := by
       rw [← hker]
       exact hmem
     have h3 := threeRegion_gap hh Φ.mem hg hgap hab hb (v.orthonormal.norm_eq_one i) hmem'
@@ -397,7 +397,7 @@ private theorem exists_long_frustrationFree_family
     · intro hx j hj
       exact hx j (by linarith [hlam_gap j hj])
   have hspan0 : Submodule.spectralSpanLE v lam 0 =
-      LinearMap.ker (chainOperator Φ).toLinearMap := by
+      LinearMap.ker (chainOperator Φ.term).toLinearMap := by
     rw [← hker]
     ext x
     rw [Submodule.mem_spectralSpanLE_iff, LinearMap.mem_ker]
@@ -419,7 +419,7 @@ private theorem exists_long_frustrationFree_family
       rw [hrepr] at h0
       have hne : (lam j : ℂ) ≠ 0 := by exact_mod_cast hj.ne'
       exact (mul_eq_zero.mp h0).resolve_left hne
-  have Φ.termℓR : (1 : ℝ) ≤ ℓ := by exact_mod_cast hell
+  have hℓR : (1 : ℝ) ≤ ℓ := by exact_mod_cast hell
   have hnorm : ‖Ht‖ ≤ 10 * (ℓ : ℝ) := (norm_threeRegion_le hh Φ.mem a b ℓ).trans (by linarith)
   obtain ⟨hK, hgapK, hupperK, hmapK⟩ :=
     exists_canonical_isometric_spectral_data Ht hHerm v lam hv 0 (g / 20) (10 * ℓ)
@@ -655,10 +655,11 @@ private theorem exists_improving_family_core :
   · have hlong : 4 * ℓ < r - p := by omega
     obtain ⟨-, -, hab, hb, -, -, -, -, -, -, -, hsub, hcollar⟩ :=
       inward_effective_cuts L ℓ p r (by omega) hpr hrL hlong
-    have hker : LinearMap.ker (chainOperator Φ).toLinearMap = G₀ := by
-      rw [chainOperator_eq_toEuclideanCLM_sum, hG₀]
-    have hgapC : ∀ y ∈ (LinearMap.ker (chainOperator Φ).toLinearMap)ᗮ,
-        g * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator Φ y⟫_ℂ := by
+    have hker : LinearMap.ker (chainOperator Φ.term).toLinearMap = G₀ := by
+      rw [chainOperator_eq_toEuclideanCLM_sum]
+      exact hG₀
+    have hgapC : ∀ y ∈ (LinearMap.ker (chainOperator Φ.term).toLinearMap)ᗮ,
+        g * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator Φ.term y⟫_ℂ := by
       intro y hy
       rw [hker] at hy
       rw [chainOperator_eq_toEuclideanCLM_sum]
@@ -760,7 +761,7 @@ theorem exists_frustrationFree_improving_family_words :
     change 0 ≤ RCLike.re _ - RCLike.re _ at this
     simp only [RCLike.re_to_complex] at this
     linarith
-  exact hcore L q p r hpr hrL P hPs hPp γ (LinearMap.ker H.toLinearMap) hγ hker
+  exact hcore L q p r hpr hrL ⟨P, hPs⟩ hPp γ (LinearMap.ker H.toLinearMap) hγ hker
     (fun y hy ↦ (hgap y hy).trans (hform y))
 
 /-- **Efficient improving family for a frustration-free chain, existence form.** Arad, Landau,

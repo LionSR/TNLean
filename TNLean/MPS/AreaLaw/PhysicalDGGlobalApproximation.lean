@@ -70,7 +70,7 @@ theorem exists_physical_dg_normalized_isOpenMPS_approximation :
   classical
   obtain ⟨K, hK, hfixed⟩ := exists_physical_dg_interval_normalized_approximation
   refine ⟨K + 1, by linarith only [hK], ?_⟩
-  intro L q Φ hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G g u
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G g u
   have hq : 2 ≤ q :=
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
   have hg : 0 < g := lt_min hgamma (by norm_num)
@@ -127,7 +127,7 @@ theorem exists_physical_dg_normalized_isOpenMPS_approximation :
       intro k hk
       have hkL : k ≤ L := (Finset.mem_Ico.mp hk).2.le
       obtain ⟨φ, hφ, hoverlap, hlogrank⟩ :=
-        hfixed L q 0 k (Nat.zero_le k) hkL Φ hs h0 h1 mu nu gamma hgamma
+        hfixed L q 0 k (Nat.zero_le k) hkL Φ h0 h1 mu nu gamma hgamma
           hmu hnu hmunu hgap deltaCut hcut hcut1 ψ hψG hψ
       rw [hrecip] at hlogrank
       have hregional := one_sub_regional_kyFanNorm_le_twice_error

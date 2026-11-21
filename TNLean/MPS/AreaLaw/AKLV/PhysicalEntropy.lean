@@ -58,8 +58,6 @@ theorem exists_aklv_physical_entropy_bound :
     ∃ C : ℝ, 0 < C ∧ ∀ (L q : ℕ)
       (Φ : ManyBody.BondInteraction L q)
       (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (Φ.term j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
       Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
       (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
@@ -76,9 +74,9 @@ theorem exists_aklv_physical_entropy_bound :
     unfold aklvInitialRankLogCoefficient
     positivity
   refine ⟨C, by dsimp [C]; positivity, ?_⟩
-  intro L q Φ mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited k hk
+  intro L q Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited k hk
   obtain ⟨_hL, hq, hg1⟩ :=
-    aklv_chain_dimension_and_gap_bounds Φ hsupp h0 h1 mu g Ω hΩ hground hgap hg hexcited
+    aklv_chain_dimension_and_gap_bounds Φ h0 h1 mu g Ω hΩ hground hgap hg hexcited
   let u := 1 + log (q : ℝ) + log (1 / g)
   let s : ℕ := ⌈A * u ^ 2 / g⌉₊
   obtain ⟨hu, hs, hgapS, _hloggap, hT, hupper, hlogD⟩ :=
@@ -94,7 +92,7 @@ theorem exists_aklv_physical_entropy_bound :
   · obtain ⟨a, hcenter, hfit⟩ := hfit
     obtain ⟨_hq, _hg1, _hs, _hlog, e, E0, ψ,
         _hregional, _henergy, _hE0, _hE6, hstates, _hinit, _hsteps⟩ :=
-      hsequence L q a Φ mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited hfit
+      hsequence L q a Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited hfit
     let ρ := ManyBody.regionState (X := fun _ ↦ Fin q) Ω (leftBlock L k)
     let H := ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k) Ω
     have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) (leftBlock L k) Ω
@@ -111,10 +109,10 @@ theorem exists_aklv_physical_entropy_bound :
       simpa only [Matrix.IsHermitian.descEigenvalue, dite_eq_left b.isLt] using
         hρ.descEigenvalue_nonneg b.val
     have hsum : ∑ b, H.eigenvalues₀ b = 1 := by
-      have Φ.term := H.sum_eigenvalues₀_filter_le 0
-      rw [ManyBody.trace_regionState_eq_one hΩ, Complex.one_re] at Φ.term
+      have h := H.sum_eigenvalues₀_filter_le 0
+      rw [ManyBody.trace_regionState_eq_one hΩ, Complex.one_re] at h
       simpa only [Nat.zero_le, Finset.filter_true, Matrix.IsHermitian.kyFanNorm_zero,
-        sub_zero] using Φ.term
+        sub_zero] using h
     have hent := probabilityEntropy_le_aklvSequenceRankBound hq hg hg1 hs hgapS hT
       (fun b ↦ H.eigenvalues₀ b) hp hsum (fun i _ ↦ by
         rw [H.sum_eigenvalues₀_filter_le, ManyBody.trace_regionState_eq_one hΩ, Complex.one_re]

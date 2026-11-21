@@ -105,7 +105,7 @@ private theorem powerProjector_spec (hL : 0 < L)
   have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
   have hgap := hgap.posSemidef_sub_smul_one
     (Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian) hΩ hspan
-  have hspec := power_filter_exp_spec_of_posSemidef_terms Φ h0 h1 hΓ hHΓ hgap hΔ m
+  have hspec := power_filter_exp_spec_of_posSemidef_terms Φ.term h0 h1 hΓ hHΓ hgap hΔ m
   simp only [card_bonds_add_one hL] at hspec
   exact ⟨hspec.1, hspec.2.1, hspec.2.2.1⟩
 
@@ -157,15 +157,17 @@ theorem norm_inner_powerProjector_le (hL : 0 < L)
   have hΓ := hΩ
   have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
   have hgap := hgap.posSemidef_sub_smul_one
-    (Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian) hΩ hspan
+    (show Φ.hamiltonian.IsHermitian from Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian)
+    hΩ hspan
   set H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
   set N : ℝ := (L : ℝ)
   set P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
     vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))
   have hH : H.IsHermitian := (posSemidef_sum Finset.univ fun i _ ↦ h0 i).isHermitian
   have hHu : H ≤ ((L - 1 : ℕ) : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) := by
-    simpa only [H, Finset.card_univ, Fintype.card_fin, Nat.cast_smul_eq_nsmul] using
-      Finset.sum_le_card_nsmul Finset.univ Φ 1 fun i _ ↦ h1 i
+    simpa only [H, ManyBody.Interaction.hamiltonian, Finset.card_univ, Fintype.card_fin,
+      Nat.cast_smul_eq_nsmul] using
+      Finset.sum_le_card_nsmul Finset.univ Φ.term 1 fun i _ ↦ h1 i
   have hcardN : ((L - 1 : ℕ) : ℝ) < N := by
     simp only [N, Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr hL.ne'), Nat.cast_one]
     linarith
@@ -245,7 +247,7 @@ theorem norm_powerProjector_sub_le (hL : 0 < L)
   have hm' : ((((Fintype.card (Fin (L - 1)) + 1 : ℕ) : ℝ) - E₀) / Δ) *
       Real.log (1 / η) ≤ (m : ℝ) := by
     rwa [card_bonds_add_one hL]
-  have hthr := norm_power_filter_sub_ground_le_of_lower_gap_log_threshold Φ h0 h1 hΓ hHΓ hgap
+  have hthr := norm_power_filter_sub_ground_le_of_lower_gap_log_threshold Φ.term h0 h1 hΓ hHΓ hgap
     hΔ hη m hm'
   simp only [card_bonds_add_one hL] at hthr
   exact hthr

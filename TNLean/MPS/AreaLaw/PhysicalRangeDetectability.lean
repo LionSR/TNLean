@@ -39,7 +39,8 @@ theorem norm_sq_physicalDetectability_supportProj_le
     (horth : ∀ z : EuclideanSpace ℂ (Fin L → Fin q),
       Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian z = 0 →
         ⟪z, x⟫_ℂ = 0) :
-    ‖physicalDetectability (fun i ↦ (hh i).supportProj) x‖ ^ 2 ≤
+    ‖physicalDetectability ⟨fun i ↦ (hh i).supportProj, fun i ↦
+        QuantumCircuit.supportProj_mem_supportedOperators _ (hh i).isHermitian (Φ.mem i)⟩ x‖ ^ 2 ≤
       (4 / (4 + gamma)) * ‖x‖ ^ 2 := by
   let P := fun i ↦ (hh i).supportProj
   have hp (i : Fin (L - 1)) : IsStarProjection (P i) :=
@@ -48,22 +49,27 @@ theorem norm_sq_physicalDetectability_supportProj_le
       (P i) (interval L i.val (i.val + 2)) :=
     (QuantumCircuit.supportProj_mem_supportedOperators _ (hh i).isHermitian
         ((Φ.mem i)))
+  let PΦ : ManyBody.BondInteraction L q := ⟨P, hps⟩
+  change ‖physicalDetectability PΦ x‖ ^ 2 ≤ _
   have hker (z : EuclideanSpace ℂ (Fin L → Fin q)) :
       Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, P i) z = 0 ↔
         Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian z = 0 := by
     have hk := Matrix.PosSemidef.sum_supportProj_mulVec_eq_zero_iff hh (WithLp.ofLp z)
-    simpa only [← Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_eq_zero] using hk
+    simpa only [← Matrix.ofLp_toEuclideanCLM, WithLp.ofLp_eq_zero,
+      ManyBody.Interaction.hamiltonian] using hk
   have hdom : Φ.hamiltonian ≤ ∑ i, P i :=
     Finset.sum_le_sum fun i _ ↦ (hh i).le_supportProj_of_norm_le_one (hn i)
-  set y := physicalDetectability P x
+  set y := physicalDetectability PΦ x
   have hyorth (z : EuclideanSpace ℂ (Fin L → Fin q))
       (hz : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian z = 0) :
       ⟪z, y⟫_ℂ = 0 :=
-    (inner_physicalDetectability_eq P hp hps ((hker z).mpr hz) x).trans (horth z hz)
+    (inner_physicalDetectability_eq PΦ hp ((hker z).mpr hz) x).trans (horth z hz)
   have hH : Φ.hamiltonian.IsHermitian :=
     (isSelfAdjoint_sum _ fun i _ ↦ (hh i).isHermitian.isSelfAdjoint).isHermitian
   have hlo := hH.mul_norm_sq_le_re_inner_of_spectral_gap hgap y hyorth
-  have henergy := re_inner_physicalDetectability_le P hp hps x
+  have henergy : (⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, P i) y⟫_ℂ).re ≤
+      4 * (‖x‖ ^ 2 - ‖y‖ ^ 2) :=
+    re_inner_physicalDetectability_le PΦ hp x
   have hcomparison :
       (⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian y⟫_ℂ).re ≤
         (⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, P i) y⟫_ℂ).re := by

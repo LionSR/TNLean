@@ -47,7 +47,7 @@ private theorem ff_clipped_hamiltonian_eq {L q a s : ℕ}
   intro α β
   let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ
   have hleft : AKLV.leftCutBlock Φ α 0 = C 0 := by
-    change (Φ.partialHamiltonian (Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val < a + 1))) -
+    change (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val < a + 1), Φ.term i) -
       (0 : ℂ) • 1 = ∑ i ∈ Finset.univ.filter
         (fun i : Fin (L - 1) ↦ 0 ≤ i.val ∧ i.val + 1 < a + 2), Φ.term i
     simp only [zero_smul, sub_zero]
@@ -63,7 +63,7 @@ private theorem ff_clipped_hamiltonian_eq {L q a s : ℕ}
     simp only [Finset.mem_filter, Finset.mem_univ, true_and]
     omega
   have hright : AKLV.rightCutBlock Φ β 0 = C 2 := by
-    change (Φ.partialHamiltonian (Finset.univ.filter (fun i : Fin (L - 1) ↦ a + s - 2 < i.val))) -
+    change (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦ a + s - 2 < i.val), Φ.term i) -
       (0 : ℂ) • 1 = ∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
         a + s - 1 ≤ i.val ∧ i.val + 1 < L), Φ.term i
     simp only [zero_smul, sub_zero]
@@ -129,7 +129,7 @@ theorem exists_aklv_frustrationFree_chebyshev_filter {L q a s : ℕ}
     (hgap : (Φ.hamiltonian - (g : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef) :
     let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ
-    B.PosSemidef ∧ B ≤ ∑ i, Φ.term i ∧ ‖B‖ ≤ 2 * t + s ∧
+    B.PosSemidef ∧ B ≤ Φ.hamiltonian ∧ ‖B‖ ≤ 2 * t + s ∧
       B *ᵥ WithLp.ofLp Ω = 0 ∧
       (B - ((g / 2 : ℝ) : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef ∧

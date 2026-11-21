@@ -76,7 +76,7 @@ of Theorem `t:aisgapless`, lines 1027–1041. The conclusion at the root is
 recorded as any consequence `Q` of its closeness, dimension and matrix
 product bounds, so that its instances need not repeat the construction. -/
 theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 0 < etaLD)
-    (Q : ∀ (L q m : ℕ) (w : ℝ) (_hq : 2 ≤ q)
+    (Q : ∀ (L q _m : ℕ) (_w : ℝ) (_hq : 2 ≤ q)
       (Φ : ManyBody.BondInteraction L q) (_h0 : ∀ i, 0 ≤ Φ.term i)
       (_count _Dref : ℕ), Submodule ℂ (EuclideanSpace ℂ (interval L 0 L → Fin q)) → Prop)
     (hQ : ∀ (L q m : ℕ) (w : ℝ) (hq : 2 ≤ q), q ≤ m → 0 < w →

@@ -148,8 +148,7 @@ An endpoint unitary gives an orthogonal unit trial vector. Only the first bond c
 change its expectation, and the change is at most one because the bond lies between
 zero and the identity. The rank-one gap inequality is essential to the conclusion. -/
 theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
     (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Ω}) : Δ ≤ 1 := by
@@ -176,7 +175,7 @@ theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (
     simpa only [K, ManyBody.inner_place] using hU
   have hgap : Δ ≤
       (⟪toEuclideanLin K Ω, toEuclideanLin Φ.hamiltonian (toEuclideanLin K Ω)⟫_ℂ).re - E₀ := by
-    simpa [hφ, horth] using (hgap.posSemidef_sub_smul_one
+    simpa [hφ, horth, ManyBody.Interaction.hamiltonian] using (hgap.posSemidef_sub_smul_one
       (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian hΩ
       hspan).gap_le (toEuclideanLin K Ω)
   have hnonneg (i : Fin (L - 1)) (v : EuclideanSpace ℂ (Fin L → Fin q)) :
@@ -232,8 +231,8 @@ theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (
       (⟪toEuclideanLin K Ω, toEuclideanLin Φ.hamiltonian (toEuclideanLin K Ω)⟫_ℂ).re - E₀ ≤
         1 := by
     rw [← hE]
-    simpa only [map_sum, LinearMap.sum_apply, inner_sum, Complex.re_sum,
-      Finset.sum_sub_distrib] using hsum.trans (by exact_mod_cast hcard)
+    simpa only [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.sum_apply, inner_sum,
+      Complex.re_sum, Finset.sum_sub_distrib] using hsum.trans (by exact_mod_cast hcard)
   exact hgap.trans henergy
 
 end TNLean.MPS.AreaLaw

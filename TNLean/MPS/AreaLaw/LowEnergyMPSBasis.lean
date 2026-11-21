@@ -81,7 +81,7 @@ theorem exists_fixed_bandwidth_low_energy_orthonormal_mps_basis
   obtain ⟨K, hK, hactual⟩ :=
     exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation etaLD hLD
   refine ⟨K, hK, ?_⟩
-  intro L q v hq hv Φ hs h0 h1 config H hH G rInner rOuter g u
+  intro L q v hq hv Φ h0 h1 config H hH G rInner rOuter g u
     delta hdelta hdelta1 eps a
   let : Nonempty (Fin L → Fin q) := config
   have heps : 0 < eps := by dsimp only [eps]; positivity
@@ -90,7 +90,7 @@ theorem exists_fixed_bandwidth_low_energy_orthonormal_mps_basis
     have hn : 0 ≤ (rInner : ℝ) := Nat.cast_nonneg rInner
     linarith only [hdelta1, hn]
   obtain ⟨Bs, B, hBs, hBsg, _hlogs, hlogB, hvec⟩ :=
-    hactual L q v hq hv Φ hs h0 h1 eps heps heps1
+    hactual L q v hq hv Φ h0 h1 eps heps heps1
   have hscale : 128 * ((L : ℝ) + 1) / eps =
       1024 * ((L : ℝ) + 1) * ((rInner : ℝ) + 1) / delta := by
     dsimp only [eps]

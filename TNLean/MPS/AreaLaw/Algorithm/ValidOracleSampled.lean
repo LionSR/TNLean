@@ -94,11 +94,11 @@ theorem eval_sampledSweepStepProgram_of_valid (hv : IsValidOracle o) (hq : 2 ≤
       haveI : NeZero q := ⟨by omega⟩
       successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
         (o (LinearAlgebraQuery.sampledFactors L (i + 1) Φ E₀ ℓ m D I)) id
-        ((ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩).sizeTrimmingSelectionWith hq Δ
+        ((ManyBody.BondInteraction.toChainInteraction Φ).sizeTrimmingSelectionWith hq Δ
           (AreaLaw.extend (i + 1) S) (oracleNets o L (i + 1) ((Δ / 169) ^ 2 / (2 * L)))
           (oracleSolver o L (i + 1) b (AreaLaw.extend (i + 1) S)
             (leftCutOperator (i + 1)
-              ((ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩).partialHamiltonian
+              ((ManyBody.BondInteraction.toChainInteraction Φ).partialHamiltonian
                 (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 (i + 1))))
             ((Δ / 169) ^ 2 / (2 * L)))) := by
   simp only [sampledSweepStepProgram, FreeM.eval_bind, FreeM.eval_lift,
@@ -123,7 +123,7 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
   classical
   let : NeZero q := ⟨by omega⟩
   rw [eval_sampledSweepStepProgram_of_valid hv hq Φ E₀ Δ I b (q ^ (2 * κ)) hi S]
-  let chain := ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩
+  let chain := ManyBody.BondInteraction.toChainInteraction Φ
   have hgapC : IsGapped chain.hamiltonian E₀ Δ := by
     rwa [show chain.hamiltonian = ∑ j, Φ.term j from ManyBody.Interaction.hamiltonian_extend]
   have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
@@ -261,7 +261,7 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
         rw [← e.inner_map_map, e.apply_symm_apply]
       rw [← norm_inner_symm, this]
       exact hover
-    let chain := ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩
+    let chain := ManyBody.BondInteraction.toChainInteraction Φ
     have hchain : chain.hamiltonian = Φ.hamiltonian := ManyBody.Interaction.hamiltonian_extend
     have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption

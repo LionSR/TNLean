@@ -86,12 +86,12 @@ theorem exists_physical_dg_interval_normalized_approximation :
   let K := 24 * K0 + 88 * (1 + Real.log (11 + b)) * (11 + b)
   have hK : 0 < K := by dsimp only [K]; positivity
   refine ⟨K, hK, ?_⟩
-  intro L q p r hpr hrL Φ hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q p r hpr hrL Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G g u J beta tau U Phi Tm e
   let ell0 : ℕ := ⌈A * u ^ 2 / g⌉₊
   let D0 : ℕ := (q * ell0 ^ 2) ^ (22 * ell0)
   obtain ⟨hD0, hlogD0, happrox⟩ :=
-    hraw L q p r hpr hrL Φ hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hraw L q p r hpr hrL Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   have hD02 : 2 ≤ D0 := hD0
   have hbootstrap : Real.log (D0 : ℝ) ≤ K0 / g * u ^ 3 := hlogD0
   have hq : 2 ≤ q :=

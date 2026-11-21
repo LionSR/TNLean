@@ -79,8 +79,6 @@ theorem exists_aklv_sharp_physical_per_cut_approximation :
       ∀ (L q : ℕ)
         (Φ : ManyBody.BondInteraction L q)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (Φ.term j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
       Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
       (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
@@ -106,14 +104,14 @@ theorem exists_aklv_sharp_physical_per_cut_approximation :
     unfold aklvAccuracyLogCoefficient aklvInitialRankLogCoefficient
     positivity
   refine ⟨A, aklvAccuracyLogCoefficient A, hA, hC, ?_⟩
-  intro L q Φ mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1 u z s0
+  intro L q Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1 u z s0
   obtain ⟨_hL, hq, hg1⟩ :=
-    aklv_chain_dimension_and_gap_bounds Φ hsupp h0 h1 mu g Ω hΩ hground hgap hg hexcited
+    aklv_chain_dimension_and_gap_bounds Φ h0 h1 mu g Ω hΩ hground hgap hg hexcited
   refine ⟨hq, hg1, aklvAccuracyRankBound_log_le_fourthRoot hA hg hg1 hrho hrho1 q hq,
     aklvAccuracyRankBound_log_le_lvv hA hg hg1 hrho hrho1 q hq, ?_⟩
   intro k hk
   obtain ⟨y, hy, herror, hrank, hactual⟩ :=
-    haccuracy L q k hq hk Φ mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1
+    haccuracy L q k hq hk Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1
   refine ⟨y, hy, herror, ?_, hrank, hactual⟩
   have hdist := @norm_sub_sq ℂ _ _ _ _ y Ω
   rw [hy, hΩ] at hdist
@@ -136,8 +134,6 @@ theorem exists_aklv_fixed_gap_physical_per_cut_approximation :
       ∀ (L q : ℕ)
         (Φ : ManyBody.BondInteraction L q)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (Φ.term j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
       Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
       (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
@@ -157,10 +153,10 @@ theorem exists_aklv_fixed_gap_physical_per_cut_approximation :
         (y = Ω ∨ IsAKLVAccuracyFilteredOutput k s0 Φ g rho Ω y) := by
   obtain ⟨A, C, hA, hC, hphysical⟩ := exists_aklv_sharp_physical_per_cut_approximation
   refine ⟨A, C, hA, hC, ?_⟩
-  intro g₀ hg₀ hg₀one L q Φ mu g Ω hsupp h0 h1 hΩ hground hgap hg hg₀g hexcited
+  intro g₀ hg₀ hg₀one L q Φ mu g Ω h0 h1 hΩ hground hgap hg hg₀g hexcited
     rho hrho hrho1 u z s0 C₀
   obtain ⟨hq, hg1, _hfourth, hlog, hcut⟩ :=
-    hphysical L q Φ mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1
+    hphysical L q Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1
   have hcubic := aklv_cubic_cost_of_fixed_gap hg₀ hg₀one hg₀g hg hg1 q hq
   change u ^ 3 / g ≤ C₀ * Real.log (q : ℝ) ^ 3 / g at hcubic
   have hz : 0 ≤ z := (aklvAccuracyLog_bounds hrho hrho1).1.trans' (by norm_num)

@@ -111,10 +111,10 @@ theorem exists_physical_dg_sampled_interval_node_event_of_le_radius :
   classical
   obtain ⟨K, hK, hreference⟩ := exists_physical_dg_interval_collective_trimming_bound
   refine ⟨K, hK, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g u epsilonRef b
   obtain ⟨B, hB, hlogB, htrim⟩ :=
-    hreference L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hreference L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       epsilonRef (by norm_num [epsilonRef]) (by norm_num [epsilonRef])
   refine ⟨B, hB, hlogB, ?_⟩
   intro Dref xiMax
@@ -154,7 +154,7 @@ theorem exists_physical_dg_sampled_interval_node_event_of_le_radius :
   obtain ⟨T, N, F, hN, hTG, hGT, hdim, hwords⟩ :=
     exists_independent_long_middle_actual_dg_word_family m q ell t g epsilon Delta
       hq hqm hell ht hg hg1 hepsilon hepsilon1 htail hfilter
-      L p r hpr hrL hlong Φ hsupp h0 h1 mu hmu hgapg
+      L p r hpr hrL hlong Φ h0 h1 mu hmu hgapg
   have himprove : ∀ (a : ℕ)
       (S : Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q))) (delta : ℝ),
       Submodule.IsViable delta S
@@ -284,10 +284,10 @@ theorem exists_physical_dg_sampled_interval_node_event :
   classical
   obtain ⟨K, hK, hphysical⟩ := exists_physical_dg_sampled_interval_node_event_of_le_radius
   refine ⟨K, hK, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g u epsilonRef b
   obtain ⟨B, hB, hlogB, hNodes⟩ :=
-    hphysical L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hphysical L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨B, hB, hlogB, ?_⟩
   intro Dref xi
   have hrG : 1 ≤ rG := Submodule.one_le_finrank_iff.mpr

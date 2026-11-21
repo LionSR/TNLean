@@ -123,7 +123,7 @@ theorem exists_unique_ground_state_canonical_tree_ritz_approximation :
   obtain ⟨Kt, -, htrimAll⟩ := exists_physical_dg_interval_collective_trimming_bound
   obtain ⟨Kref, -, hrefine⟩ := exists_physical_dg_automatic_same_candidate_refinement
   refine ⟨A, hA, ?_⟩
-  intro L q hq hL Φ hsupp h0 h1 gamma hgamma Γ H hH hΓ0 hΓ huniq hgap
+  intro L q hq hL Φ h0 h1 gamma hgamma Γ H hH hΓ0 hΓ huniq hgap
     G g Kraw d u ℓ D width
   obtain ⟨nu, hnu, hnu0⟩ :=
     exists_pos_mem_spectrum_of_unique_ground_state hq hL hH hgamma Γ huniq hgap
@@ -141,7 +141,7 @@ theorem exists_unique_ground_state_canonical_tree_ritz_approximation :
     have := Real.log_nonneg (one_le_one_div hg hg1)
     dsimp only [u]
     linarith
-  have Φ.termℓ : 1 ≤ ℓ := by
+  have hℓ : 1 ≤ ℓ := by
     apply Nat.one_le_iff_ne_zero.mpr
     apply ne_of_gt
     apply Nat.ceil_pos.mpr
@@ -151,7 +151,7 @@ theorem exists_unique_ground_state_canonical_tree_ritz_approximation :
   have hd2 : 2 ≤ d := le_max_right q 2
   have hD : 2 ≤ D := by
     have hbase : 2 ≤ d * ℓ ^ 2 :=
-      hd2.trans (by simpa only [mul_one] using Nat.mul_le_mul_left d (Nat.one_le_pow 2 ℓ Φ.termℓ))
+      hd2.trans (by simpa only [mul_one] using Nat.mul_le_mul_left d (Nat.one_le_pow 2 ℓ hℓ))
     exact Nat.one_lt_pow (by omega) (by omega)
   have hwidth : 1 ≤ width := by simp only [width]; omega
   refine ⟨hwidth, ?_⟩
@@ -176,7 +176,7 @@ theorem exists_unique_ground_state_canonical_tree_ritz_approximation :
                 EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q)))
           (G.map (Entropy.regionTensorCoordinates q
             (interval L J.val.1 J.val.2)).toLinearEquiv.toLinearMap) := fun J ↦
-    (hff L q J.val.1 J.val.2 J.property.1 J.property.2.1 Φ hsupp h0 h1 gamma hgamma Γ
+    (hff L q J.val.1 J.val.2 J.property.1 J.property.2.1 Φ h0 h1 gamma hgamma Γ
       hΓ huniq hgap).2.2
   choose Nfam W Δ hN hΔ hbudget hrankW himprove using hfam
   refine ⟨Nfam, W, hN, hrankW, ?_⟩
@@ -184,18 +184,18 @@ theorem exists_unique_ground_state_canonical_tree_ritz_approximation :
   have hrankG : Module.finrank ℂ G = 1 := hrank
   have hG : G ≠ ⊥ := (Submodule.span_singleton_eq_bot.not).mpr hΓ0
   -- the reference for collective trimming, at the error `1/10000`
-  obtain ⟨Btree, hBtree, -, htrim⟩ := htrimAll L q Φ hsupp h0 h1 0 nu gamma hgamma hmu hnu
+  obtain ⟨Btree, hBtree, -, htrim⟩ := htrimAll L q Φ h0 h1 0 nu gamma hgamma hmu hnu
     hnu0 hgap' (1 / 10000) (by norm_num) (by norm_num)
   dsimp only at htrim
   rw [hGeq, hrank] at htrim
   -- the final refinement, before the tree
-  have key := hrefine L q Φ hsupp h0 h1 0 nu gamma hgamma hmu hnu hnu0 hgap' Btree D hBtree
+  have key := hrefine L q Φ h0 h1 0 nu gamma hgamma hmu hnu hnu0 hgap' Btree D hBtree
     (by omega) eta heta
   dsimp only at key
   rw [hGeq, hrank] at key
   obtain ⟨B, -, -, -, -, -, -, -, hxi, hxiTree, -, hterminal⟩ := key
   set xi := 1 / (1000 * (((max Btree (1 ^ 2 * B)) * ⌈100 * (D : ℝ) ^ 12 /
-    (gamma / (‖∑ i, Φ.term i‖ - 0) * (eta * gamma / (2 * (‖∑ i, Φ.term i‖ - 0) + eta * gamma)))⌉₊ :
+    (gamma / (‖Φ.hamiltonian‖ - 0) * (eta * gamma / (2 * (‖Φ.hamiltonian‖ - 0) + eta * gamma)))⌉₊ :
       ℕ) : ℝ) * Real.sqrt ((L : ℝ) + 1))
   have hroot1 : 1 ≤ Real.sqrt ((L : ℝ) + 1) := Real.one_le_sqrt.mpr
     (by linarith only [(Nat.cast_nonneg L : (0 : ℝ) ≤ (L : ℝ))])
@@ -232,7 +232,7 @@ theorem exists_unique_ground_state_canonical_tree_ritz_approximation :
         _ ≤ q ^ (22 * ℓ) := Nat.pow_le_pow_right (by omega) (by omega)
         _ ≤ (d * ℓ ^ 2) ^ (22 * ℓ) := Nat.pow_le_pow_left
           ((le_max_left q 2).trans (by
-            simpa only [mul_one] using Nat.mul_le_mul_left d (Nat.one_le_pow 2 ℓ Φ.termℓ))) _
+            simpa only [mul_one] using Nat.mul_le_mul_left d (Nat.one_le_pow 2 ℓ hℓ))) _
     calc q ^ width ≤ D := hqD
       _ ≤ D ^ (2 * k) := Nat.le_self_pow (by omega) D
       _ ≤ D ^ (2 * k) * s := Nat.le_mul_of_pos_right _ (by omega)

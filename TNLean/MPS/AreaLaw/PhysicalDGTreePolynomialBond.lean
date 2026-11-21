@@ -88,7 +88,7 @@ theorem exists_physical_dg_tree_ritz_polynomial_approximation
   obtain ⟨C, hC, k, hpoly⟩ := Real.exists_refinement_output_polynomial_bound
     gamma g u Ktree Kref Dfilter hgamma hg hg1 hu hKtree.le hKref.le hDfilter
   refine ⟨C, hC, k, ?_⟩
-  intro L Φ hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G r eta heta
+  intro L Φ h0 h1 mu nu H hH hmu hnu hmunu hgap G r eta heta
   let A := ‖H‖ - mu
   let c := gamma / A
   let Kraw := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) (1 - ‖H‖⁻¹ • H)
@@ -112,7 +112,7 @@ theorem exists_physical_dg_tree_ritz_polynomial_approximation
       _ ≤ _ := by exact_mod_cast (show L - 1 ≤ L + 1 by omega)
   have hAL : A ≤ (L : ℝ) + 1 := by dsimp only [A]; linarith only [hnorm, hmu0]
   obtain ⟨_hell, _hlogD, Btree, hBtree, hlogBtree, hfamilies⟩ :=
-    hconstruct L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hconstruct L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   let Dtree := r ^ 2 * Btree
   let width := 4 * ell
   have hwidth : 1 ≤ width := by dsimp only [width]; omega

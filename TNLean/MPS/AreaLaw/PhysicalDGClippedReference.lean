@@ -70,7 +70,7 @@ theorem exists_physical_dg_common_reference_for_clipped_targets :
   classical
   obtain ⟨K, hK, hreference⟩ := exists_physical_dg_isOpenMPS_reference_subspace
   refine ⟨K, hK, ?_⟩
-  intro L q Φ hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G r g u a ha ha1 tau b
   have htau : 0 < tau := by dsimp only [tau]; positivity
   have htau1 : tau ≤ 1 := by
@@ -78,7 +78,7 @@ theorem exists_physical_dg_common_reference_for_clipped_targets :
     dsimp only [tau]
     linarith
   obtain ⟨B, hB, hlogB, U, hdimU, hUG, hGU, hUMPS⟩ :=
-    hreference L q Φ hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap tau htau htau1
+    hreference L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap tau htau htau1
   refine ⟨B, hB, hlogB, U, hdimU, hUG, hGU, hUMPS, ?_, ?_⟩
   · dsimp only [tau]
     nlinarith [sq_nonneg a]

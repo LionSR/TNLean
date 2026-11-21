@@ -163,9 +163,9 @@ theorem exists_aklv_cut_scaled_low_cluster {L q a s l r : ℕ} (hq : 0 < q)
         (g ≤ a0 j - E0 ∧ ⟪b0 j, Ω⟫_ℂ = 0) :=
     GaussianFilter.eigenvector_ground_or_gap (hB ∅) hΩ hBΩ hBgap hg j
   have hspec (j : Fin L → Fin q) : a0 j = E0 ∨ E0 + g ≤ a0 j := by
-    rcases hdich j with Φ.term | Φ.term
-    · exact Or.inl Φ.1
-    · exact Or.inr (by linarith [Φ.term.1])
+    rcases hdich j with h | h
+    · exact Or.inl h.1
+    · exact Or.inr (by linarith [h.1])
   have hsmall (T : Finset (Fin 2)) (η : ℝ) (hη : η ≤ g) :
       ‖(ι (B ∅) - ι (B Finset.univ)).domRestrict
         (Submodule.spectralSpanLE (hB T).eigenvectorBasis (hB T).eigenvalues (E0 + η))‖ ≤ ξ := by
@@ -198,18 +198,18 @@ theorem exists_aklv_cut_scaled_low_cluster {L q a s l r : ℕ} (hq : 0 < q)
     · apply Submodule.span_le.mpr
       rintro _ ⟨j, hj, rfl⟩
       change a0 j ≤ E0 at hj
-      rcases hdich j with Φ.term | Φ.term
-      · rw [Φ.term.2]
+      rcases hdich j with h | h
+      · rw [h.2]
         exact Submodule.smul_mem _ _ (Submodule.subset_span (Set.mem_singleton Ω))
       · exfalso
-        linarith [Φ.term.1]
+        linarith [h.1]
     · apply (Submodule.span_singleton_le_iff_mem _ _).mpr
       rw [Submodule.mem_spectralSpanLE_iff]
       intro j hj
-      rcases hdich j with Φ.term | Φ.term
+      rcases hdich j with h | h
       · exfalso
-        linarith [Φ.term.1]
-      · rw [OrthonormalBasis.repr_apply_apply, Φ.term.2]
+        linarith [h.1]
+      · rw [OrthonormalBasis.repr_apply_apply, h.2]
   have hdimG : Module.finrank ℂ (Submodule.span ℂ {Ω}) = 1 :=
     finrank_span_singleton (by intro hzero; simp [hzero] at hΩ : Ω ≠ 0)
   let U := Submodule.spectralSpanLE v lam (E0 + g / 20)

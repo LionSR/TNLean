@@ -47,7 +47,7 @@ theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2
     {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ L : ℕ, 1 ≤ L →
       ∀ (Φ : ManyBody.BondInteraction L q)
-(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1),
+        (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1),
       (∀ i : ℕ, i ≤ L →
         (gaussianFilterFactors Φ h0 (lvvSuccessiveError Delta) Delta i).card ≤
           P * (L + 1) ^ d ∧

@@ -66,7 +66,7 @@ theorem exists_physical_dg_isOpenMPS_reference_subspace :
   classical
   obtain ⟨K, hK, hglobal⟩ := exists_physical_dg_normalized_isOpenMPS_approximation
   refine ⟨K, hK, ?_⟩
-  intro L q Φ hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G r g u
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G r g u
     epsilon hepsilon hepsilon1 b
   have hG : G ≠ ⊥ := hH.spectralSpanLE_ne_bot_of_mem_spectrum hmu le_rfl
   have hr : 1 ≤ r := Submodule.one_le_finrank_iff.mpr hG
@@ -78,7 +78,7 @@ theorem exists_physical_dg_isOpenMPS_reference_subspace :
     apply (div_le_iff₀ (by positivity : 0 < 2 * (r : ℝ))).2
     linarith only [hepsilon1, hrR]
   obtain ⟨B, hB, hlogB, hvectors⟩ :=
-    hglobal L q Φ hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hglobal L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       deltaBasis hdelta hdelta1
   have hratio : 16 * ((L : ℝ) + 1) / deltaBasis =
       32 * (r : ℝ) * ((L : ℝ) + 1) / epsilon := by

@@ -102,7 +102,7 @@ theorem exists_long_middle_actual_dg_family :
   intro q g hq hg hg1 u ell D cA
   obtain ⟨hell, hD, hlogD, hphysical⟩ := hall q g hq hg hg1
   refine ⟨hell, hD, hlogD, ?_⟩
-  intro L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm Φ hs h0 h1 mu H hH G hmu hgap
+  intro L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm Φ h0 h1 mu H hH G hmu hgap
   have hell1 : 1 ≤ ell := Nat.le_trans (by decide : 1 ≤ 21) hell
   let a := max p ell - ell
   let b := min r (L - ell) - ell - 1
@@ -113,7 +113,7 @@ theorem exists_long_middle_actual_dg_family :
     _hR0, _hR8, hDelta0, hsmall, v, lam, heigen, hclosed,
     _hband, _hdim, hTG, hGT, _hnewgap⟩ :=
     hphysical L a b (hab.trans (Nat.le_succ b)) (hb.trans (Nat.sub_le L 1))
-      Φ hs h0 h1 mu hmu hgap
+      Φ h0 h1 mu hmu hgap
   let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
   let Areg : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
     ∑ i ∈ Finset.univ.filter
@@ -152,7 +152,7 @@ theorem exists_long_middle_actual_dg_family :
   let D0 := (q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))
   obtain ⟨N, W, hNraw, hdecomp⟩ :=
     exists_actual_regional_clipped_polynomial_family_fin
-      L q a b ell (ell ^ 2) hell1 hq hdegree hab hb Φ hs e (ell : ℝ) Jtarget
+      L q a b ell (ell ^ 2) hell1 hq hdegree hab hb Φ e (ell : ℝ) Jtarget
   change N ≤ D0 ^ 2 * q ^
     (2 * (J0 \ Jtarget).card + 2 * (Jtarget \ J0).card) at hNraw
   have hdiff : J0 \ Jtarget = ∅ := Finset.sdiff_eq_empty_iff_subset.mpr hsub
@@ -268,7 +268,7 @@ theorem exists_accuracy_long_middle_actual_dg_family :
   obtain ⟨hell, hmD, hD, _hlower, _hupper, _hscale, _hcount,
     hlogD, htrade, htail⟩ := hall m g (hq.trans hqm) hg hg1
   refine ⟨hell, hmD, hD, hlogD, ?_⟩
-  intro L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm Φ hs h0 h1 mu H hH G hmu hgap
+  intro L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm Φ h0 h1 mu H hH G hmu hgap
   have hell1 : 1 ≤ ell := Nat.le_trans (by decide : 1 ≤ 21) hell
   let a := max p ell - ell
   let b := min r (L - ell) - ell - 1
@@ -288,7 +288,7 @@ theorem exists_accuracy_long_middle_actual_dg_family :
     v, lam, heigen, hclosed, _hband, hdim, hTG, hGT, _hnewgap⟩ :=
     exists_five_region_physical_scaled_low_cluster L q a b ell (by omega) hell
       (hab.trans (Nat.le_succ b)) (hb.trans (Nat.sub_le L 1))
-      Φ hs h0 h1 mu g xi scale hg hg1 hscale0 hscale1 htail hxi.le hmu hgap
+      Φ h0 h1 mu g xi scale hg hg1 hscale0 hscale1 htail hxi.le hmu hgap
   have herror : scale / 200 = 1 / (200 * (m : ℝ)) := by
     dsimp only [scale]
     rw [div_div, mul_comm (m : ℝ) 200]
@@ -342,7 +342,7 @@ theorem exists_accuracy_long_middle_actual_dg_family :
   let D0 := (q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))
   obtain ⟨N, W, hNraw, hdecomp⟩ :=
     exists_actual_regional_clipped_polynomial_family_fin
-      L q a b ell (ell ^ 2) hell1 hq hdegree hab hb Φ hs e (ell : ℝ) Jtarget
+      L q a b ell (ell ^ 2) hell1 hq hdegree hab hb Φ e (ell : ℝ) Jtarget
   change N ≤ D0 ^ 2 * q ^
     (2 * (J0 \ Jtarget).card + 2 * (Jtarget \ J0).card) at hNraw
   have hdiff : J0 \ Jtarget = ∅ := Finset.sdiff_eq_empty_iff_subset.mpr hsub

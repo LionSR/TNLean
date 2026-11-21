@@ -54,10 +54,10 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues (minEigenvalue hH)
     let J := interval L l r
-    let P := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), Φ.term i
-    let M := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v), Φ.term i
+    let P := Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r))
+    let M := Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v))
     ∃ (eP eM : ℝ) (xP xM : (Fin L → Fin q) → ℂ),
       star xP ⬝ᵥ xP = 1 ∧ P *ᵥ xP = (eP : ℂ) • xP ∧
       (P - (eP : ℂ) • 1).PosSemidef ∧

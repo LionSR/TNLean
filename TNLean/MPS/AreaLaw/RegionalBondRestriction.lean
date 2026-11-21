@@ -36,8 +36,7 @@ def intervalBondRestriction {L q : ℕ} (l r : ℕ)
 /-- Restricting the interactions preserves their designated supports.
 Auxiliary to ALVV, arXiv:1602.08828v2, Figure `fig:generate`, lines 1348–1392. -/
 theorem intervalBondRestriction_supported {L q : ℕ} (l r : ℕ)
-    (Φ : ManyBody.BondInteraction L q)
-(i : Fin (L - 1)) :
+    (Φ : ManyBody.BondInteraction L q) (i : Fin (L - 1)) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (intervalBondRestriction l r Φ i) (interval L i.val (i.val + 2)) := by
   unfold intervalBondRestriction
@@ -61,9 +60,9 @@ Auxiliary to ALVV, arXiv:1602.08828v2, Figure `fig:generate`, lines 1348–1392.
 theorem sum_intervalBondRestriction {L q : ℕ} (l r : ℕ)
     (Φ : ManyBody.BondInteraction L q) :
     ∑ i, intervalBondRestriction l r Φ i =
-      ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), Φ.term i := by
-  simp only [Finset.sum_filter, intervalBondRestriction]
+      Φ.partialHamiltonian (Finset.univ.filter
+        (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r)) := by
+  simp only [ManyBody.Interaction.partialHamiltonian, Finset.sum_filter, intervalBondRestriction]
 
 /-- A subinterval of the parent retains exactly its original bonds.
 Auxiliary to ALVV, arXiv:1602.08828v2, Figure `fig:generate`, lines 1348–1392. -/
@@ -73,8 +72,8 @@ theorem sum_internal_intervalBondRestriction_eq {L q : ℕ} {l a b r : ℕ}
     (∑ i ∈ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ a ≤ i.val ∧ i.val + 1 < b),
         intervalBondRestriction l r Φ i) =
-      ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ a ≤ i.val ∧ i.val + 1 < b), Φ.term i := by
+      Φ.partialHamiltonian (Finset.univ.filter
+        (fun i : Fin (L - 1) ↦ a ≤ i.val ∧ i.val + 1 < b)) := by
   apply Finset.sum_congr rfl
   intro i hi
   have hi' := (Finset.mem_filter.mp hi).2

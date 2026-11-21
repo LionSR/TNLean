@@ -63,10 +63,10 @@ theorem exists_native_soft_terminal_compressed_energy_estimate
     let coords := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
       (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
       (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
-    let P := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), Φ.term i
-    let M := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v), Φ.term i
+    let P := Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r))
+    let M := Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v))
     let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
     let y0 := ((ManyBody.cutEquiv (fun _ ↦ Fin q) J) sigma0).2
     let native := fun x : J → Fin q ↦

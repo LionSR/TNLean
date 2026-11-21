@@ -60,11 +60,11 @@ theorem exists_physical_ground_isOpenMPS_reference_subspace :
   classical
   obtain ⟨K, hK, href⟩ := exists_physical_dg_isOpenMPS_reference_subspace
   refine ⟨K, hK, ?_⟩
-  intro L q hq Φ hs h0 h1 mu gamma hgamma H hH hmu hgap G r g u
+  intro L q hq Φ h0 h1 mu gamma hgamma H hH hmu hgap G r g u
     epsilon hepsilon hepsilon1 b
   by_cases hnonflat : ∃ nu ∈ spectrum ℝ H, mu < nu
   · obtain ⟨nu, hnu, hmunu⟩ := hnonflat
-    exact href L q Φ hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    exact href L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       epsilon hepsilon hepsilon1
   · have heig (i) : hH.eigenvalues i = mu := by
       rcases hgap _ (hH.eigenvalues_mem_spectrum_real i) with hi | hi

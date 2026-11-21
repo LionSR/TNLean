@@ -138,7 +138,7 @@ theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
     exact sub_mem
       (hF 0)
       (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
-  refine ⟨HL, HR, hleft, hF 2, fun j ↦ Φ.mem _, ?_, by omega⟩
+  refine ⟨HL, HR, hleft, hF 2, fun j ↦ Φ.mem ⟨a + 1 + j.val, by omega⟩, ?_, by omega⟩
   exact aklv_clipped_hamiltonian_formula hs ha Φ e t
 
 open Classical in

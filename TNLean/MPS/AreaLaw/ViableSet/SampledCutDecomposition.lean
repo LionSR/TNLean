@@ -50,8 +50,7 @@ private theorem operatorSchmidtRank_cutOperator_endpoint_le_one {L q k : ℕ}
 endpoints. LVV13, `algo53.tex`, lines 584–591 and 626–649. -/
 theorem operatorSchmidtRank_cutOperator_bondComplementWord_le_all {L q m κ : ℕ}
     (hq : 1 ≤ q)
-    (Φ : ManyBody.BondInteraction L q)
-(I : Fin m → Fin L)
+    (Φ : ManyBody.BondInteraction L q) (I : Fin m → Fin L)
     (hI : ∀ j, letterCount I j ≤ κ) (k : ℕ) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) (bondComplementWord Φ I)) ≤ q ^ (2 * κ) := by

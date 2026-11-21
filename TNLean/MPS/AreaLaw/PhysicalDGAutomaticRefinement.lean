@@ -101,7 +101,7 @@ theorem exists_physical_dg_automatic_same_candidate_refinement :
   classical
   obtain ⟨Kref, hKref, hreference⟩ := exists_physical_dg_isOpenMPS_reference_subspace
   refine ⟨Kref, hKref, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g u A c Kraw Dtree Dfilter hDtree hDfilter eta heta rho n epsilonRef bref
   have hrG : 1 ≤ rG := Submodule.one_le_finrank_iff.mpr
     (hH.spectralSpanLE_ne_bot_of_mem_spectrum hmu le_rfl)
@@ -114,7 +114,7 @@ theorem exists_physical_dg_automatic_same_candidate_refinement :
     hepsilonBudget, henergy⟩ := Real.viable_refinement_error_parameters hgamma hgammaA heta
   have hepsilon1 : epsilonRef ≤ 1 := hepsilonSmall.trans (by norm_num)
   obtain ⟨B, hB, hlogB, U, hdimU, hUG, hGU, hUMPS⟩ :=
-    hreference L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hreference L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       epsilonRef hepsilon hepsilon1
   refine ⟨B, hB, hlogB, ?_⟩
   intro b Dcommon N xi

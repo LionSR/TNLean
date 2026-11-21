@@ -127,12 +127,12 @@ theorem exists_physical_dg_interleaved_tree_with_energy_updates :
   obtain ⟨Ctail, C, Kref, hCtail, hC, hKref, hfactory⟩ :=
     exists_physical_dg_interleaved_interval_tree_with_word_powers
   refine ⟨Ctail, C, Kref, hCtail, hC, hKref, ?_⟩
-  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g m w v ell D s a tau epsilon t Delta
   obtain ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff,
     B, hB, hlogB, Uref, hdimU, hUMPS, hxiMax, hwidth, T, N, F,
     hN, htargets, htrees⟩ :=
-    hfactory L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hfactory L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   change 21 ≤ ell at hell
   refine ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff, ?_⟩
   intro u bref
@@ -214,7 +214,7 @@ theorem exists_physical_dg_interleaved_tree_with_energy_updates :
       (Entropy.regionTensorCoordinates q (interval L k J.val.2)).toLinearEquiv.toLinearMap)) hmin)
     hS2Raw
   exact ALVV.exists_soft_word_node_energy_update hq hlu huv hvr J.property.2.1
-    hleft hright hell hD hcount hs Φ hsupp h0 h1 (T J) (F J)
+    hleft hright hell hD hcount hs Φ h0 h1 (T J) (F J)
     hdimCanonical hGTCanonical hone k hpk hkr S1 S2 hS1Canonical hS2Canonical
 
 end TNLean.MPS.AreaLaw

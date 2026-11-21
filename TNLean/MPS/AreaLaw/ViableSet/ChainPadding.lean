@@ -88,8 +88,7 @@ noncomputable def paddedInteraction {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
 
 /-- Every padded term has its actual nearest-neighbour support. -/
 theorem paddedInteraction_supported {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
-    (Φ : ManyBody.BondInteraction L q)
-(j : Fin (N - 1)) :
+    (Φ : ManyBody.BondInteraction L q) (j : Fin (N - 1)) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (paddedInteraction hi z Φ j) (interval N j.val (j.val + 2)) := by
   unfold paddedInteraction
@@ -145,7 +144,7 @@ theorem sum_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N) (z : F
   simp only [Fintype.sum_sum_type, f, Sum.elim_inl, Sum.elim_inr]
   have hlinear : (∑ j, QuantumCircuit.embedOp (Fin.castLE hi) (Φ.term j)) =
       QuantumCircuit.embedOp (Fin.castLE hi) Φ.hamiltonian :=
-    (map_sum (QuantumCircuit.embedOpLinearMap (Fin.castLE hi)) Φ Finset.univ).symm
+    (map_sum (QuantumCircuit.embedOpLinearMap (Fin.castLE hi)) Φ.term Finset.univ).symm
   rw [hlinear]
 
 end TNLean.MPS.AreaLaw

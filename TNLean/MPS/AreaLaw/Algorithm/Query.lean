@@ -129,14 +129,14 @@ inductive LinearAlgebraQuery (q : ℕ) : Type → Type
   | schmidtTrim (L i : ℕ) (hi : i ≤ L) (b m : ℕ) (u : LeftBlockVector L q i) :
       LinearAlgebraQuery q (LeftBlockVector L q i)
   /-- The left factors, at the cut after `i` sites, of the Gaussian filters of the chain
-  with terms `h` at precision `c` for the gap parameter `Delta`. Huang, arXiv:1406.6355v6,
-  Section 5.4; LVV13 algorithm step 4, lines 572--592. -/
+  with interaction `Φ` at precision `c` for the gap parameter `Delta`. Huang,
+  arXiv:1406.6355v6, Section 5.4; LVV13 algorithm step 4, lines 572--592. -/
   | gaussianFilterFactors (L i : ℕ) (hq : 1 ≤ q)
       (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j)
       (c Delta : ℝ) : LinearAlgebraQuery q (Finset (LeftBlockMatrix L q i))
   /-- The left factors, at the cut after `i` sites, of the sampled projector of the words
   `I`, `ℓ` words of length `m` whose factors have rank at most `D`, for the chain with
-  terms `h` at ground energy `E₀`. Definition `d:sagsp`, line 611; algorithm step 4,
+  interaction `Φ` at ground energy `E₀`. Definition `d:sagsp`, line 611; algorithm step 4,
   lines 572--592. -/
   | sampledFactors (L i : ℕ) (Φ : ManyBody.BondInteraction L q)
       (E₀ : ℝ) (ℓ m D : ℕ) (I : Fin ℓ → Fin m → Fin L) :

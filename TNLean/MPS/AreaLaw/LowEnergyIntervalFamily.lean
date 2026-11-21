@@ -171,7 +171,7 @@ theorem exists_physical_low_energy_interval_family
     positivity
   refine ⟨hell, Real.low_energy_count_le_source_scale L q mu etaLD Kcount (D : ℝ)
     hL (by omega) hmu hK (hband.trans hetaUpper) hlogD, ?_⟩
-  intro p r hpr hrL J beta tau U Phi Tm Φ hs h0 h1 H
+  intro p r hpr hrL J beta tau U Phi Tm Φ h0 h1 H
   have hell1 : 1 ≤ ell := by omega
   classical
   by_cases hshort : r - p ≤ 4 * ell
@@ -205,7 +205,7 @@ theorem exists_physical_low_energy_interval_family
     obtain ⟨t, e, E0, z, hO, hC, htformula, _ht, hcut, hcenter,
       hzunit, hz, hE0low, hE0, hE04, hnorm, hfamily⟩ :=
       exists_five_region_low_energy_family_on_larger_region L q a b ell J
-        eta w (1 / 200) hbuffer hw (by norm_num) hq hell1 hab hbL hsub hcollar Φ hs h0 h1
+        eta w (1 / 200) hbuffer hw (by norm_num) hq hell1 hab hbL hsub hcollar Φ h0 h1
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let Areg : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ Finset.univ.filter
@@ -307,9 +307,9 @@ theorem exists_physical_original_low_energy_interval_family
   intro L q mu eta hL hq hmu hetaLower hetaUpper w g u ell D Kcount
   obtain ⟨hell, hlogD, hinterval⟩ := hall L q mu eta hL hq hmu hetaLower hetaUpper
   refine ⟨hell, hlogD, ?_⟩
-  intro p r hpr hrL J beta tau U Phi Tm Φ hs h0 h1 H
+  intro p r hpr hrL J beta tau U Phi Tm Φ h0 h1 H
   obtain ⟨s, E0, C, hC, z, hshift, hzunit, hz, hground, hfamily⟩ :=
-    hinterval p r hpr hrL Φ hs h0 h1
+    hinterval p r hpr hrL Φ h0 h1
   refine ⟨s, E0, C, hC, z, hshift, hzunit, hz, hground, ?_⟩
   intro Gup Glo
   obtain ⟨Tlo, Thi, Delta, F, hsub, hupper, hlower, hDelta, hbudget, hclip⟩ := hfamily

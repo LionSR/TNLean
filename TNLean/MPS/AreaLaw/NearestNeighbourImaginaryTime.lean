@@ -150,7 +150,8 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
     change _ ∈ ManyBody.supportedOperators _ _
     have hsum : _ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := sum_mem hterm
     change _ ∈ ManyBody.supportedOperators _ _
-    simpa only [Finset.sum_sub_distrib, Finset.sum_mul, Finset.mul_sum] using hsum
+    simpa only [ManyBody.Interaction.partialHamiltonian, Finset.sum_sub_distrib, Finset.sum_mul,
+      Finset.mul_sum] using hsum
   refine ⟨hsupport, ?_⟩
   let active := s.filter fun i ↦ ¬Disjoint (interval L i.val (i.val + 2))
     (interval L (c - m) (c + 2 + m))
@@ -167,23 +168,23 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
   have hcardReal : (active.card : ℝ) ≤ (4 : ℝ) * ((m : ℝ) + 1) := by
     exact_mod_cast hcard
   classical
-  let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) (fun i : Fin (L - 1) ↦
+  let Ψ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) (fun i : Fin (L - 1) ↦
       interval L i.val (i.val + 2)) :=
     ⟨fun i ↦ if i ∈ s then Φ.term i else 0, fun i ↦ by
       by_cases hi : i ∈ s
       · simpa only [hi, ↓reduceIte] using (show Φ.term i ∈ _ from hs i hi)
       · simpa only [hi, ↓reduceIte] using zero_mem _⟩
-  have hsumΦ : ∑ i ∈ s, Φ.term i = ∑ i ∈ s, Φ.term i :=
-    Finset.sum_congr rfl fun i hi ↦ by simp only [Φ, hi, ↓reduceIte]
-  have hbound := ManyBody.Interaction.norm_commutator_sum_le_card Φ s
+  have hsumΦ : ∑ i ∈ s, Ψ.term i = Φ.partialHamiltonian s :=
+    Finset.sum_congr rfl fun i hi ↦ by simp only [Ψ, hi, ↓reduceIte]
+  have hbound := ManyBody.Interaction.norm_commutator_sum_le_card Ψ s
     (fun i ↦ by
       by_cases hi : i ∈ s
-      · simpa only [Φ, hi, ↓reduceIte] using h0 i hi
-      · simp only [Φ, hi, ↓reduceIte, le_refl])
+      · simpa only [Ψ, hi, ↓reduceIte] using h0 i hi
+      · simp only [Ψ, hi, ↓reduceIte, le_refl])
     (fun i ↦ by
       by_cases hi : i ∈ s
-      · simpa only [Φ, hi, ↓reduceIte] using h1 i hi
-      · simpa only [Φ, hi, ↓reduceIte] using (zero_le_one : (0 : Matrix (Fin L → Fin q)
+      · simpa only [Ψ, hi, ↓reduceIte] using h1 i hi
+      · simpa only [Ψ, hi, ↓reduceIte] using (zero_le_one : (0 : Matrix (Fin L → Fin q)
           (Fin L → Fin q) ℂ) ≤ 1))
     (S := interval L (c - m) (c + 2 + m)) hX
   rw [hsumΦ] at hbound
@@ -200,7 +201,7 @@ private theorem iterated_nearest_neighbour_commutator_support_norm {L q c : ℕ}
     (h0 : ∀ i ∈ s, 0 ≤ Φ.term i) (h1 : ∀ i ∈ s, Φ.term i ≤ 1)
     (O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hO : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) O (interval L c (c + 2))) (m : ℕ) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ s, Φ.term i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.partialHamiltonian s
     let ad : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ →
         Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ H * X - X * H
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (ad^[m] O)
@@ -245,7 +246,7 @@ theorem norm_exp_conjugation_nearest_neighbour_shift_le_two {L q c : ℕ}
     (O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hO : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) O (interval L c (c + 2)))
     (z : ℂ) (t : ℝ) (ht0 : 0 ≤ t) (ht : t ≤ 1 / 8) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ I, Φ.term i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.partialHamiltonian I
     ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * O *
       NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 * ‖O‖ := by
   intro H

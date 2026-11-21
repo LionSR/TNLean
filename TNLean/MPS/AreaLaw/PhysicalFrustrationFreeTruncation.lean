@@ -35,9 +35,11 @@ noncomputable def physicalFrustrationFreeTruncation
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   (∑ i, if a ≤ i.val ∧ i.val + 1 < b then 0 else Φ.term i) +
     (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
-      (1 - physicalParityProduct (intervalBondRestriction a b Φ) 0) +
+      (1 - physicalParityProduct
+        ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ 0) +
     (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
-      (1 - physicalParityProduct (intervalBondRestriction a b Φ) 1)
+      (1 - physicalParityProduct
+        ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ 1)
 
 private theorem intervalBondRestriction_isStarProjection
     (Φ : ManyBody.BondInteraction L q)
@@ -48,14 +50,14 @@ private theorem intervalBondRestriction_isStarProjection
 
 private theorem regionalParityComplement_isStarProjection
     (Φ : ManyBody.BondInteraction L q)
-    (hp : ∀ i, IsStarProjection (Φ.term i))
-(a b p : ℕ) :
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (a b p : ℕ) :
     IsStarProjection
       ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
-        (1 - physicalParityProduct (intervalBondRestriction a b Φ) p)) := by
-  exact (physicalParityProduct_isStarProjection _
-    (intervalBondRestriction_isStarProjection Φ hp a b)
-    (intervalBondRestriction_supported a b Φ) p).one_sub.map
+        (1 - physicalParityProduct
+          ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ p)) := by
+  exact (physicalParityProduct_isStarProjection
+    ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩
+    (intervalBondRestriction_isStarProjection Φ hp a b) p).one_sub.map
       (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm.toStarAlgHom
 
 /-- The actual regional frustration-free truncation is positive semidefinite.
@@ -63,15 +65,14 @@ ALVV, arXiv:1602.08828v2, `def:FF-tH` and `thm:FF-tH`,
 lines 1467–1487 and 1543–1550. -/
 theorem physicalFrustrationFreeTruncation_posSemidef
     (Φ : ManyBody.BondInteraction L q)
-    (hp : ∀ i, IsStarProjection (Φ.term i))
-(a b : ℕ) :
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (a b : ℕ) :
     (physicalFrustrationFreeTruncation Φ a b).PosSemidef := by
   unfold physicalFrustrationFreeTruncation
   refine (Matrix.PosSemidef.add (Matrix.PosSemidef.add ?_
     (Matrix.nonneg_iff_posSemidef.mp
-      (regionalParityComplement_isStarProjection Φ hp Φ.mem a b 0).nonneg))
+      (regionalParityComplement_isStarProjection Φ hp a b 0).nonneg))
       (Matrix.nonneg_iff_posSemidef.mp
-        (regionalParityComplement_isStarProjection Φ hp Φ.mem a b 1).nonneg))
+        (regionalParityComplement_isStarProjection Φ hp a b 1).nonneg))
   exact Matrix.nonneg_iff_posSemidef.mp
     (Finset.sum_nonneg fun i _ ↦ ite_nonneg (le_refl 0) (hp i).nonneg)
 
@@ -81,7 +82,8 @@ private noncomputable def regionalTruncationTerm
       (EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ] EuclideanSpace ℂ (Fin L → Fin q))
   | .inl i => if a ≤ i.val ∧ i.val + 1 < b then 0 else
       Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Φ.term i)
-  | .inr p => 1 - physicalParityProduct (intervalBondRestriction a b Φ) p.val
+  | .inr p => 1 - physicalParityProduct
+      ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ p.val
 
 private theorem sum_regionalTruncationTerm
     (Φ : ManyBody.BondInteraction L q) (a b : ℕ) :
@@ -95,8 +97,7 @@ private theorem sum_regionalTruncationTerm
 
 private theorem regionalTruncationTerm_isStarProjection
     (Φ : ManyBody.BondInteraction L q)
-    (hp : ∀ i, IsStarProjection (Φ.term i))
-(a b : ℕ)
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (a b : ℕ)
     (i : Fin (L - 1) ⊕ Fin 2) : IsStarProjection (regionalTruncationTerm Φ a b i) := by
   cases i <;> dsimp only [regionalTruncationTerm]
   case inl i =>
@@ -104,17 +105,16 @@ private theorem regionalTruncationTerm_isStarProjection
       | exact IsStarProjection.zero _
       | exact (hp i).map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
   case inr p =>
-    exact (physicalParityProduct_isStarProjection _
-      (intervalBondRestriction_isStarProjection Φ hp a b)
-      (intervalBondRestriction_supported a b Φ) p.val).one_sub
+    exact (physicalParityProduct_isStarProjection
+      ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩
+      (intervalBondRestriction_isStarProjection Φ hp a b) p.val).one_sub
 
 /-- The actual regional truncation preserves the full kernel of the original
 Hamiltonian. This does not require a ground vector, uniqueness, or a gap.
 ALVV, arXiv:1602.08828v2, `thm:FF-tH`, lines 1543–1550. -/
 theorem physicalFrustrationFreeTruncation_kernel_iff
     (Φ : ManyBody.BondInteraction L q)
-    (hp : ∀ i, IsStarProjection (Φ.term i))
-(a b : ℕ)
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (a b : ℕ)
     (x : EuclideanSpace ℂ (Fin L → Fin q)) :
     Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
         (physicalFrustrationFreeTruncation Φ a b) x = 0 ↔
@@ -127,19 +127,22 @@ theorem physicalFrustrationFreeTruncation_kernel_iff
     have hterm (i : Fin (L - 1) ⊕ Fin 2) : regionalTruncationTerm Φ a b i x = 0 :=
       ProjectionGeometry.apply_eq_zero_of_sum_apply_eq_zero _
         (fun j ↦ ContinuousLinearMap.IsStarProjection.isSymmetricProjection
-          (regionalTruncationTerm_isStarProjection Φ hp Φ.mem a b j)) hsum i
+          (regionalTruncationTerm_isStarProjection Φ hp a b j)) hsum i
     have hfix (p : Fin 2) :
-        physicalParityProduct (intervalBondRestriction a b Φ) p.val x = x := by
+        physicalParityProduct
+          ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ p.val x = x := by
       exact (sub_eq_zero.mp (hterm (.inr p))).symm
     have hzero (i : Fin (L - 1)) :
         Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Φ.term i) x = 0 := by
       by_cases hi : a ≤ i.val ∧ i.val + 1 < b
-      · have hm := (physicalParityProduct_apply_eq_self_iff _
+      · have hm := (physicalParityProduct_apply_eq_self_iff
+          ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩
           (intervalBondRestriction_isStarProjection Φ hp a b) (i.val % 2) x).mp
             (hfix ⟨i.val % 2, Nat.mod_lt _ (by decide)⟩) i rfl
         simpa only [intervalBondRestriction, ite_eq_left hi] using hm
       · simpa only [regionalTruncationTerm, ite_eq_right hi] using hterm (.inl i)
-    simp only [map_sum, _root_.sum_apply, hzero, Finset.sum_const_zero]
+    simp only [ManyBody.Interaction.hamiltonian, map_sum, _root_.sum_apply, hzero,
+      Finset.sum_const_zero]
   · intro hx
     have hzero (i : Fin (L - 1)) :
         Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Φ.term i) x = 0 :=
@@ -148,15 +151,17 @@ theorem physicalFrustrationFreeTruncation_kernel_iff
           (Φ.term j)).toLinearMap)
         (fun j ↦ ContinuousLinearMap.IsStarProjection.isSymmetricProjection
           ((hp j).map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))))
-        (by simpa only [map_sum, _root_.sum_apply, LinearMap.sum_apply,
-          ContinuousLinearMap.coe_coe] using hx) i
+        (by simpa only [ManyBody.Interaction.hamiltonian, map_sum, _root_.sum_apply,
+          LinearMap.sum_apply, ContinuousLinearMap.coe_coe] using hx) i
     have hmask : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
         (∑ i, intervalBondRestriction a b Φ i) x = 0 := by
       simp only [map_sum, _root_.sum_apply, intervalBondRestriction, apply_ite,
         map_zero, DFunLike.ite_apply, _root_.zero_apply, hzero, ite_self, Finset.sum_const_zero]
     have hfix (p : Fin 2) :
-        physicalParityProduct (intervalBondRestriction a b Φ) p.val x = x :=
-      physicalParityProduct_fixes_kernel _
+        physicalParityProduct
+          ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ p.val x = x :=
+      physicalParityProduct_fixes_kernel
+        ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩
         (intervalBondRestriction_isStarProjection Φ hp a b) hmask p.val
     suffices hterm : ∀ i, regionalTruncationTerm Φ a b i x = 0 by
       simp only [← sum_regionalTruncationTerm, _root_.sum_apply, hterm, Finset.sum_const_zero]
@@ -167,24 +172,24 @@ most two. ALVV, arXiv:1602.08828v2, `def:FF-tH` and `def:HLeven-odd`,
 lines 1467–1487. -/
 theorem norm_physicalFrustrationFreeTruncation_region_le_two
     (Φ : ManyBody.BondInteraction L q)
-    (hp : ∀ i, IsStarProjection (Φ.term i))
-(a b : ℕ) :
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (a b : ℕ) :
     ‖(Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
-        (1 - physicalParityProduct (intervalBondRestriction a b Φ) 0) +
+        (1 - physicalParityProduct
+          ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ 0) +
       (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
-        (1 - physicalParityProduct (intervalBondRestriction a b Φ) 1)‖ ≤ 2 := by
+        (1 - physicalParityProduct
+          ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩ 1)‖ ≤ 2 := by
   simpa only [one_add_one_eq_two] using (norm_add_le _ _).trans
     (add_le_add
-      (IsStarProjection.norm_le _ (regionalParityComplement_isStarProjection Φ hp Φ.mem a b 0))
-      (IsStarProjection.norm_le _ (regionalParityComplement_isStarProjection Φ hp Φ.mem a b 1)))
+      (IsStarProjection.norm_le _ (regionalParityComplement_isStarProjection Φ hp a b 0))
+      (IsStarProjection.norm_le _ (regionalParityComplement_isStarProjection Φ hp a b 1)))
 
 /-- The complementary masses of the original parity products are bounded
 by the actual regional truncated energy. ALVV, arXiv:1602.08828v2,
 `thm:FF-tH`, lines 1543–1550. No vector normalization or gap is required. -/
 theorem sum_norm_sq_sub_physicalParityProduct_le_truncation
     (Φ : ManyBody.BondInteraction L q)
-    (hp : ∀ i, IsStarProjection (Φ.term i))
-(a b : ℕ)
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (a b : ℕ)
     (x : EuclideanSpace ℂ (Fin L → Fin q)) :
     ‖x - physicalParityProduct Φ 0 x‖ ^ 2 +
       ‖x - physicalParityProduct Φ 1 x‖ ^ 2 ≤
@@ -201,34 +206,37 @@ theorem sum_norm_sq_sub_physicalParityProduct_le_truncation
     split_ifs <;> first
       | exact (zero_mem _)
       | exact Φ.mem i
-  have hP (p : ℕ) : IsStarProjection
-      (physicalParityProduct (intervalBondRestriction a b Φ) p) :=
-    physicalParityProduct_isStarProjection _
-      (intervalBondRestriction_isStarProjection Φ hp a b)
-      (intervalBondRestriction_supported a b Φ) p
+  let Ψ : ManyBody.BondInteraction L q :=
+    ⟨intervalBondRestriction a b Φ, intervalBondRestriction_supported a b Φ⟩
+  let Ψg : ManyBody.BondInteraction L q := ⟨g, hgs⟩
+  have hP (p : ℕ) : IsStarProjection (physicalParityProduct Ψ p) :=
+    physicalParityProduct_isStarProjection Ψ
+      (intervalBondRestriction_isStarProjection Φ hp a b) p
   have hsplit (p : ℕ) : physicalParityProduct Φ p =
-      physicalParityProduct (intervalBondRestriction a b Φ) p * physicalParityProduct g p := by
+      physicalParityProduct Ψ p * physicalParityProduct Ψg p := by
     exact physicalParityProduct_partition Φ
       (fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p
   have hmass (p : ℕ) : ‖x - physicalParityProduct Φ p x‖ ^ 2 ≤
-      ‖x - physicalParityProduct (intervalBondRestriction a b Φ) p x‖ ^ 2 +
-        ‖x - physicalParityProduct g p x‖ ^ 2 := by
+      ‖x - physicalParityProduct Ψ p x‖ ^ 2 +
+        ‖x - physicalParityProduct Ψg p x‖ ^ 2 := by
     rw [hsplit p]
     exact ContinuousLinearMap.IsStarProjection.norm_sub_apply_sq_le (hP p) x
-      (physicalParityProduct g p x)
-  have hout := sum_norm_sq_sub_physicalParityProduct_le g hgp hgs x
+      (physicalParityProduct Ψg p x)
+  have hout := sum_norm_sq_sub_physicalParityProduct_le Ψg hgp x
   have hnorm (p : ℕ) :
-      (⟪x, (1 - physicalParityProduct (intervalBondRestriction a b Φ) p) x⟫_ℂ).re =
-        ‖x - physicalParityProduct (intervalBondRestriction a b Φ) p x‖ ^ 2 :=
+      (⟪x, (1 - physicalParityProduct Ψ p) x⟫_ℂ).re =
+        ‖x - physicalParityProduct Ψ p x‖ ^ 2 :=
     ContinuousLinearMap.IsStarProjection.re_inner_apply_self (hP p).one_sub x
   have henergy :
       (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
         (physicalFrustrationFreeTruncation Φ a b) x⟫_ℂ).re =
-      (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, g i) x⟫_ℂ).re +
-        ‖x - physicalParityProduct (intervalBondRestriction a b Φ) 0 x‖ ^ 2 +
-          ‖x - physicalParityProduct (intervalBondRestriction a b Φ) 1 x‖ ^ 2 := by
+      (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Ψg.hamiltonian x⟫_ℂ).re +
+        ‖x - physicalParityProduct Ψ 0 x‖ ^ 2 +
+          ‖x - physicalParityProduct Ψ 1 x‖ ^ 2 := by
+    rw [← hnorm 0, ← hnorm 1]
     simp only [physicalFrustrationFreeTruncation, map_add, StarAlgEquiv.apply_symm_apply,
-      _root_.add_apply, inner_add_right, Complex.add_re, hnorm, g]
+      _root_.add_apply, inner_add_right, Complex.add_re]
+    rfl
   linarith only [hmass 0, hmass 1, hout, henergy]
 
 /-- The converse detectability estimate with the actual regional truncated
@@ -237,17 +245,16 @@ arXiv:1602.08828v2, `thm:FF-tH`, lines 1543–1568. The constant three
 strengthens the source's converse constant four. -/
 theorem one_sub_three_mul_truncated_energy_le_norm_sq_physicalDetectability
     (Φ : ManyBody.BondInteraction L q)
-    (hp : ∀ i, IsStarProjection (Φ.term i))
-(a b : ℕ)
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (a b : ℕ)
     {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1) :
     1 - 3 * (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
       (physicalFrustrationFreeTruncation Φ a b) x⟫_ℂ).re ≤
         ‖physicalDetectability Φ x‖ ^ 2 := by
   have hconv :=
     ContinuousLinearMap.IsStarProjection.one_sub_three_mul_le_norm_sq_apply_apply
-      (physicalParityProduct_isStarProjection Φ hp Φ.mem 1)
-      (physicalParityProduct_isStarProjection Φ hp Φ.mem 0) hx
-  have hmass := sum_norm_sq_sub_physicalParityProduct_le_truncation Φ hp Φ.mem a b x
+      (physicalParityProduct_isStarProjection Φ hp 1)
+      (physicalParityProduct_isStarProjection Φ hp 0) hx
+  have hmass := sum_norm_sq_sub_physicalParityProduct_le_truncation Φ hp a b x
   change _ ≤ ‖physicalDetectability Φ x‖ ^ 2 at hconv
   linarith only [hmass, hconv]
 
@@ -257,8 +264,7 @@ ALVV, arXiv:1602.08828v2, `thm:FF-tH`, lines 1562–1568. The bound applies
 to arbitrary kernel dimension and does not require an upper bound on the gap. -/
 theorem physicalFrustrationFreeTruncation_energy_ge_of_spectral_gap
     (Φ : ManyBody.BondInteraction L q)
-    (hp : ∀ i, IsStarProjection (Φ.term i))
-(a b : ℕ)
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (a b : ℕ)
     {gamma : ℝ} (hgamma : 0 < gamma)
     (hgap : ∀ e ∈ spectrum ℝ Φ.hamiltonian, e = 0 ∨ gamma ≤ e)
     {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1)
@@ -270,9 +276,9 @@ theorem physicalFrustrationFreeTruncation_energy_ge_of_spectral_gap
         (physicalFrustrationFreeTruncation Φ a b) x⟫_ℂ).re := by
   have hden : 0 < 4 + gamma := by linarith only [hgamma]
   have hconv := one_sub_three_mul_truncated_energy_le_norm_sq_physicalDetectability
-    Φ hp Φ.mem a b hx
-  have hD := norm_sq_physicalDetectability_le_of_spectral_gap Φ hp Φ.mem hgamma hgap
-    (fun z hz ↦ horth z ((physicalFrustrationFreeTruncation_kernel_iff Φ hp Φ.mem a b z).mpr hz))
+    Φ hp a b hx
+  have hD := norm_sq_physicalDetectability_le_of_spectral_gap Φ hp hgamma hgap
+    (fun z hz ↦ horth z ((physicalFrustrationFreeTruncation_kernel_iff Φ hp a b z).mpr hz))
   have hDunit : ‖physicalDetectability Φ x‖ ^ 2 ≤ 4 / (4 + gamma) := by
     simpa only [hx, one_pow, mul_one] using hD
   have hmul := (le_div_iff₀ hden).mp (hconv.trans hDunit)
@@ -285,13 +291,12 @@ conclusion of ALVV, arXiv:1602.08828v2, `thm:FF-tH`, lines 1562–1568,
 for the full kernel, without a dimension-one assumption. -/
 theorem physicalFrustrationFreeTruncation_spectral_gap
     (Φ : ManyBody.BondInteraction L q)
-    (hp : ∀ i, IsStarProjection (Φ.term i))
-(a b : ℕ)
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (a b : ℕ)
     {gamma : ℝ} (hgamma : 0 < gamma)
     (hgap : ∀ e ∈ spectrum ℝ Φ.hamiltonian, e = 0 ∨ gamma ≤ e) :
     ∀ e ∈ spectrum ℝ (physicalFrustrationFreeTruncation Φ a b),
       e = 0 ∨ gamma / (3 * (4 + gamma)) ≤ e := by
-  have hH := (physicalFrustrationFreeTruncation_posSemidef Φ hp Φ.mem a b).isHermitian
+  have hH := (physicalFrustrationFreeTruncation_posSemidef Φ hp a b).isHermitian
   rintro e he
   obtain ⟨i, rfl⟩ := hH.spectrum_real_eq_range_eigenvalues ▸ he
   by_cases hzero : hH.eigenvalues i = 0
@@ -310,7 +315,7 @@ theorem physicalFrustrationFreeTruncation_spectral_gap
       rw [hz, inner_zero_left, hH.toEuclideanCLM_eigenvectorBasis, inner_smul_right] at hi
       exact (mul_eq_zero.mp hi.symm).resolve_left (Complex.ofReal_ne_zero.mpr hzero)
     have henergy := physicalFrustrationFreeTruncation_energy_ge_of_spectral_gap
-      Φ hp Φ.mem a b hgamma hgap (hH.eigenvectorBasis.norm_eq_one i) horth
+      Φ hp a b hgamma hgap (hH.eigenvectorBasis.norm_eq_one i) horth
     rw [hH.toEuclideanCLM_eigenvectorBasis, inner_smul_right,
       inner_self_eq_norm_sq_to_K, hH.eigenvectorBasis.norm_eq_one i] at henergy
     simpa using henergy

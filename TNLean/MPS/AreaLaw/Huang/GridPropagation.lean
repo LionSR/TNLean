@@ -83,8 +83,7 @@ the omitted boundary terms, and has simultaneous cut-rank bounds. Neither a part
 supported propagator nor Lieb--Robinson error is supplied as a hypothesis. Osborne,
 arXiv:quant-ph/0508031v2, equations (2)--(13); Huang, Section 5.4, Lemma 19. -/
 theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
-    (Φ : ManyBody.BondInteraction L q)
-(hHerm : ∀ i, (Φ.term i).IsHermitian)
+    (Φ : ManyBody.BondInteraction L q) (hHerm : ∀ i, (Φ.term i).IsHermitian)
     (hnorm : ∀ i, ‖Φ.term i‖ ≤ 1) (t : ℝ) :
     ‖hermitianUnitaryPath Φ.hamiltonian (-t) -
         chainGridPropagator (w := w) (by omega) r Φ hHerm t‖ ≤
@@ -126,8 +125,8 @@ theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
           (Real.exp_le_exp.mpr (by nlinarith [mul_le_mul_of_nonneg_left hst hv]))
           chainGridLRPrefactor_pos.le)
     have herr := hcompare t (fun _ ↦ chainGridLRPrefactor *
-      Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2)) fun k s Φ.mem ↦ by
-        exact herror k s Φ.mem
+      Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2)) fun k s hs ↦ by
+        exact herror k s hs
     change ‖hermitianUnitaryPath
         (chainGridRetainedHamiltonian hw Φ - ∑ j, chainGridBoundaryTerm hw Φ j) (-t) -
       hermitianUnitaryPath (chainGridRetainedHamiltonian hw Φ) (-t) *
@@ -144,8 +143,7 @@ theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
 with simultaneous cut-rank bounds: the existence form of `chainGridPropagator_spec`.
 Osborne, arXiv:quant-ph/0508031v2, equations (2)--(13); Huang, Section 5.4, Lemma 19. -/
 theorem exists_chainGrid_propagator_approximation (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
-    (Φ : ManyBody.BondInteraction L q)
-(hHerm : ∀ i, (Φ.term i).IsHermitian)
+    (Φ : ManyBody.BondInteraction L q) (hHerm : ∀ i, (Φ.term i).IsHermitian)
     (hnorm : ∀ i, ‖Φ.term i‖ ≤ 1) :
     ∃ K : ℝ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ, ∀ t : ℝ,
       ‖hermitianUnitaryPath Φ.hamiltonian (-t) - K t‖ ≤

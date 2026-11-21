@@ -48,11 +48,11 @@ theorem norm_sq_physicalDetectability_le_of_spectral_gap
   have hyorth (z : EuclideanSpace ℂ (Fin L → Fin q))
       (hz : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian z = 0) :
       ⟪z, y⟫_ℂ = 0 :=
-    (inner_physicalDetectability_eq Φ hp Φ.mem hz x).trans (horth z hz)
+    (inner_physicalDetectability_eq Φ hp hz x).trans (horth z hz)
   have hlo := hH.mul_norm_sq_le_re_inner_of_spectral_gap hgap y hyorth
   have henergy : (⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
       Φ.hamiltonian y⟫_ℂ).re ≤ 4 * (‖x‖ ^ 2 - ‖y‖ ^ 2) :=
-    re_inner_physicalDetectability_le Φ hp Φ.mem x
+    re_inner_physicalDetectability_le Φ hp x
   rw [div_mul_eq_mul_div, le_div_iff₀ (show 0 < 4 + gamma by linarith only [hgamma])]
   nlinarith only [hlo, henergy]
 

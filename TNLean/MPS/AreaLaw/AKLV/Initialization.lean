@@ -156,8 +156,6 @@ theorem exists_aklv_physical_product_initialization :
       ∀ (L q a : ℕ)
         (Φ : ManyBody.BondInteraction L q)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (Φ.term i) (interval L i.val (i.val + 2))) →
       (∀ i, 0 ≤ Φ.term i) → (∀ i, Φ.term i ≤ 1) → ‖Ω‖ = 1 →
       Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
       (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
@@ -202,11 +200,11 @@ theorem exists_aklv_physical_product_initialization :
           ‖ψ - φ‖ ^ 2 ≤ 1 / 64 ∧ ‖ψ - Ω‖ ^ 2 ≤ 1 / 16 := by
   obtain ⟨A, hA, hA21, hphysical⟩ := exists_aklv_physical_favorable_filter
   refine ⟨A, hA, hA21, ?_⟩
-  intro L q a Φ mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited u s t0 D ha
+  intro L q a Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited u s t0 D ha
   obtain ⟨hq, hg1, hs, hdelta, htrade, hlogD, e, E0, E, φ, p,
       hregional, hEeq, hE0, hE6, hBpos, hBnorm, hE, hφ, heigen, hprojector,
       hclose, hdegree, hpE, hfix, hrank, _herr, hperp⟩ :=
-    hphysical L q a Φ mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited ha
+    hphysical L q a Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited ha
   let delta : ℝ := 4 * Real.exp (-(4 * (s ^ 2 : ℕ) *
     Real.sqrt ((9 * g / 10) / (2 * t0 + (s : ℝ)))))
   change 0 < delta at hdelta

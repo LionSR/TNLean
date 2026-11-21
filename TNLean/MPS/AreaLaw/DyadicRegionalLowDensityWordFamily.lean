@@ -124,6 +124,6 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_word_family
                   (Delta ^ a / (1 - delta) ^ 2) grow
                   (lower.map Tm.toLinearEquiv.toLinearMap) :=
   exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause etaLD hLD _
-    (fun _ _ _ _ _ _ _ _ Φ ↦ Φ.term)
+    (fun _ _ _ _ _ _ _ _ h ↦ h)
 
 end TNLean.MPS.AreaLaw

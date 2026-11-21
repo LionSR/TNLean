@@ -98,7 +98,7 @@ private theorem three_region_data {L q l r : ℕ} (hlr : l ≤ r) (hrL : r ≤ L
     exact hA5 (f j)
   · simpa only [hJ5] using hY
   · simpa only [hJ5] using hYC
-  · have hcontra (c m : ℕ) : (c ≤ m ∧ m + 1 < c) ↔ False := ⟨fun Φ.term ↦ by omega, False.elim⟩
+  · have hcontra (c m : ℕ) : (c ≤ m ∧ m + 1 < c) ↔ False := ⟨fun h ↦ by omega, False.elim⟩
     have hsum := hsum5
     rw [Fin.sum_univ_five] at hsum
     simp only [A, aklvRegionalHamiltonians, Fin.sum_univ_three, J, Y]

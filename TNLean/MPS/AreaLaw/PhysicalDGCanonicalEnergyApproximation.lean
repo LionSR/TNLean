@@ -186,12 +186,12 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation_with_energy :
   intro q gamma hgamma
   obtain ⟨C, hC, k, hmain⟩ := hmain q gamma hgamma
   refine ⟨C, hC, k, ?_⟩
-  intro L Φ hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G rG
+  intro L Φ h0 h1 mu nu H hH hmu hnu hmunu hgap G rG
     g m w v ell D s a tau epsilon t Delta
   obtain ⟨hell, hD2, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff,
     Btree, hBtree, hlogBtree, Utree, hdimUtree, hUtreeMPS, hxiMax,
     hwidth, T, N, F, hN, htargets, haccuracy⟩ :=
-    hmain L Φ hsupp h0 h1 mu nu hmu hnu hmunu hgap
+    hmain L Φ h0 h1 mu nu hmu hnu hmunu hgap
   change 21 ≤ ell at hell
   change 2 ≤ D at hD2
   change 1 ≤ s at hs
@@ -206,7 +206,7 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation_with_energy :
   refine ⟨hwidth, hq, T, N, F, hN, htargets, ?_⟩
   have henergy := exists_canonical_root_energy_of_calibrated_words
     (L := L) (q := q) (ell := ell) (D := D) (s := s) hq hell hD2 hs rfl
-    Φ hsupp h0 h1 mu gamma hgamma hwidth T N F hmu hgap
+    Φ h0 h1 mu gamma hgamma hwidth T N F hmu hgap
     (fun J ↦ ⟨(htargets J).1, (htargets J).2.2.1, (htargets J).2.2.2.2.2⟩)
   intro Dtree A c Kraw eta heta rho n epsilonFinal bfinal
   obtain ⟨Bfinal, hBfinal, hlogBfinal, Ufinal, hdimUfinal, hUG, hGU, hUfinalMPS,

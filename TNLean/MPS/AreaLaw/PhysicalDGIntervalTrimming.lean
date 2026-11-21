@@ -73,10 +73,10 @@ theorem exists_physical_dg_interval_collective_trimming_bound :
         (G.map (Entropy.regionTensorCoordinates q (interval L p r)).toLinearEquiv.toLinearMap) := by
   obtain ⟨K, hK, hreference⟩ := exists_physical_dg_isOpenMPS_reference_subspace
   refine ⟨K, hK, ?_⟩
-  intro L q Φ hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G rG g u
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G rG g u
     epsilon hepsilon hepsilon1 b
   obtain ⟨B, hB, hlogB, U, _hdim, hUG, hGU, hU⟩ :=
-    hreference L q Φ hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hreference L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       epsilon hepsilon hepsilon1
   have hG : G ≠ ⊥ := hH.spectralSpanLE_ne_bot_of_mem_spectrum hmu le_rfl
   have hrG : 1 ≤ rG := Submodule.one_le_finrank_iff.mpr hG

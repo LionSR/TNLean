@@ -36,7 +36,7 @@ private theorem norm_exp_conjugation_nearestNeighbour_boundary_sum_le
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ I ∪ J, 0 ≤ Φ.term i) (h1 : ∀ i ∈ I ∪ J, Φ.term i ≤ 1)
     (z : ℂ) (t : ℝ) (ht0 : 0 ≤ t) (ht : t ≤ 1 / 8) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ I, Φ.term i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.partialHamiltonian I
     ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * (Φ.partialHamiltonian J) *
       NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 * (J.card : ℝ) := by
   intro H
@@ -67,7 +67,7 @@ private theorem norm_exp_conjugation_nearestNeighbour_boundary_sum_le
         NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ =
         ‖∑ j ∈ J, NormedSpace.exp ((t : ℂ) • (H - z • 1)) * Φ.term j *
           NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ := by
-      rw [Finset.mul_sum, Finset.sum_mul]
+      rw [ManyBody.Interaction.partialHamiltonian, Finset.mul_sum, Finset.sum_mul]
     _ ≤ ∑ j ∈ J, ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * Φ.term j *
         NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ := norm_sum_le _ _
     _ ≤ ∑ _j ∈ J, (2 : ℝ) := Finset.sum_le_sum hterm
@@ -97,9 +97,9 @@ theorem exists_nearestNeighbour_weighted_low_restriction
       (EuclideanSpace ℂ (Fin L → Fin q)))
     (a : (Fin L → Fin q) → ℝ)
     (hEigen : ∀ j, Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-      (X + ∑ j ∈ J, Φ.term j) (b j) = (a j : ℂ) • b j)
+      (X + Φ.partialHamiltonian J) (b j) = (a j : ℂ) • b j)
     (hgap : 2 * (J.card : ℝ) < u - e) :
-    let A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ I, Φ.term i
+    let A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.partialHamiltonian I
     let Q := Matrix.spectralProjectionGE A (r + u)
     let W := NormedSpace.exp (s • (A - (r + u) •
       (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)))
@@ -141,7 +141,7 @@ theorem norm_consecutive_regional_truncation_low_le
     let ι := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
     let G := Submodule.spectralSpanLE b a ε
     (∀ i, (e i : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ≤ A i) →
-    (∀ v, ι (X + ∑ r ∈ J, Φ.term r) (b v) = (a v : ℂ) • b v) →
+    (∀ v, ι (X + Φ.partialHamiltonian J) (b v) = (a v : ℂ) • b v) →
     2 * (J.card : ℝ) < u - ε →
     ‖(ι (A j - cfc (fun x : ℝ ↦ min x (e j + t)) (A j))).domRestrict G‖ ≤
       (Real.exp (-s * (t - u) - 1) / s) *

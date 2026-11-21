@@ -199,7 +199,7 @@ theorem exists_robust_ground_twoSidedEnergyTruncation_of_inverse_gap_cutoff {L q
     (X N Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hX : X.PosSemidef) (hN : N.PosSemidef) (hY : Y.PosSemidef)
     (hXN : Commute X N) (hXY : Commute X Y) (hNY : Commute N Y)
-    (hB : X + N + Y = (Φ.partialHamiltonian I) - (z : ℂ) • 1)
+    (hB : X + N + Y = Φ.partialHamiltonian I - (z : ℂ) • 1)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (he0 : 0 ≤ e) (he6 : e ≤ 6) (hg : 0 < g) (hg1 : g ≤ 1)
     (ht : 32768 / g ≤ t)
