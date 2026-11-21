@@ -100,6 +100,7 @@ noncomputable def ExactMPSGroundPath.of_ordered_affine
   nonzero _ _ := Q.nonzero γ hγ
   ground_line := by
     intro t ht N hN
+    have : NeZero N := ⟨by omega⟩
     rw [hR t]
     have hkerEq := hamiltonian_translationInvariant_affine_ker_eq_of_order
       A B hA hAB hN (hker N hN) t ht.1
