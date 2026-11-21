@@ -179,7 +179,7 @@ private theorem openInteractionMatrix_eq_sum_nonwrappingStart
   · intro b hb
     simp only [Finset.mem_range] at hb
     exact ⟨⟨⟨b, by omega⟩, by change b + R ≤ N; omega⟩, Finset.mem_univ _, rfl⟩
-  · exact fun i _ => (dif_pos i.2).symm
+  · exact fun i _ => by rw [dite_eq_left (show i.1.val + R ≤ N from i.2)]
 
 /-- The matrix interaction sum agrees with the Euclidean open-chain
 Hamiltonian. Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
