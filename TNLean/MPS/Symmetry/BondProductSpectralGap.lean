@@ -40,7 +40,7 @@ theorem spectrum_separated_of_quadratic_gap {n : Type*} [Fintype n]
   let v := hA.eigenvectorBasis i
   have hnorm : ‖v‖ = 1 := hA.eigenvectorBasis.orthonormal.norm_eq_one i
   have hlin : Matrix.toEuclideanLin A v = (hA.eigenvalues i : ℂ) • v :=
-    hA.toEuclideanLin_eigenvectorBasis i
+    hA.toEuclideanCLM_eigenvectorBasis i
   have hg := hGap v
   rw [hlin] at hg
   have hinner : ⟪v, v⟫_ℂ = 1 := by

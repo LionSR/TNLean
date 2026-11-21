@@ -35,7 +35,7 @@ uniformly in the domain, Hamiltonian, and cut. Those are the remaining
 geometric and analytic steps of the ground-state area law; the source theorem
 must remain unmarked until they are proved.
 
-Implementation: `TNLean/Lattice/EntropyDimension.lean` and
-`TNLean/PEPS/AreaLaw/BoundaryEntropyAssembly.lean`. The existing finite-domain
-regional entropy is identified with the QICLean finite-product entropy; no
-additional state, density matrix, partition, or entropy definition is introduced.
+Implementation: QICLean's `ManyBody.regionEntropy_le_card_mul_log` and
+`TNLean/PEPS/AreaLaw/BoundaryEntropyAssembly.lean`. The finite-domain regional
+entropy is QICLean's `ManyBody.regionEntropy`; no additional state, density
+matrix, partition, or entropy definition is introduced.

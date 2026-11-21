@@ -82,7 +82,7 @@ theorem exists_regionEntropy_prefix_le (R : ℕ) :
           (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-      ∀ i : ℕ, Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
+      ∀ i : ℕ, ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 i) ≤
         areaLawBound (6 * lemmaOneEndpointLength R J ΔE)
           (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) q := by
   obtain ⟨K, hK0, hF⟩ := exists_projectorFactorization_endpoint R
@@ -143,7 +143,7 @@ theorem exists_regionEntropy_prefix_le_with_log_constant (R : ℕ) :
         {Ω : EuclideanSpace ℂ (Fin L → Fin q)},
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ i : ℕ, Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
+        ∀ i : ℕ, ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 i) ≤
           areaLawBound (6 * lemmaOneEndpointLength R J ΔE)
             (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) q := by
   obtain ⟨K, hK, hS⟩ := exists_regionEntropy_prefix_le R

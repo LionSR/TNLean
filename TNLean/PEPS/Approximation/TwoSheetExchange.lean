@@ -469,7 +469,7 @@ renaming keeps every register at its party (`newFrame₁_owner_of_mem`).
 Polynomial-PEPS manuscript, Lemma 6.6 `lem:exchange`, `05-frames.tex`, lines 460–479; proof
 lines 481–561. -/
 theorem exchange [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
-    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω (X.tSet P) (X.eSet P) ≤
+    (hI : ManyBody.regionMutualInformation Ω (X.tSet P) (X.eSet P) ≤
       L ^ (-60 : ℤ)) :
     ∃ σ : SplittingData q (X.tSet P) (X.eSet P),
       σ.error (X.disjoint_tSet_eSet P) Ω ≤ L ^ (-30 : ℤ) ∧
@@ -603,7 +603,7 @@ theorem exchange_ofFrames [NeZero q] (F₁ F₂ : Frame pos q Party) (Y : Finset
     (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true → Disjoint h.patch.outer Y)
     (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false → h.patch.outer ⊆ Y) (P : Party)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
-    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω
+    (hI : ManyBody.regionMutualInformation Ω
       ((ofFrames F₁ F₂ Y out hout hin).tSet P) ((ofFrames F₁ F₂ Y out hout hin).eSet P) ≤
         L ^ (-60 : ℤ)) :
     ∃ (e₁ : TagSpace F₁.holes ≃ TagSpace (ofFrames F₁ F₂ Y out hout hin).frame₁.holes)

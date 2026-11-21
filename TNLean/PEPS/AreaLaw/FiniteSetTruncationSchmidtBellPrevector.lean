@@ -84,12 +84,12 @@ theorem exists_finiteSetTruncation_schmidtBellPrevector_of_gap
             Real.sqrt (2 * ε / g) ∧
           let β := fun _ : ι => Fin q
           ∀ X : Finset ι,
-            let split := FiniteProduct.splitEquiv β X
+            let split := ManyBody.splitEquiv β X
             let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split Ω₀
-            ∀ E : Finset (FiniteProduct.Configuration β X),
+            ∀ E : Finset (ManyBody.RegionConfig β X),
               0 < Matrix.IsHermitian.spectralRestrictionMass
                 (Matrix.posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E →
-              let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x =>
+              let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x =>
                 Matrix.compressedTypicalPureState ΩX E
                   ((Finset.equivFin E).symm x.2, x.1)
               ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
@@ -119,11 +119,11 @@ theorem exists_finiteSetTruncation_schmidtBellPrevector_of_gap
                 (∀ᶠ k : ℕ in Filter.atTop,
                   (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
                     ‖WithLp.toLp 2
-                      (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-                        (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+                      (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+                        (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
                         PermutationRepresentation.labelProj
                           (TensorPower.copyPerm (Fin E.card) k) (ell k)) *ᵥ
-                        (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+                        (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
                           (Fin k → Fin E.card) => ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) ∧
                 Asymptotics.IsLittleO Filter.atTop
                   (fun k : ℕ => Real.log (ell k).dim - (k : ℝ) *

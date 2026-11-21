@@ -28,11 +28,11 @@ namespace TNLean.MPS.AreaLaw.AKLV
 
 private theorem isSupportedOn_bond_sum {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (I : Finset (Fin (L - 1))) (S : Finset (Fin L))
     (hIS : ∀ i ∈ I, interval L i.val (i.val + 2) ⊆ S) :
-    Entropy.IsSupportedOn (n := fun _ ↦ q) (∑ i ∈ I, h i) S := by
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (∑ i ∈ I, h i) S := by
   change _ ∈ ManyBody.supportedOperators _ _
   exact (sum_mem fun i hi ↦
       ((hs i).mono (hIS i hi)))
@@ -43,7 +43,7 @@ blocks and normalized energy are derived, rather than supplied.
 AKLV, Section 6.1. The sharper bound two uses the two removed connecting bonds. -/
 theorem exists_chain_normalization {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (hab : a.val < b.val)
@@ -70,19 +70,19 @@ theorem exists_chain_normalization {L q : ℕ}
   let X := ∑ i ∈ I, h i
   let N := ∑ i ∈ J, h i
   let Y := ∑ i ∈ K, h i
-  have hSX : Entropy.IsSupportedOn (n := fun _ ↦ q) X S :=
+  have hSX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X S :=
     isSupportedOn_bond_sum h hs I S (by
       intro i hi v hv
       simp only [I, Finset.mem_filter, Finset.mem_univ, true_and] at hi
       simp only [S, mem_interval] at hv ⊢
       omega)
-  have hTN : Entropy.IsSupportedOn (n := fun _ ↦ q) N T :=
+  have hTN : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) N T :=
     isSupportedOn_bond_sum h hs J T (by
       intro i hi v hv
       simp only [J, Finset.mem_filter, Finset.mem_univ, true_and] at hi
       simp only [T, mem_interval] at hv ⊢
       omega)
-  have hUY : Entropy.IsSupportedOn (n := fun _ ↦ q) Y U :=
+  have hUY : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) Y U :=
     isSupportedOn_bond_sum h hs K U (by
       intro i hi v hv
       simp only [K, Finset.mem_filter, Finset.mem_univ, true_and] at hi

@@ -39,7 +39,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_normalized_approximation
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q p r : ℕ) (v : ℝ) (hq : 2 ≤ q), p ≤ r → r ≤ L → 0 < v →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2))) →
       ∀ h0 : ∀ i, 0 ≤ h i, (∀ i, h i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
@@ -49,13 +49,13 @@ theorem exists_fixed_bandwidth_interval_low_energy_normalized_approximation
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let J := interval L p r
       let beta := fun _ : Fin L ↦ Fin q
-      let tau := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration beta Jᶜ) ℂ).tensorProduct
-        (EuclideanSpace.basisFun (FiniteProduct.Configuration beta J) ℂ)).repr
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+        (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ))
-        (EuclideanSpace ℂ (FiniteProduct.Configuration beta J)))
+        (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
       let G := fun c : ℝ ↦ Submodule.spectralSpanLE
         hRaw.eigenvectorBasis hRaw.eigenvalues (minEigenvalue hRaw + c)
       let e := Tm.trans (Submodule.euclideanTensorEquiv (J → Fin q) (↥(Jᶜ) → Fin q)).symm

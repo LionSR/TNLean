@@ -31,7 +31,7 @@ arXiv:1602.08828v2, Figure `fig:algo1`, line 1631 and line 1807. -/
 theorem exists_regional_middle_center_of_child_estimates {L q l u v r : ℕ}
     (hq : 0 < q) (hlu : l ≤ u) (huv : u ≤ v) (hvr : v ≤ r) (hrL : r ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (eP eM : ℝ) (xP xM : (Fin L → Fin q) → ℂ)

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.LowDensityAccurateViability
 import TNLean.MPS.AreaLaw.LowDensityLogDimension
 import TNLean.MPS.AreaLaw.DGEntropyParameters
-import QICLean.Analysis.ViableSubspaceEntropy
+import QICLean.Entropy.ViableSampling.ViableSubspaceEntropy
 import QICLean.Analysis.ViableSubspaceMinimum
 
 /-!
@@ -46,7 +46,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_capped
     ∃ Kb Cf : ℝ, 0 < Kb ∧ 100 ≤ Cf ∧
       ∀ (L q p r : ℕ) (v : ℝ) (hq : 2 ≤ q), p ≤ r → r ≤ L → 0 < v →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2))) →
       ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
@@ -62,7 +62,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_capped
       let m := q * ⌈Real.exp 100⌉₊
       let u := 1 + Real.log (m : ℝ) + Real.log (1 / g)
       ∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ψ ∈ G (etaLD - v) → ‖ψ‖ = 1 →
-        Entropy.regionEntropy J ψ ≤ Real.log (Module.finrank ℂ (G etaLD) : ℝ) +
+        ManyBody.regionEntropy ψ J ≤ Real.log (Module.finrank ℂ (G etaLD) : ℝ) +
           Kb / (b / 2) * (1 + Real.log (q : ℝ) + Real.log (1 + 1 / (b / 2))) ^ 3 +
           14872 * (Cf + 1) * (6 + 2 * Real.log (Cf + 1)) / g * u ^ 3 +
           54 * Real.log 2 := by
@@ -76,13 +76,13 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_capped
   let : Nonempty (Fin L → Fin q) := config
   intro J G b g m u ψ hψG hψ
   let beta := fun _ : Fin L ↦ Fin q
-  let tau := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+  let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-  let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration beta Jᶜ) ℂ).tensorProduct
-    (EuclideanSpace.basisFun (FiniteProduct.Configuration beta J) ℂ)).repr
+  let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+    (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
   let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-    (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ))
-    (EuclideanSpace ℂ (FiniteProduct.Configuration beta J)))
+    (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+    (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
   let EM := EuclideanSpace ℂ (J → Fin q)
   let EE := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)
   have hb : 0 < b := lt_min hv (by positivity)
@@ -186,7 +186,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_capped
     m (Module.finrank ℂ W0) g Kf D hm hr0 hg hg1 hKf hD hlogD probability hp hsum htail
   have hactual := (Submodule.actualRegionSplit_marginal_and_entropy
     (n := fun _ : Fin L ↦ q) J ψ).2
-  have hEntropy : Entropy.regionEntropy J ψ ≤
+  have hEntropy : ManyBody.regionEntropy ψ J ≤
       Real.log (Module.finrank ℂ W0 : ℝ) + 676 * Kf * u ^ 3 + 54 * Real.log 2 := by
     rw [← hactual, hentropy]
     exact hraw

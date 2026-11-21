@@ -108,10 +108,10 @@ theorem exists_actualScan_sharp_lower_norm
       ∀ K rMom : ℝ,
       (∀ (j : terminalFamily S.K S.m S.M Horizon) (g : Fin S.K)
           (b : Fin 3) (v : ℝ), |v| ≤ rMom →
-        let U := FiniteProduct.regionalPhysicalRegion (Q j g) (Y j g) b
+        let U := ManyBody.regionalPhysicalRegion (Q j g) (Y j g) b
         Real.log (Entropy.surprisalMoment
-          (FiniteProduct.reducedPure_posSemidef β Ωt U).isHermitian.eigenvalues v) ≤
-            v * FiniteProduct.entropy β Ωt U + K * v ^ 2) →
+          (ManyBody.regionState_posSemidef U Ωt).isHermitian.eigenvalues v) ≤
+            v * ManyBody.regionEntropy Ωt U + K * v ^ 2) →
       10 * a ≤ rMom → 10 * a ≤ 1 → 0 ≤ K →
       ∀ (pre : (k : ℕ) → Config k (fun v => Fin (n v)) → ℂ)
         (k : ℕ), 0 < k → pre k ≠ 0 → ‖WithLp.toLp 2 (pre k)‖ ≤ 1 →
@@ -122,9 +122,9 @@ theorem exists_actualScan_sharp_lower_norm
       labelProj (subsystemPerm k ι₀ {none}) ellR *ᵥ (pre k ∘ e) = pre k ∘ e →
       2 * (k : ℝ) * Sent - ε ≤ Real.log ellC.dim + Real.log ellR.dim →
       let entropyGap := fun j g =>
-        FiniteProduct.entropy β Ωt (Q j g) +
-          FiniteProduct.entropy β Ωt (Q j g ∪ Y j g)ᶜ -
-          FiniteProduct.entropy β Ωt (Y j g)
+        ManyBody.regionEntropy Ωt (Q j g) +
+          ManyBody.regionEntropy Ωt (Q j g ∪ Y j g)ᶜ -
+          ManyBody.regionEntropy Ωt (Y j g)
       let gaps := (Finset.univ :
         Finset (terminalFamily S.K S.m S.M Horizon × Fin S.K)).image
           (fun j => entropyGap j.1 j.2)

@@ -125,7 +125,7 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         {H₀ A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hH₀ : H₀.IsHermitian) (hA : A.IsHermitian) (hB : B.IsHermitian) (Z : Finset (Fin L))
-    (hZ : Entropy.IsSupportedOn (n := fun _ ↦ q) (h.hamiltonian - H₀) Z)
+    (hZ : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.hamiltonian - H₀) Z)
     (η : ℝ≥0) {ℓ T : ℝ} (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
     let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
@@ -242,7 +242,7 @@ theorem exists_supported_interactionAverage_approx_exp {L q R : ℕ} {J : ℝ} (
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         {H₀ A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hH₀ : H₀.IsHermitian) (hA : A.IsHermitian) (hB : B.IsHermitian) (Z : Finset (Fin L))
-    (hZ : Entropy.IsSupportedOn (n := fun _ ↦ q) (h.hamiltonian - H₀) Z)
+    (hZ : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.hamiltonian - H₀) Z)
     (η : ℝ≥0) {ℓ : ℝ} (hℓ : 0 ≤ ℓ) :
     let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /

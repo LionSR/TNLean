@@ -50,13 +50,13 @@ noncomputable def sliceMatrix (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : �
 theorem sliceMatrix_apply (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) (a : Fin k → Fin q)
     (x : Fin L → Fin q) : sliceMatrix ψ k a x = ψ (glueLeft k a x) := by
   rw [sliceMatrix, submatrix_apply, cutMatrix_apply]
-  have hglue : (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm
+  have hglue : (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm
       (fun v ↦ a ⟨v.1.val, mem_leftBlock.mp v.2⟩, fun v ↦ x v.1) = glueLeft k a x := by
     funext i
     by_cases h : i.val < k
-    · rw [Entropy.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr h)]
+    · rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr h)]
       simp [glueLeft, h]
-    · rw [Entropy.cutEquiv_symm_apply_not_mem _ _ (mt mem_leftBlock.mp h)]
+    · rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ (mt mem_leftBlock.mp h)]
       simp [glueLeft, h]
   rw [hglue]
 
@@ -273,9 +273,9 @@ theorem isOpenMPS_of_internal_cutMatrix_rank_le {L q D : ℕ}
       have hψzero (x : Fin (L + 1 + 1) → Fin q) : ψ x = 0 := by
         simpa only [cutMatrix_apply, Prod.mk.eta, Equiv.symm_apply_apply, Matrix.zero_apply] using
           congr_fun (congr_fun hzero
-            ((Entropy.cutEquiv (fun _ : Fin (L + 1 + 1) ↦ q)
+            ((ManyBody.cutEquiv (fun _ ↦ Fin q)
               (leftBlock (L + 1 + 1) 1)) x).1)
-            ((Entropy.cutEquiv (fun _ : Fin (L + 1 + 1) ↦ q)
+            ((ManyBody.cutEquiv (fun _ ↦ Fin q)
               (leftBlock (L + 1 + 1) 1)) x).2
       let Z : OBCChainTensor q (max 1 0) (L + 1 + 1) :=
         { bondDim := fun k ↦ if k.val = 0 ∨ k.val = L + 1 + 1 then 1 else 0

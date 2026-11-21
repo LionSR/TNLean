@@ -141,7 +141,7 @@ noncomputable def
     (hΓ : ‖Γ‖ = 1) (hθ : 0 ≤ θ) (hsmall : Real.sqrt m * θ < 1)
     (j : Fin n) (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m))
     (hunit : ‖physicalRightApply W u‖ = 1)
     (hoverlap : 1 - δ ≤ ‖⟪physicalRightApply W u, Γ⟫_ℂ‖)
     (hclose : ∀ a,

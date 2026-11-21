@@ -64,7 +64,7 @@ of range `R` meet both a region `A` and its complement, where `v_R = 1 + 2R(R + 
 `01-preliminaries.tex`, lines 81–102. -/
 theorem card_crossingTerms_le_edgeBoundary (Λ : Finset (ℤ × ℤ)) (R : ℕ)
     (A : Finset (Site Λ)) :
-    (Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card ≤
+    (ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card ≤
       (edgeBoundary Λ A).card *
         ((1 + 2 * R * (R + 1)) * 2 ^ ((1 + 2 * R * (R + 1)) - 1)) := by
   classical
@@ -72,10 +72,10 @@ theorem card_crossingTerms_le_edgeBoundary (Λ : Finset (ℤ × ℤ)) (R : ℕ)
   set near : Sym2 (Site Λ) → Finset (AdmissibleSupport Λ R) := fun e ↦
     Finset.univ.filter fun X ↦ ∃ z ∈ e, z ∈ A ∧ ∃ v ∈ X.1,
       ∃ p : (planeDomainGraph Λ).Walk z v, p.length ≤ R
-  have hcover : Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A ⊆
+  have hcover : ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A ⊆
       (edgeBoundary Λ A).biUnion near := by
     intro X hX
-    simp only [Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
+    simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
     obtain ⟨⟨v, hvX, hvA⟩, w, hwX, hwA⟩ := hX
     obtain ⟨p, hp⟩ := X.2.2 v hvX w hwX
     obtain ⟨u, u', huA, -, he, p', hp'⟩ := exists_edgeBoundary_of_walk p hvA hwA
@@ -129,13 +129,13 @@ Source: `02-initial.tex`, lines 202–206, `eq:initial-local-tail-parameter`. -/
 theorem cutLogBudget_le_edgeBoundary (hq : 1 ≤ q) (R : ℕ) (A : Finset (Site Λ)) :
     cutLogBudget Λ q R A ≤ tailParameterConstant q R * (1 + (edgeBoundary Λ A).card) := by
   have hC := one_le_tailParameterConstant hq R
-  have hcard : ((Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card : ℝ) ≤
+  have hcard : ((ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card : ℝ) ≤
       (edgeBoundary Λ A).card *
         ((1 + 2 * R * (R + 1)) * 2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) := by
     exact_mod_cast card_crossingTerms_le_edgeBoundary Λ R A
   have hb : (0 : ℝ) ≤ (edgeBoundary Λ A).card := Nat.cast_nonneg _
   calc cutLogBudget Λ q R A
-      ≤ 1 + (Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card *
+      ≤ 1 + (ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card *
           Real.log (Real.exp 1 * (q : ℝ) ^ (1 + 2 * R * (R + 1))) ^ 2 :=
         cutLogBudget_le_card hq _
     _ ≤ 1 + (edgeBoundary Λ A).card * tailParameterConstant q R := by
@@ -212,12 +212,12 @@ theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_edgeBoundar
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ))
     (n : ℕ) {M : ℝ} (hM : 0 ≤ M) :
     1 - ((n : ℝ) + 2) ^ (-M) ≤
-      Entropy.typicalMass (reducedState_isHermitian Λ q Ω A).eigenvalues
-        (regionalEntropy Λ q Ω A)
+      Entropy.typicalMass (ManyBody.regionState_isHermitian A Ω).eigenvalues
+        (ManyBody.regionEntropy Ω A)
         (typicalWidthConstant q R J Δ M * Real.sqrt (1 + (edgeBoundary Λ A).card) *
           Real.log (n + 2)) := by
   exact (h.one_sub_rpow_le_typicalMass_reducedState hh hhJ hJ hΔ hΩ hgap hspan A n M).trans
-    (typicalMass_le_typicalMass_of_le (reducedState_posSemidef Λ q Ω A).eigenvalues_nonneg _
+    (typicalMass_le_typicalMass_of_le (ManyBody.regionState_posSemidef A Ω).eigenvalues_nonneg _
       (concentrationWidth_le hq R hJ hΔ A n hM))
 
 end TNLean.PEPS.AreaLaw

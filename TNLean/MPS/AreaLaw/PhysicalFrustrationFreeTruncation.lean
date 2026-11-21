@@ -49,7 +49,7 @@ private theorem intervalBondRestriction_isStarProjection
 private theorem regionalParityComplement_isStarProjection
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b p : ℕ) :
     IsStarProjection
       ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
@@ -65,7 +65,7 @@ lines 1467–1487 and 1543–1550. -/
 theorem physicalFrustrationFreeTruncation_posSemidef
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b : ℕ) :
     (physicalFrustrationFreeTruncation h a b).PosSemidef := by
   unfold physicalFrustrationFreeTruncation
@@ -98,7 +98,7 @@ private theorem sum_regionalTruncationTerm
 private theorem regionalTruncationTerm_isStarProjection
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b : ℕ)
     (i : Fin (L - 1) ⊕ Fin 2) : IsStarProjection (regionalTruncationTerm h a b i) := by
   cases i <;> dsimp only [regionalTruncationTerm]
@@ -117,7 +117,7 @@ ALVV, arXiv:1602.08828v2, `thm:FF-tH`, lines 1543–1550. -/
 theorem physicalFrustrationFreeTruncation_kernel_iff
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b : ℕ)
     (x : EuclideanSpace ℂ (Fin L → Fin q)) :
     Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
@@ -172,7 +172,7 @@ lines 1467–1487. -/
 theorem norm_physicalFrustrationFreeTruncation_region_le_two
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b : ℕ) :
     ‖(Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).symm
         (1 - physicalParityProduct (intervalBondRestriction a b h) 0) +
@@ -189,7 +189,7 @@ by the actual regional truncated energy. ALVV, arXiv:1602.08828v2,
 theorem sum_norm_sq_sub_physicalParityProduct_le_truncation
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b : ℕ)
     (x : EuclideanSpace ℂ (Fin L → Fin q)) :
     ‖x - physicalParityProduct h 0 x‖ ^ 2 +
@@ -200,7 +200,7 @@ theorem sum_norm_sq_sub_physicalParityProduct_le_truncation
   have hgp (i : Fin (L - 1)) : IsStarProjection (g i) := by
     dsimp only [g]
     split_ifs <;> first | exact IsStarProjection.zero _ | exact hp i
-  have hgs (i : Fin (L - 1)) : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+  have hgs (i : Fin (L - 1)) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (g i) (interval L i.val (i.val + 2)) := by
     change _ ∈ ManyBody.supportedOperators _ _
     dsimp only [g]
@@ -244,7 +244,7 @@ strengthens the source's converse constant four. -/
 theorem one_sub_three_mul_truncated_energy_le_norm_sq_physicalDetectability
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b : ℕ)
     {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1) :
     1 - 3 * (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
@@ -265,7 +265,7 @@ to arbitrary kernel dimension and does not require an upper bound on the gap. -/
 theorem physicalFrustrationFreeTruncation_energy_ge_of_spectral_gap
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b : ℕ)
     {gamma : ℝ} (hgamma : 0 < gamma)
     (hgap : ∀ e ∈ spectrum ℝ (∑ i, h i), e = 0 ∨ gamma ≤ e)
@@ -294,7 +294,7 @@ for the full kernel, without a dimension-one assumption. -/
 theorem physicalFrustrationFreeTruncation_spectral_gap
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b : ℕ)
     {gamma : ℝ} (hgamma : 0 < gamma)
     (hgap : ∀ e ∈ spectrum ℝ (∑ i, h i), e = 0 ∨ gamma ≤ e) :

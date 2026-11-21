@@ -55,9 +55,9 @@ This supporting result does not assert the source-sharp bond or running time. -/
 theorem exists_common_physical_chebyshev_viable_family_fin
     {L q ell a b B k : ℕ}
     (WL WR : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, Entropy.IsSupportedOn (WL r)
+    (hleft : ∀ r, ManyBody.IsSupportedOn (WL r)
       (interval L (a + r.val) (a + r.val + 2)))
-    (hright : ∀ r, Entropy.IsSupportedOn (WR r)
+    (hright : ∀ r, ManyBody.IsSupportedOn (WR r)
       (interval L (b + r.val) (b + r.val + 2)))
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
     (hell : 1 ≤ ell) (hq : 2 ≤ q) (hk : 1 ≤ k)
@@ -78,25 +78,25 @@ theorem exists_common_physical_chebyshev_viable_family_fin
         (show b + ell + 1 ≤ L by omega)
       let D : ℕ := (q * k) ^ (18 * ell + 2 * (k / ell))
       let β := fun _ : Fin L ↦ Fin q
-      let tau := (FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration β Jᶜ) ℂ).tensorProduct
-        (EuclideanSpace.basisFun (FiniteProduct.Configuration β J) ℂ)).repr
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jᶜ) ℂ).tensorProduct
+        (EuclideanSpace.basisFun (ManyBody.RegionConfig β J) ℂ)).repr
       let T : EuclideanSpace ℂ (Fin L → Fin q) ≃ₗᵢ[ℂ]
-          (EuclideanSpace ℂ (FiniteProduct.Configuration β Jᶜ) ⊗[ℂ]
-            EuclideanSpace ℂ (FiniteProduct.Configuration β J)) := U.trans Phi.symm
+          (EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ) ⊗[ℂ]
+            EuclideanSpace ℂ (ManyBody.RegionConfig β J)) := U.trans Phi.symm
       let Tm : EuclideanSpace ℂ (Fin L → Fin q) ≃ₗᵢ[ℂ]
-          (EuclideanSpace ℂ (FiniteProduct.Configuration β J) ⊗[ℂ]
-            EuclideanSpace ℂ (FiniteProduct.Configuration β Jᶜ)) :=
+          (EuclideanSpace ℂ (ManyBody.RegionConfig β J) ⊗[ℂ]
+            EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ)) :=
         T.trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (FiniteProduct.Configuration β Jᶜ))
-        (EuclideanSpace ℂ (FiniteProduct.Configuration β J)))
-      let HM := EuclideanSpace ℂ (FiniteProduct.Configuration β J)
-      let HE := EuclideanSpace ℂ (FiniteProduct.Configuration β Jᶜ)
+        (EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.RegionConfig β J)))
+      let HM := EuclideanSpace ℂ (ManyBody.RegionConfig β J)
+      let HE := EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ)
       let Hspace : Type := HM ⊗[ℂ] HE
       ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),
         let A : Fin N → HM →L[ℂ] HM := fun r ↦
-          Matrix.toEuclideanCLM (𝕜 := ℂ) (n := FiniteProduct.Configuration β J) (W r)
+          Matrix.toEuclideanCLM (𝕜 := ℂ) (n := ManyBody.RegionConfig β J) (W r)
         let grow : Submodule ℂ HM → Submodule ℂ HM := fun S ↦
           ⨆ r : Fin N, S.map (A r : HM →ₗ[ℂ] HM)
         N ≤ D ^ (2 : ℕ) ∧
@@ -105,8 +105,8 @@ theorem exists_common_physical_chebyshev_viable_family_fin
               (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).1)
               (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2))) ∧
           ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-            Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
-            Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
+            ManyBody.IsSupportedOn PL (interval L 0 (a + 1)) →
+            ManyBody.IsSupportedOn PR (interval L (b + 2 * ell) L) →
             let F : ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) →
                 Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
               Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
@@ -144,8 +144,8 @@ theorem exists_common_physical_chebyshev_viable_family_fin
   intro PL PR hPL hPR F Hphys Hm hHm n hn eig eigBasis η₀ η₁ u
     hsep hupperEndpoint hupper hgap G Δ
   exact Matrix.chebyshev_viability_of_conjugated_polynomial_family_of_card_le
-    (σ := Fin L → Fin q) (m := FiniteProduct.Configuration β J)
-    (e := FiniteProduct.Configuration β Jᶜ) (N := N) (k := k)
+    (σ := Fin L → Fin q) (m := ManyBody.RegionConfig β J)
+    (e := ManyBody.RegionConfig β Jᶜ) (N := N) (k := k)
     Hphys W Tm (by
       intro Q hQ
       obtain ⟨M, _hmatrix, _hinter, hK⟩ := hdecomp PL PR hPL hPR Q hQ

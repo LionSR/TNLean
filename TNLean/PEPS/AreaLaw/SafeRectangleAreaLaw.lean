@@ -72,7 +72,7 @@ theorem exists_regionalEntropy_safe_rect_le_linear
         ∀ (A : Finset (Site Λ)) (Q : IntRect),
           (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
             d * (Q.size : ℝ) < (supDist t z : ℝ)) →
-          regionalEntropy Λ q Ω (rectRegion A Q) ≤ K * (Q.size : ℝ) := by
+          ManyBody.regionEntropy Ω (rectRegion A Q) ≤ K * (Q.size : ℝ) := by
   classical
   obtain ⟨C, hC, harea⟩ := uniformAreaLaw q hq R (J + 1) Δ (by linarith) hΔ
   refine ⟨48 * C, mul_nonneg (by norm_num) hC, ?_⟩
@@ -84,7 +84,7 @@ theorem exists_regionalEntropy_safe_rect_le_linear
       simpa [supDist] using hclear z hz z hzcut
     exact (not_lt_of_ge (mul_nonneg hd (Nat.cast_nonneg Q.size))) hbad
   calc
-    regionalEntropy Λ q Ω (rectRegion A Q) ≤
+    ManyBody.regionEntropy Ω (rectRegion A Q) ≤
         C * (edgeBoundary Λ (rectRegion A Q)).card := harea Λ h hh
             (fun X ↦ (hhJ X).trans (by linarith)) E₀ Ω hΩ hgap hspan _
     _ ≤ C * (48 * (Q.size : ℝ)) :=
@@ -114,10 +114,10 @@ theorem exists_initialBuffer_and_real_boxEntropy_recurrence
               d * (Q.size : ℝ) < (supDist t z : ℝ)) →
             ∀ r : ℕ, 1 ≤ r → ∀ Q₀ : IntRect, Q₀.size ≤ r →
               (Q₀.dilate (c * r)).toFinset ⊆ Q.toFinset →
-              regionalEntropy Λ q Ω (rectRegion A Q₀ ∪
+              ManyBody.regionEntropy Ω (rectRegion A Q₀ ∪
                   (rectRegion A (Q₀.dilate (c * r)) \ rectRegion A Q₀)) -
-                regionalEntropy Λ q Ω (rectRegion A (Q₀.dilate (c * r)) \ rectRegion A Q₀) ≤
-              regionalEntropy Λ q Ω (rectRegion A Q₀) / 2 + b * r) ∧
+                ManyBody.regionEntropy Ω (rectRegion A (Q₀.dilate (c * r)) \ rectRegion A Q₀) ≤
+              ManyBody.regionEntropy Ω (rectRegion A Q₀) / 2 + b * r) ∧
       (∀ d : ℝ, 2 * (R : ℝ) + 10 < d →
         let F : ℕ → ℝ := fun r ↦ sSup
           {s : ℝ | ∃ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
@@ -127,7 +127,7 @@ theorem exists_initialBuffer_and_real_boxEntropy_recurrence
               groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} ∧
               (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                 d * (Q.size : ℝ) < (supDist t z : ℝ)) ∧
-              Q.size ≤ r ∧ s = regionalEntropy Λ q Ω (rectRegion A Q)}
+              Q.size ≤ r ∧ s = ManyBody.regionEntropy Ω (rectRegion A Q)}
         let p₀ : ℝ := 1 / (2 * (c : ℝ) + 5) ^ 2
         ∀ M r : ℕ, 1 ≤ M → 1 ≤ r →
           F (M * r) ≤

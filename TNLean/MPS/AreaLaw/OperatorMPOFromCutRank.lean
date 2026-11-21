@@ -24,16 +24,16 @@ namespace MPOTensor
 private theorem pairCfgEquiv_symm_glue {L q : ℕ} (B : Finset (Fin L))
     (ij : ({v : Fin L // v ∈ B} → Fin q) × ({v : Fin L // v ∈ B} → Fin q))
     (kl : ({v : Fin L // v ∉ B} → Fin q) × ({v : Fin L // v ∉ B} → Fin q)) :
-    (pairCfgEquiv q L).symm ((Entropy.cutEquiv (fun _ : Fin L ↦ q * q) B).symm
+    (pairCfgEquiv q L).symm ((ManyBody.cutEquiv (fun _ ↦ Fin (q * q)) B).symm
       ((fun v ↦ finProdFinEquiv (ij.1 v, ij.2 v)),
        (fun v ↦ finProdFinEquiv (kl.1 v, kl.2 v)))) =
-    ((Entropy.cutEquiv (fun _ : Fin L ↦ q) B).symm (ij.1, kl.1),
-     (Entropy.cutEquiv (fun _ : Fin L ↦ q) B).symm (ij.2, kl.2)) := by
+    ((ManyBody.cutEquiv (fun _ ↦ Fin q) B).symm (ij.1, kl.1),
+     (ManyBody.cutEquiv (fun _ ↦ Fin q) B).symm (ij.2, kl.2)) := by
   classical
   apply (pairCfgEquiv q L).injective
   funext v
   by_cases hv : v ∈ B <;>
-    simp [pairCfgEquiv, Entropy.cutEquiv, Equiv.piEquivPiSubtypeProd, hv]
+    simp [pairCfgEquiv, ManyBody.cutEquiv, Equiv.piEquivPiSubtypeProd, hv]
 
 /-- Pairing the ket and bra indices at each site identifies the coefficient cut rank with the
 actual operator Schmidt rank. Supporting ALVV, arXiv:1602.08828v2, `thm:cluster`,
@@ -43,7 +43,7 @@ theorem rank_pairedOperator_cutMatrix_eq {L q : ℕ}
     let ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) := WithLp.toLp 2
       (fun z ↦ M ((pairCfgEquiv q L).symm z).1 ((pairCfgEquiv q L).symm z).2)
     (cutMatrix ψ k).rank = operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) M) := by
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) M) := by
   classical
   let ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) := WithLp.toLp 2
     (fun z ↦ M ((pairCfgEquiv q L).symm z).1 ((pairCfgEquiv q L).symm z).2)
@@ -52,20 +52,20 @@ theorem rank_pairedOperator_cutMatrix_eq {L q : ℕ}
     (Equiv.piCongrRight fun _ : V ↦ (finProdFinEquiv : Fin q × Fin q ≃ Fin (q * q)).symm).trans
       (Equiv.arrowProdEquivProdArrow V (fun _ ↦ Fin q) (fun _ ↦ Fin q))
   have hmat : (cutMatrix ψ k).reindex (e {v : Fin L // v ∈ A}) (e {v : Fin L // v ∉ A}) =
-      fun ij kl ↦ (Entropy.cutOperator (n := fun _ : Fin L ↦ q) A M)
+      fun ij kl ↦ (ManyBody.cutOperator (X := fun _ ↦ Fin q) A M)
         (ij.1, kl.1) (ij.2, kl.2) := by
     ext ij kl
     change M ((pairCfgEquiv q L).symm
-      ((Entropy.cutEquiv (fun _ : Fin L ↦ q * q) A).symm
+      ((ManyBody.cutEquiv (fun _ ↦ Fin (q * q)) A).symm
         ((fun v ↦ finProdFinEquiv (ij.1 v, ij.2 v)),
          (fun v ↦ finProdFinEquiv (kl.1 v, kl.2 v))))).1
       ((pairCfgEquiv q L).symm
-      ((Entropy.cutEquiv (fun _ : Fin L ↦ q * q) A).symm
+      ((ManyBody.cutEquiv (fun _ ↦ Fin (q * q)) A).symm
         ((fun v ↦ finProdFinEquiv (ij.1 v, ij.2 v)),
          (fun v ↦ finProdFinEquiv (kl.1 v, kl.2 v))))).2 = _
     rw [pairCfgEquiv_symm_glue]
     rfl
-  change (cutMatrix ψ k).rank = operatorSchmidtRank (Entropy.cutOperator A M)
+  change (cutMatrix ψ k).rank = operatorSchmidtRank (ManyBody.cutOperator A M)
   rw [← Matrix.rank_reindex (e {v : Fin L // v ∈ A})
     (e {v : Fin L // v ∉ A}) (cutMatrix ψ k), hmat,
     Matrix.operatorSchmidtRank_eq_rank_realignment]
@@ -77,7 +77,7 @@ theorem exists_traceChainOperator_of_operatorSchmidtRank_le {L q D : ℕ}
     (hL : 1 ≤ L) (hD : 1 ≤ D)
     (M : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hrank : ∀ k : ℕ, operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) M) ≤ D) :
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) M) ≤ D) :
     ∃ A : Fin L → MPOTensor q D, M = traceChainOperator A 1 := by
   classical
   let ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) := WithLp.toLp 2

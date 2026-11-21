@@ -50,24 +50,24 @@ theorem exists_cut_product_filtered_output {L q k D : ℕ}
     (hfix : toEuclideanLin K φ = φ) {delta : ℝ} (hdelta : 0 ≤ delta) (hD : 0 < D)
     (hperp : ∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 → ⟪φ, ψ⟫_ℂ = 0 →
       ⟪φ, toEuclideanLin K ψ⟫_ℂ = 0 ∧ ‖toEuclideanLin K ψ‖ ^ 2 ≤ delta)
-    (hrank : operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    (hrank : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) K) ≤ D) (htrade : (D : ℝ) * delta ≤ 1 / 2) :
     ∃ (χ : EuclideanSpace ℂ (Fin L → Fin q))
-      (u : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) → ℂ)
+      (u : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) → ℂ)
       (v : ((i : {i : Fin L // i ∉ leftBlock L k}) → Fin q) → ℂ) (c : ℂ),
-      ‖χ‖ = 1 ∧ Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) χ =
+      ‖χ‖ = 1 ∧ ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) χ =
         WithLp.toLp 2 (fun z ↦ u z.1 * v z.2) ∧
       1 / Real.sqrt (2 * (D : ℝ)) ≤ ‖⟪φ, χ⟫_ℂ‖ ∧
       toEuclideanLin K χ ≠ 0 ∧ ‖c‖ = 1 ∧
       let ψ := c • (‖toEuclideanLin K χ‖⁻¹ : ℂ) • toEuclideanLin K χ
       ‖ψ‖ = 1 ∧
-      schmidtRank (WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q)
+      schmidtRank (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q)
         (leftBlock L k) ψ)) ≤ D ∧ ‖ψ - φ‖ ^ 2 ≤ 4 * (D : ℝ) * delta := by
   classical
   let cut := leftBlock L k
-  let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Entropy.cutEquiv (fun _ : Fin L ↦ q) cut)
-  let Kcut := Entropy.cutOperator (n := fun _ : Fin L ↦ q) cut K
-  have hU (x : EuclideanSpace ℂ (Fin L → Fin q)) : U x = Entropy.cutVector cut x := by
+  let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) cut)
+  let Kcut := ManyBody.cutOperator (X := fun _ ↦ Fin q) cut K
+  have hU (x : EuclideanSpace ℂ (Fin L → Fin q)) : U x = ManyBody.cutVector cut x := by
     ext z
     rfl
   have hintertwine (x : EuclideanSpace ℂ (Fin L → Fin q)) :
@@ -156,7 +156,7 @@ theorem exists_aklv_physical_product_initialization :
       ∀ (L q a : ℕ)
         (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2))) →
       (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) → ‖Ω‖ = 1 →
       (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
@@ -185,19 +185,19 @@ theorem exists_aklv_physical_product_initialization :
         p.natDegree = s ^ 2 ∧ p.eval E = 1 ∧
         let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval B p
         toEuclideanLin K φ = φ ∧
-        operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+        operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
           (leftBlock L (a + s / 2)) K) ≤ D ∧
         ∃ (χ : EuclideanSpace ℂ (Fin L → Fin q))
-          (vL : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L (a + s / 2)) → ℂ)
+          (vL : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L (a + s / 2))) → ℂ)
           (vR : ((i : {i : Fin L // i ∉ leftBlock L (a + s / 2)}) → Fin q) → ℂ) (c : ℂ),
           ‖χ‖ = 1 ∧
-          Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L (a + s / 2)) χ =
+          ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L (a + s / 2)) χ =
             WithLp.toLp 2 (fun z ↦ vL z.1 * vR z.2) ∧
           1 / Real.sqrt (2 * (D : ℝ)) ≤ ‖⟪φ, χ⟫_ℂ‖ ∧
           toEuclideanLin K χ ≠ 0 ∧ ‖c‖ = 1 ∧
           let ψ := c • (‖toEuclideanLin K χ‖⁻¹ : ℂ) • toEuclideanLin K χ
           ‖ψ‖ = 1 ∧
-          schmidtRank (WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q)
+          schmidtRank (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q)
             (leftBlock L (a + s / 2)) ψ)) ≤ D ∧
           ‖ψ - φ‖ ^ 2 ≤ 1 / 64 ∧ ‖ψ - Ω‖ ^ 2 ≤ 1 / 16 := by
   obtain ⟨A, hA, hA21, hphysical⟩ := exists_aklv_physical_favorable_filter

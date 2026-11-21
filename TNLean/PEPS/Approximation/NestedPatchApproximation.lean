@@ -81,8 +81,8 @@ theorem exists_closedSquare_cylinders_of_marginal_closeness
     (hp : 0 < p) (hκ : 0 < κ) (hC : 0 < C) (Ψ : Lattice.StateSpace Λ q) (hΨ : ‖Ψ‖ = 1)
     (center : ℝ × ℝ) {u : ℝ} (hu : 0 ≤ u) (huL : u ≤ B₀ * Real.log L)
     {m : ℕ} (hm : 0 < m) (r : Fin m → ℝ) (hr : Monotone r)
-    (hS : ∀ j, Entropy.regionEntropy (n := fun _ : Lattice.Site Λ ↦ q)
-      (AreaLaw.Geometry.closedSquareSample Λ center (r j)) Ψ ≤ C * (1 + u))
+    (hS : ∀ j, ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+      Ψ (AreaLaw.Geometry.closedSquareSample Λ center (r j)) ≤ C * (1 + u))
     (hclose : ∀ b : ℝ, 0 < b →
       letI : LinearOrder (Lattice.Site Λ) :=
         (Fintype.equivFin (Lattice.Site Λ)).linearOrder
@@ -101,7 +101,7 @@ theorem exists_closedSquare_cylinders_of_marginal_closeness
           (CFC.abs
             (normalizedRegularizedPatchMarginal
               (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ψᵤ x X -
-              Entropy.regionState (n := fun _ : Lattice.Site Λ ↦ q) X Ψ)).trace.re ≤
+              ManyBody.regionState (X := fun _ ↦ Fin q) Ψ X)).trace.re ≤
             (1 / 16 : ℝ)) :
     letI : LinearOrder (Lattice.Site Λ) :=
       (Fintype.equivFin (Lattice.Site Λ)).linearOrder
@@ -129,8 +129,8 @@ theorem exists_closedSquare_cylinders_of_marginal_closeness
   have hbounds := regularizedPatchRadiusExponent_bounds (C₀ := 16 * C + Real.log 8)
     (L := (L : ℝ)) (by positivity) hB₀.le hp.le hκ (by exact_mod_cast hL) huL
   have hΨeq : Ψᵤ = Ψ := rfl
-  have hS' (j : Fin m) : Entropy.regionEntropy (n := fun _ : Lattice.Site Λ ↦ q) (regions j)
-      (Ψᵤ) ≤ C * (1 + u) := by
+  have hS' (j : Fin m) : ManyBody.regionEntropy (X := fun _ ↦ Fin q) (Ψᵤ)
+      (regions j) ≤ C * (1 + u) := by
     simpa only [hΨeq] using hS j
   have hgrowth := log_regularizedPatchMinimum_exp_neg_le_of_entropy_distance
     (n := fun _ : Lattice.Site Λ ↦ q) regions hdata.2.2 a ha.1 Ψᵤ hdata.2.1
@@ -183,7 +183,7 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →
-          let Λ := AreaLaw.rectangularDomain L L
+          let Λ := ManyBody.rectangularDomain L L
           letI : LinearOrder (Lattice.Site Λ) :=
             (Fintype.equivFin (Lattice.Site Λ)).linearOrder
           let m := AreaLaw.Geometry.nestedPatchCount u
@@ -237,7 +237,7 @@ theorem SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ (center : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →
-            let Λ := AreaLaw.rectangularDomain L L
+            let Λ := ManyBody.rectangularDomain L L
             letI : LinearOrder (Lattice.Site Λ) :=
               (Fintype.equivFin (Lattice.Site Λ)).linearOrder
             let m := AreaLaw.Geometry.nestedPatchCount u

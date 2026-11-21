@@ -125,8 +125,8 @@ theorem log_regularizedPatchMinimum_exp_neg_le_of_entropy_distance
     (hΩ : ‖Ω‖ = 1) {C u R : ℝ} (hC : 0 < C) (hu : 0 ≤ u)
     (hR : (16 * C + Real.log 8) * (1 + u) ≤ R)
     (hS : ∀ j : Fin m, _root_.vonNeumannEntropy
-      (Entropy.regionState (regions j) (Ω))
-      (Entropy.regionState_posSemidef (regions j)
+      (ManyBody.regionState (Ω) (regions j))
+      (ManyBody.regionState_posSemidef (regions j)
         (Ω)).isHermitian ≤ C * (1 + u))
     (hd : ∀ r ∈ Ico ((16 * C + Real.log 8) * (1 + u)) R,
       ∀ x ∈ regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions,
@@ -135,7 +135,7 @@ theorem log_regularizedPatchMinimum_exp_neg_le_of_entropy_distance
       ∀ j : Fin m, (CFC.abs
         (normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
             regions a (Real.exp (-r)) Ω x (regions j) -
-          Entropy.regionState (regions j) (Ω))).trace.re ≤
+          ManyBody.regionState (Ω) (regions j))).trace.re ≤
         1 / 16) :
     Real.log (regularizedPatchMinimum (Out := fun v ↦ Fin (n v))
         regions a (Real.exp (-R)) Ω) ≤

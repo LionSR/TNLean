@@ -40,7 +40,7 @@ line 1631, and its energy argument at line 1807. -/
 theorem exists_physical_dg_interleaved_tree_with_recursive_energy :
     ∃ Ctail C Kref : ℝ, 21 ≤ Ctail ∧ 21 ≤ C ∧ 0 < Kref ∧ ∀ (L q : ℕ),
     ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
     0 < gamma →

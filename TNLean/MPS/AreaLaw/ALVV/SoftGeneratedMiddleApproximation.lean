@@ -50,7 +50,7 @@ no native Hamiltonian, heat approximation, operator tensor or rank bound is supp
 theorem exists_native_soft_middle_mpo_approximation {N q l r m : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ N + 1) (hm : 0 < m)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval (N + 1) i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (p t xi : ℝ)
@@ -82,7 +82,7 @@ theorem exists_native_soft_middle_mpo_approximation {N q l r m : ℕ}
   classical
   intro A P sigma0 insert eJ W b order bond
   let g := intervalBondRestriction (L := N + 1) l r h
-  have hgs (i : Fin N) : Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+  have hgs (i : Fin N) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (g i) {i.castSucc, i.succ} := by
     apply (intervalBondRestriction_supported (L := N + 1) (q := q) l r h hs i).mono
     intro j hj
@@ -112,7 +112,7 @@ theorem exists_native_soft_middle_mpo_approximation {N q l r m : ℕ}
     exact hGlobal
   obtain ⟨Ah, hAh, hAhError⟩ :=
     MPOTensor.exists_hermitian_traceChainOperator_approximation (by omega) hP Aglobal hGlobalError
-  have hPs : Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+  have hPs : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       P (interval (N + 1) l r) := by
     change _ ∈ ManyBody.supportedOperators _ _
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
@@ -146,7 +146,7 @@ theorem exists_five_region_soft_middle_mpo_approximation {N q k1 k2 k3 k4 m : �
     (hq : 0 < q) (_h12 : k1 ≤ k2) (h23 : k2 ≤ k3)
     (h34 : k3 ≤ k4) (h4L : k4 ≤ N + 1) (hm : 0 < m)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval (N + 1) i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (e p : Fin 5 → ℝ) (S : Finset (Fin 5)) (h2S : 2 ∈ S)

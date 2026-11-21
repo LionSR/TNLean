@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.RectangularDomain
+import TNLean.Lattice.FiniteDomain
+import QICLean.ManyBody.Sites.Lattice.Rectangle
+import TNLean.PEPS.NormalBlocking
 import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
 import TNLean.PEPS.AreaLaw.BoundaryConventions
 import TNLean.PEPS.RegionBlock.Basic
@@ -28,7 +30,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (planeDomainGraph rectangularDomain rectangleSiteEquiv rectangleGraphIso)
 
 namespace TNLean.PEPS.AreaLaw
 

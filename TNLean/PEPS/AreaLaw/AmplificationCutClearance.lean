@@ -119,7 +119,7 @@ theorem amplificationBound_of_radius_output {q R : ℕ} {J Δ : ℝ}
               ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
                 C₀ * n →
-              FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+              ManyBody.regionMutualInformation Ω
                   (A.filter fun x ↦ x.val ∈ T)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -129,7 +129,7 @@ theorem amplificationBound_of_radius_output {q R : ℕ} {J Δ : ℝ}
                   Disjoint Jset (graphNeighborhood Λ (2 * r)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
-                  FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
+                  ManyBody.regionMutualInformation Ω X Jset ≤
                     C * ((n : ℝ) ^ M)⁻¹) :
     AmplificationBound q R J Δ := by
   intro C₀ hC₀ M hM

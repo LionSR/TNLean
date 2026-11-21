@@ -265,7 +265,7 @@ theorem norm_vectorOfParameters_sub_le_one {D n : ℕ}
         Q.1 * (ofParameters A Q.2).coeff ((leftConfigOfFinEquiv hn).symm x)‖ ≤ C
       exact norm_scalar_mul_coeff_ofParameters_sub_le_one A P Q hδ hQscalar hQ
         hscalarclose hclose ((leftConfigOfFinEquiv hn).symm x))
-  simpa only [C, Entropy.RegionConfig, Fintype.card_pi, Fintype.card_fin,
+  simpa only [C, ManyBody.RegionConfig, Fintype.card_pi, Fintype.card_fin,
     Fintype.card_coe, card_leftBlock, min_eq_right hn, Finset.prod_const, Finset.card_univ,
     Nat.cast_mul, Nat.cast_pow, mul_assoc] using hbound
 

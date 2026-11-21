@@ -38,15 +38,17 @@ entropy of unions of components; only the two-factor product lemma is used.
 
 ## Main definitions
 
-* `ManyBody.DomainInteraction.toChain`: an interaction on `Λ`, one term for each support of
-  range `R` in the sense of `ManyBody.IsDomainSupport`, as an interaction on the chain.
+An interaction on `Λ`, one term for each support of range `R` in the sense of
+`ManyBody.IsDomainSupport`, is an interaction on the chain by its extension
+`ManyBody.Interaction.extend` along the injection `ManyBody.DomainSupport.toChainSupport`.
+
 * `domainBoundaryEdges`, `domainRegion`: the edge boundary `∂_Λ A` and the sites in `A`.
 
 ## Main results
 
 The zero entropy of a cut that splits no term and the flips of regions of zero entropy are the
 site-generic lemmas `ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint` and
-`TNLean.Lattice.regionEntropy_symmDiff_eq_of_eq_zero`.
+`ManyBody.regionEntropy_symmDiff_eq_of_eq_zero`.
 
 * `regionEntropy_le_mul_card_domainBoundaryEdges`: Theorem A on `Λ` with the constant
   `C_int(q, R, J, Δ)`.
@@ -124,17 +126,18 @@ inner edge cut of zero entropy, then every region `A` has a region `A'` of the s
 whose boundary edges are those of `A` toggled exactly at the edges of `G`. -/
 theorem exists_regionEntropy_eq_boundaryEdges_eq_symmDiff (hΩ : ‖Ω‖ = 1) (G : Finset ℕ)
     (hG : ∀ p ∈ G, p + 1 < L ∧
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 (p + 1)) Ω = 0)
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 (p + 1)) = 0)
     (A : Finset (Fin L)) :
-    ∃ A' : Finset (Fin L), Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A' Ω =
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ∧
+    ∃ A' : Finset (Fin L), ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A' =
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A ∧
       boundaryEdges L A' = boundaryEdges L A ∆ G := by
   induction G using Finset.induction_on with
   | empty => exact ⟨A, rfl, by ext; simp [Finset.mem_symmDiff]⟩
   | insert p G hp ih =>
     obtain ⟨A₁, h1, h2⟩ := ih fun r hr ↦ hG r (Finset.mem_insert_of_mem hr)
     obtain ⟨hp1, hP⟩ := hG p (Finset.mem_insert_self p G)
-    refine ⟨A₁ ∆ interval L 0 (p + 1), by rw [regionEntropy_symmDiff_eq_of_eq_zero hΩ hP, h1], ?_⟩
+    refine ⟨A₁ ∆ interval L 0 (p + 1),
+      by rw [ManyBody.regionEntropy_symmDiff_eq_of_eq_zero _ hΩ hP, h1], ?_⟩
     rw [boundaryEdges_symmDiff_interval hp1, h2, symmDiff_assoc]
     congr 1
     ext r
@@ -151,51 +154,6 @@ end FlipInduction
 section Domain
 
 variable {Λ : Finset ℤ} {q R : ℕ} {J : ℝ}
-
-/-- An interaction on `Λ` as a finite-range interaction on the chain of `|Λ|` sites, with zero
-terms on the chain supports that straddle a gap of `Λ`. TNLean note, `part0_preamble.tex`,
-`eq:ham`. -/
-noncomputable def _root_.ManyBody.DomainInteraction.toChain (h : ManyBody.DomainInteraction Λ q R) :
-    ManyBody.ChainInteraction Λ.card q R where
-  term Y := if hY : IsDomainSupport Λ R Y.1 then h.term ⟨Y.1, hY⟩ else 0
-  mem Y := by
-    split
-    · exact h.mem _
-    · exact (ManyBody.supportedOperators (fun _ : Fin Λ.card ↦ Fin q) _).zero_mem
-
-/-- The chain terms of Hermitian domain terms are Hermitian. -/
-theorem _root_.ManyBody.DomainInteraction.isHermitian_toChain_term
-    (h : ManyBody.DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
-    (Y : ManyBody.ChainSupport Λ.card R) : (h.toChain.term Y).IsHermitian := by
-  change (if hY : IsDomainSupport Λ R Y.1 then h.term ⟨Y.1, hY⟩ else 0).IsHermitian
-  split
-  · exact hh _
-  · exact Matrix.isHermitian_zero
-
-/-- The chain terms keep the bound `J ≥ 0` of the domain terms. -/
-theorem _root_.ManyBody.DomainInteraction.norm_toChain_term_le
-    (h : ManyBody.DomainInteraction Λ q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 ≤ J)
-    (Y : ManyBody.ChainSupport Λ.card R) : ‖h.toChain.term Y‖ ≤ J := by
-  change ‖if hY : IsDomainSupport Λ R Y.1 then h.term ⟨Y.1, hY⟩ else 0‖ ≤ J
-  split
-  · exact hhJ _
-  · simpa using hJ
-
-/-- The chain interaction has the same sum. -/
-theorem _root_.ManyBody.DomainInteraction.toChain_hamiltonian
-    (h : ManyBody.DomainInteraction Λ q R) : h.toChain.hamiltonian = h.hamiltonian := by
-  classical
-  refine (Fintype.sum_of_injective
-    (DomainSupport.toChainSupport (Λ := Λ) (R := R))
-    DomainSupport.toChainSupport_injective _ _ ?_ ?_).symm
-  · intro Y hY
-    change (if hY : IsDomainSupport Λ R Y.1 then h.term ⟨Y.1, hY⟩ else 0) = 0
-    split_ifs with hY'
-    · exact absurd ⟨⟨Y.1, hY'⟩, rfl⟩ hY
-    · rfl
-  · intro X
-    change h.term X = if hY : IsDomainSupport Λ R X.1 then h.term ⟨X.1, hY⟩ else 0
-    simp [X.2]
 
 /-- The edge boundary `∂_Λ A`: the edges `{x, x + 1} ⊆ Λ` with exactly one end in `A`, each
 recorded by its left end `x`. TNLean note, `part0_preamble.tex`, the setting. -/
@@ -264,19 +222,19 @@ theorem _root_.ManyBody.DomainInteraction.exists_regionEntropy_eq_card_boundaryE
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A : Finset ℤ) :
     ∃ A' : Finset (Fin Λ.card),
-      Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) A' Ω =
-        Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ∧
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A' =
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (domainRegion Λ A) ∧
       (boundaryEdges Λ.card A').card = (domainBoundaryEdges Λ A).card := by
   classical
   set G := (boundaryEdges Λ.card (domainRegion Λ A)).filter fun p ↦ ¬ IsDomainEdge Λ p
-  have hG : ∀ p ∈ G, p + 1 < Λ.card ∧ Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
-      (interval Λ.card 0 (p + 1)) Ω = 0 := by
+  have hG : ∀ p ∈ G, p + 1 < Λ.card ∧ ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+      Ω (interval Λ.card 0 (p + 1)) = 0 := by
     intro p hp
     obtain ⟨hpb, hpe⟩ := Finset.mem_filter.mp hp
     have hp1 := (mem_boundaryEdges.mp hpb).1
-    refine ⟨hp1, (ManyBody.regionEntropy_eq_entropy _ _).trans
-      (ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint (Φ := h) hh hΔ hΩ hgap
-        hspan (B := interval Λ.card 0 (p + 1)) fun X ↦ ?_)⟩
+    refine ⟨hp1,
+      ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint (Φ := h) hh hΔ hΩ hgap
+        hspan (B := interval Λ.card 0 (p + 1)) fun X ↦ ?_⟩
     exact X.2.subset_or_disjoint_of_gap hp1 fun he ↦ hpe ⟨hp1, he⟩
   obtain ⟨A', hS, hB⟩ :=
     exists_regionEntropy_eq_boundaryEdges_eq_symmDiff hΩ G hG (domainRegion Λ A)
@@ -304,12 +262,17 @@ theorem regionEntropy_le_mul_card_domainBoundaryEdges (hq : 1 ≤ q) (hJ : 0 ≤
         {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset ℤ) :
-    Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (domainRegion Λ A) ≤
       chainIntervalEntropyBound q R J Δ * (domainBoundaryEdges Λ A).card := by
   obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hh hΔ hΩ hgap hspan A
-  rw [← h.toChain_hamiltonian] at hgap hspan
-  have hchain := regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ (h.toChain)
-      (h.isHermitian_toChain_term hh) (h.norm_toChain_term_le hhJ hJ) hΩ hgap hspan A'
+  let hc : ManyBody.ChainInteraction Λ.card q R :=
+    h.extend DomainSupport.toChainSupport DomainSupport.toChainSupport_injective (fun Y ↦ Y.1)
+      fun _ ↦ subset_rfl
+  have hext : hc.hamiltonian = h.hamiltonian := ManyBody.Interaction.hamiltonian_extend
+  rw [← hext] at hgap hspan
+  have hchain := regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ hc
+      (ManyBody.Interaction.isHermitian_extend_term hh)
+      (ManyBody.Interaction.norm_extend_term_le hJ hhJ) hΩ hgap hspan A'
   simpa only [hS, hB] using hchain
 
 /-- **The one-dimensional area law** (Theorem A). For every local dimension `q ≥ 1`, range
@@ -324,7 +287,7 @@ theorem domainAreaLaw (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
         ∀ Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset ℤ,
-            Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ≤
+            ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (domainRegion Λ A) ≤
               C * (domainBoundaryEdges Λ A).card := by
   have hle := chainIntervalEntropyBound_le (q := q) (R := R) hq hJ hΔ
   have h0 := chainIntervalEntropyBound_nonneg (q := q) (R := R) hq hJ hΔ

@@ -52,12 +52,12 @@ theorem exists_regionalEntropy_rounded_shell_le_uniform_rpow
             ∀ e : ℝ, b ≤ e → e ≤ e₀ →
               ∀ C : ℝ,
                 (∀ Q' : IntRect, IsSafe Λ A D₀ Q' →
-                  regionalEntropy Λ q Ω (rectRegion A Q') ≤
+                  ManyBody.regionEntropy Ω (rectRegion A Q') ≤
                     C * (Q'.size : ℝ) ^ (1 + e)) →
                 let η := 1 - Scan.BootstrapParameters.ell e₀
                 let L := Nat.floor ((Nat.ceil (C₂ * (Q.size : ℝ)) : ℝ) ^ η)
                 ∀ j : ℕ, j ≤ L →
-                  regionalEntropy Λ q Ω
+                  ManyBody.regionEntropy Ω
                     (A.filter fun x ↦ x.1 ∈ (Q.dilate j).toFinset \ Q.toFinset) ≤
                     C * (24 + 64 / ((2 : ℝ) ^ b - 1)) *
                       (C₂ + 1) ^ (η * e₀) * (Q.size : ℝ) ^ (1 + η * e) := by

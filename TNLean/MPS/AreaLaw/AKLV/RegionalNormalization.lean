@@ -53,7 +53,7 @@ and their three shifted cores have a common unit zero vector.
 Source: AKLV, Section 6.1, normalization preceding Theorem 6.1. -/
 theorem exists_regional_minimum_shifts {L q : ℕ} [NeZero q]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ => q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (a b : Fin (L - 1)) (hab : a.val + 2 < b.val) :
     ∃ z : Fin 3 → ℝ,
@@ -187,7 +187,7 @@ its ground lower bound. No shifted positivity or energy bound is assumed.
 Source: AKLV, Section 6.1, normalization preceding Theorem 6.1. -/
 theorem exists_normalized_chain_data {L q : ℕ} [NeZero q]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ => q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (hab : a.val + 2 < b.val)

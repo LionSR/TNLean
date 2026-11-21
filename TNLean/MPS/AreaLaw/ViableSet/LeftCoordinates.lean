@@ -23,7 +23,7 @@ variable {L q i : ℕ}
 /-- Configurations of `i` sites and configurations of the left block after those sites.
 Source: LVV13, `algo53.tex`, Definition `def:viable`, lines 240–244. -/
 def leftConfigOfFinEquiv (hi : i ≤ L) :
-    (Fin i → Fin q) ≃ Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) where
+    (Fin i → Fin q) ≃ (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) where
   toFun := leftConfigOfFin
   invFun x v := x ⟨⟨v.val, lt_of_lt_of_le v.isLt hi⟩, mem_leftBlock.mpr v.isLt⟩
   left_inv _ := rfl
@@ -33,7 +33,7 @@ def leftConfigOfFinEquiv (hi : i ≤ L) :
 Source: LVV13, `algo53.tex`, the bond-trimming step, lines 549–559. -/
 theorem rank_cutMatrix_leftConfigOfFin (hi : i ≤ L) (u : LeftBlockVector L q i) (j : ℕ) :
     (cutMatrix (WithLp.toLp 2 (fun x ↦ u (leftConfigOfFin x))) j).rank =
-      Matrix.schmidtRank (WithLp.ofLp (Entropy.cutVector
+      Matrix.schmidtRank (WithLp.ofLp (ManyBody.cutVector
         (Finset.univ.filter fun v : {v : Fin L // v ∈ leftBlock L i} ↦ v.1.val < j) u)) := by
   classical
   let D := Finset.univ.filter fun v : {v : Fin L // v ∈ leftBlock L i} ↦ v.1.val < j
@@ -49,28 +49,28 @@ theorem rank_cutMatrix_leftConfigOfFin (hi : i ≤ L) (u : LeftBlockVector L q i
       {v : {v : Fin L // v ∈ leftBlock L i} // v ∉ D} :=
     e.subtypeEquiv (by intro v; simp [D, e])
   have h : cutMatrix (WithLp.toLp 2 (fun x ↦ u (leftConfigOfFin x))) j =
-      (Matrix.schmidtCoeffMatrix (WithLp.ofLp (Entropy.cutVector D u))).submatrix
+      (Matrix.schmidtCoeffMatrix (WithLp.ofLp (ManyBody.cutVector D u))).submatrix
         (e₁.arrowCongr (Equiv.refl (Fin q))) (e₂.arrowCongr (Equiv.refl (Fin q))) := by
     ext a b
     change u (leftConfigOfFin
-      ((Entropy.cutEquiv (fun _ : Fin i ↦ q) (leftBlock i j)).symm (a, b))) =
-      u ((Entropy.cutEquiv (fun _ : {v : Fin L // v ∈ leftBlock L i} ↦ q) D).symm
+      ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock i j)).symm (a, b))) =
+      u ((ManyBody.cutEquiv (fun _ ↦ Fin q) D).symm
         (e₁.arrowCongr (Equiv.refl (Fin q)) a, e₂.arrowCongr (Equiv.refl (Fin q)) b))
     apply congrArg u
     funext v
     by_cases hv : v.1.val < j
     · have hDv : v ∈ D := Finset.mem_filter.mpr ⟨Finset.mem_univ _, hv⟩
-      rw [Entropy.cutEquiv_symm_apply_mem _ _ hDv]
-      change ((Entropy.cutEquiv (fun _ : Fin i ↦ q) (leftBlock i j)).symm (a, b))
+      rw [ManyBody.cutEquiv_symm_apply_mem _ _ hDv]
+      change ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock i j)).symm (a, b))
         ⟨v.1.val, mem_leftBlock.mp v.2⟩ = _
-      rw [Entropy.cutEquiv_symm_apply_mem _ _ (show
+      rw [ManyBody.cutEquiv_symm_apply_mem _ _ (show
         (⟨v.1.val, mem_leftBlock.mp v.2⟩ : Fin i) ∈ leftBlock i j from mem_leftBlock.mpr hv)]
       rfl
     · have hDv : v ∉ D := fun h ↦ hv (Finset.mem_filter.mp h).2
-      rw [Entropy.cutEquiv_symm_apply_not_mem _ _ hDv]
-      change ((Entropy.cutEquiv (fun _ : Fin i ↦ q) (leftBlock i j)).symm (a, b))
+      rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ hDv]
+      change ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock i j)).symm (a, b))
         ⟨v.1.val, mem_leftBlock.mp v.2⟩ = _
-      rw [Entropy.cutEquiv_symm_apply_not_mem _ _ (show
+      rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ (show
         (⟨v.1.val, mem_leftBlock.mp v.2⟩ : Fin i) ∉ leftBlock i j from
           fun h ↦ hv ((mem_leftBlock (L := i) (k := j)).mp h))]
       rfl

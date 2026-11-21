@@ -84,10 +84,10 @@ theorem sourceTarget_actual_mutualInformation_bound_explicit
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-          regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
             Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) →
           (∀ j : ℕ, j ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
-            regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
               Ce * ((S.n : ℝ) *
                 ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
                   (Exponents.boxError : ℝ) + S.n)) →
@@ -117,23 +117,23 @@ theorem sourceTarget_actual_mutualInformation_bound_explicit
                 (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp)) ≤ Real.sqrt (2 * ε / g) ∧
             cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
               targetBudgetConstant q R Ctr * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
-            Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-              (regionalEntropy Λ q Ωt X) w ≤ δtail ∧
-            let E := Entropy.typicalSet (reducedState_isHermitian Λ q Ωt X).eigenvalues
-              (regionalEntropy Λ q Ωt X) w
-            let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+            Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+              (ManyBody.regionEntropy Ωt X) w ≤ δtail ∧
+            let E := Entropy.typicalSet (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+              (ManyBody.regionEntropy Ωt X) w
+            let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
             (0 < 1 - δtail ∧ 1 - δtail ≤ z ∧ 0 < z ∧ z ≤ 1 ∧ E.Nonempty ∧
-              ∀ i ∈ E, 0 < (reducedState_isHermitian Λ q Ωt X).eigenvalues i ∧
-                Real.exp (-regionalEntropy Λ q Ωt X - w) ≤
-                  (reducedState_isHermitian Λ q Ωt X).eigenvalues i ∧
-                (reducedState_isHermitian Λ q Ωt X).eigenvalues i ≤
-                  Real.exp (-regionalEntropy Λ q Ωt X + w)) ∧
+              ∀ i ∈ E, 0 < (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ∧
+                Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤
+                  (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ∧
+                (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ≤
+                  Real.exp (-ManyBody.regionEntropy Ωt X + w)) ∧
             ∃ hd : 0 < E.card,
             letI : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
             let d := E.card
             let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-              (FiniteProduct.splitEquiv β X) Ωt
-            let ψ : FiniteProduct.Configuration β Xᶜ × Fin d → ℂ := fun x ↦
+              (ManyBody.splitEquiv β X) Ωt
+            let ψ : ManyBody.RegionConfig β Xᶜ × Fin d → ℂ := fun x ↦
               compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -142,13 +142,13 @@ theorem sourceTarget_actual_mutualInformation_bound_explicit
             let σ := terminalPartition S (S.n * S.m)
             let near := fun j band ↦ receiving (σ j band) false
             let middleRegion := fun j band ↦ middle (σ j band)
-            let gpre := fun j band ↦ FiniteProduct.entropy β Ωt (near j band) +
-              FiniteProduct.entropy β Ωt (near j band ∪ middleRegion j band)ᶜ -
-              FiniteProduct.entropy β Ωt (middleRegion j band)
+            let gpre := fun j band ↦ ManyBody.regionEntropy Ωt (near j band) +
+              ManyBody.regionEntropy Ωt (near j band ∪ middleRegion j band)ᶜ -
+              ManyBody.regionEntropy Ωt (middleRegion j band)
             let gpost := fun j band ↦
-              regionalEntropy Λ q Ωt (positiveNear S.depth (σ j band)) +
-                regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j band)) -
-                regionalEntropy Λ q Ωt (middle (σ j band))
+              ManyBody.regionEntropy Ωt (positiveNear S.depth (σ j band)) +
+                ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j band)) -
+                ManyBody.regionEntropy Ωt (middle (σ j band))
             let gaps := (Finset.univ :
               Finset (terminalFamily S.K S.m S.M (S.n * S.m) × Fin S.K)).image
                 (fun j ↦ gpre j.1 j.2)
@@ -161,14 +161,14 @@ theorem sourceTarget_actual_mutualInformation_bound_explicit
               (∑ band, ∑ j, (tree s p).weight j * gpre j band) / (S.K : ℝ)
             let _Gpost := fun s p ↦
               (∑ band, ∑ j, (tree s p).weight j * gpost j band) / (S.K : ℝ)
-            let St := regionalEntropy Λ q Ωt X
+            let St := ManyBody.regionEntropy Ωt X
             let c := w - Real.log z
             let Bpre := 2 * St + 2 * Bsh +
               6 * (S.n : ℝ) * (S.D : ℝ) * Real.log q
             let continuity := 16 * Real.sqrt (Matrix.traceDistance
               (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
               (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp))) *
-                Real.log (Real.exp 1 * Fintype.card (FiniteProduct.Configuration β X))
+                Real.log (Real.exp 1 * Fintype.card (ManyBody.RegionConfig β X))
             ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
               (∀ k : ℕ, 0 < k →
                 let ξ := WithLp.toLp 2 (replicaPrevector Ωt d k (ell k) ∘
@@ -182,7 +182,7 @@ theorem sourceTarget_actual_mutualInformation_bound_explicit
                 let ℓ := transportLogDimBound q S.r₀
                 a * ℓ ≤ ct →
                 ∀ τ : ℝ, 0 < τ → τ ≤ 1 / 2 →
-                  2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+                  2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
                     sharpInformationBound St c Bpre (Real.log z) W τ
                       ((S.n : ℝ) ^ (-(1 / 2000 : ℝ)))
                       ((3 + 1 / a) * Real.binEntropy τ + 37 * (C₀ * B) * a -
@@ -308,10 +308,10 @@ theorem exists_sourceTarget_actual_mutualInformation_bound_of_threshold_le
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-          regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
             Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) →
           (∀ j : ℕ, j ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
-            regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
               Ce * ((S.n : ℝ) *
                 ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
                   (Exponents.boxError : ℝ) + S.n)) →
@@ -341,23 +341,23 @@ theorem exists_sourceTarget_actual_mutualInformation_bound_of_threshold_le
                 (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp)) ≤ Real.sqrt (2 * ε / g) ∧
             cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
               targetBudgetConstant q R Ctr * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
-            Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-              (regionalEntropy Λ q Ωt X) w ≤ δtail ∧
-            let E := Entropy.typicalSet (reducedState_isHermitian Λ q Ωt X).eigenvalues
-              (regionalEntropy Λ q Ωt X) w
-            let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+            Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+              (ManyBody.regionEntropy Ωt X) w ≤ δtail ∧
+            let E := Entropy.typicalSet (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+              (ManyBody.regionEntropy Ωt X) w
+            let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
             (0 < 1 - δtail ∧ 1 - δtail ≤ z ∧ 0 < z ∧ z ≤ 1 ∧ E.Nonempty ∧
-              ∀ i ∈ E, 0 < (reducedState_isHermitian Λ q Ωt X).eigenvalues i ∧
-                Real.exp (-regionalEntropy Λ q Ωt X - w) ≤
-                  (reducedState_isHermitian Λ q Ωt X).eigenvalues i ∧
-                (reducedState_isHermitian Λ q Ωt X).eigenvalues i ≤
-                  Real.exp (-regionalEntropy Λ q Ωt X + w)) ∧
+              ∀ i ∈ E, 0 < (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ∧
+                Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤
+                  (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ∧
+                (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ≤
+                  Real.exp (-ManyBody.regionEntropy Ωt X + w)) ∧
             ∃ hd : 0 < E.card,
             letI : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
             let d := E.card
             let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-              (FiniteProduct.splitEquiv β X) Ωt
-            let ψ : FiniteProduct.Configuration β Xᶜ × Fin d → ℂ := fun x ↦
+              (ManyBody.splitEquiv β X) Ωt
+            let ψ : ManyBody.RegionConfig β Xᶜ × Fin d → ℂ := fun x ↦
               compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -366,13 +366,13 @@ theorem exists_sourceTarget_actual_mutualInformation_bound_of_threshold_le
             let σ := terminalPartition S (S.n * S.m)
             let near := fun j band ↦ receiving (σ j band) false
             let middleRegion := fun j band ↦ middle (σ j band)
-            let gpre := fun j band ↦ FiniteProduct.entropy β Ωt (near j band) +
-              FiniteProduct.entropy β Ωt (near j band ∪ middleRegion j band)ᶜ -
-              FiniteProduct.entropy β Ωt (middleRegion j band)
+            let gpre := fun j band ↦ ManyBody.regionEntropy Ωt (near j band) +
+              ManyBody.regionEntropy Ωt (near j band ∪ middleRegion j band)ᶜ -
+              ManyBody.regionEntropy Ωt (middleRegion j band)
             let gpost := fun j band ↦
-              regionalEntropy Λ q Ωt (positiveNear S.depth (σ j band)) +
-                regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j band)) -
-                regionalEntropy Λ q Ωt (middle (σ j band))
+              ManyBody.regionEntropy Ωt (positiveNear S.depth (σ j band)) +
+                ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j band)) -
+                ManyBody.regionEntropy Ωt (middle (σ j band))
             let gaps := (Finset.univ :
               Finset (terminalFamily S.K S.m S.M (S.n * S.m) × Fin S.K)).image
                 (fun j ↦ gpre j.1 j.2)
@@ -385,14 +385,14 @@ theorem exists_sourceTarget_actual_mutualInformation_bound_of_threshold_le
               (∑ band, ∑ j, (tree s p).weight j * gpre j band) / (S.K : ℝ)
             let _Gpost := fun s p ↦
               (∑ band, ∑ j, (tree s p).weight j * gpost j band) / (S.K : ℝ)
-            let St := regionalEntropy Λ q Ωt X
+            let St := ManyBody.regionEntropy Ωt X
             let c := w - Real.log z
             let Bpre := 2 * St + 2 * Bsh +
               6 * (S.n : ℝ) * (S.D : ℝ) * Real.log q
             let continuity := 16 * Real.sqrt (Matrix.traceDistance
               (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
               (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp))) *
-                Real.log (Real.exp 1 * Fintype.card (FiniteProduct.Configuration β X))
+                Real.log (Real.exp 1 * Fintype.card (ManyBody.RegionConfig β X))
             ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
               (∀ k : ℕ, 0 < k →
                 let ξ := WithLp.toLp 2 (replicaPrevector Ωt d k (ell k) ∘
@@ -406,7 +406,7 @@ theorem exists_sourceTarget_actual_mutualInformation_bound_of_threshold_le
                 let ℓ := transportLogDimBound q S.r₀
                 a * ℓ ≤ ct →
                 ∀ τ : ℝ, 0 < τ → τ ≤ 1 / 2 →
-                  2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+                  2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
                     sharpInformationBound St c Bpre (Real.log z) W τ
                       ((S.n : ℝ) ^ (-(1 / 2000 : ℝ)))
                       ((3 + 1 / a) * Real.binEntropy τ + 37 * (C₀ * B) * a -
@@ -455,10 +455,10 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-          regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
             Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) →
           (∀ j : ℕ, j ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
-            regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
               Ce * ((S.n : ℝ) *
                 ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
                   (Exponents.boxError : ℝ) + S.n)) →
@@ -487,23 +487,23 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
                 (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp)) ≤ Real.sqrt (2 * ε / g) ∧
             cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
               Ctarget * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
-            Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-              (regionalEntropy Λ q Ωt X) w ≤ δtail ∧
-            let E := Entropy.typicalSet (reducedState_isHermitian Λ q Ωt X).eigenvalues
-              (regionalEntropy Λ q Ωt X) w
-            let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+            Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+              (ManyBody.regionEntropy Ωt X) w ≤ δtail ∧
+            let E := Entropy.typicalSet (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+              (ManyBody.regionEntropy Ωt X) w
+            let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
             (0 < 1 - δtail ∧ 1 - δtail ≤ z ∧ 0 < z ∧ z ≤ 1 ∧ E.Nonempty ∧
-              ∀ i ∈ E, 0 < (reducedState_isHermitian Λ q Ωt X).eigenvalues i ∧
-                Real.exp (-regionalEntropy Λ q Ωt X - w) ≤
-                  (reducedState_isHermitian Λ q Ωt X).eigenvalues i ∧
-                (reducedState_isHermitian Λ q Ωt X).eigenvalues i ≤
-                  Real.exp (-regionalEntropy Λ q Ωt X + w)) ∧
+              ∀ i ∈ E, 0 < (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ∧
+                Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤
+                  (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ∧
+                (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ≤
+                  Real.exp (-ManyBody.regionEntropy Ωt X + w)) ∧
             ∃ hd : 0 < E.card,
             letI : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
             let d := E.card
             let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-              (FiniteProduct.splitEquiv β X) Ωt
-            let ψ : FiniteProduct.Configuration β Xᶜ × Fin d → ℂ := fun x ↦
+              (ManyBody.splitEquiv β X) Ωt
+            let ψ : ManyBody.RegionConfig β Xᶜ × Fin d → ℂ := fun x ↦
               compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -512,13 +512,13 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
             let σ := terminalPartition S (S.n * S.m)
             let near := fun j band ↦ receiving (σ j band) false
             let middleRegion := fun j band ↦ middle (σ j band)
-            let gpre := fun j band ↦ FiniteProduct.entropy β Ωt (near j band) +
-              FiniteProduct.entropy β Ωt (near j band ∪ middleRegion j band)ᶜ -
-              FiniteProduct.entropy β Ωt (middleRegion j band)
+            let gpre := fun j band ↦ ManyBody.regionEntropy Ωt (near j band) +
+              ManyBody.regionEntropy Ωt (near j band ∪ middleRegion j band)ᶜ -
+              ManyBody.regionEntropy Ωt (middleRegion j band)
             let gpost := fun j band ↦
-              regionalEntropy Λ q Ωt (positiveNear S.depth (σ j band)) +
-                regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j band)) -
-                regionalEntropy Λ q Ωt (middle (σ j band))
+              ManyBody.regionEntropy Ωt (positiveNear S.depth (σ j band)) +
+                ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j band)) -
+                ManyBody.regionEntropy Ωt (middle (σ j band))
             let gaps := (Finset.univ :
               Finset (terminalFamily S.K S.m S.M (S.n * S.m) × Fin S.K)).image
                 (fun j ↦ gpre j.1 j.2)
@@ -531,14 +531,14 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
               (∑ band, ∑ j, (tree s p).weight j * gpre j band) / (S.K : ℝ)
             let _Gpost := fun s p ↦
               (∑ band, ∑ j, (tree s p).weight j * gpost j band) / (S.K : ℝ)
-            let St := regionalEntropy Λ q Ωt X
+            let St := ManyBody.regionEntropy Ωt X
             let c := w - Real.log z
             let Bpre := 2 * St + 2 * Bsh +
               6 * (S.n : ℝ) * (S.D : ℝ) * Real.log q
             let continuity := 16 * Real.sqrt (Matrix.traceDistance
               (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
               (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp))) *
-                Real.log (Real.exp 1 * Fintype.card (FiniteProduct.Configuration β X))
+                Real.log (Real.exp 1 * Fintype.card (ManyBody.RegionConfig β X))
             ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
               (∀ k : ℕ, 0 < k →
                 let ξ := WithLp.toLp 2 (replicaPrevector Ωt d k (ell k) ∘
@@ -552,7 +552,7 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
                 let ℓ := transportLogDimBound q S.r₀
                 a * ℓ ≤ ct →
                 ∀ τ : ℝ, 0 < τ → τ ≤ 1 / 2 →
-                  2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+                  2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
                     sharpInformationBound St c Bpre (Real.log z) W τ
                       ((S.n : ℝ) ^ (-(1 / 2000 : ℝ)))
                       ((3 + 1 / a) * Real.binEntropy τ + 37 * (C₀ * B) * a -

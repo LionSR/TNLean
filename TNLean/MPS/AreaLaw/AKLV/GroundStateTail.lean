@@ -183,7 +183,7 @@ positive unit terms, as required by AKLV, arXiv:1301.1162v1, Lemma 6.6. -/
 theorem norm_exp_conjugation_two_boundary_le_four {L q : ℕ}
     (I : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (z : ℝ) :
@@ -214,7 +214,7 @@ instead of the printed shell induction. No energy-tail estimate is assumed. -/
 theorem norm_groundState_highProjection_le_exp {L q : ℕ}
     (I : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (z e t : ℝ)

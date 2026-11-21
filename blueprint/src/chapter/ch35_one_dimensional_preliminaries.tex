@@ -325,12 +325,9 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
 
 \begin{definition}[The left and boundary parts at a cut]
     \label{def:chain_gluing_hamiltonian_parts}
-    \lean{ManyBody.ChainInteraction.cutLeftPart,
-        ManyBody.ChainInteraction.cutBoundaryPart,
-        ManyBody.ChainInteraction.cutLeftPart_add_cutBoundaryPart,
-        ManyBody.ChainInteraction.cutLeftPart_isSupportedOn,
-        ManyBody.ChainInteraction.cutBoundaryPart_isSupportedOn,
-        ManyBody.ChainInteraction.norm_cutBoundaryPart_le}
+    \lean{ManyBody.Interaction.partialHamiltonian_filter_add_filter_not,
+        ManyBody.ChainInteraction.isSupportedOn_partialHamiltonian_not_subset,
+        ManyBody.ChainInteraction.norm_partialHamiltonian_not_subset_le}
     \leanok
     \uses{def:chain_model}
     Let $H=\sum_Xh_X$ be a range-one Hamiltonian on $L$ sites with
@@ -849,8 +846,8 @@ windows and the three bulk labels.
 
 \begin{lemma}[Lieb--Robinson estimates on a one-dimensional graph]
     \label{thm:graph_lieb_robinson_two_spheres}
-    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_graphDistance_inf,
-        TNLean.MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_two}
+    \lean{ManyBody.norm_heisenberg_commutator_le_graphDistance_inf,
+        ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_two}
     \leanok
     \uses{def:qc_site_expectation}
     Let $G$ be a finite graph on a set of sites $I$, each carrying
@@ -881,6 +878,7 @@ windows and the three bulk labels.
     \uses{thm:area_law_supported_identity,thm:qc_graph_lieb_robinson_finset,
         thm:qc_graph_lieb_robinson_zero_finset,
         thm:qc_graph_neighborhood_localization}
+    This is~\cite[``Lieb--Robinson estimates on a one-dimensional graph'']{QICLean2026Blueprint}.
     For finite $\delta$, the arbitrary-support graph commutator estimate
     with decay parameter one and support-size bound $R+1$ gives the
     stronger decay $e^{-\delta}\le e^{-\delta/2}$. For infinite $\delta$,

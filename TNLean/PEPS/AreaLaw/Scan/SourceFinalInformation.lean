@@ -114,21 +114,20 @@ theorem sourceTarget_finalScale_mutualInformation_explicit
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-          regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
             Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) →
           (∀ j : ℕ, j ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
-            regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
               Ce * ((S.n : ℝ) *
                 ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
                   (Exponents.boxError : ℝ) + S.n)) →
           2 * S.r₀ ≤ S.D → ∀ (_hDpos : 1 ≤ S.D) (_hDm : 4 * S.D ≤ S.m),
           let L := ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
           let X := S.A.filter fun x ↦ x.val ∈ T
-          let β := fun _ : Site Λ ↦ Fin q
-          2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+          2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
               sourceFinalInformationConstant q (Δ / positiveNormalization 1 (Δ / 2) J) C_T Ce *
                 (S.n : ℝ) ^ (62497 / 62500 : ℝ) ∧
-            2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+            2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
               sourceFinalInformationConstant q (Δ / positiveNormalization 1 (Δ / 2) J) C_T Ce *
                 (S.n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   classical
@@ -152,7 +151,8 @@ theorem sourceTarget_finalScale_mutualInformation_explicit
     finalSharp_source_error_le_of_finalSharpErrorThreshold_le q hq Ce C₀ CB g (C_T + 1) hCe hC₀
       hCB.le hg hCvol hn
   intro Λ T _ hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
-    hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix hrD hDpos hDm L X β
+    hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix hrD hDpos hDm L X
+  let β := fun _ : Site Λ ↦ Fin q
   simp only [sourceFinalInformationThreshold, max_le_iff] at hn
   obtain ⟨hnS, hnE, hnSmall⟩ := hn
   have hnT := hnS
@@ -173,17 +173,17 @@ theorem sourceTarget_finalScale_mutualInformation_explicit
   obtain ⟨hK, hKL, hB, hcard, hX, e, Ωt, htrgs, he0, he, htrace, hBX, htail, hwdata⟩ :=
     hdata
   let w := (S.n : ℝ) ^ ((3 : ℝ) / 5)
-  let E := Entropy.typicalSet (reducedState_isHermitian Λ q Ωt X).eigenvalues
-    (regionalEntropy Λ q Ωt X) w
-  let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+  let E := Entropy.typicalSet (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+    (ManyBody.regionEntropy Ωt X) w
+  let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
   obtain ⟨hwindow, hd, hpdata⟩ := hwdata
   let : NeZero E.card := NeZero.of_pos hd
-  let St := regionalEntropy Λ q Ωt X
+  let St := ManyBody.regionEntropy Ωt X
   let c := w - Real.log z
   let Bpre := 2 * St + 2 * Bsh + 6 * (S.n : ℝ) * (S.D : ℝ) * Real.log q
   let t := Matrix.traceDistance (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
     (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp))
-  let dlog := Real.log (Real.exp 1 * Fintype.card (FiniteProduct.Configuration β X))
+  let dlog := Real.log (Real.exp 1 * Fintype.card (ManyBody.RegionConfig β X))
   let continuity := 16 * Real.sqrt t * dlog
   obtain ⟨ell, hpre, hdim, hinfo⟩ := hpdata
   have hΩt : ‖Ωt‖ = 1 := htrgs.1
@@ -192,7 +192,7 @@ theorem sourceTarget_finalScale_mutualInformation_explicit
   have htargetCont := htarget S.n hnT Λ Ω Ωt hΩ hΩt X hXcard htrace
   have hSt : St ≤ Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) +
       (S.n : ℝ) ^ (-247 : ℝ) := by
-    have h := le_abs_self (regionalEntropy Λ q Ωt X - regionalEntropy Λ q Ω X)
+    have h := le_abs_self (ManyBody.regionEntropy Ωt X - ManyBody.regionEntropy Ω X)
     dsimp only [St]
     linarith
   have hdlog : dlog ≤ 1 + ((C_T + 1) * Real.log q) * (S.n : ℝ) ^ 2 :=
@@ -204,7 +204,7 @@ theorem sourceTarget_finalScale_mutualInformation_explicit
   simp only [← hmScale, ← hKScale, roundedLogRadius, ← hr] at hsmallN
   have hW : 1 ≤ W := Real.one_le_rpow hn1 (by norm_num [Exponents.scannerOmega])
   have hMI := hinfo W hW le_rfl hsmallN τ hτ hτhalf
-  change 2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+  change 2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
     sharpInformationBound St c Bpre (Real.log z) W τ
       ((S.n : ℝ) ^ (-(1 / 2000 : ℝ)))
       ((3 + 1 / a) * Real.binEntropy τ + 37 * (C₀ * B) * a - Real.log z / a)
@@ -263,21 +263,20 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_threshold_le
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-          regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
             Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) →
           (∀ j : ℕ, j ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
-            regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
               Ce * ((S.n : ℝ) *
                 ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
                   (Exponents.boxError : ℝ) + S.n)) →
           2 * S.r₀ ≤ S.D → ∀ (_hDpos : 1 ≤ S.D) (_hDm : 4 * S.D ≤ S.m),
           let L := ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
           let X := S.A.filter fun x ↦ x.val ∈ T
-          let β := fun _ : Site Λ ↦ Fin q
-          2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+          2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
               sourceFinalInformationConstant q (Δ / positiveNormalization 1 (Δ / 2) J) C_T Ce *
                 (S.n : ℝ) ^ (62497 / 62500 : ℝ) ∧
-            2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+            2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
               sourceFinalInformationConstant q (Δ / positiveNormalization 1 (Δ / 2) J) C_T Ce *
                 (S.n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   obtain ⟨ct, Cent, eent, Cen, een, hct, htransport⟩ := exists_finiteFamilyTransportBound
@@ -324,20 +323,19 @@ theorem exists_sourceTarget_finalScale_mutualInformation
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-          regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
             Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) →
           (∀ j : ℕ, j ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
-            regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
               Ce * ((S.n : ℝ) *
                 ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
                   (Exponents.boxError : ℝ) + S.n)) →
           2 * S.r₀ ≤ S.D → ∀ (_hDpos : 1 ≤ S.D) (_hDm : 4 * S.D ≤ S.m),
           let L := ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
           let X := S.A.filter fun x ↦ x.val ∈ T
-          let β := fun _ : Site Λ ↦ Fin q
-          2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+          2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
               C * (S.n : ℝ) ^ (62497 / 62500 : ℝ) ∧
-            2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+            2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
               C * (S.n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   obtain ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, -, hall⟩ :=
     exists_sourceTarget_finalScale_mutualInformation_of_threshold_le hq R hJ hΔ hC_T hC₁

@@ -9,14 +9,11 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Lattice
 
 import TNLean.Lattice.Compression
-import TNLean.Lattice.EntropyDimension
 import TNLean.Lattice.FiniteDomain
 import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.PartyCircuit
 import TNLean.Lattice.PhysicalBufferCoordinates
 import TNLean.Lattice.RegionEntropyInequalities
-import TNLean.Lattice.RegionalEntropy
-import TNLean.Lattice.RegionalEntropyBridge
 import TNLean.Lattice.RegionalReset
 import TNLean.Lattice.RegionalResetEntropy
 import TNLean.Lattice.RegionalSwapSupport

@@ -40,7 +40,7 @@ theorem norm_qutritCopies {N : ℕ} (hN : 0 < N) : ‖qutritCopies N‖ = 1 := b
 /-- Every contiguous region has entropy at most four bits.
 Source: arXiv:0705.0292v2, lines 426–430. -/
 theorem regionEntropy_interval_qutritCopies_le {N : ℕ} (hN : 0 < N) (a b : ℕ) :
-    Entropy.regionEntropy (interval (N ^ 2 * (N + N)) a b) (qutritCopies N) ≤
+    ManyBody.regionEntropy (qutritCopies N) (interval (N ^ 2 * (N + N)) a b) ≤
       4 * Real.log 2 := by
   simpa only [qutritCopies, ← mul_assoc, show (2 : ℝ) * 2 = 4 by norm_num] using
     regionEntropy_interval_copyProduct_le (norm_qutritFamily hN)

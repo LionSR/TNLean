@@ -127,11 +127,11 @@ theorem actualCharge_energyError_le_domainGraph
       (by omega) hs hr hDpos hD hL hrows hclear hp' i
   have hη0 (i : AdmissibleSupport Λ R)
       (j : Σ _ : History S.K S.m S.M s, Option (ChargeChoices S.K S.M))
-      (θ : CoherentSphere (SiteConfig n)) : 0 ≤ D.splitEta E i j θ.1 :=
+      (θ : CoherentSphere (∀ v, Fin (n v))) : 0 ≤ D.splitEta E i j θ.1 :=
     D.splitEta_nonneg n E hadm i j θ.1
   have hηB (i : AdmissibleSupport Λ R)
       (j : Σ _ : History S.K S.m S.M s, Option (ChargeChoices S.K S.M))
-      (θ : CoherentSphere (SiteConfig n)) : D.splitEta E i j θ.1 ≤ 2 * ℓ :=
+      (θ : CoherentSphere (∀ v, Fin (n v))) : D.splitEta E i j θ.1 ≤ 2 * ℓ :=
     D.splitEta_le_two_mul_of_logDim_le n E hadm hcompat hℓ hsupp i j θ
   let : ∀ hist : Rd.H, IsFiniteMeasure (Rd.μOld k p hist) := fun hist ↦
     D.isFiniteMeasure_transportLeafMeasure n (a / 2) k (pre k) p ⟨hist, none⟩

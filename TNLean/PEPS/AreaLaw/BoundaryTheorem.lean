@@ -78,7 +78,7 @@ def SublinearCollarBound (q R : ℕ) (J Δ D₀ Ctpl : ℝ) : Prop :=
         ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
           T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
           ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
-          FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+          ManyBody.regionMutualInformation Ω
               (A.filter fun x ↦ x.val ∈ T.points)
               (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -125,7 +125,7 @@ def AmplificationBound (q R : ℕ) (J Δ : ℝ) : Prop :=
             ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
               C₀ * n →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+            ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -135,7 +135,7 @@ def AmplificationBound (q R : ℕ) (J Δ : ℝ) : Prop :=
                 Disjoint Jset (graphNeighborhood Λ (2 * r)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
-                FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
+                ManyBody.regionMutualInformation Ω X Jset ≤
                   C * ((n : ℝ) ^ M)⁻¹) ∧
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
@@ -160,7 +160,7 @@ def SublinearCollarBoundAt (q R : ℕ) (J Δ D₀ Ctpl C : ℝ) (N : ℕ) : Prop
         ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
           T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
           ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
-          FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+          ManyBody.regionMutualInformation Ω
               (A.filter fun x ↦ x.val ∈ T.points)
               (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -207,7 +207,7 @@ def AmplificationBoundAt (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) (C : ℝ) (N : 
           ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
             C₀ * n →
-          FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+          ManyBody.regionMutualInformation Ω
               (A.filter fun x ↦ x.val ∈ T)
               (A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -217,7 +217,7 @@ def AmplificationBoundAt (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) (C : ℝ) (N : 
               Disjoint Jset (graphNeighborhood Λ (2 * r)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
-              FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
+              ManyBody.regionMutualInformation Ω X Jset ≤
                 C * ((n : ℝ) ^ M)⁻¹) ∧
             ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                 (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
@@ -327,7 +327,7 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_at
           ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+            ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T.points)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -354,7 +354,7 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_at
             ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
               max C₁ 1 * n →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+            ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -364,7 +364,7 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_at
                 Disjoint Jset (graphNeighborhood Λ (2 * r)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
-                FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
+                ManyBody.regionMutualInformation Ω X Jset ≤
                   C₂ * ((n : ℝ) ^ 100)⁻¹) ∧
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
@@ -387,7 +387,7 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_at
           (∀ i, ∀ t ∈ (T i).points, ∀ x ∈ P.earlierSameFamily i,
             2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t x.val : ℝ)) ∧
           ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C₃ * (edgeBoundary Λ A).card) :
-    regionalEntropy Λ q Ω A ≤ uniformAreaLawConstantOf q C₂ C₃ * (edgeBoundary Λ A).card := by
+    ManyBody.regionEntropy Ω A ≤ uniformAreaLawConstantOf q C₂ C₃ * (edgeBoundary Λ A).card := by
   classical
   set cD := max C₃ 0 with hcD
   set cM := max C₂ 0 with hcM
@@ -404,7 +404,7 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_at
   obtain ⟨P, n, s, T, hD, -, hsub, hsep, hL, hn, hcut, hord, hsum⟩ := htwo hb
   have hell : (Exponents.geometryEll : ℝ) = Exponents.amplificationEpsilon := by
     norm_num [Exponents.geometryEll, Exponents.amplificationEpsilon]
-  have hpiece : ∀ i, FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+  have hpiece : ∀ i, ManyBody.regionMutualInformation Ω
       (P.piece i) (Aᶜ ∪ P.earlierSameFamily i) ≤ cM * ((n i : ℝ) ^ 100)⁻¹ := by
     intro i
     have hni := hn i
@@ -443,7 +443,7 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_at
           (⌊(n i : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) + 2 * r := by
         exact_mod_cast hty
       linarith only [hord i t ht y hy, hty', hsmall, hβ]
-    calc FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+    calc ManyBody.regionMutualInformation Ω
           (P.piece i) (Aᶜ ∪ P.earlierSameFamily i)
         ≤ C₂ * ((n i : ℝ) ^ 100)⁻¹ := hinfo (P.piece i) (hsub i) _ hdisj
       _ ≤ cM * ((n i : ℝ) ^ 100)⁻¹ :=
@@ -478,7 +478,7 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
           ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+            ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T.points)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -509,7 +509,7 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
             ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
               max C₁ 1 * n →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+            ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -519,7 +519,7 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
                 Disjoint Jset (graphNeighborhood Λ (2 * r)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
-                FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
+                ManyBody.regionMutualInformation Ω X Jset ≤
                   C₂ * ((n : ℝ) ^ 100)⁻¹) ∧
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
@@ -546,7 +546,8 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
         (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
       ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
-        regionalEntropy Λ q Ω A ≤ uniformAreaLawConstantOf q C₂ C₃ * (edgeBoundary Λ A).card := by
+        ManyBody.regionEntropy Ω A ≤ uniformAreaLawConstantOf q C₂ C₃ *
+            (edgeBoundary Λ A).card := by
   intro Λ h hh hhJ E₀ Ω hΩ hgap hspan A
   exact regionalEntropy_le_of_collar_amplification_twoFamilies_at hq hΔ h hh hΩ hgap hspan A
     (fun n s₀ hn ↦ hcol n s₀ hn Λ h hh hhJ E₀ Ω hΩ hgap hspan A)

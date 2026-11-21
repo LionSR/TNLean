@@ -44,16 +44,16 @@ theorem exists_unitary_diagonal_clipped_of_isMinOn_regularizedPatchObjective
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) {b : ℝ} (hb : 0 < b)
     (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
     (hΩ : ‖Ω‖ = 1)
-    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ)
+    (x : ∀ j, Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ)
     (hx : x ∈ regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions)
     (hmin : IsMinOn
       (regularizedPatchObjective (Out := fun v ↦ Fin (n v)) regions a b Ω)
       (regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions) x) :
     ∀ j : Fin m,
-      ∃ (U : Matrix (Entropy.RegionConfig n (regions j))
-          (Entropy.RegionConfig n (regions j)) ℂ)
-        (s p : Entropy.RegionConfig n (regions j) → ℝ) (lam : ℝ),
+      ∃ (U : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+          (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ)
+        (s p : (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) → ℝ) (lam : ℝ),
         Uᴴ * U = 1 ∧ U * Uᴴ = 1 ∧
         x j = U * diagonal (fun i ↦ (s i : ℂ)) * Uᴴ ∧
         normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
@@ -76,8 +76,8 @@ theorem exists_unitary_diagonal_clipped_of_isMinOn_regularizedPatchObjective
   intro j
   have hf : (⟨regions j, a j, x j⟩ : Entropy.PatchFactor n) ∈ l :=
     List.mem_reverse.mpr (List.mem_ofFn.mpr ⟨j, rfl⟩)
-  let ρ : Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ :=
+  let ρ : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ :=
     normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v)) regions a b Ω x (regions j)
   have hρ : ρ.PosSemidef :=
     normalizedRegularizedPatchMarginal_posSemidef (Out := fun v ↦ Fin (n v))
@@ -85,13 +85,13 @@ theorem exists_unitary_diagonal_clipped_of_isMinOn_regularizedPatchObjective
   have hρt : ρ.trace = 1 :=
     trace_normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
       regions a (fun k ↦ (ha k).le) hb Ω hΩ hx (regions j)
-  have hρeq : ρ = Entropy.regionState (regions j)
-      (Entropy.patchState b l (Ω)) :=
+  have hρeq : ρ = ManyBody.regionState (Entropy.patchState b l (Ω))
+      (regions j) :=
     normalizedRegularizedPatchMarginal_eq_regionState_patchState regions a b Ω x (regions j)
   have hcomm : Commute (x j) ρ := by
     simpa only [hρeq] using (Entropy.patch_stationarity hb hexp hden hnest hminList _ hf).1
-  have hvar : ∀ y : Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ,
+  have hvar : ∀ y : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ,
       y.PosSemidef → y.trace = 1 → Commute (x j) y →
       (ρ * (x j + b • 1) ^ (-1 : ℝ) * y).trace.re ≤
         (ρ * (x j + b • 1) ^ (-1 : ℝ) * x j).trace.re := by

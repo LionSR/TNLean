@@ -73,7 +73,7 @@ theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState [NeZero q] (h : ChainInter
     {k' : ℕ} (hk' : ⌈Real.exp (2 * areaLawBound ξ' C₁ q) / 2⌉₊ ≤ k') :
     let k₀ := ⌈Real.exp (2 * areaLawBound ξ' C₁ q) / 2⌉₊
     let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
         Ω).leadingEigenprojection k'
     let Φ := sequentialTruncation P (L - 1) Ω
     IsOpenMPS L q k' (fun x ↦ Φ x) ∧
@@ -85,7 +85,7 @@ theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState [NeZero q] (h : ChainInter
   -- The area law bounds the entropy of every initial segment by `S_max`.
   have hS := regionEntropy_prefix_le_of_factorization h hΩ hgap hspan hξ' hC₁ hfact j
   rw [← leftBlock_eq_interval] at hS
-  calc Real.exp (2 * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) / 2
+  calc Real.exp (2 * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L j)) / 2
       ≤ Real.exp (2 * areaLawBound ξ' C₁ q) / 2 := by gcongr
     _ ≤ k₀ := Nat.le_ceil _
 
@@ -111,7 +111,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped (R : ℕ) {κ : ℝ} (hκ : 
         let k₀ := ⌈Real.exp (2 * areaLawBound (κ * lemmaOneLength R (J / ΔE) 1)
           (max (K * lemmaOneLength R (J / ΔE) 1 ^ 3) 1) q) / 2⌉₊
         let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-          (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+          (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
             Ω).leadingEigenprojection k'
         let Φ := sequentialTruncation P (L - 1) Ω
         IsOpenMPS L q k' (fun x ↦ Φ x) ∧
@@ -148,7 +148,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_endpoint (R : ℕ) :
         let k₀ := ⌈Real.exp (2 * areaLawBound (6 * lemmaOneEndpointLength R J ΔE)
           (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) q) / 2⌉₊
         let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-          (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+          (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
             Ω).leadingEigenprojection k'
         let Φ := sequentialTruncation P (L - 1) Ω
         IsOpenMPS L q k' (fun x ↦ Φ x) ∧

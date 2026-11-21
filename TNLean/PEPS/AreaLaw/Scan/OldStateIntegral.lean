@@ -26,8 +26,6 @@ lines 390–412, at `openai/math@adc7f124`.
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix MeasureTheory
-open Entropy (SiteConfig)
-
 noncomputable section
 
 namespace TensorPower
@@ -80,14 +78,14 @@ variable (D : TransportData V K H C) (n : V → ℕ) [∀ v, NeZero (n v)]
 The old state is independent of the conditional choice in the symbol. -/
 def oldFourierCoherentIntegral (t : ℝ) (k : ℕ)
     (pre : Config k (fun v => Fin (n v)) → ℂ) (p : ℝ) (h : H)
-    (f : (SiteConfig n → ℂ) → ℝ) : ℝ :=
+    (f : ((∀ v, Fin (n v)) → ℂ) → ℝ) : ℝ :=
   ∫ u, Matrix.Transport.fourierWeight u *
     realCoherentIntegral k (base n) (D.state n t k pre p ⟨h, none⟩ u) f
 
 /-- Continuous symbols are Fourier integrable in the actual old state. -/
 theorem integrable_oldFourierCoherentIntegral (t : ℝ) (k : ℕ)
     (pre : Config k (fun v => Fin (n v)) → ℂ) (p : ℝ) (h : H)
-    {f : (SiteConfig n → ℂ) → ℝ} (hf : Continuous f) :
+    {f : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hf : Continuous f) :
     Integrable fun u => Matrix.Transport.fourierWeight u *
       realCoherentIntegral k (base n) (D.state n t k pre p ⟨h, none⟩ u) f := by
   refine (D.integrable_fourierWeight_mul_trace_state t k pre p ⟨h, none⟩
@@ -98,7 +96,7 @@ theorem integrable_oldFourierCoherentIntegral (t : ℝ) (k : ℕ)
 theorem oldFourierCoherentIntegral_mono (hD : D.IsAdmissible)
     {t : ℝ} (ht : 0 ≤ t) {k : ℕ} (hcomm : D.CrossBandCommute n t k)
     (pre : Config k (fun v => Fin (n v)) → ℂ) (p : ℝ) (h : H)
-    {f g : (SiteConfig n → ℂ) → ℝ} (hf : Continuous f) (hg : Continuous g)
+    {f g : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hf : Continuous f) (hg : Continuous g)
     (hfg : ∀ θ, f θ ≤ g θ) :
     D.oldFourierCoherentIntegral n t k pre p h f ≤
       D.oldFourierCoherentIntegral n t k pre p h g := by
@@ -113,7 +111,7 @@ theorem oldFourierCoherentIntegral_mono (hD : D.IsAdmissible)
 theorem oldFourierCoherentIntegral_nonneg (hD : D.IsAdmissible)
     {t : ℝ} (ht : 0 ≤ t) {k : ℕ} (hcomm : D.CrossBandCommute n t k)
     (pre : Config k (fun v => Fin (n v)) → ℂ) (p : ℝ) (h : H)
-    {f : (SiteConfig n → ℂ) → ℝ} (hf : Continuous f) (hf0 : ∀ θ, 0 ≤ f θ) :
+    {f : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hf : Continuous f) (hf0 : ∀ θ, 0 ≤ f θ) :
     0 ≤ D.oldFourierCoherentIntegral n t k pre p h f := by
   have hmono := D.oldFourierCoherentIntegral_mono n hD ht hcomm pre p h
     continuous_const hf hf0
@@ -123,7 +121,7 @@ theorem oldFourierCoherentIntegral_nonneg (hD : D.IsAdmissible)
 /-- Finite sums of continuous symbols retain one common old state. -/
 theorem oldFourierCoherentIntegral_sum (t : ℝ) (k : ℕ)
     (pre : Config k (fun v => Fin (n v)) → ℂ) (p : ℝ) (h : H)
-    {ι : Type*} (s : Finset ι) (f : ι → (SiteConfig n → ℂ) → ℝ)
+    {ι : Type*} (s : Finset ι) (f : ι → ((∀ v, Fin (n v)) → ℂ) → ℝ)
     (hf : ∀ i ∈ s, Continuous (f i)) :
     D.oldFourierCoherentIntegral n t k pre p h (fun θ => ∑ i ∈ s, f i θ) =
       ∑ i ∈ s, D.oldFourierCoherentIntegral n t k pre p h (f i) := by
@@ -135,7 +133,7 @@ theorem oldFourierCoherentIntegral_sum (t : ℝ) (k : ℕ)
 /-- Scalar multiplication retains one common old state. -/
 theorem oldFourierCoherentIntegral_const_mul (t : ℝ) (k : ℕ)
     (pre : Config k (fun v => Fin (n v)) → ℂ) (p : ℝ) (h : H)
-    (c : ℝ) (f : (SiteConfig n → ℂ) → ℝ) :
+    (c : ℝ) (f : ((∀ v, Fin (n v)) → ℂ) → ℝ) :
     D.oldFourierCoherentIntegral n t k pre p h (fun θ => c * f θ) =
       c * D.oldFourierCoherentIntegral n t k pre p h f := by
   unfold oldFourierCoherentIntegral
@@ -161,7 +159,7 @@ variable [∀ h, Fintype (C h)]
 
 /-- The conditional-choice entropy symbol, with one common old partition
 per history and band. It contains no choice-dependent transported state. -/
-def choiceEntropySymbol (h : H) (θ : SiteConfig n → ℂ) : ℝ :=
+def choiceEntropySymbol (h : H) (θ : (∀ v, Fin (n v)) → ℂ) : ℝ :=
   ∑ g, ∑ c, (D.choiceTree h).weight c *
     moveEta n (D.old h g) (D.move h c g) ((EuclideanSpace.equiv _ ℂ).symm θ)
 
@@ -177,7 +175,7 @@ omit [DecidableEq H] [∀ h, DecidableEq (C h)] [∀ v, NeZero (n v)] [∀ h, Fi
 (`06-transport.tex`, lines 342–347). -/
 theorem continuous_splitEta {ι : Type*} (E : EnergyTerms V n ι) (i : ι)
     (j : Σ h, Option (C h)) :
-    Continuous fun θ : SiteConfig n → ℂ =>
+    Continuous fun θ : (∀ v, Fin (n v)) → ℂ =>
       D.splitEta E i j ((EuclideanSpace.equiv _ ℂ).symm θ) := by
   unfold splitEta
   exact continuous_finsetSum _ fun g _ => continuous_splitBandEta _ _
@@ -185,7 +183,7 @@ theorem continuous_splitEta {ι : Type*} (E : EnergyTerms V n ι) (i : ι)
 omit [∀ v, NeZero (n v)] in
 /-- Admissible old partitions and valid moves make the choice symbol nonnegative. -/
 theorem choiceEntropySymbol_nonneg (hD : D.IsAdmissible) (h : H)
-    (θ : SiteConfig n → ℂ) : 0 ≤ D.choiceEntropySymbol n h θ := by
+    (θ : (∀ v, Fin (n v)) → ℂ) : 0 ≤ D.choiceEntropySymbol n h θ := by
   apply Finset.sum_nonneg
   intro g _
   apply Finset.sum_nonneg
@@ -205,7 +203,7 @@ theorem entropyGain_eq_sum_oldFourierCoherentIntegral (t : ℝ) (k : ℕ)
   unfold entropyGain
   apply Finset.sum_congr rfl
   intro h _
-  let f (g : Fin K) (θ : SiteConfig n → ℂ) : ℝ :=
+  let f (g : Fin K) (θ : (∀ v, Fin (n v)) → ℂ) : ℝ :=
     ∑ c, (D.choiceTree h).weight c *
       moveEta n (D.old h g) (D.move h c g) ((EuclideanSpace.equiv _ ℂ).symm θ)
   have hcont (g : Fin K) : Continuous (f g) :=

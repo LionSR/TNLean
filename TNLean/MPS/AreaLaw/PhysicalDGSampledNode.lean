@@ -48,7 +48,7 @@ lines 597–622, `lem:trimming`, lines 660–697, and `t:alg1`, lines 1777–181
 theorem exists_physical_dg_sampled_interval_node_event_of_le_radius :
     ∃ K : ℝ, 0 < K ∧ ∀ (L q : ℕ),
     ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
     0 < gamma →
@@ -224,7 +224,7 @@ lines 597–622, `lem:trimming`, lines 660–697, and `t:alg1`, lines 1777–181
 theorem exists_physical_dg_sampled_interval_node_event :
     ∃ K : ℝ, 0 < K ∧ ∀ (L q : ℕ),
     ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
     0 < gamma →

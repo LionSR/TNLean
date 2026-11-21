@@ -44,7 +44,7 @@ lemma chain_reset_support_separation
     (hC : ∀ c ∈ C₀, ∀ x : Fin L, x ∉ C →
       w < (Nat.dist c.val x.val : ℝ)) :
     let Q := (D ∪ C)ᶜ
-    let crossing := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
+    let crossing := ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
     let Z := crossing.biUnion (fun X ↦ X.1)
     (∀ z ∈ Q ∪ Z, ∀ a ∈ R₀ ∪ C₀,
       w - (R : ℝ) < (Nat.dist a.val z.val : ℝ)) ∧
@@ -71,7 +71,7 @@ lemma chain_reset_support_separation
   have hcross (X : ChainSupport L R) (hX : X ∈ crossing) (z : Fin L) (hz : z ∈ X.1) :
       ∀ a ∈ R₀ ∪ C₀, w - (R : ℝ) < (Nat.dist a.val z.val : ℝ) := by
     have hsplit : (∃ x ∈ X.1, x ∈ D) ∧ ∃ y ∈ X.1, y ∉ D := by
-      simpa only [crossing, Entropy.crossingTerms, Finset.mem_filter,
+      simpa only [crossing, ManyBody.crossingTerms, Finset.mem_filter,
         Finset.mem_univ, true_and] using hX
     obtain ⟨⟨x, hx, hxD⟩, y, hy, hyD⟩ := hsplit
     intro a ha

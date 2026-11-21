@@ -146,8 +146,8 @@ comparison treats the two copies as additional sites.
     \lean{FiniteProduct.relabelSites,
         FiniteProduct.regionRelabel,
         FiniteProduct.complRelabel,
-        FiniteProduct.sumSitesProduct,
-        FiniteProduct.disjSumEquiv}
+        ManyBody.sumSitesProduct,
+        ManyBody.disjSumEquiv}
     \leanok
     For a bijection $\sigma:A\to B$ between finite site sets with a common local
     alphabet, $(\sigma_*\psi)(c)=\psi(c\circ\sigma)$. For vectors $f$ on $A$
@@ -160,10 +160,10 @@ comparison treats the two copies as additional sites.
         FiniteProduct.reducedPure_relabelSites,
         FiniteProduct.entropy_relabelSites,
         FiniteProduct.mutualInformation_relabelSites,
-        FiniteProduct.reducedPure_sumSitesProduct,
-        FiniteProduct.entropy_sumSitesProduct,
-        FiniteProduct.mutualInformation_sumSitesProduct_inl,
-        FiniteProduct.mutualInformation_sumSitesProduct_inr_inl}
+        ManyBody.regionState_sumSitesProduct,
+        ManyBody.regionEntropy_sumSitesProduct,
+        ManyBody.regionMutualInformation_sumSitesProduct_inl,
+        ManyBody.regionMutualInformation_sumSitesProduct_inr_inl}
     \leanok
     \uses{def:al_amp_site_relabel}
     For any bijection $\sigma:A\to A'$ and $R\subseteq A$,
@@ -234,7 +234,7 @@ comparison treats the two copies as additional sites.
     \lean{QuantumCircuit.embedOp_val_eq_kronecker_one_submatrix,
         QuantumCircuit.kronecker_one_submatrix_mem_supportedOperators,
         TNLean.PEPS.AreaLaw.exists_supported_unitary_of_good_realization,
-        FiniteProduct.mutualInformation_le_inv_pow_of_supported_unitary}
+        ManyBody.regionMutualInformation_le_inv_pow_of_supported_unitary}
     \leanok
     \uses{thm:area_law_amplification_unitary_error,thm:al_amp_entropy_comparison_scale}
     On a finite site set with local dimension $q$, suppose $R_0$ and $L'$ are

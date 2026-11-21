@@ -109,15 +109,15 @@ AKLV, arXiv:1301.1162v1, Section 6.1, equation (5), and Lemma 4.2. -/
 theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (e : Fin 3 → ℝ) (t : ℝ) :
     let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t Finset.univ
     let H := fun j : Fin (s - 2) ↦ h ⟨a + 1 + j.val, by omega⟩
     ∃ HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      Entropy.IsSupportedOn HL (interval L 0 (a + 2)) ∧
-      Entropy.IsSupportedOn HR (interval L (a + s - 1) L) ∧
-      (∀ j, Entropy.IsSupportedOn (H j)
+      ManyBody.IsSupportedOn HL (interval L 0 (a + 2)) ∧
+      ManyBody.IsSupportedOn HR (interval L (a + s - 1) L) ∧
+      (∀ j, ManyBody.IsSupportedOn (H j)
         (interval L (a + 1 + j.val) (a + 1 + j.val + 2))) ∧
       B = HL + (∑ j, H j) + HR ∧
       a + 1 + (s - 2) / 2 = a + s / 2 := by
@@ -126,16 +126,16 @@ theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
   let F (j : Fin 3) := cfc (fun x : ℝ ↦ min x (e j + t)) (C j)
   let HL := F 0 - (((∑ j, e j) : ℝ) : ℂ) • 1
   let HR := F 2
-  have hC (j : Fin 3) : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (C j)
+  have hC (j : Fin 3) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (C j)
       (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
         ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.succ)) :=
     isSupportedOn_sum_internal_bonds L q _ _ h hsupp
-  have hF (j : Fin 3) : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (F j)
+  have hF (j : Fin 3) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (F j)
       (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
         ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.succ)) := by
     exact (ManyBody.cfc_mem_supportedOperators _
         (hC j))
-  have hleft : Entropy.IsSupportedOn HL (interval L 0 (a + 2)) := by
+  have hleft : ManyBody.IsSupportedOn HL (interval L 0 (a + 2)) := by
     change _ ∈ ManyBody.supportedOperators _ _
     exact sub_mem
       (hF 0)

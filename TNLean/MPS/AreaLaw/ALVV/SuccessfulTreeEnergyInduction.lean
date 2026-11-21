@@ -89,9 +89,9 @@ def IsTerminalRitzEnergyAssignment {L q width : ℕ} (hq : 0 < q) (hwidth : 1 �
       let k := l + (r - l) / 2
       let J' := interval L l r
       let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
-      let y0 := ((Entropy.cutEquiv (fun _ : Fin L ↦ q) J') sigma0).2
+      let y0 := ((ManyBody.cutEquiv (fun _ ↦ Fin q) J') sigma0).2
       let native := fun x : J' → Fin q ↦
-        (Entropy.cutEquiv (fun _ : Fin L ↦ q) J').symm (x, y0)
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) J').symm (x, y0)
       IsRegionalLowerEnergyEstimate h l r (49 / 16) (estimate l r) ∧
       (k - l ≤ width → IsRegionalLowerEnergyEstimate h l k 0 (estimate l k)) ∧
       (r - k ≤ width → IsRegionalLowerEnergyEstimate h k r 0 (estimate k r)) ∧
@@ -134,7 +134,7 @@ Supporting ALVV, arXiv:1602.08828v2, Theorem `t:alg1` and its proof, lines 1779-
 theorem exists_successful_tree_energy_induction
     {L q width ell : ℕ} (hq : 0 < q) (hwidth : 1 ≤ width)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (g : ℝ) (hg : 0 < g) (t Tcut : ℝ) (m D : ℕ) (hm : 2 ≤ m) (hD : 2 ≤ D)
@@ -223,9 +223,9 @@ theorem exists_successful_tree_energy_induction
     let k := l + (r - l) / 2
     let J' := interval L l r
     let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
-    let y0 := ((Entropy.cutEquiv (fun _ : Fin L ↦ q) J') sigma0).2
+    let y0 := ((ManyBody.cutEquiv (fun _ ↦ Fin q) J') sigma0).2
     let native := fun x : J' → Fin q ↦
-      (Entropy.cutEquiv (fun _ : Fin L ↦ q) J').symm (x, y0)
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) J').symm (x, y0)
     ∃ eLeft eRight : ℝ,
       IsRegionalLowerEnergyEstimate h l (u J) 0 eLeft ∧
       IsRegionalLowerEnergyEstimate h (v J) r 0 eRight ∧

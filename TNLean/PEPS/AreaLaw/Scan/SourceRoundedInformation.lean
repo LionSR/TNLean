@@ -97,20 +97,19 @@ theorem sourceTarget_finalScale_mutualInformation_of_rounded_scales_explicit
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-          regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
             Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) →
           (∀ j : ℕ, j ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
-            regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
               Ce * ((S.n : ℝ) *
                 ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
                   (Exponents.boxError : ℝ) + S.n)) →
           let L := ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
           let X := S.A.filter fun x ↦ x.val ∈ T
-          let β := fun _ : Site Λ ↦ Fin q
-          2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+          2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
               sourceFinalInformationConstant q (Δ / positiveNormalization 1 (Δ / 2) J) C_T Ce *
                 (S.n : ℝ) ^ (62497 / 62500 : ℝ) ∧
-            2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+            2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
               sourceFinalInformationConstant q (Δ / positiveNormalization 1 (Δ / 2) J) C_T Ce *
                 (S.n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   classical
@@ -165,20 +164,19 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales_of_th
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-          regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
             Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) →
           (∀ j : ℕ, j ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
-            regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
               Ce * ((S.n : ℝ) *
                 ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
                   (Exponents.boxError : ℝ) + S.n)) →
           let L := ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
           let X := S.A.filter fun x ↦ x.val ∈ T
-          let β := fun _ : Site Λ ↦ Fin q
-          2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+          2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
               sourceFinalInformationConstant q (Δ / positiveNormalization 1 (Δ / 2) J) C_T Ce *
                 (S.n : ℝ) ^ (62497 / 62500 : ℝ) ∧
-            2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+            2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
               sourceFinalInformationConstant q (Δ / positiveNormalization 1 (Δ / 2) J) C_T Ce *
                 (S.n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   obtain ⟨ct, Cent, eent, Cen, een, hct, htransport⟩ := exists_finiteFamilyTransportBound
@@ -223,19 +221,18 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
             ((2 * ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
               10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-          regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
             Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) →
           (∀ j : ℕ, j ≤ ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ →
-            regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
               Ce * ((S.n : ℝ) *
                 ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
                   (Exponents.boxError : ℝ) + S.n)) →
           let L := ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
           let X := S.A.filter fun x ↦ x.val ∈ T
-          let β := fun _ : Site Λ ↦ Fin q
-          2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+          2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
               C * (S.n : ℝ) ^ (62497 / 62500 : ℝ) ∧
-            2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+            2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
               C * (S.n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   obtain ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, -, hall⟩ :=
     exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales_of_threshold_le hq R hJ hΔ

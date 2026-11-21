@@ -36,7 +36,7 @@ theorem exists_fixed_bandwidth_low_energy_strict_isOpenMPS_approximation
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q : ℕ) (v : ℝ) (hq : 0 < q), 0 < v →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (h i) (interval L i.val (i.val + 2)))
         (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1),
       let _ : Nonempty (Fin L → Fin q) :=
@@ -109,8 +109,9 @@ theorem exists_fixed_bandwidth_low_energy_strict_isOpenMPS_approximation
         apply isOpenMPS_of_cutMatrix_rank_le ψ
         intro k
         have hrank := Matrix.rank_le_card_height (cutMatrix ψ k)
-        have hcard : Fintype.card (Entropy.RegionConfig (fun _ : Fin L ↦ 1)
-            (leftBlock L k)) = 1 := by simp [Entropy.RegionConfig]
+        have hcard : Fintype.card
+            (ManyBody.RegionConfig (fun _ ↦ Fin 1)
+            (leftBlock L k)) = 1 := by simp [ManyBody.RegionConfig]
         rw [hcard] at hrank
         simpa only [mul_one] using hrank.trans hrG
       refine ⟨ψ, hψ, hmps, ?_, ?_⟩

@@ -56,7 +56,7 @@ theorem exists_regionalEntropy_initial_rounded_collar_le_rpow
               let η := 1 - Scan.BootstrapParameters.ell e₀
               let L := Nat.floor ((Nat.ceil (C₂ * (Q.size : ℝ)) : ℝ) ^ η)
               ∀ j : ℕ, j ≤ L →
-                regionalEntropy Λ q Ω
+                ManyBody.regionEntropy Ω
                   (A.filter fun x ↦ x.1 ∈ (Q.dilate j).toFinset \ Q.toFinset) ≤
                   C * (24 + 64 / ((2 : ℝ) ^ e₀ - 1)) *
                     (C₂ + 1) ^ (η * e₀) * (Q.size : ℝ) ^ (1 + η * e₀) := by

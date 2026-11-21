@@ -3,7 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Entropy.LocalLift
+import QICLean.Entropy.SupportedMarginalTails
+import QICLean.Entropy.FilterMoment
+import QICLean.ManyBody.Sites.RegionState
+import QICLean.ManyBody.Sites.Placement
 import QICLean.Channel.SchmidtRank
 import TNLean.MPS.Chain.VaryingBondOBC
 
@@ -61,14 +64,14 @@ noncomputable def cutMatrix (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ
     Matrix ((v : {v : Fin L // v ∈ leftBlock L k}) → Fin q)
       ((v : {v : Fin L // v ∉ leftBlock L k}) → Fin q) ℂ :=
   Matrix.schmidtCoeffMatrix
-    (WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ))
+    (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ))
 
 /-- The entries of the cut matrix are the coefficients of the vector at the glued
 configuration. -/
 theorem cutMatrix_apply (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ)
     (a : (v : {v : Fin L // v ∈ leftBlock L k}) → Fin q)
     (b : (v : {v : Fin L // v ∉ leftBlock L k}) → Fin q) :
-    cutMatrix ψ k a b = ψ ((Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm (a, b)) :=
+    cutMatrix ψ k a b = ψ ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm (a, b)) :=
   rfl
 
 /-- The left block of the cut after zero sites is empty. -/

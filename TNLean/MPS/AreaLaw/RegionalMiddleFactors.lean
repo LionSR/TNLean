@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SelectedCoefficientDecomposition
 import TNLean.Algebra.MatrixFactorExchange
-import QICLean.Channel.FiniteProduct
+import QICLean.ManyBody.Sites.RegionMatrix
 import TNLean.Lattice.Sheet.Splitting
 import Mathlib.Data.Fintype.EquivFin
 
@@ -44,11 +44,11 @@ This is a configuration identity for the regional decomposition used in ALVV,
 arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
 private def threeSplitExteriorConfigEquiv {Ω : Type*} [Fintype Ω] [DecidableEq Ω]
     (q : ℕ) (T E : Finset Ω) (hTE : Disjoint T E) :
-    FiniteProduct.Configuration (fun _ : Ω ↦ Fin q) Eᶜ ≃
+    ManyBody.RegionConfig (fun _ : Ω ↦ Fin q) Eᶜ ≃
       ((T → Fin q) × (↥((T ∪ E)ᶜ) → Fin q)) :=
-  (FiniteProduct.complementUnionEquiv (fun _ : Ω ↦ Fin q) E T hTE.symm).trans
+  (ManyBody.complementUnionEquiv (fun _ : Ω ↦ Fin q) E T hTE.symm).trans
     ((Equiv.refl _).prodCongr
-      (FiniteProduct.configurationCongr (fun _ : Ω ↦ Fin q)
+      (ManyBody.configurationCongr (fun _ : Ω ↦ Fin q)
         (congrArg (fun S : Finset Ω ↦ Sᶜ) (Finset.union_comm E T))))
 
 /-- Regrouping the three regional coordinates agrees with splitting off the
@@ -60,16 +60,16 @@ private theorem exteriorMiddle_threeSplit_apply
     exteriorMiddleEquiv (T → Fin q) (E → Fin q) (↥((T ∪ E)ᶜ) → Fin q)
         (threeSplit q T E hTE x) =
       (threeSplitExteriorConfigEquiv q T E hTE
-        ((FiniteProduct.splitEquiv (fun _ : Ω ↦ Fin q) E x).2),
-        (FiniteProduct.splitEquiv (fun _ : Ω ↦ Fin q) E x).1) := by
+        ((ManyBody.splitEquiv (fun _ : Ω ↦ Fin q) E x).2),
+        (ManyBody.splitEquiv (fun _ : Ω ↦ Fin q) E x).1) := by
   apply Prod.ext
   · apply Prod.ext
     · funext v
       simp [exteriorMiddleEquiv, threeSplitExteriorConfigEquiv,
-        FiniteProduct.complementUnionEquiv, Equiv.prodCongr]
+        ManyBody.complementUnionEquiv, Equiv.prodCongr]
     · funext v
       simp [exteriorMiddleEquiv, threeSplitExteriorConfigEquiv,
-        FiniteProduct.complementUnionEquiv, FiniteProduct.configurationCongr_apply,
+        ManyBody.complementUnionEquiv, ManyBody.configurationCongr_apply,
         Equiv.prodCongr]
   · funext v
     simp [exteriorMiddleEquiv]
@@ -94,8 +94,8 @@ private theorem exists_regional_exterior_of_threeSplit_decomposition
         ∑ t, B t ⊗ₖ V t) :
     ∃ M : ι → Matrix (↥(Eᶜ) → Fin q) (↥(Eᶜ) → Fin q) R,
       X = (∑ t, M t ⊗ₖ V t).submatrix
-        ((FiniteProduct.splitEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _))
-        ((FiniteProduct.splitEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _)) := by
+        ((ManyBody.splitEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _))
+        ((ManyBody.splitEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _)) := by
   let f := (threeSplit q T E hTE).trans
     (exteriorMiddleEquiv (T → Fin q) (E → Fin q) (↥((T ∪ E)ᶜ) → Fin q))
   let M := fun t ↦ (B t).submatrix (threeSplitExteriorConfigEquiv q T E hTE)
@@ -133,8 +133,8 @@ theorem exists_regional_exterior_of_natural_threeSplit_decomposition
     ∃ M : ι → Matrix (↥(Eᶜ) → Fin q) (↥(Eᶜ) → Fin q) R,
       X = (∑ r, M r ⊗ₖ (V r).submatrix (fun σ : E → Fin q ↦ σ ∘ eE)
           (fun σ : E → Fin q ↦ σ ∘ eE)).submatrix
-        ((FiniteProduct.splitEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _))
-        ((FiniteProduct.splitEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _)) := by
+        ((ManyBody.splitEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _))
+        ((ManyBody.splitEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _)) := by
   let f := (threeSplit q T E hTE).trans
     (exteriorMiddleEquiv (T → Fin q) (E → Fin q) (↥((T ∪ E)ᶜ) → Fin q))
   let Vphys := fun r ↦ (V r).submatrix (fun σ : E → Fin q ↦ σ ∘ eE)
@@ -171,55 +171,55 @@ variable {V : Type*} [Fintype V] [DecidableEq V] (β : V → Type*)
 
 /-- Split the old middle into its removed sites and the intersection. -/
 def changingOldMiddleConfigEquiv (E J : Finset V) :
-    Configuration β E ≃ Configuration β (E \ J) × Configuration β (E ∩ J) :=
-  (configurationCongr β (Finset.sdiff_union_inter E J).symm).trans
-    (unionEquiv β (E \ J) (E ∩ J) (by
+    ManyBody.RegionConfig β E ≃ ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E ∩ J) :=
+  (ManyBody.configurationCongr β (Finset.sdiff_union_inter E J).symm).trans
+    (ManyBody.unionEquiv β (E \ J) (E ∩ J) (by
       apply Finset.disjoint_left.mpr
       intro v hA hC
       exact (Finset.mem_sdiff.mp hA).2 (Finset.mem_inter.mp hC).2))
 
 /-- Split the old exterior into the newly retained sites and the common exterior. -/
 private def changingOldExteriorConfigEquiv (E J : Finset V) :
-    Configuration β Eᶜ ≃
-      Configuration β (J \ E) × Configuration β (E ∪ J)ᶜ :=
-  (complementUnionEquiv β E (J \ E) (by
+    ManyBody.RegionConfig β Eᶜ ≃
+      ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (E ∪ J)ᶜ :=
+  (ManyBody.complementUnionEquiv β E (J \ E) (by
     apply Finset.disjoint_left.mpr
     intro v hE hB
     exact (Finset.mem_sdiff.mp hB).2 hE)).trans
       ((Equiv.refl _).prodCongr
-        (configurationCongr β (congrArg (fun S : Finset V ↦ Sᶜ)
+        (ManyBody.configurationCongr β (congrArg (fun S : Finset V ↦ Sᶜ)
           (Finset.union_sdiff_self_eq_union (s := E) (t := J)))))
 
 /-- Split the new middle, using the same literal intersection as the old split. -/
 def changingNewMiddleConfigEquiv (E J : Finset V) :
-    Configuration β J ≃ Configuration β (J \ E) × Configuration β (E ∩ J) :=
+    ManyBody.RegionConfig β J ≃ ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (E ∩ J) :=
   (changingOldMiddleConfigEquiv β J E).trans
-    ((Equiv.refl _).prodCongr (configurationCongr β (Finset.inter_comm J E)))
+    ((Equiv.refl _).prodCongr (ManyBody.configurationCongr β (Finset.inter_comm J E)))
 
 /-- Split the new exterior, using the same literal common exterior. -/
 private def changingNewExteriorConfigEquiv (E J : Finset V) :
-    Configuration β Jᶜ ≃
-      Configuration β (E \ J) × Configuration β (E ∪ J)ᶜ :=
+    ManyBody.RegionConfig β Jᶜ ≃
+      ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E ∪ J)ᶜ :=
   (changingOldExteriorConfigEquiv β J E).trans
     ((Equiv.refl _).prodCongr
-      (configurationCongr β (congrArg (fun S : Finset V ↦ Sᶜ)
+      (ManyBody.configurationCongr β (congrArg (fun S : Finset V ↦ Sᶜ)
         (Finset.union_comm J E))))
 
 /-- Old exterior-first coordinates refined into the four actual regions. -/
 private def changingOldConfigEquiv (E J : Finset V) :
     ((v : V) → β v) ≃
-      ((Configuration β (J \ E) × Configuration β (E ∪ J)ᶜ) ×
-        (Configuration β (E \ J) × Configuration β (E ∩ J))) :=
-  ((splitEquiv β E).trans (Equiv.prodComm _ _)).trans
+      ((ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (E ∪ J)ᶜ) ×
+        (ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E ∩ J))) :=
+  ((ManyBody.splitEquiv β E).trans (Equiv.prodComm _ _)).trans
     ((changingOldExteriorConfigEquiv β E J).prodCongr
       (changingOldMiddleConfigEquiv β E J))
 
 /-- New exterior-first coordinates refined into the same four actual regions. -/
 private def changingNewConfigEquiv (E J : Finset V) :
     ((v : V) → β v) ≃
-      ((Configuration β (E \ J) × Configuration β (E ∪ J)ᶜ) ×
-        (Configuration β (J \ E) × Configuration β (E ∩ J))) :=
-  ((splitEquiv β J).trans (Equiv.prodComm _ _)).trans
+      ((ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E ∪ J)ᶜ) ×
+        (ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (E ∩ J))) :=
+  ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)).trans
     ((changingNewExteriorConfigEquiv β E J).prodCongr
       (changingNewMiddleConfigEquiv β E J))
 
@@ -233,17 +233,17 @@ private theorem changingOldConfigEquiv_apply (E J : Finset V)
   · apply Prod.ext
     · funext v
       simp [changingOldConfigEquiv, changingOldExteriorConfigEquiv,
-        Equiv.prodCongr, complementUnionEquiv]
+        Equiv.prodCongr, ManyBody.complementUnionEquiv]
     · funext v
       simp [changingOldConfigEquiv, changingOldExteriorConfigEquiv,
-        Equiv.prodCongr, complementUnionEquiv, configurationCongr_apply]
+        Equiv.prodCongr, ManyBody.complementUnionEquiv, ManyBody.configurationCongr_apply]
   · apply Prod.ext
     · funext v
       simp [changingOldConfigEquiv, changingOldMiddleConfigEquiv,
-        Equiv.prodCongr, unionEquiv, configurationCongr_apply]
+        Equiv.prodCongr, ManyBody.unionEquiv, ManyBody.configurationCongr_apply]
     · funext v
       simp [changingOldConfigEquiv, changingOldMiddleConfigEquiv,
-        Equiv.prodCongr, unionEquiv, configurationCongr_apply]
+        Equiv.prodCongr, ManyBody.unionEquiv, ManyBody.configurationCongr_apply]
 
 /-- Every new four-region coordinate is the restriction to its actual sites. -/
 private theorem changingNewConfigEquiv_apply (E J : Finset V)
@@ -255,20 +255,20 @@ private theorem changingNewConfigEquiv_apply (E J : Finset V)
   · apply Prod.ext
     · funext v
       simp [changingNewConfigEquiv, changingNewExteriorConfigEquiv,
-        changingOldExteriorConfigEquiv, Equiv.prodCongr, complementUnionEquiv]
+        changingOldExteriorConfigEquiv, Equiv.prodCongr, ManyBody.complementUnionEquiv]
     · funext v
       simp [changingNewConfigEquiv, changingNewExteriorConfigEquiv,
         changingOldExteriorConfigEquiv, Equiv.prodCongr,
-        complementUnionEquiv, configurationCongr_apply]
+        ManyBody.complementUnionEquiv, ManyBody.configurationCongr_apply]
   · apply Prod.ext
     · funext v
       simp [changingNewConfigEquiv, changingNewMiddleConfigEquiv,
         changingOldMiddleConfigEquiv, Equiv.prodCongr,
-        unionEquiv, configurationCongr_apply]
+        ManyBody.unionEquiv, ManyBody.configurationCongr_apply]
     · funext v
       simp [changingNewConfigEquiv, changingNewMiddleConfigEquiv,
         changingOldMiddleConfigEquiv, Equiv.prodCongr,
-        unionEquiv, configurationCongr_apply]
+        ManyBody.unionEquiv, ManyBody.configurationCongr_apply]
 
 /-- Refining the old cut then regrouping equals refining the new cut.
 This is a coordinate identity on the four actual finite regions, supporting
@@ -292,10 +292,10 @@ are literal restrictions to the four regions. Supporting ALVV,
 arXiv:1602.08828v2, Proposition 5.7, lines 1332–1333. -/
 noncomputable def changingRegionalMiddleFamily {R ι : Type*} [Semiring R]
     (E J : Finset Ω)
-    (V : ι → Matrix (Configuration β E) (Configuration β E) R) :
-    (ι × (Configuration β (E \ J) × Configuration β (E \ J)) ×
-      (Configuration β (J \ E) × Configuration β (J \ E))) →
-      Matrix (Configuration β J) (Configuration β J) R := by
+    (V : ι → Matrix (ManyBody.RegionConfig β E) (ManyBody.RegionConfig β E) R) :
+    (ι × (ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E \ J)) ×
+      (ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (J \ E))) →
+      Matrix (ManyBody.RegionConfig β J) (ManyBody.RegionConfig β J) R := by
   classical
   exact fun r ↦
     (Matrix.exchangedMiddleFamily
@@ -312,24 +312,24 @@ arXiv:1602.08828v2, Proposition 5.7, lines 1332–1333. -/
 theorem exists_changingRegional_exterior_family
     {R ι : Type*} [Semiring R] [Fintype ι] [∀ v, Fintype (β v)]
     (E J : Finset Ω)
-    (V : ι → Matrix (Configuration β E) (Configuration β E) R)
-    (M : ι → Matrix (Configuration β Eᶜ) (Configuration β Eᶜ) R) :
-    ∃ Mnew : (ι × (Configuration β (E \ J) × Configuration β (E \ J)) ×
-        (Configuration β (J \ E) × Configuration β (J \ E))) →
-        Matrix (Configuration β Jᶜ) (Configuration β Jᶜ) R,
+    (V : ι → Matrix (ManyBody.RegionConfig β E) (ManyBody.RegionConfig β E) R)
+    (M : ι → Matrix (ManyBody.RegionConfig β Eᶜ) (ManyBody.RegionConfig β Eᶜ) R) :
+    ∃ Mnew : (ι × (ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E \ J)) ×
+        (ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (J \ E))) →
+        Matrix (ManyBody.RegionConfig β Jᶜ) (ManyBody.RegionConfig β Jᶜ) R,
       (∑ t, M t ⊗ₖ V t).submatrix
-        ((splitEquiv β E).trans (Equiv.prodComm _ _))
-        ((splitEquiv β E).trans (Equiv.prodComm _ _)) =
+        ((ManyBody.splitEquiv β E).trans (Equiv.prodComm _ _))
+        ((ManyBody.splitEquiv β E).trans (Equiv.prodComm _ _)) =
       (∑ r, Mnew r ⊗ₖ changingRegionalMiddleFamily β E J V r).submatrix
-        ((splitEquiv β J).trans (Equiv.prodComm _ _))
-        ((splitEquiv β J).trans (Equiv.prodComm _ _)) := by
+        ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
+        ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
   classical
   let Mfour := fun t ↦ (M t).reindex (changingOldExteriorConfigEquiv β E J)
     (changingOldExteriorConfigEquiv β E J)
   let Vfour := fun t ↦ (V t).reindex (changingOldMiddleConfigEquiv β E J)
     (changingOldMiddleConfigEquiv β E J)
-  let Mnew := fun r : (ι × (Configuration β (E \ J) × Configuration β (E \ J)) ×
-      (Configuration β (J \ E) × Configuration β (J \ E))) ↦
+  let Mnew := fun r : (ι × (ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E \ J)) ×
+      (ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (J \ E))) ↦
     ((Matrix.single r.2.1.1 r.2.1.2 (1 : R)) ⊗ₖ
       Matrix.operatorBlock (Mfour r.1) r.2.2.1 r.2.2.2).reindex
         (changingNewExteriorConfigEquiv β E J).symm
@@ -377,25 +377,25 @@ theorem exists_changingRegional_family_fin
       ∀ M : ι → Matrix (↥(Eᶜ) → Fin q) (↥(Eᶜ) → Fin q) ℂ,
         ∃ Mnew : Fin N → Matrix (↥(Jᶜ) → Fin q) (↥(Jᶜ) → Fin q) ℂ,
           (∑ t, M t ⊗ₖ V t).submatrix
-              ((splitEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _))
-              ((splitEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _)) =
+              ((ManyBody.splitEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _))
+              ((ManyBody.splitEquiv (fun _ : Ω ↦ Fin q) E).trans (Equiv.prodComm _ _)) =
             (∑ r, Mnew r ⊗ₖ W r).submatrix
-              ((splitEquiv (fun _ : Ω ↦ Fin q) J).trans (Equiv.prodComm _ _))
-              ((splitEquiv (fun _ : Ω ↦ Fin q) J).trans (Equiv.prodComm _ _)) := by
+              ((ManyBody.splitEquiv (fun _ : Ω ↦ Fin q) J).trans (Equiv.prodComm _ _))
+              ((ManyBody.splitEquiv (fun _ : Ω ↦ Fin q) J).trans (Equiv.prodComm _ _)) := by
   classical
   let β := fun _ : Ω ↦ Fin q
   let A := E \ J
   let B := J \ E
-  let I := ι × (Configuration β A × Configuration β A) ×
-    (Configuration β B × Configuration β B)
+  let I := ι × (ManyBody.RegionConfig β A × ManyBody.RegionConfig β A) ×
+    (ManyBody.RegionConfig β B × ManyBody.RegionConfig β B)
   let Wall := changingRegionalMiddleFamily β E J V
   let e := Fintype.equivFin I
   have hcard : Fintype.card I = Fintype.card ι * q ^ (2 * A.card + 2 * B.card) := by
     calc
-      Fintype.card I = Fintype.card ι * Fintype.card (Configuration β A) ^ 2 *
-          Fintype.card (Configuration β B) ^ 2 := Matrix.card_exchangedMiddleFamily_index
+      Fintype.card I = Fintype.card ι * Fintype.card (ManyBody.RegionConfig β A) ^ 2 *
+          Fintype.card (ManyBody.RegionConfig β B) ^ 2 := Matrix.card_exchangedMiddleFamily_index
       _ = Fintype.card ι * q ^ (2 * A.card + 2 * B.card) := by
-        simp only [Configuration, β, Fintype.card_fun, Fintype.card_fin,
+        simp only [ManyBody.RegionConfig, β, Fintype.card_fun, Fintype.card_fin,
           Fintype.card_coe, ← pow_mul]
         rw [Nat.mul_assoc, ← pow_add]
         rw [show A.card * 2 + B.card * 2 = 2 * A.card + 2 * B.card by omega]
@@ -404,8 +404,8 @@ theorem exists_changingRegional_family_fin
   obtain ⟨Mnew, hMnew⟩ := exists_changingRegional_exterior_family β E J V M
   refine ⟨fun r ↦ Mnew (e.symm r), hMnew.trans ?_⟩
   exact congrArg (fun P ↦ P.submatrix
-    ((splitEquiv β J).trans (Equiv.prodComm _ _))
-    ((splitEquiv β J).trans (Equiv.prodComm _ _)))
+    ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
+    ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)))
     (e.symm.sum_comp (fun r ↦ Mnew r ⊗ₖ Wall r)).symm
 
 end FiniteProduct

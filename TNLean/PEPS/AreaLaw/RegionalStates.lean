@@ -35,36 +35,29 @@ Source: area-law `sec:prelim`, lines 10–25, normalization of density operators
 and the one-dimensional empty tensor product. -/
 theorem trace_reducedState_eq_norm_sq (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
-    (reducedState Λ q Ω A).trace = (‖Ω‖ : ℂ) ^ 2 := by
-  rw [reducedState, Matrix.trace_partialTraceRight]
-  change (Matrix.reindex (configurationSplit Λ q A) (configurationSplit Λ q A)
-    (Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).trace = _
-  rw [Matrix.trace_reindex, Matrix.trace_vecMulVec,
-    ← EuclideanSpace.inner_eq_star_dotProduct, inner_self_eq_norm_sq_to_K]
-  rfl
+    (ManyBody.regionState Ω A).trace = (‖Ω‖ : ℂ) ^ 2 := by
+  rw [ManyBody.trace_regionState A Ω, Complex.ofReal_pow]
 
 /-- Regional entropy of a unit vector is nonnegative.
 Source: area-law `sec:prelim`, lines 10–25, entropy of normalized density operators. -/
 theorem regionalEntropy_nonneg (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ)) :
-    0 ≤ regionalEntropy Λ q Ω A :=
+    0 ≤ ManyBody.regionEntropy Ω A :=
   vonNeumannEntropy_nonneg_of_posSemidef_trace_one
-    (reducedState_posSemidef Λ q Ω A) (trace_reducedState Ω hΩ A)
+    (ManyBody.regionState_posSemidef A Ω) (trace_reducedState Ω hΩ A)
 
 /-- The empty region has zero entropy for a unit vector.
 Source: area-law `sec:prelim`, lines 23–25, empty tensor products. -/
 @[simp] theorem regionalEntropy_empty (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) :
-    regionalEntropy Λ q Ω ∅ = 0 := by
-  rw [regionalEntropy_eq_regionEntropy]
-  exact regionEntropy_empty hΩ
+    ManyBody.regionEntropy Ω ∅ = 0 := by
+  exact ManyBody.regionEntropy_empty _ Ω hΩ
 
 /-- The full region has zero entropy for a unit pure vector.
 Source: area-law `sec:prelim`, lines 23–25, purity and empty complements. -/
 @[simp] theorem regionalEntropy_univ (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) :
-    regionalEntropy Λ q Ω Finset.univ = 0 := by
-  rw [regionalEntropy_eq_regionEntropy]
-  exact regionEntropy_univ hΩ
+    ManyBody.regionEntropy Ω Finset.univ = 0 := by
+  exact ManyBody.regionEntropy_univ _ Ω hΩ
 
 end TNLean.PEPS.AreaLaw

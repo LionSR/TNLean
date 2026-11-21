@@ -100,7 +100,6 @@ import TNLean.Algebra.IsometricFrameEmbedding
 import TNLean.Algebra.IsometricGapTransfer
 import TNLean.Algebra.IsometricProjection
 import TNLean.Algebra.IsometryUnitaryExtension
-import TNLean.Algebra.KernelGapPerturbation
 import TNLean.Algebra.KleinCocycleCompleteness
 import TNLean.Algebra.KleinCocyclePhase
 import TNLean.Algebra.KleinCocycleTable

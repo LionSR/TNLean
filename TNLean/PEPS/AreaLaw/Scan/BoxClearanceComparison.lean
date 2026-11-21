@@ -72,7 +72,7 @@ theorem boxEntropy_power_le_of_succ_clearance
       lt_of_le_of_lt
         ((Nat.mul_le_mul_left (D + 1) (IntRect.size_child_le (Q := Q) i.1 i.2 hr)).trans
           hclear) (hsafe e he z hz p (hsub i hp))
-    have hbound : ∀ i : ι, regionalEntropy Λ q Ω (Xs i) ≤ C * (Q.size : ℝ) ^ p := fun i ↦
+    have hbound : ∀ i : ι, ManyBody.regionEntropy Ω (Xs i) ≤ C * (Q.size : ℝ) ^ p := fun i ↦
       (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan (hsafe_child i)
         (IntRect.size_le_of_subset (hsub i))).trans (hbox Q.size Q.one_le_size)
     have hunion : Finset.univ.biUnion Xs = rectRegion A Q := by
@@ -89,20 +89,19 @@ theorem boxEntropy_power_le_of_succ_clearance
       rw [mem_rectRegion] at hxi hxj
       obtain ⟨h1, h2⟩ := IntRect.eq_of_mem_child hr i.1.isLt i.2.isLt j.1.isLt j.2.isLt hxi.2 hxj.2
       exact Prod.ext (Fin.ext h1) (Fin.ext h2)
-    have hsumEntropy : regionalEntropy Λ q Ω (rectRegion A Q) ≤
-        ∑ i : ι, regionalEntropy Λ q Ω (Xs i) := by
-      simp only [regionalEntropy_eq_finiteProduct]
+    have hsumEntropy : ManyBody.regionEntropy Ω (rectRegion A Q) ≤
+        ∑ i : ι, ManyBody.regionEntropy Ω (Xs i) := by
       have hu := Entropy.OrderedSetFunction.union_biUnion_le_sum
-        (FiniteProduct.entropy (fun _ : Site Λ ↦ Fin q) Ω)
-        (FiniteProduct.entropy_union_le _ Ω hΩ) ∅ Xs Finset.univ
+        (ManyBody.regionEntropy Ω)
+        (ManyBody.regionEntropy_union_le _ Ω hΩ) ∅ Xs Finset.univ
         (by intros; simp) (fun i _ j _ hij ↦ hdisj hij)
-      simpa only [Finset.empty_union, FiniteProduct.entropy_empty _ Ω hΩ,
+      simpa only [Finset.empty_union, ManyBody.regionEntropy_empty _ Ω hΩ,
         zero_add, hunion] using hu
     have hcard : Fintype.card ι ≤ 4 := by
       simpa only [ι, Fintype.card_prod, Fintype.card_fin] using hcount
     calc
-      regionalEntropy Λ q Ω (rectRegion A Q) ≤
-          ∑ i : ι, regionalEntropy Λ q Ω (Xs i) := hsumEntropy
+      ManyBody.regionEntropy Ω (rectRegion A Q) ≤
+          ∑ i : ι, ManyBody.regionEntropy Ω (Xs i) := hsumEntropy
       _ ≤ ∑ _ : ι, C * (Q.size : ℝ) ^ p := Finset.sum_le_sum fun i _ ↦ hbound i
       _ = (Fintype.card ι : ℝ) * (C * (Q.size : ℝ) ^ p) := by simp
       _ ≤ 4 * (C * (Q.size : ℝ) ^ p) :=

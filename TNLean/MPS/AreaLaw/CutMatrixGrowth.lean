@@ -104,10 +104,10 @@ private theorem coefficient_matrix_eq_reindex
   apply congrArg ψ
   funext v
   by_cases hv : v.val < k
-  · rw [Entropy.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr hv), dite_eq_left hv]
+  · rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr hv), dite_eq_left hv]
     rfl
   · have hv' : v ∉ leftBlock L k := fun h ↦ hv (mem_leftBlock.mp h)
-    rw [Entropy.cutEquiv_symm_apply_not_mem _ _ hv', dite_eq_right hv]
+    rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ hv', dite_eq_right hv]
     rfl
 
 private theorem rank_cutMatrix_eq_coefficientRank

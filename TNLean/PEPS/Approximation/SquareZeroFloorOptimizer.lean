@@ -64,24 +64,24 @@ regional matrices below are in the canonical integer square coordinates. -/
 theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fidelity
     {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
         (hhJ : ∀ i, ‖h.term i‖ ≤ J)
-    [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
+    [LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L))]
     {Ω : StateSpace L q} (hΩn : ‖Ω‖ = 1) (hΩg : IsGapped h.hamiltonian E₀ Δ)
     (hΩs : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
-    (D : ℕ → Finset (Lattice.Site (AreaLaw.rectangularDomain L L)))
+    (D : ℕ → Finset (Lattice.Site (ManyBody.rectangularDomain L L)))
     (hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j)
-    (hsingle : ∀ e : Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
+    (hsingle : ∀ e : Edge (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L)),
       ∀ i j : Fin m,
-        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D i) →
-        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j) →
+        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (ManyBody.rectangularDomain L L) (D i) →
+        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (ManyBody.rectangularDomain L L) (D j) →
         i = j)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) (ha1 : ∀ j, a j ≤ 1) :
     ∃ K : (j : Fin m) → Matrix
-        (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j))
-        (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j)) ℂ,
+        (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j))
+        (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j)) ℂ,
       (∀ j : Fin m, Entropy.IsFeasibleFilter 0 (a j) (K j)) ∧
       (∀ K' : (j : Fin m) → Matrix
-          (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j))
-          (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j)) ℂ,
+          (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j))
+          (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j)) ℂ,
         (∀ j : Fin m, Entropy.IsFeasibleFilter 0 (a j) (K' j)) →
         ‖toEuclideanLin (Entropy.liftProd (Entropy.chainList D K' fun _ ↦ True))
             (AreaLaw.rectangleAreaLawState Ω)‖ ≤
@@ -91,26 +91,28 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
         (AreaLaw.rectangleAreaLawState Ω)
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
-        |(⟪φ, toEuclideanLin h.toAreaLawHamiltonian.hamiltonian φ⟫_ℂ).re - E₀| ≤
+        |(⟪φ, toEuclideanLin
+            (ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart).hamiltonian
+              φ⟫_ℂ).re - E₀| ≤
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
-            a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card ∧
+            a j ^ 2 * (Lattice.edgeBoundary (ManyBody.rectangularDomain L L) (D j)).card ∧
         Δ * (1 - ‖⟪AreaLaw.rectangleAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
-            a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
+            a j ^ 2 * (Lattice.edgeBoundary (ManyBody.rectangularDomain L L) (D j)).card := by
   classical
   obtain ⟨T, hT, hTH, hTJ, hsum⟩ := h.exists_nearestNeighbor_terms hh hhJ
-  obtain ⟨hΩ, hgs, hspan⟩ := h.isGapped_toAreaLawHamiltonian hh hΩn hΩg hΩs
+  obtain ⟨hΩ, hgs, hspan⟩ := h.isGapped_toPlaneInteraction_hermitianPart hh hΩn hΩg hΩs
   have hΩ0 : AreaLaw.rectangleAreaLawState Ω ≠ 0 := fun h0 ↦ by
     have hnorm := hΩ
     simp [h0] at hnorm
-  have hsplit : ∀ i : Lattice.Site (AreaLaw.rectangularDomain L L) ⊕
-      Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
+  have hsplit : ∀ i : Lattice.Site (ManyBody.rectangularDomain L L) ⊕
+      Edge (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L)),
       ∀ j ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m,
       ∀ k ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m, j = k := by
     intro i j hj k hk
     have hc (l : Fin m)
         (hl : l ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m) :
-        i ∈ Entropy.crossingTerms AreaLaw.nearestNeighborSupport (D l) :=
+        i ∈ ManyBody.crossingTerms AreaLaw.nearestNeighborSupport (D l) :=
       by
         simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
         exact Entropy.mem_splitIndices.mp hl
@@ -129,13 +131,13 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
       D hD a ha ha1 hΩ0 T AreaLaw.nearestNeighborSupport hT hTH hTJ hsplit heig
   have hbudget :
       (∑ j : Fin m, a j ^ 2 *
-        ∑ i ∈ Entropy.crossingTerms AreaLaw.nearestNeighborSupport (D j),
-          (Fintype.card (Entropy.InnerConfig
-            (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
+        ∑ i ∈ ManyBody.crossingTerms AreaLaw.nearestNeighborSupport (D j),
+          (Fintype.card (ManyBody.InnerConfig
+            (fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
             (D j) (AreaLaw.nearestNeighborSupport i)) : ℝ) ^ 2 * J) =
         (q : ℝ) ^ 2 * J * ∑ j : Fin m,
-          a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
-    simp_rw [Entropy.card_innerConfig]
+          a j ^ 2 * (Lattice.edgeBoundary (ManyBody.rectangularDomain L L) (D j)).card := by
+    simp_rw [ManyBody.card_innerConfig]
     simpa only [Finset.prod_const, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe] using
       AreaLaw.nearestNeighbor_crossing_budget q J (fun j : Fin m ↦ D j) a
   rw [hsum, hbudget] at henergy
@@ -143,7 +145,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
   have hgap := Matrix.PosSemidef.gap_le (Ω := AreaLaw.rectangleAreaLawState Ω)
     (hgs.posSemidef_sub_smul_one
         (ManyBody.Interaction.isHermitian_hamiltonian
-        h.isHermitian_toAreaLawHamiltonian_term) hΩ hspan)
+        h.isHermitian_toPlaneInteraction_hermitianPart_term) hΩ hspan)
     (((‖toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
       (AreaLaw.rectangleAreaLawState Ω)‖⁻¹ : ℝ) : ℂ) •
       toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))

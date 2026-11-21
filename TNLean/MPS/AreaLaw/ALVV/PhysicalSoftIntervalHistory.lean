@@ -51,7 +51,7 @@ theorem exists_physical_soft_interval_history
       (t / m) * (T1 / t) ^ m) ≤ tau * g / 1000000)
     (N p r : ℕ) (hpr : p ≤ r) (hrN : r ≤ N + 1) (hlong : 4 * ell < r - p)
       (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-      (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+      (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval (N + 1) i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     let samplingD := (m * k + 1) * (q * k) ^ (36 * ell + 4 * (k / ell))

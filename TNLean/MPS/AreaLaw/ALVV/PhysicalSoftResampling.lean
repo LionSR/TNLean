@@ -166,7 +166,7 @@ theorem exists_physical_soft_resampling_tree
     ∃ Cxi : ℝ, 0 < Cxi ∧ ∃ Pxi : ℕ,
     ∀ (L : ℕ)
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu : ℝ),
     let H := ∑ i, h i

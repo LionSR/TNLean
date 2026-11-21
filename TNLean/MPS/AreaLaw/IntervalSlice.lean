@@ -57,27 +57,27 @@ private theorem cutMatrix_intervalSlice (ψ : EuclideanSpace ℂ (Fin T → Fin 
       (cutMatrix ψ (a + j)).submatrix (prefixMap a j hj σ₀) (suffixMap a j σ₀) := by
   ext x y
   change ψ (insertInterval a σ₀
-    ((Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L j)).symm (x, y))) =
-      ψ ((Entropy.cutEquiv (fun _ : Fin T ↦ q) (leftBlock T (a + j))).symm
+    ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L j)).symm (x, y))) =
+      ψ ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock T (a + j))).symm
         (prefixMap a j hj σ₀ x, suffixMap a j σ₀ y))
   apply congrArg ψ
   funext i
   by_cases hi : i.val < a + j
-  · rw [Entropy.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr hi)]
+  · rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr hi)]
     by_cases ha : a ≤ i.val
     · have hb : i.val < a + L := lt_of_lt_of_le hi (Nat.add_le_add_left hj a)
       simp only [insertInterval,
         dite_eq_left (show a ≤ i.val ∧ i.val < a + L from ⟨ha, hb⟩),
         prefixMap, dite_eq_left ha]
-      rw [Entropy.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr (by dsimp only; omega))]
+      rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr (by dsimp only; omega))]
     · simp [insertInterval, prefixMap, ha]
-  · rw [Entropy.cutEquiv_symm_apply_not_mem _ _ (mt mem_leftBlock.mp hi)]
+  · rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ (mt mem_leftBlock.mp hi)]
     by_cases hb : i.val < a + L
     · have ha : a ≤ i.val := by omega
       simp only [insertInterval,
         dite_eq_left (show a ≤ i.val ∧ i.val < a + L from ⟨ha, hb⟩),
         suffixMap, dite_eq_left hb]
-      rw [Entropy.cutEquiv_symm_apply_not_mem _ _ (by simp only [mem_leftBlock]; omega)]
+      rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ (by simp only [mem_leftBlock]; omega)]
     · simp [insertInterval, suffixMap, hb]
 
 /-- Fixing the coordinates outside an interval cannot increase its internal cut ranks. -/

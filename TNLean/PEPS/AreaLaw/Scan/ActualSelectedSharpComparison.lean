@@ -57,7 +57,6 @@ theorem eventually_exists_selected_actualCharge_sharp_comparison
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)))
     (Sent e₀ Kmom z Cen een C Cl P cU cL Cf p₀ p₁ : ℝ)
     (rem selectionBound : ℕ → ℝ) :
-    let β := fun _ : Site Λ ↦ Fin q
     let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
     let pre : (k : ℕ) → Config k (fun v ↦ Fin (dims v)) → ℂ := fun k ↦
       replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
@@ -69,13 +68,13 @@ theorem eventually_exists_selected_actualCharge_sharp_comparison
     let near := fun j band ↦ receiving (σ j band) false
     let middleRegion := fun j band ↦ middle (σ j band)
     let gpre := fun j band ↦
-      FiniteProduct.entropy β Ωt (near j band) +
-        FiniteProduct.entropy β Ωt (near j band ∪ middleRegion j band)ᶜ -
-        FiniteProduct.entropy β Ωt (middleRegion j band)
+      ManyBody.regionEntropy Ωt (near j band) +
+        ManyBody.regionEntropy Ωt (near j band ∪ middleRegion j band)ᶜ -
+        ManyBody.regionEntropy Ωt (middleRegion j band)
     let gpost := fun j band ↦
-      regionalEntropy Λ q Ωt (positiveNear S.depth (σ j band)) +
-        regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j band)) -
-        regionalEntropy Λ q Ωt (middle (σ j band))
+      ManyBody.regionEntropy Ωt (positiveNear S.depth (σ j band)) +
+        ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j band)) -
+        ManyBody.regionEntropy Ωt (middle (σ j band))
     let gaps := (Finset.univ :
       Finset (terminalFamily S.K S.m S.M (S.n * S.m) × Fin S.K)).image
         (fun j ↦ gpre j.1 j.2)
@@ -122,7 +121,7 @@ theorem eventually_exists_selected_actualCharge_sharp_comparison
               2 * Real.bellOverlapRemainder d cU S.K k / W +
                 sharpLowerRemainder a cL Cf ell Sent k := by
   classical
-  intro β dims pre E ℓ g W σ near middleRegion gpre gpost gaps gmax tree Gpre Gpost
+  intro dims pre E ℓ g W σ near middleRegion gpre gpost gaps gmax tree Gpre Gpost
     Q δ error cap hselected hcoefficient hcomparison
   have hKr : (0 : ℝ) < S.K := Nat.cast_pos.mpr hKpos
   have hW : 0 < W := mul_pos ha hKr

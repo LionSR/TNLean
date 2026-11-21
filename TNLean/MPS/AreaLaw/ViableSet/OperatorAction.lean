@@ -38,7 +38,7 @@ The effective input bond bound is `max 1 b`, as in `IsLeftOpenMPS`. -/
 theorem IsLeftOpenMPS.toEuclideanLin (hi : i ≤ L) {b D : ℕ}
     {v : LeftBlockVector L q i} (hv : IsLeftOpenMPS b v) (A : LeftBlockMatrix L q i)
     (hA : ∀ k : ℕ, 0 < k → k < i →
-      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
         (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ D) :
     IsLeftOpenMPS (D * max 1 b) (toEuclideanLin A v) := by
   let w : EuclideanSpace ℂ (Fin i → Fin q) := WithLp.toLp 2 fun x ↦ v (leftConfigOfFin x)

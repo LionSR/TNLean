@@ -41,9 +41,9 @@ an alternative boundary convention or running time is made. -/
 theorem exists_common_physical_aeval_periodic_family_fin
     {L q ell a b B k : ℕ}
     (WL WR : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, Entropy.IsSupportedOn (WL r)
+    (hleft : ∀ r, ManyBody.IsSupportedOn (WL r)
       (interval L (a + r.val) (a + r.val + 2)))
-    (hright : ∀ r, Entropy.IsSupportedOn (WR r)
+    (hright : ∀ r, ManyBody.IsSupportedOn (WR r)
       (interval L (b + r.val) (b + r.val + 2)))
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
     (hell : 1 ≤ ell) (hq : 2 ≤ q) (hk : 1 ≤ k)
@@ -78,8 +78,8 @@ theorem exists_common_physical_aeval_periodic_family_fin
             (fun σ z ↦ σ (eJ.symm z)) =
               MPOTensor.traceChainOperator Ar (1 : Matrix (Fin Dr) (Fin Dr) ℂ)) ∧
       ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
-        Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
+        ManyBody.IsSupportedOn PL (interval L 0 (a + 1)) →
+        ManyBody.IsSupportedOn PR (interval L (b + 2 * ell) L) →
         let F : ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) →
             Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
@@ -87,9 +87,9 @@ theorem exists_common_physical_aeval_periodic_family_fin
           ∃ M : Fin N → Matrix ((Jᶜ : Finset (Fin L)) → Fin q) ((Jᶜ : Finset (Fin L)) → Fin q) ℂ,
             Polynomial.aeval (∑ a, F a) P =
               (∑ r, M r ⊗ₖ W r).submatrix
-                ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _))
-                ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _)) := by
   obtain ⟨N, W, hN, hW, hTrace, hdecomp⟩ :=
     exists_common_physical_aeval_mpo_family_fin

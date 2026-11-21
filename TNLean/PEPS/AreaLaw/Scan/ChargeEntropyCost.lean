@@ -33,7 +33,6 @@ open ManyBody (planeDomainGraph)
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open TensorPower TensorPower.ReplicaTransport
-open Entropy (SiteConfig)
 open scoped BigOperators
 
 variable {V I : Type*} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]
@@ -42,7 +41,7 @@ omit [Fintype I] [LinearOrder I] in
 /-- An arbitrary trial set gives nonnegative cost because only its old-middle
 part moves; it is disjoint from both old receiving sides. -/
 theorem augmentedMove_eta_nonneg (n : V ⊕ Bool → ℕ) (σ : PhysicalPartition V)
-    (side : Bool) (B : Finset V) (θ : EuclideanSpace ℂ (SiteConfig n)) :
+    (side : Bool) (B : Finset V) (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) :
     0 ≤ moveEta n (augmentedPartition σ) (augmentedMove σ side B) θ :=
   moveEta_nonneg n _ (augmentedPartition_isPartition σ) _
     (augmentedMove_isValid σ side B) θ
@@ -50,7 +49,7 @@ theorem augmentedMove_eta_nonneg (n : V ⊕ Bool → ℕ) (σ : PhysicalPartitio
 omit [Fintype I] [LinearOrder I] in
 /-- An empty physical move has zero entropy on either side. -/
 @[simp] theorem augmentedMove_eta_empty (n : V ⊕ Bool → ℕ) (σ : PhysicalPartition V)
-    (side : Bool) (θ : EuclideanSpace ℂ (SiteConfig n)) :
+    (side : Bool) (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) :
     moveEta n (augmentedPartition σ) (augmentedMove σ side ∅) θ = 0 := by
   cases side <;> simp [augmentedMove]
 
@@ -61,30 +60,30 @@ variable (S : CollarScan V I) (n : V ⊕ Bool → ℕ)
 /-- The side-dependent regional entropy cost of the old-middle part of a trial
 set. The auxiliary factors remain fixed on their respective sides. -/
 noncomputable def chargeEntropyCost {k : ℕ} (h : History S.K S.m S.M k)
-    (θ : EuclideanSpace ℂ (SiteConfig n)) : Fin S.K → Bool → Finset V → ℝ :=
+    (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) : Fin S.K → Bool → Finset V → ℝ :=
   fun g side B => moveEta n (augmentedPartition (S.oldChargeState h g))
     (augmentedMove (S.oldChargeState h g) side B) θ
 
 /-- Nonnegativity holds for every trial set, as required by the classical
 expected-cost inequality, before any actual-move inclusion is used. -/
 theorem chargeEntropyCost_nonneg {k : ℕ} (h : History S.K S.m S.M k)
-    (θ : EuclideanSpace ℂ (SiteConfig n)) (g : Fin S.K) (side : Bool) (B : Finset V) :
+    (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) (g : Fin S.K) (side : Bool) (B : Finset V) :
     0 ≤ S.chargeEntropyCost n h θ g side B :=
   augmentedMove_eta_nonneg n _ side B θ
 
 /-- Only a proved inclusion in the old middle permits removal of the
 intersection from the entropy cost. The conditioning side is retained. -/
 theorem chargeEntropyCost_eq_cmi_of_subset {k : ℕ} (h : History S.K S.m S.M k)
-    (θ : EuclideanSpace ℂ (SiteConfig n)) (g : Fin S.K) (side : Bool) (B : Finset V)
+    (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) (g : Fin S.K) (side : Bool) (B : Finset V)
     (hB : B ⊆ middle (S.oldChargeState h g)) :
     S.chargeEntropyCost n h θ g side B =
       if side then
-        FiniteProduct.conditionalMutualInformation (fun v => Fin (n v)) θ
+        ManyBody.conditionalMutualInformation (fun v => Fin (n v)) θ
           (B.map ⟨Sum.inl, Sum.inl_injective⟩)
           (augmentedPartition (S.oldChargeState h g)).P
           (augmentedPartition (S.oldChargeState h g)).F
       else
-        FiniteProduct.conditionalMutualInformation (fun v => Fin (n v)) θ
+        ManyBody.conditionalMutualInformation (fun v => Fin (n v)) θ
           (B.map ⟨Sum.inl, Sum.inl_injective⟩)
           (augmentedPartition (S.oldChargeState h g)).F
           (augmentedPartition (S.oldChargeState h g)).P := by
@@ -94,7 +93,7 @@ theorem chargeEntropyCost_eq_cmi_of_subset {k : ℕ} (h : History S.K S.m S.M k)
 /-- The actual charge entropy is the entropy of its removed old-middle set.
 Disabled choices stay put and have the same zero entropy as an empty move. -/
 theorem quantumChargeMove_eta (g r k : ℕ) (c : Bool × Fin S.M)
-    (σ : PhysicalPartition V) (θ : EuclideanSpace ℂ (SiteConfig n)) :
+    (σ : PhysicalPartition V) (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) :
     moveEta n (augmentedPartition σ) (S.quantumChargeMove g r k c σ) θ =
       moveEta n (augmentedPartition σ)
         (augmentedMove σ c.1 (middle σ \ middle (S.chargeStep g r k c σ))) θ := by
@@ -116,7 +115,7 @@ theorem quantumChargeMove_eta (g r k : ℕ) (c : Bool × Fin S.M)
 /-- The actual classical removed-set cost is the sum of actual selected-side
 quantum move entropies at the same old history and vector. -/
 theorem chargeMoveCost_chargeEntropyCost {k : ℕ} (h : History S.K S.m S.M k)
-    (θ : EuclideanSpace ℂ (SiteConfig n)) (c : ChargeChoices S.K S.M) :
+    (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) (c : ChargeChoices S.K S.M) :
     S.chargeMoveCost h (S.chargeEntropyCost n h θ) c =
       ∑ g, moveEta n (augmentedPartition (S.oldChargeState h g))
         (S.quantumChargeMove g (h.1 g) (k + 1) (c g) (S.oldChargeState h g)) θ := by
@@ -136,7 +135,7 @@ theorem good_designatedEntropyCost_le_expected_chargeEta_domainGraph
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x => ambientDepth T hT x.val) {k L μ : ℕ}
     (h : History S.K S.m S.M k) (n : Site Λ ⊕ Bool → ℕ)
-    (θ : EuclideanSpace ℂ (SiteConfig n))
+    (θ : EuclideanSpace ℂ (∀ v, Fin (n v)))
     (hn : 2 ≤ S.n) (hm : 2 ≤ S.m) (hk : k + 1 ≤ S.n * S.m)
     (hr : 2 * S.r₀ ≤ S.D) (hD : 4 * S.D ≤ S.m) (hDpos : 1 ≤ S.D)
     (hL : 8 * S.K * S.m ≤ L) (hC : 3 * (μ : ℝ) ≤ S.C₁)

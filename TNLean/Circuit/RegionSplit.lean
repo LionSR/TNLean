@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.SiteEmbedding
-import QICLean.Channel.FiniteProduct
+import QICLean.ManyBody.Sites.RegionMatrix
 
 /-!
 # Operators on a region in the coordinates of the region and its complement
@@ -51,7 +51,7 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
 
 /-- The raw configurations of a sheet as pairs of configurations on `S` and on `Sᶜ`. -/
 abbrev sheetSplit (q : ℕ) (S : Finset ι) : (ι → Fin q) ≃ (S → Fin q) × (↥Sᶜ → Fin q) :=
-  FiniteProduct.splitEquiv (fun _ : ι => Fin q) S
+  ManyBody.splitEquiv (fun _ : ι => Fin q) S
 
 /-- A product operator in the coordinates of `sheetSplit S` is the Kronecker product of its
 restrictions to `S` and to `Sᶜ`. -/
@@ -63,9 +63,9 @@ theorem rectKronecker_submatrix_sheetSplit (S : Finset ι) (m : ι → Matrix (F
   rw [← Finset.prod_mul_prod_compl S, ← Finset.prod_coe_sort S, ← Finset.prod_coe_sort Sᶜ]
   congr 1
   · refine Finset.prod_congr rfl fun v _ => ?_
-    simp [FiniteProduct.splitEquiv_symm_apply_of_mem _ S _ _ _ v.2]
+    simp [ManyBody.splitEquiv_symm_apply_of_mem _ S _ _ _ v.2]
   · refine Finset.prod_congr rfl fun v _ => ?_
-    simp [FiniteProduct.splitEquiv_symm_apply_of_notMem _ S _ _ _ (Finset.mem_compl.mp v.2)]
+    simp [ManyBody.splitEquiv_symm_apply_of_notMem _ S _ _ _ (Finset.mem_compl.mp v.2)]
 
 /-- An operator acting on `S` is `A' ⊗ 1` in the coordinates of `sheetSplit S`. -/
 theorem exists_kronecker_one_of_mem_supportedOperators {S : Finset ι}
@@ -129,13 +129,13 @@ complement. -/
 theorem embedOp_val_eq_kronecker_one_submatrix (S : Finset ι)
     (K : Matrix (S → Fin q) (S → Fin q) ℂ) :
     embedOp (fun x : S => x.val) K = (K ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ)).submatrix
-      (FiniteProduct.splitEquiv (fun _ : ι => Fin q) S)
-      (FiniteProduct.splitEquiv (fun _ : ι => Fin q) S) := by
+      (ManyBody.splitEquiv (fun _ : ι => Fin q) S)
+      (ManyBody.splitEquiv (fun _ : ι => Fin q) S) := by
   ext c c'
   simp only [embedOp_apply, submatrix_apply, kroneckerMap_apply, one_apply]
   have hagree : AgreeOff (fun x : S => x.val) c c' ↔
-      (FiniteProduct.splitEquiv (fun _ : ι => Fin q) S c).2 =
-        (FiniteProduct.splitEquiv (fun _ : ι => Fin q) S c').2 := by
+      (ManyBody.splitEquiv (fun _ : ι => Fin q) S c).2 =
+        (ManyBody.splitEquiv (fun _ : ι => Fin q) S c').2 := by
     constructor
     · intro h
       funext v
@@ -152,8 +152,8 @@ theorem embedOp_val_eq_kronecker_one_submatrix (S : Finset ι)
 theorem kronecker_one_submatrix_mem_supportedOperators (S : Finset ι)
     (K : Matrix (S → Fin q) (S → Fin q) ℂ) :
     (K ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ)).submatrix
-        (FiniteProduct.splitEquiv (fun _ : ι => Fin q) S)
-        (FiniteProduct.splitEquiv (fun _ : ι => Fin q) S) ∈
+        (ManyBody.splitEquiv (fun _ : ι => Fin q) S)
+        (ManyBody.splitEquiv (fun _ : ι => Fin q) S) ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q) S := by
   rw [← embedOp_val_eq_kronecker_one_submatrix]
   simpa using embedOp_mem_supportedOperators (e := fun x : S => x.val) Subtype.val_injective K

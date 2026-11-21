@@ -61,12 +61,12 @@ private theorem fullInterval_slice_regionConfigurationSplit {L q : ℕ}
       Entropy.regionConfigurationSplit q (interval L 0 L) ψ (a, b)) =
       (fullIntervalEquiv L q).symm ψ := by
   ext a
-  change ψ ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q)
+  change ψ ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q)
       (interval L 0 L)).symm (a, b)) =
     ψ (fullIntervalConfigurationEquiv L q a)
   apply congrArg ψ
   funext v
-  rw [FiniteProduct.splitEquiv_symm_apply_of_mem _ _ _ _ _
+  rw [ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _
     (mem_interval.mpr ⟨Nat.zero_le _, v.isLt⟩)]
   rfl
 

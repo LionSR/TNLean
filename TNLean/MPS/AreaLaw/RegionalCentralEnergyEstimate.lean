@@ -42,7 +42,7 @@ lines 1178–1185, and `eq:defjgapped`, lines 1380–1384. -/
 theorem exists_regional_central_energy_estimate {L q l u v r : ℕ}
     (hq : 0 < q) (hlu : l ≤ u) (huv : u ≤ v) (hvr : v ≤ r) (hrL : r ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     let A := aklvRegionalHamiltonians l u h 1

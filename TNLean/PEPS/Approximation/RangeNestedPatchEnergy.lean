@@ -80,26 +80,26 @@ The weighted crossing sum of one square is therefore at most
 theorem sum_crossingTerms_rangeNestedPatch_le {Λ : Finset (ℤ × ℤ)} (q R : ℕ) {J : ℝ}
     (hJ : 0 ≤ J) (c : ℝ × ℝ) {u : ℝ} (hu : 0 ≤ u) {j : ℕ}
     (hj : j < AreaLaw.Geometry.rangeNestedPatchCount R u) :
-    ∑ X ∈ Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1)
+    ∑ X ∈ ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1)
         (AreaLaw.Geometry.rangeNestedPatch Λ c R u j),
-      (Fintype.card (Entropy.InnerConfig (fun _ : Site Λ ↦ q)
+      (Fintype.card (ManyBody.InnerConfig (fun _ : Site Λ ↦ q)
         (AreaLaw.Geometry.rangeNestedPatch Λ c R u j) X.1) : ℝ) ^ 2 * J ≤
       R * (16 * u + 4) * 2 ^ (2 * R * (R + 1)) * (q : ℝ) ^ (2 * (2 * R * (R + 1))) * J := by
   classical
   set D := AreaLaw.Geometry.rangeNestedPatch Λ c R u j
-  set C := Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) D
+  set C := ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) D
   set N := AreaLaw.Geometry.squareLayer Λ c (AreaLaw.Geometry.rangeNestedPatchRadius R u j) R
   have hmemC : ∀ X ∈ C, (∃ v ∈ X.1, v ∈ D) ∧ ∃ v ∈ X.1, v ∉ D := fun X hX ↦ by
     simp only [C, ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
     exact hX
   -- Each split support has an inside dimension at most `q ^ (v_R - 1)`.
-  have hdim : ∀ X ∈ C, (Fintype.card (Entropy.InnerConfig (fun _ : Site Λ ↦ q) D X.1) : ℝ)
+  have hdim : ∀ X ∈ C, (Fintype.card (ManyBody.InnerConfig (fun _ : Site Λ ↦ q) D X.1) : ℝ)
       ≤ (q : ℝ) ^ (2 * R * (R + 1)) := by
     intro X hX
     obtain ⟨⟨v, hvX, hvD⟩, ⟨w, hwX, hwD⟩⟩ := hmemC X hX
-    have hcard : Fintype.card (Entropy.InnerConfig (fun _ : Site Λ ↦ q) D X.1) =
+    have hcard : Fintype.card (ManyBody.InnerConfig (fun _ : Site Λ ↦ q) D X.1) =
         q ^ (X.1 ∩ D).card := by
-      rw [Entropy.card_innerConfig, Finset.prod_const]
+      rw [ManyBody.card_innerConfig, Finset.prod_const]
     have hpos : 1 ≤ (X.1 ∩ D).card :=
       Finset.card_pos.mpr ⟨v, Finset.mem_inter.mpr ⟨hvX, hvD⟩⟩
     have hlt : (X.1 ∩ D).card < X.1.card :=
@@ -190,11 +190,11 @@ theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
   let T : AdmissibleSupport Λ R →
       Matrix (Lattice.Configuration Λ q) (Lattice.Configuration Λ q) ℂ := H.term
   let S : AdmissibleSupport Λ R → Finset (Lattice.Site Λ) := fun X ↦ X.1
-  have hsupp : ∀ X, Entropy.IsSupportedOn (n := fun _ : Lattice.Site Λ ↦ q) (T X) (S X) :=
+  have hsupp : ∀ X, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (T X) (S X) :=
     fun X ↦ (H.mem X)
   let D : ℕ → Finset (Lattice.Site Λ) := AreaLaw.Geometry.rangeNestedPatch Λ center R u
-  let K : (j : Fin m) → Matrix (Entropy.RegionConfig (fun _ : Lattice.Site Λ ↦ q) (D j))
-      (Entropy.RegionConfig (fun _ : Lattice.Site Λ ↦ q) (D j)) ℂ :=
+  let K : (j : Fin m) → Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j))
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j)) ℂ :=
     fun j ↦ (x j + b • 1) ^ (-(a j) / 2)
   have hunit : ∀ j, IsUnit (K j).det := fun j ↦
     (Matrix.isUnit_iff_isUnit_det _).mp (((hx j).1.add_smul_one_posDef hb).rpow _).isUnit
@@ -232,8 +232,8 @@ theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
   have henergy := Entropy.re_inner_sub_le_of_chain_sharp D hD K hunit hφ a ha₁ hcl
     T S hsupp hH σ₀ hHJ hsingle heig
   have hbudget : ∀ j : Fin m,
-      a j ^ 2 * ∑ X ∈ Entropy.crossingTerms S (D j),
-        (Fintype.card (Entropy.InnerConfig (fun _ : Lattice.Site Λ ↦ q) (D j) (S X)) : ℝ) ^ 2 *
+      a j ^ 2 * ∑ X ∈ ManyBody.crossingTerms S (D j),
+        (Fintype.card (ManyBody.InnerConfig (fun _ : Lattice.Site Λ ↦ q) (D j) (S X)) : ℝ) ^ 2 *
           J ≤
       (κ / m) ^ 2 * (R * (16 * u + 4) * 2 ^ (2 * R * (R + 1)) *
         (q : ℝ) ^ (2 * (2 * R * (R + 1))) * J) := fun j ↦

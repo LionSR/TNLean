@@ -135,17 +135,17 @@ structure ScannerHypotheses (X : ScannerExponents) (R : ℕ) (Δ CT Ctr C₁ Ce 
   clearance : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
     ((2 * X.L n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z
   /-- `S_Ω(X) ≤ C_e n^{1+e}` (line 355). -/
-  entropy_target : regionalEntropy Λ q Ω (S.target T) ≤ Ce * (n : ℝ) ^ (1 + X.e)
+  entropy_target : ManyBody.regionEntropy Ω (S.target T) ≤ Ce * (n : ℝ) ^ (1 + X.e)
   /-- `S_Ω(Q_j) ≤ C_e(nL^e + n)` for `0 ≤ j ≤ L` (line 356). -/
   entropy_shell : ∀ j ≤ X.L n,
-    regionalEntropy Λ q Ω (S.shell T j) ≤ Ce * (n * (X.L n : ℝ) ^ X.e + n)
+    ManyBody.regionEntropy Ω (S.shell T j) ≤ Ce * (n * (X.L n : ℝ) ^ X.e + n)
 
 /-- The typical Schmidt set of the target for `Ωt` with width `n^{3/5}`
 (`comparator:typical-set`, `07-comparators.tex`, lines 37–47; `08-scanner.tex`, line 362). -/
 def typicalWindow {Λ : Finset (ℤ × ℤ)} {I : Type*} (S : CollarScan (Site Λ) I) (q : ℕ)
     (Ωt : StateSpace Λ q) (T : Finset (ℤ × ℤ)) (n : ℕ) :=
-  Entropy.typicalSet (reducedState_isHermitian Λ q Ωt (S.target T)).eigenvalues
-    (regionalEntropy Λ q Ωt (S.target T)) ((n : ℝ) ^ (3 / 5 : ℝ))
+  Entropy.typicalSet (ManyBody.regionState_isHermitian (S.target T) Ωt).eigenvalues
+    (ManyBody.regionEntropy Ωt (S.target T)) ((n : ℝ) ^ (3 / 5 : ℝ))
 
 /-- The vectors `pre_k = π_R^{λ_k}(Ωt ⊗ Bell_{CR})^{⊗k}` of `comparator:prevector`
 (`07-comparators.tex`, lines 130–140), with auxiliary systems of dimension `d`, in the
@@ -193,7 +193,7 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
             (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp)) ≤
           Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g) ∧
         let E := S.typicalWindow q Ωt T n
-        let z := (reducedState_isHermitian Λ q Ωt (S.target T)).spectralRestrictionMass E
+        let z := (ManyBody.regionState_isHermitian (S.target T) Ωt).spectralRestrictionMass E
         0 < 1 - (n : ℝ) ^ (-100 : ℝ) ∧
         1 - (n : ℝ) ^ (-100 : ℝ) ≤ z ∧ 0 < z ∧ z ≤ 1 ∧
         ∃ (hm : 0 < S.m) (hM : 0 < S.M) (hd : 0 < E.card),
@@ -201,8 +201,8 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
         let d := E.card
         let β := fun _ : Site Λ ↦ Fin q
         let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-          (FiniteProduct.splitEquiv β (S.target T)) Ωt
-        let ψ : FiniteProduct.Configuration β (S.target T)ᶜ × Fin d → ℂ := fun x ↦
+          (ManyBody.splitEquiv β (S.target T)) Ωt
+        let ψ : ManyBody.RegionConfig β (S.target T)ᶜ × Fin d → ℂ := fun x ↦
           compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
         let Sent := _root_.vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
           (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -215,13 +215,13 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
           let σ := terminalPartition S (S.n * S.m)
           let Qpre := fun j band ↦ receiving (σ j band) false
           let Y := fun j band ↦ middle (σ j band)
-          let gpre := fun j band ↦ FiniteProduct.entropy β Ωt (Qpre j band) +
-            FiniteProduct.entropy β Ωt (Qpre j band ∪ Y j band)ᶜ -
-              FiniteProduct.entropy β Ωt (Y j band)
+          let gpre := fun j band ↦ ManyBody.regionEntropy Ωt (Qpre j band) +
+            ManyBody.regionEntropy Ωt (Qpre j band ∪ Y j band)ᶜ -
+              ManyBody.regionEntropy Ωt (Y j band)
           let gpost := fun j band ↦
-            regionalEntropy Λ q Ωt (positiveNear S.depth (σ j band)) +
-              regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j band)) -
-                regionalEntropy Λ q Ωt (middle (σ j band))
+            ManyBody.regionEntropy Ωt (positiveNear S.depth (σ j band)) +
+              ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j band)) -
+                ManyBody.regionEntropy Ωt (middle (σ j band))
           let gaps := (Finset.univ :
             Finset (terminalFamily S.K S.m S.M (S.n * S.m) × Fin S.K)).image
               (fun j ↦ gpre j.1 j.2)
@@ -229,7 +229,7 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
           ∀ W : ℝ, 1 ≤ W → X.a W n * (S.r₀ : ℝ) ^ 2 ≤ ca →
             let a := X.a W n
             let round : Fin (X.rounds n) → ScanRound (AdmissibleSupport Λ R)
-                (CoherentSphere (SiteConfig dims)) :=
+                (CoherentSphere (∀ v, Fin (dims v))) :=
               fun r ↦ S.actualScanRound hm hM dims energy a pre r.val
             ∃ Bsh Bexc Bmarg : ℝ,
               Bsh ≤ Cb * (n * (X.L n : ℝ) ^ X.e + n) ∧ Bexc ≤ Cb * n * X.D n ∧
@@ -237,8 +237,8 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
               (∀ (Y : Finset (Site Λ)) (u : ℝ),
                 |u| ≤ Entropy.tailRadius (2 / g) (B Y) →
                 Real.log (Entropy.surprisalMoment
-                  (reducedState_isHermitian Λ q Ωt Y).eigenvalues u) ≤
-                  u * regionalEntropy Λ q Ωt Y + 512 * Real.exp 1 * (2 / g) * B Y * u ^ 2) ∧
+                  (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
+                  u * ManyBody.regionEntropy Ωt Y + 512 * Real.exp 1 * (2 / g) * B Y * u ^ 2) ∧
               (∀ (k : ℕ) (hist : History S.K S.m S.M k) (band : Fin S.K),
                 (k ≤ S.n * S.m →
                   ∀ Q ∈ statusMarginalRegions S.depth (S.state hist band), B Q ≤ Bmarg) ∧
@@ -341,12 +341,12 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
       positiveDepthPrefix S.A S.depth (j : ℤ) = S.shell T j := by
     simpa only [hyp.depth_eq, Int.toNat_natCast, Finset.mem_sdiff, CollarScan.shell] using
       (positiveDepthPrefix_eq_filter_ambientDilation hT S.A (j : ℤ))
-  have htarget : regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+  have htarget : ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
       max Ce 1 * (S.n : ℝ) ^ (1 + X.e) :=
     hyp.entropy_target.trans (mul_le_mul_of_nonneg_right (le_max_left Ce 1)
       (Real.rpow_nonneg (Nat.cast_nonneg S.n) _))
   have hsource : ∀ j : ℕ, j ≤ X.L S.n →
-      regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+      ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
         max Ce 1 * ((S.n : ℝ) * (X.L S.n : ℝ) ^ X.e + S.n) := fun j hj ↦ by
     simpa only [hprefix_eq_shell j] using
       (hyp.entropy_shell j hj).trans
@@ -381,10 +381,9 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
   obtain ⟨hBnorm, hnorm⟩ := hnorm Λ T hT S hyp.graph_eq hyp.depth_eq hyp.anchor_mem
     hm hM (by omega) (X.L S.n) (by omega) hyp.r₀_eq (by omega) hDpos hDm hKL
     hyp.rows_le hyp.clearance
-  have hρ : reducedState Λ q Ωt (S.target T) =
+  have hρ : ManyBody.regionState Ωt (S.target T) =
       Matrix.partialTraceRight (Matrix.vecMulVec ΩX (star ΩX)) :=
-    (reducedState_eq_finiteProduct Λ q Ωt (S.target T)).trans
-      (FiniteProduct.reducedPure_eq_partialTrace β Ωt (S.target T))
+    ManyBody.regionState_eq_partialTrace β Ωt (S.target T)
   have hzEq :
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian.spectralRestrictionMass E =
         z := by simp only [← hρ, z]
@@ -449,9 +448,9 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
   have hWa : a * (S.K : ℝ) = W := by
     rw [ha_eq, div_mul_cancel₀ _ (Nat.cast_ne_zero.mpr (show S.K ≠ 0 by omega))]
   have hsh : ∀ j : Fin (X.L S.n + 1),
-      FiniteProduct.entropy β Ωt
+      ManyBody.regionEntropy Ωt
         (positiveDepthPrefix S.A S.depth (j.val : ℤ)) ≤ Bsh := fun j ↦ by
-    simpa only [regionalEntropy_eq_finiteProduct] using
+    simpa only [] using
       hprefix S.n ((le_max_right N Ne).trans hn) Λ Ω Ωt hyp.norm_eq_one htrgs.1
         S.A S.depth (X.L S.n) hcard htrace
         (max Ce 1) X.e hsource j.val (Nat.le_of_lt_succ j.isLt)

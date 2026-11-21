@@ -51,7 +51,7 @@ appendix, lines 829–841, eq. `obd`.
   operators lifted from disjoint regions commute.
 * `TNLean.MPS.AreaLaw.Hastings.isSupportedOn_spectralCutoff`,
   `TNLean.MPS.AreaLaw.Hastings.commute_spectralCutoff_of_isSupportedOn`: the same for operators
-  given by their supports, through `Entropy.IsSupportedOn.exists_localLift_isHermitian`.
+  given by their supports, through `ManyBody.IsSupportedOn.exists_localLift_isHermitian`.
 -/
 
 open Matrix
@@ -180,28 +180,30 @@ variable {V : Type*} [Fintype V] [DecidableEq V] {n : V → ℕ}
 
 /-- The local lift as a star-algebra homomorphism. -/
 private noncomputable def localLiftStarAlgHom (D : Finset V) :
-    Matrix (RegionConfig n D) (RegionConfig n D) ℂ →⋆ₐ[ℂ]
-      Matrix (SiteConfig n) (SiteConfig n) ℂ where
-  toFun := localLift D
-  map_one' := localLift_one
-  map_mul' := localLift_mul
-  map_zero' := by simpa using localLift_smul (D := D) 0 0
-  map_add' := localLift_add
+    Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D)
+        (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D) ℂ →⋆ₐ[ℂ]
+      Matrix (∀ v, Fin (n v)) (∀ v, Fin (n v)) ℂ where
+  toFun := ManyBody.place D
+  map_one' := ManyBody.place_one
+  map_mul' K K' := ManyBody.place_mul K K'
+  map_zero' := ManyBody.place_zero
+  map_add' := ManyBody.place_add
   commutes' c := by
-    rw [Algebra.algebraMap_eq_smul_one, localLift_smul, localLift_one,
+    rw [Algebra.algebraMap_eq_smul_one, ManyBody.place_smul, ManyBody.place_one,
       Algebra.algebraMap_eq_smul_one]
-  map_star' K := localLift_conjTranspose K
+  map_star' K := ManyBody.place_conjTranspose K
 
 /-- **Support of the cut-off.** The spectral cut-off of an operator lifted from a region `D`
 is the lift of the regional cut-off; in particular it is supported on `D`.
 Hastings, arXiv:0705.2024v4, line 841. -/
 theorem spectralCutoff_localLift {D : Finset V}
-    {K : Matrix (RegionConfig n D) (RegionConfig n D) ℂ} (hK : K.IsHermitian) (θ : ℝ) :
-    spectralCutoff (localLift D K) θ = localLift D (spectralCutoff K θ) := by
+    {K : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D)
+        (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D) ℂ} (hK : K.IsHermitian) (θ : ℝ) :
+    spectralCutoff (ManyBody.place D K) θ = ManyBody.place D (spectralCutoff K θ) := by
   have hcont : Continuous (localLiftStarAlgHom (n := n) D) :=
     LinearMap.continuous_of_finiteDimensional (localLiftStarAlgHom (n := n) D).toLinearMap
-  have hK' : IsSelfAdjoint (localLift D K) := by
-    rw [IsSelfAdjoint, star_eq_conjTranspose, ← localLift_conjTranspose, hK.eq]
+  have hK' : IsSelfAdjoint (ManyBody.place D K) := by
+    rw [IsSelfAdjoint, star_eq_conjTranspose, ← ManyBody.place_conjTranspose, hK.eq]
   exact ((localLiftStarAlgHom D).map_cfc (fun t : ℝ ↦ if |t| ≤ θ then 1 else 0) K
     (hf := K.finite_real_spectrum.continuousOn _) (hφ := hcont) (ha := hK.isSelfAdjoint)
     (hφa := hK')).symm
@@ -210,38 +212,45 @@ theorem spectralCutoff_localLift {D : Finset V}
 regions commute. With `M_L` supported on the sites left of the cut and `M_R` on the sites
 right of it, this is the commutation of `O_L` and `O_R` used in Hastings' Lemma 1. -/
 theorem commute_spectralCutoff_localLift_of_disjoint {X Y : Finset V} (hXY : Disjoint X Y)
-    {K : Matrix (RegionConfig n X) (RegionConfig n X) ℂ}
-    {K' : Matrix (RegionConfig n Y) (RegionConfig n Y) ℂ}
+    {K : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) X)
+        (ManyBody.RegionConfig (fun v ↦ Fin (n v)) X) ℂ}
+    {K' : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) Y)
+        (ManyBody.RegionConfig (fun v ↦ Fin (n v)) Y) ℂ}
     (hK : K.IsHermitian) (hK' : K'.IsHermitian) (θ θ' : ℝ) :
-    Commute (spectralCutoff (localLift X K) θ) (spectralCutoff (localLift Y K') θ') := by
+    Commute (spectralCutoff (ManyBody.place X K) θ) (spectralCutoff (ManyBody.place Y K') θ') := by
   rw [spectralCutoff_localLift hK, spectralCutoff_localLift hK']
   exact commute_localLift_of_disjoint hXY _ _
 
 /-- A Hermitian operator supported on `D` is the local lift of a Hermitian operator on `D`. -/
-theorem _root_.Entropy.IsSupportedOn.exists_localLift_isHermitian {D : Finset V}
-    {M : Matrix (SiteConfig n) (SiteConfig n) ℂ} (hM : IsSupportedOn M D) (hMh : M.IsHermitian)
-    (σ₀ : SiteConfig n) :
-    ∃ K : Matrix (RegionConfig n D) (RegionConfig n D) ℂ, K.IsHermitian ∧ M = localLift D K := by
-  obtain ⟨K, rfl⟩ := hM.exists_localLift σ₀
+theorem _root_.ManyBody.IsSupportedOn.exists_localLift_isHermitian {D : Finset V}
+    {M : Matrix (∀ v, Fin (n v)) (∀ v, Fin (n v)) ℂ} (hM : ManyBody.IsSupportedOn M D)
+        (hMh : M.IsHermitian)
+    (σ₀ : (∀ v, Fin (n v))) :
+    ∃ K : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D)
+        (ManyBody.RegionConfig (fun v ↦ Fin (n v)) D) ℂ, K.IsHermitian ∧ M
+        = ManyBody.place D K := by
+  obtain ⟨K, rfl⟩ := ManyBody.exists_eq_place_of_mem_supportedOperators hM
   refine ⟨K, localLift_injective D σ₀ ?_, rfl⟩
-  rw [localLift_conjTranspose, hMh.eq]
+  rw [ManyBody.place_conjTranspose, hMh.eq]
 
 /-- The spectral cut-off of a Hermitian operator supported on `D` is supported on `D`. With
 `M_L` supported left of the cut, this places `O_L` there, as Hastings' Lemma 1 requires
 (arXiv:0705.2024v4, `law16.tex`, lines 829–842). -/
 theorem isSupportedOn_spectralCutoff {D : Finset V}
-    {M : Matrix (SiteConfig n) (SiteConfig n) ℂ} (hM : M.IsHermitian) (hMD : IsSupportedOn M D)
-    (σ₀ : SiteConfig n) (θ : ℝ) : IsSupportedOn (spectralCutoff M θ) D := by
+    {M : Matrix (∀ v, Fin (n v)) (∀ v, Fin (n v)) ℂ} (hM : M.IsHermitian)
+        (hMD : ManyBody.IsSupportedOn M D)
+    (σ₀ : (∀ v, Fin (n v))) (θ : ℝ) : ManyBody.IsSupportedOn (spectralCutoff M θ) D := by
   obtain ⟨K, hK, rfl⟩ := hMD.exists_localLift_isHermitian hM σ₀
   rw [spectralCutoff_localLift hK]
-  exact isSupportedOn_localLift _
+  exact ManyBody.place_mem_supportedOperators _
 
 /-- The spectral cut-offs of Hermitian operators supported on disjoint regions commute: the
 commutation of `O_L` and `O_R` in Hastings' Lemma 1 (arXiv:0705.2024v4, `law16.tex`,
 lines 829–842), stated for supports. -/
 theorem commute_spectralCutoff_of_isSupportedOn {X Y : Finset V} (hXY : Disjoint X Y)
-    {M M' : Matrix (SiteConfig n) (SiteConfig n) ℂ} (hM : M.IsHermitian) (hM' : M'.IsHermitian)
-    (hMX : IsSupportedOn M X) (hM'Y : IsSupportedOn M' Y) (σ₀ : SiteConfig n) (θ θ' : ℝ) :
+    {M M' : Matrix (∀ v, Fin (n v)) (∀ v, Fin (n v)) ℂ} (hM : M.IsHermitian) (hM' : M'.IsHermitian)
+    (hMX : ManyBody.IsSupportedOn M X) (hM'Y : ManyBody.IsSupportedOn M' Y) (σ₀ : (∀ v, Fin (n v)))
+        (θ θ' : ℝ) :
     Commute (spectralCutoff M θ) (spectralCutoff M' θ') := by
   obtain ⟨K, hK, rfl⟩ := hMX.exists_localLift_isHermitian hM σ₀
   obtain ⟨K', hK', rfl⟩ := hM'Y.exists_localLift_isHermitian hM' σ₀

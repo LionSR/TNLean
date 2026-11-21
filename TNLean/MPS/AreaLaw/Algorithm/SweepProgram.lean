@@ -27,7 +27,7 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, algorithm steps 1--4, lines 379-
 456--487, 549--559 and 572--592, and the proof of Theorem 1, lines 652--668.
 -/
 
-open ManyBody (interval ChainInteraction)
+open ManyBody (interval ChainInteraction ChainSupport)
 
 open Matrix Cslib
 open scoped ComplexOrder MatrixOrder
@@ -118,7 +118,8 @@ noncomputable def sizeTrimmingProgram (L k b : ℕ) (h : ChainInteraction L q 1)
   let c : ℝ := (Δ / 169) ^ 2
   let D := constantCutBond q 1 1 Δ c
   let η : ℝ := c / (2 * L)
-  let HL := leftCutOperator k (h.cutLeftPart k)
+  let HL := leftCutOperator k (h.partialHamiltonian
+    (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k))
   unionOver (List.finRange (D + 1)) fun m ↦ do
     let N ← FreeM.lift (LinearAlgebraQuery.boundaryNet L k m.val η)
     unionOver N.toList fun X ↦ do
@@ -232,7 +233,7 @@ declared for the vectors handled. LVV13, `algo53.tex`, algorithm steps 1--4, lin
 379--592, with Huang, Section 5.4, Lemmas 18--19 for the error-reduction operator. -/
 noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     LVVProgram q (Finset (LeftBlockVector L q (i + 1))) :=
@@ -242,7 +243,7 @@ noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
   do
     let S₁ ← extensionProgram L (i + 1) b S
     let S₂ ← sizeTrimmingProgram L (i + 1) b
-      (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs) hq Delta S₁
+      (ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩) hq Delta S₁
     let S₃ ← bondTrimmingProgram L (i + 1) hi b m S₂
     let F ← FreeM.lift
       (LinearAlgebraQuery.gaussianFilterFactors L (i + 1) (Nat.le_of_lt hq) h h0 c Delta)
@@ -251,7 +252,7 @@ noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
 /-- With the honest oracle, one step of the program computes one step of the sweep. -/
 theorem eval_sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     FreeM.eval honestOracle (sweepStepProgram hq h hs h0 Delta hi S) =
@@ -264,7 +265,7 @@ theorem eval_sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
 cut of the chain. LVV13, `algo53.tex`, proof of Theorem 1, lines 652--668. -/
 noncomputable def sweepProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     (Delta : ℝ) : (i : ℕ) → LVVProgram q (Finset (LeftBlockVector L q i))
   | 0 => pure {emptyLeftVector L q}
@@ -277,7 +278,7 @@ noncomputable def sweepProgram {L : ℕ} (hq : 2 ≤ q)
 /-- With the honest oracle, the program computes the sweep at every cut. -/
 theorem eval_sweepProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     (Delta : ℝ) (i : ℕ) :
     FreeM.eval honestOracle (sweepProgram hq h hs h0 h1 Delta i) =

@@ -57,7 +57,7 @@ private theorem actual_clipped_two_window_alphabet
     (L q a b ell : ℕ) (hell : 1 ≤ ell)
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (e : Fin 5 → ℝ) (t : ℝ) :
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
@@ -80,18 +80,18 @@ private theorem actual_clipped_two_window_alphabet
     let F := Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
     let K : Finset (Fin 5) := {0, 2, 4}
     let B := (∑ j, ((if j ∈ K then C j else A j) - (e j : ℂ) • 1)) + Y
-    (∀ r, Entropy.IsSupportedOn (WL r)
+    (∀ r, ManyBody.IsSupportedOn (WL r)
       (interval L (a + r.val) (a + r.val + 2))) ∧
-    (∀ r, Entropy.IsSupportedOn (WR r)
+    (∀ r, ManyBody.IsSupportedOn (WR r)
       (interval L (b + r.val) (b + r.val + 2))) ∧
-    Entropy.IsSupportedOn PL (interval L 0 (a + 1)) ∧
-    Entropy.IsSupportedOn Pmid (interval L (a + 2 * ell) (b + 1)) ∧
-    Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) ∧
+    ManyBody.IsSupportedOn PL (interval L 0 (a + 1)) ∧
+    ManyBody.IsSupportedOn Pmid (interval L (a + 2 * ell) (b + 1)) ∧
+    ManyBody.IsSupportedOn PR (interval L (b + 2 * ell) L) ∧
     (∑ r, F r) = B := by
   classical
   intro k A J Y WL WR C S PL Pmid PR F K B
   let R : Fin 5 → Finset (Fin L) := fun j ↦ interval L (k j.castSucc) (k j.succ)
-  have hA (j : Fin 5) : Entropy.IsSupportedOn (A j) (R j) := by
+  have hA (j : Fin 5) : ManyBody.IsSupportedOn (A j) (R j) := by
     change _ ∈ ManyBody.supportedOperators _ _
     apply sum_mem
     intro i hi
@@ -179,7 +179,7 @@ private theorem exists_actual_clipped_polynomial_family_fin
     (hdegree : 1 ≤ degree)
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (e : Fin 5 → ℝ) (t : ℝ) :
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
@@ -200,9 +200,9 @@ private theorem exists_actual_clipped_polynomial_family_fin
       ∀ Q : Polynomial ℂ, Q.natDegree ≤ degree →
         ∃ M : Fin N → Matrix (↥(Jᶜ) → Fin q) (↥(Jᶜ) → Fin q) ℂ,
           Polynomial.aeval B Q = (∑ r, M r ⊗ₖ W r).submatrix
-            ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+            ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
               (Equiv.prodComm _ _))
-            ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+            ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
               (Equiv.prodComm _ _)) := by
   classical
   intro k A Cross Y K B J D
@@ -236,8 +236,8 @@ private theorem exists_actual_clipped_polynomial_family_fin
     exact hsum
   change Polynomial.aeval (∑ r, Sum.elim (Sum.elim WL WR) ![PL, Pcore, PR] r) Q =
     (∑ r, M r ⊗ₖ W r).submatrix
-      ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _))
-      ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _)) at hM
+      ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _))
+      ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _)) at hM
   exact ⟨M, hsumCore ▸ hM⟩
 end TNLean.MPS.AreaLaw
 end
@@ -262,7 +262,7 @@ theorem exists_actual_regional_clipped_polynomial_family_fin
     (hdegree : 1 ≤ degree)
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (e : Fin 5 → ℝ) (t : ℝ) (Jtarget : Finset (Fin L)) :
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
@@ -279,14 +279,14 @@ theorem exists_actual_regional_clipped_polynomial_family_fin
     let J0 := interval L (a + ell) (b + ell + 1)
     let D0 := (q * degree) ^ (18 * ell + 2 * (degree / ell))
     let β := fun _ : Fin L ↦ Fin q
-    let tau := (FiniteProduct.splitEquiv β Jtarget).trans (Equiv.prodComm _ _)
+    let tau := (ManyBody.splitEquiv β Jtarget).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-    let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration β Jtargetᶜ) ℂ).tensorProduct
-      (EuclideanSpace.basisFun (FiniteProduct.Configuration β Jtarget) ℂ)).repr
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtargetᶜ) ℂ).tensorProduct
+      (EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtarget) ℂ)).repr
     let T := U.trans Phi.symm
     let Tm := T.trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (FiniteProduct.Configuration β Jtargetᶜ))
-      (EuclideanSpace ℂ (FiniteProduct.Configuration β Jtarget)))
+      (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtargetᶜ))
+      (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtarget)))
     ∃ (N : ℕ) (W : Fin N → Matrix (Jtarget → Fin q) (Jtarget → Fin q) ℂ),
       N ≤ D0 ^ 2 * q ^ (2 * (J0 \ Jtarget).card + 2 * (Jtarget \ J0).card) ∧
       ∀ Q : Polynomial ℂ, Q.natDegree ≤ degree →
@@ -319,8 +319,8 @@ theorem exists_actual_regional_clipped_polynomial_family_fin
       hM0.trans hM
     have hconj := Matrix.toEuclideanCLM_middleFirst_conjugation_of_kronecker_sum
       (Z := Fin L → Fin q)
-      (X := FiniteProduct.Configuration β Jtargetᶜ)
-      (Y := FiniteProduct.Configuration β Jtarget) (ι := Fin N)
+      (X := ManyBody.RegionConfig β Jtargetᶜ)
+      (Y := ManyBody.RegionConfig β Jtarget) (ι := Fin N)
       tau M W (Polynomial.aeval B Q) hmatrix
     exact ⟨M, hmatrix, hconj⟩
 end TNLean.MPS.AreaLaw

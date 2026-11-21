@@ -72,8 +72,8 @@ theorem log_surprisalMoment_truncated_reducedState_le_common
     (hB : cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤ B) {u : ℝ}
     (hu : |u| ≤ (1 / (32 * Real.sqrt
       (1 + 2 / (Δ / positiveNormalization 1 (Δ / 2) J)))) / Real.sqrt B) :
-    Real.log (Entropy.surprisalMoment (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-      u * regionalEntropy Λ q Ωt Q +
+    Real.log (Entropy.surprisalMoment (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+      u * ManyBody.regionEntropy Ωt Q +
         512 * Real.exp 1 * (2 / (Δ / positiveNormalization 1 (Δ / 2) J)) * B * u ^ 2 := by
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
@@ -139,14 +139,14 @@ theorem exists_truncated_statusMarginal_moment_bounds
                 ∀ Q ∈ statusMarginalRegions S.depth (S.state hist band),
                   ∀ u : ℝ, |u| ≤ c₀ / Real.sqrt B →
                     Real.log (Entropy.surprisalMoment
-                      (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-                      u * regionalEntropy Λ q Ωt Q + C₀ * B * u ^ 2) ∧
+                      (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+                      u * ManyBody.regionEntropy Ωt Q + C₀ * B * u ^ 2) ∧
               (k + 1 ≤ S.n * S.m →
                 ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist band),
                   ∀ u : ℝ, |u| ≤ c₀ / Real.sqrt B →
                     Real.log (Entropy.surprisalMoment
-                      (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-                      u * regionalEntropy Λ q Ωt Q + C₀ * B * u ^ 2) := by
+                      (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+                      u * ManyBody.regionEntropy Ωt Q + C₀ * B * u ^ 2) := by
   classical
   obtain ⟨Ctr, hCtr, htr⟩ := exists_truncated_reducedState_moment_tail_bounds R hJ hΔ hCcard
   refine ⟨Ctr, hCtr, ?_⟩

@@ -40,7 +40,7 @@ private theorem rank_two_grid_layers_le (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w
         (chainGridBlock L w j.val : Finset (Fin L)))
     (hQ : ∀ j, Q j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (chainCutBuffer L (chainGridCut w j.val) r : Finset (Fin L))) :
-    ∀ cut : ℕ, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    ∀ cut : ℕ, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L cut) ((List.ofFn P).prod * (List.ofFn Q).prod)) ≤
         q ^ (2 * (w + (2 * r + 2))) := by
   have hpairP : (List.ofFn (fun j : Fin (L / w + 1) ↦ j)).Pairwise
@@ -84,7 +84,7 @@ supported propagator nor Lieb--Robinson error is supplied as a hypothesis. Osbor
 arXiv:quant-ph/0508031v2, equations (2)--(13); Huang, Section 5.4, Lemma 19. -/
 theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
     (hnorm : ∀ i, ‖h i‖ ≤ 1) (t : ℝ) :
     ‖hermitianUnitaryPath (∑ i, h i) (-t) -
@@ -92,7 +92,7 @@ theorem chainGridPropagator_spec (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
         (((L - 1) / w : ℕ) : ℝ) * chainGridLRPrefactor *
           Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) * |t| ∧
       ∀ cut : ℕ, operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut)
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut)
           (chainGridPropagator (w := w) (by omega) r h hHerm t)) ≤
           q ^ (2 * (w + (2 * r + 2))) := by
   classical
@@ -146,7 +146,7 @@ with simultaneous cut-rank bounds: the existence form of `chainGridPropagator_sp
 Osborne, arXiv:quant-ph/0508031v2, equations (2)--(13); Huang, Section 5.4, Lemma 19. -/
 theorem exists_chainGrid_propagator_approximation (hq : 1 ≤ q) (hwidth : 2 * r + 2 ≤ w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
     (hnorm : ∀ i, ‖h i‖ ≤ 1) :
     ∃ K : ℝ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ, ∀ t : ℝ,
@@ -154,7 +154,7 @@ theorem exists_chainGrid_propagator_approximation (hq : 1 ≤ q) (hwidth : 2 * r
         (((L - 1) / w : ℕ) : ℝ) * chainGridLRPrefactor *
           Real.exp (chainGridLRVelocity * |t| - (r : ℝ) / 2) * |t| ∧
       ∀ cut : ℕ, operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K t)) ≤
           q ^ (2 * (w + (2 * r + 2))) :=
   ⟨chainGridPropagator (w := w) (by omega) r h hHerm,
     chainGridPropagator_spec hq hwidth h hs hHerm hnorm⟩

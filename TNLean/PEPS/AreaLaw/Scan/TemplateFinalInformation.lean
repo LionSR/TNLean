@@ -144,10 +144,9 @@ theorem template_final_mutualInformation_of_boxEntropy_explicit
             let L := ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
             let X := A.filter fun x ↦ x.val ∈ T.points
             let S₀ := A.filter fun x ↦ x.val ∈ ambientDilation T.points L
-            let β := fun _ : Site Λ ↦ Fin q
-            2 * FiniteProduct.mutualInformation β Ω X S₀ᶜ ≤
+            2 * ManyBody.regionMutualInformation Ω X S₀ᶜ ≤
                 collarConstant q J Δ Cbox * (n : ℝ) ^ (62497 / 62500 : ℝ) ∧
-              2 * FiniteProduct.mutualInformation β Ω X S₀ᶜ ≤
+              2 * ManyBody.regionMutualInformation Ω X S₀ᶜ ≤
                 collarConstant q J Δ Cbox *
                   (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   classical
@@ -229,10 +228,9 @@ theorem exists_template_final_mutualInformation_of_boxEntropy_of_threshold_le
             let L := ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
             let X := A.filter fun x ↦ x.val ∈ T.points
             let S₀ := A.filter fun x ↦ x.val ∈ ambientDilation T.points L
-            let β := fun _ : Site Λ ↦ Fin q
-            2 * FiniteProduct.mutualInformation β Ω X S₀ᶜ ≤
+            2 * ManyBody.regionMutualInformation Ω X S₀ᶜ ≤
                 collarConstant q J Δ Cbox * (n : ℝ) ^ (62497 / 62500 : ℝ) ∧
-              2 * FiniteProduct.mutualInformation β Ω X S₀ᶜ ≤
+              2 * ManyBody.regionMutualInformation Ω X S₀ᶜ ≤
                 collarConstant q J Δ Cbox *
                   (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   obtain ⟨ct, Cent, eent, Cen, een, hct, htransport⟩ :=
@@ -268,10 +266,9 @@ theorem exists_template_final_mutualInformation_of_boxEntropy
             let L := ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
             let X := A.filter fun x ↦ x.val ∈ T.points
             let S₀ := A.filter fun x ↦ x.val ∈ ambientDilation T.points L
-            let β := fun _ : Site Λ ↦ Fin q
-            2 * FiniteProduct.mutualInformation β Ω X S₀ᶜ ≤
+            2 * ManyBody.regionMutualInformation Ω X S₀ᶜ ≤
                 C * (n : ℝ) ^ (62497 / 62500 : ℝ) ∧
-              2 * FiniteProduct.mutualInformation β Ω X S₀ᶜ ≤
+              2 * ManyBody.regionMutualInformation Ω X S₀ᶜ ≤
                 C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   obtain ⟨Ctr, ct, Cent, eent, Cen, een, -, -, hall⟩ :=
     exists_template_final_mutualInformation_of_boxEntropy_of_threshold_le q R D₀ hq hD₀ hJ hΔ hCtpl

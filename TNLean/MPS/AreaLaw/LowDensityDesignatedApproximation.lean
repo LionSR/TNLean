@@ -39,7 +39,7 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q : ℕ) (v : ℝ) (hq : 0 < q), 0 < v →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (h i) (interval L i.val (i.val + 2)))
         (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1),
       let _ : Nonempty (Fin L → Fin q) :=
@@ -148,7 +148,7 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
   refine ⟨Bs, Bg, hBs, hBsg, hlogs, hloggBound, ?_⟩
   intro k0 ψ hψG hψ
   have hmassAt (k : ℕ) (hkL : k ≤ L) (eps : ℝ) (heps : 0 < eps) (heps1 : eps ≤ 1) :
-      1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (leftBlock L k) ψ).kyFanNorm
           (Module.finrank ℂ (G etaLD) *
             ⌈Real.exp (F (16 + Real.log (1 / g) + Real.log (2 / eps)))⌉₊) ≤ 2 * eps := by
@@ -171,7 +171,7 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
       (by positivity) (by linarith only [hdelta1])
     have heq : 2 / (delta / 64) = 128 / delta := by field_simp; ring
     rw [heq] at hm
-    change 1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+    change 1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
       (leftBlock L k0) ψ).kyFanNorm (Module.finrank ℂ (G etaLD) * Bs) ≤ _ at hm
     convert hm using 1; ring
   · intro k hk _hne
@@ -185,7 +185,7 @@ theorem exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation
     have heq : 2 / (delta / (64 * ((L : ℝ) + 1))) =
         128 * ((L : ℝ) + 1) / delta := by field_simp; ring
     rw [heq] at hm
-    change 1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+    change 1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
       (leftBlock L k) ψ).kyFanNorm (Module.finrank ℂ (G etaLD) * Bg) ≤ _ at hm
     convert hm using 1; field_simp; ring
 

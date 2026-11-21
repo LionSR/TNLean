@@ -138,7 +138,7 @@ theorem exists_theorem_one_of_valid (hq : 2 ≤ q) {Delta : ℝ} (hDelta : 0 < D
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ (o : {ι : Type} → LinearAlgebraQuery q ι → ι), IsValidOracle o →
       ∀ (L : ℕ), 1 ≤ L → ∀ {η : ℝ}, 0 < η → Delta * η ≤ 1 →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+        (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
           (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1),
       let R := lvvAccuracyParameter L Delta η
       let ψ := FreeM.eval o (groundStateProgram hq h hs h0 h1 Delta R)

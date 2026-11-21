@@ -10,7 +10,7 @@ import TNLean.MPS.ParentHamiltonian.BlockPeriodicGroundSpaceContinuity
 import TNLean.MPS.ParentHamiltonian.BlockOpenGroundSpaceAtSimultaneousInjectivity
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteRangeKnabeGap
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockOpenGapAtSimultaneousInjectivity
-import TNLean.Algebra.KernelGapPerturbation
+import QICLean.Analysis.KernelGapPerturbation
 
 /-!
 # Compact uniform gaps for several simultaneously injective blocks

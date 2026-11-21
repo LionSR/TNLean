@@ -60,7 +60,7 @@ theorem entropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt (hq : 2 �
     (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (ψ i) j).rank ≤ k)
     (hnorm : ∑ i, w i * ‖ψ i‖ ^ 2 = 1) {P : ℝ} (hP : 0 < P)
     (hPdef : ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 j) Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) ≤
       Real.log k + ξ' * Real.log (2 * C₁ ^ 2 / P) * Real.log q + bootstrapRemainder ξ' q :=
   entropy_le_of_overlap_schmidtRank_mixture_of_factorization hq hΩ j hξ hC₁
     (fun m _ ↦ by
@@ -97,7 +97,7 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
         (∀ i, (cutMatrix (ψ i) j).rank ≤ k) → ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
         ∀ {P : ℝ}, 0 < P → ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P →
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 j) Ω ≤
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) ≤
           Real.log k + 6 * lemmaOneEndpointLength R J ΔE *
             Real.log (2 * (K * lemmaOneEndpointLength R J ΔE ^ 3) ^ 2 / P) * Real.log q +
             bootstrapRemainder (6 * lemmaOneEndpointLength R J ΔE) q := by
@@ -114,7 +114,7 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
   · -- For `q ≤ 1` the entropy vanishes and the right side is nonnegative.
     have hq1 : q = 1 := by have := NeZero.one_le (n := q); omega
     subst hq1
-    refine (regionEntropy_le_card_mul_log hΩ _).trans ?_
+    refine (ManyBody.regionEntropy_le_card_mul_log hΩ _).trans ?_
     have hk0 : 0 ≤ Real.log k := Real.log_nonneg (by exact_mod_cast hk)
     have hξ0 : 0 ≤ Real.log (6 * lemmaOneEndpointLength R J ΔE / 2 + 1) :=
       Real.log_nonneg (by linarith)

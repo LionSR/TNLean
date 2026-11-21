@@ -28,7 +28,7 @@ heat operator of the shifted sum, without distributing the scalar shift among th
 Supporting a corrected ALVV, arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 1262–1268. -/
 theorem exists_shifted_heat_mpo {N q r : ℕ} (hq : 1 ≤ q) (hr : 0 < r)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ})
     (hh : ∀ i, (h i).IsHermitian) (hnorm : ∀ i, ‖h i‖ ≤ 1)
     (eps β : ℝ) (hlo : (eps : ℂ) • 1 ≤ ∑ i, h i) (hβ : 0 ≤ β)

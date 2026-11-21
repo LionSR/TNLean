@@ -41,7 +41,7 @@ theorem exists_interval_physical_scaled_soft_low_energy_closeness
     ∃ m : ℕ, m = ⌈12 + (2 / 3 : ℝ) * eta + (16 / 3 : ℝ) * Real.log (80 / rho)⌉₊ ∧ 0 < m ∧
       ∀ (L q p r : ℕ) (hq : 0 < q) (_hpr : p ≤ r) (_hrL : r ≤ L)
         (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (h i) (interval L i.val (i.val + 2))) →
         (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) →
         let : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩

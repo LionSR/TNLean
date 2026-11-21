@@ -78,12 +78,12 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
       (R C₀ : Finset (SquareLatticeVertex L L)) (hRC : Disjoint R C₀),
       let Q := (R ∪ C₀)ᶜ
       let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C₀ → Fin q))
-      let s := FiniteProduct.splitTwoRegionsEquiv
+      let s := ManyBody.splitTwoRegionsEquiv
         (fun _ : SquareLatticeVertex L L ↦ Fin q) R C₀ hRC
       let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (Q → Fin q))
       let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
-      let Λ := AreaLaw.rectangularDomain L L
-      let a := AreaLaw.rectangleSiteEquiv L L
+      let Λ := ManyBody.rectangularDomain L L
+      let a := ManyBody.rectangleSiteEquiv L L
       let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
       let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.hamiltonian)
       let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
@@ -134,15 +134,26 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
         (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
   have hV : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
       (Q.image a : Finset (Lattice.Site Λ)) := by
-    simpa only [a, V, AreaLaw.embedOp_rectangular_eq_reindex, Finset.coe_image,
-      Matrix.reindex_apply, Matrix.submatrix_submatrix] using!
-      embedOp_mem_supportedOperators_image a.injective hV₀
+    have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators
+      (X := fun _ : SquareLatticeVertex L L ↦ Fin (q * q))
+      (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin (q * q))
+      (ManyBody.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin (q * q)))
+      (D := Q) (D' := Q.image (ManyBody.rectangleSiteEquiv L L))
+      (fun _ ↦ (ManyBody.rectangleSiteEquiv L L).injective.mem_finset_image.symm) hV₀
+    rw [AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv] at hs
+    simpa only [a, V, Matrix.reindex_apply, Matrix.submatrix_submatrix] using! hs
   have hD : gH.hamiltonian - K ∈
       ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (Z.image a : Finset (Lattice.Site Λ)) := by
-    simpa only [hK', a, K', F, K, AreaLaw.embedOp_rectangular_eq_reindex, Finset.coe_image,
-      Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_sub,
-      Pi.sub_apply, Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using!
-      embedOp_mem_supportedOperators_image a.injective (h.swapped_doubled_boundary_bound hhJ R).1
+    have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators
+      (X := fun _ : SquareLatticeVertex L L ↦ Fin (q * q))
+      (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin (q * q))
+      (ManyBody.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin (q * q)))
+      (fun _ ↦ (ManyBody.rectangleSiteEquiv L L).injective.mem_finset_image.symm)
+      (h.swapped_doubled_boundary_bound hhJ R).1
+    rw [AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv] at hs
+    simpa only [hK', a, K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_sub, Pi.sub_apply, Matrix.submatrix_mul_equiv,
+      Matrix.submatrix_submatrix] using! hs
   have hDn : ‖K' - K‖ ≤ 8 * J * (L : ℝ) ^ 2 := by
     simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
       Matrix.submatrix_sub, Pi.sub_apply, Matrix.submatrix_mul_equiv,
@@ -186,12 +197,12 @@ theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integ
         (R C₀ : Finset (SquareLatticeVertex L L)) (hRC : Disjoint R C₀),
         let Q := (R ∪ C₀)ᶜ
         let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C₀ → Fin q))
-        let s := FiniteProduct.splitTwoRegionsEquiv
+        let s := ManyBody.splitTwoRegionsEquiv
           (fun _ : SquareLatticeVertex L L ↦ Fin q) R C₀ hRC
         let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (Q → Fin q))
         let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
-        let Λ := AreaLaw.rectangularDomain L L
-        let a := AreaLaw.rectangleSiteEquiv L L
+        let Λ := ManyBody.rectangularDomain L L
+        let a := ManyBody.rectangleSiteEquiv L L
         let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
         let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.hamiltonian)
         let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)

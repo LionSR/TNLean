@@ -81,7 +81,7 @@ variable {L q : ℕ}
 
 /-- Vectors on the configurations of the left block of the cut after `k` sites. -/
 abbrev LeftBlockVector (L q k : ℕ) : Type :=
-  EuclideanSpace ℂ (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k))
+  EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))
 
 /-- The column of the cut matrix of `ψ` after `k` sites at a configuration `b` of the sites
 right of the cut, as a vector on the left block. -/
@@ -93,7 +93,7 @@ noncomputable def cutColumn (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ
 @[simp]
 theorem cutColumn_apply (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ)
     (b : (v : {v : Fin L // v ∉ leftBlock L k}) → Fin q)
-    (a : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)) :
+    (a : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
     cutColumn ψ k b a = cutMatrix ψ k a b :=
   rfl
 
@@ -153,7 +153,7 @@ theorem spanProjection_mul_self {k : ℕ} (S : Set (LeftBlockVector L q k)) :
 
 /-- The matrix `spanProjection S` acts on vectors as the projection onto `Span(S)`. -/
 theorem toLp_spanProjection_mulVec {k : ℕ} (S : Set (LeftBlockVector L q k))
-    (v : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) → ℂ) :
+    (v : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) → ℂ) :
     WithLp.toLp 2 (spanProjection S *ᵥ v) =
       (Submodule.span ℂ S).starProjection (WithLp.toLp 2 v) := by
   have h := congrArg (fun f ↦ f (WithLp.toLp 2 v)) (toEuclideanLin_spanProjection S)
@@ -180,18 +180,18 @@ theorem spanProjection_mul_cutMatrix_eq_iff {k : ℕ} {S : Set (LeftBlockVector 
 
 /-- The reduced density on the first `k` sites is `M Mᴴ` for the cut matrix `M`. -/
 theorem regionState_leftBlock_eq (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
-    Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ =
+    ManyBody.regionState (X := fun _ ↦ Fin q) ψ (leftBlock L k) =
       cutMatrix ψ k * (cutMatrix ψ k)ᴴ := by
-  simp only [Entropy.regionState, ManyBody.regionState, Matrix.partialTraceRight_vecMulVec_eq,
-    cutMatrix]
+  simp only [ManyBody.regionState_eq_partialTraceRight_cutVector,
+    Matrix.partialTraceRight_vecMulVec_eq, cutMatrix]
 
 /-- **Support in density form.** The reduced density `ρ` of `ψ` on the first `k` sites is
 supported on `Span(S)`, `P ρ = ρ`, exactly when `ψ ∈ Span(S) ⊗ H_R`. This is the support
 condition of Definition `def:viable` (arXiv:1307.5143v1, algo53.tex, lines 240–242). -/
 theorem spanProjection_mul_regionState_eq_iff {k : ℕ} {S : Set (LeftBlockVector L q k)}
     {ψ : EuclideanSpace ℂ (Fin L → Fin q)} :
-    spanProjection S * Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ =
-        Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ ↔
+    spanProjection S * ManyBody.regionState (X := fun _ ↦ Fin q) ψ (leftBlock L k) =
+        ManyBody.regionState (X := fun _ ↦ Fin q) ψ (leftBlock L k) ↔
       ψ ∈ leftSupportSubmodule S := by
   rw [← spanProjection_mul_cutMatrix_eq_iff, regionState_leftBlock_eq]
   set P := spanProjection S
@@ -214,8 +214,8 @@ theorem spanProjection_mul_regionState_eq_iff {k : ℕ} {S : Set (LeftBlockVecto
 the cut matrix `M`. -/
 theorem leftApply_cutVector_eq_iff {k : ℕ} (P : LeftBlockMatrix L q k)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
-    leftApply P (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ) =
-        Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ ↔
+    leftApply P (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ) =
+        ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ ↔
       P * cutMatrix ψ k = cutMatrix ψ k := by
   constructor
   · intro h
@@ -231,8 +231,8 @@ the hypothesis of `Matrix.IsTrimmingProjection.exists_trimmed_witness`. -/
 theorem leftApply_spanProjection_cutVector_eq_iff {k : ℕ} {S : Set (LeftBlockVector L q k)}
     {ψ : EuclideanSpace ℂ (Fin L → Fin q)} :
     leftApply (spanProjection S)
-        (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ) =
-        Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ ↔
+        (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ) =
+        ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ ↔
       ψ ∈ leftSupportSubmodule S := by
   rw [leftApply_cutVector_eq_iff, spanProjection_mul_cutMatrix_eq_iff]
 
@@ -300,13 +300,13 @@ theorem IsViable.exists_singleton_exact_of_localDimension_one
     intro hzero
     have hφzero : φ = 0 := by
       ext z
-      let p := Entropy.cutEquiv (fun _ : Fin L ↦ 1) (leftBlock L i) z
+      let p := ManyBody.cutEquiv (fun _ ↦ Fin 1) (leftBlock L i) z
       have hb : p.2 = b := Subsingleton.elim _ _
       have hz := congrArg (fun w ↦ w p.1) hzero
       rw [cutColumn_apply, cutMatrix_apply] at hz
-      have hp : (Entropy.cutEquiv (fun _ : Fin L ↦ 1) (leftBlock L i)).symm (p.1, b) = z := by
+      have hp : (ManyBody.cutEquiv (fun _ ↦ Fin 1) (leftBlock L i)).symm (p.1, b) = z := by
         rw [← hb]
-        exact (Entropy.cutEquiv (fun _ : Fin L ↦ 1) (leftBlock L i)).symm_apply_apply z
+        exact (ManyBody.cutEquiv (fun _ ↦ Fin 1) (leftBlock L i)).symm_apply_apply z
       simpa [hp] using hz
     rw [hφzero, norm_zero] at hφ
     norm_num at hφ
@@ -369,15 +369,15 @@ theorem IsViable.exists_singleton_exact_of_chainLength_zero
     intro hzero
     have hφzero : φ = 0 := by
       ext z
-      let p := Entropy.cutEquiv (fun _ : Fin 0 ↦ q) (leftBlock 0 i) z
+      let p := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock 0 i) z
       have hb : p.2 = b := by
         funext x
         exact x.1.elim0
       have hz := congrArg (fun w ↦ w p.1) hzero
       rw [cutColumn_apply, cutMatrix_apply] at hz
-      have hp : (Entropy.cutEquiv (fun _ : Fin 0 ↦ q) (leftBlock 0 i)).symm (p.1, b) = z := by
+      have hp : (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock 0 i)).symm (p.1, b) = z := by
         rw [← hb]
-        exact (Entropy.cutEquiv (fun _ : Fin 0 ↦ q) (leftBlock 0 i)).symm_apply_apply z
+        exact (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock 0 i)).symm_apply_apply z
       simpa [hp] using hz
     rw [hφzero, norm_zero] at hφ
     norm_num at hφ
@@ -476,7 +476,7 @@ theorem isViable_iff_forall_mem_span_singleton {Γ : EuclideanSpace ℂ (Fin L �
 /-- A configuration of `Fin k` read as a configuration of the left block of the cut after `k`
 sites. -/
 def leftConfigOfFin {k : ℕ} (x : Fin k → Fin q) :
-    Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) :=
+    (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) :=
   fun v ↦ x ⟨v.1.val, mem_leftBlock.mp v.2⟩
 
 /-- A vector on the first `k` sites is a matrix product state of bond dimension at most `b`
@@ -551,8 +551,8 @@ theorem isViableMPS_iff_nonempty_data
 
 /-- The restriction of a configuration of the first `k'` sites to the first `k ≤ k'`. -/
 def restrictLeft {k k' : ℕ} (h : k ≤ k')
-    (x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k')) :
-    Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) :=
+    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k'))) :
+    (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) :=
   fun v ↦ x ⟨v.1, leftBlock_mono h v.2⟩
 
 /-- The vector `v ⊗ |k⟩` on the first `i` sites for `v` on the first `i - 1` sites
@@ -581,7 +581,7 @@ def lastLeftSite {i : ℕ} (hi0 : 0 < i) (hiL : i ≤ L) : {s : Fin L // s ∈ l
 otherwise. -/
 theorem extendSite_apply {i : ℕ} (hi0 : 0 < i) (hiL : i ≤ L) (k : Fin q)
     (v : LeftBlockVector L q (i - 1))
-    (x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i)) :
+    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i))) :
     extendSite i k v x =
       if x (lastLeftSite hi0 hiL) = k then v (restrictLeft (Nat.sub_le i 1) x) else 0 := by
   change (if _ then _ else _) = _

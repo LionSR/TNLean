@@ -65,16 +65,16 @@ theorem renyiEntropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt (hq 
   have hq1 : 1 ≤ q := by omega
   have hfact' : ∀ m : ℕ, j + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL SL ∧ SL ⊆ leftBlock L j ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L j ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')) := fun m _ ↦ by
     obtain ⟨OB, OL, OR, hF⟩ := hfact m
     obtain ⟨SB, SL, SR, h⟩ := exists_factorization_of_isFactorizationAt hF
     exact ⟨OB, OL, OR, SB, SL, SR, h⟩
   set cv : EuclideanSpace ℂ (Fin L → Fin q) → _ := fun x ↦
-    WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L j) x) with hcv
+    WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) x) with hcv
   have hdot : ∀ x y, star (cv x) ⬝ᵥ cv y = ⟪x, y⟫_ℂ := fun x y ↦ star_cutVector_dotProduct j x y
   have hnormsq : ∀ x : EuclideanSpace ℂ (Fin L → Fin q), (star (cv x) ⬝ᵥ cv x).re = ‖x‖ ^ 2 := by
     intro x
@@ -105,7 +105,7 @@ theorem renyiEntropy_cutMatrix_nonpos_of_one {Ω : EuclideanSpace ℂ (Fin L →
     (j : ℕ) {α : ℝ} (hα0 : 0 < α) (hα1 : α < 1) :
     renyiEntropy (cutMatrix Ω j * (cutMatrix Ω j)ᴴ)
         (posSemidef_self_mul_conjTranspose (cutMatrix Ω j)).isHermitian α ≤ 0 := by
-  set Ψ := WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ 1) (leftBlock L j) Ω)
+  set Ψ := WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin 1) (leftBlock L j) Ω)
   have hΨ : star Ψ ⬝ᵥ Ψ = 1 := by
     rw [star_cutVector_dotProduct, inner_self_eq_norm_sq_to_K, hΩ]; norm_num
   obtain ⟨hp0, hpsum⟩ := eigenvalues₀_nonneg_and_sum_eq_one Ψ hΨ
@@ -127,8 +127,8 @@ theorem renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt {Ω : EuclideanSpace �
     (hΩ : ‖Ω‖ = 1) (j : ℕ) {α : ℝ} (hα : 1 < α) :
     renyiEntropy (cutMatrix Ω j * (cutMatrix Ω j)ᴴ)
         (posSemidef_self_mul_conjTranspose (cutMatrix Ω j)).isHermitian α ≤
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 j) Ω := by
-  set Ψ := WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω)
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) := by
+  set Ψ := WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) Ω)
   have hΨ : star Ψ ⬝ᵥ Ψ = 1 := by
     rw [star_cutVector_dotProduct, inner_self_eq_norm_sq_to_K, hΩ]; norm_num
   obtain ⟨hp0, hpsum⟩ := eigenvalues₀_nonneg_and_sum_eq_one Ψ hΨ

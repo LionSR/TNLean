@@ -95,7 +95,8 @@ preparation of matrix product states.
 
 \begin{lemma}[Support of a tensor product on paired sites]
     \label{thm:qc_site_pair_tensor_support}
-    \lean{QuantumCircuit.reindex_kronecker_mem_supportedOperators}
+    \lean{ManyBody.reindex_kronecker_mem_supportedOperators,
+        ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators}
     \leanok
     \uses{def:qc_local_circuit,def:qc_site_pair_coordinates}
     As in~\cite{OpenAI2026PolynomialPEPS}, \texttt{02-information.tex}, lines 416--424 and 513--524, if $A$ on $(\C^d)^{\otimes I}$ is supported on $S\subseteq I$ and $B$ on $(\C^e)^{\otimes I}$ is supported on $T\subseteq I$, then $A\otimes B$ reindexed by $p$ is supported on $S\cup T$ in $(\C^{de})^{\otimes I}$.

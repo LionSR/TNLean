@@ -55,10 +55,10 @@ theorem regionalEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le
       Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g) →
     ∀ Ce e : ℝ,
     (∀ j : ℕ, j ≤ L →
-      regionalEntropy Λ q Ω (positiveDepthPrefix A depth (j : ℤ)) ≤
+      ManyBody.regionEntropy Ω (positiveDepthPrefix A depth (j : ℤ)) ≤
         Ce * ((n : ℝ) * (L : ℝ) ^ e + n)) →
     ∀ j : ℕ, j ≤ L →
-      regionalEntropy Λ q Ωt (positiveDepthPrefix A depth (j : ℤ)) ≤
+      ManyBody.regionEntropy Ωt (positiveDepthPrefix A depth (j : ℤ)) ≤
         Ce * ((n : ℝ) * (L : ℝ) ^ e + n) + (n : ℝ) ^ (-247 : ℝ) := by
   classical
   have hq' : (1 : ℝ) ≤ (q : ℝ) := by exact_mod_cast hq
@@ -125,9 +125,9 @@ theorem regionalEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le
   -- Combine with the continuity difference and the original prefix bound.
   have heΩ := hentropy j hj
   rw [← hR] at heΩ
-  have hupper : regionalEntropy Λ q Ωt R ≤
-      regionalEntropy Λ q Ω R + 4 * Real.sqrt t * (1 + (R.card : ℝ) * Real.log q) := by
-    have habs := le_abs_self (regionalEntropy Λ q Ωt R - regionalEntropy Λ q Ω R)
+  have hupper : ManyBody.regionEntropy Ωt R ≤
+      ManyBody.regionEntropy Ω R + 4 * Real.sqrt t * (1 + (R.card : ℝ) * Real.log q) := by
+    have habs := le_abs_self (ManyBody.regionEntropy Ωt R - ManyBody.regionEntropy Ω R)
     linarith [hcont, habs]
   linarith [heΩ, hupper, hBcost]
 
@@ -150,10 +150,10 @@ theorem eventually_regionalEntropy_positiveDepthPrefix_le
         Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g) →
       ∀ Ce e : ℝ,
       (∀ j : ℕ, j ≤ L →
-        regionalEntropy Λ q Ω (positiveDepthPrefix A depth (j : ℤ)) ≤
+        ManyBody.regionEntropy Ω (positiveDepthPrefix A depth (j : ℤ)) ≤
           Ce * ((n : ℝ) * (L : ℝ) ^ e + n)) →
       ∀ j : ℕ, j ≤ L →
-        regionalEntropy Λ q Ωt (positiveDepthPrefix A depth (j : ℤ)) ≤
+        ManyBody.regionEntropy Ωt (positiveDepthPrefix A depth (j : ℤ)) ≤
           Ce * ((n : ℝ) * (L : ℝ) ^ e + n) + (n : ℝ) ^ (-247 : ℝ) :=
   eventually_atTop.2 ⟨_, fun _ =>
     regionalEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le q hq g Cvol hg⟩

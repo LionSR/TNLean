@@ -86,19 +86,19 @@ theorem isOpenMPS_trace_closed_chain {L q D : ℕ}
     ext a b
     rw [cutMatrix_apply]
     change Matrix.trace (C * Fin.prod (fun v ↦ A v
-      ((Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm (a, b) v))) = _
+      ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm (a, b) v))) = _
     rw [Fin.prod_eq_prod_map_finRange, ← List.ofFn_eq_map,
       orderedProduct_split _ k hkL.le]
     have hP : (List.ofFn (fun v : Fin k ↦ A (v.castLE hkL.le)
-        ((Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm
+        ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm
           (a, b) (v.castLE hkL.le)))).prod = P a := by
       apply congrArg List.prod
       apply congrArg List.ofFn
       funext v
       have hv : v.castLE hkL.le ∈ leftBlock L k := mem_leftBlock.mpr v.isLt
-      rw [Entropy.cutEquiv_symm_apply_mem _ _ hv]
+      rw [ManyBody.cutEquiv_symm_apply_mem _ _ hv]
     have hQ : (List.ofFn (fun v : Fin (L - k) ↦ A ⟨k + v.val, by omega⟩
-        ((Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm
+        ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm
           (a, b) ⟨k + v.val, by omega⟩))).prod = Q b := by
       apply congrArg List.prod
       apply congrArg List.ofFn
@@ -107,7 +107,7 @@ theorem isOpenMPS_trace_closed_chain {L q D : ℕ}
         rw [mem_leftBlock]
         change ¬ k + v.val < k
         omega
-      rw [Entropy.cutEquiv_symm_apply_not_mem _ _ hv]
+      rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ hv]
     rw [hP, hQ, ← Matrix.mul_assoc]
     change (∑ i, ∑ j, (C * P a) i j * Q b j i) =
       ∑ ij : Fin D × Fin D, (C * P a) ij.1 ij.2 * Q b ij.2 ij.1

@@ -78,9 +78,14 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{definition}[Doubled chain Hamiltonian]
     \label{def:chain_doubled_hamiltonian}
-    \lean{ManyBody.ChainInteraction.doubled,
-        ManyBody.ChainInteraction.isHermitian_doubled_term,
-        ManyBody.ChainInteraction.norm_doubled_term_le}
+    \lean{ManyBody.Interaction.doubledFin,
+        ManyBody.Interaction.doubledFin_term,
+        ManyBody.Interaction.doubled,
+        ManyBody.Interaction.relabel,
+        ManyBody.Interaction.isHermitian_doubled_term,
+        ManyBody.Interaction.norm_doubled_term_le,
+        ManyBody.Interaction.isHermitian_relabel_term,
+        ManyBody.Interaction.norm_relabel_term}
     \leanok
     \uses{def:chain_model,def:qc_site_pair_coordinates}
     Let $L,q,R$ be natural numbers, let $J$ be real, and let
@@ -117,7 +122,9 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Operator of the doubled Hamiltonian]
     \label{lem:chain_doubled_operator}
-    \lean{ManyBody.ChainInteraction.doubled_hamiltonian}
+    \lean{ManyBody.Interaction.hamiltonian_doubledFin,
+        ManyBody.Interaction.hamiltonian_doubled,
+        ManyBody.Interaction.hamiltonian_relabel}
     \leanok
     \uses{def:chain_doubled_hamiltonian}
     Under the hypotheses of Definition~\ref{def:chain_doubled_hamiltonian},
@@ -1312,11 +1319,10 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{lemma}[Araki--Lieb and the area law from interval bounds]
     \label{lem:chain_entropy_inequalities}
     \lean{
-        TNLean.Lattice.regionEntropy_union_le,
-        TNLean.Lattice.regionEntropy_le_union_add,
-        TNLean.Lattice.regionEntropy_empty,
-        TNLean.Lattice.regionEntropy_univ,
-        TNLean.Lattice.regionEntropy_le_card_mul_log,
+        ManyBody.regionEntropy_union_le,
+        ManyBody.regionEntropy_le_union_add,
+        ManyBody.regionEntropy_empty,
+        ManyBody.regionEntropy_univ,
         TNLean.MPS.AreaLaw.boundaryEdges,
         TNLean.MPS.AreaLaw.mem_boundaryEdges,
         TNLean.MPS.AreaLaw.boundaryEdges_empty,
@@ -1611,8 +1617,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{definition}[Finite domains, supports and admissible Hamiltonians]
     \label{def:domain_model}
-    \lean{
-        ManyBody.sitePos,
+    \lean{ManyBody.sitePos,
         ManyBody.sitePos_mem,
         ManyBody.exists_sitePos_eq,
         ManyBody.sub_le_sitePos_sub,
@@ -1625,15 +1630,13 @@ Theorem~B a second way, by a sequential preparation protocol.
         ManyBody.IsDomainSupport.isChainSupport,
         ManyBody.IsDomainSupport.subset_or_disjoint_of_gap,
         ManyBody.DomainInteraction,
-        ManyBody.DomainInteraction.toChain,
-        ManyBody.DomainInteraction.isHermitian_toChain_term,
-        ManyBody.DomainInteraction.norm_toChain_term_le,
-        ManyBody.DomainInteraction.toChain_hamiltonian,
+        ManyBody.Interaction.extend,
+        ManyBody.Interaction.isHermitian_extend_term,
+        ManyBody.Interaction.norm_extend_term_le,
         TNLean.MPS.AreaLaw.domainBoundaryEdges,
         TNLean.MPS.AreaLaw.domainRegion,
         TNLean.MPS.AreaLaw.IsDomainEdge,
-        TNLean.MPS.AreaLaw.card_domainBoundaryEdges
-    }
+        TNLean.MPS.AreaLaw.card_domainBoundaryEdges}
     \leanok
     \uses{def:chain_model,def:area_law_hamiltonian}
     A finite set $\Lambda\subset\mathbb Z$ carries the induced path graph, whose
@@ -1660,7 +1663,6 @@ Theorem~B a second way, by a sequential preparation protocol.
     \lean{TNLean.MPS.AreaLaw.IsDomainSupport.singleton,
         ManyBody.DomainSupport.toChainSupport,
         ManyBody.DomainSupport.toChainSupport_injective,
-        ManyBody.DomainInteraction.toChain_term,
         ManyBody.DomainInteraction.norm_bound_nonneg,
         ManyBody.DomainInteraction.sum_norm_terms_containing_le}\leanok
     \uses{def:domain_model}
@@ -1710,11 +1712,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{definition}[Doubled domain interactions and regional swaps]
     \label{def:domain_doubled_swapped_hamiltonian}
-    \lean{ManyBody.DomainInteraction.doubled,
-        ManyBody.DomainInteraction.isHermitian_doubled_term,
-        ManyBody.DomainInteraction.norm_doubled_term_le,
-        ManyBody.DomainInteraction.doubled_hamiltonian,
-        ManyBody.DomainInteraction.swappedDoubled,
+    \lean{ManyBody.DomainInteraction.swappedDoubled,
         ManyBody.DomainInteraction.isHermitian_swappedDoubled_term,
         ManyBody.DomainInteraction.norm_swappedDoubled_term_le,
         ManyBody.DomainInteraction.swappedDoubled_hamiltonian}\leanok
@@ -2329,10 +2327,10 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{lemma}[Flipping a region of zero entropy]
     \label{lem:zero_entropy_flip}
     \lean{
-        TNLean.Lattice.regionEntropy_union_add_inter_le,
-        TNLean.Lattice.regionEntropy_sdiff_eq_of_eq_zero,
-        TNLean.Lattice.regionEntropy_union_eq_of_eq_zero,
-        TNLean.Lattice.regionEntropy_symmDiff_eq_of_eq_zero,
+        ManyBody.regionEntropy_submodular,
+        ManyBody.regionEntropy_sdiff_eq_of_eq_zero,
+        ManyBody.regionEntropy_union_eq_of_eq_zero,
+        ManyBody.regionEntropy_symmDiff_eq_of_eq_zero,
         TNLean.MPS.AreaLaw.exists_mem_val_eq_iff,
         TNLean.MPS.AreaLaw.boundaryEdges_symmDiff_interval,
         TNLean.MPS.AreaLaw.exists_regionEntropy_eq_boundaryEdges_eq_symmDiff

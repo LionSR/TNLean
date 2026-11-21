@@ -60,12 +60,12 @@ AKLV, arXiv:1301.1162v1, Lemma 4.2 (`l:agsp`), lines 586--663. -/
 theorem operatorSchmidtRank_aklv_polynomial_le {L q a s ell : ℕ}
     (hq : 1 ≤ q) (hs : 0 < s) (hspace : a + s + 1 ≤ L)
     (H : Fin s → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hH : ∀ j, Entropy.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
+    (hH : ∀ j, ManyBody.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
     (HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hL : Entropy.IsSupportedOn HL (interval L 0 (a + 1)))
-    (hR : Entropy.IsSupportedOn HR (interval L (a + s) L))
+    (hL : ManyBody.IsSupportedOn HL (interval L 0 (a + 1)))
+    (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L))
     (P : Polynomial ℂ) (hP : P.natDegree ≤ ell) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L (a + s / 2))
       (Polynomial.aeval (HL + (∑ j, H j) + HR) P)) ≤
       (q * (ell + 1)) ^ (16 * (ell / s + Nat.sqrt ell + 1)) := by
@@ -87,12 +87,12 @@ constant. AKLV, arXiv:1301.1162v1, Lemma 4.2 (`l:agsp`). -/
 theorem operatorSchmidtRank_aklv_polynomial_le_max {L q a s ell : ℕ}
     (hq : 1 ≤ q) (hs : 0 < s) (hell : 1 ≤ ell) (hspace : a + s + 1 ≤ L)
     (H : Fin s → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hH : ∀ j, Entropy.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
+    (hH : ∀ j, ManyBody.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
     (HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hL : Entropy.IsSupportedOn HL (interval L 0 (a + 1)))
-    (hR : Entropy.IsSupportedOn HR (interval L (a + s) L))
+    (hL : ManyBody.IsSupportedOn HL (interval L 0 (a + 1)))
+    (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L))
     (P : Polynomial ℂ) (hP : P.natDegree ≤ ell) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L (a + s / 2))
       (Polynomial.aeval (HL + (∑ j, H j) + HR) P)) ≤
       (q * (ell + 1)) ^ (48 * max (ell / s) (Nat.sqrt ell)) := by
@@ -109,12 +109,12 @@ The preceding theorem covers the smaller degrees without a degenerate base. -/
 theorem operatorSchmidtRank_aklv_polynomial_le_source_base {L q a s ell : ℕ}
     (hq : 1 ≤ q) (hs : 0 < s) (hell : 1 ≤ ell) (hspace : a + s + 1 ≤ L)
     (H : Fin s → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hH : ∀ j, Entropy.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
+    (hH : ∀ j, ManyBody.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
     (HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hL : Entropy.IsSupportedOn HL (interval L 0 (a + 1)))
-    (hR : Entropy.IsSupportedOn HR (interval L (a + s) L))
+    (hL : ManyBody.IsSupportedOn HL (interval L 0 (a + 1)))
+    (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L))
     (P : Polynomial ℂ) (hP : P.natDegree ≤ ell) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L (a + s / 2))
       (Polynomial.aeval (HL + (∑ j, H j) + HR) P)) ≤
       (q * ell) ^ (96 * max (ell / s) (Nat.sqrt ell)) := by

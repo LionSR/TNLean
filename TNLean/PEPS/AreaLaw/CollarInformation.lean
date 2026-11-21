@@ -82,38 +82,38 @@ variable (β : ι → Type*) [∀ v, Fintype (β v)] [∀ v, DecidableEq (β v)]
 Source: `08-scanner.tex`, lines 868–873. -/
 noncomputable def collarPreQuantity (ψ : EuclideanSpace ℂ ((v : ι) → β v))
     (X U Y V : Finset ι) : ℝ :=
-  entropy β ψ (X ∪ U) + entropy β ψ V - entropy β ψ Y
+  ManyBody.regionEntropy ψ (X ∪ U) + ManyBody.regionEntropy ψ V - ManyBody.regionEntropy ψ Y
 
 /-- The leaf quantity `g_post = S(U) + S(UY) - S(Y)` of the sharp comparisons.
 Source: `08-scanner.tex`, lines 868–873. -/
 noncomputable def collarPostQuantity (ψ : EuclideanSpace ℂ ((v : ι) → β v))
     (U Y : Finset ι) : ℝ :=
-  entropy β ψ U + entropy β ψ (U ∪ Y) - entropy β ψ Y
+  ManyBody.regionEntropy ψ U + ManyBody.regionEntropy ψ (U ∪ Y) - ManyBody.regionEntropy ψ Y
 
 /-- Mutual information of two regions is symmetric. -/
 theorem mutualInformation_comm (ψ : EuclideanSpace ℂ ((v : ι) → β v)) (R T : Finset ι) :
-    mutualInformation β ψ R T = mutualInformation β ψ T R := by
-  unfold mutualInformation
+    ManyBody.regionMutualInformation ψ R T = ManyBody.regionMutualInformation ψ T R := by
+  unfold ManyBody.regionMutualInformation
   rw [Finset.union_comm]
   ring
 
 /-- Discarding part of the second region cannot increase mutual information. -/
 theorem mutualInformation_mono_right (ψ : EuclideanSpace ℂ ((v : ι) → β v))
     {X W V : Finset ι} (hWV : W ⊆ V) (hXV : Disjoint X V) :
-    mutualInformation β ψ X W ≤ mutualInformation β ψ X V := by
+    ManyBody.regionMutualInformation ψ X W ≤ ManyBody.regionMutualInformation ψ X V := by
   rw [mutualInformation_comm β ψ X W, mutualInformation_comm β ψ X V]
-  exact mutualInformation_mono_left β ψ W V X hWV hXV.symm
+  exact ManyBody.regionMutualInformation_mono_left β ψ W V X hWV hXV.symm
 
 /-- **The leaf entropy identity.** Let `X, U, Y, V` be pairwise disjoint regions
 covering all sites. For every vector `ψ`, purity gives
 `2 S(X) + g_pre - g_post = I(X : V) + I(X : YV)`. No normalization is needed.
-Source: `08-scanner.tex`, lines 868–873 and 900–905 (`scanner:entropy-identity`). -/
+Source: `08-scanner.tex`, lines 868–873 and 900–905 (`scanner:ManyBody.regionEntropy-identity`). -/
 theorem collarLeaf_entropy_identity (ψ : EuclideanSpace ℂ ((v : ι) → β v))
     {X U Y V : Finset ι} (hXU : Disjoint X U) (hXY : Disjoint X Y) (hXV : Disjoint X V)
     (hUY : Disjoint U Y) (hUV : Disjoint U V) (hYV : Disjoint Y V)
     (hcover : X ∪ U ∪ Y ∪ V = Finset.univ) :
-    2 * entropy β ψ X + (collarPreQuantity β ψ X U Y V - collarPostQuantity β ψ U Y) =
-      mutualInformation β ψ X V + mutualInformation β ψ X (Y ∪ V) := by
+    2 * ManyBody.regionEntropy ψ X + (collarPreQuantity β ψ X U Y V - collarPostQuantity β ψ U Y) =
+      ManyBody.regionMutualInformation ψ X V + ManyBody.regionMutualInformation ψ X (Y ∪ V) := by
   have hmem (v : ι) : v ∈ X ∨ v ∈ U ∨ v ∈ Y ∨ v ∈ V := by
     have h := Finset.mem_univ v
     rw [← hcover] at h
@@ -145,13 +145,13 @@ theorem collarLeaf_entropy_identity (ψ : EuclideanSpace ℂ ((v : ι) → β v)
     have h₄ : v ∈ U → v ∉ V := fun h ↦ Finset.disjoint_left.mp hUV h
     simp only [Finset.mem_compl, Finset.mem_union]
     tauto
-  have e₁ : entropy β ψ (X ∪ V) = entropy β ψ (U ∪ Y) := by
-    rw [← hc₁, entropy_compl]
-  have e₂ : entropy β ψ (X ∪ (Y ∪ V)) = entropy β ψ U := by
-    rw [← hc₂, entropy_compl]
-  have e₃ : entropy β ψ (Y ∪ V) = entropy β ψ (X ∪ U) := by
-    rw [← hc₃, entropy_compl]
-  simp only [collarPreQuantity, collarPostQuantity, mutualInformation, e₁, e₂, e₃]
+  have e₁ : ManyBody.regionEntropy ψ (X ∪ V) = ManyBody.regionEntropy ψ (U ∪ Y) := by
+    rw [← hc₁, ManyBody.regionEntropy_compl]
+  have e₂ : ManyBody.regionEntropy ψ (X ∪ (Y ∪ V)) = ManyBody.regionEntropy ψ U := by
+    rw [← hc₂, ManyBody.regionEntropy_compl]
+  have e₃ : ManyBody.regionEntropy ψ (Y ∪ V) = ManyBody.regionEntropy ψ (X ∪ U) := by
+    rw [← hc₃, ManyBody.regionEntropy_compl]
+  simp only [collarPreQuantity, collarPostQuantity, ManyBody.regionMutualInformation, e₁, e₂, e₃]
   ring
 
 /-- **The lower bound at one leaf.** If moreover a region `W` lies in the far part
@@ -161,8 +161,9 @@ theorem two_mutualInformation_le_collarLeaf (ψ : EuclideanSpace ℂ ((v : ι) �
     {X U Y V W : Finset ι} (hXU : Disjoint X U) (hXY : Disjoint X Y) (hXV : Disjoint X V)
     (hUY : Disjoint U Y) (hUV : Disjoint U V) (hYV : Disjoint Y V)
     (hcover : X ∪ U ∪ Y ∪ V = Finset.univ) (hWV : W ⊆ V) :
-    2 * mutualInformation β ψ X W ≤
-      2 * entropy β ψ X + (collarPreQuantity β ψ X U Y V - collarPostQuantity β ψ U Y) := by
+    2 * ManyBody.regionMutualInformation ψ X W ≤
+      2 * ManyBody.regionEntropy ψ X +
+          (collarPreQuantity β ψ X U Y V - collarPostQuantity β ψ U Y) := by
   rw [collarLeaf_entropy_identity β ψ hXU hXY hXV hUY hUV hYV hcover]
   have h₁ := mutualInformation_mono_right β ψ hWV hXV
   have h₂ := mutualInformation_mono_right β ψ (hWV.trans Finset.subset_union_right)
@@ -182,11 +183,11 @@ theorem two_mutualInformation_le_collarLeaf_average (ψ : EuclideanSpace ℂ ((v
     (hXV : ∀ i ∈ s, Disjoint X (V i)) (hUY : ∀ i ∈ s, Disjoint (U i) (Y i))
     (hUV : ∀ i ∈ s, Disjoint (U i) (V i)) (hYV : ∀ i ∈ s, Disjoint (Y i) (V i))
     (hcover : ∀ i ∈ s, X ∪ U i ∪ Y i ∪ V i = Finset.univ) (hWV : ∀ i ∈ s, W ⊆ V i) :
-    2 * mutualInformation β ψ X W ≤
-      2 * entropy β ψ X + ∑ i ∈ s, p i *
+    2 * ManyBody.regionMutualInformation ψ X W ≤
+      2 * ManyBody.regionEntropy ψ X + ∑ i ∈ s, p i *
         (collarPreQuantity β ψ X (U i) (Y i) (V i) - collarPostQuantity β ψ (U i) (Y i)) := by
-  have hleaf : ∀ i ∈ s, p i * (2 * mutualInformation β ψ X W) ≤
-      p i * (2 * entropy β ψ X + (collarPreQuantity β ψ X (U i) (Y i) (V i) -
+  have hleaf : ∀ i ∈ s, p i * (2 * ManyBody.regionMutualInformation ψ X W) ≤
+      p i * (2 * ManyBody.regionEntropy ψ X + (collarPreQuantity β ψ X (U i) (Y i) (V i) -
         collarPostQuantity β ψ (U i) (Y i))) := fun i hi ↦
     mul_le_mul_of_nonneg_left (two_mutualInformation_le_collarLeaf β ψ (hXU i hi)
       (hXY i hi) (hXV i hi) (hUY i hi) (hUV i hi) (hYV i hi) (hcover i hi) (hWV i hi))
@@ -204,37 +205,39 @@ Source: Lemma 2.1, `01-preliminaries.tex`, lines 33–46, as applied in
 theorem abs_mutualInformation_sub_le_of_traceDistance
     {ψ η : EuclideanSpace ℂ ((v : ι) → β v)} (hψ : ‖ψ‖ = 1) (hη : ‖η‖ = 1)
     {X J : Finset ι} (hXJ : Disjoint X J) :
-    |mutualInformation β ψ X J - mutualInformation β η X J| ≤
+    |ManyBody.regionMutualInformation ψ X J - ManyBody.regionMutualInformation η X J| ≤
       8 * √(traceDistance (vecMulVec (WithLp.ofLp ψ) (star (WithLp.ofLp ψ)))
           (vecMulVec (WithLp.ofLp η) (star (WithLp.ofLp η)))) *
-        Real.log (Real.exp 1 * Fintype.card (Configuration β X)) := by
+        Real.log (Real.exp 1 * Fintype.card (ManyBody.RegionConfig β X)) := by
   have htr (χ : EuclideanSpace ℂ ((v : ι) → β v)) (hχ : ‖χ‖ = 1) :
-      (jointMatrix β χ X J hXJ).trace = 1 := by
-    unfold jointMatrix
+      (ManyBody.jointMatrix β χ X J hXJ).trace = 1 := by
+    unfold ManyBody.jointMatrix
     rw [trace_submatrix_equiv]
-    exact trace_reducedPure β χ hχ _
+    exact ManyBody.trace_regionState_eq_one hχ (D := _)
   have h := Entropy.abs_mutualInformation_sub_le_sqrt_fin
-    (jointMatrix_posSemidef β ψ X J hXJ) (jointMatrix_posSemidef β η X J hXJ)
+    (ManyBody.jointMatrix_posSemidef β ψ X J hXJ) (ManyBody.jointMatrix_posSemidef β η X J hXJ)
     (htr ψ hψ) (htr η hη)
-  have hψI : Entropy.mutualInformation (jointMatrix β ψ X J hXJ)
-      (jointMatrix_posSemidef β ψ X J hXJ).isHermitian = mutualInformation β ψ X J :=
-    (mutualInformation_eq_matrix β ψ X J hXJ).symm
-  have hηI : Entropy.mutualInformation (jointMatrix β η X J hXJ)
-      (jointMatrix_posSemidef β η X J hXJ).isHermitian = mutualInformation β η X J :=
-    (mutualInformation_eq_matrix β η X J hXJ).symm
+  have hψI : Entropy.mutualInformation (ManyBody.jointMatrix β ψ X J hXJ)
+      (ManyBody.jointMatrix_posSemidef β ψ X J hXJ).isHermitian
+          = ManyBody.regionMutualInformation ψ X J :=
+    (ManyBody.regionMutualInformation_eq_matrix β ψ X J hXJ).symm
+  have hηI : Entropy.mutualInformation (ManyBody.jointMatrix β η X J hXJ)
+      (ManyBody.jointMatrix_posSemidef β η X J hXJ).isHermitian
+          = ManyBody.regionMutualInformation η X J :=
+    (ManyBody.regionMutualInformation_eq_matrix β η X J hXJ).symm
   rw [hψI, hηI] at h
-  have hdist : traceDistance (jointMatrix β ψ X J hXJ) (jointMatrix β η X J hXJ) ≤
+  have hdist : traceDistance (ManyBody.jointMatrix β ψ X J hXJ) (ManyBody.jointMatrix β η X J hXJ) ≤
       traceDistance (vecMulVec (WithLp.ofLp ψ) (star (WithLp.ofLp ψ)))
         (vecMulVec (WithLp.ofLp η) (star (WithLp.ofLp η))) := by
-    unfold jointMatrix
-    rw [traceDistance_submatrix_equiv _ (reducedPure_posSemidef β ψ _).isHermitian
-      (reducedPure_posSemidef β η _).isHermitian]
-    exact traceDistance_reducedPure_le β ψ η hψ hη _
-  have hlog : 0 ≤ Real.log (Real.exp 1 * Fintype.card (Configuration β X)) :=
+    unfold ManyBody.jointMatrix
+    rw [traceDistance_submatrix_equiv _ (ManyBody.regionState_posSemidef _ ψ).isHermitian
+      (ManyBody.regionState_posSemidef _ η).isHermitian]
+    exact ManyBody.traceDistance_regionState_le β ψ η hψ hη _
+  have hlog : 0 ≤ Real.log (Real.exp 1 * Fintype.card (ManyBody.RegionConfig β X)) :=
     Real.log_nonneg (one_le_mul_of_one_le_of_one_le (Real.one_le_exp zero_le_one)
       (Nat.one_le_cast.mpr (Fintype.card_pos_iff.mpr
         (Entropy.Matrix.PosSemidef.nonempty_of_trace_eq_one
-          (trace_reducedPure β ψ hψ X)))))
+          (ManyBody.trace_regionState_eq_one hψ (D := X))))))
   exact h.trans (by gcongr)
 
 /-- **The transfer to the original ground state.** Let `Ω, Ω'` be normalized vectors
@@ -248,24 +251,25 @@ theorem mutualInformation_le_add_of_traceDistance_le_rpow
     {X J : Finset ι} (hXJ : Disjoint X J) {C₁ C₂ : ℝ} {n : ℕ} (hn : 1 ≤ n)
     (hδ : traceDistance (vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))
         (vecMulVec (WithLp.ofLp Ω') (star (WithLp.ofLp Ω'))) ≤ C₁ * (n : ℝ) ^ (-500 : ℝ))
-    (hdim : Real.log (Fintype.card (Configuration β X)) ≤ C₂ * (n : ℝ) ^ 2) :
-    mutualInformation β Ω X J ≤
-      mutualInformation β Ω' X J + 8 * √C₁ * (1 + C₂) * (n : ℝ) ^ (-248 : ℝ) := by
+    (hdim : Real.log (Fintype.card (ManyBody.RegionConfig β X)) ≤ C₂ * (n : ℝ) ^ 2) :
+    ManyBody.regionMutualInformation Ω X J ≤
+      ManyBody.regionMutualInformation Ω' X J + 8 * √C₁ * (1 + C₂) * (n : ℝ) ^ (-248 : ℝ) := by
   have h := abs_mutualInformation_sub_le_of_traceDistance β hΩ hΩ' hXJ
   set δ := traceDistance (vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))
     (vecMulVec (WithLp.ofLp Ω') (star (WithLp.ofLp Ω')))
   have hn0 : (0 : ℝ) < n := by exact_mod_cast hn
-  have hcard : (1 : ℝ) ≤ Fintype.card (Configuration β X) :=
+  have hcard : (1 : ℝ) ≤ Fintype.card (ManyBody.RegionConfig β X) :=
     Nat.one_le_cast.mpr (Fintype.card_pos_iff.mpr
-      (Entropy.Matrix.PosSemidef.nonempty_of_trace_eq_one (trace_reducedPure β Ω hΩ X)))
-  have hlog : Real.log (Real.exp 1 * Fintype.card (Configuration β X)) =
-      1 + Real.log (Fintype.card (Configuration β X)) := by
+      (Entropy.Matrix.PosSemidef.nonempty_of_trace_eq_one
+          (ManyBody.trace_regionState_eq_one hΩ (D := X))))
+  have hlog : Real.log (Real.exp 1 * Fintype.card (ManyBody.RegionConfig β X)) =
+      1 + Real.log (Fintype.card (ManyBody.RegionConfig β X)) := by
     rw [Real.log_mul (Real.exp_pos 1).ne' (by positivity), Real.log_exp]
-  have hlog0 : 0 ≤ Real.log (Real.exp 1 * Fintype.card (Configuration β X)) := by
+  have hlog0 : 0 ≤ Real.log (Real.exp 1 * Fintype.card (ManyBody.RegionConfig β X)) := by
     rw [hlog]
     linarith [Real.log_nonneg hcard]
   have hn1 : (1 : ℝ) ≤ n := by exact_mod_cast hn
-  have hL : Real.log (Real.exp 1 * Fintype.card (Configuration β X)) ≤
+  have hL : Real.log (Real.exp 1 * Fintype.card (ManyBody.RegionConfig β X)) ≤
       (1 + C₂) * (n : ℝ) ^ (2 : ℝ) := by
     rw [hlog, Real.rpow_two]
     nlinarith
@@ -275,9 +279,9 @@ theorem mutualInformation_le_add_of_traceDistance_le_rpow
         rw [Real.sqrt_mul' _ (by positivity), Real.sqrt_eq_rpow ((n : ℝ) ^ (-500 : ℝ)),
           ← Real.rpow_mul hn0.le]
         norm_num
-  have hbound : 8 * √δ * Real.log (Real.exp 1 * Fintype.card (Configuration β X)) ≤
+  have hbound : 8 * √δ * Real.log (Real.exp 1 * Fintype.card (ManyBody.RegionConfig β X)) ≤
       8 * √C₁ * (1 + C₂) * (n : ℝ) ^ (-248 : ℝ) := by
-    calc 8 * √δ * Real.log (Real.exp 1 * Fintype.card (Configuration β X))
+    calc 8 * √δ * Real.log (Real.exp 1 * Fintype.card (ManyBody.RegionConfig β X))
         ≤ 8 * (√C₁ * (n : ℝ) ^ (-250 : ℝ)) * ((1 + C₂) * (n : ℝ) ^ (2 : ℝ)) := by
           gcongr
       _ = 8 * √C₁ * (1 + C₂) * (n : ℝ) ^ (-248 : ℝ) := by
@@ -362,7 +366,7 @@ theorem sublinearCollarBound_of_mutualInformation_le_at {q R : ℕ} {J Δ D₀ C
           ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+            ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T.points)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -375,7 +379,7 @@ theorem sublinearCollarBound_of_mutualInformation_le_at {q R : ℕ} {J Δ D₀ C
           ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+            ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T.points)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -433,7 +437,7 @@ theorem sublinearCollarBound_of_mutualInformation_le {q R : ℕ} {J Δ D₀ Ctpl
           ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+            ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T.points)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤

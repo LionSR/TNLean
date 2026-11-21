@@ -43,7 +43,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q p r : ℕ) (v : ℝ) (hq : 2 ≤ q), p ≤ r → r ≤ L → 0 < v →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2))) →
       ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
@@ -55,7 +55,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound
       let G := fun eta : ℝ ↦ Submodule.spectralSpanLE
         hRaw.eigenvectorBasis hRaw.eigenvalues (minEigenvalue hRaw + eta)
       ∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ψ ∈ G (etaLD - v) → ‖ψ‖ = 1 →
-        Entropy.regionEntropy J ψ ≤ Real.log (Module.finrank ℂ (G etaLD) : ℝ) +
+        ManyBody.regionEntropy ψ J ≤ Real.log (Module.finrank ℂ (G etaLD) : ℝ) +
           K / v * (1 + Real.log (q : ℝ) + Real.log (1 + 1 / v)) ^ 3 := by
   classical
   obtain ⟨Kb, Cf, hKb, hCf, hphysical⟩ :=

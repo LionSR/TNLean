@@ -44,8 +44,8 @@ theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings_
     {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 < J)
     (X Y : Finset (Fin L)) {A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A X)
-    (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B Y)
+    (hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A X)
+    (hB : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B Y)
     (d : ℕ) (hd : ∀ x ∈ X, ∀ y ∈ Y, d ≤ Nat.dist x.val y.val)
     (t : ℝ) (ht : |t| ≤ d / (40 * (chainLRVelocity R J - 1))) :
     ‖ManyBody.heisenbergEvolution h.hamiltonian t A * B -
@@ -120,7 +120,7 @@ theorem exists_regionEntropy_prefix_le_source (R : ℕ) :
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       let ξ' := 6 * max (2 * (40 * (chainLRVelocity R J - 1)) / Δ) 80
-      ∀ i : ℕ, Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
+      ∀ i : ℕ, ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 i) ≤
         c₀ * ξ' * Real.log ξ' * Real.log q * (2 : ℝ) ^ (ξ' * Real.log q) := by
   obtain ⟨c₀, hc₀, hbound⟩ := exists_regionEntropy_prefix_le_printed R
   refine ⟨c₀, hc₀, ?_⟩

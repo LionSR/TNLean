@@ -194,7 +194,7 @@ theorem sweepStepCostBound_mono (q : ℕ) (Delta : ℝ) (L : ℕ) {s s' : ℕ} (
 /-- One step of the sweep on a family `S` costs at most the budget at `|S|`. -/
 theorem cost_sweepStepProgram_le {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
@@ -205,7 +205,7 @@ theorem cost_sweepStepProgram_le {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
   simp only [sweepStepProgram, FreeM.cost_bind, FreeM.eval_lift, eval_extensionProgram,
     eval_sizeTrimmingProgram, eval_bondTrimmingProgram, honestOracle_gaussianFilterFactors,
     sweepStepCostBound]
-  set chain := ManyBody.ChainInteraction.ofNearestNeighborPositive h hs with hchain
+  set chain := ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩ with hchain
   set b := lvvSuccessiveBondBound q Delta L with hb
   set m := bondTrimmingRadius L (lvvReferenceBond q Delta L) with hm
   set c := lvvSuccessiveError Delta with hcdef
@@ -239,7 +239,7 @@ theorem cost_sweepStepProgram_le {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
 /-- The sweep up to cut `i ≤ L` costs at most `i` steps at the uniform size budget. -/
 theorem cost_sweepProgram_le {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (i : ℕ) (hi : i ≤ L) :
     FreeM.cost honestOracle queryCost (sweepProgram hq h hs h0 h1 Delta i) ≤
@@ -268,7 +268,7 @@ noncomputable def groundStateCostBound (q : ℕ) (Delta : ℝ) (N : ℕ) : ℕ :
 /-- The ground-state program costs at most the budget on the padded chain. -/
 theorem cost_groundStateProgram_le {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (R : ℕ) :
     FreeM.cost honestOracle queryCost (groundStateProgram hq h hs h0 h1 Delta R) ≤
@@ -404,7 +404,7 @@ theorem exists_groundStateProgram_cost_polynomial (hq : 2 ≤ q) {Delta : ℝ}
     (hDelta : 0 < Delta) :
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ (L R : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+        (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
           (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1),
       FreeM.countQueries honestOracle (groundStateProgram hq h hs h0 h1 Delta R) ≤
         FreeM.cost honestOracle queryCost (groundStateProgram hq h hs h0 h1 Delta R) ∧

@@ -318,8 +318,8 @@ theorem maxEigenvalue_lower_bound_of_gluing_with_objective_slack
 /-- Chain-coordinate form of the quantitative maximal-eigenvalue gluing bound. -/
 theorem maxEigenvalue_lower_bound_chain_with_objective_slack [NeZero q]
     {HL K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
-    {D : Finset (Fin L)} (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
+    {D : Finset (Fin L)} (hK : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ ξ μ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
     (hH : (HL + K).IsHermitian) (hΩ : ‖Γ‖ = 1)
@@ -645,8 +645,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_uniform_leading_bounds_of_isViab
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
-    (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
@@ -822,8 +822,8 @@ theorem _root_.ManyBody.ChainInteraction.leading_bounds_of_approximate_boundary_
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
-    (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}

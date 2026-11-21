@@ -54,15 +54,15 @@ alphabet, not supplied. AKLV, arXiv:1301.1162v1, Lemma 4.2, lines 626--662. -/
 theorem operatorSchmidtRank_aklv_window_one_marker_le {L q a s : ℕ}
     (hq : 1 ≤ q) (hspace : a + s + 1 ≤ L)
     (H : Fin s → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hH : ∀ j, Entropy.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
+    (hH : ∀ j, ManyBody.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
     (HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hL : Entropy.IsSupportedOn HL (interval L 0 (a + 1)))
-    (hR : Entropy.IsSupportedOn HR (interval L (a + s) L)) (u : Fin s) (t k : ℕ) :
+    (hL : ManyBody.IsSupportedOn HL (interval L 0 (a + 1)))
+    (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L)) (u : Fin s) (t k : ℕ) :
     let I := {j : Fin s ⊕ Fin 2 // j ≠ Sum.inl u}
     let E := @Finset.piAntidiag I ℕ (Classical.decEq I) _ _ _ Finset.univ t
     let ordinary := fun j : I ↦ aklvWindowFamily H HL HR j.val
     ∀ weight : E → ℂ, operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (a + u.val + 1))
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (a + u.val + 1))
         (∑ α : E, weight α •
           WordMultiplicity.oneMarkerCoefficient ordinary (H u) t k α.val)) ≤
       (t + s).choose s * ((t + 2 * k + 1).choose (2 * k + 1) * q ^ (2 * k)) := by
@@ -71,7 +71,7 @@ theorem operatorSchmidtRank_aklv_window_one_marker_le {L q a s : ℕ}
   let X : Fin s ⊕ Fin 2 → Finset (Fin L) :=
     Sum.elim (fun j ↦ interval L (a + j.val) (a + j.val + 2))
       ![interval L 0 (a + 1), interval L (a + s) L]
-  have hAll (j : Fin s ⊕ Fin 2) : Entropy.IsSupportedOn (aklvWindowFamily H HL HR j) (X j) := by
+  have hAll (j : Fin s ⊕ Fin 2) : ManyBody.IsSupportedOn (aklvWindowFamily H HL HR j) (X j) := by
     cases j with
     | inl j => exact hH j
     | inr j => fin_cases j <;> assumption
@@ -112,7 +112,7 @@ theorem operatorSchmidtRank_aklv_window_one_marker_le {L q a s : ℕ}
         rw [mem_interval] at hv
         rw [mem_leftBlock] at hcut
         omega
-  have hT : Entropy.IsSupportedOn (H u)
+  have hT : ManyBody.IsSupportedOn (H u)
       (interval L ((a + u.val + 1) - 1) ((a + u.val + 1) + 1)) := by
     have hlo : a + u.val + 1 - 1 = a + u.val := by omega
     have hhi : a + u.val + 1 + 1 = a + u.val + 2 := by omega

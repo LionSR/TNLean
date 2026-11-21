@@ -53,25 +53,25 @@ positive mass and the exponential window, including singular marginals.
 Source: `07-comparators.tex`, lines 37–53. -/
 theorem target_typicalSet_bounds {Λ : Finset (ℤ × ℤ)} {q : ℕ}
     (Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1) (X : Finset (Site Λ)) {w δ : ℝ}
-    (htail : Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-      (regionalEntropy Λ q Ωt X) w ≤ δ) (hδ : δ < 1) :
-    let p := (reducedState_isHermitian Λ q Ωt X).eigenvalues
-    let E := Entropy.typicalSet p (regionalEntropy Λ q Ωt X) w
-    let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+    (htail : Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+      (ManyBody.regionEntropy Ωt X) w ≤ δ) (hδ : δ < 1) :
+    let p := (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+    let E := Entropy.typicalSet p (ManyBody.regionEntropy Ωt X) w
+    let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
     0 < 1 - δ ∧ 1 - δ ≤ z ∧ 0 < z ∧ z ≤ 1 ∧ E.Nonempty ∧
       ∀ i ∈ E, 0 < p i ∧
-        Real.exp (-regionalEntropy Λ q Ωt X - w) ≤ p i ∧
-        p i ≤ Real.exp (-regionalEntropy Λ q Ωt X + w) := by
+        Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤ p i ∧
+        p i ≤ Real.exp (-ManyBody.regionEntropy Ωt X + w) := by
   classical
   obtain ⟨hzδ, hz, hz1, _⟩ :=
-    (reducedState_posSemidef Λ q Ωt X).typicalSet_normalizedSpectralRestriction_bounds
+    (ManyBody.regionState_posSemidef X Ωt).typicalSet_normalizedSpectralRestriction_bounds
       w δ (trace_reducedState Ωt hΩt X) htail hδ
   refine ⟨sub_pos.mpr hδ, hzδ, hz, hz1, ?_, ?_⟩
   · apply Finset.nonempty_iff_ne_empty.mpr
     intro hE
-    change 0 < (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass
-      (Entropy.typicalSet (reducedState_isHermitian Λ q Ωt X).eigenvalues
-        (regionalEntropy Λ q Ωt X) w) at hz
+    change 0 < (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass
+      (Entropy.typicalSet (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+        (ManyBody.regionEntropy Ωt X) w) at hz
     rw [hE] at hz
     simp only [Matrix.IsHermitian.spectralRestrictionMass, Finset.sum_empty,
       lt_self_iff_false] at hz
@@ -171,24 +171,24 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
           (∀ (Y : Finset (Site Λ)) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / g) (B Y) →
             Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt Y).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt Y +
+              (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
+              u * ManyBody.regionEntropy Ωt Y +
                 512 * Real.exp 1 * (2 / g) * B Y * u ^ 2) ∧
           (∀ (Y : Finset (Site Λ)) (v : ℝ),
-            Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt Y).eigenvalues
-              (regionalEntropy Λ q Ωt Y) v ≤
+            Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
+              (ManyBody.regionEntropy Ωt Y) v ≤
               min 1 (2 * Real.exp (Real.exp 1 / 2) *
                 Real.exp (-(v / (32 * Real.sqrt ((1 + 2 / g) * B Y)))))) ∧
           B X ≤ targetBudgetConstant q R Ctr * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
-          Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-            (regionalEntropy Λ q Ωt X) w ≤ δ ∧
-          let p := (reducedState_isHermitian Λ q Ωt X).eigenvalues
-          let E := Entropy.typicalSet p (regionalEntropy Λ q Ωt X) w
-          let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+          Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+            (ManyBody.regionEntropy Ωt X) w ≤ δ ∧
+          let p := (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+          let E := Entropy.typicalSet p (ManyBody.regionEntropy Ωt X) w
+          let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
           0 < 1 - δ ∧ 1 - δ ≤ z ∧ 0 < z ∧ z ≤ 1 ∧ E.Nonempty ∧
             ∀ i ∈ E, 0 < p i ∧
-              Real.exp (-regionalEntropy Λ q Ωt X - w) ≤ p i ∧
-              p i ≤ Real.exp (-regionalEntropy Λ q Ωt X + w) := by
+              Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤ p i ∧
+              p i ≤ Real.exp (-ManyBody.regionEntropy Ωt X + w) := by
   classical
   have hC : (0 : ℝ) ≤ C_T + 1 := by positivity
   have htr := @truncated_reducedState_moment_tail_bounds_explicit R J Δ (C_T + 1) hJ hΔ hC
@@ -228,8 +228,8 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
       _ = _ := by ring
   have hBpos : 0 < B := lt_of_lt_of_le zero_lt_one
     (one_le_cutBudget q S.graph (S.truncationSet (F.L S.n)) S.r₀ S.anchor X)
-  have htypical : Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-      (regionalEntropy Λ q Ωt X) ((S.n : ℝ) ^ ((3 : ℝ) / 5)) ≤
+  have htypical : Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+      (ManyBody.regionEntropy Ωt X) ((S.n : ℝ) ^ ((3 : ℝ) / 5)) ≤
         (S.n : ℝ) ^ (-100 : ℝ) :=
     (htail X _).trans ((min_le_right _ _).trans (hscalar S.n hn B hBpos hB))
   have hδ : (S.n : ℝ) ^ (-100 : ℝ) < 1 :=
@@ -282,24 +282,24 @@ theorem exists_truncated_target_typical_window_of_targetTypicalWindowThreshold_l
           (∀ (Y : Finset (Site Λ)) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / g) (B Y) →
             Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt Y).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt Y +
+              (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
+              u * ManyBody.regionEntropy Ωt Y +
                 512 * Real.exp 1 * (2 / g) * B Y * u ^ 2) ∧
           (∀ (Y : Finset (Site Λ)) (v : ℝ),
-            Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt Y).eigenvalues
-              (regionalEntropy Λ q Ωt Y) v ≤
+            Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
+              (ManyBody.regionEntropy Ωt Y) v ≤
               min 1 (2 * Real.exp (Real.exp 1 / 2) *
                 Real.exp (-(v / (32 * Real.sqrt ((1 + 2 / g) * B Y)))))) ∧
           B X ≤ targetBudgetConstant q R Ctr * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
-          Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-            (regionalEntropy Λ q Ωt X) w ≤ δ ∧
-          let p := (reducedState_isHermitian Λ q Ωt X).eigenvalues
-          let E := Entropy.typicalSet p (regionalEntropy Λ q Ωt X) w
-          let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+          Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+            (ManyBody.regionEntropy Ωt X) w ≤ δ ∧
+          let p := (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+          let E := Entropy.typicalSet p (ManyBody.regionEntropy Ωt X) w
+          let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
           0 < 1 - δ ∧ 1 - δ ≤ z ∧ 0 < z ∧ z ≤ 1 ∧ E.Nonempty ∧
             ∀ i ∈ E, 0 < p i ∧
-              Real.exp (-regionalEntropy Λ q Ωt X - w) ≤ p i ∧
-              p i ≤ Real.exp (-regionalEntropy Λ q Ωt X + w) := by
+              Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤ p i ∧
+              p i ≤ Real.exp (-ManyBody.regionEntropy Ωt X + w) := by
   exact ⟨_, latticeTruncationRadiusConstant_pos R hΔ (by positivity : (0 : ℝ) ≤ C_T + 1),
     truncated_target_typical_window_explicit R hJ hΔ hC_T rfl⟩
 
@@ -360,24 +360,24 @@ theorem exists_truncated_target_typical_window_uniform_in_q (R : ℕ)
           (∀ (Y : Finset (Site Λ)) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / g) (B Y) →
             Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt Y).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt Y +
+              (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
+              u * ManyBody.regionEntropy Ωt Y +
                 512 * Real.exp 1 * (2 / g) * B Y * u ^ 2) ∧
           (∀ (Y : Finset (Site Λ)) (v : ℝ),
-            Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt Y).eigenvalues
-              (regionalEntropy Λ q Ωt Y) v ≤
+            Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
+              (ManyBody.regionEntropy Ωt Y) v ≤
               min 1 (2 * Real.exp (Real.exp 1 / 2) *
                 Real.exp (-(v / (32 * Real.sqrt ((1 + 2 / g) * B Y)))))) ∧
           B X ≤ C_B * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
-          Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-            (regionalEntropy Λ q Ωt X) w ≤ δ ∧
-          let p := (reducedState_isHermitian Λ q Ωt X).eigenvalues
-          let E := Entropy.typicalSet p (regionalEntropy Λ q Ωt X) w
-          let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+          Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+            (ManyBody.regionEntropy Ωt X) w ≤ δ ∧
+          let p := (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+          let E := Entropy.typicalSet p (ManyBody.regionEntropy Ωt X) w
+          let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
           0 < 1 - δ ∧ 1 - δ ≤ z ∧ 0 < z ∧ z ≤ 1 ∧ E.Nonempty ∧
             ∀ i ∈ E, 0 < p i ∧
-              Real.exp (-regionalEntropy Λ q Ωt X - w) ≤ p i ∧
-              p i ≤ Real.exp (-regionalEntropy Λ q Ωt X + w) := by
+              Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤ p i ∧
+              p i ≤ Real.exp (-ManyBody.regionEntropy Ωt X + w) := by
   obtain ⟨Ctr, hCtr, hall⟩ :=
     exists_truncated_target_typical_window_of_targetTypicalWindowThreshold_le R hJ hΔ hC_T
   exact ⟨Ctr, hCtr, fun q _ hq => ⟨_, one_pos.trans_le (le_max_left _ _), _, le_max_left _ _,
@@ -426,24 +426,24 @@ theorem exists_truncated_target_typical_window {q : ℕ} [NeZero q]
           (∀ (Y : Finset (Site Λ)) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / g) (B Y) →
             Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt Y).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt Y +
+              (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
+              u * ManyBody.regionEntropy Ωt Y +
                 512 * Real.exp 1 * (2 / g) * B Y * u ^ 2) ∧
           (∀ (Y : Finset (Site Λ)) (v : ℝ),
-            Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt Y).eigenvalues
-              (regionalEntropy Λ q Ωt Y) v ≤
+            Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
+              (ManyBody.regionEntropy Ωt Y) v ≤
               min 1 (2 * Real.exp (Real.exp 1 / 2) *
                 Real.exp (-(v / (32 * Real.sqrt ((1 + 2 / g) * B Y)))))) ∧
           B X ≤ C_B * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
-          Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-            (regionalEntropy Λ q Ωt X) w ≤ δ ∧
-          let p := (reducedState_isHermitian Λ q Ωt X).eigenvalues
-          let E := Entropy.typicalSet p (regionalEntropy Λ q Ωt X) w
-          let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+          Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+            (ManyBody.regionEntropy Ωt X) w ≤ δ ∧
+          let p := (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+          let E := Entropy.typicalSet p (ManyBody.regionEntropy Ωt X) w
+          let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
           0 < 1 - δ ∧ 1 - δ ≤ z ∧ 0 < z ∧ z ≤ 1 ∧ E.Nonempty ∧
             ∀ i ∈ E, 0 < p i ∧
-              Real.exp (-regionalEntropy Λ q Ωt X - w) ≤ p i ∧
-              p i ≤ Real.exp (-regionalEntropy Λ q Ωt X + w) := by
+              Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤ p i ∧
+              p i ≤ Real.exp (-ManyBody.regionEntropy Ωt X + w) := by
   obtain ⟨Ctr, hCtr, hall⟩ :=
     exists_truncated_target_typical_window_uniform_in_q R hJ hΔ hC_T
   obtain ⟨C_B, hC_B, N, hN, hwindow⟩ := hall q hq

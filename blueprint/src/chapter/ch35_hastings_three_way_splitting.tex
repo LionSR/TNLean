@@ -16,14 +16,8 @@ ground state $\Psi_0$.
         TNLean.MPS.AreaLaw.Hastings.bufferSupports,
         TNLean.MPS.AreaLaw.Hastings.rightSupports,
         TNLean.MPS.AreaLaw.Hastings.sum_supports_eq_left_add_buffer_add_right,
-        ManyBody.ChainInteraction.termSum,
-        ManyBody.ChainInteraction.termSum_isHermitian,
-        ManyBody.ChainInteraction.leftPart,
-        ManyBody.ChainInteraction.bufferPart,
-        ManyBody.ChainInteraction.rightPart,
-        ManyBody.ChainInteraction.leftPart_isHermitian,
-        ManyBody.ChainInteraction.bufferPart_isHermitian,
-        ManyBody.ChainInteraction.rightPart_isHermitian,
+        ManyBody.Interaction.partialHamiltonian,
+        ManyBody.Interaction.isHermitian_partialHamiltonian,
         TNLean.MPS.AreaLaw.Hastings.groundCentered,
         TNLean.MPS.AreaLaw.Hastings.groundCentered_add,
         Matrix.IsHermitian.groundCentered,
@@ -79,12 +73,12 @@ ground state $\Psi_0$.
 \begin{lemma}[Supports of the three parts]
     \label{thm:hastings_three_way_splitting_supports}
     \lean{
-        ManyBody.ChainInteraction.isSupportedOn_termSum,
+        ManyBody.Interaction.partialHamiltonian_mem_supportedOperators,
         ManyBody.ChainInteraction.isSupportedOn_leftPart,
         ManyBody.ChainInteraction.isSupportedOn_rightPart,
         ManyBody.ChainInteraction.isSupportedOn_bufferPart,
         TNLean.MPS.AreaLaw.Hastings.subset_window_of_mem_bufferSupports,
-        Entropy.IsSupportedOn.groundCentered
+        ManyBody.IsSupportedOn.groundCentered
     }
     \leanok
     \uses{def:hastings_three_way_splitting}
@@ -102,7 +96,7 @@ ground state $\Psi_0$.
 \begin{lemma}[Norm of the buffer part]
     \label{thm:hastings_three_way_splitting_norm}
     \lean{
-        ManyBody.ChainInteraction.norm_termSum_le,
+        ManyBody.Interaction.norm_partialHamiltonian_le,
         TNLean.MPS.AreaLaw.card_supports_containing_le,
         TNLean.MPS.AreaLaw.Hastings.card_bufferSupports_le,
         ManyBody.ChainInteraction.norm_bufferPart_le,

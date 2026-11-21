@@ -58,7 +58,7 @@ theorem exists_regionalEntropy_weak_rectangle_shell_le_rpow
           ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
             ∀ j L : ℕ, j ≤ L → L ≤ Q.size →
               D₀ * L + L ≤ D₀ * Q.size →
-              regionalEntropy Λ q Ω
+              ManyBody.regionEntropy Ω
                 (A.filter fun x ↦ x.1 ∈ (Q.dilate j).toFinset \ Q.toFinset) ≤
                 C * (24 + 64 / ((2 : ℝ) ^ e₀ - 1)) *
                   (Q.size : ℝ) * (L : ℝ) ^ e₀ := by

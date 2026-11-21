@@ -49,12 +49,12 @@ theorem mutualInformation_selectedRegion_le_of_cell_bound
       E ⊆ (G ∪ B)ᶜ →
       (∀ x ∈ closure (cell o s i), ∀ v ∈ E,
         c * s ≤ dist x (sitePosition L v)) →
-      FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+      ManyBody.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
         Ω G E B ≤ Kcell)
-    (hold : FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q) Ω
+    (hold : ManyBody.regionMutualInformation Ω
       (Finset.univ.filter (fun v ↦ sitePosition L v ∈ selectedRegion o s r Aold))
       E ≤ b₀) :
-    FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q) Ω
+    ManyBody.regionMutualInformation Ω
       (Finset.univ.filter (fun v ↦ sitePosition L v ∈ selectedRegion o s r A)) E ≤
         b₀ + (S.card : ℝ) * Kcell := by
   classical
@@ -102,7 +102,7 @@ theorem mutualInformation_selectedRegion_le_of_cell_bound
     rintro y hy z ⟨w, hw, rfl⟩
     exact hclear y hy w hw
   have hcost : ∀ i ∈ S, ∀ t : Finset (ℤ × ℤ), t ⊆ S → i ∉ t →
-      FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+      ManyBody.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
         Ω (G i) E (B ∪ t.biUnion G) ≤ Kcell := by
     intro i hi t hts hit
     have hnot : i ∉ ({j | touches o s r Aold j} ∪ (t : Set (ℤ × ℤ))) :=
@@ -122,7 +122,7 @@ theorem mutualInformation_selectedRegion_le_of_cell_bound
             ((mem_selectedRegion_iff_touches_owner hs).mpr ho))
           (fun ht ↦ ⟨owner o s (sitePosition L v),
             ((hS _).mp (hts ht)).1, mem_cell_owner hs⟩)))
-  have hsum := FiniteProduct.mutualInformation_union_biUnion_le_of_conditional
+  have hsum := ManyBody.regionMutualInformation_union_biUnion_le_of_conditional
     (fun _ : Vertex L ↦ Fin q) Ω B E G S (fun _ ↦ Kcell) hcost
   have hfinal := hsum.trans (add_le_add hold (le_refl (∑ _i ∈ S, Kcell)))
   simpa only [← hregion, Finset.sum_const, nsmul_eq_mul] using hfinal

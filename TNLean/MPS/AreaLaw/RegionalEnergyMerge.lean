@@ -31,8 +31,8 @@ arXiv:1602.08828v2, Figure `fig:algo1`, lines 1627–1632. -/
 theorem exists_disjoint_regional_energy_merge {L q : ℕ}
     (hq : 0 < q) (S T : Finset (Fin L)) (hST : Disjoint S T)
     (A B Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hAS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) A S)
-    (hBT : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B T)
+    (hAS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A S)
+    (hBT : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B T)
     (hA : A.PosSemidef) (hB : B.PosSemidef)
     (hY : Y.PosSemidef) (hY1 : Y ≤ 1) :
     ∃ (eA eB eP : ℝ) (x z : (Fin L → Fin q) → ℂ),

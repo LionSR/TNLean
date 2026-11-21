@@ -65,10 +65,10 @@ theorem exists_relent_of_isGapped (R : ℕ) :
       (l + 6 * lemmaOneEndpointLength R J ΔE *
           Real.log (K * lemmaOneEndpointLength R J ΔE ^ 3)) * Real.log q +
           bootstrapRemainder (6 * lemmaOneEndpointLength R J ΔE) q ≤
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 c) Ω →
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L (c - l) (c + l)) Ω ≤
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L (c - l) c) Ω +
-          Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L c (c + l)) Ω -
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 c) →
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) (c + l)) ≤
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) c) +
+          ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L c (c + l)) -
           (1 - 2 * ((2 * (K * lemmaOneEndpointLength R J ΔE ^ 3)) *
             Real.exp (-(l / (6 * lemmaOneEndpointLength R J ΔE))))) *
             (l / (6 * lemmaOneEndpointLength R J ΔE)) +
@@ -87,7 +87,7 @@ theorem exists_relent_of_isGapped (R : ℕ) :
   · -- For `q = 1` the window condition fails: the entropy vanishes and `F(ξ', 1) > 0`.
     have hq1 : q = 1 := by have := NeZero.one_le (n := q); omega
     subst hq1
-    have hS0 := TNLean.Lattice.regionEntropy_le_card_mul_log hΩ (interval L 0 c)
+    have hS0 := ManyBody.regionEntropy_le_card_mul_log hΩ (interval L 0 c)
     have hξ0 : 0 ≤ Real.log (6 * lemmaOneEndpointLength R J ΔE / 2 + 1) :=
       Real.log_nonneg (by linarith)
     simp only [Nat.cast_one, Real.log_one, mul_zero, zero_add, bootstrapRemainder, one_pow,

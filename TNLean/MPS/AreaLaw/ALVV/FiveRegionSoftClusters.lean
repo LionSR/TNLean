@@ -50,7 +50,7 @@ theorem exists_five_region_soft_clusters {L q k1 k2 k3 k4 : ℕ}
     (hq : 0 < q) (h12 : k1 ≤ k2) (h23 : k2 ≤ k3)
     (h34 : k3 ≤ k4) (h4L : k4 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, k1, k2, k3, k4, L]

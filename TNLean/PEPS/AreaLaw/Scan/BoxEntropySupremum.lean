@@ -37,7 +37,7 @@ theorem regionalEntropy_le_of_boxEntropy_power
     {Ω : StateSpace Λ q} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A : Finset (Site Λ)) (Q : IntRect) (hsafe : IsSafe Λ A D₀ Q) :
-    regionalEntropy Λ q Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e) := by
+    ManyBody.regionEntropy Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e) := by
   by_cases hs : 1 ≤ Q.size
   · exact (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe le_rfl).trans
       (hbox Q.size hs)
@@ -46,7 +46,7 @@ theorem regionalEntropy_le_of_boxEntropy_power
       Nat.le_zero.mp (by
         simpa only [hs0, zero_pow (by decide : 2 ≠ 0)] using card_rectRegion_le A Q)
     simpa only [hcard, Nat.cast_zero, zero_mul, hs0, Real.zero_rpow he.ne', mul_zero] using
-      regionalEntropy_le_card_mul_log Λ q Ω hΩ (rectRegion A Q)
+      ManyBody.regionEntropy_le_card_mul_log hΩ (rectRegion A Q)
 
 /-- A uniform large-rectangle bound extends across all small sizes and then
 bounds the literal supremum. The new constant precedes every positive scale.
@@ -59,7 +59,7 @@ theorem boxEntropy_power_le_of_large_rectangles
       (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q → N ≤ Q.size →
-        regionalEntropy Λ q Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ p) :
+        ManyBody.regionEntropy Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ p) :
     ∀ r : ℕ, 1 ≤ r →
       boxEntropy q R J Δ D₀ r ≤
         (C + (N : ℝ) ^ 2 * Real.log q + 1) * (r : ℝ) ^ p := by
@@ -82,8 +82,8 @@ theorem boxEntropy_power_le_of_large_rectangles
   · have hsmall : (rectRegion A Q).card ≤ N ^ 2 :=
       (card_rectRegion_le A Q).trans (Nat.pow_le_pow_left (by omega) 2)
     have hsmallR : ((rectRegion A Q).card : ℝ) ≤ (N : ℝ) ^ 2 := by exact_mod_cast hsmall
-    have hbound : regionalEntropy Λ q Ω (rectRegion A Q) ≤ V :=
-      (regionalEntropy_le_card_mul_log Λ q Ω hΩ _).trans
+    have hbound : ManyBody.regionEntropy Ω (rectRegion A Q) ≤ V :=
+      (ManyBody.regionEntropy_le_card_mul_log hΩ _).trans
         (mul_le_mul_of_nonneg_right hsmallR hlq)
     exact hbound.trans ((le_mul_of_one_le_right hV hpow).trans
       (mul_le_mul_of_nonneg_right (by linarith : V ≤ C + V + 1)

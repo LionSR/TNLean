@@ -36,13 +36,13 @@ theorem IsOpenMPS.renyiEntropy_leftBlock_add_log_error_le_log
     {α δ : ℝ} (hα : 1 < α) (hδ : δ < 1)
     (herror : Matrix.rectangularTraceNorm
       (Matrix.euclideanOuterProduct ψ ψ - Matrix.euclideanOuterProduct φ φ) ≤ δ) :
-    renyiEntropy (Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ)
-      (Entropy.regionState_posSemidef _ _).isHermitian α +
+    renyiEntropy (ManyBody.regionState (X := fun _ ↦ Fin q) ψ (leftBlock L k))
+      (ManyBody.regionState_posSemidef _ _).isHermitian α +
       α / (α - 1) * Real.log (1 - δ) ≤ Real.log D := by
-  have hρ := Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ
+  have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) (leftBlock L k) ψ
   exact hρ.renyiEntropy_add_log_error_le_log_rank_of_rectangularTraceNorm
-    (by simp [Entropy.trace_regionState, hψ])
-    (Entropy.regionState_posSemidef _ φ).isHermitian
+    (by simp [ManyBody.trace_regionState, hψ])
+    (ManyBody.regionState_posSemidef _ φ).isHermitian
     (hφ.rank_regionState_leftBlock_le hk0 hkL) hα hδ
     ((rectangularTraceNorm_regionState_leftBlock_sub_le ψ φ k).trans herror)
 
@@ -61,15 +61,15 @@ theorem IsOpenMPS.renyiEntropy_sdiff_leftBlock_add_log_error_le_two_log
     {α δ : ℝ} (hα : 1 < α) (hδ : δ < 1)
     (herror : Matrix.rectangularTraceNorm
       (Matrix.euclideanOuterProduct ψ ψ - Matrix.euclideanOuterProduct φ φ) ≤ δ) :
-    renyiEntropy (Entropy.regionState (n := fun _ : Fin L ↦ q)
-      (leftBlock L b \ leftBlock L a) ψ)
-      (Entropy.regionState_posSemidef _ _).isHermitian α +
+    renyiEntropy (ManyBody.regionState (X := fun _ ↦ Fin q)
+      ψ (leftBlock L b \ leftBlock L a))
+      (ManyBody.regionState_posSemidef _ _).isHermitian α +
       α / (α - 1) * Real.log (1 - δ) ≤ 2 * Real.log D := by
-  have hρ := Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q)
+  have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q)
     (leftBlock L b \ leftBlock L a) ψ
   have hbound := hρ.renyiEntropy_add_log_error_le_log_rank_of_rectangularTraceNorm
-    (by simp [Entropy.trace_regionState, hψ])
-    (Entropy.regionState_posSemidef _ φ).isHermitian
+    (by simp [ManyBody.trace_regionState, hψ])
+    (ManyBody.regionState_posSemidef _ φ).isHermitian
     (hφ.rank_regionState_sdiff_leftBlock_le_max_sq hab) hα hδ
     ((Entropy.rectangularTraceNorm_regionState_sub_le ψ φ _).trans herror)
   have hlog : Real.log (max 1 D : ℕ) = Real.log D := by

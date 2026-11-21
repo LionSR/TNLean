@@ -47,14 +47,14 @@ theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2
     {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ L : ℕ, 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+        (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
           (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1),
       (∀ i : ℕ, i ≤ L →
         (gaussianFilterFactors h h0 (lvvSuccessiveError Delta) Delta i).card ≤
           P * (L + 1) ^ d ∧
         ∀ A ∈ gaussianFilterFactors h h0 (lvvSuccessiveError Delta) Delta i,
           ∀ k, k < i → operatorSchmidtRank
-            (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+            (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
               (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ P * (L + 1) ^ d) ∧
       (∀ i : ℕ, i ≤ L → (lvvSweep hq h hs h0 h1 Delta i).card ≤ P * (L + 1) ^ d ∧
         (∀ v ∈ lvvSweep hq h hs h0 h1 Delta i, IsLeftOpenMPS (P * (L + 1) ^ d) v) ∧

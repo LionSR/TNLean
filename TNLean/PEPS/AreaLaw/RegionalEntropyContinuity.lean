@@ -36,18 +36,18 @@ theorem abs_regionalEntropy_sub_le_sqrt_traceDistance
     (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω Φ : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hΦ : ‖Φ‖ = 1)
     (A : Finset (Site Λ)) :
-    |regionalEntropy Λ q Ω A - regionalEntropy Λ q Φ A| ≤
+    |ManyBody.regionEntropy Ω A - ManyBody.regionEntropy Φ A| ≤
       4 * Real.sqrt (Matrix.traceDistance
         (Matrix.vecMulVec Ω (star Ω)) (Matrix.vecMulVec Φ (star Φ))) *
         (1 + (A.card : ℝ) * Real.log q) := by
-  have h := FiniteProduct.abs_entropy_sub_le_sqrt_traceDistance
+  have h := ManyBody.abs_regionEntropy_sub_le_sqrt_traceDistance
     (fun _ : Site Λ ↦ Fin q) Ω Φ hΩ hΦ A
   have hdim :
-      (Fintype.card (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) A) : ℝ) ≠ 0 :=
+      (Fintype.card (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q) A) : ℝ) ≠ 0 :=
     (Nat.cast_pos.mpr (Fintype.card_pos_iff.mpr
       (Entropy.Matrix.PosSemidef.nonempty_of_trace_eq_one
-        (FiniteProduct.trace_reducedPure (fun _ : Site Λ ↦ Fin q) Ω hΩ A)))).ne'
+        (ManyBody.trace_regionState_eq_one hΩ (D := A))))).ne'
   rw [Real.log_mul (Real.exp_ne_zero 1) hdim] at h
-  simpa [regionalEntropy_eq_finiteProduct, Nat.cast_pow, Real.log_pow] using h
+  simpa [Nat.cast_pow, Real.log_pow] using h
 
 end TNLean.PEPS.AreaLaw

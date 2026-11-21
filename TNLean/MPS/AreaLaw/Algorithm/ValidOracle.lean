@@ -35,12 +35,12 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 219 and 484--487 (the solv
 polynomial-time solver of the convex programs), and the proof of Theorem 1, lines 652--678.
 -/
 
-open ManyBody (interval ChainInteraction)
+open ManyBody (interval ChainInteraction ChainSupport)
 
 open Matrix Cslib
 
 open ManyBody (IsGapped groundSpace)
-open scoped InnerProductSpace ComplexOrder MatrixOrder Kronecker
+open scoped InnerProductSpace ComplexOrder MatrixOrder Kronecker Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
 
@@ -70,11 +70,11 @@ theorem isAdmissibleSampledFactors_sampledFactors {L : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (i : ℕ) :
     ∃ (ι : Type) (J : Finset ι) (A : ι → LeftBlockMatrix L q i) (B : ι → RightBlockMatrix L q i),
-      Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) (sampledProjector h E₀ I) =
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector h E₀ I) =
           ∑ t ∈ J, A t ⊗ₖ B t ∧
         ∀ t ∈ J, A t ∈ AreaLaw.sampledFactors h E₀ I i := by
   classical
-  refine ⟨(t : Fin ℓ) × Fin (operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+  refine ⟨(t : Fin ℓ) × Fin (operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
     (leftBlock L i) (bondComplementWord h (I t)))), Finset.univ,
     fun p ↦ sampledLeftFactor h E₀ I i p.1 p.2,
     fun p ↦ cutRightFactor (bondComplementWord h (I p.1)) p.2,
@@ -116,30 +116,30 @@ structure LinearAlgebraQuery.IsValidOracle (o : {ι : Type} → LinearAlgebraQue
       (o (LinearAlgebraQuery.gaussianFilterFactors L i hq h h0 c Delta))
   gaussianFilterFactors_card : ∀ (L i : ℕ) (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (_hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (_hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (_h1 : ∀ j, h j ≤ 1)
     (c Delta : ℝ), 0 < c → 0 < Delta →
     (o (LinearAlgebraQuery.gaussianFilterFactors L i hq h h0 c Delta)).card ≤
       huangEnergyCount c Delta L * huangFilterRankBound q c Delta L
   gaussianFilterFactors_rank : ∀ (L i : ℕ) (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (_hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (_hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (_h1 : ∀ j, h j ≤ 1)
     (c Delta : ℝ), 0 < c → 0 < Delta → i ≤ L →
     ∀ A ∈ o (LinearAlgebraQuery.gaussianFilterFactors L i hq h h0 c Delta), ∀ k, k < i →
-      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
         (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ huangFilterRankBound q c Delta L
   sampledFactors : ∀ (L i : ℕ) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (E₀ : ℝ) (ℓ m D : ℕ) (I : Fin ℓ → Fin m → Fin L),
-    (∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k)
+    (∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k)
       (bondComplementWord h (I t))) ≤ D) →
     (∃ (ι : Type) (J : Finset ι) (A : ι → LeftBlockMatrix L q i) (B : ι → RightBlockMatrix L q i),
-      Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) (sampledProjector h E₀ I) =
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector h E₀ I) =
           ∑ t ∈ J, A t ⊗ₖ B t ∧
         ∀ t ∈ J, A t ∈ o (LinearAlgebraQuery.sampledFactors L i h E₀ ℓ m D I)) ∧
     (o (LinearAlgebraQuery.sampledFactors L i h E₀ ℓ m D I)).card ≤ ℓ * D ∧
     (i ≤ L → ∀ A ∈ o (LinearAlgebraQuery.sampledFactors L i h E₀ ℓ m D I), ∀ k, k < i →
-      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
         (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
   applyFactor : ∀ (L i r b : ℕ) (A : LeftBlockMatrix L q i) (s : LeftBlockVector L q i),
     o (LinearAlgebraQuery.applyFactor L i r b A s) = toEuclideanLin A s
@@ -234,7 +234,8 @@ theorem eval_sizeTrimmingProgram_of_valid (hv : IsValidOracle o) (L k b : ℕ)
     FreeM.eval o (sizeTrimmingProgram L k b h hq Δ S) =
       haveI : NeZero q := ⟨by omega⟩
       h.sizeTrimmingSelectionWith hq Δ S (oracleNets o L k ((Δ / 169) ^ 2 / (2 * L)))
-        (oracleSolver o L k b S (leftCutOperator k (h.cutLeftPart k))
+        (oracleSolver o L k b S (leftCutOperator k (h.partialHamiltonian
+            (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k)))
           ((Δ / 169) ^ 2 / (2 * L))) := by
   classical
   let : NeZero q := ⟨by omega⟩
@@ -288,7 +289,7 @@ theorem eval_errorReductionProgram_of_valid (hv : IsValidOracle o) (L i r b : �
 filter factors to the size-trimming selection of the oracle's nets and solver. -/
 theorem eval_sweepStepProgram_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     FreeM.eval o (sweepStepProgram hq h hs h0 Delta hi S) =
@@ -296,12 +297,13 @@ theorem eval_sweepStepProgram_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
       successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Delta L))
         (o (LinearAlgebraQuery.gaussianFilterFactors L (i + 1) (Nat.le_of_lt hq) h h0
           (lvvSuccessiveError Delta) Delta)) id
-        ((ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).sizeTrimmingSelectionWith hq
+        ((ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩).sizeTrimmingSelectionWith hq
           Delta (AreaLaw.extend (i + 1) S)
           (oracleNets o L (i + 1) ((Delta / 169) ^ 2 / (2 * L)))
           (oracleSolver o L (i + 1) (lvvSuccessiveBondBound q Delta L) (AreaLaw.extend (i + 1) S)
             (leftCutOperator (i + 1)
-              ((ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).cutLeftPart (i + 1)))
+              ((ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩).partialHamiltonian
+                (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 (i + 1))))
             ((Delta / 169) ^ 2 / (2 * L)))) := by
   simp only [sweepStepProgram, FreeM.eval_bind, FreeM.eval_lift, eval_extensionProgram_of_valid hv,
     eval_sizeTrimmingProgram_of_valid hv, eval_bondTrimmingProgram_of_valid hv,
@@ -323,7 +325,8 @@ theorem isAdmissibleSolver_oracleSolver (hv : IsValidOracle o) {L k : ℕ}
     (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (b : ℕ)
     (S : Finset (LeftBlockVector L q k)) :
     haveI : NeZero q := ⟨by omega⟩
-    h.IsAdmissibleSolver hq Δ S (oracleSolver o L k b S (leftCutOperator k (h.cutLeftPart k))
+    h.IsAdmissibleSolver hq Δ S (oracleSolver o L k b S (leftCutOperator k (h.partialHamiltonian
+        (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k)))
       ((Δ / 169) ^ 2 / (2 * L))) :=
   fun m ↦ hv.leadingVector L k b S _ m _
 
@@ -344,7 +347,7 @@ theorem card_oracleNets_le (hv : IsValidOracle o) {L k : ℕ} (hL : 0 < L) (hq :
 cardinality and bond budgets of the sweep. -/
 theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
@@ -361,14 +364,16 @@ theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
   let : NeZero q := ⟨by omega⟩
   have hL : 0 < L := by omega
   have hc : 0 < lvvSuccessiveError Delta := lvvSuccessiveError_pos hDelta
-  let chain := ManyBody.ChainInteraction.ofNearestNeighborPositive h hs
+  let chain := ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩
   have hT : T = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Delta L))
       (o (LinearAlgebraQuery.gaussianFilterFactors L (i + 1) (Nat.le_of_lt hq) h h0
         (lvvSuccessiveError Delta) Delta)) id
       (chain.sizeTrimmingSelectionWith hq Delta (AreaLaw.extend (i + 1) S)
         (oracleNets o L (i + 1) ((Delta / 169) ^ 2 / (2 * L)))
         (oracleSolver o L (i + 1) (lvvSuccessiveBondBound q Delta L) (AreaLaw.extend (i + 1) S)
-          (leftCutOperator (i + 1) (chain.cutLeftPart (i + 1))) ((Delta / 169) ^ 2 / (2 * L)))) :=
+          (leftCutOperator (i + 1) (chain.partialHamiltonian
+            (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 (i + 1))))
+          ((Delta / 169) ^ 2 / (2 * L)))) :=
     eval_sweepStepProgram_of_valid hv hq h hs h0 Delta hi S
   have hnet := isAdmissibleNet_oracleNets hv (k := i + 1) hL chain hDelta
   have hsol := isAdmissibleSolver_oracleSolver hv chain hq Delta (lvvSuccessiveBondBound q Delta L)
@@ -399,13 +404,13 @@ theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
       (fun _ hA k _ hki ↦ hrankF _ hA k hki) _ hv'
   · intro E₀ Γ hΩ hgap hspan hviable
     rw [hT]
-    have hpos (X) : (chain.term X).PosSemidef :=
-      (ManyBody.ChainInteraction.ofNearestNeighborPositive_term_nonneg h hs h0 X).posSemidef
+    have hpos : ∀ X, (chain.term X).PosSemidef :=
+      ManyBody.Interaction.forall_extend_term (P := Matrix.PosSemidef) Matrix.PosSemidef.zero
+        fun j ↦ (h0 j).posSemidef
     have hgapC : IsGapped chain.hamiltonian E₀ Delta := by
-      simpa only [chain, ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian] using hgap
+      rwa [show chain.hamiltonian = ∑ j, h j from ManyBody.Interaction.hamiltonian_extend]
     have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
-      simpa only [chain, ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian] using
-          hspan
+      rwa [show chain.hamiltonian = ∑ j, h j from ManyBody.Interaction.hamiltonian_extend]
     have hΓ := hΩ
     have hEig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
     have hgap := hgap.posSemidef_sub_smul_one
@@ -414,8 +419,10 @@ theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
       hc hDelta (by omega) E₀ Γ hΓ hEig hgap
       (hv.gaussianFilterFactors_admissible L (i + 1) (Nat.le_of_lt hq) h h0 _ Delta) _
       (chain.isViable_bondTrimSet_sizeTrimmingSelectionWith
-          (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-          (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hpos
+          (ManyBody.Interaction.isHermitian_extend_term fun j ↦
+            (IsSelfAdjoint.of_nonneg (h0 j)).isHermitian)
+          (ManyBody.Interaction.norm_extend_term_le zero_le_one fun j ↦
+            (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 j)).mpr (h1 j)) hpos
           hL hq hi hDelta
         (AreaLaw.extend (i + 1) S) hnet hsol E₀ Γ hΩ hgapC hspanC (hviable.extend (by omega) hi))
 
@@ -424,7 +431,7 @@ viable for every ground pair with the prescribed gap, with the size and bond bud
 the sweep. LVV13, `algo53.tex`, lines 652--668. -/
 theorem sweepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (i : ℕ) (hi : i ≤ L) :
     let S := FreeM.eval o (sweepProgram hq h hs h0 h1 Delta i)
@@ -457,7 +464,7 @@ budget times the bond budget of the sweep on the padded chain. LVV13, `algo53.te
 theorem groundStateProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 1 ≤ L)
     (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {R : ℕ} (hR : 1 ≤ R)
     (E : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
@@ -526,14 +533,15 @@ theorem groundStateProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 
       (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hspan
     have hover : 1 - δ ≤ ‖⟪Γ, e.symm w⟫_ℂ‖ :=
       one_sub_le_norm_inner_of_norm_sub_sq_le hw'norm hΩ herror
-    let chain := ManyBody.ChainInteraction.ofNearestNeighborPositive h hs
-    have hchain : chain.hamiltonian = ∑ j, h j :=
-      ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian h hs
+    let chain := ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩
+    have hchain : chain.hamiltonian = ∑ j, h j := ManyBody.Interaction.hamiltonian_extend
     have hspanC : groundSpace chain.hamiltonian E = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
-        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hΩ
+        (ManyBody.Interaction.isHermitian_extend_term fun j ↦
+          (IsSelfAdjoint.of_nonneg (h0 j)).isHermitian)
+        (ManyBody.Interaction.norm_extend_term_le zero_le_one fun j ↦
+          (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 j)).mpr (h1 j)) hΩ
         hspanC hw'norm hover
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E ≤ 8 * L * δ :=

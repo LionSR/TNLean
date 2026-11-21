@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.IntervalFamilyTrimmingIteration
 import QICLean.Analysis.FiniteFamilyImageProjection
-import QICLean.Analysis.CanonicalSamplingTrimmingMeasurable
+import QICLean.Entropy.ViableSampling.CanonicalSamplingTrimmingMeasurable
 import QICLean.Analysis.ViableSubspaceTensorProjectionMeasurable
 
 /-!

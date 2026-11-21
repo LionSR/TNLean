@@ -7,8 +7,9 @@ chain model. The following identification preserves its operator exactly.
 
 \begin{lemma}[Distinct adjacent-pair supports]
     \label{thm:huang_adjacent_supports}
-    \lean{TNLean.MPS.AreaLaw.nearestNeighborChainSupport_injective,
-        TNLean.MPS.AreaLaw.card_nearestNeighborChainSupport}
+    \lean{ManyBody.bondSupport,
+        ManyBody.bondSupport_injective,
+        TNLean.MPS.AreaLaw.card_bondSupport}
     \leanok
     The map $i\mapsto\{i,i+1\}$ from the original edge indices
     $0\le i<L-1$ into the nonempty range-one supports is injective. Each such
@@ -22,9 +23,7 @@ chain model. The following identification preserves its operator exactly.
 
 \begin{definition}[Embedding the positive adjacent-pair interaction]
     \label{def:huang_positive_chain_hamiltonian}
-    \lean{ManyBody.ChainInteraction.ofNearestNeighborPositive,
-        ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term,
-        ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le}
+    \lean{ManyBody.BondInteraction.toChainInteraction}
     \leanok
     \uses{thm:huang_adjacent_supports}
     Let $h_i$ be supported on sites $i,i+1$, with $0\le h_i\le I$.
@@ -41,11 +40,11 @@ chain model. The following identification preserves its operator exactly.
 
 \begin{lemma}[The interaction terms are preserved]
     \label{thm:huang_positive_chain_terms}
-    \lean{ManyBody.ChainInteraction.ofNearestNeighborPositive_term,
-        ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero,
-        ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero_of_card_one,
-        ManyBody.ChainInteraction.ofNearestNeighborPositive_term_nonneg,
-        ManyBody.ChainInteraction.ofNearestNeighborPositive_term_le_one}
+    \lean{ManyBody.Interaction.extend_term_apply,
+        ManyBody.Interaction.extend_term_eq_zero,
+        ManyBody.BondInteraction.toChainInteraction_term_eq_zero_of_card_one,
+        ManyBody.Interaction.extend_term_nonneg,
+        ManyBody.Interaction.extend_term_le_one}
     \leanok
     \uses{def:huang_positive_chain_hamiltonian}
     The term on each designated adjacent pair is the original $h_i$; all
@@ -64,7 +63,7 @@ chain model. The following identification preserves its operator exactly.
 
 \begin{lemma}[Equality of the Hamiltonian operators]
     \label{thm:huang_positive_chain_operator}
-    \lean{ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian}
+    \lean{ManyBody.Interaction.hamiltonian_extend}
     \leanok
     \uses{thm:huang_positive_chain_terms}
     The constructed finite-range operator is exactly

@@ -104,7 +104,7 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828 (`M_L - H_L`
 the cut). -/
 theorem isSupportedOn_localized_sub_self (K : Finset ι)
     (W X : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
-    Entropy.IsSupportedOn (n := fun _ ↦ d) (W + regionExpectation K X - W) K := by
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin d) (W + regionExpectation K X - W) K := by
   rw [add_sub_cancel_left]
   exact (ManyBody.regionExpectation_mem_supportedOperators K X)
 
@@ -132,7 +132,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_sub_localized
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (hq : 1 ≤ q) (q' ΔE : ℝ)
     (W : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (S : Finset (Fin L)) (n : ℕ) (c : ℝ)
-    (hS : Entropy.IsSupportedOn (n := fun _ ↦ q) (h.hamiltonian * W - W * h.hamiltonian) S)
+    (hS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.hamiltonian * W - W * h.hamiltonian) S)
     (hSn : S.card ≤ n) (hc : ‖h.hamiltonian * W - W * h.hamiltonian‖ ≤ c)
     {ℓ T : ℝ} (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q' ΔE h.hamiltonian W -
@@ -147,7 +147,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_sub_localized
   have hc0 : 0 ≤ c := (norm_nonneg _).trans hc
   have ha := chainLRPrefactor_nonneg R J
   have hv := chainLRVelocity_nonneg R J
-  have hA : Entropy.IsSupportedOn (n := fun _ ↦ q) (Complex.I • C) S := by
+  have hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Complex.I • C) S := by
     change _ ∈ ManyBody.supportedOperators _ _
     exact (SMulMemClass.smul_mem _ hS)
   have hloc : ∀ s ∈ Set.Icc (-T) T,
@@ -191,10 +191,12 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_leftPart_sub_
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (hq : 1 ≤ q) (j m : ℕ) (q' ΔE : ℝ) {ℓ T : ℝ}
     (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
-    ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.leftPart j m) -
-        (h.leftPart j m + regionExpectation
+    ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (leftSupports L R j m)) -
+        (h.partialHamiltonian (leftSupports L R j m) + regionExpectation
           (chainNeighborhood (interval L (j - m - 2 * R) (j - m + R)) ℓ)
-          (gaussianFilteredTerm q' ΔE h.hamiltonian (h.leftPart j m) - h.leftPart j m))‖ ≤
+          (gaussianFilteredTerm q' ΔE h.hamiltonian
+              (h.partialHamiltonian (leftSupports L R j m)) -
+            h.partialHamiltonian (leftSupports L R j m)))‖ ≤
       T * (chainLRPrefactor R J * ((3 * R : ℕ) : ℝ) ^ 2 * (partCommutatorConst R * J ^ 2) *
           Real.exp (chainLRVelocity R J * T - ℓ / 2)) +
         2 * (partCommutatorConst R * J ^ 2) *
@@ -215,10 +217,12 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_rightPart_sub
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (hq : 1 ≤ q) (j m : ℕ) (q' ΔE : ℝ) {ℓ T : ℝ}
     (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
-    ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.rightPart j m) -
-        (h.rightPart j m + regionExpectation
+    ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (rightSupports L R j m)) -
+        (h.partialHamiltonian (rightSupports L R j m) + regionExpectation
           (chainNeighborhood (interval L (j + m - R) (j + m + 2 * R)) ℓ)
-          (gaussianFilteredTerm q' ΔE h.hamiltonian (h.rightPart j m) - h.rightPart j m))‖ ≤
+          (gaussianFilteredTerm q' ΔE h.hamiltonian
+              (h.partialHamiltonian (rightSupports L R j m)) -
+            h.partialHamiltonian (rightSupports L R j m)))‖ ≤
       T * (chainLRPrefactor R J * ((3 * R : ℕ) : ℝ) ^ 2 * (partCommutatorConst R * J ^ 2) *
           Real.exp (chainLRVelocity R J * T - ℓ / 2)) +
         2 * (partCommutatorConst R * J ^ 2) *
@@ -238,11 +242,13 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_bufferPart_su
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (hq : 1 ≤ q) (j m : ℕ) (q' ΔE : ℝ) {ℓ T : ℝ}
     (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
-    ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.bufferPart j m) -
-        (h.bufferPart j m + regionExpectation
+    ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (bufferSupports L R j m)) -
+        (h.partialHamiltonian (bufferSupports L R j m) + regionExpectation
           (chainNeighborhood (interval L (j - m - 2 * R) (j - m + R) ∪
             interval L (j + m - R) (j + m + 2 * R)) ℓ)
-          (gaussianFilteredTerm q' ΔE h.hamiltonian (h.bufferPart j m) - h.bufferPart j m))‖ ≤
+          (gaussianFilteredTerm q' ΔE h.hamiltonian
+              (h.partialHamiltonian (bufferSupports L R j m)) -
+            h.partialHamiltonian (bufferSupports L R j m)))‖ ≤
       T * (chainLRPrefactor R J * ((6 * R : ℕ) : ℝ) ^ 2 *
           (2 * (partCommutatorConst R * J ^ 2)) *
           Real.exp (chainLRVelocity R J * T - ℓ / 2)) +
@@ -250,7 +256,8 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_bufferPart_su
           (Real.sqrt (2 * (q' / ΔE ^ 2).toNNReal / Real.pi) *
             Real.exp (-T ^ 2 / (2 * (q' / ΔE ^ 2).toNNReal))) := by
   refine h.norm_gaussianFilteredTerm_sub_localized_le_of_commutator hh hhJ hq q' ΔE _ _ _ _
-    (h.isSupportedOn_commutator_bufferPart j m) ?_ (h.norm_commutator_bufferPart_le hhJ j m) hℓ hT
+    (h.isSupportedOn_commutator_bufferPart j m) ?_ (h.norm_commutator_bufferPart_le hhJ j m) hℓ
+    hT
   refine (Finset.card_union_le _ _).trans ?_
   have h1 := card_interval_le (L := L) (j - m - 2 * R) (j - m + R)
   have h2 := card_interval_le (L := L) (j + m - R) (j + m + 2 * R)
@@ -261,38 +268,40 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_leftPart_localized (h : ChainInteraction L q R)
     (hh : ∀ X, (h.term X).IsHermitian)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
-    (h.leftPart j m + regionExpectation K
-      (gaussianFilteredTerm q' ΔE h.hamiltonian (h.leftPart j m) - h.leftPart j m)).IsHermitian :=
+    (h.partialHamiltonian (leftSupports L R j m) + regionExpectation K
+      (gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (leftSupports L R j m)) -
+        h.partialHamiltonian (leftSupports L R j m))).IsHermitian :=
   isHermitian_localized q' ΔE (ManyBody.Interaction.isHermitian_hamiltonian hh)
-      (h.leftPart_isHermitian hh j m) K
+      (ManyBody.Interaction.isHermitian_partialHamiltonian fun X _ ↦ hh X) K
 
 /-- The localized right part `M_R` is Hermitian.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_rightPart_localized
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
-    (h.rightPart j m + regionExpectation K
-      (gaussianFilteredTerm q' ΔE h.hamiltonian (h.rightPart j m) - h.rightPart j m)).IsHermitian :=
+    (h.partialHamiltonian (rightSupports L R j m) + regionExpectation K
+      (gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (rightSupports L R j m)) -
+        h.partialHamiltonian (rightSupports L R j m))).IsHermitian :=
   isHermitian_localized q' ΔE (ManyBody.Interaction.isHermitian_hamiltonian hh)
-      (h.rightPart_isHermitian hh j m) K
+      (ManyBody.Interaction.isHermitian_partialHamiltonian fun X _ ↦ hh X) K
 
 /-- The localized buffer part `M_B` is Hermitian.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_bufferPart_localized
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
-    (h.bufferPart j m + regionExpectation K
-      (gaussianFilteredTerm q' ΔE h.hamiltonian (h.bufferPart j m) -
-        h.bufferPart j m)).IsHermitian :=
+    (h.partialHamiltonian (bufferSupports L R j m) + regionExpectation K
+      (gaussianFilteredTerm q' ΔE h.hamiltonian (h.partialHamiltonian (bufferSupports L R j m)) -
+        h.partialHamiltonian (bufferSupports L R j m))).IsHermitian :=
   isHermitian_localized q' ΔE (ManyBody.Interaction.isHermitian_hamiltonian hh)
-      (h.bufferPart_isHermitian hh j m) K
+      (ManyBody.Interaction.isHermitian_partialHamiltonian fun X _ ↦ hh X) K
 
 /-- The left part vanishes when `j ≤ m`: the region `[0, j - m)` is then empty, and no
 support, being nonempty, is contained in it.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, line 776 (`H_L`). -/
 theorem _root_.ManyBody.ChainInteraction.leftPart_eq_zero_of_le
     (h : ChainInteraction L q R) {j m : ℕ}
-    (hjm : j ≤ m) : h.leftPart j m = 0 := by
+    (hjm : j ≤ m) : h.partialHamiltonian (leftSupports L R j m) = 0 := by
   change ∑ X ∈ leftSupports L R j m, h.term X = 0
   refine Finset.sum_eq_zero fun X hX ↦ ?_
   obtain ⟨x, hx⟩ := X.2.1

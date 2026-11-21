@@ -54,21 +54,21 @@ private theorem surprisalTail_region_le_of_family_budget
     {L q : ℕ} {ι : Type*} [Fintype ι] {J Δ E₀ : ℝ}
     (g : ι → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (D : ι → Finset (Fin L))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (g i) (D i))
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (g i) (D i))
     (hherm : ∀ i, (g i).IsHermitian) (hJ : 0 ≤ J) (hnorm : ∀ i, ‖g i‖ ≤ J)
     (hΔ : 0 < Δ) {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped (∑ i, g i) E₀ Δ)
     (hspan : groundSpace (∑ i, g i) E₀ = Submodule.span ℂ {Ω})
     (A : Finset (Fin L)) {B : ℝ}
-    (hbudget : Entropy.cutLogBudget (Entropy.crossingTerms D A)
+    (hbudget : Entropy.cutLogBudget (ManyBody.crossingTerms D A)
       (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ D) ≤ B)
     (w : ℝ) (hw : 0 ≤ w) :
     Entropy.surprisalTail
-      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) A Ω).eigenvalues
-      (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω) w ≤
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) A Ω).eigenvalues
+      (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A) w ≤
       2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * B)))) := by
-  let budget := Entropy.cutLogBudget (Entropy.crossingTerms D A)
+  let budget := Entropy.cutLogBudget (ManyBody.crossingTerms D A)
     (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ D)
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   have hbudget1 : 1 ≤ budget := Entropy.one_le_cutLogBudget _ _
@@ -83,11 +83,12 @@ private theorem surprisalTail_region_le_of_family_budget
     (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) hΩ hspan
   have htail := Entropy.surprisalTail_cut_le
     (n := fun _ : Fin L ↦ q) (h := g) (D := D) (B := A)
-    hsupp hherm hJ hnorm hΩ hΔ heig hgap rfl
-    (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) A Ω) w
+    hsupp hherm hJ hnorm hΩ hΔ heig hgap
+    (ManyBody.regionState_eq_partialTraceRight_cutVector A Ω).symm
+    (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) A Ω) w
   change Entropy.surprisalTail
-      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) A Ω).eigenvalues
-      (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω) w ≤
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) A Ω).eigenvalues
+      (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A) w ≤
       min 1 (2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * budget))))) at htail
   refine (htail.trans (min_le_right _ _)).trans ?_
@@ -110,9 +111,9 @@ private theorem surprisalTail_leftBlock_le
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (k : ℕ) (w : ℝ) (hw : 0 ≤ w) :
     Entropy.surprisalTail
-      (Entropy.regionState_isHermitian
-        (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω).eigenvalues
-      (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) w ≤
+      (ManyBody.regionState_isHermitian
+        (X := fun _ ↦ Fin q) (leftBlock L k) Ω).eigenvalues
+      (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w ≤
       2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w /
           (32 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))) := by
@@ -138,9 +139,9 @@ private theorem surprisalTail_leftBlock_le_of_consecutive_terms
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (k : ℕ) (w : ℝ) (hw : 0 ≤ w) :
     Entropy.surprisalTail
-      (Entropy.regionState_isHermitian
-        (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω).eigenvalues
-      (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) w ≤
+      (ManyBody.regionState_isHermitian
+        (X := fun _ ↦ Fin q) (leftBlock L k) Ω).eigenvalues
+      (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w ≤
       2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * windowBudgetConst q R)))) := by
   classical
@@ -172,7 +173,7 @@ theorem _root_.ManyBody.ChainInteraction.spectralProjectionGE_leftBlock_bounds
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (k : ℕ) (w : ℝ) (hw : 0 ≤ w) :
-    let ρ := Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω
+    let ρ := ManyBody.regionState (X := fun _ ↦ Fin q) Ω (leftBlock L k)
     let P := Matrix.spectralProjectionGE ρ
       (Real.exp (-(chainIntervalEntropyBound q R J Δ + w)))
     IsStarProjection P ∧
@@ -183,11 +184,11 @@ theorem _root_.ManyBody.ChainInteraction.spectralProjectionGE_leftBlock_bounds
             (32 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))) := by
   classical
   dsimp only
-  have hρ := Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω
+  have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) (leftBlock L k) Ω
   refine ⟨hρ.isHermitian.isStarProjection_spectralProjectionGE _,
-    hρ.rank_spectralProjectionGE_exp_le (Entropy.trace_regionState_eq_one hΩ) _ _, ?_⟩
+    hρ.rank_spectralProjectionGE_exp_le (ManyBody.trace_regionState_eq_one hΩ) _ _, ?_⟩
   let C := chainIntervalEntropyBound q R J Δ
-  let S := Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω
+  let S := ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)
   let v := C + w - S
   have hS : S ≤ C := by
     dsimp only [S, C]
@@ -243,14 +244,14 @@ private theorem exists_isOpenMPS_norm_sub_le_of_prefix_bounds
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {ε : ℝ} (hε : 0 < ε) (hε1 : ε ≤ 1)
     (hS : ∀ k : ℕ,
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω ≤ C)
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k) ≤ C)
     (htail :
       let w : ℝ := 64 * s * Real.log (2 * (L : ℝ) * tailPrefactorRoot / ε)
       0 ≤ w → ∀ k ∈ Finset.Ico 1 L,
         Entropy.surprisalTail
-          (Entropy.regionState_isHermitian
-            (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω).eigenvalues
-          (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) w ≤
+          (ManyBody.regionState_isHermitian
+            (X := fun _ ↦ Fin q) (leftBlock L k) Ω).eigenvalues
+          (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w ≤
           2 * Real.exp (Real.exp 1 / 2) * Real.exp (-(w / (32 * s)))) :
     ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
       IsOpenMPS L q
@@ -274,8 +275,8 @@ private theorem exists_isOpenMPS_norm_sub_le_of_prefix_bounds
   obtain ⟨Φ₀, hrank, hdist⟩ := exists_sequentialTruncation Ω hΩ w
   -- the distance
   have hsum : ∑ k ∈ Finset.Ico 1 L, Real.sqrt (Entropy.surprisalTail
-      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω).eigenvalues
-      (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) w) ≤
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k) Ω).eigenvalues
+      (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w) ≤
       ((L : ℝ) - 1) * (ε / (2 * (L : ℝ))) := by
     have hone : Real.sqrt (2 * Real.exp (Real.exp 1 / 2) * Real.exp (-(w / (32 * s)))) =
         ε / (2 * (L : ℝ)) := by
@@ -294,8 +295,8 @@ private theorem exists_isOpenMPS_norm_sub_le_of_prefix_bounds
         field_simp
       rw [this, Real.sqrt_sq (by positivity)]
     have hterm : ∀ k ∈ Finset.Ico 1 L, Real.sqrt (Entropy.surprisalTail
-        (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω).eigenvalues
-        (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) w) ≤
+        (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k) Ω).eigenvalues
+        (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)) w) ≤
         ε / (2 * (L : ℝ)) := fun k hk ↦ by
       rw [← hone]
       exact Real.sqrt_le_sqrt (htail hw0 k hk)
@@ -411,7 +412,7 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
       exact card_boundaryEdges_prefix_le L k
     have hprefix' : ((boundaryEdges L (leftBlock L k)).card : ℝ) ≤ 1 := by
       exact_mod_cast hprefix
-    calc Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω
+    calc ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k)
         ≤ C * (boundaryEdges L (leftBlock L k)).card :=
           harea L h hh hhJ hwindow E₀ Ω hΩ hgap hspan (leftBlock L k)
       _ ≤ C * 1 := mul_le_mul_of_nonneg_left hprefix' hC

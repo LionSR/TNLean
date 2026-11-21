@@ -48,7 +48,7 @@ theorem exists_independent_physical_dg_cluster_parameters :
         u ≤ (ell : ℝ) ^ 2 * Real.sqrt ((4 * g / 5) / R)) ∧
       ∀ (L q a b : ℕ), 0 < q → a + 2 * ell ≤ b + 1 → b + 2 * ell ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1)
     (mu : ℝ),

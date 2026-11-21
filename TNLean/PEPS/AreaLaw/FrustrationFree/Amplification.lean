@@ -215,7 +215,7 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
             ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
               C₀ * n →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+            ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -226,7 +226,7 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
                 Disjoint Jset (graphNeighborhood Λ (2 * r)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
-                FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
+                ManyBody.regionMutualInformation Ω X Jset ≤
                   frustrationFreeAmplificationConstant q R J Δ C₀ M * ((n : ℝ) ^ M)⁻¹) ∧
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
@@ -264,11 +264,11 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
   -- The scales `w = n^{3/5}`, `M₀ = e^{(𝓘 + 3w)/2}`, the number of sweeps `t` and `r = R χ t`.
   set w : ℝ := (n : ℝ) ^ ((3 : ℝ) / 5) with hwdef
   have hw0 : 0 ≤ w := Real.rpow_nonneg hn0.le _
-  set I := FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X (X ∪ Y)ᶜ with hIdef
+  set I := ManyBody.regionMutualInformation Ω X (X ∪ Y)ᶜ with hIdef
   have hII : I ≤ C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
     rw [hIdef, hXYS]
     exact hI
-  have hI0 : 0 ≤ I := FiniteProduct.mutualInformation_nonneg _ Ω hΩ _ _
+  have hI0 : 0 ≤ I := ManyBody.regionMutualInformation_nonneg _ Ω hΩ _ _
     (disjoint_compl_right.mono_left Finset.subset_union_left)
   set M₀ := Real.exp ((I + 3 * w) / 2) with hM₀def
   have hM₀ : 1 ≤ M₀ := Real.one_le_exp (by positivity)
@@ -289,8 +289,8 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
   let U := restoringEigenbasis Ω X
   obtain ⟨hU, hU'⟩ := restoringEigenbasis_unitary Ω X
   let 𝒲 := restoringTransport Ω X Y hXY
-  let p := (reducedState_isHermitian Λ q Ω X).eigenvalues
-  let E := Entropy.typicalSet p (regionalEntropy Λ q Ω X) w
+  let p := (ManyBody.regionState_isHermitian X Ω).eigenvalues
+  let E := Entropy.typicalSet p (ManyBody.regionEntropy Ω X) w
   let Tq := typicalProjection Λ q Ω Y w
   let Q := restoringCutProjection Ω X Y hXY w
   let ψ := restoringVector Ω X Y hXY

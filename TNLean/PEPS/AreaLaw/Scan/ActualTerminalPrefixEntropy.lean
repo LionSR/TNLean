@@ -36,7 +36,7 @@ private theorem abs_entropy_sub_le_of_nested
     {Λ : Finset (ℤ × ℤ)} {q : ℕ} (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     {R T : Finset (Site Λ)} (hRT : R ⊆ T) {b : ℕ}
     (hcard : (T ∆ R).card ≤ b) :
-    |regionalEntropy Λ q Ω T - regionalEntropy Λ q Ω R| ≤
+    |ManyBody.regionEntropy Ω T - ManyBody.regionEntropy Ω R| ≤
       (b : ℝ) * Real.log q := by
   classical
   have hunion : R ∪ (T \ R) = T := by
@@ -51,7 +51,7 @@ private theorem abs_entropy_sub_le_of_nested
   have h := abs_regionalEntropy_union_sub_le Λ q Ω hΩ R (T \ R)
     disjoint_sdiff_self_right
   rw [hunion] at h
-  exact h.trans ((regionalEntropy_le_card_mul_log Λ q Ω hΩ (T \ R)).trans
+  exact h.trans ((ManyBody.regionEntropy_le_card_mul_log hΩ (T \ R)).trans
     (mul_le_mul_of_nonneg_right (Nat.cast_le.mpr hc) (Real.log_natCast_nonneg q)))
 
 open Classical in
@@ -69,12 +69,12 @@ theorem terminalPartition_positiveEntropy_le
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1) (Bsh : ℝ)
     (hsh : ∀ i : Fin (L + 1),
-      regionalEntropy Λ q Ωt (positiveDepthPrefix S.A S.depth (i.val : ℤ)) ≤ Bsh)
+      ManyBody.regionEntropy Ωt (positiveDepthPrefix S.A S.depth (i.val : ℤ)) ≤ Bsh)
     (j : terminalFamily S.K S.m S.M (S.n * S.m)) (g : Fin S.K) :
     let σ := terminalPartition S (S.n * S.m) j g
-    regionalEntropy Λ q Ωt (positiveNear S.depth σ) ≤
+    ManyBody.regionEntropy Ωt (positiveNear S.depth σ) ≤
         Bsh + 3 * (S.n : ℝ) * (S.D : ℝ) * Real.log q ∧
-      regionalEntropy Λ q Ωt (positiveNearMiddle S.depth σ) ≤
+      ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth σ) ≤
         Bsh + 3 * (S.n : ℝ) * (S.D : ℝ) * Real.log q := by
   classical
   intro σ

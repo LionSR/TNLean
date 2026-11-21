@@ -64,10 +64,9 @@ theorem exists_template_final_mutualInformation
             let L := ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
             let X := A.filter fun x ↦ x.val ∈ T.points
             let S₀ := A.filter fun x ↦ x.val ∈ ambientDilation T.points L
-            let β := fun _ : Site Λ ↦ Fin q
-            2 * FiniteProduct.mutualInformation β Ω X S₀ᶜ ≤
+            2 * ManyBody.regionMutualInformation Ω X S₀ᶜ ≤
                 C * (n : ℝ) ^ (62497 / 62500 : ℝ) ∧
-              2 * FiniteProduct.mutualInformation β Ω X S₀ᶜ ≤
+              2 * ManyBody.regionMutualInformation Ω X S₀ᶜ ≤
                 C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   obtain ⟨Cbox, hCbox, hbox⟩ := exists_boxEntropy_le_boxError q R hq hJ hΔ
   exact exists_template_final_mutualInformation_of_boxEntropy q R D₀ hq

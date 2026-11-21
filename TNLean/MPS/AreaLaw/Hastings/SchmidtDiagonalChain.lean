@@ -130,53 +130,53 @@ absolute value, which is the form stated here. -/
 theorem norm_inner_mul_sub_le_of_factorization {j l : ℕ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {κ : Type*} [Fintype κ] (a : κ → ℂ)
-    {ψL : κ → EuclideanSpace ℂ (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L j))}
+    {ψL : κ → EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L j))}
     {ψR : κ → EuclideanSpace ℂ ((v : {v // v ∉ leftBlock L j}) → Fin q)}
     (hψL : Orthonormal ℂ ψL) (hψR : Orthonormal ℂ ψR)
-    (hdec : WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) =
+    (hdec : WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) Ω) =
       fun p ↦ ∑ α, a α * (WithLp.ofLp (ψL α) p.1 * WithLp.ofLp (ψR α) p.2))
     {O : κ → ℂ} (hO : ∀ α, ‖O α‖ ≤ 1)
     {A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {SA : Finset (Fin L)}
-    (hA : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) A SA)
+    (hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A SA)
     (hSA : Disjoint SA (interval L (j - l) (j + l))) (hA1 : ‖A‖ ≤ 1) {ε : ℝ}
     (hfact : ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
       OB.PosSemidef ∧ OL.PosSemidef ∧ OR.PosSemidef ∧ ‖OB‖ ≤ 1 ∧ ‖OL‖ ≤ 1 ∧ ‖OR‖ ≤ 1 ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OB SB ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧
       SB ⊆ interval L (j - l) (j + l) ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL SL ∧ SL ⊆ leftBlock L j ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L j ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤ ε) :
-    ‖⟪Ω, T (A * Entropy.localLift (leftBlock L j) (schmidtDiagonal O ψL)) Ω⟫_ℂ -
+    ‖⟪Ω, T (A * ManyBody.place (leftBlock L j) (schmidtDiagonal O ψL)) Ω⟫_ℂ -
         ⟪Ω, T A Ω⟫_ℂ *
-          ⟪Ω, T (Entropy.localLift (leftBlock L j) (schmidtDiagonal O ψL)) Ω⟫_ℂ‖ ≤
+          ⟪Ω, T (ManyBody.place (leftBlock L j) (schmidtDiagonal O ψL)) Ω⟫_ℂ‖ ≤
       3 * Real.sqrt (2 * ε) + ε := by
   obtain ⟨OB, OL, OR, SB, SL, SR, hOB, hOL, hOR, hOB1, hOL1, hOR1, hsB, hSB, hsL, hSL, hsR, hSR,
     hprod⟩ := hfact
   classical
   obtain ⟨σ₀, _⟩ := Function.ne_iff.mp
     ((WithLp.ofLp_eq_zero (x := Ω)).not.mpr (norm_ne_zero_iff.mp (by simp [hΩ])))
-  have hBL1 : ‖Entropy.localLift (n := fun _ : Fin L ↦ q) (leftBlock L j)
+  have hBL1 : ‖ManyBody.place (X := fun _ ↦ Fin q) (leftBlock L j)
       (schmidtDiagonal O ψL)‖ ≤ 1 :=
     (l2_opNorm_reindex_le _ _ _).trans
       ((l2_opNorm_kronecker_one_le _).trans (l2_opNorm_schmidtDiagonal_le_one hO hψL))
-  have hBR1 : ‖reindex (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L j)).symm
-      (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L j)).symm
+  have hBR1 : ‖reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L j)).symm
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L j)).symm
       ((1 : Matrix _ _ ℂ) ⊗ₖ schmidtDiagonal O ψR)‖ ≤ 1 :=
     (l2_opNorm_reindex_le _ _ _).trans
       ((l2_opNorm_one_kronecker_le _).trans (l2_opNorm_schmidtDiagonal_le_one hO hψR))
   have hBA : Commute OB A :=
-    Entropy.commute_of_isSupportedOn_disjoint hsB hA
-      (Finset.disjoint_of_subset_right hSB hSA) σ₀
-  have hRB : Commute OR (Entropy.localLift (n := fun _ : Fin L ↦ q) (leftBlock L j)
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint hsB hA
+        (Finset.disjoint_of_subset_right hSB hSA).symm
+  have hRB : Commute OR (ManyBody.place (X := fun _ ↦ Fin q) (leftBlock L j)
       (schmidtDiagonal O ψL)) :=
-    Entropy.commute_of_isSupportedOn_disjoint hsR (Entropy.isSupportedOn_localLift _)
-      hSR.symm σ₀
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint hsR
+        (ManyBody.place_mem_supportedOperators _) hSR
   have hBRL := (Entropy.commute_reindex_one_kronecker_of_isSupportedOn hsL hSL σ₀
     (schmidtDiagonal O ψR)).symm
   have hLR : Commute OL OR :=
-    Entropy.commute_of_isSupportedOn_disjoint hsL hsR
-      (Finset.disjoint_of_subset_right hSL hSR) σ₀
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint hsL hsR
+        (Finset.disjoint_of_subset_right hSL hSR).symm
   have hL : ∀ α β, star (WithLp.ofLp (ψL α)) ⬝ᵥ WithLp.ofLp (ψL β) =
       if α = β then 1 else 0 := fun α β ↦ by
     rw [dotProduct_comm, ← EuclideanSpace.inner_eq_star_dotProduct]
@@ -185,13 +185,13 @@ theorem norm_inner_mul_sub_le_of_factorization {j l : ℕ}
       if α = β then 1 else 0 := fun α β ↦ by
     rw [dotProduct_comm, ← EuclideanSpace.inner_eq_star_dotProduct]
     exact orthonormal_iff_ite.mp hψR α β
-  have hB : T (Entropy.localLift (n := fun _ : Fin L ↦ q) (leftBlock L j)
-      (schmidtDiagonal O ψL)) Ω = T (reindex (Entropy.cutEquiv (fun _ : Fin L ↦ q)
-        (leftBlock L j)).symm (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L j)).symm
+  have hB : T (ManyBody.place (X := fun _ ↦ Fin q) (leftBlock L j)
+      (schmidtDiagonal O ψL)) Ω = T (reindex (ManyBody.cutEquiv (fun _ ↦ Fin q)
+        (leftBlock L j)).symm (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L j)).symm
       ((1 : Matrix _ _ ℂ) ⊗ₖ schmidtDiagonal O ψR)) Ω := by
-    rw [Entropy.localLift, Entropy.toEuclideanCLM_reindex_cutEquiv_symm,
+    rw [ManyBody.place, Entropy.toEuclideanCLM_reindex_cutEquiv_symm,
       Entropy.toEuclideanCLM_reindex_cutEquiv_symm, hdec]
-    exact congrArg (fun f ↦ WithLp.toLp 2 (f ∘ Entropy.cutEquiv _ _))
+    exact congrArg (fun f ↦ WithLp.toLp 2 (f ∘ ManyBody.cutEquiv _ _))
       (kronecker_one_mulVec_schmidt_eq_one_kronecker_mulVec a O
         (fun α ↦ WithLp.ofLp (ψL α)) (fun α ↦ WithLp.ofLp (ψR α)) hL hR)
   exact norm_inner_sub_le_of_projector_factorization hΩ hOB hOL hOR hOB1 hOL1 hOR1 hprod hA1

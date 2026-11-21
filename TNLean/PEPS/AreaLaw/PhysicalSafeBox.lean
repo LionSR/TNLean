@@ -59,7 +59,7 @@ theorem exists_regionalEntropy_safe_rect_le_boxError
         ∀ (A : Finset (Site Λ)) (Q : IntRect),
           (∀ t ∈ Q.toFinset, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
             D₀ * (Q.size : ℝ) < (supDist t z : ℝ)) →
-          regionalEntropy Λ q Ω (rectRegion A Q) ≤
+          ManyBody.regionEntropy Ω (rectRegion A Q) ≤
             C * (Q.size : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
   obtain ⟨Cb, hCb, hbox⟩ := Scan.exists_boxEntropy_le_boxError q R hq hJ hΔ
   let d : ℕ := 2 * R + 10

@@ -31,15 +31,15 @@ AKLV, Section 6.1, the product of the regional ground vectors. -/
 theorem exists_common_ground_shifts_of_disjoint_support
     {V : Type*} [Fintype V] [DecidableEq V] {n : V → ℕ}
     (S T : Finset V) (hST : Disjoint S T)
-    (X Y : Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ)
-    (hsX : Entropy.IsSupportedOn X S) (hsY : Entropy.IsSupportedOn Y T)
-    (hX : X.IsHermitian) (hY : Y.IsHermitian) (σ₀ : Entropy.SiteConfig n) :
-    ∃ (x y : ℝ) (w : Entropy.SiteConfig n → ℂ),
+    (X Y : Matrix (∀ v, Fin (n v)) (∀ v, Fin (n v)) ℂ)
+    (hsX : ManyBody.IsSupportedOn X S) (hsY : ManyBody.IsSupportedOn Y T)
+    (hX : X.IsHermitian) (hY : Y.IsHermitian) (σ₀ : (∀ v, Fin (n v))) :
+    ∃ (x y : ℝ) (w : (∀ v, Fin (n v)) → ℂ),
       (X - (x : ℂ) • 1).PosSemidef ∧ (Y - (y : ℂ) • 1).PosSemidef ∧
       star w ⬝ᵥ w = 1 ∧ X *ᵥ w = (x : ℂ) • w ∧ Y *ᵥ w = (y : ℂ) • w := by
   classical
-  let e := Entropy.cutEquiv n S
-  let A := Entropy.RegionConfig n S
+  let e := ManyBody.cutEquiv (fun v ↦ Fin (n v)) S
+  let A := (ManyBody.RegionConfig (fun v ↦ Fin (n v)) S)
   let B := (v : {v // v ∉ S}) → Fin (n v)
   let a₀ : A := (e σ₀).1
   let b₀ : B := (e σ₀).2
@@ -56,7 +56,7 @@ theorem exists_common_ground_shifts_of_disjoint_support
   have hYcut : Y.submatrix e.symm e.symm = (1 : Matrix A A ℂ) ⊗ₖ N :=
     hsY.cutOperator_eq_one_kronecker (B := S) hST.symm a₀
   let z : A × B → ℂ := fun p ↦ u p.1 * v p.2
-  let w : Entropy.SiteConfig n → ℂ := z ∘ e
+  let w : (∀ v, Fin (n v)) → ℂ := z ∘ e
   have hunitz : star z ⬝ᵥ z = 1 := by
     rw [Matrix.star_mul_dotProduct_mul u u v v, hunitu, hunitv, mul_one]
   have hunitw : star w ⬝ᵥ w = 1 := by
@@ -121,12 +121,12 @@ normalized zero-energy test for their sum. AKLV, Section 6.1. -/
 theorem exists_three_disjoint_ground_shifts
     {V : Type*} [Fintype V] [DecidableEq V] {n : V → ℕ}
     (S T U : Finset V) (hST : Disjoint S T) (hSU : Disjoint S U) (hTU : Disjoint T U)
-    (X N Y : Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ)
-    (hsX : Entropy.IsSupportedOn X S) (hsN : Entropy.IsSupportedOn N T)
-    (hsY : Entropy.IsSupportedOn Y U)
+    (X N Y : Matrix (∀ v, Fin (n v)) (∀ v, Fin (n v)) ℂ)
+    (hsX : ManyBody.IsSupportedOn X S) (hsN : ManyBody.IsSupportedOn N T)
+    (hsY : ManyBody.IsSupportedOn Y U)
     (hX : X.IsHermitian) (hN : N.IsHermitian) (hY : Y.IsHermitian)
-    (σ₀ : Entropy.SiteConfig n) :
-    ∃ (x m y : ℝ) (w : Entropy.SiteConfig n → ℂ),
+    (σ₀ : (∀ v, Fin (n v))) :
+    ∃ (x m y : ℝ) (w : (∀ v, Fin (n v)) → ℂ),
       (X - (x : ℂ) • 1).PosSemidef ∧ (N - (m : ℂ) • 1).PosSemidef ∧
       (Y - (y : ℂ) • 1).PosSemidef ∧ star w ⬝ᵥ w = 1 ∧
       (X.PosSemidef → 0 ≤ x) ∧ (N.PosSemidef → 0 ≤ m) ∧ (Y.PosSemidef → 0 ≤ y) ∧
@@ -134,7 +134,7 @@ theorem exists_three_disjoint_ground_shifts
   classical
   obtain ⟨x, m, u, hXlow, hNlow, huunit, huX, huN⟩ :=
     exists_common_ground_shifts_of_disjoint_support S T hST X N hsX hsN hX hN σ₀
-  have hsXN : Entropy.IsSupportedOn (X + N) (S ∪ T) := by
+  have hsXN : ManyBody.IsSupportedOn (X + N) (S ∪ T) := by
     have hX' := hsX.mono (Finset.subset_union_left : S ⊆ S ∪ T)
     have hN' := hsN.mono (Finset.subset_union_right : T ⊆ S ∪ T)
     constructor

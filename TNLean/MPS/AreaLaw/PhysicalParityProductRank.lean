@@ -28,7 +28,7 @@ namespace TNLean.MPS.AreaLaw
 variable {L q : ℕ}
 
 local notation "T" => Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-local notation "C" => fun k ↦ Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k)
+local notation "C" => fun k ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k)
 
 private noncomputable abbrev parityPrefix
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (p n : ℕ) :=
@@ -52,10 +52,10 @@ private theorem operatorSchmidtRank_cut_one_le (k : ℕ) :
     operatorSchmidtRank (C k (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)) ≤ 1 := by
   classical
   change operatorSchmidtRank
-    (Matrix.reindexAlgEquiv ℂ ℂ (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)) 1) ≤ 1
+    (Matrix.reindexAlgEquiv ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)) 1) ≤ 1
   rw [map_one]
   exact
-    (operatorSchmidtRank_one_le (a := Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k))
+    (operatorSchmidtRank_one_le (a := (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)))
       (b := ((v : {v : Fin L // v ∉ leftBlock L k}) → Fin q)))
 
 private theorem interval_one_sided_of_not_crossing (i : Fin (L - 1)) (k : ℕ)
@@ -75,9 +75,9 @@ private theorem interval_one_sided_of_not_crossing (i : Fin (L - 1)) (k : ℕ)
 
 private theorem isSupportedOn_bond_complement
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (i : Fin (L - 1)) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (1 - h i) (interval L i.val (i.val + 2)) := by
   change _ ∈ ManyBody.supportedOperators _ _
   classical
@@ -87,7 +87,7 @@ private theorem isSupportedOn_bond_complement
 
 private theorem parityFactor_rank_le_one
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (p n k : ℕ)
     (hno : n + 1 ≠ k ∨ n % 2 ≠ p) :
     operatorSchmidtRank (C k (parityFactor h p n)) ≤ 1 := by
@@ -102,7 +102,7 @@ private theorem parityFactor_rank_le_one
 
 private theorem parityFactor_rank_le_sq (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (p n k : ℕ) :
     operatorSchmidtRank (C k (parityFactor h p n)) ≤ q ^ 2 := by
   classical
@@ -115,7 +115,7 @@ private theorem parityFactor_rank_le_sq (hq : 1 ≤ q)
 
 private theorem parityPrefix_rank_le_one
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (p n k : ℕ)
     (hno : ∀ j < n, j + 1 ≠ k ∨ j % 2 ≠ p) :
     operatorSchmidtRank (C k ((T).symm (parityPrefix h p n))) ≤ 1 := by
@@ -135,7 +135,7 @@ private theorem parityPrefix_rank_le_one
 
 private theorem parityPrefix_rank_le_sq (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (p n k : ℕ) :
     operatorSchmidtRank (C k ((T).symm (parityPrefix h p n))) ≤ q ^ 2 := by
   classical
@@ -161,7 +161,7 @@ private theorem parityPrefix_rank_le_sq (hq : 1 ≤ q)
 squared. The unique possible crossing factor is derived from its support. -/
 theorem operatorSchmidtRank_physicalParityProduct_le_sq (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (p k : ℕ) :
     operatorSchmidtRank (C k ((T).symm (physicalParityProduct h p))) ≤ q ^ 2 := by
   exact parityPrefix_rank_le_sq hq h hs p (L - 1) k
@@ -170,7 +170,7 @@ theorem operatorSchmidtRank_physicalParityProduct_le_sq (hq : 1 ≤ q)
 one. This also includes cuts beyond the chain and empty configuration spaces. -/
 theorem operatorSchmidtRank_physicalParityProduct_le_one
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (p k : ℕ) (hp : (k - 1) % 2 ≠ p) :
     operatorSchmidtRank (C k ((T).symm (physicalParityProduct h p))) ≤ 1 := by
   apply parityPrefix_rank_le_one h hs p (L - 1) k
@@ -184,7 +184,7 @@ theorem operatorSchmidtRank_physicalParityProduct_le_one
 No decomposition, rank, commutation or projection hypothesis is supplied. -/
 theorem sum_operatorSchmidtRank_physicalParityProduct_le (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (k : ℕ) :
     operatorSchmidtRank (C k ((T).symm (physicalParityProduct h 0))) +
       operatorSchmidtRank (C k ((T).symm (physicalParityProduct h 1))) ≤ q ^ 2 + 1 := by

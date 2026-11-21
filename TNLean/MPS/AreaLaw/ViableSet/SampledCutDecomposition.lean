@@ -28,10 +28,10 @@ namespace TNLean.MPS.AreaLaw
 
 private theorem operatorSchmidtRank_cutOperator_endpoint_le_one {L q k : ℕ}
     (hk : k = 0 ∨ L ≤ k) (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) K) ≤ 1 := by
   classical
-  have hs : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K Finset.univ := by
+  have hs : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K Finset.univ := by
     constructor
     · simp
     · intro σ τ σ' τ' hσ hτ _ _
@@ -51,10 +51,10 @@ endpoints. LVV13, `algo53.tex`, lines 584–591 and 626–649. -/
 theorem operatorSchmidtRank_cutOperator_bondComplementWord_le_all {L q m κ : ℕ}
     (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (I : Fin m → Fin L)
     (hI : ∀ j, letterCount I j ≤ κ) (k : ℕ) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) (bondComplementWord h I)) ≤ q ^ (2 * κ) := by
   by_cases hk0 : k = 0
   · exact (operatorSchmidtRank_cutOperator_endpoint_le_one (Or.inl hk0) _).trans
@@ -75,14 +75,14 @@ theorem exists_sampledProjector_cutDecomposition {L q ℓ m i D : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (E₀ : ℝ) (I : Fin ℓ → Fin m → Fin L)
     (hrank : ∀ t k, operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k)
         (bondComplementWord h (I t))) ≤ D) :
     ∃ (N : ℕ) (A : Fin N → LeftBlockMatrix L q i)
       (B : Fin N → RightBlockMatrix L q i),
-      N ≤ ℓ * D ∧ Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i)
+      N ≤ ℓ * D ∧ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
         (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B j ∧
       ∀ j k, 0 < k → k < i → operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
           ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D := by
   classical
   choose N A B hN hdec hleft using fun t ↦
@@ -100,12 +100,12 @@ theorem exists_sampledProjector_cutDecomposition {L q ℓ m i D : ℕ}
       Fintype.sum_sigma]
     simp only [Matrix.smul_kronecker, ← Finset.smul_sum, ← hdec]
     ext x y
-    simp [sampledProjector, Entropy.cutOperator, reindex_apply, submatrix_apply,
+    simp [sampledProjector, ManyBody.cutOperator, reindex_apply, submatrix_apply,
       Matrix.sum_apply, Matrix.smul_apply, c, mul_assoc]
   · intro j k hk0 hki
-    have heq : Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+    have heq : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
         ((c • A (e j).1 (e j).2).submatrix leftConfigOfFin leftConfigOfFin) =
-        c • Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+        c • ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
           ((A (e j).1 (e j).2).submatrix leftConfigOfFin leftConfigOfFin) := rfl
     rw [heq]
     exact (operatorSchmidtRank_smul_le _ _).trans (hleft _ _ k hk0 hki)

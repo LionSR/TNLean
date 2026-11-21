@@ -64,7 +64,7 @@ theorem exists_close_supported_vector_of_orthonormal_rounding
       ψ ∈ leftSupportSubmodule (Set.range w) ∧
       ‖φ - ψ‖ ≤ (r : ℝ) * θ * ‖φ‖ := by
   classical
-  let e := Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)
+  let e := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)
   let T : LeftBlockVector L q k → LeftBlockVector L q k :=
     fun x ↦ ∑ j, ⟪u j, x⟫_ℂ • w j
   let ψ : EuclideanSpace ℂ (Fin L → Fin q) :=

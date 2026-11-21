@@ -38,8 +38,8 @@ theorem IntRect.regionalEntropy_shell_le_of_safe_box
     (hbudget : D₀ * L + L ≤ D₀ * Q.size)
     (e C : ℝ) (he : 0 < e) (hC : 0 ≤ C)
     (hbox : ∀ Q' : IntRect, IsSafe Λ A D₀ Q' →
-      regionalEntropy Λ q Ω (rectRegion A Q') ≤ C * (Q'.size : ℝ) ^ (1 + e)) :
-    regionalEntropy Λ q Ω
+      ManyBody.regionEntropy Ω (rectRegion A Q') ≤ C * (Q'.size : ℝ) ^ (1 + e)) :
+    ManyBody.regionEntropy Ω
       (A.filter fun x ↦ x.1 ∈ (Q.dilate j).toFinset \ Q.toFinset) ≤
       C * (24 + 64 / ((2 : ℝ) ^ e - 1)) * (Q.size : ℝ) * (L : ℝ) ^ e := by
   have hsafeCells : ∀ c ∈ Geometry.cappedDyadicPartition

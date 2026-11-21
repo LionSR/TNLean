@@ -252,7 +252,7 @@ and the gap are those of ALVV, arXiv:1602.08828v2, lines 267, 806 and
 Assumption (DG), lines 275–279; the source states no bound on `γ`. -/
 theorem pow_le_finrank_ground_of_lt_gap :
     ∀ (L q : ℕ) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
       let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
@@ -282,12 +282,12 @@ theorem pow_le_finrank_ground_of_lt_gap :
     intro m hmL hmγ
     set c := L - m with hc
     set B : Finset (Fin L) := interval L 0 c
-    set e := Entropy.cutEquiv (fun _ : Fin L ↦ q) B
+    set e := ManyBody.cutEquiv (fun _ ↦ Fin q) B
     set S : Finset (Fin (L - 1)) := Finset.univ.filter fun i ↦ i.val + 2 ≤ c
     let cut : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ →
         Matrix ((({v // v ∈ B}) → Fin q) × (({v // v ∉ B}) → Fin q))
           ((({v // v ∈ B}) → Fin q) × (({v // v ∉ B}) → Fin q)) ℂ :=
-      fun X ↦ Entropy.cutOperator (n := fun _ : Fin L ↦ q) B X
+      fun X ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) B X
     have hcut_sum : ∀ (s : Finset (Fin (L - 1))), cut (∑ i ∈ s, h i) = ∑ i ∈ s, cut (h i) := by
       intro s
       exact map_sum (reindexLinearEquiv ℂ ℂ e e) _ s
@@ -433,7 +433,7 @@ gap `min γ 1` of the formal estimates is the gap itself. ALVV,
 arXiv:1602.08828v2, Assumption (DG), lines 275–279. -/
 theorem gap_le_one_of_finrank_lt (L q : ℕ)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ) :
     let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
@@ -457,7 +457,7 @@ lines 275–279, together with the normalization `0 ≤ h_i ≤ 1` of lines 267
 and 806. -/
 theorem gap_le_one_add_log_div_log (L q : ℕ)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ) :
     let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i

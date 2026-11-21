@@ -333,13 +333,13 @@ lines 70–94. -/
 theorem birth_liftOne (F : Sheet (Fin L) Party) (T : Finset (Fin L)) (P Q : Party)
     (hTP : ∀ x ∈ T, F.owner x = P)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
-    (hI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω T (F.birthEnv P) ≤
+    (hI : ManyBody.regionMutualInformation Ω T (F.birthEnv P) ≤
       (L : ℝ) ^ (-24 : ℤ))
     (pre post : List (Sheet (Fin L) Party)) {ℓ : Layout Party} (ξ : Mem ℓ)
     (hξ : ‖ξ‖ ≤ 1) :
     Sheet.HasSourceBoundedChange Ω (pre ++ F :: post) (pre ++ F.changeOwner T Q :: post)
       ξ {P, Q} 1 1 1 ((L : ℝ) ^ (-12 : ℤ)) := by
-  have hI' : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω T
+  have hI' : ManyBody.regionMutualInformation Ω T
       (F.birthEnv P) ≤ (L : ℝ) ^ (-(2 * (12 : ℝ))) := by
     simpa only [show -(2 * (12 : ℝ)) = (-24 : ℝ) by norm_num, Real.rpow_neg_ofNat] using hI
   obtain ⟨_, _, v, hv, hu, hs, _, herr⟩ :=
@@ -353,7 +353,7 @@ theorem birth_liftOne (F : Sheet (Fin L) Party) (T : Finset (Fin L)) (P Q : Part
 private theorem death_liftOne (F : Sheet (Fin L) Party) (T : Finset (Fin L)) (P Q : Party)
     (hTP : ∀ x ∈ T, F.owner x = P)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
-    (hI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω T
+    (hI : ManyBody.regionMutualInformation Ω T
       ((F.changeOwner T Q).birthEnv Q) ≤ (L : ℝ) ^ (-24 : ℤ))
     (pre post : List (Sheet (Fin L) Party)) {ℓ : Layout Party} (ξ : Mem ℓ)
     (hξ : ‖ξ‖ ≤ 1) :
@@ -369,7 +369,7 @@ private theorem death_liftOne (F : Sheet (Fin L) Party) (T : Finset (Fin L)) (P 
   have hGT : ∀ x ∈ T, G.owner x = Q := by
     intro x hx
     simp [G, Sheet.changeOwner, hx]
-  have hI' : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω T
+  have hI' : ManyBody.regionMutualInformation Ω T
       (G.birthEnv Q) ≤ (L : ℝ) ^ (-(2 * (12 : ℝ))) := by
     simpa only [show -(2 * (12 : ℝ)) = (-24 : ℝ) by norm_num, Real.rpow_neg_ofNat] using hI
   obtain ⟨_, _, M, hM, hu, hs, he, _, herr⟩ :=
@@ -385,7 +385,7 @@ private theorem death_liftOne (F : Sheet (Fin L) Party) (T : Finset (Fin L)) (P 
 /-- The exchange is an actual private original circuit, with no non-private gate. -/
 private theorem exchange_circuit (own : Fin L → Party) (A B C : Party) (a w : ℕ)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
-    (hI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hI : ManyBody.regionMutualInformation Ω
       (exchangeTSet own A B C a w) (exchangeESet own A B C a w) ≤ (L : ℝ) ^ (-24 : ℤ)) :
     ∃ c : OriginalCircuit
         ((main₀ own).regs q ++ (aux₃ A B C a w).regs q)
@@ -394,7 +394,7 @@ private theorem exchange_circuit (own : Fin L → Party) (A B C : Party) (a w : 
         (pairRef (Sheet.refFamily Ω) (main₀ own) (aux₃ A B C a w))
         (pairRef (Sheet.refFamily Ω) (main₄ own A B C a w) (aux₄ own A B C a w)) ∧
       c.IsSourceBounded 1 ∧ c.nonprivateCount = 0 := by
-  have hI' : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+  have hI' : ManyBody.regionMutualInformation Ω
       (exchangeTSet own A B C a w) (exchangeESet own A B C a w) ≤
         (L : ℝ) ^ (-(2 * (12 : ℝ))) := by
     simpa only [show -(2 * (12 : ℝ)) = (-24 : ℝ) by norm_num, Real.rpow_neg_ofNat] using hI
@@ -417,28 +417,28 @@ theorem circuits_of_primitive_information
     (hC : ∀ x ∈ interval L (a - 8 * w) a, own x = C)
     (hA : ∀ x ∈ interval L a (a + w), own x = A)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
-    (hI₀ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hI₀ : ManyBody.regionMutualInformation Ω
       (interval L (a - 6 * w) (a - w)) ((aux₀ C).birthEnv C) ≤
       (L : ℝ) ^ (-24 : ℤ))
-    (hI₁ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hI₁ : ManyBody.regionMutualInformation Ω
       (interval L (a - 5 * w) (a - 2 * w)) ((aux₁ B C a w).birthEnv B) ≤
       (L : ℝ) ^ (-24 : ℤ))
-    (hI₂ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hI₂ : ManyBody.regionMutualInformation Ω
       (interval L (a - 4 * w) (a - 3 * w)) ((aux₂ A B C a w).birthEnv A) ≤
       (L : ℝ) ^ (-24 : ℤ))
-    (hI₃ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hI₃ : ManyBody.regionMutualInformation Ω
       (exchangeTSet own A B C a w) (exchangeESet own A B C a w) ≤
       (L : ℝ) ^ (-24 : ℤ))
-    (hI₄ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hI₄ : ManyBody.regionMutualInformation Ω
       (interval L (a - 4 * w) a) ((main₅ own A B C a w).birthEnv A) ≤
       (L : ℝ) ^ (-24 : ℤ))
-    (hI₅ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hI₅ : ManyBody.regionMutualInformation Ω
       (interval L (a - 5 * w) (a + w)) ((main₆ own A B C a w).birthEnv B) ≤
       (L : ℝ) ^ (-24 : ℤ))
-    (hI₆ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hI₆ : ManyBody.regionMutualInformation Ω
       (interval L (a - 3 * w) a) ((main₆ own A B C a w).birthEnv B) ≤
       (L : ℝ) ^ (-24 : ℤ))
-    (hI₇ : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hI₇ : ManyBody.regionMutualInformation Ω
       (interval L (a - 6 * w) (a - 3 * w))
       ((main₈ own A B C a w).birthEnv C) ≤
       (L : ℝ) ^ (-24 : ℤ))
@@ -640,7 +640,7 @@ theorem boundary_change_of_primitive_information
     (own : Fin L → Party) (A B : Party) (w : ℕ)
     (hA : ∀ x ∈ interval L 0 w, own x = A)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
-    (hI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hI : ManyBody.regionMutualInformation Ω
       (interval L 0 w) (((main₀ own).changeOwner
         (interval L 0 w) B).birthEnv B) ≤ (L : ℝ) ^ (-24 : ℤ))
     (pre post : List (Sheet (Fin L) Party)) {ℓ : Layout Party} (ξ : Mem ℓ)

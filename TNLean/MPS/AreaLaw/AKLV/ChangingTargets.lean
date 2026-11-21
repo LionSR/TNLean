@@ -44,12 +44,12 @@ def IsAKLVSequenceInitialization {L q : ℕ} (a s : ℕ)
     (aklvLogarithmicThreshold g) Finset.univ
   ∃ (E : ℝ) (φ χ : EuclideanSpace ℂ (Fin L → Fin q))
       (p : Polynomial ℝ) (c : ℂ)
-      (vL : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L (a + s / 2)) → ℂ)
+      (vL : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L (a + s / 2))) → ℂ)
       (vR : ((v : {v : Fin L // v ∉ leftBlock L (a + s / 2)}) → Fin q) → ℂ),
     ‖φ‖ = 1 ∧ toEuclideanLin B φ = (E : ℂ) • φ ∧
     ‖φ - Ω‖ ^ 2 ≤ Real.exp (-aklvLogarithmicThreshold g / 16) / 100 ∧
     p.natDegree = s ^ 2 ∧ p.eval E = 1 ∧ ‖χ‖ = 1 ∧
-    Entropy.cutVector (leftBlock L (a + s / 2)) χ =
+    ManyBody.cutVector (leftBlock L (a + s / 2)) χ =
       WithLp.toLp 2 (fun z ↦ vL z.1 * vR z.2) ∧
     let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval B p
     toEuclideanLin K φ = φ ∧ toEuclideanLin K χ ≠ 0 ∧ ‖c‖ = 1 ∧
@@ -64,7 +64,7 @@ theorem exists_aklv_physical_changing_target_sequence :
       ∀ (L q a : ℕ)
         (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
       (∑ j, h j) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
@@ -83,7 +83,7 @@ theorem exists_aklv_physical_changing_target_sequence :
           ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
         E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
         (∀ i, ‖ψ i‖ = 1 ∧ ‖ψ i - Ω‖ ^ 2 ≤ aklvSequenceWeight i / 16 ∧
-          schmidtRank (WithLp.ofLp (Entropy.cutVector
+          schmidtRank (WithLp.ofLp (ManyBody.cutVector
             (leftBlock L (a + s / 2)) (ψ i))) ≤ aklvSequenceRankBound q g s i) ∧
         IsAKLVSequenceInitialization a s h e g Ω (ψ 0) ∧
         ∀ i, IsAKLVSequenceStep a s h e g Ω i (ψ i) (ψ (i + 1)) := by
@@ -105,7 +105,7 @@ theorem exists_aklv_physical_changing_target_sequence :
       hpE, hχ, hproduct, hfix, hKχ, hc, rfl⟩
   let State (i : ℕ) := {x : EuclideanSpace ℂ (Fin L → Fin q) //
     ‖x‖ = 1 ∧ ‖x - Ω‖ ^ 2 ≤ aklvSequenceWeight i / 16 ∧
-      schmidtRank (WithLp.ofLp (Entropy.cutVector (leftBlock L (a + s / 2)) x)) ≤
+      schmidtRank (WithLp.ofLp (ManyBody.cutVector (leftBlock L (a + s / 2)) x)) ≤
         aklvSequenceRankBound q g s i}
   change 21 ≤ s at hs
   change ‖ψ0‖ = 1 at hψunit
@@ -121,7 +121,7 @@ theorem exists_aklv_physical_changing_target_sequence :
       exists_aklv_dyadic_filtered_output (by omega) ha h hsupp h0 h1
         mu g Ω hΩ hground hgap hg hexcited e hregional i x.val x.property.1 x.property.2.1
     have hrank : schmidtRank (WithLp.ofLp
-        (Entropy.cutVector (leftBlock L (a + s / 2)) y)) ≤
+        (ManyBody.cutVector (leftBlock L (a + s / 2)) y)) ≤
           aklvSequenceRankBound q g s (i + 1) := by
       rw [(aklvSequenceRankBound_zero_succ q g s i).2]
       exact hyrank.trans (Nat.mul_le_mul_left _ x.property.2.2)

@@ -30,7 +30,7 @@ def IsIntervalSpanWithRankBound (L q p r count : ℕ) (xi : ℝ)
       S = Submodule.span ℂ (Set.range u) ∧
       ∀ j : ℕ, j < r - p - 1 → ∀ i : Fin n,
         xi ^ 2 * Matrix.schmidtRank (WithLp.ofLp
-          (Entropy.cutVector (n := fun _ : interval L p r ↦ q)
+          (ManyBody.cutVector (X := fun _ ↦ Fin q)
             (intervalTrimCut L p r j) (u i))) ≤ count
 
 /-- The recorded generator count bounds the actual subspace dimension.
@@ -74,7 +74,7 @@ theorem isIntervalSpanWithRankBound_top {L q p r count : ℕ} {xi : ℝ}
     hcount, fun i ↦ b i, b.toBasis.span_eq.symm, ?_⟩
   intro j _hj i
   have hrank : Matrix.schmidtRank (WithLp.ofLp
-      (Entropy.cutVector (n := fun _ : interval L p r ↦ q)
+      (ManyBody.cutVector (X := fun _ ↦ Fin q)
         (intervalTrimCut L p r j) (b i))) ≤
       Module.finrank ℂ (EuclideanSpace ℂ (interval L p r → Fin q)) := by
     calc
@@ -89,11 +89,11 @@ theorem isIntervalSpanWithRankBound_top {L q p r count : ℕ} {xi : ℝ}
   have hxiSq : xi ^ 2 ≤ 1 := pow_le_one₀ hxi0 hxi1
   calc
     _ ≤ (Matrix.schmidtRank (WithLp.ofLp
-        (Entropy.cutVector (n := fun _ : interval L p r ↦ q)
+        (ManyBody.cutVector (X := fun _ ↦ Fin q)
           (intervalTrimCut L p r j) (b i))) : ℝ) := by
       simpa only [one_mul] using mul_le_mul_of_nonneg_right hxiSq
         (Nat.cast_nonneg (Matrix.schmidtRank (WithLp.ofLp
-          (Entropy.cutVector (n := fun _ : interval L p r ↦ q)
+          (ManyBody.cutVector (X := fun _ ↦ Fin q)
             (intervalTrimCut L p r j) (b i)))))
     _ ≤ count := by exact_mod_cast hrank.trans hcount
 

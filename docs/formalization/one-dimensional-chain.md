@@ -17,7 +17,7 @@ dimension `q`, supports of range `R` (nonempty sets of sites of diameter at most
 `R`), one Hermitian term of norm at most `J` per support acting as the identity
 off its support, and a unit vector spanning the ground space of a gapped
 Hamiltonian (`ManyBody.IsGapped` and `ManyBody.groundSpace`). Regional entropies are QICLean's
-`Entropy.regionEntropy`. The chain proof uses only the site-generic layer
+`ManyBody.regionEntropy`. The chain proof uses only the site-generic layer
 `TNLean/Lattice/` and QICLean: no module of `TNLean/MPS/AreaLaw/` imports
 `TNLean.PEPS`, directly or transitively. The two finite-dimensional cores (the
 marginal tail bound `Entropy.surprisalTail_cut_le` and the buffered discount
@@ -154,10 +154,11 @@ graph distance across holes in a disconnected domain.
 
 The matrix-entry condition for support is the carrier of the
 supported-operator algebra `ManyBody.supportedOperators` of QICLean. The paired two-copy construction
-`ManyBody.ChainInteraction.doubled` keeps the same physical supports and
-has local dimension q² and term bound 2J. The equality
-`ManyBody.ChainInteraction.doubled_hamiltonian` identifies its sum exactly
-with H⊗1+1⊗H in paired coordinates.
+`ManyBody.Interaction.doubledFin`, the relabelling of the QICLean doubled
+interaction `ManyBody.Interaction.doubled` along the pairing of the two local
+values, keeps the same physical supports and has local dimension q² and term
+bound 2J. The equality `ManyBody.Interaction.hamiltonian_doubledFin` identifies
+its sum exactly with H⊗1+1⊗H in paired coordinates.
 
 On a contiguous chain, `MPS.AreaLaw.norm_heisenberg_commutator_le_chainDistance`
 and `MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_chainNeighborhood_le`

@@ -72,33 +72,33 @@ theorem regionEntropy_biUnion_neighborhood_intervals_le
     {L q : ℕ} {κ : Type*}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) {c : ℝ}
     (hI : ∀ a z : ℕ,
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a z) Ω ≤ c)
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L a z) ≤ c)
     (g : Fin L → Finset (Fin L))
     (hg : ∀ a z : ℕ, ∃ u v : ℕ, (interval L a z).biUnion g = interval L u v)
     (s : Finset κ) (a z : κ → ℕ) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
-      ((s.biUnion (fun i ↦ interval L (a i) (z i))).biUnion g) Ω ≤ (s.card : ℝ) * c := by
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+      Ω ((s.biUnion (fun i ↦ interval L (a i) (z i))).biUnion g) ≤ (s.card : ℝ) * c := by
   classical
   have hn (X : Finset (Fin L)) :
-      0 ≤ Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω :=
+      0 ≤ ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω X :=
     vonNeumannEntropy_nonneg_of_posSemidef_trace_one
-      (Entropy.regionState_posSemidef X Ω) (Entropy.trace_regionState_eq_one hΩ)
+      (ManyBody.regionState_posSemidef X Ω) (ManyBody.trace_regionState_eq_one hΩ)
   have hsub (X Y : Finset (Fin L)) :
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (X ∪ Y) Ω ≤
-        Entropy.regionEntropy X Ω + Entropy.regionEntropy Y Ω := by
-    linarith [TNLean.Lattice.regionEntropy_union_add_inter_le (Ω := Ω) X Y, hn (X ∩ Y)]
-  have hsum : Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
-      (s.biUnion (fun i ↦ (interval L (a i) (z i)).biUnion g)) Ω ≤
-      ∑ i ∈ s, Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
-        ((interval L (a i) (z i)).biUnion g) Ω := by
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (X ∪ Y) ≤
+        ManyBody.regionEntropy Ω X + ManyBody.regionEntropy Ω Y := by
+    linarith [ManyBody.regionEntropy_submodular _ Ω X Y, hn (X ∩ Y)]
+  have hsum : ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+      Ω (s.biUnion (fun i ↦ (interval L (a i) (z i)).biUnion g)) ≤
+      ∑ i ∈ s, ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+        Ω ((interval L (a i) (z i)).biUnion g) := by
     simpa only [Finset.sup_eq_biUnion] using
       (Finset.apply_sup_le_sum
         (f := fun X : Finset (Fin L) ↦
-          Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω)
-        (TNLean.Lattice.regionEntropy_empty hΩ) (fun {X Y} ↦ hsub X Y)
+          ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω X)
+        (ManyBody.regionEntropy_empty _ Ω hΩ) (fun {X Y} ↦ hsub X Y)
         (s := fun i ↦ (interval L (a i) (z i)).biUnion g) s)
-  have hNi (i : κ) : Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
-      ((interval L (a i) (z i)).biUnion g) Ω ≤ c := by
+  have hNi (i : κ) : ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+      Ω ((interval L (a i) (z i)).biUnion g) ≤ c := by
     obtain ⟨u, v, hgeo⟩ := hg (a i) (z i)
     simpa only [hgeo] using hI u v
   simpa only [Finset.biUnion_biUnion, Finset.sum_const, nsmul_eq_mul] using
@@ -112,10 +112,10 @@ theorem regionEntropy_chainNeighborhood_biUnion_intervals_le
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {c : ℝ}
     (hI : ∀ a z : ℕ,
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a z) Ω ≤ c)
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L a z) ≤ c)
     (s : Finset κ) (a z : κ → ℕ) (ρ : ℝ) (hρ : 0 ≤ ρ) :
     let T := s.biUnion (fun i ↦ interval L (a i) (z i))
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (chainNeighborhood T ρ) Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (chainNeighborhood T ρ) ≤
       (s.card : ℝ) * c := by
   classical
   have hN (S : Finset (Fin L)) :

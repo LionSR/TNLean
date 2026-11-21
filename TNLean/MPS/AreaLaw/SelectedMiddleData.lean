@@ -135,7 +135,7 @@ Proposition 5.7, lines 1324–1333. No positive-dimension premise is required. -
 private theorem mem_span_embedOp_single_of_isSupportedOn_singleton
     {E : Type*} [Fintype E] [DecidableEq E] {q : ℕ} (e₀ : E)
     (W : Matrix (E → Fin q) (E → Fin q) ℂ)
-    (hW : Entropy.IsSupportedOn (n := fun _ : E ↦ q) W {e₀}) :
+    (hW : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) W {e₀}) :
     let N : Fin (q * q) → Matrix (E → Fin q) (E → Fin q) ℂ := fun z ↦
       embedOp (fun _ : Fin 1 ↦ e₀)
         (Matrix.single
@@ -153,14 +153,13 @@ private theorem mem_span_embedOp_single_of_isSupportedOn_singleton
     exact zero_mem _
   · let e : Fin 1 → E := fun _ ↦ e₀
     let S : Finset E := {e₀}
-    let σ₀ : E → Fin q := fun _ ↦ ⟨0, Nat.pos_of_ne_zero hq⟩
-    obtain ⟨K, hK⟩ := hW.exists_localLift σ₀
+    obtain ⟨K, hK⟩ := ManyBody.exists_eq_place_of_mem_supportedOperators hW
     let X : Matrix (Fin 1 → Fin q) (Fin 1 → Fin q) ℂ :=
       fun x y ↦ K (fun _ ↦ x 0) (fun _ ↦ y 0)
-    have hembed : Entropy.localLift (n := fun _ ↦ q) S K =
+    have hembed : ManyBody.place (X := fun _ ↦ Fin q) S K =
         embedOp (Subtype.val : ↥S → E) K := by
       ext σ τ
-      rw [Entropy.localLift_apply, embedOp_apply]
+      rw [ManyBody.place_apply, embedOp_apply]
       congr 1
       simp only [AgreeOff, eq_iff_iff]
       constructor
@@ -226,7 +225,7 @@ private theorem exists_left_crossing_factors_with_fixed_middle_units
     {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
     (T E D : Finset V) (hTE : Disjoint T E)
     (P : Matrix (V → Fin q) (V → Fin q) ℂ)
-    (hP : Entropy.IsSupportedOn (n := fun _ : V ↦ q) P D)
+    (hP : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) P D)
     (UL : Matrix ((T → Fin q) × (E → Fin q))
       ((T → Fin q) × (E → Fin q)) ℂ)
     (hUL : P.submatrix (threeSplit q T E hTE).symm
@@ -258,7 +257,7 @@ private theorem exists_right_crossing_factors_with_fixed_middle_units
     {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
     (T E D : Finset V) (hTE : Disjoint T E)
     (P : Matrix (V → Fin q) (V → Fin q) ℂ)
-    (hP : Entropy.IsSupportedOn (n := fun _ : V ↦ q) P D)
+    (hP : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) P D)
     (VR : Matrix ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
       ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
     (hVR : P.submatrix (threeSplit q T E hTE).symm
@@ -477,9 +476,9 @@ Proposition 5.7, lines 1324–1333. -/
 theorem exists_physical_selected_window_fixed_middle_data
     {L q ℓ a b : ℕ}
     (WL WR : Fin (2 * ℓ) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, Entropy.IsSupportedOn (WL r)
+    (hleft : ∀ r, ManyBody.IsSupportedOn (WL r)
       (interval L (a + r.val) (a + r.val + 2)))
-    (hright : ∀ r, Entropy.IsSupportedOn (WR r)
+    (hright : ∀ r, ManyBody.IsSupportedOn (WR r)
       (interval L (b + r.val) (b + r.val + 2)))
     (hab : a + 2 * ℓ ≤ b) (hb : b + 2 * ℓ ≤ L - 1)
     (p s : Fin (2 * ℓ))
@@ -525,15 +524,15 @@ theorem exists_physical_selected_window_fixed_middle_data
             (↥(T ∪ E)ᶜ → Fin q)).symm ∧
       UL = ∑ z, AL z ⊗ₖ N eL z ∧
       VR = ∑ z, N eR z ⊗ₖ BR z ∧
-      (∀ z, Entropy.IsSupportedOn (n := fun _ : E ↦ q) (N eL z) C) ∧
-      (∀ z, Entropy.IsSupportedOn (n := fun _ : E ↦ q) (N eR z) C) ∧
+      (∀ z, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (N eL z) C) ∧
+      (∀ z, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (N eR z) C) ∧
       (∀ z : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → ℂ,
         ∃ Kz : Matrix (E → Fin q) (E → Fin q) ℂ,
           (∑ i ∈ O, z i • HM i) = z (Sum.inr 1) • ME + Kz ∧
-            Entropy.IsSupportedOn (n := fun _ : E ↦ q) Kz C) ∧
+            ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) Kz C) ∧
       ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
-        Entropy.IsSupportedOn PR (interval L (b + 2 * ℓ) L) →
+        ManyBody.IsSupportedOn PL (interval L 0 (a + 1)) →
+        ManyBody.IsSupportedOn PR (interval L (b + 2 * ℓ) L) →
         let F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
             Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
@@ -621,7 +620,7 @@ theorem exists_physical_selected_window_fixed_middle_data
   obtain ⟨BR, hBR⟩ := exists_right_crossing_factors_with_fixed_middle_units
     T E (interval L (b + s.val) (b + s.val + 2)) hTE (WR s) (hright s) VR hVR eR hDER
   have hNsupport (e₀ : E) (he₀ : e₀ ∈ C) (z : Fin (q * q)) :
-      Entropy.IsSupportedOn (n := fun _ : E ↦ q) (N e₀ z) C := by
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (N e₀ z) C := by
     have hinj : Function.Injective (fun _ : Fin 1 ↦ e₀) :=
       fun _ _ _ ↦ Subsingleton.elim _ _
     have hmem : N e₀ z ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({e₀} : Finset E) := by
@@ -630,12 +629,12 @@ theorem exists_physical_selected_window_fixed_middle_data
           (Matrix.single
             (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).1)
             (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).2) (1 : ℂ))
-    exact Entropy.IsSupportedOn.mono hmem
+    exact ManyBody.IsSupportedOn.mono hmem
       (Finset.singleton_subset_iff.mpr he₀)
   have hweighted : ∀ z : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → ℂ,
       ∃ Kz : Matrix (E → Fin q) (E → Fin q) ℂ,
         (∑ i ∈ O, z i • HM i) = z (Sum.inr 1) • ME + Kz ∧
-          Entropy.IsSupportedOn (n := fun _ : E ↦ q) Kz C := by
+          ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) Kz C := by
     intro z
     obtain ⟨Kz, hKz, hKsupport⟩ :=
       exists_weighted_ordinary_middle_eq_central_add_supported HM p s z C

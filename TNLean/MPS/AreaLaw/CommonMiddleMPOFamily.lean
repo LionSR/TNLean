@@ -147,9 +147,9 @@ private theorem selected_middle_fixed_mpo_family
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
     (p s : Fin (2 * ell)) (hq : 0 < q)
     (V : ι → Matrix
-      (FiniteProduct.Configuration (fun _ : Fin L ↦ Fin q)
+      (ManyBody.RegionConfig (fun _ : Fin L ↦ Fin q)
         (interval L (a + p.val + 1) (b + s.val + 1)))
-      (FiniteProduct.Configuration (fun _ : Fin L ↦ Fin q)
+      (ManyBody.RegionConfig (fun _ : Fin L ↦ Fin q)
         (interval L (a + p.val + 1) (b + s.val + 1))) ℂ)
     (D : ι → ℕ)
     (hV : ∀ t,
@@ -164,8 +164,8 @@ private theorem selected_middle_fixed_mpo_family
     let J := interval L (a + ell) (b + ell + 1)
     let A := E \ J
     let B := J \ E
-    let I := ι × (FiniteProduct.Configuration β A × FiniteProduct.Configuration β A) ×
-      (FiniteProduct.Configuration β B × FiniteProduct.Configuration β B)
+    let I := ι × (ManyBody.RegionConfig β A × ManyBody.RegionConfig β A) ×
+      (ManyBody.RegionConfig β B × ManyBody.RegionConfig β B)
     let W := FiniteProduct.changingRegionalMiddleFamily β E J V
     let eJ := intervalShiftOrderIso
       ((selected_middle_fixed_interval_bounds hab hb p s).2.2.1)
@@ -175,16 +175,16 @@ private theorem selected_middle_fixed_mpo_family
           (max 1 (D r.1)) (fun x ↦
         W r (fun z ↦ (finProdFinEquiv.symm (x (eJ.symm z))).1)
           (fun z ↦ (finProdFinEquiv.symm (x (eJ.symm z))).2))) ∧
-      ∀ M : ι → Matrix (FiniteProduct.Configuration β Eᶜ)
-          (FiniteProduct.Configuration β Eᶜ) ℂ,
-        ∃ Mnew : I → Matrix (FiniteProduct.Configuration β Jᶜ)
-            (FiniteProduct.Configuration β Jᶜ) ℂ,
+      ∀ M : ι → Matrix (ManyBody.RegionConfig β Eᶜ)
+          (ManyBody.RegionConfig β Eᶜ) ℂ,
+        ∃ Mnew : I → Matrix (ManyBody.RegionConfig β Jᶜ)
+            (ManyBody.RegionConfig β Jᶜ) ℂ,
           (∑ t, M t ⊗ₖ V t).submatrix
-            ((FiniteProduct.splitEquiv β E).trans (Equiv.prodComm _ _))
-            ((FiniteProduct.splitEquiv β E).trans (Equiv.prodComm _ _)) =
+            ((ManyBody.splitEquiv β E).trans (Equiv.prodComm _ _))
+            ((ManyBody.splitEquiv β E).trans (Equiv.prodComm _ _)) =
           (∑ r, Mnew r ⊗ₖ W r).submatrix
-            ((FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _))
-            ((FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
+            ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
+            ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
   have hbounds := selected_middle_fixed_interval_bounds hab hb p s
   obtain ⟨_hcard, hW, hglobal⟩ :=
     changingRegionalMiddleFamily_mpo_and_global_decomposition hq
@@ -209,9 +209,9 @@ source-sharp bond bound or algorithmic assertion. -/
 private noncomputable def actualCommonFixedMiddleMPOFamilyStatement
     {L q ell a b B : ℕ}
     (WL WR : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (_hleft : ∀ r, Entropy.IsSupportedOn (WL r)
+    (_hleft : ∀ r, ManyBody.IsSupportedOn (WL r)
       (interval L (a + r.val) (a + r.val + 2)))
-    (_hright : ∀ r, Entropy.IsSupportedOn (WR r)
+    (_hright : ∀ r, ManyBody.IsSupportedOn (WR r)
       (interval L (b + r.val) (b + r.val + 2)))
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
     (p s : Fin (2 * ell)) (_hq : 0 < q)
@@ -249,8 +249,8 @@ private noncomputable def actualCommonFixedMiddleMPOFamilyStatement
     let Vphys := fun r ↦ (V r).submatrix (fun σ : E → Fin q ↦ σ ∘ eE)
       (fun σ : E → Fin q ↦ σ ∘ eE)
     let I := Fin n ×
-      (FiniteProduct.Configuration β (E \ J) × FiniteProduct.Configuration β (E \ J)) ×
-      (FiniteProduct.Configuration β (J \ E) × FiniteProduct.Configuration β (J \ E))
+      (ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E \ J)) ×
+      (ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (J \ E))
     let W := FiniteProduct.changingRegionalMiddleFamily β E J Vphys
     Fintype.card I ≤ oldBound * q ^ (4 * ell) ∧
       (∀ r : I, IsOpenMPS ((b + ell + 1) - (a + ell)) (q * q)
@@ -263,20 +263,20 @@ private noncomputable def actualCommonFixedMiddleMPOFamilyStatement
           (W r).submatrix (fun σ z ↦ σ (eJ.symm z))
             (fun σ z ↦ σ (eJ.symm z)) = MPOTensor.traceChainOperator Ar Cr) ∧
       ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
-        Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
+        ManyBody.IsSupportedOn PL (interval L 0 (a + 1)) →
+        ManyBody.IsSupportedOn PR (interval L (b + 2 * ell) L) →
         let F : ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) →
             Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
         let Dphys := ∑ t ∈ O, z t • F t
         ∀ cPoly : Fin (k + 1) → ℂ,
-          ∃ Mnew : I → Matrix (FiniteProduct.Configuration β Jᶜ)
-              (FiniteProduct.Configuration β Jᶜ) ℂ,
+          ∃ Mnew : I → Matrix (ManyBody.RegionConfig β Jᶜ)
+              (ManyBody.RegionConfig β Jᶜ) ℂ,
             (∑ r : Fin (k + 1),
               cPoly r • twoMarkerCoefficient Dphys (WL p) (WR s) r.val i j) =
                 (∑ r, Mnew r ⊗ₖ W r).submatrix
-                  ((FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _))
-                  ((FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _))
+                  ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
+                  ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
 
 /-- The actual coefficient family admits a single decomposition over the
 prescribed middle and its actual complement. The original two-window
@@ -290,9 +290,9 @@ estimate or running-time bound is asserted. -/
 private theorem exists_common_fixed_middle_twoMarkerCoefficient_mpo_family
     {L q ell a b B : ℕ}
     (WL WR : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, Entropy.IsSupportedOn (WL r)
+    (hleft : ∀ r, ManyBody.IsSupportedOn (WL r)
       (interval L (a + r.val) (a + r.val + 2)))
-    (hright : ∀ r, Entropy.IsSupportedOn (WR r)
+    (hright : ∀ r, ManyBody.IsSupportedOn (WR r)
       (interval L (b + r.val) (b + r.val + 2)))
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
     (p s : Fin (2 * ell)) (hq : 0 < q)
@@ -337,8 +337,8 @@ private theorem exists_common_fixed_middle_twoMarkerCoefficient_mpo_family
   let Vphys := fun r ↦ (V r).submatrix (fun σ : E → Fin q ↦ σ ∘ eE)
     (fun σ : E → Fin q ↦ σ ∘ eE)
   let I := Fin n ×
-    (FiniteProduct.Configuration β (E \ J) × FiniteProduct.Configuration β (E \ J)) ×
-    (FiniteProduct.Configuration β (J \ E) × FiniteProduct.Configuration β (J \ E))
+    (ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E \ J)) ×
+    (ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (J \ E))
   let W := FiniteProduct.changingRegionalMiddleFamily β E J Vphys
   have hcancel (σ : Fin Nnat → Fin q) : (σ ∘ eE.symm) ∘ eE = σ := by
     funext v
@@ -473,9 +473,9 @@ or running-time bound is asserted. -/
 theorem exists_common_fixed_middle_grid_mpo_family
     {ζ : Type*} [Fintype ζ] {L q ell a b B : ℕ}
     (WL WR : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, Entropy.IsSupportedOn (WL r)
+    (hleft : ∀ r, ManyBody.IsSupportedOn (WL r)
       (interval L (a + r.val) (a + r.val + 2)))
-    (hright : ∀ r, Entropy.IsSupportedOn (WR r)
+    (hright : ∀ r, ManyBody.IsSupportedOn (WR r)
       (interval L (b + r.val) (b + r.val + 2)))
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
     (p s : Fin (2 * ell)) (hq : 0 < q)
@@ -513,8 +513,8 @@ theorem exists_common_fixed_middle_grid_mpo_family
     let Vphys := fun (u : ζ) r ↦ (V u r).submatrix
       (fun σ : E → Fin q ↦ σ ∘ eE) (fun σ : E → Fin q ↦ σ ∘ eE)
     let I := fun u : ζ ↦ Fin (n u) ×
-      (FiniteProduct.Configuration β (E \ J) × FiniteProduct.Configuration β (E \ J)) ×
-      (FiniteProduct.Configuration β (J \ E) × FiniteProduct.Configuration β (J \ E))
+      (ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E \ J)) ×
+      (ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (J \ E))
     let W := fun u : ζ ↦ FiniteProduct.changingRegionalMiddleFamily β E J (Vphys u)
     let Iall := Σ u : ζ, I u
     let Wall := fun r : Iall ↦ W r.1 r.2
@@ -529,20 +529,20 @@ theorem exists_common_fixed_middle_grid_mpo_family
           (Wall r).submatrix (fun σ z ↦ σ (eJ.symm z))
             (fun σ z ↦ σ (eJ.symm z)) = MPOTensor.traceChainOperator Ar Cr) ∧
       ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
-        Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
+        ManyBody.IsSupportedOn PL (interval L 0 (a + 1)) →
+        ManyBody.IsSupportedOn PR (interval L (b + 2 * ell) L) →
         let F : ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) →
             Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
         let Dphys := fun u : ζ ↦ ∑ t ∈ O, z u t • F t
         ∀ c : ζ → Fin (k + 1) → ℂ,
-          ∃ M : Iall → Matrix (FiniteProduct.Configuration β Jᶜ)
-              (FiniteProduct.Configuration β Jᶜ) ℂ,
+          ∃ M : Iall → Matrix (ManyBody.RegionConfig β Jᶜ)
+              (ManyBody.RegionConfig β Jᶜ) ℂ,
             (∑ u : ζ, ∑ r : Fin (k + 1),
               c u r • twoMarkerCoefficient (Dphys u) (WL p) (WR s) r.val i j) =
                 (∑ r, M r ⊗ₖ Wall r).submatrix
-                  ((FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _))
-                  ((FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
+                  ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
+                  ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
   classical
   let Ksites := interval L (a + 2 * ell) (b + 1)
   let E := interval L (a + p.val + 1) (b + s.val + 1)
@@ -575,8 +575,8 @@ theorem exists_common_fixed_middle_grid_mpo_family
   let Vphys := fun (u : ζ) r ↦ (V u r).submatrix
     (fun σ : E → Fin q ↦ σ ∘ eE) (fun σ : E → Fin q ↦ σ ∘ eE)
   let I := fun u : ζ ↦ Fin (n u) ×
-    (FiniteProduct.Configuration β (E \ J) × FiniteProduct.Configuration β (E \ J)) ×
-    (FiniteProduct.Configuration β (J \ E) × FiniteProduct.Configuration β (J \ E))
+    (ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E \ J)) ×
+    (ManyBody.RegionConfig β (J \ E) × ManyBody.RegionConfig β (J \ E))
   let W := fun u : ζ ↦ FiniteProduct.changingRegionalMiddleFamily β E J (Vphys u)
   let Iall := Σ u : ζ, I u
   let Wall := fun r : Iall ↦ W r.1 r.2
@@ -615,8 +615,8 @@ theorem exists_common_fixed_middle_grid_mpo_family
     (∑ u : ζ, ∑ r : Fin (k + 1),
       c u r • twoMarkerCoefficient (Dphys u) (WL p) (WR s) r.val i j) =
         ∑ u : ζ, (∑ r : I u, M u r ⊗ₖ W u r).submatrix
-          ((FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _))
-          ((FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
+          ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
+          ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
       apply Finset.sum_congr rfl
       intro u _hu
       exact hM u

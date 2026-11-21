@@ -625,9 +625,9 @@ abstracted — record why, so it is not re-proposed).
   `MPS/AreaLaw/Hamiltonian.lean`; all three arguments use this lemma.
   For finite induced domains, `ManyBody.DomainInteraction.norm_bound_nonneg` in
   `MPS/AreaLaw/DomainInteractionBudget.lean` uses the admissible singleton
-  and is reused by the domain per-site budget. The domain doubled, swapped
-  and per-replica perturbation proofs also use it at a member of each
-  original nonempty support.
+  and is reused by the domain per-site budget. The domain swapped and
+  per-replica perturbation proofs also use it at a member of each original
+  nonempty support.
 - **Notes:** An actual site is essential. The empty-chain branch retains
   the original real interaction bound. No positivity hypothesis on the
   interaction bound is added to the logarithmic-separation theorem.
@@ -1134,7 +1134,8 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** the three call sites were refactored on 2026-10-10. The open-chain variant in
   `CompactOpenParentGap.lean` fixes the tail at `R ≤ N` and the kernel-gap lemma in
   `CompactKernelGap.lean` has no tail, so both keep the direct call to
-  `exists_uniform_pos_nat_bounds`.
+  `exists_uniform_pos_nat_bounds`, now in QICLean
+  (`QICLean/Topology/CompactUniformBounds.lean`).
 
 ### Remainder-absorbing block lengths — promoted (2026-10-10)
 
@@ -4340,8 +4341,8 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** The anchored theorem
   `heisenberg_commutator_eq_zero_of_edist_eq_top`, the infinite-distance branch of
   `norm_heisenberg_commutator_le_graph_kernel_sum` in `GraphLocalization.lean`,
-  and `MPS/AreaLaw/LiebRobinson.lean`,
-  `norm_heisenberg_commutator_le_graphDistance_inf`.
+  and `norm_heisenberg_commutator_le_graphDistance_inf`, formerly in
+  `MPS/AreaLaw/LiebRobinson.lean` and now in QICLean's `GraphPropagation.lean`.
 - **Notes:** Both existing closed-region arguments and the finite-domain
   specialization use the shared theorem. The existing public statements are
   retained. No tactic or global attribute is introduced.
@@ -5671,8 +5672,8 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Existing lemmas:** `Nat.lt_floor_add_one`, `Nat.floor_lt`,
   `Real.exp_le_exp` and `Real.exp_add`.
 - **Notes:** Both occurrences now go through the one graph localization
-  theorem `norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_two`
-  in `MPS/AreaLaw/LiebRobinson.lean`, so the rounding step occurs once. A new
+  theorem `ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_two`
+  in QICLean's `ManyBody/Dynamics/GraphLocalization.lean`, so the rounding step occurs once. A new
   occurrence elsewhere would warrant extracting the scalar inequality.
 
 ### Restricting an operator Schmidt decomposition at a fixed configuration — candidate (2026-10-23)
@@ -5956,14 +5957,17 @@ no additional helper is proposed.
 - **Pattern:** Transport membership in a supported-operator algebra through the
   site bijection, replace the resulting embedding by matrix reindexing, and
   identify the image support.
-- **Seen:** 2 occurrences: `ManyBody.RectangleInteraction.toAreaLawHamiltonian` in
-  `PEPS/AreaLaw/RectangularHamiltonian.lean` and
-  `ManyBody.SquareInteraction.exists_nearestNeighbor_terms` in
-  `PEPS/Approximation/SquareInteractionTerms.lean`.
-- **Abstraction:** The existing `embedOp_mem_supportedOperators_image` and
-  `embedOp_rectangular_eq_reindex` perform the two transports. At a third
-  occurrence, consider a lemma giving the reindexed Hermitian term's
-  supported-operator membership directly.
+- **Seen:** 2 occurrences: `ManyBody.SquareInteraction.exists_nearestNeighbor_terms` in
+  `PEPS/Approximation/SquareInteractionTerms.lean` and
+  `ManyBody.SquareInteraction.exists_swapped_doubled_planeInteraction` in
+  `PEPS/Approximation/SwappedSquareHamiltonianInteraction.lean`; the range-one
+  interaction itself is QICLean's `ManyBody.RectangleInteraction.toPlaneInteraction`.
+- **Abstraction:** QICLean's `ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators`
+  with `ManyBody.mem_rectangleSupport_iff` performs the transport, and
+  `TNLean.PEPS.AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv` rewrites the
+  configuration bijection to `rectangleConfigurationEquiv`. At a third
+  occurrence, consider a lemma giving the reindexed term's supported-operator
+  membership directly.
 - **Notes:** The second occurrence also relabels sites and edges. The support
   identity already handles the arbitrary order on the rectangle sites;
   no order-preserving assumption should enter a shared lemma.
@@ -9046,9 +9050,9 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 ### Physical regional density as a tensor-factor partial trace — candidate (2026-10-11)
 
-- **Pattern:** Compose `reducedState_eq_finiteProduct` with
-  `FiniteProduct.reducedPure_eq_partialTrace` after splitting a physical state
-  into the selected region and its complement.
+- **Pattern:** Apply `ManyBody.regionState_eq_partialTrace` after splitting a physical
+  state into the selected region and its complement (before step 4.0 this was
+  composed with a bridge between two regional states, now deleted).
 - **Seen:** Two occurrences in `PEPS/AreaLaw/SelectedSchmidtEntropyBounds.lean`
   and `PEPS/AreaLaw/Scan/TypicalReplicaAbsorption.lean`.
 - **Abstraction:** A regional-density identity could package the composition
@@ -9738,8 +9742,8 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** `norm_heisenberg_commutator_le_chainDistance` and
   `norm_heisenberg_commutator_le_domainDistance`, formerly proved separately
   in `MPS/AreaLaw/LiebRobinson.lean` and `MPS/AreaLaw/DomainLiebRobinson.lean`.
-- **Abstraction:** `norm_heisenberg_commutator_le_graphDistance_inf` in
-  `MPS/AreaLaw/LiebRobinson.lean`, for an arbitrary finite graph; infinite
+- **Abstraction:** `ManyBody.norm_heisenberg_commutator_le_graphDistance_inf` in
+  QICLean's `ManyBody/Dynamics/GraphPropagation.lean`, for an arbitrary finite graph; infinite
   distance uses exact commutation across components, which also covers the
   connected path. Both estimates are now its specializations.
 
@@ -10231,7 +10235,9 @@ there is no need for a new tactic.
 
 ### Pure output Gram projection — library zero criterion (2026-10-29)
 
-- **Seen:** `Circuit/Channel/PhysicalPortPureOutput.lean`.
+- **Seen:** `Circuit/Channel/PhysicalPortPureOutput.lean`; moved to QICLean, where
+  the exact case is `QuantumCircuit.Circuit.exists_unit_product_approx` at `ε = 0`
+  in `QICLean/Circuit/Compile/DilationOutput.lean`.
 - **Pattern:** A pure marginal gives C*C†=P with P²=P; derive that every
   actual output column is fixed by P before extracting its environment factor.
 - **Reuse:** Mathlib's `Matrix.mul_self_mul_conjTranspose_eq_zero` turns
@@ -11775,10 +11781,11 @@ removed after the dependency audit exposed it.
   proof copy, without duplicating a generic channel contractivity theory.
 
 
-### Pure output under an explicit product code — candidate (2026-10-29)
+### Pure output under an explicit product code — retired (2026-10-29)
 
 - **Seen:** the local `hPure` facts in `Circuit/Channel/BoundedPortPureOutput.lean`
-  and `Circuit/Channel/BoundedPortApproximateOutput.lean`.
+  and `Circuit/Channel/BoundedPortApproximateOutput.lean`. Both modules were
+  deleted when the port chain moved to QICLean, so no occurrence remains.
 - **Pattern:** identify the actual initialized pure projector with the projector
   of its encoded vector using `Matrix.mul_vecMulVec`, `Matrix.vecMulVec_mul`
   and `Matrix.star_mulVec`; normalize the target through the code isometry.

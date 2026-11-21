@@ -64,10 +64,10 @@ theorem mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt
           ∀ (E : Finset (Vertex L)) (b₀ : ℝ),
             (∀ x ∈ selectedRegion o s r A, ∀ v ∈ E,
               c * s ≤ dist x (sitePosition L v)) →
-            FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q) Ω
+            ManyBody.regionMutualInformation Ω
               (Finset.univ.filter
                 (fun v ↦ sitePosition L v ∈ selectedRegion o s r Aold)) E ≤ b₀ →
-            FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q) Ω
+            ManyBody.regionMutualInformation Ω
               (Finset.univ.filter
                 (fun v ↦ sitePosition L v ∈ selectedRegion o s r A)) E ≤
               b₀ + (S.card : ℝ) * (cellInformationConstant q c Ctpl N Ca Na *
@@ -107,10 +107,10 @@ theorem exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBoun
             ∀ (E : Finset (Vertex L)) (b₀ : ℝ),
               (∀ x ∈ selectedRegion o s r A, ∀ v ∈ E,
                 c * s ≤ dist x (sitePosition L v)) →
-              FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q) Ω
+              ManyBody.regionMutualInformation Ω
                 (Finset.univ.filter
                   (fun v ↦ sitePosition L v ∈ selectedRegion o s r Aold)) E ≤ b₀ →
-              FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q) Ω
+              ManyBody.regionMutualInformation Ω
                 (Finset.univ.filter
                   (fun v ↦ sitePosition L v ∈ selectedRegion o s r A)) E ≤
                 b₀ + (S.card : ℝ) * (C₁ * (1 + Real.log s) ^ K)

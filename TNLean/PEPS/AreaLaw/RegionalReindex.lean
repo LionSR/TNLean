@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.RegionalEntropyBridge
+import TNLean.Lattice.MarginalTails
+import QICLean.Entropy.RegionEntropy
+import QICLean.Entropy.RegionUnion
 import QICLean.Entropy.RegionCovariance
 
 /-!
@@ -18,7 +20,7 @@ adjacency is required for these finite-dimensional identities.
 The statements are the constant-dimension case of QICLean's covariance of
 regional states under bijections of tensor factors
 (`Entropy.regionState_relabel`, `Entropy.regionEntropy_relabel`), with every
-basis bijection the identity, read through `reducedState_eq_regionState`.
+basis bijection the identity.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 2 (`sec:prelim`), lines 10–25, finite tensor-factor
@@ -55,11 +57,10 @@ theorem reducedState_relabel {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
     (A : Finset (Site Λ)) (A' : Finset (Site Λ'))
     (e : Site Λ ≃ Site Λ') (hA : ∀ x, x ∈ A ↔ e x ∈ A')
     (Ω : StateSpace Λ q) :
-    reducedState Λ' q (relabelState q e Ω) A' =
-      (reducedState Λ q Ω A).submatrix
+    ManyBody.regionState (relabelState q e Ω) A' =
+      (ManyBody.regionState Ω A).submatrix
         (regionConfigurationEquiv q A A' e hA).symm
         (regionConfigurationEquiv q A A' e hA).symm := by
-  rw [reducedState_eq_regionState, reducedState_eq_regionState]
   exact Entropy.regionState_relabel (n := fun _ ↦ q) (n' := fun _ ↦ q) A A' e hA
     (fun _ ↦ Equiv.refl _) Ω
 
@@ -69,8 +70,7 @@ theorem regionalEntropy_relabel {Λ Λ' : Finset (ℤ × ℤ)} (q : ℕ)
     (A : Finset (Site Λ)) (A' : Finset (Site Λ'))
     (e : Site Λ ≃ Site Λ') (hA : ∀ x, x ∈ A ↔ e x ∈ A')
     (Ω : StateSpace Λ q) :
-    regionalEntropy Λ' q (relabelState q e Ω) A' = regionalEntropy Λ q Ω A := by
-  rw [regionalEntropy_eq_regionEntropy, regionalEntropy_eq_regionEntropy]
+    ManyBody.regionEntropy (relabelState q e Ω) A' = ManyBody.regionEntropy Ω A := by
   exact Entropy.regionEntropy_relabel (n := fun _ ↦ q) (n' := fun _ ↦ q) A A' e hA
     (fun _ ↦ Equiv.refl _) Ω
 

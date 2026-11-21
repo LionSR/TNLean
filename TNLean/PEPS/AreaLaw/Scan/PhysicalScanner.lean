@@ -140,8 +140,8 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
           ((2 * X.L n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-        regionalEntropy Λ q Ω (S.target T) ≤ κ.Ce * (n : ℝ) ^ (1 + X.e) →
-        (∀ j ≤ X.L n, regionalEntropy Λ q Ω (S.shell T j) ≤
+        ManyBody.regionEntropy Ω (S.target T) ≤ κ.Ce * (n : ℝ) ^ (1 + X.e) →
+        (∀ j ≤ X.L n, ManyBody.regionEntropy Ω (S.shell T j) ≤
           κ.Ce * (n * (X.L n : ℝ) ^ X.e + n)) →
         let B : Finset (Site Λ) → ℝ :=
           fun Y ↦ cutBudget q S.graph (S.truncationSet (X.L n)) S.r₀ S.anchor Y
@@ -151,23 +151,23 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
           (∀ (Y : Finset (Site Λ)) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / κ.g) (B Y) →
             Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt Y).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt Y + 512 * Real.exp 1 * (2 / κ.g) * B Y * u ^ 2) ∧
+              (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
+              u * ManyBody.regionEntropy Ωt Y + 512 * Real.exp 1 * (2 / κ.g) * B Y * u ^ 2) ∧
           ∃ Tr : ScanTruncation X κ n,
             Tr.E0 = e ∧ Tr.gap = κ.g / 2 ∧
-            Tr.SX = regionalEntropy Λ q Ω (S.target T) ∧
-            Tr.SXt = regionalEntropy Λ q Ωt (S.target T) ∧
-            Tr.SQ = (fun j ↦ regionalEntropy Λ q Ω (S.shell T j)) ∧
-            Tr.SQt = (fun j ↦ regionalEntropy Λ q Ωt (S.shell T j)) ∧
+            Tr.SX = ManyBody.regionEntropy Ω (S.target T) ∧
+            Tr.SXt = ManyBody.regionEntropy Ωt (S.target T) ∧
+            Tr.SQ = (fun j ↦ ManyBody.regionEntropy Ω (S.shell T j)) ∧
+            Tr.SQt = (fun j ↦ ManyBody.regionEntropy Ωt (S.shell T j)) ∧
             Tr.traceDist = Matrix.traceDistance
               (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
               (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ∧
-            Tr.z = (reducedState_isHermitian Λ q Ωt (S.target T)).spectralRestrictionMass
-              (Entropy.typicalSet (reducedState_isHermitian Λ q Ωt (S.target T)).eigenvalues
-                (regionalEntropy Λ q Ωt (S.target T)) Tr.width) ∧
+            Tr.z = (ManyBody.regionState_isHermitian (S.target T) Ωt).spectralRestrictionMass
+              (Entropy.typicalSet (ManyBody.regionState_isHermitian (S.target T) Ωt).eigenvalues
+                (ManyBody.regionEntropy Ωt (S.target T)) Tr.width) ∧
             Tr.dstar = (Entropy.typicalSet
-              (reducedState_isHermitian Λ q Ωt (S.target T)).eigenvalues
-                (regionalEntropy Λ q Ωt (S.target T)) Tr.width).card ∧
+              (ManyBody.regionState_isHermitian (S.target T) Ωt).eigenvalues
+                (ManyBody.regionEntropy Ωt (S.target T)) Tr.width).card ∧
             (∀ (k : ℕ) (hist : History S.K S.m S.M k) (band : Fin S.K),
               (k ≤ S.n * S.m →
                 ∀ Q ∈ statusMarginalRegions S.depth (S.state hist band), B Q ≤ Tr.Bmarg) ∧
@@ -179,7 +179,7 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
               (pre : (k : ℕ) →
                 Config k (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) → ℂ),
               let round : Fin (X.rounds n) → ScanRound (AdmissibleSupport Λ R)
-                  (CoherentSphere (SiteConfig (augmentedDimensions (V := Site Λ) q aux))) :=
+                  (CoherentSphere (∀ v, Fin ((augmentedDimensions (V := Site Λ) q aux) v))) :=
                 fun r ↦ S.actualScanRound hm hM (augmentedDimensions (V := Site Λ) q aux)
                   (S.actualEnergyTerms h Ω J Δ (X.L n) aux) (X.a W n) pre r.val
               ∀ I : ScanInputs X κ n Tr round W,
@@ -226,7 +226,7 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
   let SD : ScanData X κ n :=
     { toScanTruncation := Tr
       ι := AdmissibleSupport Λ R
-      Θ := CoherentSphere (SiteConfig (augmentedDimensions (V := Site Λ) q aux))
+      Θ := CoherentSphere (∀ v, Fin ((augmentedDimensions (V := Site Λ) q aux) v))
       round := round
       W := W
       one_le_W := hW

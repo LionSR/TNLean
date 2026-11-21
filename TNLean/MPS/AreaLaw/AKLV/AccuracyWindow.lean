@@ -71,7 +71,7 @@ theorem exists_aklv_physical_accuracy_window :
       ∀ (L q k : ℕ) (_hq : 2 ≤ q) (_hk : k ≤ L)
         (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
       (∑ j, h j) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
@@ -102,7 +102,7 @@ theorem exists_aklv_physical_accuracy_window :
     have hx : ‖x‖ = 1 := (hinvariant 0).1
     have hxΩ : ‖x - Ω‖ ^ 2 ≤ 1 / 16 := by
       simpa only [(aklvSequenceWeight_zero_succ 0).1] using (hinvariant 0).2.1
-    have hxrank : schmidtRank (WithLp.ofLp (Entropy.cutVector (leftBlock L k) x)) ≤
+    have hxrank : schmidtRank (WithLp.ofLp (ManyBody.cutVector (leftBlock L k) x)) ≤
         (q * (s0 ^ 2 + 1)) ^ (32 * (2 * s0 + 1)) := by
       have hr := (hinvariant 0).2.2
       rw [(aklvSequenceRankBound_zero_succ q g s0 0).1, hcenter0] at hr

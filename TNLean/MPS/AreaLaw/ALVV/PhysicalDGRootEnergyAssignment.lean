@@ -43,7 +43,7 @@ theorem exists_canonical_interval_root_energy_assignment {L q ell D s : ℕ}
     (hq : 0 < q) (hell : 21 ≤ ell) (hD : 2 ≤ D)
     (hcount : 50 * ell ^ 2 ≤ D) (hsample : 1 ≤ s)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (T : LongIntervalIndex L (4 * ell) →

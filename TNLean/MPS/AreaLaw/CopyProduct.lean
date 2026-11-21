@@ -64,14 +64,14 @@ Source: arXiv:0705.0292v2, lines 421–470. -/
 theorem copyProduct_factors_at_boundary
     (η : Fin K → EuclideanSpace ℂ (Fin L → Fin q)) (t : ℕ) :
     ∃ (a : EuclideanSpace ℂ
-        (Entropy.RegionConfig (fun _ : Fin (K * L) ↦ q) (leftBlock (K * L) (t * L))))
+        (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock (K * L) (t * L))))
       (b : EuclideanSpace ℂ
         ((i : {i : Fin (K * L) // i ∉ leftBlock (K * L) (t * L)}) → Fin q)),
-      Entropy.cutVector (leftBlock (K * L) (t * L)) (copyProduct η) =
+      ManyBody.cutVector (leftBlock (K * L) (t * L)) (copyProduct η) =
         Matrix.euclideanTensorVector a b := by
   classical
   let a : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin (K * L) ↦ q) (leftBlock (K * L) (t * L))) :=
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock (K * L) (t * L))) :=
     WithLp.toLp 2 fun σ ↦ ∏ i : Fin K, if h : i.val < t then
       η i (fun j ↦ σ ⟨finProdFinEquiv (i, j), (copySite_mem_leftBlock_iff i j t).mpr h⟩)
     else 1
@@ -83,7 +83,7 @@ theorem copyProduct_factors_at_boundary
   refine ⟨a, b, ?_⟩
   ext xy
   change (∏ i : Fin K, η i (fun j ↦
-    (Entropy.cutEquiv (fun _ : Fin (K * L) ↦ q) (leftBlock (K * L) (t * L))).symm xy
+    (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock (K * L) (t * L))).symm xy
       (finProdFinEquiv (i, j)))) = _
   change _ = a xy.1 * b xy.2
   dsimp only [a, b]
@@ -94,12 +94,12 @@ theorem copyProduct_factors_at_boundary
   · simp only [dite_eq_left h, mul_one]
     apply congrArg (η i)
     funext j
-    exact Entropy.cutEquiv_symm_apply_mem (n := fun _ : Fin (K * L) ↦ q) xy.1 xy.2
+    exact ManyBody.cutEquiv_symm_apply_mem (X := fun _ ↦ Fin q) xy.1 xy.2
       ((copySite_mem_leftBlock_iff i j t).mpr h)
   · simp only [dite_eq_right h, one_mul]
     apply congrArg (η i)
     funext j
-    exact Entropy.cutEquiv_symm_apply_not_mem (n := fun _ : Fin (K * L) ↦ q) xy.1 xy.2
+    exact ManyBody.cutEquiv_symm_apply_not_mem (X := fun _ ↦ Fin q) xy.1 xy.2
       (fun hm ↦ h ((copySite_mem_leftBlock_iff i j t).mp hm))
 
 /-- Inner products of literal block products factor over the blocks. -/
@@ -125,7 +125,7 @@ theorem IsOpenMPS.exists_rank_one_at_copy_boundaries {D : ℕ}
   classical
   let S := (Finset.range (K + 1)).image (fun t ↦ t * L)
   have hf : ∀ k ∈ S,
-      ∃ a b, Entropy.cutVector (leftBlock (K * L) k) (copyProduct η) =
+      ∃ a b, ManyBody.cutVector (leftBlock (K * L) k) (copyProduct η) =
         Matrix.euclideanTensorVector a b := by
     intro k hk
     obtain ⟨t, _, rfl⟩ := Finset.mem_image.mp hk
@@ -254,9 +254,9 @@ private theorem cutMatrix_restrictions {T q : ℕ} (ψ : EuclideanSpace ℂ (Fin
   apply congrArg ψ
   funext i
   by_cases hi : i.val < k
-  · rw [Entropy.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr hi)]
+  · rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr hi)]
     simp [spliceSites, hi]
-  · rw [Entropy.cutEquiv_symm_apply_not_mem _ _ (mt mem_leftBlock.mp hi)]
+  · rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ (mt mem_leftBlock.mp hi)]
     simp [spliceSites, hi]
 
 /-- A rank-one physical cut gives the cross-multiplication identity for joined words. -/

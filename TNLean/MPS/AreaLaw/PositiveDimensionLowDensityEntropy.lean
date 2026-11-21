@@ -35,7 +35,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_of_pos_dimensio
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q p r : ℕ) (v : ℝ) (hq : 0 < q), p ≤ r → r ≤ L → 0 < v →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2))) →
       ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
@@ -47,7 +47,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_of_pos_dimensio
       let G := fun eta : ℝ ↦ Submodule.spectralSpanLE
         hRaw.eigenvectorBasis hRaw.eigenvalues (minEigenvalue hRaw + eta)
       ∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ψ ∈ G (etaLD - v) → ‖ψ‖ = 1 →
-        Entropy.regionEntropy J ψ ≤ Real.log (Module.finrank ℂ (G etaLD) : ℝ) +
+        ManyBody.regionEntropy ψ J ≤ Real.log (Module.finrank ℂ (G etaLD) : ℝ) +
           K / v * (1 + Real.log (q : ℝ) + Real.log (1 + 1 / v)) ^ 3 := by
   classical
   obtain ⟨K, hK, hactual⟩ := exists_fixed_bandwidth_interval_low_energy_entropy_bound etaLD hLD
@@ -57,9 +57,9 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_of_pos_dimensio
   · exact hactual L q p r v hq2 hpr hrL hv h hs h0 h1 ψ hψG hψ
   · have hq1 : q = 1 := by omega
     subst q
-    have hzero : Entropy.regionEntropy J ψ ≤ 0 := by
+    have hzero : ManyBody.regionEntropy ψ J ≤ 0 := by
       simpa only [Nat.cast_one, Real.log_one, mul_zero] using
-        TNLean.Lattice.regionEntropy_le_card_mul_log hψ J
+        ManyBody.regionEntropy_le_card_mul_log hψ J
     have hlogv : 0 ≤ Real.log (1 + 1 / v) :=
       Real.log_nonneg (by linarith only [one_div_pos.mpr hv])
     exact hzero.trans (add_nonneg (Real.log_natCast_nonneg _)

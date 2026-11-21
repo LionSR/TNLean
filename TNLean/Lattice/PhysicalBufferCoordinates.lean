@@ -38,7 +38,7 @@ theorem reindex_physicalBuffer_eq_place
     (q : ℕ) (R C : Finset ι) (hRC : Disjoint R C) :
     let Q := (R ∪ C)ᶜ
     let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
-    let s := FiniteProduct.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
+    let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
     let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (Q → Fin q))
     let p := QuantumCircuit.sitePairConfigurationEquiv ι q q
     let pQ := QuantumCircuit.sitePairConfigurationEquiv Q q q
@@ -55,8 +55,8 @@ theorem reindex_physicalBuffer_eq_place
       QuantumCircuit.AgreeOff (Subtype.val : Q → ι) x y := by
     simp only [P, e, g, s, Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.trans_apply,
       Equiv.doubledRegroup, Equiv.bipartiteRegroup, Equiv.prodCongr_apply, Prod.map,
-      FiniteProduct.splitTwoRegionsEquiv, FiniteProduct.unionEquiv,
-      Equiv.coe_fn_mk, FiniteProduct.splitEquiv_apply_fst, Equiv.refl_apply, Prod.mk.injEq,
+      ManyBody.splitTwoRegionsEquiv, ManyBody.unionEquiv,
+      Equiv.coe_fn_mk, ManyBody.splitEquiv_apply_fst, Equiv.refl_apply, Prod.mk.injEq,
       Equiv.apply_eq_iff_eq]
     constructor
     · intro h i hi

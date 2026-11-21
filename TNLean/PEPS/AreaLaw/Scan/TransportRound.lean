@@ -39,7 +39,7 @@ omit [DecidableEq H] [∀ h, DecidableEq (C h)] in
 /-- An unsplit leaf has identically zero split entropy, directly from the defining
 sum over exceptional bands (`06-transport.tex`, lines 342–347). -/
 theorem splitEta_eq_zero_of_not_mem_splitLeaves {i : ι} {j : Σ h, Option (C h)}
-    (hj : j ∉ D.splitLeaves E i) (θ : EuclideanSpace ℂ (SiteConfig n)) :
+    (hj : j ∉ D.splitLeaves E i) (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) :
     D.splitEta E i j θ = 0 := by
   classical
   simp [splitEta, D.forall_contains_of_not_mem_splitLeaves E hj]
@@ -57,7 +57,7 @@ variable {V H ι : Type} [Fintype V] [DecidableEq V] {K : ℕ}
 
 /-- The literal data of a round on the unit sphere. No analytic conclusion is a
 field supplied to this constructor (`06-transport.tex`, lines 377–420). -/
-def transportScanRound : ScanRound ι (CoherentSphere (SiteConfig n)) where
+def transportScanRound : ScanRound ι (CoherentSphere (∀ v, Fin (n v))) where
   H := H
   Ch := C
   w := D.histTree.weight
@@ -88,7 +88,7 @@ instance isFiniteMeasure_transportScanRound_new (k : ℕ) (p : ℝ) (h : H) (c :
 /-- Integrating on the literal old sphere gives the existing same-old-state integral. -/
 theorem integral_transportScanRound_old (hD : D.IsAdmissible) (ht : 0 ≤ t)
     (k : ℕ) (hcomm : D.CrossBandCommute n t k) (p : ℝ) (h : H)
-    {f : (SiteConfig n → ℂ) → ℝ} (hf : Continuous f) :
+    {f : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hf : Continuous f) :
     (∫ θ, f (fun x => θ.1 x) ∂(transportScanRound D n E good t pre).μOld k p h) =
       D.oldFourierCoherentIntegral n t k (pre k) p h f :=
   D.integral_transportLeafMeasure n t k (pre k) p ⟨h, none⟩ hD ht hcomm hf
@@ -96,7 +96,7 @@ theorem integral_transportScanRound_old (hD : D.IsAdmissible) (ht : 0 ≤ t)
 /-- The new sphere integral retains the actual new terminal state. -/
 theorem integral_transportScanRound_new (hD : D.IsAdmissible) (ht : 0 ≤ t)
     (k : ℕ) (hcomm : D.CrossBandCommute n t k) (p : ℝ) (h : H) (c : C h)
-    {f : (SiteConfig n → ℂ) → ℝ} (hf : Continuous f) :
+    {f : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hf : Continuous f) :
     (∫ θ, f (fun x => θ.1 x) ∂(transportScanRound D n E good t pre).μNew k p h c) =
       ∫ u, Transport.fourierWeight u *
         realCoherentIntegral k (TransportData.base n) (D.state n t k (pre k) p ⟨h, some c⟩ u) f :=

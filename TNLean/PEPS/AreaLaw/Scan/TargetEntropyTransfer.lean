@@ -39,7 +39,7 @@ theorem abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le
     Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
         (Matrix.vecMulVec Ω (star Ω)) ≤
       Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g) →
-    |regionalEntropy Λ q Ωt X - regionalEntropy Λ q Ω X| ≤
+    |ManyBody.regionEntropy Ωt X - ManyBody.regionEntropy Ω X| ≤
       (n : ℝ) ^ (-247 : ℝ) := by
   have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
   have hcost := continuityCost_le_of_fixed_coefficient_of_threshold_le
@@ -92,7 +92,7 @@ theorem eventually_abs_regionalEntropy_sub_le_of_truncation
       Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
           (Matrix.vecMulVec Ω (star Ω)) ≤
         Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g) →
-      |regionalEntropy Λ q Ωt X - regionalEntropy Λ q Ω X| ≤
+      |ManyBody.regionEntropy Ωt X - ManyBody.regionEntropy Ω X| ≤
         (n : ℝ) ^ (-247 : ℝ) :=
   eventually_atTop.2
     ⟨_, fun _ => abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le q hq g Cvol hg⟩

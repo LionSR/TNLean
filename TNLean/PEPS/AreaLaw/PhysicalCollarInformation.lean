@@ -82,7 +82,7 @@ theorem sublinearCollarBound_real_of_boxEntropy_explicit
             ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
               T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
-              FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+              ManyBody.regionMutualInformation Ω
                   (A.filter fun x ↦ x.val ∈ T.points)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -154,7 +154,7 @@ theorem sublinearCollarBound_real_of_boxEntropy
             ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
               T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
-              FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+              ManyBody.regionMutualInformation Ω
                   (A.filter fun x ↦ x.val ∈ T.points)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -207,7 +207,7 @@ theorem sublinearCollarBound_real_of_initial
             ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
               T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
-              FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+              ManyBody.regionMutualInformation Ω
                   (A.filter fun x ↦ x.val ∈ T.points)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -288,7 +288,7 @@ theorem sublinearCollarBound_real_explicit
           ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+            ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T.points)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤

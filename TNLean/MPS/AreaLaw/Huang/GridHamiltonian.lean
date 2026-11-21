@@ -144,7 +144,7 @@ theorem sum_eq_chainGridRetained_sub_boundary (hw : 0 < w)
 Osborne, Figure 2. -/
 theorem chainGridBlockHamiltonian_mem_supported (hw : 0 < w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (j : Fin (L / w + 1)) :
     chainGridBlockHamiltonian hw h j ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q) (chainGridBlock L w j.val : Finset (Fin L)) := by

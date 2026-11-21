@@ -104,20 +104,20 @@ theorem operatorSchmidtRank_regionalSlice_le (J C : Finset V)
       sheetSplit q C ((sheetSplit q J).symm ((sheetSplit q C').symm (α, β), z)) =
         (fL z α, fR z β) := by
     refine Prod.ext (funext fun c ↦ ?_) (funext fun c ↦ ?_)
-    · simp only [FiniteProduct.splitEquiv_apply_fst]
+    · simp only [ManyBody.splitEquiv_apply_fst]
       by_cases hc : (c : V) ∈ J
-      · rw [FiniteProduct.splitEquiv_symm_apply_of_mem _ J _ _ _ hc,
-          FiniteProduct.splitEquiv_symm_apply_of_mem _ C' _ _ _ (hL c hc)]
+      · rw [ManyBody.splitEquiv_symm_apply_of_mem _ J _ _ _ hc,
+          ManyBody.splitEquiv_symm_apply_of_mem _ C' _ _ _ (hL c hc)]
         simp [fL, hc]
-      · rw [FiniteProduct.splitEquiv_symm_apply_of_notMem _ J _ _ _ hc]
+      · rw [ManyBody.splitEquiv_symm_apply_of_notMem _ J _ _ _ hc]
         simp [fL, hc]
-    · simp only [FiniteProduct.splitEquiv_apply_snd]
+    · simp only [ManyBody.splitEquiv_apply_snd]
       by_cases hc : (c : V) ∈ J
-      · rw [FiniteProduct.splitEquiv_symm_apply_of_mem _ J _ _ _ hc,
-          FiniteProduct.splitEquiv_symm_apply_of_notMem _ C' _ _ _
+      · rw [ManyBody.splitEquiv_symm_apply_of_mem _ J _ _ _ hc,
+          ManyBody.splitEquiv_symm_apply_of_notMem _ C' _ _ _
             (Finset.mem_compl.mp (hR c hc))]
         simp [fR, hc]
-      · rw [FiniteProduct.splitEquiv_symm_apply_of_notMem _ J _ _ _ hc]
+      · rw [ManyBody.splitEquiv_symm_apply_of_notMem _ J _ _ _ hc]
         simp [fR, hc]
   apply operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition
   refine ⟨fun t ↦ Matrix.of fun α α' ↦ A t (fL x α) (fL y α'),
@@ -140,14 +140,14 @@ theorem operatorSchmidtRank_le_card_sq {m n : Type*} [Fintype m] [Finite n]
     (fun ij : m × m ↦ operatorBlock ρ ij.1 ij.2)
     (fun i j ↦ Submodule.subset_span ⟨(i, j), rfl⟩)
 
-/-- The cut coordinates of `Entropy.cutOperator` and of `sheetSplit` give the same operator
+/-- The cut coordinates of `ManyBody.cutOperator` and of `sheetSplit` give the same operator
 Schmidt rank. -/
 theorem operatorSchmidtRank_cutOperator_eq (B : Finset V)
     (X : Matrix (V → Fin q) (V → Fin q) ℂ) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : V ↦ q) B X) =
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) B X) =
       operatorSchmidtRank (X.reindex (sheetSplit q B) (sheetSplit q B)) :=
   (Matrix.operatorSchmidtRank_reindex_prodCongr
-    (Entropy.cutOperator (n := fun _ : V ↦ q) B X) (Equiv.refl _)
-    (FiniteProduct.complementEquiv (fun _ : V ↦ Fin q) B)).symm
+    (ManyBody.cutOperator (X := fun _ ↦ Fin q) B X) (Equiv.refl _)
+    (ManyBody.complementEquiv (fun _ : V ↦ Fin q) B)).symm
 
 end TNLean.MPS.AreaLaw

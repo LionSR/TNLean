@@ -37,12 +37,12 @@ Section 1, and the two-line route of `part2a_mps_information.tex`,
 theorem exists_snakeGridMPS (q : ℕ) (hq : 1 ≤ q) (R : ℕ)
     (J Δ : ℝ) (hJ : 0 < J) (hΔ : 0 < Δ) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ L : ℕ, 2 ≤ L →
-      ∀ H : PlaneInteraction (PEPS.AreaLaw.rectangularDomain L L) q R,
+      ∀ H : PlaneInteraction (ManyBody.rectangularDomain L L) q R,
           (∀ X, (H.term X).IsHermitian) → (∀ X, ‖H.term X‖ ≤ J) →
-      ∀ E₀ : ℝ, ∀ Ω : StateSpace (PEPS.AreaLaw.rectangularDomain L L) q,
+      ∀ E₀ : ℝ, ∀ Ω : StateSpace (ManyBody.rectangularDomain L L) q,
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∃ (D : ℕ) (Φ : StateSpace (PEPS.AreaLaw.rectangularDomain L L) q),
+        ∃ (D : ℕ) (Φ : StateSpace (ManyBody.rectangularDomain L L) q),
           ‖Φ‖ = 1 ∧ IsOpenMPS (L * L) q D (fun x ↦ snakeGridStateEquiv L q Φ x) ∧
           ‖Φ - Ω‖ ≤ 1 / (L : ℝ) ∧ (D : ℝ) ≤ Real.exp (C * L) :=
   exists_snakeGridMPS_of_uniformAreaLaw PEPS.AreaLaw.uniformAreaLaw q hq R J Δ hJ hΔ

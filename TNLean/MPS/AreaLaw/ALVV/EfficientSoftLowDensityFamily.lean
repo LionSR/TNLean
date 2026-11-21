@@ -54,7 +54,7 @@ theorem exists_efficient_soft_low_density_family
     (hscale : 3 * (m : ℝ) ≤ t) (hxi : 0 < xi)
     (N a b : ℕ) (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ N)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval (N + 1) i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
   (by
@@ -81,9 +81,9 @@ theorem exists_efficient_soft_low_density_family
       (Nat.succ_le_succ ((Nat.add_le_add_left
         (Nat.le_mul_of_pos_left ell (by decide : 0 < 2)) b).trans hb))
     let beta := fun _ : Fin (N + 1) ↦ Fin q
-    let midConfig := FiniteProduct.Configuration beta J
-    let extConfig := FiniteProduct.Configuration beta Jᶜ
-    let split := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let midConfig := ManyBody.RegionConfig beta J
+    let extConfig := ManyBody.RegionConfig beta Jᶜ
+    let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
     let Tm := ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split).trans
       ((EuclideanSpace.basisFun extConfig ℂ).tensorProduct
         (EuclideanSpace.basisFun midConfig ℂ)).repr.symm).trans

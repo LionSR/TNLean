@@ -69,8 +69,8 @@ theorem log_surprisalMoment_truncated_reducedState_le
     (X : Finset (Site Λ)) {u : ℝ}
     (hu : |u| ≤ Entropy.tailRadius (2 / (Δ / positiveNormalization 1 (Δ / 2) J))
       (cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X)) :
-    Real.log (Entropy.surprisalMoment (reducedState_isHermitian Λ q Ωt X).eigenvalues u) ≤
-      u * regionalEntropy Λ q Ωt X +
+    Real.log (Entropy.surprisalMoment (ManyBody.regionState_isHermitian X Ωt).eigenvalues u) ≤
+      u * ManyBody.regionEntropy Ωt X +
         512 * Real.exp 1 * (2 / (Δ / positiveNormalization 1 (Δ / 2) J)) *
           cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X * u ^ 2 := by
   have hc := fun i => S.truncatedEnergyTerm_mem_Icc h hh hhJ Ω hΔ hΩ L i
@@ -84,14 +84,14 @@ theorem log_surprisalMoment_truncated_reducedState_le
     ManyBody.mem_groundSpace_iff.mp (hspant ▸ Submodule.mem_span_singleton_self Ωt)
   have hgap := hgapt.posSemidef_sub_smul_one
     (S.isHermitian_sum_truncatedEnergyTerm h hh hhJ Ω hΔ hΩ L) hΩt hspant
-  simpa only [hθ, ← hB, regionalEntropy] using
+  simpa only [hθ, ← hB, ManyBody.regionEntropy] using
     (Entropy.log_surprisalMoment_cut_le (n := fun _ : Site Λ => q) (B := X)
       (fun i => S.truncatedEnergyTerm_isSupportedOn h hh Ω hgraph hanchor hΔ L i)
       (fun i => (Matrix.nonneg_iff_posSemidef.mp (hc i).1).isHermitian)
       (show (0 : ℝ) ≤ 1 by norm_num)
       (fun i => Matrix.norm_le_one_of_nonneg_of_le_one (hc i).1 (hc i).2)
-      hΩt hg heig hgap (partialTraceRight_cutVector Ωt X)
-      (reducedState_isHermitian Λ q Ωt X) (by simpa only [hθ, ← hB] using hu))
+      hΩt hg heig hgap (ManyBody.regionState_eq_partialTraceRight_cutVector X Ωt).symm
+      (ManyBody.regionState_isHermitian X Ωt) (by simpa only [hθ, ← hB] using hu))
 
 include hh hhJ in
 /-- Lemma 3.1's tail bound for every cut of the same actual truncated ground
@@ -105,8 +105,8 @@ theorem surprisalTail_truncated_reducedState_le
       ((Δ / positiveNormalization 1 (Δ / 2) J) / 2))
     (hspant : groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt})
     (X : Finset (Site Λ)) (w : ℝ) :
-    Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-        (regionalEntropy Λ q Ωt X) w ≤
+    Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+        (ManyBody.regionEntropy Ωt X) w ≤
       min 1 (2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w / (32 * Real.sqrt
           ((1 + 2 / (Δ / positiveNormalization 1 (Δ / 2) J)) *
@@ -122,14 +122,14 @@ theorem surprisalTail_truncated_reducedState_le
     ManyBody.mem_groundSpace_iff.mp (hspant ▸ Submodule.mem_span_singleton_self Ωt)
   have hgap := hgapt.posSemidef_sub_smul_one
     (S.isHermitian_sum_truncatedEnergyTerm h hh hhJ Ω hΔ hΩ L) hΩt hspant
-  simpa only [hθ, ← hB, regionalEntropy] using
+  simpa only [hθ, ← hB, ManyBody.regionEntropy] using
     (Entropy.surprisalTail_cut_le (n := fun _ : Site Λ => q) (B := X)
       (fun i => S.truncatedEnergyTerm_isSupportedOn h hh Ω hgraph hanchor hΔ L i)
       (fun i => (Matrix.nonneg_iff_posSemidef.mp (hc i).1).isHermitian)
       (show (0 : ℝ) ≤ 1 by norm_num)
       (fun i => Matrix.norm_le_one_of_nonneg_of_le_one (hc i).1 (hc i).2)
-      hΩt hg heig hgap (partialTraceRight_cutVector Ωt X)
-      (reducedState_isHermitian Λ q Ωt X) w)
+      hΩt hg heig hgap (ManyBody.regionState_eq_partialTraceRight_cutVector X Ωt).symm
+      (ManyBody.regionState_isHermitian X Ωt) w)
 
 /-- **Both marginal estimates for one truncated ground vector, with an explicit base-radius
 constant** (Proposition 4.5, `03-quasilocal.tex`, lines 405–433 and 457–505, with
@@ -186,12 +186,12 @@ theorem truncated_reducedState_moment_tail_bounds_of_locality
         (∀ (X : Finset (Site Λ)) (u : ℝ),
           |u| ≤ Entropy.tailRadius (2 / g) (B X) →
           Real.log (Entropy.surprisalMoment
-            (reducedState_isHermitian Λ q Ωt X).eigenvalues u) ≤
-            u * regionalEntropy Λ q Ωt X +
+            (ManyBody.regionState_isHermitian X Ωt).eigenvalues u) ≤
+            u * ManyBody.regionEntropy Ωt X +
               512 * Real.exp 1 * (2 / g) * B X * u ^ 2) ∧
         (∀ (X : Finset (Site Λ)) (w : ℝ),
-          Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-            (regionalEntropy Λ q Ωt X) w ≤
+          Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+            (ManyBody.regionEntropy Ωt X) w ≤
             min 1 (2 * Real.exp (Real.exp 1 / 2) *
               Real.exp (-(w / (32 * Real.sqrt ((1 + 2 / g) * B X)))))) := by
   classical
@@ -208,7 +208,7 @@ theorem truncated_reducedState_moment_tail_bounds_of_locality
           ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ (S.anchor i)
           (positiveConstraint (positiveNormalization 1 (Δ / 2) J)
             (centeredFilter 1 (Δ / 2) h.hamiltonian Ω (h.term i))) := by
-    rw [truncatedEnergyTerm, hgraph, hr, ManyBody.PlaneInteraction.positiveTerm]
+    rw [truncatedEnergyTerm, hgraph, hr, ManyBody.Interaction.positiveTerm]
   have hsum : (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) =
       ∑ i, truncatedConstraint q (planeDomainGraph Λ) (S.truncationSet L)
         ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ (S.anchor i)
@@ -266,12 +266,12 @@ theorem truncated_reducedState_moment_tail_bounds_explicit
         (∀ (X : Finset (Site Λ)) (u : ℝ),
           |u| ≤ Entropy.tailRadius (2 / g) (B X) →
           Real.log (Entropy.surprisalMoment
-            (reducedState_isHermitian Λ q Ωt X).eigenvalues u) ≤
-            u * regionalEntropy Λ q Ωt X +
+            (ManyBody.regionState_isHermitian X Ωt).eigenvalues u) ≤
+            u * ManyBody.regionEntropy Ωt X +
               512 * Real.exp 1 * (2 / g) * B X * u ^ 2) ∧
         (∀ (X : Finset (Site Λ)) (w : ℝ),
-          Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-            (regionalEntropy Λ q Ωt X) w ≤
+          Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+            (ManyBody.regionEntropy Ωt X) w ≤
             min 1 (2 * Real.exp (Real.exp 1 / 2) *
               Real.exp (-(w / (32 * Real.sqrt ((1 + 2 / g) * B X)))))) :=
   truncated_reducedState_moment_tail_bounds_of_locality R hJ hΔ hC₀
@@ -322,12 +322,12 @@ theorem exists_truncated_reducedState_moment_tail_bounds
           (∀ (X : Finset (Site Λ)) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / g) (B X) →
             Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt X).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt X +
+              (ManyBody.regionState_isHermitian X Ωt).eigenvalues u) ≤
+              u * ManyBody.regionEntropy Ωt X +
                 512 * Real.exp 1 * (2 / g) * B X * u ^ 2) ∧
           (∀ (X : Finset (Site Λ)) (w : ℝ),
-            Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-              (regionalEntropy Λ q Ωt X) w ≤
+            Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+              (ManyBody.regionEntropy Ωt X) w ≤
               min 1 (2 * Real.exp (Real.exp 1 / 2) *
                 Real.exp (-(w / (32 * Real.sqrt ((1 + 2 / g) * B X)))))) := by
   exact ⟨_, latticeTruncationRadiusConstant_pos (J := J) R hΔ hC₀,

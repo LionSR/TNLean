@@ -28,12 +28,6 @@ namespace TNLean.MPS.AreaLaw
 
 variable {Λ : Finset ℤ} {q R : ℕ} {J : ℝ}
 
-/-- Zero extension preserves the interaction at each original domain support.
-Source: TNLean note, `part0_preamble.tex`, eq:ham, lines 191–201. -/
-@[simp] lemma _root_.ManyBody.DomainInteraction.toChain_term (h : ManyBody.DomainInteraction Λ q R)
-    (X : DomainSupport Λ R) : h.toChain.term X.toChainSupport = h.term X := by
-  simp [ManyBody.DomainInteraction.toChain, DomainSupport.toChainSupport, X.2]
-
 /-- A single domain site is an admissible support at every range.
 Source: TNLean note, part0_preamble.tex, eq:ham, lines 191–201. -/
 lemma IsDomainSupport.singleton (x : Fin Λ.card) : IsDomainSupport Λ R {x} := by
@@ -54,15 +48,19 @@ lemma _root_.ManyBody.DomainInteraction.sum_norm_terms_containing_le (h : Domain
     (x : Fin Λ.card) :
     (∑ X ∈ Finset.univ.filter (fun X : DomainSupport Λ R ↦ x ∈ X.1),
       ‖h.term X‖) ≤ ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J := by
+  let hc : ManyBody.ChainInteraction Λ.card q R :=
+    h.extend DomainSupport.toChainSupport DomainSupport.toChainSupport_injective (fun Y ↦ Y.1)
+      fun _ ↦ subset_rfl
   refine (Finset.sum_le_sum_of_injOn
-    (g := fun Y : ChainSupport Λ.card R ↦ ‖(h.toChain).term Y‖)
+    (g := fun Y : ChainSupport Λ.card R ↦ ‖hc.term Y‖)
     DomainSupport.toChainSupport DomainSupport.toChainSupport_injective.injOn
     ?_ ?_ (fun _ _ _ ↦ norm_nonneg _)).trans
-      ((h.toChain).sum_norm_terms_containing_le
-        (h.norm_toChain_term_le hhJ (h.norm_bound_nonneg hhJ x)) x)
+      (hc.sum_norm_terms_containing_le
+        (ManyBody.Interaction.norm_extend_term_le (h.norm_bound_nonneg hhJ x) hhJ) x)
   · exact fun Y hY ↦ (Finset.mem_image.mp hY).elim fun X hX ↦
       hX.2 ▸ Finset.mem_filter.mpr ⟨Finset.mem_univ _, (Finset.mem_filter.mp hX.1).2⟩
-  · exact fun X _ ↦ le_of_eq (congrArg norm (h.toChain_term X).symm)
+  · exact fun X _ ↦
+      le_of_eq (congrArg norm (ManyBody.Interaction.extend_term_apply (Φ := h) X).symm)
 
 /-- The original domain crossing supports inject into the chain crossing supports.
 The chain boundary is used only as an upper counting bound.
@@ -70,14 +68,14 @@ Source: TNLean note, part1_arealaw.tex, eq:count, and
 part2a_mps_information.tex, lines 355–363. -/
 lemma card_domain_crossingTerms_le_mul_card_boundaryEdges (Λ : Finset ℤ) (R : ℕ)
     (D : Finset (Fin Λ.card)) :
-    (Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).card ≤
+    (ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).card ≤
       2 ^ (2 * R) * (boundaryEdges Λ.card D).card := by
   refine (Finset.card_le_card_of_injOn
     DomainSupport.toChainSupport ?_
     DomainSupport.toChainSupport_injective.injOn).trans
       (card_crossingTerms_le_mul_card_boundaryEdges Λ.card R D)
   exact fun X hX ↦ by
-    simpa only [Entropy.crossingTerms, Finset.mem_coe, Finset.mem_filter,
+    simpa only [ManyBody.crossingTerms, Finset.mem_coe, Finset.mem_filter,
       Finset.mem_univ, true_and, DomainSupport.toChainSupport] using hX
 
 /-- Counting both replicas of the actual crossing supports gives a bound linear
@@ -85,7 +83,7 @@ in the number of domain sites, with the same range constant as on a chain.
 Source: TNLean note, part2a_mps_information.tex, lines 355–363. -/
 lemma card_domain_crossingTerms_mul_two_le (Λ : Finset ℤ) (R : ℕ)
     (D : Finset (Fin Λ.card)) :
-    (Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).card * 2 ≤
+    (ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).card * 2 ≤
       chainCrossConst R * Λ.card := by
   have hb : (boundaryEdges Λ.card D).card ≤ Λ.card :=
     (Finset.card_filter_le _ _).trans

@@ -59,8 +59,8 @@ namespace TNLean.PEPS.Approximation
 Source: polynomial-PEPS manuscript, `00-introduction.tex`, lines 21–25. -/
 theorem dist_sitePosition_eq_supDist {L : ℕ} (x y : SquareLatticeVertex L L) :
     dist (sitePosition L x) (sitePosition L y) =
-      (AreaLaw.supDist (AreaLaw.rectangleEmbedding x) (AreaLaw.rectangleEmbedding y) : ℝ) := by
-  simp only [sitePosition, AreaLaw.supDist, AreaLaw.rectangleEmbedding, Prod.dist_eq,
+      (AreaLaw.supDist (ManyBody.rectangleEmbedding x) (ManyBody.rectangleEmbedding y) : ℝ) := by
+  simp only [sitePosition, AreaLaw.supDist, ManyBody.rectangleEmbedding, Prod.dist_eq,
     Real.dist_eq, Nat.cast_max, Nat.cast_natAbs, Int.cast_abs, Int.cast_sub,
     Int.cast_natCast, add_sub_add_right_eq_sub]
 

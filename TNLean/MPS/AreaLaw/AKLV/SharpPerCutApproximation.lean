@@ -41,7 +41,7 @@ positive-contraction endpoint perturbations bound the actual unique-ground
 gap by one. The conclusion is independent of a fitting physical window. -/
 theorem aklv_chain_dimension_and_gap_bounds {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h j) (interval L j.val (j.val + 2)))
     (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
@@ -81,7 +81,7 @@ theorem exists_aklv_sharp_physical_per_cut_approximation :
       ∀ (L q : ℕ)
         (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
       (∑ j, h j) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
@@ -138,7 +138,7 @@ theorem exists_aklv_fixed_gap_physical_per_cut_approximation :
       ∀ (L q : ℕ)
         (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
       (∑ j, h j) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →

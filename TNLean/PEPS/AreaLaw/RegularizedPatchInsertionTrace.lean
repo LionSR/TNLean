@@ -87,8 +87,8 @@ theorem inner_regularizedPatchInsertion_eq_trace_of_outer_commute
         (Matrix.reindexAlgEquiv ℂ ℂ (dependentRegionFinEquiv e (regions k))))
   let φ := dependentGlobalFinIsometry e (normalizedRegularizedPatchOutput regions a b Ω x)
   have hc (k : Fin m) (hjk : j < k) :
-      (F k).2 * Entropy.regionState (regions k) φ =
-        Entropy.regionState (regions k) φ * (F k).2 := by
+      (F k).2 * ManyBody.regionState φ (regions k) =
+        ManyBody.regionState φ (regions k) * (F k).2 := by
     simpa only [F, φ, Matrix.coe_reindexAlgEquiv,
       reindex_normalizedRegularizedPatchMarginal] using
       ((houter k hjk).map
@@ -127,7 +127,7 @@ theorem inner_regularizedPatchInsertion_eq_trace_of_outer_commute
       dependentGlobalFinIsometry e (regularizedPatchInsertion regions a b Ω x j K) =
         Matrix.toEuclideanLin
           (Entropy.liftProd ((ell.take (ell.idxOf j)).map F) *
-            Entropy.localLift (regions j)
+            ManyBody.place (regions j)
               (Matrix.reindexAlgEquiv ℂ ℂ (dependentRegionFinEquiv e (regions j)) K) *
             Entropy.liftProd ((ell.drop (ell.idxOf j + 1)).map F))
           (dependentGlobalFinIsometry e Ω) := by
@@ -147,7 +147,7 @@ theorem inner_regularizedPatchInsertion_eq_trace_of_outer_commute
       dependentGlobalFinIsometry e (regularizedPatchInsertion regions a b Ω x j H) =
         Matrix.toEuclideanLin
           (Entropy.liftProd ((ell.take (ell.idxOf j)).map F) *
-            Entropy.localLift (regions j)
+            ManyBody.place (regions j)
               (Matrix.reindexAlgEquiv ℂ ℂ (dependentRegionFinEquiv e (regions j))
                 (H * ((x j + b • 1) ^ (-(a j) / 2))⁻¹)) *
             Entropy.liftProdInv ((ell.take (ell.idxOf j)).map F))
@@ -159,21 +159,21 @@ theorem inner_regularizedPatchInsertion_eq_trace_of_outer_commute
       (Entropy.liftProdInv ((ell.take (ell.idxOf j)).map F))
       (Entropy.liftProd ((ell.take (ell.idxOf j)).map F)),
       Entropy.liftProdInv_mul_liftProd hchain, Matrix.one_mul,
-      ← Matrix.mul_assoc (Entropy.localLift (regions j)
+      ← Matrix.mul_assoc (ManyBody.place (regions j)
         (Matrix.reindexAlgEquiv ℂ ℂ (dependentRegionFinEquiv e (regions j))
           (H * ((x j + b • 1) ^ (-(a j) / 2))⁻¹))),
-      ← Entropy.localLift_mul,
+      ← ManyBody.place_mul,
       ← map_mul (Matrix.reindexAlgEquiv ℂ ℂ (dependentRegionFinEquiv e (regions j))),
       hcancel]
   have hsupport
       (p : Entropy.RegionFilter (fun v ↦ Fintype.card (Out v)))
       (hp : p ∈ (ell.take (ell.idxOf j)).map F) :
-      Entropy.IsSupportedOn
-        (Entropy.localLift (regions j)
+      ManyBody.IsSupportedOn
+        (ManyBody.place (regions j)
           (Matrix.reindexAlgEquiv ℂ ℂ (dependentRegionFinEquiv e (regions j))
             (H * ((x j + b • 1) ^ (-(a j) / 2))⁻¹))) p.1 :=
     (List.mem_map.mp hp).elim fun k hk ↦ hk.2 ▸
-      (Entropy.isSupportedOn_localLift _).mono (hnested (le_of_lt (hgreater k hk.1)))
+      (ManyBody.place_mem_supportedOperators _).mono (hnested (le_of_lt (hgreater k hk.1)))
   by_cases hzero : regularizedPatchOutput regions a b Ω x = 0
   · simp [regularizedPatchObjective, hzero]
   have hscale :

@@ -32,7 +32,7 @@ interactions. Supporting the corrected label version of ALVV, arXiv:1602.08828v2
 `thm:cluster`, lines 1298–1303 and 2014–2115. -/
 theorem exists_mpo_cluster_truncation {N q r : ℕ} (hq : 1 ≤ q) (hr : 0 < r)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ}) (β : ℝ) :
     ∃ A : Fin (N + 1) → MPOTensor q (r ^ 2 * q ^ r),
       ClusterExpansion.truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β =
@@ -48,7 +48,7 @@ norm at most one and an explicit lower energy. Supporting a corrected version of
 arXiv:1602.08828v2, `thm:cluster-approx` and `thm:cluster`, lines 1270–1303. -/
 theorem exists_mpo_cluster_approximation {N q r : ℕ} (hq : 1 ≤ q) (hr : 0 < r)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ})
     (hh : ∀ i, (h i).IsHermitian) (hnorm : ∀ i, ‖h i‖ ≤ 1)
     (lambda β : ℝ) (hlo : (lambda : ℂ) • 1 ≤ ∑ i, h i) (hβ : 0 ≤ β)

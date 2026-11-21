@@ -52,7 +52,7 @@ theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ 
     {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ L : ℕ, 1 ≤ L → ∀ R : ℕ, 1 ≤ R →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+        (_hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
           (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (_h1 : ∀ j, h j ≤ 1),
       let N := L + 2 * R ^ 2
       let hi : L ≤ N := Nat.le_add_right _ _

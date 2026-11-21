@@ -243,8 +243,8 @@ theorem chainOperator_eq_toEuclideanCLM_sum
 /-- Disjoint nearest-neighbor bond supports give the commutations needed by detectability.
 The commutations are derived from support and are not additional premises. -/
 theorem chainTerm_commute_of_not_adjacent
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (i j : ℕ) (hij : i + 1 ≠ j) (hji : j + 1 ≠ i) :
     Commute (chainTerm h i) (chainTerm h j) := by
   classical
@@ -257,14 +257,13 @@ theorem chainTerm_commute_of_not_adjacent
     simp only [mem_interval] at hx hy
     omega
   have hc : Commute (bondTermExtension h i) (bondTermExtension h j) :=
-    Entropy.commute_of_isSupportedOn_disjoint (bondTermExtension_supported hsupp i)
-      (bondTermExtension_supported hsupp j) hd
-      (fun _ : Fin L ↦ (⟨0, Nat.lt_of_lt_of_le Nat.zero_lt_one hq⟩ : Fin q))
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint (bondTermExtension_supported hsupp i)
+        (bondTermExtension_supported hsupp j) hd.symm
   exact hc.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).toMonoidHom
 
 private theorem chain_parity_commute
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b : ℕ) :
     (∀ i ∈ evenBonds a b, ∀ j ∈ evenBonds a b, Commute (chainTerm h i) (chainTerm h j)) ∧
     (∀ i ∈ oddBonds a b, ∀ j ∈ oddBonds a b, Commute (chainTerm h i) (chainTerm h j)) := by
@@ -272,11 +271,11 @@ private theorem chain_parity_commute
   · intro i hi j hj
     have hi := (Finset.mem_filter.mp hi).2
     have hj := (Finset.mem_filter.mp hj).2
-    apply chainTerm_commute_of_not_adjacent hq hsupp <;> omega
+    apply chainTerm_commute_of_not_adjacent hsupp <;> omega
   · intro i hi j hj
     have hi := (Finset.mem_filter.mp hi).2
     have hj := (Finset.mem_filter.mp hj).2
-    apply chainTerm_commute_of_not_adjacent hq hsupp <;> omega
+    apply chainTerm_commute_of_not_adjacent hsupp <;> omega
 
 /-- A vector is a zero-energy vector of the chain exactly when every term annihilates it.
 ALVV, Theorem 5.14(1). -/
@@ -296,13 +295,13 @@ theorem chainOperator_apply_eq_zero_iff
 /-- Full kernel equality for the finite chain, with parity commutations derived
 from locality. ALVV, Theorem 5.14(1), including degenerate ground spaces. -/
 theorem ker_chainReplacement
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b : ℕ) :
     LinearMap.ker (chainReplacement h a b).toLinearMap =
       LinearMap.ker (chainOperator h).toLinearMap := by
-  obtain ⟨he, ho⟩ := chain_parity_commute hq hsupp a b
+  obtain ⟨he, ho⟩ := chain_parity_commute hsupp a b
   exact ker_regionalReplacement (isStarProjection_chainTerm hh) _ _ he ho m
 
 private theorem ker_ordered_chainTerm
@@ -337,9 +336,9 @@ lines 1541–1570, with squared norms and the constant-three converse. The sourc
 region; collapsing a union of disjoint regions of each parity, as in the proof of
 Theorem `t:aisff`, lines 1597–1599, is the same argument. -/
 theorem parityReplacement_gap
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
     (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
       γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ) {s t : Finset ℕ}
@@ -347,7 +346,7 @@ theorem parityReplacement_gap
     {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1)
     (hxperp : x ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ) :
     γ / (3 * (γ + 4)) ≤ Complex.re ⟪x, regionalReplacement (chainTerm h) s t m x⟫_ℂ := by
-  have hc := chainTerm_commute_of_not_adjacent hq hsupp
+  have hc := chainTerm_commute_of_not_adjacent hsupp
   have hproj := isStarProjection_chainTerm hh
   have hk := ker_ordered_chainTerm hh
   have hgap' : ∀ y ∈ (⨅ i : Fin (m + m), LinearMap.ker
@@ -372,40 +371,40 @@ theorem parityReplacement_gap
 the original chain; locality supplies degree two and every collapsed-family identity.
 ALVV, Theorem 5.14(3), with squared norms and the constant-three converse. -/
 theorem chainReplacement_gap
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
     (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
       γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ) (a b : ℕ)
     {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1)
     (hxperp : x ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ) :
     γ / (3 * (γ + 4)) ≤ Complex.re ⟪x, chainReplacement h a b x⟫_ℂ :=
-  parityReplacement_gap hq hh hsupp hγ hgap (fun _ hi ↦ (Finset.mem_filter.mp hi).2)
+  parityReplacement_gap hh hsupp hγ hgap (fun _ hi ↦ (Finset.mem_filter.mp hi).2)
     (fun i hi ↦ by have := (Finset.mem_filter.mp hi).2; omega) hx hxperp
 
 /-- Every original zero-energy vector satisfies all replacement constraints separately.
 The global zero-energy premise is equivalent to termwise frustration freeness because
 all original terms are projections. ALVV, Theorem 5.14(1). -/
 theorem chainReplacement_frustrationFree
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b : ℕ) {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : chainOperator h Ω = 0) :
     (1 - regionalProjection (chainTerm h) (evenBonds a b) m) Ω = 0 ∧
     (1 - regionalProjection (chainTerm h) (oddBonds a b) m) Ω = 0 ∧
     ∀ i < m, i ∉ evenBonds a b ∪ oddBonds a b → chainTerm h i Ω = 0 := by
-  obtain ⟨he, ho⟩ := chain_parity_commute hq hsupp a b
+  obtain ⟨he, ho⟩ := chain_parity_commute hsupp a b
   exact regionalReplacement_frustrationFree (isStarProjection_chainTerm hh) _ _ he ho m
     ((chainOperator_apply_eq_zero_iff hh Ω).mp hΩ)
 
 /-- A concrete chain gap parameter at most one yields the uniform lower bound `γ/15`
 for every unit vector orthogonal to the full ground space. ALVV, Theorem 5.14(3). -/
 theorem chainReplacement_gap_linear
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ) (hγ1 : γ ≤ 1)
     (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
       γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ) (a b : ℕ)
@@ -414,7 +413,7 @@ theorem chainReplacement_gap_linear
     γ / 15 ≤ Complex.re ⟪x, chainReplacement h a b x⟫_ℂ := by
   have hr := gap_ratio_le hγ hγ1
   norm_num only [show (2 : ℝ) ^ 2 = 4 by norm_num] at hr
-  exact hr.trans (chainReplacement_gap hq hh hsupp hγ hgap a b hx hxperp)
+  exact hr.trans (chainReplacement_gap hh hsupp hγ hgap a b hx hxperp)
 
 /-- The corrected ALVV regional-replacement theorem on a finite nearest-neighbor chain.
 It assembles layer projections, positivity, termwise frustration freeness, full
@@ -429,7 +428,7 @@ The source's false unrestricted bound is not asserted. -/
 theorem frustrationFree_regionalReplacement_chain
     (h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (hq : 1 ≤ q)
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
     (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
       γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ)
@@ -444,17 +443,17 @@ theorem frustrationFree_regionalReplacement_chain
     ((1 - regionalProjection (chainTerm h) (evenBonds a b) m) Ω = 0 ∧
       (1 - regionalProjection (chainTerm h) (oddBonds a b) m) Ω = 0 ∧
       ∀ i < m, i ∉ evenBonds a b ∪ oddBonds a b → chainTerm h i Ω = 0) ∧
-    (∀ k, operatorSchmidtRank (Entropy.cutOperator (interval L 0 k)
+    (∀ k, operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k)
       (regionalReplacementMatrix (bondTermExtension h) (evenBonds a b) (oddBonds a b) m)) ≤
         q ^ 2 + 3) ∧
-    ((a = 0 ∨ m ≤ b) → ∀ k, operatorSchmidtRank (Entropy.cutOperator (interval L 0 k)
+    ((a = 0 ∨ m ≤ b) → ∀ k, operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k)
       (regionalReplacementMatrix (bondTermExtension h) (evenBonds a b) (oddBonds a b) m)) ≤
         q ^ 2 + 2) ∧
     (∀ x ∈ (LinearMap.ker (chainReplacement h a b).toLinearMap)ᗮ, ‖x‖ = 1 →
       γ / (3 * (γ + 4)) ≤ Complex.re ⟪x, chainReplacement h a b x⟫_ℂ) := by
-  obtain ⟨he, ho⟩ := chain_parity_commute hq hsupp a b
+  obtain ⟨he, ho⟩ := chain_parity_commute hsupp a b
   have hproj := isStarProjection_chainTerm hh
-  have hk := ker_chainReplacement hq hh hsupp a b
+  have hk := ker_chainReplacement hh hsupp a b
   have hΩ' : chainReplacement h a b Ω = 0 := by
     change Ω ∈ LinearMap.ker (chainReplacement h a b).toLinearMap
     rw [hk]
@@ -462,13 +461,13 @@ theorem frustrationFree_regionalReplacement_chain
   refine ⟨(isStarProjection_regionalProjection hproj _ he m).one_sub,
     (isStarProjection_regionalProjection hproj _ ho m).one_sub,
     isPositive_regionalReplacement hproj _ _ he ho m, hk, ⟨hΩnorm, hΩ'⟩,
-    chainReplacement_frustrationFree hq hh hsupp a b hΩ,
+    chainReplacement_frustrationFree hh hsupp a b hΩ,
     (fun k ↦ rank_regionalReplacementMatrix_le_sq_add_three h hq hsupp a b k),
     (fun hb k ↦ rank_regionalReplacementMatrix_le_sq_add_two_of_boundary h hq hsupp a b k hb),
     ?_⟩
   intro x hx hxnorm
   rw [hk] at hx
-  exact chainReplacement_gap hq hh hsupp hγ hgap a b hxnorm hx
+  exact chainReplacement_gap hh hsupp hγ hgap a b hxnorm hx
 
 end Chain
 

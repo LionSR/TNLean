@@ -36,7 +36,7 @@ close phase-aligned unit ground vector.
 Source: AKLV, arXiv:1301.1162v1, Theorem 6.1 and Section 6.1. -/
 theorem original_chain_robustness {L q : ℕ} [NeZero q]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ => q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (hab : a.val + 2 < b.val)

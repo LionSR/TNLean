@@ -242,10 +242,11 @@ seven instead of the stated bound six, as shown in
         TNLean.MPS.AreaLaw.ALVV.rank_regionalProjectionMatrix_le_sq}
     \leanok
     \uses{def:alvv_ff_matrix_replacement}
-    Suppose $d\ge1$ and each $h_i$ is supported on $\lbrack i,i+2)$.
+    Suppose each $h_i$ is supported on $\lbrack i,i+2)$.
     A parity product is supported on any set containing every selected
-    bond support. Its operator Schmidt rank at each cut is at most $d^2$.
-    If no selected bond crosses that cut, its rank is at most one.
+    bond support. If no selected bond crosses a cut, its operator Schmidt
+    rank at that cut is at most one. If $d\ge1$, its operator Schmidt rank
+    at each cut is at most $d^2$.
     Projection, positivity and commutation assumptions are unnecessary
     for these rank statements.
 \end{lemma}
@@ -359,8 +360,8 @@ seven instead of the stated bound six, as shown in
         TNLean.MPS.AreaLaw.ALVV.chainReplacement_gap_linear}
     \leanok
     \uses{def:alvv_ff_chain_operators}
-    Suppose $d\ge1$ and the supplied local terms are orthogonal
-    projections supported on their nearest-neighbor bonds.
+    Suppose the supplied local terms are orthogonal projections
+    supported on their nearest-neighbor bonds.
     Then $\ker\widetilde H=\ker H$, and each vector in this kernel
     is annihilated separately by both regional layer complements and
     by every retained exterior term.

@@ -268,14 +268,14 @@ not built on that pattern.
 
 ## What is wrong now
 
-Counts are from the sixth pin move (the approximate-conversion, imaginary-time,
-truncation and entropy modules moved to QICLean deleted), re-measured with the
+Counts are from the seventh pin move (the blocking and port-output modules of
+`TNLean/Circuit` moved to QICLean deleted), re-measured with the
 script of the first audit (TNLean `3d3507f`, QICLean
 `c62f178`); where a figure of that audit is kept for comparison, it says so.
 
 ### The directory holds two libraries
 
-`TNLean/Circuit` has 105 modules and 20,544 lines (125 and 25,197 at the
+`TNLean/Circuit` has 99 modules and 18,974 lines (125 and 25,197 at the
 first audit). More than twenty root-level modules of `TNLean/Circuit` (`SiteEmbedding*`,
 `SiteExpectation*`, `Supported*`, `EntropySupport`, `ProductVector`,
 `ExpectationBounds`, ...) and all of `Circuit/LiebRobinson` mention no layer,
@@ -484,12 +484,14 @@ Sites layer has. It holds three unrelated things:
   Kept until step 4.0, by decision at pin move 6: `RegionEntropyInequalities`,
   `StateSpace`, `RegionalEntropy`, `RegionalEntropyBridge`, `EntropyDimension`,
   the relabelling half of `SiteRelabelEntropy` and the cut-budget part of
-  `MarginalTails`. Their statements are QICLean's mathematics written with the
-  other spelling of the regional entropy (`Entropy.regionEntropy` on vectors
-  over `V → Fin q`, against `FiniteProduct.entropy`); restating them as
-  one-line corollaries would only move about forty call sites twice. They are
-  repaired only as far as a pin forces, and their call sites move at step 4.0,
-  when the two spellings are unified. Pin move 6 deleted the modules whose
+  `MarginalTails`. Their statements were QICLean's mathematics written with a
+  second spelling of the regional state and entropy. Step 4.0 (LionSR/QICLean#1156,
+  #1159) unified the spellings on `ManyBody.regionState` and `ManyBody.regionEntropy`:
+  `RegionalEntropy`, `RegionalEntropyBridge` and `EntropyDimension` are deleted, the
+  cut-marginal lemma of `MarginalTails` is QICLean's
+  `ManyBody.regionState_eq_partialTraceRight_cutVector`, and `RegionEntropyInequalities`
+  keeps only the two statements QICLean does not have (`one_le_supportDim_const`,
+  `regionEntropy_eq_zero_of_localDimension_one`). Pin move 6 deleted the modules whose
   statements moved (`ZeroEntropy`, `EntropyComparison`,
   `SupportedUnitaryEntropy`, `SupportedPolarUnitary`, the sum-of-sites half of
   `SiteRelabelEntropy`, the typical-mass part of `MarginalTails`, and the
@@ -596,8 +598,9 @@ Wave 3, two tracks that share no file:
   pin move 6 (LionSR/QICLean#1150, #1151) deletes eight more and three of
   `Algebra`; what stays is described under `TNLean/Lattice` above.
 - **3H.2** (TNLean, pin move 2; done in #10905 by F8 phase 2 and its follow-up
-  #10910, apart from the deletion of `Lattice/RegionalEntropyBridge`). `ChainHamiltonian`, `DomainHamiltonian`,
-  `Lattice.LocalHamiltonian`, `SquareHamiltonian` and `RectangularHamiltonian`
+  #10910; `Lattice/RegionalEntropyBridge` was deleted at step 4.0). `ChainHamiltonian`,
+  `DomainHamiltonian`, `Lattice.LocalHamiltonian`, `SquareHamiltonian` and
+  `RectangularHamiltonian`
   become instances (`ManyBody.ChainInteraction`, `ManyBody.DomainInteraction`,
   `ManyBody.PlaneInteraction`, `ManyBody.SquareInteraction` and
   `ManyBody.RectangleInteraction`); `Lattice/RegionalEntropyBridge` is deleted.
@@ -643,6 +646,16 @@ Wave 3, two tracks that share no file:
   lines of the chain trace norm; the approximate and asymptotic conversion
   predicates are QICLean's `QICLean/Circuit/Model/Approximate`. The
   ring-geometry group is now 6 modules and 1,746 lines.
+
+  Pin move 7 (LionSR/QICLean#1155, #1157) deletes the blocking group
+  (`Channel/{SiteBlocking, RegroupedProtocol}`) and four port modules
+  (`PortSimulation`, `PhysicalPortPureOutput`, `BoundedPortPureOutput`,
+  `BoundedPortApproximateOutput`), 1,565 lines. The four physical-port dilation
+  modules (`PhysicalPort{UnitaryCompilation, LocalDilation, Dilation,
+  EnvironmentComposition}`) wait for the dilation with local environments
+  (LionSR/QICLean#1162); through `PhysicalPortIO`, `PhysicalPortEmbedding` and
+  `RegisterEnvironment` they keep 23 more port and register modules (3,661
+  lines), which go with them.
 
   The directory was not smaller after pin move 5 for two reasons. The ring
   geometry (`ringBall`, ring separation, the ring as a circuit geometry) was
@@ -705,7 +718,7 @@ model is ported.
 
 | Module | Verdict | Action |
 |---|---|---|
-| `Lattice/RegionalEntropyBridge` | two definitions of regional state and entropy | deleted in 3H.2 |
+| `Lattice/RegionalEntropyBridge` | two definitions of regional state and entropy | deleted at step 4.0 |
 | `MPS/MPDO/MutualInfoBridge` | `mutualInfoChain` beside QICLean's mutual information | deleted in F2 |
 | QICLean `Channel/Wigner/ProjectiveCarrierBridge` | two representations of vectors | deleted with the single representation |
 | QICLean `Channel/CompletelyPositiveBridge` | a local notion beside Mathlib's `CompletelyPositiveMap`; imported by no module | build on Mathlib's type or delete |

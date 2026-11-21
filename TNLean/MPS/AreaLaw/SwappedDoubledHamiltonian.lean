@@ -46,7 +46,7 @@ noncomputable def _root_.ManyBody.ChainInteraction.swappedDoubled
   term X :=
     let e := sitePairConfigurationEquiv (Fin L) q q
     let F := Matrix.reindex e e (sheetSwapOp q D)
-    F * h.doubled.term X * Fᴴ
+    F * h.doubledFin.term X * Fᴴ
   mem X := by
     exact reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
       D X.1 (h.mem X)
@@ -57,7 +57,8 @@ theorem _root_.ManyBody.ChainInteraction.isHermitian_swappedDoubled_term {L q R 
     (h : ManyBody.ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
     (D : Finset (Fin L)) (X : ManyBody.ChainSupport L R) :
     ((h.swappedDoubled D).term X).IsHermitian :=
-  Matrix.isHermitian_mul_mul_conjTranspose _ (h.isHermitian_doubled_term hh X)
+  Matrix.isHermitian_mul_mul_conjTranspose _
+    ((ManyBody.Interaction.isHermitian_doubled_term (hh X)).reindex _)
 
 /-- Each swapped doubled term has norm at most `2 * J`.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
@@ -70,9 +71,11 @@ theorem _root_.ManyBody.ChainInteraction.norm_swappedDoubled_term_le {L q R : �
   have hF : ‖F‖ ≤ 1 := by
     simpa only [F, Matrix.l2_opNorm_reindex_equiv] using norm_sheetSwapOp_le_one (q := q) D
   have hFadj : ‖Fᴴ‖ ≤ 1 := by simpa only [Matrix.l2_opNorm_conjTranspose] using hF
-  change ‖F * h.doubled.term X * Fᴴ‖ ≤ 2 * J
-  simpa only [one_mul, mul_one] using
-    norm_mul_le_of_le (norm_mul_le_of_le hF (h.norm_doubled_term_le hhJ X)) hFadj
+  have hD : ‖h.doubledFin.term X‖ ≤ 2 * J :=
+    (ManyBody.Interaction.norm_relabel_term _ _ _ _ _ X).trans_le
+      ((ManyBody.Interaction.norm_doubled_term_le h X).trans (by linarith [hhJ X]))
+  change ‖F * h.doubledFin.term X * Fᴴ‖ ≤ 2 * J
+  simpa only [one_mul, mul_one] using norm_mul_le_of_le (norm_mul_le_of_le hF hD) hFadj
 
 /-- The sum of the swapped interactions is the conjugate of the doubled operator.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
@@ -81,7 +84,7 @@ lemma _root_.ManyBody.ChainInteraction.swappedDoubled_hamiltonian
     (D : Finset (Fin L)) :
     let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
-    (h.swappedDoubled D).hamiltonian = F * h.doubled.hamiltonian * Fᴴ := by
+    (h.swappedDoubled D).hamiltonian = F * h.doubledFin.hamiltonian * Fᴴ := by
   simp only [ManyBody.Interaction.hamiltonian, ManyBody.ChainInteraction.swappedDoubled,
     Matrix.sum_mul, Matrix.mul_sum]
 
@@ -100,8 +103,8 @@ theorem _root_.ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped
       WithLp.toLp 2 (ψ₀ ∘ e.symm)
     let Φ : EuclideanSpace ℂ (Fin L → Fin (q * q)) :=
       WithLp.toLp 2 (F *ᵥ WithLp.ofLp Ψ)
-    (‖Ψ‖ = 1 ∧ IsGapped h.doubled.hamiltonian (2 * E₀) Δ ∧
-      groundSpace h.doubled.hamiltonian (2 * E₀) = Submodule.span ℂ {Ψ}) ∧
+    (‖Ψ‖ = 1 ∧ IsGapped h.doubledFin.hamiltonian (2 * E₀) Δ ∧
+      groundSpace h.doubledFin.hamiltonian (2 * E₀) = Submodule.span ℂ {Ψ}) ∧
       (‖Φ‖ = 1 ∧ IsGapped (h.swappedDoubled D).hamiltonian (2 * E₀) Δ ∧
         groundSpace (h.swappedDoubled D).hamiltonian (2 * E₀) = Submodule.span ℂ {Φ}) := by
   classical
@@ -111,19 +114,19 @@ theorem _root_.ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped
   let Ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) := WithLp.toLp 2 (ψ₀ ∘ e.symm)
   let Φ : EuclideanSpace ℂ (Fin L → Fin (q * q)) :=
     WithLp.toLp 2 (F *ᵥ WithLp.ofLp Ψ)
-  change (‖Ψ‖ = 1 ∧ IsGapped h.doubled.hamiltonian (2 * E₀) Δ ∧
-    groundSpace h.doubled.hamiltonian (2 * E₀) = Submodule.span ℂ {Ψ}) ∧
+  change (‖Ψ‖ = 1 ∧ IsGapped h.doubledFin.hamiltonian (2 * E₀) Δ ∧
+    groundSpace h.doubledFin.hamiltonian (2 * E₀) = Submodule.span ℂ {Ψ}) ∧
     (‖Φ‖ = 1 ∧ IsGapped (h.swappedDoubled D).hamiltonian (2 * E₀) Δ ∧
       groundSpace (h.swappedDoubled D).hamiltonian (2 * E₀) = Submodule.span ℂ {Φ})
   have hH := (ManyBody.Interaction.isHermitian_hamiltonian hh)
   have hgK := hgap.kronecker_add hH hH hgap (Or.inl hΔ.le)
   have hsK := ManyBody.groundSpace_kronecker_add_eq_span hH hH hgap hgap hΔ.le hΔ.le hspan hspan
   rw [min_self] at hgK
-  have hgapD : IsGapped h.doubled.hamiltonian (2 * E₀) Δ := by
-    rw [h.doubled_hamiltonian, ManyBody.isGapped_reindex_iff, two_mul]
+  have hgapD : IsGapped h.doubledFin.hamiltonian (2 * E₀) Δ := by
+    rw [h.hamiltonian_doubledFin, ManyBody.isGapped_reindex_iff, two_mul]
     exact hgK
-  have hspanD : groundSpace h.doubled.hamiltonian (2 * E₀) = Submodule.span ℂ {Ψ} := by
-    rw [h.doubled_hamiltonian, two_mul]
+  have hspanD : groundSpace h.doubledFin.hamiltonian (2 * E₀) = Submodule.span ℂ {Ψ} := by
+    rw [h.hamiltonian_doubledFin, two_mul]
     exact ManyBody.groundSpace_reindex_eq_span e hsK
   have hΩsum : ∑ i, ‖WithLp.ofLp Ω i‖ ^ 2 = 1 := by
     rw [← EuclideanSpace.norm_sq_eq, hΩ]

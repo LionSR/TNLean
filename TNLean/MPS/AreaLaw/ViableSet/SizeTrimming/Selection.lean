@@ -34,7 +34,7 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace ChainInteraction)
+open ManyBody (IsGapped groundSpace ChainInteraction ChainSupport interval)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -69,7 +69,9 @@ noncomputable def _root_.ManyBody.ChainInteraction.sizeTrimmingSelection {L q k 
   h.sizeTrimmingSelectionWith hq Δ S
     (fun m ↦ rectangularTraceNormNet (CutSite L q k × Fin m) ((Δ / 169) ^ 2 / (2 * L)))
     (fun m ↦ boundaryLeadingVector (S : Set (LeftBlockVector L q k))
-      (leftCutOperator k (h.cutLeftPart k)) m ((Δ / 169) ^ 2 / (2 * L)))
+      (leftCutOperator k (h.partialHamiltonian
+        (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k)))
+      m ((Δ / 169) ^ 2 / (2 * L)))
 
 /-- The nets are admissible when each covers the boundary densities within `c / (2L)`
 and has at most `K` points up to the uniform cut bound. -/
@@ -91,7 +93,9 @@ def _root_.ManyBody.ChainInteraction.IsAdmissibleSolver {L q k : ℕ}
       EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) : Prop :=
   haveI : NeZero q := ⟨Nat.ne_of_gt (lt_of_lt_of_le two_pos hq)⟩
   ∀ m, IsAdmissibleLeadingVector (S : Set (LeftBlockVector L q k))
-    (leftCutOperator k (h.cutLeftPart k)) m ((Δ / 169) ^ 2 / (2 * L)) (sol m)
+    (leftCutOperator k (h.partialHamiltonian
+      (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k)))
+    m ((Δ / 169) ^ 2 / (2 * L)) (sol m)
 
 /-- The selection of an admissible solver lies in the span of the input family.
 LVV13, `algo53.tex`, Claim `c:2`, line 526. -/
@@ -134,7 +138,9 @@ theorem _root_.ManyBody.ChainInteraction.norm_le_one_of_mem_sizeTrimmingSelectio
     Finset.mem_biUnion, Finset.mem_univ, true_and] at hv
   obtain ⟨m, hm⟩ := hv
   exact norm_le_one_of_mem_boundaryMinimizerFamily
-    (S : Set (LeftBlockVector L q k)) (leftCutOperator k (h.cutLeftPart k)) _ _ _ hm
+    (S : Set (LeftBlockVector L q k))
+    (leftCutOperator k (h.partialHamiltonian
+      (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k))) _ _ _ hm
 
 /-- The selection of nets with at most `K` points each has at most `(D + 1) D K` members.
 LVV13, `algo53.tex`, Claim `c:2`, lines 520–527. -/
@@ -246,12 +252,12 @@ theorem _root_.ManyBody.ChainInteraction.isViable_sizeTrimmingSelectionWith {L q
         (h.sizeTrimmingSelectionWith hq Δ S net sol : Set (LeftBlockVector L q k)) ∧
       ∃ (m : ℕ) (W : Matrix (CutRight L q k) (Fin m) ℂ)
         (u : EuclideanSpace ℂ
-          (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m)),
+          ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m)),
         Wᴴ * W = 1 ∧ m ≤ D ∧ ‖u‖ = 1 ∧
         (∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈
           h.sizeTrimmingSelectionWith hq Δ S net sol) ∧
         1 - 1 / 12 ≤ ‖⟪Γ, WithLp.toLp 2 (fun z ↦ rightApply W u
-          (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z))⟫_ℂ‖ := by
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z))⟫_ℂ‖ := by
   classical
   intro c D
   let : NeZero q := ⟨by omega⟩
@@ -262,7 +268,8 @@ theorem _root_.ManyBody.ChainInteraction.isViable_sizeTrimmingSelectionWith {L q
   have hc : 0 < c := sq_pos_of_pos (div_pos hΔ (by norm_num))
   have hη : 0 < c / (2 * L) :=
     div_pos hc (mul_pos (by norm_num) (by exact_mod_cast hL))
-  let HL := leftCutOperator k (h.cutLeftPart k)
+  let HL := leftCutOperator k (h.partialHamiltonian
+    (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k))
   let N := net
   let T := fun m : ℕ ↦ boundaryFamily (S : Set (LeftBlockVector L q k)) m (c / (2 * L)) (N m)
     (sol m)
@@ -271,9 +278,15 @@ theorem _root_.ManyBody.ChainInteraction.isViable_sizeTrimmingSelectionWith {L q
       T m.val := rfl
   obtain ⟨_, m, W, x, -, -, -, -, hW, hmD, -, hxnorm, hxP, huniform⟩ :=
     h.exists_uniform_leading_bounds_of_isViable hh hhJ hpos hL hq hΔ
-      (h.cutLeftPart k) (h.cutBoundaryPart k) (h.cutLeftPart_add_cutBoundaryPart k)
-      (h.cutLeftPart_isSupportedOn k) (h.cutBoundaryPart_isSupportedOn k)
-      (h.norm_cutBoundaryPart_le hhJ k) hΩ hgap hspan hviable
+      (h.partialHamiltonian (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k))
+      (h.partialHamiltonian (Finset.univ.filter fun X : ChainSupport L 1 ↦
+        ¬ X.1 ⊆ interval L 0 k))
+      (h.partialHamiltonian_filter_add_filter_not fun X : ChainSupport L 1 ↦
+        X.1 ⊆ interval L 0 k).symm
+      (h.partialHamiltonian_mem_supportedOperators (D := interval L 0 k) fun X hX ↦
+        (Finset.mem_filter.mp hX).2)
+      (h.isSupportedOn_partialHamiltonian_not_subset k)
+      (h.norm_partialHamiltonian_not_subset_le hhJ k) hΩ hgap hspan hviable
   let ρx := vecMulVec x (star x)
   have hρxp : ρx.PosSemidef := posSemidef_vecMulVec_self_star x
   have hρxt : ρx.trace = 1 := by
@@ -348,11 +361,11 @@ theorem _root_.ManyBody.ChainInteraction.isViable_sizeTrimmingSelection {L q k :
     IsViable Γ (1 / 12) (h.sizeTrimmingSelection hq Δ S : Set (LeftBlockVector L q k)) ∧
       ∃ (m : ℕ) (W : Matrix (CutRight L q k) (Fin m) ℂ)
         (u : EuclideanSpace ℂ
-          (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m)),
+          ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m)),
         Wᴴ * W = 1 ∧ m ≤ D ∧ ‖u‖ = 1 ∧
         (∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ h.sizeTrimmingSelection hq Δ S) ∧
         1 - 1 / 12 ≤ ‖⟪Γ, WithLp.toLp 2 (fun z ↦ rightApply W u
-          (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z))⟫_ℂ‖ := by
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z))⟫_ℂ‖ := by
   let : NeZero q := ⟨by omega⟩
   have hc : 0 < (Δ / 169) ^ 2 := sq_pos_of_pos (div_pos hΔ (by norm_num))
   have hη : 0 < (Δ / 169) ^ 2 / (2 * L) :=

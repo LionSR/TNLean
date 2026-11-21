@@ -48,7 +48,7 @@ theorem exists_interior_low_energy_original_filter_family
       let ell : ℕ := ⌈Aconst * u ^ 2 / g⌉₊
       ∀ (a b : ℕ), a + 2 * ell ≤ b → b + 2 * ell ≤ L - 1 →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2)))
       (_h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1),
       let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
@@ -78,13 +78,13 @@ theorem exists_interior_low_energy_original_filter_family
         ‖B t e K‖ ≤ 3 * t + 4 * (ell : ℝ) ∧
         let J := interval L (a + ell) (b + ell + 1)
         let beta := fun _ : Fin L ↦ Fin q
-        let tau := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+        let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
         let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-        let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration beta Jᶜ) ℂ).tensorProduct
-          (EuclideanSpace.basisFun (FiniteProduct.Configuration beta J) ℂ)).repr
+        let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+          (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
         let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-          (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ))
-          (EuclideanSpace ℂ (FiniteProduct.Configuration beta J)))
+          (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+          (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
         let D := (q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))
         let Delta := (2 * Real.exp (-2 * ((ell ^ 2 : ℕ) : ℝ) *
           Real.sqrt (w / (3 * t + 4 * (ell : ℝ) - (E0 + eta - 2 * w))))) ^ 2

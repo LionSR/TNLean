@@ -38,24 +38,24 @@ namespace TNLean.MPS.AreaLaw
 variable {L q : ℕ}
 
 private theorem cutMatrix_localLift (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ)
-    (K : Matrix (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k))
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)) ℂ) :
-    cutMatrix (toEuclideanLin (Entropy.localLift (leftBlock L k) K) ψ) k =
+    (K : Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) ℂ) :
+    cutMatrix (toEuclideanLin (ManyBody.place (leftBlock L k) K) ψ) k =
       K * cutMatrix ψ k := by
-  rw [cutMatrix_toEuclideanLin, Entropy.cutOperator_localLift,
+  rw [cutMatrix_toEuclideanLin, ManyBody.cutOperator_place,
     Matrix.schmidtCoeffMatrix_kronecker_one_mulVec]
   rfl
 
 private theorem exists_left_supported_product
     (ψ χ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ)
-    (u z : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) → ℂ)
+    (u z : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) → ℂ)
     (v : ((i : {i : Fin L // i ∉ leftBlock L k}) → Fin q) → ℂ)
     (hv : (cutMatrix ψ k)ᵀ *ᵥ z = v) (hχ : cutMatrix χ k = vecMulVec u v) :
     ∃ X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) X (leftBlock L k) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X (leftBlock L k) ∧
       toEuclideanLin X ψ = χ := by
-  refine ⟨Entropy.localLift (leftBlock L k) (vecMulVec u z),
-    Entropy.isSupportedOn_localLift _, ?_⟩
+  refine ⟨ManyBody.place (leftBlock L k) (vecMulVec u z),
+    ManyBody.place_mem_supportedOperators _, ?_⟩
   apply cutMatrix_injective k
   dsimp only
   rw [cutMatrix_localLift ψ k (vecMulVec u z), hχ, vecMulVec_mul, ← mulVec_transpose, hv]
@@ -64,27 +64,27 @@ private noncomputable def rightCutLift (k : ℕ)
     (R : Matrix ((i : {i : Fin L // i ∉ leftBlock L k}) → Fin q)
       ((i : {i : Fin L // i ∉ leftBlock L k}) → Fin q) ℂ) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  reindex (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm
-    (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm (1 ⊗ₖ R)
+  reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm
+    (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm (1 ⊗ₖ R)
 
 private theorem cutMatrix_rightCutLift (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ)
     (R : Matrix ((i : {i : Fin L // i ∉ leftBlock L k}) → Fin q)
       ((i : {i : Fin L // i ∉ leftBlock L k}) → Fin q) ℂ) :
     cutMatrix (toEuclideanLin (rightCutLift k R) ψ) k = cutMatrix ψ k * Rᵀ := by
   rw [cutMatrix_toEuclideanLin]
-  have hr : Entropy.cutOperator (leftBlock L k) (rightCutLift k R) = 1 ⊗ₖ R := by
+  have hr : ManyBody.cutOperator (leftBlock L k) (rightCutLift k R) = 1 ⊗ₖ R := by
     ext a b
-    simp [rightCutLift, Entropy.cutOperator]
+    simp [rightCutLift, ManyBody.cutOperator]
   rw [hr, Matrix.schmidtCoeffMatrix_one_kronecker_mulVec]
   rfl
 
 private theorem exists_right_supported_product
     (ψ χ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ)
-    (u : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) → ℂ)
+    (u : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) → ℂ)
     (v w : ((i : {i : Fin L // i ∉ leftBlock L k}) → Fin q) → ℂ)
     (hu : cutMatrix ψ k *ᵥ w = u) (hχ : cutMatrix χ k = vecMulVec u v) :
     ∃ X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) X (leftBlock L k)ᶜ ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X (leftBlock L k)ᶜ ∧
       toEuclideanLin X ψ = χ := by
   refine ⟨rightCutLift k (vecMulVec v w),
     Entropy.isSupportedOn_rightCut (leftBlock L k) _, ?_⟩
@@ -96,7 +96,7 @@ private theorem exists_right_supported_product
 cannot increase any cut rank. Source: arXiv:0705.0292v2, lines 436–470. -/
 theorem rank_cutMatrix_le_of_product_mem_ranges
     (ψ χ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ)
-    (u : EuclideanSpace ℂ (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)))
+    (u : EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)))
     (v : EuclideanSpace ℂ ((i : {i : Fin L // i ∉ leftBlock L k}) → Fin q))
     (hu : u ∈ LinearMap.range (toEuclideanLin (cutMatrix ψ k)))
     (hv : v ∈ LinearMap.range (toEuclideanLin (cutMatrix ψ k)ᵀ))
@@ -128,7 +128,7 @@ Source: arXiv:0705.0292v2, the footnote at lines 436–470. -/
 theorem IsOpenMPS.of_product_mem_cut_ranges {D : ℕ}
     {ψ χ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hψ : IsOpenMPS L q D (fun x ↦ ψ x)) (k : ℕ)
-    (u : EuclideanSpace ℂ (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)))
+    (u : EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)))
     (v : EuclideanSpace ℂ ((i : {i : Fin L // i ∉ leftBlock L k}) → Fin q))
     (hu : u ∈ LinearMap.range (toEuclideanLin (cutMatrix ψ k)))
     (hv : v ∈ LinearMap.range (toEuclideanLin (cutMatrix ψ k)ᵀ))
@@ -144,23 +144,23 @@ Source: arXiv:0705.0292v2, the footnote at lines 436–470. -/
 theorem IsOpenMPS.exists_product_overlap_ge {D : ℕ}
     {ψ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hψ : IsOpenMPS L q D (fun x ↦ ψ x)) (hnorm : ‖ψ‖ = 1) (k : ℕ)
-    (a : EuclideanSpace ℂ (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)))
+    (a : EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)))
     (b : EuclideanSpace ℂ ((i : {i : Fin L // i ∉ leftBlock L k}) → Fin q)) :
     ∃ (χ : EuclideanSpace ℂ (Fin L → Fin q))
-      (u : EuclideanSpace ℂ (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)))
+      (u : EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)))
       (v : EuclideanSpace ℂ ((i : {i : Fin L // i ∉ leftBlock L k}) → Fin q)),
       IsOpenMPS L q D (fun x ↦ χ x) ∧ ‖χ‖ = 1 ∧ ‖u‖ = 1 ∧ ‖v‖ = 1 ∧
       cutMatrix χ k = vecMulVec (WithLp.ofLp u) (WithLp.ofLp v) ∧
       (∀ j, (cutMatrix χ j).rank ≤ (cutMatrix ψ j).rank) ∧
-      ‖inner ℂ (euclideanTensorVector a b) (Entropy.cutVector (leftBlock L k) ψ)‖ ≤
+      ‖inner ℂ (euclideanTensorVector a b) (ManyBody.cutVector (leftBlock L k) ψ)‖ ≤
         ‖inner ℂ a u‖ * ‖inner ℂ b v‖ := by
-  have hC : ‖Entropy.cutVector (leftBlock L k) ψ‖ = 1 :=
+  have hC : ‖ManyBody.cutVector (leftBlock L k) ψ‖ = 1 :=
     (Entropy.norm_cutVector (leftBlock L k) ψ).trans hnorm
   obtain ⟨u, v, hu, hv, huC, hvC, huv⟩ :=
     Matrix.exists_unit_product_overlap_ge (cutMatrix ψ k) hC a b
   let χ : EuclideanSpace ℂ (Fin L → Fin q) := WithLp.toLp 2 fun x ↦
-    euclideanTensorVector u v ((Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)) x)
-  have hcut : Entropy.cutVector (leftBlock L k) χ = euclideanTensorVector u v := by
+    euclideanTensorVector u v ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)) x)
+  have hcut : ManyBody.cutVector (leftBlock L k) χ = euclideanTensorVector u v := by
     ext ij
     simp [χ]
   have hmatrix : cutMatrix χ k = vecMulVec (WithLp.ofLp u) (WithLp.ofLp v) := by

@@ -59,25 +59,11 @@ private theorem sharpLower_marginalMoment_finiteProduct
     {Λ : Finset (ℤ × ℤ)} {q : ℕ}
     (Ωt : StateSpace Λ q) (U : Finset (Site Λ)) (Kmom u : ℝ)
     (h : Real.log (Entropy.surprisalMoment
-      (reducedState_isHermitian Λ q Ωt U).eigenvalues u) ≤
-        u * regionalEntropy Λ q Ωt U + Kmom * u ^ 2) :
+      (ManyBody.regionState_isHermitian U Ωt).eigenvalues u) ≤
+        u * ManyBody.regionEntropy Ωt U + Kmom * u ^ 2) :
     Real.log (Entropy.surprisalMoment
-      (FiniteProduct.reducedPure_posSemidef
-        (fun _ : Site Λ => Fin q) Ωt U).isHermitian.eigenvalues u) ≤
-      u * FiniteProduct.entropy (fun _ : Site Λ => Fin q) Ωt U + Kmom * u ^ 2 := by
-  classical
-  let β := fun _ : Site Λ => Fin q
-  have hEigen := congrArg (fun A : {A : Matrix (FiniteProduct.Configuration β U)
-      (FiniteProduct.Configuration β U) ℂ // A.IsHermitian} => A.2.eigenvalues)
-    (Subtype.ext
-      (a1 := ⟨reducedState Λ q Ωt U, reducedState_isHermitian Λ q Ωt U⟩)
-      (a2 := ⟨FiniteProduct.reducedPure β Ωt U,
-        (FiniteProduct.reducedPure_posSemidef β Ωt U).isHermitian⟩)
-      (reducedState_eq_finiteProduct Λ q Ωt U))
-  change Real.log (Entropy.surprisalMoment
-    (FiniteProduct.reducedPure_posSemidef β Ωt U).isHermitian.eigenvalues u) ≤
-      u * FiniteProduct.entropy β Ωt U + Kmom * u ^ 2
-  rw [← hEigen, ← regionalEntropy_eq_finiteProduct Λ q Ωt U]
+      (ManyBody.regionState_posSemidef U Ωt).isHermitian.eigenvalues u) ≤
+      u * ManyBody.regionEntropy Ωt U + Kmom * u ^ 2 := by
   exact h
 
 open Classical in
@@ -89,25 +75,24 @@ private theorem actualTerminal_sharpLower_moments
       (s ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state hist g),
         ∀ u : ℝ, |u| ≤ rMom →
           Real.log (Entropy.surprisalMoment
-            (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-            u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2) ∧
+            (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+            u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2) ∧
       (s + 1 ≤ S.n * S.m →
         ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist g),
           ∀ u : ℝ, |u| ≤ rMom →
             Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2)) :
-    let β := fun _ : Site Λ => Fin q
+              (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+              u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2)) :
     let σ := terminalPartition S (S.n * S.m)
     let Q := fun j g => receiving (σ j g) false
     let Y := fun j g => middle (σ j g)
     ∀ j g (b : Fin 3) (u : ℝ), |u| ≤ rMom →
-      let U := FiniteProduct.regionalPhysicalRegion (Q j g) (Y j g) b
+      let U := ManyBody.regionalPhysicalRegion (Q j g) (Y j g) b
       Real.log (Entropy.surprisalMoment
-        (FiniteProduct.reducedPure_posSemidef β Ωt U).isHermitian.eigenvalues u) ≤
-          u * FiniteProduct.entropy β Ωt U + Kmom * u ^ 2 := by
+        (ManyBody.regionState_posSemidef U Ωt).isHermitian.eigenvalues u) ≤
+          u * ManyBody.regionEntropy Ωt U + Kmom * u ^ 2 := by
   classical
-  intro β σ Q Y
+  intro σ Q Y
   have hfar (j : terminalFamily S.K S.m S.M (S.n * S.m)) (g : Fin S.K) :
       receiving (σ j g) true = (Q j g ∪ Y j g)ᶜ := by
     ext x
@@ -118,8 +103,8 @@ private theorem actualTerminal_sharpLower_moments
       U ∈ statusMarginalRegions S.depth (σ j g) →
       ∀ u : ℝ, |u| ≤ rMom →
         Real.log (Entropy.surprisalMoment
-          (reducedState_isHermitian Λ q Ωt U).eigenvalues u) ≤
-          u * regionalEntropy Λ q Ωt U + Kmom * u ^ 2 := fun
+          (ManyBody.regionState_isHermitian U Ωt).eigenvalues u) ≤
+          u * ManyBody.regionEntropy Ωt U + Kmom * u ^ 2 := fun
     | Sum.inl ⟨s, hist⟩, g, U, hU, u, hu =>
       (hmom s.val hist g).1 (Nat.le_of_lt_succ s.isLt) U hU u hu
     | Sum.inr ⟨s, hist⟩, g, U, hU, u, hu =>
@@ -127,8 +112,8 @@ private theorem actualTerminal_sharpLower_moments
   intro j g b u hu U
   have hmem : U ∈ statusMarginalRegions S.depth (σ j g) := by
     fin_cases b
-    · simp [U, FiniteProduct.regionalPhysicalRegion, statusMarginalRegions, Q]
-    · simp [U, FiniteProduct.regionalPhysicalRegion, statusMarginalRegions, Y]
+    · simp [U, ManyBody.regionalPhysicalRegion, statusMarginalRegions, Q]
+    · simp [U, ManyBody.regionalPhysicalRegion, statusMarginalRegions, Y]
     · change (Q j g ∪ Y j g)ᶜ ∈ statusMarginalRegions S.depth (σ j g)
       rw [← hfar]
       simp [statusMarginalRegions]
@@ -219,15 +204,14 @@ theorem exists_actualScan_suppliedPrevector_sharp_lower
       (s ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state hist g),
         ∀ u : ℝ, |u| ≤ rMom →
           Real.log (Entropy.surprisalMoment
-            (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-            u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2) ∧
+            (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+            u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2) ∧
       (s + 1 ≤ S.n * S.m →
         ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist g),
           ∀ u : ℝ, |u| ≤ rMom →
             Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2)) :
-    let β := fun _ : Site Λ => Fin q
+              (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+              u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2)) :
     let n := augmentedDimensions (V := Site Λ) q (fun _ => d)
     let pre : (k : ℕ) → Config k (fun v => Fin (n v)) → ℂ := fun k =>
       replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
@@ -235,9 +219,9 @@ theorem exists_actualScan_suppliedPrevector_sharp_lower
     let Q := fun j g => receiving (σ j g) false
     let Y := fun j g => middle (σ j g)
     let entropyGap := fun j g =>
-      FiniteProduct.entropy β Ωt (Q j g) +
-        FiniteProduct.entropy β Ωt (Q j g ∪ Y j g)ᶜ -
-        FiniteProduct.entropy β Ωt (Y j g)
+      ManyBody.regionEntropy Ωt (Q j g) +
+        ManyBody.regionEntropy Ωt (Q j g ∪ Y j g)ᶜ -
+        ManyBody.regionEntropy Ωt (Y j g)
     let gaps := (Finset.univ :
       Finset (terminalFamily S.K S.m S.M (S.n * S.m) × Fin S.K)).image
         (fun j => entropyGap j.1 j.2)
@@ -274,7 +258,7 @@ theorem exists_actualScan_suppliedPrevector_sharp_lower
             ((S.actualChargeScanRound hm hM s.val n
               (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p) Tcharge) := by
   classical
-  intro β n pre σ Q Y entropyGap gaps gmax
+  intro n pre σ Q Y entropyGap gaps gmax
   obtain ⟨c, Cf, hc, hCf, hlower⟩ :=
     exists_actualScan_sharp_lower_norm (Λ := Λ) (q := q) (d := d) (R := R) (J := J) a ha
   refine ⟨c, Cf, hc, hCf,

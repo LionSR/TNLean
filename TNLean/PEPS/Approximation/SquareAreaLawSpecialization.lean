@@ -81,13 +81,12 @@ basis maps. Source: polynomial-PEPS `01-preliminaries.tex`, lines 23–31,
 definition of `S_ω(A)`. -/
 theorem finiteProductEntropy_relabel (σ : V ≃ W) (q : ℕ)
     (Ω : EuclideanSpace ℂ (V → Fin q)) (A : Finset V) :
-    FiniteProduct.entropy (fun _ : W ↦ Fin q)
+    ManyBody.regionEntropy
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (σ.arrowCongr (Equiv.refl (Fin q))) Ω)
         (A.map σ.toEmbedding) =
-      FiniteProduct.entropy (fun _ : V ↦ Fin q) Ω A := by
+      ManyBody.regionEntropy Ω A := by
   have h := Entropy.regionEntropy_relabel (n := fun _ : V ↦ q) (n' := fun _ : W ↦ q)
     A (A.map σ.toEmbedding) σ (by simp) (fun _ ↦ Equiv.refl _) Ω
-  simp only [Entropy.regionEntropy, ManyBody.regionEntropy_eq_entropy] at h
   convert h using 2
   ext x
   rfl
@@ -99,15 +98,15 @@ edges of the transported cut in the integer rectangle. Source: polynomial-PEPS
 `01-preliminaries.tex`, lines 47–50, definition of `∂_Λ A`, and area-law
 Section 1. -/
 theorem card_edgeBoundary_rectangle {L : ℕ} (A : Finset (Vertex L)) :
-    (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
-        (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)).card =
+    (Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
+        (A.map (ManyBody.rectangleSiteEquiv L L).toEmbedding)).card =
       Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e} := by
   classical
-  let σ := AreaLaw.rectangleSiteEquiv L L
+  let σ := ManyBody.rectangleSiteEquiv L L
   have hadj : ∀ a b : Vertex L,
-      (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)).Adj (σ a) (σ b) ↔
+      (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L)).Adj (σ a) (σ b) ↔
         (squareLatticeGraph L L).Adj a b :=
-    fun a b ↦ (AreaLaw.rectangleGraphIso L L).map_rel_iff
+    fun a b ↦ (ManyBody.rectangleGraphIso L L).map_rel_iff
   have hmem : ∀ a : Vertex L, σ a ∈ A.map σ.toEmbedding ↔ a ∈ A := fun a ↦ by simp [σ]
   rw [Fintype.card_subtype]
   symm
@@ -161,7 +160,7 @@ Source: polynomial-PEPS Proposition 2.1 (`prop:area-law`),
 def SquareEntropyAreaLawAt (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (C_A : ℝ) : Prop :=
   0 ≤ C_A ∧
     ∀ L : ℕ, ∀ Ω : StateSpace L q, G L Ω → ∀ A : Finset (Vertex L),
-        FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
+        ManyBody.regionEntropy Ω A ≤
           C_A * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e}
 
 /-- The square-grid entropy area law of the polynomial-PEPS paper: for fixed
@@ -192,20 +191,22 @@ theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
       ∀ Ω : Lattice.StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ A : Finset (Lattice.Site Λ),
-          Lattice.regionalEntropy Λ q Ω A ≤ C * (Lattice.edgeBoundary Λ A).card)
+          ManyBody.regionEntropy Ω A ≤ C * (Lattice.edgeBoundary Λ A).card)
     {L : ℕ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
         {E₀ : ℝ} {Ω : StateSpace L q}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Vertex L)) :
-    FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
+    ManyBody.regionEntropy Ω A ≤
       C * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e} := by
-  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hh hΩ hgap hspan
-  have := hbound (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian
-    h.isHermitian_toAreaLawHamiltonian_term (h.norm_toAreaLawHamiltonian_term_le hhJ) E₀
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toPlaneInteraction_hermitianPart hh hΩ hgap hspan
+  have := hbound (ManyBody.rectangularDomain L L)
+    (ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart)
+    h.isHermitian_toPlaneInteraction_hermitianPart_term
+    (h.norm_toPlaneInteraction_hermitianPart_term_le hhJ) E₀
     (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap' hspan'
-        (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
-  rw [Lattice.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
-  exact (finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω A).symm.trans_le
+        (A.map (ManyBody.rectangleSiteEquiv L L).toEmbedding)
+  rw [card_edgeBoundary_rectangle] at this
+  exact (finiteProductEntropy_relabel (ManyBody.rectangleSiteEquiv L L) q Ω A).symm.trans_le
     this
 
 /-- The uniform finite-domain area law at range one implies the square-grid

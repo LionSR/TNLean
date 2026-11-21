@@ -53,8 +53,8 @@ theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings_
     {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (X Y : Finset (Fin L)) {A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A X)
-    (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B Y)
+    (hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A X)
+    (hB : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B Y)
     (d : ℕ) (hd : ∀ x ∈ X, ∀ y ∈ Y, d ≤ Nat.dist x.val y.val)
     (t : ℝ) (hcone : hastingsLRVelocity R J * |t| ≤ d) :
     ‖ManyBody.heisenbergEvolution h.hamiltonian t A * B -
@@ -103,7 +103,7 @@ theorem Hastings.exists_regionEntropy_prefix_le_sourceLength (R : ℕ) :
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ i : ℕ,
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 i) ≤
           c₀ * (6 * hastingsLRLength R J Δ) * Real.log (6 * hastingsLRLength R J Δ) *
             Real.log q * (2 : ℝ) ^ ((6 * hastingsLRLength R J Δ) * Real.log q) := by
   obtain ⟨c₀, hc₀, hbound⟩ := Hastings.exists_regionEntropy_prefix_le_printed R

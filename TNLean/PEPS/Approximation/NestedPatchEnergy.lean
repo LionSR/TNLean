@@ -58,7 +58,7 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (center : ℝ × ℝ) (u κ b : ℝ)
     (hu : 4 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
-    let Λ := AreaLaw.rectangularDomain L L
+    let Λ := ManyBody.rectangularDomain L L
     letI : LinearOrder (Lattice.Site Λ) :=
       (Fintype.equivFin (Lattice.Site Λ)).linearOrder
     let m := AreaLaw.Geometry.nestedPatchCount u
@@ -75,7 +75,9 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
       let φ : Lattice.StateSpace Λ q :=
         (normalizedRegularizedPatchOutput (Out := fun _ : Lattice.Site Λ ↦ Fin q)
           regions a b Ωᵤ x)
-      (inner ℂ φ (Matrix.toEuclideanLin h.toAreaLawHamiltonian.hamiltonian φ)).re - E₀ ≤
+      (inner ℂ φ (Matrix.toEuclideanLin
+          (ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart).hamiltonian
+            φ)).re - E₀ ≤
         36 * (q : ℝ) ^ 2 * J * κ ^ 2 := by
   intro Λ m regions a Ωᵤ x hx hmin φ
   have hm : (0 : ℝ) < m := Nat.cast_pos.mpr (AreaLaw.Geometry.nestedPatchCount_pos u)
@@ -92,8 +94,8 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
     (n := fun _ : Lattice.Site Λ ↦ q) regions hregions a ha hb Ωᵤ hΩᵤ x hx hmin
   obtain ⟨T, hsupp, hherm, hTnorm, hTsum⟩ := h.exists_nearestNeighbor_terms hh hhJ
   let D : ℕ → Finset (Lattice.Site Λ) := AreaLaw.Geometry.nestedPatch Λ center u
-  let K : (j : Fin m) → Matrix (Entropy.RegionConfig (fun _ : Lattice.Site Λ ↦ q) (D j))
-      (Entropy.RegionConfig (fun _ : Lattice.Site Λ ↦ q) (D j)) ℂ :=
+  let K : (j : Fin m) → Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j))
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j)) ℂ :=
     fun j ↦ (x j + b • 1) ^ (-(a j) / 2)
   have hunit : ∀ j, IsUnit (K j).det := fun j ↦
     (Matrix.isUnit_iff_isUnit_det _).mp (((hx j).1.add_smul_one_posDef hb).rpow _).isUnit
@@ -111,8 +113,9 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
     Entropy.liftProdInv_mul_liftProd_of_isUnit fun p hp ↦
       (List.mem_map.mp hp).elim fun i hi ↦ hi.2 ▸ hunit i
   have heig := Entropy.toEuclideanLin_conj_apply_eq
-    (ManyBody.mem_groundSpace_iff.mp ((h.isGapped_toAreaLawHamiltonian hh hΩ hgap hspan).2.2 ▸
-      Submodule.mem_span_singleton_self _)) hinv
+    (ManyBody.mem_groundSpace_iff.mp
+      ((h.isGapped_toPlaneInteraction_hermitianPart hh hΩ hgap hspan).2.2 ▸
+        Submodule.mem_span_singleton_self _)) hinv
     (((‖Matrix.toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
       (AreaLaw.rectangleAreaLawState Ω)‖⁻¹ : ℝ) : ℂ))
   rw [← hφpatch, ← hTsum] at heig
@@ -126,7 +129,7 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
     intro i j hj k hk
     have hc (l : Fin m) (hl : l ∈ Entropy.splitIndices
         (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m) :
-        i ∈ Entropy.crossingTerms (AreaLaw.nearestNeighborSupport (Λ := Λ)) (D l) :=
+        i ∈ ManyBody.crossingTerms (AreaLaw.nearestNeighborSupport (Λ := Λ)) (D l) :=
       by
         simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
         exact Entropy.mem_splitIndices.mp hl
@@ -140,9 +143,9 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
   have henergy := Entropy.re_inner_sub_le_of_chain_sharp D hD K hunit hφ a ha₁ hcl
     T (AreaLaw.nearestNeighborSupport (Λ := Λ)) hsupp hherm σ₀ hTnorm hsingle heig
   have hcard (A S : Finset (Lattice.Site Λ)) :
-      Fintype.card (Entropy.InnerConfig (fun _ : Lattice.Site Λ ↦ q) A S) =
+      Fintype.card (ManyBody.InnerConfig (fun _ : Lattice.Site Λ ↦ q) A S) =
         Fintype.card (↥(S ∩ A) → Fin q) := by
-    rw [Entropy.card_innerConfig]
+    rw [ManyBody.card_innerConfig]
     simp only [Finset.prod_const, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe]
   simp only [hcard, hTsum] at henergy
   rw [AreaLaw.nearestNeighbor_crossing_budget (Λ := Λ) q J

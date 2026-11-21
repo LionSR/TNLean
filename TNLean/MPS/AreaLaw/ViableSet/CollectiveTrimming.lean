@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.Basic
-import QICLean.Analysis.ViableSubspaceTrimming
+import QICLean.Entropy.ViableSampling.ViableSubspaceTrimming
 
 /-!
 # Collective trimming of a viable subspace on the chain
@@ -66,13 +66,13 @@ variable {L q : ℕ}
 of the first `i` sites and `y` that of the rest, as a linear isometry. -/
 noncomputable def blockSplit (L q i : ℕ) :
     EuclideanSpace ℂ (Fin L → Fin q) ≃ₗᵢ[ℂ]
-      EuclideanSpace ℂ (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) ×
+      EuclideanSpace ℂ ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) ×
         ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)) :=
-  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L i))
+  LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L i))
 
 @[simp]
 theorem blockSplit_apply (i : ℕ) (ψ : EuclideanSpace ℂ (Fin L → Fin q))
-    (x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i))
+    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)))
     (y : (v : {v : Fin L // v ∉ leftBlock L i}) → Fin q) :
     blockSplit L q i ψ (x, y) = cutMatrix ψ i x y :=
   rfl
@@ -80,10 +80,10 @@ theorem blockSplit_apply (i : ℕ) (ψ : EuclideanSpace ℂ (Fin L → Fin q))
 /-- Joining the block coordinates restores a vector on the chain. -/
 theorem blockSplit_symm_eq (i : ℕ)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) ×
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) ×
         ((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q))) :
     (blockSplit L q i).symm u = WithLp.toLp 2 (fun z ↦
-      u (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L i) z)) := by
+      u (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L i) z)) := by
   ext z
   simp [blockSplit, LinearIsometryEquiv.piLpCongrLeft_symm,
     LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft']
@@ -171,17 +171,17 @@ theorem rank_cutEnvVector_blockSplit {i j : ℕ} (hj : j + 1 ≤ i)
     refine congrArg (fun c : Fin L → Fin q ↦ ψ c) (funext fun v ↦ ?_)
     by_cases hv : v.val < j + 1
     · have hvi : v ∈ leftBlock L i := mem_leftBlock.2 (lt_of_lt_of_le hv hj)
-      rw [Entropy.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.2 hv),
-        Entropy.cutEquiv_symm_apply_mem _ _ hvi,
-        Entropy.cutEquiv_symm_apply_mem _ _ (mem_blockCut.2 hv)]
+      rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.2 hv),
+        ManyBody.cutEquiv_symm_apply_mem _ _ hvi,
+        ManyBody.cutEquiv_symm_apply_mem _ _ (mem_blockCut.2 hv)]
       rfl
     · have hv' : v ∉ leftBlock L (j + 1) := fun h ↦ hv (mem_leftBlock.1 h)
-      rw [Entropy.cutEquiv_symm_apply_not_mem _ _ hv']
+      rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ hv']
       by_cases hvi : v ∈ leftBlock L i
-      · rw [Entropy.cutEquiv_symm_apply_mem _ _ hvi,
-          Entropy.cutEquiv_symm_apply_not_mem _ _ (fun h ↦ hv (mem_blockCut.1 h))]
+      · rw [ManyBody.cutEquiv_symm_apply_mem _ _ hvi,
+          ManyBody.cutEquiv_symm_apply_not_mem _ _ (fun h ↦ hv (mem_blockCut.1 h))]
         simp [blockRestSubtypeEquiv, mem_leftBlock.1 hvi, Equiv.sumArrowEquivProdArrow]
-      · rw [Entropy.cutEquiv_symm_apply_not_mem _ _ hvi]
+      · rw [ManyBody.cutEquiv_symm_apply_not_mem _ _ hvi]
         have hvi' : ¬v.val < i := fun h ↦ hvi (mem_leftBlock.2 h)
         simp [blockRestSubtypeEquiv, hvi', Equiv.sumArrowEquivProdArrow]
   rw [h, rank_submatrix]
@@ -236,7 +236,7 @@ sites, for `j + 1 < i`: `ξ² · rank ≤ s`. -/
 theorem schmidtRank_cutVector_chainTrimVector_le {ξ : ℝ} (hξ : 0 < ξ)
     {S : Submodule ℂ (LeftBlockVector L q i)} (u : OrthonormalBasis (Fin s) ℂ S) {j : ℕ}
     (hj : j + 1 < i) (k : Fin s) :
-    ξ ^ 2 * Matrix.schmidtRank (WithLp.ofLp (Entropy.cutVector (blockCut L i j)
+    ξ ^ 2 * Matrix.schmidtRank (WithLp.ofLp (ManyBody.cutVector (blockCut L i j)
       (chainTrimVector ξ (fun k ↦ (u k : LeftBlockVector L q i)) k))) ≤ s :=
   Entropy.schmidtRank_cutVector_trimmed_le (blockCut_mono L i) hξ u (by omega) k
 

@@ -15,8 +15,7 @@ state the two models separately following
         ManyBody.planeDomainGraph,
         TNLean.Lattice.graphNeighborhood,
         TNLean.Lattice.configurationSplit,
-        TNLean.Lattice.card_configuration,
-        TNLean.Lattice.card_regionConfig
+        TNLean.Lattice.card_configuration
     }
     \leanok
     Let $\Lambda\subset\mathbb Z^2$ be finite (possibly empty, perforated, or
@@ -79,14 +78,14 @@ state the two models separately following
         ManyBody.isAdmissibleSupport_zero_iff,
         ManyBody.isAdmissibleSupport_singleton,
         ManyBody.isAdmissibleSupport_pair_of_adj,
-        TNLean.PEPS.AreaLaw.rectangleEmbedding,
-        TNLean.PEPS.AreaLaw.rectangleEmbedding_injective,
-        TNLean.PEPS.AreaLaw.rectangularDomain,
-        TNLean.PEPS.AreaLaw.rectangleSiteEquiv,
-        TNLean.PEPS.AreaLaw.rectangleSiteEquiv_val,
-        TNLean.PEPS.AreaLaw.rectangleGraphIso,
+        ManyBody.rectangleEmbedding,
+        ManyBody.rectangleEmbedding_injective,
+        ManyBody.rectangularDomain,
+        ManyBody.rectangleSiteEquiv,
+        ManyBody.rectangleSiteEquiv_val,
+        ManyBody.rectangleGraphIso,
         TNLean.PEPS.AreaLaw.rectangleConfigurationEquiv,
-        TNLean.PEPS.AreaLaw.isAdmissibleSupport_rectangle_pair_of_adj
+        TNLean.PEPS.AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv
     }
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}
@@ -112,11 +111,9 @@ state the two models separately following
         ManyBody.IsGapped,
         ManyBody.groundSpace,
         ManyBody.isGapped_and_groundSpace_eq_span_iff,
-        TNLean.Lattice.reducedState,
-        TNLean.Lattice.reducedState_isHermitian,
-        TNLean.Lattice.regionalEntropy,
-        TNLean.Lattice.reducedState_eq_regionState,
-        TNLean.Lattice.regionalEntropy_eq_regionEntropy,
+        ManyBody.regionState,
+        ManyBody.regionState_isHermitian,
+        ManyBody.regionEntropy,
         TNLean.PEPS.AreaLaw.UniformAreaLaw
     }
     \leanok
@@ -167,7 +164,7 @@ state the two models separately following
 \begin{lemma}[Regional reductions of pure vectors]
     \label{thm:area_law_regional_state_identities}
     \lean{
-        TNLean.Lattice.reducedState_posSemidef,
+        ManyBody.regionState_posSemidef,
         TNLean.PEPS.AreaLaw.trace_reducedState_eq_norm_sq,
         TNLean.PEPS.AreaLaw.trace_reducedState,
         TNLean.PEPS.AreaLaw.regionalEntropy_nonneg,
@@ -444,7 +441,7 @@ state the two models separately following
 
 \begin{lemma}[Distinct interactions have distinct supports]
     \label{thm:square_interaction_support_injective}
-    \lean{TNLean.PEPS.AreaLaw.squareLatticeSiteOrEdgeSupport_injective}
+    \lean{ManyBody.squareLatticeSiteOrEdgeSupport_injective}
     \leanok
     \uses{def:square_interaction_support}
     On the sites and edges of a rectangular square lattice of any width and
@@ -505,7 +502,7 @@ state the two models separately following
 
 \begin{lemma}[Relabelling the original interaction supports]
     \label{thm:square_interaction_support_relabel}
-    \lean{TNLean.PEPS.Approximation.rectangleAreaLawSupport_val_eq_nearestNeighborSupport}
+    \lean{TNLean.PEPS.Approximation.rectangleSupport_val_eq_nearestNeighborSupport}
     \leanok
     \uses{def:square_area_law_support,def:peps_square_edge_correspondence}
     With any total order on $\Lambda=\{0,\ldots,L-1\}^2$, let $e$ map $v\mapsto\sigma(v)$

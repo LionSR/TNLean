@@ -38,7 +38,7 @@ noncomputable def normalizedRegularizedPatchMarginal (a : Fin m → ℝ) (b : �
     (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
     (R : Finset V) : Matrix ((v : R) → Out v.1) ((v : R) → Out v.1) ℂ :=
-  FiniteProduct.reducedPure Out
+  ManyBody.regionState
     ((normalizedRegularizedPatchOutput regions a b Ω x)) R
 
 /-- Canonical regularized patch marginals are positive semidefinite. -/
@@ -47,7 +47,7 @@ theorem normalizedRegularizedPatchMarginal_posSemidef (a : Fin m → ℝ) (b : �
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
     (R : Finset V) :
     (normalizedRegularizedPatchMarginal regions a b Ω x R).PosSemidef :=
-  FiniteProduct.reducedPure_posSemidef Out _ R
+  ManyBody.regionState_posSemidef R _
 
 /-- Every feasible regularized output has trace-one canonical marginals,
 including the marginal on the empty region. -/
@@ -57,7 +57,7 @@ theorem trace_normalizedRegularizedPatchMarginal (a : Fin m → ℝ) (ha : ∀ j
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
     (hx : x ∈ regularizedPatchDomain regions) (R : Finset V) :
     (normalizedRegularizedPatchMarginal regions a b Ω x R).trace = 1 := by
-  apply FiniteProduct.trace_reducedPure
+  apply ManyBody.trace_regionState_eq_one
   exact norm_normalizedRegularizedPatchOutput regions a ha hb Ω hΩ hx
 
 /-- Regional expectations in the normalized regularized output are precisely
@@ -82,8 +82,8 @@ theorem reindex_normalizedRegularizedPatchMarginal {n : V → ℕ}
     (R : Finset V) :
     Matrix.reindex (dependentRegionFinEquiv e R) (dependentRegionFinEquiv e R)
         (normalizedRegularizedPatchMarginal regions a b Ω x R) =
-      Entropy.regionState R (dependentGlobalFinIsometry e
-        (normalizedRegularizedPatchOutput regions a b Ω x)) :=
+      ManyBody.regionState (dependentGlobalFinIsometry e
+        (normalizedRegularizedPatchOutput regions a b Ω x)) R :=
   reindex_reducedPure_eq_regionState e R _
 
 end TNLean.PEPS

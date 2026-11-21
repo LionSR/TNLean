@@ -177,10 +177,10 @@ theorem compl_interval_zero (L i : ℕ) : (interval L 0 i)ᶜ = interval L i L :
 the dimension bound for the complementary final segment. -/
 theorem regionEntropy_interval_zero_le {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     (hq : 1 ≤ q) (i : ℕ) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 i) ≤
       ((L - i : ℕ) : ℝ) * Real.log q := by
-  rw [← Entropy.regionEntropy_compl, compl_interval_zero]
-  refine (regionEntropy_le_card_mul_log hΩ _).trans ?_
+  rw [← ManyBody.regionEntropy_compl, compl_interval_zero]
+  refine (ManyBody.regionEntropy_le_card_mul_log hΩ _).trans ?_
   have := Real.log_nonneg (by exact_mod_cast hq : (1 : ℝ) ≤ q)
   gcongr
   exact card_interval_le i L
@@ -212,20 +212,20 @@ theorem regionEntropy_prefix_le_of_windowClaim_of_le (hq : 1 ≤ q)
     {ξ' C₁ C₂ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 < 2 * C₁) (hC : 0 ≤ Real.log C₁ + C₂)
     (l₀ : ℕ) (hl₀ : doublingWindowLength ξ' C₁ C₂ q ≤ l₀) (W : ℕ → ℕ → ℝ)
     (hdrop : ∀ i k : ℕ, i ≤ k → k ≤ L →
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω -
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 i) -
           ((k - i : ℕ) : ℝ) * Real.log q ≤
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 k) Ω)
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k))
     (hpos : ∀ i l : ℕ, i + l₀ ≤ L → l ≤ l₀ → 0 ≤ W i l)
     (hinit : ∀ i l : ℕ, i + l₀ ≤ L → l ≤ l₀ → W i l ≤ l * Real.log q)
     (hclaim : ∀ i : ℕ, i + l₀ ≤ L →
       (∀ k : ℕ, i ≤ k → k ≤ i + l₀ →
         2 * (3 * Real.log q * l₀) / 3 ≤
-          Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 k) Ω) →
+          ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k)) →
       ∀ l : ℕ, 2 * (l : ℝ) ≤ l₀ →
         W i (2 * l) ≤ 2 * W i l - (1 - 2 * C₁ * Real.exp (-(l / ξ'))) * (l / ξ') +
           Real.log C₁ + C₂)
     (i : ℕ) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 i) ≤
       3 * Real.log q * l₀ := by
   set Smax := 3 * Real.log q * l₀ with hSmax
   have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
@@ -240,7 +240,7 @@ theorem regionEntropy_prefix_le_of_windowClaim_of_le (hq : 1 ≤ q)
     push Not at hcon
     -- Every cut of the window has entropy at least `S_cut = 2 S_max/3`, eq. `sbnd`.
     have hcut : ∀ k : ℕ, i ≤ k → k ≤ i + l₀ →
-        2 * Smax / 3 ≤ Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 k) Ω := by
+        2 * Smax / 3 ≤ ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k) := by
       intro k hik hk
       have hd := hdrop i k hik (hk.trans hfit)
       have hki : ((k - i : ℕ) : ℝ) ≤ l₀ := by exact_mod_cast (by omega : k - i ≤ l₀)
@@ -271,9 +271,9 @@ theorem regionEntropy_prefix_le_of_windowClaim (hq : 1 ≤ q)
     {ξ' C₁ C₂ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 < 2 * C₁) (hC : 0 ≤ Real.log C₁ + C₂)
     (W : ℕ → ℕ → ℝ)
     (hdrop : ∀ i k : ℕ, i ≤ k → k ≤ L →
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω -
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 i) -
           ((k - i : ℕ) : ℝ) * Real.log q ≤
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 k) Ω)
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k))
     (hpos : ∀ i l : ℕ, i + doublingWindowLength ξ' C₁ C₂ q ≤ L →
       l ≤ doublingWindowLength ξ' C₁ C₂ q → 0 ≤ W i l)
     (hinit : ∀ i l : ℕ, i + doublingWindowLength ξ' C₁ C₂ q ≤ L →
@@ -281,12 +281,12 @@ theorem regionEntropy_prefix_le_of_windowClaim (hq : 1 ≤ q)
     (hclaim : ∀ i : ℕ, i + doublingWindowLength ξ' C₁ C₂ q ≤ L →
       (∀ k : ℕ, i ≤ k → k ≤ i + doublingWindowLength ξ' C₁ C₂ q →
         2 * maxEntropyBound ξ' C₁ C₂ q / 3 ≤
-          Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 k) Ω) →
+          ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k)) →
       ∀ l : ℕ, 2 * (l : ℝ) ≤ doublingWindowLength ξ' C₁ C₂ q →
         W i (2 * l) ≤ 2 * W i l - (1 - 2 * C₁ * Real.exp (-(l / ξ'))) * (l / ξ') +
           Real.log C₁ + C₂)
     (i : ℕ) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 i) ≤
       maxEntropyBound ξ' C₁ C₂ q :=
   regionEntropy_prefix_le_of_windowClaim_of_le hq hΩ hξ' hC₁ hC _ le_rfl W hdrop hpos hinit
     hclaim i
