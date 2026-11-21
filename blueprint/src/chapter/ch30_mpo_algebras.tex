@@ -853,6 +853,95 @@ Theorem~\ref{thm:mpug_anomaly_obstruction}.
     is that of Lemma~\ref{lem:mpoalg_fusion_coproduct_counit}.
 \end{proof}
 
+\begin{lemma}[Complete fusion from a cosemisimple pre-bialgebra]%
+    \label{lem:mpoalg_fusion_from_cosemisimple}
+    \lean{MPOTensor.isBoundaryClosed_ofDualRepresentation,
+        MPOTensor.DualRepresentationFusion.totalRepresentation,
+        MPOTensor.DualRepresentationFusion.totalRepresentation_injective,
+        MPOTensor.DualRepresentationFusion.tensor,
+        MPOTensor.DualRepresentationFusion.wordTupleSpanTop_tensor,
+        MPOTensor.DualRepresentationFusion.totalRepresentation_tensor,
+        MPOTensor.DualRepresentationFusion.family,
+        MPOTensor.DualRepresentationFusion.family_tensor,
+        MPOTensor.DualRepresentationFusion.toPreBialgebra,
+        MPOTensor.exists_completeZipperFusionFamily_of_cosemisimple}
+    \leanok
+    \uses{def:mpoalg_pre_bialgebra,def:mpdo_complete_zipper_fusion_family,
+        lem:mpoalg_fusion_counit_unital_representation}
+    Let $\mathcal A$ be a finite-dimensional complex pre-bialgebra whose
+    convolution dual $\mathcal A^*$ is semisimple, and let
+    $\phi\colon\mathcal A\to\MN{d}$ be an injective unital algebra
+    representation. There are finitely many positive integers $D_c$, an
+    algebra isomorphism $\psi\colon\mathcal A^*\to\bigoplus_c\MN{D_c}$,
+    and a complete zipper fusion family with letters
+    $T_c^{ik}=\psi(\phi_{ik})_c$, where $\phi_{ik}(x)=\phi(x)_{ik}$.
+    In particular, for each pair $a,b$, there are nonnegative integers
+    $N_{ab}^c$ and biorthogonal maps $V_{ab}^{c\mu},W_{ab}^{c\mu}$ with
+    \begin{align}
+        \sum_j T_a^{ij}\otimes T_b^{jk}
+         & =\sum_{c,\mu}W_{ab}^{c\mu}T_c^{ik}V_{ab}^{c\mu},
+         & V_{ab}^{c\mu}W_{ab}^{e\nu}
+         & =\delta_{ce}\delta_{\mu\nu}\Id.
+        \label{eq:mpoalg_cosemisimple_fusion}
+    \end{align}
+    Here $V_{ab}^{c\mu}:\C^{D_a}\otimes\C^{D_b}\to\C^{D_c}$ is the
+    analysis map, and $W_{ab}^{c\mu}:\C^{D_c}\to\C^{D_a}\otimes\C^{D_b}$
+    is the synthesis map. For $c=e$, the identity in
+    (\ref{eq:mpoalg_cosemisimple_fusion}) acts on $\C^{D_c}$; for $c\ne e$,
+    the right side is the zero map from $\C^{D_e}$ to $\C^{D_c}$.
+    Both zipper identities and a simultaneous one-letter inverse hold
+    without physical blocking. The boundary algebra has the fusion
+    pre-bialgebra structure with counit $\psi(f)\mapsto f(\Id)$.
+    This is the cosemisimple construction of
+    \cite[Section~4.1]{Molnar2022MPOAlgebrasI}.
+    % Source anchor: mpo.tex lines 1640--1658; cosemisimplicity at 1642.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_incoming_blocks,def:glm_boundary_zipper_family,
+        thm:glm_wha_boundary_realization,thm:glm_wha_represented_coproduct_mul,
+        thm:mpdo_bnt_common_positive_blocked_fusion,
+        thm:mpdo_one_letter_simultaneous_inverse,
+        lem:mpoalg_fusion_counit_unital_representation}
+    Wedderburn--Artin gives $\psi$. Write $\phi_{ik}(x)=\phi(x)_{ik}$.
+    Injectivity of $\phi$ gives
+    \begin{align}
+        \bigcap_{i,k}\ker\phi_{ik}                & =\{0\},        &
+        \operatorname{span}_{\C}\{\phi_{ik}:i,k\} & =\mathcal A^*.
+        \label{eq:mpoalg_cosemisimple_coefficient_span}
+    \end{align}
+    Indeed, the first equality says that the annihilator of the displayed
+    span is zero; finite-dimensional duality gives the second. Transporting
+    this span through the algebra isomorphism $\psi$ yields
+    \begin{align}
+        \operatorname{span}_{\C}\{(T_c^{ik})_c:i,k\}
+         & =\prod_c\MN{D_c}.
+        \label{eq:mpoalg_cosemisimple_simultaneous_span}
+    \end{align}
+    Projecting this simultaneous span to each block gives one-letter
+    injectivity, as in Lemma~\ref{thm:mpdo_bnt_common_positive_blocked_fusion}.
+    Lemma~\ref{thm:mpdo_one_letter_simultaneous_inverse} gives coefficients
+    $K_{(c,x,y),(i,k)}$ satisfying
+    \begin{align}
+        \sum_{i,k}K_{(c,x,y),(i,k)}(T_d^{ik})_{x'y'}
+         & =\delta_{cd}\delta_{xx'}\delta_{yy'}.
+        \label{eq:mpoalg_cosemisimple_letter_inverse}
+    \end{align}
+    The direct sum representation of $\mathcal A^*$
+    is faithful. By Lemma~\ref{thm:glm_wha_boundary_realization}, its
+    arbitrary-boundary operators are exactly the
+    represented elements $\rho_N(x)$ with one element $x$ for all lengths.
+    Lemma~\ref{thm:glm_wha_represented_coproduct_mul} gives
+    $\rho_N(xy)=\rho_N(x)\rho_N(y)$ for $N>0$, so these operators are
+    closed under products with one boundary for all positive lengths.
+    Lemma~\ref{thm:glm_boundary_incoming_blocks} gives the exact
+    biorthogonal decompositions of each incoming pair. Their synthesis
+    and analysis matrices and the simultaneous inverse give the complete
+    family by Definition~\ref{def:glm_boundary_zipper_family}. Finally
+    Lemma~\ref{lem:mpoalg_fusion_counit_unital_representation} supplies
+    the counit from $\phi(\Id)=\Id$.
+\end{proof}
+
 \begin{remark}[Kramers--Wannier duality is an intertwiner]%
     \label{rem:mpoalg_kramers_wannier}
     The Kramers--Wannier operator of Section~\ref{sec:asymex_kw} does not
