@@ -428,8 +428,9 @@ theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ (T₀ g) (T₁ g) (V₀ g) (V₁ g)
         (W₀ g) (W₁ g)) X N) :=
-  haveI : NeZero N := ⟨by omega⟩; Commute.sum_left _ _ _ fun i _ =>
-    placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
+  haveI : NeZero N := ⟨by omega⟩; Commute.sum_left _ _ _ fun i _ => by
+    rw [ManyBody.Interaction.translationInvariant_term_of_le _ hN i]
+    exact placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
       (arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_unitary
         A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ u₀ u₁ hT₀ hT₁ h₀ h₁ hY₀ hY₁ hγ g) hX
 
