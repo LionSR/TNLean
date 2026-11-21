@@ -49,7 +49,6 @@ theorem one_sub_kyFanNorm_le_of_unit_cut_rank_approximation {L q D k : ℕ}
         (posSemidef_self_mul_conjTranspose
           (cutMatrix (leftBlock L k) Ω)).isHermitian.kyFanNorm D := by
       congr 1
-      exact ManyBody.regionState_eq_cutMatrix_mul_conjTranspose Ω (leftBlock L k)
     change ‖⟪Ω, y⟫_ℂ‖ ^ 2 ≤
       (posSemidef_self_mul_conjTranspose
         (cutMatrix (leftBlock L k) Ω)).isHermitian.kyFanNorm D at h

@@ -236,7 +236,9 @@ theorem reindex_sheetSwapOp_eq_reindex_pairSwapOp
         else (1 : Matrix (Fin q × Fin q) (Fin q × Fin q) ℂ)) (a i) (b i) =
         if b i = (if i ∈ R then (a i).swap else a i) then 1 else 0 := by
     by_cases hi : i ∈ R
-    · simp [hi, Equiv.Perm.permMatrix, PEquiv.toMatrix_toPEquiv_apply, Pi.single_apply]
+    · simp only [hi, ↓reduceIte, Equiv.Perm.permMatrix, PEquiv.toMatrix_toPEquiv_apply,
+        Equiv.prodComm_apply]
+      by_cases h : b i = (a i).swap <;> simp [h]
     · simp only [hi, ↓reduceIte, Matrix.one_apply]
       exact if_congr eq_comm rfl rfl
   have hL : sheetSwapOp q R ((sitePairConfigurationEquiv ι q q).symm x)
@@ -312,7 +314,8 @@ theorem hamiltonian_relabel_conj_pairSwapOp_doubled {ι : Type*} [Fintype ι] [D
     rw [ManyBody.Interaction.hamiltonian_doubled]
     ext x y
     simp [sitePairConfigurationEquiv, ManyBody.siteConfigurationEquiv]
-  rw [ManyBody.Interaction.hamiltonian_relabel, ManyBody.Interaction.hamiltonian_conj,
+  refine (ManyBody.Interaction.hamiltonian_relabel _ _ _ _ _).trans ?_
+  rw [ManyBody.Interaction.hamiltonian_conj,
     reindex_sheetSwapOp_eq_reindex_pairSwapOp, ← hK]
   simp only [Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv]
 

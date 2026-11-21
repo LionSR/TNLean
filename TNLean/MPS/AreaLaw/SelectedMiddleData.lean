@@ -479,7 +479,7 @@ theorem exists_physical_selected_window_fixed_middle_data
       (L := L) (a := a) (b := b) p s).1
     let ME := ManyBody.placeAlong (X := fun _ ↦ Fin q)
       ⟨fun x : K ↦ (⟨x.val, hKE x.property⟩ : E),
-        fun _ _ h ↦ Subtype.ext (congrArg Subtype.val h)⟩ M
+        fun _ _ h ↦ Subtype.ext (by simpa using congrArg Subtype.val h)⟩ M
     let Pmid := ManyBody.place (X := fun _ ↦ Fin q) K M
     let O : Finset ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) :=
       (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
@@ -609,13 +609,10 @@ theorem exists_physical_selected_window_fixed_middle_data
   have hNsupport (e₀ : E) (he₀ : e₀ ∈ C) (z : Fin (q * q)) :
       ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (N e₀ z) C := by
     have hmem : N e₀ z ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({e₀} : Finset E) := by
-      simpa only [N, Finset.map_eq_image, Function.Embedding.coeFn_mk, Finset.univ_nonempty,
-          Finset.image_const] using
-        ManyBody.placeAlong_mem_supportedOperators (X := fun _ ↦ Fin q)
-          ⟨fun _ : Fin 1 ↦ e₀, fun a b _ ↦ Subsingleton.elim a b⟩
-          (Matrix.single
-            (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).1)
-            (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).2) (1 : ℂ))
+      refine ManyBody.supportedOperators_mono (fun x hx ↦ ?_)
+        (ManyBody.placeAlong_mem_supportedOperators (X := fun _ ↦ Fin q) _ _)
+      obtain ⟨i, -, rfl⟩ := Finset.mem_map.mp hx
+      exact Finset.mem_singleton_self _
     exact ManyBody.IsSupportedOn.mono hmem
       (Finset.singleton_subset_iff.mpr he₀)
   have hweighted : ∀ z : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → ℂ,
