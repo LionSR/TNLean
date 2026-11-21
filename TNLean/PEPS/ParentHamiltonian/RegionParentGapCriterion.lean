@@ -172,7 +172,7 @@ theorem regionParentHamiltonianES_quadraticForm_of_overlap_anticommutator
     (fun i j hij hover ψ => by
       rw [hcoef]
       exact hAnti i j hij hover ψ)
-  simpa only [ManyBody.Interaction.hamiltonian_ofPlace, map_sum] using hquad
+  simpa only [ManyBody.Interaction.hamiltonian_ofPlace, map_sum, P, placeES] using hquad
 
 open Classical in
 /-- The finite-overlap anticommutator estimate gives a gap of at least
@@ -225,7 +225,7 @@ theorem regionParentHamiltonianES_unit_norm_gap_of_commute (A : Tensor Γ d)
   apply regionParentHamiltonianES_norm_gap_of_quadraticForm R
     (fun i => canonicalRegionParentInteraction A (R i))
     (fun i => canonicalRegionParentInteraction_posSemidef A (R i)) zero_lt_one
-  simpa only [ManyBody.Interaction.hamiltonian_ofPlace, map_sum] using hQuad
+  simpa only [ManyBody.Interaction.hamiltonian_ofPlace, map_sum, P, placeES] using hQuad
 
 /-- A finite canonical PEPS parent on pairwise disjoint regions has norm gap
 at least one. Source: CPGSV21, arXiv:2011.12127, the non-overlapping
