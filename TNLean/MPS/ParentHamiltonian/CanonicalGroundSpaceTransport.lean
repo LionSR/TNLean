@@ -15,6 +15,11 @@ Only the physical support space enters the canonical projection.
 
 Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma `existenceinteraction`,
 lines 2195--2230, the orthogonal-complement construction of the interaction.
+
+**Transitional (#10948).** `openParentHamiltonianES_eq_of_groundSpaceES_eq`, stated for the
+Euclidean-space operator, is kept until its users are converted; the statement for the
+Hamiltonian of the parent interaction on the open chain is
+`hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq`.
 -/
 
 namespace MPSTensor
@@ -39,6 +44,17 @@ theorem openParentHamiltonianES_eq_of_groundSpaceES_eq
     ← toEuclideanLin_canonicalParentInteractionMatrix,
     ← toEuclideanLin_canonicalParentInteractionMatrix,
     canonicalParentInteractionMatrix_eq_of_groundSpaceES_eq h]
+
+/-- Equal local support spaces give equal Hamiltonians of the parent interaction on the open
+chain at every volume, independently of the bond dimensions. Source: Nachtergaele,
+arXiv:cond-mat/9410110, Lemma `existenceinteraction`, lines 2195--2230. -/
+theorem hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq
+    (h : groundSpaceES A R = groundSpaceES B R) (N : ℕ) :
+    (parentChainInteraction A R N).hamiltonian = (parentChainInteraction B R N).hamiltonian := by
+  have hP : parentInteraction A R = parentInteraction B R := by
+    simp only [parentInteraction, h]
+  unfold parentChainInteraction
+  rw [hP]
 
 end MPSTensor
 
