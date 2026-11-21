@@ -192,10 +192,10 @@ second replacement. -/
 
 /-! ### Windows of the ring
 
-The window of `L ≤ N` consecutive sites starting at `i` is the injection
-`ManyBody.ringWindow hLN i : Fin L ↪ Fin N`, `u ↦ i + u`. Reading a configuration
+The window of \(L \le N\) consecutive sites starting at \(i\) is the injection
+`ManyBody.ringWindow hLN i`, \(u \mapsto i + u\). Reading a configuration
 along it is extracting the window, its image is the set of sites of cyclic offset
-less than `L` from `i`, and replacing the window writes the new values at its
+less than \(L\) from \(i\), and replacing the window writes the new values at its
 image and leaves the other sites unchanged. -/
 
 section RingWindow
@@ -281,9 +281,9 @@ end RingWindow
 
 /-! ### The parent interaction on the ring -/
 
-/-- **The parent interaction on the ring.** On the ring of `N ≥ L` sites, the
-translation-invariant interaction whose term with index `i` is the matrix of the canonical
-parent interaction \(h_L\) placed on the window of `L` consecutive sites starting at `i`
+/-- **The parent interaction on the ring.** On the ring of \(N \ge L\) sites, the
+translation-invariant interaction whose term with index \(i\) is the matrix of the canonical
+parent interaction \(h_L\) placed on the window of \(L\) consecutive sites starting at \(i\)
 (`ManyBody.Interaction.translationInvariant`). Its terms are the translated local terms and
 its Hamiltonian is the parent Hamiltonian; a vector is frustration free exactly when it lies in
 its zero space (`isFrustrationFree_iff_mem_zeroSpace`). -/
