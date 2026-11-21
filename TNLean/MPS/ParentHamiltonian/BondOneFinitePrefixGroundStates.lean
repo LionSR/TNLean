@@ -27,6 +27,13 @@ prime-length construction; it is not inferred from an arbitrary invariant
 line or supplied as an all-volume nonvanishing condition.
 
 Source: SPWC10, arXiv:0909.5347, Theorem 5 and proof, main.tex lines 850--880.
+
+**Transitional (#10948).** `uniform_bondOne_ground_family_of_normal_local_kernel`, stated for the
+Euclidean-space operators of a local operator, is kept for
+`exists_uniform_bondOne_ground_family_of_prime_length_bound`, whose prime-length input is
+restated once QICLean has a ring interaction defined for every range; the statement for the
+translates on the ring of a local matrix is
+`uniform_bondOne_ground_family_translationInvariant_of_normal_local_kernel`.
 -/
 
 open scoped Matrix
@@ -50,13 +57,15 @@ zero-momentum ground vectors at every permitted positive length in the
 normal bond-one branch. In particular it covers the entire finite prefix.
 Source: SPWC10, Theorem 5 proof, lines 873--880, product-branch specialization. -/
 theorem exists_cyclic_ground_of_normal_bondOne_local_kernel
-    (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L) (B : MPSTensor d 1)
-    (hB : Kraus.IsNormal B) (hker : groundSpaceES B L ≤ LinearMap.ker h)
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ) (B : MPSTensor d 1)
+    (hB : Kraus.IsNormal B) (hker : groundSpaceES B L ≤ LinearMap.ker (Matrix.toEuclideanLin h))
     (M : ℕ) (hM : 0 < M) (hLM : L ≤ M) :
-    ∃ ψ : MPVSpace d M, ψ ≠ 0 ∧ periodicInteractionHamiltonianES h M ψ = 0 ∧
+    ∃ ψ : MPVSpace d M, ψ ≠ 0 ∧
+      Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hLM h).hamiltonian ψ = 0 ∧
       ∀ (s : Fin M) (σ : Fin M → Fin d), ψ (fun k ↦ σ (k + s)) = ψ σ := by
   exact ⟨mpvState B M, mpvState_ne_zero_of_normal_bondOne B hB M hM,
-    periodicInteractionHamiltonianES_mpvState_eq_zero_of_groundSpaceES_le_ker B h hker hLM,
+    toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker
+      B h hker hLM,
     mpvState_cyclic_invariant B⟩
 
 /-- All-volume uniqueness identifies the actual product vectors as
@@ -99,5 +108,27 @@ theorem exists_uniform_bondOne_ground_family_of_prime_length_bound
   have hdim : D₀ = 1 := by omega
   subst D₀
   exact ⟨B, uniform_bondOne_ground_family_of_normal_local_kernel h hUnique B hnormal hker⟩
+
+/-! ### Translates of a local matrix on the ring -/
+
+/-- All-volume uniqueness for the translates on the ring of a local matrix identifies the actual
+product vectors as one uniform bond-one family, including every positive short volume. No short
+MPS representation or zero-momentum premise is assumed. Source: SPWC10, Theorem 5,
+lines 850--880, normal bond-one branch. -/
+theorem uniform_bondOne_ground_family_translationInvariant_of_normal_local_kernel
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ)
+    (hUnique : ∀ M (hLM : L ≤ M), Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
+      (ManyBody.Interaction.translationInvariant hLM h).hamiltonian)) = 1)
+    (B : MPSTensor d 1) (hB : Kraus.IsNormal B)
+    (hker : groundSpaceES B L ≤ LinearMap.ker (Matrix.toEuclideanLin h)) :
+    ∀ M, 0 < M → ∀ hLM : L ≤ M, mpvState B M ≠ 0 ∧
+      LinearMap.ker (Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant hLM h).hamiltonian) = ℂ ∙ mpvState B M := by
+  intro M hM hLM
+  have hnonzero := mpvState_ne_zero_of_normal_bondOne B hB M hM
+  have hzero :=
+    toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker
+      B h hker hLM
+  exact ⟨hnonzero, eq_span_singleton_of_mem_of_finrank_eq_one (hUnique M hLM) hzero hnonzero⟩
 
 end MPSTensor
