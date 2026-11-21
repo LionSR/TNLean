@@ -89,7 +89,7 @@ theorem openInteractionMatrix_commutator_placeAlong_chainWindow
     (a := a) (m := (R - 1 + k) + (R - 1) + 1 - R) (by omega) ?_).trans ?_
   · intro i hi hsep
     simp only [Finset.mem_range] at hi
-    simp only [dif_pos (show i + R ≤ N by omega)]
+    simp only [dite_eq_left (show i + R ≤ N by omega)]
     refine sub_eq_zero.mpr (ManyBody.commute_placeAlong_of_disjoint (X := fun _ ↦ Fin d)
       (chainWindow i (show i + R ≤ N by omega)) ?_ h X).eq
     rw [ManyBody.map_chainWindow, ManyBody.map_chainWindow, Finset.disjoint_left]
@@ -98,8 +98,8 @@ theorem openInteractionMatrix_commutator_placeAlong_chainWindow
     omega
   · refine Finset.sum_congr rfl (fun j hj => ?_)
     simp only [Finset.mem_range] at hj
-    simp only [dif_pos (show a + j + R ≤ N by omega),
-      dif_pos (show j + R ≤ (R - 1 + k) + (R - 1) by omega)]
+    simp only [dite_eq_left (show a + j + R ≤ N by omega),
+      dite_eq_left (show j + R ≤ (R - 1 + k) + (R - 1) by omega)]
     rw [ManyBody.placeAlong_placeAlong, ManyBody.chainWindow_trans_chainWindow]
 
 /-- Localization of the open-chain commutator for an observable between

@@ -60,7 +60,7 @@ private theorem prefixGroundProjection_eq_id_sub_localTerm
     ext j
     have hj : j.val < N := by omega
     simp only [ManyBody.val_chainWindow, ManyBody.ringWindow_apply, Fin.val_add,
-      Fin.val_castLE, Fin.val_mk, zero_add, Nat.mod_eq_of_lt hj]
+      Fin.val_castLE, zero_add, Nat.mod_eq_of_lt hj]
   have hwindow : localTermES A L (⟨0, by omega⟩ : Fin N) =
       Matrix.toEuclideanLin (placeAlong (X := fun _ ↦ Fin d) (chainWindow 0 h0) (1 - p)) := by
     rw [hw]
@@ -124,7 +124,7 @@ theorem placeAlong_chainWindow_groundSpaceProjection_comp_groundSpaceProjection
 
 private theorem norm_prefixGroundProjection_comp_le
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) {L N : ℕ}
-    (hL : 0 < L) (hLN : L ≤ N) :
+    (hLN : L ≤ N) :
     ‖(prefixGroundProjection A hLN).comp (prefixGroundProjection B hLN)‖ ≤
       ‖(groundSpaceES A L).starProjection.comp (groundSpaceES B L).starProjection‖ := by
   let pA := (Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ)).symm
@@ -193,7 +193,7 @@ theorem norm_groundSpaceES_bulkObservable_cross_compression_le
   have hPB : ‖PB‖ ≤ 1 := (groundSpaceES B ((ℓ + k) + r)).starProjection_norm_le
   have hPair : ‖QA * QB‖ ≤
       ‖(groundSpaceES A ℓ).starProjection.comp (groundSpaceES B ℓ).starProjection‖ :=
-    norm_prefixGroundProjection_comp_le A B hℓ hℓN
+    norm_prefixGroundProjection_comp_le A B hℓN
   have hY : ‖Y‖ ≤ ‖Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X‖ :=
     norm_toEuclideanCLM_bulkObservable_le X ℓ r
   change ‖PA * (Y * PB)‖ ≤ _
