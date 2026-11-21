@@ -30,6 +30,11 @@ docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.10)--(3.11),
 Lemma existenceinteraction, and Section 6, lines 2649--2675;
 arXiv:1708.00029, Lemma bdcf, for the cyclic sector resolution.
+
+**Transitional (#10948).** `IsPeriodic.exists_ker_openParentHamiltonianES_eq_groundSpaceES` and
+`IsPeriodic.exists_positive_parent_interaction`, stated for the Euclidean-space operators, are
+kept until their users are converted; the last section states them for the Hamiltonians of the
+open-chain translates.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -141,5 +146,53 @@ theorem IsPeriodic.exists_positive_parent_interaction
   rw [toEuclideanLin_canonicalParentInteractionMatrix,
     openInteractionHamiltonianES_parentInteractionES A hR]
   exact hKernel R N le_rfl hN
+
+/-! ### The open-chain translates -/
+
+section ChainTranslates
+
+open ManyBody.Interaction (chainTranslates)
+
+/-- Beyond a derived interaction range, the kernel of the Hamiltonian of the parent interaction
+on the open chain is exactly the original boundary-condition space, including the single-window
+volume. Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma existenceinteraction and
+equations (3.10)--(3.16). -/
+theorem IsPeriodic.exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES
+    {A : MPSTensor d D} (hA : IsPeriodic m A) :
+    ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
+        groundSpaceES A N := by
+  let : NeZero d := ⟨hA.physDim_ne_zero⟩
+  obtain ⟨n₀, hstep⟩ := hA.exists_eventually_groundSpace_restriction_intersection
+  refine ⟨n₀ + 1, by omega, fun R N hR hRN => ?_⟩
+  apply le_antisymm ?_ (groundSpaceES_le_ker_hamiltonian_parentChainInteraction A R N)
+  intro v hv
+  apply (mem_groundSpaceES_iff A N v).mpr
+  have hstep' : ∀ M, R ≤ M →
+      ((⨅ b, (groundSpace A M).comap (restrictLastₗ b)) ⊓
+        ⨅ a, (groundSpace A M).comap (restrictFirstₗ a)) = groundSpace A (M + 1) := by
+    rintro (_ | n) hn
+    · omega
+    · simpa only [Nat.add_assoc] using hstep n (by omega)
+  exact contiguous_mem_of_restriction_intersection_submodules
+    (fun M => groundSpace A M) (by omega : 0 < R) hRN hstep' fun s hs τ ↦
+      contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hv
+        s hs τ
+
+/-- A periodic tensor admits a positive semidefinite local interaction, the matrix of the
+canonical parent interaction, whose open-chain translates have the boundary spaces as kernels
+at every volume at least its range. Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma
+existenceinteraction and Theorem 1.1, in the explicit periodic tensor setting. -/
+theorem IsPeriodic.exists_posSemidef_ker_hamiltonian_chainTranslates_eq_groundSpaceES
+    {A : MPSTensor d D} (hA : IsPeriodic m A) :
+    ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
+      h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
+          groundSpaceES A N := by
+  obtain ⟨R, hR, hKernel⟩ := hA.exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES
+  exact ⟨R, hR, LinearMap.toMatrix' (parentInteraction A R),
+    posSemidef_toMatrix'_parentInteraction A R, fun N hN => hKernel R N le_rfl hN⟩
+
+end ChainTranslates
 
 end MPSTensor
