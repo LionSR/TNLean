@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Kraus.MapIterate
 import QICLean.Kraus.Transfer
 import TNLean.MPS.Structure.PrimitiveFixedPoint
+import TNLean.MPS.Tensor
 
 /-!
 # Primitivity consequences for MPS transfer maps
@@ -47,8 +48,8 @@ variable {d D : ℕ}
 This is the iteration of the fixed-point equation. -/
 theorem transferMap_pow_fixed {A : MPSTensor d D}
     {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hfix : Kraus.transferMap (d := d) (D := D) A ρ = ρ) (n : ℕ) :
-    ((Kraus.transferMap (d := d) (D := D) A) ^ n) ρ = ρ := by
+    (hfix : Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ) (n : ℕ) :
+    ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ n) ρ = ρ := by
   induction n with
   | zero => simp
   | succ n ih =>
@@ -73,7 +74,7 @@ theorem exists_nonzero_evalWord_of_hasComplementaryFixedPointGap [NeZero D]
   by_contra hall
   push Not at hall
   have hzero : ∀ σ : Fin n → Fin d, Kraus.evalWord A (List.ofFn σ) = 0 := hall
-  have hsum : ((Kraus.transferMap (d := d) (D := D) A) ^ n) ρ = 0 := by
+  have hsum : ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ n) ρ = 0 := by
     rw [Kraus.mapLM_pow_apply]
     refine Finset.sum_eq_zero ?_
     intro σ _
@@ -89,9 +90,9 @@ since `E^n(ρ) = ρ ≠ 0`. -/
 theorem transferMap_pow_ne_zero_of_hasComplementaryFixedPointGap [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (n : ℕ) :
-    (Kraus.transferMap (d := d) (D := D) A) ^ n ≠ 0 := by
+    (Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ n ≠ 0 := by
   intro h
-  have : ((Kraus.transferMap (d := d) (D := D) A) ^ n) ρ = 0 := by
+  have : ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ n) ρ = 0 := by
     rw [h]; simp [LinearMap.zero_apply]
   rw [transferMap_pow_fixed hP.fixedPoint_is_fixed n] at this
   exact hP.fixedPoint_ne_zero this

@@ -156,15 +156,15 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
       Fam.chi_matrix_eq_one_of_lengthIndependent c hχ hLI] using
       (Fam.fusion α β i k).symm
   have evalWord_ofFn_eq_prod (m : ℕ) (w : Fin m → Fin (p * p)) :
-      _root_.evalWord D (List.ofFn w) = (List.ofFn fun l => D (w l)).prod := by
+      Kraus.evalWord D (List.ofFn w) = (List.ofFn fun l => D (w l)).prod := by
     induction m with
-    | zero => simp only [List.ofFn_zero, _root_.evalWord, List.prod_nil]
+    | zero => simp only [List.ofFn_zero, Kraus.evalWord, List.prod_nil]
     | succ m ih =>
-        simp only [List.ofFn_succ, _root_.evalWord, List.prod_cons]
+        simp only [List.ofFn_succ, Kraus.evalWord, List.prod_cons]
         congr 1
         exact ih (w ∘ Fin.succ)
   have hword (w : Fin (n + 1) → Fin (p * p)) :
-      _root_.evalWord D (List.ofFn w) =
+      Kraus.evalWord D (List.ofFn w) =
         U * Kraus.evalWord A (List.ofFn w) * Uᴴ := by
     rw [evalWord_ofFn_eq_prod, MPSTensor.evalWord_ofFn_eq_prod]
     have hconj := MPOTensor.listProd_conj_of_conjTranspose_mul_self U hU
@@ -178,18 +178,18 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
     funext γ
     exact Matrix.one_kronecker_one
   have hDword : ∀ w : List (Fin (p * p)),
-      _root_.evalWord D w = Matrix.blockDiagonal' fun γ =>
+      Kraus.evalWord D w = Matrix.blockDiagonal' fun γ =>
         (1 : Matrix (Fin (Fam.chi.dim α β γ))
           (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
           Kraus.evalWord (Fam.tensor γ).toMPSTensor w := by
     intro w
     induction w with
     | nil =>
-        simp only [_root_.evalWord, Kraus.evalWord_nil]
+        simp only [Kraus.evalWord, Kraus.evalWord_nil]
         rw [hone]
         exact Matrix.blockDiagonal'_one.symm
     | cons ij w ih =>
-        simp only [_root_.evalWord, Kraus.evalWord_cons, ih, D]
+        simp only [Kraus.evalWord, Kraus.evalWord_cons, ih, D]
         rw [← Matrix.blockDiagonal'_mul]
         congr 1
         funext γ
@@ -205,10 +205,10 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
     · simp
   have htotal :
       (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
-        coeff ε w • _root_.evalWord D (List.ofFn w)) = 1 := by
+        coeff ε w • Kraus.evalWord D (List.ofFn w)) = 1 := by
     calc
       (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
-          coeff ε w • _root_.evalWord D (List.ofFn w)) =
+          coeff ε w • Kraus.evalWord D (List.ofFn w)) =
           Matrix.blockDiagonal' fun γ =>
             (1 : Matrix (Fin (Fam.chi.dim α β γ))
               (Fin (Fam.chi.dim α β γ)) ℂ) ⊗ₖ
@@ -232,8 +232,8 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
         exact Matrix.blockDiagonal'_one
   let P := U * Uᴴ
   have hPword (w : Fin (n + 1) → Fin (p * p)) :
-      P * _root_.evalWord D (List.ofFn w) =
-        _root_.evalWord D (List.ofFn w) := by
+      P * Kraus.evalWord D (List.ofFn w) =
+        Kraus.evalWord D (List.ofFn w) := by
     rw [hword]
     simp only [P, Matrix.mul_assoc]
     rw [← Matrix.mul_assoc Uᴴ, hU, Matrix.one_mul]
@@ -241,9 +241,9 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
     U * Uᴴ = P := rfl
     _ = P * 1 := by rw [Matrix.mul_one]
     _ = P * (∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
-        coeff ε w • _root_.evalWord D (List.ofFn w)) := by rw [htotal]
+        coeff ε w • Kraus.evalWord D (List.ofFn w)) := by rw [htotal]
     _ = ∑ ε : Λ, ∑ w : Fin (n + 1) → Fin (p * p),
-        coeff ε w • _root_.evalWord D (List.ofFn w) := by
+        coeff ε w • Kraus.evalWord D (List.ofFn w) := by
       simp_rw [Matrix.mul_sum, Matrix.mul_smul, hPword]
     _ = 1 := htotal
 

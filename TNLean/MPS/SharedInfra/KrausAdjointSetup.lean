@@ -32,7 +32,7 @@ theorem conjTranspose_kraus_setup
     (hIrr : Kraus.IsIrreducibleFamily A) :
     ∃ (K : MPSTensor d D)
       (_ : IsUnitalKraus (d := d) (D := D) K)
-      (_ : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K))
+      (_ : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) K))
       (ρ : Matrix (Fin D) (Fin D) ℂ)
       (_ : ρ.PosDef)
       (_ : Kraus.adjointMap K ρ = ρ),
@@ -43,14 +43,14 @@ theorem conjTranspose_kraus_setup
   have hTP' : Kraus.IsTP A := hTP
   have h_unitalK : IsUnitalKraus (d := d) (D := D) K :=
     isUnitalKraus_conjTranspose (d := d) (D := D) (K := A) hTP'
-  have hIrrK : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K) :=
+  have hIrrK : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) K) :=
     Kraus.isIrreducibleMap_mapLM_conjTranspose A
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
-  have hCh : IsChannel (Kraus.transferMap (d := d) (D := D) A) :=
+  have hCh : IsChannel (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
     Kraus.isChannel_mapLM (d := d) (D := D) A (by unfold Kraus.IsTP; convert hTP)
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
-    hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (d := d) (D := D) A) hDpos
-  have hIrrAmap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
+    hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) hDpos
+  have hIrrAmap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
     Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (d := d) (D := D) A hIrr
   have hρ_pd : ρ.PosDef :=
     Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible (A := A) (d := d) (D := D)

@@ -38,10 +38,10 @@ variable {d : ℕ}
 /-- A block whose transfer map has spectral radius one has a nonzero letter. -/
 private theorem exists_ne_zero_of_spectralRadius_eq_one {n : ℕ} {C : MPSTensor d n}
     (hC : spectralRadius ℂ ((Module.End.toContinuousLinearMap (Matrix (Fin n) (Fin n) ℂ))
-      (Kraus.transferMap (d := d) (D := n) C)) = 1) : ∃ i, C i ≠ 0 := by
+      (Kraus.transferMap (ι := Fin d) (n := Fin n) C)) = 1) : ∃ i, C i ≠ 0 := by
   by_contra hcon
   push Not at hcon
-  have h0 : Kraus.transferMap (d := d) (D := n) C = 0 := by
+  have h0 : Kraus.transferMap (ι := Fin d) (n := Fin n) C = 0 := by
     refine LinearMap.ext fun Z => ?_
     rw [Kraus.transferMap_apply]
     simp [hcon]
@@ -150,13 +150,13 @@ theorem fundamentalTheorem_irreducibleForm_of_statesDependent
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap
             (Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ))
-          (Kraus.transferMap (d := d) (D := P.basisDim j) (P.basis j))) = 1)
+          (Kraus.transferMap (ι := Fin d) (n := Fin (P.basisDim j)) (P.basis j))) = 1)
     (hIrrQ : ∀ k, Kraus.IsIrreducibleFamily (Q.basis k))
     (hRadQ : ∀ k,
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap
             (Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ))
-          (Kraus.transferMap (d := d) (D := Q.basisDim k) (Q.basis k))) = 1)
+          (Kraus.transferMap (ι := Fin d) (n := Fin (Q.basisDim k)) (Q.basis k))) = 1)
     (hNonRepP : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (P.basis i) (P.basis j))
     (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
     (hP0 : 0 < P.basisCount) (hQ0 : 0 < Q.basisCount)

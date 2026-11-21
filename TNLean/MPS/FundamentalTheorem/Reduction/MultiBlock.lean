@@ -143,10 +143,10 @@ theorem conjMatrix_injective : Function.Injective (conjMatrix (D := D) g) :=
 
 /-- Word evaluation commutes with the change of block coordinates. -/
 theorem evalWord_conjMatrix (B : MPSTensor d DB) (w : List (Fin d)) :
-    _root_.evalWord (fun i => conjMatrix g (B i)) w = conjMatrix g (Kraus.evalWord B w) := by
+    Kraus.evalWord (fun i => conjMatrix g (B i)) w = conjMatrix g (Kraus.evalWord B w) := by
   induction w with
-  | nil => simp [_root_.evalWord, Kraus.evalWord]
-  | cons i w ih => rw [_root_.evalWord, ih, Kraus.evalWord, conjMatrix_mul]
+  | nil => simp [Kraus.evalWord]
+  | cons i w ih => rw [Kraus.evalWord, ih, Kraus.evalWord, conjMatrix_mul]
 
 end ConjMatrix
 

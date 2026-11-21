@@ -7,6 +7,7 @@ import QICLean.Kraus.Word
 import QICLean.Algebra.TraceReindex
 import Mathlib.Data.Matrix.Block
 import Mathlib.LinearAlgebra.Matrix.Reindex
+import TNLean.MPS.Tensor
 
 /-!
 # A Jordan extension detected by a virtual boundary

@@ -36,10 +36,10 @@ def HasPrimitiveIrreducibleCyclicSectors {d D : ℕ} (A : MPSTensor d D) : Prop 
   ∃ (m : ℕ), 0 < m ∧
   ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)),
     (∀ k, ∑ i : Fin (blockPhysDim d m), (blocks k i)ᴴ * blocks k i = 1) ∧
-    SameMPV₂ (blockTensor (d := d) (D := D) A m)
+    SameMPV₂ (blockTensor (d := d) (n := Fin D) A m)
       (toTensorFromBlocks (d := blockPhysDim d m) (μ := fun _ : Fin m => (1 : ℂ)) blocks) ∧
     (∀ k, _root_.IsPrimitive
-      (Kraus.transferMap (d := blockPhysDim d m) (D := dim k) (blocks k))) ∧
+      (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim k)) (blocks k))) ∧
     (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
     (∀ k, 0 < dim k)
 
@@ -68,11 +68,11 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
   have hSector : ∀ k,
       (∀ s, ∑ i : Fin (blockPhysDim d (period k)),
         (sectorBlocks k s i)ᴴ * sectorBlocks k s i = 1) ∧
-      SameMPV₂ (blockTensor (d := d) (D := dim k) (blocks k) (period k))
+      SameMPV₂ (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k))
         (toTensorFromBlocks (d := blockPhysDim d (period k))
           (μ := fun _ : Fin (period k) => (1 : ℂ)) (sectorBlocks k)) ∧
       (∀ s, _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d (period k)) (D := sectorDim k s)
+        (Kraus.transferMap (ι := Fin (blockPhysDim d (period k))) (n := Fin (sectorDim k s))
           (sectorBlocks k s))) ∧
       (∀ s, Kraus.IsIrreducibleFamily (sectorBlocks k s)) ∧
       (∀ s, 0 < sectorDim k s) := by
@@ -82,13 +82,13 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
       ∑ i : Fin (blockPhysDim d (period k)),
         (sectorBlocks k s i)ᴴ * sectorBlocks k s i = 1 := fun k => (hSector k).1
   have sector_same : ∀ k,
-      SameMPV₂ (blockTensor (d := d) (D := dim k) (blocks k) (period k))
+      SameMPV₂ (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k))
         (toTensorFromBlocks (d := blockPhysDim d (period k))
           (μ := fun _ : Fin (period k) => (1 : ℂ)) (sectorBlocks k)) :=
     fun k => (hSector k).2.1
   have sector_primitive : ∀ k s,
       _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d (period k)) (D := sectorDim k s)
+        (Kraus.transferMap (ι := Fin (blockPhysDim d (period k))) (n := Fin (sectorDim k s))
           (sectorBlocks k s)) := fun k => (hSector k).2.2.1
   have sector_irreducible : ∀ k s, Kraus.IsIrreducibleFamily (sectorBlocks k s) :=
     fun k => (hSector k).2.2.2.1
@@ -109,17 +109,17 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
       (blockPhysDim_blockPhysDim d (period k) (extra k))
   have hExtra : ∀ k s,
       (∑ i : Fin (blockPhysDim (blockPhysDim d (period k)) (extra k)),
-        (blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+        (blockTensor (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
           (sectorBlocks k s) (extra k) i)ᴴ *
-          blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+          blockTensor (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
             (sectorBlocks k s) (extra k) i = 1) ∧
       _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim (blockPhysDim d (period k)) (extra k))
-          (D := sectorDim k s)
-          (blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+        (Kraus.transferMap (ι := Fin (blockPhysDim (blockPhysDim d (period k)) (extra k)))
+          (n := Fin (sectorDim k s))
+          (blockTensor (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
             (sectorBlocks k s) (extra k))) ∧
       Kraus.IsIrreducibleFamily
-        (blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+        (blockTensor (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
           (sectorBlocks k s) (extra k)) := by
     intro k s
     have : NeZero (sectorDim k s) := ⟨Nat.ne_of_gt (sector_dim_pos k s)⟩
@@ -130,34 +130,34 @@ theorem exists_commonBlockedCyclicSectorFamily_of_commonMultiple
   have nested_same : ∀ k,
       SameMPV₂
         (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (hPhys k))
-          (blockTensor (d := blockPhysDim d (period k)) (D := dim k)
-            (blockTensor (d := d) (D := dim k) (blocks k) (period k)) (extra k)))
+          (blockTensor (d := blockPhysDim d (period k)) (n := Fin (dim k))
+            (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k)) (extra k)))
         (toTensorFromBlocks (d := blockPhysDim d p)
           (μ := fun _ : Fin (period k) => (1 : ℂ))
           (fun s => cast
             (congr_arg (fun d' => MPSTensor d' (sectorDim k s)) (hPhys k))
-            (blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+            (blockTensor (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
               (sectorBlocks k s) (extra k)))) := by
     intro k
     have hNested : SameMPV₂
-        (blockTensor (d := blockPhysDim d (period k)) (D := dim k)
-          (blockTensor (d := d) (D := dim k) (blocks k) (period k)) (extra k))
+        (blockTensor (d := blockPhysDim d (period k)) (n := Fin (dim k))
+          (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k)) (extra k))
         (toTensorFromBlocks (d := blockPhysDim (blockPhysDim d (period k)) (extra k))
           (μ := fun _ : Fin (period k) => (1 : ℂ))
-          (fun s => blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+          (fun s => blockTensor (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
             (sectorBlocks k s) (extra k))) := by
       simpa using
         (sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks
           (d := blockPhysDim d (period k)) (D := dim k)
-          (A := blockTensor (d := d) (D := dim k) (blocks k) (period k))
+          (A := blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k))
           (μ := fun _ : Fin (period k) => (1 : ℂ))
           (blocks := sectorBlocks k) (hSame := sector_same k) (p := extra k))
     have hCast := (sameMPV₂_cast_physDim (hPhys k)
-      (A := blockTensor (d := blockPhysDim d (period k)) (D := dim k)
-        (blockTensor (d := d) (D := dim k) (blocks k) (period k)) (extra k))
+      (A := blockTensor (d := blockPhysDim d (period k)) (n := Fin (dim k))
+        (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k)) (extra k))
       (B := toTensorFromBlocks (d := blockPhysDim (blockPhysDim d (period k)) (extra k))
         (μ := fun _ : Fin (period k) => (1 : ℂ))
-        (fun s => blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+        (fun s => blockTensor (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
           (sectorBlocks k s) (extra k)))).2 hNested
     rw [toTensorFromBlocks_cast_physDim (h := hPhys k)] at hCast
     simpa using hCast

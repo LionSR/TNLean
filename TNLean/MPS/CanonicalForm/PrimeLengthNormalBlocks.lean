@@ -67,7 +67,7 @@ theorem exists_normal_blocks_of_no_small_divisor {d D N : ℕ}
       _ ≤ D := hsumdim
   have hunital : ∀ k, ∑ i, Blk k i * (Blk k i)ᴴ = 1 := fun k => (hΛ k).choose_spec.2.2.1
   have hDual : ∀ k, ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ, Λ.PosDef ∧
-      Kraus.transferMap (d := d) (D := dim k) (fun a => (Blk k a)ᴴ) Λ = Λ := fun k => by
+      Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (fun a => (Blk k a)ᴴ) Λ = Λ := fun k => by
     obtain ⟨Λ, hPD, -, -, hfix⟩ := hΛ k
     exact ⟨Λ, hPD, hfix⟩
   have hIrr : ∀ k, Kraus.IsIrreducibleFamily (Blk k) := fun k => by

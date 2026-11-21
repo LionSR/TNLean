@@ -58,9 +58,9 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
       (blocksA : (x : Fin rA) → MPSTensor (blockPhysDim d p) (dimA x)),
     ∃ (rB : ℕ) (dimB : Fin rB → ℕ) (μB : Fin rB → ℂ)
       (blocksB : (x : Fin rB) → MPSTensor (blockPhysDim d p) (dimB x)),
-      SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p)
+      SameMPV₂Pos (blockTensor (d := d) (n := Fin D₁) A p)
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA) ∧
-      SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p)
+      SameMPV₂Pos (blockTensor (d := d) (n := Fin D₂) B p)
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μB) blocksB) ∧
       SameMPV₂Pos
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μA) blocksA)
@@ -70,9 +70,9 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
       (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksA x i)ᴴ * blocksA x i = 1) ∧
       (∀ x, ∑ i : Fin (blockPhysDim d p), (blocksB x i)ᴴ * blocksB x i = 1) ∧
       (∀ x, _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d p) (D := dimA x) (blocksA x))) ∧
+        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dimA x)) (blocksA x))) ∧
       (∀ x, _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d p) (D := dimB x) (blocksB x))) ∧
+        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dimB x)) (blocksB x))) ∧
       (∀ x, Kraus.IsIrreducibleFamily (blocksA x)) ∧
       (∀ x, Kraus.IsIrreducibleFamily (blocksB x)) ∧
       (∀ x, 0 < dimA x) ∧
@@ -99,21 +99,21 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
   have hFlatA : SameMPV₂
       (toTensorFromBlocks (d := blockPhysDim d p)
         (μ := fun k : Fin rA₀ => (μA₀ k) ^ p)
-        (fun k => blockTensor (d := d) (D := dimA₀ k) (blocksA₀ k) p))
+        (fun k => blockTensor (d := d) (n := Fin (dimA₀ k)) (blocksA₀ k) p))
       nonzeroA := by
     cases hFamilyA
     simpa [flatBlocksA, nonzeroA] using hFlatA_raw
   have hFlatB : SameMPV₂
       (toTensorFromBlocks (d := blockPhysDim d p)
         (μ := fun k : Fin rB₀ => (μB₀ k) ^ p)
-        (fun k => blockTensor (d := d) (D := dimB₀ k) (blocksB₀ k) p))
+        (fun k => blockTensor (d := d) (n := Fin (dimB₀ k)) (blocksB₀ k) p))
       nonzeroB := by
     cases hFamilyB
     simpa [flatBlocksB, nonzeroB] using hFlatB_raw
-  have hAPos : SameMPV₂Pos (blockTensor (d := d) (D := D₁) A p) nonzeroA := by
+  have hAPos : SameMPV₂Pos (blockTensor (d := d) (n := Fin D₁) A p) nonzeroA := by
     intro N hN σ
     exact (hAPosCanon N hN σ).trans (hFlatA N σ)
-  have hBPos : SameMPV₂Pos (blockTensor (d := d) (D := D₂) B p) nonzeroB := by
+  have hBPos : SameMPV₂Pos (blockTensor (d := d) (n := Fin D₂) B p) nonzeroB := by
     intro N hN σ
     exact (hBPosCanon N hN σ).trans (hFlatB N σ)
   have hNonzeroPos : SameMPV₂Pos nonzeroA nonzeroB := by
@@ -122,11 +122,11 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
       mpv nonzeroA σ =
           mpv (toTensorFromBlocks (d := blockPhysDim d p)
             (fun k : Fin rA₀ => (μA₀ k) ^ p)
-            (fun k => blockTensor (d := d) (D := dimA₀ k) (blocksA₀ k) p)) σ :=
+            (fun k => blockTensor (d := d) (n := Fin (dimA₀ k)) (blocksA₀ k) p)) σ :=
         (hFlatA N σ).symm
       _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)
             (fun k : Fin rB₀ => (μB₀ k) ^ p)
-            (fun k => blockTensor (d := d) (D := dimB₀ k) (blocksB₀ k) p)) σ :=
+            (fun k => blockTensor (d := d) (n := Fin (dimB₀ k)) (blocksB₀ k) p)) σ :=
         hPosCanon N hN σ
       _ = mpv nonzeroB σ := hFlatB N σ
   have hTPA' : ∀ x,
@@ -140,13 +140,13 @@ theorem unconditional_commonPrimitiveIrreducibleBlocks
     cases hFamilyB
     simpa [flatBlocksB] using hTPB x
   have hPrimA' : ∀ x, _root_.IsPrimitive
-      (Kraus.transferMap (d := blockPhysDim d p) (D := familyA.commonFlatDim x)
+      (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (familyA.commonFlatDim x))
         (flatBlocksA x)) := by
     intro x
     cases hFamilyA
     simpa [flatBlocksA] using hPrimA x
   have hPrimB' : ∀ x, _root_.IsPrimitive
-      (Kraus.transferMap (d := blockPhysDim d p) (D := familyB.commonFlatDim x)
+      (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (familyB.commonFlatDim x))
         (flatBlocksB x)) := by
     intro x
     cases hFamilyB

@@ -59,7 +59,7 @@ theorem isMPUCanonicalForm_of_isIrreducibleFamily [NeZero D] (A : MPSTensor d D)
   have hcc : c⁻¹ * starRingEnd ℂ c⁻¹ = (r : ℂ)⁻¹ := by
     rw [map_inv₀, Complex.conj_ofReal, ← mul_inv, ← Complex.ofReal_mul,
       Real.mul_self_sqrt hr.le]
-  have hfix : Kraus.transferMap (d := d) (D := D) (fun i => c⁻¹ • A i) ρ = ρ := by
+  have hfix : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => c⁻¹ • A i) ρ = ρ := by
     rw [transferMap_smul, hcc, hEig, smul_smul, inv_mul_cancel₀ hr_ne, one_smul]
   have hIrrScaled : Kraus.IsIrreducibleFamily (fun i => c⁻¹ • A i) :=
     isIrreducibleTensor_smul (inv_ne_zero hc) A hIrr
@@ -67,7 +67,7 @@ theorem isMPUCanonicalForm_of_isIrreducibleFamily [NeZero D] (A : MPSTensor d D)
     refine ⟨hIrrScaled, ?_⟩
     simpa using
       (spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
-        (Kraus.transferMap (d := d) (D := D) (fun i => c⁻¹ • A i))
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => c⁻¹ • A i))
         (Kraus.transferMap_isCPMap _)
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily _ hIrrScaled)
         ρ 1 hρ (by norm_num) (by simpa using hfix))

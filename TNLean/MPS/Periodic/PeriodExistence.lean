@@ -92,13 +92,13 @@ theorem exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one
     (hRadius :
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (Kraus.transferMap (d := d) (D := D) A)) = 1) :
+          (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) = 1) :
     ∃ m : ℕ, IsSpectrallyPeriodic m A := by
   classical
   have hD : D ≠ 0 :=
     matrix_dim_ne_zero_of_spectralRadius_eq_one
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (Kraus.transferMap (d := d) (D := D) A))
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
       hRadius
   have : NeZero D := ⟨hD⟩
   obtain ⟨σ, hσ, -, hLeft, -, hIrrB⟩ :=
@@ -113,7 +113,7 @@ theorem exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one
   have hRadB :
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (Kraus.transferMap (d := d) (D := D) B)) = 1 := by
+          (Kraus.transferMap (ι := Fin d) (n := Fin D) B)) = 1 := by
     change spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
         (Kraus.mapLM B)) = 1
@@ -121,12 +121,12 @@ theorem exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one
       spectralRadius_similarityMap_eq (D := D) (CFC.sqrt σ)⁻¹ hSinvDet]
     exact hRadius
   have hPerB :
-      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B) =
-        peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) := by
+      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) B) =
+        peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
     change peripheralEigenvalues (Kraus.mapLM B) = peripheralEigenvalues (Kraus.mapLM A)
     rw [hBdef, Kraus.mapLM_tpGauge_eq_similarityMap A σ hσ]
     exact peripheralEigenvalues_similarityMap_eq
-      (CFC.sqrt σ)⁻¹ hSinvDet (Kraus.transferMap (d := d) (D := D) A)
+      (CFC.sqrt σ)⁻¹ hSinvDet (Kraus.transferMap (ι := Fin d) (n := Fin D) A)
   -- The normalized block is nonzero, being trace preserving.
   have hLeft' : ∑ i : Fin d, (B i)ᴴ * B i = 1 := hLeft
   have hBne : ∃ i, B i ≠ 0 := by
@@ -136,7 +136,7 @@ theorem exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one
       rw [← hLeft']
       exact Finset.sum_eq_zero fun i _ => by rw [hzero i]; simp
     exact one_ne_zero hone
-  have hIrrMapB : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) B) :=
+  have hIrrMapB : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) B) :=
     Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B hIrrB
   -- Its forward Perron eigenvector is a fixed point, since the spectral radius is one.
   obtain ⟨ρ, r, hρ, hr, hρeig⟩ :=
@@ -144,14 +144,14 @@ theorem exists_isSpectrallyPeriodic_of_irreducible_of_spectralRadius_one
   have hrRad :
       (spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (Kraus.transferMap (d := d) (D := D) B))).toReal = r :=
+          (Kraus.transferMap (ι := Fin d) (n := Fin D) B))).toReal = r :=
     spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp
-      (Kraus.transferMap (d := d) (D := D) B) (Kraus.transferMap_isCPMap B) hIrrMapB
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) B) (Kraus.transferMap_isCPMap B) hIrrMapB
       ρ r hρ hr hρeig
   have hr_one : r = 1 := by
     rw [hRadB, ENNReal.toReal_one] at hrRad
     exact hrRad.symm
-  have hρfix : Kraus.transferMap (d := d) (D := D) B ρ = ρ := by
+  have hρfix : Kraus.transferMap (ι := Fin d) (n := Fin D) B ρ = ρ := by
     rw [hρeig, hr_one]
     simp
   -- The conjugate-transposed family of the normalized block is unital, and its

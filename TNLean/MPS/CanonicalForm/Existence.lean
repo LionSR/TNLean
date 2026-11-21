@@ -180,7 +180,7 @@ theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
         SameMPV₂ A B ∧
         Λ.PosDef ∧ Λ.IsDiag ∧
         (∑ i : Fin d, (B i)ᴴ * (B i) = 1) ∧
-        Kraus.transferMap (d := d) (D := D) B Λ = Λ := by
+        Kraus.transferMap (ι := Fin d) (n := Fin D) B Λ = Λ := by
   classical
   obtain ⟨U, Λ, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩ :=
     exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor

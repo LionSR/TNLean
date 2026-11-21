@@ -71,12 +71,12 @@ lemma adjointTransferMap_pow_fixes_cyclic_projection
     {d D m : ℕ} [NeZero m]
     (K : Fin d → MatrixAlg D)
     (P : Fin m → MatrixAlg D)
-    (hcyclic : ∀ k : Fin m, Kraus.transferMap (d := d) (D := D) K (P (k + 1)) = P k) :
-    ∀ k : Fin m, ((Kraus.transferMap (d := d) (D := D) K) ^ m) (P k) = P k := by
+    (hcyclic : ∀ k : Fin m, Kraus.transferMap (ι := Fin d) (n := Fin D) K (P (k + 1)) = P k) :
+    ∀ k : Fin m, ((Kraus.transferMap (ι := Fin d) (n := Fin D) K) ^ m) (P k) = P k := by
   intro k
   have hiter :
       ∀ n : ℕ, ∀ k : Fin m,
-        ((Kraus.transferMap (d := d) (D := D) K) ^ n) (P (cyclicShift k n)) = P k := by
+        ((Kraus.transferMap (ι := Fin d) (n := Fin D) K) ^ n) (P (cyclicShift k n)) = P k := by
     intro n
     induction n with
     | zero =>
@@ -87,7 +87,7 @@ lemma adjointTransferMap_pow_fixes_cyclic_projection
         rw [pow_succ', cyclicShift_succ_left]
         change
           Kraus.transferMap (d := d) (D := D) K
-            (((Kraus.transferMap (d := d) (D := D) K) ^ n) (P (cyclicShift (k + 1) n))) = P k
+            (((Kraus.transferMap (ι := Fin d) (n := Fin D) K) ^ n) (P (cyclicShift (k + 1) n))) = P k
         rw [ih (k + 1)]
         exact hcyclic k
   simpa using hiter m k
@@ -103,8 +103,8 @@ family `blockTensor A m`. Second, `Kraus.transferMap (blockTensor A m) = (Kraus.
 `((Kraus.transferMap A)^m).adjoint = ((Kraus.transferMap A).adjoint)^m`. -/
 theorem transferMap_adjoint_blocked_eq_pow
     {d D : ℕ} (A : MPSTensor d D) (m : ℕ) (X : MatrixAlg D) :
-    Kraus.transferMap (d := blockPhysDim d m) (D := D) (fun j => (blockTensor A m j)ᴴ) X =
-      ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) X := by
+    Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D) (fun j => (blockTensor A m j)ᴴ) X =
+      ((Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) ^ m) X := by
   classical
   have hM : (1 : Matrix (Fin D) (Fin D) ℂ).PosDef := Matrix.PosDef.one
   let : NormedAddCommGroup (Matrix (Fin D) (Fin D) ℂ) :=
@@ -114,31 +114,31 @@ theorem transferMap_adjoint_blocked_eq_pow
   let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
   have hBlockedAdj :
-      Kraus.transferMap (d := blockPhysDim d m) (D := D) (fun j => (blockTensor A m j)ᴴ) =
-        (Kraus.transferMap (d := blockPhysDim d m) (D := D) (blockTensor A m)).adjoint := by
+      Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D) (fun j => (blockTensor A m j)ᴴ) =
+        (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D) (blockTensor A m)).adjoint := by
     simpa using
       (Kraus.mapLM_conjTranspose_eq_adjoint (K := blockTensor A m))
   have hAdj :
-      Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) =
-        (Kraus.transferMap (d := d) (D := D) A).adjoint := by
+      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) =
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) A).adjoint := by
     simpa using
       (Kraus.mapLM_conjTranspose_eq_adjoint (K := A))
   have hPowAdj :
-      ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) =
-        (((Kraus.transferMap (d := d) (D := D) A) ^ m).adjoint) := by
+      ((Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) ^ m) =
+        (((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ m).adjoint) := by
     rw [hAdj]
-    have hpow : (((Kraus.transferMap (d := d) (D := D) A) ^ m).adjoint) =
-        ((Kraus.transferMap (d := d) (D := D) A).adjoint) ^ m := by
+    have hpow : (((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ m).adjoint) =
+        ((Kraus.transferMap (ι := Fin d) (n := Fin D) A).adjoint) ^ m := by
       simpa only [LinearMap.star_eq_adjoint] using
-        (star_pow (x := Kraus.transferMap (d := d) (D := D) A) (n := m))
+        (star_pow (x := Kraus.transferMap (ι := Fin d) (n := Fin D) A) (n := m))
     simpa using hpow.symm
   calc
     Kraus.transferMap (d := blockPhysDim d m) (D := D) (fun j => (blockTensor A m j)ᴴ) X
-        = ((Kraus.transferMap (d := blockPhysDim d m) (D := D) (blockTensor A m)).adjoint) X := by
+        = ((Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D) (blockTensor A m)).adjoint) X := by
             rw [hBlockedAdj]
-    _ = (((Kraus.transferMap (d := d) (D := D) A) ^ m).adjoint) X := by
+    _ = (((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ m).adjoint) X := by
           rw [transferMap_blockTensor]
-    _ = ((Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) ^ m) X := by
+    _ = ((Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) ^ m) X := by
           rw [← hPowAdj]
 
 /-- **Cyclic sector decomposition for a blocked periodic tensor.**
@@ -165,9 +165,9 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry
     (_hIrr : Kraus.IsIrreducibleFamily A)
     (ρ : MatrixAlg D) (hρ : ρ.PosDef)
     (hρfix : Kraus.adjointMap (fun i : Fin d => (A i)ᴴ) ρ = ρ)
-    (hIrrMap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)))
+    (hIrrMap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)))
     {γ : ℂ} (hγprim : IsPrimitiveRoot γ m)
-    (hperiph : peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ)) =
+    (hperiph : peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ)) =
       Set.range (fun j : Fin m => γ ^ (j : ℕ))) :
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
       (P : Fin m → MatrixAlg D)
@@ -178,15 +178,15 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry
       SameMPV₂ (blockTensor A m) (toTensorFromBlocks (μ := fun _ => 1) blocks) ∧
       (∀ k, IsOrthogonalProjection (P k)) ∧
       (∑ k : Fin m, P k = 1) ∧
-      (∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
+      (∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k) ∧
       (∀ k (i : Fin (blockPhysDim d m)),
         P k * (blockTensor A m) i = (blockTensor A m) i * P k) ∧
       (∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
         mpv (blocks k) σ = (P k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (Kraus.transferMap (d := blockPhysDim d m) (D := dim k)
+        (φ k (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim k))
             (fun i => (blocks k i)ᴴ) X)).1 =
-          Kraus.transferMap (d := blockPhysDim d m) (D := D)
+          Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D)
             (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1)) ∧
       (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
@@ -211,15 +211,15 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry
   obtain ⟨U, P, hU, hPow, hUm, hPproj, hPsum, hUspec, hcyclic'⟩ :=
     Kraus.exists_cyclic_decomposition_of_irreducible_schwarz
       (K := K) hUnital ρ hρ hρfix hIrrMap' hγprim hperiph'
-  have hcyclic : ∀ k, Kraus.transferMap (d := d) (D := D) K (P (k + 1)) = P k := by
+  have hcyclic : ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) K (P (k + 1)) = P k := by
     intro k; exact hcyclic' k
   -- Step 2: (E†)^m fixes each P_k
   have hPow_fix : ∀ k : Fin m,
-      ((Kraus.transferMap (d := d) (D := D) K) ^ m) (P k) = P k :=
+      ((Kraus.transferMap (ι := Fin d) (n := Fin D) K) ^ m) (P k) = P k :=
     adjointTransferMap_pow_fixes_cyclic_projection K P hcyclic
   -- Step 3: Adjoint blocked transfer map fixes P_k
   have hFix : ∀ k : Fin m,
-      Kraus.transferMap (d := blockPhysDim d m) (D := D)
+      Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D)
         (fun i => (blockTensor A m i)ᴴ) (P k) = P k := by
     intro k
     rw [transferMap_adjoint_blocked_eq_pow A m (P k)]

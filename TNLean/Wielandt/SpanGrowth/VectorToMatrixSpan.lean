@@ -26,12 +26,12 @@ variable {d D : ℕ}
 
 /-- A blocked word product of length `n` is an ordinary word product of length `n*L`. -/
 theorem wordSpan_blockTensor_le (A : MPSTensor d D) (L n : ℕ) :
-    Kraus.wordSpan (blockTensor (d := d) (D := D) A L) n ≤ Kraus.wordSpan A (n * L) := by
+    Kraus.wordSpan (blockTensor (d := d) (n := Fin D) A L) n ≤ Kraus.wordSpan A (n * L) := by
   classical
   apply Submodule.span_le.mpr
   rintro M ⟨σ, rfl⟩
   have hblock :
-      Kraus.evalWord (blockTensor (d := d) (D := D) A L) (List.ofFn σ) =
+      Kraus.evalWord (blockTensor (d := d) (n := Fin D) A L) (List.ofFn σ) =
         Kraus.evalWord A (flattenBlockedWord d L (List.ofFn σ)) :=
     evalWord_blockTensor (A := A) (L := L) (List.ofFn σ)
   have hlen : (flattenBlockedWord d L (List.ofFn σ)).length = n * L := by
@@ -43,7 +43,7 @@ theorem wordSpan_blockTensor_le (A : MPSTensor d D) (L n : ℕ) :
 has full word span at level `n*L`. -/
 theorem wordSpan_eq_top_of_blockTensor_wordSpan_eq_top
     (A : MPSTensor d D) (L n : ℕ)
-    (h : Kraus.wordSpan (blockTensor (d := d) (D := D) A L) n = ⊤) :
+    (h : Kraus.wordSpan (blockTensor (d := d) (n := Fin D) A L) n = ⊤) :
     Kraus.wordSpan A (n * L) = ⊤ := by
   refine eq_top_iff.mpr ?_
   simpa [h] using (wordSpan_blockTensor_le (A := A) (L := L) (n := n))

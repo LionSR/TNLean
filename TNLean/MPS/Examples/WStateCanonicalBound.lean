@@ -235,7 +235,7 @@ theorem lt_of_sum_mpv_eq_smul_wIndicator {r : ℕ} {dim : Fin r → ℕ}
     (B : (k : Fin r) → MPSTensor 2 (dim k)) (hdim : ∀ k, 0 < dim k)
     (hUnital : ∀ k, ∑ i, B k i * (B k i)ᴴ = 1)
     (hDual : ∀ k, ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ, Λ.PosDef ∧
-      Kraus.transferMap (d := 2) (D := dim k) (fun a => (B k a)ᴴ) Λ = Λ)
+      Kraus.transferMap (ι := Fin 2) (n := Fin (dim k)) (fun a => (B k a)ᴴ) Λ = Λ)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (B k))
     {L₀ : ℕ} (hL₀ : 0 < L₀) (hC1 : ∀ k, Kraus.IsNBlkInjective (B k) L₀)
     (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) B)
@@ -459,7 +459,7 @@ theorem lt_of_sum_mpv_eq_smul_wIndicator_asymmetric {r : ℕ} {dim : Fin r → �
     (B : (k : Fin r) → MPSTensor 2 (dim k)) (hdim : ∀ k, 0 < dim k)
     (hUnital : ∀ k, ∑ i, B k i * (B k i)ᴴ = 1)
     (hDual : ∀ k, ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ, Λ.PosDef ∧
-      Kraus.transferMap (d := 2) (D := dim k) (fun a => (B k a)ᴴ) Λ = Λ)
+      Kraus.transferMap (ι := Fin 2) (n := Fin (dim k)) (fun a => (B k a)ᴴ) Λ = Λ)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (B k))
     {L₀ : ℕ} (hL₀ : 0 < L₀) (hC1 : ∀ k, Kraus.IsNBlkInjective (B k) L₀)
     (hDistinct : BlocksNotGaugePhaseEquiv (d := 2) B)

@@ -45,7 +45,7 @@ theorem IsSpectrallyPeriodic.exists_isPeriodic_tpGauge
     {A : MPSTensor d D} (hA : IsSpectrallyPeriodic m A) :
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧
-      Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ) σ = σ ∧
+      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i ↦ (A i)ᴴ) σ = σ ∧
       GaugeEquiv A (Kraus.tpGauge (d := d) (D := D) A σ) ∧
       IsPeriodic m (Kraus.tpGauge (d := d) (D := D) A σ) := by
   obtain ⟨σ, hσ, hσfix, hLeft, hGauge, hIrr⟩ :=
@@ -57,13 +57,13 @@ theorem IsSpectrallyPeriodic.exists_isPeriodic_tpGauge
     simpa [Matrix.det_nonsing_inv] using inv_ne_zero hSdet
   have hPeripheral :
       peripheralEigenvalues
-          (Kraus.transferMap (d := d) (D := D) (Kraus.tpGauge (d := d) (D := D) A σ)) =
-        peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) := by
+          (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.tpGauge (d := d) (D := D) A σ)) =
+        peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
     change peripheralEigenvalues (Kraus.mapLM (Kraus.tpGauge A σ)) =
       peripheralEigenvalues (Kraus.mapLM A)
     rw [Kraus.mapLM_tpGauge_eq_similarityMap A σ hσ]
     exact peripheralEigenvalues_similarityMap_eq
-      (CFC.sqrt σ)⁻¹ hSinvDet (Kraus.transferMap (d := d) (D := D) A)
+      (CFC.sqrt σ)⁻¹ hSinvDet (Kraus.transferMap (ι := Fin d) (n := Fin D) A)
   refine ⟨σ, hσ, hσfix, hGauge, ?_⟩
   exact ⟨hIrr, hLeft, hA.period_pos, hPeripheral.trans hA.peripheral_eq⟩
 

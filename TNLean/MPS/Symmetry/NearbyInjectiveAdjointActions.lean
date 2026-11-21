@@ -11,6 +11,7 @@ import Mathlib.Analysis.Normed.Ring.Units
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Tactic.Abel
 import Mathlib.Tactic.GCongr
+import TNLean.MPS.Tensor
 
 /-!
 # Uniform dependence of virtual adjoint actions on an injective tensor

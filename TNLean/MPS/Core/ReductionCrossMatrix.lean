@@ -371,11 +371,11 @@ formula drawn in `cornerproblem.tex` lines 3866--3887. -/
 theorem reductionOpenBoundaryMatrixContraction_blockTensor_of_sameMPV₂Pos
     (A : MPSTensor d D_A) (B : MPSTensor d D_B)
     (hSame : SameMPV₂Pos B A) (p : ℕ) (hp : 0 < p)
-    (hA : Kraus.IsInjective (blockTensor (d := d) (D := D_A) A p))
+    (hA : Kraus.IsInjective (blockTensor (d := d) (n := Fin D_A) A p))
     (n : ℕ) (hn : 0 < n) (w : List (Fin d)) (a' a : Fin D_A) :
     reductionOpenBoundaryMatrixContraction
-        (blockTensor (d := d) (D := D_B) B p)
-        (coefficientDualInverse (blockTensor (d := d) (D := D_A) A p) hA)
+        (blockTensor (d := d) (n := Fin D_B) B p)
+        (coefficientDualInverse (blockTensor (d := d) (n := Fin D_A) A p) hA)
         n (Kraus.evalWord B w) a' a =
       (D_A : ℂ) ^ (n - 1) * Kraus.evalWord A w a' a := by
   have hflat (σ : Fin n → Fin (blockPhysDim d p)) :
@@ -386,10 +386,10 @@ theorem reductionOpenBoundaryMatrixContraction_blockTensor_of_sameMPV₂Pos
     exact Nat.mul_pos hn hp
   have hterm (σ : Fin n → Fin (blockPhysDim d p)) :
       Matrix.trace
-          (Kraus.evalWord (blockTensor (d := d) (D := D_B) B p) (List.ofFn σ) *
+          (Kraus.evalWord (blockTensor (d := d) (n := Fin D_B) B p) (List.ofFn σ) *
             Kraus.evalWord B w) =
         Matrix.trace
-          (Kraus.evalWord (blockTensor (d := d) (D := D_A) A p) (List.ofFn σ) *
+          (Kraus.evalWord (blockTensor (d := d) (n := Fin D_A) A p) (List.ofFn σ) *
             Kraus.evalWord A w) := by
     rw [evalWord_blockTensor, evalWord_blockTensor,
       ← Kraus.evalWord_append, ← Kraus.evalWord_append]
@@ -399,6 +399,6 @@ theorem reductionOpenBoundaryMatrixContraction_blockTensor_of_sameMPV₂Pos
   unfold reductionOpenBoundaryMatrixContraction
   simp_rw [hterm]
   exact reductionOpenBoundaryMatrixContraction_self
-    (blockTensor (d := d) (D := D_A) A p) hA n hn (Kraus.evalWord A w) a' a
+    (blockTensor (d := d) (n := Fin D_A) A p) hA n hn (Kraus.evalWord A w) a' a
 
 end MPSTensor

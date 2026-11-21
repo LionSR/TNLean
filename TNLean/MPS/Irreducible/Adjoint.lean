@@ -47,13 +47,13 @@ theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleT
         SameMPV₂ A B ∧
         Λ.PosDef ∧ Λ.IsDiag ∧
         (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
-        Kraus.transferMap (d := d) (D := D) (fun i => (B i)ᴴ) Λ = Λ := by
+        Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (B i)ᴴ) Λ = Λ := by
   classical
   let Aadj : MPSTensor d D := fun i => (A i)ᴴ
   have hTPadj : ∑ i : Fin d, (Aadj i)ᴴ * Aadj i = 1 := by
     simpa [Aadj, Matrix.conjTranspose_conjTranspose] using hUnital
   have hIrrAdjMap :
-      IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) Aadj) := by
+      IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) Aadj) := by
     simpa [Aadj] using
       Kraus.isIrreducibleMap_mapLM_conjTranspose A
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
@@ -73,7 +73,7 @@ theorem exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleT
   have hUnitalB : ∑ i : Fin d, B i * (B i)ᴴ = 1 := by
     simpa [B, Aadj, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
       Matrix.mul_assoc] using hTP_conj
-  have hΛ_fixB : Kraus.transferMap (d := d) (D := D) (fun i => (B i)ᴴ) Λ = Λ := by
+  have hΛ_fixB : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (B i)ᴴ) Λ = Λ := by
     simpa [B, Aadj, Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
       Matrix.mul_assoc] using hΛ_fix
   exact ⟨hSame, hΛ_pd, hΛ_diag, hUnitalB, hΛ_fixB⟩

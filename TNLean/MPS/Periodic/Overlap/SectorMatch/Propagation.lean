@@ -46,8 +46,8 @@ private lemma overlap_norm_tendsto_one_of_gaugePhase_cast
     (hCA_irr : Kraus.IsIrreducibleFamily CA) (hCB_irr : Kraus.IsIrreducibleFamily CB)
     (hCA_norm : ∑ i : Fin d, (CA i)ᴴ * CA i = 1)
     (hCB_norm : ∑ i : Fin d, (CB i)ᴴ * CB i = 1)
-    (hCA_prim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DA) CA))
-    (hCB_prim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := DB) CB))
+    (hCA_prim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DA) CA))
+    (hCB_prim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin DB) CB))
     (hMatch : GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) CA) CB) :
     Tendsto (fun N => ‖mpvOverlap (d := d) CA CB N‖) atTop (nhds (1 : ℝ)) := by
   classical

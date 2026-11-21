@@ -134,22 +134,22 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂Pos
       familyA.p = p ∧
       familyB.p = p ∧
       SameMPV₂Pos
-        (blockTensor (d := d) (D := D₁) A p)
+        (blockTensor (d := d) (n := Fin D₁) A p)
         (toTensorFromBlocks (d := blockPhysDim d p)
           (fun k => (μA k) ^ p)
-          (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p)) ∧
+          (fun k => blockTensor (d := d) (n := Fin (dimA k)) (blocksA k) p)) ∧
       SameMPV₂Pos
-        (blockTensor (d := d) (D := D₂) B p)
+        (blockTensor (d := d) (n := Fin D₂) B p)
         (toTensorFromBlocks (d := blockPhysDim d p)
           (fun k => (μB k) ^ p)
-          (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) ∧
+          (fun k => blockTensor (d := d) (n := Fin (dimB k)) (blocksB k) p)) ∧
       SameMPV₂Pos
         (toTensorFromBlocks (d := blockPhysDim d p)
           (fun k => (μA k) ^ p)
-          (fun k => blockTensor (d := d) (D := dimA k) (blocksA k) p))
+          (fun k => blockTensor (d := d) (n := Fin (dimA k)) (blocksA k) p))
         (toTensorFromBlocks (d := blockPhysDim d p)
           (fun k => (μB k) ^ p)
-          (fun k => blockTensor (d := d) (D := dimB k) (blocksB k) p)) ∧
+          (fun k => blockTensor (d := d) (n := Fin (dimB k)) (blocksB k) p)) ∧
       (∀ x, familyA.commonFlatWeight μA x ≠ 0) ∧
       (∀ x, familyB.commonFlatWeight μB x ≠ 0) ∧
       (∀ x, ∑ i : Fin (blockPhysDim d familyA.p),
@@ -157,10 +157,10 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂Pos
       (∀ x, ∑ i : Fin (blockPhysDim d familyB.p),
         (familyB.commonFlatBlocks x i)ᴴ * familyB.commonFlatBlocks x i = 1) ∧
       (∀ x, _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d familyA.p) (D := familyA.commonFlatDim x)
+        (Kraus.transferMap (ι := Fin (blockPhysDim d familyA.p)) (n := Fin (familyA.commonFlatDim x))
           (familyA.commonFlatBlocks x))) ∧
       (∀ x, _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d familyB.p) (D := familyB.commonFlatDim x)
+        (Kraus.transferMap (ι := Fin (blockPhysDim d familyB.p)) (n := Fin (familyB.commonFlatDim x))
           (familyB.commonFlatBlocks x))) ∧
       (∀ x, Kraus.IsIrreducibleFamily (familyA.commonFlatBlocks x)) ∧
       (∀ x, Kraus.IsIrreducibleFamily (familyB.commonFlatBlocks x)) ∧
@@ -229,13 +229,13 @@ theorem afterBlocking_commonLengthCommonSectorData_of_sameMPV₂Pos
   · intro x
     let y := familyA.flatKey x
     change _root_.IsPrimitive
-      (Kraus.transferMap (d := blockPhysDim d familyA.p) (D := familyA.sectorDim y.1 y.2)
+      (Kraus.transferMap (ι := Fin (blockPhysDim d familyA.p)) (n := Fin (familyA.sectorDim y.1 y.2))
         (familyA.commonSectorBlock y.1 y.2))
     exact (familyA.derived_properties y.1 y.2).2.1
   · intro x
     let y := familyB.flatKey x
     change _root_.IsPrimitive
-      (Kraus.transferMap (d := blockPhysDim d familyB.p) (D := familyB.sectorDim y.1 y.2)
+      (Kraus.transferMap (ι := Fin (blockPhysDim d familyB.p)) (n := Fin (familyB.sectorDim y.1 y.2))
         (familyB.commonSectorBlock y.1 y.2))
     exact (familyB.derived_properties y.1 y.2).2.1
   · intro x

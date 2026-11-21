@@ -76,7 +76,7 @@ private lemma exists_mpv_blockTensor_ne_zero {D : ℕ} (A : MPSTensor d D)
     (hNZ : ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0)
     (p : ℕ) (hp : 0 < p) :
     ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → Fin (blockPhysDim d p),
-      mpv (blockTensor (d := d) (D := D) A p) σ ≠ 0 := by
+      mpv (blockTensor (d := d) (n := Fin D) A p) σ ≠ 0 := by
   classical
   obtain ⟨N₀, hN₀, σ₀, hσ₀⟩ := hNZ
   let w := List.ofFn σ₀
@@ -192,7 +192,7 @@ theorem exists_isBNTCanonicalForm_afterBlocking_pos_normalized
       ∃ P : SectorDecomposition (blockPhysDim d p),
         IsBNTCanonicalForm P ∧
         ∀ N : ℕ, 0 < N → ∀ σ : Fin N → Fin (blockPhysDim d p),
-          mpv (blockTensor (d := d) (D := D) A p) σ = (m : ℂ) ^ N * mpv P.toTensor σ := by
+          mpv (blockTensor (d := d) (n := Fin D) A p) σ = (m : ℂ) ^ N * mpv P.toTensor σ := by
   classical
   obtain ⟨p, hp, r, dim, μ, blocks, hDim, hTP, hPrim, hIrr, -, hμne, hSamePos⟩ :=
     exists_prepared_BNT_blocks_afterBlocking_pos (d := d) (D := D) A
@@ -222,7 +222,7 @@ theorem exists_isBNTCanonicalForm_afterBlocking_pos_normalized
     rw [mul_comm]
     exact div_mul_cancel₀ (μ k) hm0
   calc
-    mpv (blockTensor (d := d) (D := D) A p) σ
+    mpv (blockTensor (d := d) (n := Fin D) A p) σ
         = mpv (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) σ :=
       hSamePos N hN σ
     _ = mpv (toTensorFromBlocks (d := blockPhysDim d p)

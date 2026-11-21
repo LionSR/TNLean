@@ -110,9 +110,9 @@ structure IsNormalTensor (A : MPSTensor d D) : Prop where
   spectral_radius_one :
     spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (Kraus.transferMap (d := d) (D := D) A)) = 1
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) = 1
   /-- (ii-b) the associated CPM has no unit-modulus eigenvalue other than one. -/
-  primitive_transfer : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)
+  primitive_transfer : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A)
 
 /-- A normal tensor has nonzero bond dimension.
 
@@ -124,7 +124,7 @@ theorem IsNormalTensor.bondDim_ne_zero {A : MPSTensor d D} (h : IsNormalTensor A
     D ≠ 0 :=
   matrix_dim_ne_zero_of_spectralRadius_eq_one
     ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-      (Kraus.transferMap (d := d) (D := D) A))
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
     h.spectral_radius_one
 
 /-- Every tensor of bond dimension one is irreducible: the only orthogonal

@@ -252,7 +252,7 @@ theorem exists_paper_cyclic_projectors_of_isPeriodic
     _hV_iso, _hV_range, _hEmbed⟩ :=
     exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic A hA
   have hCyclic' :
-      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
+      ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
     intro k
     simpa [cyclicNextOfPos, Fin.add_def] using hCyclic k
   let Q : Fin p → MatrixAlg D := fun k => P (-k)

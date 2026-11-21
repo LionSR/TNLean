@@ -81,8 +81,8 @@ Source: arXiv:1606.00608, lines 219--223 define the transfer map and lines
 264--268 give the invertible gauge relation. -/
 theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) :
     ∃ C : Matrix (Fin D) (Fin D) ℂ, C.det ≠ 0 ∧
-      Kraus.transferMap (d := d) (D := D) B =
-        similarityMap (D := D) C (Kraus.transferMap (d := d) (D := D) A) := by
+      Kraus.transferMap (ι := Fin d) (n := Fin D) B =
+        similarityMap (D := D) C (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
   obtain ⟨X, hX⟩ := h
   refine ⟨((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ), ?_, ?_⟩
   · exact Matrix.GeneralLinearGroup.det_ne_zero (X⁻¹ : GL (Fin D) ℂ)
@@ -126,17 +126,17 @@ theorem transferMap_eq_similarityMap {A B : MPSTensor d D} (h : GaugeEquiv A B) 
             simp [Finset.mul_sum, Finset.sum_mul, Matrix.mul_assoc]
       _ = similarityMap (D := D)
             ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
-            (Kraus.transferMap (d := d) (D := D) A) Y := by
+            (Kraus.transferMap (ι := Fin d) (n := Fin D) A) Y := by
             simp [similarityMap, Matrix.conjTranspose_nonsing_inv,
               hX_inv_inv, hXstar_inv_inv, Matrix.mul_assoc]
 
 /-- Gauge equivalence transports quasi-idempotence of the transfer map. -/
 theorem transferMap_comp_self_eq_smul_iff {A B : MPSTensor d D}
     (h : GaugeEquiv A B) (c : ℂ) :
-    Kraus.transferMap (d := d) (D := D) B ∘ₗ Kraus.transferMap (d := d) (D := D) B =
-        c • Kraus.transferMap (d := d) (D := D) B ↔
-      Kraus.transferMap (d := d) (D := D) A ∘ₗ Kraus.transferMap (d := d) (D := D) A =
-        c • Kraus.transferMap (d := d) (D := D) A := by
+    Kraus.transferMap (ι := Fin d) (n := Fin D) B ∘ₗ Kraus.transferMap (d := d) (D := D) B =
+        c • Kraus.transferMap (ι := Fin d) (n := Fin D) B ↔
+      Kraus.transferMap (ι := Fin d) (n := Fin D) A ∘ₗ Kraus.transferMap (d := d) (D := D) A =
+        c • Kraus.transferMap (ι := Fin d) (n := Fin D) A := by
   obtain ⟨C, hC, hMap⟩ := h.transferMap_eq_similarityMap
   let e := (Matrix.congruenceLinearEquiv C hC).symm.conjAlgEquiv ℂ
   have hSimilarity (E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
@@ -173,23 +173,23 @@ theorem of_gaugeEquiv {A B : MPSTensor d D} (hB : IsNormalTensor B)
     IsNormalTensor A := by
   obtain ⟨C, hC, hMap⟩ := hGauge.transferMap_eq_similarityMap
   refine ⟨?_, ?_, ?_⟩
-  · have hIrrB : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) B) :=
+  · have hIrrB : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) B) :=
       Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B hB.no_invariant_proj
-    have hIrrA : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) := by
+    have hIrrA : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
       have hIrrSim : IsIrreducibleMap
-          (similarityMap (D := D) C (Kraus.transferMap (d := d) (D := D) A)) := by
+          (similarityMap (D := D) C (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) := by
         simpa [hMap] using hIrrB
       exact (isIrreducibleMap_similarity_iff (D := D) hC).1 hIrrSim
     exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A hIrrA
   · have hsr := hB.spectral_radius_one
     rw [hMap] at hsr
     rw [spectralRadius_similarityMap_eq (D := D) C hC
-      (Kraus.transferMap (d := d) (D := D) A)] at hsr
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) A)] at hsr
     exact hsr
   · have hPrim := hB.primitive_transfer
     rw [hMap] at hPrim
     exact (IsPrimitive.similarityMap_iff (D := D) C hC
-      (Kraus.transferMap (d := d) (D := D) A)).1 hPrim
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) A)).1 hPrim
 
 end IsNormalTensor
 
@@ -208,51 +208,51 @@ theorem exists_tpGauge_of_irreducible_spectralRadius_one
     (hRadius :
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (Kraus.transferMap (d := d) (D := D) A)) = 1) :
+          (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) = 1) :
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧
-      Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = σ ∧
+      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ = σ ∧
       IsLeftCanonical (Kraus.tpGauge (d := d) (D := D) A σ) ∧
       GaugeEquiv A (Kraus.tpGauge (d := d) (D := D) A σ) ∧
       Kraus.IsIrreducibleFamily (Kraus.tpGauge (d := d) (D := D) A σ) := by
   have hD : D ≠ 0 :=
     matrix_dim_ne_zero_of_spectralRadius_eq_one
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (Kraus.transferMap (d := d) (D := D) A))
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
       hRadius
   let : NeZero D := ⟨hD⟩
   have hA : ∃ i, A i ≠ 0 := by
     by_contra hzero
     push Not at hzero
-    have hmap : Kraus.transferMap (d := d) (D := D) A = 0 := by
+    have hmap : Kraus.transferMap (ι := Fin d) (n := Fin D) A = 0 := by
       ext X a b
       simp [hzero]
     have hspectral := hRadius
     rw [hmap] at hspectral
     simp at hspectral
-  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
+  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
     Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr
   obtain ⟨ρ, r, hρ, hr, hρeig⟩ :=
     exists_posDef_transferMap_eigenvector_of_irreducible A hIrr hA
   have hradius :
       (spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (Kraus.transferMap (d := d) (D := D) A))).toReal = r :=
+          (Kraus.transferMap (ι := Fin d) (n := Fin D) A))).toReal = r :=
     spectralRadius_toReal_eq_of_posDef_eigenvector_of_irreducible_cp
-      (Kraus.transferMap (d := d) (D := D) A) (Kraus.transferMap_isCPMap A) hIrrMap
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) A) (Kraus.transferMap_isCPMap A) hIrrMap
       ρ r hρ hr hρeig
   have hradius_one :
       (spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-          (Kraus.transferMap (d := d) (D := D) A))).toReal = 1 := by
+          (Kraus.transferMap (ι := Fin d) (n := Fin D) A))).toReal = 1 := by
     rw [hRadius]
     simp
   have hr_one : r = 1 := hradius.symm.trans hradius_one
   obtain ⟨σ, t, hσ, ht, hσeig⟩ :=
     exists_posDef_adjoint_eigenvector A hIrr hA
-  have htrace : Matrix.trace (σ * Kraus.transferMap (d := d) (D := D) A ρ) =
+  have htrace : Matrix.trace (σ * Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ) =
       Matrix.trace
-        (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ * ρ) :=
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ * ρ) :=
     Kraus.trace_mul_mapLM_adjoint A rfl σ ρ
   have htr_ne : Matrix.trace (σ * ρ) ≠ 0 := by
     exact ne_of_gt (hσ.trace_mul_pos_of_posSemidef_of_ne_zero
@@ -263,9 +263,9 @@ theorem exists_tpGauge_of_irreducible_spectralRadius_one
       (r : ℂ) * Matrix.trace (σ * ρ) =
           Matrix.trace (σ * ((r : ℂ) • ρ)) := by
             rw [Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
-      _ = Matrix.trace (σ * Kraus.transferMap (d := d) (D := D) A ρ) := by rw [hρeig]
+      _ = Matrix.trace (σ * Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ) := by rw [hρeig]
       _ = Matrix.trace
-          (Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ * ρ) := htrace
+          (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ * ρ) := htrace
       _ = Matrix.trace (((t : ℂ) • σ) * ρ) := by rw [hσeig]
       _ = (t : ℂ) * Matrix.trace (σ * ρ) := by
             rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
@@ -273,7 +273,7 @@ theorem exists_tpGauge_of_irreducible_spectralRadius_one
     have hc : (r : ℂ) = (t : ℂ) := mul_right_cancel₀ htr_ne hscalar
     exact_mod_cast hc
   have ht_one : t = 1 := hrt ▸ hr_one
-  have hσfix : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = σ := by
+  have hσfix : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ = σ := by
     simpa [ht_one] using hσeig
   have hTP : IsLeftCanonical (Kraus.tpGauge (d := d) (D := D) A σ) :=
     Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint A σ hσ hσfix
@@ -294,17 +294,17 @@ theorem IsNormalTensor.exists_tpGauge
     {A : MPSTensor d D} (h : IsNormalTensor A) :
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧
-      Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = σ ∧
+      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ = σ ∧
       IsLeftCanonical (Kraus.tpGauge (d := d) (D := D) A σ) ∧
       GaugeEquiv A (Kraus.tpGauge (d := d) (D := D) A σ) ∧
       _root_.IsPrimitive
-        (Kraus.transferMap (d := d) (D := D) (Kraus.tpGauge (d := d) (D := D) A σ)) ∧
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.tpGauge (d := d) (D := D) A σ)) ∧
       Kraus.IsIrreducibleFamily (Kraus.tpGauge (d := d) (D := D) A σ) := by
   obtain ⟨σ, hσ, hσfix, hTP, hGauge, hIrr⟩ :=
     exists_tpGauge_of_irreducible_spectralRadius_one
       h.no_invariant_proj h.spectral_radius_one
   have hPrim : _root_.IsPrimitive
-      (Kraus.transferMap (d := d) (D := D) (Kraus.tpGauge (d := d) (D := D) A σ)) :=
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.tpGauge (d := d) (D := D) A σ)) :=
     (Kraus.isPrimitive_mapLM_tpGauge_iff A σ hσ).2 h.primitive_transfer
   exact ⟨σ, hσ, hσfix, hTP, hGauge, hPrim, hIrr⟩
 
@@ -354,7 +354,7 @@ the transfer map of a left-canonical tensor is a channel, so its spectral radius
 (Wolf Proposition 6.1). -/
 theorem isNormalTensor_of_isIrreducibleFamily_leftCanonical [NeZero D]
     (A : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily A)
-    (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A))
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
     (hLeft : IsLeftCanonical A) : IsNormalTensor A where
   no_invariant_proj := hIrr
   spectral_radius_one :=
@@ -372,7 +372,7 @@ theorem IsNormalTensor.exists_apply_ne_zero
   have : NeZero D := ⟨h.bondDim_ne_zero⟩
   by_contra hzero
   push Not at hzero
-  have hmap : Kraus.transferMap (d := d) (D := D) A = 0 := by
+  have hmap : Kraus.transferMap (ι := Fin d) (n := Fin D) A = 0 := by
     ext X a b
     simp [hzero]
   have hspectral := h.spectral_radius_one

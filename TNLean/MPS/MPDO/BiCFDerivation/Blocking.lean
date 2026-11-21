@@ -33,8 +33,8 @@ theorem pairTraceSeparatingAt_blockTensor
     {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     (p N : ℕ) (hSep : PairTraceSeparatingAt A B (N * p)) :
     PairTraceSeparatingAt
-      (blockTensor (d := d) (D := D₁) A p)
-      (blockTensor (d := d) (D := D₂) B p) N := by
+      (blockTensor (d := d) (n := Fin D₁) A p)
+      (blockTensor (d := d) (n := Fin D₂) B p) N := by
   intro ΔA ΔB hΔ
   apply hSep ΔA ΔB
   intro τ

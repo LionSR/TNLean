@@ -46,14 +46,14 @@ structure IsSpectrallyPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
   spectral_radius_one :
     spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (Kraus.transferMap (d := d) (D := D) A)) = 1
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) = 1
   /-- The period is positive, as in the periodic-block description of
   arXiv:1708.00029, lines 257--258. -/
   period_pos : 0 < m
   /-- The unit-circle eigenvalues are exactly the `m`-th roots of unity, as in
   arXiv:1708.00029, lines 257--258. -/
   peripheral_eq :
-    peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) = {μ : ℂ | μ ^ m = 1}
+    peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) = {μ : ℂ | μ ^ m = 1}
 
 /-- A spectrally periodic block has nonzero bond dimension.
 
@@ -64,7 +64,7 @@ theorem IsSpectrallyPeriodic.bondDim_ne_zero {m : ℕ} {A : MPSTensor d D}
     (hA : IsSpectrallyPeriodic m A) : D ≠ 0 :=
   matrix_dim_ne_zero_of_spectralRadius_eq_one
     ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-      (Kraus.transferMap (d := d) (D := D) A))
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
     hA.spectral_radius_one
 
 /-- `IsPeriodic m A` bundles irreducibility, left-canonical normalization,
@@ -81,7 +81,7 @@ structure IsPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
   period_pos : 0 < m
   /-- Peripheral eigenvalues are exactly `m`-th roots of unity. -/
   peripheral_eq :
-    peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) = {μ : ℂ | μ ^ m = 1}
+    peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) = {μ : ℂ | μ ^ m = 1}
 
 /-- A positive period has a primitive root in `ℂ`; this is a consequence of
 the period, not an additional periodicity hypothesis.
@@ -104,7 +104,7 @@ theorem IsPeriodic.bondDim_ne_zero {m : ℕ} {A : MPSTensor d D}
   intro hD
   subst D
   have hOne :
-      (1 : ℂ) ∈ peripheralEigenvalues (Kraus.transferMap (d := d) (D := 0) A) := by
+      (1 : ℂ) ∈ peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin 0) A) := by
     rw [hA.peripheral_eq]
     simp
   exact hOne.1 (Subsingleton.elim _ _)
@@ -177,13 +177,13 @@ theorem IsPeriodic.one_iff_primitive (A : MPSTensor d D) :
     IsPeriodic 1 A ↔
       Kraus.IsIrreducibleFamily A ∧
       IsLeftCanonical A ∧
-      IsPrimitive (Kraus.transferMap (d := d) (D := D) A) := by
+      IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
   constructor
   · intro h
     refine ⟨h.irreducible, h.leftCanonical, ?_⟩
     rw [IsPrimitive]
     calc
-      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A)
+      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A)
           = {μ : ℂ | μ ^ 1 = 1} := h.peripheral_eq
       _ = ({1} : Set ℂ) := by
         ext μ
@@ -193,7 +193,7 @@ theorem IsPeriodic.one_iff_primitive (A : MPSTensor d D) :
     refine ⟨hIrr, hLC, by decide, ?_⟩
     rw [IsPrimitive] at hPrim
     calc
-      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A)
+      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A)
           = ({1} : Set ℂ) := hPrim
       _ = {μ : ℂ | μ ^ 1 = 1} := by
         ext μ
@@ -361,8 +361,8 @@ theorem IsPeriodic.period_eq_of_repeatedBlocks
     {m n : ℕ} {A B : MPSTensor d D}
     (hA : IsPeriodic m A) (hB : IsPeriodic n B)
     (_hRep : RepeatedBlocks A B)
-    (hSpec : peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) =
-      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B)) :
+    (hSpec : peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) =
+      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) B)) :
     m = n :=
   period_eq_of_setOf_pow_eq_one hA.period_pos hB.period_pos
     (by rw [← hA.peripheral_eq, ← hB.peripheral_eq]; exact hSpec)
@@ -376,8 +376,8 @@ by the repeated-block condition can only have the same period. -/
 theorem IsSpectrallyPeriodic.period_eq_of_peripheralEigenvalues_eq
     {m n : ℕ} {A B : MPSTensor d D}
     (hA : IsSpectrallyPeriodic m A) (hB : IsSpectrallyPeriodic n B)
-    (hSpec : peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) =
-      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) B)) :
+    (hSpec : peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) =
+      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) B)) :
     m = n :=
   period_eq_of_setOf_pow_eq_one hA.period_pos hB.period_pos
     (by rw [← hA.peripheral_eq, ← hB.peripheral_eq]; exact hSpec)

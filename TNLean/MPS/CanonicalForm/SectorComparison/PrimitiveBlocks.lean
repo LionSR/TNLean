@@ -75,7 +75,7 @@ points for `E^P` follows from the complementary transfer-map gap of
 theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A))
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
     (hIrr : Kraus.IsIrreducibleFamily A)
     {P : ℕ} (hP : 0 < P) :
     Kraus.IsIrreducibleFamily (blockTensor A P) := by
@@ -86,27 +86,27 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
     hPrimMPS.posDef_of_isIrreducibleFamily hIrr
   -- Step 2: Blocked tensor is TP.
   have hTP_blocked : ∑ i : Fin (blockPhysDim d P),
-      (blockTensor (d := d) (D := D) A P i)ᴴ * blockTensor (d := d) (D := D) A P i = 1 :=
+      (blockTensor (d := d) (n := Fin D) A P i)ᴴ * blockTensor (d := d) (n := Fin D) A P i = 1 :=
     leftCanonical_blockTensor A P hTP
   -- Step 3: Blocked transfer map is a channel.
-  have hCh : IsChannel (Kraus.transferMap (d := blockPhysDim d P) (D := D) (blockTensor A P)) :=
+  have hCh : IsChannel (Kraus.transferMap (ι := Fin (blockPhysDim d P)) (n := Fin D) (blockTensor A P)) :=
     Kraus.isChannel_mapLM (blockTensor A P) hTP_blocked
   -- Step 4: ρ is fixed by the blocked transfer map.
   have hρ_fix_blocked :
-      Kraus.transferMap (d := blockPhysDim d P) (D := D) (blockTensor A P) ρ = ρ :=
+      Kraus.transferMap (ι := Fin (blockPhysDim d P)) (n := Fin D) (blockTensor A P) ρ = ρ :=
     transferMap_blockTensor_fixedPoint A P ρ hPrimMPS.fixedPoint_is_fixed
   -- Step 5: Uniqueness of PSD fixed points of Kraus.transferMap(blockTensor A P).
   -- Strategy: if E^P σ = σ, set σ' = σ - c•ρ (c = tr σ / tr ρ).
   -- Show N^{Pk} σ' = σ' for all k ≥ 1, but N^n → 0, hence σ' = 0.
   have huniq : ∀ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosSemidef →
-      Kraus.transferMap (d := blockPhysDim d P) (D := D) (blockTensor A P) σ = σ →
+      Kraus.transferMap (ι := Fin (blockPhysDim d P)) (n := Fin D) (blockTensor A P) σ = σ →
       ∃ c : ℂ, σ = c • ρ := by
     intro σ _hσ_psd hσ_fix
     -- Convert hσ_fix to: (Kraus.transferMap A)^P σ = σ.
     rw [transferMap_blockTensor] at hσ_fix
     -- Set abbreviations.
-    set E := Kraus.transferMap (d := d) (D := D) A with E_def
+    set E := Kraus.transferMap (ι := Fin d) (n := Fin D) A with E_def
     set Pρ := fixedPointProj (D := D) ρ hPrimMPS.trace_ne_zero with Pρ_def
     set N := E - Pρ with N_def
     set c := Matrix.trace σ / Matrix.trace ρ with c_def
@@ -201,9 +201,9 @@ theorem isIrreducibleTensor_blockTensor_of_tp_primitive_irr [NeZero D]
     exact tendsto_nhds_unique tendsto_const_nhds hconst_tendsto
   -- Step 6: Apply isIrreducibleMap_of_channel_posDef_fixedPoint_unique.
   have hIrrMap : IsIrreducibleMap
-      (Kraus.transferMap (d := blockPhysDim d P) (D := D) (blockTensor A P)) :=
+      (Kraus.transferMap (ι := Fin (blockPhysDim d P)) (n := Fin D) (blockTensor A P)) :=
     isIrreducibleMap_of_channel_posDef_fixedPoint_unique
-      (Kraus.transferMap (d := blockPhysDim d P) (D := D) (blockTensor A P))
+      (Kraus.transferMap (ι := Fin (blockPhysDim d P)) (n := Fin D) (blockTensor A P))
       hCh ρ hPD hρ_fix_blocked huniq
   -- Step 7: IsIrreducibleMap → Kraus.IsIrreducibleFamily.
   exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM (blockTensor A P) hIrrMap
@@ -218,20 +218,20 @@ common refinement or injectivity/Wielandt-span arguments. -/
 theorem tp_primitive_irreducible_extra_blocking [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A))
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
     (hIrr : Kraus.IsIrreducibleFamily A)
     {k : ℕ} (hk : 0 < k) :
     (∑ i : Fin (blockPhysDim d k),
-      (blockTensor (d := d) (D := D) A k i)ᴴ * blockTensor (d := d) (D := D) A k i = 1) ∧
+      (blockTensor (d := d) (n := Fin D) A k i)ᴴ * blockTensor (d := d) (n := Fin D) A k i = 1) ∧
     _root_.IsPrimitive
-      (Kraus.transferMap (d := blockPhysDim d k) (D := D)
-        (blockTensor (d := d) (D := D) A k)) ∧
-    Kraus.IsIrreducibleFamily (blockTensor (d := d) (D := D) A k) := by
+      (Kraus.transferMap (ι := Fin (blockPhysDim d k)) (n := Fin D)
+        (blockTensor (d := d) (n := Fin D) A k)) ∧
+    Kraus.IsIrreducibleFamily (blockTensor (d := d) (n := Fin D) A k) := by
   refine ⟨?_, ?_, ?_⟩
   · exact leftCanonical_blockTensor (d := d) (D := D) (A := A) (L := k) hTP
   · rw [transferMap_blockTensor]
     exact isPrimitive_pow_of_isPrimitive (D := D)
-      (Kraus.transferMap (d := d) (D := D) A) k hk hPrim
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) A) k hk hPrim
   · exact isIrreducibleTensor_blockTensor_of_tp_primitive_irr
       (d := d) (D := D) A hTP hPrim hIrr hk
 
@@ -276,30 +276,30 @@ theorem exists_common_injective_blocking_of_tp_primitive_irr_family
     (blocks : (k : Fin r) → MPSTensor d (dim k))
     (hDim : ∀ k, 0 < dim k)
     (hTP : ∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1)
-    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (d := d) (D := dim k) (blocks k)))
+    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k)))
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k)) :
     ∃ L : ℕ, 0 < L ∧ ∀ k : Fin r,
-      Kraus.IsInjective (blockTensor (d := d) (D := dim k) (blocks k) L) ∧
+      Kraus.IsInjective (blockTensor (d := d) (n := Fin (dim k)) (blocks k) L) ∧
       (∑ i : Fin (blockPhysDim d L),
-        (blockTensor (d := d) (D := dim k) (blocks k) L i)ᴴ *
-          blockTensor (d := d) (D := dim k) (blocks k) L i = 1) ∧
+        (blockTensor (d := d) (n := Fin (dim k)) (blocks k) L i)ᴴ *
+          blockTensor (d := d) (n := Fin (dim k)) (blocks k) L i = 1) ∧
       _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d L) (D := dim k)
-          (blockTensor (d := d) (D := dim k) (blocks k) L)) ∧
-      Kraus.IsIrreducibleFamily (blockTensor (d := d) (D := dim k) (blocks k) L) := by
+        (Kraus.transferMap (ι := Fin (blockPhysDim d L)) (n := Fin (dim k))
+          (blockTensor (d := d) (n := Fin (dim k)) (blocks k) L)) ∧
+      Kraus.IsIrreducibleFamily (blockTensor (d := d) (n := Fin (dim k)) (blocks k) L) := by
   classical
   -- `NeZero (dim k)` for each `k` from positivity.
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
   -- Per-block injective blocking lengths.
   have hBlock : ∀ k : Fin r, ∃ Lk : ℕ, 0 < Lk ∧
-      Kraus.IsInjective (blockTensor (d := d) (D := dim k) (blocks k) Lk) := by
+      Kraus.IsInjective (blockTensor (d := d) (n := Fin (dim k)) (blocks k) Lk) := by
     intro k
     exact MPSTensor.exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible
       (blocks k) (hTP k) (hPrim k) (hIrr k)
   let L : Fin r → ℕ := fun k => Classical.choose (hBlock k)
   have hL_pos : ∀ k, 0 < L k := fun k => (Classical.choose_spec (hBlock k)).1
   have hL_inj : ∀ k,
-      Kraus.IsInjective (blockTensor (d := d) (D := dim k) (blocks k) (L k)) :=
+      Kraus.IsInjective (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (L k)) :=
     fun k => (Classical.choose_spec (hBlock k)).2
   refine ⟨∏ k : Fin r, L k, Finset.prod_pos fun k _ => hL_pos k, ?_⟩
   intro k
@@ -313,7 +313,7 @@ theorem exists_common_injective_blocking_of_tp_primitive_irr_family
   -- Step 2: injectivity at the common length via blockwise multiplication.
   have hInj :
       Kraus.IsInjective
-        (blockTensor (d := d) (D := dim k) (blocks k) (∏ j : Fin r, L j)) := by
+        (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (∏ j : Fin r, L j)) := by
     have hmul := MPSTensor.blockTensor_isInjective_mul_of_blockTensor_isInjective
       (blocks k) hmult_pos (hL_inj k)
     rw [hcommon]

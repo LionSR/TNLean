@@ -46,8 +46,8 @@ theorem reindexPhysical_cast_dim {d₁ d₂ D₁ D₂ : ℕ} (e : Fin d₁ ≃ F
 /-- Reindexing by a physical-index equivalence does not change the transfer map. -/
 theorem transferMap_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
     (A : MPSTensor d₂ D) :
-    Kraus.transferMap (d := d₁) (D := D) (Kraus.reindexPhysical e A) =
-      Kraus.transferMap (d := d₂) (D := D) A := by
+    Kraus.transferMap (ι := Fin d₁) (n := Fin D) (Kraus.reindexPhysical e A) =
+      Kraus.transferMap (ι := Fin d₂) (n := Fin D) A := by
   ext X i j
   simp only [Kraus.transferMap_apply, Kraus.reindexPhysical]
   have hsum :
@@ -79,8 +79,8 @@ theorem leftCanonical_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ �
 theorem isPrimitive_transferMap_reindexPhysical_equiv {d₁ d₂ D : ℕ}
     (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D) :
     _root_.IsPrimitive
-        (Kraus.transferMap (d := d₁) (D := D) (Kraus.reindexPhysical e A)) ↔
-      _root_.IsPrimitive (Kraus.transferMap (d := d₂) (D := D) A) := by
+        (Kraus.transferMap (ι := Fin d₁) (n := Fin D) (Kraus.reindexPhysical e A)) ↔
+      _root_.IsPrimitive (Kraus.transferMap (ι := Fin d₂) (n := Fin D) A) := by
   rw [transferMap_reindexPhysical_equiv e A]
 
 /-- Reindexing by a physical-index equivalence preserves invariant projections. -/

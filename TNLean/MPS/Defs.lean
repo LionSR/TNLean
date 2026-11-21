@@ -11,6 +11,7 @@ import Mathlib.Order.Filter.AtTopBot.Basic
 import QICLean.Algebra.MatrixKernelRigidity
 import QICLean.Kraus.Word
 import QICLean.Kraus.Injectivity
+import TNLean.MPS.Tensor
 
 /-!
 # Basic definitions for matrix product state tensors

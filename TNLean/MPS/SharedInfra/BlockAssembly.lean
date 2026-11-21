@@ -230,13 +230,13 @@ theorem evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal
     rfl
   calc
     Kraus.evalWord (toTensorFromBlocks (d := d) (μ := μ) A) w =
-        (Matrix.reindex e e) (_root_.evalWord BD w) := by
+        (Matrix.reindex e e) (Kraus.evalWord BD w) := by
       simpa [toTensorFromBlocks, BD, e, hfun] using
         evalWord_reindex (d := d) (e := e) (A := BD) w
     _ = (Matrix.reindex e e)
         (Matrix.blockDiagonal' fun k => (μ k) ^ w.length • Kraus.evalWord (A k) w) := by
       congr 1
-      simpa [BD] using evalWord_blockDiagonal'_smul (μ := μ) (A := A) w
+      simpa [BD] using Kraus.evalWord_blockDiagonal'_smul (μ := μ) (A := A) w
 
 /-- A tensor reconstructed through a coisometry has the same positive-length
 closed-chain coefficients as the tensor on the retained space.

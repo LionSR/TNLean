@@ -86,7 +86,7 @@ structure HasPrimitiveBlocks {r : ℕ} {dim : Fin r → ℕ}
     (A : (k : Fin r) → MPSTensor d (dim k)) : Prop where
   /-- Each block transfer map has `1` as its unique peripheral eigenvalue. -/
   block_primitive : ∀ k,
-    _root_.IsPrimitive (Kraus.transferMap (d := d) (D := dim k) (A k))
+    _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (A k))
 
 namespace HasPrimitiveBlocks
 
@@ -94,7 +94,7 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 variable {A : (k : Fin r) → MPSTensor d (dim k)}
 
 /-- Build `HasPrimitiveBlocks` from pointwise peripheral primitivity. -/
-theorem ofForall (hA : ∀ k, _root_.IsPrimitive (Kraus.transferMap (d := d) (D := dim k) (A k))) :
+theorem ofForall (hA : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (A k))) :
     HasPrimitiveBlocks (d := d) A where
   block_primitive := hA
 
@@ -211,7 +211,7 @@ theorem of_peripheral_primitive
     (hμ_antitone : Antitone (fun k : Fin r => ‖μ k‖))
     (hμ_ne_zero : ∀ k, μ k ≠ 0)
     (hDim : ∀ k, 0 < dim k)
-    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (d := d) (D := dim k) (A k))) :
+    (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (A k))) :
     IsCanonicalForm μ A := by
   refine ⟨hInj, hLeft, hμ_antitone, hμ_ne_zero, hDim, ?_⟩
   intro k
@@ -248,7 +248,7 @@ structure IsNormalCanonicalForm {r : ℕ} {dim : Fin r → ℕ}
   leftCanonical : ∀ k, ∑ i : Fin d, (A k i)ᴴ * (A k i) = 1
   /-- Each block transfer map is primitive in the peripheral-spectrum sense. -/
   block_primitive : ∀ k,
-    _root_.IsPrimitive (Kraus.transferMap (d := d) (D := dim k) (A k))
+    _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (A k))
   /-- Non-increasing ordering of the block weights by modulus. -/
   mu_antitone : Antitone (fun k : Fin r => ‖μ k‖)
   /-- No block weight vanishes. -/

@@ -74,8 +74,8 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
     (hDpos : 0 < D) :
     ∃ p : ℕ, 0 < p ∧
       _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d p) (D := D)
-          (blockTensor (d := d) (D := D) A p)) := by
+        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin D)
+          (blockTensor (d := d) (n := Fin D) A p)) := by
   classical
   -- Work with the conjugate-transposed Kraus family `K i = (A i)ᴴ`.
   let K : MPSTensor d D := fun i => (A i)ᴴ
@@ -83,18 +83,18 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
   have h_unitalK : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) K :=
     KadisonSchwarz.isUnitalKraus_conjTranspose (d := d) (D := D) (K := A) hTP'
   -- Irreducibility of `Kraus.transferMap K` from tensor-irreducibility of `A`.
-  have hIrrK : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) K) := by
+  have hIrrK : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) K) := by
     have hIrrAdj :=
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrrT).traceAdjointMap
         (Kraus.isPositiveMap_mapLM A)
     rw [Kraus.traceAdjointMap_mapLM_eq_mapLM_conjTranspose] at hIrrAdj
     exact hIrrAdj
   -- A positive definite fixed point for `Kraus.transferMap A`, hence for `Kraus.adjointMap K`.
-  have hCh : IsChannel (Kraus.transferMap (d := d) (D := D) A) :=
+  have hCh : IsChannel (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
     Kraus.isChannel_mapLM (d := d) (D := D) A (by unfold Kraus.IsTP; convert hTP)
   obtain ⟨ρ, hρ_psd, hρ_ne, hρ_fix⟩ :=
-    hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (d := d) (D := D) A) hDpos
-  have hIrrAmap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
+    hCh.exists_posSemidef_fixedPoint (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) hDpos
+  have hIrrAmap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
     Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily (d := d) (D := D) A hIrrT
   have hρ_pd : ρ.PosDef :=
     Kraus.posSemidef_fixedPoint_isPosDef_of_irreducible (A := A) (d := d) (D := D)
@@ -105,7 +105,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
       Kraus.transferMap_apply] using hρ_fix
   -- Root-of-unity peripheral eigenvalues for `Kraus.transferMap K`.
   let E : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
-    Kraus.transferMap (d := d) (D := D) K
+    Kraus.transferMap (ι := Fin d) (n := Fin D) K
   have hfin : (peripheralEigenvalues E).Finite := peripheralEigenvalues_finite (f := E)
   have hroot : ∀ μ ∈ hfin.toFinset, ∃ q : ℕ, 0 < q ∧ μ ^ q = 1 := by
     intro μ hμ
@@ -143,28 +143,28 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor
     Matrix.toMatrixNormedAddCommGroup (n := Fin D) (𝕜 := ℂ) 1 hM
   let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
-  have hE_adj : E = (Kraus.transferMap (d := d) (D := D) A).adjoint := by
+  have hE_adj : E = (Kraus.transferMap (ι := Fin d) (n := Fin D) A).adjoint := by
     -- `E = Kraus.transferMap (A†)` and use the lemma.
     simpa only using (Kraus.mapLM_conjTranspose_eq_adjoint (K := A))
   -- Rewrite `E ^ p` as the adjoint of `(Kraus.transferMap A) ^ p`.
-  have hpow_adj : E ^ p = ((Kraus.transferMap (d := d) (D := D) A) ^ p).adjoint := by
+  have hpow_adj : E ^ p = ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ p).adjoint := by
     -- First rewrite `E` using `hE_adj`.
     rw [hE_adj]
     -- Reduce to the general identity `(F^p).adjoint = (F.adjoint)^p`.
-    have hpow : (((Kraus.transferMap (d := d) (D := D) A) ^ p).adjoint) =
-        ((Kraus.transferMap (d := d) (D := D) A).adjoint) ^ p := by
+    have hpow : (((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ p).adjoint) =
+        ((Kraus.transferMap (ι := Fin d) (n := Fin D) A).adjoint) ^ p := by
       -- `star` on `Module.End` is the adjoint.
       simpa only [LinearMap.star_eq_adjoint] using
-        (star_pow (x := Kraus.transferMap (d := d) (D := D) A) (n := p))
+        (star_pow (x := Kraus.transferMap (ι := Fin d) (n := Fin D) A) (n := p))
     -- Rearrange to match the goal.
     simpa only using hpow.symm
-  have hprim_adj : _root_.IsPrimitive (((Kraus.transferMap (d := d) (D := D) A) ^ p).adjoint) := by
+  have hprim_adj : _root_.IsPrimitive (((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ p).adjoint) := by
     rw [_root_.isPrimitive_iff]
     -- `hprim_pow_adj` is exactly the peripheral eigenvalue statement.
     simpa only [hpow_adj] using hprim_pow_adj
-  have hprim_pow : _root_.IsPrimitive ((Kraus.transferMap (d := d) (D := D) A) ^ p) :=
+  have hprim_pow : _root_.IsPrimitive ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ p) :=
     -- Use invariance under adjoint.
-    (IsPrimitive.adjoint_iff (E := (Kraus.transferMap (d := d) (D := D) A) ^ p)).1 hprim_adj
+    (IsPrimitive.adjoint_iff (E := (Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ p)).1 hprim_adj
   refine ⟨p, hp_pos, ?_⟩
   -- Convert the power into a physical blocking.
   -- `Kraus.transferMap (blockTensor A p) = (Kraus.transferMap A) ^ p`.

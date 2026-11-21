@@ -143,9 +143,9 @@ def PeriodicVectorYieldsProjector (M : MPOTensor d D) : Prop :=
     (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
     Vᴴ * V = 1 → (∀ v : Fin (D * D), verticalTensor M v * V = V * B v) →
     Kraus.IsIrreducibleFamily B → ρ.PosDef → 0 < r →
-    Kraus.transferMap (d := D * D) (D := n) B ρ = (r : ℂ) • ρ →
+    Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) B ρ = (r : ℂ) • ρ →
     ∀ μ : ℂ,
-      Module.End.HasEigenvalue (Kraus.transferMap (d := D * D) (D := n) B) μ →
+      Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) B) μ →
       ‖μ‖ = r → μ ≠ (r : ℂ) →
       ∃ p : ℕ, Nonempty (PeriodicSectorProjector M p)
 

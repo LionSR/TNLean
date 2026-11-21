@@ -119,14 +119,14 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
         (blocks k i)ᴴ * blocks k i = 1) ∧
       -- (b) Blocks have primitive transfer maps
       (∀ k, _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d p) (D := dim k) (blocks k))) ∧
+        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k)) (blocks k))) ∧
       -- (c) Positive bond dimensions
       (∀ k, 0 < dim k) ∧
       -- (d) Nonzero weights
       (∀ k, μ k ≠ 0) ∧
       -- (e) Positive-length MPV relationship
       SameMPV₂Pos
-        (blockTensor (d := d) (D := D) A p)
+        (blockTensor (d := d) (n := Fin D) A p)
         (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
       -- (f) Bond-dimension bound
       ∑ k : Fin r, dim k ≤ D := by
@@ -141,7 +141,7 @@ theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
     exists_common_blocking_all_primitive_of_TP_irr blocks₀ hTP₀ hIrr₀ hDim₀
   -- Step C: Construct the blocked data.
   set blocks₁ : (k : Fin r₀) → MPSTensor (blockPhysDim d P) (dim₀ k) :=
-    fun k => blockTensor (d := d) (D := dim₀ k) (blocks₀ k) P with blocks₁_def
+    fun k => blockTensor (d := d) (n := Fin (dim₀ k)) (blocks₀ k) P with blocks₁_def
   set μ₁ : Fin r₀ → ℂ := fun k => (μ₀ k) ^ P with μ₁_def
   -- Step D: Verify all properties.
   refine ⟨P, hP, r₀, dim₀, μ₁, blocks₁, ?_, ?_, ?_, ?_, ?_, ?_⟩

@@ -85,7 +85,7 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hCyclic :
-      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+      ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hComm :
       ∀ k (i : Fin (blockPhysDim d m)),
         P k * (blockTensor A m) i = (blockTensor A m) i * P k)
@@ -95,9 +95,9 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
     {φ : (k : Fin m) →
       Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k)}
     (hIntertwine : ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-      (φ k (Kraus.transferMap (d := blockPhysDim d m) (D := dim k)
+      (φ k (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim k))
           (fun i => (blocks k i)ᴴ) X)).1 =
-        Kraus.transferMap (d := blockPhysDim d m) (D := D)
+        Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D)
           (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
     (hMul : ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
@@ -141,7 +141,7 @@ private lemma not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces
   -- period-transfer contradiction then forces it to vanish.
   obtain ⟨U, ζ, hζ, hU_ne, hSupp, hEig⟩ :
       ∃ (U : MatrixAlg D) (ζ : ℂ), ‖ζ‖ = 1 ∧ U ≠ 0 ∧ U = P u * U * P v ∧
-        ((Kraus.transferMap (d := d) (D := D) A) ^ m) U = ζ • U := by
+        ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ m) U = ζ • U := by
     have : NeZero (dim u) := ⟨hNondeg u⟩
     obtain ⟨U, ζ, hζ, hU_ne, hSupp, hEig_block⟩ :=
       exists_offDiag_eigenvector_of_gaugePhase_cast_left
@@ -184,7 +184,7 @@ lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hCyclicP :
-      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+      ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hComm :
       ∀ k (i : Fin (blockPhysDim d m)),
         P k * (blockTensor A m) i = (blockTensor A m) i * P k)
@@ -192,9 +192,9 @@ lemma sectorBlocks_not_gaugePhaseEquiv_of_ne
       ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
         mpv (blocks k) σ = (P k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace)
     (hIntertwine : ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-      (φ k (Kraus.transferMap (d := blockPhysDim d m) (D := dim k)
+      (φ k (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim k))
           (fun i => (blocks k i)ᴴ) X)).1 =
-        Kraus.transferMap (d := blockPhysDim d m) (D := D)
+        Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D)
           (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
     (hMul : ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
@@ -246,7 +246,7 @@ private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hCyclicP :
-      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+      ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hComm :
       ∀ k (i : Fin (blockPhysDim d m)),
         P k * (blockTensor A m) i = (blockTensor A m) i * P k)
@@ -254,9 +254,9 @@ private theorem sectorOverlap_tendsto_delta_of_cyclicSectorDecomp
       ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
         mpv (blocks k) σ = (P k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace)
     (hIntertwine : ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-      (φ k (Kraus.transferMap (d := blockPhysDim d m) (D := dim k)
+      (φ k (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim k))
           (fun i => (blocks k i)ᴴ) X)).1 =
-        Kraus.transferMap (d := blockPhysDim d m) (D := D)
+        Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D)
           (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
     (hMul : ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
@@ -355,7 +355,7 @@ private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hCyclicP :
-      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+      ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (hComm :
       ∀ k (i : Fin (blockPhysDim d m)),
         P k * (blockTensor A m) i = (blockTensor A m) i * P k)
@@ -363,9 +363,9 @@ private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
       ∀ k (N : ℕ) (σ : Fin N → Fin (blockPhysDim d m)),
         mpv (blocks k) σ = (P k * Kraus.evalWord (blockTensor A m) (List.ofFn σ)).trace)
     (hIntertwine : ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-      (φ k (Kraus.transferMap (d := blockPhysDim d m) (D := dim k)
+      (φ k (Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin (dim k))
           (fun i => (blocks k i)ᴴ) X)).1 =
-        Kraus.transferMap (d := blockPhysDim d m) (D := D)
+        Kraus.transferMap (ι := Fin (blockPhysDim d m)) (n := Fin D)
           (fun i => (P k * blockTensor A m i)ᴴ) ((φ k X).1))
     (hMul : ∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
       (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1)
@@ -381,20 +381,20 @@ private theorem blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
     (hNondeg : ∀ k, dim k ≠ 0) :
     Tendsto
       (fun k => mpvOverlap (d := blockPhysDim d m)
-        (blockTensor (d := d) (D := D) A m)
-        (blockTensor (d := d) (D := D) A m) k)
+        (blockTensor (d := d) (n := Fin D) A m)
+        (blockTensor (d := d) (n := Fin D) A m) k)
       atTop (nhds (m : ℂ)) := by
   classical
   have hOverlap_eq : ∀ N,
       mpvOverlap (d := blockPhysDim d m)
-          (blockTensor (d := d) (D := D) A m)
-          (blockTensor (d := d) (D := D) A m) N =
+          (blockTensor (d := d) (n := Fin D) A m)
+          (blockTensor (d := d) (n := Fin D) A m) N =
         ∑ u : Fin m, ∑ v : Fin m,
           mpvOverlap (d := blockPhysDim d m) (blocks u) (blocks v) N := by
     intro N
     exact mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
-      (blockTensor (d := d) (D := D) A m)
-      (blockTensor (d := d) (D := D) A m)
+      (blockTensor (d := d) (n := Fin D) A m)
+      (blockTensor (d := d) (n := Fin D) A m)
       blocks blocks hBlocks_mpv hBlocks_mpv N
   have hInner : ∀ u : Fin m,
       Tendsto
@@ -433,14 +433,14 @@ theorem periodicSelfOverlap_tendsto
     hEmbed⟩ :=
     exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic A hP
   have hCyclicP :
-      ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
+      ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
     intro k
     simpa [cyclicNextOfPos, Fin.add_def] using hCyclicRaw k
   have hBlocked :
       Tendsto
         (fun k => mpvOverlap (d := blockPhysDim d m)
-          (blockTensor (d := d) (D := D) A m)
-          (blockTensor (d := d) (D := D) A m) k)
+          (blockTensor (d := d) (n := Fin D) A m)
+          (blockTensor (d := d) (n := Fin D) A m) k)
         atTop (nhds (m : ℂ)) :=
     blockTensor_selfOverlap_tendsto_of_cyclicSectorDecomp
       A hP blocks hBlocks_lc hBlocks_mpv hPproj hPsum hCyclicP hComm hTrace

@@ -37,7 +37,7 @@ theorem exists_rankOne_mem_wordSpan_blockTensor [NeZero D]
       Kraus.evalWord A (List.ofFn σ₀) *ᵥ φ = μ • φ ∧
       (Kraus.evalWord A (List.ofFn τ₀))ᵀ *ᵥ ψ = ν • ψ ∧
       Matrix.vecMulVec φ ψ ∈
-        Kraus.wordSpan (blockTensor (d := d) (D := D) A N₀) m_blocked := by
+        Kraus.wordSpan (blockTensor (d := d) (n := Fin D) A N₀) m_blocked := by
   change Kraus.wordSpan A N₀ = ⊤ at hN₀
   exact Kraus.exists_rankOne_mem_wordSpan_blockTensor A hN₀ hN₀pos
 

@@ -10,6 +10,7 @@ import QICLean.Kraus.InvariantProjection
 import QICLean.Channel.KrausMap
 import QICLean.Kraus.Transfer
 import TNLean.Wielandt.Primitivity.EasyDirections
+import TNLean.MPS.Tensor
 
 /-!
 # Spectral consequences of normality for the transfer map
@@ -50,7 +51,7 @@ projection. No normalization is needed.
 Source: arXiv:0909.5347, Proposition 3, proof of (a)⟹(c). -/
 theorem isIrreducibleMap_transferMap_of_isNormal
     (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
-    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) := by
+    IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
   obtain ⟨q, _, hq⟩ := exists_vectorSpreadSpan_eq_top_of_isNormal A hA
   simpa only using Kraus.isIrreducibleMap_mapLM_of_vectorSpreadSpan_eq_top A hq
 
@@ -71,11 +72,11 @@ theorem exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     {X : Matrix (Fin D) (Fin D) ℂ} {μ : ℂ}
-    (hEig : Kraus.transferMap (d := d) (D := D) A X = μ • X)
+    (hEig : Kraus.transferMap (ι := Fin d) (n := Fin D) A X = μ • X)
     (hX_ne : X ≠ 0) (hμ_ne : μ ≠ 1) {p : ℕ} (hroot : μ ^ p = 1) :
     ∃ H : Matrix (Fin D) (Fin D) ℂ,
       H.IsHermitian ∧ H ≠ 0 ∧ H.trace = 0 ∧
-      ((Kraus.transferMap (d := d) (D := D) A) ^ p) H = H ∧
+      ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ p) H = H ∧
       ¬H.PosSemidef := by
   obtain ⟨H, hH, hH_ne, hH_tr, hH_fix⟩ :=
     Kraus.exists_hermitian_ne_zero_trace_zero_pow_fixedPoint
@@ -96,7 +97,7 @@ theorem isPrimitive_transferMap_of_isNormal [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hA : Kraus.IsNormal A) :
-    IsPrimitive (Kraus.transferMap (d := d) (D := D) A) := by
+    IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
   obtain ⟨q, _, hq⟩ := exists_vectorSpreadSpan_eq_top_of_isNormal A hA
   simpa only using
     Kraus.isPrimitive_mapLM_of_isTP_of_vectorSpreadSpan_eq_top A hNorm hq
@@ -110,7 +111,7 @@ theorem exists_posDef_fixedPoint_of_isNormal [NeZero D]
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hA : Kraus.IsNormal A) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
-      ρ.PosDef ∧ Kraus.transferMap (d := d) (D := D) A ρ = ρ := by
+      ρ.PosDef ∧ Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ := by
   obtain ⟨q, _, hq⟩ := exists_vectorSpreadSpan_eq_top_of_isNormal A hA
   obtain ⟨ρ, hρ_pd, hρ_fix⟩ :=
     Kraus.exists_posDef_fixedPoint_of_isTP_of_vectorSpreadSpan_eq_top A hNorm hq

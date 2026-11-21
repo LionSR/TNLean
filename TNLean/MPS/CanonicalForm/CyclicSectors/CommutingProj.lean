@@ -60,9 +60,9 @@ theorem exists_blockDecomp_of_commuting_projections_with_letter_and_isometry
       (∀ k (N : ℕ) (σ : Fin N → Fin d),
         mpv (blocks k) σ = (P k * Kraus.evalWord A (List.ofFn σ)).trace) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (Kraus.transferMap (d := d) (D := dim k)
+        (φ k (Kraus.transferMap (ι := Fin d) (n := Fin (dim k))
             (fun i => (blocks k i)ᴴ) X)).1 =
-          Kraus.transferMap (d := d) (D := D)
+          Kraus.transferMap (ι := Fin d) (n := Fin D)
             (fun i => (P k * A i)ᴴ) ((φ k X).1)) ∧
       (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
@@ -145,9 +145,9 @@ theorem exists_blockDecomp_of_commuting_projections_with_letter
       (∀ k (N : ℕ) (σ : Fin N → Fin d),
         mpv (blocks k) σ = (P k * Kraus.evalWord A (List.ofFn σ)).trace) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (Kraus.transferMap (d := d) (D := dim k)
+        (φ k (Kraus.transferMap (ι := Fin d) (n := Fin (dim k))
             (fun i => (blocks k i)ᴴ) X)).1 =
-          Kraus.transferMap (d := d) (D := D)
+          Kraus.transferMap (ι := Fin d) (n := Fin D)
             (fun i => (P k * A i)ᴴ) ((φ k X).1)) ∧
       (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧

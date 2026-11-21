@@ -43,7 +43,7 @@ structure IsMPUCanonicalBlock (A : MPSTensor d D) : Prop where
   spectral_radius_one :
     spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (Kraus.transferMap (d := d) (D := D) A)) = 1
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) = 1
 
 /-- Witness data for the MPU canonical form, using irreducible
 spectral-radius-one blocks and an exact coisometric retained-block

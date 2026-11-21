@@ -41,7 +41,7 @@ theorem commutes_letters_of_adjoint_fixed_projection
     (A : MPSTensor d D)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     {P : MatrixAlg D} (hP : IsOrthogonalProjection P)
-    (hFix : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) P = P) :
+    (hFix : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) P = P) :
     ∀ i : Fin d, P * A i = A i * P := by
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
   have hTPK : Kraus.IsTP A := hLeft
@@ -71,7 +71,7 @@ theorem exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry
     (hPproj : ∀ k : Fin m, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hFix : ∀ k : Fin m, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P k) = P k) :
+    (hFix : ∀ k : Fin m, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P k) = P k) :
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor d (dim k))
       (φ : (k : Fin m) →
         Matrix (Fin (dim k)) (Fin (dim k)) ℂ ≃ₗ[ℂ] cornerSubmodule (P k))
@@ -81,9 +81,9 @@ theorem exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry
       (∀ k (N : ℕ) (σ : Fin N → Fin d),
         mpv (blocks k) σ = (P k * Kraus.evalWord A (List.ofFn σ)).trace) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-        (φ k (Kraus.transferMap (d := d) (D := dim k)
+        (φ k (Kraus.transferMap (ι := Fin d) (n := Fin (dim k))
             (fun i => (blocks k i)ᴴ) X)).1 =
-          Kraus.transferMap (d := d) (D := D)
+          Kraus.transferMap (ι := Fin d) (n := Fin D)
             (fun i => (P k * A i)ᴴ) ((φ k X).1)) ∧
       (∀ k (X Y : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k (X * Y)).1 = (φ k X).1 * (φ k Y).1) ∧
@@ -138,7 +138,7 @@ theorem offDiag_shift_of_adjoint_cyclic_shift [NeZero m]
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     {P : Fin m → MatrixAlg D}
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
-    (hShift : ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hShift : ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (k : Fin m) (i : Fin d) :
     P (k + 1) * A i = A i * P k := by
   let K : Fin d → MatrixAlg D := fun i => (A i)ᴴ
@@ -176,7 +176,7 @@ theorem eq_sum_offDiag_of_adjoint_cyclic_shift [NeZero m]
     {P : Fin m → MatrixAlg D}
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
     (hPsum : ∑ k : Fin m, P k = 1)
-    (hShift : ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hShift : ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (i : Fin d) :
     A i = ∑ u : Fin m, P (u + 1) * A i * P u := by
   have hShiftLetter := offDiag_shift_of_adjoint_cyclic_shift A hLeft hPproj hShift
@@ -202,7 +202,7 @@ theorem offDiag_shift_evalWord_of_adjoint_cyclic_shift [NeZero m]
     (hLeft : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     {P : Fin m → MatrixAlg D}
     (hPproj : ∀ k, IsOrthogonalProjection (P k))
-    (hShift : ∀ k, Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
+    (hShift : ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k)
     (k : Fin m) (w : List (Fin d)) :
     P (k + w.length • (1 : Fin m)) * Kraus.evalWord A w = Kraus.evalWord A w * P k := by
   induction w generalizing k with

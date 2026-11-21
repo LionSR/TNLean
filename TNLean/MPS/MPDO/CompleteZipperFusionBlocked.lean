@@ -55,30 +55,12 @@ namespace MPSTensor.MultiBlockCompression
 
 variable {ι : Type*} [DecidableEq ι] {d d' DB : ℕ} {D : ι → ℕ} {S : Finset ι}
 
-/-- Word evaluation of a family of block-diagonal matrices is block diagonal. -/
-private theorem evalWord_blockDiagonal'_of {o : Type*} [Fintype o] [DecidableEq o]
-    {n : o → ℕ} (X : Fin d → ∀ k, Matrix (Fin (n k)) (Fin (n k)) ℂ) (w : List (Fin d)) :
-    _root_.evalWord (fun i => Matrix.blockDiagonal' (X i)) w =
-      Matrix.blockDiagonal' fun k => _root_.evalWord (fun i => X i k) w := by
-  induction w with
-  | nil =>
-    change (1 : Matrix ((k : o) × Fin (n k)) _ ℂ) = Matrix.blockDiagonal' 1
-    simp
-  | cons i w ih => simp [_root_.evalWord, ih, Matrix.blockDiagonal'_mul]
-
 /-- The evaluation of a nonempty word in the zero family vanishes. -/
 private theorem evalWord_zero_of_ne_nil {n : Type*} [Fintype n] [DecidableEq n]
     {w : List (Fin d)} (hw : w ≠ []) :
-    _root_.evalWord (fun _ => (0 : Matrix n n ℂ)) w = 0 := by
+    Kraus.evalWord (fun _ => (0 : Matrix n n ℂ)) w = 0 := by
   obtain ⟨i, w, rfl⟩ := List.exists_cons_of_ne_nil hw
-  simp [_root_.evalWord]
-
-/-- The generic word evaluation agrees with `Kraus.evalWord` on square matrices over `Fin n`. -/
-private theorem evalWord_eq_kraus_evalWord {n : ℕ} (A : Fin d → Matrix (Fin n) (Fin n) ℂ)
-    (w : List (Fin d)) : _root_.evalWord A w = Kraus.evalWord A w := by
-  induction w with
-  | nil => rfl
-  | cons i w ih => simp only [_root_.evalWord, Kraus.evalWord, ih]
+  simp [Kraus.evalWord]
 
 variable {B : MPSTensor d DB} {C : ∀ s, MPSTensor d (D s)}
 
@@ -102,7 +84,6 @@ noncomputable def ofWords (P : MultiBlockCompression B S C) (u : Fin d' → List
     rw [hB', ← evalWord_conjMatrix, Matrix.blockDiag'_evalWord P.ord.injective P.triangular,
       hC']
     simp only [P.matched]
-    exact evalWord_eq_kraus_evalWord _ _
   unmatched j t := by
     rw [hB', ← evalWord_conjMatrix, Matrix.blockDiag'_evalWord P.ord.injective P.triangular]
     simp only [P.unmatched]
@@ -127,12 +108,12 @@ theorem remainder_ofWords_eq_zero (P : MultiBlockCompression B S C) (hP : P.rema
   funext j
   apply conjMatrix_injective P.gauge
   have hdiag : conjMatrix P.gauge (B' j) = Matrix.blockDiagonal' fun k =>
-      _root_.evalWord (fun i => (conjMatrix P.gauge (B i)).blockDiag' k) (u j) := by
+      Kraus.evalWord (fun i => (conjMatrix P.gauge (B i)).blockDiag' k) (u j) := by
     rw [hB', ← evalWord_conjMatrix,
       show (fun i => conjMatrix P.gauge (B i)) = fun i =>
         Matrix.blockDiagonal' (conjMatrix P.gauge (B i)).blockDiag' from
         funext (P.conjMatrix_eq_blockDiagonal'_of_remainder_eq_zero hP),
-      evalWord_blockDiagonal'_of]
+      Kraus.evalWord_blockDiagonal']
   have h := (P.ofWords u hu hB' hC').conjMatrix_remainder j
   change conjMatrix P.gauge _ = conjMatrix P.gauge (B' j) -
     Matrix.blockDiagonal' (conjMatrix P.gauge (B' j)).blockDiag' at h

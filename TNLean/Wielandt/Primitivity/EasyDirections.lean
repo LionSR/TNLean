@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.Wielandt.Primitivity.EasyDirections
 import TNLean.Wielandt.Primitivity.Definitions
+import TNLean.MPS.Tensor
 
 /-!
 # Proposition 3, direction (b) to (a), and the index comparison

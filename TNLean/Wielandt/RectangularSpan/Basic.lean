@@ -83,13 +83,13 @@ Proof by induction on `n`: each word of length `(n+1)*L` factors into a block of
 size `L` (giving a blocked Kraus operator) and a remainder of size `n*L` (handled
 by the inductive hypothesis). -/
 theorem wordSpan_le_wordSpan_blockTensor (A : MPSTensor d D) (L n : ℕ) :
-    Kraus.wordSpan A (n * L) ≤ Kraus.wordSpan (blockTensor (d := d) (D := D) A L) n := by
+    Kraus.wordSpan A (n * L) ≤ Kraus.wordSpan (blockTensor (d := d) (n := Fin D) A L) n := by
   classical
   -- We prove: for all σ, Kraus.evalWord A (List.ofFn σ) ∈ Kraus.wordSpan B n
   -- by induction on n.
   suffices h : ∀ (n : ℕ) (σ : Fin (n * L) → Fin d),
       Kraus.evalWord A (List.ofFn σ) ∈
-        Kraus.wordSpan (blockTensor (d := d) (D := D) A L) n by
+        Kraus.wordSpan (blockTensor (d := d) (n := Fin D) A L) n by
     apply Submodule.span_le.mpr
     rintro M ⟨σ, rfl⟩
     exact h n σ
@@ -104,14 +104,14 @@ theorem wordSpan_le_wordSpan_blockTensor (A : MPSTensor d D) (L n : ℕ) :
       simp [hempty]
     rw [hσ]
     simpa only [Kraus.evalWord, List.length_nil] using
-      (Kraus.evalWord_mem_wordSpan (blockTensor (d := d) (D := D) A L) [])
+      (Kraus.evalWord_mem_wordSpan (blockTensor (d := d) (n := Fin D) A L) [])
   | succ n ih =>
     intro σ
     -- Factor the word into first block + rest
     obtain ⟨σ₀, σ', hfactor⟩ := evalWord_chunk A L n σ
     rw [hfactor]
     -- First factor: Kraus.evalWord A (List.ofFn σ₀) is a single blocked Kraus operator
-    set B := blockTensor (d := d) (D := D) A L
+    set B := blockTensor (d := d) (n := Fin D) A L
     set σ₀_enc := Fin.cast (blockPhysDim_eq_pow d L).symm (finFunctionFinEquiv σ₀)
     have hfirst_eq : Kraus.evalWord A (List.ofFn σ₀) = B σ₀_enc := by
       simp [B, Kraus.blockTensor, Kraus.wordOfBlock, Kraus.decodeBlock,
@@ -132,8 +132,8 @@ theorem wordSpan_le_wordSpan_blockTensor (A : MPSTensor d D) (L n : ℕ) :
 
 If `Kraus.IsNormal A` and `L > 0`, then `Kraus.IsNormal (blockTensor A L)`. -/
 theorem isNormal_blockTensor (A : MPSTensor d D) (L : ℕ) (hL : 0 < L)
-    (hN : Kraus.IsNormal (d := d) (D := D) A) :
-    Kraus.IsNormal (blockTensor (d := d) (D := D) A L) := by
+    (hN : Kraus.IsNormal (ι := Fin d) (n := Fin D) A) :
+    Kraus.IsNormal (blockTensor (d := d) (n := Fin D) A L) := by
   obtain ⟨N₀, hN₀pos, hN₀⟩ := hN
   have hN₀_top : Kraus.wordSpan A N₀ = ⊤ :=
     (wordSpan_eq_top_iff_isNBlkInjective A N₀).mpr hN₀
@@ -143,10 +143,10 @@ theorem isNormal_blockTensor (A : MPSTensor d D) (L : ℕ) (hL : 0 < L)
     exact Kraus.wordSpan_top_of_mul A hN₀_top L hL
   -- Kraus.wordSpan A (N₀ * L) ≤ Kraus.wordSpan B N₀
   have hle : Kraus.wordSpan A (N₀ * L) ≤
-      Kraus.wordSpan (blockTensor (d := d) (D := D) A L) N₀ :=
+      Kraus.wordSpan (blockTensor (d := d) (n := Fin D) A L) N₀ :=
     wordSpan_le_wordSpan_blockTensor A L N₀
   -- Conclude: Kraus.wordSpan B N₀ ≥ ⊤, hence = ⊤
-  have hBtop : Kraus.wordSpan (blockTensor (d := d) (D := D) A L) N₀ = ⊤ :=
+  have hBtop : Kraus.wordSpan (blockTensor (d := d) (n := Fin D) A L) N₀ = ⊤ :=
     eq_top_iff.mpr (htopNL ▸ hle)
   exact ⟨N₀, hN₀pos, (wordSpan_eq_top_iff_isNBlkInjective _ N₀).mp hBtop⟩
 
@@ -161,7 +161,7 @@ noncomputable def encodeBlock (d L : ℕ) (σ₀ : Fin L → Fin d) :
 equals the word evaluation. -/
 theorem blockTensor_apply_encodeBlock (A : MPSTensor d D) (L : ℕ)
     (σ₀ : Fin L → Fin d) :
-    (blockTensor (d := d) (D := D) A L) (encodeBlock d L σ₀) =
+    (blockTensor (d := d) (n := Fin D) A L) (encodeBlock d L σ₀) =
       Kraus.evalWord A (List.ofFn σ₀) := by
   classical
   simp [Kraus.blockTensor, Kraus.wordOfBlock, Kraus.decodeBlock, encodeBlock,
@@ -171,13 +171,13 @@ theorem blockTensor_apply_encodeBlock (A : MPSTensor d D) (L : ℕ)
 theorem blockTensor_single_eigenvector (A : MPSTensor d D)
     {L : ℕ} (σ₀ : Fin L → Fin d) (φ : Fin D → ℂ) (μ : ℂ)
     (heig : Kraus.evalWord A (List.ofFn σ₀) *ᵥ φ = μ • φ) :
-    (blockTensor (d := d) (D := D) A L) (encodeBlock d L σ₀) *ᵥ φ = μ • φ := by
+    (blockTensor (d := d) (n := Fin D) A L) (encodeBlock d L σ₀) *ᵥ φ = μ • φ := by
   rw [blockTensor_apply_encodeBlock]; exact heig
 
 /-- The transpose of a blocked Kraus operator equals the transposed word evaluation. -/
 theorem blockTensor_transpose_encodeBlock (A : MPSTensor d D) (L : ℕ)
     (σ₀ : Fin L → Fin d) :
-    ((blockTensor (d := d) (D := D) A L) (encodeBlock d L σ₀))ᵀ =
+    ((blockTensor (d := d) (n := Fin D) A L) (encodeBlock d L σ₀))ᵀ =
       (Kraus.evalWord A (List.ofFn σ₀))ᵀ := by
   rw [blockTensor_apply_encodeBlock]
 
@@ -193,7 +193,7 @@ word lengths of both the column and row eigenvectors.
 `Kraus.wordSpan A ((D - 1 + (m_blocked + (D - 1))) * L) = ⊤`. -/
 theorem wielandt_blocked_assembly [NeZero D]
     (A : MPSTensor d D)
-    (hNormal : Kraus.IsNormal (d := d) (D := D) A)
+    (hNormal : Kraus.IsNormal (ι := Fin d) (n := Fin D) A)
     (L : ℕ) (hL : 0 < L)
     (σ₀ : Fin L → Fin d)
     (φ : Fin D → ℂ) (hφ : φ ≠ 0)
@@ -206,9 +206,9 @@ theorem wielandt_blocked_assembly [NeZero D]
     {m_blocked : ℕ}
     (hRankOne :
       Matrix.vecMulVec φ ψ ∈
-        Kraus.wordSpan (blockTensor (d := d) (D := D) A L) m_blocked) :
+        Kraus.wordSpan (blockTensor (d := d) (n := Fin D) A L) m_blocked) :
     Kraus.wordSpan A ((D - 1 + (m_blocked + (D - 1))) * L) = ⊤ := by
-  set B := blockTensor (d := d) (D := D) A L
+  set B := blockTensor (d := d) (n := Fin D) A L
   set i₀ := encodeBlock d L σ₀
   set i₁ := encodeBlock d L τ₀
   -- φ is a single-index eigenvector of B
@@ -216,7 +216,7 @@ theorem wielandt_blocked_assembly [NeZero D]
     blockTensor_single_eigenvector A σ₀ φ μ heigφ
   -- ψ is a transpose eigenvector of B at index i₁
   have heigψ_B : (B i₁)ᵀ *ᵥ ψ = ν • ψ := by
-    change (blockTensor (d := d) (D := D) A L (encodeBlock d L τ₀))ᵀ *ᵥ ψ = ν • ψ
+    change (blockTensor (d := d) (n := Fin D) A L (encodeBlock d L τ₀))ᵀ *ᵥ ψ = ν • ψ
     rw [blockTensor_transpose_encodeBlock]
     exact heigψ
   -- B is normal

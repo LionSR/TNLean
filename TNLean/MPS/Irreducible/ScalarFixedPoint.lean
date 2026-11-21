@@ -44,9 +44,9 @@ theorem fixed_eq_scalar_of_isIrreducibleTensor_unital
     {d D : ℕ}
     (A : MPSTensor d D)
     (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
-    (hUnital : Kraus.transferMap (d := d) (D := D) A 1 = 1)
+    (hUnital : Kraus.transferMap (ι := Fin d) (n := Fin D) A 1 = 1)
     (X : Matrix (Fin D) (Fin D) ℂ)
-    (hfix : Kraus.transferMap (d := d) (D := D) A X = X) :
+    (hfix : Kraus.transferMap (ι := Fin d) (n := Fin D) A X = X) :
     ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
   classical
   rcases Nat.eq_zero_or_pos D with rfl | hD

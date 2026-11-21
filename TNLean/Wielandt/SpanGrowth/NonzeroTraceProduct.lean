@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.Wielandt.SpanGrowth.NonzeroTraceProduct
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
+import TNLean.MPS.Tensor
 
 /-!
 # Nonzero Trace Words at Bounded Length (Lemma 1)

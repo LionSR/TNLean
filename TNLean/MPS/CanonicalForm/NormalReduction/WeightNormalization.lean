@@ -172,10 +172,10 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_of_exists_ne_zero_m
           Λ.PosDef ∧
           Λ.IsDiag ∧
           (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
-          Kraus.transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+          Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
       (∀ k,
         ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          Kraus.transferMap (d := d) (D := dim k) (blocks k) X = X →
+          Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k) X = X →
             ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
       (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
       (∀ k, ‖ν k‖ ≤ 1) ∧
@@ -235,10 +235,10 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_or_forall_pos_mpv_e
           Λ.PosDef ∧
           Λ.IsDiag ∧
           (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
-          Kraus.transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+          Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
       (∀ k,
         ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          Kraus.transferMap (d := d) (D := dim k) (blocks k) X = X →
+          Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k) X = X →
             ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
       (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
       (∀ k, ‖ν k‖ ≤ 1) ∧
@@ -283,10 +283,10 @@ theorem exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty
           Λ.PosDef ∧
           Λ.IsDiag ∧
           (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
-          Kraus.transferMap (d := d) (D := dim k) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+          Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
       (∀ k,
         ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
-          Kraus.transferMap (d := d) (D := dim k) (blocks k) X = X →
+          Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k) X = X →
             ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
       (∀ k, ∃ a : ℝ, 0 < a ∧ ν k = (a : ℂ)) ∧
       (∀ k, ‖ν k‖ ≤ 1) ∧

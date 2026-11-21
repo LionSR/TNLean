@@ -85,8 +85,8 @@ phase `ζ ^ L`. -/
 private theorem gaugePhaseEquiv_blockTensor
     (A B : MPSTensor d D) (L : ℕ)
     (hGPE : GaugePhaseEquiv A B) :
-    GaugePhaseEquiv (blockTensor (d := d) (D := D) A L)
-      (blockTensor (d := d) (D := D) B L) := by
+    GaugePhaseEquiv (blockTensor (d := d) (n := Fin D) A L)
+      (blockTensor (d := d) (n := Fin D) B L) := by
   rcases hGPE with ⟨X, ζ, hζ, hX⟩
   refine ⟨X, ζ ^ L, pow_ne_zero L hζ, ?_⟩
   intro i
@@ -114,7 +114,7 @@ private theorem gaugePhaseEquiv_blockTensor
             (Kraus.evalWord_smul (ζ := ζ) (K := C) (wordOfBlock d L i))
     _ = (ζ ^ L) •
           ((X : Matrix (Fin D) (Fin D) ℂ) *
-            blockTensor (d := d) (D := D) A L i *
+            blockTensor (d := d) (n := Fin D) A L i *
             ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
           simp [hGauge, Kraus.blockTensor]
 
@@ -126,8 +126,8 @@ private theorem blockTensor_selfOverlap_tendsto_of_isPeriodic
     (hP : IsPeriodic m A) :
     Tendsto
       (fun N => mpvOverlap (d := blockPhysDim d m)
-        (blockTensor (d := d) (D := D) A m)
-        (blockTensor (d := d) (D := D) A m) N)
+        (blockTensor (d := d) (n := Fin D) A m)
+        (blockTensor (d := d) (n := Fin D) A m) N)
       atTop (nhds (m : ℂ)) := by
   have : NeZero D := ⟨hP.bondDim_ne_zero⟩
   have hSelf : Tendsto (fun N => mpvOverlap A A (m * N)) atTop (nhds (m : ℂ)) :=
@@ -147,18 +147,18 @@ private theorem gaugePhase_blockTensor_overlap_not_tendsto_zero_of_periodic
     (A B : MPSTensor d D) {m : ℕ} [NeZero m]
     (hA : IsPeriodic m A) (hB : IsPeriodic m B)
     (hGPE_block :
-      GaugePhaseEquiv (blockTensor (d := d) (D := D) A m)
-        (blockTensor (d := d) (D := D) B m)) :
+      GaugePhaseEquiv (blockTensor (d := d) (n := Fin D) A m)
+        (blockTensor (d := d) (n := Fin D) B m)) :
     ¬ Tendsto
       (fun N => mpvOverlap (d := blockPhysDim d m)
-        (blockTensor (d := d) (D := D) A m)
-        (blockTensor (d := d) (D := D) B m) N)
+        (blockTensor (d := d) (n := Fin D) A m)
+        (blockTensor (d := d) (n := Fin D) B m) N)
       atTop (nhds (0 : ℂ)) := by
   classical
   intro hZero
   obtain ⟨X, ζ, _hζ, hX⟩ := hGPE_block
-  let Ablk := blockTensor (d := d) (D := D) A m
-  let Bblk := blockTensor (d := d) (D := D) B m
+  let Ablk := blockTensor (d := d) (n := Fin D) A m
+  let Bblk := blockTensor (d := d) (n := Fin D) B m
   have hA_self : Tendsto (fun N => mpvOverlap (d := blockPhysDim d m) Ablk Ablk N)
       atTop (nhds (m : ℂ)) := by
     simpa [Ablk] using blockTensor_selfOverlap_tendsto_of_isPeriodic A hA
@@ -223,8 +223,8 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
       SameMPV₂ (blockTensor B m)
         (toTensorFromBlocks (μ := fun _ => 1) blocksB))
     (hGPE_block :
-      GaugePhaseEquiv (blockTensor (d := d) (D := D) A m)
-        (blockTensor (d := d) (D := D) B m)) :
+      GaugePhaseEquiv (blockTensor (d := d) (n := Fin D) A m)
+        (blockTensor (d := d) (n := Fin D) B m)) :
     ∃ u v : Fin m,
       ¬ Tendsto
         (fun N => mpvOverlap (d := blockPhysDim d m)
@@ -235,14 +235,14 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
   simp only [not_exists, not_not] at hNone
   have hOverlap_eq : ∀ N,
       mpvOverlap (d := blockPhysDim d m)
-          (blockTensor (d := d) (D := D) A m)
-          (blockTensor (d := d) (D := D) B m) N =
+          (blockTensor (d := d) (n := Fin D) A m)
+          (blockTensor (d := d) (n := Fin D) B m) N =
         ∑ u : Fin m, ∑ v : Fin m,
           mpvOverlap (d := blockPhysDim d m) (blocksA u) (blocksB v) N := by
     intro N
     exact mpvOverlap_eq_sum_of_sameMPV₂_toTensorFromBlocks_one
-      (blockTensor (d := d) (D := D) A m)
-      (blockTensor (d := d) (D := D) B m)
+      (blockTensor (d := d) (n := Fin D) A m)
+      (blockTensor (d := d) (n := Fin D) B m)
       blocksA blocksB hA_mpv hB_mpv N
   have hInnerZero : ∀ u : Fin m,
       Tendsto
@@ -262,8 +262,8 @@ private lemma exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicD
   have hGlobalZero :
       Tendsto
         (fun N => mpvOverlap (d := blockPhysDim d m)
-          (blockTensor (d := d) (D := D) A m)
-          (blockTensor (d := d) (D := D) B m) N)
+          (blockTensor (d := d) (n := Fin D) A m)
+          (blockTensor (d := d) (n := Fin D) B m) N)
         atTop (nhds (0 : ℂ)) :=
     hSumZero.congr fun N => (hOverlap_eq N).symm
   exact
@@ -301,8 +301,8 @@ private lemma exists_sector_match_of_blockedGaugePhaseEquiv_cyclicDecomp
     (hNondegA : ∀ u, dimA u ≠ 0)
     (hNondegB : ∀ v, dimB v ≠ 0)
     (hGPE_block :
-      GaugePhaseEquiv (blockTensor (d := d) (D := D) A m)
-        (blockTensor (d := d) (D := D) B m)) :
+      GaugePhaseEquiv (blockTensor (d := d) (n := Fin D) A m)
+        (blockTensor (d := d) (n := Fin D) B m)) :
     ∃ (u v : Fin m) (hdim : dimA u = dimB v),
       dimA u ≠ 0 ∧
       GaugePhaseEquiv

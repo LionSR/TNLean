@@ -93,7 +93,7 @@ structure PGVWC07CanonicalFormData (A : MPSTensor d D) where
   /-- Condition 3: the identity is the only fixed point of
   `X ↦ ∑_i A_i^j X A_i^{j†}` up to scalars (lines 755-757). -/
   fixedPoint_scalar : ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-    Kraus.transferMap (d := d) (D := dim k) (blocks k) X = X →
+    Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k) X = X →
       ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
   /-- The bond indices occupied by the blocks; the source lists the blocks
   consecutively (lines 745-751). -/
@@ -130,8 +130,8 @@ whose pairing with `Λ` vanishes; so `P` is a fixed point of `X ↦ ∑_i A_i X 
 scalar projection, `0` or `1`. -/
 theorem isIrreducibleFamily_of_unital_of_dualFixedPoint (A : MPSTensor d D)
     (hunital : ∑ i, A i * (A i)ᴴ = 1) {Λ : Matrix (Fin D) (Fin D) ℂ} (hΛ : Λ.PosDef)
-    (hΛfix : Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) Λ = Λ)
-    (hscalar : ∀ X : Matrix (Fin D) (Fin D) ℂ, Kraus.transferMap (d := d) (D := D) A X = X →
+    (hΛfix : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) Λ = Λ)
+    (hscalar : ∀ X : Matrix (Fin D) (Fin D) ℂ, Kraus.transferMap (ι := Fin d) (n := Fin D) A X = X →
       ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ)) :
     Kraus.IsIrreducibleFamily A := by
   classical
@@ -147,21 +147,21 @@ theorem isIrreducibleFamily_of_unital_of_dualFixedPoint (A : MPSTensor d D)
       rw [Matrix.sub_mul, Matrix.sub_mul, Matrix.one_mul] at this
       exact sub_eq_zero.mp this
     simpa only [Matrix.star_eq_conjTranspose] using mul_proj_mul_star_eq hPh' hPP hKP
-  have hsum : P - Kraus.transferMap (d := d) (D := D) A P =
+  have hsum : P - Kraus.transferMap (ι := Fin d) (n := Fin D) A P =
       ∑ i, P * A i * (1 - P) * (P * A i * (1 - P))ᴴ := by
     rw [Kraus.transferMap_apply, Finset.sum_congr rfl fun i _ => hterm i, Finset.sum_sub_distrib,
       ← Finset.sum_mul, ← Finset.mul_sum, hunital, Matrix.mul_one, hPP, sub_sub_cancel]
-  have hpsd : (P - Kraus.transferMap (d := d) (D := D) A P).PosSemidef := by
+  have hpsd : (P - Kraus.transferMap (ι := Fin d) (n := Fin D) A P).PosSemidef := by
     rw [hsum]
     exact Matrix.posSemidef_sum _ fun i _ => Matrix.posSemidef_self_mul_conjTranspose _
-  have htr : Matrix.trace (Λ * (P - Kraus.transferMap (d := d) (D := D) A P)) = 0 := by
+  have htr : Matrix.trace (Λ * (P - Kraus.transferMap (ι := Fin d) (n := Fin D) A P)) = 0 := by
     rw [Kraus.transferMap_apply, Matrix.mul_sub, Matrix.trace_sub, Finset.mul_sum,
       Matrix.trace_sum, sub_eq_zero]
     conv_lhs => rw [← hΛfix', Finset.sum_mul, Matrix.trace_sum]
     refine Finset.sum_congr rfl fun i _ => ?_
     rw [Matrix.mul_assoc, Matrix.mul_assoc, Matrix.trace_mul_comm]
     simp only [Matrix.mul_assoc]
-  have hfix : Kraus.transferMap (d := d) (D := D) A P = P :=
+  have hfix : Kraus.transferMap (ι := Fin d) (n := Fin D) A P = P :=
     (sub_eq_zero.mp (Matrix.posSemidef_eq_zero_of_posDef_trace_mul_eq_zero hpsd hΛ htr)).symm
   obtain ⟨c, hc⟩ := hscalar P hfix
   rcases Nat.eq_zero_or_pos D with hD | hD
@@ -276,7 +276,7 @@ theorem exists_weight_sum_mul_conjTranspose_eq_of_isNBlkInjective [NeZero D] {L 
 positive definite fixed point of the transfer map of the conjugate-transposed block. -/
 theorem dualFixedPoint_transferMap (k : Fin h.r) :
     ∃ Λ : Matrix (Fin (h.dim k)) (Fin (h.dim k)) ℂ, Λ.PosDef ∧
-      Kraus.transferMap (d := d) (D := h.dim k) (fun i => (h.blocks k i)ᴴ) Λ = Λ := by
+      Kraus.transferMap (ι := Fin d) (n := Fin (h.dim k)) (fun i => (h.blocks k i)ᴴ) Λ = Λ := by
   obtain ⟨Λ, hΛ, -, hΛfix⟩ := h.dual_fixedPoint k
   refine ⟨Λ, hΛ, ?_⟩
   rw [Kraus.transferMap_apply]
@@ -329,7 +329,7 @@ theorem isPGVWC07CanonicalForm_toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ
     (hdual : ∀ k, ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
       Λ.PosDef ∧ Λ.IsDiag ∧ ∑ i, (blocks k i)ᴴ * Λ * blocks k i = Λ)
     (hfixed : ∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
-      Kraus.transferMap (d := d) (D := dim k) (blocks k) X = X →
+      Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k) X = X →
         ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) :
     IsPGVWC07CanonicalForm (toTensorFromBlocks (d := d) (μ := ν) blocks) := by
   choose a ha using hν
