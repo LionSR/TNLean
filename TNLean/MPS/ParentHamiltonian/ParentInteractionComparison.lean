@@ -17,6 +17,11 @@ interactions, as defined in CPGSV21, arXiv:2011.12127, lines 1996--1999. It is
 the remark at line 2170 that non-projector interactions are bounded above and
 below by projectors up to a constant, which reduces the gap theorem at lines
 2183--2187 to the canonical projection interaction.
+
+**Transitional (#10948).** `IsParentInteraction.exists_pos_comparison`, stated for the
+Euclidean-space operator `parentInteractionES`, is kept until its users are converted; the
+comparison with the operator of the matrix of the canonical parent interaction is
+`IsParentInteraction.exists_pos_comparison_toEuclideanLin_toMatrix'_parentInteraction`.
 -/
 
 open scoped ComplexOrder
@@ -42,5 +47,25 @@ theorem IsParentInteraction.exists_pos_comparison
   exact ⟨κ, C, hκ, hC,
     by simpa only [hh.ker_eq, parentInteractionES] using hLower,
     by simpa only [hh.ker_eq, parentInteractionES] using hUpper⟩
+
+/-- Every positive parent interaction is comparable in both directions to the operator of the
+matrix of the canonical parent interaction. The constants are strictly positive, including
+when both operators vanish.
+
+Source: CPGSV21, arXiv:2011.12127, lines 1996--1999 and line 2170. -/
+theorem IsParentInteraction.exists_pos_comparison_toEuclideanLin_toMatrix'_parentInteraction
+    {d D R : ℕ} {A : MPSTensor d D}
+    {h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)}
+    (hh : IsParentInteraction A R h) :
+    ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧
+      (κ : ℂ) • Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A R)) ≤ h ∧
+      h ≤ (C : ℂ) • Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A R)) := by
+  obtain ⟨κ, hκ, hLower⟩ :=
+    hh.isPositive.exists_pos_smul_orthogonal_ker_projection_le
+  obtain ⟨C, hC, hUpper⟩ :=
+    hh.isPositive.exists_pos_le_smul_orthogonal_ker_projection
+  rw [toEuclideanLin_toMatrix'_parentInteraction]
+  exact ⟨κ, C, hκ, hC, by simpa only [hh.ker_eq] using hLower,
+    by simpa only [hh.ker_eq] using hUpper⟩
 
 end MPSTensor
