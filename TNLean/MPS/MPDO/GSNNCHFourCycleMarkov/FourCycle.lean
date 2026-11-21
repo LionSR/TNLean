@@ -30,6 +30,8 @@ open ManyBody
 
 namespace MPOTensor
 
+variable {d : ℕ}
+
 /-- Decode the noncontiguous middle subsystem (B=\{1,3\}) from one basis
 label. -/
 private def fourCycleMiddlePair (d : ℕ) (b : Fin (d * d)) : Fin d × Fin d :=
@@ -235,8 +237,6 @@ noncomputable def fourCycleTripartiteState (rho : ChainOperator d 4) :
     (fourCycleTripartiteEquiv d).symm rho
 
 namespace GSNNCHData
-
-variable {d : ℕ}
 
 /-- A sector bond in ordered-pair coordinates. -/
 private noncomputable def pairBondFour (data : GSNNCHData d 4)

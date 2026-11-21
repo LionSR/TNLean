@@ -211,7 +211,7 @@ bound on `|M_L Ψ₀|`). -/
 theorem _root_.ManyBody.ChainInteraction.norm_localizedPart_apply_le {E₀ : ℝ}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ ΔE)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 < ΔE) (hs : 0 ≤ s)
-    {P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hP : P.IsHermitian) (K : Finset (Fin L))
+    {P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (K : Finset (Fin L))
     {cP δ : ℝ} (hc : ‖h.hamiltonian * P - P * h.hamiltonian‖ ≤ cP)
     (hδ : ‖gaussianFilteredTerm s ΔE h.hamiltonian P -
       (P + regionExpectation K (gaussianFilteredTerm s ΔE h.hamiltonian P - P))‖ ≤ δ) :
@@ -298,13 +298,13 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   -- the bounds `‖M Ω‖ ≤ μ`
   have hμL : ‖toEuclideanLin ML Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
-    h.norm_localizedPart_apply_le hh Ω s ΔE hΩ hgap hspan hΔ hs hPL KL
+    h.norm_localizedPart_apply_le hh Ω s ΔE hΩ hgap hspan hΔ hs KL
       (h.norm_commutator_leftPart_le hhJ c m)
       (h.norm_gaussianFilteredTerm_leftPart_sub_localized_le hh hhJ hq1 c m s ΔE
           (Nat.cast_nonneg k) hT)
   have hμR : ‖toEuclideanLin MR Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
-    h.norm_localizedPart_apply_le hh Ω s ΔE hΩ hgap hspan hΔ hs hPR KR
+    h.norm_localizedPart_apply_le hh Ω s ΔE hΩ hgap hspan hΔ hs KR
       (h.norm_commutator_rightPart_le hhJ c m)
       (h.norm_gaussianFilteredTerm_rightPart_sub_localized_le hh hhJ hq1 c m s ΔE
           (Nat.cast_nonneg k) hT)
