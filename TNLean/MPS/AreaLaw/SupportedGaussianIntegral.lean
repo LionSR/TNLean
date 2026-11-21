@@ -227,7 +227,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
   have hgen := exists_supported_gaussian_integral_graphNeighborhood
     (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
     (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le) hΦh b₀
-    (Φ.sum_norm_terms_containing_le hΦn)
+    (ManyBody.ChainInteraction.sum_norm_terms_containing_le Φ hΦn)
         (ManyBody.Interaction.isHermitian_hamiltonian (Φ := h.doubledFin) fun X ↦
           (ManyBody.Interaction.isHermitian_doubled_term (hh X)).reindex _) Z ℓ
         d hd (fun s ↦ by
@@ -308,7 +308,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
   have hgen := exists_supported_gaussian_integral_graphNeighborhood
     (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) Φ
     (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) hΦh b₀
-    (Φ.sum_norm_terms_containing_le hΦn)
+    (ManyBody.DomainInteraction.sum_norm_terms_containing_le Φ hΦn)
         (ManyBody.Interaction.isHermitian_hamiltonian (Φ := h.doubledFin) fun X ↦
           (ManyBody.Interaction.isHermitian_doubled_term (hh X)).reindex _) Z (m : ℝ)
         d hd (fun s ↦ by

@@ -182,7 +182,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpect
   have hgen := norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
     (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
     (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le) hΦh b₀
-    (Φ.sum_norm_terms_containing_le hΦn) (C ×ˢ Finset.univ)
+    (ManyBody.ChainInteraction.sum_norm_terms_containing_le Φ hΦn) (C ×ˢ Finset.univ)
         (fun p ↦ p.1.1) Z
     (fun p hp ↦ Finset.subset_biUnion_of_mem (fun X ↦ X.1) (Finset.mem_product.mp hp).1)
     (fun p _ ↦ p.1.2.card_le) A (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).1)
@@ -262,7 +262,7 @@ theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpec
   have hgen := norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
     (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) Φ
     (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) hΦh b₀
-    (Φ.sum_norm_terms_containing_le hΦn) (C ×ˢ Finset.univ)
+    (ManyBody.DomainInteraction.sum_norm_terms_containing_le Φ hΦn) (C ×ˢ Finset.univ)
         (fun p ↦ p.1.1) Z
     (fun p hp ↦ Finset.subset_biUnion_of_mem (fun X ↦ X.1) (Finset.mem_product.mp hp).1)
     (fun p _ ↦ p.1.2.isChainSupport.card_le) A
