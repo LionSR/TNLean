@@ -86,6 +86,10 @@ open TNLean.Lattice.Sheet
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {Party : Type*}
 
+/-- Shortcut instance, which keeps instance terms on products with the configurations off a
+region small. -/
+instance (A : Finset ι) : DecidableEq ({v // v ∉ A} → Fin q) := inferInstance
+
 /-- **Data of Lemma 6.6.** Two encoded frames on two sheets and the physical sample `Y ∩ Λ` of a
 plane region `Y`. The holes of each frame are listed as the holes whose outer squares lie outside
 `Y`, followed by those whose outer squares lie inside `Y`: every hole's entire outer square lies on
