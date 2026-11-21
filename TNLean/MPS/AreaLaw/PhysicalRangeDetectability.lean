@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.AreaLaw.PhysicalDetectabilityGap
 import QICLean.Analysis.WeightedProjection
+import QICLean.Algebra.MatrixToEuclidean
 
 /-!
 # Detectability after replacing positive contractions by range projections
