@@ -24,7 +24,8 @@ no parent-Hamiltonian or ground-space conclusion is asserted.
 **Local fix (unital subalgebras):** The printed Theorem 4.1 uses a definition
 of C*-algebra not requiring the identity, although every commutant contains
 it. The algebra here is unital, as in the corrected commutant theorem.
-See `docs/paper-gaps/scp10_finite_group_commutant_unital.tex`.
+See
+<https://github.com/LionSR/QICLean/blob/main/docs/paper-gaps/scp10_finite_group_commutant_unital.tex>.
 -/
 
 noncomputable section

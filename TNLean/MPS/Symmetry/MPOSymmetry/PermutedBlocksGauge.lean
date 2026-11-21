@@ -38,7 +38,8 @@ scalars relating the tensors themselves. The available uniqueness of reductions 
 tensor (arXiv:1706.07329v2, Theorem 22) relates two reductions only against long words, so all
 three are defined here by comparison against long words, and the gauge law is proved in that
 form. See `docs/paper-gaps/fbc25_boundary_dressed_l_symbols.tex`. The transition-element index
-correction is recorded in `docs/paper-gaps/fbc25_stabilizer_transition_index_typo.tex`.
+correction is recorded in
+<https://github.com/LionSR/QICLean/blob/main/docs/paper-gaps/fbc25_stabilizer_transition_index_typo.tex>.
 
 ## Main definitions
 
@@ -272,7 +273,8 @@ vanishes, some rescaling of the fusion and action tensors gives `ω = 1` and
 `h₁ = k_{g₁g₂x}⁻¹ g₁ k_{g₂x}`.
 
 The two-cocycle is a representative, not a cohomology class. The first factor uses the corrected
-representative index recorded in `docs/paper-gaps/fbc25_stabilizer_transition_index_typo.tex`.
+representative index recorded in
+<https://github.com/LionSR/QICLean/blob/main/docs/paper-gaps/fbc25_stabilizer_transition_index_typo.tex>.
 The gauge `ω = 1` is derived from the vanishing of the anomaly class. -/
 theorem exists_rescale_lSymbol_eq_inducedLSymbol (hF : F.IsNormalRepresentation)
     (hA : ∀ x, Kraus.IsNormal (A x)) (hD : ∀ x, 0 < D x)
@@ -311,7 +313,8 @@ theorem exists_rescale_lSymbol_eq_inducedLSymbol (hF : F.IsNormalRepresentation)
 group, the two-cocycle of `exists_rescale_lSymbol_eq_inducedLSymbol` can be chosen with values
 of modulus one, as in arXiv:2502.20257, Lemma `lemma:h1h2` (`main.tex` lines 7028--7042), where
 `ψ` is valued in `U(1)`. The unit phase of the cocycle is cohomologous to it, by the
-finite-group comparison of `docs/paper-gaps/fbc25_circle_complex_units_cohomology.tex`, and the
+finite-group comparison of
+<https://github.com/LionSR/QICLean/blob/main/docs/paper-gaps/fbc25_circle_complex_units_cohomology.tex>, and the
 coboundary is absorbed into the action gauge. -/
 theorem exists_rescale_lSymbol_eq_inducedLSymbol_of_finite [Finite G]
     (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNormal (A x)) (hD : ∀ x, 0 < D x)
