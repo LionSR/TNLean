@@ -16,17 +16,13 @@ The gap $\varepsilon=\varepsilon_1-\varepsilon_0$ of the source is such a
 $\Delta$, and every statement below holds for every such $\Delta$, with
 $\varepsilon_1$ replaced by $\varepsilon_0+\Delta$.
 
-\begin{definition}[Bond Hamiltonians on the chain]
-    \label{def:lvv_bond_hamiltonian}
-    \lean{ManyBody.bondSupport}
-    \leanok
-    \uses{def:chain_model}
-    A family of bond terms $H_0,\ldots,H_{L-2}$ as above defines a Hamiltonian of
-    range one with interaction norm at most one: its term at the support
-    $\{i,i+1\}$ is $H_i$, and its terms at single sites vanish. Distinct bonds
-    have distinct supports, so each term is a single $H_i$ or zero; hence its terms
-    are positive semidefinite with norm at most one, and its sum is $H=\sum_iH_i$.
-\end{definition}
+Such a family of bond terms is a Hamiltonian of range one with interaction norm at
+most one: its term at the support $\{i,i+1\}$ is $H_i$, its terms at single sites
+vanish, its terms are positive semidefinite with norm at most one, and its sum is
+$H=\sum_iH_i$
+(Definition~\ref{def:huang_positive_chain_hamiltonian} and
+Lemmas~\ref{thm:huang_adjacent_supports}, \ref{thm:huang_positive_chain_terms}
+and~\ref{thm:huang_positive_chain_operator}).
 
 \begin{definition}[The power projector]
     \label{def:lvv_power_projector}
