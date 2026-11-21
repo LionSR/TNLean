@@ -16,6 +16,12 @@ finite dimensionality bounds its excitation projection by a positive multiple
 of that Hamiltonian. This is the local comparison needed to transfer a
 parent-Hamiltonian gap between admissible interaction ranges; see
 `docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex`.
+
+The comparison is stated, in the last section, for the Hamiltonian of the parent interaction on
+the open chain (`parentChainInteraction`) and the matrix of the local parent interaction.
+
+**Transitional (#10948).** `exists_pos_parentInteractionES_openParentHamiltonianES_comparison` is
+kept, unchanged, for unconverted users and is deleted when its last user is converted.
 -/
 
 open scoped InnerProductSpace ComplexOrder
@@ -115,5 +121,33 @@ theorem exists_pos_parentInteractionES_openParentHamiltonianES_comparison
       (openParentHamiltonianES_isPositive A R W)
   exact ⟨κ, C, hκ, hC, by simpa only [hker, parentInteractionES] using hLower,
     by simpa only [hker, parentInteractionES] using hUpper⟩
+
+/-! ### The Hamiltonian of the parent interaction on the open chain -/
+
+section ChainInteraction
+
+open scoped MatrixOrder
+
+/-- If the kernel of the operator of the Hamiltonian of the parent interaction on the open chain
+is the local MPS space, that Hamiltonian and the local parent interaction bound one another, in
+the Loewner order, by positive constants. -/
+theorem exists_pos_toMatrix'_parentInteraction_hamiltonian_parentChainInteraction_comparison
+    {d D R W : ℕ} (A : MPSTensor d D)
+    (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) =
+      groundSpaceES A W) :
+    ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧
+      (κ : ℂ) • LinearMap.toMatrix' (parentInteraction A W) ≤
+        (parentChainInteraction A R W).hamiltonian ∧
+      (parentChainInteraction A R W).hamiltonian ≤
+        (C : ℂ) • LinearMap.toMatrix' (parentInteraction A W) := by
+  have hH := Matrix.isPositive_toEuclideanLin_iff.mpr
+    (posSemidef_hamiltonian_parentChainInteraction A R W)
+  obtain ⟨κ, hκ, hLower⟩ := LinearMap.IsPositive.exists_pos_smul_orthogonal_ker_projection_le hH
+  obtain ⟨C, hC, hUpper⟩ := LinearMap.IsPositive.exists_pos_le_smul_orthogonal_ker_projection hH
+  rw [hker, ← toEuclideanLin_toMatrix'_parentInteraction, ← map_smul] at hLower hUpper
+  exact ⟨κ, C, hκ, hC, Matrix.toEuclideanLin_le_toEuclideanLin_iff.mp hLower,
+    Matrix.toEuclideanLin_le_toEuclideanLin_iff.mp hUpper⟩
+
+end ChainInteraction
 
 end MPSTensor
