@@ -47,6 +47,9 @@ the periodic chain.
   Hamiltonians correspond one-to-one through \(\Lambda^{\otimes N}\).
 * `MPSTensor.hasUniqueGroundState_chainGroundSpace_rotatePhysical` — uniqueness of the
   ground state transfers along the correspondence.
+**Transitional (#10948).** `isParentInteraction_parentInteractionES`, stated for the
+Euclidean-space operator `parentInteractionES`, is kept until its users are converted; the last
+section states it for the operator of the matrix of the canonical parent interaction.
 -/
 
 open scoped Matrix BigOperators
@@ -439,5 +442,20 @@ theorem hasUniqueGroundState_chainGroundSpace_rotatePhysical
     HasUniqueGroundState (chainGroundSpace (rotatePhysical Λ A) L N) := by
   rw [HasUniqueGroundState, chainGroundSpace_rotatePhysical hΛ]
   exact (LinearEquiv.finrank_map_eq (onSiteTensorPowEquiv N hΛ) (chainGroundSpace A L N)).trans hA
+
+/-! ### The matrix of the canonical parent interaction -/
+
+/-- The canonical parent interaction, whose operator is the orthogonal projector onto
+\(\mathcal G_L(A)^\perp\), is a parent interaction in the sense of arXiv:2011.12127,
+lines 1996--1999. -/
+theorem isParentInteraction_toEuclideanLin_toMatrix'_parentInteraction (A : MPSTensor d D)
+    (L : ℕ) :
+    IsParentInteraction A L (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A L)))
+      where
+  isPositive :=
+    Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_toMatrix'_parentInteraction A L)
+  ker_eq := by
+    ext v
+    rw [LinearMap.mem_ker, toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff]
 
 end MPSTensor
