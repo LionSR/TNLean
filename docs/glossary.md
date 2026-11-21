@@ -1802,9 +1802,9 @@ in `MPS/Preparation/` uses it.
   LOCC" and the graph distance before Proposition `propQCA2`.
 - **Sanctioned bridges:** `Geometry.iterate_neighbourhood_ring` (on the ring, the
   ring neighbourhood of radius `r`), `Geometry.iterate_neighbourhood_pathGraph_subset`,
-  `Geometry.iterate_neighbourhood_graph_subset` and their disjointness forms.
-- **Caveat:** for the open chain and graphs only the inclusion in the metric
-  ball is proved; on the ring the equality holds.
+  `Geometry.iterate_neighbourhood_graph` and their disjointness forms.
+- **Caveat:** for the open chain only the inclusion in the metric ball is
+  proved; on the ring and on a graph the equality holds.
 
 #### `ManyBody.IsGraphSeparated` on the cycle (QICLean)
 
@@ -2077,8 +2077,8 @@ in `MPS/Preparation/` uses it.
 - **Sanctioned bridges:** `IsProtocol.isKrausCPTP` (the map is a channel),
   `IsProtocol.comp` (protocols compose and depths add), `IsProtocol.seq`
   (a sequence of layers is a protocol of at most its length), and
-  `IsProtocol.traceAdjointMap_mem_supportedOperators_ringBall` (light cone of
-  radius `T` of the Heisenberg picture on the ring). Grouping `k` consecutive
+  `IsProtocol.traceAdjointMap_mem_supportedOperators_graphNeighborhood` (light
+  cone of radius `T` of the Heisenberg picture on the ring). Grouping `k` consecutive
   sites is QICLean's
   `QuantumCircuit.IsProtocol.block` with `QuantumCircuit.Geometry.ringBlocking`:
   for positive block count and nonempty input bases it gives depth at most
@@ -2157,7 +2157,7 @@ in `MPS/Preparation/` uses it.
   `IsConversion.density` (a conversion of a density matrix is a density
   matrix), `QuantumCircuit.IsConversion.ofOnsite_seq` (attach, run a sequence
   of channel layers, discard), and
-  `QuantumCircuit.IsConversion.trace_mul_mul_eq_of_isRingSeparated` (vanishing
+  `QuantumCircuit.IsConversion.trace_mul_mul_eq_of_isGraphSeparated` (vanishing
   connected correlations beyond ring distance `2T` from a product input).
 - **Caveat:** the relation is directed and not symmetric: a channel need not be
   undone by another channel. Neither `ρ` nor `σ` is required to be a density
