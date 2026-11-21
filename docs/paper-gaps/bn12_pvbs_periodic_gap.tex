@@ -47,8 +47,8 @@ Indeed, the hopping coefficients agree, while the difference in diagonal
 terms is $[(\mu^2-\mu)n_L+(1-\mu)n_R]/(1+\mu^2)$ at each bond.
 Periodic summation identifies the two occupation sums.\footnote{Formal declarations:
     \leanid{MPSTensor.parentInteraction_pvbs_two_apply},
-    \leanid{MPSTensor.parentHamiltonianES_pvbs_decomposition}, and
-    \leanid{MPSTensor.parentHamiltonianES_pvbs_gap_exact}.}
+    \leanid{MPSTensor.toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_decomposition}, and
+    \leanid{MPSTensor.hamiltonian_parentRingInteraction_pvbs_gap_exact}.}
 
 \section{Lower bound and attainment}
 For $\mu\ge0$, the critical Hamiltonian $H_1$ and the coefficient $a(\mu)$
@@ -90,7 +90,7 @@ norm-gap bound on all sufficiently large rings is contradicted by this
 family. This is the finite-periodic-volume criterion of thermodynamic
 gaplessness, without constructing an infinite-volume operator or claiming
 that any fixed finite ring has zero gap above its full kernel.\footnote{Formal
-    declarations: \leanid{MPSTensor.parentHamiltonianES_pvbs_critical_fourierMagnon}
+    declarations: \leanid{MPSTensor.toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_fourierMagnon}
     and \leanid{MPSTensor.not_exists_eventual_uniform_gap_pvbs_critical}.}
 
 \section{Remaining scope}

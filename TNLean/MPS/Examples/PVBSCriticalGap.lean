@@ -20,6 +20,14 @@ not merely the vacuum complement. Thus no eventual positive uniform gap exists.
 Bachmann–Nachtergaele, arXiv:1112.4097, Section II, the one-particle
 dispersion following equation (8), specialized to one species and zero phase.
 No vanishing finite-volume gap above the enlarged critical kernel is asserted.
+
+The Hamiltonian is the Hamiltonian of the parent interaction on the ring
+(`parentRingInteraction`), acting through `Matrix.toEuclideanLin`.
+
+**Transitional (#10948).** `not_exists_eventual_uniform_gap_pvbs_critical` quantifies over all
+lengths beyond a threshold, without `2 ≤ N`, and is stated for the Euclidean-space operator
+`parentHamiltonianES`, defined at every length; it is restated once the ring interaction is
+defined at every length.
 -/
 
 open scoped Matrix BigOperators InnerProductSpace
@@ -41,15 +49,15 @@ theorem pvbs_fourierMagnon_ne_zero (N : ℕ) [NeZero N] :
 
 /-- The actual critical PVBS parent has a Fourier magnon with energy
 `1 - cos (2π/N)`, including the two-oriented-window convention at length two. -/
-theorem parentHamiltonianES_pvbs_critical_fourierMagnon {N : ℕ} [NeZero N]
-    (hN : 2 ≤ N) :
-    parentHamiltonianES (pvbsTensor 1) 2 N
+theorem toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_fourierMagnon {N : ℕ}
+    [NeZero N] (hN : 2 ≤ N) :
+    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) hN).hamiltonian
       (WithLp.toLp 2 (SpinChain.oneMagnon
         (fun j : Fin N => ZMod.stdAddChar (ZMod.finEquiv N j)))) =
       (ZMod.cycleFourierGap N : ℂ) •
         WithLp.toLp 2 (SpinChain.oneMagnon
           (fun j : Fin N => ZMod.stdAddChar (ZMod.finEquiv N j))) := by
-  rw [parentHamiltonianES_pvbs_critical_oneMagnon hN]
+  rw [toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_oneMagnon hN]
   ext σ
   have hc (j : Fin N) :
       ZMod.stdAddChar (ZMod.finEquiv N j) -
@@ -67,14 +75,17 @@ because its eigenvalue is positive and the parent Hamiltonian is symmetric. -/
 theorem pvbs_fourierMagnon_mem_orthogonal_kernel {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     WithLp.toLp 2 (SpinChain.oneMagnon
       (fun j : Fin N => ZMod.stdAddChar (ZMod.finEquiv N j))) ∈
-        (LinearMap.ker (parentHamiltonianES (pvbsTensor 1) 2 N))ᗮ := by
+        (LinearMap.ker
+          (Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) hN).hamiltonian))ᗮ := by
   rw [Submodule.mem_orthogonal]
   intro w hw
-  have h := (parentHamiltonianES_isPositive (pvbsTensor 1) 2 N).isSymmetric w
+  have h := (Matrix.isPositive_toEuclideanLin_iff.mpr
+    (posSemidef_hamiltonian_parentRingInteraction (pvbsTensor 1) hN)).isSymmetric w
     (WithLp.toLp 2 (SpinChain.oneMagnon
       (fun j : Fin N => ZMod.stdAddChar (ZMod.finEquiv N j))))
   rw [LinearMap.mem_ker.mp hw, inner_zero_left,
-    parentHamiltonianES_pvbs_critical_fourierMagnon hN, inner_smul_right] at h
+    toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_fourierMagnon hN,
+    inner_smul_right] at h
   exact (mul_eq_zero.mp h.symm).resolve_left
     (Complex.ofReal_ne_zero.mpr (ZMod.cycleFourierGap_pos hN).ne')
 
@@ -90,8 +101,14 @@ theorem not_exists_eventual_uniform_gap_pvbs_critical :
   let : NeZero N := ⟨by omega⟩
   let v : EuclideanSpace ℂ (Cfg 2 N) := WithLp.toLp 2 (SpinChain.oneMagnon
     (fun j : Fin N => ZMod.stdAddChar (ZMod.finEquiv N j)))
-  have hbound := hgap N hN₀ v (pvbs_fourierMagnon_mem_orthogonal_kernel hN)
-  rw [parentHamiltonianES_pvbs_critical_fourierMagnon hN, norm_smul,
+  have hH : parentHamiltonianES (pvbsTensor 1) 2 N =
+      Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) hN).hamiltonian := by
+    unfold parentHamiltonianES
+    rw [parentHamiltonian_of_le _ hN]
+    rfl
+  have hbound := hgap N hN₀ v (hH ▸ pvbs_fourierMagnon_mem_orthogonal_kernel hN)
+  rw [hH, toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_fourierMagnon hN,
+    norm_smul,
     Complex.norm_real, Real.norm_eq_abs, abs_of_pos hη] at hbound
   have hδle : δ ≤ ZMod.cycleFourierGap N :=
     le_of_mul_le_mul_right hbound (norm_pos_iff.mpr (pvbs_fourierMagnon_ne_zero N))

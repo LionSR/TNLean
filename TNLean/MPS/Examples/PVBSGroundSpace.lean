@@ -113,25 +113,27 @@ theorem contiguous_mem_groundSpace_pvbs {N : ℕ} (q : ℂ) (hN : 2 ≤ N)
   exact groundSpace_pvbs_intersection q n
 
 /-- The open nearest-neighbour parent Hamiltonian has exactly the full PVBS
-matrix-product space as its zero-energy space. -/
-theorem ker_openParentHamiltonianES_pvbs (q : ℂ) {N : ℕ} (hN : 2 ≤ N) :
-    LinearMap.ker (openParentHamiltonianES (pvbsTensor q) 2 N) =
+matrix-product space as its zero-energy space. The open-chain parent Hamiltonian is the
+Hamiltonian of `parentChainInteraction`, and its kernel is taken for its operator. -/
+theorem ker_hamiltonian_parentChainInteraction_pvbs (q : ℂ) {N : ℕ} (hN : 2 ≤ N) :
+    LinearMap.ker
+        (Matrix.toEuclideanLin (parentChainInteraction (pvbsTensor q) 2 N).hamiltonian) =
       groundSpaceES (pvbsTensor q) N := by
-  refine le_antisymm ?_ (groundSpaceES_le_ker_openParentHamiltonianES _ 2 N)
+  refine le_antisymm ?_ (groundSpaceES_le_ker_hamiltonian_parentChainInteraction _ 2 N)
   intro v hv
   rw [mem_groundSpaceES_iff]
-  apply contiguous_mem_groundSpace_pvbs q hN
-  intro s hs τ
-  have h := cyclicRestrictₗ_mem_groundSpace_of_mem_ker_openParentHamiltonianES
-    (pvbsTensor q) hN hv ⟨s, by omega⟩ hs τ
-  rwa [cyclicRestrictₗ_eq_contiguousRestrictₗ _ hN hs] at h
+  exact contiguous_mem_groundSpace_pvbs q hN fun s hs τ ↦
+    contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction
+      (pvbsTensor q) hv s hs τ
 
 /-- There are exactly two independent zero-energy states on every open chain of
 at least two sites, for every complex PVBS parameter. -/
-theorem finrank_ker_openParentHamiltonianES_pvbs (q : ℂ) {N : ℕ} (hN : 2 ≤ N) :
-    Module.finrank ℂ (LinearMap.ker (openParentHamiltonianES (pvbsTensor q) 2 N)) = 2 := by
+theorem finrank_ker_hamiltonian_parentChainInteraction_pvbs (q : ℂ) {N : ℕ} (hN : 2 ≤ N) :
+    Module.finrank ℂ (LinearMap.ker
+      (Matrix.toEuclideanLin (parentChainInteraction (pvbsTensor q) 2 N).hamiltonian)) = 2 := by
   obtain ⟨n, rfl⟩ : ∃ n, N = n + 1 := ⟨N - 1, by omega⟩
-  rw [ker_openParentHamiltonianES_pvbs q hN, groundSpaceES, LinearEquiv.finrank_map_eq]
+  rw [ker_hamiltonian_parentChainInteraction_pvbs q hN, groundSpaceES,
+    LinearEquiv.finrank_map_eq]
   exact finrank_groundSpace_pvbsTensor q n
 
 end MPSTensor

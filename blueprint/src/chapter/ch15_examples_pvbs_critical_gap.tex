@@ -3,9 +3,9 @@
 
 \begin{lemma}[Critical PVBS one-particle dynamics]
     \label{thm:pvbs_one_particle_dynamics}
-    \lean{MPSTensor.localTermES_pvbs_critical_oneMagnon,
-        MPSTensor.parentHamiltonianES_pvbs_critical_oneMagnon,
-        MPSTensor.parentHamiltonianES_pvbs_critical_uniformParticle}
+    \lean{MPSTensor.toEuclideanLin_parentRingInteraction_term_pvbs_critical_oneMagnon,
+        MPSTensor.toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_oneMagnon,
+        MPSTensor.toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_uniformParticle}
     \leanok
     \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
     For site amplitudes $f_j$, let
@@ -34,7 +34,7 @@
 \begin{lemma}[Positive low-energy Fourier magnons]
     \label{thm:pvbs_critical_fourier_magnon}
     \lean{MPSTensor.pvbs_fourierMagnon_ne_zero,
-        MPSTensor.parentHamiltonianES_pvbs_critical_fourierMagnon,
+        MPSTensor.toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_fourierMagnon,
         MPSTensor.pvbs_fourierMagnon_mem_orthogonal_kernel}
     \leanok
     \uses{def:pvbs_tensor, def:parent_hamiltonian_es}

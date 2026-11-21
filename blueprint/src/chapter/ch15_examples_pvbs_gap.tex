@@ -58,9 +58,9 @@ one-species specialization by an explicit operator decomposition.
 
 \begin{lemma}[Periodic occupation decomposition]
     \label{thm:pvbs_periodic_occupation}
-    \lean{MPSTensor.localTermES_pvbs_two_apply,
-        MPSTensor.localTermES_pvbs_decomposition,
-        MPSTensor.parentHamiltonianES_pvbs_decomposition}
+    \lean{MPSTensor.toEuclideanLin_parentRingInteraction_term_pvbs_two_apply,
+        MPSTensor.toEuclideanLin_parentRingInteraction_term_pvbs_decomposition,
+        MPSTensor.toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_decomposition}
     \leanok
     \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
     On every ring of $N\ge2$ sites, the PVBS parent Hamiltonian satisfies
@@ -84,11 +84,11 @@ one-species specialization by an explicit operator decomposition.
 
 \begin{lemma}[Uniform periodic PVBS lower gap bound]
     \label{thm:pvbs_uniform_lower_gap}
-    \lean{MPSTensor.parentHamiltonianES_pvbs_energy_decomposition,
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_pvbs_energy_decomposition,
         MPSTensor.pvbs_particle_number_ge_norm_sq,
-        MPSTensor.parentHamiltonianES_pvbs_energy_lower_bound,
+        MPSTensor.hamiltonian_parentRingInteraction_pvbs_energy_lower_bound,
         MPSTensor.pvbs_zero_of_mem_orthogonal_parent_kernel,
-        MPSTensor.parentHamiltonianES_pvbs_gap}
+        MPSTensor.hamiltonian_parentRingInteraction_pvbs_gap}
     \leanok
     \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
     For $\mu\ge0$, let $c(\mu)=(\mu-1)^2/(1+\mu^2)$.
@@ -115,9 +115,9 @@ one-species specialization by an explicit operator decomposition.
 
 \begin{lemma}[Attainment and exact noncritical finite-ring gap]
     \label{thm:pvbs_exact_periodic_gap}
-    \lean{MPSTensor.parentHamiltonianES_pvbs_uniformParticle,
-        MPSTensor.parentHamiltonianES_pvbs_gap_le,
-        MPSTensor.parentHamiltonianES_pvbs_gap_exact}
+    \lean{MPSTensor.toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_uniformParticle,
+        MPSTensor.hamiltonian_parentRingInteraction_pvbs_gap_le,
+        MPSTensor.hamiltonian_parentRingInteraction_pvbs_gap_exact}
     \leanok
     \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
     The uniform one-particle vector $W_N=\sum_j|0\cdots1_j\cdots0\rangle$
