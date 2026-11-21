@@ -38,6 +38,8 @@ No normality, primitivity, or translation-invariance hypothesis is imposed.
 open scoped ComplexOrder MatrixOrder
 open Kraus (blockPhysDim blockTensor)
 open ManyBody (placeAlong chainWindow)
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d R L K N : ℕ}
 
@@ -69,7 +71,7 @@ Nachtergaele, arXiv:cond-mat/9410110, Section 3, equations (3.12)--(3.14). -/
 noncomputable def blockedInteractionMatrix (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (L K : ℕ) : Matrix (Cfg (blockPhysDim d L) K) (Cfg (blockPhysDim d L) K) ℂ :=
   Matrix.reindex (blockedConfigEquiv d K L).symm (blockedConfigEquiv d K L).symm
-    (openInteractionMatrix h (K * L))
+    ((chainTranslates R (K * L) h).hamiltonian)
 
 /-- Decoding the coarse interaction recovers its defining original open
 sum. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3,
@@ -77,21 +79,21 @@ equations (3.12)--(3.14). -/
 @[simp] theorem reindex_blockedInteractionMatrix (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (L K : ℕ) :
     Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L)
-      (blockedInteractionMatrix h L K) = openInteractionMatrix h (K * L) :=
+      (blockedInteractionMatrix h L K) = (chainTranslates R (K * L) h).hamiltonian :=
   (Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L)).apply_symm_apply _
 
-private theorem placeAlong_chainWindow_openInteractionMatrix {W n b : ℕ}
+private theorem placeAlong_chainWindow_hamiltonian_chainTranslates {W n b : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hb : b + W ≤ n) :
-    placeAlong (X := fun _ ↦ Fin d) (chainWindow b hb) (openInteractionMatrix h W) =
+    placeAlong (X := fun _ ↦ Fin d) (chainWindow b hb) ((chainTranslates R W h).hamiltonian) =
       ∑ j ∈ Finset.range (W + 1 - R),
         if hj : b + j + R ≤ n then
           placeAlong (X := fun _ ↦ Fin d) (chainWindow (b + j) hj) h else 0 := by
-  rw [openInteractionMatrix, ManyBody.placeAlong_sum]
+  rw [hamiltonian_chainTranslates_eq_sum_range, ManyBody.placeAlong_sum]
   refine Finset.sum_congr rfl fun j hj => ?_
   have hj' : j + R ≤ W := by
     have hj'' := Finset.mem_range.mp hj
     omega
-  simp only [dif_pos hj', dif_pos (show b + j + R ≤ n by omega)]
+  simp only [dite_eq_left hj', dite_eq_left (show b + j + R ≤ n by omega)]
   rw [ManyBody.placeAlong_placeAlong, ManyBody.chainWindow_trans_chainWindow]
 
 /-- Each term of an open interaction sum of a positive interaction is positive. -/
@@ -106,9 +108,9 @@ private theorem posSemidef_dite_placeAlong_chainWindow (h : Matrix (Cfg d R) (Cf
 /-- A positive local interaction gives a positive open interaction sum at
 every volume, including volumes shorter than its range. Source:
 Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
-theorem openInteractionMatrix_posSemidef (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : h.PosSemidef) (n : ℕ) : (openInteractionMatrix h n).PosSemidef := by
-  rw [openInteractionMatrix]
+theorem hamiltonian_chainTranslates_posSemidef (h : Matrix (Cfg d R) (Cfg d R) ℂ)
+    (hh : h.PosSemidef) (n : ℕ) : ((chainTranslates R n h).hamiltonian).PosSemidef := by
+  rw [hamiltonian_chainTranslates_eq_sum_range]
   exact Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun b _ =>
     (posSemidef_dite_placeAlong_chainWindow h hh n b).nonneg)
 
@@ -117,7 +119,7 @@ including coarse windows shorter than the original range. Source:
 Nachtergaele, arXiv:cond-mat/9410110, equation (3.12), positivity of its sums. -/
 theorem blockedInteractionMatrix_posSemidef (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : h.PosSemidef) (L K : ℕ) : (blockedInteractionMatrix h L K).PosSemidef :=
-  (openInteractionMatrix_posSemidef h hh (K * L)).submatrix (blockedConfigEquiv d K L)
+  (hamiltonian_chainTranslates_posSemidef h hh (K * L)).submatrix (blockedConfigEquiv d K L)
 
 variable [NeZero d] [NeZero L]
 
@@ -125,22 +127,22 @@ variable [NeZero d] [NeZero L]
 all internal original starts; every pair of starts in the summation ranges
 gives a window of the original chain. Source: a regrouping identity for
 Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
-theorem openInteractionMatrix_blockedInteractionMatrix_reindex
+theorem hamiltonian_chainTranslates_blockedInteractionMatrix_reindex
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) :
     Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
-      (openInteractionMatrix (blockedInteractionMatrix h L K) N) =
+      ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian) =
       ∑ i ∈ Finset.range (N + 1 - K), ∑ j ∈ Finset.range (K * L + 1 - R),
         if hij : i * L + j + R ≤ N * L then
           placeAlong (X := fun _ ↦ Fin d) (chainWindow (i * L + j) hij) h else 0 := by
-  rw [openInteractionMatrix_blocking_reindex, reindex_blockedInteractionMatrix]
+  rw [hamiltonian_chainTranslates_blocking_reindex, reindex_blockedInteractionMatrix]
   refine Finset.sum_congr rfl fun i hi => ?_
   have hi' : i + K ≤ N := by
     have hi'' := Finset.mem_range.mp hi
     omega
   have hiL : i * L + K * L ≤ N * L := by
     simpa only [Nat.add_mul] using Nat.mul_le_mul_right L hi'
-  simp only [dif_pos hiL]
-  exact placeAlong_chainWindow_openInteractionMatrix h hiL
+  simp only [dite_eq_left hiL]
+  exact placeAlong_chainWindow_hamiltonian_chainTranslates h hiL
 
 
 omit [NeZero d] in
@@ -149,12 +151,12 @@ private theorem sum_aligned_windows_le (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (∑ i ∈ Finset.range (N + 1 - K), ∑ j ∈ Finset.range (K * L + 1 - R),
       if hij : i * L + j + R ≤ N * L then
         placeAlong (X := fun _ ↦ Fin d) (chainWindow (i * L + j) hij) h else 0) ≤
-      ((K * L + 1 - R : ℕ) : ℂ) • openInteractionMatrix h (N * L) := by
+      ((K * L + 1 - R : ℕ) : ℂ) • (chainTranslates R (N * L) h).hamiltonian := by
   rw [Finset.sum_comm]
   calc
-    _ ≤ ∑ j ∈ Finset.range (K * L + 1 - R), openInteractionMatrix h (N * L) := by
+    _ ≤ ∑ j ∈ Finset.range (K * L + 1 - R), (chainTranslates R (N * L) h).hamiltonian := by
       refine Finset.sum_le_sum fun j hj => ?_
-      rw [openInteractionMatrix]
+      rw [hamiltonian_chainTranslates_eq_sum_range]
       refine Finset.sum_le_sum_of_injOn (fun i : ℕ => i * L + j) ?_ ?_
         (fun _ _ => le_rfl) ?_
       · intro i _ i' _ he
@@ -174,10 +176,10 @@ private theorem sum_aligned_windows_le (h : Matrix (Cfg d R) (Cfg d R) ℂ)
 
 
 omit [NeZero d] in
-private theorem openInteractionMatrix_le_sum_aligned_windows
+private theorem hamiltonian_chainTranslates_le_sum_aligned_windows
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hKN : K ≤ N) (hcover : R + L ≤ K * L + 1) :
-    openInteractionMatrix h (N * L) ≤
+    (chainTranslates R (N * L) h).hamiltonian ≤
       ∑ i ∈ Finset.range (N + 1 - K), ∑ j ∈ Finset.range (K * L + 1 - R),
         if hij : i * L + j + R ≤ N * L then
           placeAlong (X := fun _ ↦ Fin d) (chainWindow (i * L + j) hij) h else 0 := by
@@ -190,7 +192,7 @@ private theorem openInteractionMatrix_le_sum_aligned_windows
     exact aligned_window_cover_bounds (NeZero.pos L) hKN hcover (by
       have hs' := Finset.mem_range.mp hs
       omega)
-  rw [openInteractionMatrix, ← Finset.sum_product _ _
+  rw [hamiltonian_chainTranslates_eq_sum_range, ← Finset.sum_product _ _
     (fun q : ℕ × ℕ => if hq : q.1 * L + q.2 + R ≤ N * L then
       placeAlong (X := fun _ ↦ Fin d) (chainWindow (q.1 * L + q.2) hq) h else 0)]
   refine Finset.sum_le_sum_of_injOn f ?_ ?_ ?_ ?_
@@ -212,43 +214,46 @@ private theorem openInteractionMatrix_le_sum_aligned_windows
 with upper multiplicity \(KL-R+1\), independent of volume.
 Source: a positive-term counting form of Nachtergaele,
 arXiv:cond-mat/9410110, Section 3, equations (3.12)--(3.14). -/
-theorem openInteractionMatrix_blockedInteractionMatrix_comparison
+theorem hamiltonian_chainTranslates_blockedInteractionMatrix_comparison
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hKN : K ≤ N) (hcover : R + L ≤ K * L + 1) :
-    openInteractionMatrix h (N * L) ≤
+    (chainTranslates R (N * L) h).hamiltonian ≤
         Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
-          (openInteractionMatrix (blockedInteractionMatrix h L K) N) ∧
+          ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian) ∧
       Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
-          (openInteractionMatrix (blockedInteractionMatrix h L K) N) ≤
-        ((K * L + 1 - R : ℕ) : ℂ) • openInteractionMatrix h (N * L) := by
-  rw [openInteractionMatrix_blockedInteractionMatrix_reindex h]
-  exact ⟨openInteractionMatrix_le_sum_aligned_windows h hh hKN hcover,
+          ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian) ≤
+        ((K * L + 1 - R : ℕ) : ℂ) • (chainTranslates R (N * L) h).hamiltonian := by
+  rw [hamiltonian_chainTranslates_blockedInteractionMatrix_reindex h]
+  exact ⟨hamiltonian_chainTranslates_le_sum_aligned_windows h hh hKN hcover,
     sum_aligned_windows_le h hh⟩
 
 /-- The coarse and original open Hamiltonians have the same kernel after
 configuration decoding. Source: the positive comparison mechanism of
 Nachtergaele, arXiv:cond-mat/9410110, Section 3, equations (3.13)--(3.14). -/
-theorem ker_toEuclideanLin_openInteractionMatrix_blockedInteractionMatrix_reindex
+theorem ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_reindex
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hKN : K ≤ N) (hcover : R + L ≤ K * L + 1) :
     LinearMap.ker (Matrix.toEuclideanLin
       (Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
-        (openInteractionMatrix (blockedInteractionMatrix h L K) N))) =
-      LinearMap.ker (Matrix.toEuclideanLin (openInteractionMatrix h (N * L))) := by
+        ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian))) =
+      LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R (N * L) h).hamiltonian)) := by
   obtain ⟨hLower, hUpper⟩ :=
-    openInteractionMatrix_blockedInteractionMatrix_comparison h hh hKN hcover
-  have hLower' : Matrix.toEuclideanLin (openInteractionMatrix h (N * L)) ≤
+    hamiltonian_chainTranslates_blockedInteractionMatrix_comparison h hh hKN hcover
+  have hLower' : Matrix.toEuclideanLin ((chainTranslates R (N * L) h).hamiltonian) ≤
       Matrix.toEuclideanLin (Matrix.reindex (blockedConfigEquiv d N L)
-        (blockedConfigEquiv d N L) (openInteractionMatrix (blockedInteractionMatrix h L K) N)) := by
+        (blockedConfigEquiv d N L)
+        ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian)) := by
     rw [LinearMap.le_def, ← map_sub, Matrix.isPositive_toEuclideanLin_iff]
     exact Matrix.le_iff.mp hLower
   have hUpper' : Matrix.toEuclideanLin (Matrix.reindex (blockedConfigEquiv d N L)
-      (blockedConfigEquiv d N L) (openInteractionMatrix (blockedInteractionMatrix h L K) N)) ≤
-      ((K * L + 1 - R : ℕ) : ℂ) • Matrix.toEuclideanLin (openInteractionMatrix h (N * L)) := by
+      (blockedConfigEquiv d N L)
+      ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian)) ≤
+      ((K * L + 1 - R : ℕ) : ℂ) •
+        Matrix.toEuclideanLin ((chainTranslates R (N * L) h).hamiltonian) := by
     rw [← map_smul, LinearMap.le_def, ← map_sub, Matrix.isPositive_toEuclideanLin_iff]
     exact Matrix.le_iff.mp hUpper
   have hP := Matrix.isPositive_toEuclideanLin_iff.mpr
-    (openInteractionMatrix_posSemidef h hh (N * L))
+    (hamiltonian_chainTranslates_posSemidef h hh (N * L))
   have hQ := LinearMap.nonneg_iff_isPositive.mp
     ((LinearMap.nonneg_iff_isPositive.mpr hP).trans hLower')
   have hC : 0 < ((K * L + 1 - R : ℕ) : ℝ) := by
@@ -272,7 +277,7 @@ theorem eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace
         groundSpaceES A n) :
     ∀ᶠ N in Filter.atTop, LinearMap.ker (Matrix.toEuclideanLin
       (Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
-        (openInteractionMatrix (blockedInteractionMatrix h L K) N))) =
+        ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian))) =
       (groundSpaceES (blockTensor A L) N).map
         (blockedConfigLinearIsometryEquiv d N L).toLinearEquiv.toLinearMap := by
   obtain ⟨M, hM⟩ := Filter.eventually_atTop.1 hker
@@ -282,9 +287,9 @@ theorem eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace
     have hL := NeZero.pos L
     have hscaled := Nat.mul_le_mul_right L hKN
     omega
-  rw [ker_toEuclideanLin_openInteractionMatrix_blockedInteractionMatrix_reindex
+  rw [ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_reindex
     h hh hKN hcover,
-    ← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix h hR hRN,
+    ← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN,
     hM (N * L) ((le_max_right K M).trans (hN.trans (Nat.le_mul_of_pos_right N (NeZero.pos L))))]
   exact (groundSpaceES_blockTensor_map A L N).symm
 
@@ -303,10 +308,10 @@ theorem ker_openInteractionHamiltonianES_blockedInteractionMatrix_map
     have hL := NeZero.pos L
     have hscaled := Nat.mul_le_mul_right L hKN
     omega
-  rw [openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix _ hK hKN,
-    openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix h hR hRN]
+  rw [openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates _ hK hKN,
+    openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN]
   exact (Matrix.ker_toEuclideanLin_reindex_map (blockedConfigEquiv d N L) _).trans
-    (ker_toEuclideanLin_openInteractionMatrix_blockedInteractionMatrix_reindex
+    (ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_reindex
       h hh hKN hcover)
 
 /-- An eventual exact MPS kernel for the original interaction gives the
@@ -328,7 +333,7 @@ theorem eventually_ker_openInteractionHamiltonianES_blockedInteractionMatrix_eq_
     A h hh hR hcover hker, Filter.eventually_ge_atTop K] with N hN hKN
   apply Submodule.map_injective_of_injective
     (blockedConfigLinearIsometryEquiv d N L).injective
-  rw [openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix _ hK hKN,
+  rw [openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates _ hK hKN,
     blockedConfigLinearIsometryEquiv, Matrix.ker_toEuclideanLin_reindex_map]
   exact hN
 

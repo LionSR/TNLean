@@ -33,6 +33,8 @@ equation (3.12), and the finite-interval support discussion in Section 3.
 -/
 
 open scoped ComplexOrder
+open ManyBody.Interaction (chainTranslates)
+
 namespace PositiveLinearMap
 variable {E : Type*} [Ring E] [PartialOrder E] [Module ℂ E] [StarRing E]
   [StarOrderedRing E]
@@ -108,17 +110,17 @@ theorem quasiLocalState_groundSpaceProjection_eq_one_of_isParentInteraction_word
     φ (quasiLocalIntervalObservable d a N
       (groundSpaceProjectionMatrix (toTensorFromBlocks (d := d) (μ := μ) A) N)) = 1 := by
   refine quasiLocalState_groundSpaceProjection_eq_one_of_interval_eq_zero
-    (toTensorFromBlocks (d := d) (μ := μ) A) φ hφ a (openInteractionMatrix h N) ?_ ?_ ?_
+    (toTensorFromBlocks (d := d) (μ := μ) A) φ hφ a ((chainTranslates R N h).hamiltonian) ?_ ?_ ?_
   · apply Matrix.isPositive_toEuclideanLin_iff.mp
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix
+    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
       h (by omega) hN]
     exact openInteractionHamiltonianES_isPositive hh.isPositive N
-  · rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix
+  · rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
       h (by omega) hN,
       hh.ker_openInteractionHamiltonianES_eq_ker_openParentHamiltonianES (by omega)]
     exact ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_wordTupleSpanTop
       μ A hμ hS hSpan hR hN
-  · exact apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero
+  · exact apply_quasiLocalIntervalObservable_hamiltonian_chainTranslates_eq_zero
       φ.toLinearMap h hzero a N
 
 /-- Local zero energy gives eventual joint MPS support on the symmetric
@@ -160,16 +162,16 @@ theorem eventually_quasiLocalState_symmetric_groundSpaceProjection_eq_one_of_eve
     Filter.tendsto_atTop_mono (fun n => by dsimp only [id]; omega) Filter.tendsto_id
   filter_upwards [hlim.eventually hker, Filter.eventually_ge_atTop R] with n hkerN hn
   refine quasiLocalState_groundSpaceProjection_eq_one_of_interval_eq_zero
-    A φ hφ (-(n : ℤ)) (openInteractionMatrix h (2 * n + 1)) ?_ ?_ ?_
+    A φ hφ (-(n : ℤ)) ((chainTranslates R (2 * n + 1) h).hamiltonian) ?_ ?_ ?_
   · apply Matrix.isPositive_toEuclideanLin_iff.mp
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix
+    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
       h hR (by omega)]
     exact openInteractionHamiltonianES_isPositive
       (Matrix.isPositive_toEuclideanLin_iff.mpr hh) _
-  · rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix
+  · rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
       h hR (by omega)]
     exact hkerN
-  · exact apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero
+  · exact apply_quasiLocalIntervalObservable_hamiltonian_chainTranslates_eq_zero
       φ.toLinearMap h hzero (-(n : ℤ)) (2 * n + 1)
 
 end MPSTensor

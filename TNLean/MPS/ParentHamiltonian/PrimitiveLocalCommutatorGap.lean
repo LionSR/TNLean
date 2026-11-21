@@ -32,6 +32,8 @@ open Filter
 open scoped Matrix Topology ComplexOrder InnerProductSpace
 open ManyBody (placeAlong chainWindow)
 
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 
 variable {d D R k : ℕ}
@@ -79,7 +81,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutatorObservable_exp
       let B : Matrix (Cfg d (N n)) (Cfg d (N n)) ℂ := placeAlong (X := fun _ ↦ Fin d)
         (chainWindow (n + (R - 1)) (by rw [hN n]; omega)) X
       (inner ℂ (((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
-        (Bᴴ * (openInteractionMatrix h (N n) * B - B * openInteractionMatrix h (N n))))
+        (Bᴴ * ((chainTranslates R (N n) h).hamiltonian * B -
+          B * (chainTranslates R (N n) h).hamiltonian)))
           (ψ n)) (ψ n)).re) atTop
       (nhds (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re) := by
   let ψ' (n : ℕ) := reindexChainVector (hN n) (ψ n)
@@ -99,7 +102,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutatorObservable_exp
   have hwin : n + ((R - 1 + k) + (R - 1)) ≤ N n := by
     rw [hN n]
     omega
-  rw [placeAlong_chainWindow_adjoint_mul_openInteractionMatrix_commutator h X hR hwin,
+  rw [placeAlong_chainWindow_adjoint_mul_hamiltonian_chainTranslates_commutator h X hR hwin,
     bulkObservable_eq_placeAlong_chainWindow]
   calc
     _ = (inner ℂ (ψ n) ((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
@@ -177,12 +180,12 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_g
         atTop (nhds (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re) := by
     apply (hP.localCommutatorObservable_expectation_tendsto hρ h X hR
       N (fun n => by dsimp [N]; omega) ψ hGround hUnit).congr'
-    filter_upwards [] with n
+    filter_upwards [Filter.eventually_ge_atTop 1] with n hn
     have hH : Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
-        (openInteractionMatrix h (N n)) =
+        ((chainTranslates R (N n) h).hamiltonian) =
         (openParentHamiltonianES A R (N n)).toContinuousLinearMap :=
       congrArg LinearMap.toContinuousLinearMap
-        (toEuclideanCLM_openInteractionMatrix_parentInteraction A hR (by dsimp [N]; omega))
+        (toEuclideanCLM_hamiltonian_chainTranslates_parentInteraction A hR (by dsimp [N]; omega))
     dsimp only
     rw [map_mul, map_sub, map_mul, map_mul, ← Matrix.star_eq_conjTranspose,
       map_star, ContinuousLinearMap.star_eq_adjoint, hH,

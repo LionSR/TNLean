@@ -28,6 +28,8 @@ lines 907--947, and Section 3, finite-interval support spaces.
 
 open Filter SpinChain
 open scoped Matrix MatrixOrder ComplexOrder BigOperators
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 
 variable {d D : ℕ} [NeZero d]
@@ -83,13 +85,13 @@ theorem mem_parentGroundStateFace_iff_groundSpace_support_of_eventual_kernel
   · rintro ⟨hφ, hSupport⟩
     refine ⟨hφ, fun a => ?_⟩
     obtain ⟨N, hkerN, hRN⟩ := (hker.and (eventually_ge_atTop R)).exists
-    have hHP : openInteractionMatrix h N * groundSpaceProjectionMatrix A N = 0 := by
+    have hHP : (chainTranslates R N h).hamiltonian * groundSpaceProjectionMatrix A N = 0 := by
       apply EquivLike.injective (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ))
       simp only [map_mul, map_zero, groundSpaceProjectionMatrix, StarAlgEquiv.apply_symm_apply]
       refine ContinuousLinearMap.ext fun v => ?_
-      change Matrix.toEuclideanLin (openInteractionMatrix h N)
+      change Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)
         ((groundSpaceES A N).starProjection v) = 0
-      rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix h hR hRN]
+      rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN]
       exact LinearMap.mem_ker.mp
         (hkerN.symm ▸ (groundSpaceES A N).starProjection_apply_mem v)
     let f := intervalStateFunctional φ hφ.2.2 a N
@@ -97,13 +99,14 @@ theorem mem_parentGroundStateFace_iff_groundSpace_support_of_eventual_kernel
       simpa only [f, intervalStateFunctional_apply, map_one, hφ.2.1] using
         hSupport a N (lt_of_lt_of_le hR hRN)
     have hcomp := f.apply_projection_compression_eq (groundSpaceProjectionMatrix A N)
-      (openInteractionMatrix h N)
+      ((chainTranslates R N h).hamiltonian)
       (isStarProjection_groundSpaceProjectionMatrix A N).isSelfAdjoint.star_eq
       (isStarProjection_groundSpaceProjectionMatrix A N).isIdempotentElem hf
-    have hzero : φ (quasiLocalIntervalObservable d a N (openInteractionMatrix h N)) = 0 := by
+    have hzero :
+        φ (quasiLocalIntervalObservable d a N ((chainTranslates R N h).hamiltonian)) = 0 := by
       simpa only [Matrix.mul_assoc, hHP, Matrix.mul_zero, map_zero,
         f, intervalStateFunctional_apply] using hcomp.symm
-    rw [quasiLocalIntervalObservable_openInteractionMatrix a h N, map_sum] at hzero
+    rw [quasiLocalIntervalObservable_hamiltonian_chainTranslates a h N, map_sum] at hzero
     have hnonneg (i : ℕ) :
         0 ≤ φ (quasiLocalIntervalObservable d (a + (i : ℤ)) R h) :=
       (intervalStateFunctional φ hφ.2.2 (a + (i : ℤ)) R).map_nonneg hh.nonneg

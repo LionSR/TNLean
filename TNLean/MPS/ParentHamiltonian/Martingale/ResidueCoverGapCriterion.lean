@@ -224,7 +224,7 @@ theorem IsPeriodic.exists_pos_openParentHamiltonianES_gap_all_of_residue_cover_d
     rw [toEuclideanLin_canonicalParentInteractionMatrix,
       openInteractionHamiltonianES_parentInteractionES A hR]
     exact hKernel n hn
-  obtain ⟨γ, hγ, hGap⟩ := hA.exists_aligned_openInteractionMatrix_gap_of_eventual_kernel
+  obtain ⟨γ, hγ, hGap⟩ := hA.exists_aligned_hamiltonian_chainTranslates_gap_of_eventual_kernel
     (canonicalParentInteractionMatrix A R) (canonicalParentInteractionMatrix_posSemidef A R)
     hR hker
   have hLeft : ∀ K ≥ K₀, ∀ v ∈
@@ -232,7 +232,7 @@ theorem IsPeriodic.exists_pos_openParentHamiltonianES_gap_all_of_residue_cover_d
       γ * ‖v‖ ≤ ‖openParentHamiltonianES A R (K * m + M * m) v‖ := by
     intro K _
     have h := hGap (K + M)
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix
+    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
         (canonicalParentInteractionMatrix A R) hR (by rw [Nat.add_mul]; omega),
       toEuclideanLin_canonicalParentInteractionMatrix,
       openInteractionHamiltonianES_parentInteractionES A hR] at h

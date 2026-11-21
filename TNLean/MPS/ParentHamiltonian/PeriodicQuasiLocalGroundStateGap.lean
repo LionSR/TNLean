@@ -40,6 +40,8 @@ Lemma lem:blocking-arbitrary, lines 434--451.
 
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d D m R : ℕ} [NeZero d]
 /-- One positive constant bounds the literal infinite-volume commutator energy
@@ -65,11 +67,11 @@ theorem IsPeriodic.exists_pos_quasiLocalCommutator_limit_gap_of_eventual_kernel
           ∃ e : ℂ, Tendsto (fun n => φ
             (star (quasiLocalIntervalObservable d a k X) *
               (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                  (openInteractionMatrix h ((ℓ n + k) + r n)) *
+                  ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
                 quasiLocalIntervalObservable d a k X -
                 quasiLocalIntervalObservable d a k X *
                   quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                    (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                    ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
             (γ : ℂ) * φ (star (quasiLocalIntervalObservable d a k X) *
               quasiLocalIntervalObservable d a k X) ≤ e := by
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩

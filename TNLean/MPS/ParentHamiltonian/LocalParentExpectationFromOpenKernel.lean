@@ -29,6 +29,8 @@ classification of all ground states is a separate result.
 open scoped Matrix ComplexOrder BigOperators
 open SpinChain
 
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 
 variable {d : ℕ} [NeZero d]
@@ -46,17 +48,18 @@ theorem quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
     (hfix : Kraus.transferMap (A α) ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
     {R N : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hRN : R ≤ N)
     (hker : groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N ≤
-      LinearMap.ker (Matrix.toEuclideanLin (openInteractionMatrix h N))) (a : ℤ) :
+      LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian))) (a : ℤ) :
     quasiLocalExpectation (A α) hTP hρ hfix htr
       (quasiLocalIntervalObservable d a R h) = 0 := by
   have hkerα : groundSpaceES (A α) N ≤
-      LinearMap.ker (Matrix.toEuclideanLin (openInteractionMatrix h N)) := by
+      LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)) := by
     apply le_trans ?_ hker
     exact groundSpaceES_block_le_toTensorFromBlocks μ A hμ α N
   have hzero := quasiLocalExpectation_interval_eq_zero_of_groundSpaceES_le_ker
-    (A α) hTP hρ hfix htr a (openInteractionMatrix h N) hkerα
-  rw [quasiLocalIntervalObservable_openInteractionMatrix a h N, map_sum] at hzero
-  simp only [quasiLocalExpectation_quasiLocalIntervalObservable, Finset.sum_const, Finset.card_range, nsmul_eq_mul] at hzero ⊢
+    (A α) hTP hρ hfix htr a ((chainTranslates R N h).hamiltonian) hkerα
+  rw [quasiLocalIntervalObservable_hamiltonian_chainTranslates a h N, map_sum] at hzero
+  simp only [quasiLocalExpectation_quasiLocalIntervalObservable, Finset.sum_const,
+    Finset.card_range, nsmul_eq_mul] at hzero ⊢
   exact (mul_eq_zero.mp hzero).resolve_left (Nat.cast_ne_zero.mpr (by omega))
 
 /-- An eventual equality between the open-chain kernel and the joint MPS space
@@ -78,6 +81,6 @@ theorem quasiLocalExpectation_interval_eq_zero_of_eventually_open_kernel
   obtain ⟨N, hN, hRN⟩ := (hker.and (Filter.eventually_ge_atTop R)).exists
   apply quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
     μ A hμ α hTP hρ hfix htr h hRN (a := a)
-  rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix h hR hRN, hN]
+  rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN, hN]
 
 end MPSTensor

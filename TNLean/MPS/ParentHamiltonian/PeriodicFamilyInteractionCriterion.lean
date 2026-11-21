@@ -35,6 +35,8 @@ classified, supplied interaction, kernel identity, or finite gap is assumed.
 
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d b : ℕ} [NeZero d] {D : Fin b → ℕ}
 
@@ -101,11 +103,11 @@ theorem exists_positive_parent_interaction_quasiLocalCommutator_gap_of_periodic_
           ∃ e : ℂ, Tendsto (fun n => φ
             (star (quasiLocalIntervalObservable d a k X) *
               (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                  (openInteractionMatrix h ((ℓ n + k) + r n)) *
+                  ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
                 quasiLocalIntervalObservable d a k X -
                 quasiLocalIntervalObservable d a k X *
                   quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                    (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                    ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
             (γ : ℂ) * φ (star (quasiLocalIntervalObservable d a k X) *
               quasiLocalIntervalObservable d a k X) ≤ e := by
   obtain ⟨R, hR, h, hh, hKernel⟩ :=

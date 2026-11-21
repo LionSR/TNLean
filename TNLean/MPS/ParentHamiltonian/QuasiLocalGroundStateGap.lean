@@ -33,6 +33,8 @@ lines 933--947, and Section 6, lines 2649--2675.
 -/
 open Filter SpinChain
 open scoped Matrix MatrixOrder Matrix.Norms.L2Operator ComplexOrder Topology BigOperators
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d b : ℕ} [NeZero d] {D : Fin b → ℕ} [∀ j, NeZero (D j)]
 
@@ -65,11 +67,11 @@ theorem exists_pos_pure_ground_state_commutator_limit_gap_of_eventual_kernel
         Tendsto ℓ f atTop → Tendsto r f atTop →
         ∃ e : ℂ, Tendsto (fun n => φ (star (quasiLocalIntervalObservable d a k X) *
           (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-              (openInteractionMatrix h ((ℓ n + k) + r n)) *
+              ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
             quasiLocalIntervalObservable d a k X -
             quasiLocalIntervalObservable d a k X *
               quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
           (γ : ℂ) * φ (star (quasiLocalIntervalObservable d a k X) *
             quasiLocalIntervalObservable d a k X) ≤ e := by
   obtain ⟨γ, hγ, hfinite, hsector⟩ :=
@@ -112,11 +114,11 @@ theorem exists_pos_pure_ground_state_commutator_limit_gap_of_wordTupleSpanTop
         Tendsto ℓ f atTop → Tendsto r f atTop →
         ∃ e : ℂ, Tendsto (fun n => φ (star (quasiLocalIntervalObservable d a k X) *
           (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-              (openInteractionMatrix h ((ℓ n + k) + r n)) *
+              ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
             quasiLocalIntervalObservable d a k X -
             quasiLocalIntervalObservable d a k X *
               quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
           (γ : ℂ) * φ (star (quasiLocalIntervalObservable d a k X) *
             quasiLocalIntervalObservable d a k X) ≤ e := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, _, hJoint, _⟩ :=

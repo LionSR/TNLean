@@ -28,6 +28,8 @@ uses the trace-preserving channel fixed-point theorem, proved by Cesàro means.
 
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d D : ℕ}
 
@@ -87,11 +89,11 @@ theorem exists_positive_parent_finite_and_quasiLocal_gap_of_physical_isometry
           ∃ e : ℂ, Tendsto (fun n => φ
             (star (quasiLocalIntervalObservable d a k X) *
               (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                  (openInteractionMatrix h ((ℓ n + k) + r n)) *
+                  ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
                 quasiLocalIntervalObservable d a k X -
                 quasiLocalIntervalObservable d a k X *
                   quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                    (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                    ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
             (γ : ℂ) * φ (star (quasiLocalIntervalObservable d a k X) *
               quasiLocalIntervalObservable d a k X) ≤ e := by
   obtain ⟨ρ, hρ, hTrace, hFix⟩ := exists_stationary_density_tensorOfPhysicalIsometry V hV

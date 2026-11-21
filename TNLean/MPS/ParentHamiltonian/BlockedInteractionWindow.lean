@@ -37,6 +37,8 @@ open scoped ComplexOrder MatrixOrder
 open Kraus (blockPhysDim)
 open ManyBody (placeAlong chainWindow)
 
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 
 variable {d L : ℕ} [NeZero d] [NeZero L]
@@ -76,25 +78,25 @@ start in the summation range gives a window of the chain. This includes
 volumes shorter than the interaction range, when both sums vanish. Source:
 Nachtergaele, arXiv:cond-mat/9410110, equation (3.12), under the site
 regrouping at lines 825--836. -/
-theorem openInteractionMatrix_blocking_reindex {K : ℕ}
+theorem hamiltonian_chainTranslates_blocking_reindex {K : ℕ}
     (h : Matrix (Cfg (blockPhysDim d L) K) (Cfg (blockPhysDim d L) K) ℂ) (N : ℕ) :
     Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
-        (openInteractionMatrix h N) =
+        ((chainTranslates _ N h).hamiltonian) =
       ∑ i ∈ Finset.range (N + 1 - K),
         if hi : i * L + K * L ≤ N * L then
           placeAlong (X := fun _ ↦ Fin d) (chainWindow (i * L) hi)
             (Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L) h)
         else 0 := by
   change (Matrix.reindexLinearEquiv ℂ ℂ (blockedConfigEquiv d N L)
-    (blockedConfigEquiv d N L)) (openInteractionMatrix h N) = _
-  rw [openInteractionMatrix, map_sum]
+    (blockedConfigEquiv d N L)) ((chainTranslates _ N h).hamiltonian) = _
+  rw [hamiltonian_chainTranslates_eq_sum_range, map_sum]
   refine Finset.sum_congr rfl fun i hi => ?_
   have hi' : i + K ≤ N := by
     have hi'' := Finset.mem_range.mp hi
     omega
   have hiL : i * L + K * L ≤ N * L := by
     simpa only [Nat.add_mul] using Nat.mul_le_mul_right L hi'
-  simp only [dif_pos hi', dif_pos hiL]
+  simp only [dite_eq_left hi', dite_eq_left hiL]
   exact placeAlong_chainWindow_blocking_reindex h hi'
 
 omit [NeZero d] in
@@ -103,13 +105,13 @@ partition is bounded by the open sum over all windows, with coefficient one.
 This holds at every volume and needs no positive physical-dimension hypothesis.
 Source: a positive-term counting consequence of Nachtergaele,
 arXiv:cond-mat/9410110, equation (3.12). -/
-theorem sum_aligned_placeAlong_chainWindow_le_openInteractionMatrix {K : ℕ}
+theorem sum_aligned_placeAlong_chainWindow_le_hamiltonian_chainTranslates {K : ℕ}
     (h : Matrix (Cfg d (K * L)) (Cfg d (K * L)) ℂ)
     (hh : h.PosSemidef) (N : ℕ) :
     (∑ i ∈ Finset.range (N + 1 - K),
       if hi : i * L + K * L ≤ N * L then
         placeAlong (X := fun _ ↦ Fin d) (chainWindow (i * L) hi) h else 0) ≤
-      openInteractionMatrix h (N * L) := by
+      (chainTranslates _ (N * L) h).hamiltonian := by
   have hsub : (Finset.range (N + 1 - K)).image (fun i => i * L) ⊆
       Finset.range (N * L + 1 - K * L) := by
     rintro j hj
@@ -127,12 +129,12 @@ theorem sum_aligned_placeAlong_chainWindow_le_openInteractionMatrix {K : ℕ}
         if hi : i * L + K * L ≤ N * L then
           placeAlong (X := fun _ ↦ Fin d) (chainWindow (i * L) hi) h else 0 :=
     Finset.sum_image (fun i _ j _ hij => mul_left_injective₀ (NeZero.ne L) hij)
-  rw [← hsum, openInteractionMatrix]
+  rw [← hsum, hamiltonian_chainTranslates_eq_sum_range]
   refine Finset.sum_le_sum_of_subset_of_nonneg hsub ?_
   intro j _ _
   by_cases hj : j + K * L ≤ N * L
-  · simp only [dif_pos hj]
+  · simp only [dite_eq_left hj]
     exact Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_placeAlong _ hh)
-  · simp only [dif_neg hj, le_refl]
+  · simp only [dite_eq_right hj, le_refl]
 
 end MPSTensor

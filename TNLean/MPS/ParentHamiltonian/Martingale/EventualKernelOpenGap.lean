@@ -81,7 +81,7 @@ theorem exists_openInteractionHamiltonianES_gap_of_eventual_kernel
   simpa only [hCanonicalKernel (2 * p) N (by omega) hN] using hCanonicalGap N
 /-- Matrix form of the finite-chain gap under the eventual kernel hypothesis
 of Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2, lines 933--947. -/
-theorem exists_openInteractionMatrix_gap_of_eventual_kernel
+theorem exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
     (μ : Fin b → ℂ) (A : (j : Fin b) → MPSTensor d (D j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)

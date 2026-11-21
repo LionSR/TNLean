@@ -36,6 +36,8 @@ and Section 6, lines 2649--2675.
 
 open Filter SpinChain
 open scoped Matrix ComplexOrder BigOperators Topology
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d b : ℕ} {D : Fin b → ℕ} [NeZero d]
 /-- The eventual joint kernel gives a real nonnegative local commutator
@@ -59,18 +61,18 @@ theorem quasiLocalExpectation_localCommutatorObservable_nonneg_of_eventual_kerne
   let n := N₀ + R
   let N := (n + k) + n
   have hRN : R ≤ N := by dsimp [n, N]; omega
-  have hH : (openInteractionMatrix h N).PosSemidef := by
+  have hH : ((chainTranslates R N h).hamiltonian).PosSemidef := by
     apply Matrix.isPositive_toEuclideanLin_iff.mp
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix h hR hRN]
+    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN]
     exact openInteractionHamiltonianES_isPositive
       (Matrix.isPositive_toEuclideanLin_iff.mpr hh) N
   have hsupport : groundSpaceES (A α) N ≤
-      LinearMap.ker (Matrix.toEuclideanLin (openInteractionMatrix h N)) := by
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix h hR hRN,
+      LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)) := by
+    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN,
       hN₀ N (by dsimp [N, n]; omega)]
     exact groundSpaceES_block_le_toTensorFromBlocks μ A hμ α N
   have hnonneg := observableInsertionExpectation_adjoint_commutator_nonneg
-    (A α) hρ (openInteractionMatrix h N) (bulkObservable X n n) hH hsupport
+    (A α) hρ ((chainTranslates R N h).hamiltonian) (bulkObservable X n n) hH hsupport
   rw [← quasiLocalIntervalObservable_bulkObservable_commutator a h X hR
     (by dsimp [n]; omega : R - 1 ≤ n) (by dsimp [n]; omega : R - 1 ≤ n)]
   rw [quasiLocalExpectation_quasiLocalIntervalObservable]
@@ -101,7 +103,7 @@ theorem exists_pos_multiblock_localCommutator_gap_of_eventual_kernel
       0 < k → observableInsertionExpectation (A α) (ρ α) X = 0 →
         γ * (observableInsertionExpectation (A α) (ρ α) (Xᴴ * X)).re ≤
           (observableInsertionExpectation (A α) (ρ α) (localCommutatorObservable h X)).re := by
-  obtain ⟨γ, hγ, hgap⟩ := exists_openInteractionMatrix_gap_of_eventual_kernel
+  obtain ⟨γ, hγ, hgap⟩ := exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
     μ A hμ ρ hP hρ hDistinct hR h hh hker
   refine ⟨γ, hγ, hgap, ?_⟩
   intro α k X _ hcenter
@@ -186,11 +188,11 @@ theorem exists_pos_multiblock_quasiLocalCommutator_limit_gap_of_eventual_kernel
         Tendsto ℓ f atTop → Tendsto r f atTop →
         ∃ e : ℂ, Tendsto (fun n => ω α (star (quasiLocalIntervalObservable d a k X) *
           (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-              (openInteractionMatrix h ((ℓ n + k) + r n)) *
+              ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
             quasiLocalIntervalObservable d a k X -
             quasiLocalIntervalObservable d a k X *
               quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
           (γ : ℂ) * ω α (star (quasiLocalIntervalObservable d a k X) *
             quasiLocalIntervalObservable d a k X) ≤ e := by
   dsimp only

@@ -23,6 +23,8 @@ simultaneous injectivity, or a spectral gap.
 
 open scoped Matrix ComplexOrder BigOperators
 
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 
 variable {d D N : ℕ}
@@ -61,19 +63,19 @@ theorem IsParentInteraction.localCommutatorObservable_nonneg
     0 ≤ observableInsertionExpectation (A α) ρ (localCommutatorObservable h X) := by
   let w := (R - 1 + k) + (R - 1)
   have hw : R ≤ w := by dsimp [w]; omega
-  have hH : (openInteractionMatrix h w).PosSemidef := by
+  have hH : ((chainTranslates R w h).hamiltonian).PosSemidef := by
     apply Matrix.isPositive_toEuclideanLin_iff.mp
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix h hR hw]
+    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hw]
     exact openInteractionHamiltonianES_isPositive hh.isPositive w
   have hker : groundSpaceES (A α) w ≤
-      LinearMap.ker (Matrix.toEuclideanLin (openInteractionMatrix h w)) := by
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix h hR hw,
+      LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R w h).hamiltonian)) := by
+    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hw,
       hh.ker_openInteractionHamiltonianES_eq_ker_openParentHamiltonianES hR]
     apply le_trans ?_ (groundSpaceES_le_ker_openParentHamiltonianES
       (toTensorFromBlocks (d := d) (μ := μ) A) R w)
     exact groundSpaceES_block_le_toTensorFromBlocks μ A hμ α w
   exact observableInsertionExpectation_adjoint_commutator_nonneg
-    (A α) hρ (openInteractionMatrix h w) (bulkObservable X (R - 1) (R - 1)) hH hker
+    (A α) hρ ((chainTranslates R w h).hamiltonian) (bulkObservable X (R - 1) (R - 1)) hH hker
 
 /-- The positive-parent commutator expectation has zero imaginary part in
 every block. Source: Nachtergaele, arXiv:cond-mat/9410110, lines 2649--2675. -/

@@ -32,6 +32,8 @@ and the infinite-volume commutator argument, lines 2649--2675.
 
 open Filter SpinChain
 open scoped Matrix ComplexOrder BigOperators Topology
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d b : ℕ} {D : Fin b → ℕ} [NeZero d] [∀ i, NeZero (D i)]
 
@@ -58,11 +60,11 @@ theorem exists_pos_multiblock_quasiLocalCommutator_limit_gap
         Tendsto ℓ f atTop → Tendsto r f atTop →
         ∃ e : ℂ, Tendsto (fun n => ω α (star (quasiLocalIntervalObservable d a k X) *
           (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-              (openInteractionMatrix h ((ℓ n + k) + r n)) *
+              ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
             quasiLocalIntervalObservable d a k X -
             quasiLocalIntervalObservable d a k X *
               quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
           (γ : ℂ) * ω α (star (quasiLocalIntervalObservable d a k X) *
             quasiLocalIntervalObservable d a k X) ≤ e := by
   dsimp only
@@ -118,11 +120,11 @@ theorem exists_pure_primitiveFamily_quasiLocalCommutator_limit_gap_of_wordTupleS
         Tendsto ℓ f atTop → Tendsto r f atTop →
         ∃ e : ℂ, Tendsto (fun n => ω α (star (quasiLocalIntervalObservable d a k X) *
           (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-              (openInteractionMatrix h ((ℓ n + k) + r n)) *
+              ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
             quasiLocalIntervalObservable d a k X -
             quasiLocalIntervalObservable d a k X *
               quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
           (γ : ℂ) * ω α (star (quasiLocalIntervalObservable d a k X) *
             quasiLocalIntervalObservable d a k X) ≤ e := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, _⟩ :=

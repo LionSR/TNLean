@@ -17,17 +17,19 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12).
 -/
 
 open scoped Matrix BigOperators
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d R N : ℕ}
 
 /-- The open matrix sum vanishes when the interval is shorter than its
 interaction range. Source: Nachtergaele, arXiv:cond-mat/9410110,
 equation (3.12), the empty interaction sum. -/
-theorem openInteractionMatrix_eq_zero_of_length_lt
+theorem hamiltonian_chainTranslates_eq_zero_of_length_lt
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hN : N < R) :
-    openInteractionMatrix h N = 0 := by
+    (chainTranslates R N h).hamiltonian = 0 := by
   have hEmpty : N + 1 - R = 0 := Nat.sub_eq_zero_of_le (by omega)
-  simp [openInteractionMatrix, hEmpty]
+  simp [hamiltonian_chainTranslates_eq_sum_range, hEmpty]
 
 /-- The Euclidean open interaction sum also vanishes on intervals shorter
 than its range. Source: Nachtergaele, arXiv:cond-mat/9410110,
@@ -44,15 +46,15 @@ theorem openInteractionHamiltonianES_eq_zero_of_length_lt
 /-- The matrix and Euclidean open Hamiltonians agree at every chain length,
 including those below the positive interaction range. Source: Nachtergaele,
 arXiv:cond-mat/9410110, equation (3.12). -/
-theorem openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix_all
+theorem openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates_all
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (N : ℕ) :
     openInteractionHamiltonianES (Matrix.toEuclideanLin h) N =
-      Matrix.toEuclideanLin (openInteractionMatrix h N) := by
+      Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian) := by
   by_cases hRN : R ≤ N
-  · exact openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix h hR hRN
+  · exact openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN
   · have hN : N < R := Nat.lt_of_not_ge hRN
     rw [openInteractionHamiltonianES_eq_zero_of_length_lt _ hN,
-      openInteractionMatrix_eq_zero_of_length_lt h hN, map_zero]
+      hamiltonian_chainTranslates_eq_zero_of_length_lt h hN, map_zero]
 
 end MPSTensor
 

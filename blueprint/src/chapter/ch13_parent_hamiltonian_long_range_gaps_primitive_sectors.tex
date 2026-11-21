@@ -281,9 +281,9 @@
 
 \begin{definition}[Finite open interaction sum in matrix coordinates]
     \label{def:finite_open_interaction_matrix}
-    \lean{MPSTensor.openInteractionMatrix,
-        MPSTensor.openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix,
-        MPSTensor.toEuclideanCLM_openInteractionMatrix_parentInteraction}
+    \lean{MPSTensor.hamiltonian_chainTranslates_eq_sum_range,
+        MPSTensor.openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates,
+        MPSTensor.toEuclideanCLM_hamiltonian_chainTranslates_parentInteraction}
     \leanok
     For an arbitrary range-$R$ matrix $h$, let
     $H_N(h)=\sum_{a=0}^{N-R}\iota_a(h)$, where $\iota_a$ places $h$
@@ -317,10 +317,10 @@
 
 \begin{lemma}[Finite-range commutator localization]
     \label{thm:finite_open_commutator_locality}
-    \lean{MPSTensor.openInteractionMatrix_commutator_placeAlong_chainWindow,
-        MPSTensor.openInteractionMatrix_commutator_bulkObservable,
-        MPSTensor.placeAlong_chainWindow_adjoint_mul_openInteractionMatrix_commutator,
-        MPSTensor.bulkObservable_adjoint_mul_openInteractionMatrix_commutator}
+    \lean{MPSTensor.hamiltonian_chainTranslates_commutator_placeAlong_chainWindow,
+        MPSTensor.hamiltonian_chainTranslates_commutator_bulkObservable,
+        MPSTensor.placeAlong_chainWindow_adjoint_mul_hamiltonian_chainTranslates_commutator,
+        MPSTensor.bulkObservable_adjoint_mul_hamiltonian_chainTranslates_commutator}
     \leanok
     Let $R,k\geq1$ and $X_N=I_\ell\otimes X\otimes I_r$, where
     $\ell,r\geq t=R-1$ and $N=\ell+k+r$. Then
@@ -1576,7 +1576,7 @@
 
 \begin{lemma}[Local zero energy and finite open-chain expectations]
     \label{thm:quasi_local_open_interaction_zero_expectation}
-    \lean{SpinChain.quasiLocalIntervalObservable_openInteractionMatrix, SpinChain.apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero}
+    \lean{SpinChain.quasiLocalIntervalObservable_hamiltonian_chainTranslates, SpinChain.apply_quasiLocalIntervalObservable_hamiltonian_chainTranslates_eq_zero}
     \leanok
     Let $h$ be an $R$-site matrix, where $R>0$, and let $H_N$ be its open-chain
     sum. For every interval position $a$ and every $N\geq0$,
@@ -2007,7 +2007,7 @@
 \begin{lemma}[Uniform finite-chain gap from an eventual kernel identity]
     \label{thm:eventual_kernel_open_interaction_gap}
     \lean{MPSTensor.exists_openInteractionHamiltonianES_gap_of_eventual_kernel,
-        MPSTensor.exists_openInteractionMatrix_gap_of_eventual_kernel}
+        MPSTensor.exists_hamiltonian_chainTranslates_gap_of_eventual_kernel}
     \leanok
     Let $A_j$ be a finite family of normalized primitive MPS tensors with
     faithful fixed density matrices, pairwise inequivalent under gauge and

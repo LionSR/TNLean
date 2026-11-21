@@ -44,6 +44,8 @@ and Section 6, Lemma commutation (ii), lines 2442--2531.
 
 open Filter SpinChain
 open scoped Matrix MatrixOrder ComplexOrder BigOperators InnerProductSpace Topology
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d b R : ℕ} [NeZero d] {D : Fin b → ℕ}
 
@@ -66,14 +68,15 @@ private theorem exists_aligned_canonical_gap_of_periodic_family
     rw [toEuclideanLin_canonicalParentInteractionMatrix,
       openInteractionHamiltonianES_parentInteractionES _ hR]
     exact hKernel N hN
-  obtain ⟨γ, hγ, hGap⟩ := exists_aligned_openInteractionMatrix_gap_of_periodic_family_of_dvd
+  obtain ⟨γ, hγ, hGap⟩ := exists_aligned_hamiltonian_chainTranslates_gap_of_periodic_family_of_dvd
     (fun _ => 1) A (fun _ => one_ne_zero) m hPeriodic L hL hdiv h
     (canonicalParentInteractionMatrix_posSemidef T R) hR hEventual
   refine ⟨γ, hγ, ?_⟩
   intro n
-  have hEq : Matrix.toEuclideanLin (openInteractionMatrix h (n * L)) =
+  have hEq : Matrix.toEuclideanLin ((chainTranslates R (n * L) h).hamiltonian) =
       openParentHamiltonianES T R (n * L) := by
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix_all h hR (n * L),
+    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates_all h hR
+        (n * L),
       show h = canonicalParentInteractionMatrix T R from rfl,
       toEuclideanLin_canonicalParentInteractionMatrix,
       openInteractionHamiltonianES_parentInteractionES _ hR]
@@ -183,8 +186,8 @@ theorem exists_positive_parent_interaction_finite_quasiLocal_gap_of_periodic_fam
         LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
           groundSpaceES (toTensorFromBlocks μ A) N) ∧
     ∃ δ : ℝ, 0 < δ ∧
-      (∀ N, ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (openInteractionMatrix h N)))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (openInteractionMatrix h N) v‖) ∧
+      (∀ N, ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)))ᗮ,
+        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian) v‖) ∧
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
         φ ∈ parentGroundStateFace h → IsPureQuasiLocalState d φ →
@@ -195,11 +198,11 @@ theorem exists_positive_parent_interaction_finite_quasiLocal_gap_of_periodic_fam
           ∃ e : ℂ, Tendsto (fun n => φ
             (star (quasiLocalIntervalObservable d a k X) *
               (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                  (openInteractionMatrix h ((ℓ n + k) + r n)) *
+                  ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
                 quasiLocalIntervalObservable d a k X -
                 quasiLocalIntervalObservable d a k X *
                   quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                    (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                    ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
             (γ : ℂ) * φ (star (quasiLocalIntervalObservable d a k X) *
               quasiLocalIntervalObservable d a k X) ≤ e := by
   obtain ⟨R, hR, hAll⟩ := exists_openParentHamiltonianES_gap_of_periodic_family
@@ -209,11 +212,11 @@ theorem exists_positive_parent_interaction_finite_quasiLocal_gap_of_periodic_fam
     exists_positive_canonical_parent_interaction_of_exact_open_kernels
       (toTensorFromBlocks μ A) hR hKernelCanonical
   have hGapMatrix (N : ℕ) : ∀ v ∈
-      (LinearMap.ker (Matrix.toEuclideanLin (openInteractionMatrix h N)))ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (openInteractionMatrix h N) v‖ := by
-    have hEq : Matrix.toEuclideanLin (openInteractionMatrix h N) =
+      (LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)))ᗮ,
+      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian) v‖ := by
+    have hEq : Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian) =
         openParentHamiltonianES (toTensorFromBlocks μ A) R N := by
-      rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix_all h hR N,
+      rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates_all h hR N,
         heq, toEuclideanLin_canonicalParentInteractionMatrix,
         openInteractionHamiltonianES_parentInteractionES _ hR]
     simpa only [hEq] using hGapCanonical N

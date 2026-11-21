@@ -29,6 +29,8 @@ docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 open Filter
 open scoped Matrix Topology ComplexOrder InnerProductSpace
 
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 
 variable {d D R k : ℕ}
@@ -72,11 +74,11 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.openInteraction_commutator_en
   intro N H B
   apply (hP.localCommutatorObservable_expectation_tendsto hρ h X hR
     N (fun n => by dsimp [N]; omega) ψ hGround hUnit).congr'
-  filter_upwards [] with n
+  filter_upwards [Filter.eventually_ge_atTop 1] with n hn
   have hH : Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
-      (openInteractionMatrix h (N n)) = (H n).toContinuousLinearMap :=
+      ((chainTranslates R (N n) h).hamiltonian) = (H n).toContinuousLinearMap :=
     congrArg LinearMap.toContinuousLinearMap
-      (openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix
+      (openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
         h hR (by dsimp [N]; omega)).symm
   dsimp only
   rw [map_mul, map_sub, map_mul, map_mul, ← Matrix.star_eq_conjTranspose,

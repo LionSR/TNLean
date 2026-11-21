@@ -22,6 +22,8 @@ equation (3.12), and lines 1469--1482.
 open MPSTensor
 open scoped Matrix BigOperators
 
+open ManyBody.Interaction (chainTranslates)
+
 namespace SpinChain
 
 variable {d : ℕ} [NeZero d]
@@ -29,17 +31,17 @@ variable {d : ℕ} [NeZero d]
 /-- The quasi-local image of a finite open sum is the sum of the nonwrapping
 translated interaction observables. Source: Nachtergaele,
 arXiv:cond-mat/9410110, equation (3.12). -/
-theorem quasiLocalIntervalObservable_openInteractionMatrix (a : ℤ) {R : ℕ}
+theorem quasiLocalIntervalObservable_hamiltonian_chainTranslates (a : ℤ) {R : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (N : ℕ) :
-    quasiLocalIntervalObservable d a N (openInteractionMatrix h N) =
+    quasiLocalIntervalObservable d a N ((chainTranslates R N h).hamiltonian) =
       ∑ i ∈ Finset.range (N + 1 - R),
         quasiLocalIntervalObservable d (a + (i : ℤ)) R h := by
-  rw [openInteractionMatrix, map_sum]
+  rw [hamiltonian_chainTranslates_eq_sum_range, map_sum]
   refine Finset.sum_congr rfl fun i hi ↦ ?_
   have hi' : i + R ≤ N := by
     have hi'' := Finset.mem_range.mp hi
     omega
-  simp only [dif_pos hi']
+  simp only [dite_eq_left hi']
   exact quasiLocalIntervalObservable_placeAlong_chainWindow a N i h hi'
 
 /-- Vanishing expectation on every local translate implies vanishing
@@ -47,13 +49,13 @@ expectation on every finite open interaction sum. The functional need only
 be linear; in particular no translation invariance is imposed on a state.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12) and the
 zero-energy face in Theorem 1.1. -/
-theorem apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero
+theorem apply_quasiLocalIntervalObservable_hamiltonian_chainTranslates_eq_zero
     (φ : QuasiLocalAlgebra d →ₗ[ℂ] ℂ) {R : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hzero : ∀ a : ℤ, φ (quasiLocalIntervalObservable d a R h) = 0)
     (a : ℤ) (N : ℕ) :
-    φ (quasiLocalIntervalObservable d a N (openInteractionMatrix h N)) = 0 := by
-  simp only [quasiLocalIntervalObservable_openInteractionMatrix a h N,
+    φ (quasiLocalIntervalObservable d a N ((chainTranslates R N h).hamiltonian)) = 0 := by
+  simp only [quasiLocalIntervalObservable_hamiltonian_chainTranslates a h N,
     map_sum, hzero, Finset.sum_const_zero]
 
 end SpinChain

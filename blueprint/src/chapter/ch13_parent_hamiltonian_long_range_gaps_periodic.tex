@@ -559,7 +559,7 @@
 
 \begin{lemma}[Blocked open sums have aligned original starts]
     \label{thm:blocked_open_interaction_sum}
-    \lean{MPSTensor.openInteractionMatrix_blocking_reindex}
+    \lean{MPSTensor.hamiltonian_chainTranslates_blocking_reindex}
     \leanok
     For $d,L,K>0$ and every $N\geq0$, write $H_h(N)$ for the open sum
     of the range-$K$ interaction $h$ on the blocked chain. Then
@@ -579,7 +579,7 @@
 
 \begin{lemma}[Aligned positive windows are bounded by the full open sum]
     \label{thm:aligned_positive_window_sum}
-    \lean{MPSTensor.sum_aligned_placeAlong_chainWindow_le_openInteractionMatrix}
+    \lean{MPSTensor.sum_aligned_placeAlong_chainWindow_le_hamiltonian_chainTranslates}
     \leanok
     Let $d\geq0$, $K,L>0$, and let $Y\geq0$ be an operator on $KL$
     original sites. For every $N\geq0$,
@@ -772,7 +772,7 @@
 
 \begin{lemma}[Expansion of the grouped open interaction sum]
     \label{thm:blocked_interaction_expansion}
-    \lean{MPSTensor.openInteractionMatrix_blockedInteractionMatrix_reindex}
+    \lean{MPSTensor.hamiltonian_chainTranslates_blockedInteractionMatrix_reindex}
     \leanok
     Let $d,L,R,K>0$, $R\leq KL$, and $N\geq K$. If $h_B$ is the grouped
     interaction, then
@@ -794,8 +794,8 @@
 
 \begin{lemma}[Positive comparison and kernel equality under grouping]
     \label{thm:blocked_interaction_comparison}
-    \lean{MPSTensor.openInteractionMatrix_blockedInteractionMatrix_comparison,
-        MPSTensor.ker_toEuclideanLin_openInteractionMatrix_blockedInteractionMatrix_reindex,
+    \lean{MPSTensor.hamiltonian_chainTranslates_blockedInteractionMatrix_comparison,
+        MPSTensor.ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_reindex,
         MPSTensor.ker_openInteractionHamiltonianES_blockedInteractionMatrix_map}
     \leanok
     Let $d,L,R,K>0$, $h\geq0$, $N\geq K$, and $R+L\leq KL+1$.
@@ -849,7 +849,7 @@
 
 \begin{lemma}[Positivity of open interaction sums]
     \label{thm:open_interaction_matrix_posSemidef}
-    \lean{MPSTensor.openInteractionMatrix_posSemidef}
+    \lean{MPSTensor.hamiltonian_chainTranslates_posSemidef}
     \leanok
     Let $R>0$ and let $h$ be a positive semidefinite interaction on $R$
     sites. For every $n\geq0$, the open sum
@@ -936,7 +936,7 @@
 
 \begin{lemma}[A blocked finite-chain gap gives an original gap]
     \label{thm:blocked_finite_gap_transfer}
-    \lean{MPSTensor.openInteractionMatrix_gap_of_blocked_gap}
+    \lean{MPSTensor.hamiltonian_chainTranslates_gap_of_blocked_gap}
     \leanok
     Let $d,L,R,K>0$, $N\geq K$, $R+L\leq KL+1$, and $h\geq0$.
     Let $\widehat h$ be the interaction obtained by regrouping $H_h(KL)$.
@@ -955,7 +955,7 @@
 
 \begin{lemma}[Uniform gaps at all block-divisible volumes]
     \label{thm:blocked_primitive_aligned_uniform_gap}
-    \lean{MPSTensor.exists_aligned_openInteractionMatrix_gap_of_blocked_primitive_family}
+    \lean{MPSTensor.exists_aligned_hamiltonian_chainTranslates_gap_of_blocked_primitive_family}
     \leanok
     Let $d,L>0$. Suppose $A^{[L]}$ has an exact joint-space presentation
     at every length by inequivalent primitive tensors of positive bond
@@ -980,7 +980,7 @@
 
 \begin{lemma}[A periodic tensor has uniform gaps at period-divisible volumes]
     \label{thm:periodic_tensor_aligned_uniform_gap}
-    \lean{MPSTensor.IsPeriodic.exists_aligned_openInteractionMatrix_gap_of_eventual_kernel}
+    \lean{MPSTensor.IsPeriodic.exists_aligned_hamiltonian_chainTranslates_gap_of_eventual_kernel}
     \leanok
     Let $A$ be a periodic tensor of period $m>0$, and let $h\geq0$
     have positive range and eventual kernel $G_A(n)$.
@@ -1254,7 +1254,7 @@
 
 \begin{lemma}[Uniform open-chain gap at a common period multiple]
     \label{thm:periodic_block_family_aligned_gap_of_dvd}
-    \lean{MPSTensor.exists_aligned_openInteractionMatrix_gap_of_periodic_family_of_dvd}
+    \lean{MPSTensor.exists_aligned_hamiltonian_chainTranslates_gap_of_periodic_family_of_dvd}
     \leanok
     Let $d\geq1$, and let $(A_j)$ be a finite family of normalized
     periodic tensors with
@@ -1290,7 +1290,7 @@
 
 \begin{lemma}[Existence of an aligned open-chain gap for a periodic family]
     \label{thm:periodic_block_family_aligned_gap_exists}
-    \lean{MPSTensor.exists_aligned_openInteractionMatrix_gap_of_periodic_family}
+    \lean{MPSTensor.exists_aligned_hamiltonian_chainTranslates_gap_of_periodic_family}
     \leanok
     Assume $d\geq1$. Under the periodic-family, nonzero-weight, positivity, positive-range,
     and eventual original kernel hypotheses of
@@ -5057,7 +5057,7 @@
 
 \begin{lemma}[Two representations of the open interaction sum]
     \label{thm:all_length_open_interaction_matrix}
-    \lean{MPSTensor.openInteractionMatrix_eq_zero_of_length_lt,MPSTensor.openInteractionHamiltonianES_eq_zero_of_length_lt,MPSTensor.openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix_all}
+    \lean{MPSTensor.hamiltonian_chainTranslates_eq_zero_of_length_lt,MPSTensor.openInteractionHamiltonianES_eq_zero_of_length_lt,MPSTensor.openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates_all}
     \leanok
     Let $h$ be a matrix on an $R$-site interval. Its matrix sum over all
     nonwrapping windows and the corresponding linear operator both vanish
@@ -5539,7 +5539,7 @@
 
 \begin{lemma}[Given-interaction open gaps for a periodic family]
     \label{thm:periodic_family_given_interaction_uniform_open_gap}
-    \lean{MPSTensor.exists_openInteractionMatrix_gap_of_periodic_family_of_eventual_kernel}
+    \lean{MPSTensor.exists_hamiltonian_chainTranslates_gap_of_periodic_family_of_eventual_kernel}
     \leanok
     Let $d\ge1$, let $(A_j)$ be a finite family of normalized periodic
     tensors, let $\mu_j\ne0$, and write $T=\bigoplus_j\mu_jA_j$.

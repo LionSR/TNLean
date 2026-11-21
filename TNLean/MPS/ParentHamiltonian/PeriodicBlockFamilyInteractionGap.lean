@@ -35,6 +35,8 @@ lines 933--947, condition C1, and Section 6, lines 2593--2675.
 
 open Filter SpinChain
 open scoped Matrix MatrixOrder ComplexOrder BigOperators Topology
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d b R : ℕ} [NeZero d] {D : Fin b → ℕ}
 
@@ -44,7 +46,7 @@ above the actual finite-volume kernel. No local parent-kernel identity or
 interaction-range lower bound is required. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2, lines 933--947, condition C1,
 and Section 6, lines 2593--2675. -/
-theorem exists_openInteractionMatrix_gap_of_periodic_family_of_eventual_kernel
+theorem exists_hamiltonian_chainTranslates_gap_of_periodic_family_of_eventual_kernel
     (μ : Fin b → ℂ) (A : ∀ j, MPSTensor d (D j)) (hμ : ∀ j, μ j ≠ 0)
     (m : Fin b → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j))
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
@@ -52,8 +54,8 @@ theorem exists_openInteractionMatrix_gap_of_periodic_family_of_eventual_kernel
       LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
         groundSpaceES (toTensorFromBlocks μ A) N) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N,
-      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (openInteractionMatrix h N)))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (openInteractionMatrix h N) v‖ := by
+      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)))ᗮ,
+        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian) v‖ := by
   obtain ⟨R₀, hR₀, hCanonical⟩ := exists_openParentHamiltonianES_gap_of_periodic_family
     μ A hμ m hPeriodic
   obtain ⟨δ, hδ, hGap⟩ :=
@@ -62,7 +64,7 @@ theorem exists_openInteractionMatrix_gap_of_periodic_family_of_eventual_kernel
       (Matrix.isPositive_toEuclideanLin_iff.mpr hh) hKernel
   refine ⟨δ, hδ, ?_⟩
   intro N
-  simpa only [openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix_all h hR N]
+  simpa only [openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates_all h hR N]
     using hGap N
 
 
@@ -79,8 +81,8 @@ theorem exists_finite_quasiLocal_gap_of_periodic_family_of_eventual_kernel
       LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
         groundSpaceES (toTensorFromBlocks μ A) N) :
     ∃ δ : ℝ, 0 < δ ∧
-      (∀ N, ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (openInteractionMatrix h N)))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (openInteractionMatrix h N) v‖) ∧
+      (∀ N, ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)))ᗮ,
+        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian) v‖) ∧
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
         φ ∈ parentGroundStateFace h → IsPureQuasiLocalState d φ →
@@ -91,15 +93,15 @@ theorem exists_finite_quasiLocal_gap_of_periodic_family_of_eventual_kernel
           ∃ e : ℂ, Tendsto (fun n => φ
             (star (quasiLocalIntervalObservable d a k X) *
               (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                  (openInteractionMatrix h ((ℓ n + k) + r n)) *
+                  ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
                 quasiLocalIntervalObservable d a k X -
                 quasiLocalIntervalObservable d a k X *
                   quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                    (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                    ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
             (γ : ℂ) * φ (star (quasiLocalIntervalObservable d a k X) *
               quasiLocalIntervalObservable d a k X) ≤ e := by
   obtain ⟨δ, hδ, hFinite⟩ :=
-    exists_openInteractionMatrix_gap_of_periodic_family_of_eventual_kernel
+    exists_hamiltonian_chainTranslates_gap_of_periodic_family_of_eventual_kernel
       μ A hμ m hPeriodic h hR hh hKernel
   obtain ⟨γ, hγ, hInfinite⟩ := exists_pos_quasiLocalCommutator_limit_gap_of_periodic_family
     μ A hμ m hPeriodic h hR hh hKernel
