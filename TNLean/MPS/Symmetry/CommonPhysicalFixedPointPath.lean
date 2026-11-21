@@ -518,6 +518,7 @@ noncomputable def commonPhysicalBondCanonicalParentComparisonPath
     (fun N hN g =>
       commonPhysicalParentInteraction_commute_onSite ρ₀ ρ₁ h₀ h₁ U₀ U₁ B g (hCov g) hN)
   · intro N hN x hx
+    have : NeZero N := ⟨by omega⟩
     have hxES : WithLp.toLp 2 x ∈ LinearMap.ker
         (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) := by
       change WithLp.toLp 2 ((Interaction.translationInvariant N A).hamiltonian.mulVec x) = 0
@@ -527,6 +528,7 @@ noncomputable def commonPhysicalBondCanonicalParentComparisonPath
     simpa only [LinearMap.mem_ker, Matrix.toEuclideanLin, Matrix.toLpLin_apply,
       WithLp.ofLp_toLp, WithLp.toLp_eq_zero] using hparent
   · intro N hN
+    have : NeZero N := ⟨by omega⟩
     have hspec : (0 : ℂ) ∈ spectrum ℂ
         (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) := by
       rw [Matrix.spectrum_toLpLin]
