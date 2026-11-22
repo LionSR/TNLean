@@ -141,7 +141,7 @@ variable (hff : IsFrustrationFreeGapped h J Δ Ω)
 /-- The range projection `Π_X` of the term `h_X`. -/
 noncomputable def termProj (X : AdmissibleSupport Λ R) :
     Matrix (Configuration Λ q) (Configuration Λ q) ℂ :=
-  (hff.isHermitian X).supportProj
+  (hff.posSemidef X).isHermitian.supportProj
 
 /-- The sweep `D = ∏_X (1 - Π_X)`, the supports taken colour by colour. -/
 noncomputable def sweepOp (c : SupportColouring Λ R) :
@@ -150,11 +150,13 @@ noncomputable def sweepOp (c : SupportColouring Λ R) :
 
 theorem termProj_mem (X : AdmissibleSupport Λ R) :
     hff.termProj X ∈ supportedOperators (fun _ : Site Λ ↦ Fin q) X.1 :=
-  supportProj_mem_supportedOperators (hff.isHermitian X) (h.mem X)
+  supportProj_mem_supportedOperators (hff.posSemidef X).isHermitian (h.mem X)
 
 theorem termProj_mulVec (X : AdmissibleSupport Λ R) :
     hff.termProj X *ᵥ WithLp.ofLp Ω = 0 :=
-  (hff.isHermitian X).supportProj_mulVec_eq_zero_of_mulVec_eq_zero _ (hff.mulVec_eq_zero X)
+  (hff.posSemidef X).isHermitian.supportProj_mulVec_eq_zero_of_mulVec_eq_zero _
+    (ManyBody.Interaction.mem_zeroSpace_iff.mp
+      (hff.zeroSpace_eq ▸ Submodule.mem_span_singleton_self Ω) X)
 
 theorem factor_mem (X : AdmissibleSupport Λ R) :
     1 - hff.termProj X ∈ supportedOperators (fun _ : Site Λ ↦ Fin q) X.1 :=
@@ -170,7 +172,8 @@ theorem conjTranspose_factor_mulVec (X : AdmissibleSupport Λ R) :
     (1 - hff.termProj X)ᴴ *ᵥ WithLp.ofLp Ω = WithLp.ofLp Ω := by
   have h0 := hff.factor_mulVec X
   unfold termProj at h0 ⊢
-  rw [conjTranspose_sub, conjTranspose_one, (hff.isHermitian X).supportProj_isHermitian.eq, h0]
+  rw [conjTranspose_sub, conjTranspose_one,
+    (hff.posSemidef X).isHermitian.supportProj_isHermitian.eq, h0]
 
 /-- The sweep fixes `Ω`. -/
 theorem sweepOp_mulVec_self
@@ -233,7 +236,7 @@ theorem norm_sweepOp_pow_apply_le (hJ : 0 < J) (hΔ : 0 < Δ)
     simp only [P, wordProjections]
     cases w[k]? with
     | none => exact IsStarProjection.zero _
-    | some X => exact ((hff.isHermitian X).isStarProjection_supportProj).map clm
+    | some X => exact ((hff.posSemidef X).isHermitian.isStarProjection_supportProj).map clm
   have hPΩ : ∀ k, P k Ω = 0 := fun k ↦ by
     simp only [P, wordProjections]
     cases w[k]? with

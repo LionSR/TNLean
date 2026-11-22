@@ -237,7 +237,7 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A) := by
   intro n hn2 hnN Λ h Ω hff A T hcard hXcut hYcut hScut hI
-  have hh := hff.isHermitian
+  have hh := fun X ↦ (hff.posSemidef X).1
   have hhJ := hff.norm_term_le hJ.le
   have hgap := hff.isGapped
   have hspan := hff.groundSpace_eq

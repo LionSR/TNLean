@@ -85,13 +85,13 @@ localization errors of the amplification stage.
 
 \begin{lemma}[The model is gapped]
     \label{thm:frustration_free_area_law_model_gapped}
-    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isHermitian, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.mem_zeroSpace, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.hamiltonian_mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isFrustrationFree, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.gap, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.iff_model, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_term_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.smul_sub_le_sum_supportProj}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isFrustrationFree, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.gap, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.iff_model, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_term_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.smul_sub_le_sum_supportProj}
     \leanok
     \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_range_projection}
-    In the model of Definition~\ref{def:frustration_free_area_law_model}, every
-    term is Hermitian, the ground space of $H$ at energy $0$ is
-    $\mathbb C\Omega$, $H\Omega=0$ and $h_X\Omega=0$ for every $X$, so $\Omega$
-    is a common ground vector of the terms at energy zero. If $\Delta>0$, then
+    In the model of Definition~\ref{def:frustration_free_area_law_model}, the
+    ground space of $H$ at energy $0$ is $\mathbb C\Omega$, and the
+    interaction is frustration free: $\Omega$ is a common ground vector of
+    the terms at energy zero. If $\Delta>0$, then
     $H\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, and the model is equivalent
     to the four conditions displayed in
     Definition~\ref{def:frustration_free_area_law_model}. If $J\ge0$, then

@@ -163,16 +163,6 @@ theorem place_mulVec_eq_zero_iff (A : Tensor Γ d) (R : Finset V)
     rw [← hh.2] at hmem
     exact congrFun (LinearMap.mem_ker.mp hmem) σ
 
-/-- The closed PEPS vector is annihilated by every parent interaction.
-Source: arXiv:2011.12127, frustration freeness, lines 2008–2011. -/
-theorem place_stateCoeff_eq_zero (A : Tensor Γ d) (R : Finset V)
-    {h : Matrix (RegionPhysicalConfig (d := d) R)
-      (RegionPhysicalConfig (d := d) R) ℂ}
-    (hh : IsRegionParentInteraction A R h) :
-    ManyBody.place (X := fun _ ↦ Fin _) R h *ᵥ stateCoeff A = 0 :=
-  (place_mulVec_eq_zero_iff A R hh _).mpr
-    (stateCoeff_slice_mem_regionGroundSpace A R)
-
 /-! ## Finite families of interactions -/
 
 /-- A physical slice with the complementary configuration fixed.
@@ -220,16 +210,20 @@ theorem stateCoeff_mem_regionParentGroundSpace (A : Tensor Γ d) (R : ι → Fin
   simp only [regionParentGroundSpace, Submodule.mem_iInf, Submodule.mem_comap]
   exact fun i τ => stateCoeff_slice_mem_regionGroundSpace A (R i) τ
 
-/-- Every term and therefore their sum annihilates the closed PEPS vector.
+omit [Fintype ι] in
+/-- **The closed PEPS vector lies in the zero space of every family of regional parent
+interactions**: every placed parent interaction annihilates it.
 Source: arXiv:2011.12127, frustration freeness, lines 2008–2011. -/
-theorem regionParentHamiltonian_stateCoeff_eq_zero (A : Tensor Γ d) (R : ι → Finset V)
+theorem toLp_stateCoeff_mem_zeroSpace_ofPlace (A : Tensor Γ d) (R : ι → Finset V)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hh : ∀ i, IsRegionParentInteraction A (R i) (h i)) :
-    (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian *ᵥ stateCoeff A = 0 := by
-  exact (ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff
-    (Φ := ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h)
-    fun i ↦ ManyBody.posSemidef_place (X := fun _ ↦ Fin _) (hh i).1).mpr
-    (fun i => place_stateCoeff_eq_zero A (R i) (hh i))
+    WithLp.toLp 2 (stateCoeff A) ∈
+      (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).zeroSpace := by
+  rw [ManyBody.Interaction.mem_zeroSpace_iff]
+  intro i
+  rw [ManyBody.Interaction.ofPlace_term]
+  exact (place_mulVec_eq_zero_iff A (R i) (hh i) _).mpr
+    (stateCoeff_slice_mem_regionGroundSpace A (R i))
 
 end TNLean.PEPS
