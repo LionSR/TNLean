@@ -14,7 +14,7 @@ Removed declaration:
 - `MPOTensor.WeakHopfRepresentation.weakHopfAverage_starProjection_of_rep_eq_one`
   (hypotheses: block injectivity at `L > 0` and `W.rep L 1 = 1`).
 
-Replacement, in `TNLean/MPS/Symmetry/WeakHopfParentAverage.lean`:
+Replacement, in `TNLean/MPS/Symmetry/MPOSymmetry/ParentHamiltonian/WeakHopfParentAverage.lean`:
 
 - `MPOTensor.WeakHopfRepresentation.weakHopfAverage_starProjection` now
   takes `Kraus.IsNBlkInjective A L` for any `L`, with no hypothesis on
@@ -45,8 +45,8 @@ where `Q_1 = I`. If the ideal has a nonzero element, it is everything.
 Otherwise every one-site vector vanishes, and then so does every vector of
 positive length.
 
-The general boundary criteria in `TNLean/MPS/Symmetry/BoundaryUnitSupport.lean`
-and `TNLean/MPS/Symmetry/BoundaryProjectionAverage.lean` are unchanged. They
+The general boundary criteria in `TNLean/MPS/Symmetry/MPOSymmetry/ParentHamiltonian/BoundaryUnitSupport.lean`
+and `TNLean/MPS/Symmetry/MPOSymmetry/ParentHamiltonian/BoundaryProjectionAverage.lean` are unchanged. They
 still apply to an arbitrary operator tensor that has a boundary equal to the
 identity at one injective length.
 

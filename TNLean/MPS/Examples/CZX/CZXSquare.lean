@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.CZX.CZXTensor
-import TNLean.MPS.FundamentalTheorem.Reduction.AssemblyLemmas
+import TNLean.MPS.FundamentalTheorem.Compression.AssemblyLemmas
 
 /-!
 # CZX: compression of the stacked square onto `-δ`

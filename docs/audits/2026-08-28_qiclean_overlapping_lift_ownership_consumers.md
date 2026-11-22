@@ -8,10 +8,10 @@ MPS/MPDO-facing four-cycle construction and obstruction argument.
 
 ## QICLean owners
 
-- `QICLean.Algebra.OverlappingLiftAlgebra` owns the multiplicativity, star,
+- `QICLean.Algebra.Kronecker.OverlappingLiftAlgebra` owns the multiplicativity, star,
   Kronecker, sum, scalar, support-annihilation, and positivity lemmas for
   `Matrix.leftOverlappingLift` and `Matrix.rightOverlappingLift`.
-- `QICLean.Entropy.PositiveOverlappingProduct` owns
+- `QICLean.Entropy.StrongSubadditivity.PositiveOverlappingProduct` owns
   `Matrix.exists_quantumMarkovDecomposition_of_positive_overlapping_product`
   and its generic spatial-decomposition proof.
 
@@ -21,7 +21,7 @@ promoted to the generic public API as `Matrix.leftOverlappingLift_star` and
 
 ## TNLean consumer changes
 
-- `TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.FourCycle` imports the two QICLean
+- `TNLean.MPS.MPDO.CommutingForm.FourCycleMarkov` imports the two QICLean
   owners directly.
 - The duplicate generic modules
   `GSNNCHFourCycleMarkov/OverlappingLiftAlgebra.lean` and

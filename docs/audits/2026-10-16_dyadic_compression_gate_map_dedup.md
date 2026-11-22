@@ -1,7 +1,7 @@
 # Dyadic protocol compression through the general distributed construction
 
 This audit records the public declarations removed from
-`TNLean/PEPS/Approximation/DyadicProtocolCompression.lean`. That module now reads a dyadic
+`TNLean/PEPS/Approximation/Protocol/DyadicProtocolCompression.lean`. That module now reads a dyadic
 protocol as a distributed construction and applies the general compression theorem for
 distributed constructions in `TNLean/Lattice/Compression/DistributedGateMapConstruction.lean`.
 This is the audit note required by `docs/project_conventions.md` §Style. Every non-`Archive` use

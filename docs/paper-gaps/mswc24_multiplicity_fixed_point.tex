@@ -111,7 +111,7 @@ of its block, the state $\sum_j\alpha^{(N)}_j\ket{\Omega_j}$ and its GHZ form ar
 formalized.\footnote{Formal declarations:
     \leanid{MPSTensor.SectorDecomposition.embeddedFixedPointPair} and
     \leanid{MPSTensor.SectorDecomposition.canonicalFixedPointState} in
-    \doclink{TNLean/MPS/Preparation/NonNormalCanonicalForm}.}
+    \doclink{TNLean/MPS/Preparation/BlockSum/NonNormalCanonicalForm}.}
 The counterexample is formalized for the source's construction with the pairs
 placed on one copy: for every $q\geq1$ and $M\geq1$ the overlap of
 (\ref{eq:mswc24_counterexample_approx}) with the normalized target is
@@ -128,7 +128,7 @@ $C(N/q)e^{-\gamma q/\xi_{\mathrm{diag}}}\exp\bigl(C(N/q)e^{-\gamma
     \leanid{MPSTensor.nonNormalApproxOverlap_repeatedBlockTensor},
     \leanid{MPSTensor.tendsto_norm_nonNormalApproxOverlap_repeatedBlockTensor},
     \leanid{MPSTensor.not_approximationError_le_repeatedBlockTensor} in
-    \doclink{TNLean/MPS/Preparation/RepeatedBlockCounterexample}.}
+    \doclink{TNLean/MPS/Preparation/BlockSum/RepeatedBlockCounterexample}.}
 The positive part and the support projector of the blocked tensor are computed
 from the uniqueness of the positive square root of $B^\dagger B$. The computation
 above for an arbitrary placement of the pair of the first block is not formalized.
@@ -149,7 +149,7 @@ printed bound.\footnote{Formal declarations:
     \leanid{MPSTensor.isBNTCanonicalForm_repeatedBlockSector},
     \leanid{MPSTensor.reindex_toTensor_repeatedBlockSector} and
     \leanid{MPSTensor.embeddedFixedPointPair_repeatedBlockSector} in
-    \doclink{TNLean/MPS/Preparation/RepeatedBlockCounterexample}.}
+    \doclink{TNLean/MPS/Preparation/BlockSum/RepeatedBlockCounterexample}.}
 
 The block form (\ref{eq:mswc24_block_form}) also fails when every multiplicity is
 one, as soon as the $q$-site states of distinct blocks are not orthogonal
@@ -227,10 +227,10 @@ formalized.\footnote{Formal declarations:
     \leanid{MPSTensor.nonNormalApproxOverlap_repeatedBlockSum_oneCopy},
     \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy} and
     \leanid{MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum_oneCopy} in
-    \doclink{TNLean/MPS/Preparation/OneCopyPairState};
+    \doclink{TNLean/MPS/Preparation/BlockSum/OneCopyPairState};
     \leanid{MPSTensor.exists_approximationError_le_repeatedBlockSum_oneCopy} and
     \leanid{MPSTensor.exists_approximationError_le_mul_repeatedBlockSum_oneCopy} in
-    \doclink{TNLean/MPS/Preparation/BlockSumError}.}
+    \doclink{TNLean/MPS/Preparation/BlockSum/BlockSumError}.}
 The evaluation of the corrected coefficients on the counterexample above is not formalized
 separately; it is a special case of the identity with the corrected state.
 

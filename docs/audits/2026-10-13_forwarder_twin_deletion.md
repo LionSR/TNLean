@@ -16,37 +16,37 @@ Each entry gives the issue item, the removed declaration, its file, and the
 replacement.
 
 1. `MPSTensor.pairIdentity_mem_pairWordTupleSpan_eventually_of_pairAllWordsSpanTop_period_window`
-   (`TNLean/MPS/MPDO/BiCFDerivation/PairHomogenization/Span.lean`). Replacement:
+   (`TNLean/MPS/CanonicalForm/PairWordSpan/Span.lean`). Replacement:
    `MPSTensor.pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window`,
    which drops the unused all-words span hypothesis.
 2. `TNLean.PEPS.localGauge_exists`
-   (`TNLean/PEPS/FundamentalTheorem/LocalGaugeExtraction.lean`). Replacement:
+   (`TNLean/PEPS/FundamentalTheorem/Injective/LocalGaugeExtraction.lean`). Replacement:
    `TNLean.PEPS.localGauge_exists_of_factorizedLocalGauge`, the same statement.
 3. `TNLean.PEPS.regionUnionPart_inside_disjoint_three`
-   (`TNLean/PEPS/InjectiveRegion.lean`). Replacement:
+   (`TNLean/PEPS/Graph/Region/InjectiveRegion.lean`). Replacement:
    `TNLean.PEPS.regionInside_disjoint_outside`, the same statement after
    unfolding the indexed parts.
 4. `MPSTensor.wolf_theorem_6_8_kraus_span`
-   (`TNLean/Wielandt/Primitivity/Equivalence.lean`). Replacement:
+   (`TNLean/MPS/Transfer/Primitivity/Equivalence.lean`). Replacement:
    `MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank`, the same
    statement; its docstring now names Wolf Theorem 6.8.
 5. `MPSTensor.gauge_unique_up_to_scalar_of_sameMPV`
-   (`TNLean/MPS/Symmetry/GaugeUniqueness.lean`). Replacement:
+   (`TNLean/MPS/Tensor/Gauge/GaugeUniqueness.lean`). Replacement:
    `MPSTensor.gauge_unique_up_to_scalar`, which drops the unused equal-MPV
    hypothesis.
 7. `TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective_all`
-   (`TNLean/PEPS/EdgeMiddlePhysical/Basic.lean`). Replacement:
+   (`TNLean/PEPS/FundamentalTheorem/Injective/EdgeMiddlePhysical.lean`). Replacement:
    `TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective`, the
    same assertion with the edge as an explicit argument.
-8. `MPOTensor.CZX.tensor_eq_blockTensor` (`TNLean/MPS/MPDO/CZXTensor.lean`).
+8. `MPOTensor.CZX.tensor_eq_blockTensor` (`TNLean/MPS/MPDO/CZX/CZXTensor.lean`).
    Replacement: `MPOTensor.blockTwo_eq_blockTensor_reindex` applied to
    `MPOTensor.CZX.decoratedSiteTensor`.
 9. `TNLean.PEPS.hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula`
-   (`TNLean/PEPS/LocalGauge.lean`). Replacement:
+   (`TNLean/PEPS/FundamentalTheorem/Injective/LocalGauge.lean`). Replacement:
    `TNLean.PEPS.hasFactorizedLocalGauge_of_localGaugeFormula`, the same
    statement, since `BlockedMiddleGaugeFormula` abbreviates its hypothesis.
 10. The private `subalgebra_prod_eq_top_of_axes`
-    (`TNLean/MPS/MPDO/BiCFDerivation/PairHomogenization/Algebra.lean`) was
+    (`TNLean/MPS/CanonicalForm/PairWordSpan/Algebra.lean`) was
     inlined into `MPSTensor.matrixPairSubalgebra_eq_top_of_axes`, its only use.
 
 The only Lean call site, in `TNLean.PEPS.localGauge_exists_of_blockedMiddleGaugeFormula`,

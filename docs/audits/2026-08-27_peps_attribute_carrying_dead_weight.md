@@ -8,9 +8,9 @@ repository-local pass-through exception of `docs/project_conventions.md` §Style
 
 | Removed | Replacement |
 |---|---|
-| `TNLean.PEPS.notMem_vertexComplementVertices_self` (`@[simp]`, `TNLean/PEPS/VertexComplement/Basic.lean`) | `TNLean.PEPS.mem_vertexComplementVertices_iff`, the sibling `@[simp]` iff immediately above it in the same file, which subsumes it |
-| `TNLean.PEPS.instFintypeVertexComplementPhysicalConfig` (`TNLean/PEPS/VertexComplement/Basic.lean`) | `Pi.fintype`, found through the reducible `abbrev VertexComplementPhysicalConfig` — the removed body was literally `inferInstance` |
-| `TNLean.PEPS.edgeComplementConfigSplitAt_fst` (`@[simp]`, `TNLean/PEPS/EdgeMiddlePhysical/KernelDescent.lean`) | none — the forward direction of the splitting equivalence is used nowhere; the lemma actually consumed in the file is the sibling `edgeComplementValue_edgeComplementConfigSplitAt_symm` |
+| `TNLean.PEPS.notMem_vertexComplementVertices_self` (`@[simp]`, `TNLean/PEPS/Tensor/Region/VertexComplement.lean`) | `TNLean.PEPS.mem_vertexComplementVertices_iff`, the sibling `@[simp]` iff immediately above it in the same file, which subsumes it |
+| `TNLean.PEPS.instFintypeVertexComplementPhysicalConfig` (`TNLean/PEPS/Tensor/Region/VertexComplement.lean`) | `Pi.fintype`, found through the reducible `abbrev VertexComplementPhysicalConfig` — the removed body was literally `inferInstance` |
+| `TNLean.PEPS.edgeComplementConfigSplitAt_fst` (`@[simp]`, `TNLean/PEPS/FundamentalTheorem/Injective/EdgeMiddleKernelDescent.lean`) | none — the forward direction of the splitting equivalence is used nowhere; the lemma actually consumed in the file is the sibling `edgeComplementValue_edgeComplementConfigSplitAt_symm` |
 
 ## What was checked
 

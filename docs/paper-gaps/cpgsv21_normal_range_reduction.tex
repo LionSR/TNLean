@@ -92,10 +92,10 @@ difficult inclusion in
 Eq.~\ref{eq:cpgsv21_normal_range_reduction_periodic_ground_space} combines a
 complementary-word argument for $L_0+1<N$ with a full-ring cyclic change of cut
 for $N=L_0+1$.\footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:738 for
+\path{TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean}:738 for
 \leanid{MPSTensor.chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction},
 and
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:776 for
+\path{TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean}:776 for
 \leanid{MPSTensor.chainGroundSpace_eq_mpvSubmodule_normal}. The formal
 hypotheses are named \leanid{Kraus.IsNormal A} and
 \leanid{Kraus.IsNBlkInjective A L0}, together with
@@ -113,11 +113,11 @@ available intersection theorem applies to a tensor that is already injective
 at one site. Its proof writes the identity as a linear combination of the
 one-site matrices $A_j$ and iterates the resulting single-letter intersection
 property through contiguous windows.\footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean}:343 for
+\path{TNLean/MPS/Tensor/GroundSpace/IntersectionProperty.lean}:343 for
 \leanid{MPSTensor.groundSpace_intersection},
-\path{TNLean/MPS/Chain/OneSidedInverse.lean}:67 for
+\path{TNLean/MPS/Tensor/Words/OneSidedInverse.lean}:67 for
 \leanid{Kraus.decompositionMap hA 1}, and
-\path{TNLean/MPS/ParentHamiltonian/CyclicWindow.lean}:220--257 for the
+\path{TNLean/MPS/Tensor/GroundSpace/CyclicWindow.lean}:220--257 for the
 contiguous iteration.}
 For a normal tensor with injectivity length $L_0$, the available inverse acts
 on words of length $L_0$, not on individual letters. This does not contradict
@@ -131,9 +131,9 @@ chain belongs to its full MPS ground space. Cyclic-window monotonicity derives
 this conclusion from the cyclic length-$L$ constraints. This formalizes the
 iterated open-boundary argument without using the single-site intersection
 lemma.\footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:107 for
+\path{TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean}:107 for
 \leanid{MPSTensor.contiguous_mem_groundSpace_of_isNBlkInjective}, and
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:169 for
+\path{TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean}:169 for
 \leanid{MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective}.}
 
 \section{The boundary block-window identity}
@@ -201,10 +201,10 @@ boundary-product lemma gives
 Here $W_\eta$ corresponds to the restriction beginning at the last site, and
 $V_\eta$ corresponds to the second boundary-crossing restriction.\footnote{
 Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean} for
+\path{TNLean/MPS/Tensor/GroundSpace/BoundaryClosingStripping.lean} for
 \leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap},
 and
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosing.lean} for
+\path{TNLean/MPS/Tensor/GroundSpace/BoundaryClosing.lean} for
 \leanid{MPSTensor.closure_property_boundary_one_sided_products_of_groundSpaceMap}.}
 The block-injective commutation lemma applied to this local comparison yields
 Eq.~\ref{eq:cpgsv21_normal_range_reduction_one_site_commutation}.\footnote{In
@@ -235,16 +235,16 @@ The first-letter restriction lemma then gives
 Thus Eq.~\ref{eq:cpgsv21_normal_range_reduction_boundary_restriction_equality}
 follows from the one-sided products and the commutation identity; it is not
 the primitive comparison.\footnote{Formal locations:
-\path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean} for
+\path{TNLean/MPS/Tensor/GroundSpace/BoundaryMatrixBlock.lean} for
 \leanid{MPSTensor.boundary_restrictions_eq_of_commutes_and_one_sided}, and
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean} for its use in
+\path{TNLean/MPS/Tensor/GroundSpace/BoundaryClosingStripping.lean} for its use in
 \leanid{MPSTensor.closure_property_boundary_restrictions_eq_of_groundSpaceMap}.}
 
 The block-injective commutation lemma reduces
 Eq.~\ref{eq:cpgsv21_normal_range_reduction_one_site_commutation} to
 Eq.~\ref{eq:cpgsv21_normal_range_reduction_block_window_matrix_identity}.
 \footnote{Formal location:
-\path{TNLean/MPS/ParentHamiltonian/BoundaryMatrixBlock.lean} for
+\path{TNLean/MPS/Tensor/GroundSpace/BoundaryMatrixBlock.lean} for
 \leanid{MPSTensor.boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq}.}
 The last cyclic window first yields only
 \begin{align}
@@ -272,7 +272,7 @@ turns Eq.~\ref{eq:cpgsv21_normal_range_reduction_block_word_trace_identity}
 into
 Eq.~\ref{eq:cpgsv21_normal_range_reduction_block_window_matrix_identity}.
 \footnote{Formal location:
-\path{TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean} for
+\path{TNLean/MPS/Tensor/GroundSpace/BoundaryClosingStripping.lean} for
 \leanid{MPSTensor.block_window_matrix_equation_of_trace_evalWord_mul_eq_of_isNBlkInjective}.}
 The source-labelled formal statement is
 \leanid{MPSTensor.closure_property_boundary_block_window_equation_of_groundSpaceMap}.

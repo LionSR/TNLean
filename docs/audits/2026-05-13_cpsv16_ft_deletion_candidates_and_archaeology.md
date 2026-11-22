@@ -144,7 +144,7 @@ Recommended status: **KEEP** with a note that they survive the deletion.
 **Grand total:** ≈ 1650 lines, 20 declarations, 6 entire files, in 9 files
 touched, all in `TNLean/MPS/FundamentalTheorem/Full/`. No other directory is
 affected (per the grep audit: `EventuallyNonzeroProportionalMPV₂` is referenced
-*only* inside `Full/` plus its definition in `MPS/Defs.lean`).
+*only* inside `Full/` plus its definition in `MPS/Tensor/Defs.lean`).
 
 After the cull, the proportional-case subtree retains exactly:
 
@@ -307,7 +307,7 @@ No.
 * `audits/lean_spaghetti_*.md`, `audits/2026-02-19_proof_structure_audit_memo.md`:
   "peeling" appears in these but refers to *block-separation / CFSep
   exponential bound* peeling — a completely different argument in
-  `PiAlgebra/CanonicalFormSepAux.lean`.
+  `MPS/CanonicalForm/BlockFamily.lean`.
 
 The earliest documents that diagnose the wrong-direction subgraph are:
 

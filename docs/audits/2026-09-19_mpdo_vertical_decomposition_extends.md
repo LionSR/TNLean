@@ -26,8 +26,8 @@ field-by-field transcriptions and two duplicated pass-through lemmas.
 ## What changed
 
 `MPOTensor.CPSVVerticalDecomposition` moved from
-`TNLean/MPS/MPDO/RFPPositiveFusionDecomposition.lean` to
-`TNLean/MPS/MPDO/BNTAlgebraTensorClause.lean`. The move is upstream and was
+`TNLean/MPS/MPDO/Fusion/RFPPositiveFusionDecomposition.lean` to
+`TNLean/MPS/MPDO/Coefficients/BNTAlgebraTensorClause.lean`. The move is upstream and was
 forced: `RFPPositiveFusionDecomposition` already imports
 `BNTAlgebraTensorClause` transitively through
 `VerticalBlockedOperatorRepresentations`, so the two clauses could not have
@@ -44,7 +44,7 @@ fields: `coeffs` and `algebraClause` for the algebra clause, and `chi` through
 because the parent projection resolves `H.labelCount` and its siblings.
 
 `MPOTensor.BNTFusionTensorClause.toBNTAlgebraTensorClause` and the fusion
-clause assembled in `TNLean/MPS/MPDO/BNTFusionTensorClauseFromRFP.lean` now
+clause assembled in `TNLean/MPS/MPDO/Fusion/BNTFusionTensorClauseFromRFP.lean` now
 pass the parent structure as a whole instead of transcribing its twelve
 fields.
 

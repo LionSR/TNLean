@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.EntropyScaling.CutReducedState
-import QICLean.Entropy.RenyiRankLowerBound
-import QICLean.Entropy.FilterOptimizer
-import QICLean.Entropy.RegionEntropy
+import TNLean.MPS.Tensor.OpenMPS.CutReducedState
+import QICLean.Entropy.Renyi.RankLowerBound
+import QICLean.ManyBody.Entropy.Filter.Optimizer
+import QICLean.ManyBody.Entropy.RegionEntropy
 
 /-!
 # Rényi lower bounds for matrix product state approximation

@@ -7,7 +7,7 @@ body applied the general theorem with the proportionality scalars set to one.
 
 | Removed | Replacement |
 |---|---|
-| `MPOTensor.isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL` (`TNLean/MPS/MPDO/OrthogonalSectorAreaLaw.lean`) | `MPOTensor.isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL` (same file), at $a_{x,N}=c_N=1$ via `OrthogonalCommutingSectorFamily.toProportional` |
+| `MPOTensor.isSAL_of_orthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL` (`TNLean/MPS/MPDO/BNTSectors/OrthogonalSectorAreaLaw.lean`) | `MPOTensor.isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL` (same file), at $a_{x,N}=c_N=1$ via `OrthogonalCommutingSectorFamily.toProportional` |
 
 ## Blueprint
 

@@ -24,24 +24,24 @@ Their original physical correlators are retained.
 ## Direct import owners
 
 `StringOrderDefs` used none of the seven declarations in
-`TNLean.Spectral.TransferOperatorGapInjective`. Its actual requirements from
+`TNLean.MPS.Transfer.Spectrum.TransferOperatorGapInjective`. Its actual requirements from
 that import were:
 
 - `Kraus.mixedMapLM` and `Kraus.mixedMapLM_apply`, owned by
-  `QICLean.Kraus.MixedMap`
+  `QICLean.Kraus.MixedMap.Basic`
 - `pow_tendsto_zero_of_spectralRadius_lt_one`, owned by
-  `QICLean.Analysis.SpectralRadiusPowerDecay`
+  `QICLean.Spectral.Radius.PowerDecay`
 - The matrix operator-norm structures, owned by
-  `QICLean.Algebra.MatrixOperatorSpace` and selected with `TNOperatorSpace`,
+  `QICLean.Analysis.Norm.MatrixOperatorSpace` and selected with `TNOperatorSpace`,
   replacing their incidental availability through the spectral `Kraus` scope
 
-The same file used no declaration from `TNLean.MPS.Symmetry.Defs`; its tensor
-vocabulary is supplied by `TNLean.MPS.Defs`. The direct importers outside the
+The same file used no declaration from `TNLean.MPS.Tensor.Gauge.OnSiteSymmetry`; its tensor
+vocabulary is supplied by `TNLean.MPS.Tensor.Defs`. The direct importers outside the
 generated aggregator are `StringOrder`, `StringOrderAux`,
 `PhysicalStringEndpoints`, and `AKLTPhysicalStringOrder`. None uses an export
 of the removed injective spectral leaf. `StringOrder` does use
 `modulus_one_eigenvalue_implies_gauge_of_irreducible_TP`, so it imports its
-actual owner `TNLean.Spectral.TransferOperatorGapNT` directly. Its
+actual owner `TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT` directly. Its
 `twistedTensor` and `IsOnSiteSymmetric` uses remain supplied by the existing
 `VirtualRepresentation` import.
 

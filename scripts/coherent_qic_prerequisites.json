@@ -1,10 +1,10 @@
 {
   "modules": [
-    "QICLean.Algebra.ZModCyclicSums",
-    "QICLean.Analysis.FiniteRangeKnabe",
-    "QICLean.Analysis.PositiveGapTransfer",
-    "QICLean.Analysis.TwoProjectionCompression",
-    "QICLean.Analysis.WeightedSupertrace",
+    "QICLean.Algebra.Combinatorics.ZModCyclicSums",
+    "QICLean.Spectral.Gap.FiniteRangeKnabe",
+    "QICLean.Spectral.Gap.PositiveGapTransfer",
+    "QICLean.Analysis.Projection.TwoProjectionCompression",
+    "QICLean.Analysis.Norm.WeightedSupertrace",
     "QICLean.Channel.Irreducible.Ergodicity",
     "QICLean.Channel.Irreducible.FromSpectral",
     "QICLean.Channel.Irreducible.KrausGauge",
@@ -16,7 +16,7 @@
     "QICLean.Channel.Semigroup.Primitivity.Helpers",
     "QICLean.Channel.Semigroup.Primitivity.IrreducibleAnalysis",
     "QICLean.Channel.Semigroup.Primitivity.SpectralMapping",
-    "QICLean.Channel.WolfTheorem68",
+    "QICLean.Kraus.Wielandt.PrimitiveCriterion",
     "QICLean.Kraus.MixedMap.Gap",
     "QICLean.Kraus.PrimitiveFixedPoint",
     "QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral",
@@ -24,8 +24,8 @@
     "QICLean.Kraus.Wielandt.Primitivity.StronglyIrreducibleToFullWordSpan",
     "QICLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive",
     "QICLean.Kraus.Wielandt.RectangularSpan.Universality",
-    "QICLean.Spectral.GaugeConstruction",
-    "QICLean.Spectral.TransferOperatorGapNormalized",
-    "QICLean.Spectral.TransferOperatorGapRectNormalized"
+    "QICLean.Kraus.MixedMap.GaugeConstruction",
+    "QICLean.Kraus.MixedMap.TransferOperatorGapNormalized",
+    "QICLean.Kraus.MixedMap.TransferOperatorGapRectNormalized"
   ]
 }

@@ -11,8 +11,8 @@ blueprint `\lean{...}` tag keeps its target.
 
 | Absorbed modules | Surviving module |
 |---|---|
-| `TNLean/PEPS/RegionBlock/UnionInjectivityOverlap.lean`, `TNLean/PEPS/RegionBlock/UnionInjectivityOverlap2.lean` | `TNLean/PEPS/RegionBlock/UnionInjectivityOverlapSetup.lean` |
-| `TNLean/PEPS/RegionBlock/UnionInjectivityOverlap3b.lean`, `TNLean/PEPS/RegionBlock/UnionInjectivityOverlap6.lean` | `TNLean/PEPS/RegionBlock/UnionInjectivityOverlapBridge.lean` |
+| `TNLean/PEPS/RegionBlock/UnionInjectivityOverlap.lean`, `TNLean/PEPS/RegionBlock/UnionInjectivityOverlap2.lean` | `TNLean/PEPS/Injectivity/Region/OverlapUnionGeometry.lean` |
+| `TNLean/PEPS/RegionBlock/UnionInjectivityOverlap3b.lean`, `TNLean/PEPS/RegionBlock/UnionInjectivityOverlap6.lean` | `TNLean/PEPS/Injectivity/Region/OverlapUnion.lean` |
 
 Both pairs are phase-honest rather than arithmetic. The first pair holds the
 setup of the source's two-step inverse application: the two host three-block
@@ -37,8 +37,8 @@ References blocks are dropped as duplicates.
 
 | Old path | New path |
 |---|---|
-| `TNLean/PEPS/TorusFundamentalTheorem2.lean` | `TNLean/PEPS/TorusUnconditionalFundamentalTheorem.lean` |
-| `TNLean/PEPS/NormalSquareFundamentalTheorem2.lean` | `TNLean/PEPS/NormalSquareUnconditionalFundamentalTheorem.lean` |
+| `TNLean/PEPS/TorusFundamentalTheorem2.lean` | `TNLean/PEPS/FundamentalTheorem/Torus/TorusUnconditionalFundamentalTheorem.lean` |
+| `TNLean/PEPS/NormalSquareFundamentalTheorem2.lean` | `TNLean/PEPS/FundamentalTheorem/Normal/NormalSquareUnconditionalFundamentalTheorem.lean` |
 
 Neither module is a continuation. `TorusFundamentalTheorem.lean` proves the
 scalar condition on the discrete torus and is a separate mathematical layer, not

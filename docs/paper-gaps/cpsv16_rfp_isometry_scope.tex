@@ -79,14 +79,14 @@ structural theorem there, and pulls the result back along the similarity; the
 converse follows directly from the rank-one transfer formula.\footnote{Formal
 declarations:
 \leanid{MPSTensor.GaugeEquiv.isIsometryCanonicalForm_iff} in
-\doclink{TNLean/MPS/RFP/StructuralFull} and
+\doclink{TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralFull} and
 \leanid{MPSTensor.IsNormalTensor.isTransferIdempotent_iff_isIsometryCanonicalForm}
-in \doclink{TNLean/MPS/RFP/NormalIsometryCharacterization}.}
+in \doclink{TNLean/MPS/RFP/CPSVCanonicalForm}.}
 
 Applied to each block of an indexed family, the same theorem gives the
 following.\footnote{Formal declaration:
 \leanid{MPSTensor.rfp_nt_structural_full} in
-\doclink{TNLean/MPS/RFP/StructuralFull}.}
+\doclink{TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralFull}.}
 For each block $k$, let $D_k$ denote its bond dimension. The theorem gives
 \begin{align}
     A_k^i
@@ -137,7 +137,7 @@ A comparison theorem rescales this single-block decomposition by
 \end{align}
 \footnote{Formal declaration:
 \leanid{MPSTensor.rfp_nt_structural_full_unit_pair} in
-\doclink{TNLean/MPS/RFP/StructuralFull}.}
+\doclink{TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralFull}.}
 This rescaling leaves $\Lambda_kU_k^i$ unchanged and recovers the diagonal
 pair-index equation in the source unit convention,
 \begin{align}
@@ -351,7 +351,7 @@ $\Lambda$ at line~1278 is an imprecise notation for the dressing.
 
 The trace-normalized isometry canonical form is captured by a dedicated
 predicate.\footnote{Formal declaration: \leanid{MPSTensor.IsIsometryCanonicalForm}
-in \doclink{TNLean/MPS/RFP/StructuralFull}.}
+in \doclink{TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralFull}.}
 It asserts the existence of an invertible matrix $X$, a positive diagonal
 matrix $\Lambda$ with $\sum_\alpha\Lambda_\alpha=1$, and a unit pair-index
 isometry $U$ such that
@@ -597,7 +597,7 @@ then the direct sum is a renormalization fixed point:
 \end{align}
 \footnote{Formal declaration:
 \leanid{MPSTensor.isTransferIdempotent_directSumTensor_of_isIsometryCanonicalForm}
-in \doclink{TNLean/MPS/RFP/ResidualIsometry}.}
+in \doclink{TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/ResidualIsometry}.}
 This follows from transfer-map block additivity.\footnote{Formal theorem:
 \leanid{MPSTensor.blockTransferSum_idempotent_of_isIsometryCanonicalForm}.}
 Decomposing the direct-sum transfer map blockwise,\footnote{Formal decomposition:

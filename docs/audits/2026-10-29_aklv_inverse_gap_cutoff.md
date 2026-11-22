@@ -7,7 +7,7 @@ its cutoff **32768(e+g)/g²**. The operator being clipped is unchanged.
 Base: `20acc2f1bb3c9b3f00a53e58d0e50c413fe2e7e0` on
 `codex/aklv-robustness-9837-public`, verified against
 [PR #10327](https://github.com/LionSR/TNLean/pull/10327).
-The refinement is isolated in `TNLean/MPS/AreaLaw/AKLV/InverseGapRobustness.lean`.
+The refinement is isolated in `TNLean/MPS/AreaLaw/ChebyshevAGSP/InverseGapRobustness.lean`.
 All eleven accepted AKLV proof modules are byte-identical to that base.
 The existing Blueprint chapter is extended by an appended section; its original
 prefix, including the accepted theorem and proof, is byte-identical.
@@ -100,7 +100,7 @@ no builds; compilation and `#print axioms` audits were performed separately by t
 - Existing dependency checkouts and cached `Mathlib.olean` verified before
   building. An independent cache copy was used, with cross-commit TNLean
   outputs removed. No Mathlib source rebuild or pin change.
-- `lake build TNLean.MPS.AreaLaw.AKLV.NormalizedChain` passed (3259 jobs),
+- `lake build TNLean.MPS.AreaLaw.ChebyshevAGSP.NormalizedChain` passed (3259 jobs),
   then the new target passed (3260 jobs; changed module 8.9 seconds).
   The AKLV aggregator target also passed (3261 jobs).
 - Strict elaboration passed with warnings as errors, strict implicits,

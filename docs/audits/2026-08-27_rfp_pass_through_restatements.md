@@ -9,8 +9,8 @@ canonical-form predicate.
 
 | Removed | Replacement |
 |---|---|
-| `MPSTensor.rfp_iff_zcl` (`TNLean/MPS/RFP/Assembly.lean`, file deleted) | `MPSTensor.zcl_iff_idempotent_transfer` applied to the chosen block and symmetrized: `(MPSTensor.zcl_iff_idempotent_transfer (A k)).symm` (`TNLean/MPS/RFP/ZeroCorrelationLength.lean`), which is exactly what the removed proof body was |
-| `MPSTensor.rfp_cf_structural` (`TNLean/MPS/RFP/StructuralForm.lean`) | `MPSTensor.IsCanonicalForm.block_injective` (`TNLean/PiAlgebra/CanonicalFormSepAux.lean`), the structure field the removed proof body already returned |
+| `MPSTensor.rfp_iff_zcl` (`TNLean/MPS/RFP/Assembly.lean`, file deleted) | `MPSTensor.zcl_iff_idempotent_transfer` applied to the chosen block and symmetrized: `(MPSTensor.zcl_iff_idempotent_transfer (A k)).symm` (`TNLean/MPS/CanonicalForm/Correlation/ZeroCorrelationLength.lean`), which is exactly what the removed proof body was |
+| `MPSTensor.rfp_cf_structural` (`TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralForm.lean`) | `MPSTensor.IsCanonicalForm.block_injective` (`TNLean/MPS/CanonicalForm/BlockFamily.lean`), the structure field the removed proof body already returned |
 
 ## What was checked
 
@@ -26,7 +26,7 @@ so the file was deleted. Its only importer was the generated aggregator
 line. `TNLean.lean` is unchanged.
 
 An attempt to also drop the now-unused direct import of the canonical-form
-auxiliary module from `TNLean/MPS/RFP/StructuralForm.lean` was reverted: that
+auxiliary module from `TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralForm.lean` was reverted: that
 module is the only route by which the file reaches the unitary
 diagonal-fixed-point existence theorem it still uses, and the root build fails
 without it.
@@ -53,7 +53,7 @@ carries.
 ## What is retained
 
 The prose bullet naming the second declaration was removed from the
-`## Main results` list of `TNLean/MPS/RFP/StructuralForm.lean`; the other four
+`## Main results` list of `TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralForm.lean`; the other four
 bullets and the `## Proof strategy` section are untouched. The dated scouting
 and inventory records under `docs/audits/` that mention the two old names as
 historical entries were deliberately left alone.

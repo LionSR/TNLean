@@ -22,12 +22,12 @@ without adding new `sorry`/`axiom`.
 - `CLAUDE.md`, `docs/PROOF_INTEGRITY.md`, `docs/style.md`,
   `docs/blueprint_style_guide.md`
 - issue #460 full thread, including the owner comments after PRs #694 and #757
-- `TNLean/MPS/ParentHamiltonian/GroundSpace.lean`
-- `TNLean/MPS/ParentHamiltonian/Defs.lean`
-- `TNLean/MPS/ParentHamiltonian/Basic.lean`
-- `TNLean/MPS/ParentHamiltonian/CyclicWindow.lean`
+- `TNLean/MPS/Tensor/GroundSpace/GroundSpace.lean`
+- `TNLean/MPS/Tensor/GroundSpace/ParentHamiltonian.lean`
+- `TNLean/MPS/Tensor/GroundSpace/ParentHamiltonianBasic.lean`
+- `TNLean/MPS/Tensor/GroundSpace/CyclicWindow.lean`
 - `TNLean/MPS/ParentHamiltonian/Martingale.lean`
-- `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`
+- `TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean`
 - `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean`
 - Mathlib files:
   - `Mathlib/Analysis/InnerProductSpace/Positive.lean`
@@ -67,7 +67,7 @@ The current sorry surface relevant to this issue is:
   - `parentHamiltonianES_gap_bound_of_friedrichs`
 - `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean`
   - `parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition`
-- `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`
+- `TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean`
   - `chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction`
     (upstream dependency for the degenerate-GS route)
 
@@ -172,7 +172,7 @@ I checked that the relevant building blocks already typecheck on current
 ```bash
 cd .worktrees/issue-460-friedrichs
 lake build TNLean.MPS.ParentHamiltonian.Martingale
-lake build TNLean.MPS.ParentHamiltonian.CyclicWindow
+lake build TNLean.MPS.Tensor.GroundSpace.CyclicWindow
 lake env lean /tmp/issue460_friedrichs_scratch.lean
 ```
 
@@ -180,7 +180,7 @@ with
 
 ```lean
 import TNLean.MPS.ParentHamiltonian.Martingale
-import TNLean.MPS.ParentHamiltonian.CyclicWindow
+import TNLean.MPS.Tensor.GroundSpace.CyclicWindow
 import Mathlib.Analysis.InnerProductSpace.Positive
 
 namespace MPSTensor

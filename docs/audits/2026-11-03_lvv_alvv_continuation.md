@@ -27,15 +27,15 @@ For the actual canonical random construction, one common reference, collection o
 
     max(L-1,0)/(L+1)^2.
 
-The proof uses the true failure event of the literal sampled parent. A parent coordinate does not affect either actual child. Uniform conditional section estimates therefore bound the union of guarded failures, and the actual root subdivision contains at most L-1 internal intervals. No viability assumption on other overlapping intervals or supplied sampling-success hypothesis is used. See [PhysicalDGCanonicalJointProbability.lean](../../TNLean/MPS/AreaLaw/PhysicalDGCanonicalJointProbability.lean).
+The proof uses the true failure event of the literal sampled parent. A parent coordinate does not affect either actual child. Uniform conditional section estimates therefore bound the union of guarded failures, and the actual root subdivision contains at most L-1 internal intervals. No viability assumption on other overlapping intervals or supplied sampling-success hypothesis is used. See [PhysicalDGCanonicalJointProbability.lean](../../TNLean/MPS/AreaLaw/LowEnergyAlgorithm/DegenerateGround/PhysicalDGCanonicalJointProbability.lean).
 
 The canonical construction also has a checked approximation theorem. For fixed local dimension q and positive gap lower bound gamma, constants C>0 and k are chosen before the chain, interactions, ground multiplicity r, requested accuracy eta and samples. The physical families precede eta. At each positive eta, one common radius is selected before the samples. Every successful sample supplies its own actual root, unchanged, to the literal final filter-and-trim iteration. The actual compressed Ritz subspace of its terminal space has dimension r, both directed errors at most eta/2, and a common bound for every vector:
 
     bond <= C [(L+1)(r+1)(1+1/eta)]^k.
 
-The same bond bounds every vector of that sample's initial native root. This concerns the actual recursive output and its actual Ritz space. See [PhysicalDGCanonicalApproximation.lean](../../TNLean/MPS/AreaLaw/PhysicalDGCanonicalApproximation.lean).
+The same bond bounds every vector of that sample's initial native root. This concerns the actual recursive output and its actual Ritz space. See [PhysicalDGCanonicalApproximation.lean](../../TNLean/MPS/AreaLaw/LowEnergyAlgorithm/DegenerateGround/PhysicalDGCanonicalApproximation.lean).
 
-A separate theorem for the selected interleaved operation gives explicit coefficient and degree estimates: one universal C0 precedes q and gamma, and both k and log(max(C,1)) are at most C0 U^10/g^2, where g=min(gamma,1) and U=1+log(max(q,50))+log(1/g). See [PhysicalDGInterleavedPolynomialBond.lean](../../TNLean/MPS/AreaLaw/PhysicalDGInterleavedPolynomialBond.lean). The canonical theorem above currently records the qualitative polynomial conclusion.
+A separate theorem for the selected interleaved operation gives explicit coefficient and degree estimates: one universal C0 precedes q and gamma, and both k and log(max(C,1)) are at most C0 U^10/g^2, where g=min(gamma,1) and U=1+log(max(q,50))+log(1/g). See [PhysicalDGInterleavedPolynomialBond.lean](../../TNLean/MPS/AreaLaw/LowEnergyAlgorithm/DegenerateGround/PhysicalDGInterleavedPolynomialBond.lean). The canonical theorem above currently records the qualitative polynomial conclusion.
 
 The block leaves, hard-clipped families, capped gap, fixed failure scale and corrected counts are documented in the paper-gap notes. Identification with the printed soft-truncated generation procedure, its printed energy-power count and its computational running time remain separate obligations. A polynomial bound on output size is not a proof of polynomial running time.
 
@@ -52,7 +52,7 @@ The sharper MPS approximation now gives one normalized witness satisfying both a
 
     K_eta [u^3/g + g^(-1/4) A^(3/4) u] (1+log A).
 
-For the designated cut A uses log(128/delta); the global bound uses log(128(L+1)/delta). The same witness has squared distance at most delta/2. The scalar case q=1 and zero-length and endpoint cases are included. See [LowDensityDesignatedApproximation.lean](../../TNLean/MPS/AreaLaw/LowDensityDesignatedApproximation.lean) and [the low-energy scope note](../paper-gaps/alvv16_low_energy_family_scope.tex). The continuation also constructs the actual linear image of a standard orthonormal basis of the inner band under its chosen normalized MPS approximants. The map is injective; its range has exactly the inner-band dimension; it approximates the inner band in both directions; and its standard orthonormal basis consists of MPS with bond at most rInner*rOuter*B. The common factor B precedes the basis and vectors. Its accuracy profile uses log(1024(L+1)(rInner+1)/delta). This is mathematical basis existence; the source's complete low-density algorithm, energy guarantee and running time remain separate. See [LowEnergyMPSBasis.lean](../../TNLean/MPS/AreaLaw/LowEnergyMPSBasis.lean).
+For the designated cut A uses log(128/delta); the global bound uses log(128(L+1)/delta). The same witness has squared distance at most delta/2. The scalar case q=1 and zero-length and endpoint cases are included. See [LowDensityDesignatedApproximation.lean](../../TNLean/MPS/AreaLaw/LowEnergyAlgorithm/LowDensity/LowDensityDesignatedApproximation.lean) and [the low-energy scope note](../paper-gaps/alvv16_low_energy_family_scope.tex). The continuation also constructs the actual linear image of a standard orthonormal basis of the inner band under its chosen normalized MPS approximants. The map is injective; its range has exactly the inner-band dimension; it approximates the inner band in both directions; and its standard orthonormal basis consists of MPS with bond at most rInner*rOuter*B. The common factor B precedes the basis and vectors. Its accuracy profile uses log(1024(L+1)(rInner+1)/delta). This is mathematical basis existence; the source's complete low-density algorithm, energy guarantee and running time remain separate. See [LowEnergyMPSBasis.lean](../../TNLean/MPS/AreaLaw/LowEnergyAlgorithm/LowDensity/LowEnergyMPSBasis.lean).
 
 ## Soft truncation and recursive energy estimates
 
@@ -79,7 +79,7 @@ calibrated root-energy argument into a mathematical auxiliary. The public
 signature remains byte-identical. The earlier 98.169-second private check and
 failed 50-second ordinary check remain historical diagnostics; they are not
 presented as passing production checks. See
-[PhysicalDGCanonicalEnergyApproximation.lean](../../TNLean/MPS/AreaLaw/PhysicalDGCanonicalEnergyApproximation.lean).
+[PhysicalDGCanonicalEnergyApproximation.lean](../../TNLean/MPS/AreaLaw/LowEnergyAlgorithm/PhysicalDGCanonicalEnergyApproximation.lean).
 
 ## Measurable sampling and trimming
 

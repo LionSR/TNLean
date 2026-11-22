@@ -10,19 +10,19 @@ consumers were found by searching every final name component across
 
 | Deleted module | Content now lives in |
 |---|---|
-| `TNLean/Wielandt/Primitivity/ImpliesStronglyIrreducibleAux.lean` | `TNLean/Wielandt/Primitivity/ImpliesStronglyIrreducible.lean`: `exists_hermitian_ne_zero_trace_zero_pow_fixedPoint`, `isPeripherallyPrimitive_of_isPrimitivePaper`, `isStronglyIrreduciblePaper_of_isPrimitivePaper`, unchanged |
-| `TNLean/Wielandt/Primitivity/ImpliesIrreducible.lean` | `TNLean/Wielandt/Primitivity/StronglyIrreducibleToFullRank.lean`: `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef`, unchanged |
-| `TNLean/MPS/Structure/PrimitivityBridge.lean` | `TNLean/MPS/Overlap/PeripheralToTransferMapGap.lean`: `IsPrimitiveMPS.overlap_tendsto_one`, unchanged |
+| `TNLean/Wielandt/Primitivity/ImpliesStronglyIrreducibleAux.lean` | `TNLean/MPS/Transfer/Primitivity/ImpliesStronglyIrreducible.lean`: `exists_hermitian_ne_zero_trace_zero_pow_fixedPoint`, `isPeripherallyPrimitive_of_isPrimitivePaper`, `isStronglyIrreduciblePaper_of_isPrimitivePaper`, unchanged |
+| `TNLean/Wielandt/Primitivity/ImpliesIrreducible.lean` | `TNLean/MPS/Transfer/Primitivity/StronglyIrreducibleToFullRank.lean`: `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef`, unchanged |
+| `TNLean/MPS/Structure/PrimitivityBridge.lean` | `TNLean/MPS/Transfer/Spectrum/PrimitiveOverlap.lean`: `IsPrimitiveMPS.overlap_tendsto_one`, unchanged |
 
 ## Removed declaration and its replacement
 
 | Removed declaration | Replacement |
 |---|---|
-| `MPSTensor.HasPrimitiveFixedPoint.overlap_tendsto_one` (`MPS/Structure/PrimitivityBridge.lean`, deleted) | `MPSTensor.IsPrimitiveMPS.overlap_tendsto_one` applied to the witness of `MPSTensor.HasPrimitiveFixedPoint`, which was its whole body; its one consumer, `overlap_tendsto_one_of_peripheralPrimitive_of_irreducible` in `MPS/Overlap/PeripheralToTransferMapGap.lean`, now inlines that step |
+| `MPSTensor.HasPrimitiveFixedPoint.overlap_tendsto_one` (`MPS/Structure/PrimitivityBridge.lean`, deleted) | `MPSTensor.IsPrimitiveMPS.overlap_tendsto_one` applied to the witness of `MPSTensor.HasPrimitiveFixedPoint`, which was its whole body; its one consumer, `overlap_tendsto_one_of_peripheralPrimitive_of_irreducible` in `MPS/Transfer/Spectrum/PrimitiveOverlap.lean`, now inlines that step |
 
 No blueprint `\lean{...}` tag cites the removed name. The coherent
 prerequisite allowlist `scripts/coherent_tn_prerequisites.json` now names
-`TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible` in place of the
+`TNLean.MPS.Transfer.Primitivity.ImpliesStronglyIrreducible` in place of the
 deleted auxiliary module and drops `TNLean.MPS.Structure.PrimitivityBridge`,
 whose content is in the already listed
-`TNLean.MPS.Overlap.PeripheralToTransferMapGap`.
+`TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap`.

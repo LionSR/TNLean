@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.ComplexSqrt
-import TNLean.MPS.RFP.Defs
-import TNLean.MPS.Symmetry.Defs
-import TNLean.MPS.Examples.GHZ
+import QICLean.Analysis.Real.ComplexSqrt
+import TNLean.MPS.Transfer.RenormalizationFixedPoint.Defs
+import TNLean.MPS.Tensor.Gauge.OnSiteSymmetry
+import TNLean.MPS.Examples.GHZ.GHZ
 
 /-!
 # Even-parity (Z₂ group-algebra) MPS tensor

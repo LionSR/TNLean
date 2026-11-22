@@ -93,18 +93,18 @@ The formal statements\footnote{Formal declarations:
     \leanid{QuantumCircuit.LongRangeGate.isImplementationOn_rounds} in QICLean's
     \path{QICLean/Circuit/Protocol/Teleportation/LongRangeGates}, and
     \leanid{MPSPreparation.exists_isMeasurementConversion_treeOp} in
-    \doclink{TNLean/MPS/Preparation/TreeMeasurement},
+    \doclink{TNLean/MPS/Preparation/Circuit/TreeMeasurement},
     \leanid{QuantumCircuit.RegisterGate.exists_rounds} in QICLean's
     \path{QICLean/Circuit/Protocol/Teleportation/RegisterGates},
     \leanid{MPSPreparation.exists_rounds_blockLayerOp_regTreeOp} in
-    \doclink{TNLean/MPS/Preparation/RegisterTree},
+    \doclink{TNLean/MPS/Preparation/Circuit/RegisterTree},
     \leanid{MPSPreparation.regTreeOp_apply_blockInputCfg} in
-    \doclink{TNLean/MPS/Preparation/RegisterTreeState}, and
+    \doclink{TNLean/MPS/Preparation/Circuit/RegisterTreeState}, and
     \leanid{MPSPreparation.exists_isMeasurementConversion_approximatingMPVState},
     \leanid{MPSPreparation.exists_isMeasurementConversion_approximationError_le}
     and
     \leanid{MPSPreparation.exists_isMeasurementConversion_le_logb_log}
-    in \doclink{TNLean/MPS/Preparation/LogLogDepthPreparation}.}
+    in \doclink{TNLean/MPS/Preparation/Normal/LogLogDepthPreparation}.}
 are exact, and no outcome is post-selected.
 
 \section{The restriction formerly adopted: the chain length}
@@ -128,17 +128,17 @@ so the depth stays $O(k)$.
 The restriction on the chain length is removed by trees on leaves of unequal
 widths.\footnote{Formal declarations:
     \leanid{MPSPreparation.cfgPolarIso_split} in
-    \doclink{TNLean/MPS/Preparation/PolarMerge},
+    \doclink{TNLean/MPS/Preparation/Tree/PolarMerge},
     \leanid{MPSPreparation.exists_rounds_blockLayerOp_treeLevelsOp} in
-    \doclink{TNLean/MPS/Preparation/UnequalRegisterTree},
+    \doclink{TNLean/MPS/Preparation/Circuit/UnequalRegisterTree},
     \leanid{MPSPreparation.treeBlockOp_apply} in
-    \doclink{TNLean/MPS/Preparation/UnequalRegisterTreeState},
+    \doclink{TNLean/MPS/Preparation/Circuit/UnequalRegisterTreeState},
     \leanid{MPSPreparation.exists_isMeasurementConversion_blockIsometryState}
-    in \doclink{TNLean/MPS/Preparation/UnequalTreePreparation}, and
+    in \doclink{TNLean/MPS/Preparation/Circuit/UnequalTreePreparation}, and
     \leanid{MPSPreparation.exists_isMeasurementConversion_le_log_log_of_mpvState_ne_zero}
     and
     \leanid{MPSPreparation.exists_isMeasurementConversion_le_log_log}
-    in \doclink{TNLean/MPS/Preparation/LogLogDepthEveryLength}.}
+    in \doclink{TNLean/MPS/Preparation/Normal/LogLogDepthEveryLength}.}
 \begin{enumerate}
     \item \emph{Halves of unequal lengths.} For polar decompositions
           $\mathcal B_{n_i}=V_{n_i}P_{n_i}$ of $A$ blocked over $n_1$ and over
@@ -201,9 +201,9 @@ superpositions simultaneously. For each fixed measurement history the
 branch scalar is independent of the input on the zero-scratch subspace;
 the final equality specifies every physical site.\footnote{Formal declarations:
     \leanid{MPSPreparation.exists_isometryTree_matrix_eq_supportedCfgPolarIso} in
-    \doclink{TNLean/MPS/Preparation/SupportedPolarTree}, and
+    \doclink{TNLean/MPS/Preparation/Tree/SupportedPolarTree}, and
     \leanid{MPSPreparation.exists_rounds_blockLayerOp_supportedPolarTree} in
-    \doclink{TNLean/MPS/Preparation/SupportedTreePreparation}.}
+    \doclink{TNLean/MPS/Preparation/Circuit/SupportedTreePreparation}.}
 The supported trees now compose with the constant-depth sparse GHZ seed
 and one simultaneous pair-window unitary. The bond encodings end in a zero
 site, and an equality of full physical configurations aligns them with the
@@ -214,11 +214,11 @@ The all-length bound now holds for the supplied canonical repeated-block
 class with normal inequivalent left-canonical blocks and positive definite
 trace-one transfer fixed points.\footnote{Formal declarations:
     \leanid{MPSPreparation.exists_supported_block_preparation_constants} in
-    \doclink{TNLean/MPS/Preparation/CoherentBlockTreePreparation},
+    \doclink{TNLean/MPS/Preparation/Measurement/CoherentBlockTreePreparation},
     \leanid{MPSPreparation.exists_log_log_preparation_of_supported_block_approximation} in
-    \doclink{TNLean/MPS/Preparation/SupportedLogLogPreparation}, and
+    \doclink{TNLean/MPS/Preparation/Measurement/CoherentBlockTreePreparation}, and
     \leanid{MPSPreparation.exists_isMeasurementConversion_repeatedBlockSum_le_log_log_of_inequivalent}
-    in \doclink{TNLean/MPS/Preparation/OverlappingLogLogPreparation}.}
+    in \doclink{TNLean/MPS/Preparation/Measurement/OverlappingLogLogPreparation}.}
 The same constant precedes $N$ and $\varepsilon$. It covers every $N\ge2$
 with nonzero periodic vector and $0<\varepsilon\le1$, finite-block overlap,
 complex copy phases, repetitions, and vanishing individual sector sums.

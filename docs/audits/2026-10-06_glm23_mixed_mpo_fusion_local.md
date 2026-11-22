@@ -31,10 +31,10 @@ Checked production and regression source hashes:
 
 | File | SHA-256 |
 | --- | --- |
-| `TNLean/MPS/MPDO/BoundaryActionCrossTransport.lean` | `cd02c5f12494247cb1ca38eea66275c64a758c30885a41d1660710324b5dce47` |
-| `TNLean/MPS/MPDO/BoundaryActionCrossFusionEntries.lean` | `d316e3d16cd269d406d082b85c787f55b1cae4d848f39b7c2534b6bf9de22d21` |
-| `TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointMPOFusionMaps.lean` | `8b459b2e2b41c88071cae06f817956393f3e633f0ca6577334bee93ad7ad3a4d` |
-| `TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointMPOFusion.lean` | `6ea175994b2934a48327feb0833d7447ba8c20152785adbd0ea87fc7b1c4869d` |
+| `TNLean/MPS/FundamentalTheorem/Zipper/BoundaryActionCrossTransport.lean` | `cd02c5f12494247cb1ca38eea66275c64a758c30885a41d1660710324b5dce47` |
+| `TNLean/MPS/FundamentalTheorem/Zipper/BoundaryActionCrossTransport.lean` | `d316e3d16cd269d406d082b85c787f55b1cae4d848f39b7c2534b6bf9de22d21` |
+| `TNLean/MPS/Symmetry/MPOSymmetry/MixedPath/MPO/MixedEndpointMPOFusionMaps.lean` | `8b459b2e2b41c88071cae06f817956393f3e633f0ca6577334bee93ad7ad3a4d` |
+| `TNLean/MPS/Symmetry/MPOSymmetry/MixedPath/MPO/MixedEndpointMPOFusion.lean` | `6ea175994b2934a48327feb0833d7447ba8c20152785adbd0ea87fc7b1c4869d` |
 | `TNLeanTest/BoundaryActionCrossTransport.lean` | `4e86bd233bffc3651402a9a3c021abf67fb687b49c29a07dcda11d1c257a0210` |
 | `TNLeanTest/MixedEndpointMPOFusionMaps.lean` | `60e51d9e12c66b0f46b4c0b3d343fe162c3d3ecc94df17d96d390f2d80f28033` |
 | `TNLeanTest/MixedEndpointMPOFusion.lean` | `29503d926f34f6251249c7981fa3883dc2f1310bec6e1287a0a61527c734765c` |

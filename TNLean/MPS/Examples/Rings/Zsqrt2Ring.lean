@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.NumberTheory.Zsqrtd.ToReal
-import QICLean.Algebra.MatrixSingleSpan
-import TNLean.MPS.FundamentalTheorem.Reduction.ExplicitGauge
+import QICLean.Algebra.Matrix.MatrixSingleSpan
+import TNLean.MPS.FundamentalTheorem.Compression.ExplicitGauge
 
 /-!
 # Exact arithmetic for the Ising twist: matrices over `ℤ[√2]` and their complex images

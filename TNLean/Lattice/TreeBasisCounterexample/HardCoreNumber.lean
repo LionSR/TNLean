@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.PlaceAlong
-import QICLean.Algebra.MatrixAux
-import QICLean.Algebra.MatrixToEuclidean
+import QICLean.Algebra.Matrix.MatrixAux
+import QICLean.Analysis.Norm.MatrixToEuclidean
 import Mathlib.Analysis.CStarAlgebra.Projection
 
 /-!

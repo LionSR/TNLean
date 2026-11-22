@@ -7,7 +7,7 @@ kept.
 
 ## Removed declaration and its replacement
 
-In `TNLean/MPS/Preparation/PositivePartRate.lean`:
+In `TNLean/MPS/CanonicalForm/FixedPointApproximation/PositivePartRate.lean`:
 
 - `MPSTensor.lt_exp_neg_div_correlationLength_sq`: for `0 < γ < 1/2`, every
   `a < 1` with `a ≤ |λ₂|` satisfies `a < (e^{-γ/ξ})²`.

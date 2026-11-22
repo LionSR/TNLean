@@ -1,6 +1,6 @@
 # A physical common family before the closing parameter
 
-`MPS/AreaLaw/CommonClosingPolynomialFamily.lean` constructs one finite retained operator family from a fixed native core and polynomial closing matrix C(z)=sum_a z^a C_a. The family precedes every complex parameter z, supported exterior pair, and scalar polynomial of degree at most k. No desired interpolation formula, polynomial degree bound, tensor decomposition, spectral target, or successful sample is supplied as a hypothesis.
+`MPS/AreaLaw/LowEnergyAlgorithm/MPO/CommonClosingPolynomialFamily.lean` constructs one finite retained operator family from a fixed native core and polynomial closing matrix C(z)=sum_a z^a C_a. The family precedes every complex parameter z, supported exterior pair, and scalar polynomial of degree at most k. No desired interpolation formula, polynomial degree bound, tensor decomposition, spectral target, or successful sample is supplied as a hypothesis.
 
 For the actual two-window geometry, the count is at most
 

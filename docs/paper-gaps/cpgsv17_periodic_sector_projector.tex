@@ -86,7 +86,7 @@ gauge normalization, and coisometry construction are recorded in
 The literal-CPSV proof of
 Eq.~\ref{eq:cpgsv17_periodic_sector_projector_exists_noncommuting_length} is
 \leanid{MPSTensor.IsCPSVCanonicalForm.exists_not_commute_of_displaced} in
-\doclink{TNLean/MPS/MPDO/CPSVPeriodicExclusion}. Suppose, for contradiction,
+\doclink{TNLean/MPS/MPDO/Vertical/CPSVPeriodicExclusion}. Suppose, for contradiction,
 that $Q_1$ commutes with $H^{(N+1)}$ for every $N$. Idempotence of $Q$ then
 gives
 \begin{align}
@@ -108,10 +108,10 @@ Eq.~\ref{eq:cpgsv17_periodic_sector_projector_vertical_displacement}. The
 corresponding theorem under the stronger normalized BNT-refined horizontal
 hypothesis is
 \leanid{MPOTensor.IsHorizontalCF.exists_not_commute_of_displaced} in
-\doclink{TNLean/MPS/MPDO/HorizontalBNT}.
+\doclink{TNLean/MPS/CanonicalForm/SimpleMPO/HorizontalBNT}.
 
 The cyclic decomposition and its letter-shift property are formalized in
-\path{TNLean/MPS/MPDO/CyclicProjector.lean}. They provide a period $p\geq1$,
+\path{TNLean/MPS/MPDO/Vertical/CyclicProjector.lean}. They provide a period $p\geq1$,
 an orthogonal projector $Q$, invariance under full-period words, and
 displacement by one letter. Choose the length $N+1$ supplied by
 Eq.~\ref{eq:cpgsv17_periodic_sector_projector_exists_noncommuting_length}.
@@ -132,10 +132,10 @@ which contradicts the choice of $N$.
 
 The literal conclusion is
 \leanid{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_cpsvCanonicalForm} in
-\doclink{TNLean/MPS/MPDO/CPSVPeriodicExclusion}. The stronger-hypothesis
+\doclink{TNLean/MPS/MPDO/Vertical/CPSVPeriodicExclusion}. The stronger-hypothesis
 variant is
 \leanid{MPOTensor.hasNoPeriodicVectors_verticalTensor_of_horizontalCF} in
-\doclink{TNLean/MPS/MPDO/CyclicProjector}. Neither theorem adds an assumption
+\doclink{TNLean/MPS/MPDO/Vertical/CyclicProjector}. Neither theorem adds an assumption
 beyond its stated canonical-form and MPDO hypotheses.
 
 \section{Status}
@@ -157,7 +157,7 @@ The subsequent phase-class grouping, normalization of the grouped
 representatives, and construction of the final coisometry are also complete.
 Together, these results establish the literal theorem
 \leanid{MPOTensor.verticalCF_of_cpsvCanonicalForm} in
-\doclink{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm}. The stronger theorem from
+\doclink{TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm}. The stronger theorem from
 normalized BNT-refined horizontal form remains separate.
 
 This completion concerns only Proposition~4.13 of

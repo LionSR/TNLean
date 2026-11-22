@@ -10,11 +10,11 @@ Blueprint tag names it.
 | Removed declaration | Single source of truth | Migrated consumer |
 |---|---|---|
 | `MPSTensor.rectSpan_nilpIndex_finrank_constant'` | `Kraus.rectSpan_nilpIndex_finrank_constant'` | none (`RectangularSpan/Universality` already called the QICLean name) |
-| `MPSTensor.vectorSpreadSpan_eq_top_of_wordSpan_eq_top` | `Kraus.vectorSpreadSpan_eq_top_of_wordSpan_eq_top` | `Wielandt/Primitivity/EasyDirections` (two call sites) |
-| `MPSTensor.wielandt_lemma2b_conditional` | `Kraus.wielandt_lemma2b_conditional` | `Wielandt/RectangularSpan/Basic` (`wielandt_blocked_assembly`) |
+| `MPSTensor.vectorSpreadSpan_eq_top_of_wordSpan_eq_top` | `Kraus.vectorSpreadSpan_eq_top_of_wordSpan_eq_top` | `MPS/Transfer/Primitivity/EasyDirections` (two call sites) |
+| `MPSTensor.wielandt_lemma2b_conditional` | `Kraus.wielandt_lemma2b_conditional` | `MPS/Transfer/Primitivity/RectangularSpan` (`wielandt_blocked_assembly`) |
 
-Docstring mentions in `Wielandt/Primitivity/EasyDirections` and
-`MPS/CanonicalForm/SectorComparison/TPPrimitiveReduction` were re-pointed to the
+Docstring mentions in `MPS/Transfer/Primitivity/EasyDirections` and
+`MPS/CanonicalForm/NormalBlocks/TPGauge` were re-pointed to the
 `Kraus` names in the same change.
 
 The three defining modules remain because their other results are MPS-specific:

@@ -12,7 +12,7 @@ import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
 import QICLean.Algebra.PerronFrobenius.RankOne
-import TNLean.MPS.MPDO.ZCL
+import TNLean.MPS.Operator.DensityOperator.ZCL
 
 /-!
 # A virtual-spanning obstruction to the rank-one step in Lemma C.5

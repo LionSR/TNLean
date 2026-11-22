@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.PhysicalOutputContraction
-import QICLean.Analysis.OrthonormalMatrixNorm
-import QICLean.Channel.RectangularTraceNormContraction
+import QICLean.Analysis.Norm.KroneckerOperatorNorm
+import QICLean.Analysis.TraceNorm.RectangularTraceNormContraction
 
 /-!
 # Trace-norm contraction by the actual exterior words

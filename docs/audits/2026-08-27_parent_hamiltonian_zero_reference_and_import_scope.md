@@ -16,8 +16,8 @@ the use site, so no replacement declaration is needed.
 |---|---|
 | `MPSTensor.productPairWindow_apply` (`TNLean/MPS/ParentHamiltonian/ProductPair.lean`) | none needed; the equation holds by `rfl` and `productPairWindow` unfolds directly |
 | `MPSTensor.productPairState_zero` (`TNLean/MPS/ParentHamiltonian/ProductPair.lean`) | none needed; the empty product is discharged by `simp [productPairState]` at any use site |
-| `MPSTensor.reindexSites_symm_apply` (`TNLean/MPS/ParentHamiltonian/RestrictTransport.lean`) | none needed; the equation holds by `rfl` |
-| `MPSTensor.reindexSites_rfl` (`TNLean/MPS/ParentHamiltonian/RestrictTransport.lean`) | none needed; the equation holds by `rfl` |
+| `MPSTensor.reindexSites_symm_apply` (`TNLean/MPS/Tensor/GroundSpace/RestrictTransport.lean`) | none needed; the equation holds by `rfl` |
+| `MPSTensor.reindexSites_rfl` (`TNLean/MPS/Tensor/GroundSpace/RestrictTransport.lean`) | none needed; the equation holds by `rfl` |
 
 The neighbouring lemmas `productPairWindow_one`, `productPairState_one`,
 `reindexSites_apply` and `reindexSites_groundSpaceMap` are load-bearing and are
@@ -25,10 +25,10 @@ untouched.
 
 ## Import scope of the periodic-boundary reduction
 
-`TNLean/MPS/ParentHamiltonian/PeriodicBoundaryReduction.lean` imported five
+`TNLean/MPS/Tensor/GroundSpace/PeriodicBoundaryReduction.lean` imported five
 modules whose contents it never names; the identifiers they supply are used by
 its single downstream consumer,
-`TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`, which reached them through
+`TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean`, which reached them through
 the reduction module. The five imports moved to the consumer, which now names
 each of them directly:
 

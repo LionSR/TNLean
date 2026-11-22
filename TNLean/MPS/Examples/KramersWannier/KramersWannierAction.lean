@@ -3,10 +3,10 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.FundamentalTheorem.Reduction.ExplicitGauge
+import TNLean.MPS.FundamentalTheorem.Compression.ExplicitGauge
 import TNLean.MPS.Examples.KramersWannier.KramersWannier
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
-import TNLean.MPS.MPDO.ActionTensor
+import TNLean.MPS.FundamentalTheorem.Compression.MultiBlockTrace
+import TNLean.MPS.Operator.Product.ActionTensor
 import TNLean.MPS.Examples.KramersWannier.KramersWannierSource
 
 /-!

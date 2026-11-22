@@ -140,23 +140,23 @@ proportional fundamental theorem. Its history is documented in
 The relevant surviving formal declarations are:
 \begin{itemize}
     \item \leanid{MPSTensor.SectorDecomposition}: the raw two-layer sector surface
-    (\doclink{TNLean/MPS/SharedInfra/SectorDecomposition}).
+    (\doclink{TNLean/MPS/Tensor/DirectSum/SectorDecomposition}).
 
     \item \leanid{MPSTensor.IsBNTCanonicalForm}: the BNT canonical-form predicate
-    (\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Basic}).
+    (\doclink{TNLean/MPS/Tensor/DirectSum/SectorBNT}).
 
     \item
     \leanid{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}
     and
     \leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li}
-    in \doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}, together with
+    in \doclink{TNLean/MPS/CanonicalForm/BNT/SectorOverlap}, together with
     \leanid{MPSTensor.SectorDecomposition.coeff_not_eventually_zero} in
-    \doclink{TNLean/MPS/SharedInfra/SectorDecomposition}.
+    \doclink{TNLean/MPS/Tensor/DirectSum/SectorDecomposition}.
 
     \item
     \leanid{MPSTensor.fundamentalTheorem_proportional_canonicalForm}: the
     corrected proportional comparison for BNT families
-    (\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord}).
+    (\doclink{TNLean/MPS/FundamentalTheorem/Sectors/FundamentalCoord}).
 \end{itemize}
 See also \ghpr{1657}, on branch
 \path{feat/mps-ft-path-beta-pr1-two-layer}, and the ``PR~1.5 amendment'' in

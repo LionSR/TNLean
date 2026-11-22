@@ -27,7 +27,7 @@ row, under the same fully qualified name.
 
 | Deleted TNLean module | Declarations | QICLean module |
 |---|---|---|
-| `TNLean/Algebra/ComplexSqrt.lean` | 11 | `QICLean/Algebra/ComplexSqrt.lean` |
+| `TNLean/Algebra/ComplexSqrt.lean` | 11 | `QICLean/Analysis/Real/ComplexSqrt.lean` |
 | `TNLean/Circuit/Gates/TwoLevel.lean` | 24 | `QICLean/Circuit/Gate/TwoLevel.lean` |
 | `TNLean/Circuit/Gates/Givens.lean` | 23 | `QICLean/Circuit/Gate/Givens.lean` |
 | `TNLean/Circuit/PartialIsometryDilation.lean` | 5 | `QICLean/Circuit/Gate/PartialIsometryDilation.lean` |
@@ -114,9 +114,9 @@ have yet.
 
 | Deleted TNLean declaration | TNLean module |
 |---|---|
-| `Entropy.IsSupportedOn.add`, `Entropy.IsSupportedOn.neg`, `Entropy.IsSupportedOn.sub` | `MPS/AreaLaw/Hastings/PartCommutators.lean` |
-| `Entropy.IsSupportedOn.smul` | `MPS/AreaLaw/Hastings/ProjectorFactorizationScaling.lean` |
-| `Entropy.IsSupportedOn.conjTranspose` | `MPS/AreaLaw/Hastings/PositiveFactorization.lean` |
+| `Entropy.IsSupportedOn.add`, `Entropy.IsSupportedOn.neg`, `Entropy.IsSupportedOn.sub` | `MPS/AreaLaw/Chain/PartCommutators.lean` |
+| `Entropy.IsSupportedOn.smul` | `MPS/AreaLaw/ProjectorFactorization/ProjectorFactorization.lean` |
+| `Entropy.IsSupportedOn.conjTranspose` | `MPS/AreaLaw/ProjectorFactorization/PositiveFactorization.lean` |
 | `TNLean.Lattice.isSupportedOn_sum` | `Lattice/ZeroEntropy.lean` |
 
 Each is closure of `ManyBody.supportedOperators (fun v ↦ Fin (n v)) D`
@@ -141,7 +141,7 @@ Importers of a deleted module import the QICLean module of the same row.
 `Circuit/Gates/TwoSiteUniversality` imported `Circuit/Gates/Givens`, which
 imported `Circuit/Gates/ControlledProducts`; since the QICLean module has no
 such import, `TwoSiteUniversality` now imports both. The four modules that lost
-a supported-operator lemma import `QICLean.Entropy.SupportedOperatorAlgebra`,
+a supported-operator lemma import `QICLean.ManyBody.Entropy.Cut.SupportedOperatorAlgebra`,
 which brings the Sites layer.
 The import aggregators `TNLean/Algebra.lean`, `TNLean/Circuit.lean` and
 `TNLean/Circuit/Gates.lean` are regenerated.
@@ -151,17 +151,17 @@ The import aggregators `TNLean/Algebra.lean`, `TNLean/Circuit.lean` and
 Apart from the four pull requests above, the range adds about 200 declarations
 to QICLean and removes two private ones (`Matrix.rpow_mul_one_sub`,
 `QICLean.ComplexGaussian.sqrt_two_complex_sq`), neither used in TNLean. Three
-declarations moved from `QICLean/Entropy/FilterStationarity.lean` to
-`QICLean/Entropy/SupportedOperatorAlgebra.lean`, which the former imports. The
+declarations moved from `QICLean/ManyBody/Entropy/Filter/Stationarity.lean` to
+`QICLean/ManyBody/Entropy/Cut/SupportedOperatorAlgebra.lean`, which the former imports. The
 statements of `Real.exists_softTruncation_order_of_residual_budget` and
 `Real.exists_softTruncation_scaled_order_of_residual_budget` are unchanged.
 
 `Entropy.IsSupportedOn` and `Entropy.localLift` are now abbreviations of
 `ManyBody.IsSupportedOn` and `ManyBody.place`, so `simp` stops at the Sites
 definitions. Six calls add the Sites name to the simp set:
-`ManyBody.IsSupportedOn` in `MPS/AreaLaw/SoftTruncatedHamiltonianMPO` (two),
-and `ManyBody.place` in `MPS/AreaLaw/SequentialTruncation` (two) and
-`MPS/AreaLaw/Hastings/IntervalMutualInformation` (two).
+`ManyBody.IsSupportedOn` in `MPS/AreaLaw/LowEnergyAlgorithm/MPO/SoftTruncationMPOAccuracy` (two),
+and `ManyBody.place` in `MPS/Tensor/VaryingBond/SequentialTruncation` (two) and
+`MPS/AreaLaw/ProjectorFactorization/IntervalMutualInformation` (two).
 
 A comparison of fully qualified names found no other TNLean declaration
 duplicated by a declaration added in the range. The following are left as
@@ -178,6 +178,6 @@ they are:
   `Set` and `Finset` regions; their unification is the same switch.
 - Every other use of the temporary `Entropy` abbreviations and forwarding
   lemmas, which is deleted in step 4.0 of the plan.
-- `MPSTensor.conj_invSqrtTwo` (`MPS/Examples/AKLTReview.lean`), which has the
+- `MPSTensor.conj_invSqrtTwo` (`MPS/Examples/AKLT/AKLTReview.lean`), which has the
   statement of `Complex.conj_invSqrtTwo`. The pair existed inside TNLean before
   this range.

@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.FiniteDomain
 import QICLean.ManyBody.Sites.Lattice.Rectangle
-import TNLean.PEPS.NormalBlocking
-import TNLean.PEPS.RegionBlock.Basic
+import TNLean.PEPS.Injectivity.Normal.NormalBlocking
+import TNLean.PEPS.Tensor.Region.RegionBlock
 
 /-!
 # Native rectangular edge and vertex boundaries

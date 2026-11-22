@@ -41,8 +41,8 @@ use is field projection by dot notation, which resolves through the parent.
 `IsRawRepresentation` has no use outside its own file.
 `IsRepresentation` is used as a hypothesis in ten files, none of which
 constructs it positionally. The four uses of the removed bridge, two in
-`TNLean/MPS/ParentHamiltonian/LocalSupport.lean` and two in
-`TNLean/MPS/RFP/AppendixBStructuralData.lean`, were renamed to the inherited
+`TNLean/MPS/ParentHamiltonian/Commuting/LocalSupport.lean` and two in
+`TNLean/MPS/ParentHamiltonian/Commuting/AppendixBStructuralData.lean`, were renamed to the inherited
 parent projection.
 
 The one blueprint tag naming the removed bridge, on the overlapping two-site
@@ -64,7 +64,7 @@ both structures.
 Three of the five pairs are left alone.
 
 The two orthogonal commuting sector families of
-`TNLean/MPS/MPDO/GSNNCHOrthogonalSectors.lean` share five fields but are not
+`TNLean/MPS/FundamentalTheorem/PhysicalSupport/GSNNCHOrthogonalSectors.lean` share five fields but are not
 given a common base. Their field docstrings cite different passages of
 arXiv:1606.00608 — lines 838--842 with 1786--1796 for the exact family, lines
 838--842 with 1641--1665 for the proportional one — and a shared base would
@@ -93,7 +93,7 @@ zero. A shared predicate would have to either drop the guard from the tagged
 definition, which strengthens a blueprint-tagged statement and so is barred by
 the faithfulness rule, or add a vacuous guard to the unconditional one. The
 honest passage between them already exists in two lines of
-`TNLean/MPS/FundamentalTheorem/SectorBNT/CanonicalFormBridge.lean`.
+`TNLean/MPS/CanonicalForm/BNTPresentation/CanonicalFormBridge.lean`.
 
 ## What is deferred
 

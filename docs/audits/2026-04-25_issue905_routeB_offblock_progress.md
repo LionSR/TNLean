@@ -23,7 +23,7 @@ In `TNLean/Algebra/ScalarCommutant.lean`:
 - `Matrix.isBlockDiagonal'_of_commutes_blockProjection`: if a matrix commutes with
   every block projection, then it is block diagonal.
 
-In `TNLean/MPS/SharedInfra/BlockAssembly.lean`:
+In `TNLean/MPS/Tensor/DirectSum/BlockAssembly.lean`:
 
 - `MPSTensor.evalWord_toTensorFromBlocks_eq_reindex_blockDiagonal`: word
 evaluation of the assembled tensor is the reindexed block diagonal of the

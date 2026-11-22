@@ -337,7 +337,7 @@ sums over good histories.\footnote{Integrability declarations:
 \paragraph{Truncated ground state and status marginal moments.}
 The log-moment generating function and spectral tail bounds
 of~\cite[Lemma~3.1]{OpenAI2026AreaLaw} are formalized in
-\path{TNLean/PEPS/AreaLaw/Scan/ActualMarginalTails.lean} for every regional
+\path{TNLean/PEPS/AreaLaw/Statuses/ActualMarginalTails.lean} for every regional
 marginal of a unit ground vector $\widetilde\Omega$ of the truncated
 Hamiltonian $\widetilde H=\sum_i\widetilde h_i$ satisfying
 \begin{align}
@@ -379,7 +379,7 @@ $C_0=512\mathrm e(2/g)$ and $c_0=[32\sqrt{1+2/g}]^{-1}$ while retaining
     and \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_source_statusMarginal_moment_bounds}.}
 
 \paragraph{Target typical window and final collar parameters.}
-In \path{TNLean/PEPS/AreaLaw/Scan/TargetTypicalWindow.lean}, under the paper's
+In \path{TNLean/PEPS/AreaLaw/Statuses/TargetTypicalWindow.lean}, under the paper's
 target geometry~\cite{OpenAI2026AreaLaw} (\path{08-scanner.tex}, lines~21--48,
 243--257, and 400--414)---a nonempty ambient target $T$ with $|T|\le C_Tn^2$,
 at most $n$ sites per ambient layer up to $L=\lfloor n^{1-\ell_T}\rfloor$, and

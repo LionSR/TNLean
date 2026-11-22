@@ -54,7 +54,7 @@ calculations in
 `Periodic/Overlap/SectorMatch/Contraction.lean`,
 `Periodic/Overlap/SectorOverlapTransport.lean`,
 `Periodic/SectorContraction.lean`, and `Symmetry/Defs.lean`; and the encoded
-word calculation in `Wielandt/RectangularSpan/Basic.lean`. No mathematical
+word calculation in `MPS/Transfer/Primitivity/RectangularSpan.lean`. No mathematical
 statement changes in these consumers.
 
 ## Bond reindexing

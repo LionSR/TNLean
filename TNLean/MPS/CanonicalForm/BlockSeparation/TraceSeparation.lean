@@ -1,0 +1,696 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.CanonicalForm.BlockSeparation.PerCopyHorizontalCF
+import QICLean.Algebra.Matrix.TraceFormDuality
+import TNLean.MPS.Tensor.Gauge.WordTupleGauge
+import Mathlib.LinearAlgebra.Finsupp.LinearCombination
+import Mathlib.LinearAlgebra.Prod
+import Mathlib.RingTheory.Noetherian.Defs
+import QICLean.Algebra.Matrix.MatrixTracePairing
+import TNLean.MPS.Tensor.Physical.Blocking
+
+/-!
+# Finite-word trace separation for MPDO block families
+
+The `HorizontalCFData` structure in `PerCopyHorizontalCF.lean` assumes
+finite-word trace separation for its block family. This file gives finite-length
+span, linear-independence, and selector criteria for that field.
+
+1. A clean **abstract sufficient condition**: if, after blocking to some fixed
+   length `L`, the word-evaluation tuples
+   `w ↦ (k ↦ Kraus.evalWord (A k) (List.ofFn w))`
+   span the full product algebra `∀ k, Matrix (Fin (dim k)) (Fin (dim k)) ℂ`,
+   then finite-word trace separation follows from nondegeneracy of the product
+   trace pairing.
+
+2. A finite-dimensional **linear-independence criterion**: if the scalar word-entry
+   family obtained by reading off every block matrix entry is linearly
+   independent, then those tuple-valued word evaluations already span the full
+   product algebra. This reduces finite-word trace separation to a concrete
+   linear-algebra condition.
+
+3. An abstract **block-injectivity selector-data criterion**: if each block is
+   block-injective at some common length and a second finite family of words
+   isolates the individual blocks (identity on one block, zero on the others),
+   then concatenating the two families yields the preceding span condition.
+   This is a self-contained *sufficient condition* for the block-separation step
+   (Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:1606.00608, lines 340--345),
+   which the paper itself obtains by citing David2006; the route
+   here is an alternative, not a formalization of the paper's argument, and the
+   underlying block-separation theorem is still the missing ingredient (see the
+   summary below and `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`).
+
+4. A **pairwise-to-global selector reduction**: if every ordered pair of
+   distinct blocks admits a finite word polynomial that is the identity on the
+   first block and zero on the second, then multiplying these pairwise
+   separators gives full block-selector words.
+
+5. A finite-dimensional **cumulative pair trace criterion**: if no nonzero pair
+   trace functional vanishes on all finite pair words, then a finite cumulative
+   word-length bound already detects every nonzero test pair.
+
+This isolates the missing ingredient more precisely: one still needs a proved
+finite-length block-separation theorem producing either the pairwise separators
+of item (4), the selector data of item (3), or equivalently the word-entry
+linear independence of item (2), from canonical-form/BNT data.
+
+## Pair separation under physical blocking
+
+This file transports homogeneous pair trace separation through physical
+blocking.  A blocked word of length `N` is identified with its flattened
+ordinary word of length `N * p`.
+
+The result is the finite-word transport used in the block-injectivity argument
+of arXiv:1606.00608, lines 318--344.
+-/
+
+section
+
+open scoped Matrix BigOperators
+
+namespace MPSTensor
+
+variable {d : ℕ} {r : ℕ} {dim : Fin r → ℕ}
+
+/-- A simultaneous one-letter span makes every member of the tensor family
+injective.
+
+This is the projection to one labelled block in the simultaneous block
+injectivity statement of arXiv:1606.00608, lines 317--345. -/
+theorem WordTupleSpanTop.isInjective_one
+    {A : (k : Fin r) → MPSTensor d (dim k)}
+    (hSpan : WordTupleSpanTop A 1) (j : Fin r) :
+    Kraus.IsInjective (A j) := by
+  classical
+  unfold Kraus.IsInjective
+  apply top_unique
+  intro X _
+  let Xj : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ :=
+    fun k ↦ if h : k = j then h ▸ X else 0
+  have hXj : Xj ∈ Submodule.span ℂ (Set.range (wordTuple A 1)) := by
+    rw [hSpan]
+    exact Submodule.mem_top
+  have hcomponent : Xj j ∈ Submodule.span ℂ (Set.range (A j)) := by
+    exact Submodule.span_induction (p := fun Y _ ↦
+        Y j ∈ Submodule.span ℂ (Set.range (A j)))
+      (fun Y hY ↦ by
+        rcases hY with ⟨w, rfl⟩
+        apply Submodule.subset_span
+        refine ⟨w 0, ?_⟩
+        simp [wordTuple, List.ofFn_succ])
+      (Submodule.zero_mem _)
+      (fun Y Z _ _ hY hZ ↦ Submodule.add_mem _ hY hZ)
+      (fun c Y _ hY ↦ Submodule.smul_mem _ c hY)
+      hXj
+  simpa [Xj] using hcomponent
+
+/-- Index type for a matrix entry inside a block family. -/
+abbrev BlockEntryIndex (dim : Fin r → ℕ) :=
+  Σ k : Fin r, Fin (dim k) × Fin (dim k)
+
+/-- The value of a tuple of block matrices at a chosen block entry. -/
+def blockEntryValue
+    (M : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+    (x : BlockEntryIndex dim) : ℂ :=
+  M x.1 x.2.1 x.2.2
+
+/-- A simultaneous one-letter product-algebra span has a left inverse which
+distinguishes the block label and both matrix indices.
+
+This is the simultaneous inverse used after blocking in arXiv:1511.08090,
+lines 269--277 and 427--431. -/
+theorem WordTupleSpanTop.exists_one_letter_simultaneous_left_inverse
+    {A : (k : Fin r) → MPSTensor d (dim k)}
+    (hSpan : WordTupleSpanTop A 1) :
+    ∃ C : Matrix (BlockEntryIndex dim) (Fin d) ℂ,
+      ∀ (k j : Fin r) (x y : Fin (dim k))
+        (x' y' : Fin (dim j)),
+        (∑ i : Fin d, C ⟨k, x, y⟩ i * A j i x' y') =
+          if h : k = j then
+            if _ : h ▸ x = x' then if _ : h ▸ y = y' then 1 else 0 else 0
+          else 0 := by
+  classical
+  let target (k : Fin r) (x y : Fin (dim k)) :
+      (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ :=
+    fun j x' y' =>
+      if h : k = j then
+        if _ : h ▸ x = x' then if _ : h ▸ y = y' then 1 else 0 else 0
+      else 0
+  have htarget (k : Fin r) (x y : Fin (dim k)) :
+      target k x y ∈ Submodule.span ℂ (Set.range (wordTuple A 1)) := by
+    rw [hSpan]
+    exact Submodule.mem_top
+  have hcoeff (k : Fin r) (x y : Fin (dim k)) :
+      ∃ c : (Fin 1 → Fin d) → ℂ,
+        ∑ w, c w • wordTuple A 1 w = target k x y :=
+    (Submodule.mem_span_range_iff_exists_fun ℂ).mp (htarget k x y)
+  choose coeff hcoeff_eq using hcoeff
+  let e := (Equiv.funUnique (Fin 1) (Fin d)).symm
+  refine ⟨fun z i ↦ coeff z.1 z.2.1 z.2.2 (e i), ?_⟩
+  intro k j x y x' y'
+  change (∑ i : Fin d, coeff k x y (e i) * A j i x' y') = _
+  rw [show (∑ i : Fin d, coeff k x y (e i) * A j i x' y') =
+      ∑ w : Fin 1 → Fin d, coeff k x y w * A j (w 0) x' y' by
+    simpa [e] using Equiv.sum_comp e
+      (fun w : Fin 1 → Fin d ↦ coeff k x y w * A j (w 0) x' y')]
+  have hentry := congrArg (fun M ↦ M j x' y') (hcoeff_eq k x y)
+  simpa [wordTuple, target, Fintype.linearCombination_apply,
+    Matrix.sum_apply, Matrix.smul_apply, List.ofFn_succ] using hentry
+
+/-- A simultaneous left inverse in the ket--bra coordinates of an MPO tensor
+family.  It selects the block label and both virtual matrix indices.
+
+This is the inverse identity used in arXiv:1606.00608, Appendix C.2, lines
+1666--1676, and in the complete zipper fusion data of arXiv:1511.08090,
+lines 269--277. -/
+def IsMPOBlockLeftInverse
+    {p : ℕ} (M : (k : Fin r) → MPOTensor p (dim k))
+    (C : Matrix (BlockEntryIndex dim) (Fin p × Fin p) ℂ) : Prop :=
+  ∀ (k j : Fin r) (x y : Fin (dim k)) (x' y' : Fin (dim j)),
+    (∑ i : Fin p, ∑ l : Fin p, C ⟨k, x, y⟩ (i, l) * M j i l x' y') =
+      if h : k = j then
+        if _ : h ▸ x = x' then if _ : h ▸ y = y' then 1 else 0 else 0
+      else 0
+
+/-- The simultaneous one-letter inverse in the ket--bra coordinates of an MPO
+tensor family.  Its orientation is the one used by the complete zipper fusion
+data.
+
+Source: arXiv:1511.08090, simultaneous inverse at lines 269--277, after the
+common blocking at lines 427--431. -/
+theorem WordTupleSpanTop.exists_mpo_block_left_inverse
+    {p : ℕ} {M : (k : Fin r) → MPOTensor p (dim k)}
+    (hSpan : WordTupleSpanTop (fun k ↦ (M k).toMPSTensor) 1) :
+    ∃ C : Matrix (BlockEntryIndex dim) (Fin p × Fin p) ℂ,
+      IsMPOBlockLeftInverse M C := by
+  obtain ⟨C, hC⟩ := hSpan.exists_one_letter_simultaneous_left_inverse
+  refine ⟨fun z il ↦ C z (finProdFinEquiv il), ?_⟩
+  intro k j x y x' y'
+  change (∑ i : Fin p, ∑ l : Fin p,
+    C ⟨k, x, y⟩ (finProdFinEquiv (i, l)) * M j i l x' y') = _
+  have hpair (il : Fin p × Fin p) :
+      (M j).toMPSTensor (finProdFinEquiv il) x' y' =
+        M j il.1 il.2 x' y' := by
+    rcases il with ⟨i, l⟩
+    simp [MPOTensor.toMPSTensor]
+  calc
+    _ = ∑ il : Fin p × Fin p,
+        C ⟨k, x, y⟩ (finProdFinEquiv il) * M j il.1 il.2 x' y' :=
+      (Fintype.sum_prod_type _).symm
+    _ = ∑ q : Fin (p * p),
+        C ⟨k, x, y⟩ q * (M j).toMPSTensor q x' y' := by
+      simpa only [hpair] using
+          Equiv.sum_comp finProdFinEquiv
+            (fun q ↦ C ⟨k, x, y⟩ q * (M j).toMPSTensor q x' y')
+    _ = _ := hC k j x y x' y'
+
+/-- The scalar word family obtained by reading off one chosen matrix entry of the
+block-word tuple. -/
+def wordEntryFamily
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (L : ℕ) : BlockEntryIndex dim → (Fin L → Fin d) → ℂ :=
+  fun x w => blockEntryValue (wordTuple A L w) x
+
+/-- A finite family of homogeneous words whose trace pairings separate every
+matrix tuple. This is a finite-word condition, not the literal one-letter
+block-injective canonical form of arXiv:1606.00608, Definition `defnbi`,
+lines 317--322. -/
+def HasFiniteWordTraceSeparation
+    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop :=
+  ∃ L : ℕ, ∀ (Δ : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
+    (∀ w : Fin L → Fin d,
+        (∑ k : Fin r, Matrix.trace (Δ k * Kraus.evalWord (A k) (List.ofFn w))) = 0) →
+    ∀ k, Δ k = 0
+
+/-- A finite-length spanning hypothesis implies `HasFiniteWordTraceSeparation`. -/
+theorem hasFiniteWordTraceSeparation_of_wordTupleSpanTop
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    {L : ℕ} (hSpan : WordTupleSpanTop A L) :
+    HasFiniteWordTraceSeparation A := by
+  refine ⟨L, ?_⟩
+  intro Δ hΔ k
+  exact block_matrices_eq_zero_of_wordTupleSpanTop_trace A hSpan Δ hΔ k
+
+/-- A finite family of words which isolates each block: for every `k`, one can
+form a linear combination of those word evaluations that equals the identity on
+block `k` and vanishes on all other blocks. -/
+def HasBlockSelectorWords
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (S : ℕ) : Prop :=
+  ∀ k : Fin r, ∃ c : (Fin S → Fin d) → ℂ,
+    (∑ w : Fin S → Fin d, c w • Kraus.evalWord (A k) (List.ofFn w)) = 1 ∧
+    ∀ j : Fin r, j ≠ k →
+      (∑ w : Fin S → Fin d, c w • Kraus.evalWord (A j) (List.ofFn w)) = 0
+
+/-- A length-`S` word polynomial which selects block `k` on a finite set of
+other blocks. The tuple `M` lies in the span of simultaneous length-`S` word
+evaluations, is the identity on `k`, and vanishes on every block in `targets`.
+
+Taking `targets = Finset.univ.erase k` is the tuple-span form used to recover
+coefficient-based `HasBlockSelectorWords`. Smaller target sets are useful for
+assembling global selectors from pairwise block-separating word polynomials. -/
+def HasBlockSelectorOn
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (k : Fin r) (S : ℕ) (targets : Finset (Fin r)) : Prop :=
+  ∃ M : (j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ,
+    M ∈ Submodule.span ℂ (Set.range (wordTuple A S)) ∧
+      M k = 1 ∧
+      ∀ j : Fin r, j ∈ targets → M j = 0
+
+/-- Pairwise finite block separation: for each ordered pair of distinct blocks,
+there is a length-`S` word polynomial that is the identity on the first block
+and zero on the second. -/
+def HasPairBlockSeparatingWords
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (S : ℕ) : Prop :=
+  ∀ k j : Fin r, j ≠ k → HasBlockSelectorOn A k S {j}
+
+/-- The simultaneous length-`S` word evaluation of two blocks. -/
+def pairWordTuple {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (S : ℕ) (w : Fin S → Fin d) :
+    Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ :=
+  (Kraus.evalWord A (List.ofFn w), Kraus.evalWord B (List.ofFn w))
+
+/-- Finite-length product-algebra span for a single ordered pair of blocks. -/
+def PairWordTupleSpanTop {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (S : ℕ) : Prop :=
+  Submodule.span ℂ (Set.range (pairWordTuple A B S)) = ⊤
+
+/-- Dual trace-separation criterion for a single ordered pair of blocks at a fixed
+length.
+
+This is the homogeneous finite-dimensional dual of pair product-span: no nonzero
+pair of trace test matrices may annihilate all simultaneous length-`S` word
+pairs.  The remaining BNT step is to prove such a finite `S` from block
+non-equivalence. -/
+def PairTraceSeparatingAt {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (S : ℕ) : Prop :=
+  ∀ ΔA : Matrix (Fin D₁) (Fin D₁) ℂ,
+    ∀ ΔB : Matrix (Fin D₂) (Fin D₂) ℂ,
+      (∀ w : Fin S → Fin d,
+        Matrix.trace (ΔA * Kraus.evalWord A (List.ofFn w)) +
+          Matrix.trace (ΔB * Kraus.evalWord B (List.ofFn w)) = 0) →
+      ΔA = 0 ∧ ΔB = 0
+
+/-- Homogeneous pair trace separation is symmetric in the two blocks. -/
+theorem pairTraceSeparatingAt_symm {D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂} {S : ℕ}
+    (hSep : PairTraceSeparatingAt A B S) :
+    PairTraceSeparatingAt B A S := by
+  intro ΔB ΔA hRel
+  obtain ⟨hA, hB⟩ := hSep ΔA ΔB fun w => by
+    simpa [add_comm] using hRel w
+  exact ⟨hB, hA⟩
+
+/-- Remove a propositional bond-dimension cast from the left block in
+homogeneous pair trace separation. -/
+theorem pairTraceSeparatingAt_uncast_left {D₁ D₁' D₂ : ℕ}
+    (h : D₁ = D₁') {A : MPSTensor d D₁} {B : MPSTensor d D₂} {S : ℕ}
+    (hSep : PairTraceSeparatingAt (cast (congr_arg (MPSTensor d) h) A) B S) :
+    PairTraceSeparatingAt A B S := by
+  subst h
+  simpa using hSep
+
+/-- The simultaneous word evaluation of two blocks for an arbitrary finite word. -/
+def pairEvalWordTuple {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (w : List (Fin d)) :
+    Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ :=
+  (Kraus.evalWord A w, Kraus.evalWord B w)
+
+/-- The cumulative span of pair word tuples of length at most `S`. -/
+noncomputable def pairCumulativeSpan {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (S : ℕ) :
+    Submodule ℂ (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ) :=
+  Submodule.span ℂ
+    {M | ∃ w : List (Fin d), w.length ≤ S ∧ M = pairEvalWordTuple A B w}
+
+/-- Finite cumulative pair product-span: pair word tuples of length at most `S`
+span the full product matrix algebra. -/
+def PairCumulativeWordTupleSpanTop {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (S : ℕ) : Prop :=
+  pairCumulativeSpan A B S = ⊤
+
+/-- Trace-separation by all pair word tuples of length at most `S`.
+
+This finite cutoff form is weaker than the homogeneous criterion
+`PairTraceSeparatingAt`, but it is the exact finite-dimensional consequence of
+ruling out trace functionals that vanish on all word lengths. -/
+def PairTraceSeparatingUpTo {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) (S : ℕ) : Prop :=
+  ∀ ΔA : Matrix (Fin D₁) (Fin D₁) ℂ,
+    ∀ ΔB : Matrix (Fin D₂) (Fin D₂) ℂ,
+      (∀ w : List (Fin d), w.length ≤ S →
+        Matrix.trace (ΔA * Kraus.evalWord A w) +
+          Matrix.trace (ΔB * Kraus.evalWord B w) = 0) →
+      ΔA = 0 ∧ ΔB = 0
+
+/-- Infinite trace-separation by pair word tuples of all finite lengths. -/
+def PairTraceSeparatingAll {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
+  ∀ ΔA : Matrix (Fin D₁) (Fin D₁) ℂ,
+    ∀ ΔB : Matrix (Fin D₂) (Fin D₂) ℂ,
+      (∀ w : List (Fin d),
+        Matrix.trace (ΔA * Kraus.evalWord A w) +
+          Matrix.trace (ΔB * Kraus.evalWord B w) = 0) →
+      ΔA = 0 ∧ ΔB = 0
+
+/-- The span of pair word tuples over all finite words. -/
+noncomputable def pairAllWordsSpan {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
+    Submodule ℂ (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ) :=
+  Submodule.span ℂ (Set.range (pairEvalWordTuple A B))
+
+/-- All finite pair word tuples span the full product matrix algebra. -/
+def PairAllWordsSpanTop {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
+  pairAllWordsSpan A B = ⊤
+
+/-- Membership of a pair word tuple in the cumulative pair span. -/
+theorem pairEvalWordTuple_mem_pairCumulativeSpan {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    {w : List (Fin d)} {S : ℕ} (hw : w.length ≤ S) :
+    pairEvalWordTuple A B w ∈ pairCumulativeSpan A B S :=
+  Submodule.subset_span ⟨w, hw, rfl⟩
+
+/-- Cumulative pair spans are monotone in the cutoff. -/
+theorem pairCumulativeSpan_mono {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    {S T : ℕ} (hST : S ≤ T) :
+    pairCumulativeSpan A B S ≤ pairCumulativeSpan A B T := by
+  apply Submodule.span_mono
+  rintro M ⟨w, hw, rfl⟩
+  exact ⟨w, le_trans hw hST, rfl⟩
+
+/-- Cumulative trace separation is monotone in the cutoff. -/
+theorem PairTraceSeparatingUpTo.mono {D₁ D₂ : ℕ}
+    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {S T : ℕ} (hSep : PairTraceSeparatingUpTo A B S) (hST : S ≤ T) :
+    PairTraceSeparatingUpTo A B T := by
+  intro ΔA ΔB hΔ
+  exact hSep ΔA ΔB (fun w hw => hΔ w (le_trans hw hST))
+
+/-- Homogeneous trace separation implies cumulative trace separation at the same cutoff. -/
+theorem pairTraceSeparatingUpTo_of_pairTraceSeparatingAt {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (hSep : PairTraceSeparatingAt A B S) :
+    PairTraceSeparatingUpTo A B S := by
+  intro ΔA ΔB hΔ
+  exact hSep ΔA ΔB (fun w => by
+    simpa using hΔ (List.ofFn w) (by simp))
+
+/-- Finite-word trace separation has a finite homogeneous word-tuple span
+witness. -/
+theorem exists_wordTupleSpanTop_of_hasFiniteWordTraceSeparation
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hSep : HasFiniteWordTraceSeparation A) :
+    ∃ L : ℕ, WordTupleSpanTop A L := by
+  classical
+  rcases hSep with ⟨L, hL⟩
+  refine ⟨L, ?_⟩
+  unfold WordTupleSpanTop
+  apply Matrix.eq_top_of_pi_trace_separating
+  intro Δ hZero
+  apply funext
+  refine hL Δ ?_
+  intro w
+  have hwmem : wordTuple A L w ∈ Submodule.span ℂ (Set.range (wordTuple A L)) :=
+    Submodule.subset_span ⟨w, rfl⟩
+  simpa [wordTuple] using hZero (wordTuple A L w) hwmem
+
+/-- Finite-word trace separation is equivalent to a homogeneous word-tuple span
+at some finite length. -/
+theorem hasFiniteWordTraceSeparation_iff_exists_wordTupleSpanTop
+    (A : (k : Fin r) → MPSTensor d (dim k)) :
+    HasFiniteWordTraceSeparation A ↔ ∃ L : ℕ, WordTupleSpanTop A L :=
+  ⟨exists_wordTupleSpanTop_of_hasFiniteWordTraceSeparation A, fun ⟨_, hSpan⟩ ↦
+    hasFiniteWordTraceSeparation_of_wordTupleSpanTop A hSpan⟩
+
+/-- The pair trace-separation criterion is the dual form of pair product-span. -/
+theorem pairWordTupleSpanTop_of_pairTraceSeparatingAt {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (hSep : PairTraceSeparatingAt A B S) :
+    PairWordTupleSpanTop A B S := by
+  classical
+  unfold PairWordTupleSpanTop
+  apply Matrix.eq_top_of_prod_trace_separating
+  rintro ⟨ΔA, ΔB⟩ hZero
+  apply Prod.ext_iff.mpr
+  refine hSep ΔA ΔB ?_
+  intro w
+  have hwmem : pairWordTuple A B S w ∈
+      Submodule.span ℂ (Set.range (pairWordTuple A B S)) :=
+    Submodule.subset_span ⟨w, rfl⟩
+  simpa [pairWordTuple] using hZero (pairWordTuple A B S w) hwmem
+
+/-- Homogeneous pair product-span gives homogeneous trace separation. -/
+theorem pairTraceSeparatingAt_of_pairWordTupleSpanTop {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (hSpan : PairWordTupleSpanTop A B S) :
+    PairTraceSeparatingAt A B S := by
+  classical
+  intro ΔA ΔB hΔ
+  have hle : Submodule.span ℂ (Set.range (pairWordTuple A B S)) ≤
+      LinearMap.ker (Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB)) := by
+    apply Submodule.span_le.mpr
+    rintro M ⟨w, rfl⟩
+    change Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB) (pairWordTuple A B S w) = 0
+    simpa only [Matrix.prodTraceForm_apply, pairWordTuple] using hΔ w
+  exact Prod.mk.inj (Matrix.eq_zero_of_forall_trace_mul_add_eq_zero (ΔA, ΔB)
+    (fun M ↦ hle (by rw [hSpan]; exact Submodule.mem_top)))
+
+/-- Homogeneous pair product-span is equivalent to homogeneous trace separation. -/
+theorem pairWordTupleSpanTop_iff_pairTraceSeparatingAt {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ} :
+    PairWordTupleSpanTop A B S ↔ PairTraceSeparatingAt A B S :=
+  ⟨pairTraceSeparatingAt_of_pairWordTupleSpanTop A B,
+    pairWordTupleSpanTop_of_pairTraceSeparatingAt A B⟩
+
+/-- Cumulative trace separation is the dual form of cumulative pair product-span. -/
+theorem pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (hSep : PairTraceSeparatingUpTo A B S) :
+    PairCumulativeWordTupleSpanTop A B S := by
+  classical
+  unfold PairCumulativeWordTupleSpanTop
+  apply Matrix.eq_top_of_prod_trace_separating
+  rintro ⟨ΔA, ΔB⟩ hZero
+  apply Prod.ext_iff.mpr
+  refine hSep ΔA ΔB ?_
+  intro w hw
+  have hwmem : pairEvalWordTuple A B w ∈ pairCumulativeSpan A B S :=
+    pairEvalWordTuple_mem_pairCumulativeSpan A B hw
+  simpa [pairEvalWordTuple] using hZero (pairEvalWordTuple A B w) hwmem
+
+/-- Cumulative pair product-span gives cumulative trace separation. -/
+theorem pairTraceSeparatingUpTo_of_pairCumulativeWordTupleSpanTop {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (hSpan : PairCumulativeWordTupleSpanTop A B S) :
+    PairTraceSeparatingUpTo A B S := by
+  classical
+  intro ΔA ΔB hΔ
+  have hle : pairCumulativeSpan A B S ≤
+      LinearMap.ker (Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB)) := by
+    apply Submodule.span_le.mpr
+    rintro M ⟨w, hw, rfl⟩
+    change Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB) (pairEvalWordTuple A B w) = 0
+    simpa only [Matrix.prodTraceForm_apply, pairEvalWordTuple] using hΔ w hw
+  exact Prod.mk.inj (Matrix.eq_zero_of_forall_trace_mul_add_eq_zero (ΔA, ΔB)
+    (fun M ↦ hle (by rw [hSpan]; exact Submodule.mem_top)))
+
+/-- Cumulative trace separation is equivalent to cumulative pair product-span. -/
+theorem pairCumulativeWordTupleSpanTop_iff_pairTraceSeparatingUpTo {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ} :
+    PairCumulativeWordTupleSpanTop A B S ↔ PairTraceSeparatingUpTo A B S :=
+  ⟨pairTraceSeparatingUpTo_of_pairCumulativeWordTupleSpanTop A B,
+    pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo A B⟩
+
+/-- Homogeneous pair product-span implies cumulative pair product-span at the same cutoff. -/
+theorem pairCumulativeWordTupleSpanTop_of_pairWordTupleSpanTop {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (hSpan : PairWordTupleSpanTop A B S) :
+    PairCumulativeWordTupleSpanTop A B S := by
+  classical
+  unfold PairCumulativeWordTupleSpanTop
+  apply eq_top_iff.mpr
+  intro M _
+  have hM : M ∈ Submodule.span ℂ (Set.range (pairWordTuple A B S)) := by
+    rw [hSpan]
+    exact Submodule.mem_top
+  have hle : Submodule.span ℂ (Set.range (pairWordTuple A B S)) ≤
+      pairCumulativeSpan A B S := by
+    apply Submodule.span_le.mpr
+    rintro N ⟨w, rfl⟩
+    simpa [pairWordTuple, pairEvalWordTuple] using
+      (pairEvalWordTuple_mem_pairCumulativeSpan A B (w := List.ofFn w) (S := S) (by simp))
+  exact hle hM
+
+/-- Homogeneous trace separation implies cumulative pair product-span at the same cutoff. -/
+theorem pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingAt {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {S : ℕ}
+    (hSep : PairTraceSeparatingAt A B S) :
+    PairCumulativeWordTupleSpanTop A B S :=
+  pairCumulativeWordTupleSpanTop_of_pairTraceSeparatingUpTo A B
+    (pairTraceSeparatingUpTo_of_pairTraceSeparatingAt A B hSep)
+
+/-- Trace separation by all finite pair words is dual to the span of all pair word tuples. -/
+theorem pairAllWordsSpanTop_of_pairTraceSeparatingAll {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSep : PairTraceSeparatingAll A B) :
+    PairAllWordsSpanTop A B := by
+  classical
+  unfold PairAllWordsSpanTop
+  apply Matrix.eq_top_of_prod_trace_separating
+  rintro ⟨ΔA, ΔB⟩ hZero
+  apply Prod.ext_iff.mpr
+  refine hSep ΔA ΔB ?_
+  intro w
+  have hwmem : pairEvalWordTuple A B w ∈ pairAllWordsSpan A B :=
+    Submodule.subset_span ⟨w, rfl⟩
+  simpa [pairEvalWordTuple] using hZero (pairEvalWordTuple A B w) hwmem
+
+/-- The span of all finite pair words gives trace separation by all finite pair words. -/
+theorem pairTraceSeparatingAll_of_pairAllWordsSpanTop {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSpan : PairAllWordsSpanTop A B) :
+    PairTraceSeparatingAll A B := by
+  classical
+  intro ΔA ΔB hΔ
+  have hle : pairAllWordsSpan A B ≤
+      LinearMap.ker (Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB)) := by
+    apply Submodule.span_le.mpr
+    rintro M ⟨w, rfl⟩
+    change Matrix.prodTraceForm (Fin D₁) (Fin D₂) (ΔA, ΔB) (pairEvalWordTuple A B w) = 0
+    simpa only [Matrix.prodTraceForm_apply, pairEvalWordTuple] using hΔ w
+  exact Prod.mk.inj (Matrix.eq_zero_of_forall_trace_mul_add_eq_zero (ΔA, ΔB)
+    (fun M ↦ hle (by rw [hSpan]; exact Submodule.mem_top)))
+
+/-- All-length trace separation is equivalent to all-word pair product-span. -/
+theorem pairAllWordsSpanTop_iff_pairTraceSeparatingAll {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
+    PairAllWordsSpanTop A B ↔ PairTraceSeparatingAll A B :=
+  ⟨pairTraceSeparatingAll_of_pairAllWordsSpanTop A B,
+    pairAllWordsSpanTop_of_pairTraceSeparatingAll A B⟩
+
+/-- If all pair words span the product algebra, then words up to some finite cutoff already span. -/
+theorem exists_pairCumulativeWordTupleSpanTop_of_pairAllWordsSpanTop {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSpan : PairAllWordsSpanTop A B) :
+    ∃ S : ℕ, PairCumulativeWordTupleSpanTop A B S := by
+  classical
+  let V := Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ
+  have hx : ∀ x : V, ∃ S : ℕ, x ∈ pairCumulativeSpan A B S := by
+    intro x
+    have hxAll : x ∈ pairAllWordsSpan A B := by
+      rw [hSpan]
+      exact Submodule.mem_top
+    induction hxAll using Submodule.span_induction with
+    | mem y hy =>
+        rcases hy with ⟨w, rfl⟩
+        exact ⟨w.length, pairEvalWordTuple_mem_pairCumulativeSpan A B le_rfl⟩
+    | zero => exact ⟨0, Submodule.zero_mem _⟩
+    | add x y _ _ hx hy =>
+        rcases hx with ⟨Sx, hSx⟩
+        rcases hy with ⟨Sy, hSy⟩
+        refine ⟨max Sx Sy, Submodule.add_mem _ ?_ ?_⟩
+        · exact (pairCumulativeSpan_mono A B (le_max_left Sx Sy)) hSx
+        · exact (pairCumulativeSpan_mono A B (le_max_right Sx Sy)) hSy
+    | smul a x _ hx =>
+        rcases hx with ⟨Sx, hSx⟩
+        exact ⟨Sx, Submodule.smul_mem _ a hSx⟩
+  have : IsNoetherian ℂ V := isNoetherian_of_isNoetherianRing_of_finite ℂ V
+  let f : ℕ →o Submodule ℂ V :=
+    ⟨fun S => pairCumulativeSpan A B S, fun _ _ hST => pairCumulativeSpan_mono A B hST⟩
+  obtain ⟨S₀, hstab⟩ := (monotone_stabilizes_iff_noetherian.mpr ‹IsNoetherian ℂ V›) f
+  refine ⟨S₀, eq_top_iff.mpr ?_⟩
+  intro x _
+  rcases hx x with ⟨S, hS⟩
+  rcases le_total S S₀ with hSS₀ | hS₀S
+  · exact (pairCumulativeSpan_mono A B hSS₀) hS
+  · have heq : pairCumulativeSpan A B S = pairCumulativeSpan A B S₀ :=
+      (hstab S hS₀S).symm
+    simpa [heq] using hS
+
+/-- If no nonzero trace functional vanishes on all pair words, then a finite cumulative
+cutoff already trace-separates the pair. -/
+theorem exists_pairTraceSeparatingUpTo_of_pairTraceSeparatingAll {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (hSep : PairTraceSeparatingAll A B) :
+    ∃ S : ℕ, PairTraceSeparatingUpTo A B S := by
+  obtain ⟨S, hS⟩ := exists_pairCumulativeWordTupleSpanTop_of_pairAllWordsSpanTop A B
+    (pairAllWordsSpanTop_of_pairTraceSeparatingAll A B hSep)
+  exact ⟨S, pairTraceSeparatingUpTo_of_pairCumulativeWordTupleSpanTop A B hS⟩
+
+/-- A finite cumulative cutoff exists exactly when no nonzero trace functional
+vanishes on all finite pair words. -/
+theorem exists_pairTraceSeparatingUpTo_iff_pairTraceSeparatingAll {D₁ D₂ : ℕ}
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) :
+    (∃ S : ℕ, PairTraceSeparatingUpTo A B S) ↔ PairTraceSeparatingAll A B := by
+  constructor
+  · rintro ⟨S, hS⟩ ΔA ΔB hΔ
+    exact hS ΔA ΔB (fun w _hw => hΔ w)
+  · exact exists_pairTraceSeparatingUpTo_of_pairTraceSeparatingAll A B
+
+/-- A finite family of all-length pair trace-separation hypotheses admits one common
+cumulative cutoff. -/
+theorem exists_forall_pairTraceSeparatingUpTo_of_forall_pairTraceSeparatingAll
+    (A : (k : Fin r) → MPSTensor d (dim k))
+    (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAll (A k) (A j)) :
+    ∃ S : ℕ, ∀ k j : Fin r, j ≠ k → PairTraceSeparatingUpTo (A k) (A j) S := by
+  classical
+  let Sij : Fin r × Fin r → ℕ := fun p =>
+    if h : p.2 ≠ p.1 then
+      Classical.choose (exists_pairTraceSeparatingUpTo_of_pairTraceSeparatingAll
+        (A p.1) (A p.2) (hSep p.1 p.2 h))
+    else 0
+  let S : ℕ := Finset.univ.sup Sij
+  refine ⟨S, ?_⟩
+  intro k j hjk
+  have hbase : PairTraceSeparatingUpTo (A k) (A j) (Sij (k, j)) := by
+    simpa [Sij, hjk] using
+      (Classical.choose_spec (exists_pairTraceSeparatingUpTo_of_pairTraceSeparatingAll
+        (A k) (A j) (hSep k j hjk)))
+  have hle : Sij (k, j) ≤ S := by
+    exact Finset.le_sup (s := Finset.univ) (f := Sij) (Finset.mem_univ (k, j))
+  exact hbase.mono hle
+
+end MPSTensor
+
+end
+
+section
+
+open scoped Matrix BigOperators
+open Kraus (blockTensor evalWord_blockTensor)
+
+namespace MPSTensor
+
+variable {d : ℕ}
+
+/-- Pair trace separation at original length `N * p` gives pair trace
+separation at blocked length `N`.
+
+This is the finite-word transport implicit in the passage from injective
+representatives to block injectivity in arXiv:1606.00608, lines 318--344. -/
+theorem pairTraceSeparatingAt_blockTensor
+    {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (p N : ℕ) (hSep : PairTraceSeparatingAt A B (N * p)) :
+    PairTraceSeparatingAt
+      (blockTensor (d := d) (n := Fin D₁) A p)
+      (blockTensor (d := d) (n := Fin D₂) B p) N := by
+  intro ΔA ΔB hΔ
+  apply hSep ΔA ΔB
+  intro τ
+  let σ := (blockedConfigEquiv d N p).symm τ
+  have hσ := hΔ σ
+  simp only [evalWord_blockTensor] at hσ
+  rw [← ofFn_blockedConfigEquiv] at hσ
+  simpa [σ] using hσ
+
+end MPSTensor
+
+end

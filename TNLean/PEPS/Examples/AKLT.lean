@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Trace
-import QICLean.Algebra.SingletMatrix
-import TNLean.PEPS.TorusSiteTensor
+import QICLean.Algebra.Unitary.SingletMatrix
+import TNLean.PEPS.Tensor.Torus.TorusSiteTensor
 
 /-!
 # AKLT: the two-dimensional AKLT state on the square lattice as a PEPS

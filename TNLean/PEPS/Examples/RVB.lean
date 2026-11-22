@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Notation
-import TNLean.PEPS.TorusSiteTensor
+import TNLean.PEPS.Tensor.Torus.TorusSiteTensor
 
 /-!
 # RVB: the nearest-neighbour resonating valence bond state as a PEPS

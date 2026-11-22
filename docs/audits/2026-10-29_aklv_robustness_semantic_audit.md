@@ -17,7 +17,7 @@ The owner separately repeated compilation and transitive axiom checks.
 ## Exact statement and source correspondence
 
 The physical entry is `TNLean.MPS.AreaLaw.AKLV.normalized_chain_robustness`
-in `TNLean/MPS/AreaLaw/AKLV/NormalizedChain.lean`. Its input consists of:
+in `TNLean/MPS/AreaLaw/ChebyshevAGSP/NormalizedChain.lean`. Its input consists of:
 
 - original nearest-neighbour supports and positive contractions `0 ≤ hᵢ ≤ I`;
 - two boundary bonds `a < b`, three real scalar shifts, and positivity of

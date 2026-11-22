@@ -15,14 +15,14 @@ Target issue: #612
 
 ## Outcome
 
-I did **not** change `TNLean/MPS/MPDO/AlgebraStructure.lean`.
+I did **not** change `TNLean/MPS/MPDO/RFP/AlgebraStructure.lean`.
 The current algebra-structure side is still a scaffold on `main`, and replacing it
 by a paper-faithful definition would require new support-algebra infrastructure that
 is not yet present in the repository.
 
 ## Current state on `main`
 
-The file `TNLean/MPS/MPDO/AlgebraStructure.lean` still exposes a vacuous
+The file `TNLean/MPS/MPDO/RFP/AlgebraStructure.lean` still exposes a vacuous
 compatibility predicate:
 
 - `MPOTensor.AlgebraStructureData.CompatibleWith _ _ : Prop := True`
@@ -39,7 +39,7 @@ that the compatibility relation is trivial.
 ## The merged #611 API that one would naturally transfer from
 
 PR #665 (#611) added the transfer-retract formulation in
-`TNLean/MPS/MPDO/FusionIsometries.lean`. For each blocked size `n`, it provides
+`TNLean/MPS/MPDO/RFP/FusionIsometries.lean`. For each blocked size `n`, it provides
 `MPOTensor.TransferRetractData M n` consisting of:
 
 - a support subspace

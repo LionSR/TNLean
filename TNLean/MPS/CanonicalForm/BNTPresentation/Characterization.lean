@@ -1,0 +1,447 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import QICLean.Algebra.Combinatorics.FinSum
+import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
+import TNLean.MPS.CanonicalForm.BNT.PhaseClassSectorData
+import TNLean.MPS.Tensor.DirectSum.SectorDecomposition
+import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorDichotomy
+
+/-!
+# Characterization of a basis of normal tensors
+
+This module proves the characterization of a basis of normal tensors from
+arXiv:1606.00608, Proposition 2.7 (`prop:char-BNT`, lines 271--280 and
+1135--1146). For a tensor in canonical form, a finite candidate family is a
+basis of normal tensors if and only if every candidate is normal, every
+canonical-form summand is gauge-phase equivalent to one member of the family,
+and distinct members are not gauge-phase equivalent.
+
+The canonical-form hypotheses below record the context of the source
+proposition: the displayed summands are normal with nonzero coefficients, and
+their weighted direct sum generates the same positive-length matrix product
+vectors as the original tensor. Positive bond dimensions are implicit in the
+source's matrix algebras and are made explicit through typeclass assumptions.
+
+## Existence of a basis of normal tensors
+
+This module constructs a basis of normal tensors from literal CPSV canonical-form data by
+choosing one representative from each MPV phase-equivalence class of the displayed blocks.
+-/
+
+section
+
+open scoped Matrix BigOperators
+open Filter Topology
+
+namespace MPSTensor
+
+variable {d D : ℕ} {A : MPSTensor d D}
+
+/-- Every sector of a full-support sector decomposition is represented in any
+basis of normal tensors for the same matrix product vectors.
+
+The nonzero copy weights make each sector coefficient nonzero infinitely
+often, excluding the unused-candidate counterexample to unrestricted BNT
+uniqueness.  This is the full-support direction used in the sector matching
+argument of CPSV16, Appendix A, lines 1135--1148 and 1182.
+
+Source: arXiv:1606.00608, Proposition 2.7 and Appendix A, lines 1135--1148
+and 1182 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. -/
+theorem SectorDecomposition.exists_phase_match_of_isCPSVBasisOfNormalTensors
+    {g : ℕ} {dimB : Fin g → ℕ} [∀ j, NeZero (dimB j)]
+    {P : SectorDecomposition d} [∀ j, NeZero (P.basisDim j)]
+    (B : (j : Fin g) → MPSTensor d (dimB j))
+    (hPNormal : ∀ j, IsNormalTensor (P.basis j))
+    (hPDistinct : BlocksNotGaugePhaseEquiv (d := d) P.basis)
+    (hBNormal : ∀ j, IsNormalTensor (B j))
+    (hBNT : IsCPSVBasisOfNormalTensors P.toTensor (fun j => ⟨dimB j, B j⟩))
+    (j₀ : Fin P.basisCount) :
+    ∃ k : Fin g, MPVBlockPhaseEquiv (P.basis j₀) (B k) := by
+  classical
+  have hBDistinct : BlocksNotGaugePhaseEquiv (d := d) B :=
+    hBNT.blocks_not_gaugePhaseEquiv
+  have hPPhaseDistinct : ∀ i j : Fin P.basisCount, i ≠ j →
+      ¬ MPVBlockPhaseEquiv (P.basis i) (P.basis j) := by
+    intro i j hij hPhase
+    obtain ⟨hdim, hGPE⟩ :=
+      hPhase.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
+        (hPNormal i) (hPNormal j)
+    exact hPDistinct i j hij hdim hGPE
+  have hBPhaseDistinct : ∀ i j : Fin g, i ≠ j →
+      ¬ MPVBlockPhaseEquiv (B i) (B j) := by
+    intro i j hij hPhase
+    obtain ⟨hdim, hGPE⟩ :=
+      hPhase.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
+        (hBNormal i) (hBNormal j)
+    exact hBDistinct i j hij hdim hGPE
+  by_contra hNo
+  push Not at hNo
+  let T : Finset (Fin P.basisCount) :=
+    Finset.univ.filter fun j : Fin P.basisCount =>
+      ∀ k : Fin g, ¬ MPVBlockPhaseEquiv (P.basis j) (B k)
+  have hj₀T : j₀ ∈ T := by
+    simp [T, hNo]
+  have hTNotPhase : ∀ (j : Fin P.basisCount), j ∈ T → ∀ k : Fin g,
+      ¬ MPVBlockPhaseEquiv (P.basis j) (B k) := by
+    intro j hj k
+    exact (Finset.mem_filter.mp hj).2 k
+  have hNotTPhase : ∀ j : Fin P.basisCount, j ∉ T →
+      ∃ k : Fin g, MPVBlockPhaseEquiv (P.basis j) (B k) := by
+    intro j hj
+    have hnot : ¬ (∀ k : Fin g, ¬ MPVBlockPhaseEquiv (P.basis j) (B k)) := by
+      intro hall
+      exact hj (by simp [T, hall])
+    push Not at hnot
+    exact hnot
+  have hScalar : ∀ c : {j : Fin P.basisCount // j ∉ T},
+      ∃ k : Fin g, ∃ α : ℕ → ℂ, ∀ N : ℕ, 0 < N →
+        mpvState (d := d) (P.basis c.1) N =
+          α N • mpvState (d := d) (B k) N := by
+    intro c
+    obtain ⟨k, ζ, hζ, hmpv⟩ := hNotTPhase c.1 c.2
+    refine ⟨k, fun N => (ζ ^ N)⁻¹, ?_⟩
+    intro N hN
+    apply PiLp.ext
+    intro σ
+    have hB_mpv : mpv (B k) σ = ζ ^ N * mpv (P.basis c.1) σ :=
+      hmpv N hN σ
+    have hζN : ζ ^ N ≠ 0 := pow_ne_zero N hζ
+    simp only [mpvState_apply, PiLp.smul_apply, smul_eq_mul]
+    calc
+      mpv (P.basis c.1) σ = (ζ ^ N)⁻¹ * (ζ ^ N * mpv (P.basis c.1) σ) := by
+        rw [inv_mul_cancel_left₀ hζN]
+      _ = (ζ ^ N)⁻¹ * mpv (B k) σ := by rw [← hB_mpv]
+  choose kOf αOf hStateOf using hScalar
+  let : Fintype {j : Fin P.basisCount // j ∈ T} := Subtype.fintype (fun j => j ∈ T)
+  let : Fintype {j : Fin P.basisCount // j ∉ T} := Subtype.fintype (fun j => j ∉ T)
+  let C :
+      (x : Sum {j : Fin P.basisCount // j ∈ T} (Fin g)) →
+        MPSTensor d
+          (Sum.elim
+            (fun j : {j : Fin P.basisCount // j ∈ T} => P.basisDim j.1)
+            dimB x) :=
+    Sum.rec
+      (motive := fun x => MPSTensor d
+        (Sum.elim
+          (fun j : {j : Fin P.basisCount // j ∈ T} => P.basisDim j.1)
+          dimB x))
+      (fun j => P.basis j.1) B
+  have hSelf : ∀ x,
+      Tendsto (fun N => mpvOverlap (d := d) (C x) (C x) N) atTop
+        (𝓝 (1 : ℂ)) := by
+    intro x
+    cases x with
+    | inl j => simpa [C] using (hPNormal j.1).selfOverlap_tendsto_one
+    | inr k => simpa [C] using (hBNormal k).selfOverlap_tendsto_one
+  have hCross : ∀ x y, x ≠ y →
+      Tendsto (fun N => mpvOverlap (d := d) (C x) (C y) N) atTop
+        (𝓝 (0 : ℂ)) := by
+    intro x y hxy
+    cases x with
+    | inl i =>
+        cases y with
+        | inl j =>
+            have hij : i.1 ≠ j.1 := by
+              intro h
+              exact hxy (congrArg Sum.inl (Subtype.ext h))
+            simpa [C] using
+              overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv
+                (hPNormal i.1) (hPNormal j.1) (hPPhaseDistinct i.1 j.1 hij)
+        | inr k =>
+            simpa [C] using
+              overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv
+                (hPNormal i.1) (hBNormal k) (hTNotPhase i.1 i.2 k)
+    | inr k =>
+        cases y with
+        | inl i =>
+            simpa [C] using tendsto_mpvOverlap_zero_swap
+              (P.basis i.1) (B k)
+              (overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv
+                (hPNormal i.1) (hBNormal k) (hTNotPhase i.1 i.2 k))
+        | inr l =>
+            have hkl : k ≠ l := by
+              intro h
+              exact hxy (congrArg Sum.inr h)
+            simpa [C] using
+              overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv
+                (hBNormal k) (hBNormal l) (hBPhaseDistinct k l hkl)
+  have hLI : ∀ᶠ N in atTop,
+      LinearIndependent ℂ
+        (Sum.elim
+          (fun j : {j : Fin P.basisCount // j ∈ T} =>
+            mpvState (d := d) (P.basis j.1) N)
+          (fun k : Fin g => mpvState (d := d) (B k) N)) :=
+    (eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal
+      C hSelf hCross).mono (fun N hN => by
+        have key :
+            (fun x : Sum {j : Fin P.basisCount // j ∈ T} (Fin g) =>
+              mpvState (d := d) (C x) N) =
+              Sum.elim
+                (fun j : {j : Fin P.basisCount // j ∈ T} =>
+                  mpvState (d := d) (P.basis j.1) N)
+                (fun k : Fin g => mpvState (d := d) (B k) N) := by
+          funext x
+          cases x <;> rfl
+        rw [← key]
+        exact hN)
+  have hCoeffEventuallyZero : ∀ᶠ N : ℕ in atTop, P.coeff N j₀ = 0 := by
+    refine (hLI.and (Filter.eventually_atTop.mpr ⟨1, fun N hN => hN⟩)).mono ?_
+    intro N hN
+    rcases hN with ⟨hLIN, hNpos⟩
+    obtain ⟨cB, hcB⟩ := hBNT.spans_mpv N hNpos
+    have hPstate := P.mpvState_toTensor_eq_sum_coeff N
+    have hBstate :
+        mpvState (d := d) P.toTensor N =
+          ∑ k : Fin g, cB k • mpvState (d := d) (B k) N :=
+      mpvState_eq_sum_of_decomp (d := d) P.toTensor B cB (hcB)
+    have hPBsum :
+        (∑ j : Fin P.basisCount, P.coeff N j •
+            mpvState (d := d) (P.basis j) N) =
+          ∑ k : Fin g, cB k • mpvState (d := d) (B k) N :=
+      hPstate.symm.trans hBstate
+    exact LinearIndependent.coefficient_eq_zero_of_sum_eq_of_complement_smul
+      (T := T) (a := fun j => P.coeff N j)
+      (u := fun j => mpvState (d := d) (P.basis j) N)
+      (b := cB) (v := fun k => mpvState (d := d) (B k) N)
+      (kOf := kOf) (α := fun c => αOf c N)
+      (hComplement := fun c => hStateOf c N hNpos)
+      (hSum := hPBsum) (hLI := hLIN) (i₀ := j₀) hj₀T
+  exact (P.coeff_not_eventually_zero j₀) hCoeffEventuallyZero
+
+/-- Characterization of a basis of normal tensors by coverage of the normal
+canonical-form summands and minimality under gauge-phase equivalence.
+
+This is arXiv:1606.00608, Proposition 2.7 (`prop:char-BNT`, lines 271--280
+and 1135--1146).  The canonical-form coefficients are nonzero, as in the
+construction at lines 214--225; candidate normality, which is part of the BNT
+definition at lines 271--274, is stated on the characterized side of the iff. -/
+theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
+    {r g : ℕ} {dimCF : Fin r → ℕ} {dimB : Fin g → ℕ}
+    [∀ k, NeZero (dimCF k)] [∀ j, NeZero (dimB j)]
+    (A : MPSTensor d D) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPSTensor d (dimCF k))
+    (basis : (j : Fin g) → MPSTensor d (dimB j))
+    (hBlocksNormal : ∀ k, IsNormalTensor (blocks k))
+    (hμne : ∀ k, μ k ≠ 0)
+    (hCF : SameMPV₂Pos A (toTensorFromBlocks (d := d) μ blocks)) :
+    IsCPSVBasisOfNormalTensors A (fun j => ⟨dimB j, basis j⟩) ↔
+      (∀ j, IsNormalTensor (basis j)) ∧
+      (∀ k : Fin r, ∃ j : Fin g, ∃ hdim : dimB j = dimCF k,
+        ∃ X : GL (Fin (dimCF k)) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
+          ∀ i, blocks k i = ζ •
+            ((X : Matrix (Fin (dimCF k)) (Fin (dimCF k)) ℂ) *
+              (cast (congr_arg (MPSTensor d) hdim) (basis j)) i *
+              (↑(X⁻¹) : Matrix (Fin (dimCF k)) (Fin (dimCF k)) ℂ))) ∧
+      (∀ j k : Fin g, j ≠ k → ∀ hdim : dimB j = dimB k,
+        ¬ ∃ X : GL (Fin (dimB k)) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
+          ∀ i, basis k i = ζ •
+            ((X : Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ) *
+              (cast (congr_arg (MPSTensor d) hdim) (basis j)) i *
+              (↑(X⁻¹) : Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ))) := by
+  classical
+  constructor
+  · intro hBNT
+    have hBasisNormal := hBNT.blocks_normal
+    have hBasisDistinct := hBNT.blocks_not_gaugePhaseEquiv
+    refine ⟨hBasisNormal, ?_, ?_⟩
+    · let classes := mpvPhaseClassData blocks
+      let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
+      have hPBasis : ∀ j : Fin P.basisCount,
+          P.basis j = blocks (classes.repr j) := by
+        intro j
+        rfl
+      have hPBasisDim : ∀ j : Fin P.basisCount,
+          P.basisDim j = dimCF (classes.repr j) := by
+        intro j
+        rfl
+      let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) := fun j => by
+        rw [hPBasisDim j]
+        infer_instance
+      have hPNormal : ∀ j : Fin P.basisCount, IsNormalTensor (P.basis j) := by
+        intro j
+        rw [hPBasis j]
+        exact hBlocksNormal (classes.repr j)
+      have hPDistinct : BlocksNotGaugePhaseEquiv (d := d) P.basis := by
+        simpa [P, classes, collapsedBntSectorDecomp] using classes.blocks_not_equiv
+      have hPA : SameMPV₂Pos P.toTensor A :=
+        (collapsedBntSectorDecomp_sameMPV₂Pos (d := d) μ blocks hμne).trans hCF.symm
+      have hPBNT :
+          IsCPSVBasisOfNormalTensors P.toTensor
+            (fun j => ⟨dimB j, basis j⟩) := by
+        refine {
+          blocks_normal := hBNT.blocks_normal
+          spans_mpv := ?_
+          eventually_li := hBNT.eventually_li
+        }
+        · intro N hN
+          obtain ⟨c, hc⟩ := hBNT.spans_mpv N hN
+          refine ⟨c, fun σ => ?_⟩
+          rw [hPA N hN σ]
+          exact hc σ
+      intro k
+      obtain ⟨jClass, q, hEnum⟩ := classes.exists_enum_eq k
+      obtain ⟨jBasis, hRepBasis⟩ :=
+        P.exists_phase_match_of_isCPSVBasisOfNormalTensors basis
+          hPNormal hPDistinct hBasisNormal hPBNT jClass
+      have hBasisRep : MPVBlockPhaseEquiv (basis jBasis) (blocks (classes.repr jClass)) := by
+        rw [← hPBasis jClass]
+        exact hRepBasis.symm
+      have hRepBlock : MPVBlockPhaseEquiv (blocks (classes.repr jClass)) (blocks k) := by
+        rw [← hEnum]
+        exact classes.enum_phase jClass q
+      have hBasisBlock : MPVBlockPhaseEquiv (basis jBasis) (blocks k) :=
+        hBasisRep.trans hRepBlock
+      obtain ⟨hdim, hGPE⟩ :=
+        hBasisBlock.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
+          (hBasisNormal jBasis) (hBlocksNormal k)
+      obtain ⟨X, ζ, hζ, hrel⟩ := hGPE
+      have hζnorm : ‖ζ‖ = 1 :=
+        norm_eq_one_of_gaugePhase_cast_of_isNormalTensor
+          (hBasisNormal jBasis) (hBlocksNormal k) hdim hrel
+      exact ⟨jBasis, hdim, X, ζ, hζnorm, hrel⟩
+    · intro j k hjk hdim hUnit
+      obtain ⟨X, ζ, hζnorm, hrel⟩ := hUnit
+      exact hBasisDistinct j k hjk hdim
+        ⟨X, ζ, Complex.ne_zero_of_norm_eq_one hζnorm, hrel⟩
+  · rintro ⟨hBasisNormal, hCover, hUnitDistinct⟩
+    have hDistinct : BlocksNotGaugePhaseEquiv (d := d) basis := by
+      intro j k hjk hdim hGPE
+      obtain ⟨X, ζ, _hζ, hrel⟩ := hGPE
+      apply hUnitDistinct j k hjk hdim
+      exact ⟨X, ζ,
+        norm_eq_one_of_gaugePhase_cast_of_isNormalTensor
+          (hBasisNormal j) (hBasisNormal k) hdim hrel,
+        hrel⟩
+    choose jOf hdimOf XOf ζOf hζnormOf hrelOf using hCover
+    have hGPE : ∀ k : Fin r,
+        GaugePhaseEquiv
+          (cast (congr_arg (MPSTensor d) (hdimOf k)) (basis (jOf k)))
+          (blocks k) := fun k =>
+      ⟨XOf k, ζOf k,
+        Complex.ne_zero_of_norm_eq_one (hζnormOf k), hrelOf k⟩
+    have hPhase : ∀ k : Fin r,
+        MPVBlockPhaseEquiv (basis (jOf k)) (blocks k) := fun k =>
+      MPVBlockPhaseEquiv.of_gaugePhaseEquiv_cast
+        (basis (jOf k)) (blocks k) (hdimOf k) (hGPE k)
+    choose ζ hζ hmpv using hPhase
+    refine {
+      blocks_normal := hBasisNormal
+      spans_mpv := ?_
+      eventually_li :=
+        exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv
+          basis hBasisNormal hDistinct
+    }
+    intro N hN
+    let c : Fin g → ℂ := fun j =>
+      ∑ k : Fin r, if jOf k = j then (μ k * ζ k) ^ N else 0
+    refine ⟨c, ?_⟩
+    intro σ
+    calc
+      mpv A σ = mpv (toTensorFromBlocks (d := d) μ blocks) σ := hCF N hN σ
+      _ = ∑ k : Fin r, (μ k) ^ N * mpv (blocks k) σ := by
+        simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
+      _ = ∑ k : Fin r, (μ k * ζ k) ^ N * mpv (basis (jOf k)) σ := by
+        refine Finset.sum_congr rfl ?_
+        intro k _
+        rw [hmpv k N hN σ, mul_pow]
+        ring
+      _ = ∑ j : Fin g, c j * mpv (basis j) σ := by
+        have hGroup :=
+          Fintype.sum_fiber_smul (φ := jOf)
+            (a := fun k : Fin r => (μ k * ζ k) ^ N)
+            (v := fun j : Fin g => mpvState (d := d) (basis j) N)
+        have hComponent := congrArg (fun v : MPVSpace d N => v σ) hGroup
+        simpa [c, mpvState_apply, PiLp.smul_apply, smul_eq_mul] using hComponent
+
+/-- Characterization of a basis of normal tensors for literal CPSV canonical-form data.
+
+This specializes arXiv:1606.00608, Proposition 2.7 (`prop:char-BNT`, lines
+271--301 and 1137--1148), to the data of eq. `II_CF1`. -/
+theorem CPSVCanonicalFormData.isCPSVBasisOfNormalTensors_iff_covered_and_minimal
+    {g : ℕ} {dimB : Fin g → ℕ} [∀ j, NeZero (dimB j)]
+    (data : CPSVCanonicalFormData A)
+    (basis : (j : Fin g) → MPSTensor d (dimB j)) :
+    IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dimB j, basis j⟩) ↔
+      (∀ j, IsNormalTensor (basis j)) ∧
+      (∀ k : Fin data.r,
+        ∃ j : Fin g, ∃ hdim : dimB j = data.dim k,
+        ∃ X : GL (Fin (data.dim k)) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
+          ∀ i, data.blocks k i = ζ •
+            ((X : Matrix (Fin (data.dim k)) (Fin (data.dim k)) ℂ) *
+              (cast (congr_arg (MPSTensor d) hdim) (basis j)) i *
+              (↑(X⁻¹) : Matrix (Fin (data.dim k)) (Fin (data.dim k)) ℂ))) ∧
+      (∀ j k : Fin g, j ≠ k → ∀ hdim : dimB j = dimB k,
+        ¬ ∃ X : GL (Fin (dimB k)) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
+          ∀ i, basis k i = ζ •
+            ((X : Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ) *
+              (cast (congr_arg (MPSTensor d) hdim) (basis j)) i *
+              (↑(X⁻¹) : Matrix (Fin (dimB k)) (Fin (dimB k)) ℂ))) := by
+  let : ∀ k, NeZero (data.dim k) := fun k ↦ ⟨Nat.ne_of_gt (data.dim_pos k)⟩
+  exact isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
+    A data.weights data.blocks basis data.blocks_normal data.weights_ne_zero
+      data.sameMPV₂Pos_toTensorFromBlocks
+
+end MPSTensor
+
+end
+
+section
+
+open scoped Matrix
+
+namespace MPSTensor
+
+variable {d D : ℕ} {A : MPSTensor d D}
+
+/-- Literal CPSV canonical-form data admit a basis of normal tensors obtained by
+choosing one representative from each MPV phase-equivalence class.
+
+The conclusion is the existence part of the construction underlying
+arXiv:1606.00608, Proposition `prop:char-BNT`, lines 271--280 and 1137--1146. -/
+theorem CPSVCanonicalFormData.exists_isCPSVBasisOfNormalTensors
+    (data : CPSVCanonicalFormData A) :
+    ∃ g : ℕ, ∃ dimB : Fin g → ℕ,
+      ∃ basis : (j : Fin g) → MPSTensor d (dimB j),
+        (∀ j, 0 < dimB j) ∧
+        IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dimB j, basis j⟩) := by
+  classical
+  let : ∀ k, NeZero (data.dim k) :=
+    fun k ↦ ⟨Nat.ne_of_gt (data.dim_pos k)⟩
+  let classes := mpvPhaseClassData data.blocks
+  let dimB : Fin classes.g → ℕ := fun j ↦ data.dim (classes.repr j)
+  let basis : (j : Fin classes.g) → MPSTensor d (dimB j) :=
+    fun j ↦ data.blocks (classes.repr j)
+  have hdimB : ∀ j, 0 < dimB j := by
+    intro j
+    exact data.dim_pos (classes.repr j)
+  let : ∀ j, NeZero (dimB j) := fun j ↦ ⟨Nat.ne_of_gt (hdimB j)⟩
+  refine ⟨classes.g, dimB, basis, hdimB, ?_⟩
+  apply (data.isCPSVBasisOfNormalTensors_iff_covered_and_minimal basis).2
+  refine ⟨?_, ?_, ?_⟩
+  · intro j
+    exact data.blocks_normal (classes.repr j)
+  · intro k
+    obtain ⟨j, q, hEnum⟩ := classes.exists_enum_eq k
+    have hPhase : MPVBlockPhaseEquiv (basis j) (data.blocks k) := by
+      change MPVBlockPhaseEquiv (data.blocks (classes.repr j)) (data.blocks k)
+      rw [← hEnum]
+      exact classes.enum_phase j q
+    obtain ⟨hdim, hGauge⟩ :=
+      hPhase.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
+        (data.blocks_normal (classes.repr j)) (data.blocks_normal k)
+    obtain ⟨X, ζ, _hζ, hrel⟩ := hGauge
+    refine ⟨j, hdim, X, ζ, ?_, hrel⟩
+    exact norm_eq_one_of_gaugePhase_cast_of_isNormalTensor
+      (data.blocks_normal (classes.repr j)) (data.blocks_normal k) hdim hrel
+  · intro j k hjk hdim hUnit
+    obtain ⟨X, ζ, hζnorm, hrel⟩ := hUnit
+    apply classes.blocks_not_equiv j k hjk hdim
+    exact ⟨X, ζ,
+      Complex.ne_zero_of_norm_eq_one hζnorm, hrel⟩
+
+end MPSTensor
+
+end

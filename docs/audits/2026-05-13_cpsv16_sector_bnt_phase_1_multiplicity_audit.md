@@ -13,12 +13,12 @@ The proposed `IsBNTCanonicalForm` is a real improvement over the one-copy surfac
 * CPSV21 `Papers/2011.12127/TN-Review-main.tex:1815-1837`: normal tensors are primitive after blocking; canonical form is `⊕_k μ_k A_k`.
 * CPSV21 `Papers/2011.12127/TN-Review-main.tex:1846-1884`: BNT and the two-layer BNT decomposition use raw entries `μ_{j,q}` and coefficient `∑_q μ_{j,q}^N`.
 * CPSV21 `Papers/2011.12127/TN-Review-main.tex:1905-1908`: the unital gauge is optional, and the non-periodic theorem is separated from the periodic generalization.
-* `TNLean/MPS/SharedInfra/SectorDecomposition.lean:29-43`: `SectorWeightData` already stores multiplicities and raw nonzero weights.
-* `TNLean/MPS/SharedInfra/SectorDecomposition.lean:137-199`: `P.toTensor` already expands as `∑_j ∑_q (P.weight j q)^N V_N(P.basis j)` and then as `∑_j P.coeff N j V_N(P.basis j)`.
-* `TNLean/MPS/BNT/Construction.lean:68-74`: `BlocksNotGaugePhaseEquiv` has the cast-compatible shape needed when basis dimensions differ.
-* `TNLean/MPS/BNT/Construction.lean:446-467`: cross-overlap decay splits into same-dimension `GaugePhaseEquiv` and different-dimension cases.
-* `TNLean/MPS/BNT/Basic.lean:172-178` and `:195-213`: coefficient extraction and combined-family LI are already surface-agnostic engines.
-* `TNLean/MPS/FundamentalTheorem/SectorWeightComparison.lean:112-117`: `geom_sum_eventually_zero` is the right algebraic tool for proving power sums of nonzero weights are not eventually zero.
+* `TNLean/MPS/Tensor/DirectSum/SectorDecomposition.lean:29-43`: `SectorWeightData` already stores multiplicities and raw nonzero weights.
+* `TNLean/MPS/Tensor/DirectSum/SectorDecomposition.lean:137-199`: `P.toTensor` already expands as `∑_j ∑_q (P.weight j q)^N V_N(P.basis j)` and then as `∑_j P.coeff N j V_N(P.basis j)`.
+* `TNLean/MPS/CanonicalForm/BNT/Construction.lean:68-74`: `BlocksNotGaugePhaseEquiv` has the cast-compatible shape needed when basis dimensions differ.
+* `TNLean/MPS/CanonicalForm/BNT/Construction.lean:446-467`: cross-overlap decay splits into same-dimension `GaugePhaseEquiv` and different-dimension cases.
+* `TNLean/MPS/CanonicalForm/BNT/Basic.lean:172-178` and `:195-213`: coefficient extraction and combined-family LI are already surface-agnostic engines.
+* `TNLean/MPS/Tensor/DirectSum/SectorWeightComparison.lean:112-117`: `geom_sum_eventually_zero` is the right algebraic tool for proving power sums of nonzero weights are not eventually zero.
 
 ## Q1. Repeated `phaseWeight j q` within a sector
 
@@ -72,7 +72,7 @@ The proposed `IsBNTCanonicalForm` is a real improvement over the one-copy surfac
 
 **Verdict:** missing algebraic API, and the equal-modulus layer is unnecessary for the source argument.
 
-**Reference / counter-check:** `TNLean/MPS/BNT/Basic.lean:195-213` gives the combined-family LI once self-overlaps and all cross-overlaps have the right limits.  `TNLean/MPS/BNT/Basic.lean:172-178` then extracts coefficients from a relation.  To get a contradiction for a fixed sector, one must know the sector coefficient `P.coeff N j = ∑_q P.weight j q ^ N` is not eventually zero.
+**Reference / counter-check:** `TNLean/MPS/CanonicalForm/BNT/Basic.lean:195-213` gives the combined-family LI once self-overlaps and all cross-overlaps have the right limits.  `TNLean/MPS/CanonicalForm/BNT/Basic.lean:172-178` then extracts coefficients from a relation.  To get a contradiction for a fixed sector, one must know the sector coefficient `P.coeff N j = ∑_q P.weight j q ^ N` is not eventually zero.
 
 **Recommendation:** prove an API lemma for raw sector weights:
 
@@ -134,7 +134,7 @@ The existing Gram-matrix LI theorem uses limit `1`, so the generalized version w
 
 **Verdict:** the simplified proposed field is not type-correct in heterogeneous dimensions; the cast-compatible shape is required.
 
-**Reference / counter-check:** `BlocksNotGaugePhaseEquiv` in `TNLean/MPS/BNT/Construction.lean:68-74` quantifies over `h : dim j = dim k` and casts the left tensor.  The cross-overlap lemma at `:446-467` uses this shape and handles `dim j ≠ dim k` separately.
+**Reference / counter-check:** `BlocksNotGaugePhaseEquiv` in `TNLean/MPS/CanonicalForm/BNT/Construction.lean:68-74` quantifies over `h : dim j = dim k` and casts the left tensor.  The cross-overlap lemma at `:446-467` uses this shape and handles `dim j ≠ dim k` separately.
 
 **Recommendation:** define
 

@@ -5,8 +5,8 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.CZX.CZXPlusIdentity
 import TNLean.MPS.Examples.CZX.CZXUnitary
-import TNLean.MPS.MPDO.DirectSum
-import TNLean.MPS.MPDO.IdentityTensor
+import TNLean.MPS.Operator.Product.DirectSum
+import TNLean.MPS.Operator.Defs
 
 /-!
 # CZX plus identity: projectors on even rings and inverses on odd rings

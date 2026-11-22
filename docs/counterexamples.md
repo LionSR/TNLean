@@ -23,8 +23,8 @@ mathematical obstruction.
 - Location:
   `TNLean/Archive/PerronFrobeniusVirtualSpanningCounterexample.lean`
 - Active physical-sector realization:
-  `TNLean/MPS/MPDO/ActiveSectorSpanningCounterexample.lean` and
-  `TNLean/MPS/MPDO/ActiveSectorSpanningRFP.lean`
+  `TNLean/MPS/Examples/SpanningSectors/ActiveSectorSpanningCounterexample.lean` and
+  `TNLean/MPS/Examples/SpanningSectors/ActiveSectorSpanningRFP.lean`
 - Main declaration:
   `TNLean.Archive.PerronFrobeniusVirtualSpanningCounterexample.injective_sourceZCL_tensor_with_nilpotent_sector_pairing`
 - Strengthened declaration with scalar positive semidefinite neighboring operators:
@@ -63,7 +63,7 @@ mathematical obstruction.
 
 ### Coefficient absorption need not preserve normality
 
-- Location: `TNLean/MPS/MPDO/CaseIIAbsorptionCounterexample.lean`
+- Location: `TNLean/MPS/Examples/MPDOCounterexamples/CaseIIAbsorptionCounterexample.lean`
 - Main declaration:
   `MPOTensor.CaseIIAbsorptionCounterexample.ambient_isSAL_isSimpleCanonicalForm_and_firstAbsorbed_not_isNormalTensor`
 - Statement refuted: the Case-II step at CPSV16 lines 1646--1665 treats the
@@ -88,9 +88,9 @@ mathematical obstruction.
 
 ### The absorbed-representative structure assertion is false
 
-- Locations: `TNLean/MPS/MPDO/NonCartesianActiveSectorCounterexample.lean`
-  `TNLean/MPS/MPDO/NeighboringTraceObstructionAmbientBlocks.lean`, and
-  `TNLean/MPS/MPDO/NeighboringTraceObstructionAmbientCounterexample.lean`
+- Locations: `TNLean/MPS/Examples/NonCartesianSectors/NonCartesianActiveSectorCounterexample.lean`
+  `TNLean/MPS/Examples/NonCartesianSectors/NeighboringTraceObstructionAmbientBlocks.lean`, and
+  `TNLean/MPS/Examples/NonCartesianSectors/NeighboringTraceObstructionAmbientCounterexample.lean`
 - Main declarations:
   `MPOTensor.NonCartesianActiveSectorCandidate.full_lowLevel_counterexample`
   and
@@ -134,9 +134,9 @@ mathematical obstruction.
 
 ### SAL and ZCL do not imply the Proposition C.15 blocking channels
 
-- Locations: `TNLean/MPS/MPDO/CPSVBlockingChannelCounterexample.lean`,
-  `TNLean/MPS/MPDO/CPSVBlockingChannelEmbeddedCounterexample.lean`, and
-  `TNLean/MPS/MPDO/CPSVBlockingChannelAmbientCounterexample.lean`
+- Locations: `TNLean/MPS/Examples/NonCartesianSectors/CPSVBlockingChannelCounterexample.lean`,
+  `TNLean/MPS/Examples/NonCartesianSectors/CPSVBlockingChannelEmbeddedCounterexample.lean`, and
+  `TNLean/MPS/Examples/NonCartesianSectors/CPSVBlockingChannelAmbientCounterexample.lean`
 - Main declaration:
   `MPOTensor.CPSVBlockingChannelCounterexample.printed_propositionC15_and_theorem49_ii_to_v_are_false`
 - Statement refuted: under the standing simple, biCF, MPDO, saturation-of-the-
@@ -169,7 +169,7 @@ mathematical obstruction.
 
 ### Unequal raw copies refute Theorem 4.9(iv)$\Rightarrow$(v)
 
-- Location: `TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.lean`
+- Location: `TNLean/MPS/Examples/MPDOCounterexamples/Theorem49RepeatedCopyCounterexample.lean`
 - Main declaration:
   `MPOTensor.CaseIIAbsorptionCounterexample.printed_theorem49_iv_to_v_is_false`
 - Statement refuted: under the printed standing simple-biCF-BNT and MPDO
@@ -195,7 +195,7 @@ mathematical obstruction.
 ### Horizontal periodic equality does not determine vertical BNT coefficients
 
 - Location:
-  `TNLean/MPS/MPDO/VerticalCoefficientPresentationCounterexample.lean`
+  `TNLean/MPS/Examples/MPDOCounterexamples/VerticalCoefficientPresentationCounterexample.lean`
 - Main declaration:
   `MPOTensor.VerticalCoefficientPresentationCounterexample.sameMPV₂Pos_and_no_relabelled_coefficient_equality`
 - Statement refuted: two tensor-attached vertical BNT algebra clauses on MPO
@@ -255,7 +255,7 @@ mathematical obstruction.
 
 ### Supported compression preserves positive lengths, not length zero
 
-- Location: `TNLean/MPS/CanonicalForm/CyclicSectors/CompressionPositive.lean`
+- Location: `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/Compression.lean`
 - Statement refuted: supported-projection compression gives heterogeneous
   `SameMPV₂` at all lengths.
 - Witness: the length-zero coefficient changes from `trace 1 = D` to
@@ -263,7 +263,7 @@ mathematical obstruction.
 
 ### All-zero scalar blocks must be excluded before TP gauging
 
-- Location: `TNLean/MPS/CanonicalForm/NormalReduction/TPGauge.lean`
+- Location: `TNLean/MPS/CanonicalForm/NormalBlocks/TPGauge.lean`
 - Statement refuted: the blockwise Perron-Frobenius TP-gauge step has an
   unconditional arbitrary-input theorem under the current `SameMPV₂`
   interface.
@@ -285,7 +285,7 @@ mathematical obstruction.
 
 ### Cumulative spanning does not imply normality without aperiodicity
 
-- Locations: `TNLean/Wielandt/SpanGrowth/CumulativeToWordSpan.lean`,
+- Locations: `TNLean/MPS/Tensor/Words/WordSpan.lean`,
   `QICLean/Kraus/Wielandt/SpanGrowth/AlgebraSpan.lean`,
   `blueprint/src/chapter/ch08_wielandt.tex`
 - Statement refuted: cumulative spanning, or algebra generation, implies that a
@@ -295,7 +295,7 @@ mathematical obstruction.
 
 ### Irreducible channels need not be primitive
 
-- Location: `QICLean/QPF/Primitive.lean`
+- Location: `QICLean/Kraus/PrimitiveFixedPoint/Assembly.lean`
 - Statement refuted: irreducibility of a channel implies primitivity.
 - Witness: an irreducible channel can have period greater than `1`; primitivity
   is a stronger peripheral-spectrum condition.
@@ -309,7 +309,7 @@ mathematical obstruction.
 
 ### PEPS gauge uniqueness is not global-scalar uniqueness
 
-- Locations: `TNLean/PEPS/FundamentalTheorem.lean`,
+- Locations: `TNLean/PEPS/FundamentalTheorem/Injective/FundamentalTheorem.lean`,
   `blueprint/src/chapter/ch23_algebraic_ft.tex`
 - Statement refuted: two PEPS gauge families differ by one global scalar.
 - Witness: the connected triangle, bond-dimension-`1` counterexample from
@@ -329,7 +329,7 @@ mathematical obstruction.
 
 ### The dimension-only FNW prefactor fails at a prescribed rate
 
-- Location: `TNLean/MPS/ParentHamiltonian/FNWDimensionConstant/Counterexample.lean`
+- Location: `TNLean/MPS/ParentHamiltonian/ProjectorDefect/DimensionConstant/Counterexample.lean`
 - Main declaration:
   `MPSTensor.FNWDimensionConstant.exists_dimensionFour_counterexample`
 - Statement refuted: Nachtergaele's dimension-only prefactor $c=k^2$ bounds

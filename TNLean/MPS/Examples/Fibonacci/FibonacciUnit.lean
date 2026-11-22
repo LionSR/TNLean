@@ -3,9 +3,9 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.FundamentalTheorem.Reduction.CompressionPeriodic
+import TNLean.MPS.FundamentalTheorem.OperatorProduct.CompressionPeriodic
 import TNLean.MPS.Examples.Fibonacci.Fibonacci
-import TNLean.MPS.Examples.Rings.GoldenCompression
+import TNLean.MPS.Examples.Rings.GoldenRing
 
 /-!
 # Fibonacci unit laws: `1 ⊗ 1 = 1` and `1 ⊗ τ = τ ⊗ 1 = τ` as compressions

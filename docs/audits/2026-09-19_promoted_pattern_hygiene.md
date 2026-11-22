@@ -18,15 +18,15 @@ closing each summand by `Submodule.smul_mem`.
 
 | Module | Certificate |
 |---|---|
-| `TNLean/PEPS/TorusRowColumnReductionObstruction.lean` | `Aunits_isInjective` |
+| `TNLean/PEPS/FundamentalTheorem/Torus/TorusRowColumnReductionObstruction.lean` | `Aunits_isInjective` |
 | `TNLean/MPS/FundamentalTheorem/Reduction/Examples/Zsqrt2Ring.lean` | `MPSTensor.isNormal_of_single_eq_smul_zsqrt2` |
 | `TNLean/MPS/FundamentalTheorem/Reduction/Examples/GoldenCompression.lean` | `MPSTensor.isNormal_of_golden_single` |
 | `TNLean/MPS/FundamentalTheorem/Reduction/Examples/OneSlotGauge.lean` | `MPSTensor.isNBlkInjective_two_of_int` |
 | `TNLean/MPS/RFP/BellPairCIDObstruction.lean` | `MPSTensor.bellPairChainTensor_isInjective` |
-| `TNLean/MPS/MPDO/CZXTensorInjectivity.lean` | `MPOTensor.CZX.tensor_isInjective` |
-| `TNLean/MPS/MPDO/BondTwoSingletonGramBoundary.lean` | `MPOTensor.BondTwoSingletonGramBoundary.singletonTensor_isInjective` |
-| `TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean` | `diagonalRestrictionUnits_isInjective` (private) |
-| `TNLean/MPS/MPDO/PositiveMinimalRealizationCounterexample.lean` | `MPSTensor.PositiveMinimalRealizationCounterexample.tensor_isInjective` |
+| `TNLean/MPS/MPDO/CZX/CZXTensor.lean` | `MPOTensor.CZX.tensor_isInjective` |
+| `TNLean/MPS/Examples/BondTwoSingleton/BondTwoSingletonGramBoundary.lean` | `MPOTensor.BondTwoSingletonGramBoundary.singletonTensor_isInjective` |
+| `TNLean/MPS/CanonicalForm/DiagonalRestrictionCounterexample.lean` | `diagonalRestrictionUnits_isInjective` (private) |
+| `TNLean/MPS/Examples/MPDOCounterexamples/PositiveMinimalRealizationCounterexample.lean` | `MPSTensor.PositiveMinimalRealizationCounterexample.tensor_isInjective` |
 
 Each now ends in one application of the helper, and each file gains the import
 of `TNLean.Algebra.MatrixSingleSpan`. The last of the nine expanded the sum over
@@ -53,24 +53,24 @@ two-line bodies.
 
 | Module | Private lemma now reusing the owner |
 |---|---|
-| `TNLean/MPS/Examples/Cluster.lean` | `MPSTensor.inv_sqrt2_sq` |
+| `TNLean/MPS/Examples/Cluster/Cluster.lean` | `MPSTensor.inv_sqrt2_sq` |
 | `TNLean/MPS/Examples/EvenParity.lean` | `MPSTensor.inv_sqrt2_mul_self` |
-| `TNLean/MPS/Examples/MajumdarGhosh.lean` | `MPSTensor.inv_ofReal_sqrt2_mul_self` |
-| `TNLean/MPS/MPDO/LocalPurificationRFP.lean` | `MPOTensor.sqrt2_inv_mul_self` (private) |
-| `TNLean/MPS/MPDO/CaseIIAbsorptionCounterexample.lean` | `MPOTensor.CaseIIAbsorptionCounterexample.invSqrtTwo_mul_self` |
+| `TNLean/MPS/Examples/MajumdarGhosh/MajumdarGhosh.lean` | `MPSTensor.inv_ofReal_sqrt2_mul_self` |
+| `TNLean/MPS/MPDO/Purification/LocalPurificationRFP.lean` | `MPOTensor.sqrt2_inv_mul_self` (private) |
+| `TNLean/MPS/Examples/MPDOCounterexamples/CaseIIAbsorptionCounterexample.lean` | `MPOTensor.CaseIIAbsorptionCounterexample.invSqrtTwo_mul_self` |
 | `TNLean/MPS/RFP/CPSVCIDNotRFPExample.lean` | `MPSTensor.cpsvExample34_invSqrtTwo_sq` |
 
 Retained deliberately: the three private constants naming `1/√2`
 (`MPOTensor.TwistedDimer.invSqrt2` is real-valued, the other two are complex and
 each has some twenty use sites), and the nine general-`d` `sourceSqrt`
-cancellations of `TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean`, which are
+cancellations of `TNLean/MPS/Examples/Shift/ShiftSourceFactors.lean`, which are
 consumed as rewrite rules in fixed associativity shapes and two of which carry
 source citations.
 
 ## 3. Two gauges that recomputed their own inverse
 
-`TNLean/MPS/MPDO/BondTwoSingletonGramBoundary.lean` and
-`TNLean/MPS/MPDO/PositiveMinimalRealizationCounterexample.lean` each built a
+`TNLean/MPS/Examples/BondTwoSingleton/BondTwoSingletonGramBoundary.lean` and
+`TNLean/MPS/Examples/MPDOCounterexamples/PositiveMinimalRealizationCounterexample.lean` each built a
 concrete two-by-two gauge through
 `Matrix.GeneralLinearGroup.mkOfDetNeZero`, then recovered its inverse
 coordinate by building a second `mkOfDetNeZero` for the inverse matrix, proving
@@ -103,10 +103,10 @@ introduced. No blueprint tag names a removed declaration.
 ## Deferred (both landed 2026-09-23)
 
 `MPOTensor.sourceSqrt_mul_inv` and `MPOTensor.sourceSqrt_inv_mul`
-(`TNLean/MPS/MPU/Examples/ShiftSourceFactors.lean`) were pure pass-throughs of
+(`TNLean/MPS/Examples/Shift/ShiftSourceFactors.lean`) were pure pass-throughs of
 `mul_inv_cancel₀` with one use each; they were retired in the 2026-09-23
 second pass together with the wider attribute sweep over that file, and the
 two copies of the normalized-ancilla cancellation in
-`TNLean/MPS/MPU/PhysicalAncilla.lean` now route through
+`TNLean/MPS/MPU/CanonicalForm/PhysicalAncilla.lean` now route through
 `Complex.ofReal_sqrt_inv_mul_self`. Recorded in
 `docs/audits/2026-09-23_hygiene_second_pass.md`.

@@ -154,7 +154,7 @@ The transfer-form physical correlator is formally defined by
 \end{align}
 \footnote{Formal declaration:
     \leanid{MPSTensor.physicalStringOrderParam} in
-    \path{TNLean/MPS/Symmetry/StringOrderDefs.lean}.}
+    \path{TNLean/MPS/Transfer/Correlation/StringOrderDefs.lean}.}
 The physical predicate uses the explicit projective correction
 $u\notin\C\Id$, rather than the literal $u\ne\Id$ printed by the source.
 It asserts that there exist such a unitary $u$, physical endpoint operators
@@ -166,7 +166,7 @@ $x,y$, and a number $s>0$ such that
 \end{align}
 \footnote{Formal declaration:
     \leanid{MPSTensor.HasPhysicalStringOrder} in
-    \path{TNLean/MPS/Symmetry/StringOrderDefs.lean}.}
+    \path{TNLean/MPS/Transfer/Correlation/StringOrderDefs.lean}.}
 
 The main formal theorems instead use virtual-boundary nondecay. For virtual
 matrices $X,Y\in M_D(\mathbb{C})$ and a fixed twist $u$, define
@@ -178,7 +178,7 @@ matrices $X,Y\in M_D(\mathbb{C})$ and a fixed twist $u$, define
 \end{align}
 \footnote{Formal declaration:
     \leanid{MPSTensor.stringOrderBoundaryParam} in
-    \path{TNLean/MPS/Symmetry/StringOrderDefs.lean}.}
+    \path{TNLean/MPS/Transfer/Correlation/StringOrderDefs.lean}.}
 Virtual-boundary nondecay means that there exist $X,Y$ and $c>0$ such that
 \begin{align}
     \left\lVert T_L(X,Y,u)\right\rVert
@@ -187,7 +187,7 @@ Virtual-boundary nondecay means that there exist $X,Y$ and $c>0$ such that
 \end{align}
 for every length $L$.\footnote{Formal declaration:
     \leanid{MPSTensor.HasStringOrder} in
-    \path{TNLean/MPS/Symmetry/StringOrderDefs.lean}.}
+    \path{TNLean/MPS/Transfer/Correlation/StringOrderDefs.lean}.}
 
 The formal development proves that virtual-boundary nondecay is equivalent to
 virtual local covariance. It also proves virtual-boundary nondecay for
@@ -197,7 +197,7 @@ hypotheses, together with the corresponding equivalence theorem.\footnote{
     \leanid{MPSTensor.stringOrder_iff_localSymmetry},
     \leanid{MPSTensor.hasStringOrder_of_symmetric_injective}, and
     \leanid{MPSTensor.hasStringOrder_iff_of_symmetric_injective} in
-    \path{TNLean/MPS/Symmetry/StringOrder.lean}.}
+    \path{TNLean/MPS/Symmetry/StringOrder/StringOrder.lean}.}
 
 The physical and virtual-boundary notions differ in four respects.
 

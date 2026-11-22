@@ -206,7 +206,7 @@ Without one of these stronger ingredients, I do not currently see a way to disch
 The downstream private placeholder
 
 - `hLift_cyclicDecomp_mps_of_fixUpgrade_missingBridge`
-  in `TNLean/MPS/Periodic/Overlap/SelfOverlap.lean`
+  in `TNLean/MPS/CanonicalForm/Periodic/Overlap/SelfOverlap.lean`
 
 still cannot be replaced by the public `SectorIrreducibility` theorem alone, because its statement
 requires the fully specialized `hLift` conclusion with **no remaining `hProjStep` parameter**.

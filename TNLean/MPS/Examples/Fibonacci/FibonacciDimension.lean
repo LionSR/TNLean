@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import Mathlib.NumberTheory.Real.GoldenRatio
 import TNLean.MPS.Examples.Fibonacci.FibonacciAnomaly
-import TNLean.MPS.Symmetry.MPOSymmetry.Dimension
+import TNLean.MPS.Symmetry.MPOSymmetry.Fusion.Dimension
 
 /-!
 # The Perron–Frobenius dimensions of the Fibonacci fusion ring

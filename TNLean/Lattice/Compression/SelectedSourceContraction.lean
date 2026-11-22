@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.PreparedSourceContraction
-import QICLean.Algebra.MultilinearSelectedSum
+import QICLean.Algebra.Module.MultilinearSelectedSum
 
 /-!
 # Selected coordinates of prepared source contractions

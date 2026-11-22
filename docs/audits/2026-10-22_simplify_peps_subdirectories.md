@@ -12,8 +12,8 @@ migrated to the replacement.
 
 | Removed | File | Replacement |
 |---|---|---|
-| `mem_blue_or_complement_of_not_mem_red` | `TNLean/PEPS/RegionBlock/CoarseThreeSiteCoherentFrame.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `twoBlockScalarProportional_unique` | `TNLean/PEPS/RegionBlock/ProportionalityFromAbsorbed.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `ThreeBlockGeometry.isRegionBoundaryEdge_red_of_host` | `TNLean/PEPS/RegionBlock/UnionInjectivityGeneral2.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `isP0OuterEdge_both_not_mem_R₂` | `TNLean/PEPS/RegionBlock/UnionInjectivityOverlap3.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `isOverlapCrossingEdge_both_mem_R₁` | `TNLean/PEPS/RegionBlock/UnionInjectivityOverlapSetup.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `mem_blue_or_complement_of_not_mem_red` | `TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/CoherentFrame.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `twoBlockScalarProportional_unique` | `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/ProportionalityFromAbsorbed.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `ThreeBlockGeometry.isRegionBoundaryEdge_red_of_host` | `TNLean/PEPS/Injectivity/Region/DisjointUnion.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `isP0OuterEdge_both_not_mem_R₂` | `TNLean/PEPS/Injectivity/Region/OverlapUnionBridgeRow.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `isOverlapCrossingEdge_both_mem_R₁` | `TNLean/PEPS/Injectivity/Region/OverlapUnionGeometry.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |

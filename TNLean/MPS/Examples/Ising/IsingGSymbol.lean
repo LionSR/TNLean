@@ -7,8 +7,8 @@ import TNLean.MPS.Examples.Ising.IsingDimension
 import TNLean.MPS.Examples.Ising.IsingFusion
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebra
 import TNLean.MPS.Examples.Ising.IsingTensors
-import TNLean.MPS.MPDO.BondSimilarity
-import TNLean.MPS.MPDO.SimpleScaling
+import TNLean.MPS.Operator.Periodic.BondSimilarity
+import TNLean.MPS.CanonicalForm.SimpleMPO.SimpleScaling
 
 /-!
 # Ising string-net: the source's G-symbol tensors and the F-symbol blocks

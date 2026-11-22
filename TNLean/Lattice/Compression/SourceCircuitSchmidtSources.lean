@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceCircuitChoiceAt
-import QICLean.Probability.ComplexGaussian.SchmidtSource
+import QICLean.Probability.Gaussian.SchmidtSource
 
 /-!
 # Schmidt coordinates determined by original gate labels

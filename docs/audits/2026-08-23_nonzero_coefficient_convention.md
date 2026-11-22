@@ -49,17 +49,17 @@ The MPDO inverse-map "active sector" vocabulary
 `PhysicalSectorActiveRestriction.lean`, `inactive*Density`,
 `zeroRightTensorOnInactive`) is a different concept (zero right tensors in
 the Case-I factorization) and is untouched, as is the `ActiveLabel` corner
-vocabulary of `TNLean/MPS/MPDO/VerticalProductSpectralFamily.lean`.
+vocabulary of `TNLean/MPS/MPDO/Fusion/VerticalProductSpectralFamily.lean`.
 
 ## Deleted modules
 
 | Module | Disposition |
 |---|---|
 | `TNLean/MPS/CanonicalForm/ActiveBlocks.lean` | Deleted; the active-block restriction is the identity under the convention. |
-| `TNLean/MPS/CanonicalForm/ActiveBNTRefinement.lean` | Replaced by `TNLean/MPS/CanonicalForm/BNTRefinement.lean`. |
+| `TNLean/MPS/CanonicalForm/ActiveBNTRefinement.lean` | Replaced by `TNLean/MPS/CanonicalForm/BNTPresentation/Refinement.lean`. |
 | `TNLean/MPS/CanonicalForm/BNTUniqueness.lean` | Deleted; its refutation adjoined a zero-weight block. |
 | `TNLean/MPS/FundamentalTheorem/SectorBNT/CanonicalFormEqual.lean` | Deleted; `CanonicalFormEqualAmbient.lean` is the Corollary 2.11 statement. |
-| `TNLean/MPS/MPU/ActiveTransferMultiplicity.lean` | Replaced by `TNLean/MPS/MPU/TransferMultiplicity.lean`. |
+| `TNLean/MPS/MPU/ActiveTransferMultiplicity.lean` | Replaced by `TNLean/MPS/CanonicalForm/SimpleMPU/TransferMultiplicity.lean`. |
 | `TNLean/MPS/RFP/BNTResidualIsometryCounterexample.lean` | Deleted; its refutation adjoined an unused normal tensor with zero coefficient. |
 
 ## Removed declarations

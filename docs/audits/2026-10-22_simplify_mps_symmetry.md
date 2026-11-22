@@ -12,7 +12,7 @@ migrated to the replacement.
 
 | Removed | File | Replacement |
 |---|---|---|
-| `mulTensorAssocMatrix_eq_finCongr` | `TNLean/MPS/Symmetry/MPOSymmetry/AssociatorToolkit.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `symmetricProjection_mul` (private) | `TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointProjectorComparison.lean` | `LinearMap.IsSymmetricProjection.mul_of_commute` |
-| `one_sub_mul_le_add_one_sub` (private) | `TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointProjectorComparison.lean` | `LinearMap.IsSymmetricProjection.one_sub_mul_le_add_one_sub` |
-| `one_sub_mul_mul_le` (private) | `TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointProjectorComparison.lean` | `LinearMap.IsSymmetricProjection.one_sub_mul_mul_le` |
+| `mulTensorAssocMatrix_eq_finCongr` | `TNLean/MPS/FundamentalTheorem/OperatorGroup/AssociatorToolkit.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `symmetricProjection_mul` (private) | `TNLean/MPS/Symmetry/MPOSymmetry/MixedPath/Endpoint/MixedEndpointProjectorComparison.lean` | `LinearMap.IsSymmetricProjection.mul_of_commute` |
+| `one_sub_mul_le_add_one_sub` (private) | `TNLean/MPS/Symmetry/MPOSymmetry/MixedPath/Endpoint/MixedEndpointProjectorComparison.lean` | `LinearMap.IsSymmetricProjection.one_sub_mul_le_add_one_sub` |
+| `one_sub_mul_mul_le` (private) | `TNLean/MPS/Symmetry/MPOSymmetry/MixedPath/Endpoint/MixedEndpointProjectorComparison.lean` | `LinearMap.IsSymmetricProjection.one_sub_mul_mul_le` |

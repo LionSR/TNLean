@@ -6,9 +6,9 @@ Authors: TNLean contributors
 import TNLean.Lattice.Sheet.Splitting
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.Entropy.RegionUnion
-import QICLean.Algebra.OperatorSchmidt
-import QICLean.Entropy.SupportedMarginalTails
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import QICLean.Algebra.OperatorSchmidt.Basic
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
 
 /-!
 # A supported operator at the right boundary of a three-region partition

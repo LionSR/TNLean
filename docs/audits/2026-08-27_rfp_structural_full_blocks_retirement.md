@@ -8,9 +8,9 @@ single-tensor original applied to one block, with a proof body of the form
 
 | Removed | Replacement |
 |---|---|
-| `MPSTensor.isIsometryCanonicalForm_of_rfp_nt_blocks` (`TNLean/MPS/RFP/StructuralFull.lean`) | `MPSTensor.isIsometryCanonicalForm_of_rfp_nt` (same file), applied at each block |
-| `MPSTensor.rfp_nt_structural_full_blocks` (`TNLean/MPS/RFP/StructuralFull.lean`) | `MPSTensor.rfp_nt_structural_full` (same file), applied at each block |
-| `MPSTensor.rfp_nt_structural_full_blocks_unit_pair` (`TNLean/MPS/RFP/StructuralFull.lean`) | `MPSTensor.rfp_nt_structural_full_unit_pair` (same file), applied at each block |
+| `MPSTensor.isIsometryCanonicalForm_of_rfp_nt_blocks` (`TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralFull.lean`) | `MPSTensor.isIsometryCanonicalForm_of_rfp_nt` (same file), applied at each block |
+| `MPSTensor.rfp_nt_structural_full_blocks` (`TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralFull.lean`) | `MPSTensor.rfp_nt_structural_full` (same file), applied at each block |
+| `MPSTensor.rfp_nt_structural_full_blocks_unit_pair` (`TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralFull.lean`) | `MPSTensor.rfp_nt_structural_full_unit_pair` (same file), applied at each block |
 
 ## What was checked
 
@@ -28,7 +28,7 @@ of the Appendix B structural lemma and is cited by the isometry-scope paper-gap
 note, which makes it a substantive public result rather than a pass-through. No
 further dead-weight cascade follows.
 
-Three call sites in `TNLean/MPS/RFP/ResidualIsometry.lean` inline the per-block
+Three call sites in `TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/ResidualIsometry.lean` inline the per-block
 shape by hand. Migrating them to the removed wrappers instead of deleting the
 wrappers was considered and rejected: each site is a two-line function that
 supplies its own fixed-point hypothesis from the direct-sum block projection, so

@@ -12,4 +12,4 @@ migrated to the replacement.
 
 | Removed | File | Replacement |
 |---|---|---|
-| `Edge.ofAdj_symm` | `TNLean/PEPS/Defs.lean` | `Edge.ofAdj_of_lt` or `Edge.ofAdj_of_gt`, for the required orientation |
+| `Edge.ofAdj_symm` | `TNLean/PEPS/Tensor/Network/Defs.lean` | `Edge.ofAdj_of_lt` or `Edge.ofAdj_of_gt`, for the required orientation |

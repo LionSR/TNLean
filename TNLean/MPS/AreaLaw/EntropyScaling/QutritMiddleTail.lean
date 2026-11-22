@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.EntropyScaling.QutritFamily
-import QICLean.Analysis.KyFanNorm
+import QICLean.Spectral.Eigenvalue.KyFanNorm
 
 /-!
 # Middle-cut tail of the qutrit family

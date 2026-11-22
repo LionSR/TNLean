@@ -72,8 +72,8 @@ Section~IV.C of Ref.~\cite{Cirac2021Matrix} describes the degenerate
 parent-Hamiltonian ground space of a matrix product state with more than one
 block in canonical form.\footnote{For traceability, the boundary-crossing
 comparison has a formal span-dependent form on the main branch
-(\path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalCrossingTrace.lean} and
-\path{TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalPGVWCComparison.lean}).
+(\path{TNLean/MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BNTBlockDiagonalCrossingTrace.lean} and
+\path{TNLean/MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BNTBlockDiagonalPGVWCComparison.lean}).
 The short crossing-tail span hypothesis is removed by the global change-of-cut
 comparison in
 \leanid{MPSTensor.exists_blockDiagonal_boundary_chainGroundSpace_pgvwc07_of_dualFixedPoint};
@@ -1032,7 +1032,7 @@ site $i$, then
   \label{eq:cpgsv21_block_diagonal_parent_ground_space_positive_kernel_sum}
 \end{align}
 The formal statements are in
-\path{TNLean/MPS/ParentHamiltonian/BlockGroundSpaceAtInjectivityLength.lean}.
+\path{TNLean/MPS/ParentHamiltonian/BlockGroundSpace/BlockGroundSpaceAtInjectivityLength.lean}.
 
 For an original tensor in canonical form, repeated multiplicity copies
 have the same component local spaces as their distinct normal
@@ -1041,7 +1041,7 @@ at every positive length. Thus the same conclusion applies to the original
 tensor, including its multiplicities, at the same supplied $S$.
 The corresponding statements for canonical projectors and arbitrary positive
 parent terms are in
-\path{TNLean/MPS/ParentHamiltonian/CanonicalBlockGroundSpaceAtInjectivityLength.lean}.
+\path{TNLean/MPS/ParentHamiltonian/BlockGroundSpace/CanonicalBlockGroundSpaceAtInjectivityLength.lean}.
 
 \section{A dimension bound including the minimal ring}
 
@@ -1059,7 +1059,7 @@ precisely their periodic vector span as its kernel. The terms may be arbitrary
 positive operators with the prescribed local kernels. The statement includes
 the minimal ring $N=L=R$; in particular it applies at $N=L=3D^5$ without an
 extra site or normalization assumption. These conclusions are proved in
-\path{TNLean/MPS/ParentHamiltonian/CanonicalBoundedRangeGroundSpace.lean}.
+\path{TNLean/MPS/ParentHamiltonian/BlockGroundSpace/CanonicalBoundedRangeGroundSpace.lean}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

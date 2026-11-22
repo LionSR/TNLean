@@ -27,7 +27,7 @@ or injectivity/Wielandt blocking length.
 - `MPSTensor.sameMPV₂_blockTensor_blockTensor_mul_reindex`: iterated blocking and
   one-step blocking have the same MPV family after the physical labels are identified by
   flattening iterated blocks.
-- Physical-dimension transport lemmas in `TNLean/MPS/Core/BlockingInfrastructure.lean`
+- Physical-dimension transport lemmas in `TNLean/MPS/Transfer/Irreducible/BlockingInfrastructure.lean`
   for `SameMPV₂`, `toTensorFromBlocks`, trace preservation, transfer-map primitivity,
   and tensor irreducibility.
 - `MPSTensor.CommonBlockedCyclicSectorFamily`: one-sided data structure for a finite

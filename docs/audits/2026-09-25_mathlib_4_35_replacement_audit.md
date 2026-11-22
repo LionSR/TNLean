@@ -61,8 +61,8 @@ Mathlib commit `17019dcaaa`, `feat(Basic/IsEmpty/Defs): add Fin.isEmpty_iff
 
 in `Mathlib.Basic.IsEmpty.Defs`. Five local constructions of an empty-type
 instance from a vanishing dimension now apply this equivalence directly, in
-`MPS/MPU/TransferMultiplicity`, `MPS/CanonicalForm/NormalReduction/WeightNormalization`,
-`MPS/MPDO/BNTAlgebraTensorClauseSpectrum`, and `MPS/MPU/CanonicalForm`.
+`MPS/CanonicalForm/SimpleMPU/TransferMultiplicity`, `MPS/CanonicalForm/NormalBlocks/WeightNormalization`,
+`MPS/MPDO/AmbientSectorMaps/BNTAlgebraTensorClauseSpectrum`, and `MPS/CanonicalForm/SimpleMPU/FullSupport`.
 
 ## Uniqueness of limits of pointwise equal sequences
 
@@ -75,8 +75,8 @@ theorem tendsto_nhds_unique_of_forall {f g : α → X} {a b : X}
 ```
 
 It replaces the two `congr'` intermediates in `MPS/RFP/PhaseOscillation`. The
-remaining `tendsto_nhds_unique` sites in `MPS/SharedInfra/GaugePhase` and
-`MPS/BNT/PermutationRigidityPrimitive` compare limits after a norm or `simpa`
+remaining `tendsto_nhds_unique` sites in `MPS/Transfer/Spectrum/GaugePhase` and
+`MPS/CanonicalForm/BNTPresentation/PermutationRigidityPrimitive` compare limits after a norm or `simpa`
 step rather than pointwise equality and are unchanged.
 
 ## API changes absorbed by the upgrade
@@ -94,20 +94,20 @@ repair keeps the theorem statement.
   `RingHom.injective` from a simple ring, because the tensor-product semiring
   path no longer unifies with `NonAssocRing.toNonAssocSemiring` by itself.
 - `spectralRadius` is now defined as a supremum over the quasispectrum.
-  `MPS/Symmetry/StringOrder` rewrites with `spectralRadius_eq_of_unital` to
+  `MPS/Symmetry/StringOrder/StringOrder` rewrites with `spectralRadius_eq_of_unital` to
   recover the supremum over the spectrum.
 - `LinearMap.nonneg_iff_isPositive` and `LinearMap.le_def` take their operators
-  implicitly (`MPS/ParentHamiltonian/Martingale/OpenHamiltonian`,
-  `MPS/ParentHamiltonian/Martingale/OpenParentGap`).
+  implicitly (`MPS/ParentHamiltonian/ParentInteraction/OpenHamiltonian`,
+  `MPS/ParentHamiltonian/Gap/Filtration/OpenParentGap`).
 - Instance search for `HasSummableGeomSeries` on operators of a Euclidean space
-  now times out. `MPS/ParentHamiltonian/GramInverseConvergence` supplies the
+  now times out. `MPS/ParentHamiltonian/BoundaryMap/GramInverseConvergence` supplies the
   instance locally from completeness of the finite-dimensional operator space.
 - Several `simp` and `rw` steps no longer see through the instances of
-  `Multiplicative (ZMod n)` and its products. In `MPS/MPU/GroupCocycleMPO/Instances`,
-  `MPS/MPDO/CZXGaussInvariantSubspace`, and `MPS/Examples/GHZClusterAction` the
+  `Multiplicative (ZMod n)` and its products. In `MPS/MPU/Representation/GroupCocycleMPO/Instances`,
+  `MPS/MPDO/CZX/CZXGaussInvariantSubspace`, and `MPS/Examples/GHZCluster/GHZClusterAction` the
   lemmas are now applied with `exact` or `Finset.prod_congr`, which unify at
   default transparency.
-- `norm_num` now closes one goal in `MPS/MPDO/PositiveMinimalRealizationCounterexample`
+- `norm_num` now closes one goal in `MPS/Examples/MPDOCounterexamples/PositiveMinimalRealizationCounterexample`
   that previously needed a trailing `simp`.
 
 ## Renamed APIs and warning cleanup
@@ -121,7 +121,7 @@ MonoidHom.coe_coe → MonoidHom.coe_ofClass
 SetLike.le_def    → IsConcreteLE.le_iff
 ```
 
-`isCoatomic_of_orderTop_gt_wellFounded` is deprecated. `MPS/FundamentalTheorem/Reduction/Flag`
+`isCoatomic_of_orderTop_gt_wellFounded` is deprecated. `MPS/FundamentalTheorem/WordModule/Flag`
 no longer builds the coatomic structure by hand: Mathlib derives `IsCoatomic` for the
 submodules of a Noetherian module, so the proof applies `eq_top_or_exists_le_coatom`
 directly.
@@ -141,11 +141,11 @@ the upgrade.
   multiply named matrices rather than literals, and the simproc's interaction
   with `vecCons` simp lemmas is untested here. It is a candidate for a separate
   trial on one example module, not an upgrade replacement.
-- `Finset.equivOfEq` would replace one term in `PEPS/RegionBlock/Basic` without
+- `Finset.equivOfEq` would replace one term in `PEPS/Tensor/Region/RegionBlock` without
   saving lines.
 - `isOpen_setOfPred_isInvertible` and `IsInvertible.eventually_nhds` are
   qualitative and do not give the quantitative inverse bound of
-  `MPS/ParentHamiltonian/GramInverseConvergence`.
+  `MPS/ParentHamiltonian/BoundaryMap/GramInverseConvergence`.
 - The new positive-definite `mulVec` injectivity lemmas, the positivity API for
   continuous functionals on a C*-algebra, `Matrix.spectrum_transpose`,
   `Matrix.IsIndecomposable`, and `Representation.stabilizer` have no TNLean

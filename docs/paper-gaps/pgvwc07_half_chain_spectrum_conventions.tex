@@ -179,7 +179,7 @@ that $\mathcal E_A$ have one eigenvalue of modulus one counted with
 multiplicity.
 
 The finite normalization and spectral comparison are in
-\path{TNLean/MPS/ParentHamiltonian/HalfChainPhysicalStability.lean}.
+\path{TNLean/MPS/Tensor/HalfChain/HalfChainPhysicalStability.lean}.
 For a vector $\psi$ on $2L$ sites, let $K_\psi$ be its coefficient matrix,
 $(K_\psi)_{\sigma\tau}=\psi(\sigma\tau)$ for configurations $\sigma,\tau$
 of the two halves, let $R_\psi=K_\psi K_\psi^\dagger$ be its reduced matrix,
@@ -203,7 +203,7 @@ $2\|\widehat\psi-\widehat\phi\|$.
 
 The capstone
 \leanid{MPSTensor.PGVWC07CanonicalFormData.exists_halfChainSpectrumLimit_of_c2}
-in \path{TNLean/MPS/ParentHamiltonian/HalfChainGeneralCanonicalSpectrum.lean}
+in \path{TNLean/MPS/ParentHamiltonian/WeightedCanonicalSectors.lean}
 combines the derived dominant block and physical remainder with these
 bounds. Its normalized faithful diagonal fixed point is derived from the
 canonical data, not added as a hypothesis. The actual weighted tensor's

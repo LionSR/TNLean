@@ -7,17 +7,17 @@ identified with the dyadic anchor of the routing step (`eq:anchors`,
 `07-assembly.tex:108–114`). It is the audit note required by
 `docs/project_conventions.md` §Style. The two definitions were literally equal,
 `if j = 0 then r else 2 ^ j * r + 2 ^ (j - 1)`; the module docstring of
-`TNLean/PEPS/Approximation/DyadicHierarchyCounts.lean` had recorded that they
+`TNLean/PEPS/Approximation/DyadicHierarchy/DyadicHierarchyCounts.lean` had recorded that they
 were to be unified. All non-`Archive` uses are migrated, no blueprint
 `\lean{...}` tag cites a removed name, and no compatibility alias is kept.
 
 ## Removed declarations and their replacements
 
-All removed declarations were in `TNLean/PEPS/Approximation/DyadicHierarchyCounts.lean`.
+All removed declarations were in `TNLean/PEPS/Approximation/DyadicHierarchy/DyadicHierarchyCounts.lean`.
 
 - `TNLean.PEPS.Approximation.squareAddress`. Replacement:
   `TNLean.PEPS.Approximation.dyadicAnchor` in
-  `TNLean/PEPS/Approximation/DyadicAnchors.lean`, with the same defining
+  `TNLean/PEPS/Approximation/DyadicHierarchy/DyadicAnchors.lean`, with the same defining
   expression.
 - `TNLean.PEPS.Approximation.squareAddress_mem`, the address lies in its square,
   `2 ^ j r ≤ a < 2 ^ j r + 2 ^ j`. Replacement:

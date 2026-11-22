@@ -1,7 +1,7 @@
 # Rescaling-stable bond-matching predicate rename (issue #7706)
 
 Issue #7706 applies the `Is`-prefix convention to the bond-matching condition in
-`TNLean/MPS/MPDO/RescalingStableLengthDependentRFPViaTS.lean`. The definition remains
+`TNLean/MPS/Examples/Dimer/RescalingStableLengthDependentRFPViaTS.lean`. The definition remains
 `bondBit2 p = bondBit1 q` for `p q : Fin 4`. The decidability instance still uses
 `inferInstanceAs (Decidable (bondBit2 p = bondBit1 q))`; no replacement mathematics
 or automation is introduced. The theorem statements and proofs are unchanged apart

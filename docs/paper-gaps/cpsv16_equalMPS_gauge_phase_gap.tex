@@ -74,7 +74,7 @@ case into two steps. First, asymptotically unit-modulus overlap forces the
 spectral radius of the mixed transfer matrix to be at least one.\footnote{The
 formal theorem is
 \leanid{MPSTensor.mixedTransferSpectralRadius_ge_one_of_mpvOverlap_norm_tendsto_one}
-in \path{TNLean/MPS/SharedInfra/GaugePhase.lean}. It formalizes a
+in \path{TNLean/MPS/Transfer/Spectrum/GaugePhase.lean}. It formalizes a
 step in the proof of Lemma~\texttt{equalMPS}
 \cite[lines~1093--1117]{Cirac2016MPDO_arXiv}.}
 This statement is the contrapositive of the formalized decay theorem for mixed
@@ -84,12 +84,12 @@ Second, the modulus-one spectral theorem applies the Cauchy--Schwarz equality
 argument with the positive fixed point and obtains gauge-phase
 equivalence.\footnote{The formal theorem is
 \leanid{MPSTensor.modulus_one_eigenvalue_implies_gauge_of_irreducible_TP}
-in \path{TNLean/Spectral/TransferOperatorGapNT.lean}.}
+in \path{TNLean/MPS/Transfer/Spectrum/TransferOperatorGapNT.lean}.}
 Combining these steps gives the same-dimensional gauge-phase theorem with the
 source overlap hypothesis and without an MPV proportionality
 hypothesis.\footnote{The formal theorem is
 \leanid{MPSTensor.gaugePhaseEquiv_of_overlap_norm_tendsto_one_of_irreducible_TP}
-in \path{TNLean/MPS/SharedInfra/GaugePhase.lean}.}
+in \path{TNLean/MPS/Transfer/Spectrum/GaugePhase.lean}.}
 
 This same-dimensional theorem modifies the normal-tensor hypotheses in a
 controlled way. In the source, a normal tensor has no nontrivial invariant
@@ -127,10 +127,10 @@ force the mixed overlap to converge to zero. Its contrapositive gives
 \end{align}
 The decay theorem is
 \leanid{MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP}
-in \path{TNLean/Spectral/TransferOperatorGapNT.lean}. Its contrapositive is
+in \path{TNLean/MPS/Transfer/Spectrum/TransferOperatorGapNT.lean}. Its contrapositive is
 recorded as
 \leanid{MPSTensor.dim_eq_of_mpvOverlap_norm_tendsto_one_of_irreducible_TP}
-in \path{TNLean/MPS/SharedInfra/GaugePhase.lean}. These results use
+in \path{TNLean/MPS/Transfer/Spectrum/GaugePhase.lean}. These results use
 only positive-length asymptotic overlaps and do not depend on the empty-word
 coefficient.
 
@@ -156,7 +156,7 @@ rectangular overlap-decay theorem.
 
 The theorem
 \leanid{MPSTensor.IsNormalTensor.overlap_dichotomy} in
-\path{TNLean/MPS/Overlap/NormalTensorDichotomy.lean} combines these components
+\path{TNLean/MPS/CanonicalForm/NormalBlocks/NormalTensorDichotomy.lean} combines these components
 with normalized self-overlap and proves the full normal-tensor dichotomy and
 structural conclusion of Lemma~\texttt{equalMPS}
 \cite{Cirac2016MPDO_arXiv}. Its corollary

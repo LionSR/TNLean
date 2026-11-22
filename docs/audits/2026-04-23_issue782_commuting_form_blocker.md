@@ -2,7 +2,7 @@
 
 ## What landed in this branch
 
-This branch adds `TNLean/MPS/MPDO/CommutingForm.lean`, which formalizes the
+This branch adds `TNLean/MPS/Operator/Simple/CommutingForm.lean`, which formalizes the
 **target side** of Appendix C.2 / Theorem 4.9(iii):
 
 - a chain-level notion `MPOTensor.CommutingFormData` for a positive two-site

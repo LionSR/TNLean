@@ -1,0 +1,881 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import QICLean.Channel.Irreducible.KrausGauge
+import QICLean.Kraus.IrreducibleAction
+import TNLean.MPS.Transfer.Irreducible.PerronGauge
+import TNLean.MPS.Tensor.Physical.Blocking
+import TNLean.MPS.Transfer.Scaling
+import TNLean.MPS.CanonicalForm.NormalBlocks.IrreducibleDecomposition
+import TNLean.MPS.CanonicalForm.BlockFamily
+import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
+import TNLean.MPS.Transfer.Irreducible.BlockingInfrastructure
+import TNLean.MPS.Tensor.Physical.BlockingTransfer
+import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
+import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
+import QICLean.Channel.Peripheral.GroupStructure
+import TNLean.MPS.Tensor.Words.WordSpan
+import TNLean.MPS.Transfer.Primitivity.RectangularSpan
+import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank
+
+/-!
+# TP-gauge reduction for normal canonical-form construction
+
+This module gives the TP-gauge normalization part of the normal-canonical-form
+reduction.
+
+Its public outputs are:
+
+* `MPSTensor.exists_pgvwc07_unital_dualDiag_data_of_irreducible` — the
+  single-block PGVWC07 unital gauge, scalar fixed-point, and dual
+  diagonalization theorem.
+* `MPSTensor.exists_pgvwc07_unital_dualDiag_blockwise` — the same PGVWC07
+  construction applied blockwise to a prepared nonzero irreducible decomposition.
+* `MPSTensor.exists_tp_gauge_blockwise` — blockwise Perron--Frobenius / TP-gauge
+  normalization for an irreducible block decomposition.
+* `MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary` — the
+  arbitrary-input positive-length form with the total bond-dimension bound.
+* `MPSTensor.exists_pgvwc07_positiveLengthWitness` — the same positive-length
+  theorem recorded as a single structured witness.
+* `MPSTensor.exists_tp_gauge_from_arbitrary` — the corresponding arbitrary-input
+  trace-preserving gauge reduction.
+
+The auxiliary declarations stay file-local because they are elementary lemmas for
+rescaling and gauge transport.
+
+## TP-primitive reduction after blocking
+
+This file begins the canonical-form reduction for arbitrary MPS families. It
+combines removal of all-zero blocks at positive lengths, the TP gauge, and
+common blocking into a blocked decomposition whose blocks are left-canonical
+and have primitive transfer maps.
+
+### Main statements
+
+* `exists_tp_primitive_blockDecomp_after_blocking` — arbitrary tensors admit a
+  positive-length blocked decomposition into TP-primitive blocks whose total
+  bond dimension is at most the original bond dimension.
+
+### References
+
+* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Section 2.3 + Appendix A]
+* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:2011.12127, Section IV]
+
+### External inputs
+
+This file is the main integration point for the Quantum Wielandt machinery in the
+canonical-form reduction.  It imports four Wielandt modules:
+
+1. **`Wielandt.SpanGrowth.VectorToMatrixSpan`** — the vector-to-matrix spanning step
+   (arXiv:0909.5347, Lemma 2(a)/Wolf Chapter 6): if a vector-valued linear image of the
+   Kraus word products spans the full vector space, then the matrix-valued word products
+   span the full matrix algebra.
+
+2. **`Wielandt.SpanGrowth.CumulativeSpan`** — the cumulative span growth machinery
+   (arXiv:0909.5347, Lemma 1): the cumulative span `S_n(A)` grows strictly until it
+   reaches the full matrix algebra, with an explicit bound on the stopping time.
+
+3. **`Wielandt.RectangularSpan.Basic`** — the rectangular span theory for Wielandt
+   Lemma 2(b): `Kraus.wielandt_lemma2b_conditional` reduces the full-rank conclusion
+   to finding a rank-one element in the word span.
+
+4. **`Wielandt.Primitivity.StronglyIrreducibleToFullRank`** — the hardest direction
+   of the primitivity equivalence (Proposition 3(a)→(c) of arXiv:0909.5347): strong
+   irreducibility of the transfer map implies `krausRank A = D`.
+
+Together, these inputs supply the fact that a TP-primitive block (after the
+Perron-Frobenius gauge and periodicity blocking) is injective — its Kraus operators
+span the full matrix algebra at length 1, and therefore block-injective at every
+positive length.  This is the mathematical content that justifies the
+"primitive ⇒ injective" implication used in the blocked canonical-form decomposition.
+
+### Tags
+
+matrix product states, canonical form, blocking, primitive transfer maps
+-/
+
+section
+
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+/-- Witness for the exact positive-length form of the PGVWC07
+translation-invariant canonical-form construction.
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
+lines 742--763, for nonempty rings and exact MPV equality.  The fields record
+the weighted nonzero-block direct sum, the unital block condition, the
+diagonal positive-definite dual fixed point, the scalar fixed-point conclusion,
+positive weights, positive block dimensions, and the total bond-dimension
+bound.
+
+This witness is the unnormalized positive-length form.  The source theorem also
+writes the weights with `1 ≥ λ_j > 0`, after the proof says that the spectral
+radius is normalized without loss of generality at lines 765--766.  That global
+normalization is supplied by the finite-family weight-normalization theorem.
+The positive-length convention is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
+structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where
+  /-- Number of nonzero canonical blocks. -/
+  r : ℕ
+  /-- Bond dimension of each nonzero canonical block. -/
+  dim : Fin r → ℕ
+  /-- Positive block weights. -/
+  weights : Fin r → ℂ
+  /-- Nonzero canonical blocks in the unital orientation. -/
+  blocks : (k : Fin r) → MPSTensor d (dim k)
+  /-- Each block has a diagonal positive-definite fixed point for the adjoint
+  transfer map and satisfies the unital condition. -/
+  dual_fixed :
+    ∀ k,
+      ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+        Λ.PosDef ∧
+        Λ.IsDiag ∧
+        (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
+        Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (fun i => (blocks k i)ᴴ) Λ = Λ
+  /-- The fixed points of each block transfer map are exactly the scalar
+  multiples of the identity. -/
+  scalar_fixed :
+    ∀ k,
+      ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+        Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k) X = X →
+          ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)
+  /-- Every block weight is a positive real number, embedded into `ℂ`. -/
+  weight_pos : ∀ k, ∃ a : ℝ, 0 < a ∧ weights k = (a : ℂ)
+  /-- Every nonzero block has positive bond dimension. -/
+  dim_pos : ∀ k, 0 < dim k
+  /-- On nonempty rings, the original tensor and the weighted block tensor have
+  the same MPV coefficients. -/
+  sameMPV_pos : SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := weights) blocks)
+  /-- The total bond dimension of the nonzero canonical blocks is at most the
+  original bond dimension. -/
+  bondDim_le : ∑ k : Fin r, dim k ≤ D
+
+private theorem isIrreducibleAction_gaugeEquiv
+    {D : ℕ} {A B : MPSTensor d D}
+    (hGauge : GaugeEquiv (d := d) (D := D) A B)
+    (hIrr : Matrix.IsIrreducibleAction (d := d) (D := D) A) :
+    Matrix.IsIrreducibleAction (d := d) (D := D) B := by
+  classical
+  rcases hGauge with ⟨X, hX⟩
+  let T : (Fin D → ℂ) ≃ₗ[ℂ] (Fin D → ℂ) :=
+    (Matrix.GeneralLinearGroup.toLin X).toLinearEquiv
+  intro W hW
+  let W' : Submodule ℂ (Fin D → ℂ) := W.map T.symm.toLinearMap
+  have hW' : Matrix.IsInvariantSubmodule (d := d) (D := D) A W' := by
+    intro i v hv
+    rcases (Submodule.mem_map).1 hv with ⟨u, huW, rfl⟩
+    refine (Submodule.mem_map).2 ?_
+    refine ⟨(B i).mulVec u, hW i u huW, ?_⟩
+    change (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *ᵥ ((B i) *ᵥ u)) =
+      (A i) *ᵥ ((((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *ᵥ u))
+    calc
+      (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *ᵥ ((B i) *ᵥ u))
+          = ((((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * B i) *ᵥ u) := by
+              simp [Matrix.mulVec_mulVec]
+      _ = ((A i * (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) ) *ᵥ u) := by
+            rw [hX i]
+            simp [Matrix.mul_assoc]
+      _ = (A i) *ᵥ ((((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *ᵥ u)) := by
+            simp [Matrix.mulVec_mulVec]
+  rcases hIrr W' hW' with hW'bot | hW'top
+  · left
+    exact (Submodule.map_eq_bot_iff (p := W) (e := T.symm)).1 (by simpa [W'] using hW'bot)
+  · right
+    exact (Submodule.map_eq_top_iff (p := W) (e := T.symm)).1 (by simpa [W'] using hW'top)
+
+/-- **Single irreducible-block PGVWC07 canonical-form data.**
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
+lines 765--770 and 816--832.  For one irreducible nonzero block, the
+Perron--Frobenius eigenvector gives the source theorem's unital gauge.  In
+that unital gauge every fixed point is scalar, and a final unitary conjugation
+diagonalizes a positive-definite fixed point of the dual transfer map.
+
+This is still a single-block statement.  It does not yet thread the construction
+through the recursive finite-ring block decomposition, nor does it prove the
+total bond-dimension bound of the full translation-invariant canonical-form
+theorem. -/
+theorem exists_pgvwc07_unital_dualDiag_data_of_irreducible
+    [NeZero D]
+    (A : MPSTensor d D)
+    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hA : ∃ i, A i ≠ 0) :
+    ∃ (B C : MPSTensor d D)
+      (r : ℝ)
+      (ρ Λ : Matrix (Fin D) (Fin D) ℂ)
+      (U : Matrix.unitaryGroup (Fin D) ℂ),
+        ρ.PosDef ∧
+        0 < r ∧
+        (∀ i : Fin d,
+          B i =
+            (↑((Real.sqrt r)⁻¹) : ℂ) •
+              ((CFC.sqrt ρ)⁻¹ * A i * CFC.sqrt ρ)) ∧
+        GaugeEquiv (d := d) (D := D)
+          (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B ∧
+        (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
+        (∀ X : Matrix (Fin D) (Fin D) ℂ,
+          Kraus.transferMap (ι := Fin d) (n := Fin D) B X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ)) ∧
+        (let C' : MPSTensor d D :=
+          fun i =>
+            (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * B i *
+              (↑U : Matrix (Fin D) (Fin D) ℂ);
+          C = C' ∧
+          SameMPV₂ B C ∧
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, C i * (C i)ᴴ = 1) ∧
+          Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (C i)ᴴ) Λ = Λ) := by
+  classical
+  obtain ⟨B, r, ρ, hρ, hr, hB_form, hB_unital, hGauge⟩ :=
+    exists_unital_data_of_irreducible (d := d) (D := D) A hIrr hA
+  let c : ℂ := (↑((Real.sqrt r)⁻¹) : ℂ)
+  have hroot_ne : (↑(Real.sqrt r) : ℂ) ≠ 0 := by
+    exact_mod_cast (Real.sqrt_ne_zero'.mpr hr)
+  have hc_ne : c ≠ 0 := by
+    dsimp [c]
+    simp [hroot_ne]
+  have hIrr_scaled :
+      Kraus.IsIrreducibleFamily (d := d) (D := D) (fun i => c • A i) :=
+    isIrreducibleTensor_smul (d := d) (D := D) hc_ne A hIrr
+  have hActionScaled :
+      Matrix.IsIrreducibleAction (d := d) (D := D) (fun i => c • A i) :=
+    Kraus.isIrreducibleAction_of_isIrreducibleFamily
+      (d := d) (D := D) (fun i => c • A i) hIrr_scaled
+  have hActionB : Matrix.IsIrreducibleAction (d := d) (D := D) B :=
+    isIrreducibleAction_gaugeEquiv (d := d) (D := D) hGauge hActionScaled
+  have hIrrB : Kraus.IsIrreducibleFamily (d := d) (D := D) B :=
+    Kraus.isIrreducibleFamily_of_isIrreducibleAction (d := d) (D := D) B hActionB
+  have hB_unital_map : Kraus.transferMap (ι := Fin d) (n := Fin D) B 1 = 1 := by
+    simpa [Kraus.transferMap_apply, Matrix.mul_one] using hB_unital
+  have : Nonempty (Fin D) := ⟨⟨0, NeZero.pos D⟩⟩
+  have hScalar :
+      ∀ X : Matrix (Fin D) (Fin D) ℂ,
+        Kraus.transferMap (ι := Fin d) (n := Fin D) B X = X →
+          ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+    intro X hX
+    exact fixed_eq_scalar_of_isIrreducibleTensor_unital
+      (d := d) (D := D) B hIrrB hB_unital_map X hX
+  obtain ⟨U, Λ, hSame, hΛ_pd, hΛ_diag, hC_unital, hΛ_fix⟩ :=
+    exists_unitary_diag_posDef_adjointFixedPoint_of_unital_of_isIrreducibleTensor
+      (d := d) (D := D) B hB_unital hIrrB (NeZero.pos D)
+  let C : MPSTensor d D :=
+    fun i =>
+      (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * B i *
+        (↑U : Matrix (Fin D) (Fin D) ℂ)
+  refine ⟨B, C, r, ρ, Λ, U, hρ, hr, hB_form, ?_, hB_unital, hScalar, ?_⟩
+  · simpa [c] using hGauge
+  · exact ⟨rfl, hSame, hΛ_pd, hΛ_diag, hC_unital, hΛ_fix⟩
+
+private theorem scalar_fixedPoints_unitaryConj
+    {D : ℕ}
+    (A : MPSTensor d D)
+    (U : Matrix.unitaryGroup (Fin D) ℂ)
+    (hScalar :
+      ∀ X : Matrix (Fin D) (Fin D) ℂ,
+        Kraus.transferMap (ι := Fin d) (n := Fin D) A X = X →
+          ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ)) :
+    ∀ X : Matrix (Fin D) (Fin D) ℂ,
+      Kraus.transferMap (ι := Fin d) (n := Fin D)
+          (fun i =>
+            (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
+              (↑U : Matrix (Fin D) (Fin D) ℂ)) X = X →
+        ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+  classical
+  intro X hX
+  let V : Matrix (Fin D) (Fin D) ℂ := ↑U
+  let Y : Matrix (Fin D) (Fin D) ℂ := V * X * Vᴴ
+  have hVV : Vᴴ * V = 1 := by
+    rw [← Matrix.star_eq_conjTranspose]
+    exact Matrix.UnitaryGroup.star_mul_self U
+  have hVV' : V * Vᴴ = 1 := by
+    rw [← Matrix.star_eq_conjTranspose]
+    exact Unitary.mul_star_self_of_mem U.prop
+  have hconj :
+      Kraus.transferMap (ι := Fin d) (n := Fin D)
+          (fun i =>
+            (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
+              (↑U : Matrix (Fin D) (Fin D) ℂ)) X =
+        Vᴴ * Kraus.transferMap (ι := Fin d) (n := Fin D) A Y * V := by
+    simpa [V, Y] using transferMap_unitaryConj (d := d) (D := D) A U X
+  have hmiddle :
+      Vᴴ * Kraus.transferMap (ι := Fin d) (n := Fin D) A Y * V = X := by
+    calc
+      Vᴴ * Kraus.transferMap (ι := Fin d) (n := Fin D) A Y * V
+          = Kraus.transferMap (ι := Fin d) (n := Fin D)
+              (fun i =>
+                (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i *
+                  (↑U : Matrix (Fin D) (Fin D) ℂ)) X := hconj.symm
+      _ = X := hX
+  have hYfix : Kraus.transferMap (ι := Fin d) (n := Fin D) A Y = Y := by
+    calc
+      Kraus.transferMap (ι := Fin d) (n := Fin D) A Y
+          = (V * Vᴴ) * Kraus.transferMap (ι := Fin d) (n := Fin D) A Y * (V * Vᴴ) := by
+              simp [hVV']
+      _ = V * (Vᴴ * Kraus.transferMap (ι := Fin d) (n := Fin D) A Y * V) * Vᴴ := by
+              simp [Matrix.mul_assoc]
+      _ = V * X * Vᴴ := by rw [hmiddle]
+      _ = Y := rfl
+  obtain ⟨c, hc⟩ := hScalar Y hYfix
+  refine ⟨c, ?_⟩
+  calc
+    X = (Vᴴ * V) * X * (Vᴴ * V) := by simp [hVV]
+    _ = Vᴴ * Y * V := by simp [Y, Matrix.mul_assoc]
+    _ = Vᴴ * (c • (1 : Matrix (Fin D) (Fin D) ℂ)) * V := by rw [hc]
+    _ = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
+          simp [hVV]
+
+private theorem bond_dim_ne_zero_of_exists_nonzero
+    {D : ℕ} (A : MPSTensor d D) (hA : ∃ i, A i ≠ 0) :
+    D ≠ 0 := by
+  intro hD
+  rcases hA with ⟨i, hi⟩
+  have hzero : A i = 0 := by
+    ext a b
+    exfalso
+    have ha : (a : ℕ) < 0 := by
+      simpa [hD] using a.2
+    omega
+  exact hi hzero
+
+private theorem gauge_blockwise_shared
+    (A : MPSTensor d D)
+    {r0 : ℕ} {dim0 : Fin r0 → ℕ}
+    (blocks0 : (k : Fin r0) → MPSTensor d (dim0 k))
+    (hSame0 :
+      SameMPV₂ A
+        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
+    (hNonzero0 : ∀ k, ∃ i, blocks0 k i ≠ 0)
+    (blocks1 : (k : Fin r0) → MPSTensor d (dim0 k))
+    (r1 : Fin r0 → ℝ)
+    (hr1_pos : ∀ k, 0 < r1 k)
+    (hSameGauge :
+      ∀ k,
+        SameMPV
+          (fun i => (↑((Real.sqrt (r1 k))⁻¹) : ℂ) • blocks0 k i)
+          (blocks1 k)) :
+    SameMPV₂ A
+        (toTensorFromBlocks
+          (d := d) (μ := fun k : Fin r0 => (↑(Real.sqrt (r1 k)) : ℂ)) blocks1) ∧
+      (∀ k : Fin r0, (↑(Real.sqrt (r1 k)) : ℂ) ≠ 0) ∧
+      (∀ k, 0 < dim0 k) := by
+  classical
+  let μ1 : Fin r0 → ℂ := fun k => (↑(Real.sqrt (r1 k)) : ℂ)
+  have hdim0_ne : ∀ k : Fin r0, dim0 k ≠ 0 := by
+    intro k
+    exact bond_dim_ne_zero_of_exists_nonzero
+      (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)
+  have hSameBlocks :
+      SameMPV₂
+        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0)
+        (toTensorFromBlocks (d := d) (μ := μ1) blocks1) := by
+    intro N σ
+    calc
+      mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0) σ
+          = ∑ k : Fin r0, (1 : ℂ) ^ N * mpv (blocks0 k) σ := by
+              simpa [smul_eq_mul] using
+                (mpv_toTensorFromBlocks_eq_sum
+                  (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) (A := blocks0) (σ := σ))
+      _ = ∑ k : Fin r0, (μ1 k) ^ N * mpv (blocks1 k) σ := by
+            refine Finset.sum_congr rfl ?_
+            intro k _
+            let c : ℂ := (↑((Real.sqrt (r1 k))⁻¹) : ℂ)
+            have hGaugeSame : SameMPV (fun i => c • blocks0 k i) (blocks1 k) := by
+              simpa [c] using hSameGauge k
+            have hscale : mpv (blocks1 k) σ = c ^ N * mpv (blocks0 k) σ := by
+              calc
+                mpv (blocks1 k) σ = mpv (fun i => c • blocks0 k i) σ :=
+                  (hGaugeSame N σ).symm
+                _ = c ^ N * mpv (blocks0 k) σ := mpv_smul c (blocks0 k) σ
+            have hroot_ne : (↑(Real.sqrt (r1 k)) : ℂ) ≠ 0 := by
+              exact_mod_cast (Real.sqrt_ne_zero'.mpr (hr1_pos k))
+            have hμc : μ1 k * c = 1 := by
+              dsimp [μ1, c]
+              simp [hroot_ne]
+            have hmulpow : (μ1 k) ^ N * c ^ N = 1 := by
+              rw [← mul_pow, hμc, one_pow]
+            have hmulpow_apply :
+                (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ) = mpv (blocks0 k) σ := by
+              calc
+                (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ)
+                    = ((μ1 k) ^ N * c ^ N) * mpv (blocks0 k) σ := by ring
+                _ = mpv (blocks0 k) σ := by simp [hmulpow]
+            calc
+              (1 : ℂ) ^ N * mpv (blocks0 k) σ = mpv (blocks0 k) σ := by simp
+              _ = (μ1 k) ^ N * (c ^ N * mpv (blocks0 k) σ) := hmulpow_apply.symm
+              _ = (μ1 k) ^ N * mpv (blocks1 k) σ := by rw [hscale]
+      _ = mpv (toTensorFromBlocks (d := d) (μ := μ1) blocks1) σ := by
+            symm
+            simpa [smul_eq_mul] using
+              (mpv_toTensorFromBlocks_eq_sum (d := d) (μ := μ1) (A := blocks1) (σ := σ))
+  have hSame1 :
+      SameMPV₂ A (toTensorFromBlocks (d := d) (μ := μ1) blocks1) := by
+    intro N σ
+    calc
+      mpv A σ
+          = mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0) σ :=
+              hSame0 N σ
+      _ = mpv (toTensorFromBlocks (d := d) (μ := μ1) blocks1) σ := hSameBlocks N σ
+  have hμne1 : ∀ k : Fin r0, μ1 k ≠ 0 := by
+    intro k
+    dsimp [μ1]
+    exact_mod_cast (Real.sqrt_ne_zero'.mpr (hr1_pos k))
+  have hDim1 : ∀ k : Fin r0, 0 < dim0 k := by
+    intro k
+    exact Nat.pos_of_ne_zero (hdim0_ne k)
+  exact ⟨hSame1, hμne1, hDim1⟩
+
+/-- **Blockwise PGVWC07 unital and dual-diagonal theorem.**
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical, proof
+lines 765--770 and 816--832, after the recursive invariant-subspace splitting
+has already produced a nonzero irreducible block family.  The theorem applies
+`exists_pgvwc07_unital_dualDiag_data_of_irreducible` to every block, records
+the positive spectral-radius weights, and preserves the finite-ring MPV family
+through the weighted direct sum.
+
+This is still a prepared-block statement.  It does not start from an arbitrary
+translation-invariant representation, does not separate all-zero blocks, and
+does not prove the total bond-dimension bound of the full source theorem. The
+prepared-block boundary is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
+theorem exists_pgvwc07_unital_dualDiag_blockwise
+    (A : MPSTensor d D)
+    {r0 : ℕ} {dim0 : Fin r0 → ℕ}
+    (blocks0 : (k : Fin r0) → MPSTensor d (dim0 k))
+    (hIrr0 : ∀ k, Kraus.IsIrreducibleFamily (blocks0 k))
+    (hSame0 :
+      SameMPV₂ A
+        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
+    (hNonzero0 : ∀ k, ∃ i, blocks0 k i ≠ 0) :
+    ∃ μ1 : Fin r0 → ℂ,
+      ∃ blocks1 : (k : Fin r0) → MPSTensor d (dim0 k),
+        SameMPV₂ A
+          (toTensorFromBlocks (d := d) (μ := μ1) blocks1) ∧
+        (∀ k,
+          ∃ Λ : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
+            Λ.PosDef ∧
+            Λ.IsDiag ∧
+            (∑ i : Fin d, blocks1 k i * (blocks1 k i)ᴴ = 1) ∧
+            Kraus.transferMap (ι := Fin d) (n := Fin (dim0 k)) (fun i => (blocks1 k i)ᴴ) Λ = Λ) ∧
+        (∀ k,
+          ∀ X : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
+            Kraus.transferMap (ι := Fin d) (n := Fin (dim0 k)) (blocks1 k) X = X →
+              ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ)) ∧
+        (∀ k, ∃ a : ℝ, 0 < a ∧ μ1 k = (a : ℂ)) ∧
+        (∀ k, μ1 k ≠ 0) ∧
+        (∀ k, 0 < dim0 k) := by
+  classical
+  have hcanon :
+      ∀ k : Fin r0,
+        ∃ (B C : MPSTensor d (dim0 k))
+          (r : ℝ)
+          (ρ Λ : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ)
+          (U : Matrix.unitaryGroup (Fin (dim0 k)) ℂ),
+            ρ.PosDef ∧
+            0 < r ∧
+            (∀ i : Fin d,
+              B i =
+                (↑((Real.sqrt r)⁻¹) : ℂ) •
+                  ((CFC.sqrt ρ)⁻¹ * blocks0 k i * CFC.sqrt ρ)) ∧
+            GaugeEquiv (d := d) (D := dim0 k)
+              (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • blocks0 k i) B ∧
+            (∑ i : Fin d, B i * (B i)ᴴ = 1) ∧
+            (∀ X : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
+              Kraus.transferMap (ι := Fin d) (n := Fin (dim0 k)) B X = X →
+                ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ)) ∧
+            (let C' : MPSTensor d (dim0 k) :=
+              fun i =>
+                (↑U : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ)ᴴ * B i *
+                  (↑U : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ);
+              C = C' ∧
+              SameMPV₂ B C ∧
+              Λ.PosDef ∧
+              Λ.IsDiag ∧
+              (∑ i : Fin d, C i * (C i)ᴴ = 1) ∧
+              Kraus.transferMap (ι := Fin d) (n := Fin (dim0 k)) (fun i => (C i)ᴴ) Λ = Λ) := by
+    intro k
+    let : NeZero (dim0 k) :=
+      ⟨bond_dim_ne_zero_of_exists_nonzero
+        (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
+    exact exists_pgvwc07_unital_dualDiag_data_of_irreducible
+      (A := blocks0 k) (hIrr := hIrr0 k) (hA := hNonzero0 k)
+  choose blocksB blocks1 r1 ρ1 Λ1 U1 hρpd1 hrpos1 hform1 hGauge1 hUnitalB1
+    hScalarB1 hFinal1 using hcanon
+  have hSameGauge :
+      ∀ k : Fin r0,
+        SameMPV
+          (fun i => (↑((Real.sqrt (r1 k))⁻¹) : ℂ) • blocks0 k i)
+          (blocks1 k) := by
+    intro k
+    let c : ℂ := (↑((Real.sqrt (r1 k))⁻¹) : ℂ)
+    have hGaugeSame : SameMPV (fun i => c • blocks0 k i) (blocksB k) :=
+      GaugeEquiv.sameMPV (hGauge1 k)
+    have hSameBC : SameMPV₂ (blocksB k) (blocks1 k) := (hFinal1 k).2.1
+    intro N σ
+    calc
+      mpv (fun i => (↑((Real.sqrt (r1 k))⁻¹) : ℂ) • blocks0 k i) σ
+          = mpv (blocksB k) σ := by
+              simpa [c] using hGaugeSame N σ
+      _ = mpv (blocks1 k) σ := hSameBC N σ
+  let μ1 : Fin r0 → ℂ := fun k => (↑(Real.sqrt (r1 k)) : ℂ)
+  obtain ⟨hSame1, hμne1, hDim1⟩ :=
+    gauge_blockwise_shared A blocks0 hSame0 hNonzero0 blocks1 r1 hrpos1 hSameGauge
+  have hΛData :
+      ∀ k : Fin r0,
+        ∃ Λ : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, blocks1 k i * (blocks1 k i)ᴴ = 1) ∧
+          Kraus.transferMap (ι := Fin d) (n := Fin (dim0 k)) (fun i => (blocks1 k i)ᴴ) Λ = Λ := by
+    intro k
+    exact ⟨Λ1 k, (hFinal1 k).2.2.1, (hFinal1 k).2.2.2.1,
+      (hFinal1 k).2.2.2.2.1, (hFinal1 k).2.2.2.2.2⟩
+  have hScalarC :
+      ∀ k : Fin r0,
+        ∀ X : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ,
+          Kraus.transferMap (ι := Fin d) (n := Fin (dim0 k)) (blocks1 k) X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ) := by
+    intro k
+    have hCeq := (hFinal1 k).1
+    rw [hCeq]
+    exact scalar_fixedPoints_unitaryConj (d := d) (D := dim0 k)
+      (blocksB k) (U1 k) (hScalarB1 k)
+  have hμpos1 : ∀ k : Fin r0, ∃ a : ℝ, 0 < a ∧ μ1 k = (a : ℂ) := by
+    intro k
+    exact ⟨Real.sqrt (r1 k), Real.sqrt_pos.2 (hrpos1 k), rfl⟩
+  exact ⟨μ1, blocks1, hSame1, hΛData, hScalarC, hμpos1, hμne1, hDim1⟩
+
+/-- Blockwise Perron--Frobenius / TP-gauge stage for an irreducible block decomposition.
+
+This theorem is the blockwise TP-normalization step used by
+`exists_tp_gauge_from_arbitrary`, and it also gives the earlier
+TP-normalization route on a fixed irreducible decomposition. Its extra
+nonzero-block hypothesis lives on a chosen decomposition, so it still does not
+by itself give an unconditional arbitrary-input theorem under the current
+`SameMPV₂` relation. Concretely, every input block is assumed to have some
+nonzero Kraus operator, excluding the all-zero scalar counterexample and
+matching the hypotheses of the corresponding irreducible-to-TP result from
+`Existence.lean`. It remains separate from the later normal-canonical-form theorem
+in `NormalReduction/Main.lean`.
+
+Source: arXiv:1606.00608, lines 1058--1077, applied independently to each nonzero irreducible
+block. The relation to the PGVWC07 unital orientation is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
+theorem exists_tp_gauge_blockwise
+    (A : MPSTensor d D)
+    {r0 : ℕ} {dim0 : Fin r0 → ℕ}
+    (blocks0 : (k : Fin r0) → MPSTensor d (dim0 k))
+    (hIrr0 : ∀ k, Kraus.IsIrreducibleFamily (blocks0 k))
+    (hSame0 :
+      SameMPV₂ A
+        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r0 => (1 : ℂ)) blocks0))
+    (hNonzero0 : ∀ k, ∃ i, blocks0 k i ≠ 0) :
+    ∃ μ1 : Fin r0 → ℂ,
+      ∃ blocks1 : (k : Fin r0) → MPSTensor d (dim0 k),
+        SameMPV₂ A
+          (toTensorFromBlocks (d := d) (μ := μ1) blocks1) ∧
+        (∀ k, Kraus.IsIrreducibleFamily (blocks1 k)) ∧
+        (∀ k, ∑ i : Fin d, (blocks1 k i)ᴴ * blocks1 k i = 1) ∧
+        (∀ k, 0 < μ1 k) ∧
+        (∀ k, 0 < dim0 k) := by
+  classical
+  have htp :
+      ∀ k : Fin r0,
+        ∃ (B : MPSTensor d (dim0 k)) (r : ℝ) (σ : Matrix (Fin (dim0 k)) (Fin (dim0 k)) ℂ),
+          σ.PosDef ∧ 0 < r ∧
+          (∀ i : Fin d,
+            B i = CFC.sqrt σ *
+              ((↑((Real.sqrt r)⁻¹) : ℂ) • blocks0 k i) * (CFC.sqrt σ)⁻¹) ∧
+          (∑ i : Fin d, (B i)ᴴ * B i = 1) ∧
+          GaugeEquiv (d := d) (D := dim0 k)
+            (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • blocks0 k i) B := by
+    intro k
+    let : NeZero (dim0 k) :=
+      ⟨bond_dim_ne_zero_of_exists_nonzero
+        (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
+    exact
+      exists_tp_data_of_irreducible
+        (A := blocks0 k) (hIrr := hIrr0 k) (hA := hNonzero0 k)
+  choose blocks1 r1 σ1 hσpd1 hrpos1 hform1 hLeft1 hGauge1 using htp
+  have hSameGauge :
+      ∀ k : Fin r0,
+        SameMPV
+          (fun i => (↑((Real.sqrt (r1 k))⁻¹) : ℂ) • blocks0 k i)
+          (blocks1 k) := by
+    intro k
+    exact GaugeEquiv.sameMPV (hGauge1 k)
+  let μ1 : Fin r0 → ℂ := fun k => (↑(Real.sqrt (r1 k)) : ℂ)
+  obtain ⟨hSame1, _hμne1, hDim1⟩ :=
+    gauge_blockwise_shared A blocks0 hSame0 hNonzero0 blocks1 r1 hrpos1 hSameGauge
+  have hIrr1 : ∀ k : Fin r0, Kraus.IsIrreducibleFamily (blocks1 k) := by
+    intro k
+    let : NeZero (dim0 k) :=
+      ⟨bond_dim_ne_zero_of_exists_nonzero
+        (d := d) (D := dim0 k) (blocks0 k) (hNonzero0 k)⟩
+    let c : ℂ := (↑((Real.sqrt (r1 k))⁻¹) : ℂ)
+    have hroot_ne : (↑(Real.sqrt (r1 k)) : ℂ) ≠ 0 := by
+      exact_mod_cast (Real.sqrt_ne_zero'.mpr (hrpos1 k))
+    have hc_ne : c ≠ 0 := by
+      dsimp [c]
+      simp [hroot_ne]
+    have hIrr_scaled :
+        Kraus.IsIrreducibleFamily (d := d) (D := dim0 k) (fun i => c • blocks0 k i) :=
+      isIrreducibleTensor_smul (d := d) (D := dim0 k) hc_ne (blocks0 k) (hIrr0 k)
+    have hIrr_gauge :
+        Kraus.IsIrreducibleFamily (d := d) (D := dim0 k)
+          (Kraus.tpGauge (fun i => c • blocks0 k i) (σ1 k)) :=
+      (Kraus.isIrreducibleFamily_tpGauge_iff
+        (fun i => c • blocks0 k i) (σ1 k) (hσpd1 k)).2 hIrr_scaled
+    have hEq :
+        blocks1 k = Kraus.tpGauge (d := d) (D := dim0 k) (fun i => c • blocks0 k i) (σ1 k) := by
+      funext i
+      simpa [Kraus.tpGauge, c] using hform1 k i
+    simpa [hEq, Kraus.tpGauge] using hIrr_gauge
+  exact ⟨μ1, blocks1, hSame1, hIrr1, hLeft1, (fun k =>
+    Complex.zero_lt_real.mpr (Real.sqrt_pos.2 (hrpos1 k))), hDim1⟩
+
+/-!
+## Arbitrary-input blockwise gauge reductions
+
+The nonzero irreducible decomposition from `Existence.lean` is placed blockwise
+in either the PGVWC07 unital orientation or the trace-preserving orientation.
+The blockwise gauges preserve the index set and every bond dimension, so the
+structural bond-dimension bound passes through unchanged.
+-/
+
+/-- **Arbitrary-input PGVWC07 unital dual-diagonal form.**
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`, proof
+lines 761--832.  At every positive length, an arbitrary tensor is
+represented by positive real weights multiplying nonzero blocks in the unital
+orientation.  Each block has only scalar transfer-map fixed points and admits a
+diagonal positive-definite fixed point of the adjoint transfer map.  The total
+bond dimension of the retained blocks is at most the original bond dimension.
+The positive-length form and structural dimension bound are recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
+theorem exists_pgvwc07_unital_dualDiag_from_arbitrary
+    (A : MPSTensor d D) :
+    ∃ (r : ℕ) (dim : Fin r → ℕ)
+      (μ : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      (∀ k,
+        ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          Λ.PosDef ∧
+          Λ.IsDiag ∧
+          (∑ i : Fin d, blocks k i * (blocks k i)ᴴ = 1) ∧
+          Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (fun i => (blocks k i)ᴴ) Λ = Λ) ∧
+      (∀ k,
+        ∀ X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ,
+          Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k) X = X →
+            ∃ c : ℂ, X = c • (1 : Matrix (Fin (dim k)) (Fin (dim k)) ℂ)) ∧
+      (∀ k, ∃ a : ℝ, 0 < a ∧ μ k = (a : ℂ)) ∧
+      (∀ k, 0 < dim k) ∧
+      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      ∑ k : Fin r, dim k ≤ D := by
+  classical
+  obtain ⟨r, dim, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hPos₀, hBound₀⟩ :=
+    exists_irreducible_blockDecomp_nonzeroBlocks (d := d) (D := D) A
+  let A_nonzero := toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀
+  have hSame_refl : SameMPV₂ A_nonzero
+      (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀) :=
+    fun _ _ => rfl
+  obtain ⟨μ, blocks, hSame, hΛ, hScalar, hμPos, _hμNe, hDim⟩ :=
+    exists_pgvwc07_unital_dualDiag_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl
+      hNonzero₀
+  exact ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, hDim,
+    hPos₀.trans hSame.toSameMPV₂Pos, hBound₀⟩
+
+/-- **Structured positive-length PGVWC07 canonical-form witness.**
+
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
+lines 742--763.  This theorem is the structured form of
+`exists_pgvwc07_unital_dualDiag_from_arbitrary`.
+
+This is the unnormalized positive-length witness.  The source theorem's
+normalization `1 ≥ λ_j > 0` is supplied later by the finite-family
+weight-normalization theorem, following the global spectral-radius
+normalization convention from lines 765--766.
+The positive-length convention is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
+theorem exists_pgvwc07_positiveLengthWitness
+    (A : MPSTensor d D) :
+    Nonempty (PGVWC07PositiveLengthWitness (d := d) (D := D) A) := by
+  classical
+  obtain ⟨r, dim, μ, blocks, hΛ, hScalar, hμPos, hDim, hSame, hBound⟩ :=
+    exists_pgvwc07_unital_dualDiag_from_arbitrary (d := d) (D := D) A
+  exact ⟨
+    { r := r
+      dim := dim
+      weights := μ
+      blocks := blocks
+      dual_fixed := hΛ
+      scalar_fixed := hScalar
+      weight_pos := hμPos
+      dim_pos := hDim
+      sameMPV_pos := hSame
+      bondDim_le := hBound }⟩
+
+/-- **Arbitrary-input trace-preserving gauge reduction.**
+
+This combines the invariant-subspace splitting of arXiv:1606.00608,
+lines 201--219, with the canonical-form-II gauge passage at lines 1058--1077
+for the nonzero irreducible blocks.
+
+From any `A : MPSTensor d D`, it produces TP-gauged irreducible blocks
+`blocks k` with positive real weights `μ k`, the square roots of the original
+blocks' spectral radii.
+
+Every nonzero block satisfies:
+* `Kraus.IsIrreducibleFamily`;
+* left-canonical normalization `∑ᵢ (Bᵢ)ᴴ Bᵢ = I`;
+* positive bond dimension;
+* positive real weight.
+
+At every positive length, `A` has the same MPV as the weighted nonzero-block
+sum, whose total bond dimension is at most `D`.
+
+**Scope restriction (translation-invariant canonical-form proof step):**
+Pérez-García, Verstraete, Wolf, and Cirac, Theorem Th:TIcanonical,
+lines 765--770 use a full-rank positive fixed point to gauge a block into the
+unital orientation `∑ i, B i * (B i)ᴴ = 1`. This theorem supplies the dual
+left-canonical trace-preserving orientation after discarding the all-zero blocks.
+The PGVWC07 unital-orientation analogue is
+`exists_pgvwc07_unital_dualDiag_from_arbitrary` above.  This
+theorem remains useful as a TP-gauge reduction, but it is not the canonical-form
+statement matching PGVWC07 Theorem Th:TIcanonical.  The boundary is recorded in
+`docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`. -/
+theorem exists_tp_gauge_from_arbitrary (A : MPSTensor d D) :
+    ∃ (r : ℕ) (dim : Fin r → ℕ)
+      (μ : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
+      (∀ k, ∑ i : Fin d, (blocks k i)ᴴ * blocks k i = 1) ∧
+      (∀ k, 0 < μ k) ∧
+      (∀ k, 0 < dim k) ∧
+      SameMPV₂Pos A (toTensorFromBlocks (d := d) (μ := μ) blocks) ∧
+      ∑ k : Fin r, dim k ≤ D := by
+  classical
+  obtain ⟨r, dim, blocks₀, hIrr₀, hNonzero₀, _hDim₀, hPos₀, hBound₀⟩ :=
+    exists_irreducible_blockDecomp_nonzeroBlocks (d := d) (D := D) A
+  let A_nonzero := toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀
+  have hSame_refl : SameMPV₂ A_nonzero
+      (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks₀) :=
+    fun _ _ => rfl
+  obtain ⟨μ, blocks, hSame, hIrr, hLeft, hμPos, hDim⟩ :=
+    exists_tp_gauge_blockwise A_nonzero blocks₀ hIrr₀ hSame_refl hNonzero₀
+  exact ⟨r, dim, μ, blocks, hIrr, hLeft, hμPos, hDim,
+    hPos₀.trans hSame.toSameMPV₂Pos, hBound₀⟩
+
+
+end MPSTensor
+
+end
+
+section
+
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Filter
+open Kraus (blockPhysDim blockTensor)
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+/-!
+## The main reduction theorem
+
+We compose the individual reduction steps into a single theorem that takes
+an arbitrary `A : MPSTensor d D` and produces blocked TP-primitive data.
+-/
+
+/-- **Main reduction: arbitrary MPS tensor → blocked TP-primitive decomposition.**
+
+For any `A : MPSTensor d D`, there exists a blocking period `p > 0` and
+a decomposition:
+
+* a family of **weighted blocked blocks** `blocks k` indexed by `Fin r`, each with:
+  - left-canonical (TP) normalization `∑ᵢ (blocks k i)ᴴ * (blocks k i) = I`;
+  - primitive transfer map `_root_.IsPrimitive (Kraus.transferMap (blocks k))`;
+  - positive bond dimension;
+  - nonzero weight `μ k`.
+
+The MPV relationship holds at every positive blocked length:
+```
+  mpv (blockTensor A p) σ = mpv (toTensorFromBlocks μ blocks) σ
+```
+
+The retained blocks have total bond dimension at most the original bond
+dimension.  This bound comes from the invariant-subspace decomposition and is
+independent of any empty-word comparison.
+
+Source: Pérez-García, Verstraete, Wolf, and Cirac, Theorem `Th:TIcanonical`,
+proof lines 761--832, for the nonzero irreducible blocks and their canonical
+gauge; arXiv:1606.00608, equation `eq:II_Aiplusk1`, Section II.C, and Appendix A,
+for removal of zero blocks and blocking to primitive cyclic sectors.  The
+positive-length statement and structural dimension bound are recorded in
+`docs/paper-gaps/cpsv16_zero_tail_length_zero_decomposition.tex`.
+
+**Original blocks:** The pre-blocking blocks are `IsIrreducibleTensor`, but blocking does not in
+general preserve tensor irreducibility. See the module documentation for the gap analysis. -/
+theorem exists_tp_primitive_blockDecomp_after_blocking (A : MPSTensor d D) :
+    ∃ (p : ℕ) (_ : 0 < p)
+      (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
+      (blocks : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k)),
+      -- (a) Blocks are left-canonical (TP)
+      (∀ k, ∑ i : Fin (blockPhysDim d p),
+        (blocks k i)ᴴ * blocks k i = 1) ∧
+      -- (b) Blocks have primitive transfer maps
+      (∀ k, _root_.IsPrimitive
+        (Kraus.transferMap (ι := Fin (blockPhysDim d p)) (n := Fin (dim k)) (blocks k))) ∧
+      -- (c) Positive bond dimensions
+      (∀ k, 0 < dim k) ∧
+      -- (d) Nonzero weights
+      (∀ k, μ k ≠ 0) ∧
+      -- (e) Positive-length MPV relationship
+      SameMPV₂Pos
+        (blockTensor (d := d) (n := Fin D) A p)
+        (toTensorFromBlocks (d := blockPhysDim d p) (μ := μ) blocks) ∧
+      -- (f) Bond-dimension bound
+      ∑ k : Fin r, dim k ≤ D := by
+  classical
+  -- Step A: Get TP-gauged irreducible blocks from an arbitrary tensor.
+  obtain ⟨r₀, dim₀, μ₀, blocks₀,
+      hIrr₀, hTP₀, hμPos₀, hDim₀, hPos₀, hDimBound₀⟩ :=
+    exists_tp_gauge_from_arbitrary (d := d) (D := D) A
+  have hμNe₀ : ∀ k, μ₀ k ≠ 0 := fun k => ne_of_gt (hμPos₀ k)
+  -- Step B: Find a common blocking period making all transfer maps primitive.
+  obtain ⟨P, hP, hPrim⟩ :=
+    exists_common_blocking_all_primitive_of_TP_irr blocks₀ hTP₀ hIrr₀ hDim₀
+  -- Step C: Construct the blocked data.
+  set blocks₁ : (k : Fin r₀) → MPSTensor (blockPhysDim d P) (dim₀ k) :=
+    fun k => blockTensor (d := d) (n := Fin (dim₀ k)) (blocks₀ k) P with blocks₁_def
+  set μ₁ : Fin r₀ → ℂ := fun k => (μ₀ k) ^ P with μ₁_def
+  -- Step D: Verify all properties.
+  refine ⟨P, hP, r₀, dim₀, μ₁, blocks₁, ?_, ?_, ?_, ?_, ?_, ?_⟩
+  -- (a) TP under blocking.
+  · intro k
+    exact leftCanonical_blockTensor (d := d) (D := dim₀ k) (A := blocks₀ k) (L := P) (hTP₀ k)
+  -- (b) Primitive transfer maps.
+  · exact hPrim
+  -- (c) Positive bond dimensions (unchanged by blocking).
+  · exact hDim₀
+  -- (d) Nonzero weights: `(μ₀ k)^P` remains nonzero since `μ₀ k ≠ 0`.
+  · exact blockWeights_ne_zero μ₀ hμNe₀ P
+  -- (e) Positive-length MPV relationship.
+  · simpa [μ₁_def, blocks₁_def] using
+      sameMPV₂Pos_blockTensor_toTensorFromBlocks
+        (d := d) (D := D) (r := r₀) (dim := dim₀)
+        A μ₀ blocks₀ hPos₀ P hP
+  -- (f) Bond dimensions are unchanged by blocking.
+  · exact hDimBound₀
+
+end MPSTensor
+
+end

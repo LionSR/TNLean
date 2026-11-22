@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.Fibonacci.FibonacciFSymbol
-import TNLean.MPS.MPDO.RingTreeData
+import TNLean.MPS.MPDO.MPOAction.RingTreeData
 
 /-!
 # Exact fusion and action trees of the two-block Fibonacci realization

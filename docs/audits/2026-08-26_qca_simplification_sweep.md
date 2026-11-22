@@ -34,8 +34,8 @@ Consequences:
   finite-dimensional C*-algebra factors, and removing the `Fin` binders does
   not close it. The module's `**Scope restriction (full matrix factors):**`
   marker stays as written.
-- The module no longer needs `QICLean.Channel.OperatorSystem`. It imports
-  `QICLean.Channel.TensorMap` for `Matrix.bipartiteSlice` and
+- The module no longer needs `QICLean.Channel.OperatorSystem.Basic`. It imports
+  `QICLean.Algebra.Kronecker.TensorMap` for `Matrix.bipartiteSlice` and
   `Mathlib.LinearAlgebra.Dimension.Free` for `Module.finBasis`, both of which
   had been arriving transitively.
 

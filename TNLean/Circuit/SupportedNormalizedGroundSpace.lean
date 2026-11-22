@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.SupportedGroundSpace
-import QICLean.Analysis.SpectralFilter.PositiveReplacement
+import QICLean.Spectral.Filter.PositiveReplacement
 import Mathlib.Analysis.Normed.Module.Normalize
 
 /-!

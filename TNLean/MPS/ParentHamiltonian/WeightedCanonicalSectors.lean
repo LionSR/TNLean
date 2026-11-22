@@ -3,14 +3,29 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.ParentHamiltonian.WeightedCanonicalPhysicalLimit
-import TNLean.MPS.ParentHamiltonian.HalfChainSourceSpectrum
-import QICLean.Algebra.ScalarCommutant
-import QICLean.Algebra.L2OpNormReindex
+import TNLean.MPS.CanonicalForm.TranslationInvariant
+import TNLean.MPS.CanonicalForm.Periodic.Overlap.PeriodicMPSNormLowerBound
+import TNLean.MPS.CanonicalForm.HalfChainCanonicalSpectrum
+import QICLean.Algebra.MatrixAlgebra.ScalarCommutant
+import QICLean.Analysis.Norm.L2OpNormReindex
 import Mathlib.LinearAlgebra.Eigenspace.Zero
+import TNLean.MPS.Tensor.HalfChain.HalfChainPhysicalStability
 
 /-!
-# Dominant sectors of a weighted canonical tensor
+# Disappearance of subleading weighted canonical blocks
+
+For a weighted TI canonical tensor, each unital block has periodic state
+norm bounded by its bond dimension. The exact weighted decomposition
+therefore bounds the physical remainder after retaining the unit-weight
+blocks by a finite sum of geometric sequences. This remainder tends to
+zero without any spectral or convergence assumption.
+
+Source: PGVWC07, arXiv:quant-ph/0608197, Theorems 4 and 6, lines 742–759
+and 970–993. This is the physical contribution estimate for the weighted
+canonical half-chain limit; it does not identify a unique dominant block
+from Condition C2 or replace finite-ring normalization by one.
+
+## Dominant sectors of a weighted canonical tensor
 
 Each canonical sector projection is a transfer eigenvector with eigenvalue
 its squared weight. Spectral-radius normalization forces a unit-weight
@@ -32,7 +47,89 @@ reading of PGVWC07 Condition C2 (lines 954–963) excludes only other peripheral
 and the multi-block theorem under that literal reading remains open. Documented in
 `docs/paper-gaps/pgvwc07_half_chain_spectrum_conventions.tex`. The sector, spectral-radius
 and remainder results of this module are unconditional and outside this restriction.
+
+## The half-chain spectrum of a general weighted canonical MPS under C2
+
+The normalized generic C2 condition counts eigenvalues with algebraic
+multiplicity. It determines the unique unit-weight normal block of the
+actual weighted canonical tensor. The physical remainder tends to zero;
+the canonical dual fixed point supplies positive diagonal weights of sum
+one. The actual finite normalization and dimension-independent spectral
+stability then transport the one-block half-chain limit to the original
+weighted tensor, including multiplicities and zero padding.
+
+Source: PGVWC07, arXiv:quant-ph/0608197, Condition C2 and Theorem 6,
+lines 954–993. The multiplicity, normalization and indexing conventions
+are recorded in `docs/paper-gaps/pgvwc07_half_chain_spectrum_conventions.tex`.
 -/
+
+section
+
+open Filter
+open scoped Matrix BigOperators Topology
+
+namespace MPSTensor.PGVWC07CanonicalFormData
+
+variable {d D : ℕ} {A : MPSTensor d D} (h : PGVWC07CanonicalFormData A)
+
+/-- The actual physical contribution of subunit canonical weights has a
+finite geometric bound. No irreducibility, peripheral simplicity, or
+assumed decay estimate is needed. Source: PGVWC07, Theorems 4 and 6,
+lines 742–759 and 970–993. -/
+theorem norm_mpvState_sub_unitWeight_sum_le (N : ℕ) :
+    ‖mpvState A N - ∑ k ∈ Finset.univ.filter (fun k => h.weight k = 1),
+      mpvState (h.blocks k) N‖ ≤
+    ∑ k ∈ Finset.univ.filter (fun k => h.weight k < 1),
+      h.weight k ^ N * (h.dim k : ℝ) := by
+  classical
+  have hState := mpvState_eq_sum_of_decomp A h.blocks
+    (fun k => (h.weight k : ℂ) ^ N) (h.mpv_eq_sum (N := N))
+  have hSplit : mpvState A N -
+      ∑ k ∈ Finset.univ.filter (fun k => h.weight k = 1), mpvState (h.blocks k) N =
+      ∑ k ∈ Finset.univ.filter (fun k => h.weight k < 1),
+        (h.weight k : ℂ) ^ N • mpvState (h.blocks k) N := by
+    rw [hState]
+    simp only [Finset.sum_filter]
+    rw [← Finset.sum_sub_distrib]
+    apply Finset.sum_congr rfl
+    intro k _
+    by_cases hk : h.weight k = 1
+    · simp [hk]
+    · have hklt : h.weight k < 1 := lt_of_le_of_ne (h.weight_le_one k) hk
+      simp only [hk, hklt, ite_true, ite_false, sub_zero]
+  rw [hSplit]
+  apply (norm_sum_le _ _).trans
+  apply Finset.sum_le_sum
+  intro k _
+  rw [norm_smul, norm_pow, Complex.norm_real, Real.norm_of_nonneg (h.weight_pos k).le]
+  exact mul_le_mul_of_nonneg_left
+    (norm_mpvState_le_bondDimension_of_unital (h.blocks k) (h.unital k) N)
+    (pow_nonneg (h.weight_pos k).le N)
+
+/-- All strictly subunit canonical weights disappear in actual periodic
+state norm. The retained state is the sum of the unit-weight block vectors,
+without an assumption that this sum consists of only one block. Source:
+PGVWC07, Theorems 4 and 6, lines 742–759 and 970–993. -/
+theorem tendsto_norm_mpvState_sub_unitWeight_sum :
+    Tendsto (fun N => ‖mpvState A N -
+      ∑ k ∈ Finset.univ.filter (fun k => h.weight k = 1), mpvState (h.blocks k) N‖)
+      atTop (𝓝 (0 : ℝ)) := by
+  classical
+  have hSum : Tendsto (fun N =>
+      ∑ k ∈ Finset.univ.filter (fun k => h.weight k < 1),
+        h.weight k ^ N * (h.dim k : ℝ)) atTop (𝓝 (0 : ℝ)) := by
+    simpa only [zero_mul, Finset.sum_const_zero] using
+      tendsto_finsetSum (Finset.univ.filter (fun k => h.weight k < 1))
+        (fun k hk =>
+          (tendsto_pow_atTop_nhds_zero_of_lt_one (h.weight_pos k).le
+            (Finset.mem_filter.mp hk).2).mul_const (h.dim k : ℝ))
+  exact squeeze_zero (fun _ => norm_nonneg _) (h.norm_mpvState_sub_unitWeight_sum_le) hSum
+
+end MPSTensor.PGVWC07CanonicalFormData
+
+end
+
+section
 
 open scoped Matrix BigOperators Matrix.Norms.L2Operator ComplexOrder Topology ENNReal
 
@@ -332,3 +429,80 @@ theorem exists_dominantNormalBlock_physical_limit_of_c2
   exact ⟨k, hk, hUnique, h.isNormalTensor_of_weight_eq_one_of_c2 hC2 hk, hPhysical⟩
 
 end MPSTensor.PGVWC07CanonicalFormData
+
+end
+
+section
+
+noncomputable section
+
+open Filter Matrix
+open scoped Matrix.Norms.L2Operator ComplexOrder Topology BigOperators
+
+namespace MPSTensor
+
+variable {d D : ℕ} {A : MPSTensor d D}
+
+/-- The actual normalized half-chain ordered spectrum of a general
+weighted canonical tensor converges to the doubled diagonal fixed-point
+spectrum of its derived dominant block. No block, stationary density,
+normalization, decay estimate or spectral limit is an added hypothesis.
+C2 is the source's generic, algebraic-multiplicity condition, rather than
+uniqueness of the peripheral eigenvalue as a distinct value.
+Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 6, lines 954–993;
+`docs/paper-gaps/pgvwc07_half_chain_spectrum_conventions.tex`. -/
+theorem PGVWC07CanonicalFormData.exists_halfChainSpectrumLimit_of_c2
+    (h : PGVWC07CanonicalFormData A)
+    (hRadius : spectralRadius ℂ
+      ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
+        (Kraus.transferMap A)) = 1)
+    (hC2 : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → ‖μ‖ = 1 →
+      μ = 1 ∧ (Kraus.transferMap A).charpoly.rootMultiplicity μ = 1) :
+    ∃ k : Fin h.r, h.weight k = 1 ∧ (∀ j, h.weight j = 1 → j = k) ∧
+      IsNormalTensor (h.blocks k) ∧
+      ∃ lam : Fin (h.dim k) → ℝ, ∃ hlam : ∀ a, 0 < lam a, (∑ a, lam a = 1) ∧
+        (∑ i, (h.blocks k i)ᴴ * (Matrix.diagonal fun a ↦ (lam a : ℂ)) * h.blocks k i =
+          Matrix.diagonal fun a ↦ (lam a : ℂ)) ∧
+        (∀ᶠ L : ℕ in atTop, 0 < halfChainNormSq A L) ∧
+        ∀ i : ℕ, Tendsto (fun L ↦ halfChainEigenvalues A L i) atTop
+          (𝓝 ((posSemidef_halfChainSpectrumLimit lam
+            (fun a ↦ (hlam a).le)).isHermitian.paddedEigenvalues i)) := by
+  classical
+  obtain ⟨k, hk, hUnique, hNormal, hPhysical⟩ :=
+    h.exists_dominantNormalBlock_physical_limit_of_c2 hRadius hC2
+  obtain ⟨lam, hlam, htr, hfix⟩ := h.exists_normalized_diagonal_dualFixedPoint k
+  have hZ := (halfChainNormSq_unital (h.blocks k) hNormal lam
+    (fun a ↦ (hlam a).le) htr (h.unital k) hfix).1
+  have hNorm : Tendsto (fun L : ℕ ↦ ‖mpvState (h.blocks k) (L + L)‖) atTop (𝓝 1) := by
+    have hsqrt := (Real.continuous_sqrt.tendsto (1 : ℝ)).comp hZ
+    simpa only [halfChainNormSq_eq_norm_mpvState_sq, Function.comp_def,
+      Real.sqrt_sq_eq_abs, abs_norm, Real.sqrt_one] using hsqrt
+  have hLength : Tendsto (fun L : ℕ ↦ L + L) atTop atTop := by
+    apply tendsto_atTop.mpr
+    intro M
+    exact eventually_atTop.mpr ⟨M, fun L hL ↦ by omega⟩
+  have hPhysicalEven := hPhysical.comp hLength
+  have hNormalized := tendsto_normalizedMPVState_sub_of_mpvState_sub
+    A (h.blocks k) (fun L ↦ L + L) hPhysicalEven hNorm
+  have hNonzero : ∀ᶠ L : ℕ in atTop, 0 < halfChainNormSq A L := by
+    have hSmall := hPhysicalEven.eventually
+      (eventually_lt_nhds (show (0 : ℝ) < 1 / 4 by norm_num))
+    have hLarge := hNorm.eventually
+      (eventually_gt_nhds (show (1 / 2 : ℝ) < 1 by norm_num))
+    filter_upwards [hSmall, hLarge] with L hSmallL hLargeL
+    have hDiff := (abs_le.mp (abs_norm_sub_norm_le (mpvState A (L + L))
+      (mpvState (h.blocks k) (L + L)))).1
+    have hPos : 0 < ‖mpvState A (L + L)‖ := by
+      change ‖mpvState A (L + L) - mpvState (h.blocks k) (L + L)‖ < 1 / 4 at hSmallL
+      linarith
+    rw [halfChainNormSq_eq_norm_mpvState_sq]
+    exact sq_pos_of_pos hPos
+  refine ⟨k, hk, hUnique, hNormal, lam, hlam, htr, hfix, hNonzero, fun i ↦ ?_⟩
+  apply tendsto_halfChainEigenvalues_of_normalizedMPVState_sub A (h.blocks k) hNormalized i
+  exact tendsto_halfChainEigenvalues_unital (h.blocks k) hNormal lam
+    (fun a ↦ (hlam a).le) htr (h.unital k) hfix i
+
+end MPSTensor
+end
+
+end

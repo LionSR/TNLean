@@ -7,7 +7,7 @@ import TNLean.MPS.Examples.Ising.IsingLetterSectorOne
 import TNLean.MPS.Examples.Ising.IsingLetterSectorPsi
 import TNLean.MPS.Examples.Ising.IsingLetterSectorSigmaAbelian
 import TNLean.MPS.Examples.Ising.IsingLetterSectorSigmaSigma
-import TNLean.MPS.MPDO.OperatorFromWordTrace
+import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
 
 /-!
 # Weighted Ising twist: the hidden bond objects

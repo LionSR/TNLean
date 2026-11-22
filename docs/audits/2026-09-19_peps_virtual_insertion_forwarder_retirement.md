@@ -1,6 +1,6 @@
 # PEPS local virtual insertion forwarder retirement
 
-`TNLean/PEPS/VirtualInsertion.lean` carried two parallel theorem families about
+`TNLean/PEPS/Tensor/Network/VirtualInsertion.lean` carried two parallel theorem families about
 the local virtual operations at a vertex. The `…At` family assumes only that
 the family of local physical vectors at the one vertex `v` is linearly
 independent; the other family assumes `IsVertexInjective A`, which is that same
@@ -21,7 +21,7 @@ consolidation tracked as ledger entry D6
 
 ## Removed declarations
 
-All removals are from `TNLean/PEPS/VirtualInsertion.lean`. In each row `hA` is
+All removals are from `TNLean/PEPS/Tensor/Network/VirtualInsertion.lean`. In each row `hA` is
 the vertex-injectivity hypothesis of the removed statement and `v` is the
 vertex it was applied at.
 
@@ -41,8 +41,8 @@ vertex it was applied at.
 
 Eight of the eleven had no consumer outside the defining file. The three with
 consumers were migrated in place at eight call sites:
-`TNLean/PEPS/InsertionRealization.lean` (six sites) and
-`TNLean/PEPS/InsertionCoefficientRealization.lean` (two sites). Six of the
+`TNLean/PEPS/FundamentalTheorem/Injective/InsertionRealization.lean` (six sites) and
+`TNLean/PEPS/FundamentalTheorem/Injective/InsertionCoefficientRealization.lean` (two sites). Six of the
 eight migrations are the mechanical
 substitution of `(hA v)` for `hA`. The two sites in
 `edgePhysicalToVirtualInsertion_of_projected_realization_eq` rewrite a
@@ -85,12 +85,12 @@ time.
 
 The three definitions `physRealizeLocalOp`, `localProjector` and
 `localVirtualOpOfPhysicalOp`, and the definition `localLeftInverse`, remain in
-Lean as untagged conveniences: `TNLean/PEPS/InsertionRealization.lean` and
-`TNLean/PEPS/LocalGauge.lean` state results in those spellings.
+Lean as untagged conveniences: `TNLean/PEPS/FundamentalTheorem/Injective/InsertionRealization.lean` and
+`TNLean/PEPS/FundamentalTheorem/Injective/LocalGauge.lean` state results in those spellings.
 
 The simp lemma `localProjector_apply_localTensorMap` also remains. It is a
 pass-through of the same shape, but it was restored deliberately because the
-bare `simp` calls in `TNLean/PEPS/LocalGauge.lean` fire on it; see
+bare `simp` calls in `TNLean/PEPS/FundamentalTheorem/Injective/LocalGauge.lean` fire on it; see
 `docs/audits/2026-08-27_peps_cycle_edge_simp_retirement.md`.
 
 ## Checked
@@ -108,7 +108,7 @@ the clearance above.
 
 ## Deferred
 
-`TNLean/PEPS/InsertionRealization.lean` repeats the same shape one level up:
+`TNLean/PEPS/FundamentalTheorem/Injective/InsertionRealization.lean` repeats the same shape one level up:
 `edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq` and its
 right-hand twin forward to the `…eqAt` statements below them and are tagged in
 `blueprint/src/chapter/ch24_peps_ft_edge_kernel_gauges_kernel_descent_recovery.tex`.

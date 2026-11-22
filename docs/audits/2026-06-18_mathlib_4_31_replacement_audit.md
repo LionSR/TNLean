@@ -238,7 +238,7 @@ There are also important non-replacements.
   unless the word-product arguments are reorganized through a submonoid or
   subsemiring construction.
 - The `SO(3)` Euler-angle factorization in
-  `TNLean/MPS/Examples/AKLTRotation.lean` remains local.  Mathlib 4.31 provides
+  `TNLean/MPS/Examples/AKLT/AKLTRotation.lean` remains local.  Mathlib 4.31 provides
   the special-orthogonal group interface, a two-dimensional membership
   characterization, and the `Complex.arg` trigonometric identities used by the
   local proof, but it does not provide a direct `SO(3)` Euler decomposition.
@@ -341,17 +341,17 @@ of coercion lemmas.
 
 TNLean files containing deprecated or fragile reindexing code include:
 
-- `TNLean/PEPS/TorusGaugedWeightCovariance.lean`
-- `TNLean/PEPS/TorusGaugeUniqueness.lean`
+- `TNLean/PEPS/FundamentalTheorem/Torus/TorusGaugedWeightCovariance.lean`
+- `TNLean/PEPS/FundamentalTheorem/Torus/TorusGaugeUniqueness.lean`
 - `TNLean/Channel/Schwarz/SchwarzSubnormal.lean`
-- `TNLean/PEPS/RegionBlock/CoarseThreeSite11.lean`
-- `TNLean/PEPS/RegionBlock/Insertion.lean`
-- `TNLean/PEPS/RegionTransportInsertion.lean`
-- `TNLean/PEPS/EdgeGaugeFamily.lean`
+- `TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/SingleEdgeTransfer.lean`
+- `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/Insertion.lean`
+- `TNLean/PEPS/FundamentalTheorem/Normal/RegionTransportInsertion.lean`
+- `TNLean/PEPS/FundamentalTheorem/Injective/EdgeGaugeFamily.lean`
 - `TNLean/Channel/Peripheral/CyclicDecomposition/Basic.lean`
-- `TNLean/PEPS/FundamentalTheorem/OneVertexComparison.lean`
-- `TNLean/MPS/Structure/InvariantSubspaceDecomp.lean`
-- `TNLean/MPS/SharedInfra/BlockAssembly.lean`
+- `TNLean/PEPS/FundamentalTheorem/Injective/OneVertexComparison.lean`
+- `TNLean/MPS/Tensor/DirectSum/InvariantSubspaceDecomp.lean`
+- `TNLean/MPS/Tensor/DirectSum/BlockAssembly.lean`
 
 Recommended action:
 
@@ -365,15 +365,15 @@ Recommended action:
 Applied PEPS follow-up:
 
 - Explicit uses of `TNLean.PEPS.reindexAlgEquiv_smul` were removed.  The four
-  scalar transport sites in `TNLean/PEPS/TorusGaugeUniqueness.lean` now rewrite
+  scalar transport sites in `TNLean/PEPS/FundamentalTheorem/Torus/TorusGaugeUniqueness.lean` now rewrite
   by Mathlib's `map_smul` for the algebra equivalence.  The unused
   compatibility theorem was then removed.
 - Explicit uses of `TNLean.PEPS.reindexAlgEquiv_finCongr_symm_round` were
-  removed from `TNLean/PEPS/EdgeGaugeFamily.lean`.  The only local transport
+  removed from `TNLean/PEPS/FundamentalTheorem/Injective/EdgeGaugeFamily.lean`.  The only local transport
   site now uses a proof by simplifying `Matrix.reindexAlgEquiv` directly.  The
   unused compatibility theorem was then removed.
 - Explicit uses of `TNLean.PEPS.reindexAlgEquiv_gaugeConj` were removed.  The
-  only use in `TNLean/PEPS/TorusWitnessTransport.lean` now uses `map_mul`,
+  only use in `TNLean/PEPS/FundamentalTheorem/Torus/TorusWitnessTranslate.lean` now uses `map_mul`,
   `map_inv`, and `glReindex_coe` directly.  The unused compatibility theorem
   was then removed.
 - Explicit uses of `TNLean.PEPS.reindexAlgEquiv_transpose` were removed.  Its
@@ -385,7 +385,7 @@ Applied PEPS follow-up:
   target.
 - The private MPS cyclic-sector helper
   `reindexLinearEquiv_conjTranspose` was removed from
-  `TNLean/MPS/CanonicalForm/CyclicSectors/Compression.lean`; its two uses now
+  `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/Compression.lean`; its two uses now
   cite Mathlib's `Matrix.conjTranspose_reindex` directly.
 
 ### Rank and finite-dimensional matrix dimensions
@@ -421,7 +421,7 @@ TNLean had local finite-dimensional wrappers such as:
 The square-dimension wrappers and the rectangular injectivity-to-dimension
 wrapper have now been removed.  The remaining rectangular dimension arguments
 in `TNLean/Spectral/GaugeConstruction.lean` and
-`TNLean/Spectral/TransferOperatorGapNT.lean` use
+`TNLean/MPS/Transfer/Spectrum/TransferOperatorGapNT.lean` use
 `Matrix.toLin'` together with `LinearMap.finrank_le_finrank_of_injective`
 directly.
 
@@ -492,7 +492,7 @@ facts and have been removed:
 The dependent proofs now use the Mathlib unitary facts directly.  Two private
 copies of a shaped spectral-decomposition lemma were also removed from
 `TNLean/Channel/PerronFrobenius/Normalization.lean` and
-`TNLean/MPS/Irreducible/FixedPointProjection.lean`.
+`TNLean/MPS/Transfer/Irreducible/FixedPointProjection.lean`.
 
 The public shaped spectral-decomposition wrappers were also removed from
 `TNLean/Algebra/HermitianHelpers.lean`:
@@ -870,7 +870,7 @@ Recommended action:
 Applied martingale follow-up:
 
 - The private helper `isPositive_smul_of_real_re_nonneg` in
-  `TNLean/MPS/ParentHamiltonian/Martingale/Transport.lean` was removed.  The
+  `TNLean/MPS/ParentHamiltonian/ParentInteraction/Transport.lean` was removed.  The
   local-term averaging proof now uses Mathlib's
   `LinearMap.IsPositive.smul_of_nonneg` directly, with the scalar nonnegativity
   discharged by `positivity` under `ComplexOrder`.
@@ -878,7 +878,7 @@ Applied martingale follow-up:
 Applied wrapping-window follow-up:
 
 - The two theorem-level `maxHeartbeats` bounds in
-  `TNLean/MPS/ParentHamiltonian/WrappingWindow.lean` were removed.  Under Lean
+  `TNLean/MPS/Tensor/GroundSpace/WrappingWindow.lean` were removed.  Under Lean
   4.31, both the trace-rotation extraction lemma `wrapping_window_matEq` and
   the boundary commutation theorem `boundary_matrix_commutes` elaborate under
   the default heartbeat budget.
@@ -886,7 +886,7 @@ Applied wrapping-window follow-up:
 Focused check:
 
 ```bash
-lake build TNLean.MPS.ParentHamiltonian.WrappingWindow -q --log-level=info
+lake build TNLean.MPS.Tensor.GroundSpace.WrappingWindow -q --log-level=info
 ```
 
 Applied projection follow-up:
@@ -900,7 +900,7 @@ Applied projection follow-up:
   semidefinite now uses
   `IsStarProjection.nonneg` followed by `Matrix.nonneg_iff_posSemidef`.
 - Duplicate complement-projection proofs were removed from
-  `TNLean/MPS/Irreducible/Adjoint.lean`,
+  `TNLean/MPS/Transfer/Irreducible/DiagonalFixedPoint.lean`,
   `TNLean/Channel/Irreducible/FromSpectral.lean`, and
   `TNLean/Channel/Semigroup/ReducibleQDS/Defs.lean`; downstream uses now call
   the single foundational lemma.
@@ -1286,7 +1286,7 @@ at the instance site.  The remaining local `maxHeartbeats` bound around the
 partial-isometry extension theorem was retested under Lean 4.31 and is still
 needed for elaboration.
 
-In `TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData`, the common
+In `TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonSectorData`, the common
 positive-blocking-length cyclic-sector theorem now elaborates under the default
 Lean 4.31 heartbeat budget.  The local theorem-level `maxHeartbeats` override
 and its comment were removed.
@@ -1332,7 +1332,7 @@ completeness.
 
 The local spectral-radius extraction theorems in
 `TNLean.Spectral.TransferOperatorGap`, `TNLean.Spectral.TransferOperatorGapRect`,
-and `TNLean.Spectral.TransferOperatorGapNT` were retested under Lean 4.31.  The
+and `TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT` were retested under Lean 4.31.  The
 square transfer-gap theorem, the rectangular transfer-gap theorem, the
 Perron--Frobenius gauge extraction in the non-translation-invariant file, and
 the non-rectangular non-translation-invariant spectral-radius extraction no
@@ -1341,7 +1341,7 @@ longer need their previous local bounds.
 Focused check for the final non-translation-invariant removal:
 
 ```bash
-lake build TNLean.Spectral.TransferOperatorGapNT -q --log-level=info
+lake build TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT -q --log-level=info
 ```
 
 The scalar spectral-radius identity `spectralRadius_smul` in
@@ -1504,8 +1504,8 @@ The affected files are:
 - `TNLean/Channel/Irreducible/Similarity.lean`
 - `TNLean/Channel/Semigroup/ReducibleQDS/FixedDensity.lean`
 - `TNLean/MPS/Core/CPPrimitive.lean`
-- `TNLean/MPS/Irreducible/FixedPointProjection.lean`
-- `TNLean/MPS/Irreducible/FormII.lean`
+- `TNLean/MPS/Transfer/Irreducible/FixedPointProjection.lean`
+- `TNLean/MPS/Transfer/Irreducible/DiagonalFixedPoint.lean`
 - `TNLean/QPF/PosDef.lean`
 
 The public maximally-entangled projection lemmas remain, because they name the
@@ -1522,8 +1522,8 @@ lake build TNLean.QPF.PosDef TNLean.Channel.MaximallyEntangled \
   TNLean.Channel.Irreducible.Growth.Exponential \
   TNLean.Channel.Irreducible.FromSpectral TNLean.Channel.Irreducible.Similarity \
   TNLean.Channel.Semigroup.ReducibleQDS.FixedDensity \
-  TNLean.MPS.Core.CPPrimitive TNLean.MPS.Irreducible.FormII \
-  TNLean.MPS.Irreducible.FixedPointProjection -q --log-level=info
+  TNLean.MPS.Core.CPPrimitive TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint \
+  TNLean.MPS.Transfer.Irreducible.FixedPointProjection -q --log-level=info
 ```
 
 ### Exponential inverse-factorial scalar cleanup, 2026-06-19
@@ -1590,7 +1590,7 @@ Removed declarations:
 Focused check:
 
 ```bash
-lake build TNLean.MPS.Periodic.Defs -q --log-level=info
+lake build TNLean.MPS.Transfer.Irreducible.Periodic -q --log-level=info
 ```
 
 ### PEPS accessor pass-through removal, 2026-06-19
@@ -1608,8 +1608,8 @@ references:
 Focused check:
 
 ```bash
-lake build TNLean.PEPS.RegionBlock.CoarseThreeSite11 \
-  TNLean.PEPS.NormalBondDimension TNLean.PEPS.TorusRowColumnReductionObstruction \
+lake build TNLean.PEPS.FundamentalTheorem.Normal.CoarseThreeSite.SingleEdgeTransfer \
+  TNLean.PEPS.FundamentalTheorem.Normal.NormalBondDimension TNLean.PEPS.FundamentalTheorem.Torus.TorusRowColumnReductionObstruction \
   -q --log-level=info
 ```
 
@@ -1619,11 +1619,11 @@ The follow-up PEPS scan found three exported example declarations that named
 only immediate proof steps and had no blueprint references:
 
 - `TNLean.PEPS.middle_injective` in
-  `TNLean/PEPS/PhysicalToVirtualCounterexample.lean` was exactly
+  `TNLean/PEPS/FundamentalTheorem/Injective/PhysicalToVirtualCounterexample.lean` was exactly
   `linearIndependent_empty_type`, used once as the middle-injectivity field of
   the three-site counterexample.
 - `TNLean.PEPS.Aunits_isNBlkInjective` in
-  `TNLean/PEPS/TorusRowColumnReductionObstruction.lean` was the direct
+  `TNLean/PEPS/FundamentalTheorem/Torus/TorusRowColumnReductionObstruction.lean` was the direct
   one-block injectivity consequence of `Aunits_isInjective`.
 - `TNLean.PEPS.Bunits_isNBlkInjective` in the same file was the corresponding
   one-block consequence after transporting injectivity along
@@ -1635,13 +1635,13 @@ route-specialization site, so no additional public theorem names are exported.
 Focused check:
 
 ```bash
-lake build TNLean.PEPS.PhysicalToVirtualCounterexample \
-  TNLean.PEPS.TorusRowColumnReductionObstruction -q --log-level=info
+lake build TNLean.PEPS.FundamentalTheorem.Injective.PhysicalToVirtualCounterexample \
+  TNLean.PEPS.FundamentalTheorem.Torus.TorusRowColumnReductionObstruction -q --log-level=info
 ```
 
 ### PEPS two-injective heartbeat retest, 2026-06-19
 
-In `TNLean.PEPS.TwoInjectiveComparison.Basic`, the operator-Schmidt bond-gauge
+In `TNLean.PEPS.FundamentalTheorem.Injective.TwoBlockTensor`, the operator-Schmidt bond-gauge
 extraction theorem now elaborates under the default Lean 4.31 heartbeat budget.
 The local theorem-level `maxHeartbeats` override and its comment were removed.
 The diagonal-family lemma in
@@ -1667,7 +1667,7 @@ step `M - N = 0`.  They now apply the Mathlib equality-form theorem directly:
 - `MPSTensor.internal_products_eq`
 - `MPSTensor.external_products_eq`
 - `MPSTensor.eq_of_trace_mul_evalWord_eq`
-- `eq_of_trace_pairing_span` in `TNLean.PEPS.CycleMPSChainArc`
+- `eq_of_trace_pairing_span` in `TNLean.PEPS.Injectivity.Region.CycleMPSChainArc`
 
 The two private `eq_of_trace_mul_left_eq` helpers in the PEPS overlap
 insertion files were removed; their use sites now call
@@ -1686,14 +1686,14 @@ Removed the private local matrix-coordinate expansion:
 This theorem was the scalar-matrix-unit form of Mathlib's
 `Matrix.matrix_eq_sum_single`.  The trace-representation helper
 `linearMap_apply_eq_sum` in
-`TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank` now rewrites by the
+`TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank` now rewrites by the
 Mathlib theorem and only performs the local scalar simplification from
 `Matrix.single i j (N i j)` to `N i j • Matrix.single i j 1`.
 
 Focused check:
 
 ```bash
-lake build TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank -q --log-level=info
+lake build TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank -q --log-level=info
 ```
 
 ### Deprecation-policy exceptions
@@ -1783,7 +1783,7 @@ pass-throughs:
   blueprint-facing theorem `MPSTensor.clusterBlocked_transferMap_idempotent`.
 - `sum_single_diag_const` in
   `TNLean.Channel.FixedPoint.ConditionalExpectation` and
-  `TNLean.MPS.RFP.StructuralFull`.  Both were one-use local diagonal
+  `TNLean.MPS.CanonicalForm.RenormalizationFixedPoint.StructuralFull`.  Both were one-use local diagonal
   matrix-unit sum wrappers for `Matrix.sum_single_eq_diagonal` followed by
   `Matrix.smul_one_eq_diagonal`.
 - `sum_single_diag_one` in `TNLean.Channel.Determinant.HilbertSchmidt`.  This
@@ -1807,20 +1807,20 @@ lake env lean TNLean/Channel/Semigroup/Kernel.lean
 lake env lean TNLean/Channel/Semigroup/Primitivity/Helpers.lean
 lake build TNLean.Channel.Semigroup.Dissipative -q --log-level=info
 lake build TNLean.Channel.KrausFreedom -q --log-level=info
-lake env lean TNLean/MPS/Symmetry/StringOrder.lean --json
+lake env lean TNLean/MPS/Symmetry/StringOrder/StringOrder.lean --json
 lake env lean TNLean/Wielandt/Primitivity/PrimitiveBridge.lean --json
 lake env lean TNLean/Channel/Semigroup/Primitivity/Basic.lean --json
 lake env lean TNLean/Channel/Semigroup/Primitivity/Helpers.lean --json
-lake env lean TNLean/MPS/CanonicalForm/Existence.lean --json
-lake env lean TNLean/MPS/CanonicalForm/SectorComparison/PrimitiveBlocks.lean --json
-lake env lean TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean --json
-lake env lean TNLean/MPS/CanonicalForm/SectorComparison/CommonBlockedCyclicSectorFamily.lean --json
-lake env lean TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorData.lean --json
-lake build TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData -q --log-level=info
-lake env lean TNLean/MPS/Periodic/Overlap/SelfOverlapSetup.lean --json
-lake env lean TNLean/MPS/Periodic/Overlap/Dichotomy.lean --json
-lake env lean TNLean/MPS/Periodic/FundamentalTheorem.lean --json
-lake env lean TNLean/MPS/Periodic/Symmetry/Theorem41Forward.lean --json
+lake env lean TNLean/MPS/CanonicalForm/NormalBlocks/IrreducibleDecomposition.lean --json
+lake env lean TNLean/MPS/CanonicalForm/NormalBlocks/PrimitiveBlocks.lean --json
+lake env lean TNLean/MPS/CanonicalForm/BNT/PhaseClassSectorData.lean --json
+lake env lean TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CommonBlockedCyclicSectorFamily.lean --json
+lake env lean TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CommonSectorData.lean --json
+lake build TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonSectorData -q --log-level=info
+lake env lean TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/PeriodicSectorDecomposition.lean --json
+lake env lean TNLean/MPS/CanonicalForm/Periodic/Overlap/Dichotomy.lean --json
+lake env lean TNLean/MPS/FundamentalTheorem/Periodic/RepeatedBlocks.lean --json
+lake env lean TNLean/MPS/FundamentalTheorem/Refinement/IsometryTensor.lean --json
 lake env lean TNLean/Axioms/OperatorConvexity.lean --json
 lake env lean TNLean/Analysis/OperatorConvexity.lean --json
 lake env lean TNLean/Channel/Schwarz/OperatorMonotone.lean --json
@@ -1833,21 +1833,21 @@ lake build TNLean.Analysis.OperatorConvexity TNLean.Axioms.OperatorConvexity \
   TNLean.Channel.Schwarz.OperatorConvexity TNLean.Channel.Schwarz.OperatorMonotone \
   -q --log-level=info
 lake build TNLean.Channel.WolfProps -q --log-level=info
-lake build TNLean.Channel.Irreducible.Basic TNLean.MPS.Irreducible.Adjoint \
+lake build TNLean.Channel.Irreducible.Basic TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint \
   TNLean.Channel.Irreducible.FromSpectral TNLean.Channel.Semigroup.ReducibleQDS.Defs \
   TNLean.MPS.Periodic.SectorIrreducibility.HLiftCore -q --log-level=info
 lake env lean TNLean/Algebra/MatrixAux.lean --json
 lake env lean TNLean/Spectral/GaugeConstruction.lean --json
 lake build TNLean.Algebra.ProjectionTriangularTrace -q --log-level=info
-lake env lean TNLean/Spectral/TransferOperatorGapNT.lean --json
+lake env lean TNLean/MPS/Transfer/Spectrum/TransferOperatorGapNT.lean --json
 lake env lean TNLean/Spectral/TransferOperatorGapRect.lean
-lake env lean TNLean/Spectral/PrimitiveOverlap.lean
+lake env lean TNLean/MPS/Transfer/Spectrum/PrimitiveOverlap.lean
 lake env lean TNLean/Spectral/MPVOverlapDecay.lean
-lake env lean TNLean/MPS/Symmetry/StringOrderDefs.lean
+lake env lean TNLean/MPS/Transfer/Correlation/StringOrderDefs.lean
 lake build TNLean.Spectral.GaugeConstruction TNLean.Spectral.TransferOperatorGap \
-  TNLean.Spectral.TransferOperatorGapRect TNLean.Spectral.TransferOperatorGapNT \
-  TNLean.Spectral.PrimitiveOverlap TNLean.Spectral.MPVOverlapDecay \
-  TNLean.MPS.Symmetry.StringOrderDefs -q --log-level=info
+  TNLean.Spectral.TransferOperatorGapRect TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT \
+  TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap TNLean.Spectral.MPVOverlapDecay \
+  TNLean.MPS.Transfer.Correlation.StringOrderDefs -q --log-level=info
 lake env lean TNLean/Channel/Irreducible/Growth/OneStep.lean --json
 lake env lean TNLean/Channel/Irreducible/Growth/Preservation.lean --json
 lake env lean TNLean/Channel/Irreducible/Growth/KernelDescent.lean --json
@@ -1855,18 +1855,18 @@ lake env lean TNLean/Channel/Peripheral/GroupStructure.lean --json
 lake env lean TNLean/Spectral/TransferOperatorGap.lean --json
 lake env lean TNLean/Spectral/TransferOperatorGap.lean
 lake env lean TNLean/Spectral/TransferOperatorGapRect.lean
-lake env lean TNLean/PiAlgebra/CanonicalFormSepAux.lean --json
+lake env lean TNLean/MPS/CanonicalForm/BlockFamily.lean --json
 lake build TNLean.Algebra.MatrixAux TNLean.Spectral.GaugeConstruction \
-  TNLean.Spectral.TransferOperatorGapNT TNLean.Spectral.TransferOperatorGap \
+  TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT TNLean.Spectral.TransferOperatorGap \
   TNLean.Channel.Irreducible.Growth.KernelDescent \
-  TNLean.Channel.Peripheral.GroupStructure TNLean.PiAlgebra.CanonicalFormSepAux \
+  TNLean.Channel.Peripheral.GroupStructure TNLean.MPS.CanonicalForm.BlockFamily \
   -q --log-level=info
-lake env lean TNLean/Spectral/QuantitativeGap.lean --json
+lake env lean TNLean/MPS/Transfer/Spectrum/QuantitativeGap.lean --json
 lake env lean TNLean/MPS/Structure/PrimitivityBridge.lean --json
-lake build TNLean.Algebra.TracePairing TNLean.MPS.Chain.TensorEquality \
-  TNLean.PEPS.CycleMPSWordTransport TNLean.PEPS.CycleMPSChainArc \
-  TNLean.PEPS.CycleMPSOverlapInsertion TNLean.PEPS.CycleMPSChainOverlapWindow \
-  TNLean.PEPS.CycleMPSChainOverlapInsertion -q --log-level=info
+lake build TNLean.Algebra.TracePairing TNLean.MPS.Tensor.Words.TensorEquality \
+  TNLean.PEPS.Tensor.Cycle.CycleMPSWordTransport TNLean.PEPS.Injectivity.Region.CycleMPSChainArc \
+  TNLean.PEPS.CycleMPSOverlapInsertion TNLean.PEPS.FundamentalTheorem.Cycle.CycleMPSChainOverlapWindow \
+  TNLean.PEPS.FundamentalTheorem.Cycle.CycleMPSChainOverlapInsertion -q --log-level=info
 lake build TNLean.Channel.Semigroup.ReducibleQDS.GeneratorCompression \
   TNLean.Channel.Semigroup.RelaxationConditions -q --log-level=info
 lake build TNLean.QPF.PosDef TNLean.Channel.MaximallyEntangled \
@@ -1874,8 +1874,8 @@ lake build TNLean.QPF.PosDef TNLean.Channel.MaximallyEntangled \
   TNLean.Channel.Irreducible.Growth.Exponential \
   TNLean.Channel.Irreducible.FromSpectral TNLean.Channel.Irreducible.Similarity \
   TNLean.Channel.Semigroup.ReducibleQDS.FixedDensity \
-  TNLean.MPS.Core.CPPrimitive TNLean.MPS.Irreducible.FormII \
-  TNLean.MPS.Irreducible.FixedPointProjection -q --log-level=info
+  TNLean.MPS.Core.CPPrimitive TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint \
+  TNLean.MPS.Transfer.Irreducible.FixedPointProjection -q --log-level=info
 ```
 
 ### Semigroup primitivity heartbeat retest, 2026-06-19
@@ -1927,7 +1927,7 @@ wrapper.
 
 ## Euclidean-space basis expansion, 2026-06-19
 
-`TNLean/MPS/ParentHamiltonian/Martingale/Transport.lean` contained a private
+`TNLean/MPS/ParentHamiltonian/ParentInteraction/Transport.lean` contained a private
 coordinate expansion theorem
 
 - `euclideanSpace_eq_sum_single`
@@ -1942,7 +1942,7 @@ subsequent linear-map coordinate calculation, but its proof is now just
 Focused check:
 
 ```bash
-lake build TNLean.MPS.ParentHamiltonian.Martingale.Transport -q --log-level=info
+lake build TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport -q --log-level=info
 ```
 
 ## Kossakowski identity-sum cleanup, 2026-06-19
@@ -1964,7 +1964,7 @@ matrix calculations:
 
 - `span_singleton_one_finOne_eq_top` in
   `TNLean/MPS/MPDO/BiCFDerivation/Counterexample.lean`.
-- `mul_triple_one` in `TNLean/MPS/MPDO/LocalPurificationRFP.lean`.
+- `mul_triple_one` in `TNLean/MPS/MPDO/Purification/LocalPurificationRFP.lean`.
 
 The duplicate-block counterexample now proves the needed span statement inside
 `duplicateScalarBlocks_isInjective` from
@@ -1977,7 +1977,7 @@ Focused checks:
 ```bash
 lake build TNLean.Channel.Semigroup.KossakowskiForm -q --log-level=info
 lake build TNLean.MPS.MPDO.BiCFDerivation.Counterexample \
-  TNLean.MPS.MPDO.LocalPurificationRFP -q --log-level=info
+  TNLean.MPS.MPDO.Purification.LocalPurificationRFP -q --log-level=info
 ```
 
 ### Limit-uniqueness helper removal, 2026-06-19
@@ -2014,7 +2014,7 @@ one-line wrappers around Mathlib's positive-semidefinite kernel criterion
 `Matrix.PosSemidef.dotProduct_mulVec_zero_iff`:
 
 - `TNLean/QPF/PosDef.lean`
-- `TNLean/MPS/Irreducible/FixedPointProjection.lean`
+- `TNLean/MPS/Transfer/Irreducible/FixedPointProjection.lean`
 
 Both files now invoke `hρ_psd.dotProduct_mulVec_zero_iff` at the use sites.
 The fixed-point and positive-definiteness statements are unchanged.
@@ -2023,7 +2023,7 @@ Focused check:
 
 ```bash
 lake build TNLean.QPF.PosDef \
-  TNLean.MPS.Irreducible.FixedPointProjection -q --log-level=info
+  TNLean.MPS.Transfer.Irreducible.FixedPointProjection -q --log-level=info
 ```
 
 ## Linear-map eigenvector helper removal, 2026-06-19
@@ -2104,7 +2104,7 @@ lake build TNLean.Channel.Semigroup.Dissipative -q --log-level=info
 
 ## Rectangular-span multiplication-map commutation cleanup, 2026-06-19
 
-`TNLean/Wielandt/RectangularSpan/Universality.lean` had a private theorem
+`TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean` had a private theorem
 `map_mulRight_map_mulLeft_comm` proving that submodule images by left and right
 matrix multiplication commute.  The old proof expanded the two linear maps on a
 test matrix and used `Matrix.mul_assoc`.
@@ -2118,7 +2118,7 @@ needed by the rectangular-span permanence argument.
 Focused check:
 
 ```bash
-lake build TNLean.Wielandt.RectangularSpan.Universality -q --log-level=info
+lake build TNLean.MPS.Transfer.Primitivity.RectangularSpan -q --log-level=info
 ```
 
 ## Kadison-Schwarz Kraus star-interface cleanup, 2026-06-19
@@ -2147,9 +2147,9 @@ lake build TNLean.Channel.Determinant.HeisenbergDual \
   TNLean.Channel.FixedPoint.Algebra \
   TNLean.Channel.Peripheral.ClosureFixedPoint \
   TNLean.Channel.Peripheral.CyclicGroup \
-  TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorDecomposition \
-  TNLean.MPS.Periodic.Overlap.SelfOverlapSetup \
-  TNLean.MPS.Periodic.SectorIrreducibility.HLift -q --log-level=info
+  TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CyclicSectorDecomposition \
+  TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.PeriodicSectorDecomposition \
+  TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.HLift -q --log-level=info
 ```
 
 ## Fin zero-padding sum cleanup, 2026-06-19
@@ -2179,7 +2179,7 @@ lake build TNLean.Algebra.FinSum \
 ## Wielandt range-power injectivity consolidation, 2026-06-21
 
 `TNLean/Wielandt/RankOne/BoundedWord.lean` and
-`TNLean/Wielandt/RectangularSpan/Growth.lean` both proved the same consequence
+`TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean` both proved the same consequence
 of the Fitting disjointness theorem: if
 `X ∈ range (LinearMap.mulLeft ℂ (M ^ D))` and `M * X = 0`, then `X = 0`.
 The rectangular-span file also carried a private vector form of the same
@@ -2200,7 +2200,7 @@ Focused check:
 ```bash
 lake build TNLean.Wielandt.RankOne.SpanGrowth \
   TNLean.Wielandt.RankOne.BoundedWord \
-  TNLean.Wielandt.RectangularSpan.Growth \
+  TNLean.MPS.Transfer.Primitivity.RectangularSpan \
   TNLean.Wielandt.RectangularSpan.UniversalityAux.NilpIndex -q
 ```
 
@@ -2215,11 +2215,11 @@ matrix is nonzero.
 
 The removed private wrappers were in:
 
-- `TNLean/PEPS/CycleMPSOverlapCapstone.lean`;
-- `TNLean/PEPS/CycleMPSChainOverlapCapstone.lean`;
+- `TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSOverlapCapstone.lean`;
+- `TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapCapstone.lean`;
 - `TNLean/PEPS/CycleMPSOverlapInsertion.lean`;
-- `TNLean/PEPS/CycleMPSChainOverlapInsertion.lean`;
-- `TNLean/PEPS/CycleMPSTranslationInvariant.lean`.
+- `TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapInsertion.lean`;
+- `TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSTranslationInvariant.lean`.
 
 In the translation-invariant argument, the corresponding nonzero fact for an
 invertible matrix is now `Units.ne_zero` applied to the gauge matrix, again
@@ -2228,11 +2228,11 @@ after supplying the inhabited `Fin D` instance.
 Focused checks:
 
 ```bash
-lake env lean TNLean/PEPS/CycleMPSOverlapCapstone.lean
-lake env lean TNLean/PEPS/CycleMPSChainOverlapCapstone.lean
+lake env lean TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSOverlapCapstone.lean
+lake env lean TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapCapstone.lean
 lake env lean TNLean/PEPS/CycleMPSOverlapInsertion.lean
-lake env lean TNLean/PEPS/CycleMPSChainOverlapInsertion.lean
-lake env lean TNLean/PEPS/CycleMPSTranslationInvariant.lean
+lake env lean TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapInsertion.lean
+lake env lean TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSTranslationInvariant.lean
 ```
 
 ## Naimark square-Gram adapter cleanup, 2026-06-21
@@ -2261,7 +2261,7 @@ lake build TNLean.Channel.POVM.Uniqueness -q --log-level=info
 
 ## PEPS right-multiplication span cleanup, 2026-06-21
 
-`TNLean/PEPS/CycleMPSChainOverlapCapstone.lean` had a private helper
+`TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapCapstone.lean` had a private helper
 `span_range_mul_right_unit`, proving by induction over spans that right
 multiplication by an invertible matrix preserves a spanning family of square
 matrices.  The helper had a single use in the window-covariance proof.
@@ -2279,12 +2279,12 @@ visible at the point where the bond-operator argument needs it.
 Focused check:
 
 ```bash
-lake env lean TNLean/PEPS/CycleMPSChainOverlapCapstone.lean
+lake env lean TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapCapstone.lean
 ```
 
 ## PEPS product-family span cleanup, 2026-06-21
 
-`TNLean/PEPS/CycleMPSChainOverlapCapstone.lean` also had a private helper
+`TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapCapstone.lean` also had a private helper
 `span_range_mul_pair`, proving by two nested span inductions that if two
 families span the full matrix algebra, then their pairwise products span the
 full matrix algebra.  The helper had a single use, to supply the spanning
@@ -2299,7 +2299,7 @@ over the generating families are gone.
 Focused check:
 
 ```bash
-lake env lean TNLean/PEPS/CycleMPSChainOverlapCapstone.lean
+lake env lean TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapCapstone.lean
 ```
 
 ## Exact-length two-sided word-span cleanup, 2026-06-21
@@ -2329,9 +2329,9 @@ equality of two-sided multiplication maps from a spanning family to every
 matrix:
 
 - `PEPS.conj_eq_conj_of_span` in
-  `TNLean/PEPS/CycleMPSTranslationInvariant.lean`;
+  `TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSTranslationInvariant.lean`;
 - `MPSChainTensor.conj_eq_conj_of_span_range` in
-  `TNLean/PEPS/CycleMPSChainOverlapCapstone.lean`.
+  `TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapCapstone.lean`.
 
 Both helpers now regard `M ↦ P * M * Q` as a linear map and apply Mathlib's
 native extension principles:
@@ -2342,8 +2342,8 @@ native extension principles:
 Focused checks:
 
 ```bash
-lake env lean TNLean/PEPS/CycleMPSTranslationInvariant.lean
-lake env lean TNLean/PEPS/CycleMPSChainOverlapCapstone.lean
+lake env lean TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSTranslationInvariant.lean
+lake env lean TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapCapstone.lean
 ```
 
 ## PEPS trace-pairing extension cleanup, 2026-06-21
@@ -2353,9 +2353,9 @@ proofs to extend equality from a spanning family of word products to every
 matrix:
 
 - `MPSTensor.eq_of_trace_mul_evalWord_eq` in
-  `TNLean/PEPS/CycleMPSWordTransport.lean`;
+  `TNLean/PEPS/Tensor/Cycle/CycleMPSWordTransport.lean`;
 - `MPSChainTensor.eq_of_trace_pairing_span` in
-  `TNLean/PEPS/CycleMPSChainArc.lean`.
+  `TNLean/PEPS/Injectivity/Region/CycleMPSChainArc.lean`.
 
 Both proofs now regard `Q ↦ trace (M * Q)` and `Q ↦ trace (N * Q)` as
 linear functionals, use `LinearMap.ext_on_range` on the spanning word family,
@@ -2365,8 +2365,8 @@ and then apply the native trace-pairing extensionality theorem
 Focused checks:
 
 ```bash
-lake build TNLean.PEPS.CycleMPSChainArc -q --log-level=info
-lake build TNLean.PEPS.CycleMPSWordTransport -q --log-level=info
+lake build TNLean.PEPS.Injectivity.Region.CycleMPSChainArc -q --log-level=info
+lake build TNLean.PEPS.Tensor.Cycle.CycleMPSWordTransport -q --log-level=info
 ```
 
 ## PEPS span-map cleanup, 2026-06-21
@@ -2375,13 +2375,13 @@ Four cycle-MPS PEPS proofs used local span inductions only to express simple
 linear images of spanning families:
 
 - `mul_left_letter_mem_span` in
-  `TNLean/PEPS/CycleMPSWordTransport.lean`;
+  `TNLean/PEPS/Tensor/Cycle/CycleMPSWordTransport.lean`;
 - `mul_left_letter_mem_arc_span` in
-  `TNLean/PEPS/CycleMPSChainArc.lean`;
+  `TNLean/PEPS/Injectivity/Region/CycleMPSChainArc.lean`;
 - `isUnit_of_mul_span` in
-  `TNLean/PEPS/CycleMPSChainOverlapCapstone.lean`;
+  `TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapCapstone.lean`;
 - the commutation extension inside `transport_one_eq_smul_one` in
-  `TNLean/PEPS/CycleMPSOverlapCapstone.lean`.
+  `TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSOverlapCapstone.lean`.
 
 The first two now map the length-`m` word span through left multiplication and
 use `Submodule.map_span`.  The invertibility helper now observes that the
@@ -2393,8 +2393,8 @@ with `commute_iff_eq`.
 Focused check:
 
 ```bash
-lake build TNLean.PEPS.CycleMPSWordTransport TNLean.PEPS.CycleMPSChainArc \
-  TNLean.PEPS.CycleMPSChainOverlapCapstone TNLean.PEPS.CycleMPSOverlapCapstone \
+lake build TNLean.PEPS.Tensor.Cycle.CycleMPSWordTransport TNLean.PEPS.Injectivity.Region.CycleMPSChainArc \
+  TNLean.PEPS.FundamentalTheorem.Cycle.CycleMPSChainOverlapCapstone TNLean.PEPS.FundamentalTheorem.Cycle.CycleMPSOverlapCapstone \
   -q --log-level=info
 ```
 

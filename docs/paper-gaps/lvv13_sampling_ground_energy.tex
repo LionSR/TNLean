@@ -157,7 +157,7 @@ preprint conclusion can be claimed.
 \section{The actual high-probability event}
 
 The probability estimate itself is preserved in
-\path{TNLean/MPS/AreaLaw/ViableSet/SampledProjector.lean}.
+\path{TNLean/MPS/AreaLaw/GroundStateAlgorithm/ApproximateProjector/SampledProjector.lean}.
 The underlying law is the actual product of uniform letters on
 $\{0,\ldots,n-1\}^{\ell\times m}$, with the last label denoting the
 identity padding letter. For fixed physical ground data, $m\ge0$ and
@@ -213,11 +213,11 @@ spatial-rank arguments.
 \section{The checked finite construction}
 
 The energy-dependent normalization and Corollary~2.14 are formalized in
-\path{TNLean/MPS/AreaLaw/ViableSet/SampledProjector.lean}: at the
+\path{TNLean/MPS/AreaLaw/GroundStateAlgorithm/ApproximateProjector/SampledProjector.lean}: at the
 logarithmic power, $C^m\le n(1/\eta)^{\varepsilon_0/\Delta}$, and the
 sampled operator approximates the power with simultaneously bounded letter
 counts, for an explicit sample count. The deterministic error reduction in
-\path{TNLean/MPS/AreaLaw/ViableSet/SampledErrorReduction.lean} then supplies,
+\path{TNLean/MPS/AreaLaw/GroundStateAlgorithm/ApproximateProjector/SampledCutDecomposition.lean} then supplies,
 at each cut, one family of at most $\ell q^{2\kappa}$ left factors, each of
 operator Schmidt rank at most $q^{2\kappa}$ at every internal left cut, chosen
 before the input viable family. The counts depend explicitly on the specified

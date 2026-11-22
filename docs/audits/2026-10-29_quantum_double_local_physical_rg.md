@@ -52,7 +52,7 @@ is supporting evidence, not a substitute for the Lean proofs.
   `c55e6e786f49471c72fbddbec5415808896aec1e` matches the manifest and Lean
   v4.35.0-rc3. The matching prebuilt Mathlib artifacts were verified before builds.
   No Mathlib source build was started.
-- `lake build TNLean.PEPS.Examples.QuantumDoubleRenormalization`: passed;
+- `lake build TNLean.PEPS.Examples.QuantumDouble.QuantumDoubleRenormalization`: passed;
   dependencies were built only after
   the matching prebuilt Mathlib cache was verified.
 - Direct strict elaboration of the production file and

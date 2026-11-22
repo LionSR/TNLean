@@ -64,9 +64,9 @@ exponential width factor using `sqrt(w) ≤ w`, `log(w) ≤ w`, and `sqrt(t) ≤
 
 The three owned proof modules are:
 
-- `TNLean/MPS/AreaLaw/StripGeometry.lean` (258 lines).
-- `TNLean/MPS/AreaLaw/StripBufferDiscount.lean` (333 lines).
-- `TNLean/MPS/AreaLaw/StripApproximation.lean` (504 lines).
+- `TNLean/MPS/AreaLaw/Chain/StripGeometry.lean` (258 lines).
+- `TNLean/MPS/AreaLaw/Entropy/StripBufferDiscount.lean` (333 lines).
+- `TNLean/MPS/AreaLaw/Approximation/StripApproximation.lean` (504 lines).
 
 Integration updates are the generated area-law aggregator, the strip section
 of `ch35_one_dimensional_chain.tex`, its two role-registry entries, and the

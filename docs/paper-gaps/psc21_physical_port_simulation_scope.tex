@@ -54,7 +54,7 @@ operator $X$. The sitewise encodings and decodings are onsite
 channels.\footnote{Formal declarations:
     \leanid{KrausFamily.decode}, \leanid{KrausFamily.map_decode_map_embed} and
     \leanid{QuantumCircuit.map_decodeCircuit_comp_map_encodeCircuit} in QICLean's
-    \path{QICLean/Channel/KrausFamilyEncoding} and
+    \path{QICLean/Channel/KrausMap/KrausFamilyEncoding} and
     \path{QICLean/Circuit/Compile/Encoding}.}
 
 On a ring of $N\ge2$ sites, give each site one physical port, a $k$-qudit
@@ -189,7 +189,7 @@ environment, so its trace can be postponed even when that environment is
 correlated with the system. Only the original physical ports participate in
 counted intersite layers.\footnote{Formal declarations:
     \leanid{KrausFamily.IsTP.exists_unitary_dilation} in QICLean's
-    \path{QICLean/Channel/KrausFamilyDilation} and
+    \path{QICLean/Channel/KrausMap/KrausFamilyDilation} and
     \leanid{QuantumCircuit.map_traceCircuit_map_tensorRight} in
     \path{QICLean/Circuit/Compile/Dilation}.}
 The source appends the environments as further qudits of dimension $d$ at
@@ -311,7 +311,7 @@ forces $\varepsilon\ge1$ and is included.
 
 The generic finite-dimensional estimate is
 \leanid{Matrix.exists_unit_product_approx_of_pure_marginal} in QICLean's
-\path{QICLean/Channel/PureMarginalApproximation}, and its specialization to
+\path{QICLean/Channel/Schmidt/PureMarginalApproximation}, and its specialization to
 the bounded compiler and the port codes is
 \leanid{QuantumCircuit.IsBoundedProtocol.exists_portRing_unit_product_approx}
 in QICLean's \path{QICLean/Circuit/Compile/PortCode}. The estimate supplies

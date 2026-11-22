@@ -71,7 +71,7 @@ of an arbitrary choice of output boundary.\footnote{
     \leanid{MPOTensor.IsBoundaryCompatible},
     \leanid{MPOTensor.isBoundaryClosed_iff_exists_linearMap}, and
     \leanid{MPOTensor.isBoundaryCompatible_iff_exists_linearMap}, in
-    \doclink{TNLean/MPS/MPDO/BoundaryClosedness}.}
+    \doclink{TNLean/MPS/Operator/Boundary/BoundaryClosedness}.}
 For supplied exact decompositions
 $B^i=\sum_cW_cA_c^iV_c$ with $V_cW_b=\delta_{cb}1$, the transported
 boundaries are $V_cXW_c$ at every positive length. The empty-word identity
@@ -79,7 +79,7 @@ additionally requires $\sum_cW_cV_c=1$ on the ambient bond space.
 These forward formulas do not construct the decomposition from
 closedness.\footnote{\leanid{MPSTensor.IsBiorthogonalDecomposition.mpvWithBoundary}
     and \leanid{MPSTensor.IsBiorthogonalDecomposition.evalWord_of_complete}, in
-    \doclink{TNLean/MPS/MPDO/BoundaryTransport}.}
+    \doclink{TNLean/MPS/Operator/Boundary/BoundaryTransport}.}
 
 \paragraph{Exact arbitrary-boundary reconstruction.}
 Merged \ghpr{8689} supplies the source-exact reconstruction. The assembled
@@ -93,7 +93,7 @@ together with any nonzero complex scalar.\footnote{
     \leanid{MPOTensor.IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective}
     and
     \leanid{MPOTensor.IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective},
-    in \doclink{TNLean/MPS/MPDO/BoundarySourceDecomposition}.}
+    in \doclink{TNLean/MPS/FundamentalTheorem/Zipper/BoundarySourceDecomposition}.}
 
 The common positive word-spanning length is derived from these individual
 block hypotheses. The trace-dual boundary map becomes a non-unital algebra
@@ -104,11 +104,11 @@ nilpotent remainder. Their synthesis-analysis sum is the represented
 identity, which may be a proper support idempotent. No adjoint preservation,
 star closure, or ambient identity resolution is assumed.\footnote{
     \leanid{MPSTensor.exists_positive_wordTupleSpanTop_of_isInjective}, in
-    \doclink{TNLean/MPS/MPDO/InjectiveBlockWordSpan};
+    \doclink{TNLean/MPS/FundamentalTheorem/Zipper/CompleteZipperFusionBlocked};
     \leanid{Matrix.exists_piMatrix_blocks}, in
-    \path{QICLean/Algebra/MatrixUnitFactorization.lean}; and
+    \path{QICLean/Algebra/MatrixAlgebra/MatrixUnitFactorization.lean}; and
     \leanid{MPSTensor.exists_biorthogonalDecomposition_of_boundaryTransport}, in
-    \doclink{TNLean/MPS/MPDO/BoundaryBiorthogonal}.}
+    \doclink{TNLean/MPS/Operator/Boundary/BoundaryBiorthogonal}.}
 This exact representation splitting discharges the reconstruction step of
 Appendix A; it is not a separate assertion that every arbitrary two-sided
 linear-map expansion has a globally minimal number of summands.
@@ -119,7 +119,7 @@ representation law, and fusion associativity. The simultaneous state
 independence used in the proof is derived from the same individual block
 hypotheses, rather than added to the source theorem.\footnote{
     \leanid{MPOTensor.IsBoundaryClosed.exists_isNIMRep_of_isBoundaryCompatible}, in
-    \doclink{TNLean/MPS/MPDO/BoundaryMultiplicity}.}
+    \doclink{TNLean/MPS/FundamentalTheorem/Zipper/BoundaryMultiplicity}.}
 
 \paragraph{Periodic fusion and action.}
 The periodic fusion hypothesis is (\ref{eq:glm23_fusion}) at every positive
@@ -150,7 +150,7 @@ reductions, one pair for every copy of each output channel. They reconstruct
 the stacked tensor only up to a nilpotent remainder.\footnote{
     \leanid{MPOTensor.exists_fusionTensors_of_mpo_mul_eq_sum} and
     \leanid{MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum}, in
-    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors}.}
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/Fusion/FusionTensors}.}
 This is not the source's exact letterwise decomposition from
 arbitrary-boundary closedness and invariance. For a single normal target,
 two reductions are proportional after multiplication by sufficiently long
@@ -162,12 +162,12 @@ When an exact biorthogonal zipper decomposition is supplied, uniqueness up
 to an invertible matrix on each multiplicity space is proved.\footnote{
     \leanid{MPOTensor.exists_unique_zipperFusionGauge} and
     \leanid{MPOTensor.exists_unique_zipperActionGauge}, in
-    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness}.}
+    \doclink{TNLean/MPS/Operator/Fusion/ZipperUniqueness}.}
 The exact source reconstructions also admit unique invertible
 multiplicity gauges on their letter support under the stated target-block
 hypotheses.\footnote{
     \leanid{MPSTensor.IsBiorthogonalDecomposition.exists_unique_multiplicityGauge_of_isInjective},
-    in \doclink{TNLean/MPS/MPDO/BoundaryZipperUniqueness}.}
+    in \doclink{TNLean/MPS/FundamentalTheorem/Zipper/BoundaryZipperUniqueness}.}
 These comparison maps do not by themselves prove the joint L-symbol gauge
 law, and they are not an assertion about unrestricted periodic reductions.
 
@@ -184,10 +184,10 @@ under the full multiplicity gauge.\footnote{
     \leanid{MPOTensor.CompleteZipperFusionFamily.rightTripleSynthesis_mul_printedFMatrix},
     \leanid{MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_pentagon}, and
     \leanid{MPOTensor.CompleteZipperFusionFamily.printedFMatrix_regauge}, in
-    \doclink{TNLean/MPS/MPDO/CompleteZipperFusionDefs},
-    \doclink{TNLean/MPS/MPDO/CompleteZipperFusion},
-    \doclink{TNLean/MPS/MPDO/CompleteZipperFusionPentagon}, and
-    \doclink{TNLean/MPS/MPDO/CompleteZipperFusionGauge}.}
+    \doclink{TNLean/MPS/Operator/Fusion/CompleteZipperFusionDefs},
+    \doclink{TNLean/MPS/Operator/Fusion/CompleteZipperFusion},
+    \doclink{TNLean/MPS/Operator/Fusion/CompleteZipperFusionPentagon}, and
+    \doclink{TNLean/MPS/Operator/Fusion/CompleteZipperFusionGauge}.}
 The printed F-matrix and its inverse have opposite orientations; the
 pentagon must use the stated orientation. Constructions from a compression
 with zero remainder and from a star-closed word algebra are also available.
@@ -197,7 +197,7 @@ zipper family after a derived common positive physical blocking, with the
 original exact virtual maps and multiplicities unchanged. A simultaneous
 one-letter inverse at the unblocked alphabet is not imposed.\footnote{
     \leanid{MPOTensor.IsBoundaryClosed.exists_completeZipperFusionFamily}, in
-    \doclink{TNLean/MPS/MPDO/BoundaryZipperBlocked}.}
+    \doclink{TNLean/MPS/MPDO/MPOAction/BoundaryZipperBlocked}.}
 Star closure is not a standing hypothesis of the source's Sections 2--3.
 
 \paragraph{Multiplicity L matrices and the coupled pentagon.}
@@ -217,7 +217,7 @@ supplied by those same block assumptions.\footnote{
     \leanid{MPOTensor.actionLMatrix_cross},
     \leanid{MPOTensor.actionLMatrix_inverse_of_isInjective}, and
     \leanid{MPOTensor.actionLMatrix_analysis}, in
-    \doclink{TNLean/MPS/MPDO/BoundaryActionLMatrix}.}
+    \doclink{TNLean/MPS/FundamentalTheorem/Zipper/BoundaryActionLMatrix}.}
 
 The current draft \ghpr{8695} derives the multiplicity coupled pentagon
 for these actual coefficients from exact tree comparisons. Its source
@@ -229,7 +229,7 @@ Triangular physical padding and a common positive blocking leave the
 original virtual maps, and hence their coefficients, unchanged.\footnote{
     \leanid{MPOTensor.actionLMatrix_mixed_pentagon} and
     \leanid{MPOTensor.IsBoundaryCompatible.exists_exact_mixed_pentagon}, in
-    \doclink{TNLean/MPS/MPDO/BoundarySourceMixedPentagon}.}
+    \doclink{TNLean/MPS/MPDO/MPOAction/MixedPentagon}.}
 The fusion coefficient uses left analysis followed by right synthesis,
 so it is the inverse printed F-matrix of the complete-zipper convention.
 The coupled F factor has row $(d,\eta,\chi)$ and column $(f,\mu,\nu)$,
@@ -253,7 +253,7 @@ source's joint gauge transformation.\footnote{
     \leanid{MPSTensor.IsBiorthogonalDecomposition.exists_multiplicityGauge_eq_of_isInjective},
     and
     \leanid{MPOTensor.exists_actionLMatrix_fusionFMatrix_regauge_of_isInjective}, in
-    \doclink{TNLean/MPS/MPDO/BoundaryActionLMatrixGauge}.}
+    \doclink{TNLean/MPS/MPDO/MPOAction/BoundaryActionLMatrixGauge}.}
 
 \paragraph{First-order invariance of the L-symbols along a path.}
 Along a path with the operator blocks, the exact fusion maps, and the bond
@@ -274,7 +274,7 @@ differentiability of the new L-symbols, asserted at line 1440, is
 derived.\footnote{
     \leanid{MPOTensor.hasDerivAt_actionLMatrix} and
     \leanid{MPOTensor.hasDerivAt_actionLMatrix_gaugeCurve}, in
-    \doclink{TNLean/MPS/MPDO/BoundaryActionLMatrixPath}.}
+    \doclink{TNLean/MPS/MPDO/MPOAction/BoundaryActionLMatrixPath}.}
 
 \emph{Gap in the source's proof.} The source concludes at line 1551 that
 ``the $L'$-symbol is in the same class as the $L$-symbol since they are
@@ -299,9 +299,9 @@ source's argument at a point $\gamma$ uses a two-sided environment
 $\gamma+d\gamma$ (line 1361). No continuity of the generators is
 assumed.\footnote{
     \leanid{Matrix.exists_eq_sum_smul_of_hasDerivAt}, in
-    \path{QICLean/Analysis/MatrixFrameDeriv.lean}, and
+    \path{QICLean/Analysis/Calculus/MatrixFrameDeriv.lean}, and
     \leanid{MPOTensor.exists_actionLMatrix_regauge_of_hasDerivAt}, in
-    \doclink{TNLean/MPS/MPDO/BoundaryActionLMatrixPath}.}
+    \doclink{TNLean/MPS/MPDO/MPOAction/BoundaryActionLMatrixPath}.}
 Not formalized are the source's extensions to action tensors that are only
 continuous and to a bond dimension growing along the path (line 1551), the
 step from a gapped path of parent Hamiltonians to a continuous path of
@@ -315,9 +315,9 @@ existence theorem. These extra assumptions belong only to this explicit
 ODE construction; the connected-open-set theorem above does not require
 them.\footnote{
     \leanid{MPOTensor.actionLMatrix_gaugeEquiv_of_continuous}, in
-    \doclink{TNLean/MPS/MPDO/BoundaryActionLMatrixPath}, and
+    \doclink{TNLean/MPS/MPDO/MPOAction/BoundaryActionLMatrixPath}, and
     \leanid{MPOTensor.exists_actionLMatrix_gaugeEquiv_of_contDiff}, in
-    \doclink{TNLean/MPS/MPDO/BoundaryActionLMatrixPathExistence}.}
+    \doclink{TNLean/MPS/MPDO/MPOAction/BoundaryActionLMatrixPath}.}
 
 \paragraph{The single-block obstruction for exact maps.}
 For a single injective state block acted on without multiplicity, the L
@@ -331,14 +331,14 @@ hypotheses are those of the coupled pentagon.\footnote{
     \leanid{MPOTensor.sum_fusionMultiplicity_eq_one_of_singleBlock},
     \leanid{MPOTensor.fusionFMatrix_eq_singleBlockLambda}, and
     \leanid{MPOTensor.exists_fusionFMatrix_eq_one_of_singleBlock}, in
-    \doclink{TNLean/MPS/MPDO/BoundarySingleBlockObstruction}.}
+    \doclink{TNLean/MPS/MPDO/MPOAction/BoundarySingleBlockObstruction}.}
 For group fusion and action multiplicities, every multiplicity space has
 one element; the scalar L and F entries form a scalar L-symbol compatible
 with a scalar three-cochain, and a block fixed by the whole group makes
 that cochain a coboundary.\footnote{
     \leanid{MPOTensor.exists_lSymbol_isCompatible_of_group} and
     \leanid{MPOTensor.isTrivialGaugeClass_of_group_of_forall_smul_eq}, in
-    \doclink{TNLean/MPS/MPDO/BoundaryGroupSpecialization}.}
+    \doclink{TNLean/MPS/MPDO/MPOAction/BoundaryGroupSpecialization}.}
 This scalar cochain is built from the exact maps; its identification with
 the boundary-dressed associator of the periodic group reductions is the
 adapter of item 3 below.
@@ -352,8 +352,8 @@ Mathlib's third group cohomology.\footnote{
     \leanid{MPOTensor.GroupFamily.FusionData.isCocycle_omega},
     \leanid{MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge}, and
     \leanid{MPOTensor.GroupFamily.IsNormalRepresentation.anomalyClass}, in
-    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/Associator} and
-    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/AssociatorCohomology}.}
+    \doclink{TNLean/MPS/FundamentalTheorem/OperatorGroup/Associator} and
+    \doclink{TNLean/MPS/FundamentalTheorem/OperatorGroup/AssociatorCohomology}.}
 For an action permuting normal state blocks, the fusion and action
 reductions similarly construct scalar L-symbols and prove their coupled
 pentagon with that associator. Restriction to a fixed block trivializes
@@ -366,8 +366,8 @@ not be described as absent.\footnote{
     \leanid{MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_comap_omega_of_fixed},
     and
     \leanid{MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass},
-    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks} and
-    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction}.}
+    in \doclink{TNLean/MPS/FundamentalTheorem/OperatorGroup/PermutedBlocks} and
+    \doclink{TNLean/MPS/FundamentalTheorem/OperatorGroup/AnomalyObstruction}.}
 The scalar gauge operation and its preservation of compatibility are
 proved. Deriving the full L-symbol gauge law from every change of
 fusion and action tensors remains distinct from these scalar identities.
@@ -390,7 +390,7 @@ that adapter is distinct from both the completed reconstruction and the
 periodic, boundary-dressed group reductions.\footnote{
     \leanid{MPOTensor.GroupFamily.isOnSite_of_closed_fusion} and
     \leanid{MPOTensor.GroupFamily.anomalyClass_eq_zero_of_closed_fusion}, in
-    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion}.}
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/Fusion/ClosedFusion}.}
 
 \paragraph{Other periodic consequences.}
 The fusion-ring obstruction to a single normal symmetric block is also
@@ -403,8 +403,8 @@ That construction requires neither commutativity of the fusion ring nor
 indecomposability of the action.\footnote{
     \leanid{MPOTensor.not_isMPOSymmetric_of_forall_not_isFusionCharacter} and
     \leanid{MPOTensor.exists_pos_symmetric_boundary_state}, in
-    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/Character} and
-    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/SymmetricBoundary}.}
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/Fusion/Character} and
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/Fusion/SymmetricBoundary}.}
 
 \section{Remaining boundary}
 
@@ -441,7 +441,7 @@ theorem, and the conjugated fusion tensors, transported along them, have
 the conjugate associator.\footnote{
     \leanid{MPOTensor.GroupFamily.nonempty_bondGauge_timeReversal} and
     \leanid{MPOTensor.GroupFamily.FusionData.exists_real_cohomologousTo_omega_of_timeReversal},
-    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/TimeReversalAnomaly}.}
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/Anomaly/TimeReversalAnomaly}.}
 Further independent work concerns the tensor-derived time-reversal
 constraint on the L-symbols;
 the weak-Hopf realization, represented-unit support, and canonical-integral
@@ -514,15 +514,15 @@ at each endpoint.\footnote{\leanid{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedM
     \leanid{MPSTensor.MPOSymmetry.isMPOFusionAlgebra_arbitraryPhysicalMixedMPO},
     and
     \leanid{MPSTensor.MPOSymmetry.tendsto_arbitraryPhysicalMixed_groundSpace_starProjection},
-    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedMPO} and
-    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedGroundProjection}.}
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/MixedPath/MPO/ArbitraryPhysicalMixedMPO} and
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/MixedPath/Gap/ArbitraryPhysicalMixedGroundProjection}.}
 The canonical path Hamiltonians commute with the common operators along
 the closed interval once the two-site boundary range of the common
 operator is closed under the adjoint. Section~5 does not supply this
 closure, and an explicit non-unitary involutive symmetry satisfying all
 of its other data shows that the canonical parent need not commute; see
 \texttt{glm23\_mixed\_path\_parent\_commutation.tex}.\footnote{\leanid{MPSTensor.MPOSymmetry.hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo},
-    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedParentCommutation}.}
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/MixedPath/MPO/ArbitraryPhysicalMixedParentCommutation}.}
 The source-faithful symmetric path remains open. For the block-injective
 construction for degenerate ground spaces (lines 1695 onwards), the exact
 action and fusion of the common operators are formalized, the one-site

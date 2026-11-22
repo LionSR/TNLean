@@ -3,15 +3,15 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Entropy.RegionStrongSubadditivity
-import QICLean.Entropy.MovementEtaRegional
-import QICLean.Entropy.RegionEntropyInequalities
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionEntropyInequalities
 
 /-!
 # Regional entropies for one-dimensional local spaces
 
 Two facts about the regional entropies of a unit vector on a finite set `V` of sites, each of
-local dimension `q`, that the inequalities of `QICLean.Entropy.RegionEntropyInequalities`
+local dimension `q`, that the inequalities of `QICLean.ManyBody.Entropy.RegionEntropyInequalities`
 (subadditivity, the Araki–Lieb inequality, the dimension bound `S(A) ≤ |A| log q`, and the
 statements on regions of zero entropy) do not contain. The statements use no geometry of `V`,
 so the chain of `L` sites (`V = Fin L`) and the finite lattice domains (`V = Site Λ`) both

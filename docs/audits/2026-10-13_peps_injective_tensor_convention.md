@@ -26,7 +26,7 @@ structure Tensor.IsInjective (A : Tensor G d) : Prop where
   bondDim_pos : ∀ e : Edge G, 0 < A.bondDim e
 ```
 
-in `TNLean/PEPS/Defs.lean`, with one `**Local fix (nonzero virtual spaces):**`
+in `TNLean/PEPS/Tensor/Network/Defs.lean`, with one `**Local fix (nonzero virtual spaces):**`
 marker citing `docs/paper-gaps/peps_injective_ft_section3_route.tex`. Its
 positivity field quantifies over every edge, which is the whole index of
 `bondDim`.
@@ -50,16 +50,16 @@ positivity.
 
 | Declaration | File |
 |---|---|
-| `exists_stateCoeff_ne_zero` | `TNLean/PEPS/FundamentalTheorem.lean` |
-| `fundamentalTheorem_PEPS_of_bondDim` | `TNLean/PEPS/FundamentalTheorem.lean` |
-| `bondDim_eq_of_isInjective_sameState` (renamed) | `TNLean/PEPS/FundamentalTheorem.lean` |
-| `fundamentalTheorem_PEPS` | `TNLean/PEPS/FundamentalTheorem.lean` |
-| `gauge_unique_mod_edge_scalars` | `TNLean/PEPS/FundamentalTheorem/Uniqueness.lean` |
-| `fundamentalTheorem_normalPEPS_of_vertexInjective` | `TNLean/PEPS/NormalFundamentalTheorem.lean` |
-| `gaugeEquiv_cycleShift_of_isCycleShiftInvariantState`, `bondDim_cycleSuccEdge_add_one_eq_of_isCycleShiftInvariantState`, `bondDim_eq_of_isCycleShiftInvariantState` | `TNLean/PEPS/CycleShiftBondUniformity.lean` |
-| `exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond` | `TNLean/PEPS/CycleMPSConstantDescription.lean` |
-| `bondDim_translateEdge_of_isTorusTranslationInvariantState`, `bondDim_torusRightEdge_const_of_isTorusTranslationInvariantState`, `bondDim_torusUpEdge_const_of_isTorusTranslationInvariantState`, `torusUniformBondDim_of_isTorusTranslationInvariantState` | `TNLean/PEPS/TorusStateTranslationInvariant.lean` |
-| `GaugeConsistencyConnectivityCounterexample.FundamentalTheoremPEPSStatement` | `TNLean/PEPS/GaugeConsistencyConnectivityCounterexample.lean` |
+| `exists_stateCoeff_ne_zero` | `TNLean/PEPS/FundamentalTheorem/Injective/FundamentalTheorem.lean` |
+| `fundamentalTheorem_PEPS_of_bondDim` | `TNLean/PEPS/FundamentalTheorem/Injective/FundamentalTheorem.lean` |
+| `bondDim_eq_of_isInjective_sameState` (renamed) | `TNLean/PEPS/FundamentalTheorem/Injective/FundamentalTheorem.lean` |
+| `fundamentalTheorem_PEPS` | `TNLean/PEPS/FundamentalTheorem/Injective/FundamentalTheorem.lean` |
+| `gauge_unique_mod_edge_scalars` | `TNLean/PEPS/FundamentalTheorem/Injective/Uniqueness.lean` |
+| `fundamentalTheorem_normalPEPS_of_vertexInjective` | `TNLean/PEPS/FundamentalTheorem/Normal/NormalFundamentalTheorem.lean` |
+| `gaugeEquiv_cycleShift_of_isCycleShiftInvariantState`, `bondDim_cycleSuccEdge_add_one_eq_of_isCycleShiftInvariantState`, `bondDim_eq_of_isCycleShiftInvariantState` | `TNLean/PEPS/FundamentalTheorem/Cycle/CycleShiftBondUniformity.lean` |
+| `exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond` | `TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSConstantDescription.lean` |
+| `bondDim_translateEdge_of_isTorusTranslationInvariantState`, `bondDim_torusRightEdge_const_of_isTorusTranslationInvariantState`, `bondDim_torusUpEdge_const_of_isTorusTranslationInvariantState`, `torusUniformBondDim_of_isTorusTranslationInvariantState` | `TNLean/PEPS/FundamentalTheorem/Torus/TorusStateTranslationInvariant.lean` |
+| `GaugeConsistencyConnectivityCounterexample.FundamentalTheoremPEPSStatement` | `TNLean/PEPS/FundamentalTheorem/Injective/GaugeConsistencyConnectivityCounterexample.lean` |
 
 The `**Scope restriction (positive bond dimensions):**` marker on
 `gauge_unique_mod_edge_scalars`, the `**Local fix (positive virtual spaces):**`
@@ -99,7 +99,7 @@ remaining source-facing theorem uses before the witness is deleted.
   vacuously, and both states are zero while the bond dimensions differ.
   Deletion follows once that theorem takes its own interface carrying the
   convention.
-- `TNLean/PEPS/PhysicalToVirtualCounterexample.lean` refutes
+- `TNLean/PEPS/FundamentalTheorem/Injective/PhysicalToVirtualCounterexample.lean` refutes
   `physical_to_virtual_insertion` without positivity. That theorem's injectivity
   hypothesis is `EdgeBlockedThreeSiteInjective A e`, chain data that the witness
   satisfies with one zero bond at an endpoint. Deletion follows once the

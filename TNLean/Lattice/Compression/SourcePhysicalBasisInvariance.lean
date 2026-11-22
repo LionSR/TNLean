@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourcePhysicalDensity
-import QICLean.Channel.PartialTraceBasisInvariance
+import QICLean.Channel.PartialTrace.BasisInvariance
 
 /-!
 # Basis independence of actual physical corrected terms

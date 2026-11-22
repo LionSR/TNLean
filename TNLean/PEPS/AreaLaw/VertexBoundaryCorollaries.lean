@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.FiniteDomain
-import TNLean.PEPS.AreaLaw.TheoremStatements
+import TNLean.PEPS.AreaLaw.Regions.TheoremStatements
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

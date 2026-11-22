@@ -329,11 +329,11 @@ reconstruction. The retained part is represented rectangularly, and the
 omitted part must be zero. No full-support hypothesis is added.
 
 Literal Proposition~4.13 now uses this condition in
-\path{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm.lean}.\footnote{Formal
+\path{TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm.lean}.\footnote{Formal
 declaration: \leanid{MPOTensor.verticalCF\_of\_cpsvCanonicalForm}.}
 The theorem under the normalized BNT-refined horizontal form remains available
 separately in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}.\footnote{Formal declaration:
+\path{TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm.lean}.\footnote{Formal declaration:
 \leanid{MPOTensor.verticalCF\_of\_horizontalCF}.}
 The vertical phase-class grouping and normalization preceding both coisometry
 constructions are recorded in
@@ -342,7 +342,7 @@ in \href{https://github.com/LionSR/TNLean/issues/3869}{GitHub issue \#3869}.
 
 The source-generated support identities and their trace consequences are
 proved in
-\path{TNLean/MPS/MPDO/VerticalSectorImagePreservation.lean}.\footnote{The image
+\path{TNLean/MPS/MPDO/SectorMaps/VerticalSectorImagePreservation.lean}.\footnote{The image
 identities are
 \leanid{MPOTensor.precompressionVerticalSectorT_image_preservation} and
 \leanid{MPOTensor.precompressionVerticalSectorS_image_preservation}; their
@@ -355,7 +355,7 @@ The general measure-and-prepare completion is formalized in
 \leanid{Matrix.supportCompletion\_isKrausCPTP}.}
 Under supplied unitary conjugacies between the paired sectors, the active
 compositions and completed physical channels are formalized in
-\path{TNLean/MPS/MPDO/BNTAlgebraTensorClauseConditionalPhysicalMaps.lean}.%
+\path{TNLean/MPS/MPDO/AmbientSectorMaps/BNTAlgebraTensorClauseConditionalPhysicalMaps.lean}.%
 \footnote{Formal declaration:
 \leanid{MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.%
 UnitarySectorConjugacy.isRFPViaTS}.}

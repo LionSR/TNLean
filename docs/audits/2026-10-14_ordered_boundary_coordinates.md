@@ -1,6 +1,6 @@
 # Ordered crossing Fourier blocks: the exterior-scalar factorization (2026-10-14)
 
-`TNLean/PEPS/ParentHamiltonian/GraphCoordinateCanonicalParentTransport.lean`
+`TNLean/PEPS/ParentHamiltonian/SemiRegular/GraphCoordinateCanonicalParentTransport.lean`
 carried a factorization of a crossing Fourier block of the ordered (unreversed)
 bond orientation into a fixed exterior scalar times the regional Fourier
 operation. Since #9280 the ordered parent transports are derived as the
@@ -21,4 +21,4 @@ request branch at removal time.
 | `TNLean.PEPS.mixedPhysicalProductMatrix_boundary_coordinates` | `TNLean.PEPS.mixedPhysicalProductMatrix_oriented_boundary_coordinates` at `o = fun _ => false` |
 
 Both replacements live in
-`TNLean/PEPS/ParentHamiltonian/OrientedCoordinateParentTransport.lean`.
+`TNLean/PEPS/ParentHamiltonian/SemiRegular/OrientedCoordinateParentTransport.lean`.

@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Examples.CZY
 
 import TNLean.MPS.Examples.CZY.CZYFusion
+import TNLean.MPS.Examples.CZY.CZYFusionAssociativity
 import TNLean.MPS.Examples.CZY.CZYReduced
 import TNLean.MPS.Examples.CZY.CZYSquare
 import TNLean.MPS.Examples.CZY.CZYTensor

@@ -1,0 +1,192 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import Mathlib.Algebra.Module.Submodule.LinearMap
+import TNLean.MPS.Tensor.Physical.BlockingTransfer
+import TNLean.MPS.Operator.DensityOperator.ZCL
+
+/-!
+# Transfer retracts and fusion coisometries
+
+The first definitions record a linear-algebraic factorization of a
+doubled-index blocked transfer map. At a fixed blocked size `n ≥ 1`,
+`TransferRetractData M n` specifies a subspace `𝒜ₙ`, a forward map
+`Tₙ : M_D(ℂ) → 𝒜ₙ`, and a backward map `Sₙ : 𝒜ₙ → M_D(ℂ)` with
+`Tₙ ∘ Sₙ = id_{𝒜ₙ}` and `Sₙ ∘ Tₙ = Eₙ`. These identities force `Eₙ² = Eₙ`;
+conversely any idempotent blocked transfer map factors canonically through its
+range. Thus such data exist at a fixed size precisely when `Eₙ` is idempotent;
+existence at every positive size is equivalent to idempotence of `E₁`.
+
+This range-subspace factorization is not the physical renormalization
+fixed-point condition of arXiv:1606.00608, Definition RFPMixedTS, lines
+638--660. That definition requires trace-preserving completely positive maps
+on the physical indices; its Appendix C.4 construction appears at lines
+1974--2085. The predicate `IsRFPViaTS` records this physical-map condition.
+
+The source-faithful active-support fusion maps of Theorem 4.14(iii) are recorded
+by `BNTFusionCoisometryFamily`. Their stronger full-support specialization is
+recorded by `BNTFusionIsometryFamily`.
+
+## Main declarations
+
+* `blockedTransferMap`: the transfer map of the `n`-site blocked doubled-index
+  MPS tensor.
+* `TransferRetractData`: retract structure whose characteristic identity is the
+  blocked transfer map.
+* `transferRetractData_one_iff_isZCL`: the one-site retract criterion for
+  doubled-index transfer-map idempotence.
+* `transferRetractData_of_isZCL`: transfer-retract data at every positive
+  blocked size under doubled-index transfer-map idempotence.
+
+## References
+
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Definition
+  RFPMixedTS, lines 638--660, and Appendix C.4, lines 1974--2085, for the
+  distinct physical-map RFP condition.
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608, Theorem
+  4.14(ii)--(iii), lines 972--991, for the BNT fusion maps.
+-/
+
+open scoped Matrix BigOperators
+
+namespace MPOTensor
+
+variable {d D : ℕ}
+
+/-- The bond-space matrix algebra on which the blocked transfer map acts. -/
+abbrev FusionBondSpace (D : ℕ) : Type :=
+  Matrix (Fin D) (Fin D) ℂ
+
+/-! ## Transfer-map-level retract data -/
+
+/-- The blocked transfer map of an MPO tensor, obtained by viewing `M` as a
+Doubled-index MPS tensor and blocking `n` physical sites. -/
+noncomputable def blockedTransferMap (M : MPOTensor d D) (n : ℕ) :
+    FusionBondSpace D →ₗ[ℂ] FusionBondSpace D :=
+  Kraus.transferMap
+    (ι := Fin (Kraus.blockPhysDim (d * d) n)) (n := Fin D)
+    (Kraus.blockTensor (d := d * d) (n := Fin D) M.toMPSTensor n)
+
+/-- Blocking an MPO tensor in the doubled-index MPS picture raises the transfer
+map to the corresponding power. -/
+@[simp] theorem blockedTransferMap_eq_pow (M : MPOTensor d D) (n : ℕ) :
+    blockedTransferMap M n = (transferMap M) ^ n := by
+  simpa only [blockedTransferMap, transferMap_eq_toMPSTensor] using
+    (MPSTensor.transferMap_blockTensor (A := M.toMPSTensor) (L := n))
+
+/-- At blocked size `1`, the blocked transfer map is the original transfer map. -/
+@[simp] theorem blockedTransferMap_one (M : MPOTensor d D) :
+    blockedTransferMap M 1 = transferMap M := by
+  rw [blockedTransferMap_eq_pow (M := M), pow_one]
+
+/-- Transfer-retract datum at blocked size `n`.
+
+A subspace of bond-space matrices together with a retract whose characteristic
+map is the blocked transfer map. This is a range-subspace factorization of the
+doubled-index idempotence criterion, not the paper's physical RFP map (see
+`IsRFPViaTS`) or its BNT fusion coisometries (see
+`BNTFusionCoisometryFamily`). -/
+structure TransferRetractData (M : MPOTensor d D) (n : ℕ) where
+  /-- The subspace through which the blocked transfer map factors. -/
+  supportAlgebra : Submodule ℂ (FusionBondSpace D)
+  /-- Forward map `T_n : M_D(ℂ) → 𝒜_n`. -/
+  T : FusionBondSpace D →ₗ[ℂ] supportAlgebra
+  /-- Backward map `S_n : 𝒜_n → M_D(ℂ)`. -/
+  S : supportAlgebra →ₗ[ℂ] FusionBondSpace D
+  /-- The retract identity `T_n ∘ S_n = id_{𝒜_n}`. -/
+  hTS : T ∘ₗ S = LinearMap.id
+  /-- The characteristic identity `S_n ∘ T_n = E_n` for the blocked transfer
+  map `E_n`. -/
+  hST : S ∘ₗ T = blockedTransferMap M n
+
+namespace TransferRetractData
+
+variable {M : MPOTensor d D} {n : ℕ}
+
+/-- Any transfer-retract witness forces the blocked transfer map at the same
+size to be idempotent. -/
+theorem blockedTransferMap_idempotent (F : TransferRetractData M n) :
+    blockedTransferMap M n ∘ₗ blockedTransferMap M n = blockedTransferMap M n := by
+  calc
+    blockedTransferMap M n ∘ₗ blockedTransferMap M n
+        = (F.S ∘ₗ F.T) ∘ₗ (F.S ∘ₗ F.T) := by rw [F.hST]
+    _ = F.S ∘ₗ (F.T ∘ₗ F.S) ∘ₗ F.T := by simp only [LinearMap.comp_assoc]
+    _ = F.S ∘ₗ LinearMap.id ∘ₗ F.T := by rw [F.hTS]
+    _ = F.S ∘ₗ F.T := by
+      simp only [LinearMap.id_comp]
+    _ = blockedTransferMap M n := F.hST
+
+/-- An idempotent blocked transfer map yields a canonical transfer-retract
+witness by factoring through its range. -/
+noncomputable def ofBlockedTransferMapIdempotent
+    (hE : blockedTransferMap M n ∘ₗ blockedTransferMap M n = blockedTransferMap M n) :
+    TransferRetractData M n where
+  supportAlgebra := (blockedTransferMap M n).range
+  T := LinearMap.codRestrict (blockedTransferMap M n).range (blockedTransferMap M n)
+    (fun x => ⟨x, rfl⟩)
+  S := (blockedTransferMap M n).range.subtype
+  hTS := by
+    apply LinearMap.ext
+    intro x
+    rcases x with ⟨x, hx⟩
+    rcases hx with ⟨y, rfl⟩
+    apply Subtype.ext
+    change blockedTransferMap M n (blockedTransferMap M n y) = blockedTransferMap M n y
+    simpa only [LinearMap.comp_apply] using congrArg (fun f => f y) hE
+  hST :=
+    LinearMap.subtype_comp_codRestrict
+      (blockedTransferMap M n)
+      (blockedTransferMap M n).range
+      (fun x => ⟨x, rfl⟩)
+
+/-- A level-`1` transfer retract implies doubled-index transfer-map idempotence. -/
+theorem isZCL (F : TransferRetractData M 1) : IsZCL M := by
+  simpa only [IsZCL, blockedTransferMap_one] using F.blockedTransferMap_idempotent
+
+end TransferRetractData
+
+/-- A one-site transfer-retract datum is equivalent to doubled-index
+transfer-map idempotence.
+
+The forward direction is the retract calculation
+\(E_1^2 = S_1T_1S_1T_1 = S_1T_1\).  The reverse direction factors the
+idempotent transfer map through its range.  This is a definitional unfolding:
+arXiv:1606.00608, Definition RFPMixedTS, lines 638--660, and Appendix C.4,
+lines 1974--2085 construct physical trace-preserving CP maps, not this
+bond-space retract. -/
+theorem transferRetractData_one_iff_isZCL (M : MPOTensor d D) :
+    Nonempty (TransferRetractData M 1) ↔ IsZCL M := by
+  constructor
+  · rintro ⟨F⟩
+    exact F.isZCL
+  · intro hM
+    exact ⟨TransferRetractData.ofBlockedTransferMapIdempotent
+      (M := M) (n := 1) (by simpa only [IsZCL, blockedTransferMap_one] using hM)⟩
+
+/-- Under doubled-index transfer-map idempotence, every positive blocked
+transfer map coincides with the original transfer map. -/
+theorem blockedTransferMap_eq_transferMap_of_isZCL {M : MPOTensor d D}
+    (hM : IsZCL M) {n : ℕ} (hn : 0 < n) :
+    blockedTransferMap M n = transferMap M := by
+  have hIdem : IsIdempotentElem (transferMap M) := hM
+  simpa only [blockedTransferMap_eq_pow] using hIdem.pow_eq (Nat.ne_of_gt hn)
+
+/-- Under doubled-index transfer-map idempotence, every positive blocked
+transfer map is idempotent. -/
+theorem blockedTransferMap_idempotent_of_isZCL {M : MPOTensor d D}
+    (hM : IsZCL M) {n : ℕ} (hn : 0 < n) :
+    blockedTransferMap M n ∘ₗ blockedTransferMap M n = blockedTransferMap M n := by
+  rw [blockedTransferMap_eq_transferMap_of_isZCL hM hn]
+  exact hM
+
+/-- Doubled-index transfer-map idempotence gives transfer-retract data at every
+positive blocking size. -/
+theorem transferRetractData_of_isZCL {M : MPOTensor d D}
+    (hM : IsZCL M) {n : ℕ} (hn : 0 < n) :
+    Nonempty (TransferRetractData M n) :=
+  ⟨TransferRetractData.ofBlockedTransferMapIdempotent
+    (M := M) (n := n) (blockedTransferMap_idempotent_of_isZCL hM hn)⟩
+
+end MPOTensor

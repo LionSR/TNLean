@@ -88,8 +88,8 @@ injective complements that differ exactly in that site.
 \section{Current formal representation}
 
 The injective PEPS objects used by the normal theorem are represented in
-\path{TNLean/PEPS/Defs.lean}, \path{TNLean/PEPS/VirtualInsertion.lean}, and
-\path{TNLean/PEPS/Blocking.lean}. The PEPS chapter of the blueprint has a
+\path{TNLean/PEPS/Tensor/Network/Defs.lean}, \path{TNLean/PEPS/Tensor/Network/VirtualInsertion.lean}, and
+\path{TNLean/PEPS/Tensor/Network/Blocking.lean}. The PEPS chapter of the blueprint has a
 separate normal-PEPS section after the injective theorem. This separation is
 important: the normal theorem needs extra blocking hypotheses before the
 injective proof route can be invoked.
@@ -1327,7 +1327,7 @@ The remaining obligations are the following.
           (\leanid{TNLean.PEPS.redBundleInsertedCoeff_singleton}). The single-crossing
           hypothesis is the explicit assumption that the red-to-blue crossings are exactly the
           singleton $\{e\}$, which the source's coordinate blocking discharges
-          (\path{TNLean/PEPS/NormalBlocking.lean:251--264,367--379}).
+          (\path{TNLean/PEPS/Injectivity/Normal/NormalBlocking.lean:251--264,367--379}).
 
           With these two landed pieces, the descent on both tensors (sharing the non-incident
           bond products under matched bond dimensions, by
@@ -2379,8 +2379,8 @@ the cycle graph.\footnote{Formal declarations:
     \leanid{TNLean.PEPS.fundamentalTheorem_normalMPS_cycle_gauge_unique}
     (uniqueness, blueprint
     \path{cor:fundamentalTheorem_normalMPS_cycle_gauge_unique}), with the
-    blocking construction in \path{TNLean/PEPS/CycleArcRegion.lean} and
-    \path{TNLean/PEPS/CycleBlockingData.lean} (blueprint
+    blocking construction in \path{TNLean/PEPS/Graph/Region/CycleArcRegion.lean} and
+    \path{TNLean/PEPS/FundamentalTheorem/Cycle/CycleBlockingData.lean} (blueprint
     \path{thm:peps_cycleNormalPEPSBlockingHypotheses}).}
 The closed chain is the cycle graph on $n$ vertices, a block of $L$
 consecutive sites is a cyclic arc, and the blocking hypotheses of the
@@ -2415,7 +2415,7 @@ Second, the translationally invariant corollary of
 Ref.~\cite{Molnar2018NormalPEPS} (lines 1624--1661,
 single gauge $Z$ and a root of unity $\lambda$ with $\lambda^n=1$) is not
 delivered by this instantiation: it needs a translation apparatus on the
-cycle mirroring the torus one (\path{TNLean/PEPS/TorusTranslation.lean}), and
+cycle mirroring the torus one (\path{TNLean/PEPS/Graph/Torus/TorusTranslation.lean}), and
 the development's translation-invariant setting remains the torus
 (\path{fundamentalTheorem_normalTorusPEPS_unconditional}).  The
 strengthening of the corollary to $n\geq 2L+1$ announced by the source
@@ -2810,7 +2810,7 @@ The site-dependent form of Lemma~5 is formalized, and the site-independent
 statements
 landed there are its constant specializations.  The development works with
 the existing site-dependent chains (\leanid{MPSChainTensor}, one tensor per
-site of the closed chain, \path{TNLean/MPS/Chain/Defs.lean}) and adds the
+site of the closed chain, \path{TNLean/MPS/Tensor/Chain/Defs.lean}) and adds the
 arc vocabulary: the ordered product of a word along an arc of consecutive
 sites, starting anywhere on the chain and wrapping cyclically
 (\leanid{MPSChainTensor.arcEval}), and the source's hypothesis that every
@@ -2881,7 +2881,7 @@ word products.
 One scope restriction remains, marked in the sources:
 all sites share one physical dimension $d$ and all bonds one bond
 dimension $D$, the dimensions of the chain vocabulary of
-\path{TNLean/MPS/Chain/Defs.lean}, while the source poses no restriction
+\path{TNLean/MPS/Tensor/Chain/Defs.lean}, while the source poses no restriction
 on the local dimensions of the site-dependent tensors.  The
 per-bond-dimension generality would replace the matrix algebra by
 rectangular matrix spaces with dimensions varying around the chain, and

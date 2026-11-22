@@ -7,8 +7,8 @@ import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.SuccessiveTrimming
 import TNLean.MPS.AreaLaw.ViableSet.CollectiveTrimming
 import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
-import QICLean.Analysis.IsometricDomainExtension
-import QICLean.Analysis.OverlapTriangle
+import QICLean.Analysis.Isometry.IsometricDomainExtension
+import QICLean.Analysis.Projection.OverlapTriangle
 
 /-!
 # Bond trimming of a finite left family

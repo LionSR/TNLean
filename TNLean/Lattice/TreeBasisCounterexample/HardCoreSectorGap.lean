@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.TreeBasisCounterexample.PositiveLift
 import TNLean.Lattice.TreeBasisCounterexample.HardCoreNumber
-import QICLean.Channel.TrimmingEnergy
+import QICLean.Channel.Schmidt.TrimmingEnergy
 import Mathlib.Analysis.Real.Sqrt
 
 /-!

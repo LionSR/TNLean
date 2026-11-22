@@ -38,7 +38,7 @@ efficiently as well.'').
 
 The algorithm is written as a program over a type of
 queries,\footnote{\leanid{TNLean.MPS.AreaLaw.LinearAlgebraQuery} in
-    \doclink{TNLean/MPS/AreaLaw/Algorithm/Query}.} one query for each of
+    \doclink{TNLean/MPS/AreaLaw/GroundStateAlgorithm/QueryProgram/Query}.} one query for each of
 the operations above: one-site extension, enumeration of the net of boundary
 contractions, feasibility of the size-trimming convex program and the leading
 eigenvector of its solution, Schmidt trimming, the left factors of the
@@ -53,7 +53,7 @@ the boundary contraction and the rank of the operator. The total declared cost
 of the program on a chain of $n$ sites at accuracy parameter $R$ is at most
 $P\,(n+2R^2+1)^{d}$ with $P$ and $d$ depending only on the local dimension and
 the gap parameter,\footnote{\leanid{TNLean.MPS.AreaLaw.exists_groundStateProgram_cost_polynomial}
-    in \doclink{TNLean/MPS/AreaLaw/Algorithm/Cost}.} and the number of
+    in \doclink{TNLean/MPS/AreaLaw/GroundStateAlgorithm/QueryProgram/Cost}.} and the number of
 queries is at most the cost.
 
 \section{The restriction}
@@ -69,8 +69,8 @@ Three things are declared rather than derived.
     \emph{valid} oracles,\footnote{\leanid{TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle},
         \leanid{TNLean.MPS.AreaLaw.groundStateProgram_spec_of_valid} and
         \leanid{TNLean.MPS.AreaLaw.exists_groundStateProgram_cost_polynomial_of_valid}
-        in \doclink{TNLean/MPS/AreaLaw/Algorithm/ValidOracle} and
-        \doclink{TNLean/MPS/AreaLaw/Algorithm/ValidOracleCost}.} those that
+        in \doclink{TNLean/MPS/AreaLaw/GroundStateAlgorithm/QueryProgram/ValidOracle} and
+        \doclink{TNLean/MPS/AreaLaw/GroundStateAlgorithm/QueryProgram/ValidOracleCost}.} those that
     perform the deterministic operations exactly, enumerate nets of the
     required radius with the standard point bound, report feasibility
     truthfully, return the leading eigenvector of some optimal solution of
@@ -102,7 +102,7 @@ The padding also changes how the accuracy enters the running time. At the
 accuracy parameter $R=\max\{1,\lceil\sqrt{4n/(\varepsilon\eta)}\rceil\}$
 the overlap is at least $1-\eta$ and the total declared cost is at most
 $P\,(17n/(\varepsilon\eta)+5n)^{d}$ for $\varepsilon\eta\le1$.\footnote{\leanid{TNLean.MPS.AreaLaw.exists_theorem_one_of_valid}
-    in \doclink{TNLean/MPS/AreaLaw/Algorithm/TheoremOne}.} This is polynomial
+    in \doclink{TNLean/MPS/AreaLaw/GroundStateAlgorithm/QueryProgram/TheoremOne}.} This is polynomial
 in $n$ and $1/\eta$, and the degree of $1/\eta$ is the degree $d$ of the
 whole computation, which depends on the local dimension and the gap. The
 printed form $n^{c(d,\varepsilon)}\,\mathrm{poly}(n/\eta)$ could be read as
@@ -120,7 +120,7 @@ ground-state projector, whose words are drawn uniformly at random, with the
 ground energy as an input. The computation on this
 route\footnote{\leanid{TNLean.MPS.AreaLaw.sampledGroundStateProgram} and
     \leanid{TNLean.MPS.AreaLaw.exists_sampledGroundStateProgram_success_polynomial}
-    in \doclink{TNLean/MPS/AreaLaw/Algorithm/SampledProgram}.} takes one family
+    in \doclink{TNLean/MPS/AreaLaw/GroundStateAlgorithm/QueryProgram/SampledProgram}.} takes one family
 of words per cut as an input and is deterministic in them; a sampling
 operation is therefore not a query with a declared cost but the law of the
 input, the product over the cuts of the law of $\ell$ independent uniform
@@ -147,7 +147,7 @@ most $P\,(n+2R^2+1)^{d}$ for every valid oracle, and on the sampled route, on
 the event of probability at least $1-1/(2n^2)$ on which the output has the
 required overlap, the cost is at most a polynomial in $n$ fixed before the
 chain, for every valid oracle.\footnote{\leanid{TNLean.MPS.AreaLaw.exists_sampledGroundStateProgram_success_cost_polynomial_of_valid}
-    in \doclink{TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampledCost}.}
+    in \doclink{TNLean/MPS/AreaLaw/GroundStateAlgorithm/QueryProgram/ValidOracleSampledCost}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}

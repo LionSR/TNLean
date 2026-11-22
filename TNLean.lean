@@ -13,9 +13,6 @@ import TNLean.Circuit
 import TNLean.Lattice
 import TNLean.MPS
 import TNLean.PEPS
-import TNLean.PiAlgebra
 import TNLean.QCA
 import TNLean.QICLeanInterface
-import TNLean.Spectral
 import TNLean.Tactic
-import TNLean.Wielandt

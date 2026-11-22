@@ -422,7 +422,7 @@ In priority order:
 ## 5. What the strict-modulus restriction changes
 
 The Lean `IsCanonicalFormBNT` carries `mu_strict_anti : StrictAnti (‖μ ·‖)`
-(`TNLean/MPS/BNT/Construction.lean:106`). This is strictly stronger than
+(`TNLean/MPS/CanonicalForm/BNT/Construction.lean:106`). This is strictly stronger than
 CPSV16's CF, where all blocks have transfer-operator spectral radius 1.
 The defense (paraphrasing the candidate argument in the prompt) is:
 

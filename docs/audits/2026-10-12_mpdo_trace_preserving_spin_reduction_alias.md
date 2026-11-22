@@ -6,7 +6,7 @@ simplification survey, candidate E20).
 
 ## Removed declarations
 
-* `MPOTensor.HasTracePreservingSpinReduction` (`TNLean/MPS/MPDO/PRFP.lean`).
+* `MPOTensor.HasTracePreservingSpinReduction` (`TNLean/MPS/MPDO/Purification/PRFP.lean`).
   Replacement: `IsKrausCPTP (MPOTensor.ancillaryTraceMap d dK)`, which was its
   body.
 * `MPOTensor.hasTracePreservingSpinReduction` (same file). Replacement:

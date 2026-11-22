@@ -8,8 +8,8 @@ import TNLean.Lattice.PartyCircuit.DistributedSourceComposition
 import TNLean.Lattice.PartyCircuit.SourceCircuitLocations
 import TNLean.Lattice.PartyCircuit.PreparedSourceGate
 import TNLean.Lattice.PartyCircuit.PartyLayout
-import QICLean.Analysis.SourceOnlyDensityError
-import QICLean.Analysis.ChronologicalGarbage
+import QICLean.Analysis.TraceNorm.SourceOnlyDensityError
+import QICLean.Channel.Dilation.ChronologicalGarbage
 import TNLean.Lattice.PartyCircuit.WordEvaluationTransport
 
 /-! # Preparation and private inputs for distributed circuits

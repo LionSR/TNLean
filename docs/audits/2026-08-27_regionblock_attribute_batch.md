@@ -20,10 +20,10 @@ Line numbers cite the audited head `ffba2d758`.
 
 | Removed declaration | Location at the audited head |
 |---|---|
-| `TNLean.PEPS.CoarseBlockingFrame.regionOf_zero` | `TNLean/PEPS/RegionBlock/CoarseThreeSite.lean:202` |
-| `TNLean.PEPS.CoarseBlockingFrame.regionOf_one` | `TNLean/PEPS/RegionBlock/CoarseThreeSite.lean:204` |
-| `TNLean.PEPS.CoarseBlockingFrame.regionOf_two` | `TNLean/PEPS/RegionBlock/CoarseThreeSite.lean:206` |
-| `TNLean.PEPS.CoarseBlockingFrame.coarseTensor_bondDim` | `TNLean/PEPS/RegionBlock/CoarseThreeSite.lean:245` |
+| `TNLean.PEPS.CoarseBlockingFrame.regionOf_zero` | `TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/CoarseThreeSite.lean:202` |
+| `TNLean.PEPS.CoarseBlockingFrame.regionOf_one` | `TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/CoarseThreeSite.lean:204` |
+| `TNLean.PEPS.CoarseBlockingFrame.regionOf_two` | `TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/CoarseThreeSite.lean:206` |
+| `TNLean.PEPS.CoarseBlockingFrame.coarseTensor_bondDim` | `TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/CoarseThreeSite.lean:245` |
 | `TNLean.PEPS.instFintypeCrossingConfig` | `TNLean/PEPS/RegionBlock/CoarseThreeSite2.lean:94` |
 | `TNLean.PEPS.CoarseBlockingFrame.edgeRegions_rb` | `TNLean/PEPS/RegionBlock/CoarseThreeSite2.lean:117` |
 | `TNLean.PEPS.CoarseBlockingFrame.edgeRegions_rc` | `TNLean/PEPS/RegionBlock/CoarseThreeSite2.lean:119` |
@@ -37,14 +37,14 @@ Line numbers cite the audited head `ffba2d758`.
 | `TNLean.PEPS.incidentBC1_fst` | `TNLean/PEPS/RegionBlock/CoarseThreeSite3.lean:284` |
 | `TNLean.PEPS.incidentRC2_fst` | `TNLean/PEPS/RegionBlock/CoarseThreeSite3.lean:285` |
 | `TNLean.PEPS.incidentBC2_fst` | `TNLean/PEPS/RegionBlock/CoarseThreeSite3.lean:286` |
-| `TNLean.PEPS.overrideEdge_coarse_rb` | `TNLean/PEPS/RegionBlock/CoarseThreeSite7.lean:309` |
-| `TNLean.PEPS.RegionInsertionTransfer.fwdAlgHom_apply` | `TNLean/PEPS/RegionBlock/Algebra.lean:422` |
-| `TNLean.PEPS.RegionInsertionTransfer.fwdAlgEquiv_apply` | `TNLean/PEPS/RegionBlock/Algebra.lean:452` |
-| `TNLean.PEPS.regionBoundaryEdgeComplEquiv_apply_coe` | `TNLean/PEPS/RegionBlock/Insertion.lean:88` |
+| `TNLean.PEPS.overrideEdge_coarse_rb` | `TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/InsertedCoefficientDescentBundle.lean:309` |
+| `TNLean.PEPS.RegionInsertionTransfer.fwdAlgHom_apply` | `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/InsertionAlgebra.lean:422` |
+| `TNLean.PEPS.RegionInsertionTransfer.fwdAlgEquiv_apply` | `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/InsertionAlgebra.lean:452` |
+| `TNLean.PEPS.regionBoundaryEdgeComplEquiv_apply_coe` | `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/Insertion.lean:88` |
 | `TNLean.PEPS.regionBoundaryEdgeDoubleComplEquiv_apply_coe` | `TNLean/PEPS/RegionBlock/Recovery6.lean:97` |
-| `TNLean.PEPS.instFintypeRegionPhysicalConfig` | `TNLean/PEPS/RegionBlock/Basic.lean:106` |
-| `TNLean.PEPS.instFintypeTouchConfig` | `TNLean/PEPS/RegionBlock/KernelDescent.lean:303` |
-| `TNLean.PEPS.instFintypeExteriorConfig` | `TNLean/PEPS/RegionBlock/KernelDescent.lean:312` |
+| `TNLean.PEPS.instFintypeRegionPhysicalConfig` | `TNLean/PEPS/Tensor/Region/RegionBlock.lean:106` |
+| `TNLean.PEPS.instFintypeTouchConfig` | `TNLean/PEPS/Injectivity/Region/RegionKernelDescent.lean:303` |
+| `TNLean.PEPS.instFintypeExteriorConfig` | `TNLean/PEPS/Injectivity/Region/RegionKernelDescent.lean:312` |
 
 Each removed name is replaced by the definitional unfolding it stated. A `rfl`
 projection of a pattern-matching definition (`regionOf_zero` and its two
@@ -55,7 +55,7 @@ recovered by `rfl` at any use site; a structure-field projection
 deleted `Fintype` instance is replaced by the instance search already finds:
 `Pi.instFintype` over the underlying pi-type, which is what the `inferInstance`
 body was reporting. `overrideEdge_coarse_rb` is replaced by the general
-`overrideEdge_edge` (`TNLean/PEPS/RegionBlock/CoarseThreeSite7.lean`), of which
+`overrideEdge_edge` (`TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/InsertedCoefficientDescentBundle.lean`), of which
 it was a coarse-graph instance.
 
 ## Restored set: empty
@@ -88,14 +88,14 @@ search.
 
 ## Deliberately retained
 
-`instFintypeRegionBoundaryConfig` (`TNLean/PEPS/RegionBlock/Basic.lean`) has the
+`instFintypeRegionBoundaryConfig` (`TNLean/PEPS/Tensor/Region/RegionBlock.lean`) has the
 same `inferInstance` shape and no production reference, but a comment inside
-`regionInsertedCoeff` (`TNLean/PEPS/RegionBlock/Insertion.lean`) names it as the
+`regionInsertedCoeff` (`TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/Insertion.lean`) names it as the
 concrete instance distinguishing two otherwise identical `Finset.univ`s, and the
 bridging step there is written around that distinction. Removing it would change
 which instance elaboration picks at that step, so it is out of scope for a
 zero-reference pass and left in place.
 
 `regionBoundaryEdgeComplEquiv_symm_apply_coe`
-(`TNLean/PEPS/RegionBlock/Insertion.lean`) is the sibling of a deleted lemma but
+(`TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/Insertion.lean`) is the sibling of a deleted lemma but
 is not itself zero-reference, and is untouched.

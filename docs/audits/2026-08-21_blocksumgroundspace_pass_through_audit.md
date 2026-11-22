@@ -3,7 +3,7 @@
 This audit records the repository-local deprecation exception used by PR #6824.
 Each declaration below was an exact pass-through with no independent
 mathematical content. At the audited head, it had no non-`Archive` consumer
-outside `TNLean/MPS/ParentHamiltonian/BlockSumGroundSpace.lean` itself and no
+outside `TNLean/MPS/ParentHamiltonian/BlockGroundSpace/BlockSumGroundSpace.lean` itself and no
 Blueprint `\lean{...}` tag.
 
 | Removed declaration | Existing replacement |

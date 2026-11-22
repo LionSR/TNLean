@@ -3,7 +3,7 @@
 ## What this branch adds
 
 This branch introduces a new file
-`TNLean/MPS/MPDO/CommutingFormBridge.lean` that formalizes the strongest honest
+`TNLean/MPS/Operator/PhysicalSector/CommutingFormBridge.lean` that formalizes the strongest honest
 forward step currently justified on `origin/main` for Appendix C.2,
 Proposition C.6:
 
@@ -53,7 +53,7 @@ commuting-form conclusion.
 
 ## Files touched
 
-- `TNLean/MPS/MPDO/CommutingFormBridge.lean` (new)
+- `TNLean/MPS/Operator/PhysicalSector/CommutingFormBridge.lean` (new)
 - `TNLean.lean`
 - `blueprint/src/chapter/ch02b_mpdo.tex`
 

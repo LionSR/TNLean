@@ -12,15 +12,15 @@ None of the removed declarations had a Lean consumer, and none carried a
 
 | Removed declaration | Issue | Replacement |
 |---|---|---|
-| `MPOTensor.productBondSwapEquiv_self` (`MPS/MPDO/PhysicalAdjoint.lean`) | #4564 | none needed: no consumer |
-| `MPOTensor.embedLocalOperator_mem_unitaryGroup` (`MPS/MPDO/PhysicalGibbsEmbedding.lean`) | #4564 | none needed: no consumer; it follows from `embedLocalOperator_conjTranspose`, `embedLocalOperator_mul` and the unit law, which stay |
-| `MPOTensor.TwistedDimer.tau_one_sum` (`MPS/MPDO/TwistedDimer.lean`) | #4564 | none needed: no consumer; `simp [tau]` proves it |
-| `Matrix.isStarProjection_swapAntisymmetricProjection` (`MPS/MPU/Examples/SwapPath.lean`) | #4564 | none needed: no consumer; it is `(isStarProjection_swapSymmetricProjection d).one_sub` |
+| `MPOTensor.productBondSwapEquiv_self` (`MPS/Operator/Product/PhysicalAdjoint.lean`) | #4564 | none needed: no consumer |
+| `MPOTensor.embedLocalOperator_mem_unitaryGroup` (`MPS/Operator/Interaction/PhysicalGibbsEmbedding.lean`) | #4564 | none needed: no consumer; it follows from `embedLocalOperator_conjTranspose`, `embedLocalOperator_mul` and the unit law, which stay |
+| `MPOTensor.TwistedDimer.tau_one_sum` (`MPS/Examples/Dimer/TwistedDimerMPDO.lean`) | #4564 | none needed: no consumer; `simp [tau]` proves it |
+| `Matrix.isStarProjection_swapAntisymmetricProjection` (`MPS/Examples/Shift/SwapPath.lean`) | #4564 | none needed: no consumer; it is `(isStarProjection_swapSymmetricProjection d).one_sub` |
 | `MPSTensor.AppendixBStructuralData.appendixBQAX_factor_action` (module `MPS/RFP/AppendixBFactorAction.lean`, deleted) | #7911 | `MPSTensor.leftPairLift_toMatrix_reindex`, of which it was the instance at `appendixBQAXOnCoeffSpace` |
 | `MPSTensor.AppendixBStructuralData.appendixBQXB_factor_action` (same module) | #7911 | `MPSTensor.rightPairLift_toMatrix_reindex`, of which it was the instance at `appendixBQXBOnCoeffSpace` |
-| `MPSTensor.fundamentalTheorem_periodic_proportional_of_isPeriodic` (`MPS/Periodic/FundamentalTheorem.lean`) | #7915 | `MPSTensor.fundamentalTheorem_periodic_proportional` applied to `PeriodicOverlapHypothesis.ofIsPeriodic`, which was its whole body |
-| `MPOTensor.IsMPUSimple.sourceV_transpose_isIsometry` (`MPS/MPU/SourceVCompleteNetwork.lean`) | #7917 | `MPOTensor.IsMPUCanonicalFormII.sourceV_isIsometry` for the source gate; the transposed-weight auxiliary statement was the residue of a route that D13 excludes |
-| private `MPSTensor.ft_sector_bnt_equal_mps_unitaryGauge_literal` (`MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean`) | #7913 | renamed to the public `MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary`, whose former body was a bare call to it; the statement is unchanged |
+| `MPSTensor.fundamentalTheorem_periodic_proportional_of_isPeriodic` (`MPS/FundamentalTheorem/Periodic/RepeatedBlocks.lean`) | #7915 | `MPSTensor.fundamentalTheorem_periodic_proportional` applied to `PeriodicOverlapHypothesis.ofIsPeriodic`, which was its whole body |
+| `MPOTensor.IsMPUSimple.sourceV_transpose_isIsometry` (`MPS/MPU/Simple/SourceVCompleteNetwork.lean`) | #7917 | `MPOTensor.IsMPUCanonicalFormII.sourceV_isIsometry` for the source gate; the transposed-weight auxiliary statement was the residue of a route that D13 excludes |
+| private `MPSTensor.ft_sector_bnt_equal_mps_unitaryGauge_literal` (`MPS/FundamentalTheorem/Sectors/FundamentalCoord.lean`) | #7913 | renamed to the public `MPSTensor.fundamentalTheorem_equal_canonicalForm_unitary`, whose former body was a bare call to it; the statement is unchanged |
 
 ## Prose repointed
 
@@ -32,7 +32,7 @@ None of the removed declarations had a Lean consumer, and none carried a
   footnote cites only the two generic pair-lift identities and the sentence
   says that the Appendix B equations are their instances.
 - `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex` and the
-  module docstring of `MPS/Periodic/FundamentalTheorem.lean` name the one
+  module docstring of `MPS/FundamentalTheorem/Periodic/RepeatedBlocks.lean` name the one
   remaining block-matching theorem and `PeriodicOverlapHypothesis.ofIsPeriodic`.
 - `docs/paper-gaps/mpu_source_cut_orientation.tex` drops the sentence that
   recorded the transposed-weight theorem as retained.

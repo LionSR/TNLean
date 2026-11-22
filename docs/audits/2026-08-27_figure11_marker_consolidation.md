@@ -14,7 +14,7 @@ one module. Per the one-marker-per-(restriction, module) rule they were
 folded into the module docstring, with the module marker naming the
 declarations it covers so that it claims no more than it carries.
 
-In `TNLean/MPS/MPDO/VerticalProductFusionDecomposition.lean`, the fixed-pair
+In `TNLean/MPS/MPDO/Fusion/VerticalProductFusionDecomposition.lean`, the fixed-pair
 support marker and the fusion-coisometry marker were each stated three times,
 on `MPOTensor.RetainedProductSpectralFamily.OriginalCornerFamily.toBNTFusionCoisometryFamily`,
 `MPOTensor.RetainedProductSpectralFamily.exists_bntFusionCoisometryFamily`,
@@ -22,13 +22,13 @@ and `MPOTensor.transportedVerticalSector_exists_positiveFusionDecomposition`.
 Both now appear once in the module docstring, naming those three
 declarations.
 
-In `TNLean/MPS/MPDO/VerticalProductCornerComparison.lean`, the fixed-pair
+In `TNLean/MPS/MPDO/Fusion/VerticalProductCornerComparison.lean`, the fixed-pair
 support marker was stated on
 `MPOTensor.RetainedProductSpectralFamily.exists_flatBlockedBNTComparison` and
 on `MPOTensor.RetainedProductSpectralFamily.exists_originalCornerFamily`. The
 module marker now states both readings and names both declarations.
 
-In `TNLean/MPS/MPDO/VerticalProductSpectralFamily.lean`, the fixed-pair
+In `TNLean/MPS/MPDO/Fusion/VerticalProductSpectralFamily.lean`, the fixed-pair
 support marker was stated on
 `MPOTensor.RetainedProductSpectralFamily.exists_blockedBNT_gaugePhase_of_flatBlock`,
 on `MPOTensor.RetainedProductSpectralFamily.FlatBlockedBNTComparison`, and on
@@ -44,7 +44,7 @@ cites `docs/paper-gaps/cpsv16_figure11_per_pair_support.tex` or
 
 Two further Figure-11 markers were reviewed and **left alone**, because each
 is already the single marker of its module:
-`TNLean/MPS/MPDO/VerticalProductRetainedBlocks.lean` and
+`TNLean/MPS/MPDO/Fusion/VerticalProductRetainedBlocks.lean` and
 `TNLean/MPS/MPDO/CPSVVerticalProductFusionDecomposition.lean`. No
 zero-sector-complement, blocked-coefficient-exponent, or `Scope restriction`
 marker was touched.
@@ -53,13 +53,13 @@ marker was touched.
 
 | Removed | Replacement |
 |---|---|
-| `MPOTensor.pi_list_prod_apply` (private, `TNLean/MPS/MPDO/VerticalSectorDensityBlocks.lean`) | Mathlib's `Pi.list_prod_apply` |
-| `MPOTensor.verticalSectorFinEquiv_copy` (`TNLean/MPS/MPDO/VerticalSectorCoordinates.lean`) | `MPOTensor.verticalSectorFinEquiv_outer_symm` together with `Equiv.symm_apply_apply` |
+| `MPOTensor.pi_list_prod_apply` (private, `TNLean/MPS/MPDO/SectorMaps/VerticalSectorDensityBlocks.lean`) | Mathlib's `Pi.list_prod_apply` |
+| `MPOTensor.verticalSectorFinEquiv_copy` (`TNLean/MPS/MPDO/SectorMaps/VerticalSectorCoordinates.lean`) | `MPOTensor.verticalSectorFinEquiv_outer_symm` together with `Equiv.symm_apply_apply` |
 
 `pi_list_prod_apply` restated Mathlib's `Pi.list_prod_apply` verbatim for a
 family of monoids. Its single call site now rewrites with the Mathlib lemma,
 which is already in the module's import closure and is used with the same
-rewrite pair in `TNLean/MPS/MPDO/VerticalSectorGeneration.lean`.
+rewrite pair in `TNLean/MPS/MPDO/SectorMaps/VerticalSectorGeneration.lean`.
 
 `verticalSectorFinEquiv_copy` was a `@[simp]` lemma with no reference
 anywhere in the repository and no blueprint tag. It could not fire in a bare
@@ -72,24 +72,24 @@ terminology, and both removals fall under the pass-through exception.
 ## Unused imports
 
 Five import lines were removed from
-`TNLean/MPS/MPDO/VerticalProductReconstruction.lean`:
-`TNLean.MPS.CanonicalForm.BNTCharacterization`, the then-current
+`TNLean/MPS/MPDO/Fusion/VerticalProductReconstruction.lean`:
+`TNLean.MPS.CanonicalForm.BNTPresentation.Characterization`, the then-current
 `TNLean.MPS.CanonicalForm.NormalCommutant`,
-`TNLean.MPS.MPDO.FigureEightPairwise`, `TNLean.MPS.MPDO.VerticalBNT`, and
-`TNLean.MPS.MPDO.VerticalSpectral`. At that checkpoint each remained reachable
+`TNLean.MPS.MPDO.Vertical.FigureEightPairwise`, `TNLean.MPS.MPDO.Vertical.VerticalBNT`, and
+`TNLean.MPS.MPDO.Vertical.VerticalReduction`. At that checkpoint each remained reachable
 through the four surviving imports, so the import closure of this module and of
 every module downstream of it was unchanged and the deletion could not alter
 elaboration anywhere. The generic normal-commutant API subsequently moved to
 `QICLean.Kraus.NormalCommutant`.
 
 Three further imports of the same module —
-`TNLean.MPS.MPDO.VerticalCoisometry`,
-`TNLean.MPS.MPDO.HorizontalBlocking`, and
-`TNLean.MPS.CanonicalForm.BNTTransport` — were also unused by name inside the
+`TNLean.MPS.MPDO.Vertical.VerticalCoisometry`,
+`TNLean.MPS.MPDO.Vertical.HorizontalBlocking`, and
+`TNLean.MPS.CanonicalForm.BNT.Transport` — were also unused by name inside the
 file, but deleting them does shrink the closure, and this module is the only
 route by which they reach their downstream consumers. Removing
 `HorizontalBlocking` broke three proofs in
-`TNLean/MPS/MPDO/VerticalProductRetainedBlocks.lean`, which reaches
+`TNLean/MPS/MPDO/Fusion/VerticalProductRetainedBlocks.lean`, which reaches
 `MPOTensor.IsHorizontalCF.blockTwo` only through this pass-through. All three
 were restored. An import that is unused by name in its own file is still
 load-bearing when it is the sole path to a name used downstream; the honest

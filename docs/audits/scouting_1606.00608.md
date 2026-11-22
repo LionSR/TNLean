@@ -35,7 +35,7 @@
 | Item | Description | Formalizability | Our Status |
 |------|-------------|-----------------|------------|
 | **Def 3.3: CID** | Correlations Independent of Distance: ⟨O₁O₂⟩ independent of separation | Easy | Not formalized. |
-| **Def 3.5: Local Orthogonality (LO)** `DefLO` | BNT elements satisfy Σ_i A^i_j ⊗ Ā^i_{j'} = 0 for j≠j' | Easy | **Partially present**: `cross_overlap_tendsto_zero` in `MPS/BNT/Construction.lean` proves overlap → 0, which is the asymptotic version. The exact (non-asymptotic) LO is not yet a definition. |
+| **Def 3.5: Local Orthogonality (LO)** `DefLO` | BNT elements satisfy Σ_i A^i_j ⊗ Ā^i_{j'} = 0 for j≠j' | Easy | **Partially present**: `cross_overlap_tendsto_zero` in `MPS/CanonicalForm/BNT/Construction.lean` proves overlap → 0, which is the asymptotic version. The exact (non-asymptotic) LO is not yet a definition. |
 | **Def 3.6: ZCL** | MPS is LO and has CID | Easy | Not formalized as a combined definition. |
 | **Def 3.7: Transfer matrix E** | E = Σ_i A^i ⊗ Ā^i (Choi form of CPM) | **Already formalized** | `transferMap` in `MPS/Core/Transfer.lean` is the CPM form E(X) = Σ A^i X A^{i†}. Choi matrix form in `Channel/TransferMatrix.lean`. Mixed transfer `mixedTransferMap` in `Spectral/MixedTransfer.lean`. |
 | **Thm 3.8 (ZCL ⟺ E²=E)** `TheoremZCLPure` | For CF tensor: ZCL ⟺ transfer matrix is idempotent | Medium | Not formalized. Forward direction easy from spectral theory. Reverse uses block-injectivity + Lemma app_simple (Newton-Girard, which **we have**: `Algebra/ScalarPowerSumIdentity.lean`). |
@@ -314,7 +314,7 @@ TNLean/MPS/RFP/
 
 | File | Paper ref | Key definitions/theorems | Est. LOC | Imports from existing |
 |------|-----------|-------------------------|----------|-----------------------|
-| `Defs.lean` | Def 3.2 | `IsTransferIdempotent (A : MPSTensor d D)`, `IsIdempotentCPM` (E²=E), equivalence with the physical blocking definition via Stinespring | ~80 | `MPS/Defs`, `MPS/Core/Transfer`, `Channel/Stinespring` |
+| `Defs.lean` | Def 3.2 | `IsTransferIdempotent (A : MPSTensor d D)`, `IsIdempotentCPM` (E²=E), equivalence with the physical blocking definition via Stinespring | ~80 | `MPS/Tensor/Defs`, `MPS/Core/Transfer`, `Channel/Stinespring` |
 | `ZeroCorrelationLength.lean` | Defs 3.3–3.7, Thm 3.8 | `IsCID`, `IsLocallyOrthogonal`, `IsZCL`, `zcl_iff_idempotent_transfer` | ~250 | `MPS/Core/Transfer`, `MPS/BNT/*`, `Spectral/SpectralGap`, `Algebra/ScalarPowerSumIdentity` |
 | `StructuralForm.lean` | Thm 3.11, Lem B.1, Cor 3.12 | `rfp_nt_structural` (A^i = XΛU^iX^{-1}), `rfp_cf_structural` (full block form), `rfp_bnt_structural` | ~200 | `RFP/Defs`, `RFP/ZeroCorrelationLength`, `Channel/FixedPoint/*`, `MPS/BNT/*` |
 | `Convergence.lean` | App B (primitive-block convergence; full CF flow obstructed) | `rg_flow_converges_of_cf` | ~120 | `MPS/Core/Transfer`, `MPS/BNT/*`, `Spectral/SpectralGap` |
@@ -517,15 +517,15 @@ Tier 5 ────────────────────────�
 
 | Scouting report module | Existing PH plan | Compatible? | Notes |
 |------------------------|------------------|-------------|-------|
-| **`MPS/RFP/Defs.lean`** (`IsTransferIdempotent`) | Not in PH plan | **No conflict** | New concept, orthogonal to PH infrastructure |
-| **`MPS/RFP/ZeroCorrelationLength.lean`** | ch15 remark (line 89–91) says "E²=E ⟺ ξ=0 ⟺ RGFP" | **Compatible** — ch15 already gestures at this equivalence. Our module would formalize it. | The `correlationLength` in `Correlations.lean` is defined as `-1/log‖λ₂‖`. ZCL = this being 0 = λ₂ = 0 = E²=E. Clean connection. |
+| **`MPS/Transfer/RenormalizationFixedPoint/Defs.lean`** (`IsTransferIdempotent`) | Not in PH plan | **No conflict** | New concept, orthogonal to PH infrastructure |
+| **`MPS/CanonicalForm/Correlation/ZeroCorrelationLength.lean`** | ch15 remark (line 89–91) says "E²=E ⟺ ξ=0 ⟺ RGFP" | **Compatible** — ch15 already gestures at this equivalence. Our module would formalize it. | The `correlationLength` in `Correlations.lean` is defined as `-1/log‖λ₂‖`. ZCL = this being 0 = λ₂ = 0 = E²=E. Clean connection. |
 | **`MPS/RFP/Assembly.lean`** (RFP ⟺ ZCL) | Not in PH plan | **No conflict** | |
-| **`MPS/ParentHamiltonian/GroundSpace.lean`** | **PH-0a in issue #191** | **Direct match** — our proposed file has the same name and content as the PH plan | Must coordinate: whoever implements first sets the API |
+| **`MPS/Tensor/GroundSpace/GroundSpace.lean`** | **PH-0a in issue #191** | **Direct match** — our proposed file has the same name and content as the PH plan | Must coordinate: whoever implements first sets the API |
 | **`MPS/ParentHamiltonian/FrustrationFree.lean`** | **PH-0b,c,d in issue #191** | **Direct match** — PH plan calls it `Defs.lean`, we call it `FrustrationFree.lean` | Minor naming difference. PH plan puts parent interaction + Hamiltonian + FF all in `Defs.lean`; we split into `FrustrationFree.lean`. Either works. |
-| **`MPS/ParentHamiltonian/Commuting.lean`** | **Not in PH plan** | **Extension** — the PH plan covers general (non-commuting) parent Hamiltonians from [CPGSV21]. Commuting parent Hamiltonians are specific to 1606.00608 §3. | The PH plan's `parentHamiltonian` definition should be general enough that `IsCommutingParentHam` is just a predicate on top. No conflict, just new content. |
+| **`MPS/ParentHamiltonian/Commuting/Defs.lean`** | **Not in PH plan** | **Extension** — the PH plan covers general (non-commuting) parent Hamiltonians from [CPGSV21]. Commuting parent Hamiltonians are specific to 1606.00608 §3. | The PH plan's `parentHamiltonian` definition should be general enough that `IsCommutingParentHam` is just a predicate on top. No conflict, just new content. |
 | **`MPS/ParentHamiltonian/Decorrelation.lean`** | Not in PH plan | **No conflict** — self-contained, dimension-independent | |
 | **`MPS/MPDO/` (all files)** | Not in PH plan | **No conflict** — entirely new territory | |
-| **Correlations.lean location** | **PR#226 proposes moving to `MPS/Core/`** | **Tension** — our scouting report assumes it stays in `ParentHamiltonian/`; PR#226 moves it to `Core/`. | If PR#226 merges, update imports in scouting report. The move is sensible: correlations are general MPS infrastructure, not PH-specific. Our RFP modules would import from `MPS/Core/Correlations`. |
+| **Correlations.lean location** | **PR#226 proposes moving to `MPS/Core/`** | **Tension** — our scouting report assumes it stays in `ParentHamiltonian/`; PR#226 moves it to `Core/`. | If PR#226 merges, update imports in scouting report. The move is sensible: correlations are general MPS infrastructure, not PH-specific. Our RFP modules would import from `MPS/Transfer/Correlation/Correlations`. |
 
 ### Key compatibility findings
 
@@ -538,7 +538,7 @@ Tier 5 ────────────────────────�
 
    **Recommendation**: Let the PH plan (#191) define these first (it's more general). The RFP modules then import and add predicates like `IsCommutingParentHam`, `IsNNCPH`.
 
-3. **Correlations.lean is moving.** PR#226 moves it from `ParentHamiltonian/` to `Core/`. This is good for the RFP modules — they'd import `MPS/Core/Correlations` rather than reaching into `ParentHamiltonian/`. The `correlationLength` definition there is compatible with our ZCL formalization (ZCL ⟺ ξ=0 ⟺ E²=E).
+3. **Correlations.lean is moving.** PR#226 moves it from `ParentHamiltonian/` to `Core/`. This is good for the RFP modules — they'd import `MPS/Transfer/Correlation/Correlations` rather than reaching into `ParentHamiltonian/`. The `correlationLength` definition there is compatible with our ZCL formalization (ZCL ⟺ ξ=0 ⟺ E²=E).
 
 4. **Blueprint ch14 doesn't exist yet.** The PH tracking document (`PARENT_HAMILTONIAN_ISSUES.md`) has a detailed outline for ch14, but the file hasn't been created. Our RFP formalization would need a separate blueprint chapter (ch16 or similar) for RFP-specific content, but the commuting-Hamiltonian parts could go in ch14 once it exists.
 
@@ -606,7 +606,7 @@ The RMP review (arXiv:2011.12127, Cirac–Pérez-García–Schuch–Verstraete, 
    while 1606.00608 Def 3.3 defines CID as:
    > ⟨Ψ|O₁O₂|Ψ⟩ = ⟨Ψ|O₁O₂'|Ψ⟩ (distance-independent)
 
-   These are **equivalent for single ground states** but the RMP version is more natural for degenerate ground spaces (GHZ example). For our formalization (Tier 1, `MPS/RFP/ZeroCorrelationLength.lean`), the E²=E characterization bypasses both — it's the clean formalization target.
+   These are **equivalent for single ground states** but the RMP version is more natural for degenerate ground spaces (GHZ example). For our formalization (Tier 1, `MPS/CanonicalForm/Correlation/ZeroCorrelationLength.lean`), the E²=E characterization bypasses both — it's the clean formalization target.
 
 4. **The RMP omits the multi-block MPDO case** in Thm 4.14. The RMP (line 977) explicitly says "we do not include the case of multiple blocks." The full generality is only in 1606.00608. This matters for Tier 5 formalization.
 
@@ -619,4 +619,4 @@ The RMP review (arXiv:2011.12127, Cirac–Pérez-García–Schuch–Verstraete, 
 6. **The "commuting parent Hamiltonian ⟺ RFP" equivalence** appears in both papers:
    - RMP line 893–895 cites 1606.00608 for the proof
    - 1606.00608 Thm 3.10 `thm:main-MPS` proves it (via [Beigi])
-   - Our `MPS/ParentHamiltonian/Commuting.lean` would bridge between the PH infrastructure (from RMP) and the RFP theory (from 1606.00608)
+   - Our `MPS/ParentHamiltonian/Commuting/Defs.lean` would bridge between the PH infrastructure (from RMP) and the RFP theory (from 1606.00608)

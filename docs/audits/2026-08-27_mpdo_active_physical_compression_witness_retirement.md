@@ -30,7 +30,7 @@ citations of
 
 The in-tree call site,
 `exists_etaLocalStructureData_supported_of_twoSidedPhysicalSlice` in
-`TNLean/MPS/MPDO/PhysicalSectorActiveBond.lean`, already uses the surviving
+`TNLean/MPS/MPDO/BNTSectors/BNTPhysicalSectorGSNNCH.lean`, already uses the surviving
 declarations directly. Its restricted factorization keeps an explicit type
 ascription, which supplies the type-level behavior formerly exposed by
 `factorizationForRestrictionData`.

@@ -3,7 +3,7 @@
 Date: 2026-10-11. PR: chore(deps): bump QICLean to the rectangular trace norm
 truncation and drop the local nuclear-norm module.
 
-LionSR/QICLean#781 adds `QICLean/Analysis/RectangularTraceNormTruncation.lean`,
+LionSR/QICLean#781 adds `QICLean/Analysis/TraceNorm/RectangularTraceNormTruncation.lean`,
 which states the estimates of `TNLean/Algebra/NuclearNormTruncation.lean` for
 QICLean's `Matrix.rectangularTraceNorm`. Most declarations have the same fully
 qualified name in both libraries, so keeping the TNLean module would make the

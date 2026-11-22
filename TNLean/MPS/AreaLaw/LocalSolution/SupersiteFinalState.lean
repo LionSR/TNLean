@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LocalSolution.ClosingLink
-import TNLean.MPS.AreaLaw.LocalSolution.SupersiteHierarchy
+import TNLean.MPS.AreaLaw.Spectral.SupersiteHierarchy
 
 /-!
 # The final states of the hierarchy on supersites

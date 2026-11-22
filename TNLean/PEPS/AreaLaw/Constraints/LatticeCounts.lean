@@ -1,0 +1,89 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.Lattice.BufferedRectangles
+import TNLean.PEPS.AreaLaw.Constraints.CrossingBudget
+import TNLean.PEPS.AreaLaw.Interactions.GraphPropagation
+
+/-!
+# Counting bounds on an induced square-lattice domain
+
+The graph-theoretic results of Section 4 of the area-law manuscript take as hypotheses the
+counts of Section 2: graph balls and spheres of radius `d` have at most a constant times
+`(d + 1)²` sites, each support has at most `v_R = 1 + 2 R (R + 1)` sites, at most
+`μ_R = 2 ^ (v_R - 1)` supports contain a given site, so at most `μ_R` labels share an
+anchor and the norms of the terms meeting a site sum to at most `μ_R J`. The sphere,
+support-diameter, support-size and site-budget counts are proved in
+`TNLean.PEPS.AreaLaw.GraphPropagation`, and the count of supports containing a site is
+`TNLean.PEPS.AreaLaw.card_admissibleSupport_containing_le`; this file adds the remaining
+counts on the induced nearest-neighbour graph of an arbitrary finite domain, holes and
+disconnected components included, from the ambient diamond count `eq:ball-count`.
+
+## Main results
+
+* `TNLean.PEPS.AreaLaw.card_graphBall_domainGraph_le`: `|N_d(x)| ≤ 2 (d + 1)²`.
+* `TNLean.PEPS.AreaLaw.card_anchor_fiber_le`: at most `μ_R` labels per anchor.
+* `TNLean.PEPS.AreaLaw.card_interedges_compl_le_card_edgeBoundary`: ordered cut edges are
+  counted by the unordered edge boundary `∂_Λ X`.
+
+## References
+
+* OpenAI, *A two-dimensional area law from a global spectral gap*, September 24, 2026,
+  `eq:ball-count` and the multiplicity bound after it (`01-preliminaries.tex`, lines 82–103),
+  and `eq:quasilocal-budget` (`03-quasilocal.tex`, lines 30–40).
+  Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. Independently
+  formalized from the manuscript; no upstream Lean proof text is reused.
+-/
+
+open scoped Matrix.Norms.L2Operator
+open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport card_le_diamond_of_edist_le
+  latticeL1Distance_le_one_of_planeDomainGraph_adj planeDomainGraph)
+
+namespace TNLean.PEPS.AreaLaw
+
+open QuantumCircuit
+
+variable {Λ : Finset (ℤ × ℤ)}
+
+/-- **Ball count** (`eq:ball-count`, `01-preliminaries.tex`, lines 82–87): a graph ball of
+radius `d` in an induced domain has at most `1 + 2 d (d + 1) ≤ 2 (d + 1)²` sites. -/
+theorem card_graphBall_domainGraph_le (x : Site Λ) (d : ℕ) :
+    ((ManyBody.graphBall (planeDomainGraph Λ) x d).card : ℝ) ≤ 2 * ((d : ℝ) + 1) ^ 2 := by
+  have h := card_le_diamond_of_edist_le (G := planeDomainGraph Λ) Subtype.val
+    (ManyBody.graphBall (planeDomainGraph Λ) x d) Subtype.val_injective
+    (fun _ _ => latticeL1Distance_le_one_of_planeDomainGraph_adj) x d (fun y hy =>
+        ManyBody.mem_graphBall.mp hy)
+  have h' : ((ManyBody.graphBall (planeDomainGraph Λ) x d).card : ℝ) ≤ 1 + 2 * d * (d + 1) := by
+    exact_mod_cast h
+  nlinarith
+
+/-- **Anchor multiplicity**: if every label is anchored inside its support, at most `μ_R`
+labels share an anchor (`03-quasilocal.tex`, lines 30–33). -/
+theorem card_anchor_fiber_le {R : ℕ} (a : AdmissibleSupport Λ R → Site Λ)
+    (ha : ∀ X, a X ∈ X.1) (x : Site Λ) :
+    (Finset.univ.filter fun X => a X = x).card ≤ 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
+  (Finset.card_le_card fun X hX => by
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hX ⊢
+    exact hX ▸ ha X).trans (card_admissibleSupport_containing_le (R := R) x)
+
+/-- Ordered cut edges `(u, v)`, `u ∈ X`, `v ∉ X`, are no more numerous than the unordered
+edges of `∂_Λ X` (`03-quasilocal.tex`, line 436). -/
+theorem card_interedges_compl_le_card_edgeBoundary (X : Finset (Site Λ)) :
+    ((planeDomainGraph Λ).interedges X Xᶜ).card ≤
+      (ManyBody.edgeBoundary (planeDomainGraph Λ) X).card := by
+  classical
+  refine Finset.card_le_card_of_injOn (fun p => s(p.1, p.2)) ?_ ?_
+  · intro p hp
+    simp only [Finset.mem_coe, SimpleGraph.mem_interedges_iff, Finset.mem_compl] at hp ⊢
+    exact ManyBody.mk_mem_edgeBoundary_iff.mpr ⟨hp.2.2, Or.inl ⟨hp.1, hp.2.1⟩⟩
+  · intro p hp p' hp' he
+    simp only [Finset.mem_coe, SimpleGraph.mem_interedges_iff, Finset.mem_compl] at hp hp'
+    rcases Sym2.eq_iff.mp he with ⟨h1, h2⟩ | ⟨h1, h2⟩
+    · exact Prod.ext h1 h2
+    · exact absurd (h1 ▸ hp.1) hp'.2.1
+
+end TNLean.PEPS.AreaLaw

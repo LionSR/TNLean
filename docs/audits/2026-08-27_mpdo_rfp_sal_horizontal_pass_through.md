@@ -7,7 +7,7 @@ blueprint `\lean{}` tag.
 
 | Removed | Replacement |
 |---|---|
-| `MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS` (`TNLean/MPS/MPDO/RFPViaTSSAL.lean`) | `MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero` (same file), applied to the nonvanishing positive-length traces supplied by `MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS` |
+| `MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS` (`TNLean/MPS/MPDO/RFP/RFPViaTSSAL.lean`) | `MPOTensor.isSourceZCL_and_isSAL_of_isRFPViaTS_of_trace_ne_zero` (same file), applied to the nonvanishing positive-length traces supplied by `MPOTensor.trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS` |
 
 The removed theorem's whole body was that composition, so any future caller
 reconstructs it in two lines at the use site.
@@ -37,4 +37,4 @@ It remains reachable through its paper-gap citation.
 
 ## Net effect
 
-`TNLean/MPS/MPDO/RFPViaTSSAL.lean` goes from 504 to 480 lines.
+`TNLean/MPS/MPDO/RFP/RFPViaTSSAL.lean` goes from 504 to 480 lines.

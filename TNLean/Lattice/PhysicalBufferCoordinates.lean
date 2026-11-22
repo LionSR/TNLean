@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.Circuit.RegionSplit
-import QICLean.Entropy.RegionPurificationSplitting
-import QICLean.Entropy.PhysicalBufferOverlap
+import QICLean.ManyBody.Entropy.RegionPurificationSplitting
+import QICLean.Entropy.MutualInformation.PhysicalBufferOverlap
 
 /-!
 # Buffer operators in paired physical coordinates

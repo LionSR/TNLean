@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Logic.Equiv.Fin.Basic
-import TNLean.MPS.Core.Blocking
+import TNLean.MPS.Tensor.Physical.Blocking
 import TNLean.QCA.LocalAlgebra
 
 /-!

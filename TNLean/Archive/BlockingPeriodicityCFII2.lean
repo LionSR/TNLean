@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Irreducible.FormII
-import TNLean.MPS.Core.BlockingTransfer
-import TNLean.MPS.Irreducible.FixedPointProjection
-import TNLean.MPS.Core.TransferPeripheral
+import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
+import TNLean.MPS.Tensor.Physical.BlockingTransfer
+import TNLean.MPS.Transfer.Irreducible.FixedPointProjection
+import TNLean.MPS.Transfer.Irreducible.TransferPeripheral
 import QICLean.Channel.Peripheral.PeriodicityRemoval
 import QICLean.Channel.Peripheral.Conjugation
 

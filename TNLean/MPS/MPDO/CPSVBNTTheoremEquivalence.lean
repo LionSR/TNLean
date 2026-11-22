@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.BNTAlgebraTensorClauseReflectedTarget
-import TNLean.MPS.MPDO.BNTFusionTensorClauseFromRFP
+import TNLean.MPS.MPDO.AmbientSectorMaps.BNTAlgebraTensorClauseReflectedTarget
+import TNLean.MPS.MPDO.Fusion.BNTFusionTensorClauseFromRFP
 
 /-!
 # The BNT form of the general MPDO renormalization fixed-point theorem
@@ -28,6 +28,8 @@ CPSV canonical form.
 noncomputable section
 
 namespace MPOTensor
+
+variable {d D : ℕ}
 
 /-- **Theorem 4.14(i) if and only if (ii).** For an MPDO in literal CPSV
 canonical form, the renormalization fixed-point condition is equivalent to

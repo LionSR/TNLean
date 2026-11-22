@@ -35,7 +35,7 @@ commutator remain Blueprint-tagged and unchanged in statement.
 
 ## Private duplicate
 
-`TNLean/MPS/MPDO/KatoDeformedRFPObstruction.lean` defined both
+`TNLean/MPS/Examples/MPDOCounterexamples/KatoDeformedRFPObstruction.lean` defined both
 `block0Weight` and `blockLetterAmplitude` as the same complex number,
 `1 / Real.sqrt 2`, and proved the same square calculation twice. The deletion
 test uses `blockLetterAmplitude` as the zero-block weight, removes
@@ -49,10 +49,10 @@ Three direct imports elaborate redundantly against the present dependency
 graph and are removed:
 
 - `Mathlib.LinearAlgebra.Dimension.Constructions` from
-  `TNLean/MPS/RFP/BeigiGroundSpaceDimension.lean`;
-- `QICLean.Algebra.MatrixIsometryEntries` from
-  `TNLean/MPS/RFP/BeigiLoopInjectivity.lean`;
-- `QICLean.Algebra.MatrixIsometryEntries` from `TNLean/MPS/RFP/Defs.lean`.
+  `TNLean/MPS/ParentHamiltonian/Commuting/SectorGraph/BeigiEventuallyConstantSectorGraph.lean`;
+- `QICLean.Algebra.Unitary.MatrixIsometryEntries` from
+  `TNLean/MPS/ParentHamiltonian/Commuting/SectorGraph/BeigiLoopInjectivity.lean`;
+- `QICLean.Algebra.Unitary.MatrixIsometryEntries` from `TNLean/MPS/Transfer/RenormalizationFixedPoint/Defs.lean`.
 
 These removals change no declaration or Blueprint reference. Their net
 reduction is 3 lines.

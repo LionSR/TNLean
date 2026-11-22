@@ -24,7 +24,7 @@ section use the names as they are after it.
 The source introduces three properties of a channel
 (`Papers/0909.5347/main.tex:403-430`) and proves them equivalent
 (Proposition 3, `:501-509`). The proposition is now the single theorem
-`MPSTensor.primitivity_tfae` of `TNLean/Wielandt/Primitivity/Equivalence.lean`:
+`MPSTensor.primitivity_tfae` of `TNLean/MPS/Transfer/Primitivity/Equivalence.lean`:
 for `[NeZero D]` and `∑ i, (A i)ᴴ * A i = 1`, a `List.TFAE` of
 
 1. `∃ q, 0 < q ∧ ∀ φ, φ ≠ 0 → Kraus.vectorSpreadSpan A φ q = ⊤`;
@@ -112,8 +112,8 @@ normalization, which its proof uses.
 
 The coherent prerequisite allowlist `scripts/coherent_tn_prerequisites.json`
 drops the two deleted modules it named; their content is in the already
-listed `TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank` and
-`TNLean.Wielandt.RectangularSpan.Universality`. Its recorded baseline commit
+listed `TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank` and
+`TNLean.MPS.Transfer.Primitivity.RectangularSpan`. Its recorded baseline commit
 is unchanged, so an export needs a new baseline once this change is on `main`.
 
 ## Blueprint
@@ -158,7 +158,7 @@ Four of them concern the predicate and Kraus-level operations only, and are
 candidates to move to QICLean: `smul_inv_trace` (with its three auxiliary
 lemmas `fixedPointProj_smul`, `Matrix.trace_inv_trace_smul` and
 `Matrix.PosDef.inv_trace_smul` of
-`TNLean/MPS/Structure/PrimitiveFixedPoint.lean`),
+`TNLean/MPS/Transfer/Primitivity/PrimitiveFixedPoint.lean`),
 `transferMap_pow_tendsto_fixedPointProj`, `reindexPhysical` and `blockTensor`.
 The proof of `blockTensor` uses
 `MPSTensor.tp_primitive_irreducible_extra_blocking`, which would have to move

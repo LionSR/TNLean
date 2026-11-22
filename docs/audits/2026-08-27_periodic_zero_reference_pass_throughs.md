@@ -9,8 +9,8 @@ find: the 2026-08-26 periodic sweep passed over both.
 
 | Removed | Replacement |
 |---|---|
-| `MPSTensor.gaugeEquiv_of_sameMPV_rotatePhysical` (`TNLean/MPS/Periodic/Applications.lean`) | `MPSTensor.fundamentalTheorem_singleBlock` (`TNLean/MPS/FundamentalTheorem/Basic.lean`) |
-| `MPSTensor.perBlock_zgauge_of_power_eq` (`TNLean/MPS/Periodic/FundamentalTheorem.lean`) | `MPSTensor.zgauge_construction` (same file) |
+| `MPSTensor.gaugeEquiv_of_sameMPV_rotatePhysical` (`TNLean/MPS/Transfer/Irreducible/PeriodicRotation.lean`) | `MPSTensor.fundamentalTheorem_singleBlock` (`TNLean/MPS/Tensor/Gauge/FundamentalTheorem.lean`) |
+| `MPSTensor.perBlock_zgauge_of_power_eq` (`TNLean/MPS/FundamentalTheorem/Periodic/RepeatedBlocks.lean`) | `MPSTensor.zgauge_construction` (same file) |
 
 ## What was checked
 

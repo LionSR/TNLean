@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.Word
-import QICLean.Algebra.TraceReindex
+import QICLean.Algebra.Matrix.MatrixReindex
 import Mathlib.Data.Matrix.Block
 import Mathlib.LinearAlgebra.Matrix.Reindex
 import TNLean.MPS.Tensor

@@ -360,7 +360,7 @@ theorem nonzero_block_span_eq_of_sameMPV₂_after_blocking
 - `TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean` — structural chain + "What remains" (lines 2339–2379)
 - `TNLean/MPS/CanonicalForm/Assembly/ProportionalComparison.lean` — common phase/span hypotheses
 - `TNLean/MPS/CanonicalForm/Assembly/CyclicSectorDecomposition.lean` — `flattenWordOfBlock_cast_eq` (line 1482)
-- `TNLean/MPS/CanonicalForm/BNTGrouping.lean` — norm-class collapse; docstring documents restricted scope
+- `TNLean/MPS/CanonicalForm/BNT/Grouping.lean` — norm-class collapse; docstring documents restricted scope
 - `TNLean/MPS/CanonicalForm/EqualNormBridge.lean` — one-sided BNT construction with overlap data
 - `blueprint/src/chapter/ch11_assembly.tex` — `\notready` at `thm:ft_equal` (line 192) and remark (line 1714)
 - Previous audits: `audits/2026-04-21_issue652_gap1_blocker.md`, `audits/2026-04-23_issue652_gap1_followup.md`, `audits/2026-04-26_issue877_after_blocking_sector.md`, `audits/2026-05-01_issue1075_fintype_coordinate_obstacle.md`, `audits/2026-05-01_issue1068_common_phase_cover_from_common_sectors.md`

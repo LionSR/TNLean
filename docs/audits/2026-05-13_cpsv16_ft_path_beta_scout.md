@@ -147,7 +147,7 @@ The brief described `spectralLevel` as a direct structure field.  Lean 4 rejects
 
 ### Adapter construction
 
-The adapter `IsCanonicalFormBNT.toIsBNTCanonicalFormSD` uses the existing `trivialSectorDecomp` and `sameMPV₂_trivialSectorDecomp` from `TNLean/MPS/CanonicalForm/BNTGrouping.lean`, with:
+The adapter `IsCanonicalFormBNT.toIsBNTCanonicalFormSD` uses the existing `trivialSectorDecomp` and `sameMPV₂_trivialSectorDecomp` from `TNLean/MPS/CanonicalForm/BNT/Grouping.lean`, with:
 
 * `spectralLevel := μ`,
 * `spectralLevel_ne_zero := hCF.toIsCanonicalForm.mu_ne_zero`,
@@ -160,7 +160,7 @@ No new helper lemmas were needed — `trivialSectorDecomp`, `sameMPV₂_trivialS
 ### Naming and file placement decisions
 
 * **Replaced the one-layer stub in place.**  The previous `IsBNTCanonicalFormSD` had fields `unit_modulus` and `bnt_data`; both are gone in the two-layer version.  No consumers needed updates (only `TNLean.lean` registered the module; no callers existed).
-* **No new files.**  The adapter lives in the same file as the structure definition (`IsBNTCanonicalFormSD.lean`), matching the co-location pattern of `IsCanonicalFormBNT.isBNT` in `MPS/BNT/Construction.lean`.  `TNLean.lean` already imports `TNLean.MPS.FundamentalTheorem.SectorDecomposition.IsBNTCanonicalFormSD` at line 231; no registration change was needed.
+* **No new files.**  The adapter lives in the same file as the structure definition (`IsBNTCanonicalFormSD.lean`), matching the co-location pattern of `IsCanonicalFormBNT.isBNT` in `MPS/CanonicalForm/BNT/Construction.lean`.  `TNLean.lean` already imports `TNLean.MPS.FundamentalTheorem.SectorDecomposition.IsBNTCanonicalFormSD` at line 231; no registration change was needed.
 
 ### PR 2 pick-up
 
@@ -201,7 +201,7 @@ In `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD.lean`
   `(∀ h : 0 < P.basisCount, ‖lam ⟨0, h⟩‖ = 1)`.  This is vacuous when
   `P.basisCount = 0` and asserts unit modulus of the dominant level
   otherwise, exactly mirroring `IsNormalCanonicalFormBNT.mu_dom_norm_one`
-  in `TNLean/MPS/BNT/Construction.lean`.
+  in `TNLean/MPS/CanonicalForm/BNT/Construction.lean`.
 * A new accessor `IsBNTCanonicalFormSD.spectralLevel_dom_norm_one`
   extracts the dominant unit-modulus condition.
 * A new corollary `IsBNTCanonicalFormSD.spectralLevel_norm_le_one`

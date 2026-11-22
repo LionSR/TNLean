@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.QCA.SupportAlgebraCommutation
 import TNLean.QCA.SupportAlgebraGeneration
 import TNLean.QCA.QuasiLocalCommutant
-import QICLean.Algebra.StarSubalgebraFactor
+import QICLean.Algebra.StarSubalgebra.Factor
 
 /-!
 # Scalar centers and matrix presentations of the QCA support algebras

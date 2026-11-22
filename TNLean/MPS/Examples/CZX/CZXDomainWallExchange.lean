@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.CZX.CZXDomainWalls
-import TNLean.MPS.Symmetry.MPOSymmetry.DomainWallExchange
+import TNLean.MPS.FundamentalTheorem.OperatorGroup.DomainWallExchange
 
 /-!
 # CZX: equal domain-wall phases and a string over a pair of walls

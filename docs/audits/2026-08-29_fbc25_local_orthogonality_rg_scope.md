@@ -87,7 +87,7 @@ The equivalent rectangular linear-map form is
 for every \(D_x\times D_y\) matrix \(X\).  This is the convention implemented
 by `Kraus.mixedMapLM A_x A_y`.  Accordingly,
 `MPSTensor.IsBNTLocallyOrthogonal blocks` in
-`TNLean/MPS/RFP/ZeroCorrelationLength.lean` is exactly the family of equations
+`TNLean/MPS/CanonicalForm/Correlation/ZeroCorrelationLength.lean` is exactly the family of equations
 
 ```text
 ∀ x y, x ≠ y → Kraus.mixedMapLM (blocks x) (blocks y) = 0.

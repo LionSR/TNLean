@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.DistributedOperatorContraction
 import TNLean.Lattice.Compression.PartyProductScalar
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Absorbing a scalar into a distributed local matrix

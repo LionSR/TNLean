@@ -4,7 +4,7 @@ This branch adds checked auxiliary identities for transporting nonzero-block wei
 
 ## Lean declarations added
 
-In `TNLean/MPS/Core/BlockingInfrastructure.lean`:
+In `TNLean/MPS/Transfer/Irreducible/BlockingInfrastructure.lean`:
 
 - `MPSTensor.blockedFlatConfig` and `MPSTensor.mpv_blockTensor_eq_mpv_blockedFlatConfig`: shared flattened-configuration helpers for reusing the same original physical word across blocked tensors.
 - `MPSTensor.sameMPV₂_blockTensor_toTensorFromBlocks`: direct adapter saying that blocking an assembled weighted block tensor agrees, as an MPV family, with assembling the individually blocked blocks and powered weights.
@@ -73,7 +73,7 @@ New declarations in `TNLean/MPS/CanonicalForm/Assembly/CyclicSectorDecomposition
 - `MPSTensor.CommonBlockedCyclicSectorFamily.commonFlatWeight_apply_block_eq`: all sectors
   from the same original block carry the same transported weight.
 
-Updated documentation in `TNLean/MPS/Core/BlockingInfrastructure.lean`:
+Updated documentation in `TNLean/MPS/Transfer/Irreducible/BlockingInfrastructure.lean`:
 
 - The blocked-word identification gap now explicitly references issue #1113
   (Fintype coordinate equality for grouped-block relabeling).

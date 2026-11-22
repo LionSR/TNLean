@@ -56,7 +56,7 @@ No individual redistribution is needed for the proved aggregate identities.
 The three reference regions are
 $[0,a+1)$, $[a+3,a+s-2)$, and $[a+s,L)$.
 Their actual internal sums $A_j$ have pairwise disjoint supports. The
-module \doclink{TNLean/MPS/AreaLaw/AKLV/Normalization} constructs genuine minima $e_j$
+module \doclink{TNLean/MPS/AreaLaw/ChebyshevAGSP/Normalization} constructs genuine minima $e_j$
 and a common unit vector attaining them. The remaining at most six boundary
 contractions give an attained ground energy $E_0\in[0,6]$ for
 $H=\sum_i h_i-(\sum_j e_j)\Id$.
@@ -72,7 +72,7 @@ they are not asserted to be their attained minima.
 
 \section{A polynomial threshold and an aligned actual ground vector}
 
-The module \doclink{TNLean/MPS/AreaLaw/AKLV/PhysicalRobustness} retains the actual unit
+The module \doclink{TNLean/MPS/AreaLaw/ChebyshevAGSP/PhysicalRobustness} retains the actual unit
 ground vector $\Omega$, energy $\mu$, and first excited energy $\mu+g$
 of the original nearest-neighbour Hamiltonian, with $g>0$.
 The ground-line gap and the original endpoint trial-vector argument derive
@@ -156,7 +156,7 @@ interactions. The exponential residual comparison, the spectral cluster and
 the robustness theorem then apply verbatim, with the same genuine minima,
 the same thresholds $T(g)$ and $(1024/g)(E_0/g+1)$, the same gap $9g/10$
 and the same squared error $e^{-t/16}/100$. This is proved for every
-$s\ge1$ in \doclink{TNLean/MPS/AreaLaw/AKLV/PhysicalRobustness}, and in
+$s\ge1$ in \doclink{TNLean/MPS/AreaLaw/ChebyshevAGSP/PhysicalRobustness}, and in
 particular for $s\in\{1,2\}$.
 
 \paragraph{Classification.}
@@ -173,7 +173,7 @@ changing-target construction use its shorter retained window.
 The source does not state a numerical minimum for $s$ beside
 Theorem~6.1. Its application at line 1023 chooses $s=O(\log^2 d/g)$ with
 a sufficiently large constant. The actual uniform choice in
-\doclink{TNLean/MPS/AreaLaw/AKLV/FavorableFilter} proves $s\ge21$, so this
+\doclink{TNLean/MPS/AreaLaw/ChebyshevAGSP/ClippedFilter} proves $s\ge21$, so this
 application satisfies the restriction. The clipped filter and the
 changing-target sequence keep the stronger requirement $s\ge6$, which
 they use in their division-with-remainder degree count; the application
@@ -194,7 +194,7 @@ At source line 1023, the product-overlap inequality is printed with
 $\le$; the cited Lemma~2.2 gives $\ge1/\sqrt{2D}$.
 For the initial application to the clipped filter, its fixed vector is the
 actual clipped ground vector $\phi^{t_0}$.
-The construction in \doclink{TNLean/MPS/AreaLaw/AKLV/Initialization}
+The construction in \doclink{TNLean/MPS/AreaLaw/ChebyshevAGSP/Initialization}
 therefore chooses a product vector $\chi$ satisfying
 \begin{align*}
  |\langle\phi^{t_0},\chi\rangle|\ge1/\sqrt{2D}.
@@ -221,7 +221,7 @@ sequence or entropy theorem.
 
 \section{The coherent changing-target sequence}
 
-The construction in \doclink{TNLean/MPS/AreaLaw/AKLV/ChangingTargets}
+The construction in \doclink{TNLean/MPS/AreaLaw/ChebyshevAGSP/ChangingTargetStep}
 uses one dependent recursion on the actual preceding unit vector. Its
 fixed regional minima come from the physical initialization; the minimizing
 energies returned by later refinements agree with them by uniqueness of
@@ -249,7 +249,7 @@ also separate and is not replaced by this fixed-window recursion.
 
 \section{Accuracy-dependent windows and the sharp rank comparison}
 
-The construction in \doclink{TNLean/MPS/AreaLaw/AKLV/AccuracyWindow}
+The construction in \doclink{TNLean/MPS/AreaLaw/ChebyshevAGSP/OptimizedTailParameters}
 chooses the source's accuracy-dependent enlarged window at a prescribed
 physical cut. A fitting enlarged window admits the actual initial window
 at that same cut. Refinement applies the actual polynomial to that actual
@@ -272,7 +272,7 @@ logarithm
 32(\lfloor\ell/s\rfloor+\lfloor\sqrt\ell\rfloor+1)\log(q(\ell+1)),\,
 (s-\lfloor s/2\rfloor)\log q\bigr\}.
 \end{align*}
-The construction in \doclink{TNLean/MPS/AreaLaw/AKLV/OptimizedRankBound}
+The construction in \doclink{TNLean/MPS/AreaLaw/ChebyshevAGSP/OptimizedRankBound}
 now proves the uniform comparison
 \begin{align*}
  \log B\le C_A\left[\frac{u^3}{g}+
@@ -288,14 +288,14 @@ most $s_0\log q+2m\log q$, which is absorbed by the same bound.
 No exponential-in-degree replacement is used.
 
 The physical theorem in
-\doclink{TNLean/MPS/AreaLaw/AKLV/SharpPerCutApproximation}
+\doclink{TNLean/MPS/AreaLaw/ChebyshevAGSP/SharpPerCutApproximation}
 derives $q\ge2$ and $g\le1$ from the two distinct spectral values and
 the original unique-ground positive-contraction chain, independently
 of window fit. Neither is a new hypothesis. The actual excited spectral
 value $\mu+g$ remains explicit; the statement is not asserted for every
 arbitrary projector-gap lower bound without choosing an actual gap.
 
-Finally \doclink{TNLean/MPS/AreaLaw/AKLV/SharpMPSApproximation}
+Finally \doclink{TNLean/MPS/AreaLaw/ChebyshevAGSP/SharpMPSApproximation}
 sets $\rho=\epsilon^2/[16(L+1)]$. The actual per-cut approximants give
 Schmidt discarded mass at most $\rho$. Sequential truncation by the
 leading marginal spectral projections has squared error at most
@@ -309,7 +309,7 @@ approximation route. The entropy summation from the separate coherent
 changing-target sequence is also completed below.
 \section{Entropy from the actual coherent sequence}
 
-The module \doclink{TNLean/MPS/AreaLaw/AKLV/SequenceEntropyParameters}
+The module \doclink{TNLean/MPS/AreaLaw/ChebyshevAGSP/SequenceEntropyParameters}
 proves, for the actual selected degrees and filter ranks,
 \begin{align*}
  1\le\ell_j&\le240s(j+1),&
@@ -328,7 +328,7 @@ marginal dimension. The existing finite dyadic quadratic moment gives
 The actual marginal tails $2^{-i}/16$ supplied by the coherent sequence
 imply entropy at most $300000\log D_0$.
 
-The module \doclink{TNLean/MPS/AreaLaw/AKLV/PhysicalEntropy} combines
+The module \doclink{TNLean/MPS/AreaLaw/ChebyshevAGSP/PhysicalEntropy} combines
 this estimate with the actual initial-width bound. If the prescribed
 initial window fails to fit, the exact smaller-side dimension estimate
 $S_k\le\min\{k,L-k\}\log q\le s\log q$ suffices. The resulting theorem

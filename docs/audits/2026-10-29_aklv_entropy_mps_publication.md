@@ -65,13 +65,13 @@ the exact source revision of each added file. Those PRs remain the units
 of review; this combined revision introduces no further mathematical proof.
 
 The existing `Entropy.localLift_sub` declaration is supplied by
-`QICLean.Representation.RelativePin`. Its duplicate local definition is
+`QICLean.ManyBody.Replica.RelativePin`. Its duplicate local definition is
 removed from `SequentialTruncation.lean`, preserving the theorem name and
 statement. The monotonicity of the allowed open-MPS bond dimension is also
 included; the same elementary result occurs in the separate LVV submission.
 
 Likewise, `WordMultiplicity.wordCoefficient` is now supplied by
-`QICLean.Algebra.WordCoefficient`. The identical definition is removed from
+`QICLean.Algebra.Word.WordMultiplicity`. The identical definition is removed from
 `TNLean/Algebra/TwoMarkerScalarRecovery.lean`, which imports the companion
 module. The ordered-word sum, public name, and existing consumers are unchanged.
 

@@ -16,9 +16,9 @@ and then confirmed by a full `lake build`.
 
 | Removed | Replacement |
 |---|---|
-| `TNLean.PEPS.normalSquareEdgeBlockingHypotheses_of_interiorData_injective_chain` | `(normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).injective_chain_at_edge e` applied at the use site, exactly as the retained siblings do in `TNLean/PEPS/NormalEdgeBlockingTranslated.lean` and `TNLean/PEPS/NormalSquarePEPSBlocking.lean` |
+| `TNLean.PEPS.normalSquareEdgeBlockingHypotheses_of_interiorData_injective_chain` | `(normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).injective_chain_at_edge e` applied at the use site, exactly as the retained siblings do in `TNLean/PEPS/Injectivity/Normal/NormalEdgeBlockingTranslated.lean` and `TNLean/PEPS/Injectivity/Normal/NormalSquarePEPSBlocking.lean` |
 | `TNLean.PEPS.normalSquareEdgeBlockingHypotheses_of_interiorData_endpoint_disjoint_cover` | `(normalSquareEdgeBlockingHypotheses_of_interiorData h hUnion data).endpoint_disjoint_cover_at_edge e` applied at the use site |
-| `TNLean.PEPS.normalSquareBlockingRegions_of_overlap` | `normalSquareBlockingRegions_of_TCover h (regionInjectivityUnionClosure_of_overlap A hpos) hWidth hHeight cover` (`TNLean/PEPS/NormalSquareInjectivity.lean`), which is the blueprint-cited survivor |
+| `TNLean.PEPS.normalSquareBlockingRegions_of_overlap` | `normalSquareBlockingRegions_of_TCover h (regionInjectivityUnionClosure_of_overlap A hpos) hWidth hHeight cover` (`TNLean/PEPS/Injectivity/Normal/NormalSquareInjectivity.lean`), which is the blueprint-cited survivor |
 | `TNLean.PEPS.isTwoBlockInjective_regionTwoBlock_of_isVertexInjective` | `isTwoBlockInjective_regionTwoBlock A R (regionBlockedTensorInjective_of_isVertexInjective A R hA hpos)` |
 | `TNLean.PEPS.NormalPEPSBlockingHypotheses.isTwoBlockInjective_redTwoBlock` | `isTwoBlockInjective_regionTwoBlock A (h.edgeBlocking.red e) (h.injective_chain_at_edge e).1` |
 | `TNLean.PEPS.NormalPEPSBlockingHypotheses.isTwoBlockInjective_blueTwoBlock` | `isTwoBlockInjective_regionTwoBlock A (h.edgeBlocking.blue e) (h.injective_chain_at_edge e).2.1` |
@@ -61,26 +61,26 @@ The Blueprint tags at
 `TNLean.PEPS.complementTwoBlock` and
 `TNLean.PEPS.isTwoBlockInjective_complementTwoBlock` were checked and left
 untouched: they resolve to the vertex-complement declarations in
-`TNLean/PEPS/FundamentalTheorem/OneVertexComparison.lean`, not to the
+`TNLean/PEPS/FundamentalTheorem/Injective/OneVertexComparison.lean`, not to the
 edge-centred wrappers retired here, whose full names carried the
 `NormalPEPSBlockingHypotheses` namespace prefix.
 
 ## Deferred
 
 `TNLean.PEPS.edgeGaugeOfCycleGauge` in
-`TNLean/PEPS/CycleMPSFundamentalTheorem.lean` became zero-reference once its
+`TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSFundamentalTheorem.lean` became zero-reference once its
 round-trip identity was retired. It is left in place, still described by the
 module docstring, for a follow-up slice rather than widening this one.
 
 The identically-shaped unreferenced accessors
 `normalSquareEdgeBlockingHypotheses_injective_chain_of_marginCovers` and
 `normalSquareEdgeBlockingHypotheses_endpoint_disjoint_cover_of_marginCovers`
-in `TNLean/PEPS/NormalEdgeBlockingTranslated.lean` are the same shape and need
+in `TNLean/PEPS/Injectivity/Normal/NormalEdgeBlockingTranslated.lean` are the same shape and need
 their own verification pass.
 
 ## Imports
 
-No import was removed. `TNLean/PEPS/NormalEdgeGauge.lean` keeps
-`TNLean.PEPS.NormalBlocking` even though its own surviving content no longer
+No import was removed. `TNLean/PEPS/FundamentalTheorem/Normal/NormalEdgeGauge.lean` keeps
+`TNLean.PEPS.Injectivity.Normal.NormalBlocking` even though its own surviving content no longer
 needs it: its two direct importers and their transitive consumers reach PEPS
 material through that path.

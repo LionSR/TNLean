@@ -3,10 +3,10 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import QICLean.Algebra.NatSquarePlusOne
+import QICLean.Algebra.Combinatorics.NatSquarePlusOne
 import TNLean.MPS.Examples.Fibonacci.FibonacciAction
 import TNLean.MPS.Examples.Fibonacci.FibonacciUnit
-import TNLean.MPS.Symmetry.MPOSymmetry.Character
+import TNLean.MPS.Symmetry.MPOSymmetry.Fusion.Character
 
 /-!
 # Fibonacci anomaly: no single normal state carries the Fibonacci symmetry

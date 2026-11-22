@@ -5,10 +5,10 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.CZX.CZXSquare
 import TNLean.MPS.Examples.CZY.CZYTensor
-import TNLean.MPS.FundamentalTheorem.Reduction.Splitting
-import TNLean.MPS.MPDO.BondOneOperator
-import TNLean.MPS.MPDO.IdentityTensor
-import TNLean.MPS.MPDO.OperatorFromWordTrace
+import TNLean.MPS.FundamentalTheorem.Compression.Splitting
+import TNLean.MPS.Operator.Periodic.BondOneOperator
+import TNLean.MPS.Operator.Defs
+import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
 
 /-!
 # CZY: the stacked square as a nonsplit compression onto the identity

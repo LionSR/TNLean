@@ -129,7 +129,7 @@ removed: `Matrix.PosSemidef.gap_mono` and
 are absent from TNLean main's QICLean revision `14ecc5b64b`.
 The duplicate TNLean declaration
 `Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose` is removed from
-`MPS/Core/Blocking.lean`; the imported QICLean theorem now supplies it under
+`MPS/Tensor/Physical/Blocking.lean`; the imported QICLean theorem now supplies it under
 the same name.
 
 Verification after reconciliation:
@@ -138,7 +138,7 @@ Verification after reconciliation:
   the updated QICLean dependency. The initial build exposed the duplicate
   adjoint-injectivity declaration above; the full build was repeated after
   its removal.
-- `MPS/Core/Blocking.lean` passes strict elaboration with warnings as errors,
+- `MPS/Tensor/Physical/Blocking.lean` passes strict elaboration with warnings as errors,
   both automatic implicit options disabled, Mathlib standard linters and
   the package synthesis-depth limit.
 - Imported axiom inspection of the four principal successive-construction

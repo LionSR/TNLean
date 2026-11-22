@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.CZX.CZXPermutedBlocks
-import TNLean.MPS.Symmetry.MPOSymmetry.DomainWall
+import TNLean.MPS.FundamentalTheorem.OperatorGroup.DomainWall
 
 /-!
 # CZX: domain walls between the two product states and `c_{AB} c_{BA} = -1`

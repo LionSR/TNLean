@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.SequentialTruncation
-import TNLean.MPS.AreaLaw.OpenMPSCutRank
-import QICLean.Algebra.MatrixStarProjection
-import QICLean.Channel.SchmidtTrimming
+import TNLean.MPS.Tensor.VaryingBond.SequentialTruncation
+import TNLean.MPS.Tensor.OpenMPS.OpenMPSCutRank
+import QICLean.Analysis.Projection.MatrixStarProjection
+import QICLean.Channel.Schmidt.Trimming
 
 /-!
 # Viable sets on a chain

@@ -2,7 +2,7 @@
 
 This audit records the direct deletion of the unsuffixed root of the BNT
 direct-sum selector ladder from
-`TNLean/MPS/BNT/DirectSumSelectors.lean`. Current code uses the surviving
+`TNLean/MPS/CanonicalForm/BlockSeparation/DirectSumSelectors.lean`. Current code uses the surviving
 Condition-C1 declaration named below.
 
 ## Removed declaration and its replacement
@@ -26,11 +26,11 @@ survived that migration, so the root has been referenced by nothing since.
 The companion retirement
 `docs/audits/2026-08-26_pre_condition_c1_bnt_route_retirement.md` cut the same
 pre-Condition-C1 branch inside `TNLean/MPS/ParentHamiltonian/`, but it predates
-the creation of `TNLean/MPS/BNT/DirectSumSelectors.lean` by PR #7199, so the
+the creation of `TNLean/MPS/CanonicalForm/BlockSeparation/DirectSumSelectors.lean` by PR #7199, so the
 selector-span root in the new module was outside its reach.
 
 The single surviving consumer of the ladder,
-`TNLean/MPS/ParentHamiltonian/BNTBlockIntersection.lean:79`, calls the `_c1`
+`TNLean/MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BNTBlockIntersection.lean:79`, calls the `_c1`
 rung.
 
 ## Scope of the replacement
@@ -50,8 +50,8 @@ current consumer and carried no blueprint `\lean{}` tag.
 
 Only the zero-reference root is deleted. Its callee
 `MPSTensor.hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv`
-(`TNLean/MPS/BNT/DirectSumSelectors.lean`) stays live: it is used by
-`TNLean/MPS/ParentHamiltonian/BNTBlockIntersection.lean:569` and is cited at
+(`TNLean/MPS/CanonicalForm/BlockSeparation/DirectSumSelectors.lean`) stays live: it is used by
+`TNLean/MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BNTBlockIntersection.lean:569` and is cited at
 `docs/paper-gaps/pgvwc07_direct_sum_input.tex:236,280`. Other declarations in
 the file also use the file-level parameter `L`, so that parameter remains.
 

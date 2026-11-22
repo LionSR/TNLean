@@ -12,10 +12,10 @@ migrated to the replacement.
 
 | Removed | File | Replacement |
 |---|---|---|
-| `translate_scale` | `TNLean/PEPS/Approximation/AdaptivePatchSupply.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `translate_dim` | `TNLean/PEPS/Approximation/AdaptivePatchSupply.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `translate_outer` | `TNLean/PEPS/Approximation/AdaptivePatchSupply.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `exists_const_mul_rpow_le_rpow` | `TNLean/PEPS/Approximation/CellTwoFamilyPartition.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `translate_scale` | `TNLean/PEPS/Approximation/NestedPatches/AdaptivePatchSupply.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `translate_dim` | `TNLean/PEPS/Approximation/NestedPatches/AdaptivePatchSupply.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `translate_outer` | `TNLean/PEPS/Approximation/NestedPatches/AdaptivePatchSupply.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `exists_const_mul_rpow_le_rpow` | `TNLean/PEPS/Approximation/Cells/CellTwoFamilyPartition.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
 
 The four elementary helpers `tile_subset_box`, `dyadicAnchor_ne_zero`, `holeRadius_nonneg` and
 `edgeOperations_eq_append`, which this pass also found unused, were removed first by #9889 and are

@@ -8,7 +8,10 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.AreaLaw.EntropyScaling
 
-import TNLean.MPS.AreaLaw.EntropyScaling.CutReducedState
+import TNLean.MPS.AreaLaw.EntropyScaling.CopyErrorAmplification
+import TNLean.MPS.AreaLaw.EntropyScaling.CopyMPSFactor
+import TNLean.MPS.AreaLaw.EntropyScaling.CopyProduct
+import TNLean.MPS.AreaLaw.EntropyScaling.CopyRegionEntropy
 import TNLean.MPS.AreaLaw.EntropyScaling.EfficientApproximation
 import TNLean.MPS.AreaLaw.EntropyScaling.QutritApproximation
 import TNLean.MPS.AreaLaw.EntropyScaling.QutritCopies

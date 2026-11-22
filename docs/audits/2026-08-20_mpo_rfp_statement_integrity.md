@@ -48,7 +48,7 @@ nodes and GitHub tasks rather than being replaced by stronger hypotheses.
 The formerly public theorem
 `MPOTensor.firstSiteMatrix_mul_normalizedMPO_of_ketLeftMul_eq` was replaced by
 the file-private theorem `firstSiteMatrix_mul_normalizedMPO_of_ketLeftMul_eq`
-in `TNLean/MPS/MPDO/LocalOrthogonalSumAreaLaw.lean`. Its statement and proof
+in `TNLean/MPS/MPDO/Entropy/LocalOrthogonalSumAreaLaw.lean`. Its statement and proof
 are unchanged. Its sole non-`Archive` consumer is the public theorem
 `MPOTensor.firstSiteMatrix_mul_reducedBlockState_of_ketLeftMul_eq` in the same
 module, and no Blueprint declaration cites the former public name.

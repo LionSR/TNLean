@@ -11,7 +11,7 @@ which is the same map by definition.
 
 | Removed | Replacement |
 |---|---|
-| `MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace` (`TNLean/MPS/RFP/AppendixBStructuralData.lean`) | `MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace` (same file), its definitional value |
+| `MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace` (`TNLean/MPS/ParentHamiltonian/Commuting/AppendixBStructuralData.lean`) | `MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace` (same file), its definitional value |
 | `MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace_eq_parentInteraction` (same file) | `MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace_eq_parentInteraction` |
 | `MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace_idempotent` (same file) | `MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace_idempotent` |
 | `MPSTensor.AppendixBStructuralData.localTerm_two_three_one_eq_appendixBQXBOnCoeffSpace_lift` (same file) | renamed to `MPSTensor.AppendixBStructuralData.localTerm_two_three_one_eq_appendixBQAXOnCoeffSpace_rightLift`; the statement only replaces the representative by its definitional value |

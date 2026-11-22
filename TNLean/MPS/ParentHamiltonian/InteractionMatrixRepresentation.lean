@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.ParentHamiltonian.IsometricDeformationSymmetry
-import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteraction
-import TNLean.MPS.Symmetry.GappedInteractionPath
+import TNLean.MPS.ParentHamiltonian.Deformation.IsometricDeformationSymmetry
+import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicInteraction
+import TNLean.MPS.Operator.Interaction.GappedInteractionPath
 
 /-!
 # Matrix coordinates for general periodic interactions

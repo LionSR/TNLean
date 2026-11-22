@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.Basic
-import QICLean.Entropy.ViableSampling.ViableSubspaceTrimming
+import QICLean.ManyBody.Subspace.Trimming
 
 /-!
 # Collective trimming of a viable subspace on the chain

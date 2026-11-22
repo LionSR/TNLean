@@ -7,7 +7,7 @@ blueprint `\lean{...}` tag cites a removed name, and no compatibility alias is k
 
 ## Removed declarations
 
-In `TNLean/MPS/Examples/Z3Anomalous/Z3AnomalousDefectCompression.lean`:
+In `TNLean/MPS/Examples/Z3/Z3AnomalousDefectCompression.lean`:
 
 - `Z3Anomalous.pairGaugeEis`, `Z3Anomalous.pairGaugeInvEis`, `Z3Anomalous.pairGauge_mul_inv`,
   `Z3Anomalous.pairGaugeInv_mul`: the nine pair gauges over `ℤ[ω]`.
@@ -29,7 +29,7 @@ In `TNLean/MPS/Examples/Z3Anomalous/Z3AnomalousDefectCompression.lean`:
 defectSquare_eq_blockDiagonal`, the direct sum of the nine pair-block data
 (`Z3Anomalous.pairCompression`) along the block-diagonal form of the square
 (`Z3Anomalous.defectSquare_eq_blockDiagonal`). The general construction
-(`TNLean/MPS/FundamentalTheorem/Reduction/MultiBlockDirectSum.lean`) supplies the gauge, the
+(`TNLean/MPS/FundamentalTheorem/Compression/MultiBlockDirectSum.lean`) supplies the gauge, the
 block order and the coordinate labelling once for every example, together with the identity of
 the assembled remainder as the direct sum of the block remainders, which gives the sharp
 nilpotency order three (`Z3Anomalous.defectSquare_evalWord_remainder_eq_zero`,

@@ -14,9 +14,9 @@ Date: 2026-04-08
 
 - Actual `sorry`s: 9 total, concentrated in 3 files: TNLean/Channel/FixedPoint/WedderburnDecomp.lean, TNLean/Channel/Schwarz/AndoLieb.lean, TNLean/Channel/Schwarz/OperatorConvexity.lean.
 - Direct imports of actual-sorry modules: `TNLean/Channel/Schwarz/OperatorMonotone.lean` imports `OperatorConvexity`; `TNLean/Channel/WolfChapter6Index.lean` imports `FixedPoint.WedderburnDecomp`.
-- Worst oversized files: `TNLean/Channel/Peripheral/CyclicDecomposition.lean` (1426 lines); `TNLean/Spectral/SpectralGapNT.lean` (1275 lines); `TNLean/Channel/Determinant.lean` (1202 lines); `TNLean/Spectral/SpectralGap.lean` (1113 lines); `TNLean/Wielandt/RectangularSpan/UniversalityAux.lean` (1097 lines); `TNLean/Channel/Schwarz/PositiveOnAbelian.lean` (1039 lines); `TNLean/Wielandt/Primitivity/StronglyIrreducibleToFullRank.lean` (1035 lines); `TNLean/Channel/Irreducible/Growth.lean` (972 lines).
+- Worst oversized files: `TNLean/Channel/Peripheral/CyclicDecomposition.lean` (1426 lines); `TNLean/Spectral/SpectralGapNT.lean` (1275 lines); `TNLean/Channel/Determinant.lean` (1202 lines); `TNLean/Spectral/SpectralGap.lean` (1113 lines); `TNLean/Wielandt/RectangularSpan/UniversalityAux.lean` (1097 lines); `TNLean/Channel/Schwarz/PositiveOnAbelian.lean` (1039 lines); `TNLean/MPS/Transfer/Primitivity/StronglyIrreducibleToFullRank.lean` (1035 lines); `TNLean/Channel/Irreducible/Growth.lean` (972 lines).
 - Worst proof-size hotspots: `TNLean/Spectral/SpectralGap.lean`:394-978 `eigenvector_gives_gauge` (585 lines); `TNLean/Channel/Peripheral/CyclicDecomposition.lean`:537-1100 `exists_cyclic_projections_of_peripheral_unitary` (564 lines); `TNLean/Spectral/SpectralGapNT.lean`:87-609 `eigenvector_gives_gauge_of_irreducible_TP` (523 lines); `TNLean/Spectral/SpectralGapNT.lean`:751-1203 `dim_eq_of_modulus_one_eigenvector_of_irreducible_TP` (453 lines); `TNLean/Channel/Semigroup/RelaxationConditions.lean`:345-678 `finrank_traceless_blockUT_add_D_le` (334 lines); `TNLean/Channel/Schwarz/PositiveOnAbelian.lean`:458-731 `blockForm_nonneg_of_scalarPSD_of_commuting` (274 lines); `TNLean/Channel/Determinant.lean`:649-917 `heisenberg_dual_multiplicative` (269 lines); `TNLean/Channel/Irreducible/SpectralRadius.lean`:208-471 `spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp` (264 lines).
-- Dead documentation artifacts found in code: `TNLean/Wielandt/WielandtBound.lean:264` and `TNLean/Wielandt/RectangularSpan/Universality.lean:836` both end with `: True := trivial` theorems that exist only to anchor prose.
+- Dead documentation artifacts found in code: `TNLean/Wielandt/WielandtBound.lean:264` and `TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean:836` both end with `: True := trivial` theorems that exist only to anchor prose.
 - No immediately closable `sorry`s were found. The remaining ones are either blocked on missing Mathlib infrastructure (`OperatorConvexity`, `AndoLieb`) or on a real algebraic gap (`WedderburnDecomp`).
 
 ## High-Severity Findings
@@ -25,7 +25,7 @@ Date: 2026-04-08
 - `TNLean/Channel/Schwarz/OperatorConvexity.lean` carries 3 actual `sorry`s in Jensen inequalities. `TNLean/Channel/Schwarz/OperatorMonotone.lean` then imports those placeholders, so some proved-looking corollaries are only conditionally sound.
 - `TNLean/Channel/Schwarz/AndoLieb.lean` carries 3 actual `sorry`s and is another unsound theorem file in the Chapter 5 pipeline.
 - `TNLean/Channel/WolfChapter6Index.lean` is documentation-only, yet it directly imports `FixedPoint.WedderburnDecomp`. That is unnecessary contamination of the import graph.
-- `TNLean/Channel/Peripheral/CyclicDecomposition.lean`, `TNLean/Spectral/SpectralGap.lean`, `TNLean/Spectral/SpectralGapNT.lean`, `TNLean/Wielandt/Primitivity/StronglyIrreducibleToFullRank.lean`, and `TNLean/Wielandt/RectangularSpan/UniversalityAux.lean` are all far past the "hard to review / hard to refactor" threshold and should be split along existing section boundaries.
+- `TNLean/Channel/Peripheral/CyclicDecomposition.lean`, `TNLean/Spectral/SpectralGap.lean`, `TNLean/Spectral/SpectralGapNT.lean`, `TNLean/MPS/Transfer/Primitivity/StronglyIrreducibleToFullRank.lean`, and `TNLean/Wielandt/RectangularSpan/UniversalityAux.lean` are all far past the "hard to review / hard to refactor" threshold and should be split along existing section boundaries.
 
 ## Copy-Paste / Structural Duplication
 
@@ -151,13 +151,13 @@ Date: 2026-04-08
 | `TNLean/Channel/WolfChapter2Index.lean` | 111 | 0 | 0 | - | 0 | 0 |  |
 | `TNLean/Channel/WolfChapter6Index.lean` | 303 | 0 | 0 | - | 1 | 0 | TODOs imports actual-sorry module Documentation-only file that directly imports `FixedPoint.WedderburnDecomp` and therefore pulls actual `sorry`s into the import graph unnecessarily. |
 | `TNLean/Channel/WolfChapter6Wrappers.lean` | 69 | 0 | 0 | - | 0 | 0 |  |
-| `TNLean/Spectral/CrossCorrelation.lean` | 82 | 0 | 0 | - | 0 | 2 |  |
+| `TNLean/MPS/Transfer/Spectrum/TransferOperatorGapInjective.lean` | 82 | 0 | 0 | - | 0 | 2 |  |
 | `TNLean/Spectral/FrobeniusNorm.lean` | 114 | 0 | 0 | - | 0 | 3 |  |
 | `TNLean/Spectral/MPVOverlapDecay.lean` | 198 | 0 | 1 | `mpvOverlap_tendsto_zero` 56-112 (57l) | 0 | 4 |  |
-| `TNLean/Spectral/MPVOverlapTrace.lean` | 165 | 0 | 2 | `trace_mixedTransferMap_pow_eq_mpvOverlap` 51-109 (59l) | 0 | 2 |  |
+| `TNLean/MPS/Transfer/Spectrum/MPVOverlapTrace.lean` | 165 | 0 | 2 | `trace_mixedTransferMap_pow_eq_mpvOverlap` 51-109 (59l) | 0 | 2 |  |
 | `TNLean/Spectral/MixedTransfer.lean` | 216 | 0 | 0 | - | 0 | 11 |  |
-| `TNLean/Spectral/PrimitiveOverlap.lean` | 101 | 0 | 0 | - | 0 | 4 | Generic trace-convergence pass-through declarations retired; the remaining theorem is MPS overlap-specific. |
-| `TNLean/Spectral/QuantitativeGap.lean` | 438 | 0 | 4 | `correlation_length_bound` 316-414 (99l) | 0 | 12 |  |
+| `TNLean/MPS/Transfer/Spectrum/PrimitiveOverlap.lean` | 101 | 0 | 0 | - | 0 | 4 | Generic trace-convergence pass-through declarations retired; the remaining theorem is MPS overlap-specific. |
+| `TNLean/MPS/Transfer/Spectrum/QuantitativeGap.lean` | 438 | 0 | 4 | `correlation_length_bound` 316-414 (99l) | 0 | 12 |  |
 | `TNLean/Spectral/SpectralGap.lean` | 1113 | 0 | 2 | `eigenvector_gives_gauge` 394-978 (585l) | 0 | 71 | split candidate Contains a 585-line private lemma (`eigenvector_gives_gauge`). Split HS contraction, gauge rigidity, and convergence into separate files. Copy-paste cluster: same core gauge-rigidity proof pattern is repeated in `SpectralGapRect` and `SpectralGapNT`. |
 | `TNLean/Spectral/SpectralGapNT.lean` | 1275 | 0 | 3 | `eigenvector_gives_gauge_of_irreducible_TP` 87-609 (523l) | 0 | 156 | split candidate Very large and heavily duplicated with `SpectralGap`/`SpectralGapRect`; split same-dimension and different-dimension arguments into separate files. Copy-paste cluster: same-/different-dimension gauge proofs mirror `SpectralGap` and `SpectralGapRect`. |
 | `TNLean/Spectral/SpectralGapRect.lean` | 612 | 0 | 1 | `dim_eq_of_modulus_one_eigenvector` 297-550 (254l) | 0 | 31 | split candidate Rectangular analogue duplicates large parts of the gauge-rigidity argument from `SpectralGap`/`SpectralGapNT`. Copy-paste cluster: rectangular gauge-rigidity proof largely mirrors `SpectralGap` and `SpectralGapNT`. |
@@ -168,35 +168,35 @@ Date: 2026-04-08
 | `TNLean/Wielandt/PaperResults/MatrixSpanSharpBound.lean` | 113 | 0 | 0 | - | 0 | 0 |  |
 | `TNLean/Wielandt/PaperResults/NonzeroTraceWord.lean` | 135 | 0 | 0 | - | 0 | 0 |  |
 | `TNLean/Wielandt/PaperResults/WielandtInequality.lean` | 350 | 0 | 1 | `iIndex_le_general_of_isPrimitivePaper` 269-350 (82l) | 0 | 3 |  |
-| `TNLean/Wielandt/Primitivity/EasyDirections.lean` | 146 | 0 | 0 | - | 0 | 0 |  |
-| `TNLean/Wielandt/Primitivity/Equivalence.lean` | 282 | 0 | 0 | - | 0 | 0 |  |
+| `TNLean/MPS/Transfer/Primitivity/EasyDirections.lean` | 146 | 0 | 0 | - | 0 | 0 |  |
+| `TNLean/MPS/Transfer/Primitivity/Equivalence.lean` | 282 | 0 | 0 | - | 0 | 0 |  |
 | `TNLean/Wielandt/Primitivity/ImpliesIrreducible.lean` | 252 | 0 | 1 | `isIrreducibleTensor_of_isPrimitiveMPS_of_posDef` 202-252 (51l) | 0 | 4 |  |
-| `TNLean/Wielandt/Primitivity/ImpliesStronglyIrreducible.lean` | 677 | 0 | 3 | `posDef_sum_vecMulVec_of_span_eq_top` 82-162 (81l) | 0 | 10 | split candidate Should split by theorem family; current file mixes positivity preliminaries with the main implication. |
+| `TNLean/MPS/Transfer/Primitivity/ImpliesStronglyIrreducible.lean` | 677 | 0 | 3 | `posDef_sum_vecMulVec_of_span_eq_top` 82-162 (81l) | 0 | 10 | split candidate Should split by theorem family; current file mixes positivity preliminaries with the main implication. |
 | `TNLean/Wielandt/Primitivity/ImpliesStronglyIrreducibleAux.lean` | 704 | 0 | 2 | `hermitian_pow_fixedPoint_eq_zero_of_trace_eq_zero_of_isPrimitivePaper` 477-558 (82l) | 0 | 7 | split candidate Auxiliary file is large enough to split again; currently mixes trace lemmas and peripheral-primitivity assembly. |
-| `TNLean/Wielandt/Primitivity/Normal.lean` | 166 | 0 | 0 | - | 0 | 2 |  |
+| `TNLean/MPS/Transfer/Primitivity/Normal.lean` | 166 | 0 | 0 | - | 0 | 2 |  |
 | `TNLean/Wielandt/Primitivity/PaperDefinitions.lean` | 260 | 0 | 0 | - | 0 | 0 |  |
-| `TNLean/Wielandt/Primitivity/StronglyIrreducibleToFullRank.lean` | 1035 | 0 | 8 | `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper` 930-1016 (87l) | 0 | 17 | split candidate Excellent internal sectioning but should be multiple files. Eight named parts already exist and map cleanly to file boundaries. |
+| `TNLean/MPS/Transfer/Primitivity/StronglyIrreducibleToFullRank.lean` | 1035 | 0 | 8 | `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper` 930-1016 (87l) | 0 | 17 | split candidate Excellent internal sectioning but should be multiple files. Eight named parts already exist and map cleanly to file boundaries. |
 | `TNLean/Wielandt/Primitivity/ToNormal.lean` | 225 | 0 | 0 | - | 0 | 5 |  |
 | `TNLean/Wielandt/QuantumWielandt.lean` | 100 | 0 | 0 | - | 0 | 0 |  |
 | `TNLean/Wielandt/RankOne/BoundedWord.lean` | 538 | 0 | 0 | - | 0 | 19 | split candidate Split bi-rectangular-span API, dimension-growth lemmas, and final bounded-word existence into separate files. |
 | `TNLean/Wielandt/RankOne/Construction.lean` | 416 | 0 | 1 | `IsNBlkInjective_transposeTensor` 85-156 (72l) | 0 | 20 |  |
 | `TNLean/Wielandt/RankOne/Element.lean` | 230 | 0 | 1 | `range_pow_le_iSup_maxGenEigenspace_ne_zero` 132-194 (63l) | 0 | 13 |  |
 | `TNLean/Wielandt/RankOne/Extraction.lean` | 181 | 0 | 1 | `iSup_maxGenEigenspace_ne_zero_le_range_pow` 90-159 (70l) | 0 | 6 |  |
-| `TNLean/Wielandt/RankOne/ExtractionFull.lean` | 503 | 0 | 1 | `exists_rankOne_mem_wordSpan_blockTensor` 282-350 (69l) | 0 | 4 | split candidate Sits just over the split threshold; could separate extraction lemmas from final coarse-bound assembly. |
+| `TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean` | 503 | 0 | 1 | `exists_rankOne_mem_wordSpan_blockTensor` 282-350 (69l) | 0 | 4 | split candidate Sits just over the split threshold; could separate extraction lemmas from final coarse-bound assembly. |
 | `TNLean/Wielandt/RankOne/Manufacture.lean` | 57 | 0 | 0 | - | 0 | 4 |  |
 | `TNLean/Wielandt/RankOne/Products.lean` | 331 | 0 | 0 | - | 0 | 2 |  |
 | `TNLean/Wielandt/RankOne/SpanGrowth.lean` | 137 | 0 | 0 | - | 0 | 3 |  |
-| `TNLean/Wielandt/RectangularSpan/Basic.lean` | 380 | 0 | 1 | `wordSpan_le_wordSpan_blockTensor` 119-170 (52l) | 0 | 14 |  |
-| `TNLean/Wielandt/RectangularSpan/Growth.lean` | 373 | 0 | 0 | - | 0 | 10 |  |
+| `TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean` | 380 | 0 | 1 | `wordSpan_le_wordSpan_blockTensor` 119-170 (52l) | 0 | 14 |  |
+| `TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean` | 373 | 0 | 0 | - | 0 | 10 |  |
 | `TNLean/Wielandt/RectangularSpan/Ranges.lean` | 324 | 0 | 0 | - | 0 | 21 |  |
-| `TNLean/Wielandt/RectangularSpan/Universality.lean` | 838 | 0 | 3 | `vecMulVec_eigenvector_exact_wordSpan` 722-835 (114l) | 0 | 9 | split candidate dead `True := trivial` theorem Contains dead documentation artifact `wielandt_summary_documentation : True := trivial`. Split Section 8g and Section 8h into separate files. |
+| `TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean` | 838 | 0 | 3 | `vecMulVec_eigenvector_exact_wordSpan` 722-835 (114l) | 0 | 9 | split candidate dead `True := trivial` theorem Contains dead documentation artifact `wielandt_summary_documentation : True := trivial`. Split Section 8g and Section 8h into separate files. |
 | `TNLean/Wielandt/RectangularSpan/UniversalityAux.lean` | 1097 | 0 | 2 | `sharp_bound_le` 732-785 (54l) | 0 | 16 | split candidate Another top-priority split candidate; already partitioned into Sections 8c-8f1/2 and should be file-split accordingly. |
-| `TNLean/Wielandt/SpanGrowth/CumulativeSpan.lean` | 269 | 0 | 0 | - | 0 | 8 |  |
-| `TNLean/Wielandt/SpanGrowth/CumulativeToWordSpan.lean` | 254 | 0 | 0 | - | 0 | 2 |  |
-| `TNLean/Wielandt/SpanGrowth/EigenvectorSpreading.lean` | 382 | 0 | 0 | - | 0 | 7 |  |
-| `TNLean/Wielandt/SpanGrowth/InvertibleWordSpan.lean` | 533 | 0 | 1 | `wordSpan_eq_top_of_isNormal_of_isUnit` 467-524 (58l) | 0 | 15 | split candidate Over 500 lines; split dimensional preliminaries from the final invertible-word-span theorem. |
-| `TNLean/Wielandt/SpanGrowth/NonzeroTraceProduct.lean` | 626 | 0 | 2 | `exists_nonzero_trace_word_sharp_pos` 421-626 (206l) | 0 | 20 | split candidate Over 600 lines; split sharp-normal-span growth from the final nonzero-trace-word extraction. |
-| `TNLean/Wielandt/SpanGrowth/VectorToMatrixSpan.lean` | 318 | 0 | 2 | `cumulativeVectorSpan_le_vectorSpreadSpan_of_eigenvector` 142-218 (77l) | 1 | 16 | TODOs Contains a stale TODO note about the remaining hard part of Lemma 2(b). |
+| `TNLean/MPS/Tensor/Words/WordSpan.lean` | 269 | 0 | 0 | - | 0 | 8 |  |
+| `TNLean/MPS/Tensor/Words/WordSpan.lean` | 254 | 0 | 0 | - | 0 | 2 |  |
+| `TNLean/MPS/Tensor/Words/WordSpan.lean` | 382 | 0 | 0 | - | 0 | 7 |  |
+| `TNLean/MPS/Transfer/Primitivity/InvertibleWordSpan.lean` | 533 | 0 | 1 | `wordSpan_eq_top_of_isNormal_of_isUnit` 467-524 (58l) | 0 | 15 | split candidate Over 500 lines; split dimensional preliminaries from the final invertible-word-span theorem. |
+| `TNLean/MPS/Tensor/Words/WordSpan.lean` | 626 | 0 | 2 | `exists_nonzero_trace_word_sharp_pos` 421-626 (206l) | 0 | 20 | split candidate Over 600 lines; split sharp-normal-span growth from the final nonzero-trace-word extraction. |
+| `TNLean/MPS/Tensor/Words/WordSpan.lean` | 318 | 0 | 2 | `cumulativeVectorSpan_le_vectorSpreadSpan_of_eigenvector` 142-218 (77l) | 1 | 16 | TODOs Contains a stale TODO note about the remaining hard part of Lemma 2(b). |
 | `TNLean/Wielandt/WielandtBound.lean` | 266 | 0 | 1 | `wielandt_chain` 212-263 (52l) | 0 | 0 | dead `True := trivial` theorem Contains dead documentation artifact `wielandt_roadmap : True := trivial`. |
 
 ## Recommendation Order

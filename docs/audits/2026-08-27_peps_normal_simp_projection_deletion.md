@@ -15,21 +15,21 @@ below names each removed declaration with its replacement.
 
 | Removed | Replacement |
 |---|---|
-| `TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.toRectangular_twoByThreeRegion` (`TNLean/PEPS/NormalBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
-| `TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.toRectangular_threeByTwoRegion` (`TNLean/PEPS/NormalBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
-| `TNLean.PEPS.scaleVertex_bondDim` (`TNLean/PEPS/NormalBondDimension.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
-| `TNLean.PEPS.normalSquareHorizontalTranslatedEdge_blockingDatum_interior_blue` (`TNLean/PEPS/NormalEdgeBlockingInterior.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
-| `TNLean.PEPS.normalSquareHorizontalTranslatedEdge_blockingDatum_interior_complement` (`TNLean/PEPS/NormalEdgeBlockingInterior.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
-| `TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum_interior_red` (`TNLean/PEPS/NormalEdgeBlockingInterior.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
-| `TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum_interior_blue` (`TNLean/PEPS/NormalEdgeBlockingInterior.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
-| `TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum_interior_complement` (`TNLean/PEPS/NormalEdgeBlockingInterior.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
-| `TNLean.PEPS.regionInjectivityDataPair_isInjective` (`TNLean/PEPS/NormalPairBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
-| `TNLean.PEPS.NormalEdgeBlockingData.pairLeft_red` (`TNLean/PEPS/NormalPairBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
-| `TNLean.PEPS.NormalEdgeBlockingData.pairLeft_blue` (`TNLean/PEPS/NormalPairBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
-| `TNLean.PEPS.NormalEdgeBlockingData.pairLeft_complement` (`TNLean/PEPS/NormalPairBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
-| `TNLean.PEPS.NormalEdgeBlockingData.pairRight_red` (`TNLean/PEPS/NormalPairBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
-| `TNLean.PEPS.NormalEdgeBlockingData.pairRight_blue` (`TNLean/PEPS/NormalPairBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
-| `TNLean.PEPS.NormalEdgeBlockingData.pairRight_complement` (`TNLean/PEPS/NormalPairBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.toRectangular_twoByThreeRegion` (`TNLean/PEPS/Injectivity/Normal/NormalBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.NormalSquareLatticeRectangleInjectivityHypotheses.toRectangular_threeByTwoRegion` (`TNLean/PEPS/Injectivity/Normal/NormalBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.scaleVertex_bondDim` (`TNLean/PEPS/FundamentalTheorem/Normal/NormalBondDimension.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.normalSquareHorizontalTranslatedEdge_blockingDatum_interior_blue` (`TNLean/PEPS/Injectivity/Normal/NormalEdgeBlockingInterior.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.normalSquareHorizontalTranslatedEdge_blockingDatum_interior_complement` (`TNLean/PEPS/Injectivity/Normal/NormalEdgeBlockingInterior.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum_interior_red` (`TNLean/PEPS/Injectivity/Normal/NormalEdgeBlockingInterior.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum_interior_blue` (`TNLean/PEPS/Injectivity/Normal/NormalEdgeBlockingInterior.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.normalSquareVerticalTranslatedEdge_blockingDatum_interior_complement` (`TNLean/PEPS/Injectivity/Normal/NormalEdgeBlockingInterior.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.regionInjectivityDataPair_isInjective` (`TNLean/PEPS/Injectivity/Normal/NormalPairBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.NormalEdgeBlockingData.pairLeft_red` (`TNLean/PEPS/Injectivity/Normal/NormalPairBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.NormalEdgeBlockingData.pairLeft_blue` (`TNLean/PEPS/Injectivity/Normal/NormalPairBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.NormalEdgeBlockingData.pairLeft_complement` (`TNLean/PEPS/Injectivity/Normal/NormalPairBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.NormalEdgeBlockingData.pairRight_red` (`TNLean/PEPS/Injectivity/Normal/NormalPairBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.NormalEdgeBlockingData.pairRight_blue` (`TNLean/PEPS/Injectivity/Normal/NormalPairBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
+| `TNLean.PEPS.NormalEdgeBlockingData.pairRight_complement` (`TNLean/PEPS/Injectivity/Normal/NormalPairBlocking.lean`) | none needed; the surviving consumers prove the projection by `rfl` at the use site |
 
 ## Withdrawn from the slice
 
@@ -38,7 +38,7 @@ kept. It is cited through `\leanid{}` at
 `docs/paper-gaps/peps_normal_ft_section3_route.tex:1392`, so deleting it would
 break a named reference in the paper-gap record for the route through Section 3
 of arXiv:1804.04964. Its section header in
-`TNLean/PEPS/NormalEdgeBlockingInterior.lean` is reworded from the plural to the
+`TNLean/PEPS/Injectivity/Normal/NormalEdgeBlockingInterior.lean` is reworded from the plural to the
 singular, since it is now the only projection lemma in that section: the header
 describes the red region of the horizontal translated interior blocking datum
 alone.

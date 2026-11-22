@@ -1,0 +1,213 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.Operator.Defs
+import TNLean.MPS.Operator.Product.PhysicalAdjoint
+import TNLean.MPS.Operator.Product.OperatorProduct
+import QICLean.Algebra.Matrix.RankOneSandwich
+import TNLean.MPS.Operator.Unitary.Basic
+
+/-!
+# Simple matrix product unitary tensors
+
+This file formalizes the double layer and the two exact local contraction identities
+`simple1` and `simple2` from arXiv:1703.09188, Section III.A.  It then follows the
+paper's sequential contraction proof that every simple tensor generates a matrix
+product unitary.
+
+The upper tensor in the paper's diagrams is the physical adjoint: its physical
+indices are exchanged and its entries are conjugated, while the virtual chain is
+not reflected.  Accordingly the double layer uses `physicalAdjointTensor`, not
+`adjointTensor`.
+
+## Main definitions
+
+* `doubleLayerTensor` — the local tensor for \(U^\dagger U\).
+* `IsMPUSimple` — the paper's `simple1` and `simple2` identities.
+
+## Main results
+
+* `IsMPUSimple.isMPU` — a simple tensor generates MPU.
+
+## References
+
+* Cirac--Perez-Garcia--Schuch--Verstraete, "Matrix Product Unitaries:
+  Structure, Symmetries, and Topological Invariants", arXiv:1703.09188,
+  Section III.A, lines 359--388 and Figures `II_Simple1.png`, `II_Simple2.png`.
+-/
+
+open scoped Matrix BigOperators Kronecker
+open Matrix
+
+namespace MPOTensor
+
+variable {d D : ℕ}
+
+/-- The local **double layer** obtained by placing the physical adjoint of `U`
+above `U` and contracting their adjacent physical legs.  Its bond index is the
+canonical enumeration of a pair of original bond indices.
+
+Closing a chain of these letters gives `mpo U N` conjugate-transposed times
+`mpo U N`; see `mpo_doubleLayerTensor`.
+
+Source: arXiv:1703.09188, Section III.A, lines 363--388 and Figures
+`II_Simple1.png`, `II_Simple2.png`. -/
+noncomputable def doubleLayerTensor (U : MPOTensor d D) : MPOTensor d (D * D) :=
+  mulTensor (physicalAdjointTensor U) U
+
+/-- A scalar whose conjugate product is one leaves the double layer unchanged. -/
+theorem doubleLayerTensor_smul_of_star_mul_self (c : ℂ) (U : MPOTensor d D)
+    (hc : star c * c = 1) : doubleLayerTensor (c • U) = doubleLayerTensor U := by
+  simp only [doubleLayerTensor, physicalAdjointTensor_smul, mulTensor_smul_smul, hc, one_smul]
+
+/-- The exact local, canonically reindexed form of the double-layer letter:
+\((W^{ik})_{(β₁,β₂),(α₁,α₂)}\) is obtained from
+\(\sum_j (U^\sharp)^{ij} \otimes U^{jk}\) using `finProdFinEquiv` on both
+bond indices.
+
+Source: arXiv:1703.09188, Definition III.2, lines 363--374 and Figures
+`II_Simple1.png`, `II_Simple2.png`. -/
+@[simp] theorem doubleLayerTensor_apply (U : MPOTensor d D) (i k : Fin d) :
+    doubleLayerTensor U i k =
+      (∑ j : Fin d, (physicalAdjointTensor U i j) ⊗ₖ (U j k)).submatrix
+        finProdFinEquiv.symm finProdFinEquiv.symm := by
+  rw [doubleLayerTensor, mulTensor_apply]
+
+/-- Closing the double layer gives the global product \((U^{(N)})^\dagger U^{(N)}\).
+
+This fixes the diagram orientation: the upper layer is the physical adjoint,
+which generates the conjugate transpose without reflecting the virtual chain.
+
+Source: arXiv:1703.09188, lines 363--388, especially the product contracted in
+the proof of Proposition III.3(i). -/
+theorem mpo_doubleLayerTensor (U : MPOTensor d D) (N : ℕ) :
+    mpo (doubleLayerTensor U) N = (mpo U N)ᴴ * mpo U N := by
+  rw [doubleLayerTensor, mpo_mulTensor]
+  congr 1
+  ext σ τ
+  rw [mpo_physicalAdjointTensor]
+  rfl
+
+/-- An MPU tensor is **simple** when its double-layer letters have boundary
+vectors `a` and `b` satisfying the two diagrammatic identities `simple1` and
+`simple2`.
+
+Writing \(W^{ij}\) for a double-layer letter and
+\(R=|b)(a|\), the fields are exactly
+\[
+  (a|W^{ij}|b)=\delta_{ij}, \qquad
+  W^{ij}W^{k\ell}=W^{ij}R W^{k\ell}.
+\]
+Thus `simple1` closes one letter with the witnesses to the physical identity,
+while `simple2` inserts the rank-one operator \(|b)(a|\) between two adjacent
+letters.  This notion is unrelated to the CPSV16 predicate `MPOTensor.IsSimple`.
+
+Source: arXiv:1703.09188, Definition III.2, equations `simple1` and `simple2`,
+lines 363--374 and Figures `II_Simple1.png`, `II_Simple2.png`. -/
+def IsMPUSimple (U : MPOTensor d D) : Prop :=
+  ∃ a b : Fin (D * D) → ℂ,
+    (∀ i j : Fin d,
+      a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b) = if i = j then 1 else 0) ∧
+    (∀ i j k l : Fin d,
+      doubleLayerTensor U i j * doubleLayerTensor U k l =
+        doubleLayerTensor U i j * vecMulVec b a * doubleLayerTensor U k l)
+
+/-- The bond-one identity tensor is simple, with both boundary vectors equal to one.
+
+Source: arXiv:1703.09188, Definition III.2, equations `simple1` and `simple2`,
+lines 363--374, specialized to the identity tensor. -/
+theorem isMPUSimple_idTensor (d : ℕ) : IsMPUSimple (idTensor d) := by
+  have hR : Matrix.vecMulVec (fun _ : Fin (1 * 1) ↦ (1 : ℂ)) (fun _ : Fin (1 * 1) ↦ (1 : ℂ)) =
+      1 := by
+    ext x y
+    rw [Subsingleton.elim (α := Fin 1) x y]
+    simp [Matrix.vecMulVec_apply]
+  refine ⟨fun _ ↦ 1, fun _ ↦ 1, fun i j ↦ ?_, fun i j k l ↦ ?_⟩
+  · simp only [dotProduct, Matrix.mulVec, doubleLayerTensor_apply,
+      Matrix.submatrix_apply, Matrix.sum_apply, Matrix.kroneckerMap_apply,
+      physicalAdjointTensor_apply, idTensor]
+    by_cases h : i = j
+    · subst h
+      simp [Matrix.ite_apply, eq_comm]
+    · simp [Matrix.ite_apply, h, eq_comm]
+  · rw [hR, Matrix.mul_one]
+
+namespace IsMPUSimple
+
+/-- The `simple1` contraction supplied by witnesses for an MPU-simple tensor.
+
+Source: arXiv:1703.09188, equation `simple1`, lines 363--370 and Figure
+`II_Simple1.png`. -/
+theorem simple1 {U : MPOTensor d D} (hU : IsMPUSimple U) :
+    ∃ a b : Fin (D * D) → ℂ, ∀ i j : Fin d,
+      a ⬝ᵥ (doubleLayerTensor U i j *ᵥ b) = if i = j then 1 else 0 := by
+  obtain ⟨a, b, h₁, _⟩ := hU
+  exact ⟨a, b, h₁⟩
+
+/-- The exact `simple2` contraction supplied by the same witnesses as
+`simple1`: the rank-one operator \(|b)(a|\) may be inserted between adjacent
+double-layer letters.
+
+Source: arXiv:1703.09188, equation `simple2`, lines 363--374 and Figure
+`II_Simple2.png`. -/
+theorem simple2 {U : MPOTensor d D} (hU : IsMPUSimple U) :
+    ∃ a b : Fin (D * D) → ℂ, ∀ i j k l : Fin d,
+      doubleLayerTensor U i j * doubleLayerTensor U k l =
+        doubleLayerTensor U i j * vecMulVec b a * doubleLayerTensor U k l := by
+  obtain ⟨a, b, _, h₂⟩ := hU
+  exact ⟨a, b, h₂⟩
+
+/-- Sequentially applying `simple2` around a closed double-layer chain and
+then `simple1` at every site gives the physical identity.
+
+Source: arXiv:1703.09188, Proposition III.3(i), lines 378--388. -/
+theorem mpo_doubleLayerTensor_eq_one {U : MPOTensor d D} (hU : IsMPUSimple U)
+    (N : ℕ) (hN : 1 < N) :
+    mpo (doubleLayerTensor U) N =
+      (1 : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) := by
+  obtain ⟨a, b, h₁, h₂⟩ := hU
+  ext σ τ
+  rw [mpo_apply, mpoMatrixEntry, Matrix.one_apply]
+  rw [evalWord_ofFn]
+  let P : Matrix (Fin (D * D)) (Fin (D * D)) ℂ → Prop :=
+    fun A ↦ ∃ i j, A = doubleLayerTensor U i j
+  have hP : ∀ A ∈ List.ofFn (fun x : Fin N ↦ doubleLayerTensor U (σ x) (τ x)), P A := by
+    intro A hA
+    simp only [List.mem_ofFn] at hA
+    obtain ⟨x, rfl⟩ := hA
+    exact ⟨σ x, τ x, rfl⟩
+  have hpair : ∀ A B, P A → P B → A * B = A * vecMulVec b a * B := by
+    rintro A B ⟨i, j, rfl⟩ ⟨k, l, rfl⟩
+    exact h₂ i j k l
+  rw [trace_listProd a b P hpair _ (by simpa) hP]
+  rw [List.map_ofFn, List.prod_ofFn]
+  simp only [Function.comp_apply, h₁]
+  by_cases hστ : σ = τ
+  · subst τ
+    simp
+  · rw [ite_eq_right hστ]
+    have hpoint : ∃ x, σ x ≠ τ x := by
+      by_contra h
+      apply hστ
+      funext x
+      exact not_ne_iff.mp (not_exists.mp h x)
+    obtain ⟨x, hx⟩ := hpoint
+    apply Finset.prod_eq_zero (Finset.mem_univ x)
+    simp [hx]
+
+/-- Every simple tensor generates a matrix product unitary, by the paper's
+sequential contraction route through `simple2` and `simple1`.
+
+Source: arXiv:1703.09188, Proposition III.3(i), lines 378--388. -/
+theorem isMPU {U : MPOTensor d D} (hU : IsMPUSimple U) : IsMPU U := by
+  intro N hN
+  rw [Matrix.mem_unitaryGroup_iff']
+  simp only [Matrix.star_eq_conjTranspose]
+  rw [← mpo_doubleLayerTensor]
+  exact hU.mpo_doubleLayerTensor_eq_one N hN
+
+end IsMPUSimple
+
+end MPOTensor

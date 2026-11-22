@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Complex.Exponential
 import Mathlib.Data.Matrix.Basic
-import TNLean.PEPS.TorusSiteTensor
+import TNLean.PEPS.Tensor.Torus.TorusSiteTensor
 
 /-!
 # Classical models: the Gibbs weights of a classical model as a PEPS

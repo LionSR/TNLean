@@ -12,15 +12,15 @@ definition.
 
 | Audited declaration | Disposition / replacement |
 |---|---|
-| `TNLean.PEPS.complementVertex_ne` (`TNLean/PEPS/VertexComplement/Basic.lean`) | `(mem_vertexComplementVertices_iff (V := V) v w).mp hw` — the `@[simp]` iff in the same file, carrying the same `omit [DecidableRel G.Adj]` |
-| `TNLean.PEPS.gauge_sum_left_right` (private, `TNLean/PEPS/FundamentalTheorem/GaugeAction.lean`) | inlined into `TNLean.PEPS.gauge_sum_left_right_matrix_inv`, its only consumer |
-| `TNLean.PEPS.IsVertexInjective.localCoeff_eq_zero_of_contract_zero` (`TNLean/PEPS/EdgeMiddlePhysical/Basic.lean` and `TNLean/PEPS/VertexComplement/Basic.lean`) | the single declaration of the same name in `TNLean/PEPS/VirtualInsertion.lean`, the common ancestor of both files |
-| `TNLean.PEPS.otherLeft_edge_ne'` and `TNLean.PEPS.otherRight_edge_ne'` (private, `TNLean/PEPS/FundamentalTheorem/GaugeAction.lean` and `TNLean/PEPS/EdgeMiddlePhysical/KernelDescent.lean`) | `TNLean.PEPS.otherLeft_edge_ne` and `TNLean.PEPS.otherRight_edge_ne` in `TNLean/PEPS/Blocking.lean`, now public |
-| `TNLean.PEPS.localTensorEval` (`TNLean/PEPS/FundamentalTheorem/LocalGaugeExtraction.lean`) | none — zero consumers; the local tensor map that the file actually uses is `localTensorMap` in `TNLean/PEPS/VirtualInsertion.lean` |
-| `TNLean.PEPS.edge_ne_of_middle_incident_for_physical` (`TNLean/PEPS/EdgeMiddlePhysical/Basic.lean`) and `TNLean.PEPS.incidentMiddle_ne` (`TNLean/PEPS/RegionBlock/CoarseThreeSite7.lean`) | `TNLean.PEPS.edge_ne_of_middle_incident` in `TNLean/PEPS/Blocking.lean`, now public and carrying the `incidentMiddle_ne` docstring |
-| `TNLean.PEPS.LocalConfig` (private, `TNLean/PEPS/FundamentalTheorem/GaugeAction.lean`) | `TNLean.PEPS.OpenLocalConfig` in the same file — the two abbreviations unfolded to the same product type, and the public one keeps the fuller docstring |
-| `TNLean.PEPS.edgeFinEqDelta` (private, `TNLean/PEPS/FundamentalTheorem/EdgeInsertion.lean`) | `TNLean.PEPS.finEqDelta (leftIncidentValue A ξ f) (rightIncidentValue A ξ f)`, the composition of three `GaugeAction.lean` helpers that are now public |
-| `TNLean.PEPS.matrixUnit` (`TNLean/PEPS/TwoInjectiveComparison/Basic.lean`) | deleted; use `Matrix.single i j (1 : ℂ)` from Mathlib directly |
+| `TNLean.PEPS.complementVertex_ne` (`TNLean/PEPS/Tensor/Region/VertexComplement.lean`) | `(mem_vertexComplementVertices_iff (V := V) v w).mp hw` — the `@[simp]` iff in the same file, carrying the same `omit [DecidableRel G.Adj]` |
+| `TNLean.PEPS.gauge_sum_left_right` (private, `TNLean/PEPS/FundamentalTheorem/Injective/GaugeAction.lean`) | inlined into `TNLean.PEPS.gauge_sum_left_right_matrix_inv`, its only consumer |
+| `TNLean.PEPS.IsVertexInjective.localCoeff_eq_zero_of_contract_zero` (`TNLean/PEPS/FundamentalTheorem/Injective/EdgeMiddlePhysical.lean` and `TNLean/PEPS/Tensor/Region/VertexComplement.lean`) | the single declaration of the same name in `TNLean/PEPS/Tensor/Network/VirtualInsertion.lean`, the common ancestor of both files |
+| `TNLean.PEPS.otherLeft_edge_ne'` and `TNLean.PEPS.otherRight_edge_ne'` (private, `TNLean/PEPS/FundamentalTheorem/Injective/GaugeAction.lean` and `TNLean/PEPS/FundamentalTheorem/Injective/EdgeMiddleKernelDescent.lean`) | `TNLean.PEPS.otherLeft_edge_ne` and `TNLean.PEPS.otherRight_edge_ne` in `TNLean/PEPS/Tensor/Network/Blocking.lean`, now public |
+| `TNLean.PEPS.localTensorEval` (`TNLean/PEPS/FundamentalTheorem/Injective/LocalGaugeExtraction.lean`) | none — zero consumers; the local tensor map that the file actually uses is `localTensorMap` in `TNLean/PEPS/Tensor/Network/VirtualInsertion.lean` |
+| `TNLean.PEPS.edge_ne_of_middle_incident_for_physical` (`TNLean/PEPS/FundamentalTheorem/Injective/EdgeMiddlePhysical.lean`) and `TNLean.PEPS.incidentMiddle_ne` (`TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/InsertedCoefficientDescentBundle.lean`) | `TNLean.PEPS.edge_ne_of_middle_incident` in `TNLean/PEPS/Tensor/Network/Blocking.lean`, now public and carrying the `incidentMiddle_ne` docstring |
+| `TNLean.PEPS.LocalConfig` (private, `TNLean/PEPS/FundamentalTheorem/Injective/GaugeAction.lean`) | `TNLean.PEPS.OpenLocalConfig` in the same file — the two abbreviations unfolded to the same product type, and the public one keeps the fuller docstring |
+| `TNLean.PEPS.edgeFinEqDelta` (private, `TNLean/PEPS/FundamentalTheorem/Injective/EdgeInsertion.lean`) | `TNLean.PEPS.finEqDelta (leftIncidentValue A ξ f) (rightIncidentValue A ξ f)`, the composition of three `GaugeAction.lean` helpers that are now public |
+| `TNLean.PEPS.matrixUnit` (`TNLean/PEPS/FundamentalTheorem/Injective/TwoBlockTensor.lean`) | deleted; use `Matrix.single i j (1 : ℂ)` from Mathlib directly |
 
 ## What was checked
 
@@ -37,7 +37,7 @@ consumers in `GaugeAction.lean`, `RegionBlock/GaugeInjectivity.lean`, and
 **Triplicated coefficient lemma.** The statement and proof of
 `IsVertexInjective.localCoeff_eq_zero_of_contract_zero` appeared in
 `EdgeMiddlePhysical/Basic.lean` and `VertexComplement/Basic.lean`, which both
-import `TNLean.PEPS.Blocking` and so both import `TNLean.PEPS.VirtualInsertion`.
+import `TNLean.PEPS.Tensor.Network.Blocking` and so both import `TNLean.PEPS.Tensor.Network.VirtualInsertion`.
 The declaration moved to that common ancestor, immediately after
 `IsVertexInjective.localTensorMap_injective`, which is the only fact its proof
 uses; the fuller of the two docstrings survives. The fully qualified name is
@@ -65,7 +65,7 @@ downstream modules restated it verbatim, one as
 `CoarseThreeSite7.lean` copy had; the three call sites in
 `EdgeMiddlePhysical/Basic.lean`, `EdgeMiddlePhysical/KernelDescent.lean`, and
 `CoarseThreeSite7.lean` were renamed and resolve without qualification, all
-three files having `TNLean.PEPS.Blocking` in their transitive import closure.
+three files having `TNLean.PEPS.Tensor.Network.Blocking` in their transitive import closure.
 Neither retired spelling occurs under `blueprint/src` or `docs`, and
 `_for_physical` was never referenced outside `TNLean/PEPS/EdgeMiddlePhysical/`.
 

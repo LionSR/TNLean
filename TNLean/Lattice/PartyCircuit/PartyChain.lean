@@ -11,8 +11,9 @@ import TNLean.Lattice.PartyCircuit.PartyWord
 This file places the monomials of `TNLean.Lattice.PartyCircuit` on parties.  An allowed monomial
 (`PartyChain`) consists of source-only words separated by pair effects: an effect contracts a
 register `ℂ^α` of a party `p` and a register `ℂ^β` of another party `q` with a normalized bra.
-Its operator is the `EffectChain` of `TNLean.Lattice.PartyCircuit.PairEffectElimination`
-(`PartyChain.toEffectChain`), so the error, count and coefficient bounds proved there apply.
+Its operator is the `EffectChain` of `TNLean.Lattice.PartyCircuit.PairEffectChain`
+(`PartyChain.toEffectChain`), so the error, count and coefficient bounds of
+`TNLean.Lattice.PartyCircuit.PairEffectElimination` apply.
 Registers, source-only words and stacks of pair registers are defined in
 `TNLean.Lattice.PartyCircuit.PartyWord`.
 

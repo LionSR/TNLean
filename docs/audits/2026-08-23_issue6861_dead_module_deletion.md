@@ -27,7 +27,7 @@ tag. The removed declarations were:
 - `MPSTensor.sameMPV_upperFin_diagFin`.
 
 Issue #7135 had already completed the compatibility transition to the
-coordinate-free API in `TNLean/MPS/Core/ProjectionTriangularTrace.lean`, using
+coordinate-free API in `TNLean/MPS/Tensor/DirectSum/InvariantSubspaceDecomp.lean`, using
 an orthogonal projection and its complement. The exact replacement relation at
 removal was:
 

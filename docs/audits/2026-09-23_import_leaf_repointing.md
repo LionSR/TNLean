@@ -22,18 +22,18 @@ since they are used without being named.
 
 | File | Old import | New import(s) |
 |---|---|---|
-| `TNLean/MPS/CanonicalForm/BNTGrouping.lean` | `CanonicalForm.NormalReduction` | none (cone-dead; the line is deleted) |
-| `TNLean/MPS/CanonicalForm/SectorComparison/TPPrimitiveReduction.lean` | `CanonicalForm.NormalReduction` | `NormalReduction.TPGauge` (provides `exists_tp_gauge_from_arbitrary`) |
-| `TNLean/MPS/CanonicalForm/SectorComparison/TPPrimitiveReduction.lean` | `CanonicalForm.CyclicSectors` | none (cone-dead; the line is deleted) |
-| `TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorDecomposition.lean` | `Periodic.SectorIrreducibility` | `Periodic.SectorIrreducibility.HLift` (provides `cyclic_projection_mul_left`, `cyclic_projection_mul_right`, `isIrreducibleOnCorner_of_cyclic_decomp_mps`) |
-| `TNLean/MPS/Periodic/FundamentalTheorem.lean` | `Periodic.Overlap` | `Periodic.Overlap.Dichotomy` (provides `periodicOverlapDichotomy`), `Periodic.Overlap.SelfOverlap` (provides `periodicSelfOverlap_tendsto`) |
-| `TNLean/MPS/Periodic/Overlap/Dichotomy.lean` | `Periodic.Overlap.SectorMatch` | `Periodic.Overlap.SectorMatch.Consequences` (provides `periodicOverlap_gaugeEquiv_of_sector_match`, `periodicOverlap_tendsto_zero_of_ne_dim`; `Contraction` is reached transitively through it) |
-| `TNLean/MPS/Periodic/Overlap/SelfOverlapSetup.lean` | `CanonicalForm.CyclicSectors` | none (closure-neutral; `CornerBridge`, `CommonSectorData` and `CyclicSectorRelation` keep the cone reachable) |
-| `TNLean/MPS/Periodic/Overlap/SelfOverlapSetup.lean` | `Periodic.SectorIrreducibility` | none (closure-neutral; the `HLift` cone is reached through `CommonSectorData`) |
-| `TNLean/MPS/Periodic/SectorIrreducibility/ProjectionOrtho.lean` | `CanonicalForm.CyclicSectors` | `CanonicalForm.CyclicSectors.FixedAdjoint` (provides `commutes_letters_of_adjoint_fixed_projection`) |
-| `TNLean/MPS/Periodic/ProjectiveRep.lean` | `Periodic.Symmetry` | `MPS.Symmetry.Defs` (provides `twistedTensor`; the file never names a `Periodic.Symmetry` leaf) |
-| `TNLean/PEPS/InsertionAlgebra.lean` | `PEPS.EdgeMiddlePhysical` | `PEPS.EdgeMiddlePhysical.Basic` |
-| `TNLean/PEPS/InsertionRealization.lean` | `PEPS.EdgeMiddlePhysical` | `PEPS.EdgeMiddlePhysical.Basic` |
+| `TNLean/MPS/CanonicalForm/BNT/Grouping.lean` | `CanonicalForm.NormalReduction` | none (cone-dead; the line is deleted) |
+| `TNLean/MPS/CanonicalForm/NormalBlocks/TPGauge.lean` | `CanonicalForm.NormalReduction` | `NormalReduction.TPGauge` (provides `exists_tp_gauge_from_arbitrary`) |
+| `TNLean/MPS/CanonicalForm/NormalBlocks/TPGauge.lean` | `CanonicalForm.CyclicSectors` | none (cone-dead; the line is deleted) |
+| `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CyclicSectorDecomposition.lean` | `Periodic.SectorIrreducibility` | `Periodic.SectorIrreducibility.HLift` (provides `cyclic_projection_mul_left`, `cyclic_projection_mul_right`, `isIrreducibleOnCorner_of_cyclic_decomp_mps`) |
+| `TNLean/MPS/FundamentalTheorem/Periodic/RepeatedBlocks.lean` | `Periodic.Overlap` | `Periodic.Overlap.Dichotomy` (provides `periodicOverlapDichotomy`), `Periodic.Overlap.SelfOverlap` (provides `periodicSelfOverlap_tendsto`) |
+| `TNLean/MPS/CanonicalForm/Periodic/Overlap/Dichotomy.lean` | `Periodic.Overlap.SectorMatch` | `Periodic.Overlap.SectorMatch.Consequences` (provides `periodicOverlap_gaugeEquiv_of_sector_match`, `periodicOverlap_tendsto_zero_of_ne_dim`; `Contraction` is reached transitively through it) |
+| `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/PeriodicSectorDecomposition.lean` | `CanonicalForm.CyclicSectors` | none (closure-neutral; `CornerBridge`, `CommonSectorData` and `CyclicSectorRelation` keep the cone reachable) |
+| `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/PeriodicSectorDecomposition.lean` | `Periodic.SectorIrreducibility` | none (closure-neutral; the `HLift` cone is reached through `CommonSectorData`) |
+| `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/ProjectionOrtho.lean` | `CanonicalForm.CyclicSectors` | `CanonicalForm.CyclicSectors.FixedAdjoint` (provides `commutes_letters_of_adjoint_fixed_projection`) |
+| `TNLean/MPS/Tensor/PeriodicProjectiveRep.lean` | `Periodic.Symmetry` | `MPS.Symmetry.Defs` (provides `twistedTensor`; the file never names a `Periodic.Symmetry` leaf) |
+| `TNLean/PEPS/FundamentalTheorem/Injective/InsertionAlgebra.lean` | `PEPS.EdgeMiddlePhysical` | `PEPS.EdgeMiddlePhysical.Basic` |
+| `TNLean/PEPS/FundamentalTheorem/Injective/InsertionRealization.lean` | `PEPS.EdgeMiddlePhysical` | `PEPS.EdgeMiddlePhysical.Basic` |
 
 ## Deviations from the survey table
 
@@ -47,7 +47,7 @@ handled on the evidence of the scan rather than the table.
   `Contraction`, so the single-leaf replacement the table gives is correct and
   is what was applied.
 - The two `PEPS` files both take `Basic` only. Neither file names any
-  `KernelDescent` declaration. `TNLean/PEPS/EdgeGaugeFamily.lean` projects
+  `KernelDescent` declaration. `TNLean/PEPS/FundamentalTheorem/Injective/EdgeGaugeFamily.lean` projects
   `hA.edgeBlockedThreeSiteInjective` and `hB.edgeBlockedThreeSiteInjective` off
   `IsVertexInjective` hypotheses, and that dot-notation resolves to the
   declaration `IsVertexInjective.edgeBlockedThreeSiteInjective` in

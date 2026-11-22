@@ -20,12 +20,12 @@ paired with its replacement below.
 
 | Audited declaration | File | Disposition / replacement |
 |---|---|---|
-| `MPOTensor.BNTAlgebraTensorClause.isVerticalCF` | `TNLean/MPS/MPDO/BNTAlgebraTensorClause.lean` | build `IsVerticalCF M` from the clause fields at the use site: `⟨H.labelCount, H.bondDim, H.multiplicity, H.weight, H.tensor, H.verticalCoisometry, H.multiplicity_pos, H.weight_pos, H.coisometry, H.isBNT, H.forward, H.reconstruction⟩` |
-| `MPOTensor.HasBNTAlgebraTensorClause.isVerticalCF` | `TNLean/MPS/MPDO/BNTAlgebraTensorClause.lean` | destructure the `Nonempty` and use the anonymous constructor above |
-| `MPOTensor.BNTFusionTensorClause.isVerticalCF` | `TNLean/MPS/MPDO/BNTFusionTensorClause.lean` | the same, after `BNTFusionTensorClause.toBNTAlgebraTensorClause` |
-| `MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.RelabeledTwoSiteWeightedSectorSpace` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseAmbientSectorCoordinates.lean` | removed; use `VerticalWeightedSectorSpace S.relabeledTwoSiteBondDim S.relabeledTwoSiteMultiplicity` directly |
-| `MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_identityMarkedRealization` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseConditionalUnitary.lean` | `gauge_gram_eq_pos_smul_one_of_identityMarkedRealization` followed by `exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one`, both retained |
-| `MPOTensor.BNTAlgebraTensorClause.toMultiplicitySpectrumComparison` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseSpectrum.lean` | removed; use `(H.toTwoSiteMultiplicitySpectrum hCanonical hM).toComparison` |
+| `MPOTensor.BNTAlgebraTensorClause.isVerticalCF` | `TNLean/MPS/MPDO/Coefficients/BNTAlgebraTensorClause.lean` | build `IsVerticalCF M` from the clause fields at the use site: `⟨H.labelCount, H.bondDim, H.multiplicity, H.weight, H.tensor, H.verticalCoisometry, H.multiplicity_pos, H.weight_pos, H.coisometry, H.isBNT, H.forward, H.reconstruction⟩` |
+| `MPOTensor.HasBNTAlgebraTensorClause.isVerticalCF` | `TNLean/MPS/MPDO/Coefficients/BNTAlgebraTensorClause.lean` | destructure the `Nonempty` and use the anonymous constructor above |
+| `MPOTensor.BNTFusionTensorClause.isVerticalCF` | `TNLean/MPS/MPDO/Fusion/BNTFusionTensorClause.lean` | the same, after `BNTFusionTensorClause.toBNTAlgebraTensorClause` |
+| `MPOTensor.BNTAlgebraTensorClause.TwoSiteMultiplicitySpectrum.RelabeledTwoSiteWeightedSectorSpace` | `TNLean/MPS/MPDO/AmbientSectorMaps/BNTAlgebraTensorClauseAmbientSectorCoordinates.lean` | removed; use `VerticalWeightedSectorSpace S.relabeledTwoSiteBondDim S.relabeledTwoSiteMultiplicity` directly |
+| `MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.exists_unitary_sector_conjugacy_of_identityMarkedRealization` | `TNLean/MPS/MPDO/AmbientSectorMaps/BNTAlgebraTensorClauseSpectrum.lean` | `gauge_gram_eq_pos_smul_one_of_identityMarkedRealization` followed by `exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one`, both retained |
+| `MPOTensor.BNTAlgebraTensorClause.toMultiplicitySpectrumComparison` | `TNLean/MPS/MPDO/AmbientSectorMaps/BNTAlgebraTensorClauseSpectrum.lean` | removed; use `(H.toTwoSiteMultiplicitySpectrum hCanonical hM).toComparison` |
 | `MPOTensor.BNTAlgebraTensorClause.TwoSiteExactSectorGauge.IdentityMarkedRealization.ofPositiveCoefficientPhysicalRealization` | `TNLean/MPS/MPDO/BNTAlgebraTensorClauseConditionalGram.lean` | removed; the live constructor is `IdentityMarkedRealization.ofPositiveTailReflectedTarget`, with its distinct hypothesis set |
 
 The first three are one restatement carried through three carriers: the clause
@@ -53,12 +53,12 @@ not make any import dead.
 
 | Removed declaration | File | Replacement |
 |---|---|---|
-| `MPOTensor.BNTAlgebraTensorClause.operators_operator` | `TNLean/MPS/MPDO/BNTAlgebraTensorClause.lean` | `rfl`; it was a `@[simp]` projection of `operators`, which is `verticalBNTOperatorFamily H.tensor` by definition |
-| `MPOTensor.CPSVExample412Literal.M_zero_zero` | `TNLean/MPS/MPDO/CPSVExample412Literal.lean` | unfold `M` directly, as the surviving call sites already do |
-| `MPOTensor.CPSVExample412Literal.M_one_one` | `TNLean/MPS/MPDO/CPSVExample412Literal.lean` | unfold `M` directly |
-| `MPOTensor.CPSVExample412Literal.M_zero_one` | `TNLean/MPS/MPDO/CPSVExample412Literal.lean` | unfold `M` directly |
-| `MPOTensor.CPSVExample412Literal.M_one_zero` | `TNLean/MPS/MPDO/CPSVExample412Literal.lean` | unfold `M` directly |
-| `MPOTensor.CPSVExample411BinarySupport.complementPathWeight_cons` | `TNLean/MPS/MPDO/CPSVExample411BinarySupport.lean` | `rfl`; it restated the recursive branch of `complementPathWeight` |
+| `MPOTensor.BNTAlgebraTensorClause.operators_operator` | `TNLean/MPS/MPDO/Coefficients/BNTAlgebraTensorClause.lean` | `rfl`; it was a `@[simp]` projection of `operators`, which is `verticalBNTOperatorFamily H.tensor` by definition |
+| `MPOTensor.CPSVExample412Literal.M_zero_zero` | `TNLean/MPS/Examples/IdentityPlusZString/Literal.lean` | unfold `M` directly, as the surviving call sites already do |
+| `MPOTensor.CPSVExample412Literal.M_one_one` | `TNLean/MPS/Examples/IdentityPlusZString/Literal.lean` | unfold `M` directly |
+| `MPOTensor.CPSVExample412Literal.M_zero_one` | `TNLean/MPS/Examples/IdentityPlusZString/Literal.lean` | unfold `M` directly |
+| `MPOTensor.CPSVExample412Literal.M_one_zero` | `TNLean/MPS/Examples/IdentityPlusZString/Literal.lean` | unfold `M` directly |
+| `MPOTensor.CPSVExample411BinarySupport.complementPathWeight_cons` | `TNLean/MPS/Examples/BinaryCycle/BinarySupport.lean` | `rfl`; it restated the recursive branch of `complementPathWeight` |
 
 The four `M_*` lemmas were predicted to be the likeliest survivors, because the
 literal-example computations expand `M`, `sigmaZ`, and `SpinCover.pauli` in the
@@ -86,9 +86,9 @@ to `docs/tactic_patterns.md`.
 ## Refuted candidate
 
 `MPOTensor.physicalSliceColumns_apply_finProdFinEquiv`
-(`TNLean/MPS/MPDO/BNTLayerOrthogonality.lean`) was proposed for the same batch
+(`TNLean/MPS/CanonicalForm/SimpleMPO/BNTLayerOrthogonality.lean`) was proposed for the same batch
 and is retained. It is name-level zero-reference, but it is an implicit `@[simp]`
-consumer at `TNLean/MPS/MPDO/BNTLayerOrthogonality.lean:152`, where the
+consumer at `TNLean/MPS/CanonicalForm/SimpleMPO/BNTLayerOrthogonality.lean:152`, where the
 surrounding rewrite depends on it firing. The file is untouched.
 
 ## Alternative identity-marked constructor

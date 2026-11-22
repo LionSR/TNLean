@@ -37,7 +37,7 @@ This creates a dependency knot. Refactoring suggestion: extract shared infrastru
 
 ### 1.3 PEPS scaffold is purely sorry
 
-`TNLean/PEPS/FundamentalTheorem.lean`: 6 sorry's, 8 TODO markers. The file is imported at the project root but provides no proved theorems. Consider gating the import behind a feature flag or moving to a separate `PEPS.Stub` module.
+`TNLean/PEPS/FundamentalTheorem/Injective/FundamentalTheorem.lean`: 6 sorry's, 8 TODO markers. The file is imported at the project root but provides no proved theorems. Consider gating the import behind a feature flag or moving to a separate `PEPS.Stub` module.
 
 ## Priority 2: Sorry Clusters
 
@@ -67,7 +67,7 @@ The `UniqueGroundState` sorry's have a common root: `WrappingWindow.lean` fails 
 
 ### 2.6 RFP structural — 1 sorry
 
-`MPS/RFP/StructuralForm.lean`: `rfp_nt_structural` — rank-1 characterization of idempotent CPTP maps.
+`MPS/CanonicalForm/RenormalizationFixedPoint/StructuralForm.lean`: `rfp_nt_structural` — rank-1 characterization of idempotent CPTP maps.
 
 ## Priority 3: Code Quality
 
@@ -91,7 +91,7 @@ Most are in `ParentHamiltonian/` (5) and `PEPS/` (8). These should be converted 
 - `Algebra/ProjectionTriangularTrace.lean`: long proof bodies
 - `Algebra/BurnsideTheorem.lean`: long proof bodies
 - `MPS/Overlap/PeripheralToSpectralGap.lean`: long proof body
-- `PiAlgebra/CanonicalFormSepAux.lean`: long proof body
+- `MPS/CanonicalForm/BlockFamily.lean`: long proof body
 
 ### 3.5 Repeated proof boilerplate
 

@@ -2,7 +2,7 @@
 
 ## Statement and source
 
-`TNLean/PEPS/TorusBondClosureSeamMovement.lean` proves the group-valued
+`TNLean/PEPS/Injectivity/TorusSector/TorusBondClosureSeamMovement.lean` proves the group-valued
 seam deformation used in Schuch, Cirac, and Pérez-García,
 arXiv:1001.3807, Theorem 5.5 and equation `eq:2d:move-strings`.
 

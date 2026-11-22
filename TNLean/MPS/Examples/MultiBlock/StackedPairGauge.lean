@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import QICLean.Kraus.Injectivity
-import QICLean.Algebra.MatrixSingleSpan
-import TNLean.MPS.FundamentalTheorem.Reduction.ProjectorWeightedSum
+import QICLean.Algebra.Matrix.MatrixSingleSpan
+import TNLean.MPS.FundamentalTheorem.Compression.ProjectorWeightedSum
 
 /-!
 # The adapted inner-bond basis shared by stacked pair products

@@ -8,27 +8,8 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.FundamentalTheorem.SectorBNT
 
-import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
-import TNLean.MPS.FundamentalTheorem.SectorBNT.Basic
-import TNLean.MPS.FundamentalTheorem.SectorBNT.Blocking
-import TNLean.MPS.FundamentalTheorem.SectorBNT.CanonicalFormBridge
-import TNLean.MPS.FundamentalTheorem.SectorBNT.CanonicalFormEqualAmbient
-import TNLean.MPS.FundamentalTheorem.SectorBNT.CoeffIdentity
-import TNLean.MPS.FundamentalTheorem.SectorBNT.CopyWeightMatching
-import TNLean.MPS.FundamentalTheorem.SectorBNT.EqualModulus
-import TNLean.MPS.FundamentalTheorem.SectorBNT.ExactMatch
-import TNLean.MPS.FundamentalTheorem.SectorBNT.Examples
-import TNLean.MPS.FundamentalTheorem.SectorBNT.Fundamental
-import TNLean.MPS.FundamentalTheorem.SectorBNT.FundamentalCoord
-import TNLean.MPS.FundamentalTheorem.SectorBNT.MatchAux
+import TNLean.MPS.FundamentalTheorem.SectorBNT.NormalBlockInjectiveBlocking
+import TNLean.MPS.FundamentalTheorem.SectorBNT.NormalGauge
 import TNLean.MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients
-import TNLean.MPS.FundamentalTheorem.SectorBNT.PreparedReconstruction
-import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch
-import TNLean.MPS.FundamentalTheorem.SectorBNT.ProportionalMatch.Core
-import TNLean.MPS.FundamentalTheorem.SectorBNT.SingleSector
-import TNLean.MPS.FundamentalTheorem.SectorBNT.StrongMatch
-import TNLean.MPS.FundamentalTheorem.SectorBNT.Supplier
-import TNLean.MPS.FundamentalTheorem.SectorBNT.SupplierNormalized
+import TNLean.MPS.FundamentalTheorem.SectorBNT.PrimitiveBlockWordSpan
 import TNLean.MPS.FundamentalTheorem.SectorBNT.UnblockedPowerSumCoefficients
-import TNLean.MPS.FundamentalTheorem.SectorBNT.Unitary
-import TNLean.MPS.FundamentalTheorem.SectorBNT.WeightEquiv

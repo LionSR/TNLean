@@ -68,7 +68,7 @@ positivity of the real logarithm of the corresponding ratio.
 \section{Certified scalar statements}
 
 The module
-\doclink{TNLean/MPS/MPDO/CPSVExamples410411Arithmetic} machine-checks
+\doclink{TNLean/MPS/Examples/CorrelatedFlip/EntropyArithmetic} machine-checks
 Eq.~\ref{eq:cpsv16_exact_arithmetic_scope_example410_integer_inequality} in
 \leanid{CPSVExamples410411Arithmetic.example410_integer_inequality} and
 Eq.~\ref{eq:cpsv16_exact_arithmetic_scope_example411_integer_inequality} in
@@ -90,9 +90,9 @@ The arithmetic module proves only scalar statements. It neither identifies
 reduced-state spectra nor establishes an area-law conclusion.
 
 For the corrected Example~4.10 tensor at $p=1/4$,
-\doclink{TNLean/MPS/MPDO/CPSVExample410Spectrum} supplies the root multisets
+\doclink{TNLean/MPS/Examples/CorrelatedFlip/Spectrum} supplies the root multisets
 for blocks of one through four sites. The module
-\doclink{TNLean/MPS/MPDO/CPSVExample410Entropy} then proves
+\doclink{TNLean/MPS/Examples/CorrelatedFlip/Entropy} then proves
 \begin{align}
     I_2
         &> I_1
@@ -103,14 +103,14 @@ completes \ghissue{6301} without asserting the universal parameter range
 printed in Example~4.10 of Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 For the literal four-site family in Example~4.11,
-\doclink{TNLean/MPS/MPDO/CPSVExample411Entropy} proves
+\doclink{TNLean/MPS/Examples/BinaryCycle/Entropy} proves
 \begin{align}
     I_2
         &> I_1
     \label{eq:cpsv16_exact_arithmetic_scope_example411_mutual_information_defect}
 \end{align}
 and hence failure of saturation. Independently,
-\doclink{TNLean/MPS/MPDO/CPSVExample411SourceZCL} proves failure of source zero
+\doclink{TNLean/MPS/Examples/BinaryCycle/SourceZCL} proves failure of source zero
 correlation length through finite-marginal instability, both for the effective
 binary model and for its ambient two-qubit realization. These results complete
 \ghissue{6302}: they refute the printed saturation clause and verify the

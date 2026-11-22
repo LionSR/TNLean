@@ -23,7 +23,7 @@ one-import alias with no directory. This is the shape retired on 2026-08-26
 | handwritten `TNLean.PEPS.TorusWindowPeeling` | generated aggregator at the same module path |
 | handwritten `TNLean.MPS.MPDO.BiCFDerivation.PairHomogenization` | generated aggregator at the same module path |
 | handwritten `TNLean.MPS.MPDO.GSNNCHFourCycleMarkov` | generated aggregator at the same module path |
-| handwritten `TNLean.MPS.Periodic.SectorUnitary` | none; its sole import `TNLean.MPS.Periodic.Overlap.GaugePhase` is reached directly |
+| handwritten `TNLean.MPS.Periodic.SectorUnitary` | none; its sole import `TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.GaugePhase` is reached directly |
 | `HANDWRITTEN_IMPORT_OWNERSHIP` and its three helper functions in `scripts/generate_import_aggregators.py` | the exception-free coverage rule |
 
 No declaration was removed: a comment-stripped scan of all twelve files returns
@@ -32,7 +32,7 @@ non-import command of any kind. No blueprint `\lean{}` payload can name a
 module, and no blueprint prose names any of the twelve module paths; the single
 textual match on `EdgeMiddlePhysical` is the tag
 `TNLean.PEPS.EdgeMiddlePhysicalConfig`, declared in
-`TNLean/PEPS/EdgeMiddlePhysical/Basic.lean`.
+`TNLean/PEPS/FundamentalTheorem/Injective/EdgeMiddlePhysical.lean`.
 
 `TNLean.MPS.Periodic.SectorUnitary` shadowed no directory, so its path is
 vacated rather than regenerated. Its only importer was the generated
@@ -61,8 +61,8 @@ build-verified separately.
 The coverage check of `scripts/generate_import_aggregators.py` deliberately
 ignores handwritten reachability. `HANDWRITTEN_IMPORT_OWNERSHIP` was the single
 declared exception to that rule: it suppressed the two imports
-`TNLean.MPS.ParentHamiltonian.BlockedGroundSpaceTransport` and
-`TNLean.MPS.ParentHamiltonian.LocalSupportTransport` from the
+`TNLean.MPS.ParentHamiltonian.BoundaryMap.BlockedGroundSpaceTransport` and
+`TNLean.MPS.ParentHamiltonian.Commuting.LocalSupportTransport` from the
 `TNLean.MPS.ParentHamiltonian` aggregator, on the ground that the handwritten
 `Martingale` waypoint reached them through `Martingale.BlockedGap`.
 
@@ -86,12 +86,12 @@ production modules (was 40 / 1,277).
 
 Three import lines were removed in the same pass:
 
-* `TNLean/MPS/CanonicalForm/SectorComparison/NormalityChain.lean` dropped
-  `TNLean.MPS.Chain.BlockedChainFT`;
-* `TNLean/MPS/CanonicalForm/SectorComparison/TPPrimitiveReduction.lean` dropped
-  `TNLean.MPS.CanonicalForm.CommonPeriodCyclicSectors`;
-* `TNLean/MPS/MPDO/PhysicalSupportRestriction.lean` dropped
-  `TNLean.MPS.CanonicalForm.ProjectorClosureDecomposition`.
+* `TNLean/MPS/CanonicalForm/NormalBlocks/NormalityChain.lean` dropped
+  `TNLean.MPS.Tensor.Chain.BlockedChainFT`;
+* `TNLean/MPS/CanonicalForm/NormalBlocks/TPGauge.lean` dropped
+  `TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonPeriodBlocking`;
+* `TNLean/MPS/CanonicalForm/SimpleMPO/PhysicalSupportRestriction.lean` dropped
+  `TNLean.MPS.CanonicalForm.NormalBlocks.ProjectorClosureDecomposition`.
 
 The exclusive cone of each edge was recomputed over the whole import graph,
 including the QICLean and Mathlib dependencies, so that no module upstream of
