@@ -103,7 +103,7 @@ theorem finrank_regionParentGroundSpace_semiRegular_fourier_eq
 
 /-- The composed physical operation identifies every ground vector in the
 full kernels of arbitrary positive canonical parent Hamiltonians. -/
-theorem map_ker_regionParentHamiltonian_semiRegular_fourier_eq [Fintype ι]
+theorem map_ker_hamiltonian_ofPlace_semiRegular_fourier_eq [Fintype ι]
     (d : I → ℕ) (D : ∀ i, G →* Matrix (Fin (d i)) (Fin (d i)) ℂ)
     (hd : ∀ i, 0 < d i) (Q : Matrix G (Σ i, Fin (d i) × Fin (d i)) ℂ)
     (hQ : Q.IsIsometry)

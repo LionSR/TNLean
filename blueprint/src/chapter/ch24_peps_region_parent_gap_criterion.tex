@@ -33,10 +33,10 @@ Deriving it from properties of a boundary state is a separate question.
 
 \begin{lemma}[Gap from overlapping-pair estimates]%
     \label{thm:peps_finite_overlap_gap}
-    \lean{TNLean.PEPS.regionParentHamiltonianES_norm_gap_of_quadraticForm,
-        TNLean.PEPS.regionParentHamiltonianES_quadraticForm_of_overlap_anticommutator,
-        TNLean.PEPS.regionParentHamiltonianES_norm_gap_of_overlap_anticommutator,
-        TNLean.PEPS.regionParentHamiltonianES_norm_gap_of_overlap_of_comparison}
+    \lean{TNLean.PEPS.hamiltonian_ofPlace_norm_gap_of_quadraticForm,
+        TNLean.PEPS.hamiltonian_ofPlace_quadraticForm_of_overlap_anticommutator,
+        TNLean.PEPS.hamiltonian_ofPlace_norm_gap_of_overlap_anticommutator,
+        TNLean.PEPS.hamiltonian_ofPlace_norm_gap_of_overlap_of_comparison}
     \leanok
     \uses{thm:peps_region_projector_unit_gap,
         thm:peps_disjoint_region_interactions_commute}
@@ -74,7 +74,7 @@ Deriving it from properties of a boundary state is a separate question.
 
 \begin{corollary}[A gap independent of the volume]%
     \label{cor:peps_uniform_finite_overlap_gap}
-    \lean{TNLean.PEPS.regionParentHamiltonianES_uniform_norm_gap_of_overlap_anticommutator}
+    \lean{TNLean.PEPS.hamiltonian_ofPlace_uniform_norm_gap_of_overlap_anticommutator}
     \leanok
     \uses{thm:peps_finite_overlap_gap}
     Consider an arbitrary family of finite graphs, regional canonical
@@ -93,8 +93,8 @@ Deriving it from properties of a boundary state is a separate question.
 
 \begin{lemma}[Unit gap for commuting canonical parents]%
     \label{thm:peps_commuting_region_parent_unit_gap}
-    \lean{TNLean.PEPS.regionParentHamiltonianES_unit_norm_gap_of_commute,
-        TNLean.PEPS.regionParentHamiltonianES_unit_norm_gap_of_pairwise_disjoint}
+    \lean{TNLean.PEPS.hamiltonian_ofPlace_unit_norm_gap_of_commute,
+        TNLean.PEPS.hamiltonian_ofPlace_unit_norm_gap_of_pairwise_disjoint}
     \leanok
     \uses{thm:peps_region_projector_unit_gap,
         thm:peps_disjoint_region_interactions_commute}

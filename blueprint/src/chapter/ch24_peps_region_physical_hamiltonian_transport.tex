@@ -15,8 +15,8 @@
     \lean{TNLean.PEPS.regionSliceMap_ext,
         TNLean.PEPS.regionSliceMap_place,
         TNLean.PEPS.globalPhysicalMap_place,
-        TNLean.PEPS.globalPhysicalMap_regionParentHamiltonian,
-        TNLean.PEPS.globalPhysicalMatrix_regionParentHamiltonian}
+        TNLean.PEPS.globalPhysicalMap_hamiltonian_ofPlace_mulVec,
+        TNLean.PEPS.hamiltonian_ofPlace_mul_globalPhysicalMatrix}
     \leanok
     \uses{def:peps_global_physical_matrix,def:peps_region_parent_hamiltonian}
     Suppose the regional interactions $h_i$ and $k_i$ satisfy
@@ -44,9 +44,9 @@
         TNLean.PEPS.globalPhysicalMatrix_isUnitaryBetween,
         TNLean.PEPS.toMatrix_regionPhysicalEquiv_symm,
         TNLean.PEPS.deformedRegionInteraction_eq_unitary_conj,
-        TNLean.PEPS.regionParentHamiltonian_physicalDeform_unitary,
-        TNLean.PEPS.charpoly_regionParentHamiltonian_physicalDeform_unitary,
-        TNLean.PEPS.spectrum_regionParentHamiltonian_physicalDeform_unitary}
+        TNLean.PEPS.hamiltonian_ofPlace_deformedRegionInteraction_of_isUnitaryBetween,
+        TNLean.PEPS.charpoly_hamiltonian_ofPlace_deformedRegionInteraction_of_isUnitaryBetween,
+        TNLean.PEPS.spectrum_hamiltonian_ofPlace_deformedRegionInteraction_of_isUnitaryBetween}
     \leanok
     \uses{def:peps_deformed_region_interaction,def:peps_global_physical_matrix}
     If every $F_v$ is unitary, then every regional product $F_R$ and

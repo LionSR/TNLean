@@ -75,7 +75,7 @@ variable {ι : Type*} [Fintype ι]
 /-- Common regional comparison constants also compare the full Hamiltonians.
 Source: CPGSV21, arXiv:2011.12127, comparison with projections, line 2170,
 and the PEPS parent sum, lines 2003–2011. -/
-theorem regionParentHamiltonian_comparison (R : ι → Finset V)
+theorem hamiltonian_ofPlace_comparison (R : ι → Finset V)
     (h k : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ) (κ C : ℝ)
     (hLower : ∀ i, (κ : ℂ) • k i ≤ h i)
@@ -107,7 +107,7 @@ private theorem smul_le_smul_of_nonneg {n : Type*} {H K : Matrix n n ℂ}
 /-- A finite collection of positive regional parent interactions has common
 strictly positive comparison constants with the sum of canonical projectors.
 Source: CPGSV21, arXiv:2011.12127, line 2170 and lines 2003–2011. -/
-theorem exists_pos_regionParentHamiltonian_comparison (A : Tensor Γ d)
+theorem exists_pos_hamiltonian_ofPlace_comparison (A : Tensor Γ d)
     (R : ι → Finset V)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
@@ -126,7 +126,7 @@ theorem exists_pos_regionParentHamiltonian_comparison (A : Tensor Γ d)
     obtain ⟨iMin, _, hMin⟩ := Finset.exists_min_image Finset.univ κ Finset.univ_nonempty
     obtain ⟨iMax, _, hMax⟩ := Finset.exists_max_image Finset.univ C Finset.univ_nonempty
     refine ⟨κ iMin, C iMax, hκ iMin, hC iMax, ?_⟩
-    apply regionParentHamiltonian_comparison
+    apply hamiltonian_ofPlace_comparison
     · intro i
       exact (smul_mono_of_posSemidef (canonicalRegionParentInteraction_posSemidef A (R i))
         (hMin i (Finset.mem_univ i))).trans (hLower i)
@@ -138,7 +138,7 @@ theorem exists_pos_regionParentHamiltonian_comparison (A : Tensor Γ d)
 /-- Any two positive PEPS parents on the same finite family of regions bound
 one another by strictly positive constants. Source: CPGSV21,
 arXiv:2011.12127, comparison with projections, line 2170. -/
-theorem exists_pos_regionParentHamiltonian_comparison_between (A : Tensor Γ d)
+theorem exists_pos_hamiltonian_ofPlace_comparison_between (A : Tensor Γ d)
     (R : ι → Finset V)
     (h k : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
@@ -150,9 +150,9 @@ theorem exists_pos_regionParentHamiltonian_comparison_between (A : Tensor Γ d)
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ≤
           (C : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian := by
   obtain ⟨κh, Ch, hκh, hCh, hLowerH, hUpperH⟩ :=
-    exists_pos_regionParentHamiltonian_comparison A R h hh
+    exists_pos_hamiltonian_ofPlace_comparison A R h hh
   obtain ⟨κk, Ck, hκk, hCk, hLowerK, hUpperK⟩ :=
-    exists_pos_regionParentHamiltonian_comparison A R k hk
+    exists_pos_hamiltonian_ofPlace_comparison A R k hk
   refine ⟨κh / Ck, Ch / κk, div_pos hκh hCk, div_pos hCh hκk, ?_, ?_⟩
   · calc
       ((κh / Ck : ℝ) : ℂ) • (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian ≤
@@ -177,7 +177,7 @@ theorem exists_pos_regionParentHamiltonian_comparison_between (A : Tensor Γ d)
 /-- Changing the positive regional interactions leaves the full Euclidean
 ground space unchanged. Source: CPGSV21, arXiv:2011.12127, prescribed parent
 kernels and frustration freeness, lines 2003–2011. -/
-theorem ker_toEuclideanLin_regionParentHamiltonian_eq (A : Tensor Γ d)
+theorem ker_toEuclideanLin_hamiltonian_ofPlace_eq (A : Tensor Γ d)
     (R : ι → Finset V)
     (h k : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
@@ -198,7 +198,7 @@ theorem ker_toEuclideanLin_regionParentHamiltonian_eq (A : Tensor Γ d)
 parents with the same regional kernels. The transferred gap is multiplied by
 the lower comparison constant. This is the finite-dimensional consequence of
 CPGSV21, arXiv:2011.12127, comparison with projections, line 2170. -/
-theorem regionParentHamiltonian_norm_gap_of_comparison (A : Tensor Γ d)
+theorem hamiltonian_ofPlace_norm_gap_of_comparison (A : Tensor Γ d)
     (R : ι → Finset V)
     (h k : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
@@ -230,7 +230,7 @@ theorem regionParentHamiltonian_norm_gap_of_comparison (A : Tensor Γ d)
     simpa only [map_sub, map_smul] using
       Matrix.isPositive_toEuclideanLin_iff.mpr (Matrix.le_iff.mp hLower)
   have hker := (LinearMap.ker_smul _ (κ : ℂ) hκ0).trans
-    (ker_toEuclideanLin_regionParentHamiltonian_eq A R k h hk hh)
+    (ker_toEuclideanLin_hamiltonian_ofPlace_eq A R k h hk hh)
   apply hpos.norm_gap_of_le_of_ker_eq (mul_nonneg hκ.le hγ) hle hker
   intro ψ hψ
   rw [LinearMap.ker_smul _ (κ : ℂ) hκ0] at hψ
@@ -242,7 +242,7 @@ the orthogonal complement of the ground space is independent of the choice
 of positive parent interactions. The comparison constants may depend on the
 interactions and the collection. Source: CPGSV21, arXiv:2011.12127,
 comparison with projections, line 2170. -/
-theorem regionParentHamiltonian_has_pos_norm_gap_iff (A : Tensor Γ d)
+theorem hamiltonian_ofPlace_has_pos_norm_gap_iff (A : Tensor Γ d)
     (R : ι → Finset V)
     (h k : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
@@ -261,13 +261,13 @@ theorem regionParentHamiltonian_has_pos_norm_gap_iff (A : Tensor Γ d)
   constructor
   · rintro ⟨γ, hγ, hGap⟩
     obtain ⟨κ, C, hκ, hC, hLower, hUpper⟩ :=
-      exists_pos_regionParentHamiltonian_comparison_between A R k h hk hh
+      exists_pos_hamiltonian_ofPlace_comparison_between A R k h hk hh
     exact ⟨κ * γ, mul_pos hκ hγ,
-      regionParentHamiltonian_norm_gap_of_comparison A R k h hk hh hκ hγ.le hLower hGap⟩
+      hamiltonian_ofPlace_norm_gap_of_comparison A R k h hk hh hκ hγ.le hLower hGap⟩
   · rintro ⟨γ, hγ, hGap⟩
     obtain ⟨κ, C, hκ, hC, hLower, hUpper⟩ :=
-      exists_pos_regionParentHamiltonian_comparison_between A R h k hh hk
+      exists_pos_hamiltonian_ofPlace_comparison_between A R h k hh hk
     exact ⟨κ * γ, mul_pos hκ hγ,
-      regionParentHamiltonian_norm_gap_of_comparison A R h k hh hk hκ hγ.le hLower hGap⟩
+      hamiltonian_ofPlace_norm_gap_of_comparison A R h k hh hk hκ hγ.le hLower hGap⟩
 
 end TNLean.PEPS

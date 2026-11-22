@@ -124,7 +124,7 @@ theorem regionParentGroundSpace_eq_of_regionGroundSpace_eq
 
 /-- The canonical finite parent Hamiltonian depends only on its regional
 spaces. Source: CPGSV21, Section IV.C.1, lines 2003–2011. -/
-theorem canonical_regionParentHamiltonian_eq_of_regionGroundSpace_eq [Fintype ι]
+theorem hamiltonian_ofPlace_canonicalRegionParentInteraction_eq_of_regionGroundSpace_eq [Fintype ι]
     {A B : Tensor Γ d} (R : ι → Finset V)
     (hR : ∀ i, regionGroundSpace A (R i) = regionGroundSpace B (R i)) :
     (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R

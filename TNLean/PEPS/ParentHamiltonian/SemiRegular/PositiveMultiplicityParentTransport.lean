@@ -104,7 +104,7 @@ theorem finrank_regionParentGroundSpace_positiveMultiplicity_eq
 
 /-- Arbitrary positive local interactions with the genuine contraction kernels
 have their full Hamiltonian kernels transported by the explicit multiplicity map. -/
-theorem map_ker_regionParentHamiltonian_positiveMultiplicity_eq
+theorem map_ker_hamiltonian_ofPlace_positiveMultiplicity_eq
     (d m : I → ℕ) (D : ∀ i, G →* Matrix (Fin (d i)) (Fin (d i)) ℂ)
     (hm : ∀ i, 0 < m i) {p q : ℕ}
     (eX : (v : V) → (IncidentEdge Γ v → Σ i, Fin (d i)) ≃ Fin p)

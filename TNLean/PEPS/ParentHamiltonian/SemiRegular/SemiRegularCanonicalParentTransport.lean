@@ -168,7 +168,7 @@ theorem finrank_regionParentGroundSpace_multiplicity_eq
 /-- Arbitrary positive canonical parent interactions, with the actual regional
 kernels on both sides, have their full Hamiltonian kernels identified by the
 physical bond map. The conclusion concerns every ground vector. -/
-theorem map_ker_regionParentHamiltonian_multiplicity_eq
+theorem map_ker_hamiltonian_ofPlace_multiplicity_eq
     (d : I → ℕ) (D : ∀ i, G →* Matrix (Fin (d i)) (Fin (d i)) ℂ)
     (hd : ∀ i, 0 < d i)
     (eX : (v : V) → (IncidentEdge Γ v → Σ i, Fin (d i)) ≃ Fin p)
@@ -190,6 +190,6 @@ theorem map_ker_regionParentHamiltonian_multiplicity_eq
       (Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin q) R K).hamiltonian).ker := by
   simpa only [blockMultiplicityRootWeight_self, blockMultiplicityRepresentation_self] using
-    map_ker_regionParentHamiltonian_copy_eq d d D hd eX eY R hcover H K hH hK
+    map_ker_hamiltonian_ofPlace_copy_eq d d D hd eX eY R hcover H K hH hK
 
 end TNLean.PEPS

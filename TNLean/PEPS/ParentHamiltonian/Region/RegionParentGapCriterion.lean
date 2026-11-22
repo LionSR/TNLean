@@ -107,7 +107,7 @@ variable {ι : Type*} [Fintype ι]
 /-- A positive quadratic-form bound gives the same norm gap for a finite PEPS
 parent sum. Source: CPGSV21, arXiv:2011.12127, equivalence of the gap and
 `H² ≥ γ H`, line 2170. -/
-theorem regionParentHamiltonianES_norm_gap_of_quadraticForm (R : ι → Finset V)
+theorem hamiltonian_ofPlace_norm_gap_of_quadraticForm (R : ι → Finset V)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hh : ∀ i, (h i).PosSemidef) {γ : ℝ} (hγ : 0 < γ)
@@ -135,7 +135,7 @@ open Classical in
 the quadratic spectral-gap inequality for the canonical PEPS parent.
 Source: CPGSV21, arXiv:2011.12127, projector expansion and pair bounds,
 lines 2170–2179; this is its finite-overlap consequence on a general graph. -/
-theorem regionParentHamiltonianES_quadraticForm_of_overlap_anticommutator
+theorem hamiltonian_ofPlace_quadraticForm_of_overlap_anticommutator
     (A : Tensor Γ d) (R : ι → Finset V) {ε : ℝ} {m : ℕ}
     (hε : 0 ≤ ε) (hm : 0 < m)
     (hCard : ∀ i, ((Finset.univ.erase i).filter
@@ -179,7 +179,7 @@ open Classical in
 `1 - m * ε` whenever this number is positive. Source: CPGSV21,
 arXiv:2011.12127, projector-sum gap criterion, lines 2170–2179. The pairwise
 estimate and overlap bound remain explicit hypotheses. -/
-theorem regionParentHamiltonianES_norm_gap_of_overlap_anticommutator
+theorem hamiltonian_ofPlace_norm_gap_of_overlap_anticommutator
     (A : Tensor Γ d) (R : ι → Finset V) {ε : ℝ} {m : ℕ}
     (hε : 0 ≤ ε) (hm : 0 < m) (hmε : (m : ℝ) * ε < 1)
     (hCard : ∀ i, ((Finset.univ.erase i).filter
@@ -193,15 +193,15 @@ theorem regionParentHamiltonianES_norm_gap_of_overlap_anticommutator
       (fun i => canonicalRegionParentInteraction A (R i))).hamiltonian
     ∀ ψ ∈ H.kerᗮ, (1 - (m : ℝ) * ε) * ‖ψ‖ ≤ ‖H ψ‖ := by
   classical
-  exact regionParentHamiltonianES_norm_gap_of_quadraticForm R
+  exact hamiltonian_ofPlace_norm_gap_of_quadraticForm R
     (fun i => canonicalRegionParentInteraction A (R i))
     (fun i => canonicalRegionParentInteraction_posSemidef A (R i)) (sub_pos.mpr hmε)
-    (regionParentHamiltonianES_quadraticForm_of_overlap_anticommutator A R hε hm hCard hAnti)
+    (hamiltonian_ofPlace_quadraticForm_of_overlap_anticommutator A R hε hm hCard hAnti)
 
 /-- Pairwise commuting canonical PEPS parent terms have norm gap at least one.
 Source: CPGSV21, arXiv:2011.12127, commuting nonnegative cross terms in the
 projector-sum expansion, lines 2170–2175. Commutation is explicit here. -/
-theorem regionParentHamiltonianES_unit_norm_gap_of_commute (A : Tensor Γ d)
+theorem hamiltonian_ofPlace_unit_norm_gap_of_commute (A : Tensor Γ d)
     (R : ι → Finset V)
     (hComm : let P := fun i => placeES (R i) (canonicalRegionParentInteraction A (R i))
       ∀ i j, Commute (P i) (P j)) :
@@ -222,7 +222,7 @@ theorem regionParentHamiltonianES_unit_norm_gap_of_commute (A : Tensor Γ d)
         (fun v => LinearMap.congr_fun (hComm i j).symm.eq v) ψ
       simp only [sub_self, neg_zero, zero_mul]
       exact add_nonneg h₁ h₂)
-  apply regionParentHamiltonianES_norm_gap_of_quadraticForm R
+  apply hamiltonian_ofPlace_norm_gap_of_quadraticForm R
     (fun i => canonicalRegionParentInteraction A (R i))
     (fun i => canonicalRegionParentInteraction_posSemidef A (R i)) zero_lt_one
   simpa only [ManyBody.Interaction.hamiltonian_ofPlace, map_sum, P, placeES] using hQuad
@@ -230,12 +230,12 @@ theorem regionParentHamiltonianES_unit_norm_gap_of_commute (A : Tensor Γ d)
 /-- A finite canonical PEPS parent on pairwise disjoint regions has norm gap
 at least one. Source: CPGSV21, arXiv:2011.12127, the non-overlapping
 projector terms of the expansion, lines 2170–2175. -/
-theorem regionParentHamiltonianES_unit_norm_gap_of_pairwise_disjoint (A : Tensor Γ d)
+theorem hamiltonian_ofPlace_unit_norm_gap_of_pairwise_disjoint (A : Tensor Γ d)
     (R : ι → Finset V) (hDisjoint : Pairwise (fun i j => Disjoint (R i) (R j))) :
     let H := Matrix.toEuclideanLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R
       (fun i => canonicalRegionParentInteraction A (R i))).hamiltonian
     ∀ ψ ∈ H.kerᗮ, (1 : ℝ) * ‖ψ‖ ≤ ‖H ψ‖ := by
-  apply regionParentHamiltonianES_unit_norm_gap_of_commute A R
+  apply hamiltonian_ofPlace_unit_norm_gap_of_commute A R
   dsimp only
   intro i j
   rcases eq_or_ne i j with rfl | hij
@@ -248,7 +248,7 @@ open Classical in
 finite-overlap gap to arbitrary positive regional parent interactions.
 Source: CPGSV21, arXiv:2011.12127, comparison with projections and the
 projector-sum expansion, lines 2170–2179. Both bounds are explicit hypotheses. -/
-theorem regionParentHamiltonianES_norm_gap_of_overlap_of_comparison
+theorem hamiltonian_ofPlace_norm_gap_of_overlap_of_comparison
     (A : Tensor Γ d) (R : ι → Finset V)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
@@ -270,11 +270,11 @@ theorem regionParentHamiltonianES_norm_gap_of_overlap_of_comparison
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian).kerᗮ,
       (κ * (1 - (m : ℝ) * ε)) * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian ψ‖ := by
-  exact regionParentHamiltonian_norm_gap_of_comparison A R h
+  exact hamiltonian_ofPlace_norm_gap_of_comparison A R h
     (fun i => canonicalRegionParentInteraction A (R i)) hh
     (fun i => isRegionParentInteraction_canonical A (R i))
     hκ (sub_pos.mpr hmε).le hLower
-    (regionParentHamiltonianES_norm_gap_of_overlap_anticommutator A R hε hm hmε hCard hAnti)
+    (hamiltonian_ofPlace_norm_gap_of_overlap_anticommutator A R hε hm hmε hCard hAnti)
 
 section UniformFamily
 
@@ -289,7 +289,7 @@ open Classical in
 when its overlap degree and pairwise constant are independent of the graph.
 Source: CPGSV21, arXiv:2011.12127, the system-size-independent gap criterion
 in Section IV.C.3, lines 2167–2179. The pairwise estimate remains explicit. -/
-theorem regionParentHamiltonianES_uniform_norm_gap_of_overlap_anticommutator
+theorem hamiltonian_ofPlace_uniform_norm_gap_of_overlap_anticommutator
     (A : (L : Λ) → Tensor (graph L) (physicalDim L))
     (R : (L : Λ) → terms L → Finset (vertices L)) {ε : ℝ} {m : ℕ}
     (hε : 0 ≤ ε) (hm : 0 < m) (hmε : (m : ℝ) * ε < 1)
@@ -308,7 +308,7 @@ theorem regionParentHamiltonianES_uniform_norm_gap_of_overlap_anticommutator
     0 < 1 - (m : ℝ) * ε ∧
       ∀ L, ∀ ψ ∈ (H L).kerᗮ, (1 - (m : ℝ) * ε) * ‖ψ‖ ≤ ‖H L ψ‖ := by
   refine ⟨sub_pos.mpr hmε, fun L => ?_⟩
-  exact regionParentHamiltonianES_norm_gap_of_overlap_anticommutator
+  exact hamiltonian_ofPlace_norm_gap_of_overlap_anticommutator
     (A L) (R L) hε hm hmε (hCard L) (hAnti L)
 
 end UniformFamily

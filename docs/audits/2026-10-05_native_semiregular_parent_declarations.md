@@ -98,7 +98,7 @@
 
 - `TNLean.PEPS.nonempty_canonicalOrientedSemiRegularParentEquiv`
 - `TNLean.PEPS.finrank_regionParentGroundSpace_arbitraryOrientedSemiRegular_eq`
-- `TNLean.PEPS.nonempty_ker_regionParentHamiltonian_arbitraryOrientedSemiRegular_equiv`
+- `TNLean.PEPS.nonempty_ker_hamiltonian_ofPlace_arbitraryOrientedSemiRegular_equiv`
 
 ## TNLean/PEPS/ParentHamiltonian/SemiRegular/OrientedCoordinateParentTransport.lean
 
@@ -111,7 +111,7 @@
 - `TNLean.PEPS.graphNumberedBondFamilyMatrix_oriented_coordinates_injective`
 - `TNLean.PEPS.canonicalOrientedCoordinateParentEquiv`
 - `TNLean.PEPS.finrank_regionParentGroundSpace_oriented_coordinates_eq`
-- `TNLean.PEPS.map_ker_regionParentHamiltonian_oriented_coordinates_eq`
+- `TNLean.PEPS.map_ker_hamiltonian_ofPlace_oriented_coordinates_eq`
 
 ## TNLean/PEPS/ParentHamiltonian/SemiRegular/OrientedCopyParentTransport.lean
 
@@ -127,7 +127,7 @@
 - `TNLean.PEPS.graphNumberedCopyMatrix_injOn_oriented_parent`
 - `TNLean.PEPS.canonicalOrientedCopyParentEquiv`
 - `TNLean.PEPS.finrank_regionParentGroundSpace_oriented_copy_eq`
-- `TNLean.PEPS.map_ker_regionParentHamiltonian_oriented_copy_eq`
+- `TNLean.PEPS.map_ker_hamiltonian_ofPlace_oriented_copy_eq`
 
 ## TNLean/PEPS/ParentHamiltonian/SemiRegular/OrientedCopyWeightPhysicalTransport.lean
 
@@ -146,7 +146,7 @@
 - `TNLean.PEPS.nonempty_gInjectiveOrientedCanonicalParentEquiv`
 - `TNLean.PEPS.nonempty_orientedSemiRegularGInjectiveParentEquiv`
 - `TNLean.PEPS.finrank_regionParentGroundSpace_orientedSemiRegularGInjective_eq`
-- `TNLean.PEPS.nonempty_ker_regionParentHamiltonian_orientedSemiRegularGInjective_equiv`
+- `TNLean.PEPS.nonempty_ker_hamiltonian_ofPlace_orientedSemiRegularGInjective_equiv`
 
 ## TNLean/PEPS/ParentHamiltonian/Torus/TorusInvariantClosureMembership.lean
 

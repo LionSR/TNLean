@@ -89,7 +89,7 @@ theorem finrank_regionParentGroundSpace_arbitrarySemiRegular_eq
 
 /-- Positive local interactions with the genuine regional kernels have equivalent
 full Hamiltonian kernels for an arbitrary unitary semi-regular representation. -/
-theorem nonempty_ker_regionParentHamiltonian_arbitrarySemiRegular_equiv
+theorem nonempty_ker_hamiltonian_ofPlace_arbitrarySemiRegular_equiv
     (U : G →* Matrix X X ℂ) (hU : ∀ g, U g ∈ Matrix.unitaryGroup X ℂ)
     (hSemi : Representation.IsSemiRegular (Matrix.toLinAlgEquiv'.toMonoidHom.comp U))
     (k : ℕ) (hk : ∀ v : V, Fintype.card (IncidentEdge Γ v) = k) {p : ℕ}

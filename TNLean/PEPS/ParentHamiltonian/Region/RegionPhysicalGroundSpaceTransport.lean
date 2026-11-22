@@ -271,7 +271,7 @@ variable [Fintype ι]
 map when each local interaction is transported by inverse-adjoint congruence.
 Source: regional parent construction in arXiv:2011.12127,
 Section IV.C.1, lines 2003–2011. -/
-theorem map_ker_regionParentHamiltonian_physicalDeform (A : Tensor Γ d)
+theorem map_ker_hamiltonian_ofPlace_deformedRegionInteraction (A : Tensor Γ d)
     (R : ι → Finset V) (F : V → (Fin d → ℂ) ≃ₗ[ℂ] (Fin e → ℂ))
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)

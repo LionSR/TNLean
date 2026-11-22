@@ -217,7 +217,7 @@ theorem finrank_regionParentGroundSpace_physicalDeform_of_injOn (A : Tensor Γ d
 and after deformation have full kernels related by the physical product map.
 The interactions need not be obtained from one another by conjugation.
 Source: the exact local-kernel parent construction of SCP10, Theorem 5.7. -/
-theorem map_ker_regionParentHamiltonian_physicalDeform_of_injOn (A : Tensor Γ d)
+theorem map_ker_hamiltonian_ofPlace_physicalDeform_of_injOn (A : Tensor Γ d)
     (F : V → Matrix (Fin e) (Fin d) ℂ)
     (hF : ∀ v, Set.InjOn (Matrix.mulVecLin (F v)) (localTensorMap A v).range)
     {ι : Type*} [Fintype ι] (R : ι → Finset V) (hcover : ∀ v, ∃ i, v ∈ R i)

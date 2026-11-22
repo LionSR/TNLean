@@ -126,7 +126,7 @@ theorem finrank_regionParentGroundSpace_coordinates_eq
 
 /-- Fourier coordinates identify full kernels of arbitrary positive canonical
 parent interactions, retaining their actual regional PEPS ranges. -/
-theorem map_ker_regionParentHamiltonian_coordinates_eq
+theorem map_ker_hamiltonian_ofPlace_coordinates_eq
     {ι : Type*} [Fintype ι] (Q : Matrix Y X ℂ) (hQ : Q.conjTranspose * Q = 1)
     (U : G →* Matrix X X ℂ) (L : G →* Matrix Y Y ℂ)
     (hL : ∀ g, L g = Q * U g * Q.conjTranspose)

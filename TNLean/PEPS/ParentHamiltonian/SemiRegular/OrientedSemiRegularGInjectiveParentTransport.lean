@@ -94,7 +94,7 @@ theorem finrank_regionParentGroundSpace_orientedSemiRegularGInjective_eq
 
 /-- The complete Hamiltonian kernels of arbitrary positive canonical local
 parents are equivalent for every semi-regular G-injective physical tensor. -/
-theorem nonempty_ker_regionParentHamiltonian_orientedSemiRegularGInjective_equiv
+theorem nonempty_ker_hamiltonian_ofPlace_orientedSemiRegularGInjective_equiv
     (U : G →* Matrix X X ℂ) (o : Edge Γ → Bool) (hU : ∀ g, U g ∈ Matrix.unitaryGroup X ℂ)
     (hSemi : Representation.IsSemiRegular (Matrix.toLinAlgEquiv'.toMonoidHom.comp U))
     {p : ℕ} (a : (v : V) → (IncidentEdge Γ v → X) → Fin p → ℂ)

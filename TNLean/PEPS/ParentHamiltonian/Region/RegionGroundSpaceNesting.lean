@@ -279,7 +279,7 @@ theorem regionParentGroundSpace_antitone_regions (A : Tensor Γ d)
 /-- Parent kernels decrease when their regional constraints are enlarged or
 supplemented by containing regions. Source: CPGSV21, arXiv:2011.12127,
 regional parent kernels and frustration freeness, lines 2003–2011. -/
-theorem ker_regionParentHamiltonian_le_of_regions_covered (A : Tensor Γ d)
+theorem ker_hamiltonian_ofPlace_le_of_regions_covered (A : Tensor Γ d)
     {ι κ : Type*} [Fintype ι] [Fintype κ]
     (R : ι → Finset V) (S : κ → Finset V)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
