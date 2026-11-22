@@ -4,18 +4,19 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.VaryingOBCReconstruction
-import QICLean.Analysis.WeightedPositiveKernel
+import QICLean.ManyBody.Hamiltonian.FrustrationFree
+import QICLean.ManyBody.Hamiltonian.Models
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!
 # Local projector kernels on a varying-bond open chain
 
 The two-site boundary range uses the rectangular matrices at each bond.
-Its orthogonal complement defines the local parent projector. Fixing a prefix
-and a suffix gives a coordinate restriction to the intervening pair. Summing
-the adjoint compressions of the local projector over these outside configurations
-extends it by the identity. Each outside configuration occurs once, so there is
-no averaging factor and no cyclic interaction across the endpoints.
+Its orthogonal complement defines the local parent projector. The parent interaction on the
+open chain places the matrix of the projector at each position on the two sites of that
+position (`ManyBody.Interaction.ofPlaceAlong`), so each term acts as the identity on the
+remaining sites and there is no cyclic interaction across the endpoints. Fixing a prefix
+and a suffix gives a coordinate restriction to the intervening pair.
 
 Positivity identifies the kernel of the resulting finite Hamiltonian with the
 adjacent-pair trace sections used in the open-chain reconstruction.
@@ -25,7 +26,7 @@ Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 9 and the first step of its pro
 `Papers/quant-ph_0608197/MPSarchive.tex`, lines 1195–1222.
 -/
 
-open scoped BigOperators Matrix InnerProductSpace
+open scoped BigOperators ComplexOrder Matrix InnerProductSpace
 
 namespace Matrix
 
@@ -100,111 +101,152 @@ noncomputable def obcPairSection {N p q : ℕ} (h : p + 2 + q = N)
       map_add' := fun _ _ ↦ rfl
       map_smul' := fun _ _ ↦ rfl }
 
-/-- One outside-coordinate compression of the local projector.
-Source: PGVWC07, Theorem 9 proof, lines 1213–1217. -/
-private noncomputable def obcPairCompression (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
-    {N p q : ℕ} (h : p + 2 + q = N) (u : Fin p → Fin d) (w : Fin q → Fin d) :
-    EuclideanSpace ℂ (Fin N → Fin d) →ₗ[ℂ] EuclideanSpace ℂ (Fin N → Fin d) :=
-  (obcPairSection h u w).adjoint ∘ₗ obcPairProjector b A p ∘ₗ obcPairSection h u w
+/-- The configuration of the chain with prefix `u`, pair `a` and suffix `w`. -/
+private def obcPairCfg {N p q : ℕ} (h : p + 2 + q = N) (u : Fin p → Fin d)
+    (a : Fin 2 → Fin d) (w : Fin q → Fin d) : Fin N → Fin d :=
+  fun i ↦ Fin.append (Fin.append u a) w (Fin.cast h.symm i)
 
-private theorem obcPairCompression_isPositive (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
-    {N p q : ℕ} (h : p + 2 + q = N) (u : Fin p → Fin d) (w : Fin q → Fin d) :
-    (obcPairCompression b A h u w).IsPositive :=
-  (obcPairProjector_isPositive b A p).adjoint_conj (obcPairSection h u w)
+private theorem obcPairCfg_chainWindow {N p q : ℕ} (h : p + 2 + q = N) (u : Fin p → Fin d)
+    (a : Fin 2 → Fin d) (w : Fin q → Fin d) (j : Fin 2) :
+    obcPairCfg h u a w (ManyBody.chainWindow (N := N) (k := 2) p (by omega) j) = a j := by
+  have hj : Fin.cast h.symm (ManyBody.chainWindow (N := N) (k := 2) p (by omega) j) =
+      Fin.castAdd q (Fin.natAdd p j) := Fin.ext rfl
+  rw [obcPairCfg, hj, Fin.append_left, Fin.append_right]
 
-private theorem obcPairCompression_apply_eq_zero_iff (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
-    {N p q : ℕ} (h : p + 2 + q = N) (u : Fin p → Fin d) (w : Fin q → Fin d)
-    (ψ : EuclideanSpace ℂ (Fin N → Fin d)) :
-    obcPairCompression b A h u w ψ = 0 ↔
-      obcPairProjector b A p (obcPairSection h u w ψ) = 0 := by
+private theorem obcPairCfg_of_forall_chainWindow_ne {N p q : ℕ} (h : p + 2 + q = N)
+    (u : Fin p → Fin d) (a a' : Fin 2 → Fin d) (w : Fin q → Fin d) {v : Fin N}
+    (hv : ∀ j, ManyBody.chainWindow (N := N) (k := 2) p (by omega) j ≠ v) :
+    obcPairCfg h u a' w v = obcPairCfg h u a w v := by
+  have key : ∀ v' : Fin (p + 2 + q), (∀ j : Fin 2, p + j.val ≠ v'.val) →
+      Fin.append (Fin.append u a') w v' = Fin.append (Fin.append u a) w v' := by
+    intro v' hv'
+    induction v' using Fin.addCases with
+    | left i =>
+      induction i using Fin.addCases with
+      | left k => simp only [Fin.append_left]
+      | right j => exact absurd rfl (hv' j)
+    | right k => simp only [Fin.append_right]
+  exact key _ fun j hj ↦ hv j (Fin.ext hj)
+
+private theorem obcPairCfg_self {N p q : ℕ} (h : p + 2 + q = N) (σ : Fin N → Fin d) :
+    obcPairCfg h (fun i ↦ σ (Fin.cast h (Fin.castAdd q (Fin.castAdd 2 i))))
+      (fun j ↦ σ (ManyBody.chainWindow (N := N) (k := 2) p (by omega) j))
+      (fun k ↦ σ (Fin.cast h (Fin.natAdd (p + 2) k))) = σ := by
+  have key : ∀ v' : Fin (p + 2 + q),
+      Fin.append (Fin.append (fun i ↦ σ (Fin.cast h (Fin.castAdd q (Fin.castAdd 2 i))))
+        (fun j ↦ σ (ManyBody.chainWindow (N := N) (k := 2) p (by omega) j)))
+        (fun k ↦ σ (Fin.cast h (Fin.natAdd (p + 2) k))) v' = σ (Fin.cast h v') := by
+    intro v'
+    induction v' using Fin.addCases with
+    | left i =>
+      induction i using Fin.addCases with
+      | left k => simp only [Fin.append_left]
+      | right j =>
+        simp only [Fin.append_left, Fin.append_right]
+        exact congrArg σ (Fin.ext rfl)
+    | right k => simp only [Fin.append_right]
+  funext v
+  exact (key (Fin.cast h.symm v)).trans (congrArg σ (Fin.ext rfl))
+
+/-- **The parent interaction on the open chain with varying bonds.** On the open chain of `N`
+sites, the term at the position `p`, for `p + 2 ≤ N`, is the matrix of the pair projector at `p`
+placed on the two sites `p` and `p + 1` (`ManyBody.Interaction.ofPlaceAlong`); there is no term
+across the endpoints. Its Hamiltonian is the open parent Hamiltonian. Source: PGVWC07,
+Theorem 9, lines 1201–1217. -/
+noncomputable abbrev obcParentInteraction (b : ℕ → ℕ)
+    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (N : ℕ) :=
+  ManyBody.Interaction.ofPlaceAlong (α := Fin d)
+    (fun p : Fin (N - 1) ↦ ManyBody.chainWindow (N := N) (k := 2) p.val (by omega))
+    (fun p ↦ Matrix.toEuclideanLin.symm (obcPairProjector b A p.val))
+
+/-- The terms of the parent interaction on the open chain with varying bonds are positive
+semidefinite. Source: PGVWC07, Theorem 9 proof, lines 1213–1217. -/
+theorem posSemidef_obcParentInteraction_term (b : ℕ → ℕ)
+    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (N : ℕ) (p : Fin (N - 1)) :
+    ((obcParentInteraction b A N).term p).PosSemidef :=
+  ManyBody.posSemidef_placeAlong (X := fun _ ↦ Fin d) _
+    (Matrix.isPositive_toEuclideanLin_iff.mp (by
+      rw [LinearEquiv.apply_symm_apply]
+      exact obcPairProjector_isPositive b A p.val))
+
+/-- The Hamiltonian of the parent interaction on the open chain with varying bonds is positive
+semidefinite. Source: PGVWC07, Theorem 9 proof, lines 1213–1217. -/
+theorem posSemidef_hamiltonian_obcParentInteraction (b : ℕ → ℕ)
+    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (N : ℕ) :
+    (obcParentInteraction b A N).hamiltonian.PosSemidef :=
+  ManyBody.Interaction.posSemidef_hamiltonian (posSemidef_obcParentInteraction_term b A N)
+
+private theorem placeAlong_chainWindow_obcPairProjector_mulVec_apply (b : ℕ → ℕ)
+    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) {N p q : ℕ}
+    (h : p + 2 + q = N) (ψ : EuclideanSpace ℂ (Fin N → Fin d)) (u : Fin p → Fin d)
+    (a : Fin 2 → Fin d) (w : Fin q → Fin d) :
+    (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow (N := N) (k := 2) p (by omega))
+        (Matrix.toEuclideanLin.symm (obcPairProjector b A p)) *ᵥ ψ.ofLp) (obcPairCfg h u a w) =
+      obcPairProjector b A p (obcPairSection h u w ψ) a := by
+  rw [ManyBody.placeAlong_mulVec_apply_of _ _ _ _ (fun a' ↦ obcPairCfg h u a' w)
+    (fun a' j ↦ obcPairCfg_chainWindow h u a' w j)
+    (fun a' v hv ↦ obcPairCfg_of_forall_chainWindow_ne h u a a' w hv)]
+  have hT : obcPairProjector b A p (obcPairSection h u w ψ) =
+      Matrix.toEuclideanLin (Matrix.toEuclideanLin.symm (obcPairProjector b A p))
+        (obcPairSection h u w ψ) := by
+    rw [LinearEquiv.apply_symm_apply]
+  rw [hT, Matrix.toLpLin_apply]
+  simp only [funext (obcPairCfg_chainWindow h u a w)]
+  rfl
+
+private theorem placeAlong_chainWindow_obcPairProjector_mulVec_eq_zero_iff (b : ℕ → ℕ)
+    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) {N p q : ℕ}
+    (h : p + 2 + q = N) (ψ : EuclideanSpace ℂ (Fin N → Fin d)) :
+    ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        (ManyBody.chainWindow (N := N) (k := 2) p (by omega))
+        (Matrix.toEuclideanLin.symm (obcPairProjector b A p)) *ᵥ ψ.ofLp = 0 ↔
+      ∀ (u : Fin p → Fin d) (w : Fin q → Fin d),
+        obcPairProjector b A p (obcPairSection h u w ψ) = 0 := by
   constructor
+  · intro hzero u w
+    ext a
+    rw [← placeAlong_chainWindow_obcPairProjector_mulVec_apply b A h ψ u a w, hzero]
+    rfl
   · intro hzero
-    apply (obcPairProjector_isPositive b A p).apply_eq_zero_of_re_inner_eq_zero
-    rw [← LinearMap.adjoint_inner_left (obcPairSection h u w) ψ]
-    change Complex.re (⟪obcPairCompression b A h u w ψ, ψ⟫_ℂ) = 0
-    rw [hzero]
-    simp
-  · intro hzero
-    change (obcPairSection h u w).adjoint
-      (obcPairProjector b A p (obcPairSection h u w ψ)) = 0
-    rw [hzero, map_zero]
-
-/-- The open parent Hamiltonian sums the pair projector extended by the identity
-on its prefix and suffix. Every outside configuration is counted once.
-Source: PGVWC07, Theorem 9, lines 1201–1217. -/
-noncomputable def obcParentHamiltonian (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (N : ℕ) :
-    EuclideanSpace ℂ (Fin N → Fin d) →ₗ[ℂ] EuclideanSpace ℂ (Fin N → Fin d) :=
-  ∑ s : {s : Fin (N + 1) × Fin (N + 1) // s.1.val + 2 + s.2.val = N},
-    ∑ u : Fin s.val.1.val → Fin d, ∑ w : Fin s.val.2.val → Fin d,
-      obcPairCompression b A s.property u w
-
-/-- The varying-bond open parent Hamiltonian is positive.
-Source: PGVWC07, Theorem 9 proof, lines 1213–1217. -/
-theorem obcParentHamiltonian_isPositive (b : ℕ → ℕ)
-    (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (N : ℕ) :
-    (obcParentHamiltonian b A N).IsPositive := by
-  classical
-  exact LinearMap.isPositive_sum Finset.univ fun s _ ↦
-    LinearMap.isPositive_sum Finset.univ fun u _ ↦
-      LinearMap.isPositive_sum Finset.univ fun w _ ↦
-        obcPairCompression_isPositive b A s.property u w
+    funext σ
+    rw [← obcPairCfg_self h σ, placeAlong_chainWindow_obcPairProjector_mulVec_apply, hzero]
+    rfl
 
 /-- The Hamiltonian vanishes exactly when every fixed-outside pair
 section belongs to the two-site boundary range. Source: PGVWC07,
 equation unique-OBC, lines 1213–1220. -/
-theorem obcParentHamiltonian_apply_eq_zero_iff (b : ℕ → ℕ)
+theorem hamiltonian_obcParentInteraction_apply_eq_zero_iff (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (N : ℕ)
     (ψ : EuclideanSpace ℂ (Fin N → Fin d)) :
-    obcParentHamiltonian b A N ψ = 0 ↔
+    Matrix.toEuclideanLin (obcParentInteraction b A N).hamiltonian ψ = 0 ↔
       ∀ (p q : ℕ) (h : p + 2 + q = N) (u : Fin p → Fin d) (w : Fin q → Fin d),
         obcPairProjector b A p (obcPairSection h u w ψ) = 0 := by
-  classical
-  have hpos := fun (s : {s : Fin (N + 1) × Fin (N + 1) //
-      s.1.val + 2 + s.2.val = N}) ↦
-    LinearMap.isPositive_sum Finset.univ fun u _ ↦
-      LinearMap.isPositive_sum Finset.univ fun w _ ↦
-        obcPairCompression_isPositive b A s.property u w
-  rw [obcParentHamiltonian, WeightedPositiveKernel.apply_sum_eq_zero_iff hpos]
+  rw [Matrix.toLpLin_apply, WithLp.toLp_eq_zero, ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff
+    (posSemidef_obcParentInteraction_term b A N)]
   constructor
   · intro hzero p q h u w
-    let s : {s : Fin (N + 1) × Fin (N + 1) // s.1.val + 2 + s.2.val = N} :=
-      ⟨(⟨p, by omega⟩, ⟨q, by omega⟩), h⟩
-    have hu := (WeightedPositiveKernel.apply_sum_eq_zero_iff
-      (fun u ↦ LinearMap.isPositive_sum Finset.univ fun w _ ↦
-        obcPairCompression_isPositive b A s.property u w) ψ).mp (hzero s)
-    have hw := (WeightedPositiveKernel.apply_sum_eq_zero_iff
-      (fun w ↦ obcPairCompression_isPositive b A s.property u w) ψ).mp (hu u)
-    exact (obcPairCompression_apply_eq_zero_iff b A h u w ψ).mp (hw w)
-  · intro hzero s
-    apply (WeightedPositiveKernel.apply_sum_eq_zero_iff
-      (fun u ↦ LinearMap.isPositive_sum Finset.univ fun w _ ↦
-        obcPairCompression_isPositive b A s.property u w) ψ).mpr
-    intro u
-    apply (WeightedPositiveKernel.apply_sum_eq_zero_iff
-      (fun w ↦ obcPairCompression_isPositive b A s.property u w) ψ).mpr
-    intro w
-    exact (obcPairCompression_apply_eq_zero_iff b A s.property u w ψ).mpr
-      (hzero s.val.1.val s.val.2.val s.property u w)
+    exact (placeAlong_chainWindow_obcPairProjector_mulVec_eq_zero_iff b A h ψ).mp
+      (hzero ⟨p, by omega⟩) u w
+  · intro hzero p
+    exact (placeAlong_chainWindow_obcPairProjector_mulVec_eq_zero_iff b A
+      (show p.val + 2 + (N - (p.val + 2)) = N by omega) ψ).mpr fun u w ↦ hzero _ _ _ u w
 
 /-- The kernel of the open Hamiltonian gives the list-indexed pair
 sections needed for reconstruction along the whole chain. The coefficient
 identification only changes the representation of a physical word.
 Source: PGVWC07, equation unique-OBC, lines 1213–1220. -/
-theorem obcParentHamiltonian_pair_sections_of_apply_eq_zero (b : ℕ → ℕ)
+theorem pair_sections_of_hamiltonian_obcParentInteraction_apply_eq_zero (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) {N : ℕ}
     (ψ : EuclideanSpace ℂ (Fin N → Fin d)) (f : List (Fin d) → ℂ)
     (hf : ∀ w : Fin N → Fin d, f (List.ofFn w) = ψ w)
-    (hzero : obcParentHamiltonian b A N ψ = 0) :
+    (hzero : Matrix.toEuclideanLin (obcParentInteraction b A N).hamiltonian ψ = 0) :
     ∀ u v : List (Fin d), u.length + 2 + v.length = N →
       ∃ X : Matrix (Fin (b (u.length + 2))) (Fin (b u.length)) ℂ,
         ∀ i j, f (u ++ i :: j :: v) =
           Matrix.trace (X * A u.length i * A (u.length + 1) j) := by
   intro u v huv
-  have hlocal := (obcParentHamiltonian_apply_eq_zero_iff b A N ψ).mp hzero
+  have hlocal := (hamiltonian_obcParentInteraction_apply_eq_zero_iff b A N ψ).mp hzero
     u.length v.length huv u.get v.get
   obtain ⟨X, hX⟩ := (obcPairProjector_apply_eq_zero_iff b A u.length _).mp hlocal
   refine ⟨X, fun i j ↦ ?_⟩
@@ -220,19 +262,19 @@ theorem obcParentHamiltonian_pair_sections_of_apply_eq_zero (b : ℕ → ℕ)
 /-- The open Hamiltonian kernel is exactly the adjacent-pair trace-section
 condition, in list coordinates. Source: PGVWC07, equation unique-OBC,
 lines 1213–1220. -/
-theorem obcParentHamiltonian_apply_eq_zero_iff_pair_sections (b : ℕ → ℕ)
+theorem hamiltonian_obcParentInteraction_apply_eq_zero_iff_pair_sections (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) {N : ℕ}
     (ψ : EuclideanSpace ℂ (Fin N → Fin d)) (f : List (Fin d) → ℂ)
     (hf : ∀ w : Fin N → Fin d, f (List.ofFn w) = ψ w) :
-    obcParentHamiltonian b A N ψ = 0 ↔
+    Matrix.toEuclideanLin (obcParentInteraction b A N).hamiltonian ψ = 0 ↔
       ∀ u v : List (Fin d), u.length + 2 + v.length = N →
         ∃ X : Matrix (Fin (b (u.length + 2))) (Fin (b u.length)) ℂ,
           ∀ i j, f (u ++ i :: j :: v) =
             Matrix.trace (X * A u.length i * A (u.length + 1) j) := by
   constructor
-  · exact obcParentHamiltonian_pair_sections_of_apply_eq_zero b A ψ f hf
+  · exact pair_sections_of_hamiltonian_obcParentInteraction_apply_eq_zero b A ψ f hf
   · intro hpair
-    apply (obcParentHamiltonian_apply_eq_zero_iff b A N ψ).mpr
+    apply (hamiltonian_obcParentInteraction_apply_eq_zero_iff b A N ψ).mpr
     intro p q h u v
     have key : ∀ m : ℕ, m = (List.ofFn u).length →
         ∃ X : Matrix (Fin (b (m + 2))) (Fin (b m)) ℂ,

@@ -213,7 +213,7 @@ the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
     \label{def:varying_obc_parent_projectors}
     \lean{Matrix.obcPairBoundary, Matrix.obcPairBoundary_apply,
         Matrix.obcPairProjector,
-        Matrix.obcPairSection, Matrix.obcParentHamiltonian}
+        Matrix.obcPairSection, Matrix.obcParentInteraction}
     \leanok
     Let $B^{[j]}_i\in M_{D_j,D_{j+1}}(\mathbb C)$. The two-site
     boundary range at $j$ is
@@ -224,13 +224,16 @@ the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
     \end{align}
     Write $P_j$ for the orthogonal projection onto $G_j^\perp$.
     If $u,v$ are fixed prefix and suffix configurations of lengths $j$ and
-    $N-j-2$, let $(R_{j,u,v}\phi)(i,k)=\phi(u,i,k,v)$. The open parent
-    Hamiltonian is
+    $N-j-2$, let $(R_{j,u,v}\phi)(i,k)=\phi(u,i,k,v)$. The parent interaction
+    on the open chain has, for each $j=0,\ldots,N-2$, the term $P_j$ acting on
+    the sites $j$ and $j+1$ and as the identity on the other sites, so that
+    $(P_j\phi)(u,i,k,v)=(P_jR_{j,u,v}\phi)(i,k)$. The open parent
+    Hamiltonian is its sum
     \begin{align}
-        H_N & =\sum_{j=0}^{N-2}\sum_{u,v}R_{j,u,v}^\dagger P_jR_{j,u,v}.
+        H_N & =\sum_{j=0}^{N-2}P_j
+        =\sum_{j=0}^{N-2}\sum_{u,v}R_{j,u,v}^\dagger P_jR_{j,u,v}.
     \end{align}
-    Summing over each outside configuration once extends $P_j$ by the identity
-    outside its adjacent pair. There is no interaction across the endpoints.
+    There is no interaction across the endpoints.
     This is the local Hamiltonian of
     \cite[Theorem~9, lines~1201--1217]{PerezGarcia2007Matrix}.
 \end{definition}
@@ -253,10 +256,10 @@ the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
 
 \begin{lemma}[Hamiltonian kernel and adjacent coefficient sections]
     \label{lem:varying_obc_parent_kernel_sections}
-    \lean{Matrix.obcParentHamiltonian_isPositive,
-        Matrix.obcParentHamiltonian_apply_eq_zero_iff,
-        Matrix.obcParentHamiltonian_pair_sections_of_apply_eq_zero,
-        Matrix.obcParentHamiltonian_apply_eq_zero_iff_pair_sections}
+    \lean{Matrix.posSemidef_hamiltonian_obcParentInteraction,
+        Matrix.hamiltonian_obcParentInteraction_apply_eq_zero_iff,
+        Matrix.pair_sections_of_hamiltonian_obcParentInteraction_apply_eq_zero,
+        Matrix.hamiltonian_obcParentInteraction_apply_eq_zero_iff_pair_sections}
     \leanok
     \uses{def:varying_obc_parent_projectors,
         lem:varying_obc_pair_projector_kernel}
@@ -271,14 +274,14 @@ the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
     normalization is required for this equivalence.
 \end{lemma}
 \begin{proof}\leanok
-    Every compression $R^\dagger P_jR$ is positive, so a vector lies in the kernel
-    of their sum exactly when each compression annihilates it. The quadratic
-    form identity
-    $\langle R^\dagger P_jR\phi,\phi\rangle=\langle P_jR\phi,R\phi\rangle$
-    and positivity identify this with $P_jR\phi=0$. The pair-projector kernel
+    Every term $P_j$ of the interaction is positive, so a vector lies in the
+    kernel of their sum exactly when each term annihilates it. Since
+    $(P_j\phi)(u,i,k,v)=(P_jR_{j,u,v}\phi)(i,k)$, the term at $j$ annihilates
+    $\phi$ exactly when $P_jR_{j,u,v}\phi=0$ for every outside configuration
+    $u,v$. The pair-projector kernel
     characterization gives the boundary matrix for each outside configuration.
     In the reverse direction these boundary representations make all the
-    compressions vanish. Ordered prefix, pair and suffix concatenation
+    terms vanish. Ordered prefix, pair and suffix concatenation
     identifies the same physical configurations in either description.
 \end{proof}
 
@@ -286,7 +289,7 @@ the adjacent-pair conditions with the kernel of the open parent Hamiltonian.
     \label{lem:varying_obc_boundary_states_parent_kernel}
     \lean{Matrix.obc_rectangularEval_append, Matrix.obcBoundaryState,
         Matrix.obcBoundaryState_pair_section,
-        Matrix.obcParentHamiltonian_apply_obcBoundaryState}
+        Matrix.hamiltonian_obcParentInteraction_apply_obcBoundaryState}
     \leanok
     \uses{def:varying_obc_parent_projectors,lem:varying_obc_parent_kernel_sections,lem:varying_obc_pair_projector_kernel}
     Let $Z\in M_{D_N,D_0}(\mathbb C)$ and define the physical vector
@@ -350,7 +353,7 @@ afterwards, for arbitrary physical dimensions.
 \begin{lemma}[The represented state is annihilated by the parent]
     \label{lem:varying_obc_scalar_state_parent_kernel}
     \lean{Matrix.obcBoundaryState_one_eq_obcScalarState,
-        Matrix.obcParentHamiltonian_apply_obcScalarState}
+        Matrix.hamiltonian_obcParentInteraction_apply_obcScalarState}
     \leanok
     \uses{def:varying_obc_scalar_state,
         lem:varying_obc_boundary_states_parent_kernel}
@@ -375,9 +378,9 @@ afterwards, for arbitrary physical dimensions.
 
 \begin{lemma}[Unique ground-state line of the varying-bond open parent]
     \label{lem:varying_obc_actual_parent_unique_line}
-    \lean{Matrix.exists_smul_obcScalarState_of_obcParentHamiltonian_apply_eq_zero,
-        Matrix.ker_obcParentHamiltonian_eq_span,
-        Matrix.finrank_ker_obcParentHamiltonian_eq_one}
+    \lean{Matrix.exists_smul_obcScalarState_of_hamiltonian_obcParentInteraction_apply_eq_zero,
+        Matrix.ker_hamiltonian_obcParentInteraction_eq_span,
+        Matrix.finrank_ker_hamiltonian_obcParentInteraction_eq_one}
     \leanok
     \uses{lem:varying_obc_parent_kernel_sections,
         lem:varying_obc_full_chain_reconstruction,

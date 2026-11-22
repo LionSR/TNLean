@@ -109,7 +109,7 @@ private theorem extend_varyingPhysicalScalarState (d D : ℕ → ℕ) {N : ℕ}
   have hzero : varyingPhysicalParentHamiltonian
       (fun _ : Fin N ↦ Fin (∑ j : Fin N, d j.val)) D (fun k ↦ C k.val) Ω = 0 :=
     (varyingPhysicalParentHamiltonian_uniform_apply_eq_zero_iff D C Ω).mpr
-      (obcParentHamiltonian_apply_obcScalarState D C N hleft hright)
+      (hamiltonian_obcParentInteraction_apply_obcScalarState D C N hleft hright)
   have hfamily : (fun k : Fin N ↦ C k.val) =
       (fun k ↦ Function.extend
         (commonPhysicalEmbedding (fun j : Fin N ↦ d j.val) k) (A k) 0) := by
@@ -166,7 +166,7 @@ theorem ker_varyingPhysicalParentHamiltonian_eq_span (d D : ℕ → ℕ) {N : �
   have hstate : E (varyingPhysicalScalarState d D A hleft hright) = Ω :=
     extend_varyingPhysicalScalarState d D A hN hleft hright hA
   have htransport (ψ : EuclideanSpace ℂ ((k : Fin N) → Fin (d k.val))) :
-      obcParentHamiltonian D C N (E ψ) = 0 ↔
+      Matrix.toEuclideanLin (obcParentInteraction D C N).hamiltonian (E ψ) = 0 ↔
         varyingPhysicalParentHamiltonian (fun k : Fin N ↦ Fin (d k.val)) D A ψ = 0 := by
     rw [← varyingPhysicalParentHamiltonian_uniform_apply_eq_zero_iff D C (E ψ), hfamily]
     exact varyingPhysicalParentHamiltonian_extend_eq_zero_iff
@@ -175,7 +175,7 @@ theorem ker_varyingPhysicalParentHamiltonian_eq_span (d D : ℕ → ℕ) {N : �
   ext ψ
   constructor
   · intro hψ
-    obtain ⟨c, hc⟩ := exists_smul_obcScalarState_of_obcParentHamiltonian_apply_eq_zero
+    obtain ⟨c, hc⟩ := exists_smul_obcScalarState_of_hamiltonian_obcParentInteraction_apply_eq_zero
       D C hN hleft hright (commonPhysicalSiteFamily_row d D A hA) hC1' (E ψ)
       ((htransport ψ).mpr hψ)
     have heq : ψ = c • varyingPhysicalScalarState d D A hleft hright := by
@@ -190,7 +190,7 @@ theorem ker_varyingPhysicalParentHamiltonian_eq_span (d D : ℕ → ℕ) {N : �
       (c • varyingPhysicalScalarState d D A hleft hright) = 0
     rw [map_smul]
     have hz := (htransport (varyingPhysicalScalarState d D A hleft hright)).mp
-      (hstate.symm ▸ obcParentHamiltonian_apply_obcScalarState D C N hleft hright)
+      (hstate.symm ▸ hamiltonian_obcParentInteraction_apply_obcScalarState D C N hleft hright)
     rw [hz, smul_zero]
 
 /-- The actual open parent on arbitrary varying physical alphabets has a
