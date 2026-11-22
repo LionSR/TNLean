@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.MPS.Tensor.GroundSpace.BoundaryClosingStripping
 import TNLean.MPS.Tensor.GroundSpace.CyclicTranslation
 import TNLean.MPS.Tensor.GroundSpace.ExtendRight
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.KernelChainGroundSpace
 import TNLean.MPS.Tensor.GroundSpace.Nonvanishing
 import TNLean.MPS.Tensor.GroundSpace.PeriodicBoundaryReduction
 import TNLean.MPS.Tensor.GroundSpace.RestrictTransport
@@ -789,64 +788,5 @@ theorem chainGroundSpace_eq_mpvSubmodule_normal {A : MPSTensor d D} [NeZero D]
     rw [mpvSubmodule, Submodule.mem_span_singleton] at hψ
     obtain ⟨c, rfl⟩ := hψ
     exact Submodule.smul_mem _ c (mpv_mem_chainGroundSpace A L N (by omega) hLN)
-
-/-- **Unique periodic ground state** for a block-injective tensor throughout the interaction
-range \(L₀<L\le N\): the periodic MPS vector is nonzero and the ground space at energy \(0\)
-of the parent Hamiltonian on the ring is the line through it. This strengthens the finite-size
-assumption \(N\ge 2L₀\) printed in [PGVWC07] (quant-ph/0608197), Theorem `uniqueGS`,
-`MPSarchive.tex`, lines 1272--1274, to \(N\ge L₀+1\), together with \(N\ge2\). -/
-theorem parentHamiltonian_unique_gs {A : MPSTensor d D} [NeZero D]
-    {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
-    {L N : ℕ} (hL : L₀ < L) (hLN : L ≤ N) :
-    haveI : NeZero N := ⟨by omega⟩;
-    ManyBody.groundSpace (parentRingInteraction A L N).hamiltonian 0 = ℂ ∙ mpvState A N ∧
-      mpvState A N ≠ 0 := by
-  have hNormal : Kraus.IsNormal A := ⟨L₀, hL₀, hInj⟩
-  have hNlarge : L₀ + 1 ≤ N := by omega
-  refine ⟨?_, mpvState_ne_zero_of_isNBlkInjective hInj hL₀ hNlarge⟩
-  rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_chainGroundSpace A (by omega) hLN,
-    chainGroundSpace_eq_mpvSubmodule_normal hNormal hInj hL₀ (by omega) hL hLN hNlarge,
-    mpvSubmodule, Submodule.map_span, Set.image_singleton]
-  rfl
-
-/-- Unique periodic ground state for an injective tensor at every interaction range
-\(1<L\le N\): the periodic MPS vector is nonzero and the ground space at energy \(0\) of the
-parent Hamiltonian on the ring is the line through it. This is the case \(L₀=1\) of
-`parentHamiltonian_unique_gs`. -/
-theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : Kraus.IsInjective A)
-    {L N : ℕ} (hL : 1 < L) (hLN : L ≤ N) :
-    haveI : NeZero N := ⟨by omega⟩;
-    ManyBody.groundSpace (parentRingInteraction A L N).hamiltonian 0 = ℂ ∙ mpvState A N ∧
-      mpvState A N ≠ 0 :=
-  parentHamiltonian_unique_gs (Kraus.isNBlkInjective_one_of_isInjective hA) one_pos hL hLN
-
-/-- Unique ground state for tensors injective after blocking at range \(2L₀\): the periodic
-MPS vector is nonzero and spans the ground space at energy \(0\) of the parent Hamiltonian
-on the ring. This includes the endpoint \(L₀=1,N=2\). This is the one-dimensional
-specialization of arXiv:2011.12127, Section IV.C, lines 2041--2048. -/
-theorem parentHamiltonian_unique_gs_injective {A : MPSTensor d D} [NeZero D]
-    {L₀ : ℕ} (hA : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
-    {N : ℕ} (hN : 2 * L₀ ≤ N) :
-    haveI : NeZero N := ⟨by omega⟩;
-    ManyBody.groundSpace (parentRingInteraction A (2 * L₀) N).hamiltonian 0 =
-        ℂ ∙ mpvState A N ∧
-      mpvState A N ≠ 0 :=
-  parentHamiltonian_unique_gs hA hL₀ (by omega) hN
-
-/-- Unique ground state for normal tensors at range \(L₀+1\) on every ring
-with \(L₀+1\le N\): the periodic MPS vector is nonzero and spans the ground space at energy
-\(0\) of the parent Hamiltonian on the ring. This is arXiv:2011.12127, Section IV.C, lines
-2086--2094.
-
-The normality hypothesis is redundant because positive-length block injectivity already
-implies normality; it is retained in this specialization. -/
-theorem parentHamiltonian_unique_gs_normal {A : MPSTensor d D} [NeZero D]
-    {L₀ : ℕ} (_hA : Kraus.IsNormal A) (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
-    {N : ℕ} (hN : L₀ + 1 ≤ N) :
-    haveI : NeZero N := ⟨by omega⟩;
-    ManyBody.groundSpace (parentRingInteraction A (L₀ + 1) N).hamiltonian 0 =
-        ℂ ∙ mpvState A N ∧
-      mpvState A N ≠ 0 :=
-  parentHamiltonian_unique_gs hInj hL₀ (by omega) hN
 
 end MPSTensor

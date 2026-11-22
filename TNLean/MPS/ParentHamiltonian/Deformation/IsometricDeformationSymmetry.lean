@@ -8,7 +8,7 @@ import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockSumIntervalSpaces
 import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicInteraction
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Deformation.ParentHamiltonianSymmetry
-import TNLean.MPS.Symmetry.GappedPath.InteractionHamiltonianSymmetry
+import TNLean.MPS.Operator.Interaction.GappedInteractionPath
 
 /-!
 # Parent-Hamiltonian symmetry along the constructed polar deformation

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Combinatorics.TupleEquiv
 import TNLean.MPS.Examples.AKLT.AKLT
 import TNLean.MPS.Tensor.GroundSpace.IntersectionProperty
-import TNLean.MPS.Tensor.GroundSpace.UniqueGroundState
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.KernelChainGroundSpace
 
 /-!
 # AKLT two-site parent Hamiltonian

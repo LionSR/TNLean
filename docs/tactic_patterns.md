@@ -2591,7 +2591,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `MPS/Symmetry/SPTClassification/WeightedMatrixUnitParentPath.lean`, and
   `MPS/Symmetry/SPTClassification/CommonPhysicalFixedPointPath.lean` (2026-10-02).
 - **Abstraction:** `MPSTensor.hamiltonian_translationInvariant_commute_onSiteTensorPow`
-  in `MPS/Symmetry/GappedPath/InteractionHamiltonianSymmetry.lean`.
+  in `MPS/ParentHamiltonian/Deformation/ParentHamiltonianSymmetry.lean`.
 - **Notes:** all four callers use the common lemma. The on-site matrix need
   not be unitary; local commutation alone gives commutation of the sum.
 

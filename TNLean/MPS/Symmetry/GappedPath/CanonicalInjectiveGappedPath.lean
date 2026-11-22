@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Hamiltonian.KernelGap
-import TNLean.MPS.Symmetry.GappedPath.InteractionHamiltonianSymmetry
 import TNLean.MPS.ParentHamiltonian.Deformation.ParentHamiltonianSymmetry
 import TNLean.MPS.ParentHamiltonian.Continuity.CompactParentGap
 import TNLean.MPS.Symmetry.GappedPath.ExactMPSGappedPhase

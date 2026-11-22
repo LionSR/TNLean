@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.FixedPoint.WeightedMatrixUnitParent
 import TNLean.MPS.Symmetry.GappedPath.OrderedGappedInteractionPath
 import TNLean.MPS.Symmetry.SPTClassification.FixedPointGappedPathWitness
-import TNLean.MPS.Symmetry.GappedPath.InteractionHamiltonianSymmetry
+import TNLean.MPS.ParentHamiltonian.Deformation.ParentHamiltonianSymmetry
 import TNLean.MPS.Symmetry.GappedPath.GappedInteractionPathComposition
 
 /-!

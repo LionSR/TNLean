@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Spectral.Gap.CompactKernelGap
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalityChain
 import TNLean.MPS.ParentHamiltonian.Continuity.CompactParentGap
-import TNLean.MPS.Tensor.GroundSpace.UniqueGroundState
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.KernelChainGroundSpace
 
 /-!
 # Uniform gaps for compact families of normal tensors
