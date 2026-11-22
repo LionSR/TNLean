@@ -37,7 +37,7 @@ theorem twoSiteShiftedLayer_mul_kron [NeZero N]
     (x : Matrix (Fin ℓ) (Fin ℓ) ℂ) (y : Matrix (Fin r) (Fin r) ℂ)
     (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ) :
     twoSiteShiftedLayer (N := N) (v * (yᴴ ⊗ₖ xᴴ)) =
-      twoSiteShiftedLayer (N := N) v * (Matrix.piKronecker fun _ : Fin N ↦ (x ⊗ₖ y))ᴴ := by
+      twoSiteShiftedLayer (N := N) v * Matrix.piKronecker fun _ : Fin N ↦ (x ⊗ₖ y)ᴴ := by
   ext i h
   simp only [Matrix.mul_apply, twoSiteShiftedLayer, Matrix.piKronecker_apply]
   rw [Fintype.prod_sum]

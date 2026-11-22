@@ -87,11 +87,11 @@ theorem sum_star_copyApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [NeZer
     have hdot : ∑ c, star (((Matrix.piKronecker fun _ : Fin M ↦ (L j)) *ᵥ
         pairProductState (fixedPointPair (σ j))) c) * m c =
         ∑ c', star (pairProductState (fixedPointPair (σ j)) c') *
-          ((Matrix.piKronecker fun _ : Fin M ↦ (L j))ᴴ *ᵥ m) c' := by
-      change star ((Matrix.piKronecker fun _ : Fin M ↦ (L j)) *ᵥ pairProductState (fixedPointPair (σ
-          j))) ⬝ᵥ m =
-        star (pairProductState (fixedPointPair (σ j))) ⬝ᵥ ((Matrix.piKronecker fun _ : Fin M ↦ (L
-            j))ᴴ *ᵥ m)
+          ((Matrix.piKronecker fun _ : Fin M ↦ (L j)ᴴ) *ᵥ m) c' := by
+      change star ((Matrix.piKronecker fun _ : Fin M ↦ L j) *ᵥ
+          pairProductState (fixedPointPair (σ j))) ⬝ᵥ m =
+        star (pairProductState (fixedPointPair (σ j))) ⬝ᵥ
+          ((Matrix.piKronecker fun _ : Fin M ↦ (L j)ᴴ) *ᵥ m)
       rw [star_mulVec, ← dotProduct_mulVec, Matrix.conjTranspose_piKronecker]
     rw [hdot, ofPhysicalMatrixLM_mul_polarPos, mpvOverlap]
     let e : (Fin M → Fin (Dj j * Dj j)) ≃ (Fin M → Fin (Dj j) × Fin (Dj j)) :=
@@ -139,7 +139,8 @@ theorem sum_norm_sq_copyApproxVector_le (A : MPSTensor d D) (q M : ℕ) [NeZero 
     · subst h
       rw [hiso, Matrix.piKronecker_one, one_mulVec,
         pairProductState_fixedPointPair_norm_sq (hσ j) (htr j)]
-    · rw [horth j k h, tensorPower_zero (NeZero.ne M), zero_mulVec]
+    · rw [horth j k h, (Matrix.piKronecker_eq_zero_iff _).2
+        ⟨⟨0, Nat.pos_of_ne_zero (NeZero.ne M)⟩, rfl⟩, zero_mulVec]
       simp
   have hstate : ((∑ c, ‖copyFixedPointState (M := M) (ghzAmplitude β) L σ c‖ ^ 2 : ℝ) : ℂ) = 1 := by
     rw [ofReal_sum_norm_sq]
@@ -151,9 +152,10 @@ theorem sum_norm_sq_copyApproxVector_le (A : MPSTensor d D) (q M : ℕ) [NeZero 
     refine Finset.sum_congr rfl fun c _ => ?_
     simp [copyFixedPointState, F, Finset.sum_apply]
   have hidem := Matrix.conjTranspose_polarIso_mul_polarIso (physicalMatrix (blockTensor A q))
-  have h := Matrix.sum_norm_sq_piKronecker_mulVec_le (M := M)
-    (W := Matrix.polarIso (physicalMatrix (blockTensor A q)))
-    (by rw [hidem, Matrix.polarSupport_mul_polarSupport]) (copyFixedPointState (ghzAmplitude β) L σ)
+  have h := Matrix.sum_norm_sq_piKronecker_mulVec_le
+    (W := fun _ : Fin M ↦ Matrix.polarIso (physicalMatrix (blockTensor A q)))
+    (fun _ ↦ by rw [hidem, Matrix.polarSupport_mul_polarSupport])
+    (copyFixedPointState (ghzAmplitude β) L σ)
   exact h.trans (Complex.ofReal_injective (hstate.trans Complex.ofReal_one.symm)).le
 
 end MPSTensor
