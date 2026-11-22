@@ -81,7 +81,7 @@ open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder MatrixOrder K
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {d D : ℕ} {A : MPSTensor d D}
 
 /-! ## Normal tensor (NT) -/
 

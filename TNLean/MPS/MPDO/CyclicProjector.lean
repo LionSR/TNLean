@@ -87,7 +87,8 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
     (hfix : Kraus.transferMap (ι := Fin d) (n := Fin D) B ρ = (rad : ℂ) • ρ) :
     KadisonSchwarz.IsUnitalKraus (d := d) (D := D) (Kraus.spectralUnitalGauge B rad ρ) ∧
     Kraus.IsIrreducibleFamily (Kraus.spectralUnitalGauge B rad ρ) ∧
-    IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.spectralUnitalGauge B rad ρ)) ∧
+    IsIrreducibleMap
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.spectralUnitalGauge B rad ρ)) ∧
     ∃ σ : Matrix (Fin D) (Fin D) ℂ, σ.PosDef ∧
       Kraus.adjointMap (Kraus.spectralUnitalGauge B rad ρ) σ = σ := by
   classical
@@ -118,7 +119,8 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
   obtain ⟨σ, hσ_psd, hσ_ne, hσ_fix⟩ :=
     hCh.exists_posSemidef_fixedPoint
       (E := Kraus.transferMap (ι := Fin d) (n := Fin D) (fun v => (K v)ᴴ)) (NeZero.pos D)
-  have hIrrAdj : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun v => (K v)ᴴ)) :=
+  have hIrrAdj :
+      IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun v => (K v)ᴴ)) :=
     Kraus.isIrreducibleMap_mapLM_conjTranspose K
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily K hIrrK)
   have hσ_pd : σ.PosDef :=
@@ -140,7 +142,8 @@ theorem hasEigenvalue_transferMap_spectralUnitalGauge
     (hρ : ρ.PosDef) (hrad : 0 < rad) {μ : ℂ}
     (hμ : Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin d) (n := Fin D) B) μ) :
     Module.End.HasEigenvalue
-      (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.spectralUnitalGauge B rad ρ)) (μ / rad) := by
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.spectralUnitalGauge B rad ρ))
+      (μ / rad) := by
   classical
   obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
   have hXeq : Kraus.transferMap (ι := Fin d) (n := Fin D) B X = μ • X :=
@@ -198,6 +201,8 @@ theorem hasEigenvalue_transferMap_spectralUnitalGauge
 end MPSTensor
 
 namespace MPOTensor
+
+variable {d D : ℕ}
 
 open MPSTensor in
 /-- **The displaced invariant projector of a nontrivial periodic vector**
@@ -290,7 +295,8 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
   obtain ⟨U, P, _, _, _, hPproj, hPsum, _, hcyclicLM⟩ :=
     Kraus.exists_cyclic_decomposition_of_irreducible_schwarz
       (K := K) hUnital σ hσ hσfix hIrrMapLM hγprim hperiphLM
-  have hcyclic : ∀ k : Fin m, Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) K (P (k + 1)) = P k :=
+  have hcyclic : ∀ k : Fin m,
+      Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) K (P (k + 1)) = P k :=
     fun k => by exact hcyclicLM k
   -- Notation for the square root of the eigenvector and the scaling factor.
   set S : Matrix (Fin n) (Fin n) ℂ := CFC.sqrt ρ with hS
