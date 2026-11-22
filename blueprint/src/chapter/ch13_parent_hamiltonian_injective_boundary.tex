@@ -592,10 +592,12 @@ ground space is spanned by $V^{(N)}(A)$.
 \begin{lemma}[Periodic MPS vector nonvanishing for block-injective tensors]%
     \label{thm:mpv_ne_zero_blk_injective}
     \lean{MPSTensor.mpv_ne_zero_of_isNBlkInjective}
+    \lean{MPSTensor.mpvState_ne_zero_of_isNBlkInjective}
     \leanok
     \uses{def:mpv, def:l_blk_injective}
     If $A$ is $L_0$-block-injective with $L_0>0$, $D\ge1$, and
-    $N\ge L_0+1$, then $V^{(N)}(A)\ne0$ in the $N$-site space.
+    $N\ge L_0+1$, then $V^{(N)}(A)\ne0$ in the $N$-site space, and likewise
+    as a vector of the Hilbert space $\ell^2(\{0,\ldots,d-1\}^N)$.
 \end{lemma}
 
 \begin{proof}

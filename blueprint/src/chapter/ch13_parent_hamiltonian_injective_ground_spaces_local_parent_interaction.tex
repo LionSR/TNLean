@@ -3438,18 +3438,21 @@ translated copies of the local interaction.
 
 \begin{lemma}[Frustration-freeness of the periodic MPS vector]\label{lem:parent_hamiltonian_ff}
     \lean{MPSTensor.toLp_mpv_mem_zeroSpace_parentRingInteraction}
+    \lean{MPSTensor.isFrustrationFree_parentRingInteraction}
     \leanok
     \uses{def:is_frustration_free, def:mpv, lem:local_term_annihilates_mpv}
     On a ring of $N\ge1$ sites and for every window length $L$, the periodic
     MPS vector is a frustration-free ground state: for every site $i$, one has
-    $h_iV^{(N)}(A)=0$.
+    $h_iV^{(N)}(A)=0$. If $V^{(N)}(A)\ne0$, the parent interaction on the ring
+    is frustration free.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    For $L\le N$ the claim follows from
+    For $L\le N$ the first claim follows from
     Lemma~\ref{lem:local_term_annihilates_mpv}; for $L>N$ the local terms
-    vanish.
+    vanish. The local terms are positive, so a nonzero vector annihilated by
+    all of them minimizes the energy of each.
 \end{proof}
 
 \section{Intersection property and unique ground state}\label{sec:intersection_unique}
