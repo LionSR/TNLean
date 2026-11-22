@@ -2955,7 +2955,7 @@ shorter interaction range.
         MPSTensor.isCPSVBasisOfNormalTensors_shortRangeHeisenbergTensor,
         MPSTensor.mem_groundSpaceES_shortRangeHeisenbergTensor_two_iff,
         MPSTensor.groundSpaceES_shortRangeHeisenbergTensor_two_starProjection,
-        MPSTensor.parentInteractionES_shortRangeHeisenbergTensor_two_apply}
+        MPSTensor.toEuclideanLin_toMatrix'_parentInteraction_shortRangeHeisenbergTensor_two_apply}
     \leanok
     The direct sum of the three bond-one qubit tensors
     $(1,0)$, $(0,1)$ and $(1/\sqrt2,1/\sqrt2)$, with weights one,
@@ -2986,7 +2986,7 @@ shorter interaction range.
         ZMod.tendsto_cycleFourierGap_zero,
         MPSTensor.shortRangeHeisenbergMagnon,
         MPSTensor.shortRangeHeisenbergMagnon_ne_zero,
-        MPSTensor.parentHamiltonianES_shortRangeHeisenbergMagnon,
+        MPSTensor.toEuclideanLin_hamiltonian_parentRingInteraction_shortRangeHeisenbergMagnon,
         MPSTensor.not_exists_eventual_uniform_gap_shortRangeHeisenbergTensor_two}
     \leanok
     \uses{lem:three_normal_blocks_singlet_parent, def:parent_hamiltonian_es}
@@ -2994,7 +2994,9 @@ shorter interaction range.
     has a nonzero eigenvector of eigenvalue
     $\varepsilon_N=1-\cos(2\pi/N)>0$ for every $N\geq2$.
     These eigenvalues tend to zero. Consequently there are no
-    $\delta>0$ and $N_0$ such that
+    $\delta>0$ and $N_0$ such that, for every $N\geq N_0$, every eigenvalue
+    of $H_{N,2}$ other than zero is at least $\delta$; equivalently there
+    are none with
     \[
         \delta\lVert v\rVert\leq\lVert H_{N,2}v\rVert
         \qquad(N\geq N_0,\ v\perp\ker H_{N,2}).
