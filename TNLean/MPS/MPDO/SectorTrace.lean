@@ -95,7 +95,7 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPOTensor
 
-variable {d D : ℕ}
+variable {d D n : ℕ}
 
 /-! ### Single-site vertical loops -/
 

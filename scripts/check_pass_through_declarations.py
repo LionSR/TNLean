@@ -264,7 +264,6 @@ PASS_THROUGH: frozenset[str] = frozenset(
         "MPSTensor.HasNNCPHGroundSpaces.hasParentHamiltonianGroundSpaceSpanning",
         "TNLean.Algebra.RestrictedFusionGauge.fusionGauge_one",
         "TNLean.Algebra.RestrictedScalarGauge.gauge_one",
-        "TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass.comap",
         "TNLean.PEPS.EncodedFrame.PairwiseDisjointOuter.of_cons",
     }
 )
