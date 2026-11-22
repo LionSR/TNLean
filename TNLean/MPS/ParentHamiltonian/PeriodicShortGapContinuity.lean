@@ -122,8 +122,8 @@ theorem ker_hamiltonian_parentRingInteraction_two_eq_range_periodicMpvLineMap
     LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A 2 N).hamiltonian) =
       (periodicMpvLineMap A N).range := by
   have : NeZero N := ⟨by omega⟩
-  rw [← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _ _ _,
-    parentHamiltonianGroundSpaceES,
+  rw [← ManyBody.groundSpace_zero,
+    groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
     ker_parentHamiltonian_eq_chainGroundSpace A (by omega : 0 < N) hN,
     chainGroundSpace_eq_mpvSubmodule hA hN (by norm_num : 1 < 2) hN]
   simp only [mpvSubmodule, periodicMpvLineMap]

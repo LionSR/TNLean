@@ -99,8 +99,8 @@ eventual constancy of the numerical weighted-cycle sum.
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem hasEventuallyConstantCycleWeightSum_of_parentGroundSpace
     (F : BeigiSectorGraphData A)
-    (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, N₀ < N →
-      Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 N) = c) :
+    (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, ∀ hN : N₀ < N, haveI : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩;
+      Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction A 2 N).hamiltonian 0) = c) :
     HasEventuallyConstantCycleWeightSum F.edgeWeight := by
   rcases hparent with ⟨c, N₀, hparent⟩
   refine ⟨c, max N₀ 2, ?_⟩
@@ -109,43 +109,33 @@ theorem hasEventuallyConstantCycleWeightSum_of_parentGroundSpace
   have htwo : 2 < N := (Nat.le_max_right N₀ 2).trans_lt hN
   rw [F.cycleWeightSum_edgeWeight_eq hNpos]
   simpa only [edgeWeight] using
-    (F.parentHamiltonianGroundSpaceES_finrank_eq (Nat.le_of_lt htwo)).symm.trans
+    (F.groundSpace_hamiltonian_parentRingInteraction_finrank_eq (Nat.le_of_lt htwo)).symm.trans
       (hparent N hN₀)
 
 /-- If the parent-ground-space dimension is eventually constant, then at
 every length greater than two it equals the number of positive sector loops.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, equation (13). -/
-theorem parentHamiltonianGroundSpaceES_finrank_eq_card_loop
+theorem groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop
     (F : BeigiSectorGraphData A)
-    (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, N₀ < N →
-      Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 N) = c)
+    (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, ∀ hN : N₀ < N, haveI : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩;
+      Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction A 2 N).hamiltonian 0) = c)
     {N : ℕ} (hN : 2 < N) :
-    Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction A 2 N).hamiltonian 0) =
       Fintype.card (Loop F.edgeWeight) := by
   have hNpos : 0 < N := by omega
-  let : NeZero N := ⟨Nat.ne_of_gt hNpos⟩
+  have : NeZero N := ⟨by omega⟩
   have hconst := F.hasEventuallyConstantCycleWeightSum_of_parentGroundSpace hparent
   calc
-    Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 N) =
+    Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction A 2 N).hamiltonian 0) =
         ∑ c : F.OrderedCycle N,
           ∏ n : Fin N,
             Module.finrank ℂ (F.edgeGroundSpace (c.1 n) (c.1 (n + 1))) :=
-      F.parentHamiltonianGroundSpaceES_finrank_eq (Nat.le_of_lt hN)
+      F.groundSpace_hamiltonian_parentRingInteraction_finrank_eq (Nat.le_of_lt hN)
     _ = cycleWeightSum F.edgeWeight hNpos := by
       simpa only [edgeWeight] using (F.cycleWeightSum_edgeWeight_eq hNpos).symm
     _ = Fintype.card (Loop F.edgeWeight) := cycleWeightSum_eq_card_loop hconst hNpos
-
-/-- Transport to Euclidean-space coordinates preserves the dimension of the
-parent ground space. -/
-theorem parentHamiltonianGroundSpaceES_finrank_eq_ker
-    (A : MPSTensor d D) (L N : ℕ) :
-    Module.finrank ℂ (parentHamiltonianGroundSpaceES A L N) =
-      Module.finrank ℂ (LinearMap.ker (parentHamiltonian A L N)) := by
-  unfold parentHamiltonianGroundSpaceES
-  exact LinearEquiv.finrank_map_eq
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm
-    (LinearMap.ker (parentHamiltonian A L N))
 
 /-- In the BNT nearest-neighbor parent-Hamiltonian setting, every finite-chain
 dimension covered by Beigi's cycle formula equals the number of positive
@@ -153,21 +143,27 @@ sector loops.
 
 Source: CPSV16, Definition 3.9 and Theorem 3.10, lines 517--540; Beigi,
 J. Phys. A 45 (2012) 025306, Section IV. -/
-theorem parentHamiltonianGroundSpaceES_finrank_eq_card_loop_of_hasBNTSectorData
+theorem groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop_of_hasBNTSectorData
     {P : SectorDecomposition d} (F : BeigiSectorGraphData P.toTensor)
     (hBNT : HasBNTSectorData P)
     (hNNCPH : HasNNCPHGroundSpaces P.toTensor P.basis)
     {N : ℕ} (hN : 2 < N) :
-    Module.finrank ℂ (parentHamiltonianGroundSpaceES P.toTensor 2 N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    Module.finrank ℂ
+        (ManyBody.groundSpace (parentRingInteraction P.toTensor 2 N).hamiltonian 0) =
       Fintype.card (Loop F.edgeWeight) := by
   rcases hBNT.eventually_parentHamiltonian_groundSpace_finrank_eq hNNCPH with
     ⟨N₀, hraw⟩
-  have hparent : ∃ c N₁ : ℕ, ∀ M : ℕ, N₁ < M →
-      Module.finrank ℂ (parentHamiltonianGroundSpaceES P.toTensor 2 M) = c := by
+  have hparent : ∃ c N₁ : ℕ, ∀ M : ℕ, ∀ hM : N₁ < M,
+      haveI : NeZero M := ⟨Nat.ne_zero_of_lt hM⟩;
+      Module.finrank ℂ
+        (ManyBody.groundSpace (parentRingInteraction P.toTensor 2 M).hamiltonian 0) = c := by
     refine ⟨P.basisCount, N₀, ?_⟩
     intro M hM
-    rw [parentHamiltonianGroundSpaceES_finrank_eq_ker]
-    exact hraw M hM
-  exact F.parentHamiltonianGroundSpaceES_finrank_eq_card_loop hparent hN
+    have : NeZero M := ⟨Nat.ne_zero_of_lt hM⟩
+    rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker]
+    exact (LinearEquiv.finrank_map_eq (WithLp.linearEquiv 2 ℂ (NSiteSpace d M)).symm _).trans
+      (hraw M hM)
+  exact F.groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop hparent hN
 
 end MPSTensor.BeigiSectorGraphData

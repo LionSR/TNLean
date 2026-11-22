@@ -187,8 +187,8 @@ theorem ker_hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_range_blockP
       (blockPeriodicMpvMapES A N).range := by
   have : NeZero N := ⟨by omega⟩
   rw [range_blockPeriodicMpvMapES,
-    ← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _ _ _,
-    parentHamiltonianGroundSpaceES,
+    ← ManyBody.groundSpace_zero,
+    groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
     ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop μ A hμ hS hSpan hR hRN]
 
 /-- The projection onto the kernel of the Hamiltonian of the parent interaction on the ring is

@@ -32,7 +32,7 @@ Hamiltonian, its trace gives Beigi's ordered-cycle formula.
   of the complete complementary-interaction product;
 * `BeigiSectorGraphData.mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self`:
   its fixed vectors have zero parent-Hamiltonian energy;
-* `BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq`: Beigi's
+* `BeigiSectorGraphData.groundSpace_hamiltonian_parentRingInteraction_finrank_eq`: Beigi's
   finite-chain dimension formula.
 
 ## References
@@ -573,10 +573,10 @@ private theorem localComplementProductES_trace (F : BeigiSectorGraphData A)
       simpa only [transport, complementProductTransport] using
         F.groundBondProduct_trace hN
 
-private theorem parentHamiltonianGroundSpaceES_finrank_eq_all_sequences
+private theorem groundSpace_hamiltonian_parentRingInteraction_finrank_eq_all_sequences
     (F : BeigiSectorGraphData A) {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
-    Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 N) =
+    Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction A 2 N).hamiltonian 0) =
       ∑ k : Fin N → Fin F.sectorCount,
         ∏ n : Fin N, Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1))) := by
   have : NeZero N := ⟨by omega⟩
@@ -589,7 +589,7 @@ private theorem parentHamiltonianGroundSpaceES_finrank_eq_all_sequences
   have htrace := hproj.trace
   rw [F.localComplementProductES_trace hN] at htrace
   norm_cast at htrace
-  rw [parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction A _ _]
+  rw [ManyBody.groundSpace_zero]
   exact htrace.symm
 
 /-- A vector fixed by the complete product of complementary two-site parent
@@ -649,10 +649,10 @@ interaction convention remains open. Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)--(4). -/
-theorem parentHamiltonianGroundSpaceES_finrank_eq
+theorem groundSpace_hamiltonian_parentRingInteraction_finrank_eq
     (F : BeigiSectorGraphData A) {N : ℕ} (hN : 2 ≤ N) :
     letI : NeZero N := ⟨by omega⟩
-    Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 N) =
+    Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction A 2 N).hamiltonian 0) =
       ∑ c : F.OrderedCycle N,
         ∏ n : Fin N,
           Module.finrank ℂ (F.edgeGroundSpace (c.1 n) (c.1 (n + 1))) := by
@@ -662,7 +662,7 @@ theorem parentHamiltonianGroundSpaceES_finrank_eq
     ∏ n : Fin N, Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1)))
   let cycle : (Fin N → Fin F.sectorCount) → Prop := fun k ↦
     ∀ n : Fin N, F.IsEdge (k n) (k (n + 1))
-  rw [F.parentHamiltonianGroundSpaceES_finrank_eq_all_sequences (by omega)]
+  rw [F.groundSpace_hamiltonian_parentRingInteraction_finrank_eq_all_sequences (by omega)]
   change ∑ k : Fin N → Fin F.sectorCount, weight k =
     ∑ c : {k // cycle k}, weight c.1
   calc
@@ -689,13 +689,13 @@ two cyclic windows traverse the same pair of sites in opposite orders, so
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)--(4),
 including the period-two ordered-cycle convention. -/
-theorem parentHamiltonianGroundSpaceES_finrank_eq_two
+theorem groundSpace_hamiltonian_parentRingInteraction_finrank_eq_two
     (F : BeigiSectorGraphData A) :
-    Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 2) =
+    Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction A 2 2).hamiltonian 0) =
       ∑ c : F.OrderedCycle 2,
         ∏ n : Fin 2,
           Module.finrank ℂ (F.edgeGroundSpace (c.1 n) (c.1 (n + 1))) := by
-  apply F.parentHamiltonianGroundSpaceES_finrank_eq (N := 2)
+  apply F.groundSpace_hamiltonian_parentRingInteraction_finrank_eq (N := 2)
   omega
 
 end BeigiSectorGraphData

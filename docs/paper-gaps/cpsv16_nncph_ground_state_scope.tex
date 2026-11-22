@@ -392,10 +392,10 @@ canonical-form, all-chain ground-space, or eventual-dimension hypothesis.
 
 For a finite sector graph, the ordered-cycle ground-space dimension formula
 holds for every $N\geq2$.\footnote{Formal theorem:
-\leanid{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq}.}
+\leanid{MPSTensor.BeigiSectorGraphData.groundSpace_hamiltonian_parentRingInteraction_finrank_eq}.}
 Its period-two specialization retains both orientations:\footnote{Formal
 specialization:
-\leanid{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq_two}.}
+\leanid{MPSTensor.BeigiSectorGraphData.groundSpace_hamiltonian_parentRingInteraction_finrank_eq_two}.}
 when $a\ne b$, the ordered cycles $(a,b)$ and $(b,a)$ are distinct. This
 matches the convention used in Section~III, Equations~(2)--(4), of the
 finite-degeneracy argument cited by Ref.~\cite{Cirac2016MPDO_arXiv}. These
@@ -414,7 +414,7 @@ The project adopts the local convention that an $L$-site interaction vanishes
 when $L>N$. Thus $H_2^{(1)}=0$,\footnote{Formal theorem:
 \leanid{MPSTensor.parentHamiltonian_two_one_eq_zero}.} and the length-one ground
 space is full:\footnote{Formal theorem:
-\leanid{MPSTensor.parentHamiltonianGroundSpaceES_two_one_eq_top}.}
+\leanid{MPSTensor.groundSpace_hamiltonian_parentRingInteraction_two_one_eq_top}.}
 \begin{align}
     \ker H_2^{(1)}
         &=\C^d.
@@ -473,12 +473,12 @@ common product, following the source argument.
 Applied to the sector datum, every parent-ground-space dimension for $N>2$
 equals the loop number whenever these dimensions are eventually
 constant.\footnote{Formal theorem:
-\leanid{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq_card_loop}.}
+\leanid{MPSTensor.BeigiSectorGraphData.groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop}.}
 Combining this result with
 (\ref{eq:cpsv16_nncph_ground_state_scope_eventual_ground_dimension}) identifies
 the ground-space dimension with the loop count under BNT sector
 data.\footnote{Formal theorem:
-\leanid{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq_card_loop_of_hasBNTSectorData}.}
+\leanid{MPSTensor.BeigiSectorGraphData.groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop_of_hasBNTSectorData}.}
 This conclusion does not identify the loop states with the original BNT
 representatives.
 
@@ -573,7 +573,7 @@ For every $N\geq2$, the loop product vector belongs to the kernel of the
 length-two periodic parent Hamiltonian.\footnote{Formal theorems:
 \leanid{MPSTensor.BeigiSectorGraphData.loopProductState_mem_ker_parentHamiltonian}
 and
-\leanid{MPSTensor.BeigiSectorGraphData.loopProductState_mem_parentHamiltonianGroundSpaceES}.}
+\leanid{MPSTensor.BeigiSectorGraphData.loopProductState_mem_groundSpace_hamiltonian_parentRingInteraction}.}
 The proof uses the local edge-ground-space condition and its positive-loop
 specialization in the finite-degeneracy construction cited by
 Ref.~\cite{Cirac2016MPDO_arXiv}. The condition $N\geq2$ is the source-defined
@@ -596,9 +596,9 @@ the loop-count formula give, for every $N>2$,
     \label{eq:cpsv16_nncph_ground_state_scope_loop_ground_space_spanning}
 \end{align}
 \footnote{Formal theorem:
-\leanid{MPSTensor.BeigiSectorGraphData.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES};
+\leanid{MPSTensor.BeigiSectorGraphData.span_loopProductStateES_eq_groundSpace_hamiltonian_parentRingInteraction};
 under BNT sector data,
-\leanid{MPSTensor.BeigiSectorGraphData.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_hasBNTSectorData}.}
+\leanid{MPSTensor.BeigiSectorGraphData.span_loopProductStateES_eq_groundSpace_hamiltonian_parentRingInteraction_of_hasBNTSectorData}.}
 These results do not by themselves identify the loop states with the original
 BNT representatives.
 

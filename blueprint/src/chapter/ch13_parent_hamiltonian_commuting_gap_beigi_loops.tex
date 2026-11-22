@@ -1,7 +1,7 @@
 \begin{lemma}[Two-site parent Hamiltonian on a single-site chain]
     \label{thm:project_local_one_site_parent_hamiltonian_zero}
     \lean{MPSTensor.parentHamiltonian_two_one_eq_zero}
-    \lean{MPSTensor.parentHamiltonianGroundSpaceES_two_one_eq_top}
+    \lean{MPSTensor.groundSpace_hamiltonian_parentRingInteraction_two_one_eq_top}
     \leanok
     Under the convention that an $L$-site interaction vanishes for $L>N$, the
     two-site parent Hamiltonian on a one-site periodic chain satisfies
@@ -56,8 +56,8 @@
 
 \begin{lemma}[Parent-ground-space dimension is the loop number]
     \label{cor:beigi_parent_ground_space_loop_number}
-    \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq_card_loop}
-    \lean{MPSTensor.BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq_card_loop_of_hasBNTSectorData}
+    \lean{MPSTensor.BeigiSectorGraphData.groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop}
+    \lean{MPSTensor.BeigiSectorGraphData.groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop_of_hasBNTSectorData}
     \leanok
     \uses{thm:beigi_ordered_cycle_ground_space_dimension, thm:beigi_eventually_constant_sector_graph, thm:nncph_eventual_ground_space_dimension}
     If the parent-ground-space dimension is eventually constant, then for
@@ -348,7 +348,7 @@
 \begin{lemma}[A positive Beigi loop gives a parent ground state]
     \label{thm:beigi_loop_product_state_ground_state}
     \lean{MPSTensor.BeigiSectorGraphData.loopProductState_mem_ker_parentHamiltonian}
-    \lean{MPSTensor.BeigiSectorGraphData.loopProductState_mem_parentHamiltonianGroundSpaceES}
+    \lean{MPSTensor.BeigiSectorGraphData.loopProductState_mem_groundSpace_hamiltonian_parentRingInteraction}
     \leanok
     \uses{def:beigi_sector_graph, def:beigi_loop_product_state, thm:beigi_complement_product_conjugation, thm:beigi_complement_product_fixed_vector}
     Let $a\to a$ be a positive loop. For every $N\geq2$, its physical
@@ -397,8 +397,8 @@
     \lean{MPSTensor.BeigiSectorGraphData.loopProductStateES_ne_zero}
     \lean{MPSTensor.BeigiSectorGraphData.loopProductStateES_inner_eq_zero_of_ne}
     \lean{MPSTensor.BeigiSectorGraphData.loopProductStateES_linearIndependent}
-    \lean{MPSTensor.BeigiSectorGraphData.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES}
-    \lean{MPSTensor.BeigiSectorGraphData.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES_of_hasBNTSectorData}
+    \lean{MPSTensor.BeigiSectorGraphData.span_loopProductStateES_eq_groundSpace_hamiltonian_parentRingInteraction}
+    \lean{MPSTensor.BeigiSectorGraphData.span_loopProductStateES_eq_groundSpace_hamiltonian_parentRingInteraction_of_hasBNTSectorData}
     \leanok
     \uses{thm:beigi_loop_product_state_ground_state, cor:beigi_parent_ground_space_loop_number}
     Suppose that the parent-ground-space dimension is eventually constant.

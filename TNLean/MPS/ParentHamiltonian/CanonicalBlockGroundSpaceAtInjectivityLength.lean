@@ -88,8 +88,8 @@ theorem CPSVCanonicalFormData.ker_sum_eq_of_wordTupleSpanTop
       WeightedPositiveKernel.ker_sum_eq_iInf (fun i ↦ Matrix.isPositive_toEuclideanLin_iff.mpr
         (posSemidef_parentRingInteraction_term A _ i))]
     simp only [hker]
-  rw [hEq, ← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _ _ _,
-    parentHamiltonianGroundSpaceES,
+  rw [hEq, ← ManyBody.groundSpace_zero,
+    groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
     data.ker_parentHamiltonian_eq_of_wordTupleSpanTop hS hSpan hSL hLN]
 
 /-- A canonical tensor admits a basis of normal tensors for which every
