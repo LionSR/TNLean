@@ -13,13 +13,16 @@ import QICLean.Algebra.IndexInduction
 At a root-of-unity weight, the existing PVBS one-particle line is invariant
 under cyclic translation, with its actual vector phase retained. When the
 periodic volume equals the interaction range, the actual pure-window
-Hamiltonian has exactly this line as its kernel. A nontrivial phase excludes
+Hamiltonian (the Hamiltonian of the translates of the pure-window matrix around the ring) has
+exactly this line as its kernel. A nontrivial phase excludes
 nonzero translation-invariant vectors in that kernel.
 
 This concerns one matching periodic volume. It supplies no all-volume model
 or unrestricted counterexample to SPWC10, arXiv:0909.5347, Theorem 5.
 The PVBS coefficients are those of arXiv:1112.4097, Section II, equations (1)--(8).
 -/
+
+open ManyBody.Interaction (translationInvariant)
 
 namespace MPSTensor
 
@@ -64,15 +67,16 @@ are proved, not supplied. Source: PVBS coefficients and cyclic line invariance,
 arXiv:1112.4097, Section II. -/
 theorem pvbsPureWindowHamiltonian_apply_pvbsEdge (q : ℂ) {R : ℕ} (hR : 0 < R)
     (hq : q ^ R = 1) :
-    periodicInteractionHamiltonianES (pvbsPureWindowInteraction q R) R
+    haveI : NeZero R := ⟨by omega⟩;
+    Matrix.toEuclideanLin (translationInvariant R (pvbsPureWindowInteraction q R)).hamiltonian
       (WithLp.toLp 2 (pvbsEdge q R)) = 0 := by
-  apply (periodicInteractionHamiltonianES_eq_zero_iff_sections
-    (pvbsPureWindowInteraction q R) (pvbsPureWindowInteraction_isPositive q R)
-    hR le_rfl _).mpr
+  have : NeZero R := ⟨by omega⟩
+  apply (toEuclideanLin_hamiltonian_translationInvariant_eq_zero_iff_sections le_rfl
+    (pvbsPureWindowInteraction q R) (posSemidef_pvbsPureWindowInteraction q R) _).mpr
   intro i τ
   obtain ⟨c, hc⟩ := Submodule.mem_span_singleton.mp
     (cyclicTranslateState_pvbsEdge_mem_span q hR hq (-i))
-  apply (pvbsPureWindowInteraction_apply_eq_zero_iff q R _).mpr
+  apply (toEuclideanLin_pvbsPureWindowInteraction_apply_eq_zero_iff q R _).mpr
   refine ⟨c, fun σ ↦ ?_⟩
   change pvbsEdge q R (cyclicCfg (Fin.pos i) R i σ τ) = c * pvbsEdge q R σ
   rw [cyclicCfg_full_eq_cyclicTranslateCfg_neg (Fin.pos i)]
@@ -84,17 +88,18 @@ identity is assumed. Source: the PVBS cyclic line at a root of unity,
 arXiv:1112.4097, Section II; finite-volume context SPWC10, Theorem 5. -/
 theorem ker_pvbsPureWindowHamiltonian_matching_volume (q : ℂ) {R : ℕ} (hR : 0 < R)
     (hq : q ^ R = 1) :
-    LinearMap.ker (periodicInteractionHamiltonianES (pvbsPureWindowInteraction q R) R) =
+    haveI : NeZero R := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin
+        (translationInvariant R (pvbsPureWindowInteraction q R)).hamiltonian) =
       Submodule.span ℂ {WithLp.toLp 2 (pvbsEdge q R)} := by
-  let _ : NeZero R := ⟨hR.ne'⟩
+  have : NeZero R := ⟨by omega⟩
   ext ψ
   constructor
   · intro hψ
-    have hsections := (periodicInteractionHamiltonianES_eq_zero_iff_sections
-      (pvbsPureWindowInteraction q R) (pvbsPureWindowInteraction_isPositive q R)
-      hR le_rfl ψ).mp hψ
-    let i : Fin R := ⟨0, hR⟩
-    obtain ⟨c, hc⟩ := (pvbsPureWindowInteraction_apply_eq_zero_iff q R _).mp
+    have hsections := (toEuclideanLin_hamiltonian_translationInvariant_eq_zero_iff_sections
+      le_rfl (pvbsPureWindowInteraction q R) (posSemidef_pvbsPureWindowInteraction q R) ψ).mp hψ
+    let i : Fin R := 0
+    obtain ⟨c, hc⟩ := (toEuclideanLin_pvbsPureWindowInteraction_apply_eq_zero_iff q R _).mp
       (hsections i 0)
     apply Submodule.mem_span_singleton.mpr
     refine ⟨c, ?_⟩
@@ -102,7 +107,8 @@ theorem ker_pvbsPureWindowHamiltonian_matching_volume (q : ℂ) {R : ℕ} (hR : 
     have hcfg : cyclicCfg (Fin.pos i) R i σ (0 : Cfg 2 R) = σ := by
       rw [cyclicCfg_full_eq_cyclicTranslateCfg_neg (Fin.pos i)]
       ext k
-      simp [cyclicTranslateCfg, i]
+      simp only [cyclicTranslateCfg, i]
+      rw [neg_zero, add_zero]
     have h := hc σ
     change ψ (cyclicCfg (Fin.pos i) R i σ 0) = c * pvbsEdge q R σ at h
     change c * pvbsEdge q R σ = ψ σ
@@ -110,7 +116,8 @@ theorem ker_pvbsPureWindowHamiltonian_matching_volume (q : ℂ) {R : ℕ} (hR : 
     exact h.symm
   · intro hψ
     obtain ⟨c, rfl⟩ := Submodule.mem_span_singleton.mp hψ
-    change periodicInteractionHamiltonianES (pvbsPureWindowInteraction q R) R
+    change Matrix.toEuclideanLin
+      (translationInvariant R (pvbsPureWindowInteraction q R)).hamiltonian
       (c • WithLp.toLp 2 (pvbsEdge q R)) = 0
     rw [map_smul, pvbsPureWindowHamiltonian_apply_pvbsEdge q hR hq, smul_zero]
 
@@ -136,7 +143,9 @@ Source: the PVBS cyclic phase, arXiv:1112.4097, Section II; finite-prefix
 context SPWC10, arXiv:0909.5347, Theorem 5, lines 850–880. -/
 theorem eq_zero_of_pvbsPureWindow_matching_volume_fixed (q : ℂ) {R : ℕ}
     (hR : 0 < R) (hq : q ^ R = 1) (hqone : q ≠ 1) (ψ : MPVSpace 2 R)
-    (hzero : periodicInteractionHamiltonianES (pvbsPureWindowInteraction q R) R ψ = 0)
+    (hzero : haveI : NeZero R := ⟨by omega⟩;
+      Matrix.toEuclideanLin (translationInvariant R (pvbsPureWindowInteraction q R)).hamiltonian
+        ψ = 0)
     (hfixed : ∀ s : Fin R, cyclicTranslateState s ψ.ofLp = ψ.ofLp) : ψ = 0 := by
   have hmem : ψ ∈ Submodule.span ℂ {WithLp.toLp 2 (pvbsEdge q R)} := by
     rw [← ker_pvbsPureWindowHamiltonian_matching_volume q hR hq]

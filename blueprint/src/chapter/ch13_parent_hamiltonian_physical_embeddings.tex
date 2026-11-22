@@ -1,10 +1,10 @@
 \begin{lemma}[Sections of a positive periodic interaction]
     \label{lem:periodic_interaction_sections}
-    \lean{MPSTensor.cyclicRestrictES_periodicLocalInteractionES}
-    \lean{MPSTensor.periodicLocalInteractionES_eq_zero_iff_sections}
-    \lean{MPSTensor.periodicInteractionHamiltonianES_eq_zero_iff_sections}
+    \lean{MPSTensor.cyclicRestrictES_toEuclideanLin_translationInvariant_term}
+    \lean{MPSTensor.toEuclideanLin_translationInvariant_term_eq_zero_iff_sections}
+    \lean{MPSTensor.toEuclideanLin_hamiltonian_translationInvariant_eq_zero_iff_sections}
     \leanok
-    For $1\le R\le M$, let $h$ be an operator on $R$ consecutive sites,
+    For $M\ge1$ and $R\le M$, let $h$ be an operator on $R$ consecutive sites,
     let $h_i$ be its cyclic translate extended by the identity, and write
     $R_{i,\tau}\psi$ for the coefficient section with the outside letters
     fixed to $\tau$. Then $R_{i,\tau}h_i\psi=hR_{i,\tau}\psi$.
@@ -21,9 +21,9 @@
 
 \begin{lemma}[Restriction of an interaction inside an interval]
     \label{lem:periodic_interaction_interval_section}
-    \lean{MPSTensor.periodicLocalInteractionES_rightFiber_eq_zero_of_eq_zero}
+    \lean{MPSTensor.toEuclideanLin_translationInvariant_term_rightFiber_eq_zero_of_eq_zero}
     \leanok
-    Let $h$ have range $R\ge1$, let $W\le M$, and let a translated copy of
+    Let $h$ have range $R$, let $1\le W\le M$, and let a translated copy of
     $h$ lie wholly inside a cyclic interval of $W$ sites. If that translated
     operator kills $\psi$, then its corresponding translate on $W$ sites
     kills every coefficient section of $\psi$ obtained by fixing the
@@ -100,8 +100,8 @@
 
 \begin{lemma}[Sector labels in a periodic projector kernel]
     \label{lem:physical_sector_projector_kernel_support}
-    \lean{MPSTensor.physical_label_eq_of_projectorHamiltonian_coeff_ne_zero}
-    \lean{MPSTensor.coeff_eq_zero_of_projectorHamiltonian_of_physical_labels_ne}
+    \lean{MPSTensor.physical_label_eq_of_translationInvariant_projector_coeff_ne_zero}
+    \lean{MPSTensor.coeff_eq_zero_of_translationInvariant_projector_of_physical_labels_ne}
     \leanok
     \uses{lem:periodic_interaction_sections}
     Let $2\le R\le M$ and let $S$ be a subspace on $R$ sites. Suppose
@@ -132,8 +132,8 @@
 
 \begin{lemma}[No mixed physical sectors in the periodic kernel]
     \label{lem:two_physical_sector_projector_kernel}
-    \lean{MPSTensor.coeff_eq_zero_of_two_sector_projectorHamiltonian}
-    \lean{MPSTensor.coeff_eq_zero_of_physical_sum_projectorHamiltonian}
+    \lean{MPSTensor.coeff_eq_zero_of_two_sector_translationInvariant_projector}
+    \lean{MPSTensor.coeff_eq_zero_of_physical_sum_translationInvariant_projector}
     \leanok
     \uses{lem:physical_sector_embedded_coefficients,lem:physical_sector_projector_kernel_support}
     Let $2\le R\le M$. Embed two local spaces $S$ and $T$ from alphabets
@@ -154,7 +154,7 @@
 \begin{lemma}[Exact decomposition into physical sectors]
     \label{lem:physical_sector_state_decomposition}
     \lean{MPSTensor.physical_sum_state_decomposition}
-    \lean{MPSTensor.physical_sum_state_decomposition_of_projectorHamiltonian_eq_zero}
+    \lean{MPSTensor.physical_sum_state_decomposition_of_translationInvariant_projector_eq_zero}
     \leanok
     \uses{lem:two_physical_sector_projector_kernel}
     Split an alphabet into $a$ and $b$ letters, and let $M\ge1$.
@@ -230,7 +230,7 @@ be the periodic sums of the complementary projections of these spaces.
 
 \begin{lemma}[The periodic sum restricts to its component]
     \label{lem:physical_sector_periodic_hamiltonian_transport}
-    \lean{MPSTensor.physical_sector_projectorHamiltonian_embed,
+    \lean{MPSTensor.physical_sector_hamiltonian_translationInvariant_embed,
         MPSTensor.physical_sector_hamiltonian_translationInvariant_embed_eq_zero_iff}
     \leanok
     \uses{lem:physical_sector_parent_projection_transport,
@@ -256,7 +256,7 @@ be the periodic sums of the complementary projections of these spaces.
 
 \begin{lemma}[Exact component kernel condition for a sector sum]
     \label{lem:physical_sector_sum_kernel_iff}
-    \lean{MPSTensor.physical_sector_projectorHamiltonian_sum_eq_zero_iff}
+    \lean{MPSTensor.physical_sector_hamiltonian_translationInvariant_sum_eq_zero_iff}
     \leanok
     \uses{lem:physical_sector_periodic_hamiltonian_transport,
         lem:physical_sector_word_orthogonality}
@@ -277,7 +277,7 @@ be the periodic sums of the complementary projections of these spaces.
 
 \begin{lemma}[Full kernel decomposition for a split physical alphabet]
     \label{lem:physical_sum_full_kernel}
-    \lean{MPSTensor.ker_physical_sum_projectorHamiltonian}
+    \lean{MPSTensor.ker_physical_sum_translationInvariant_projector}
     \leanok
     \uses{lem:physical_sector_state_decomposition,lem:physical_sector_sum_kernel_iff}
     Let $M\ge R\ge2$, and split the physical alphabet into its first $a$

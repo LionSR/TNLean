@@ -10523,7 +10523,7 @@ there is no need for a new tactic.
 - **Pattern:** Restrict an identity-extended interaction to its own window,
   identify the unchanged outside coordinates, and recover the inserted word.
 - **Abstraction:** The latter module exposes
-  `cyclicRestrictES_periodicLocalInteractionES` for arbitrary local operators.
+  `cyclicRestrictES_toEuclideanLin_translationInvariant_term` for arbitrary local operators.
   The earlier canonical proof occurs before this module in the import order;
   sharing it would require moving the general definition before that proof.
 - **Decision:** Record the two occurrences; do not introduce a tactic or an

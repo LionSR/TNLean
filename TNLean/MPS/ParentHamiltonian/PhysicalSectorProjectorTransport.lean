@@ -17,12 +17,6 @@ no whole-kernel decomposition or dynamical supplier is assumed.
 
 Source context: the physical-sector construction for the finite-prefix
 investigation of SPWC10, arXiv:0909.5347, Theorem 5, lines 850–880.
-
-**Transitional (#10948).** `physical_sector_projectorHamiltonian_embed` and
-`physical_sector_projectorHamiltonian_sum_eq_zero_iff`, stated for the Euclidean-space operator
-`periodicInteractionHamiltonianES`, are kept until their last user is converted. The last section
-states the facts for the Hamiltonian of the translation-invariant interaction
-(`ManyBody.Interaction.translationInvariant`) of the matrix of each complementary projection.
 -/
 
 open scoped InnerProductSpace BigOperators
@@ -150,113 +144,10 @@ private theorem physical_embedding_cyclic_active_block
   intro σ
   apply Prod.ext <;> funext j <;> rfl
 
-private theorem periodicLocalInteractionES_extend_physical
-    (e : Fin a ↪ Fin d) (hRM : R ≤ M)
-    (G : MPVSpace a R →ₗ[ℂ] MPVSpace a R)
-    (H : MPVSpace d R →ₗ[ℂ] MPVSpace d R)
-    (h : ∀ v, H ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
-        |>.euclideanExtendByZero v) =
-      (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).euclideanExtendByZero (G v))
-    (i : Fin M) (v : MPVSpace a M) :
-    periodicLocalInteractionES H i
-        ((Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero v) =
-      (Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero
-        (periodicLocalInteractionES G i v) := by
-  let U := cyclicActiveBlockConfigLinearIsometryEquiv d R hRM i
-  let V := cyclicActiveBlockConfigLinearIsometryEquiv a R hRM i
-  let E := (Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero
-  let F := ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).prodMap
-    (Function.Embedding.piCongrRight (fun _ : Fin (M - R) ↦ e))).euclideanExtendByZero
-  have hcoord (x : MPVSpace a M) : U (E x) = F (V x) :=
-    physical_embedding_cyclic_active_block e hRM i x
-  apply U.injective
-  calc
-    U (periodicLocalInteractionES H i (E v)) =
-        ContinuousLinearMap.rightFiberwiseMap (LinearMap.toContinuousLinearMap H) (U (E v)) :=
-      cyclicActiveBlock_periodicLocalInteractionES_apply H hRM i (E v)
-    _ = ContinuousLinearMap.rightFiberwiseMap (LinearMap.toContinuousLinearMap H) (F (V v)) :=
-      congrArg _ (hcoord v)
-    _ = F (ContinuousLinearMap.rightFiberwiseMap (LinearMap.toContinuousLinearMap G) (V v)) :=
-      ContinuousLinearMap.rightFiberwiseMap_extendByZero _ _ _ _ h (V v)
-    _ = F (V (periodicLocalInteractionES G i v)) :=
-      congrArg F (cyclicActiveBlock_periodicLocalInteractionES_apply G hRM i v).symm
-    _ = U (E (periodicLocalInteractionES G i v)) := (hcoord _).symm
-
-/-- The actual periodic Hamiltonian of the complementary projection of two
-embedded sector spaces intertwines with the actual first-sector parent sum.
-The local covariance is derived from the spaces themselves, not assumed.
-Source: physical-sector assembly for the SPWC10 finite-prefix investigation. -/
-theorem physical_sector_projectorHamiltonian_embed
-    (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (h : ∀ i j, e i ≠ f j)
-    (hR : 0 < R) (hRM : R ≤ M)
-    (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
-    (v : MPVSpace a M) :
-    periodicInteractionHamiltonianES
-        ((S.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
-            |>.euclideanExtendByZero.toLinearMap) ⊔
-          T.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
-            |>.euclideanExtendByZero.toLinearMap))ᗮ.starProjection.toLinearMap) M
-        ((Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero v) =
-      (Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero
-        (periodicInteractionHamiltonianES Sᗮ.starProjection.toLinearMap M v) := by
-  simp only [periodicInteractionHamiltonianES, LinearMap.sum_apply, map_sum]
-  apply Finset.sum_congr rfl
-  intro i _
-  exact periodicLocalInteractionES_extend_physical e hRM _ _
-    (physical_sector_parent_projection_embed e f h hR S T) i v
-
-/-- The actual combined parent annihilates the sum of two sector vectors
-exactly when each actual component parent annihilates its own vector. The
-component separation is derived from physical orthogonality, not supplied as
-a kernel decomposition or an assumed dynamics relation.
-Source: physical-sector assembly for the SPWC10 finite-prefix investigation. -/
-theorem physical_sector_projectorHamiltonian_sum_eq_zero_iff
-    (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (h : ∀ i j, e i ≠ f j)
-    (hR : 0 < R) (hRM : R ≤ M)
-    (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
-    (v : MPVSpace a M) (w : MPVSpace b M) :
-    periodicInteractionHamiltonianES
-        ((S.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
-            |>.euclideanExtendByZero.toLinearMap) ⊔
-          T.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
-            |>.euclideanExtendByZero.toLinearMap))ᗮ.starProjection.toLinearMap) M
-        ((Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero v +
-          (Function.Embedding.piCongrRight (fun _ : Fin M ↦ f)).euclideanExtendByZero w) = 0 ↔
-      periodicInteractionHamiltonianES Sᗮ.starProjection.toLinearMap M v = 0 ∧
-        periodicInteractionHamiltonianES Tᗮ.starProjection.toLinearMap M w = 0 := by
-  let E := (Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero
-  let F := (Function.Embedding.piCongrRight (fun _ : Fin M ↦ f)).euclideanExtendByZero
-  let H := periodicInteractionHamiltonianES
-    ((S.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
-        |>.euclideanExtendByZero.toLinearMap) ⊔
-      T.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
-        |>.euclideanExtendByZero.toLinearMap))ᗮ.starProjection.toLinearMap) M
-  let G := periodicInteractionHamiltonianES Sᗮ.starProjection.toLinearMap M
-  let K := periodicInteractionHamiltonianES Tᗮ.starProjection.toLinearMap M
-  have hE : H (E v) = E (G v) := physical_sector_projectorHamiltonian_embed e f h hR hRM S T v
-  have hF : H (F w) = F (K w) := by
-    simpa only [sup_comm] using physical_sector_projectorHamiltonian_embed f e
-      (fun j i ↦ (h i j).symm) hR hRM T S w
-  change H (E v + F w) = 0 ↔ G v = 0 ∧ K w = 0
-  rw [map_add, hE, hF]
-  constructor
-  · intro hz
-    have horth : ⟪E (G v), F (K w)⟫_ℂ = 0 :=
-      Function.Embedding.inner_extendByZero_eq_zero_of_disjoint _ _
-        (disjoint_physical_word_ranges e f h (hR.trans_le hRM)) (G v) (K w)
-    have hn := congrArg (fun x ↦ ⟪E (G v), x⟫_ℂ) hz
-    rw [inner_add_right, horth, add_zero, inner_zero_right] at hn
-    have hezero : E (G v) = 0 := inner_self_eq_zero.mp hn
-    have hfzero : F (K w) = 0 := by simpa only [hezero, zero_add] using hz
-    exact ⟨(E.toLinearMap.map_eq_zero_iff E.injective).mp hezero,
-      (F.toLinearMap.map_eq_zero_iff F.injective).mp hfzero⟩
-  · rintro ⟨hv, hw⟩
-    rw [hv, hw, map_zero, map_zero, zero_add]
-
 /-! ### The translation-invariant interaction of the complementary projections
 
-The same facts for the Hamiltonian of the translation-invariant interaction on the ring of the
-matrix of each complementary projection; statements about vectors take its operator
+The Hamiltonian of the translation-invariant interaction on the ring of the matrix of each
+complementary projection; statements about vectors take its operator
 `Matrix.toEuclideanLin`. -/
 
 private theorem toEuclideanLin_translationInvariant_term_extend_physical
