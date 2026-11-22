@@ -15,11 +15,6 @@ tensor, and conjugates the corresponding orthogonal parent projections.
 
 These identities apply at every window length, including the two-site
 supports used in Garre-Rubio–Lootens–Molnár, arXiv:2203.12563, Section 5.
-
-**Transitional (#10948).** `parentInteractionES_reindexPhysical_equiv`, the conjugation stated
-for the Euclidean-space operator, is kept until its users are converted; the statement for the
-operator of the local parent matrix is
-`toEuclideanLin_toMatrix'_parentInteraction_reindexPhysical_equiv`.
 -/
 
 open scoped Matrix.Norms.Frobenius
@@ -99,26 +94,6 @@ theorem groundSpaceES_reindexPhysical_equiv
       physicalReindexLinearIsometryEquiv_groundSpaceMapES e A N x⟩
   · rintro ⟨w, ⟨x, rfl⟩, rfl⟩
     exact ⟨x, (physicalReindexLinearIsometryEquiv_groundSpaceMapES e A N x).symm⟩
-
-/-- The canonical local parent projection is conjugated by the physical
-configuration isometry under an alphabet bijection. -/
-theorem parentInteractionES_reindexPhysical_equiv
-    (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D) (N : ℕ) :
-    parentInteractionES (Kraus.reindexPhysical e A) N =
-      (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.conj
-        (parentInteractionES A N) := by
-  have hOrth : (groundSpaceES (Kraus.reindexPhysical e A) N)ᗮ =
-      ((groundSpaceES A N)ᗮ).map
-        (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.toLinearMap := by
-    rw [groundSpaceES_reindexPhysical_equiv, Submodule.map_orthogonal_equiv]
-  have hProj := congrArg
-    (fun S : Submodule ℂ (EuclideanSpace ℂ (Cfg d₁ N)) =>
-      S.starProjection.toLinearMap) hOrth
-  refine hProj.trans ?_
-  apply LinearMap.ext
-  intro v
-  exact Submodule.starProjection_map_apply
-    (physicalReindexLinearIsometryEquiv e N) (groundSpaceES A N)ᗮ v
 
 /-- The operator of the canonical local parent matrix is conjugated by the physical
 configuration isometry under an alphabet bijection. -/
