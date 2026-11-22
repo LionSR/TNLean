@@ -140,14 +140,21 @@ theorem hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteract
     (γ := γ) rfl hnum hWindowGap x
   rwa [ManyBody.Interaction.sum_toEuclideanLin_translationInvariant_term_finEquiv_symm] at hx
 
-set_option linter.style.longLine false in
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D : ℕ}
+
 /-- A primitive MPS has a positive finite-range Knabe gap for its canonical
 range-\(l + 1\) parent Hamiltonian on every periodic chain with \(N \geq 2m\).
 
 The open coefficient is
 \(\gamma = (1 - \varepsilon\sqrt{l + 1})^2\), the active Knabe volume is \(m + l\), and
 \(m\) is chosen so that \(l^2 < m\gamma\). -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_hamiltonian_parentRingInteraction_gap_of_finiteRangeKnabe
+theorem exists_hamiltonian_parentRingInteraction_gap_of_finiteRangeKnabe
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ m : ℕ, ∃ δ : ℝ,
@@ -195,4 +202,4 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_hamiltonian_parentRing
   · exact ⟨by simpa [δ, γ] using hPeriodic.1,
       fun N _ hN ↦ by simpa [δ, γ] using hPeriodic.2 N hN⟩
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap

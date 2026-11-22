@@ -366,7 +366,14 @@ private theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_an
       hThree (by omega) j v
     linarith
 
-set_option linter.style.longLine false in
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D : ℕ}
+
 /-- A primitive MPS tensor with a positive-definite fixed point admits physical blocking whose
 range-two blocked parent interaction on the ring has gap constant \(1/8\).
 
@@ -378,7 +385,7 @@ finite-overlap martingale reduction gives the displayed bound.
 
 The conclusion concerns only `blockTensor A p`; it makes no comparison with an original-site
 parent interaction. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth
+theorem exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth
     [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
@@ -397,13 +404,12 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_hamiltonia
   rw [hγ]
   exact hGap N hN μ hμ
 
-set_option linter.style.longLine false in
 /-- A primitive MPS tensor with a positive-definite fixed point admits physical blocking whose
 range-two blocked parent interaction on the ring has a uniform positive gap.
 
 The conclusion concerns only `blockTensor A p`; it makes no comparison with an original-site
 parent interaction. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_hamiltonian_parentRingInteraction_gapped
+theorem exists_blockTensor_hamiltonian_parentRingInteraction_gapped
     [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
@@ -417,4 +423,4 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_hamiltonia
     hP.exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth hρ
   exact ⟨p, hp, hInj, 1 / 8, by norm_num, hGap⟩
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap

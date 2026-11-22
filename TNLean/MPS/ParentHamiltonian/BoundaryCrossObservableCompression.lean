@@ -197,16 +197,23 @@ theorem norm_groundSpaceES_bulkObservable_cross_compression_le
         ‖Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X‖ * 1 := by gcongr
     _ = _ := by simp only [one_mul, mul_one]
 
-set_option linter.style.longLine false in
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D₁ D₂ : ℕ}
+
 /-- The products of the ground projections of inequivalent normalized primitive
 tensors tend to zero in operator norm. Source: Nachtergaele,
 arXiv:cond-mat/9410110, proof of Lemma disjoint, equations C1C2 and limP12. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceES_starProjection_comp_tendsto_zero_of_inequivalent
+theorem groundSpaceES_starProjection_comp_tendsto_zero_of_inequivalent
     [NeZero D₁] [NeZero D₂] {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} {σ : Matrix (Fin D₂) (Fin D₂) ℂ}
     (hA : Kraus.HasComplementaryFixedPointGap A ρ) (hB : Kraus.HasComplementaryFixedPointGap B σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
-    (hDistinct : ∀ h : D₂ = D₁, ¬ GaugePhaseEquiv (h ▸ B) A) :
+    (hDistinct : ∀ h : D₂ = D₁, ¬ MPSTensor.GaugePhaseEquiv (h ▸ B) A) :
     Tendsto (fun n =>
       ‖(groundSpaceES A n).starProjection.comp (groundSpaceES B n).starProjection‖)
       atTop (𝓝 0) := by
@@ -222,18 +229,17 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceES_starProjection_
     simp only [Submodule.starProjection_bot, sub_zero] at h
     exact h.trans_lt (half_lt_self hε)
 
-set_option linter.style.longLine false in
 /-- Cross compression of a fixed nonempty local observable between inequivalent
 primitive sectors tends to zero as the left free interval expands. The right
 free interval may vary arbitrarily. This follows by prefix locality from the
 sector-overlap estimate in Nachtergaele, arXiv:cond-mat/9410110,
 proof of Lemma disjoint, lines 1744--1820. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_cross_groundSpace_compression_tendsto_zero_of_inequivalent
+theorem bulkObservable_cross_groundSpace_compression_tendsto_zero_of_inequivalent
     [NeZero D₁] [NeZero D₂] {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} {σ : Matrix (Fin D₂) (Fin D₂) ℂ}
     (hA : Kraus.HasComplementaryFixedPointGap A ρ) (hB : Kraus.HasComplementaryFixedPointGap B σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
-    (hDistinct : ∀ h : D₂ = D₁, ¬ GaugePhaseEquiv (h ▸ B) A)
+    (hDistinct : ∀ h : D₂ = D₁, ¬ MPSTensor.GaugePhaseEquiv (h ▸ B) A)
     {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ} (hℓ : Tendsto ℓ f atTop) :
     Tendsto (fun n =>
@@ -251,4 +257,4 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_cross_groundSp
   exact squeeze_zero (fun _ => norm_nonneg _)
     (fun _ => norm_groundSpaceES_bulkObservable_cross_compression_le A B X) hUpper
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap
