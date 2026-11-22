@@ -1,0 +1,54 @@
+\begin{definition}[Locally flat reversible dual transport]
+    \label{def:peps_dual_flat_transport}
+    \lean{TNLean.PEPS.TorusDualFlatTransport,TNLean.PEPS.TorusDualFlatTransport.eval}\leanok
+    \uses{def:peps_dual_flux_path,def:peps_dual_flux_homotopy}
+    Assign a set to every dual vertex and a reversible map to every
+    labelled step. Reverse steps give inverse maps. The two directed
+    sides of every square whose enclosed primal vertex belongs to the
+    allowed swept set give equal maps. Transport along a path is ordered
+    composition of its step maps.
+\end{definition}
+
+\begin{lemma}[Restricted homotopy preserves locally flat transport]
+    \label{lem:peps_dual_flat_transport_invariance}
+    \lean{TNLean.PEPS.TorusDualHomotopy.flatTransport_eval_eq}\leanok
+    Every generated homotopy supported on the allowed swept set
+    preserves every locally flat reversible transport.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:peps_dual_flat_transport,def:peps_dual_flux_homotopy}
+    Backtracks cancel by reversibility, and allowed squares preserve
+    transport by local flatness. Composition and reversal preserve
+    equality of the resulting bijections. In particular,
+    \begin{align}
+        F_q(F_{p^{-1}}z)=F_p(F_{p^{-1}}z)=z=F_q(F_{q^{-1}}z).
+        \label{eq:peps_flat_transport_reverse}
+    \end{align}
+    Cancelling the bijection $F_q$ proves the reversal case.
+\end{proof}
+
+\begin{lemma}[Completeness of locally flat transports]
+    \label{lem:peps_dual_flat_transport_completeness}
+    \lean{TNLean.PEPS.torusDualHomotopy_iff_flatTransport}\leanok
+    Two parallel labelled dual paths admit a generated homotopy with
+    the prescribed swept support if and only if their transports agree
+    for every choice of small vertex sets in a fixed base universe and
+    locally flat reversible step maps. This holds for every pair of torus
+    periods. The set of transports is not assumed finite; the statement
+    does not assert a finite decision procedure or classification by displacement.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_dual_flat_transport_invariance}
+    For the converse, fix the common initial vertex and take as the set
+    over each vertex all path classes from that initial vertex, modulo
+    the generated supported homotopy. Appending a step gives a reversible
+    map. Explicitly, with initial vertex $a$,
+    \begin{align}
+        Y_b=\{\text{paths }a\to b\}/{\sim_R},\qquad
+        F_e([r])=[re],\qquad F_p([1_a])=[p].
+        \label{eq:peps_flat_transport_path_classes}
+    \end{align}
+    A backtrack proves the inverse law and an allowed square proves local
+    flatness. These quotient sets belong to the base universe. The asserted
+    transport equality at $[1_a]$ gives $[p]=[q]$, hence $p\sim_Rq$.
+\end{proof}
