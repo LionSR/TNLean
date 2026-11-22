@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.FaithfulStationaryClosure
 import TNLean.MPS.FundamentalTheorem.Reduction.Splitting
-import TNLean.Algebra.SubmoduleStarProjectionMatrix
+import QICLean.Algebra.MatrixStarProjection
 
 /-!
 # Stationary splitting in the asymmetric fundamental theorem

@@ -95,10 +95,11 @@ Sections II.D.2 and II.F.2, equation eq:1d-sym:jointsym. -/
 theorem physicalSpectatorBondInteraction_spectrum_gap_one {N : ℕ}
     (K d₀ d₁ : ℕ) (B : Matrix (Fin K × Fin K) (Fin K × Fin K) ℂ)
     (hB : IsStarProjection B) (hN : 2 ≤ N) :
-    ∀ z ∈ spectrum ℂ
-      (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; ∀ z ∈ spectrum ℂ
+      (Interaction.translationInvariant N
         (physicalSpectatorBondInteraction K d₀ d₁ B)).hamiltonian,
       0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
+  have : NeZero N := ⟨by omega⟩
   exact sectorBondInteraction_spectrum_gap_one _ _ _ _
     (Matrix.physicalSpectatorEdgeInteraction_isStarProjection K d₀ d₁ B hB) hN
 

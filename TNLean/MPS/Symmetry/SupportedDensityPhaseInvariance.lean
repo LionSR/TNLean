@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.SupportedIsometricCompression
+import QICLean.Algebra.SupportedIsometricCompression
 import TNLean.MPS.Symmetry.LocalSpectralSupport
 import TNLean.MPS.Symmetry.LocalInvariantCompression
 
@@ -28,9 +28,9 @@ set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
 
 open scoped Matrix ComplexOrder Topology
-open Filter TNLean.Algebra
+open Filter ScalarCohomology
 
-open scoped TNLean.Algebra.ScalarCohomology
+open scoped ScalarCohomology
 
 namespace MPSTensor
 

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ListProduct
+import QICLean.Algebra.OrderedProduct
 import TNLean.MPS.MPDO.FirstSite
 import TNLean.MPS.MPDO.VerticalCF
 import TNLean.MPS.MPDO.ZCL
@@ -95,7 +95,7 @@ open scoped Matrix BigOperators ComplexOrder
 
 namespace MPOTensor
 
-variable {d D : ℕ}
+variable {d D n : ℕ}
 
 /-! ### Single-site vertical loops -/
 

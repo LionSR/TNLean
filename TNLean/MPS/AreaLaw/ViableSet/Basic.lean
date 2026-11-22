@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
-import TNLean.Algebra.SubmoduleStarProjectionMatrix
+import QICLean.Algebra.MatrixStarProjection
 import QICLean.Channel.SchmidtTrimming
 
 /-!

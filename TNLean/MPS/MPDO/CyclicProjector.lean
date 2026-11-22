@@ -84,10 +84,11 @@ of the peripheral spectrum, Wolf 2012, Theorem 6.6. -/
 theorem spectralUnitalGauge_schwarz_setup [NeZero D]
     (B : MPSTensor d D) (hIrr : Kraus.IsIrreducibleFamily B)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (rad : ℝ) (hρ : ρ.PosDef) (hrad : 0 < rad)
-    (hfix : Kraus.transferMap (d := d) (D := D) B ρ = (rad : ℂ) • ρ) :
+    (hfix : Kraus.transferMap (ι := Fin d) (n := Fin D) B ρ = (rad : ℂ) • ρ) :
     KadisonSchwarz.IsUnitalKraus (d := d) (D := D) (Kraus.spectralUnitalGauge B rad ρ) ∧
     Kraus.IsIrreducibleFamily (Kraus.spectralUnitalGauge B rad ρ) ∧
-    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (Kraus.spectralUnitalGauge B rad ρ)) ∧
+    IsIrreducibleMap
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.spectralUnitalGauge B rad ρ)) ∧
     ∃ σ : Matrix (Fin D) (Fin D) ℂ, σ.PosDef ∧
       Kraus.adjointMap (Kraus.spectralUnitalGauge B rad ρ) σ = σ := by
   classical
@@ -103,7 +104,7 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
   have hIrrK : Kraus.IsIrreducibleFamily (Kraus.spectralUnitalGauge B rad ρ) := by
     have h := isIrreducibleTensor_smul_conj B hIrr hSunit hcne
     exact h
-  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D)
+  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D)
       (Kraus.spectralUnitalGauge B rad ρ)) :=
     Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily _ hIrrK
   refine ⟨hUnital, hIrrK, hIrrMap, ?_⟩
@@ -113,12 +114,13 @@ theorem spectralUnitalGauge_schwarz_setup [NeZero D]
   set K : MPSTensor d D := Kraus.spectralUnitalGauge B rad ρ with hK
   have hTPadj : ∑ v : Fin d, ((K v)ᴴ)ᴴ * (K v)ᴴ = 1 := by
     simpa [Matrix.conjTranspose_conjTranspose] using hUnital
-  have hCh : IsChannel (Kraus.transferMap (d := d) (D := D) (fun v => (K v)ᴴ)) :=
+  have hCh : IsChannel (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun v => (K v)ᴴ)) :=
     Kraus.isChannel_mapLM (fun v => (K v)ᴴ) hTPadj
   obtain ⟨σ, hσ_psd, hσ_ne, hσ_fix⟩ :=
     hCh.exists_posSemidef_fixedPoint
-      (E := Kraus.transferMap (d := d) (D := D) (fun v => (K v)ᴴ)) (NeZero.pos D)
-  have hIrrAdj : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) (fun v => (K v)ᴴ)) :=
+      (E := Kraus.transferMap (ι := Fin d) (n := Fin D) (fun v => (K v)ᴴ)) (NeZero.pos D)
+  have hIrrAdj :
+      IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun v => (K v)ᴴ)) :=
     Kraus.isIrreducibleMap_mapLM_conjTranspose K
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily K hIrrK)
   have hσ_pd : σ.PosDef :=
@@ -138,12 +140,13 @@ modulus $r$. -/
 theorem hasEigenvalue_transferMap_spectralUnitalGauge
     (B : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) (rad : ℝ)
     (hρ : ρ.PosDef) (hrad : 0 < rad) {μ : ℂ}
-    (hμ : Module.End.HasEigenvalue (Kraus.transferMap (d := d) (D := D) B) μ) :
+    (hμ : Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin d) (n := Fin D) B) μ) :
     Module.End.HasEigenvalue
-      (Kraus.transferMap (d := d) (D := D) (Kraus.spectralUnitalGauge B rad ρ)) (μ / rad) := by
+      (Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.spectralUnitalGauge B rad ρ))
+      (μ / rad) := by
   classical
   obtain ⟨X, hX⟩ := hμ.exists_hasEigenvector
-  have hXeq : Kraus.transferMap (d := d) (D := D) B X = μ • X :=
+  have hXeq : Kraus.transferMap (ι := Fin d) (n := Fin D) B X = μ • X :=
     Module.End.mem_eigenspace_iff.mp (Module.End.hasEigenvector_iff.mp hX).1
   have hXne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX).2
   set S : Matrix (Fin D) (Fin D) ℂ := CFC.sqrt ρ with hS
@@ -164,7 +167,7 @@ theorem hasEigenvalue_transferMap_spectralUnitalGauge
           rw [Matrix.nonsing_inv_mul S hSdet, Matrix.mul_one]
       _ = S * (X' * S) := by rw [hX']; simp only [Matrix.mul_assoc]
       _ = 0 := by rw [h0, Matrix.zero_mul, Matrix.mul_zero]
-  have hmap : Kraus.transferMap (d := d) (D := D) (Kraus.spectralUnitalGauge B rad ρ) X'
+  have hmap : Kraus.transferMap (ι := Fin d) (n := Fin D) (Kraus.spectralUnitalGauge B rad ρ) X'
       = (μ / ↑rad) • X' := by
     have hterm : ∀ v : Fin d,
         Kraus.spectralUnitalGauge B rad ρ v * X' * (Kraus.spectralUnitalGauge B rad ρ v)ᴴ
@@ -188,8 +191,8 @@ theorem hasEigenvalue_transferMap_spectralUnitalGauge
           rw [← Finset.smul_sum, Finset.mul_sum, Finset.sum_mul]
       _ = (c * c) • (S⁻¹ * (μ • X) * S⁻¹) := by
           rw [show ∑ v : Fin d, B v * X * (B v)ᴴ
-              = Kraus.transferMap (d := d) (D := D) B X from
-            (Kraus.transferMap_apply (d := d) (D := D) B X).symm, hXeq]
+              = Kraus.transferMap (ι := Fin d) (n := Fin D) B X from
+            (Kraus.transferMap_apply (ι := Fin d) (n := Fin D) B X).symm, hXeq]
       _ = (μ / ↑rad) • X' := by
           rw [Matrix.mul_smul, Matrix.smul_mul, smul_smul, hcc, hX',
             div_eq_mul_inv, mul_comm]
@@ -198,6 +201,8 @@ theorem hasEigenvalue_transferMap_spectralUnitalGauge
 end MPSTensor
 
 namespace MPOTensor
+
+variable {d D : ℕ}
 
 open MPSTensor in
 /-- **The displaced invariant projector of a nontrivial periodic vector**
@@ -227,9 +232,9 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     (hV : Vᴴ * V = 1)
     (hint : ∀ v : Fin (D * D), verticalTensor M v * V = V * B v)
     (hirr : Kraus.IsIrreducibleFamily B) (hρ : ρ.PosDef) (hrad : 0 < rad)
-    (hfix : Kraus.transferMap (d := D * D) (D := n) B ρ = (rad : ℂ) • ρ)
+    (hfix : Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) B ρ = (rad : ℂ) • ρ)
     (μ : ℂ)
-    (hμ : Module.End.HasEigenvalue (Kraus.transferMap (d := D * D) (D := n) B) μ)
+    (hμ : Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) B) μ)
     (hnorm : ‖μ‖ = rad) (hne : μ ≠ (rad : ℂ)) :
     ∃ (p : ℕ) (Q : Matrix (Fin d) (Fin d) ℂ),
       p ≠ 0 ∧ Q.IsHermitian ∧ IsIdempotentElem Q ∧
@@ -258,7 +263,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
   -- not `1`, so the peripheral cyclic group has order at least two.
   have hradC : (rad : ℂ) ≠ 0 := by exact_mod_cast hrad.ne'
   have hμ'val : Module.End.HasEigenvalue
-      (Kraus.transferMap (d := D * D) (D := n) K) (μ / rad) :=
+      (Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) K) (μ / rad) :=
     MPSTensor.hasEigenvalue_transferMap_spectralUnitalGauge B ρ rad hρ hrad hμ
   have hμ'norm : ‖μ / (rad : ℂ)‖ = 1 := by
     rw [norm_div, hnorm, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hrad,
@@ -269,7 +274,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     by_contra hm1'
     have hm1 : m = 1 := le_antisymm (not_lt.mp hm1') hm_pos
     have hμ'mem : μ / (rad : ℂ) ∈
-        peripheralEigenvalues (Kraus.transferMap (d := D * D) (D := n) K) :=
+        peripheralEigenvalues (Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) K) :=
       ⟨hμ'val, hμ'norm⟩
     rw [hset] at hμ'mem
     obtain ⟨k, hk⟩ := hμ'mem
@@ -279,7 +284,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     rw [Fin.eq_zero k]
     simp
   -- The cyclic family of Wolf Theorem 6.6 for the gauged corner map.
-  have hperiph : peripheralEigenvalues (Kraus.transferMap (d := D * D) (D := n) K) =
+  have hperiph : peripheralEigenvalues (Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) K) =
       Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
     rw [hset]
     ext z
@@ -290,7 +295,8 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
   obtain ⟨U, P, _, _, _, hPproj, hPsum, _, hcyclicLM⟩ :=
     Kraus.exists_cyclic_decomposition_of_irreducible_schwarz
       (K := K) hUnital σ hσ hσfix hIrrMapLM hγprim hperiphLM
-  have hcyclic : ∀ k : Fin m, Kraus.transferMap (d := D * D) (D := n) K (P (k + 1)) = P k :=
+  have hcyclic : ∀ k : Fin m,
+      Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) K (P (k + 1)) = P k :=
     fun k => by exact hcyclicLM k
   -- Notation for the square root of the eigenvector and the scaling factor.
   set S : Matrix (Fin n) (Fin n) ℂ := CFC.sqrt ρ with hS
@@ -485,7 +491,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
         _ = 0 := by rw [← Matrix.mul_assoc, horth, Matrix.zero_mul]
     -- The cyclic action then annihilates the displaced sector, which is
     -- impossible: no cyclic projection vanishes.
-    have hmap0 : Kraus.transferMap (d := D * D) (D := n) K (P 0) = 0 := by
+    have hmap0 : Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) K (P 0) = 0 := by
       rw [Kraus.transferMap_apply]
       refine Finset.sum_eq_zero fun v _ => ?_
       have hKv0 : K v * P 0 = P (0 - 1) * K v := by

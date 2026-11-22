@@ -60,7 +60,6 @@ The identity `eq:zeta` of the same proposition is proved in
 -/
 
 open scoped Matrix Kronecker
-open TNLean.Algebra
 
 /-! ### Permutation matrices of bond-dimension equalities -/
 

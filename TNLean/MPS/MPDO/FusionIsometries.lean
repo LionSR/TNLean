@@ -66,8 +66,8 @@ Doubled-index MPS tensor and blocking `n` physical sites. -/
 noncomputable def blockedTransferMap (M : MPOTensor d D) (n : ℕ) :
     FusionBondSpace D →ₗ[ℂ] FusionBondSpace D :=
   Kraus.transferMap
-    (d := Kraus.blockPhysDim (d * d) n) (D := D)
-    (Kraus.blockTensor (d := d * d) (D := D) M.toMPSTensor n)
+    (ι := Fin (Kraus.blockPhysDim (d * d) n)) (n := Fin D)
+    (Kraus.blockTensor (d := d * d) (n := Fin D) M.toMPSTensor n)
 
 /-- Blocking an MPO tensor in the doubled-index MPS picture raises the transfer
 map to the corresponding power. -/

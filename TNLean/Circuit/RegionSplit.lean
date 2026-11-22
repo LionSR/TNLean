@@ -3,8 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.RegionMatrix
+import TNLean.Circuit.SupportedOperators
 
 /-!
 # Operators on a region in the coordinates of the region and its complement

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.RegionalTruncationResidual
 import QICLean.Analysis.SoftTruncationRestrictedResidual
 import QICLean.Analysis.ShiftedSoftHardTruncation
+import QICLean.Analysis.SoftTruncationLowRestriction
 
 /-!
 # A regional hard tail with an arbitrary commuting interior
@@ -64,8 +65,9 @@ theorem norm_hard_residual_low_of_barrier
 
 
 /-- An actual soft residual above a lower energy is controlled on a low spectral space
-of an arbitrary commuting interior plus the original local boundary. Both the weighted
-map and the hard-to-soft comparison are derived. Auxiliary to ALVV,
+of an arbitrary commuting interior plus the original local boundary: the bond case of
+`Matrix.norm_soft_truncation_excess_low_le_of_conjugation_le`, with the conjugation bound
+`2 |J|` of the boundary bonds. Auxiliary to ALVV,
 arXiv:1602.08828v2, `lem:exp-approx`, lines 1195–1255. -/
 theorem norm_soft_residual_low_of_barrier
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
@@ -90,18 +92,13 @@ theorem norm_soft_residual_low_of_barrier
         ((2 * (J.card : ℝ)) / (b0 - energy - 2 * (J.card : ℝ))) +
           (t / (m : ℝ)) * (T / t) ^ m := by
   intro A S
-  have htail := norm_hard_residual_low_of_barrier I J Φ h0 h1 B
-    c b0 energy s (p + T) hs0 hs1 hcut hBA hproj basis a hEigen hgap
   have hA : A.IsHermitian :=
     (isSelfAdjoint_sum I fun i hi ↦
       IsSelfAdjoint.of_nonneg (h0 i (Finset.mem_union_left J hi))).isHermitian
-  have hX : (A - (p : ℂ) • 1).PosSemidef := le_iff.mp hp
-  have hcmp := hX.norm_softTruncation_residual_domRestrict_le t m T ht hm hT S
-  have hclip : A - (p : ℂ) • 1 - energyTruncation (A - (p : ℂ) • 1) T =
-      A - energyTruncation A (p + T) := by
-    rw [hA.energyTruncation_sub_smul_one p T]
-    abel
-  rw [hclip] at hcmp
-  exact hcmp.trans (_root_.add_le_add htail (le_refl ((t / (m : ℝ)) * (T / t) ^ m)))
+  have hconj := norm_exp_conjugation_nearestNeighbour_boundary_sum_le I J Φ h0 h1
+    ((c : ℝ) : ℂ) s hs0.le hs1
+  simp only [Complex.coe_smul] at hconj
+  exact norm_soft_truncation_excess_low_le_of_conjugation_le A B _ hA p c b0 energy s t T _ m
+    hp hs0 ht hm hT hcut hBA hproj basis a hEigen hconj hgap
 
 end TNLean.MPS.AreaLaw

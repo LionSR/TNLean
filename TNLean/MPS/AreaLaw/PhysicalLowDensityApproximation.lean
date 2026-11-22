@@ -190,7 +190,13 @@ theorem exists_fixed_bandwidth_normalized_low_energy_approximation_of_independen
       hVcoord.exists_unit_schmidtRank_le_of_equiv eCoord
         (by linarith only [hdelta1]) hψG hψ
     refine ⟨φ, hφ, ?_, hrank.trans ?_⟩
-    · nlinarith [norm_nonneg ⟪φ, ψ⟫_ℂ]
+    · have hx0 : 0 ≤ ‖⟪φ, ψ⟫_ℂ‖ := norm_nonneg _
+      rcases le_total 1 ‖⟪φ, ψ⟫_ℂ‖ with h1 | h1
+      · linarith only [h1, hdelta]
+      · have hsq : ‖⟪φ, ψ⟫_ℂ‖ ^ 2 ≤ ‖⟪φ, ψ⟫_ℂ‖ := by
+          rw [sq]
+          exact mul_le_of_le_one_left hx0 h1
+        linarith only [hsq, hoverlap, hdelta]
     · calc
         Module.finrank ℂ V ≤ N * Module.finrank ℂ W0 := hdim
         _ ≤ D1 ^ 2 * Module.finrank ℂ W0 := Nat.mul_le_mul_right _ hN

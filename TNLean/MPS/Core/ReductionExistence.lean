@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.JordanChevalley
-import TNLean.Algebra.RankOneFactorization
-import TNLean.Algebra.SemisimpleTracePowers
+import QICLean.Algebra.RankOneFactorization
+import QICLean.Algebra.SemisimpleTracePowers
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.Reduction
 import TNLean.MPS.Core.ReductionCrossMatrix
@@ -54,12 +54,12 @@ Source: arXiv:1706.07329v2, proof of Proposition 20,
 private theorem exists_isReduction_of_blockTensor_isInjective_of_sameMPV₂Pos
     [NeZero D_A] (A : MPSTensor d D_A) (B : MPSTensor d D_B)
     (hSame : SameMPV₂Pos B A) (p : ℕ) (hp : 0 < p)
-    (hA : Kraus.IsInjective (blockTensor (d := d) (D := D_A) A p)) :
+    (hA : Kraus.IsInjective (blockTensor (d := d) (n := Fin D_A) A p)) :
     ∃ (V : Matrix (Fin D_A) (Fin D_B) ℂ)
       (W : Matrix (Fin D_B) (Fin D_A) ℂ), IsReduction B A V W := by
   classical
-  let Aₚ := blockTensor (d := d) (D := D_A) A p
-  let Bₚ := blockTensor (d := d) (D := D_B) B p
+  let Aₚ := blockTensor (d := d) (n := Fin D_A) A p
+  let Bₚ := blockTensor (d := d) (n := Fin D_B) B p
   let C := coefficientDualInverse Aₚ hA
   let K := reductionCrossMatrix Bₚ C
   let f : Module.End ℂ (Fin D_B × Fin D_A → ℂ) := Matrix.toLin' K

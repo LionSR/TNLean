@@ -164,8 +164,7 @@ preparation of matrix product states.
         QuantumCircuit.IsPreparedInDepth.dotProduct_mul_mul_of_isGraphSeparated,
         QuantumCircuit.IsPreparedInDepth.dotProduct_mul_eq,
         QuantumCircuit.IsPreparedInDepth.dotProduct_mul_mul,
-        QuantumCircuit.expect_productVector_rectKronecker,
-        QuantumCircuit.expect_productVector_mul}
+        QuantumCircuit.star_productVector_dotProduct_prodOp_mulVec}
     \leanok
     Following~\cite[Theorem~1]{Malz2024Preparation}, let $\ket\psi$ be prepared in depth $T$, and let $Z\in\mathcal A_X$, $Z'\in\mathcal A_{X'}$ with $\mathcal L_T(X)\cap\mathcal L_T(X')=\varnothing$ (e.g., $d_{\rm ring}(X,X')>2T$). Then
     \begin{align}
@@ -200,8 +199,7 @@ preparation of matrix product states.
 \begin{lemma}[Preparation from the all-zero state]
     \label{lem:qc_preparation_from_zero}
     \uses{def:qc_local_circuit}
-    \lean{QuantumCircuit.rectKronecker_mulVec_productVector,
-        QuantumCircuit.finKronecker_mulVec_productVector,
+    \lean{QuantumCircuit.prodOp_mulVec_productVector,
         Matrix.exists_mem_unitaryGroup_eq_smul_mulVec_single,
         QuantumCircuit.productVector_pi_smul,
         QuantumCircuit.exists_prod_eq_smul_prodOp_mulVec,

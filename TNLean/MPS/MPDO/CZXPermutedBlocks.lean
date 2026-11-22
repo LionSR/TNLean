@@ -65,7 +65,7 @@ is the same for both. Documented in
 noncomputable section
 
 open scoped BigOperators Matrix Kronecker
-open TNLean.Algebra MPSTensor MPOTensor.GroupFamily
+open MPSTensor MPOTensor.GroupFamily
 
 namespace MPOTensor.CZX
 

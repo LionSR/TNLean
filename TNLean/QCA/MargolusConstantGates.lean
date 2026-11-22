@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.QCA.MargolusCoherentCoordinates
 import TNLean.QCA.ConsecutivePairCoordinates
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # One fixed pair of actual Margolus gates

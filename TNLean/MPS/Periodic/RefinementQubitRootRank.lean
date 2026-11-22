@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.BilinearForm.Orthogonal
 import QICLean.Channel.KrausMap
 import QICLean.Channel.Schwarz.Closure
-import TNLean.Algebra.InjectivePositiveMapRank
-import TNLean.Algebra.KrausSpanRank
+import QICLean.Channel.InjectivePositiveMapRank
+import QICLean.Kraus.ChoiRankSpan
 import TNLean.MPS.Periodic.RootWordSpan
 import TNLean.MPS.Periodic.Symmetry.Theorem41Reverse
 

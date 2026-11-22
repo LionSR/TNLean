@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.TwoSiteBondInteraction
 import TNLean.MPS.Symmetry.BondProductContinuity
-import TNLean.Algebra.MatrixProjectionReindex
+import QICLean.Algebra.MatrixStarProjection
 
 /-!
 # A symmetric gapped path for the direct-sum fixed points

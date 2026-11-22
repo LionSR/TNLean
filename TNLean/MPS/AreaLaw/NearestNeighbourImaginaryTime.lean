@@ -12,8 +12,8 @@ import Mathlib.Data.Finset.Disjoint
 import Mathlib.Data.Nat.Factorial.Basic
 import Mathlib.Logic.Function.Iterate
 import Mathlib.Tactic.Positivity
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.SupportedMatrixElements
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.ManyBody.Sites.ProductVector
 import QICLean.Entropy.RegionUnion
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
@@ -30,12 +30,9 @@ For a sum of positive unit contractions supported on nearest-neighbour bonds,
 a two-site observable satisfies `‖exp(tH) * O * exp(-tH)‖ ≤ 2 * ‖O‖` for
 `0 ≤ t ≤ 1 / 8`. The estimate is unchanged by a scalar shift of `H`.
 
-The proof follows the commutator argument of Arad, Kuwahara and Landau,
-arXiv:1406.3898, Lemma `lem:Hadamard-bound`, `low70.tex`, lines 795–880.
-After `m` commutators the support has grown by at most `m` sites on each
-side, so at most `2*m + 3` bonds contribute. This gives the factorial
-bound `4^m * m! * ‖O‖`; the exponential series is then bounded by a
-geometric series. The Hamiltonian is the original bond sum throughout.
+This is the bond case of `ManyBody.Interaction.norm_exp_conjugation_shift_le_two`, the
+short-time form of Arad, Kuwahara and Landau, arXiv:1406.3898, Lemma `lem:Hadamard-bound`,
+`low70.tex`, lines 795–880: every bond has two sites, and every site lies in at most two bonds.
 -/
 
 open ManyBody (interval mem_interval)
@@ -44,186 +41,18 @@ open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
 
-/-- At most 2m+3 nearest-neighbor bonds meet the m-fold enlargement of a
-possibly clipped two-site interval. No condition on the chain length or
-centre is needed. Supporting AKL14, arXiv:1406.3898, lines 795–880. -/
-private theorem card_bonds_meeting_enlarged_interval_le (L c m : ℕ) :
-    (Finset.univ.filter fun i : Fin (L - 1) ↦
-      ¬Disjoint (interval L i.val (i.val + 2))
-        (interval L (c - m) (c + 2 + m))).card ≤ 2 * m + 3 := by
+/-- Every site of the chain lies in at most two of the nearest-neighbour bonds of a set.
+Supporting AKL14, arXiv:1406.3898, `low70.tex`, lines 400–445. -/
+theorem card_filter_mem_bond_le_two {L : ℕ} (s : Finset (Fin (L - 1))) (x : Fin L) :
+    (s.filter fun i ↦ x ∈ interval L i.val (i.val + 2)).card ≤ 2 := by
   classical
-  let I := Finset.univ.filter fun i : Fin (L - 1) ↦
-    ¬Disjoint (interval L i.val (i.val + 2))
-      (interval L (c - m) (c + 2 + m))
-  have hbounds (i : I) : c ≤ i.val.val + m + 1 ∧ i.val.val < c + m + 2 := by
-    have hi := (Finset.mem_filter.mp i.property).2
-    obtain ⟨v, hv, hvc⟩ := Finset.not_disjoint_iff.mp hi
-    rw [mem_interval] at hv hvc
-    omega
-  let f : I → Fin (2 * m + 3) := fun i ↦
-    ⟨i.val.val + m + 1 - c, by have hi := hbounds i; omega⟩
-  have hf : Function.Injective f := by
-    intro i j hij
-    have heq := congrArg Fin.val hij
-    have hi := hbounds i
-    have hj := hbounds j
-    have hval : i.val.val = j.val.val := by
-      dsimp only [f] at heq
-      omega
-    apply Subtype.ext
-    exact Fin.ext hval
-  simpa only [Fintype.card_coe, Fintype.card_fin] using
-    (Fintype.card_le_of_injective f hf)
-
-end TNLean.MPS.AreaLaw
-
-namespace TNLean.MPS.AreaLaw
-
-/-- A nearest-neighbor bond meeting an enlarged two-site interval is
-contained in its next enlargement. This is the support step for AKL14,
-arXiv:1406.3898, low70.tex, lines 817–877. The chain may be empty and the
-intervals are clipped at its endpoints. -/
-private theorem bond_subset_enlarged_interval_succ {L c m i : ℕ}
-    (hmeet : ¬Disjoint (interval L i (i + 2))
-      (interval L (c - m) (c + 2 + m))) :
-    interval L i (i + 2) ⊆
-      interval L (c - (m + 1)) (c + 2 + (m + 1)) := by
-  obtain ⟨v, hvi, hvc⟩ := Finset.not_disjoint_iff.mp hmeet
-  intro w hw
-  simp only [mem_interval] at hvi hvc hw ⊢
+  apply (Finset.card_le_card_of_injOn (fun i : Fin (L - 1) ↦ i.val)
+    (t := {x.val - 1, x.val}) ?_ Fin.val_injective.injOn).trans Finset.card_le_two
+  intro i hi
+  have hx := mem_interval.mp (Finset.mem_filter.mp hi).2
+  simp only [Finset.coe_insert, Finset.coe_singleton, Set.mem_insert_iff,
+    Set.mem_singleton_iff]
   omega
-
-/-- Enlargement by one preserves the old interval. Supporting the same
-nearest-neighbor support argument of AKL14, arXiv:1406.3898, lines 817–877. -/
-private theorem enlarged_interval_subset_succ (L c m : ℕ) :
-    interval L (c - m) (c + 2 + m) ⊆
-      interval L (c - (m + 1)) (c + 2 + (m + 1)) := by
-  intro w hw
-  simp only [mem_interval] at hw ⊢
-  omega
-
-end TNLean.MPS.AreaLaw
-
-namespace TNLean.MPS.AreaLaw
-
-open QuantumCircuit
-open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
-
-/-- One commutator with an original nearest-neighbour regional sum enlarges
-a two-site interval by one and costs at most four times the next order.
-Supporting AKL14, arXiv:1406.3898, low70.tex, lines 817–877. -/
-private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
-    (s : Finset (Fin (L - 1)))
-    (Φ : ManyBody.BondInteraction L q)
-    (h0 : ∀ i ∈ s, 0 ≤ Φ.term i) (h1 : ∀ i ∈ s, Φ.term i ≤ 1)
-    (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X
-      (interval L (c - m) (c + 2 + m))) :
-    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      ((Φ.partialHamiltonian s) * X - X * (Φ.partialHamiltonian s))
-      (interval L (c - (m + 1)) (c + 2 + (m + 1))) ∧
-    ‖(Φ.partialHamiltonian s) * X - X * (Φ.partialHamiltonian s)‖ ≤
-      (4 : ℝ) * ((m : ℝ) + 1) * ‖X‖ := by
-  classical
-  let J := interval L (c - (m + 1)) (c + 2 + (m + 1))
-  have hXJ : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J :=
-    ManyBody.supportedOperators_mono
-      (by simpa only [Finset.coe_subset] using enlarged_interval_subset_succ L c m)
-      hX
-  have hterm (i : Fin (L - 1)) (hi : i ∈ s) :
-      Φ.term i * X - X * Φ.term i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := by
-    by_cases hd : Disjoint (interval L i.val (i.val + 2))
-        (interval L (c - m) (c + 2 + m))
-    · have hc : Commute (Φ.term i) X := ManyBody.commute_of_mem_supportedOperators_of_disjoint
-        (Φ.mem i) hX hd
-      rw [sub_eq_zero.mpr hc.eq]
-      exact zero_mem _
-    · have hhJ : Φ.term i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J :=
-        ManyBody.supportedOperators_mono
-          (by simpa only [Finset.coe_subset] using bond_subset_enlarged_interval_succ hd)
-          (Φ.mem i)
-      exact sub_mem (mul_mem hhJ hXJ) (mul_mem hXJ hhJ)
-  have hsupport : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      ((Φ.partialHamiltonian s) * X - X * (Φ.partialHamiltonian s)) J := by
-    change _ ∈ ManyBody.supportedOperators _ _
-    have hsum : _ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := sum_mem hterm
-    change _ ∈ ManyBody.supportedOperators _ _
-    simpa only [ManyBody.Interaction.partialHamiltonian, Finset.sum_sub_distrib, Finset.sum_mul,
-      Finset.mul_sum] using hsum
-  refine ⟨hsupport, ?_⟩
-  let active := s.filter fun i ↦ ¬Disjoint (interval L i.val (i.val + 2))
-    (interval L (c - m) (c + 2 + m))
-  have hcard : active.card ≤ 4 * (m + 1) := by
-    calc
-      active.card ≤ (Finset.univ.filter fun i : Fin (L - 1) ↦
-          ¬Disjoint (interval L i.val (i.val + 2))
-            (interval L (c - m) (c + 2 + m))).card := by
-        apply Finset.card_le_card
-        intro i hi
-        exact Finset.mem_filter.mpr ⟨Finset.mem_univ i, (Finset.mem_filter.mp hi).2⟩
-      _ ≤ 2 * m + 3 := card_bonds_meeting_enlarged_interval_le L c m
-      _ ≤ 4 * (m + 1) := by omega
-  have hcardReal : (active.card : ℝ) ≤ (4 : ℝ) * ((m : ℝ) + 1) := by
-    exact_mod_cast hcard
-  classical
-  let Ψ := Φ.restrict (· ∈ s)
-  have hsumΦ : ∑ i ∈ s, Ψ.term i = Φ.partialHamiltonian s :=
-    ManyBody.Interaction.partialHamiltonian_restrict_of_forall fun _ hi ↦ hi
-  have hbound := ManyBody.Interaction.norm_commutator_sum_le_card Ψ s
-    (fun i ↦ by
-      by_cases hi : i ∈ s
-      · rw [ManyBody.Interaction.restrict_term, ite_eq_left hi]
-        exact h0 i hi
-      · rw [ManyBody.Interaction.restrict_term, ite_eq_right hi])
-    (fun i ↦ by
-      by_cases hi : i ∈ s
-      · rw [ManyBody.Interaction.restrict_term, ite_eq_left hi]
-        exact h1 i hi
-      · rw [ManyBody.Interaction.restrict_term, ite_eq_right hi]
-        exact zero_le_one)
-    (S := interval L (c - m) (c + 2 + m)) hX
-  rw [hsumΦ] at hbound
-  exact hbound.trans (mul_le_mul_of_nonneg_right hcardReal (norm_nonneg X))
-
-/-- The actual iterated commutators of an original nearest-neighbour regional
-sum remain local and have factorial norm growth. Auxiliary to AKL14,
-arXiv:1406.3898, low70.tex, lines 804–877; no imaginary-time sum is asserted. -/
-private theorem iterated_nearest_neighbour_commutator_support_norm {L q c : ℕ}
-    (s : Finset (Fin (L - 1)))
-    (Φ : ManyBody.BondInteraction L q)
-    (h0 : ∀ i ∈ s, 0 ≤ Φ.term i) (h1 : ∀ i ∈ s, Φ.term i ≤ 1)
-    (O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hO : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) O (interval L c (c + 2))) (m : ℕ) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.partialHamiltonian s
-    let ad : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ →
-        Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ H * X - X * H
-    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (ad^[m] O)
-      (interval L (c - m) (c + 2 + m)) ∧
-      ‖ad^[m] O‖ ≤ (4 : ℝ) ^ m * (m.factorial : ℝ) * ‖O‖ := by
-  intro H ad
-  induction m with
-  | zero =>
-    simpa only [Function.iterate_zero_apply, Nat.sub_zero, Nat.add_zero, pow_zero,
-      Nat.factorial_zero, Nat.cast_one, one_mul] using And.intro hO (le_refl ‖O‖)
-  | succ m ih =>
-    obtain ⟨hsupport, hnorm⟩ := nearest_neighbour_commutator_step s Φ h0 h1
-      (ad^[m] O) ih.1
-    refine ⟨?_, ?_⟩
-    · simpa only [Function.iterate_succ_apply'] using hsupport
-    · rw [Function.iterate_succ_apply']
-      calc
-        ‖ad (ad^[m] O)‖ ≤ (4 : ℝ) * ((m : ℝ) + 1) * ‖ad^[m] O‖ := hnorm
-        _ ≤ (4 : ℝ) * ((m : ℝ) + 1) *
-            ((4 : ℝ) ^ m * (m.factorial : ℝ) * ‖O‖) :=
-          mul_le_mul_of_nonneg_left ih.2 (by positivity)
-        _ = (4 : ℝ) ^ (m + 1) * ((m + 1).factorial : ℝ) * ‖O‖ := by
-          rw [pow_succ, Nat.factorial_succ, Nat.cast_mul, Nat.cast_add, Nat.cast_one]
-          ring
-
-end TNLean.MPS.AreaLaw
-
-
-namespace TNLean.MPS.AreaLaw
 
 /-- Imaginary-time conjugation by an original nearest-neighbour regional sum
 has a uniform short-time bound, also after an arbitrary scalar shift.
@@ -240,22 +69,16 @@ theorem norm_exp_conjugation_nearest_neighbour_shift_le_two {L q c : ℕ}
     let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.partialHamiltonian I
     ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * O *
       NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 * ‖O‖ := by
+  classical
   intro H
-  apply Matrix.norm_exp_conjugation_le_two_of_growth (H - z • 1) O 4 t ht0 (by linarith)
-  intro m
-  rw [FunLike.coe_pow_eq_iterate]
-  have had :
-      (fun X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ ↦
-        (H - z • 1) * X - X * (H - z • 1)) =
-      (fun X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ ↦ H * X - X * H) := by
-    funext X
-    simp only [sub_mul, mul_sub, smul_mul_assoc, mul_smul_comm, one_mul, mul_one]
-    abel
-  have hcoe : ⇑(GaussianFilter.commutatorCLM (H - z • 1)) =
-      fun X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ ↦ (H - z • 1) * X - X * (H - z • 1) := by
-    funext X
-    rfl
-  rw [hcoe, had]
-  exact (iterated_nearest_neighbour_commutator_support_norm I Φ h0 h1 O hO m).2
+  have hH : H = ∑ i ∈ I, (Φ.restrict (· ∈ I)).term i :=
+    (ManyBody.Interaction.partialHamiltonian_restrict_of_forall fun _ hi ↦ hi).symm
+  rw [hH]
+  exact (Φ.restrict (· ∈ I)).norm_exp_conjugation_shift_le_two I (k := 2) (g := 2)
+    (fun i ↦ by by_cases hi : i ∈ I <;> simp [hi, h0])
+    (fun i ↦ by by_cases hi : i ∈ I <;> simp [hi, h1])
+    (fun i ↦ by simpa using ManyBody.card_interval_le (L := L) i.val (i.val + 2))
+    (card_filter_mem_bond_le_two I) hO
+    (by simpa using ManyBody.card_interval_le (L := L) c (c + 2)) z ht0 (by push_cast; linarith)
 
 end TNLean.MPS.AreaLaw

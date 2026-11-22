@@ -274,7 +274,7 @@ class OversizedLeanFilePolicyTests(CapturedCheck):
 class ImportLayerPolicyTests(unittest.TestCase):
     def test_layers_are_assigned_from_the_bottom_up(self) -> None:
         self.assertEqual(layers.layer_of("TNLean.Algebra.FinKronecker"), "algebra")
-        self.assertEqual(layers.layer_of("TNLean.Circuit.SiteEmbedding"), "sites")
+        self.assertEqual(layers.layer_of("TNLean.Circuit.RegionSplit"), "sites")
         self.assertEqual(layers.layer_of("TNLean.Circuit.SitePermutation"), "sites")
         self.assertEqual(layers.layer_of("TNLean.Circuit.LocalCircuit"), "circuit")
         self.assertEqual(layers.layer_of("TNLean.Lattice.PartyCircuit.PartyWord"), "party")
@@ -283,10 +283,10 @@ class ImportLayerPolicyTests(unittest.TestCase):
 
     def test_upward_and_sideways_imports_are_violations(self) -> None:
         sources = {
-            "TNLean.Algebra.A": "import TNLean.Circuit.SiteEmbedding\ntheorem a : True := trivial\n",
-            "TNLean.Circuit.SiteEmbedding": "import TNLean.Algebra.A\ndef e := 0\n",
+            "TNLean.Algebra.A": "import TNLean.Circuit.RegionSplit\ntheorem a : True := trivial\n",
+            "TNLean.Circuit.RegionSplit": "import TNLean.Algebra.A\ndef e := 0\n",
             "TNLean.Circuit.LocalCircuit": (
-                "import TNLean.Circuit.SiteEmbedding\nimport TNLean.Lattice.StateSpace\n"
+                "import TNLean.Circuit.RegionSplit\nimport TNLean.Lattice.StateSpace\n"
                 "def c := 0\n"
             ),
             "TNLean.Lattice.StateSpace": "import TNLean.MPS.Defs\ndef h := 0\n",
@@ -295,7 +295,7 @@ class ImportLayerPolicyTests(unittest.TestCase):
         self.assertEqual(
             layers.violations(sources),
             {
-                "TNLean.Algebra.A -> TNLean.Circuit.SiteEmbedding",
+                "TNLean.Algebra.A -> TNLean.Circuit.RegionSplit",
                 "TNLean.Circuit.LocalCircuit -> TNLean.Lattice.StateSpace",
                 "TNLean.Lattice.StateSpace -> TNLean.MPS.Defs",
             },

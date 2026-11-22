@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.CyclicWielandt.Matrix
-import TNLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.MatrixSingleSpan
 import QICLean.Kraus.Wielandt.RectangularSpan.UniversalityAux.Basic
 import Mathlib.Tactic.Abel
 import Mathlib.Tactic.Linarith

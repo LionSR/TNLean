@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Huang.FilterPolynomial
 import TNLean.MPS.AreaLaw.Huang.ApproximateEnergyFilter
 import TNLean.MPS.AreaLaw.Huang.PhysicalGaussian
+import QICLean.Analysis.PhysicalPowerFilterLowerGap
 
 /-!
 # A finite family of ground filters from a positive nearest-neighbour chain
@@ -92,28 +93,19 @@ theorem exists_positive_chain_filter_family {L q : ℕ} (hq : 1 ≤ q)
     fun j ↦ (huangFilterApproximant_spec hq Φ h0 h1 hc hDelta j).1,
     fun j ↦ (huangFilterApproximant_spec hq Φ h0 h1 hc hDelta j).2⟩
 
-/-- An energy eigenvalue of a sum of positive contractions lies in the length window.
-Supporting estimate for Huang, arXiv:1406.6355v6, Section 5.4, Lemma 18. -/
+/-- An energy eigenvalue of a sum of positive contractions lies in the length window: the bond
+case of `Matrix.eigenvalue_nonneg_and_le_card_of_posSemidef_terms`. Supporting estimate for
+Huang, arXiv:1406.6355v6, Section 5.4, Lemma 18. -/
 theorem abs_eigenvalue_positive_chain_le_length {L q : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΓ : ‖Γ‖ = 1) {E₀ : ℝ}
     (hHΓ : Φ.hamiltonian *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ) :
     |E₀| ≤ (L : ℝ) := by
-  have hnorm (i) : ‖Φ.term i‖ ≤ 1 :=
-    (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 i)).mpr (h1 i)
-  have hHnorm : ‖∑ i, Φ.term i‖ ≤ (L : ℝ) := by
-    calc
-      _ ≤ ∑ i, ‖Φ.term i‖ := norm_sum_le _ _
-      _ ≤ ∑ _ : Fin (L - 1), (1 : ℝ) := Finset.sum_le_sum fun i _ ↦ hnorm i
-      _ = ((L - 1 : ℕ) : ℝ) := by simp
-      _ ≤ (L : ℝ) := by exact_mod_cast Nat.sub_le L 1
-  have heig : toEuclideanLin Φ.hamiltonian Γ = (E₀ : ℂ) • Γ := by
-    apply WithLp.ofLp_injective
-    exact hHΓ
-  have hn := Entropy.norm_toEuclideanLin_le Φ.hamiltonian Γ
-  rw [heig, norm_smul, hΓ, mul_one, mul_one, Complex.norm_real, Real.norm_eq_abs] at hn
-  exact hn.trans hHnorm
+  obtain ⟨hE0, hE1⟩ := eigenvalue_nonneg_and_le_card_of_posSemidef_terms Φ.term
+    (fun i ↦ nonneg_iff_posSemidef.mp (h0 i)) h1 hΓ hHΓ
+  rw [abs_of_nonneg hE0]
+  exact hE1.trans (by simp)
 
 /-- For every gapped ground pair, one Huang approximant is within `4 η` of a positive
 multiple `a |Γ⟩⟨Γ|`, `1/2 ≤ a ≤ 1`, of the ground projection. Huang, arXiv:1406.6355v6,

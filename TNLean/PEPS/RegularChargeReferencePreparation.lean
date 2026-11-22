@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularChargePair
-import TNLean.Algebra.UnitaryVectorSwap
+import QICLean.Algebra.UnitaryVectorSwap
 
-import TNLean.Algebra.PermutationMatrixCommutation
+import QICLean.Algebra.PermutationMatrixCommute
 
 /-!
 # Symmetric preparation on the two internal reference labels

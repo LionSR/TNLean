@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.MatrixIsometryEntries
 import TNLean.MPS.MPDO.PhysicalSectorBondCommutativity
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Transport of adjacent physical-sector bonds

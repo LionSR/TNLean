@@ -103,9 +103,9 @@ action with its original virtual pair action. Source: arXiv:1010.3732,
 Section II.F.2, equation eq:1d-sym:jointsym. -/
 theorem sptPhysicalEmbedding_left_intertwiner
     {G : Type} [Group G] {D₀ D₁ : ℕ} [NeZero D₀]
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω) (g : G) :
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω) (g : G) :
     sptFixedPointAction (ρ₀.directSum ρ₁) 1 g *
         Matrix.coordinateInclusion (sptPhysicalEmbedding (Fin.castAddEmb D₁)) =
       Matrix.coordinateInclusion (sptPhysicalEmbedding (Fin.castAddEmb D₁)) *
@@ -121,9 +121,9 @@ action with its original virtual pair action. Source: arXiv:1010.3732,
 Section II.F.2, equation eq:1d-sym:jointsym. -/
 theorem sptPhysicalEmbedding_right_intertwiner
     {G : Type} [Group G] {D₀ D₁ : ℕ} [NeZero D₁]
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω) (g : G) :
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω) (g : G) :
     sptFixedPointAction (ρ₀.directSum ρ₁) 1 g *
         Matrix.coordinateInclusion (sptPhysicalEmbedding (Fin.natAddEmb D₀)) =
       Matrix.coordinateInclusion (sptPhysicalEmbedding (Fin.natAddEmb D₀)) *

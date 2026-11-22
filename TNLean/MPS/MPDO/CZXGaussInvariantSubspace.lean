@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.MonomialFixedSubspace
+import QICLean.Algebra.MonomialFixedSubspace
 import TNLean.MPS.MPDO.CZXGaussCircuitTuple
 import TNLean.MPS.MPDO.EmbedLocalOperatorMonomial
 import TNLean.MPS.MPDO.GaugeInvariantSubspace
@@ -285,7 +285,7 @@ theorem fiberPhase_ne_zero (j : Fin N)
 fiber over $(p,b)$ exactly when $b=0$. -/
 theorem isTrivialHolonomy_fiberPhase_iff (hN : 3 ≤ N)
     (pb : (Fin N → ZMod 2) × (Fin N → ZMod 2)) :
-    TNLean.Algebra.IsTrivialHolonomy fiberPhase pb ↔ pb.2 = 0 := by
+    Hypercube.IsTrivialHolonomy fiberPhase pb ↔ pb.2 = 0 := by
   have h2 : 2 ≤ N := by omega
   constructor
   · intro h
@@ -295,7 +295,7 @@ theorem isTrivialHolonomy_fiberPhase_iff (hN : 3 ≤ N)
     rw [sub_add_cancel] at hk hhol
     rw [hhol, mul_comm, mul_eq_right₀ (mul_ne_zero (fiberPhase_ne_zero _ _)
       (fiberPhase_ne_zero _ _))] at hk
-    rcases TNLean.Algebra.zmod_two_eq_zero_or_one (pb.2 k) with h0 | h1
+    rcases Hypercube.zmod_two_eq_zero_or_one (pb.2 k) with h0 | h1
     · exact h0
     · rw [h1, show ((1 : ZMod 2)).val = 1 from rfl] at hk
       exfalso
@@ -331,7 +331,7 @@ def placedGaussOperator (N : ℕ) (hN : 2 ≤ N) (j : Fin N) :
   ManyBody.placeAlong (X := fun _ ↦ Fin (Fintype.card (Fin 4 × Multiplicative (ZMod 2))))
     (ManyBody.ringWindow hN j)
     (Matrix.reindexAlgEquiv ℂ ℂ windowCoordinates
-      (TNLean.Algebra.gaussOperator circuitTuple gen))
+      (GaussLaw.gaussOperator circuitTuple gen))
 
 theorem sum_multiplicative_zmod_two {M : Type*} [AddCommMonoid M]
     (f : Multiplicative (ZMod 2) → M) :
@@ -341,10 +341,10 @@ theorem sum_multiplicative_zmod_two {M : Type*} [AddCommMonoid M]
 
 /-- For $\mathbb Z_2$ the local Gauss projector is $P=(\mathrm{id}+G)/2$. -/
 theorem gaussProjector_circuitTuple :
-    TNLean.Algebra.gaussProjector circuitTuple =
-      (2 : ℂ)⁻¹ • (1 + TNLean.Algebra.gaussOperator circuitTuple gen) := by
-  rw [TNLean.Algebra.gaussProjector_eq_average, sum_multiplicative_zmod_two,
-    TNLean.Algebra.gaussOperator_one, show Fintype.card (Multiplicative (ZMod 2)) = 2 by decide]
+    GaussLaw.gaussProjector circuitTuple =
+      (2 : ℂ)⁻¹ • (1 + GaussLaw.gaussOperator circuitTuple gen) := by
+  rw [GaussLaw.gaussProjector_eq_average, sum_multiplicative_zmod_two,
+    GaussLaw.gaussOperator_one, show Fintype.card (Multiplicative (ZMod 2)) = 2 by decide]
   push_cast
   rfl
 
@@ -380,10 +380,11 @@ window by $\sigma$ and its phase is read off the window. -/
 theorem placedGaussOperator_eq_monomial (N : ℕ) (hN : 2 ≤ N) (j : Fin N) :
     placedGaussOperator N hN j =
       monomial
-        (windowPerm 2 hN j (windowCoordinates.symm.trans (localPerm.trans windowCoordinates)))
+        (ManyBody.placeAlongPerm (ManyBody.ringWindow hN j)
+          (windowCoordinates.symm.trans (localPerm.trans windowCoordinates)))
         fun t ↦ localPhase (windowCoordinates.symm (MPSTensor.extractWindow 2 j t)) := by
   rw [placedGaussOperator, gaussOperator_circuitTuple_gen, Matrix.coe_reindexAlgEquiv,
-    reindex_monomial, placeAlong_ringWindow_monomial]
+    reindex_monomial, ManyBody.placeAlong_monomial]
   rfl
 
 theorem siteBits_eq_localBits_zero (m : Fin 2 → Fin 4) :
@@ -416,11 +417,11 @@ theorem toAdd_gen_mul (a : Multiplicative (ZMod 2)) :
   rw [toAdd_mul, toAdd_ofAdd, add_comm]
 
 theorem gaussLegAction_fst {G : Type*} [Group G] (g : G) (l : G × G) :
-    (TNLean.Algebra.gaussLegAction g l).1 = l.1 * g⁻¹ :=
+    (GaussLaw.gaussLegAction g l).1 = l.1 * g⁻¹ :=
   rfl
 
 theorem gaussLegAction_snd {G : Type*} [Group G] (g : G) (l : G × G) :
-    (TNLean.Algebra.gaussLegAction g l).2 = g * l.2 :=
+    (GaussLaw.gaussLegAction g l).2 = g * l.2 :=
   rfl
 
 /-- Decoding the two-site window at `j` of a chain configuration. -/
@@ -446,13 +447,14 @@ coordinates. -/
 theorem chainDecode_windowPerm (hN : 2 ≤ N) (j : Fin N)
     (t : Fin N → Fin (Fintype.card (Fin 4 × Multiplicative (ZMod 2)))) :
     chainDecode N
-        (windowPerm 2 hN j (windowCoordinates.symm.trans (localPerm.trans windowCoordinates)) t) =
+        (ManyBody.placeAlongPerm (ManyBody.ringWindow hN j)
+          (windowCoordinates.symm.trans (localPerm.trans windowCoordinates)) t) =
       chainFlip j (chainDecode N t) := by
   obtain ⟨hj, hj1⟩ := chainDecode_window hN j t
   set y := windowCoordinates.symm (MPSTensor.extractWindow 2 j t) with hy
   funext k
-  rw [chainDecode_apply, windowPerm_apply, replaceWindow_two_apply hN, chainFlip_apply,
-    Pi.add_apply, Equiv.trans_apply, Equiv.trans_apply, ← hy]
+  rw [chainDecode_apply, placeAlongPerm_ringWindow_apply, replaceWindow_two_apply hN,
+    chainFlip_apply, Pi.add_apply, Equiv.trans_apply, Equiv.trans_apply, ← hy]
   by_cases hkj : k = j
   · subst hkj
     rw [ite_eq_left rfl, gaussLocalCoordinateEquiv_apply_zero, siteDecode_equivFin,
@@ -492,7 +494,7 @@ $i^{q_j}$. -/
 theorem placedGaussOperator_eq_reindex (N : ℕ) [NeZero N] (hN : 2 ≤ N) (j : Fin N) :
     placedGaussOperator N hN j =
       reindex (fiberCoordinates N) (fiberCoordinates N)
-        (monomial (TNLean.Algebra.fiberFlip j) (fiberPhase j)) := by
+        (monomial (Hypercube.fiberFlip j) (fiberPhase j)) := by
   rw [placedGaussOperator_eq_monomial, reindex_monomial]
   congr 1
   · ext t : 1
@@ -503,7 +505,7 @@ theorem placedGaussOperator_eq_reindex (N : ℕ) [NeZero N] (hN : 2 ≤ N) (j : 
     generalize hx : (fiberEquiv N).symm (chainDecode N t) = x
     rw [Equiv.symm_apply_eq] at hx
     obtain ⟨pb, γ⟩ := x
-    rw [hx, TNLean.Algebra.fiberFlip_apply, chainFlip_fiberEquiv hN]
+    rw [hx, Hypercube.fiberFlip_apply, chainFlip_fiberEquiv hN]
   · funext t
     rw [localPhase_window hN, Function.comp_apply, fiberPhase, fiberCoordinates,
       Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.apply_symm_apply]
@@ -535,17 +537,17 @@ theorem finrank_commonFixedSubmodule_placedGaussProjector_circuitTuple (N : ℕ)
   rw [commonFixedSubmodule_placedGaussProjector_circuitTuple N h2]
   have hop : (fun j : Fin N ↦ toLin' (placedGaussOperator N h2 j)) =
       fun j ↦ toLin' (reindex (fiberCoordinates N) (fiberCoordinates N)
-        (monomial (TNLean.Algebra.fiberFlip j) (fiberPhase j))) :=
+        (monomial (Hypercube.fiberFlip j) (fiberPhase j))) :=
     funext fun j ↦ by rw [placedGaussOperator_eq_reindex N h2 j]
-  rw [hop, TNLean.Algebra.finrank_commonFixedSubmodule_reindex (fiberCoordinates N)
-    (fun j ↦ monomial (TNLean.Algebra.fiberFlip j) (fiberPhase j)),
-    TNLean.Algebra.finrank_commonFixedSubmodule_monomial_fiberFlip fiberPhase
+  rw [hop, Matrix.finrank_commonFixedSubmodule_reindex (fiberCoordinates N)
+    (fun j ↦ monomial (Hypercube.fiberFlip j) (fiberPhase j)),
+    Hypercube.finrank_commonFixedSubmodule_monomial_fiberFlip fiberPhase
       (fun j s ↦ by
         obtain ⟨pb, γ⟩ := s
-        rw [TNLean.Algebra.fiberFlip_apply]
+        rw [Hypercube.fiberFlip_apply]
         exact fiberPhase_mul_fiberPhase_flip h2 j pb γ)]
   let hequiv : {x : (Fin N → ZMod 2) × (Fin N → ZMod 2) //
-      TNLean.Algebra.IsTrivialHolonomy fiberPhase x} ≃ (Fin N → ZMod 2) :=
+      Hypercube.IsTrivialHolonomy fiberPhase x} ≃ (Fin N → ZMod 2) :=
     { toFun := fun x ↦ x.1.1
       invFun := fun p ↦ ⟨(p, 0), (isTrivialHolonomy_fiberPhase_iff hN (p, 0)).mpr rfl⟩
       left_inv := fun x ↦ by

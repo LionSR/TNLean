@@ -358,9 +358,9 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{definition}[Scalar cochains and normalization]
     \label{def:mpug_scalar_cochains}
-    \lean{TNLean.Algebra.ScalarThreeCochain,
-        TNLean.Algebra.ScalarCocycle.IsNormalized,
-        TNLean.Algebra.ScalarThreeCochain.IsNormalized}
+    \lean{ScalarThreeCochain,
+        ScalarCocycle.IsNormalized,
+        ScalarThreeCochain.IsNormalized}
     \leanok
     \uses{def:scalar_cocycle}
     By Definition~\ref{def:scalar_cocycle}, a scalar $2$-cochain
@@ -382,14 +382,14 @@ Definition~\ref{def:mpug_group_representation}.
     % Source anchor: arXiv:2502.20257, standing convention at lines 1936--1937
     %   and its display eq:triv_omegas, whose printed form repeats
     %   omega(g,h,e) three times.
-    % Local fix: docs/paper-gaps/fbc25_three_cocycle_normalization_typo.tex.
+    % Local fix: https://sirui-lu.com/QICLean/paper-gaps/fbc25_three_cocycle_normalization_typo.pdf.
     The scalar $2$-cochain $\beta$ is normalized when
     $\beta(e,g)=\beta(g,e)=1$ for every $g\in G$.
 \end{definition}
 
 \begin{definition}[Scalar three-cocycle]
     \label{def:mpug_three_cocycle}
-    \lean{TNLean.Algebra.ScalarThreeCochain.IsCocycle}
+    \lean{ScalarThreeCochain.IsCocycle}
     \leanok
     \uses{def:mpug_scalar_cochains}
     As in~\cite{FrancoRubio2025MPUGauging}, a scalar $3$-cochain is a
@@ -400,12 +400,13 @@ Definition~\ref{def:mpug_group_representation}.
         \label{eq:mpug_three_cocycle}
     \end{align}
     % Source anchor: arXiv:2502.20257, eq:3-cocycle.
+    This is~\cite[``Scalar three-cocycle'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{definition}[Three-coboundary and fusion-tensor gauge action]
     \label{def:mpug_fusion_gauge}
-    \lean{TNLean.Algebra.ScalarThreeCochain.coboundary,
-        TNLean.Algebra.ScalarThreeCochain.fusionGauge}
+    \lean{ScalarThreeCochain.coboundary,
+        ScalarThreeCochain.fusionGauge}
     \leanok
     \uses{def:mpug_scalar_cochains}
     For a scalar $2$-cochain $\beta$, define
@@ -425,8 +426,8 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{lemma}[Identity and composition of fusion gauges]
     \label{thm:mpug_gauge_action}
-    \lean{TNLean.Algebra.ScalarThreeCochain.fusionGauge_one,
-        TNLean.Algebra.ScalarThreeCochain.fusionGauge_comp}
+    \lean{ScalarThreeCochain.fusionGauge_one,
+        ScalarThreeCochain.fusionGauge_comp}
     \leanok
     \uses{def:mpug_fusion_gauge}
     Let $1$ denote the constant scalar $2$-cochain and let
@@ -443,6 +444,7 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{proof}\leanok
     \uses{def:mpug_fusion_gauge}
+    This is~\cite[``Identity and composition of gauges'']{QICLean2026Blueprint}.
     The constant cochain has $d1=1$. Commutativity of $\C^\times$ gives
     $d(\beta\gamma)=(d\beta)(d\gamma)$, and substitution into
     (\ref{eq:mpug_gauge_action}) gives
@@ -452,7 +454,7 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{lemma}[A three-coboundary is a three-cocycle]
     \label{thm:mpug_coboundary_cocycle}
-    \lean{TNLean.Algebra.ScalarThreeCochain.isCocycle_coboundary}
+    \lean{ScalarThreeCochain.isCocycle_coboundary}
     \leanok
     \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge}
     For every scalar $2$-cochain $\beta$, the cochain $d\beta$ satisfies
@@ -461,6 +463,8 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{proof}\leanok
     \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge}
+    This is~\cite[``A three-coboundary is a
+        three-cocycle'']{QICLean2026Blueprint}.
     Expanding the two sides gives the same product after cancellation:
     \begin{align}
          & (d\beta)(gh,k,l)(d\beta)(g,h,kl) \\
@@ -474,8 +478,8 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{lemma}[Products and fusion gauges preserve three-cocycles]
     \label{thm:mpug_gauge_preserves_cocycle}
-    \lean{TNLean.Algebra.ScalarThreeCochain.IsCocycle.mul,
-        TNLean.Algebra.ScalarThreeCochain.IsCocycle.fusionGauge}
+    \lean{ScalarThreeCochain.IsCocycle.mul,
+        ScalarThreeCochain.IsCocycle.fusionGauge}
     \leanok
     \uses{def:mpug_three_cocycle, def:mpug_fusion_gauge}
     The pointwise product of two scalar $3$-cocycles is a scalar
@@ -486,6 +490,8 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{proof}\leanok
     \uses{def:mpug_three_cocycle, thm:mpug_coboundary_cocycle}
+    This is~\cite[``Products and gauges preserve
+        three-cocycles'']{QICLean2026Blueprint}.
     Multiplying the two instances of (\ref{eq:mpug_three_cocycle}) and
     reordering their factors in $\C^\times$ shows that the pointwise product of
     two $3$-cocycles is a $3$-cocycle. Applying this product identity to
@@ -495,10 +501,10 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{lemma}[Normalization under a fusion gauge]
     \label{thm:mpug_gauge_preserves_normalization}
-    \lean{TNLean.Algebra.ScalarThreeCochain.isNormalized_coboundary_iff,
-        TNLean.Algebra.ScalarThreeCochain.isNormalized_coboundary,
-        TNLean.Algebra.ScalarThreeCochain.IsNormalized.mul,
-        TNLean.Algebra.ScalarThreeCochain.IsNormalized.fusionGauge}
+    \lean{ScalarThreeCochain.isNormalized_coboundary_iff,
+        ScalarThreeCochain.isNormalized_coboundary,
+        ScalarThreeCochain.IsNormalized.mul,
+        ScalarThreeCochain.IsNormalized.fusionGauge}
     \leanok
     \uses{def:mpug_scalar_cochains, def:mpug_fusion_gauge}
     The $3$-coboundary $d\beta$ is normalized if and only if there is a
@@ -514,6 +520,7 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{proof}\leanok
     \uses{def:mpug_scalar_cochains, def:mpug_fusion_gauge}
+    This is~\cite[``Normalization under a gauge'']{QICLean2026Blueprint}.
     Setting one argument at a time equal to $e$ in
     (\ref{eq:mpug_coboundary}), if $d\beta$ is normalized, then
     (\ref{eq:mpug_three_normalized}) for $d\beta$ at $(e,e,g)$ and at
@@ -534,20 +541,21 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{definition}[Cohomologous scalar three-cochains]
     \label{def:mpug_cohomologous_to}
-    \lean{TNLean.Algebra.ScalarThreeCochain.CohomologousTo}
+    \lean{ScalarThreeCochain.CohomologousTo}
     \leanok
     \uses{def:mpug_fusion_gauge}
     Two scalar $3$-cochains $\omega$ and $\eta$ are cohomologous when
     $\omega=\beta\mathbin{\triangleright}\eta$ for some scalar
     $2$-cochain $\beta$.
+    This is~\cite[``Cohomologous scalar three-cochains'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Cohomologous-to is an equivalence relation]
     \label{thm:mpug_cohomologous_to_equivalence}
-    \lean{TNLean.Algebra.ScalarThreeCochain.CohomologousTo.refl,
-        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.symm,
-        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.trans,
-        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.equivalence}
+    \lean{ScalarThreeCochain.CohomologousTo.refl,
+        ScalarThreeCochain.CohomologousTo.symm,
+        ScalarThreeCochain.CohomologousTo.trans,
+        ScalarThreeCochain.CohomologousTo.equivalence}
     \leanok
     \uses{def:mpug_cohomologous_to, thm:mpug_gauge_action}
     Cohomologous-to is reflexive, symmetric, and transitive.
@@ -555,6 +563,8 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{proof}\leanok
     \uses{thm:mpug_gauge_action}
+    This is~\cite[``Cohomologous-to is an equivalence
+        relation'']{QICLean2026Blueprint}.
     Reflexivity uses the constant cochain $1$. If $\omega=
         \beta\mathbin{\triangleright}\eta$, then
     \begin{align}
@@ -568,17 +578,18 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{definition}[Trivial scalar gauge class]
     \label{def:mpug_trivial_gauge_class}
-    \lean{TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass}
+    \lean{ScalarThreeCochain.IsTrivialGaugeClass}
     \leanok
     \uses{def:mpug_cohomologous_to}
     A scalar $3$-cochain has trivial gauge class when it is cohomologous to
     the constant cochain $1$.
+    This is~\cite[``Trivial scalar gauge class'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Cocycles and classes for trivial coefficients]
     \label{thm:mpug_h2_trivial_coefficients}
-    \lean{TNLean.Algebra.isMulCocycle₂_iff,
-        TNLean.Algebra.H2π_eq_iff_isMulCoboundary₂_div}
+    \lean{ScalarCohomology.isMulCocycle₂_iff,
+        ScalarCohomology.H2π_eq_iff_isMulCoboundary₂_div}
     \leanok
     \uses{def:is_coboundary, def:cohomologous_to, def:is_cocycle, def:h2_cx}
     Let $G$ act trivially on $\C^\times$, and let
@@ -617,7 +628,7 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{lemma}[Every class has a scalar cocycle representative]
     \label{thm:mpug_h2_group_cohomology_comparison}
-    \lean{TNLean.Algebra.ScalarCocycle.exists_H2π_eq}
+    \lean{ScalarCocycle.exists_H2π_eq}
     \leanok
     \uses{def:h2_cx, thm:mpug_h2_trivial_coefficients}
     Endowing $\C^\times$ with the trivial $G$-action, every element of
@@ -644,15 +655,15 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{definition}[Scalar three-cocycles in degree-three group cohomology]
     \label{def:mpug_h3_group_cohomology}
-    \lean{TNLean.Algebra.scalarRepresentationEquiv,
-        TNLean.Algebra.ScalarCocycle.toInhomogeneousCochain,
-        TNLean.Algebra.ScalarCocycle.ofInhomogeneousCochain,
-        TNLean.Algebra.ScalarThreeCochain.toInhomogeneousCochain,
-        TNLean.Algebra.ScalarThreeCochain.ofInhomogeneousCochain,
-        TNLean.Algebra.ScalarThreeCochain.toCocycles,
-        TNLean.Algebra.ScalarThreeCochain.ofCocycles,
-        TNLean.Algebra.ScalarThreeCochain.cocyclesEquiv,
-        TNLean.Algebra.ScalarThreeCochain.anomalyClass}
+    \lean{ScalarCohomology.scalarRepresentationEquiv,
+        ScalarCocycle.toInhomogeneousCochain,
+        ScalarCocycle.ofInhomogeneousCochain,
+        ScalarThreeCochain.toInhomogeneousCochain,
+        ScalarThreeCochain.ofInhomogeneousCochain,
+        ScalarThreeCochain.toCocycles,
+        ScalarThreeCochain.ofCocycles,
+        ScalarThreeCochain.cocyclesEquiv,
+        ScalarThreeCochain.anomalyClass}
     \leanok
     \uses{def:mpug_three_cocycle, thm:mpug_h2_group_cohomology_comparison}
     Giving $\C^\times$ the trivial $G$-action and writing it additively as in
@@ -667,22 +678,24 @@ Definition~\ref{def:mpug_group_representation}.
         \label{eq:mpug_h3_class}
     \end{align}
     in the degree-three cohomology of the inhomogeneous cochain complex.
+    This is~\cite[``Scalar three-cocycles in degree-three group
+        cohomology'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{theorem}[Fusion-gauge classes are degree-three cohomology classes]
     \label{thm:mpug_h3_group_cohomology}
-    \lean{TNLean.Algebra.groupCohomology_π_eq_zero_iff,
-        TNLean.Algebra.scalarRepresentationEquiv_ofMul_eq_zero_iff,
-        TNLean.Algebra.ScalarCohomology.ofMulDistribMulAction_ρ_apply,
-        TNLean.Algebra.ScalarThreeCochain.d_toInhomogeneousCochain,
-        TNLean.Algebra.ScalarThreeCochain.isCocycle_iff_d_eq_zero,
-        TNLean.Algebra.ScalarCocycle.d_toInhomogeneousCochain_apply,
-        TNLean.Algebra.ScalarCocycle.d_toInhomogeneousCochain,
-        TNLean.Algebra.ScalarThreeCochain.fusionGauge_eq_iff,
-        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_exists_d_eq,
-        TNLean.Algebra.ScalarThreeCochain.cohomologousTo_iff_anomalyClass_eq,
-        TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_iff_anomalyClass_eq_zero,
-        TNLean.Algebra.ScalarThreeCochain.anomalyClass_surjective}
+    \lean{groupCohomology.π_eq_zero_iff,
+        ScalarCohomology.scalarRepresentationEquiv_ofMul_eq_zero_iff,
+        ScalarCohomology.ofMulDistribMulAction_ρ_apply,
+        ScalarThreeCochain.d_toInhomogeneousCochain,
+        ScalarThreeCochain.isCocycle_iff_d_eq_zero,
+        ScalarCocycle.d_toInhomogeneousCochain_apply,
+        ScalarCocycle.d_toInhomogeneousCochain,
+        ScalarThreeCochain.fusionGauge_eq_iff,
+        ScalarThreeCochain.cohomologousTo_iff_exists_d_eq,
+        ScalarThreeCochain.cohomologousTo_iff_anomalyClass_eq,
+        ScalarThreeCochain.isTrivialGaugeClass_iff_anomalyClass_eq_zero,
+        ScalarThreeCochain.anomalyClass_surjective}
     \leanok
     \uses{def:mpug_h3_group_cohomology, def:mpug_fusion_gauge,
         def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
@@ -733,7 +746,7 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{definition}[Cyclic invariant of a scalar three-cochain]
     \label{def:mpug_cyclic_invariant}
-    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicInvariant}
+    \lean{ScalarThreeCochain.cyclicInvariant}
     \leanok
     \uses{def:mpug_scalar_cochains}
     For a scalar $3$-cochain $\omega$, an element $g\in G$, and a natural
@@ -743,15 +756,17 @@ Definition~\ref{def:mpug_group_representation}.
          & =\prod_{k=0}^{n-1}\omega(g,g^k,g).
         \label{eq:mpug_cyclic_invariant}
     \end{align}
+    This is~\cite[``Cyclic invariant of a scalar
+        three-cochain'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Gauge invariance of the cyclic invariant]
     \label{thm:mpug_cyclic_invariant_gauge}
-    \lean{TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_coboundary,
-        TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_fusionGauge,
-        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.cyclicInvariant_eq,
-        TNLean.Algebra.ScalarThreeCochain.cyclicInvariant_eq_one_of_isTrivialGaugeClass,
-        TNLean.Algebra.ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one}
+    \lean{ScalarThreeCochain.cyclicInvariant_coboundary,
+        ScalarThreeCochain.cyclicInvariant_fusionGauge,
+        ScalarThreeCochain.CohomologousTo.cyclicInvariant_eq,
+        ScalarThreeCochain.cyclicInvariant_eq_one_of_isTrivialGaugeClass,
+        ScalarThreeCochain.not_isTrivialGaugeClass_of_cyclicInvariant_ne_one}
     \leanok
     \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge,
         def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
@@ -770,6 +785,8 @@ Definition~\ref{def:mpug_group_representation}.
 \begin{proof}\leanok
     \uses{def:mpug_cyclic_invariant, def:mpug_fusion_gauge,
         def:mpug_cohomologous_to, def:mpug_trivial_gauge_class}
+    This is~\cite[``Gauge invariance of the cyclic
+        invariant'']{QICLean2026Blueprint}.
     By (\ref{eq:mpug_coboundary}),
     \begin{align}
         (d\beta)(g,g^k,g)
@@ -786,21 +803,22 @@ Definition~\ref{def:mpug_group_representation}.
 
 \begin{definition}[Restriction of scalar three-cochains]
     \label{def:mpug_cochain_restriction}
-    \lean{TNLean.Algebra.ScalarThreeCochain.comap,
-        TNLean.Algebra.ScalarThreeCochain.comap_apply}
+    \lean{ScalarThreeCochain.comap,
+        ScalarThreeCochain.comap_apply}
     \leanok
     \uses{def:mpug_scalar_cochains}
     For a group homomorphism $f\colon H\to G$, the restriction of a scalar
     $3$-cochain $\omega$ on $G$ is
     $(f^*\omega)(a,b,c)=\omega(f(a),f(b),f(c))$.
+    This is~\cite[``Restriction of scalar
+        three-cochains'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{lemma}[Restriction preserves cocycles and gauge classes]
     \label{thm:mpug_cochain_restriction}
-    \lean{TNLean.Algebra.ScalarThreeCochain.IsCocycle.comap,
-        TNLean.Algebra.ScalarThreeCochain.comap_fusionGauge,
-        TNLean.Algebra.ScalarThreeCochain.CohomologousTo.comap,
-        TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass.comap}
+    \lean{ScalarThreeCochain.IsCocycle.comap,
+        ScalarThreeCochain.comap_fusionGauge,
+        ScalarThreeCochain.CohomologousTo.comap}
     \leanok
     \uses{def:mpug_cochain_restriction, def:mpug_three_cocycle,
         def:mpug_fusion_gauge, def:mpug_cohomologous_to,
@@ -817,6 +835,8 @@ Definition~\ref{def:mpug_group_representation}.
     \uses{def:mpug_cochain_restriction, def:mpug_three_cocycle,
         def:mpug_fusion_gauge, def:mpug_cohomologous_to,
         def:mpug_trivial_gauge_class}
+    This is~\cite[``Restriction preserves cocycles and gauge
+        classes'']{QICLean2026Blueprint}.
     Since $f(ab)=f(a)f(b)$, for all $a,b,c,d\in H$
     \begin{align}
         (f^*\omega)(ab,c,d)\,(f^*\omega)(a,b,cd)

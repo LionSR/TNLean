@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularTorusSite
-import TNLean.Algebra.RepresentationTensorProduct
-import TNLean.Algebra.TranslatedCharacterOrthogonality
-import TNLean.Algebra.BinaryProjectionFamily
+import QICLean.Representation.Character.TensorProduct
+import QICLean.Representation.Character.TranslatedOrthogonality
+import QICLean.Algebra.BinaryProjectionFamily
 
 /-!
 # Charge-pair coefficients and the interferometric return measurement

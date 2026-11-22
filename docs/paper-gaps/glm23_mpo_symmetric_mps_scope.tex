@@ -106,7 +106,7 @@ star closure, or ambient identity resolution is assumed.\footnote{
     \leanid{MPSTensor.exists_positive_wordTupleSpanTop_of_isInjective}, in
     \doclink{TNLean/MPS/MPDO/InjectiveBlockWordSpan};
     \leanid{Matrix.exists_piMatrix_blocks}, in
-    \doclink{TNLean/Algebra/PiMatrixRepresentation}; and
+    \path{QICLean/Algebra/MatrixUnitFactorization.lean}; and
     \leanid{MPSTensor.exists_biorthogonalDecomposition_of_boundaryTransport}, in
     \doclink{TNLean/MPS/MPDO/BoundaryBiorthogonal}.}
 This exact representation splitting discharges the reconstruction step of
@@ -299,7 +299,7 @@ source's argument at a point $\gamma$ uses a two-sided environment
 $\gamma+d\gamma$ (line 1361). No continuity of the generators is
 assumed.\footnote{
     \leanid{Matrix.exists_eq_sum_smul_of_hasDerivAt}, in
-    \doclink{TNLean/Algebra/MatrixFrameDeriv}, and
+    \path{QICLean/Analysis/MatrixFrameDeriv.lean}, and
     \leanid{MPOTensor.exists_actionLMatrix_regauge_of_hasDerivAt}, in
     \doclink{TNLean/MPS/MPDO/BoundaryActionLMatrixPath}.}
 Not formalized are the source's extensions to action tensors that are only
@@ -378,7 +378,7 @@ $H^2(H,\mathbb C^\times)$ are proved. The formula is first used in a fusion
 gauge in which the anomaly is identically one on the stabilizer and then
 transported back; the required gauge exists whenever the restricted class
 is trivial. The correction is recorded in
-\cite{gap:glm23_eq20_fusion_gauge}. This is an algebraic classification of
+\url{https://sirui-lu.com/QICLean/paper-gaps/glm23_eq20_fusion_gauge.pdf}. This is an algebraic classification of
 scalar solutions with the fusion gauge held fixed, not the physical
 Hamiltonian-path classification.
 

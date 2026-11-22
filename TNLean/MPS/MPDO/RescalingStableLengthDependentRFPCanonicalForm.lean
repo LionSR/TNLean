@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.MPDO.RescalingStableLengthDependentRFP
 import TNLean.MPS.MPDO.SimpleTensor
 import TNLean.MPS.RFP.BeigiLoopBNTIdentification
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # The literal CPSV canonical form of `R.toMPSTensor`

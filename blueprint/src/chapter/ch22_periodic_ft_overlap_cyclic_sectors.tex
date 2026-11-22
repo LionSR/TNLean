@@ -400,9 +400,9 @@
 \end{lemma}
 
 \begin{lemma}[Finite-cycle coboundary]\label{lem:finite_cycle_coboundary}
-    \lean{TNLean.Algebra.exists_fin_succ_coboundary_of_prod_eq_one}
-    \lean{TNLean.Algebra.exists_fin_cyclic_coboundary_of_prod_eq_one}
-    \lean{TNLean.Algebra.exists_fin_complex_unit_cyclic_coboundary_of_prod_eq_one}
+    \lean{Fin.exists_succ_coboundary_of_prod_eq_one}
+    \lean{Fin.exists_cyclic_coboundary_of_prod_eq_one}
+    \lean{Fin.exists_complex_unit_cyclic_coboundary_of_prod_eq_one}
     \leanok
 
     Let $G$ be a commutative group, and let
@@ -418,6 +418,7 @@
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``Finite-cycle coboundary'']{QICLean2026Blueprint}.
 
     Set $\varphi_k=(\kappa_0\cdots\kappa_{k-1})^{-1}$, with the empty product
     equal to $1$. For $k<n$,

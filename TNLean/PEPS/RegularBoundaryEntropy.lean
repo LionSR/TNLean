@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularBoundaryState
-import TNLean.Algebra.FlatDensityEntropy
+import QICLean.Entropy.FlatDensityEntropy
 
 /-!
 # Entropy of the virtual regular boundary state

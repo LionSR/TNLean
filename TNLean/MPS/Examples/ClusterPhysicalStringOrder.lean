@@ -166,7 +166,8 @@ Supporting calculation for arXiv:0802.0447, Example 2, lines 401–411. -/
 lemma clusterBlockedRMP_eq_mul (i : Fin 4) :
     clusterBlockedRMP i = clusterTensorRMP (Fin.modNat (m := 2) (n := 2) i) *
       clusterTensorRMP (Fin.divNat (m := 2) (n := 2) i) := by
-  simp only [clusterBlockedRMP, Kraus.blockTensor, Kraus.wordOfBlock]
+  simp only [clusterBlockedRMP, Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply,
+    Kraus.decodeBlockEquiv_apply]
   rw [clusterString_decodeBlock (by simp [blockPhysDim_eq_pow]) i]
   simp [List.ofFn_succ, Kraus.evalWord]
 

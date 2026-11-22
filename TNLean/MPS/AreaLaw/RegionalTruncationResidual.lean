@@ -12,7 +12,7 @@ import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
 
 The original nearest-neighbour bond sum supplies boundary exponential estimates. With them,
 the conjugation-bound form of the weighted Sylvester argument in
-`TNLean.Algebra.WeightedLowRestriction` controls the regional truncation excess on the
+`QICLean.Analysis.WeightedLowRestriction` controls the regional truncation excess on the
 specified low-energy space.
 
 These results support ALVV, arXiv:1602.08828v2,
@@ -27,9 +27,10 @@ namespace TNLean.MPS.AreaLaw
 
 /-- The sum of supplied original nearest-neighbour boundary bonds has
 short-time conjugation norm at most twice their number, even after a scalar
-energy shift. Supporting AKL14, arXiv:1406.3898, low70.tex, lines 817–877.
+energy shift: the bond case of `ManyBody.Interaction.norm_exp_conjugation_shift_sum_le`.
+Supporting AKL14, arXiv:1406.3898, low70.tex, lines 795–880.
 No conjugation or residual estimate is supplied as a hypothesis. -/
-private theorem norm_exp_conjugation_nearestNeighbour_boundary_sum_le
+theorem norm_exp_conjugation_nearestNeighbour_boundary_sum_le
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i ∈ I ∪ J, 0 ≤ Φ.term i) (h1 : ∀ i ∈ I ∪ J, Φ.term i ≤ 1)
@@ -37,37 +38,27 @@ private theorem norm_exp_conjugation_nearestNeighbour_boundary_sum_le
     let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.partialHamiltonian I
     ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * (Φ.partialHamiltonian J) *
       NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 * (J.card : ℝ) := by
+  classical
   intro H
-  have h0I : ∀ i ∈ I, 0 ≤ Φ.term i := fun i hi ↦ h0 i (Finset.mem_union_left J hi)
-  have h1I : ∀ i ∈ I, Φ.term i ≤ 1 := fun i hi ↦ h1 i (Finset.mem_union_left J hi)
-  have hnorm1 : ‖(1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)‖ ≤ 1 :=
-    IsStarProjection.norm_le _
-      (IsStarProjection.one (Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
-  have hterm (j : Fin (L - 1)) (hj : j ∈ J) :
-      ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * Φ.term j *
-        NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 := by
-    have hjunion : j ∈ I ∪ J := Finset.mem_union_right I hj
-    have hjnorm : ‖Φ.term j‖ ≤ 1 :=
-      (CStarAlgebra.norm_le_norm_of_le_of_nonneg (h1 j hjunion) (h0 j hjunion)).trans
-        hnorm1
-    calc
-      ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * Φ.term j *
-          NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 * ‖Φ.term j‖ :=
-        norm_exp_conjugation_nearest_neighbour_shift_le_two (c := j.val)
-          I Φ h0I h1I (Φ.term j) (Φ.mem j) z t ht0 ht
-      _ ≤ 2 * 1 := mul_le_mul_of_nonneg_left hjnorm (by norm_num)
-      _ = 2 := mul_one 2
-  calc
-    ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * (Φ.partialHamiltonian J) *
-        NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ =
-        ‖∑ j ∈ J, NormedSpace.exp ((t : ℂ) • (H - z • 1)) * Φ.term j *
-          NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ := by
-      rw [ManyBody.Interaction.partialHamiltonian, Finset.mul_sum, Finset.sum_mul]
-    _ ≤ ∑ j ∈ J, ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * Φ.term j *
-        NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ := norm_sum_le _ _
-    _ ≤ ∑ _j ∈ J, (2 : ℝ) := Finset.sum_le_sum hterm
-    _ = (J.card : ℝ) * 2 := by simp only [Finset.sum_const, nsmul_eq_mul]
-    _ = 2 * (J.card : ℝ) := mul_comm _ _
+  have hI : H = ∑ i ∈ I, (Φ.restrict (· ∈ I ∪ J)).term i :=
+    (ManyBody.Interaction.partialHamiltonian_restrict_of_forall fun _ hi ↦
+      Finset.mem_union_left J hi).symm
+  have hJ : Φ.partialHamiltonian J = ∑ j ∈ J, (Φ.restrict (· ∈ I ∪ J)).term j :=
+    (ManyBody.Interaction.partialHamiltonian_restrict_of_forall fun _ hj ↦
+      Finset.mem_union_right I hj).symm
+  rw [hI, hJ]
+  exact (Φ.restrict (· ∈ I ∪ J)).norm_exp_conjugation_shift_sum_le I J (k := 2) (g := 2)
+    (fun i ↦ by
+      rw [ManyBody.Interaction.restrict_term]
+      split_ifs with hi
+      exacts [h0 i hi, le_rfl])
+    (fun i ↦ by
+      rw [ManyBody.Interaction.restrict_term]
+      split_ifs with hi
+      exacts [h1 i hi, zero_le_one])
+    (fun i ↦ by simpa using ManyBody.card_interval_le (L := L) i.val (i.val + 2))
+    (card_filter_mem_bond_le_two I) z ht0 (by push_cast; linarith)
+
 /-- The actual exponential weight on the original regional sum has a small
 restriction from the actual low spectral span to the original high projection
 range. All commutations, range memberships, quadratic bounds and boundary norms

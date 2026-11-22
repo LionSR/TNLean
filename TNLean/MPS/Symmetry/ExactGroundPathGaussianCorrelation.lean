@@ -20,7 +20,7 @@ Source: Hastings–Koma, arXiv:math-ph/0507008, Section 3; applied to the
 exact MPS path of SPC11, arXiv:1010.3732, Section II.F, lines 929–953.
 -/
 
-open ManyBody Matrix QuantumCircuit MPSPreparation GaussianFilter
+open ManyBody Matrix GaussianFilter
 open scoped Matrix.Norms.L2Operator InnerProductSpace NNReal
 
 namespace MPSTensor
@@ -62,15 +62,15 @@ theorem ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound
   intro γ hγ N _ hN A B X Y hX hY hA hB hXY hcenter q T a hq hT ha
   obtain ⟨E₀, hH, hline, hgap⟩ := hdata γ hγ N hN
   have hne : ManyBody.groundSpace
-      (Interaction.translationInvariant hN (P.interaction γ)).hamiltonian E₀ ≠ ⊥ := by
+      (Interaction.translationInvariant N (P.interaction γ)).hamiltonian E₀ ≠ ⊥ := by
     rw [hline, Ne, Submodule.span_singleton_eq_bot]
     exact ((EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm.map_eq_zero_iff).not.mpr
       (Q.nonzero γ hγ N (by omega))
   apply ManyBody.norm_centered_ground_correlation_le_gaussian hq hΔ hT (by positivity)
     (by positivity) hH ((ManyBody.isGapped_iff_eigenvalues hH).mpr ⟨hne, hgap⟩) hline A B hcenter
   intro t
-  exact norm_hamiltonian_translationInvariant_commutator_le_exp_abs_of_disjoint hN (P.interaction γ)
-    (P.hermitian γ hγ) (P.norm_le_one γ hγ) A B X Y hX hY hA hB hXY a ha t
+  exact Interaction.norm_hamiltonian_translationInvariant_commutator_le_exp_abs_of_disjoint
+    (P.interaction γ) (P.hermitian γ hγ) (P.norm_le_one γ hγ) A B X Y hX hY hA hB hXY a ha t
 
 /-- The physical gap bounds ordinary connected correlations of arbitrary
 supported observables. Centering, its norm bound and support preservation

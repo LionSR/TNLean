@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPDO.OperatorCyclicSum
-import TNLean.Algebra.FinSumPermutation
-import TNLean.Algebra.MatrixTensorPower
+import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.MatrixTensorPower
 
 /-!
 # Periodic circuit of a two-site standard form

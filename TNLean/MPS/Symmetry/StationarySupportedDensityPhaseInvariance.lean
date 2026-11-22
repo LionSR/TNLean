@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.KrausCornerCompression
 import QICLean.Channel.FixedPoint.SupportInvariance
-import TNLean.Algebra.SupportedIsometricCompression
+import QICLean.Algebra.SupportedIsometricCompression
 import TNLean.MPS.Symmetry.LocalInvariantCompression
 import TNLean.MPS.Symmetry.LocalProjectiveClassStability
 import TNLean.MPS.Symmetry.LocalSpectralSupport
@@ -38,9 +38,9 @@ set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
 
 open scoped Matrix ComplexOrder Topology
-open Filter TNLean.Algebra
+open Filter TNLean.Algebra ScalarCohomology
 
-open scoped TNLean.Algebra.ScalarCohomology
+open scoped ScalarCohomology
 
 namespace MPSTensor
 

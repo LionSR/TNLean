@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.Chain.OneSidedInverse
-import TNLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.MatrixSingleSpan
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
 /-!

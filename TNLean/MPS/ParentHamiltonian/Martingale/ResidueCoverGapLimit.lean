@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.ResidueCoverGapCriterion
 import TNLean.MPS.ParentHamiltonian.PeriodicOriginalIntersection
-import TNLean.Algebra.UniformSelectionBounds
+import QICLean.Topology.UniformSelectionBounds
 
 /-!
 # From residual cover projection limits to an open-chain gap

@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteIntervalGapComparison
-import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorOrder
+import QICLean.Analysis.EuclideanFiberwiseMap
 import TNLean.MPS.ParentHamiltonian.PrimitiveGaugeExistence
 
 /-!

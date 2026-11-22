@@ -72,7 +72,7 @@ open scoped Matrix
 
 namespace Z3Anomalous
 
-open MPOTensor TNLean.Algebra
+open MPOTensor
 
 /-! ### The group family -/
 

@@ -126,6 +126,8 @@ preparation error is estimated separately by a squared-distance inequality.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_ordered_idempotent_quadratic}
+    This is~\cite[``Ordered factors with scalar
+        compression'']{QICLean2026Blueprint}.
     For $C\ge4$ large enough in terms of $K$, $\lVert e\rVert$ and
     $\lVert1-e\rVert$, the smallness condition gives
     $\delta\le1$ and $|\alpha_j|\ge3/4$. With
@@ -153,6 +155,7 @@ preparation error is estimated separately by a squared-distance inequality.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
+    This is~\cite[``Telescoping an ordered product'']{QICLean2026Blueprint}.
     Induction on $M$, separating the last factor in the ordered product and
     the last summand, proves the identity.
 \end{proof}
@@ -168,6 +171,8 @@ preparation error is estimated separately by a squared-distance inequality.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:ldp_ordered_telescoping_identity}
+    This is~\cite[``First-order bound near an
+        idempotent'']{QICLean2026Blueprint}.
     Every power of $e$ has norm at most $c$, so
     (\ref{eq:ldp_ordered_telescoping_identity}) and induction on $M$, using
     $\lVert\prod_{i=0}^{j-1}X_i\rVert

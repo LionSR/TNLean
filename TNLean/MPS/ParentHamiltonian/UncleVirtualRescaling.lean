@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.Basic
 import Mathlib.Data.Matrix.Block
 import Mathlib.Logic.Equiv.Fin.Basic
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Virtual rescaling for two-block uncle Hamiltonians

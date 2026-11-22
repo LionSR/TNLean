@@ -30,7 +30,7 @@ the unmodified fusion operators `λ^R_{e,e} = λ^R_{e,g} = 𝟙`, `λ^R_{g,e} = 
   least three sites.
 
 The local representation property of the modified operators is
-`TNLean.Algebra.gaussOperator_mul` for every tuple of unitaries.
+`GaussLaw.gaussOperator_mul` for every tuple of unitaries.
 
 The periodic vector of the gauged tensor is a product of nearest-neighbour factors, because the
 incoming bond of every letter is forced by the letter
@@ -140,7 +140,7 @@ private theorem gaugeLabelMatrix_mul_blockedGHZTensor_apply (u : Fin 4 × Multip
       GaussianInt.toComplex (gaugedBondWeightZ u r) else 0 := by
   obtain ⟨m, a⟩ := u
   rw [blockedGHZTensor_apply, Matrix.mul_diagonal]
-  rcases MPSTensor.zmod2_cases a with rfl | rfl <;>
+  rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
     fin_cases m <;> fin_cases l <;> fin_cases r <;>
     simp +decide [gaugeLabelMatrix, gaugedBondWeightZ, toComplex_neg_i]
 
@@ -249,7 +249,7 @@ private theorem localPerm_gaugedSite_window (x y : Fin 4 × Multiplicative (ZMod
   rw [Equiv.trans_apply, Equiv.trans_apply, windowCoordinates_symm_gaugedSite]
   funext k
   fin_cases k <;> simp [windowCoordinates, gaugedSite, localPerm, gaussWindowImage,
-    TNLean.Algebra.gaussLegAction_apply]
+    GaussLaw.gaussLegAction_apply]
 
 private theorem localPhase_gaugedSite_window (x y : Fin 4 × Multiplicative (ZMod 2)) :
     localPhase (windowCoordinates.symm ![gaugedSite.symm x, gaugedSite.symm y]) =
@@ -286,7 +286,7 @@ theorem placedGaussOperator_mulVec_gaugedMPS (N : ℕ) (hN : 2 ≤ N) (j : Fin N
   have : NeZero N := ⟨by omega⟩
   rw [placedGaussOperator_eq_monomial, monomial_mulVec_eq_self_iff]
   intro s
-  rw [windowPerm_apply, extractWindow_two hN j s]
+  rw [placeAlongPerm_ringWindow_apply, extractWindow_two hN j s]
   set x := gaugedSite (s j)
   set y := gaugedSite (s (j + 1))
   have hw : ![s j, s (j + 1)] = ![gaugedSite.symm x, gaugedSite.symm y] := by simp [x, y]
@@ -355,8 +355,8 @@ private def unmodifiedPhase (a b : Multiplicative (ZMod 2)) : (Fin 2 → Fin 4) 
 private theorem unmodifiedCircuitTuple_eq_monomial (a b : Multiplicative (ZMod 2)) :
     (unmodifiedCircuitTuple a b : Matrix (Fin 2 → Fin 4) (Fin 2 → Fin 4) ℂ) =
       monomial (unmodifiedPerm a b) (unmodifiedPhase a b) := by
-  rcases MPSTensor.zmod2_cases a with rfl | rfl <;>
-    rcases MPSTensor.zmod2_cases b with rfl | rfl
+  rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
+    rcases Multiplicative.zmod2_cases b with rfl | rfl
   · simp [unmodifiedCircuitTuple, unmodifiedPerm, unmodifiedPhase, monomial_one]
   · simp [unmodifiedCircuitTuple, unmodifiedPerm, unmodifiedPhase, monomial_one]
   · simp only [unmodifiedCircuitTuple, unmodifiedPerm, unmodifiedPhase, w_eq,
@@ -379,24 +379,27 @@ theorem unmodifiedPlacedGaussOperator_mulVec_gaugedMPS_ne (N : ℕ) (hN : 2 ≤ 
       gaugedMPS N ≠ gaugedMPS N := by
   have : NeZero N := ⟨by omega⟩
   rw [MPOTensor.placedGaussOperator, gaussWindowOperator,
-    TNLean.Algebra.gaussOperator_eq_monomial _ _ _ unmodifiedCircuitTuple_eq_monomial,
-    Matrix.coe_reindexAlgEquiv, reindex_monomial, placeAlong_ringWindow_monomial, Ne,
+    GaussLaw.gaussOperator_eq_monomial _ _ _ unmodifiedCircuitTuple_eq_monomial,
+    Matrix.coe_reindexAlgEquiv, reindex_monomial, ManyBody.placeAlong_monomial, Ne,
     monomial_mulVec_eq_self_iff]
   intro h
   set c : Gs := gaugedSite.symm (0, 1)
   have hs := h fun _ ↦ c
-  rw [windowPerm_apply, extractWindow_two hN j] at hs
+  rw [placeAlongPerm_ringWindow_apply, extractWindow_two hN j] at hs
   have hwin : (gaussLocalCoordinateEquiv 4 (Multiplicative (ZMod 2))).symm ![c, c] =
       (![0, 0], (1, 1)) := windowCoordinates_symm_gaugedSite (0, 1) (0, 1)
   have himg : ((gaussLocalCoordinateEquiv 4 (Multiplicative (ZMod 2))).symm.trans
-      ((TNLean.Algebra.gaussMonomialPerm unmodifiedPerm gen).trans
+      ((GaussLaw.gaussMonomialPerm unmodifiedPerm gen).trans
         (gaussLocalCoordinateEquiv 4 (Multiplicative (ZMod 2))))) ![c, c] =
       ![gaugedSite.symm (3, gen), gaugedSite.symm (0, gen)] := by
     rw [Equiv.trans_apply, Equiv.trans_apply, hwin]
     funext k
     fin_cases k <;>
-      simp +decide [gaugedSite, unmodifiedPerm, TNLean.Algebra.gaussLegAction_apply]
-  rw [himg, Function.comp_apply, hwin] at hs
+      simp +decide [gaugedSite, unmodifiedPerm, GaussLaw.gaussLegAction_apply]
+  have hcc : (fun _ : Fin 2 ↦ c) = ![c, c] := by
+    funext k
+    fin_cases k <;> rfl
+  rw [himg, Function.comp_apply, hcc, hwin] at hs
   obtain ⟨R, h1, h2⟩ := gaugedMPS_replaceWindow hN j (fun _ ↦ c)
     ![gaugedSite.symm (3, gen), gaugedSite.symm (0, gen)] (by simp +decide [c, gaugedLeftBond])
   have hR : R = 1 := by
@@ -406,9 +409,9 @@ theorem unmodifiedPlacedGaussOperator_mulVec_gaugedMPS_ne (N : ℕ) (hN : 2 ≤ 
     rw [h2] at hone
     simpa +decide [c, gaugedBondFactorZ, gaugedBondWeightZ, gaugedLeftBond] using hone
   rw [h1, h2, hR] at hs
-  have hphase : TNLean.Algebra.gaussMonomialPhase unmodifiedPerm unmodifiedPhase gen
+  have hphase : GaussLaw.gaussMonomialPhase unmodifiedPerm unmodifiedPhase gen
       (![0, 0], (1, 1)) = I := by
-    simp +decide [TNLean.Algebra.gaussMonomialPhase, unmodifiedPerm, unmodifiedPhase, hExponent]
+    simp +decide [GaussLaw.gaussMonomialPhase, unmodifiedPerm, unmodifiedPhase, hExponent]
   rw [hphase] at hs
   have hlhs : GaussianInt.toComplex
       (gaugedBondFactorZ (gaugedSite (gaugedSite.symm (3, gen)))
@@ -449,27 +452,27 @@ theorem not_commute_placedGaussOperator (N : ℕ) [NeZero N] (hN : 3 ≤ N) (j :
     rw [localPerm_gaugedSite_window]
     rfl
   -- The images of the constant configuration under the two placed permutations.
-  have hPj : ∀ k, windowPerm 2 hN2 j π s k =
+  have hPj : ∀ k, ManyBody.placeAlongPerm (ManyBody.ringWindow hN2 j) π s k =
       if k = j then gaugedSite.symm (3, 1) else if k = j + 1 then gaugedSite.symm (0, 1)
       else c := by
     intro k
-    rw [windowPerm_apply, extractWindow_two hN2 j, replaceWindow_two_apply, hπ]
+    rw [placeAlongPerm_ringWindow_apply, extractWindow_two hN2 j, replaceWindow_two_apply, hπ]
     rfl
-  have hPj1 : ∀ k, windowPerm 2 hN2 (j + 1) π s k =
+  have hPj1 : ∀ k, ManyBody.placeAlongPerm (ManyBody.ringWindow hN2 (j + 1)) π s k =
       if k = j + 1 then gaugedSite.symm (3, 1) else if k = j + 1 + 1 then gaugedSite.symm (0, 1)
       else c := by
     intro k
-    rw [windowPerm_apply, extractWindow_two hN2 (j + 1), replaceWindow_two_apply, hπ]
+    rw [placeAlongPerm_ringWindow_apply, extractWindow_two hN2 (j + 1), replaceWindow_two_apply, hπ]
     rfl
   -- The phases.
   have hΦj1 : localPhase (windowCoordinates.symm (MPSTensor.extractWindow 2 j
-      (windowPerm 2 hN2 (j + 1) π s))) =
+      (ManyBody.placeAlongPerm (ManyBody.ringWindow hN2 (j + 1)) π s))) =
       iPow (phaseExponent (localBits ![0, 3]) 1 0) := by
     rw [extractWindow_two hN2 j, hPj1, hPj1, ite_eq_right hj1.symm, ite_eq_right hj2.symm,
       ite_eq_left rfl, localPhase_gaugedSite_window]
     rfl
   have hΦj1' : localPhase (windowCoordinates.symm (MPSTensor.extractWindow 2 (j + 1)
-      (windowPerm 2 hN2 j π s))) =
+      (ManyBody.placeAlongPerm (ManyBody.ringWindow hN2 j) π s))) =
       iPow (phaseExponent (localBits ![0, 0]) 0 1) := by
     rw [extractWindow_two hN2 (j + 1), hPj, hPj, ite_eq_right hj1, ite_eq_left rfl,
       ite_eq_right hj2, ite_eq_right hj21, localPhase_gaugedSite_window]
@@ -479,7 +482,9 @@ theorem not_commute_placedGaussOperator (N : ℕ) [NeZero N] (hN : 3 ≤ N) (j :
     intro k
     rw [extractWindow_two hN2 k, localPhase_gaugedSite_window]
     rfl
-  have hentry := congrFun (congrFun h ((windowPerm 2 hN2 j π * windowPerm 2 hN2 (j + 1) π) s)) s
+  have hentry := congrFun (congrFun h
+    ((ManyBody.placeAlongPerm (X := fun _ ↦ Gs) (ManyBody.ringWindow hN2 j) π *
+      ManyBody.placeAlongPerm (X := fun _ ↦ Gs) (ManyBody.ringWindow hN2 (j + 1)) π) s)) s
   rw [monomial_apply, monomial_apply, ite_eq_left rfl] at hentry
   simp only [Equiv.Perm.mul_apply] at hentry
   rw [hΦj1, hΦ, hΦ] at hentry
@@ -494,8 +499,10 @@ theorem not_commute_placedGaussOperator (N : ℕ) [NeZero N] (hN : 3 ≤ N) (j :
     rw [← toComplex_iPowZ, ← toComplex_iPowZ, ← map_mul, map_ne_zero_iff _
       GaussianInt.toComplex_injective]
     decide
-  by_cases hperm : windowPerm 2 hN2 j π (windowPerm 2 hN2 (j + 1) π s) =
-      windowPerm 2 hN2 (j + 1) π (windowPerm 2 hN2 j π s)
+  by_cases hperm : ManyBody.placeAlongPerm (ManyBody.ringWindow hN2 j) π
+      (ManyBody.placeAlongPerm (ManyBody.ringWindow hN2 (j + 1)) π s) =
+      ManyBody.placeAlongPerm (ManyBody.ringWindow hN2 (j + 1)) π
+        (ManyBody.placeAlongPerm (ManyBody.ringWindow hN2 j) π s)
   · simp only [hperm, ↓reduceIte, hΦj1'] at hentry
     exact hne hentry
   · simp only [hperm, ↓reduceIte] at hentry

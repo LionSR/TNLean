@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Chain.BinaryPhase
-import TNLean.Algebra.MonomialMatrix
+import QICLean.Algebra.MonomialMatrix
 import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.Examples.CZX.CZXAnomaly
 import TNLean.MPS.MPU.GroupRepresentation

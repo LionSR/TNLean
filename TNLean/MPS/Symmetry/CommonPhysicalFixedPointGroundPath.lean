@@ -175,9 +175,9 @@ continuous exact MPS ground-state realization. Source: arXiv:1010.3732,
 Section II.F.2, `eq:sym:omega-gamma`. -/
 noncomputable def commonPhysicalNormalizedBondExactMPSGroundPath
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)

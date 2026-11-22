@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryCoordinates
 import Mathlib.Data.Matrix.Basis
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Physical path vectors for weighted matrix-unit tensors

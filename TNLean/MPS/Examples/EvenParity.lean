@@ -115,8 +115,9 @@ noncomputable def evenParityZ2Action :
   toFun g := if Multiplicative.toAdd g = 0 then 1 else pauliZ
   map_one' := by simp [toAdd_one]
   map_mul' a b := by
-    rcases zmod2_cases a with rfl | rfl <;> rcases zmod2_cases b with rfl | rfl <;>
-      simp [toAdd_ofAdd, zmod2_one_add_one, pauliZ_sq]
+    rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
+      rcases Multiplicative.zmod2_cases b with rfl | rfl <;>
+      simp [toAdd_ofAdd, ZMod.zmod2_one_add_one, pauliZ_sq]
 
 /-- σz as an element of GL(2,ℂ). -/
 private noncomputable def pauliZGL : GL (Fin 2) ℂ :=
@@ -168,7 +169,7 @@ on the physical index by flipping the relative phase of `A¹`. -/
 theorem evenParity_isOnSiteSymmetric_Z2 :
     IsOnSiteSymmetric evenParityTensor evenParityZ2Action := by
   intro g
-  rcases zmod2_cases g with rfl | rfl
+  rcases Multiplicative.zmod2_cases g with rfl | rfl
   · rw [twistedTensor_one]; exact fun _ _ => rfl
   · exact evenParity_gaugeEquiv_twisted.sameMPV
 

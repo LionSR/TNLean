@@ -31,8 +31,8 @@ namespace MPSTensor
 Source: arXiv:1010.3732, Section II.F.2, `eq:1d-sym:jointsym`. -/
 noncomputable def sptFixedPointUnitaryAction
     {G : Type} [Group G] {D : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ : TNLean.Algebra.ProjectiveRepresentation (D := D) ω)
+    {ω : ScalarCocycle G}
+    (ρ : ProjectiveRepresentation (D := D) ω)
     (hρ : ∀ g, (ρ.X g : Matrix (Fin D) (Fin D) ℂ) ∈
       Matrix.unitaryGroup (Fin D) ℂ) :
     G →* Matrix.unitaryGroup (Fin (D * D)) ℂ :=
@@ -45,9 +45,9 @@ most one, and the finite-chain gap is uniformly at least one.
 Source: arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/
 noncomputable def normalizedBondFixedPointGappedPath
     {G : Type} [Group G] {D₀ D₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈
       Matrix.unitaryGroup (Fin D₀) ℂ)
@@ -75,19 +75,19 @@ noncomputable def normalizedBondFixedPointGappedPath
     have hNZ : NeZero N := ⟨by omega⟩
     refine ⟨0, ?_, ?_⟩
     · unfold normalizedBondInteraction
-      rw [@hamiltonian_translationInvariant_twoSiteBondPenalty (D₀ + D₁) N hNZ]
+      rw [@hamiltonian_translationInvariant_twoSiteBondPenalty (D₀ + D₁) N hNZ hN]
       exact (normalizedPhysicalBondInterpolation_parent_spectrum_gap_one
         hD₀ hD₁ γ (by omega)).1
     · intro z hz
       unfold normalizedBondInteraction at hz
-      rw [@hamiltonian_translationInvariant_twoSiteBondPenalty (D₀ + D₁) N hNZ] at hz
+      rw [@hamiltonian_translationInvariant_twoSiteBondPenalty (D₀ + D₁) N hNZ hN] at hz
       have h := (normalizedPhysicalBondInterpolation_parent_spectrum_gap_one
         hD₀ hD₁ γ (by omega)).2 z hz
       simpa using h
   symmetric γ hγ g N hN := by
     have hNZ : NeZero N := ⟨by omega⟩
     unfold normalizedBondInteraction
-    rw [@hamiltonian_translationInvariant_twoSiteBondPenalty (D₀ + D₁) N hNZ]
+    rw [@hamiltonian_translationInvariant_twoSiteBondPenalty (D₀ + D₁) N hNZ hN]
     change Commute
       (physicalBondProductParentHamiltonian
         (normalizedBondInterpolationVector D₀ D₁ γ) (by omega))

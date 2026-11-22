@@ -10,7 +10,7 @@ import QICLean.Kraus.Transfer
 import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.Periodic.Defs
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 Copyright (c) 2026 TNLean contributors. All rights reserved.

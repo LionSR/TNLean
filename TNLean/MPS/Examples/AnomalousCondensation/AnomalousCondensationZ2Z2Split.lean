@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.Algebra.GeneralizeDecide
+import QICLean.Algebra.GeneralizeDecide
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2
 
 /-!

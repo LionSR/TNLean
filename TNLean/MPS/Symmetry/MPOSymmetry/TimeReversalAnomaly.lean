@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ScalarThreeCocycleTimeReversal
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleTimeReversal
 import TNLean.MPS.Symmetry.MPDO.Vectorized
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 
@@ -31,7 +31,7 @@ The argument is formalized at the level of the tensors.
   `β_{g,h}` the relative scalar of the two choices.
 
 The scalar conclusion, that a three-cochain cohomologous to its conjugate is cohomologous to a
-real one, is `TNLean.Algebra.ScalarThreeCochain.exists_cohomologousTo_star_eq_self`.
+real one, is `ScalarThreeCochain.exists_cohomologousTo_star_eq_self`.
 
 The gauge transport of fusion tensors along exact bond gauges is stated for an arbitrary
 family with the same bond dimensions; it shows that the associator is unchanged.
@@ -65,7 +65,6 @@ family with the same bond dimensions; it shows that the associator is unchanged.
 -/
 
 open scoped Matrix Kronecker BigOperators
-open TNLean.Algebra
 
 /-! ### Recombining and conjugating letters -/
 

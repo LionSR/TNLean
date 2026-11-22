@@ -8,6 +8,7 @@ import TNLean.MPS.Symmetry.ExactMPSGappedPhase
 import TNLean.MPS.Symmetry.PositiveLengthSymmetryCharacter
 import TNLean.MPS.Symmetry.PhysicalCharacterTwist
 import TNLean.MPS.Symmetry.GlobalVirtualGauge
+import QICLean.Analysis.FiniteKroneckerPowers
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.CStarAlgebra.Spectrum
 import Mathlib.Topology.Connected.TotallyDisconnected
@@ -33,7 +34,7 @@ see `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`. The preceding
 finite-chain character results do not carry this restriction.
 -/
 
-open scoped TNLean.Algebra.ScalarCohomology
+open scoped ScalarCohomology
 open scoped Matrix Matrix.Norms.L2Operator ComplexConjugate
 
 namespace Matrix
@@ -187,9 +188,10 @@ theorem ExactMPSGroundPath.exists_chain_character
   apply Matrix.exists_constant_character_of_continuous_invariant_line V hV v hv hne
     (t₀ := 0)
   intro t g
+  have : NeZero N := ⟨by omega⟩
   obtain ⟨E, _, _, hline⟩ := Q.ground_line t t.property N hN
   exact mem_span_mpv_of_commute_ground_line (Q.tensor t)
-    (ManyBody.Interaction.translationInvariant hN (P.interaction t)).hamiltonian (V g) E
+    (ManyBody.Interaction.translationInvariant N (P.interaction t)).hamiltonian (V g) E
     (P.symmetric t t.property g N hN) hline
 
 /-- The constant finite-chain character acts on periodic MPS coefficients.
@@ -265,8 +267,6 @@ theorem ExactMPSGroundPath.exists_exact_symmetry_of_isInjective
   exact ⟨χ, hχ, fun t => isOnSiteSymmetric_physicalCharacterUntwist χ hχ U (Q.tensor t)
     (hSame t)⟩
 
-open TNLean.Algebra
-
 /-- Continuous virtual projective data and endpoint cohomology can be
 derived from the independent physical ground-state realization when its
 ambient tensors are one-site injective. Source context:
@@ -290,9 +290,9 @@ theorem ExactMPSGroundPath.exists_continuous_virtual_data_of_isInjective
           ((((ρ t).X (g⁻¹))⁻¹ : GL (Fin Q.bondDimension) ℂ) :
             Matrix (Fin Q.bondDimension) (Fin Q.bondDimension) ℂ)) ∧
       groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep (ρ 1) Q.bondDimension_pos)) =
+        (ScalarCocycle.isMulCocycle₂_of_projRep (ρ 1) Q.bondDimension_pos)) =
         groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-          (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep (ρ 0) Q.bondDimension_pos)) := by
+          (ScalarCocycle.isMulCocycle₂_of_projRep (ρ 0) Q.bondDimension_pos)) := by
   obtain ⟨χ, hχ, hSym⟩ := Q.exists_exact_symmetry_of_isInjective hInj
   obtain ⟨ω, ρ, hcont, hfactor, hCov⟩ :=
     exists_continuous_projectiveRepresentation_of_isOnSiteSymmetric Q.bondDimension_pos
@@ -331,9 +331,9 @@ theorem ExactMPSGroundPath.exists_rephasing_endpoint_cohomology_of_isInjective
             (((ρ₁.X (g⁻¹))⁻¹ : GL (Fin Q.bondDimension) ℂ) :
               Matrix (Fin Q.bondDimension) (Fin Q.bondDimension) ℂ)) →
         groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-          (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ Q.bondDimension_pos)) =
+          (ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ Q.bondDimension_pos)) =
           groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-            (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ Q.bondDimension_pos)) := by
+            (ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ Q.bondDimension_pos)) := by
   obtain ⟨χ, hχ, hSym⟩ := Q.exists_exact_symmetry_of_isInjective hInj
   refine ⟨χ, hχ, ?_⟩
   intro ω₀ ω₁ ρ₀ ρ₁ hρ₀ hρ₁

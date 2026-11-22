@@ -172,7 +172,7 @@ theorem chainGroundSpace_repeatedBlockTensor_eq_ghzTensor (L N : ℕ) :
 periodic MPS vectors carry different sector probabilities. -/
 theorem parentHamiltonian_repeatedBlockTensor_eq_ghzTensor (L N : ℕ) :
     parentHamiltonian repeatedBlockTensor L N = parentHamiltonian ghzTensor L N := by
-  simp [parentHamiltonian, parentRingInteraction,
+  simp [parentHamiltonian, localTerm, parentRingInteraction,
     parentInteraction_repeatedBlockTensor_eq_ghzTensor]
 
 /-- The actual normalized periodic vectors of two tensors with identical parent

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.StringOrderDefs
 import TNLean.MPS.Symmetry.StringOrderAux
 import TNLean.MPS.Symmetry.VirtualRepresentation
-import TNLean.Algebra.CocycleCohomology
+import QICLean.Algebra.Cohomology.CocycleCohomology
 
 /-!
 # String order parameters and local symmetry equivalence
@@ -51,7 +51,7 @@ string-order universality theorems that use them.
   arXiv:1010.3732, Section II.F — SPT classification (not formalized here)
 -/
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder Kraus TNLean.Algebra.ScalarCohomology
+open scoped Matrix BigOperators ComplexOrder MatrixOrder Kraus ScalarCohomology
 
 namespace MPSTensor
 
@@ -372,8 +372,6 @@ separate SPT phases.
 -/
 
 section SPTLabels
-
-open TNLean.Algebra
 
 variable {G : Type} [Group G]
 

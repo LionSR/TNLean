@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicInvariant
 import TNLean.MPS.MPDO.ActionTensorReduction
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 
@@ -55,7 +55,6 @@ than injective, and neither unitarity nor simplicity of the operators is used.
 -/
 
 open scoped Matrix Kronecker
-open TNLean.Algebra
 
 namespace MPOTensor
 

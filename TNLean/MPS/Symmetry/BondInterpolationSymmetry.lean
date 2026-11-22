@@ -22,7 +22,6 @@ inside a space of dimension `D₀ + D₁`, as recorded in
 -/
 
 open scoped Matrix
-open TNLean.Algebra
 
 namespace MPSTensor
 

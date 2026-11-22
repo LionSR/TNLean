@@ -78,16 +78,16 @@ theorem exponential_convergence_of_primitive [NeZero D]
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hA : Kraus.IsInjective A)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ_pd : ρ.PosDef)
-    (hρ_fix : Kraus.transferMap (d := d) (D := D) A ρ = ρ) :
+    (hρ_fix : Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ) :
     ∃ (C : ℝ) (δ : ℝ),
       0 < C ∧ 0 < δ ∧ δ ≤ 1 ∧
       ∀ (n : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
-        ‖((Kraus.transferMap (d := d) (D := D) A)^[n]) X -
+        ‖((Kraus.transferMap (ι := Fin d) (n := Fin D) A)^[n]) X -
           fixedPointProj ρ (ne_of_gt hρ_pd.trace_pos) X‖ ≤
           C * (1 - δ) ^ n * ‖X‖ := by
   classical
   let V := Matrix (Fin D) (Fin D) ℂ
-  let E : V →ₗ[ℂ] V := Kraus.transferMap (d := d) (D := D) A
+  let E : V →ₗ[ℂ] V := Kraus.transferMap (ι := Fin d) (n := Fin D) A
   let P : V →ₗ[ℂ] V := fixedPointProj (D := D) ρ (ne_of_gt hρ_pd.trace_pos)
   let N : V →ₗ[ℂ] V := E - P
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
@@ -173,11 +173,11 @@ theorem correlation_length_bound [NeZero D]
       0 < C ∧ 0 < ξ ∧
       ∀ (n : ℕ) (X : Matrix (Fin D) (Fin D) ℂ),
         Matrix.trace X = 0 →
-        ‖((Kraus.transferMap (d := d) (D := D) A)^[n]) X‖ ≤
+        ‖((Kraus.transferMap (ι := Fin d) (n := Fin D) A)^[n]) X‖ ≤
           C * Real.exp (-(n : ℝ) / ξ) * ‖X‖ := by
   classical
   let V := Matrix (Fin D) (Fin D) ℂ
-  let E : V →ₗ[ℂ] V := Kraus.transferMap (d := d) (D := D) A
+  let E : V →ₗ[ℂ] V := Kraus.transferMap (ι := Fin d) (n := Fin D) A
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   have hPrim : _root_.IsPrimitive E :=
     isPrimitive_transferMap_of_isNormal A hNorm hA.isNormal
@@ -267,9 +267,9 @@ theorem transfer_map_gap_of_injective [NeZero D]
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
     (hA : Kraus.IsInjective A) :
     ∃ (δ : ℝ), 0 < δ ∧
-      ∀ (μ : ℂ), Module.End.HasEigenvalue (Kraus.transferMap (d := d) (D := D) A) μ →
+      ∀ (μ : ℂ), Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin d) (n := Fin D) A) μ →
         μ ≠ 1 → ‖μ‖ ≤ 1 - δ := by
-  set E := Kraus.transferMap (d := d) (D := D) A
+  set E := Kraus.transferMap (ι := Fin d) (n := Fin D) A
   -- Step 1: Kraus.IsInjective → IsPrimitive (Kraus.transferMap A)
   have hPrim : _root_.IsPrimitive E :=
     isPrimitive_transferMap_of_isNormal A hNorm hA.isNormal

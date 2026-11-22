@@ -44,10 +44,11 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_eq_range
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (γ : unitInterval) (hN : 2 ≤ N) :
-    LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+      (Interaction.translationInvariant N
           (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian) =
       (periodicMpvLineMap (arbitraryPhysicalMixedInterpolation A₀ A₁ γ) N).range := by
+  have : NeZero N := ⟨by omega⟩
   rw [arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv A₀ A₁ h₀ h₁ γ hN]
   exact (ContinuousLinearMap.range_smulRight_apply
     (by norm_num : (1 : ℂ →L[ℂ] ℂ) ≠ 0) _).symm
@@ -60,9 +61,10 @@ theorem continuous_arbitraryPhysicalMixed_groundSpace_starProjection
     [NeZero D₀] [NeZero D₁]
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁) (hN : 2 ≤ N) :
-    Continuous fun γ : unitInterval =>
-      (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Continuous fun γ : unitInterval =>
+      (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian)).starProjection := by
+  have : NeZero N := ⟨by omega⟩
   have hT := continuous_periodicMpvLineMap_family
     (fun γ : unitInterval => arbitraryPhysicalMixedInterpolation A₀ A₁ γ)
     ((continuous_arbitraryPhysicalMixedInterpolation A₀ A₁).comp continuous_subtype_val) N
@@ -74,7 +76,7 @@ theorem continuous_arbitraryPhysicalMixed_groundSpace_starProjection
       (fun γ : unitInterval => ContinuousLinearMap.injectiveRangeProjector
         (periodicMpvLineMap (arbitraryPhysicalMixedInterpolation A₀ A₁ γ) N) (hTinj γ)) =
       (fun γ : unitInterval => (LinearMap.ker (Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN
+        (Interaction.translationInvariant N
           (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian)).starProjection) := by
     funext γ
     rw [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection,
@@ -91,12 +93,14 @@ theorem arbitraryPhysicalMixed_groundSpace_starProjection_endpoint
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (right : Bool) (hN : 2 ≤ N) :
-    (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩;
+    (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
       (arbitraryPhysicalMixedInteraction A₀ A₁ (if right then 1 else 0))).hamiltonian)
         ).starProjection =
-    (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+    (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
       (arbitraryPhysicalEndpointParentInteraction A₀ A₁ right)).hamiltonian)
         ).starProjection := by
+  have : NeZero N := ⟨by omega⟩
   rw [arbitraryPhysicalMixedInteraction_endpoint_ker_eq_parent A₀ A₁ h₀ h₁ right hN]
 
 /-- As the parameter tends to an endpoint within the closed interval, the
@@ -109,13 +113,14 @@ theorem tendsto_arbitraryPhysicalMixed_groundSpace_starProjection
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (right : Bool) (hN : 2 ≤ N) :
-    Tendsto (fun γ : unitInterval =>
-      (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Tendsto (fun γ : unitInterval =>
+      (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian)).starProjection)
       (𝓝 (if right then 1 else 0))
-      (𝓝 (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+      (𝓝 (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
         (arbitraryPhysicalEndpointParentInteraction A₀ A₁ right)).hamiltonian)
           ).starProjection) := by
+  have : NeZero N := ⟨by omega⟩
   rw [← arbitraryPhysicalMixed_groundSpace_starProjection_endpoint A₀ A₁ h₀ h₁ right hN]
   convert (continuous_arbitraryPhysicalMixed_groundSpace_starProjection
     A₀ A₁ h₀ h₁ hN).tendsto (if right then 1 else 0) using 6
@@ -129,11 +134,13 @@ theorem arbitraryPhysicalEndpointAttachment_groundSpace_starProjection
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (right : Bool) {t : ℝ} (ht : 0 ≤ t) (hN : 2 ≤ N) :
-    (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩;
+    (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
       (arbitraryPhysicalEndpointAttachment A₀ A₁ right t)).hamiltonian)).starProjection =
-    (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+    (LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
       (arbitraryPhysicalEndpointParentInteraction A₀ A₁ right)).hamiltonian)
         ).starProjection := by
+  have : NeZero N := ⟨by omega⟩
   rw [arbitraryPhysicalEndpointAttachment_ker_eq_parent A₀ A₁ h₀ h₁ right ht hN]
 
 end MPOSymmetry

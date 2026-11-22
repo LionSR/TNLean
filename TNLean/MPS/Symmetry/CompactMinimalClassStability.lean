@@ -39,9 +39,9 @@ set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder Topology
-open Filter TNLean.Algebra
+open Filter TNLean.Algebra ScalarCohomology
 
-open scoped TNLean.Algebra.ScalarCohomology
+open scoped ScalarCohomology
 
 namespace MPSTensor
 

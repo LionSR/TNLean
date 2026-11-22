@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LocalSolution.RoundedPeriodicCoarsening
 import TNLean.MPS.AreaLaw.LocalSolution.PeriodicChainApproximation
-import TNLean.Algebra.MatrixHermitianSum
+import QICLean.Algebra.HermitianPartSum
 import QICLean.ManyBody.Hamiltonian.GaussianFilter
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 

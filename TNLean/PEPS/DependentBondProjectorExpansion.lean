@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.DependentBondNetwork
 import TNLean.PEPS.GInjective
-import TNLean.Algebra.RepresentationTensorProduct
+import QICLean.Representation.Character.TensorProduct
 
 /-!
 # Canonical projector contractions with different bond dimensions

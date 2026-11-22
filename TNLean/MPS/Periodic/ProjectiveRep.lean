@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.Defs
-import TNLean.Algebra.ProjectiveRepresentation
-import TNLean.Algebra.CocycleCohomology
+import QICLean.Algebra.Cohomology.ProjectiveRepresentation
+import QICLean.Algebra.Cohomology.CocycleCohomology
 
 /-!
 # Periodic MPS — conditional projective representation after the symmetry corollary
@@ -42,7 +42,7 @@ here.
 * `MPSTensor.cor_4_1_projective_rep` — the conditional projective-representation
   construction:
   from `PeriodicProjectiveRigidity`, produce a
-  `TNLean.Algebra.ProjectiveRepresentation` on the bond space together with
+  `ProjectiveRepresentation` on the bond space together with
   the intertwining relation between `A` and the twisted tensors.
 * `MPSTensor.cor_4_1_projective_rep_cocycle` — if `D > 0`, the factor system
   satisfies the 2-cocycle identity (via
@@ -62,8 +62,8 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-open TNLean.Algebra
-open scoped TNLean.Algebra.ScalarCohomology
+open ScalarCohomology
+open scoped ScalarCohomology
 
 variable {d D : ℕ} {G : Type} [Group G]
 
@@ -105,7 +105,7 @@ def PeriodicProjectiveRigidity
 If the pointwise virtual gauges in `PeriodicProjectiveRigidity` can be chosen
 coherently, then the bond-space gauges assemble into a projective representation
 of `G`: there exist a scalar 2-cochain `ω : G × G → ℂˣ` and a
-`TNLean.Algebra.ProjectiveRepresentation` on the bond space whose virtual gauges
+`ProjectiveRepresentation` on the bond space whose virtual gauges
 still realize the pointwise `Z`-gauge intertwining with the twisted tensors.
 
 The source paper arXiv:1708.00029, Section 4.2, lines 834--845, supplies only

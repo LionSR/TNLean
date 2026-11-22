@@ -16,9 +16,9 @@ gauge preparation preceding the polar deformation.
 Source: arXiv:1010.3732, Sections II.C and II.F.2.
 -/
 
-open scoped Matrix TNLean.Algebra.ScalarCohomology
+open scoped Matrix ScalarCohomology
 
-namespace TNLean.Algebra.ProjectiveRepresentation
+namespace ProjectiveRepresentation
 
 variable {G : Type} [Group G] {D : ℕ} {ω : ScalarCocycle G}
 
@@ -40,11 +40,9 @@ def conjugate (ρ : ProjectiveRepresentation (D := D) ω) (Y : GL (Fin D) ℂ) :
               ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ), hY, Matrix.one_mul]
       _ = _ := by rw [ρ.map_mul, Matrix.mul_smul, Matrix.smul_mul]
 
-end TNLean.Algebra.ProjectiveRepresentation
+end ProjectiveRepresentation
 
 namespace MPSTensor
-
-open TNLean.Algebra
 
 /-- Virtual covariance survives a nonzero rescaling and a bond gauge,
 with the virtual matrices conjugated by that gauge. Source:
@@ -94,9 +92,9 @@ theorem cohomologousTo_of_smul_gaugeEquiv
       (ρ₁.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * B i *
         (((ρ₁.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :
     groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D))) =
+      (ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D))) =
     groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D))) := by
+      (ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D))) := by
   obtain ⟨Y, hY⟩ := hGauge
   exact cohomologousTo_of_isInjective B hB U (NeZero.pos D)
     (twistedTensor_covariance_of_smul_gauge U ρ₀ hρ₀ c Y hY) hρ₁

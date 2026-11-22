@@ -3,7 +3,7 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ListOfFn
+import QICLean.Algebra.OrderedProduct
 import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.Chain.OneSidedInverse
 import TNLean.MPS.Core.TracePairing

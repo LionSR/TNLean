@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.UnitaryGroup
-import TNLean.Algebra.FinKronecker
+import QICLean.Algebra.FiniteKroneckerProduct
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.TimeReversalIndex
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan

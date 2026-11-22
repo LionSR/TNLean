@@ -49,7 +49,6 @@ three-cocycle is the coboundary of `v⁻¹`.
 -/
 
 open scoped Matrix Kronecker
-open TNLean.Algebra
 
 namespace MPOTensor
 
@@ -212,7 +211,6 @@ theorem bondDim_le_one_of_mulTensor_eq_ite {D₁ D₂ : ℕ} {A : MPOTensor d D�
     · exact ⟨⟨0, by omega⟩, Ne.symm ha⟩
   have := hall (Matrix.single c c 1) a c b
   simpa [Matrix.single_apply, hc, Ne.symm hc] using this
-
 
 /-! ### Matrices on one-point index types -/
 

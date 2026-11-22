@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.MatrixCoordinateInclusion
+import QICLean.Algebra.MatrixCoordinateInclusion
 import TNLean.MPS.Symmetry.ProjectiveDirectSum
 import Mathlib.Data.Fin.Embedding
 
@@ -16,8 +16,6 @@ Source: arXiv:1010.3732, Section II.F.2, `eq:1d-sym:jointsym`.
 -/
 
 open scoped Matrix
-
-namespace TNLean.Algebra
 
 /-- The first coordinate inclusion intertwines the projective direct sum
 with its first summand. Source: arXiv:1010.3732, Section II.F.2,
@@ -64,5 +62,3 @@ theorem ProjectiveRepresentation.directSum_coordinateInclusion_right
     Matrix.reindex_apply, Matrix.fromBlocks,
     ← finSumFinEquiv_apply_right, -finSumFinEquiv_apply_left,
     finSumFinEquiv.injective.eq_iff]
-
-end TNLean.Algebra

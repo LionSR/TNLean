@@ -48,19 +48,20 @@ theorem isGapped_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
     {E Delta : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hH : Φ.hamiltonian.IsHermitian)
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E Delta)
     (hspan : groundSpace Φ.hamiltonian E = Submodule.span ℂ {Γ}) (hDelta : 0 < Delta) :
-    ‖paddedGroundVector hi z Γ‖ = 1 ∧ IsGapped (∑ j, paddedInteraction hi z Φ j) E (min Delta 1) ∧
-      groundSpace (∑ j, paddedInteraction hi z Φ j) E =
+    ‖paddedGroundVector hi z Γ‖ = 1 ∧
+      IsGapped (Φ.padded hi fun _ ↦ ManyBody.siteBasisPenalty z).hamiltonian E (min Delta 1) ∧
+      groundSpace (Φ.padded hi fun _ ↦ ManyBody.siteBasisPenalty z).hamiltonian E =
         Submodule.span ℂ {paddedGroundVector hi z Γ} := by
   classical
+  let P := (Φ.padded hi fun _ ↦ ManyBody.siteBasisPenalty z).hamiltonian
   let e := leftConfigOfFinEquiv (q := q) hi
   let H := Φ.hamiltonian
   let b0 : (v : {v : Fin N // v ∉ leftBlock N L}) → Fin q := fun _ ↦ z
   let A := Matrix.reindex e e H
   let B := ManyBody.productBasisPenalty b0
   let c := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N L)
-  have hpad : ManyBody.cutOperator (leftBlock N L) (∑ j, paddedInteraction hi z Φ j) =
-      A ⊗ₖ 1 + 1 ⊗ₖ B := by
-    rw [sum_paddedInteraction hL hi z Φ]
+  have hpad : ManyBody.cutOperator (leftBlock N L) P = A ⊗ₖ 1 + 1 ⊗ₖ B := by
+    rw [show P = _ from hamiltonian_padded_siteBasisPenalty hL hi z Φ]
     change ManyBody.cutOperator (leftBlock N L)
         (ManyBody.placeAlong (X := fun _ ↦ Fin q) (Fin.castLEEmb hi) H) +
       ManyBody.cutOperator (leftBlock N L)
@@ -78,11 +79,9 @@ theorem isGapped_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
     (ManyBody.groundSpace_productBasisPenalty b0)
   rw [add_zero, ← hpad] at hgK hsK
   have hsP := ManyBody.groundSpace_reindex_eq_span c.symm hsK
-  rw [show Matrix.reindex c.symm c.symm (ManyBody.cutOperator (leftBlock N L)
-      (∑ j, paddedInteraction hi z Φ j)) = ∑ j, paddedInteraction hi z Φ j by
+  rw [show Matrix.reindex c.symm c.symm (ManyBody.cutOperator (leftBlock N L) P) = P by
     ext σ τ
-    exact congrArg₂ (∑ j, paddedInteraction hi z Φ j) (c.symm_apply_apply σ)
-      (c.symm_apply_apply τ)] at hsP
+    exact congrArg₂ P (c.symm_apply_apply σ) (c.symm_apply_apply τ)] at hsP
   refine ⟨(norm_paddedGroundVector hi z Γ).trans hΩ, (ManyBody.isGapped_reindex_iff c).mp hgK,
     hsP.trans ?_⟩
   congr 2

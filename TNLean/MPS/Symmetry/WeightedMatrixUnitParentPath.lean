@@ -36,13 +36,15 @@ spectral gap at least one for every real parameter. Source:
 arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/
 theorem hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N) :
-    (0 : ℂ) ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩;
+    (0 : ℂ) ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant N
       (normalizedBondInteraction D₀ D₁ γ)).hamiltonian ∧
-    ∀ z ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant hN
+    ∀ z ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant N
       (normalizedBondInteraction D₀ D₁ γ)).hamiltonian,
       0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
   have : NeZero N := ⟨by omega⟩
-  simpa only [normalizedBondInteraction, hamiltonian_translationInvariant_twoSiteBondPenalty] using
+  simpa only [normalizedBondInteraction,
+    hamiltonian_translationInvariant_twoSiteBondPenalty hN] using
     normalizedPhysicalBondInterpolation_parent_spectrum_gap_one h₀ h₁ γ (by omega : 1 ≤ N)
 
 /-- For a fixed bond parameter, affine interpolation to a covariant
@@ -52,9 +54,9 @@ Source: arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`,
 comparison of the fixed-point parent interactions. -/
 noncomputable def normalizedBondCanonicalParentComparisonPath
     {G : Type} [Group G] {D₀ D₁ E : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈
       Matrix.unitaryGroup (Fin D₀) ℂ)
@@ -64,9 +66,9 @@ noncomputable def normalizedBondCanonicalParentComparisonPath
     (horder : normalizedBondInteraction D₀ D₁ γ ≤
       LinearMap.toMatrix' (parentInteraction B 2))
     (hker : ∀ (N : ℕ) (hN : 2 ≤ N) (x : Cfg ((D₀ + D₁) * (D₀ + D₁)) N → ℂ),
-      (ManyBody.Interaction.translationInvariant hN
+      haveI : NeZero N := ⟨by omega⟩; (ManyBody.Interaction.translationInvariant N
           (normalizedBondInteraction D₀ D₁ γ)).hamiltonian.mulVec x = 0 →
-        (ManyBody.Interaction.translationInvariant hN
+        (ManyBody.Interaction.translationInvariant N
           (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian.mulVec x = 0)
     (hCov : ∀ g, GaugeEquiv B (rotatePhysical (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) B)) :
     SymmetricGappedInteractionPath
@@ -94,18 +96,20 @@ noncomputable def normalizedBondCanonicalParentComparisonPath
   case refine_3 =>
     intro N hN g
     have : NeZero N := ⟨by omega⟩
-    simpa only [normalizedBondInteraction, hamiltonian_translationInvariant_twoSiteBondPenalty,
+    simpa only [normalizedBondInteraction, hamiltonian_translationInvariant_twoSiteBondPenalty hN,
       sptFixedPointUnitaryAction, MonoidHom.codRestrict_apply, Subtype.coe_mk] using
       (normalizedPhysicalBondInterpolation_parent_commute_onSite
         ρ₀ ρ₁ h₀ h₁ g γ (by omega : 1 ≤ N)).symm
   case refine_2 =>
     exact ⟨1, zero_lt_one, fun N hN z hz =>
+      haveI : NeZero N := ⟨by omega⟩
       ((hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one
         hD₀ hD₁ γ hN).2 z hz).2⟩
   case refine_1 =>
     intro N hN
+    have : NeZero N := ⟨by omega⟩
     have hspec : (0 : ℂ) ∈ spectrum ℂ (Matrix.toEuclideanLin
-        (ManyBody.Interaction.translationInvariant hN
+        (ManyBody.Interaction.translationInvariant N
           (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) := by
       rw [Matrix.spectrum_toLpLin]
       exact (hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one
@@ -120,9 +124,9 @@ Source: arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`,
 comparison of the fixed-point parent interactions. -/
 noncomputable def weightedMatrixUnitParentComparisonPath
     {G : Type} [Group G] {D₀ D₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈
       Matrix.unitaryGroup (Fin D₀) ℂ)
@@ -149,9 +153,9 @@ Source: arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`.
 The endpoint tensors may have vanishing coefficients. -/
 noncomputable def weightedCanonicalFixedPointGappedPath
     {G : Type} [Group G] {D₀ D₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈
       Matrix.unitaryGroup (Fin D₀) ℂ)

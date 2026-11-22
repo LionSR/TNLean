@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicInvariant
 import TNLean.MPS.Core.GHZ
 import TNLean.MPS.Examples.CZX.CZXAnomalyClass
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
@@ -49,7 +49,7 @@ The conclusion `L_0 / L_1 = -1` of line 1335 is unchanged. Documented in
 noncomputable section
 
 open scoped Matrix Kronecker
-open TNLean.Algebra MPOTensor MPOTensor.GroupFamily MPSTensor
+open MPOTensor MPOTensor.GroupFamily MPSTensor
 
 namespace CZXCompression
 

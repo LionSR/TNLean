@@ -57,13 +57,13 @@ theorem fundamentalTheorem_periodic_proportional_irreducibleForm
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap
             (Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ))
-          (Kraus.transferMap (d := d) (D := P.basisDim j) (P.basis j))) = 1)
+          (Kraus.transferMap (ι := Fin d) (n := Fin (P.basisDim j)) (P.basis j))) = 1)
     (hIrrQ : ∀ k, Kraus.IsIrreducibleFamily (Q.basis k))
     (hRadQ : ∀ k,
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap
             (Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ))
-          (Kraus.transferMap (d := d) (D := Q.basisDim k) (Q.basis k))) = 1)
+          (Kraus.transferMap (ι := Fin d) (n := Fin (Q.basisDim k)) (Q.basis k))) = 1)
     (hNonRepP : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (P.basis i) (P.basis j))
     (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
     (hProp : NonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
@@ -100,13 +100,13 @@ theorem fundamentalTheorem_periodic_equalCase_derivedPeriods
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap
             (Matrix (Fin (P.basisDim j)) (Fin (P.basisDim j)) ℂ))
-          (Kraus.transferMap (d := d) (D := P.basisDim j) (P.basis j))) = 1)
+          (Kraus.transferMap (ι := Fin d) (n := Fin (P.basisDim j)) (P.basis j))) = 1)
     (hIrrQ : ∀ k, Kraus.IsIrreducibleFamily (Q.basis k))
     (hRadQ : ∀ k,
       spectralRadius ℂ
         ((Module.End.toContinuousLinearMap
             (Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ))
-          (Kraus.transferMap (d := d) (D := Q.basisDim k) (Q.basis k))) = 1)
+          (Kraus.transferMap (ι := Fin d) (n := Fin (Q.basisDim k)) (Q.basis k))) = 1)
     (hNonRepP : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (P.basis i) (P.basis j))
     (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
     (hSame : SameMPV₂Pos P.toTensor Q.toTensor) :

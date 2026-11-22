@@ -12,8 +12,9 @@ import QICLean.Analysis.ViableSubspaceCoordinates
 import QICLean.Analysis.WeightedProjection
 import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.Algebra.OperatorSchmidtPartition
-import TNLean.Algebra.CommonKernelSpectralGap
+import QICLean.ManyBody.Hamiltonian.KernelGap
 import QICLean.ManyBody.Sites.Twirl
+import QICLean.Algebra.MatrixToEuclidean
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeThreeRegion
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
@@ -755,7 +756,8 @@ theorem exists_frustrationFree_improving_family_words :
   have hform (y : EuclideanSpace ℂ (Fin L → Fin q)) :
       Complex.re ⟪y, H y⟫_ℂ ≤ Complex.re ⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ)
         (n := Fin L → Fin q) (∑ i, P i) y⟫_ℂ := by
-    have hpos := ContinuousLinearMap.le_def.mp (Matrix.toEuclideanCLM_le_of_le hle)
+    have hpos :=
+      ContinuousLinearMap.le_def.mp (Matrix.toEuclideanCLM_le_toEuclideanCLM_iff.mpr hle)
     have := hpos.re_inner_nonneg_right y
     simp only [_root_.sub_apply, inner_sub_right, map_sub] at this
     change 0 ≤ RCLike.re _ - RCLike.re _ at this

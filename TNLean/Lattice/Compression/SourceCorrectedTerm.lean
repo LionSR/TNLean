@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceCircuitSubstitution
-import TNLean.Algebra.MatrixDensitySum
+import QICLean.Algebra.MatrixDensitySum
 
 /-!
 # Corrected source terms on the original circuit

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.SPTFixedPoint
 import TNLean.MPS.Symmetry.MixedSymmetry
-import TNLean.Algebra.ConjugateRegularRepresentation
+import QICLean.Algebra.Cohomology.ConjugateRegularRepresentation
 
 /-!
 # Dimer SPT fixed points with time reversal and reflection
@@ -29,7 +29,7 @@ claimed at source line 1157. The deviation is documented in
 -/
 
 open scoped Matrix Kronecker
-open TNLean.Algebra
+open SymmetryParity ConjugateProjectiveRepresentation
 
 namespace MPSTensor
 
@@ -183,7 +183,7 @@ theorem mixedSptAction_mul [NeZero D]
     have hu : φ (g * h) = parityUnitary (t g) (φ h) * φ g := hφ g h
     have hc := congrArg (fun z : unitary ℂ => (z : ℂ)) hu
     simpa only [Submonoid.coe_mul, parityUnitary_coe, mul_comm] using hc
-  simp only [mixedSptAction, map_mul, hphase]
+  simp only [mixedSptAction, _root_.map_mul, hphase]
   exact (mixedSptMatrix_mul _ _ _ _ _ (ω (g, h) : ℂ) _ _ _
     (ρ.map_mul g h) (ρ.factor_unitary (Nat.pos_of_ne_zero (NeZero.ne D)) g h)).symm
 

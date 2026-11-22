@@ -70,9 +70,9 @@ theorem fullIntervalFilterTrimStep_normalized_affine_eq_raw
   exact fullIntervalFilterTrimStep_smul (Complex.ofReal_ne_zero.mpr (inv_ne_zero hnormal)) _ xi S
 
 /-- The actual positive chain supplies a normalized filter for its original
-full degenerate ground space. The physical two-value spectral convention
-makes the normalization positive. Supporting ALVV, arXiv:1602.08828v2,
-hypothesis (DG), lines 275–279, and final filter, lines 1620–1643. -/
+full degenerate ground space: the chain case of
+`Matrix.PosSemidef.normalized_affine_ground_filter_spec_of_norm`. Supporting ALVV,
+arXiv:1602.08828v2, hypothesis (DG), lines 275–279, and final filter, lines 1620–1643. -/
 theorem physical_dg_normalized_ground_filter_spec
     {L q : ℕ} (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (mu nu gamma : ℝ) (hgamma : 0 < gamma) :
@@ -90,29 +90,9 @@ theorem physical_dg_normalized_ground_filter_spec
       (∀ x ∈ G, K x = x) ∧
       (∀ x ∈ Gᗮ, K x ∈ Gᗮ) ∧
       ∀ x ∈ Gᗮ, ‖K x‖ ^ 2 ≤ (1 - c) * ‖x‖ ^ 2 := by
-  intro H hH hmu hnu hmunu hgap G M K c
-  have hupper : ∀ z ∈ spectrum ℝ H, z ≤ M := by
-    apply (le_algebraMap_iff_spectrum_le hH.isSelfAdjoint).mp
-    exact IsSelfAdjoint.le_algebraMap_norm_self H hH.isSelfAdjoint
-  have hE1 : mu + gamma ≤ M := by
-    rcases hgap nu hnu with heq | hexc
-    · exact False.elim (ne_of_gt hmunu heq)
-    · exact hexc.trans (hupper nu hnu)
-  have hden : 0 < M - mu := by linarith [hupper nu hnu]
-  have hmu0 : 0 ≤ mu := spectrum_nonneg_of_nonneg
-    (show 0 ≤ H from Finset.sum_nonneg fun i _ ↦ h0 i) hmu
-  have hM : 0 < M := by linarith
-  have hspectrum : ∀ z ∈ spectrum ℝ H, z = mu ∨ z ∈ Set.Icc (mu + gamma) M := by
-    intro z hz
-    exact (hgap z hz).elim Or.inl (fun he ↦ Or.inr ⟨he, hupper z hz⟩)
-  have hspec := hH.normalized_affine_ground_filter_spec
-    (by linarith : mu < mu + gamma) hE1 hspectrum
-  have hrate : (mu + gamma - mu) / (M - mu) = c := by
-    dsimp only [c]
-    congr 1
-    ring
-  rw [hrate] at hspec
-  exact ⟨hM, hden, hspec⟩
+  intro H hH hmu hnu hmunu hgap
+  exact Matrix.PosSemidef.normalized_affine_ground_filter_spec_of_norm
+    (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)) hgamma hmu hnu hmunu hgap
 
 /-- One actual physical filter and collective trim of the given root
 obeys the stable recurrence for the original full ground space. The

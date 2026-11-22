@@ -2,7 +2,7 @@
 
 Issue: #8318. Source: arXiv:2502.20257, lines 1927–1931, with the existing
 finite-discrete clarification in
-`docs/paper-gaps/fbc25_circle_complex_units_cohomology.tex`.
+<https://sirui-lu.com/QICLean/paper-gaps/fbc25_circle_complex_units_cohomology.pdf>.
 
 The circle coefficient object is now literally
 `Rep.ofMulDistribMulAction G Circle`. The existing scoped trivial action is

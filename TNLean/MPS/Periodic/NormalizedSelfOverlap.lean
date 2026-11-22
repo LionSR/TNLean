@@ -61,7 +61,7 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
     (hIrr : Kraus.IsIrreducibleFamily A)
     (hLeft : IsLeftCanonical A)
     (hSelf : Tendsto (fun N : ℕ ↦ mpvOverlap (d := d) A A N) atTop (nhds 1)) :
-    _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A) ∧ Kraus.IsNormal A := by
+    _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A) ∧ Kraus.IsNormal A := by
   classical
   obtain ⟨K, hUnital, hIrrK, ρ, hρpd, hρfix, rfl⟩ :=
     conjTranspose_kraus_setup A hLeft hIrr
@@ -69,16 +69,16 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
     Kraus.peripheralEigenvalues_eq_range_primitiveRoot
       (fun i ↦ (A i)ᴴ) hUnital ρ hρpd hρfix hIrrK
   let m : ℕ := (peripheralEigenvalues_finite
-    (f := Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ))).toFinset.card
+    (f := Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i ↦ (A i)ᴴ))).toFinset.card
   have hm' : 0 < m := by simpa [m] using hm
   have hγroot' : IsPrimitiveRoot γ m := by simpa [m] using hγroot
   have hPeriphK' :
-      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) =
+      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i ↦ (A i)ᴴ)) =
         Set.range (fun j : Fin m ↦ γ ^ (j : ℕ)) := by
     simpa [m] using hPeriphK
   have : NeZero m := ⟨hm'.ne'⟩
   have hKRoots :
-      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) =
+      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i ↦ (A i)ᴴ)) =
         {z : ℂ | z ^ m = 1} := by
     rw [hPeriphK']
     ext z
@@ -98,23 +98,23 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
   let : InnerProductSpace ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     Matrix.toMatrixInnerProductSpace (n := Fin D) (𝕜 := ℂ) 1 hM.posSemidef
   have hAdj :
-      Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ) =
-        (Kraus.transferMap (d := d) (D := D) A).adjoint := by
+      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i ↦ (A i)ᴴ) =
+        (Kraus.transferMap (ι := Fin d) (n := Fin D) A).adjoint := by
     simpa using (Kraus.mapLM_conjTranspose_eq_adjoint (K := A))
   have hPeriphA :
-      peripheralEigenvalues (Kraus.transferMap (d := d) (D := D) A) =
+      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) =
         {z : ℂ | z ^ m = 1} := by
     ext z
     constructor
     · rintro ⟨hzEig, hzNorm⟩
       have hstarEig : Module.End.HasEigenvalue
-          (Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) (star z) := by
+          (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i ↦ (A i)ᴴ)) (star z) := by
         rw [hAdj]
         exact (Module.End.hasEigenvalue_adjoint_iff
-          (E := Kraus.transferMap (d := d) (D := D) A) (μ := z)).1 hzEig
+          (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) (μ := z)).1 hzEig
       have hstarMem : star z ∈
           peripheralEigenvalues
-            (Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) := by
+            (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i ↦ (A i)ᴴ)) := by
         exact ⟨hstarEig, by simpa using hzNorm⟩
       have hstarPow : (star z) ^ m = 1 := by
         simpa [hKRoots] using hstarMem
@@ -126,14 +126,14 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
         simpa using this
       have hstarMem : star z ∈
           peripheralEigenvalues
-            (Kraus.transferMap (d := d) (D := D) (fun i ↦ (A i)ᴴ)) := by
+            (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i ↦ (A i)ᴴ)) := by
         rw [hKRoots]
         exact hstarPow
       rcases hstarMem with ⟨hstarEig, hstarNorm⟩
       have hzEig : Module.End.HasEigenvalue
-          (Kraus.transferMap (d := d) (D := D) A) z := by
+          (Kraus.transferMap (ι := Fin d) (n := Fin D) A) z := by
         apply (Module.End.hasEigenvalue_adjoint_iff
-          (E := Kraus.transferMap (d := d) (D := D) A) (μ := z)).2
+          (E := Kraus.transferMap (ι := Fin d) (n := Fin D) A) (μ := z)).2
         simpa [hAdj] using hstarEig
       exact ⟨hzEig, by simpa using hstarNorm⟩
   have hPeriodic : IsPeriodic m A :=
@@ -152,7 +152,7 @@ theorem isPrimitive_and_isNormal_of_irreducible_leftCanonical_selfOverlap_tendst
     tendsto_nhds_unique (periodicSelfOverlap_tendsto A hPeriodic) hSubsequenceOne
   have hmOne : m = 1 := by exact_mod_cast hmComplex
   rw [hmOne] at hPeriodic
-  have hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A) :=
+  have hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
     ((IsPeriodic.one_iff_primitive A).1 hPeriodic).2.2
   exact ⟨hPrim, isNormal_of_tp_primitive_irreducible A hLeft hPrim hIrr⟩
 

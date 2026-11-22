@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Projective
 import TNLean.PEPS.NormalPhysicalSymmetry
-import TNLean.Algebra.ProjectiveRepresentation
+import QICLean.Algebra.Cohomology.ProjectiveRepresentation
 
 /-!
 # Projective bond representations of a normal tensor network
@@ -115,7 +115,7 @@ end TNLean.PEPS
 
 namespace TNLean.PEPS
 
-open TNLean.Lattice TNLean.Algebra
+open TNLean.Lattice
 open scoped BigOperators Matrix
 
 variable {V : Type*} [Fintype V] [LinearOrder V]

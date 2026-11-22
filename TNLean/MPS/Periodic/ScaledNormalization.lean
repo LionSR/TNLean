@@ -58,15 +58,15 @@ theorem exists_leftCanonical_periodic_scale_of_irreducible
       IsPeriodic m B := by
   classical
   obtain ⟨ρ, r, hρ, hr, hEig⟩ := exists_posDef_transferMap_eigenvector_of_irreducible A hIrr hA
-  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) :=
+  have hIrrMap : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) :=
     Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr
   have hRad :
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-            (Kraus.transferMap (d := d) (D := D) A)) =
+            (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) =
         ENNReal.ofReal r :=
     spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
-      (Kraus.transferMap (d := d) (D := D) A) (Kraus.transferMap_isCPMap A) hIrrMap ρ r hρ hr hEig
+      (Kraus.transferMap A) (Kraus.transferMap_isCPMap A) hIrrMap ρ r hρ hr hEig
   set ζ : ℂ := (↑((Real.sqrt r)⁻¹) : ℂ) with hζ_def
   have hsqrt_pos : 0 < Real.sqrt r := Real.sqrt_pos.2 hr
   have hζ : ζ ≠ 0 := by
@@ -79,7 +79,7 @@ theorem exists_leftCanonical_periodic_scale_of_irreducible
   have hRadScaled :
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-            (Kraus.transferMap (d := d) (D := D) (fun i => ζ • A i))) = 1 := by
+            (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => ζ • A i))) = 1 := by
     rw [spectralRadius_transferMap_smul ζ hζ A, hRad]
     have hval : ‖ζ‖ ^ 2 * r = 1 := by
       rw [hnormζ, inv_pow, Real.sq_sqrt hr.le]

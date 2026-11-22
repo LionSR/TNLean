@@ -7,7 +7,7 @@ import QICLean.Analysis.MatrixFamilySupport
 import TNLean.MPS.MPDO.BNTLayerOrthogonality
 import TNLean.MPS.MPDO.PhysicalSectorProductRealization
 import TNLean.MPS.MPDO.PhysicalSectorVirtualSpanning
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Supports of active physical-sector factors

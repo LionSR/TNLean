@@ -95,7 +95,7 @@ is `1`.  The conclusion is obtained by the following implications:
 theorem isNormal_of_tp_primitive_irreducible [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A))
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
     (hIrr : Kraus.IsIrreducibleFamily A) :
     Kraus.IsNormal A := by
   -- Step 1: TP normalization, peripheral primitivity, and irreducibility give
@@ -136,7 +136,7 @@ The blocking length is positive by the definition of normality. -/
 theorem exists_pos_blockTensor_isInjective_of_tp_primitive_irreducible [NeZero D]
     (A : MPSTensor d D)
     (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A))
+    (hPrim : _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
     (hIrr : Kraus.IsIrreducibleFamily A) :
     ∃ L : ℕ, 0 < L ∧ Kraus.IsInjective (blockTensor A L) := by
   obtain ⟨L, hLpos, hL⟩ := isNormal_of_tp_primitive_irreducible A hTP hPrim hIrr
@@ -265,14 +265,14 @@ theorem exists_common_isNBlkInjective_of_isNormal_leftCanonical
   classical
   have : ∀ k : Fin r, NeZero (dim k) := fun k => ⟨hNonzero k⟩
   have hBlock : ∀ k : Fin r, ∃ L : ℕ, 0 < L ∧ L ≤ (dim k) ^ 4 ∧
-      Kraus.IsInjective (blockTensor (d := d) (D := dim k) (blocks k) L) := by
+      Kraus.IsInjective (blockTensor (d := d) (n := Fin (dim k)) (blocks k) L) := by
     intro k
     exact exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
       (blocks k) (hLeft k) (hNormal k)
   let L : Fin r → ℕ := fun k => Classical.choose (hBlock k)
   have hL_pos : ∀ k, 0 < L k := fun k => (Classical.choose_spec (hBlock k)).1
   have hL_inj : ∀ k,
-      Kraus.IsInjective (blockTensor (d := d) (D := dim k) (blocks k) (L k)) :=
+      Kraus.IsInjective (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (L k)) :=
     fun k => (Classical.choose_spec (hBlock k)).2.2
   refine ⟨∏ k : Fin r, L k, Finset.prod_pos fun k _ => hL_pos k, ?_⟩
   intro k
@@ -298,7 +298,7 @@ Taking `n = N` in (2) and using (1) with `m = P`: `Kraus.wordSpan A (N * P) = �
 `Kraus.wordSpan (blockTensor A P) N ⊇ Kraus.wordSpan A (N * P) = ⊤`. -/
 theorem isNormal_blockTensor_of_isNormal
     (A : MPSTensor d D) {P : ℕ} (hP : 0 < P) (hN : Kraus.IsNormal A) :
-    Kraus.IsNormal (d := blockPhysDim d P) (D := D) (blockTensor (d := d) (D := D) A P) := by
+    Kraus.IsNormal (blockTensor (d := d) (n := Fin D) A P) := by
   obtain ⟨N, hNpos, hNblk⟩ := hN
   have hwordN : Kraus.wordSpan A N = ⊤ :=
     (wordSpan_eq_top_iff_isNBlkInjective A N).mpr hNblk
@@ -306,13 +306,13 @@ theorem isNormal_blockTensor_of_isNormal
     Kraus.wordSpan_top_of_mul A hwordN P hP
   -- Kraus.wordSpan A (N * P) ≤ Kraus.wordSpan (blockTensor A P) N
   have hle : Kraus.wordSpan A (N * P) ≤
-      Kraus.wordSpan (blockTensor (d := d) (D := D) A P) N :=
+      Kraus.wordSpan (blockTensor (d := d) (n := Fin D) A P) N :=
     wordSpan_le_wordSpan_blockTensor A P N
   have hwordNP' : Kraus.wordSpan A (N * P) = ⊤ := by rwa [Nat.mul_comm] at hwordNP
   rw [hwordNP'] at hle
   refine ⟨N, hNpos, ?_⟩
   exact (wordSpan_eq_top_iff_isNBlkInjective
-    (blockTensor (d := d) (D := D) A P) N).mp (eq_top_iff.mpr hle)
+    (blockTensor (d := d) (n := Fin D) A P) N).mp (eq_top_iff.mpr hle)
 
 
 namespace IsNormalCanonicalFormBNT
@@ -340,10 +340,10 @@ theorem exists_common_blockTensor_isInjective
     (h : IsNormalCanonicalFormBNT (d := d) μ blocks) :
     ∃ L : ℕ, 0 < L ∧
       ∀ k : Fin r,
-        Kraus.IsInjective (blockTensor (d := d) (D := dim k) (blocks k) L) := by
+        Kraus.IsInjective (blockTensor (d := d) (n := Fin (dim k)) (blocks k) L) := by
   classical
   have hBlock : ∀ k : Fin r, ∃ L : ℕ, 0 < L ∧ L ≤ (dim k) ^ 4 ∧
-      Kraus.IsInjective (blockTensor (d := d) (D := dim k) (blocks k) L) := by
+      Kraus.IsInjective (blockTensor (d := d) (n := Fin (dim k)) (blocks k) L) := by
     intro k
     exact MPSTensor.exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
       (blocks k) (h.leftCanonical k)
@@ -352,7 +352,7 @@ theorem exists_common_blockTensor_isInjective
   let L : Fin r → ℕ := fun k => Classical.choose (hBlock k)
   have hL_pos : ∀ k, 0 < L k := fun k => (Classical.choose_spec (hBlock k)).1
   have hL_inj : ∀ k,
-      Kraus.IsInjective (blockTensor (d := d) (D := dim k) (blocks k) (L k)) :=
+      Kraus.IsInjective (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (L k)) :=
     fun k => (Classical.choose_spec (hBlock k)).2.2
   refine ⟨∏ k : Fin r, L k, Finset.prod_pos fun k _ => hL_pos k, ?_⟩
   intro k
@@ -392,9 +392,9 @@ theorem exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT
     (hB : IsNormalCanonicalFormBNT (d := d) μB blocksB) :
     ∃ L : ℕ, 0 < L ∧
       (∀ j : Fin rA,
-        Kraus.IsInjective (blockTensor (d := d) (D := dimA j) (blocksA j) L)) ∧
+        Kraus.IsInjective (blockTensor (d := d) (n := Fin (dimA j)) (blocksA j) L)) ∧
       (∀ k : Fin rB,
-        Kraus.IsInjective (blockTensor (d := d) (D := dimB k) (blocksB k) L)) := by
+        Kraus.IsInjective (blockTensor (d := d) (n := Fin (dimB k)) (blocksB k) L)) := by
   obtain ⟨LA, hLA_pos, hLA⟩ :=
     IsNormalCanonicalFormBNT.exists_common_blockTensor_isInjective hA
   obtain ⟨LB, hLB_pos, hLB⟩ :=

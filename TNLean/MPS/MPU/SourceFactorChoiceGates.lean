@@ -3,12 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.UnitaryKronecker
+import QICLean.Algebra.UnitaryKronecker
 import TNLean.MPS.MPU.SourceFactorChoice
 import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPU.FundamentalTheoremGatesNecessity
 import TNLean.MPS.MPU.FundamentalTheoremGatesBlocked
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # The gate statements for every choice of compact decompositions

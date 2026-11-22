@@ -124,9 +124,10 @@ common MPO at every ring length at least two. The realization is on the active
 space; no realization on the enlarged space or adjoint-closure premise is assumed. -/
 theorem hamiltonian_arbitraryPhysicalMixedWeakHopfParent_commute
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedWeakHopfParent A₀ A₁ W γ)).hamiltonian
       (MPOTensor.mpo (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) N) := by
+  have : NeZero N := ⟨by omega⟩
   rw [arbitraryPhysicalMixedWeakHopfParent_eq
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ W hInj₀ hInj₁ h₀ h₁ hW hγ]
   apply hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
@@ -143,11 +144,12 @@ the already established mixed parent path; no gap is asserted for the literal
 uncompleted average. -/
 theorem exists_uniform_arbitraryPhysicalMixedWeakHopfParent_gap :
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ γ : unitInterval, ∀ N : ℕ, ∀ hN : 2 ≤ N,
+      haveI : NeZero N := ⟨by omega⟩;
       ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN
+        (Interaction.translationInvariant N
             (arbitraryPhysicalMixedWeakHopfParent A₀ A₁ W γ)).hamiltonian))ᗮ,
         δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-          (Interaction.translationInvariant hN
+          (Interaction.translationInvariant N
               (arbitraryPhysicalMixedWeakHopfParent A₀ A₁ W γ)).hamiltonian v‖ := by
   obtain ⟨δ, hδ, hδ₁, hg⟩ := exists_uniform_arbitraryPhysicalMixed_periodic_path_gap
     A₀ A₁ hInj₀ hInj₁

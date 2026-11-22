@@ -7,7 +7,7 @@ import TNLean.PEPS.AreaLaw.Amplification.ChannelWordOmission
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelEventError
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelPoissonGrowth
 import TNLean.PEPS.AreaLaw.Amplification.GraphOmittedAnchorTail
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Spatial omission bounds for physical channel words

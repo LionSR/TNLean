@@ -71,7 +71,9 @@ original prefix from a viable witness.
 
 \begin{definition}[The padded nearest-neighbour interaction]
     \label{def:lvv_padded_interaction}
-    \lean{TNLean.MPS.AreaLaw.paddedInteraction,TNLean.MPS.AreaLaw.paddingBondEquiv}
+    \lean{ManyBody.BondInteraction.padded,
+        ManyBody.BondInteraction.padded_term_of_lt,
+        ManyBody.BondInteraction.padded_term_of_le}
     \leanok
     Let $1\le L\le N$, fix a basis level $z$, and let $h_j$ be interactions
     on the first $L$ sites. For $0\le j<N-1$, define
@@ -89,11 +91,14 @@ original prefix from a viable witness.
 
 \begin{lemma}[Interval supports under prefix placement]
     \label{thm:lvv_prefix_support}
-    \lean{TNLean.MPS.AreaLaw.isSupportedOn_placeAlong_castLEEmb}
+    \lean{ManyBody.placeAlong_mem_supportedOperators_map}
     \leanok
     \uses{lem:qc_placed_operators}
-    Placing an operator from the first $L$ sites into the first $L$ sites of
-    a longer chain preserves each interval support $[a,b)$.
+    An operator supported on a set $S$ of sites, placed along an embedding
+    of the sites into a larger system, is supported on the image of $S$.
+    In particular, placing an operator from the first $L$ sites into the
+    first $L$ sites of a longer chain preserves each interval support
+    $[a,b)$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -104,9 +109,9 @@ original prefix from a viable witness.
 
 \begin{lemma}[Support, order and sum of the padded interaction]
     \label{thm:lvv_padded_interaction_sum}
-    \lean{TNLean.MPS.AreaLaw.paddedInteraction_supported,
-        TNLean.MPS.AreaLaw.paddedInteraction_nonneg_le_one,
-        TNLean.MPS.AreaLaw.sum_paddedInteraction}
+    \lean{ManyBody.BondInteraction.padded_term_nonneg,
+        ManyBody.BondInteraction.padded_term_le_one,
+        ManyBody.BondInteraction.hamiltonian_padded}
     \leanok
     \uses{def:lvv_padded_interaction,thm:lvv_prefix_support,
         thm:lvv_placement_order,thm:lvv_product_basis_penalty}

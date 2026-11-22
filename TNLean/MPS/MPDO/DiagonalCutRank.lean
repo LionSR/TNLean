@@ -21,7 +21,7 @@ arXiv:1704.06507, it gives the stronger classical estimate
 $I(X:Y) \leq 2\log D$.  The information-versus-rank theorem is formalized in
 `TNLean.Entropy.ClassicalMutualInformation`; rank invariance under scalar
 normalization is supplied by Mathlib, while scalar extension is proved in
-`TNLean.Algebra.MatrixRankBaseChange`.
+`QICLean.Algebra.MatrixRankBaseChange`.
 
 ## Main definitions
 

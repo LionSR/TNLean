@@ -145,16 +145,17 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (γ : unitInterval) (hN : 2 ≤ N) :
-    LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
+      (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian) =
       Submodule.span ℂ {(WithLp.toLp 2
         (mpv (N := N) (arbitraryPhysicalMixedInterpolation A₀ A₁ γ)))} := by
+  have : NeZero N := ⟨by omega⟩
   rw [arbitraryPhysicalMixedInteraction,
     isometricInteractionExtension_ker_eq_map_of_posSemidef _
       (commonFixedPointInclusion_isometry _ d₀ d₁)
       (mixedEndpointInteractionMatrix_posSemidef _ _ γ) hN,
-    ← periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian,
+    ← periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian _ hN,
     toEuclideanLin_mixedEndpointInteractionMatrix,
     mixedEndpoint_periodic_ker_eq_range_periodicMpvLineMap _ _
       (isInjective_polarPosTensor h₀) (isInjective_polarPosTensor h₁) γ hN]
@@ -179,9 +180,10 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_finrank
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (γ : unitInterval) (hN : 2 ≤ N) :
-    Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
+      (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian)) = 1 := by
+  have : NeZero N := ⟨by omega⟩
   rw [arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv A₀ A₁ h₀ h₁ γ hN]
   apply finrank_span_singleton
   intro hzero
@@ -199,21 +201,23 @@ theorem exists_uniform_arbitraryPhysicalMixed_periodic_path_gap
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁) :
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ γ : unitInterval, ∀ N : ℕ, ∀ hN : 2 ≤ N,
+      haveI : NeZero N := ⟨by omega⟩;
       ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN
+        (Interaction.translationInvariant N
           (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian))ᗮ,
         δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-          (Interaction.translationInvariant hN
+          (Interaction.translationInvariant N
             (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian v‖ := by
   obtain ⟨δ, hδ, hgap⟩ := exists_uniform_mixedEndpoint_periodic_path_gap
     (polarPosTensor A₀) (polarPosTensor A₁)
     (isInjective_polarPosTensor h₀) (isInjective_polarPosTensor h₁)
   refine ⟨min δ 1, lt_min hδ zero_lt_one, min_le_right _ _, ?_⟩
   intro γ N hN
+  have : NeZero N := ⟨by omega⟩
   apply isometricInteractionExtension_norm_gap _
     (commonFixedPointInclusion_isometry _ d₀ d₁)
     (mixedEndpointInteractionMatrix_posSemidef _ _ γ) hN hδ.le
-  rw [← periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian,
+  rw [← periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian _ hN,
     toEuclideanLin_mixedEndpointInteractionMatrix]
   exact hgap γ N hN
 

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.CommonKernelSpectralGap
+import QICLean.ManyBody.Hamiltonian.KernelGap
 import TNLean.MPS.Symmetry.InteractionHamiltonianSymmetry
 import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
 import TNLean.MPS.ParentHamiltonian.CompactParentGap
@@ -82,14 +82,17 @@ theorem hamiltonian_translationInvariant_parent_spectrum_gap
     (hN : 2 ≤ N) {δ : ℝ}
     (hGap : ∀ v ∈ (LinearMap.ker (parentHamiltonianES A 2 N))ᗮ,
       δ * ‖v‖ ≤ ‖parentHamiltonianES A 2 N v‖) :
-    let H := (ManyBody.Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩
+    let H := (ManyBody.Interaction.translationInvariant N
       (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian
     (0 : ℂ) ∈ spectrum ℂ H ∧
       ∀ z ∈ spectrum ℂ H, 0 ≤ z.re ∧ (z.re = 0 ∨ δ ≤ z.re) := by
-  let H := (ManyBody.Interaction.translationInvariant hN
+  have : NeZero N := ⟨by omega⟩
+  let H := (ManyBody.Interaction.translationInvariant N
     (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian
-  have hH : parentHamiltonianES A 2 N = Matrix.toEuclideanLin H :=
-    parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow A hN
+  have hH : parentHamiltonianES A 2 N = Matrix.toEuclideanLin H := by
+    simp only [H, ManyBody.Interaction.hamiltonian_translationInvariant_of_le _ hN]
+    exact parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow A hN
   constructor
   · change (0 : ℂ) ∈ spectrum ℂ H
     rw [← Matrix.spectrum_toLpLin (p := 2)]

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointInterpolation
 import TNLean.MPS.Core.TracePairing
-import TNLean.Algebra.InjectiveRangeProjectorContinuity
+import QICLean.Analysis.InjectiveRangeProjector
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 
 /-!

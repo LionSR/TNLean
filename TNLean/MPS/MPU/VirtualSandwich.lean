@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import TNLean.MPS.MPU.SourceCuts
 import Mathlib.Topology.Instances.Matrix
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Virtual sandwiching of an MPO tensor

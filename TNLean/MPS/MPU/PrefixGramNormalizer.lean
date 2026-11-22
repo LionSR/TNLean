@@ -8,7 +8,7 @@ import QICLean.Algebra.MatrixUnitaryBetween
 import Mathlib.LinearAlgebra.Matrix.Vec
 import Mathlib.Analysis.Matrix.PosDef
 import TNLean.MPS.MPU.AffineGramHull
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Global normalization of MPU prefix Grams

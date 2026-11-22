@@ -8,7 +8,7 @@ import Mathlib.RingTheory.SimpleModule.Basic
 import Mathlib.LinearAlgebra.Basis.VectorSpace
 import Mathlib.LinearAlgebra.Dimension.Finrank
 import Mathlib.Analysis.Complex.Polynomial.Basic
-import TNLean.Algebra.WordAlgebra
+import QICLean.Algebra.WordAlgebra
 import TNLean.MPS.FundamentalTheorem.Reduction.WordModule
 
 /-!

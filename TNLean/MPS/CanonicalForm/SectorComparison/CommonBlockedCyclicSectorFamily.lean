@@ -64,13 +64,13 @@ structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
     ∑ i : Fin (blockPhysDim d (period k)), (sectorBlocks k s i)ᴴ * sectorBlocks k s i = 1
   /-- Each period-blocked nonzero-weight block is represented by its unit-weight cyclic sectors. -/
   sector_same : ∀ k,
-    SameMPV₂ (blockTensor (d := d) (D := dim k) (blocks k) (period k))
+    SameMPV₂ (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k))
       (toTensorFromBlocks (d := blockPhysDim d (period k))
         (μ := fun _ : Fin (period k) => (1 : ℂ)) (sectorBlocks k))
   /-- The sector transfer maps are primitive before later reblocking. -/
   sector_primitive : ∀ k s,
     _root_.IsPrimitive
-      (Kraus.transferMap (d := blockPhysDim d (period k)) (D := sectorDim k s)
+      (Kraus.transferMap (ι := Fin (blockPhysDim d (period k))) (n := Fin (sectorDim k s))
         (sectorBlocks k s))
   /-- The sector blocks are tensor-irreducible before later reblocking. -/
   sector_irreducible : ∀ k s, Kraus.IsIrreducibleFamily (sectorBlocks k s)
@@ -84,13 +84,13 @@ structure CommonBlockedCyclicSectorFamily {d r : ℕ} {dim : Fin r → ℕ}
   nested_same : ∀ k,
     SameMPV₂
       (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (blockPhysDim_nested_eq k))
-        (blockTensor (d := blockPhysDim d (period k)) (D := dim k)
-          (blockTensor (d := d) (D := dim k) (blocks k) (period k)) (extra k)))
+        (blockTensor (d := blockPhysDim d (period k)) (n := Fin (dim k))
+          (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (period k)) (extra k)))
       (toTensorFromBlocks (d := blockPhysDim d p)
         (μ := fun _ : Fin (period k) => (1 : ℂ))
         (fun s => cast
           (congr_arg (fun d' => MPSTensor d' (sectorDim k s)) (blockPhysDim_nested_eq k))
-          (blockTensor (d := blockPhysDim d (period k)) (D := sectorDim k s)
+          (blockTensor (d := blockPhysDim d (period k)) (n := Fin (sectorDim k s))
             (sectorBlocks k s) (extra k))))
 
 namespace CommonBlockedCyclicSectorFamily
@@ -109,7 +109,7 @@ noncomputable def commonSectorBlock (F : CommonBlockedCyclicSectorFamily blocks)
     MPSTensor (blockPhysDim d F.p) (F.sectorDim k s) :=
   cast (congr_arg (fun d' => MPSTensor d' (F.sectorDim k s))
       (F.blockPhysDim_nested_eq k))
-    (blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+    (blockTensor (d := blockPhysDim d (F.period k)) (n := Fin (F.sectorDim k s))
       (F.sectorBlocks k s) (F.extra k))
 
 /-- Bond dimensions of the derived flattened common-sector family. -/
@@ -139,7 +139,7 @@ noncomputable def commonReindexedBlock (F : CommonBlockedCyclicSectorFamily bloc
     (k : Fin r) : MPSTensor (blockPhysDim d F.p) (dim k) :=
   cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
     (Kraus.reindexPhysical (iteratedBlockIndex d (F.period k) (F.extra k))
-      (blockTensor (d := d) (D := dim k) (blocks k) (F.period k * F.extra k)))
+      (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (F.period k * F.extra k)))
 
 /-- The derived flattened sector weights obtained from the original nonzero weights after
 blocking by the common length. -/
@@ -152,7 +152,7 @@ private theorem commonSectorBlock_structural (F : CommonBlockedCyclicSectorFamil
     (∑ i : Fin (blockPhysDim d F.p),
       (F.commonSectorBlock k s i)ᴴ * F.commonSectorBlock k s i = 1) ∧
     _root_.IsPrimitive
-      (Kraus.transferMap (d := blockPhysDim d F.p) (D := F.sectorDim k s)
+      (Kraus.transferMap (ι := Fin (blockPhysDim d F.p)) (n := Fin (F.sectorDim k s))
         (F.commonSectorBlock k s)) ∧
     Kraus.IsIrreducibleFamily (F.commonSectorBlock k s) := by
   have : NeZero (F.sectorDim k s) := ⟨Nat.ne_of_gt (F.sector_dim_pos k s)⟩
@@ -162,15 +162,15 @@ private theorem commonSectorBlock_structural (F : CommonBlockedCyclicSectorFamil
     (F.sector_irreducible k s) (hk := F.extra_pos k)
   refine ⟨?_, ?_, ?_⟩
   · have hcast := (leftCanonical_cast_physDim (F.blockPhysDim_nested_eq k)
-      (A := blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+      (A := blockTensor (d := blockPhysDim d (F.period k)) (n := Fin (F.sectorDim k s))
         (F.sectorBlocks k s) (F.extra k))).2 hExtra.1
     simpa [commonSectorBlock] using hcast
   · have hcast := (isPrimitive_transferMap_cast_physDim (F.blockPhysDim_nested_eq k)
-      (A := blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+      (A := blockTensor (d := blockPhysDim d (F.period k)) (n := Fin (F.sectorDim k s))
         (F.sectorBlocks k s) (F.extra k))).2 hExtra.2.1
     simpa [commonSectorBlock] using hcast
   · have hcast := (isIrreducibleTensor_cast_physDim (F.blockPhysDim_nested_eq k)
-      (A := blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+      (A := blockTensor (d := blockPhysDim d (F.period k)) (n := Fin (F.sectorDim k s))
         (F.sectorBlocks k s) (F.extra k))).2 hExtra.2.2
     simpa [commonSectorBlock] using hcast
 
@@ -184,16 +184,16 @@ theorem reindexed_sameMPV₂
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     SameMPV₂
       (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
-        (blockTensor (d := blockPhysDim d (F.period k)) (D := dim k)
-          (blockTensor (d := d) (D := dim k) (blocks k) (F.period k)) (F.extra k)))
+        (blockTensor (d := blockPhysDim d (F.period k)) (n := Fin (dim k))
+          (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (F.period k)) (F.extra k)))
       (F.commonReindexedBlock k) := by
   have h := sameMPV₂_blockTensor_blockTensor_mul_reindex
     (d := d) (D := dim k) (A := blocks k) (m := F.period k) (n := F.extra k)
   exact (sameMPV₂_cast_physDim (F.blockPhysDim_nested_eq k)
-    (A := blockTensor (d := blockPhysDim d (F.period k)) (D := dim k)
-      (blockTensor (d := d) (D := dim k) (blocks k) (F.period k)) (F.extra k))
+    (A := blockTensor (d := blockPhysDim d (F.period k)) (n := Fin (dim k))
+      (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (F.period k)) (F.extra k))
     (B := Kraus.reindexPhysical (iteratedBlockIndex d (F.period k) (F.extra k))
-      (blockTensor (d := d) (D := dim k) (blocks k) (F.period k * F.extra k)))).2 h
+      (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (F.period k * F.extra k)))).2 h
 
 /-- A relabeled nonzero-weight block is represented by its common-alphabet cyclic sectors. -/
 private theorem commonReindexedBlock_sameMPV₂_commonSectorTensor
@@ -203,21 +203,21 @@ private theorem commonReindexedBlock_sameMPV₂_commonSectorTensor
   calc
     mpv (F.commonReindexedBlock k) σ =
         mpv (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
-          (blockTensor (d := blockPhysDim d (F.period k)) (D := dim k)
-            (blockTensor (d := d) (D := dim k) (blocks k) (F.period k)) (F.extra k))) σ :=
+          (blockTensor (d := blockPhysDim d (F.period k)) (n := Fin (dim k))
+            (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (F.period k)) (F.extra k))) σ :=
       ((F.reindexed_sameMPV₂ k) N σ).symm
     _ = mpv (F.commonSectorTensor k) σ := by
       change
         mpv (cast (congr_arg (fun d' => MPSTensor d' (dim k)) (F.blockPhysDim_nested_eq k))
-            (blockTensor (d := blockPhysDim d (F.period k)) (D := dim k)
-              (blockTensor (d := d) (D := dim k) (blocks k) (F.period k))
+            (blockTensor (d := blockPhysDim d (F.period k)) (n := Fin (dim k))
+              (blockTensor (d := d) (n := Fin (dim k)) (blocks k) (F.period k))
               (F.extra k))) σ =
           mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
             (μ := fun _ : Fin (F.period k) => (1 : ℂ))
             (fun s =>
               cast (congr_arg (fun d' => MPSTensor d' (F.sectorDim k s))
                   (F.blockPhysDim_nested_eq k))
-                (blockTensor (d := blockPhysDim d (F.period k)) (D := F.sectorDim k s)
+                (blockTensor (d := blockPhysDim d (F.period k)) (n := Fin (F.sectorDim k s))
                   (F.sectorBlocks k s) (F.extra k)))) σ
       exact F.nested_same k N σ
 
@@ -428,7 +428,7 @@ private theorem blockTensor_eq_commonReindexedBlock_of_word_eq
         wordOfBlock d (F.period k * F.extra k)
           (iteratedBlockIndex d (F.period k) (F.extra k)
             (Fin.cast ((F.blockPhysDim_nested_eq k).symm) i))) :
-    blockTensor (d := d) (D := dim k) (blocks k) F.p = F.commonReindexedBlock k := by
+    blockTensor (d := d) (n := Fin (dim k)) (blocks k) F.p = F.commonReindexedBlock k := by
   funext i
   rw [commonReindexedBlock, cast_physDim_apply (F.blockPhysDim_nested_eq k)]
   change Kraus.evalWord (blocks k) (Kraus.wordOfBlock d F.p i) =
@@ -444,7 +444,7 @@ direct word. -/
 private theorem blockTensor_eq_commonReindexedBlock_of_groupedBlockCastAgrees
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r)
     (hCast : F.groupedBlockCastAgrees k) :
-    blockTensor (d := d) (D := dim k) (blocks k) F.p = F.commonReindexedBlock k :=
+    blockTensor (d := d) (n := Fin (dim k)) (blocks k) F.p = F.commonReindexedBlock k :=
   F.blockTensor_eq_commonReindexedBlock_of_word_eq k
     (F.wordOfBlock_eq_iteratedBlockIndex_of_groupedBlockCastAgrees k hCast)
 
@@ -454,7 +454,7 @@ private theorem blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastA
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r)
     (hCast : F.groupedBlockCastAgrees k) :
     SameMPV₂
-      (blockTensor (d := d) (D := dim k) (blocks k) F.p)
+      (blockTensor (d := d) (n := Fin (dim k)) (blocks k) F.p)
       (F.commonReindexedBlock k) := by
   rw [F.blockTensor_eq_commonReindexedBlock_of_groupedBlockCastAgrees k hCast]
   intro N σ
@@ -465,23 +465,23 @@ private theorem sameMPV₂_weightedCanonicalBlock_commonReindexedBlock_of_blockw
     (F : CommonBlockedCyclicSectorFamily blocks) (μ : Fin r → ℂ)
     (hBlock : ∀ k : Fin r,
       SameMPV₂
-        (blockTensor (d := d) (D := dim k) (blocks k) F.p)
+        (blockTensor (d := d) (n := Fin (dim k)) (blocks k) F.p)
         (F.commonReindexedBlock k)) :
     SameMPV₂
       (toTensorFromBlocks (d := blockPhysDim d F.p)
         (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
+        (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) F.p))
       (toTensorFromBlocks (d := blockPhysDim d F.p)
         (μ := fun k : Fin r => (μ k) ^ F.p) F.commonReindexedBlock) := by
   intro N σ
   calc
     mpv (toTensorFromBlocks (d := blockPhysDim d F.p)
         (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p)) σ
+        (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) F.p)) σ
         = ∑ k : Fin r, ((μ k) ^ F.p) ^ N •
-            mpv (blockTensor (d := d) (D := dim k) (blocks k) F.p) σ :=
+            mpv (blockTensor (d := d) (n := Fin (dim k)) (blocks k) F.p) σ :=
           mpv_toTensorFromBlocks_eq_sum (fun k : Fin r => (μ k) ^ F.p)
-            (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p) σ
+            (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) F.p) σ
     _ = ∑ k : Fin r, ((μ k) ^ F.p) ^ N • mpv (F.commonReindexedBlock k) σ := by
           refine Finset.sum_congr rfl fun k _ => ?_
           rw [hBlock k N σ]
@@ -497,7 +497,7 @@ theorem derived_properties (F : CommonBlockedCyclicSectorFamily blocks)
     (∑ i : Fin (blockPhysDim d F.p),
         (F.commonSectorBlock k s i)ᴴ * F.commonSectorBlock k s i = 1) ∧
     _root_.IsPrimitive
-        (Kraus.transferMap (d := blockPhysDim d F.p) (D := F.sectorDim k s)
+        (Kraus.transferMap (ι := Fin (blockPhysDim d F.p)) (n := Fin (F.sectorDim k s))
           (F.commonSectorBlock k s)) ∧
     Kraus.IsIrreducibleFamily (F.commonSectorBlock k s) ∧
     0 < F.sectorDim k s := by
@@ -510,7 +510,7 @@ comparison used by `reindexed_nonzero_part`. -/
 theorem blockTensor_sameMPV₂_commonReindexedBlock
     (F : CommonBlockedCyclicSectorFamily blocks) (k : Fin r) :
     SameMPV₂
-      (blockTensor (d := d) (D := dim k) (blocks k) F.p)
+      (blockTensor (d := d) (n := Fin (dim k)) (blocks k) F.p)
       (F.commonReindexedBlock k) :=
   F.blockTensor_sameMPV₂_commonReindexedBlock_of_groupedBlockCastAgrees k
     (groupedBlockCastAgrees_of_flattenWordOfBlock_cast_eq
@@ -525,7 +525,7 @@ theorem reindexed_nonzero_part (F : CommonBlockedCyclicSectorFamily blocks) (μ 
     SameMPV₂
       (toTensorFromBlocks (d := blockPhysDim d F.p)
         (μ := fun k : Fin r => (μ k) ^ F.p)
-        (fun k => blockTensor (d := d) (D := dim k) (blocks k) F.p))
+        (fun k => blockTensor (d := d) (n := Fin (dim k)) (blocks k) F.p))
       (toTensorFromBlocks (d := blockPhysDim d F.p)
         (μ := F.commonFlatWeight μ) (F.commonFlatBlocks)) := by
   intro N σ

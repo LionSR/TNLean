@@ -53,7 +53,6 @@ taking the dagger of the two fusion trees, is not proved here.
 -/
 
 open scoped Matrix Kronecker
-open TNLean.Algebra
 
 /-! ### Permutation matrices of bond identifications -/
 

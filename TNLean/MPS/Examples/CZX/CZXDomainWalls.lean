@@ -50,7 +50,7 @@ against regions longer than a buffer; documented in
 noncomputable section
 
 open scoped Matrix Kronecker
-open TNLean.Algebra MPOTensor MPOTensor.GroupFamily MPSTensor
+open MPOTensor MPOTensor.GroupFamily MPSTensor
 
 namespace CZXCompression
 

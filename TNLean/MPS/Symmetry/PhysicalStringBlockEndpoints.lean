@@ -9,7 +9,7 @@ import TNLean.MPS.Core.Blocking
 import QICLean.Algebra.HermitianHelpers
 import QICLean.Algebra.KroneckerFactorPositivity
 import Mathlib.LinearAlgebra.Multilinear.Basic
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Both physical endpoints on dimension-bounded blocks

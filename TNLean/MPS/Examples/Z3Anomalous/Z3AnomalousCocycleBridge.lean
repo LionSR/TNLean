@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ScalarThreeCocycleCyclicDomainWall
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicDomainWall
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyClass
 import TNLean.MPS.MPU.GroupCocycleMPO.FusionTensors
 
@@ -90,7 +90,7 @@ open scoped BigOperators Matrix
 
 namespace Z3Anomalous
 
-open MPOTensor MPOTensor.GroupCocycle TNLean.Algebra.ScalarThreeCochain
+open MPOTensor MPOTensor.GroupCocycle ScalarThreeCochain
 
 /-- The exponent of the gauge on a neighboring pair `(a, b)`: `[b = 2] + [a = 1][b = 2]`. The
 first term is the on-site gate `diag(1, 1, ω)` of the right site, the second the two-site gate

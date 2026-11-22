@@ -59,7 +59,7 @@ theorem exists_posDef_adjoint_eigenvector
     (hA : ∃ i, A i ≠ 0) :
     ∃ (σ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ),
       σ.PosDef ∧ 0 < r ∧
-      Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) σ = (r : ℂ) • σ := by
+      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ = (r : ℂ) • σ := by
   obtain ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩ :=
     Kraus.exists_posDef_adjoint_eigenvector (K := A)
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr) hA
@@ -127,7 +127,7 @@ theorem exists_unital_data_of_irreducible
   classical
   let Aadj : MPSTensor d D := fun i => (A i)ᴴ
   have hIrrAdjMap :
-      IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) Aadj) := by
+      IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) Aadj) := by
     simpa [Aadj] using
       Kraus.isIrreducibleMap_mapLM_conjTranspose A
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr)
@@ -140,7 +140,7 @@ theorem exists_unital_data_of_irreducible
     exact hi (Matrix.conjTranspose_eq_zero.mp (by simpa [Aadj] using h))
   obtain ⟨ρ, r, hρ, hr, hρ_eig_adj⟩ :=
     exists_posDef_adjoint_eigenvector (d := d) (D := D) Aadj hIrrAdj hAadj
-  have hρ_eig : Kraus.transferMap (d := d) (D := D) A ρ = (r : ℂ) • ρ := by
+  have hρ_eig : Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = (r : ℂ) • ρ := by
     simpa [Aadj, Matrix.conjTranspose_conjTranspose] using hρ_eig_adj
   let B : MPSTensor d D := Kraus.spectralUnitalGauge (d := d) (D := D) A r ρ
   have hB_unital : ∑ i : Fin d, B i * (B i)ᴴ = 1 := by

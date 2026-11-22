@@ -76,8 +76,6 @@ open scoped BigOperators Matrix Kronecker
 
 namespace MPOTensor.GroupCocycle
 
-open TNLean.Algebra
-
 variable {G : Type} [Group G] {n : ℕ} (e : G ≃ Fin n)
 
 /-- The projector `P_{g,h}` of arXiv:2203.12563v3, lines 2264–2287: its diagonal component

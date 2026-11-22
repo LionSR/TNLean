@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicInvariant
 import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks
 
 /-!
@@ -77,7 +77,6 @@ the source's convention.
 -/
 
 open scoped Matrix Kronecker
-open TNLean.Algebra
 
 namespace MPOTensor
 
@@ -380,7 +379,6 @@ theorem physAct_twoWallChain (T : MPOTensor d D₁) (σ : Fin k → Fin d) (i : 
   rw [physAct_evalWord, h'] at h
   exact h
 
-
 /-- A word of length at least `2M + 1` splits into two outer pieces of length `M` and a nonempty
 middle. -/
 theorem _root_.List.exists_append_append_of_two_mul_lt {α : Type*} (w : List α) {M : ℕ}
@@ -457,7 +455,8 @@ for all words `u`, `v` longer than a fixed buffer. The target blocks are identif
 
 The source draws this identity with one site on each side of the wall (lines 774--832), in the
 setting of the renormalization fixed point (lines 1351 and 1358); the buffer here plays the
-role of the blocked sites of line 1358. The scalar `c` is `c_{AB}` of `eq:localcdef` for `ℤ₂` and `B^g_{x,y}` of
+role of the blocked sites of line 1358. The scalar `c` is `c_{AB}` of `eq:localcdef` for `ℤ₂` and
+`B^g_{x,y}` of
 `eq:localcdefG` for a general group. Both walls and the phase are nonzero, the convention of
 the module docstring. -/
 structure IsDomainWallAction (g : G) {x y x' y' : X} (hx : g • x = x') (hy : g • y = y')

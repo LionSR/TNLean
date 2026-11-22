@@ -184,15 +184,15 @@ declared costs of the operations performed along the way.
 
 \begin{definition}[Polynomially bounded functions]
     \label{def:nat_polynomial_bounded}
-    \lean{TNLean.IsNatPolynomialBounded,
-        TNLean.IsNatPolynomialBounded.const,
-        TNLean.IsNatPolynomialBounded.id,
-        TNLean.IsNatPolynomialBounded.of_le,
-        TNLean.IsNatPolynomialBounded.add,
-        TNLean.IsNatPolynomialBounded.mul,
-        TNLean.IsNatPolynomialBounded.pow,
-        TNLean.IsNatPolynomialBounded.max_one,
-        TNLean.IsNatPolynomialBounded.exists_one_le}
+    \lean{IsNatPolynomialBounded,
+        IsNatPolynomialBounded.const,
+        IsNatPolynomialBounded.id,
+        IsNatPolynomialBounded.of_le,
+        IsNatPolynomialBounded.add,
+        IsNatPolynomialBounded.mul,
+        IsNatPolynomialBounded.pow,
+        IsNatPolynomialBounded.max_one,
+        IsNatPolynomialBounded.exists_one_le}
     \leanok
     A function $f$ from the natural numbers to themselves is polynomially
     bounded when $f(n)\le P\,(n+1)^d$ for all $n\ge1$, for natural numbers $P$
@@ -200,6 +200,7 @@ declared costs of the operations performed along the way.
     bounded, and the class is closed under pointwise domination, sums,
     products, powers and taking the maximum with one; the coefficient $P$ can be
     taken positive.
+    This is~\cite[``Polynomially bounded functions'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{definition}[The cost budgets]

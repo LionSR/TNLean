@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.StabilizerCocycleReconstruction
+import QICLean.Algebra.Cohomology.StabilizerCocycleReconstruction
 
 /-!
 # L-symbols on a free transitive action
@@ -14,7 +14,7 @@ case of arXiv:2203.12563, Section 4.1, and the uniqueness assertion used in
 the four-block example of Section 6.
 -/
 
-namespace TNLean.Algebra.LSymbol
+namespace LSymbol
 
 variable {G : Type} {X : Type*} [Group G] [MulAction G X]
 
@@ -58,4 +58,4 @@ theorem isCompatible_regular {ω : ScalarThreeCochain G} (hω : ω.IsCocycle) :
   field_simp
   simpa only [smul_eq_mul, mul_comm, mul_left_comm, mul_assoc] using he'
 
-end TNLean.Algebra.LSymbol
+end LSymbol

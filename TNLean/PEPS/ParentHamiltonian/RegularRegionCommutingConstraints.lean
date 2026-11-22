@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.RegularRegionBondRightInvariance
 import TNLean.PEPS.RegularCycleControlledSupport
-import TNLean.Algebra.PermutationMatrixCommutation
+import QICLean.Algebra.PermutationMatrixCommute
 
 /-!
 # Commuting constraints in regular half-edge coordinates

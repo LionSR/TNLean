@@ -106,9 +106,10 @@ theorem
     {X : Matrix (Fin (χ₀ + χ₁)) (Fin (χ₀ + χ₁)) ℂ}
     (hX : X ∈ MPOTensor.commutingBoundaryAlgebra
       (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁)) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) X N) :=
+  haveI : NeZero N := ⟨by omega⟩;
   hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁
     (exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq_of_weakHopf
@@ -128,10 +129,10 @@ theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_weakHopf
       (fun _ : Fin m => A₁) V₁ W₁)
     (hW : Wh.tensor = arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁)
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpo (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) N) :=
-  hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
+  haveI : NeZero N := ⟨by omega⟩; hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁
     (exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq_of_weakHopf
       A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hW) hγ hN

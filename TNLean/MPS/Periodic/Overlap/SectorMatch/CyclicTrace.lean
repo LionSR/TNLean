@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.Overlap.SectorMatch.Basic
-import TNLean.Algebra.PiTensorProductPhase
+import QICLean.Algebra.PiTensorProductPhase
 
 /-!
 # Cyclic trace separation for periodic sector matches

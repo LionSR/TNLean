@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.ComplexSqrt
-import TNLean.Algebra.FinKronecker
+import QICLean.Algebra.FiniteKroneckerProduct
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Examples.PVBS
 import TNLean.MPS.Examples.WStatePrimeLengthBound

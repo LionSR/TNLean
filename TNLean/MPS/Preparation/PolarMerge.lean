@@ -110,8 +110,8 @@ theorem blockTensor_add_apply (A : MPSTensor d D) (n₁ n₂ : ℕ) (τ₁ : Cfg
     blockTensor A (n₁ + n₂) ((decodeBlockEquiv d (n₁ + n₂)).symm (Fin.append τ₁ τ₂)) =
       blockTensor A n₁ ((decodeBlockEquiv d n₁).symm τ₁) *
         blockTensor A n₂ ((decodeBlockEquiv d n₂).symm τ₂) := by
-  simp only [blockTensor, Kraus.blockTensor, Kraus.wordOfBlock,
-    Kraus.decodeBlock_decodeBlockEquiv_symm, List.ofFn_fin_append, Kraus.evalWord_append]
+  simp only [blockTensor, Kraus.blockTensor, Kraus.reindexPhysical, Equiv.apply_symm_apply,
+    Kraus.block_apply, List.ofFn_fin_append, Kraus.evalWord_append]
 
 /-- The equivalence of the configurations of a block with the pairs of configurations of its
 halves, read on blocked indices. -/
@@ -288,7 +288,7 @@ blocked tensor of `X`. -/
 theorem pairProductTensor_self {κ : ℕ} (X : MPSTensor κ D) :
     pairProductTensor X X = blockTensor X 2 := by
   funext e
-  simp [pairProductTensor, blockTensor, Kraus.blockTensor, Kraus.wordOfBlock, List.ofFn_succ]
+  simp [pairProductTensor, blockTensor, Kraus.blockTensor, Kraus.reindexPhysical, List.ofFn_succ]
 
 /-- **Halves of equal lengths**: joining two blocks of `n` sites, `W` is the partial isometry
 of the two-site blocked tensor of the positive part `P_n`. For `n = 2^{j+1}` this is the layer

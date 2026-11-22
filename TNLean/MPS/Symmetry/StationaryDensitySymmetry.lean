@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Channel.KrausFreedom
 import TNLean.MPS.Preparation.BlockedPolar
-import TNLean.Algebra.ProjectiveRepresentation
+import QICLean.Algebra.Cohomology.ProjectiveRepresentation
 
 /-!
 # Symmetry of a unique stationary matrix
@@ -86,8 +86,8 @@ covariance is expressed using the inverse group element.
 Source context: arXiv:2011.12127, §III.A, "Entanglement spectrum and edge modes". -/
 theorem virtualAction_commute_stationaryMatrix_of_unique
     {G : Type} [Group G] {d D : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ : TNLean.Algebra.ProjectiveRepresentation (D := D) ω)
+    {ω : ScalarCocycle G}
+    (ρ : ProjectiveRepresentation (D := D) ω)
     (hρ : ∀ g, (ρ.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U : G →* Matrix.unitaryGroup (Fin d) ℂ) (A : MPSTensor d D)
     (hCov : ∀ g, rotatePhysical (U g) A = fun i =>

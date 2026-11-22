@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.TorusGaugedVerticalFluxMove
 import TNLean.PEPS.TorusSweptStringDeformation
 import TNLean.PEPS.TorusSweptHorizontalStep
-import TNLean.Algebra.ZModSmallDifference
+import QICLean.Algebra.ZModIntCast
 import TNLean.PEPS.RegularInternalGaugeTransport
 import TNLean.PEPS.TwoPlaquetteTransportTable
 /-!

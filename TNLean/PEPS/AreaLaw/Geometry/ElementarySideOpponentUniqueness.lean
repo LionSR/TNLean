@@ -58,7 +58,7 @@ private theorem rectangle_tangential_strict {p q a b : ℝ × ℝ} {ξ η : ℝ}
         linarith [hξp.2, hx.1.1]
       · right
         linarith [hξp.1, hx.1.2]
-    by_contra! hy
+    by_contra hy
     have hη : η = a.2 ∨ η = b.2 := by
       simp only [Set.mem_Ioo, not_and_or, not_lt] at hy
       rcases hy with hy | hy

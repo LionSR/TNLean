@@ -29,7 +29,7 @@ entry formula `MPSTensor.mpv_toMPSTensor_pairConfig`.
 
 **Naming.**  The codebase has no separate purity predicate, so the results are
 stated in trace form and in the Frobenius-norm vocabulary of
-`TNLean.Algebra.MatrixAux`.  Following the convention of the eta-local
+`QICLean.Algebra.MatrixAux`.  Following the convention of the eta-local
 structure paper-gap note
 (<https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>), the
 unnormalized quantity `Matrix.trace (mpo K N * (mpo K N)ᴴ)` is called the
@@ -143,7 +143,7 @@ theorem mpvOverlap_toMPSTensor_self_eq_trace_sq (K : MPOTensor d D) (hK : IsMPDO
 
 /-- **Frobenius-norm form.**  The real part of the doubled-index self-overlap
 is the squared Frobenius norm of the MPO, that is, its raw squared
-Hilbert--Schmidt norm in the vocabulary of `TNLean.Algebra.MatrixAux`.
+Hilbert--Schmidt norm in the vocabulary of `QICLean.Algebra.MatrixAux`.
 
 This is a project derivation preparing the Lemma C.5 route of the eta-local
 structure paper-gap note

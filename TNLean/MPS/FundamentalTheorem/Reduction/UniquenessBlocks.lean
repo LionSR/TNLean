@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Isomorphisms
 import Mathlib.RingTheory.SimpleModule.Rank
-import TNLean.Algebra.CoveringMatching
-import TNLean.Algebra.Subquotient
+import QICLean.Algebra.CoveringMatching
+import QICLean.Algebra.Subquotient
 import TNLean.MPS.FundamentalTheorem.Reduction.GaugeWordModule
 import TNLean.MPS.FundamentalTheorem.Reduction.IrreducibleTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessFlag

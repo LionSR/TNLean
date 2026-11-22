@@ -30,12 +30,14 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii),
 lines 2442--2531. -/
 noncomputable def residualWindowLeftOverlapFactorES
     (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ) (K r : ℕ) :
-    EuclideanSpace ℂ (Cfg (blockPhysDim d L) K × (Fin E × Fin D)) →L[ℂ]
+    EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K) →L[ℂ]
       BoundaryFamilySpace (D := E) (Cfg (blockPhysDim d L) K × Cfg d r) :=
   (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (Equiv.prodAssoc (Cfg (blockPhysDim d L) K) (Cfg d r)
-      (Fin E × Fin E)).symm).toContinuousLinearEquiv.toContinuousLinearMap.comp
-      (EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) K) (correlatedTailMapES A V r))
+    ((Equiv.prodComm (Cfg d r × (Fin E × Fin E)) (Cfg (blockPhysDim d L) K)).trans
+      (Equiv.prodAssoc (Cfg (blockPhysDim d L) K) (Cfg d r)
+        (Fin E × Fin E)).symm)).toContinuousLinearEquiv.toContinuousLinearMap.comp
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
+        (correlatedTailMapES A V r))
 /-- Prefix-word multiplication indexed also by the original tail.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii),
 lines 2442--2531. -/
@@ -44,14 +46,17 @@ noncomputable def residualWindowRightOverlapFactorES
     BoundaryFamilySpace (D := E) (Cfg d r) →L[ℂ]
       BoundaryFamilySpace (D := E) (Cfg (blockPhysDim d L) K × Cfg d r) :=
   (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    ((Equiv.prodAssoc (Cfg d r) (Cfg (blockPhysDim d L) K) (Fin E × Fin E)).symm.trans
-      (Equiv.prodCongr (Equiv.prodComm (Cfg d r) (Cfg (blockPhysDim d L) K))
-        (Equiv.refl (Fin E × Fin E))))).toContinuousLinearEquiv.toContinuousLinearMap.comp
-    (EuclideanSpace.fiberwiseMap (Cfg d r) (residualWindowRightVirtualMapES (D := E) B K))
+    ((Equiv.prodAssoc (Fin E × Fin E) (Cfg (blockPhysDim d L) K) (Cfg d r)).trans
+      (Equiv.prodComm (Fin E × Fin E)
+        (Cfg (blockPhysDim d L) K × Cfg d r)))).toContinuousLinearEquiv.toContinuousLinearMap.comp
+    ((ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+      (residualWindowRightVirtualMapES (D := E) B K)).comp
+      (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+        (Equiv.prodComm (Cfg d r) (Fin E × Fin E))).toContinuousLinearMap)
 /-- The left overlap factor has matrix fibers given by the correlated tail. -/
 theorem boundaryFamilyEquiv_residualWindowLeftOverlapFactorES_apply
     (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ) (K r : ℕ)
-    (x : EuclideanSpace ℂ (Cfg (blockPhysDim d L) K × (Fin E × Fin D)))
+    (x : EuclideanSpace ℂ ((Fin E × Fin D) × Cfg (blockPhysDim d L) K))
     (u : Cfg (blockPhysDim d L) K) (τ : Cfg d r) :
     boundaryFamilyEquiv (Cfg (blockPhysDim d L) K × Cfg d r)
       (residualWindowLeftOverlapFactorES A V K r x) (u, τ) =
@@ -75,13 +80,15 @@ theorem norm_residualWindowLeftOverlapFactorES_le
     ‖residualWindowLeftOverlapFactorES (L := L) A V K r‖ ≤ ‖correlatedTailMapES A V r‖ := by
   refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
   change ‖(LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (Equiv.prodAssoc (Cfg (blockPhysDim d L) K) (Cfg d r)
-      (Fin E × Fin E)).symm)
-        (EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) K)
+    ((Equiv.prodComm (Cfg d r × (Fin E × Fin E)) (Cfg (blockPhysDim d L) K)).trans
+      (Equiv.prodAssoc (Cfg (blockPhysDim d L) K) (Cfg d r)
+        (Fin E × Fin E)).symm))
+        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
           (correlatedTailMapES A V r) x)‖ ≤ _
   rw [LinearIsometryEquiv.norm_map]
   exact (ContinuousLinearMap.le_opNorm _ x).trans
-    (mul_le_mul_of_nonneg_right (EuclideanSpace.norm_fiberwiseMap_le _ _) (norm_nonneg x))
+    (mul_le_mul_of_nonneg_right (ContinuousLinearMap.norm_rightFiberwiseMap_le _)
+      (norm_nonneg x))
 /-- Isometric coordinate rearrangement and a finite direct sum preserve the
 prefix-word norm bound, uniformly in the original tail. -/
 theorem norm_residualWindowRightOverlapFactorES_le
@@ -89,15 +96,17 @@ theorem norm_residualWindowRightOverlapFactorES_le
     ‖residualWindowRightOverlapFactorES B K r‖ ≤
       ‖residualWindowRightVirtualMapES (D := E) B K‖ := by
   refine ContinuousLinearMap.opNorm_le_bound _ (norm_nonneg _) fun x => ?_
+  let R := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+    (Equiv.prodComm (Cfg d r) (Fin E × Fin E))
   change ‖(LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    ((Equiv.prodAssoc (Cfg d r) (Cfg (blockPhysDim d L) K) (Fin E × Fin E)).symm.trans
-      (Equiv.prodCongr (Equiv.prodComm (Cfg d r) (Cfg (blockPhysDim d L) K))
-        (Equiv.refl (Fin E × Fin E)))))
-      (EuclideanSpace.fiberwiseMap (Cfg d r)
-        (residualWindowRightVirtualMapES (D := E) B K) x)‖ ≤ _
-  rw [LinearIsometryEquiv.norm_map]
-  exact (ContinuousLinearMap.le_opNorm _ x).trans
-    (mul_le_mul_of_nonneg_right (EuclideanSpace.norm_fiberwiseMap_le _ _) (norm_nonneg x))
+    ((Equiv.prodAssoc (Fin E × Fin E) (Cfg (blockPhysDim d L) K) (Cfg d r)).trans
+      (Equiv.prodComm (Fin E × Fin E) (Cfg (blockPhysDim d L) K × Cfg d r))))
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (residualWindowRightVirtualMapES (D := E) B K) (R x))‖ ≤ _
+  rw [LinearIsometryEquiv.norm_map, ← R.norm_map x]
+  exact (ContinuousLinearMap.le_opNorm _ (R x)).trans
+    (mul_le_mul_of_nonneg_right (ContinuousLinearMap.norm_rightFiberwiseMap_le _)
+      (norm_nonneg (R x)))
 /-- The centered mixed Gram factors through the common-prefix Gram defect.
 This is the direct-sum form of Nachtergaele, arXiv:cond-mat/9410110,
 Lemma commutation (ii), lines 2442--2531. -/
@@ -108,7 +117,7 @@ theorem residualWindow_centeredMixedGram_eq_overlapFactors [NeZero E]
     (K M r : ℕ) (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ *
       (V * Vᴴ) * Kraus.evalWord A (List.ofFn τ) = Q) :
     let Kinf := Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-    let Ktail := EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) K)
+    let Ktail := ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
       (residualBoundaryGramLimit A V ρ (ne_of_gt hρ.trace_pos) r)
     let Kleft := boundaryFiberwiseMap (Cfg d r) Kinf
     let Iinf := (rectangularRowProjection E Q).comp (Ring.inverse (rectangularRightGramMetric D ρ))
@@ -141,7 +150,7 @@ theorem norm_residualWindow_centeredMixedGram_le [NeZero E]
     (K M r : ℕ) (hGram : ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ *
       (V * Vᴴ) * Kraus.evalWord A (List.ofFn τ) = Q) :
     let Kinf := Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
-    let Ktail := EuclideanSpace.fiberwiseMap (Cfg (blockPhysDim d L) K)
+    let Ktail := ContinuousLinearMap.rightFiberwiseMap (S := Cfg (blockPhysDim d L) K)
       (residualBoundaryGramLimit A V ρ (ne_of_gt hρ.trace_pos) r)
     let Kleft := boundaryFiberwiseMap (Cfg d r) Kinf
     let Iinf := (rectangularRowProjection E Q).comp (Ring.inverse (rectangularRightGramMetric D ρ))

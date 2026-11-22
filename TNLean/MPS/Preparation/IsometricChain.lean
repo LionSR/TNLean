@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
-import TNLean.Algebra.FinOrderedProduct
-import TNLean.Algebra.FinSumPermutation
-import TNLean.Algebra.IsometryUnitaryExtension
+import QICLean.Algebra.OrderedProduct
+import QICLean.Algebra.FinSumPermutation
+import QICLean.Circuit.Gate.UnitaryExtension
 import TNLean.MPS.Chain.VaryingBondOBC
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.LinearAlgebra.UnitaryGroup

@@ -7,7 +7,7 @@ import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.RegionalMiddleFactors
 import TNLean.MPS.AreaLaw.FixedConfigurationExtension
 import TNLean.MPS.AreaLaw.IntervalSlice
-import TNLean.Algebra.MatrixFactorExchange
+import QICLean.Algebra.MatrixFactorExchange
 import Mathlib.Data.Matrix.Basis
 
 /-!

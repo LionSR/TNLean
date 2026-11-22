@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.PeriodicInverseProjectionSum
-import TNLean.Algebra.SectorProjectionSumDefect
+import QICLean.Analysis.ProjectionProductDefect
 import TNLean.MPS.ParentHamiltonian.ResidualWindowProjectorCancellation
 import TNLean.MPS.ParentHamiltonian.ResidualWindowLeftSectorSum
 import TNLean.MPS.ParentHamiltonian.ResidualWindowRightSectorSum

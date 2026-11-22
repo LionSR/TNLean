@@ -70,7 +70,7 @@ open scoped BigOperators Matrix
 
 namespace Z3Clock
 
-open MPOTensor MPSTensor TNLean.Algebra
+open MPOTensor MPSTensor
 
 /-! ### Cube roots of `ω` -/
 

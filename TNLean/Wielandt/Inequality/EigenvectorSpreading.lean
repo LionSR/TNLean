@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.Wielandt.Inequality.EigenvectorSpreading
 import TNLean.Wielandt.Primitivity.Equivalence
+import TNLean.MPS.Tensor
 
 /-!
 # Lemma 2(a) for MPS tensors

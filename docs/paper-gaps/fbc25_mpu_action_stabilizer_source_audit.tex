@@ -443,7 +443,7 @@ formula on cohomology classes, and it does not construct action tensors or an
 MPU realization.  The formula is compatible exactly as printed only in a
 fusion gauge in which $\omega$ is one on $H\times H\times H$; for a general
 $\omega$ with $\omega|_H=d\beta$ it can fail, and the correction is recorded
-in \cite{gap:glm23_eq20_fusion_gauge}.
+in \url{https://sirui-lu.com/QICLean/paper-gaps/glm23_eq20_fusion_gauge.pdf}.
 
 For fixed $(G,\omega,H)$, Ref.~\cite[source line~761]{GarreRubio2023MPOSym}
 states that gauge classes of solutions form a torsor for
@@ -537,13 +537,13 @@ The existing library separates the following layers.
           represented by pretransitivity together with nonemptiness.  No
           normality hypothesis on $H$ should be introduced.
 
-    \item TNLean's \leanid{TNLean.Algebra.LSymbol} is the scalar function
+    \item QICLean's \leanid{LSymbol} is the scalar function
           $\mathsf X\to G\to G\to\mathbb C^\times$.
-          \leanid{TNLean.Algebra.LSymbol.IsCompatible} is exactly
+          \leanid{LSymbol.IsCompatible} is exactly
           (\ref{eq:fbc25_action_audit_l_compatibility}), and
-          \leanid{TNLean.Algebra.LSymbol.gauge} is exactly
+          \leanid{LSymbol.gauge} is exactly
           (\ref{eq:fbc25_action_audit_target_l_gauge}).  The name
-          \leanid{TNLean.Algebra.ActionTensorGauge} denotes only the scalar
+          \leanid{ActionTensorGauge} denotes only the scalar
           cochain $\gamma_{g,x}$; it is not tensor data.  These declarations
           deliberately assert neither existence of action tensors nor their
           attachment to an MPU.
@@ -562,7 +562,7 @@ The existing library separates the following layers.
           group $H^2(H,\mathbb C^\times)$ under pointwise multiplication of
           cocycles, acting freely and transitively on action-gauge classes)
           are formalized in
-          \doclink{TNLean/Algebra/StabilizerCocycleReconstruction}.
+          \path{QICLean/Algebra/Cohomology/StabilizerCocycleReconstruction.lean}.
 
     \item The on-site, single-block specialization is already represented by
           \leanid{MPSTensor.IsOnSiteSymmetric} and
@@ -609,7 +609,7 @@ It is the product of $\beta^{-1}$ with a coboundary, and the basepoint
 restriction gives $\Psi|_{H\times H}=\psi$.
 These scalar implications and the equivalence with the image of the actual
 cohomology restriction map are formalized in
-\doclink{TNLean/Algebra/StabilizerBlockIndependence}.
+\path{QICLean/Algebra/Cohomology/StabilizerBlockIndependence.lean}.
 They do not identify scalar gauges with tensor gauges of an MPS--MPU pair,
 or assert naturality of the comparison between $U(1)$ and
 $\mathbb C^\times$ coefficients under subgroup restriction.

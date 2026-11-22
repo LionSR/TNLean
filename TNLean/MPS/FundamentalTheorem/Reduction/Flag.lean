@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 import Mathlib.RingTheory.Noetherian.Basic
-import TNLean.Algebra.TraceInvariantSubmodule
+import QICLean.Algebra.TraceInvariantSubmodule
 import TNLean.MPS.FundamentalTheorem.Reduction.FlagData
 import TNLean.MPS.FundamentalTheorem.Reduction.Identification
 
@@ -212,8 +212,8 @@ lemma finset_eq_empty_of_forall_sum_trace_evalWord_eq_zero (S : Finset ι) {D : 
     intro k hk
     have hχ : ∀ w : List (Fin d), w ≠ [] → traceWord N w = (0 : WordAlgebra d →ₗ[ℂ] ℂ) (ofWord w) :=
       fun w hw => by rw [hN, h w hw, LinearMap.zero_apply]
-    rw [← map_pow, ← traceChar_apply, traceChar_eq_of_traceWord_eq hχ (aug_pow hu hk),
-      LinearMap.zero_apply]
+    rw [← map_pow, ← traceChar_apply,
+      linearMap_eq_on_ker_aug (χ₁ := traceChar N) hχ (aug_pow hu hk), LinearMap.zero_apply]
   obtain ⟨n, hn⟩ := LinearMap.isNilpotent_of_forall_trace_pow_eq_zero (Algebra.lsmul ℂ ℂ N u) hzero
   have hpow : ∀ x : N, (u ^ n) • x = 0 := by
     intro x

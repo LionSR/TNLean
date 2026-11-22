@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.KleinCocycleCompleteness
+import QICLean.Algebra.Cohomology.KleinCocycleCompleteness
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Exact
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2NonSplit
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Split
@@ -84,7 +84,7 @@ records, not the source.
 noncomputable section
 
 open scoped Matrix Kronecker
-open TNLean.Algebra MPOTensor MPSTensor MPOTensor.GroupCocycle
+open MPOTensor MPSTensor MPOTensor.GroupCocycle
 
 namespace Z2Z2Condensation
 

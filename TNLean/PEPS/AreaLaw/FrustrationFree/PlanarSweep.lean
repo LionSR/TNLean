@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.FrustrationFree.LightCone
 import TNLean.PEPS.AreaLaw.BufferedRectangles
-import TNLean.Algebra.GreedyColoring
+import QICLean.Algebra.GreedyColoring
 import QICLean.Algebra.OverlapGraph
 
 /-!

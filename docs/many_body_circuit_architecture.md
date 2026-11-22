@@ -611,7 +611,10 @@ Wave 3, two tracks that share no file:
 - **3A** (both). The generic modules of `TNLean/Algebra` move to QICLean,
   merged into topical modules: 40 used by two or more directories, up to 131
   used by one; 44 used nowhere outside the directory are reviewed for deletion;
-  19 mention a tensor network and stay.
+  19 mention a tensor network and stay. Done at the move onto QICLean's fourth
+  batch: 237 modules of `TNLean/Algebra` were deleted for their QICLean
+  counterparts. Eighteen stay: four that mention a tensor network and are
+  imported, and fourteen that no module imports but the blueprint tags.
 - **3C.0** (QICLean). Check the circuit core against the party calculus before
   its signatures are fixed.
 - **3C.1** (QICLean, done). The core: `System`, `Layer`, `Circuit`, Kraus family and
@@ -668,6 +671,18 @@ Wave 3, two tracks that share no file:
   Dilation, DilationOutput}`, except the identity of the compiled channel on an
   arbitrary state of the port and scratch wires carried along as a reference,
   which QICLean's construction does not give and which is dropped.
+
+  The move onto QICLean's fourth batch deletes 14 more modules of
+  `TNLean/Circuit` (`ProductVector`, `SupportedMatrixElements`,
+  `ExpectationBounds`, `SiteEmbedding`, `EmbeddedProduct`,
+  `ConfigurationLayers`, `Gates/Permutation`, `SupportedComplementProduct`,
+  `SiteOscillation`, `SpectatorSiteExpectation`, `SpectatorOscillationSupport`,
+  `SupportProjection`, `Measurement/Asymptotic` and
+  `CleanImplementationPlacement`), together with `MPS/Preparation/FiniteRing*`
+  and seven spectator modules of `MPS/ParentHamiltonian/Martingale`. `TNLean/Circuit`
+  keeps eight modules: `SupportedOperators`, `SitePermutation`, `RegionSplit`,
+  `RegionalSwap`, `SitewiseTensorSupport`, `SupportedGroundSpace`,
+  `SupportedNormalizedGroundSpace` and `WeightedGHZ`.
 
   The directory was not smaller after pin move 5 for two reasons. The ring
   geometry (`ringBall`, ring separation, the ring as a circuit geometry) was

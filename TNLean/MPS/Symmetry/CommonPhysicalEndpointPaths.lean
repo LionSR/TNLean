@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.UnitaryGeneralLinearInverse
+import QICLean.Algebra.IsometricFrameEmbedding
 import TNLean.MPS.Symmetry.CommonPhysicalEndpoints
 import TNLean.MPS.Symmetry.PhysicalMatrixBondCovariance
 
@@ -49,9 +49,9 @@ representation. Source context: arXiv:1010.3732, Sections II.C and II.F.2,
 equation eq:1d-sym:jointsym. -/
 noncomputable def commonPhysicalLeftPolarGappedPath
     {G : Type} [Group G] {d₀ d₁ D₀ D₁ : ℕ} [NeZero D₀]
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ)
@@ -88,9 +88,9 @@ representation. Source context: arXiv:1010.3732, Sections II.C and II.F.2,
 equation eq:1d-sym:jointsym. -/
 noncomputable def commonPhysicalRightPolarGappedPath
     {G : Type} [Group G] {d₀ d₁ D₀ D₁ : ℕ} [NeZero D₁]
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ)

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ListProduct
+import QICLean.Algebra.OrderedProduct
 import TNLean.MPS.Periodic.CornerTransition
 
 /-!
@@ -49,7 +49,7 @@ multiple of `m`).
 The downstream theorem `sectorTensor_proportional_of_blockedMatch` recombines
 these mechanisms with the per-sector scalar bookkeeping into the uniform
 product-tensor identity `eq:resultprop`, then applies
-`PiTensorProductPhase.exists_kappa_product_one_of_piTensorProduct_eq_root_smul`
+`PiTensorProduct.exists_kappa_product_one_of_tprod_eq_root_smul`
 to continue Appendix A, lines 1063--1080.
 
 ## References

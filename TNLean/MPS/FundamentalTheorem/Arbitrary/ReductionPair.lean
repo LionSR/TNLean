@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import Mathlib.Order.JordanHolder
 import QICLean.Algebra.MatrixFamilyAction
-import TNLean.Algebra.Subquotient
-import TNLean.Algebra.WordAlgebraNilpotent
+import QICLean.Algebra.Subquotient
+import QICLean.Algebra.WordAlgebra
 import TNLean.MPS.Core.ReductionResidual
 import TNLean.MPS.Core.ReductionResidual.Basic
 import TNLean.MPS.Core.TracePairing

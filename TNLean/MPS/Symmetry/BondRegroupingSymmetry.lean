@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.BondRegroupingLocality
 import TNLean.MPS.Symmetry.SPTFixedPoint
-import TNLean.Algebra.FinKronecker
+import QICLean.Algebra.FiniteKroneckerProduct
 
 /-!
 # Physical symmetry in incoming-bond coordinates
@@ -51,8 +51,8 @@ theorem incomingBondPerm_conj_registerAction (D N : ℕ)
 `W_g = ρ(g⁻¹)`, is the right-left virtual action `W_g⁻¹ ⊗ W_gᵀ` in incoming-bond
 coordinates. Source: arXiv:1010.3732, Section II.F.2, `eq:1d-sym:jointsym`. -/
 theorem incomingBondPerm_conj_sptFixedPointAction {G : Type} [Group G]
-    {D : ℕ} {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ : TNLean.Algebra.ProjectiveRepresentation (D := D) ω) (g : G) (N : ℕ) :
+    {D : ℕ} {ω : ScalarCocycle G}
+    (ρ : ProjectiveRepresentation (D := D) ω) (g : G) (N : ℕ) :
     (incomingBondPerm D N).permMatrix ℂ *
       Matrix.finKronecker (fun _ : Fin N =>
         Matrix.reindex finProdFinEquiv finProdFinEquiv

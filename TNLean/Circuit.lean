@@ -8,25 +8,11 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Circuit
 
-import TNLean.Circuit.CleanImplementationPlacement
-import TNLean.Circuit.ConfigurationLayers
-import TNLean.Circuit.EmbeddedProduct
-import TNLean.Circuit.ExpectationBounds
-import TNLean.Circuit.Gates
-import TNLean.Circuit.Measurement
-import TNLean.Circuit.ProductVector
 import TNLean.Circuit.RegionSplit
 import TNLean.Circuit.RegionalSwap
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.SiteOscillation
 import TNLean.Circuit.SitePermutation
 import TNLean.Circuit.SitewiseTensorSupport
-import TNLean.Circuit.SpectatorOscillationSupport
-import TNLean.Circuit.SpectatorSiteExpectation
-import TNLean.Circuit.SupportProjection
-import TNLean.Circuit.SupportedComplementProduct
 import TNLean.Circuit.SupportedGroundSpace
-import TNLean.Circuit.SupportedMatrixElements
 import TNLean.Circuit.SupportedNormalizedGroundSpace
 import TNLean.Circuit.SupportedOperators
 import TNLean.Circuit.WeightedGHZ

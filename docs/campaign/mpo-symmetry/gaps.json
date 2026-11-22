@@ -40,6 +40,7 @@
     },
     {
       "id": "docs/paper-gaps/glm23_eq20_fusion_gauge.tex",
+      "repo": "QICLean",
       "kind": "local-correction",
       "status": "resolved",
       "paper": "glm23",
@@ -104,6 +105,7 @@
     },
     {
       "id": "docs/paper-gaps/glm23_klein_h3_circle_coefficients.tex",
+      "repo": "QICLean",
       "kind": "narrower",
       "status": "open",
       "paper": "glm23",

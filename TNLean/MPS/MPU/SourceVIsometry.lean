@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixUnitaryBetween
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SourceUV
 

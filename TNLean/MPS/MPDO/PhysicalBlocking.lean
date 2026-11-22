@@ -304,7 +304,7 @@ theorem toMPSTensor_blockTwo (M : MPOTensor d D) :
   funext ij
   simp [toMPSTensor, blockTwo, Kraus.reindexPhysical,
     Kraus.blockTensor, twoSiteDoubledIndexEquiv, twoSiteBlockEquiv,
-    blockedDoubledIndexEquiv, Kraus.wordOfBlock, Equiv.arrowCongr]
+    blockedDoubledIndexEquiv, Equiv.arrowCongr]
 
 /-- The concrete two-site blocking is the general length-two blocking after
 the canonical relabeling of each physical index.

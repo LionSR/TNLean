@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Amplification.AncillaTransport
 import TNLean.PEPS.AreaLaw.Amplification.LatticeRestoring
-import TNLean.Algebra.MatrixKroneckerContraction
+import QICLean.Analysis.MatrixKroneckerContraction
 import QICLean.Analysis.RootChannel
 
 /-!

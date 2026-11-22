@@ -22,7 +22,7 @@ Appendix B, lines 2614–2632, and Appendix C, lines 2653–2717.
 
 noncomputable section
 
-open scoped Matrix TNLean.Algebra.ScalarCohomology
+open scoped Matrix ScalarCohomology
 open TNLean.Algebra
 
 namespace MPSTensor

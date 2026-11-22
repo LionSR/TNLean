@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.AffineGramTransfer
 import TNLean.MPS.MPU.BalancedGramMetrics
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
 
 /-!

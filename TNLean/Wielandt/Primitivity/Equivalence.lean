@@ -7,6 +7,7 @@ import QICLean.Channel.Irreducible.FromSpectral
 import TNLean.Wielandt.Primitivity.EasyDirections
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
+import TNLean.MPS.Tensor
 
 /-!
 # Proposition 3 of the quantum Wielandt paper
@@ -98,16 +99,16 @@ theorem primitivity_tfae [NeZero D]
       ∃ q : ℕ, 0 < q ∧ ∀ φ : Fin D → ℂ, φ ≠ 0 → Kraus.vectorSpreadSpan A φ q = ⊤,
       ∃ n : ℕ, 0 < n ∧ Kraus.wordSpan A n = ⊤,
       ∃ ρ : Matrix (Fin D) (Fin D) ℂ, ρ.PosDef ∧
-        Kraus.transferMap (d := d) (D := D) A ρ = ρ ∧
+        Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ ∧
         (∀ σ : Matrix (Fin D) (Fin D) ℂ,
-          Kraus.transferMap (d := d) (D := D) A σ = σ → ∃ c : ℂ, σ = c • ρ) ∧
-        IsPrimitive (Kraus.transferMap (d := d) (D := D) A)] := by
+          Kraus.transferMap (ι := Fin d) (n := Fin D) A σ = σ → ∃ c : ℂ, σ = c • ρ) ∧
+        IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A)] := by
   tfae_have 2 → 1 := exists_vectorSpreadSpan_eq_top_of_isNormal A
   tfae_have 1 → 3 := by
     rintro ⟨q, -, hq⟩
-    have hIrr : IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) := by
+    have hIrr : IsIrreducibleMap (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
       simpa only using Kraus.isIrreducibleMap_mapLM_of_vectorSpreadSpan_eq_top A hq
-    have hPrim : IsPrimitive (Kraus.transferMap (d := d) (D := D) A) := by
+    have hPrim : IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
       simpa only using
         Kraus.isPrimitive_mapLM_of_isTP_of_vectorSpreadSpan_eq_top A hNorm hq
     obtain ⟨ρ, hP, hρ⟩ :=
@@ -174,9 +175,9 @@ theorem wolf_theorem_6_15 [NeZero D] (A : MPSTensor d D)
     (hSpan : Kraus.IsNormal A) :
     ∃! ρ : Matrix (Fin D) (Fin D) ℂ,
       ρ ∈ densityMatrices D ∧ ρ.PosDef ∧
-      Kraus.transferMap (d := d) (D := D) A ρ = ρ ∧
+      Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ ∧
       ∀ σ : Matrix (Fin D) (Fin D) ℂ,
-        Kraus.transferMap (d := d) (D := D) A σ = σ → ∃ c : ℂ, σ = c • ρ := by
+        Kraus.transferMap (ι := Fin d) (n := Fin D) A σ = σ → ∃ c : ℂ, σ = c • ρ := by
   obtain ⟨ρ₀, hPrim, hρ₀pd⟩ :=
     exists_hasComplementaryFixedPointGap_posDef_of_isNormal A hNorm hSpan
   have htr_pos : 0 < Matrix.trace ρ₀ := hρ₀pd.trace_pos
@@ -185,10 +186,10 @@ theorem wolf_theorem_6_15 [NeZero D] (A : MPSTensor d D)
   have hρpd : ρ.PosDef := hρ₀pd.smul (inv_pos.mpr htr_pos)
   have hρ_trace : Matrix.trace ρ = 1 := by
     rw [hρ_def, Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ htr_ne]
-  have hρ_fix : Kraus.transferMap (d := d) (D := D) A ρ = ρ := by
+  have hρ_fix : Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ := by
     rw [hρ_def, LinearMap.map_smul, hPrim.fixedPoint_is_fixed]
   have hunique : ∀ σ : Matrix (Fin D) (Fin D) ℂ,
-      Kraus.transferMap (d := d) (D := D) A σ = σ → ∃ c : ℂ, σ = c • ρ := by
+      Kraus.transferMap (ι := Fin d) (n := Fin D) A σ = σ → ∃ c : ℂ, σ = c • ρ := by
     intro σ hσ
     refine ⟨Matrix.trace σ, ?_⟩
     calc σ = (Matrix.trace σ / Matrix.trace ρ₀) • ρ₀ := hPrim.fixedPoint_unique σ hσ

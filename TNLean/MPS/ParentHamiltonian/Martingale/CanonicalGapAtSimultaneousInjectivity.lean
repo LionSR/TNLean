@@ -44,7 +44,8 @@ theorem CPSVCanonicalFormData.parentHamiltonianES_eq_representatives
         (fun j ↦ data.blocks (data.representativeIndex j))) R N := by
   -- `parentHamiltonianES_eq_of_groundSpace_eq` needs equal bond dimensions; the
   -- representative block sum has a different one, so the definitions are unfolded.
-  simp only [parentHamiltonianES, parentHamiltonian, parentRingInteraction, parentInteraction,
+  simp only [parentHamiltonianES, parentHamiltonian, localTerm, parentRingInteraction,
+    parentInteraction,
     groundSpaceES, data.groundSpace_eq_toTensorFromBlocks_representatives hR]
 
 variable [NeZero d]

@@ -94,7 +94,7 @@ theorem wordTupleSpanTop_of_ge_of_isNBlkInjective {r : ℕ} {dim : Fin r → ℕ
     (A : (k : Fin r) → MPSTensor d (dim k)) (hdim : ∀ k, 0 < dim k)
     (hUnital : ∀ k, ∑ i, A k i * (A k i)ᴴ = 1)
     (hDual : ∀ k, ∃ Λ : Matrix (Fin (dim k)) (Fin (dim k)) ℂ, Λ.PosDef ∧
-      Kraus.transferMap (d := d) (D := dim k) (fun a => (A k a)ᴴ) Λ = Λ)
+      Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (fun a => (A k a)ᴴ) Λ = Λ)
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (A k))
     {L₀ : ℕ} (hL₀ : 0 < L₀) (hC1 : ∀ k, Kraus.IsNBlkInjective (A k) L₀)
     (hDistinct : BlocksNotGaugePhaseEquiv (d := d) A)

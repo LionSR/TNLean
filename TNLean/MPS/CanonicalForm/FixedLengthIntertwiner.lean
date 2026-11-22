@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import QICLean.Kraus.Wielandt.SpanGrowth.CumulativeSpan
-import TNLean.Algebra.FinSumPermutation
-import TNLean.Algebra.OperatorSchmidt
+import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.BipartiteSumUniqueness
 import TNLean.MPS.CanonicalForm.QuadraticReconstruction
 
 /-!
@@ -222,7 +222,7 @@ theorem exists_cutGauge_of_coeff_eq {B C : MPSTensor d D} {k m : ℕ}
     intro σ τ
     rw [← coeff_append_eq_sum_cutVector, ← coeff_append_eq_sum_cutVector]
     exact hstate σ τ
-  obtain ⟨g, hg⟩ := TNLean.PEPS.gauge_eq1 hΨ hcontr
+  obtain ⟨g, hg⟩ := LinearIndependent.exists_left_eq_sum_of_sum_mul_eq hΨ hcontr
   let G : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ := Matrix.of g
   have hexpand : ∀ (c : Fin D × Fin D → ℂ) σ,
       (∑ μ, c μ * leftCutVector B k μ σ) =

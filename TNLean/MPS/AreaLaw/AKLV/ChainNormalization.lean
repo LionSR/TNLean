@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AKLV.DisjointGroundEnergy
 import TNLean.MPS.AreaLaw.AKLV.NormalizedChain
-import TNLean.Algebra.MatrixHermitianSum
+import QICLean.Algebra.HermitianPartSum
 
 /-!
 # Regional scalar normalization of an original nearest-neighbour chain

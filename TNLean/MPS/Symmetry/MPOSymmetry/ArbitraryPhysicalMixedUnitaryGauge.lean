@@ -424,12 +424,13 @@ theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of
     {X : Matrix (Fin (1 + 1)) (Fin (1 + 1)) ℂ}
     (hX : X ∈ commutingBoundaryAlgebra
       (arbitraryPhysicalMixedMPO A₀ A₁ (T₀ g) (T₁ g) (V₀ g) (V₁ g) (W₀ g) (W₁ g))) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ (T₀ g) (T₁ g) (V₀ g) (V₁ g)
         (W₀ g) (W₁ g)) X N) :=
-  Commute.sum_left _ _ _ fun i _ =>
-    placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
+  haveI : NeZero N := ⟨by omega⟩; Commute.sum_left _ _ _ fun i _ => by
+    rw [ManyBody.Interaction.translationInvariant_term_of_le _ hN i]
+    exact placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
       (arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_unitary
         A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ u₀ u₁ hT₀ hT₁ h₀ h₁ hY₀ hY₁ hγ g) hX
 
@@ -454,9 +455,10 @@ theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary
     (hY₁ : ∀ g, ∃ c : ℂ, c ≠ 0 ∧
       c • bondOneActionGauge (W₁ g 0) ∈ Matrix.unitaryGroup (Fin D₁) ℂ)
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) (g : G) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (mpo (arbitraryPhysicalMixedMPO A₀ A₁ (T₀ g) (T₁ g) (V₀ g) (V₁ g) (W₀ g) (W₁ g)) N) := by
+  have : NeZero N := ⟨by omega⟩
   rw [← mpoWithBoundary_one]
   exact hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_unitary
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ u₀ u₁ hT₀ hT₁ h₀ h₁ hY₀ hY₁ hγ hN g
@@ -487,9 +489,10 @@ theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary_can
     (h₁ : ∀ g, IsBiorthogonalDecomposition (MPOTensor.actTensor (T₁ g) A₁)
       (fun _ : Fin 1 => A₁) (V₁ g) (W₁ g))
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) (g : G) :
-    Commute (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (mpo (arbitraryPhysicalMixedMPO A₀ A₁ (T₀ g) (T₁ g) (V₀ g) (V₁ g) (W₀ g) (W₁ g)) N) :=
+  haveI : NeZero N := ⟨by omega⟩;
   hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ u₀ u₁ hT₀ hT₁ h₀ h₁
     (fun g ↦ exists_smul_bondOneActionGauge_mem_unitaryGroup hInj₀ hNorm₀ hΛ₀ hΛfix₀

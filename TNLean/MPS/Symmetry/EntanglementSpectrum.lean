@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.AnticommutingEvenDimension
-import TNLean.Algebra.ProjectiveCommutantEigenspace
+import QICLean.Algebra.AnticommutingEvenDimension
+import QICLean.Algebra.Cohomology.ProjectiveCommutantEigenspace
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.GaugeUniqueness
 import TNLean.MPS.Symmetry.StringOrderAux
@@ -56,7 +56,7 @@ every eigenspace is the degeneracy the source asserts.
   Concepts, symmetries, theorems*
 -/
 
-open scoped Matrix BigOperators ComplexOrder MatrixOrder TNLean.Algebra.ScalarCohomology
+open scoped Matrix BigOperators ComplexOrder MatrixOrder ScalarCohomology
 open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
@@ -197,8 +197,8 @@ theorem finrank_eigenspace_ne_one_of_isNontrivialClass {G : Type} [Group G]
     {Λ : Matrix (Fin D) (Fin D) ℂ} (hΛpos : Λ.PosDef)
     (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
     {U : G →* Matrix (Fin d) (Fin d) ℂ} (hU : ∀ g, U g * (U g)ᴴ = 1)
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ : TNLean.Algebra.ProjectiveRepresentation (D := D) ω)
+    {ω : ScalarCocycle G}
+    (ρ : ProjectiveRepresentation (D := D) ω)
     {ζ : G → ℂ} (hζ : ∀ g, ζ g ≠ 0)
     (hρ : ∀ g i, twistedTensor A U g i =
       ζ g • ((ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *

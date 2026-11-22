@@ -91,7 +91,7 @@ theorem periodicLocalInteractionES_parentInteractionES
     apply U.toLinearEquiv.conj.injective
     rw [LinearEquiv.conj_conj_symm]
     exact hConj.symm
-  · simp [periodicLocalInteractionES, localTermES, localTerm, hRN]
+  · simp [periodicLocalInteractionES, localTermES, localTerm_of_not_le A hRN, hRN]
 
 /-- Cyclic extension commutes with scalar multiplication. -/
 theorem periodicLocalInteractionES_smul (c : ℂ)

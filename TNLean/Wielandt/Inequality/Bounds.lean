@@ -323,7 +323,7 @@ theorem iIndex_le_general_of_isNormal [NeZero D]
     set n := w.length with hn_def
     have hn_pos : 0 < n := hw_pos
     -- Set up the blocked tensor
-    set B := blockTensor (d := d) (D := D) A n
+    set B := blockTensor (d := d) (n := Fin D) A n
     -- B is Kraus.IsNormal
     have hNB : Kraus.IsNormal B := isNormal_blockTensor A n hn_pos hN
     -- Encode w as a blocked index

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.ComplexSqrt
 import QICLean.Circuit.Model.UnitaryRing
-import TNLean.Circuit.ExpectationBounds
+import QICLean.Analysis.UnitaryExpectation
 import TNLean.Circuit.WeightedGHZ
 import TNLean.MPS.Preparation.StateApproximationError
 
@@ -87,15 +87,16 @@ theorem ghz_sector_weight_infidelity_lower_bound {T : ℕ}
       simp only [h l (Finset.mem_singleton_self l)]
   have hcov := norm_covariance_mulVec_ghzState_two_le Geometry.ring_cost_pos hU hRR' hcover
     (hZs i) (hZs j) (hZu i) (hZu j) hab
-  have hcov' : ‖expect ψ (Z i * Z j) - expect ψ (Z i) * expect ψ (Z j)‖ ≤ 16 / 25 :=
+  have hcov' : ‖star ψ ⬝ᵥ ((Z i * Z j) *ᵥ ψ) -
+      star ψ ⬝ᵥ (Z i *ᵥ ψ) * star ψ ⬝ᵥ (Z j *ᵥ ψ)‖ ≤ 16 / 25 :=
     hcov.trans_eq (by rw [ha, hb]; norm_num)
-  have hZφ (l : Fin N) : expect φ (Z l) = 0 := by
+  have hZφ (l : Fin N) : star φ ⬝ᵥ (Z l *ᵥ φ) = 0 := by
     change star (ghzState (ι := Fin N) ![Complex.invSqrtTwo, Complex.invSqrtTwo]) ⬝ᵥ
       (diagonal (fun σ : Fin N → Fin 2 => if σ l = 0 then (1 : ℂ) else -1) *ᵥ
         ghzState (ι := Fin N) ![Complex.invSqrtTwo, Complex.invSqrtTwo]) = 0
     rw [dotProduct_ghzState_diagonal_mulVec, Fin.sum_univ_two]
     simp [Complex.invSqrtTwo_mul_self]
-  have hZZφ : expect φ (Z i * Z j) = 1 := by
+  have hZZφ : star φ ⬝ᵥ ((Z i * Z j) *ᵥ φ) = 1 := by
     change star (ghzState (ι := Fin N) ![Complex.invSqrtTwo, Complex.invSqrtTwo]) ⬝ᵥ
       ((diagonal _ * diagonal _) *ᵥ
         ghzState (ι := Fin N) ![Complex.invSqrtTwo, Complex.invSqrtTwo]) = 1
@@ -108,16 +109,13 @@ theorem ghz_sector_weight_infidelity_lower_bound {T : ℕ}
   let η := ‖(WithLp.toLp 2 ψ - c • WithLp.toLp 2 φ :
     EuclideanSpace ℂ (Fin N → Fin 2))‖
   have hdiff := norm_covariance_sub_le hψ hcφ (hZu i) (hZu j)
-  simp only [expect_smul_state hc, hZφ, hZZφ, mul_zero, sub_zero] at hdiff
+  simp only [star_smul_dotProduct_mulVec_smul hc, hZφ, hZZφ, mul_zero, sub_zero] at hdiff
   have htri : (1 : ℝ) ≤ 16 / 25 + 6 * η := by
+    generalize star ψ ⬝ᵥ ((Z i * Z j) *ᵥ ψ) - star ψ ⬝ᵥ (Z i *ᵥ ψ) * star ψ ⬝ᵥ (Z j *ᵥ ψ) = C
+      at hcov' hdiff
     calc
-      1 = ‖(expect ψ (Z i * Z j) - expect ψ (Z i) * expect ψ (Z j)) -
-          ((expect ψ (Z i * Z j) - expect ψ (Z i) * expect ψ (Z j)) - 1)‖ := by
-        ring_nf
-        simp
-      _ ≤ ‖expect ψ (Z i * Z j) - expect ψ (Z i) * expect ψ (Z j)‖ +
-          ‖(expect ψ (Z i * Z j) - expect ψ (Z i) * expect ψ (Z j)) - 1‖ :=
-        norm_sub_le _ _
+      1 = ‖C - (C - 1)‖ := by simp
+      _ ≤ ‖C‖ + ‖C - 1‖ := norm_sub_le _ _
       _ ≤ 16 / 25 + 6 * η := add_le_add hcov' hdiff
   have hη : (3 : ℝ) / 50 ≤ η := by linarith
   have hηsq : (9 : ℝ) / 2500 ≤ η ^ 2 := by nlinarith [sq_nonneg (η - 3 / 50)]

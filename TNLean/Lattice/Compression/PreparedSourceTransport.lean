@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.PreparedSourceContraction
 import QICLean.Probability.ComplexGaussian.SourceTransportExpansion
-import TNLean.Algebra.MultilinearSelectedSum
+import QICLean.Algebra.MultilinearSelectedSum
 
 /-!
 # Source contractions in endpoint frames

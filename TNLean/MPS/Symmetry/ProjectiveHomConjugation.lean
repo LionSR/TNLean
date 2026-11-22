@@ -24,15 +24,15 @@ set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
 open scoped Matrix Kronecker
 
-namespace TNLean.Algebra.ProjectiveRepresentation
+namespace ProjectiveRepresentation
 
 variable {G : Type} [Group G] {D₀ D₁ : ℕ}
-variable {ω₀ ω₁ : TNLean.Algebra.ScalarCocycle G}
+variable {ω₀ ω₁ : ScalarCocycle G}
 
 /-- The factor of a unitary projective representation cancels with its
 complex conjugate. The bond dimension must be nonzero. -/
 theorem factor_mul_star_eq_one_of_unitary [NeZero D₀]
-    (ρ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω₀)
+    (ρ : ProjectiveRepresentation (D := D₀) ω₀)
     (hρ : ∀ g, (ρ.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (g h : G) : (ω₀ (g, h) : ℂ) * star (ω₀ (g, h) : ℂ) = 1 := by
   change (ω₀ (g, h) : ℂ) * (starRingEnd ℂ) (ω₀ (g, h) : ℂ) = 1
@@ -41,16 +41,16 @@ theorem factor_mul_star_eq_one_of_unitary [NeZero D₀]
 
 /-- The projective matrix acting on vectorized intertwiners. -/
 def homMatrix
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω₀)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω₁) (g : G) :
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω₀)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω₁) (g : G) :
     Matrix (Fin D₀ × Fin D₁) (Fin D₀ × Fin D₁) ℂ :=
   (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ).map star ⊗ₖ
     (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ)
 
 /-- The projective matrix on the intertwiner space is unitary. -/
 theorem homMatrix_mem_unitaryGroup
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω₀)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω₁)
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω₀)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (g : G) : homMatrix ρ₀ ρ₁ g ∈ Matrix.unitaryGroup _ ℂ :=
@@ -59,8 +59,8 @@ theorem homMatrix_mem_unitaryGroup
 /-- The factor on the intertwiner space is the complex conjugate of the
 first factor multiplied by the second. -/
 theorem homMatrix_mul
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω₀)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω₁) (g h : G) :
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω₀)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω₁) (g h : G) :
     homMatrix ρ₀ ρ₁ g * homMatrix ρ₀ ρ₁ h =
       (star (ω₀ (g, h) : ℂ) * (ω₁ (g, h) : ℂ)) • homMatrix ρ₀ ρ₁ (g * h) := by
   simp only [homMatrix]
@@ -76,8 +76,8 @@ theorem homMatrix_mul
     Matrix.smul_kronecker, Matrix.kronecker_smul, smul_smul]
 
 private theorem homFactor_mul_star_eq_one [NeZero D₀] [NeZero D₁]
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω₀)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω₁)
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω₀)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (g h : G) :
@@ -96,8 +96,8 @@ private theorem homFactor_mul_star_eq_one [NeZero D₀] [NeZero D₁]
 /-- Although the matrices on the intertwiner space are projective, their
 conjugations compose exactly. -/
 theorem homMatrix_conjugation_mul [NeZero D₀] [NeZero D₁]
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω₀)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω₁)
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω₀)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (g h : G) (X : Matrix (Fin D₀ × Fin D₁) (Fin D₀ × Fin D₁) ℂ) :
@@ -115,4 +115,4 @@ theorem homMatrix_conjugation_mul [NeZero D₀] [NeZero D₁]
       simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
       rw [mul_comm, homFactor_mul_star_eq_one ρ₀ ρ₁ h₀ h₁ g h, one_smul]
 
-end TNLean.Algebra.ProjectiveRepresentation
+end ProjectiveRepresentation

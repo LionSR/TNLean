@@ -30,7 +30,7 @@ set_option linter.mathlibStandardSet true
 open scoped Matrix ComplexOrder Topology OnePoint
 open Filter TNLean.Algebra
 
-open scoped TNLean.Algebra.ScalarCohomology
+open scoped ScalarCohomology
 
 namespace MPSTensor
 

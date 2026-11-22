@@ -171,7 +171,8 @@ Source: arXiv:quant-ph/0608197, the display at lines 977--979. -/
 theorem halfChainGram_apply_eq_transferMap_pow (A : MPSTensor d D) (L : ℕ)
     (p q : Fin D × Fin D) :
     halfChainGram A L p q =
-      (((Kraus.transferMap (d := d) (D := D) A) ^ L) (Matrix.single q.2 p.2 1)) q.1 p.1 := by
+      (((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L)
+        (Matrix.single q.2 p.2 1)) q.1 p.1 := by
   classical
   have hmul (W : Matrix (Fin D) (Fin D) ℂ) (a b c e : Fin D) :
       ((W * Matrix.single c a 1 * Wᴴ : Matrix (Fin D) (Fin D) ℂ) e b) =
@@ -248,12 +249,12 @@ theorem exists_geometric_bound_halfChainGram_sub_fixedPointProj
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ L, 1 ≤ L → ∀ p q : Fin D × Fin D,
       ‖halfChainGram A L p q -
         fixedPointProj Λ htr (Matrix.single q.2 p.2 1) q.1 p.1‖ ≤ C * r ^ L := by
-  set N := Kraus.transferMap (d := d) (D := D) A - fixedPointProj Λ htr with hN
+  set N := Kraus.transferMap (ι := Fin d) (n := Fin D) A - fixedPointProj Λ htr with hN
   set T := (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) N with hT
   obtain ⟨C, r, hC, hr0, hr1, hbound⟩ :=
     geometric_bound_of_spectralRadius_lt_one T (by simpa [hT, hN] using hgap)
   refine ⟨C, r, hC, hr0, hr1, fun L hL p q => ?_⟩
-  have hpow : (Kraus.transferMap (d := d) (D := D) A) ^ L = fixedPointProj Λ htr + N ^ L :=
+  have hpow : (Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L = fixedPointProj Λ htr + N ^ L :=
     pow_eq_fixedPointProj_add_compl_pow (E := Kraus.transferMap A) (ρ := Λ) htr hTP hΛ hL
   have hentry : halfChainGram A L p q -
       fixedPointProj Λ htr (Matrix.single q.2 p.2 1) q.1 p.1 =

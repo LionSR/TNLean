@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Algebra.Star.UnitaryStarAlgAut
-import TNLean.Algebra.UnitaryGeneralLinearInverse
+import QICLean.Algebra.IsometricFrameEmbedding
 import TNLean.MPS.ParentHamiltonian.PhysicalDeformation
 import TNLean.MPS.Symmetry.BondProductPhysicalSymmetry
 import TNLean.MPS.Symmetry.FixedPointGappedPath
@@ -26,9 +26,9 @@ physical symmetry. Source: arXiv:1010.3732, Section II.F.2,
 equation eq:1d-sym:jointsym. -/
 theorem normalizedBondInteraction_commute_onSite
     {G : Type} [Group G] {D₀ D₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈
       Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈

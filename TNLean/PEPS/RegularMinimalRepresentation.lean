@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularFourier
 import TNLean.PEPS.TorusBlockMultiplicityState
-import TNLean.Algebra.SemiRegularGroupAlgebra
+import QICLean.Representation.Character.SemiRegularGroupAlgebra
 
 /-!
 # A multiplicity-one semi-regular representation derived from the finite group

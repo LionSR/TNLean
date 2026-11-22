@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.Defs
 import TNLean.PEPS.AreaLaw.WeakRectangleShellSafety
-import TNLean.Algebra.ExplicitThresholds
+import QICLean.Analysis.ExplicitThresholds
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 
 /-!

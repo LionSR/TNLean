@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointEdgeProjectors
-import TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorProjections
+import QICLean.Analysis.EuclideanSigmaFiberwiseMap
 
 /-!
 # Joint normalized edge constraints as dependent spectator extensions

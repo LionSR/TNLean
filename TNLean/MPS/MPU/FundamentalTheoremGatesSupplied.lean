@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.FundamentalTheoremGates
-import TNLean.Algebra.UnitaryKronecker
+import QICLean.Algebra.UnitaryKronecker
 
 /-!
 # The fundamental theorem of matrix product unitaries: gates, necessity

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ScalarThreeCocycleCyclicClass
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicClass
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyClass
 
@@ -19,9 +19,9 @@ three-cochain has the cyclic invariant of the cocycle `ω₂` of line 2040 at th
 not that of `ω₀` or `ω₁`; so it is not cohomologous to `ω₀` or `ω₁`. Its domain-wall phase at the
 generator is `exp(2πi/3)`, the `n = 3`, `j = 2`, `a = 1` entry of the printed table. Since the
 cyclic invariant at the generator determines the class of a three-cocycle of `ℤ₃`
-(`TNLean.Algebra.ScalarThreeCocycleCyclicClass`), the cochain is cohomologous to `ω₂`, and the
-anomaly class of the family in `H³(ℤ₃, ℂˣ)` is the class of `ω₂`. The orientation of the
-anomaly three-cochain is that of `TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyClass`, whose
+(`QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicClass`), the cochain is cohomologous to
+`ω₂`, and the anomaly class of the family in `H³(ℤ₃, ℂˣ)` is the class of `ω₂`. The orientation
+of the anomaly three-cochain is that of `TNLean.MPS.Examples.Z3Anomalous.Z3AnomalyClass`, whose
 L-symbols satisfy the coupled pentagon equation `coupledpent` of the source (line 1876) with `ω`
 on the same side.
 
@@ -40,8 +40,6 @@ on the same side.
 -/
 
 noncomputable section
-
-open TNLean.Algebra
 
 namespace Z3Anomalous
 

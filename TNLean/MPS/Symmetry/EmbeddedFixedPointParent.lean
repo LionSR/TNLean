@@ -50,9 +50,9 @@ interaction by a symmetric affine path with a uniform gap.
 Source: arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`
 and `eq:1d-sym:jointsym`, the first endpoint comparison. -/
 noncomputable def embeddedSptFixedPointLeftParentComparisonPath
-    {G : Type} [Group G] {D₀ D₁ : ℕ} {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {G : Type} [Group G] {D₀ D₁ : ℕ} {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈
       Matrix.unitaryGroup (Fin D₀) ℂ)
@@ -78,9 +78,9 @@ interaction by a symmetric affine path with a uniform gap.
 Source: arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`
 and `eq:1d-sym:jointsym`, the second endpoint comparison. -/
 noncomputable def embeddedSptFixedPointRightParentComparisonPath
-    {G : Type} [Group G] {D₀ D₁ : ℕ} {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {G : Type} [Group G] {D₀ D₁ : ℕ} {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈
       Matrix.unitaryGroup (Fin D₀) ℂ)
@@ -108,9 +108,9 @@ space. Each tensor retains its original bond dimension. Source:
 arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`
 and `eq:1d-sym:jointsym`. -/
 noncomputable def embeddedCanonicalFixedPointGappedPath
-    {G : Type} [Group G] {D₀ D₁ : ℕ} {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {G : Type} [Group G] {D₀ D₁ : ℕ} {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈
       Matrix.unitaryGroup (Fin D₀) ℂ)

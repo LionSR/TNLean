@@ -111,12 +111,12 @@ and Cirac, Theorem `Th:TIcanonical`, proof lines 819--826.  The paper writes
 eigenvalue. -/
 theorem exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint
     (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
-    (h_unital : Kraus.transferMap (d := d) (D := D) A 1 = 1)
+    (h_unital : Kraus.transferMap (ι := Fin d) (n := Fin D) A 1 = 1)
     (hX_herm : X.IsHermitian)
-    (hX_fix : Kraus.transferMap (d := d) (D := D) A X = X)
+    (hX_fix : Kraus.transferMap (ι := Fin d) (n := Fin D) A X = X)
     (hX_nonscalar : ¬ ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ)) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
-      ρ.PosSemidef ∧ Kraus.transferMap (d := d) (D := D) A ρ = ρ ∧
+      ρ.PosSemidef ∧ Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ ∧
         ρ ≠ 0 ∧ ¬ ρ.PosDef := by
   classical
   rcases Nat.eq_zero_or_pos D with rfl | hD
@@ -128,8 +128,8 @@ theorem exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint
     simpa [ρ, c] using maxEigenvalue_smul_one_sub_posSemidef hX_herm
   have hρ_not_pd : ¬ ρ.PosDef := by
     simpa [ρ, c] using max_shift_not_posDef (D := D) hX_herm
-  have hρ_fix : Kraus.transferMap (d := d) (D := D) A ρ = ρ := by
-    change Kraus.transferMap (d := d) (D := D) A ((↑c : ℂ) • 1 - X) = (↑c : ℂ) • 1 - X
+  have hρ_fix : Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ := by
+    change Kraus.transferMap (ι := Fin d) (n := Fin D) A ((↑c : ℂ) • 1 - X) = (↑c : ℂ) • 1 - X
     rw [map_sub, map_smul, h_unital, hX_fix]
   have hρ_ne : ρ ≠ 0 := by
     intro hρ_zero
@@ -189,7 +189,7 @@ theorem exists_twoBlock_decomp_of_posSemidef_fixedPoint_strict
     (A : MPSTensor d D)
     (ρ : Matrix (Fin D) (Fin D) ℂ)
     (hρ_psd : ρ.PosSemidef)
-    (hρ_fix : Kraus.transferMap (d := d) (D := D) A ρ = ρ)
+    (hρ_fix : Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = ρ)
     (hρ_ne : ρ ≠ 0)
     (hρ_not_pd : ¬ ρ.PosDef) :
     ∃ n m : ℕ, ∃ _ : n + m = D, n < D ∧ m < D ∧
@@ -219,9 +219,9 @@ source phrase "fixed point different from the identity" is implemented here as
 every unital linear map and do not produce a nontrivial support projection. -/
 theorem exists_twoBlock_decomp_of_unital_nonScalar_fixedPoint
     (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
-    (h_unital : Kraus.transferMap (d := d) (D := D) A 1 = 1)
+    (h_unital : Kraus.transferMap (ι := Fin d) (n := Fin D) A 1 = 1)
     (hX_herm : X.IsHermitian)
-    (hX_fix : Kraus.transferMap (d := d) (D := D) A X = X)
+    (hX_fix : Kraus.transferMap (ι := Fin d) (n := Fin D) A X = X)
     (hX_nonscalar : ¬ ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ)) :
     ∃ n m : ℕ, ∃ _ : n + m = D, n < D ∧ m < D ∧
       ∃ (A₁ : MPSTensor d n) (A₂ : MPSTensor d m),

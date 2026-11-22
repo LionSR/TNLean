@@ -82,13 +82,17 @@ theorem exists_uniform_positive_chain_successive_accuracy {q : ℕ} (hq : 2 ≤ 
   have hN : 1 ≤ N := hL.trans hi
   let z : Fin q := ⟨0, by omega⟩
   let Ψ : ManyBody.BondInteraction N q :=
-    ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
+    Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z)
   obtain ⟨_, hS, _⟩ := hrun N hN Ψ
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2)
+    (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
+      fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
+    (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
+      fun _ ↦ ManyBody.siteBasisPenalty_le_one z)
   let S := lvvSweep hq Ψ
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) (min Delta 1)
+    (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
+      fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
+    (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
+      fun _ ↦ ManyBody.siteBasisPenalty_le_one z) (min Delta 1)
   have hS0 : S 0 = {emptyLeftVector N q} := rfl
   let B := P * (N + 1) ^ d
   have hB : 1 ≤ B := by

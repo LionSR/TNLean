@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.Blocking
-import TNLean.Algebra.UnitaryGeneralLinearInverse
+import QICLean.Algebra.IsometricFrameEmbedding
 import TNLean.MPS.Symmetry.EntanglementSpectrum
 
 /-!
@@ -25,7 +25,6 @@ set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
 open scoped Matrix
-open TNLean.Algebra
 
 namespace MPSTensor
 

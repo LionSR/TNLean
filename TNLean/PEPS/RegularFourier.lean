@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.UnitaryRepresentationBlocks
+import QICLean.Representation.Character.UnitaryAlgebra
 import TNLean.PEPS.RegularMatrixEquiv
-import TNLean.Algebra.RepresentationDeltaPositive
+import QICLean.Representation.Character.DeltaPositive
 
 /-!
 # Orthonormal Fourier rows of the finite regular representation

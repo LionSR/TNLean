@@ -11,7 +11,7 @@ import TNLean.MPS.AreaLaw.RegionalMiddleFactors
 import TNLean.MPS.AreaLaw.RetainedCoreFamilies
 import TNLean.Algebra.TwoMarkerMiddleFactors
 import QICLean.ManyBody.Sites.RegionMatrix
-import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlacedConfiguration
 import Mathlib.Algebra.Polynomial.AlgebraMap
 import Mathlib.Data.Fintype.BigOperators
 

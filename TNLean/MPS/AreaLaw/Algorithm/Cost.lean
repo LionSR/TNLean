@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.NatPolynomialBound
+import QICLean.Algebra.NatPolynomialBound
 import TNLean.MPS.AreaLaw.Algorithm.GroundStateProgram
 
 /-!
@@ -279,21 +279,27 @@ theorem cost_groundStateProgram_le {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
   set z : Fin q := ⟨0, by omega⟩ with hz
   set e := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (leftConfigOfFinEquiv (q := q) hi) with he
   set Ψ : ManyBody.BondInteraction N q :=
-    ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩ with hΨ
+    Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z) with hΨ
   set S := lvvSweep hq Ψ
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) (min Delta 1) L with hS
+    (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
+      fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
+    (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
+      fun _ ↦ ManyBody.siteBasisPenalty_le_one z) (min Delta 1) L with hS
   set B := sweepStepCostBound q (min Delta 1) N (max 1 (lvvSuccessiveCardBound q (min Delta 1) N))
     with hB
   have hsweep := cost_sweepProgram_le (by omega) hq Ψ
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) hg L hi
+    (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
+      fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
+    (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
+      fun _ ↦ ManyBody.siteBasisPenalty_le_one z) hg L hi
   have hcard : (S.image fun w ↦ e.symm w).card ≤
       max 1 (lvvSuccessiveCardBound q (min Delta 1) N) := by
     refine Finset.card_image_le.trans ?_
     refine (lvvSweep_spec hq Ψ
-      (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
-      (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) hg L hi).1.trans ?_
+      (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
+        fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
+      (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
+        fun _ ↦ ManyBody.siteBasisPenalty_le_one z) hg L hi).1.trans ?_
     split_ifs <;> simp
   have hmin := energyMinimizerCost_mono hi q (lvvSuccessiveBondBound q (min Delta 1) N) hcard
   exact Nat.add_le_add (hsweep.trans (Nat.mul_le_mul_right B hi)) hmin

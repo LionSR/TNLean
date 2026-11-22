@@ -310,7 +310,7 @@ theorem z2FourierGInjTensor_eq_blockTensor_ghz :
   obtain ⟨w, rfl⟩ := (Kraus.decodeBlockEquiv 2 2).symm.surjective I
   have hL : Kraus.blockTensor (ghzTensorD 2) 2 ((Kraus.decodeBlockEquiv 2 2).symm w) =
       ghzTensorD 2 (w 0) * ghzTensorD 2 (w 1) := by
-    simp [Kraus.blockTensor, Kraus.wordOfBlock, List.ofFn_succ, Kraus.evalWord_cons]
+    simp [Kraus.blockTensor, Kraus.reindexPhysical, List.ofFn_succ, Kraus.evalWord_cons]
   have hR : z2FourierGInjTensor ((Kraus.decodeBlockEquiv 2 2).symm w) =
       ∑ i : Fin 2, ∑ j : Fin 2, ((1 / 2 : ℂ) * z2Fourier (w 0) i * z2Fourier (w 1) j) •
         gInjTensor z2Label (gInjPhysEquiv z2Label (z2Label.symm i, z2Label.symm j)) := by

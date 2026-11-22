@@ -125,7 +125,7 @@ noncomputable def blockDiagEntry (a : Fin d → Fin D → ℂ) (q : ℕ)
 /-- Blocking a diagonal tensor gives a diagonal tensor. -/
 theorem blockTensor_diagonal (a : Fin d → Fin D → ℂ) (q : ℕ) (w : Fin (blockPhysDim d q)) :
     blockTensor (fun i => diagonal (a i)) q w = diagonal (blockDiagEntry a q w) := by
-  simp [blockTensor, Kraus.blockTensor, Kraus.wordOfBlock, evalWord_diagonal, List.map_ofFn,
+  simp [blockTensor, Kraus.blockTensor, Kraus.reindexPhysical, evalWord_diagonal, List.map_ofFn,
     blockDiagEntry, List.prod_ofFn, Function.comp_def]
 
 /-- The physical matrix of the blocked diagonal tensor factors through `J : |e⟩ ↦ |e e⟩`:

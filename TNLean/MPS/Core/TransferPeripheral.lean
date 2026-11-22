@@ -38,7 +38,7 @@ theorem evalWord_mul_cyclicProj {r n m : ℕ} [NeZero m]
     (K : Fin r → MatrixAlg n) (P : Fin m → MatrixAlg n)
     (hproj : ∀ k, IsOrthogonalProjection (P k))
     (hsum : ∑ k : Fin m, P k = 1)
-    (hcyclic : ∀ k : Fin m, Kraus.transferMap (d := r) (D := n) K (P (k + 1)) = P k) :
+    (hcyclic : ∀ k : Fin m, Kraus.transferMap (ι := Fin r) (n := Fin n) K (P (k + 1)) = P k) :
     ∀ (w : List (Fin r)) (k : Fin m),
       Kraus.evalWord K w * P k = P (k - (w.length : Fin m)) * Kraus.evalWord K w := by
   have hcyclicLM : ∀ k : Fin m, Kraus.mapLM K (P (k + 1)) = P k := fun k => hcyclic k

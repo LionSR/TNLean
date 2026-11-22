@@ -52,9 +52,9 @@ virtual action on its two ends. Source: arXiv:1010.3732, Section II.F.2,
 equations `eq:sym:omega-gamma` and `eq:1d-sym:jointsym`. -/
 theorem normalizedBondInterpolationVector_fixed_directSum
     {G : Type} [Group G] {D₀ D₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (g : G) (γ : ℝ)
     (h₀ : (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ) :

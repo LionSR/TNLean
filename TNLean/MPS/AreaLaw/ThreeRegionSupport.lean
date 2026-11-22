@@ -7,9 +7,9 @@ import TNLean.Lattice.Sheet.RegionalOperatorForms
 import TNLean.Lattice.Sheet.SupportedSchmidtRank
 import TNLean.Lattice.Sheet.LeftSupportedSchmidtRank
 import TNLean.MPS.AreaLaw.TwoCutEdgeSupports
-import TNLean.Circuit.SupportedMatrixElements
+import QICLean.ManyBody.Sites.ProductVector
 import QICLean.Entropy.RegionUnion
-import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.Entropy.SupportedMarginalTails
 import QICLean.Algebra.OperatorBlock
 import Mathlib.Data.Fintype.BigOperators

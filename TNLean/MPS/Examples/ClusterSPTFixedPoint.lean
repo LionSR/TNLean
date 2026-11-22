@@ -54,7 +54,6 @@ noncomputable section
 
 namespace MPSTensor
 
-open TNLean.Algebra
 open scoped ScalarCohomology
 
 /-- Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` line 1157).

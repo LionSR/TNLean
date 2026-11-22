@@ -152,10 +152,11 @@ theorem physicalMatrix_blockTensor_blockSum (hι : ∀ j, Function.Injective (ι
     physicalMatrix (blockTensor (blockSum Aj ι μ) q) =
       ∑ j, μ j ^ q • (physicalMatrix (blockTensor (Aj j) q) * (pairEmbedding (ι j))ᴴ) := by
   ext w p
-  have hw : Kraus.wordOfBlock d q w ≠ [] := by
-    rw [← List.length_pos_iff, Kraus.length_wordOfBlock]; omega
-  simp only [physicalMatrix, blockTensor, Kraus.blockTensor]
-  rw [evalWord_blockSum hι hdisj μ _ hw, Kraus.length_wordOfBlock, Matrix.sum_apply,
+  have hw : List.ofFn (Kraus.decodeBlock d q w) ≠ [] := by
+    rw [← List.length_pos_iff, List.length_ofFn]; omega
+  simp only [physicalMatrix, blockTensor, Kraus.blockTensor, Kraus.reindexPhysical,
+    Kraus.block_apply, Kraus.decodeBlockEquiv_apply]
+  rw [evalWord_blockSum hι hdisj μ _ hw, List.length_ofFn, Matrix.sum_apply,
     Matrix.sum_apply]
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [Matrix.smul_apply, Matrix.smul_apply]
@@ -166,7 +167,7 @@ theorem physicalMatrix_blockTensor_blockSum (hι : ∀ j, Function.Injective (ι
   rcases p with ⟨x, y⟩
   simp only [conjTranspose_apply, pairEmbedding_apply, coordEmbedding, of_apply, Prod.mk.injEq,
     physicalMatrix]
-  by_cases h1 : x = ι j a <;> by_cases h2 : y = ι j c <;> simp [h1, h2, Kraus.blockTensor]
+  by_cases h1 : x = ι j a <;> by_cases h2 : y = ι j c <;> simp [h1, h2, Kraus.reindexPhysical]
 
 
 /-! ### The bond pairs of the blocks -/

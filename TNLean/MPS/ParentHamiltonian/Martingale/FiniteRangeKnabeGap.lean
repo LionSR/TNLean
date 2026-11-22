@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.OrthogonalKernelGap
 import TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian
-import TNLean.MPS.ParentHamiltonian.Martingale.FiberwiseQuadraticFormGap
+import QICLean.Analysis.EuclideanFiberwiseGap
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteIntervalGapComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenParentGap
 

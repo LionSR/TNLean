@@ -4,8 +4,8 @@
 
 \begin{definition}[L-symbols and compatibility]
     \label{def:mpug_l_symbols}
-    \lean{TNLean.Algebra.LSymbol,
-        TNLean.Algebra.LSymbol.IsCompatible}
+    \lean{LSymbol,
+        LSymbol.IsCompatible}
     \leanok
     \uses{def:mpug_scalar_cochains}
     Let $G$ act on a set $\mathsf X$. An $L$-symbol is a function
@@ -22,12 +22,13 @@
     \cite{FrancoRubio2025MPUGauging}. No transitivity or finiteness assumption
     is imposed on the action.
     % Source anchor: arXiv:2502.20257, eq:omega_and_Ls.
+    This is~\cite[``L-symbols and compatibility'']{QICLean2026Blueprint}.
 \end{definition}
 
 \begin{definition}[Joint scalar gauge of L-symbols]
     \label{def:mpug_l_gauge}
-    \lean{TNLean.Algebra.ActionTensorGauge,
-        TNLean.Algebra.LSymbol.gauge}
+    \lean{ActionTensorGauge,
+        LSymbol.gauge}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_fusion_gauge}
     An action-tensor scalar gauge is a function
@@ -51,8 +52,8 @@
 
 \begin{lemma}[Identity and composition of joint scalar gauges]
     \label{thm:mpug_l_gauge_composition}
-    \lean{TNLean.Algebra.LSymbol.gauge_one,
-        TNLean.Algebra.LSymbol.gauge_comp}
+    \lean{LSymbol.gauge_one,
+        LSymbol.gauge_comp}
     \leanok
     \uses{def:mpug_l_gauge}
     The constant fusion and action gauges leave every $L$-symbol unchanged.
@@ -75,8 +76,8 @@
 
 \begin{definition}[Normalized L-symbols and action-tensor gauges]
     \label{def:mpug_l_normalized}
-    \lean{TNLean.Algebra.LSymbol.IsNormalized,
-        TNLean.Algebra.ActionTensorGauge.IsNormalized}
+    \lean{LSymbol.IsNormalized,
+        ActionTensorGauge.IsNormalized}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_l_gauge}
     As in \cite{FrancoRubio2025MPUGauging}, the $L$-symbol is normalized when,
@@ -136,11 +137,11 @@
 
 \begin{lemma}[Joint scalar gauges preserve L-symbol compatibility]
     \label{thm:mpug_l_gauge_preservation}
-    \lean{TNLean.Algebra.LSymbol.IsCompatible.gauge,
-        TNLean.Algebra.LSymbol.gauge_apply_right_one,
-        TNLean.Algebra.LSymbol.gauge_apply_left_one,
-        TNLean.Algebra.LSymbol.isNormalized_gauge_iff,
-        TNLean.Algebra.LSymbol.IsNormalized.gauge}
+    \lean{LSymbol.IsCompatible.gauge,
+        LSymbol.gauge_apply_right_one,
+        LSymbol.gauge_apply_left_one,
+        LSymbol.isNormalized_gauge_iff,
+        LSymbol.IsNormalized.gauge}
     \leanok
     \uses{def:mpug_fusion_gauge, def:mpug_l_symbols,
         def:mpug_l_gauge, def:mpug_l_normalized}
@@ -167,6 +168,8 @@
 \begin{proof}\leanok
     \uses{def:mpug_fusion_gauge, def:mpug_l_symbols, def:mpug_l_gauge,
         def:mpug_l_normalized}
+    This is~\cite[``Joint scalar gauges preserve L-symbol
+        compatibility'']{QICLean2026Blueprint}.
     With $L'=(\beta,\gamma)\mathbin{\triangleright}L$, substituting
     (\ref{eq:mpug_l_gauge}) into the left side of
     (\ref{eq:mpug_l_compatibility}) for $L'$ cancels the factor
@@ -211,8 +214,8 @@
 
 \begin{lemma}[A block fixed by a subgroup trivializes the restricted three-cocycle]
     \label{thm:mpug_fixed_block_trivializes}
-    \lean{TNLean.Algebra.LSymbol.isTrivialGaugeClass_comap_of_isCompatible,
-        TNLean.Algebra.LSymbol.isTrivialGaugeClass_of_isCompatible_of_forall_smul_eq}
+    \lean{LSymbol.isTrivialGaugeClass_comap_of_isCompatible,
+        LSymbol.isTrivialGaugeClass_of_isCompatible_of_forall_smul_eq}
     \leanok
     \uses{def:mpug_l_symbols, def:mpug_cochain_restriction,
         def:mpug_fusion_gauge, def:mpug_trivial_gauge_class}
@@ -661,7 +664,7 @@ $N\geq1$.
 
 \begin{lemma}[The anomaly at an involution]
     \label{thm:mpug_involution_anomaly_ratio}
-    \lean{TNLean.Algebra.LSymbol.eq_div_of_isCompatible_of_mul_self_eq_one}
+    \lean{LSymbol.eq_div_of_isCompatible_of_mul_self_eq_one}
     \leanok
     \uses{def:mpug_l_symbols}
     If $L$ is compatible with $\omega$ and $g^2=e$, then for every
@@ -674,13 +677,14 @@ $N\geq1$.
 \end{lemma}
 
 \begin{proof}\leanok
+    This is~\cite[``The anomaly at an involution'']{QICLean2026Blueprint}.
     Setting $h=k=g$ in (\ref{eq:mpug_l_compatibility}) and using $gg=e$
     gives the ratio.
 \end{proof}
 
 \begin{lemma}[The involution ratio from the self-pair and identity L-symbols]
     \label{thm:mpug_involution_anomaly_identity_ratio}
-    \lean{TNLean.Algebra.LSymbol.div_eq_mul_of_isCompatible_of_mul_self_eq_one}
+    \lean{LSymbol.div_eq_mul_of_isCompatible_of_mul_self_eq_one}
     \leanok
     \uses{def:mpug_l_symbols}
     If $L$ is compatible with $\omega$ and $g^2=e$, then for every
@@ -698,6 +702,8 @@ $N\geq1$.
 
 \begin{proof}\leanok
     \uses{thm:mpug_involution_anomaly_ratio}
+    This is~\cite[``The involution ratio from the self-pair and identity
+        L-symbols'']{QICLean2026Blueprint}.
     Compatibility at $(g,e,g)$ gives $L^x_{e,g}=\omega(g,e,g)L^{gx}_{g,e}$,
     and at $(g,e,e)$ it gives $L^z_{e,e}=\omega(g,e,e)L^z_{g,e}$ for $z=x$ and
     $z=gx$. Substituting into the formula of
@@ -1215,8 +1221,8 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_prod_lSymbol,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_inv_cyclicInvariant,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.prod_eq_domainWallPhase,
-        TNLean.Algebra.LSymbol.prod_div_eq_inv_cyclicInvariant,
-        TNLean.Algebra.LSymbol.prod_Ico_div_eq_inv_cyclicInvariant}
+        LSymbol.prod_div_eq_inv_cyclicInvariant,
+        LSymbol.prod_Ico_div_eq_inv_cyclicInvariant}
     \leanok
     \uses{def:mpug_domain_wall_family, def:mpug_permuted_block_l_symbol,
         def:mpug_anomaly_three_cochain}
@@ -1249,8 +1255,8 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 
 \begin{lemma}[The stabilizer of two blocks acts projectively]
     \label{thm:mpug_domain_wall_projective}
-    \lean{TNLean.Algebra.LSymbol.ratioCocycle,
-        TNLean.Algebra.LSymbol.ratioCocycle_isMulCocycle₂,
+    \lean{LSymbol.ratioCocycle,
+        LSymbol.ratioCocycle_isMulCocycle₂,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed,
         MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed_self}
     \leanok
