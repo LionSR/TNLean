@@ -71,16 +71,18 @@ gives a two-sided comparison of the periodic parent Hamiltonians of ranges \(m +
 \(R\): each range-\(R\) term occurs in exactly \(m\) windows. This is the finite-range comparison
 used in `docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex`. -/
 theorem hamiltonian_parentRingInteraction_comparison_of_local_open_comparison
-    (A : MPSTensor d D) {R m N : ℕ} [NeZero N]
+    (A : MPSTensor d D) {R m N : ℕ}
     (hR : 1 ≤ R) (hmR : R ≤ m) (hN : 2 * m ≤ N) {κ C : ℝ}
     (hLower : (κ : ℂ) • LinearMap.toMatrix' (parentInteraction A (m + R - 1)) ≤
       (parentChainInteraction A R (m + R - 1)).hamiltonian)
     (hUpper : (parentChainInteraction A R (m + R - 1)).hamiltonian ≤
       (C : ℂ) • LinearMap.toMatrix' (parentInteraction A (m + R - 1))) :
+    haveI : NeZero N := ⟨by omega⟩;
     (κ : ℂ) • (parentRingInteraction A (m + R - 1) N).hamiltonian ≤
         (m : ℂ) • (parentRingInteraction A R N).hamiltonian ∧
       (m : ℂ) • (parentRingInteraction A R N).hamiltonian ≤
         (C : ℂ) • (parentRingInteraction A (m + R - 1) N).hamiltonian := by
+  have : NeZero N := ⟨by omega⟩
   have hWN : m + R - 1 ≤ N := by omega
   have hsum : ∑ i : Fin N, ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hWN i)
       (parentChainInteraction A R (m + R - 1)).hamiltonian =

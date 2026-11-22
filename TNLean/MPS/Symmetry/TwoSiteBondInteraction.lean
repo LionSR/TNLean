@@ -126,10 +126,11 @@ private theorem twoSiteBondInteraction_etaPair {D : ℕ}
 starting at `i` (`ManyBody.placeAlong` along `ManyBody.ringWindow`) acts on the
 outgoing bond and is identity on every other bond. Source: arXiv:1010.3732, Section II.D.2,
 `eq:phase-nosym:iso-hamiltonian`. -/
-theorem embed_twoSiteBondInteraction_apply {D N : ℕ} [NeZero N]
+theorem embed_twoSiteBondInteraction_apply {D N : ℕ}
     (hN : 2 ≤ N) (i : Fin N)
     (K : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)
     (s t : Fin N → Fin (D * D)) :
+    haveI : NeZero N := ⟨by omega⟩;
     placeAlong (X := fun _ ↦ Fin (D * D)) (ringWindow hN i) (twoSiteBondInteraction K) s t =
       ∏ n, if n = i then
         K ((finProdFinEquiv.symm (s n)).2, (finProdFinEquiv.symm (s (n + 1))).1)
@@ -138,6 +139,7 @@ theorem embed_twoSiteBondInteraction_apply {D N : ℕ} [NeZero N]
           (finProdFinEquiv.symm (s (n + 1))).1) =
         ((finProdFinEquiv.symm (t n)).2,
           (finProdFinEquiv.symm (t (n + 1))).1) then 1 else 0 := by
+  have : NeZero N := ⟨by omega⟩
   let e := singleSectorRegisterEquiv D
   let k : Fin N → Fin 1 := fun _ => 0
   let sx : (n : Fin N) → Fin D × Fin D :=
@@ -183,15 +185,17 @@ theorem embed_twoSiteBondInteraction_apply {D N : ℕ} [NeZero N]
 /-- The two-site interaction beginning at `i` is the incoming bond term at
 its successor, transported to physical coordinates. Source:
 arXiv:1010.3732, Section II.D.2, `eq:phase-nosym:iso-hamiltonian`. -/
-theorem embed_twoSiteBondInteraction_eq_conj {D N : ℕ} [NeZero N]
+theorem embed_twoSiteBondInteraction_eq_conj {D N : ℕ}
     (hN : 2 ≤ N) (i : Fin N)
     (K : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
+    haveI : NeZero N := ⟨by omega⟩;
     placeAlong (X := fun _ ↦ Fin (D * D)) (ringWindow hN i) (twoSiteBondInteraction K) =
       (incomingBondPerm D N).permMatrix ℂ *
         placeAlong (X := fun _ ↦ Fin (D * D)) (ringWindow (by omega : 1 ≤ N) (finRotate N i))
           (MPOTensor.oneSiteOperator (Matrix.reindex finProdFinEquiv finProdFinEquiv K)) *
         ((incomingBondPerm D N).permMatrix ℂ).conjTranspose := by
   classical
+  have : NeZero N := ⟨by omega⟩
   refine Matrix.ext fun (s t : Fin N → Fin (D * D)) ↦ ?_
   rw [embed_twoSiteBondInteraction_apply, incomingBondPerm_conj_local_apply]
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_apply_apply]
@@ -205,12 +209,14 @@ theorem embed_twoSiteBondInteraction_eq_conj {D N : ℕ} [NeZero N]
 /-- The transported independent-bond parent Hamiltonian is the sum of one
 translation-invariant two-site interaction. Source: arXiv:1010.3732,
 Section II.D.2, `eq:phase-nosym:iso-hamiltonian`. -/
-theorem hamiltonian_translationInvariant_twoSiteBondPenalty {D N : ℕ} [NeZero N]
+theorem hamiltonian_translationInvariant_twoSiteBondPenalty {D N : ℕ}
     (hN : 2 ≤ N) (η : Fin (D * D) → ℂ) :
+    haveI : NeZero N := ⟨by omega⟩;
     (Interaction.translationInvariant N
       (twoSiteBondInteraction (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
         (bondPenalty η)))).hamiltonian =
       physicalBondProductParentHamiltonian η (by omega) := by
+  have : NeZero N := ⟨by omega⟩
   unfold physicalBondProductParentHamiltonian bondProductParentHamiltonian
   simp_rw [Interaction.hamiltonian_translationInvariant_of_le _ hN,
     embed_twoSiteBondInteraction_eq_conj]

@@ -98,12 +98,13 @@ theorem isometricInteractionExtension_commute_onSiteTensorPow {d m : ℕ}
 
 /-- The periodic translates of the normalized independent-bond interaction
 commute. Source: arXiv:1010.3732, Sections II.D.2 and II.F.2. -/
-theorem normalizedBondInteraction_translate_commute {D₀ D₁ N : ℕ} [NeZero N]
+theorem normalizedBondInteraction_translate_commute {D₀ D₁ N : ℕ}
     (γ : ℝ) (hN : 2 ≤ N) (i j : Fin N) :
     Commute (placeAlong (X := fun _ ↦ Fin ((D₀ + D₁) * (D₀ + D₁))) (ringWindow hN i)
         (normalizedBondInteraction D₀ D₁ γ))
       (placeAlong (X := fun _ ↦ Fin ((D₀ + D₁) * (D₀ + D₁))) (ringWindow hN j)
         (normalizedBondInteraction D₀ D₁ γ)) := by
+  have : NeZero N := ⟨by omega⟩
   let P := (incomingBondPerm (D₀ + D₁) N).permMatrix ℂ
   let η := normalizedBondInterpolationVector D₀ D₁ γ
   have hTranslated (k : Fin N) :
@@ -231,11 +232,12 @@ theorem commonPhysicalNormalizedBondInteraction_le_parent {D₀ D₁ R : ℕ}
 /-- The enlarged normalized bond terms commute at every pair of sites.
 Source: arXiv:1010.3732, Sections II.D.2 and II.F.2. -/
 theorem commonPhysicalNormalizedBondInteraction_translate_commute
-    {D₀ D₁ N : ℕ} [NeZero N] (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N) (i j : Fin N) :
+    {D₀ D₁ N : ℕ} (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N) (i j : Fin N) :
     Commute (placeAlong (X := fun _ ↦ Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁))
         (ringWindow hN i) (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ))
       (placeAlong (X := fun _ ↦ Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁))
         (ringWindow hN j) (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)) := by
+  have : NeZero N := ⟨by omega⟩
   simpa only [physicalSpectatorBondInteraction_eq_isometricInteractionExtension,
     commonPhysicalNormalizedBondInteraction, normalizedBondInteraction] using
     physicalSpectatorBondInteraction_translate_commute (D₀ + D₁) d₀ d₁
