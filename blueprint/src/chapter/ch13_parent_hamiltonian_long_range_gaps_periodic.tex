@@ -912,7 +912,7 @@
     monotonicity of $f$ proves (\ref{eq:ph_positive_commutator_comparison}).
 \end{proof}
 
-\begin{lemma}[Configuration reindexing preserves kernels and norm gaps]
+\begin{lemma}[Configuration reindexing preserves kernels and eigenvalues]
     \label{thm:configuration_reindex_kernel_gap}
     \lean{Matrix.toEuclideanLin_reindex_piLpCongrLeft,
         Matrix.ker_toEuclideanLin_reindex_map,
@@ -924,14 +924,16 @@
     \begin{align}
         H^e U_e=U_e H,\qquad \ker H^e=U_e(\ker H).
     \end{align}
-    Every estimate $\gamma\|v\|\leq\|Hv\|$ on $(\ker H)^\perp$
-    holds with the same constant for $H^e$ on $(\ker H^e)^\perp$.
+    The matrices $H^e$ and $H$ have the same eigenvalues. Hence, for every
+    real $\gamma$, every nonzero eigenvalue of $H^e$ is at least $\gamma$
+    whenever every nonzero eigenvalue of $H$ is.
     Positivity is unnecessary.
 \end{lemma}
 \begin{proof}\leanok
     Change the summation index in the matrix action. The intertwining
-    identity and invertibility give the kernel identity. Isometries
-    preserve norms and orthogonal complements, yielding the gap estimate.
+    identity and invertibility show that $U_e$ carries each eigenspace of
+    $H$ onto the eigenspace of $H^e$ for the same eigenvalue; the kernel
+    is the eigenspace for $0$.
 \end{proof}
 
 \begin{lemma}[A blocked finite-chain gap gives an original gap]

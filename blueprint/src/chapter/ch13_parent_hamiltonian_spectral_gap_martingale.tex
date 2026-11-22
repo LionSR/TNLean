@@ -1758,19 +1758,19 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     $\lVert v\rVert$ when $v\neq0$.
 \end{proof}
 
-\begin{lemma}[Norm gap from the full-range C1--C3 estimate]
+\begin{lemma}[Spectral gap from the full-range C1--C3 estimate]
     \label{thm:nachtergaele_c1_c3_full_range_norm_gap}
     \lean{FrustrationFree.NestedGroundProjections.forall_hasEigenvalue_of_nachtergaele_c1_c3_full_range}
     \leanok
     In the setting of
     Lemma~\ref{thm:nachtergaele_c1_c3_full_range_energy_estimate}, suppose
     that $H$ is
-    positive and $\operatorname{ran}(G_N)=\ker H$. Then every
-    $v\in(\ker H)^\perp$ satisfies
+    positive and $\operatorname{ran}(G_N)=\ker H$. Then every eigenvalue
+    $\mu\neq0$ of $H$ satisfies
     \begin{align}
         \frac{\gamma_{l+1}}{d_{l+1}}
-        \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert
-         & \leq\lVert Hv\rVert.
+        \left(1-\epsilon_l\sqrt{l+1}\right)^2
+         & \leq\mu.
         \label{eq:nachtergaele_c1_c3_full_range_norm_gap}
     \end{align}
 \end{lemma}
@@ -1794,7 +1794,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     \end{align}
     This global quadratic-form bound satisfies the hypothesis of
     Lemma~\ref{lem:quadratic_form_to_norm_bound}, whose finite-dimensional
-    criterion yields the stated norm bound.
+    criterion bounds every nonzero eigenvalue of $H$ below by $\kappa$.
 \end{proof}
 
 \begin{lemma}[Martingale criterion for a finite family of projections]
@@ -3871,17 +3871,13 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Rearranging (\ref{eq:projector_diff_inner_prod_expand}) proves the claim.
 \end{proof}
 
-\begin{lemma}[Norm gap implies the squared quadratic-form bound]
+\begin{lemma}[Spectral gap implies the squared quadratic-form bound]
     \label{lem:norm_gap_to_squared_quadratic_form}
     \lean{LinearMap.IsPositive.quadraticForm_sq_ge_of_forall_hasEigenvalue}
     \leanok
     Let $H$ be a positive operator on a finite-dimensional complex Hilbert
-    space and let $\gamma\geq0$. If
-    \begin{align}
-        \gamma\lVert u\rVert & \leq \lVert Hu\rVert
-        \qquad\text{for every }u\in(\ker H)^\perp,
-    \end{align}
-    then every vector $v$ satisfies
+    space and let $\gamma\geq0$. If every nonzero eigenvalue of $H$ is at
+    least $\gamma$, then every vector $v$ satisfies
     \begin{align}
         \gamma\operatorname{Re}\langle Hv,v\rangle
          & \leq \operatorname{Re}\langle Hv,Hv\rangle.
@@ -3890,6 +3886,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
+    Expanding in an orthonormal eigenbasis of $H$, whose eigenvalues on
+    $(\ker H)^\perp$ are at least $\gamma$, gives
+    $\gamma\lVert u\rVert\leq\lVert Hu\rVert$ for every $u\in(\ker H)^\perp$.
     For $w=v-P_{\ker H}v$, one has $w\perp\ker H$ and $Hw=Hv$, and symmetry gives
     $\langle Hv,v\rangle=\langle Hv,w\rangle$. Hence
     \begin{align}
@@ -3909,8 +3908,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Let $G$ act on a finite active configuration space. If
     $G^2\geq\gamma G$ as a quadratic form, the same inequality holds when $G$
     acts independently over any finite right spectator coordinate. In
-    particular, positivity and a norm gap $\gamma$ for $G$ imply this
-    fiberwise quadratic-form inequality.
+    particular, if $G$ is positive, $\gamma\geq0$, and every nonzero
+    eigenvalue of $G$ is at least $\gamma$, then this fiberwise
+    quadratic-form inequality holds.
 \end{lemma}
 
 \begin{proof}

@@ -2699,8 +2699,9 @@ shorter interaction range.
     Suppose $\kappa\geq0$, $c<1$,
     $\|P_W-P_UP_V\|\leq c$, and
     $\kappa((I-P_U)+(I-P_V))\leq H$ in the order of self-adjoint
-    operators. Then $\kappa(1-c)\|v\|\leq\|Hv\|$ for every $v\perp W$.
-    This is a two-subspace consequence of the ground-projection estimate
+    operators. Then every nonzero eigenvalue of $H$ is at least
+    $\kappa(1-c)$. This is a two-subspace consequence of the
+    ground-projection estimate
     in \cite[Section~6, the three-interval commutation lemma,
         part~(ii)]{Nachtergaele1996Spectral}.
 \end{lemma}
@@ -2715,9 +2716,11 @@ shorter interaction range.
     anticommutator inequality gives $L^2\geq(1-c)L$, and
     $\ker L=U\cap V=W$. The finite-dimensional spectral theorem gives
     $(1-c)\|v\|^2\leq\langle Lv,v\rangle$ for $v\perp W$.
-    Applying $\kappa L\leq H$ and Cauchy--Schwarz yields
-    $\kappa(1-c)\|v\|^2\leq\langle Hv,v\rangle
-        \leq\|Hv\|\|v\|$. Cancel $\|v\|$ when $v\ne0$.
+    Applying $\kappa L\leq H$ yields
+    $\kappa(1-c)\|v\|^2\leq\langle Hv,v\rangle$ for $v\perp W$.
+    Since $\kappa\geq0$ and $L\geq0$, $H$ is positive, so an eigenvector
+    $v$ for an eigenvalue $\mu\neq0$ lies in $W^\perp$ and gives
+    $\kappa(1-c)\|v\|^2\leq\mu\|v\|^2$.
 \end{proof}
 
 \begin{lemma}[Combining gaps on two open intervals]
