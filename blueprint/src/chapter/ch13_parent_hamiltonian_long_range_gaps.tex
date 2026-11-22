@@ -1095,15 +1095,15 @@ tensors.
 
 \begin{lemma}[The interaction on a full interval]
     \label{lem:full-interval-parent-interaction}
-    \lean{MPSTensor.localTermES_self_zero_eq_parentInteractionES}
+    \lean{MPSTensor.parentRingInteraction_term_zero_self}
     \leanok
-    For an MPS tensor $A$ and an interval of positive length $W$,
+    For an MPS tensor $A$ and a ring of positive length $W$, the term of
     the length-$W$ parent interaction starting at the first site is the
     orthogonal projection $h_W$ onto $\mathcal G_W(A)^\perp$.
 \end{lemma}
 \begin{proof}\leanok
-    Restriction to the full interval is the identity, so the local interaction
-    is precisely the defining orthogonal projection.
+    The window of this term is the whole ring in its own order, so placing
+    the projection on it changes nothing.
 \end{proof}
 
 \begin{lemma}[Periodic comparison from an open interval]
@@ -2496,11 +2496,11 @@ tensors.
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:periodic-fixed-interaction,thm:cyclic_active_block_local_conjugacy,lem:full-interval-parent-interaction}
+    \uses{def:periodic-fixed-interaction,thm:cyclic_active_block_local_conjugacy}
     In cyclic active-interval coordinates, each translated canonical term
-    is the full-interval parent projection extended by the identity on the
-    spectator sites. Conjugating back identifies the terms individually.
-    When $R>N$, both definitions give zero.
+    is the parent projection on the active interval extended by the
+    identity on the spectator sites. Conjugating back identifies the terms
+    individually. When $R>N$, both definitions give zero.
 \end{proof}
 
 \begin{lemma}[Uniform comparison of periodic parent Hamiltonians]

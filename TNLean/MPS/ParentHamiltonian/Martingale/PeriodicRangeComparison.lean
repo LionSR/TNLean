@@ -13,9 +13,6 @@ A comparison between a parent projector and a shorter-range open Hamiltonian
 can be translated around a periodic chain. Summing the translated inequalities
 counts each shorter-range interaction once for every position within the open
 window. This gives an operator comparison between the periodic Hamiltonians.
-
-**Transitional (#10948).** `localTermES_self_zero_eq_parentInteractionES` (stated for the
-Euclidean-space operators) is kept until its last user is converted.
 -/
 
 open scoped BigOperators ComplexOrder InnerProductSpace
@@ -24,26 +21,9 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The full-length interaction starting at zero is the canonical parent
-projection on that interval. -/
-theorem localTermES_self_zero_eq_parentInteractionES (A : MPSTensor d D)
-    {W : ℕ} (hW : 0 < W) :
-    localTermES A W (⟨0, hW⟩ : Fin W) = parentInteractionES A W := by
-  have hcfg (ω σ : Cfg d W) :
-      cyclicCfg hW W (⟨0, hW⟩ : Fin W) ω σ = ω :=
-    funext fun k ↦ by simp [cyclicCfg, Nat.mod_eq_of_lt k.isLt]
-  have hext (σ : Cfg d W) : extractWindow W (⟨0, hW⟩ : Fin W) σ = σ :=
-    funext fun k ↦ by simp [extractWindow, Nat.mod_eq_of_lt k.isLt]
-  have hr (σ : Cfg d W) : cyclicRestrictES hW W (⟨0, hW⟩ : Fin W) σ =
-      (LinearMap.id : EuclideanSpace ℂ (Cfg d W) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d W)) :=
-    LinearMap.ext fun v ↦ PiLp.ext fun ω ↦ congrArg v (hcfg ω σ)
-  exact LinearMap.ext fun v ↦ PiLp.ext fun σ ↦ by
-    simpa only [hr, hext, LinearMap.id_apply] using
-      localTermES_apply A W (⟨0, hW⟩ : Fin W) le_rfl v σ
-
 /-! ### The comparison for the Hamiltonians of the parent interactions
 
-The same comparison for the Hamiltonians of the parent interactions on the ring
+The comparison for the Hamiltonians of the parent interactions on the ring
 (`parentRingInteraction`) and on the open interval (`parentChainInteraction`), in the matrix
 order. -/
 

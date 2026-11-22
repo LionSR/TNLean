@@ -80,24 +80,24 @@ theorem periodicLocalInteractionES_mono
 /-- Extending the canonical local projection gives the existing translated
 parent-Hamiltonian term. -/
 theorem periodicLocalInteractionES_parentInteractionES
-    {D : ℕ} (A : MPSTensor d D) (hR : 0 < R) (i : Fin N) :
+    {D : ℕ} (A : MPSTensor d D) (_hR : 0 < R) (i : Fin N) :
     periodicLocalInteractionES (parentInteractionES A R) i = localTermES A R i := by
   by_cases hRN : R ≤ N
-  · let U := cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
-    have hConj : U.toLinearEquiv.conj (localTermES A R i) =
-        (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R))
-          (LinearMap.toContinuousLinearMap (parentInteractionES A R))).toLinearMap := by
-      simpa only [U, Fin.val_mk, cyclicForwardSite_zero,
-        localTermES_self_zero_eq_parentInteractionES A hR,
-        LinearEquiv.conj_apply, LinearMap.comp_assoc] using!
-        (localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv A
-          (R := R) hRN i ⟨0, hR⟩ (by simp))
-    unfold periodicLocalInteractionES
-    rw [dite_eq_left hRN]
-    change U.toLinearEquiv.symm.conj _ = _
-    apply U.toLinearEquiv.conj.injective
-    rw [LinearEquiv.conj_conj_symm]
-    exact hConj.symm
+  · have : NeZero N := NeZero.of_pos i.pos
+    let U := cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
+    apply LinearMap.ext
+    intro ψ
+    apply U.injective
+    have hterm : localTermES A R i ψ =
+        Matrix.toEuclideanLin ((parentRingInteraction A R N).term i) ψ := by
+      ext σ
+      rw [localTermES_apply A R i hRN, toEuclideanLin_parentRingInteraction_term_apply A hRN,
+        toEuclideanLin_toMatrix'_parentInteraction]
+      rfl
+    rw [cyclicActiveBlock_periodicLocalInteractionES_apply _ hRN, hterm,
+      cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply hRN,
+      toEuclideanLin_toMatrix'_parentInteraction]
+    rfl
   · simp [periodicLocalInteractionES, localTermES, localTerm_of_not_le A hRN, hRN]
 
 /-- Cyclic extension commutes with scalar multiplication. -/

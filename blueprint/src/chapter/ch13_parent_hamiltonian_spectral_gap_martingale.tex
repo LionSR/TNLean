@@ -4231,30 +4231,31 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[A local interaction inside a cyclic active block]
     \label{thm:cyclic_active_block_local_conjugacy}
-    \lean{MPSTensor.localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv}
+    \lean{MPSTensor.toEuclideanLin_translationInvariant_term_conj_cyclicActiveBlock}
     \leanok
-    \uses{def:cyclic_active_block_coordinates,
-        rem:euclidean_local_projector_ingredients, lem:right-spectator-extension}
-    Suppose that $W\leq N$ and $q+R\leq W$.  Under the isometry $U_i$ in
-    (\ref{eq:cyclic_active_block_isometry}), the range-$R$ interaction
-    beginning at the cyclic site $i+q$ becomes the corresponding nonwrapping
-    interaction on the active $W$-site interval, acting independently on the
+    \uses{def:cyclic_active_block_coordinates, lem:right-spectator-extension}
+    Let $h$ be an operator on $R$ sites, and for a ring of $M\geq R$ sites
+    write $h_j^{(M)}$ for $h$ placed on the $R$ consecutive sites beginning at
+    the cyclic site $j$.  Suppose that $W\leq N$ and $q+R\leq W$.  Under the
+    isometry $U_i$ in (\ref{eq:cyclic_active_block_isometry}), the translate
+    of $h$ beginning at the cyclic site $i+q$ of the ring of $N$ sites
+    becomes the translate beginning at the site $q$ of the active $W$-site
+    interval, whose window does not wrap, acting independently on the
     complementary configuration:
     \begin{align}
-        U_i h_{i+q}^{(N,R)}U_i^{-1}
-         & =\bigl(h_q^{(W,R)}\bigr)^{\oplus[d]^{N-W}}.
+        U_i h_{i+q}^{(N)}U_i^{-1}
+         & =\bigl(h_q^{(W)}\bigr)^{\oplus[d]^{N-W}}.
         \label{eq:cyclic_active_block_local_conjugacy}
     \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{def:cyclic_active_block_coordinates,
-        rem:euclidean_local_projector_ingredients, lem:right-spectator-extension}
-    The condition $q+R\leq W$ places the whole interaction window inside the
-    active block.  Joining an active configuration to a complementary one
+    \uses{def:cyclic_active_block_coordinates, lem:right-spectator-extension}
+    The condition $q+R\leq W$ places the whole window inside the active
+    block.  Joining an active configuration to a complementary one
     therefore preserves both the extracted length-$R$ word and every
-    configuration obtained by replacing that word.  The local projector acts
+    configuration obtained by replacing that word.  The operator $h$ acts
     only on the active coordinates, which proves
     (\ref{eq:cyclic_active_block_local_conjugacy}) on each complementary
     configuration.

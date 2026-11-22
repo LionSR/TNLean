@@ -109,18 +109,19 @@ theorem hamiltonian_restrict_parentChainInteraction_conj_cyclicActiveBlock
       apply Fin.ext
       simp only [cyclicForwardSite, Fin.val_mk, s]
       rw [Nat.mod_eq_of_lt (by omega)]
-    have h1 := localTermES_eq_toEuclideanLin_parentChainInteraction_term A
-      (⟨q.val, by omega⟩ : Fin W) hq
-    have h2 := localTermES_eq_toEuclideanLin_parentChainInteraction_term A
-      (⟨n - W + q.val, by omega⟩ : Fin N) (by change n - W + q.val + R ≤ N; omega)
+    have hW : NeZero W := ⟨by omega⟩
+    have hN : NeZero N := ⟨by omega⟩
     change (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
         (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin
           ((parentChainInteraction A R W).term ⟨q.val, by omega⟩)))) x =
       U (Matrix.toEuclideanLin ((parentChainInteraction A R N).term ⟨n - W + q.val, by omega⟩)
         (U.symm x))
-    rw [← h1, ← h2, hstart]
+    rw [ManyBody.Interaction.chainTranslates_term_eq_translationInvariant_term _ (by omega),
+      ManyBody.Interaction.chainTranslates_term_eq_translationInvariant_term _ (by omega)]
+    simp only [hstart]
     exact (LinearMap.congr_fun
-      (localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv A (by omega : W ≤ N) s
+      (toEuclideanLin_translationInvariant_term_conj_cyclicActiveBlock
+        (LinearMap.toMatrix' (parentInteraction A R)) (by omega : W ≤ N) s
         ⟨q.val, by omega⟩ hq) x).symm
 
 /-- Summing all complete suffix windows of length \(W\) counts every range-\(W\)
