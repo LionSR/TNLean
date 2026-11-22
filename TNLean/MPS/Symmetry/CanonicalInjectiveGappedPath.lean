@@ -41,7 +41,7 @@ theorem isGapped_hamiltonian_translationInvariant_parent
       (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian 0 δ := by
   have : NeZero N := ⟨by omega⟩
   exact (ManyBody.isGapped_zero_iff_norm
-    (posSemidef_hamiltonian_parentRingInteraction A hN)).mpr
+    (posSemidef_hamiltonian_parentRingInteraction A _ _)).mpr
       ⟨groundSpace_hamiltonian_parentRingInteraction_two_ne_bot A hInj hN, hGap⟩
 
 /-- A continuous one-site injective tensor path with fixed unitary on-site
@@ -74,18 +74,10 @@ noncomputable def canonicalInjectiveGappedPath
   gap := by
     let B : Set.Icc (0 : ℝ) 1 → MPSTensor d D := fun γ => A γ
     obtain ⟨δ, hδ, hGap⟩ :=
-      exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths B
+      exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isInjective_all_lengths B
         (continuousOn_iff_continuous_domRestrict.mp hA)
         (fun γ => hInj γ γ.property) isCompact_univ
-    refine ⟨δ, hδ, fun γ hγ N hN => ⟨0,
-      isGapped_hamiltonian_translationInvariant_parent (A γ) (hInj γ hγ) hN ?_⟩⟩
-    have : NeZero N := ⟨by omega⟩
-    have hH : parentHamiltonianES (A γ) 2 N =
-        Matrix.toEuclideanLin (parentRingInteraction (A γ) 2 N).hamiltonian := by
-      rw [ManyBody.Interaction.hamiltonian_translationInvariant_of_le _ hN]
-      exact parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow (A γ) hN
-    rw [← hH]
-    exact hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN
+    exact ⟨δ, hδ, fun γ hγ N hN => ⟨0, hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN⟩⟩
   symmetric γ hγ g N hN := by
     rw [← onSiteTensorPow_eq_finKronecker]
     have hSym := hamiltonian_translationInvariant_commute_onSiteTensorPow (U g)

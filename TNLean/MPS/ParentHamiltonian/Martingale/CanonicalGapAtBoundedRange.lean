@@ -30,6 +30,8 @@ at some shorter ranges: a canonical tensor with three blocks has a gapless
 two-site parent; see `docs/paper-gaps/cpgsv21_short_range_parent_gap.tex`.
 -/
 
+open scoped ComplexOrder
+
 namespace MPSTensor
 
 variable {d D : ℕ} [NeZero d] [NeZero D]
@@ -38,16 +40,16 @@ variable {d D : ℕ} [NeZero d] [NeZero D]
 \(R\geq 3D^5\) has a positive gap uniform over the periodic chain length.
 Source: arXiv:1606.00608, lines 317--345, and arXiv:2011.12127,
 Section IV.C, lines 2114--2129 and 2183--2187. -/
-theorem IsCPSVCanonicalForm.exists_parentHamiltonianES_uniform_gap_of_three_bondDim_pow_five_le
+theorem IsCPSVCanonicalForm.exists_parentRingInteraction_uniform_gap_of_three_bondDim_pow_five_le
     {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) {R : ℕ}
     (hR : 3 * D ^ 5 ≤ R) :
-    ∃ γ : ℝ, 0 < γ ∧ ∀ N : ℕ, ∀ v ∈
-      (LinearMap.ker (parentHamiltonianES A R N))ᗮ,
-      γ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖ := by
+    ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentRingInteraction A R N).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ := by
   let data := Classical.choice hA
   obtain ⟨S, hS, hBound, hSpan⟩ :=
     data.exists_positive_wordTupleSpanTop_succ_le_three_bondDim_pow_five
-  exact data.exists_parentHamiltonianES_uniform_gap_of_wordTupleSpanTop
+  exact data.exists_parentRingInteraction_uniform_gap_of_wordTupleSpanTop
     hS hSpan (hBound.trans hR)
 
 /-- Every fixed positive parent interaction of a canonical tensor at range
@@ -63,8 +65,9 @@ theorem IsCPSVCanonicalForm.exists_parentInteraction_uniform_gap_of_three_bondDi
       (LinearMap.ker (periodicInteractionHamiltonianES h N))ᗮ,
       γ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES h N v‖ := by
   obtain ⟨γ, hγ, hGap⟩ :=
-    hA.exists_parentHamiltonianES_uniform_gap_of_three_bondDim_pow_five_le hR
+    hA.exists_parentRingInteraction_uniform_gap_of_three_bondDim_pow_five_le hR
   exact hh.exists_uniform_gap_of_canonical_gap
-    (lt_of_lt_of_le (Nat.mul_pos (by omega) (Nat.pow_pos (NeZero.pos D))) hR) hγ hGap
+    (lt_of_lt_of_le (Nat.mul_pos (by omega) (Nat.pow_pos (NeZero.pos D))) hR) hγ
+    fun N ↦ parentHamiltonianES_norm_gap_of_forall_hasEigenvalue A R N (hGap N)
 
 end MPSTensor

@@ -324,12 +324,16 @@ theorem exists_uniform_mixedEndpoint_periodic_gap [NeZero D₀]
         δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
           (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N v‖ := by
   obtain ⟨δ, hδ, hGap⟩ :=
-    exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths
+    exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isInjective_all_lengths
       (fun _ : Unit => mixedEndpointLeftTensor A₀ D₁) continuous_const
       (fun _ => isInjective_mixedEndpointLeftTensor A₀ hA₀ D₁)
       (S := Set.univ) isCompact_univ
   refine ⟨δ / 3, div_pos hδ (by norm_num), fun N hN => ?_⟩
-  exact mixedEndpoint_periodic_norm_gap A₀ A₁ hN hδ (hGap () (Set.mem_univ ()) N hN)
+  have : NeZero N := ⟨by omega⟩
+  exact mixedEndpoint_periodic_norm_gap A₀ A₁ hN hδ (by
+    rw [parentHamiltonianES, parentHamiltonian_eq_toLin'_hamiltonian]
+    exact ((ManyBody.isGapped_zero_iff_norm (posSemidef_hamiltonian_parentRingInteraction _ 2
+      N)).mp (hGap () (Set.mem_univ ()) N hN)).2)
 
 end MPOSymmetry
 end MPSTensor

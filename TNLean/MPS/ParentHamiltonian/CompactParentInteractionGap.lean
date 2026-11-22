@@ -98,10 +98,13 @@ theorem exists_uniform_parentInteraction_gap_of_compact_isNormal_at_range
     isNBlkInjective_of_le (pow_pos (NeZero.pos D) 4)
       (isNBlkInjective_pow_four_of_isNormal (A x) (hNormal x)) (by omega)
   obtain ⟨γ, hγ, hGap⟩ :=
-    exists_uniform_parentHamiltonianES_gap_of_compact_isNormal_at_range A hA hNormal hR hS
+    exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNormal_at_range
+      A hA hNormal hR hS
   exact exists_uniform_periodicInteractionHamiltonianES_gap_of_compact_canonical_gap A
     (continuous_groundSpaceES_starProjection_family A hA R hInj) H hH hParent hS
-    (by omega) hγ hGap
+    (by omega) hγ fun x hx N hN ↦
+      parentHamiltonianES_norm_gap_of_forall_hasEigenvalue (A x) R N
+        (ManyBody.isGapped_zero_iff.mp (hGap x hx N hN)).2
 
 
 /-- Compact normal families retain a common gap for continuous positive
@@ -143,12 +146,13 @@ theorem exists_uniform_block_parentInteraction_gap_of_compact
   have hSpanR (x : X) : WordTupleSpanTop (A x) R :=
     wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega)
   obtain ⟨γ, hγ, hGap⟩ :=
-    exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths
+    exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_all_lengths
       μ A hμ hA hS hSpan hR hK
   exact exists_uniform_periodicInteractionHamiltonianES_gap_of_compact_canonical_gap
     (fun x => toTensorFromBlocks (d := d) (μ := μ x) (A x))
     (continuous_groundSpaceES_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
-    H hH hParent hK (by omega) hγ hGap
+    H hH hParent hK (by omega) hγ fun x hx N hN ↦
+      parentHamiltonianES_norm_gap_of_forall_hasEigenvalue _ R N (hGap x hx N hN)
 
 
 end MPSTensor

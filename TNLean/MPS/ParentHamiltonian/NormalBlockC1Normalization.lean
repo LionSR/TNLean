@@ -21,7 +21,7 @@ namespace MPSTensor
 pairwise inequivalence, and every periodic parent Hamiltonian of the block sum.
 This retains the C1 length used in PGVWC07, arXiv:quant-ph/0608197,
 Theorem 12, lines 1424--1458. -/
-theorem exists_hasComplementaryFixedPointGap_family_parentHamiltonianES_eq_of_common_isNBlkInjective
+theorem exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_common_isNBlkInjective
     {d r L₀ : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (hL₀ : 0 < L₀)
@@ -34,8 +34,9 @@ theorem exists_hasComplementaryFixedPointGap_family_parentHamiltonianES_eq_of_co
       (∀ j, Kraus.IsNBlkInjective (B j) L₀) ∧
       (∀ i j, i ≠ j → ∀ h : dim j = dim i,
         ¬ GaugePhaseEquiv (h ▸ B j) (B i)) ∧
-      (∀ L N, parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ) A) L N =
-        parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ) B) L N) := by
+      (∀ (L N : ℕ) [NeZero N],
+        (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) L N).hamiltonian =
+          (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) B) L N).hamiltonian) := by
   classical
   choose B ζ ρ hζ hGauge _hmpv hP hρ hGS _hPI _hCGS using
     fun j ↦ exists_hasComplementaryFixedPointGap_gauge_of_isNormal ⟨L₀, hL₀, hBlk j⟩
@@ -48,8 +49,8 @@ theorem exists_hasComplementaryFixedPointGap_family_parentHamiltonianES_eq_of_co
         gaugePhaseEquiv_of_smul_smul_cast h (hζ j) (hζ i)
           (gaugePhaseEquiv_of_gaugeEquiv_left_right_cast h (hGauge j)
             (by simpa only [eqRec_eq_cast] using hGP) (hGauge i)))
-  · intro L N
-    exact parentHamiltonianES_toTensorFromBlocks_eq_of_block_groundSpace_eq
+  · intro L N _
+    exact hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_of_block_groundSpace_eq
       μ μ A B hμ hμ (fun j ↦ hGS j L) N
 
 end MPSTensor

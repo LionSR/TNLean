@@ -121,7 +121,7 @@
 
 \begin{lemma}[Quadratic-form estimate from the martingale condition]
     \label{lem:parent_hamiltonian_ordered_rowsum_quadratic}
-    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_quadratic_form_of_ordered_local_term_bounds}
     \leanok
     \uses{lem:ordered_projection_rowsum_reduction, def:parent_hamiltonian_es, rem:euclidean_local_projector_ingredients, lem:transported_es_local_projections}
     For a fixed chain length $N$, suppose the Hilbert-space local terms
@@ -179,7 +179,7 @@
 
 \begin{lemma}[Parent-Hamiltonian gap from the anticommutator martingale condition]
     \label{lem:parent_hamiltonian_anticommutator_rowsum_gap}
-    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_anticommutator_local_term_bounds}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_quadratic_form_of_anticommutator_local_term_bounds}
     \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_anticommutator_local_term_bounds}
     \leanok
     \uses{lem:anticommutator_projection_rowsum_reduction, lem:parent_hamiltonian_es_quadratic_reduction, lem:transported_es_local_projections}
@@ -212,7 +212,7 @@
 
 \begin{lemma}[Parent-Hamiltonian finite-overlap anticommutator reduction]
     \label{lem:parent_hamiltonian_finite_overlap_anticommutator_gap}
-    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_anticommutator}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_quadratic_form_of_finite_overlap_anticommutator}
     \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_finite_overlap_anticommutator}
     \leanok
     \uses{lem:finite_overlap_projection_anticommutator_reduction, lem:parent_hamiltonian_es_quadratic_reduction, lem:transported_es_local_projections}
@@ -245,7 +245,7 @@
 
 \begin{lemma}[Parent-Hamiltonian finite-overlap martingale quadratic reduction]
     \label{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic}
-    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_ordered_cross_term}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_quadratic_form_of_finite_overlap_ordered_cross_term}
     \leanok
     \uses{lem:finite_overlap_projection_rowsum_reduction, def:parent_hamiltonian_es}
     For a fixed chain length $N$, let $m$ be a positive integer and let
@@ -324,7 +324,7 @@
 \begin{lemma}[Concrete non-overlap positivity for cyclic supports]
     \label{lem:cyclic_window_nonoverlap_positive}
     \lean{MPSTensor.CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap}
-    \lean{MPSTensor.localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap}
+    \lean{MPSTensor.re_inner_parentRingInteraction_term_nonneg_of_not_cyclicWindowsOverlap}
     \leanok
     \uses{lem:cyclic_window_support_offsets, def:cyclic_windows_overlap, lem:transported_es_nonoverlap_positive}
     If $L\le N$ and the cyclic supports $S_i$ and $S_j$ do not meet, then the

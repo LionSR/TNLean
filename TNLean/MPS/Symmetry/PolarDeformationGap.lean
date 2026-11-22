@@ -45,32 +45,8 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_gap_polarDeformation
   have hInj (γ : Set.Icc (0 : ℝ) 1) : Kraus.IsInjective (B γ) :=
     isInjective_polarDeformation hA γ.property
   obtain ⟨δ, hδ, hGap⟩ :=
-    exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths
+    exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isInjective_all_lengths
       B hB hInj isCompact_univ
-  refine ⟨δ, hδ, fun γ hγ N hN => ?_⟩
-  have : NeZero N := ⟨by omega⟩
-  have hH : parentHamiltonianES (polarDeformation A γ) 2 N =
-      Matrix.toEuclideanLin (parentRingInteraction (polarDeformation A γ) 2 N).hamiltonian := by
-    rw [ManyBody.Interaction.hamiltonian_translationInvariant_of_le _ hN]
-    exact parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow _ hN
-  refine (ManyBody.isGapped_zero_iff_norm
-    (posSemidef_hamiltonian_parentRingInteraction (polarDeformation A γ) hN)).mpr
-      ⟨groundSpace_hamiltonian_parentRingInteraction_two_ne_bot _ (hInj ⟨γ, hγ⟩) hN, ?_⟩
-  rw [← hH]
-  exact hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN
-
-/-- Canonical parent interactions commute with the same on-site symmetry
-throughout an injective polar deformation in unitary virtual gauge.
-Source: arXiv:1010.3732, Section II.C, “Isometric form and symmetries”. -/
-theorem commute_toMatrix'_parentInteraction_polarDeformation_onSiteTensorPow
-    {d D : ℕ} {A : MPSTensor d D} (hA : Kraus.IsInjective A)
-    (U : Matrix (Fin d) (Fin d) ℂ) (X : Matrix (Fin D) (Fin D) ℂ)
-    (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
-    (hX : X ∈ Matrix.unitaryGroup (Fin D) ℂ)
-    (hCov : rotatePhysical U A = fun i => X * A i * Xᴴ) (γ : ℝ) (L : ℕ) :
-    Commute (LinearMap.toMatrix' (parentInteraction (polarDeformation A γ) L))
-      (onSiteTensorPow L U) :=
-  parentInteraction_matrix_commute_onSiteTensorPow _ U hU
-    (gaugeEquiv_polarDeformation_of_unitary_covariance hA U X hU hX hCov γ) L
+  exact ⟨δ, hδ, fun γ hγ N hN => hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN⟩
 
 end MPSTensor

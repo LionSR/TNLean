@@ -19,26 +19,27 @@ TNLean derivation in `docs/paper-gaps/knabe88_finite_range_coefficient.tex`.
 -/
 
 open Filter
-open scoped Topology
+open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- A positive open-chain gap on all sufficiently large multiples of a fixed
-positive integer implies a positive periodic gap at every sufficiently large
-length. This applies to the divisible open lengths in Nachtergaele,
+/-- A positive gap of the open-chain parent Hamiltonians on all sufficiently large multiples of
+a fixed positive integer implies a positive gap of the Hamiltonians of the parent interaction on
+every sufficiently large ring. Each gap is stated above the kernel: every eigenvalue is `0` or at
+least the gap. This applies to the divisible open lengths in Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 2.1(ii), using the finite-range comparison in
 `docs/paper-gaps/knabe88_finite_range_coefficient.tex`. -/
-theorem exists_parentHamiltonianES_gap_of_eventually_divisible_openParentHamiltonianES_gap
+theorem exists_hamiltonian_parentRingInteraction_gap_of_eventually_divisible_gap
     (A : MPSTensor d D) {p R : ℕ} (hp : 1 ≤ p) (hR : 1 ≤ R)
     {γ : ℝ} (hγ : 0 < γ)
-    (hOpen : ∀ᶠ M : ℕ in atTop, ∀ u ∈
-      (LinearMap.ker (openParentHamiltonianES A R (p * M)))ᗮ,
-      γ * ‖u‖ ≤ ‖openParentHamiltonianES A R (p * M) u‖) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ᶠ N : ℕ in atTop, ∀ v ∈
-      (LinearMap.ker (parentHamiltonianES A R N))ᗮ,
-      δ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖ := by
+    (hOpen : ∀ᶠ M : ℕ in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A R (p * M)).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ) :
+    ∃ δ : ℝ, 0 < δ ∧ ∀ᶠ N : ℕ in atTop, ∀ [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentRingInteraction A R N).hamiltonian) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨n, hn⟩ := exists_lt_nsmul hγ (((R : ℝ) - 1) ^ 2)
   obtain ⟨M, hM, hGap⟩ := ((eventually_ge_atTop (n + 2 * R)).and hOpen).exists
   have hMp : M ≤ p * M := by nlinarith
@@ -47,8 +48,9 @@ theorem exists_parentHamiltonianES_gap_of_eventually_divisible_openParentHamilto
   have hnum : ((R : ℝ) - 1) ^ 2 < (m : ℝ) * γ := by
     exact hn.trans_le (by simpa only [nsmul_eq_mul] using
       mul_le_mul_of_nonneg_right (Nat.cast_le.mpr hm.2.1) hγ.le)
-  obtain ⟨hδ, hPeriodic⟩ := parentHamiltonianES_gap_of_openParentHamiltonianES_gap
-    A hR hm.1 hnum (hm.2.2.symm ▸ hGap)
-  exact ⟨_, hδ, (eventually_ge_atTop (2 * m)).mono hPeriodic⟩
+  obtain ⟨hδ, hPeriodic⟩ :=
+    hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteraction_gap
+      A hR hm.1 hnum (hm.2.2.symm ▸ hGap)
+  exact ⟨_, hδ, (eventually_ge_atTop (2 * m)).mono fun N hN _ ↦ hPeriodic N hN⟩
 
 end MPSTensor

@@ -353,9 +353,9 @@
 
 \begin{lemma}[Intersection property for two adjacent local kernels]
     \label{thm:adjacent_local_kernels_ground_space_es}
-    \lean{MPSTensor.mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero}
-    \lean{MPSTensor.adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ}
-    \lean{MPSTensor.adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ}
+    \lean{MPSTensor.mem_groundSpaceES_succ_of_parentRingInteraction_term_zero_one_eq_zero}
+    \lean{MPSTensor.parentRingInteraction_term_zero_one_eq_zero_of_mem_groundSpaceES_succ}
+    \lean{MPSTensor.parentRingInteraction_term_zero_one_eq_zero_iff_mem_groundSpaceES_succ}
     \leanok
     \uses{thm:ground_space_intersection, lem:local_term_es_kernel_restrictions, lem:mem_ground_space_es}
     If $A$ is injective and $L\ge2$, then on an $(L+1)$-site chain the kernels
@@ -386,7 +386,7 @@
     \lean{MPSTensor.CyclicWindowsDisjoint.symm}
     \lean{MPSTensor.localTerm_commute_of_cyclic_windows_disjoint}
     \lean{MPSTensor.localTermES_commute_of_cyclic_windows_disjoint}
-    \lean{MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint}
+    \lean{MPSTensor.re_inner_parentRingInteraction_term_nonneg_of_cyclic_windows_disjoint}
     \leanok
     \uses{lem:transported_es_local_projections, rem:projection_geometry_rowsum_identities}
     Let $L\le N$ and let $h_{i,\mathrm{ES}},h_{j,\mathrm{ES}}$ be
@@ -449,7 +449,7 @@
 
 \begin{lemma}[Parent-Hamiltonian quadratic-form reduction]
     \label{lem:parent_hamiltonian_es_quadratic_reduction}
-    \lean{MPSTensor.hamiltonian_parentRingInteraction_norm_bound_of_quadratic_form}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_of_quadratic_form}
     \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_quadratic_form}
     \leanok
     \uses{lem:transported_es_positive, thm:parent_ground_space_es_kernel, lem:quadratic_form_to_norm_bound}

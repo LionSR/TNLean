@@ -174,12 +174,13 @@ least two. The positive polar factor is derived from the original tensor.
 Source: arXiv:1010.3732, lines 575--625 and Appendix A. -/
 theorem exists_uniform_isometricDeformation_parent_gap
     (A : (j : Fin r) → MPSTensor d (dim j)) (hSpan : WordTupleSpanTop A 1) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
-      ∀ v ∈ (LinearMap.ker (parentHamiltonianES
-        (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N))ᗮ,
-        δ * ‖v‖ ≤ ‖parentHamiltonianES
-          (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N v‖ := by
-  exact exists_uniform_parentHamiltonianES_gap_positivePhysicalDeformation
+    ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ (N : ℕ) (hN : 2 ≤ N),
+      haveI : NeZero N := ⟨by omega⟩;
+      ∀ z : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentRingInteraction
+          (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N).hamiltonian) z →
+          z = 0 ∨ (δ : ℂ) ≤ z := by
+  exact exists_uniform_hamiltonian_parentRingInteraction_gap_positivePhysicalDeformation
     (leftPolarBlocks A) ((wordTupleSpanTop_leftPolarBlocks_iff A 1).2 hSpan)
     (fun _ => 1) (by simp) (leftPolarPhysicalFactor A) (leftPolarPhysicalFactor_posDef A)
 
@@ -208,13 +209,13 @@ theorem exists_blocked_isometricDeformation_parent_gap_of_isNormalTensor
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hNormal : ∀ j, IsNormalTensor (A j)) (hDistinct : BlocksNotGaugePhaseEquiv A) :
     ∃ L : ℕ, 0 < L ∧ L + 1 ≤ 3 * (max (∑ j, dim j) 1) ^ 5 ∧
-      ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
-        ∀ v ∈ (LinearMap.ker (parentHamiltonianES
-          (toTensorFromBlocks (fun _ => 1)
-            (isometricDeformationBlocks (fun j => blockTensor (A j) L) γ)) 2 N))ᗮ,
-          δ * ‖v‖ ≤ ‖parentHamiltonianES
+      ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ (N : ℕ) (hN : 2 ≤ N),
+        haveI : NeZero N := ⟨by omega⟩;
+        ∀ z : ℂ, Module.End.HasEigenvalue
+          (Matrix.toEuclideanLin (parentRingInteraction
             (toTensorFromBlocks (fun _ => 1)
-              (isometricDeformationBlocks (fun j => blockTensor (A j) L) γ)) 2 N v‖ := by
+              (isometricDeformationBlocks (fun j => blockTensor (A j) L) γ)) 2 N).hamiltonian) z →
+            z = 0 ∨ (δ : ℂ) ≤ z := by
   let : ∀ j, NeZero (dim j) := fun j => ⟨(hNormal j).bondDim_ne_zero⟩
   obtain ⟨L, hL, hBound, hSpan⟩ :=
     exists_positive_blockTensor_wordTupleSpanTop_one_of_isNormalTensor A hNormal hDistinct

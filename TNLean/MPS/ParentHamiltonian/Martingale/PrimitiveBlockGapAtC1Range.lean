@@ -34,7 +34,7 @@ variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
 range above the three-block bound determined by a common injectivity length,
 as in PGVWC07, Theorem 12 (`2blocks.2`). The gap conclusion is stated in
 arXiv:2011.12127, Gaps subsection, lines 2183--2187. -/
-theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_of_threeBlock_bound
+theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_threeBlock_bound
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
@@ -43,14 +43,13 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_of_threeBlock_bound
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     {L₀ R : ℕ} (hL₀ : 0 < L₀) (hBlk : ∀ j, Kraus.IsNBlkInjective (A j) L₀)
     (hr : 2 ≤ r) (hR : 3 * (r - 1) * (L₀ + 1) + 1 ≤ R) :
-    ∃ γ : ℝ, 0 < γ ∧ ∀ᶠ N : ℕ in atTop, ∀ v ∈
-      (LinearMap.ker (parentHamiltonianES
-        (toTensorFromBlocks (d := d) (μ := μ) A) R N))ᗮ,
-      γ * ‖v‖ ≤ ‖parentHamiltonianES
-        (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
-  exact exists_parentHamiltonianES_toTensorFromBlocks_gap_of_ker_openParentHamiltonianES_eq
+    ∃ γ : ℝ, 0 < γ ∧ ∀ᶠ N : ℕ in atTop, ∀ [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin
+        (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+        z = 0 ∨ (γ : ℂ) ≤ z := by
+  exact exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_ker_eq
     μ A hμ ρ hP hρ hDistinct (by omega) fun _ hW ↦
-      ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_threeBlock_bound
+      ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_threeBlock_bound
         μ A hμ ρ hP hρ hDistinct hL₀ hBlk hr hR hW
 
 end MPSTensor

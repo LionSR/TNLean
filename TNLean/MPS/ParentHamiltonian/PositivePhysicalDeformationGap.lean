@@ -78,19 +78,20 @@ theorem positivePhysicalDeformation_isUnit
 have a gap uniform in the parameter and every periodic length at least two.
 The initial simultaneous one-site span is supplied after the source's initial
 blocking. Source: arXiv:1010.3732, lines 589--594 and Appendix A. -/
-theorem exists_uniform_parentHamiltonianES_gap_positivePhysicalDeformation
+theorem exists_uniform_hamiltonian_parentRingInteraction_gap_positivePhysicalDeformation
     [NeZero d] [∀ j, NeZero (dim j)]
     (A : (j : Fin r) → MPSTensor d (dim j)) (hSpan : WordTupleSpanTop A 1)
     (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0)
     (Q : Matrix (Fin d) (Fin d) ℂ) (hQ : Q.PosDef) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
-      ∀ v ∈ (LinearMap.ker (parentHamiltonianES
-        (toTensorFromBlocks (d := d) μ
-          (fun j => rotatePhysical (positivePhysicalDeformation Q γ) (A j))) 2 N))ᗮ,
-        δ * ‖v‖ ≤ ‖parentHamiltonianES
-          (toTensorFromBlocks (d := d) μ
-            (fun j => rotatePhysical (positivePhysicalDeformation Q γ) (A j))) 2 N v‖ := by
-  obtain ⟨δ, hδ, hgap⟩ := exists_uniform_parentHamiltonianES_gap_of_compact_physicalAction
+    ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ (N : ℕ) (hN : 2 ≤ N),
+      haveI : NeZero N := ⟨by omega⟩;
+      ∀ z : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin
+          (parentRingInteraction (toTensorFromBlocks (d := d) μ
+            (fun j => rotatePhysical (positivePhysicalDeformation Q γ) (A j))) 2 N).hamiltonian) z →
+          z = 0 ∨ (δ : ℂ) ≤ z := by
+  obtain ⟨δ, hδ, hgap⟩ :=
+    exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_physicalAction
     A (S := 1) (R := 2) zero_lt_one hSpan le_rfl
     (positivePhysicalDeformation Q) (continuous_positivePhysicalDeformation Q)
     (positivePhysicalDeformation_isUnit Q hQ) (fun _ => μ) (fun _ => hμ) isCompact_univ

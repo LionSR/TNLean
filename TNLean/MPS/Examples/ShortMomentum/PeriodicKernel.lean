@@ -166,8 +166,7 @@ theorem ker_hamiltonian_parentRingInteraction_threeLetterTensor_eq_span {ζ : �
       (mpv (threeLetterTensor ζ)) = mpvState (threeLetterTensor ζ) N := by
     ext σ
     exact (mpvState_apply (threeLetterTensor ζ) N σ).symm
-  rw [← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _
-      (by omega : 7 ≤ N),
+  rw [← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _ _ _,
     parentHamiltonianGroundSpaceES,
     ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
     chainGroundSpace_seven_threeLetterTensor_eq_mpvSubmodule hζ (by omega),
@@ -178,7 +177,7 @@ theorem ker_hamiltonian_parentRingInteraction_threeLetterTensor_seven_eq_bot {ζ
     (hζ : IsPrimitiveRoot ζ 5) :
     LinearMap.ker (Matrix.toEuclideanLin
       (parentRingInteraction (threeLetterTensor ζ) 7 7).hamiltonian) = ⊥ := by
-  rw [← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _ (le_refl 7),
+  rw [← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _ _ _,
     parentHamiltonianGroundSpaceES,
     ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
     chainGroundSpace_threeLetterTensor_seven_eq_bot hζ, Submodule.map_bot]

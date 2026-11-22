@@ -34,24 +34,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The periodic local-term family indexed by the cyclic group of sites. -/
-noncomputable def zmodLocalTermES {N : ℕ} [NeZero N]
-    (A : MPSTensor d D) (R : ℕ) :
-    ZMod N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  fun s ↦ localTermES A R ((ZMod.finEquiv N).symm s)
-
-/-- Reindexing periodic local terms by \(\mathbb Z/N\mathbb Z\) preserves their total sum. -/
-theorem sum_zmodLocalTermES_eq_parentHamiltonianES {N : ℕ} [NeZero N]
-    (A : MPSTensor d D) (R : ℕ) :
-    (∑ s : ZMod N, zmodLocalTermES A R s) = parentHamiltonianES A R N := by
-  rw [parentHamiltonianES_eq_sum_localTermES]
-  calc
-    (∑ s : ZMod N, zmodLocalTermES A R s) =
-        ∑ i : Fin N, zmodLocalTermES A R (ZMod.finEquiv N i) :=
-      ((ZMod.finEquiv N).toEquiv.sum_comp (zmodLocalTermES A R)).symm
-    _ = ∑ i : Fin N, localTermES A R i := by
-      simp [zmodLocalTermES]
-
 /-- Two range-\(R\) cyclic windows are disjoint when their oriented start
 separation \(e\) satisfies \(R \leq e\) and \(e + R \leq N\). -/
 theorem cyclicWindowsDisjoint_cyclicForwardSite_of_oriented_separation
@@ -84,18 +66,6 @@ theorem cyclicWindowsDisjoint_cyclicForwardSite_of_oriented_separation
   have hab : a = e + b := by
     simpa [Nat.ModEq, Nat.mod_eq_of_lt haN, Nat.mod_eq_of_lt hebN] using hcancel
   omega
-
-/-- The oriented-separation condition gives the commutation hypothesis used in
-the finite-range Knabe inequality. -/
-theorem zmodLocalTermES_commute_of_oriented_separation {N R e : ℕ} [NeZero N]
-    (A : MPSTensor d D) (hR : R ≤ e) (he : e + R ≤ N)
-    (s : ZMod N) (v : EuclideanSpace ℂ (Cfg d N)) :
-    zmodLocalTermES A R s (zmodLocalTermES A R (s + (e : ZMod N)) v) =
-      zmodLocalTermES A R (s + (e : ZMod N)) (zmodLocalTermES A R s v) := by
-  rw [zmodLocalTermES, zmodLocalTermES,
-    finEquiv_symm_add_eq_cyclicForwardSite]
-  exact localTermES_commute_of_cyclic_windows_disjoint A (by omega)
-    (cyclicWindowsDisjoint_cyclicForwardSite_of_oriented_separation hR he _) v
 
 /-- Split a periodic configuration into a cyclic active block of length \(W\) and
 its ordered complement. -/
@@ -350,45 +320,154 @@ theorem localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv
   rw [hrestrict,
     extractWindow_join_cyclicActiveBlock hWN s q hqR σ τ]
 
-/-- A Knabe block of \(m\) consecutive range-\(R\) periodic terms is the
-fiberwise open parent Hamiltonian on exactly \(m + R - 1\) active sites.
+/-! ### Blocks of consecutive terms on the ring
 
-The assumptions \(1 \leq R\), \(R \leq m\), and \(2m \leq N\) ensure that the active
-interval fits inside the periodic chain and contains every one of the \(m\)
-nonwrapping interaction windows. -/
-theorem cyclicWindowSum_zmodLocalTermES_conj_cyclicActiveBlock
-    {N R m : ℕ} [NeZero N] (A : MPSTensor d D)
-    (hR : 1 ≤ R) (hmR : R ≤ m) (hN : 2 * m ≤ N) (s : ZMod N) :
-    let W := m + R - 1
-    let i := (ZMod.finEquiv N).symm s
-    let U := cyclicActiveBlockConfigLinearIsometryEquiv d W (by omega) i
-    U.toLinearEquiv.toLinearMap.comp
-        ((ProjectionGeometry.cyclicWindowSum (zmodLocalTermES A R) m s).comp
-          U.symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-        (LinearMap.toContinuousLinearMap
-          (openParentHamiltonianES A R W))).toLinearMap := by
-  classical
-  dsimp only
-  let i := (ZMod.finEquiv N).symm s
-  let U := cyclicActiveBlockConfigLinearIsometryEquiv d (m + R - 1) (by omega) i
-  apply LinearMap.ext
-  intro x
-  simp only [ProjectionGeometry.cyclicWindowSum, openParentHamiltonianES,
-    ManyBody.Interaction.hamiltonian, LinearMap.comp_apply, LinearMap.sum_apply, map_sum,
-    ContinuousLinearMap.rightFiberwiseMap_sum, ContinuousLinearMap.toLinearMap_sum]
-  refine Fin.sum_eq_sum_of_val_eq _ _ (fun k ha hb ↦ ?_) (fun i hi ↦ absurd i.isLt (by omega))
-    (fun i hi ↦ absurd i.isLt (by omega))
-  have hstart : (ZMod.finEquiv N).symm (s + (k : ZMod N)) = cyclicForwardSite i k := by
-    simpa [i] using finEquiv_symm_add_eq_cyclicForwardSite s k
-  change U (localTermES A R ((ZMod.finEquiv N).symm (s + (k : ZMod N))) (U.symm x)) = _
-  rw [hstart]
-  have hk : (⟨k, by omega⟩ : Fin (m + R - 1)).val + R ≤ m + R - 1 := by
-    change k + R ≤ m + R - 1
-    omega
-  rw [← localTermES_eq_toEuclideanLin_parentChainInteraction_term A ⟨k, by omega⟩ hk]
-  exact LinearMap.congr_fun
-    (localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv A (by omega) i ⟨k, by omega⟩ hk)
-    x
+For a local matrix `h` on `R` sites, the terms of its translates on the ring
+(`ManyBody.Interaction.translationInvariant`) with windows inside one window of `W` consecutive
+sites add up to the translate of the open-chain Hamiltonian of `h` on `W` sites
+(`ManyBody.Interaction.chainTranslates`); in the cyclic active-block coordinates of its window, a
+term acts on the active block only. -/
+
+section RingTerms
+
+open Fin.CommRing
+
+variable {R N : ℕ}
+
+/-- A term of the translates of `h` on the ring acts at a configuration \(σ\) as `h` on the
+cyclic restriction to its window, read at the window of \(σ\). -/
+theorem toEuclideanLin_translationInvariant_term_apply (hRN : R ≤ N)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N))
+    (σ : Cfg d N) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) v σ =
+      Matrix.toEuclideanLin h (cyclicRestrictES (Fin.pos i) R i σ v) (extractWindow R i σ) := by
+  have : NeZero N := NeZero.of_pos i.pos
+  rw [ManyBody.Interaction.translationInvariant_term_of_le _ hRN i, Matrix.toLpLin_apply,
+    Matrix.toLpLin_apply]
+  change Matrix.mulVec (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hRN i) h)
+    (WithLp.ofLp v) σ = Matrix.mulVec h _ _
+  rw [ManyBody.placeAlong_mulVec_apply_of _ _ _ σ (replaceWindow R hRN i σ)
+    (replaceWindow_ringWindow hRN i σ)
+    (fun τ _ hv ↦ replaceWindow_of_forall_ringWindow_ne hRN i σ τ hv)]
+  rfl
+
+/-- In the cyclic active-block coordinates of its window, a term of the translates of `h` on the
+ring is `h` on the active block, acting independently on every spectator configuration. Source:
+PGVWC07, arXiv:quant-ph/0608197, Theorem 11 proof, lines 1418–1422. -/
+theorem cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply
+    (hRN : R ≤ N) (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N)
+    (ψ : EuclideanSpace ℂ (Cfg d N)) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
+        (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) ψ) =
+      ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R))
+        (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin h))
+        (cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i ψ) := by
+  have : NeZero N := NeZero.of_pos i.pos
+  let U := cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
+  let e := cyclicActiveBlockConfigEquiv d R hRN i
+  apply U.symm.injective
+  rw [LinearIsometryEquiv.symm_apply_apply]
+  ext σ
+  rw [toEuclideanLin_translationInvariant_term_apply hRN,
+    cyclicActiveBlockConfigLinearIsometryEquiv_symm_apply_apply]
+  change Matrix.toEuclideanLin h _ (extractWindow R i σ) =
+    Matrix.toEuclideanLin h (ContinuousLinearMap.rightFiber (U ψ) (e σ).2) (extractWindow R i σ)
+  apply congrArg
+    (fun w : EuclideanSpace ℂ (Cfg d R) => Matrix.toEuclideanLin h w (extractWindow R i σ))
+  ext ω
+  change ψ (cyclicCfg (Fin.pos i) R i ω σ) = ψ (e.symm (ω, (e σ).2))
+  rcases Nat.eq_zero_or_pos R with rfl | hR
+  · have hω : ω = (e σ).1 := Subsingleton.elim _ _
+    rw [hω, Prod.mk.eta, Equiv.symm_apply_apply]
+    exact congrArg ψ (funext fun k ↦ by simp [cyclicCfg])
+  · have hfull (ξ : Cfg d R) : cyclicCfg hR R (⟨0, hR⟩ : Fin R) ω ξ = ω := by
+      funext j
+      simp [cyclicCfg, Nat.mod_eq_of_lt j.isLt]
+    have hj := cyclicCfg_join_cyclicActiveBlock hRN i (⟨0, hR⟩ : Fin R)
+      (by simp) ω (e σ).1 (e σ).2
+    simp only [cyclicForwardSite_zero, hfull, Prod.mk.eta] at hj
+    rw [Equiv.symm_apply_apply] at hj
+    exact congrArg ψ hj
+
+end RingTerms
 
 end MPSTensor
+
+namespace ManyBody.Interaction
+
+open Fin.CommRing
+
+variable {α : Type*} [Fintype α] [DecidableEq α] {R N : ℕ} [NeZero N]
+
+/-- **A window of terms.** On the ring of `N` sites, the translate to the window of `W ≤ N`
+consecutive sites starting at `i` of the open-chain Hamiltonian of `h` on `W` sites is the sum of
+the terms of the translates of `h` on the ring at the starts `i, i + 1, …, i + (W - R)`: the
+windows of `R` consecutive sites inside that window. -/
+theorem translationInvariant_term_hamiltonian_chainTranslates
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) {W : ℕ} (hWN : W ≤ N) (i : Fin N) :
+    (translationInvariant N (chainTranslates R W h).hamiltonian).term i =
+      ∑ j : Fin (W + 1 - R), (translationInvariant N h).term (i + (j.val : Fin N)) := by
+  rw [translationInvariant_term_of_le _ hWN, hamiltonian, ManyBody.placeAlong_sum]
+  refine Fintype.sum_congr _ _ fun j ↦ ?_
+  rw [ofPlaceAlong_term, translationInvariant_term_of_le _ (show R ≤ N by have := j.isLt; omega),
+    ManyBody.placeAlong_placeAlong, ManyBody.chainWindow_trans_ringWindow]
+
+/-- **Separated windows.** Terms of translates on the ring whose windows of `R` consecutive
+sites start `e` sites apart, with `R ≤ e` and `e + R ≤ N`, commute: the windows are disjoint. -/
+theorem commute_translationInvariant_term_add_of_le
+    (h h' : Matrix (Fin R → α) (Fin R → α) ℂ) {e : ℕ} (hR : R ≤ e) (he : e + R ≤ N)
+    (i : Fin N) :
+    Commute ((translationInvariant N h).term i)
+      ((translationInvariant N h').term (i + (e : Fin N))) := by
+  have hRN : R ≤ N := by omega
+  rw [translationInvariant_term_of_le _ hRN, translationInvariant_term_of_le _ hRN]
+  refine ManyBody.commute_placeAlong_of_disjoint (X := fun _ ↦ α) _
+    (Finset.disjoint_left.mpr fun k hki hkj ↦ ?_) _ _
+  have hj : i + (e : Fin N) = MPSTensor.cyclicForwardSite i e :=
+    Fin.ext (by simp [MPSTensor.cyclicForwardSite, Fin.val_add])
+  rw [hj] at hkj
+  exact MPSTensor.cyclicWindowsDisjoint_cyclicForwardSite_of_oriented_separation hR he i k
+    ((MPSTensor.mem_map_ringWindow_iff hRN i k).mp hki)
+    ((MPSTensor.mem_map_ringWindow_iff hRN _ k).mp hkj)
+
+/-- Separated terms commute, for sites indexed by the cyclic group. -/
+theorem commute_translationInvariant_term_finEquiv_symm_add_of_le
+    (h h' : Matrix (Fin R → α) (Fin R → α) ℂ) {e : ℕ} (hR : R ≤ e) (he : e + R ≤ N)
+    (s : ZMod N) :
+    Commute ((translationInvariant N h).term ((ZMod.finEquiv N).symm s))
+      ((translationInvariant N h').term ((ZMod.finEquiv N).symm (s + (e : ZMod N)))) := by
+  rw [map_add, map_natCast]
+  exact commute_translationInvariant_term_add_of_le h h' hR he _
+
+/-- **A Knabe block.** For `1 ≤ R`, the sum of the operators of `m` consecutive terms of the
+translates of `h` on the ring, starting at the site `s`, is the operator of the translate to the
+window of `m + R - 1` consecutive sites starting at `s` of the open-chain Hamiltonian of `h` on
+`m + R - 1` sites. The sites are indexed by the cyclic group, as in the finite-range Knabe
+inequality. -/
+theorem cyclicWindowSum_toEuclideanLin_translationInvariant_term
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) {m : ℕ} (hR : 1 ≤ R) (hW : m + R - 1 ≤ N)
+    (s : ZMod N) :
+    ProjectionGeometry.cyclicWindowSum (fun s : ZMod N ↦
+        Matrix.toEuclideanLin ((translationInvariant N h).term ((ZMod.finEquiv N).symm s))) m s =
+      Matrix.toEuclideanLin ((translationInvariant N
+        (chainTranslates R (m + R - 1) h).hamiltonian).term ((ZMod.finEquiv N).symm s)) := by
+  rw [translationInvariant_term_hamiltonian_chainTranslates h hW, map_sum,
+    ProjectionGeometry.cyclicWindowSum]
+  refine Fin.sum_eq_sum_of_val_eq _ _ (fun k _ _ ↦ ?_) (fun i hi ↦ absurd i.isLt (by omega))
+    (fun i hi ↦ absurd i.isLt (by omega))
+  rw [map_add, map_natCast]
+
+/-- The operators of the terms of the translates on the ring, indexed by the cyclic group, add
+up to the operator of the Hamiltonian. -/
+theorem sum_toEuclideanLin_translationInvariant_term_finEquiv_symm
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) :
+    ∑ s : ZMod N, Matrix.toEuclideanLin
+        ((translationInvariant N h).term ((ZMod.finEquiv N).symm s)) =
+      Matrix.toEuclideanLin (translationInvariant N h).hamiltonian := by
+  rw [hamiltonian, map_sum]
+  exact (ZMod.finEquiv N).symm.toEquiv.sum_comp fun i ↦
+    Matrix.toEuclideanLin ((translationInvariant N h).term i)
+
+end ManyBody.Interaction

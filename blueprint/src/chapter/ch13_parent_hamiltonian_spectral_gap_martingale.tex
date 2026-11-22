@@ -250,8 +250,7 @@
 
 \begin{definition}[Fixed-volume prefix and interval ground projections]%
     \label{def:fixed-volume-prefix-ground-projections}
-    \lean{MPSTensor.openPrefixParentHamiltonianES,
-        MPSTensor.openPrefixGroundProjectionES,
+    \lean{MPSTensor.openPrefixGroundProjectionES,
         MPSTensor.openIntervalGroundProjectionES}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients}
@@ -271,8 +270,7 @@
 
 \begin{lemma}[Positivity of the fixed-volume Hamiltonians]%
     \label{lem:fixed-volume-hamiltonians-positive}
-    \lean{MPSTensor.openPrefixParentHamiltonianES_isPositive,
-        MPSTensor.openSuffixParentHamiltonianES_isPositive}
+    \lean{MPSTensor.posSemidef_hamiltonian_restrict_parentChainInteraction}
     \leanok
     \uses{def:fixed-volume-prefix-ground-projections,
         lem:transported_es_positive}
@@ -300,7 +298,7 @@
 
 \begin{lemma}[Nested fixed-volume prefix ground projections]%
     \label{thm:fixed-volume-prefix-ground-projections-nested}
-    \lean{MPSTensor.ker_openPrefixParentHamiltonianES_antitone,
+    \lean{MPSTensor.ker_hamiltonian_prefix_parentChainInteraction_antitone,
         MPSTensor.fixedAmbientNestedGroundProjectionsES}
     \leanok
     \uses{def:fixed-volume-prefix-ground-projections,
@@ -335,9 +333,9 @@
     \lean{LinearMap.IsSymmetric.kernelProjection_commute_of_commute,
         Submodule.starProjection_commute_of_le,
         MPSTensor.cyclicWindowsDisjoint_of_nonwrapping_ordered,
-        MPSTensor.openPrefixParentHamiltonianES_commute_openSuffixParentHamiltonianES,
+        MPSTensor.hamiltonian_prefix_parentChainInteraction_commute_restrict,
         MPSTensor.openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_le,
-        MPSTensor.ker_openPrefixParentHamiltonianES_le_ker_openSuffixParentHamiltonianES,
+        MPSTensor.ker_hamiltonian_prefix_parentChainInteraction_le_ker_restrict,
         MPSTensor.openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_lt,
         MPSTensor.fixedAmbient_martingaleDifference_commute_openIntervalGroundProjectionES,
         MPSTensor.inner_sum_fixedAmbient_martingaleDifference_openIntervalGroundProjectionES_eq_Icc}
@@ -521,8 +519,8 @@
 
 \begin{lemma}[Open Hamiltonian sums with right spectators]
     \label{thm:open-hamiltonian-right-spectator-conjugacy}
-    \lean{MPSTensor.openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv,
-        MPSTensor.openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv}
+    \lean{MPSTensor.hamiltonian_prefix_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv,
+        MPSTensor.hamiltonian_restrict_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv}
     \leanok
     \uses{thm:local-term-right-spectator-conjugacy}
     Let $L>0$ and $p\leq n$.  Under the standard identification
@@ -546,11 +544,11 @@
 
 \begin{lemma}[Fixed-volume C3 ground projections with right spectators]
     \label{thm:fixed-volume-c3-projector-conjugacy}
-    \lean{MPSTensor.openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES,
-        MPSTensor.ker_openPrefixParentHamiltonianES_eq_openChainLeftGroundSpaceES,
-        MPSTensor.openSuffixParentHamiltonianES_full_window_eq_term,
-        MPSTensor.ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES,
-        MPSTensor.ker_openPrefixParentHamiltonianES_self_eq_groundSpaceES,
+    \lean{MPSTensor.hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChainInteraction,
+        MPSTensor.ker_hamiltonian_prefix_parentChainInteraction_eq_openChainLeftGroundSpaceES,
+        MPSTensor.hamiltonian_restrict_parentChainInteraction_full_window_eq_term,
+        MPSTensor.ker_hamiltonian_restrict_parentChainInteraction_eq_openChainTailGroundSpaceES,
+        MPSTensor.ker_hamiltonian_prefix_parentChainInteraction_self_eq_groundSpaceES,
         MPSTensor.openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv,
         MPSTensor.openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv,
         MPSTensor.openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv}
@@ -593,10 +591,10 @@
 
 \begin{lemma}[C3 boundary indices in the fixed final volume]
     \label{thm:fixed-volume-c3-boundary-indices}
-    \lean{MPSTensor.openPrefixParentHamiltonianES_eq_zero_of_lt,
+    \lean{MPSTensor.hamiltonian_prefix_parentChainInteraction_eq_zero_of_lt,
         MPSTensor.openPrefixGroundProjectionES_eq_one_of_lt,
         MPSTensor.fixedAmbient_martingaleDifference_eq_zero_of_lt,
-        MPSTensor.openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoint,
+        MPSTensor.hamiltonian_prefix_parentChainInteraction_eq_restrict_at_endpoint,
         MPSTensor.openIntervalGroundProjectionES_at_endpoint,
         MPSTensor.openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint}
     \leanok
@@ -1898,8 +1896,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{definition}[Compatible open-chain parent Hamiltonian]
     \label{def:open_parent_hamiltonian_es}
-    \lean{MPSTensor.NonwrappingStart}
-    \lean{MPSTensor.openParentHamiltonianES}
+    \lean{MPSTensor.NonwrappingStart, MPSTensor.parentChainInteraction}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients}
     For $L,N\in\N$, let
@@ -1920,7 +1917,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Full-window compatible interaction]
     \label{thm:open_parent_hamiltonian_full_window}
-    \lean{MPSTensor.openParentHamiltonianES_self_eq_parentInteractionES}
+    \lean{MPSTensor.hamiltonian_parentChainInteraction_self_eq_parentInteractionES}
     \leanok
     \uses{def:open_parent_hamiltonian_es, rem:euclidean_local_projector_ingredients}
     If $L>0$, then
@@ -2003,7 +2000,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Positivity of the compatible open-chain Hamiltonian]
     \label{lem:open_parent_hamiltonian_es_positive}
-    \lean{MPSTensor.openParentHamiltonianES_isPositive}
+    \lean{MPSTensor.posSemidef_hamiltonian_parentChainInteraction}
     \leanok
     \uses{def:open_parent_hamiltonian_es, lem:transported_es_positive}
     For every $A$, $L$, and $N$, the operator
@@ -2018,7 +2015,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{definition}[Compatible suffix Hamiltonian]
     \label{def:open_suffix_parent_hamiltonian_es}
-    \lean{MPSTensor.openSuffixParentHamiltonianES}
+    \lean{ManyBody.Interaction.mem_ker_toEuclideanLin_hamiltonian_restrict_iff}
     \leanok
     \uses{def:open_parent_hamiltonian_es}
     For $L,l,n,N\in\N$, the Hamiltonian on the last $l$ sites of the prefix
@@ -2037,7 +2034,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % source lower endpoint when L=l+1.
 \begin{lemma}[Vanishing suffix before a complete window]
     \label{thm:open_suffix_parent_hamiltonian_zero_before_window}
-    \lean{MPSTensor.openSuffixParentHamiltonianES_eq_zero_of_lt}
+    \lean{MPSTensor.hamiltonian_restrict_parentChainInteraction_eq_zero_of_lt}
     \leanok
     \uses{def:open_suffix_parent_hamiltonian_es}
     If $n<L$, then
@@ -2059,7 +2056,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % lines 1030--1041.
 \begin{lemma}[Shifted full-range suffix sum]
     \label{thm:open_suffix_parent_hamiltonian_range_shift}
-    \lean{MPSTensor.sum_range_openSuffixParentHamiltonianES_succ_eq_Icc}
+    \lean{MPSTensor.sum_range_hamiltonian_restrict_parentChainInteraction_succ_eq_Icc}
     \leanok
     \uses{def:open_suffix_parent_hamiltonian_es,
         thm:open_suffix_parent_hamiltonian_zero_before_window}
@@ -2082,7 +2079,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Finite-overlap condition C1 for the compatible open chain]
     \label{thm:open_parent_hamiltonian_es_c1}
-    \lean{MPSTensor.openParentHamiltonianES_C1}
+    \lean{MPSTensor.hamiltonian_parentChainInteraction_C1}
     \leanok
     \uses{def:open_parent_hamiltonian_es,
         def:open_suffix_parent_hamiltonian_es}
@@ -2121,7 +2118,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % lines 1030--1041; proof of Theorem 2.1(i), lines 1250--1255.
 \begin{lemma}[Full-range compatible open-chain counting bound]
     \label{thm:open_parent_hamiltonian_c1_full_range}
-    \lean{MPSTensor.openParentHamiltonianES_C1_full_range_quadratic_form}
+    \lean{MPSTensor.parentChainInteraction_C1_full_range_quadratic_form}
     \leanok
     \uses{thm:open_parent_hamiltonian_es_c1,
         thm:open_suffix_parent_hamiltonian_range_shift}
@@ -2154,7 +2151,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % gamma_{l+1} in the printed proof, lines 1240--1248.
 \begin{lemma}[Embedded fixed-window condition C2]
     \label{thm:open_suffix_parent_hamiltonian_es_c2}
-    \lean{MPSTensor.openSuffixParentHamiltonianES_eq_localTermES,
+    \lean{MPSTensor.hamiltonian_restrict_parentChainInteraction_eq_localTermES,
         MPSTensor.isStarProjection_hamiltonian_restrict_parentChainInteraction,
         MPSTensor.toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_starProjection,
         MPSTensor.toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_id_sub_starProjection,
@@ -2264,7 +2261,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % lines 1043--1058; proof of Theorem 2.1(i), lines 1240--1248.
 \begin{lemma}[Full-range fixed-window local gap]
     \label{thm:open_suffix_parent_hamiltonian_c2_full_range}
-    \lean{MPSTensor.openSuffixParentHamiltonianES_C2_full_range_norm_sq}
+    \lean{MPSTensor.parentChainInteraction_C2_full_range_norm_sq}
     \leanok
     \uses{thm:open_suffix_parent_hamiltonian_zero_before_window,
         thm:open_suffix_parent_hamiltonian_es_c2}
@@ -2297,7 +2294,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Zero energy forces every compatible local constraint]
     \label{thm:open_parent_hamiltonian_zero_local_terms}
-    \lean{MPSTensor.localTermES_eq_zero_of_openParentHamiltonianES_eq_zero}
+    \lean{MPSTensor.localTermES_eq_zero_of_hamiltonian_parentChainInteraction_eq_zero}
     \leanok
     \uses{def:open_parent_hamiltonian_es}
     If $H^{\mathrm{open}}_{N,L}(A)v=0$, then, for every $i\in I_{L,N}$,
@@ -2361,7 +2358,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Open-boundary vectors have zero compatible energy]
     \label{thm:open_ground_space_le_hamiltonian_kernel}
-    \lean{MPSTensor.groundSpaceES_le_ker_openParentHamiltonianES}
+    \lean{MPSTensor.groundSpaceES_le_ker_hamiltonian_parentChainInteraction}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_es}
     For every $A$, $L$, and $N$,
@@ -2396,7 +2393,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Compatible zero energy restricts to each window]
     \label{thm:open_parent_hamiltonian_window_ground_space}
-    \lean{MPSTensor.cyclicRestrictₗ_mem_groundSpace_of_mem_ker_openParentHamiltonianES}
+    \lean{MPSTensor.cyclicRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_parent,
         rem:cyclic_window_operators}
@@ -2449,7 +2446,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Ground-state property of the compatible open chain]
     \label{thm:open_parent_hamiltonian_kernel_ground_space}
-    \lean{MPSTensor.ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective}
+    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective}
     Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. As the canonical MPS
@@ -3686,7 +3683,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % lines 1030--1094; Theorem 2.1(i), lines 1119--1130; proof lines 1195--1259.
 \begin{lemma}[Compatible open-chain gap from fixed-volume overlap]
     \label{thm:open_parent_hamiltonian_fixed_c3_gap}
-    \lean{MPSTensor.openParentHamiltonianES_norm_gap_of_fixedAmbient_c3}
+    \lean{MPSTensor.hamiltonian_parentChainInteraction_gap_of_fixedAmbient_c3}
     \leanok
     \uses{thm:nachtergaele_c1_c3_full_range_norm_gap,
         thm:physical-outside-window-martingale-cancellation,
@@ -3754,7 +3751,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % lines 1083--1094; Theorem 2.1(i), lines 1119--1130; proof lines 1195--1259.
 \begin{lemma}[Uniform gap for primitive compatible open chains]
     \label{thm:primitive_open_parent_hamiltonian_gap}
-    \lean{Kraus.HasComplementaryFixedPointGap.exists_openParentHamiltonianES_gap}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_hamiltonian_parentChainInteraction_gap}
     \leanok
     \uses{thm:literal_fixed_volume_martingale_c3,
         thm:open_parent_hamiltonian_fixed_c3_gap}
@@ -4151,21 +4148,23 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{definition}[Cyclic coordinates for periodic local interactions]
     \label{def:cyclic_parent_local_coordinates}
-    \lean{MPSTensor.zmodLocalTermES}
+    \lean{ZMod.finEquiv}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients}
-    For an $N$-site periodic chain with $N>0$, index the range-$R$
-    local interactions by $\mathbb Z/N\mathbb Z$.  If
-    $s\in\mathbb Z/N\mathbb Z$ and $i\in\{0,\ldots,N-1\}$ is its standard
-    representative, write
+    For an $N$-site periodic chain with $N>0$, the sites $\{0,\ldots,N-1\}$
+    are identified with $\mathbb Z/N\mathbb Z$ through the standard
+    representatives; this identification is additive. Index the range-$R$
+    local interactions by $\mathbb Z/N\mathbb Z$: if
+    $s\in\mathbb Z/N\mathbb Z$ has the standard representative $i$, write
     \begin{align}
-        h_s^{(N,R)} & =h_{i,\mathrm{ES}}(A,R).
+        h_s^{(N,R)} & =h_{i,\mathrm{ES}}(A,R)
     \end{align}
+    for the term of the parent interaction on the ring whose window starts at $i$.
 \end{definition}
 
 \begin{lemma}[Total sum in cyclic coordinates]
     \label{thm:cyclic_parent_local_sum}
-    \lean{MPSTensor.sum_zmodLocalTermES_eq_parentHamiltonianES}
+    \lean{ManyBody.Interaction.sum_toEuclideanLin_translationInvariant_term_finEquiv_symm}
     \leanok
     \uses{def:cyclic_parent_local_coordinates, def:parent_hamiltonian_es}
     The sum over the cyclic coordinates is the periodic parent Hamiltonian:
@@ -4187,7 +4186,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \label{thm:cyclic_parent_oriented_separation}
     \lean{MPSTensor.finEquiv_symm_add_eq_cyclicForwardSite,
         MPSTensor.cyclicWindowsDisjoint_cyclicForwardSite_of_oriented_separation,
-        MPSTensor.zmodLocalTermES_commute_of_oriented_separation}
+        ManyBody.Interaction.commute_translationInvariant_term_finEquiv_symm_add_of_le}
     \leanok
     \uses{def:cyclic_parent_local_coordinates, rem:cyclic_window_operators,
         lem:cyclic_window_nonoverlap_positive}
@@ -4272,7 +4271,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[A cyclic Knabe block is an open parent Hamiltonian]
     \label{thm:cyclic_knabe_block_open_parent_hamiltonian}
-    \lean{MPSTensor.cyclicWindowSum_zmodLocalTermES_conj_cyclicActiveBlock}
+    \lean{ManyBody.Interaction.cyclicWindowSum_toEuclideanLin_translationInvariant_term}
     \leanok
     \uses{def:cyclic_parent_local_coordinates,
         def:cyclic_active_block_coordinates,
@@ -4308,7 +4307,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Periodic finite-range gap from one open active volume]
     \label{thm:parent_hamiltonian_gap_from_open_knabe_block}
-    \lean{MPSTensor.parentHamiltonianES_gap_of_openParentHamiltonianES_gap}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteraction_gap}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:parent_hamiltonian_es,
         thm:cyclic_parent_local_sum, thm:cyclic_parent_oriented_separation,
@@ -4372,7 +4371,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{theorem}[Uniform finite-range gap for primitive MPS parent Hamiltonians]
     \label{thm:primitive_parent_hamiltonian_finite_range_knabe_gap}
-    \lean{Kraus.HasComplementaryFixedPointGap.exists_parentHamiltonianES_gap_of_finiteRangeKnabe}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_hamiltonian_parentRingInteraction_gap_of_finiteRangeKnabe}
     \leanok
     \uses{thm:primitive_open_parent_hamiltonian_gap,
         thm:open_parent_hamiltonian_kernel_ground_space,

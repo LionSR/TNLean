@@ -98,8 +98,8 @@ is recorded in
     \label{thm:continuous_finite_window_parent_hamiltonian}
     \lean{MPSTensor.continuous_groundSpaceMapES_family,
         MPSTensor.continuous_groundSpaceES_starProjection_family,
-        MPSTensor.continuous_openParentHamiltonianES_family,
-        MPSTensor.continuous_parentHamiltonianES_family}
+        MPSTensor.continuous_hamiltonian_parentChainInteraction_family,
+        MPSTensor.continuous_hamiltonian_parentRingInteraction_family}
     \leanok
     \uses{def:ground_space_map_es, def:ground_space_es,
         def:open_parent_hamiltonian_es, def:parent_hamiltonian_es,
@@ -127,7 +127,7 @@ is recorded in
 
 \begin{lemma}[Local stability of a finite-window gap]
     \label{thm:open_parent_gap_continuity}
-    \lean{MPSTensor.eventually_openParentHamiltonianES_gap}
+    \lean{MPSTensor.eventually_hamiltonian_parentChainInteraction_gap}
     \leanok
     \uses{thm:kernel_gap_perturbation,
         thm:continuous_finite_window_parent_hamiltonian}
@@ -152,10 +152,9 @@ is recorded in
 
 \begin{lemma}[Comparison of open-chain ranges]
     \label{lem:open_parent_range_comparison}
-    \lean{MPSTensor.openParentHamiltonianES_comparison_of_local,
-        MPSTensor.openParentHamiltonianES_gap_of_long_gap_at_length,
-        MPSTensor.openParentHamiltonianES_gap_of_long_gap,
-        MPSTensor.openParentHamiltonianES_two_gap_of_long_gap}
+    \lean{MPSTensor.hamiltonian_chainTranslates_comparison_of_local,
+        MPSTensor.toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length,
+        LinearMap.IsPositive.norm_gap_of_scaled_comparison}
     \leanok
     \uses{def:open_parent_hamiltonian_es, thm:open_parent_hamiltonian_es_c1}
     Let $0<R\leq W\leq N$. If
@@ -184,8 +183,8 @@ is recorded in
 
 \begin{lemma}[Strict Knabe windows for injective tensors]
     \label{thm:injective_strict_knabe_window}
-    \lean{MPSTensor.exists_openParentHamiltonianES_two_uniform_gap_of_isInjective,
-        MPSTensor.exists_strict_openParentHamiltonianES_two_window_of_isInjective}
+    \lean{MPSTensor.exists_hamiltonian_parentChainInteraction_two_uniform_gap_of_isInjective,
+        MPSTensor.exists_strict_hamiltonian_parentChainInteraction_two_window_of_isInjective}
     \leanok
     \uses{thm:primitive_open_parent_hamiltonian_gap,
         lem:parent-finite-interval-comparison,
@@ -225,7 +224,7 @@ is recorded in
 
 \begin{lemma}[Gap in a parameter neighborhood]
     \label{thm:knabe_gap_neighborhood}
-    \lean{MPSTensor.eventually_parentHamiltonianES_gap_of_strict_openGap}
+    \lean{MPSTensor.eventually_hamiltonian_parentRingInteraction_gap_of_strict_openGap}
     \leanok
     \uses{thm:open_parent_gap_continuity,
         thm:parent_hamiltonian_gap_from_open_knabe_block}
@@ -325,7 +324,7 @@ is recorded in
 
 \begin{lemma}[Continuity of short periodic ground lines]
     \label{thm:periodic_short_gap_continuity}
-    \lean{MPSTensor.exists_uniform_parentHamiltonianES_two_gap_fixed_volume}
+    \lean{MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_two_gap_fixed_volume}
     \leanok
     \uses{thm:compact_kernel_gap, thm:continuous_injective_range_projector,
         thm:continuous_finite_window_parent_hamiltonian}
@@ -348,8 +347,8 @@ is recorded in
 
 \begin{theorem}[Uniform parent gap on compact parameter sets]
     \label{thm:compact_parent_gap}
-    \lean{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths}
+    \lean{MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isInjective,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isInjective_all_lengths}
     \leanok
     \uses{thm:knabe_gap_neighborhood, thm:injective_strict_knabe_window,
         thm:periodic_short_gap_continuity, lem:compact_uniform_pos_nat_bounds}
@@ -381,19 +380,19 @@ is recorded in
 
 \begin{lemma}[Compact normal families at a fixed interaction range]
     \label{thm:compact_normal_parent_gap}
-    \lean{MPSTensor.exists_openParentHamiltonianES_uniform_gap_of_isNBlkInjective,
-        MPSTensor.exists_strict_openParentHamiltonianES_window_of_isNBlkInjective,
-        MPSTensor.eventually_parentHamiltonianES_gap_of_strict_openGap_of_isNBlkInjective,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNBlkInjective,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNBlkInjective_all_lengths,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_fixed_volume_of_isNBlkInjective,
+    \lean{MPSTensor.exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective,
+        MPSTensor.exists_strict_hamiltonian_parentChainInteraction_window_of_isNBlkInjective,
+        MPSTensor.eventually_hamiltonian_parentRingInteraction_gap_of_strict_openGap_of_isNBlkInjective,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNBlkInjective,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNBlkInjective_all_lengths,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_fixed_volume_of_isNBlkInjective,
         MPSTensor.isNBlkInjective_pow_four_of_isNormal,
         MPSTensor.periodicMpvLineMap_injective_of_isNBlkInjective,
-        MPSTensor.ker_parentHamiltonianES_eq_range_periodicMpvLineMap_of_isNBlkInjective,
-        MPSTensor.continuous_parentHamiltonianES_kernelProjection_family_of_isNBlkInjective,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNormal_all_lengths,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNBlkInjective_at_range,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNormal_at_range}
+        MPSTensor.ker_hamiltonian_parentRingInteraction_eq_range_periodicMpvLineMap_of_isNBlkInjective,
+        MPSTensor.continuous_hamiltonian_parentRingInteraction_kernelProjection_family_of_isNBlkInjective,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNormal_all_lengths,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNBlkInjective_at_range,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNormal_at_range}
     \leanok
     \uses{thm:compact_kernel_gap, lem:open_parent_range_comparison,
         thm:parent_hamiltonian_gap_from_open_knabe_block}
@@ -453,7 +452,7 @@ is recorded in
         MPSTensor.blockPeriodicMpvMapES_injective_of_wordTupleSpanTop,
         MPSTensor.range_blockPeriodicMpvMapES,
         MPSTensor.continuous_parentHamiltonianES_toTensorFromBlocks_kernelProjection_family,
-        MPSTensor.exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_fixed_volume_of_wordTupleSpanTop}
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_wordTupleSpanTop}
     \leanok
     \uses{thm:compact_kernel_gap}
     Let $x\mapsto(A_x^j)_j$ be a continuous family of blocks. At every
@@ -487,10 +486,10 @@ is recorded in
 
 \begin{lemma}[Compact families of several normal blocks]
     \label{thm:compact_block_parent_gap}
-    \lean{MPSTensor.eventually_parentHamiltonianES_toTensorFromBlocks_gap_of_strict_openGap,
-        MPSTensor.exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact,
-        MPSTensor.exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths,
-        MPSTensor.exists_uniform_block_parentHamiltonianES_gap_of_compact_isNormalTensor}
+    \lean{MPSTensor.eventually_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_strict_openGap,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_compact,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_all_lengths,
+        MPSTensor.exists_uniform_block_hamiltonian_parentRingInteraction_gap_of_compact_isNormalTensor}
     \leanok
     \uses{thm:block_ground_space_continuity,
         thm:cpsv_bnt_sharp_span_ambient_cap, thm:block_word_span_propagation,
@@ -563,7 +562,7 @@ is recorded in
         MPSTensor.span_wordTuple_rotatePhysical_eq_of_leftInverse,
         MPSTensor.wordTupleSpanTop_rotatePhysical_iff,
         MPSTensor.continuous_rotatePhysical_family,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_physicalAction}
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_physicalAction}
     \leanok
     \uses{thm:compact_block_parent_gap}
     Let $(A^j)_j$ have simultaneous spanning length $S>0$. An invertible
@@ -592,7 +591,7 @@ is recorded in
         MPSTensor.positivePhysicalDeformation_one,
         MPSTensor.continuous_positivePhysicalDeformation,
         MPSTensor.positivePhysicalDeformation_isUnit,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_positivePhysicalDeformation,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_positivePhysicalDeformation,
         MPSTensor.positiveDeformedParentInteractionES,
         MPSTensor.isParentInteraction_positiveDeformedParentInteractionES,
         MPSTensor.positiveDeformedParentInteractionES_eq,
@@ -1312,7 +1311,7 @@ is recorded in
 
 \begin{lemma}[Uniform open-chain gap along the positive affine deformation]
     \label{thm:positive_affine_physical_deformation_open_gap}
-    \lean{MPSTensor.exists_uniform_openParentHamiltonianES_gap_positivePhysicalDeformation,
+    \lean{MPSTensor.exists_uniform_hamiltonian_parentChainInteraction_gap_positivePhysicalDeformation,
         MPSTensor.exists_uniform_positiveDeformedParentInteractionES_open_gap}
     \leanok
     Let $(A^j)_j$ be simultaneously one-site injective blocks of positive
@@ -1581,10 +1580,10 @@ is recorded in
 
 \begin{lemma}[Finite-volume continuity from the local projection]
     \label{thm:finite_window_continuity_from_ground_projection}
-    \lean{MPSTensor.continuous_parentInteractionES_family_of_groundProjection,
-        MPSTensor.continuous_localTermES_family_of_groundProjection,
-        MPSTensor.continuous_openParentHamiltonianES_family_of_groundProjection,
-        MPSTensor.continuous_parentHamiltonianES_family_of_groundProjection}
+    \lean{MPSTensor.continuous_toMatrix'_parentInteraction_family_of_groundProjection,
+        MPSTensor.continuous_parentRingInteraction_term_family_of_groundProjection,
+        MPSTensor.continuous_hamiltonian_parentChainInteraction_family_of_groundProjection,
+        MPSTensor.continuous_hamiltonian_parentRingInteraction_family_of_groundProjection}
     \leanok
     \uses{def:ground_space_es, def:open_parent_hamiltonian_es, def:parent_hamiltonian_es}
     Suppose that the orthogonal projection onto $G_L(A_x)$ is continuous

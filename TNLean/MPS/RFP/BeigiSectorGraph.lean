@@ -564,13 +564,13 @@ private theorem parentHamiltonianGroundSpaceES_finrank_eq_all_sequences
   classical
   have hproj := LinearMap.isProj_ker_sum_listProd_one_sub
     (fun i : Fin N ↦ Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i))
-    (fun i ↦ isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A hN i)
+    (fun i ↦ isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A _ i)
     (fun i j ↦ F.commute_toEuclideanLin_parentRingInteraction_term hN i j)
   rw [sum_toEuclideanLin_parentRingInteraction_term A hN] at hproj
   have htrace := hproj.trace
   rw [F.localComplementProductES_trace hN] at htrace
   norm_cast at htrace
-  rw [parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction A hN]
+  rw [parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction A _ _]
   exact htrace.symm
 
 /-- A vector fixed by the complete product of complementary two-site parent
@@ -608,7 +608,7 @@ theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
     rw [transport.e.apply_symm_apply, hraw]
   have hproj := LinearMap.isProj_ker_sum_listProd_one_sub
     (fun i : Fin N ↦ Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i))
-    (fun i ↦ isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A hN i)
+    (fun i ↦ isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A _ i)
     (fun i j ↦ F.commute_toEuclideanLin_parentRingInteraction_term hN i j)
   rw [sum_toEuclideanLin_parentRingInteraction_term A hN] at hproj
   have hkerES : transport.e.symm v ∈

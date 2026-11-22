@@ -102,7 +102,7 @@ tensors.
     \lean{MPSTensor.parentInteraction_eq_of_groundSpace_eq,
         MPSTensor.localTerm_eq_of_parentInteraction_eq,
         MPSTensor.parentHamiltonian_eq_of_groundSpace_eq,
-        MPSTensor.parentHamiltonianES_eq_of_groundSpace_eq}
+        MPSTensor.hamiltonian_parentRingInteraction_eq_of_groundSpace_eq}
     \leanok
     \uses{def:ground_space_parent, def:parent_interaction,
         def:parent_hamiltonian, def:parent_hamiltonian_es}
@@ -222,7 +222,7 @@ tensors.
 
 \begin{lemma}[Uniform finite-range gap for normal MPS parent Hamiltonians]
     \label{thm:normal_parent_hamiltonian_finite_range_knabe_gap}
-    \lean{MPSTensor.exists_parentHamiltonianES_gap_of_isNormal}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_gap_of_isNormal}
     \leanok
     \uses{def:normal, def:l_blk_injective, def:parent_hamiltonian_es}
     Let $D>0$ and let $A$ be a normal tensor, with no normalization imposed on
@@ -402,13 +402,15 @@ tensors.
 
 \begin{lemma}[Positive gap at a fixed length]
     \label{thm:parent_hamiltonian_fixed_length_gap}
-    \lean{MPSTensor.parentHamiltonianES_exists_gap}
+    \lean{ManyBody.exists_pos_forall_hasEigenvalue}
     \leanok
     \uses{def:parent_hamiltonian_es}
-    For any tensor $A$, interaction range $L$, and chain length $N$, there
-    exists $\delta_N>0$ such that
-    $\delta_N\lVert v\rVert\leq\lVert H_{N,L}^{\mathrm{ES}}(A)v\rVert$
-    for every $v\in(\ker H_{N,L}^{\mathrm{ES}}(A))^\perp$.
+    A positive semidefinite matrix $H$ has a positive gap above its kernel:
+    there exists $\delta>0$ such that every eigenvalue of $H$ other than zero
+    is at least $\delta$; equivalently
+    $\delta\lVert v\rVert\leq\lVert Hv\rVert$ for every $v\in(\ker H)^\perp$.
+    In particular, for any tensor $A$, interaction range $L$, and chain length
+    $N>0$, this holds for $H_{N,L}^{\mathrm{ES}}(A)$ with some $\delta_N>0$.
 \end{lemma}
 
 \begin{proof}
@@ -423,7 +425,7 @@ tensors.
 
 \begin{lemma}[Extension of an eventual uniform gap]
     \label{thm:parent_hamiltonian_eventual_gap}
-    \lean{MPSTensor.parentHamiltonianES_gap_of_eventual_gap}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_of_eventual_gap}
     \leanok
     \uses{def:parent_hamiltonian_es}
     Fix $A$ and $L$. Suppose $\delta>0$ and $M\in\mathbb N$ satisfy
@@ -447,7 +449,7 @@ tensors.
 
 \begin{lemma}[Uniform gap for normal MPS parent Hamiltonians]
     \label{thm:normal_mps_parent_hamiltonian_gap}
-    \lean{MPSTensor.exists_parentHamiltonianES_uniform_gap_of_isNormal}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_uniform_gap_of_isNormal}
     \leanok
     \uses{def:normal, def:l_blk_injective, def:parent_hamiltonian_es}
     Let $D>0$ and let $A$ be a normal tensor. For the normal-tensor case of
@@ -589,7 +591,7 @@ tensors.
 
 \begin{lemma}[Grouped open-chain coercivity]
     \label{thm:grouped_open_parent_gap}
-    \lean{MPSTensor.openParentHamiltonianES_norm_gap_of_grouped_c3}
+    \lean{MPSTensor.hamiltonian_parentChainInteraction_gap_of_grouped_c3}
     \leanok
     Let $p\geq1$, $M\geq2$, and $N=pM$. Consider the
     range-$2p$ open parent Hamiltonian $H_N$ and the grouped
@@ -622,7 +624,7 @@ tensors.
 
 \begin{lemma}[Energy counting for grouped open windows]
     \label{thm:grouped_open_parent_c1}
-    \lean{MPSTensor.grouped_openParentHamiltonianES_C1}
+    \lean{MPSTensor.grouped_hamiltonian_parentChainInteraction_C1}
     \leanok
     \uses{def:open_suffix_parent_hamiltonian_es, def:open_parent_hamiltonian_es}
     Let $p\geq1$, $M\geq0$, and $N=pM$. For every vector $v$ on the
@@ -644,7 +646,7 @@ tensors.
 
 \begin{lemma}[Unit local gap for grouped open windows]
     \label{thm:grouped_open_suffix_c2}
-    \lean{MPSTensor.grouped_openSuffixParentHamiltonianES_C2}
+    \lean{MPSTensor.grouped_hamiltonian_restrict_parentChainInteraction_C2}
     \leanok
     \uses{def:open_suffix_parent_hamiltonian_es}
     Let $p\geq1$, $0\leq n<M$, and $N=pM$. Write $Q_n$ for the
@@ -666,7 +668,7 @@ tensors.
 \begin{lemma}[Prefix ground spaces with free right sites]
     \label{thm:ph_prefix_kernel_free_right_sites}
     \lean{MPSTensor.mem_range_leftBoundaryMapES_iff_rightFiber,
-        MPSTensor.ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES}
+        MPSTensor.ker_hamiltonian_prefix_parentChainInteraction_eq_range_leftBoundaryMapES}
     \leanok
     Let $R>0$ and suppose that the length-$n$ open parent Hamiltonian has
     kernel $G_n(A)$. On $n+r$ sites, the kernel of the same interactions
@@ -695,7 +697,7 @@ tensors.
 \begin{lemma}[Reassociated suffix ground space]
     \label{thm:ph_reassociated_suffix_kernel}
     \lean{MPSTensor.physicalReassocES_map_submodule,
-        MPSTensor.range_reassocTailBoundaryMapES_eq_ker_openSuffixParentHamiltonianES}
+        MPSTensor.range_reassocTailBoundaryMapES_eq_ker_hamiltonian_restrict_parentChainInteraction}
     \leanok
     Reassociation identifies any subspace of the physical space on
     $K+(L+Q)$ sites with the same subspace on $(K+L)+Q$ sites.
@@ -723,8 +725,8 @@ tensors.
 
 \begin{lemma}[Terminal interval kernels]
     \label{thm:ph_terminal_interval_kernel}
-    \lean{MPSTensor.ker_openSuffixParentHamiltonianES_eq_of_local_kernel,
-        MPSTensor.ker_openSuffixParentHamiltonianES_eq_range_reassocTailBoundaryMapES}
+    \lean{MPSTensor.ker_hamiltonian_restrict_parentChainInteraction_eq_of_local_kernel,
+        MPSTensor.ker_hamiltonian_restrict_parentChainInteraction_eq_range_reassocTailBoundaryMapES}
     \leanok
     Let $0<R\leq W\leq n\leq N$, and suppose that the range-$R$ open parent
     Hamiltonian on $W$ sites has kernel $G_W(A)$. On the $N$-site chain,
@@ -776,7 +778,7 @@ tensors.
 
 \begin{lemma}[Periodic gaps from divisible open intervals]
     \label{thm:periodic_gap_from_divisible_open}
-    \lean{MPSTensor.exists_parentHamiltonianES_gap_of_eventually_divisible_openParentHamiltonianES_gap}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_gap_of_eventually_divisible_gap}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:parent_hamiltonian_es}
     Let $A$ be a tensor, let $p,R\geq 1$ be integers, and let $\gamma>0$.
@@ -882,7 +884,7 @@ tensors.
 \begin{lemma}[Open-chain gaps on divisible lengths for primitive block sums]
     \label{thm:primitive_block_sum_open_gap_subsequence}
     \lean{MPSTensor.%
-        exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap}
+        exists_ge_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_fixedPointGap}
     \leanok
     Let $A_0,\ldots,A_{r-1}$ be normalized primitive tensors with
     common physical dimension $d\geq1$, positive bond dimensions,
@@ -915,7 +917,7 @@ tensors.
 \begin{lemma}[Open-chain gaps at every length for primitive block sums]
     \label{thm:primitive_block_sum_open_gap_all_lengths}
     \lean{MPSTensor.%
-        exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_all_of_hasComplementaryFixedPointGap}
+        exists_ge_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_all_of_fixedPointGap}
     \leanok
     Under the hypotheses of
     Lemma~\ref{thm:primitive_block_sum_open_gap_subsequence}, as in the
@@ -955,8 +957,8 @@ tensors.
 
 \begin{lemma}[Uniformly gapped interaction ranges for primitive block sums]
     \label{thm:primitive_block_sum_parent_gap}
-    \lean{MPSTensor.exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap,
-        MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap}
+    \lean{MPSTensor.exists_ge_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_fixedPointGap,
+        MPSTensor.exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_fixedPointGap}
     \leanok
     Let $A_0,\ldots,A_{r-1}$ be normalized primitive tensors with
     common physical dimension $d\geq1$, positive bond dimensions,
@@ -1020,7 +1022,7 @@ tensors.
 
 \begin{lemma}[Comparison on a finite interval]
     \label{lem:parent-finite-interval-comparison}
-    \lean{MPSTensor.exists_pos_parentInteractionES_openParentHamiltonianES_comparison}
+    \lean{MPSTensor.exists_pos_parentInteractionES_hamiltonian_parentChainInteraction_comparison}
     \leanok
     \uses{def:open_parent_hamiltonian_es}
     Let $A$ be an MPS tensor, and let $R,W$ be interaction and interval lengths.
@@ -1087,7 +1089,7 @@ tensors.
 
 \begin{lemma}[Transfer to a prescribed interaction range]
     \label{thm:parent-gap-fixed-range-transfer}
-    \lean{MPSTensor.exists_parentHamiltonianES_gap_of_larger_range}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_gap_of_larger_range}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_es,
         def:parent_hamiltonian_es}
@@ -1131,7 +1133,7 @@ tensors.
 
 \begin{lemma}[Periodic comparison from an open interval]
     \label{thm:periodic-parent-range-comparison}
-    \lean{MPSTensor.parentHamiltonianES_comparison_of_local_open_comparison}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_comparison_of_local_open_comparison}
     \leanok
     Let $1\leq R\leq m$, $N\geq 2m$, and $W=m+R-1$.
     Write $K_{R,W}$ for the open parent Hamiltonian of interaction length
@@ -1161,7 +1163,7 @@ tensors.
 
 \begin{lemma}[Uniform gap above an interaction threshold]
     \label{thm:primitive_block_sum_parent_gap_threshold}
-    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_hasComplementaryFixedPointGap}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_threshold_of_fixedPointGap}
     \leanok
     Let $B=\bigoplus_j\mu_j A_j$, where the coefficients are nonzero and
     $(A_j)_j$ is a finite family of normalized primitive tensors of positive
@@ -1190,7 +1192,7 @@ tensors.
 
 \begin{lemma}[Gap at the common block-injectivity range]
     \label{thm:primitive-block-parent-gap-three-block-bound}
-    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_of_threeBlock_bound}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_threeBlock_bound}
     \leanok
     Let $B=\bigoplus_{j=0}^{r-1}\mu_j A_j$, where $r\geq2$, all coefficients
     are nonzero, and the normalized primitive tensors $A_j$ are pairwise
@@ -1219,7 +1221,7 @@ tensors.
 
 \begin{lemma}[Gap uniform in every chain length]
     \label{thm:primitive-block-parent-uniform-gap-three-block-bound}
-    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_threeBlock_bound}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_of_threeBlock_bound}
     \leanok
     Let $B=\bigoplus_{j=0}^{r-1}\mu_j A_j$, where $r\geq2$, all coefficients
     are nonzero, and the normalized primitive tensors $A_j$ are pairwise
@@ -1795,7 +1797,7 @@ tensors.
 \begin{lemma}[Open ground spaces at a simultaneous injectivity length]
     \label{thm:block_open_kernel_simultaneous_injectivity}
     \lean{MPSTensor.%
-        ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_wordTupleSpanTop}
+        ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop}
     \leanok
     Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
     Suppose that their simultaneous length-$S$ word tuples span the product
@@ -1821,7 +1823,7 @@ tensors.
 \begin{lemma}[Open-chain gaps at a simultaneous injectivity length]
     \label{thm:block_open_gap_all_lengths_simultaneous_injectivity}
     \lean{MPSTensor.%
-        exists_openParentHamiltonianES_toTensorFromBlocks_gap_of_wordTupleSpanTop}
+        exists_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_wordTupleSpanTop}
     \leanok
     Let $A^0,\ldots,A^{r-1}$ have positive bond dimensions and common
     physical dimension $d\geq1$. Suppose that their simultaneous
@@ -1862,7 +1864,7 @@ tensors.
 \begin{lemma}[Dimension-bound open gaps for normal blocks]
     \label{thm:normal_block_open_gap_dimension_bound}
     \lean{MPSTensor.%
-        exists_openParentHamiltonianES_toTensorFromBlocks_gap_of_isNormalTensor}
+        exists_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_isNormalTensor}
     \leanok
     Let $A^j$ be normal tensors with common physical dimension $d\geq1$,
     pairwise inequivalent under virtual similarity and phase. Set
@@ -1881,14 +1883,14 @@ tensors.
 
 \begin{lemma}[Open parent gaps for canonical tensors]
     \label{thm:canonical_open_gap_all_lengths}
-    \lean{MPSTensor.CPSVCanonicalFormData.openParentHamiltonianES_eq_representatives,
+    \lean{MPSTensor.CPSVCanonicalFormData.parentChainInteraction_eq_representatives,
         MPSTensor.CPSVCanonicalFormData.%
-        exists_openParentHamiltonianES_gap_of_wordTupleSpanTop,
+        exists_hamiltonian_parentChainInteraction_gap_of_wordTupleSpanTop,
         MPSTensor.IsCPSVCanonicalForm.exists_bnt_open_gap_of_wordTupleSpanTop,
         MPSTensor.IsCPSVCanonicalForm.%
-        exists_openParentHamiltonianES_gap_of_three_bondDim_pow_five_le,
+        exists_parentChainInteraction_gap_of_three_bondDim_pow_five_le,
         MPSTensor.CPSVCanonicalFormData.%
-        ker_openParentHamiltonianES_eq_groundSpaceES_of_wordTupleSpanTop}
+        ker_hamiltonian_parentChainInteraction_eq_of_wordTupleSpanTop}
     \leanok
     Let $A$ be a canonical tensor with physical dimension $d\geq1$, and
     choose its distinct normal representatives $B^j$. At every positive
@@ -2066,7 +2068,7 @@ tensors.
     \label{thm:open_knabe_padding_properties}
     \lean{MPSTensor.zmodOpenLocalTermES_isSymmetricProjection,
         MPSTensor.zmodOpenLocalTermES_commute_of_oriented_separation,
-        MPSTensor.sum_zmodOpenLocalTermES_eq_openParentHamiltonianES}
+        MPSTensor.sum_zmodOpenLocalTermES_eq_hamiltonian_parentChainInteraction}
     \leanok
     \uses{def:open_knabe_padding}
     Every $\widetilde h_s$ is an orthogonal projection. If $R\leq e$ and
@@ -2114,7 +2116,7 @@ tensors.
 
 \begin{lemma}[An open-chain finite-size gap criterion]
     \label{thm:open_finite_range_knabe_gap}
-    \lean{MPSTensor.openParentHamiltonianES_gap_of_finite_open_gaps}
+    \lean{MPSTensor.hamiltonian_parentChainInteraction_gap_of_finite_open_gaps}
     \leanok
     \uses{def:open_parent_hamiltonian_es}
     Let $1\leq R\leq m$, and suppose that every range-$R$ open parent
@@ -2143,8 +2145,8 @@ tensors.
 
 \begin{lemma}[Persistence of gaps on finitely many open intervals]
     \label{thm:open_gap_bounded_volume_continuity}
-    \lean{MPSTensor.eventually_openParentHamiltonianES_toTensorFromBlocks_gap_fixed_volume,
-        MPSTensor.eventually_openParentHamiltonianES_toTensorFromBlocks_gap_bounded_volumes}
+    \lean{MPSTensor.eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_fixed_volume,
+        MPSTensor.eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_bounded_volumes}
     \leanok
     Let $A_x^j$ be continuous block tensors with positive physical and bond
     dimensions. Suppose their length-$S$ word tuples span the product matrix
@@ -2172,7 +2174,7 @@ tensors.
 
 \begin{lemma}[Local persistence of an all-length open gap]
     \label{thm:open_gap_all_length_neighborhood}
-    \lean{MPSTensor.eventually_openParentHamiltonianES_toTensorFromBlocks_gap_of_uniform_gap}
+    \lean{MPSTensor.eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_uniform_gap}
     \leanok
     Under the block-family hypotheses of
     Lemma~\ref{thm:open_gap_bounded_volume_continuity}, suppose that at
@@ -2193,7 +2195,7 @@ tensors.
 
 \begin{lemma}[Compact uniform open gaps for simultaneously injective blocks]
     \label{thm:compact_block_open_gap}
-    \lean{MPSTensor.exists_uniform_openParentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths}
+    \lean{MPSTensor.exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_compact_all_lengths}
     \leanok
     Let $K$ be compact, and let $A_x^j$ be continuous block tensors with
     positive physical and bond dimensions. Suppose their length-$S$ word
@@ -2217,7 +2219,7 @@ tensors.
 
 \begin{lemma}[Compact dimension-bound open gaps for normal blocks]
     \label{thm:compact_normal_block_open_gap}
-    \lean{MPSTensor.exists_uniform_block_openParentHamiltonianES_gap_of_compact_isNormalTensor}
+    \lean{MPSTensor.exists_uniform_block_hamiltonian_parentChainInteraction_gap_of_compact_isNormalTensor}
     \leanok
     Let $A_x^j$ be continuous normalized normal blocks, pairwise inequivalent
     under virtual similarity and phase at every parameter, with physical
@@ -2265,7 +2267,7 @@ tensors.
 \begin{lemma}[Open-chain gaps at a prescribed simultaneous injectivity range]
     \label{thm:block_open_gap_subsequence_simultaneous_injectivity}
     \lean{MPSTensor.%
-        exists_openParentHamiltonianES_toTensorFromBlocks_gap_subsequence_of_wordTupleSpanTop}
+        exists_parentChainInteraction_toTensorFromBlocks_gap_subsequence_of_wordTupleSpanTop}
     \leanok
     Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
     Suppose that their simultaneous length-$S$ word tuples span the product
@@ -2301,7 +2303,7 @@ tensors.
 \begin{lemma}[Strict Knabe intervals at a simultaneous injectivity range]
     \label{thm:block_strict_knabe_window_simultaneous_injectivity}
     \lean{MPSTensor.%
-        exists_strict_openParentHamiltonianES_toTensorFromBlocks_window_of_wordTupleSpanTop}
+        exists_strict_parentChainInteraction_toTensorFromBlocks_window_of_wordTupleSpanTop}
     \leanok
     Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
     Suppose that their simultaneous length-$S$ word tuples span the product
@@ -2328,7 +2330,7 @@ tensors.
 
 \begin{lemma}[A uniform gap at the simultaneous injectivity range]
     \label{thm:block-parent-uniform-gap-simultaneous-injectivity}
-    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop}
     \leanok
     Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
     Suppose their word tuples of a given positive length $S$ span the full
@@ -2691,7 +2693,7 @@ shorter interaction range.
 
 \begin{lemma}[A prescribed periodic gap from an open-chain estimate]
     \label{thm:parent-prescribed-gap-window}
-    \lean{MPSTensor.parentHamiltonianES_gap_ge_one_sub_of_open_gap}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_ge_one_sub_of_open_gap}
     \leanok
     \uses{def:parent_hamiltonian_es,def:open_parent_hamiltonian_es}
     Let $0<\eta<1$, $1\le R\le m$, and
@@ -2719,9 +2721,9 @@ shorter interaction range.
 
 \begin{lemma}[Preservation of finite-interval gaps]
     \label{thm:open_interval_gap_transport}
-    \lean{MPSTensor.openPrefixParentHamiltonianES_norm_gap_of_local_gap,
-        MPSTensor.openSuffixParentHamiltonianES_norm_gap_of_local_gap,
-        MPSTensor.openSuffixParentHamiltonianES_conj_cyclicActiveBlock}
+    \lean{MPSTensor.hamiltonian_prefix_parentChainInteraction_gap_of_local_gap,
+        MPSTensor.hamiltonian_restrict_parentChainInteraction_gap_of_local_gap,
+        MPSTensor.hamiltonian_restrict_parentChainInteraction_conj_cyclicActiveBlock}
     \leanok
     Let $R>0$. If the range-$R$ parent Hamiltonian on $n$ sites has norm
     gap $\kappa>0$ on its kernel complement, its extension to the prefix
@@ -2783,9 +2785,8 @@ shorter interaction range.
 
 \begin{lemma}[Combining gaps on two open intervals]
     \label{thm:open_parent_overlapping_interval_gap}
-    \lean{MPSTensor.openPrefixParentHamiltonianES_le_openParentHamiltonianES,
-        MPSTensor.openSuffixParentHamiltonianES_le_openParentHamiltonianES,
-        MPSTensor.openParentHamiltonianES_norm_gap_of_overlapping_interval_gaps}
+    \lean{ManyBody.Interaction.hamiltonian_restrict_le,
+        MPSTensor.hamiltonian_parentChainInteraction_gap_of_overlapping_interval_gaps}
     \leanok
     Let $H$ be the range-$R$ parent Hamiltonian on an open chain of length
     $N$, and let $H_L$ and $H_T$ be its interaction sums on a prefix of
@@ -2850,7 +2851,7 @@ shorter interaction range.
 
 \begin{lemma}[Prescribed gaps for primitive tensors]
     \label{thm:primitive-parent-prescribed-gap}
-    \lean{Kraus.HasComplementaryFixedPointGap.eventually_parentHamiltonianES_gap_ge_one_sub}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_parentRingInteraction_gap_ge_one_sub}
     \leanok
     \uses{def:primitive_mps,def:parent_hamiltonian_es}
     Let $A$ be a normalized primitive tensor with positive bond dimension
@@ -2885,7 +2886,7 @@ shorter interaction range.
 
 \begin{lemma}[Prescribed gaps for primitive block sums]
     \label{thm:primitive-block-parent-prescribed-gap}
-    \lean{MPSTensor.eventually_toTensorFromBlocks_parentHamiltonianES_gap_ge_one_sub}
+    \lean{MPSTensor.eventually_toTensorFromBlocks_hamiltonian_parentRingInteraction_gap_ge_one_sub}
     \leanok
     \uses{def:primitive_mps,def:parent_hamiltonian_es,def:gauge_phase_equiv}
     Let $B=\bigoplus_j\mu_jA_j$, where the $A_j$ are normalized
@@ -2917,8 +2918,8 @@ shorter interaction range.
 
 \begin{lemma}[Prescribed gaps without normalization]
     \label{thm:normal-parent-prescribed-gap}
-    \lean{MPSTensor.eventually_parentHamiltonianES_gap_ge_one_sub_of_isNormal,
-        MPSTensor.eventually_toTensorFromBlocks_parentHamiltonianES_gap_ge_one_sub_of_isNormal}
+    \lean{MPSTensor.eventually_hamiltonian_parentRingInteraction_gap_ge_one_sub_of_isNormal,
+        MPSTensor.eventually_toTensorFromBlocks_hamiltonian_parentRingInteraction_gap_ge_one_sub_of_isNormal}
     \leanok
     \uses{def:normal,def:parent_hamiltonian_es}
     The conclusion of Lemma~\ref{thm:primitive-parent-prescribed-gap}
@@ -3159,12 +3160,11 @@ shorter interaction range.
 
 \begin{lemma}[Sparse grouped open-chain energy bound]
     \label{thm:sparse_grouped_open_energy_gap}
-    \lean{MPSTensor.sparseGroupedOpenParentHamiltonianES,
+    \lean{MPSTensor.sum_range_hamiltonian_restrict_parentChainInteraction_grouped,
         MPSTensor.grouped_martingaleDifference_norm_le_of_projector_defect_of_le,
-        MPSTensor.sparseGroupedOpenParentHamiltonianES_energy_bound_of_grouped_c3,
-        MPSTensor.sparseGroupedOpenParentHamiltonianES_isPositive,
-        MPSTensor.sparseGroupedOpenParentHamiltonianES_projection_bound_of_grouped_c3,
-        MPSTensor.sparseGroupedOpenParentHamiltonianES_add_terminal_le}
+        MPSTensor.sparseGrouped_energy_bound_of_grouped_c3,
+        MPSTensor.sparseGrouped_projection_bound_of_grouped_c3,
+        MPSTensor.sparseGrouped_add_terminal_le}
     \leanok
     Let $p\geq1$, $M\geq2$, and $pM\leq N$. Sample the canonical
     range-$2p$ interactions at starts $0,p,\ldots,p(M-2)$, and write
@@ -3201,7 +3201,7 @@ shorter interaction range.
 
 \begin{lemma}[Sharp open-chain gap with a residual terminal interval]
     \label{thm:sparse_grouped_terminal_open_gap}
-    \lean{MPSTensor.openParentHamiltonianES_gap_of_sparse_grouped_and_terminal}
+    \lean{MPSTensor.hamiltonian_parentChainInteraction_gap_of_sparse_grouped_and_terminal}
     \leanok
     Let $p\geq1$, $M\geq2$, $0<q<p$, and $N=pM+q$.
     Assume that every range-$2p$ open Hamiltonian at length at least $2p$
@@ -3232,7 +3232,7 @@ shorter interaction range.
 
 \begin{lemma}[Prescribed open-chain gaps for primitive block sums]
     \label{thm:primitive_block_open_prescribed_gap}
-    \lean{MPSTensor.eventually_toTensorFromBlocks_openParentHamiltonianES_gap_ge_one_sub}
+    \lean{MPSTensor.eventually_toTensorFromBlocks_hamiltonian_parentChainInteraction_gap_ge_one_sub}
     \leanok
     Let $A_0,\ldots,A_{r-1}$ be normalized primitive tensors with common
     physical dimension $d\geq1$, positive bond dimensions, and
@@ -3263,7 +3263,7 @@ shorter interaction range.
 
 \begin{lemma}[Prescribed open-chain gaps for normal block sums]
     \label{thm:normal_block_open_prescribed_gap}
-    \lean{MPSTensor.eventually_toTensorFromBlocks_openParentHamiltonianES_gap_ge_one_sub_of_isNormal}
+    \lean{MPSTensor.eventually_toTensorFromBlocks_hamiltonian_parentChainInteraction_gap_ge_one_sub_of_isNormal}
     \leanok
     Let $A_0,\ldots,A_{r-1}$ be normal tensors with common physical
     dimension $d\geq1$ and positive bond dimensions. Suppose no two

@@ -465,81 +465,6 @@ theorem restrictFirst_eq_cyclicRestrictES_one {L : ℕ} (hL : 0 < L)
       exact Nat.mod_eq_of_lt (Nat.lt_succ_of_lt r.isLt)
     simp [cyclicCfg, hOneNat, hmod]
 
-/-- Forward local intersection property for adjacent Euclidean-space local terms.
-
-On an \((L+1)\)-site chain, if the two overlapping \(L\)-site local terms based at
-`0` and `1` both annihilate a vector, then the vector lies in the \((L+1)\)-site
-MPS ground space.  This is the Euclidean/local-projector form of the
-open-chain intersection property `groundSpace_intersection`; it is a structural
-predecessor to the quantitative principal-angle estimate for overlapping
-windows. -/
-theorem mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero {A : MPSTensor d D}
-    (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
-    {v : EuclideanSpace ℂ (Cfg d (L + 1))}
-    (hleft : localTermES A L (0 : Fin (L + 1)) v = 0)
-    (hright : localTermES A L (1 : Fin (L + 1)) v = 0) :
-    v ∈ groundSpaceES A (L + 1) := by
-  let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))
-  have hLN : L ≤ L + 1 := by omega
-  have hLeft : InLeftGround A L (eN v) := by
-    intro j
-    have hmemES : cyclicRestrictES (d := d) (Fin.pos (0 : Fin (L + 1))) L
-        (0 : Fin (L + 1)) (fun _ => j) v ∈ groundSpaceES A L :=
-      cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero A hLN
-        (0 : Fin (L + 1)) hleft (fun _ => j)
-    have hmemNS := (mem_groundSpaceES_iff A L _).1 hmemES
-    rwa [restrictLast_eq_cyclicRestrictES_zero v (fun _ => j)]
-  have hRight : InRightGround A L (eN v) := by
-    intro i
-    have hmemES : cyclicRestrictES (d := d) (Fin.pos (1 : Fin (L + 1))) L
-        (1 : Fin (L + 1)) (fun _ => i) v ∈ groundSpaceES A L :=
-      cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero A hLN
-        (1 : Fin (L + 1)) hright (fun _ => i)
-    have hmemNS := (mem_groundSpaceES_iff A L _).1 hmemES
-    rwa [restrictFirst_eq_cyclicRestrictES_one (by omega : 0 < L) v (fun _ => i)]
-  have hψ : eN v ∈ groundSpace A (L + 1) :=
-    groundSpace_intersection hA hL hLeft hRight
-  exact (mem_groundSpaceES_iff A (L + 1) v).2 hψ
-
-/-- Vectors in the \((L+1)\)-site MPS ground space are killed by the two adjacent
-\(L\)-site Euclidean-space local terms. -/
-theorem adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ
-    (A : MPSTensor d D) {L : ℕ} (hL : 0 < L)
-    {v : EuclideanSpace ℂ (Cfg d (L + 1))} (hv : v ∈ groundSpaceES A (L + 1)) :
-    localTermES A L (0 : Fin (L + 1)) v = 0 ∧
-      localTermES A L (1 : Fin (L + 1)) v = 0 := by
-  let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))
-  have hψ : eN v ∈ groundSpace A (L + 1) := (mem_groundSpaceES_iff A (L + 1) v).1 hv
-  have hLN : L ≤ L + 1 := by omega
-  constructor
-  · rw [localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A hLN
-      (0 : Fin (L + 1)) v]
-    intro τ
-    rw [mem_groundSpaceES_iff]
-    rw [← restrictLast_eq_cyclicRestrictES_zero v τ]
-    exact groundSpace_inLeftGround A L hψ (τ (Fin.last L))
-  · rw [localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A hLN
-      (1 : Fin (L + 1)) v]
-    intro τ
-    rw [mem_groundSpaceES_iff]
-    rw [← restrictFirst_eq_cyclicRestrictES_one hL v τ]
-    exact groundSpace_inRightGround A L hψ (τ 0)
-
-/-- Adjacent local kernels on an \((L+1)\)-site chain intersect in the MPS ground
-space.  This restates the open-chain intersection property in the same
-Euclidean local-projector language used by the martingale proof. -/
-theorem adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ {A : MPSTensor d D}
-    (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
-    {v : EuclideanSpace ℂ (Cfg d (L + 1))} :
-    localTermES A L (0 : Fin (L + 1)) v = 0 ∧
-      localTermES A L (1 : Fin (L + 1)) v = 0 ↔
-        v ∈ groundSpaceES A (L + 1) := by
-  constructor
-  · intro h
-    exact mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero hA hL h.1 h.2
-  · intro hv
-    exact adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ A (by omega : 0 < L) hv
-
 @[simp] private theorem localTermESSummand_apply {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
     {L : ℕ} (hLN : L ≤ N) (i : Fin N) (τ v σ) :
     localTermESSummand A hN L i τ v σ =
@@ -736,32 +661,6 @@ theorem localTermES_commute_of_cyclic_windows_disjoint {N : ℕ} (A : MPSTensor 
   rw [hleft, hright]
   simpa [P] using separateLinearMap_apply_commute P P F (extractWindow L i σ)
     (extractWindow L j σ)
-
-/-- Non-overlap positivity for Euclidean-space local terms on disjoint cyclic windows.
-
-For \(L ≤ N\), if the cyclic windows based at \(i\) and \(j\) have no common site, then
-the ordered cross term of the corresponding Euclidean-space local projections is
-nonnegative: \(0 ≤ \operatorname{Re}\langle h_i v, h_j v\rangle\). -/
-theorem localTermES_re_inner_nonneg_of_cyclic_windows_disjoint {N : ℕ}
-    (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) {i j : Fin N}
-    (hij : CyclicWindowsDisjoint L i j) (v : EuclideanSpace ℂ (Cfg d N)) :
-    0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re :=
-  LinearMap.IsSymmetricProjection.re_inner_apply_apply_nonneg_of_commute
-    (localTermES_isSymmetricProjection A L i)
-    (localTermES_isSymmetricProjection A L j)
-    (localTermES_commute_of_cyclic_windows_disjoint A hLN hij) v
-
-/-- Non-overlap positivity for the concrete cyclic-window overlap predicate.
-
-When `cyclicWindowsOverlap N L i j` fails and \(L ≤ N\), the two windows are
-site-disjoint, so the Euclidean-space local terms commute and have nonnegative ordered
-cross term. -/
-theorem localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap {N : ℕ}
-    (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) {i j : Fin N}
-    (hij : ¬ cyclicWindowsOverlap N L i j) (v : EuclideanSpace ℂ (Cfg d N)) :
-    0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re :=
-  localTermES_re_inner_nonneg_of_cyclic_windows_disjoint A hLN
-    (CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap hij) v
 
 /-- The Euclidean-space parent Hamiltonian is positive because it is a finite
 sum of positive Euclidean-space local terms. -/
@@ -971,14 +870,14 @@ theorem parentRingInteraction_term_zero_one_eq_zero_iff_mem_groundSpaceES_succ
     parentRingInteraction_term_zero_one_eq_zero_of_mem_groundSpaceES_succ A (by omega)⟩
 
 /-- Every term of the parent interaction on the ring is an orthogonal projection. -/
-theorem isStarProjection_parentRingInteraction_term (A : MPSTensor d D) {L N : ℕ}
-    (hLN : L ≤ N) (i : Fin N) :
+theorem isStarProjection_parentRingInteraction_term (A : MPSTensor d D) (L : ℕ) {N : ℕ}
+    (i : Fin N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     IsStarProjection ((parentRingInteraction A L N).term i) := by
   have : NeZero N := NeZero.of_pos i.pos
   have hP := isStarProjection_toMatrix'_parentInteraction A L
-  rw [ManyBody.Interaction.translationInvariant_term_of_le _ hLN i]
-  refine ⟨?_, ?_⟩
+  refine ManyBody.Interaction.forall_translationInvariant_term (P := IsStarProjection)
+    ⟨IsIdempotentElem.zero, IsSelfAdjoint.zero _⟩ (fun hLN i ↦ ⟨?_, ?_⟩) i
   · rw [IsIdempotentElem, ← ManyBody.placeAlong_mul, hP.isIdempotentElem.eq]
   · rw [IsSelfAdjoint, Matrix.star_eq_conjTranspose, ← ManyBody.placeAlong_conjTranspose,
       ← Matrix.star_eq_conjTranspose, hP.isSelfAdjoint.star_eq]
@@ -986,27 +885,26 @@ theorem isStarProjection_parentRingInteraction_term (A : MPSTensor d D) {L N : �
 /-- The operator of every term of the parent interaction on the ring is a symmetric
 projection. -/
 theorem isSymmetricProjection_toEuclideanLin_parentRingInteraction_term (A : MPSTensor d D)
-    {L N : ℕ} (hLN : L ≤ N) (i : Fin N) :
+    (L : ℕ) {N : ℕ} (i : Fin N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
-    (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i)).IsSymmetricProjection := by
-  have : NeZero N := NeZero.of_pos i.pos
-  have hP := isStarProjection_parentRingInteraction_term A hLN i
-  exact ⟨by rw [IsIdempotentElem, Module.End.mul_eq_comp, ← Matrix.toEuclideanLin_mul,
-      hP.isIdempotentElem.eq], Matrix.isSymmetric_toEuclideanLin_iff.mpr hP.isSelfAdjoint⟩
+    (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i)).IsSymmetricProjection :=
+  haveI : NeZero N := NeZero.of_pos i.pos
+  Matrix.isSymmetricProjection_toEuclideanLin_iff.mpr
+    (isStarProjection_parentRingInteraction_term A L i)
 
 /-- Every term of the parent interaction on the ring is positive semidefinite. -/
-theorem posSemidef_parentRingInteraction_term (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N)
+theorem posSemidef_parentRingInteraction_term (A : MPSTensor d D) (L : ℕ) {N : ℕ}
     (i : Fin N) :
     haveI : NeZero N := NeZero.of_pos i.pos;
     ((parentRingInteraction A L N).term i).PosSemidef :=
   haveI : NeZero N := NeZero.of_pos i.pos
   Matrix.isPositive_toEuclideanLin_iff.mp
-    (isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A hLN i).isPositive
+    (isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A L i).isPositive
 
 /-- The Hamiltonian of the parent interaction on the ring is positive semidefinite. -/
-theorem posSemidef_hamiltonian_parentRingInteraction (A : MPSTensor d D) {L N : ℕ} [NeZero N]
-    (hLN : L ≤ N) : (parentRingInteraction A L N).hamiltonian.PosSemidef :=
-  ManyBody.Interaction.posSemidef_hamiltonian fun i ↦ posSemidef_parentRingInteraction_term A hLN i
+theorem posSemidef_hamiltonian_parentRingInteraction (A : MPSTensor d D) (L N : ℕ) [NeZero N] :
+    (parentRingInteraction A L N).hamiltonian.PosSemidef :=
+  ManyBody.Interaction.posSemidef_hamiltonian fun i ↦ posSemidef_parentRingInteraction_term A L i
 
 /-- **Disjoint windows.** Terms of the parent interaction on the ring whose cyclic windows have
 no common site commute. This is the non-overlap commutation input for the finite-overlap
@@ -1043,8 +941,8 @@ theorem re_inner_parentRingInteraction_term_nonneg_of_cyclic_windows_disjoint
       Matrix.toEuclideanLin ((parentRingInteraction A L N).term j) v⟫_ℂ).re :=
   haveI : NeZero N := NeZero.of_pos i.pos
   LinearMap.IsSymmetricProjection.re_inner_apply_apply_nonneg_of_commute
-    (isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A hLN i)
-    (isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A hLN j)
+    (isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A L i)
+    (isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A L j)
     (fun w ↦ by
       rw [← Module.End.mul_apply, ← Module.End.mul_apply, Module.End.mul_eq_comp,
         Module.End.mul_eq_comp, ← Matrix.toEuclideanLin_mul, ← Matrix.toEuclideanLin_mul,
@@ -1064,7 +962,7 @@ theorem re_inner_parentRingInteraction_term_nonneg_of_not_cyclicWindowsOverlap
 /-- The ground space of the finite parent Hamiltonian is the kernel of the operator of the
 Hamiltonian of the parent interaction on the ring. -/
 theorem parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction
-    (A : MPSTensor d D) {L N : ℕ} [NeZero N] (_hLN : L ≤ N) :
+    (A : MPSTensor d D) (L N : ℕ) [NeZero N] :
     parentHamiltonianGroundSpaceES A L N =
       LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian) := by
   ext v

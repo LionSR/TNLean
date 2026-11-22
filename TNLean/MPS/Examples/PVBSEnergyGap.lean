@@ -96,7 +96,7 @@ theorem hamiltonian_parentRingInteraction_pvbs_energy_lower_bound (μ : ℝ) (h�
   have ha : 0 ≤ 2 * μ / (1 + μ ^ 2) := by positivity
   have hc : 0 ≤ (μ - 1) ^ 2 / (1 + μ ^ 2) := by positivity
   have hcrit := (Matrix.isPositive_toEuclideanLin_iff.mpr
-    (posSemidef_hamiltonian_parentRingInteraction (pvbsTensor 1) hN)).re_inner_nonneg_right v
+    (posSemidef_hamiltonian_parentRingInteraction (pvbsTensor 1) 2 N)).re_inner_nonneg_right v
   have hn := mul_le_mul_of_nonneg_left (pvbs_particle_number_ge_norm_sq v hv) hc
   exact hn.trans (le_add_of_nonneg_left (mul_nonneg ha hcrit))
 
@@ -127,7 +127,7 @@ theorem isGapped_hamiltonian_parentRingInteraction_pvbs (μ : ℝ) (hμ : 0 ≤ 
       ((μ - 1) ^ 2 / (1 + μ ^ 2)) := by
   have : NeZero N := ⟨by omega⟩
   rw [ManyBody.isGapped_zero_iff_norm
-    (posSemidef_hamiltonian_parentRingInteraction (pvbsTensor (μ : ℂ)) hN),
+    (posSemidef_hamiltonian_parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N),
     ManyBody.groundSpace_zero]
   set H := Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian
   refine ⟨fun hbot ↦ ?_, fun v hv ↦ ?_⟩

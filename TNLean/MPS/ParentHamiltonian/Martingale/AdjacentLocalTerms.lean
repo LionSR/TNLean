@@ -114,8 +114,7 @@ theorem openChainLeftGroundSpaceES_orthogonal_starProjection_eq_parentRingIntera
     (B : MPSTensor d D) :
     (openChainLeftGroundSpaceES B 2)ᗮ.starProjection.toLinearMap =
       Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 0) := by
-  have hP := isSymmetricProjection_toEuclideanLin_parentRingInteraction_term B
-    (show 2 ≤ 3 by omega) 0
+  have hP := isSymmetricProjection_toEuclideanLin_parentRingInteraction_term B 2 (0 : Fin 3)
   apply (Submodule.isSymmetricProjection_starProjection
     ((openChainLeftGroundSpaceES B 2)ᗮ)).ext hP
   rw [Submodule.range_starProjection, range_eq_orthogonal_ker_of_isSymmetricProjection hP,
@@ -128,8 +127,7 @@ theorem openChainTailGroundSpaceES_orthogonal_starProjection_eq_parentRingIntera
     (B : MPSTensor d D) :
     (openChainTailGroundSpaceES B 1 2)ᗮ.starProjection.toLinearMap =
       Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 1) := by
-  have hP := isSymmetricProjection_toEuclideanLin_parentRingInteraction_term B
-    (show 2 ≤ 3 by omega) 1
+  have hP := isSymmetricProjection_toEuclideanLin_parentRingInteraction_term B 2 (1 : Fin 3)
   apply (Submodule.isSymmetricProjection_starProjection
     ((openChainTailGroundSpaceES B 1 2)ᗮ)).ext hP
   rw [Submodule.range_starProjection, range_eq_orthogonal_ker_of_isSymmetricProjection hP,

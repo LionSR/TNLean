@@ -75,13 +75,12 @@ private theorem exists_strict_mixedEndpoint_open_window [NeZero D₀] [NeZero D�
   let : NeZero (D₀ + D₁) := ⟨by have := NeZero.ne D₀; omega⟩
   have hInj := isInjective_mixedEndpointInterpolation A₀ A₁ h₀ h₁ hγ
   obtain ⟨m, hm, η, hnum, hgap⟩ :=
-    exists_strict_openParentHamiltonianES_two_window_of_isInjective _ hInj
+    exists_strict_hamiltonian_parentChainInteraction_two_window_of_isInjective _ hInj
   refine ⟨m, hm, η, hnum, ?_⟩
   intro v hv
   rw [mixedEndpoint_openInteractionHamiltonianES_eq_of_mem_Ioo A₀ A₁ hγ] at hv ⊢
-  rw [ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
-    (Kraus.isNBlkInjective_one_of_isInjective hInj) (by norm_num) (by omega)] at hv
-  exact hgap v hv
+  exact (ManyBody.forall_hasEigenvalue_iff_norm
+    (posSemidef_hamiltonian_parentChainInteraction _ 2 (m + 1))).mp hgap v hv
 
 /-- Near every parameter of the closed path, one positive gap and one
 length threshold work for the actual periodic Hamiltonians. The canonical
@@ -126,10 +125,13 @@ private theorem eventually_mixedEndpoint_periodic_long_gap [NeZero D₀] [NeZero
       (hEndpoint γ hend N (by omega) v hv)
   have hγ := mem_Ioo_of_not_endpoint hend
   have hOpenCanonical :
-      ∀ u ∈ (LinearMap.ker (openParentHamiltonianES
-        (mixedEndpointInterpolation A₀ A₁ γ) 2 (m + 2 - 1)))ᗮ,
-        η' * ‖u‖ ≤ ‖openParentHamiltonianES
-          (mixedEndpointInterpolation A₀ A₁ γ) 2 (m + 2 - 1) u‖ := by
+      ∀ u ∈ (LinearMap.ker
+          (Matrix.toEuclideanLin
+              (parentChainInteraction (mixedEndpointInterpolation A₀ A₁ γ) 2
+                  (m + 2 - 1)).hamiltonian))ᗮ,
+        η' * ‖u‖ ≤ ‖Matrix.toEuclideanLin
+            (parentChainInteraction (mixedEndpointInterpolation A₀ A₁ γ) 2 (m + 2 - 1)).hamiltonian
+                u‖ := by
     rw [show m + 2 - 1 = m + 1 by omega,
       ← mixedEndpoint_openInteractionHamiltonianES_eq_of_mem_Ioo A₀ A₁ hγ]
     exact hOpen
@@ -137,10 +139,14 @@ private theorem eventually_mixedEndpoint_periodic_long_gap [NeZero D₀] [NeZero
       (mixedEndpointInterpolation A₀ A₁ γ) 2 N))ᗮ := by
     rw [← mixedEndpoint_periodicInteractionHamiltonianES_eq_of_mem_Ioo A₀ A₁ hγ]
     exact hv
-  have hKnabe := (parentHamiltonianES_gap_of_openParentHamiltonianES_gap
-    (mixedEndpointInterpolation A₀ A₁ γ) (R := 2) (m := m) (by norm_num) hm
-    (by simpa only [Nat.cast_ofNat, show ((2 : ℝ) - 1) ^ 2 = 1 by norm_num] using hnum')
-    hOpenCanonical).2 N hN v hvCanonical
+  have hKnabe := parentHamiltonianES_norm_gap_of_forall_hasEigenvalue
+    (mixedEndpointInterpolation A₀ A₁ γ) 2 N
+    ((hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteraction_gap
+      (mixedEndpointInterpolation A₀ A₁ γ) (R := 2) (m := m) (by norm_num) hm
+      (by simpa only [Nat.cast_ofNat, show ((2 : ℝ) - 1) ^ 2 = 1 by norm_num] using hnum')
+      ((ManyBody.forall_hasEigenvalue_iff_norm
+        (posSemidef_hamiltonian_parentChainInteraction _ 2 _)).mpr hOpenCanonical)).2 N hN)
+    v hvCanonical
   have hactual : δK * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
       (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N v‖ := by
     rw [mixedEndpoint_periodicInteractionHamiltonianES_eq_of_mem_Ioo A₀ A₁ hγ]

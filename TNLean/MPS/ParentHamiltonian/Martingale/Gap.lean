@@ -19,7 +19,7 @@ cyclic windows remains an explicit hypothesis.
   estimate.
 -/
 
-open scoped BigOperators InnerProductSpace
+open scoped BigOperators ComplexOrder InnerProductSpace
 
 namespace MPSTensor
 
@@ -38,7 +38,7 @@ anticommutator estimate for the terms \(h_i\) of the parent interaction on the r
 \]
 for overlapping off-diagonal pairs implies a uniform gap \(γ>0\), independent
 of the chain length, for the Hamiltonians \(H\) of the parent interaction on the rings of
-\(N ≥ 2L\) sites on the orthogonal complement of their kernels.
+\(N ≥ 2L\) sites: every eigenvalue of \(H\) other than zero is at least \(γ\).
 
 This is the public gapped theorem matching the martingale condition in
 arXiv:2011.12127, Section IV.C, lines 2176-2179. The MPS-specific proof of the
@@ -54,13 +54,14 @@ theorem hamiltonian_parentRingInteraction_gapped_of_anticommutator
           - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) * (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
               ((⟪h i v, v⟫_ℂ).re + (⟪h j v, v⟫_ℂ).re) ≤
             (⟪h i v, h j v⟫_ℂ).re + (⟪h j v, h i v⟫_ℂ).re) :
-    ∃ γ > 0, ∀ (N : ℕ) (hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
+    ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) (hLN : 2 * L ≤ N) (μ : ℂ),
       haveI : NeZero N := ⟨by omega⟩;
-      let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
-      v ∈ (LinearMap.ker H)ᗮ → γ * ‖v‖ ≤ ‖H v‖ := by
+      Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian) μ →
+      μ = 0 ∨ (γ : ℂ) ≤ μ := by
   obtain ⟨hγ, hgap⟩ :=
     hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator A L hL
       hAnti
-  exact ⟨(1 : ℝ) / (4 * (L : ℝ)), hγ, hgap⟩
+  exact ⟨_, hγ, hgap⟩
 
 end MPSTensor

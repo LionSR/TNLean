@@ -80,9 +80,9 @@ theorem ker_sum_eq_bntMPSVectorSpan_of_wordTupleSpanTop
       (Matrix.toEuclideanLin (parentRingInteraction (toTensorFromBlocks μ A) L N).hamiltonian) := by
     rw [ManyBody.Interaction.hamiltonian, map_sum, WeightedPositiveKernel.ker_sum_eq_iInf hH,
       WeightedPositiveKernel.ker_sum_eq_iInf (fun i ↦ Matrix.isPositive_toEuclideanLin_iff.mpr
-        (posSemidef_parentRingInteraction_term _ hLN i))]
+        (posSemidef_parentRingInteraction_term _ _ i))]
     simp only [hker]
-  rw [hEq, ← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _ hLN,
+  rw [hEq, ← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _ _ _,
     parentHamiltonianGroundSpaceES,
     ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop μ A hμ hS hSpan hSL hLN]
 

@@ -260,11 +260,12 @@ theorem exists_uniform_jointMixedEndpoint_periodic_gap
   · let : NeZero (jointMixedPhysicalDim d₀ d₁ D₀ D₁) := ⟨hd⟩
     let : ∀ x, NeZero (D₀ x) := fun x => ⟨Nat.ne_of_gt (hD₀ x)⟩
     obtain ⟨δ, hδ, hGap⟩ :=
-      exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop
+      exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop
         (fun _ => 1) (jointMixedEndpointLeftTensor A₀ d₁ D₁) (fun _ => one_ne_zero)
         (by decide : 0 < 1) (wordTupleSpanTop_jointMixedEndpointLeftTensor A₀ A₁ h₀ h₁)
         (by decide : 1 + 1 ≤ 2)
     exact ⟨min δ (1 / 2), lt_min hδ (by norm_num), fun N hN =>
-      jointMixedEndpoint_periodic_norm_gap A₀ A₁ hN hδ.le (hGap N)⟩
+      jointMixedEndpoint_periodic_norm_gap A₀ A₁ hN hδ.le
+        (parentHamiltonianES_norm_gap_of_forall_hasEigenvalue _ 2 N (hGap N))⟩
 
 end MPSTensor.MPOSymmetry

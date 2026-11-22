@@ -94,8 +94,9 @@ theorem CPSVCanonicalFormData.exists_parentInteraction_uniform_gap_of_wordTupleS
       (LinearMap.ker (periodicInteractionHamiltonianES h N))ᗮ,
       γ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES h N v‖ := by
   obtain ⟨γ, hγ, hGap⟩ :=
-    data.exists_parentHamiltonianES_uniform_gap_of_wordTupleSpanTop hS hSpan hR
-  exact hh.exists_uniform_gap_of_canonical_gap (by omega) hγ hGap
+    data.exists_parentRingInteraction_uniform_gap_of_wordTupleSpanTop hS hSpan hR
+  exact hh.exists_uniform_gap_of_canonical_gap (by omega) hγ
+    fun N ↦ parentHamiltonianES_norm_gap_of_forall_hasEigenvalue A R N (hGap N)
 
 /-- One choice of normal representatives gives the uniform gap for every fixed
 positive parent interaction at every admissible simultaneous injectivity range.
@@ -113,6 +114,7 @@ theorem IsCPSVCanonicalForm.exists_bnt_parentInteraction_uniform_gap_of_wordTupl
   obtain ⟨g, dim, B, hB, hGap⟩ := hA.exists_bnt_uniform_gap_of_wordTupleSpanTop
   refine ⟨g, dim, B, hB, fun hS hSpan hR h hh ↦ ?_⟩
   obtain ⟨γ, hγ, hCanonical⟩ := hGap hS hSpan hR
-  exact hh.exists_uniform_gap_of_canonical_gap (by omega) hγ hCanonical
+  exact hh.exists_uniform_gap_of_canonical_gap (by omega) hγ
+    fun N ↦ parentHamiltonianES_norm_gap_of_forall_hasEigenvalue A _ N (hCanonical N)
 
 end MPSTensor

@@ -210,12 +210,16 @@ theorem exists_uniform_mixedEndpoint_periodic_one_gap [NeZero D₁]
         δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
           (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap N v‖ := by
   obtain ⟨δ, hδ, hGap⟩ :=
-    exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths
+    exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isInjective_all_lengths
       (fun _ : Unit => mixedEndpointRightTensor A₁ D₀) continuous_const
       (fun _ => isInjective_mixedEndpointRightTensor A₁ hA₁ D₀)
       (S := Set.univ) isCompact_univ
   refine ⟨δ / 3, div_pos hδ (by norm_num), fun N hN => ?_⟩
-  exact mixedEndpoint_periodic_one_norm_gap A₀ A₁ hN hδ (hGap () (Set.mem_univ ()) N hN)
+  have : NeZero N := ⟨by omega⟩
+  exact mixedEndpoint_periodic_one_norm_gap A₀ A₁ hN hδ (by
+    rw [parentHamiltonianES, parentHamiltonian_eq_toLin'_hamiltonian]
+    exact ((ManyBody.isGapped_zero_iff_norm (posSemidef_hamiltonian_parentRingInteraction _ 2
+      N)).mp (hGap () (Set.mem_univ ()) N hN)).2)
 
 /-- One strictly positive gap bound works for both actual extended endpoints
 and every periodic chain of length at least two. Only the two endpoint

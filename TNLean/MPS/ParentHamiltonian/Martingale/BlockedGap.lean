@@ -383,19 +383,19 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_hamiltonia
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
-        ∀ (N : ℕ) (hN : 4 ≤ N) (v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N)),
+        ∀ (N : ℕ) (hN : 4 ≤ N) (μ : ℂ),
           haveI : NeZero N := ⟨by omega⟩;
-          let H := Matrix.toEuclideanLin
-            (parentRingInteraction (blockTensor A p) 2 N).hamiltonian
-          v ∈ (LinearMap.ker H)ᗮ → (1 / 8 : ℝ) * ‖v‖ ≤ ‖H v‖ := by
+          Module.End.HasEigenvalue (Matrix.toEuclideanLin
+            (parentRingInteraction (blockTensor A p) 2 N).hamiltonian) μ →
+          μ = 0 ∨ ((1 / 8 : ℝ) : ℂ) ≤ μ := by
   obtain ⟨p, hp, hInj, hAnti⟩ := hP.exists_blockTensor_anticommutator hρ
   obtain ⟨_, hGap⟩ :=
     hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator
       (blockTensor A p) 2 (by omega) hAnti
-  refine ⟨p, hp, hInj, fun N hN v hv ↦ ?_⟩
-  have hγ : (1 / 8 : ℝ) = 1 / (4 * (2 : ℝ)) := by norm_num
+  refine ⟨p, hp, hInj, fun N hN μ hμ ↦ ?_⟩
+  have hγ : (1 / 8 : ℝ) = 1 / (4 * ((2 : ℕ) : ℝ)) := by norm_num
   rw [hγ]
-  exact hGap N hN v hv
+  exact hGap N hN μ hμ
 
 set_option linter.style.longLine false in
 /-- A primitive MPS tensor with a positive-definite fixed point admits physical blocking whose
@@ -408,11 +408,11 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_hamiltonia
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
-        ∃ γ > 0, ∀ (N : ℕ) (hN : 4 ≤ N) (v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N)),
+        ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) (hN : 4 ≤ N) (μ : ℂ),
           haveI : NeZero N := ⟨by omega⟩;
-          let H := Matrix.toEuclideanLin
-            (parentRingInteraction (blockTensor A p) 2 N).hamiltonian
-          v ∈ (LinearMap.ker H)ᗮ → γ * ‖v‖ ≤ ‖H v‖ := by
+          Module.End.HasEigenvalue (Matrix.toEuclideanLin
+            (parentRingInteraction (blockTensor A p) 2 N).hamiltonian) μ →
+          μ = 0 ∨ (γ : ℂ) ≤ μ := by
   obtain ⟨p, hp, hInj, hGap⟩ :=
     hP.exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth hρ
   exact ⟨p, hp, hInj, 1 / 8, by norm_num, hGap⟩

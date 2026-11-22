@@ -39,20 +39,20 @@ theorem groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq
 periodic parent Hamiltonian. The parent interaction is the orthogonal
 projection onto the complement of the local ground space, as in
 Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
-theorem parentHamiltonianES_toTensorFromBlocks_eq_of_block_groundSpace_eq
+theorem hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_of_block_groundSpace_eq
     (μ ν : Fin r → ℂ) (A B : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (hν : ∀ j, ν j ≠ 0) {L : ℕ}
-    (hGS : ∀ j, groundSpace (A j) L = groundSpace (B j) L) (N : ℕ) :
-    parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ) A) L N =
-      parentHamiltonianES (toTensorFromBlocks (d := d) (μ := ν) B) L N :=
-  parentHamiltonianES_eq_of_groundSpace_eq
+    (hGS : ∀ j, groundSpace (A j) L = groundSpace (B j) L) (N : ℕ) [NeZero N] :
+    (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) L N).hamiltonian =
+      (parentRingInteraction (toTensorFromBlocks (d := d) (μ := ν) B) L N).hamiltonian :=
+  hamiltonian_parentRingInteraction_eq_of_groundSpace_eq
     (groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq μ ν A B hμ hν hGS) N
 
 /-- Normalizing inequivalent normal blocks preserves the entire family of
 periodic parent Hamiltonians of their weighted direct sum. This is the
 normalization in Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.1)--(3.2b), before the gap argument of Section 6. -/
-theorem exists_hasComplementaryFixedPointGap_family_parentHamiltonianES_eq_of_isNormal
+theorem exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_isNormal
     [∀ j, NeZero (dim j)]
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (hNormal : ∀ j, Kraus.IsNormal (A j))
@@ -63,12 +63,13 @@ theorem exists_hasComplementaryFixedPointGap_family_parentHamiltonianES_eq_of_is
       (∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
       (∀ i j, i ≠ j → ∀ h : dim j = dim i,
         ¬ GaugePhaseEquiv (h ▸ B j) (B i)) ∧
-      (∀ L N, parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ) A) L N =
-        parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ) B) L N) := by
+      (∀ (L N : ℕ) [NeZero N],
+        (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) L N).hamiltonian =
+          (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) B) L N).hamiltonian) := by
   exact (exists_hasComplementaryFixedPointGap_family_of_isNormal A hNormal hDistinct).elim
     fun B ⟨ρ, hP, hρ, hGS, hDistinctB⟩ ↦
-      ⟨B, ρ, hP, hρ, hDistinctB, fun L N ↦
-        parentHamiltonianES_toTensorFromBlocks_eq_of_block_groundSpace_eq
+      ⟨B, ρ, hP, hρ, hDistinctB, fun L N _ ↦
+        hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_of_block_groundSpace_eq
           μ μ A B hμ hμ (fun j ↦ hGS j L) N⟩
 
 end MPSTensor

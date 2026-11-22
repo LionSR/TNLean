@@ -80,7 +80,7 @@ theorem pvbs_fourierMagnon_mem_orthogonal_kernel {N : â„•} [NeZero N] (hN : 2 â‰
   rw [Submodule.mem_orthogonal]
   intro w hw
   have h := (Matrix.isPositive_toEuclideanLin_iff.mpr
-    (posSemidef_hamiltonian_parentRingInteraction (pvbsTensor 1) hN)).isSymmetric w
+    (posSemidef_hamiltonian_parentRingInteraction (pvbsTensor 1) 2 N)).isSymmetric w
     (WithLp.toLp 2 (SpinChain.oneMagnon
       (fun j : Fin N => ZMod.stdAddChar (ZMod.finEquiv N j))))
   rw [LinearMap.mem_ker.mp hw, inner_zero_left,

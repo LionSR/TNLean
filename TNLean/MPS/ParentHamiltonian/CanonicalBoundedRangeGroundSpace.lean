@@ -72,7 +72,7 @@ theorem IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_bounded_range
     ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPSTensor d (dim j)) (R : ℕ),
       IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩) ∧
       0 < R ∧ R ≤ 3 * D ^ 5 ∧
-      ∀ {L N : ℕ} [NeZero N], R ≤ L → ∀ _hLN : L ≤ N,
+      ∀ {L N : ℕ} [NeZero N], R ≤ L → L ≤ N →
         ∀ H : Fin N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N),
           (∀ i, (H i).IsPositive) →
           (∀ i, LinearMap.ker (H i) =

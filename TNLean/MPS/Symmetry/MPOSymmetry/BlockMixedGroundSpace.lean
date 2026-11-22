@@ -227,12 +227,13 @@ theorem exists_uniform_blockMixed_parentHamiltonianES_gap
     rw [Subtype.isCompact_iff, Set.image_preimage_eq_of_subset (by rwa [Subtype.range_coe])]
     exact hK
   obtain ⟨δ, hδ, hgap⟩ :=
-    exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths
+    exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_all_lengths
       (fun _ _ => 1) (fun γ : Set.Ioo (0 : ℝ) 1 => blockMixedInterpolation A₀ A₁ γ)
       (fun _ _ => one_ne_zero)
       (fun x => (continuous_blockMixedInterpolation A₀ A₁ x).comp continuous_subtype_val)
       one_pos (fun γ => wordTupleSpanTop_blockMixedInterpolation A₀ A₁ h₀ h₁ γ.2) le_rfl hK'
-  exact ⟨δ, hδ, fun γ hγ => hgap ⟨γ, hKI hγ⟩ hγ⟩
+  exact ⟨δ, hδ, fun γ hγ N hN => parentHamiltonianES_norm_gap_of_forall_hasEigenvalue _ 2 N
+    (hgap ⟨γ, hKI hγ⟩ hγ N hN)⟩
 
 /-- As the parameter tends within the open interval to any point of the closed
 interval, in particular to either endpoint, the ground projections of the
