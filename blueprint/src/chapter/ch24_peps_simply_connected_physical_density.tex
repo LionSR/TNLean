@@ -80,3 +80,43 @@
     connectedness and apply
     \ref{thm:peps_torus_physical_local_equivalence}.
 \end{proof}
+
+\begin{lemma}[Vacuum reduced density of a closed flux string]
+    \label{lem:peps_closed_flux_vacuum_density}
+    \lean{TNLean.PEPS.IsGIsometric.torusClosedFlux_normalized_density_eq_vacuum}
+    \leanok
+    \uses{thm:peps_torus_simply_connected_physical_density,def:peps_dual_flux_cut}
+    Under the hypotheses of
+    Lemma~\ref{thm:peps_torus_simply_connected_physical_density}, let
+    $p:a\to a$ be any finite closed dual path and let $g\in G$.
+    Let $M_p$ be the physical cut matrix of its inserted flux string, and
+    let $M_0$ be the cut matrix with identity insertions. Then
+    \begin{align}
+        \frac{M_pM_p^\dagger}{\operatorname{tr}(M_pM_p^\dagger)}
+        =\frac{M_0M_0^\dagger}{\operatorname{tr}(M_0M_0^\dagger)}.
+        \label{eq:peps_closed_flux_density}
+    \end{align}
+    The path may wind around the torus.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_dual_flux_endpoints,thm:peps_bond_flat_classification,
+        thm:peps_dual_flux_gauge_absorption,thm:peps_dual_flux_nonzero,
+        thm:peps_torus_simply_connected_physical_density}
+    Lemma~\ref{thm:peps_dual_flux_endpoints} gives identity holonomy on every
+    plaquette. The inserted bond assignment is therefore flat. By
+    Lemma~\ref{thm:peps_bond_flat_classification} it is gauge equivalent to
+    commuting seam labels $(u,v)$. Gauge absorption gives the matrix identity
+    \begin{align}
+        M_p(\sigma,\tau)
+        =\Psi_{u,v}\bigl(\operatorname{assemble}_R(\sigma,\tau)\bigr)
+        =M_{u,v}(\sigma,\tau),
+        \label{eq:peps_closed_flux_closure_cut}
+    \end{align}
+    where $\Psi_{u,v}$ is the commuting-seam closure state and $M_{u,v}$
+    its cut across $R$. The cut is nonzero by
+    Lemma~\ref{thm:peps_dual_flux_nonzero}. The common-density assertion
+    (\ref{eq:peps_simply_connected_density}) thus gives
+    $M_pM_p^\dagger/\operatorname{tr}(M_pM_p^\dagger)=\rho_R$.
+    The constant path gives the vacuum cut and the same $\rho_R$, proving
+    (\ref{eq:peps_closed_flux_density}).
+\end{proof}

@@ -1,0 +1,81 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Vacuum Reduced Densities of Closed Flux Strings}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3}~\cite{Schuch2010PEPS},
+Lemma 6.14, source \path{Papers/1001.3807/paper_v3.tex}, lines 2199--2214,
+asserts local unobservability of a flux string away from its endpoints.
+Theorem 6.9, lines 2027--2072, identifies local physical densities of
+commuting torus closure states on a simply connected block.
+
+On a native torus with both periods at least three, let the physical tensor
+be regular $G$-isometric for a finite group $G$. Let $R$ have connected
+induced occupied graph and simply connected closed-cell realization.
+For every finite closed dual path $p:a\to a$ and every $g\in G$, let $M_p$
+be its actual inserted physical cut matrix and let $M_0$ use identity
+insertions. Then
+\begin{align}
+    \frac{M_pM_p^\dagger}{\operatorname{tr}(M_pM_p^\dagger)}
+    =\frac{M_0M_0^\dagger}{\operatorname{tr}(M_0M_0^\dagger)}.
+    \label{eq:closed_flux_vacuum_density}
+\end{align}
+Both cuts are proved nonzero. Identity plaquette holonomy is derived from
+the coincidence of the dual endpoints, then flat-connection classification
+and virtual invariance identify the actual state with a commuting seam
+closure. The common physical density of those closures gives
+(\ref{eq:closed_flux_vacuum_density}). The path may have arbitrary winding;
+its global state is not asserted equal to the vacuum.
+
+The declaration is
+\leanid{TNLean.PEPS.IsGIsometric.torusClosedFlux_normalized_density_eq_vacuum}.
+No factorization, equality of reduced matrices, local parent common-kernel
+identification, or nonzero-cut premise is supplied to this theorem.
+
+This proves the closed-string subcase of the density question under the
+stated observation geometry. General open flux pairs observed away from
+their endpoints still require a separate argument. Endpoint avoidance
+alone does not exclude an annular region that detects an enclosed flux.
+Neither arbitrary-region path avoidance nor the general open-pair vacuum
+reduced-density assertion is claimed; these remain under \ghissue{8703}.
+The full-lattice Hamiltonian obligations of \ghissue{8947} are unchanged.
+
+\section{An endpoint-free annular obstruction}
+The necessity of an observation-topology restriction can be seen over
+$G=\mathbb Z_2$. With virtual bits $t,r,b,l$ and physical triple $s$, use
+\begin{align}
+    A(t,r,b,l;s)=[s=(r+t,b+t,l+t)].
+    \label{eq:closed_flux_binary_site}
+\end{align}
+This tensor is invariant under simultaneous bit flip and is isometric on
+the invariant subspace up to the positive factor $2$.
+
+On a $7\times7$ torus, take the four-step eastward dual path from $(1,1)$
+to $(5,1)$. Its insertions flip the downward bonds anchored at
+$(2,1),(3,1),(4,1),(5,1)$. Observe only the vertices on the perimeter of
+the square $[0,3]^2$. This observation contains no vertex of either endpoint
+plaquette. At each observed vertex, the two incidences followed by the
+perimeter have a relative bit determined by the physical triple in
+(\ref{eq:closed_flux_binary_site}). The product of their diagonal signs is
+an observable $W_R$ supported on the annulus. Every summed bond label
+occurs twice, while exactly one flipped bond crosses the perimeter.
+Consequently the two nonzero physical states satisfy
+\begin{align}
+    W_R\lvert\Psi_0\rangle & =\lvert\Psi_0\rangle, \\
+    W_R\lvert\Psi_p\rangle & =-\lvert\Psi_p\rangle.
+    \label{eq:closed_flux_annular_sign}
+\end{align}
+Their normalized reduced densities on $R$ differ. Thus endpoint avoidance
+alone cannot replace the observation-topology hypotheses. The closed-loop
+density theorem is formalized; this annular calculation is an explicit
+mathematical obstruction, not a claimed additional Lean theorem.
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
