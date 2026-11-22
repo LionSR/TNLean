@@ -12,7 +12,7 @@ import Mathlib.Analysis.InnerProductSpace.Spectrum
 
 A positive operator with a vector orthogonal to its kernel and Rayleigh
 quotient below epsilon has a positive eigenvalue below epsilon.
-Applied to the explicit finite uncle Hamiltonian, this is the spectral step
+Applied to the Hamiltonian of the translates of the uncle interaction, this is the spectral step
 in arXiv:1210.6613, proof of Theorem thm:gapless, lines 1302–1314.
 The preceding norm, energy, and ground-overlap estimates must still supply
 such a vector; they are not assumed as a gaplessness conclusion here.
@@ -24,9 +24,14 @@ open scoped InnerProductSpace BigOperators
 
 namespace MPSTensor
 
-private theorem exists_small_pos_eigenvalue_of_rayleigh
+/-- A positive operator on a finite-dimensional space has a positive eigenvalue below a strict
+Rayleigh bound attained on its kernel complement.
+
+This is the finite spectral argument of arXiv:1210.6613, proof of thm:gapless,
+lines 1302–1314; constructing the variational vector remains a separate step. -/
+theorem _root_.LinearMap.IsPositive.exists_pos_eigenvalue_lt_of_rayleigh
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
-    (T : E →ₗ[ℂ] E) (hT : T.IsPositive) (v : E) (hv : v ∈ (LinearMap.ker T)ᗮ)
+    {T : E →ₗ[ℂ] E} (hT : T.IsPositive) (v : E) (hv : v ∈ (LinearMap.ker T)ᗮ)
     (ε : ℝ) (hRayleigh : (⟪T v, v⟫_ℂ).re < ε * ‖v‖ ^ 2) :
     ∃ μ : ℝ, 0 < μ ∧ μ < ε ∧ Module.End.HasEigenvalue T (μ : ℂ) := by
   classical
@@ -149,44 +154,19 @@ theorem norm_mpv_span_projection_sq_le
       4 * (‖inner ℂ (mpvState A N) φ‖ ^ 2 + ‖inner ℂ (mpvState B N) φ‖ ^ 2) :=
   norm_span_pair_projection_sq_le _ _ _ hA hB hAB
 
-/-- The finite uncle Hamiltonian has a positive eigenvalue below a
-strict Rayleigh bound from its kernel complement. Positivity is derived from
-the interaction rather than supplied as another hypothesis.
-
-This is the finite spectral argument of arXiv:1210.6613, proof of thm:gapless,
-lines 1302–1314; constructing the variational vector remains a separate step. -/
-theorem exists_pos_eigenvalue_uncleHamiltonianES_lt_of_rayleigh
-    {d a b : ℕ} (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ)
-    (v : EuclideanSpace ℂ (Cfg d N))
-    (hv : v ∈ (LinearMap.ker (uncleHamiltonianES A B R L N).toLinearMap)ᗮ)
-    (ε : ℝ)
-    (hRayleigh : (⟪uncleHamiltonianES A B R L N v, v⟫_ℂ).re < ε * ‖v‖ ^ 2) :
-    ∃ μ : ℝ, 0 < μ ∧ μ < ε ∧
-      Module.End.HasEigenvalue (uncleHamiltonianES A B R L N).toLinearMap (μ : ℂ) :=
-  exists_small_pos_eigenvalue_of_rayleigh _ (uncleHamiltonianES_isPositive A B R L N)
-    v hv ε hRayleigh
-
-/-- The variational spectral step for an arbitrary trial vector.
-Subtracting its kernel projection preserves energy and removes
-exactly the projected squared norm. This derives the kernel-complement
+/-- The variational spectral step for an arbitrary trial vector and a positive operator on a
+finite-dimensional space. Subtracting the kernel projection of the vector preserves energy and
+removes exactly the projected squared norm. This derives the kernel-complement
 vector rather than requiring orthogonality of the supplied trial.
 Source: arXiv:1210.6613, proof of thm:gapless, lines 1302–1314. -/
-theorem exists_pos_eigenvalue_uncleHamiltonianES_lt_of_projection_bound
-    {d a b : ℕ} (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ)
-    (v : EuclideanSpace ℂ (Cfg d N)) (ε : ℝ)
-    (hRayleigh : (⟪uncleHamiltonianES A B R L N v, v⟫_ℂ).re <
-      ε * (‖v‖ ^ 2 -
-        ‖(LinearMap.ker (uncleHamiltonianES A B R L N).toLinearMap).starProjection v‖ ^ 2)) :
-    ∃ μ : ℝ, 0 < μ ∧ μ < ε ∧
-      Module.End.HasEigenvalue (uncleHamiltonianES A B R L N).toLinearMap (μ : ℂ) := by
-  let T := (uncleHamiltonianES A B R L N).toLinearMap
+theorem _root_.LinearMap.IsPositive.exists_pos_eigenvalue_lt_of_projection_bound
+    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
+    {T : E →ₗ[ℂ] E} (hT : T.IsPositive) (v : E) (ε : ℝ)
+    (hRayleigh : (⟪T v, v⟫_ℂ).re <
+      ε * (‖v‖ ^ 2 - ‖(LinearMap.ker T).starProjection v‖ ^ 2)) :
+    ∃ μ : ℝ, 0 < μ ∧ μ < ε ∧ Module.End.HasEigenvalue T (μ : ℂ) := by
   let K := LinearMap.ker T
   let w := v - K.starProjection v
-  have hT : T.IsPositive := uncleHamiltonianES_isPositive A B R L N
   have hw : w ∈ Kᗮ := Submodule.sub_starProjection_mem_orthogonal (K := K) v
   have hkill : T (K.starProjection v) = 0 :=
     LinearMap.mem_ker.mp (K.starProjection_apply_mem v)
@@ -205,7 +185,7 @@ theorem exists_pos_eigenvalue_uncleHamiltonianES_lt_of_projection_bound
       Submodule.starProjection_orthogonal_val (K := K) v
     rw [horth] at hpyth
     linarith
-  apply exists_small_pos_eigenvalue_of_rayleigh T hT w hw ε
+  apply hT.exists_pos_eigenvalue_lt_of_rayleigh w hw ε
   rw [henergy, hnorm]
   exact hRayleigh
 

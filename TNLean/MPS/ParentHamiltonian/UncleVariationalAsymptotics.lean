@@ -24,13 +24,15 @@ open scoped InnerProductSpace Topology
 
 namespace MPSTensor
 
+open ManyBody.Interaction (translationInvariant)
+
 /-- The actual uncle Hamiltonians have eventually a positive eigenvalue
 below every positive threshold when the actual trial family has quadratic
 squared norm, vanishing kernel projection and linear energy. The kernel
 complement vector is derived by subtracting its actual orthogonal projection.
 This is the analytic step of arXiv:1210.6613, proof of thm:gapless,
 lines 1302–1314; no source tensor estimate is asserted by this lemma alone. -/
-theorem eventually_exists_pos_eigenvalue_uncleHamiltonianES_lt_of_trial_bounds
+theorem eventually_exists_pos_eigenvalue_hamiltonian_uncleInteraction_lt_of_trial_bounds
     {d a b : ℕ} (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
@@ -38,14 +40,19 @@ theorem eventually_exists_pos_eigenvalue_uncleHamiltonianES_lt_of_trial_bounds
     (c : ℝ) (hc : 0 < c)
     (hNorm : ∀ᶠ N : ℕ in atTop, c * ((N + 1 : ℕ) : ℝ) ^ 2 ≤ ‖v N‖ ^ 2)
     (hProj : Tendsto (fun N : ℕ ↦
-      ‖(LinearMap.ker (uncleHamiltonianES A B R L (6 * N + 1)).toLinearMap).starProjection
+      ‖(LinearMap.ker (Matrix.toEuclideanLin
+          (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian)).starProjection
         (v N)‖ ^ 2) atTop (𝓝 0))
     (hEnergy : ∃ C : ℝ, 0 < C ∧ ∀ᶠ N : ℕ in atTop,
-      (⟪uncleHamiltonianES A B R L (6 * N + 1) (v N), v N⟫_ℂ).re ≤ C * N) :
+      (⟪Matrix.toEuclideanLin
+          (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian (v N), v
+            N⟫_ℂ).re ≤ C * N) :
     ∀ ε : ℝ, 0 < ε → ∀ᶠ N : ℕ in atTop,
       ∃ μ : ℝ, 0 < μ ∧ μ < ε ∧
         Module.End.HasEigenvalue
-          (uncleHamiltonianES A B R L (6 * N + 1)).toLinearMap (μ : ℂ) := by
+          (Matrix.toEuclideanLin
+              (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian) (μ : ℂ) :=
+                by
   obtain ⟨C, hC, hEnergy⟩ := hEnergy
   intro ε hε
   let k : ℝ := ε * c / 2
@@ -53,7 +60,8 @@ theorem eventually_exists_pos_eigenvalue_uncleHamiltonianES_lt_of_trial_bounds
   obtain ⟨M, hM⟩ := exists_nat_gt (C / k)
   have hMpos : 0 < M := Nat.cast_pos.mp ((div_pos hC hk).trans hM)
   have hProjSmall : ∀ᶠ N : ℕ in atTop,
-      ‖(LinearMap.ker (uncleHamiltonianES A B R L (6 * N + 1)).toLinearMap).starProjection
+      ‖(LinearMap.ker (Matrix.toEuclideanLin
+          (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian)).starProjection
         (v N)‖ ^ 2 < c / 2 :=
     hProj.eventually (eventually_lt_nhds (half_pos hc))
   filter_upwards [hNorm, hEnergy, hProjSmall, eventually_ge_atTop M]
@@ -62,7 +70,8 @@ theorem eventually_exists_pos_eigenvalue_uncleHamiltonianES_lt_of_trial_bounds
   have hNormN' : c * ((N : ℝ) + 1) ^ 2 ≤ ‖v N‖ ^ 2 := by
     simpa only [Nat.cast_add, Nat.cast_one] using hNormN
   have hMass : (c / 2) * (N : ℝ) ^ 2 ≤ ‖v N‖ ^ 2 -
-      ‖(LinearMap.ker (uncleHamiltonianES A B R L (6 * N + 1)).toLinearMap).starProjection
+      ‖(LinearMap.ker (Matrix.toEuclideanLin
+          (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian)).starProjection
         (v N)‖ ^ 2 := by
     have hlinear : 0 ≤ c * (N : ℝ) := mul_nonneg hc.le hNpos.le
     have hquadratic : 0 ≤ c * (N : ℝ) ^ 2 := mul_nonneg hc.le (sq_nonneg _)
@@ -75,8 +84,8 @@ theorem eventually_exists_pos_eigenvalue_uncleHamiltonianES_lt_of_trial_bounds
       C * (N : ℝ) < (k * (N : ℝ)) * (N : ℝ) :=
         mul_lt_mul_of_pos_right hLarge hNpos
       _ = _ := by dsimp [k]; ring
-  apply exists_pos_eigenvalue_uncleHamiltonianES_lt_of_projection_bound
-    A B R L (6 * N + 1) (v N) ε
+  apply (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_uncleInteraction
+    A B R L (6 * N + 1))).exists_pos_eigenvalue_lt_of_projection_bound (v N) ε
   exact hEnergyN.trans_lt
     (hRayleigh.trans_le (mul_le_mul_of_nonneg_left hMass hε.le))
 

@@ -348,13 +348,13 @@ private theorem uncleBoundaryBlockTrace_lower_word
 in the actual uncle projector kernel, even with arbitrary exterior factors.
 No perturbation injectivity or canonical normalization is needed for this
 algebraic cancellation. Source: arXiv:1210.6613, lines 1289–1296. -/
-theorem uncleInteractionES_upper_wall_slice_eq_zero
+theorem uncleInteraction_upper_wall_slice_eq_zero
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (P : Matrix (Fin a) (Fin a) ℂ) (Q : Matrix (Fin b) (Fin a) ℂ)
     (u v : List (Fin d)) :
-    uncleInteractionES A B R L ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
       (fun σ ↦ Matrix.trace (P * uncleDomainWallWord A B R (u ++ List.ofFn σ ++ v) * Q))) =
       0 := by
   apply (mem_uncleBoundarySpace_two_iff A B R L _).mp
@@ -364,13 +364,13 @@ theorem uncleInteractionES_upper_wall_slice_eq_zero
 /-- Inside the L-wall interval the same actual local cancellation holds,
 with the second rectangular wall orientation. Source: arXiv:1210.6613,
 lines 1289–1296. -/
-theorem uncleInteractionES_lower_wall_slice_eq_zero
+theorem uncleInteraction_lower_wall_slice_eq_zero
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (P : Matrix (Fin b) (Fin b) ℂ) (Q : Matrix (Fin a) (Fin b) ℂ)
     (u v : List (Fin d)) :
-    uncleInteractionES A B R L ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
       (fun σ ↦ Matrix.trace (P * uncleDomainWallWord B A L (u ++ List.ofFn σ ++ v) * Q))) =
       0 := by
   apply (mem_uncleBoundarySpace_two_iff A B R L _).mp
@@ -381,26 +381,26 @@ theorem uncleInteractionES_lower_wall_slice_eq_zero
 moving interval, with every exterior physical letter fixed. This includes
 all wall positions in that interval, not just the two local positions.
 Source: arXiv:1210.6613, lines 1289–1296. -/
-theorem uncleInteractionES_twoWall_slice_first_eq_zero
+theorem uncleInteraction_twoWall_slice_first_eq_zero
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (p u v w x y : List (Fin d)) :
-    uncleInteractionES A B R L ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
       (fun σ ↦ uncleTwoWallCoefficient A B R L p (u ++ List.ofFn σ ++ v) w x y)) = 0 := by
   simpa only [uncleTwoWallCoefficient, Matrix.mul_assoc] using
-    uncleInteractionES_upper_wall_slice_eq_zero A B R L (Kraus.evalWord A p)
+    uncleInteraction_upper_wall_slice_eq_zero A B R L (Kraus.evalWord A p)
       (Kraus.evalWord B w * uncleDomainWallWord B A L x * Kraus.evalWord A y) u v
 
 /-- The actual two-wall coefficient is also killed by a pair inside the
 second moving interval. The rectangular trace identity moves the exterior
 first wall around the periodic trace. Source: arXiv:1210.6613, lines 1289–1296. -/
-theorem uncleInteractionES_twoWall_slice_second_eq_zero
+theorem uncleInteraction_twoWall_slice_second_eq_zero
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (p r w u v y : List (Fin d)) :
-    uncleInteractionES A B R L ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
+    Matrix.toEuclideanLin (uncleInteraction A B R L) ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm
       (fun σ ↦ uncleTwoWallCoefficient A B R L p r w (u ++ List.ofFn σ ++ v) y)) = 0 := by
   have hslice :
       (fun σ : Fin 2 → Fin d ↦
@@ -411,7 +411,7 @@ theorem uncleInteractionES_twoWall_slice_second_eq_zero
     funext σ
     exact uncleTwoWallCoefficient_rotate A B R L p r w (u ++ List.ofFn σ ++ v) y
   rw [hslice]
-  exact uncleInteractionES_lower_wall_slice_eq_zero A B R L (Kraus.evalWord B w)
+  exact uncleInteraction_lower_wall_slice_eq_zero A B R L (Kraus.evalWord B w)
     (Kraus.evalWord A y * Kraus.evalWord A p * uncleDomainWallWord A B R r) u v
 
 end MPSTensor

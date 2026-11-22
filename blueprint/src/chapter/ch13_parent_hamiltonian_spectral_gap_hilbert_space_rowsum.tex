@@ -50,7 +50,6 @@
     \lean{MPSTensor.cyclicRestrictES}
     \lean{MPSTensor.localTermES}
     \lean{MPSTensor.localTermES_apply}
-    \lean{MPSTensor.localTermESSummand}
     \leanok
     \uses{def:ground_space_es, rem:cyclic_window_operators}
     Let $P_L^{\mathrm{ES}}(A)$ denote the orthogonal projector onto
@@ -59,50 +58,49 @@
     $\tau$, the map $R_{i,\tau}$ restricts an $N$-site vector to that
     length-$L$ cyclic window with the outside configuration fixed by $\tau$.
     The local term $h_{i,\mathrm{ES}}$ is the corresponding $N$-site local
-    projector, and
-    $R_{i,\tau}^{\dagger}P_L^{\mathrm{ES}}(A)R_{i,\tau}$ is the basic positive
-    summand in its cyclic-averaging formula.
+    projector.
 \end{remark}
 
-\begin{lemma}[Positivity of the Hilbert-space local summands]
+\begin{lemma}[Positivity of the Hilbert-space local projector]
     \label{lem:euclidean_local_projector_positive}
     \lean{MPSTensor.parentInteractionES_isPositive}
-    \lean{MPSTensor.localTermESSummand_isPositive}
-    \lean{MPSTensor.localTermESSummand_sum_isPositive}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients}
     The Hilbert-space local projector $P_L^{\mathrm{ES}}(A)$ is positive.
-    Consequently, every summand
-    $R_{i,\tau}^{\dagger}P_L^{\mathrm{ES}}(A)R_{i,\tau}$ is positive, and so is
-    the finite sum over $\tau$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Orthogonal projectors are positive. Conjugation by $R_{i,\tau}$ preserves
-    positivity, and finite sums of positive operators remain positive.
+    Orthogonal projectors are positive.
 \end{proof}
 
 \begin{lemma}[Cyclic averaging for the Hilbert-space local terms]
     \label{lem:local_term_es_average}
     \lean{MPSTensor.parentHamiltonianES_eq_sum_localTermES}
-    \lean{MPSTensor.localTermES_eq_average_localTermESSummand}
+    \lean{MPSTensor.inv_smul_sum_adjoint_comp_cyclicRestrictES_apply}
+    \lean{MPSTensor.toEuclideanLin_translationInvariant_term_eq_inv_smul_sum}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients, lem:euclidean_local_projector_positive}
     The Hilbert-space parent Hamiltonian is the sum of the Hilbert-space local
-    terms, $H_{N,\mathrm{ES}}=\sum_i h_{i,\mathrm{ES}}$, and each local term
-    admits the exact cyclic-averaging formula
+    terms, $H_{N,\mathrm{ES}}=\sum_i h_{i,\mathrm{ES}}$. Let $L\le N$ and let
+    $T$ be an operator on the $L$-site Hilbert space. For every $N$-site vector
+    $v$ and every configuration $\sigma$, the cyclic average
+    $d^{-L}\sum_{\tau}R_{i,\tau}^{\dagger}TR_{i,\tau}v$ has the coefficient of
+    $TR_{i,\sigma}v$ at the restriction of $\sigma$ to the window as its
+    coefficient at $\sigma$. Consequently, for every matrix $h$ on $L$ sites,
+    its translate $h_i$ to the cyclic window starting at $i$ on the ring of
+    $N$ sites admits the exact cyclic-averaging formula
     \begin{align}
-        h_{i,\mathrm{ES}}
+        h_i
          & =d^{-L}\sum_{\tau}
-        R_{i,\tau}^{\dagger}P_L^{\mathrm{ES}}(A)R_{i,\tau}.
+        R_{i,\tau}^{\dagger}hR_{i,\tau}.
         \label{eq:ph_cyclic_averaging}
     \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Unfolding the Hilbert-space local term and comparing it
+    Comparing the translate
     configuration-by-configuration with the cyclic restrictions gives the
     formula, where the $d^{-L}$ factor compensates for the $d^L$ choices of
     the window coordinates in the ambient configuration parameter $\tau$.
@@ -120,7 +118,8 @@
 
 \begin{proof}
     \leanok
-    By the averaging formula (\ref{eq:ph_cyclic_averaging}),
+    By the cyclic average of Lemma~\ref{lem:local_term_es_average} with
+    $T=P_L^{\mathrm{ES}}(A)$,
     $h_{i,\mathrm{ES}}$ is a non-negative scalar multiple of a finite sum of
     positive conjugates of $P_L^{\mathrm{ES}}(A)$, hence is itself positive;
     summing over $i$ yields positivity of $H_{N,\mathrm{ES}}$.

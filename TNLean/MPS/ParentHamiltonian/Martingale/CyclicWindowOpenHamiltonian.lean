@@ -352,6 +352,20 @@ theorem toEuclideanLin_translationInvariant_term_apply (hRN : R ≤ N)
     (fun τ _ hv ↦ replaceWindow_of_forall_ringWindow_ne hRN i σ τ hv)]
   rfl
 
+/-- A term of the translates of `h` on the ring is the cyclic average of the conjugates of `h`
+by the restrictions to its window. -/
+theorem toEuclideanLin_translationInvariant_term_eq_inv_smul_sum (hRN : R ≤ N)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) =
+      (((d ^ R : ℕ) : ℂ)⁻¹) • ∑ τ : Cfg d N,
+        (cyclicRestrictES (Fin.pos i) R i τ).adjoint ∘ₗ Matrix.toEuclideanLin h ∘ₗ
+          cyclicRestrictES (Fin.pos i) R i τ := by
+  have : NeZero N := NeZero.of_pos i.pos
+  ext v σ
+  rw [toEuclideanLin_translationInvariant_term_apply hRN,
+    inv_smul_sum_adjoint_comp_cyclicRestrictES_apply hRN]
+
 /-- In the cyclic active-block coordinates of its window, a term of the translates of `h` on the
 ring is `h` on the active block, acting independently on every spectator configuration. Source:
 PGVWC07, arXiv:quant-ph/0608197, Theorem 11 proof, lines 1418–1422. -/

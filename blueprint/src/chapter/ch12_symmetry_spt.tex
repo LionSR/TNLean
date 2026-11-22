@@ -118,8 +118,7 @@ of the virtual projective representation.
 
 \begin{lemma}[Uniform parent gap along an injective polar deformation]
     \label{thm:spt_polar_deformation_gap}
-    \lean{MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_polarDeformation,
-        MPSTensor.commute_toMatrix'_parentInteraction_polarDeformation_onSiteTensorPow}
+    \lean{MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_polarDeformation}
     \leanok
 
     Let $A$ be one-site injective with $D>0$, and let $H_{N,2}(A_\gamma)$
@@ -127,8 +126,6 @@ of the virtual projective representation.
     $\delta>0$ such that, for every $\gamma\in[0,1]$ and every $N\geq2$,
     zero is an eigenvalue of $H_{N,2}(A_\gamma)$ and every other eigenvalue
     is at least $\delta$.
-    Under the unitary bond-conjugation covariance of the preceding theorem,
-    each canonical range-$L$ parent interaction commutes with $U^{\otimes L}$.
     In the polar-deformation argument of
     \cite[Section~II.C and Appendix~A]{Schuch2011Phases}, this establishes
     the one-site injective case; as documented in
@@ -143,10 +140,14 @@ of the virtual projective representation.
     The preceding theorem gives a continuous injective family on the compact
     interval $[0,1]$. The compact-family parent-gap theorem applies to this
     family, and the periodic vector of an injective tensor is a nonzero
-    zero-energy vector. Covariance by bond conjugation gives gauge equivalence under
-    physical rotation, so the canonical parent interactions commute with
-    the physical tensor powers.
+    zero-energy vector.
 \end{proof}
+
+Under the unitary bond-conjugation covariance of
+Lemma~\ref{thm:spt_polar_deformation}, the deformed tensors are gauge
+equivalent to their physical rotations, so by
+Lemma~\ref{thm:spt_parent_hamiltonian_symmetry} each canonical range-$L$
+parent interaction along the path commutes with $U^{\otimes L}$.
 
 \begin{lemma}[Canonical interactions along a symmetric injective path]
     \label{thm:spt_canonical_injective_gapped_path}

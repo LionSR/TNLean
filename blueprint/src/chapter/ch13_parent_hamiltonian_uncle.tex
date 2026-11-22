@@ -14,7 +14,7 @@ one scalar need not be a similarity transformation.
     \label{lem:uncle_local_projector_continuity}
     \lean{ContinuousLinearMap.continuousAt_range_starProjection_of_injective}
     \lean{MPSTensor.continuousAt_groundSpaceES_starProjection_of_isNBlkInjective}
-    \lean{MPSTensor.continuousAt_parentInteractionES_of_isNBlkInjective}
+    \lean{MPSTensor.continuousAt_toMatrix'_parentInteraction_of_isNBlkInjective}
     \leanok
     \uses{def:ground_space_map_es,def:parent_interaction}
     Let $T_x$ be a family of finite-dimensional boundary maps continuous at
@@ -133,9 +133,9 @@ one scalar need not be a similarity transformation.
 
 \begin{lemma}[Canonical two-block uncle interaction and Hamiltonian]
     \label{thm:two_block_uncle_parent_limit}
-    \lean{MPSTensor.uncleInteractionES}
-    \lean{MPSTensor.uncleHamiltonianES}
-    \lean{MPSTensor.tendsto_parentInteractionES_twoBlockPerturbation}
+    \lean{MPSTensor.uncleInteraction}
+    \lean{MPSTensor.toEuclideanLin_uncleInteraction_apply}
+    \lean{MPSTensor.tendsto_toMatrix'_parentInteraction_twoBlockPerturbation}
     \lean{MPSTensor.tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation}
     \lean{MPSTensor.tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation_real}
     \leanok
@@ -164,7 +164,7 @@ one scalar need not be a similarity transformation.
 
 \begin{lemma}[Uncle limits under an injective perturbation]
     \label{cor:uncle_parent_limit_injective_perturbation}
-    \lean{MPSTensor.tendsto_parentInteractionES_twoBlockPerturbation_of_isInjective_perturbation,
+    \lean{MPSTensor.tendsto_toMatrix'_parentInteraction_twoBlockPerturbation_of_isInjective_perturbation,
         MPSTensor.tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation_of_isInjective_perturbation}
     \leanok
     \uses{lem:uncle_injective_perturbation, thm:two_block_uncle_parent_limit}
@@ -197,11 +197,11 @@ infinite-volume Hamiltonian is included here.
         MPSTensor.groundSpaceMap_uncleTensor_right,
         MPSTensor.groundSpace_blockTensor_le_uncleTensor_left,
         MPSTensor.groundSpace_blockTensor_le_uncleTensor_right,
-        MPSTensor.uncleInteractionES_apply_eq_zero_left,
-        MPSTensor.uncleInteractionES_apply_eq_zero_right,
-        MPSTensor.uncleHamiltonianES_apply_eq_zero_of_mem_chainGroundSpace_left,
-        MPSTensor.uncleHamiltonianES_apply_eq_zero_of_mem_chainGroundSpace_right,
-        MPSTensor.span_mpv_le_ker_uncleHamiltonianES}
+        MPSTensor.uncleInteraction_apply_eq_zero_left,
+        MPSTensor.uncleInteraction_apply_eq_zero_right,
+        MPSTensor.hamiltonian_uncleInteraction_apply_eq_zero_of_mem_chainGroundSpace_left,
+        MPSTensor.hamiltonian_uncleInteraction_apply_eq_zero_of_mem_chainGroundSpace_right,
+        MPSTensor.span_mpv_le_ker_hamiltonian_uncleInteraction}
     \leanok
     \uses{def:two_block_uncle_tensor,thm:two_block_uncle_parent_limit,
         def:ground_space_map,def:chain_ground_space}
@@ -235,10 +235,10 @@ infinite-volume Hamiltonian is included here.
 
 \begin{lemma}[Local conditions for the uncle kernel]
     \label{lem:uncle_kernel_local_conditions}
-    \lean{MPSTensor.uncleInteractionES_isPositive,
-        MPSTensor.uncleHamiltonianES_isPositive,
-        MPSTensor.uncleInteractionES_apply_eq_zero_iff,
-        MPSTensor.uncleHamiltonianES_apply_eq_zero_iff}
+    \lean{MPSTensor.posSemidef_uncleInteraction,
+        MPSTensor.posSemidef_hamiltonian_uncleInteraction,
+        MPSTensor.uncleInteraction_apply_eq_zero_iff,
+        MPSTensor.hamiltonian_uncleInteraction_apply_eq_zero_iff}
     \leanok
     \uses{thm:two_block_uncle_parent_limit,def:two_block_uncle_tensor}
     The local interaction and every finite periodic Hamiltonian are positive.

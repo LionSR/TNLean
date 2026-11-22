@@ -17,8 +17,8 @@ method:
 
 * `parentInteractionES` — the \(L\)-site parent interaction as an orthogonal
   projector on the Hilbert-space model `EuclideanSpace ℂ (Cfg d L)`;
-* `cyclicRestrictES` and `localTermESSummand` — cyclic-window restriction
-  and the conjugated \(R_{i,\tau}^\dagger P_L R_{i,\tau}\) summands;
+* `cyclicRestrictES` — cyclic-window restriction, and the cyclic average of the conjugates
+  \(R_{i,\tau}^\dagger T R_{i,\tau}\) of an operator on a window;
 * `localTermES` and `parentHamiltonianES` — Euclidean-space representatives of
   the local terms and the full parent Hamiltonian;
 * `restrictLast_eq_cyclicRestrictES_zero` and
@@ -32,7 +32,7 @@ method:
   `LinearMap.toMatrix' (parentInteraction A L)` (whose operator is the orthogonal projection onto
   the complement of the local ground space) and the terms and Hamiltonian of the parent
   interaction on the ring `parentRingInteraction A L N`. Statements about the Euclidean-space
-  operators `parentInteractionES`, `localTermESSummand`, `localTermES` and `parentHamiltonianES`
+  operators `parentInteractionES`, `localTermES` and `parentHamiltonianES`
   are being replaced by these (TNLean issue 10948).
 -/
 
@@ -79,35 +79,6 @@ noncomputable def cyclicRestrictES {N : ℕ} (hN : 0 < N) (L : ℕ) (i : Fin N)
     (τ : Fin N → Fin d) :
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) :=
   LinearMap.withLpMap 2 (cyclicRestrictₗ (d := d) hN L i τ)
-
-/-- One positive summand in the future averaged `EuclideanSpace` formula for a
-local parent-Hamiltonian term.
-
-This is the conjugate \(R_{i,\tau}^\dagger P_L R_{i,\tau}\) of the local
-orthogonal projector \(P_L\) by the transported cyclic restriction map \(R_{i,\tau}\). -/
-noncomputable def localTermESSummand {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
-    (L : ℕ) (i : Fin N) (τ : Fin N → Fin d) :
-    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  (cyclicRestrictES (d := d) hN L i τ).adjoint ∘ₗ
-    parentInteractionES A L ∘ₗ
-    cyclicRestrictES (d := d) hN L i τ
-
-/-- Each conjugated cyclic-restriction summand \(R_{i,\tau}^\dagger P_L R_{i,\tau}\)
-is positive. -/
-theorem localTermESSummand_isPositive {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
-    (L : ℕ) (i : Fin N) (τ : Fin N → Fin d) :
-    (localTermESSummand A hN L i τ).IsPositive := by
-  simpa [localTermESSummand, LinearMap.adjoint_adjoint] using
-    (LinearMap.IsPositive.conj_adjoint
-      (hT := parentInteractionES_isPositive A L)
-      ((cyclicRestrictES (d := d) hN L i τ).adjoint))
-
-/-- The unnormalised finite sum of the future averaging summands is positive. -/
-theorem localTermESSummand_sum_isPositive {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
-    (L : ℕ) (i : Fin N) :
-    (∑ τ : Cfg d N, localTermESSummand A hN L i τ).IsPositive := by
-  exact LinearMap.isPositive_sum _ fun τ _ =>
-    localTermESSummand_isPositive A hN L i τ
 
 /-! ### Ground-space and Hamiltonian transport to `EuclideanSpace` -/
 
@@ -465,20 +436,6 @@ theorem restrictFirst_eq_cyclicRestrictES_one {L : ℕ} (hL : 0 < L)
       exact Nat.mod_eq_of_lt (Nat.lt_succ_of_lt r.isLt)
     simp [cyclicCfg, hOneNat, hmod]
 
-@[simp] private theorem localTermESSummand_apply {N : ℕ} (A : MPSTensor d D) (hN : 0 < N)
-    {L : ℕ} (hLN : L ≤ N) (i : Fin N) (τ v σ) :
-    localTermESSummand A hN L i τ v σ =
-      if SameOutsideWindow (L := L) i σ τ then localTermES A L i v σ else 0 := by
-  classical
-  rw [localTermESSummand]
-  simp only [LinearMap.comp_apply]
-  by_cases hστ : SameOutsideWindow (L := L) i σ τ
-  · rw [cyclicRestrictES_adjoint_apply hN hLN i σ τ]
-    rw [ite_eq_left hστ, localTermES_apply A L i hLN v σ]
-    simp [hστ, cyclicRestrictES_eq_of_sameOutsideWindow hN i hστ]
-  · rw [cyclicRestrictES_adjoint_apply hN hLN i σ τ, ite_eq_right hστ]
-    simp [hστ]
-
 private theorem sameOutsideWindow_card {N : ℕ} {L : ℕ} (hLN : L ≤ N)
     (i : Fin N) (σ : Cfg d N) :
     Fintype.card {τ : Cfg d N // SameOutsideWindow (L := L) i σ τ} = d ^ L := by
@@ -507,70 +464,62 @@ private theorem sameOutsideWindow_card {N : ℕ} {L : ℕ} (hLN : L ≤ N)
         = Fintype.card (Cfg d L) := (Fintype.card_of_bijective (f := f) hf).symm
     _ = d ^ L := by simp [Cfg]
 
-/-- The transported local term is the cyclic average of the positive Euclidean
-summands \(R_{i,\tau}^\dagger P_L R_{i,\tau}\). -/
-theorem localTermES_eq_average_localTermESSummand {N : ℕ} (A : MPSTensor d D)
-    {L : ℕ} (hLN : L ≤ N) (i : Fin N) :
-    localTermES A L i =
-      ((((d ^ L : ℕ) : ℂ)⁻¹) •
-        (∑ τ : Cfg d N, localTermESSummand A (Fin.pos i) L i τ)) := by
+/-- The cyclic average of the conjugates \(R_{i,\tau}^\dagger T R_{i,\tau}\) of an operator
+\(T\) on \(L\) sites by the restrictions to the window starting at \(i\) applies \(T\) to the
+section of the vector on that window. -/
+theorem inv_smul_sum_adjoint_comp_cyclicRestrictES_apply {N L : ℕ} (hLN : L ≤ N) (i : Fin N)
+    (T : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L))
+    (v : EuclideanSpace ℂ (Cfg d N)) (σ : Cfg d N) :
+    ((((d ^ L : ℕ) : ℂ)⁻¹) • ∑ τ : Cfg d N,
+      (cyclicRestrictES (Fin.pos i) L i τ).adjoint ∘ₗ T ∘ₗ
+        cyclicRestrictES (Fin.pos i) L i τ) v σ =
+      T (cyclicRestrictES (Fin.pos i) L i σ v) (extractWindow L i σ) := by
   classical
-  ext v σ
-  let q : Cfg d N → Prop := SameOutsideWindow (L := L) i σ
-  let sq : Finset (Cfg d N) := Finset.univ.filter q
-  have hfilter :
-      (∑ τ : Cfg d N, if q τ then localTermES A L i v σ else 0) =
-        sq.sum (fun _ => localTermES A L i v σ) := by
-    dsimp [sq]
-    symm
-    simpa using (Finset.sum_filter (s := Finset.univ) (p := q)
-      (f := fun _ => localTermES A L i v σ))
-  have hsconst :
-      sq.sum (fun _ => localTermES A L i v σ) =
-        sq.card • localTermES A L i v σ := by
-    exact Finset.sum_const (s := sq) (b := localTermES A L i v σ)
-  have hcard_filter : sq.card = Fintype.card {τ : Cfg d N // q τ} := by
-    dsimp [sq]
-    symm
-    simpa using (Fintype.card_subtype q)
-  have hne_nat : (d ^ L : ℕ) ≠ 0 := by
-    have hcard : Fintype.card (Cfg d L) = d ^ L := by
-      simp [Cfg]
+  have hsummand (τ : Cfg d N) :
+      ((cyclicRestrictES (Fin.pos i) L i τ).adjoint
+        (T (cyclicRestrictES (Fin.pos i) L i τ v))) σ =
+        if SameOutsideWindow (L := L) i σ τ then
+          T (cyclicRestrictES (Fin.pos i) L i σ v) (extractWindow L i σ) else 0 := by
+    rw [cyclicRestrictES_adjoint_apply (Fin.pos i) hLN i σ τ]
+    by_cases hστ : SameOutsideWindow (L := L) i σ τ
+    · rw [ite_eq_left hστ, ite_eq_left hστ,
+        cyclicRestrictES_eq_of_sameOutsideWindow (Fin.pos i) i hστ]
+    · rw [ite_eq_right hστ, ite_eq_right hστ]
+  have hne : (((d ^ L : ℕ) : ℂ)) ≠ 0 := by
+    have hcard : Fintype.card (Cfg d L) = d ^ L := by simp [Cfg]
     have : Fintype.card (Cfg d L) ≠ 0 := by
       let _ : Nonempty (Cfg d L) := ⟨extractWindow L i σ⟩
       exact Fintype.card_ne_zero
-    rwa [hcard] at this
-  have hne : (((d ^ L : ℕ) : ℂ)) ≠ 0 := by
-    exact_mod_cast hne_nat
-  calc
-    localTermES A L i v σ
-        = (((d ^ L : ℕ) : ℂ)⁻¹) * ((d ^ L) • localTermES A L i v σ) := by
-            symm
-            rw [nsmul_eq_mul, ← mul_assoc, inv_mul_cancel₀ hne, one_mul]
-    _ = (((d ^ L : ℕ) : ℂ)⁻¹) *
-          (Fintype.card {τ : Cfg d N // q τ} • localTermES A L i v σ) := by
-            rw [sameOutsideWindow_card hLN i σ]
-    _ = (((d ^ L : ℕ) : ℂ)⁻¹) *
-          (sq.card • localTermES A L i v σ) := by rw [hcard_filter]
-    _ = (((d ^ L : ℕ) : ℂ)⁻¹) *
-          (sq.sum (fun _ => localTermES A L i v σ)) := by rw [hsconst]
-    _ = (((d ^ L : ℕ) : ℂ)⁻¹) *
-          (∑ τ : Cfg d N, if q τ then localTermES A L i v σ else 0) := by rw [hfilter]
-    _ = (((d ^ L : ℕ) : ℂ)⁻¹) *
-          (∑ τ : Cfg d N, localTermESSummand A (Fin.pos i) L i τ v σ) := by
-            simp [q, localTermESSummand_apply, hLN]
-    _ = ((((d ^ L : ℕ) : ℂ)⁻¹) • (∑ τ : Cfg d N,
-          localTermESSummand A (Fin.pos i) L i τ)) v σ := by
-            simp
+    rw [hcard] at this
+    exact_mod_cast this
+  have happly : ((((d ^ L : ℕ) : ℂ)⁻¹) • ∑ τ : Cfg d N,
+      (cyclicRestrictES (Fin.pos i) L i τ).adjoint ∘ₗ T ∘ₗ
+        cyclicRestrictES (Fin.pos i) L i τ) v σ =
+      (((d ^ L : ℕ) : ℂ)⁻¹) * ∑ τ : Cfg d N,
+        ((cyclicRestrictES (Fin.pos i) L i τ).adjoint
+          (T (cyclicRestrictES (Fin.pos i) L i τ v))) σ := by
+    simp only [LinearMap.smul_apply, LinearMap.sum_apply, LinearMap.comp_apply, PiLp.smul_apply,
+      WithLp.ofLp_sum, Finset.sum_apply, smul_eq_mul]
+  rw [happly]
+  simp_rw [hsummand]
+  rw [Finset.sum_ite, Finset.sum_const, Finset.sum_const_zero, add_zero, ← Fintype.card_subtype,
+    sameOutsideWindow_card hLN i σ, nsmul_eq_mul, ← mul_assoc, inv_mul_cancel₀ hne, one_mul]
 
 /-- The transported local term is positive because it is a finite cyclic average
-of the positive summands \(R_{i,\tau}^\dagger P_L R_{i,\tau}\). -/
+of the positive operators \(R_{i,\tau}^\dagger P_L R_{i,\tau}\). -/
 theorem localTermES_isPositive {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N) :
     (localTermES A L i).IsPositive := by
   by_cases hLN : L ≤ N
-  · rw [localTermES_eq_average_localTermESSummand A hLN i]
-    exact (localTermESSummand_sum_isPositive A (Fin.pos i) L i).smul_of_nonneg
-      (by positivity)
+  · have h : localTermES A L i = (((d ^ L : ℕ) : ℂ)⁻¹) • ∑ τ : Cfg d N,
+        (cyclicRestrictES (Fin.pos i) L i τ).adjoint ∘ₗ parentInteractionES A L ∘ₗ
+          cyclicRestrictES (Fin.pos i) L i τ := by
+      ext v σ
+      rw [inv_smul_sum_adjoint_comp_cyclicRestrictES_apply hLN, localTermES_apply A L i hLN]
+    rw [h]
+    refine (LinearMap.isPositive_sum _ fun τ _ => ?_).smul_of_nonneg (by positivity)
+    simpa [LinearMap.adjoint_adjoint] using
+      (LinearMap.IsPositive.conj_adjoint (hT := parentInteractionES_isPositive A L)
+        ((cyclicRestrictES (Fin.pos i) L i τ).adjoint))
   · simp [localTermES, localTerm_of_not_le A hLN]
 
 private theorem localTermES_isIdempotentElem {N : ℕ} (A : MPSTensor d D) (L : ℕ)
