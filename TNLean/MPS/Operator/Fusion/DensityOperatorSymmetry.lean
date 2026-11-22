@@ -298,7 +298,7 @@ theorem IsStrongOnSiteSymmetry.isWeakOnSiteSymmetry
   have hL' := h g L hL
   simp only [mpo_onSite] at hL' ⊢
   exact Matrix.IsStrongSymmetry.isWeakSymmetry_of_unitary (hM L hL).isHermitian
-    (Matrix.IsIsometry.piKronecker (hU g)) ⟨c g L, hL'⟩
+    (Matrix.IsIsometry.piKronecker (fun _ ↦ hU g)) ⟨c g L, hL'⟩
 
 /-- **Unit modulus of on-site strong eigenvalues.**
 
@@ -309,7 +309,7 @@ theorem IsStrongOnSiteSymmetry.norm_eq_one {M : MPOTensor d D} {X : Matrix (Fin 
     ‖c g L‖ = 1 := by
   have hL' := h g L hL
   simp only [mpo_onSite] at hL'
-  exact Matrix.IsStrongSymmetry.norm_eq_one (Matrix.IsIsometry.piKronecker (hU g))
+  exact Matrix.IsStrongSymmetry.norm_eq_one (Matrix.IsIsometry.piKronecker (fun _ ↦ hU g))
     hL' hρ
 
 /-- **On-site strong eigenvalues are multiplicative.**

@@ -73,7 +73,8 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry {d m 
   have hT : T.adjoint ∘ₗ T = LinearMap.id := by
     simpa only [T, ← Matrix.toEuclideanLin_conjTranspose_eq_adjoint,
       Matrix.toEuclideanLin, Matrix.toLpLin_mul_same, Matrix.toLpLin_one] using
-      congrArg Matrix.toEuclideanLin (Matrix.IsIsometry.piKronecker (fun _ : Fin (N := L) ↦ hE))
+      congrArg Matrix.toEuclideanLin (show (Matrix.piKronecker fun _ : Fin L => E)ᴴ *
+        Matrix.piKronecker (fun _ : Fin L => E) = 1 from Matrix.IsIsometry.piKronecker fun _ ↦ hE)
   have hinner (x y : EuclideanSpace ℂ (Cfg d L)) :
       inner ℂ (T x) (T y) = inner ℂ x y := by
     rw [← LinearMap.adjoint_inner_right]
