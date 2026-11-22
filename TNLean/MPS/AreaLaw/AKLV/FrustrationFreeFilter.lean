@@ -125,7 +125,7 @@ theorem exists_aklv_frustrationFree_chebyshev_filter {L q a s : ℕ}
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (g t : ℝ) (hg : 0 < g) (hg1 : g ≤ 1) (ht : 1024 / g ≤ t)
-    (hzero : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0)
+    (hzero : Ω ∈ Φ.zeroSpace)
     (hgap : (Φ.hamiltonian - (g : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef) :
     let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ

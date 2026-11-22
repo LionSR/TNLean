@@ -54,7 +54,7 @@ theorem exists_aklv_frustrationFree_physical_entropy_bound :
       (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
       2 ≤ q →
       (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
-      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0 →
+      Ω ∈ Φ.zeroSpace →
       (Φ.hamiltonian - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
       0 < g → g ≤ 1 → ∀ k : ℕ, k ≤ L →
@@ -157,7 +157,7 @@ theorem exists_aklv_frustrationFree_entropy_bound_of_mem_spectrum :
       (Φ : ManyBody.BondInteraction L q)
       (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
       (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
-      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0 →
+      Ω ∈ Φ.zeroSpace →
       (Φ.hamiltonian - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
       0 < g → g ∈ spectrum ℝ Φ.hamiltonian → ∀ k : ℕ, k ≤ L →

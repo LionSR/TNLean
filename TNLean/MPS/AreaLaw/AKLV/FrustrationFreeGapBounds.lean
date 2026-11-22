@@ -7,6 +7,7 @@ import TNLean.MPS.AreaLaw.BoundaryGap
 import QICLean.Analysis.LowEnergyCoordinates
 import QICLean.Analysis.PositiveGapUniqueness
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Hamiltonian.FrustrationFree
 
 /-!
 # Local dimension and gap of a frustration-free chain
@@ -35,12 +36,15 @@ theorem aklv_frustrationFree_dimension_and_gap_bounds {L q : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
-    (hzero : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0)
+    (hzero : Ω ∈ Φ.zeroSpace)
     (hgap : (Φ.hamiltonian - (g : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
     (hg : 0 < g) (hexcited : g ∈ spectrum ℝ Φ.hamiltonian) :
     2 ≤ q ∧ g ≤ 1 := by
   classical
+  replace hzero : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0 :=
+    (ManyBody.Interaction.mem_zeroSpace_iff_hamiltonian_mulVec_eq_zero
+      fun j ↦ Matrix.nonneg_iff_posSemidef.mp (h0 j)).mp hzero
   have hH : Φ.hamiltonian.IsHermitian :=
     (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian
   have hground : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = ((0 : ℝ) : ℂ) • WithLp.ofLp Ω := by
