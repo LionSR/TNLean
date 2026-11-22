@@ -93,30 +93,11 @@ namespace IsFrustrationFreeGapped
 
 variable {h : PlaneInteraction Λ q R} {J Δ : ℝ} {Ω : StateSpace Λ q}
 
-/-- The terms are Hermitian. -/
-theorem isHermitian (hff : IsFrustrationFreeGapped h J Δ Ω) (X) : (h.term X).IsHermitian :=
-  (hff.posSemidef X).isHermitian
-
 /-- The ground space at energy zero is the line through `Ω`, since for positive terms it is the
 zero space of the interaction (`ManyBody.Interaction.zeroSpace_eq_groundSpace`). -/
 theorem groundSpace_eq (hff : IsFrustrationFreeGapped h J Δ Ω) :
     groundSpace h.hamiltonian 0 = Submodule.span ℂ {Ω} :=
   (ManyBody.Interaction.zeroSpace_eq_groundSpace hff.posSemidef).symm.trans hff.zeroSpace_eq
-
-/-- `Ω` lies in the zero space of the interaction. -/
-theorem mem_zeroSpace (hff : IsFrustrationFreeGapped h J Δ Ω) : Ω ∈ h.zeroSpace :=
-  hff.zeroSpace_eq ▸ Submodule.mem_span_singleton_self Ω
-
-/-- Every term annihilates `Ω` (`ManyBody.Interaction.mem_zeroSpace_iff`). -/
-theorem mulVec_eq_zero (hff : IsFrustrationFreeGapped h J Δ Ω) (X) :
-    h.term X *ᵥ WithLp.ofLp Ω = 0 :=
-  ManyBody.Interaction.mem_zeroSpace_iff.mp hff.mem_zeroSpace X
-
-/-- The Hamiltonian annihilates `Ω`. -/
-theorem hamiltonian_mulVec_eq_zero (hff : IsFrustrationFreeGapped h J Δ Ω) :
-    h.hamiltonian *ᵥ WithLp.ofLp Ω = 0 :=
-  (ManyBody.Interaction.mem_zeroSpace_iff_hamiltonian_mulVec_eq_zero hff.posSemidef).mp
-    hff.mem_zeroSpace
 
 /-- The model is a frustration-free interaction: `Ω` is a common ground vector of the terms,
 all at energy zero. -/
@@ -131,7 +112,7 @@ theorem isFrustrationFree (hff : IsFrustrationFreeGapped h J Δ Ω) : h.IsFrustr
 theorem gap (hff : IsFrustrationFreeGapped h J Δ Ω) (hΔ : 0 < Δ) :
     (Δ : ℂ) • (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤ h.hamiltonian := by
   have hH : h.hamiltonian.IsHermitian :=
-    ManyBody.Interaction.isHermitian_hamiltonian hff.isHermitian
+    ManyBody.Interaction.isHermitian_hamiltonian fun X ↦ (hff.posSemidef X).isHermitian
   obtain ⟨-, -, hpsd⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff (H := h.hamiltonian)
     (E₀ := 0) hΔ Ω).mpr ⟨hH, hff.norm_eq_one, hff.isGapped, hff.groundSpace_eq⟩
   rw [Matrix.le_iff]
@@ -146,7 +127,8 @@ theorem iff_model (hΔ : 0 < Δ) :
         (∀ X, h.term X ≤ J • (1 : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) ∧
         (∀ X, h.term X *ᵥ WithLp.ofLp Ω = 0) ∧ ‖Ω‖ = 1 ∧
         (Δ : ℂ) • (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤ h.hamiltonian := by
-  refine ⟨fun hff ↦ ⟨hff.posSemidef, hff.le_bound, hff.mulVec_eq_zero, hff.norm_eq_one,
+  refine ⟨fun hff ↦ ⟨hff.posSemidef, hff.le_bound, ManyBody.Interaction.mem_zeroSpace_iff.mp
+    (hff.zeroSpace_eq ▸ Submodule.mem_span_singleton_self Ω), hff.norm_eq_one,
     hff.gap hΔ⟩, fun ⟨hpos, hle, hzero, hΩ, hgap⟩ ↦ ?_⟩
   have hiff := (ManyBody.isGapped_and_groundSpace_eq_span_iff (H := h.hamiltonian) (E₀ := 0)
     hΔ Ω).mp ⟨hΩ, ?_, ?_⟩
@@ -192,7 +174,8 @@ theorem _root_.TNLean.PEPS.AreaLaw.UniformAreaLaw.frustrationFreeAreaLaw
     (hU : UniformAreaLaw) : FrustrationFreeAreaLaw := by
   intro q hq R J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := hU q hq R J Δ hJ hΔ
-  exact ⟨C, hC, fun Λ h Ω hff A ↦ hbound Λ h hff.isHermitian (hff.norm_term_le hJ.le) 0 Ω
+  exact ⟨C, hC, fun Λ h Ω hff A ↦ hbound Λ h (fun X ↦ (hff.posSemidef X).isHermitian)
+    (hff.norm_term_le hJ.le) 0 Ω
     hff.norm_eq_one hff.isGapped hff.groundSpace_eq A⟩
 
 end TNLean.PEPS.AreaLaw.FrustrationFree

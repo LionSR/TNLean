@@ -43,6 +43,8 @@ section
 open MPSTensor
 open scoped Matrix BigOperators
 
+open ManyBody.Interaction (chainTranslates hamiltonian_chainTranslates_eq_sum_range)
+
 namespace SpinChain
 
 variable {d : ℕ} [NeZero d]
@@ -50,12 +52,12 @@ variable {d : ℕ} [NeZero d]
 /-- The quasi-local image of a finite open sum is the sum of the nonwrapping
 translated interaction observables. Source: Nachtergaele,
 arXiv:cond-mat/9410110, equation (3.12). -/
-theorem quasiLocalIntervalObservable_openInteractionMatrix (a : ℤ) {R : ℕ}
+theorem quasiLocalIntervalObservable_hamiltonian_chainTranslates (a : ℤ) {R : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (N : ℕ) :
-    quasiLocalIntervalObservable d a N (openInteractionMatrix h N) =
+    quasiLocalIntervalObservable d a N ((chainTranslates R N h).hamiltonian) =
       ∑ i ∈ Finset.range (N + 1 - R),
         quasiLocalIntervalObservable d (a + (i : ℤ)) R h := by
-  rw [openInteractionMatrix, map_sum]
+  rw [hamiltonian_chainTranslates_eq_sum_range, map_sum]
   refine Finset.sum_congr rfl fun i hi ↦ ?_
   have hi' : i + R ≤ N := by
     have hi'' := Finset.mem_range.mp hi
@@ -68,13 +70,13 @@ expectation on every finite open interaction sum. The functional need only
 be linear; in particular no translation invariance is imposed on a state.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12) and the
 zero-energy face in Theorem 1.1. -/
-theorem apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero
+theorem apply_quasiLocalIntervalObservable_hamiltonian_chainTranslates_eq_zero
     (φ : QuasiLocalAlgebra d →ₗ[ℂ] ℂ) {R : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hzero : ∀ a : ℤ, φ (quasiLocalIntervalObservable d a R h) = 0)
     (a : ℤ) (N : ℕ) :
-    φ (quasiLocalIntervalObservable d a N (openInteractionMatrix h N)) = 0 := by
-  simp only [quasiLocalIntervalObservable_openInteractionMatrix a h N,
+    φ (quasiLocalIntervalObservable d a N ((chainTranslates R N h).hamiltonian)) = 0 := by
+  simp only [quasiLocalIntervalObservable_hamiltonian_chainTranslates a h N,
     map_sum, hzero, Finset.sum_const_zero]
 
 end SpinChain
@@ -85,6 +87,8 @@ section
 
 open scoped Matrix ComplexOrder BigOperators
 open SpinChain
+
+open ManyBody.Interaction (chainTranslates)
 
 namespace MPSTensor
 
@@ -103,40 +107,39 @@ theorem quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
     (hfix : Kraus.transferMap (A α) ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
     {R N : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hRN : R ≤ N)
     (hker : groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N ≤
-      LinearMap.ker (Matrix.toEuclideanLin (openInteractionMatrix h N))) (a : ℤ) :
+      LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian))) (a : ℤ) :
     quasiLocalExpectation (A α) hTP hρ hfix htr
       (quasiLocalIntervalObservable d a R h) = 0 := by
   have hkerα : groundSpaceES (A α) N ≤
-      LinearMap.ker (Matrix.toEuclideanLin (openInteractionMatrix h N)) := by
+      LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)) := by
     apply le_trans ?_ hker
     exact groundSpaceES_block_le_toTensorFromBlocks μ A hμ α N
   have hzero := quasiLocalExpectation_interval_eq_zero_of_groundSpaceES_le_ker
-    (A α) hTP hρ hfix htr a (openInteractionMatrix h N) hkerα
-  rw [quasiLocalIntervalObservable_openInteractionMatrix a h N, map_sum] at hzero
+    (A α) hTP hρ hfix htr a ((chainTranslates R N h).hamiltonian) hkerα
+  rw [quasiLocalIntervalObservable_hamiltonian_chainTranslates a h N, map_sum] at hzero
   simp only [quasiLocalExpectation_quasiLocalIntervalObservable, Finset.sum_const,
     Finset.card_range, nsmul_eq_mul] at hzero ⊢
   exact (mul_eq_zero.mp hzero).resolve_left (Nat.cast_ne_zero.mpr (by omega))
 
-/-- An eventual equality between the open-chain kernel and the joint MPS space
-implies zero local interaction expectation in each constructed sector state.
+/-- An eventual equality between the kernel of the open-chain Hamiltonian of an interaction and
+the joint MPS space implies zero local interaction expectation in each constructed sector state.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2, the eventual
 finite-volume kernel condition. -/
-theorem quasiLocalExpectation_interval_eq_zero_of_eventually_open_kernel
+theorem quasiLocalExpectation_interval_eq_zero_of_eventually_ker_hamiltonian_chainTranslates
     {b : ℕ} {dim : Fin b → ℕ}
     (μ : Fin b → ℂ) (A : ∀ α, MPSTensor d (dim α)) (hμ : ∀ α, μ α ≠ 0)
     (α : Fin b) (hTP : ∑ i, (A α i)ᴴ * A α i = 1)
     {ρ : Matrix (Fin (dim α)) (Fin (dim α)) ℂ} (hρ : ρ.PosSemidef)
     (hfix : Kraus.transferMap (A α) ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
-    {R : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R)
+    {R : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hker : ∀ᶠ N in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
-        groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N) (a : ℤ) :
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
+        groundSpaceES (toTensorFromBlocks μ A) N) (a : ℤ) :
     quasiLocalExpectation (A α) hTP hρ hfix htr
       (quasiLocalIntervalObservable d a R h) = 0 := by
   obtain ⟨N, hN, hRN⟩ := (hker.and (Filter.eventually_ge_atTop R)).exists
-  apply quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
-    μ A hμ α hTP hρ hfix htr h hRN (a := a)
-  rw [← openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix h hR hRN, hN]
+  exact quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
+    μ A hμ α hTP hρ hfix htr h hRN hN.ge a
 
 end MPSTensor
 

@@ -46,26 +46,26 @@ theorem wordTupleSpanTop_of_ge
       (fun j ↦ inv_ne_zero (hζ j))
       (wordTupleSpanTop_of_family_gaugeEquiv_symm hSpanB hGauge)
 
-/-- At every range exceeding the supplied simultaneous injectivity length,
-the open parent-Hamiltonian kernel is the full local matrix product space.
+/-- At every range exceeding the supplied simultaneous injectivity length, the kernel of the
+Hamiltonian of the parent interaction on the open chain is the full local matrix product space.
 The original blocks need no normalization hypotheses.
 Source: arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
-theorem ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_wordTupleSpanTop
+theorem ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
     [NeZero d] (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) {S R N : ℕ} (hS : 0 < S)
     (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R) (hRN : R ≤ N) :
-    LinearMap.ker (openParentHamiltonianES
-      (toTensorFromBlocks (d := d) (μ := μ) A) R N) =
-      groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N := by
+    LinearMap.ker (Matrix.toEuclideanLin
+      (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
+      groundSpaceES (toTensorFromBlocks μ A) N := by
   obtain ⟨B, ρ, hP, _hρ, hSpanB, hGS, _⟩ :=
     exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
-  have hLocal : ∀ L, groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L =
-      groundSpace (toTensorFromBlocks (d := d) (μ := μ) B) L :=
+  have hLocal : ∀ L, groundSpace (toTensorFromBlocks μ A) L =
+      groundSpace (toTensorFromBlocks μ B) L :=
     fun L ↦ groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq
       μ μ A B hμ hμ (fun j ↦ hGS j L)
-  rw [openParentHamiltonianES_eq_of_groundSpace_eq (hLocal R) N]
+  rw [parentChainInteraction_eq_of_groundSpace_eq (hLocal R) N]
   simpa only [groundSpaceES, hLocal N] using
-    ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
+    ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
       μ B hμ (fun j ↦ (hP j).norm)
       (fun n hn ↦ wordTupleSpanTop_of_ge_of_tracePreserving B hSpanB
         (fun j ↦ (hP j).norm) hn) hR hRN

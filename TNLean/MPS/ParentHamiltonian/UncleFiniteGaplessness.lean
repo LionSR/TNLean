@@ -30,19 +30,23 @@ open MeasureTheory Filter
 
 namespace MPSTensor
 
+open ManyBody.Interaction (translationInvariant)
+
 variable {d a b : ℕ}
 
-private theorem ker_uncleHamiltonianES_eq_span_mpvState
+private theorem ker_hamiltonian_uncleInteraction_eq_span_mpvState
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L))
     (M : ℕ) (hM : 2 ≤ M) :
-    LinearMap.ker (uncleHamiltonianES A B R L M).toLinearMap =
+    haveI : NeZero M := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin
+        (translationInvariant M (uncleInteraction A B R L)).hamiltonian) =
       Submodule.span ℂ ({mpvState A M, mpvState B M} :
         Set (EuclideanSpace ℂ (Cfg d M))) := by
   obtain ⟨n, rfl⟩ : ∃ n : ℕ, M = n + 2 := ⟨M - 2, by omega⟩
-  rw [ker_uncleHamiltonianES_eq_span_mpv A B R L hPert n]
+  rw [ker_hamiltonian_uncleInteraction_eq_span_mpv A B R L hPert n]
   rfl
 
 /-- Generic finite-volume gaplessness for the actual two-block uncle
@@ -54,7 +58,7 @@ injective-perturbation assumption, not an assumed variational estimate.
 
 Source: arXiv:1210.6613, thm:gapless, lines 1154–1314; injective
 perturbations at lines 1017–1018 and 1041–1042. -/
-theorem uncleHamiltonianES_ae_eventually_exists_pos_eigenvalue_lt
+theorem hamiltonian_uncleInteraction_ae_eventually_exists_pos_eigenvalue_lt
     (A : MPSTensor d a) (B : MPSTensor d b)
     (hUA : Kraus.mapLM A 1 = 1) (hUB : Kraus.mapLM B 1 = 1)
     (ρA : Matrix (Fin a) (Fin a) ℂ) (hρA : ρA.PosDef) (htrA : Matrix.trace ρA = 1)
@@ -66,7 +70,9 @@ theorem uncleHamiltonianES_ae_eventually_exists_pos_eigenvalue_lt
       ∀ ε : ℝ, 0 < ε → ∀ᶠ N : ℕ in atTop,
         ∃ η : ℝ, 0 < η ∧ η < ε ∧
           Module.End.HasEigenvalue
-            (uncleHamiltonianES A B P.1 P.2 (6 * N + 1)).toLinearMap (η : ℂ) := by
+            (Matrix.toEuclideanLin
+                (translationInvariant (6 * N + 1) (uncleInteraction A B P.1 P.2)).hamiltonian) (η :
+                  ℂ) := by
   classical
   by_cases hExists : ∃ (R₀ : Fin d → Matrix (Fin a) (Fin b) ℂ)
       (L₀ : Fin d → Matrix (Fin b) (Fin a) ℂ),
@@ -94,11 +100,12 @@ theorem uncleHamiltonianES_ae_eventually_exists_pos_eigenvalue_lt
     have hSpan := uncleTwoWallTrialSource_span_projection_tendsto_zero
       A B P.1 P.2 hUA hUB hGram hAB hBA
     have hProjection : Tendsto (fun N : ℕ ↦
-        ‖(LinearMap.ker (uncleHamiltonianES A B P.1 P.2
-          (6 * N + 1)).toLinearMap).starProjection (v N)‖ ^ 2) atTop (nhds (0 : ℝ)) := by
+        ‖(LinearMap.ker (Matrix.toEuclideanLin (translationInvariant (6 * N + 1)
+            (uncleInteraction A B P.1 P.2)).hamiltonian)).starProjection (v N)‖ ^ 2) atTop
+          (nhds (0 : ℝ)) := by
       apply hSpan.congr'
       filter_upwards [eventually_gt_atTop 0] with N hN
-      have hK := ker_uncleHamiltonianES_eq_span_mpvState A B P.1 P.2 hPert
+      have hK := ker_hamiltonian_uncleInteraction_eq_span_mpvState A B P.1 P.2 hPert
         (6 * N + 1) (by omega)
       have key : ∀ (K₁ K₂ : Submodule ℂ (EuclideanSpace ℂ (Cfg d (6 * N + 1))))
           [K₁.HasOrthogonalProjection] [K₂.HasOrthogonalProjection], K₁ = K₂ →
@@ -106,9 +113,9 @@ theorem uncleHamiltonianES_ae_eventually_exists_pos_eigenvalue_lt
         rintro K₁ K₂ _ _ rfl x
         rfl
       rw [key _ _ hK]
-    obtain ⟨CE, hCE, hEnergy⟩ := re_inner_uncleHamiltonianES_trial_le_mul
+    obtain ⟨CE, hCE, hEnergy⟩ := re_inner_hamiltonian_uncleInteraction_trial_le_mul
       A B P.1 P.2 hUA hUB ρA hρA ρB hρB hFA hFB hAB hBA
-    apply eventually_exists_pos_eigenvalue_uncleHamiltonianES_lt_of_trial_bounds
+    apply eventually_exists_pos_eigenvalue_hamiltonian_uncleInteraction_lt_of_trial_bounds
       A B P.1 P.2 v c hc hNormLower hProjection
     exact ⟨CE, hCE, (eventually_gt_atTop 0).mono fun N hN ↦ hEnergy N hN⟩
   · exact Filter.Eventually.of_forall fun P hPert ↦

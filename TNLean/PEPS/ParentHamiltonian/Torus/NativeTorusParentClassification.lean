@@ -67,7 +67,7 @@ theorem ker_torusPlaquetteParentHamiltonian_eq_nativeCommutingClosureSpan
     (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
         torusPlaquetteRegion H).hamiltonian).ker =
       NativeTorus.commutingClosureSpan (graphBondAlphabet A) U (graphDependentTensor A) := by
-  rw [ker_regionParentHamiltonian A torusPlaquetteRegion H hH,
+  rw [ker_hamiltonian_ofPlace A torusPlaquetteRegion H hH,
     torusPlaquetteParentGroundSpace_eq_nativeCommutingClosureSpan A U hU hA]
 
 /-- The full physical kernel has one dimension per commuting pair class, with

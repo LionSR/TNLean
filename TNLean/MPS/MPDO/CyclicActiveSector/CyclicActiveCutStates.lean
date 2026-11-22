@@ -45,7 +45,7 @@ noncomputable def cyclicActiveLeftOpenBlock
       let kC := F.cyclicActiveRetainedWord hk
       ((lam : ℂ) ^ 2) •
         (F.cyclicActiveLeftBoundary b (kC 0) ⊗ₖ
-          Matrix.finKronecker (fun i : Fin A ↦
+          Matrix.piKronecker (fun i : Fin A ↦
             F.neighboringOperator (k i.castSucc) (k i.succ)))
     else 0
 
@@ -66,7 +66,7 @@ noncomputable def cyclicActiveRightOpenBlock
   classical
   exact if hk : F.IsCyclicActiveRetainedWord k then
       let kC := F.cyclicActiveRetainedWord hk
-      Matrix.finKronecker (fun i : Fin C ↦
+      Matrix.piKronecker (fun i : Fin C ↦
           F.neighboringOperator (k i.castSucc) (k i.succ)) ⊗ₖ
         F.cyclicActiveRightBoundary a (kC (Fin.last C))
     else 0
@@ -91,7 +91,7 @@ theorem cyclicActiveLeftOpenBlock_posSemidef
   · let P : Matrix (F.LeftOpenEdgeIndex k) (F.LeftOpenEdgeIndex k) ℂ := by
       exact ((lam : ℂ) ^ 2) •
         (F.cyclicActiveLeftBoundary b ((F.cyclicActiveRetainedWord hk) 0) ⊗ₖ
-          Matrix.finKronecker (fun i : Fin A ↦
+          Matrix.piKronecker (fun i : Fin A ↦
             F.neighboringOperator (k i.castSucc) (k i.succ)))
     have hblock : F.cyclicActiveLeftOpenBlock lam b k = P := by
       ext x y
@@ -100,7 +100,7 @@ theorem cyclicActiveLeftOpenBlock_posSemidef
     unfold P
     apply Matrix.PosSemidef.smul
     · exact (F.cyclicActiveLeftBoundary_posSemidef hpos b hb _).kronecker
-        (Matrix.finKronecker_posSemidef _ fun i ↦ hpos _ _)
+        (Matrix.piKronecker_posSemidef _ fun i ↦ hpos _ _)
     · have hs : 0 ≤ lam ^ 2 := sq_nonneg lam
       exact_mod_cast hs
   · have hblock : F.cyclicActiveLeftOpenBlock lam b k = 0 := by
@@ -128,7 +128,7 @@ theorem cyclicActiveRightOpenBlock_posSemidef
   by_cases hk : F.IsCyclicActiveRetainedWord k
   · unfold cyclicActiveRightOpenBlock
     simp only [dite_eq_left hk]
-    exact (Matrix.finKronecker_posSemidef _ fun i ↦ hpos _ _).kronecker
+    exact (Matrix.piKronecker_posSemidef _ fun i ↦ hpos _ _).kronecker
       (F.cyclicActiveRightBoundary_posSemidef hpos a ha _)
   · unfold cyclicActiveRightOpenBlock
     simp only [dite_eq_right hk]

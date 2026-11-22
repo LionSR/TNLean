@@ -58,9 +58,10 @@ noncomputable def tensorC : MPSTensor 2 2 := ![σx, E 0 0]
 def tensorCInt : Fin 2 → Matrix (Fin 2) (Fin 2) ℤ := ![!![0, 1; 1, 0], !![1, 0; 0, 0]]
 
 theorem tensorC_eq_complexOfRing (a : Fin 2) :
-    tensorC a = complexOfRing (Int.castRingHom ℂ) (tensorCInt a) := by
+    tensorC a = Matrix.complexOfRing (Int.castRingHom ℂ) (tensorCInt a) := by
   ext i j
-  fin_cases a <;> fin_cases i <;> fin_cases j <;> simp [tensorC, tensorCInt, complexOfRing_apply]
+  fin_cases a <;> fin_cases i <;> fin_cases j <;> simp [tensorC, tensorCInt,
+      Matrix.complexOfRing_apply]
 
 /-- The words of length three writing the matrix units: `E₁₁ = PPP`, `E₁₂ = PPX`, `E₂₁ = XPP`,
 `E₂₂ = XPX`, with `X = σ_x`, `P = E₁₁`. -/
@@ -289,9 +290,10 @@ def tensorBInt : Fin 2 → Matrix (Fin 4) (Fin 4) ℤ :=
     !![1, 0, 0, 0; 0, 0, 0, 0; 0, 0, 1, 0; 0, 0, 0, 0]]
 
 theorem tensorB_eq_complexOfRing (i : Fin 2) :
-    tensorB i = complexOfRing (Int.castRingHom ℂ) (tensorBInt i) := by
+    tensorB i = Matrix.complexOfRing (Int.castRingHom ℂ) (tensorBInt i) := by
   ext a b
-  fin_cases i <;> fin_cases a <;> fin_cases b <;> simp [tensorB, tensorBInt, complexOfRing_apply]
+  fin_cases i <;> fin_cases a <;> fin_cases b <;> simp [tensorB, tensorBInt,
+      Matrix.complexOfRing_apply]
 
 /-- The order of the two copies: copy `j` at position `j`. -/
 def ordM : BlockIndex labels 0 ≃ Fin 2 where
@@ -349,16 +351,16 @@ noncomputable def splitRed (A Ainv : Matrix (Fin 2) (Fin 2) ℂ) (h1 : A * Ainv 
   triangular i := by
     rw [conjMatrix_gaugeOfMatrix, kronMat_conj h1, tensorB_eq_complexOfRing]
     refine MultiBlockCompression.triangular_of_offDiag fun x y hxy => ?_
-    rw [Matrix.submatrix_apply, complexOfRing_apply]
+    rw [Matrix.submatrix_apply, Matrix.complexOfRing_apply]
     have : tensorBInt i (tauM x) (tauM y) = 0 := by
       revert i x y; decide
     rw [this, map_zero]
   matched i s := by
     ext p q
     rw [Matrix.blockDiag'_apply, conjMatrix_gaugeOfMatrix, kronMat_conj h1,
-      tensorB_eq_complexOfRing, Matrix.submatrix_apply, complexOfRing_apply]
+      tensorB_eq_complexOfRing, Matrix.submatrix_apply, Matrix.complexOfRing_apply]
     change _ = tensorC i p q
-    rw [tensorC_eq_complexOfRing, complexOfRing_apply]
+    rw [tensorC_eq_complexOfRing, Matrix.complexOfRing_apply]
     congr 1
     obtain ⟨s, hs⟩ := s
     obtain rfl : hs = Finset.mem_univ s := rfl
@@ -392,8 +394,8 @@ theorem exists_split_multiBlockCompression_kronRow (A Ainv : Matrix (Fin 2) (Fin
     change conjMatrix (gaugeOfMatrix tauM _ _ (kronMat_inv h1) (kronMat_inv h2)) (tensorB i) x y =
       0
     rw [conjMatrix_gaugeOfMatrix, kronMat_conj h1, tensorB_eq_complexOfRing]
-    change complexOfRing (Int.castRingHom ℂ) (tensorBInt i) (tauM x) (tauM y) = 0
-    rw [complexOfRing_apply]
+    change Matrix.complexOfRing (Int.castRingHom ℂ) (tensorBInt i) (tauM x) (tauM y) = 0
+    rw [Matrix.complexOfRing_apply]
     have : tensorBInt i (tauM x) (tauM y) = 0 := tensorBInt_offDiag i x y hxy
     rw [this, map_zero]
   · rw [MultiBlockCompression.left_gaugeOfMatrix (splitRed A Ainv h1 h2) (τ := tauM)

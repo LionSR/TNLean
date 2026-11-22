@@ -5,7 +5,12 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.ArbitraryPhysicalMixedInterpolation
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointUniformPathGap
-import TNLean.MPS.ParentHamiltonian.InteractionMatrixRepresentation
+import TNLean.MPS.ParentHamiltonian.Deformation.IsometricDeformationSymmetry
+import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
+import QICLean.Spectral.Gap.PositiveComparisonGap
+import QICLean.ManyBody.Hamiltonian.KernelGap
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
+import TNLean.MPS.Operator.Interaction.GappedInteractionPath
 import TNLean.MPS.Symmetry.GappedPath.PhysicalIsometricGapTransport
 import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalEndpointOrthogonality
 
@@ -39,50 +44,6 @@ namespace MPOSymmetry
 
 variable {d₀ d₁ D₀ D₁ N : ℕ}
 
-/-- The configuration matrix of the actual extended mixed interaction.
-Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-noncomputable def mixedEndpointInteractionMatrix
-    (B₀ : MPSTensor (D₀ * D₀) D₀) (B₁ : MPSTensor (D₁ * D₁) D₁) (γ : ℝ) :
-    MPOTensor.ChainOperator ((D₀ + D₁) * (D₀ + D₁)) 2 :=
-  Matrix.toEuclideanLin.symm (mixedEndpointParentInteraction B₀ B₁ γ).toLinearMap
-
-/-- The matrix interaction represents the same Euclidean operator.
-Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem toEuclideanLin_mixedEndpointInteractionMatrix
-    (B₀ : MPSTensor (D₀ * D₀) D₀) (B₁ : MPSTensor (D₁ * D₁) D₁) (γ : ℝ) :
-    Matrix.toEuclideanLin (mixedEndpointInteractionMatrix B₀ B₁ γ) =
-      (mixedEndpointParentInteraction B₀ B₁ γ).toLinearMap :=
-  LinearEquiv.apply_symm_apply _ _
-
-/-- Every actual mixed interaction is positive, including at the endpoints.
-Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpointInteractionMatrix_posSemidef
-    (B₀ : MPSTensor (D₀ * D₀) D₀) (B₁ : MPSTensor (D₁ * D₁) D₁) (γ : ℝ) :
-    (mixedEndpointInteractionMatrix B₀ B₁ γ).PosSemidef := by
-  apply Matrix.isPositive_toEuclideanLin_iff.mp
-  rw [toEuclideanLin_mixedEndpointInteractionMatrix]
-  exact mixedEndpointParentInteraction_isPositive B₀ B₁ γ
-
-/-- Matrix coordinates preserve continuity of the actual extended interaction.
-Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem continuous_mixedEndpointInteractionMatrix [NeZero D₀] [NeZero D₁]
-    (B₀ : MPSTensor (D₀ * D₀) D₀) (B₁ : MPSTensor (D₁ * D₁) D₁)
-    (h₀ : Kraus.IsInjective B₀) (h₁ : Kraus.IsInjective B₁) :
-    Continuous (mixedEndpointInteractionMatrix B₀ B₁) := by
-  have hMat : Continuous fun T :
-      EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2) →L[ℂ]
-        EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2) =>
-      Matrix.toEuclideanLin.symm T.toLinearMap :=
-    by
-      let F :
-          (EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2) →L[ℂ]
-            EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2)) →ₗ[ℂ]
-          MPOTensor.ChainOperator ((D₀ + D₁) * (D₀ + D₁)) 2 :=
-        Matrix.toEuclideanLin.symm.toLinearMap.comp (ContinuousLinearMap.coeLM ℂ)
-      exact F.continuous_of_finiteDimensional
-  exact hMat.comp (continuous_mixedEndpointParentInteraction B₀ B₁ h₀ h₁
-    (NeZero.pos D₀) (NeZero.pos D₁))
-
 /-- The actual mixed local interaction in the common enlarged physical space.
 It is the support-coordinate interaction conjugated by the common inclusion,
 with energy one on its unused two-site complement.
@@ -92,7 +53,7 @@ noncomputable def arbitraryPhysicalMixedInteraction
     MPOTensor.ChainOperator ((((D₀ + D₁) * (D₀ + D₁)) + d₀) + d₁) 2 :=
   isometricInteractionExtension
     (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁)
-    (mixedEndpointInteractionMatrix (polarPosTensor A₀) (polarPosTensor A₁) γ)
+    (mixedEndpointParentInteraction (polarPosTensor A₀) (polarPosTensor A₁) γ)
 
 /-- The enlarged mixed interaction is positive at every parameter.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -101,7 +62,7 @@ theorem arbitraryPhysicalMixedInteraction_posSemidef
     (arbitraryPhysicalMixedInteraction A₀ A₁ γ).PosSemidef :=
   isometricInteractionExtension_posSemidef _
     (commonFixedPointInclusion_isometry _ d₀ d₁)
-    (mixedEndpointInteractionMatrix_posSemidef _ _ γ)
+    (posSemidef_mixedEndpointParentInteraction _ _ γ)
 
 /-- For arbitrary injective physical alphabets, the actual enlarged local
 interactions vary continuously through both rank-changing endpoints.
@@ -110,13 +71,15 @@ theorem continuous_arbitraryPhysicalMixedInteraction [NeZero D₀] [NeZero D₁]
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁) :
     Continuous (arbitraryPhysicalMixedInteraction A₀ A₁) := by
-  let T := Matrix.tensorPower 2 (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁)
+  let T := (Matrix.piKronecker fun _ : Fin 2 ↦ (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀
+      d₁))
   change Continuous (fun γ => 1 - T *
-    (1 - mixedEndpointInteractionMatrix (polarPosTensor A₀) (polarPosTensor A₁) γ) * Tᴴ)
+    (1 - mixedEndpointParentInteraction (polarPosTensor A₀) (polarPosTensor A₁) γ) * Tᴴ)
   exact continuous_const.sub
     ((continuous_const.matrix_mul (continuous_const.sub
-      (continuous_mixedEndpointInteractionMatrix _ _
-        (isInjective_polarPosTensor h₀) (isInjective_polarPosTensor h₁)))).matrix_mul
+      (continuous_mixedEndpointParentInteraction _ _
+        (isInjective_polarPosTensor h₀) (isInjective_polarPosTensor h₁)
+        (NeZero.pos D₀) (NeZero.pos D₁)))).matrix_mul
       continuous_const)
 
 /-- In the open interval the enlarged interaction is the canonical two-site
@@ -131,10 +94,8 @@ theorem arbitraryPhysicalMixedInteraction_eq_parent_of_mem_Ioo
   rw [arbitraryPhysicalMixedInterpolation,
     parentInteraction_matrix_rotatePhysical_eq_isometricInteractionExtension _
       (commonFixedPointInclusion_isometry _ d₀ d₁)]
-  unfold arbitraryPhysicalMixedInteraction mixedEndpointInteractionMatrix
-  rw [mixedEndpointParentInteraction_eq_parentInteractionES _ _ hγ]
-  simp only [LinearMap.coe_toContinuousLinearMap,
-    parentInteractionES_eq_toEuclideanLin_parentMatrix, LinearEquiv.symm_apply_apply]
+  unfold arbitraryPhysicalMixedInteraction
+  rw [mixedEndpointParentInteraction_eq_toMatrix'_parentInteraction _ _ hγ]
 
 /-- The enlarged periodic kernel is exactly the line of the actual mixed
 periodic vector, including both endpoints. Neither kernel equality nor a
@@ -154,9 +115,7 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv
   rw [arbitraryPhysicalMixedInteraction,
     isometricInteractionExtension_ker_eq_map_of_posSemidef _
       (commonFixedPointInclusion_isometry _ d₀ d₁)
-      (mixedEndpointInteractionMatrix_posSemidef _ _ γ) hN,
-    ← periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian _ hN,
-    toEuclideanLin_mixedEndpointInteractionMatrix,
+      (posSemidef_mixedEndpointParentInteraction _ _ γ) hN,
     mixedEndpoint_periodic_ker_eq_range_periodicMpvLineMap _ _
       (isInjective_polarPosTensor h₀) (isInjective_polarPosTensor h₁) γ hN]
   have hline := ContinuousLinearMap.range_smulRight_apply
@@ -191,35 +150,38 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_finrank
   exact congrArg WithLp.ofLp hzero
 
 /-- One positive gap works for the actual enlarged mixed path on the entire
-closed interval and all periodic lengths at least two. Polar support
-injectivity, local positivity, and the support-path gap are all derived
-from the original endpoint tensors. The chosen lower bound is the minimum of the support-path gap
-and the unit unused-space penalty.
-Source: arXiv:2203.12563, Section 5, lines 1584–1601 and 1687–1692. -/
+closed interval and all periodic lengths at least two: every periodic Hamiltonian
+is gapped above its zero ground energy, whose eigenspace is the line of the
+periodic vector. Polar support injectivity, local positivity, and the
+support-path gap are all derived from the original endpoint tensors. The chosen
+lower bound is the minimum of the support-path gap and the unit unused-space
+penalty. Source: arXiv:2203.12563, Section 5, lines 1584–1601 and 1687–1692. -/
 theorem exists_uniform_arbitraryPhysicalMixed_periodic_path_gap
     [NeZero D₀] [NeZero D₁]
     (A₀ : MPSTensor d₀ D₀) (A₁ : MPSTensor d₁ D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁) :
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ γ : unitInterval, ∀ N : ℕ, ∀ hN : 2 ≤ N,
       haveI : NeZero N := ⟨by omega⟩;
-      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-        (Interaction.translationInvariant N
-          (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-          (Interaction.translationInvariant N
-            (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian v‖ := by
-  obtain ⟨δ, hδ, hgap⟩ := exists_uniform_mixedEndpoint_periodic_path_gap
+      IsGapped (Interaction.translationInvariant N
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian 0 δ := by
+  obtain ⟨δ, hδ, hgap⟩ :=
+    exists_uniform_isGapped_mixedEndpoint_hamiltonian_translationInvariant_path
     (polarPosTensor A₀) (polarPosTensor A₁)
     (isInjective_polarPosTensor h₀) (isInjective_polarPosTensor h₁)
   refine ⟨min δ 1, lt_min hδ zero_lt_one, min_le_right _ _, ?_⟩
   intro γ N hN
   have : NeZero N := ⟨by omega⟩
-  apply isometricInteractionExtension_norm_gap _
-    (commonFixedPointInclusion_isometry _ d₀ d₁)
-    (mixedEndpointInteractionMatrix_posSemidef _ _ γ) hN hδ.le
-  rw [← periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian _ hN,
-    toEuclideanLin_mixedEndpointInteractionMatrix]
-  exact hgap γ N hN
+  let h := mixedEndpointParentInteraction (polarPosTensor A₀) (polarPosTensor A₁) γ
+  have hA : h.PosSemidef := posSemidef_mixedEndpointParentInteraction _ _ γ
+  refine ⟨fun hbot ↦ ?_, ?_⟩
+  · have hdim := arbitraryPhysicalMixedInteraction_groundSpace_finrank A₀ A₁ h₀ h₁ γ hN
+    rw [← groundSpace_zero, hbot, finrank_bot] at hdim
+    exact zero_ne_one hdim
+  · intro μ hμ
+    have hμ' := isometricInteractionExtension_eigenvalue_gap _
+      (commonFixedPointInclusion_isometry _ d₀ d₁) hA hN
+      (isGapped_zero_iff.mp (hgap γ N hN)).2 μ hμ
+    simpa only [Complex.ofReal_zero, zero_add] using hμ'
 
 end MPOSymmetry
 end MPSTensor

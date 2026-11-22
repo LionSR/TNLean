@@ -189,8 +189,8 @@ theorem ker_toEuclideanLin_regionParentHamiltonian_eq (A : Tensor Γ d)
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R k).hamiltonian).ker := by
   classical
   ext ψ
-  have heq := (ker_regionParentHamiltonian A R h hh).trans
-    (ker_regionParentHamiltonian A R k hk).symm
+  have heq := (ker_hamiltonian_ofPlace A R h hh).trans
+    (ker_hamiltonian_ofPlace A R k hk).symm
   have hmem := congrArg (fun S => WithLp.ofLp ψ ∈ S) heq
   simpa [LinearMap.mem_ker, Matrix.toEuclideanLin, Matrix.toLpLin] using hmem
 

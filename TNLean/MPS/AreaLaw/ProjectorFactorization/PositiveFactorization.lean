@@ -8,7 +8,6 @@ import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Sites.Placement
-import QICLean.ManyBody.Entropy.Cut.SupportedOperatorAlgebra
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.Tensor.VaryingBond.OpenMPS
 

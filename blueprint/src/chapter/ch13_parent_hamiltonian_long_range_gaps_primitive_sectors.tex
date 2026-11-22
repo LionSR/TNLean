@@ -281,24 +281,21 @@
 
 \begin{definition}[Finite open interaction sum in matrix coordinates]
     \label{def:finite_open_interaction_matrix}
-    \lean{MPSTensor.openInteractionMatrix,
-        MPSTensor.openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix,
-        MPSTensor.toEuclideanCLM_openInteractionMatrix_parentInteraction}
+    \lean{ManyBody.Interaction.hamiltonian_chainTranslates_eq_sum_range,
+        MPSTensor.toEuclideanCLM_hamiltonian_chainTranslates_parentInteraction}
     \leanok
     For an arbitrary range-$R$ matrix $h$, let
     $H_N(h)=\sum_{a=0}^{N-R}\iota_a(h)$, where $\iota_a$ places $h$
     on the sites $a,\ldots,a+R-1$ of an $N$-site chain, with the sum
-    empty when $N<R$. For $R\geq1$ and $N\geq R$, its Euclidean matrix
-    action is the open interaction Hamiltonian. If $h$ is the complement
+    empty when $N<R$. If $h$ is the complement
     projection of $G_R(A)$, it is the canonical open parent Hamiltonian.
     This is the nonwrapping interaction sum in
     \cite[equation (3.12)]{Nachtergaele1996Spectral}.
 \end{definition}
 \begin{proof}\leanok
     \uses{def:open_parent_hamiltonian_es}
-    The admissible starts are exactly $0,\ldots,N-R$. Each matrix inclusion
-    acts as the corresponding Euclidean local interaction, so their sums
-    agree. Substitute the local complement projection for the canonical case.
+    The admissible starts are exactly $0,\ldots,N-R$. Substitute the local
+    complement projection for the canonical case.
 \end{proof}
 
 \begin{definition}[The fixed local commutator observable]
@@ -317,10 +314,10 @@
 
 \begin{lemma}[Finite-range commutator localization]
     \label{thm:finite_open_commutator_locality}
-    \lean{MPSTensor.openInteractionMatrix_commutator_placeAlong_chainWindow,
-        MPSTensor.openInteractionMatrix_commutator_bulkObservable,
-        MPSTensor.placeAlong_chainWindow_adjoint_mul_openInteractionMatrix_commutator,
-        MPSTensor.bulkObservable_adjoint_mul_openInteractionMatrix_commutator}
+    \lean{MPSTensor.hamiltonian_chainTranslates_commutator_placeAlong_chainWindow,
+        MPSTensor.hamiltonian_chainTranslates_commutator_bulkObservable,
+        MPSTensor.placeAlong_chainWindow_adjoint_mul_hamiltonian_chainTranslates_commutator,
+        MPSTensor.bulkObservable_adjoint_mul_hamiltonian_chainTranslates_commutator}
     \leanok
     Let $R,k\geq1$ and $X_N=I_\ell\otimes X\otimes I_r$, where
     $\ell,r\geq t=R-1$ and $N=\ell+k+r$. Then
@@ -390,7 +387,8 @@
     matrix $\rho$, and let $X$ act on $k>0$ sites with $\eta_A(X)=0$.
     Fix $R>0$ and let $h=I-P_{G_R(A)}$. Suppose that, on the expanding
     chains $N_n=2n+2(R-1)+k$, the canonical open Hamiltonians eventually
-    have kernel $G_{N_n}(A)$ and a common norm gap $\gamma\geq0$.
+    have kernel $G_{N_n}(A)$ and all their nonzero eigenvalues at least
+    $\gamma\geq0$.
     Suppose also that a family of unit vectors eventually belongs to these
     ground spaces. With $B=I_{R-1}\otimes X\otimes I_{R-1}$,
     \begin{align}
@@ -439,9 +437,9 @@
 \begin{lemma}[Equality of open parent-interaction kernels]
     \label{thm:open_parent_interaction_kernel_equal}
     \lean{MPSTensor.IsParentInteraction.%
-        ker_openInteractionHamiltonianES_eq_ker_openParentHamiltonianES}
+        ker_hamiltonian_chainTranslates_eq_ker_parentChainInteraction}
     \leanok
-    Let $h\geq0$ act on $R>0$ sites with kernel $G_R(A)$, and let
+    Let $h\geq0$ act on $R$ sites with kernel $G_R(A)$, and let
     $q=I-P_{G_R(A)}$. For every chain length $N$,
     $\ker H_N(h)=\ker H_N(q)$.
 \end{lemma}
@@ -461,7 +459,8 @@
     matrix $\rho$, let $h\geq0$ act on $R>0$ sites, and let $X$ act on
     $k>0$ sites with $\eta_A(X)=0$. Suppose the open interaction sums
     on chains $N_n=2n+2(R-1)+k$ eventually have kernel $G_{N_n}(A)$
-    and common norm gap $\gamma\geq0$. Suppose that a family of unit
+    and all their nonzero eigenvalues at least $\gamma\geq0$. Suppose that
+    a family of unit
     vectors eventually belongs to these ground spaces.
     With $B=I_{R-1}\otimes X\otimes I_{R-1}$,
     \begin{align}
@@ -967,7 +966,7 @@
     interaction on $R\geq1$ sites. Put $t=R-1$,
     $N_n=(n+t+k)+(t+n)$, and let $H_n$ be its open interaction sum.
     Suppose that these operators eventually have kernel $G(N_n)$ and
-    norm gap at least $\gamma\geq0$. For eventually unit
+    all their nonzero eigenvalues at least $\gamma\geq0$. For eventually unit
     $\psi_n\in G_{A_\alpha}(N_n)$ and every $k\geq1$ observable $X$
     with $\eta_\alpha(X)=0$,
     \begin{align}
@@ -1576,7 +1575,7 @@
 
 \begin{lemma}[Local zero energy and finite open-chain expectations]
     \label{thm:quasi_local_open_interaction_zero_expectation}
-    \lean{SpinChain.quasiLocalIntervalObservable_openInteractionMatrix, SpinChain.apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero}
+    \lean{SpinChain.quasiLocalIntervalObservable_hamiltonian_chainTranslates, SpinChain.apply_quasiLocalIntervalObservable_hamiltonian_chainTranslates_eq_zero}
     \leanok
     Let $h$ be an $R$-site matrix, where $R>0$, and let $H_N$ be its open-chain
     sum. For every interval position $a$ and every $N\geq0$,
@@ -1864,7 +1863,7 @@
 
 \begin{lemma}[Sector membership from eventual open kernels]
     \label{thm:sector_local_zero_from_eventual_open_kernel}
-    \lean{MPSTensor.quasiLocalExpectation_interval_eq_zero_of_eventually_open_kernel}
+    \lean{MPSTensor.quasiLocalExpectation_interval_eq_zero_of_eventually_ker_hamiltonian_chainTranslates}
     \leanok
     Under the same sector-state assumptions, suppose that
     $\ker H_N=\mathcal G_N$ for every sufficiently large $N$, where
@@ -1884,147 +1883,39 @@
     \label{lem:open_interaction_subwindow_coordinates}
     \lean{MPSTensor.cyclicCfg_join_cyclicActiveBlock,
         MPSTensor.extractWindow_join_cyclicActiveBlock,
-        MPSTensor.nonwrappingSuffixStartEquiv,
-        MPSTensor.periodicLocalInteractionES_apply,
-        MPSTensor.periodicLocalInteractionES_conj_cyclicActiveBlock}
+        MPSTensor.toEuclideanLin_translationInvariant_term_apply}
     \leanok
     \uses{def:cyclic_active_block_coordinates,
         def:open_local_interaction_sum}
     Suppose $W\leq N$, fix a cyclic start $s$, and let $q<W$ satisfy
     $q+R\leq W$. Replacing the range-$R$ subwindow beginning at $s+q$
     changes only the active configuration. Restriction to this subwindow
-    agrees with restriction at $q$ inside the active block. When $R>0$, any local
-    operator, extended by the identity, satisfies
-    \[
-        U_s h_{s+q}^{(N)}U_s^{-1}
-        =\bigl(h_q^{(W)}\bigr)^{\oplus[d]^{N-W}}.
-    \]
-    Its action is obtained by applying $h$ to the restricted window with
-    outside coordinates fixed. If $0<R\leq W\leq n\leq N$, translation
-    $q\mapsto n-W+q$ also identifies the nonwrapping starts on $W$ sites
-    with the range-$R$ starts contained in $[n-W,n)$.
+    agrees with restriction at $q$ inside the active block. For $R\leq N$,
+    the translate of any operator $h$ on $R$ sites to a window of the ring
+    of $N$ sites acts by applying $h$ to the restricted window with outside
+    coordinates fixed.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:cyclic_active_block_coordinates}
     In active-block coordinates, subwindow replacement changes only the
-    first coordinate. The start bijection has inverse subtraction of
-    $n-W$. Applying the local operator separately on each complementary
-    configuration gives the conjugation identity.
-\end{proof}
-
-\begin{definition}[An interaction on an embedded suffix]
-    \label{def:open_suffix_interaction_sum}
-    \lean{MPSTensor.openSuffixInteractionHamiltonianES}
-    \leanok
-    \uses{def:open_local_interaction_sum}
-    For a range-$R$ operator $h$, let $H_{[n-W,n)}(h)$ be the sum of its
-    nonwrapping translates in an $N$-site chain whose starts satisfy
-    $n-W\leq i$ and $i+R\leq n$.
-\end{definition}
-
-\begin{lemma}[Counting positive terms in complete open windows]
-    \label{lem:positive_open_window_counting}
-    \lean{MPSTensor.sum_nonwrappingWindowTerms_le,
-        MPSTensor.sum_openSuffixInteractionHamiltonianES_le}
-    \leanok
-    \uses{def:open_suffix_interaction_sum}
-    Let $R\leq W$. For any positive operators $T_i$, indexed by the
-    nonwrapping range-$R$ starts in an $N$-site chain,
-    \[
-        \sum_{n=W}^{N}\ \sum_{\substack{n-W\leq i\\i+R\leq n}}T_i
-        \leq (W-R+1)\sum_i T_i.
-    \]
-    In particular, for a positive interaction $h$,
-    $\sum_{n=W}^{N}H_{[n-W,n)}(h)
-        \leq(W-R+1)H_N^{\mathrm{open}}(h)$.
-    This is the counting argument of condition C1 in
-    \cite{Nachtergaele1996Spectral}, applied to arbitrary positive terms.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{def:open_suffix_interaction_sum}
-    A term beginning at $i$ can occur only for
-    $i+R\leq n\leq i+W$, an interval containing $W-R+1$ integers.
-    Reverse the order of summation and use positivity of each term.
-\end{proof}
-
-\begin{lemma}[Transfer of a finite-window comparison]
-    \label{lem:open_interaction_suffix_comparison}
-    \lean{MPSTensor.openSuffixInteractionHamiltonianES_conj_cyclicActiveBlock,
-        MPSTensor.openSuffixInteractionHamiltonianES_comparison_of_local}
-    \leanok
-    \uses{lem:open_interaction_subwindow_coordinates,
-        def:open_suffix_interaction_sum}
-    Suppose $0<R\leq W\leq n\leq N$. The suffix Hamiltonian is unitarily
-    equivalent to $H_W^{\mathrm{open}}(h)$ acting independently on the
-    complementary configurations. If
-    $\kappa p_W(A)\leq H_W^{\mathrm{open}}(h)$, then the same inequality
-    holds after embedding both sides on the suffix $[n-W,n)$.
-    Here $p_W(A)$ is the canonical complementary ground-space projection;
-    no sign condition on $\kappa$ or positivity condition on $h$ is needed
-    for this transfer of order.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:open_interaction_subwindow_coordinates}
-    Sum the conjugation identity over the corresponding start bijection.
-    Extension by the identity and conjugation by an isometry preserve order.
-\end{proof}
-
-\begin{lemma}[Open-chain comparison for an arbitrary positive interaction]
-    \label{thm:positive_open_interaction_range_comparison}
-    \lean{MPSTensor.openInteractionHamiltonianES_comparison_of_local,
-        MPSTensor.openInteractionHamiltonianES_gap_of_long_gap_at_length}
-    \leanok
-    \uses{lem:positive_open_window_counting,
-        lem:open_interaction_suffix_comparison,
-        lem:open_parent_range_comparison}
-    Let $0<R\leq W\leq N$, let $h$ be positive, and suppose
-    $\kappa p_W(A)\leq H_W^{\mathrm{open}}(h)$. Then
-    \[
-        \kappa H_{N,W}^{\mathrm{open}}(A)
-        \leq (W-R+1)H_N^{\mathrm{open}}(h).
-    \]
-    If additionally $\kappa,\gamma>0$, both global kernels equal $G_N(A)$,
-    and $\gamma\lVert v\rVert\leq
-        \lVert H_{N,W}^{\mathrm{open}}(A)v\rVert$ for $v\perp G_N(A)$, then
-    \[
-        \frac{\kappa\gamma}{W-R+1}\lVert v\rVert
-        \leq\lVert H_N^{\mathrm{open}}(h)v\rVert
-        \qquad(v\perp G_N(A)).
-    \]
-    No local parent-kernel equality is assumed for $h$. This is a
-    finite-window consequence of condition C1 and the comparison argument
-    in Section~6 of \cite{Nachtergaele1996Spectral}.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:positive_open_window_counting,
-        lem:open_interaction_suffix_comparison}
-    Sum the embedded local comparisons. Each full range-$W$ parent term
-    occurs once, whereas a range-$R$ term occurs at most $W-R+1$ times.
-    For the gap, compare the positive operators
-    $\kappa H_{N,W}^{\mathrm{open}}(A)$ and
-    $(W-R+1)H_N^{\mathrm{open}}(h)$, whose kernels agree, and divide by
-    the positive window multiplicity.
+    first coordinate. The translate of $h$ is $h$ placed on its window,
+    which leaves every coordinate outside the window unchanged.
 \end{proof}
 
 \begin{lemma}[Uniform finite-chain gap from an eventual kernel identity]
     \label{thm:eventual_kernel_open_interaction_gap}
-    \lean{MPSTensor.exists_openInteractionHamiltonianES_gap_of_eventual_kernel,
-        MPSTensor.exists_openInteractionMatrix_gap_of_eventual_kernel}
+    \lean{MPSTensor.exists_hamiltonian_chainTranslates_gap_of_eventual_kernel}
     \leanok
     Let $A_j$ be a finite family of normalized primitive MPS tensors with
     faithful fixed density matrices, pairwise inequivalent under gauge and
     phase, and let $B=\bigoplus_j\mu_jA_j$, where every $\mu_j\ne0$.
-    Let $h\geq0$ be an interaction of range $R\geq1$.
+    Let $h\geq0$ be an interaction of range $R$.
     Suppose that $\ker H^{\mathrm{open}}_{h,N}=\mathcal G_N(B)$
-    for all sufficiently large $N$. Then there exists $\gamma>0$ such that
-    \begin{align}
-        \gamma\|v\|\leq\|H^{\mathrm{open}}_{h,N}v\|
-        \notag
-    \end{align}
-    for every $N\in\mathbb N$ and every
-    $v\perp\ker H^{\mathrm{open}}_{h,N}$.
-    No condition on the local kernel of $h$, or lower bound on $R$
-    beyond $R\geq1$, is required. This is the finite-chain conclusion of
+    for all sufficiently large $N$. Then there exists $\gamma>0$ such that,
+    for every $N\in\mathbb N$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{h,N}$ is at least $\gamma$.
+    No condition on the local kernel of $h$, or lower bound on $R$,
+    is required. This is the finite-chain conclusion of
     \cite[Theorem~1.2]{Nachtergaele1996Spectral}, under its eventual
     finite-interval kernel hypothesis, for the primitive-sector representation;
     the passage from more general periodic presentations is separate
@@ -2034,7 +1925,7 @@
     \uses{thm:primitive_block_sum_open_gap_all_lengths,
         thm:ph_primitive_blocks_open_kernel,
         lem:parent-finite-interval-comparison,
-        thm:positive_open_interaction_range_comparison}
+        lem:open_parent_range_comparison}
     Choose a canonical interaction range $W=2p$ above the original range
     and both kernel thresholds, with canonical gap $\delta>0$ uniform in
     the volume. Finite dimensionality and positivity give

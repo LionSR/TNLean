@@ -52,9 +52,9 @@ valence-bond construction.
 
 * `MPSTensor.exists_hasComplementaryFixedPointGap_gauge_of_isNormal`: the normalized primitive
   gauge of a normal tensor.
-* `MPSTensor.exists_parentHamiltonianES_gap_of_isNormal`: the finite-range
+* `MPSTensor.exists_hamiltonian_parentRingInteraction_gap_of_isNormal`: the finite-range
   Knabe gap for the parent Hamiltonian of an arbitrary normal tensor.
-* `MPSTensor.exists_parentHamiltonianES_uniform_gap_of_isNormal`: the uniform
+* `MPSTensor.exists_hamiltonian_parentRingInteraction_uniform_gap_of_isNormal`: the uniform
   gap for every periodic length.
 
 ## References
@@ -78,11 +78,11 @@ variable {d D : ℕ}
 /-! ### Transport of the parent Hamiltonian along equal local MPS spaces -/
 
 /-- Two tensors with the same local MPS space at length \(L\) have the same
-finite-chain parent Hamiltonian in the Euclidean realization. -/
-theorem parentHamiltonianES_eq_of_groundSpace_eq {A B : MPSTensor d D} {L : ℕ}
-    (h : groundSpace A L = groundSpace B L) (N : ℕ) :
-    parentHamiltonianES A L N = parentHamiltonianES B L N := by
-  simp only [parentHamiltonianES, parentHamiltonian_eq_of_groundSpace_eq h N]
+Hamiltonian of the parent interaction on every ring. -/
+theorem hamiltonian_parentRingInteraction_eq_of_groundSpace_eq {A B : MPSTensor d D} {L : ℕ}
+    (h : groundSpace A L = groundSpace B L) (N : ℕ) [NeZero N] :
+    (parentRingInteraction A L N).hamiltonian = (parentRingInteraction B L N).hamiltonian := by
+  simp only [parentRingInteraction, parentInteraction_eq_of_groundSpace_eq h]
 
 /-! ### The normalized primitive gauge -/
 
@@ -163,7 +163,7 @@ representative with a positive definite fixed point, which is where the
 finite-range Knabe estimate applies; the parent Hamiltonian is unchanged by that
 replacement, and block injectivity transfers back through the rescaling and the
 gauge. -/
-theorem exists_parentHamiltonianES_gap_of_isNormal [NeZero D] {A : MPSTensor d D}
+theorem exists_hamiltonian_parentRingInteraction_gap_of_isNormal [NeZero D] {A : MPSTensor d D}
     (hA : Kraus.IsNormal A) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ m : ℕ, ∃ δ : ℝ,
       1 < l ∧ Kraus.IsNBlkInjective A l ∧
@@ -172,20 +172,20 @@ theorem exists_parentHamiltonianES_gap_of_isNormal [NeZero D] {A : MPSTensor d D
       δ = ((m : ℝ) * (1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2 -
           (l : ℝ) ^ 2) / ((m : ℝ) - (l : ℝ)) ∧
       0 < δ ∧
-      ∀ N : ℕ, 2 * m ≤ N → ∀ v ∈
-        (LinearMap.ker (parentHamiltonianES A (l + 1) N))ᗮ,
-        δ * ‖v‖ ≤ ‖parentHamiltonianES A (l + 1) N v‖ := by
+      ∀ (N : ℕ) [NeZero N], 2 * m ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentRingInteraction A (l + 1) N).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨B, ζ, ρ, hζ, hgauge, _hmpv, hPrim, hρ, hGS, _hPI, _hCGS⟩ :=
     exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA
   obtain ⟨l, ε, m, δ, hl, hInjB, hε, hεlt, hm, hδ_def, hδ, hGap⟩ :=
-    hPrim.exists_parentHamiltonianES_gap_of_finiteRangeKnabe hρ
+    hPrim.exists_hamiltonian_parentRingInteraction_gap_of_finiteRangeKnabe hρ
   have hInjA : Kraus.IsNBlkInjective A l :=
     (isNBlkInjective_smul_iff hζ A l).1
       (isNBlkInjective_of_gaugeEquiv hInjB hgauge.symm)
   refine ⟨l, ε, m, δ, hl, hInjA, hε, hεlt, hm, hδ_def, hδ, ?_⟩
-  intro N hN v hv
-  rw [parentHamiltonianES_eq_of_groundSpace_eq (hGS (l + 1)) N] at hv ⊢
-  exact hGap N hN v hv
+  intro N _ hN
+  rw [hamiltonian_parentRingInteraction_eq_of_groundSpace_eq (hGS (l + 1)) N]
+  exact hGap N hN
 
 /-- A normal tensor has a uniform positive parent-Hamiltonian gap at a suitable
 interaction range, for every periodic length.
@@ -194,14 +194,16 @@ This is the normal-tensor case of arXiv:2011.12127, lines 2183--2187.
 The finite-range Knabe estimate treats all sufficiently large lengths; taking
 a minimum with the finitely many remaining positive bounds removes its volume
 threshold. No normalization hypothesis is imposed on the tensor. -/
-theorem exists_parentHamiltonianES_uniform_gap_of_isNormal [NeZero D]
+theorem exists_hamiltonian_parentRingInteraction_uniform_gap_of_isNormal [NeZero D]
     {A : MPSTensor d D} (hA : Kraus.IsNormal A) :
     ∃ l : ℕ, 1 < l ∧ Kraus.IsNBlkInjective A l ∧ ∃ γ : ℝ, 0 < γ ∧
-      ∀ N : ℕ, ∀ v ∈ (LinearMap.ker (parentHamiltonianES A (l + 1) N))ᗮ,
-        γ * ‖v‖ ≤ ‖parentHamiltonianES A (l + 1) N v‖ := by
+      ∀ (N : ℕ) [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentRingInteraction A (l + 1) N).hamiltonian) μ →
+          μ = 0 ∨ (γ : ℂ) ≤ μ := by
   obtain ⟨l, ε, m, δ, hl, hInj, _, _, _, _, hδ, hGap⟩ :=
-    exists_parentHamiltonianES_gap_of_isNormal hA
-  obtain ⟨γ, hγ, hAll⟩ := parentHamiltonianES_gap_of_eventual_gap A (l + 1) (2 * m) hδ hGap
+    exists_hamiltonian_parentRingInteraction_gap_of_isNormal hA
+  obtain ⟨γ, hγ, hAll⟩ := hamiltonian_parentRingInteraction_gap_of_eventual_gap A (l + 1)
+    (2 * m) hδ fun N _ hN ↦ hGap N hN
   exact ⟨l, hl, hInj, γ, hγ, hAll⟩
 
 end MPSTensor

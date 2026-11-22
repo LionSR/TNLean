@@ -70,7 +70,7 @@ tensors. Different interaction terms may act on different regions.
         TNLean.PEPS.place_mulVec_eq_zero_iff,
         ManyBody.Interaction.posSemidef_hamiltonian,
         ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff,
-        TNLean.PEPS.ker_regionParentHamiltonian}
+        TNLean.PEPS.ker_hamiltonian_ofPlace}
     \leanok
     \uses{def:peps_region_parent_hamiltonian}
     The parent Hamiltonian is positive semidefinite and satisfies
@@ -95,16 +95,17 @@ tensors. Different interaction terms may act on different regions.
 
 \begin{theorem}[Frustration freeness of the represented PEPS]%
     \label{thm:peps_region_parent_frustration_free}
-    \lean{TNLean.PEPS.place_stateCoeff_eq_zero,
-        TNLean.PEPS.stateCoeff_mem_regionParentGroundSpace,
-        TNLean.PEPS.regionParentHamiltonian_stateCoeff_eq_zero}
+    \lean{TNLean.PEPS.stateCoeff_mem_regionParentGroundSpace,
+        TNLean.PEPS.toLp_stateCoeff_mem_zeroSpace_ofPlace}
     \leanok
     \uses{def:peps_region_parent_hamiltonian,
         thm:peps_region_ground_space_slice}
-    The closed PEPS vector $\psi$ satisfies
-    $\widetilde h_i\psi=0$ for every $i\in I$, and hence $H\psi=0$.
-    Whenever $\psi\ne0$, it is a ground state of this positive
-    Hamiltonian, and it minimizes every local term simultaneously.
+    The closed PEPS vector $\psi$ satisfies every regional ground-space
+    condition, and $\widetilde h_i\psi=0$ for every $i\in I$: it lies in the
+    zero space of the family of extended interactions. Since the terms are
+    positive, the zero space is the kernel of $H$; whenever $\psi\ne0$, it
+    is a ground state of this positive Hamiltonian, and it minimizes every
+    local term simultaneously.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -112,5 +113,5 @@ tensors. Different interaction terms may act on different regions.
         thm:peps_region_parent_common_kernel}
     Every complementary slice of $\psi$ belongs to the regional
     PEPS ground space. Therefore every extended interaction kills
-    $\psi$, and their sum does as well.
+    $\psi$.
 \end{proof}

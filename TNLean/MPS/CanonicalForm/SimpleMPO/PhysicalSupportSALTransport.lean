@@ -72,7 +72,7 @@ theorem trace_mpo_changePhysicalBasis_of_isometry
     Matrix.trace (mpo (changePhysicalBasis V M) N) =
       Matrix.trace (mpo M N) := by
   rw [← singleKrausMap_tensorPower_mpo]
-  exact (singleKrausMap_isKrausCPTP (Matrix.tensorPower N V)
+  exact (singleKrausMap_isKrausCPTP (Matrix.piKronecker fun _ : Fin N ↦ V)
     (tensorPower_isometry V hV N)).trace_map (mpo M N)
 
 /-- Normalization commutes with an isometric physical inclusion. -/
@@ -80,11 +80,11 @@ theorem normalizedMPO_changePhysicalBasis_of_isometry
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
     (M : MPOTensor d D) (N : ℕ) :
     normalizedMPO (changePhysicalBasis V M) N =
-      singleKrausMap (Matrix.tensorPower N V) (normalizedMPO M N) := by
+      singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V) (normalizedMPO M N) := by
   rw [normalizedMPO, normalizedMPO,
     trace_mpo_changePhysicalBasis_of_isometry V hV M N,
     ← singleKrausMap_tensorPower_mpo]
-  exact ((singleKrausMap (Matrix.tensorPower N V)).map_smul _ _).symm
+  exact ((singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V)).map_smul _ _).symm
 
 /-- After splitting a chain into a prefix and suffix, the sitewise physical
 matrix is the Kronecker product of the corresponding prefix and suffix
@@ -93,11 +93,11 @@ theorem reindex_tensorPower_blockSplit
     (V : Matrix (Fin e) (Fin d) ℂ) (L K : ℕ) :
     Matrix.reindex (blockSplitEquiv e L K)
         (blockSplitEquiv d L K)
-        (Matrix.tensorPower (L + K) V) =
+        (Matrix.piKronecker fun _ : Fin (L + K) ↦ V) =
       Matrix.kroneckerMap (· * ·)
-        (Matrix.tensorPower L V) (Matrix.tensorPower K V) := by
+        (Matrix.piKronecker fun _ : Fin L ↦ V) (Matrix.piKronecker fun _ : Fin K ↦ V) := by
   ext ⟨a, b⟩ ⟨x, y⟩
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.tensorPower_apply,
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.piKronecker_apply,
     Matrix.kroneckerMap_apply, blockSplitEquiv_symm_apply]
   rw [Fin.prod_univ_add]
   simp
@@ -107,11 +107,11 @@ the sitewise physical matrix. -/
 theorem reindex_tensorPower_blockReindex
     (V : Matrix (Fin e) (Fin d) ℂ) (N L : ℕ) (hL : L ≤ N) :
     Matrix.reindex (blockReindexEquiv e N L hL)
-        (blockReindexEquiv d N L hL) (Matrix.tensorPower N V) =
-      Matrix.tensorPower (L + (N - L)) V := by
+        (blockReindexEquiv d N L hL) (Matrix.piKronecker fun _ : Fin N ↦ V) =
+      (Matrix.piKronecker fun _ : Fin (L + (N - L)) ↦ V) := by
   ext s t
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    Matrix.tensorPower_apply, blockReindexEquiv, Equiv.arrowCongr_symm,
+    Matrix.piKronecker_apply, blockReindexEquiv, Equiv.arrowCongr_symm,
     Equiv.refl_symm, Equiv.arrowCongr_apply, Equiv.coe_refl,
     finCongr_symm]
   exact Fintype.prod_equiv (finCongr (Nat.add_sub_cancel' hL)).symm
@@ -126,17 +126,17 @@ theorem blockReducedState_singleKraus_sitewise
     (L K : ℕ)
     (X : Matrix (Fin (L + K) → Fin d) (Fin (L + K) → Fin d) ℂ) :
     blockReducedState e L K
-        (singleKrausMap (Matrix.tensorPower (L + K) V) X) =
-      singleKrausMap (Matrix.tensorPower L V)
+        (singleKrausMap (Matrix.piKronecker fun _ : Fin (L + K) ↦ V) X) =
+      singleKrausMap (Matrix.piKronecker fun _ : Fin L ↦ V)
         (blockReducedState d L K X) := by
   change Matrix.partialTraceRight
       (Matrix.reindex (blockSplitEquiv e L K) (blockSplitEquiv e L K)
-        (singleKrausMap (Matrix.tensorPower (L + K) V) X)) = _
+        (singleKrausMap (Matrix.piKronecker fun _ : Fin (L + K) ↦ V) X)) = _
   rw [Matrix.reindex_singleKrausMap
       (blockSplitEquiv d L K) (blockSplitEquiv e L K),
     reindex_tensorPower_blockSplit]
   exact Matrix.partialTraceRight_kronecker_conj_of_right_isometry
-    (Matrix.tensorPower L V) (Matrix.tensorPower K V)
+    (Matrix.piKronecker fun _ : Fin L ↦ V) (Matrix.piKronecker fun _ : Fin K ↦ V)
     (tensorPower_isometry V hV K)
     (Matrix.reindex (blockSplitEquiv d L K) (blockSplitEquiv d L K) X)
 
@@ -146,14 +146,14 @@ theorem reducedBlockState_changePhysicalBasis_of_isometry
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
     (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N) :
     reducedBlockState (changePhysicalBasis V M) N L hL =
-      singleKrausMap (Matrix.tensorPower L V)
+      singleKrausMap (Matrix.piKronecker fun _ : Fin L ↦ V)
         (reducedBlockState M N L hL) := by
   rw [reducedBlockState, reducedBlockState,
     normalizedMPO_changePhysicalBasis_of_isometry V hV]
   change blockReducedState e L (N - L)
       (Matrix.reindex (blockReindexEquiv e N L hL)
         (blockReindexEquiv e N L hL)
-        (singleKrausMap (Matrix.tensorPower N V)
+        (singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V)
           (normalizedMPO M N))) = _
   rw [Matrix.reindex_singleKrausMap
       (blockReindexEquiv d N L hL) (blockReindexEquiv e N L hL),
@@ -172,14 +172,14 @@ theorem blockEntropy_changePhysicalBasis_of_isometry
         (by
           rw [← singleKrausMap_tensorPower_mpo]
           exact hM.mul_mul_conjTranspose_same
-            (Matrix.tensorPower N V)) =
+            (Matrix.piKronecker fun _ : Fin N ↦ V)) =
       blockEntropy M N L hL hM := by
   let hM' : (mpo (changePhysicalBasis V M) N).PosSemidef := by
     rw [← singleKrausMap_tensorPower_mpo]
-    exact hM.mul_mul_conjTranspose_same (Matrix.tensorPower N V)
+    exact hM.mul_mul_conjTranspose_same (Matrix.piKronecker fun _ : Fin N ↦ V)
   let hρ := reducedBlockState_isHermitian M N L hL hM
   let hρ' := Matrix.isHermitian_mul_mul_conjTranspose
-    (Matrix.tensorPower L V) hρ
+    (Matrix.piKronecker fun _ : Fin L ↦ V) hρ
   change vonNeumannEntropy
       (reducedBlockState (changePhysicalBasis V M) N L hL)
         (reducedBlockState_isHermitian
@@ -189,11 +189,11 @@ theorem blockEntropy_changePhysicalBasis_of_isometry
     V hV M N L hL
   calc
     _ = vonNeumannEntropy
-        (singleKrausMap (Matrix.tensorPower L V)
+        (singleKrausMap (Matrix.piKronecker fun _ : Fin L ↦ V)
           (reducedBlockState M N L hL)) hρ' :=
       vonNeumannEntropy_congr hred _ _
     _ = _ := vonNeumannEntropy_singleKraus_isometry
-      (Matrix.tensorPower L V) (tensorPower_isometry V hV L)
+      (Matrix.piKronecker fun _ : Fin L ↦ V) (tensorPower_isometry V hV L)
       (reducedBlockState M N L hL) hρ
 
 /-- An isometric physical inclusion does not change the mutual information
@@ -206,7 +206,7 @@ theorem mutualInfoChain_changePhysicalBasis_of_isometry
         (by
           rw [← singleKrausMap_tensorPower_mpo]
           exact hM.mul_mul_conjTranspose_same
-            (Matrix.tensorPower N V)) =
+            (Matrix.piKronecker fun _ : Fin N ↦ V)) =
       mutualInfoChain M N L hL hM := by
   simp only [mutualInfoChain]
   rw [blockEntropy_changePhysicalBasis_of_isometry V hV,

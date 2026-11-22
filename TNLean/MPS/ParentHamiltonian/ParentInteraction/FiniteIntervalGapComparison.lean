@@ -18,6 +18,9 @@ of that Hamiltonian. This is the local comparison needed to transfer a
 parent-Hamiltonian gap between admissible interaction ranges; see
 `docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex`.
 
+The comparison is stated for the Hamiltonian of the parent interaction on the open chain
+(`parentChainInteraction`) and the matrix of the local parent interaction.
+
 ## Comparison of parent interactions with the canonical projection
 
 A positive local interaction with the prescribed MPS kernel bounds, and is
@@ -113,22 +116,33 @@ end LinearMap.IsPositive
 
 namespace MPSTensor
 
-/-- If the open-chain kernel equals the local MPS space, its Hamiltonian and
-its parent projection bound one another by positive constants. -/
-theorem exists_pos_parentInteractionES_openParentHamiltonianES_comparison
+/-! ### The Hamiltonian of the parent interaction on the open chain -/
+
+section ChainInteraction
+
+open scoped MatrixOrder
+
+/-- If the kernel of the operator of the Hamiltonian of the parent interaction on the open chain
+is the local MPS space, that Hamiltonian and the local parent interaction bound one another, in
+the Loewner order, by positive constants. -/
+theorem exists_pos_toMatrix'_parentInteraction_hamiltonian_parentChainInteraction_comparison
     {d D R W : ℕ} (A : MPSTensor d D)
-    (hker : LinearMap.ker (openParentHamiltonianES A R W) = groundSpaceES A W) :
+    (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) =
+      groundSpaceES A W) :
     ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧
-      (κ : ℂ) • parentInteractionES A W ≤ openParentHamiltonianES A R W ∧
-      openParentHamiltonianES A R W ≤ (C : ℂ) • parentInteractionES A W := by
-  obtain ⟨κ, hκ, hLower⟩ :=
-    LinearMap.IsPositive.exists_pos_smul_orthogonal_ker_projection_le
-      (openParentHamiltonianES_isPositive A R W)
-  obtain ⟨C, hC, hUpper⟩ :=
-    LinearMap.IsPositive.exists_pos_le_smul_orthogonal_ker_projection
-      (openParentHamiltonianES_isPositive A R W)
-  exact ⟨κ, C, hκ, hC, by simpa only [hker, parentInteractionES] using hLower,
-    by simpa only [hker, parentInteractionES] using hUpper⟩
+      (κ : ℂ) • LinearMap.toMatrix' (parentInteraction A W) ≤
+        (parentChainInteraction A R W).hamiltonian ∧
+      (parentChainInteraction A R W).hamiltonian ≤
+        (C : ℂ) • LinearMap.toMatrix' (parentInteraction A W) := by
+  have hH := Matrix.isPositive_toEuclideanLin_iff.mpr
+    (posSemidef_hamiltonian_parentChainInteraction A R W)
+  obtain ⟨κ, hκ, hLower⟩ := LinearMap.IsPositive.exists_pos_smul_orthogonal_ker_projection_le hH
+  obtain ⟨C, hC, hUpper⟩ := LinearMap.IsPositive.exists_pos_le_smul_orthogonal_ker_projection hH
+  rw [hker, ← toEuclideanLin_toMatrix'_parentInteraction, ← map_smul] at hLower hUpper
+  exact ⟨κ, C, hκ, hC, Matrix.toEuclideanLin_le_toEuclideanLin_iff.mp hLower,
+    Matrix.toEuclideanLin_le_toEuclideanLin_iff.mp hUpper⟩
+
+end ChainInteraction
 
 end MPSTensor
 
@@ -140,25 +154,25 @@ open scoped ComplexOrder
 
 namespace MPSTensor
 
-/-- Every positive parent interaction is comparable in both directions to the
-canonical parent projection. The constants are strictly positive, including
+/-- Every positive parent interaction is comparable in both directions to the operator of the
+matrix of the canonical parent interaction. The constants are strictly positive, including
 when both operators vanish.
 
 Source: CPGSV21, arXiv:2011.12127, lines 1996--1999 and line 2170. -/
-theorem IsParentInteraction.exists_pos_comparison
+theorem IsParentInteraction.exists_pos_comparison_toEuclideanLin_toMatrix'_parentInteraction
     {d D R : ℕ} {A : MPSTensor d D}
     {h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)}
     (hh : IsParentInteraction A R h) :
     ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧
-      (κ : ℂ) • parentInteractionES A R ≤ h ∧
-      h ≤ (C : ℂ) • parentInteractionES A R := by
+      (κ : ℂ) • Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A R)) ≤ h ∧
+      h ≤ (C : ℂ) • Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A R)) := by
   obtain ⟨κ, hκ, hLower⟩ :=
     hh.isPositive.exists_pos_smul_orthogonal_ker_projection_le
   obtain ⟨C, hC, hUpper⟩ :=
     hh.isPositive.exists_pos_le_smul_orthogonal_ker_projection
-  exact ⟨κ, C, hκ, hC,
-    by simpa only [hh.ker_eq, parentInteractionES] using hLower,
-    by simpa only [hh.ker_eq, parentInteractionES] using hUpper⟩
+  rw [toEuclideanLin_toMatrix'_parentInteraction]
+  exact ⟨κ, C, hκ, hC, by simpa only [hh.ker_eq] using hLower,
+    by simpa only [hh.ker_eq] using hUpper⟩
 
 end MPSTensor
 

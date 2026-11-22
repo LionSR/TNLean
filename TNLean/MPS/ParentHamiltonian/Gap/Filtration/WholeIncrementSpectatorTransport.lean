@@ -51,31 +51,40 @@ theorem mem_range_leftBoundaryMapES_iff_rightFiber
 
 /-- An identification of the active open-chain kernel with the local ground
 space identifies the larger-volume prefix kernel with its right extension. -/
-theorem ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES
-    (A : MPSTensor d D) {R n r : ℕ} (hR : 0 < R)
-    (hker : LinearMap.ker (openParentHamiltonianES A R n) = groundSpaceES A n) :
-    LinearMap.ker (openPrefixParentHamiltonianES A R (n + r) n) =
+theorem ker_hamiltonian_prefix_parentChainInteraction_eq_range_leftBoundaryMapES
+    (A : MPSTensor d D) {R n r : ℕ}
+    (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R n).hamiltonian) =
+        groundSpaceES A n) :
+    LinearMap.ker
+        (Matrix.toEuclideanLin
+            ((parentChainInteraction A R (n + r)).restrict fun i ↦ i.val + R ≤ n).hamiltonian) =
       (leftBoundaryMapES A n r).range := by
   ext v
   have hconj : rightSpectatorConfigLinearIsometryEquiv d n r
-      (openPrefixParentHamiltonianES A R (n + r) n v) =
+      (Matrix.toEuclideanLin
+          ((parentChainInteraction A R (n + r)).restrict fun i ↦ i.val + R ≤ n).hamiltonian v) =
       ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-        (LinearMap.toContinuousLinearMap (openPrefixParentHamiltonianES A R n n))
+        (LinearMap.toContinuousLinearMap
+            (Matrix.toEuclideanLin
+                ((parentChainInteraction A R n).restrict fun i ↦ i.val + R ≤ n).hamiltonian))
         (rightSpectatorConfigLinearIsometryEquiv d n r v) := by
     simpa only [LinearMap.comp_apply, LinearEquiv.coe_coe, ContinuousLinearMap.coe_coe,
       LinearIsometryEquiv.coe_toLinearEquiv, LinearIsometryEquiv.symm_apply_apply] using
       LinearMap.congr_fun
-        (openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-          A (n := n) (r := r) (p := n) hR le_rfl)
+        (hamiltonian_prefix_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv
+          A (n := n) (r := r) (p := n) le_rfl)
         (rightSpectatorConfigLinearIsometryEquiv d n r v)
   rw [mem_range_leftBoundaryMapES_iff_rightFiber, LinearMap.mem_ker,
     ← (rightSpectatorConfigLinearIsometryEquiv d n r).map_eq_zero_iff, hconj]
   change (rightSpectatorConfigLinearIsometryEquiv d n r v) ∈
     LinearMap.ker (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-      (LinearMap.toContinuousLinearMap (openPrefixParentHamiltonianES A R n n))).toLinearMap ↔ _
+      (LinearMap.toContinuousLinearMap
+          (Matrix.toEuclideanLin
+              ((parentChainInteraction A R n).restrict fun i ↦ i.val + R ≤
+                  n).hamiltonian))).toLinearMap ↔ _
   rw [ContinuousLinearMap.mem_ker_rightFiberwiseMap_iff,
     LinearMap.coe_toContinuousLinearMap,
-    openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES, hker]
+    hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChainInteraction, hker]
 
 /-- Reassociation transports any length-indexed subspace to the same subspace
 in the equal ambient length. -/
@@ -94,16 +103,21 @@ theorem physicalReassocES_map_submodule
 
 /-- The reassociated right interval is the kernel of the parent interaction
 on the full suffix window. -/
-theorem range_reassocTailBoundaryMapES_eq_ker_openSuffixParentHamiltonianES
+theorem range_reassocTailBoundaryMapES_eq_ker_hamiltonian_restrict_parentChainInteraction
     (A : MPSTensor d D) {K L Q : ℕ} (hR : 0 < L + Q) :
     (reassocTailBoundaryMapES A K L Q).range =
-      LinearMap.ker (openSuffixParentHamiltonianES A (L + Q) (L + Q)
-        (K + L + Q) (K + L + Q)) := by
+      LinearMap.ker
+          (Matrix.toEuclideanLin
+              ((parentChainInteraction A (L + Q) (K + L + Q)).restrict fun i ↦ K + L + Q - (L + Q) ≤
+                  i.val ∧ i.val + (L + Q) ≤ K + L + Q).hamiltonian) := by
   rw [reassocTailBoundaryMapES, ContinuousLinearMap.toLinearMap_comp,
     LinearMap.range_comp, range_tailBoundaryMapES,
-    ← ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES A hR]
+    ← ker_hamiltonian_restrict_parentChainInteraction_eq_openChainTailGroundSpaceES A hR]
   exact physicalReassocES_map_submodule
-    (fun n ↦ LinearMap.ker (openSuffixParentHamiltonianES A (L + Q) (L + Q) n n)) K L Q
+    (fun n ↦ LinearMap.ker
+        (Matrix.toEuclideanLin
+            ((parentChainInteraction A (L + Q) n).restrict fun i ↦ n - (L + Q) ≤ i.val ∧ i.val +
+                (L + Q) ≤ n).hamiltonian)) K L Q
 
 /-- The active grouped martingale error is the three-interval projector
 error, provided the two prefix kernels are their boundary-condition spaces.
@@ -111,13 +125,17 @@ This is the projector identity underlying Nachtergaele's condition C3-prime,
 arXiv:cond-mat/9410110, lines 1095--1107. -/
 theorem norm_suffixProjection_comp_prefixDifference_eq_projector_defect
     (A : MPSTensor d D) {K L Q : ℕ} (hR : 0 < L + Q)
-    (hleft : LinearMap.ker (openParentHamiltonianES A (L + Q) (K + L)) =
+    (hleft : LinearMap.ker
+        (Matrix.toEuclideanLin (parentChainInteraction A (L + Q) (K + L)).hamiltonian) =
       groundSpaceES A (K + L))
-    (hfull : LinearMap.ker (openParentHamiltonianES A (L + Q) (K + L + Q)) =
+    (hfull : LinearMap.ker
+        (Matrix.toEuclideanLin (parentChainInteraction A (L + Q) (K + L + Q)).hamiltonian) =
       groundSpaceES A (K + L + Q)) :
     ‖LinearMap.toContinuousLinearMap
-      ((LinearMap.ker (openSuffixParentHamiltonianES A (L + Q) (L + Q)
-        (K + L + Q) (K + L + Q))).starProjection.toLinearMap.comp
+      ((LinearMap.ker
+          (Matrix.toEuclideanLin
+              ((parentChainInteraction A (L + Q) (K + L + Q)).restrict fun i ↦ K + L + Q - (L + Q) ≤
+                  i.val ∧ i.val + (L + Q) ≤ K + L + Q).hamiltonian)).starProjection.toLinearMap.comp
         (openPrefixGroundProjectionES A (L + Q) (K + L + Q) (K + L) -
           openPrefixGroundProjectionES A (L + Q) (K + L + Q) (K + L + Q)))‖ =
       ‖(groundSpaceES A (K + L + Q)).starProjection -
@@ -129,9 +147,9 @@ theorem norm_suffixProjection_comp_prefixDifference_eq_projector_defect
       ← reassocTailBoundaryMapES_comp_tailVirtualMapES A K L Q]
     exact LinearMap.range_comp_le_range _ _
   simp only [openPrefixGroundProjectionES,
-    ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES A hR hleft,
-    openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES, hfull,
-    ← range_reassocTailBoundaryMapES_eq_ker_openSuffixParentHamiltonianES A hR]
+    ker_hamiltonian_prefix_parentChainInteraction_eq_range_leftBoundaryMapES A hleft,
+    hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChainInteraction, hfull,
+    ← range_reassocTailBoundaryMapES_eq_ker_hamiltonian_restrict_parentChainInteraction A hR]
   exact norm_projection_difference _ _ _ hWV
 
 end MPSTensor

@@ -159,7 +159,7 @@ theorem exists_isMeasurementConversion_sum_blockIsometryState
   have hpair : u.toCircuit.IsImplementationOn KrausGate.ev {seed}
       (pairLayerOp hN hr fun _ => W) := by
     rw [← huop]
-    exact Circuit.isImplementationOn_of_kraus_eq (fun p ↦ u.kraus_eq_op p) _
+    exact u.isImplementationOn _
   have hall := hpair.comp himpl fun v hv => by
     rw [Set.mem_singleton_iff] at hv
     subst v

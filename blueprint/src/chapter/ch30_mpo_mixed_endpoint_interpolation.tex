@@ -99,7 +99,8 @@ physical-support coordinates and $0<\gamma<1$.
     \label{def:mpo_mixed_extended_support}
     \lean{MPSTensor.MPOSymmetry.insertedTwoSiteMap,
         MPSTensor.MPOSymmetry.insertedTwoSiteMap_apply,
-        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction}
+        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction,
+        MPSTensor.MPOSymmetry.toEuclideanLin_mixedEndpointParentInteraction}
     \leanok
     \uses{def:mpo_mixed_endpoint_tensor}
     For a tensor $B$ and an inserted matrix $W$, define
@@ -148,8 +149,8 @@ physical-support coordinates and $0<\gamma<1$.
         MPSTensor.MPOSymmetry.finrank_mixedEndpoint_extendedSupport,
         MPSTensor.MPOSymmetry.continuous_mixedEndpoint_extendedSupport_starProjection,
         MPSTensor.MPOSymmetry.continuous_mixedEndpointParentInteraction,
-        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_eq_parentInteractionES,
-        MPSTensor.MPOSymmetry.tendsto_mixedEndpoint_parentInteractionES}
+        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_eq_toMatrix'_parentInteraction,
+        MPSTensor.MPOSymmetry.tendsto_toMatrix'_parentInteraction_mixedEndpointInterpolation}
     \leanok
     \uses{def:mpo_mixed_extended_support,def:ground_space_es,
         def:parent_interaction}

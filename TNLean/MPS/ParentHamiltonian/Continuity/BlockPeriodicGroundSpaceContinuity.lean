@@ -22,7 +22,7 @@ Source: arXiv:1010.3732, Appendix A, lines 2575--2578; arXiv:2011.12127,
 Section IV.C, lines 2114--2129.
 -/
 
-open scoped BigOperators Matrix Topology
+open scoped BigOperators Matrix Topology ComplexOrder
 
 namespace MPSTensor
 
@@ -122,36 +122,42 @@ theorem continuous_blockPeriodicMpvMapES_family
   ext x σ
   simp [blockPeriodicMpvMapES, Fintype.linearCombination, Finset.sum_apply]
 
-/-- Above a simultaneous injectivity length, the periodic parent kernel
-is the range of the component-vector map, including at the shortest ring
-containing the interaction. Source: arXiv:2011.12127, Section IV.C,
-lines 2114--2129. -/
-theorem ker_parentHamiltonianES_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES
+/-! ### The parent interaction on the ring -/
+
+/-- Above a simultaneous injectivity length, the kernel of the Hamiltonian of the parent
+interaction on the ring is the range of the component-vector map, including at the shortest ring
+containing the interaction. Source: arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
+theorem ker_hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES
     [NeZero d] [∀ j, NeZero (dim j)]
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) {S R N : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
     (hR : S + 1 ≤ R) (hRN : R ≤ N) :
-    LinearMap.ker (parentHamiltonianES
-      (toTensorFromBlocks (d := d) (μ := μ) A) R N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin
+      (parentRingInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
       (blockPeriodicMpvMapES A N).range := by
+  have : NeZero N := ⟨by omega⟩
   rw [range_blockPeriodicMpvMapES,
-    ← parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES,
-    parentHamiltonianGroundSpaceES,
+    ← ManyBody.groundSpace_zero,
+    groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
     ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop μ A hμ hS hSpan hR hRN]
 
-/-- The periodic ground-space projection is continuous for a family with
-one common positive simultaneous injectivity length. The nonzero weights
-may vary arbitrarily, since they leave the periodic component span unchanged.
+/-- The projection onto the kernel of the Hamiltonian of the parent interaction on the ring is
+continuous for a family with one common positive simultaneous injectivity length. The nonzero
+weights may vary arbitrarily, since they leave the periodic component span unchanged.
 Source: arXiv:1010.3732, Appendix A, lines 2575--2578. -/
-theorem continuous_parentHamiltonianES_toTensorFromBlocks_kernelProjection_family
+theorem continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_kernelProjection_family
     {X : Type*} [TopologicalSpace X] [NeZero d] [∀ j, NeZero (dim j)]
     (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     {S R N : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     (hR : S + 1 ≤ R) (hRN : R ≤ N) :
-    Continuous fun x => (LinearMap.ker (parentHamiltonianES
-      (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N)).starProjection := by
+    haveI : NeZero N := ⟨by omega⟩;
+    Continuous fun x =>
+      (LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction
+        (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian)).starProjection := by
+  have : NeZero N := ⟨by omega⟩
   have hInj (x : X) : Function.Injective (blockPeriodicMpvMapES (A x) N) :=
     blockPeriodicMpvMapES_injective_of_wordTupleSpanTop (A x)
       (wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega : S ≤ N))
@@ -159,39 +165,38 @@ theorem continuous_parentHamiltonianES_toTensorFromBlocks_kernelProjection_famil
     (fun x => blockPeriodicMpvMapES (A x) N)
     (continuous_blockPeriodicMpvMapES_family A hA N) hInj
   have hKernel (x : X) :=
-    ker_parentHamiltonianES_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES
+    ker_hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES
       (μ x) (A x) (hμ x) hS (hSpan x) hR hRN
   simpa only [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection,
     ← hKernel] using hProj
 
-/-- At every fixed periodic volume containing an interaction longer than
-a common simultaneous injectivity length, a continuous compact family of
-block tensors has one positive parent-Hamiltonian gap bound. Nonzero
-weights need no continuity assumption. Source: arXiv:1010.3732,
+/-- At every fixed periodic volume containing an interaction longer than a common simultaneous
+injectivity length, a continuous compact family of block tensors has one positive gap above the
+kernel of the Hamiltonian of the parent interaction on the ring: every eigenvalue is `0` or at
+least the gap. Nonzero weights need no continuity assumption. Source: arXiv:1010.3732,
 Appendix A, lines 2575--2578. -/
-theorem exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_fixed_volume_of_wordTupleSpanTop
+theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_wordTupleSpanTop
     {X : Type*} [TopologicalSpace X] [NeZero d] [∀ j, NeZero (dim j)]
     (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     {S R N : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     {K : Set X} (hK : IsCompact K) (hR : S + 1 ≤ R) (hRN : R ≤ N) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K,
-      ∀ v ∈ (LinearMap.ker (parentHamiltonianES
-        (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N))ᗮ,
-        δ * ‖v‖ ≤ ‖parentHamiltonianES
-          (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N v‖ := by
+    haveI : NeZero N := ⟨by omega⟩;
+    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ ν : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+      (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian) ν →
+        ν = 0 ∨ (δ : ℂ) ≤ ν := by
+  have : NeZero N := ⟨by omega⟩
   have hSpanR (x : X) : WordTupleSpanTop (A x) R :=
     wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega : S ≤ R)
   have hGround := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
     μ A hμ hA R hSpanR
-  have hH := continuous_parentHamiltonianES_family_of_groundProjection
-    (fun x => toTensorFromBlocks (d := d) (μ := μ x) (A x)) hRN hGround
-  have hKernel := continuous_parentHamiltonianES_toTensorFromBlocks_kernelProjection_family
-    μ A hμ hA hS hSpan hR hRN
-  exact ContinuousLinearMap.exists_uniform_norm_gap_of_compact
-    (X := X) (E := EuclideanSpace ℂ (Cfg d N))
-    (fun x => LinearMap.toContinuousLinearMap
-      (parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N))
-    hH hKernel hK
+  have hKernel :=
+    continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_kernelProjection_family
+      μ A hμ hA hS hSpan hR hRN
+  simp only [← ManyBody.groundSpace_zero] at hKernel
+  exact hK.exists_uniform_forall_hasEigenvalue
+    (continuous_hamiltonian_parentRingInteraction_family_of_groundProjection
+      (fun x => toTensorFromBlocks (μ x) (A x)) hRN hGround)
+    (fun _ ↦ posSemidef_hamiltonian_parentRingInteraction _ _ _) hKernel
 
 end MPSTensor

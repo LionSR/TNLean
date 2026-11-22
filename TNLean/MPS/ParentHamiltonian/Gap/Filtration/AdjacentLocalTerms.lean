@@ -10,23 +10,23 @@ import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 # Adjacent open-chain excitation projections
 
 This file identifies, on the explicit three-site Hilbert space, the two
-complementary open-chain ground projections with the range-two local parent
-Hamiltonian terms based at sites \(0\) and \(1\).
+complementary open-chain ground projections with the range-two terms based at sites \(0\) and
+\(1\) of the parent interaction on the ring (`parentRingInteraction`).
 
 The coordinate identifications compare the open-chain `restrictLast` and tail
-`restrictFirst` slices with the cyclic restrictions used to define `localTermES`.
+`restrictFirst` slices with the cyclic restrictions of the terms.
 They yield the individual kernel identities before projection uniqueness is
 applied; no injectivity or nonzero bond-dimension assumption is needed.
 
 ## Main results
 
-* `MPSTensor.ker_localTermES_two_three_zero` identifies the site-\(0\) kernel
-  with the left open-chain ground space.
-* `MPSTensor.ker_localTermES_two_three_one` identifies the site-\(1\) kernel
-  with the tail open-chain ground space.
-* `MPSTensor.openChainLeftGroundSpaceES_orthogonal_starProjection_eq_localTermES`
-  and `MPSTensor.openChainTailGroundSpaceES_orthogonal_starProjection_eq_localTermES`
-  identify the complementary excitation projections with those local terms.
+* `MPSTensor.ker_toEuclideanLin_parentRingInteraction_term_two_three_zero` identifies the
+  site-\(0\) kernel with the left open-chain ground space.
+* `MPSTensor.ker_toEuclideanLin_parentRingInteraction_term_two_three_one` identifies the
+  site-\(1\) kernel with the tail open-chain ground space.
+* `MPSTensor.openChainLeftGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term`
+  and `MPSTensor.openChainTailGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term`
+  identify the complementary excitation projections with those terms.
 
 ## References
 
@@ -56,55 +56,6 @@ theorem tailRestrictₗ_one_eq_restrictFirst (u : Fin 1 → Fin d)
   funext k
   exact congrArg (Fin.cons (u 0) σ) (Fin.ext (by simp))
 
-/-! ### Individual three-site kernels -/
-
-/-- On the explicit three-site chain, the kernel of the range-two local term at
-site \(0\) is the left open-chain ground space.
-
-Source terminology: this is the ground condition on \(Λ_n\) inside \(Λ_{n+1}\) in
-Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
-theorem ker_localTermES_two_three_zero (B : MPSTensor d D) :
-    LinearMap.ker (localTermES B 2 (0 : Fin 3)) = openChainLeftGroundSpaceES B 2 := by
-  ext v
-  rw [LinearMap.mem_ker, mem_openChainLeftGroundSpaceES_iff,
-    localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES B (by omega)
-      (0 : Fin 3) v]
-  constructor
-  · intro hv j
-    have h := hv (fun _ => j)
-    rw [mem_groundSpaceES_iff] at h
-    rwa [restrictLast_eq_cyclicRestrictES_zero v (fun _ => j)]
-  · intro hv τ
-    rw [mem_groundSpaceES_iff]
-    rw [← restrictLast_eq_cyclicRestrictES_zero v τ]
-    exact hv (τ (Fin.last 2))
-
-/-- On the explicit three-site chain, the kernel of the range-two local term at
-site \(1\) is the one-site-prefix tail open-chain ground space.
-
-Source terminology: this is the tail condition on
-\(Λ_{n+1} \ Λ_{n-l}\) inside \(Λ_{n+1}\) in Nachtergaele,
-arXiv:cond-mat/9410110, eq. (2.4). -/
-theorem ker_localTermES_two_three_one (B : MPSTensor d D) :
-    LinearMap.ker (localTermES B 2 (1 : Fin 3)) = openChainTailGroundSpaceES B 1 2 := by
-  ext v
-  rw [LinearMap.mem_ker, mem_openChainTailGroundSpaceES_iff,
-    localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES B (by omega)
-      (1 : Fin 3) v]
-  constructor
-  · intro hv u
-    rw [tailRestrictₗ_one_eq_restrictFirst]
-    have h := hv (fun _ => u 0)
-    rw [mem_groundSpaceES_iff] at h
-    rwa [restrictFirst_eq_cyclicRestrictES_one (by omega) v (fun _ => u 0)]
-  · intro hv τ
-    rw [mem_groundSpaceES_iff]
-    rw [← restrictFirst_eq_cyclicRestrictES_one (by omega) v τ]
-    rw [← tailRestrictₗ_one_eq_restrictFirst (fun _ => τ 0)]
-    exact hv (fun _ => τ 0)
-
-/-! ### Complementary excitation projections -/
-
 private theorem range_eq_orthogonal_ker_of_isSymmetricProjection
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [FiniteDimensional ℂ E] {P : E →ₗ[ℂ] E} (hP : P.IsSymmetricProjection) :
@@ -112,36 +63,74 @@ private theorem range_eq_orthogonal_ker_of_isSymmetricProjection
   have horth : (LinearMap.range P)ᗮ = LinearMap.ker P := hP.isSymmetric.orthogonal_range
   rw [← horth, Submodule.orthogonal_orthogonal]
 
-/-- On the explicit three-site chain, the complementary left open-chain ground
-projection is the range-two local parent-Hamiltonian term at site \(0\).
+/-! ### The terms of the parent interaction on the ring of three sites -/
 
-The proof uses uniqueness of a symmetric projection from its range, after the
-site-\(0\) kernel has been identified. -/
-theorem openChainLeftGroundSpaceES_orthogonal_starProjection_eq_localTermES
+/-- On the explicit three-site chain, the kernel of the operator of the range-two term at site
+\(0\) of the parent interaction on the ring is the left open-chain ground space.
+
+Source terminology: this is the ground condition on \(Λ_n\) inside \(Λ_{n+1}\) in
+Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
+theorem ker_toEuclideanLin_parentRingInteraction_term_two_three_zero (B : MPSTensor d D) :
+    LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 0)) =
+      openChainLeftGroundSpaceES B 2 := by
+  ext v
+  rw [LinearMap.mem_ker, mem_openChainLeftGroundSpaceES_iff,
+    toEuclideanLin_parentRingInteraction_term_eq_zero_iff B (by norm_num : 2 ≤ 3)]
+  constructor
+  · intro hv j
+    have h := hv (fun _ => j)
+    rw [mem_groundSpaceES_iff] at h
+    rwa [restrictLast_eq_cyclicRestrictES_zero v (fun _ => j)]
+  · intro hv τ
+    rw [mem_groundSpaceES_iff, ← restrictLast_eq_cyclicRestrictES_zero v τ]
+    exact hv (τ (Fin.last 2))
+
+/-- On the explicit three-site chain, the kernel of the operator of the range-two term at site
+\(1\) of the parent interaction on the ring is the one-site-prefix tail open-chain ground space.
+
+Source terminology: this is the tail condition on \(Λ_{n+1} \ Λ_{n-l}\) inside \(Λ_{n+1}\) in
+Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
+theorem ker_toEuclideanLin_parentRingInteraction_term_two_three_one (B : MPSTensor d D) :
+    LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 1)) =
+      openChainTailGroundSpaceES B 1 2 := by
+  ext v
+  rw [LinearMap.mem_ker, mem_openChainTailGroundSpaceES_iff,
+    toEuclideanLin_parentRingInteraction_term_eq_zero_iff B (by norm_num : 2 ≤ 3)]
+  constructor
+  · intro hv u
+    rw [tailRestrictₗ_one_eq_restrictFirst]
+    have h := hv (fun _ => u 0)
+    rw [mem_groundSpaceES_iff] at h
+    rwa [restrictFirst_eq_cyclicRestrictES_one (by omega) v (fun _ => u 0)]
+  · intro hv τ
+    rw [mem_groundSpaceES_iff, ← restrictFirst_eq_cyclicRestrictES_one (by omega) v τ,
+      ← tailRestrictₗ_one_eq_restrictFirst (fun _ => τ 0)]
+    exact hv (fun _ => τ 0)
+
+/-- On the explicit three-site chain, the complementary left open-chain ground projection is the
+operator of the range-two term at site \(0\) of the parent interaction on the ring: both are
+symmetric projections with the same kernel. -/
+theorem openChainLeftGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term
     (B : MPSTensor d D) :
     (openChainLeftGroundSpaceES B 2)ᗮ.starProjection.toLinearMap =
-      localTermES B 2 (0 : Fin 3) := by
+      Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 0) := by
+  have hP := isSymmetricProjection_toEuclideanLin_parentRingInteraction_term B 2 (0 : Fin 3)
   apply (Submodule.isSymmetricProjection_starProjection
-    ((openChainLeftGroundSpaceES B 2)ᗮ)).ext (localTermES_isSymmetricProjection B 2 _)
-  rw [Submodule.range_starProjection]
-  rw [range_eq_orthogonal_ker_of_isSymmetricProjection
-    (localTermES_isSymmetricProjection B 2 (0 : Fin 3))]
-  rw [ker_localTermES_two_three_zero]
+    ((openChainLeftGroundSpaceES B 2)ᗮ)).ext hP
+  rw [Submodule.range_starProjection, range_eq_orthogonal_ker_of_isSymmetricProjection hP,
+    ker_toEuclideanLin_parentRingInteraction_term_two_three_zero]
 
-/-- On the explicit three-site chain, the complementary tail open-chain ground
-projection is the range-two local parent-Hamiltonian term at site \(1\).
-
-The proof uses uniqueness of a symmetric projection from its range, after the
-site-\(1\) kernel has been identified. -/
-theorem openChainTailGroundSpaceES_orthogonal_starProjection_eq_localTermES
+/-- On the explicit three-site chain, the complementary tail open-chain ground projection is the
+operator of the range-two term at site \(1\) of the parent interaction on the ring: both are
+symmetric projections with the same kernel. -/
+theorem openChainTailGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term
     (B : MPSTensor d D) :
     (openChainTailGroundSpaceES B 1 2)ᗮ.starProjection.toLinearMap =
-      localTermES B 2 (1 : Fin 3) := by
+      Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 1) := by
+  have hP := isSymmetricProjection_toEuclideanLin_parentRingInteraction_term B 2 (1 : Fin 3)
   apply (Submodule.isSymmetricProjection_starProjection
-    ((openChainTailGroundSpaceES B 1 2)ᗮ)).ext (localTermES_isSymmetricProjection B 2 _)
-  rw [Submodule.range_starProjection]
-  rw [range_eq_orthogonal_ker_of_isSymmetricProjection
-    (localTermES_isSymmetricProjection B 2 (1 : Fin 3))]
-  rw [ker_localTermES_two_three_one]
+    ((openChainTailGroundSpaceES B 1 2)ᗮ)).ext hP
+  rw [Submodule.range_starProjection, range_eq_orthogonal_ker_of_isSymmetricProjection hP,
+    ker_toEuclideanLin_parentRingInteraction_term_two_three_one]
 
 end MPSTensor

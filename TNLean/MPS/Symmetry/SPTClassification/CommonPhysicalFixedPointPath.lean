@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Symmetry.GappedPath.InteractionHamiltonianSymmetry
 import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalEndpoints
 import TNLean.MPS.Symmetry.SPTClassification.EmbeddedFixedPointParent
 import TNLean.MPS.Symmetry.GappedPath.PhysicalInteractionGap
@@ -78,14 +77,14 @@ theorem isometricInteractionExtension_commute_onSiteTensorPow {d m : ℕ}
     Commute (isometricInteractionExtension E A)
       (onSiteTensorPow 2 (U : Matrix (Fin m) (Fin m) ℂ)) := by
   have hInt : onSiteTensorPow 2 (U : Matrix (Fin m) (Fin m) ℂ) *
-      Matrix.tensorPower 2 E =
-      Matrix.tensorPower 2 E *
+      (Matrix.piKronecker fun _ : Fin 2 ↦ E) =
+      (Matrix.piKronecker fun _ : Fin 2 ↦ E) *
         onSiteTensorPow 2 (V : Matrix (Fin d) (Fin d) ℂ) := by
-    change Matrix.rectKronecker (fun _ : Fin 2 => (U : Matrix (Fin m) (Fin m) ℂ)) *
-      Matrix.rectKronecker (fun _ : Fin 2 => E) =
-      Matrix.rectKronecker (fun _ : Fin 2 => E) *
-        Matrix.rectKronecker (fun _ : Fin 2 => (V : Matrix (Fin d) (Fin d) ℂ))
-    rw [Matrix.rectKronecker_mul, Matrix.rectKronecker_mul]
+    change Matrix.piKronecker (fun _ : Fin 2 => (U : Matrix (Fin m) (Fin m) ℂ)) *
+      Matrix.piKronecker (fun _ : Fin 2 => E) =
+      Matrix.piKronecker (fun _ : Fin 2 => E) *
+        Matrix.piKronecker (fun _ : Fin 2 => (V : Matrix (Fin d) (Fin d) ℂ))
+    rw [Matrix.piKronecker_mul, Matrix.piKronecker_mul]
     simp only [hE]
   have hUnitary {r : ℕ} (R : Matrix.unitaryGroup (Fin r) ℂ) :
       onSiteTensorPow 2 (R : Matrix (Fin r) (Fin r) ℂ) ∈
@@ -98,12 +97,13 @@ theorem isometricInteractionExtension_commute_onSiteTensorPow {d m : ℕ}
 
 /-- The periodic translates of the normalized independent-bond interaction
 commute. Source: arXiv:1010.3732, Sections II.D.2 and II.F.2. -/
-theorem normalizedBondInteraction_translate_commute {D₀ D₁ N : ℕ} [NeZero N]
+theorem normalizedBondInteraction_translate_commute {D₀ D₁ N : ℕ}
     (γ : ℝ) (hN : 2 ≤ N) (i j : Fin N) :
     Commute (placeAlong (X := fun _ ↦ Fin ((D₀ + D₁) * (D₀ + D₁))) (ringWindow hN i)
         (normalizedBondInteraction D₀ D₁ γ))
       (placeAlong (X := fun _ ↦ Fin ((D₀ + D₁) * (D₀ + D₁))) (ringWindow hN j)
         (normalizedBondInteraction D₀ D₁ γ)) := by
+  have : NeZero N := ⟨by omega⟩
   let P := (incomingBondPerm (D₀ + D₁) N).permMatrix ℂ
   let η := normalizedBondInterpolationVector D₀ D₁ γ
   have hTranslated (k : Fin N) :
@@ -148,7 +148,8 @@ Section II.F.2, eq:sym:omega-gamma. -/
 theorem continuous_commonPhysicalNormalizedBondInteraction
     {D₀ D₁ : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (d₀ d₁ : ℕ) :
     Continuous (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁) := by
-  let E := Matrix.tensorPower 2 (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁)
+  let E := (Matrix.piKronecker fun _ : Fin 2 ↦ (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀
+      d₁))
   change Continuous (fun γ => 1 - E * (1 - normalizedBondInteraction D₀ D₁ γ) * Eᴴ)
   exact continuous_const.sub
     ((continuous_const.matrix_mul (continuous_const.sub
@@ -182,17 +183,17 @@ theorem isometricInteractionExtension_ker_le_of_ker_le {d m N : ℕ}
   have hyB := LinearMap.mem_ker.mp (hker hy)
   have hInt : Matrix.toEuclideanLin
       (Interaction.translationInvariant N (isometricInteractionExtension E B)).hamiltonian ∘ₗ
-        Matrix.toEuclideanLin (Matrix.tensorPower N E) =
-      Matrix.toEuclideanLin (Matrix.tensorPower N E) ∘ₗ
+        Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E) =
+      Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E) ∘ₗ
         Matrix.toEuclideanLin (Interaction.translationInvariant N B).hamiltonian := by
     simpa only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same] using
       congrArg Matrix.toEuclideanLin
         (hamiltonian_translationInvariant_isometricInteractionExtension_intertwiner E hE B hB hN)
   change Matrix.toEuclideanLin
     (Interaction.translationInvariant N (isometricInteractionExtension E B)).hamiltonian
-      (Matrix.toEuclideanLin (Matrix.tensorPower N E) y) = 0
+      (Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E) y) = 0
   calc
-    _ = Matrix.toEuclideanLin (Matrix.tensorPower N E)
+    _ = Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E)
         (Matrix.toEuclideanLin (Interaction.translationInvariant N B).hamiltonian y) :=
       LinearMap.congr_fun hInt y
     _ = 0 := by rw [hyB, map_zero]
@@ -205,18 +206,13 @@ theorem commonPhysicalNormalizedBondInteraction_zero_mem_spectrum
     (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩; (0 : ℂ) ∈ spectrum ℂ (Interaction.translationInvariant N
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian := by
-  have : NeZero N := ⟨by omega⟩
-  have hdet : Matrix.det
-      (Interaction.translationInvariant N (normalizedBondInteraction D₀ D₁ γ)).hamiltonian =
-        0 := by
-    simpa only [spectrum.mem_iff, map_zero, zero_sub, IsUnit.neg_iff,
-      Matrix.isUnit_iff_isUnit_det, isUnit_iff_ne_zero, not_not] using
-      (hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one h₀ h₁ γ hN).1
-  obtain ⟨ψ, hψ, hz⟩ := Matrix.exists_mulVec_eq_zero_iff.mpr hdet
+  obtain ⟨ψ, hψ, hψ0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot
+    (isGapped_hamiltonian_translationInvariant_normalizedBondInteraction h₀ h₁ γ hN).1
+  rw [mem_groundSpace_iff_mulVec, Complex.ofReal_zero, zero_smul] at hψ
   exact isometricInteractionExtension_zero_mem_spectrum _
     (commonFixedPointInclusion_isometry _ d₀ d₁) _
     (normalizedBondInteraction_isStarProjection h₀ h₁ γ).isSelfAdjoint.isHermitian
-    hN ψ hψ hz
+    hN ψ.ofLp (fun h ↦ hψ0 (WithLp.ofLp_injective 2 h)) hψ
 
 /-- The local bond comparison with a canonical parent persists in the
 common physical space. Source: arXiv:1010.3732, Section II.F.2,
@@ -236,11 +232,12 @@ theorem commonPhysicalNormalizedBondInteraction_le_parent {D₀ D₁ R : ℕ}
 /-- The enlarged normalized bond terms commute at every pair of sites.
 Source: arXiv:1010.3732, Sections II.D.2 and II.F.2. -/
 theorem commonPhysicalNormalizedBondInteraction_translate_commute
-    {D₀ D₁ N : ℕ} [NeZero N] (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N) (i j : Fin N) :
+    {D₀ D₁ N : ℕ} (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N) (i j : Fin N) :
     Commute (placeAlong (X := fun _ ↦ Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁))
         (ringWindow hN i) (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ))
       (placeAlong (X := fun _ ↦ Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁))
         (ringWindow hN j) (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)) := by
+  have : NeZero N := ⟨by omega⟩
   simpa only [physicalSpectatorBondInteraction_eq_isometricInteractionExtension,
     commonPhysicalNormalizedBondInteraction, normalizedBondInteraction] using
     physicalSpectatorBondInteraction_translate_commute (D₀ + D₁) d₀ d₁
@@ -249,18 +246,27 @@ theorem commonPhysicalNormalizedBondInteraction_translate_commute
 
 /-- The enlarged normalized bond Hamiltonians retain the uniform gap of
 one above zero. Source: arXiv:1010.3732, Section II.F.2, eq:sym:omega-gamma. -/
-theorem commonPhysicalNormalizedBondInteraction_spectrum_gap_one
+theorem isGapped_commonPhysicalNormalizedBondInteraction
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁)
     (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N) :
-    haveI : NeZero N := ⟨by omega⟩; ∀ z ∈ spectrum ℂ (Interaction.translationInvariant N
-      (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian,
-      0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
+    haveI : NeZero N := ⟨by omega⟩;
+    IsGapped (Interaction.translationInvariant N
+      (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian 0 1 := by
   have : NeZero N := ⟨by omega⟩
-  simpa only [physicalSpectatorBondInteraction_eq_isometricInteractionExtension,
-    commonPhysicalNormalizedBondInteraction, normalizedBondInteraction] using
-    physicalSpectatorBondInteraction_spectrum_gap_one (D₀ + D₁) d₀ d₁ _
-      (bondPenalty_reindex_isStarProjection _
-        (normalizedBondInterpolationVector_sum_normSq h₀ h₁ γ)) hN
+  refine ⟨?_, ?_⟩
+  · have hspec : (0 : ℂ) ∈ spectrum ℂ (Matrix.toEuclideanLin
+        (Interaction.translationInvariant N
+          (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian) := by
+      rw [Matrix.spectrum_toLpLin]
+      exact commonPhysicalNormalizedBondInteraction_zero_mem_spectrum h₀ h₁ d₀ d₁ γ hN
+    simpa only [ManyBody.groundSpace, Complex.ofReal_zero] using
+      Module.End.hasEigenvalue_iff.mp (Module.End.HasEigenvalue.of_mem_spectrum hspec)
+  · simpa only [physicalSpectatorBondInteraction_eq_isometricInteractionExtension,
+      commonPhysicalNormalizedBondInteraction, normalizedBondInteraction, Complex.ofReal_zero,
+      zero_add, Complex.ofReal_one] using
+      physicalSpectatorBondInteraction_eigenvalue_gap_one (D₀ + D₁) d₀ d₁ _
+        (bondPenalty_reindex_isStarProjection _
+          (normalizedBondInterpolationVector_sum_normSq h₀ h₁ γ)) hN
 
 /-- The enlarged periodic Hamiltonian has precisely the transported
 weighted matrix-unit MPS ground line. Source: arXiv:1010.3732,
@@ -272,7 +278,8 @@ theorem commonPhysicalNormalizedBondInteraction_groundSpace
     LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian) =
       Submodule.span ℂ {(Matrix.toEuclideanLin
-        (Matrix.tensorPower N (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁))
+        (Matrix.piKronecker fun _ : Fin N ↦ (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀
+            d₁))
         (WithLp.toLp 2 (mpv (N := N) (weightedMatrixUnitInterpolation D₀ D₁ γ))))} := by
   have : NeZero N := ⟨by omega⟩
   have : NeZero N := ⟨by omega⟩
@@ -288,10 +295,10 @@ MPS vector to that of the rotated tensor. Source context: arXiv:1010.3732,
 Section II.F.2, eq:1d-sym:jointsym. -/
 theorem toEuclideanLin_tensorPower_mpv_rotatePhysical {d m D N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) :
-    Matrix.toEuclideanLin (Matrix.tensorPower N E)
+    Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E)
         (WithLp.toLp 2 (mpv (N := N) A)) =
       WithLp.toLp 2 (mpv (N := N) (rotatePhysical E A)) := by
-  change WithLp.toLp 2 ((Matrix.rectKronecker fun _ : Fin N => E).mulVec (mpv A)) =
+  change WithLp.toLp 2 ((Matrix.piKronecker fun _ : Fin N => E).mulVec (mpv A)) =
     WithLp.toLp 2 (mpv (rotatePhysical E A))
   rw [mpv_eq_groundSpaceMap_one A N, mpv_eq_groundSpaceMap_one (rotatePhysical E A) N,
     groundSpaceMap_rotatePhysical_rectangular]
@@ -338,7 +345,7 @@ theorem commonPhysicalNormalizedBondInteraction_ker_le_parent
   exact isometricInteractionExtension_ker_le_of_ker_le _
     (commonFixedPointInclusion_isometry _ d₀ d₁) _ _
     (normalizedBondInteraction_isStarProjection h₀ h₁ γ)
-    (parentInteraction_toMatrix'_isStarProjection B 2).isSelfAdjoint.isHermitian hN
+    (isStarProjection_toMatrix'_parentInteraction B 2).isSelfAdjoint.isHermitian hN
     (normalizedBondInteraction_translate_commute γ hN)
     (commonPhysicalNormalizedBondInteraction_translate_commute d₀ d₁ γ hN) hker
 
@@ -362,7 +369,7 @@ theorem commonPhysicalParentInteraction_commute_onSite
     Commute (Interaction.translationInvariant N (LinearMap.toMatrix' (parentInteraction
       (rotatePhysical (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁) B)
         2))).hamiltonian
-      (Matrix.finKronecker fun _ : Fin N =>
+      (Matrix.piKronecker fun _ : Fin N =>
         (commonSptPhysicalAction ρ₀ ρ₁ h₀ h₁ U₀ U₁ g : Matrix _ _ ℂ)) := by
   have : NeZero N := ⟨by omega⟩
   let V := sptFixedPointUnitaryAction (ρ₀.directSum ρ₁)
@@ -381,7 +388,7 @@ theorem commonPhysicalParentInteraction_commute_onSite
     (SetLike.coe_mem (U g)) hCovA 2
   change Commute (Interaction.translationInvariant N
     (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian (onSiteTensorPow N Ug)
-  exact hamiltonian_translationInvariant_commute_onSiteTensorPow Ug _ hN hLocal
+  exact hamiltonian_translationInvariant_commute_onSiteTensorPow Ug _ hLocal
 
 /-- The enlarged normalized bond interaction commutes with the fixed
 two-site physical representation. Source: arXiv:1010.3732,
@@ -422,7 +429,7 @@ theorem commonPhysicalNormalizedBondInteraction_commute_onSite
     (U₁ : G →* Matrix.unitaryGroup (Fin d₁) ℂ) (g : G) (γ : ℝ) (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian
-      (Matrix.finKronecker fun _ : Fin N =>
+      (Matrix.piKronecker fun _ : Fin N =>
         (commonSptPhysicalAction ρ₀ ρ₁ h₀ h₁ U₀ U₁ g : Matrix _ _ ℂ)) := by
   have : NeZero N := ⟨by omega⟩
   let Ug : Matrix (Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁))
@@ -433,7 +440,7 @@ theorem commonPhysicalNormalizedBondInteraction_commute_onSite
   change Commute (Interaction.translationInvariant N
     (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian
     (onSiteTensorPow N Ug)
-  exact hamiltonian_translationInvariant_commute_onSiteTensorPow Ug _ hN hLocal
+  exact hamiltonian_translationInvariant_commute_onSiteTensorPow Ug _ hLocal
 
 /-- The normalized direct-sum bond interpolation is a symmetric uniformly
 gapped path in the common physical space, retaining both original physical
@@ -461,14 +468,9 @@ noncomputable def commonPhysicalNormalizedBondGappedPath
   norm_le_one γ _ :=
     (commonPhysicalNormalizedBondInteraction_isStarProjection hD₀ hD₁ d₀ d₁ γ).norm_le _
   continuous := (continuous_commonPhysicalNormalizedBondInteraction hD₀ hD₁ d₀ d₁).continuousOn
-  gap := by
-    refine ⟨1, zero_lt_one, ?_⟩
-    intro γ _ N hN
-    refine ⟨0, commonPhysicalNormalizedBondInteraction_zero_mem_spectrum
-      hD₀ hD₁ d₀ d₁ γ hN, ?_⟩
-    simpa only [zero_add] using
-      commonPhysicalNormalizedBondInteraction_spectrum_gap_one hD₀ hD₁ d₀ d₁ γ hN
-  symmetric γ _ g N hN :=
+  gap := ⟨1, zero_lt_one, fun γ _ _ hN ↦
+    ⟨0, isGapped_commonPhysicalNormalizedBondInteraction hD₀ hD₁ d₀ d₁ γ hN⟩⟩
+  symmetric γ _ g _ hN :=
     commonPhysicalNormalizedBondInteraction_commute_onSite ρ₀ ρ₁ h₀ h₁ U₀ U₁ g γ hN
 
 /-- For a fixed normalized bond, its ordered canonical-parent comparison
@@ -505,37 +507,28 @@ noncomputable def commonPhysicalBondCanonicalParentComparisonPath
   let A := commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ
   let C := rotatePhysical (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁) B
   have hA := commonPhysicalNormalizedBondInteraction_isStarProjection hD₀ hD₁ d₀ d₁ γ
-  have hC := parentInteraction_toMatrix'_isStarProjection C 2
+  have hC := isStarProjection_toMatrix'_parentInteraction C 2
   refine orderedGappedInteractionPath U A _
     (Matrix.nonneg_iff_posSemidef.mp hA.nonneg)
     (Matrix.nonneg_iff_posSemidef.mp hC.nonneg)
     (commonPhysicalNormalizedBondInteraction_le_parent d₀ d₁ γ B horder)
     (hA.norm_le _) (parentInteraction_toMatrix'_norm_le_one C 2)
-    ?_ ?_ ⟨1, zero_lt_one, fun N hN z hz =>
-      (commonPhysicalNormalizedBondInteraction_spectrum_gap_one hD₀ hD₁ d₀ d₁ γ hN z hz).2⟩
+    ?_ ⟨1, zero_lt_one, fun N hN ↦
+      isGapped_commonPhysicalNormalizedBondInteraction hD₀ hD₁ d₀ d₁ γ hN⟩
     (fun N hN g =>
       commonPhysicalNormalizedBondInteraction_commute_onSite ρ₀ ρ₁ h₀ h₁ U₀ U₁ g γ hN)
     (fun N hN g =>
       commonPhysicalParentInteraction_commute_onSite ρ₀ ρ₁ h₀ h₁ U₀ U₁ B g (hCov g) hN)
-  · intro N hN x hx
-    have : NeZero N := ⟨by omega⟩
-    have hxES : WithLp.toLp 2 x ∈ LinearMap.ker
-        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) := by
-      change WithLp.toLp 2 ((Interaction.translationInvariant N A).hamiltonian.mulVec x) = 0
-      rw [hx, WithLp.toLp_zero]
-    have hparent := commonPhysicalNormalizedBondInteraction_ker_le_parent
-      hD₀ hD₁ d₀ d₁ γ hN B (hker N hN) hxES
-    simpa only [LinearMap.mem_ker, Matrix.toEuclideanLin, Matrix.toLpLin_apply,
-      WithLp.ofLp_toLp, WithLp.toLp_eq_zero] using hparent
-  · intro N hN
-    have : NeZero N := ⟨by omega⟩
-    have hspec : (0 : ℂ) ∈ spectrum ℂ
-        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) := by
-      rw [Matrix.spectrum_toLpLin]
-      exact commonPhysicalNormalizedBondInteraction_zero_mem_spectrum hD₀ hD₁ d₀ d₁ γ hN
-    obtain ⟨x, hx⟩ :=
-      (Module.End.HasEigenvalue.of_mem_spectrum hspec).exists_hasEigenvector
-    exact ⟨x, hx.2, by simpa only [zero_smul] using hx.apply_eq_smul⟩
+  intro N hN x hx
+  have : NeZero N := ⟨by omega⟩
+  have hxES : WithLp.toLp 2 x ∈ LinearMap.ker
+      (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) := by
+    change WithLp.toLp 2 ((Interaction.translationInvariant N A).hamiltonian.mulVec x) = 0
+    rw [hx, WithLp.toLp_zero]
+  have hparent := commonPhysicalNormalizedBondInteraction_ker_le_parent
+    hD₀ hD₁ d₀ d₁ γ hN B (hker N hN) hxES
+  simpa only [LinearMap.mem_ker, Matrix.toEuclideanLin, Matrix.toLpLin_apply,
+    WithLp.ofLp_toLp, WithLp.toLp_eq_zero] using hparent
 
 /-- The first enlarged bond endpoint is joined to the canonical parent of
 the first fixed-point tensor in the active summand. Source: arXiv:1010.3732,

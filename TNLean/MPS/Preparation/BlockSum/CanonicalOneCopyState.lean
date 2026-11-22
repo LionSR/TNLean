@@ -47,7 +47,7 @@ theorem oneCopyFixedPointState_eq_tensorPower_mulVec_ghzState (h : IsBNTCanonica
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) (q M : ℕ)
     (p : Fin M → Fin P.totalDim × Fin P.totalDim) :
     h.oneCopyFixedPointState κ q M ((bondRegrouping M P.totalDim).symm p) =
-      (Matrix.tensorPower M (pairIsometry (h.basisFixedPointPair κ)) *ᵥ
+      ((Matrix.piKronecker fun _ : Fin M ↦ (pairIsometry (h.basisFixedPointPair κ))) *ᵥ
         ghzState (ghzAmplitude (oneCopyWeight P.copyWeights κ q M))) p :=
   nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState _ _ p
 

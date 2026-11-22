@@ -42,20 +42,20 @@
   coordinates" (2026-10-06) recorded the first two MPU copies, `siteProduct` in
   `MPU/FundamentalTheoremGates.lean` and `chainPower` in
   `MPU/Examples/ShiftStrictEquivalence.lean`; this entry supersedes it.
-- **Abstraction:** `Matrix.tensorPower` (`QICLean/Algebra/Kronecker/MatrixTensorPower.lean`, QICLean dependency) for one
-  factor at every site and `Matrix.rectKronecker` (`QICLean/Algebra/Kronecker/FiniteKroneckerProduct.lean`, QICLean dependency) for
-  site-dependent factors, with `Matrix.tensorPower_apply`,
-  `Matrix.IsUnitaryBetween.tensorPower` and `Matrix.tensorPower_mem_unitaryGroup`
+- **Abstraction:** `Matrix.piKronecker` (`QICLean/Algebra/Kronecker/MatrixTensorPower.lean`, QICLean dependency) for one
+  factor at every site and `Matrix.piKronecker` (`QICLean/Algebra/Kronecker/FiniteKroneckerProduct.lean`, QICLean dependency) for
+  site-dependent factors, with `Matrix.piKronecker_apply`,
+  `Matrix.IsUnitaryBetween.piKronecker` and `Matrix.piKronecker_mem_unitaryGroup`
   added. The local definitions and their duplicated lemmas are deleted; the lemmas
   that remain are renamed onto `tensorPower`.
 - **Notes:** The products of identity entries in the deleted proofs close with
   `simp [Finset.prod_boole, funext_iff]`, the idiom of the PEPS and circuit files.
   The shared layer still has three parallel definitions, `tensorPower`,
-  `rectKronecker` and `finKronecker`, which agree definitionally; merging them is a
+  `Matrix.piKronecker` and `Matrix.piKronecker`, which agree definitionally; merging them is a
   separate candidate.
 - **Remaining case:** `MPOTensor.sitewise_prod_conjTranspose_mul_self`
   (`MPS/MPDO/CyclicActiveSector/LemmaC5CaseI.lean`) still restates the isometry of a sitewise product in
-  entrywise form; it is a candidate for `Matrix.IsIsometry.tensorPower`.
+  entrywise form; it is a candidate for `Matrix.IsIsometry.piKronecker`.
 
 ### Disjoint summands of `Fin (m + n)` — promoted (2026-11-16)
 
@@ -2591,7 +2591,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `MPS/Symmetry/SPTClassification/WeightedMatrixUnitParentPath.lean`, and
   `MPS/Symmetry/SPTClassification/CommonPhysicalFixedPointPath.lean` (2026-10-02).
 - **Abstraction:** `MPSTensor.hamiltonian_translationInvariant_commute_onSiteTensorPow`
-  in `MPS/Symmetry/GappedPath/InteractionHamiltonianSymmetry.lean`.
+  in `MPS/ParentHamiltonian/Deformation/ParentHamiltonianSymmetry.lean`.
 - **Notes:** all four callers use the common lemma. The on-site matrix need
   not be unitary; local commutation alone gives commutation of the sum.
 
@@ -2696,7 +2696,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** prove an identity `f A B = g A B`, bilinear in operators `A`, `B` acting on
   sets of sites `S`, `S'`, by nested `Submodule.span_induction` on
   `A ∈ supportedOperators d S` and `B ∈ supportedOperators d S'`: a product-generator case
-  `finKronecker m`, `finKronecker m'` settled site by site, and eight zero, addition and
+  `Matrix.piKronecker m`, `Matrix.piKronecker m'` settled site by site, and eight zero, addition and
   scalar cases.
 - **Seen:** 4 occurrences in 3 files (2026-09-27): `commute_of_mem_supportedOperators`
   `expect_productVector_mul` and `trace_rectKronecker_mul_mul` in
@@ -4023,8 +4023,8 @@ three-plaquette output measurement, and the routed reunion measurement.
   rescaled form `MPSTensor.mulTensor_smul_complexOfRing` and
   `MPSTensor.actTensor_complexOfRing`, in
   `TNLean/MPS/FundamentalTheorem/Compression/RingEmbedding.lean`, beside
-  the entrywise image `MPSTensor.complexOfRing` of
-  `TNLean/Algebra/ComplexOfRing.lean` that they belong to.
+  the entrywise image `Matrix.complexOfRing` of
+  `QICLean/Algebra/Matrix/ComplexOfRing.lean` that they belong to.
 - **Notes:** the rescaled form is what the P6 fixed points need, since their
   tensors are integer matrices divided by a common denominator; the unscaled
   form is the instance at one. Each ring keeps only a one-line abbreviation of
@@ -4047,19 +4047,19 @@ three-plaquette output measurement, and the routed reunion measurement.
   `GoldenCompression.lean` and `EisensteinCertificates.lean`, and about thirty
   gauge-inverse rewrites across the CZX, Ising, multi-block, Fibonacci and
   `ℤ[ω]` examples.
-- **Abstraction:** `MPSTensor.complexOfRing_sub`, `_transpose`,
+- **Abstraction:** `Matrix.complexOfRing_sub`, `_transpose`,
   `_blockDiagonal'`, `_injective`, `_ne_zero` and
-  `MPSTensor.complexOfRing_mul_eq_one` in
-  `TNLean/Algebra/ComplexOfRing.lean`; `MPSTensor.evalWordR` with
+  `Matrix.complexOfRing_mul_eq_one` in
+  `QICLean/Algebra/Matrix/ComplexOfRing.lean`; `MPSTensor.evalWordR` with
   `MPSTensor.evalWord_complexOfRing`, and the certificates
   `MPSTensor.isNBlkInjective_of_complexOfRing_smul_single` and
   `MPSTensor.isNormal_of_complexOfRing_smul_single`, in
   `TNLean/MPS/FundamentalTheorem/Compression/RingEmbedding.lean`.
 - **Notes:** `complexOfGolden` and `complexOfEisenstein` are now same-name
-  `abbrev`s of `complexOfRing`, and `evalWordGolden` and `mulGoldenTensor` of
+  `abbrev`s of `Matrix.complexOfRing`, and `evalWordGolden` and `mulGoldenTensor` of
   `evalWordR` and `mulTensorR`, so their blueprint tags and statements stay;
   the ring-specific lemmas the proofs rewrite with are one-line instances. A
-  term such as `complexOfRing_mul_eq_one _ hG` elaborates against a goal
+  term such as `Matrix.complexOfRing_mul_eq_one _ hG` elaborates against a goal
   stated with the abbreviation, because the abbreviation unfolds reducibly;
   a forward `rw` with a general lemma does not match the abbreviated head, so
   rewriting keeps the ring-specific names. Kernel `decide` costs are unchanged,
@@ -4202,7 +4202,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/MPS/FundamentalTheorem/Compression/AssemblyLemmas.lean`, wrapping
   `right_intertwiner_eq_zero_of_certificate` and
   `left_intertwiner_eq_zero_of_certificate`.
-- **Notes:** the letters are given as images `complexOfRing f (BR i)` of
+- **Notes:** the letters are given as images `Matrix.complexOfRing f (BR i)` of
   matrices over a ring `R` with `f : R →+* ℂ` (usually `Int.castRingHom ℂ`),
   and the certificate is a matrix `N` over `R` with
   `N * (sitewiseEqMatrix BR CR).submatrix rows id = c • 1` and `f c ≠ 0`, where
@@ -4258,7 +4258,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   and scalars `u, v` with
   `Matrix.single i j 1 = u • (A a * A b) + v • (A c * A e)`, typically by
   `fin_cases` on `(i, j)` or through one table decided over the integers and
-  transported by `complexOfRing`. When more words or another length are
+  transported by `Matrix.complexOfRing`. When more words or another length are
   needed, use `MPSTensor.isNormal_of_complexOfRing_single` instead.
 
 ### inner product of combinations of orthogonal sequences — promoted
@@ -6753,10 +6753,10 @@ current counts and full location lists).
   `TNLean/MPS/Examples/CZX/CZXSquare.lean`, and
   `CZXCompression.czxPlusIdentity_conjMatrix` in
   `TNLean/MPS/Examples/CZX/CZXPlusIdentity.lean`.
-- **Abstraction:** the entrywise image `MPSTensor.complexOfRing` along a ring
-  homomorphism into the complex numbers, with `complexOfRing_mul`,
-  `complexOfRing_one` and `complexOfRing_neg` in
-  `TNLean/Algebra/ComplexOfRing.lean`, whose instantiation at the integer cast
+- **Abstraction:** the entrywise image `Matrix.complexOfRing` along a ring
+  homomorphism into the complex numbers, with `Matrix.complexOfRing_mul`,
+  `Matrix.complexOfRing_one` and `Matrix.complexOfRing_neg` in
+  `QICLean/Algebra/Matrix/ComplexOfRing.lean`, whose instantiation at the integer cast
   is the coercion `MPSTensor.complexOfInt` of
   `TNLean/Algebra/ComplexOfInt.lean` with its one-line `complexOfInt_mul`,
   `complexOfInt_one` and `complexOfInt_neg`, together with
@@ -8167,7 +8167,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** below the three-occurrence promotion threshold. The new construction
   reuses Mathlib's star-projection facts; no custom tactic is needed.
 
-### nonzero matrix eigenvectors lie orthogonal to the kernel — candidate
+### nonzero matrix eigenvectors lie orthogonal to the kernel — resolved (2026-11-21)
 - **Pattern:** use self-adjointness to identify the orthogonal complement
   of the kernel with the range, then exhibit the inverse eigenvalue times
   the eigenvector as a preimage.
@@ -8175,9 +8175,11 @@ spectral split → block extraction → MPV calculation → strict bounds
   `QICLean/ManyBody/Hamiltonian/KernelGap.lean` and
   `spectrum_separated_of_orthogonal_norm_gap` in
   `MPS/Symmetry/GappedPath/CanonicalInjectiveGappedPath.lean` (2026-10-02).
-- **Abstraction:** a nonzero-eigenvalue membership lemma for symmetric
-  linear maps would remove the repeated range argument.
-- **Notes:** two occurrences across two files; below the promotion threshold.
+- **Result:** both declarations are deleted. Their statements are QICLean's
+  `ManyBody.forall_hasEigenvalue_iff_re_inner` and
+  `ManyBody.forall_hasEigenvalue_iff_norm`, which carry the argument once;
+  the gap statements are now stated through eigenvalues or
+  `ManyBody.IsGapped`.
 
 ### Orthogonal projections are Hermitian — promoted (2026-10-02)
 
@@ -10194,7 +10196,7 @@ there is no need for a new tactic.
   result is scalar multiplication by the function at the corresponding energy.
 - **Seen:** Two private helper proofs, in
   `MPS/AreaLaw/GroundStateAlgorithm/GaussianFilter/ApproximateEnergyFilter.lean` and the companion module
-  `QICLean/Spectral/Gap/GroundProjection.lean`.
+  `QICLean/Spectral/Filter/Gaussian/SpectralGap.lean`.
 - **Abstraction:** A public Mathlib or QICLean theorem for the action of a real
   functional calculus on `IsHermitian.eigenvectorBasis` would replace both helpers.
 - **Notes:** The current spectral proof calls the helper once and then uses
@@ -10521,7 +10523,7 @@ there is no need for a new tactic.
 - **Pattern:** Restrict an identity-extended interaction to its own window,
   identify the unchanged outside coordinates, and recover the inserted word.
 - **Abstraction:** The latter module exposes
-  `cyclicRestrictES_periodicLocalInteractionES` for arbitrary local operators.
+  `cyclicRestrictES_toEuclideanLin_translationInvariant_term` for arbitrary local operators.
   The earlier canonical proof occurs before this module in the import order;
   sharing it would require moving the general definition before that proof.
 - **Decision:** Record the two occurrences; do not introduce a tactic or an
@@ -12603,3 +12605,27 @@ length-one word indices is needed.
   and the stationary equation.
 - **Candidate status:** Below the three-occurrence promotion threshold. Record
   a possible shared mathematical lemma; no abstraction or new tactic yet.
+
+### Eigenvalue-form gaps read from norm bounds on the kernel complement — candidate (2026-11-21)
+
+- **Seen:** `PeriodicShortGapContinuity.lean`, `CompactNormalParentGap.lean`,
+  `BlockPeriodicGroundSpaceContinuity.lean` and
+  `Martingale/CompactOpenIntervalGap.lean` (compact families);
+  `Martingale/CanonicalGapToInteractionGap.lean` and
+  `Martingale/ResidueCoverGapCriterion.lean` (some positive gap of one
+  positive semidefinite matrix); `Martingale/OpenHamiltonian.lean` and
+  `PEPS/ParentHamiltonian/Region/RegionFullGroundSpace.lean` (unit gap of an
+  orthogonal projection).
+- **Pattern:** Prove a bound `δ ‖v‖ ≤ ‖H v‖` on the orthogonal complement of
+  the kernel by the abstract operator lemma, then pass to the statement that
+  every eigenvalue is `0` or at least `δ` through
+  `ManyBody.forall_hasEigenvalue_iff_norm` (or to `ManyBody.IsGapped` through
+  `ManyBody.isGapped_zero_iff_norm`), and compare two constants by
+  `Or.imp_right` with `Complex.real_le_real`.
+- **Candidate status:** The repeated steps are statements about one matrix and
+  belong with `ManyBody.forall_hasEigenvalue_iff_norm` in QICLean: existence
+  of a positive gap of a positive semidefinite matrix, antitonicity of the
+  eigenvalue form in the gap, the compact-family gap in the eigenvalue form,
+  the unit gap of an orthogonal projection, and the characterization of
+  `IsGapped H 0 Δ` by a nonzero kernel and the eigenvalue form. No TNLean
+  lemma is added; the call sites are replaced when those lemmas exist.

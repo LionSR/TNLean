@@ -31,14 +31,14 @@
 
 \begin{lemma}[Three-site anticommutator embedding into cyclic adjacent pairs]
     \label{thm:three_site_anticommutator_cyclic_transport}
-    \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite}
-    \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
+    \lean{MPSTensor.re_inner_parentRingInteraction_term_adjacent_twoSite_forward_ge_of_threeSite}
+    \lean{MPSTensor.re_inner_parentRingInteraction_term_adjacent_twoSite_backward_ge_of_threeSite}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients, rem:cyclic_window_operators}
     Fix a tensor $A$ with physical dimension $d>0$ and a coefficient
-    $c\in\mathbb R$. For every chain length $N$ and site $i\in\Fin{N}$, set
-    $h_i^{(N)}:=h_{i,\mathrm{ES}}^{(N,2)}(A)$, the Euclidean range-two parent
-    term of this same tensor $A$ at $i$. Suppose that, for
+    $c\in\mathbb R$. For every chain length $N\geq1$ and site
+    $i\in\Fin{N}$, let $h_i^{(N)}$ be the range-two parent term of this
+    same tensor $A$ at $i$ on the ring of $N$ sites. Suppose that, for
     every three-site vector $w$,
     \begin{align}
         -c(\re\langle h_0^{(3)}w,w\rangle+\re\langle h_1^{(3)}w,w\rangle)
@@ -121,7 +121,7 @@
 
 \begin{lemma}[Quadratic-form estimate from the martingale condition]
     \label{lem:parent_hamiltonian_ordered_rowsum_quadratic}
-    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_ordered_local_term_bounds}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_quadratic_form_of_ordered_local_term_bounds}
     \leanok
     \uses{lem:ordered_projection_rowsum_reduction, def:parent_hamiltonian_es, rem:euclidean_local_projector_ingredients, lem:transported_es_local_projections}
     For a fixed chain length $N$, suppose the Hilbert-space local terms
@@ -156,14 +156,14 @@
 
 \begin{lemma}[Parent-Hamiltonian gap from ordered local row bounds]
     \label{lem:parent_hamiltonian_ordered_rowsum_gap}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_ordered_local_term_bounds}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_ordered_local_term_bounds}
     \leanok
     \uses{lem:parent_hamiltonian_ordered_rowsum_quadratic, lem:parent_hamiltonian_es_quadratic_reduction, lem:transported_es_local_projections}
     Assume uniformly for every $N\ge2L$ that the Hilbert-space local terms
     satisfy the ordered row-sum estimate (\ref{eq:ph_ordered_rowsum_estimate})
     with $\gamma=1/(4L)$. If $L>1$, then $1/(4L)>0$ and, for every
-    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
-    $\frac{1}{4L}\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
+    $N\ge2L$, every nonzero eigenvalue of
+    $H_{N,L}^{\mathrm{ES}}(A)$ is at least $\frac{1}{4L}$.
 \end{lemma}
 
 \begin{proof}
@@ -173,14 +173,13 @@
     $\gamma=1/(4L)$ for every admissible $N$. The positivity and kernel
     identification of the Hilbert-space Hamiltonian then allow
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} to convert this
-    quadratic-form estimate into the norm lower bound on the orthogonal
-    complement of the ground space.
+    quadratic-form estimate into the lower bound on the nonzero eigenvalues.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from the anticommutator martingale condition]
     \label{lem:parent_hamiltonian_anticommutator_rowsum_gap}
-    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_anticommutator_local_term_bounds}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_anticommutator_local_term_bounds}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_quadratic_form_of_anticommutator_local_term_bounds}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_anticommutator_local_term_bounds}
     \leanok
     \uses{lem:anticommutator_projection_rowsum_reduction, lem:parent_hamiltonian_es_quadratic_reduction, lem:transported_es_local_projections}
     Assume uniformly for every $N\ge2L$ that the Hilbert-space local terms satisfy
@@ -196,9 +195,8 @@
         \notag
     \end{align}
     for $i\ne j$, with row and column coefficient sums bounded by one. If
-    $L>1$, then $1/(4L)>0$ and, for every
-    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$,
-    $\frac{1}{4L}\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
+    $L>1$, then $1/(4L)>0$ and, for every $N\ge2L$, every nonzero eigenvalue of
+    $H_{N,L}^{\mathrm{ES}}(A)$ is at least $\frac{1}{4L}$.
 \end{lemma}
 
 \begin{proof}
@@ -206,14 +204,13 @@
     The fixed-chain anticommutator row-sum reduction gives the quadratic-form
     estimate with $\gamma=1/(4L)$ for every admissible $N$. The positivity and
     kernel identification of the Hilbert-space Hamiltonian then convert this
-    quadratic-form estimate into the norm lower bound on the orthogonal complement
-    of the ground space.
+    quadratic-form estimate into the lower bound on the nonzero eigenvalues.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian finite-overlap anticommutator reduction]
     \label{lem:parent_hamiltonian_finite_overlap_anticommutator_gap}
-    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_anticommutator}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_quadratic_form_of_finite_overlap_anticommutator}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_finite_overlap_anticommutator}
     \leanok
     \uses{lem:finite_overlap_projection_anticommutator_reduction, lem:parent_hamiltonian_es_quadratic_reduction, lem:transported_es_local_projections}
     Fix $L>1$ and set $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ that
@@ -230,8 +227,8 @@
         \bigr),
         \notag
     \end{align}
-    then the explicit norm lower bound with constant $1/(4L)$ follows for
-    vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+    then $1/(4L)>0$ and, for every $N\ge2L$, every nonzero eigenvalue of
+    $H_{N,L}^{\mathrm{ES}}(A)$ is at least $\frac{1}{4L}$.
 \end{lemma}
 
 \begin{proof}
@@ -240,12 +237,12 @@
     Hilbert-space local terms yields the quadratic-form estimate with
     $\gamma=1/(4L)$, and
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} converts it to the
-    norm lower bound.
+    lower bound on the nonzero eigenvalues.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian finite-overlap martingale quadratic reduction]
     \label{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic}
-    \lean{MPSTensor.parentHamiltonianES_quadratic_form_of_finite_overlap_ordered_cross_term}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_quadratic_form_of_finite_overlap_ordered_cross_term}
     \leanok
     \uses{lem:finite_overlap_projection_rowsum_reduction, def:parent_hamiltonian_es}
     For a fixed chain length $N$, let $m$ be a positive integer and let
@@ -324,7 +321,7 @@
 \begin{lemma}[Concrete non-overlap positivity for cyclic supports]
     \label{lem:cyclic_window_nonoverlap_positive}
     \lean{MPSTensor.CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap}
-    \lean{MPSTensor.localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap}
+    \lean{MPSTensor.re_inner_parentRingInteraction_term_nonneg_of_not_cyclicWindowsOverlap}
     \leanok
     \uses{lem:cyclic_window_support_offsets, def:cyclic_windows_overlap, lem:transported_es_nonoverlap_positive}
     If $L\le N$ and the cyclic supports $S_i$ and $S_j$ do not meet, then the
@@ -362,14 +359,14 @@
 
 \begin{lemma}[Parent-Hamiltonian gap from a finite-overlap martingale estimate]
     \label{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_ordered_cross_term}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_finite_overlap_ordered_cross_term}
     \leanok
     \uses{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_quadratic, lem:parent_hamiltonian_es_quadratic_reduction}
     Fix $L>1$ and set $m=2(L-1)$. Suppose uniformly for every $N\ge2L$ that
     the hypotheses of the fixed-chain finite-overlap martingale reduction hold
-    with $\gamma=1/(4L)$ and this value of $m$. Then $1/(4L)>0$, and the
-    explicit norm lower bound with constant $1/(4L)$ follows for vectors in
-    $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+    with $\gamma=1/(4L)$ and this value of $m$. Then $1/(4L)>0$ and, for
+    every $N\ge2L$, every nonzero eigenvalue of
+    $H_{N,L}^{\mathrm{ES}}(A)$ is at least $\frac{1}{4L}$.
 \end{lemma}
 
 \begin{proof}
@@ -377,12 +374,12 @@
     The fixed-chain finite-overlap reduction gives the required quadratic-form
     estimate for every admissible $N$.
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} converts that
-    estimate to the norm lower bound.
+    estimate to the lower bound on the nonzero eigenvalues.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from a cyclic-window martingale estimate]
     \label{lem:parent_hamiltonian_cyclic_window_ordered_cross_term_gap}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_ordered_cross_term}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_ordered_cross_term}
     \leanok
     \uses{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap, lem:cyclic_window_overlap_cardinality, lem:transported_es_local_projections, lem:cyclic_window_nonoverlap_positive}
     Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
@@ -394,8 +391,8 @@
         \re\langle h_{i,\mathrm{ES}}v,v\rangle.
         \label{eq:ph_cyclic_window_overlap_estimate}
     \end{align}
-    Then $1/(4L)>0$, and the explicit norm lower bound with constant $1/(4L)$
-    follows for vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+    Then $1/(4L)>0$ and, for every $N\ge2L$, every nonzero eigenvalue of
+    $H_{N,L}^{\mathrm{ES}}(A)$ is at least $\frac{1}{4L}$.
 \end{lemma}
 
 \begin{proof}
@@ -411,12 +408,12 @@
     non-negative ordered cross term. Combining these facts with the
     overlapping-window estimate (\ref{eq:ph_cyclic_window_overlap_estimate}) in
     Lemma~\ref{lem:parent_hamiltonian_finite_overlap_ordered_cross_term_gap}
-    yields the norm lower bound.
+    yields the lower bound on the nonzero eigenvalues.
 \end{proof}
 
 \begin{lemma}[Parent-Hamiltonian gap from a cyclic anticommutator estimate]
     \label{lem:parent_hamiltonian_cyclic_overlap_anticommutator_gap}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator}
     \leanok
     \uses{lem:parent_hamiltonian_finite_overlap_anticommutator_gap, lem:cyclic_window_overlap_cardinality, lem:cyclic_window_nonoverlap_positive, lem:cyclic_windows_overlap_symmetry}
     Fix $L>1$ and let $i\sim_L j$ mean that the cyclic supports of the
@@ -432,8 +429,8 @@
         \bigr).
         \notag
     \end{align}
-    Then the explicit norm lower bound with constant $1/(4L)$ follows for
-    vectors in $(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$.
+    Then $1/(4L)>0$ and, for every $N\ge2L$, every nonzero eigenvalue of
+    $H_{N,L}^{\mathrm{ES}}(A)$ is at least $\frac{1}{4L}$.
 \end{lemma}
 
 \begin{proof}
@@ -443,5 +440,5 @@
     overlapping off-diagonal windows in each row and column. If two cyclic
     supports do not meet, Lemma~\ref{lem:cyclic_window_nonoverlap_positive}
     gives non-negative ordered cross terms in both orders, so the
-    finite-overlap anticommutator reduction yields the norm lower bound.
+    finite-overlap anticommutator reduction yields the lower bound on the nonzero eigenvalues.
 \end{proof}

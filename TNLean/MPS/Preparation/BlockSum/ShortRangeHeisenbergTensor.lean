@@ -184,14 +184,16 @@ theorem groundSpaceES_shortRangeHeisenbergTensor_two_starProjection
     simp only [hwsym, map_sub, map_add, map_div₀, map_ofNat]
     ring
 
-/-- The canonical two-site parent interaction is the singlet projector
+/-- The matrix of the canonical two-site parent interaction acts as the singlet projector
 \((1-\mathrm{Swap})/2\). The swap exchanges the two physical sites.
 Source for the parent-interaction definition: arXiv:2011.12127,
 lines 1996--1999. -/
-theorem parentInteractionES_shortRangeHeisenbergTensor_two_apply
+theorem toEuclideanLin_toMatrix'_parentInteraction_shortRangeHeisenbergTensor_two_apply
     (v : EuclideanSpace ℂ (Cfg 2 2)) (σ : Cfg 2 2) :
-    parentInteractionES shortRangeHeisenbergTensor 2 v σ =
+    Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction shortRangeHeisenbergTensor 2))
+        v σ =
       (v σ - v (σ ∘ Fin.rev)) / 2 := by
+  rw [toEuclideanLin_toMatrix'_parentInteraction]
   change ((groundSpaceES shortRangeHeisenbergTensor 2)ᗮ.starProjection v) σ = _
   rw [Submodule.starProjection_orthogonal_val,
     groundSpaceES_shortRangeHeisenbergTensor_two_starProjection]

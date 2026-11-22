@@ -50,19 +50,16 @@ is recorded in
 
 \begin{lemma}[Open-chain gaps at every sufficient range]
     \label{thm:normal_open_gap_every_sufficient_range}
-    \lean{MPSTensor.exists_openParentHamiltonianES_uniform_gap_of_isNBlkInjective_all_lengths,
-        MPSTensor.exists_openParentHamiltonianES_uniform_gap_of_isNBlkInjective_of_lt,
-        MPSTensor.exists_openParentHamiltonianES_uniform_gap_of_isNormal_of_le,
-        MPSTensor.exists_openParentHamiltonianES_uniform_gap_of_isNormal_all_lengths}
+    \lean{MPSTensor.exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective_all_lengths,
+        MPSTensor.exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective_of_lt,
+        MPSTensor.exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNormal_of_le,
+        MPSTensor.exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNormal_all_lengths}
     \leanok
     \uses{lem:open_parent_range_comparison,
         thm:open_parent_hamiltonian_kernel_ground_space}
     Let $A$ be injective at a length $p>0$, and let $R>p$. There is
-    $\delta>0$ such that
-    \[
-        \delta\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,R}(A)v\rVert
-        \qquad(N\geq R,\ v\perp\ker H^{\mathrm{open}}_{N,R}(A)).
-    \]
+    $\delta>0$ such that, for every $N\geq R$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,R}(A)$ is at least $\delta$.
     In particular, for a normal tensor of bond dimension $D>0$, every
     fixed $R\geq D^4+1$ has this property. No normalization is required.
 \end{lemma}
@@ -98,8 +95,8 @@ is recorded in
     \label{thm:continuous_finite_window_parent_hamiltonian}
     \lean{MPSTensor.continuous_groundSpaceMapES_family,
         MPSTensor.continuous_groundSpaceES_starProjection_family,
-        MPSTensor.continuous_openParentHamiltonianES_family,
-        MPSTensor.continuous_parentHamiltonianES_family}
+        MPSTensor.continuous_hamiltonian_parentChainInteraction_family,
+        MPSTensor.continuous_hamiltonian_parentRingInteraction_family}
     \leanok
     \uses{def:ground_space_map_es, def:ground_space_es,
         def:open_parent_hamiltonian_es, def:parent_hamiltonian_es,
@@ -127,7 +124,7 @@ is recorded in
 
 \begin{lemma}[Local stability of a finite-window gap]
     \label{thm:open_parent_gap_continuity}
-    \lean{MPSTensor.eventually_openParentHamiltonianES_gap}
+    \lean{MPSTensor.eventually_hamiltonian_parentChainInteraction_gap}
     \leanok
     \uses{thm:kernel_gap_perturbation,
         thm:continuous_finite_window_parent_hamiltonian}
@@ -152,23 +149,32 @@ is recorded in
 
 \begin{lemma}[Comparison of open-chain ranges]
     \label{lem:open_parent_range_comparison}
-    \lean{MPSTensor.openParentHamiltonianES_comparison_of_local,
-        MPSTensor.openParentHamiltonianES_gap_of_long_gap_at_length,
-        MPSTensor.openParentHamiltonianES_gap_of_long_gap,
-        MPSTensor.openParentHamiltonianES_two_gap_of_long_gap}
+    \lean{MPSTensor.hamiltonian_chainTranslates_comparison_of_local,
+        MPSTensor.toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length,
+        LinearMap.IsPositive.norm_gap_of_scaled_comparison}
     \leanok
-    \uses{def:open_parent_hamiltonian_es, thm:open_parent_hamiltonian_es_c1}
-    Let $0<R\leq W\leq N$. If
-    $\kappa\,h_W\leq H^{\mathrm{open}}_{W,R}$ for the range-$W$ parent
-    interaction $h_W$ and some $\kappa>0$, then
-    $\kappa H^{\mathrm{open}}_{N,W}\leq(W-R+1)H^{\mathrm{open}}_{N,R}$. For a
-    tensor for which both open kernels equal $G_N^{\mathrm{ES}}$, a gap
-    $\gamma\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,W}v\rVert$ on
-    $(G_N^{\mathrm{ES}})^\perp$ gives
-    $\frac{\kappa\gamma}{W-R+1}\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,R}v\rVert$
-    on the same complement. The assertion may be used at one volume or
-    uniformly over every $N\geq W$. For a one-site injective tensor with
-    $R=2$ and $W\geq2$, the kernel hypotheses hold automatically.
+    \uses{def:open_parent_hamiltonian_es, def:open_local_interaction_sum,
+        thm:open_parent_hamiltonian_es_c1}
+    Let $R\leq W$, let $h\geq0$ be a matrix on $R$ sites, and write
+    $H^{\mathrm{open}}_N(h)$ for the sum of its translates over the windows
+    of $R$ consecutive sites of an open chain of $N$ sites. If
+    $\kappa\,h_W\leq H^{\mathrm{open}}_W(h)$ for the range-$W$ parent
+    interaction $h_W$ of a tensor $A$ and a real number $\kappa$, then
+    $\kappa H^{\mathrm{open}}_{N,W}(A)\leq(W-R+1)H^{\mathrm{open}}_N(h)$
+    for every $N$. If moreover $\kappa,\gamma>0$, both kernels at the volume
+    $N$ equal $G_N^{\mathrm{ES}}(A)$, and every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,W}(A)$ is at least $\gamma$, then every nonzero
+    eigenvalue of $H^{\mathrm{open}}_N(h)$ is at least
+    $\kappa\gamma/(W-R+1)$. There is no hypothesis on the kernel of $h$
+    itself. The transfer rests on the following fact for operators $P,Q$ on
+    a finite-dimensional inner-product space with $P\geq0$: if
+    $\kappa P\leq mQ$ with $\kappa,\gamma,m>0$, $\ker P=\ker Q$ and
+    $\gamma\|v\|\leq\|Pv\|$ for $v\perp\ker P$, then
+    $(\kappa\gamma/m)\|v\|\leq\|Qv\|$ for $v\perp\ker Q$. Taking for $h$ the range-$R$ parent interaction compares
+    $H^{\mathrm{open}}_{N,W}$ with $H^{\mathrm{open}}_{N,R}$; for a one-site
+    injective tensor with $R=2$ and $W\geq2$, the kernel hypotheses hold
+    automatically. This is a finite-window consequence of condition C1 and
+    the comparison argument of \cite{Nachtergaele1996Spectral}.
 \end{lemma}
 
 \begin{proof}
@@ -176,27 +182,29 @@ is recorded in
     \uses{thm:open_parent_hamiltonian_es_c1,
         thm:open_parent_hamiltonian_kernel_ground_space,
         lem:positive_gap_transfer_loewner}
-    Translating the local comparison to every window of $W$ consecutive sites
-    and summing shows that each range-$R$ term lies in at most $W-R+1$ windows.
-    Because both open Hamiltonians have kernel $G_N^{\mathrm{ES}}$, the
-    operator inequality transfers the gap.
+    Place the local comparison on every window of $W$ consecutive sites and
+    sum. Each range-$W$ parent term occurs once, and each translate of $h$
+    lies in at most $W-R+1$ of these windows, so positivity of $h$ gives the
+    operator inequality. Because both positive operators have kernel
+    $G_N^{\mathrm{ES}}$, the inequality transfers the lower bound on the
+    nonzero eigenvalues, divided by the window multiplicity.
 \end{proof}
 
 \begin{lemma}[Strict Knabe windows for injective tensors]
     \label{thm:injective_strict_knabe_window}
-    \lean{MPSTensor.exists_openParentHamiltonianES_two_uniform_gap_of_isInjective,
-        MPSTensor.exists_strict_openParentHamiltonianES_two_window_of_isInjective}
+    \lean{MPSTensor.exists_hamiltonian_parentChainInteraction_two_uniform_gap_of_isInjective,
+        MPSTensor.exists_strict_hamiltonian_parentChainInteraction_two_window_of_isInjective}
     \leanok
     \uses{thm:primitive_open_parent_hamiltonian_gap,
         lem:parent-finite-interval-comparison,
         lem:open_parent_range_comparison}
     Let $A$ be a one-site injective tensor of nonzero bond dimension. Then the
     open-chain Hamiltonian $H^{\mathrm{open}}_{N,2}(A)$ built from the
-    canonical two-site parent interaction has a positive gap above
-    $G_N^{\mathrm{ES}}(A)$, uniform in all sufficiently large $N$. In
-    particular, there are $m\geq2$ and $\gamma$ with $m\gamma>1$ such that
-    $\gamma\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{m+1,2}(A)v\rVert$ for all
-    $v\perp G_{m+1}^{\mathrm{ES}}(A)$.
+    canonical two-site parent interaction has all its nonzero eigenvalues
+    bounded below by one positive constant, uniformly in all sufficiently
+    large $N$. In particular, there are $m\geq2$ and $\gamma$ with
+    $m\gamma>1$ such that every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{m+1,2}(A)$ is at least $\gamma$.
 \end{lemma}
 
 \begin{proof}
@@ -225,18 +233,17 @@ is recorded in
 
 \begin{lemma}[Gap in a parameter neighborhood]
     \label{thm:knabe_gap_neighborhood}
-    \lean{MPSTensor.eventually_parentHamiltonianES_gap_of_strict_openGap}
+    \lean{MPSTensor.eventually_hamiltonian_parentRingInteraction_gap_of_strict_openGap}
     \leanok
     \uses{thm:open_parent_gap_continuity,
         thm:parent_hamiltonian_gap_from_open_knabe_block}
     Let $x\mapsto A_x$ be a continuous family of one-site injective tensors of
-    nonzero bond dimension, let $m\geq2$, and suppose
-    $\gamma\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{m+1,2}(A_{x_0})v\rVert$
-    for $v\perp G_{m+1}^{\mathrm{ES}}(A_{x_0})$ with $m\gamma>1$. Then there is
-    $\delta>0$ such that, for all $x$ near $x_0$ and all $N\geq2m$, the
-    periodic parent Hamiltonian $H_{N,2}(A_x)$ satisfies
-    $\delta\lVert v\rVert\leq\lVert H_{N,2}(A_x)v\rVert$ on the orthogonal
-    complement of its kernel.
+    nonzero bond dimension, let $m\geq2$, and suppose that every nonzero
+    eigenvalue of $H^{\mathrm{open}}_{m+1,2}(A_{x_0})$ is at least $\gamma$,
+    with $m\gamma>1$. Then there is
+    $\delta>0$ such that, for all $x$ near $x_0$ and all $N\geq2m$, every
+    nonzero eigenvalue of the periodic parent Hamiltonian $H_{N,2}(A_x)$ is
+    at least $\delta$.
 \end{lemma}
 
 \begin{proof}
@@ -258,28 +265,26 @@ is recorded in
         ManyBody.forall_hasEigenvalue_of_le,
         ManyBody.IsGapped.of_le}
     \leanok
-    If every eigenvalue $z$ of a Hermitian matrix $M$ has $\operatorname{Re}z=0$
-    or $\operatorname{Re}z\geq\delta$, then
-    $\delta\lVert x\rVert^2\leq\operatorname{Re}\langle x,Mx\rangle$ for all
-    $x\perp\ker M$. Conversely, if $M\geq0$ satisfies this quadratic-form bound,
-    then every eigenvalue $z$ of $M$ has $\operatorname{Re}z\geq0$, and
-    $\operatorname{Re}z=0$ or $\operatorname{Re}z\geq\delta$.
-    Let $0\leq A\leq C$ be matrices with $\ker A\subseteq\ker C$ and such a
-    gap $\delta$ for $A$. Then $\ker C=\ker A$, and every eigenvalue $z$ of
-    $C$ satisfies $\operatorname{Re}z=0$ or $\operatorname{Re}z\geq\delta$.
-    In particular, if $0\leq A\leq B$ with $\ker A\subseteq\ker B$ and
-    $t\geq0$, this applies to $C_t=A+t(B-A)$, which is positive semidefinite;
-    if $\ker A\neq0$, then $0$ is an eigenvalue of every $C_t$.
+    If every eigenvalue of a Hermitian matrix $M$ is $0$ or at least $\delta$,
+    then $\delta\lVert x\rVert^2\leq\operatorname{Re}\langle x,Mx\rangle$ for
+    all $x\perp\ker M$; for $M\geq0$ the converse holds. Let $0\leq A\leq C$
+    be matrices with $\ker A\subseteq\ker C$. Then $\ker C=\ker A$, and if
+    every eigenvalue of $A$ is $0$ or at least $\delta$, so is every
+    eigenvalue of $C$. If moreover $\ker A\neq0$, then $C$ is gapped above
+    the zero ground energy with gap $\delta$. For $0\leq A\leq B$ with
+    $\ker A\subseteq\ker B$ and $t\geq0$ this applies to $C=A+t(B-A)$.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Since $t(B-A)\geq0$, a vector annihilated by $C_t$ has
-    $\langle x,Ax\rangle=0$, hence $Ax=0$, and conversely $Ax=0$ forces $Bx=0$.
+    This is~\cite[``The spectrum above the kernel'' and ``A larger matrix
+        with the same kernel keeps the gap'']{QICLean2026Blueprint}.
+    Since $C-A\geq0$, a vector annihilated by $C$ has
+    $\langle x,Ax\rangle=0$, hence $Ax=0$; conversely $Ax=0$ forces $Cx=0$.
     On $(\ker A)^\perp$ one has
-    $\langle x,C_tx\rangle\geq\langle x,Ax\rangle\geq\delta\lVert x\rVert^2$. The
-    equivalence with the spectral statement follows by expanding $x$ in an
-    orthonormal eigenbasis of the Hermitian matrix.
+    $\langle x,Cx\rangle\geq\langle x,Ax\rangle\geq\delta\lVert x\rVert^2$.
+    The equivalence with the eigenvalue statement follows by expanding $x$ in
+    an orthonormal eigenbasis of the Hermitian matrix.
 \end{proof}
 
 \begin{lemma}[Uniform bounds from local bounds on a compact set]
@@ -327,15 +332,15 @@ is recorded in
 
 \begin{lemma}[Continuity of short periodic ground lines]
     \label{thm:periodic_short_gap_continuity}
-    \lean{MPSTensor.exists_uniform_parentHamiltonianES_two_gap_fixed_volume}
+    \lean{MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_two_gap_fixed_volume}
     \leanok
     \uses{thm:compact_kernel_gap, thm:continuous_injective_range_projector,
         thm:continuous_finite_window_parent_hamiltonian}
     Let $x\mapsto A_x$ be a continuous family of one-site injective tensors of
     nonzero bond dimension, let $S$ be a compact parameter set, and let
-    $N\geq2$. Then there is $\delta>0$ such that
-    $\delta\lVert v\rVert\leq\lVert H_{N,2}(A_x)v\rVert$ for all $x\in S$ and
-    all $v$ orthogonal to the kernel of $H_{N,2}(A_x)$.
+    $N\geq2$. Then there is $\delta>0$ such that, for all $x\in S$, zero is
+    an eigenvalue of $H_{N,2}(A_x)$ and every other eigenvalue is at least
+    $\delta$.
 \end{lemma}
 
 \begin{proof}
@@ -350,8 +355,8 @@ is recorded in
 
 \begin{theorem}[Uniform parent gap on compact parameter sets]
     \label{thm:compact_parent_gap}
-    \lean{MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths}
+    \lean{MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isInjective,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isInjective_all_lengths}
     \leanok
     \uses{thm:knabe_gap_neighborhood, thm:injective_strict_knabe_window,
         thm:periodic_short_gap_continuity, lem:compact_uniform_pos_nat_bounds}
@@ -362,10 +367,10 @@ is recorded in
     \cite{gap:spc11_uniform_gap_injective_scope}), let $x\mapsto A_x$ be a
     continuous family of one-site injective tensors of nonzero bond dimension,
     and let $S$ be a compact parameter set. Then there is $\delta>0$ such
-    that, for every $x\in S$, every $N\geq2$ and every
-    $v\perp\ker H_{N,2}(A_x)$,
+    that, for every $x\in S$ and every $N\geq2$,
     \begin{align}
-        \delta\lVert v\rVert & \leq\lVert H_{N,2}(A_x)v\rVert.
+        \text{zero is an eigenvalue of }H_{N,2}(A_x)
+        \text{ and every other eigenvalue is at least }\delta.
         \label{eq:compact_parent_gap}
     \end{align}
 \end{theorem}
@@ -383,30 +388,28 @@ is recorded in
 
 \begin{lemma}[Compact normal families at a fixed interaction range]
     \label{thm:compact_normal_parent_gap}
-    \lean{MPSTensor.exists_openParentHamiltonianES_uniform_gap_of_isNBlkInjective,
-        MPSTensor.exists_strict_openParentHamiltonianES_window_of_isNBlkInjective,
-        MPSTensor.eventually_parentHamiltonianES_gap_of_strict_openGap_of_isNBlkInjective,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNBlkInjective,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNBlkInjective_all_lengths,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_fixed_volume_of_isNBlkInjective,
+    \lean{MPSTensor.exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective,
+        MPSTensor.exists_strict_hamiltonian_parentChainInteraction_window_of_isNBlkInjective,
+        MPSTensor.eventually_hamiltonian_parentRingInteraction_gap_of_strict_openGap_of_isNBlkInjective,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNBlkInjective,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNBlkInjective_all_lengths,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_fixed_volume_of_isNBlkInjective,
         MPSTensor.isNBlkInjective_pow_four_of_isNormal,
         MPSTensor.periodicMpvLineMap_injective_of_isNBlkInjective,
-        MPSTensor.ker_parentHamiltonianES_eq_range_periodicMpvLineMap_of_isNBlkInjective,
-        MPSTensor.continuous_parentHamiltonianES_kernelProjection_family_of_isNBlkInjective,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNormal_all_lengths,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNBlkInjective_at_range,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_isNormal_at_range}
+        MPSTensor.ker_hamiltonian_parentRingInteraction_eq_range_periodicMpvLineMap_of_isNBlkInjective,
+        MPSTensor.continuous_hamiltonian_parentRingInteraction_kernelProjection_family_of_isNBlkInjective,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNormal_all_lengths,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNBlkInjective_at_range,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isNormal_at_range}
     \leanok
     \uses{thm:compact_kernel_gap, lem:open_parent_range_comparison,
         thm:parent_hamiltonian_gap_from_open_knabe_block}
     Let $x\mapsto A_x$ be continuous with nonzero fixed bond dimension,
     and let $S$ be compact. Suppose every $A_x$ is injective after the same
     positive length $p$. For every fixed interaction range $R>p$, there is
-    $\delta>0$ such that
-    \[
-        \delta\lVert v\rVert\leq\lVert H_{N,R}(A_x)v\rVert
-        \qquad(x\in S,\ N\geq R,\ v\perp\ker H_{N,R}(A_x)).
-    \]
+    $\delta>0$ such that, for every $x\in S$ and every $N\geq R$, zero is an
+    eigenvalue of $H_{N,R}(A_x)$ and every other eigenvalue is at least
+    $\delta$.
     If each $A_x$ is merely normal, the same assertion holds at the
     ranges $R\geq D^4+1$. No gap estimate or normalized gauge is
     assumed as a hypothesis.
@@ -451,11 +454,11 @@ is recorded in
         MPSTensor.blockPeriodicMpvMapES_apply,
         MPSTensor.blockPeriodicMpvMapES_eq_blockGroundSpaceMapES,
         MPSTensor.continuous_blockPeriodicMpvMapES_family,
-        MPSTensor.ker_parentHamiltonianES_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES,
+        MPSTensor.ker_hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES,
         MPSTensor.blockPeriodicMpvMapES_injective_of_wordTupleSpanTop,
         MPSTensor.range_blockPeriodicMpvMapES,
-        MPSTensor.continuous_parentHamiltonianES_toTensorFromBlocks_kernelProjection_family,
-        MPSTensor.exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_fixed_volume_of_wordTupleSpanTop}
+        MPSTensor.continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_kernelProjection_family,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_wordTupleSpanTop}
     \leanok
     \uses{thm:compact_kernel_gap}
     Let $x\mapsto(A_x^j)_j$ be a continuous family of blocks. At every
@@ -489,10 +492,10 @@ is recorded in
 
 \begin{lemma}[Compact families of several normal blocks]
     \label{thm:compact_block_parent_gap}
-    \lean{MPSTensor.eventually_parentHamiltonianES_toTensorFromBlocks_gap_of_strict_openGap,
-        MPSTensor.exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact,
-        MPSTensor.exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths,
-        MPSTensor.exists_uniform_block_parentHamiltonianES_gap_of_compact_isNormalTensor}
+    \lean{MPSTensor.eventually_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_strict_openGap,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_compact,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_all_lengths,
+        MPSTensor.exists_uniform_block_hamiltonian_parentRingInteraction_gap_of_compact_isNormalTensor}
     \leanok
     \uses{thm:block_ground_space_continuity,
         thm:cpsv_bnt_sharp_span_ambient_cap, thm:block_word_span_propagation,
@@ -500,12 +503,9 @@ is recorded in
         thm:parent_hamiltonian_gap_from_open_knabe_block}
     Under the preceding simultaneous spanning hypothesis, fix
     $R\geq S+1$. On a compact parameter set there is $\delta>0$ such
-    that the canonical periodic parent Hamiltonian of the weighted block
-    sum satisfies
-    \[
-        \delta\lVert v\rVert\leq\lVert H_{N,R}(x)v\rVert
-        \qquad(N\geq R,\ v\perp\ker H_{N,R}(x)).
-    \]
+    that, for every $N\geq R$, every nonzero eigenvalue of the canonical
+    periodic parent Hamiltonian $H_{N,R}(x)$ of the weighted block sum is at
+    least $\delta$.
     In particular, as for the two-site interaction of the initially blocked
     path in \cite[Appendix~A]{Schuch2011Phases} (see
     \cite{gap:spc11_uniform_gap_injective_scope}), for pairwise inequivalent
@@ -531,8 +531,8 @@ is recorded in
 
 \begin{lemma}[Continuous positive parent interactions]
     \label{thm:compact_positive_parent_interaction_gap}
-    \lean{MPSTensor.exists_uniform_pos_parentInteractionES_le_of_compact,
-        MPSTensor.exists_uniform_periodicInteractionHamiltonianES_gap_of_compact_canonical_gap,
+    \lean{MPSTensor.exists_uniform_pos_toMatrix'_parentInteraction_le_of_compact,
+        MPSTensor.exists_uniform_hamiltonian_translationInvariant_gap_of_compact_canonical_gap,
         MPSTensor.exists_uniform_parentInteraction_gap_of_compact_isNormal,
         MPSTensor.exists_uniform_block_parentInteraction_gap_of_compact,
         MPSTensor.exists_uniform_parentInteraction_gap_of_compact_isNormal_at_range}
@@ -542,9 +542,13 @@ is recorded in
     Suppose the local ground-space projection and a positive parent
     interaction $h_x$ depend continuously on $x$, with the same local
     kernel. On a compact parameter set there is $\kappa>0$ such that
-    $h_x\geq\kappa P_{G_R(x)^\perp}$. Consequently every canonical
-    periodic gap uniform in the parameter and chain length transfers to
-    the chosen interactions. This applies, in particular, to compact
+    $h_x\geq\kappa P_{G_R(x)^\perp}$. Consequently, if every nonzero
+    eigenvalue of the canonical periodic parent Hamiltonians is at least
+    $\gamma>0$ uniformly in the parameter and in all chain lengths from some
+    length on,
+    then every nonzero eigenvalue of the sums of the cyclic translates of
+    $h_x$ is at least a positive constant, uniform in the same sense.
+    This applies, in particular, to compact
     normal families at every fixed range $R\geq D^4+1$.
 \end{lemma}
 
@@ -565,7 +569,7 @@ is recorded in
         MPSTensor.span_wordTuple_rotatePhysical_eq_of_leftInverse,
         MPSTensor.wordTupleSpanTop_rotatePhysical_iff,
         MPSTensor.continuous_rotatePhysical_family,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_of_compact_physicalAction}
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_physicalAction}
     \leanok
     \uses{thm:compact_block_parent_gap}
     Let $(A^j)_j$ have simultaneous spanning length $S>0$. An invertible
@@ -594,12 +598,12 @@ is recorded in
         MPSTensor.positivePhysicalDeformation_one,
         MPSTensor.continuous_positivePhysicalDeformation,
         MPSTensor.positivePhysicalDeformation_isUnit,
-        MPSTensor.exists_uniform_parentHamiltonianES_gap_positivePhysicalDeformation,
-        MPSTensor.positiveDeformedParentInteractionES,
-        MPSTensor.isParentInteraction_positiveDeformedParentInteractionES,
-        MPSTensor.positiveDeformedParentInteractionES_eq,
+        MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_positivePhysicalDeformation,
+        MPSTensor.positiveDeformedParentInteraction,
+        MPSTensor.isParentInteraction_toEuclideanLin_positiveDeformedParentInteraction,
+        MPSTensor.positiveDeformedParentInteraction_eq,
         MPSTensor.continuous_deformedInteraction_positivePhysicalDeformation,
-        MPSTensor.exists_uniform_positiveDeformedParentInteractionES_gap}
+        MPSTensor.exists_uniform_positiveDeformedParentInteraction_gap}
     \leanok
     \uses{thm:physical_action_joint_span_compact_gap,
         thm:compact_positive_parent_interaction_gap}
@@ -700,9 +704,9 @@ is recorded in
         MPSTensor.isometricDeformationBlocks_one,
         MPSTensor.continuous_isometricDeformationBlocks,
         MPSTensor.wordTupleSpanTop_isometricDeformationBlocks_iff,
-        MPSTensor.isometricDeformationInteractionES,
-        MPSTensor.continuous_isometricDeformationInteractionES,
-        MPSTensor.isParentInteraction_isometricDeformationInteractionES,
+        MPSTensor.isometricDeformationInteraction,
+        MPSTensor.continuous_isometricDeformationInteraction,
+        MPSTensor.isParentInteraction_toEuclideanLin_isometricDeformationInteraction,
         MPSTensor.exists_uniform_isometricDeformation_parent_gap,
         MPSTensor.exists_uniform_isometricDeformation_interaction_gap,
         MPSTensor.exists_blocked_isometricDeformation_parent_gap_of_isNormalTensor}
@@ -807,7 +811,7 @@ is recorded in
 \begin{lemma}[Invariant local spaces and commuting physical deformations]
     \label{thm:parent_invariant_space_physical_deformation}
     \lean{MPSTensor.onSiteTensorPow_commute,
-        MPSTensor.parentInteractionES_commute_onSiteTensorPow_of_invariant,
+        MPSTensor.toMatrix'_parentInteraction_commute_onSiteTensorPow_of_invariant,
         MPSTensor.groundSpaceES_invariant_rotatePhysical_of_commute,
         MPSTensor.groundSpaceES_invariant_rotatePhysical_iff_of_commute,
         MPSTensor.deformedInteraction_commute_onSiteTensorPow}
@@ -838,18 +842,13 @@ is recorded in
 
 \begin{lemma}[On-site symmetry of open and periodic interaction sums]
     \label{thm:parent_interaction_sum_on_site_symmetry}
-    \lean{MPSTensor.periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow,
-        MPSTensor.periodicLocalInteractionES_commute_onSiteTensorPow,
-        MPSTensor.periodicInteractionHamiltonianES_commute_onSiteTensorPow,
-        MPSTensor.openInteractionHamiltonianES_commute_onSiteTensorPow}
+    \lean{MPSTensor.hamiltonian_chainTranslates_commute_onSiteTensorPow}
     \leanok
     Let $h$ be an interaction on $R$ sites, let $U$ be a physical
-    matrix, and suppose $[h,U^{\otimes R}]=0$. For every $N\geq R$,
-    each cyclic extension of $h$ commutes with $U^{\otimes N}$.
-    Consequently both the periodic sum and the sum over nonwrapping
-    windows commute with $U^{\otimes N}$. In configuration coordinates,
-    cyclic extension is the matrix obtained by placing $h$ on the
-    window and the identity on its complement.
+    matrix, and suppose $[h,U^{\otimes R}]=0$. The sum of the translates
+    of $h$ over the nonwrapping windows of the open chain commutes with
+    $U^{\otimes N}$ at every length $N$; the periodic sum is
+    Lemma~\ref{thm:spt_interaction_hamiltonian_symmetry}.
 \end{lemma}
 
 \begin{proof}
@@ -865,12 +864,12 @@ is recorded in
     \label{thm:isometric_deformation_supplied_parent_symmetry}
     \lean{MPSTensor.groundSpaceES_invariant_leftPolarBlocks,
         MPSTensor.groundSpaceES_invariant_isometricDeformationBlocks,
-        MPSTensor.parentInteractionES_isometricDeformationBlocks_commute,
-        MPSTensor.isometricDeformationInteractionES_commute,
-        MPSTensor.isometricDeformation_parentHamiltonianES_commute,
-        MPSTensor.isometricDeformation_openParentHamiltonianES_commute,
-        MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute,
-        MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute}
+        MPSTensor.toMatrix'_parentInteraction_isometricDeformation_commute,
+        MPSTensor.isometricDeformationInteraction_commute,
+        MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute,
+        MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute,
+        MPSTensor.isometricDeformation_hamiltonian_translationInvariant_commute,
+        MPSTensor.isometricDeformation_hamiltonian_chainTranslates_commute}
     \leanok
     Let $A=(A^j)_j$ be a finite block family, combined in direct sum with unit
     coefficients, and let $P=QW$ be its constructed joint left polar
@@ -1005,12 +1004,12 @@ is recorded in
 \begin{lemma}[Derived parent symmetry for one injective canonical block]
     \label{thm:injective_isometric_deformation_parent_symmetry}
     \lean{MPSTensor.groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric,
-        MPSTensor.parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetric,
-        MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetric,
-        MPSTensor.isometricDeformation_parentHamiltonianES_commute_of_isOnSiteSymmetric,
-        MPSTensor.isometricDeformation_openParentHamiltonianES_commute_of_isOnSiteSymmetric,
-        MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetric,
-        MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSymmetric}
+        MPSTensor.toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric,
+        MPSTensor.isometricDeformationInteraction_commute_of_isOnSiteSymmetric,
+        MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetric,
+        MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetric,
+        MPSTensor.isometricDeformation_hamiltonian_translationInvariant_commute_of_isOnSiteSymmetric,
+        MPSTensor.isometricDeformation_hamiltonian_chainTranslates_commute_of_isOnSiteSymmetric}
     \leanok
     Let $A$ be a one-site injective tensor of positive bond dimension,
     in the unital canonical orientation $\E_A(I)=I$. Let
@@ -1051,12 +1050,12 @@ is recorded in
 
 \begin{lemma}[Derived parent symmetry in trace-preserving normalization]
     \label{thm:injective_isometric_deformation_parent_symmetry_tp}
-    \lean{MPSTensor.parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetric_of_isTP,
-        MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetric_of_isTP,
-        MPSTensor.isometricDeformation_parentHamiltonianES_commute_of_isOnSiteSymmetric_of_isTP,
-        MPSTensor.isometricDeformation_openParentHamiltonianES_commute_of_isOnSiteSymmetric_of_isTP,
-        MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetric_of_isTP,
-        MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSymmetric_of_isTP}
+    \lean{MPSTensor.toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.isometricDeformationInteraction_commute_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.isometricDeformation_hamiltonian_translationInvariant_commute_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.isometricDeformation_hamiltonian_chainTranslates_commute_of_isOnSiteSymmetric_of_isTP}
     \leanok
     Let $A$ be a one-site injective tensor of positive bond dimension,
     with $\sum_i A_i^\dagger A_i=I$. Let $g\mapsto U_g$ be a unitary
@@ -1272,12 +1271,12 @@ is recorded in
 \begin{lemma}[Derived parent symmetry for several normal blocks]
     \label{thm:block_isometric_deformation_parent_symmetry}
     \lean{MPSTensor.groundSpaceES_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase,
-        MPSTensor.parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetricUpToPhase,
-        MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetricUpToPhase,
-        MPSTensor.isometricDeformation_parentHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase,
-        MPSTensor.isometricDeformation_openParentHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase,
-        MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase,
-        MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase}
+        MPSTensor.toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.isometricDeformationInteraction_commute_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.isometricDeformation_hamiltonian_translationInvariant_commute_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.isometricDeformation_hamiltonian_chainTranslates_commute_of_isOnSiteSymmetricUpToPhase}
     \leanok
     In the setting of
     Lemma~\ref{thm:block_isometric_deformation_symmetry_permutation},
@@ -1314,8 +1313,8 @@ is recorded in
 
 \begin{lemma}[Uniform open-chain gap along the positive affine deformation]
     \label{thm:positive_affine_physical_deformation_open_gap}
-    \lean{MPSTensor.exists_uniform_openParentHamiltonianES_gap_positivePhysicalDeformation,
-        MPSTensor.exists_uniform_positiveDeformedParentInteractionES_open_gap}
+    \lean{MPSTensor.exists_uniform_hamiltonian_parentChainInteraction_gap_positivePhysicalDeformation,
+        MPSTensor.exists_uniform_positiveDeformedParentInteraction_open_gap}
     \leanok
     Let $(A^j)_j$ be simultaneously one-site injective blocks of positive
     bond dimensions, let all block weights be nonzero, and let $Q>0$ on
@@ -1468,9 +1467,9 @@ is recorded in
     \label{thm:continuous_block_finite_window_parent_hamiltonian}
     \lean{MPSTensor.continuous_iSup_groundSpaceES_starProjection_of_injective_family,
         MPSTensor.continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family,
-        MPSTensor.continuous_parentInteractionES_toTensorFromBlocks_family,
-        MPSTensor.continuous_openParentHamiltonianES_toTensorFromBlocks_family,
-        MPSTensor.continuous_parentHamiltonianES_toTensorFromBlocks_family}
+        MPSTensor.continuous_toMatrix'_parentInteraction_toTensorFromBlocks_family,
+        MPSTensor.continuous_hamiltonian_parentChainInteraction_toTensorFromBlocks_family,
+        MPSTensor.continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_family}
     \leanok
     \uses{def:block_ground_space_map, def:open_parent_hamiltonian_es, def:parent_hamiltonian_es}
     Let $x\mapsto A_x^j$ be continuous for every block $j$, with fixed
@@ -1583,10 +1582,10 @@ is recorded in
 
 \begin{lemma}[Finite-volume continuity from the local projection]
     \label{thm:finite_window_continuity_from_ground_projection}
-    \lean{MPSTensor.continuous_parentInteractionES_family_of_groundProjection,
-        MPSTensor.continuous_localTermES_family_of_groundProjection,
-        MPSTensor.continuous_openParentHamiltonianES_family_of_groundProjection,
-        MPSTensor.continuous_parentHamiltonianES_family_of_groundProjection}
+    \lean{MPSTensor.continuous_toMatrix'_parentInteraction_family_of_groundProjection,
+        MPSTensor.continuous_parentRingInteraction_term_family_of_groundProjection,
+        MPSTensor.continuous_hamiltonian_parentChainInteraction_family_of_groundProjection,
+        MPSTensor.continuous_hamiltonian_parentRingInteraction_family_of_groundProjection}
     \leanok
     \uses{def:ground_space_es, def:open_parent_hamiltonian_es, def:parent_hamiltonian_es}
     Suppose that the orthogonal projection onto $G_L(A_x)$ is continuous

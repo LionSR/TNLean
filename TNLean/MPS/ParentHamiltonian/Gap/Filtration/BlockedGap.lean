@@ -18,10 +18,13 @@ tensor. No comparison with an interaction on the original unblocked chain is mad
 
 ## Main results
 
-* `Kraus.HasComplementaryFixedPointGap.exists_blockTensor_parentHamiltonianES_gap_eighth` chooses a
-  physical block length and proves the explicit gap constant \(1/8\) for the blocked tensor.
-* `Kraus.HasComplementaryFixedPointGap.exists_blockTensor_parentHamiltonianES_gapped` proves a
-  uniform positive gap for the same blocked range-two parent Hamiltonians.
+In the namespace `Kraus.HasComplementaryFixedPointGap`:
+
+* `exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth` chooses a physical block
+  length and proves the explicit gap constant \(1/8\) for the Hamiltonian of the range-two
+  parent interaction on the ring of the blocked tensor.
+* `exists_blockTensor_hamiltonian_parentRingInteraction_gapped` proves a uniform positive gap
+  for the same blocked range-two parent Hamiltonians.
 
 ## References
 
@@ -308,17 +311,15 @@ private theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_an
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
-        ∀ (N : ℕ) (_hN : 2 * 2 ≤ N) (i j : Fin N),
+        ∀ (N : ℕ) (hN : 2 * 2 ≤ N) (i j : Fin N),
           j ∈ Finset.univ.erase i → cyclicWindowsOverlap N 2 i j →
             ∀ v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N),
-              - (1 - ((1 : ℝ) / (4 * (2 : ℝ)))) *
-                  (((2 * (2 - 1) : ℕ) : ℝ)⁻¹) *
-                  ((⟪localTermES (blockTensor A p) 2 i v, v⟫_ℂ).re +
-                    (⟪localTermES (blockTensor A p) 2 j v, v⟫_ℂ).re) ≤
-                (⟪localTermES (blockTensor A p) 2 i v,
-                    localTermES (blockTensor A p) 2 j v⟫_ℂ).re +
-                  (⟪localTermES (blockTensor A p) 2 j v,
-                    localTermES (blockTensor A p) 2 i v⟫_ℂ).re := by
+              haveI : NeZero N := ⟨by omega⟩;
+              let h (k : Fin N) := Matrix.toEuclideanLin
+                ((parentRingInteraction (blockTensor A p) 2 N).term k);
+              - (1 - ((1 : ℝ) / (4 * (2 : ℝ)))) * (((2 * (2 - 1) : ℕ) : ℝ)⁻¹) *
+                  ((⟪h i v, v⟫_ℂ).re + (⟪h j v, v⟫_ℂ).re) ≤
+                (⟪h i v, h j v⟫_ℂ).re + (⟪h j v, h i v⟫_ℂ).re := by
   obtain ⟨p, hp, hInj, hDefect⟩ :=
     hP.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths hρ
   let B := blockTensor A p
@@ -330,14 +331,11 @@ private theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_an
           (groundSpaceES B 3).starProjection‖ ≤ 7 / 16 := by
     rw [blockTensor_threeSite_openChain_defect_norm_eq A p]
     simpa only [B, Nat.add_assoc] using hDefect
+  let T₀ := Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 0)
+  let T₁ := Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 1)
   have hThree : ∀ w : EuclideanSpace ℂ (Cfg (blockPhysDim d p) 3),
-      -(7 / 16 : ℝ) *
-          ((⟪localTermES B 2 (0 : Fin 3) w, w⟫_ℂ).re +
-            (⟪localTermES B 2 (1 : Fin 3) w, w⟫_ℂ).re) ≤
-        (⟪localTermES B 2 (0 : Fin 3) w,
-            localTermES B 2 (1 : Fin 3) w⟫_ℂ).re +
-          (⟪localTermES B 2 (1 : Fin 3) w,
-            localTermES B 2 (0 : Fin 3) w⟫_ℂ).re := by
+      -(7 / 16 : ℝ) * ((⟪T₀ w, w⟫_ℂ).re + (⟪T₁ w, w⟫_ℂ).re) ≤
+        (⟪T₀ w, T₁ w⟫_ℂ).re + (⟪T₁ w, T₀ w⟫_ℂ).re := by
     intro w
     have hAnti := re_inner_openChain_anticommutator_ge_neg_of_groundProjection_defect
       (A := B) (K := 1) (L₀ := 1) (Kraus.isNBlkInjective_one_of_isInjective hBInj)
@@ -350,92 +348,79 @@ private theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_an
           (openChainLeftGroundSpaceES B 2)ᗮ.starProjection.toLinearMap w⟫_ℂ).re +
         (⟪(openChainLeftGroundSpaceES B 2)ᗮ.starProjection.toLinearMap w,
           (openChainTailGroundSpaceES B 1 2)ᗮ.starProjection.toLinearMap w⟫_ℂ).re at hAnti
-    rw [openChainTailGroundSpaceES_orthogonal_starProjection_eq_localTermES,
-      openChainLeftGroundSpaceES_orthogonal_starProjection_eq_localTermES] at hAnti
-    have hsum :
-        (⟪localTermES B 2 (1 : Fin 3) w, w⟫_ℂ).re +
-            (⟪localTermES B 2 (0 : Fin 3) w, w⟫_ℂ).re =
-          (⟪localTermES B 2 (0 : Fin 3) w, w⟫_ℂ).re +
-            (⟪localTermES B 2 (1 : Fin 3) w, w⟫_ℂ).re := add_comm _ _
-    have hcross :
-        (⟪localTermES B 2 (1 : Fin 3) w, localTermES B 2 (0 : Fin 3) w⟫_ℂ).re +
-            (⟪localTermES B 2 (0 : Fin 3) w, localTermES B 2 (1 : Fin 3) w⟫_ℂ).re =
-          (⟪localTermES B 2 (0 : Fin 3) w, localTermES B 2 (1 : Fin 3) w⟫_ℂ).re +
-            (⟪localTermES B 2 (1 : Fin 3) w, localTermES B 2 (0 : Fin 3) w⟫_ℂ).re :=
-      add_comm _ _
-    rw [hsum, hcross] at hAnti
-    exact hAnti
-  have hAnti : ∀ (N : ℕ) (_hN : 2 * 2 ≤ N) (i j : Fin N),
-      j ∈ Finset.univ.erase i → cyclicWindowsOverlap N 2 i j →
-        ∀ v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N),
-          - (1 - ((1 : ℝ) / (4 * (2 : ℝ)))) *
-              (((2 * (2 - 1) : ℕ) : ℝ)⁻¹) *
-              ((⟪localTermES B 2 i v, v⟫_ℂ).re +
-                (⟪localTermES B 2 j v, v⟫_ℂ).re) ≤
-            (⟪localTermES B 2 i v, localTermES B 2 j v⟫_ℂ).re +
-              (⟪localTermES B 2 j v, localTermES B 2 i v⟫_ℂ).re := by
-    intro N hN i j hji hOverlap v
-    have hne : j ≠ i := (Finset.mem_erase.mp hji).1
-    norm_num only [Nat.reduceSub, Nat.reduceMul, Nat.cast_ofNat, invOf_eq_inv]
-    rcases cyclicWindowsOverlap_twoSite_cases hOverlap with rfl | hForward | hBackward
-    · exact False.elim (hne rfl)
-    · subst j
-      exact re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite
-        hThree (by omega) i v
-    · subst i
-      simpa only [add_comm] using
-        re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite
-          hThree (by omega) j v
-  exact ⟨p, hp, hInj, hAnti⟩
-
-/-- A primitive MPS tensor with a positive-definite fixed point admits
-physical blocking whose range-two blocked parent Hamiltonian has gap constant \(1/8\).
-
-The coefficient \(7/16\) is first obtained for the whole-increment C3-prime
-projector defect on three original blocks. Explicit blocked Hilbert-space transport
-turns it into the adjacent three-site anticommutator estimate. The forward and
-backward cyclic transports then cover every overlapping off-diagonal pair, and the
-finite-overlap martingale reduction gives the displayed bound.
-
-The conclusion concerns only `blockTensor A p`; it makes no comparison with an
-original-site parent interaction. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_parentHamiltonianES_gap_eighth
-    [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
-    ∃ p : ℕ,
-      0 < p ∧ Kraus.IsNBlkInjective A p ∧
-        ∀ (N : ℕ) (_hN : 4 ≤ N)
-          (v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N)),
-          v ∈ (parentHamiltonianGroundSpaceES (blockTensor A p) 2 N)ᗮ →
-            (1 / 8 : ℝ) * ‖v‖ ≤
-              ‖parentHamiltonianES (blockTensor A p) 2 N v‖ := by
-  obtain ⟨p, hp, hInj, hAnti⟩ := hP.exists_blockTensor_anticommutator hρ
-  let B := blockTensor A p
-  obtain ⟨_, hGap⟩ :=
-    parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator
-      B 2 (by omega) hAnti
+    rw [openChainTailGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term,
+      openChainLeftGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term] at hAnti
+    linarith
   refine ⟨p, hp, hInj, ?_⟩
-  intro N hN v hv
-  have hγ : (1 / 8 : ℝ) = 1 / (4 * (2 : ℝ)) := by norm_num
-  rw [hγ]
-  exact hGap N hN v hv
-
-/-- A primitive MPS tensor with a positive-definite fixed point admits
-physical blocking whose range-two blocked parent Hamiltonian has a uniform positive gap.
-
-The conclusion concerns only `blockTensor A p`; it makes no comparison with an
-original-site parent interaction. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_parentHamiltonianES_gapped
-    [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
-    ∃ p : ℕ,
-      0 < p ∧ Kraus.IsNBlkInjective A p ∧
-        ∃ γ > 0, ∀ (N : ℕ) (_hN : 4 ≤ N)
-          (v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N)),
-          v ∈ (parentHamiltonianGroundSpaceES (blockTensor A p) 2 N)ᗮ →
-            γ * ‖v‖ ≤ ‖parentHamiltonianES (blockTensor A p) 2 N v‖ := by
-  obtain ⟨p, hp, hInj, hGap⟩ :=
-    hP.exists_blockTensor_parentHamiltonianES_gap_eighth hρ
-  exact ⟨p, hp, hInj, 1 / 8, by norm_num, hGap⟩
+  intro N hN i j hji hOverlap v
+  have hne : j ≠ i := (Finset.mem_erase.mp hji).1
+  dsimp only
+  norm_num only [Nat.reduceSub, Nat.reduceMul, Nat.cast_ofNat, invOf_eq_inv]
+  rcases cyclicWindowsOverlap_twoSite_cases hOverlap with rfl | hForward | hBackward
+  · exact False.elim (hne rfl)
+  · subst j
+    exact re_inner_parentRingInteraction_term_adjacent_twoSite_forward_ge_of_threeSite
+      hThree (by omega) i v
+  · subst i
+    have h := re_inner_parentRingInteraction_term_adjacent_twoSite_forward_ge_of_threeSite
+      hThree (by omega) j v
+    linarith
 
 end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D : ℕ}
+
+/-- A primitive MPS tensor with a positive-definite fixed point admits physical blocking whose
+range-two blocked parent interaction on the ring has gap constant \(1/8\).
+
+The coefficient \(7/16\) is first obtained for the whole-increment C3-prime projector defect on
+three original blocks. Explicit blocked Hilbert-space transport turns it into the adjacent
+three-site anticommutator estimate for the terms of the parent interaction on the ring. The
+forward and backward cyclic transports then cover every overlapping off-diagonal pair, and the
+finite-overlap martingale reduction gives the displayed bound.
+
+The conclusion concerns only `blockTensor A p`; it makes no comparison with an original-site
+parent interaction. -/
+theorem exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth
+    [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
+    ∃ p : ℕ,
+      0 < p ∧ Kraus.IsNBlkInjective A p ∧
+        ∀ (N : ℕ) (hN : 4 ≤ N) (μ : ℂ),
+          haveI : NeZero N := ⟨by omega⟩;
+          Module.End.HasEigenvalue (Matrix.toEuclideanLin
+            (parentRingInteraction (blockTensor A p) 2 N).hamiltonian) μ →
+          μ = 0 ∨ ((1 / 8 : ℝ) : ℂ) ≤ μ := by
+  obtain ⟨p, hp, hInj, hAnti⟩ := hP.exists_blockTensor_anticommutator hρ
+  obtain ⟨_, hGap⟩ :=
+    hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator
+      (blockTensor A p) 2 (by omega) hAnti
+  refine ⟨p, hp, hInj, fun N hN μ hμ ↦ ?_⟩
+  have hγ : (1 / 8 : ℝ) = 1 / (4 * ((2 : ℕ) : ℝ)) := by norm_num
+  rw [hγ]
+  exact hGap N hN μ hμ
+
+/-- A primitive MPS tensor with a positive-definite fixed point admits physical blocking whose
+range-two blocked parent interaction on the ring has a uniform positive gap.
+
+The conclusion concerns only `blockTensor A p`; it makes no comparison with an original-site
+parent interaction. -/
+theorem exists_blockTensor_hamiltonian_parentRingInteraction_gapped
+    [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : Matrix.PosDef ρ) :
+    ∃ p : ℕ,
+      0 < p ∧ Kraus.IsNBlkInjective A p ∧
+        ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) (hN : 4 ≤ N) (μ : ℂ),
+          haveI : NeZero N := ⟨by omega⟩;
+          Module.End.HasEigenvalue (Matrix.toEuclideanLin
+            (parentRingInteraction (blockTensor A p) 2 N).hamiltonian) μ →
+          μ = 0 ∨ (γ : ℂ) ≤ μ := by
+  obtain ⟨p, hp, hInj, hGap⟩ :=
+    hP.exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth hρ
+  exact ⟨p, hp, hInj, 1 / 8, by norm_num, hGap⟩
+
+end Kraus.HasComplementaryFixedPointGap

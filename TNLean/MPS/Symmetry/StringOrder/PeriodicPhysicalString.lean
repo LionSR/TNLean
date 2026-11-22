@@ -129,21 +129,21 @@ corresponding transfer power. Source: arXiv:0802.0447, `EU` and `SOPMP`,
 lines 168–181. This identity is finite and includes zero middle length. -/
 theorem physicalObservableTransfer_finKronecker_const (A : MPSTensor d D)
     (u : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
-    physicalObservableTransfer A N (Matrix.finKronecker fun _ : Fin N => u) =
+    physicalObservableTransfer A N (Matrix.piKronecker fun _ : Fin N => u) =
       twistedTransferIter A u N := by
   classical
   induction N with
   | zero =>
       apply LinearMap.ext
       intro X
-      simp [physicalObservableTransfer_apply, Matrix.finKronecker_apply,
+      simp [physicalObservableTransfer_apply, Matrix.piKronecker_apply,
         twistedTransferIter]
   | succ N ih =>
-      have htensor : Matrix.finKronecker (fun _ : Fin (N + 1) => u) =
-          appendObservable (Matrix.finKronecker fun _ : Fin N => u)
+      have htensor : Matrix.piKronecker (fun _ : Fin (N + 1) => u) =
+          appendObservable (Matrix.piKronecker fun _ : Fin N => u)
             (Matrix.of fun τ σ : Fin 1 → Fin d => u (τ 0) (σ 0)) := by
         ext τ σ
-        simp only [Matrix.finKronecker_apply, Fin.prod_univ_castSucc]
+        simp only [Matrix.piKronecker_apply, Fin.prod_univ_castSucc]
         rfl
       rw [htensor, physicalObservableTransfer_appendObservable,
         physicalObservableTransfer_singleton, ih]
@@ -249,14 +249,14 @@ theorem pureCanonical_mpvExpectation_block_string_tendsto
       (fun n : ℕ => mpvExpectation A (p + N + q + n)
         (appendObservable
           (appendObservable
-            (appendObservable x (Matrix.finKronecker fun _ : Fin N => u)) y)
+            (appendObservable x (Matrix.piKronecker fun _ : Fin N => u)) y)
           (1 : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ)))
       atTop (nhds (Matrix.trace (Λ * physicalObservableTransfer A p x
         (twistedTransferIter A u N (physicalObservableTransfer A q y 1))))) := by
   have h := pureCanonical_mpvExpectation_appendObservable_tendsto
     A Λ hΛpos hΛtr hΛfix hNorm hPure (p + N + q)
     (appendObservable
-      (appendObservable x (Matrix.finKronecker fun _ : Fin N => u)) y)
+      (appendObservable x (Matrix.piKronecker fun _ : Fin N => u)) y)
   simpa only [physicalObservableTransfer_appendObservable,
     physicalObservableTransfer_finKronecker_const, Module.End.mul_apply] using h
 
@@ -271,7 +271,7 @@ theorem pureCanonical_mpvExpectation_string_tendsto
         (appendObservable
           (appendObservable
             (appendObservable (Matrix.of fun τ σ : Fin 1 → Fin d => x (τ 0) (σ 0))
-              (Matrix.finKronecker fun _ : Fin N => u))
+              (Matrix.piKronecker fun _ : Fin N => u))
             (Matrix.of fun τ σ : Fin 1 → Fin d => y (τ 0) (σ 0)))
           (1 : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ)))
       atTop (nhds (physicalStringOrderParam A Λ x y u N)) := by

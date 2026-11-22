@@ -31,6 +31,7 @@ namespace TNLean.PEPS.AreaLaw.Scan
 
 variable {V : Type} [Fintype V] [DecidableEq V]
 
+omit [DecidableEq V] in
 /-- The scanner energy is the original global replica mean under the same
 copywise configuration identification. The statement includes zero replicas
 and requires no positivity or gap assumption.

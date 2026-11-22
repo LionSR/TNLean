@@ -43,7 +43,7 @@ arXiv:2405.00439, Section V, lines 2081–2087. -/
 noncomputable def pairedGate (σ : Bool → Equiv.Perm κ)
     (A : Bool → Matrix (Fin d) (Fin d) ℂ) (k : κ) :
     Matrix (κ × Bool → Fin d) (κ × Bool → Fin d) ℂ :=
-  rectKronecker fun s ↦ if σ s.2 k = s.1 then A s.2 else 1
+  Matrix.piKronecker fun s ↦ if σ s.2 k = s.1 then A s.2 else 1
 
 omit [Fintype κ] in
 private theorem pairedBond_disjoint (σ : Bool → Equiv.Perm κ) {k l : κ} (hkl : k ≠ l) :
@@ -60,12 +60,12 @@ private theorem pairedBond_disjoint (σ : Bool → Equiv.Perm κ) {k l : κ} (hk
 private theorem pairedGate_list_prod (σ : Bool → Equiv.Perm κ)
     (A : Bool → Matrix (Fin d) (Fin d) ℂ) (l : List κ) (hl : l.Nodup) :
     (l.map (pairedGate σ A)).prod =
-      rectKronecker fun s ↦ if (σ s.2).symm s.1 ∈ l then A s.2 else 1 := by
+      Matrix.piKronecker fun s ↦ if (σ s.2).symm s.1 ∈ l then A s.2 else 1 := by
   induction l with
   | nil => simp
   | cons k l ih =>
     obtain ⟨hk, ht⟩ := List.nodup_cons.mp hl
-    rw [List.map_cons, List.prod_cons, ih ht, pairedGate, rectKronecker_mul]
+    rw [List.map_cons, List.prod_cons, ih ht, pairedGate, Matrix.piKronecker_mul]
     congr 1
     funext s
     by_cases h : σ s.2 k = s.1
@@ -98,11 +98,11 @@ def pairedFactor (σ : Bool → Bool → Equiv.Perm κ) (A : Bool → Matrix (Fi
 private theorem place_prodOp_pairedFactor (σ : Bool → Bool → Equiv.Perm κ)
     (A : Bool → Matrix (Fin d) (Fin d) ℂ) (p : κ × Bool) :
     ManyBody.place ((pairCircuitGeometry σ).cell p)
-        (ManyBody.prodOp (X := fun _ : {s // s ∈ (pairCircuitGeometry σ).cell p} ↦ Fin d)
+        (Matrix.piKronecker (ι := fun _ : {s // s ∈ (pairCircuitGeometry σ).cell p} ↦ Fin d)
           fun s ↦ pairedFactor σ A p s.1) =
       pairedGate (σ p.2) A p.1 := by
   rw [← ManyBody.placeAlong_subtype]
-  refine ManyBody.placeAlong_prodOp _ _ (pairedFactor σ A p) (fun _ ↦ rfl) fun s hs ↦ ?_
+  refine ManyBody.placeAlong_piKronecker _ _ (pairedFactor σ A p) (fun _ ↦ rfl) fun s hs ↦ ?_
   have hne : σ p.2 s.2 p.1 ≠ s.1 := fun h ↦
     hs ⟨s, Finset.mem_image.mpr ⟨s.2, Finset.mem_univ _, Prod.ext h rfl⟩⟩ rfl
   simp [pairedFactor, hne]
@@ -119,7 +119,7 @@ noncomputable def pairCircuitLayer (σ : Bool → Bool → Equiv.Perm κ) (color
       obtain ⟨l, _, rfl⟩ := Finset.mem_image.mp hq
       exact pairedBond_disjoint (σ color) fun h ↦ hpq (Prod.ext h rfl))
     fun p ↦ KrausFamily.single
-      (ManyBody.prodOp (X := fun _ : {s // s ∈ (pairCircuitGeometry σ).cell p.1} ↦ Fin d)
+      (Matrix.piKronecker (ι := fun _ : {s // s ∈ (pairCircuitGeometry σ).cell p.1} ↦ Fin d)
         fun s ↦ pairedFactor σ A p.1 s.1)
 
 omit [Fintype κ] in
@@ -129,7 +129,7 @@ theorem forall_isUnitary_pairCircuitLayer (σ : Bool → Bool → Equiv.Perm κ)
     (hA : ∀ b, A b ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) (S : Finset κ) :
     (pairCircuitLayer σ color A S).Forall KrausGate.ev KrausFamily.IsUnitary :=
   Layer.forall_ofCells _ (KrausFamily.isUnitary_single (one_mem _)) _ _ _ fun p ↦
-    KrausFamily.isUnitary_single (ManyBody.prodOp_mem_unitary fun s ↦ by
+    KrausFamily.isUnitary_single (Matrix.piKronecker_mem_unitaryGroup fun s ↦ by
       unfold pairedFactor
       split_ifs
       · exact hA _
@@ -143,7 +143,7 @@ theorem pairCircuitLayer_kraus (σ : Bool → Bool → Equiv.Perm κ) (color : B
     (A : Bool → Matrix (Fin d) (Fin d) ℂ) (S : Finset κ)
     (i : (pairCircuitLayer σ color A S).Index) :
     (pairCircuitLayer σ color A S).kraus KrausGate.ev i =
-      rectKronecker fun s ↦ if (σ color s.2).symm s.1 ∈ S then A s.2 else 1 := by
+      Matrix.piKronecker fun s ↦ if (σ color s.2).symm s.1 ∈ S then A s.2 else 1 := by
   classical
   have hinj : Function.Injective fun c : (S.image fun k ↦ (k, color)) ↦ c.1.1 := by
     intro c c' h
@@ -273,9 +273,9 @@ Section V, lines 2081–2087. -/
 private theorem op_dressedPairCircuit (τ : Equiv.Perm κ)
     (u w : unitary (Matrix (Fin d) (Fin d) ℂ)) (S : Finset κ) :
     (dressedPairCircuit τ u w S).op =
-      (rectKronecker fun s ↦ if (dressedCircuitMatchings τ true s.2).symm s.1 ∈
+      (Matrix.piKronecker fun s ↦ if (dressedCircuitMatchings τ true s.2).symm s.1 ∈
         S.filter (fun k ↦ τ k ∈ S) then secondPairFactors w s.2 else 1) *
-      rectKronecker fun s ↦ if (dressedCircuitMatchings τ false s.2).symm s.1 ∈ S then
+      Matrix.piKronecker fun s ↦ if (dressedCircuitMatchings τ false s.2).symm s.1 ∈ S then
         firstPairFactors u w s.2 else 1 := by
   obtain ⟨i₁⟩ := (Layer.nonempty_unique_index_of_forall_isUnitary
     (forall_isUnitary_pairCircuitLayer (dressedCircuitMatchings τ) false _
@@ -292,8 +292,8 @@ the circuit is the explicit construction in the endpoint audit. -/
 theorem op_dressedPairCircuit_univ (τ : Equiv.Perm κ)
     (u w : unitary (Matrix (Fin d) (Fin d) ℂ)) :
     (dressedPairCircuit τ u w Finset.univ).op =
-      rectKronecker fun _ : κ × Bool ↦ (u : Matrix (Fin d) (Fin d) ℂ) := by
-  rw [op_dressedPairCircuit, rectKronecker_mul]
+      Matrix.piKronecker fun _ : κ × Bool ↦ (u : Matrix (Fin d) (Fin d) ℂ) := by
+  rw [op_dressedPairCircuit, Matrix.piKronecker_mul]
   congr 1
   funext s
   rcases s with ⟨k, b⟩
@@ -308,11 +308,11 @@ theorem op_dressedPairCircuit_single_entry (τ : Equiv.Perm κ)
     (u w : unitary (Matrix (Fin d) (Fin d) ℂ)) (S : Finset κ) (a : κ)
     (ha : a ∈ S) (hentry : ∀ k ∈ S, τ.symm k ∈ S ↔ k ≠ a) :
     (dressedPairCircuit τ u w S).op =
-      rectKronecker (fun s : κ × Bool ↦ if s = (a, false) then
+      Matrix.piKronecker (fun s : κ × Bool ↦ if s = (a, false) then
         (w : Matrix (Fin d) (Fin d) ℂ) else 1) *
-      rectKronecker (fun s : κ × Bool ↦ if s.1 ∈ S then
+      Matrix.piKronecker (fun s : κ × Bool ↦ if s.1 ∈ S then
         (u : Matrix (Fin d) (Fin d) ℂ) else 1) := by
-  rw [op_dressedPairCircuit, rectKronecker_mul, rectKronecker_mul]
+  rw [op_dressedPairCircuit, Matrix.piKronecker_mul, Matrix.piKronecker_mul]
   congr 1
   funext s
   rcases s with ⟨k, b⟩

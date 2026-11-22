@@ -58,10 +58,11 @@ abbrev sheetSplit (q : ℕ) (S : Finset ι) :
 /-- A product operator in the coordinates of `sheetSplit S` is the Kronecker product of its
 restrictions to `S` and to `Sᶜ`. -/
 theorem rectKronecker_submatrix_sheetSplit (S : Finset ι) (m : ι → Matrix (Fin q) (Fin q) ℂ) :
-    (rectKronecker m).submatrix (sheetSplit q S).symm (sheetSplit q S).symm =
-      rectKronecker (fun v : S => m v) ⊗ₖ rectKronecker (fun v : {v // v ∉ S} => m v) := by
+    (Matrix.piKronecker m).submatrix (sheetSplit q S).symm (sheetSplit q S).symm =
+      Matrix.piKronecker (fun v : S => m v) ⊗ₖ Matrix.piKronecker (fun v : {v // v ∉ S} => m
+          v) := by
   ext ⟨a, c⟩ ⟨a', c'⟩
-  simp only [submatrix_apply, rectKronecker_apply, kroneckerMap_apply]
+  simp only [submatrix_apply, Matrix.piKronecker_apply, kroneckerMap_apply]
   rw [← Fintype.prod_subtype_mul_prod_subtype (· ∈ S)]
   congr 1
   · refine Finset.prod_congr (Finset.ext fun _ => by simp) fun v _ => ?_
@@ -78,11 +79,10 @@ theorem exists_kronecker_one_of_mem_supportedOperators {S : Finset ι}
         A' ⊗ₖ (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ) := by
   induction hA using ManyBody.supportedOperators_induction with
   | prod m hm =>
-    rw [prodOp_eq_rectKronecker]
-    refine ⟨rectKronecker fun v : S => m v, ?_⟩
+    refine ⟨Matrix.piKronecker fun v : S => m v, ?_⟩
     rw [rectKronecker_submatrix_sheetSplit]
     congr 1
-    rw [← rectKronecker_one (ν := {v // v ∉ S}) (ι := Fin q)]
+    rw [← Matrix.piKronecker_one (ν := {v // v ∉ S}) (ι := fun _ ↦ Fin q)]
     congr 1
     funext v
     exact hm v v.2
@@ -104,11 +104,10 @@ theorem exists_one_kronecker_of_mem_supportedOperators {S : Finset ι} {D : Fins
         (1 : Matrix (S → Fin q) (S → Fin q) ℂ) ⊗ₖ A' := by
   induction hA using ManyBody.supportedOperators_induction with
   | prod m hm =>
-    rw [prodOp_eq_rectKronecker]
-    refine ⟨rectKronecker fun v : {v // v ∉ S} => m v, ?_⟩
+    refine ⟨Matrix.piKronecker fun v : {v // v ∉ S} => m v, ?_⟩
     rw [rectKronecker_submatrix_sheetSplit]
     congr 1
-    rw [← rectKronecker_one (ν := ↥S) (ι := Fin q)]
+    rw [← Matrix.piKronecker_one (ν := ↥S) (ι := fun _ ↦ Fin q)]
     congr 1
     funext v
     exact hm v fun hv => Finset.disjoint_left.mp hD hv v.2

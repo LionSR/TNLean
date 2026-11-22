@@ -8,7 +8,6 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.ParentHamiltonian.ParentInteraction
 
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.CanonicalParentInteractionMatrix
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.CoefficientPairing
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.CyclicRestrictionNorm
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.CyclicWindowPermutation

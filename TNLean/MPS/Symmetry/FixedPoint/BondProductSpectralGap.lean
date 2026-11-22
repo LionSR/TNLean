@@ -5,15 +5,15 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.FixedPoint.BondProductPhysicalParentHamiltonian
 import QICLean.ManyBody.Hamiltonian.KernelGap
-import Mathlib.Analysis.Matrix.Spectrum
+import QICLean.ManyBody.Hamiltonian.Martingale.AbstractCriterion
 import Mathlib.Analysis.Matrix.Order
 
 /-!
 # Spectral form of the independent-bond gap
 
 The quadratic-form inequality for the commuting parent Hamiltonian implies
-that its nonzero spectral values are at least one. This gives the spectral
-form of the uniform gap used in the gapped-path definition of
+that its nonzero eigenvalues are at least one. With its ground line this is
+the uniform gap above zero used in the gapped-path definition of
 Schuch--Pérez-García--Cirac, arXiv:1010.3732, Section II.F.2.
 -/
 
@@ -21,42 +21,20 @@ open scoped Matrix MatrixOrder InnerProductSpace ComplexOrder
 
 namespace MPSTensor
 
-/-- A positive Hermitian matrix satisfying the quadratic gap `A² ≥ A`
-has spectrum in `{0} ∪ [1,∞)`. Source: arXiv:1010.3732,
-Section II.F.2, applied to the commuting bond parent Hamiltonian. -/
-theorem spectrum_separated_of_quadratic_gap {n : Type*} [Fintype n]
+/-- A positive semidefinite matrix satisfying the quadratic gap `A² ≥ A` has every
+eigenvalue equal to `0` or at least `1`. Source: arXiv:1010.3732, Section II.F.2, applied to
+the commuting bond parent Hamiltonian. -/
+theorem forall_hasEigenvalue_of_quadratic_gap {n : Type*} [Fintype n]
     [DecidableEq n] (A : Matrix n n ℂ) (hPos : A.PosSemidef)
     (hGap : ∀ v : EuclideanSpace ℂ n,
       (⟪Matrix.toEuclideanLin A v, v⟫_ℂ).re ≤
         (⟪Matrix.toEuclideanLin A v,
           Matrix.toEuclideanLin A v⟫_ℂ).re) :
-    ∀ z ∈ spectrum ℂ A, 0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
-  classical
-  let hA := hPos.isHermitian
-  intro z hz
-  rw [hA.spectrum_eq_image_range] at hz
-  obtain ⟨r, ⟨i, rfl⟩, rfl⟩ := hz
-  have hnonneg : 0 ≤ hA.eigenvalues i := hPos.eigenvalues_nonneg i
-  let v := hA.eigenvectorBasis i
-  have hnorm : ‖v‖ = 1 := hA.eigenvectorBasis.orthonormal.norm_eq_one i
-  have hlin : Matrix.toEuclideanLin A v = (hA.eigenvalues i : ℂ) • v :=
-    hA.toEuclideanCLM_eigenvectorBasis i
-  have hg := hGap v
-  rw [hlin] at hg
-  have hinner : ⟪v, v⟫_ℂ = 1 := by
-    rw [inner_self_eq_norm_sq_to_K, hnorm]
-    norm_num
-  have hineq : hA.eigenvalues i ≤ (hA.eigenvalues i) ^ 2 := by
-    rw [inner_smul_left, inner_smul_right, inner_smul_left, hinner] at hg
-    simpa [Complex.star_def, pow_two] using hg
-  constructor
-  · simp [hnonneg]
-  · by_cases hzero : hA.eigenvalues i = 0
-    · left; simp [hzero]
-    · right
-      have hpos : 0 < hA.eigenvalues i := lt_of_le_of_ne hnonneg (Ne.symm hzero)
-      change 1 ≤ hA.eigenvalues i
-      nlinarith
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin A) μ →
+      μ = 0 ∨ (1 : ℂ) ≤ μ := by
+  simpa only [Complex.ofReal_one] using
+    FrustrationFree.forall_hasEigenvalue_of_martingale_of_finiteDimensional one_pos
+      (Matrix.isPositive_toEuclideanLin_iff.mpr hPos) (by simpa only [one_mul] using hGap)
 
 /-- The physical parent Hamiltonian of unit bonds is positive
 semidefinite. Source: arXiv:1010.3732, Section II.F.2. -/
@@ -75,69 +53,42 @@ theorem physicalBondProductParentHamiltonian_posSemidef
   exact hbond.mul_mul_conjTranspose_same
     ((incomingBondPerm D N).permMatrix ℂ)
 
-/-- The unique ground line gives the zero spectral value of the physical
-parent Hamiltonian. Source: arXiv:1010.3732, Section II.F.2. -/
-theorem physicalBondProductParentHamiltonian_zero_mem_spectrum
+/-- The physical parent Hamiltonian is gapped above its zero ground energy with gap one,
+uniformly in the chain length and bond vector; its ground space is the line of the physically
+reordered bond-product state. Source: arXiv:1010.3732, Section II.F.2. -/
+theorem isGapped_physicalBondProductParentHamiltonian
     {D N : ℕ} (η : Fin (D * D) → ℂ)
     (hη : ∑ x, Complex.normSq (η x) = 1)
     (hN : 1 ≤ N) :
-    (0 : ℂ) ∈ spectrum ℂ (physicalBondProductParentHamiltonian η hN) := by
-  let U := incomingBondUnitaryLin D N
-  let ψ := bondProductState η N
-  have hψ : ψ ≠ 0 := bondProductState_ne_zero η hη N
-  have hUψ : U ψ ≠ 0 := by
+    ManyBody.IsGapped (physicalBondProductParentHamiltonian η hN) 0 1 := by
+  have hpos := physicalBondProductParentHamiltonian_posSemidef η hη hN
+  have hlin : physicalBondProductParentHamiltonianLin η hN =
+      Matrix.toEuclideanLin (physicalBondProductParentHamiltonian η hN) := by
+    simpa [bondMatrixEquiv_symm_eq_toEuclideanLin] using
+      physicalBondProductParentHamiltonianLin_eq_matrix η hN
+  have hUψ : incomingBondUnitaryLin D N (bondProductState η N) ≠ 0 := by
     intro hzero
-    have h := congrArg (fun v => star U v) hzero
-    apply hψ
+    have h := congrArg (fun v => star (incomingBondUnitaryLin D N) v) hzero
+    apply bondProductState_ne_zero η hη N
     rw [← Module.End.mul_apply, incomingBondUnitaryLin_star_mul_self D N] at h
     simpa using h
-  have hker : LinearMap.ker (physicalBondProductParentHamiltonianLin η hN) ≠ ⊥ := by
-    intro hbot
-    have hmem : U ψ ∈ LinearMap.ker (physicalBondProductParentHamiltonianLin η hN) := by
-      rw [physicalBondProductParentHamiltonian_groundSpace η hη hN]
-      exact Submodule.subset_span (Set.mem_singleton _)
-    have hz : U ψ = 0 := by
-      rw [hbot] at hmem
-      simpa using hmem
-    exact hUψ hz
-  rw [← Matrix.spectrum_toLpLin (p := 2)]
-  apply Module.End.hasEigenvalue_iff_mem_spectrum.mp
-  rw [Module.End.hasEigenvalue_iff, Module.End.eigenspace_zero]
-  simpa [physicalBondProductParentHamiltonianLin_eq_matrix,
-    bondMatrixEquiv_symm_eq_toEuclideanLin] using hker
+  refine ManyBody.isGapped_zero_iff.mpr ⟨?_, ?_⟩
+  · rw [ManyBody.groundSpace_zero, ← hlin, physicalBondProductParentHamiltonian_groundSpace η hη hN,
+      Ne, Submodule.span_singleton_eq_bot]
+    exact hUψ
+  · rw [Complex.ofReal_one]
+    refine forall_hasEigenvalue_of_quadratic_gap _ hpos fun v ↦ ?_
+    rw [← hlin]
+    exact physicalBondProductParentHamiltonian_gap_one η hη hN v
 
-/-- The physical parent spectrum consists of its zero ground value and
-values at least one, with a bound uniform in the chain length and bond
-vector. Source: arXiv:1010.3732, Section II.F.2. -/
-theorem physicalBondProductParentHamiltonian_spectrum_gap_one
-    {D N : ℕ} (η : Fin (D * D) → ℂ)
-    (hη : ∑ x, Complex.normSq (η x) = 1)
-    (hN : 1 ≤ N) :
-    (0 : ℂ) ∈ spectrum ℂ (physicalBondProductParentHamiltonian η hN) ∧
-      ∀ z ∈ spectrum ℂ (physicalBondProductParentHamiltonian η hN),
-        0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
-  constructor
-  · exact physicalBondProductParentHamiltonian_zero_mem_spectrum η hη hN
-  · apply spectrum_separated_of_quadratic_gap _
-      (physicalBondProductParentHamiltonian_posSemidef η hη hN)
-    intro v
-    simpa [physicalBondProductParentHamiltonianLin_eq_matrix,
-      bondMatrixEquiv_symm_eq_toEuclideanLin] using
-      physicalBondProductParentHamiltonian_gap_one η hη hN v
-
-/-- Uniform spectral gap along the normalized interpolation, including
-the zero ground value. Source: arXiv:1010.3732, Section II.F.2. -/
-theorem normalizedPhysicalBondInterpolation_parent_spectrum_gap_one
+/-- Uniform gap along the normalized interpolation, above the zero ground energy.
+Source: arXiv:1010.3732, Section II.F.2. -/
+theorem isGapped_normalizedPhysicalBondInterpolation_parent
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁)
     (γ : ℝ) (hN : 1 ≤ N) :
-    (0 : ℂ) ∈ spectrum ℂ
-      (physicalBondProductParentHamiltonian
-        (normalizedBondInterpolationVector D₀ D₁ γ) hN) ∧
-      ∀ z ∈ spectrum ℂ
-        (physicalBondProductParentHamiltonian
-          (normalizedBondInterpolationVector D₀ D₁ γ) hN),
-        0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) :=
-  physicalBondProductParentHamiltonian_spectrum_gap_one _
+    ManyBody.IsGapped (physicalBondProductParentHamiltonian
+      (normalizedBondInterpolationVector D₀ D₁ γ) hN) 0 1 :=
+  isGapped_physicalBondProductParentHamiltonian _
     (normalizedBondInterpolationVector_sum_normSq h₀ h₁ γ) hN
 
 end MPSTensor

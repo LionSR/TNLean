@@ -495,7 +495,7 @@ theorem exists_windowGHZCorrectionRound [NeZero M]
       (V : RegionConfig (fun _ : Fin N ↦ Fin d) D → (i : Fin N) → Matrix (Fin d) (Fin d) ℂ),
       (∀ m i, V m i ∈ unitaryGroup (Fin d) ℂ) ∧
       ∀ m, ∃ c : ℂ, ∀ α : Cfg d r₁ → ℂ,
-        (prodOp (V m) * place (X := fun _ : Fin N ↦ Fin d) D (Matrix.single m m 1)) *ᵥ
+        (piKronecker (V m) * place (X := fun _ : Fin N ↦ Fin d) D (Matrix.single m m 1)) *ᵥ
           windowGHZDifference hN hr α = c • windowGHZState hN hr α := by
   classical
   set e₀ := registerSite hN hr (0 : Fin M) with he₀def
@@ -531,11 +531,11 @@ theorem exists_windowGHZCorrectionRound [NeZero M]
   rw [← mulVec_mulVec]
   -- The corrected vector after the outcome `m`.
   funext x
-  change (finKronecker (fun j => (Equiv.addRight (δ m j)).permMatrix ℂ) *ᵥ
+  change (Matrix.piKronecker (fun j => (Equiv.addRight (δ m j)).permMatrix ℂ) *ᵥ
     (place (X := fun _ : Fin N ↦ Fin d) Sm (Matrix.single m m 1) *ᵥ
       windowGHZDifference hN hr α)) x = _
   set z : Cfg d N := fun i => x i + δ m i with hz
-  rw [finKronecker_permMatrix_mulVec]
+  rw [Matrix.piKronecker_permMatrix_mulVec]
   dsimp only
   rw [show (fun i => (Equiv.addRight (δ m i)) (x i)) = z from rfl,
     place_single_self_mulVec_apply, windowGHZDifference]

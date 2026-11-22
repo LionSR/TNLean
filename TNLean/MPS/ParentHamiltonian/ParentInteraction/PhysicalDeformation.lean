@@ -45,11 +45,11 @@ the periodic chain.
 * `MPSTensor.chainGroundSpace_rotatePhysical` and
   `MPSTensor.ker_parentHamiltonian_rotatePhysical` — the ground spaces of the two parent
   Hamiltonians correspond one-to-one through \(\Lambda^{\otimes N}\).
-* `MPSTensor.hasUniqueGroundState_chainGroundSpace_rotatePhysical` — uniqueness of the
+* `MPSTensor.chainGroundSpace_rotatePhysical_eq_span` — uniqueness of the
   ground state transfers along the correspondence.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 open Kraus (decodeBlockEquiv)
 
 namespace MPSTensor
@@ -75,9 +75,9 @@ noncomputable def onSiteTensorPow (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
 \(\bigotimes_{n<L}\Lambda\); the algebra of the latter is in
 `QICLean/Algebra/Kronecker/FiniteKroneckerProduct.lean`. -/
 lemma onSiteTensorPow_eq_finKronecker (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
-    onSiteTensorPow L Λ = Matrix.finKronecker fun _ : Fin L => Λ := by
+    onSiteTensorPow L Λ = Matrix.piKronecker fun _ : Fin L => Λ := by
   ext σ τ
-  simp [onSiteTensorPow, Matrix.finKronecker_apply]
+  simp [onSiteTensorPow, Matrix.piKronecker_apply]
 
 /-- The tensor power is the blocked Kronecker lift read through the decoding of blocked
 physical indices. -/
@@ -139,8 +139,8 @@ theorem groundSpaceMap_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPS
     (L : ℕ) (X : Matrix (Fin D) (Fin D) ℂ) :
     groundSpaceMap (rotatePhysical Λ A) L X =
       Matrix.toLin' (onSiteTensorPow L Λ) (groundSpaceMap A L X) := by
-  simpa only [onSiteTensorPow_eq_finKronecker, Matrix.rectKronecker_eq_finKronecker,
-    Matrix.toLin'_apply] using groundSpaceMap_rotatePhysical_rectangular Λ A L X
+  simpa only [onSiteTensorPow_eq_finKronecker,
+      Matrix.toLin'_apply] using groundSpaceMap_rotatePhysical_rectangular Λ A L X
 
 /-- The local ground space of the deformed tensor is the image of the local ground space of
 the original tensor under the tensor power: \(\mathcal G_L(\Lambda A) =
@@ -151,7 +151,7 @@ theorem groundSpace_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTen
     (L : ℕ) :
     groundSpace (rotatePhysical Λ A) L =
       (groundSpace A L).map (Matrix.toLin' (onSiteTensorPow L Λ)) := by
-  simpa only [onSiteTensorPow_eq_finKronecker, Matrix.rectKronecker_eq_finKronecker] using
+  simpa only [onSiteTensorPow_eq_finKronecker] using
     groundSpace_rotatePhysical_rectangular Λ A L
 
 /-- The Hilbert-space realization of the local ground space of the deformed tensor is the
@@ -160,7 +160,7 @@ theorem groundSpaceES_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPST
     (L : ℕ) :
     groundSpaceES (rotatePhysical Λ A) L =
       (groundSpaceES A L).map (Matrix.toEuclideanLin (onSiteTensorPow L Λ)) := by
-  simpa only [onSiteTensorPow_eq_finKronecker, Matrix.rectKronecker_eq_finKronecker] using
+  simpa only [onSiteTensorPow_eq_finKronecker] using
     groundSpaceES_rotatePhysical_rectangular Λ A L
 
 /-! ### The deformed parent interaction -/
@@ -175,32 +175,30 @@ structure IsParentInteraction (A : MPSTensor d D) (L : ℕ)
   /-- The kernel of the interaction is the local ground space. -/
   ker_eq : LinearMap.ker h = groundSpaceES A L
 
-/-- The canonical parent interaction, the orthogonal projector onto
-\(\mathcal G_L(A)^\perp\), is a parent interaction in the sense of the source definition. -/
-theorem isParentInteraction_parentInteractionES (A : MPSTensor d D) (L : ℕ) :
-    IsParentInteraction A L (parentInteractionES A L) where
-  isPositive := parentInteractionES_isPositive A L
-  ker_eq := by
-    ext v
-    rw [LinearMap.mem_ker, parentInteractionES_apply_eq_zero_iff]
-
 /-- The deformed interaction
 \(h' = ({\Lambda^{-1}}^\dagger)^{\otimes L}\, h\, (\Lambda^{-1})^{\otimes L}\) of
 arXiv:2011.12127, lines 2190--2192, and equation deformed-parent-1 at lines 2033--2035. -/
 noncomputable def deformedInteraction (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ)
-    (h : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L)) :
-    EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) :=
-  Matrix.toEuclideanLin (onSiteTensorPow L (Λ⁻¹)ᴴ) ∘ₗ h ∘ₗ
-    Matrix.toEuclideanLin (onSiteTensorPow L Λ⁻¹)
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ) : Matrix (Cfg d L) (Cfg d L) ℂ :=
+  onSiteTensorPow L (Λ⁻¹)ᴴ * h * onSiteTensorPow L Λ⁻¹
 
-/-- The deformed interaction of a positive operator is positive: it is the conjugate
-\(S^\dagger h S\) with \(S = (\Lambda^{-1})^{\otimes L}\). -/
-theorem deformedInteraction_isPositive (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ)
-    {h : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L)}
-    (hh : h.IsPositive) : (deformedInteraction L Λ h).IsPositive := by
-  rw [deformedInteraction, ← onSiteTensorPow_conjTranspose,
-    Matrix.toEuclideanLin_conjTranspose_eq_adjoint]
-  exact hh.adjoint_conj _
+/-- The operator of the deformed interaction is the operator of the interaction between the
+operators of the two tensor powers. -/
+theorem toEuclideanLin_deformedInteraction (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ)
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ) :
+    Matrix.toEuclideanLin (deformedInteraction L Λ h) =
+      Matrix.toEuclideanLin (onSiteTensorPow L (Λ⁻¹)ᴴ) ∘ₗ Matrix.toEuclideanLin h ∘ₗ
+        Matrix.toEuclideanLin (onSiteTensorPow L Λ⁻¹) := by
+  rw [deformedInteraction, Matrix.mul_assoc]
+  simp only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same]
+
+/-- The deformed interaction of a positive semidefinite matrix is positive semidefinite: it is
+the conjugate \(S^\dagger h S\) with \(S = (\Lambda^{-1})^{\otimes L}\). -/
+theorem posSemidef_deformedInteraction (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ)
+    {h : Matrix (Cfg d L) (Cfg d L) ℂ} (hh : h.PosSemidef) :
+    (deformedInteraction L Λ h).PosSemidef := by
+  rw [deformedInteraction, ← onSiteTensorPow_conjTranspose]
+  exact hh.conjTranspose_mul_mul_same _
 
 /-- Composition of the Hilbert-space maps of two tensor powers is the map of the tensor
 power of the product. -/
@@ -214,10 +212,11 @@ lemma toEuclideanLin_onSiteTensorPow_mul_apply (L : ℕ) (Λ Λ' : Matrix (Fin d
 
 /-- The kernel of the deformed interaction is the local ground space of the deformed
 tensor: \(\ker h' = \Lambda^{\otimes L}\ker h = \mathcal G_L(\Lambda A)\). -/
-theorem ker_deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ : IsUnit Λ)
-    {A : MPSTensor d D} {h : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L)}
-    (hker : LinearMap.ker h = groundSpaceES A L) :
-    LinearMap.ker (deformedInteraction L Λ h) = groundSpaceES (rotatePhysical Λ A) L := by
+theorem ker_toEuclideanLin_deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ}
+    (hΛ : IsUnit Λ) {A : MPSTensor d D} {h : Matrix (Cfg d L) (Cfg d L) ℂ}
+    (hker : LinearMap.ker (Matrix.toEuclideanLin h) = groundSpaceES A L) :
+    LinearMap.ker (Matrix.toEuclideanLin (deformedInteraction L Λ h)) =
+      groundSpaceES (rotatePhysical Λ A) L := by
   have hdet : IsUnit Λ.det := (Matrix.isUnit_iff_isUnit_det Λ).1 hΛ
   have hleft : ∀ v : EuclideanSpace ℂ (Cfg d L),
       Matrix.toEuclideanLin (onSiteTensorPow L Λ)
@@ -240,7 +239,8 @@ theorem ker_deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ
       Matrix.toEuclideanLin, Matrix.toLpLin_one, LinearMap.id_apply]
   rw [groundSpaceES_rotatePhysical, ← hker]
   ext v
-  simp only [LinearMap.mem_ker, deformedInteraction, LinearMap.comp_apply, Submodule.mem_map]
+  simp only [LinearMap.mem_ker, toEuclideanLin_deformedInteraction, LinearMap.comp_apply,
+    Submodule.mem_map]
   constructor
   · intro hv
     refine ⟨Matrix.toEuclideanLin (onSiteTensorPow L Λ⁻¹) v, ?_, hleft v⟩
@@ -248,7 +248,7 @@ theorem ker_deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ
     rw [hadj, map_zero] at hzero
     simpa [LinearMap.mem_ker] using hzero
   · rintro ⟨u, hu, rfl⟩
-    have hu' : h u = 0 := hu
+    have hu' : Matrix.toEuclideanLin h u = 0 := hu
     rw [hright, hu', map_zero]
 
 /-- arXiv:2011.12127, lines 2190--2192: if \(A^i = \sum_j \Lambda_{ij} B^j\) with \(\Lambda\)
@@ -256,12 +256,13 @@ invertible and \(h\) is a parent interaction for \(B\) on \(k\) sites, then
 \(h' = ({\Lambda^{-1}}^\dagger)^{\otimes k} h (\Lambda^{-1})^{\otimes k}\) is a parent
 interaction for \(A\).  Here \(B\) is the tensor `A` and \(A\) is `rotatePhysical Λ A`. -/
 theorem IsParentInteraction.deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ}
-    (hΛ : IsUnit Λ) {A : MPSTensor d D}
-    {h : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L)}
-    (hh : IsParentInteraction A L h) :
-    IsParentInteraction (rotatePhysical Λ A) L (MPSTensor.deformedInteraction L Λ h) where
-  isPositive := deformedInteraction_isPositive L Λ hh.isPositive
-  ker_eq := ker_deformedInteraction L hΛ hh.ker_eq
+    (hΛ : IsUnit Λ) {A : MPSTensor d D} {h : Matrix (Cfg d L) (Cfg d L) ℂ}
+    (hh : IsParentInteraction A L (Matrix.toEuclideanLin h)) :
+    IsParentInteraction (rotatePhysical Λ A) L
+      (Matrix.toEuclideanLin (MPSTensor.deformedInteraction L Λ h)) where
+  isPositive := Matrix.isPositive_toEuclideanLin_iff.mpr
+    (posSemidef_deformedInteraction L Λ (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive))
+  ker_eq := ker_toEuclideanLin_deformedInteraction L hΛ hh.ker_eq
 
 /-! ### The chain ground spaces
 
@@ -432,12 +433,30 @@ noncomputable def onSiteTensorPowEquiv (N : ℕ) {Λ : Matrix (Fin d) (Fin d) �
 
 /-- arXiv:2011.12127, lines 2037--2038: if the parent Hamiltonian of \(A\) has a unique
 ground state, then so does the parent Hamiltonian of the deformed tensor \(\Lambda A\), since
-the two ground spaces correspond through the invertible map \(\Lambda^{\otimes N}\). -/
-theorem hasUniqueGroundState_chainGroundSpace_rotatePhysical
+the two ground spaces correspond through the invertible map \(\Lambda^{\otimes N}\): if the
+chain ground space of \(A\) is the line through a nonzero vector \(\psi\), the chain ground
+space of \(\Lambda A\) is the line through the nonzero vector \(\Lambda^{\otimes N}\psi\). -/
+theorem chainGroundSpace_rotatePhysical_eq_span
     {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ : IsUnit Λ) {A : MPSTensor d D} {L N : ℕ}
-    (hA : HasUniqueGroundState (chainGroundSpace A L N)) :
-    HasUniqueGroundState (chainGroundSpace (rotatePhysical Λ A) L N) := by
-  rw [HasUniqueGroundState, chainGroundSpace_rotatePhysical hΛ]
-  exact (LinearEquiv.finrank_map_eq (onSiteTensorPowEquiv N hΛ) (chainGroundSpace A L N)).trans hA
+    {ψ : NSiteSpace d N} (hA : chainGroundSpace A L N = ℂ ∙ ψ ∧ ψ ≠ 0) :
+    chainGroundSpace (rotatePhysical Λ A) L N = ℂ ∙ Matrix.toLin' (onSiteTensorPow N Λ) ψ ∧
+      Matrix.toLin' (onSiteTensorPow N Λ) ψ ≠ 0 := by
+  refine ⟨?_, (onSiteTensorPowEquiv N hΛ).map_ne_zero_iff.mpr hA.2⟩
+  rw [chainGroundSpace_rotatePhysical hΛ, hA.1, Submodule.map_span, Set.image_singleton]
+
+/-! ### The matrix of the canonical parent interaction -/
+
+/-- The canonical parent interaction, whose operator is the orthogonal projector onto
+\(\mathcal G_L(A)^\perp\), is a parent interaction in the sense of arXiv:2011.12127,
+lines 1996--1999. -/
+theorem isParentInteraction_toEuclideanLin_toMatrix'_parentInteraction (A : MPSTensor d D)
+    (L : ℕ) :
+    IsParentInteraction A L (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A L)))
+      where
+  isPositive :=
+    Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_toMatrix'_parentInteraction A L)
+  ker_eq := by
+    ext v
+    rw [LinearMap.mem_ker, toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff]
 
 end MPSTensor

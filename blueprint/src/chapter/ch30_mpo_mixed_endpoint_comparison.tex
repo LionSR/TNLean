@@ -9,9 +9,10 @@
         MPSTensor.MPOSymmetry.mixedEndpointColumnSector_isSymmetricProjection,
         MPSTensor.MPOSymmetry.mixedEndpointRowSector_commute_columnSector,
         MPSTensor.MPOSymmetry.mixedEndpointLeftTensor_starProjection_eq_outerCorner,
-        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_isPositive,
-        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_zero_le_parentInteractionES,
-        MPSTensor.MPOSymmetry.parentInteractionES_mixedEndpointLeftTensor_le,
+        MPSTensor.MPOSymmetry.isSymmetricProjection_toEuclideanLin_mixedEndpointParentInteraction,
+        MPSTensor.MPOSymmetry.posSemidef_mixedEndpointParentInteraction,
+        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_zero_le_parentInteraction,
+        MPSTensor.MPOSymmetry.parentInteraction_mixedEndpointLeftTensor_le,
         MPSTensor.MPOSymmetry.mixedEndpoint_one_sub_columnSector_zero_le_parentInteraction,
         MPSTensor.MPOSymmetry.mixedEndpoint_one_sub_rowSector_one_le_parentInteraction}
     \leanok
@@ -83,15 +84,15 @@
         MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_one_eq_conj_swap,
         MPSTensor.MPOSymmetry.mixedEndpointRowSector_conj_swap,
         MPSTensor.MPOSymmetry.mixedEndpointColumnSector_conj_swap,
-        MPSTensor.MPOSymmetry.parentInteractionES_mixedEndpointRightTensor_eq_conj,
-        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_one_le_parentInteractionES,
-        MPSTensor.MPOSymmetry.parentInteractionES_mixedEndpointRightTensor_le,
+        MPSTensor.MPOSymmetry.parentInteraction_mixedEndpointRightTensor_eq_conj,
+        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_one_le_parentInteraction,
+        MPSTensor.MPOSymmetry.parentInteraction_mixedEndpointRightTensor_le,
         MPSTensor.MPOSymmetry.mixedEndpoint_columnSector_zero_le_parentInteraction_one,
         MPSTensor.MPOSymmetry.mixedEndpoint_rowSector_one_le_parentInteraction_one,
         MPSTensor.physicalReindexLinearIsometryEquiv_conj_diagonal,
         MPSTensor.physicalReindexLinearIsometryEquiv_groundSpaceMapES,
         MPSTensor.groundSpaceES_reindexPhysical_equiv,
-        MPSTensor.parentInteractionES_reindexPhysical_equiv}
+        MPSTensor.toEuclideanLin_toMatrix'_parentInteraction_reindexPhysical_equiv}
     \leanok
     \uses{def:mpo_mixed_endpoint_swap,def:mpo_mixed_extended_support,
         def:mpo_mixed_physical_sectors,def:ground_space_es,def:injective}
@@ -134,31 +135,24 @@
 
 \begin{lemma}[Periodic endpoint comparison, ground lines, and gaps]
     \label{thm:mpo_mixed_periodic_endpoint_gaps}
-    \lean{MPSTensor.periodicLocalInteractionES_add,
-        MPSTensor.periodicLocalInteractionES_sub,
-        MPSTensor.periodicLocalInteractionES_one,
-        MPSTensor.periodicLocalInteractionES_diagonal_apply,
-        MPSTensor.MPOSymmetry.periodicLocalInteractionES_mixedEndpointRowSector_previous,
-        MPSTensor.MPOSymmetry.periodicLocalInteractionES_mixedEndpointColumnSector_next,
-        MPSTensor.MPOSymmetry.periodicLocalInteractionES_outerRowPenalty_le_previous,
-        MPSTensor.MPOSymmetry.periodicLocalInteractionES_outerColumnPenalty_le_next,
-        MPSTensor.MPOSymmetry.localTermES_mixedEndpointLeftTensor_le_three_extended,
-        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_comparison,
-        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_ker_eq,
-        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_norm_gap,
-        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_groundSpace_eq,
-        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_groundSpace_finrank,
-        MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_periodic_gap,
-        MPSTensor.MPOSymmetry.periodicLocalInteractionES_outerRowPenalty_one_le_previous,
-        MPSTensor.MPOSymmetry.periodicLocalInteractionES_outerColumnPenalty_one_le_next,
-        MPSTensor.MPOSymmetry.localTermES_mixedEndpointRightTensor_le_three_extended,
-        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_one_comparison,
-        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_one_ker_eq,
-        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_one_norm_gap,
-        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_one_groundSpace_eq,
-        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_one_groundSpace_finrank,
-        MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_periodic_one_gap,
-        MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_periodic_endpoints_gap}
+    \lean{ManyBody.Interaction.translationInvariant_term_add,
+        ManyBody.Interaction.translationInvariant_term_sub,
+        ManyBody.Interaction.translationInvariant_term_one,
+        ManyBody.Interaction.translationInvariant_term_mono,
+        ManyBody.Interaction.translationInvariant_term_diagonal,
+        MPSTensor.MPOSymmetry.parentRingInteraction_mixedEndpointLeftTensor_term_le_three_extended,
+        MPSTensor.MPOSymmetry.mixedEndpoint_hamiltonian_translationInvariant_comparison,
+        MPSTensor.MPOSymmetry.mixedEndpoint_ker_hamiltonian_translationInvariant_eq,
+        MPSTensor.MPOSymmetry.mixedEndpoint_hamiltonian_translationInvariant_gap,
+        MPSTensor.MPOSymmetry.mixedEndpoint_groundSpace_hamiltonian_translationInvariant_eq_span,
+        MPSTensor.MPOSymmetry.exists_uniform_isGapped_mixedEndpoint_hamiltonian_translationInvariant,
+        MPSTensor.MPOSymmetry.parentRingInteraction_mixedEndpointRightTensor_term_le_three_extended,
+        MPSTensor.MPOSymmetry.mixedEndpoint_hamiltonian_translationInvariant_one_comparison,
+        MPSTensor.MPOSymmetry.mixedEndpoint_ker_hamiltonian_translationInvariant_one_eq,
+        MPSTensor.MPOSymmetry.mixedEndpoint_hamiltonian_translationInvariant_one_gap,
+        MPSTensor.MPOSymmetry.mixedEndpoint_groundSpace_hamiltonian_translationInvariant_one_eq_span,
+        MPSTensor.MPOSymmetry.exists_uniform_isGapped_mixedEndpoint_hamiltonian_translationInvariant_one,
+        MPSTensor.MPOSymmetry.exists_uniform_isGapped_mixedEndpoint_hamiltonian_translationInvariant_endpoints}
     \leanok
     \uses{def:mpo_mixed_extended_support,def:mpo_mixed_endpoint_swap,
         def:periodic-fixed-interaction,def:parent_hamiltonian_es,
@@ -170,13 +164,14 @@
         H'_{p,N}      & \leq K_{p,N}\leq3H'_{p,N}, \\
         \ker H'_{p,N} & =\ker K_{p,N}.
     \end{align}
-    If $A_p$ is injective and $D_p>0$, this kernel is exactly the
-    one-dimensional span of its embedded periodic MPS.
-    A positive gap $\delta_p$ of $K_{p,N}$ transfers to a gap $\delta_p/3$ of
-    $H'_{p,N}$. Consequently, if both endpoint tensors are injective,
-    with $D_0,D_1>0$, there is $\delta>0$ such that both endpoint
-    Hamiltonians have gap at least $\delta$ on every periodic chain
-    of length at least two.
+    If $A_p$ is injective and $D_p>0$, the embedded periodic MPS is
+    nonzero and this kernel is exactly the line it spans.
+    If every nonzero eigenvalue of $K_{p,N}$ is at least $\delta_p>0$,
+    then every nonzero eigenvalue of $H'_{p,N}$ is at least $\delta_p/3$.
+    Consequently, if both endpoint tensors are injective,
+    with $D_0,D_1>0$, there is $\delta>0$ such that, on every periodic
+    chain of length at least two, both endpoint Hamiltonians have a
+    nonzero kernel and all their nonzero eigenvalues are at least $\delta$.
     Only the two endpoint parameters are quantified in this conclusion.
 \end{lemma}
 \begin{proof}
@@ -187,9 +182,9 @@
         thm:periodic-fixed-interaction-order,
         thm:periodic-fixed-interaction-canonical,lem:local_term_es_average,
         lem:transported_es_positive,lem:positive-comparison-kernel-gap,
-        thm:parent_ground_space_es_kernel,
+        thm:parent_ring_ground_space_kernel,
         thm:parent_hamiltonian_kernel_eq_chain_ground_space,
-        thm:chain_ground_space_eq_mpv_blk,thm:ground_space_unique_periodic,
+        thm:ground_space_unique_periodic,
         thm:mpo_mixed_first_support,thm:compact_parent_gap}
     A missing outer row sector on one edge is an inner row sector of
     the previous edge; a missing outer column sector is an inner column
@@ -204,9 +199,9 @@
     Positivity and Lemma~\ref{lem:positive-comparison-kernel-gap} give
     equal kernels and transfer the canonical gap with factor $1/3$.
     When $A_p$ is injective and $D_p>0$, the embedded tensor $B_p$ is
-    one-site injective. Lemmas~\ref{thm:chain_ground_space_eq_mpv_blk}
-    and~\ref{thm:ground_space_unique_periodic} identify its canonical
-    kernel as the one-dimensional periodic MPS span. Applying
+    one-site injective. Lemma~\ref{thm:ground_space_unique_periodic}
+    identifies its canonical kernel as the line through its periodic MPS,
+    which is nonzero. Applying
     Theorem~\ref{thm:compact_parent_gap} to the constant family $B_p$
     over a one-point parameter space yields a positive canonical
     gap independent of the chain length, and taking the smaller of the two

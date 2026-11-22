@@ -76,9 +76,10 @@ theorem frustrationFreeAreaLaw : FrustrationFreeAreaLaw := by
     (one_le_two.trans (two_le_uniformAreaLawScale N₁ N₂ C₂))
   refine ⟨uniformAreaLawConstantOf q C₂ C₃, uniformAreaLawConstantOf_nonneg hq C₂ C₃,
     fun Λ h Ω hff A ↦ ?_⟩
-  exact regionEntropy_le_of_collar_amplification_twoFamilies_at hq hΔ h hff.isHermitian
+  have hh := fun X ↦ (hff.posSemidef X).1
+  exact regionEntropy_le_of_collar_amplification_twoFamilies_at hq hΔ h hh
     hff.norm_eq_one hff.isGapped hff.groundSpace_eq A
-    (fun n s₀ hn ↦ hcol n s₀ hn Λ h hff.isHermitian (hff.norm_term_le hJ.le) 0 Ω
+    (fun n s₀ hn ↦ hcol n s₀ hn Λ h hh (hff.norm_term_le hJ.le) 0 Ω
       hff.norm_eq_one hff.isGapped hff.groundSpace_eq A)
     (fun n hn2 hn ↦ frustrationFreeAmplificationBound hq hJ hΔ (lt_max_of_lt_right one_pos) 100
       n hn2 hn Λ h Ω hff A)

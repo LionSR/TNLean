@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.VaryingBond.OpenMPS
 import QICLean.Entropy.Surprisal.FilterMoment
-import QICLean.Analysis.Order.GlobalGap
+import QICLean.Spectral.Eigenvalue.GlobalGap
 
 /-!
 # The product of the two marginals across a cut

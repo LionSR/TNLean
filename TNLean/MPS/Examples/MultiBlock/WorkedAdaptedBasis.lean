@@ -229,8 +229,8 @@ theorem gtInt_mul_g0InvInt : gtInt * g0InvInt = atInt * pxInt * aInvInt := by de
 /-- `Γ` as a change of coordinates. -/
 noncomputable def gammaGauge : (Fin 4 → ℂ) ≃ₗ[ℂ] (BlockSpace dims labels 1 → ℂ) :=
   gaugeOfMatrix tauG (toC gammaInt) (toC gammaInvInt)
-    (complexOfRing_mul_eq_one _ gammaInt_mul_gammaInvInt)
-    (complexOfRing_mul_eq_one _ gammaInvInt_mul_gammaInt)
+    (Matrix.complexOfRing_mul_eq_one _ gammaInt_mul_gammaInvInt)
+    (Matrix.complexOfRing_mul_eq_one _ gammaInvInt_mul_gammaInt)
 
 theorem gaugeMatrix_gammaGauge : gaugeMatrix gammaGauge = (toC gammaInt).submatrix tauG id :=
   gaugeMatrix_gaugeOfMatrix _ _ _ _ _
@@ -282,7 +282,7 @@ theorem toC_gammaInt_mulVec (v : Fin 4 → ℂ) :
     toC gammaInt *ᵥ v = ![2 * v 0 + 2 * v 1 + v 2 + v 3, v 3, v 0 + 2 * v 1 + v 2, -v 1 + v 3] := by
   ext i
   fin_cases i <;>
-    simp [gammaInt, toC, complexOfRing_apply, Matrix.mulVec, dotProduct, Fin.sum_univ_four]
+    simp [gammaInt, toC, Matrix.complexOfRing_apply, Matrix.mulVec, dotProduct, Fin.sum_univ_four]
 
 theorem blockEmbed_mulVec_apply {z : ℕ} (b : BlockIndex labels z) (f : BlockSpace dims labels z → ℂ)
     (y : BlockSpace dims labels z) :
@@ -305,7 +305,8 @@ theorem sum_blockEmbed_mul_intertwiner_mul_blockProj :
   obtain ⟨m, rfl⟩ := tauGt.symm.surjective x
   obtain ⟨n, rfl⟩ := tauG.symm.surjective y
   fin_cases m <;> fin_cases n <;>
-    simp [tauGt, tauG, Matrix.blockDiagonal'_apply, intertwiner, matY, toC, complexOfRing_apply,
+    simp [tauGt, tauG, Matrix.blockDiagonal'_apply, intertwiner, matY, toC,
+        Matrix.complexOfRing_apply,
       pxInt] <;>
     rfl
 
@@ -487,13 +488,13 @@ theorem intertwiner_spec (b : BlockIndex labels 1) :
 
 theorem toC_aInt_apply_eq_zero_of_lt (x y : BlockSpace dims labels 1) (h : ordG y.1 < ordG x.1) :
     toC aInt (tauG x) (tauG y) = 0 := by
-  change complexOfRing (Int.castRingHom ℂ) aInt (tauG x) (tauG y) = 0
-  rw [complexOfRing_apply, aInt_apply_eq_zero_of_lt x y h, map_zero]
+  change Matrix.complexOfRing (Int.castRingHom ℂ) aInt (tauG x) (tauG y) = 0
+  rw [Matrix.complexOfRing_apply, aInt_apply_eq_zero_of_lt x y h, map_zero]
 
 theorem toC_atInt_apply_eq_zero_of_lt (x y : BlockSpace dims labels 1) (h : ordGt y.1 < ordGt x.1) :
     toC atInt (tauGt x) (tauGt y) = 0 := by
-  change complexOfRing (Int.castRingHom ℂ) atInt (tauGt x) (tauGt y) = 0
-  rw [complexOfRing_apply, atInt_apply_eq_zero_of_lt x y h, map_zero]
+  change Matrix.complexOfRing (Int.castRingHom ℂ) atInt (tauGt x) (tauGt y) = 0
+  rw [Matrix.complexOfRing_apply, atInt_apply_eq_zero_of_lt x y h, map_zero]
 
 theorem aInt_apply_diag (b : BlockIndex labels 1) (p q : Fin (slotSize dims b)) :
     aInt (tauG ⟨b, p⟩) (tauG ⟨b, q⟩) = if p = q then 1 else 0 := by
@@ -506,15 +507,15 @@ theorem atInt_apply_diag (b : BlockIndex labels 1) (p q : Fin (slotSize dims b))
 theorem toC_aInt_apply_diag (b : BlockIndex labels 1) (p q : Fin (slotSize dims b)) :
     toC aInt (tauG ⟨b, p⟩) (tauG ⟨b, q⟩) =
       (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ) p q := by
-  change complexOfRing (Int.castRingHom ℂ) aInt (tauG ⟨b, p⟩) (tauG ⟨b, q⟩) = _
-  rw [complexOfRing_apply, aInt_apply_diag, Matrix.one_apply]
+  change Matrix.complexOfRing (Int.castRingHom ℂ) aInt (tauG ⟨b, p⟩) (tauG ⟨b, q⟩) = _
+  rw [Matrix.complexOfRing_apply, aInt_apply_diag, Matrix.one_apply]
   split_ifs <;> simp
 
 theorem toC_atInt_apply_diag (b : BlockIndex labels 1) (p q : Fin (slotSize dims b)) :
     toC atInt (tauGt ⟨b, p⟩) (tauGt ⟨b, q⟩) =
       (1 : Matrix (Fin (slotSize dims b)) (Fin (slotSize dims b)) ℂ) p q := by
-  change complexOfRing (Int.castRingHom ℂ) atInt (tauGt ⟨b, p⟩) (tauGt ⟨b, q⟩) = _
-  rw [complexOfRing_apply, atInt_apply_diag, Matrix.one_apply]
+  change Matrix.complexOfRing (Int.castRingHom ℂ) atInt (tauGt ⟨b, p⟩) (tauGt ⟨b, q⟩) = _
+  rw [Matrix.complexOfRing_apply, atInt_apply_diag, Matrix.one_apply]
   split_ifs <;> simp
 
 /-- The matching read on slots is the identity of labels. -/
@@ -528,7 +529,8 @@ theorem ord_redGt_eq_matching (b : BlockIndex labels 1) :
 /-- `g = 𝔄 Γ`. -/
 theorem gaugeMatrix_redG_eq_mul : gaugeMatrix redG.gauge =
     (toC aInt).submatrix tauG tauG * gaugeMatrix gammaGauge := by
-  rw [gaugeMatrix_redG, gaugeMatrix_gammaGauge, Matrix.submatrix_mul_equiv, ← complexOfRing_mul,
+  rw [gaugeMatrix_redG, gaugeMatrix_gammaGauge, Matrix.submatrix_mul_equiv, ←
+      Matrix.complexOfRing_mul,
     aInt_mul_gammaInt]
 
 /-- `g_tilde = 𝔄_tilde P_X Γ`. -/
@@ -536,8 +538,8 @@ theorem gaugeMatrix_redGt_eq_mul : gaugeMatrix redGt.gauge = (toC atInt).submatr
     (∑ b, Matrix.blockEmbed (slotSize dims) b * intertwiner b *
       Matrix.blockProj (slotSize dims) b) * gaugeMatrix gammaGauge := by
   rw [sum_blockEmbed_mul_intertwiner_mul_blockProj, gaugeMatrix_redGt, gaugeMatrix_gammaGauge,
-    Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv, ← complexOfRing_mul,
-    ← complexOfRing_mul, atInt_mul_pxInt_mul_gammaInt]
+    Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv, ← Matrix.complexOfRing_mul,
+    ← Matrix.complexOfRing_mul, atInt_mul_pxInt_mul_gammaInt]
 
 theorem blockTriangular_aInt :
     ((toC aInt).submatrix tauG tauG).BlockTriangular fun x => redG.ord x.1 :=
@@ -564,13 +566,15 @@ theorem gt_mul_g0Inv_submatrix : (toC gtInt).submatrix tauGt id * (toC g0InvInt)
     (toC atInt).submatrix tauGt tauGt * (toC pxInt).submatrix tauGt tauG *
       ((toC aInt).submatrix tauG tauG)⁻¹ := by
   have hinvA : (toC aInvInt).submatrix tauG tauG * (toC aInt).submatrix tauG tauG = 1 := by
-    rw [Matrix.submatrix_mul_equiv, ← complexOfRing_mul, aInvInt_mul_aInt, complexOfRing_one]
+    rw [Matrix.submatrix_mul_equiv, ← Matrix.complexOfRing_mul, aInvInt_mul_aInt,
+        Matrix.complexOfRing_one]
     exact Matrix.submatrix_one_equiv tauG
   have hL : ∀ M N : Matrix (Fin 4) (Fin 4) ℂ,
       M.submatrix tauGt id * N.submatrix id tauG = (M * N).submatrix tauGt tauG :=
     fun M N => (Matrix.submatrix_mul M N _ _ _ Function.bijective_id).symm
   rw [Matrix.inv_eq_left_inv hinvA, hL, Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv,
-    ← complexOfRing_mul, ← complexOfRing_mul, ← complexOfRing_mul, gtInt_mul_g0InvInt]
+    ← Matrix.complexOfRing_mul, ← Matrix.complexOfRing_mul, ← Matrix.complexOfRing_mul,
+    gtInt_mul_g0InvInt]
 
 /-- **The factorization** (*The asymmetric fundamental theorem of matrix product states*, Example
 6.16): with the complements `L₁ = M₁`, `L₂ = M_tilde₁` (forced, `K = 0` at both positions) and

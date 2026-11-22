@@ -50,7 +50,7 @@ decision over `ℤ[σ]` transport to the complex matrices.
 * `MPSTensor.complexOfGolden`, `MPSTensor.mulGoldenTensor`, `MPSTensor.evalWordGolden`: the
   entrywise image of a matrix over `ℤ[σ]` in the complex matrices, the bond-space product and
   word evaluation over `ℤ[σ]`, as the instances at `goldenToComplex` of the general
-  `MPSTensor.complexOfRing`, `MPSTensor.mulTensorR` and `MPSTensor.evalWordR`.
+  `Matrix.complexOfRing`, `MPSTensor.mulTensorR` and `MPSTensor.evalWordR`.
 
 ## Main results
 
@@ -289,7 +289,7 @@ namespace MPSTensor
 
 /-- The entrywise image of a matrix over the golden integers in the complex matrices. -/
 noncomputable abbrev complexOfGolden {m n : Type*} (X : Matrix m n GoldenInt) : Matrix m n ℂ :=
-  complexOfRing goldenToComplex X
+  Matrix.complexOfRing goldenToComplex X
 
 @[simp] theorem complexOfGolden_apply {m n : Type*} (X : Matrix m n GoldenInt) (i : m) (j : n) :
     complexOfGolden X i j = goldenToComplex (X i j) := rfl
@@ -297,15 +297,15 @@ noncomputable abbrev complexOfGolden {m n : Type*} (X : Matrix m n GoldenInt) : 
 theorem complexOfGolden_mul {m n o : Type*} [Fintype n] (X : Matrix m n GoldenInt)
     (Y : Matrix n o GoldenInt) :
     complexOfGolden (X * Y) = complexOfGolden X * complexOfGolden Y :=
-  complexOfRing_mul goldenToComplex X Y
+  Matrix.complexOfRing_mul goldenToComplex X Y
 
 theorem complexOfGolden_one {n : Type*} [DecidableEq n] :
     complexOfGolden (1 : Matrix n n GoldenInt) = 1 :=
-  complexOfRing_one goldenToComplex
+  Matrix.complexOfRing_one goldenToComplex
 
 theorem complexOfGolden_zero {m n : Type*} :
     complexOfGolden (0 : Matrix m n GoldenInt) = 0 :=
-  complexOfRing_zero goldenToComplex
+  Matrix.complexOfRing_zero goldenToComplex
 
 variable {d D D₁ D₂ : ℕ}
 

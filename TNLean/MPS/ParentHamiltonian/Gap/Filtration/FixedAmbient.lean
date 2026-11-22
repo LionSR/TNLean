@@ -118,11 +118,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- A nonwrapping interaction start whose length-\(L\) support lies in the prefix
-\([0,n)\) of a fixed \(N\)-site chain. -/
-abbrev OpenPrefixStart (L N n : ℕ) :=
-  {i : NonwrappingStart L N // i.1.val + L ≤ n}
-
 /-- Ordered nonwrapping windows are cyclically site-disjoint. -/
 theorem cyclicWindowsDisjoint_of_nonwrapping_ordered {N L : ℕ} {i j : Fin N}
     (hj : j.val + L ≤ N) (hij : i.val + L ≤ j.val) :
@@ -142,18 +137,14 @@ theorem cyclicWindowsDisjoint_of_nonwrapping_ordered {N L : ℕ} {i j : Fin N}
     simpa only [Fin.val_mk, Nat.mod_eq_of_lt hjrN] using congrArg Fin.val hkjEq
   omega
 
-/-- The parent Hamiltonian of the prefix \([0,n)\), acting on the fixed ambient
-space of an \(N\)-site open chain. -/
-noncomputable def openPrefixParentHamiltonianES (A : MPSTensor d D)
-    (L N n : ℕ) :
-    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  ∑ i : OpenPrefixStart L N n, localTermES A L i.1.1
-
 /-- The fixed-ambient ground projection of the prefix \([0,n)\). -/
 noncomputable def openPrefixGroundProjectionES (A : MPSTensor d D)
     (L N n : ℕ) :
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  (LinearMap.ker (openPrefixParentHamiltonianES A L N n)).starProjection.toLinearMap
+  (LinearMap.ker
+      (Matrix.toEuclideanLin
+          ((parentChainInteraction A L N).restrict fun i ↦ i.val + L ≤
+              n).hamiltonian)).starProjection.toLinearMap
 
 /-- The fixed-ambient local ground projection on \([n-l,n+1)\).
 
@@ -163,31 +154,20 @@ noncomputable def openIntervalGroundProjectionES (A : MPSTensor d D)
     (L l N n : ℕ) :
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
   (LinearMap.ker
-    (openSuffixParentHamiltonianES A L (l + 1) N (n + 1))).starProjection.toLinearMap
-
-/-- If a fixed-ambient prefix Hamiltonian annihilates a vector, every local
-interaction contained in that prefix annihilates it. -/
-theorem localTermES_eq_zero_of_openPrefixParentHamiltonianES_eq_zero
-    (A : MPSTensor d D) (L N n : ℕ) {v : EuclideanSpace ℂ (Cfg d N)}
-    (hv : openPrefixParentHamiltonianES A L N n v = 0)
-    (i : OpenPrefixStart L N n) :
-    localTermES A L i.1.1 v = 0 := by
-  rw [openPrefixParentHamiltonianES] at hv
-  exact ProjectionGeometry.apply_eq_zero_of_sum_apply_eq_zero
-    (fun i : OpenPrefixStart L N n => localTermES A L i.1.1)
-    (fun i => localTermES_isSymmetricProjection A L i.1.1) hv i
+    (Matrix.toEuclideanLin
+        ((parentChainInteraction A L N).restrict fun i ↦ n + 1 - (l + 1) ≤ i.val ∧ i.val + L ≤ n +
+            1).hamiltonian)).starProjection.toLinearMap
 
 /-- Prefix kernels decrease when the prefix grows. -/
-theorem ker_openPrefixParentHamiltonianES_antitone (A : MPSTensor d D)
+theorem ker_hamiltonian_prefix_parentChainInteraction_antitone (A : MPSTensor d D)
     (L N : ℕ) :
-    Antitone fun n => LinearMap.ker (openPrefixParentHamiltonianES A L N n) := by
+    Antitone fun n => LinearMap.ker
+        (Matrix.toEuclideanLin
+            ((parentChainInteraction A L N).restrict fun i ↦ i.val + L ≤ n).hamiltonian) := by
   intro m n hmn v hv
-  rw [LinearMap.mem_ker] at hv ⊢
-  rw [openPrefixParentHamiltonianES, LinearMap.sum_apply]
-  apply Finset.sum_eq_zero
-  intro i _
-  exact localTermES_eq_zero_of_openPrefixParentHamiltonianES_eq_zero A L N n hv
-    ⟨i.1, i.2.trans hmn⟩
+  rw [ManyBody.Interaction.mem_ker_toEuclideanLin_hamiltonian_restrict_iff
+    (posSemidef_parentChainInteraction_term A L N)] at hv ⊢
+  exact fun i hi ↦ hv i (hi.trans hmn)
 
 /-- The prefix kernel projections form Nachtergaele's decreasing ground-space
 filtration on the single ambient \(N\)-site Hilbert space. -/
@@ -201,80 +181,55 @@ noncomputable def fixedAmbientNestedGroundProjectionsES (A : MPSTensor d D)
   antitone_range := by
     intro m n hmn
     simpa only [openPrefixGroundProjectionES, Submodule.range_starProjection] using
-      ker_openPrefixParentHamiltonianES_antitone A L N hmn
-
-/-- The fixed-ambient prefix Hamiltonian is positive. -/
-theorem openPrefixParentHamiltonianES_isPositive (A : MPSTensor d D)
-    (L N n : ℕ) : (openPrefixParentHamiltonianES A L N n).IsPositive := by
-  rw [openPrefixParentHamiltonianES]
-  exact LinearMap.isPositive_sum _ fun i _ => localTermES_isPositive A L i.1.1
-
-/-- A fixed-ambient suffix-interval Hamiltonian is positive. -/
-theorem openSuffixParentHamiltonianES_isPositive (A : MPSTensor d D)
-    (L l N n : ℕ) : (openSuffixParentHamiltonianES A L l N n).IsPositive := by
-  rw [openSuffixParentHamiltonianES]
-  exact LinearMap.isPositive_sum _ fun i _ => localTermES_isPositive A L i.1
+      ker_hamiltonian_prefix_parentChainInteraction_antitone A L N hmn
 
 /-- A prefix Hamiltonian ending before a suffix interval starts commutes with
-that interval Hamiltonian.  The proof expands both finite sums and uses
-site-disjoint commutation for every pair of local interactions. -/
-theorem openPrefixParentHamiltonianES_commute_openSuffixParentHamiltonianES
-    (A : MPSTensor d D) {L l N m n : ℕ} (hLN : L ≤ N)
-    (hsep : m ≤ n - l) :
-    (openPrefixParentHamiltonianES A L N m).comp
-        (openSuffixParentHamiltonianES A L l N n) =
-      (openSuffixParentHamiltonianES A L l N n).comp
-        (openPrefixParentHamiltonianES A L N m) := by
-  apply LinearMap.ext
-  intro v
-  simp only [openPrefixParentHamiltonianES, openSuffixParentHamiltonianES,
-    LinearMap.comp_apply, LinearMap.sum_apply]
-  simp_rw [map_sum]
-  rw [Finset.sum_comm'
-    (s := Finset.univ)
-    (t := fun _ => Finset.univ.filter fun i : NonwrappingStart L N =>
-      n - l ≤ i.1.val ∧ i.1.val + L ≤ n)
-    (t' := Finset.univ.filter fun i : NonwrappingStart L N =>
-      n - l ≤ i.1.val ∧ i.1.val + L ≤ n)
-    (s' := fun _ => Finset.univ)
-    (fun _ _ => by simp)]
-  apply Finset.sum_congr rfl
-  intro j hj
-  rw [Finset.mem_filter] at hj
-  apply Finset.sum_congr rfl
-  intro i _
-  exact localTermES_commute_of_cyclic_windows_disjoint A hLN
-    (cyclicWindowsDisjoint_of_nonwrapping_ordered j.2 (by omega)) v
+that interval Hamiltonian: every pair of their terms has disjoint windows. -/
+theorem hamiltonian_prefix_parentChainInteraction_commute_restrict
+    (A : MPSTensor d D) {L l N m n : ℕ} (hsep : m ≤ n - l) :
+    (Matrix.toEuclideanLin
+        ((parentChainInteraction A L N).restrict fun i ↦ i.val + L ≤ m).hamiltonian).comp
+        (Matrix.toEuclideanLin
+            ((parentChainInteraction A L N).restrict fun i ↦ n - l ≤ i.val ∧ i.val + L ≤
+                n).hamiltonian) =
+      (Matrix.toEuclideanLin
+          ((parentChainInteraction A L N).restrict fun i ↦ n - l ≤ i.val ∧ i.val + L ≤
+              n).hamiltonian).comp
+        (Matrix.toEuclideanLin
+            ((parentChainInteraction A L N).restrict fun i ↦ i.val + L ≤ m).hamiltonian) := by
+  rw [← Matrix.toEuclideanLin_mul, ← Matrix.toEuclideanLin_mul]
+  exact congrArg _ (ManyBody.Interaction.commute_hamiltonian_restrict _ _ fun i j hi hj ↦
+    commute_parentChainInteraction_term_of_add_le A (by omega)).eq
 
 /-- Prefix and local-interval ground projections commute when their supporting
 Hamiltonians are disjoint.  Hamiltonian commutation makes both kernels and their
 orthogonal complements invariant, which yields projection commutation. -/
 theorem openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_le
-    (A : MPSTensor d D) {L l N m n : ℕ} (hLN : L ≤ N)
-    (hsep : m ≤ n - l) :
+    (A : MPSTensor d D) {L l N m n : ℕ} (hsep : m ≤ n - l) :
     (openPrefixGroundProjectionES A L N m).comp
         (openIntervalGroundProjectionES A L l N n) =
       (openIntervalGroundProjectionES A L l N n).comp
         (openPrefixGroundProjectionES A L N m) := by
   apply LinearMap.IsSymmetric.kernelProjection_commute_of_commute
-    (openSuffixParentHamiltonianES_isPositive A L (l + 1) N (n + 1)).isSymmetric
-  exact openPrefixParentHamiltonianES_commute_openSuffixParentHamiltonianES A hLN
-    (by omega)
+    (Matrix.isPositive_toEuclideanLin_iff.mpr
+        (posSemidef_hamiltonian_restrict_parentChainInteraction A L N _)).isSymmetric
+  exact hamiltonian_prefix_parentChainInteraction_commute_restrict A (by omega)
 
 /-- Once a prefix extends past \(n\), its ground space is contained in the local
 ground space on \([n-l,n+1)\). -/
-theorem ker_openPrefixParentHamiltonianES_le_ker_openSuffixParentHamiltonianES
+theorem ker_hamiltonian_prefix_parentChainInteraction_le_ker_restrict
     (A : MPSTensor d D) {L l N m n : ℕ} (hnm : n < m) :
-    LinearMap.ker (openPrefixParentHamiltonianES A L N m) ≤
-      LinearMap.ker (openSuffixParentHamiltonianES A L (l + 1) N (n + 1)) := by
+    LinearMap.ker
+        (Matrix.toEuclideanLin
+            ((parentChainInteraction A L N).restrict fun i ↦ i.val + L ≤ m).hamiltonian) ≤
+      LinearMap.ker
+          (Matrix.toEuclideanLin
+              ((parentChainInteraction A L N).restrict fun i ↦ n + 1 - (l + 1) ≤ i.val ∧ i.val + L ≤
+                  n + 1).hamiltonian) := by
   intro v hv
-  rw [LinearMap.mem_ker] at hv ⊢
-  rw [openSuffixParentHamiltonianES, LinearMap.sum_apply]
-  apply Finset.sum_eq_zero
-  intro i hi
-  rw [Finset.mem_filter] at hi
-  exact localTermES_eq_zero_of_openPrefixParentHamiltonianES_eq_zero A L N m hv
-    ⟨i, by omega⟩
+  rw [ManyBody.Interaction.mem_ker_toEuclideanLin_hamiltonian_restrict_iff
+    (posSemidef_parentChainInteraction_term A L N)] at hv ⊢
+  exact fun i hi ↦ hv i (by omega)
 
 /-- Prefix and local-interval ground projections commute when the local ground
 space contains the prefix ground space. -/
@@ -285,7 +240,7 @@ theorem openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_l
       (openIntervalGroundProjectionES A L l N n).comp
         (openPrefixGroundProjectionES A L N m) := by
   exact Submodule.starProjection_commute_of_le
-    (ker_openPrefixParentHamiltonianES_le_ker_openSuffixParentHamiltonianES
+    (ker_hamiltonian_prefix_parentChainInteraction_le_ker_restrict
       A hnm)
 
 /-- The physical fixed-ambient martingale difference commutes with the local
@@ -295,8 +250,7 @@ For \(m<n-l\), both prefix projections in \(E_m=G_m-G_{m+1}\) are supported to
 the left of \([n-l,n+1)\). For \(n<m\), both prefix kernels are contained in the
 local interval kernel. -/
 theorem fixedAmbient_martingaleDifference_commute_openIntervalGroundProjectionES
-    (A : MPSTensor d D) {L l N m n : ℕ} (hLN : L ≤ N)
-    (hout : m < n - l ∨ n < m) :
+    (A : MPSTensor d D) {L l N m n : ℕ} (hout : m < n - l ∨ n < m) :
     ((fixedAmbientNestedGroundProjectionsES A L N).martingaleDifference m).comp
         (openIntervalGroundProjectionES A L l N n) =
       (openIntervalGroundProjectionES A L l N n).comp
@@ -305,9 +259,9 @@ theorem fixedAmbient_martingaleDifference_commute_openIntervalGroundProjectionES
     fixedAmbientNestedGroundProjectionsES, LinearMap.sub_comp, LinearMap.comp_sub]
   rcases hout with hleft | hright
   · rw [openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_le
-        A hLN (by omega),
+        A (by omega),
       openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_le
-        A hLN (by omega)]
+        A (by omega)]
   · rw [openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_lt
         A hright,
       openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_lt
@@ -320,7 +274,7 @@ Here \(G_m\) is the kernel projection of the prefix Hamiltonian on \([0,m)\),
 \(E_m=G_m-G_{m+1}\), and \(Q_n\) is the kernel projection of the local Hamiltonian
 on \([n-l,n+1)\). -/
 theorem inner_sum_fixedAmbient_martingaleDifference_openIntervalGroundProjectionES_eq_Icc
-    (A : MPSTensor d D) {L N n l : ℕ} (hLN : L ≤ N) (hn : n < N)
+    (A : MPSTensor d D) {L N n l : ℕ} (hn : n < N)
     (v : EuclideanSpace ℂ (Cfg d N)) :
     inner ℂ v (∑ m ∈ Finset.range N,
         (fixedAmbientNestedGroundProjectionsES A L N).martingaleDifference m
@@ -335,6 +289,6 @@ theorem inner_sum_fixedAmbient_martingaleDifference_openIntervalGroundProjection
     (openIntervalGroundProjectionES A L l N n) N n l hn
   intro m hout
   exact fixedAmbient_martingaleDifference_commute_openIntervalGroundProjectionES
-    A hLN hout
+    A hout
 
 end MPSTensor

@@ -32,7 +32,7 @@ Lemma commutation (ii), equations (3.12)--(3.16), and Section 6.
 
 A normalized periodic tensor supplies one positive original-chain interaction
 whose open kernels are its boundary spaces above the chosen range. The same
-interaction has a uniform norm gap on the actual finite-chain kernel
+interaction has a uniform gap above the kernel on the actual finite-chain kernel
 complement at every volume and a common infinite-volume commutator gap in
 all pure zero-energy states. The latter conclusion uses the literal interval
 commutators along any exhaustion with both margins diverging. The finite and
@@ -77,31 +77,35 @@ namespace MPSTensor
 variable {d D m : ℕ}
 
 /-- Periodicity alone derives a canonical original-chain interaction range,
-exact open kernels above that range, and one norm gap at every volume.
+exact open kernels above that range, and one gap at every volume: every eigenvalue of the
+open-chain parent Hamiltonian is `0` or at least the gap.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2,
 Lemma commutation (ii), and Section 6, in the periodic tensor setting. -/
-theorem IsPeriodic.exists_pos_openParentHamiltonianES_gap
+theorem IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap
     {A : MPSTensor d D} (hA : IsPeriodic m A) :
     ∃ R : ℕ, 0 < R ∧
-      (∀ N, R ≤ N → LinearMap.ker (openParentHamiltonianES A R N) = groundSpaceES A N) ∧
+      (∀ N, R ≤ N → LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian)
+          = groundSpaceES A N) ∧
       ∃ δ : ℝ, 0 < δ ∧
-        ∀ N, ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R N))ᗮ,
-          δ * ‖v‖ ≤ ‖openParentHamiltonianES A R N v‖ := by
+        ∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
+          (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
+            μ = 0 ∨ (δ : ℂ) ≤ μ := by
   let : NeZero d := ⟨hA.physDim_ne_zero⟩
   obtain ⟨R, hR, hKernel, N₀, _hRN, δ, hδ, hGap⟩ :=
-    hA.exists_pos_openParentHamiltonianES_gap_of_residue_cover_limit
+    hA.exists_pos_hamiltonian_parentChainInteraction_gap_of_residue_cover_limit
       hA.residual_cover_projection_defect_tendsto_zero
   obtain ⟨γ, hγ, hAll⟩ := Nat.exists_pos_forall_of_eventually
-    (P := fun N γ => ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R N))ᗮ,
-      γ * ‖v‖ ≤ ‖openParentHamiltonianES A R N v‖)
-    (fun N γ η hle hgap v hv =>
-      (mul_le_mul_of_nonneg_right hle (norm_nonneg v)).trans (hgap v hv))
-    (fun N => LinearMap.exists_pos_mul_norm_le_of_mem_orthogonal_ker
-      (openParentHamiltonianES A R N)) hδ hGap
+    (P := fun N γ => ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ)
+    (fun N γ η hle hgap => ManyBody.forall_hasEigenvalue_mono hle hgap)
+    (fun N => ManyBody.exists_pos_forall_hasEigenvalue
+      (posSemidef_hamiltonian_parentChainInteraction A R N)) hδ hGap
   exact ⟨R, hR, hKernel, γ, hγ, hAll⟩
 
 /-- A normalized periodic tensor admits a positive local matrix interaction
-with exact original-chain open kernels and one norm gap at every volume.
+with exact original-chain open kernels and one gap above the kernel at every volume:
+every eigenvalue of the open-chain Hamiltonian is `0` or at least the gap.
 No interaction, faithful invariant matrix, or sector separation is supplied.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2,
 Lemma existenceinteraction, and Section 6, in the periodic tensor setting. -/
@@ -109,18 +113,14 @@ theorem IsPeriodic.exists_positive_parent_interaction_uniform_gap
     {A : MPSTensor d D} (hA : IsPeriodic m A) :
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
-      (∀ N, R ≤ N → LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) = groundSpaceES A N) ∧
-      ∃ δ : ℝ, 0 < δ ∧ ∀ N, ∀ v ∈ (LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
-        δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖ := by
-  obtain ⟨R, hR, hKernel, δ, hδ, hGap⟩ := hA.exists_pos_openParentHamiltonianES_gap
-  refine ⟨R, hR, canonicalParentInteractionMatrix A R,
-    canonicalParentInteractionMatrix_posSemidef A R, ?_, δ, hδ, ?_⟩
-  · simpa only [toEuclideanLin_canonicalParentInteractionMatrix,
-      openInteractionHamiltonianES_parentInteractionES A hR] using hKernel
-  · simpa only [toEuclideanLin_canonicalParentInteractionMatrix,
-      openInteractionHamiltonianES_parentInteractionES A hR] using hGap
+      (∀ N, R ≤ N → LinearMap.ker (Matrix.toEuclideanLin
+        (ManyBody.Interaction.chainTranslates R N h).hamiltonian) = groundSpaceES A N) ∧
+      ∃ δ : ℝ, 0 < δ ∧ ∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (ManyBody.Interaction.chainTranslates R N h).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ := by
+  obtain ⟨R, hR, hKernel, δ, hδ, hGap⟩ := hA.exists_pos_hamiltonian_parentChainInteraction_gap
+  exact ⟨R, hR, LinearMap.toMatrix' (parentInteraction A R),
+    posSemidef_toMatrix'_parentInteraction A R, hKernel, δ, hδ, hGap⟩
 
 end MPSTensor
 
@@ -130,10 +130,12 @@ section
 
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d D m : ℕ}
 /-- Periodicity derives one positive original-chain interaction with exact
-kernels above its range, a uniform finite-chain norm gap at every volume, and
+kernels above its range, a uniform finite-chain gap above the kernel at every volume, and
 a common literal infinite-volume commutator gap in every pure zero-energy
 state. The same interaction is used for both gaps. Neither interaction,
 dimension, support, density nor convergence data are supplied.
@@ -146,12 +148,12 @@ theorem IsPeriodic.exists_positive_parent_interaction_finite_and_quasiLocal_gap
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES A N) ∧
     ∃ δ : ℝ, 0 < δ ∧
-      (∀ N, ∀ v ∈ (LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
-        δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖) ∧
+      (∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ) ∧
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
         φ ∈ parentGroundStateFace h → IsPureQuasiLocalState d φ →
@@ -162,18 +164,18 @@ theorem IsPeriodic.exists_positive_parent_interaction_finite_and_quasiLocal_gap
           ∃ e : ℂ, Tendsto (fun n => φ
             (star (quasiLocalIntervalObservable d a k X) *
               (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                  (openInteractionMatrix h ((ℓ n + k) + r n)) *
+                  ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
                 quasiLocalIntervalObservable d a k X -
                 quasiLocalIntervalObservable d a k X *
                   quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                    (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                    ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
             (γ : ℂ) * φ (star (quasiLocalIntervalObservable d a k X) *
               quasiLocalIntervalObservable d a k X) ≤ e := by
   let : NeZero d := ⟨hA.physDim_ne_zero⟩
   obtain ⟨R, hR, h, hh, hKernel, δ, hδ, hFinite⟩ :=
     hA.exists_positive_parent_interaction_uniform_gap
   have hEventual : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES A N :=
     (eventually_ge_atTop R).mono fun N hN => hKernel N hN
   obtain ⟨γ, hγ, hQuasi⟩ :=
@@ -187,6 +189,8 @@ section
 
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d D m : ℕ}
 
@@ -203,7 +207,7 @@ theorem IsPeriodic.exists_positive_parent_interaction_quasiLocalCommutator_gap
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES A N) ∧
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
@@ -215,17 +219,18 @@ theorem IsPeriodic.exists_positive_parent_interaction_quasiLocalCommutator_gap
           ∃ e : ℂ, Tendsto (fun n => φ
             (star (quasiLocalIntervalObservable d a k X) *
               (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                  (openInteractionMatrix h ((ℓ n + k) + r n)) *
+                  ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
                 quasiLocalIntervalObservable d a k X -
                 quasiLocalIntervalObservable d a k X *
                   quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                    (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                    ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
             (γ : ℂ) * φ (star (quasiLocalIntervalObservable d a k X) *
               quasiLocalIntervalObservable d a k X) ≤ e := by
   let : NeZero d := ⟨hA.physDim_ne_zero⟩
-  obtain ⟨R, hR, h, hh, hKernel⟩ := hA.exists_positive_parent_interaction
+  obtain ⟨R, hR, h, hh, hKernel⟩ :=
+    hA.exists_posSemidef_ker_hamiltonian_chainTranslates_eq_groundSpaceES
   have hEventual : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES A N :=
     (eventually_ge_atTop R).mono fun N hN => hKernel N hN
   obtain ⟨γ, hγ, hGap⟩ :=

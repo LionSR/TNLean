@@ -71,7 +71,7 @@ theorem exists_nonuniform_seamBoundaries_of_mem_torusPlaquetteParentKernel
   have hB := isGInjective_graphPhysicalPaddingTensor N
     (incidentRepresentation graphEdgeTail graphEdgeHead (fun e ↦ Fin (N e)) U) A hA
   have hN := bondDim_ne_zero_of_isSemiRegular B U hU
-  rw [ker_regionParentHamiltonian B torusPlaquetteRegion H hH] at hΨ
+  rw [ker_hamiltonian_ofPlace B torusPlaquetteRegion H hH] at hΨ
   refine ⟨dependentPhysicalProductFamilyMap (physicalRestrictionMatrix (Phys := Phys)) Ψ, ?_, ?_⟩
   · exact padding_restriction_eq_self_of_mem_regionParentGroundSpace N A hN (0 : X)
       torusPlaquetteRegion (fun v ↦ ⟨v, mem_torusPlaquetteRegion_self v⟩) hΨ

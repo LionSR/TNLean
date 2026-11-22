@@ -27,6 +27,8 @@ open scoped Matrix BigOperators InnerProductSpace ComplexOrder MatrixOrder
 
 namespace MPSTensor
 
+open ManyBody.Interaction (translationInvariant)
+
 variable {d a b : ℕ}
 
 /-- The four actual globally pinned trials, on the original source chain.
@@ -243,7 +245,7 @@ energy or state-rate condition. These are the source normalized-block
 hypotheses used for the variational construction; no injective perturbation
 or generic nonvanishing is needed for this energy upper bound alone.
 Source: arXiv:1210.6613, Lemma lowenergystates, item 3, lines 1289–1296. -/
-theorem re_inner_uncleHamiltonianES_trial_le_mul
+theorem re_inner_hamiltonian_uncleInteraction_trial_le_mul
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
@@ -256,7 +258,9 @@ theorem re_inner_uncleHamiltonianES_trial_le_mul
     ∃ C : ℝ, 0 < C ∧ ∀ (N : ℕ), 0 < N →
       let φ := (WithLp.linearEquiv 2 ℂ (NSiteSpace d (6 * N + 1))).symm
         (uncleTwoWallTrialSource A B R L N)
-      (⟪uncleHamiltonianES A B R L (6 * N + 1) φ, φ⟫_ℂ).re ≤ C * N := by
+      (⟪Matrix.toEuclideanLin
+          (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian φ, φ⟫_ℂ).re ≤ C
+            * N := by
   obtain ⟨C, hC, hPinned⟩ := norm_uncleTrialPinnedGlobalState_sq_le_mul A B R L hA hB
     ρA hρA ρB hρB hfixA hfixB hAB hBA
   refine ⟨8 * C, by positivity, fun N hN ↦ ?_⟩
@@ -271,7 +275,7 @@ theorem re_inner_uncleHamiltonianES_trial_le_mul
   calc
     _ ≤ (((d ^ 2 : ℕ) : ℝ)⁻¹) * ∑ i ∈ uncleTrialEndpointBonds N hN,
         ∑ τ : Cfg d (6 * N + 1), ‖uncleTrialPinnedEndpointState A B R L N hN i τ‖ ^ 2 :=
-      re_inner_uncleHamiltonianES_trial_le_pinnedEndpoint_norms A B R L N hN
+      re_inner_hamiltonian_uncleInteraction_trial_le_pinnedEndpoint_norms A B R L N hN
     _ = ∑ i ∈ uncleTrialEndpointBonds N hN,
         ‖uncleTrialPinnedGlobalState A B R L N hN i‖ ^ 2 := by
       rw [Finset.mul_sum]

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Spectral.Filter.Gaussian.GroundEstimate
-import QICLean.Analysis.Order.GlobalGap
+import QICLean.Spectral.Eigenvalue.GlobalGap
 import QICLean.Analysis.Exponential.UnitaryEvolution
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.Analysis.Calculus.Kernel

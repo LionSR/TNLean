@@ -19,7 +19,8 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.jointMixedColumnSector,
         MPSTensor.MPOSymmetry.jointMixedRowSector_apply,
         MPSTensor.MPOSymmetry.jointMixedColumnSector_apply,
-        MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction}
+        MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction,
+        MPSTensor.MPOSymmetry.toEuclideanLin_jointMixedEndpointParentInteraction}
     \leanok
     \uses{def:mpo_joint_mixed_family,def:mpo_joint_mixed_support}
     Let $r(\mu),c(\mu)\in\{0,1\}$ indicate whether the row and column
@@ -182,9 +183,9 @@ overlaps of the original endpoint blocks.
     \label{thm:mpo_joint_local_comparison}
     \lean{LinearMap.IsSymmetricProjection.one_sub_mul_le_add_one_sub,
         LinearMap.IsSymmetricProjection.one_sub_mul_mul_le,
-        MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction_isPositive,
-        MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction_zero_le_parentInteractionES,
-        MPSTensor.MPOSymmetry.parentInteractionES_jointMixedEndpointLeftTensor_le,
+        MPSTensor.MPOSymmetry.posSemidef_jointMixedEndpointParentInteraction,
+        MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction_zero_le_parentInteraction,
+        MPSTensor.MPOSymmetry.parentInteraction_jointMixedEndpointLeftTensor_le,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_one_sub_columnSector_zero_le_parentInteraction,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_one_sub_rowSector_one_le_parentInteraction}
     \leanok
@@ -227,10 +228,10 @@ overlaps of the original endpoint blocks.
 
 \begin{lemma}[Cyclic counting and the inactive penalty]
     \label{thm:mpo_joint_cyclic_penalty}
-    \lean{MPSTensor.MPOSymmetry.periodicLocalInteractionES_jointMixedRowSector,
-        MPSTensor.MPOSymmetry.periodicLocalInteractionES_jointMixedColumnSector,
-        MPSTensor.MPOSymmetry.sum_periodicLocalInteractionES_jointMixedRowSector,
-        MPSTensor.MPOSymmetry.sum_periodicLocalInteractionES_jointMixedColumnSector,
+    \lean{MPSTensor.MPOSymmetry.toEuclideanLin_translationInvariant_term_jointMixedRowWeight,
+        MPSTensor.MPOSymmetry.toEuclideanLin_translationInvariant_term_jointMixedColumnWeight,
+        MPSTensor.MPOSymmetry.sum_toEuclideanLin_translationInvariant_term_jointMixedRowWeight,
+        MPSTensor.MPOSymmetry.sum_toEuclideanLin_translationInvariant_term_jointMixedColumnWeight,
         MPSTensor.MPOSymmetry.jointMixedPeriodicViolationCount_eq_zero_iff,
         MPSTensor.MPOSymmetry.jointMixedPeriodicPhasePenalty_apply,
         MPSTensor.MPOSymmetry.mem_ker_jointMixedPeriodicPhasePenalty_iff,
@@ -271,8 +272,8 @@ overlaps of the original endpoint blocks.
     \lean{LinearMap.apply_eq_of_le_of_sub_le_of_apply_eq_zero,
         LinearMap.IsSymmetricProjection.apply_eq_self_of_one_sub_le_twice_of_mem_ker,
         LinearMap.IsPositive.ker_eq_of_le_of_eq_on_projection,
-        MPSTensor.MPOSymmetry.jointMixedRowSector_commute_periodicLocalInteraction,
-        MPSTensor.MPOSymmetry.jointMixedColumnSector_commute_periodicLocalInteraction,
+        MPSTensor.MPOSymmetry.jointMixedRowSector_commute_translationInvariant_term,
+        MPSTensor.MPOSymmetry.jointMixedColumnSector_commute_translationInvariant_term,
         MPSTensor.MPOSymmetry.jointMixedPeriodicPhasePenalty_commute,
         MPSTensor.MPOSymmetry.jointMixedPeriodicActiveProjection_commute,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_comparison,
@@ -308,8 +309,8 @@ overlaps of the original endpoint blocks.
 \begin{lemma}[Joint endpoint ground space and uniform periodic gap]
     \label{thm:mpo_joint_periodic_gap}
     \lean{LinearMap.re_inner_ge_half_of_one_sub_le_twice,
-        LinearMap.IsPositive.norm_gap_of_reducing_projection,
-        MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_norm_gap,
+        LinearMap.IsPositive.forall_hasEigenvalue_of_reducing_projection,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_gap,
         MPSTensor.MPOSymmetry.mpv_jointMixedEndpointInterpolation_zero,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_groundSpace_eq,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_groundSpace_eq_actual,
@@ -322,12 +323,13 @@ overlaps of the original endpoint blocks.
     $\ket{V^{(N)}(A_x(0))}=\ket{V^{(N)}(B_x)}$ and
     $\ker H'_N=\spn_{\C}\{\ket{V^{(N)}(A_x(0))}:x\in\Fin{r}\}$.
     There is a $\delta>0$, independent of $N$, such that every
-    $v\perp\ker H'_N$ satisfies
+    nonzero eigenvalue $\lambda$ of $H'_N$ satisfies
     \begin{align}
-        \|H'_Nv\| & \ge\min(\delta,1/2)\|v\|.
+        \lambda & \ge\min(\delta,1/2).
         \label{eq:mpo_joint_periodic_gap}
     \end{align}
-    Here $\delta$ is one gap for the full joint canonical parent.
+    Here $\delta$ is one lower bound for the nonzero eigenvalues of the
+    full joint canonical parent $K_N$. The kernel may be zero.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -350,7 +352,8 @@ overlaps of the original endpoint blocks.
         \ge\delta\|x\|^2+\tfrac12\|y\|^2
         \ge\min(\delta,1/2)\|v\|^2.
     \end{align}
-    Cauchy--Schwarz gives (\ref{eq:mpo_joint_periodic_gap}). If the common
+    Since $H'_N\ge0$, this quadratic bound on $(\ker H'_N)^\perp$ gives
+    (\ref{eq:mpo_joint_periodic_gap}). If the common
     physical alphabet is empty, the positive-length chain space is zero,
     and both conclusions hold directly. Empty block families require no
     separate nonemptiness assumption.

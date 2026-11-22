@@ -47,10 +47,10 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{lemma}[Single-site operators, permutations of sites and sites in the state zero]
     \label{lem:qc_site_permutations}
-    \lean{QuantumCircuit.prodOp_update_one_mulVec_apply,
+    \lean{QuantumCircuit.piKronecker_update_one_mulVec_apply,
         QuantumCircuit.IsZeroOn, QuantumCircuit.IsZeroOn.mono,
         QuantumCircuit.IsZeroOn.smul,
-        QuantumCircuit.IsZeroOn.prodOp_update_one_mulVec,
+        QuantumCircuit.IsZeroOn.piKronecker_update_one_mulVec,
         QuantumCircuit.cfgPerm,
         ManyBody.sitePermOp_mul_mul_conjTranspose,
         QuantumCircuit.permMatrix_cfgPerm_mul_permMatrix_cfgPerm,
@@ -120,7 +120,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         QuantumCircuit.TeleportHop.kraus_layerOne,
         QuantumCircuit.TeleportHop.kraus_layerTwo,
         QuantumCircuit.TeleportHop.sitePerm,
-        QuantumCircuit.sitePermOp_mul_prodOp,
+        QuantumCircuit.sitePermOp_mul_piKronecker,
         QuantumCircuit.TeleportHop.chainFrame,
         QuantumCircuit.TeleportHop.chainPre,
         QuantumCircuit.TeleportHop.chainFrame_mem_unitaryGroup,

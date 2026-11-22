@@ -165,7 +165,6 @@ theorem mixedEndpointEdgeLinearIsometry_adjoint_apply
       v (mixedEndpointEdgePhysicalCfg k ξ) :=
   coordinateLin_adjoint_apply _ _ _
 
-
 /-- Zero extension recovers the original coefficient on every encoded
 smaller-edge configuration. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpointEdgeLinearIsometry_apply_active
@@ -285,7 +284,7 @@ theorem mixedEndpointEdgeSectorProjection_commute_actualInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (k : MixedEndpointEdgePosition) :
     Commute (mixedEndpointEdgeSectorProjection D₀ D₁ k)
-      (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap := by
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) := by
   have hinner := (mixedEndpointColumnSector_commute_parentInteraction_zero A₀ A₁ 0).mul_left
     (mixedEndpointRowSector_commute_parentInteraction_zero A₀ A₁ 1)
   cases k with
@@ -317,7 +316,6 @@ def mixedEndpointEdgeSupportES
     Submodule ℂ (EuclideanSpace ℂ (mixedEndpointEdgeCfg D₀ D₁ k)) :=
   (mixedEndpointEdgeBoundaryMap A₀ A₁ k).range.map
     (WithLp.linearEquiv 2 ℂ (mixedEndpointEdgeCfg D₀ D₁ k → ℂ)).symm.toLinearMap
-
 
 /-- The common spelling of the three canonical smaller-edge constraints.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -437,9 +435,10 @@ theorem map_actualSupport_edgeAdjoint_eq_edgeSupport
 
 private theorem ker_actualInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    LinearMap.ker (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap =
+    LinearMap.ker (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) =
       (insertedTwoSiteMap (mixedEndpointBase A₀ A₁) (bondInterpolationMatrix D₀ D₁ 0)).range := by
   ext v
+  rw [toEuclideanLin_mixedEndpointParentInteraction]
   exact mem_ker_insertedParentInteraction_iff _ _ v
 
 /-- The actual boundary range is invariant under each explicitly derived
@@ -455,10 +454,10 @@ theorem mixedEndpointEdgeSectorProjection_invariant_actualSupport
   rintro _ ⟨v, hv, rfl⟩
   have hc := congrArg (fun T => T v)
     (mixedEndpointEdgeSectorProjection_commute_actualInteraction A₀ A₁ k).eq.symm
-  change (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap
+  change Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)
       (mixedEndpointEdgeSectorProjection D₀ D₁ k v) =
     mixedEndpointEdgeSectorProjection D₀ D₁ k
-      ((mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap v) at hc
+      ((Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) v) at hc
   rw [LinearMap.mem_ker.mp hv, map_zero] at hc
   exact hc
 
@@ -509,7 +508,7 @@ def mixedEndpointEdgeCompression
     EuclideanSpace ℂ (mixedEndpointEdgeCfg D₀ D₁ k) →ₗ[ℂ]
       EuclideanSpace ℂ (mixedEndpointEdgeCfg D₀ D₁ k) :=
   (mixedEndpointEdgeLinearIsometry D₀ D₁ k).toLinearMap.adjoint ∘ₗ
-    (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap ∘ₗ
+    Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0) ∘ₗ
       (mixedEndpointEdgeLinearIsometry D₀ D₁ k).toLinearMap
 
 /-- The actual edge compression intertwines with the original interaction.
@@ -518,20 +517,22 @@ theorem mixedEndpointEdgeCompression_intertwines
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (k : MixedEndpointEdgePosition) (v : EuclideanSpace ℂ (mixedEndpointEdgeCfg D₀ D₁ k)) :
     mixedEndpointEdgeLinearIsometry D₀ D₁ k (mixedEndpointEdgeCompression A₀ A₁ k v) =
-      mixedEndpointParentInteraction A₀ A₁ 0 (mixedEndpointEdgeLinearIsometry D₀ D₁ k v) := by
+      Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)
+        (mixedEndpointEdgeLinearIsometry D₀ D₁ k v) := by
   let J := (mixedEndpointEdgeLinearIsometry D₀ D₁ k).toLinearMap
   have hfix : mixedEndpointEdgeSectorProjection D₀ D₁ k (J v) = J v := by
     rw [← mixedEndpointEdgeLinearIsometry_comp_adjoint]
     change J ((J.adjoint ∘ₗ J) v) = J v
     rw [mixedEndpointEdgeLinearIsometry_adjoint_comp, LinearMap.id_apply]
-  change (J ∘ₗ J.adjoint) ((mixedEndpointParentInteraction A₀ A₁ 0) (J v)) =
-    (mixedEndpointParentInteraction A₀ A₁ 0) (J v)
+  change (J ∘ₗ J.adjoint) (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0) (J v)) =
+    Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0) (J v)
   rw [mixedEndpointEdgeLinearIsometry_comp_adjoint]
   have hc := congrArg (fun T => T (J v))
     (mixedEndpointEdgeSectorProjection_commute_actualInteraction A₀ A₁ k).eq
   change mixedEndpointEdgeSectorProjection D₀ D₁ k
-      ((mixedEndpointParentInteraction A₀ A₁ 0) (J v)) =
-    (mixedEndpointParentInteraction A₀ A₁ 0) (mixedEndpointEdgeSectorProjection D₀ D₁ k (J v)) at hc
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0) (J v)) =
+    Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)
+      (mixedEndpointEdgeSectorProjection D₀ D₁ k (J v)) at hc
   rw [hfix] at hc
   exact hc
 
@@ -541,9 +542,9 @@ theorem mixedEndpointEdgeCompression_isSymmetricProjection
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (k : MixedEndpointEdgePosition) :
     (mixedEndpointEdgeCompression A₀ A₁ k).IsSymmetricProjection := by
-  have hP : (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap.IsSymmetricProjection :=
-    ⟨(Submodule.isSymmetricProjection_starProjection _).isIdempotentElem.one_sub,
-      (mixedEndpointParentInteraction_isPositive A₀ A₁ 0).isSymmetric⟩
+  have hP : (Matrix.toEuclideanLin
+      (mixedEndpointParentInteraction A₀ A₁ 0)).IsSymmetricProjection :=
+    isSymmetricProjection_toEuclideanLin_mixedEndpointParentInteraction A₀ A₁ 0
   constructor
   · apply LinearMap.ext
     intro v
@@ -562,7 +563,8 @@ theorem ker_mixedEndpointEdgeCompression
   rw [mixedEndpointEdgeSupportES_eq_comap_actualSupport, ← ker_actualInteraction]
   ext v
   change mixedEndpointEdgeCompression A₀ A₁ k v = 0 ↔
-    mixedEndpointParentInteraction A₀ A₁ 0 (mixedEndpointEdgeLinearIsometry D₀ D₁ k v) = 0
+    Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)
+      (mixedEndpointEdgeLinearIsometry D₀ D₁ k v) = 0
   rw [← mixedEndpointEdgeCompression_intertwines]
   constructor
   · intro hv
@@ -604,11 +606,13 @@ theorem mixedEndpointLastEdge_compression_eq_constraint
 
 /-- The actual compressed interior interaction is the ordinary endpoint
 parent term. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpointInteriorEdge_compression_eq_parentInteractionES
+theorem mixedEndpointInteriorEdge_compression_eq_toEuclideanLin_parentInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    mixedEndpointEdgeCompression A₀ A₁ .interior = parentInteractionES A₀ 2 := by
+    mixedEndpointEdgeCompression A₀ A₁ .interior =
+      (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A₀ 2)) :
+      EuclideanSpace ℂ (Cfg (D₀ * D₀) 2) →ₗ[ℂ] EuclideanSpace ℂ (Cfg (D₀ * D₀) 2)) := by
   rw [mixedEndpointEdge_compression_eq_constraint]
-  exact mixedEndpointInteriorEdgeConstraintES_eq_parentInteractionES A₀ A₁
+  exact mixedEndpointInteriorEdgeConstraintES_eq_toEuclideanLin_parentInteraction A₀ A₁
 
 end
 

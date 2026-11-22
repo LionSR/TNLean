@@ -136,8 +136,8 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
 
 \begin{lemma}[Boundary spaces under physical embeddings]
     \label{thm:spt_physical_embedding_boundary}
-    \lean{Matrix.rectKronecker_conjTranspose,
-        Matrix.rectKronecker_conjTranspose_mul_self,
+    \lean{Matrix.conjTranspose_piKronecker,
+        Matrix.IsIsometry.piKronecker,
         MPSTensor.groundSpaceMap_rotatePhysical_rectangular,
         MPSTensor.groundSpace_rotatePhysical_rectangular,
         MPSTensor.groundSpaceES_rotatePhysical_rectangular}
@@ -215,7 +215,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
 \end{definition}
 
 \begin{lemma}[The canonical parent interaction is a parent interaction]\label{thm:canonical_parent_interaction_is_parent_interaction}
-    \lean{MPSTensor.isParentInteraction_parentInteractionES}
+    \lean{MPSTensor.isParentInteraction_toEuclideanLin_toMatrix'_parentInteraction}
     \leanok
     \uses{def:is_parent_interaction, rem:euclidean_local_projector_ingredients}
     The canonical parent interaction $P_L^{\mathrm{ES}}(A)$, the orthogonal
@@ -224,8 +224,8 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
 
 \begin{proof}
     \leanok
-    \uses{lem:euclidean_local_projector_positive, lem:parent_interaction_es_kernel}
-    By Lemma~\ref{lem:euclidean_local_projector_positive}, an orthogonal
+    \uses{def:canonical_parent_interaction_matrix, lem:parent_interaction_es_kernel}
+    By Definition~\ref{def:canonical_parent_interaction_matrix}, an orthogonal
     projector is hermitian and positive semidefinite, and by
     Lemma~\ref{lem:parent_interaction_es_kernel} a vector is annihilated by the
     projector onto $G_L(A)^\perp$ exactly when it lies in $G_L(A)$, so
@@ -249,8 +249,8 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
 \end{definition}
 
 \begin{lemma}[The deformed interaction is a parent interaction]\label{thm:deformed_interaction_parent}
-    \lean{MPSTensor.deformedInteraction_isPositive}
-    \lean{MPSTensor.ker_deformedInteraction}
+    \lean{MPSTensor.posSemidef_deformedInteraction}
+    \lean{MPSTensor.ker_toEuclideanLin_deformedInteraction}
     \lean{MPSTensor.IsParentInteraction.deformedInteraction}
     \leanok
     \uses{def:physical_rotation, def:is_parent_interaction, def:deformed_interaction}
@@ -385,11 +385,12 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
 
 \begin{lemma}[Uniqueness of the ground state is preserved]\label{thm:unique_ground_state_physical_rotation}
     \lean{MPSTensor.onSiteTensorPowEquiv}
-    \lean{MPSTensor.hasUniqueGroundState_chainGroundSpace_rotatePhysical}
+    \lean{MPSTensor.chainGroundSpace_rotatePhysical_eq_span}
     \leanok
     \uses{def:physical_rotation, def:chain_ground_space, def:has_unique_ground_state}
-    Let $\Lambda\in\MN{d}$ be invertible. If $\dim\mathcal G_{N,L}(A)=1$, then
-    $\dim\mathcal G_{N,L}(\Lambda A)=1$.
+    Let $\Lambda\in\MN{d}$ be invertible. If $\mathcal G_{N,L}(A)$ is the
+    line through a nonzero vector $\psi$, then $\mathcal G_{N,L}(\Lambda A)$
+    is the line through the nonzero vector $\Lambda^{\otimes N}\psi$.
 \end{lemma}
 
 \begin{proof}
@@ -397,5 +398,6 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
     \uses{thm:chain_ground_space_physical_rotation, lem:on_site_tensor_pow_mul}
     By (\ref{eq:chain_ground_space_physical_rotation}), $\mathcal G_{N,L}(\Lambda A)$
     is the image of $\mathcal G_{N,L}(A)$ under the linear automorphism
-    $\Lambda^{\otimes N}$, which preserves dimension.
+    $\Lambda^{\otimes N}$, which maps the line through $\psi$ onto the line
+    through $\Lambda^{\otimes N}\psi$ and nonzero vectors to nonzero vectors.
 \end{proof}

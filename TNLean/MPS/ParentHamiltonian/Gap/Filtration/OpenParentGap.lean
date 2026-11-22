@@ -46,26 +46,25 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- A fixed-window suffix Hamiltonian vanishes before its full interaction
-window fits.  This supplies the early-index part of the full-range C1 and C2
-hypotheses. -/
-theorem openSuffixParentHamiltonianES_eq_zero_of_lt
+/-- The Hamiltonian of an interval of exactly the interaction length vanishes before its window
+fits. This supplies the early-index part of the full-range C1 and C2 hypotheses. -/
+theorem hamiltonian_restrict_parentChainInteraction_eq_zero_of_lt
     (A : MPSTensor d D) {L N n : ℕ} (hnL : n < L) :
-    openSuffixParentHamiltonianES A L L N n = 0 := by
-  rw [openSuffixParentHamiltonianES]
-  apply Finset.sum_eq_zero
-  intro i hi
-  rw [Finset.mem_filter] at hi
-  exfalso
-  omega
+    ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian = 0 := by
+  rw [ManyBody.Interaction.hamiltonian_restrict,
+    Finset.filter_false_of_mem fun i _ ↦ by omega, ManyBody.Interaction.partialHamiltonian_empty]
 
-/-- Shifting the full filtration range by one gives the C1 suffix sum.  Terms
+/-- Shifting the full filtration range by one gives the C1 sum over intervals. Terms
 before the first complete length-\(L\) window are zero. -/
-theorem sum_range_openSuffixParentHamiltonianES_succ_eq_Icc
+theorem sum_range_hamiltonian_restrict_parentChainInteraction_succ_eq_Icc
     (A : MPSTensor d D) {L N : ℕ} (hL : 0 < L) :
-    ∑ n ∈ Finset.range N, openSuffixParentHamiltonianES A L L N (n + 1) =
-      ∑ n ∈ Finset.Icc L N, openSuffixParentHamiltonianES A L L N n := by
-  let f := fun n ↦ openSuffixParentHamiltonianES A L L N n
+    ∑ n ∈ Finset.range N, ((parentChainInteraction A L N).restrict
+        fun i ↦ n + 1 - L ≤ i.val ∧ i.val + L ≤ n + 1).hamiltonian =
+      ∑ n ∈ Finset.Icc L N, ((parentChainInteraction A L N).restrict
+        fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian := by
+  let f := fun n ↦ ((parentChainInteraction A L N).restrict
+    fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian
   have hshift :
       ∑ n ∈ Finset.range N, f (n + 1) = ∑ n ∈ Finset.Icc 1 N, f n := by
     apply Finset.sum_bij (fun n _ ↦ n + 1)
@@ -91,103 +90,81 @@ theorem sum_range_openSuffixParentHamiltonianES_succ_eq_Icc
       omega
     · intro n hn hnL
       simp only [Finset.mem_Icc] at hn hnL
-      exact openSuffixParentHamiltonianES_eq_zero_of_lt A (by omega)
+      exact hamiltonian_restrict_parentChainInteraction_eq_zero_of_lt A (by omega)
   exact hshift.trans htrim.symm
 
-/-- Full-range C1 for interaction length \(l+1\), with the source counting
-constant \(d_{l+1}=1\).  The range indices are shifted because the local
-Hamiltonian at martingale index \(n\) acts on \([n-l,n+1)\). -/
-theorem openParentHamiltonianES_C1_full_range_quadratic_form
-    (A : MPSTensor d D) {l N : ℕ} (x : EuclideanSpace ℂ (Cfg d N)) :
+/-- Full-range C1 for intervals of exactly the interaction length \(L\), with the source
+counting constant \(d_L=1\). The range indices are shifted because the local Hamiltonian at
+martingale index \(n\) acts on \([n+1-L,n+1)\). Nachtergaele, arXiv:cond-mat/9410110, condition
+C1, lines 1030--1041. -/
+theorem parentChainInteraction_C1_full_range_quadratic_form
+    (A : MPSTensor d D) {L N : ℕ} (hL : 0 < L) (x : EuclideanSpace ℂ (Cfg d N)) :
     0 ≤ ∑ n ∈ Finset.range N,
-        (⟪openSuffixParentHamiltonianES A (l + 1) (l + 1) N (n + 1) x, x⟫_ℂ).re ∧
+        (⟪Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+          fun i ↦ n + 1 - L ≤ i.val ∧ i.val + L ≤ n + 1).hamiltonian x, x⟫_ℂ).re ∧
       (∑ n ∈ Finset.range N,
-        (⟪openSuffixParentHamiltonianES A (l + 1) (l + 1) N (n + 1) x, x⟫_ℂ).re) ≤
-        (⟪openParentHamiltonianES A (l + 1) N x, x⟫_ℂ).re := by
-  have hsum := sum_range_openSuffixParentHamiltonianES_succ_eq_Icc
-    A (L := l + 1) (N := N) (by omega)
-  have hC1 := openParentHamiltonianES_C1 A
-    (L := l + 1) (l := l + 1) (N := N) (le_refl _)
-  simp only [Nat.sub_self, zero_add, Nat.cast_one, one_smul] at hC1
-  rw [← hsum] at hC1
-  let S := ∑ n ∈ Finset.range N,
-    openSuffixParentHamiltonianES A (l + 1) (l + 1) N (n + 1)
-  constructor
-  · exact Finset.sum_nonneg fun n hn ↦
-      (openSuffixParentHamiltonianES_isPositive A (l + 1) (l + 1) N (n + 1)).2 x
-  · have hpos := (LinearMap.le_def (f := S) (g := openParentHamiltonianES A (l + 1) N)).mp hC1.2
-    have hx := hpos.2 x
-    have hSform :
-        RCLike.re ⟪S x, x⟫_ℂ =
-          ∑ n ∈ Finset.range N,
-            (⟪openSuffixParentHamiltonianES A (l + 1) (l + 1) N (n + 1) x,
-              x⟫_ℂ).re := by
-      simp only [S, LinearMap.sum_apply, sum_inner, map_sum, RCLike.re_to_complex]
-    change 0 ≤ RCLike.re ⟪(openParentHamiltonianES A (l + 1) N - S) x, x⟫_ℂ at hx
-    rw [LinearMap.sub_apply, inner_sub_left, map_sub, hSform] at hx
-    exact sub_nonneg.mp hx
+        (⟪Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+          fun i ↦ n + 1 - L ≤ i.val ∧ i.val + L ≤ n + 1).hamiltonian x, x⟫_ℂ).re) ≤
+        (⟪Matrix.toEuclideanLin (parentChainInteraction A L N).hamiltonian x, x⟫_ℂ).re := by
+  have hC1 := (parentChainInteraction_C1 A (le_refl L) N).2
+  rw [Nat.sub_self, zero_add, Nat.cast_one, one_smul,
+    ← sum_range_hamiltonian_restrict_parentChainInteraction_succ_eq_Icc A hL,
+    ← Matrix.toEuclideanLin_le_toEuclideanLin_iff, map_sum] at hC1
+  refine ⟨Finset.sum_nonneg fun n _ ↦ (Matrix.isPositive_toEuclideanLin_iff.mpr
+    (posSemidef_hamiltonian_restrict_parentChainInteraction A L N _)).2 x, ?_⟩
+  have hx := ((LinearMap.le_def ..).mp hC1).2 x
+  rw [LinearMap.sub_apply, inner_sub_left, map_sub, LinearMap.sum_apply, sum_inner,
+    map_sum] at hx
+  exact sub_nonneg.mp hx
 
-/-- Full-range norm-square form of C2 with \(\gamma_{l+1}=1\).  At early
-indices both sides vanish.  Once the window fits, the suffix Hamiltonian is the
-orthogonal projection \(I-Q_n\). -/
-theorem openSuffixParentHamiltonianES_C2_full_range_norm_sq
-    (A : MPSTensor d D) {l N n : ℕ} (hnN : n < N)
-    (x : EuclideanSpace ℂ (Cfg d N)) :
-    ‖((LinearMap.id : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ]
-          EuclideanSpace ℂ (Cfg d N)) -
-        openIntervalGroundProjectionES A (l + 1) l N n) x‖ ^ 2 ≤
-      (⟪openSuffixParentHamiltonianES A (l + 1) (l + 1) N (n + 1) x, x⟫_ℂ).re := by
-  by_cases hnl : n < l
-  · have hzero := openSuffixParentHamiltonianES_eq_zero_of_lt
-      A (L := l + 1) (N := N) (n := n + 1) (by omega)
-    simp only [openIntervalGroundProjectionES, hzero, LinearMap.ker_zero,
-      Submodule.starProjection_top']
+/-- Full-range norm-square form of C2 with \(\gamma_L=1\) for an interval of exactly the
+interaction length. Before the window fits both sides vanish; once it fits, the interval
+Hamiltonian is the orthogonal projection \(I-Q\) onto the complement of its kernel.
+Nachtergaele, arXiv:cond-mat/9410110, condition C2, lines 1045--1056. -/
+theorem parentChainInteraction_C2_full_range_norm_sq
+    (A : MPSTensor d D) {L N n : ℕ} (hnN : n ≤ N) (x : EuclideanSpace ℂ (Cfg d N)) :
+    ‖((LinearMap.id : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N)) -
+        (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+          fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian)).starProjection.toLinearMap)
+          x‖ ^ 2 ≤
+      (⟪Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+        fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian x, x⟫_ℂ).re := by
+  by_cases hnL : n < L
+  · rw [hamiltonian_restrict_parentChainInteraction_eq_zero_of_lt A hnL, map_zero,
+      LinearMap.ker_zero, Submodule.starProjection_top']
     norm_num
-  · have hln : l + 1 ≤ n + 1 := by omega
-    have hnN' : n + 1 ≤ N := by omega
-    let H := openSuffixParentHamiltonianES A (l + 1) (l + 1) N (n + 1)
-    have hH : H.IsSymmetricProjection :=
-      openSuffixParentHamiltonianES_isSymmetricProjection A (by omega) hln hnN'
-    have hEq :
-        H = (LinearMap.id : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ]
-          EuclideanSpace ℂ (Cfg d N)) -
-          openIntervalGroundProjectionES A (l + 1) l N n := by
-      simpa only [H, openIntervalGroundProjectionES] using
-        openSuffixParentHamiltonianES_eq_id_sub_starProjection_ker
-          A (by omega) hln hnN'
-    rw [← hEq]
-    have hIdem : H (H x) = H x := by
-      have h := congrArg (fun T : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ]
-        EuclideanSpace ℂ (Cfg d N) ↦ T x) hH.isIdempotentElem.eq
-      simpa [Module.End.mul_apply] using h
-    calc
-      ‖H x‖ ^ 2 = (⟪H x, H x⟫_ℂ).re :=
-        (inner_self_eq_norm_sq (𝕜 := ℂ) (H x)).symm
+  · have hLn : L ≤ n := by omega
+    have hH := Matrix.isSymmetricProjection_toEuclideanLin_iff.mpr
+      (isStarProjection_hamiltonian_restrict_parentChainInteraction A hLn hnN)
+    rw [← toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_id_sub_starProjection
+      A hLn hnN]
+    generalize Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian = H at hH ⊢
+    have hIdem : H (H x) = H x := LinearMap.congr_fun hH.isIdempotentElem.eq x
+    calc ‖H x‖ ^ 2 = (⟪H x, H x⟫_ℂ).re := (inner_self_eq_norm_sq (𝕜 := ℂ) (H x)).symm
       _ = (⟪H (H x), x⟫_ℂ).re := by rw [hH.isSymmetric (H x) x]
-      _ = (⟪H x, x⟫_ℂ).re := by rw [hIdem]
-      _ ≤ (⟪openSuffixParentHamiltonianES A (l + 1) (l + 1) N (n + 1) x,
-          x⟫_ℂ).re := le_rfl
+      _ ≤ (⟪H x, x⟫_ℂ).re := by rw [hIdem]
 
-/-- Fixed-parameter open-chain gap obtained from the fixed-ambient C3 bound.
-For \(L=l+1\), conditions C1 and C2 have constants one, so the coefficient is
-\((1-\epsilon_l\sqrt{l+1})^2\). -/
-theorem openParentHamiltonianES_norm_gap_of_fixedAmbient_c3
-    [NeZero D] (A : MPSTensor d D) {l N : ℕ}
-    (hl : 0 < l) (hInj : Kraus.IsNBlkInjective A l) (hlN : l + 1 ≤ N)
-    {ε : ℝ} (hε : 0 ≤ ε)
+/-- Fixed-parameter open-chain gap obtained from the fixed-ambient C3 bound: every eigenvalue
+of the open-chain parent Hamiltonian is `0` or at least \((1-\epsilon_l\sqrt{l+1})^2\). For
+\(L=l+1\), conditions C1 and C2 have constants one. Nachtergaele, arXiv:cond-mat/9410110,
+Theorem 2.1(i), lines 1119--1130. -/
+theorem hamiltonian_parentChainInteraction_gap_of_fixedAmbient_c3
+    (A : MPSTensor d D) {l N : ℕ} {ε : ℝ} (hε : 0 ≤ ε)
     (hεlt : ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ))
     (hC3 : ∀ n ∈ Finset.range N,
       ‖LinearMap.toContinuousLinearMap
         ((openIntervalGroundProjectionES A (l + 1) l N n).comp
           ((fixedAmbientNestedGroundProjectionsES A (l + 1) N).martingaleDifference n))‖ ≤ ε) :
-    ∀ v ∈ (groundSpaceES A N)ᗮ,
-      (1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2 * ‖v‖ ≤
-        ‖openParentHamiltonianES A (l + 1) N v‖ := by
+    ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A (l + 1) N).hamiltonian) μ →
+        μ = 0 ∨ (((1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2 : ℝ) : ℂ) ≤ μ := by
   let G := fixedAmbientNestedGroundProjectionsES A (l + 1) N
   let Q := fun n ↦ openIntervalGroundProjectionES A (l + 1) l N n
-  let localHamiltonian := fun n ↦
-    openSuffixParentHamiltonianES A (l + 1) (l + 1) N (n + 1)
-  let H := openParentHamiltonianES A (l + 1) N
+  let localHamiltonian := fun n ↦ Matrix.toEuclideanLin
+    ((parentChainInteraction A (l + 1) N).restrict
+      fun i ↦ n + 1 - (l + 1) ≤ i.val ∧ i.val + (l + 1) ≤ n + 1).hamiltonian
+  let H := Matrix.toEuclideanLin (parentChainInteraction A (l + 1) N).hamiltonian
   have hzero : G.projection 0 = LinearMap.id := by
     change openPrefixGroundProjectionES A (l + 1) N 0 =
       (1 : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N))
@@ -201,44 +178,43 @@ theorem openParentHamiltonianES_norm_gap_of_fixedAmbient_c3
           (Q n).comp (G.martingaleDifference m) := by
     intro n hn m hout
     exact fixedAmbient_martingaleDifference_commute_openIntervalGroundProjectionES
-      A hlN hout
+      A hout
   have hground : LinearMap.range (G.projection N) = LinearMap.ker H := by
-    change LinearMap.range (openPrefixGroundProjectionES A (l + 1) N N) =
-      LinearMap.ker (openParentHamiltonianES A (l + 1) N)
+    change LinearMap.range (openPrefixGroundProjectionES A (l + 1) N N) = LinearMap.ker H
     simp only [openPrefixGroundProjectionES, Submodule.range_starProjection]
-    rw [openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES]
+    rw [hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChainInteraction]
   have hgap :=
-    FrustrationFree.NestedGroundProjections.norm_lower_bound_of_nachtergaele_c1_c3_full_range
+    FrustrationFree.NestedGroundProjections.forall_hasEigenvalue_of_nachtergaele_c1_c3_full_range
       G Q localHamiltonian H N l hzero
       (γ := (1 : ℝ)) (d := (1 : ℝ)) (ε := ε)
       (by norm_num) (by norm_num) hε hεlt hQ hcomm
       (fun x ↦ by
         simpa only [localHamiltonian, H, one_mul] using
-          openParentHamiltonianES_C1_full_range_quadratic_form A x)
+          parentChainInteraction_C1_full_range_quadratic_form A (Nat.succ_pos l) x)
       (fun n hn x ↦ by
-        simpa only [localHamiltonian, Q, one_mul] using
-          openSuffixParentHamiltonianES_C2_full_range_norm_sq A
-            (Finset.mem_range.mp hn) x)
-      hC3 (openParentHamiltonianES_isPositive A (l + 1) N) hground
-  rw [ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
-    hInj hl hlN] at hgap
+        simpa only [localHamiltonian, Q, one_mul, openIntervalGroundProjectionES] using
+          parentChainInteraction_C2_full_range_norm_sq A
+            (Nat.succ_le_of_lt (Finset.mem_range.mp hn)) x)
+      hC3 (Matrix.isPositive_toEuclideanLin_iff.mpr
+        (posSemidef_hamiltonian_parentChainInteraction A (l + 1) N)) hground
   simpa only [H, div_one, one_mul] using hgap
 
-/-- A primitive MPS has a uniform nonwrapping open-parent-Hamiltonian gap.
-The witnesses use the same \(l\) and \(\epsilon_l\) as the physical C3
-estimate, uniformly for every \(N\) with \(l+1\leq N\). -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_openParentHamiltonianES_gap
+/-- A primitive MPS has a uniform gap of its open-chain parent Hamiltonians: every eigenvalue
+is `0` or at least \((1-\epsilon_l\sqrt{l+1})^2\). The witnesses use the same \(l\) and
+\(\epsilon_l\) as the physical C3 estimate, uniformly for every \(N\) with \(l+1\leq N\).
+Nachtergaele, arXiv:cond-mat/9410110, Theorem 2.1(i), lines 1119--1130. -/
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_hamiltonian_parentChainInteraction_gap
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ _hl : 1 < l, ∃ _hInj : Kraus.IsNBlkInjective A l,
       0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
-      ∀ N : ℕ, l + 1 ≤ N → ∀ v ∈ (groundSpaceES A N)ᗮ,
-        (1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2 * ‖v‖ ≤
-          ‖openParentHamiltonianES A (l + 1) N v‖ := by
+      ∀ N : ℕ, l + 1 ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentChainInteraction A (l + 1) N).hamiltonian) μ →
+          μ = 0 ∨ (((1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2 : ℝ) : ℂ) ≤ μ := by
   obtain ⟨l, ε, hl, hInj, hε, hεlt, hC3⟩ :=
     hP.exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold hρ
-  refine ⟨l, ε, hl, hInj, hε, hεlt, fun N hlN ↦ ?_⟩
-  exact openParentHamiltonianES_norm_gap_of_fixedAmbient_c3
-    A hl.le hInj hlN hε hεlt (fun n hn ↦ hC3 N n (Finset.mem_range.mp hn))
+  exact ⟨l, ε, hl, hInj, hε, hεlt, fun N _ ↦
+    hamiltonian_parentChainInteraction_gap_of_fixedAmbient_c3 A hε hεlt
+      fun n hn ↦ hC3 N n (Finset.mem_range.mp hn)⟩
 
 end MPSTensor

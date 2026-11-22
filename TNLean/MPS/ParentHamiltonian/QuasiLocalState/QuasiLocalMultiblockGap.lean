@@ -75,17 +75,18 @@ section
 open scoped Matrix BigOperators ComplexOrder
 open SpinChain
 
-namespace MPSTensor
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
 
 variable {d D : ℕ}
 
-set_option linter.style.longLine false in
 /-- Every positive parent interaction at range at least \(D^4+1\) has a
 positive commutator bound in the constructed primitive quasi-local state.
 The constant is independent of the interval, its position, and the observable.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and Section 6,
 lines 2649--2675; CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_quasiLocalCommutator_gap_of_isParentInteraction
+theorem exists_pos_quasiLocalCommutator_gap_of_isParentInteraction
     [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {R : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
@@ -108,7 +109,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_quasiLocalCommutat
     quasiLocalExpectation_quasiLocalIntervalObservable]
   exact hgap X hk hcenter
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap
 
 end
 
@@ -200,6 +201,8 @@ section
 
 open Filter SpinChain
 open scoped Matrix ComplexOrder BigOperators Topology
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d b : ℕ} {D : Fin b → ℕ} [NeZero d] [∀ i, NeZero (D i)]
 
@@ -226,11 +229,11 @@ theorem exists_pos_multiblock_quasiLocalCommutator_limit_gap
         Tendsto ℓ f atTop → Tendsto r f atTop →
         ∃ e : ℂ, Tendsto (fun n => ω α (star (quasiLocalIntervalObservable d a k X) *
           (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-              (openInteractionMatrix h ((ℓ n + k) + r n)) *
+              ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
             quasiLocalIntervalObservable d a k X -
             quasiLocalIntervalObservable d a k X *
               quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
           (γ : ℂ) * ω α (star (quasiLocalIntervalObservable d a k X) *
             quasiLocalIntervalObservable d a k X) ≤ e := by
   dsimp only
@@ -286,11 +289,11 @@ theorem exists_pure_primitiveFamily_quasiLocalCommutator_limit_gap_of_wordTupleS
         Tendsto ℓ f atTop → Tendsto r f atTop →
         ∃ e : ℂ, Tendsto (fun n => ω α (star (quasiLocalIntervalObservable d a k X) *
           (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-              (openInteractionMatrix h ((ℓ n + k) + r n)) *
+              ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
             quasiLocalIntervalObservable d a k X -
             quasiLocalIntervalObservable d a k X *
               quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
           (γ : ℂ) * ω α (star (quasiLocalIntervalObservable d a k X) *
             quasiLocalIntervalObservable d a k X) ≤ e := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, _⟩ :=

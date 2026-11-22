@@ -19,19 +19,6 @@ lines 440–453, and Appendix B, lines 2614–2632.
 
 open scoped Matrix
 
-namespace Matrix
-
-/-- Scaling every factor scales its finite Kronecker power by the product
-of the scalars. Source context: arXiv:1010.3732, Appendix B, lines 2614–2632. -/
-theorem finKronecker_const_smul {d N : ℕ}
-    (z : ℂ) (A : Matrix (Fin d) (Fin d) ℂ) :
-    (finKronecker fun _ : Fin N => z • A) =
-      z ^ N • (finKronecker fun _ : Fin N => A) := by
-  ext σ τ
-  simp [finKronecker_apply, Finset.prod_mul_distrib]
-
-end Matrix
-
 namespace MPSTensor
 
 /-- A physical character change preserves the same symmetric interaction
@@ -52,7 +39,7 @@ def SymmetricGappedInteractionPath.physicalCharacterTwist
   continuous := P.continuous
   gap := P.gap
   symmetric γ hγ g N hN := by
-    simp only [MPSTensor.physicalCharacterTwist_apply, Matrix.finKronecker_const_smul]
+    simp only [MPSTensor.physicalCharacterTwist_apply, Matrix.piKronecker_smul, Fintype.card_fin]
     exact (P.symmetric γ hγ g N hN).smul_right (χ g ^ N)
 
 /-- The exact MPS ground realization is preserved by changing the physical

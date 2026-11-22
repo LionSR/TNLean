@@ -19,6 +19,9 @@ two oriented windows when the ring has exactly two sites.
 
 Bachmann–Nachtergaele, arXiv:1112.4097, Section II, equations (4)–(8),
 restricted here to one species with zero phase.
+
+The formulas are stated for the terms and the Hamiltonian of the parent interaction on the
+ring (`parentRingInteraction`), acting through `Matrix.toEuclideanLin`.
 -/
 
 open scoped Matrix BigOperators InnerProductSpace
@@ -27,13 +30,16 @@ namespace MPSTensor
 
 /-- The actual translated PVBS interaction has the occupation/hopping formula
 at every cyclic bond, including either orientation of a two-site ring. -/
-theorem localTermES_pvbs_two_apply (μ : ℝ) {N : ℕ} (hN : 2 ≤ N) (i : Fin N)
-    (v : EuclideanSpace ℂ (Cfg 2 N)) (σ : Cfg 2 N) :
-    localTermES (pvbsTensor (μ : ℂ)) 2 i v σ =
+theorem toEuclideanLin_parentRingInteraction_term_pvbs_two_apply (μ : ℝ) {N : ℕ}
+    (hN : 2 ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg 2 N)) (σ : Cfg 2 N) :
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin ((parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).term i) v σ =
       (((μ : ℂ) ^ 2 * (σ i).val + (σ (cyclicForwardSite i 1)).val) * v σ -
         (μ : ℂ) * (if σ i = σ (cyclicForwardSite i 1) then 0
           else v (σ ∘ Equiv.swap i (cyclicForwardSite i 1)))) / (1 + (μ : ℂ) ^ 2) := by
-  rw [localTermES_apply _ 2 i hN]
+  have : NeZero N := ⟨by omega⟩
+  rw [toEuclideanLin_parentRingInteraction_term_apply _ hN,
+    toEuclideanLin_toMatrix'_parentInteraction]
   change parentInteraction (pvbsTensor (μ : ℂ)) 2
     (fun τ => v (cyclicCfg (Fin.pos i) 2 i τ σ)) (extractWindow 2 i σ) = _
   rw [parentInteraction_pvbs_two_apply,
@@ -44,17 +50,20 @@ theorem localTermES_pvbs_two_apply (μ : ℝ) {N : ℕ} (hN : 2 ≤ N) (i : Fin 
 
 /-- Relative to the critical interaction, the local change is a diagonal
 occupation field with different weights at the two ends of the bond. -/
-theorem localTermES_pvbs_decomposition (μ : ℝ) {N : ℕ} (hN : 2 ≤ N) (i : Fin N)
-    (v : EuclideanSpace ℂ (Cfg 2 N)) (σ : Cfg 2 N) :
-    localTermES (pvbsTensor (μ : ℂ)) 2 i v σ =
-      ((2 * μ / (1 + μ ^ 2) : ℝ) : ℂ) * localTermES (pvbsTensor 1) 2 i v σ +
+theorem toEuclideanLin_parentRingInteraction_term_pvbs_decomposition (μ : ℝ) {N : ℕ}
+    (hN : 2 ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg 2 N)) (σ : Cfg 2 N) :
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin ((parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).term i) v σ =
+      ((2 * μ / (1 + μ ^ 2) : ℝ) : ℂ) *
+          Matrix.toEuclideanLin ((parentRingInteraction (pvbsTensor 1) 2 N).term i) v σ +
         ( (((μ ^ 2 - μ) / (1 + μ ^ 2) : ℝ) : ℂ) * (σ i).val +
           (((1 - μ) / (1 + μ ^ 2) : ℝ) : ℂ) * (σ (cyclicForwardSite i 1)).val ) *
             v σ := by
+  have : NeZero N := ⟨by omega⟩
   have hdreal : 0 < 1 + μ ^ 2 := by positivity
   have hd : (1 + (μ : ℂ) ^ 2) ≠ 0 := by exact_mod_cast hdreal.ne'
-  rw [localTermES_pvbs_two_apply μ hN]
-  have h := localTermES_pvbs_two_apply 1 hN i v σ
+  rw [toEuclideanLin_parentRingInteraction_term_pvbs_two_apply μ hN]
+  have h := toEuclideanLin_parentRingInteraction_term_pvbs_two_apply 1 hN i v σ
   norm_num only [Complex.ofReal_one, one_pow, one_mul] at h
   rw [h]
   push_cast
@@ -63,22 +72,23 @@ theorem localTermES_pvbs_decomposition (μ : ℝ) {N : ℕ} (hN : 2 ≤ N) (i : 
 
 /-- On a periodic ring, the PVBS Hamiltonian is the sum of a positive multiple
 of the critical parent and the squared hopping imbalance times particle number. -/
-theorem parentHamiltonianES_pvbs_decomposition (μ : ℝ) {N : ℕ} (hN : 2 ≤ N)
-    (v : EuclideanSpace ℂ (Cfg 2 N)) (σ : Cfg 2 N) :
-    parentHamiltonianES (pvbsTensor (μ : ℂ)) 2 N v σ =
+theorem toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_decomposition (μ : ℝ) {N : ℕ}
+    (hN : 2 ≤ N) (v : EuclideanSpace ℂ (Cfg 2 N)) (σ : Cfg 2 N) :
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian v σ =
       ((2 * μ / (1 + μ ^ 2) : ℝ) : ℂ) *
-        parentHamiltonianES (pvbsTensor 1) 2 N v σ +
+        Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) 2 N).hamiltonian v σ +
       ((((μ - 1) ^ 2 / (1 + μ ^ 2) : ℝ) : ℂ) *
         (∑ i : Fin N, ((σ i).val : ℂ))) * v σ := by
+  have : NeZero N := ⟨by omega⟩
   let : NeZero N := ⟨by omega⟩
   have hshift : ∑ i : Fin N, ((σ (cyclicForwardSite i 1)).val : ℂ) =
       ∑ i : Fin N, ((σ i).val : ℂ) := by
     simp_rw [← cyclicSuccessorEquiv_apply]
     exact Equiv.sum_comp (cyclicSuccessorEquiv N) (fun i => ((σ i).val : ℂ))
-  rw [parentHamiltonianES_eq_sum_localTermES,
-    parentHamiltonianES_eq_sum_localTermES]
+  rw [ManyBody.Interaction.hamiltonian, ManyBody.Interaction.hamiltonian, map_sum, map_sum]
   simp only [LinearMap.sum_apply, WithLp.ofLp_sum, Finset.sum_apply,
-    localTermES_pvbs_decomposition μ hN, Finset.sum_add_distrib,
+    toEuclideanLin_parentRingInteraction_term_pvbs_decomposition μ hN, Finset.sum_add_distrib,
     ← Finset.mul_sum, ← Finset.sum_mul, hshift]
   push_cast
   ring

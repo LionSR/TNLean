@@ -23,9 +23,8 @@ sum-of-squares argument.
 
 * `clusterSource_mpv_eq_globalZ` and `clusterSource_mpv_ne_zero` identify the
   source MPV with the globally `Z`-rotated cluster MPV and prove nonvanishing.
-* `clusterSource_iInf_eigenspace_eq_mpvSubmodule` and
-  `clusterSource_stabilizer_unique_gs` identify the common `-1` stabilizer
-  eigenspace and prove its uniqueness.
+* `clusterSource_iInf_eigenspace_eq_mpvSubmodule` identifies the common `-1` stabilizer
+  eigenspace with the line through the source vector, which is nonzero.
 * `clusterSource_hamiltonian_eigenspace_eq_mpvSubmodule` and
   `clusterSource_energy_lower_bound` identify the bottom eigenspace of the
   stabilizer sum and prove its energy lower bound.
@@ -293,16 +292,6 @@ theorem clusterSource_iInf_eigenspace_eq_mpvSubmodule {N : ℕ} (hN : 3 ≤ N) :
       exact hzspan
     have hneg := globalZ_mem_common_neg 1 (globalZ v) hzplus
     simpa only [globalZ_involutive v] using hneg
-
-/-- Uniqueness follows from the transported one-dimensional span, without an
-injectivity proof for the source matrices.
-
-See arXiv:quant-ph/0608197, local TeX lines 374--387. -/
-theorem clusterSource_stabilizer_unique_gs {N : ℕ} (hN : 3 ≤ N) :
-    HasUniqueGroundState
-      (⨅ i : Fin N, Module.End.eigenspace (clusterChainStabilizer i) (-1)) := by
-  rw [clusterSource_iInf_eigenspace_eq_mpvSubmodule hN, mpvSubmodule]
-  exact finrank_span_singleton (clusterSource_mpv_ne_zero hN)
 
 /-! ### The stabilizer sum as a sum of squares -/
 

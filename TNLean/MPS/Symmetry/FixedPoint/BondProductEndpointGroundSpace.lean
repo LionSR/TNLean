@@ -18,7 +18,7 @@ calculation behind the independent-bond parent Hamiltonian of
 Schuch--Pérez-García--Cirac, arXiv:1010.3732, Section II.D.2.
 -/
 
-open scoped Matrix InnerProductSpace
+open scoped Matrix MatrixOrder InnerProductSpace
 
 namespace MPSTensor
 
@@ -160,9 +160,10 @@ private theorem twoSiteBondInteraction_kills_groundSpaceES_of_groundSpaceMap
   rw [hgX]
   exact congrArg (WithLp.toLp 2) (hkill X)
 
-/-- A unit bond penalty is bounded above by a two-site parent interaction
-whenever it annihilates every open-boundary ground vector. -/
-theorem twoSiteBondInteraction_le_parentInteractionES_of_groundSpaceMap
+/-- A unit bond penalty is bounded above by the two-site parent interaction
+whenever it annihilates every open-boundary ground vector. Source context:
+arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/
+theorem twoSiteBondInteraction_le_parentInteraction_of_groundSpaceMap
     {D E : ℕ} (A : MPSTensor (D * D) E)
     (η : Fin (D * D) → ℂ)
     (hη : ∑ p, Complex.normSq (η p) = 1)
@@ -170,10 +171,9 @@ theorem twoSiteBondInteraction_le_parentInteractionES_of_groundSpaceMap
       (twoSiteBondInteraction
         (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
           (bondPenalty η))).mulVec (groundSpaceMap A 2 X) = 0) :
-    Matrix.toEuclideanLin
-      (twoSiteBondInteraction
-        (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
-          (bondPenalty η))) ≤ parentInteractionES A 2 := by
+    twoSiteBondInteraction
+      (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm (bondPenalty η)) ≤
+      LinearMap.toMatrix' (parentInteraction A 2) := by
   let B := Matrix.toEuclideanLin
     (twoSiteBondInteraction
       (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
@@ -181,8 +181,10 @@ theorem twoSiteBondInteraction_le_parentInteractionES_of_groundSpaceMap
   let G := groundSpaceES A 2
   have hB : B.IsSymmetricProjection :=
     twoSiteBondInteraction_bondPenalty_isSymmetricProjection η hη
-  have hP := parentInteractionES_isSymmetricProjection A 2
+  have hP := isSymmetricProjection_toEuclideanLin_toMatrix'_parentInteraction A 2
+  rw [Matrix.le_iff, ← Matrix.isPositive_toEuclideanLin_iff, map_sub, ← LinearMap.le_def]
   apply (hB.le_iff_range_le_range hP).mpr
+  rw [toEuclideanLin_toMatrix'_parentInteraction]
   change B.range ≤ (Gᗮ.starProjection.toLinearMap).range
   rw [Submodule.range_starProjection]
   intro v hv
@@ -202,14 +204,13 @@ theorem twoSiteBondInteraction_le_parentInteractionES_of_groundSpaceMap
 /-- The independent-bond penalty is bounded above by the canonical two-site
 parent interaction of the fixed-point tensor. Source: arXiv:1010.3732,
 Section II.D.2, `eq:phase-nosym:iso-hamiltonian`. -/
-theorem twoSiteBondInteraction_le_parentInteractionES_sptFixedPointTensor
+theorem twoSiteBondInteraction_le_parentInteraction_sptFixedPointTensor
     (D : ℕ) (hD : 0 < D) :
-    Matrix.toEuclideanLin
-      (twoSiteBondInteraction
+    twoSiteBondInteraction
         (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
-          (bondPenalty (matrixUnitBondVector D)))) ≤
-      parentInteractionES (sptFixedPointTensor D) 2 :=
-  twoSiteBondInteraction_le_parentInteractionES_of_groundSpaceMap
+          (bondPenalty (matrixUnitBondVector D))) ≤
+      LinearMap.toMatrix' (parentInteraction (sptFixedPointTensor D) 2) :=
+  twoSiteBondInteraction_le_parentInteraction_of_groundSpaceMap
     (sptFixedPointTensor D) (matrixUnitBondVector D)
     (matrixUnitBondVector_sum_normSq D hD)
     (twoSiteBondInteraction_groundSpaceMap_sptFixedPointTensor D hD)

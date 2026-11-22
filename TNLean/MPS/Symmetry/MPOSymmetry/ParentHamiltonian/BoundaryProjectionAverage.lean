@@ -119,7 +119,7 @@ when the ambient complement \(I-P_n\) is nonzero. This is the linearity
 consequence of the normalization in GLM23 Appendix B, lines 2463--2466,
 with its distinction from ambient completion recorded in
 `docs/paper-gaps/glm23_wha_parent_completion.tex`. -/
-theorem IsBoundaryCompatible.sum_mpoWithBoundary_parentInteractionES
+theorem IsBoundaryCompatible.sum_mpoWithBoundary_toEuclideanLin_toMatrix'_parentInteraction
     (h : IsBoundaryCompatible T A) (hInj : Kraus.IsNBlkInjective A L)
     (hL : 0 < L) {U : Matrix (Fin D₁) (Fin D₁) ℂ}
     (hU : mpoWithBoundary T U L = 1) (hn : 0 < n)
@@ -130,11 +130,11 @@ theorem IsBoundaryCompatible.sum_mpoWithBoundary_parentInteractionES
     (hXY : ∑ i, mpoWithBoundary T (X i) n * mpoWithBoundary T (Y i) n =
       mpoWithBoundary T U n) :
     (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
-        MPSTensor.parentInteractionES A n *
+        Matrix.toEuclideanLin (LinearMap.toMatrix' (MPSTensor.parentInteraction A n)) *
         Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) =
       Matrix.toEuclideanLin (mpoWithBoundary T U n) -
         (MPSTensor.groundSpaceES A n).starProjection.toLinearMap := by
-  rw [MPSTensor.parentInteractionES, Submodule.starProjection_orthogonal']
+  rw [MPSTensor.toEuclideanLin_toMatrix'_parentInteraction, Submodule.starProjection_orthogonal']
   change (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
       (1 - (MPSTensor.groundSpaceES A n).starProjection.toLinearMap) *
       Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) = _
@@ -163,9 +163,9 @@ theorem IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_groundSpaceES_starProje
     1 - (∑ i, Matrix.toEuclideanLin (mpoWithBoundary T (X i) n) *
         (MPSTensor.groundSpaceES A n).starProjection.toLinearMap *
         Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) =
-      MPSTensor.parentInteractionES A n := by
+      Matrix.toEuclideanLin (LinearMap.toMatrix' (MPSTensor.parentInteraction A n)) := by
   rw [h.sum_mpoWithBoundary_groundSpaceES_starProjection hInj hL hU hn hstar X Y hXY,
-    MPSTensor.parentInteractionES, Submodule.starProjection_orthogonal']
+    MPSTensor.toEuclideanLin_toMatrix'_parentInteraction, Submodule.starProjection_orthogonal']
   rfl
 
 /-- The ambient complement of the averaged support is nonzero if
@@ -188,6 +188,7 @@ theorem IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_groundSpaceES_starProje
         Matrix.toEuclideanLin (mpoWithBoundary T (Y i) n)) ≠ 0 := by
   rw [h.one_sub_sum_mpoWithBoundary_groundSpaceES_starProjection
     hInj hL hU hn hstar X Y hXY]
-  exact MPSTensor.parentInteractionES_ne_zero A n hDim
+  exact fun h0 ↦ MPSTensor.toMatrix'_parentInteraction_ne_zero A n hDim
+    (Matrix.toEuclideanLin.injective (h0.trans (map_zero _).symm))
 
 end MPOTensor

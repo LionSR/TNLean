@@ -18,7 +18,6 @@ import TNLean.MPS.ParentHamiltonian.Continuity
 import TNLean.MPS.ParentHamiltonian.Deformation
 import TNLean.MPS.ParentHamiltonian.Gap
 import TNLean.MPS.ParentHamiltonian.Interaction
-import TNLean.MPS.ParentHamiltonian.InteractionMatrixRepresentation
 import TNLean.MPS.ParentHamiltonian.LocalExpectation
 import TNLean.MPS.ParentHamiltonian.OpenBoundary
 import TNLean.MPS.ParentHamiltonian.ParentInteraction

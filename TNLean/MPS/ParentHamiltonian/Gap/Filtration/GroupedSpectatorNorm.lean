@@ -27,42 +27,68 @@ both prefix endpoints lie within that volume. This is the fixed-volume
 extension of Nachtergaele's condition C3-prime, arXiv:cond-mat/9410110,
 lines 1095--1104. -/
 theorem norm_suffixGroundProjection_comp_prefixDifference_le_active
-    (A : MPSTensor d D) {R l n r p : ℕ} (hR : 0 < R) (hp : p ≤ n) :
+    (A : MPSTensor d D) {R l n r p : ℕ} (hp : p ≤ n) :
     ‖LinearMap.toContinuousLinearMap
       (((LinearMap.ker
-        (openSuffixParentHamiltonianES A R l (n + r) n)).starProjection.toLinearMap).comp
+        (Matrix.toEuclideanLin
+            ((parentChainInteraction A R (n + r)).restrict fun i ↦ n - l ≤ i.val ∧ i.val + R ≤
+                n).hamiltonian)).starProjection.toLinearMap).comp
         (openPrefixGroundProjectionES A R (n + r) p -
           openPrefixGroundProjectionES A R (n + r) n))‖ ≤
       ‖LinearMap.toContinuousLinearMap
-        (((LinearMap.ker (openSuffixParentHamiltonianES A R l n n)).starProjection.toLinearMap).comp
+        (((LinearMap.ker
+            (Matrix.toEuclideanLin
+                ((parentChainInteraction A R n).restrict fun i ↦ n - l ≤ i.val ∧ i.val + R ≤
+                    n).hamiltonian)).starProjection.toLinearMap).comp
           (openPrefixGroundProjectionES A R n p - openPrefixGroundProjectionES A R n n))‖ := by
   let U := rightSpectatorConfigLinearIsometryEquiv d n r
   have hP (q : ℕ) (hq : q ≤ n) :
       U.toLinearEquiv.conj
-          (LinearMap.ker (openPrefixParentHamiltonianES A R (n + r) q)).starProjection.toLinearMap =
+          (LinearMap.ker
+              (Matrix.toEuclideanLin
+                  ((parentChainInteraction A R (n + r)).restrict fun i ↦ i.val + R ≤
+                      q).hamiltonian)).starProjection.toLinearMap =
         (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-          (LinearMap.ker (openPrefixParentHamiltonianES A R n q)).starProjection).toLinearMap :=
+          (LinearMap.ker
+              (Matrix.toEuclideanLin
+                  ((parentChainInteraction A R n).restrict fun i ↦ i.val + R ≤
+                      q).hamiltonian)).starProjection).toLinearMap :=
     ker_starProjection_conj_of_rightFiberwiseMap _ _
-      (openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-        A (r := r) hR hq)
+      (hamiltonian_prefix_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv
+        A (r := r) hq)
   have hQ :
       U.toLinearEquiv.conj (LinearMap.ker
-          (openSuffixParentHamiltonianES A R l (n + r) n)).starProjection.toLinearMap =
+          (Matrix.toEuclideanLin
+              ((parentChainInteraction A R (n + r)).restrict fun i ↦ n - l ≤ i.val ∧ i.val + R ≤
+                  n).hamiltonian)).starProjection.toLinearMap =
         (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-          (LinearMap.ker (openSuffixParentHamiltonianES A R l n n)).starProjection).toLinearMap :=
+          (LinearMap.ker
+              (Matrix.toEuclideanLin
+                  ((parentChainInteraction A R n).restrict fun i ↦ n - l ≤ i.val ∧ i.val + R ≤
+                      n).hamiltonian)).starProjection).toLinearMap :=
     ker_starProjection_conj_of_rightFiberwiseMap _ _
-      (openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-        A (l := l) (n := n) (r := r) hR le_rfl)
+      (hamiltonian_restrict_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv
+        A (l := l) (n := n) (r := r) le_rfl)
   have hprod : U.toLinearEquiv.conj
       (((LinearMap.ker
-        (openSuffixParentHamiltonianES A R l (n + r) n)).starProjection.toLinearMap).comp
+        (Matrix.toEuclideanLin
+            ((parentChainInteraction A R (n + r)).restrict fun i ↦ n - l ≤ i.val ∧ i.val + R ≤
+                n).hamiltonian)).starProjection.toLinearMap).comp
         (openPrefixGroundProjectionES A R (n + r) p -
           openPrefixGroundProjectionES A R (n + r) n)) =
       (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-        ((LinearMap.ker (openSuffixParentHamiltonianES A R l n n)).starProjection.comp
-          ((LinearMap.ker (openPrefixParentHamiltonianES A R n p)).starProjection -
+        ((LinearMap.ker
+            (Matrix.toEuclideanLin
+                ((parentChainInteraction A R n).restrict fun i ↦ n - l ≤ i.val ∧ i.val + R ≤
+                    n).hamiltonian)).starProjection.comp
+          ((LinearMap.ker
+              (Matrix.toEuclideanLin
+                  ((parentChainInteraction A R n).restrict fun i ↦ i.val + R ≤
+                      p).hamiltonian)).starProjection -
             (LinearMap.ker
-              (openPrefixParentHamiltonianES A R n n)).starProjection))).toLinearMap := by
+              (Matrix.toEuclideanLin
+                  ((parentChainInteraction A R n).restrict fun i ↦ i.val + R ≤
+                      n).hamiltonian)).starProjection))).toLinearMap := by
     simp only [LinearEquiv.conj_comp, map_sub, openPrefixGroundProjectionES,
       hQ, hP p hp, hP n le_rfl]
     rw [← ContinuousLinearMap.toLinearMap_sub, ← ContinuousLinearMap.toLinearMap_comp,

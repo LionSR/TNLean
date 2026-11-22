@@ -271,7 +271,7 @@ theorem nonNormalApproxVector_basisPair (A : MPSTensor d D) (q M : ℕ) (α : Fi
     (c : Fin b → Fin D) (τ : Fin M → Fin (blockPhysDim d q)) :
     nonNormalApproxVector A q M α (fun j => basisPair (c j)) τ =
       ∑ j, α j * ∏ k, polarIso (physicalMatrix (blockTensor A q)) (τ k) (c j, c j) := by
-  simp only [nonNormalApproxVector, mulVec, dotProduct, tensorPower, of_apply,
+  simp only [nonNormalApproxVector, mulVec, dotProduct, Matrix.piKronecker, of_apply,
     nonNormalFixedPointState, pairProductState_basisPair, mul_ite, mul_one, mul_zero,
     Finset.mul_sum]
   rw [Finset.sum_comm]

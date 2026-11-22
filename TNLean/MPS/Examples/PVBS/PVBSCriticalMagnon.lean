@@ -25,16 +25,20 @@ namespace MPSTensor
 
 /-- On the full one-particle sector, the critical PVBS local term is the singlet
 exchange term. This identity uses the actual canonical parent interaction. -/
-theorem localTermES_pvbs_critical_oneMagnon {N : ℕ} (hN : 2 ≤ N)
-    (f : Fin N → ℂ) (i : Fin N) (σ : Cfg 2 N) :
-    localTermES (pvbsTensor 1) 2 i (WithLp.toLp 2 (SpinChain.oneMagnon f)) σ =
+theorem toEuclideanLin_parentRingInteraction_term_pvbs_critical_oneMagnon {N : ℕ}
+    (hN : 2 ≤ N) (f : Fin N → ℂ) (i : Fin N) (σ : Cfg 2 N) :
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin ((parentRingInteraction (pvbsTensor 1) 2 N).term i)
+        (WithLp.toLp 2 (SpinChain.oneMagnon f)) σ =
       (SpinChain.oneMagnon f σ -
         SpinChain.oneMagnon f (σ ∘ Equiv.swap i (cyclicForwardSite i 1))) / 2 := by
+  have : NeZero N := ⟨by omega⟩
   let : NeZero N := ⟨by omega⟩
   have hn : cyclicForwardSite i 1 ≠ i := by
     rw [← cyclicSuccessorEquiv_apply]
     exact cyclicSuccessorEquiv_ne hN i
-  have h := localTermES_pvbs_two_apply 1 hN i (WithLp.toLp 2 (SpinChain.oneMagnon f)) σ
+  have h := toEuclideanLin_parentRingInteraction_term_pvbs_two_apply 1 hN i
+    (WithLp.toLp 2 (SpinChain.oneMagnon f)) σ
   norm_num only [Complex.ofReal_one, one_pow, one_mul] at h
   rw [h]
   change (((((σ i).val : ℂ) + (σ (cyclicForwardSite i 1)).val) *
@@ -60,26 +64,32 @@ theorem localTermES_pvbs_critical_oneMagnon {N : ℕ} (hN : 2 ≤ N)
 
 /-- The actual critical periodic PVBS parent acts by the normalized cycle
 Laplacian on one-particle coefficients, including the two-site ring. -/
-theorem parentHamiltonianES_pvbs_critical_oneMagnon {N : ℕ} [NeZero N] (hN : 2 ≤ N)
-    (f : Fin N → ℂ) :
-    parentHamiltonianES (pvbsTensor 1) 2 N (WithLp.toLp 2 (SpinChain.oneMagnon f)) =
+theorem toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_oneMagnon {N : ℕ}
+    (hN : 2 ≤ N) (f : Fin N → ℂ) :
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) 2 N).hamiltonian
+        (WithLp.toLp 2 (SpinChain.oneMagnon f)) =
       WithLp.toLp 2 (SpinChain.oneMagnon (fun j =>
         f j - (f (cyclicSuccessorEquiv N j) + f ((cyclicSuccessorEquiv N).symm j)) / 2)) := by
-  rw [parentHamiltonianES_eq_sum_localTermES]
+  have : NeZero N := ⟨by omega⟩
+  rw [ManyBody.Interaction.hamiltonian, map_sum]
   ext σ
   simp only [LinearMap.sum_apply, WithLp.ofLp_sum, Finset.sum_apply,
-    localTermES_pvbs_critical_oneMagnon hN, ← Finset.sum_div]
+    toEuclideanLin_parentRingInteraction_term_pvbs_critical_oneMagnon hN, ← Finset.sum_div]
   simp_rw [← cyclicSuccessorEquiv_apply]
   exact SpinChain.oneMagnon_edge_sum (cyclicSuccessorEquiv N)
     (cyclicSuccessorEquiv_ne hN) f σ
 
 /-- At critical hopping, the uniform one-particle vector is a periodic ground
 state on every ring of at least two sites. -/
-theorem parentHamiltonianES_pvbs_critical_uniformParticle {N : ℕ} (hN : 2 ≤ N) :
-    parentHamiltonianES (pvbsTensor 1) 2 N
+theorem toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_uniformParticle
+    {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) 2 N).hamiltonian
       (WithLp.toLp 2 (SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ)))) = 0 := by
+  have : NeZero N := ⟨by omega⟩
   let : NeZero N := ⟨by omega⟩
-  rw [parentHamiltonianES_pvbs_critical_oneMagnon hN]
+  rw [toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_oneMagnon hN]
   ext σ
   norm_num [SpinChain.oneMagnon]
 

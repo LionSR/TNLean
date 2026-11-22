@@ -47,8 +47,8 @@ noncomputable def shiftSwapDaggerSymmetry (d : ℕ) :
     FiniteChainOperatorSymmetry (d * d) where
   applicable := {N | 0 < N}
   action := fun {N} X ↦
-    Matrix.tensorPower N (shiftPhysicalSwap d) * Xᴴ *
-      Matrix.tensorPower N (shiftPhysicalSwap d)
+    (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) * Xᴴ *
+      (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d))
 
 /-- Transposition combined with exchange of the two physical species.
 Source: arXiv:1703.09188, equation `SSymmetries-transpose`, with \(Q=S\). -/
@@ -56,8 +56,8 @@ noncomputable def shiftSwapTransposeSymmetry (d : ℕ) :
     FiniteChainOperatorSymmetry (d * d) where
   applicable := {N | 0 < N}
   action := fun {N} X ↦
-    Matrix.tensorPower N (shiftPhysicalSwap d) * Xᵀ *
-      Matrix.tensorPower N (shiftPhysicalSwap d)
+    (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) * Xᵀ *
+      (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d))
 
 private theorem shiftPhysicalSwap_conjTranspose (d : ℕ) :
     (shiftPhysicalSwap d)ᴴ = shiftPhysicalSwap d := by
@@ -79,26 +79,26 @@ theorem shiftPhysicalSwap_mul_self (d : ℕ) :
   exact h
 
 private theorem chainSwap_mul_self (d N : ℕ) :
-    Matrix.tensorPower N (shiftPhysicalSwap d) *
-      Matrix.tensorPower N (shiftPhysicalSwap d) = 1 := by
-  rw [Matrix.tensorPower_mul, shiftPhysicalSwap_mul_self,
-    Matrix.tensorPower_one]
+    (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) *
+      (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) = 1 := by
+  rw [Matrix.piKronecker_mul, shiftPhysicalSwap_mul_self,
+    Matrix.piKronecker_one]
 
 private theorem chainSwap_transpose (d N : ℕ) :
-    (Matrix.tensorPower N (shiftPhysicalSwap d))ᵀ =
-      Matrix.tensorPower N (shiftPhysicalSwap d) := by
+    (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d))ᵀ =
+      (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) := by
   have h := shiftPhysicalSwap_transpose d
   ext σ τ
-  simp only [Matrix.transpose_apply, Matrix.tensorPower_apply]
+  simp only [Matrix.transpose_apply, Matrix.piKronecker_apply]
   apply Finset.prod_congr rfl
   intro n _
   exact congrFun (congrFun h (σ n)) (τ n)
 
 private theorem chainSwap_map_star (d N : ℕ) :
-    (Matrix.tensorPower N (shiftPhysicalSwap d)).map (starRingEnd ℂ) =
-      Matrix.tensorPower N (shiftPhysicalSwap d) := by
+    (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)).map (starRingEnd ℂ) =
+      (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) := by
   ext σ τ
-  simp [Matrix.tensorPower_apply, shiftPhysicalSwap, Equiv.Perm.permMatrix,
+  simp [Matrix.piKronecker_apply, shiftPhysicalSwap, Equiv.Perm.permMatrix,
     PEquiv.toMatrix_apply]
 
 /-- The physical swap converts swap-combined adjunction into adjunction.
@@ -113,7 +113,7 @@ theorem isInvariantUnderSymmetry_shiftSwapDagger_iff {E : ℕ} (U : MPOTensor (d
   change _ ↔ (mpo (U.ketLeftMul (shiftPhysicalSwap d)) N)ᴴ = _
   rw [mpo_ketLeftMul]
   apply Matrix.swapCombined_fixed_iff_leftMul _ _ (chainSwap_mul_self d N)
-  rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_tensorPower,
+  rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_piKronecker,
     shiftPhysicalSwap_conjTranspose]
 
 /-- The physical swap converts swap-combined transposition into transposition.
@@ -143,10 +143,10 @@ theorem isInvariantUnderSymmetry_conjugation_ketLeftMul_swap_iff
     (mpo (U.ketLeftMul (shiftPhysicalSwap d)) N).map (starRingEnd ℂ) = _
   rw [mpo_ketLeftMul, Matrix.map_mul, chainSwap_map_star]
   constructor
-  · exact congrArg (fun X ↦ Matrix.tensorPower N (shiftPhysicalSwap d) * X)
+  · exact congrArg (fun X ↦ (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) * X)
   · intro h
     simpa only [← Matrix.mul_assoc, chainSwap_mul_self, Matrix.one_mul] using
-      congrArg (fun X ↦ Matrix.tensorPower N (shiftPhysicalSwap d) * X) h
+      congrArg (fun X ↦ (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) * X) h
 
 /-- Swap multiplication identifies strict equivalence under swap-combined
 adjunction with strict equivalence under adjunction.

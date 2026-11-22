@@ -64,6 +64,8 @@ section
 open scoped Matrix MatrixOrder Matrix.Norms.L2Operator ComplexOrder Topology BigOperators
 open SpinChain
 open Kraus (blockPhysDim)
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d L : ℕ} [NeZero d] [NeZero L]
 /-- Blocking transports each finite-volume commutator energy
@@ -142,11 +144,11 @@ theorem quasiLocalIntervalObservable_localCommutatorObservable_nonneg
       ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X)) := by
   let f := intervalStateFunctional φ hpos (a - ((R - 1 : ℕ) : ℤ))
     ((R - 1 + k) + (R - 1))
-  let H := openInteractionMatrix h ((R - 1 + k) + (R - 1))
+  let H := (chainTranslates R ((R - 1 + k) + (R - 1)) h).hamiltonian
   let Z := bulkObservable X (R - 1) (R - 1)
-  have hH : H.PosSemidef := openInteractionMatrix_posSemidef h hh _
+  have hH : H.PosSemidef := hamiltonian_chainTranslates_posSemidef h hh _
   have hz : f H = 0 :=
-    apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero φ.toLinearMap h
+    apply_quasiLocalIntervalObservable_hamiltonian_chainTranslates_eq_zero φ.toLinearMap h
       hzero (a - ((R - 1 : ℕ) : ℤ)) ((R - 1 + k) + (R - 1))
   change 0 ≤ f (Zᴴ * (H * Z - Z * H))
   rw [PositiveLinearMap.apply_conjTranspose_commutator_eq f H Z hH hz]
@@ -177,19 +179,19 @@ theorem blocking_localCommutator_energy_le
   let f := intervalStateFunctional φ hpos ((a - (n : ℤ)) * L) (N * L)
   let Z := Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
     (bulkObservable Y n n)
-  let H := openInteractionMatrix h (N * L)
+  let H := (chainTranslates R (N * L) h).hamiltonian
   let C := Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
-    (openInteractionMatrix (blockedInteractionMatrix h L K) N)
+    ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian)
   have hKN : K ≤ N := by dsimp [N, n]; omega
-  have hH : H.PosSemidef := openInteractionMatrix_posSemidef h hh (N * L)
+  have hH : H.PosSemidef := hamiltonian_chainTranslates_posSemidef h hh (N * L)
   have hC : C.PosSemidef :=
-    (openInteractionMatrix_posSemidef (blockedInteractionMatrix h L K)
+    (hamiltonian_chainTranslates_posSemidef (blockedInteractionMatrix h L K)
       (blockedInteractionMatrix_posSemidef h hh L K) N).submatrix
         (blockedConfigEquiv d N L).symm
   have hfH : f H = 0 :=
-    apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero
+    apply_quasiLocalIntervalObservable_hamiltonian_chainTranslates_eq_zero
       φ.toLinearMap h hzero ((a - (n : ℤ)) * L) (N * L)
-  have hBound := (openInteractionMatrix_blockedInteractionMatrix_comparison
+  have hBound := (hamiltonian_chainTranslates_blockedInteractionMatrix_comparison
     h hh hKN hcover).2
   have hEnergy := PositiveLinearMap.apply_conjTranspose_commutator_le
     f C H Z hC hH hfH ((K * L + 1 - R : ℕ) : ℝ) (by simpa [C, H] using hBound)
@@ -202,11 +204,11 @@ theorem blocking_localCommutator_energy_le
       (quasiLocalBlockingFunctional d L).symm φ
         (quasiLocalIntervalObservable (blockPhysDim d L) (a - (n : ℤ)) N
           ((bulkObservable Y n n)ᴴ *
-            (openInteractionMatrix (blockedInteractionMatrix h L K) N *
+            ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian *
               bulkObservable Y n n - bulkObservable Y n n *
-                openInteractionMatrix (blockedInteractionMatrix h L K) N))) from
+                (chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian))) from
       (blocking_interval_commutator_eq φ (a - (n : ℤ)) N
-        (openInteractionMatrix (blockedInteractionMatrix h L K) N)
+        ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian)
         (bulkObservable Y n n)).symm]
     rw [quasiLocalIntervalObservable_bulkObservable_commutator a
       (blockedInteractionMatrix h L K) Y hK
@@ -341,11 +343,11 @@ theorem quasiLocalCommutator_limit_gap_of_blocking
       ∃ e : ℂ, Filter.Tendsto (fun n => φ
         (star (quasiLocalIntervalObservable d a k X) *
           (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-              (openInteractionMatrix h ((ℓ n + k) + r n)) *
+              ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
             quasiLocalIntervalObservable d a k X -
             quasiLocalIntervalObservable d a k X *
               quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
         ((γ / (K * L + 1 - R : ℕ) : ℝ) : ℂ) *
           φ (star (quasiLocalIntervalObservable d a k X) *
             quasiLocalIntervalObservable d a k X) ≤ e := by
@@ -373,6 +375,8 @@ section
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
 open Kraus (blockPhysDim blockTensor)
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d D L R b : ℕ} [NeZero d] [NeZero L]
   {E : Fin b → ℕ} [∀ j, NeZero (E j)]
@@ -393,7 +397,7 @@ theorem exists_pos_quasiLocalCommutator_limit_gap_of_blocked_primitive_family
       groundSpaceES (toTensorFromBlocks (μ := μ) B) N)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES A N) :
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
@@ -405,11 +409,11 @@ theorem exists_pos_quasiLocalCommutator_limit_gap_of_blocked_primitive_family
           ∃ e : ℂ, Tendsto (fun n => φ
             (star (quasiLocalIntervalObservable d a k X) *
               (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                  (openInteractionMatrix h ((ℓ n + k) + r n)) *
+                  ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
                 quasiLocalIntervalObservable d a k X -
                 quasiLocalIntervalObservable d a k X *
                   quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                    (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                    ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
             (γ : ℂ) * φ (star (quasiLocalIntervalObservable d a k X) *
               quasiLocalIntervalObservable d a k X) ≤ e := by
   let K := R + L
@@ -417,11 +421,11 @@ theorem exists_pos_quasiLocalCommutator_limit_gap_of_blocked_primitive_family
   have hcover : R + L ≤ K * L + 1 :=
     (Nat.le_mul_of_pos_right (R + L) (NeZero.pos L)).trans (Nat.le_succ _)
   have hkerB : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES
-        (Matrix.toEuclideanLin (blockedInteractionMatrix h L K)) N) =
+      LinearMap.ker (Matrix.toEuclideanLin
+        (chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian) =
       groundSpaceES (toTensorFromBlocks (μ := μ) B) N :=
-    (eventually_ker_openInteractionHamiltonianES_blockedInteractionMatrix_eq_groundSpaceES
-      A h hh hR hK hcover hker).mono fun N hN => hN.trans (hJoint N)
+    (eventually_ker_hamiltonian_chainTranslates_blockedInteractionMatrix_eq_groundSpaceES
+      A h hh hcover hker).mono fun N hN => hN.trans (hJoint N)
   obtain ⟨γ, hγ, _hFinite, hGap⟩ :=
     exists_pos_multiblock_quasiLocalCommutator_gap_of_eventual_kernel
       μ B hμ ρ hP hρ hDistinct hK (blockedInteractionMatrix h L K)

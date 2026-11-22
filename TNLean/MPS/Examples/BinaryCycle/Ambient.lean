@@ -153,9 +153,9 @@ def embedConfig {N : ℕ} (σ : Fin N → Fin 2) : Fin N → Fin 4 :=
 configurations. -/
 @[simp] theorem tensorPower_inclusion_embedConfig {N : ℕ}
     (σ τ : Fin N → Fin 2) :
-    Matrix.tensorPower N inclusion (embedConfig σ) τ =
+    (Matrix.piKronecker fun _ : Fin N ↦ inclusion) (embedConfig σ) τ =
       if σ = τ then 1 else 0 := by
-  simp only [Matrix.tensorPower_apply, embedConfig, inclusion_siteEmbedding]
+  simp only [Matrix.piKronecker_apply, embedConfig, inclusion_siteEmbedding]
   rw [Fintype.prod_boole]
   congr 1
   exact propext funext_iff.symm
@@ -163,7 +163,7 @@ configurations. -/
 /-- The ambient periodic MPO is the sitewise single-Kraus congruence of the
 binary periodic MPO. -/
 theorem mpo_ambientM_eq_singleKrausMap (N : ℕ) :
-    mpo ambientM N = singleKrausMap (Matrix.tensorPower N inclusion)
+    mpo ambientM N = singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ inclusion)
       (mpo CPSVExample411BinarySupport.M N) :=
   (singleKrausMap_tensorPower_mpo inclusion CPSVExample411BinarySupport.M N).symm
 

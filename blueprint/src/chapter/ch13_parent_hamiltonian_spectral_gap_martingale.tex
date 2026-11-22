@@ -250,8 +250,7 @@
 
 \begin{definition}[Fixed-volume prefix and interval ground projections]%
     \label{def:fixed-volume-prefix-ground-projections}
-    \lean{MPSTensor.openPrefixParentHamiltonianES,
-        MPSTensor.openPrefixGroundProjectionES,
+    \lean{MPSTensor.openPrefixGroundProjectionES,
         MPSTensor.openIntervalGroundProjectionES}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients}
@@ -271,8 +270,7 @@
 
 \begin{lemma}[Positivity of the fixed-volume Hamiltonians]%
     \label{lem:fixed-volume-hamiltonians-positive}
-    \lean{MPSTensor.openPrefixParentHamiltonianES_isPositive,
-        MPSTensor.openSuffixParentHamiltonianES_isPositive}
+    \lean{MPSTensor.posSemidef_hamiltonian_restrict_parentChainInteraction}
     \leanok
     \uses{def:fixed-volume-prefix-ground-projections,
         lem:transported_es_positive}
@@ -300,8 +298,7 @@
 
 \begin{lemma}[Nested fixed-volume prefix ground projections]%
     \label{thm:fixed-volume-prefix-ground-projections-nested}
-    \lean{MPSTensor.localTermES_eq_zero_of_openPrefixParentHamiltonianES_eq_zero,
-        MPSTensor.ker_openPrefixParentHamiltonianES_antitone,
+    \lean{MPSTensor.ker_hamiltonian_prefix_parentChainInteraction_antitone,
         MPSTensor.fixedAmbientNestedGroundProjectionsES}
     \leanok
     \uses{def:fixed-volume-prefix-ground-projections,
@@ -336,9 +333,9 @@
     \lean{LinearMap.IsSymmetric.kernelProjection_commute_of_commute,
         Submodule.starProjection_commute_of_le,
         MPSTensor.cyclicWindowsDisjoint_of_nonwrapping_ordered,
-        MPSTensor.openPrefixParentHamiltonianES_commute_openSuffixParentHamiltonianES,
+        MPSTensor.hamiltonian_prefix_parentChainInteraction_commute_restrict,
         MPSTensor.openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_le,
-        MPSTensor.ker_openPrefixParentHamiltonianES_le_ker_openSuffixParentHamiltonianES,
+        MPSTensor.ker_hamiltonian_prefix_parentChainInteraction_le_ker_restrict,
         MPSTensor.openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_lt,
         MPSTensor.fixedAmbient_martingaleDifference_commute_openIntervalGroundProjectionES,
         MPSTensor.inner_sum_fixedAmbient_martingaleDifference_openIntervalGroundProjectionES_eq_Icc}
@@ -497,7 +494,7 @@
 
 \begin{lemma}[Nonwrapping interactions with right spectators]
     \label{thm:local-term-right-spectator-conjugacy}
-    \lean{MPSTensor.localTermES_conj_rightSpectatorConfigLinearIsometryEquiv}
+    \lean{MPSTensor.toEuclideanLin_parentChainInteraction_term_conj_rightSpectatorConfigLinearIsometryEquiv}
     \leanok
     \uses{lem:right-spectator-extension}
     Let $i+L\leq n$.  Under the standard identification
@@ -522,8 +519,8 @@
 
 \begin{lemma}[Open Hamiltonian sums with right spectators]
     \label{thm:open-hamiltonian-right-spectator-conjugacy}
-    \lean{MPSTensor.openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv,
-        MPSTensor.openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv}
+    \lean{MPSTensor.hamiltonian_prefix_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv,
+        MPSTensor.hamiltonian_restrict_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv}
     \leanok
     \uses{thm:local-term-right-spectator-conjugacy}
     Let $L>0$ and $p\leq n$.  Under the standard identification
@@ -547,11 +544,11 @@
 
 \begin{lemma}[Fixed-volume C3 ground projections with right spectators]
     \label{thm:fixed-volume-c3-projector-conjugacy}
-    \lean{MPSTensor.openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES,
-        MPSTensor.ker_openPrefixParentHamiltonianES_eq_openChainLeftGroundSpaceES,
-        MPSTensor.openSuffixParentHamiltonianES_full_window_eq_localTermES,
-        MPSTensor.ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES,
-        MPSTensor.ker_openPrefixParentHamiltonianES_self_eq_groundSpaceES,
+    \lean{MPSTensor.hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChainInteraction,
+        MPSTensor.ker_hamiltonian_prefix_parentChainInteraction_eq_openChainLeftGroundSpaceES,
+        MPSTensor.hamiltonian_restrict_parentChainInteraction_full_window_eq_term,
+        MPSTensor.ker_hamiltonian_restrict_parentChainInteraction_eq_openChainTailGroundSpaceES,
+        MPSTensor.ker_hamiltonian_prefix_parentChainInteraction_self_eq_groundSpaceES,
         MPSTensor.openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv,
         MPSTensor.openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv,
         MPSTensor.openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv}
@@ -594,10 +591,10 @@
 
 \begin{lemma}[C3 boundary indices in the fixed final volume]
     \label{thm:fixed-volume-c3-boundary-indices}
-    \lean{MPSTensor.openPrefixParentHamiltonianES_eq_zero_of_lt,
+    \lean{MPSTensor.hamiltonian_prefix_parentChainInteraction_eq_zero_of_lt,
         MPSTensor.openPrefixGroundProjectionES_eq_one_of_lt,
         MPSTensor.fixedAmbient_martingaleDifference_eq_zero_of_lt,
-        MPSTensor.openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoint,
+        MPSTensor.hamiltonian_prefix_parentChainInteraction_eq_restrict_at_endpoint,
         MPSTensor.openIntervalGroundProjectionES_at_endpoint,
         MPSTensor.openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint}
     \leanok
@@ -1761,19 +1758,19 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     $\lVert v\rVert$ when $v\neq0$.
 \end{proof}
 
-\begin{lemma}[Norm gap from the full-range C1--C3 estimate]
+\begin{lemma}[Spectral gap from the full-range C1--C3 estimate]
     \label{thm:nachtergaele_c1_c3_full_range_norm_gap}
-    \lean{FrustrationFree.NestedGroundProjections.norm_lower_bound_of_nachtergaele_c1_c3_full_range}
+    \lean{FrustrationFree.NestedGroundProjections.forall_hasEigenvalue_of_nachtergaele_c1_c3_full_range}
     \leanok
     In the setting of
     Lemma~\ref{thm:nachtergaele_c1_c3_full_range_energy_estimate}, suppose
     that $H$ is
-    positive and $\operatorname{ran}(G_N)=\ker H$. Then every
-    $v\in(\ker H)^\perp$ satisfies
+    positive and $\operatorname{ran}(G_N)=\ker H$. Then every eigenvalue
+    $\mu\neq0$ of $H$ satisfies
     \begin{align}
         \frac{\gamma_{l+1}}{d_{l+1}}
-        \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert
-         & \leq\lVert Hv\rVert.
+        \left(1-\epsilon_l\sqrt{l+1}\right)^2
+         & \leq\mu.
         \label{eq:nachtergaele_c1_c3_full_range_norm_gap}
     \end{align}
 \end{lemma}
@@ -1797,7 +1794,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     \end{align}
     This global quadratic-form bound satisfies the hypothesis of
     Lemma~\ref{lem:quadratic_form_to_norm_bound}, whose finite-dimensional
-    criterion yields the stated norm bound.
+    criterion bounds every nonzero eigenvalue of $H$ below by $\kappa$.
 \end{proof}
 
 \begin{lemma}[Martingale criterion for a finite family of projections]
@@ -1899,8 +1896,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{definition}[Compatible open-chain parent Hamiltonian]
     \label{def:open_parent_hamiltonian_es}
-    \lean{MPSTensor.NonwrappingStart}
-    \lean{MPSTensor.openParentHamiltonianES}
+    \lean{MPSTensor.NonwrappingStart, MPSTensor.parentChainInteraction}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients}
     For $L,N\in\N$, let
@@ -1921,10 +1917,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Full-window compatible interaction]
     \label{thm:open_parent_hamiltonian_full_window}
-    \lean{MPSTensor.openParentHamiltonianES_self_eq_parentInteractionES}
+    \lean{MPSTensor.hamiltonian_parentChainInteraction_self}
     \leanok
     \uses{def:open_parent_hamiltonian_es, rem:euclidean_local_projector_ingredients}
-    If $L>0$, then
+    For every $L$,
     \begin{align}
         H^{\mathrm{open}}_{L,L}(A)
          & =P_L^{\mathrm{ES}}(A).
@@ -1959,8 +1955,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Unit gap at the full-window volume]
     \label{thm:open_parent_hamiltonian_full_window_unit_gap}
-    \lean{MPSTensor.openParentHamiltonianES_self_norm_eq_of_mem_orthogonal_ker,
-        MPSTensor.openParentHamiltonianES_self_unit_gap}
+    \lean{MPSTensor.norm_toEuclideanLin_hamiltonian_parentChainInteraction_self_of_mem_orthogonal_ker,
+        MPSTensor.unit_gap_hamiltonian_parentChainInteraction_self}
     \leanok
     \uses{thm:open_parent_hamiltonian_full_window}
     If $L>0$ and
@@ -1970,11 +1966,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
          & =\lVert v\rVert.
         \label{eq:open_parent_hamiltonian_full_window_norm}
     \end{align}
-    In particular,
-    \begin{align}
-        \lVert v\rVert
-         & \leq\lVert H^{\mathrm{open}}_{L,L}(A)v\rVert.
-    \end{align}
+    In particular, every nonzero eigenvalue of $H^{\mathrm{open}}_{L,L}(A)$
+    is at least $1$; this last assertion also holds for $L=0$.
     In \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}, this gives
     $\gamma_{l+1}=1$ at the full-window volume $N=L=l+1$, without asserting
     that the excited subspace is nonzero or giving a gap for any $N>L$.
@@ -2004,7 +1997,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Positivity of the compatible open-chain Hamiltonian]
     \label{lem:open_parent_hamiltonian_es_positive}
-    \lean{MPSTensor.openParentHamiltonianES_isPositive}
+    \lean{MPSTensor.posSemidef_hamiltonian_parentChainInteraction}
     \leanok
     \uses{def:open_parent_hamiltonian_es, lem:transported_es_positive}
     For every $A$, $L$, and $N$, the operator
@@ -2019,8 +2012,6 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{definition}[Compatible suffix Hamiltonian]
     \label{def:open_suffix_parent_hamiltonian_es}
-    \lean{MPSTensor.openSuffixParentHamiltonianES}
-    \leanok
     \uses{def:open_parent_hamiltonian_es}
     For $L,l,n,N\in\N$, the Hamiltonian on the last $l$ sites of the prefix
     $[0,n)$, regarded as an operator on the $N$-site chain, is
@@ -2038,7 +2029,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % source lower endpoint when L=l+1.
 \begin{lemma}[Vanishing suffix before a complete window]
     \label{thm:open_suffix_parent_hamiltonian_zero_before_window}
-    \lean{MPSTensor.openSuffixParentHamiltonianES_eq_zero_of_lt}
+    \lean{MPSTensor.hamiltonian_restrict_parentChainInteraction_eq_zero_of_lt}
     \leanok
     \uses{def:open_suffix_parent_hamiltonian_es}
     If $n<L$, then
@@ -2060,7 +2051,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % lines 1030--1041.
 \begin{lemma}[Shifted full-range suffix sum]
     \label{thm:open_suffix_parent_hamiltonian_range_shift}
-    \lean{MPSTensor.sum_range_openSuffixParentHamiltonianES_succ_eq_Icc}
+    \lean{MPSTensor.sum_range_hamiltonian_restrict_parentChainInteraction_succ_eq_Icc}
     \leanok
     \uses{def:open_suffix_parent_hamiltonian_es,
         thm:open_suffix_parent_hamiltonian_zero_before_window}
@@ -2083,7 +2074,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Finite-overlap condition C1 for the compatible open chain]
     \label{thm:open_parent_hamiltonian_es_c1}
-    \lean{MPSTensor.openParentHamiltonianES_C1}
+    \lean{MPSTensor.parentChainInteraction_C1}
     \leanok
     \uses{def:open_parent_hamiltonian_es,
         def:open_suffix_parent_hamiltonian_es}
@@ -2122,7 +2113,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % lines 1030--1041; proof of Theorem 2.1(i), lines 1250--1255.
 \begin{lemma}[Full-range compatible open-chain counting bound]
     \label{thm:open_parent_hamiltonian_c1_full_range}
-    \lean{MPSTensor.openParentHamiltonianES_C1_full_range_quadratic_form}
+    \lean{MPSTensor.parentChainInteraction_C1_full_range_quadratic_form}
     \leanok
     \uses{thm:open_parent_hamiltonian_es_c1,
         thm:open_suffix_parent_hamiltonian_range_shift}
@@ -2155,14 +2146,13 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % gamma_{l+1} in the printed proof, lines 1240--1248.
 \begin{lemma}[Embedded fixed-window condition C2]
     \label{thm:open_suffix_parent_hamiltonian_es_c2}
-    \lean{MPSTensor.openSuffixParentHamiltonianES_eq_localTermES,
-        MPSTensor.openSuffixParentHamiltonianES_isSymmetricProjection,
-        MPSTensor.openSuffixParentHamiltonianES_eq_orthogonal_starProjection_ker,
-        MPSTensor.openSuffixParentHamiltonianES_eq_id_sub_starProjection_ker,
-        MPSTensor.openSuffixParentHamiltonianES_C2,
-        MPSTensor.openSuffixParentHamiltonianES_C2_quadratic_form,
-        MPSTensor.openSuffixParentHamiltonianES_norm_eq_of_mem_orthogonal_ker,
-        MPSTensor.openSuffixParentHamiltonianES_unit_gap}
+    \lean{MPSTensor.isStarProjection_hamiltonian_restrict_parentChainInteraction,
+        MPSTensor.toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_starProjection,
+        MPSTensor.toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_id_sub_starProjection,
+        MPSTensor.parentChainInteraction_C2,
+        MPSTensor.parentChainInteraction_C2_quadratic_form,
+        MPSTensor.norm_toEuclideanLin_hamiltonian_restrict_parentChainInteraction_of_mem_orthogonal_ker,
+        MPSTensor.unit_gap_hamiltonian_restrict_parentChainInteraction}
     \leanok
     \uses{def:open_suffix_parent_hamiltonian_es,
         thm:open_parent_hamiltonian_es_c1,
@@ -2265,7 +2255,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % lines 1043--1058; proof of Theorem 2.1(i), lines 1240--1248.
 \begin{lemma}[Full-range fixed-window local gap]
     \label{thm:open_suffix_parent_hamiltonian_c2_full_range}
-    \lean{MPSTensor.openSuffixParentHamiltonianES_C2_full_range_norm_sq}
+    \lean{MPSTensor.parentChainInteraction_C2_full_range_norm_sq}
     \leanok
     \uses{thm:open_suffix_parent_hamiltonian_zero_before_window,
         thm:open_suffix_parent_hamiltonian_es_c2}
@@ -2298,10 +2288,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Zero energy forces every compatible local constraint]
     \label{thm:open_parent_hamiltonian_zero_local_terms}
-    \lean{MPSTensor.localTermES_eq_zero_of_openParentHamiltonianES_eq_zero}
+    \lean{ManyBody.Interaction.mem_ker_toEuclideanLin_hamiltonian_iff}
     \leanok
     \uses{def:open_parent_hamiltonian_es}
-    If $H^{\mathrm{open}}_{N,L}(A)v=0$, then, for every $i\in I_{L,N}$,
+    Let $H=\sum_i h_i$ be a finite sum of positive semidefinite matrices.
+    Then $Hv=0$ if and only if $h_iv=0$ for every $i$. In particular, if
+    $H^{\mathrm{open}}_{N,L}(A)v=0$, then, for every $i\in I_{L,N}$,
     \begin{align}
         h_{i,\mathrm{ES}}(A,L)v & =0.
     \end{align}
@@ -2316,8 +2308,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \langle h_{i,\mathrm{ES}}(A,L)v,v\rangle
          & =\re\langle H^{\mathrm{open}}_{N,L}(A)v,v\rangle=0.
     \end{align}
-    Each summand is the squared norm of the image of $v$ under an orthogonal
-    projection. Hence every local term annihilates $v$.
+    Each summand is nonnegative, so each vanishes, and a positive
+    semidefinite matrix annihilates every vector on which its quadratic form
+    vanishes. Hence every local term annihilates $v$.
 \end{proof}
 
 \begin{lemma}[Restriction of an open-boundary MPS vector]
@@ -2362,7 +2355,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Open-boundary vectors have zero compatible energy]
     \label{thm:open_ground_space_le_hamiltonian_kernel}
-    \lean{MPSTensor.groundSpaceES_le_ker_openParentHamiltonianES}
+    \lean{MPSTensor.groundSpaceES_le_ker_hamiltonian_parentChainInteraction}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_es}
     For every $A$, $L$, and $N$,
@@ -2397,7 +2390,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Compatible zero energy restricts to each window]
     \label{thm:open_parent_hamiltonian_window_ground_space}
-    \lean{MPSTensor.cyclicRestrictₗ_mem_groundSpace_of_mem_ker_openParentHamiltonianES}
+    \lean{MPSTensor.cyclicRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_parent,
         rem:cyclic_window_operators}
@@ -2422,7 +2415,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Compatible zero energy has open-boundary form]
     \label{thm:open_hamiltonian_kernel_le_ground_space}
-    \lean{MPSTensor.ker_openParentHamiltonianES_le_groundSpaceES_of_isNBlkInjective}
+    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_le_groundSpaceES_of_isNBlkInjective}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective}
     Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. If $A$ is
@@ -2450,7 +2443,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Ground-state property of the compatible open chain]
     \label{thm:open_parent_hamiltonian_kernel_ground_space}
-    \lean{MPSTensor.ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective}
+    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective}
     Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. As the canonical MPS
@@ -2501,7 +2494,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Dimension of the open-chain ground space]
     \label{thm:open_parent_hamiltonian_kernel_finrank}
-    \lean{MPSTensor.groundSpaceES_finrank_eq_of_isNBlkInjective, MPSTensor.finrank_ker_openParentHamiltonianES_of_isNBlkInjective}
+    \lean{MPSTensor.groundSpaceES_finrank_eq_of_isNBlkInjective, MPSTensor.finrank_ker_hamiltonian_parentChainInteraction_of_isNBlkInjective}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective}
     If $A$ is $L$-block-injective, then $\dim G_{L}^{\mathrm{ES}}(A)=D^{2}$.
@@ -3687,7 +3680,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % lines 1030--1094; Theorem 2.1(i), lines 1119--1130; proof lines 1195--1259.
 \begin{lemma}[Compatible open-chain gap from fixed-volume overlap]
     \label{thm:open_parent_hamiltonian_fixed_c3_gap}
-    \lean{MPSTensor.openParentHamiltonianES_norm_gap_of_fixedAmbient_c3}
+    \lean{MPSTensor.hamiltonian_parentChainInteraction_gap_of_fixedAmbient_c3}
     \leanok
     \uses{thm:nachtergaele_c1_c3_full_range_norm_gap,
         thm:physical-outside-window-martingale-cancellation,
@@ -3697,8 +3690,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         thm:open_suffix_parent_hamiltonian_c2_full_range,
         lem:open_parent_hamiltonian_es_positive,
         thm:open_parent_hamiltonian_kernel_ground_space}
-    Let $D\geq1$, let $l>0$, suppose that $A$ is $l$-block injective, and let
-    $N\geq l+1$.  Assume $0\leq\epsilon_l<1/\sqrt{l+1}$ and, for every
+    Assume $0\leq\epsilon_l<1/\sqrt{l+1}$ and, for every
     $0\leq n<N$,
     \begin{align}
         \left\lVert Q_nE_n^{(N)}\right\rVert & \leq\epsilon_l,
@@ -3706,11 +3698,11 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \end{align}
     where $Q_n$ is the ground-space projection of the interval
     $[n-l,n+1)$ and $E_n^{(N)}$ is the fixed-volume martingale difference.
-    Then every $v\in(G_N^{\mathrm{ES}}(A))^\perp$ satisfies
+    Then every nonzero eigenvalue $\mu$ of $H^{\mathrm{open}}_{N,l+1}(A)$
+    satisfies
     \begin{align}
-        \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert
-         & \leq
-        \left\lVert H^{\mathrm{open}}_{N,l+1}(A)v\right\rVert.
+        \left(1-\epsilon_l\sqrt{l+1}\right)^2
+         & \leq\mu.
         \label{eq:open_parent_hamiltonian_fixed_c3_gap}
     \end{align}
     By applying the full-range estimate with $d_{l+1}=\gamma_{l+1}=1$ and
@@ -3755,7 +3747,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % lines 1083--1094; Theorem 2.1(i), lines 1119--1130; proof lines 1195--1259.
 \begin{lemma}[Uniform gap for primitive compatible open chains]
     \label{thm:primitive_open_parent_hamiltonian_gap}
-    \lean{Kraus.HasComplementaryFixedPointGap.exists_openParentHamiltonianES_gap}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_hamiltonian_parentChainInteraction_gap}
     \leanok
     \uses{thm:literal_fixed_volume_martingale_c3,
         thm:open_parent_hamiltonian_fixed_c3_gap}
@@ -3766,12 +3758,11 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \epsilon_l & <\frac{1}{\sqrt{l+1}},
         \label{eq:primitive_open_parent_hamiltonian_threshold}
     \end{align}
-    and, for every $N\geq l+1$ and every
-    $v\in(G_N^{\mathrm{ES}}(A))^\perp$,
+    and, for every $N\geq l+1$, every nonzero eigenvalue $\mu$ of
+    $H^{\mathrm{open}}_{N,l+1}(A)$ satisfies
     \begin{align}
-        \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert
-         & \leq
-        \left\lVert H^{\mathrm{open}}_{N,l+1}(A)v\right\rVert.
+        \left(1-\epsilon_l\sqrt{l+1}\right)^2
+         & \leq\mu.
         \label{eq:primitive_open_parent_hamiltonian_gap}
     \end{align}
 \end{lemma}
@@ -3829,19 +3820,15 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Uniform gap for a blocked primitive MPS parent Hamiltonian]
     \label{thm:martingale_mps}
-    \lean{Kraus.HasComplementaryFixedPointGap.exists_blockTensor_parentHamiltonianES_gap_eighth,
-        Kraus.HasComplementaryFixedPointGap.exists_blockTensor_parentHamiltonianES_gapped}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth,
+        Kraus.HasComplementaryFixedPointGap.exists_blockTensor_hamiltonian_parentRingInteraction_gapped}
     \leanok
-    \uses{def:primitive_mps, def:l_blk_injective, def:blocked_tensor, def:parent_ground_space_es, def:parent_hamiltonian_es}
+    \uses{def:primitive_mps, def:l_blk_injective, def:blocked_tensor, def:parent_hamiltonian_es}
     Let $A$ be a primitive MPS tensor with nonzero physical and bond dimensions,
     and suppose that its fixed point is positive definite.  There is a blocking
     length $p>0$ such that $A$ is $p$-block injective and, with
-    $B=\operatorname{block}_p(A)$, for every $N\geq4$ and every
-    $v\in(\ker H_{N,2}(B))^\perp$,
-    \begin{align}
-        \frac{1}{8}\lVert v\rVert
-         & \leq \lVert H_{N,2}(B)v\rVert.
-    \end{align}
+    $B=\operatorname{block}_p(A)$, for every $N\geq4$, every nonzero
+    eigenvalue of $H_{N,2}(B)$ is at least $\tfrac18$.
 \end{lemma}
 
 \begin{proof}
@@ -3884,17 +3871,13 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Rearranging (\ref{eq:projector_diff_inner_prod_expand}) proves the claim.
 \end{proof}
 
-\begin{lemma}[Norm gap implies the squared quadratic-form bound]
+\begin{lemma}[Spectral gap implies the squared quadratic-form bound]
     \label{lem:norm_gap_to_squared_quadratic_form}
-    \lean{LinearMap.IsPositive.quadraticForm_sq_ge_of_norm_gap}
+    \lean{LinearMap.IsPositive.quadraticForm_sq_ge_of_forall_hasEigenvalue}
     \leanok
     Let $H$ be a positive operator on a finite-dimensional complex Hilbert
-    space and let $\gamma\geq0$. If
-    \begin{align}
-        \gamma\lVert u\rVert & \leq \lVert Hu\rVert
-        \qquad\text{for every }u\in(\ker H)^\perp,
-    \end{align}
-    then every vector $v$ satisfies
+    space and let $\gamma\geq0$. If every nonzero eigenvalue of $H$ is at
+    least $\gamma$, then every vector $v$ satisfies
     \begin{align}
         \gamma\operatorname{Re}\langle Hv,v\rangle
          & \leq \operatorname{Re}\langle Hv,Hv\rangle.
@@ -3903,6 +3886,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{proof}
     \leanok
+    Expanding in an orthonormal eigenbasis of $H$, whose eigenvalues on
+    $(\ker H)^\perp$ are at least $\gamma$, gives
+    $\gamma\lVert u\rVert\leq\lVert Hu\rVert$ for every $u\in(\ker H)^\perp$.
     For $w=v-P_{\ker H}v$, one has $w\perp\ker H$ and $Hw=Hv$, and symmetry gives
     $\langle Hv,v\rangle=\langle Hv,w\rangle$. Hence
     \begin{align}
@@ -3916,14 +3902,15 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{lemma}[Right-spectator quadratic-form bound]
     \label{lem:right_spectator_quadratic_form_gap}
     \lean{ContinuousLinearMap.quadraticForm_sq_ge_rightFiberwiseMap,
-        LinearMap.IsPositive.quadraticForm_sq_ge_rightFiberwiseMap_of_norm_gap}
+        LinearMap.IsPositive.quadraticForm_sq_ge_rightFiberwiseMap_of_forall_hasEigenvalue}
     \leanok
     \uses{lem:norm_gap_to_squared_quadratic_form, lem:right-spectator-extension}
     Let $G$ act on a finite active configuration space. If
     $G^2\geq\gamma G$ as a quadratic form, the same inequality holds when $G$
     acts independently over any finite right spectator coordinate. In
-    particular, positivity and a norm gap $\gamma$ for $G$ imply this
-    fiberwise quadratic-form inequality.
+    particular, if $G$ is positive, $\gamma\geq0$, and every nonzero
+    eigenvalue of $G$ is at least $\gamma$, then this fiberwise
+    quadratic-form inequality holds.
 \end{lemma}
 
 \begin{proof}
@@ -4152,21 +4139,23 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{definition}[Cyclic coordinates for periodic local interactions]
     \label{def:cyclic_parent_local_coordinates}
-    \lean{MPSTensor.zmodLocalTermES}
+    \lean{ZMod.finEquiv}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients}
-    For an $N$-site periodic chain with $N>0$, index the range-$R$
-    local interactions by $\mathbb Z/N\mathbb Z$.  If
-    $s\in\mathbb Z/N\mathbb Z$ and $i\in\{0,\ldots,N-1\}$ is its standard
-    representative, write
+    For an $N$-site periodic chain with $N>0$, the sites $\{0,\ldots,N-1\}$
+    are identified with $\mathbb Z/N\mathbb Z$ through the standard
+    representatives; this identification is additive. Index the range-$R$
+    local interactions by $\mathbb Z/N\mathbb Z$: if
+    $s\in\mathbb Z/N\mathbb Z$ has the standard representative $i$, write
     \begin{align}
-        h_s^{(N,R)} & =h_{i,\mathrm{ES}}(A,R).
+        h_s^{(N,R)} & =h_{i,\mathrm{ES}}(A,R)
     \end{align}
+    for the term of the parent interaction on the ring whose window starts at $i$.
 \end{definition}
 
 \begin{lemma}[Total sum in cyclic coordinates]
     \label{thm:cyclic_parent_local_sum}
-    \lean{MPSTensor.sum_zmodLocalTermES_eq_parentHamiltonianES}
+    \lean{ManyBody.Interaction.sum_toEuclideanLin_translationInvariant_term_finEquiv_symm}
     \leanok
     \uses{def:cyclic_parent_local_coordinates, def:parent_hamiltonian_es}
     The sum over the cyclic coordinates is the periodic parent Hamiltonian:
@@ -4188,7 +4177,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \label{thm:cyclic_parent_oriented_separation}
     \lean{MPSTensor.finEquiv_symm_add_eq_cyclicForwardSite,
         MPSTensor.cyclicWindowsDisjoint_cyclicForwardSite_of_oriented_separation,
-        MPSTensor.zmodLocalTermES_commute_of_oriented_separation}
+        ManyBody.Interaction.commute_translationInvariant_term_finEquiv_symm_add_of_le}
     \leanok
     \uses{def:cyclic_parent_local_coordinates, rem:cyclic_window_operators,
         lem:cyclic_window_nonoverlap_positive}
@@ -4242,30 +4231,31 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[A local interaction inside a cyclic active block]
     \label{thm:cyclic_active_block_local_conjugacy}
-    \lean{MPSTensor.localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv}
+    \lean{MPSTensor.toEuclideanLin_translationInvariant_term_conj_cyclicActiveBlock}
     \leanok
-    \uses{def:cyclic_active_block_coordinates,
-        rem:euclidean_local_projector_ingredients, lem:right-spectator-extension}
-    Suppose that $W\leq N$ and $q+R\leq W$.  Under the isometry $U_i$ in
-    (\ref{eq:cyclic_active_block_isometry}), the range-$R$ interaction
-    beginning at the cyclic site $i+q$ becomes the corresponding nonwrapping
-    interaction on the active $W$-site interval, acting independently on the
+    \uses{def:cyclic_active_block_coordinates, lem:right-spectator-extension}
+    Let $h$ be an operator on $R$ sites, and for a ring of $M\geq R$ sites
+    write $h_j^{(M)}$ for $h$ placed on the $R$ consecutive sites beginning at
+    the cyclic site $j$.  Suppose that $W\leq N$ and $q+R\leq W$.  Under the
+    isometry $U_i$ in (\ref{eq:cyclic_active_block_isometry}), the translate
+    of $h$ beginning at the cyclic site $i+q$ of the ring of $N$ sites
+    becomes the translate beginning at the site $q$ of the active $W$-site
+    interval, whose window does not wrap, acting independently on the
     complementary configuration:
     \begin{align}
-        U_i h_{i+q}^{(N,R)}U_i^{-1}
-         & =\bigl(h_q^{(W,R)}\bigr)^{\oplus[d]^{N-W}}.
+        U_i h_{i+q}^{(N)}U_i^{-1}
+         & =\bigl(h_q^{(W)}\bigr)^{\oplus[d]^{N-W}}.
         \label{eq:cyclic_active_block_local_conjugacy}
     \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{def:cyclic_active_block_coordinates,
-        rem:euclidean_local_projector_ingredients, lem:right-spectator-extension}
-    The condition $q+R\leq W$ places the whole interaction window inside the
-    active block.  Joining an active configuration to a complementary one
+    \uses{def:cyclic_active_block_coordinates, lem:right-spectator-extension}
+    The condition $q+R\leq W$ places the whole window inside the active
+    block.  Joining an active configuration to a complementary one
     therefore preserves both the extracted length-$R$ word and every
-    configuration obtained by replacing that word.  The local projector acts
+    configuration obtained by replacing that word.  The operator $h$ acts
     only on the active coordinates, which proves
     (\ref{eq:cyclic_active_block_local_conjugacy}) on each complementary
     configuration.
@@ -4273,7 +4263,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[A cyclic Knabe block is an open parent Hamiltonian]
     \label{thm:cyclic_knabe_block_open_parent_hamiltonian}
-    \lean{MPSTensor.cyclicWindowSum_zmodLocalTermES_conj_cyclicActiveBlock}
+    \lean{ManyBody.Interaction.cyclicWindowSum_toEuclideanLin_translationInvariant_term}
     \leanok
     \uses{def:cyclic_parent_local_coordinates,
         def:cyclic_active_block_coordinates,
@@ -4309,7 +4299,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Periodic finite-range gap from one open active volume]
     \label{thm:parent_hamiltonian_gap_from_open_knabe_block}
-    \lean{MPSTensor.parentHamiltonianES_gap_of_openParentHamiltonianES_gap}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteraction_gap}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:parent_hamiltonian_es,
         thm:cyclic_parent_local_sum, thm:cyclic_parent_oriented_separation,
@@ -4317,11 +4307,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         lem:right_spectator_quadratic_form_gap,
         thm:finite_range_cyclic_knabe, lem:quadratic_form_to_norm_bound}
     Let $1\leq R\leq m$, put $W=m+R-1$, and suppose that
-    $H^{\mathrm{open}}_{W,R}(A)$ has norm gap $\gamma$.  Thus, for every
-    $u\in(\ker H^{\mathrm{open}}_{W,R}(A))^\perp$,
     \begin{align}
-        \gamma\lVert u\rVert
-         & \leq\left\lVert H^{\mathrm{open}}_{W,R}(A)u\right\rVert.
+        \text{every nonzero eigenvalue of }H^{\mathrm{open}}_{W,R}(A)
+        \text{ is at least }\gamma.
         \label{eq:open_knabe_block_norm_gap}
     \end{align}
     If $(R-1)^2<m\gamma$, define
@@ -4330,11 +4318,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
          & =\frac{m\gamma-(R-1)^2}{m-R+1}.
         \label{eq:parent_hamiltonian_finite_range_knabe_delta}
     \end{align}
-    Then $\delta>0$, and for every $N\geq2m$ and every
-    $v\in(\ker H_{N,R}^{\mathrm{ES}}(A))^\perp$,
+    Then $\delta>0$, and for every $N\geq2m$,
     \begin{align}
-        \delta\lVert v\rVert
-         & \leq\left\lVert H_{N,R}^{\mathrm{ES}}(A)v\right\rVert.
+        \text{every nonzero eigenvalue of }H_{N,R}^{\mathrm{ES}}(A)
+        \text{ is at least }\delta.
         \label{eq:parent_hamiltonian_finite_range_knabe_gap}
     \end{align}
     As documented in
@@ -4352,7 +4339,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         thm:cyclic_knabe_block_open_parent_hamiltonian,
         lem:right_spectator_quadratic_form_gap,
         thm:finite_range_cyclic_knabe, lem:quadratic_form_to_norm_bound}
-    The norm gap (\ref{eq:open_knabe_block_norm_gap}) and positivity give
+    The gap (\ref{eq:open_knabe_block_norm_gap}) and positivity give
     $(H^{\mathrm{open}}_{W,R})^2\geq\gamma H^{\mathrm{open}}_{W,R}$ as a
     quadratic form.  Lemma~\ref{lem:right_spectator_quadratic_form_gap} gives
     the same inequality after adjoining the $N-W$ complementary sites, and
@@ -4373,7 +4360,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{theorem}[Uniform finite-range gap for primitive MPS parent Hamiltonians]
     \label{thm:primitive_parent_hamiltonian_finite_range_knabe_gap}
-    \lean{Kraus.HasComplementaryFixedPointGap.exists_parentHamiltonianES_gap_of_finiteRangeKnabe}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_hamiltonian_parentRingInteraction_gap_of_finiteRangeKnabe}
     \leanok
     \uses{thm:primitive_open_parent_hamiltonian_gap,
         thm:open_parent_hamiltonian_kernel_ground_space,
@@ -4406,11 +4393,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
          & =\frac{m\gamma_{\mathrm{open}}-l^2}{m-l}.
         \label{eq:primitive_finite_range_knabe_delta}
     \end{align}
-    For every $N\geq2m$ and every
-    $v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$,
+    For every $N\geq2m$,
     \begin{align}
-        \delta\lVert v\rVert
-         & \leq\left\lVert H_{N,l+1}^{\mathrm{ES}}(A)v\right\rVert.
+        \text{every nonzero eigenvalue of }H_{N,l+1}^{\mathrm{ES}}(A)
+        \text{ is at least }\delta.
         \label{eq:primitive_finite_range_knabe_gap}
     \end{align}
     Although \cite[lines~1460--1500]{PerezGarcia2007Matrix} and

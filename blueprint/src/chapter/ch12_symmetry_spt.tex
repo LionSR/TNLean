@@ -118,20 +118,14 @@ of the virtual projective representation.
 
 \begin{lemma}[Uniform parent gap along an injective polar deformation]
     \label{thm:spt_polar_deformation_gap}
-    \lean{MPSTensor.exists_uniform_parentHamiltonianES_gap_polarDeformation,
-        MPSTensor.parentInteractionES_polarDeformation_commute_onSiteTensorPow}
+    \lean{MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_polarDeformation}
     \leanok
 
     Let $A$ be one-site injective with $D>0$, and let $H_{N,2}(A_\gamma)$
     be its canonical two-site periodic parent Hamiltonian. There is
-    $\delta>0$ such that, for every $\gamma\in[0,1]$, every $N\geq2$, and
-    every $v\perp\ker H_{N,2}(A_\gamma)$,
-    \begin{align}
-        \delta\lVert v\rVert & \leq\lVert H_{N,2}(A_\gamma)v\rVert.
-        \notag
-    \end{align}
-    Under the unitary bond-conjugation covariance of the preceding theorem,
-    each canonical range-$L$ parent interaction commutes with $U^{\otimes L}$.
+    $\delta>0$ such that, for every $\gamma\in[0,1]$ and every $N\geq2$,
+    zero is an eigenvalue of $H_{N,2}(A_\gamma)$ and every other eigenvalue
+    is at least $\delta$.
     In the polar-deformation argument of
     \cite[Section~II.C and Appendix~A]{Schuch2011Phases}, this establishes
     the one-site injective case; as documented in
@@ -145,15 +139,19 @@ of the virtual projective representation.
         thm:spt_parent_hamiltonian_symmetry}
     The preceding theorem gives a continuous injective family on the compact
     interval $[0,1]$. The compact-family parent-gap theorem applies to this
-    family. Covariance by bond conjugation gives gauge equivalence under
-    physical rotation, so the canonical parent interactions commute with
-    the physical tensor powers.
+    family, and the periodic vector of an injective tensor is a nonzero
+    zero-energy vector.
 \end{proof}
+
+Under the unitary bond-conjugation covariance of
+Lemma~\ref{thm:spt_polar_deformation}, the deformed tensors are gauge
+equivalent to their physical rotations, so by
+Lemma~\ref{thm:spt_parent_hamiltonian_symmetry} each canonical range-$L$
+parent interaction along the path commutes with $U^{\otimes L}$.
 
 \begin{lemma}[Canonical interactions along a symmetric injective path]
     \label{thm:spt_canonical_injective_gapped_path}
-    \lean{MPSTensor.continuous_parentInteraction_matrix_family,
-        MPSTensor.hamiltonian_translationInvariant_parent_spectrum_gap,
+    \lean{MPSTensor.isGapped_hamiltonian_translationInvariant_parent,
         MPSTensor.canonicalInjectiveGappedPath}
     \leanok
     \uses{def:spt_common_space_gapped_path}
@@ -391,13 +389,13 @@ of the virtual projective representation.
         MPSTensor.bondMatrixEquiv_symm_isSymmetricProjection,
         MPSTensor.sectorBondInteraction_isStarProjection,
         MPSTensor.sectorBondInteraction_translate_commute,
-        MPSTensor.sectorBondInteraction_spectrum_gap_one,
+        MPSTensor.sectorBondInteraction_eigenvalue_gap_one,
         Matrix.physicalSpectatorEdgeInteraction_isStarProjection,
         MPSTensor.physicalSpectatorBondInteraction_isStarProjection,
         MPSTensor.physicalSpectatorBondInteraction_translate_commute,
-        MPSTensor.physicalSpectatorBondInteraction_spectrum_gap_one,
+        MPSTensor.physicalSpectatorBondInteraction_eigenvalue_gap_one,
         MPSTensor.hamiltonian_translationInvariant_quadratic_gap_of_commuting_projection,
-        MPSTensor.hamiltonian_translationInvariant_spectrum_gap_one_of_commuting_projection}
+        MPSTensor.hamiltonian_translationInvariant_eigenvalue_gap_one_of_commuting_projection}
     \leanok
     \uses{def:spt_sector_bond_interaction}
     If every $\eta_{q,h}$ is an orthogonal projection, so is the
@@ -1218,8 +1216,7 @@ and the regrouping of physical registers into bonds.
 
 \begin{definition}[Symmetric gapped paths on a common physical space]
     \label{def:spt_common_space_gapped_path}
-    \lean{ManyBody.Interaction.translationInvariant,
-        MPSTensor.SymmetricGappedInteractionPath}
+    \lean{MPSTensor.SymmetricGappedInteractionPath}
     \leanok
     Fix a unitary representation $U:G\to\mathrm U(d)$ and two
     two-site interactions $h_0,h_1$.  A symmetric gapped path between them
@@ -1382,13 +1379,11 @@ and the regrouping of physical registers into bonds.
     \label{thm:spt_parent_hamiltonian_symmetry}
     \lean{MPSTensor.onSiteTensorPow_conjTranspose_mul_self,
         MPSTensor.groundSpaceES_invariant_of_gauge_covariance,
-        MPSTensor.parentInteractionES_commute_onSiteTensorPow,
         MPSTensor.onSiteTensorPow_reindex_windowComplement,
         MPSTensor.placeAlong_ringWindow_commute_onSiteTensorPow,
-        MPSTensor.parentInteractionES_eq_toEuclideanLin_parentMatrix,
         MPSTensor.parentInteraction_matrix_commute_onSiteTensorPow,
-        MPSTensor.localTermES_commute_onSiteTensorPow,
-        MPSTensor.parentHamiltonianES_commute_onSiteTensorPow}
+        MPSTensor.commute_parentRingInteraction_term_onSiteTensorPow,
+        MPSTensor.commute_hamiltonian_parentRingInteraction_onSiteTensorPow}
     \leanok
     \uses{def:gauge_equiv, def:physical_rotation, def:parent_interaction,
         def:parent_hamiltonian_es}
@@ -1660,7 +1655,7 @@ and the regrouping of physical registers into bonds.
     \label{lem:spt_independent_bond_gap}
     \lean{MPSTensor.bondPenalty_norm_le_one,
         MPSTensor.bondProductParentHamiltonian_posSemidef,
-        MPSTensor.bondProductParentHamiltonian_spectrum_gap_one,
+        MPSTensor.isGapped_bondProductParentHamiltonian,
         MPSTensor.normalizedBondInterpolation_parent_uniform_gap}
     \leanok
     \uses{thm:spt_bond_product_parent_gap, thm:spt_bond_parent_continuity}
@@ -1755,8 +1750,8 @@ and the regrouping of physical registers into bonds.
 \begin{lemma}[Spectral gap of the physical bond parent Hamiltonian]
     \label{thm:spt_physical_bond_parent_spectrum}
     \lean{MPSTensor.physicalBondProductParentHamiltonian_posSemidef,
-        MPSTensor.physicalBondProductParentHamiltonian_spectrum_gap_one,
-        MPSTensor.normalizedPhysicalBondInterpolation_parent_spectrum_gap_one}
+        MPSTensor.isGapped_physicalBondProductParentHamiltonian,
+        MPSTensor.isGapped_normalizedPhysicalBondInterpolation_parent}
     \leanok
     \uses{thm:spt_physical_bond_parent_gap}
     For every unit bond vector, and in particular for
@@ -1890,10 +1885,10 @@ and the regrouping of physical registers into bonds.
         MPSTensor.matrixUnitBondVector_sum_normSq,
         MPSTensor.groundSpaceMap_sptFixedPointTensor_two_apply,
         MPSTensor.twoSiteBondInteraction_groundSpaceMap_sptFixedPointTensor,
-        MPSTensor.twoSiteBondInteraction_le_parentInteractionES_sptFixedPointTensor,
+        MPSTensor.twoSiteBondInteraction_le_parentInteraction_sptFixedPointTensor,
         MPSTensor.one_sub_twoSiteBondInteraction_mulVec_sptFixedPointTensor,
         MPSTensor.twoSiteBondInteraction_apply_eq_zero_iff_sptFixedPointTensor,
-        MPSTensor.twoSiteBondInteraction_eq_parentInteractionES_sptFixedPointTensor}
+        MPSTensor.twoSiteBondInteraction_eq_parentInteraction_sptFixedPointTensor}
     \leanok
     \uses{thm:spt_two_site_bond_interaction, def:spt_fixed_point_tensor}
     Let $D>0$, let $A^{(a,b)}=D^{-1/2}|a\rangle\langle b|$ be the SPT
@@ -1952,7 +1947,6 @@ and the regrouping of physical registers into bonds.
     \label{thm:spt_weighted_matrix_unit_parent_comparison}
     \lean{MPSTensor.groundSpaceMap_weightedMatrixUnitInterpolation_two_apply,
         MPSTensor.twoSiteBondInteraction_groundSpaceMap_weightedMatrixUnitInterpolation,
-        MPSTensor.twoSiteBondInteraction_le_parentInteractionES_weightedMatrixUnitInterpolation,
         MPSTensor.twoSiteBondInteraction_le_parentInteraction_weightedMatrixUnitInterpolation,
         MPSTensor.incomingBondUnitaryLin_normalizedBondInterpolation_state,
         MPSTensor.hamiltonian_translationInvariant_normalizedBondInteraction_groundSpace,
@@ -1992,7 +1986,7 @@ and the regrouping of physical registers into bonds.
 
 \begin{definition}[Symmetric paths between weighted canonical parents]
     \label{def:spt_weighted_canonical_parent_path}
-    \lean{MPSTensor.hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one,
+    \lean{MPSTensor.isGapped_hamiltonian_translationInvariant_normalizedBondInteraction,
         MPSTensor.weightedMatrixUnitParentComparisonPath,
         MPSTensor.weightedCanonicalFixedPointGappedPath}
     \leanok
@@ -2039,10 +2033,9 @@ and the regrouping of physical registers into bonds.
 
 \begin{lemma}[Canonical parents under physical isometries]
     \label{thm:spt_physical_embedding_parent}
-    \lean{MPSTensor.parentInteractionES_rotatePhysical_isometry,
-        MPSTensor.parentInteractionES_rotatePhysical_isometry_decomposition,
+    \lean{MPSTensor.toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry,
         MPSTensor.parentInteraction_matrix_rotatePhysical_isometry,
-        MPSTensor.parentInteractionES_rotatePhysical_isometry_apply_of_adjoint_eq_zero}
+        MPSTensor.toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry_apply_of_adjoint_eq_zero}
     \leanok
     \uses{thm:spt_physical_embedding_boundary,
         thm:spt_isometric_image_projection, def:parent_interaction}

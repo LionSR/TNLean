@@ -14,7 +14,6 @@ import TNLean.MPS.Symmetry.GappedPath.ExactMPSGappedPhase
 import TNLean.MPS.Symmetry.GappedPath.ExactMPSGroundPathComposition
 import TNLean.MPS.Symmetry.GappedPath.ExactMPSPhaseGaugeInvariance
 import TNLean.MPS.Symmetry.GappedPath.GappedInteractionPathComposition
-import TNLean.MPS.Symmetry.GappedPath.InteractionHamiltonianSymmetry
 import TNLean.MPS.Symmetry.GappedPath.OrderedGappedInteractionPath
 import TNLean.MPS.Symmetry.GappedPath.PhysicalCharacterGappedPath
 import TNLean.MPS.Symmetry.GappedPath.PhysicalInteractionGap

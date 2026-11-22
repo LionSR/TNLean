@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.BulkObservable.BoundaryObservableCompression
 import TNLean.MPS.ParentHamiltonian.BulkObservable.PrimitiveLocalParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.Gap.PrimitiveBlockOpenGapAllLengths
 
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.CanonicalParentInteractionMatrix
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 
 /-!
 # Local commutator inequalities for primitive sectors of a multiblock tensor
@@ -141,35 +141,38 @@ theorem multiblock_localCommutator_gap_of_openInteraction_gap
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     (α : ι) {R k : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : (Matrix.toEuclideanLin h).IsPositive)
+    (hh : h.PosSemidef)
     (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
     (hcenter : observableInsertionExpectation (A α) (ρ α) X = 0)
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
     {γ : ℝ} (hγ : 0 ≤ γ)
     (hKernel : ∀ᶠ n in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h)
-        ((n + (R - 1) + k) + (R - 1 + n))) =
+      LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.chainTranslates R
+        ((n + (R - 1) + k) + (R - 1 + n)) h).hamiltonian) =
           ⨆ i, groundSpaceES (A i) ((n + (R - 1) + k) + (R - 1 + n)))
-    (hGap : ∀ᶠ n in atTop, ∀ v ∈
-      (LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h)
-        ((n + (R - 1) + k) + (R - 1 + n))))ᗮ,
-      γ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h)
-        ((n + (R - 1) + k) + (R - 1 + n)) v‖)
+    (hGap : ∀ᶠ n in atTop, ∀ z : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (ManyBody.Interaction.chainTranslates R
+        ((n + (R - 1) + k) + (R - 1 + n)) h).hamiltonian) z →
+        z = 0 ∨ (γ : ℂ) ≤ z)
     (hGround : ∀ᶠ n in atTop,
       ψ n ∈ groundSpaceES (A α) ((n + (R - 1) + k) + (R - 1 + n)))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
     γ * (observableInsertionExpectation (A α) (ρ α) (Xᴴ * X)).re ≤
       (observableInsertionExpectation (A α) (ρ α) (localCommutatorObservable h X)).re := by
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
-  let H (n : ℕ) := openInteractionHamiltonianES (Matrix.toEuclideanLin h) (N n)
+  let H (n : ℕ) :=
+    Matrix.toEuclideanLin (ManyBody.Interaction.chainTranslates R (N n) h).hamiltonian
   have hEnergy :=
     (hP α).openInteraction_commutator_energy_tendsto (hρ α) h X hR ψ hGround hUnit
   exact multiblock_commutator_gap_of_bulkObservable_energy_limit A ρ hP hρ hDistinct
     α X hcenter (ℓ := fun n : ℕ => n + (R - 1)) (r := fun n => (R - 1) + n)
     (tendsto_add_atTop_nat (R - 1))
     (tendsto_atTop_mono (fun n => Nat.le_add_left n (R - 1)) tendsto_id)
-    H ψ hγ (Eventually.of_forall fun n => openInteractionHamiltonianES_isPositive hh (N n))
-    hGap hKernel hGround hUnit hEnergy
+    H ψ hγ (Eventually.of_forall fun n => Matrix.isPositive_toEuclideanLin_iff.mpr
+      (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh (N n)))
+    (hGap.mono fun n hn => (ManyBody.forall_hasEigenvalue_iff_norm
+      (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh (N n))).mp hn)
+    hKernel hGround hUnit hEnergy
 
 end FiniteFamily
 section BlockFamily
@@ -197,15 +200,16 @@ theorem exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
   let T := toTensorFromBlocks (d := d) (μ := μ) A
   have hRpos : 0 < R := by omega
   have hKernel : ∀ N, R ≤ N →
-      LinearMap.ker (openParentHamiltonianES T R N) = groundSpaceES T N :=
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction T R N).hamiltonian) =
+          groundSpaceES T N :=
     fun N hN =>
-      ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_wordTupleSpanTop
+      ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
         μ A hμ hS hSpan hR hN
   obtain ⟨δ, hδ, hcanonical⟩ :=
-    exists_openParentHamiltonianES_toTensorFromBlocks_gap_of_wordTupleSpanTop
+    exists_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_wordTupleSpanTop
       μ A hμ hS hSpan hR
-  obtain ⟨γ, hγ, hgap⟩ := hh.exists_open_uniform_gap_of_canonical_gap hRpos hδ
-    (fun N hN v hv => hcanonical N hN v (by rwa [hKernel N hN] at hv))
+  obtain ⟨γ, hγ, hgap⟩ :=
+    hh.exists_hamiltonian_chainTranslates_uniform_gap_of_canonical_gap hδ hcanonical
   have hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i) := fun i j hij h => by
     simpa only [eqRec_eq_cast] using not_gaugePhaseEquiv_of_wordTupleSpanTop A hSpan i j hij h
@@ -216,9 +220,10 @@ theorem exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
     tendsto_atTop_mono (fun n => by dsimp [N]; omega) tendsto_id
   obtain ⟨ψ, hg, hu⟩ := (hP α).exists_eventually_unit_groundSpaceES (hρ α) N hN
   apply multiblock_localCommutator_gap_of_openInteraction_gap
-    A ρ hP hρ hDistinct α h hh.isPositive X hRpos hcenter ψ hγ.le
+    A ρ hP hρ hDistinct α h (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive) X hRpos
+    hcenter ψ hγ.le
   · exact Eventually.of_forall fun n => by
-      rw [hh.ker_openInteractionHamiltonianES_eq_ker_openParentHamiltonianES hRpos,
+      rw [hh.ker_hamiltonian_chainTranslates_eq_ker_parentChainInteraction,
         hKernel (N n) (by dsimp [N]; omega), groundSpaceES_toTensorFromBlocks_eq_iSup μ A hμ]
   · exact Eventually.of_forall fun n => hgap (N n) (by dsimp [N]; omega)
   · exact Eventually.of_forall hg
@@ -242,13 +247,10 @@ theorem exists_pos_multiblock_localCommutator_gap_of_wordTupleSpanTop
               (groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) R)ᗮ.starProjection)
             X)).re := by
   let T := toTensorFromBlocks (d := d) (μ := μ) A
-  let h := canonicalParentInteractionMatrix T R
-  have hmatrix : Matrix.toEuclideanLin h = parentInteractionES T R :=
-    toEuclideanLin_canonicalParentInteractionMatrix T R
-  apply exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
+  let h := LinearMap.toMatrix' (parentInteraction T R)
+  exact exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
     μ A hμ ρ hP hρ hS hSpan hR h
-  rw [hmatrix]
-  exact isParentInteraction_parentInteractionES T R
+    (isParentInteraction_toEuclideanLin_toMatrix'_parentInteraction T R)
 
 end BlockFamily
 

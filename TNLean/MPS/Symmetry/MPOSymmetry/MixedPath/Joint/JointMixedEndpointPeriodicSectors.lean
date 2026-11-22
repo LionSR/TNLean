@@ -22,7 +22,8 @@ of length two, where both directed translates remain in the sum.
 Source: GLM23, arXiv:2203.12563, Section 5, lines 1695–1777.
 -/
 
-open scoped BigOperators ComplexOrder InnerProductSpace Matrix
+open scoped BigOperators ComplexOrder InnerProductSpace Matrix MatrixOrder
+open ManyBody.Interaction (translationInvariant)
 
 namespace MPSTensor.MPOSymmetry
 
@@ -30,30 +31,34 @@ variable {d₀ d₁ r N : ℕ} {D₀ D₁ : Fin r → ℕ}
 
 /-- A translated row-phase selector is the selector at its actual cyclic
 chain site. This holds for any local window length. -/
-theorem periodicLocalInteractionES_jointMixedRowSector {R : ℕ}
+theorem toEuclideanLin_translationInvariant_term_jointMixedRowWeight {R : ℕ}
     (hRN : R ≤ N) (i : Fin N) (site : Fin R) :
-    periodicLocalInteractionES (jointMixedRowSector d₀ d₁ D₀ D₁ site) i =
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((translationInvariant N (Matrix.diagonal
+      fun ω : Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) R =>
+        jointMixedRowWeight (ω site))).term i) =
       jointMixedRowSector d₀ d₁ D₀ D₁ (cyclicForwardSite i site.val) := by
-  ext v σ
-  rw [jointMixedRowSector_apply]
-  change periodicLocalInteractionES
-    (Matrix.toEuclideanLin (Matrix.diagonal fun ω => jointMixedRowWeight (ω site)))
-      i v σ = _
-  rw [periodicLocalInteractionES_diagonal_apply hRN]
+  have : NeZero N := NeZero.of_pos i.pos
+  have hs : i + Fin.castLE hRN site = cyclicForwardSite i site.val :=
+    Fin.ext (by simp [cyclicForwardSite, Fin.add_def])
+  rw [ManyBody.Interaction.translationInvariant_term_diagonal hRN]
+  simp only [hs]
   rfl
 
 /-- A translated column-phase selector is the selector at its actual
 cyclic chain site, including a site across the periodic seam. -/
-theorem periodicLocalInteractionES_jointMixedColumnSector {R : ℕ}
+theorem toEuclideanLin_translationInvariant_term_jointMixedColumnWeight {R : ℕ}
     (hRN : R ≤ N) (i : Fin N) (site : Fin R) :
-    periodicLocalInteractionES (jointMixedColumnSector d₀ d₁ D₀ D₁ site) i =
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((translationInvariant N (Matrix.diagonal
+      fun ω : Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) R =>
+        jointMixedColumnWeight (ω site))).term i) =
       jointMixedColumnSector d₀ d₁ D₀ D₁ (cyclicForwardSite i site.val) := by
-  ext v σ
-  rw [jointMixedColumnSector_apply]
-  change periodicLocalInteractionES
-    (Matrix.toEuclideanLin (Matrix.diagonal fun ω => jointMixedColumnWeight (ω site)))
-      i v σ = _
-  rw [periodicLocalInteractionES_diagonal_apply hRN]
+  have : NeZero N := NeZero.of_pos i.pos
+  have hs : i + Fin.castLE hRN site = cyclicForwardSite i site.val :=
+    Fin.ext (by simp [cyclicForwardSite, Fin.add_def])
+  rw [ManyBody.Interaction.translationInvariant_term_diagonal hRN]
+  simp only [hs]
   rfl
 
 private theorem cyclicForwardSite_one_eq_finRotate (i : Fin N) :
@@ -63,12 +68,14 @@ private theorem cyclicForwardSite_one_eq_finRotate (i : Fin N) :
 
 /-- Summing a fixed local row-phase selector around the ring counts each
 chain row once, also for the second site of a two-site window. -/
-theorem sum_periodicLocalInteractionES_jointMixedRowSector
+theorem sum_toEuclideanLin_translationInvariant_term_jointMixedRowWeight
     (hN : 2 ≤ N) (site : Fin 2) :
-    (∑ i : Fin N,
-      periodicLocalInteractionES (jointMixedRowSector d₀ d₁ D₀ D₁ site) i) =
+    haveI : NeZero N := ⟨by omega⟩;
+    (∑ i : Fin N, Matrix.toEuclideanLin ((translationInvariant N (Matrix.diagonal
+      fun ω : Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2 =>
+        jointMixedRowWeight (ω site))).term i)) =
       ∑ i : Fin N, jointMixedRowSector d₀ d₁ D₀ D₁ i := by
-  simp_rw [periodicLocalInteractionES_jointMixedRowSector hN]
+  simp_rw [toEuclideanLin_translationInvariant_term_jointMixedRowWeight hN]
   fin_cases site
   · simp
   · simpa only [Fin.val_one, cyclicForwardSite_one_eq_finRotate] using
@@ -76,12 +83,14 @@ theorem sum_periodicLocalInteractionES_jointMixedRowSector
 
 /-- Summing a fixed local column-phase selector around the ring counts
 each chain column once. -/
-theorem sum_periodicLocalInteractionES_jointMixedColumnSector
+theorem sum_toEuclideanLin_translationInvariant_term_jointMixedColumnWeight
     (hN : 2 ≤ N) (site : Fin 2) :
-    (∑ i : Fin N,
-      periodicLocalInteractionES (jointMixedColumnSector d₀ d₁ D₀ D₁ site) i) =
+    haveI : NeZero N := ⟨by omega⟩;
+    (∑ i : Fin N, Matrix.toEuclideanLin ((translationInvariant N (Matrix.diagonal
+      fun ω : Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2 =>
+        jointMixedColumnWeight (ω site))).term i)) =
       ∑ i : Fin N, jointMixedColumnSector d₀ d₁ D₀ D₁ i := by
-  simp_rw [periodicLocalInteractionES_jointMixedColumnSector hN]
+  simp_rw [toEuclideanLin_translationInvariant_term_jointMixedColumnWeight hN]
   fin_cases site
   · simp
   · simpa only [Fin.val_one, cyclicForwardSite_one_eq_finRotate] using
@@ -277,54 +286,95 @@ theorem one_sub_jointMixedPeriodicActiveProjection_le :
 /-- The sum of the outer row and column penalties of every two-site
 window is exactly the per-site phase penalty. -/
 theorem jointMixedPeriodicPhasePenalty_eq_sum_outer (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N =
       ∑ i : Fin N,
-        (periodicLocalInteractionES (1 - jointMixedRowSector d₀ d₁ D₀ D₁ (0 : Fin 2)) i +
-          periodicLocalInteractionES (1 - jointMixedColumnSector d₀ d₁ D₀ D₁ (1 : Fin 2)) i) := by
-  simp only [jointMixedPeriodicPhasePenalty, periodicLocalInteractionES_sub,
-    periodicLocalInteractionES_one hN, Finset.sum_add_distrib, Finset.sum_sub_distrib,
-    sum_periodicLocalInteractionES_jointMixedRowSector hN,
-    sum_periodicLocalInteractionES_jointMixedColumnSector hN]
+        (Matrix.toEuclideanLin ((translationInvariant N (1 - Matrix.diagonal
+            fun ω : Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2 =>
+              jointMixedRowWeight (ω 0))).term i) +
+          Matrix.toEuclideanLin ((translationInvariant N (1 - Matrix.diagonal
+            fun ω : Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2 =>
+              jointMixedColumnWeight (ω 1))).term i)) := by
+  have : NeZero N := ⟨by omega⟩
+  have honeN : Matrix.toEuclideanLin (1 : Matrix (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) N)
+      (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) N) ℂ) = 1 :=
+    LinearMap.ext fun v => Matrix.toEuclideanLin_one_apply v
+  simp only [jointMixedPeriodicPhasePenalty, ManyBody.Interaction.translationInvariant_term_sub,
+    ManyBody.Interaction.translationInvariant_term_one hN, map_sub, honeN,
+    Finset.sum_add_distrib, Finset.sum_sub_distrib,
+    sum_toEuclideanLin_translationInvariant_term_jointMixedRowWeight hN,
+    sum_toEuclideanLin_translationInvariant_term_jointMixedColumnWeight hN]
 
 /-- Local inner-phase penalties are bounded by the actual extended
 interaction. Cyclic summation counts each phase once, including at length two. -/
 theorem jointMixedPeriodicPhasePenalty_le_twice
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N ≤
-      (2 : ℂ) • periodicInteractionHamiltonianES
-        (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N := by
-  have hcol (i : Fin N) := periodicLocalInteractionES_mono
-    (jointMixedEndpoint_one_sub_columnSector_zero_le_parentInteraction A₀ A₁) i
-  have hrow (i : Fin N) := periodicLocalInteractionES_mono
-    (jointMixedEndpoint_one_sub_rowSector_one_le_parentInteraction A₀ A₁) i
+      (2 : ℂ) • Matrix.toEuclideanLin
+        (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian := by
+  have : NeZero N := ⟨by omega⟩
+  let Rm : Matrix (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2)
+      (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2) ℂ :=
+    Matrix.diagonal fun ω => jointMixedRowWeight (ω 1)
+  let Cm : Matrix (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2)
+      (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2) ℂ :=
+    Matrix.diagonal fun ω => jointMixedColumnWeight (ω 0)
+  have hone : Matrix.toEuclideanLin (1 : Matrix (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2)
+      (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2) ℂ) = 1 :=
+    LinearMap.ext fun v => Matrix.toEuclideanLin_one_apply v
+  have honeN : Matrix.toEuclideanLin (1 : Matrix (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) N)
+      (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) N) ℂ) = 1 :=
+    LinearMap.ext fun v => Matrix.toEuclideanLin_one_apply v
+  have hrowM : 1 - Rm ≤ jointMixedEndpointParentInteraction A₀ A₁ 0 := by
+    rw [← Matrix.toEuclideanLin_le_toEuclideanLin_iff]
+    simpa only [map_sub, hone,
+      show Matrix.toEuclideanLin Rm = jointMixedRowSector d₀ d₁ D₀ D₁ 1 from rfl] using
+      jointMixedEndpoint_one_sub_rowSector_one_le_parentInteraction A₀ A₁
+  have hcolM : 1 - Cm ≤ jointMixedEndpointParentInteraction A₀ A₁ 0 := by
+    rw [← Matrix.toEuclideanLin_le_toEuclideanLin_iff]
+    simpa only [map_sub, hone,
+      show Matrix.toEuclideanLin Cm = jointMixedColumnSector d₀ d₁ D₀ D₁ 0 from rfl] using
+      jointMixedEndpoint_one_sub_columnSector_zero_le_parentInteraction A₀ A₁
   have h := Finset.sum_le_sum fun (i : Fin N) (_ : i ∈ Finset.univ) =>
-    add_le_add (hrow i) (hcol i)
-  simp only [periodicLocalInteractionES_sub, periodicLocalInteractionES_one hN,
+    add_le_add
+      (Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr
+        (ManyBody.Interaction.translationInvariant_term_mono (N := N) hrowM i))
+      (Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr
+        (ManyBody.Interaction.translationInvariant_term_mono (N := N) hcolM i))
+  simp only [ManyBody.Interaction.translationInvariant_term_sub,
+    ManyBody.Interaction.translationInvariant_term_one hN, map_sub, honeN, Rm, Cm,
     Finset.sum_add_distrib, Finset.sum_sub_distrib,
-    sum_periodicLocalInteractionES_jointMixedRowSector hN,
-    sum_periodicLocalInteractionES_jointMixedColumnSector hN] at h
-  simpa only [jointMixedPeriodicPhasePenalty, periodicInteractionHamiltonianES,
+    sum_toEuclideanLin_translationInvariant_term_jointMixedRowWeight hN,
+    sum_toEuclideanLin_translationInvariant_term_jointMixedColumnWeight hN] at h
+  simpa only [jointMixedPeriodicPhasePenalty, ManyBody.Interaction.hamiltonian, map_sum,
     Finset.sum_add_distrib, Finset.sum_sub_distrib, two_smul] using h
 
 /-- Every row phase commutes with every actual translated endpoint term. -/
-theorem jointMixedRowSector_commute_periodicLocalInteraction
+theorem jointMixedRowSector_commute_translationInvariant_term
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x))
     (hN : 2 ≤ N) (i k : Fin N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Commute (jointMixedRowSector d₀ d₁ D₀ D₁ k)
-      (periodicLocalInteractionES (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i) :=
-  periodicLocalInteractionES_commute_siteDiagonal _ hN jointMixedRowWeight
+      (Matrix.toEuclideanLin
+        ((translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).term i)) :=
+  ManyBody.Interaction.toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN
+    jointMixedRowWeight
     (jointMixedRowSector_commute_parentInteraction_zero A₀ A₁) i k
 
 /-- Every column phase commutes with every actual translated endpoint term. -/
-theorem jointMixedColumnSector_commute_periodicLocalInteraction
+theorem jointMixedColumnSector_commute_translationInvariant_term
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x))
     (hN : 2 ≤ N) (i k : Fin N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Commute (jointMixedColumnSector d₀ d₁ D₀ D₁ k)
-      (periodicLocalInteractionES (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i) :=
-  periodicLocalInteractionES_commute_siteDiagonal _ hN jointMixedColumnWeight
+      (Matrix.toEuclideanLin
+        ((translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).term i)) :=
+  ManyBody.Interaction.toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN
+    jointMixedColumnWeight
     (jointMixedColumnSector_commute_parentInteraction_zero A₀ A₁) i k
 
 /-- The full phase penalty commutes with the actual periodic endpoint
@@ -332,17 +382,21 @@ Hamiltonian, as a consequence of the individual physical phase actions. -/
 theorem jointMixedPeriodicPhasePenalty_commute
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Commute (jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N)
-      (periodicInteractionHamiltonianES
-        (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N) := by
+      (Matrix.toEuclideanLin
+        (translationInvariant N
+          (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian) := by
+  have : NeZero N := ⟨by omega⟩
+  rw [ManyBody.Interaction.hamiltonian, map_sum]
   apply Commute.sum_right
   intro i _
   apply Commute.sum_left
   intro k _
   exact ((Commute.one_left _).sub_left
-    (jointMixedRowSector_commute_periodicLocalInteraction A₀ A₁ hN i k)).add_left
+    (jointMixedRowSector_commute_translationInvariant_term A₀ A₁ hN i k)).add_left
       ((Commute.one_left _).sub_left
-        (jointMixedColumnSector_commute_periodicLocalInteraction A₀ A₁ hN i k))
+        (jointMixedColumnSector_commute_translationInvariant_term A₀ A₁ hN i k))
 
 /-- The actual endpoint Hamiltonian reduces the concrete active
 projection. Both the projection and its invariance are derived from the
@@ -350,14 +404,18 @@ physical phase conditions. -/
 theorem jointMixedPeriodicActiveProjection_commute
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Commute (jointMixedPeriodicActiveProjection d₀ d₁ D₀ D₁ N)
-      (periodicInteractionHamiltonianES
-        (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N) := by
-  let H := periodicInteractionHamiltonianES
-    (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N
+      (Matrix.toEuclideanLin
+        (translationInvariant N
+          (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian) := by
+  have : NeZero N := ⟨by omega⟩
+  let H := Matrix.toEuclideanLin
+    (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian
   let S := LinearMap.ker (jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N)
-  have hH : H.IsPositive := periodicInteractionHamiltonianES_isPositive
-    (jointMixedEndpointParentInteraction_isPositive A₀ A₁ 0) N
+  have hH : H.IsPositive := Matrix.isPositive_toEuclideanLin_iff.mpr
+    (ManyBody.Interaction.posSemidef_hamiltonian_translationInvariant
+      (posSemidef_jointMixedEndpointParentInteraction A₀ A₁ 0))
   have hS : S.map H ≤ S := by
     rintro _ ⟨v, hv, rfl⟩
     have hc := LinearMap.congr_fun (jointMixedPeriodicPhasePenalty_commute A₀ A₁ hN).eq v
@@ -373,9 +431,10 @@ actual periodic endpoint Hamiltonian. -/
 theorem one_sub_jointMixedPeriodicActiveProjection_le_twice
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     1 - jointMixedPeriodicActiveProjection d₀ d₁ D₀ D₁ N ≤
-      (2 : ℂ) • periodicInteractionHamiltonianES
-        (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N :=
+      (2 : ℂ) • Matrix.toEuclideanLin
+        (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian :=
   one_sub_jointMixedPeriodicActiveProjection_le.trans
     (jointMixedPeriodicPhasePenalty_le_twice A₀ A₁ hN)
 

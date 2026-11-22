@@ -229,7 +229,7 @@ protected theorem IsMPDO.changePhysicalBasis {K : MPOTensor d D}
     IsMPDO (changePhysicalBasis V K) := by
   intro N hN
   rw [← singleKrausMap_tensorPower_mpo]
-  exact (hK N hN).mul_mul_conjTranspose_same (Matrix.tensorPower N V)
+  exact (hK N hN).mul_mul_conjTranspose_same (Matrix.piKronecker fun _ : Fin N ↦ V)
 
 /-- Under an isometric physical embedding, the MPDO condition is equivalent
 before and after the embedding.

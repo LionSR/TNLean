@@ -101,7 +101,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 
 \begin{lemma}[Commutation from an invariant star algebra]
     \label{thm:glm_parent_invariant_star_algebra}
-    \lean{MPSTensor.parentInteractionES_commute_of_starAlgebra_invariant}
+    \lean{MPSTensor.commute_toMatrix'_parentInteraction_of_starAlgebra_invariant}
     \leanok
     \uses{def:parent_interaction}
     Let $\mathcal B$ be a unital $*$-subalgebra of operators on the
@@ -119,8 +119,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 
 \begin{lemma}[Local commutation from an adjoint-closed range]
     \label{thm:glm_boundary_parent_local}
-    \lean{MPOTensor.IsBoundaryCompatible.parentInteractionES_commute_mpoWithBoundary,
-        MPOTensor.IsBoundaryCompatible.groundSpaceES_mem_invtSubmodule,
+    \lean{MPOTensor.IsBoundaryCompatible.groundSpaceES_mem_invtSubmodule,
         MPOTensor.IsBoundaryCompatible.groundSpaceES_invariant_boundaryStarAlgebra,
         MPOTensor.IsBoundaryCompatible.parentInteraction_mpoWithBoundary_mulVec,
         MPOTensor.IsBoundaryCompatible.parentInteraction_commute_mpoWithBoundary,
@@ -155,8 +154,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 
 \begin{lemma}[Local commutation from an adjoint-closed family]
     \label{thm:glm_boundary_parent_local_family}
-    \lean{MPSTensor.parentInteractionES_commute_of_conjTranspose_mem,
-        MPOTensor.parentInteractionES_commute_mpoWithBoundary_of_forall_isBoundaryCompatible,
+    \lean{MPSTensor.commute_toMatrix'_parentInteraction_of_conjTranspose_mem,
         MPOTensor.parentInteraction_matrix_commute_mpoWithBoundary_of_forall_isBoundaryCompatible}
     \leanok
     \uses{def:glm_boundary_closedness, def:parent_interaction}
@@ -251,8 +249,8 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 
 \begin{lemma}[Periodic commutation]
     \label{thm:glm_boundary_parent_periodic}
-    \lean{MPOTensor.IsBoundaryCompatible.parentHamiltonianES_commute_mpoWithBoundary,
-        MPOTensor.IsBoundaryCompatible.localTermES_commute_mpoWithBoundary,
+    \lean{MPOTensor.IsBoundaryCompatible.commute_hamiltonian_parentRingInteraction_mpoWithBoundary,
+        MPOTensor.IsBoundaryCompatible.commute_parentRingInteraction_term_mpoWithBoundary,
         MPOTensor.IsBoundaryCompatible.parentHamiltonian_commute_mpoWithBoundary}
     \leanok
     \uses{def:glm_boundary_closedness, def:mpdo_commuting_boundary,
@@ -317,7 +315,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 
 \begin{lemma}[Individual periodic block symmetries]
     \label{thm:glm_boundary_parent_blocks}
-    \lean{MPOTensor.IsBoundaryCompatible.parentHamiltonianES_commute_mpo_block}
+    \lean{MPOTensor.IsBoundaryCompatible.commute_hamiltonian_parentRingInteraction_mpo_block}
     \leanok
     \uses{def:glm_boundary_block_sum, def:glm_boundary_closedness,
         def:parent_hamiltonian}
@@ -338,9 +336,9 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 
 \begin{lemma}[Nonzero canonical interaction]
     \label{thm:glm_boundary_parent_nonzero}
-    \lean{MPSTensor.parentInteractionES_ne_zero,
+    \lean{MPSTensor.toMatrix'_parentInteraction_ne_zero,
         MPSTensor.parentInteraction_ne_zero,
-        MPOTensor.IsBoundaryCompatible.nonzero_parentInteractionES_and_parentHamiltonianES_commute}
+        MPOTensor.IsBoundaryCompatible.nonzero_parentInteraction_and_hamiltonian_parentRingInteraction_commute}
     \leanok
     \uses{def:parent_interaction, def:parent_hamiltonian,
         def:glm_boundary_closedness, def:mpdo_commuting_boundary}
@@ -368,7 +366,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 \begin{lemma}[Normalized boundary averages of the support]
     \label{thm:glm_boundary_projection_average}
     \lean{MPOTensor.IsBoundaryCompatible.sum_mpoWithBoundary_groundSpaceES_starProjection,
-        MPOTensor.IsBoundaryCompatible.sum_mpoWithBoundary_parentInteractionES,
+        MPOTensor.IsBoundaryCompatible.sum_mpoWithBoundary_toEuclideanLin_toMatrix'_parentInteraction,
         MPOTensor.IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_groundSpaceES_starProjection}
     \leanok
     \uses{def:glm_boundary_closedness, def:l_blk_injective, def:parent_interaction}

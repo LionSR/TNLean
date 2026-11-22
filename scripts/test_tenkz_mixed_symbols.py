@@ -77,7 +77,7 @@ def source_check() -> dict[str, object]:
                   r"\gamma=0,1", r"\tau_0(M)=0"):
         assert token in source, token
     # Check declaration spelling against the owned modules without running Lean.
-    owners = [ROOT / f"TNLean/MPS/Symmetry/MPOSymmetry/{name}.lean" for name in
+    owners = [ROOT / f"TNLean/MPS/Symmetry/MPOSymmetry/MixedPath/MPO/{name}.lean" for name in
               ("MixedEndpointTripleMaps", "MixedEndpointMPOActionSymbols",
                "MixedEndpointMPOFusionSymbols")]
     lean_source = "\n".join(path.read_text(encoding="utf-8") for path in owners)

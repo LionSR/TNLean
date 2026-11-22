@@ -67,8 +67,8 @@ def canonicalRegions (X : Fin m → Finset (Vertex L)) (k : ℕ) :
 /-- Regional configuration coordinates, using the existing dependent equivalence. -/
 def regionEquiv (X : Fin m → Finset (Vertex L)) (j : Fin m) :
     RegionConfiguration q (X j) ≃ (ManyBody.RegionConfig (fun _ ↦ Fin q) (canonicalRegions X j)) :=
-  Entropy.regionConfigurationEquiv (n := fun _ : Vertex L ↦ q)
-    (n' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
+  ManyBody.regionConfigurationEquiv (X := fun _ : Vertex L ↦ Fin q)
+    (X' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ Fin q)
     (X j) (canonicalRegions X j) (ManyBody.rectangleSiteEquiv L L)
     (by intro v; simp) (fun _ ↦ Equiv.refl (Fin q))
 
@@ -121,9 +121,9 @@ theorem admissible_fromCanonical (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
 
 /-- The existing physical isometry is the generic site relabelling with identity basis maps. -/
 theorem squareAreaLawState_eq_relabelVector (Ω : State L q) :
-    AreaLaw.rectangleAreaLawState Ω = Entropy.relabelVector
-      (n := fun _ : Vertex L ↦ q)
-      (n' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
+    AreaLaw.rectangleAreaLawState Ω = ManyBody.relabelVector
+      (X := fun _ : Vertex L ↦ Fin q)
+      (X' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ Fin q)
       (ManyBody.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin q)) Ω := by
   ext σ
   rfl
@@ -145,14 +145,14 @@ private theorem reindex_extendedMatrices (F : FilterFamily q m X) (j : Fin m)
     (hD : ∀ v, v ∈ extendRegions X j ↔
       ManyBody.rectangleSiteEquiv L L v ∈ canonicalRegions X j) :
     reindex
-        (Entropy.regionConfigurationEquiv
-          (n := fun _ : Vertex L ↦ q)
-          (n' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
+        (ManyBody.regionConfigurationEquiv
+          (X := fun _ : Vertex L ↦ Fin q)
+          (X' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ Fin q)
           (extendRegions X j) (canonicalRegions X j)
           (ManyBody.rectangleSiteEquiv L L) hD (fun _ ↦ Equiv.refl (Fin q)))
-        (Entropy.regionConfigurationEquiv
-          (n := fun _ : Vertex L ↦ q)
-          (n' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
+        (ManyBody.regionConfigurationEquiv
+          (X := fun _ : Vertex L ↦ Fin q)
+          (X' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ Fin q)
           (extendRegions X j) (canonicalRegions X j)
           (ManyBody.rectangleSiteEquiv L L) hD (fun _ ↦ Equiv.refl (Fin q)))
         (extendedMatrices F j) = canonicalMatrices F j := by

@@ -74,7 +74,7 @@ theorem trace_mul_ne_zero_of_disjoint {S T : Finset ι} (hST : Disjoint S T)
     Matrix.trace (A * B) ≠ 0 := by
   have hfactor := trace_rectKronecker_mul_mul hST
     (fun _ : ι => (1 : Matrix (Fin d) (Fin d) ℂ)) hA hB
-  rw [rectKronecker_one, Matrix.one_mul, Matrix.one_mul, Matrix.one_mul] at hfactor
+  rw [Matrix.piKronecker_one, Matrix.one_mul, Matrix.one_mul, Matrix.one_mul] at hfactor
   intro hzero
   rw [hzero, zero_mul] at hfactor
   exact mul_ne_zero htrA htrB hfactor.symm

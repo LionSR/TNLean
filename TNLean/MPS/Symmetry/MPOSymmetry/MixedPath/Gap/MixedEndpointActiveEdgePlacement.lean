@@ -431,23 +431,6 @@ theorem mixedEndpointActive_edgeFiber_eq_edgeIsometry
     exact mixedEndpointActiveInclusion_apply_inactive v _
       (not_active_edgeReplacement_of_not_mem_range p ξ ω hω)
 
-private theorem localInteraction_apply_restriction {d L : ℕ}
-    (h : EuclideanSpace ℂ (Cfg d 2) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d 2))
-    (hL : 2 ≤ L) (i : Fin L) (v : EuclideanSpace ℂ (Cfg d L)) (σ : Cfg d L) :
-    periodicLocalInteractionES h i v σ =
-      h (cyclicRestrictES (Fin.pos i) 2 i σ v) (extractWindow 2 i σ) := by
-  rw [periodicLocalInteractionES_apply_fiber h hL]
-  change h (WithLp.toLp 2 fun ω => v
-    ((cyclicActiveBlockConfigEquiv d 2 hL i).symm
-      (ω, (cyclicActiveBlockConfigEquiv d 2 hL i σ).2))) (extractWindow 2 i σ) = _
-  apply congrArg (fun w : EuclideanSpace ℂ (Cfg d 2) => h w (extractWindow 2 i σ))
-  apply PiLp.ext
-  intro ω
-  change v ((cyclicActiveBlockConfigEquiv d 2 hL i).symm
-    (ω, (cyclicActiveBlockConfigEquiv d 2 hL i σ).2)) =
-      v (cyclicCfg (Fin.pos i) 2 i ω σ)
-  rw [cyclicCfg_eq_join_cyclicActiveBlock hL]
-
 /-- The actual compressed physical term acts by the derived smaller-edge
 constraint on the explicit edge fiber, with every other coordinate fixed. -/
 theorem mixedEndpointActiveLocalInteraction_apply_edgeFiber
@@ -459,7 +442,8 @@ theorem mixedEndpointActiveLocalInteraction_apply_edgeFiber
       mixedEndpointEdgeConstraintES A₀ A₁ (mixedEndpointActiveEdgePosition p)
         (mixedEndpointActiveEdgeFiber p v (mixedEndpointActiveEdgeConfigEquiv D₀ D₁ p ξ).2)
         (mixedEndpointActiveEdgeConfigEquiv D₀ D₁ p ξ).1 := by
-  rw [mixedEndpointActiveLocalInteraction_apply, localInteraction_apply_restriction _ (by omega),
+  rw [mixedEndpointActiveLocalInteraction_apply,
+    toEuclideanLin_translationInvariant_term_apply (by omega),
     extractWindow_mixedEndpointActivePhysicalCfg,
     mixedEndpointActive_edgeFiber_eq_edgeIsometry]
   rw [← mixedEndpointEdgeLinearIsometry_adjoint_apply]

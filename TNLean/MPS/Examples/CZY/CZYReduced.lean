@@ -280,7 +280,7 @@ theorem czyReduced_commutant_form (P : Matrix (Fin 3) (Fin 3) ℂ)
       (P * czyReduced 3) i j = (czyReduced 3 * P) i j :=
     fun i j => ⟨congrArg (fun M => M i j) h₀, congrArg (fun M => M i j) h₁⟩
   norm_num [Fin.forall_fin_succ, czyReduced_eq, czyReducedIntMPS,
-    complexOfInt, complexOfRing, Matrix.mul_apply, Fin.sum_univ_succ] at h
+    complexOfInt, Matrix.complexOfRing, Matrix.mul_apply, Fin.sum_univ_succ] at h
   ext i j
   fin_cases i <;> fin_cases j <;> simp <;> grind
 

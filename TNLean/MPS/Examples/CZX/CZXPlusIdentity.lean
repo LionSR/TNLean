@@ -194,11 +194,11 @@ theorem plusGaugeInv_mul : plusGaugeInvInt * plusGaugeInt = 1 := by decide
 
 theorem plusGaugeComplex_mul_inv :
     complexOfInt plusGaugeInt * complexOfInt plusGaugeInvInt = 1 :=
-  complexOfRing_mul_eq_one _ plusGauge_mul_inv
+  Matrix.complexOfRing_mul_eq_one _ plusGauge_mul_inv
 
 theorem plusGaugeComplex_inv_mul :
     complexOfInt plusGaugeInvInt * complexOfInt plusGaugeInt = 1 :=
-  complexOfRing_mul_eq_one _ plusGaugeInv_mul
+  Matrix.complexOfRing_mul_eq_one _ plusGaugeInv_mul
 
 /-- The slots of Example E: all four target blocks. -/
 abbrev plusSlots : Finset (Fin 4) := Finset.univ

@@ -57,10 +57,10 @@ noncomputable def tensorB : MPSTensor 2 4 :=
     !![2, 0, 1, 3; 0, 2, 0, -2; -2, -2, -1, -1; 0, 0, 0, 0]]
 
 theorem tensorB_eq_complexOfRing (i : Fin 2) :
-    tensorB i = complexOfRing (Int.castRingHom ℂ) (tensorBInt i) := by
+    tensorB i = Matrix.complexOfRing (Int.castRingHom ℂ) (tensorBInt i) := by
   ext a b
   fin_cases i <;> fin_cases a <;> fin_cases b <;>
-    simp [tensorB, tensorBInt, complexOfRing_apply]
+    simp [tensorB, tensorBInt, Matrix.complexOfRing_apply]
 
 /-- `C₁ = (σ_x, E₁₁)`, as printed in *The asymmetric fundamental theorem of matrix product states*,
 Example 6.16. -/
@@ -156,16 +156,16 @@ def blocksInt' : ∀ s : Fin 2, Fin 2 → Matrix (Fin (dims s)) (Fin (dims s)) �
   | 1 => ![!![1], !![2]]
 
 theorem blocks_eq_complexOfRing (s : Fin 2) (i : Fin 2) :
-    blocks s i = complexOfRing (Int.castRingHom ℂ) (blocksInt s i) := by
+    blocks s i = Matrix.complexOfRing (Int.castRingHom ℂ) (blocksInt s i) := by
   ext a b
   fin_cases s <;> fin_cases i <;> fin_cases a <;> fin_cases b <;>
-    simp [blocks, blocksInt, tensorC₁, tensorC₂, Multiplicity.tensorC, complexOfRing_apply]
+    simp [blocks, blocksInt, tensorC₁, tensorC₂, Multiplicity.tensorC, Matrix.complexOfRing_apply]
 
 theorem blocks'_eq_complexOfRing (s : Fin 2) (i : Fin 2) :
-    blocks' s i = complexOfRing (Int.castRingHom ℂ) (blocksInt' s i) := by
+    blocks' s i = Matrix.complexOfRing (Int.castRingHom ℂ) (blocksInt' s i) := by
   ext a b
   fin_cases s <;> fin_cases i <;> fin_cases a <;> fin_cases b <;>
-    simp [blocks', blocksInt', tensorC₁', tensorC₂, complexOfRing_apply]
+    simp [blocks', blocksInt', tensorC₁', tensorC₂, Matrix.complexOfRing_apply]
 
 /-- The slot of `C₁` (or `C₁'`). -/
 abbrev slotC1 : {s // s ∈ labels} := ⟨0, Finset.mem_univ _⟩
@@ -298,16 +298,16 @@ noncomputable def redGt : MultiBlockCompression tensorB labels blocks' :=
 
 /-- An integer matrix read in `ℂ`. -/
 noncomputable abbrev toC {m n : Type*} (M : Matrix m n ℤ) : Matrix m n ℂ :=
-  complexOfRing (Int.castRingHom ℂ) M
+  Matrix.complexOfRing (Int.castRingHom ℂ) M
 
 theorem gauge_redG : redG.gauge = gaugeOfMatrix tauG (toC g0Int) (toC g0InvInt)
-    (complexOfRing_mul_eq_one _ (by decide +kernel))
-    (complexOfRing_mul_eq_one _ (by decide +kernel)) :=
+    (Matrix.complexOfRing_mul_eq_one _ (by decide +kernel))
+    (Matrix.complexOfRing_mul_eq_one _ (by decide +kernel)) :=
   rfl
 
 theorem gauge_redGt : redGt.gauge = gaugeOfMatrix tauGt (toC gtInt) (toC gtInvInt)
-    (complexOfRing_mul_eq_one _ (by decide +kernel))
-    (complexOfRing_mul_eq_one _ (by decide +kernel)) :=
+    (Matrix.complexOfRing_mul_eq_one _ (by decide +kernel))
+    (Matrix.complexOfRing_mul_eq_one _ (by decide +kernel)) :=
   rfl
 
 theorem leftRow_redG (b : BlockIndex labels 1) :
@@ -346,7 +346,7 @@ theorem redG_spec : redG.z = 1 ∧ (redG.ord (Sum.inl slotC1)).val = 0 ∧
     redG.rightCol zeroSlot = toC !![-1; 0; 2; 0] ∧
     redG.rightCol (Sum.inl slotC2) = toC !![1; -1; 0; 0] := by
   refine ⟨rfl, rfl, rfl, rfl, by decide +kernel, fun i => ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
-  · rw [tensorB_eq_complexOfRing, ← complexOfRing_mul, ← complexOfRing_mul, conjG_eq]
+  · rw [tensorB_eq_complexOfRing, ← Matrix.complexOfRing_mul, ← Matrix.complexOfRing_mul, conjG_eq]
   · exact (leftRow_redG (Sum.inl slotC1)).trans (congrArg toC
       (Matrix.ext fun i j => by fin_cases i <;> fin_cases j <;> decide))
   · exact (leftRow_redG zeroSlot).trans (congrArg toC
@@ -376,7 +376,7 @@ theorem redGt_spec : redGt.z = 1 ∧ (redGt.ord zeroSlot).val = 0 ∧
     redGt.rightCol (Sum.inl slotC1) = toC !![4, -7; -1, 3; -5, 6; 0, 1] := by
   refine ⟨rfl, rfl, rfl, rfl, by decide +kernel, by decide +kernel, fun i => ?_, ?_, ?_, ?_, ?_,
     ?_, ?_⟩
-  · rw [tensorB_eq_complexOfRing, ← complexOfRing_mul, ← complexOfRing_mul, conjGt_eq]
+  · rw [tensorB_eq_complexOfRing, ← Matrix.complexOfRing_mul, ← Matrix.complexOfRing_mul, conjGt_eq]
   · exact (leftRow_redGt zeroSlot).trans (congrArg toC
       (Matrix.ext fun i j => by fin_cases i; fin_cases j <;> decide))
   · exact (leftRow_redGt (Sum.inl slotC2)).trans (congrArg toC
@@ -403,7 +403,7 @@ theorem not_exists_left_redGt_eq_smul_left_redG : redGt.left slotC2 = toC !![-2,
   rw [h1, h2] at hc
   have h00 : toC !![(-2 : ℤ), -3, -1, 1] 0 0 = c * toC !![(0 : ℤ), -1, 0, 1] 0 0 := by
     rw [hc]; rfl
-  simp [toC, complexOfRing_apply] at h00
+  simp [toC, Matrix.complexOfRing_apply] at h00
 
 /-- **The word traces** (*The asymmetric fundamental theorem of matrix product states*, Example
 6.16): `tr B^w = tr C₁^w + tr C₂^w` for every nonempty word, and `tr B^∅ = 4`. -/
@@ -465,14 +465,14 @@ theorem toC_g0Int_mulVec (v : Fin 4 → ℂ) :
     toC g0Int *ᵥ v = ![2 * v 0 + 2 * v 1 + v 2 + v 3, v 3, v 0 + v 1 + v 2 + v 3, -v 1 + v 3] := by
   ext i
   fin_cases i <;>
-    simp [g0Int, toC, complexOfRing_apply, Matrix.mulVec, dotProduct, Fin.sum_univ_four]
+    simp [g0Int, toC, Matrix.complexOfRing_apply, Matrix.mulVec, dotProduct, Fin.sum_univ_four]
 
 theorem toC_gtInt_mulVec (v : Fin 4 → ℂ) :
     toC gtInt *ᵥ v = ![3 * v 0 + 2 * v 1 + 2 * v 2 + 3 * v 3, -2 * v 0 - 3 * v 1 - v 2 + v 3,
       2 * v 0 + 2 * v 1 + v 2 + 2 * v 3, v 3] := by
   ext i
   fin_cases i <;>
-    simp [gtInt, toC, complexOfRing_apply, Matrix.mulVec, dotProduct, Fin.sum_univ_four]
+    simp [gtInt, toC, Matrix.complexOfRing_apply, Matrix.mulVec, dotProduct, Fin.sum_univ_four]
   ring
 
 /-- Membership in the flag of `g`: the coordinates `g₀ v` at the positions `≥ k` vanish. -/
@@ -809,7 +809,7 @@ theorem inf_sup_intertwiner_redG_redGt :
   · intro v _
     rw [hWGt1, hWG1]
     ext i; fin_cases i <;>
-      simp [toC, complexOfRing_apply, matY, Matrix.mulVec, dotProduct, Fin.sum_univ_four]
+      simp [toC, Matrix.complexOfRing_apply, matY, Matrix.mulVec, dotProduct, Fin.sum_univ_four]
     ring
   · intro i
     have hYi : !![(1 : ℂ), -1; 0, 1] * matY = 1 := by
@@ -818,10 +818,10 @@ theorem inf_sup_intertwiner_redG_redGt :
   · rw [hVGt1, hVG1]
     ext i j
     fin_cases i <;> fin_cases j <;>
-      simp [toC, complexOfRing_apply, Matrix.mul_apply, Fin.sum_univ_two] <;> norm_num
+      simp [toC, Matrix.complexOfRing_apply, Matrix.mul_apply, Fin.sum_univ_two] <;> norm_num
   · intro j
     rw [hN1, mem_flagVec_redGt_two _ rfl]
-    fin_cases j <;> simp [toC, complexOfRing_apply] <;> norm_num
+    fin_cases j <;> simp [toC, Matrix.complexOfRing_apply] <;> norm_num
   · intro v hv
     rw [hU0] at hv
     obtain ⟨hv1, -⟩ := Submodule.mem_inf.1 hv
@@ -831,7 +831,7 @@ theorem inf_sup_intertwiner_redG_redGt :
     have e2 : v 2 = -2 * v 0 := by linear_combination h2 - 2 * e1 - 2 * h3
     rw [hWGt0, hWG0]
     ext i; fin_cases i
-    simp [toC, complexOfRing_apply, Matrix.mulVec, dotProduct, Fin.sum_univ_four, e1, e2, h3]
+    simp [toC, Matrix.complexOfRing_apply, Matrix.mulVec, dotProduct, Fin.sum_univ_four, e1, e2, h3]
     ring
   · rw [hK0]
     have : flagVec redG ⟨1, by decide⟩ ⊓ flagVec redGt ⟨1, by decide⟩ = ⊥ := by
@@ -855,7 +855,7 @@ theorem inf_sup_intertwiner_redG_redGt :
     have e2 : v 2 = -2 * v 0 - 2 * v 1 := by linear_combination h2 - 2 * h3
     rw [hWGt2, hWG2]
     ext i; fin_cases i
-    simp [toC, complexOfRing_apply, Matrix.mulVec, dotProduct, Fin.sum_univ_four, e2, h3]
+    simp [toC, Matrix.complexOfRing_apply, Matrix.mulVec, dotProduct, Fin.sum_univ_four, e2, h3]
     ring
   · rw [hK2]
     have : flagVec redG ⟨2, by decide⟩ ⊓ flagVec redGt ⟨2, by decide⟩ =

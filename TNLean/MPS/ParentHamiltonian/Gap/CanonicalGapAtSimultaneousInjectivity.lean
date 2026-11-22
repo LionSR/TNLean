@@ -28,6 +28,8 @@ parent-Hamiltonian identification with the representatives carries no such
 restriction. Documented in `docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex`.
 -/
 
+open scoped ComplexOrder
+
 namespace MPSTensor
 
 variable {d D : ℕ}
@@ -36,16 +38,15 @@ variable {d D : ℕ}
 those of its distinct normal representatives, including all multiplicity
 copies and the ambient reconstruction in CPSV16, equations `II_CF1` and
 `decBSV`. -/
-theorem CPSVCanonicalFormData.parentHamiltonianES_eq_representatives
+theorem CPSVCanonicalFormData.hamiltonian_parentRingInteraction_eq_representatives
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A)
-    {R : ℕ} (hR : 0 < R) (N : ℕ) :
-    parentHamiltonianES A R N = parentHamiltonianES
+    {R : ℕ} (hR : 0 < R) (N : ℕ) [NeZero N] :
+    (parentRingInteraction A R N).hamiltonian = (parentRingInteraction
       (toTensorFromBlocks (d := d) (fun _ ↦ 1)
-        (fun j ↦ data.blocks (data.representativeIndex j))) R N := by
-  -- `parentHamiltonianES_eq_of_groundSpace_eq` needs equal bond dimensions; the
+        (fun j ↦ data.blocks (data.representativeIndex j))) R N).hamiltonian := by
+  -- `hamiltonian_parentRingInteraction_eq_of_groundSpace_eq` needs equal bond dimensions; the
   -- representative block sum has a different one, so the definitions are unfolded.
-  simp only [parentHamiltonianES, parentHamiltonian, localTerm, parentRingInteraction,
-    parentInteraction,
+  simp only [parentRingInteraction, parentInteraction,
     groundSpaceES, data.groundSpace_eq_toTensorFromBlocks_representatives hR]
 
 variable [NeZero d]
@@ -54,21 +55,24 @@ variable [NeZero d]
 at least one more than a supplied simultaneous injectivity length of its normal
 representatives. Multiplicities and ambient reconstruction remain part of the
 original tensor. Source: CPGSV21, Section IV.C, lines 2114--2129 and 2183--2187. -/
-theorem CPSVCanonicalFormData.exists_parentHamiltonianES_uniform_gap_of_wordTupleSpanTop
+theorem CPSVCanonicalFormData.exists_parentRingInteraction_uniform_gap_of_wordTupleSpanTop
     {A : MPSTensor d D} (data : CPSVCanonicalFormData A) {S R : ℕ}
     (hS : 0 < S)
     (hSpan : WordTupleSpanTop
       (fun j ↦ data.blocks (data.representativeIndex j)) S)
     (hR : S + 1 ≤ R) :
-    ∃ γ : ℝ, 0 < γ ∧ ∀ N : ℕ, ∀ v ∈
-      (LinearMap.ker (parentHamiltonianES A R N))ᗮ,
-      γ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖ := by
+    ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentRingInteraction A R N).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ := by
   let : ∀ j, NeZero (data.dim (data.representativeIndex j)) :=
     fun j ↦ ⟨(data.dim_pos (data.representativeIndex j)).ne'⟩
-  simp_rw [data.parentHamiltonianES_eq_representatives (show 0 < R by omega)]
-  exact exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop
-    (fun _ ↦ 1) (fun j ↦ data.blocks (data.representativeIndex j))
-    (by simp) hS hSpan hR
+  obtain ⟨γ, hγ, hGap⟩ :=
+    exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop
+      (fun _ ↦ 1) (fun j ↦ data.blocks (data.representativeIndex j))
+      (by simp) hS hSpan hR
+  refine ⟨γ, hγ, fun N _ ↦ ?_⟩
+  rw [data.hamiltonian_parentRingInteraction_eq_representatives (show 0 < R by omega)]
+  exact hGap N
 
 /-- A canonical tensor admits one choice of normal representatives for which
 every supplied simultaneous injectivity length yields the uniform gap at the
@@ -79,14 +83,14 @@ theorem IsCPSVCanonicalForm.exists_bnt_uniform_gap_of_wordTupleSpanTop
     ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPSTensor d (dim j)),
       IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩) ∧
       ∀ {S R : ℕ}, 0 < S → WordTupleSpanTop B S → S + 1 ≤ R →
-        ∃ γ : ℝ, 0 < γ ∧ ∀ N : ℕ, ∀ v ∈
-          (LinearMap.ker (parentHamiltonianES A R N))ᗮ,
-          γ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖ := by
+        ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue
+          (Matrix.toEuclideanLin (parentRingInteraction A R N).hamiltonian) μ →
+            μ = 0 ∨ (γ : ℂ) ≤ μ := by
   let data := Classical.choice hA
   refine ⟨data.phaseClasses.g, (fun j ↦ data.dim (data.representativeIndex j)),
     (fun j ↦ data.blocks (data.representativeIndex j)),
     data.bntRefinement.representativesBNT, ?_⟩
   intro S R hS hSpan hR
-  exact data.exists_parentHamiltonianES_uniform_gap_of_wordTupleSpanTop hS hSpan hR
+  exact data.exists_parentRingInteraction_uniform_gap_of_wordTupleSpanTop hS hSpan hR
 
 end MPSTensor

@@ -143,4 +143,15 @@ theorem mpv_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
       _ = Matrix.trace (0 * M) := by simp
   exact allZero_contradiction hInj hL₀ (by omega : 0 < N - L₀) hprod_zero
 
+/-- The periodic MPS vector of a tensor of positive block-injectivity length \(L_0\) is
+nonzero in the Euclidean space of the ring of \(N \ge L_0 + 1\) sites. -/
+theorem mpvState_ne_zero_of_isNBlkInjective {A : MPSTensor d D} [NeZero D]
+    {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
+    {N : ℕ} (hN : L₀ + 1 ≤ N) :
+    mpvState A N ≠ 0 := by
+  intro h
+  refine mpv_ne_zero_of_isNBlkInjective hInj hL₀ hN ?_
+  ext σ
+  simpa using congrArg (fun v : MPVSpace d N ↦ v σ) h
+
 end MPSTensor

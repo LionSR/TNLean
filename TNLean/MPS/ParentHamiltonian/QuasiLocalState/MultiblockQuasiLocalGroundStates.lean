@@ -11,7 +11,7 @@ import TNLean.MPS.ParentHamiltonian.QuasiLocalState.PrimitiveQuasiLocalUniquenes
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockWordSpanNormalization
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockWordSpanSeparation
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockOpenGroundSpace
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.CanonicalParentInteractionMatrix
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 
 /-!
 # Classification of the quasi-local ground-state face
@@ -82,6 +82,8 @@ section
 
 open scoped Matrix MatrixOrder Matrix.Norms.L2Operator ComplexOrder Topology BigOperators
 open SpinChain
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d b R : ℕ} [NeZero d] {D : Fin b → ℕ} [∀ j, NeZero (D j)]
 
@@ -96,9 +98,9 @@ theorem mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kern
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (μ := μ) A) N)
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) :
     φ ∈ parentGroundStateFace h ↔
@@ -110,14 +112,14 @@ theorem mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kern
     exact exists_convex_combination_quasiLocalExpectation_of_eventually_groundSpace_support
       μ A hμ ρ hP hρ hDistinct φ hφ.1
       (eventually_quasiLocalState_symmetric_groundSpaceProjection_eq_one_of_eventual_kernel
-        (toTensorFromBlocks (μ := μ) A) h hR hh hker φ hφ.1 hφ.2)
+        (toTensorFromBlocks (μ := μ) A) h hh hker φ hφ.1 hφ.2)
   · rintro ⟨w, hw, hsum, rfl⟩
     exact (convex_parentGroundStateFace h).sum_mem (fun j _ => hw j) hsum
       (fun j _ => ⟨quasiLocalExpectation_isState (A j) (hP j).norm
         (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed (hP j).trace_ne_zero,
-        quasiLocalExpectation_interval_eq_zero_of_eventually_open_kernel μ A hμ j
-          (hP j).norm (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed
-          (hP j).trace_ne_zero h hR hker⟩)
+        quasiLocalExpectation_interval_eq_zero_of_eventually_ker_hamiltonian_chainTranslates
+          μ A hμ j (hP j).norm (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed
+          (hP j).trace_ne_zero h hker⟩)
 /-- The pure locally zero-energy states are precisely the constructed primitive
 sector states. Purity means extremality among all normalized positive states.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorems 1.1--1.2,
@@ -128,9 +130,9 @@ theorem isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (μ := μ) A) N)
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) :
     (φ ∈ parentGroundStateFace h ∧ IsPureQuasiLocalState d φ) ↔
@@ -140,7 +142,7 @@ theorem isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel
   · rintro ⟨hφ, hPure⟩
     obtain ⟨w, hw, hsum, hdecomp⟩ :=
       (mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kernel
-        μ A hμ ρ hP hρ hDistinct h hR hh hker φ).mp hφ
+        μ A hμ ρ hP hρ hDistinct h hh hker φ).mp hφ
     exact exists_eq_of_isPureQuasiLocalState_of_finite_decomposition φ hPure
       (fun j => quasiLocalExpectation (A j) (hP j).norm (hP j).fixedPoint_psd
         (hP j).fixedPoint_is_fixed (hP j).trace_ne_zero)
@@ -149,9 +151,9 @@ theorem isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel
   · rintro ⟨j, rfl⟩
     exact ⟨⟨quasiLocalExpectation_isState (A j) (hP j).norm
       (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed (hP j).trace_ne_zero,
-      quasiLocalExpectation_interval_eq_zero_of_eventually_open_kernel μ A hμ j
-        (hP j).norm (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed
-        (hP j).trace_ne_zero h hR hker⟩,
+      quasiLocalExpectation_interval_eq_zero_of_eventually_ker_hamiltonian_chainTranslates
+        μ A hμ j (hP j).norm (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed
+        (hP j).trace_ne_zero h hker⟩,
       (hP j).isPureQuasiLocalState_quasiLocalExpectation (hρ j)⟩
 
 end MPSTensor
@@ -162,6 +164,8 @@ section
 
 open scoped Topology ComplexOrder BigOperators
 open SpinChain
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d b R : ℕ} [NeZero d] {D : Fin b → ℕ} [∀ j, NeZero (D j)]
 /-- Primitive normalization of an original simultaneously spanning family
@@ -172,9 +176,9 @@ arXiv:cond-mat/9410110, Theorems 1.1--1.2, lines 854--947. -/
 theorem exists_normalized_parentGroundStateFace_classification_of_eventually_open_kernel
     (μ : Fin b → ℂ) (A : ∀ j, MPSTensor d (D j)) (hμ : ∀ j, μ j ≠ 0)
     {S : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (μ := μ) A) N) :
     ∃ (B : ∀ j, MPSTensor d (D j))
       (ρ : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)
@@ -199,7 +203,7 @@ theorem exists_normalized_parentGroundStateFace_classification_of_eventually_ope
       (groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq
         μ μ A B hμ hμ (fun j => hGS j N))
   have hkerB : ∀ᶠ N : ℕ in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (μ := μ) B) N :=
     hker.mono fun N hN => hN.trans (hJoint N)
   have hDistinct : ∀ i j, i ≠ j → ∀ e : D j = D i,
@@ -208,9 +212,9 @@ theorem exists_normalized_parentGroundStateFace_classification_of_eventually_ope
       not_gaugePhaseEquiv_of_wordTupleSpanTop B hSpanB i j hij e
   exact ⟨B, ρ, hP, hρ, hSpanB, hGS, hJoint,
     fun φ => mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kernel
-      μ B hμ ρ hP hρ hDistinct h hR hh hkerB φ,
+      μ B hμ ρ hP hρ hDistinct h hh hkerB φ,
     fun φ => isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel
-      μ B hμ ρ hP hρ hDistinct h hR hh hkerB φ⟩
+      μ B hμ ρ hP hρ hDistinct h hh hkerB φ⟩
 end MPSTensor
 
 end
@@ -219,6 +223,8 @@ section
 
 open Filter SpinChain
 open scoped Matrix ComplexOrder BigOperators Topology
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d b : ℕ} {D : Fin b → ℕ} [NeZero d] [∀ i, NeZero (D i)]
 /-- A finite inequivalent primitive family admits a positive canonical
@@ -234,20 +240,14 @@ theorem exists_positive_parent_interaction_of_hasComplementaryFixedPointGap
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) :
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N := by
   obtain ⟨R, hR, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
+    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
       μ A hμ ρ hP hρ hDistinct
-  let T := toTensorFromBlocks (d := d) (μ := μ) A
-  let h := canonicalParentInteractionMatrix T R
-  have hmatrix : Matrix.toEuclideanLin h = parentInteractionES T R :=
-    toEuclideanLin_canonicalParentInteractionMatrix T R
-  refine ⟨R, hR, h, ?_, ?_⟩
-  · exact canonicalParentInteractionMatrix_posSemidef T R
-  · intro N hN
-    rw [hmatrix, openInteractionHamiltonianES_parentInteractionES T hR]
-    exact hKernel R N le_rfl hN
+  exact ⟨R, hR,
+    LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R),
+    posSemidef_toMatrix'_parentInteraction _ R, fun N hN => hKernel R N le_rfl hN⟩
 
 /-- One positive interaction realizes both the exact joint open kernels
 at all volumes at least its derived range and the entire convex face of
@@ -264,10 +264,10 @@ theorem exists_positive_parent_interaction_groundStateFace_of_hasComplementaryFi
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N) ∧
       (∀ᶠ N : ℕ in atTop,
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N) ∧
       let ω := fun j => quasiLocalExpectation (A j) (hP j).norm
         (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed (hP j).trace_ne_zero
@@ -279,14 +279,14 @@ theorem exists_positive_parent_interaction_groundStateFace_of_hasComplementaryFi
   obtain ⟨R, hR, h, hh, hKernel⟩ :=
     exists_positive_parent_interaction_of_hasComplementaryFixedPointGap μ A hμ ρ hP hρ hDistinct
   have hEventual : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N :=
     (eventually_ge_atTop R).mono fun N hN => hKernel N hN
   refine ⟨R, hR, h, hh, hKernel, hEventual, ?_, ?_⟩
   · exact fun φ => mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kernel
-      μ A hμ ρ hP hρ hDistinct h hR hh hEventual φ
+      μ A hμ ρ hP hρ hDistinct h hh hEventual φ
   · exact fun φ => isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel
-      μ A hμ ρ hP hρ hDistinct h hR hh hEventual φ
+      μ A hμ ρ hP hρ hDistinct h hh hEventual φ
 
 end MPSTensor
 

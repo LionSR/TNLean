@@ -3384,12 +3384,13 @@ translated copies of the local interaction.
 \end{definition}
 
 \begin{definition}[Frustration-free condition]\label{def:is_frustration_free}
-    \lean{MPSTensor.IsFrustrationFree}
-    \leanok
     \uses{def:local_term_parent}
     A vector $\psi$ is a frustration-free ground state of the parent Hamiltonian
     when each local interaction annihilates it, that is, when
-    $h_i\psi=0$ for every $i\in\Fin{N}$.
+    $h_i\psi=0$ for every $i\in\Fin{N}$. These vectors form the zero space of
+    the parent interaction on the ring, the intersection of the kernels of its
+    terms. An interaction is frustration free when some nonzero vector
+    minimizes the energy of every term.
 \end{definition}
 
 \begin{lemma}[Periodic MPS vector window membership]\label{lem:mpv_window_mem_ground_space}
@@ -3436,16 +3437,22 @@ translated copies of the local interaction.
 \end{proof}
 
 \begin{lemma}[Frustration-freeness of the periodic MPS vector]\label{lem:parent_hamiltonian_ff}
-    \lean{MPSTensor.parentHamiltonian_frustrationFree}
+    \lean{MPSTensor.toLp_mpv_mem_zeroSpace_parentRingInteraction}
+    \lean{MPSTensor.isFrustrationFree_parentRingInteraction}
     \leanok
     \uses{def:is_frustration_free, def:mpv, lem:local_term_annihilates_mpv}
-    The periodic MPS vector is a frustration-free ground state: for every site
-    $i$, one has $h_iV^{(N)}(A)=0$.
+    On a ring of $N\ge1$ sites and for every window length $L$, the periodic
+    MPS vector is a frustration-free ground state: for every site $i$, one has
+    $h_iV^{(N)}(A)=0$. If $V^{(N)}(A)\ne0$, the parent interaction on the ring
+    is frustration free.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    The claim follows from Lemma~\ref{lem:local_term_annihilates_mpv}.
+    For $L\le N$ the first claim follows from
+    Lemma~\ref{lem:local_term_annihilates_mpv}; for $L>N$ the local terms
+    vanish. The local terms are positive, so a nonzero vector annihilated by
+    all of them minimizes the energy of each.
 \end{proof}
 
 \section{Intersection property and unique ground state}\label{sec:intersection_unique}

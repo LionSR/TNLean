@@ -131,7 +131,7 @@ theorem ker_regionParentHamiltonian_eq_span_of_full_region (A : Tensor Γ d)
     (Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian).ker =
       Submodule.span ℂ {stateCoeff A} := by
-  rw [ker_regionParentHamiltonian A R h hh,
+  rw [ker_hamiltonian_ofPlace A R h hh,
     regionParentGroundSpace_eq_span_of_full_region A R hfull]
 
 /-- A nonzero PEPS has a one-dimensional common ground space when a full-region
@@ -167,15 +167,17 @@ theorem canonicalRegionParentInteraction_apply_eq_self (A : Tensor Γ d) (R : Fi
   rw [canonicalRegionParentInteraction, LinearEquiv.apply_symm_apply]
   exact Submodule.starProjection_eq_self_iff.mpr hψ
 
-/-- The canonical regional interaction has unit norm gap on the complement
-of its kernel. Source: CPGSV21, arXiv:2011.12127, projector comparison, line 2170. -/
-theorem canonicalRegionParentInteraction_unit_norm_gap (A : Tensor Γ d) (R : Finset V) :
-    ∀ ψ ∈ (Matrix.toEuclideanLin (canonicalRegionParentInteraction A R)).kerᗮ,
-      (1 : ℝ) * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin (canonicalRegionParentInteraction A R) ψ‖ := by
+/-- The canonical regional interaction has unit gap above its kernel: every
+eigenvalue is `0` or at least `1`. Source: CPGSV21, arXiv:2011.12127, projector
+comparison, line 2170. -/
+theorem canonicalRegionParentInteraction_eigenvalue_gap_one (A : Tensor Γ d) (R : Finset V) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (canonicalRegionParentInteraction A R)) μ → μ = 0 ∨ (1 : ℂ) ≤ μ := by
   classical
-  intro ψ hψ
-  rw [(isRegionParentInteraction_canonical A R).ker_toEuclideanLin] at hψ
-  rw [canonicalRegionParentInteraction_apply_eq_self A R hψ, one_mul]
+  exact ManyBody.forall_hasEigenvalue_one_of_isStarProjection
+    ⟨canonicalRegionParentInteraction_isIdempotentElem A R,
+      Matrix.isHermitian_iff_isSelfAdjoint.mp
+        (canonicalRegionParentInteraction_posSemidef A R).isHermitian⟩
 
 /-- The spectrum of the canonical regional projector contains only zero and one.
 Source: CPGSV21, arXiv:2011.12127, projector parent interactions, line 2170. -/
@@ -227,17 +229,15 @@ theorem place_canonical_isSymmetricProjection (A : Tensor Γ d) (R : Finset V) :
   rw [Matrix.toLpLin_mul 2 2 2] at h
   exact h
 
-/-- The lifted canonical projector has unit norm gap on its excitation space.
-Source: CPGSV21, arXiv:2011.12127, projector parent interactions, line 2170. -/
-theorem place_canonical_unit_norm_gap (A : Tensor Γ d) (R : Finset V) :
-    ∀ ψ ∈ (Matrix.toEuclideanLin
-      (ManyBody.place (X := fun _ ↦ Fin _) R (canonicalRegionParentInteraction A R))).kerᗮ,
-      (1 : ℝ) * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin
-        (ManyBody.place (X := fun _ ↦ Fin _) R (canonicalRegionParentInteraction A R)) ψ‖ := by
+/-- The lifted canonical projector has unit gap above its kernel: every
+eigenvalue is `0` or at least `1`. Source: CPGSV21, arXiv:2011.12127, projector
+parent interactions, line 2170. -/
+theorem place_canonical_eigenvalue_gap_one (A : Tensor Γ d) (R : Finset V) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+      (ManyBody.place (X := fun _ ↦ Fin _) R (canonicalRegionParentInteraction A R))) μ →
+        μ = 0 ∨ (1 : ℂ) ≤ μ := by
   classical
-  intro ψ hψ
-  have hP := place_canonical_isSymmetricProjection A R
-  rw [← hP.isSymmetric.orthogonal_range, Submodule.orthogonal_orthogonal] at hψ
-  rw [(LinearMap.IsIdempotentElem.mem_range_iff hP.isIdempotentElem).mp hψ, one_mul]
+  exact ManyBody.forall_hasEigenvalue_one_of_isStarProjection
+    (Matrix.isSymmetricProjection_toEuclideanLin_iff.mp (place_canonical_isSymmetricProjection A R))
 
 end TNLean.PEPS

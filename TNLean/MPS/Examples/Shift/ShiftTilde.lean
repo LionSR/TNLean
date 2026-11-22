@@ -58,14 +58,14 @@ noncomputable def shiftExampleTildeU₃ (d : ℕ) : MPOTensor (d * d) (d * d) :=
 
 /-- Exact all-chain formula for $\widetilde U_1^{(N)}=\mathbb S^{\otimes N}$. -/
 theorem mpo_shiftExampleTildeU₁ (d N : ℕ) :
-    mpo (shiftExampleTildeU₁ d) N = Matrix.tensorPower N (shiftPhysicalSwap d) := by
+    mpo (shiftExampleTildeU₁ d) N = (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) := by
   rw [shiftExampleTildeU₁, mpo_ketLeftMul, mpo_shiftExampleU₁, Matrix.mul_one]
 
 /-- Exact all-chain formula for
 $\widetilde U_2^{(N)}=\mathbb S^{\otimes N}(T^{(N)\dagger}\otimes T^{(N)})$. -/
 theorem mpo_shiftExampleTildeU₂ (d N : ℕ) [NeZero N] :
     mpo (shiftExampleTildeU₂ d) N =
-      Matrix.tensorPower N (shiftPhysicalSwap d) *
+      (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) *
         Matrix.reindex (finTupleProdEquiv N d d).symm
           (finTupleProdEquiv N d d).symm
           ((Equiv.Perm.permMatrix ℂ (rotateConfig N d))ᴴ ⊗ₖ
@@ -76,7 +76,7 @@ theorem mpo_shiftExampleTildeU₂ (d N : ℕ) [NeZero N] :
 $\widetilde U_3^{(N)}=\mathbb S^{\otimes N}(T^{(N)}\otimes T^{(N)\dagger})$. -/
 theorem mpo_shiftExampleTildeU₃ (d N : ℕ) [NeZero N] :
     mpo (shiftExampleTildeU₃ d) N =
-      Matrix.tensorPower N (shiftPhysicalSwap d) *
+      (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) *
         Matrix.reindex (finTupleProdEquiv N d d).symm
           (finTupleProdEquiv N d d).symm
           (Equiv.Perm.permMatrix ℂ (rotateConfig N d) ⊗ₖ
@@ -98,7 +98,7 @@ private def shiftExampleChainU₃ (d N : ℕ) : Equiv.Perm (Fin N → Fin (d * d
       (finTupleProdEquiv N d d).symm)
 
 private theorem sitewise_shiftPhysicalSwap_eq_permMatrix (d N : ℕ) :
-    Matrix.tensorPower N (shiftPhysicalSwap d) =
+    (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) =
       Equiv.Perm.permMatrix ℂ (shiftExampleChainSwap d N) := by
   classical
   have hchain : shiftExampleChainSwap d N =
@@ -110,7 +110,7 @@ private theorem sitewise_shiftPhysicalSwap_eq_permMatrix (d N : ℕ) :
     rfl
   rw [hchain]
   ext σ τ
-  simp only [Matrix.tensorPower_apply, shiftPhysicalSwap, Equiv.Perm.permMatrix,
+  simp only [Matrix.piKronecker_apply, shiftPhysicalSwap, Equiv.Perm.permMatrix,
     PEquiv.toMatrix_apply]
   rw [Fintype.prod_boole]
   simp [funext_iff]
@@ -156,9 +156,9 @@ Source: arXiv:1703.09188, equation `tildeU3` (lines 2059--2062). -/
 theorem mpo_shiftExampleTildeU₃_eq_swap_mul_tildeU₂_mul_swap
     (d N : ℕ) [NeZero N] :
     mpo (shiftExampleTildeU₃ d) N =
-      Matrix.tensorPower N (shiftPhysicalSwap d) *
+      (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) *
         mpo (shiftExampleTildeU₂ d) N *
-          Matrix.tensorPower N (shiftPhysicalSwap d) := by
+          (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) := by
   rw [mpo_shiftExampleTildeU₃, mpo_shiftExampleTildeU₂,
     sitewise_shiftPhysicalSwap_eq_permMatrix,
     shiftExampleU₂_chain_eq_permMatrix, shiftExampleU₃_chain_eq_permMatrix]

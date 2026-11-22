@@ -99,19 +99,29 @@ theorem mixedEndpointLeftTensor_starProjection_eq_outerCorner
     change R (C (S.starProjection v)) = R (C v)
     rw [S.starProjection_eq_self_iff.mpr hv]
 
+/-- The operator of the extended local interaction is an orthogonal projection at every
+parameter, including both endpoints. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
+theorem isSymmetricProjection_toEuclideanLin_mixedEndpointParentInteraction
+    (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) (γ : ℝ) :
+    (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)).IsSymmetricProjection := by
+  rw [toEuclideanLin_mixedEndpointParentInteraction]
+  exact symmetricProjection_one_sub (Submodule.isSymmetricProjection_starProjection _)
+
 /-- The extended local interaction is positive at every parameter, including
 both endpoints. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpointParentInteraction_isPositive
+theorem posSemidef_mixedEndpointParentInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) (γ : ℝ) :
-    (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap.IsPositive :=
-  (symmetricProjection_one_sub (Submodule.isSymmetricProjection_starProjection _)).isPositive
+    (mixedEndpointParentInteraction A₀ A₁ γ).PosSemidef :=
+  Matrix.isPositive_toEuclideanLin_iff.mp
+    (isSymmetricProjection_toEuclideanLin_mixedEndpointParentInteraction A₀ A₁ γ).isPositive
 
 /-- The extended first-endpoint term is bounded above by the canonical
 embedded first-endpoint term. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpointParentInteraction_zero_le_parentInteractionES
+theorem mixedEndpointParentInteraction_zero_le_parentInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap ≤
-      parentInteractionES (mixedEndpointLeftTensor A₀ D₁) 2 := by
+    Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0) ≤
+      Matrix.toEuclideanLin
+        (LinearMap.toMatrix' (parentInteraction (mixedEndpointLeftTensor A₀ D₁) 2)) := by
   have hle : (groundSpaceES (mixedEndpointLeftTensor A₀ D₁) 2).starProjection.toLinearMap ≤
       (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
         (bondInterpolationMatrix D₀ D₁ 0)).range.starProjection.toLinearMap := by
@@ -119,7 +129,8 @@ theorem mixedEndpointParentInteraction_zero_le_parentInteractionES
       (Submodule.isSymmetricProjection_starProjection _) |>.mpr
     simpa only [Submodule.range_starProjection] using
       groundSpaceES_mixedEndpointLeftTensor_le_extendedSupport A₀ A₁
-  simpa only [mixedEndpointParentInteraction, parentInteractionES,
+  simpa only [toEuclideanLin_mixedEndpointParentInteraction,
+    toEuclideanLin_toMatrix'_parentInteraction,
     Submodule.starProjection_orthogonal', ContinuousLinearMap.toLinearMap_sub,
     ContinuousLinearMap.toLinearMap_one] using sub_le_sub_left hle 1
 
@@ -127,10 +138,11 @@ theorem mixedEndpointParentInteraction_zero_le_parentInteractionES
 interaction plus its two outer sector penalties. These penalties are supplied
 by the neighboring extended terms on a ring.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem parentInteractionES_mixedEndpointLeftTensor_le
+theorem parentInteraction_mixedEndpointLeftTensor_le
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    parentInteractionES (mixedEndpointLeftTensor A₀ D₁) 2 ≤
-      (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap +
+    Matrix.toEuclideanLin
+      (LinearMap.toMatrix' (parentInteraction (mixedEndpointLeftTensor A₀ D₁) 2)) ≤
+      Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0) +
         (1 - mixedEndpointRowSector D₀ D₁ 0) +
         (1 - mixedEndpointColumnSector D₀ D₁ 1) := by
   let S := (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
@@ -145,10 +157,11 @@ theorem parentInteractionES_mixedEndpointLeftTensor_le
       (bondInterpolationMatrix D₀ D₁ 0))
     (mixedEndpointColumnSector_commute_extendedSupport_starProjection A₀ A₁
       (bondInterpolationMatrix D₀ D₁ 0))
-  simpa only [parentInteractionES, Submodule.starProjection_orthogonal',
+  simpa only [toEuclideanLin_toMatrix'_parentInteraction,
+    Submodule.starProjection_orthogonal',
     ContinuousLinearMap.toLinearMap_sub, ContinuousLinearMap.toLinearMap_one,
     mixedEndpointLeftTensor_starProjection_eq_outerCorner A₀ A₁,
-    mixedEndpointParentInteraction] using hupper
+    toEuclideanLin_mixedEndpointParentInteraction] using hupper
 
 private theorem extendedSupport_starProjection_le_sector
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
@@ -171,8 +184,9 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpoint_one_sub_columnSector_zero_le_parentInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
     1 - mixedEndpointColumnSector D₀ D₁ 0 ≤
-      (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap :=
-  sub_le_sub_left (extendedSupport_starProjection_le_sector A₀ A₁ _
+      Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0) := by
+  rw [toEuclideanLin_mixedEndpointParentInteraction]
+  exact sub_le_sub_left (extendedSupport_starProjection_le_sector A₀ A₁ _
     (mixedEndpointColumnSector_isSymmetricProjection 0)
     (mixedEndpointColumnSector_zero_insertedTwoSiteMap A₀ A₁)) 1
 
@@ -182,8 +196,9 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpoint_one_sub_rowSector_one_le_parentInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
     1 - mixedEndpointRowSector D₀ D₁ 1 ≤
-      (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap :=
-  sub_le_sub_left (extendedSupport_starProjection_le_sector A₀ A₁ _
+      Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0) := by
+  rw [toEuclideanLin_mixedEndpointParentInteraction]
+  exact sub_le_sub_left (extendedSupport_starProjection_le_sector A₀ A₁ _
     (mixedEndpointRowSector_isSymmetricProjection 1)
     (mixedEndpointRowSector_one_insertedTwoSiteMap A₀ A₁)) 1
 

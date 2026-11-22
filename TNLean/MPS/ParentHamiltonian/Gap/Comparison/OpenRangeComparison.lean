@@ -9,6 +9,8 @@ import TNLean.MPS.ParentHamiltonian.ParentInteraction.EmbeddedC2
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.FiniteIntervalGapComparison
 import QICLean.Analysis.TensorProduct.EuclideanFiberwiseMap
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PrimitiveGaugeExistence
+import QICLean.Spectral.Gap.PositiveComparisonGap
+import QICLean.Algebra.Combinatorics.FinSum
 
 /-!
 # Comparison of parent interactions on open chains
@@ -26,360 +28,237 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Translate the starts of nonwrapping windows in a finite interval to the
-corresponding starts in an embedded suffix interval. Source: Nachtergaele,
-arXiv:cond-mat/9410110, condition C1. -/
-def nonwrappingSuffixStartEquiv {R W N n : ℕ} (hR : 0 < R) (_hRW : R ≤ W)
-    (hWn : W ≤ n) (hnN : n ≤ N) :
-    NonwrappingStart R W ≃
-      {i : NonwrappingStart R N // n - W ≤ i.1.val ∧ i.1.val + R ≤ n} where
-  toFun q := by
-    have hq : q.1.val + R ≤ W := q.2
-    refine ⟨⟨⟨n - W + q.1.val, by omega⟩, by
-      change n - W + q.1.val + R ≤ N
-      omega⟩, by
-      change n - W ≤ n - W + q.1.val ∧ n - W + q.1.val + R ≤ n
-      omega⟩
-  invFun i := by
-    have hi : n - W ≤ i.1.1.val ∧ i.1.1.val + R ≤ n := i.2
-    refine ⟨⟨i.1.1.val - (n - W), by omega⟩, by
-      change i.1.1.val - (n - W) + R ≤ W
-      omega⟩
-  left_inv q := by
-    apply Subtype.ext
-    apply Fin.ext
-    have hq := q.2
-    simp only
-    omega
-  right_inv i := by
-    apply Subtype.ext
-    apply Subtype.ext
-    apply Fin.ext
-    have hi := i.2
-    simp only
-    omega
-
 /-- A nonwrapping suffix interval, viewed in cyclic active-block coordinates,
 is the same Hamiltonian on the active interval acting independently of all
 spectator coordinates. -/
-theorem openSuffixParentHamiltonianES_conj_cyclicActiveBlock
+theorem hamiltonian_restrict_parentChainInteraction_conj_cyclicActiveBlock
     (A : MPSTensor d D) {R W N n : ℕ} (hR : 0 < R) (hRW : R ≤ W)
     (hWn : W ≤ n) (hnN : n ≤ N) :
     let s : Fin N := ⟨n - W, by omega⟩
     let U := cyclicActiveBlockConfigLinearIsometryEquiv d W (by omega : W ≤ N) s
     U.toLinearEquiv.toLinearMap.comp
-      ((openSuffixParentHamiltonianES A R W N n).comp
+      ((Matrix.toEuclideanLin
+          ((parentChainInteraction A R N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + R ≤
+              n).hamiltonian).comp
         U.symm.toLinearEquiv.toLinearMap) =
       (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-        (LinearMap.toContinuousLinearMap (openParentHamiltonianES A R W))).toLinearMap := by
+        (LinearMap.toContinuousLinearMap
+            (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian))).toLinearMap := by
   classical
   dsimp only
   let s : Fin N := ⟨n - W, by omega⟩
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d W (by omega : W ≤ N) s
-  let e := nonwrappingSuffixStartEquiv hR hRW hWn hnN
-  have hsum : openSuffixParentHamiltonianES A R W N n =
-      ∑ i : {i : NonwrappingStart R N // n - W ≤ i.1.val ∧ i.1.val + R ≤ n},
-        localTermES A R i.1.1 := by
-    rw [openSuffixParentHamiltonianES]
-    exact Finset.sum_subtype _ (fun i => by simp) _
-  rw [hsum]
   apply LinearMap.ext
   intro x
-  simp only [openParentHamiltonianES, LinearMap.comp_apply, LinearMap.sum_apply, map_sum,
-    ContinuousLinearMap.rightFiberwiseMap_sum]
-  calc
-    (∑ i : {i : NonwrappingStart R N // n - W ≤ i.1.val ∧ i.1.val + R ≤ n},
-        U (localTermES A R i.1.1 (U.symm x))) =
-      ∑ q : NonwrappingStart R W,
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-          (LinearMap.toContinuousLinearMap (localTermES A R q.1)) x := by
-        apply Fintype.sum_equiv e.symm
-        intro i
-        have hstart : i.1.1 = cyclicForwardSite s (e.symm i).1.val := by
-          apply Fin.ext
-          have hi := i.2
-          simp only [cyclicForwardSite, Fin.val_mk, s]
-          rw [Nat.mod_eq_of_lt (by omega : n - W + (e.symm i).1.val < N)]
-          change i.1.1.val = n - W + (i.1.1.val - (n - W))
-          omega
-        rw [hstart]
-        exact LinearMap.congr_fun
-          (localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv A
-            (by omega : W ≤ N) s (e.symm i).1 (e.symm i).2) x
-    _ = (∑ q : NonwrappingStart R W,
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-          (LinearMap.toContinuousLinearMap (localTermES A R q.1))) x := by
-      simp
-
-/-- A comparison between the long parent projection and the short-range
-Hamiltonian on one interval holds on every nonwrapping interval of that
-length in an open chain. -/
-theorem openSuffixParentHamiltonianES_comparison_of_local
-    (A : MPSTensor d D) {R W N n : ℕ} (hR : 0 < R) (hRW : R ≤ W)
-    (hWn : W ≤ n) (hnN : n ≤ N) {κ : ℝ}
-    (hLocal : (κ : ℂ) • parentInteractionES A W ≤
-      openParentHamiltonianES A R W) :
-    (κ : ℂ) • openSuffixParentHamiltonianES A W W N n ≤
-      openSuffixParentHamiltonianES A R W N n := by
-  let s : Fin N := ⟨n - W, by omega⟩
-  let U := cyclicActiveBlockConfigLinearIsometryEquiv d W (by omega : W ≤ N) s
-  have hShort : U.toLinearEquiv.conj (openSuffixParentHamiltonianES A R W N n) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-        (LinearMap.toContinuousLinearMap (openParentHamiltonianES A R W))).toLinearMap := by
-    simpa only [U, LinearEquiv.conj_apply, LinearMap.comp_assoc] using!
-      openSuffixParentHamiltonianES_conj_cyclicActiveBlock A hR hRW hWn hnN
-  have hLong : U.toLinearEquiv.conj (openSuffixParentHamiltonianES A W W N n) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-        (LinearMap.toContinuousLinearMap (parentInteractionES A W))).toLinearMap := by
-    simpa only [U, LinearEquiv.conj_apply, LinearMap.comp_assoc,
-      openParentHamiltonianES_self_eq_parentInteractionES A (by omega : 0 < W)] using!
-      openSuffixParentHamiltonianES_conj_cyclicActiveBlock A
-        (by omega : 0 < W) le_rfl hWn hnN
-  refine (U.conj_le_conj_iff _ _).mp ?_
-  simpa only [map_smul, hLong, hShort, ContinuousLinearMap.rightFiberwiseMap_smul,
-    ContinuousLinearMap.toLinearMap_smul] using
-    (ContinuousLinearMap.rightFiberwiseMap_mono (S := Cfg d (N - W))
-      (G := LinearMap.toContinuousLinearMap ((κ : ℂ) • parentInteractionES A W))
-      (H := LinearMap.toContinuousLinearMap (openParentHamiltonianES A R W)) hLocal)
+  rw [ManyBody.Interaction.hamiltonian_restrict,
+    ManyBody.Interaction.partialHamiltonian]
+  simp only [ManyBody.Interaction.hamiltonian, LinearMap.comp_apply,
+    LinearMap.sum_apply, map_sum, ContinuousLinearMap.rightFiberwiseMap_sum,
+    ContinuousLinearMap.toLinearMap_sum]
+  symm
+  refine Finset.sum_bij
+    (fun (q : Fin (W + 1 - R)) _ ↦ (⟨n - W + q.val, by omega⟩ : Fin (N + 1 - R)))
+    (fun q _ ↦ ?_) (fun q₁ _ q₂ _ h ↦ ?_) (fun i hi ↦ ?_) (fun q _ ↦ ?_)
+  · simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    omega
+  · have := congrArg Fin.val h
+    simp only at this
+    exact Fin.ext (by omega)
+  · rw [Finset.mem_filter] at hi
+    exact ⟨⟨i.val - (n - W), by omega⟩, Finset.mem_univ _, Fin.ext (by simp only; omega)⟩
+  · have hq : (⟨q.val, by omega⟩ : Fin W).val + R ≤ W := by
+      change q.val + R ≤ W
+      omega
+    have hstart : (⟨n - W + q.val, by omega⟩ : Fin N) = cyclicForwardSite s q.val := by
+      apply Fin.ext
+      simp only [cyclicForwardSite, Fin.val_mk, s]
+      rw [Nat.mod_eq_of_lt (by omega)]
+    have hW : NeZero W := ⟨by omega⟩
+    have hN : NeZero N := ⟨by omega⟩
+    change (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
+        (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin
+          ((parentChainInteraction A R W).term ⟨q.val, by omega⟩)))) x =
+      U (Matrix.toEuclideanLin ((parentChainInteraction A R N).term ⟨n - W + q.val, by omega⟩)
+        (U.symm x))
+    rw [ManyBody.Interaction.chainTranslates_term_eq_translationInvariant_term _ (by omega),
+      ManyBody.Interaction.chainTranslates_term_eq_translationInvariant_term _ (by omega)]
+    simp only [hstart]
+    exact (LinearMap.congr_fun
+      (toEuclideanLin_translationInvariant_term_conj_cyclicActiveBlock
+        (LinearMap.toMatrix' (parentInteraction A R)) (by omega : W ≤ N) s
+        ⟨q.val, by omega⟩ hq) x).symm
 
 /-- Summing all complete suffix windows of length \(W\) counts every range-\(W\)
 open-chain parent term exactly once. -/
-theorem sum_openSuffixParentHamiltonianES_full_window
-    (A : MPSTensor d D) {W N : ℕ} (hW : 0 < W) :
-    ∑ n ∈ Finset.Icc W N, openSuffixParentHamiltonianES A W W N n =
-      openParentHamiltonianES A W N := by
-  classical
-  rw [openParentHamiltonianES]
-  apply Finset.sum_bij (fun n hn =>
-    (⟨⟨n - W, by
-      have hnBounds := Finset.mem_Icc.mp hn
-      omega⟩, by
-      have hnBounds := Finset.mem_Icc.mp hn
-      change n - W + W ≤ N
-      omega⟩ : NonwrappingStart W N))
-  · intro n hn
-    exact Finset.mem_univ _
-  · intro n₁ hn₁ n₂ hn₂ h
-    have hval := congrArg (fun i : NonwrappingStart W N => i.1.val) h
+theorem sum_hamiltonian_restrict_parentChainInteraction_full_window
+    (A : MPSTensor d D) (W N : ℕ) :
+    ∑ n ∈ Finset.Icc W N, Matrix.toEuclideanLin
+        ((parentChainInteraction A W N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + W ≤
+            n).hamiltonian =
+      Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian := by
+  rw [ManyBody.Interaction.hamiltonian, map_sum]
+  refine Finset.sum_bij (fun n hn ↦ (⟨n - W, by
+      have := Finset.mem_Icc.mp hn
+      omega⟩ : Fin (N + 1 - W))) (fun n hn ↦ Finset.mem_univ _) (fun n₁ hn₁ n₂ hn₂ h ↦ ?_)
+    (fun i _ ↦ ⟨i.val + W, ?_, ?_⟩) (fun n hn ↦ ?_)
+  · have hval := congrArg Fin.val h
     simp only at hval
     have hn₁ := Finset.mem_Icc.mp hn₁
     have hn₂ := Finset.mem_Icc.mp hn₂
     omega
-  · intro i _
-    refine ⟨i.1.val + W, ?_, ?_⟩
-    · simp only [Finset.mem_Icc]
-      have hi := i.2
-      omega
-    · apply Subtype.ext
-      apply Fin.ext
-      simp only
-      omega
-  · intro n hn
-    have hn := Finset.mem_Icc.mp hn
-    exact openSuffixParentHamiltonianES_eq_localTermES A hW hn.1 hn.2
+  · simp only [Finset.mem_Icc]
+    omega
+  · exact Fin.ext (by simp)
+  · have hn := Finset.mem_Icc.mp hn
+    rw [hamiltonian_restrict_parentChainInteraction_eq_term A hn.1 hn.2]
 
-/-- A positive comparison on one window bounds the longer-range open-chain
-Hamiltonian by the shorter-range one at every volume. Each short-range term
-belongs to at most \(W - R + 1\) windows. -/
-theorem openParentHamiltonianES_comparison_of_local
-    (A : MPSTensor d D) {R W N : ℕ} (hR : 0 < R) (hRW : R ≤ W)
-    (_hWN : W ≤ N) {κ : ℝ}
-    (hLocal : (κ : ℂ) • parentInteractionES A W ≤
-      openParentHamiltonianES A R W) :
-    (κ : ℂ) • openParentHamiltonianES A W N ≤
-      ((W - R + 1 : ℕ) : ℂ) • openParentHamiltonianES A R N := by
-  calc
-    (κ : ℂ) • openParentHamiltonianES A W N =
-        (κ : ℂ) • ∑ n ∈ Finset.Icc W N,
-          openSuffixParentHamiltonianES A W W N n := by
-          rw [sum_openSuffixParentHamiltonianES_full_window A (by omega : 0 < W)]
-    _ = ∑ n ∈ Finset.Icc W N,
-          (κ : ℂ) • openSuffixParentHamiltonianES A W W N n := by
-          rw [Finset.smul_sum]
-    _ ≤ ∑ n ∈ Finset.Icc W N,
-          openSuffixParentHamiltonianES A R W N n := by
-          apply Finset.sum_le_sum
-          intro n hn
-          have hBounds := Finset.mem_Icc.mp hn
-          exact openSuffixParentHamiltonianES_comparison_of_local A hR hRW
-            hBounds.1 hBounds.2 hLocal
-    _ ≤ ((W - R + 1 : ℕ) : ℂ) • openParentHamiltonianES A R N :=
-          (openParentHamiltonianES_C1 A hRW).2
+/-! ### The comparison for the Hamiltonians of the interactions
 
-/-- A positive comparison on one interval transfers the open-chain gap
-from range \(W\) to range \(R\) at a specified chain length, provided
-both kernels are the canonical local MPS space. The loss is the window
-multiplicity \(W-R+1\). Source: arXiv:cond-mat/9410110, Section 6. -/
-theorem openParentHamiltonianES_gap_of_long_gap_at_length
-    (A : MPSTensor d D) {R W N : ℕ}
-    (hR : 0 < R) (hRW : R ≤ W) (hWN : W ≤ N) {κ γ : ℝ} (hκ : 0 < κ) (hγ : 0 < γ)
-    (hLocal : (κ : ℂ) • parentInteractionES A W ≤
-      openParentHamiltonianES A R W)
-    (hShortKer : LinearMap.ker (openParentHamiltonianES A R N) = groundSpaceES A N)
-    (hLongKer : LinearMap.ker (openParentHamiltonianES A W N) = groundSpaceES A N)
-    (hLong : ∀ v ∈ (groundSpaceES A N)ᗮ,
-      γ * ‖v‖ ≤ ‖openParentHamiltonianES A W N v‖) :
-    ∀ v ∈ (groundSpaceES A N)ᗮ,
-      (κ * γ / (W - R + 1 : ℕ)) * ‖v‖ ≤
-        ‖openParentHamiltonianES A R N v‖ := by
-  intro v hv
-  have hOrder := openParentHamiltonianES_comparison_of_local A
-    hR hRW hWN hLocal
-  have hκ' : (κ : ℂ) ≠ 0 := by exact_mod_cast hκ.ne'
-  have hm : 0 < (W - R + 1 : ℕ) := by omega
-  have hm' : ((W - R + 1 : ℕ) : ℂ) ≠ 0 := by exact_mod_cast (Nat.ne_of_gt hm)
-  have hGapScaled : ∀ u ∈
-      (LinearMap.ker ((κ : ℂ) • openParentHamiltonianES A W N))ᗮ,
-      (κ * γ) * ‖u‖ ≤
-        ‖((κ : ℂ) • openParentHamiltonianES A W N) u‖ := by
-    intro u hu
-    have hu' : u ∈ (groundSpaceES A N)ᗮ := by
-      simpa only [LinearMap.ker_smul _ _ hκ', hLongKer] using hu
-    simpa only [LinearMap.smul_apply, norm_smul, Complex.norm_real,
-      Real.norm_eq_abs, abs_of_pos hκ, mul_assoc] using
-      mul_le_mul_of_nonneg_left (hLong u hu') hκ.le
-  have hKerScaled :
-      LinearMap.ker ((κ : ℂ) • openParentHamiltonianES A W N) =
-      LinearMap.ker (((W - R + 1 : ℕ) : ℂ) • openParentHamiltonianES A R N) := by
-    simp only [LinearMap.ker_smul _ _ hκ', LinearMap.ker_smul _ _ hm',
-      hLongKer, hShortKer]
-  have hTransfer := LinearMap.IsPositive.norm_gap_of_le_of_ker_eq
-    ((openParentHamiltonianES_isPositive A W N).smul_of_nonneg
-      (by exact_mod_cast hκ.le))
-    (mul_nonneg hκ.le hγ.le) hOrder
-    hKerScaled hGapScaled
-  have hv' : v ∈
-      (LinearMap.ker (((W - R + 1 : ℕ) : ℂ) • openParentHamiltonianES A R N))ᗮ := by
-    simpa only [LinearMap.ker_smul _ _ hm', hShortKer] using hv
-  have h := hTransfer v hv'
-  rw [div_mul_eq_mul_div]
-  apply (div_le_iff₀ (Nat.cast_pos.mpr hm)).mpr
-  calc
-    (κ * γ) * ‖v‖ ≤ ((W - R + 1 : ℕ) : ℝ) * ‖openParentHamiltonianES A R N v‖ := by
-      simpa only [LinearMap.smul_apply, norm_smul, Complex.norm_natCast,
-        Real.norm_natCast] using h
-    _ = ‖openParentHamiltonianES A R N v‖ * ((W - R + 1 : ℕ) : ℝ) := mul_comm _ _
+The comparison and the gap transfer for a local matrix `h` and the Hamiltonians of its open-chain
+translates (`ManyBody.Interaction.chainTranslates`) and of the parent interaction on the open
+chain (`parentChainInteraction`), in the matrix order. -/
 
-/-- A positive finite-interval comparison transfers a uniform open-chain
-gap from range \(W\) to range \(R\), provided both open kernels are the
-canonical local MPS space. The loss is the window multiplicity
-\(W-R+1\). Source: arXiv:cond-mat/9410110, Section 6. -/
-theorem openParentHamiltonianES_gap_of_long_gap
-    (A : MPSTensor d D) {R W : ℕ} (hR : 0 < R) (hRW : R ≤ W) {κ γ : ℝ} (hκ : 0 < κ) (hγ : 0 < γ)
-    (hLocal : (κ : ℂ) • parentInteractionES A W ≤
-      openParentHamiltonianES A R W)
-    (hShortKer : ∀ N, W ≤ N →
-      LinearMap.ker (openParentHamiltonianES A R N) = groundSpaceES A N)
-    (hLongKer : ∀ N, W ≤ N →
-      LinearMap.ker (openParentHamiltonianES A W N) = groundSpaceES A N)
-    (hLong : ∀ N : ℕ, W ≤ N → ∀ v ∈ (groundSpaceES A N)ᗮ,
-      γ * ‖v‖ ≤ ‖openParentHamiltonianES A W N v‖) :
-    ∀ N : ℕ, W ≤ N → ∀ v ∈ (groundSpaceES A N)ᗮ,
-      (κ * γ / (W - R + 1 : ℕ)) * ‖v‖ ≤
-        ‖openParentHamiltonianES A R N v‖ := by
-  intro N hWN
-  exact openParentHamiltonianES_gap_of_long_gap_at_length A hR hRW hWN
-    hκ hγ hLocal (hShortKer N hWN) (hLongKer N hWN) (hLong N hWN)
+section Interaction
 
-/-- For a one-site injective tensor, a uniform open-chain gap at a longer
-range transfers to the canonical two-site parent Hamiltonian. The interval
-comparison is supplied at the long range, and the resulting constant is
-independent of the chain length. -/
-theorem openParentHamiltonianES_two_gap_of_long_gap
-    [NeZero D] (A : MPSTensor d D) (hInj : Kraus.IsInjective A)
-    {W : ℕ} (hW : 2 ≤ W) {κ γ : ℝ} (hκ : 0 < κ) (hγ : 0 < γ)
-    (hLocal : (κ : ℂ) • parentInteractionES A W ≤
-      openParentHamiltonianES A 2 W)
-    (hLong : ∀ N : ℕ, W ≤ N → ∀ v ∈ (groundSpaceES A N)ᗮ,
-      γ * ‖v‖ ≤ ‖openParentHamiltonianES A W N v‖) :
-    ∀ N : ℕ, W ≤ N → ∀ v ∈ (groundSpaceES A N)ᗮ,
-      (κ * γ / (W - 1 : ℕ)) * ‖v‖ ≤
-        ‖openParentHamiltonianES A 2 N v‖ := by
-  have hInjOne : Kraus.IsNBlkInjective A 1 :=
-    Kraus.isNBlkInjective_one_of_isInjective hInj
-  have hShortKer (N : ℕ) (hWN : W ≤ N) :
-      LinearMap.ker (openParentHamiltonianES A 2 N) = groundSpaceES A N := by
-    simpa only [Nat.reduceAdd] using
-      ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
-        hInjOne (by norm_num : 0 < 1) (by omega : 1 + 1 ≤ N)
-  have hInjLong : Kraus.IsNBlkInjective A (W - 1) :=
-    isNBlkInjective_of_le (by norm_num : 0 < 1) hInjOne (by omega)
-  have hLongKer (N : ℕ) (hWN : W ≤ N) :
-      LinearMap.ker (openParentHamiltonianES A W N) = groundSpaceES A N := by
-    simpa only [Nat.sub_add_cancel (by omega : 1 ≤ W)] using
-      ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
-        hInjLong (by omega : 0 < W - 1) (by omega : W - 1 + 1 ≤ N)
-  simpa only [show W - 2 + 1 = W - 1 by omega] using
-    openParentHamiltonianES_gap_of_long_gap A (by norm_num : 0 < 2) hW
-      hκ hγ hLocal hShortKer hLongKer hLong
+open scoped MatrixOrder
+open ManyBody.Interaction (chainTranslates hamiltonian_chainTranslates_eq_sum_range)
 
-/-- Equality of the local MPS spaces at one length makes the corresponding
-open-chain parent Hamiltonians equal at every volume. -/
-theorem openParentHamiltonianES_eq_of_groundSpace_eq
+/-- **Comparison from one window.** If the open Hamiltonian of a positive semidefinite range-`R`
+matrix `h` on `W` sites dominates a multiple of the local parent projection on `W` sites, then on
+every open chain the Hamiltonian of the translates of `h`, times the window multiplicity
+\(W-R+1\), dominates the same multiple of the open-chain parent Hamiltonian of range `W`.
+Nachtergaele, arXiv:cond-mat/9410110, condition C1 and Section 6. -/
+theorem hamiltonian_chainTranslates_comparison_of_local (A : MPSTensor d D) {R W N : ℕ}
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef) (hRW : R ≤ W) {κ : ℝ}
+    (hLocal : (κ : ℂ) • LinearMap.toMatrix' (parentInteraction A W) ≤
+      (chainTranslates R W h).hamiltonian) :
+    (κ : ℂ) • (parentChainInteraction A W N).hamiltonian ≤
+      ((W - R + 1 : ℕ) : ℂ) • (chainTranslates R N h).hamiltonian := by
+  let g : ℕ → Matrix (Cfg d N) (Cfg d N) ℂ := fun i ↦
+    if hi : i + R ≤ N then ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow i hi) h
+    else 0
+  have hg : ∀ i, 0 ≤ g i := fun i ↦ by
+    by_cases hi : i + R ≤ N
+    · simp only [g, dite_eq_left hi]
+      exact Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_placeAlong _ hh)
+    · simp only [g, dite_eq_right hi, le_refl]
+  have hwindow (n : ℕ) (hn : n + W ≤ N) :
+      (κ : ℂ) • ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow n hn)
+          (LinearMap.toMatrix' (parentInteraction A W)) ≤
+        ∑ j ∈ Finset.range (W + 1 - R), g (n + j) := by
+    rw [← ManyBody.placeAlong_smul]
+    refine (ManyBody.placeAlong_le_placeAlong _ hLocal).trans_eq ?_
+    rw [hamiltonian_chainTranslates_eq_sum_range, ManyBody.placeAlong_sum]
+    refine Finset.sum_congr rfl fun j hj ↦ ?_
+    have hj' : j + R ≤ W := by have := Finset.mem_range.mp hj; omega
+    simp only [g, dite_eq_left hj', dite_eq_left (show n + j + R ≤ N by omega),
+      ManyBody.placeAlong_placeAlong, ManyBody.chainWindow_trans_chainWindow]
+  rw [hamiltonian_chainTranslates_eq_sum_range, hamiltonian_chainTranslates_eq_sum_range,
+    Finset.smul_sum, show W - R + 1 = W + 1 - R by omega, Nat.cast_smul_eq_nsmul]
+  calc ∑ n ∈ Finset.range (N + 1 - W), (κ : ℂ) • (if hn : n + W ≤ N then
+          ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow n hn)
+            (LinearMap.toMatrix' (parentInteraction A W)) else 0)
+      ≤ ∑ n ∈ Finset.range (N + 1 - W), ∑ j ∈ Finset.range (W + 1 - R), g (n + j) := by
+        refine Finset.sum_le_sum fun n hn ↦ ?_
+        rw [dite_eq_left (show n + W ≤ N by have := Finset.mem_range.mp hn; omega)]
+        exact hwindow n _
+    _ ≤ (W + 1 - R) • ∑ i ∈ Finset.range (N + 1 - R), g i :=
+        Finset.sum_range_sum_range_add_le g hg fun n hn j hj ↦ by omega
+
+/-- **Gap transfer at a specified volume.** Under the comparison of
+`hamiltonian_chainTranslates_comparison_of_local`, if the open Hamiltonian of `h` and the
+open-chain parent Hamiltonian of range `W` on `N` sites have the same kernel, the MPS
+boundary-condition space, a gap \(γ\) above the kernel of the latter (every eigenvalue is `0`
+or at least \(γ\)) gives the gap \(κγ/(W-R+1)\) above the kernel of the former. There is no
+hypothesis on the kernel of the local matrix `h` itself. Nachtergaele,
+arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
+theorem toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
+    (A : MPSTensor d D) {R W N : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
+    (hRW : R ≤ W) {κ γ : ℝ} (hκ : 0 < κ) (hγ : 0 < γ)
+    (hLocal : (κ : ℂ) • LinearMap.toMatrix' (parentInteraction A W) ≤
+      (chainTranslates R W h).hamiltonian)
+    (hShortKer : LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
+      groundSpaceES A N)
+    (hLongKer : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian) =
+      groundSpaceES A N)
+    (hLong : ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
+        μ = 0 ∨ ((κ * γ / (W - R + 1 : ℕ) : ℝ) : ℂ) ≤ μ := by
+  have hOrder := hamiltonian_chainTranslates_comparison_of_local A h hh hRW (N := N) hLocal
+  rw [← Matrix.toEuclideanLin_le_toEuclideanLin_iff, map_smul, map_smul] at hOrder
+  refine (ManyBody.forall_hasEigenvalue_iff_norm
+    (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh N)).mpr ?_
+  exact LinearMap.IsPositive.norm_gap_of_scaled_comparison
+    (E := EuclideanSpace ℂ (Cfg d N))
+    (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentChainInteraction A W N))
+    hκ hγ (by positivity : 0 < ((W - R + 1 : ℕ) : ℝ)) (by exact_mod_cast hOrder)
+    (hLongKer.trans hShortKer.symm)
+    ((ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentChainInteraction A W N)).mp hLong)
+
+/-- Equality of the local MPS spaces at one length makes the parent interactions on the open
+chain equal at every volume. -/
+theorem parentChainInteraction_eq_of_groundSpace_eq
     {A B : MPSTensor d D} {L : ℕ}
     (h : groundSpace A L = groundSpace B L) (N : ℕ) :
-    openParentHamiltonianES A L N = openParentHamiltonianES B L N := by
-  have hParent : parentInteraction A L = parentInteraction B L :=
-    parentInteraction_eq_of_groundSpace_eq h
-  unfold openParentHamiltonianES localTermES localTerm parentRingInteraction
-  simp only [hParent]
+    parentChainInteraction A L N = parentChainInteraction B L N := by
+  unfold parentChainInteraction
+  rw [parentInteraction_eq_of_groundSpace_eq h]
 
-/-- A one-site injective tensor has a positive open-chain gap at its canonical
-two-site parent interaction, uniformly in the interval length once that length
-is sufficiently large. The interaction range is fixed at two sites; the
-constant and the starting length may depend on the tensor. -/
-theorem exists_openParentHamiltonianES_two_uniform_gap_of_isInjective
+/-- A one-site injective tensor has a positive open-chain gap at its canonical two-site parent
+interaction, uniformly in the interval length once that length is sufficiently large: every
+eigenvalue of the open-chain Hamiltonian is `0` or at least the gap. The interaction range is
+fixed at two sites; the constant and the starting length may depend on the tensor. -/
+theorem exists_hamiltonian_parentChainInteraction_two_uniform_gap_of_isInjective
     [NeZero D] (A : MPSTensor d D) (hA : Kraus.IsInjective A) :
     ∃ W : ℕ, 2 ≤ W ∧ ∃ δ : ℝ, 0 < δ ∧
-      ∀ N : ℕ, W ≤ N → ∀ v ∈ (groundSpaceES A N)ᗮ,
-        δ * ‖v‖ ≤ ‖openParentHamiltonianES A 2 N v‖ := by
+      ∀ N : ℕ, W ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentChainInteraction A 2 N).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨B, ζ, ρ, _hζ, _hGauge, _hMPV, hP, hρ, hGS, _hPI, _hChain⟩ :=
     exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA.isNormal
   obtain ⟨l, ε, hl, _hInjB, hε, hεlt, hOpenB⟩ :=
-    hP.exists_openParentHamiltonianES_gap hρ
-  let W := l + 1
-  have hW : 2 ≤ W := by dsimp [W]; omega
+    hP.exists_hamiltonian_parentChainInteraction_gap hρ
   have hInjOne : Kraus.IsNBlkInjective A 1 :=
     Kraus.isNBlkInjective_one_of_isInjective hA
-  have hker : LinearMap.ker (openParentHamiltonianES A 2 W) =
-      groundSpaceES A W := by
-    exact ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
-      hInjOne (by norm_num : 0 < 1) hW
+  have hShortKer (N : ℕ) (hN : 2 ≤ N) :
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A 2 N).hamiltonian) =
+        groundSpaceES A N :=
+    ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
+      hInjOne (by norm_num : 0 < 1) hN
   obtain ⟨κ, C, hκ, _hC, hLocal, _hUpper⟩ :=
-    exists_pos_parentInteractionES_openParentHamiltonianES_comparison A hker
-  let γ : ℝ := (1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2
+    exists_pos_toMatrix'_parentInteraction_hamiltonian_parentChainInteraction_comparison A
+      (hShortKer (l + 1) (by omega))
   have hsqrt : 0 < Real.sqrt ((l + 1 : ℕ) : ℝ) :=
     Real.sqrt_pos.2 (by positivity)
-  have hγ : 0 < γ := by
-    dsimp [γ]
+  have hγ : 0 < (1 - ε * Real.sqrt ((l + 1 : ℕ) : ℝ)) ^ 2 := by
     have hprod : ε * Real.sqrt ((l + 1 : ℕ) : ℝ) < 1 :=
       (lt_div_iff₀ hsqrt).mp hεlt
     positivity
-  have hOpenA : ∀ N : ℕ, W ≤ N → ∀ v ∈ (groundSpaceES A N)ᗮ,
-      γ * ‖v‖ ≤ ‖openParentHamiltonianES A W N v‖ := by
-    intro N hWN v hv
-    have hES : groundSpaceES A N = groundSpaceES B N := by
-      simp only [groundSpaceES, hGS N]
-    have hvB : v ∈ (groundSpaceES B N)ᗮ := by simpa only [hES] using hv
-    have hB := hOpenB N (by simpa only [W] using hWN) v hvB
-    rwa [← openParentHamiltonianES_eq_of_groundSpace_eq (hGS W) N] at hB
-  let δ : ℝ := κ * γ / (W - 1 : ℕ)
-  have hδ : 0 < δ := by
-    dsimp [δ]
-    exact div_pos (mul_pos hκ hγ) (Nat.cast_pos.mpr (by omega))
-  refine ⟨W, hW, δ, hδ, ?_⟩
-  exact openParentHamiltonianES_two_gap_of_long_gap A hA hW hκ hγ hLocal hOpenA
+  refine ⟨l + 1, by omega, _, div_pos (mul_pos hκ hγ)
+    (Nat.cast_pos.mpr (Nat.succ_pos (l + 1 - 2))), fun N hN ↦ ?_⟩
+  refine toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length A
+    (LinearMap.toMatrix' (parentInteraction A 2)) (posSemidef_toMatrix'_parentInteraction A 2)
+    (by omega) hκ hγ hLocal (hShortKer N (by omega))
+    (ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
+      (isNBlkInjective_of_le (by norm_num : 0 < 1) hInjOne (by omega)) (by omega) hN) ?_
+  rw [parentChainInteraction_eq_of_groundSpace_eq (hGS (l + 1)) N]
+  exact hOpenB N hN
 
-/-- Every one-site injective tensor has a finite nearest-neighbor open window
-whose excitation gap satisfies the strict Knabe threshold. -/
-theorem exists_strict_openParentHamiltonianES_two_window_of_isInjective
+/-- Every one-site injective tensor has a finite nearest-neighbor open window whose gap above
+the kernel satisfies the strict Knabe threshold. -/
+theorem exists_strict_hamiltonian_parentChainInteraction_two_window_of_isInjective
     [NeZero D] (A : MPSTensor d D) (hA : Kraus.IsInjective A) :
     ∃ m : ℕ, 2 ≤ m ∧ ∃ γ : ℝ,
       1 < (m : ℝ) * γ ∧
-      ∀ v ∈ (groundSpaceES A (m + 1))ᗮ,
-        γ * ‖v‖ ≤ ‖openParentHamiltonianES A 2 (m + 1) v‖ := by
+      ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentChainInteraction A 2 (m + 1)).hamiltonian) μ →
+          μ = 0 ∨ (γ : ℂ) ≤ μ := by
   obtain ⟨W, hW, δ, hδ, hGap⟩ :=
-    exists_openParentHamiltonianES_two_uniform_gap_of_isInjective A hA
+    exists_hamiltonian_parentChainInteraction_two_uniform_gap_of_isInjective A hA
   obtain ⟨n, hn⟩ := exists_lt_nsmul hδ (1 : ℝ)
   let m := n + W
   have hm : 2 ≤ m := by dsimp [m]; omega
@@ -389,8 +268,8 @@ theorem exists_strict_openParentHamiltonianES_two_window_of_isInjective
       (1 : ℝ) < n • δ := hn
       _ = (n : ℝ) * δ := by simp [nsmul_eq_mul]
       _ ≤ (m : ℝ) * δ := mul_le_mul_of_nonneg_right hnm hδ.le
-  refine ⟨m, hm, δ, hnum, ?_⟩
-  intro v hv
-  exact hGap (m + 1) (by dsimp [m]; omega) v hv
+  exact ⟨m, hm, δ, hnum, hGap (m + 1) (by dsimp [m]; omega)⟩
+
+end Interaction
 
 end MPSTensor

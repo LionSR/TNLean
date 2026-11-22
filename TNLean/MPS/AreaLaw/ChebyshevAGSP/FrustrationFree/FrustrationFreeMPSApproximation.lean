@@ -59,7 +59,7 @@ theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
     (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (g : ℝ) (hg : 0 < g) (hg1 : g ≤ 1)
-    (hzero : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0)
+    (hzero : Ω ∈ Φ.zeroSpace)
     (hgap : (Φ.hamiltonian - (g : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
     (htrade : (((q * (s0 ^ 2 + 1)) ^ (32 * (2 * s0 + 1)) : ℕ) : ℝ) *
@@ -177,7 +177,7 @@ theorem exists_aklv_frustrationFree_per_cut_approximation :
       (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
       2 ≤ q →
       (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
-      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0 →
+      Ω ∈ Φ.zeroSpace →
       (Φ.hamiltonian - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
       0 < g → g ≤ 1 → ∀ rho : ℝ, 0 < rho → rho ≤ 1 →
@@ -280,7 +280,7 @@ theorem exists_aklv_frustrationFree_sequential_mps_approximation :
       (Φ : ManyBody.BondInteraction L q)
       (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
       (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
-      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0 →
+      Ω ∈ Φ.zeroSpace →
       (Φ.hamiltonian - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
       0 < g → g ∈ spectrum ℝ Φ.hamiltonian →

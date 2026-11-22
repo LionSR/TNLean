@@ -12,7 +12,7 @@ import QICLean.ManyBody.Sites.ProductVector
 import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import QICLean.Spectral.Gap.KernelSpectralGap
+import QICLean.Spectral.Gap.EigenvalueGap
 
 /-!
 # Detectability for a physical nearest-neighbour projection chain

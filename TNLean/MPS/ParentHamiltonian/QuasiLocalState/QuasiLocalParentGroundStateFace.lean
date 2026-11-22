@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.QCA.FinitePureStateDecomposition
 import TNLean.MPS.ParentHamiltonian.LocalExpectation.LocalParentExpectation
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockSumIntervalSpaces
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.CanonicalParentInteractionMatrix
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 
 /-!
 # Zero-energy states for positive parent interactions
@@ -130,11 +130,10 @@ theorem quasiLocalExpectation_mem_parentGroundStateFace_canonicalParentInteracti
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
     (hFix : Kraus.transferMap A ρ = ρ) (htr : Matrix.trace ρ ≠ 0) (R : ℕ) :
     quasiLocalExpectation A hTP hρ hFix htr ∈
-      parentGroundStateFace (canonicalParentInteractionMatrix A R) := by
+      parentGroundStateFace (LinearMap.toMatrix' (parentInteraction A R)) := by
   apply quasiLocalExpectation_mem_parentGroundStateFace_of_groundSpaceES_le_ker
     A hTP hρ hFix htr
-  rw [toEuclideanLin_canonicalParentInteractionMatrix]
-  exact (isParentInteraction_parentInteractionES A R).ker_eq.ge
+  exact (isParentInteraction_toEuclideanLin_toMatrix'_parentInteraction A R).ker_eq.ge
 
 end MPSTensor
 

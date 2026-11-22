@@ -45,10 +45,10 @@ private theorem exists_sourceMap_of_exists_embeddedMap (N : ℕ)
   let Tsource : Matrix (Fin 2 → Fin 4) (Fin 2 → Fin 4) ℂ →ₗ[ℂ]
       Matrix (Fin N → Fin 4) (Fin N → Fin 4) ℂ :=
     sitewisePhysicalRecovery physicalInclusion N ∘ₗ T ∘ₗ
-      singleKrausMap (Matrix.tensorPower 2 physicalInclusion)
+      singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ physicalInclusion)
   have hForward : IsKrausCPTP
-      (singleKrausMap (Matrix.tensorPower 2 physicalInclusion)) :=
-    singleKrausMap_isKrausCPTP (Matrix.tensorPower 2 physicalInclusion)
+      (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ physicalInclusion)) :=
+    singleKrausMap_isKrausCPTP (Matrix.piKronecker fun _ : Fin 2 ↦ physicalInclusion)
       (tensorPower_isometry physicalInclusion
         physicalInclusion_isometry 2)
   have hRecover : IsKrausCPTP

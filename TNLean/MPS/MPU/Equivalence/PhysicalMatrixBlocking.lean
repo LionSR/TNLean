@@ -30,12 +30,12 @@ Source: arXiv:1703.09188, blocking at lines 297--305. -/
 theorem tensorPower_blockKron_reindex
     (Q : Matrix (Fin d) (Fin d) ℂ) (N k : ℕ) :
     Matrix.reindex (MPSTensor.blockedConfigEquiv d N k).symm
-        (MPSTensor.blockedConfigEquiv d N k).symm (Matrix.tensorPower (N * k) Q) =
-      Matrix.tensorPower N (MPSTensor.blockKron k Q) := by
+        (MPSTensor.blockedConfigEquiv d N k).symm (Matrix.piKronecker fun _ : Fin (N * k) ↦ Q) =
+      (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k Q)) := by
   classical
   symm
   exact Matrix.ext fun σ τ => by
-    simpa [Matrix.tensorPower_apply, MPSTensor.blockKron, Matrix.reindex_apply,
+    simpa [Matrix.piKronecker_apply, MPSTensor.blockKron, Matrix.reindex_apply,
       MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp,
       Fintype.prod_prod_type] using
       (finProdFinEquiv.prod_comp (fun v : Fin (N * k) =>
@@ -156,7 +156,7 @@ theorem transposeWithPhysicalMatrix_block (Q : Matrix (Fin d) (Fin d) ℂ)
   apply symmetry_eq (daggerWithPhysicalMatrix (1 : Matrix (Fin d) (Fin d) ℂ))
     (daggerSymmetry d) rfl
   intro N X
-  simp [daggerWithPhysicalMatrix, daggerSymmetry, Matrix.tensorPower_one]
+  simp [daggerWithPhysicalMatrix, daggerSymmetry, Matrix.piKronecker_one]
 
 /-- The identity physical matrix gives ordinary transposition. -/
 @[simp] theorem transposeWithPhysicalMatrix_one (d : ℕ) :
@@ -164,7 +164,7 @@ theorem transposeWithPhysicalMatrix_block (Q : Matrix (Fin d) (Fin d) ℂ)
   apply symmetry_eq (transposeWithPhysicalMatrix (1 : Matrix (Fin d) (Fin d) ℂ))
     (transposeSymmetry d) rfl
   intro N X
-  simp [transposeWithPhysicalMatrix, transposeSymmetry, Matrix.tensorPower_one]
+  simp [transposeWithPhysicalMatrix, transposeSymmetry, Matrix.piKronecker_one]
 
 end FiniteChainOperatorSymmetry
 

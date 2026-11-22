@@ -47,8 +47,10 @@ theorem cyclicSuccessorEquiv_apply {N : ℕ} [NeZero N] (i : Fin N) :
     finEquiv_symm_add_eq_cyclicForwardSite (ZMod.finEquiv N i) 1
 
 /-- The successor on a ring of at least two sites has no fixed point. -/
-theorem cyclicSuccessorEquiv_ne {N : ℕ} [NeZero N] (hN : 2 ≤ N) (i : Fin N) :
+theorem cyclicSuccessorEquiv_ne {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
+    haveI : NeZero N := ⟨by omega⟩;
     cyclicSuccessorEquiv N i ≠ i := by
+  have : NeZero N := ⟨by omega⟩
   let : Fact (1 < N) := ⟨by omega⟩
   intro hi
   change (ZMod.finEquiv N).symm (ZMod.finEquiv N i + 1) = i at hi

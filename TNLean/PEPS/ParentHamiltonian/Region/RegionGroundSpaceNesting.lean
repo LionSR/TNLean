@@ -292,7 +292,7 @@ theorem ker_regionParentHamiltonian_le_of_regions_covered (A : Tensor Γ d)
     (Matrix.mulVecLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) S k).hamiltonian).ker ≤
       (Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian).ker := by
-  rw [ker_regionParentHamiltonian A S k hk, ker_regionParentHamiltonian A R h hh]
+  rw [ker_hamiltonian_ofPlace A S k hk, ker_hamiltonian_ofPlace A R h hh]
   exact regionParentGroundSpace_le_of_regions_covered A R S hRS
 
 end TNLean.PEPS

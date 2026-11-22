@@ -200,24 +200,24 @@ theorem isStrongMPOSymmetry_iff_purification {ι : Type*} {χ : ι → ℕ}
 `u^{⊗L} ⊗ 1_anc`. -/
 theorem finKronecker_mul_purificationAmplitude
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ) (u : Matrix (Fin d) (Fin d) ℂ) (L : ℕ) :
-    (Matrix.finKronecker fun _ : Fin L => u) * purificationAmplitude A L =
+    (Matrix.piKronecker fun _ : Fin L => u) * purificationAmplitude A L =
       purificationAmplitude (fun i k => ∑ j, u i j • A j k) L := by
   ext σ κ
   rw [purificationAmplitude_apply, Matrix.trace_prod_ofFn_sum_smul, Matrix.mul_apply]
   refine Finset.sum_congr rfl fun τ _ => ?_
-  rw [Matrix.finKronecker_apply, purificationAmplitude_apply]
+  rw [Matrix.piKronecker_apply, purificationAmplitude_apply]
 
 /-- Twisting the ancilla leg of the purifying tensor by `v` acts on the purifying state by
 `1 ⊗ v^{⊗L}`, which multiplies the system-by-ancilla matrix on the right by the transpose. -/
 theorem purificationAmplitude_mul_finKronecker_transpose
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ) (v : Matrix (Fin dK) (Fin dK) ℂ)
     (L : ℕ) :
-    purificationAmplitude A L * (Matrix.finKronecker fun _ : Fin L => v)ᵀ =
+    purificationAmplitude A L * (Matrix.piKronecker fun _ : Fin L => v)ᵀ =
       purificationAmplitude (fun i k => ∑ l, v k l • A i l) L := by
   ext σ κ
   rw [purificationAmplitude_apply, Matrix.trace_prod_ofFn_sum_smul, Matrix.mul_apply]
   refine Finset.sum_congr rfl fun τ _ => ?_
-  rw [Matrix.transpose_apply, Matrix.finKronecker_apply, purificationAmplitude_apply, mul_comm]
+  rw [Matrix.transpose_apply, Matrix.piKronecker_apply, purificationAmplitude_apply, mul_comm]
 
 /-- A gauge-phase covariant purifying tensor has a rescaled purifying state: if
 `B^{(i,k)} = ζ X A^{(i,k)} X^{-1}`, then `Φ_B = ζ^L Φ_A`. -/
@@ -288,13 +288,13 @@ theorem isWeakOnSiteSymmetry_of_gaugePhase_purification {G : Type*} [Monoid G]
   intro g L _
   simp only [mpoWithBoundary_one]
   set Φ := purificationAmplitude A L
-  set u := Matrix.finKronecker fun _ : Fin L => U g
-  set W := (Matrix.finKronecker fun _ : Fin L => V g)ᵀ
-  have hu : uᴴ * u = 1 := Matrix.finKronecker_conjTranspose_mul_self (hU g)
+  set u := Matrix.piKronecker fun _ : Fin L => U g
+  set W := (Matrix.piKronecker fun _ : Fin L => V g)ᵀ
+  have hu : uᴴ * u = 1 := Matrix.IsIsometry.piKronecker (fun _ ↦ hU g)
   have hW : W * Wᴴ = 1 := by
     have h1 : Wᴴ * W = 1 := by
-      simp only [W, Matrix.finKronecker_transpose]
-      exact Matrix.finKronecker_conjTranspose_mul_self (transpose_conjTranspose_mul_self (hV g))
+      simp only [W, Matrix.transpose_piKronecker]
+      exact Matrix.IsIsometry.piKronecker (fun _ ↦ transpose_conjTranspose_mul_self (hV g))
     exact mul_eq_one_comm.mp h1
   have hΦ : u * Φ * W = ζ g ^ L • Φ := by
     rw [finKronecker_mul_purificationAmplitude, purificationAmplitude_mul_finKronecker_transpose]

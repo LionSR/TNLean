@@ -137,11 +137,11 @@ theorem isingGaugeZ_transpose_mul : isingGaugeZᵀ * isingGaugeZ = 1 := by decid
 
 theorem isingGaugeComplex_mul_transpose :
     complexOfZsqrt2 isingGaugeZ * complexOfZsqrt2 isingGaugeZᵀ = 1 :=
-  complexOfRing_mul_eq_one _ isingGaugeZ_mul_transpose
+  Matrix.complexOfRing_mul_eq_one _ isingGaugeZ_mul_transpose
 
 theorem isingGaugeComplex_transpose_mul :
     complexOfZsqrt2 isingGaugeZᵀ * complexOfZsqrt2 isingGaugeZ = 1 :=
-  complexOfRing_mul_eq_one _ isingGaugeZ_transpose_mul
+  Matrix.complexOfRing_mul_eq_one _ isingGaugeZ_transpose_mul
 
 /-! ### The slots and the block coordinates -/
 

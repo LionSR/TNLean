@@ -104,31 +104,33 @@ theorem isInjective_uncleTensor_of_isInjective_perturbation {d a b : ℕ}
 input of the existing two-site uncle interaction limit. Source:
 arXiv:1210.6613, Lemma "lemma:inj-perturbation" and Theorem
 "thm:unclehamiltonian", lines 910–1016. -/
-theorem tendsto_parentInteractionES_twoBlockPerturbation_of_isInjective_perturbation
+theorem tendsto_toMatrix'_parentInteraction_twoBlockPerturbation_of_isInjective_perturbation
     {d a b : ℕ} (A P : MPSTensor d a) (B Q : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (fun i ↦ uncleBlockMatrix (A i) (R i) (L i) (B i))) :
-    Filter.Tendsto (fun ε : ℂ => LinearMap.toContinuousLinearMap
-      (parentInteractionES (twoBlockPerturbation A P B Q R L ε) 2))
-      (𝓝[≠] 0) (𝓝 (uncleInteractionES A B R L)) :=
-  tendsto_parentInteractionES_twoBlockPerturbation A P B Q R L
+    Filter.Tendsto (fun ε : ℂ => Matrix.toEuclideanCLM (𝕜 := ℂ)
+      (LinearMap.toMatrix' (parentInteraction (twoBlockPerturbation A P B Q R L ε) 2)))
+      (𝓝[≠] 0) (𝓝 (Matrix.toEuclideanCLM (𝕜 := ℂ) (uncleInteraction A B R L))) :=
+  tendsto_toMatrix'_parentInteraction_twoBlockPerturbation A P B Q R L
     (isInjective_uncleTensor_of_isInjective_perturbation A B R L hPert)
 
 /-- The source injective-perturbation condition gives the uncle-Hamiltonian
 limit at each fixed periodic length. Source: arXiv:1210.6613,
 Lemma "lemma:inj-perturbation" and Theorem "thm:unclehamiltonian",
 lines 910–1016. -/
-theorem tendsto_parentHamiltonianES_twoBlockPerturbation_of_isInjective_perturbation
+theorem tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation_of_isInjective_perturbation
     {d a b : ℕ} (A P : MPSTensor d a) (B Q : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (fun i ↦ uncleBlockMatrix (A i) (R i) (L i) (B i)))
     {N : ℕ} (hN : 2 ≤ N) :
-    Filter.Tendsto (fun ε : ℂ => LinearMap.toContinuousLinearMap
-      (parentHamiltonianES (twoBlockPerturbation A P B Q R L ε) 2 N))
-      (𝓝[≠] 0) (𝓝 (uncleHamiltonianES A B R L N)) :=
-  tendsto_parentHamiltonianES_twoBlockPerturbation A P B Q R L
+    haveI : NeZero N := ⟨by omega⟩;
+    Filter.Tendsto (fun ε : ℂ => Matrix.toEuclideanCLM (𝕜 := ℂ)
+      (parentRingInteraction (twoBlockPerturbation A P B Q R L ε) 2 N).hamiltonian)
+      (𝓝[≠] 0) (𝓝 (Matrix.toEuclideanCLM (𝕜 := ℂ)
+        (ManyBody.Interaction.translationInvariant N (uncleInteraction A B R L)).hamiltonian)) :=
+  tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation A P B Q R L
     (isInjective_uncleTensor_of_isInjective_perturbation A B R L hPert) hN
 
 end MPSTensor

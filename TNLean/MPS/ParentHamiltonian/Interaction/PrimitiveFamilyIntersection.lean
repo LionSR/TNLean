@@ -7,8 +7,12 @@ import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.JointGroundSpaceIntersection
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceIndependence
 import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicOriginalIntersection
+import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
+import QICLean.Spectral.Gap.PositiveComparisonGap
+import QICLean.ManyBody.Hamiltonian.KernelGap
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 import TNLean.MPS.ParentHamiltonian.Interaction.OpenInteraction
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.CanonicalParentInteractionMatrix
 
 /-!
 # Primitive-family intersections from support-space independence
@@ -86,12 +90,12 @@ theorem eventually_iSup_groundSpace_restriction_intersection_of_hasComplementary
     obtain ⟨n₀, hn₀⟩ := (hPeriodic j).exists_eventually_groundSpace_restriction_intersection
     exact (eventually_ge_atTop n₀).mono fun n hn => hn₀ n hn
 
-/-- The overlap and geometric-intersection argument gives exact canonical
-open kernels for a weighted primitive family, at every volume at least any
-sufficiently large interaction range. No joint word-span condition is
-supplied. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 4,
+/-- The overlap and geometric-intersection argument gives, for a weighted primitive family, the
+boundary-condition space as the kernel of the Hamiltonian of the parent interaction on the open
+chain at every volume at least any sufficiently large interaction range. No joint word-span
+condition is supplied. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 4,
 Lemma existenceinteraction, and equations (3.12)--(3.13). -/
-theorem exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_primitive_overlap
+theorem exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_primitive_overlap
     [NeZero d] {r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
     (μ : Fin r → ℂ) (A : ∀ j, MPSTensor d (dim j)) (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
@@ -99,19 +103,21 @@ theorem exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_o
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) :
     ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
-      LinearMap.ker (openParentHamiltonianES (toTensorFromBlocks μ A) R N) =
+      LinearMap.ker (Matrix.toEuclideanLin
+          (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
         groundSpaceES (toTensorFromBlocks μ A) N := by
-  apply exists_ker_openParentHamiltonianES_eq_groundSpaceES_of_eventually_restriction_intersection
+  apply exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_eventually_intersection
   filter_upwards [
     eventually_iSup_groundSpace_restriction_intersection_of_hasComplementaryFixedPointGap
       A ρ hP hρ hDistinct] with n hn
   simpa only [groundSpace_toTensorFromBlocks_eq_iSup μ A hμ] using hn
 
-/-- A weighted inequivalent primitive family admits a positive canonical
-interaction with exact joint open kernels for all volumes at least its
-range. The interaction is constructed from the overlap-based joint
-intersection. Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.1
-and Lemma existenceinteraction, in the supplied primitive-family setting. -/
+open ManyBody.Interaction (chainTranslates) in
+/-- A weighted inequivalent primitive family admits a positive semidefinite canonical
+interaction whose open-chain translates have exact joint kernels for all volumes at least its
+range. The interaction is constructed from the overlap-based joint intersection. Source:
+Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.1 and Lemma existenceinteraction, in the supplied
+primitive-family setting. -/
 theorem exists_positive_parent_interaction_of_primitive_overlap
     [NeZero d] {r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
     (μ : Fin r → ℂ) (A : ∀ j, MPSTensor d (dim j)) (hμ : ∀ j, μ j ≠ 0)
@@ -121,14 +127,14 @@ theorem exists_positive_parent_interaction_of_primitive_overlap
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) :
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES (toTensorFromBlocks μ A) N := by
   obtain ⟨R, hR, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_primitive_overlap
+    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_primitive_overlap
       μ A hμ ρ hP hρ hDistinct
   obtain ⟨h, _heq, hh, hKernelInteraction⟩ :=
-    exists_positive_canonical_parent_interaction_of_exact_open_kernels
-      (toTensorFromBlocks μ A) hR (fun N => hKernel R N le_rfl)
+    exists_posSemidef_eq_toMatrix'_parentInteraction_of_ker_hamiltonian_parentChainInteraction
+      (toTensorFromBlocks μ A) (fun N => hKernel R N le_rfl)
   exact ⟨R, hR, h, hh, hKernelInteraction⟩
 
 end MPSTensor

@@ -26,6 +26,8 @@ formula is a conjecture there and is not claimed here.
 multi-species thermodynamic gap conjecture is not asserted. See
 `docs/paper-gaps/bn12_pvbs_periodic_gap.tex`.
 
+The Hamiltonian is the Hamiltonian of the parent interaction on the ring
+(`parentRingInteraction`), acting through `Matrix.toEuclideanLin`.
 -/
 
 open scoped Matrix BigOperators InnerProductSpace
@@ -48,25 +50,28 @@ private theorem particle_number_uniformParticle {N : ℕ} (σ : Cfg 2 N) :
 
 /-- The uniform one-particle mode has exactly the hopping-imbalance energy,
 independently of the ring length. -/
-theorem parentHamiltonianES_pvbs_uniformParticle (μ : ℝ) {N : ℕ} (hN : 2 ≤ N) :
-    parentHamiltonianES (pvbsTensor (μ : ℂ)) 2 N
+theorem toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_uniformParticle (μ : ℝ) {N : ℕ}
+    (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian
       (WithLp.toLp 2 (SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ)))) =
       (((μ - 1) ^ 2 / (1 + μ ^ 2) : ℝ) : ℂ) •
         WithLp.toLp 2 (SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ))) := by
+  have : NeZero N := ⟨by omega⟩
   ext σ
-  rw [parentHamiltonianES_pvbs_decomposition μ hN,
-    parentHamiltonianES_pvbs_critical_uniformParticle hN]
+  rw [toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_decomposition μ hN,
+    toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_uniformParticle hN]
   simp only [PiLp.zero_apply, mul_zero, zero_add, PiLp.smul_apply, smul_eq_mul]
   change _ * _ * SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ)) σ = _
   rw [mul_assoc, particle_number_uniformParticle]
 
-/-- Any norm-gap bound for the noncritical periodic PVBS Hamiltonian is at most
-the energy of its uniform one-particle mode. -/
-theorem parentHamiltonianES_pvbs_gap_le (μ : ℝ) (hμ : μ ≠ 1) {N : ℕ} (hN : 2 ≤ N)
-    {γ : ℝ} (hgap : ∀ v ∈
-      (LinearMap.ker (parentHamiltonianES (pvbsTensor (μ : ℂ)) 2 N))ᗮ,
-      γ * ‖v‖ ≤ ‖parentHamiltonianES (pvbsTensor (μ : ℂ)) 2 N v‖) :
+/-- Any gap of the noncritical periodic PVBS Hamiltonian above its zero ground
+energy is at most the energy of its uniform one-particle mode. -/
+theorem hamiltonian_parentRingInteraction_pvbs_gap_le (μ : ℝ) (hμ : μ ≠ 1) {N : ℕ}
+    (hN : 2 ≤ N) {γ : ℝ} (hgap : haveI : NeZero N := ⟨by omega⟩; ManyBody.IsGapped
+      (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian 0 γ) :
     γ ≤ (μ - 1) ^ 2 / (1 + μ ^ 2) := by
+  have : NeZero N := ⟨by omega⟩
   let v : EuclideanSpace ℂ (Cfg 2 N) :=
     WithLp.toLp 2 (SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ)))
   have hvne : v ≠ 0 := by
@@ -76,33 +81,28 @@ theorem parentHamiltonianES_pvbs_gap_le (μ : ℝ) (hμ : μ ≠ 1) {N : ℕ} (h
     simp [v] at hz
   have hc : 0 < (μ - 1) ^ 2 / (1 + μ ^ 2) :=
     div_pos (sq_pos_of_ne_zero (sub_ne_zero.mpr hμ)) (by positivity)
-  have heig := parentHamiltonianES_pvbs_uniformParticle μ hN
-  have horth : v ∈ (LinearMap.ker (parentHamiltonianES (pvbsTensor (μ : ℂ)) 2 N))ᗮ := by
-    rw [Submodule.mem_orthogonal]
-    intro w hw
-    have h := (parentHamiltonianES_isPositive (pvbsTensor (μ : ℂ)) 2 N).isSymmetric w v
-    rw [LinearMap.mem_ker.mp hw, inner_zero_left, heig, inner_smul_right] at h
-    exact (mul_eq_zero.mp h.symm).resolve_left (Complex.ofReal_ne_zero.mpr hc.ne')
-  have hh := hgap v horth
-  rw [heig, norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hc] at hh
-  exact le_of_mul_le_mul_right hh (norm_pos_iff.mpr hvne)
+  have heig : Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian v =
+      (((μ - 1) ^ 2 / (1 + μ ^ 2) : ℝ) : ℂ) • v :=
+    toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_uniformParticle μ hN
+  rcases hgap.2 _ (Module.End.hasEigenvalue_of_hasEigenvector
+    ⟨Module.End.mem_eigenspace_iff.mpr heig, hvne⟩) with h | h
+  · exact absurd (Complex.ofReal_injective h) hc.ne'
+  · simpa only [zero_add] using Complex.real_le_real.mp h
 
 /-- The finite periodic one-species, zero-phase PVBS gap is exactly
 `(μ - 1)² / (1 + μ²)` for every positive noncritical hopping and every ring
-of at least two sites. This is both a uniform lower bound and the largest
-possible norm-gap constant for the actual positive parent Hamiltonian. -/
-theorem parentHamiltonianES_pvbs_gap_exact (μ : ℝ) (hμ : 0 < μ) (hμne : μ ≠ 1) :
-    0 < (μ - 1) ^ 2 / (1 + μ ^ 2) ∧ ∀ N : ℕ, 2 ≤ N →
-      (∀ v ∈ (LinearMap.ker (parentHamiltonianES (pvbsTensor (μ : ℂ)) 2 N))ᗮ,
-        ((μ - 1) ^ 2 / (1 + μ ^ 2)) * ‖v‖ ≤
-          ‖parentHamiltonianES (pvbsTensor (μ : ℂ)) 2 N v‖) ∧
-      ∀ γ : ℝ, (∀ v ∈
-        (LinearMap.ker (parentHamiltonianES (pvbsTensor (μ : ℂ)) 2 N))ᗮ,
-        γ * ‖v‖ ≤ ‖parentHamiltonianES (pvbsTensor (μ : ℂ)) 2 N v‖) →
-          γ ≤ (μ - 1) ^ 2 / (1 + μ ^ 2) := by
+of at least two sites: the Hamiltonian is gapped above its zero ground energy
+with this constant, and with no larger one. -/
+theorem hamiltonian_parentRingInteraction_pvbs_gap_exact (μ : ℝ) (hμ : 0 < μ) (hμne : μ ≠ 1) :
+    0 < (μ - 1) ^ 2 / (1 + μ ^ 2) ∧ ∀ (N : ℕ) (hN : 2 ≤ N),
+      haveI : NeZero N := ⟨by omega⟩;
+      ManyBody.IsGapped (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian 0
+        ((μ - 1) ^ 2 / (1 + μ ^ 2)) ∧
+      ∀ γ : ℝ, ManyBody.IsGapped (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian 0 γ →
+        γ ≤ (μ - 1) ^ 2 / (1 + μ ^ 2) := by
   refine ⟨div_pos (sq_pos_of_ne_zero (sub_ne_zero.mpr hμne)) (by positivity), ?_⟩
   intro N hN
-  exact ⟨parentHamiltonianES_pvbs_gap μ hμ.le hN,
-    fun _ hgap => parentHamiltonianES_pvbs_gap_le μ hμne hN hgap⟩
+  exact ⟨isGapped_hamiltonian_parentRingInteraction_pvbs μ hμ.le hN,
+    fun _ hgap => hamiltonian_parentRingInteraction_pvbs_gap_le μ hμne hN hgap⟩
 
 end MPSTensor

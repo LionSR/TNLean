@@ -65,7 +65,7 @@ for `|+⟩ = -i(|-1⟩+|+1⟩)/√2`. Documented in
 * `MPSTensor.akltTensorRMP_gaugeEquiv` : bridge to `akltTensor`
 * `MPSTensor.akltTensorRMP_isNormal`, `MPSTensor.akltTensorRMP_isOnSiteSymmetric_Z2Z2`,
   `MPSTensor.akltTensorRMP_virtual_projRep`, `MPSTensor.akltTensorRMPPauli_isOnSiteSymmetric_SO3`,
-  `MPSTensor.akltTensorRMP_parentHamiltonian_two_unique_gs`
+  `MPSTensor.akltTensorRMP_chainGroundSpace_two_eq_mpvSubmodule`
 
 ## References
 - [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,
@@ -350,13 +350,6 @@ theorem akltTensorRMP_chainGroundSpace_two_eq_mpvSubmodule {N : ℕ} (hN : 3 ≤
     chainGroundSpace akltTensorRMP 2 N = mpvSubmodule akltTensorRMP N := by
   rw [chainGroundSpace_eq_of_groundSpace_eq (akltTensorRMP_groundSpace_eq 2),
     akltTensorRMP_mpvSubmodule_eq, aklt_chainGroundSpace_two_eq_mpvSubmodule hN]
-
-/-- Bridge: the two-site parent Hamiltonian of the review's tensor has a unique ground
-state on every periodic chain of `N ≥ 3` sites. -/
-theorem akltTensorRMP_parentHamiltonian_two_unique_gs {N : ℕ} (hN : 3 ≤ N) :
-    HasUniqueGroundState (chainGroundSpace akltTensorRMP 2 N) := by
-  rw [chainGroundSpace_eq_of_groundSpace_eq (akltTensorRMP_groundSpace_eq 2)]
-  exact aklt_parentHamiltonian_two_unique_gs hN
 
 end MPSTensor
 

@@ -634,14 +634,16 @@ theorem replaces the complementary-word comparison.
     \uses{def:chain_ground_space, def:l_blk_injective, def:has_unique_ground_state}
     If $D \ge 1$, $A$ is injective after blocking $L_0>0$ sites, and
     $L_0 < L \le N$, then the parent Hamiltonian of interaction range $L$ has
-    a unique periodic ground state. These inequalities imply $N\ge2$ and
+    a unique periodic ground state: $V^{(N)}(A)\ne0$, and the ground space at
+    energy $0$ of the parent Hamiltonian on the ring of $N$ sites is
+    $\C\,V^{(N)}(A)$. These inequalities imply $N\ge2$ and
     $N\ge L_0+1$, extending the finite-size range $N\ge 2L_0$ of
     \cite[Theorem~10]{PerezGarcia2007Matrix}.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{def:normal, thm:chain_ground_space_eq_mpv_normal, thm:mpv_ne_zero_blk_injective}
+    \uses{def:normal, thm:chain_ground_space_eq_mpv_normal, thm:mpv_ne_zero_blk_injective, thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     Block injectivity at the positive length $L_0$ makes $A$ normal. Hence
     Lemma~\ref{thm:chain_ground_space_eq_mpv_normal} gives
     \begin{align}
@@ -652,32 +654,26 @@ theorem replaces the complementary-word comparison.
     \begin{align}
         V^{(N)}(A) & \neq0.
     \end{align}
-    Therefore
-    \begin{align}
-        \dim\mathcal G_{N,L}(A)
-         & =\dim\spn\bigl\{V^{(N)}(A)\bigr\}=1.
-    \end{align}
+    By Lemma~\ref{thm:parent_hamiltonian_kernel_eq_chain_ground_space}, the
+    ground space at energy $0$ of the parent Hamiltonian on the ring is
+    $\mathcal G_{N,L}(A)$, which proves the claim.
 \end{proof}
 
 \begin{lemma}[Unique ground state on the periodic chain]%
     \label{thm:ground_space_unique_periodic}
     \lean{MPSTensor.groundSpace_unique_periodic}
     \leanok
-    \uses{thm:chain_ground_space_eq_mpv_blk, def:has_unique_ground_state, lem:mpv_eq_ground_space_map_one, thm:ground_space_map_injective}
-    For an injective tensor $A$ with $D \ge 1$, if $N \ge 2$ and
-    $1 < L \le N$, then the periodic chain ground space is one-dimensional.
+    \uses{thm:parent_hamiltonian_unique_gs}
+    For an injective tensor $A$ with $D \ge 1$ and $1 < L \le N$, the
+    periodic MPS vector $V^{(N)}(A)$ is nonzero and the ground space at
+    energy $0$ of the parent Hamiltonian on the ring is the line it spans.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:chain_ground_space_eq_mpv_blk, lem:mpv_eq_ground_space_map_one, thm:ground_space_map_injective}
-    By Lemma~\ref{thm:chain_ground_space_eq_mpv_blk}, the ground space is the
-    line $\spn\bigl\{V^{(N)}(A)\bigr\}$. It remains to show that the MPV is
-    nonzero. If $V^{(N)}(A)=0$, then
-    Lemma~\ref{lem:mpv_eq_ground_space_map_one} gives
-    $\Gamma_{N}(\Id)=\Gamma_{N}(0)$. Since $A$ is injective and $N > 0$,
-    Lemma~\ref{thm:ground_space_map_injective} forces $\Id = 0$, a
-    contradiction. Therefore the spanning line is one-dimensional.
+    \uses{thm:parent_hamiltonian_unique_gs}
+    An injective tensor is injective after blocking one site, so
+    Theorem~\ref{thm:parent_hamiltonian_unique_gs} with $L_0=1$ applies.
 \end{proof}
 
 \begin{theorem}[Unique ground state after blocking]%
@@ -687,7 +683,8 @@ theorem replaces the complementary-word comparison.
     \uses{def:chain_ground_space, def:l_blk_injective, def:has_unique_ground_state}
     If $A$ becomes injective after blocking $L_0 > 0$ sites and $D \ge 1$,
     the parent Hamiltonian with interaction range $2L_0$ has a unique ground
-    state on every periodic chain with $N \ge 2L_0$. In particular, this
+    state on every periodic chain with $N \ge 2L_0$: $V^{(N)}(A)\ne0$ and
+    the ground space at energy $0$ is $\C\,V^{(N)}(A)$. In particular, this
     includes $L_0=1$ and $N=2$.
 \end{theorem}
 
@@ -705,7 +702,9 @@ theorem replaces the complementary-word comparison.
     \uses{def:chain_ground_space, def:normal, def:l_blk_injective, def:has_unique_ground_state}
     If $A$ is normal, becomes injective after blocking $L_0 > 0$ sites, and
     $D \ge 1$, then the parent Hamiltonian with interaction range $L_0 + 1$
-    has a unique ground state on every periodic chain with $L_0+1\le N$.
+    has a unique ground state on every periodic chain with $L_0+1\le N$:
+    $V^{(N)}(A)\ne0$ and the ground space at energy $0$ is
+    $\C\,V^{(N)}(A)$.
 \end{theorem}
 
 \begin{proof}

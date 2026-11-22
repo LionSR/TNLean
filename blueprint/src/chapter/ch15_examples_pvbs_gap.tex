@@ -58,9 +58,9 @@ one-species specialization by an explicit operator decomposition.
 
 \begin{lemma}[Periodic occupation decomposition]
     \label{thm:pvbs_periodic_occupation}
-    \lean{MPSTensor.localTermES_pvbs_two_apply,
-        MPSTensor.localTermES_pvbs_decomposition,
-        MPSTensor.parentHamiltonianES_pvbs_decomposition}
+    \lean{MPSTensor.toEuclideanLin_parentRingInteraction_term_pvbs_two_apply,
+        MPSTensor.toEuclideanLin_parentRingInteraction_term_pvbs_decomposition,
+        MPSTensor.toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_decomposition}
     \leanok
     \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
     On every ring of $N\ge2$ sites, the PVBS parent Hamiltonian satisfies
@@ -84,19 +84,19 @@ one-species specialization by an explicit operator decomposition.
 
 \begin{lemma}[Uniform periodic PVBS lower gap bound]
     \label{thm:pvbs_uniform_lower_gap}
-    \lean{MPSTensor.parentHamiltonianES_pvbs_energy_decomposition,
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_pvbs_energy_decomposition,
         MPSTensor.pvbs_particle_number_ge_norm_sq,
-        MPSTensor.parentHamiltonianES_pvbs_energy_lower_bound,
+        MPSTensor.hamiltonian_parentRingInteraction_pvbs_energy_lower_bound,
         MPSTensor.pvbs_zero_of_mem_orthogonal_parent_kernel,
-        MPSTensor.parentHamiltonianES_pvbs_gap}
+        MPSTensor.isGapped_hamiltonian_parentRingInteraction_pvbs}
     \leanok
     \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
     For $\mu\ge0$, let $c(\mu)=(\mu-1)^2/(1+\mu^2)$.
     If $v$ has zero vacuum amplitude, then
     $\langle v,H_\mu v\rangle\ge c(\mu)\|v\|^2$.
-    Consequently, for every $N\ge2$ and $v\perp\ker H_\mu$,
+    Consequently, for every $N\ge2$, zero is an eigenvalue of $H_\mu$ and
     \begin{align}
-        c(\mu)\|v\| & \le\|H_\mu v\|.
+        \text{every other eigenvalue of }H_\mu\text{ is at least }c(\mu).
         \label{eq:pvbs_uniform_norm_gap}
     \end{align}
 \end{lemma}
@@ -109,21 +109,22 @@ one-species specialization by an explicit operator decomposition.
     $\langle v,\mathcal N v\rangle\ge\|v\|^2$, and
     (\ref{eq:pvbs_periodic_number}) then gives
     $\langle v,H_\mu v\rangle\ge c(\mu)\|v\|^2$. Since the vacuum lies in
-    $\ker H_\mu$, every $v\perp\ker H_\mu$ has zero vacuum amplitude, and the
-    Cauchy--Schwarz inequality yields the norm bound.
+    $\ker H_\mu$, zero is an eigenvalue and every $v\perp\ker H_\mu$ has zero
+    vacuum amplitude. An eigenvector of a nonzero eigenvalue is orthogonal to
+    the kernel, so its eigenvalue is at least $c(\mu)$.
 \end{proof}
 
 \begin{lemma}[Attainment and exact noncritical finite-ring gap]
     \label{thm:pvbs_exact_periodic_gap}
-    \lean{MPSTensor.parentHamiltonianES_pvbs_uniformParticle,
-        MPSTensor.parentHamiltonianES_pvbs_gap_le,
-        MPSTensor.parentHamiltonianES_pvbs_gap_exact}
+    \lean{MPSTensor.toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_uniformParticle,
+        MPSTensor.hamiltonian_parentRingInteraction_pvbs_gap_le,
+        MPSTensor.hamiltonian_parentRingInteraction_pvbs_gap_exact}
     \leanok
     \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
     The uniform one-particle vector $W_N=\sum_j|0\cdots1_j\cdots0\rangle$
     satisfies $H_\mu W_N=c(\mu)W_N$ for every real $\mu$ and $N\ge2$.
     For $\mu>0$ and $\mu\ne1$, $c(\mu)>0$ is the largest possible
-    norm-gap constant in (\ref{eq:pvbs_uniform_norm_gap}), hence the exact
+    constant in (\ref{eq:pvbs_uniform_norm_gap}), hence the exact
     gap above the unique periodic vacuum.
     At $\mu=1$, the W vector is instead another zero-energy state;
     this does not assert that the finite-ring gap above the enlarged

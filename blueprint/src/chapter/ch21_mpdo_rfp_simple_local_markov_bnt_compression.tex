@@ -578,7 +578,6 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{definition}[Sitewise physical action and BNT coefficients]
     \label{def:mpdo_sitewise_physical_matrix}
-    \lean{Matrix.tensorPower}
     \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor}
     \leanok
     For a one-site matrix $V$, write $V^{\otimes N}$ in the configuration
@@ -594,8 +593,7 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{lemma}[Products and adjoints of tensor powers]
     \label{lem:mpdo_tensor_power_laws}
-    \lean{Matrix.tensorPower_mul, Matrix.conjTranspose_tensorPower,
-        Matrix.tensorPower_one}
+    \lean{Matrix.piKronecker_mul, Matrix.piKronecker_one}
     \leanok
     \uses{def:mpdo_sitewise_physical_matrix}
     Let $I,J,K$ be finite sets, $X\in\C^{I\times J}$,

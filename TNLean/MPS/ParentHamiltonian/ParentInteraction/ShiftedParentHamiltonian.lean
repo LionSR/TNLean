@@ -38,12 +38,25 @@ theorem isPositive_conj_of_add_eq_smul_parentHamiltonian
       (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap).IsPositive := by
   have h' : (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ
       (H + c • LinearMap.id) ∘ₗ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap =
-      s • parentHamiltonianES A L N := by
+      s • ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ
+        parentHamiltonian A L N ∘ₗ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap) := by
     rw [h]
     ext v
-    simp [parentHamiltonianES]
+    simp
   rw [h']
-  exact (parentHamiltonianES_isPositive A L N).smul_of_nonneg hs
+  rcases Nat.eq_zero_or_pos N with rfl | hN
+  · rw [parentHamiltonian_eq_sum_localTerm, Finset.univ_eq_empty, Finset.sum_empty,
+      LinearMap.zero_comp, LinearMap.comp_zero, smul_zero]
+    exact LinearMap.isPositive_zero
+  · have : NeZero N := ⟨hN.ne'⟩
+    have hH : (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ
+        parentHamiltonian A L N ∘ₗ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap =
+        Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian := by
+      rw [parentHamiltonian_eq_toLin'_hamiltonian]
+      rfl
+    rw [hH]
+    exact (Matrix.isPositive_toEuclideanLin_iff.mpr
+      (posSemidef_hamiltonian_parentRingInteraction A L N)).smul_of_nonneg hs
 
 /-- If \(H+c=s\,H_{\mathrm{parent}}\) with \(s\ge0\), then every eigenvalue \(\mu\) of
 \(H\) satisfies \(-c\le\mu\) in the complex order. -/

@@ -53,16 +53,16 @@ theorem bondDim_pos_of_isSAL (M : MPOTensor d D) (hSAL : IsSAL M) :
 square in configuration coordinates. -/
 theorem tensorPower_two_eq_twoSiteSectorProjection
     (P : Matrix (Fin d) (Fin d) ℂ) :
-    Matrix.tensorPower 2 P = twoSiteSectorProjection P := by
+    (Matrix.piKronecker fun _ : Fin 2 ↦ P) = twoSiteSectorProjection P := by
   ext s t
-  simp [Matrix.tensorPower_apply, twoSiteSectorProjection,
+  simp [Matrix.piKronecker_apply, twoSiteSectorProjection,
     finTwoArrowEquiv, Matrix.reindex_apply]
 
 /-- The sitewise tensor square of an isometry has the corresponding tensor
 square of its range projection as its range projection. -/
 theorem tensorPower_two_mul_conjTranspose
     (V : Matrix (Fin d) (Fin e) ℂ) :
-    Matrix.tensorPower 2 V * (Matrix.tensorPower 2 V)ᴴ =
+    (Matrix.piKronecker fun _ : Fin 2 ↦ V) * (Matrix.piKronecker fun _ : Fin 2 ↦ V)ᴴ =
       twoSiteSectorProjection (V * Vᴴ) := by
   rw [tensorPower_mul_conjTranspose,
     tensorPower_two_eq_twoSiteSectorProjection]
@@ -139,7 +139,7 @@ noncomputable def liftedBond (F : PhysicalSupportRestrictionData P K)
     (B : Matrix (Fin 2 → Fin F.supportDim)
       (Fin 2 → Fin F.supportDim) ℂ) :
     Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ :=
-  singleKrausMap (Matrix.tensorPower 2 F.inclusion) B
+  singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion) B
 
 /-- Positivity of a restricted two-site bond is preserved by its inclusion
 into the ambient physical space. -/
@@ -147,15 +147,15 @@ theorem liftedBond_pos (F : PhysicalSupportRestrictionData P K)
     {B : Matrix (Fin 2 → Fin F.supportDim)
       (Fin 2 → Fin F.supportDim) ℂ} (hB : B.PosSemidef) :
     (F.liftedBond B).PosSemidef :=
-  hB.mul_mul_conjTranspose_same (Matrix.tensorPower 2 F.inclusion)
+  hB.mul_mul_conjTranspose_same (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion)
 
 /-- The tensor square of the support inclusion has the prescribed two-site
 sector as its range. -/
 theorem twoSiteSectorProjection_eq_lifted_range
     (F : PhysicalSupportRestrictionData P K) :
     twoSiteSectorProjection P =
-      Matrix.tensorPower 2 F.inclusion *
-        (Matrix.tensorPower 2 F.inclusion)ᴴ := by
+      (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion) *
+        (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion)ᴴ := by
   rw [tensorPower_two_mul_conjTranspose, F.inclusion_range]
 
 /-- A lifted bond acts entirely within the tensor square of the prescribed
@@ -171,13 +171,13 @@ theorem liftedBond_supported (F : PhysicalSupportRestrictionData P K)
   rw [F.twoSiteSectorProjection_eq_lifted_range]
   simp only [liftedBond, singleKrausMap_apply, Matrix.mul_assoc]
   rw [← Matrix.mul_assoc
-      (Matrix.tensorPower 2 F.inclusion)ᴴ
-      (Matrix.tensorPower 2 F.inclusion),
+      (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion)ᴴ
+      (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion),
     tensorPower_isometry F.inclusion F.inclusion_isometry 2,
     Matrix.one_mul]
   rw [← Matrix.mul_assoc
-      (Matrix.tensorPower 2 F.inclusion)ᴴ
-      (Matrix.tensorPower 2 F.inclusion),
+      (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion)ᴴ
+      (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion),
     tensorPower_isometry F.inclusion F.inclusion_isometry 2,
     Matrix.one_mul]
 

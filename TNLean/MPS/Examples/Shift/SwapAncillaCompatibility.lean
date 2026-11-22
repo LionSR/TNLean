@@ -42,16 +42,16 @@ private theorem shiftSwap_sandwich_apply (d : ℕ)
 private theorem chainShiftSwap_sandwich_apply (d N : ℕ)
     (X : Matrix (Fin N → Fin (d * d)) (Fin N → Fin (d * d)) ℂ)
     (σ τ : Fin N → Fin (d * d)) :
-    (Matrix.tensorPower N (shiftPhysicalSwap d) * X *
-      Matrix.tensorPower N (shiftPhysicalSwap d)) σ τ =
+    ((Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) * X *
+      (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d))) σ τ =
         X (fun n => bondPairSwap (σ n)) (fun n => bondPairSwap (τ n)) := by
   classical
   let e : Equiv.Perm (Fin N → Fin (d * d)) :=
     Equiv.piCongrRight (fun _ => bondPairSwapEquiv d)
-  have hC : Matrix.tensorPower N (shiftPhysicalSwap d) =
+  have hC : (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) =
       Equiv.Perm.permMatrix ℂ e := by
     ext s t
-    simp only [Matrix.tensorPower_apply, shiftPhysicalSwap, Equiv.Perm.permMatrix,
+    simp only [Matrix.piKronecker_apply, shiftPhysicalSwap, Equiv.Perm.permMatrix,
       PEquiv.toMatrix_apply]
     rw [Fintype.prod_boole]
     simp [e, funext_iff]
@@ -77,8 +77,8 @@ theorem symmetryFamily_at_ne_shiftSwapDagger
     (S.at (d * d)).action (tensorPhysicalIdOperator P d) at hcompat
   rw [hS] at hcompat
   change tensorPhysicalIdOperator Y d =
-    Matrix.tensorPower 1 (shiftPhysicalSwap d) * (tensorPhysicalIdOperator P d)ᴴ *
-      Matrix.tensorPower 1 (shiftPhysicalSwap d) at hcompat
+    (Matrix.piKronecker fun _ : Fin 1 ↦ (shiftPhysicalSwap d)) * (tensorPhysicalIdOperator P d)ᴴ *
+      (Matrix.piKronecker fun _ : Fin 1 ↦ (shiftPhysicalSwap d)) at hcompat
   have hzero := congrFun (congrFun hcompat (fun _ => finProdFinEquiv (a, a)))
     (fun _ => finProdFinEquiv (a, a))
   have hone := congrFun (congrFun hcompat (fun _ => finProdFinEquiv (a, b)))
@@ -106,8 +106,8 @@ theorem symmetryFamily_at_ne_shiftSwapTranspose
     (S.at (d * d)).action (tensorPhysicalIdOperator P d) at hcompat
   rw [hS] at hcompat
   change tensorPhysicalIdOperator Y d =
-    Matrix.tensorPower 1 (shiftPhysicalSwap d) * (tensorPhysicalIdOperator P d)ᵀ *
-      Matrix.tensorPower 1 (shiftPhysicalSwap d) at hcompat
+    (Matrix.piKronecker fun _ : Fin 1 ↦ (shiftPhysicalSwap d)) * (tensorPhysicalIdOperator P d)ᵀ *
+      (Matrix.piKronecker fun _ : Fin 1 ↦ (shiftPhysicalSwap d)) at hcompat
   have hzero := congrFun (congrFun hcompat (fun _ => finProdFinEquiv (a, a)))
     (fun _ => finProdFinEquiv (a, a))
   have hone := congrFun (congrFun hcompat (fun _ => finProdFinEquiv (a, b)))

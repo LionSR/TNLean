@@ -145,7 +145,7 @@ noncomputable def isingCompression :
     (fun s a => isingWeightsZ s • isingSigmaZ (Fin.divNat (m := 10) (n := 10) a)
       (Fin.modNat (m := 10) (n := 10) a))
     (fun s a => by
-      rw [complexOfRing_smul, zsqrt2ToComplex_isingWeightsZ]
+      rw [Matrix.complexOfRing_smul, zsqrt2ToComplex_isingWeightsZ]
       rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 

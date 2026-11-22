@@ -255,11 +255,11 @@ theorem physicalBondProductParentHamiltonian_commute_of_bond_action
     (hS : S ∈ Matrix.unitaryGroup (Fin (D * D)) ℂ)
     (hη : S *ᵥ η = η) (hN : 1 ≤ N)
     (hT : (incomingBondPerm D N).permMatrix ℂ *
-      Matrix.rectKronecker (fun _ : Fin N => S) *
+      Matrix.piKronecker (fun _ : Fin N => S) *
       ((incomingBondPerm D N).permMatrix ℂ)ᴴ = T) :
     Commute T (physicalBondProductParentHamiltonian η hN) := by
   let P := (incomingBondPerm D N).permMatrix ℂ
-  let A := Matrix.rectKronecker (fun _ : Fin N => S)
+  let A := Matrix.piKronecker (fun _ : Fin N => S)
   let H := bondProductParentHamiltonian η hN
   have hP : Pᴴ * P = 1 :=
     (Matrix.mem_unitaryGroup_iff').mp (incomingBondPerm_mem_unitaryGroup D N)
@@ -293,7 +293,7 @@ theorem normalizedPhysicalBondInterpolation_parent_commute_onSite
       Matrix.unitaryGroup _ ℂ)
     (g : G) (γ : ℝ) (hN : 1 ≤ N) :
     Commute
-      (Matrix.finKronecker (fun _ : Fin N =>
+      (Matrix.piKronecker (fun _ : Fin N =>
         sptFixedPointAction (ρ₀.directSum ρ₁) 1 g))
       (physicalBondProductParentHamiltonian
         (normalizedBondInterpolationVector D₀ D₁ γ) hN) := by
@@ -326,10 +326,10 @@ theorem normalizedPhysicalBondInterpolation_parent_commute_onSite
   apply physicalBondProductParentHamiltonian_commute_of_bond_action
     (normalizedBondInterpolationVector D₀ D₁ γ) S _ hS hfix hN
   change (incomingBondPerm (D₀ + D₁) N).permMatrix ℂ *
-      Matrix.finKronecker (fun _ : Fin N => S) *
+      Matrix.piKronecker (fun _ : Fin N => S) *
       ((incomingBondPerm (D₀ + D₁) N).permMatrix ℂ)ᴴ = _
-  simpa only [S, X, Y, Matrix.rectKronecker_apply,
-    Matrix.finKronecker_apply] using
+  simpa only [S, X, Y, Matrix.piKronecker_apply,
+    Matrix.piKronecker_apply] using
     incomingBondPerm_conj_sptFixedPointAction ρ g N
 
 end MPSTensor

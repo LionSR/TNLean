@@ -1,30 +1,25 @@
-\begin{definition}[Parent ground space under the canonical $\ell^2$ identification]
-    \label{def:parent_ground_space_es}
-    \lean{MPSTensor.parentHamiltonianGroundSpaceES}
-    \leanok
-    \uses{def:parent_hamiltonian, def:nsite_space_parent}
-    Denote by $\mathcal G_{N,L}^{\mathrm{ES}}(A)$ the parent ground space after
-    identifying the coefficient space with the Hilbert space
-    $\ell^2(\{0,\ldots,d-1\}^N)$.
-\end{definition}
-
 \begin{definition}[Parent Hamiltonian under the canonical $\ell^2$ identification]
     \label{def:parent_hamiltonian_es}
-    \lean{MPSTensor.parentHamiltonianES}
+    \lean{MPSTensor.parentRingInteraction}
     \leanok
     \uses{def:parent_hamiltonian, def:nsite_space_parent}
-    Denote by $H_{N,L}^{\mathrm{ES}}(A)$ the conjugate of $H_N(A,L)$ by the
-    coordinate identification between the coefficient space and
-    $\ell^2(\{0,\ldots,d-1\}^N)$.
+    For $N\ge1$, the parent interaction on the ring of $N$ sites assigns to
+    each site $i$ the matrix of the local parent interaction placed on the
+    cyclic window of $L$ sites starting at $i$, and zero when $L>N$. Denote
+    by $H_{N,L}^{\mathrm{ES}}(A)$ the operator on
+    $\ell^2(\{0,\ldots,d-1\}^N)$ of the sum of these matrices; it is the
+    conjugate of $H_N(A,L)$ by the coordinate identification between the
+    coefficient space and $\ell^2(\{0,\ldots,d-1\}^N)$.
 \end{definition}
 
 \begin{lemma}[Kernel under the canonical $\ell^2$ identification]
-    \label{thm:parent_ground_space_es_kernel}
-    \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES}
+    \label{thm:parent_ring_ground_space_kernel}
+    \lean{MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_ker}
     \leanok
-    Under the canonical $\ell^2$ identification of the $N$-site state space, the
-    parent ground space is exactly the kernel of the corresponding
-    parent Hamiltonian.
+    For $N\ge1$, the ground space at energy $0$ of the Hamiltonian of the
+    parent interaction on the ring is the image of the kernel of
+    $H_N(A,L)$ under the canonical $\ell^2$ identification of the
+    $N$-site state space.
 \end{lemma}
 
 \begin{proof}
@@ -35,22 +30,10 @@
     identification.
 \end{proof}
 
-\begin{lemma}[Membership criterion under the canonical $\ell^2$ identification]
-    \label{lem:mem_parent_ground_space_es}
-    \lean{MPSTensor.mem_parentHamiltonianGroundSpaceES_iff}
-    \leanok
-    \uses{thm:parent_ground_space_es_kernel}
-    A vector belongs to $\mathcal G_{N,L}^{\mathrm{ES}}(A)$ exactly when the
-    parent Hamiltonian annihilates it.
-\end{lemma}
-
 \begin{remark}[Local projectors under the canonical $\ell^2$ identification]
     \label{rem:euclidean_local_projector_ingredients}
-    \lean{MPSTensor.parentInteractionES}
     \lean{MPSTensor.cyclicRestrictES}
-    \lean{MPSTensor.localTermES}
-    \lean{MPSTensor.localTermES_apply}
-    \lean{MPSTensor.localTermESSummand}
+    \lean{MPSTensor.toEuclideanLin_parentRingInteraction_term_apply}
     \leanok
     \uses{def:ground_space_es, rem:cyclic_window_operators}
     Let $P_L^{\mathrm{ES}}(A)$ denote the orthogonal projector onto
@@ -59,50 +42,34 @@
     $\tau$, the map $R_{i,\tau}$ restricts an $N$-site vector to that
     length-$L$ cyclic window with the outside configuration fixed by $\tau$.
     The local term $h_{i,\mathrm{ES}}$ is the corresponding $N$-site local
-    projector, and
-    $R_{i,\tau}^{\dagger}P_L^{\mathrm{ES}}(A)R_{i,\tau}$ is the basic positive
-    summand in its cyclic-averaging formula.
+    projector.
 \end{remark}
-
-\begin{lemma}[Positivity of the Hilbert-space local summands]
-    \label{lem:euclidean_local_projector_positive}
-    \lean{MPSTensor.parentInteractionES_isPositive}
-    \lean{MPSTensor.localTermESSummand_isPositive}
-    \lean{MPSTensor.localTermESSummand_sum_isPositive}
-    \leanok
-    \uses{rem:euclidean_local_projector_ingredients}
-    The Hilbert-space local projector $P_L^{\mathrm{ES}}(A)$ is positive.
-    Consequently, every summand
-    $R_{i,\tau}^{\dagger}P_L^{\mathrm{ES}}(A)R_{i,\tau}$ is positive, and so is
-    the finite sum over $\tau$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Orthogonal projectors are positive. Conjugation by $R_{i,\tau}$ preserves
-    positivity, and finite sums of positive operators remain positive.
-\end{proof}
 
 \begin{lemma}[Cyclic averaging for the Hilbert-space local terms]
     \label{lem:local_term_es_average}
-    \lean{MPSTensor.parentHamiltonianES_eq_sum_localTermES}
-    \lean{MPSTensor.localTermES_eq_average_localTermESSummand}
+    \lean{MPSTensor.inv_smul_sum_adjoint_comp_cyclicRestrictES_apply}
+    \lean{MPSTensor.toEuclideanLin_translationInvariant_term_eq_inv_smul_sum}
     \leanok
-    \uses{rem:euclidean_local_projector_ingredients, lem:euclidean_local_projector_positive}
-    The Hilbert-space parent Hamiltonian is the sum of the Hilbert-space local
-    terms, $H_{N,\mathrm{ES}}=\sum_i h_{i,\mathrm{ES}}$, and each local term
-    admits the exact cyclic-averaging formula
+    \uses{rem:euclidean_local_projector_ingredients, def:canonical_parent_interaction_matrix}
+    Let $L\le N$ and let
+    $T$ be an operator on the $L$-site Hilbert space. For every $N$-site vector
+    $v$ and every configuration $\sigma$, the cyclic average
+    $d^{-L}\sum_{\tau}R_{i,\tau}^{\dagger}TR_{i,\tau}v$ has the coefficient of
+    $TR_{i,\sigma}v$ at the restriction of $\sigma$ to the window as its
+    coefficient at $\sigma$. Consequently, for every matrix $h$ on $L$ sites,
+    its translate $h_i$ to the cyclic window starting at $i$ on the ring of
+    $N$ sites admits the exact cyclic-averaging formula
     \begin{align}
-        h_{i,\mathrm{ES}}
+        h_i
          & =d^{-L}\sum_{\tau}
-        R_{i,\tau}^{\dagger}P_L^{\mathrm{ES}}(A)R_{i,\tau}.
+        R_{i,\tau}^{\dagger}hR_{i,\tau}.
         \label{eq:ph_cyclic_averaging}
     \end{align}
 \end{lemma}
 
 \begin{proof}
     \leanok
-    Unfolding the Hilbert-space local term and comparing it
+    Comparing the translate
     configuration-by-configuration with the cyclic restrictions gives the
     formula, where the $d^{-L}$ factor compensates for the $d^L$ choices of
     the window coordinates in the ambient configuration parameter $\tau$.
@@ -110,8 +77,8 @@
 
 \begin{lemma}[Positivity of the Hilbert-space Hamiltonian]
     \label{lem:transported_es_positive}
-    \lean{MPSTensor.localTermES_isPositive}
-    \lean{MPSTensor.parentHamiltonianES_isPositive}
+    \lean{MPSTensor.posSemidef_parentRingInteraction_term}
+    \lean{MPSTensor.posSemidef_hamiltonian_parentRingInteraction}
     \leanok
     \uses{lem:local_term_es_average}
     Each Hilbert-space local term $h_{i,\mathrm{ES}}$ is positive, hence the full
@@ -120,7 +87,8 @@
 
 \begin{proof}
     \leanok
-    By the averaging formula (\ref{eq:ph_cyclic_averaging}),
+    By the cyclic average of Lemma~\ref{lem:local_term_es_average} with
+    $T=P_L^{\mathrm{ES}}(A)$,
     $h_{i,\mathrm{ES}}$ is a non-negative scalar multiple of a finite sum of
     positive conjugates of $P_L^{\mathrm{ES}}(A)$, hence is itself positive;
     summing over $i$ yields positivity of $H_{N,\mathrm{ES}}$.
@@ -128,8 +96,8 @@
 
 \begin{lemma}[Hilbert-space local terms are symmetric projections]
     \label{lem:transported_es_local_projections}
-    \lean{MPSTensor.parentInteractionES_isSymmetricProjection}
-    \lean{MPSTensor.localTermES_isSymmetricProjection}
+    \lean{MPSTensor.isSymmetricProjection_toEuclideanLin_toMatrix'_parentInteraction}
+    \lean{MPSTensor.isSymmetricProjection_toEuclideanLin_parentRingInteraction_term}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients, lem:transported_es_positive}
     The Hilbert-space local projector $P_L^{\mathrm{ES}}(A)$ is a symmetric
@@ -152,7 +120,7 @@
 
 \begin{lemma}[Kernel of the Hilbert-space parent interaction]
     \label{lem:parent_interaction_es_kernel}
-    \lean{MPSTensor.parentInteractionES_apply_eq_zero_iff}
+    \lean{MPSTensor.toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff}
     \leanok
     \uses{def:ground_space_es, rem:euclidean_local_projector_ingredients}
     The Hilbert-space local interaction $P_L^{\mathrm{ES}}(A)$ annihilates
@@ -170,8 +138,8 @@
 
 \begin{lemma}[Local-term kernel via cyclic restrictions]
     \label{lem:local_term_es_kernel_restrictions}
-    \lean{MPSTensor.localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES}
-    \lean{MPSTensor.cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero}
+    \lean{MPSTensor.toEuclideanLin_parentRingInteraction_term_eq_zero_iff}
+    \lean{MPSTensor.cyclicRestrictES_mem_groundSpaceES_of_parentRingInteraction_term_eq_zero}
     \leanok
     \uses{lem:parent_interaction_es_kernel, rem:euclidean_local_projector_ingredients}
     For $L\le N$, a Hilbert-space local term $h_{i,\mathrm{ES}}$ annihilates a
@@ -231,10 +199,10 @@
 
 \begin{lemma}[Adjacent three-site kernels and excitation projections]
     \label{thm:adjacent_two_site_local_terms_open_chain}
-    \lean{MPSTensor.ker_localTermES_two_three_zero,
-        MPSTensor.ker_localTermES_two_three_one,
-        MPSTensor.openChainLeftGroundSpaceES_orthogonal_starProjection_eq_localTermES,
-        MPSTensor.openChainTailGroundSpaceES_orthogonal_starProjection_eq_localTermES}
+    \lean{MPSTensor.ker_toEuclideanLin_parentRingInteraction_term_two_three_zero,
+        MPSTensor.ker_toEuclideanLin_parentRingInteraction_term_two_three_one,
+        MPSTensor.openChainLeftGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term,
+        MPSTensor.openChainTailGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term}
     \leanok
     \uses{def:open_chain_ground_subspaces_es, rem:euclidean_local_projector_ingredients}
     For a tensor $B$, let $h_0$ and $h_1$ be the two translated length-two parent
@@ -317,28 +285,18 @@
     $H_N(A,L)\psi=\sum_i h_i(A,L)\psi=0$.
 \end{proof}
 
-\begin{definition}[Hilbert-space cyclic constraint space]
-    \label{def:chain_ground_space_es}
-    \lean{MPSTensor.chainGroundSpaceES}
-    \leanok
-    \uses{def:chain_ground_space}
-    The Hilbert-space cyclic constraint space is the image of
-    $G_L^{(N)}(A)$ by the canonical $\ell^2$ identification:
-    $G_{L,\mathrm{ES}}^{(N)}(A)=e_N^{-1}G_L^{(N)}(A)$.
-\end{definition}
-
 \begin{lemma}[The finite-volume kernel is the cyclic constraint space]
     \label{thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     \lean{MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace}
-    \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_chainGroundSpaceES}
+    \lean{MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_chainGroundSpace}
+    \lean{MPSTensor.zeroSpace_parentRingInteraction_eq_map_chainGroundSpace}
     \leanok
-    \uses{def:parent_hamiltonian, def:parent_hamiltonian_es, def:chain_ground_space, thm:parent_hamiltonian_kernel_le_chain_ground_space, lem:chain_ground_space_le_parent_hamiltonian_kernel, def:chain_ground_space_es}
+    \uses{def:parent_hamiltonian, def:parent_hamiltonian_es, def:chain_ground_space, thm:parent_hamiltonian_kernel_le_chain_ground_space, lem:chain_ground_space_le_parent_hamiltonian_kernel}
     Assume $N>0$ and $L\le N$. Then
     $\ker H_N(A,L)=G_L^{(N)}(A)$. Equivalently, after the canonical
-    Hilbert-space identification,
-    $\mathcal K_N^{\mathrm{ES}}(A,L)=e_N^{-1}G_L^{(N)}(A)$, where
-    $\mathcal K_N^{\mathrm{ES}}(A,L)$ is the zero-energy space of
-    $H_{N,L}^{\mathrm{ES}}(A)$.
+    Hilbert-space identification $e_N$, the ground space at energy $0$ of the
+    parent Hamiltonian on the ring is $e_N^{-1}G_L^{(N)}(A)$, and so is the
+    space of vectors annihilated by every translated parent interaction.
 \end{lemma}
 
 \begin{proof}
@@ -353,9 +311,9 @@
 
 \begin{lemma}[Intersection property for two adjacent local kernels]
     \label{thm:adjacent_local_kernels_ground_space_es}
-    \lean{MPSTensor.mem_groundSpaceES_succ_of_adjacent_localTermES_eq_zero}
-    \lean{MPSTensor.adjacent_localTermES_eq_zero_of_mem_groundSpaceES_succ}
-    \lean{MPSTensor.adjacent_localTermES_eq_zero_iff_mem_groundSpaceES_succ}
+    \lean{MPSTensor.mem_groundSpaceES_succ_of_parentRingInteraction_term_zero_one_eq_zero}
+    \lean{MPSTensor.parentRingInteraction_term_zero_one_eq_zero_of_mem_groundSpaceES_succ}
+    \lean{MPSTensor.parentRingInteraction_term_zero_one_eq_zero_iff_mem_groundSpaceES_succ}
     \leanok
     \uses{thm:ground_space_intersection, lem:local_term_es_kernel_restrictions, lem:mem_ground_space_es}
     If $A$ is injective and $L\ge2$, then on an $(L+1)$-site chain the kernels
@@ -385,8 +343,8 @@
     \lean{MPSTensor.CyclicWindowsDisjoint}
     \lean{MPSTensor.CyclicWindowsDisjoint.symm}
     \lean{MPSTensor.localTerm_commute_of_cyclic_windows_disjoint}
-    \lean{MPSTensor.localTermES_commute_of_cyclic_windows_disjoint}
-    \lean{MPSTensor.localTermES_re_inner_nonneg_of_cyclic_windows_disjoint}
+    \lean{MPSTensor.commute_parentRingInteraction_term_of_cyclic_windows_disjoint}
+    \lean{MPSTensor.re_inner_parentRingInteraction_term_nonneg_of_cyclic_windows_disjoint}
     \leanok
     \uses{lem:transported_es_local_projections, rem:projection_geometry_rowsum_identities}
     Let $L\le N$ and let $h_{i,\mathrm{ES}},h_{j,\mathrm{ES}}$ be
@@ -449,12 +407,12 @@
 
 \begin{lemma}[Parent-Hamiltonian quadratic-form reduction]
     \label{lem:parent_hamiltonian_es_quadratic_reduction}
-    \lean{MPSTensor.parentHamiltonianES_norm_bound_of_quadratic_form}
-    \lean{MPSTensor.parentHamiltonianES_gap_bound_of_quadratic_form}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_of_quadratic_form}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_quadratic_form}
     \leanok
-    \uses{lem:transported_es_positive, thm:parent_ground_space_es_kernel, lem:quadratic_form_to_norm_bound}
+    \uses{lem:transported_es_positive, thm:parent_ring_ground_space_kernel, lem:quadratic_form_to_norm_bound}
     Let $H_{N,L}^{\mathrm{ES}}(A)$ be the Hilbert-space representative of the
-    parent Hamiltonian. If a constant $\gamma>0$ satisfies the uniform
+    parent Hamiltonian. If a constant $\gamma>0$ satisfies the
     quadratic-form estimate
     \begin{align}
         \gamma\re\langle H_{N,L}^{\mathrm{ES}}(A)v,v\rangle
@@ -463,19 +421,20 @@
         H_{N,L}^{\mathrm{ES}}(A)v\rangle
         \label{eq:ph_uniform_quadratic_form}
     \end{align}
-    for every $N\ge2L$ and every vector $v$, then
-    $\gamma\|v\|\le\|H_{N,L}^{\mathrm{ES}}(A)v\|$ for every
-    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$. In particular, with
-    $L>1$ and $\gamma=1/(4L)$, the explicit gap-bound conclusion follows once
-    this same quadratic-form estimate (\ref{eq:ph_uniform_quadratic_form}) is
-    given.
+    for every vector $v$ at one chain length $N\geq1$, then every nonzero
+    eigenvalue of $H_{N,L}^{\mathrm{ES}}(A)$ is at least $\gamma$. In
+    particular, if $L>1$ and the estimate
+    (\ref{eq:ph_uniform_quadratic_form}) holds with $\gamma=1/(4L)$ for
+    every $N\ge2L$ and every vector $v$, then $1/(4L)>0$ and every nonzero
+    eigenvalue of $H_{N,L}^{\mathrm{ES}}(A)$ is at least $1/(4L)$ for every
+    $N\ge2L$.
 \end{lemma}
 
 \begin{proof}
     \leanok
     The Hilbert-space Hamiltonian is positive by
     Lemma~\ref{lem:transported_es_positive}, and its Hilbert-space ground
-    space is its kernel by Lemma~\ref{thm:parent_ground_space_es_kernel}.
+    space is its kernel by Lemma~\ref{thm:parent_ring_ground_space_kernel}.
     Therefore the abstract spectral-theorem conversion of
     Lemma~\ref{lem:quadratic_form_to_norm_bound} applies directly. The
     explicit constant is positive because $L>1$ implies $4L>0$.

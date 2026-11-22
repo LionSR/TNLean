@@ -310,7 +310,8 @@ def mixedEndpointNormalizedEdgeConstraint
       EuclideanSpace ℂ (mixedEndpointEdgeCfg D₀ D₁ k) :=
   match k with
   | .first => endpointFirstEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁)
-  | .interior => parentInteractionES A₀ 2
+  | .interior => (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A₀ 2)) :
+      EuclideanSpace ℂ (Cfg (D₀ * D₀) 2) →ₗ[ℂ] EuclideanSpace ℂ (Cfg (D₀ * D₀) 2))
   | .last => endpointLastEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁)
 
 /-- The concrete normalized local constraint with all chain spectators. -/
@@ -443,12 +444,14 @@ theorem mem_ker_mixedEndpointActiveLocalInteraction_iff_normalized
       rw [mixedEndpointActiveLocalInteraction_eq_edgePlacement]
       change mixedEndpointActiveEdgePlacement (.interior i)
           (mixedEndpointEdgeConstraintES A₀ A₁ .interior) =
-        mixedEndpointActiveEdgePlacement (.interior i) (parentInteractionES A₀ 2)
+        mixedEndpointActiveEdgePlacement (.interior i)
+          (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A₀ 2)) :
+            EuclideanSpace ℂ (Cfg (D₀ * D₀) 2) →ₗ[ℂ] EuclideanSpace ℂ (Cfg (D₀ * D₀) 2))
       rw [← mixedEndpointEdge_compression_eq_constraint,
-        mixedEndpointInteriorEdge_compression_eq_parentInteractionES]
+        mixedEndpointInteriorEdge_compression_eq_toEuclideanLin_parentInteraction]
     rw [heq]
     have hcomm := mixedEndpointActiveInteriorEdgePlacement_commute_boundaryMaps
-      (D₁ := D₁) i (parentInteractionES A₀ 2) F
+      (D₁ := D₁) i (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A₀ 2))) F
     exact ((mem_ker_commuting_map_iff _ _ hcomm.1 hFirst _).trans
       (mem_ker_commuting_map_iff _ _ hcomm.2 hLast v)).symm
 
@@ -499,7 +502,7 @@ theorem mixedEndpointActiveNormalizedLocalInteraction_isSymmetricProjection
   cases p with
   | first => exact endpointFirstEdgeCoreConstraintES_isSymmetricProjection A₀ _
   | last => exact endpointLastEdgeCoreConstraintES_isSymmetricProjection A₀ _
-  | interior _ => exact parentInteractionES_isSymmetricProjection A₀ 2
+  | interior _ => exact isSymmetricProjection_toEuclideanLin_toMatrix'_parentInteraction A₀ 2
 
 private theorem symmetricProjections_eq_of_ker_eq
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]

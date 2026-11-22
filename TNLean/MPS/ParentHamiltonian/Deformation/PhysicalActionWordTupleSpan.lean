@@ -19,7 +19,7 @@ of the blocks does not replace its hypothesis.
 Source: arXiv:1010.3732, the isometric deformation and Appendix A.
 -/
 
-open scoped Matrix BigOperators Topology
+open scoped Matrix BigOperators Topology ComplexOrder
 
 namespace MPSTensor
 
@@ -77,21 +77,20 @@ theorem continuous_rotatePhysical_family
 fixed simultaneously injective block tensor has a common periodic gap.
 For a jointly one-site injective tensor, this applies directly at range two.
 Source: arXiv:1010.3732, Appendix A, and the isometric path at lines 589--594. -/
-theorem exists_uniform_parentHamiltonianES_gap_of_compact_physicalAction
+theorem exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_physicalAction
     {X : Type*} [TopologicalSpace X] [NeZero d] [∀ j, NeZero (dim j)]
     (A : (j : Fin r) → MPSTensor d (dim j)) {S R : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R)
     (M : X → Matrix (Fin d) (Fin d) ℂ) (hM : Continuous M)
     (hUnit : ∀ x, IsUnit (M x)) (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0)
     {K : Set X} (hK : IsCompact K) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, R ≤ N →
-      ∀ v ∈ (LinearMap.ker (parentHamiltonianES
-        (toTensorFromBlocks (d := d) (μ := μ x)
-          (fun j => rotatePhysical (M x) (A j))) R N))ᗮ,
-        δ * ‖v‖ ≤ ‖parentHamiltonianES
-          (toTensorFromBlocks (d := d) (μ := μ x)
-            (fun j => rotatePhysical (M x) (A j))) R N v‖ := by
-  exact exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths
+    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ (N : ℕ) (hN : R ≤ N), haveI : NeZero N := ⟨by omega⟩;
+      ∀ z : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin
+          (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ x)
+            (fun j => rotatePhysical (M x) (A j))) R N).hamiltonian) z →
+          z = 0 ∨ (δ : ℂ) ≤ z := by
+  exact exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_all_lengths
     μ (fun x j => rotatePhysical (M x) (A j)) hμ
     (fun j => continuous_rotatePhysical_family M (fun _ => A j) hM continuous_const)
     hS (fun x => (wordTupleSpanTop_rotatePhysical_iff (M x) (hUnit x) A S).2 hSpan)

@@ -14,13 +14,13 @@ vector to a scalar multiple of the actual open-chain state. The state itself has
 unit norm, derived from the sitewise canonical equations and singleton endpoints.
 
 **Local fix (chains with an adjacent pair):** the chain length is at least two in
-`exists_smul_obcScalarState_of_obcParentHamiltonian_apply_eq_zero`,
-`ker_obcParentHamiltonian_eq_span` and `finrank_ker_obcParentHamiltonian_eq_one`,
-the source's setup of a Hamiltonian summed over adjacent pairs; a one-site chain
-has no interaction term. The statements concern the ground-state line, as the
-source's normalization step does. The physical alphabet is common to the sites
-throughout this module; these are the special cases from which the theorem for
-arbitrary physical dimensions is derived. Documented in
+`exists_smul_obcScalarState_of_hamiltonian_obcParentInteraction_apply_eq_zero`,
+`ker_hamiltonian_obcParentInteraction_eq_span` and
+`finrank_ker_hamiltonian_obcParentInteraction_eq_one`, the source's setup of a Hamiltonian
+summed over adjacent pairs; a one-site chain has no interaction term. The statements concern
+the ground-state line, as the source's normalization step does. The physical alphabet is
+common to the sites throughout this module; these are the special cases from which the theorem
+for arbitrary physical dimensions is derived. Documented in
 `docs/paper-gaps/pgvwc07_open_parent_domain.tex`.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 9 and proof,
@@ -81,18 +81,20 @@ theorem norm_obcScalarState_eq_one (b : ℕ → ℕ)
 of the represented state. Pair sections are derived from that kernel equation.
 Source: PGVWC07, Theorem 9 proof, equation unique-OBC and scalar endpoints,
 lines 1212–1237. -/
-theorem exists_smul_obcScalarState_of_obcParentHamiltonian_apply_eq_zero (b : ℕ → ℕ)
+theorem exists_smul_obcScalarState_of_hamiltonian_obcParentInteraction_apply_eq_zero (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
     {N : ℕ} (hN : 2 ≤ N) (hleft : b 0 = 1) (hright : b N = 1)
     (hA : ∀ k < N, ∑ i, A k i * (A k i)ᴴ = (1 : Matrix (Fin (b k)) _ ℂ))
     (hC1 : ∀ k < N, Submodule.span ℂ (Set.range (A k)) = ⊤)
-    (ψ : EuclideanSpace ℂ (Fin N → Fin d)) (hzero : obcParentHamiltonian b A N ψ = 0) :
+    (ψ : EuclideanSpace ℂ (Fin N → Fin d))
+    (hzero : Matrix.toEuclideanLin (obcParentInteraction b A N).hamiltonian ψ = 0) :
     ∃ c : ℂ, ψ = c • obcScalarState b A N hleft hright := by
   classical
   let f : List (Fin d) → ℂ := Function.extend List.ofFn (fun w ↦ ψ w) 0
   have hf (w : Fin N → Fin d) : f (List.ofFn w) = ψ w :=
     List.ofFn_injective.extend_apply (fun w ↦ ψ w) 0 w
-  have hpair := obcParentHamiltonian_pair_sections_of_apply_eq_zero b A ψ f hf hzero
+  have hpair :=
+    pair_sections_of_hamiltonian_obcParentInteraction_apply_eq_zero b A ψ f hf hzero
   obtain ⟨c, hc⟩ := obc_scalar_reconstruction_of_adjacent_pair_sections
     b A hN hleft hright hA hC1 f hpair
   refine ⟨c, ?_⟩
@@ -120,46 +122,50 @@ theorem obcBoundaryState_one_eq_obcScalarState (b : ℕ → ℕ)
 /-- The actual canonical open-chain state has zero energy for its actual parent
 Hamiltonian. No local annihilation equation is supplied as a hypothesis.
 Source: PGVWC07, Theorem 9, lines 1195–1217. -/
-theorem obcParentHamiltonian_apply_obcScalarState (b : ℕ → ℕ)
+theorem hamiltonian_obcParentInteraction_apply_obcScalarState (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
     (N : ℕ) (hleft : b 0 = 1) (hright : b N = 1) :
-    obcParentHamiltonian b A N (obcScalarState b A N hleft hright) = 0 := by
+    Matrix.toEuclideanLin (obcParentInteraction b A N).hamiltonian
+      (obcScalarState b A N hleft hright) = 0 := by
   rw [← obcBoundaryState_one_eq_obcScalarState b A N hleft hright]
-  exact obcParentHamiltonian_apply_obcBoundaryState b A N _
+  exact hamiltonian_obcParentInteraction_apply_obcBoundaryState b A N _
 
 /-- The actual varying-bond open parent Hamiltonian has exactly the represented
 state line as its kernel, at every length with an adjacent pair. Sitewise C1,
 canonical row-isometry and singleton endpoints are the source's data; no kernel,
 local section, boundary reconstruction or ground-state supplier is assumed.
 Source: PGVWC07, Theorem 9 and proof, lines 1195–1237. -/
-theorem ker_obcParentHamiltonian_eq_span (b : ℕ → ℕ)
+theorem ker_hamiltonian_obcParentInteraction_eq_span (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
     {N : ℕ} (hN : 2 ≤ N) (hleft : b 0 = 1) (hright : b N = 1)
     (hA : ∀ k < N, ∑ i, A k i * (A k i)ᴴ = (1 : Matrix (Fin (b k)) _ ℂ))
     (hC1 : ∀ k < N, Submodule.span ℂ (Set.range (A k)) = ⊤) :
-    LinearMap.ker (obcParentHamiltonian b A N) =
+    LinearMap.ker (Matrix.toEuclideanLin (obcParentInteraction b A N).hamiltonian) =
       Submodule.span ℂ {obcScalarState b A N hleft hright} := by
   ext ψ
   constructor
   · intro hψ
-    obtain ⟨c, rfl⟩ := exists_smul_obcScalarState_of_obcParentHamiltonian_apply_eq_zero
+    obtain ⟨c, rfl⟩ := exists_smul_obcScalarState_of_hamiltonian_obcParentInteraction_apply_eq_zero
       b A hN hleft hright hA hC1 ψ hψ
     exact Submodule.smul_mem _ c (Submodule.mem_span_singleton_self _)
   · intro hψ
     obtain ⟨c, rfl⟩ := Submodule.mem_span_singleton.mp hψ
-    change obcParentHamiltonian b A N (c • obcScalarState b A N hleft hright) = 0
-    rw [map_smul, obcParentHamiltonian_apply_obcScalarState b A N hleft hright, smul_zero]
+    change Matrix.toEuclideanLin (obcParentInteraction b A N).hamiltonian
+      (c • obcScalarState b A N hleft hright) = 0
+    rw [map_smul, hamiltonian_obcParentInteraction_apply_obcScalarState b A N hleft hright,
+      smul_zero]
 
 /-- The actual varying-bond open parent has a one-dimensional ground kernel.
 Its spanning state is proved normalized from the original canonical equations.
 Source: PGVWC07, Theorem 9 and proof, lines 1195–1237. -/
-theorem finrank_ker_obcParentHamiltonian_eq_one (b : ℕ → ℕ)
+theorem finrank_ker_hamiltonian_obcParentInteraction_eq_one (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ)
     {N : ℕ} (hN : 2 ≤ N) (hleft : b 0 = 1) (hright : b N = 1)
     (hA : ∀ k < N, ∑ i, A k i * (A k i)ᴴ = (1 : Matrix (Fin (b k)) _ ℂ))
     (hC1 : ∀ k < N, Submodule.span ℂ (Set.range (A k)) = ⊤) :
-    Module.finrank ℂ (LinearMap.ker (obcParentHamiltonian b A N)) = 1 := by
-  rw [ker_obcParentHamiltonian_eq_span b A hN hleft hright hA hC1]
+    Module.finrank ℂ
+      (LinearMap.ker (Matrix.toEuclideanLin (obcParentInteraction b A N).hamiltonian)) = 1 := by
+  rw [ker_hamiltonian_obcParentInteraction_eq_span b A hN hleft hright hA hC1]
   apply finrank_span_singleton
   intro hzero
   have hnorm := norm_obcScalarState_eq_one b A N hleft hright hA

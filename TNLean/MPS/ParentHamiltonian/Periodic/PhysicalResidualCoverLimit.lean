@@ -84,7 +84,7 @@ Gram hypotheses. The gap is measured above the actual kernel, including
 short volumes. Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 Lemma commutation (ii). This is an auxiliary criterion with explicit
 algebraic, kernel, and aligned-gap assumptions. -/
-theorem exists_pos_openParentHamiltonianES_gap_of_aligned_gap_of_primitive_resolution
+theorem exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_gap_of_primitive_resolution
     [NeZero D] {ι : Type*} [Fintype ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
     (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
@@ -100,15 +100,17 @@ theorem exists_pos_openParentHamiltonianES_gap_of_aligned_gap_of_primitive_resol
       (V j * (V j)ᴴ) * Kraus.evalWord A (List.ofFn τ) : Matrix (Fin D) (Fin D) ℂ) = Q j r)
     {R N₀ : ℕ} (hR : 0 < R) (hL : 0 < L)
     (hKernel : ∀ N, R ≤ N →
-      LinearMap.ker (openParentHamiltonianES A R N) = groundSpaceES A N)
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
+          groundSpaceES A N)
     {γ : ℝ} (hγ : 0 < γ)
-    (hAligned : ∀ n ≥ N₀, ∀ v ∈
-      (LinearMap.ker (openParentHamiltonianES A R (n * L)))ᗮ,
-      γ * ‖v‖ ≤ ‖openParentHamiltonianES A R (n * L) v‖) :
+    (hAligned : ∀ n ≥ N₀, ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A R (n * L)).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N,
-      ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R N))ᗮ,
-        δ * ‖v‖ ≤ ‖openParentHamiltonianES A R N v‖ :=
-  exists_pos_openParentHamiltonianES_gap_of_aligned_gap_of_residue_cover_limit
+      ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ :=
+  exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_gap_of_residue_cover_limit
     A hR hL hKernel hγ hAligned (fun K r =>
       residual_cover_projection_defect_tendsto_zero_of_primitive_resolution
         A B V ρ hP hρ hDistinct hV hSum hInt hCoInt Q hQ hGram

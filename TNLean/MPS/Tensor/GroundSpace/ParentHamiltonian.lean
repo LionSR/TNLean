@@ -4,10 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.GroundSpace.GroundSpace
+import QICLean.Analysis.Projection.MatrixStarProjection
+import QICLean.Analysis.Norm.MatrixToEuclidean
 import QICLean.ManyBody.Hamiltonian.FrustrationFree
 import QICLean.ManyBody.Hamiltonian.Models
 
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 
 /-!
 # Parent interaction and parent Hamiltonian (definitions)
@@ -40,9 +43,9 @@ parent Hamiltonian, which is the Hamiltonian of that interaction.
 
 * `MPSTensor.parentHamiltonian A L N` — its Hamiltonian \(H = ∑ᵢ hᵢ\), as a linear map.
 
-* `MPSTensor.IsFrustrationFree` — the parent-Hamiltonian ground-state
-  condition \(hᵢ ψ = 0\) for every local term, which is membership in the zero space of
-  the parent interaction on the ring (`MPSTensor.isFrustrationFree_iff_mem_zeroSpace`).
+The vectors annihilated by every local term, the frustration-free ground vectors of the parent
+model, are the zero space `ManyBody.Interaction.zeroSpace` of the parent interaction on the
+ring.
 -/
 
 open scoped BigOperators
@@ -286,12 +289,26 @@ end RingWindow
 translation-invariant interaction whose term with index \(i\) is, for \(L \le N\), the matrix
 of the canonical parent interaction \(h_L\) placed on the window of \(L\) consecutive sites
 starting at \(i\), and zero for \(L > N\) (`ManyBody.Interaction.translationInvariant`). Its
-terms are the translated local terms and its Hamiltonian is the parent Hamiltonian; a vector is
-frustration free exactly when it lies in its zero space
-(`isFrustrationFree_iff_mem_zeroSpace`). -/
+terms are the translated local terms and its Hamiltonian is the parent Hamiltonian; the
+frustration-free ground vectors of the parent model are the vectors of its zero space
+(`ManyBody.Interaction.zeroSpace`). -/
 noncomputable abbrev parentRingInteraction (A : MPSTensor d D) (L N : ℕ) [NeZero N] :=
   ManyBody.Interaction.translationInvariant (α := Fin d) N
     (LinearMap.toMatrix' (parentInteraction A L))
+
+/-- **The parent interaction on the open chain.** On the open chain of `N` sites, the translates
+of the matrix of the canonical parent interaction \(h_L\) along the windows of `L` consecutive
+sites starting at `0, …, N - L` (`ManyBody.Interaction.chainTranslates`); it has no term when
+`N < L`. Its Hamiltonian is the open-chain parent Hamiltonian of Nachtergaele,
+arXiv:cond-mat/9410110, equation (3.12).
+
+**Convention at range zero.** For `L = 0` the windows are the `N + 1` empty windows at the
+positions `0, …, N`, so the Hamiltonian is `N + 1` times the one-by-one matrix of \(h_0\)
+(which is `0` when `D > 0` and `1` when `D = 0`). The source has no range-zero interaction. -/
+noncomputable abbrev parentChainInteraction (A : MPSTensor d D) (L N : ℕ) :
+    ManyBody.Interaction (fun _ : Fin N ↦ Fin d) (fun i : Fin (N + 1 - L) ↦
+      Finset.univ.map (ManyBody.chainWindow (N := N) (k := L) i.val (by omega))) :=
+  ManyBody.Interaction.chainTranslates L N (LinearMap.toMatrix' (parentInteraction A L))
 
 /-! ### Local term and parent Hamiltonian -/
 
@@ -300,7 +317,7 @@ parent interaction on the ring (`parentRingInteraction`), which acts as `parentI
 on the window \(\{i, i+1, \ldots, i+L-1 \bmod N\}\) and as the identity on the complement.
 
 **Important:** When \(L > N\) the term of the ring interaction, and hence this definition,
-is `0`, which makes `parentHamiltonian` trivially zero and `IsFrustrationFree` vacuously true.
+is `0`, which makes `parentHamiltonian` trivially zero and every vector frustration free.
 The lemmas in `Basic.lean` carry an explicit \(L ≤ N\) hypothesis; the one-site
 two-site result below records the \(L > N\) convention separately.
 
@@ -373,21 +390,5 @@ only uses chain lengths greater than two. This restriction is documented in
 @[simp] theorem parentHamiltonian_two_one_eq_zero (A : MPSTensor d D) :
     parentHamiltonian A 2 1 = 0 := by
   exact Finset.sum_eq_zero fun i _ ↦ localTerm_of_not_le A (by norm_num) i
-
-/-- Frustration-free ground-state condition for the parent model:
-every local term annihilates the candidate vector. This is membership in the zero space of
-the parent interaction on the ring (`isFrustrationFree_iff_mem_zeroSpace`). -/
-def IsFrustrationFree (A : MPSTensor d D) (L N : ℕ) (ψ : NSiteSpace d N) : Prop :=
-  ∀ i : Fin N, localTerm A L N i ψ = 0
-
-/-- A vector is frustration free for the parent model exactly when it lies in the zero space
-of the parent interaction on the ring. -/
-theorem isFrustrationFree_iff_mem_zeroSpace (A : MPSTensor d D) (L : ℕ) [NeZero N]
-    (ψ : NSiteSpace d N) :
-    IsFrustrationFree A L N ψ ↔
-      WithLp.toLp 2 ψ ∈ (parentRingInteraction A L N).zeroSpace := by
-  rw [ManyBody.Interaction.mem_zeroSpace_iff]
-  refine forall_congr' fun i ↦ ?_
-  rw [localTerm_eq_toLin'_term A L i, Matrix.toLin'_apply]
 
 end MPSTensor

@@ -232,7 +232,7 @@ hypothesis it proves the printed coefficient
     \label{eq:cpgsv21_martingale_overlap_nachtergaele_full_range_coefficient}
 \end{align}
 The associated norm theorem
-\leanid{FrustrationFree.NestedGroundProjections.norm_lower_bound_of_nachtergaele_c1_c3_full_range}
+\leanid{FrustrationFree.NestedGroundProjections.forall_hasEigenvalue_of_nachtergaele_c1_c3_full_range}
 reuses the existing finite-dimensional spectral theorem. These declarations
 are not identified with the unrestricted source theorem.
 
@@ -409,7 +409,7 @@ sites and final $r$ sites is
 \leanid{MPSTensor.rightSpectatorConfigEquiv}; its Euclidean realization is
 \leanid{MPSTensor.rightSpectatorConfigLinearIsometryEquiv}.  For every
 nonwrapping interaction, the theorem
-\leanid{MPSTensor.localTermES_conj_rightSpectatorConfigLinearIsometryEquiv}
+\leanid{MPSTensor.toEuclideanLin_parentChainInteraction_term_conj_rightSpectatorConfigLinearIsometryEquiv}
 proves that the larger-volume local term is the direct sum of the $n$-site
 local term over right-spectator configurations.  The theorems
 \leanid{MPSTensor.openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv}
@@ -472,9 +472,9 @@ Let $h_0,h_1$ be adjacent two-site terms on a three-site Hilbert space. Assume
     \label{eq:cpgsv21_martingale_overlap_three_site_anticommutator}
 \end{align}
 in quadratic form. The theorems
-\leanid{MPSTensor.re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite}
+\leanid{MPSTensor.re_inner_parentRingInteraction_term_adjacent_twoSite_forward_ge_of_threeSite}
 and
-\leanid{MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
+\leanid{MPSTensor.re_inner_parentRingInteraction_term_adjacent_twoSite_backward_ge_of_threeSite}
 transport
 (\ref{eq:cpgsv21_martingale_overlap_three_site_anticommutator}), with the same
 coefficient $c$, to every forward and backward adjacent cyclic pair on every
@@ -582,18 +582,18 @@ development also contains the source anticommutator row-sum argument directly,
 without this stronger one-sided estimate.\footnote{The formal anchors are
     \leanid{ProjectionGeometry.crossTerm_sum_bound_of_anticommutator_rowCol},
     \leanid{ProjectionGeometry.quadraticForm_sum_projections_of_anticommutator_rowCol}, and
-    \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_anticommutator_local_term_bounds}.
+    \leanid{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_anticommutator_local_term_bounds}.
     The finite-overlap reductions are
     \leanid{ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_anticommutator},
-    \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_finite_overlap_anticommutator},
+    \leanid{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_finite_overlap_anticommutator},
     and
-    \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}.
+    \leanid{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator}.
     The final gap statement is
-    \leanid{MPSTensor.parentHamiltonian_gapped_of_anticommutator} in
+    \leanid{MPSTensor.hamiltonian_parentRingInteraction_gapped_of_anticommutator} in
     \path{TNLean/MPS/ParentHamiltonian/ParentInteraction/Reduction.lean}.
     The ordered cross-term reduction in
     \path{TNLean/MPS/ParentHamiltonian/ParentInteraction/Reduction.lean} is
-    \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_ordered_cross_term}.
+    \leanid{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_ordered_cross_term}.
     The cyclic-window norm-compression reductions
     \path{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound},
     \path{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound_of_le},
@@ -777,7 +777,7 @@ and the transport of the $7/16$ adjacent anticommutator estimate to every
 cyclic overlap.
 
 The source-matching entry \path{thm:anticommutator_gap_bound} points to
-\leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}
+\leanid{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator}
 in \path{TNLean/MPS/ParentHamiltonian/ParentInteraction/Reduction.lean}; its hypothesis
 is (\ref{eq:cpgsv21_martingale_overlap_cyclic_anticommutator_target}).
 The Blueprint entries that recorded the special and constant-$\eta$
@@ -1891,8 +1891,8 @@ quadratic-form inequality
     \label{eq:cpgsv21_martingale_overlap_open_knabe_quadratic}
 \end{align}
 The declarations
-\leanid{LinearMap.IsPositive.quadraticForm_sq_ge_of_norm_gap} and
-\leanid{LinearMap.IsPositive.quadraticForm_sq_ge_rightFiberwiseMap_of_norm_gap}
+\leanid{LinearMap.IsPositive.quadraticForm_sq_ge_of_forall_hasEigenvalue} and
+\leanid{LinearMap.IsPositive.quadraticForm_sq_ge_rightFiberwiseMap_of_forall_hasEigenvalue}
 prove this implication and preserve it under the spectator sum in
 (\ref{eq:cpgsv21_martingale_overlap_cyclic_open_block}).
 
@@ -2169,9 +2169,9 @@ and
 \path{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_operator_norm_of_lt}.
 The replacement for all of them is the source-anchored anticommutator route,
 whose public statement is
-\leanid{MPSTensor.parentHamiltonian_gapped_of_anticommutator} and whose
+\leanid{MPSTensor.hamiltonian_parentRingInteraction_gapped_of_anticommutator} and whose
 cyclic-window reduction is
-\leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}.
+\leanid{MPSTensor.hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator}.
 None of the removed theorems had a consumer, the all-vector estimate they
 assume has no discharger, and the operator-product form is unsatisfiable
 whenever the overlapping excitation ranges share a nonzero vector.  The nine

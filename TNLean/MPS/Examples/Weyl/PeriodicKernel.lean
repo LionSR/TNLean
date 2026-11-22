@@ -105,31 +105,6 @@ theorem chainGroundSpace_seven_threeLetterTensor_eq_mpvSubmodule {ζ : ℂ}
     exact Submodule.smul_mem _ c
       (mpv_mem_chainGroundSpace (threeLetterTensor ζ) 7 N (by omega) hN)
 
-/-- The actual Euclidean parent-Hamiltonian kernel is the periodic trace
-line at every length at least eight. -/
-theorem ker_parentHamiltonianES_threeLetterTensor_eq_span {ζ : ℂ}
-    (hζ : IsPrimitiveRoot ζ 5) (N : ℕ) (hN : 8 ≤ N) :
-    LinearMap.ker (parentHamiltonianES (threeLetterTensor ζ) 7 N) =
-      Submodule.span ℂ {mpvState (threeLetterTensor ζ) N} := by
-  have hstate : (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).symm
-      (mpv (threeLetterTensor ζ)) = mpvState (threeLetterTensor ζ) N := by
-    ext σ
-    exact (mpvState_apply (threeLetterTensor ζ) N σ).symm
-  rw [← parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES,
-    parentHamiltonianGroundSpaceES,
-    ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
-    chainGroundSpace_seven_threeLetterTensor_eq_mpvSubmodule hζ (by omega),
-    mpvSubmodule, Submodule.map_span, Set.image_singleton, LinearEquiv.coe_coe, hstate]
-
-/-- The actual main-sector parent Hamiltonian has zero kernel at length seven. -/
-theorem ker_parentHamiltonianES_threeLetterTensor_seven_eq_bot {ζ : ℂ}
-    (hζ : IsPrimitiveRoot ζ 5) :
-    LinearMap.ker (parentHamiltonianES (threeLetterTensor ζ) 7 7) = ⊥ := by
-  rw [← parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES,
-    parentHamiltonianGroundSpaceES,
-    ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
-    chainGroundSpace_threeLetterTensor_seven_eq_bot hζ, Submodule.map_bot]
-
 /-- The actual periodic trace vector is nonzero at every length at least eight. -/
 theorem mpvState_threeLetterTensor_ne_zero {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 5)
     (N : ℕ) (hN : 8 ≤ N) : mpvState (threeLetterTensor ζ) N ≠ 0 := by
@@ -142,5 +117,40 @@ theorem mpvState_threeLetterTensor_ne_zero {ζ : ℂ} (hζ : IsPrimitiveRoot ζ 
   have hcoeff := congrArg (fun v : MPVSpace 3 m ↦ v σ) hzero
   change mpvState (threeLetterTensor ζ) m σ = 0 at hcoeff
   simpa only [mpvState_apply, mpv, coeff] using hcoeff
+
+/-! ### The parent interaction on the ring -/
+
+section RingInteraction
+
+/-- The kernel of the periodic parent Hamiltonian is the periodic trace line at every length at
+least eight. -/
+theorem ker_hamiltonian_parentRingInteraction_threeLetterTensor_eq_span {ζ : ℂ}
+    (hζ : IsPrimitiveRoot ζ 5) (N : ℕ) (hN : 8 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin
+        (parentRingInteraction (threeLetterTensor ζ) 7 N).hamiltonian) =
+      Submodule.span ℂ {mpvState (threeLetterTensor ζ) N} := by
+  have : NeZero N := ⟨by omega⟩
+  have hstate : (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).symm
+      (mpv (threeLetterTensor ζ)) = mpvState (threeLetterTensor ζ) N := by
+    ext σ
+    exact (mpvState_apply (threeLetterTensor ζ) N σ).symm
+  rw [← ManyBody.groundSpace_zero,
+    groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
+    ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
+    chainGroundSpace_seven_threeLetterTensor_eq_mpvSubmodule hζ (by omega),
+    mpvSubmodule, Submodule.map_span, Set.image_singleton, LinearEquiv.coe_coe, hstate]
+
+/-- The main-sector periodic parent Hamiltonian has zero kernel at length seven. -/
+theorem ker_hamiltonian_parentRingInteraction_threeLetterTensor_seven_eq_bot {ζ : ℂ}
+    (hζ : IsPrimitiveRoot ζ 5) :
+    LinearMap.ker (Matrix.toEuclideanLin
+      (parentRingInteraction (threeLetterTensor ζ) 7 7).hamiltonian) = ⊥ := by
+  rw [← ManyBody.groundSpace_zero,
+    groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
+    ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
+    chainGroundSpace_threeLetterTensor_seven_eq_bot hζ, Submodule.map_bot]
+
+end RingInteraction
 
 end MPSTensor.ShortMomentum

@@ -133,40 +133,40 @@ theorem wordTupleSpanTop_isometricDeformationBlocks_iff
 
 /-- The source's positive two-site interaction along the constructed
 isometric path. Source: arXiv:1010.3732, lines 610--625. -/
-noncomputable def isometricDeformationInteractionES
+noncomputable def isometricDeformationInteraction
     (A : (j : Fin r) → MPSTensor d (dim j)) (γ : unitInterval) :
-    EuclideanSpace ℂ (Cfg d 2) →L[ℂ] EuclideanSpace ℂ (Cfg d 2) :=
-  positiveDeformedParentInteractionES (leftPolarPhysicalFactor A)
+    Matrix (Cfg d 2) (Cfg d 2) ℂ :=
+  positiveDeformedParentInteraction (leftPolarPhysicalFactor A)
     (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) γ
 
 variable [NeZero d] [∀ j, NeZero (dim j)]
 
 omit [NeZero d] [∀ j, NeZero (dim j)] in
 /-- The positive interactions of the constructed isometric deformation
-vary continuously in operator norm.
+vary continuously.
 Source: arXiv:1010.3732, lines 610--628. -/
-theorem continuous_isometricDeformationInteractionES
+theorem continuous_isometricDeformationInteraction
     (A : (j : Fin r) → MPSTensor d (dim j)) :
-    Continuous (isometricDeformationInteractionES A) := by
+    Continuous (isometricDeformationInteraction A) := by
   exact continuous_deformedInteraction_positivePhysicalDeformation
-    (leftPolarPhysicalFactor A) (leftPolarPhysicalFactor_posDef A) 2
-    (parentInteractionES (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) 2)
+    (leftPolarPhysicalFactor A) (leftPolarPhysicalFactor_posDef A) 2 _
 
 omit [NeZero d] [∀ j, NeZero (dim j)] in
 /-- The constructed interaction is positive and its kernel is exactly the
 two-site ground space along the constructed path.
 Source: arXiv:1010.3732, lines 623--625. -/
-theorem isParentInteraction_isometricDeformationInteractionES
+theorem isParentInteraction_toEuclideanLin_isometricDeformationInteraction
     (A : (j : Fin r) → MPSTensor d (dim j)) (γ : unitInterval) :
     IsParentInteraction (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2
-      (isometricDeformationInteractionES A γ).toLinearMap := by
+      (Matrix.toEuclideanLin (isometricDeformationInteraction A γ)) := by
   change IsParentInteraction
     (toTensorFromBlocks (fun _ => 1) (fun j =>
       rotatePhysical (positivePhysicalDeformation (leftPolarPhysicalFactor A) γ)
         (leftPolarBlocks A j))) 2 _
   rw [← rotatePhysical_toTensorFromBlocks]
-  exact isParentInteraction_positiveDeformedParentInteractionES (leftPolarPhysicalFactor A)
-    (leftPolarPhysicalFactor_posDef A) (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) γ
+  exact isParentInteraction_toEuclideanLin_positiveDeformedParentInteraction
+    (leftPolarPhysicalFactor A) (leftPolarPhysicalFactor_posDef A)
+    (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) γ
 
 /-- The canonical two-site parents of the constructed isometric path have
 a positive gap uniform in the path parameter and every ring of length at
@@ -174,12 +174,13 @@ least two. The positive polar factor is derived from the original tensor.
 Source: arXiv:1010.3732, lines 575--625 and Appendix A. -/
 theorem exists_uniform_isometricDeformation_parent_gap
     (A : (j : Fin r) → MPSTensor d (dim j)) (hSpan : WordTupleSpanTop A 1) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
-      ∀ v ∈ (LinearMap.ker (parentHamiltonianES
-        (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N))ᗮ,
-        δ * ‖v‖ ≤ ‖parentHamiltonianES
-          (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N v‖ := by
-  exact exists_uniform_parentHamiltonianES_gap_positivePhysicalDeformation
+    ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ (N : ℕ) (hN : 2 ≤ N),
+      haveI : NeZero N := ⟨by omega⟩;
+      ∀ z : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentRingInteraction
+          (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N).hamiltonian) z →
+          z = 0 ∨ (δ : ℂ) ≤ z := by
+  exact exists_uniform_hamiltonian_parentRingInteraction_gap_positivePhysicalDeformation
     (leftPolarBlocks A) ((wordTupleSpanTop_leftPolarBlocks_iff A 1).2 hSpan)
     (fun _ => 1) (by simp) (leftPolarPhysicalFactor A) (leftPolarPhysicalFactor_posDef A)
 
@@ -188,12 +189,13 @@ path have a gap uniform in the parameter and every ring of length at least
 two. Source: arXiv:1010.3732, lines 575--625 and Appendix A. -/
 theorem exists_uniform_isometricDeformation_interaction_gap
     (A : (j : Fin r) → MPSTensor d (dim j)) (hSpan : WordTupleSpanTop A 1) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
-      ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (isometricDeformationInteractionES A γ).toLinearMap N))ᗮ,
-        δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (isometricDeformationInteractionES A γ).toLinearMap N v‖ := by
-  exact exists_uniform_positiveDeformedParentInteractionES_gap
+    ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ (N : ℕ) (hN : 2 ≤ N),
+      haveI : NeZero N := ⟨by omega⟩;
+      ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant N
+          (isometricDeformationInteraction A γ)).hamiltonian) z →
+          z = 0 ∨ (δ : ℂ) ≤ z := by
+  exact exists_uniform_positiveDeformedParentInteraction_gap
     (leftPolarBlocks A) ((wordTupleSpanTop_leftPolarBlocks_iff A 1).2 hSpan)
     (fun _ => 1) (by simp) (leftPolarPhysicalFactor A) (leftPolarPhysicalFactor_posDef A)
 
@@ -208,13 +210,13 @@ theorem exists_blocked_isometricDeformation_parent_gap_of_isNormalTensor
     (A : (j : Fin r) → MPSTensor d (dim j))
     (hNormal : ∀ j, IsNormalTensor (A j)) (hDistinct : BlocksNotGaugePhaseEquiv A) :
     ∃ L : ℕ, 0 < L ∧ L + 1 ≤ 3 * (max (∑ j, dim j) 1) ^ 5 ∧
-      ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
-        ∀ v ∈ (LinearMap.ker (parentHamiltonianES
-          (toTensorFromBlocks (fun _ => 1)
-            (isometricDeformationBlocks (fun j => blockTensor (A j) L) γ)) 2 N))ᗮ,
-          δ * ‖v‖ ≤ ‖parentHamiltonianES
+      ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ (N : ℕ) (hN : 2 ≤ N),
+        haveI : NeZero N := ⟨by omega⟩;
+        ∀ z : ℂ, Module.End.HasEigenvalue
+          (Matrix.toEuclideanLin (parentRingInteraction
             (toTensorFromBlocks (fun _ => 1)
-              (isometricDeformationBlocks (fun j => blockTensor (A j) L) γ)) 2 N v‖ := by
+              (isometricDeformationBlocks (fun j => blockTensor (A j) L) γ)) 2 N).hamiltonian) z →
+            z = 0 ∨ (δ : ℂ) ≤ z := by
   let : ∀ j, NeZero (dim j) := fun j => ⟨(hNormal j).bondDim_ne_zero⟩
   obtain ⟨L, hL, hBound, hSpan⟩ :=
     exists_positive_blockTensor_wordTupleSpanTop_one_of_isNormalTensor A hNormal hDistinct

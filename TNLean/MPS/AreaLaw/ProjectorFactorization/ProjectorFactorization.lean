@@ -9,7 +9,9 @@ import TNLean.MPS.AreaLaw.ProjectorFactorization.ChainLocalizedParts
 import TNLean.MPS.AreaLaw.ProjectorFactorization.DecaySlack
 import TNLean.MPS.AreaLaw.ProjectorFactorization.FactorizationBudget
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import QICLean.ManyBody.Entropy.Cut.SupportedOperatorAlgebra
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
+import QICLean.Entropy.Surprisal.FilterMoment
+import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Dynamics.InteractionOperations
 
 /-!

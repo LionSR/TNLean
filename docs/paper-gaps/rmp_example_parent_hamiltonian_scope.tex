@@ -305,7 +305,6 @@ is $-N$ and its eigenspace is one-dimensional.\footnote{Formal declarations:
 \leanid{MPSTensor.clusterSource_mpv_eq_globalZ},
 \leanid{MPSTensor.clusterSource_mpv_ne_zero},
 \leanid{MPSTensor.clusterSource_iInf_eigenspace_eq_mpvSubmodule},
-\leanid{MPSTensor.clusterSource_stabilizer_unique_gs},
 \leanid{MPSTensor.clusterSource_hamiltonian_eigenspace_eq_mpvSubmodule}, and
 \leanid{MPSTensor.clusterSource_energy_lower_bound} in
 \path{TNLean/MPS/Examples/Cluster/ClusterSourceGroundState.lean}.}
@@ -320,9 +319,8 @@ as an operator identity is not
 formalized; the formal statements are the eigenspace
 identities.\footnote{Formal declarations:
 \leanid{MPSTensor.cluster_groundSpace_three_eq_eigenspace},
-\leanid{MPSTensor.cluster_iInf_eigenspace_eq_chainGroundSpace},
-\leanid{MPSTensor.cluster_iInf_eigenspace_eq_mpvSubmodule}, and
-\leanid{MPSTensor.cluster_stabilizer_unique_gs} in
+\leanid{MPSTensor.cluster_iInf_eigenspace_eq_chainGroundSpace} and
+\leanid{MPSTensor.cluster_iInf_eigenspace_eq_mpvSubmodule} in
 \path{TNLean/MPS/Examples/Cluster/ClusterParentHamiltonian.lean}.}
 
 The polynomial AKLT Hamiltonian
@@ -365,11 +363,11 @@ nonwrapping three-site window. For a general block-injective tensor the
 formal count is exactly $D^2$. The review's lower bound is the squared
 irreducible-representation dimension, at most $D^2$; the exact count $D^2$
 is a sharper unconditional statement, not merely a bound.\footnote{Formal declarations:
-\leanid{MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES},
-\leanid{MPSTensor.aklt_finrank_ker_openParentHamiltonianES_two}, and
-\leanid{MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_span_openState}
+\leanid{MPSTensor.aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES},
+\leanid{MPSTensor.aklt_finrank_ker_hamiltonian_parentChainInteraction_two}, and
+\leanid{MPSTensor.aklt_ker_hamiltonian_parentChainInteraction_two_eq_span_openState}
 in \path{TNLean/MPS/Examples/AKLT/AKLTOpenBoundary.lean};
-\leanid{MPSTensor.finrank_ker_openParentHamiltonianES_of_isNBlkInjective} in
+\leanid{MPSTensor.finrank_ker_hamiltonian_parentChainInteraction_of_isNBlkInjective} in
 \path{TNLean/MPS/ParentHamiltonian/ParentInteraction/OpenHamiltonian.lean}.} The
 spin decomposition is now also formalized. In the bond basis of the AKLT
 tensor, the virtual generators are $J=(\sigma^x,-\sigma^y,-\sigma^z)/2$.
@@ -391,12 +389,12 @@ The local projector identity gives
 $H^{\mathrm{open}}_{\mathrm{poly}}+2(N-1)I/3=2H^{\mathrm{open}}_{\mathrm{proj}}$.
 Its lowest eigenvalue is therefore $-2(N-1)/3$, and its four-dimensional
 ground space has the same singlet and triplet sectors.\footnote{Results:
-\leanid{MPSTensor.akltOpenHamiltonianES_add_eq_parent},
-\leanid{MPSTensor.akltOpenHamiltonianES_eigenvalue_ge},
-\leanid{MPSTensor.akltOpenHamiltonianES_hasEigenvalue},
-\leanid{MPSTensor.akltOpenHamiltonianES_groundSpace_finrank},
-\leanid{MPSTensor.akltOpenHamiltonianES_ground_spinZero_finrank}, and
-\leanid{MPSTensor.akltOpenHamiltonianES_ground_spinOne_finrank}.}
+\leanid{MPSTensor.akltOpenHamiltonian_add_eq_parent},
+\leanid{MPSTensor.akltOpenHamiltonian_eigenvalue_ge},
+\leanid{MPSTensor.akltOpenHamiltonian_hasEigenvalue},
+\leanid{MPSTensor.akltOpenHamiltonian_groundSpace_finrank},
+\leanid{MPSTensor.akltOpenHamiltonian_ground_spinZero_finrank}, and
+\leanid{MPSTensor.akltOpenHamiltonian_ground_spinOne_finrank}.}
 These are statements about the ground eigenspace, not the kernel of the
 unshifted polynomial Hamiltonian.
 

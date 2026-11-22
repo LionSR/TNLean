@@ -313,7 +313,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         MPSTensor.commonPhysicalNormalizedBondInteraction_zero_mem_spectrum,
         MPSTensor.commonPhysicalNormalizedBondInteraction_le_parent,
         MPSTensor.commonPhysicalNormalizedBondInteraction_translate_commute,
-        MPSTensor.commonPhysicalNormalizedBondInteraction_spectrum_gap_one,
+        MPSTensor.isGapped_commonPhysicalNormalizedBondInteraction,
         MPSTensor.commonPhysicalNormalizedBondInteraction_groundSpace,
         MPSTensor.toEuclideanLin_tensorPower_mpv_rotatePhysical,
         MPSTensor.commonPhysicalNormalizedBondInteraction_groundSpace_eq_span_mpv,
@@ -395,10 +395,11 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_interaction_hamiltonian_symmetry}
     \lean{MPSTensor.hamiltonian_translationInvariant_commute_onSiteTensorPow}
     \leanok
-    If a two-site interaction commutes with the tensor square of an
-    on-site matrix, then its translation-invariant periodic Hamiltonian
-    commutes with the full tensor power at every chain length at least
-    two. Unitarity is not needed for this algebraic identity.
+    If an interaction $h$ on $R$ sites commutes with $U^{\otimes R}$
+    for an on-site matrix $U$, then on every ring of $N\geq1$ sites the
+    sum of the cyclic translates of $h$, which is zero when $N<R$,
+    commutes with $U^{\otimes N}$. Unitarity is not needed for this
+    algebraic identity.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -428,8 +429,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{lemma}[Physical character changes preserve the same gapped path]
     \label{thm:spt_character_gapped_path}
-    \lean{Matrix.finKronecker_const_smul,
-        MPSTensor.SymmetricGappedInteractionPath.physicalCharacterTwist,
+    \lean{MPSTensor.SymmetricGappedInteractionPath.physicalCharacterTwist,
         MPSTensor.ExactMPSGroundPath.physicalCharacterTwist}
     \leanok
     \uses{def:spt_exact_mps_gapped_phase}

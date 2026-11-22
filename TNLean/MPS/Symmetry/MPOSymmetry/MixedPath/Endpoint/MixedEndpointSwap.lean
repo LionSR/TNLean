@@ -172,9 +172,9 @@ interaction for the reversed pair. Source: arXiv:2203.12563, Section 5,
 lines 1690–1692. -/
 theorem mixedEndpointParentInteraction_one_eq_conj_swap
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap =
+    Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 1) =
       (physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) 2).toLinearEquiv.conj
-        (mixedEndpointParentInteraction A₁ A₀ 0).toLinearMap := by
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₁ A₀ 0)) := by
   let U := physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) 2
   let S := (insertedTwoSiteMap (mixedEndpointBase A₁ A₀)
     (bondInterpolationMatrix D₁ D₀ 0)).range
@@ -182,6 +182,7 @@ theorem mixedEndpointParentInteraction_one_eq_conj_swap
     (fun T : Submodule ℂ (EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2)) =>
       T.starProjection)
     (mixedEndpoint_extendedSupport_one_eq_map_swap A₀ A₁)
+  rw [toEuclideanLin_mixedEndpointParentInteraction, toEuclideanLin_mixedEndpointParentInteraction]
   apply LinearMap.ext
   intro v
   have hmap := Submodule.starProjection_map_apply U S v

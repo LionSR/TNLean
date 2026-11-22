@@ -134,7 +134,7 @@
 \begin{lemma}[Short ground vectors in the product-state branch]
     \label{lem:spwc_bond_one_finite_prefix_ground}
     \lean{MPSTensor.exists_cyclic_ground_of_normal_bondOne_local_kernel,
-        MPSTensor.uniform_bondOne_ground_family_of_normal_local_kernel}
+        MPSTensor.uniform_bondOne_ground_family_translationInvariant_of_normal_local_kernel}
     \leanok
     \uses{lem:spwc_bond_one_all_volume_nonvanishing, lem:local_mps_kernel_all_volumes,
         lem:periodic_finite_cyclic_representation}
@@ -495,8 +495,8 @@
         MPSTensor.ShortMomentum.mem_groundSpace_of_seven_contiguous_constraints,
         MPSTensor.ShortMomentum.chainGroundSpace_seven_le_groundSpace_threeLetterTensor,
         MPSTensor.ShortMomentum.chainGroundSpace_seven_threeLetterTensor_eq_mpvSubmodule,
-        MPSTensor.ShortMomentum.ker_parentHamiltonianES_threeLetterTensor_eq_span,
-        MPSTensor.ShortMomentum.ker_parentHamiltonianES_threeLetterTensor_seven_eq_bot,
+        MPSTensor.ShortMomentum.ker_hamiltonian_parentRingInteraction_threeLetterTensor_eq_span,
+        MPSTensor.ShortMomentum.ker_hamiltonian_parentRingInteraction_threeLetterTensor_seven_eq_bot,
         MPSTensor.ShortMomentum.mpvState_threeLetterTensor_ne_zero}
     \leanok
     \uses{lem:short_volume_weyl_normality,
@@ -548,7 +548,7 @@ matrix product representations.
 
 \begin{lemma}[Positivity of the seven-site interaction]
     \label{lem:seven_sector_interaction_positive}
-    \lean{MPSTensor.ShortMomentum.sevenSectorInteraction_isPositive}
+    \lean{MPSTensor.ShortMomentum.posSemidef_sevenSectorInteraction}
     \leanok
     \uses{def:seven_sector_interaction}
     The interaction $h$ is positive for all $\zeta,q\in\mathbb C$.

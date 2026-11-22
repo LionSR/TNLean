@@ -8,7 +8,7 @@ import TNLean.MPS.ParentHamiltonian.BulkObservable.BulkObservableCommutator
 import TNLean.MPS.ParentHamiltonian.Continuity.NormalOpenGapAtWielandtRange
 import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank
 
-import TNLean.MPS.ParentHamiltonian.ParentInteraction.CanonicalParentInteractionMatrix
+import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 
 /-!
 # A local commutator inequality in one primitive sector
@@ -31,6 +31,8 @@ docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 open Filter
 open scoped Matrix Topology ComplexOrder InnerProductSpace
 open ManyBody (placeAlong chainWindow)
+
+open ManyBody.Interaction (chainTranslates)
 
 namespace MPSTensor
 
@@ -79,7 +81,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutatorObservable_exp
       let B : Matrix (Cfg d (N n)) (Cfg d (N n)) ℂ := placeAlong (X := fun _ ↦ Fin d)
         (chainWindow (n + (R - 1)) (by rw [hN n]; omega)) X
       (inner ℂ (((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
-        (Bᴴ * (openInteractionMatrix h (N n) * B - B * openInteractionMatrix h (N n))))
+        (Bᴴ * ((chainTranslates R (N n) h).hamiltonian * B -
+          B * (chainTranslates R (N n) h).hamiltonian)))
           (ψ n)) (ψ n)).re) atTop
       (nhds (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re) := by
   let ψ' (n : ℕ) := reindexChainVector (hN n) (ψ n)
@@ -99,7 +102,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutatorObservable_exp
   have hwin : n + ((R - 1 + k) + (R - 1)) ≤ N n := by
     rw [hN n]
     omega
-  rw [placeAlong_chainWindow_adjoint_mul_openInteractionMatrix_commutator h X hR hwin,
+  rw [placeAlong_chainWindow_adjoint_mul_hamiltonian_chainTranslates_commutator h X hR hwin,
     bulkObservable_eq_placeAlong_chainWindow]
   calc
     _ = (inner ℂ (ψ n) ((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
@@ -142,7 +145,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_eventually_unit_ground
     exact norm_smul_inv_norm hv
 
 /-- The local commutator inequality for the canonical open interaction follows
-from its eventual ground-space identity and uniform norm gap. The commutator
+from its eventual ground-space identity and uniform gap above the kernel. The commutator
 energy limit is derived from locality and primitive transfer convergence.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_gap
@@ -153,11 +156,14 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_g
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
     {γ : ℝ} (hγ : 0 ≤ γ)
     (hKernel : ∀ᶠ n in atTop,
-      LinearMap.ker (openParentHamiltonianES A R ((n + (R - 1) + k) + (R - 1 + n))) =
+      LinearMap.ker
+          (Matrix.toEuclideanLin
+              (parentChainInteraction A R ((n + (R - 1) + k) + (R - 1 + n))).hamiltonian) =
         groundSpaceES A ((n + (R - 1) + k) + (R - 1 + n)))
-    (hGap : ∀ᶠ n in atTop, ∀ v ∈
-      (LinearMap.ker (openParentHamiltonianES A R ((n + (R - 1) + k) + (R - 1 + n))))ᗮ,
-      γ * ‖v‖ ≤ ‖openParentHamiltonianES A R ((n + (R - 1) + k) + (R - 1 + n)) v‖)
+    (hGap : ∀ᶠ n in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin
+        (parentChainInteraction A R ((n + (R - 1) + k) + (R - 1 + n))).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hGround : ∀ᶠ n in atTop,
       ψ n ∈ groundSpaceES A ((n + (R - 1) + k) + (R - 1 + n)))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
@@ -166,23 +172,25 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_g
         ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
           (groundSpaceES A R)ᗮ.starProjection) X)).re := by
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
-  let h := canonicalParentInteractionMatrix A R
+  let h := LinearMap.toMatrix' (parentInteraction A R)
   have hEnergy :
       let B (n : ℕ) := ((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
         (bulkObservable X (n + (R - 1)) (R - 1 + n))).toLinearMap
       Tendsto (fun n =>
         (inner ℂ (((B n).adjoint.comp
-          ((openParentHamiltonianES A R (N n)).comp (B n) -
-            (B n).comp (openParentHamiltonianES A R (N n)))) (ψ n)) (ψ n)).re)
+          ((Matrix.toEuclideanLin (parentChainInteraction A R (N n)).hamiltonian).comp (B n) -
+            (B n).comp (Matrix.toEuclideanLin (parentChainInteraction A R (N n)).hamiltonian)))
+                (ψ n)) (ψ n)).re)
         atTop (nhds (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re) := by
     apply (hP.localCommutatorObservable_expectation_tendsto hρ h X hR
       N (fun n => by dsimp [N]; omega) ψ hGround hUnit).congr'
-    filter_upwards [eventually_ge_atTop 1] with n hn
+    filter_upwards [Filter.eventually_ge_atTop 1] with n hn
     have hH : Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
-        (openInteractionMatrix h (N n)) =
-        (openParentHamiltonianES A R (N n)).toContinuousLinearMap :=
+        ((chainTranslates R (N n) h).hamiltonian) =
+            (Matrix.toEuclideanLin
+                (parentChainInteraction A R (N n)).hamiltonian).toContinuousLinearMap :=
       congrArg LinearMap.toContinuousLinearMap
-        (toEuclideanCLM_openInteractionMatrix_parentInteraction A hR (by dsimp [N]; omega))
+        (toEuclideanCLM_hamiltonian_chainTranslates_parentInteraction A R (N n))
     dsimp only
     rw [map_mul, map_sub, map_mul, map_mul, ← Matrix.star_eq_conjTranspose,
       map_star, ContinuousLinearMap.star_eq_adjoint, hH,
@@ -192,9 +200,13 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_g
     (ℓ := fun n : ℕ => n + (R - 1)) (r := fun n => (R - 1) + n)
     (tendsto_add_atTop_nat (R - 1))
     (tendsto_atTop_mono (fun n => Nat.le_add_left n (R - 1)) tendsto_id)
-    (fun n => openParentHamiltonianES A R (N n)) ψ hγ
-    (Eventually.of_forall fun n => openParentHamiltonianES_isPositive A R (N n))
-    hGap hKernel hGround hUnit hEnergy
+    (fun n => Matrix.toEuclideanLin (parentChainInteraction A R (N n)).hamiltonian) ψ hγ
+    (Eventually.of_forall fun n =>
+        (Matrix.isPositive_toEuclideanLin_iff.mpr
+            (posSemidef_hamiltonian_parentChainInteraction A R (N n))))
+    (hGap.mono fun n hn => (ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentChainInteraction A R (N n))).mp hn)
+    hKernel hGround hUnit hEnergy
 
 /-- At every range at least \(D^4+1\), a normalized primitive sector obeys
 one positive local commutator bound for all centered local observables.
@@ -212,7 +224,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_ga
               (groundSpaceES A R)ᗮ.starProjection) X)).re := by
   have hNormal := isNormal_of_hasComplementaryFixedPointGap_with_posDef hP hρ
   obtain ⟨γ, hγ, hgap⟩ :=
-    exists_openParentHamiltonianES_uniform_gap_of_isNormal_of_le A hNormal hR
+    exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNormal_of_le A hNormal hR
   refine ⟨γ, hγ, ?_⟩
   intro k X _ hcenter
   have hD : 0 < D ^ 4 := pow_pos (NeZero.pos D) 4
@@ -230,8 +242,9 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_ga
   have hRange : R - 1 + 1 = R := by omega
   apply hP.localCommutator_gap_of_open_gap hρ X hRpos hcenter ψ hγ.le
   · exact Eventually.of_forall fun n => by
-      simpa only [hRange] using ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
+      have h := ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
         hInj (by omega : 0 < R - 1) (by dsimp [N]; omega : R - 1 + 1 ≤ N n)
+      rwa [hRange] at h
   · exact Eventually.of_forall fun n => hgap (N n) (by dsimp [N]; omega)
   · exact Eventually.of_forall hg
   · exact hu

@@ -90,7 +90,7 @@ variable (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D
 /-- The ambient completion of the literal integral average on the active
 physical space. The correction is necessary because the average is nonunital. -/
 def mixedWeakHopfCompletedInteraction (γ : ℝ) :=
-  W.averageMatrix 2 (mixedEndpointInteractionMatrix A₀ A₁ γ) + (1 - W.rep 2 1)
+  W.averageMatrix 2 (mixedEndpointParentInteraction A₀ A₁ γ) + (1 - W.rep 2 1)
 
 variable (h₀ : IsBiorthogonalDecomposition (MPOTensor.actTensor T₀ A₀)
     (fun _ : Fin m => A₀) V₀ W₀)
@@ -104,8 +104,8 @@ include h₀ h₁ hW hInj₀ hInj₁ in
 by precisely the missing represented-unit projection. -/
 theorem averageMatrix_mixedEndpointInteraction_of_mem_Ioo
     {γ : ℝ} (hγ : γ ∈ Set.Ioo (0 : ℝ) 1) :
-    W.averageMatrix 2 (mixedEndpointInteractionMatrix A₀ A₁ γ) =
-      W.rep 2 1 - 1 + mixedEndpointInteractionMatrix A₀ A₁ γ := by
+    W.averageMatrix 2 (mixedEndpointParentInteraction A₀ A₁ γ) =
+      W.rep 2 1 - 1 + mixedEndpointParentInteraction A₀ A₁ γ := by
   have hc : MPOTensor.IsBoundaryCompatible W.tensor (mixedEndpointInterpolation A₀ A₁ γ) := by
     rw [hW]
     exact isBoundaryCompatible_mixedEndpointInterpolation
@@ -114,11 +114,10 @@ theorem averageMatrix_mixedEndpointInteraction_of_mem_Ioo
     (isInjective_mixedEndpointInterpolation A₀ A₁ hInj₀ hInj₁ hγ)
   apply Matrix.toEuclideanLin.injective
   simp only [MPOTensor.WeakHopfRepresentation.averageMatrix, LinearEquiv.apply_symm_apply,
-    map_add, map_sub, toEuclideanLin_mixedEndpointInteractionMatrix,
-    mixedEndpointParentInteraction_eq_parentInteractionES A₀ A₁ hγ,
-    LinearMap.coe_toContinuousLinearMap]
-  rw [W.weakHopfAverage_parentInteractionES hc hi (by decide), parentInteractionES,
-    Submodule.starProjection_orthogonal']
+    map_add, map_sub,
+    mixedEndpointParentInteraction_eq_toMatrix'_parentInteraction A₀ A₁ hγ]
+  rw [W.weakHopfAverage_toEuclideanLin_toMatrix'_parentInteraction hc hi (by decide),
+    toEuclideanLin_toMatrix'_parentInteraction, Submodule.starProjection_orthogonal']
   have hone : Matrix.toEuclideanLin (1 : MPOTensor.ChainOperator
       ((D₀ + D₁) * (D₀ + D₁)) 2) = 1 := by
     simp [Matrix.toEuclideanLin]
@@ -136,12 +135,13 @@ The endpoint interaction uses the extended support, not the endpoint tensor's
 canonical support. -/
 theorem averageMatrix_mixedEndpointInteraction [NeZero D₀] [NeZero D₁]
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) :
-    W.averageMatrix 2 (mixedEndpointInteractionMatrix A₀ A₁ γ) =
-      W.rep 2 1 - 1 + mixedEndpointInteractionMatrix A₀ A₁ γ := by
-  have hc := continuous_mixedEndpointInteractionMatrix A₀ A₁ hInj₀ hInj₁
+    W.averageMatrix 2 (mixedEndpointParentInteraction A₀ A₁ γ) =
+      W.rep 2 1 - 1 + mixedEndpointParentInteraction A₀ A₁ γ := by
+  have hc := continuous_mixedEndpointParentInteraction A₀ A₁ hInj₀ hInj₁
+      (NeZero.pos D₀) (NeZero.pos D₁)
   have hs : Set.Ioo (0 : ℝ) 1 ⊆ {γ | W.averageMatrix 2
-      (mixedEndpointInteractionMatrix A₀ A₁ γ) =
-        W.rep 2 1 - 1 + mixedEndpointInteractionMatrix A₀ A₁ γ} := fun γ hγ =>
+      (mixedEndpointParentInteraction A₀ A₁ γ) =
+        W.rep 2 1 - 1 + mixedEndpointParentInteraction A₀ A₁ γ} := fun γ hγ =>
     averageMatrix_mixedEndpointInteraction_of_mem_Ioo
       A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ W h₀ h₁ hW hInj₀ hInj₁ hγ
   rw [← closure_Ioo (zero_ne_one' ℝ)] at hγ
@@ -153,7 +153,7 @@ include h₀ h₁ hW hInj₀ hInj₁ in
 theorem mixedWeakHopfCompletedInteraction_eq [NeZero D₀] [NeZero D₁]
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) :
     mixedWeakHopfCompletedInteraction A₀ A₁ W γ =
-      mixedEndpointInteractionMatrix A₀ A₁ γ := by
+      mixedEndpointParentInteraction A₀ A₁ γ := by
   rw [mixedWeakHopfCompletedInteraction, averageMatrix_mixedEndpointInteraction
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ W h₀ h₁ hW hInj₀ hInj₁ hγ]
   abel
@@ -163,7 +163,8 @@ include hInj₀ hInj₁ in
 theorem continuous_mixedWeakHopfCompletedInteraction [NeZero D₀] [NeZero D₁] :
     Continuous (mixedWeakHopfCompletedInteraction A₀ A₁ W) :=
   ((W.continuous_averageMatrix 2).comp
-    (continuous_mixedEndpointInteractionMatrix A₀ A₁ hInj₀ hInj₁)).add continuous_const
+    (continuous_mixedEndpointParentInteraction A₀ A₁ hInj₀ hInj₁
+      (NeZero.pos D₀) (NeZero.pos D₁))).add continuous_const
 
 include h₀ h₁ hW hInj₀ hInj₁ in
 /-- The completed average is positive on the closed interval. -/
@@ -172,7 +173,7 @@ theorem mixedWeakHopfCompletedInteraction_posSemidef [NeZero D₀] [NeZero D₁]
     (mixedWeakHopfCompletedInteraction A₀ A₁ W γ).PosSemidef := by
   rw [mixedWeakHopfCompletedInteraction_eq
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ W h₀ h₁ hW hInj₀ hInj₁ hγ]
-  exact mixedEndpointInteractionMatrix_posSemidef A₀ A₁ γ
+  exact posSemidef_mixedEndpointParentInteraction A₀ A₁ γ
 
 include h₀ h₁ hW hInj₀ hInj₁ in
 /-- The completed active interaction commutes with every boundary operator,
@@ -185,27 +186,21 @@ theorem mixedWeakHopfCompletedInteraction_commute [NeZero D₀] [NeZero D₁]
   rw [mixedWeakHopfCompletedInteraction_eq
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ W h₀ h₁ hW hInj₀ hInj₁ hγ]
   set B := MPOTensor.mpoWithBoundary W.tensor X 2
-  have hc := continuous_mixedEndpointInteractionMatrix A₀ A₁ hInj₀ hInj₁
-  have hs : Set.Ioo (0 : ℝ) 1 ⊆ {γ | mixedEndpointInteractionMatrix A₀ A₁ γ * B =
-      B * mixedEndpointInteractionMatrix A₀ A₁ γ} := by
+  have hc := continuous_mixedEndpointParentInteraction A₀ A₁ hInj₀ hInj₁
+      (NeZero.pos D₀) (NeZero.pos D₁)
+  have hs : Set.Ioo (0 : ℝ) 1 ⊆ {γ | mixedEndpointParentInteraction A₀ A₁ γ * B =
+      B * mixedEndpointParentInteraction A₀ A₁ γ} := by
     intro t ht
     have hcompat : MPOTensor.IsBoundaryCompatible W.tensor
         (mixedEndpointInterpolation A₀ A₁ t) := by
       rw [hW]
       exact isBoundaryCompatible_mixedEndpointInterpolation
         T₀ T₁ A₀ A₁ V₀ V₁ W₀ W₁ h₀ h₁ t
-    have hcomm := hcompat.parentInteractionES_commute_mpoWithBoundary (by decide)
+    have hcomm := hcompat.parentInteraction_matrix_commute_mpoWithBoundary (by decide)
       (fun Z => let ⟨Y, hY⟩ := W.exists_conjTranspose_mpoWithBoundary_eq Z
         ⟨Y, hY 2⟩) X
-    have hp : Matrix.toEuclideanLin (mixedEndpointInteractionMatrix A₀ A₁ t) =
-        parentInteractionES (mixedEndpointInterpolation A₀ A₁ t) 2 := by
-      rw [toEuclideanLin_mixedEndpointInteractionMatrix,
-        mixedEndpointParentInteraction_eq_parentInteractionES A₀ A₁ ht]
-      rfl
-    rw [← hp] at hcomm
-    apply Matrix.toEuclideanLin.injective
-    simpa only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same,
-      Module.End.mul_eq_comp] using hcomm.eq
+    rw [← mixedEndpointParentInteraction_eq_toMatrix'_parentInteraction A₀ A₁ ht] at hcomm
+    exact hcomm.eq
   rw [← closure_Ioo (zero_ne_one' ℝ)] at hγ
   exact Set.EqOn.closure hs (hc.matrix_mul continuous_const)
     (continuous_const.matrix_mul hc) hγ
@@ -217,7 +212,7 @@ theorem averageMatrix_mixedEndpointInteraction_commute
     [FiniteDimensional ℂ H] [NeZero D₀] [NeZero D₁]
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1)
     (X : Matrix (Fin (χ₀ + χ₁)) (Fin (χ₀ + χ₁)) ℂ) :
-    Commute (W.averageMatrix 2 (mixedEndpointInteractionMatrix A₀ A₁ γ))
+    Commute (W.averageMatrix 2 (mixedEndpointParentInteraction A₀ A₁ γ))
       (MPOTensor.mpoWithBoundary W.tensor X 2) := by
   have hc := mixedWeakHopfCompletedInteraction_commute
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ W h₀ h₁ hW hInj₀ hInj₁ hγ X
@@ -252,7 +247,7 @@ theorem hamiltonian_averageMatrix_mixedEndpointInteraction_commute
     [FiniteDimensional ℂ H] [NeZero D₀] [NeZero D₁]
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
-      (W.averageMatrix 2 (mixedEndpointInteractionMatrix A₀ A₁ γ))).hamiltonian
+      (W.averageMatrix 2 (mixedEndpointParentInteraction A₀ A₁ γ))).hamiltonian
       (MPOTensor.mpo W.tensor N) := by
   have : NeZero N := ⟨by omega⟩
   rw [← MPOTensor.mpoWithBoundary_one]

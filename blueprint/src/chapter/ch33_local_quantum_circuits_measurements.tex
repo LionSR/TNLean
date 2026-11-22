@@ -64,7 +64,7 @@ outcomes.
     \label{lem:qc_permutation_layers}
     \lean{QuantumCircuit.IsLocalPerm,
         QuantumCircuit.IsLocalPerm.permMatrix_mem_supportedOperators,
-        Matrix.finKronecker_permMatrix_mulVec}
+        Matrix.piKronecker_permMatrix_mulVec}
     \leanok
     \uses{def:qc_local_circuit}
     Let $\sigma$ be a configuration permutation supported on $X\subseteq I$ (i.e., $\sigma(x)|_{X^c}=x|_{X^c}$ and $\sigma(x)|_X$ depends only on $x|_X$, such as a shift $x\mapsto x+f(x|_{X\setminus\{t\}})e_t$ in $\mathbb Z_d$ at $t\in X$). Then $(P_\sigma v)(x)=v(\sigma x)$ defines a unitary $P_\sigma\in\mathcal A_X$. For single-site label permutations $\tau_i$, $(\bigotimes_i P_{\tau_i}v)(x)=v(\tau_0(x_0),\dots,\tau_{N-1}(x_{N-1}))$.

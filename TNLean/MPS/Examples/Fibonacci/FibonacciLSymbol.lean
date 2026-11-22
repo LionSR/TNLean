@@ -121,14 +121,14 @@ theorem fib_actionLMatrix_eq (x y : Fin 2)
       (sequentialActionPathEquiv 1 1 x ⟨y, ⟨z, i, j⟩⟩) =
         complexOfGolden (fibSequentialAnalysisGolden 1 1 x z y) := by
     rw [fibSequentialAnalysisGolden, complexOfGolden]
-    erw [complexOfRing_mul, complexOfRing_mul, complexOfRing_idKronR,
+    erw [Matrix.complexOfRing_mul, Matrix.complexOfRing_mul, complexOfRing_idKronR,
       complexOfRing_mulTensorAssocInvMatrixR]
     rfl
   have hsyn : fusionThenActionSynthesis (χ := fibBlockDim) (D := fibNimDim) fibFusionSynthesis
       fibActSynthesis 1 1 x (fusionActionPathEquiv 1 1 x ⟨y, ⟨c, k, μ⟩⟩) =
         complexOfGolden (fibFusionActionSynthesisGolden 1 1 x c y) := by
     rw [fibFusionActionSynthesisGolden, complexOfGolden]
-    erw [complexOfRing_mul, complexOfRing_kronIdR]
+    erw [Matrix.complexOfRing_mul, complexOfRing_kronIdR]
     rfl
   have hD : (fibNimDim y : ℂ) ≠ 0 := by fin_cases y <;> norm_num [fibNimDim]
   unfold actionLMatrix

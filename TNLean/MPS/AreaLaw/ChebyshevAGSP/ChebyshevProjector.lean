@@ -7,7 +7,8 @@ import TNLean.MPS.AreaLaw.ChebyshevAGSP.InverseGapRobustness
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.SingleWindowPolynomialRank
 import TNLean.MPS.AreaLaw.Spectral.SupersiteHierarchy
 import QICLean.Spectral.Filter.ChebyshevSpectralFilter
-import QICLean.Spectral.Gap.GroundProjection
+import QICLean.Spectral.Filter.Gaussian.SpectralGap
+import QICLean.ManyBody.Hamiltonian.FrustrationFree
 
 /-!
 # Chebyshev filters of a truncated chain
@@ -236,8 +237,8 @@ theorem exists_normalized_chain_chebyshev_filter {L q : ℕ}
 is retained exactly by exterior truncation. The gap is at least half
 the original one for the explicit cutoff `32768/g`.
 AKLV, arXiv:1301.1162v1, Section 4 following Lemma 4.2 and Theorem 6.1.
-Positivity of the unit bonds and zero total ground energy express the
-frustration-free qualification. -/
+Positivity of the unit bonds and the vanishing of every bond on the ground vector express
+the frustration-free qualification. -/
 theorem exists_frustrationFree_chain_chebyshev_filter {L q : ℕ}
     (Φ : ManyBody.BondInteraction L q)
     (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
@@ -248,7 +249,7 @@ theorem exists_frustrationFree_chain_chebyshev_filter {L q : ℕ}
     let Ht := twoSidedEnergyTruncation (leftCutBlock Φ a 0)
       (middleCutBlock Φ a b 0 + (Φ.term a + Φ.term b)) (rightCutBlock Φ b 0) t
     let u := 2 * t + middleCutBudget a b 0
-    Matrix.toEuclideanLin H Ω = 0 →
+    Ω ∈ Φ.zeroSpace →
     (H - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
     Matrix.toEuclideanLin Ht Ω = 0 ∧
@@ -263,6 +264,10 @@ theorem exists_frustrationFree_chain_chebyshev_filter {L q : ℕ}
           ⟪Ω, Matrix.toEuclideanLin K ψ⟫_ℂ = 0 ∧
             ‖Matrix.toEuclideanLin K ψ‖ ^ 2 ≤ δ := by
   intro H Ht u heig hgap
+  replace heig : Matrix.toEuclideanLin H Ω = 0 := by
+    rw [ManyBody.Interaction.zeroSpace_eq_groundSpace
+      (fun i ↦ Matrix.nonneg_iff_posSemidef.mp (h0 i)), ManyBody.groundSpace_zero] at heig
+    exact LinearMap.mem_ker.mp heig
   have hX : (leftCutBlock Φ a 0).PosSemidef := by
     simpa only [leftCutBlock, ManyBody.Interaction.partialHamiltonian, Complex.ofReal_zero,
       zero_smul, sub_zero] using
@@ -619,7 +624,7 @@ theorem exists_frustrationFree_chain_chebyshev_agsp {L q w : ℕ}
     let u := 2 * t + middleCutBudget a b 0
     let A := interval L 0 (a.val + w + 1)
     let D := (q * k) ^ (17 * (w + k / (2 * w)))
-    Matrix.toEuclideanLin H Ω = 0 →
+    Ω ∈ Φ.zeroSpace →
     (H - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
     Matrix.toEuclideanLin Ht Ω = 0 ∧

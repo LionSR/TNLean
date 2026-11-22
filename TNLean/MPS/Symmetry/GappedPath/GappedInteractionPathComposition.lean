@@ -76,13 +76,11 @@ noncomputable def trans (P : SymmetricGappedInteractionPath U h₀ h₁)
     intro γ _ N hN
     rcases P.concatenatedInteraction_mem Q γ with ⟨t, ht, heq⟩ | ⟨t, ht, heq⟩
     · rw [heq]
-      obtain ⟨E, hE, hspec⟩ := hgap₀ t ht N hN
-      exact ⟨E, hE, fun z hz => ⟨(hspec z hz).1,
-        (hspec z hz).2.imp id (fun h => (add_le_add (le_refl E) (min_le_left δ₀ δ₁)).trans h)⟩⟩
+      obtain ⟨E, hE⟩ := hgap₀ t ht N hN
+      exact ⟨E, hE.mono (min_le_left δ₀ δ₁)⟩
     · rw [heq]
-      obtain ⟨E, hE, hspec⟩ := hgap₁ t ht N hN
-      exact ⟨E, hE, fun z hz => ⟨(hspec z hz).1,
-        (hspec z hz).2.imp id (fun h => (add_le_add (le_refl E) (min_le_right δ₀ δ₁)).trans h)⟩⟩
+      obtain ⟨E, hE⟩ := hgap₁ t ht N hN
+      exact ⟨E, hE.mono (min_le_right δ₀ δ₁)⟩
   symmetric γ _ g N hN := by
     rcases P.concatenatedInteraction_mem Q γ with ⟨t, ht, heq⟩ | ⟨t, ht, heq⟩
     · rw [heq]; exact P.symmetric t ht g N hN

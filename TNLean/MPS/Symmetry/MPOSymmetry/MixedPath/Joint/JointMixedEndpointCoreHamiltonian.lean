@@ -168,17 +168,19 @@ def jointEndpointNormalizedBulkTerm
     EuclideanSpace ℂ (JointEndpointChainCfg d n D₀ E F) →ₗ[ℂ]
       EuclideanSpace ℂ (JointEndpointChainCfg d n D₀ E F) :=
   place (jointEndpointChainBulkEquiv d n D₀ E F)
-    (openParentHamiltonianES (toTensorFromBlocks (fun _ ↦ 1) A) 2 n)
+    (Matrix.toEuclideanLin
+        (parentChainInteraction (toTensorFromBlocks (fun _ ↦ 1) A) 2 n).hamiltonian)
 
 /-- With exactly one middle site there is no bulk edge. Thus the shortest
 chain described by the normalized sum has its two distinct boundary edges. -/
 theorem jointEndpointNormalizedBulkTerm_one_eq_zero
     (A : (x : Fin r) → MPSTensor d (D₀ x)) (E F : Fin r → ℕ) :
     jointEndpointNormalizedBulkTerm A E F 1 = 0 := by
-  let : IsEmpty (NonwrappingStart 2 1) := ⟨fun i ↦ by have h := i.2; omega⟩
+  have h0 : (parentChainInteraction (toTensorFromBlocks (fun _ ↦ 1) A) 2 1).hamiltonian = 0 :=
+    Finset.sum_of_isEmpty (ι := Fin 0) _
   ext v κ
-  rw [jointEndpointNormalizedBulkTerm, place_apply]
-  simp [openParentHamiltonianES]
+  rw [jointEndpointNormalizedBulkTerm, place_apply, h0]
+  simp
 
 /-- The first operator on an ordered-pair core uses the original left block. -/
 def jointEndpointCoreFirstTerm
@@ -201,7 +203,8 @@ def jointEndpointCoreBulkTerm
     EuclideanSpace ℂ (JointEndpointCoreCfg d n D₀ q) →ₗ[ℂ]
       EuclideanSpace ℂ (JointEndpointCoreCfg d n D₀ q) :=
   place (jointEndpointCoreBulkEquiv d n D₀ q)
-    (openParentHamiltonianES (toTensorFromBlocks (fun _ ↦ 1) A) 2 n)
+    (Matrix.toEuclideanLin
+        (parentChainInteraction (toTensorFromBlocks (fun _ ↦ 1) A) 2 n).hamiltonian)
 
 /-- The explicit common operator G_(x,y,n+1), independent of exterior
 multiplicities. Its two boundary edges are distinct even when n = 0. -/

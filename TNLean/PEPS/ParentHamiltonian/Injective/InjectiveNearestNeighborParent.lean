@@ -177,7 +177,7 @@ theorem finrank_ker_regionParentHamiltonian_edgePairs_eq_one
     Module.finrank ℂ (Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) edgePairRegion H).hamiltonian).ker =
       1 := by
-  rw [ker_regionParentHamiltonian A edgePairRegion H hH]
+  rw [ker_hamiltonian_ofPlace A edgePairRegion H hH]
   exact finrank_regionParentGroundSpace_edgePairs_eq_one A hA hneighbors
 
 /-- For an injective PEPS, every exact-kernel augmented nearest-neighbor
@@ -193,7 +193,7 @@ theorem finrank_ker_regionParentHamiltonian_edgeAndIsolated_eq_one
         edgeAndIsolatedRegion H).hamiltonian).ker =
       1 := by
   classical
-  rw [ker_regionParentHamiltonian A edgeAndIsolatedRegion H hH]
+  rw [ker_hamiltonian_ofPlace A edgeAndIsolatedRegion H hH]
   exact finrank_regionParentGroundSpace_edgeAndIsolated_eq_one A hA
 
 end TNLean.PEPS

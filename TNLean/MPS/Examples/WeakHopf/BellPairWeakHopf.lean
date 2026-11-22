@@ -831,19 +831,22 @@ theorem weakHopfAverage_starProjection_stateTensor {n : ℕ} (hn : 0 < n) :
 vanishes, \(E_n(I-P_n)=Q_n-P_n=0\), at every positive length; see
 `docs/paper-gaps/glm23_wha_parent_completion.tex`, section "An elementary
 fusion-compatible test". -/
-theorem weakHopfAverage_parentInteractionES_stateTensor {n : ℕ} (hn : 0 < n) :
+theorem weakHopfAverage_toEuclideanLin_toMatrix'_parentInteraction_stateTensor {n : ℕ}
+    (hn : 0 < n) :
     (weakHopfRepresentation r).weakHopfAverage n
-      (MPSTensor.parentInteractionES (stateTensor r) n) = 0 := by
-  rw [(weakHopfRepresentation r).weakHopfAverage_parentInteractionES (isBoundaryCompatible r)
-    (isNBlkInjective_stateTensor r) hn, starProjection_groundSpaceES_stateTensor r hn, sub_self]
+      (Matrix.toEuclideanLin
+        (LinearMap.toMatrix' (MPSTensor.parentInteraction (stateTensor r) n))) = 0 := by
+  rw [(weakHopfRepresentation r).weakHopfAverage_toEuclideanLin_toMatrix'_parentInteraction
+    (isBoundaryCompatible r) (isNBlkInjective_stateTensor r) hn,
+    starProjection_groundSpaceES_stateTensor r hn, sub_self]
 
 omit [NeZero r] in
 /-- The canonical parent term \(I-P_n\) of the Bell-pair state is nonzero for
 \(r\ge2\) and \(n\ge2\), although its uncompleted average vanishes; it equals the
 ambient complement \(I-E_n(P_n)\). -/
-theorem parentInteractionES_stateTensor_ne_zero (hr : 2 ≤ r) {n : ℕ} (hn : 2 ≤ n) :
-    MPSTensor.parentInteractionES (stateTensor r) n ≠ 0 := by
-  refine MPSTensor.parentInteractionES_ne_zero _ n ?_
+theorem toMatrix'_parentInteraction_stateTensor_ne_zero (hr : 2 ≤ r) {n : ℕ} (hn : 2 ≤ n) :
+    LinearMap.toMatrix' (MPSTensor.parentInteraction (stateTensor r) n) ≠ 0 := by
+  refine MPSTensor.toMatrix'_parentInteraction_ne_zero _ n ?_
   have h1 : r < r * r := by nlinarith
   exact lt_of_lt_of_le (Nat.pow_lt_pow_left h1 two_ne_zero)
     (Nat.pow_le_pow_right (Nat.mul_pos (by omega) (by omega)) hn)

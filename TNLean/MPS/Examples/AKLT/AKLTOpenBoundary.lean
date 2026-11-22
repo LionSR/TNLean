@@ -59,10 +59,13 @@ sites. Its singlet and triplet sectors are proved in `AKLTSpinSectors`.
 
 ## Main results
 
-* `MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES`
-* `MPSTensor.aklt_finrank_ker_openParentHamiltonianES_two`
-* `MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_span_openState`
-* `MPSTensor.aklt_finrank_ker_openParentHamiltonianES_three`
+* `MPSTensor.aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES`
+* `MPSTensor.aklt_finrank_ker_hamiltonian_parentChainInteraction_two`
+* `MPSTensor.aklt_ker_hamiltonian_parentChainInteraction_two_eq_span_openState`
+* `MPSTensor.aklt_finrank_ker_hamiltonian_parentChainInteraction_three`
+
+The open-chain parent Hamiltonian is the Hamiltonian of `parentChainInteraction`, and its
+kernel is taken for its operator `Matrix.toEuclideanLin`.
 
 ## References
 
@@ -77,6 +80,10 @@ sites. Its singlet and triplet sectors are proved in `AKLTSpinSectors`.
 
 namespace MPSTensor
 
+/-! ### The kernel of the Hamiltonian of `parentChainInteraction` -/
+
+section ChainInteraction
+
 /-- Every kernel vector of the open-chain two-site AKLT parent Hamiltonian lies
 in the open-boundary MPS space.
 
@@ -85,12 +92,15 @@ every three-site window restricts on both sides to nonwrapping two-site
 windows, and the hand check of arXiv:2011.12127, line 2095, grows these
 constraints to the three-site window; the open-chain growth theorem for the
 block-injective AKLT tensor (\(L_0 = 2\)) then covers the whole chain. -/
-theorem aklt_ker_openParentHamiltonianES_two_le_groundSpaceES {N : ℕ} (hN : 2 ≤ N) :
-    LinearMap.ker (openParentHamiltonianES akltTensor 2 N) ≤ groundSpaceES akltTensor N := by
+theorem aklt_ker_hamiltonian_parentChainInteraction_two_le_groundSpaceES {N : ℕ}
+    (hN : 2 ≤ N) :
+    LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction akltTensor 2 N).hamiltonian) ≤
+      groundSpaceES akltTensor N := by
   rcases hN.eq_or_lt with rfl | hN3
-  · rw [openParentHamiltonianES_self_eq_parentInteractionES akltTensor (by norm_num)]
+  · rw [hamiltonian_parentChainInteraction_self]
     intro v hv
-    exact (parentInteractionES_apply_eq_zero_iff akltTensor 2 v).1 (LinearMap.mem_ker.1 hv)
+    exact (toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff akltTensor 2 v).1
+      (LinearMap.mem_ker.1 hv)
   · intro v hv
     have hNpos : 0 < N := by omega
     rw [mem_groundSpaceES_iff]
@@ -102,11 +112,11 @@ theorem aklt_ker_openParentHamiltonianES_two_le_groundSpaceES {N : ℕ} (hN : 2 
     apply aklt_mem_groundSpace_three_of_inLeftGround_of_inRightGround
     · intro j
       rw [cyclicRestrictₗ_restrictLast]
-      exact cyclicRestrictₗ_mem_groundSpace_of_mem_ker_openParentHamiltonianES
+      exact cyclicRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction
         akltTensor hN hv i (by change s + 2 ≤ N; omega) _
     · intro j
       rw [cyclicRestrictₗ_restrictFirst hNpos (by omega)]
-      refine cyclicRestrictₗ_mem_groundSpace_of_mem_ker_openParentHamiltonianES
+      refine cyclicRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction
         akltTensor hN hv _ ?_ _
       change (s + 1) % N + 2 ≤ N
       rw [Nat.mod_eq_of_lt (by omega)]
@@ -121,19 +131,22 @@ open-boundary ground space of line 1174, and the hand check
 \(\mathcal G_{1,2}\cap\mathcal G_{2,3}=\mathcal G_{1,2,3}\) of line 2095, which
 the review prints for the periodic chain and which is a local identity reused
 here on nonwrapping windows. -/
-theorem aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES {N : ℕ} (hN : 2 ≤ N) :
-    LinearMap.ker (openParentHamiltonianES akltTensor 2 N) = groundSpaceES akltTensor N :=
-  le_antisymm (aklt_ker_openParentHamiltonianES_two_le_groundSpaceES hN)
-    (groundSpaceES_le_ker_openParentHamiltonianES akltTensor 2 N)
+theorem aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES {N : ℕ}
+    (hN : 2 ≤ N) :
+    LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction akltTensor 2 N).hamiltonian) =
+      groundSpaceES akltTensor N :=
+  le_antisymm (aklt_ker_hamiltonian_parentChainInteraction_two_le_groundSpaceES hN)
+    (groundSpaceES_le_ker_hamiltonian_parentChainInteraction akltTensor 2 N)
 
 /-- For \(N \ge 2\), the open-chain two-site projector parent Hamiltonian of
 the AKLT tensor has a four-dimensional kernel. The fourfold count in
 arXiv:2011.12127, line 1174, concerns the AKLT model. The polynomial
 Hamiltonian of that passage is identified with the shifted projector sum in
 `AKLTOpenPolynomialHamiltonian`; the present statement concerns the projector kernel. -/
-theorem aklt_finrank_ker_openParentHamiltonianES_two {N : ℕ} (hN : 2 ≤ N) :
-    Module.finrank ℂ (LinearMap.ker (openParentHamiltonianES akltTensor 2 N)) = 4 := by
-  rw [aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES hN,
+theorem aklt_finrank_ker_hamiltonian_parentChainInteraction_two {N : ℕ} (hN : 2 ≤ N) :
+    Module.finrank ℂ (LinearMap.ker
+      (Matrix.toEuclideanLin (parentChainInteraction akltTensor 2 N).hamiltonian)) = 4 := by
+  rw [aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN,
     groundSpaceES_finrank_eq_of_isNBlkInjective
       (isNBlkInjective_of_le (by norm_num) aklt_isNBlkInjective_two hN)]
   norm_num
@@ -142,23 +155,27 @@ theorem aklt_finrank_ker_openParentHamiltonianES_two {N : ℕ} (hN : 2 ≤ N) :
 sides"). For \(N \ge 2\), the kernel of the open-chain two-site AKLT parent
 Hamiltonian is spanned by the open-boundary states \(σ ↦ (l|A^σ|r)\), with
 boundary vectors \(((l|, |r))\) ranging over \(ℂ^2 × ℂ^2\). -/
-theorem aklt_ker_openParentHamiltonianES_two_eq_span_openState {N : ℕ} (hN : 2 ≤ N) :
-    LinearMap.ker (openParentHamiltonianES akltTensor 2 N) =
+theorem aklt_ker_hamiltonian_parentChainInteraction_two_eq_span_openState {N : ℕ}
+    (hN : 2 ≤ N) :
+    LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction akltTensor 2 N).hamiltonian) =
       Submodule.span ℂ (Set.range fun p : (Fin 2 → ℂ) × (Fin 2 → ℂ) =>
         WithLp.toLp 2 (openState p.1 p.2 akltTensor N)) := by
-  rw [aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES hN, groundSpaceES,
+  rw [aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN, groundSpaceES,
     groundSpace_eq_span_openState, Submodule.map_span, ← Set.range_comp]
   rfl
 
 /-- Project result: for \(N \ge 3\), the open-chain three-site AKLT parent
 Hamiltonian has a four-dimensional kernel. This is the specialization of
-`finrank_ker_openParentHamiltonianES_of_isNBlkInjective` to the AKLT tensor at
+`finrank_ker_hamiltonian_parentChainInteraction_of_isNBlkInjective` to the AKLT tensor at
 its injectivity length \(L_0 = 2\); it is a project corollary, not a statement
 printed in the review. -/
-theorem aklt_finrank_ker_openParentHamiltonianES_three {N : ℕ} (hN : 3 ≤ N) :
-    Module.finrank ℂ (LinearMap.ker (openParentHamiltonianES akltTensor 3 N)) = 4 := by
-  rw [finrank_ker_openParentHamiltonianES_of_isNBlkInjective (L₀ := 2)
+theorem aklt_finrank_ker_hamiltonian_parentChainInteraction_three {N : ℕ} (hN : 3 ≤ N) :
+    Module.finrank ℂ (LinearMap.ker
+      (Matrix.toEuclideanLin (parentChainInteraction akltTensor 3 N).hamiltonian)) = 4 := by
+  rw [finrank_ker_hamiltonian_parentChainInteraction_of_isNBlkInjective (L₀ := 2)
     aklt_isNBlkInjective_two (by norm_num) hN]
   norm_num
+
+end ChainInteraction
 
 end MPSTensor

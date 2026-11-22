@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.NormalizedChain
+import QICLean.ManyBody.Hamiltonian.FrustrationFree
 
 /-!
 # Exact ground-vector preservation for frustration-free clipping
@@ -43,7 +44,7 @@ lemma frustrationFree_twoSidedEnergyTruncation_ground_gap {L q : ℕ}
     (a b : Fin (L - 1)) (hab : a.val < b.val)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (g t : ℝ) (hg : 0 < g) (hg1 : g ≤ 1) (ht : 1024 / g ≤ t)
-    (hzero : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0)
+    (hzero : Ω ∈ Φ.zeroSpace)
     (hgap : (Φ.hamiltonian - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef) :
     let X := leftCutBlock Φ a 0
@@ -53,6 +54,9 @@ lemma frustrationFree_twoSidedEnergyTruncation_ground_gap {L q : ℕ}
     K.PosSemidef ∧ K ≤ Φ.hamiltonian ∧ K *ᵥ WithLp.ofLp Ω = 0 ∧
       (K - ((g / 2 : ℝ) : ℂ) •
         (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef := by
+  replace hzero : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0 :=
+    (ManyBody.Interaction.mem_zeroSpace_iff_hamiltonian_mulVec_eq_zero
+      fun j ↦ Matrix.nonneg_iff_posSemidef.mp (h0 j)).mp hzero
   intro X N Y K
   classical
   let H := Φ.hamiltonian

@@ -7,13 +7,15 @@ import TNLean.MPS.ParentHamiltonian.Uncle.UncleKernelConditions
 import TNLean.MPS.Tensor.Overlap
 import Mathlib.Analysis.InnerProductSpace.Spectrum
 import TNLean.MPS.ParentHamiltonian.Uncle.UncleTrialOverlap
+import QICLean.Spectral.Eigenvalue.PositiveRayleighEigenvalue
 
 /-!
 # The finite variational spectral step for the uncle Hamiltonian
 
 A positive operator with a vector orthogonal to its kernel and Rayleigh
-quotient below epsilon has a positive eigenvalue below epsilon.
-Applied to the explicit finite uncle Hamiltonian, this is the spectral step
+quotient below epsilon has a positive eigenvalue below epsilon (QICLean,
+`LinearMap.IsPositive.exists_pos_eigenvalue_lt_of_rayleigh`).
+Applied to the Hamiltonian of the translates of the uncle interaction, this is the spectral step
 in arXiv:1210.6613, proof of Theorem thm:gapless, lines 1302–1314.
 The preceding norm, energy, and ground-overlap estimates must still supply
 such a vector; they are not assumed as a gaplessness conclusion here.
@@ -45,60 +47,6 @@ noncomputable section
 open scoped InnerProductSpace BigOperators
 
 namespace MPSTensor
-
-private theorem exists_small_pos_eigenvalue_of_rayleigh
-    {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
-    (T : E →ₗ[ℂ] E) (hT : T.IsPositive) (v : E) (hv : v ∈ (LinearMap.ker T)ᗮ)
-    (ε : ℝ) (hRayleigh : (⟪T v, v⟫_ℂ).re < ε * ‖v‖ ^ 2) :
-    ∃ μ : ℝ, 0 < μ ∧ μ < ε ∧ Module.End.HasEigenvalue T (μ : ℂ) := by
-  classical
-  let b : OrthonormalBasis (Fin (Module.finrank ℂ E)) ℂ E :=
-    hT.isSymmetric.eigenvectorBasis rfl
-  let lam : Fin (Module.finrank ℂ E) → ℝ := hT.isSymmetric.eigenvalues rfl
-  have hnonneg (i) : 0 ≤ lam i := hT.nonneg_eigenvalues rfl i
-  have heig (i) : Module.End.HasEigenvalue T (lam i : ℂ) :=
-    hT.isSymmetric.hasEigenvalue_eigenvalues rfl i
-  have hcoord_zero (i) (hi : lam i = 0) : b.repr v i = 0 := by
-    have hker : b i ∈ LinearMap.ker T := by
-      rw [LinearMap.mem_ker]
-      change T (hT.isSymmetric.eigenvectorBasis rfl i) = 0
-      rw [hT.isSymmetric.apply_eigenvectorBasis]
-      change (lam i : ℂ) • b i = 0
-      rw [hi, Complex.ofReal_zero, zero_smul]
-    rw [b.repr_apply_apply]
-    exact ((LinearMap.ker T).mem_orthogonal v).mp hv (b i) hker
-  have hnorm : ‖v‖ ^ 2 = ∑ i, ‖b.repr v i‖ ^ 2 := by
-    rw [← b.repr.norm_map v, PiLp.norm_sq_eq_of_L2]
-  have henergy : (⟪T v, v⟫_ℂ).re = ∑ i, lam i * ‖b.repr v i‖ ^ 2 := by
-    rw [← b.repr.inner_map_map (T v) v, PiLp.inner_apply]
-    change Complex.reCLM (∑ i, inner ℂ (b.repr (T v) i) (b.repr v i)) = _
-    rw [map_sum Complex.reCLM]
-    apply Finset.sum_congr rfl
-    intro i _
-    have hdia : b.repr (T v) i = (lam i : ℂ) * b.repr v i :=
-      hT.isSymmetric.eigenvectorBasis_apply_self_apply rfl v i
-    rw [hdia]
-    change (inner ℂ ((lam i : ℂ) • b.repr v i) (b.repr v i)).re = _
-    rw [inner_smul_left, Complex.conj_ofReal]
-    simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero]
-    exact congrArg (lam i * ·) (inner_self_eq_norm_sq (𝕜 := ℂ) (b.repr v i))
-  suffices ∃ i, 0 < lam i ∧ lam i < ε by
-    obtain ⟨i, hi, hε⟩ := this
-    exact ⟨lam i, hi, hε, heig i⟩
-  by_contra hnone
-  have hweight (i) : ε * ‖b.repr v i‖ ^ 2 ≤ lam i * ‖b.repr v i‖ ^ 2 := by
-    by_cases hi : lam i = 0
-    · rw [hcoord_zero i hi]
-      simp
-    · have hpos : 0 < lam i := lt_of_le_of_ne (hnonneg i) (Ne.symm hi)
-      have hlarge : ε ≤ lam i := by
-        by_contra hlt
-        exact hnone ⟨i, hpos, lt_of_not_ge hlt⟩
-      exact mul_le_mul_of_nonneg_right hlarge (sq_nonneg _)
-  have hlower : ε * ‖v‖ ^ 2 ≤ (⟪T v, v⟫_ℂ).re := by
-    rw [hnorm, henergy, Finset.mul_sum]
-    exact Finset.sum_le_sum fun i _ ↦ hweight i
-  exact (not_lt_of_ge hlower) hRayleigh
 
 private theorem norm_span_pair_projection_sq_le
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
@@ -171,66 +119,6 @@ theorem norm_mpv_span_projection_sq_le
       4 * (‖inner ℂ (mpvState A N) φ‖ ^ 2 + ‖inner ℂ (mpvState B N) φ‖ ^ 2) :=
   norm_span_pair_projection_sq_le _ _ _ hA hB hAB
 
-/-- The finite uncle Hamiltonian has a positive eigenvalue below a
-strict Rayleigh bound from its kernel complement. Positivity is derived from
-the interaction rather than supplied as another hypothesis.
-
-This is the finite spectral argument of arXiv:1210.6613, proof of thm:gapless,
-lines 1302–1314; constructing the variational vector remains a separate step. -/
-theorem exists_pos_eigenvalue_uncleHamiltonianES_lt_of_rayleigh
-    {d a b : ℕ} (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ)
-    (v : EuclideanSpace ℂ (Cfg d N))
-    (hv : v ∈ (LinearMap.ker (uncleHamiltonianES A B R L N).toLinearMap)ᗮ)
-    (ε : ℝ)
-    (hRayleigh : (⟪uncleHamiltonianES A B R L N v, v⟫_ℂ).re < ε * ‖v‖ ^ 2) :
-    ∃ μ : ℝ, 0 < μ ∧ μ < ε ∧
-      Module.End.HasEigenvalue (uncleHamiltonianES A B R L N).toLinearMap (μ : ℂ) :=
-  exists_small_pos_eigenvalue_of_rayleigh _ (uncleHamiltonianES_isPositive A B R L N)
-    v hv ε hRayleigh
-
-/-- The variational spectral step for an arbitrary trial vector.
-Subtracting its kernel projection preserves energy and removes
-exactly the projected squared norm. This derives the kernel-complement
-vector rather than requiring orthogonality of the supplied trial.
-Source: arXiv:1210.6613, proof of thm:gapless, lines 1302–1314. -/
-theorem exists_pos_eigenvalue_uncleHamiltonianES_lt_of_projection_bound
-    {d a b : ℕ} (A : MPSTensor d a) (B : MPSTensor d b)
-    (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
-    (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (N : ℕ)
-    (v : EuclideanSpace ℂ (Cfg d N)) (ε : ℝ)
-    (hRayleigh : (⟪uncleHamiltonianES A B R L N v, v⟫_ℂ).re <
-      ε * (‖v‖ ^ 2 -
-        ‖(LinearMap.ker (uncleHamiltonianES A B R L N).toLinearMap).starProjection v‖ ^ 2)) :
-    ∃ μ : ℝ, 0 < μ ∧ μ < ε ∧
-      Module.End.HasEigenvalue (uncleHamiltonianES A B R L N).toLinearMap (μ : ℂ) := by
-  let T := (uncleHamiltonianES A B R L N).toLinearMap
-  let K := LinearMap.ker T
-  let w := v - K.starProjection v
-  have hT : T.IsPositive := uncleHamiltonianES_isPositive A B R L N
-  have hw : w ∈ Kᗮ := Submodule.sub_starProjection_mem_orthogonal (K := K) v
-  have hkill : T (K.starProjection v) = 0 :=
-    LinearMap.mem_ker.mp (K.starProjection_apply_mem v)
-  have hTw : T w = T v := by
-    change T (v - K.starProjection v) = T v
-    rw [map_sub, hkill, sub_zero]
-  have hcross : inner ℂ (T v) (K.starProjection v) = 0 := by
-    rw [hT.isSymmetric v (K.starProjection v), hkill, inner_zero_right]
-  have henergy : (⟪T w, w⟫_ℂ).re = (⟪T v, v⟫_ℂ).re := by
-    rw [hTw]
-    change (inner ℂ (T v) (v - K.starProjection v)).re = _
-    rw [inner_sub_right, hcross, sub_zero]
-  have hnorm : ‖w‖ ^ 2 = ‖v‖ ^ 2 - ‖K.starProjection v‖ ^ 2 := by
-    have hpyth := Submodule.norm_sq_eq_add_norm_sq_starProjection v K
-    have horth : Kᗮ.starProjection v = w :=
-      Submodule.starProjection_orthogonal_val (K := K) v
-    rw [horth] at hpyth
-    linarith
-  apply exists_small_pos_eigenvalue_of_rayleigh T hT w hw ε
-  rw [henergy, hnorm]
-  exact hRayleigh
-
 end MPSTensor
 end
 
@@ -298,13 +186,15 @@ open scoped InnerProductSpace Topology
 
 namespace MPSTensor
 
+open ManyBody.Interaction (translationInvariant)
+
 /-- The actual uncle Hamiltonians have eventually a positive eigenvalue
 below every positive threshold when the actual trial family has quadratic
 squared norm, vanishing kernel projection and linear energy. The kernel
 complement vector is derived by subtracting its actual orthogonal projection.
 This is the analytic step of arXiv:1210.6613, proof of thm:gapless,
 lines 1302–1314; no source tensor estimate is asserted by this lemma alone. -/
-theorem eventually_exists_pos_eigenvalue_uncleHamiltonianES_lt_of_trial_bounds
+theorem eventually_exists_pos_eigenvalue_hamiltonian_uncleInteraction_lt_of_trial_bounds
     {d a b : ℕ} (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
@@ -312,14 +202,19 @@ theorem eventually_exists_pos_eigenvalue_uncleHamiltonianES_lt_of_trial_bounds
     (c : ℝ) (hc : 0 < c)
     (hNorm : ∀ᶠ N : ℕ in atTop, c * ((N + 1 : ℕ) : ℝ) ^ 2 ≤ ‖v N‖ ^ 2)
     (hProj : Tendsto (fun N : ℕ ↦
-      ‖(LinearMap.ker (uncleHamiltonianES A B R L (6 * N + 1)).toLinearMap).starProjection
+      ‖(LinearMap.ker (Matrix.toEuclideanLin
+          (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian)).starProjection
         (v N)‖ ^ 2) atTop (𝓝 0))
     (hEnergy : ∃ C : ℝ, 0 < C ∧ ∀ᶠ N : ℕ in atTop,
-      (⟪uncleHamiltonianES A B R L (6 * N + 1) (v N), v N⟫_ℂ).re ≤ C * N) :
+      (⟪Matrix.toEuclideanLin
+          (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian (v N), v
+            N⟫_ℂ).re ≤ C * N) :
     ∀ ε : ℝ, 0 < ε → ∀ᶠ N : ℕ in atTop,
       ∃ μ : ℝ, 0 < μ ∧ μ < ε ∧
         Module.End.HasEigenvalue
-          (uncleHamiltonianES A B R L (6 * N + 1)).toLinearMap (μ : ℂ) := by
+          (Matrix.toEuclideanLin
+              (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian) (μ : ℂ) :=
+                by
   obtain ⟨C, hC, hEnergy⟩ := hEnergy
   intro ε hε
   let k : ℝ := ε * c / 2
@@ -327,7 +222,8 @@ theorem eventually_exists_pos_eigenvalue_uncleHamiltonianES_lt_of_trial_bounds
   obtain ⟨M, hM⟩ := exists_nat_gt (C / k)
   have hMpos : 0 < M := Nat.cast_pos.mp ((div_pos hC hk).trans hM)
   have hProjSmall : ∀ᶠ N : ℕ in atTop,
-      ‖(LinearMap.ker (uncleHamiltonianES A B R L (6 * N + 1)).toLinearMap).starProjection
+      ‖(LinearMap.ker (Matrix.toEuclideanLin
+          (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian)).starProjection
         (v N)‖ ^ 2 < c / 2 :=
     hProj.eventually (eventually_lt_nhds (half_pos hc))
   filter_upwards [hNorm, hEnergy, hProjSmall, eventually_ge_atTop M]
@@ -336,7 +232,8 @@ theorem eventually_exists_pos_eigenvalue_uncleHamiltonianES_lt_of_trial_bounds
   have hNormN' : c * ((N : ℝ) + 1) ^ 2 ≤ ‖v N‖ ^ 2 := by
     simpa only [Nat.cast_add, Nat.cast_one] using hNormN
   have hMass : (c / 2) * (N : ℝ) ^ 2 ≤ ‖v N‖ ^ 2 -
-      ‖(LinearMap.ker (uncleHamiltonianES A B R L (6 * N + 1)).toLinearMap).starProjection
+      ‖(LinearMap.ker (Matrix.toEuclideanLin
+          (translationInvariant (6 * N + 1) (uncleInteraction A B R L)).hamiltonian)).starProjection
         (v N)‖ ^ 2 := by
     have hlinear : 0 ≤ c * (N : ℝ) := mul_nonneg hc.le hNpos.le
     have hquadratic : 0 ≤ c * (N : ℝ) ^ 2 := mul_nonneg hc.le (sq_nonneg _)
@@ -349,8 +246,8 @@ theorem eventually_exists_pos_eigenvalue_uncleHamiltonianES_lt_of_trial_bounds
       C * (N : ℝ) < (k * (N : ℝ)) * (N : ℝ) :=
         mul_lt_mul_of_pos_right hLarge hNpos
       _ = _ := by dsimp [k]; ring
-  apply exists_pos_eigenvalue_uncleHamiltonianES_lt_of_projection_bound
-    A B R L (6 * N + 1) (v N) ε
+  apply (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_uncleInteraction
+    A B R L (6 * N + 1))).exists_pos_eigenvalue_lt_of_projection_bound (v N) ε
   exact hEnergyN.trans_lt
     (hRayleigh.trans_le (mul_le_mul_of_nonneg_left hMass hε.le))
 

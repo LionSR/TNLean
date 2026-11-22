@@ -22,7 +22,8 @@ matrices is. This file records the embedding `ℤ√2 → ℂ` sending `√2` to
 root of two, the entrywise image of a matrix along it, the compatibility of that image with
 products and matrix units, its bond-space product and action, and the normality criterion of
 `P6Compression.isNormal_of_single_eq_smul` transported to this ring. The compatibilities are the
-instances at this embedding of the general statements of `TNLean.Algebra.ComplexOfRing` and of
+instances at this embedding of the general statements of
+`QICLean.Algebra.Matrix.ComplexOfRing` and of
 `Examples/RingEmbedding.lean`. The two-object Ising example
 (`Examples/IsingWeightedTwist.lean`) is built on it.
 
@@ -73,7 +74,7 @@ namespace MPSTensor
 
 /-- The entrywise image of a matrix over `ℤ√2` in the complex matrices. -/
 noncomputable abbrev complexOfZsqrt2 {m n : Type*} (X : Matrix m n (ℤ√2)) : Matrix m n ℂ :=
-  complexOfRing zsqrt2ToComplex X
+  Matrix.complexOfRing zsqrt2ToComplex X
 
 @[simp] theorem complexOfZsqrt2_apply {m n : Type*} (X : Matrix m n (ℤ√2)) (i : m) (j : n) :
     complexOfZsqrt2 X i j = zsqrt2ToComplex (X i j) := rfl
@@ -81,19 +82,19 @@ noncomputable abbrev complexOfZsqrt2 {m n : Type*} (X : Matrix m n (ℤ√2)) : 
 theorem complexOfZsqrt2_mul {m n o : Type*} [Fintype n] (X : Matrix m n (ℤ√2))
     (Y : Matrix n o (ℤ√2)) :
     complexOfZsqrt2 (X * Y) = complexOfZsqrt2 X * complexOfZsqrt2 Y :=
-  complexOfRing_mul zsqrt2ToComplex X Y
+  Matrix.complexOfRing_mul zsqrt2ToComplex X Y
 
 theorem complexOfZsqrt2_one {n : Type*} [DecidableEq n] :
     complexOfZsqrt2 (1 : Matrix n n (ℤ√2)) = 1 :=
-  complexOfRing_one zsqrt2ToComplex
+  Matrix.complexOfRing_one zsqrt2ToComplex
 
 theorem complexOfZsqrt2_smul {m n : Type*} (c : ℤ√2) (X : Matrix m n (ℤ√2)) :
     complexOfZsqrt2 (c • X) = zsqrt2ToComplex c • complexOfZsqrt2 X :=
-  complexOfRing_smul zsqrt2ToComplex c X
+  Matrix.complexOfRing_smul zsqrt2ToComplex c X
 
 theorem complexOfZsqrt2_submatrix {m n m' n' : Type*} (X : Matrix m n (ℤ√2)) (f : m' → m)
     (g : n' → n) : complexOfZsqrt2 (X.submatrix f g) = (complexOfZsqrt2 X).submatrix f g :=
-  complexOfRing_submatrix zsqrt2ToComplex X f g
+  Matrix.complexOfRing_submatrix zsqrt2ToComplex X f g
 
 variable {d D D₁ D₂ : ℕ}
 

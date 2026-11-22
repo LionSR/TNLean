@@ -128,11 +128,11 @@ def bondProductState (η : Fin q → ℂ) (N : ℕ) :
 
 private theorem sitewise_bondVectorProjection_eq_productVectorProjection
     (η : Fin q → ℂ) (N : ℕ) :
-    Matrix.rectKronecker
+    Matrix.piKronecker
       (fun _ : Fin N => bondVectorProjection η) =
         Matrix.vecMulVec (bondProductVector η N) (star (bondProductVector η N)) := by
   ext σ τ
-  simp only [Matrix.rectKronecker_apply, bondVectorProjection,
+  simp only [Matrix.piKronecker_apply, bondVectorProjection,
     Matrix.vecMulVec_apply, bondProductVector, Pi.star_apply]
   rw [Finset.prod_mul_distrib]
   simp

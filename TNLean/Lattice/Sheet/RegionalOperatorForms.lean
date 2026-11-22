@@ -48,9 +48,9 @@ theorem exists_threeSplit_eq_kronecker_one_kronecker_one
     hm v fun hv => Finset.disjoint_left.mp h (hD hv) v.2
   have hU : ∀ v : {v // v ∉ T ∪ E}, m v = 1 := fun v =>
     hm v fun hv => v.2 (Finset.mem_union_left E (hD hv))
-  refine ⟨rectKronecker (fun v : T => m v), ?_⟩
+  refine ⟨Matrix.piKronecker (fun v : T => m v), ?_⟩
   rw [rectKronecker_submatrix_threeSplit h]
-  simp only [hE, hU, rectKronecker_one]
+  simp only [hE, hU, Matrix.piKronecker_one]
   rfl
 
 /-- An operator on a subset of U has a U-only factor in the three-region coordinates.
@@ -74,10 +74,10 @@ theorem exists_threeSplit_eq_one_kronecker
     hm v fun hv => (Finset.mem_compl.mp (hD hv)) (Finset.mem_union_left E v.2)
   have hE : ∀ v : E, m v = 1 := fun v =>
     hm v fun hv => (Finset.mem_compl.mp (hD hv)) (Finset.mem_union_right T v.2)
-  refine ⟨rectKronecker (fun v : {v // v ∉ T ∪ E} => m v), ?_⟩
+  refine ⟨Matrix.piKronecker (fun v : {v // v ∉ T ∪ E} => m v), ?_⟩
   rw [rectKronecker_submatrix_threeSplit h]
   change _ = (1 : Matrix ((T → Fin q) × (E → Fin q))
     ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ _
-  simp only [hT, hE, rectKronecker_one, one_kronecker_one]
+  simp only [hT, hE, Matrix.piKronecker_one, one_kronecker_one]
 
 end TNLean.Lattice.Sheet

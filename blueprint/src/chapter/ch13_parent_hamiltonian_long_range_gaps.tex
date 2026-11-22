@@ -102,7 +102,7 @@ tensors.
     \lean{MPSTensor.parentInteraction_eq_of_groundSpace_eq,
         MPSTensor.localTerm_eq_of_parentInteraction_eq,
         MPSTensor.parentHamiltonian_eq_of_groundSpace_eq,
-        MPSTensor.parentHamiltonianES_eq_of_groundSpace_eq}
+        MPSTensor.hamiltonian_parentRingInteraction_eq_of_groundSpace_eq}
     \leanok
     \uses{def:ground_space_parent, def:parent_interaction,
         def:parent_hamiltonian, def:parent_hamiltonian_es}
@@ -222,7 +222,7 @@ tensors.
 
 \begin{lemma}[Uniform finite-range gap for normal MPS parent Hamiltonians]
     \label{thm:normal_parent_hamiltonian_finite_range_knabe_gap}
-    \lean{MPSTensor.exists_parentHamiltonianES_gap_of_isNormal}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_gap_of_isNormal}
     \leanok
     \uses{def:normal, def:l_blk_injective, def:parent_hamiltonian_es}
     Let $D>0$ and let $A$ be a normal tensor, with no normalization imposed on
@@ -238,10 +238,10 @@ tensors.
     \end{align}
     realizes the uniform gap of matrix product state parent Hamiltonians
     asserted at \cite[lines~2183--2187]{Cirac2021Matrix}: for every
-    $N\geq2m$ and every $v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$,
+    $N\geq2m$,
     \begin{align}
-        \delta\lVert v\rVert
-         & \leq\left\lVert H_{N,l+1}^{\mathrm{ES}}(A)v\right\rVert.
+        \text{every nonzero eigenvalue of }H_{N,l+1}^{\mathrm{ES}}(A)
+        \text{ is at least }\delta.
         \label{eq:normal_finite_range_knabe_gap}
     \end{align}
 \end{lemma}
@@ -402,13 +402,15 @@ tensors.
 
 \begin{lemma}[Positive gap at a fixed length]
     \label{thm:parent_hamiltonian_fixed_length_gap}
-    \lean{MPSTensor.parentHamiltonianES_exists_gap}
+    \lean{ManyBody.exists_pos_forall_hasEigenvalue}
     \leanok
     \uses{def:parent_hamiltonian_es}
-    For any tensor $A$, interaction range $L$, and chain length $N$, there
-    exists $\delta_N>0$ such that
-    $\delta_N\lVert v\rVert\leq\lVert H_{N,L}^{\mathrm{ES}}(A)v\rVert$
-    for every $v\in(\ker H_{N,L}^{\mathrm{ES}}(A))^\perp$.
+    A positive semidefinite matrix $H$ has a positive gap above its kernel:
+    there exists $\delta>0$ such that every eigenvalue of $H$ other than zero
+    is at least $\delta$; equivalently
+    $\delta\lVert v\rVert\leq\lVert Hv\rVert$ for every $v\in(\ker H)^\perp$.
+    In particular, for any tensor $A$, interaction range $L$, and chain length
+    $N>0$, this holds for $H_{N,L}^{\mathrm{ES}}(A)$ with some $\delta_N>0$.
 \end{lemma}
 
 \begin{proof}
@@ -423,15 +425,14 @@ tensors.
 
 \begin{lemma}[Extension of an eventual uniform gap]
     \label{thm:parent_hamiltonian_eventual_gap}
-    \lean{MPSTensor.parentHamiltonianES_gap_of_eventual_gap}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_of_eventual_gap}
     \leanok
     \uses{def:parent_hamiltonian_es}
-    Fix $A$ and $L$. Suppose $\delta>0$ and $M\in\mathbb N$ satisfy
-    $\delta\lVert v\rVert\leq\lVert H_{N,L}^{\mathrm{ES}}(A)v\rVert$
-    for every $N\geq M$ and every
-    $v\in(\ker H_{N,L}^{\mathrm{ES}}(A))^\perp$.
-    Then some $\gamma>0$ satisfies the inequality with $\gamma$ in place of
-    $\delta$ for every $N$.
+    Fix $A$ and $L$. Suppose $\delta>0$ and $M\in\mathbb N$ are such that,
+    for every $N\geq\max\{M,1\}$, every nonzero eigenvalue of
+    $H_{N,L}^{\mathrm{ES}}(A)$ is at least $\delta$.
+    Then there is $\gamma>0$ such that, for every $N\geq1$, every nonzero
+    eigenvalue of $H_{N,L}^{\mathrm{ES}}(A)$ is at least $\gamma$.
 \end{lemma}
 
 \begin{proof}
@@ -447,19 +448,15 @@ tensors.
 
 \begin{lemma}[Uniform gap for normal MPS parent Hamiltonians]
     \label{thm:normal_mps_parent_hamiltonian_gap}
-    \lean{MPSTensor.exists_parentHamiltonianES_uniform_gap_of_isNormal}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_uniform_gap_of_isNormal}
     \leanok
     \uses{def:normal, def:l_blk_injective, def:parent_hamiltonian_es}
     Let $D>0$ and let $A$ be a normal tensor. For the normal-tensor case of
     the uniform gap assertion in \cite[lines~2183--2187]{Cirac2021Matrix},
     there exist a suitable interaction range $l+1$ with $l>1$ and a constant
-    $\gamma>0$ such that $A$ is $l$-block injective and, for every $N$ and
-    every $v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$,
-    \begin{align}
-        \gamma\lVert v\rVert
-         & \leq \lVert H_{N,l+1}^{\mathrm{ES}}(A)v\rVert.
-        \notag
-    \end{align}
+    $\gamma>0$ such that $A$ is $l$-block injective and, for every
+    $N\geq1$, every nonzero eigenvalue of $H_{N,l+1}^{\mathrm{ES}}(A)$ is at
+    least $\gamma$.
 \end{lemma}
 
 \begin{proof}
@@ -490,7 +487,7 @@ tensors.
     in quadratic form. Then the parent Hamiltonian has the explicit gap
     constant $\gamma_L:=1/(4L)>0$.
     Concretely, if $N\ge2L$ and
-    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$, then
+    $v\in(\ker H_{N,L}^{\mathrm{ES}}(A))^\perp$, then
     $\gamma_L\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
 \end{lemma}
 
@@ -505,17 +502,14 @@ tensors.
 
 \begin{lemma}[Conditional spectral gap for MPS parent Hamiltonians]
     \label{thm:parent_hamiltonian_gapped}
-    \lean{MPSTensor.parentHamiltonian_gapped_of_anticommutator}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gapped_of_anticommutator}
     \leanok
     \uses{thm:anticommutator_gap_bound}
     For a tensor $A$ and a range $L>1$, assume the cyclic-window
     anticommutator estimate of Lemma~\ref{thm:anticommutator_gap_bound}.
     Then there exists $\gamma>0$
-    such that for every $N\ge2L$ and every vector
-    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$ one has
-    $\gamma\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
-    By Lemma~\ref{lem:quadratic_form_to_norm_bound}, this implies the usual
-    uniform lower bound on every nonzero eigenvalue of the parent Hamiltonian.
+    such that, for every $N\ge2L$, every nonzero eigenvalue of
+    $H_{N,L}^{\mathrm{ES}}(A)$ is at least $\gamma$.
 \end{lemma}
 
 \begin{proof}
@@ -589,16 +583,13 @@ tensors.
 
 \begin{lemma}[Grouped open-chain coercivity]
     \label{thm:grouped_open_parent_gap}
-    \lean{MPSTensor.openParentHamiltonianES_norm_gap_of_grouped_c3}
+    \lean{MPSTensor.hamiltonian_parentChainInteraction_gap_of_grouped_c3}
     \leanok
     Let $p\geq1$, $M\geq2$, and $N=pM$. Consider the
     range-$2p$ open parent Hamiltonian $H_N$ and the grouped
     projections above. Let $0\leq\epsilon<1/\sqrt2$ and suppose that
-    $\|Q_nE_n\|\leq\epsilon$ for $0\leq n<M$. Then, for every
-    $v\perp\ker H_N$,
-    \begin{align}
-        (1-\epsilon\sqrt2)^2\|v\| & \leq\|H_Nv\|.
-    \end{align}
+    $\|Q_nE_n\|\leq\epsilon$ for $0\leq n<M$. Then every nonzero
+    eigenvalue of $H_N$ is at least $(1-\epsilon\sqrt2)^2$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -622,7 +613,7 @@ tensors.
 
 \begin{lemma}[Energy counting for grouped open windows]
     \label{thm:grouped_open_parent_c1}
-    \lean{MPSTensor.grouped_openParentHamiltonianES_C1}
+    \lean{MPSTensor.grouped_hamiltonian_parentChainInteraction_C1}
     \leanok
     \uses{def:open_suffix_parent_hamiltonian_es, def:open_parent_hamiltonian_es}
     Let $p\geq1$, $M\geq0$, and $N=pM$. For every vector $v$ on the
@@ -644,7 +635,7 @@ tensors.
 
 \begin{lemma}[Unit local gap for grouped open windows]
     \label{thm:grouped_open_suffix_c2}
-    \lean{MPSTensor.grouped_openSuffixParentHamiltonianES_C2}
+    \lean{MPSTensor.grouped_hamiltonian_restrict_parentChainInteraction_C2}
     \leanok
     \uses{def:open_suffix_parent_hamiltonian_es}
     Let $p\geq1$, $0\leq n<M$, and $N=pM$. Write $Q_n$ for the
@@ -666,7 +657,7 @@ tensors.
 \begin{lemma}[Prefix ground spaces with free right sites]
     \label{thm:ph_prefix_kernel_free_right_sites}
     \lean{MPSTensor.mem_range_leftBoundaryMapES_iff_rightFiber,
-        MPSTensor.ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES}
+        MPSTensor.ker_hamiltonian_prefix_parentChainInteraction_eq_range_leftBoundaryMapES}
     \leanok
     Let $R>0$ and suppose that the length-$n$ open parent Hamiltonian has
     kernel $G_n(A)$. On $n+r$ sites, the kernel of the same interactions
@@ -695,7 +686,7 @@ tensors.
 \begin{lemma}[Reassociated suffix ground space]
     \label{thm:ph_reassociated_suffix_kernel}
     \lean{MPSTensor.physicalReassocES_map_submodule,
-        MPSTensor.range_reassocTailBoundaryMapES_eq_ker_openSuffixParentHamiltonianES}
+        MPSTensor.range_reassocTailBoundaryMapES_eq_ker_hamiltonian_restrict_parentChainInteraction}
     \leanok
     Reassociation identifies any subspace of the physical space on
     $K+(L+Q)$ sites with the same subspace on $(K+L)+Q$ sites.
@@ -723,8 +714,8 @@ tensors.
 
 \begin{lemma}[Terminal interval kernels]
     \label{thm:ph_terminal_interval_kernel}
-    \lean{MPSTensor.ker_openSuffixParentHamiltonianES_eq_of_local_kernel,
-        MPSTensor.ker_openSuffixParentHamiltonianES_eq_range_reassocTailBoundaryMapES}
+    \lean{MPSTensor.ker_hamiltonian_restrict_parentChainInteraction_eq_of_local_kernel,
+        MPSTensor.ker_hamiltonian_restrict_parentChainInteraction_eq_range_reassocTailBoundaryMapES}
     \leanok
     Let $0<R\leq W\leq n\leq N$, and suppose that the range-$R$ open parent
     Hamiltonian on $W$ sites has kernel $G_W(A)$. On the $N$-site chain,
@@ -776,16 +767,15 @@ tensors.
 
 \begin{lemma}[Periodic gaps from divisible open intervals]
     \label{thm:periodic_gap_from_divisible_open}
-    \lean{MPSTensor.exists_parentHamiltonianES_gap_of_eventually_divisible_openParentHamiltonianES_gap}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_gap_of_eventually_divisible_gap}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:parent_hamiltonian_es}
     Let $A$ be a tensor, let $p,R\geq 1$ be integers, and let $\gamma>0$.
-    Suppose that, for every sufficiently large integer $M$ and every
-    $u\perp\ker H^{\mathrm{open}}_{pM,R}(A)$,
-    $\gamma\lVert u\rVert\leq\lVert H^{\mathrm{open}}_{pM,R}(A)u\rVert$.
-    Then there is $\delta>0$ such that, for every sufficiently large $N$
-    and every $v\perp\ker H^{\mathrm{ES}}_{N,R}(A)$,
-    $\delta\lVert v\rVert\leq\lVert H^{\mathrm{ES}}_{N,R}(A)v\rVert$.
+    Suppose that, for every sufficiently large integer $M$, every nonzero
+    eigenvalue of $H^{\mathrm{open}}_{pM,R}(A)$ is at least $\gamma$.
+    Then there is $\delta>0$ such that, for every sufficiently large $N$,
+    every nonzero eigenvalue of $H^{\mathrm{ES}}_{N,R}(A)$ is at least
+    $\delta$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -882,7 +872,7 @@ tensors.
 \begin{lemma}[Open-chain gaps on divisible lengths for primitive block sums]
     \label{thm:primitive_block_sum_open_gap_subsequence}
     \lean{MPSTensor.%
-        exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap}
+        exists_ge_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_fixedPointGap}
     \leanok
     Let $A_0,\ldots,A_{r-1}$ be normalized primitive tensors with
     common physical dimension $d\geq1$, positive bond dimensions,
@@ -892,13 +882,8 @@ tensors.
     By the grouped martingale estimate of
     \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral},
     for every $R_*\in\mathbb N$ there are $p\geq\max\{1,R_*\}$ and
-    $\gamma>0$ such that
-    \begin{align}
-        \gamma\|v\|\leq
-        \|H^{\mathrm{open}}_{pM,2p}(B)v\|\notag
-    \end{align}
-    for every $M\geq2$ and every
-    $v\perp\ker H^{\mathrm{open}}_{pM,2p}(B)$.
+    $\gamma>0$ such that, for every $M\geq2$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{pM,2p}(B)$ is at least $\gamma$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -915,19 +900,15 @@ tensors.
 \begin{lemma}[Open-chain gaps at every length for primitive block sums]
     \label{thm:primitive_block_sum_open_gap_all_lengths}
     \lean{MPSTensor.%
-        exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_all_of_hasComplementaryFixedPointGap}
+        exists_ge_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_all_of_fixedPointGap}
     \leanok
     Under the hypotheses of
     Lemma~\ref{thm:primitive_block_sum_open_gap_subsequence}, as in the
     open-chain form of \cite[Theorem~1.2]{Nachtergaele1996Spectral}, for every
-    $R_*\in\mathbb N$ there are $p\geq\max\{1,R_*\}$ and $\delta>0$ such that
-    \begin{align}
-        \delta\|v\|\leq
-        \|H^{\mathrm{open}}_{N,2p}(B)v\|\notag
-    \end{align}
-    for every chain length $N$ and every
-    $v\perp\ker H^{\mathrm{open}}_{N,2p}(B)$ (for $N<2p$ the Hamiltonian is
-    zero and the assertion is vacuous).
+    $R_*\in\mathbb N$ there are $p\geq\max\{1,R_*\}$ and $\delta>0$ such
+    that, for every chain length $N$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,2p}(B)$ is at least $\delta$ (for $N<2p$ the
+    Hamiltonian is zero and the assertion is vacuous).
 \end{lemma}
 \begin{proof}
     \leanok
@@ -955,8 +936,8 @@ tensors.
 
 \begin{lemma}[Uniformly gapped interaction ranges for primitive block sums]
     \label{thm:primitive_block_sum_parent_gap}
-    \lean{MPSTensor.exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap,
-        MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap}
+    \lean{MPSTensor.exists_ge_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_fixedPointGap,
+        MPSTensor.exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_fixedPointGap}
     \leanok
     Let $A_0,\ldots,A_{r-1}$ be normalized primitive tensors with
     common physical dimension $d\geq1$, positive bond dimensions,
@@ -965,13 +946,9 @@ tensors.
     $\mu_j\ne0$ for every $j$, and set
     $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$.
     For every prescribed lower bound $R_*$, there exist
-    $R\geq\max\{1,R_*\}$, $\gamma>0$, and $N_0$ such that
-    the periodic range-$R$ parent Hamiltonian satisfies
-    \begin{align}
-        \gamma\|v\|\leq\|H_{R,N}v\|
-        \notag
-    \end{align}
-    for every $N\geq N_0$ and every $v\perp\ker H_{R,N}$.
+    $R\geq\max\{1,R_*\}$, $\gamma>0$, and $N_0$ such that, for every
+    $N\geq N_0$, every nonzero eigenvalue of the periodic range-$R$ parent
+    Hamiltonian $H_{R,N}$ is at least $\gamma$.
     In particular, the block sum admits a parent interaction with a
     uniform positive periodic gap.
 \end{lemma}
@@ -1020,7 +997,7 @@ tensors.
 
 \begin{lemma}[Comparison on a finite interval]
     \label{lem:parent-finite-interval-comparison}
-    \lean{MPSTensor.exists_pos_parentInteractionES_openParentHamiltonianES_comparison}
+    \lean{MPSTensor.exists_pos_toMatrix'_parentInteraction_hamiltonian_parentChainInteraction_comparison}
     \leanok
     \uses{def:open_parent_hamiltonian_es}
     Let $A$ be an MPS tensor, and let $R,W$ be interaction and interval lengths.
@@ -1087,7 +1064,7 @@ tensors.
 
 \begin{lemma}[Transfer to a prescribed interaction range]
     \label{thm:parent-gap-fixed-range-transfer}
-    \lean{MPSTensor.exists_parentHamiltonianES_gap_of_larger_range}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_gap_of_larger_range}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_es,
         def:parent_hamiltonian_es}
@@ -1118,20 +1095,20 @@ tensors.
 
 \begin{lemma}[The interaction on a full interval]
     \label{lem:full-interval-parent-interaction}
-    \lean{MPSTensor.localTermES_self_zero_eq_parentInteractionES}
+    \lean{MPSTensor.parentRingInteraction_term_zero_self}
     \leanok
-    For an MPS tensor $A$ and an interval of positive length $W$,
+    For an MPS tensor $A$ and a ring of positive length $W$, the term of
     the length-$W$ parent interaction starting at the first site is the
     orthogonal projection $h_W$ onto $\mathcal G_W(A)^\perp$.
 \end{lemma}
 \begin{proof}\leanok
-    Restriction to the full interval is the identity, so the local interaction
-    is precisely the defining orthogonal projection.
+    The window of this term is the whole ring in its own order, so placing
+    the projection on it changes nothing.
 \end{proof}
 
 \begin{lemma}[Periodic comparison from an open interval]
     \label{thm:periodic-parent-range-comparison}
-    \lean{MPSTensor.parentHamiltonianES_comparison_of_local_open_comparison}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_comparison_of_local_open_comparison}
     \leanok
     Let $1\leq R\leq m$, $N\geq 2m$, and $W=m+R-1$.
     Write $K_{R,W}$ for the open parent Hamiltonian of interaction length
@@ -1161,19 +1138,16 @@ tensors.
 
 \begin{lemma}[Uniform gap above an interaction threshold]
     \label{thm:primitive_block_sum_parent_gap_threshold}
-    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_hasComplementaryFixedPointGap}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_threshold_of_fixedPointGap}
     \leanok
     Let $B=\bigoplus_j\mu_j A_j$, where the coefficients are nonzero and
     $(A_j)_j$ is a finite family of normalized primitive tensors of positive
     bond dimension, pairwise inequivalent under similarity and phase. Assume that
     each recorded invariant density is positive definite and that the physical
     dimension is positive. There exists $R_0\geq1$ such that, for every
-    $R\geq R_0$, there exist $\gamma_R>0$ and $N_R$ for which
-    \begin{align}
-        \gamma_R\|v\|\leq\|H_{R,N}(B)v\|
-        \notag
-    \end{align}
-    for every $N\geq N_R$ and every $v\perp\ker H_{R,N}(B)$.
+    $R\geq R_0$, there exist $\gamma_R>0$ and $N_R$ for which every nonzero
+    eigenvalue of $H_{R,N}(B)$ is at least $\gamma_R$ for every
+    $N\geq N_R$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:primitive_block_sum_parent_gap,thm:ph_primitive_blocks_open_kernel,thm:parent-gap-fixed-range-transfer}
@@ -1190,7 +1164,7 @@ tensors.
 
 \begin{lemma}[Gap at the common block-injectivity range]
     \label{thm:primitive-block-parent-gap-three-block-bound}
-    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_of_threeBlock_bound}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_threeBlock_bound}
     \leanok
     Let $B=\bigoplus_{j=0}^{r-1}\mu_j A_j$, where $r\geq2$, all coefficients
     are nonzero, and the normalized primitive tensors $A_j$ are pairwise
@@ -1200,11 +1174,8 @@ tensors.
     range constructed by the overlap argument recorded
     in~\cite{gap:cpgsv21_block_parent_interaction_range}, for every
     $R\geq3(r-1)(L_0+1)+1$ there exist $\gamma_R>0$ and $N_R$ such that
-    \begin{align}
-        \gamma_R\|v\|\leq\|H_{R,N}(B)v\|
-        \notag
-    \end{align}
-    for every $N\geq N_R$ and every $v\perp\ker H_{R,N}(B)$.
+    every nonzero eigenvalue of $H_{R,N}(B)$ is at least $\gamma_R$ for
+    every $N\geq N_R$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:primitive_block_sum_parent_gap,thm:parent-gap-fixed-range-transfer,
@@ -1219,7 +1190,7 @@ tensors.
 
 \begin{lemma}[Gap uniform in every chain length]
     \label{thm:primitive-block-parent-uniform-gap-three-block-bound}
-    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_threeBlock_bound}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_of_threeBlock_bound}
     \leanok
     Let $B=\bigoplus_{j=0}^{r-1}\mu_j A_j$, where $r\geq2$, all coefficients
     are nonzero, and the normalized primitive tensors $A_j$ are pairwise
@@ -1227,10 +1198,8 @@ tensors.
     dimensions, positive definite recorded invariant densities, and a common
     block-injectivity length $L_0\geq1$. For every
     $R\geq3(r-1)(L_0+1)+1$, there exists $\gamma_R>0$ such that, for every
-    $N\in\mathbb N$ and every $v\perp\ker H_{R,N}(B)$,
-    \begin{align}
-        \gamma_R\|v\|\leq\|H_{R,N}(B)v\|.
-    \end{align}
+    $N\geq1$, every nonzero eigenvalue of $H_{R,N}(B)$ is at least
+    $\gamma_R$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:primitive-block-parent-gap-three-block-bound,thm:parent_hamiltonian_eventual_gap}
@@ -1795,7 +1764,7 @@ tensors.
 \begin{lemma}[Open ground spaces at a simultaneous injectivity length]
     \label{thm:block_open_kernel_simultaneous_injectivity}
     \lean{MPSTensor.%
-        ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_wordTupleSpanTop}
+        ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop}
     \leanok
     Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
     Suppose that their simultaneous length-$S$ word tuples span the product
@@ -1821,7 +1790,7 @@ tensors.
 \begin{lemma}[Open-chain gaps at a simultaneous injectivity length]
     \label{thm:block_open_gap_all_lengths_simultaneous_injectivity}
     \lean{MPSTensor.%
-        exists_openParentHamiltonianES_toTensorFromBlocks_gap_of_wordTupleSpanTop}
+        exists_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_wordTupleSpanTop}
     \leanok
     Let $A^0,\ldots,A^{r-1}$ have positive bond dimensions and common
     physical dimension $d\geq1$. Suppose that their simultaneous
@@ -1831,12 +1800,8 @@ tensors.
     original blocks, the finite-interval conclusion of
     \cite[Theorem~1.2 and Section~6]{Nachtergaele1996Spectral} holds at
     every interaction range $R\geq S+1$: there exists $\delta>0$
-    such that
-    \begin{align}
-        \delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(B)v\|
-        \notag
-    \end{align}
-    for every $N\geq R$ and every $v\perp G_N(B)$.
+    such that, for every $N\geq R$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,R}(B)$ is at least $\delta$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:block_word_span_primitive_normalization,
@@ -1862,14 +1827,14 @@ tensors.
 \begin{lemma}[Dimension-bound open gaps for normal blocks]
     \label{thm:normal_block_open_gap_dimension_bound}
     \lean{MPSTensor.%
-        exists_openParentHamiltonianES_toTensorFromBlocks_gap_of_isNormalTensor}
+        exists_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_isNormalTensor}
     \leanok
     Let $A^j$ be normal tensors with common physical dimension $d\geq1$,
     pairwise inequivalent under virtual similarity and phase. Set
     $D_* = \max\{\sum_j D_j,1\}$ and $B=\bigoplus_j\mu_jA^j$,
     with every $\mu_j\ne0$. For every $R\geq3D_*^5$, there exists
-    $\delta>0$ such that $\delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(B)v\|$
-    for every $N\geq R$ and every $v\perp G_N(B)$.
+    $\delta>0$ such that, for every $N\geq R$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,R}(B)$ is at least $\delta$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,
@@ -1881,14 +1846,14 @@ tensors.
 
 \begin{lemma}[Open parent gaps for canonical tensors]
     \label{thm:canonical_open_gap_all_lengths}
-    \lean{MPSTensor.CPSVCanonicalFormData.openParentHamiltonianES_eq_representatives,
+    \lean{MPSTensor.CPSVCanonicalFormData.parentChainInteraction_eq_representatives,
         MPSTensor.CPSVCanonicalFormData.%
-        exists_openParentHamiltonianES_gap_of_wordTupleSpanTop,
+        exists_hamiltonian_parentChainInteraction_gap_of_wordTupleSpanTop,
         MPSTensor.IsCPSVCanonicalForm.exists_bnt_open_gap_of_wordTupleSpanTop,
         MPSTensor.IsCPSVCanonicalForm.%
-        exists_openParentHamiltonianES_gap_of_three_bondDim_pow_five_le,
+        exists_parentChainInteraction_gap_of_three_bondDim_pow_five_le,
         MPSTensor.CPSVCanonicalFormData.%
-        ker_openParentHamiltonianES_eq_groundSpaceES_of_wordTupleSpanTop}
+        ker_hamiltonian_parentChainInteraction_eq_of_wordTupleSpanTop}
     \leanok
     Let $A$ be a canonical tensor with physical dimension $d\geq1$, and
     choose its distinct normal representatives $B^j$. At every positive
@@ -1897,12 +1862,8 @@ tensors.
     reconstruction of $A$. If the representatives are simultaneously
     injective at $S>0$ and $R\geq S+1$, then
     $\ker H^{\mathrm{open}}_{N,R}(A)=G_N(A)$ for every $N\geq R$,
-    and there is $\delta>0$ such that
-    \begin{align}
-        \delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(A)v\|
-        \notag
-    \end{align}
-    for every $N\geq R$ and every $v\perp G_N(A)$.
+    and there is $\delta>0$ such that, for every $N\geq R$, every nonzero
+    eigenvalue of $H^{\mathrm{open}}_{N,R}(A)$ is at least $\delta$.
     If the bond dimension $D$ is positive, the conclusion holds at every
     $R\geq3D^5$ without a given injectivity length.
 \end{lemma}
@@ -1919,7 +1880,7 @@ tensors.
 
 \begin{definition}[Open sums of a local interaction]
     \label{def:open_local_interaction_sum}
-    \lean{MPSTensor.openInteractionHamiltonianES}
+    \lean{ManyBody.Interaction.chainTranslates}
     \leanok
     For a local operator $h$ on $R$ sites, let
     $H^{\mathrm{open}}_N(h)$ be the sum of its translates over starts
@@ -1929,33 +1890,29 @@ tensors.
 
 \begin{lemma}[Properties of open interaction sums]
     \label{lem:open_local_interaction_sum_properties}
-    \lean{MPSTensor.openInteractionHamiltonianES_mono,
-        MPSTensor.openInteractionHamiltonianES_smul,
-        MPSTensor.openInteractionHamiltonianES_zero,
-        MPSTensor.openInteractionHamiltonianES_isPositive,
-        MPSTensor.openInteractionHamiltonianES_parentInteractionES}
+    \lean{ManyBody.Interaction.hamiltonian_chainTranslates_mono,
+        ManyBody.Interaction.hamiltonian_chainTranslates_smul,
+        ManyBody.Interaction.hamiltonian_chainTranslates_zero,
+        ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates}
     \leanok
     Open interaction sums preserve order and positivity, commute with
     scalar multiplication, and vanish for the zero interaction.
-    When $R>0$, the sum of the canonical parent projection is the
-    canonical open parent Hamiltonian.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:open_local_interaction_sum}
     Extension by the identity and physical coordinate isometries preserve
     order, positivity, and scalar multiplication. Summation preserves
-    these properties. Extending the local parent projection gives each
-    canonical parent term.
+    these properties.
 \end{proof}
 
 \begin{lemma}[Open gaps for fixed positive parent interactions]
     \label{thm:open_positive_parent_gap}
-    \lean{MPSTensor.IsParentInteraction.exists_pos_open_comparison,
-        MPSTensor.IsParentInteraction.exists_open_uniform_gap_of_canonical_gap,
+    \lean{MPSTensor.IsParentInteraction.exists_pos_hamiltonian_chainTranslates_comparison,
+        MPSTensor.IsParentInteraction.exists_hamiltonian_chainTranslates_uniform_gap_of_canonical_gap,
         MPSTensor.CPSVCanonicalFormData.%
         exists_openInteraction_uniform_gap_of_wordTupleSpanTop}
     \leanok
-    Let $R>0$, and let $h\geq0$ have kernel $G_R(A)$.
+    Let $h\geq0$ be a matrix on $R$ sites with kernel $G_R(A)$.
     There are $\kappa,C>0$, independent of $N$, such that
     \begin{align}
         \kappa H^{\mathrm{open}}_{N,R}(A)
@@ -1963,9 +1920,11 @@ tensors.
         \leq C H^{\mathrm{open}}_{N,R}(A).
         \notag
     \end{align}
-    Hence a uniform canonical open-chain gap $\gamma>0$ for $N\geq R$
-    gives the gap $\kappa\gamma$ for $H^{\mathrm{open}}_N(h)$ on its
-    kernel complement. In particular, this applies to every fixed positive
+    Hence, if every nonzero eigenvalue of the canonical open-chain
+    Hamiltonian $H^{\mathrm{open}}_{N,R}(A)$ is at least $\gamma>0$ for
+    every $N\geq R$, then every nonzero eigenvalue of
+    $H^{\mathrm{open}}_N(h)$ is at least $\kappa\gamma$ for those $N$.
+    In particular, this applies to every fixed positive
     parent interaction of a canonical tensor when its normal representatives
     are simultaneously injective at $S>0$ and $R\geq S+1$.
 \end{lemma}
@@ -1976,28 +1935,29 @@ tensors.
     $\kappa h_R(A)\leq h\leq C h_R(A)$, and summing the translated
     comparisons yields the two-sided operator bounds. Because the two positive
     operators bound one another by positive constants, their kernels coincide,
-    and the lower bound transfers the canonical gap to the common kernel
-    complement.
+    and the lower bound transfers the lower bound on the nonzero eigenvalues.
 \end{proof}
 
 \begin{lemma}[Compact comparison for open parent interactions]
     \label{thm:compact_open_positive_parent_gap}
     \lean{MPSTensor.%
-        exists_uniform_openInteractionHamiltonianES_gap_of_compact_canonical_gap,
+        exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap,
         MPSTensor.CPSVCanonicalFormData.exists_uniform_openInteraction_gap_of_compact,
         MPSTensor.IsCPSVCanonicalForm.%
         exists_uniform_openInteraction_gap_of_compact_of_bounded_range}
     \leanok
     Let $K$ be a compact parameter set. Suppose the local ground projections
     of $A_x$ are continuous, and let $h_x$ be a continuous family of positive
-    interactions with kernel $G_R(A_x)$, where $R>0$. If the canonical open
-    parent Hamiltonians have one positive gap for every $x\in K$ and every
-    $N\geq N_0$, then the interaction sums $H^{\mathrm{open}}_N(h_x)$
-    also have one positive gap for those parameters and lengths.
+    interactions with kernel $G_R(A_x)$. If every nonzero eigenvalue of the
+    canonical open parent Hamiltonians is at least one positive constant for
+    every $x\in K$ and every $N\geq N_0$, then every nonzero eigenvalue of
+    the interaction sums $H^{\mathrm{open}}_N(h_x)$ is at least one positive
+    constant for those parameters and lengths.
 
     For a fixed canonical tensor $A$, this conclusion requires no given
     canonical gap: simultaneous injectivity at $S>0$ and $R\geq S+1$
-    give one gap uniform over $x\in K$ and every $N\geq R$.
+    give one positive lower bound on the nonzero eigenvalues, uniform over
+    $x\in K$ and every $N\geq R$.
     When its bond dimension $D$ is positive, $R\geq3D^5$ suffices without
     a given injectivity length.
 \end{lemma}
@@ -2015,9 +1975,9 @@ tensors.
 \begin{lemma}[Compact gaps on bounded open intervals]
     \label{thm:compact_bounded_open_interval_gap}
     \lean{MPSTensor.%
-        exists_uniform_openParentHamiltonianES_toTensorFromBlocks_gap_fixed_volume,
+        exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_fixed_volume,
         MPSTensor.%
-        exists_uniform_openParentHamiltonianES_toTensorFromBlocks_gap_bounded_volumes}
+        exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_bounded_volumes}
     \leanok
     Let $K$ be a compact parameter set, and let $A_x^j$ be continuous
     block tensors with positive physical and bond dimensions. Suppose that
@@ -2025,13 +1985,9 @@ tensors.
     parameter, where $S>0$. Set $B_x=\bigoplus_j\mu_j(x)A_x^j$, with
     all weights nonzero; the weights need not be continuous.
     Fix $R\geq S+1$ and a finite upper length $M$.
-    There is $\delta>0$ such that
-    \begin{align}
-        \delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(B_x)v\|
-        \notag
-    \end{align}
-    for every $x\in K$, every $R\leq N\leq M$, and every
-    $v\perp\ker H^{\mathrm{open}}_{N,R}(B_x)$.
+    There is $\delta>0$ such that, for every $x\in K$ and every
+    $R\leq N\leq M$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,R}(B_x)$ is at least $\delta$.
     The constant may depend on $M$.
 \end{lemma}
 \begin{proof}\leanok
@@ -2041,18 +1997,32 @@ tensors.
     local ground projections at lengths $R$ and $N$. The open Hamiltonian
     depends continuously on the first projection, and its kernel is $G_N$.
     The compact finite-dimensional norm-gap theorem gives one positive
-    bound at this $N$. Taking the minimum over $R\leq N\leq M$ gives the
+    bound at this $N$; for the positive operator
+    $H^{\mathrm{open}}_{N,R}(B_x)$ a norm bound on the complement of the
+    kernel is a lower bound on the nonzero eigenvalues. Taking the minimum over $R\leq N\leq M$ gives the
     claim. Nonzero weights preserve every local ground space.
 \end{proof}
 
 \begin{definition}[Zero-padded open interactions]
     \label{def:open_knabe_padding}
-    \lean{MPSTensor.zmodOpenLocalTermES}
-    \leanok
     \uses{def:open_parent_hamiltonian_es}
     Let $R,P>0$. On the Hilbert space of an $N$-site chain, index the
     nonwrapping canonical interactions by $s\in\Z/P\Z$. Writing $\bar s$
-    for the representative in $\{0,\ldots,P-1\}$, define
+    for the representative in $\{0,\ldots,P-1\}$, let $\widetilde h_s$ be
+    the sum of the interactions of the open chain whose window starts at
+    $\bar s$; there is at most one. The period indexes the interactions; the
+    physical chain still has $N$ sites.
+\end{definition}
+
+\begin{lemma}[Projection, sum, and separation of padded interactions]
+    \label{thm:open_knabe_padding_properties}
+    \lean{MPSTensor.hamiltonian_restrict_parentChainInteraction_val_eq,
+        MPSTensor.isStarProjection_hamiltonian_restrict_parentChainInteraction_val_eq,
+        MPSTensor.commute_hamiltonian_restrict_parentChainInteraction_of_oriented_separation,
+        MPSTensor.sum_hamiltonian_restrict_parentChainInteraction_val_eq}
+    \leanok
+    \uses{def:open_knabe_padding}
+    The padded interactions are
     \begin{align}
         \widetilde h_s & =
         \begin{cases}
@@ -2061,16 +2031,6 @@ tensors.
         \end{cases}
         \label{eq:open_knabe_padding}
     \end{align}
-    The period indexes the interactions; the physical chain still has $N$ sites.
-\end{definition}
-
-\begin{lemma}[Projection, sum, and separation of padded interactions]
-    \label{thm:open_knabe_padding_properties}
-    \lean{MPSTensor.zmodOpenLocalTermES_isSymmetricProjection,
-        MPSTensor.zmodOpenLocalTermES_commute_of_oriented_separation,
-        MPSTensor.sum_zmodOpenLocalTermES_eq_openParentHamiltonianES}
-    \leanok
-    \uses{def:open_knabe_padding}
     Every $\widetilde h_s$ is an orthogonal projection. If $R\leq e$ and
     $e+R\leq P$, then $\widetilde h_s\widetilde h_{s+e}
         =\widetilde h_{s+e}\widetilde h_s$ for every $s$. If $N\leq P$,
@@ -2090,8 +2050,8 @@ tensors.
 
 \begin{lemma}[Clipped windows of padded interactions]
     \label{thm:open_knabe_clipped_windows}
-    \lean{MPSTensor.cyclicWindowSum_zmodOpenLocalTermES_eq_zero_or_interval,
-        MPSTensor.cyclicWindowSum_zmodOpenLocalTermES_quadraticForm_gap}
+    \lean{MPSTensor.cyclicWindowSum_hamiltonian_restrict_parentChainInteraction_eq_zero_or_interval,
+        MPSTensor.cyclicWindowSum_hamiltonian_restrict_parentChainInteraction_quadraticForm_gap}
     \leanok
     \uses{def:open_knabe_padding}
     Let $m>0$, $N\geq R>0$, and $P=N+2m$. Put
@@ -2099,8 +2059,8 @@ tensors.
     range-$R$ open Hamiltonian on an interval $[n-W,n)$, extended by the
     identity on the remaining sites, with
     $R\leq W\leq m+R-1$ and $W\leq n\leq N$.
-    If every open Hamiltonian on $R\leq W\leq m+R-1$ sites has norm
-    gap at least $\gamma>0$ on its kernel complement, then
+    If every nonzero eigenvalue of every open Hamiltonian on
+    $R\leq W\leq m+R-1$ sites is at least $\gamma>0$, then
     $A_s^2\geq\gamma A_s$ for every $s$.
 \end{lemma}
 \begin{proof}\leanok
@@ -2110,26 +2070,26 @@ tensors.
     interval. Its active starts therefore form one interval $[a,b)$, or
     none. In the first case, with $W=b-a+R-1$ and $n=b+R-1$, the local terms
     sum to the interval Hamiltonian on $[a,n)$.
-    Its norm gap is preserved under extension by free sites. Positivity
-    converts this norm gap into $A_s^2\geq\gamma A_s$; the zero case is immediate.
+    Its gap above the kernel is preserved under extension by free sites. Positivity
+    converts this gap into $A_s^2\geq\gamma A_s$; the zero case is immediate.
 \end{proof}
 
 \begin{lemma}[An open-chain finite-size gap criterion]
     \label{thm:open_finite_range_knabe_gap}
-    \lean{MPSTensor.openParentHamiltonianES_gap_of_finite_open_gaps}
+    \lean{MPSTensor.hamiltonian_parentChainInteraction_gap_of_finite_open_gaps}
     \leanok
     \uses{def:open_parent_hamiltonian_es}
-    Let $1\leq R\leq m$, and suppose that every range-$R$ open parent
-    Hamiltonian on $R\leq W\leq m+R-1$ sites has norm gap at least
-    $\gamma$ on its kernel complement. By the cyclic finite-range inequality
+    Let $1\leq R\leq m$, and suppose that every nonzero eigenvalue of
+    every range-$R$ open parent Hamiltonian on $R\leq W\leq m+R-1$ sites is
+    at least $\gamma$. By the cyclic finite-range inequality
     derived in \cite{gap:knabe88_finite_range_coefficient} (rather than the
     printed periodic nearest-neighbor criterion), if $m\gamma>(R-1)^2$, then
     \begin{align}
         \delta & =\frac{m\gamma-(R-1)^2}{m-R+1}>0,
         \label{eq:open_finite_range_knabe_delta}
     \end{align}
-    and $\delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(A)v\|$ for every
-    $N\geq R$ and $v\perp\ker H^{\mathrm{open}}_{N,R}(A)$.
+    and every nonzero eigenvalue of $H^{\mathrm{open}}_{N,R}(A)$ is at
+    least $\delta$ for every $N\geq R$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:open_knabe_padding_properties,thm:open_knabe_clipped_windows,
@@ -2140,13 +2100,14 @@ tensors.
     satisfies $A_s^2\geq\gamma A_s$. The cyclic inequality therefore gives
     $(H^{\mathrm{open}}_{N,R}(A))^2\geq\delta H^{\mathrm{open}}_{N,R}(A)$
     with $\delta$ as in~(\ref{eq:open_finite_range_knabe_delta}).
-    The positive-operator quadratic-form estimate gives the asserted norm gap.
+    For a positive operator this quadratic-form estimate bounds the nonzero
+    eigenvalues from below by $\delta$.
 \end{proof}
 
 \begin{lemma}[Persistence of gaps on finitely many open intervals]
     \label{thm:open_gap_bounded_volume_continuity}
-    \lean{MPSTensor.eventually_openParentHamiltonianES_toTensorFromBlocks_gap_fixed_volume,
-        MPSTensor.eventually_openParentHamiltonianES_toTensorFromBlocks_gap_bounded_volumes}
+    \lean{MPSTensor.eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_fixed_volume,
+        MPSTensor.eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_bounded_volumes}
     \leanok
     Let $A_x^j$ be continuous block tensors with positive physical and bond
     dimensions. Suppose their length-$S$ word tuples span the product matrix
@@ -2174,13 +2135,14 @@ tensors.
 
 \begin{lemma}[Local persistence of an all-length open gap]
     \label{thm:open_gap_all_length_neighborhood}
-    \lean{MPSTensor.eventually_openParentHamiltonianES_toTensorFromBlocks_gap_of_uniform_gap}
+    \lean{MPSTensor.eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_uniform_gap}
     \leanok
     Under the block-family hypotheses of
     Lemma~\ref{thm:open_gap_bounded_volume_continuity}, suppose that at
-    $x_0$ one $\gamma>0$ bounds the open norm gaps on $G_N(B_{x_0})^\perp$
-    for every $N\geq R$. Then some $\delta>0$ bounds the open norm gaps
-    on their kernel complements for every $N\geq R$ and every $x$ in
+    $x_0$ one $\gamma>0$ bounds below the nonzero eigenvalues of
+    $H^{\mathrm{open}}_{N,R}(B_{x_0})$ for every $N\geq R$. Then some
+    $\delta>0$ bounds below the nonzero eigenvalues of
+    $H^{\mathrm{open}}_{N,R}(B_x)$ for every $N\geq R$ and every $x$ in
     one neighborhood of $x_0$.
 \end{lemma}
 \begin{proof}\leanok
@@ -2195,7 +2157,7 @@ tensors.
 
 \begin{lemma}[Compact uniform open gaps for simultaneously injective blocks]
     \label{thm:compact_block_open_gap}
-    \lean{MPSTensor.exists_uniform_openParentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths}
+    \lean{MPSTensor.exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_compact_all_lengths}
     \leanok
     Let $K$ be compact, and let $A_x^j$ be continuous block tensors with
     positive physical and bond dimensions. Suppose their length-$S$ word
@@ -2203,10 +2165,9 @@ tensors.
     Put $B_x=\bigoplus_j\mu_j(x)A_x^j$, with every weight nonzero.
     Following the compactness argument of \cite[Appendix~A]{Schuch2011Phases}
     at the stated sufficient range, with no continuity of the weights required,
-    for each fixed $R\geq S+1$ there is $\delta>0$ such that
-    $\delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(B_x)v\|$ for every
-    $x\in K$, every $N\geq R$, and every
-    $v\perp\ker H^{\mathrm{open}}_{N,R}(B_x)$.
+    for each fixed $R\geq S+1$ there is $\delta>0$ such that, for every
+    $x\in K$ and every $N\geq R$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,R}(B_x)$ is at least $\delta$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,
@@ -2219,7 +2180,7 @@ tensors.
 
 \begin{lemma}[Compact dimension-bound open gaps for normal blocks]
     \label{thm:compact_normal_block_open_gap}
-    \lean{MPSTensor.exists_uniform_block_openParentHamiltonianES_gap_of_compact_isNormalTensor}
+    \lean{MPSTensor.exists_uniform_block_hamiltonian_parentChainInteraction_gap_of_compact_isNormalTensor}
     \leanok
     Let $A_x^j$ be continuous normalized normal blocks, pairwise inequivalent
     under virtual similarity and phase at every parameter, with physical
@@ -2227,7 +2188,8 @@ tensors.
     Put $D_* =\max\{\sum_jD_j,1\}$ and
     $B_x=\bigoplus_j\mu_j(x)A_x^j$, with every weight nonzero.
     For every compact $K$ and every fixed $R\geq3D_*^5$, one positive
-    open norm gap holds uniformly for $x\in K$ and all $N\geq R$.
+    constant bounds below the nonzero eigenvalues of
+    $H^{\mathrm{open}}_{N,R}(B_x)$ uniformly for $x\in K$ and all $N\geq R$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:cpsv_bnt_sharp_span_ambient_cap,thm:block_word_span_propagation,
@@ -2267,7 +2229,7 @@ tensors.
 \begin{lemma}[Open-chain gaps at a prescribed simultaneous injectivity range]
     \label{thm:block_open_gap_subsequence_simultaneous_injectivity}
     \lean{MPSTensor.%
-        exists_openParentHamiltonianES_toTensorFromBlocks_gap_subsequence_of_wordTupleSpanTop}
+        exists_parentChainInteraction_toTensorFromBlocks_gap_subsequence_of_wordTupleSpanTop}
     \leanok
     Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
     Suppose that their simultaneous length-$S$ word tuples span the product
@@ -2275,11 +2237,9 @@ tensors.
     every $\mu_j\neq0$. Combining the block-injective local spaces of
     \cite[Section~IV.C]{Cirac2021Matrix} with the martingale estimate of
     \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral}, for any
-    fixed $R\geq S+1$ there are $p>0$, with $R\leq2p$, and $\delta>0$ such that
-    \begin{align}
-        \delta\|v\|\leq\|H^{\mathrm{open}}_{pM,R}(B)v\|\notag
-    \end{align}
-    for every $M\geq2$ and every $v\perp G_{pM}^{\mathrm{ES}}(B)$.
+    fixed $R\geq S+1$ there are $p>0$, with $R\leq2p$, and $\delta>0$ such
+    that, for every $M\geq2$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{pM,R}(B)$ is at least $\delta$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -2303,7 +2263,7 @@ tensors.
 \begin{lemma}[Strict Knabe intervals at a simultaneous injectivity range]
     \label{thm:block_strict_knabe_window_simultaneous_injectivity}
     \lean{MPSTensor.%
-        exists_strict_openParentHamiltonianES_toTensorFromBlocks_window_of_wordTupleSpanTop}
+        exists_strict_parentChainInteraction_toTensorFromBlocks_window_of_wordTupleSpanTop}
     \leanok
     Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
     Suppose that their simultaneous length-$S$ word tuples span the product
@@ -2313,10 +2273,8 @@ tensors.
     of Lemma~\ref{thm:parent_hamiltonian_gap_from_open_knabe_block} (with
     the coefficient discussed in
     \path{docs/paper-gaps/knabe88_finite_range_coefficient.tex}) such that
-    \begin{align}
-        \gamma\|v\|\leq\|H^{\mathrm{open}}_{m+R-1,R}(B)v\|\notag
-    \end{align}
-    for every $v\perp G_{m+R-1}^{\mathrm{ES}}(B)$.
+    every nonzero eigenvalue of $H^{\mathrm{open}}_{m+R-1,R}(B)$ is at least
+    $\gamma$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -2330,7 +2288,7 @@ tensors.
 
 \begin{lemma}[A uniform gap at the simultaneous injectivity range]
     \label{thm:block-parent-uniform-gap-simultaneous-injectivity}
-    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop}
     \leanok
     Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
     Suppose their word tuples of a given positive length $S$ span the full
@@ -2338,13 +2296,9 @@ tensors.
     $\mu_j$ is nonzero. Realizing the block-injective gap assertion of
     \cite[Section~IV.C]{Cirac2021Matrix} at the simultaneous injectivity range,
     for each interaction range $R\geq S+1$ there is a constant $\gamma_R>0$
-    such that
-    \begin{align}
-        \gamma_R\lVert v\rVert\leq\lVert H_{R,N}v\rVert
-    \end{align}
-    for every chain length $N\in\mathbb N$ and every
-    $v\perp\ker H_{R,N}$, where $H_{R,N}$ is the canonical periodic parent
-    Hamiltonian of $B$.
+    such that, for every chain length $N\geq1$, every nonzero eigenvalue of
+    $H_{R,N}$ is at least $\gamma_R$, where $H_{R,N}$ is the canonical
+    periodic parent Hamiltonian of $B$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -2372,11 +2326,11 @@ tensors.
 
 \begin{lemma}[Canonical parent Hamiltonians and normal representatives]
     \label{thm:canonical-parent-hamiltonian-representatives}
-    \lean{MPSTensor.CPSVCanonicalFormData.parentHamiltonianES_eq_representatives}
+    \lean{MPSTensor.CPSVCanonicalFormData.hamiltonian_parentRingInteraction_eq_representatives}
     \leanok
     Let $A$ be a tensor in canonical form, with distinct normal
     representatives $B_0,\ldots,B_{g-1}$, and set $B=\bigoplus_j B_j$.
-    For every positive interaction range $R$ and every chain length $N$,
+    For every positive interaction range $R$ and every chain length $N\geq1$,
     the canonical periodic parent Hamiltonians satisfy
     \begin{align}
         H_{R,N}(A)=H_{R,N}(B).\notag
@@ -2397,7 +2351,7 @@ tensors.
 
 \begin{lemma}[Canonical gap for every canonical decomposition]
     \label{thm:canonical-decomposition-gap-simultaneous-injectivity}
-    \lean{MPSTensor.CPSVCanonicalFormData.exists_parentHamiltonianES_uniform_gap_of_wordTupleSpanTop}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_parentRingInteraction_uniform_gap_of_wordTupleSpanTop}
     \leanok
     Let $A$ be a tensor in canonical form with positive physical dimension.
     Fix any canonical decomposition of
@@ -2405,10 +2359,8 @@ tensors.
     Let $S$ be a positive integer such that the simultaneous length-$S$ word
     tuples of $B_0,\ldots,B_{g-1}$ span the product of the block matrix
     algebras. Then, for every $R\geq S+1$, there exists $\gamma>0$ such that,
-    for every chain length $N$ and every vector $v\perp\ker H_{R,N}(A)$,
-    \begin{align}
-        \gamma\|v\|\leq\|H_{R,N}(A)v\|.\notag
-    \end{align}
+    for every chain length $N\geq1$, every nonzero eigenvalue of
+    $H_{R,N}(A)$ is at least $\gamma$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:canonical-parent-hamiltonian-representatives,thm:block-parent-uniform-gap-simultaneous-injectivity}
@@ -2428,11 +2380,8 @@ tensors.
     tensors $B_0,\ldots,B_{g-1}$ once, before $S$ and $R$, such that for every
     positive integer $S$ whose simultaneous length-$S$ word tuples span the
     product of the block matrix algebras and every $R\geq S+1$, there exists
-    $\gamma>0$ such that, for every chain length $N$ and every vector
-    $v\perp\ker H_{R,N}(A)$,
-    \begin{align}
-        \gamma\|v\|\leq\|H_{R,N}(A)v\|.\notag
-    \end{align}
+    $\gamma>0$ such that, for every chain length $N\geq1$, every nonzero
+    eigenvalue of $H_{R,N}(A)$ is at least $\gamma$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:canonical-decomposition-gap-simultaneous-injectivity}
@@ -2444,15 +2393,13 @@ tensors.
 \begin{lemma}[A dimension bound for canonical parent gaps]
     \label{thm:canonical_parent_gap_bounded_range}
     \lean{MPSTensor.IsCPSVCanonicalForm.%
-        exists_parentHamiltonianES_uniform_gap_of_three_bondDim_pow_five_le}
+        exists_parentRingInteraction_uniform_gap_of_three_bondDim_pow_five_le}
     \leanok
     Let $A$ be a tensor in canonical form with positive physical dimension
     and positive bond dimension $D$. For every $R\geq3D^5$, there is
-    $\gamma>0$ (depending on $A$ and $R$, but not on $N$) such that
-    \begin{align}
-        \gamma\|v\|\leq\|H_{R,N}(A)v\|\notag
-    \end{align}
-    for every $N\in\mathbb N$ and every $v\perp\ker H_{R,N}(A)$.
+    $\gamma>0$ (depending on $A$ and $R$, but not on $N$) such that, for
+    every $N\geq1$, every nonzero eigenvalue of $H_{R,N}(A)$ is at least
+    $\gamma$.
     Combining the blocking estimate of
     \cite[lines~317--345]{Cirac2016MPDO_arXiv} with the gap assertion of
     \cite[Section~IV.C]{Cirac2021Matrix}, this sufficient range need not be
@@ -2473,7 +2420,7 @@ tensors.
 
 \begin{lemma}[Comparison of positive parent interactions]
     \label{thm:parent-interaction-comparison}
-    \lean{MPSTensor.IsParentInteraction.exists_pos_comparison}
+    \lean{MPSTensor.IsParentInteraction.exists_pos_comparison_toEuclideanLin_toMatrix'_parentInteraction}
     \leanok
     Let $h$ be a positive interaction on $R$ sites whose kernel is the local
     MPS space $G_R(A)$, in the sense of
@@ -2492,9 +2439,9 @@ tensors.
 
 \begin{definition}[Periodic sum of a fixed interaction]
     \label{def:periodic-fixed-interaction}
-    \lean{MPSTensor.periodicLocalInteractionES,MPSTensor.periodicInteractionHamiltonianES}
+    \lean{ManyBody.Interaction.translationInvariant}
     \leanok
-    Let $h$ act on the physical space of $R$ consecutive sites. For
+    Let $h$ be a matrix on the physical space of $R$ consecutive sites, and let $N\ge1$. For
     $R\leq N$, let $U_i$ be the unitary which places the cyclic interval
     of length $R$ starting at $i$ first and the remaining sites second.
     Define
@@ -2508,16 +2455,13 @@ tensors.
 
 \begin{lemma}[Order and positivity of periodic interaction sums]
     \label{thm:periodic-fixed-interaction-order}
-    \lean{MPSTensor.periodicLocalInteractionES_mono,
-        MPSTensor.periodicLocalInteractionES_smul,
-        MPSTensor.periodicInteractionHamiltonianES_zero,
-        MPSTensor.periodicInteractionHamiltonianES_mono,
-        MPSTensor.periodicInteractionHamiltonianES_smul,
-        MPSTensor.periodicInteractionHamiltonianES_isPositive}
+    \lean{ManyBody.Interaction.hamiltonian_translationInvariant_mono,
+        ManyBody.Interaction.hamiltonian_translationInvariant_smul,
+        ManyBody.Interaction.posSemidef_hamiltonian_translationInvariant}
     \leanok
-    Cyclic extension and its periodic sum preserve operator inequalities
-    and commute with scalar multiplication. In particular, for every
-    volume $N$,
+    The periodic sum preserves operator inequalities
+    and commutes with scalar multiplication: for every
+    volume $N\ge1$,
     \begin{align}
         h\leq k & \quad\Longrightarrow\quad H_N(h)\leq H_N(k),\notag                      \\
         H_N(ch) & =cH_N(h),                                          & H_N(0) & =0,\notag \\
@@ -2534,22 +2478,22 @@ tensors.
 
 \begin{lemma}[Canonical parent projections give the canonical Hamiltonian]
     \label{thm:periodic-fixed-interaction-canonical}
-    \lean{MPSTensor.periodicLocalInteractionES_parentInteractionES,
-        MPSTensor.periodicInteractionHamiltonianES_parentInteractionES}
+    \lean{MPSTensor.localTerm_eq_toLin'_term,
+        MPSTensor.parentHamiltonian_eq_toLin'_hamiltonian}
     \leanok
     For a tensor $A$ and a positive interaction range $R$, the periodic
     sum of the canonical parent projection $h_R=I-P_{G_R(A)}$ is exactly the
-    canonical parent Hamiltonian, at every volume:
+    canonical parent Hamiltonian, term by term and at every volume $N\ge1$:
     \begin{align}
         H_N(h_R)=H_{R,N}(A).\notag
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:periodic-fixed-interaction,thm:cyclic_active_block_local_conjugacy,lem:full-interval-parent-interaction}
+    \uses{def:periodic-fixed-interaction,thm:cyclic_active_block_local_conjugacy}
     In cyclic active-interval coordinates, each translated canonical term
-    is the full-interval parent projection extended by the identity on the
-    spectator sites. Conjugating back identifies the terms individually.
-    When $R>N$, both definitions give zero.
+    is the parent projection on the active interval extended by the
+    identity on the spectator sites. Conjugating back identifies the terms
+    individually. When $R>N$, both definitions give zero.
 \end{proof}
 
 \begin{lemma}[Uniform comparison of periodic parent Hamiltonians]
@@ -2583,16 +2527,16 @@ tensors.
     \label{thm:positive-parent-interaction-uniform-gap}
     \lean{MPSTensor.IsParentInteraction.exists_uniform_gap_of_canonical_gap}
     \leanok
-    Let $A$ be a matrix product tensor and let $R>0$. Suppose that the periodic
-    Hamiltonians formed from the orthogonal projection onto $G_R(A)^\perp$
-    have a positive gap uniformly in the chain length. Let $h$ be a fixed positive
+    Let $A$ be a matrix product tensor and let $R$ be an interaction range.
+    Suppose that there is $\gamma>0$ such that, for every chain length
+    $N\geq1$, every nonzero eigenvalue of the periodic Hamiltonian formed
+    from the orthogonal projection onto $G_R(A)^\perp$ is at least $\gamma$.
+    Let $h$ be a fixed positive
     operator on $R$ sites with kernel $G_R(A)$, and let $H_N(h)$ be the sum
-    of its cyclic translates. Then there is $\delta>0$ such that, for every chain
-    length $N$ and every $v\perp\ker H_N(h)$,
-    \begin{align}
-        \delta\lVert v\rVert\leq\lVert H_N(h)v\rVert.
-    \end{align}
-    For $N<R$ both periodic Hamiltonians are defined to be zero.
+    of its cyclic translates. Then there is $\delta>0$ such that, for every
+    chain length $N\geq1$, every nonzero eigenvalue of $H_N(h)$ is at least
+    $\delta$.
+    For $N<R$ both periodic Hamiltonians are zero.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -2617,10 +2561,9 @@ tensors.
     Suppose that $S>0$ and the tuples of length-$S$ words span the product of
     the block matrix algebras. For every $R\geq S+1$ and
     every fixed positive operator $h$ on $R$ sites with kernel $G_R(A)$,
-    there is $\gamma>0$ such that, for every $N$ and every $v\perp\ker H_N(h)$,
-    \begin{align}
-        \gamma\lVert v\rVert\leq\lVert H_N(h)v\rVert.
-    \end{align}
+    there is $\gamma>0$ such that, for every $N\geq1$, every nonzero
+    eigenvalue of the sum $H_N(h)$ of the cyclic translates of $h$ is at
+    least $\gamma$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -2640,11 +2583,9 @@ tensors.
     the following holds. Suppose that $S>0$ and the tuples of length-$S$ words
     span the product of the block matrix algebras. For
     every $R\geq S+1$ and every fixed positive operator $h$ on $R$ sites with
-    kernel $G_R(A)$, there is $\gamma>0$ such that, for every $N$ and every
-    $v\perp\ker H_N(h)$,
-    \begin{align}
-        \gamma\lVert v\rVert\leq\lVert H_N(h)v\rVert.
-    \end{align}
+    kernel $G_R(A)$, there is $\gamma>0$ such that, for every $N\geq1$,
+    every nonzero eigenvalue of the sum $H_N(h)$ of the cyclic translates of
+    $h$ is at least $\gamma$.
     The representatives are chosen once, independently of $S$, $R$, and $h$.
 \end{lemma}
 \begin{proof}
@@ -2666,11 +2607,9 @@ tensors.
     positive-interaction comparison of \cite[Section~IV.C]{Cirac2021Matrix}
     with the sufficient dimension bound of
     \cite[lines~317--345]{Cirac2016MPDO_arXiv}, there is $\gamma>0$
-    (depending on $A$, $R$, and $h$, but not on $N$) such that
-    \begin{align}
-        \gamma\|v\|\leq\|H_N(h)v\|\notag
-    \end{align}
-    for every $N\in\mathbb N$ and every $v\perp\ker H_N(h)$.
+    (depending on $A$, $R$, and $h$, but not on $N$) such that, for every
+    $N\geq1$, every nonzero eigenvalue of the sum $H_N(h)$ of the cyclic
+    translates of $h$ is at least $\gamma$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -2693,16 +2632,14 @@ shorter interaction range.
 
 \begin{lemma}[A prescribed periodic gap from an open-chain estimate]
     \label{thm:parent-prescribed-gap-window}
-    \lean{MPSTensor.parentHamiltonianES_gap_ge_one_sub_of_open_gap}
+    \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_ge_one_sub_of_open_gap}
     \leanok
     \uses{def:parent_hamiltonian_es,def:open_parent_hamiltonian_es}
     Let $0<\eta<1$, $1\le R\le m$, and
-    $2(R-1)^2\le m\eta$. Suppose the open parent Hamiltonian on
-    $m+R-1$ sites has gap at least $1-\eta/2$. Then, for every
-    $N\ge2m$ and every $v\perp\ker H_{R,N}$,
-    \begin{align}
-        (1-\eta)\|v\| & \le\|H_{R,N}v\|.
-    \end{align}
+    $2(R-1)^2\le m\eta$. Suppose that every nonzero eigenvalue of the open
+    parent Hamiltonian on $m+R-1$ sites is at least $1-\eta/2$. Then, for
+    every $N\ge2m$, every nonzero eigenvalue of the periodic parent
+    Hamiltonian $H_{R,N}$ is at least $1-\eta$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -2721,16 +2658,16 @@ shorter interaction range.
 
 \begin{lemma}[Preservation of finite-interval gaps]
     \label{thm:open_interval_gap_transport}
-    \lean{MPSTensor.openPrefixParentHamiltonianES_norm_gap_of_local_gap,
-        MPSTensor.openSuffixParentHamiltonianES_norm_gap_of_local_gap,
-        MPSTensor.openSuffixParentHamiltonianES_conj_cyclicActiveBlock}
+    \lean{MPSTensor.hamiltonian_prefix_parentChainInteraction_gap_of_local_gap,
+        MPSTensor.hamiltonian_restrict_parentChainInteraction_gap_of_local_gap,
+        MPSTensor.hamiltonian_restrict_parentChainInteraction_conj_cyclicActiveBlock}
     \leanok
-    Let $R>0$. If the range-$R$ parent Hamiltonian on $n$ sites has norm
-    gap $\kappa>0$ on its kernel complement, its extension to the prefix
-    of an $(n+q)$-site chain has the same lower bound.
-    Likewise, if $R\leq W\leq n\leq N$ and the range-$R$ Hamiltonian
-    on $W$ sites has gap at least $\kappa$, its interaction sum on
-    $[n-W,n)$, acting on the $N$-site chain, has gap at least $\kappa$.
+    Let $R>0$. If every nonzero eigenvalue of the range-$R$ parent
+    Hamiltonian on $n$ sites is at least $\kappa>0$, the same holds for its
+    extension to the prefix of an $(n+q)$-site chain.
+    Likewise, if $R\leq W\leq n\leq N$ and every nonzero eigenvalue of the
+    range-$R$ Hamiltonian on $W$ sites is at least $\kappa$, the same holds
+    for its interaction sum on $[n-W,n)$, acting on the $N$-site chain.
     The physical coordinate isometry identifies this interval interaction
     sum with the $W$-site Hamiltonian tensored with the identity on the
     remaining sites. These are the finite-interval gaps used in
@@ -2754,7 +2691,7 @@ shorter interaction range.
 
 \begin{lemma}[Sharp gap comparison from two ground spaces]
     \label{thm:sharp_two_ground_projection_gap}
-    \lean{FrustrationFree.norm_gap_of_two_ground_projection_bounds}
+    \lean{FrustrationFree.forall_hasEigenvalue_of_two_ground_projection_bounds}
     \leanok
     Let $H$ be a linear operator on a finite-dimensional complex Hilbert
     space, let $W=\ker H$, and suppose $W\subseteq U\cap V$. Write
@@ -2762,8 +2699,9 @@ shorter interaction range.
     Suppose $\kappa\geq0$, $c<1$,
     $\|P_W-P_UP_V\|\leq c$, and
     $\kappa((I-P_U)+(I-P_V))\leq H$ in the order of self-adjoint
-    operators. Then $\kappa(1-c)\|v\|\leq\|Hv\|$ for every $v\perp W$.
-    This is a two-subspace consequence of the ground-projection estimate
+    operators. Then every nonzero eigenvalue of $H$ is at least
+    $\kappa(1-c)$. This is a two-subspace consequence of the
+    ground-projection estimate
     in \cite[Section~6, the three-interval commutation lemma,
         part~(ii)]{Nachtergaele1996Spectral}.
 \end{lemma}
@@ -2778,25 +2716,26 @@ shorter interaction range.
     anticommutator inequality gives $L^2\geq(1-c)L$, and
     $\ker L=U\cap V=W$. The finite-dimensional spectral theorem gives
     $(1-c)\|v\|^2\leq\langle Lv,v\rangle$ for $v\perp W$.
-    Applying $\kappa L\leq H$ and Cauchy--Schwarz yields
-    $\kappa(1-c)\|v\|^2\leq\langle Hv,v\rangle
-        \leq\|Hv\|\|v\|$. Cancel $\|v\|$ when $v\ne0$.
+    Applying $\kappa L\leq H$ yields
+    $\kappa(1-c)\|v\|^2\leq\langle Hv,v\rangle$ for $v\perp W$.
+    Since $\kappa\geq0$ and $L\geq0$, $H$ is positive, so an eigenvector
+    $v$ for an eigenvalue $\mu\neq0$ lies in $W^\perp$ and gives
+    $\kappa(1-c)\|v\|^2\leq\mu\|v\|^2$.
 \end{proof}
 
 \begin{lemma}[Combining gaps on two open intervals]
     \label{thm:open_parent_overlapping_interval_gap}
-    \lean{MPSTensor.openPrefixParentHamiltonianES_le_openParentHamiltonianES,
-        MPSTensor.openSuffixParentHamiltonianES_le_openParentHamiltonianES,
-        MPSTensor.openParentHamiltonianES_norm_gap_of_overlapping_interval_gaps}
+    \lean{ManyBody.Interaction.hamiltonian_restrict_le,
+        MPSTensor.hamiltonian_parentChainInteraction_gap_of_overlapping_interval_gaps}
     \leanok
     Let $H$ be the range-$R$ parent Hamiltonian on an open chain of length
     $N$, and let $H_L$ and $H_T$ be its interaction sums on a prefix of
     length $n$ and on a terminal interval of length $W$, respectively.
     Write $P_L$, $P_T$, and $P$ for their orthogonal ground projections.
-    Suppose $\kappa\geq0$, and suppose both interval Hamiltonians have a
-    norm gap at least $\kappa$ on their respective kernel complements.
-    If $\|P-P_LP_T\|\leq1/2$, then
-    $(\kappa/16)\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
+    Suppose $\kappa\geq0$, and suppose every nonzero eigenvalue of each of
+    the two interval Hamiltonians is at least $\kappa$.
+    If $\|P-P_LP_T\|\leq1/2$, then every nonzero eigenvalue of $H$ is at
+    least $\kappa/16$.
     The interval interaction sums always satisfy $H_L\leq H$ and
     $H_T\leq H$.
 \end{lemma}
@@ -2852,17 +2791,14 @@ shorter interaction range.
 
 \begin{lemma}[Prescribed gaps for primitive tensors]
     \label{thm:primitive-parent-prescribed-gap}
-    \lean{Kraus.HasComplementaryFixedPointGap.eventually_parentHamiltonianES_gap_ge_one_sub}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_parentRingInteraction_gap_ge_one_sub}
     \leanok
     \uses{def:primitive_mps,def:parent_hamiltonian_es}
     Let $A$ be a normalized primitive tensor with positive bond dimension
     and a positive-definite invariant matrix. For every $0<\eta<1$,
     every sufficiently large integer $l$ has the following property.
-    If $m\ge l+1$, $2l^2\le m\eta$, and $N\ge2m$, then
-    \begin{align}
-        (1-\eta)\|v\| & \le\|H_{l+1,N}v\|
-    \end{align}
-    for every $v\perp\ker H_{l+1,N}$. One may take
+    If $m\ge l+1$, $2l^2\le m\eta$, and $N\ge2m$, then every nonzero
+    eigenvalue of $H_{l+1,N}$ is at least $1-\eta$. One may take
     $m=\max\{l+1,\lceil2l^2/\eta\rceil\}$.
     The threshold for $l$ depends on the tensor; no dimension-only
     bound on this threshold is asserted.
@@ -2887,7 +2823,7 @@ shorter interaction range.
 
 \begin{lemma}[Prescribed gaps for primitive block sums]
     \label{thm:primitive-block-parent-prescribed-gap}
-    \lean{MPSTensor.eventually_toTensorFromBlocks_parentHamiltonianES_gap_ge_one_sub}
+    \lean{MPSTensor.eventually_toTensorFromBlocks_hamiltonian_parentRingInteraction_gap_ge_one_sub}
     \leanok
     \uses{def:primitive_mps,def:parent_hamiltonian_es,def:gauge_phase_equiv}
     Let $B=\bigoplus_j\mu_jA_j$, where the $A_j$ are normalized
@@ -2919,8 +2855,8 @@ shorter interaction range.
 
 \begin{lemma}[Prescribed gaps without normalization]
     \label{thm:normal-parent-prescribed-gap}
-    \lean{MPSTensor.eventually_parentHamiltonianES_gap_ge_one_sub_of_isNormal,
-        MPSTensor.eventually_toTensorFromBlocks_parentHamiltonianES_gap_ge_one_sub_of_isNormal}
+    \lean{MPSTensor.eventually_hamiltonian_parentRingInteraction_gap_ge_one_sub_of_isNormal,
+        MPSTensor.eventually_toTensorFromBlocks_hamiltonian_parentRingInteraction_gap_ge_one_sub_of_isNormal}
     \leanok
     \uses{def:normal,def:parent_hamiltonian_es}
     The conclusion of Lemma~\ref{thm:primitive-parent-prescribed-gap}
@@ -2956,7 +2892,7 @@ shorter interaction range.
         MPSTensor.isCPSVBasisOfNormalTensors_shortRangeHeisenbergTensor,
         MPSTensor.mem_groundSpaceES_shortRangeHeisenbergTensor_two_iff,
         MPSTensor.groundSpaceES_shortRangeHeisenbergTensor_two_starProjection,
-        MPSTensor.parentInteractionES_shortRangeHeisenbergTensor_two_apply}
+        MPSTensor.toEuclideanLin_toMatrix'_parentInteraction_shortRangeHeisenbergTensor_two_apply}
     \leanok
     The direct sum of the three bond-one qubit tensors
     $(1,0)$, $(0,1)$ and $(1/\sqrt2,1/\sqrt2)$, with weights one,
@@ -2987,7 +2923,7 @@ shorter interaction range.
         ZMod.tendsto_cycleFourierGap_zero,
         MPSTensor.shortRangeHeisenbergMagnon,
         MPSTensor.shortRangeHeisenbergMagnon_ne_zero,
-        MPSTensor.parentHamiltonianES_shortRangeHeisenbergMagnon,
+        MPSTensor.toEuclideanLin_hamiltonian_parentRingInteraction_shortRangeHeisenbergMagnon,
         MPSTensor.not_exists_eventual_uniform_gap_shortRangeHeisenbergTensor_two}
     \leanok
     \uses{lem:three_normal_blocks_singlet_parent, def:parent_hamiltonian_es}
@@ -2995,11 +2931,8 @@ shorter interaction range.
     has a nonzero eigenvector of eigenvalue
     $\varepsilon_N=1-\cos(2\pi/N)>0$ for every $N\geq2$.
     These eigenvalues tend to zero. Consequently there are no
-    $\delta>0$ and $N_0$ such that
-    \[
-        \delta\lVert v\rVert\leq\lVert H_{N,2}v\rVert
-        \qquad(N\geq N_0,\ v\perp\ker H_{N,2}).
-    \]
+    $\delta>0$ and $N_0$ such that, for every $N\geq N_0$, every eigenvalue
+    of $H_{N,2}$ other than zero is at least $\delta$.
     Thus the unrestricted assertion in
     \cite[Section~IV.C, lines~2183--2187]{Cirac2021Matrix} is false.
     The sufficient-range theorems remain valid, since this example
@@ -3161,12 +3094,11 @@ shorter interaction range.
 
 \begin{lemma}[Sparse grouped open-chain energy bound]
     \label{thm:sparse_grouped_open_energy_gap}
-    \lean{MPSTensor.sparseGroupedOpenParentHamiltonianES,
+    \lean{MPSTensor.sum_range_hamiltonian_restrict_parentChainInteraction_grouped,
         MPSTensor.grouped_martingaleDifference_norm_le_of_projector_defect_of_le,
-        MPSTensor.sparseGroupedOpenParentHamiltonianES_energy_bound_of_grouped_c3,
-        MPSTensor.sparseGroupedOpenParentHamiltonianES_isPositive,
-        MPSTensor.sparseGroupedOpenParentHamiltonianES_projection_bound_of_grouped_c3,
-        MPSTensor.sparseGroupedOpenParentHamiltonianES_add_terminal_le}
+        MPSTensor.sparseGrouped_energy_bound_of_grouped_c3,
+        MPSTensor.sparseGrouped_projection_bound_of_grouped_c3,
+        MPSTensor.sparseGrouped_add_terminal_le}
     \leanok
     Let $p\geq1$, $M\geq2$, and $pM\leq N$. Sample the canonical
     range-$2p$ interactions at starts $0,p,\ldots,p(M-2)$, and write
@@ -3203,7 +3135,7 @@ shorter interaction range.
 
 \begin{lemma}[Sharp open-chain gap with a residual terminal interval]
     \label{thm:sparse_grouped_terminal_open_gap}
-    \lean{MPSTensor.openParentHamiltonianES_gap_of_sparse_grouped_and_terminal}
+    \lean{MPSTensor.hamiltonian_parentChainInteraction_gap_of_sparse_grouped_and_terminal}
     \leanok
     Let $p\geq1$, $M\geq2$, $0<q<p$, and $N=pM+q$.
     Assume that every range-$2p$ open Hamiltonian at length at least $2p$
@@ -3211,12 +3143,8 @@ shorter interaction range.
     three-interval ground-projection defect is at most
     $0\leq\epsilon<1/\sqrt2$ whenever the overlap has at least $p$ sites,
     uniformly in both outer intervals, with the right interval nonempty.
-    Then
-    \[
-        (1-\sqrt2\epsilon)^2(1-\epsilon)\|v\|
-        \leq\|H^{\mathrm{open}}_{N,2p}v\|
-        \qquad(v\perp\ker H^{\mathrm{open}}_{N,2p}).
-    \]
+    Then every nonzero eigenvalue of $H^{\mathrm{open}}_{N,2p}$ is at least
+    $(1-\sqrt2\epsilon)^2(1-\epsilon)$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:sparse_grouped_open_energy_gap,
@@ -3234,7 +3162,7 @@ shorter interaction range.
 
 \begin{lemma}[Prescribed open-chain gaps for primitive block sums]
     \label{thm:primitive_block_open_prescribed_gap}
-    \lean{MPSTensor.eventually_toTensorFromBlocks_openParentHamiltonianES_gap_ge_one_sub}
+    \lean{MPSTensor.eventually_toTensorFromBlocks_hamiltonian_parentChainInteraction_gap_ge_one_sub}
     \leanok
     Let $A_0,\ldots,A_{r-1}$ be normalized primitive tensors with common
     physical dimension $d\geq1$, positive bond dimensions, and
@@ -3242,11 +3170,8 @@ shorter interaction range.
     are related by a virtual similarity and a phase. Put
     $B=\bigoplus_j\mu_jA_j$, with $\mu_j\ne0$ for every $j$.
     For every $0<\eta<1$, there is $p_0$ such that, for every
-    $p\geq p_0$ and every $N\geq2p$,
-    \[
-        (1-\eta)\|v\|\leq\|H^{\mathrm{open}}_{N,2p}(B)v\|
-        \qquad(v\perp\ker H^{\mathrm{open}}_{N,2p}(B)).
-    \]
+    $p\geq p_0$ and every $N\geq2p$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,2p}(B)$ is at least $1-\eta$.
     This is a quantitative consequence of
     \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral}.
 \end{lemma}
@@ -3265,18 +3190,15 @@ shorter interaction range.
 
 \begin{lemma}[Prescribed open-chain gaps for normal block sums]
     \label{thm:normal_block_open_prescribed_gap}
-    \lean{MPSTensor.eventually_toTensorFromBlocks_openParentHamiltonianES_gap_ge_one_sub_of_isNormal}
+    \lean{MPSTensor.eventually_toTensorFromBlocks_hamiltonian_parentChainInteraction_gap_ge_one_sub_of_isNormal}
     \leanok
     Let $A_0,\ldots,A_{r-1}$ be normal tensors with common physical
     dimension $d\geq1$ and positive bond dimensions. Suppose no two
     distinct blocks are related by similarity and multiplication by a
     nonzero complex scalar, and let $B=\bigoplus_j\mu_jA_j$, with
     $\mu_j\ne0$ for every $j$. For every $0<\eta<1$, there is $p_0$
-    such that, for every $p\geq p_0$ and every $N\geq2p$,
-    \[
-        (1-\eta)\|v\|\leq\|H^{\mathrm{open}}_{N,2p}(B)v\|
-        \qquad(v\perp\ker H^{\mathrm{open}}_{N,2p}(B)).
-    \]
+    such that, for every $p\geq p_0$ and every $N\geq2p$, every nonzero
+    eigenvalue of $H^{\mathrm{open}}_{N,2p}(B)$ is at least $1-\eta$.
     Thus the canonical open-chain gap approaches one as the even
     interaction range grows, uniformly over all lengths at least that
     range. This is a quantitative consequence of the projector decay and

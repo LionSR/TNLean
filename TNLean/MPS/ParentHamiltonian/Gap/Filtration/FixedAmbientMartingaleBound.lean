@@ -27,22 +27,20 @@ variable {d D : ℕ}
 
 /-- Before the first full interaction window fits, the fixed-ambient prefix
 Hamiltonian vanishes. -/
-theorem openPrefixParentHamiltonianES_eq_zero_of_lt
+theorem hamiltonian_prefix_parentChainInteraction_eq_zero_of_lt
     (A : MPSTensor d D) {L N n : ℕ} (hnL : n < L) :
-    openPrefixParentHamiltonianES A L N n = 0 := by
-  rw [openPrefixParentHamiltonianES]
-  apply Finset.sum_eq_zero
-  intro i _
-  exfalso
-  have hi := i.2
-  omega
+    Matrix.toEuclideanLin
+        ((parentChainInteraction A L N).restrict fun i ↦ i.val + L ≤ n).hamiltonian = 0 := by
+  rw [ManyBody.Interaction.hamiltonian_restrict,
+    Finset.filter_false_of_mem fun i _ ↦ by omega, ManyBody.Interaction.partialHamiltonian_empty,
+    map_zero]
 
 /-- Before the first full interaction window fits, the fixed-ambient ground
 projection is the identity. -/
 theorem openPrefixGroundProjectionES_eq_one_of_lt
     (A : MPSTensor d D) {L N n : ℕ} (hnL : n < L) :
     openPrefixGroundProjectionES A L N n = 1 := by
-  have hzero := openPrefixParentHamiltonianES_eq_zero_of_lt A (N := N) hnL
+  have hzero := hamiltonian_prefix_parentChainInteraction_eq_zero_of_lt A (N := N) hnL
   simp only [openPrefixGroundProjectionES, hzero, LinearMap.ker_zero,
     Submodule.starProjection_top']
   rfl
@@ -60,46 +58,33 @@ theorem fixedAmbient_martingaleDifference_eq_zero_of_lt
 
 /-- At the first full-window prefix, the prefix and local-interval Hamiltonians
 are the same single local interaction. -/
-theorem openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoint
-    (A : MPSTensor d D) {L N : ℕ} (hL : 0 < L) (hLN : L ≤ N) :
-    openPrefixParentHamiltonianES A L N L =
-      openSuffixParentHamiltonianES A L L N L := by
-  classical
-  have hN : 0 < N := lt_of_lt_of_le hL hLN
-  let iFin : Fin N := ⟨0, hN⟩
-  let i : NonwrappingStart L N := ⟨iFin, by
-    change 0 + L ≤ N
-    omega⟩
-  have hprefix : openPrefixParentHamiltonianES A L N L = localTermES A L i.1 := by
-    let i' : OpenPrefixStart L N L := ⟨i, by
-      change 0 + L ≤ L
-      omega⟩
-    let _ : Subsingleton (OpenPrefixStart L N L) :=
-      ⟨fun j k => by
-        apply Subtype.ext
-        apply Subtype.ext
-        apply Fin.ext
-        have hj := j.2
-        have hk := k.2
-        omega⟩
-    rw [openPrefixParentHamiltonianES, Fintype.sum_subsingleton _ i']
-  have hsuffix : openSuffixParentHamiltonianES A L L N L = localTermES A L i.1 := by
-    simpa only [Nat.sub_self] using
-      openSuffixParentHamiltonianES_eq_localTermES A hL le_rfl hLN
-  exact hprefix.trans hsuffix.symm
+theorem hamiltonian_prefix_parentChainInteraction_eq_restrict_at_endpoint
+    (A : MPSTensor d D) (L N : ℕ) :
+    Matrix.toEuclideanLin
+        ((parentChainInteraction A L N).restrict fun i ↦ i.val + L ≤ L).hamiltonian =
+      Matrix.toEuclideanLin
+          ((parentChainInteraction A L N).restrict fun i ↦ L - L ≤ i.val ∧ i.val + L ≤
+              L).hamiltonian := by
+  rw [ManyBody.Interaction.hamiltonian_restrict, ManyBody.Interaction.hamiltonian_restrict,
+    Finset.filter_congr fun i _ ↦ (by simp : i.val + L ≤ L ↔ L - L ≤ i.val ∧ i.val + L ≤ L)]
 
 /-- At the endpoint \(n=l\), the local ground projection is the next prefix
 ground projection. -/
 theorem openIntervalGroundProjectionES_at_endpoint
-    (A : MPSTensor d D) {l N : ℕ} (hl : 0 < l) (hlN : l + 1 ≤ N) :
+    (A : MPSTensor d D) (l N : ℕ) :
     openIntervalGroundProjectionES A (l + 1) l N l =
       openPrefixGroundProjectionES A (l + 1) N (l + 1) := by
   have hHamiltonian :=
-    openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoint
-      A (L := l + 1) (N := N) (by omega) hlN
+    hamiltonian_prefix_parentChainInteraction_eq_restrict_at_endpoint A (l + 1) N
   have hker :
-      LinearMap.ker (openSuffixParentHamiltonianES A (l + 1) (l + 1) N (l + 1)) =
-        LinearMap.ker (openPrefixParentHamiltonianES A (l + 1) N (l + 1)) :=
+      LinearMap.ker
+          (Matrix.toEuclideanLin
+              ((parentChainInteraction A (l + 1) N).restrict fun i ↦ l + 1 - (l + 1) ≤ i.val ∧
+                  i.val + (l + 1) ≤ l + 1).hamiltonian) =
+        LinearMap.ker
+            (Matrix.toEuclideanLin
+                ((parentChainInteraction A (l + 1) N).restrict fun i ↦ i.val + (l + 1) ≤ l +
+                    1).hamiltonian) :=
     congrArg LinearMap.ker hHamiltonian.symm
   simp only [openIntervalGroundProjectionES, openPrefixGroundProjectionES]
   exact congrArg (fun U : Submodule ℂ (EuclideanSpace ℂ (Cfg d N)) =>
@@ -108,7 +93,7 @@ theorem openIntervalGroundProjectionES_at_endpoint
 /-- Nachtergaele's C3 product vanishes at the endpoint \(n=l\):
 \(Q_l E_l = G_{[0,l+1)} (1 - G_{[0,l+1)}) = 0\). -/
 theorem openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint
-    (A : MPSTensor d D) {l N : ℕ} (hl : 0 < l) (hlN : l + 1 ≤ N) :
+    (A : MPSTensor d D) (l N : ℕ) :
     (openIntervalGroundProjectionES A (l + 1) l N l).comp
         ((fixedAmbientNestedGroundProjectionsES A (l + 1) N).martingaleDifference l) = 0 := by
   rw [FrustrationFree.NestedGroundProjections.martingaleDifference]
@@ -116,7 +101,7 @@ theorem openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint
       (openPrefixGroundProjectionES A (l + 1) N l -
         openPrefixGroundProjectionES A (l + 1) N (l + 1)) = 0
   rw [openPrefixGroundProjectionES_eq_one_of_lt A (by omega),
-    openIntervalGroundProjectionES_at_endpoint A hl hlN,
+    openIntervalGroundProjectionES_at_endpoint A l N,
     LinearMap.comp_sub]
   let P := openPrefixGroundProjectionES A (l + 1) N (l + 1)
   change P * 1 - P * P = 0
@@ -256,8 +241,7 @@ theorem fixedAmbient_martingaleDifference_norm_le_of_openChain
   · rw [fixedAmbient_martingaleDifference_eq_zero_of_lt A hnl,
       LinearMap.comp_zero]
     simpa using hε
-  · rw [openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint
-      A hl.le (by omega)]
+  · rw [openIntervalGroundProjectionES_comp_martingaleDifference_at_endpoint A n N]
     simpa using hε
   · obtain ⟨K, rfl⟩ : ∃ K, n = K + l := ⟨n - l, by omega⟩
     obtain ⟨r, rfl⟩ : ∃ r, N = (K + (l + 1)) + r :=
@@ -265,11 +249,18 @@ theorem fixedAmbient_martingaleDifference_norm_le_of_openChain
     exact (norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openChain
       (r := r) hInj hl.le (by omega)).trans (hOpen K (by omega))
 
-set_option linter.style.longLine false in
+end MPSTensor
+
+namespace Kraus.HasComplementaryFixedPointGap
+
+open MPSTensor
+
+variable {d D : ℕ}
+
 /-- A primitive MPS satisfies Nachtergaele's C3 bound on every active index of
 the fixed final-volume filtration.  The same overlap length and coefficient as
 in the physical open-chain estimate are used. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold
+theorem exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ _hl : 1 < l, ∃ _hInj : Kraus.IsNBlkInjective A l,
@@ -284,4 +275,4 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_fixedAmbient_martingal
   exact ⟨l, ε, hl, hInj, hε, hε_lt,
     fixedAmbient_martingaleDifference_norm_le_of_openChain hl hInj hε hOpen⟩
 
-end MPSTensor
+end Kraus.HasComplementaryFixedPointGap

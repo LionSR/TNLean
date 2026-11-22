@@ -77,21 +77,21 @@ noncomputable def pairTwist (u v : Matrix (Fin d) (Fin d) ℂ) (M : MPOTensor d 
 
 /-- Twisting the ket leg by `u` multiplies the periodic operators by `u^{⊗L}` on the left. -/
 theorem mpo_ketTwist (u : Matrix (Fin d) (Fin d) ℂ) (M : MPOTensor d D) (L : ℕ) :
-    mpo (fun i j => ∑ k, u i k • M k j) L = (Matrix.finKronecker fun _ : Fin L => u) * mpo M L := by
+    mpo (fun i j => ∑ k, u i k • M k j) L = (Matrix.piKronecker fun _ : Fin L => u) * mpo M L := by
   ext σ τ
   rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Matrix.trace_prod_ofFn_sum_smul, Matrix.mul_apply]
   refine Finset.sum_congr rfl fun κ _ => ?_
-  rw [Matrix.finKronecker_apply, mpo_apply, mpoMatrixEntry, evalWord_ofFn]
+  rw [Matrix.piKronecker_apply, mpo_apply, mpoMatrixEntry, evalWord_ofFn]
 
 /-- Twisting the bra leg by `v` multiplies the periodic operators by `(v^{⊗L})^T` on the
 right. -/
 theorem mpo_braTwist (v : Matrix (Fin d) (Fin d) ℂ) (M : MPOTensor d D) (L : ℕ) :
     mpo (fun i j => ∑ l, v j l • M i l) L =
-      mpo M L * (Matrix.finKronecker fun _ : Fin L => v)ᵀ := by
+      mpo M L * (Matrix.piKronecker fun _ : Fin L => v)ᵀ := by
   ext σ τ
   rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn, Matrix.trace_prod_ofFn_sum_smul, Matrix.mul_apply]
   refine Finset.sum_congr rfl fun κ _ => ?_
-  rw [Matrix.transpose_apply, Matrix.finKronecker_apply, mpo_apply, mpoMatrixEntry,
+  rw [Matrix.transpose_apply, Matrix.piKronecker_apply, mpo_apply, mpoMatrixEntry,
     evalWord_ofFn, mul_comm]
 
 /-- **The periodic operators of a ket-bra twist.**
@@ -101,8 +101,8 @@ with `u ⊗ v` on each doubled physical index of the vectorized state `|ρ⟩⟩
 (arXiv:2603.28349, lines 364–368). -/
 theorem mpo_pairTwist (u v : Matrix (Fin d) (Fin d) ℂ) (M : MPOTensor d D) (L : ℕ) :
     mpo (pairTwist u v M) L =
-      (Matrix.finKronecker fun _ : Fin L => u) * mpo M L *
-        (Matrix.finKronecker fun _ : Fin L => v)ᵀ := by
+      (Matrix.piKronecker fun _ : Fin L => u) * mpo M L *
+        (Matrix.piKronecker fun _ : Fin L => v)ᵀ := by
   rw [Matrix.mul_assoc, ← mpo_braTwist, ← mpo_ketTwist]
   rfl
 
@@ -112,24 +112,24 @@ arXiv:2504.16985, lines 175–182. -/
 theorem mpoWithBoundary_ketTwist (u : Matrix (Fin d) (Fin d) ℂ)
     (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
     mpoWithBoundary (fun i j => ∑ k, u i k • M k j) X L =
-      (Matrix.finKronecker fun _ : Fin L => u) * mpoWithBoundary M X L := by
+      (Matrix.piKronecker fun _ : Fin L => u) * mpoWithBoundary M X L := by
   ext σ τ
   rw [mpoWithBoundary, evalWord_ofFn, Matrix.trace_mul_prod_ofFn_sum_smul,
     Matrix.mul_apply]
   refine Finset.sum_congr rfl fun κ _ => ?_
-  rw [Matrix.finKronecker_apply, mpoWithBoundary, evalWord_ofFn]
+  rw [Matrix.piKronecker_apply, mpoWithBoundary, evalWord_ofFn]
 
 /-- A bra twist acts on every boundary-weighted operator by right multiplication.
 Source: arXiv:2603.28349, lines 364–368. -/
 theorem mpoWithBoundary_braTwist (v : Matrix (Fin d) (Fin d) ℂ)
     (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
     mpoWithBoundary (fun i j => ∑ l, v j l • M i l) X L =
-      mpoWithBoundary M X L * (Matrix.finKronecker fun _ : Fin L => v)ᵀ := by
+      mpoWithBoundary M X L * (Matrix.piKronecker fun _ : Fin L => v)ᵀ := by
   ext σ τ
   rw [mpoWithBoundary, evalWord_ofFn, Matrix.trace_mul_prod_ofFn_sum_smul,
     Matrix.mul_apply]
   refine Finset.sum_congr rfl fun κ _ => ?_
-  rw [Matrix.transpose_apply, Matrix.finKronecker_apply, mpoWithBoundary,
+  rw [Matrix.transpose_apply, Matrix.piKronecker_apply, mpoWithBoundary,
     evalWord_ofFn, mul_comm]
 
 /-- Acting on both physical legs retains the virtual boundary.
@@ -137,8 +137,8 @@ Source: arXiv:2603.28349, lines 364–368. -/
 theorem mpoWithBoundary_pairTwist (u v : Matrix (Fin d) (Fin d) ℂ)
     (M : MPOTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) (L : ℕ) :
     mpoWithBoundary (pairTwist u v M) X L =
-      (Matrix.finKronecker fun _ : Fin L => u) * mpoWithBoundary M X L *
-        (Matrix.finKronecker fun _ : Fin L => v)ᵀ := by
+      (Matrix.piKronecker fun _ : Fin L => u) * mpoWithBoundary M X L *
+        (Matrix.piKronecker fun _ : Fin L => v)ᵀ := by
   rw [Matrix.mul_assoc, ← mpoWithBoundary_braTwist, ← mpoWithBoundary_ketTwist]
   rfl
 
@@ -291,9 +291,9 @@ theorem mpvWithBoundary_toMPSTensor_eq_mul_iff (M N : MPOTensor d D)
 /-- The transpose of the Kronecker power of the entrywise conjugate is the adjoint of the
 Kronecker power. -/
 private theorem finKronecker_map_star_transpose (u : Matrix (Fin d) (Fin d) ℂ) (L : ℕ) :
-    (Matrix.finKronecker fun _ : Fin L => u.map (starRingEnd ℂ))ᵀ =
-      (Matrix.finKronecker fun _ : Fin L => u)ᴴ := by
-  rw [Matrix.finKronecker_transpose, Matrix.finKronecker_conjTranspose]
+    (Matrix.piKronecker fun _ : Fin L => u.map (starRingEnd ℂ))ᵀ =
+      (Matrix.piKronecker fun _ : Fin L => u)ᴴ := by
+  rw [Matrix.transpose_piKronecker, Matrix.conjTranspose_piKronecker]
   rfl
 
 /-- For a unitary `a`, `[a, ρ] = 0` is `a ρ a^† = ρ`. -/
@@ -327,9 +327,9 @@ theorem isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor (M : MPOTensor d 
   rw [twistedTensor_toMPSTensor_pairRep, sameMPV_toMPSTensor_iff]
   refine forall_congr' fun L => forall_congr' fun _ => ?_
   rw [mpo_onSite, mpo_pairTwist, MonoidHom.comp_apply]
-  change _ ↔ _ = _ * _ * (Matrix.finKronecker fun _ : Fin L => (U g).map (starRingEnd ℂ))ᵀ
+  change _ ↔ _ = _ * _ * (Matrix.piKronecker fun _ : Fin L => (U g).map (starRingEnd ℂ))ᵀ
   rw [finKronecker_map_star_transpose,
-    commute_iff_mul_mul_conjTranspose (Matrix.finKronecker_conjTranspose_mul_self (hU g))]
+    commute_iff_mul_mul_conjTranspose (Matrix.IsIsometry.piKronecker (fun _ ↦ hU g))]
 
 /-- **Strong on-site symmetry on the vectorized state.**
 
@@ -348,7 +348,7 @@ theorem isStrongOnSiteSymmetry_iff_mpv_toMPSTensor (M : MPOTensor d D)
   simp only [mpoWithBoundary_one]
   refine forall_congr' fun g => forall_congr' fun L => forall_congr' fun _ => ?_
   rw [twistedTensor_toMPSTensor_pairRep, mpv_toMPSTensor_eq_mul_iff, mpo_pairTwist,
-    mpo_onSite, MonoidHom.one_apply, Matrix.finKronecker_one, Matrix.transpose_one,
+    mpo_onSite, MonoidHom.one_apply, Matrix.piKronecker_one, Matrix.transpose_one,
     Matrix.mul_one]
 
 /-- Weak on-site symmetry of the boundary-weighted vectorized state.
@@ -375,7 +375,7 @@ theorem isWeakOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor
     (pairTwist (U g) ((U g).map (starRingEnd ℂ)) M) M X L 1
   simp only [one_mul, one_smul] at hvec
   rw [hvec, mpo_onSite, mpoWithBoundary_pairTwist, finKronecker_map_star_transpose,
-    commute_iff_mul_mul_conjTranspose (Matrix.finKronecker_conjTranspose_mul_self (hU g)),
+    commute_iff_mul_mul_conjTranspose (Matrix.IsIsometry.piKronecker (fun _ ↦ hU g)),
     eq_comm]
 
 /-- Strong on-site symmetry of the boundary-weighted vectorized state.
@@ -392,7 +392,7 @@ theorem isStrongOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor
   refine forall_congr' fun g => forall_congr' fun L => forall_congr' fun _ => ?_
   rw [twistedTensor_toMPSTensor_pairRep, mpvWithBoundary_toMPSTensor_eq_mul_iff,
     mpoWithBoundary_pairTwist, mpo_onSite, MonoidHom.one_apply,
-    Matrix.finKronecker_one, Matrix.transpose_one, Matrix.mul_one]
+    Matrix.piKronecker_one, Matrix.transpose_one, Matrix.mul_one]
 
 end Symmetry
 

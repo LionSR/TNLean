@@ -532,27 +532,13 @@ ground space is spanned by $V^{(N)}(A)$.
         =\Gamma_N(\Id)(\sigma)$.
 \end{proof}
 
-\begin{definition}[One-dimensional ground space]\label{def:has_unique_ground_state}
-    \lean{MPSTensor.HasUniqueGroundState}
-    \leanok
-    A finite-dimensional ground space $S$ is one-dimensional if $\dim S=1$.
+\begin{definition}[Unique ground state]\label{def:has_unique_ground_state}
+    A Hamiltonian $H$ has the unique ground state $\Omega$ at the energy
+    $E_0$ when $\Omega\ne0$ and the eigenspace of $H$ at $E_0$ is the line
+    $\C\,\Omega$. Such an eigenspace is one-dimensional, and conversely a
+    one-dimensional eigenspace is the line through each of its nonzero
+    vectors.
 \end{definition}
-
-\begin{lemma}[One-dimensionality criterion]\label{thm:has_unique_ground_state_iff_proportional}
-    \lean{MPSTensor.hasUniqueGroundState_iff_proportional}
-    \leanok
-    \uses{def:has_unique_ground_state}
-    For finite-dimensional $S$, $\dim S=1$ if and only if there exists a
-    nonzero $\psi_0\in S$ such that every $\psi\in S$ is of the form
-    $c\,\psi_0$.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    A finite-dimensional vector space has dimension one if and only if it is
-    spanned by a single nonzero vector $\psi_0$, so every $\psi\in S$ has the
-    form $c\,\psi_0$.
-\end{proof}
 
 \begin{definition}[Periodic parent-Hamiltonian ground space]\label{def:chain_ground_space}
     \lean{MPSTensor.chainGroundSpace}
@@ -606,10 +592,12 @@ ground space is spanned by $V^{(N)}(A)$.
 \begin{lemma}[Periodic MPS vector nonvanishing for block-injective tensors]%
     \label{thm:mpv_ne_zero_blk_injective}
     \lean{MPSTensor.mpv_ne_zero_of_isNBlkInjective}
+    \lean{MPSTensor.mpvState_ne_zero_of_isNBlkInjective}
     \leanok
     \uses{def:mpv, def:l_blk_injective}
     If $A$ is $L_0$-block-injective with $L_0>0$, $D\ge1$, and
-    $N\ge L_0+1$, then $V^{(N)}(A)\ne0$ in the $N$-site space.
+    $N\ge L_0+1$, then $V^{(N)}(A)\ne0$ in the $N$-site space, and likewise
+    as a vector of the Hilbert space $\ell^2(\{0,\ldots,d-1\}^N)$.
 \end{lemma}
 
 \begin{proof}

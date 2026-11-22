@@ -215,9 +215,9 @@ theorem wBlockEncoding_conjTranspose_mul_self {k : ℕ} (hk : 0 < k) :
 
 /-- Every tensor power of the W-block encoding is an isometry. -/
 theorem rectKronecker_wBlockEncoding_isometry {k : ℕ} (hk : 0 < k) (m : ℕ) :
-    (Matrix.rectKronecker fun _ : Fin m => wBlockEncoding k)ᴴ *
-      Matrix.rectKronecker (fun _ : Fin m => wBlockEncoding k) = 1 :=
-  Matrix.rectKronecker_conjTranspose_mul_self (wBlockEncoding_conjTranspose_mul_self hk)
+    (Matrix.piKronecker fun _ : Fin m => wBlockEncoding k)ᴴ *
+      Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) = 1 :=
+  Matrix.IsIsometry.piKronecker (fun _ ↦ wBlockEncoding_conjTranspose_mul_self hk)
 
 private theorem product_vacuum_blocks {k : ℕ} (m : ℕ)
     (σ : Fin m → Fin (blockPhysDim 2 k)) :
@@ -234,12 +234,12 @@ private theorem product_vacuum_blocks {k : ℕ} (m : ℕ)
 
 private theorem encoding_vacuum {k : ℕ} (m : ℕ)
     (σ : Fin m → Fin (blockPhysDim 2 k)) :
-    (Matrix.rectKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ pvbsVacuum m) σ =
+    (Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ pvbsVacuum m) σ =
       pvbsVacuum (m * k) (blockedConfigEquiv 2 m k σ) := by
-  change (∑ x : Cfg 2 m, Matrix.rectKronecker (fun _ : Fin m => wBlockEncoding k) σ x *
+  change (∑ x : Cfg 2 m, Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) σ x *
     (Pi.single (0 : Cfg 2 m) (1 : ℂ) : Cfg 2 m → ℂ) x) = _
   rw [Finset.sum_eq_single (0 : Cfg 2 m)]
-  · rw [Pi.single_eq_same, mul_one, Matrix.rectKronecker_apply, ← product_vacuum_blocks m σ]
+  · rw [Pi.single_eq_same, mul_one, Matrix.piKronecker_apply, ← product_vacuum_blocks m σ]
     exact Finset.prod_congr rfl fun i _ ↦ wBlockEncoding_zero k (σ i)
   · intro x _ hx
     simp [hx]
@@ -249,7 +249,7 @@ private theorem encoding_vacuum {k : ℕ} (m : ℕ)
 the unnormalized W vector to the flattened W vector divided by the square root
 of the block length. No blocked-vector equation is supplied as a hypothesis. -/
 theorem rectKronecker_wBlockEncoding_mulVec_wIndicator (k m : ℕ) :
-    Matrix.rectKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ wIndicator m =
+    Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ wIndicator m =
       (Real.sqrt k : ℂ)⁻¹ •
         fun σ => wIndicator (m * k) (blockedConfigEquiv 2 m k σ) := by
   induction m with
@@ -266,21 +266,21 @@ theorem rectKronecker_wBlockEncoding_mulVec_wIndicator (k m : ℕ) :
     refine Fin.consCases (fun I τ ↦ ?_) σ
     simp only [Matrix.mulVec, dotProduct]
     rw [← (Fin.consEquiv (fun _ : Fin (m + 1) => Fin 2)).sum_comp
-      (fun x => Matrix.rectKronecker (fun _ : Fin (m + 1) => wBlockEncoding k)
+      (fun x => Matrix.piKronecker (fun _ : Fin (m + 1) => wBlockEncoding k)
         (Fin.cons I τ) x * wIndicator (m + 1) x)]
     rw [Fintype.sum_prod_type]
     change (∑ i : Fin 2, ∑ x : Cfg 2 m,
-      Matrix.rectKronecker (fun _ : Fin (m + 1) => wBlockEncoding k)
+      Matrix.piKronecker (fun _ : Fin (m + 1) => wBlockEncoding k)
         (Fin.cons I τ) (Fin.cons i x) * wIndicator (m + 1) (Fin.cons i x)) = _
     rw [Fin.sum_univ_two]
-    simp only [Matrix.rectKronecker_apply, Fin.prod_univ_succ,
+    simp only [Matrix.piKronecker_apply, Fin.prod_univ_succ,
       Fin.cons_zero, Fin.cons_succ, wIndicator_cons_zero, wIndicator_cons_one]
     simp_rw [mul_assoc]
     rw [← Finset.mul_sum, ← Finset.mul_sum]
     change wBlockEncoding k I 0 *
-        (Matrix.rectKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ wIndicator m) τ +
+        (Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ wIndicator m) τ +
       wBlockEncoding k I 1 *
-        (Matrix.rectKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ pvbsVacuum m) τ = _
+        (Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ pvbsVacuum m) τ = _
     rw [ih, encoding_vacuum]
     simp only [Pi.smul_apply, smul_eq_mul]
     rw [wIndicator_flatten_cons, wBlockEncoding_zero, wBlockEncoding_one]
@@ -291,7 +291,7 @@ encoding. This retains all (mk) physical sites under the existing flattening
 equivalence. Source: the blocking device of PGVWC07, lines 2090–2097,
 applied to the review's W vector, lines 2348–2362. -/
 theorem rectKronecker_wBlockEncoding_mulVec_normalized (k m : ℕ) :
-    Matrix.rectKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ
+    Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) *ᵥ
       ((Real.sqrt m : ℂ)⁻¹ • wIndicator m) =
       (Real.sqrt (m * k : ℕ) : ℂ)⁻¹ •
         fun σ => wIndicator (m * k) (blockedConfigEquiv 2 m k σ) := by
@@ -311,18 +311,18 @@ theorem mpv_wBlockCompression_of_eq_wIndicator {D k m : ℕ} (hk : 0 < k)
         (c * (Real.sqrt k : ℂ)) * wIndicator m τ := by
   have hroot : (Real.sqrt k : ℂ) ≠ 0 :=
     Complex.ofReal_ne_zero.mpr (Real.sqrt_ne_zero'.mpr (by exact_mod_cast hk))
-  let E := Matrix.rectKronecker fun _ : Fin m => wBlockEncoding k
+  let E := Matrix.piKronecker fun _ : Fin m => wBlockEncoding k
   let W : (Fin m → Fin (blockPhysDim 2 k)) → ℂ :=
     fun σ => wIndicator (m * k) (blockedConfigEquiv 2 m k σ)
   have hflat : W = (Real.sqrt k : ℂ) • (E *ᵥ wIndicator m) := by
     dsimp only [E]
     rw [rectKronecker_wBlockEncoding_mulVec_wIndicator, smul_smul,
       mul_inv_cancel₀ hroot, one_smul]
-  have hpull : Matrix.rectKronecker (fun _ : Fin m => (wBlockEncoding k)ᴴ) *ᵥ W =
+  have hpull : Matrix.piKronecker (fun _ : Fin m => (wBlockEncoding k)ᴴ) *ᵥ W =
       (Real.sqrt k : ℂ) • wIndicator m := by
     rw [hflat, Matrix.mulVec_smul, Matrix.mulVec_mulVec]
     dsimp only [E]
-    rw [← Matrix.rectKronecker_conjTranspose,
+    rw [← Matrix.conjTranspose_piKronecker,
       rectKronecker_wBlockEncoding_isometry hk m, Matrix.one_mulVec]
   have hblock : ∀ σ : Fin m → Fin (blockPhysDim 2 k),
       mpv (blockTensor A k) σ = c * W σ := by
@@ -332,7 +332,7 @@ theorem mpv_wBlockCompression_of_eq_wIndicator {D k m : ℕ} (hk : 0 < k)
   intro τ
   rw [mpv_rotatePhysical]
   simp_rw [hblock]
-  change (Matrix.rectKronecker (fun _ : Fin m => (wBlockEncoding k)ᴴ) *ᵥ (c • W)) τ = _
+  change (Matrix.piKronecker (fun _ : Fin m => (wBlockEncoding k)ᴴ) *ᵥ (c • W)) τ = _
   rw [Matrix.mulVec_smul, hpull]
   simp only [Pi.smul_apply, smul_eq_mul, mul_assoc]
 

@@ -2058,7 +2058,7 @@ TNLean.MPS.ParentHamiltonian.Martingale.BoundedProjectionDeformation -> TNLean.M
 TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold -> TNLean.MPS.ParentHamiltonian.ProjectorDefect.C3Threshold  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.CanonicalGapAtBoundedRange -> TNLean.MPS.ParentHamiltonian.Interaction.ParentInteractionGap @1  # tn; merged into MPS.ParentHamiltonian.Martingale.ParentInteractionGap
 TNLean.MPS.ParentHamiltonian.Martingale.CanonicalGapAtSimultaneousInjectivity -> TNLean.MPS.ParentHamiltonian.Gap.CanonicalGapAtSimultaneousInjectivity  # tn
-TNLean.MPS.ParentHamiltonian.Martingale.CanonicalGapToInteractionGap -> TNLean.MPS.ParentHamiltonian.Interaction.OpenInteractionRangeComparison @1  # tn; merged into MPS.ParentHamiltonian.Martingale.OpenInteractionRangeComparison
+TNLean.MPS.ParentHamiltonian.Martingale.CanonicalGapToInteractionGap -> TNLean.MPS.ParentHamiltonian.Interaction.OpenInteractionRangeComparison  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.CanonicalOpenGap -> TNLean.MPS.ParentHamiltonian.Gap.CanonicalOpenGap  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.CompactOpenIntervalGap -> TNLean.MPS.ParentHamiltonian.Continuity.OpenGapContinuity @0  # tn; merged into MPS.ParentHamiltonian.Martingale.OpenGapContinuity
 TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian -> TNLean.MPS.ParentHamiltonian.Gap.Comparison.CyclicWindowOpenHamiltonian  # tn
@@ -2085,8 +2085,6 @@ TNLean.MPS.ParentHamiltonian.Martingale.OpenChain -> TNLean.MPS.ParentHamiltonia
 TNLean.MPS.ParentHamiltonian.Martingale.OpenFiniteRangeKnabeGap -> TNLean.MPS.ParentHamiltonian.Gap.Comparison.OpenFiniteRangeKnabeGap  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.OpenGapContinuity -> TNLean.MPS.ParentHamiltonian.Continuity.OpenGapContinuity @1  # tn; merge target
 TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian -> TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian @0  # tn; merge target
-TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction -> TNLean.MPS.ParentHamiltonian.Interaction.OpenInteraction @0  # tn; merge target
-TNLean.MPS.ParentHamiltonian.Martingale.OpenInteractionRangeComparison -> TNLean.MPS.ParentHamiltonian.Interaction.OpenInteractionRangeComparison @0  # tn; merge target
 TNLean.MPS.ParentHamiltonian.Martingale.OpenKnabePadding -> TNLean.MPS.ParentHamiltonian.Gap.Comparison.OpenKnabePadding  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.OpenParentGap -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.OpenParentGap  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.OpenParentInteractionGap -> TNLean.MPS.ParentHamiltonian.Continuity.OpenParentInteractionGap  # tn

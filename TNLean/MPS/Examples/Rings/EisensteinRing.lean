@@ -221,7 +221,7 @@ namespace MPSTensor
 /-- The entrywise image of a matrix over the Eisenstein integers in the complex matrices. -/
 noncomputable abbrev complexOfEisenstein {m n : Type*} (X : Matrix m n EisensteinInt) :
     Matrix m n ℂ :=
-  complexOfRing eisensteinToComplex X
+  Matrix.complexOfRing eisensteinToComplex X
 
 @[simp] theorem complexOfEisenstein_apply {m n : Type*} (X : Matrix m n EisensteinInt) (i : m)
     (j : n) : complexOfEisenstein X i j = eisensteinToComplex (X i j) := rfl
@@ -229,41 +229,41 @@ noncomputable abbrev complexOfEisenstein {m n : Type*} (X : Matrix m n Eisenstei
 theorem complexOfEisenstein_mul {m n o : Type*} [Fintype n] (X : Matrix m n EisensteinInt)
     (Y : Matrix n o EisensteinInt) :
     complexOfEisenstein (X * Y) = complexOfEisenstein X * complexOfEisenstein Y :=
-  complexOfRing_mul eisensteinToComplex X Y
+  Matrix.complexOfRing_mul eisensteinToComplex X Y
 
 theorem complexOfEisenstein_one {n : Type*} [DecidableEq n] :
     complexOfEisenstein (1 : Matrix n n EisensteinInt) = 1 :=
-  complexOfRing_one eisensteinToComplex
+  Matrix.complexOfRing_one eisensteinToComplex
 
 theorem complexOfEisenstein_zero {m n : Type*} :
     complexOfEisenstein (0 : Matrix m n EisensteinInt) = 0 :=
-  complexOfRing_zero eisensteinToComplex
+  Matrix.complexOfRing_zero eisensteinToComplex
 
 theorem complexOfEisenstein_sub {m n : Type*} (X Y : Matrix m n EisensteinInt) :
     complexOfEisenstein (X - Y) = complexOfEisenstein X - complexOfEisenstein Y :=
-  complexOfRing_sub eisensteinToComplex X Y
+  Matrix.complexOfRing_sub eisensteinToComplex X Y
 
 theorem complexOfEisenstein_smul {m n : Type*} (c : EisensteinInt) (X : Matrix m n EisensteinInt) :
     complexOfEisenstein (c • X) = eisensteinToComplex c • complexOfEisenstein X :=
-  complexOfRing_smul eisensteinToComplex c X
+  Matrix.complexOfRing_smul eisensteinToComplex c X
 
 theorem complexOfEisenstein_transpose {m n : Type*} (X : Matrix m n EisensteinInt) :
     complexOfEisenstein Xᵀ = (complexOfEisenstein X)ᵀ :=
-  complexOfRing_transpose eisensteinToComplex X
+  Matrix.complexOfRing_transpose eisensteinToComplex X
 
 theorem complexOfEisenstein_submatrix {m n m' n' : Type*} (X : Matrix m n EisensteinInt)
     (f : m' → m) (g : n' → n) :
     complexOfEisenstein (X.submatrix f g) = (complexOfEisenstein X).submatrix f g :=
-  complexOfRing_submatrix eisensteinToComplex X f g
+  Matrix.complexOfRing_submatrix eisensteinToComplex X f g
 
 theorem complexOfEisenstein_ne_zero {m n : Type*} {X : Matrix m n EisensteinInt} (hX : X ≠ 0) :
     complexOfEisenstein X ≠ 0 :=
-  complexOfRing_ne_zero eisensteinToComplex_injective hX
+  Matrix.complexOfRing_ne_zero eisensteinToComplex_injective hX
 
 theorem complexOfEisenstein_blockDiagonal' {o : Type*} [DecidableEq o] {m' : o → Type*}
     (M : ∀ k, Matrix (m' k) (m' k) EisensteinInt) :
     complexOfEisenstein (Matrix.blockDiagonal' M) =
       Matrix.blockDiagonal' fun k => complexOfEisenstein (M k) :=
-  complexOfRing_blockDiagonal' eisensteinToComplex M
+  Matrix.complexOfRing_blockDiagonal' eisensteinToComplex M
 
 end MPSTensor

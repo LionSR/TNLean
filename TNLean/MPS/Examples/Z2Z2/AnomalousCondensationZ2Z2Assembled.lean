@@ -148,7 +148,8 @@ theorem condensationTensor_eq_blockDiagonal (i j : Fin 4) :
       finSumFinEquiv.symm finSumFinEquiv.symm) := by
     rw [condensationTensor, h2]
     exact directSum_complexOfRing _ _ xyIntTensor i j
-  rw [h, condensationInt_eq, complexOfInt, complexOfRing_submatrix, complexOfRing_blockDiagonal']
+  rw [h, condensationInt_eq, complexOfInt, Matrix.complexOfRing_submatrix,
+      Matrix.complexOfRing_blockDiagonal']
   congr 2
   funext g
   exact (symTensor_eq g i j).symm
@@ -197,28 +198,28 @@ theorem xX_remainder_eq (a : Fin 16) :
   rw [MultiBlockCompression.remainder_oneSlot _ oneSlotMem, xX_left_eq, xX_right_eq,
     xXStacked_eq, eMPS_eq, xXLeft, xXRight, ← complexOfInt_mul, ← complexOfInt_mul,
     xXRemainderInt]
-  exact (complexOfRing_sub _ _ _).symm
+  exact (Matrix.complexOfRing_sub _ _ _).symm
 
 theorem xXy_remainder_eq (a : Fin 16) :
     xXyCompression.remainder a = complexOfInt (xXyRemainderInt a) := by
   rw [MultiBlockCompression.remainder_oneSlot _ oneSlotMem, xXy_left_eq, xXy_right_eq,
     xXyStacked_eq, negYMPS_eq, xXyLeft, xXyRight, ← complexOfInt_mul, ← complexOfInt_mul,
     xXyRemainderInt]
-  exact (complexOfRing_sub _ _ _).symm
+  exact (Matrix.complexOfRing_sub _ _ _).symm
 
 theorem xyX_remainder_eq (a : Fin 16) :
     xyXCompression.remainder a = complexOfInt (xyXRemainderInt a) := by
   rw [MultiBlockCompression.remainder_oneSlot _ oneSlotMem, xyX_left_eq, xyX_right_eq,
     xyXStacked_eq, yMPS_eq, xyXLeft, xyXRight, ← complexOfInt_mul, ← complexOfInt_mul,
     xyXRemainderInt]
-  exact (complexOfRing_sub _ _ _).symm
+  exact (Matrix.complexOfRing_sub _ _ _).symm
 
 theorem xyXy_remainder_eq (a : Fin 16) :
     xyXyCompression.remainder a = complexOfInt (xyXyRemainderInt a) := by
   rw [MultiBlockCompression.remainder_oneSlot _ oneSlotMem, xyXy_left_eq, xyXy_right_eq,
     xyXyStacked_eq, negEMPS_eq, xyXyLeft, xyXyRight, ← complexOfInt_mul, ← complexOfInt_mul,
     xyXyRemainderInt]
-  exact (complexOfRing_sub _ _ _).symm
+  exact (Matrix.complexOfRing_sub _ _ _).symm
 
 /-- **Every product of three remainder letters of the pair `(x, x)` vanishes** (data file,
 Section 4). -/

@@ -148,7 +148,7 @@ theorem exists_cutBoundary_of_mem_regionParentKernel (A : Tensor Γ d)
     ∃ M : CutConfig (regionExteriorCut (R i)) (graphBondAlphabet A) → ℂ,
       ∀ σ, cutCoeff graphEdgeTail graphEdgeHead (graphBondAlphabet A)
         (graphDependentTensor A) (regionExteriorCut (R i)) M σ = ψ σ := by
-  rw [ker_regionParentHamiltonian A R H hH] at hψ
+  rw [ker_hamiltonian_ofPlace A R H hH] at hψ
   exact (mem_cutSpace_iff _ _ _ _ _ _).mp ((Submodule.mem_iInf _).mp
     (regionParentGroundSpace_le_iInf_cutSpace A hA R hcover hψ) i)
 

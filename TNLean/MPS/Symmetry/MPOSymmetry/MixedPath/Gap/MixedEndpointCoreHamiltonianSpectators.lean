@@ -137,7 +137,8 @@ def endpointCoreEdgeConstraint (A₀ : MPSTensor (D₀ * D₀) D₀) (k : MixedE
       EuclideanSpace ℂ (endpointCoreEdgeCfg D₀ k) :=
   match k with
   | .first => endpointFirstEdgeCoreConstraintES A₀ PUnit
-  | .interior => parentInteractionES A₀ 2
+  | .interior => (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A₀ 2)) :
+      EuclideanSpace ℂ (Cfg (D₀ * D₀) 2) →ₗ[ℂ] EuclideanSpace ℂ (Cfg (D₀ * D₀) 2))
   | .last => endpointLastEdgeCoreConstraintES A₀ PUnit
 
 /-- The selected local fiber of a common-core vector.
@@ -264,12 +265,13 @@ theorem mixedEndpointActiveNormalizedLocalInteraction_apply_exteriorFiber
       let f := cyclicActiveBlockConfigEquiv (D₀ * D₀) 2 (by have := i.2; omega) i.1
       rw [mixedEndpointActiveNormalizedLocalInteraction, mixedEndpointActiveEdgePlacement_apply,
         endpointCoreLocalInteraction_apply]
-      change parentInteractionES A₀ 2
+      change Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A₀ 2))
           (mixedEndpointActiveEdgeFiber (.interior i) v (a, (b, (f σ).2, c), e)) (f σ).1 =
-        parentInteractionES A₀ 2
+        Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A₀ 2))
           (endpointCoreEdgeFiber (.interior i) (endpointExteriorFiber v a e)
             (b, (f σ).2, c)) (f σ).1
-      apply congrArg (fun w => parentInteractionES A₀ 2 w (f σ).1)
+      apply congrArg (fun w =>
+        Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A₀ 2)) w (f σ).1)
       apply PiLp.ext
       intro η
       rfl

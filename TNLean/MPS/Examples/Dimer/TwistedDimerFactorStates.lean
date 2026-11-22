@@ -62,7 +62,7 @@ theorem evenFlagState_eq_mpo_Mhat (N : ℕ) :
   | succ N =>
       rw [CPSVExample412Literal.rho_eq_finKronecker (N + 1) (by omega)]
       ext s t
-      norm_num [evenFlagState, flagMatrix_zero, flagMatrix_one, powN, Matrix.finKronecker]
+      norm_num [evenFlagState, flagMatrix_zero, flagMatrix_one, powN, Matrix.piKronecker]
 
 /-- The flag family has a density-operator tensor satisfying both channel
 fixed-point equations, namely the already normalized CPSV16 Example 4.12 tensor. -/
@@ -116,7 +116,7 @@ lemma trace_powN_sigma (N : ℕ) : (powN sigma N).trace = 1 := by
 positive semidefinite operator in the original site coordinates. -/
 theorem decoratedState_posSemidef {N : ℕ} (hN : 0 < N) :
     (decoratedState N).PosSemidef :=
-  ((Matrix.finKronecker_posSemidef (fun _ : Fin N => sigma)
+  ((Matrix.piKronecker_posSemidef (fun _ : Fin N => sigma)
     (fun _ => sigma_posSemidef)).kronecker (evenFlagState_posSemidef hN)).submatrix
       ((incomingCellEquiv N).trans (bondFlagEquiv N))
 

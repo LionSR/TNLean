@@ -206,10 +206,10 @@ theorem mpo_map_starRingEnd (T : MPOTensor d D) (N : ℕ) :
 `O(𝒯T) = v^{⊗N} O(T)^* (v^{⊗N})^†`. Source: arXiv:2203.12563, line 867. -/
 theorem mpo_timeReversal (v : Matrix (Fin d) (Fin d) ℂ) (T : MPOTensor d D) (N : ℕ) :
     mpo (timeReversal v T) N =
-      Matrix.finKronecker (fun _ : Fin N ↦ v) * (mpo T N).map (starRingEnd ℂ) *
-        (Matrix.finKronecker fun _ : Fin N ↦ v)ᴴ := by
-  rw [timeReversal, mpo_pairTwist, mpo_map_starRingEnd, Matrix.finKronecker_transpose,
-    Matrix.finKronecker_conjTranspose]
+      Matrix.piKronecker (fun _ : Fin N ↦ v) * (mpo T N).map (starRingEnd ℂ) *
+        (Matrix.piKronecker fun _ : Fin N ↦ v)ᴴ := by
+  rw [timeReversal, mpo_pairTwist, mpo_map_starRingEnd, Matrix.transpose_piKronecker,
+    Matrix.conjTranspose_piKronecker]
   rfl
 
 /-- The doubled-index letters of the time-reversed tensor are linear combinations of the
@@ -514,8 +514,8 @@ variable {d : ℕ} {G : Type} [Group G] {F : GroupFamily G d} {v : Matrix (Fin d
 periodic operator of the family on every nonempty chain: `𝒯 O_g = O_g 𝒯`, that is,
 `v^{⊗N} O_g^* = O_g v^{⊗N}`. Source: arXiv:2203.12563, line 869. -/
 def CommutesWithTimeReversal (F : GroupFamily G d) (v : Matrix (Fin d) (Fin d) ℂ) : Prop :=
-  ∀ g N, 0 < N → Matrix.finKronecker (fun _ : Fin N ↦ v) *
-    (mpo (F.tensor g) N).map (starRingEnd ℂ) = mpo (F.tensor g) N * Matrix.finKronecker fun _ ↦ v
+  ∀ g N, 0 < N → Matrix.piKronecker (fun _ : Fin N ↦ v) *
+    (mpo (F.tensor g) N).map (starRingEnd ℂ) = mpo (F.tensor g) N * Matrix.piKronecker fun _ ↦ v
 
 namespace FusionData
 
@@ -580,10 +580,10 @@ theorem nonempty_bondGauge_timeReversal (hF : F.IsNormalRepresentation)
   have hsame : ∀ g N, 0 < N →
       mpo (MPOTensor.timeReversal v (F.tensor g)) N = mpo (F.tensor g) N := by
     intro g N hN
-    have hV : Matrix.finKronecker (fun _ : Fin N ↦ v) *
-        (Matrix.finKronecker fun _ : Fin N ↦ v)ᴴ = 1 :=
-      mul_eq_one_comm.mp (Matrix.finKronecker_conjTranspose_mul_self
-        (by simpa [Matrix.star_eq_conjTranspose] using Matrix.mem_unitaryGroup_iff'.mp hv))
+    have hV : Matrix.piKronecker (fun _ : Fin N ↦ v) *
+        (Matrix.piKronecker fun _ : Fin N ↦ v)ᴴ = 1 :=
+      mul_eq_one_comm.mp (Matrix.IsIsometry.piKronecker
+        (fun _ ↦ Matrix.mem_unitaryGroup_iff'.mp hv))
     rw [mpo_timeReversal, hT g N hN, Matrix.mul_assoc, hV, Matrix.mul_one]
   have key : ∀ g, ∃ P Q : Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ,
       P * Q = 1 ∧ Q * P = 1 ∧

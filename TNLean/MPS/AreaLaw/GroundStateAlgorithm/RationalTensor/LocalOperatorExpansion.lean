@@ -31,11 +31,11 @@ and equality of the remaining physical coordinates. -/
 theorem rectKronecker_twoSiteMatrixUnitFactors
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     {p r : ι} (hpr : p ≠ r) (a b c d : Fin q) (σ τ : ι → Fin q) :
-    Matrix.rectKronecker (twoSiteMatrixUnitFactors p r a b c d) σ τ =
+    Matrix.piKronecker (twoSiteMatrixUnitFactors p r a b c d) σ τ =
       if σ p = a ∧ τ p = b ∧ σ r = c ∧ τ r = d ∧
         (∀ j, j ≠ p → j ≠ r → σ j = τ j) then 1 else 0 := by
   classical
-  rw [Matrix.rectKronecker_apply]
+  rw [Matrix.piKronecker_apply]
   split_ifs with h
   · apply Finset.prod_eq_one
     intro j _hj
@@ -98,7 +98,7 @@ theorem supported_eq_sum_twoSiteMatrixUnitFactors
     (hX : ManyBody.IsSupportedOn X {p, r}) :
     X = ∑ a : Fin q, ∑ b : Fin q, ∑ c : Fin q, ∑ d : Fin q,
       X (twoSiteConfig σ₀ p r a c) (twoSiteConfig σ₀ p r b d) •
-        Matrix.rectKronecker (twoSiteMatrixUnitFactors p r a b c d) := by
+        Matrix.piKronecker (twoSiteMatrixUnitFactors p r a b c d) := by
   classical
   ext σ τ
   simp only [Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,

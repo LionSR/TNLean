@@ -216,7 +216,7 @@ theorem commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection
     (hMpdo : IsMPDO M) (s : Fin S.basisCount) :
     IsMPDO (commonWeightAbsorbedBasisMPOTensor S hWeight s) := by
   intro N hN
-  let P := Matrix.tensorPower N (bntSectorProjection hC hρ hη hR s)
+  let P := (Matrix.piKronecker fun _ : Fin N ↦ (bntSectorProjection hC hρ hη hR s))
   have heq : P * mpo M N * P =
       (S.copies s : ℂ) • mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N :=
     sitewise_bntSectorProjection_mul_mpo_mul_self

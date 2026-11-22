@@ -9,8 +9,8 @@ import TNLean.MPS.ParentHamiltonian.Gap.Comparison.OpenRangeComparison
 # Gaps of interval Hamiltonians after adjoining free sites
 
 An interval Hamiltonian, acting on a larger chain, is an orthogonal direct
-sum of copies of its finite-interval operator. Its norm gap on the kernel
-complement is therefore preserved. The proof transports the kernel
+sum of copies of its finite-interval operator. Its gap, the lower bound on its
+nonzero eigenvalues, is therefore preserved. The proof transports the kernel
 projection and its positive comparison under the physical coordinate
 isometry. This supplies the fixed-ambient interpretation of the local gaps
 in Nachtergaele, arXiv:cond-mat/9410110, condition C2, lines 1045--1056.
@@ -86,39 +86,56 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Adjoining free sites to a prefix preserves its finite-interval norm gap.
-This is the fixed-ambient interpretation of the local gap in Nachtergaele,
-arXiv:cond-mat/9410110, condition C2, lines 1045--1056. -/
-theorem openPrefixParentHamiltonianES_norm_gap_of_local_gap
-    (A : MPSTensor d D) {R n q : ℕ} (hR : 0 < R) {κ : ℝ} (hκ : 0 < κ)
-    (hGap : ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R n))ᗮ,
-      κ * ‖v‖ ≤ ‖openParentHamiltonianES A R n v‖) :
-    ∀ v ∈ (LinearMap.ker (openPrefixParentHamiltonianES A R (n + q) n))ᗮ,
-      κ * ‖v‖ ≤ ‖openPrefixParentHamiltonianES A R (n + q) n v‖ := by
-  have hConj := openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-    A (n := n) (r := q) (p := n) hR le_rfl
-  exact norm_gap_of_fiberwise_conj (rightSpectatorConfigLinearIsometryEquiv d n q)
-    (openPrefixParentHamiltonianES A R (n + q) n) (openParentHamiltonianES A R n)
-    hκ (openParentHamiltonianES_isPositive A R n)
+/-- Adjoining free sites to a prefix preserves its finite-interval gap: every eigenvalue of the
+prefix Hamiltonian on the longer chain is `0` or at least the gap. This is the fixed-ambient
+interpretation of the local gap in Nachtergaele, arXiv:cond-mat/9410110, condition C2,
+lines 1045--1056. -/
+theorem hamiltonian_prefix_parentChainInteraction_gap_of_local_gap
+    (A : MPSTensor d D) {R n q : ℕ} {κ : ℝ} (hκ : 0 < κ)
+    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A R n).hamiltonian) μ →
+        μ = 0 ∨ (κ : ℂ) ≤ μ) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+      ((parentChainInteraction A R (n + q)).restrict fun i ↦ i.val + R ≤ n).hamiltonian) μ →
+        μ = 0 ∨ (κ : ℂ) ≤ μ := by
+  have hConj :=
+    hamiltonian_prefix_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv
+      A (L := R) (n := n) (r := q) (p := n) le_rfl
+  refine (ManyBody.forall_hasEigenvalue_iff_norm
+    (posSemidef_hamiltonian_restrict_parentChainInteraction A R (n + q) _)).mpr ?_
+  exact norm_gap_of_fiberwise_conj (rightSpectatorConfigLinearIsometryEquiv d n q) _
+    (Matrix.toEuclideanLin (parentChainInteraction A R n).hamiltonian) hκ
+    (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentChainInteraction A R n))
     (by simpa only [LinearEquiv.conj_apply, LinearMap.comp_assoc,
-      openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES] using! hConj) hGap
+      hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChainInteraction] using!
+        hConj)
+    ((ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentChainInteraction A R n)).mp hGap)
 
-/-- Inserting a finite terminal-interval Hamiltonian into a larger chain
-preserves its norm gap. The physical coordinate isometry places its active
-sites first and the free sites second. This is the fixed-ambient form of
-Nachtergaele's condition C2, arXiv:cond-mat/9410110, lines 1045--1056. -/
-theorem openSuffixParentHamiltonianES_norm_gap_of_local_gap
+/-- Inserting a finite terminal-interval Hamiltonian into a larger chain preserves its gap:
+every eigenvalue of the interval Hamiltonian on the larger chain is `0` or at least the gap.
+The physical coordinate isometry places its active sites first and the free sites second. This
+is the fixed-ambient form of Nachtergaele's condition C2, arXiv:cond-mat/9410110,
+lines 1045--1056. -/
+theorem hamiltonian_restrict_parentChainInteraction_gap_of_local_gap
     (A : MPSTensor d D) {R W N n : ℕ} (hR : 0 < R) (hRW : R ≤ W)
     (hWn : W ≤ n) (hnN : n ≤ N) {κ : ℝ} (hκ : 0 < κ)
-    (hGap : ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R W))ᗮ,
-      κ * ‖v‖ ≤ ‖openParentHamiltonianES A R W v‖) :
-    ∀ v ∈ (LinearMap.ker (openSuffixParentHamiltonianES A R W N n))ᗮ,
-      κ * ‖v‖ ≤ ‖openSuffixParentHamiltonianES A R W N n v‖ := by
-  have hConj := openSuffixParentHamiltonianES_conj_cyclicActiveBlock A hR hRW hWn hnN
+    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) μ →
+        μ = 0 ∨ (κ : ℂ) ≤ μ) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+      ((parentChainInteraction A R N).restrict
+        fun i ↦ n - W ≤ i.val ∧ i.val + R ≤ n).hamiltonian) μ →
+        μ = 0 ∨ (κ : ℂ) ≤ μ := by
+  have hConj := hamiltonian_restrict_parentChainInteraction_conj_cyclicActiveBlock A hR hRW hWn hnN
+  refine (ManyBody.forall_hasEigenvalue_iff_norm
+    (posSemidef_hamiltonian_restrict_parentChainInteraction A R N _)).mpr ?_
   exact norm_gap_of_fiberwise_conj
-    (cyclicActiveBlockConfigLinearIsometryEquiv d W (hWn.trans hnN) ⟨n - W, by omega⟩)
-    (openSuffixParentHamiltonianES A R W N n) (openParentHamiltonianES A R W)
-    hκ (openParentHamiltonianES_isPositive A R W)
-    (by simpa only [LinearEquiv.conj_apply, LinearMap.comp_assoc] using! hConj) hGap
+    (cyclicActiveBlockConfigLinearIsometryEquiv d W (hWn.trans hnN) ⟨n - W, by omega⟩) _
+    (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) hκ
+    (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentChainInteraction A R W))
+    (by simpa only [LinearEquiv.conj_apply, LinearMap.comp_assoc] using! hConj)
+    ((ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentChainInteraction A R W)).mp hGap)
 
 end MPSTensor

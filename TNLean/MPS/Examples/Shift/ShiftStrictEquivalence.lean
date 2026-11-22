@@ -12,7 +12,7 @@ import TNLean.MPS.MPU.Simple.AdjointSimpleContraction
 import TNLean.MPS.MPU.CanonicalForm.TensorProductCanonicalForm
 import TNLean.MPS.Operator.Simple.SectorEtaPositivity
 import TNLean.MPS.Operator.Periodic.BondSimilarity
-import QICLean.Algebra.Kronecker.MatrixTensorPower
+import QICLean.Algebra.Kronecker.PiKronecker
 
 /-!
 # The two shift products are strictly equivalent
@@ -63,7 +63,7 @@ theorem IsMPU.conjugatePhysical {U : MPOTensor d D} (hU : IsMPU U)
   intro N hN
   have : NeZero N := ⟨by omega⟩
   rw [mpo_conjugatePhysical_eq]
-  have hP := Matrix.tensorPower_mem_unitaryGroup N hu
+  have hP := Matrix.piKronecker_mem_unitaryGroup (fun _ : Fin N ↦ hu)
   exact mul_mem (mul_mem hP (hU N hN)) (Unitary.star_mem hP)
 
 /-- Physical conjugation is continuous in the conjugating matrix: every entry of every letter

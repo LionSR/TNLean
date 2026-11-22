@@ -64,19 +64,24 @@ of the ground space at all sufficiently large volumes. The explicit threshold
 uses the general Wielandt length \((D^2+1)^2\).
 Source: SPWC10, Theorem 5 proof, lines 858–880. -/
 theorem exists_normal_eventual_ground_data_of_prime_length_bound
-    (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L) (hh : h.IsPositive)
-    (hUnique : ∀ M, L ≤ M →
-      Module.finrank ℂ (LinearMap.ker (periodicInteractionHamiltonianES h M)) = 1)
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
+    (hUnique : ∀ M [NeZero M], L ≤ M →
+      Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant M h).hamiltonian)) = 1)
     {D N : ℕ} (A : MPSTensor d D) (hPrime : N.Prime)
     (hBound : L + max ((D ^ 2 + 1) ^ 2)
       (3 * (D - 1) * ((D ^ 2 + 1) ^ 2 + 1)) ≤ N)
     (hA : mpvState A N ≠ 0)
-    (hzero : periodicInteractionHamiltonianES h N (mpvState A N) = 0) :
+    (hzero : haveI : NeZero N := ⟨hPrime.ne_zero⟩;
+      Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant N h).hamiltonian (mpvState A N) = 0) :
     ∃ D₀ : ℕ, 0 < D₀ ∧ D₀ ≤ D ∧ ∃ B : MPSTensor d D₀,
-      Kraus.IsNormal B ∧ groundSpaceES B L ≤ LinearMap.ker h ∧ ∃ M₀ : ℕ,
-      ∀ M, M₀ ≤ M → mpvState B M ≠ 0 ∧
-        LinearMap.ker (periodicInteractionHamiltonianES h M) = ℂ ∙ mpvState B M := by
+      Kraus.IsNormal B ∧ groundSpaceES B L ≤ LinearMap.ker (Matrix.toEuclideanLin h) ∧ ∃ M₀ : ℕ,
+      ∀ M [NeZero M], M₀ ≤ M → mpvState B M ≠ 0 ∧
+        LinearMap.ker (Matrix.toEuclideanLin
+          (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState B M := by
   classical
+  have : NeZero N := ⟨hPrime.ne_zero⟩
   let q : ℕ := (D ^ 2 + 1) ^ 2
   change L + max q (3 * (D - 1) * (q + 1)) ≤ N at hBound
   have hq : 0 < q := by dsimp [q]; positivity
@@ -112,13 +117,13 @@ theorem exists_normal_eventual_ground_data_of_prime_length_bound
     have hSpan : WordTupleSpanTop B (N - L) :=
       wordTupleSpanTop_of_ge_of_isNBlkInjective (L₀ := q) B hdim hunital hDual hIrr hq
         hC1 hDistinct (max_le hqNL hSepNL)
-    have hker := groundSpaceES_le_ker_of_periodicInteractionHamiltonianES_eq_zero
+    have hker := groundSpaceES_le_ker_of_toEuclideanLin_hamiltonian_translationInvariant_eq_zero
       B c hc h hh hPrime.pos (by omega) hSpan (by rwa [← hsum])
     let j : Fin r := ⟨0, hr⟩
     let : NeZero (dim j) := ⟨(hdim j).ne'⟩
     refine ⟨dim j, hdim j, hdimD j, B j, ⟨q, hq, hC1 j⟩, hker j,
       max L (q + 1), ?_⟩
-    intro M hM
+    intro M _ hM
     have hLM : L ≤ M := (le_max_left _ _).trans hM
     have hqM : q + 1 ≤ M := (le_max_right _ _).trans hM
     have hnonzero : mpvState (B j) M ≠ 0 := by
@@ -127,8 +132,9 @@ theorem exists_normal_eventual_ground_data_of_prime_length_bound
       funext σ
       simpa only [mpvState_apply, PiLp.zero_apply, Pi.zero_apply] using
         congrArg (fun v : MPVSpace d M => v σ) hMzero
-    have hGround := periodicInteractionHamiltonianES_mpvState_eq_zero_of_groundSpaceES_le_ker
-      (B j) h (hker j) hLM
+    have hGround :=
+      toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker
+        (B j) h (hker j) hLM
     exact ⟨hnonzero, eq_span_singleton_of_mem_of_finrank_eq_one
       (hUnique M hLM) hGround hnonzero⟩
 
@@ -137,17 +143,21 @@ MPS tensor generating the ground space at all sufficiently large volumes.
 The explicit threshold uses the general Wielandt length \((D^2+1)^2\).
 Source: SPWC10, Theorem 5 proof, lines 858–880. -/
 theorem exists_eventually_fixed_mps_of_prime_length_bound
-    (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L) (hh : h.IsPositive)
-    (hUnique : ∀ M, L ≤ M →
-      Module.finrank ℂ (LinearMap.ker (periodicInteractionHamiltonianES h M)) = 1)
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
+    (hUnique : ∀ M [NeZero M], L ≤ M →
+      Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant M h).hamiltonian)) = 1)
     {D N : ℕ} (A : MPSTensor d D) (hPrime : N.Prime)
     (hBound : L + max ((D ^ 2 + 1) ^ 2)
       (3 * (D - 1) * ((D ^ 2 + 1) ^ 2 + 1)) ≤ N)
     (hA : mpvState A N ≠ 0)
-    (hzero : periodicInteractionHamiltonianES h N (mpvState A N) = 0) :
+    (hzero : haveI : NeZero N := ⟨hPrime.ne_zero⟩;
+      Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant N h).hamiltonian (mpvState A N) = 0) :
     ∃ D₀ : ℕ, 0 < D₀ ∧ D₀ ≤ D ∧ ∃ B : MPSTensor d D₀, ∃ M₀ : ℕ,
-      ∀ M, M₀ ≤ M → mpvState B M ≠ 0 ∧
-        LinearMap.ker (periodicInteractionHamiltonianES h M) = ℂ ∙ mpvState B M := by
+      ∀ M [NeZero M], M₀ ≤ M → mpvState B M ≠ 0 ∧
+        LinearMap.ker (Matrix.toEuclideanLin
+          (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState B M := by
   obtain ⟨D₀, hD₀, hD, B, _, _, M₀, hB⟩ :=
     exists_normal_eventual_ground_data_of_prime_length_bound h hh hUnique A hPrime hBound hA hzero
   exact ⟨D₀, hD₀, hD, B, M₀, hB⟩
@@ -158,20 +168,26 @@ fifth-degree bound \(N<L+\max\{(D^2+1)^2,3(D-1)((D^2+1)^2+1)\}\).
 The local interaction and all constants are fixed independently of the prime
 and of the representing tensor. Source: SPWC10, Theorem 5, lines 850–880. -/
 theorem eventually_fixed_mps_or_prime_length_bound
-    (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L) (hh : h.IsPositive)
-    (hUnique : ∀ M, L ≤ M →
-      Module.finrank ℂ (LinearMap.ker (periodicInteractionHamiltonianES h M)) = 1) :
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
+    (hUnique : ∀ M [NeZero M], L ≤ M →
+      Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant M h).hamiltonian)) = 1) :
     (∃ (D₀ : ℕ) (B : MPSTensor d D₀) (M₀ : ℕ),
-      ∀ M, M₀ ≤ M → mpvState B M ≠ 0 ∧
-        LinearMap.ker (periodicInteractionHamiltonianES h M) = ℂ ∙ mpvState B M) ∨
-    (∀ (N : ℕ), N.Prime → ∀ (D : ℕ) (A : MPSTensor d D),
-      mpvState A N ≠ 0 → periodicInteractionHamiltonianES h N (mpvState A N) = 0 →
+      ∀ M [NeZero M], M₀ ≤ M → mpvState B M ≠ 0 ∧
+        LinearMap.ker (Matrix.toEuclideanLin
+          (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState B M) ∨
+    (∀ (N : ℕ) (hPrime : N.Prime) (D : ℕ) (A : MPSTensor d D),
+      mpvState A N ≠ 0 →
+      (haveI : NeZero N := ⟨hPrime.ne_zero⟩;
+        Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N h).hamiltonian
+          (mpvState A N) = 0) →
         N < L + max ((D ^ 2 + 1) ^ 2)
           (3 * (D - 1) * ((D ^ 2 + 1) ^ 2 + 1))) := by
   classical
   by_cases hFixed : ∃ (D₀ : ℕ) (B : MPSTensor d D₀) (M₀ : ℕ),
-      ∀ M, M₀ ≤ M → mpvState B M ≠ 0 ∧
-        LinearMap.ker (periodicInteractionHamiltonianES h M) = ℂ ∙ mpvState B M
+      ∀ M [NeZero M], M₀ ≤ M → mpvState B M ≠ 0 ∧
+        LinearMap.ker (Matrix.toEuclideanLin
+          (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState B M
   · exact Or.inl hFixed
   · right
     intro N hPrime D A hA hzero
@@ -199,22 +215,27 @@ at all permitted positive volumes. Short representations are constructed,
 with no supplied finite-volume MPS premise.
 Source: the finite-prefix completion of SPWC10, Theorem 5, lines 850--880. -/
 theorem exists_uniform_bond_on_cyclic_ground_sector
-    (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L)
-    (hUnique : ∀ M, L ≤ M →
-      Module.finrank ℂ (LinearMap.ker (periodicInteractionHamiltonianES h M)) = 1)
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ)
+    (hUnique : ∀ M [NeZero M], L ≤ M →
+      Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant M h).hamiltonian)) = 1)
     {D : ℕ} (B : MPSTensor d D) (M₀ : ℕ)
-    (hB : ∀ M, M₀ ≤ M → mpvState B M ≠ 0 ∧
-      LinearMap.ker (periodicInteractionHamiltonianES h M) = ℂ ∙ mpvState B M) :
+    (hB : ∀ M [NeZero M], M₀ ≤ M → mpvState B M ≠ 0 ∧
+      LinearMap.ker (Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState B M) :
     ∃ K : ℕ, 0 < K ∧
-      ∀ M, 0 < M → L ≤ M → ∀ ψ : MPVSpace d M,
-        ψ ≠ 0 → periodicInteractionHamiltonianES h M ψ = 0 →
+      ∀ M (hM : 0 < M), L ≤ M → haveI : NeZero M := ⟨by omega⟩; ∀ ψ : MPVSpace d M,
+        ψ ≠ 0 → Matrix.toEuclideanLin
+          (ManyBody.Interaction.translationInvariant M h).hamiltonian ψ = 0 →
         (∀ (s : Fin M) (σ : Fin M → Fin d), ψ (fun k ↦ σ (k + s)) = ψ σ) →
         ∃ C : MPSTensor d K, mpvState C M ≠ 0 ∧
-          LinearMap.ker (periodicInteractionHamiltonianES h M) = ℂ ∙ mpvState C M := by
+          LinearMap.ker (Matrix.toEuclideanLin
+            (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState C M := by
   classical
   let K := D + M₀ * d ^ M₀ + 1
   refine ⟨K, by dsimp [K]; omega, ?_⟩
   intro M hM hLM ψ hψ hzero hTI
+  have : NeZero M := ⟨by omega⟩
   by_cases hlong : M₀ ≤ M
   · let C := padBond B K
     have hDK : D ≤ K := by dsimp [K]; omega
@@ -246,33 +267,42 @@ the eventual fixed tensor. This makes the remaining source quantifier
 explicit without assuming short periodic representations.
 Source: SPWC10, Theorem 5, lines 850--880, finite-prefix boundary. -/
 theorem uniform_bond_family_iff_short_cyclic_ground
-    (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L)
-    (hUnique : ∀ M, L ≤ M →
-      Module.finrank ℂ (LinearMap.ker (periodicInteractionHamiltonianES h M)) = 1)
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ)
+    (hUnique : ∀ M [NeZero M], L ≤ M →
+      Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant M h).hamiltonian)) = 1)
     {D : ℕ} (B : MPSTensor d D) (M₀ : ℕ)
-    (hB : ∀ M, M₀ ≤ M → mpvState B M ≠ 0 ∧
-      LinearMap.ker (periodicInteractionHamiltonianES h M) = ℂ ∙ mpvState B M) :
-    (∃ K : ℕ, 0 < K ∧ ∀ M, 0 < M → L ≤ M →
+    (hB : ∀ M [NeZero M], M₀ ≤ M → mpvState B M ≠ 0 ∧
+      LinearMap.ker (Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState B M) :
+    (∃ K : ℕ, 0 < K ∧ ∀ M (hM : 0 < M), L ≤ M → haveI : NeZero M := ⟨by omega⟩;
       ∃ C : MPSTensor d K, mpvState C M ≠ 0 ∧
-        LinearMap.ker (periodicInteractionHamiltonianES h M) = ℂ ∙ mpvState C M) ↔
-    (∀ M, 0 < M → L ≤ M → M < M₀ →
-      ∃ ψ : MPVSpace d M, ψ ≠ 0 ∧ periodicInteractionHamiltonianES h M ψ = 0 ∧
+        LinearMap.ker (Matrix.toEuclideanLin
+          (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState C M) ↔
+    (∀ M (hM : 0 < M), L ≤ M → haveI : NeZero M := ⟨by omega⟩; M < M₀ →
+      ∃ ψ : MPVSpace d M, ψ ≠ 0 ∧ Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant M h).hamiltonian ψ = 0 ∧
         ∀ (s : Fin M) (σ : Fin M → Fin d), ψ (fun k ↦ σ (k + s)) = ψ σ) := by
   classical
   constructor
   · rintro ⟨K, _, hK⟩ M hM hLM _
+    have : NeZero M := ⟨by omega⟩
     obtain ⟨C, hC, hker⟩ := hK M hM hLM
     refine ⟨mpvState C M, hC, ?_, mpvState_cyclic_invariant C⟩
-    change mpvState C M ∈ LinearMap.ker (periodicInteractionHamiltonianES h M)
+    change mpvState C M ∈ LinearMap.ker (Matrix.toEuclideanLin
+      (ManyBody.Interaction.translationInvariant M h).hamiltonian)
     rw [hker]
     exact Submodule.mem_span_singleton_self _
   · intro hshort
     obtain ⟨K, hK, hsector⟩ := exists_uniform_bond_on_cyclic_ground_sector h hUnique B M₀ hB
     refine ⟨K, hK, ?_⟩
     intro M hM hLM
+    have : NeZero M := ⟨by omega⟩
     by_cases hlong : M₀ ≤ M
-    · have hzero : periodicInteractionHamiltonianES h M (mpvState B M) = 0 := by
-        change mpvState B M ∈ LinearMap.ker (periodicInteractionHamiltonianES h M)
+    · have hzero : Matrix.toEuclideanLin
+          (ManyBody.Interaction.translationInvariant M h).hamiltonian (mpvState B M) = 0 := by
+        change mpvState B M ∈ LinearMap.ker (Matrix.toEuclideanLin
+          (ManyBody.Interaction.translationInvariant M h).hamiltonian)
         rw [(hB M hlong).2]
         exact Submodule.mem_span_singleton_self _
       exact hsector M hM hLM (mpvState B M) (hB M hlong).1 hzero

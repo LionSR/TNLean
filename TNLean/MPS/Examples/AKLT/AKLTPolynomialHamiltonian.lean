@@ -65,7 +65,6 @@ triplet for every \(N\ge2\). See
 * `MPSTensor.akltHamiltonian_add_isPositive`, `MPSTensor.akltHamiltonian_eigenvalue_ge` :
   \(H\ge-\tfrac{2N}3\)
 * `MPSTensor.akltHamiltonian_eigenspace_eq_mpvSubmodule`,
-  `MPSTensor.akltHamiltonian_hasUniqueGroundState`,
   `MPSTensor.akltHamiltonian_hasEigenvalue` : the unique ground state
 
 ## References
@@ -355,28 +354,15 @@ theorem akltHamiltonian_eigenspace_eq_mpvSubmodule {N : ℕ} (hN3 : 3 ≤ N) :
     ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
     aklt_chainGroundSpace_two_eq_mpvSubmodule hN3]
 
-/-- Source: arXiv:quant-ph/0608197, `Papers/quant-ph_0608197/MPSarchive.tex`
-lines 340–349, for the ground-state claim. On a periodic chain of \(N\ge3\) sites
-the AKLT Hamiltonian has a unique ground state: its eigenspace for its ground
-energy \(-\tfrac{2N}3\) is one-dimensional. The value \(-\tfrac{2N}3\) is a project
-result (`akltHamiltonian_eigenvalue_ge`, `akltHamiltonian_hasEigenvalue`); the
-source prints no ground energy. -/
-theorem akltHamiltonian_hasUniqueGroundState {N : ℕ} (hN3 : 3 ≤ N) :
-    HasUniqueGroundState (Module.End.eigenspace (akltHamiltonian N) (-(2 * N / 3) : ℂ)) := by
-  rw [akltHamiltonian_eigenspace_eq_mpvSubmodule hN3,
-    ← aklt_chainGroundSpace_two_eq_mpvSubmodule hN3]
-  exact aklt_parentHamiltonian_two_unique_gs hN3
-
 /-- Project result: on a periodic chain of \(N\ge3\) sites, \(-\tfrac{2N}3\) is an
 eigenvalue of the AKLT Hamiltonian, hence its ground energy by
 `akltHamiltonian_eigenvalue_ge`. -/
 theorem akltHamiltonian_hasEigenvalue {N : ℕ} (hN3 : 3 ≤ N) :
     Module.End.HasEigenvalue (akltHamiltonian N) (-(2 * N / 3) : ℂ) := by
-  rw [Module.End.hasEigenvalue_iff]
-  intro h
-  have h1 := akltHamiltonian_hasUniqueGroundState hN3
-  rw [HasUniqueGroundState, h, finrank_bot] at h1
-  exact zero_ne_one h1
+  rw [Module.End.hasEigenvalue_iff, akltHamiltonian_eigenspace_eq_mpvSubmodule hN3,
+    mpvSubmodule, Ne, Submodule.span_singleton_eq_bot]
+  exact mpv_ne_zero_of_isNBlkInjective aklt_isNBlkInjective_two (by norm_num)
+    (show 2 + 1 ≤ N by omega)
 
 end MPSTensor
 

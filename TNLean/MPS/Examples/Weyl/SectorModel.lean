@@ -16,8 +16,9 @@ import TNLean.MPS.Tensor.Physical.PhysicalEmbedding
 The physical alphabet has three Weyl letters and two particle letters. The
 local kernel is the sum of the embedded seven-site Weyl boundary space and
 the embedded pure particle line. Its complementary projection is a single
-positive interaction of range seven. For a primitive fifth-root Weyl parameter
-and a matching seventh-root particle weight, its actual periodic kernel is the
+positive semidefinite matrix of range seven. For a primitive fifth-root Weyl parameter
+and a matching seventh-root particle weight, the kernel of the Hamiltonian of its
+translates around the ring is the
 particle line at seven sites and the Weyl trace line at every larger volume.
 
 All volume assertions explicitly concern the permitted domain of at least
@@ -28,14 +29,17 @@ Source context: SPWC10, arXiv:0909.5347, Theorem 5, main.tex lines 790--793,
 850--880; PGVWC07, MPSarchive.tex lines 663--671 and 2244--2265.
 -/
 
+open scoped ComplexOrder MatrixOrder
+open ManyBody.Interaction (translationInvariant)
+
 namespace MPSTensor.ShortMomentum
 
-/-- A fixed positive interaction on five physical letters, with seven-site
+/-- The matrix of a fixed positive interaction on five physical letters, with seven-site
 local kernel equal to the actual Weyl boundary sector plus the actual pure
 particle sector. Source context: SPWC10, Theorem 5, lines 850--880, with the
 permitted-volume and translation-phase distinctions explicit in this module. -/
-noncomputable def sevenSectorInteraction (ζ q : ℂ) : MPVSpace 5 7 →ₗ[ℂ] MPVSpace 5 7 :=
-  ((groundSpaceES (threeLetterTensor ζ) 7).map
+noncomputable def sevenSectorInteraction (ζ q : ℂ) : Matrix (Cfg 5 7) (Cfg 5 7) ℂ :=
+  Matrix.toEuclideanLin.symm <| ((groundSpaceES (threeLetterTensor ζ) 7).map
       (Function.Embedding.euclideanExtendByZero (Function.Embedding.piCongrRight
         (fun _ : Fin 7 ↦ (Fin.castAddEmb 2 : Fin 3 ↪ Fin 5)))).toLinearMap ⊔
     (Submodule.span ℂ {WithLp.toLp 2 (pvbsEdge q 7)}).map
@@ -43,32 +47,38 @@ noncomputable def sevenSectorInteraction (ζ q : ℂ) : MPVSpace 5 7 →ₗ[ℂ]
         (fun _ : Fin 7 ↦ (Fin.natAddEmb 3 : Fin 2 ↪ Fin 5)))).toLinearMap)ᗮ
     |>.starProjection.toLinearMap
 
-/-- The fixed seven-site interaction is positive, independently of the chosen
+/-- The fixed seven-site interaction is positive semidefinite, independently of the chosen
 complex parameters. Source: its actual complementary orthogonal projection. -/
-theorem sevenSectorInteraction_isPositive (ζ q : ℂ) :
-    (sevenSectorInteraction ζ q).IsPositive :=
-  (Submodule.isSymmetricProjection_starProjection _).isPositive
+theorem posSemidef_sevenSectorInteraction (ζ q : ℂ) :
+    (sevenSectorInteraction ζ q).PosSemidef := by
+  rw [← Matrix.isPositive_toEuclideanLin_iff, sevenSectorInteraction,
+    LinearEquiv.apply_symm_apply]
+  exact (Submodule.isSymmetricProjection_starProjection _).isPositive
 
 /-- At every permitted volume greater than seven, the actual periodic kernel
 is exactly the embedded nonzero Weyl trace line. No component or mixed-sector
 kernel identity is assumed. Source context: SPWC10, Theorem 5, lines 850--880. -/
 theorem ker_sevenSectorHamiltonian_of_eight_le {ζ q : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) (hq : q ≠ 0) (M : ℕ) (hM : 8 ≤ M) :
-    LinearMap.ker (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) M) =
+    haveI : NeZero M := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin
+        (translationInvariant M (sevenSectorInteraction ζ q)).hamiltonian) =
       Submodule.span ℂ {(Function.Embedding.euclideanExtendByZero
         (Function.Embedding.piCongrRight (fun _ : Fin M ↦ (Fin.castAddEmb 2 : Fin 3 ↪ Fin 5)))
           (mpvState (threeLetterTensor ζ) M))} := by
-  have hmain : LinearMap.ker (periodicInteractionHamiltonianES
-      (groundSpaceES (threeLetterTensor ζ) 7)ᗮ.starProjection.toLinearMap M) =
+  have : NeZero M := ⟨by omega⟩
+  have hmain : LinearMap.ker (Matrix.toEuclideanLin (translationInvariant M
+      (Matrix.toEuclideanLin.symm
+        (groundSpaceES (threeLetterTensor ζ) 7)ᗮ.starProjection.toLinearMap)).hamiltonian) =
       Submodule.span ℂ {mpvState (threeLetterTensor ζ) M} := by
-    change LinearMap.ker (periodicInteractionHamiltonianES
-      (parentInteractionES (threeLetterTensor ζ) 7) M) = _
-    rw [periodicInteractionHamiltonianES_parentInteractionES _ (by decide)]
-    exact ker_parentHamiltonianES_threeLetterTensor_eq_span hζ M hM
-  have hparticle : LinearMap.ker (periodicInteractionHamiltonianES
-      (Submodule.span ℂ {WithLp.toLp 2 (pvbsEdge q 7)})ᗮ.starProjection.toLinearMap M) = ⊥ :=
+    rw [← toEuclideanLin_toMatrix'_parentInteraction, LinearEquiv.symm_apply_apply]
+    exact ker_hamiltonian_parentRingInteraction_threeLetterTensor_eq_span hζ M hM
+  have hparticle : LinearMap.ker (Matrix.toEuclideanLin (translationInvariant M
+      (Matrix.toEuclideanLin.symm (Submodule.span ℂ
+        {WithLp.toLp 2 (pvbsEdge q 7)})ᗮ.starProjection.toLinearMap)).hamiltonian) = ⊥ :=
     ker_pvbsPureWindowHamiltonian_eq_bot q hq 5 hM
-  rw [sevenSectorInteraction, ker_physical_sum_projectorHamiltonian _ _ (by decide) (by omega),
+  rw [sevenSectorInteraction,
+    ker_physical_sum_translationInvariant_projector (a := 3) (b := 2) _ _ (by decide) (by omega),
     hmain, hparticle, Submodule.map_bot, sup_bot_eq, Submodule.map_span, Set.image_singleton,
     LinearIsometry.coe_toLinearMap]
 
@@ -79,9 +89,10 @@ This is an eventual statement, consistent with SPWC10's future-length proof
 at lines 877--879. -/
 theorem exists_bond_five_eventual_ground_family_sevenSector {ζ q : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) (hq : q ≠ 0) :
-    ∃ A : MPSTensor 5 5, ∀ M : ℕ, 8 ≤ M →
+    ∃ A : MPSTensor 5 5, ∀ (M : ℕ) (hM : 8 ≤ M), haveI : NeZero M := ⟨by omega⟩;
       mpvState A M ≠ 0 ∧
-      LinearMap.ker (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) M) =
+      LinearMap.ker (Matrix.toEuclideanLin
+          (translationInvariant M (sevenSectorInteraction ζ q)).hamiltonian) =
         Submodule.span ℂ {mpvState A M} := by
   let e : Fin 3 ↪ Fin 5 := Fin.castAddEmb 2
   refine ⟨Function.extend e (threeLetterTensor ζ) 0, fun M hM ↦ ?_⟩
@@ -100,21 +111,24 @@ embedded geometric particle line, with its root-of-unity phase retained.
 Source context: the finite-prefix distinction in SPWC10, Theorem 5, lines 850--880. -/
 theorem ker_sevenSectorHamiltonian_seven {ζ q : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) (hq : q ^ 7 = 1) :
-    LinearMap.ker (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) 7) =
+    LinearMap.ker (Matrix.toEuclideanLin
+        (translationInvariant 7 (sevenSectorInteraction ζ q)).hamiltonian) =
       Submodule.span ℂ {(Function.Embedding.euclideanExtendByZero
         (Function.Embedding.piCongrRight (fun _ : Fin 7 ↦ (Fin.natAddEmb 3 : Fin 2 ↪ Fin 5)))
           (WithLp.toLp 2 (pvbsEdge q 7)))} := by
-  have hmain : LinearMap.ker (periodicInteractionHamiltonianES
-      (groundSpaceES (threeLetterTensor ζ) 7)ᗮ.starProjection.toLinearMap 7) = ⊥ := by
-    change LinearMap.ker (periodicInteractionHamiltonianES
-      (parentInteractionES (threeLetterTensor ζ) 7) 7) = _
-    rw [periodicInteractionHamiltonianES_parentInteractionES _ (by decide)]
-    exact ker_parentHamiltonianES_threeLetterTensor_seven_eq_bot hζ
-  have hparticle : LinearMap.ker (periodicInteractionHamiltonianES
-      (Submodule.span ℂ {WithLp.toLp 2 (pvbsEdge q 7)})ᗮ.starProjection.toLinearMap 7) =
+  have hmain : LinearMap.ker (Matrix.toEuclideanLin (translationInvariant 7
+      (Matrix.toEuclideanLin.symm
+        (groundSpaceES (threeLetterTensor ζ) 7)ᗮ.starProjection.toLinearMap)).hamiltonian) =
+      ⊥ := by
+    rw [← toEuclideanLin_toMatrix'_parentInteraction, LinearEquiv.symm_apply_apply]
+    exact ker_hamiltonian_parentRingInteraction_threeLetterTensor_seven_eq_bot hζ
+  have hparticle : LinearMap.ker (Matrix.toEuclideanLin (translationInvariant 7
+      (Matrix.toEuclideanLin.symm (Submodule.span ℂ
+        {WithLp.toLp 2 (pvbsEdge q 7)})ᗮ.starProjection.toLinearMap)).hamiltonian) =
       Submodule.span ℂ {WithLp.toLp 2 (pvbsEdge q 7)} :=
     ker_pvbsPureWindowHamiltonian_matching_volume q (by decide) hq
-  rw [sevenSectorInteraction, ker_physical_sum_projectorHamiltonian _ _ (by decide) le_rfl,
+  rw [sevenSectorInteraction,
+    ker_physical_sum_translationInvariant_projector (a := 3) (b := 2) _ _ (by decide) le_rfl,
     hmain, hparticle, Submodule.map_bot, bot_sup_eq, Submodule.map_span, Set.image_singleton,
     LinearIsometry.coe_toLinearMap]
 
@@ -125,10 +139,14 @@ Source context: SPWC10's fixed-interaction condition, Theorem 5, lines 850--857;
 the volume domain here is explicitly \(M\ge7\). -/
 theorem exists_nonzero_ground_line_sevenSectorHamiltonian {ζ q : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) (hq : q ^ 7 = 1) (M : ℕ) (hM : 7 ≤ M) :
+    haveI : NeZero M := ⟨by omega⟩;
     ∃ v : MPVSpace 5 M, v ≠ 0 ∧
-      periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) M v = 0 ∧
-      LinearMap.ker (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) M) =
+      Matrix.toEuclideanLin
+        (translationInvariant M (sevenSectorInteraction ζ q)).hamiltonian v = 0 ∧
+      LinearMap.ker (Matrix.toEuclideanLin
+          (translationInvariant M (sevenSectorInteraction ζ q)).hamiltonian) =
         Submodule.span ℂ {v} := by
+  have : NeZero M := ⟨by omega⟩
   have hqzero : q ≠ 0 := by
     intro h
     rw [h, zero_pow (by decide)] at hq
@@ -142,14 +160,12 @@ theorem exists_nonzero_ground_line_sevenSectorHamiltonian {ζ q : ℂ}
       intro hv
       have hz := E.injective (hv.trans E.map_zero.symm)
       exact pvbsEdge_ne_zero_matching_volume q (by decide) hz
-    have hker : LinearMap.ker
-        (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) 7) =
+    have hker : LinearMap.ker (Matrix.toEuclideanLin
+        (translationInvariant 7 (sevenSectorInteraction ζ q)).hamiltonian) =
         Submodule.span ℂ {v} := ker_sevenSectorHamiltonian_seven hζ hq
     refine ⟨v, hv, ?_, hker⟩
-    have hmem : v ∈ LinearMap.ker
-        (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) _) := by
-      rw [hker]
-      exact Submodule.mem_span_singleton_self v
+    have hmem : v ∈ Submodule.span ℂ {v} := Submodule.mem_span_singleton_self v
+    rw [← hker] at hmem
     exact hmem
   · have hlarge : 8 ≤ M := by omega
     let E := (Function.Embedding.piCongrRight
@@ -159,14 +175,12 @@ theorem exists_nonzero_ground_line_sevenSectorHamiltonian {ζ q : ℂ}
       intro hv
       exact mpvState_threeLetterTensor_ne_zero hζ M hlarge
         (E.injective (hv.trans E.map_zero.symm))
-    have hker : LinearMap.ker
-        (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) M) =
+    have hker : LinearMap.ker (Matrix.toEuclideanLin
+        (translationInvariant M (sevenSectorInteraction ζ q)).hamiltonian) =
         Submodule.span ℂ {v} := ker_sevenSectorHamiltonian_of_eight_le hζ hqzero M hlarge
     refine ⟨v, hv, ?_, hker⟩
-    have hmem : v ∈ LinearMap.ker
-        (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) _) := by
-      rw [hker]
-      exact Submodule.mem_span_singleton_self v
+    have hmem : v ∈ Submodule.span ℂ {v} := Submodule.mem_span_singleton_self v
+    rw [← hker] at hmem
     exact hmem
 
 /-- The fixed interaction has a one-dimensional actual ground kernel at every
@@ -174,8 +188,10 @@ permitted volume. Its nonzero spanning vector is derived in the preceding
 existence theorem. Source context: SPWC10, Theorem 5, lines 850--857. -/
 theorem finrank_ker_sevenSectorHamiltonian {ζ q : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) (hq : q ^ 7 = 1) (M : ℕ) (hM : 7 ≤ M) :
-    Module.finrank ℂ
-      (LinearMap.ker (periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) M)) = 1 := by
+    haveI : NeZero M := ⟨by omega⟩;
+    Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
+      (translationInvariant M (sevenSectorInteraction ζ q)).hamiltonian)) = 1 := by
+  have : NeZero M := ⟨by omega⟩
   obtain ⟨v, hv, _, hker⟩ := exists_nonzero_ground_line_sevenSectorHamiltonian hζ hq M hM
   rw [hker]
   exact finrank_span_singleton hv
@@ -187,7 +203,8 @@ Source context: SPWC10, Theorem 5, lines 850--880, and the ordinary periodic
 trace convention at lines 790--793. -/
 theorem eq_zero_of_sevenSectorHamiltonian_fixed {ζ q : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) (hq : q ^ 7 = 1) (hqone : q ≠ 1) (ψ : MPVSpace 5 7)
-    (hzero : periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) 7 ψ = 0)
+    (hzero : Matrix.toEuclideanLin
+      (translationInvariant 7 (sevenSectorInteraction ζ q)).hamiltonian ψ = 0)
     (hfixed : ∀ s : Fin 7, cyclicTranslateState s ψ.ofLp = ψ.ofLp) : ψ = 0 := by
   have hmem : ψ ∈ Submodule.span ℂ {(Function.Embedding.euclideanExtendByZero
       (Function.Embedding.piCongrRight (fun _ : Fin 7 ↦ (Fin.natAddEmb 3 : Fin 2 ↪ Fin 5)))
@@ -202,7 +219,8 @@ theorem eq_zero_of_sevenSectorHamiltonian_fixed {ζ q : ℂ}
     dsimp only [y]
     rw [map_smul]
     exact hc
-  have hyzero : periodicInteractionHamiltonianES (pvbsPureWindowInteraction q 7) 7 y = 0 := by
+  have hyzero : Matrix.toEuclideanLin
+      (translationInvariant 7 (pvbsPureWindowInteraction q 7)).hamiltonian y = 0 := by
     dsimp only [y]
     rw [map_smul, pvbsPureWindowHamiltonian_apply_pvbsEdge q (by decide) hq, smul_zero]
   have hyfixed (s : Fin 7) : cyclicTranslateState s y.ofLp = y.ofLp := by
@@ -226,43 +244,50 @@ lines 790--793, and its finite-prefix distinction at lines 877--879. -/
 theorem mpvState_eq_zero_of_sevenSectorHamiltonian_eq_zero {ζ q : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) (hq : q ^ 7 = 1) (hqone : q ≠ 1)
     {D : ℕ} (A : MPSTensor 5 D)
-    (hzero : periodicInteractionHamiltonianES (sevenSectorInteraction ζ q) 7
+    (hzero : Matrix.toEuclideanLin
+      (translationInvariant 7 (sevenSectorInteraction ζ q)).hamiltonian
       (mpvState A 7) = 0) : mpvState A 7 = 0 := by
   apply eq_zero_of_sevenSectorHamiltonian_fixed hζ hq hqone (mpvState A 7) hzero
   intro s
   funext σ
   exact mpvState_cyclic_invariant A s σ
 
-/-- There exists one fixed positive seven-site interaction with a nonzero common
-local ground vector and a one-dimensional actual periodic kernel at every
+/-- There exists one fixed positive semidefinite seven-site matrix whose translates around the
+ring have a nonzero common ground vector and a Hamiltonian with one-dimensional kernel at every
 permitted volume, but no nonzero translation-invariant ground vector at seven
 sites. The volume domain and vector-level invariance are part of the statement.
 This tests the all-volume ordinary trace-MPS strengthening, not the eventual
 fixed-tensor conclusion in SPWC10, Theorem 5, proof lines 877--879. -/
 theorem exists_seven_site_interaction_without_short_fixed_ground :
-    ∃ h : MPVSpace 5 7 →ₗ[ℂ] MPVSpace 5 7, h.IsPositive ∧
-      (∀ M : ℕ, 7 ≤ M →
-        Module.finrank ℂ (LinearMap.ker (periodicInteractionHamiltonianES h M)) = 1 ∧
+    ∃ h : Matrix (Cfg 5 7) (Cfg 5 7) ℂ, h.PosSemidef ∧
+      (∀ (M : ℕ) (hM : 7 ≤ M), haveI : NeZero M := ⟨by omega⟩;
+        Module.finrank ℂ (LinearMap.ker
+          (Matrix.toEuclideanLin (translationInvariant M h).hamiltonian)) = 1 ∧
         ∃ v : MPVSpace 5 M, v ≠ 0 ∧
-          ∀ i : Fin M, periodicLocalInteractionES h i v = 0) ∧
-      (∃ A : MPSTensor 5 5, ∀ M : ℕ, 8 ≤ M → mpvState A M ≠ 0 ∧
-        LinearMap.ker (periodicInteractionHamiltonianES h M) =
+          ∀ i : Fin M, Matrix.toEuclideanLin ((translationInvariant M h).term i) v = 0) ∧
+      (∃ A : MPSTensor 5 5, ∀ (M : ℕ) (hM : 8 ≤ M), haveI : NeZero M := ⟨by omega⟩;
+        mpvState A M ≠ 0 ∧
+        LinearMap.ker (Matrix.toEuclideanLin (translationInvariant M h).hamiltonian) =
           Submodule.span ℂ {mpvState A M}) ∧
-      (∀ ψ : MPVSpace 5 7, periodicInteractionHamiltonianES h 7 ψ = 0 →
+      (∀ ψ : MPVSpace 5 7,
+        Matrix.toEuclideanLin (translationInvariant 7 h).hamiltonian ψ = 0 →
         (∀ s : Fin 7, cyclicTranslateState s ψ.ofLp = ψ.ofLp) → ψ = 0) := by
   let ζ : ℂ := Complex.exp (2 * Real.pi * Complex.I / 5)
   let q : ℂ := Complex.exp (2 * Real.pi * Complex.I / 7)
   have hζ : IsPrimitiveRoot ζ 5 := Complex.isPrimitiveRoot_exp 5 (by decide)
   have hq : IsPrimitiveRoot q 7 := Complex.isPrimitiveRoot_exp 7 (by decide)
-  refine ⟨sevenSectorInteraction ζ q, sevenSectorInteraction_isPositive ζ q, ?_, ?_, ?_⟩
+  refine ⟨sevenSectorInteraction ζ q, posSemidef_sevenSectorInteraction ζ q, ?_, ?_, ?_⟩
   · intro M hM
+    have : NeZero M := ⟨by omega⟩
     refine ⟨finrank_ker_sevenSectorHamiltonian hζ hq.pow_eq_one M hM, ?_⟩
     obtain ⟨v, hv, hzero, _⟩ :=
       exists_nonzero_ground_line_sevenSectorHamiltonian hζ hq.pow_eq_one M hM
     refine ⟨v, hv, ?_⟩
+    rw [ManyBody.Interaction.hamiltonian, map_sum] at hzero
     exact (WeightedPositiveKernel.apply_sum_eq_zero_iff
-      (fun i : Fin M ↦ periodicLocalInteractionES_isPositive
-        (sevenSectorInteraction_isPositive ζ q) i) v).mp hzero
+      (fun i : Fin M ↦ Matrix.isPositive_toEuclideanLin_iff.mpr (Matrix.nonneg_iff_posSemidef.mp
+        (ManyBody.Interaction.translationInvariant_term_nonneg (Matrix.nonneg_iff_posSemidef.mpr
+          (posSemidef_sevenSectorInteraction ζ q)) i))) v).mp hzero
   · exact exists_bond_five_eventual_ground_family_sevenSector hζ (hq.ne_zero (by decide))
   · intro ψ hzero hfixed
     exact eq_zero_of_sevenSectorHamiltonian_fixed hζ hq.pow_eq_one

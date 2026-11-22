@@ -289,10 +289,10 @@ case.
         MPSTensor.MPOSymmetry.blockPeriodicMpvMapES_sectorTensor_injective,
         MPSTensor.MPOSymmetry.wordTupleSpanTop_blockMixedInterpolation,
         MPSTensor.MPOSymmetry.blockPeriodicMpvMapES_blockMixedInterpolation_injective,
-        MPSTensor.MPOSymmetry.ker_parentHamiltonianES_blockMixedTensor,
+        MPSTensor.MPOSymmetry.ker_hamiltonian_parentRingInteraction_blockMixedTensor,
         MPSTensor.MPOSymmetry.linearIndependent_mpv_blockMixedInterpolation,
         MPSTensor.MPOSymmetry.continuous_blockMixed_groundSpace_starProjection,
-        MPSTensor.MPOSymmetry.exists_uniform_blockMixed_parentHamiltonianES_gap,
+        MPSTensor.MPOSymmetry.exists_uniform_blockMixed_hamiltonian_parentRingInteraction_gap,
         MPSTensor.MPOSymmetry.tendsto_blockMixed_groundSpace_starProjection}
     \leanok
     \uses{def:mpo_block_mixed_path,def:parent_hamiltonian_es}
@@ -306,8 +306,8 @@ case.
               independent.
         \item The ground projection of $H(\gamma)$ is continuous on
               $(0,1)$, and every compact subset of $(0,1)$ admits one
-              $\delta>0$ with $\|H(\gamma)v\|\geq\delta\|v\|$ for all
-              $N\geq2$ and all $v$ orthogonal to the ground space.
+              $\delta>0$ such that, for all $N\geq2$, every nonzero
+              eigenvalue of $H(\gamma)$ is at least $\delta$.
         \item As $\gamma\to\gamma_0\in[0,1]$ within $(0,1)$, the ground
               projection of $H(\gamma)$ converges to the orthogonal
               projection onto the span of the block states at $\gamma_0$.

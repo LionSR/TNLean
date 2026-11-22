@@ -113,10 +113,7 @@ Source: arXiv:1606.00608, Definition 3.9, lines 517--525. -/
 theorem twoSiteParentInteractionMatrix_isHermitian (A : MPSTensor d D) :
     (twoSiteParentInteractionMatrix A).IsHermitian := by
   apply Matrix.IsHermitian.reindex
-  rw [parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix]
-  exact (LinearMap.isHermitian_toMatrix_iff
-    (EuclideanSpace.basisFun (Cfg d 2) ℂ)).2
-      (parentInteractionES_isSymmetricProjection A 2).isSymmetric
+  exact (isStarProjection_toMatrix'_parentInteraction A 2).isSelfAdjoint.isHermitian
 
 /-- On three sites, nearest-neighbor parent commutation becomes commutation of
 the two natural overlapping lifts of the canonical two-site interaction.

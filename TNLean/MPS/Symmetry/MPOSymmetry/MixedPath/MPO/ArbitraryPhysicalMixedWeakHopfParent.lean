@@ -48,7 +48,7 @@ theorem exists_adjointBoundary_changePhysicalBasis
   refine ⟨Y, fun n => ?_⟩
   have htransport (Z : Matrix (Fin D) (Fin D) ℂ) :
       mpoWithBoundary (changePhysicalBasis J W.tensor) Z n =
-        singleKrausMap (Matrix.tensorPower n J) (mpoWithBoundary W.tensor Z n) := by
+        singleKrausMap (Matrix.piKronecker fun _ : Fin n ↦ J) (mpoWithBoundary W.tensor Z n) := by
     simp only [mpoWithBoundary_eq_physCloseN,
       singleKrausMap_tensorPower_physCloseN]
   rw [htransport, htransport]
@@ -138,19 +138,15 @@ theorem hamiltonian_arbitraryPhysicalMixedWeakHopfParent_commute
   exact ⟨Y, by simpa only [hW, arbitraryPhysicalMixedMPO] using hY 2⟩
 
 include h₀ h₁ hW hInj₀ hInj₁ in
-/-- The completed integral path has a positive spectral gap uniform in the
-parameter and all periodic ring lengths at least two. This uses equality with
-the already established mixed parent path; no gap is asserted for the literal
-uncompleted average. -/
+/-- The completed integral path has a positive spectral gap above its zero
+ground energy, uniform in the parameter and all periodic ring lengths at least
+two. This uses equality with the already established mixed parent path; no gap
+is asserted for the literal uncompleted average. -/
 theorem exists_uniform_arbitraryPhysicalMixedWeakHopfParent_gap :
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ γ : unitInterval, ∀ N : ℕ, ∀ hN : 2 ≤ N,
       haveI : NeZero N := ⟨by omega⟩;
-      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-        (Interaction.translationInvariant N
-            (arbitraryPhysicalMixedWeakHopfParent A₀ A₁ W γ)).hamiltonian))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-          (Interaction.translationInvariant N
-              (arbitraryPhysicalMixedWeakHopfParent A₀ A₁ W γ)).hamiltonian v‖ := by
+      IsGapped (Interaction.translationInvariant N
+        (arbitraryPhysicalMixedWeakHopfParent A₀ A₁ W γ)).hamiltonian 0 δ := by
   obtain ⟨δ, hδ, hδ₁, hg⟩ := exists_uniform_arbitraryPhysicalMixed_periodic_path_gap
     A₀ A₁ hInj₀ hInj₁
   refine ⟨δ, hδ, hδ₁, fun γ N hN => ?_⟩

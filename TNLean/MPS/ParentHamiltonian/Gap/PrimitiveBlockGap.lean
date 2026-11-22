@@ -37,7 +37,7 @@ at range \(2p\), uniform over all chain lengths \(pM\) with \(M\geq2\).
 The grouping length \(p\) may be chosen above any prescribed lower bound.
 This is Nachtergaele's grouped estimate, arXiv:cond-mat/9410110,
 Theorem 2.1(ii), and the three-interval estimate of Section 6. -/
-theorem exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap
+theorem exists_ge_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_fixedPointGap
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
@@ -45,13 +45,11 @@ theorem exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_hasComplemen
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) (Rmin : ℕ) :
     ∃ p : ℕ, Rmin ≤ p ∧ 0 < p ∧ ∃ γ : ℝ, 0 < γ ∧
-      ∀ M : ℕ, 2 ≤ M → ∀ v ∈
-        (LinearMap.ker (openParentHamiltonianES
-          (toTensorFromBlocks (d := d) (μ := μ) A) (2 * p) (p * M)))ᗮ,
-        γ * ‖v‖ ≤ ‖openParentHamiltonianES
-          (toTensorFromBlocks (d := d) (μ := μ) A) (2 * p) (p * M) v‖ := by
+      ∀ M : ℕ, 2 ≤ M → ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ) A) (2 * p)
+          (p * M)).hamiltonian) z → z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨L₀, hL₀, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
+    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
       μ A hμ ρ hP hρ hDistinct
   obtain ⟨p, hp, hDefect⟩ := ((eventually_ge_atTop (max L₀ Rmin)).and
     (eventually_toTensorFromBlocks_projector_defect_le μ A hμ ρ hP hρ hDistinct
@@ -62,13 +60,13 @@ theorem exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_hasComplemen
   have hγ : 0 < (1 - (1 / 2 : ℝ) * Real.sqrt 2) ^ 2 :=
     sq_pos_of_pos (by linarith [Real.sqrt_two_lt_three_halves])
   refine ⟨p, by omega, by omega, _, hγ, ?_⟩
-  intro M hM
+  intro M _
   exact
-    openParentHamiltonianES_norm_gap_of_grouped_c3
-      (toTensorFromBlocks (d := d) (μ := μ) A) (p := p) (by omega) hM
+    hamiltonian_parentChainInteraction_gap_of_grouped_c3
+      (toTensorFromBlocks (d := d) (μ := μ) A) (p := p) (by omega)
       (by norm_num) hεlt
       (grouped_martingaleDifference_norm_le_of_projector_defect
-        (toTensorFromBlocks (d := d) (μ := μ) A) (by omega) hM
+        (toTensorFromBlocks (d := d) (μ := μ) A) (by omega)
         (fun n hn ↦ hKernel (2 * p) n (by omega) hn) (by norm_num)
         (fun K ↦ hDefect K p (by omega)))
 
@@ -77,7 +75,7 @@ interaction above every prescribed lower bound on its range. This combines
 Nachtergaele's grouped estimate, Theorem 2.1(ii), with the finite-range
 periodic comparison. The chosen range is twice a sufficiently large overlap
 length; no assertion about every shorter admissible range is made here. -/
-theorem exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap
+theorem exists_ge_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_fixedPointGap
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
@@ -85,16 +83,15 @@ theorem exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementary
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) (Rmin : ℕ) :
     ∃ R : ℕ, Rmin ≤ R ∧ 0 < R ∧ ∃ γ : ℝ, 0 < γ ∧
-      ∀ᶠ N : ℕ in atTop, ∀ v ∈
-        (LinearMap.ker (parentHamiltonianES
-          (toTensorFromBlocks (d := d) (μ := μ) A) R N))ᗮ,
-        γ * ‖v‖ ≤ ‖parentHamiltonianES
-          (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
+      ∀ᶠ N : ℕ in atTop, ∀ [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin
+          (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+          z = 0 ∨ (γ : ℂ) ≤ z := by
   obtain ⟨p, hRmin, hp, γ, hγ, hOpen⟩ :=
-    exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap
+    exists_ge_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_fixedPointGap
       μ A hμ ρ hP hρ hDistinct Rmin
   obtain ⟨δ, hδ, hPeriodic⟩ :=
-    exists_parentHamiltonianES_gap_of_eventually_divisible_openParentHamiltonianES_gap
+    exists_hamiltonian_parentRingInteraction_gap_of_eventually_divisible_gap
       (toTensorFromBlocks (d := d) (μ := μ) A) (by omega : 1 ≤ p)
       (by omega : 1 ≤ 2 * p) hγ
       ((eventually_ge_atTop (2 : ℕ)).mono hOpen)
@@ -104,7 +101,7 @@ theorem exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementary
 an interaction range with a uniform positive periodic gap. This is the
 existence-of-range consequence of Nachtergaele's Theorem 2.1(ii) and the
 three-interval estimate of Section 6. -/
-theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap
+theorem exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_fixedPointGap
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
@@ -112,12 +109,11 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFix
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) :
     ∃ R : ℕ, 0 < R ∧ ∃ γ : ℝ, 0 < γ ∧
-      ∀ᶠ N : ℕ in atTop, ∀ v ∈
-        (LinearMap.ker (parentHamiltonianES
-          (toTensorFromBlocks (d := d) (μ := μ) A) R N))ᗮ,
-        γ * ‖v‖ ≤ ‖parentHamiltonianES
-          (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
-  exact (exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap
+      ∀ᶠ N : ℕ in atTop, ∀ [NeZero N], ∀ z : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin
+          (parentRingInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+          z = 0 ∨ (γ : ℂ) ≤ z := by
+  exact (exists_ge_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_fixedPointGap
     μ A hμ ρ hP hρ hDistinct 0).imp fun _ h ↦ h.2
 
 end MPSTensor

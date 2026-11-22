@@ -31,6 +31,8 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
+open ManyBody.Interaction (translationInvariant)
+
 variable {d a b : ℕ}
 
 private theorem blockedConfigEquiv_one_two (σ : Cfg (blockPhysDim d 2) 1) :
@@ -50,7 +52,7 @@ theorem mem_uncleBoundarySpace_two_iff
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ) (ψ : NSiteSpace d 2) :
     ψ ∈ uncleBoundarySpace A B R L 2 ↔
-      uncleInteractionES A B R L
+      Matrix.toEuclideanLin (uncleInteraction A B R L)
         ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm ψ) = 0 := by
   let f : NSiteSpace d 2 ≃ₗ[ℂ] NSiteSpace (blockPhysDim d 2) 1 :=
     LinearEquiv.funCongrLeft ℂ ℂ (blockedConfigEquiv d 1 2)
@@ -67,7 +69,7 @@ theorem mem_uncleBoundarySpace_two_iff
       subst i
       exact (decodeBlockEquiv d 2).symm_apply_apply (σ 0)
     rw [hcfg]
-  rw [uncleInteractionES_apply_eq_zero_iff, mem_groundSpaceES_iff]
+  rw [uncleInteraction_apply_eq_zero_iff, mem_groundSpaceES_iff]
   have hcoords :
       (WithLp.linearEquiv 2 ℂ (NSiteSpace (blockPhysDim d 2) 1))
           ((blockedConfigLinearIsometryEquiv d 1 2).symm
@@ -85,16 +87,17 @@ theorem mem_uncleBoundarySpace_two_iff
 /-- The actual finite Hamiltonian kernel imposes precisely the cyclic
 length-two source boundary constraints. Source: arXiv:1210.6613,
 thm:gs-subspace-uncle, lines 1050–1073. -/
-theorem uncleHamiltonianES_apply_eq_zero_iff_boundary_windows
+theorem hamiltonian_uncleInteraction_apply_eq_zero_iff_boundary_windows
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     {N : ℕ} (hN : 2 ≤ N) (ψ : NSiteSpace d N) :
-    uncleHamiltonianES A B R L N
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin (translationInvariant N (uncleInteraction A B R L)).hamiltonian
         ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm ψ) = 0 ↔
       ∀ (i : Fin N) (τ : Cfg d N),
         cyclicRestrictₗ (Fin.pos i) 2 i τ ψ ∈ uncleBoundarySpace A B R L 2 := by
-  rw [uncleHamiltonianES_apply_eq_zero_iff A B R L hN]
+  rw [hamiltonian_uncleInteraction_apply_eq_zero_iff A B R L hN]
   apply forall_congr' fun i ↦ forall_congr' fun τ ↦ ?_
   simpa [cyclicRestrictES, LinearMap.withLpMap] using
     (mem_uncleBoundarySpace_two_iff A B R L
@@ -137,22 +140,24 @@ sector MPS vectors. This is arXiv:1210.6613, Theorem
 thm:gs-subspace-uncle, lines 1043–1150, at every length n+2.
 The intersection and closure properties are derived from the injective
 perturbation; neither is a premise of this statement. -/
-theorem ker_uncleHamiltonianES_eq_span_mpv
+theorem ker_hamiltonian_uncleInteraction_eq_span_mpv
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (hPert : Kraus.IsInjective (uncleBoundaryLetter A B R L)) (n : ℕ) :
-    LinearMap.ker (uncleHamiltonianES A B R L (n + 2)).toLinearMap =
+    LinearMap.ker (Matrix.toEuclideanLin
+        (translationInvariant (n + 2) (uncleInteraction A B R L)).hamiltonian) =
       Submodule.span ℂ
         {(WithLp.linearEquiv 2 ℂ (NSiteSpace d (n + 2))).symm (mpv A),
           (WithLp.linearEquiv 2 ℂ (NSiteSpace d (n + 2))).symm (mpv B)} := by
   apply le_antisymm
   · intro v hv
-    change uncleHamiltonianES A B R L (n + 2) v = 0 at hv
+    change Matrix.toEuclideanLin
+      (translationInvariant (n + 2) (uncleInteraction A B R L)).hamiltonian v = 0 at hv
     let ψ : NSiteSpace d (n + 2) := (WithLp.linearEquiv 2 ℂ _) v
     have hψ : (WithLp.linearEquiv 2 ℂ (NSiteSpace d (n + 2))).symm ψ = v :=
       LinearEquiv.symm_apply_apply _ v
-    have hwindow := (uncleHamiltonianES_apply_eq_zero_iff_boundary_windows
+    have hwindow := (hamiltonian_uncleInteraction_apply_eq_zero_iff_boundary_windows
       A B R L (by omega) ψ).mp (by simpa only [hψ] using hv)
     have hleft := mem_uncleBoundarySpace_of_cyclic_windows A B R L hPert (by omega) ψ hwindow
     let t : Fin (n + 2) := 1
@@ -183,6 +188,6 @@ theorem ker_uncleHamiltonianES_eq_span_mpv
         {(WithLp.linearEquiv 2 ℂ (NSiteSpace d (n + 2))).symm (mpv A),
           (WithLp.linearEquiv 2 ℂ (NSiteSpace d (n + 2))).symm (mpv B)} at hm
     rwa [hψ] at hm
-  · exact span_mpv_le_ker_uncleHamiltonianES A B R L (by omega)
+  · exact span_mpv_le_ker_hamiltonian_uncleInteraction A B R L (by omega)
 
 end MPSTensor

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.StandardForm.TwoSiteStandardForm
 import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 import QICLean.Algebra.Combinatorics.FinSumPermutation
-import QICLean.Algebra.Kronecker.MatrixTensorPower
+import QICLean.Algebra.Kronecker.PiKronecker
 
 /-!
 # Periodic circuit of a two-site standard form
@@ -78,7 +78,7 @@ theorem twoSiteUnshiftedLayer_isUnitaryBetween
     (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ)
     (hu : u.IsUnitaryBetween) :
     (twoSiteUnshiftedLayer (N := N) u).IsUnitaryBetween :=
-  Matrix.IsUnitaryBetween.tensorPower N hu
+  Matrix.IsUnitaryBetween.piKronecker (fun _ : Fin N ↦ hu)
 
 /-- The shifted layer is unitary between the intermediate-pair and
 physical-pair configuration spaces.
@@ -88,8 +88,8 @@ theorem twoSiteShiftedLayer_isUnitaryBetween [NeZero N]
     (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ)
     (hv : v.IsUnitaryBetween) :
     (twoSiteShiftedLayer (N := N) v).IsUnitaryBetween := by
-  have h := Matrix.IsUnitaryBetween.tensorPower N hv
-  have h' := h.reindex (Matrix.tensorPower N v)
+  have h := Matrix.IsUnitaryBetween.piKronecker (fun _ : Fin N ↦ hv)
+  have h' := h.reindex (Matrix.piKronecker fun _ : Fin N ↦ v)
     (twoSiteShiftedPairEquiv (N := N) (ℓ := d) (r := d)).symm
     (twoSiteShiftedPairEquiv (N := N) (ℓ := ℓ) (r := r)).symm
   convert h' using 1

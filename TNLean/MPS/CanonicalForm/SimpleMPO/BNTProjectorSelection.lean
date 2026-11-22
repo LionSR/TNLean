@@ -500,7 +500,7 @@ theorem singleKrausMap_sitewise_bntSectorProjection_mpo_basis
     (hR : ∀ s : Fin g, R s ≠ 0) {N : ℕ} (hN : 0 < N)
     (i s : Fin g) :
     singleKrausMap
-        (Matrix.tensorPower N (bntSectorProjection hC hρ hη hR s))
+        (Matrix.piKronecker fun _ : Fin N ↦ (bntSectorProjection hC hρ hη hR s))
         (mpo (K i) N) =
       if s = i then mpo (K i) N else 0 := by
   rw [singleKrausMap_tensorPower_mpo,
@@ -637,7 +637,7 @@ theorem singleKrausMap_sitewise_bntSectorProjection_mpo
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     {N : ℕ} (hN : 0 < N) (s : Fin S.basisCount) :
     singleKrausMap
-        (Matrix.tensorPower N (bntSectorProjection hC hρ hη hR s))
+        (Matrix.piKronecker fun _ : Fin N ↦ (bntSectorProjection hC hρ hη hR s))
         (mpo M N) =
       (S.copies s : ℂ) •
         mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N := by
@@ -688,12 +688,12 @@ theorem sitewise_bntSectorProjection_mul_mpo_mul_self
     (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ)
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     {N : ℕ} (hN : 0 < N) (s : Fin S.basisCount) :
-    let P := Matrix.tensorPower N (bntSectorProjection hC hρ hη hR s)
+    let P := (Matrix.piKronecker fun _ : Fin N ↦ (bntSectorProjection hC hρ hη hR s))
     P * mpo M N * P =
       (S.copies s : ℂ) •
         mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N := by
   dsimp only
-  let P := Matrix.tensorPower N (bntSectorProjection hC hρ hη hR s)
+  let P := (Matrix.piKronecker fun _ : Fin N ↦ (bntSectorProjection hC hρ hη hR s))
   have hP : P.IsHermitian := tensorPower_isHermitian
     (bntSectorProjection_isOrthogonal hC hρ hη hR s).1 N
   calc
@@ -744,7 +744,7 @@ theorem exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL
                 physicalSlice (S.basisMPOTensor i) β α *
                 bntSectorProjection W.hC W.hρ W.hη W.hR t = 0) ∧
         (∀ (N : ℕ), 0 < N → ∀ s : Fin S.basisCount,
-          let P := Matrix.tensorPower N (bntSectorProjection W.hC W.hρ W.hη W.hR s)
+          let P := (Matrix.piKronecker fun _ : Fin N ↦ (bntSectorProjection W.hC W.hρ W.hη W.hR s))
           P * mpo M N * P =
             (S.copies s : ℂ) •
               mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N) := by

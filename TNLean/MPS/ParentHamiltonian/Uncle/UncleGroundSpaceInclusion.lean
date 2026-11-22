@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Matrix.MatrixReindex
 import TNLean.MPS.ParentHamiltonian.Uncle.UncleParentLimit
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.KernelChainGroundSpace
+import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicInteractionSections
 
 /-!
 # The two parent sectors lie in the actual uncle kernel
@@ -28,6 +29,8 @@ noncomputable section
 open scoped Matrix BigOperators
 
 namespace MPSTensor
+
+open ManyBody.Interaction (translationInvariant)
 
 variable {d a b : ℕ}
 
@@ -104,14 +107,14 @@ theorem groundSpace_blockTensor_le_uncleTensor_right
   rintro _ ⟨X, rfl⟩
   exact ⟨uncleBlockMatrix 0 0 0 X, groundSpaceMap_uncleTensor_right A B R L X⟩
 
-private theorem uncleInteractionES_apply_eq_zero_of_blocked_groundSpace
+private theorem uncleInteraction_apply_eq_zero_of_blocked_groundSpace
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     {c : ℕ} (C : MPSTensor d c)
     (hC : groundSpace (blockTensor C 2) 1 ≤ groundSpace (uncleTensor A B R L) 1)
     (v : EuclideanSpace ℂ (Cfg d 2)) (hv : v ∈ groundSpaceES C 2) :
-    uncleInteractionES A B R L v = 0 := by
+    Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0 := by
   have hv' : v ∈ (groundSpaceES (blockTensor C 2) 1).map
       (blockedConfigLinearIsometryEquiv d 1 2).toLinearEquiv.toLinearMap := by
     simpa only [groundSpaceES_blockTensor_map, one_mul] using hv
@@ -119,10 +122,11 @@ private theorem uncleInteractionES_apply_eq_zero_of_blocked_groundSpace
   have hwU : w ∈ groundSpaceES (uncleTensor A B R L) 1 := by
     apply (mem_groundSpaceES_iff _ _ w).mpr
     exact hC ((mem_groundSpaceES_iff _ _ w).mp hw)
-  have hkill : parentInteractionES (uncleTensor A B R L) 1 w = 0 :=
-    (parentInteractionES_apply_eq_zero_iff (uncleTensor A B R L) 1 w).mpr hwU
+  have hkill : (groundSpaceES (uncleTensor A B R L) 1)ᗮ.starProjection w = 0 := by
+    rwa [Submodule.starProjection_apply_eq_zero_iff, Submodule.orthogonal_orthogonal]
+  rw [toEuclideanLin_uncleInteraction_apply]
   change blockedConfigLinearIsometryEquiv d 1 2
-      (parentInteractionES (uncleTensor A B R L) 1
+      ((groundSpaceES (uncleTensor A B R L) 1)ᗮ.starProjection
         ((blockedConfigLinearIsometryEquiv d 1 2).symm
           (blockedConfigLinearIsometryEquiv d 1 2 w))) = 0
   rw [LinearIsometryEquiv.symm_apply_apply, hkill, map_zero]
@@ -130,100 +134,105 @@ private theorem uncleInteractionES_apply_eq_zero_of_blocked_groundSpace
 /-- The actual two-site uncle interaction annihilates the first local parent
 space, without a perturbation-injectivity premise. Source: arXiv:1210.6613,
 proof of thm:gs-subspace-uncle, lines 1050–1065. -/
-theorem uncleInteractionES_apply_eq_zero_left
+theorem uncleInteraction_apply_eq_zero_left
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (v : EuclideanSpace ℂ (Cfg d 2)) (hv : v ∈ groundSpaceES A 2) :
-    uncleInteractionES A B R L v = 0 :=
-  uncleInteractionES_apply_eq_zero_of_blocked_groundSpace A B R L A
+    Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0 :=
+  uncleInteraction_apply_eq_zero_of_blocked_groundSpace A B R L A
     (groundSpace_blockTensor_le_uncleTensor_left A B R L) v hv
 
 /-- The actual two-site uncle interaction annihilates the second local parent
 space, without a perturbation-injectivity premise. Source: arXiv:1210.6613,
 proof of thm:gs-subspace-uncle, lines 1050–1065. -/
-theorem uncleInteractionES_apply_eq_zero_right
+theorem uncleInteraction_apply_eq_zero_right
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (v : EuclideanSpace ℂ (Cfg d 2)) (hv : v ∈ groundSpaceES B 2) :
-    uncleInteractionES A B R L v = 0 :=
-  uncleInteractionES_apply_eq_zero_of_blocked_groundSpace A B R L B
+    Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0 :=
+  uncleInteraction_apply_eq_zero_of_blocked_groundSpace A B R L B
     (groundSpace_blockTensor_le_uncleTensor_right A B R L) v hv
 
-private theorem uncleHamiltonianES_apply_eq_zero_of_parent_windows
+private theorem hamiltonian_uncleInteraction_apply_eq_zero_of_parent_windows
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     {c : ℕ} (C : MPSTensor d c)
-    (hC : ∀ v ∈ groundSpaceES C 2, uncleInteractionES A B R L v = 0)
+    (hC : ∀ v ∈ groundSpaceES C 2, Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0)
     {N : ℕ} (hN : 2 ≤ N)
     (ψ : NSiteSpace d N) (hψ : ψ ∈ chainGroundSpace C 2 N) :
-    uncleHamiltonianES A B R L N
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin (translationInvariant N (uncleInteraction A B R L)).hamiltonian
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm ψ) = 0 := by
+  have : NeZero N := ⟨by omega⟩
   have hNpos : 0 < N := by omega
   rw [chainGroundSpace, dite_eq_left ⟨hNpos, hN⟩] at hψ
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
   have hlocal (i : Fin N) (τ : Cfg d N) :
-      uncleInteractionES A B R L
+      Matrix.toEuclideanLin (uncleInteraction A B R L)
         (cyclicRestrictES (d := d) (Fin.pos i) 2 i τ
           ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm ψ)) = 0 := by
     apply hC
     apply (mem_groundSpaceES_iff C 2 _).mpr
     simpa [cyclicRestrictES, LinearMap.withLpMap] using hψ i τ
-  simp only [uncleHamiltonianES, sum_apply,
-    smul_apply, ContinuousLinearMap.comp_apply,
-    LinearMap.coe_toContinuousLinearMap', hlocal, map_zero, Finset.sum_const_zero,
-    smul_zero]
+  rw [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.sum_apply]
+  exact Finset.sum_eq_zero fun i _ ↦
+    (toEuclideanLin_translationInvariant_term_eq_zero_iff_sections hN _ i _).mpr (hlocal i)
 
 /-- Every periodic first-sector parent ground vector is annihilated by the
 actual uncle Hamiltonian. Source: arXiv:1210.6613, proof of
 thm:gs-subspace-uncle, lines 1050–1065. -/
-theorem uncleHamiltonianES_apply_eq_zero_of_mem_chainGroundSpace_left
+theorem hamiltonian_uncleInteraction_apply_eq_zero_of_mem_chainGroundSpace_left
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     {N : ℕ} (hN : 2 ≤ N)
     (ψ : NSiteSpace d N) (hψ : ψ ∈ chainGroundSpace A 2 N) :
-    uncleHamiltonianES A B R L N
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin (translationInvariant N (uncleInteraction A B R L)).hamiltonian
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm ψ) = 0 :=
-  uncleHamiltonianES_apply_eq_zero_of_parent_windows A B R L A
-    (uncleInteractionES_apply_eq_zero_left A B R L) hN ψ hψ
+  hamiltonian_uncleInteraction_apply_eq_zero_of_parent_windows A B R L A
+    (uncleInteraction_apply_eq_zero_left A B R L) hN ψ hψ
 
 /-- Every periodic second-sector parent ground vector is annihilated by the
 actual uncle Hamiltonian. Source: arXiv:1210.6613, proof of
 thm:gs-subspace-uncle, lines 1050–1065. -/
-theorem uncleHamiltonianES_apply_eq_zero_of_mem_chainGroundSpace_right
+theorem hamiltonian_uncleInteraction_apply_eq_zero_of_mem_chainGroundSpace_right
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     {N : ℕ} (hN : 2 ≤ N)
     (ψ : NSiteSpace d N) (hψ : ψ ∈ chainGroundSpace B 2 N) :
-    uncleHamiltonianES A B R L N
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin (translationInvariant N (uncleInteraction A B R L)).hamiltonian
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm ψ) = 0 :=
-  uncleHamiltonianES_apply_eq_zero_of_parent_windows A B R L B
-    (uncleInteractionES_apply_eq_zero_right A B R L) hN ψ hψ
+  hamiltonian_uncleInteraction_apply_eq_zero_of_parent_windows A B R L B
+    (uncleInteraction_apply_eq_zero_right A B R L) hN ψ hψ
 
 /-- The span of the two actual periodic MPS vectors lies in the uncle
 Hamiltonian kernel. This is the lower inclusion of arXiv:1210.6613,
 thm:gs-subspace-uncle, lines 1050–1065; no converse or dimension assertion
 is made without the intersection and closure arguments. -/
-theorem span_mpv_le_ker_uncleHamiltonianES
+theorem span_mpv_le_ker_hamiltonian_uncleInteraction
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Submodule.span ℂ
       {(WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A),
         (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv B)} ≤
-      LinearMap.ker (uncleHamiltonianES A B R L N).toLinearMap := by
+      LinearMap.ker (Matrix.toEuclideanLin
+        (translationInvariant N (uncleInteraction A B R L)).hamiltonian) := by
   apply Submodule.span_le.mpr
   intro v hv
   simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hv
   rcases hv with rfl | rfl
-  · exact uncleHamiltonianES_apply_eq_zero_of_mem_chainGroundSpace_left A B R L hN _
+  · exact hamiltonian_uncleInteraction_apply_eq_zero_of_mem_chainGroundSpace_left A B R L hN _
       (mpv_mem_chainGroundSpace A 2 N (by omega) hN)
-  · exact uncleHamiltonianES_apply_eq_zero_of_mem_chainGroundSpace_right A B R L hN _
+  · exact hamiltonian_uncleInteraction_apply_eq_zero_of_mem_chainGroundSpace_right A B R L hN _
       (mpv_mem_chainGroundSpace B 2 N (by omega) hN)
 
 end MPSTensor

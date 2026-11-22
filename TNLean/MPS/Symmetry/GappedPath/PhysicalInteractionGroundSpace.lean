@@ -89,12 +89,12 @@ theorem isometricInteractionExtension_isStarProjection {d m : ℕ}
     IsStarProjection (isometricInteractionExtension E A) := by
   apply IsStarProjection.one_sub
   refine ⟨?_, (Matrix.isHermitian_mul_mul_conjTranspose
-    (Matrix.tensorPower 2 E)
+    (Matrix.piKronecker fun _ : Fin 2 ↦ E)
     hA.one_sub.isSelfAdjoint.isHermitian).isSelfAdjoint⟩
   exact (Matrix.singleKrausMap_mul_of_isometry
-    (Matrix.tensorPower 2 E)
+    (Matrix.piKronecker fun _ : Fin 2 ↦ E)
     (MPOTensor.tensorPower_isometry E hE 2) (1 - A) (1 - A)).symm.trans
-      (congrArg (singleKrausMap (Matrix.tensorPower 2 E))
+      (congrArg (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ E))
         hA.one_sub.isIdempotentElem.eq)
 
 /-- The product of local ground projections of an isometric extension is
@@ -111,20 +111,20 @@ theorem isometricInteractionExtension_groundProduct {d m N : ℕ}
     (List.ofFn fun i : Fin N =>
       1 - placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i)
           (isometricInteractionExtension E A)).prod =
-      singleKrausMap (Matrix.tensorPower N E)
+      singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ E)
         (List.ofFn fun i : Fin N =>
           1 - placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A).prod := by
   have hLift (i : Fin N) :
       placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i)
-          (singleKrausMap (Matrix.tensorPower 2 E) (1 - A)) =
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ E) (1 - A)) =
         1 - placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i)
           (isometricInteractionExtension E A) := by
     rw [isometricInteractionExtension, placeAlong_sub, placeAlong_one, sub_sub_cancel]
   have hLiftComm (i j : Fin N) :
       Commute (placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i)
-          (singleKrausMap (Matrix.tensorPower 2 E) (1 - A)))
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ E) (1 - A)))
         (placeAlong (X := fun _ ↦ Fin m) (ringWindow hN j)
-          (singleKrausMap (Matrix.tensorPower 2 E) (1 - A))) := by
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ E) (1 - A))) := by
     rw [hLift i, hLift j]
     exact (Commute.one_left _).sub_left ((Commute.one_right _).sub_right (hcomm i j))
   have hOld (i : Fin N) : placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) (1 - A) =
@@ -153,7 +153,7 @@ theorem isometricInteractionExtension_ker_eq_map {d m N : ℕ}
       (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian) =
       (LinearMap.ker
         (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian)).map
-        (Matrix.toEuclideanLin (Matrix.tensorPower N E)) := by
+        (Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E)) := by
   have : NeZero N := ⟨by omega⟩
   rw [hamiltonian_translationInvariant_ker_eq_range_groundProduct _
     (isometricInteractionExtension_isStarProjection E hE A hA) hN hcommNew]
@@ -182,7 +182,7 @@ theorem isometricInteractionExtension_ker_eq_span {d m N : ℕ}
       Submodule.span ℂ {ψ}) :
     haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
       (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian) =
-      Submodule.span ℂ {Matrix.toEuclideanLin (Matrix.tensorPower N E) ψ} := by
+      Submodule.span ℂ {Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E) ψ} := by
   have : NeZero N := ⟨by omega⟩
   rw [isometricInteractionExtension_ker_eq_map E hE A hA hN hcommOld hcommNew,
     hground, Submodule.map_span, Set.image_singleton]

@@ -21,47 +21,63 @@ variable {d D : ℕ}
 an embedded terminal Hamiltonian with the full-window terminal ground space.
 This is the interval kernel identification used in Nachtergaele,
 arXiv:cond-mat/9410110, condition C3-prime, lines 1095--1107. -/
-theorem ker_openSuffixParentHamiltonianES_eq_of_local_kernel (A : MPSTensor d D) {R W N n : ℕ}
+theorem ker_hamiltonian_restrict_parentChainInteraction_eq_of_local_kernel (A : MPSTensor d D)
+    {R W N n : ℕ}
     (hR : 0 < R) (hRW : R ≤ W) (hWn : W ≤ n) (hnN : n ≤ N)
-    (hker : LinearMap.ker (openParentHamiltonianES A R W) = groundSpaceES A W) :
-    LinearMap.ker (openSuffixParentHamiltonianES A R W N n) =
-      LinearMap.ker (openSuffixParentHamiltonianES A W W N n) := by
+    (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) =
+        groundSpaceES A W) :
+    LinearMap.ker
+        (Matrix.toEuclideanLin
+            ((parentChainInteraction A R N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + R ≤
+                n).hamiltonian) =
+      LinearMap.ker
+          (Matrix.toEuclideanLin
+              ((parentChainInteraction A W N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + W ≤
+                  n).hamiltonian) := by
   ext v
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d W (hWn.trans hnN) ⟨n - W, by omega⟩
   have hconj (T : ℕ) (hT : 0 < T) (hTW : T ≤ W) :
-      U (openSuffixParentHamiltonianES A T W N n v) =
+      U (Matrix.toEuclideanLin
+          ((parentChainInteraction A T N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + T ≤
+              n).hamiltonian v) =
         ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-          (openParentHamiltonianES A T W).toContinuousLinearMap (U v) := by
+          (Matrix.toEuclideanLin (parentChainInteraction A T W).hamiltonian).toContinuousLinearMap
+              (U v) := by
     simpa only [U, LinearMap.comp_apply, LinearEquiv.coe_coe, ContinuousLinearMap.coe_coe,
       LinearIsometryEquiv.coe_toLinearEquiv, LinearIsometryEquiv.symm_apply_apply] using
-      LinearMap.congr_fun (openSuffixParentHamiltonianES_conj_cyclicActiveBlock
+      LinearMap.congr_fun (hamiltonian_restrict_parentChainInteraction_conj_cyclicActiveBlock
         A hT hTW hWn hnN) (U v)
   rw [LinearMap.mem_ker, ← U.map_eq_zero_iff, hconj R hR hRW,
     LinearMap.mem_ker, ← U.map_eq_zero_iff, hconj W (hR.trans_le hRW) le_rfl]
   change U v ∈ LinearMap.ker
     (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-      (openParentHamiltonianES A R W).toContinuousLinearMap).toLinearMap ↔
+      (Matrix.toEuclideanLin
+          (parentChainInteraction A R W).hamiltonian).toContinuousLinearMap).toLinearMap ↔
     U v ∈ LinearMap.ker
     (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-      (openParentHamiltonianES A W W).toContinuousLinearMap).toLinearMap
+      (Matrix.toEuclideanLin
+          (parentChainInteraction A W W).hamiltonian).toContinuousLinearMap).toLinearMap
   rw [ContinuousLinearMap.mem_ker_rightFiberwiseMap_iff,
     ContinuousLinearMap.mem_ker_rightFiberwiseMap_iff, LinearMap.coe_toContinuousLinearMap,
-    hker, openParentHamiltonianES_self_eq_parentInteractionES A (hR.trans_le hRW)]
-  simp only [LinearMap.coe_toContinuousLinearMap, parentInteractionES,
+    hker, hamiltonian_parentChainInteraction_self, toEuclideanLin_toMatrix'_parentInteraction]
+  simp only [LinearMap.coe_toContinuousLinearMap,
     Submodule.ker_starProjection, Submodule.orthogonal_orthogonal]
 /-- The kernel of a terminal interval Hamiltonian is the reassociated tail
 boundary space whenever its active finite-interval kernel is the MPS ground
 space. Source: Nachtergaele, arXiv:cond-mat/9410110, condition C3-prime,
 lines 1095--1107. -/
-theorem ker_openSuffixParentHamiltonianES_eq_range_reassocTailBoundaryMapES
+theorem ker_hamiltonian_restrict_parentChainInteraction_eq_range_reassocTailBoundaryMapES
     (A : MPSTensor d D) {R K L Q : ℕ}
     (hR : 0 < R) (hRW : R ≤ L + Q)
-    (hker : LinearMap.ker (openParentHamiltonianES A R (L + Q)) =
+    (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R (L + Q)).hamiltonian) =
       groundSpaceES A (L + Q)) :
-    LinearMap.ker (openSuffixParentHamiltonianES A R (L + Q)
-      (K + L + Q) (K + L + Q)) = (reassocTailBoundaryMapES A K L Q).range := by
-  simpa only [ker_openSuffixParentHamiltonianES_eq_of_local_kernel
+    LinearMap.ker
+        (Matrix.toEuclideanLin
+            ((parentChainInteraction A R (K + L + Q)).restrict fun i ↦ K + L + Q - (L + Q) ≤ i.val ∧
+                i.val + R ≤ K + L + Q).hamiltonian) =
+                    (reassocTailBoundaryMapES A K L Q).range := by
+  simpa only [ker_hamiltonian_restrict_parentChainInteraction_eq_of_local_kernel
     A hR hRW (by omega : L + Q ≤ K + L + Q) le_rfl hker] using
-    (range_reassocTailBoundaryMapES_eq_ker_openSuffixParentHamiltonianES
+    (range_reassocTailBoundaryMapES_eq_ker_hamiltonian_restrict_parentChainInteraction
       A (hR.trans_le hRW)).symm
 end MPSTensor

@@ -559,7 +559,7 @@
 
 \begin{lemma}[Blocked open sums have aligned original starts]
     \label{thm:blocked_open_interaction_sum}
-    \lean{MPSTensor.openInteractionMatrix_blocking_reindex}
+    \lean{MPSTensor.hamiltonian_chainTranslates_blocking_reindex}
     \leanok
     For $d,L,K>0$ and every $N\geq0$, write $H_h(N)$ for the open sum
     of the range-$K$ interaction $h$ on the blocked chain. Then
@@ -579,7 +579,7 @@
 
 \begin{lemma}[Aligned positive windows are bounded by the full open sum]
     \label{thm:aligned_positive_window_sum}
-    \lean{MPSTensor.sum_aligned_placeAlong_chainWindow_le_openInteractionMatrix}
+    \lean{MPSTensor.sum_aligned_placeAlong_chainWindow_le_hamiltonian_chainTranslates}
     \leanok
     Let $d\geq0$, $K,L>0$, and let $Y\geq0$ be an operator on $KL$
     original sites. For every $N\geq0$,
@@ -772,7 +772,7 @@
 
 \begin{lemma}[Expansion of the grouped open interaction sum]
     \label{thm:blocked_interaction_expansion}
-    \lean{MPSTensor.openInteractionMatrix_blockedInteractionMatrix_reindex}
+    \lean{MPSTensor.hamiltonian_chainTranslates_blockedInteractionMatrix_reindex}
     \leanok
     Let $d,L,R,K>0$, $R\leq KL$, and $N\geq K$. If $h_B$ is the grouped
     interaction, then
@@ -794,9 +794,9 @@
 
 \begin{lemma}[Positive comparison and kernel equality under grouping]
     \label{thm:blocked_interaction_comparison}
-    \lean{MPSTensor.openInteractionMatrix_blockedInteractionMatrix_comparison,
-        MPSTensor.ker_toEuclideanLin_openInteractionMatrix_blockedInteractionMatrix_reindex,
-        MPSTensor.ker_openInteractionHamiltonianES_blockedInteractionMatrix_map}
+    \lean{MPSTensor.hamiltonian_chainTranslates_blockedInteractionMatrix_comparison,
+        MPSTensor.ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_reindex,
+        MPSTensor.ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_map}
     \leanok
     Let $d,L,R,K>0$, $h\geq0$, $N\geq K$, and $R+L\leq KL+1$.
     Then
@@ -825,9 +825,9 @@
 \begin{lemma}[Eventual MPS kernels persist under grouping]
     \label{thm:blocked_interaction_eventual_kernel}
     \lean{MPSTensor.eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace,
-        MPSTensor.eventually_ker_openInteractionHamiltonianES_blockedInteractionMatrix_eq_groundSpaceES}
+        MPSTensor.eventually_ker_hamiltonian_chainTranslates_blockedInteractionMatrix_eq_groundSpaceES}
     \leanok
-    Let $d,L,R,K>0$, $R+L\leq KL+1$, $h\geq0$, and let $A$ be any
+    Let $d,L>0$, $R+L\leq KL+1$, $h\geq0$, and let $A$ be any
     MPS tensor. Suppose that $\ker H_h(n)=\mathcal G_n(A)$ for all
     sufficiently large $n$. Then, for all sufficiently large $N$,
     \begin{align}
@@ -849,7 +849,7 @@
 
 \begin{lemma}[Positivity of open interaction sums]
     \label{thm:open_interaction_matrix_posSemidef}
-    \lean{MPSTensor.openInteractionMatrix_posSemidef}
+    \lean{MPSTensor.hamiltonian_chainTranslates_posSemidef}
     \leanok
     Let $R>0$ and let $h$ be a positive semidefinite interaction on $R$
     sites. For every $n\geq0$, the open sum
@@ -912,11 +912,11 @@
     monotonicity of $f$ proves (\ref{eq:ph_positive_commutator_comparison}).
 \end{proof}
 
-\begin{lemma}[Configuration reindexing preserves kernels and norm gaps]
+\begin{lemma}[Configuration reindexing preserves kernels and eigenvalues]
     \label{thm:configuration_reindex_kernel_gap}
     \lean{Matrix.toEuclideanLin_reindex_piLpCongrLeft,
         Matrix.ker_toEuclideanLin_reindex_map,
-        Matrix.norm_gap_toEuclideanLin_reindex}
+        Matrix.hasEigenvalue_toEuclideanLin_reindex_iff}
     \leanok
     Let $e:I\to J$ be a bijection of finite configuration sets, and let $H$
     be any square complex matrix on $I$. The associated Euclidean isometry
@@ -924,48 +924,48 @@
     \begin{align}
         H^e U_e=U_e H,\qquad \ker H^e=U_e(\ker H).
     \end{align}
-    Every estimate $\gamma\|v\|\leq\|Hv\|$ on $(\ker H)^\perp$
-    holds with the same constant for $H^e$ on $(\ker H^e)^\perp$.
+    The matrices $H^e$ and $H$ have the same eigenvalues. Hence, for every
+    real $\gamma$, every nonzero eigenvalue of $H^e$ is at least $\gamma$
+    whenever every nonzero eigenvalue of $H$ is.
     Positivity is unnecessary.
 \end{lemma}
 \begin{proof}\leanok
     Change the summation index in the matrix action. The intertwining
-    identity and invertibility give the kernel identity. Isometries
-    preserve norms and orthogonal complements, yielding the gap estimate.
+    identity and invertibility show that $U_e$ carries each eigenspace of
+    $H$ onto the eigenspace of $H^e$ for the same eigenvalue; the kernel
+    is the eigenspace for $0$.
 \end{proof}
 
 \begin{lemma}[A blocked finite-chain gap gives an original gap]
     \label{thm:blocked_finite_gap_transfer}
-    \lean{MPSTensor.openInteractionMatrix_gap_of_blocked_gap}
+    \lean{MPSTensor.hamiltonian_chainTranslates_gap_of_blocked_gap}
     \leanok
-    Let $d,L,R,K>0$, $N\geq K$, $R+L\leq KL+1$, and $h\geq0$.
+    Let $d,L>0$, $N\geq K$, $R+L\leq KL+1$, and $h\geq0$.
     Let $\widehat h$ be the interaction obtained by regrouping $H_h(KL)$.
-    If $H_{\widehat h}(N)$ has norm gap $\gamma>0$ on its kernel
-    complement, then $H_h(NL)$ has norm gap
-    $\gamma/(KL+1-R)$ on its entire kernel complement.
+    If every nonzero eigenvalue of $H_{\widehat h}(N)$ is at least
+    $\gamma>0$, then every nonzero eigenvalue of $H_h(NL)$ is at least
+    $\gamma/(KL+1-R)$.
     This is a finite-volume consequence of
     \cite[Section~3, equations~(3.12)--(3.14)]{Nachtergaele1996Spectral}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:blocked_interaction_comparison,thm:configuration_reindex_kernel_gap,lem:positive-comparison-kernel-gap}
-    Carry the blocked norm estimate to original coordinates.
+    Carry the blocked estimate to original coordinates.
     The two positive order comparisons give coincident kernels and
-    transfer the gap with the stated divisor.
+    transfer the lower bound on the nonzero eigenvalues with the stated
+    divisor.
 \end{proof}
 
 \begin{lemma}[Uniform gaps at all block-divisible volumes]
     \label{thm:blocked_primitive_aligned_uniform_gap}
-    \lean{MPSTensor.exists_aligned_openInteractionMatrix_gap_of_blocked_primitive_family}
+    \lean{MPSTensor.exists_aligned_hamiltonian_chainTranslates_gap_of_blocked_primitive_family}
     \leanok
     Let $d,L>0$. Suppose $A^{[L]}$ has an exact joint-space presentation
     at every length by inequivalent primitive tensors of positive bond
-    dimensions, with faithful invariant matrices and nonzero weights. Let $h\geq0$ have positive range $R$
-    and eventual original kernel $G_A(n)$. If $K>0$ and
-    $R+L\leq KL+1$, there is $\delta>0$ such that
-    \begin{align}
-        \delta\|v\|\leq\|H_h(NL)v\|
-        \qquad\bigl(N\geq0,\ v\perp\ker H_h(NL)\bigr).
-    \end{align}
+    dimensions, with faithful invariant matrices and nonzero weights.
+    Let $h\geq0$ have range $R$ and eventual original kernel $G_A(n)$. If
+    $R+L\leq KL+1$, there is $\delta>0$ such that, for every $N\geq0$,
+    every nonzero eigenvalue of $H_h(NL)$ is at least $\delta$.
     Only block-divisible original volumes are asserted. This is the
     corresponding restriction of
     \cite[Theorem~1.2]{Nachtergaele1996Spectral}.
@@ -980,14 +980,12 @@
 
 \begin{lemma}[A periodic tensor has uniform gaps at period-divisible volumes]
     \label{thm:periodic_tensor_aligned_uniform_gap}
-    \lean{MPSTensor.IsPeriodic.exists_aligned_openInteractionMatrix_gap_of_eventual_kernel}
+    \lean{MPSTensor.IsPeriodic.exists_aligned_hamiltonian_chainTranslates_gap_of_eventual_kernel}
     \leanok
     Let $A$ be a periodic tensor of period $m>0$, and let $h\geq0$
-    have positive range and eventual kernel $G_A(n)$.
-    There exists $\delta>0$ such that, for every $N\geq0$,
-    \begin{align}
-        \forall\,v\perp\ker H_h(Nm):\ \delta\|v\|\leq\|H_h(Nm)v\|.
-    \end{align}
+    have eventual kernel $G_A(n)$.
+    There exists $\delta>0$ such that, for every $N\geq0$, every nonzero
+    eigenvalue of $H_h(Nm)$ is at least $\delta$.
     The primitive family, its invariant matrices, and its inequivalence
     are derived from periodicity. Other residue lengths remain separate.
 \end{lemma}
@@ -1254,18 +1252,15 @@
 
 \begin{lemma}[Uniform open-chain gap at a common period multiple]
     \label{thm:periodic_block_family_aligned_gap_of_dvd}
-    \lean{MPSTensor.exists_aligned_openInteractionMatrix_gap_of_periodic_family_of_dvd}
+    \lean{MPSTensor.exists_aligned_hamiltonian_chainTranslates_gap_of_periodic_family_of_dvd}
     \leanok
     Let $d\geq1$, and let $(A_j)$ be a finite family of normalized
     periodic tensors with
     periods $m_j$, and let $T=\bigoplus_j\mu_jA_j$, with $\mu_j\neq0$.
     Let $L>0$ satisfy $m_j\mid L$ for every $j$. Suppose $h\geq0$ has
-    range $R>0$ and $\ker H_h(n)=\mathcal G_T(n)$ for all sufficiently
-    large $n$. There is $\gamma>0$ such that, for every $N\geq0$ and
-    every $v\perp\ker H_h(NL)$,
-    \begin{align}
-        \gamma\lVert v\rVert\leq\lVert H_h(NL)v\rVert.
-    \end{align}
+    range $R$ and $\ker H_h(n)=\mathcal G_T(n)$ for all sufficiently
+    large $n$. There is $\gamma>0$ such that, for every $N\geq0$, every
+    nonzero eigenvalue of $H_h(NL)$ is at least $\gamma$.
     This includes short volumes with their kernels. The original
     family may be empty; its sectors need not be inequivalent and no
     faithful invariant matrices are given. This is the explicit
@@ -1290,14 +1285,13 @@
 
 \begin{lemma}[Existence of an aligned open-chain gap for a periodic family]
     \label{thm:periodic_block_family_aligned_gap_exists}
-    \lean{MPSTensor.exists_aligned_openInteractionMatrix_gap_of_periodic_family}
+    \lean{MPSTensor.exists_aligned_hamiltonian_chainTranslates_gap_of_periodic_family}
     \leanok
-    Assume $d\geq1$. Under the periodic-family, nonzero-weight, positivity, positive-range,
+    Assume $d\geq1$. Under the periodic-family, nonzero-weight, positivity,
     and eventual original kernel hypotheses of
     Lemma~\ref{thm:periodic_block_family_aligned_gap_of_dvd}, there exist
-    $L>0$ and $\gamma>0$ such that the same norm gap holds at every
-    original length $NL$, on the orthogonal complement of its
-    kernel. No common blocking length is given, and the original
+    $L>0$ and $\gamma>0$ such that, at every original length $NL$, every
+    nonzero eigenvalue of $H_h(NL)$ is at least $\gamma$. No common blocking length is given, and the original
     family may be empty. These are the aligned finite-chain lengths
     associated with the regrouping in
     \cite[lines 825--836, Theorem~1.2]{Nachtergaele1996Spectral}.
@@ -2211,8 +2205,8 @@
 
 \begin{lemma}[Canonical original-chain interaction for a periodic tensor]
     \label{thm:periodic_original_parent_interaction}
-    \lean{MPSTensor.IsPeriodic.exists_ker_openParentHamiltonianES_eq_groundSpaceES,
-        MPSTensor.IsPeriodic.exists_positive_parent_interaction}
+    \lean{MPSTensor.IsPeriodic.exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES,
+        MPSTensor.IsPeriodic.exists_posSemidef_ker_hamiltonian_chainTranslates_eq_groundSpaceES}
     \leanok
     For the same tensor $A$, there is $R_0>0$ such that, for every $R\ge R_0$
     and every $N\ge R$, the canonical range-$R$ open parent Hamiltonian has
@@ -2238,9 +2232,8 @@
 
 \begin{definition}[Matrix of the canonical parent interaction]
     \label{def:canonical_parent_interaction_matrix}
-    \lean{MPSTensor.canonicalParentInteractionMatrix,
-        MPSTensor.toEuclideanLin_canonicalParentInteractionMatrix,
-        MPSTensor.canonicalParentInteractionMatrix_posSemidef}
+    \lean{MPSTensor.toEuclideanLin_toMatrix'_parentInteraction,
+        MPSTensor.posSemidef_toMatrix'_parentInteraction}
     \leanok
     Let \(h_R\) be the configuration-basis matrix of the orthogonal
     projection onto \(G_R(A)^\perp\). This matrix is positive semidefinite
@@ -2549,16 +2542,14 @@
 
 \begin{lemma}[Covering interval energies and kernels]
     \label{thm:open_cover_energy_kernel}
-    \lean{MPSTensor.ker_openParentHamiltonianES_le_ker_openPrefix,
-        MPSTensor.localTermES_eq_zero_of_openSuffixParentHamiltonianES_eq_zero,
-        MPSTensor.ker_openPrefix_inf_ker_openSuffix_eq_ker_openParentHamiltonianES,
-        MPSTensor.openPrefix_add_openSuffix_le_two_openParentHamiltonianES,
+    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_le_ker_hamiltonian_prefix,
+        MPSTensor.ker_hamiltonian_prefix_inf_ker_hamiltonian_restrict_parentChainInteraction,
         MPSTensor.leftBoundary_inf_reassocTail_range_eq_groundSpaceES_of_open_kernel}
     \leanok
     Let $H_N$ be the canonical range-$R$ open Hamiltonian, and let $H_L,H_T$
     be its restrictions to a prefix of length $n$ and a terminal interval of
-    length $W$, respectively. Then $H_L+H_T\le2H_N$.
-    If $n\le N$ and $N+R\le n+W+1$, every interaction window lies in one
+    length $W$, respectively. Then $\ker H_N\subseteq\ker H_L$.
+    If $N+R\le n+W+1$, every interaction window lies in one
     of these intervals, and
     $\ker H_L\cap\ker H_T=\ker H_N$.
     If the finite kernels equal the MPS boundary spaces and the overlap has
@@ -2567,23 +2558,23 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:fixed-volume-prefix-ground-projections-nested,thm:ph_prefix_kernel_free_right_sites,thm:ph_terminal_interval_kernel,thm:open_parent_overlapping_interval_gap}
-    Each interval contains a subset of the positive local terms of $H_N$.
-    This proves the energy upper bound. A vector annihilated by an interval
-    sum is annihilated by every local projection in that sum. The covering
+    Each interval contains a subset of the positive local terms of $H_N$,
+    and a vector annihilated by a sum of positive terms is annihilated by
+    every term of that sum. This proves the kernel inclusion. The covering
     condition therefore gives the kernel identity. The boundary-space identity
     follows by the physical coordinate isometries adjoining free sites.
 \end{proof}
 
 \begin{lemma}[Finite residue gaps and quotient reconstruction]
     \label{thm:finite_open_residue_gaps}
-    \lean{MPSTensor.exists_pos_openParentHamiltonianES_gap_over_residues,
-        MPSTensor.openParentHamiltonianES_gap_all_large_of_residue_gaps}
+    \lean{MPSTensor.exists_pos_hamiltonian_parentChainInteraction_gap_over_residues,
+        MPSTensor.hamiltonian_parentChainInteraction_gap_all_large_of_residue_gaps}
     \leanok
     For fixed $R,W$ and $m>0$, the finitely many canonical open Hamiltonians
-    at lengths $W+r$, $0\le r<m$, have a common positive gap on their
-    kernel complements. A gap valid at all lengths
-    $Km+Mm+r$ with $K\ge K_0$ and $r<m$ is valid at every
-    $N\ge(K_0+M)m$.
+    at lengths $W+r$, $0\le r<m$, have a common positive lower bound on
+    their nonzero eigenvalues. A lower bound on the nonzero eigenvalues
+    valid at all lengths $Km+Mm+r$ with $K\ge K_0$ and $r<m$ is valid at
+    every $N\ge(K_0+M)m$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:positive-kernel-projection-comparison}
@@ -2593,8 +2584,8 @@
 
 \begin{lemma}[Fixed-overlap residue-cover gap criterion]
     \label{thm:open_residue_cover_gap_criterion}
-    \lean{MPSTensor.exists_pos_openParentHamiltonianES_gap_of_aligned_cover_defect,
-        MPSTensor.IsPeriodic.exists_pos_openParentHamiltonianES_gap_all_of_residue_cover_defect}
+    \lean{MPSTensor.exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_cover_defect,
+        MPSTensor.IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap_all_of_residue_cover_defect}
     \leanok
     Suppose $m>0$, $R>0$, $Mm\ge R$, and the canonical open kernels equal
     $G_N$ for every $N\ge R$. Cover $N=Km+Mm+r$ by the aligned prefix
@@ -2966,7 +2957,7 @@
 
 \begin{lemma}[Open gap from a residual cover limit]
     \label{thm:open_gap_residue_cover_limit}
-    \lean{MPSTensor.IsPeriodic.exists_pos_openParentHamiltonianES_gap_of_residue_cover_limit}
+    \lean{MPSTensor.IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap_of_residue_cover_limit}
     \leanok
     Let $A$ be a periodic tensor of period $m>0$ on a nonzero physical space.
     For $K,M,r\geq0$, let $P$ denote the ground-space projection on
@@ -2976,10 +2967,9 @@
     tensored with the free $Km$ sites.
     Suppose that, for every pair of sequences $K_M,r_M$,
     $\|P-P_{\mathrm L}P_{\mathrm R}\|\to0$ as $M\to\infty$.
-    Then there exist $R>0$, $N_0\geq R$, and $\delta>0$ such that every
-    $N\geq N_0$ and every $v\perp\ker H_{A,R,N}$ satisfy
-    $\delta\|v\|\leq\|H_{A,R,N}v\|$, where $H_{A,R,N}$ is the
-    canonical open parent Hamiltonian.
+    Then there exist $R>0$, $N_0\geq R$, and $\delta>0$ such that, for
+    every $N\geq N_0$, every nonzero eigenvalue of $H_{A,R,N}$ is at least
+    $\delta$, where $H_{A,R,N}$ is the canonical open parent Hamiltonian.
     At the same range, $\ker H_{A,R,N}=G_A(N)$ for every $N\geq R$.
     The convergence assumption is explicit; this is an auxiliary limit
     criterion for the projection comparison in
@@ -3585,16 +3575,14 @@
 
 \begin{lemma}[Uniform original-chain open-parent gap for a periodic tensor]
     \label{thm:periodic_open_parent_gap_all_volumes}
-    \lean{MPSTensor.IsPeriodic.exists_pos_openParentHamiltonianES_gap}
+    \lean{MPSTensor.IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap}
     \leanok
 
     Let $A$ be a normalized periodic tensor. There exist $R\ge1$ and
     $\delta>0$ such that the canonical range-$R$ open-parent Hamiltonian
-    $H_{R,N}$ satisfies
-    \begin{align}
-        \forall\,N\ge R:\ \ker H_{R,N}=\mathcal G_A(N),\qquad
-        \forall\,N\in\mathbb N,\ v\perp\ker H_{R,N}:\ \delta\|v\|\le\|H_{R,N}v\|.
-    \end{align}
+    $H_{R,N}$ satisfies $\ker H_{R,N}=\mathcal G_A(N)$ for every $N\ge R$,
+    and, for every $N\in\mathbb N$, every nonzero eigenvalue of $H_{R,N}$ is
+    at least $\delta$.
     There is no divisibility condition on $N$. The interaction range and
     constant are derived from periodicity alone. This is the normalized
     periodic tensor specialization of
@@ -3621,10 +3609,8 @@
     For every normalized periodic tensor $A$, there exist $R\ge1$, a positive
     local matrix $h$ on $R$ sites, and $\delta>0$ such that its open-chain
     interaction sums $H_N$ satisfy
-    \begin{align}
-        \forall\,N\ge R:\ \ker H_N=\mathcal G_A(N),\qquad
-        \forall\,N\in\mathbb N,\ v\perp\ker H_N:\ \delta\|v\|\le\|H_Nv\|.
-    \end{align}
+    $\ker H_N=\mathcal G_A(N)$ for every $N\ge R$, and, for every
+    $N\in\mathbb N$, every nonzero eigenvalue of $H_N$ is at least $\delta$.
     No local interaction, invariant density, or sector separation is given.
     The scope is the explicit normalized periodic tensor setting of
     \cite[Theorem 1.2, Lemma existenceinteraction, and Section 6]{Nachtergaele1996Spectral}.
@@ -3644,10 +3630,8 @@
     Let $A$ be a normalized periodic tensor. There exist a range $R\ge1$, a
     positive local matrix $h$ on $R$ sites, and constants $\delta,\gamma>0$
     with the following properties. The open interaction sum $H_N$ satisfies
-    \begin{align}
-        \forall\,N\ge R:\ \ker H_N=\mathcal G_A(N),\qquad
-        \forall\,N\in\mathbb N,\ v\perp\ker H_N:\ \delta\|v\|\le\|H_Nv\|.
-    \end{align}
+    $\ker H_N=\mathcal G_A(N)$ for every $N\ge R$, and, for every
+    $N\in\mathbb N$, every nonzero eigenvalue of $H_N$ is at least $\delta$.
     For every pure zero-energy state $\varphi$ of this same interaction and
     every observable $X$ supported on $[a,a+k)$ with $k>0$ and $\varphi(X)=0$,
     along every filter for which both margins $\ell_n,r_n\to\infty$, there is a limit
@@ -4168,8 +4152,8 @@
 
 \begin{lemma}[Canonical open kernels from eventual intersections]
     \label{thm:canonical_open_kernel_from_eventual_intersection}
-    \lean{MPSTensor.ker_openParentHamiltonianES_eq_groundSpaceES_of_restriction_intersection,
-        MPSTensor.exists_ker_openParentHamiltonianES_eq_groundSpaceES_of_eventually_restriction_intersection}
+    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_restriction_intersection,
+        MPSTensor.exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_eventually_intersection}
     \leanok
     Let $d\ge1$ and let $A$ be any tensor. Suppose that, for every $q\ge R$,
     \begin{align}
@@ -4224,7 +4208,7 @@
 
 \begin{lemma}[Canonical primitive-family interaction from overlap]
     \label{thm:primitive_parent_interaction_from_overlap}
-    \lean{MPSTensor.exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_primitive_overlap,
+    \lean{MPSTensor.exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_primitive_overlap,
         MPSTensor.exists_positive_parent_interaction_of_primitive_overlap}
     \leanok
     Let $d\ge1$, let $(A_j)$ be a finite family of pairwise gauge and phase
@@ -4478,8 +4462,8 @@
 
 \begin{lemma}[Periodic-family interaction criterion]
     \label{thm:periodic_family_interaction_independence_criterion}
-    \lean{MPSTensor.exists_ker_openParentHamiltonianES_of_periodic_family_independence,
-        MPSTensor.exists_positive_parent_interaction_of_periodic_family_independence}
+    \lean{MPSTensor.exists_ker_hamiltonian_parentChainInteraction_of_periodic_family_independence,
+        MPSTensor.exists_posSemidef_ker_hamiltonian_chainTranslates_of_periodic_family_independence}
     \leanok
     Let $d\ge1$, let $(A_j)$ be a finite family of normalized periodic
     tensors with arbitrary periods, and let $\mu_j\ne0$.
@@ -4533,20 +4517,18 @@
 
 \begin{lemma}[All-length gap from aligned estimates and residual covers]
     \label{thm:aligned_residue_cover_gap_limit}
-    \lean{MPSTensor.exists_pos_openParentHamiltonianES_gap_of_aligned_gap_of_residue_cover_limit}
+    \lean{MPSTensor.exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_gap_of_residue_cover_limit}
     \leanok
     Let $A$ be any tensor and $R,L>0$. Assume that its canonical open
     Hamiltonian has kernel $\mathcal G_A(N)$ for every $N\geq R$ and one
-    positive norm gap at every sufficiently large length divisible by $L$.
+    positive lower bound on its nonzero eigenvalues at every sufficiently
+    large length divisible by $L$.
     Assume also that, for every choice of exterior lengths $K(M),r(M)$,
     the projection defect of the cover with left length $(K(M)+M)L$,
     right length $ML+r(M)$, and overlap length $ML$ tends to zero as
-    $M\to\infty$. Then there is $\delta>0$ such that
-    \begin{align}
-        \delta\|v\|\leq\|H_R^{\mathrm{open}}(N)v\|
-        \qquad(N\geq0,
-        \ v\perp\ker H_R^{\mathrm{open}}(N)).
-    \end{align}
+    $M\to\infty$. Then there is $\delta>0$ such that, for every
+    $N\geq0$, every nonzero eigenvalue of $H_R^{\mathrm{open}}(N)$ is at
+    least $\delta$.
     All three estimates are given hypotheses of this criterion.
     This is the covering argument of
     \cite[Section~6]{Nachtergaele1996Spectral}.
@@ -4563,8 +4545,8 @@
 
 \begin{lemma}[Canonical interactions depend only on local support]
     \label{lem:canonical_interaction_support_transport}
-    \lean{MPSTensor.canonicalParentInteractionMatrix_eq_of_groundSpaceES_eq,
-        MPSTensor.openParentHamiltonianES_eq_of_groundSpaceES_eq}
+    \lean{MPSTensor.toMatrix'_parentInteraction_eq_of_groundSpaceES_eq,
+        MPSTensor.hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq}
     \leanok
     If two tensors have the same $R$-site boundary space, their canonical
     interaction matrices agree. For $R>0$, their canonical open Hamiltonians
@@ -4690,8 +4672,8 @@
 
 \begin{lemma}[Canonical interaction for a periodic family]
     \label{thm:periodic_family_canonical_interaction}
-    \lean{MPSTensor.exists_ker_openParentHamiltonianES_of_periodic_family,
-        MPSTensor.exists_positive_parent_interaction_of_periodic_family}
+    \lean{MPSTensor.exists_ker_hamiltonian_parentChainInteraction_of_periodic_family,
+        MPSTensor.exists_posSemidef_ker_hamiltonian_chainTranslates_of_periodic_family}
     \leanok
     Let $d\ge1$, let $(A_j)$ be a finite family of normalized periodic
     tensors with arbitrary periods, and let $\mu_j\ne0$.
@@ -4745,8 +4727,8 @@
 
 \begin{lemma}[Canonical interaction for faithful stationary generators]
     \label{thm:faithful_generators_canonical_interaction}
-    \lean{MPSTensor.exists_ker_openParentHamiltonianES_of_leftCanonical_of_posDef_fixedPoint,
-        MPSTensor.exists_positive_parent_interaction_of_leftCanonical_of_posDef_fixedPoint}
+    \lean{MPSTensor.exists_ker_hamiltonian_parentChainInteraction_of_leftCanonical_of_posDef_fixedPoint,
+        MPSTensor.exists_posSemidef_ker_hamiltonian_chainTranslates_of_leftCanonical_of_posDef_fixedPoint}
     \leanok
     Let $A$ have positive bond dimension, satisfy $\sum_iA_i^*A_i=I$,
     and have a faithful stationary matrix $\rho>0$.
@@ -4922,17 +4904,14 @@
 
 \begin{lemma}[All-length gap criterion from a primitive resolution]
     \label{thm:all_length_gap_primitive_resolution_criterion}
-    \lean{MPSTensor.exists_pos_openParentHamiltonianES_gap_of_aligned_gap_of_primitive_resolution}
+    \lean{MPSTensor.exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_gap_of_primitive_resolution}
     \leanok
     Assume the preceding hypotheses and $R,L>0$. Suppose that the
     canonical range-$R$ open Hamiltonian has kernel $\mathcal G_A(N)$
-    for every $N\ge R$, and has a common positive norm gap at all
-    sufficiently large lengths divisible by $L$. Then there is
-    $\delta>0$ such that, for every $N$ and every
-    $v\perp\ker H_{R,N}^{\mathrm{open}}(A)$,
-    \begin{align}
-        \delta\|v\|\le\|H_{R,N}^{\mathrm{open}}(A)v\|.
-    \end{align}
+    for every $N\ge R$, and has a common positive lower bound on its
+    nonzero eigenvalues at all sufficiently large lengths divisible by $L$.
+    Then there is $\delta>0$ such that, for every $N$, every nonzero
+    eigenvalue of $H_{R,N}^{\mathrm{open}}(A)$ is at least $\delta$.
     Exact kernels and the aligned gap remain explicit assumptions of
     this criterion. The conclusion uses the kernel also at
     volumes shorter than the interaction range.
@@ -5060,22 +5039,19 @@
     period-one sectors. The last identity follows from the cyclic word Gram.
 \end{proof}
 
-\begin{lemma}[Two representations of the open interaction sum]
+\begin{lemma}[The open interaction sum on short chains]
     \label{thm:all_length_open_interaction_matrix}
-    \lean{MPSTensor.openInteractionMatrix_eq_zero_of_length_lt,MPSTensor.openInteractionHamiltonianES_eq_zero_of_length_lt,MPSTensor.openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix_all}
+    \lean{MPSTensor.hamiltonian_chainTranslates_eq_zero_of_length_lt}
     \leanok
-    Let $h$ be a matrix on an $R$-site interval. Its matrix sum over all
-    nonwrapping windows and the corresponding linear operator both vanish
-    when the chain length satisfies $N<R$. If $R>0$, the matrix and linear
-    operator representations of the open interaction sum agree for every
-    $N\geq0$. No positivity assumption on $h$ is needed.
+    Let $h$ be a matrix on an $R$-site interval. Its sum over all
+    nonwrapping windows vanishes when the chain length satisfies $N<R$.
+    No positivity assumption on $h$ is needed.
     This is the empty-sum convention in \cite{Nachtergaele1996Spectral},
     equation~\textup{(3.12)}.
 \end{lemma}
 \begin{proof}\leanok
-    For $N<R$ there is no nonwrapping window of length $R$, so both sums
-    are empty. For $N\geq R$, the coordinate representation intertwines
-    each local term, and linearity identifies their sums.
+    For $N<R$ there is no nonwrapping window of length $R$, so the sum
+    is empty.
 \end{proof}
 
 \begin{lemma}[Primitive resolution of a periodic family]
@@ -5115,7 +5091,7 @@
 
 \begin{lemma}[Positive canonical interaction from exact open kernels]
     \label{lem:positive_canonical_interaction_exact_open_kernels}
-    \lean{MPSTensor.exists_positive_canonical_parent_interaction_of_exact_open_kernels}
+    \lean{MPSTensor.exists_posSemidef_eq_toMatrix'_parentInteraction_of_ker_hamiltonian_parentChainInteraction}
     \leanok
     Let $A$ be a tensor and let $R>0$. Suppose the canonical open
     Hamiltonian has kernel $\mathcal G_A(N)$ for every $N\ge R$.
@@ -5133,22 +5109,19 @@
 
 \begin{lemma}[Transfer of canonical gaps to an eventual-kernel interaction]
     \label{thm:canonical_gap_to_eventual_kernel_interaction}
-    \lean{MPSTensor.exists_openInteractionHamiltonianES_gap_of_canonical_gaps_of_eventual_kernel}
+    \lean{MPSTensor.exists_toEuclideanLin_hamiltonian_chainTranslates_gap_of_canonical_gaps_of_eventual_kernel}
     \leanok
     Let $A$ be a tensor. Suppose that, for every sufficiently large range $W$,
     its canonical open Hamiltonians have kernels $\mathcal G_A(N)$ for $N\ge W$
-    and a positive uniform norm gap above their kernels at all volumes.
-    Let $h\ge0$ have positive range $R$, and suppose
+    and a positive lower bound on their nonzero eigenvalues, uniform in the
+    volume. Let $h\ge0$ have range $R$, and suppose
     $\ker H_h(N)=\mathcal G_A(N)$ for all sufficiently large $N$.
-    Then there exists $\gamma>0$ such that, for every $N\ge0$ and
-    $v\perp\ker H_h(N)$,
-    \begin{align}
-        \gamma\|v\|\le\|H_h(N)v\|.
-    \end{align}
+    Then there exists $\gamma>0$ such that, for every $N\ge0$, every
+    nonzero eigenvalue of $H_h(N)$ is at least $\gamma$.
     No local kernel condition or tensor injectivity is imposed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:positive-kernel-projection-comparison,thm:positive_open_interaction_range_comparison}
+    \uses{lem:positive-kernel-projection-comparison,lem:open_parent_range_comparison}
     Choose $W\ge R$ large enough for both kernel identities and the canonical
     gap. Positivity and finite dimensionality give
     $H_h(W)\ge\kappa P_{\mathcal G_A(W)^\perp}$ with $\kappa>0$.
@@ -5229,7 +5202,7 @@
 
 \begin{lemma}[Uniform open gaps for faithful stationary generators]
     \label{thm:faithful_generators_uniform_open_gap}
-    \lean{MPSTensor.exists_openParentHamiltonianES_gap_of_leftCanonical_of_posDef_fixedPoint}
+    \lean{MPSTensor.exists_hamiltonian_parentChainInteraction_gap_of_leftCanonical_of_posDef_fixedPoint}
     \leanok
     Let $A$ have positive bond dimension and satisfy
     $\sum_i A_i^*A_i=I$. Suppose that $\rho>0$ and
@@ -5238,10 +5211,8 @@
     \begin{align}
         \forall\,N\geq R:\ \ker H_{R,N}=G_A(N),
     \end{align}
-    and there is $\delta_R>0$ such that
-    \begin{align}
-        \forall\,N\geq0,\ v\perp\ker H_{R,N}:\ \delta_R\|v\|\leq\|H_{R,N}v\|.
-    \end{align}
+    and there is $\delta_R>0$ such that, for every $N\geq0$, every
+    nonzero eigenvalue of $H_{R,N}$ is at least $\delta_R$.
     The constant is independent of the original chain length, including its
     residue modulo every blocking length. This is the given generating-data
     case of \cite{Nachtergaele1996Spectral}, Theorems~1.1--1.2.
@@ -5289,7 +5260,7 @@
 
 \begin{lemma}[Uniform original-length open gaps for periodic families]
     \label{thm:periodic_family_uniform_original_open_gap}
-    \lean{MPSTensor.exists_openParentHamiltonianES_gap_of_periodic_family}
+    \lean{MPSTensor.exists_hamiltonian_parentChainInteraction_gap_of_periodic_family}
     \leanok
     Let $d\ge1$, let $(A_j)$ be a finite family of normalized periodic
     tensors with arbitrary periods, and let $\mu_j\ne0$.
@@ -5298,14 +5269,12 @@
     \begin{align}
         \forall\,N\ge R:\ \ker H_{R,N}^{\mathrm{open}}(T)=\mathcal G_T(N),
     \end{align}
-    and there exists $\delta_R>0$ such that, for every $N\ge0$ and
-    every $v\perp\ker H_{R,N}^{\mathrm{open}}(T)$,
-    \begin{align}
-        \delta_R\|v\|\le\|H_{R,N}^{\mathrm{open}}(T)v\|.
-    \end{align}
+    and there exists $\delta_R>0$ such that, for every $N\ge0$, every
+    nonzero eigenvalue of $H_{R,N}^{\mathrm{open}}(T)$ is at least
+    $\delta_R$.
     The finite family may be empty. No inequivalence, invariant matrix,
     primitive presentation, interaction, or kernel identity is given.
-    The norm bound uses the kernel also when $N<R$.
+    The eigenvalue bound also holds when $N<R$.
     This is the finite periodic-tensor presentation of the gap theorem;
     the passage from general GVBS data to such a presentation remains
     separate.
@@ -5334,8 +5303,9 @@
     Under the preceding hypotheses, one can choose $R>0$ and the
     canonical positive interaction $h$ of range $R$ so that its open
     kernels are $\mathcal G_T(N)$ for every $N\ge R$.
-    There exists $\delta>0$ giving a norm gap above the open
-    kernel at every original volume, including $N<R$.
+    There exists $\delta>0$ such that every nonzero eigenvalue of the
+    open-chain Hamiltonian is at least $\delta$ at every original volume,
+    including $N<R$.
     For the same interaction there exists $\gamma>0$ such that every
     pure normalized zero-energy state $\varphi$ and every centered
     local observable $X$ on a positive-length interval satisfy
@@ -5454,11 +5424,10 @@
     \leanok
     Let $A$ be normalized with positive bond dimension and a faithful stationary
     matrix, as in Lemma~\ref{thm:faithful_generators_uniform_open_gap}.
-    Let $h\geq0$ be any given interaction of positive range $R$ such that $\ker H_h(N)=G_A(N)$ for all sufficiently large $N$.
-    Then there is $\delta>0$ such that
-    \begin{align}
-        \forall\,N\geq0,\ v\perp\ker H_h(N):\ \delta\|v\|\leq\|H_h(N)v\|.
-    \end{align}
+    Let $h\geq0$ be any given interaction of range $R$ such that
+    $\ker H_h(N)=G_A(N)$ for all sufficiently large $N$.
+    Then there is $\delta>0$ such that, for every $N\geq0$, every nonzero
+    eigenvalue of $H_h(N)$ is at least $\delta$.
     The local kernel $\ker h$ need not equal $G_A(R)$.
     This is the finite-volume conclusion of \cite{Nachtergaele1996Spectral},
     Theorem~1.2, in the given faithful generating-data setting.
@@ -5544,20 +5513,17 @@
 
 \begin{lemma}[Given-interaction open gaps for a periodic family]
     \label{thm:periodic_family_given_interaction_uniform_open_gap}
-    \lean{MPSTensor.exists_openInteractionMatrix_gap_of_periodic_family_of_eventual_kernel}
+    \lean{MPSTensor.exists_hamiltonian_chainTranslates_gap_of_periodic_family_of_eventual_kernel}
     \leanok
     Let $d\ge1$, let $(A_j)$ be a finite family of normalized periodic
     tensors, let $\mu_j\ne0$, and write $T=\bigoplus_j\mu_jA_j$.
-    Let $h\ge0$ be a given interaction of range $R>0$ whose open
+    Let $h\ge0$ be a given interaction of range $R$ whose open
     Hamiltonians satisfy $\ker H_N(h)=\mathcal G_T(N)$ for every
     sufficiently large $N$.
-    Then there exists $\delta>0$ such that every original volume $N$
-    and every $v\perp\ker H_N(h)$ satisfy
-    \begin{align}
-        \delta\|v\| & \le\|H_N(h)v\|.
-    \end{align}
+    Then there exists $\delta>0$ such that, at every original volume $N$,
+    every nonzero eigenvalue of $H_N(h)$ is at least $\delta$.
     The kernel is used also on short intervals. No local-kernel
-    identity at range $R$, lower bound on $R$ beyond positivity, sector
+    identity at range $R$, lower bound on $R$, sector
     separation, stationary matrix, or finite gap is given.
     The finite family may be empty. The statement concerns finite
     periodic-tensor presentations; the general GVBS presentation step
@@ -5580,8 +5546,9 @@
     \label{thm:periodic_family_given_interaction_finite_quasi_local_gap}
     \lean{MPSTensor.exists_finite_quasiLocal_gap_of_periodic_family_of_eventual_kernel}
     \leanok
-    Under the preceding hypotheses, the same given interaction $h$
-    has an all-length finite norm gap with a constant $\delta>0$ and
+    Under the preceding hypotheses and for range $R>0$, the same given
+    interaction $h$ has a constant $\delta>0$ bounding below the nonzero
+    eigenvalues of its open-chain Hamiltonians at every length, and
     a constant $\gamma>0$ such that every pure normalized zero-energy
     state $\varphi$ and every centered local observable $X$ on a
     positive-length interval beginning at $a$ satisfy

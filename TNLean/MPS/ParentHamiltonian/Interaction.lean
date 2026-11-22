@@ -17,7 +17,6 @@ import TNLean.MPS.ParentHamiltonian.Interaction.LocalEquivalenceBounds
 import TNLean.MPS.ParentHamiltonian.Interaction.OpenInteraction
 import TNLean.MPS.ParentHamiltonian.Interaction.OpenInteractionRangeComparison
 import TNLean.MPS.ParentHamiltonian.Interaction.ParentInteractionGap
-import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicInteraction
 import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicInteractionSections
 import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicOriginalIntersection
 import TNLean.MPS.ParentHamiltonian.Interaction.PhysicalSectorKernelSupport

@@ -55,10 +55,10 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
 \begin{lemma}[Interior moving-wall cancellation]
     \label{lem:uncle_two_wall_interior_cancellation}
     \lean{MPSTensor.uncleBoundaryWord_slice_mem,
-        MPSTensor.uncleInteractionES_upper_wall_slice_eq_zero,
-        MPSTensor.uncleInteractionES_lower_wall_slice_eq_zero,
-        MPSTensor.uncleInteractionES_twoWall_slice_first_eq_zero,
-        MPSTensor.uncleInteractionES_twoWall_slice_second_eq_zero}
+        MPSTensor.uncleInteraction_upper_wall_slice_eq_zero,
+        MPSTensor.uncleInteraction_lower_wall_slice_eq_zero,
+        MPSTensor.uncleInteraction_twoWall_slice_first_eq_zero,
+        MPSTensor.uncleInteraction_twoWall_slice_second_eq_zero}
     \leanok
     \uses{def:uncle_two_wall_trial,thm:uncle_periodic_ground_space}
     Fix all exterior physical letters, and vary two adjacent physical
@@ -83,8 +83,8 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     \label{lem:uncle_trial_four_bond_localization}
     \lean{MPSTensor.uncleTrialEndpointBonds,
         MPSTensor.uncleTrialEndpointBonds_card,
-        MPSTensor.uncleInteractionES_trial_cyclicRestrict_eq_zero,
-        MPSTensor.uncleHamiltonianES_trial_eq_sum_endpoints}
+        MPSTensor.uncleInteraction_trial_cyclicRestrict_eq_zero,
+        MPSTensor.hamiltonian_uncleInteraction_trial_eq_sum_endpoints}
     \leanok
     \uses{def:uncle_two_wall_trial,lem:uncle_two_wall_interior_cancellation,
         lem:uncle_parent_sector_containment}
@@ -141,12 +141,12 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
 
 \begin{lemma}[The actual endpoint quadratic energy]
     \label{lem:uncle_trial_endpoint_quadratic_energy}
-    \lean{MPSTensor.norm_uncleInteractionES_apply_le,
-        MPSTensor.norm_uncleInteractionES_le_one,
-        MPSTensor.re_inner_uncleInteractionES_eq_norm_sq,
-        MPSTensor.re_inner_uncleInteractionES_bounds,
-        MPSTensor.re_inner_uncleHamiltonianES_trial_eq_sum_endpoints,
-        MPSTensor.re_inner_uncleHamiltonianES_trial_le_endpoint_norms}
+    \lean{MPSTensor.norm_uncleInteraction_apply_le,
+        MPSTensor.norm_uncleInteraction_le_one,
+        MPSTensor.re_inner_uncleInteraction_eq_norm_sq,
+        MPSTensor.re_inner_uncleInteraction_bounds,
+        MPSTensor.re_inner_hamiltonian_uncleInteraction_trial_eq_sum_endpoints,
+        MPSTensor.re_inner_hamiltonian_uncleInteraction_trial_le_endpoint_norms}
     \leanok
     \uses{lem:uncle_trial_four_bond_localization,def:two_block_uncle_tensor}
     The actual local uncle projector is a contraction, and
@@ -177,17 +177,17 @@ perturbation span condition in Theorem~\ref{thm:uncle_periodic_ground_space}.
     \label{lem:uncle_trial_pinned_endpoint_residuals}
     \lean{MPSTensor.uncleDomainWallWord_append,
         MPSTensor.uncleTwoWallCoefficient_rotate,
-        MPSTensor.uncleInteractionES_pin_upper_left,
-        MPSTensor.uncleInteractionES_pin_upper_right,
-        MPSTensor.uncleInteractionES_pin_lower_left,
-        MPSTensor.uncleInteractionES_pin_lower_right,
-        MPSTensor.uncleInteractionES_trial_pin_first_endpoint,
-        MPSTensor.uncleInteractionES_trial_pin_second_endpoint,
-        MPSTensor.uncleInteractionES_trial_pin_third_endpoint,
-        MPSTensor.uncleInteractionES_trial_pin_fourth_endpoint,
+        MPSTensor.uncleInteraction_pin_upper_left,
+        MPSTensor.uncleInteraction_pin_upper_right,
+        MPSTensor.uncleInteraction_pin_lower_left,
+        MPSTensor.uncleInteraction_pin_lower_right,
+        MPSTensor.uncleInteraction_trial_pin_first_endpoint,
+        MPSTensor.uncleInteraction_trial_pin_second_endpoint,
+        MPSTensor.uncleInteraction_trial_pin_third_endpoint,
+        MPSTensor.uncleInteraction_trial_pin_fourth_endpoint,
         MPSTensor.uncleTrialPinnedEndpointState,
-        MPSTensor.uncleInteractionES_trial_eq_pinnedEndpointState,
-        MPSTensor.re_inner_uncleHamiltonianES_trial_le_pinnedEndpoint_norms}
+        MPSTensor.uncleInteraction_trial_eq_pinnedEndpointState,
+        MPSTensor.re_inner_hamiltonian_uncleInteraction_trial_le_pinnedEndpoint_norms}
     \leanok
     \uses{lem:uncle_trial_endpoint_quadratic_energy,
         lem:uncle_two_wall_interior_cancellation}

@@ -61,29 +61,41 @@ theorem coeff_eq_zero_of_mem_two_embedded_physical_sectors
   rw [embedded_physical_vector_apply_eq_zero_of_labels_ne e label c₁ he x ω i j hij,
     embedded_physical_vector_apply_eq_zero_of_labels_ne f label c₂ hf y ω i j hij, zero_add]
 
-/-- A nonzero coefficient in the actual periodic complementary-projection
-kernel has the same physical sector at every site. Only the local coefficient
-support is assumed; all local annihilation and global support conclusions are
-derived from the Hamiltonian equation. Source: physical-sector separation in
-the finite-prefix investigation of SPWC10, Theorem 5, lines 850--880. -/
-theorem physical_label_eq_of_projectorHamiltonian_coeff_ne_zero
+/-! ### Translates of the complementary projection on the ring -/
+
+section TranslationInvariant
+
+open scoped ComplexOrder
+open ManyBody.Interaction (translationInvariant)
+
+/-- A nonzero coefficient in the kernel of the Hamiltonian of the translates on the ring of the
+complementary projection has the same physical sector at every site. Only the local coefficient
+support is assumed; all local annihilation and global support conclusions are derived from the
+Hamiltonian equation. Source: physical-sector separation in the finite-prefix investigation of
+SPWC10, Theorem 5, lines 850--880. -/
+theorem physical_label_eq_of_translationInvariant_projector_coeff_ne_zero
     (S : Submodule ℂ (MPVSpace d R)) (label : Fin d → κ)
     (hR : 2 ≤ R) (hRM : R ≤ M)
     (hS : ∀ v ∈ S, ∀ ω : Cfg d R,
       label (ω ⟨0, by omega⟩) ≠ label (ω ⟨1, by omega⟩) → v ω = 0)
     (ψ : MPVSpace d M)
-    (hzero : periodicInteractionHamiltonianES Sᗮ.starProjection.toLinearMap M ψ = 0)
+    (hzero : haveI : NeZero M := ⟨by omega⟩; Matrix.toEuclideanLin (translationInvariant M
+      (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap)).hamiltonian ψ = 0)
     (σ : Cfg d M) (hσ : ψ σ ≠ 0) :
     ∀ i : Fin M, label (σ i) = label (σ ⟨0, by omega⟩) := by
+  have : NeZero M := ⟨by omega⟩
   let _ : NeZero M := ⟨by omega⟩
-  have hsections := (periodicInteractionHamiltonianES_eq_zero_iff_sections
-    Sᗮ.starProjection.toLinearMap
-    (Submodule.isSymmetricProjection_starProjection Sᗮ).isPositive
-    (by omega) hRM ψ).mp hzero
+  have hh : (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap).PosSemidef := by
+    rw [← Matrix.isPositive_toEuclideanLin_iff, LinearEquiv.apply_symm_apply]
+    exact (Submodule.isSymmetricProjection_starProjection Sᗮ).isPositive
+  have hsections := (toEuclideanLin_hamiltonian_translationInvariant_eq_zero_iff_sections
+    hRM _ hh ψ).mp hzero
   have hadj (i : Fin M) : label (σ (i + 1)) = label (σ i) := by
     by_contra hne
     let v := cyclicRestrictES (Fin.pos i) R i σ ψ
-    have hlocal : Sᗮ.starProjection v = 0 := hsections i σ
+    have hlocal : Sᗮ.starProjection v = 0 := by
+      have h := hsections i σ
+      rwa [LinearEquiv.apply_symm_apply] at h
     have hv : v ∈ S := by
       rw [Submodule.starProjection_orthogonal'] at hlocal
       have hsub : v - S.starProjection v = 0 := by
@@ -114,64 +126,68 @@ theorem physical_label_eq_of_projectorHamiltonian_coeff_ne_zero
   apply Fin.cyclic_induction (P := fun j ↦ label (σ j) = label (σ ⟨0, by omega⟩))
     (by rfl) (fun j hj ↦ (hadj j).trans hj) i
 
-/-- Any word containing two different physical-sector labels has zero
-coefficient in the actual periodic complementary-projection kernel.
-Source: physical-sector separation in the finite-prefix investigation of
-SPWC10, Theorem 5, lines 850--880. -/
-theorem coeff_eq_zero_of_projectorHamiltonian_of_physical_labels_ne
+/-- Any word containing two different physical-sector labels has zero coefficient in the kernel
+of the Hamiltonian of the translates on the ring of the complementary projection. Source:
+physical-sector separation in the finite-prefix investigation of SPWC10, Theorem 5,
+lines 850--880. -/
+theorem coeff_eq_zero_of_translationInvariant_projector_of_physical_labels_ne
     (S : Submodule ℂ (MPVSpace d R)) (label : Fin d → κ)
     (hR : 2 ≤ R) (hRM : R ≤ M)
     (hS : ∀ v ∈ S, ∀ ω : Cfg d R,
       label (ω ⟨0, by omega⟩) ≠ label (ω ⟨1, by omega⟩) → v ω = 0)
     (ψ : MPVSpace d M)
-    (hzero : periodicInteractionHamiltonianES Sᗮ.starProjection.toLinearMap M ψ = 0)
+    (hzero : haveI : NeZero M := ⟨by omega⟩; Matrix.toEuclideanLin (translationInvariant M
+      (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap)).hamiltonian ψ = 0)
     (σ : Cfg d M) (i j : Fin M) (hij : label (σ i) ≠ label (σ j)) : ψ σ = 0 := by
+  have : NeZero M := ⟨by omega⟩
   by_contra hσ
-  have heq := physical_label_eq_of_projectorHamiltonian_coeff_ne_zero
+  have heq := physical_label_eq_of_translationInvariant_projector_coeff_ne_zero
     S label hR hRM hS ψ hzero σ hσ
   exact hij ((heq i).trans (heq j).symm)
 
-/-- The actual periodic Hamiltonian formed from the complementary projection
-of two embedded sector subspaces has no mixed-sector coefficients. Neither a
-local support conclusion nor a global kernel decomposition is supplied.
-Source: physical-sector separation in the finite-prefix investigation of
-SPWC10, Theorem 5, lines 850--880. -/
-theorem coeff_eq_zero_of_two_sector_projectorHamiltonian
+/-- The Hamiltonian of the translates on the ring of the complementary projection of two
+embedded sector subspaces has no mixed-sector coefficients in its kernel. Neither a local support
+conclusion nor a global kernel decomposition is supplied. Source: physical-sector separation in
+the finite-prefix investigation of SPWC10, Theorem 5, lines 850--880. -/
+theorem coeff_eq_zero_of_two_sector_translationInvariant_projector
     {a b : ℕ} (e : Fin a ↪ Fin d) (f : Fin b ↪ Fin d) (label : Fin d → κ)
     (c₁ c₂ : κ) (he : ∀ i, label (e i) = c₁) (hf : ∀ i, label (f i) = c₂)
     (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
     (hR : 2 ≤ R) (hRM : R ≤ M) (ψ : MPVSpace d M)
-    (hzero : periodicInteractionHamiltonianES
+    (hzero : haveI : NeZero M := ⟨by omega⟩;
+      Matrix.toEuclideanLin (translationInvariant M (Matrix.toEuclideanLin.symm
       ((S.map
           (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).euclideanExtendByZero.toLinearMap ⊔
         T.map
           (Function.Embedding.piCongrRight (fun _ : Fin R ↦ f)).euclideanExtendByZero.toLinearMap)ᗮ
-        |>.starProjection.toLinearMap) M ψ = 0)
+        |>.starProjection.toLinearMap))).hamiltonian ψ = 0)
     (σ : Cfg d M) (i j : Fin M) (hij : label (σ i) ≠ label (σ j)) : ψ σ = 0 := by
-  apply coeff_eq_zero_of_projectorHamiltonian_of_physical_labels_ne _ label hR hRM
+  have : NeZero M := ⟨by omega⟩
+  apply coeff_eq_zero_of_translationInvariant_projector_of_physical_labels_ne _ label hR hRM
     (fun v hv ω hω ↦ coeff_eq_zero_of_mem_two_embedded_physical_sectors
       e f label c₁ c₂ he hf S T v hv ω ⟨0, by omega⟩ ⟨1, by omega⟩ hω)
     ψ hzero σ i j hij
 
-/-- Splitting the physical alphabet into its first \(a\) and last \(b\) letters,
-the complementary projection of any two embedded local spaces has no
-mixed-alphabet ground coefficients. The inclusions are exactly those of
-\(\mathrm{Fin}(a)\sqcup\mathrm{Fin}(b)\simeq\mathrm{Fin}(a+b)\).
-Source: physical-sector assembly in the finite-prefix investigation of
-SPWC10, Theorem 5, lines 850--880. -/
-theorem coeff_eq_zero_of_physical_sum_projectorHamiltonian
+/-- Splitting the physical alphabet into its first \(a\) and last \(b\) letters, the
+Hamiltonian of the translates on the ring of the complementary projection of any two embedded
+local spaces has no mixed-alphabet ground coefficients. The inclusions are exactly those of
+\(\mathrm{Fin}(a)\sqcup\mathrm{Fin}(b)\simeq\mathrm{Fin}(a+b)\). Source: physical-sector
+assembly in the finite-prefix investigation of SPWC10, Theorem 5, lines 850--880. -/
+theorem coeff_eq_zero_of_physical_sum_translationInvariant_projector
     {a b : ℕ} (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
     (hR : 2 ≤ R) (hRM : R ≤ M) (ψ : MPVSpace (a + b) M)
-    (hzero : periodicInteractionHamiltonianES
+    (hzero : haveI : NeZero M := ⟨by omega⟩;
+      Matrix.toEuclideanLin (translationInvariant M (Matrix.toEuclideanLin.symm
       ((S.map
           (Function.Embedding.piCongrRight
             (fun _ : Fin R ↦ Fin.castAddEmb b)).euclideanExtendByZero.toLinearMap ⊔
         T.map
           (Function.Embedding.piCongrRight
             (fun _ : Fin R ↦ Fin.natAddEmb a)).euclideanExtendByZero.toLinearMap)ᗮ
-        |>.starProjection.toLinearMap) M ψ = 0)
+        |>.starProjection.toLinearMap))).hamiltonian ψ = 0)
     (σ : Cfg (a + b) M) (i j : Fin M) (hi : (σ i).val < a) (hj : a ≤ (σ j).val) :
     ψ σ = 0 := by
+  have : NeZero M := ⟨by omega⟩
   let label : Fin (a + b) → Bool := fun k ↦ decide (k.val < a)
   have he (k : Fin a) : label (Fin.castAddEmb b k) = true := by
     change decide (k.val < a) = true
@@ -179,9 +195,11 @@ theorem coeff_eq_zero_of_physical_sum_projectorHamiltonian
   have hf (k : Fin b) : label (Fin.natAddEmb a k) = false := by
     change decide (a + k.val < a) = false
     simp
-  apply coeff_eq_zero_of_two_sector_projectorHamiltonian (Fin.castAddEmb b) (Fin.natAddEmb a)
-    label true false he hf S T hR hRM ψ hzero σ i j
+  apply coeff_eq_zero_of_two_sector_translationInvariant_projector (Fin.castAddEmb b)
+    (Fin.natAddEmb a) label true false he hf S T hR hRM ψ hzero σ i j
   change decide ((σ i).val < a) ≠ decide ((σ j).val < a)
   simp [hi, not_lt_of_ge hj]
+
+end TranslationInvariant
 
 end MPSTensor

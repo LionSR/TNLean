@@ -55,7 +55,8 @@ periodic state of the positive part read as a tensor. The source uses `V†V = �
 tensors"); no injectivity is needed. -/
 theorem sum_star_tensorPower_polarIso_mulVec_mul_mpv (A : MPSTensor d D) (q M : ℕ)
     (F : (Fin M → Fin D × Fin D) → ℂ) :
-    ∑ τ, star ((tensorPower M (Matrix.polarIso (physicalMatrix (blockTensor A q))) *ᵥ F) τ) *
+    ∑ τ, star (((Matrix.piKronecker fun _ : Fin M ↦ (Matrix.polarIso (physicalMatrix (blockTensor A
+        q)))) *ᵥ F) τ) *
         mpv A (blockedConfigEquiv d M q τ) =
       ∑ c, star (F c) *
         mpv (polarPosTensor (blockTensor A q)) fun k => (virtualPairEquiv D).symm (c k) := by
@@ -64,24 +65,25 @@ theorem sum_star_tensorPower_polarIso_mulVec_mul_mpv (A : MPSTensor d D) (q M : 
   set e : (Fin M → Fin (D * D)) ≃ (Fin M → Fin D × Fin D) :=
     Equiv.piCongrRight fun _ => virtualPairEquiv D
   set m : (Fin M → Fin D × Fin D) → ℂ := fun c => mpv (polarPosTensor Bq) (e.symm c)
-  have hT : ∀ τ, mpv A (blockedConfigEquiv d M q τ) = (tensorPower M V *ᵥ m) τ := by
+  have hT : ∀ τ, mpv A (blockedConfigEquiv d M q τ) = ((Matrix.piKronecker fun _ : Fin M ↦ V) *ᵥ
+      m) τ := by
     intro τ
     rw [mpv_blockedConfigEquiv_eq_sum_polar]
-    simp only [mulVec, dotProduct, tensorPower, of_apply, m]
+    simp only [mulVec, dotProduct, Matrix.piKronecker, of_apply, m]
     exact Fintype.sum_equiv e _ _ fun τ' => by
       simp [e, polarIsoMatrix, V, Bq]
-  have hfixP : tensorPower M (Vᴴ * V) *ᵥ m = m := by
+  have hfixP : (Matrix.piKronecker fun _ : Fin M ↦ (Vᴴ * V)) *ᵥ m = m := by
     funext c
     have h : mpv (rotatePhysical (polarSupportMatrix Bq) (polarPosTensor Bq)) (e.symm c) =
         mpv (polarPosTensor Bq) (e.symm c) := by rw [rotatePhysical_polarSupportMatrix]
     rw [mpv_rotatePhysical] at h
     change _ = mpv (polarPosTensor Bq) (e.symm c)
     rw [← h, Matrix.conjTranspose_polarIso_mul_polarIso]
-    simp only [mulVec, dotProduct, tensorPower, of_apply, m]
+    simp only [mulVec, dotProduct, Matrix.piKronecker, of_apply, m]
     refine (Fintype.sum_equiv e.symm _ _ fun c' => ?_)
     simp [e, polarSupportMatrix, Bq]
   simp only [hT]
-  rw [sum_star_tensorPower_mulVec_mul, hfixP]
+  rw [Matrix.sum_star_piKronecker_mulVec_mul, hfixP]
   rfl
 
 /-- **The overlap after `V^{⊗M}`.** For any tensor `A` and pairs `ω_j` of matrices `σ'_j`, the

@@ -45,18 +45,22 @@ theorem shortRangeHeisenbergMagnon_ne_zero (N : ℕ) [NeZero N] :
   exact one_ne_zero (by simpa only [SpinChain.oneMagnon_singleDown,
     RingEquiv.apply_symm_apply, AddChar.map_zero_eq_one] using hz)
 
-/-- On a ring of at least two sites the first Fourier magnon is an eigenvector
-of the two-site parent Hamiltonian, with eigenvalue \(1-\cos(2\pi/N)\).
-This is the periodic version of the one-magnon recurrence in
-Koma--Nachtergaele, arXiv:cond-mat/9512120, Lemma 4, equation (3.13). -/
-theorem parentHamiltonianES_shortRangeHeisenbergMagnon {N : ℕ} [NeZero N]
+/-- On a ring of at least two sites the first Fourier magnon is an eigenvector of the Hamiltonian
+of the two-site parent interaction on the ring, with eigenvalue \(1-\cos(2\pi/N)\). This is the
+periodic version of the one-magnon recurrence in Koma--Nachtergaele, arXiv:cond-mat/9512120,
+Lemma 4, equation (3.13). -/
+theorem toEuclideanLin_hamiltonian_parentRingInteraction_shortRangeHeisenbergMagnon {N : ℕ}
     (hN : 2 ≤ N) :
-    parentHamiltonianES shortRangeHeisenbergTensor 2 N (shortRangeHeisenbergMagnon N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin (parentRingInteraction shortRangeHeisenbergTensor 2 N).hamiltonian
+        (shortRangeHeisenbergMagnon N) =
       (ZMod.cycleFourierGap N : ℂ) • shortRangeHeisenbergMagnon N := by
+  have : NeZero N := ⟨by omega⟩
   apply PiLp.ext
   intro σ
-  rw [parentHamiltonianES_apply_of_singlet_parentInteraction shortRangeHeisenbergTensor
-    parentInteractionES_shortRangeHeisenbergTensor_two_apply hN]
+  rw [toEuclideanLin_hamiltonian_parentRingInteraction_apply_of_singlet_parentInteraction
+    shortRangeHeisenbergTensor
+    toEuclideanLin_toMatrix'_parentInteraction_shortRangeHeisenbergTensor_two_apply hN]
   change (∑ i : Fin N,
     (SpinChain.oneMagnon (fun j => ZMod.stdAddChar (ZMod.finEquiv N j)) σ -
       SpinChain.oneMagnon (fun j => ZMod.stdAddChar (ZMod.finEquiv N j))
@@ -76,22 +80,6 @@ theorem parentHamiltonianES_shortRangeHeisenbergMagnon {N : ℕ} [NeZero N]
   simp_rw [hc]
   exact SpinChain.oneMagnon_smul _ _ _
 
-private theorem norm_gap_le_of_positive_eigenvector {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    (H : E →ₗ[ℂ] E) (hH : H.IsSymmetric) {v : E} {η δ : ℝ}
-    (hη : 0 < η) (hne : v ≠ 0) (hv : H v = (η : ℂ) • v)
-    (hgap : ∀ w ∈ (LinearMap.ker H)ᗮ, δ * ‖w‖ ≤ ‖H w‖) : δ ≤ η := by
-  have horth : v ∈ (LinearMap.ker H)ᗮ := by
-    rw [Submodule.mem_orthogonal]
-    intro w hw
-    have h := hH w v
-    rw [LinearMap.mem_ker.mp hw, inner_zero_left, hv, inner_smul_right] at h
-    exact (mul_eq_zero.mp h.symm).resolve_left (Complex.ofReal_ne_zero.mpr hη.ne')
-  have hnorm : ‖H v‖ = η * ‖v‖ := by
-    rw [hv, norm_smul, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hη]
-  exact (mul_le_mul_iff_left₀ (norm_pos_iff.mpr hne)).mp
-    (by simpa only [hnorm, mul_comm] using hgap v horth)
-
 /-- The canonical range-two parent Hamiltonian of the three normal product-state
 blocks has no positive gap uniform over all sufficiently long periodic chains.
 Thus the unrestricted parent-gap assertion of arXiv:2011.12127, Section IV.C,
@@ -99,18 +87,23 @@ lines 2183--2187, is false. The canonical normal-block certificates are proved
 in `ShortRangeHeisenbergTensor`; the source error is recorded in
 `docs/paper-gaps/cpgsv21_short_range_parent_gap.tex`. -/
 theorem not_exists_eventual_uniform_gap_shortRangeHeisenbergTensor_two :
-    ¬ ∃ δ : ℝ, 0 < δ ∧ ∃ N₀ : ℕ, ∀ N : ℕ, N₀ ≤ N →
-      ∀ v ∈ (LinearMap.ker (parentHamiltonianES shortRangeHeisenbergTensor 2 N))ᗮ,
-        δ * ‖v‖ ≤ ‖parentHamiltonianES shortRangeHeisenbergTensor 2 N v‖ := by
+    ¬ ∃ δ : ℝ, 0 < δ ∧ ∃ N₀ : ℕ, ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
+      ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin
+          (parentRingInteraction shortRangeHeisenbergTensor 2 N).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ := by
   rintro ⟨δ, hδ, N₀, hgap⟩
   obtain ⟨N, hN₀, hN, hη, hsmall⟩ :=
     ZMod.exists_large_cycleFourierGap_pos_lt hδ N₀
-  let : NeZero N := ⟨by omega⟩
-  have hbound := norm_gap_le_of_positive_eigenvector
-    (parentHamiltonianES shortRangeHeisenbergTensor 2 N)
-    (parentHamiltonianES_isPositive shortRangeHeisenbergTensor 2 N).isSymmetric
-    hη (shortRangeHeisenbergMagnon_ne_zero N)
-    (parentHamiltonianES_shortRangeHeisenbergMagnon hN) (hgap N hN₀)
-  exact (not_le_of_gt hsmall) hbound
+  have : NeZero N := ⟨by omega⟩
+  have hev : Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentRingInteraction shortRangeHeisenbergTensor 2 N).hamiltonian)
+      (ZMod.cycleFourierGap N : ℂ) :=
+    Module.End.hasEigenvalue_of_hasEigenvector ⟨Module.End.mem_eigenspace_iff.mpr
+      (toEuclideanLin_hamiltonian_parentRingInteraction_shortRangeHeisenbergMagnon hN),
+      shortRangeHeisenbergMagnon_ne_zero N⟩
+  rcases hgap N hN₀ _ hev with h0 | hle
+  · exact hη.ne' (by exact_mod_cast h0)
+  · exact (not_le_of_gt hsmall) (by exact_mod_cast hle)
 
 end MPSTensor

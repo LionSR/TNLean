@@ -254,15 +254,16 @@ theorem GaugePhaseEquiv.isTransferIdempotent
 
 /-- Eventual constancy of the Euclidean parent-ground-space dimension under the algebraic BNT
 and all-chain NNCPH hypotheses. -/
-private theorem eventually_parentHamiltonianGroundSpaceES_finrank_eq_of_isBNT
+private theorem eventually_groundSpace_hamiltonian_parentRingInteraction_finrank_eq_of_isBNT
     {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
     {B : MPSTensor d D} (hBNT : IsBNT B r dim A)
     (hNNCPH : HasNNCPHGroundSpaces B A) :
-    ∃ c N₀ : ℕ, ∀ N : ℕ, N₀ < N →
-      Module.finrank ℂ (parentHamiltonianGroundSpaceES B 2 N) = c := by
+    ∃ c N₀ : ℕ, ∀ N : ℕ, ∀ hN : N₀ < N, haveI : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩;
+      Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0) = c := by
   obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
   refine ⟨r, max N₀ 2, ?_⟩
   intro N hN
+  have : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩
   have hN₀ : N₀ < N := lt_of_le_of_lt (Nat.le_max_left N₀ 2) hN
   have hTwo : 2 < N := lt_of_le_of_lt (Nat.le_max_right N₀ 2) hN
   have hImage : LinearIndependent ℂ
@@ -276,8 +277,9 @@ private theorem eventually_parentHamiltonianGroundSpaceES_finrank_eq_of_isBNT
       (fun j : Fin r => (mpv (A j) : NSiteSpace d N)) :=
     LinearIndependent.of_comp
       (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap hImage
-  rw [BeigiSectorGraphData.parentHamiltonianGroundSpaceES_finrank_eq_ker,
+  rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
     (hNNCPH N hTwo).groundSpaceSpanning, bntMPSVectorSpan]
+  refine (LinearEquiv.finrank_map_eq (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm _).trans ?_
   simpa using finrank_span_eq_card hCoefficients
 
 /-- The normalized minimal loop MPV state is the corresponding Euclidean loop-product state
@@ -318,16 +320,17 @@ private theorem BeigiSectorGraphData.normalizedMinimalLoopTensor_overlap_tendsto
 normalized minimal-loop MPV states. -/
 private theorem BeigiSectorGraphData.mpvState_mem_span_normalizedMinimalLoopTensor
     {D' : ℕ} {B : MPSTensor d D} (F : BeigiSectorGraphData B)
-    (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, N₀ < N →
-      Module.finrank ℂ (parentHamiltonianGroundSpaceES B 2 N) = c)
+    (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, ∀ hN : N₀ < N, haveI : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩;
+      Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0) = c)
     {C : MPSTensor d D'} {N : ℕ} (hN : 2 < N)
-    (hGround :
-      mpvState (d := d) C N ∈ parentHamiltonianGroundSpaceES B 2 N) :
+    (hGround : haveI : NeZero N := ⟨by omega⟩;
+      mpvState (d := d) C N ∈ ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0) :
     mpvState (d := d) C N ∈
       Submodule.span ℂ (Set.range fun l : Loop F.edgeWeight =>
         mpvState (d := d) (F.normalizedMinimalLoopTensor l) N) := by
   let : NeZero N := ⟨by omega⟩
-  have hLoopSpan := F.span_loopProductStateES_eq_parentHamiltonianGroundSpaceES hparent hN
+  have hLoopSpan :=
+    F.span_loopProductStateES_eq_groundSpace_hamiltonian_parentRingInteraction hparent hN
   have hInLoopSpan : mpvState (d := d) C N ∈
       Submodule.span ℂ
         (Set.range fun l : Loop F.edgeWeight => F.loopProductStateES l) := by
@@ -357,11 +360,9 @@ private theorem BeigiSectorGraphData.mpvState_mem_span_normalizedMinimalLoopTens
 /-- The periodic MPV state of the NNCPH tensor eventually belongs to the span of the normalized
 minimal loop MPV states. -/
 private theorem BeigiSectorGraphData.eventually_mpvState_mem_span_normalizedMinimalLoopTensor
-    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
     {B : MPSTensor d D} (F : BeigiSectorGraphData B)
-    (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, N₀ < N →
-      Module.finrank ℂ (parentHamiltonianGroundSpaceES B 2 N) = c)
-    (hNNCPH : HasNNCPHGroundSpaces B A) :
+    (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, ∀ hN : N₀ < N, haveI : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩;
+      Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0) = c) :
     ∀ᶠ N in Filter.atTop,
       mpvState (d := d) B N ∈
         Submodule.span ℂ (Set.range fun l : Loop F.edgeWeight =>
@@ -369,14 +370,16 @@ private theorem BeigiSectorGraphData.eventually_mpvState_mem_span_normalizedMini
   refine Filter.eventually_atTop.mpr ⟨3, ?_⟩
   intro N hN
   have hTwo : 2 < N := by omega
-  have hGround : mpvState (d := d) B N ∈ parentHamiltonianGroundSpaceES B 2 N := by
-    rw [parentHamiltonianGroundSpaceES, Submodule.mem_map]
+  have : NeZero N := ⟨by omega⟩
+  have hGround : mpvState (d := d) B N ∈
+      ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0 := by
+    rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker, Submodule.mem_map]
     refine ⟨(mpv B : NSiteSpace d N), ?_, rfl⟩
     rw [LinearMap.mem_ker, parentHamiltonian_eq_sum_localTerm]
     rw [LinearMap.sum_apply]
     apply Finset.sum_eq_zero
     intro i _hi
-    exact (hNNCPH N hTwo).isFrustrationFree i
+    exact localTerm_annihilates_mpv B 2 N (by omega) i
   exact F.mpvState_mem_span_normalizedMinimalLoopTensor hparent hTwo hGround
 
 /-- Each BNT component in an all-chain NNCPH ground-space family eventually
@@ -385,8 +388,8 @@ private theorem
     BeigiSectorGraphData.eventually_component_mpvState_mem_span_normalizedMinimalLoopTensor
     {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
     {B : MPSTensor d D} (F : BeigiSectorGraphData B)
-    (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, N₀ < N →
-      Module.finrank ℂ (parentHamiltonianGroundSpaceES B 2 N) = c)
+    (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, ∀ hN : N₀ < N, haveI : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩;
+      Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0) = c)
     (hNNCPH : HasNNCPHGroundSpaces B A) (j : Fin r) :
     ∀ᶠ N in Filter.atTop,
       mpvState (d := d) (A j) N ∈
@@ -395,9 +398,10 @@ private theorem
   refine Filter.eventually_atTop.mpr ⟨3, ?_⟩
   intro N hN
   have hTwo : 2 < N := by omega
-  have hGround :
-      mpvState (d := d) (A j) N ∈ parentHamiltonianGroundSpaceES B 2 N := by
-    rw [parentHamiltonianGroundSpaceES, Submodule.mem_map]
+  have : NeZero N := ⟨by omega⟩
+  have hGround : mpvState (d := d) (A j) N ∈
+      ManyBody.groundSpace (parentRingInteraction B 2 N).hamiltonian 0 := by
+    rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker, Submodule.mem_map]
     refine ⟨(mpv (A j) : NSiteSpace d N), ?_, rfl⟩
     rw [(hNNCPH N hTwo).groundSpaceSpanning, bntMPSVectorSpan]
     exact Submodule.subset_span ⟨j, rfl⟩
@@ -471,8 +475,8 @@ theorem nncph_implies_rfp
       IsNormalTensor (F.normalizedMinimalLoopTensor l) :=
     F.normalizedMinimalLoopTensor_isNormalTensor
   have hparent :=
-    eventually_parentHamiltonianGroundSpaceES_finrank_eq_of_isBNT hBNT hNNCPH
-  have hMem := F.eventually_mpvState_mem_span_normalizedMinimalLoopTensor hparent hNNCPH
+    eventually_groundSpace_hamiltonian_parentRingInteraction_finrank_eq_of_isBNT hBNT hNNCPH
+  have hMem := F.eventually_mpvState_mem_span_normalizedMinimalLoopTensor hparent
   have hCross : ∀ l m : Loop F.edgeWeight, l ≠ m →
       Filter.Tendsto
         (fun N => mpvOverlap (d := d) (F.normalizedMinimalLoopTensor l)
@@ -528,7 +532,7 @@ theorem isTransferIdempotent_basisDirectSum_of_hasNNCPHGroundSpaces
       IsNormalTensor (F.normalizedMinimalLoopTensor l) :=
     F.normalizedMinimalLoopTensor_isNormalTensor
   have hparent :=
-    eventually_parentHamiltonianGroundSpaceES_finrank_eq_of_isBNT
+    eventually_groundSpace_hamiltonian_parentRingInteraction_finrank_eq_of_isBNT
       hCF.isBNT_basisDirectSum hNNCPH
   have hPhaseExists : ∀ j : Fin P.basisCount,
       ∃ l : Loop F.edgeWeight,

@@ -75,6 +75,8 @@ section
 open Filter MPSTensor
 open scoped Matrix Topology
 
+open ManyBody.Interaction (chainTranslates)
+
 namespace SpinChain
 
 variable {d : ℕ} [NeZero d]
@@ -87,11 +89,11 @@ theorem quasiLocalIntervalObservable_bulkObservable_commutator (a : ℤ) {R k �
     (hR : 0 < R) (hℓ : R - 1 ≤ ℓ) (hr : R - 1 ≤ r) :
     quasiLocalIntervalObservable d (a - (ℓ : ℤ)) ((ℓ + k) + r)
       ((bulkObservable X ℓ r)ᴴ *
-        (openInteractionMatrix h ((ℓ + k) + r) * bulkObservable X ℓ r -
-          bulkObservable X ℓ r * openInteractionMatrix h ((ℓ + k) + r))) =
+        ((chainTranslates R ((ℓ + k) + r) h).hamiltonian * bulkObservable X ℓ r -
+          bulkObservable X ℓ r * (chainTranslates R ((ℓ + k) + r) h).hamiltonian)) =
       quasiLocalIntervalObservable d (a - ((R - 1 : ℕ) : ℤ))
         ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X) := by
-  rw [bulkObservable_adjoint_mul_openInteractionMatrix_commutator h X hR hℓ hr]
+  rw [bulkObservable_adjoint_mul_hamiltonian_chainTranslates_commutator h X hR hℓ hr]
   rw [quasiLocalIntervalObservable_placeAlong_chainWindow (a - (ℓ : ℤ)) ((ℓ + k) + r)
     (ℓ - (R - 1)) (localCommutatorObservable h X) (by omega)]
   congr 2
@@ -108,8 +110,8 @@ theorem eventually_quasiLocalIntervalObservable_bulkObservable_commutator_eq
     ∀ᶠ n in f,
       quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
         ((bulkObservable X (ℓ n) (r n))ᴴ *
-          (openInteractionMatrix h ((ℓ n + k) + r n) * bulkObservable X (ℓ n) (r n) -
-            bulkObservable X (ℓ n) (r n) * openInteractionMatrix h ((ℓ n + k) + r n))) =
+          ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian * bulkObservable X (ℓ n) (r n) -
+            bulkObservable X (ℓ n) (r n) * (chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)) =
         quasiLocalIntervalObservable d (a - ((R - 1 : ℕ) : ℤ))
           ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X) := by
   filter_upwards [hℓ.eventually (eventually_ge_atTop (R - 1)),
@@ -127,8 +129,8 @@ theorem tendsto_quasiLocalIntervalObservable_bulkObservable_commutator
     Tendsto (fun n ↦
       quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
         ((bulkObservable X (ℓ n) (r n))ᴴ *
-          (openInteractionMatrix h ((ℓ n + k) + r n) * bulkObservable X (ℓ n) (r n) -
-            bulkObservable X (ℓ n) (r n) * openInteractionMatrix h ((ℓ n + k) + r n)))) f
+          ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian * bulkObservable X (ℓ n) (r n) -
+            bulkObservable X (ℓ n) (r n) * (chainTranslates R ((ℓ n + k) + r n) h).hamiltonian))) f
       (nhds (quasiLocalIntervalObservable d (a - ((R - 1 : ℕ) : ℤ))
         ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X))) :=
   tendsto_const_nhds.congr'
@@ -148,8 +150,8 @@ theorem tendsto_apply_quasiLocalIntervalObservable_bulkObservable_commutator
     Tendsto (fun n ↦ ω
       (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
         ((bulkObservable X (ℓ n) (r n))ᴴ *
-          (openInteractionMatrix h ((ℓ n + k) + r n) * bulkObservable X (ℓ n) (r n) -
-            bulkObservable X (ℓ n) (r n) * openInteractionMatrix h ((ℓ n + k) + r n))))) f
+          ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian * bulkObservable X (ℓ n) (r n) -
+            bulkObservable X (ℓ n) (r n) * (chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f
       (nhds (ω (quasiLocalIntervalObservable d (a - ((R - 1 : ℕ) : ℤ))
         ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X)))) :=
   tendsto_const_nhds.congr'
@@ -164,11 +166,11 @@ theorem quasiLocalIntervalObservable_commutator_locality (a : ℤ) {R k ℓ r : 
     (hR : 0 < R) (hℓ : R - 1 ≤ ℓ) (hr : R - 1 ≤ r) :
     star (quasiLocalIntervalObservable d a k X) *
         (quasiLocalIntervalObservable d (a - (ℓ : ℤ)) ((ℓ + k) + r)
-            (openInteractionMatrix h ((ℓ + k) + r)) *
+            ((chainTranslates R ((ℓ + k) + r) h).hamiltonian) *
           quasiLocalIntervalObservable d a k X -
           quasiLocalIntervalObservable d a k X *
             quasiLocalIntervalObservable d (a - (ℓ : ℤ)) ((ℓ + k) + r)
-              (openInteractionMatrix h ((ℓ + k) + r))) =
+              ((chainTranslates R ((ℓ + k) + r) h).hamiltonian)) =
       quasiLocalIntervalObservable d (a - ((R - 1 : ℕ) : ℤ))
         ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X) := by
   simpa only [← Matrix.star_eq_conjTranspose, map_mul, map_sub, map_star,
@@ -187,11 +189,11 @@ theorem tendsto_apply_quasiLocalIntervalObservable_commutator
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n ↦ ω (star (quasiLocalIntervalObservable d a k X) *
       (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-          (openInteractionMatrix h ((ℓ n + k) + r n)) *
+          ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
         quasiLocalIntervalObservable d a k X -
         quasiLocalIntervalObservable d a k X *
           quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-            (openInteractionMatrix h ((ℓ n + k) + r n))))) f
+            ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f
       (nhds (ω (quasiLocalIntervalObservable d (a - ((R - 1 : ℕ) : ℤ))
         ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X)))) := by
   simpa only [← Matrix.star_eq_conjTranspose, map_mul, map_sub, map_star,

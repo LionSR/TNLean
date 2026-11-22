@@ -59,7 +59,7 @@ Proposition 5.7, lines 1324–1333. -/
 theorem isOpenMPS_operator_entries_rectKronecker {L q : ℕ}
     (M : Fin L → Matrix (Fin q) (Fin q) ℂ) :
     IsOpenMPS L (q * q) 1 (fun w ↦
-      Matrix.rectKronecker M
+      Matrix.piKronecker M
         (fun v ↦ (w v).divNat) (fun v ↦ (w v).modNat)) :=
   isOpenMPS_operator_entries_prod M
 
@@ -75,12 +75,12 @@ theorem isOpenMPS_operator_entries_embed_one_site {L q : ℕ} (v : Fin L)
   classical
   let N : Fin 1 → Matrix (Fin q) (Fin q) ℂ :=
     fun _ i j ↦ X (fun _ ↦ i) (fun _ ↦ j)
-  have hX : X = ManyBody.prodOp (X := fun _ : Fin 1 ↦ Fin q) (Y := fun _ : Fin 1 ↦ Fin q) N := by
+  have hX : X = Matrix.piKronecker (ι := fun _ : Fin 1 ↦ Fin q) (κ := fun _ : Fin 1 ↦ Fin q) N := by
     ext x y
-    rw [ManyBody.prodOp_apply, Fin.prod_univ_one]
+    rw [Matrix.piKronecker_apply, Fin.prod_univ_one]
     change X x y = X (fun _ ↦ x 0) (fun _ ↦ y 0)
     congr 1 <;> funext i <;> congr 1 <;> exact Subsingleton.elim _ _
-  rw [hX, ManyBody.placeAlong_prodOp (X := fun _ ↦ Fin q)
+  rw [hX, ManyBody.placeAlong_piKronecker (X := fun _ ↦ Fin q)
     ⟨fun _ : Fin 1 ↦ v, fun a b _ ↦ Subsingleton.elim a b⟩ N
     (Function.update (fun _ ↦ (1 : Matrix (Fin q) (Fin q) ℂ)) v (N 0))
     (fun _ ↦ Function.update_self _ _ _)

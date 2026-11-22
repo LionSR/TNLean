@@ -44,7 +44,7 @@ preparation of matrix product states.
         QuantumCircuit.UnitaryCircuit, QuantumCircuit.UnitaryCircuit.op,
         QuantumCircuit.UnitaryCircuit.depth, QuantumCircuit.Geometry,
         QuantumCircuit.Geometry.ring, QuantumCircuit.Geometry.ring_cell,
-        QuantumCircuit.rectKronecker_mem_supportedOperators}
+        ManyBody.piKronecker_mem_supportedOperators}
     \leanok
     A \emph{bond geometry} on a finite site set $I$ is a family $(B_b)_{b\in\beta}$ of subsets $B_b\subseteq I$. An operator on $(\C^d)^{\otimes I}$ \emph{acts on} $X\subseteq I$ if it lies in $\mathcal A_X=\MN{d}^{\otimes X}\otimes\mathbb 1_{I\setminus X}=\operatorname{span}\{\bigotimes_{i\in I}m_i:m_i=\mathbb 1\text{ for }i\notin X\}$. A \emph{layer} is a product of unitaries on pairwise disjoint bonds and of one-site unitaries on the remaining sites; it has depth $1$ if it contains a gate on a bond and depth $0$ otherwise. A \emph{local circuit of depth $T$} is a product $U=W_k\cdots W_1$ of layers of total depth at most $T$, and a state $\ket\psi$ is \emph{prepared in depth $T$} if $\ket\psi=U\bigotimes_{i\in I}\ket{v_i}$.
 
@@ -164,7 +164,7 @@ preparation of matrix product states.
         QuantumCircuit.IsPreparedInDepth.dotProduct_mul_mul_of_isGraphSeparated,
         QuantumCircuit.IsPreparedInDepth.dotProduct_mul_eq,
         QuantumCircuit.IsPreparedInDepth.dotProduct_mul_mul,
-        QuantumCircuit.star_productVector_dotProduct_prodOp_mulVec}
+        QuantumCircuit.star_productVector_dotProduct_piKronecker_mulVec}
     \leanok
     Following~\cite[Theorem~1]{Malz2024Preparation}, let $\ket\psi$ be prepared in depth $T$, and let $Z\in\mathcal A_X$, $Z'\in\mathcal A_{X'}$ with $\mathcal L_T(X)\cap\mathcal L_T(X')=\varnothing$ (e.g., $d_{\rm ring}(X,X')>2T$). Then
     \begin{align}
@@ -199,11 +199,11 @@ preparation of matrix product states.
 \begin{lemma}[Preparation from the all-zero state]
     \label{lem:qc_preparation_from_zero}
     \uses{def:qc_local_circuit}
-    \lean{QuantumCircuit.prodOp_mulVec_productVector,
+    \lean{QuantumCircuit.piKronecker_mulVec_productVector,
         Matrix.exists_mem_unitaryGroup_eq_smul_mulVec_single,
         QuantumCircuit.productVector_pi_smul,
-        QuantumCircuit.exists_prod_eq_smul_prodOp_mulVec,
-        QuantumCircuit.IsUnitaryCircuit.prodOp,
+        QuantumCircuit.exists_prod_eq_smul_piKronecker_mulVec,
+        QuantumCircuit.IsUnitaryCircuit.piKronecker,
         QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_prod_single}
     \leanok
     Let $d\ge1$. On any finite site set, $(\bigotimes_i m_i)(\bigotimes_i\ket{v_i})=\bigotimes_i m_i\ket{v_i}$ and $\bigotimes_i c_i\ket{v_i}=(\prod_i c_i)\bigotimes_i\ket{v_i}$. Every nonzero $\ket v\in\C^d$ equals $c\,u\ket 0$ ($c\ne0$, $u\in\mathrm U(d)$), every nonzero product vector equals $c(\bigotimes_i u_i)\ket{0\cdots0}$, $\bigotimes_i u_i$ is one layer of one-site unitaries, of depth $0$, and every nonzero vector prepared in depth $T$ equals $c\,U\ket{0\cdots0}$ for a local circuit $U$ of depth $T$.
@@ -217,7 +217,7 @@ preparation of matrix product states.
 \begin{lemma}[Operators placed on sets of sites]
     \label{lem:qc_placed_operators}
     \lean{ManyBody.placeAlong, ManyBody.placeAlong_apply, ManyBody.placeAlong_placeAlong,
-        ManyBody.placeAlong_prodOp,
+        ManyBody.placeAlong_piKronecker,
         ManyBody.commute_placeAlong_of_disjoint,
         QuantumCircuit.noncommProd_placeAlong_apply}
     \leanok

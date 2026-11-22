@@ -240,48 +240,30 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
 
 \begin{lemma}[Gap preservation with a unit unused-space penalty]
     \label{thm:mpo_isometry_positive_gap}
-    \lean{MPSTensor.isometricInteractionExtension_quadratic_gap,
-        MPSTensor.isometricInteractionExtension_norm_gap,
-        MPSTensor.isometricInteractionExtension_spectrum_gap}
+    \lean{MPSTensor.isometricInteractionExtension_eigenvalue_gap}
     \leanok
     \uses{def:spt_isometric_interaction_extension}
-    Suppose $E^\dagger E=I$, $h\geq0$, and $N\geq2$.
-    A quadratic-form bound $\delta\|x\|^2\leq
-        \operatorname{Re}\langle H_Nx,x\rangle$ on $(\ker H_N)^\perp$
-    gives
-    \begin{align}
-        \min\{\delta,1\}\|v\|^2
-        \leq\operatorname{Re}\langle H'_Nv,v\rangle
-        \quad (v\perp\ker H'_N).
-        \label{eq:mpo_isometry_quadratic_gap}
-    \end{align}
-    If $\delta\geq0$, a norm gap $\delta\|x\|\leq\|H_Nx\|$
-    on $(\ker H_N)^\perp$ gives
-    $\min\{\delta,1\}\|v\|\leq\|H'_Nv\|$ on $(\ker H'_N)^\perp$.
-    Finally, spectral separation
-    $\operatorname{spec}H_N\subseteq\{0\}\cup[\delta,\infty)$ gives
-    \begin{align}
-        \operatorname{spec}H'_N
-        \subseteq[0,\infty)\cap
-        \bigl(\{0\}\cup[\min\{\delta,1\},\infty)\bigr).
-        \label{eq:mpo_isometry_spectral_gap}
-    \end{align}
-    The quadratic-form and spectral assertions allow arbitrary real
-    $\delta$. None of these assertions requires $0$ to be an eigenvalue.
+    Suppose $E^\dagger E=I$, $h\geq0$, and $N\geq2$, and let $\delta$ be
+    a real number. If every eigenvalue of $H_N$ is $0$ or at least
+    $\delta$, then every eigenvalue of $H'_N$ is $0$ or at least
+    $\min\{\delta,1\}$. Neither assertion requires $0$ to be an
+    eigenvalue.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_isometric_interaction_zero_modes,
         thm:spt_periodic_hamiltonian_order,thm:mpo_isometry_inactive_bound,
-        thm:mpo_isometry_abstract_quadratic,thm:mpo_isometry_abstract_norm}
-    Positivity of $h$ and $h'$ makes both periodic sums positive.
-    Combining $H'_NW_N=W_NH_N$ with
-    (\ref{eq:mpo_isometry_inactive_energy}) and applying the abstract
-    quadratic-form or norm theorem with $U=W_N$ and $c=1$ gives the first two bounds.
-    For the spectral assertion, finite-dimensional spectral separation
-    first gives the quadratic-form bound on $(\ker H_N)^\perp$;
-    (\ref{eq:mpo_isometry_quadratic_gap}) transfers this bound to $H'_N$,
-    and the converse spectral implication for the positive operator $H'_N$
-    yields the spectral inclusion.
+        thm:mpo_isometry_abstract_quadratic}
+    Positivity of $h$ and $h'$ makes both periodic sums positive. For a
+    positive matrix, the eigenvalue condition with constant $\delta$ is
+    equivalent to the quadratic-form bound
+    $\delta\|x\|^2\leq\operatorname{Re}\langle H_Nx,x\rangle$ on
+    $(\ker H_N)^\perp$, by expanding $x$ in an eigenbasis. Combining
+    $H'_NW_N=W_NH_N$ with (\ref{eq:mpo_isometry_inactive_energy}) and
+    applying the abstract quadratic-form theorem with $U=W_N$ and $c=1$
+    gives
+    $\min\{\delta,1\}\|v\|^2\leq\operatorname{Re}\langle H'_Nv,v\rangle$
+    for $v\perp\ker H'_N$, which is the eigenvalue condition for $H'_N$
+    with constant $\min\{\delta,1\}$.
 \end{proof}
 
 In particular, a positive bound $\delta$ uniform in $N\geq2$ remains
@@ -440,47 +422,17 @@ original bond-$D_p$ tensors.
 
 \subsection{The continuous positive interaction}
 
-\begin{lemma}[Coordinate representation of a periodic interaction]
-    \label{thm:mpo_periodic_interaction_coordinates}
-    \lean{MPSTensor.periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian}
-    \leanok
-    \uses{thm:parent_interaction_sum_on_site_symmetry}
-    For any local matrix $a$ on $(\C^d)^{\otimes R}$, with $R\leq N$,
-    its action on a cyclic window agrees with the operator defined by applying $a$
-    to that window and fixing the exterior configuration. Their periodic
-    sums therefore agree. In particular, for $R=2$ and $N\geq2$,
-    the sum of the Euclidean local operators is the operator with
-    configuration-basis matrix $\sum_{i=0}^{N-1}a_i$.
-    No positivity or projection assumption on $a$ is needed.
-\end{lemma}
-\begin{proof}\leanok
-    For a configuration $\sigma$, let $\sigma|_i$ be its ordered
-    cyclic window and let $\sigma[i\leftarrow\tau]$ replace that
-    window by $\tau$. Both local operators have the coefficient formula
-    \begin{align}
-        (a_iv)_\sigma
-        =\sum_{\tau\in\{0,\ldots,d-1\}^{R}}
-        a_{\sigma|_i,\tau}\,v_{\sigma[i\leftarrow\tau]}.
-        \label{eq:mpo_periodic_matrix_action}
-    \end{align}
-    The cyclic window and its complement partition the sites, so their
-    coordinate permutation extracts and replaces precisely these indices;
-    summing (\ref{eq:mpo_periodic_matrix_action}) over the cyclic origins
-    gives the periodic identity.
-\end{proof}
-
 \begin{definition}[Enlarged mixed local interaction]
     \label{def:mpo_arbitrary_physical_interaction}
-    \lean{MPSTensor.MPOSymmetry.mixedEndpointInteractionMatrix,
-        MPSTensor.MPOSymmetry.toEuclideanLin_mixedEndpointInteractionMatrix,
-        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction}
+    \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction}
     \leanok
     \uses{def:mpo_mixed_extended_support,def:mpo_arbitrary_physical_tensor,
         def:spt_isometric_interaction_extension}
     For any square-alphabet tensors $C_0,C_1$, let
-    $h_{C_0,C_1}(\gamma)$ be the configuration-basis matrix of
+    $h_{C_0,C_1}(\gamma)$ be the matrix of
     $I-\Pi_{\mathcal S'_\gamma}$ for their extended mixed two-site
-    support. It represents exactly that Euclidean operator. Set
+    support, the extended local interaction of
+    Definition~\ref{def:mpo_mixed_extended_support}. Set
     $h_\gamma=h_{B_0,B_1}(\gamma)$, $T=J\otimes J$, and define
     \begin{align}
         \widetilde h_\gamma
@@ -494,18 +446,13 @@ original bond-$D_p$ tensors.
 
 \begin{lemma}[Positivity and continuity through the endpoints]
     \label{thm:mpo_arbitrary_interaction_continuity}
-    \lean{MPSTensor.MPOSymmetry.mixedEndpointInteractionMatrix_posSemidef,
-        MPSTensor.MPOSymmetry.continuous_mixedEndpointInteractionMatrix,
-        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_posSemidef,
+    \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_posSemidef,
         MPSTensor.MPOSymmetry.continuous_arbitraryPhysicalMixedInteraction}
     \leanok
     \uses{def:mpo_arbitrary_physical_interaction,def:injective}
-    For arbitrary $C_0,C_1$ and real $\gamma$,
-    $h_{C_0,C_1}(\gamma)\geq0$; for arbitrary $A_0,A_1$,
+    For arbitrary $A_0,A_1$ and real $\gamma$,
     $\widetilde h_\gamma\geq0$.
-    If $D_0,D_1>0$ and $C_0,C_1$ are injective, then
-    $h_{C_0,C_1}(\gamma)$ is continuous on $\R$.
-    Thus, if $D_0,D_1>0$ and $A_0,A_1$ are one-site injective,
+    If $D_0,D_1>0$ and $A_0,A_1$ are one-site injective, then
     $\widetilde h_\gamma$ is continuous on $\R$, including at $0$ and $1$.
 \end{lemma}
 \begin{proof}\leanok
@@ -562,7 +509,6 @@ original bond-$D_p$ tensors.
 \begin{proof}\leanok
     \uses{thm:mpo_polar_support_injective,
         thm:mpo_mixed_periodic_line_continuity,
-        thm:mpo_periodic_interaction_coordinates,
         thm:mpo_arbitrary_interaction_continuity,
         thm:mpo_isometry_positive_kernel}
     The support-coordinate theorem gives the nonzero periodic vector
@@ -582,28 +528,32 @@ original bond-$D_p$ tensors.
     \uses{def:mpo_arbitrary_physical_interaction,def:injective}
     If $D_0,D_1>0$ and $A_0,A_1$ are one-site injective, there is a
     constant $0<\varepsilon\leq1$, depending only on these tensors,
-    such that for every $\gamma\in[0,1]$, every $N\geq2$, and every
-    $v\perp\ker\widetilde H_{\gamma,N}$,
+    such that for every $\gamma\in[0,1]$ and every $N\geq2$, zero is an
+    eigenvalue of $\widetilde H_{\gamma,N}$ and
     \begin{align}
-        \varepsilon\|v\|\leq\|\widetilde H_{\gamma,N}v\|.
+        \text{every other eigenvalue of }\widetilde H_{\gamma,N}
+        \text{ is at least }\varepsilon.
         \label{eq:mpo_arbitrary_uniform_gap}
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:mpo_polar_support_injective,
         thm:mpo_mixed_uniform_periodic_path_gap,
-        thm:mpo_periodic_interaction_coordinates,
         thm:mpo_arbitrary_interaction_continuity,
-        thm:mpo_isometry_positive_gap}
+        thm:mpo_isometry_positive_gap,
+        thm:mpo_arbitrary_periodic_ground_line}
     For the derived injective tensors $B_0,B_1$, which have square physical
     alphabets, the uniform mixed-path gap theorem gives $\delta>0$,
     independent of $\gamma\in[0,1]$ and $N\geq2$, with
     $\delta\|x\|\leq\|H_{\gamma,N}x\|$ on the
     kernel complement. The coordinate identity transfers precisely
     this bound to the matrix Hamiltonian. Each $h_\gamma$ is positive,
-    so Lemma~\ref{thm:mpo_isometry_positive_gap} applies to the fixed
-    inclusion $J$ and gives (\ref{eq:mpo_arbitrary_uniform_gap}) with
-    $\varepsilon=\min\{\delta,1\}>0$. Both constants are obtained
+    so this norm bound says that every eigenvalue of $H_{\gamma,N}$ is $0$
+    or at least $\delta$, and Lemma~\ref{thm:mpo_isometry_positive_gap}
+    applies to the fixed inclusion $J$. It gives
+    (\ref{eq:mpo_arbitrary_uniform_gap}) with
+    $\varepsilon=\min\{\delta,1\}>0$, and zero is an eigenvalue because
+    the kernel of $\widetilde H_{\gamma,N}$ is a line. Both constants are obtained
     from the endpoint tensors; a support-path gap is not an assumption.
 \end{proof}
 

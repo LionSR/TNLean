@@ -1000,7 +1000,7 @@ out.
   Hamiltonian are positive semidefinite operators with kernel `𝒢_R`).
 - **Sanctioned bridges:** `TNLean.PEPS.isRegionParentInteraction_canonical`
   (the orthogonal projector onto the complement of the regional space);
-  `TNLean.PEPS.ker_regionParentHamiltonian` (for any such family of terms the
+  `TNLean.PEPS.ker_hamiltonian_ofPlace` (for any such family of terms the
   ground space of their sum is the intersection of the regional conditions);
   `TNLean.PEPS.IsRegionParentInteraction.mul_regionReducedDensity_eq_zero`.
 - **Caveat:** the predicate fixes only the kernel of each term. The resulting
@@ -1477,35 +1477,41 @@ The following notions use different transfer objects and are not interchangeable
 
 ## Parent Hamiltonians on the ring
 
-### `MPSTensor.IsFrustrationFree`
+### `MPSTensor.parentRingInteraction`
 
-- **Declaration:** `MPSTensor.IsFrustrationFree A L N ψ : Prop`, for a tensor
-  `A`, a window length `L`, a ring of `N` sites and `ψ : NSiteSpace d N`: every
-  translated local term `MPSTensor.localTerm A L N i` annihilates `ψ`.
+- **Declaration:** `MPSTensor.parentRingInteraction A L N`, for a tensor `A`, a
+  window length `L` and a ring of `N ≥ 1` sites (`[NeZero N]`): the
+  translation-invariant interaction
+  `ManyBody.Interaction.translationInvariant N (LinearMap.toMatrix'
+  (parentInteraction A L))` whose term with index `i` is, for `L ≤ N`, the local
+  parent projector placed on the window of `L` consecutive sites starting at `i`
+  (`ManyBody.placeAlong` along `ManyBody.ringWindow`), and zero for `L > N`.
 - **Defined in:** `TNLean/MPS/Tensor/GroundSpace/ParentHamiltonian.lean`.
-- **Meaning:** for `L ≤ N` the local terms and the parent Hamiltonian are the
-  terms and the Hamiltonian of one interaction,
-  `MPSTensor.parentRingInteraction A hLN`, the translation-invariant interaction
-  `ManyBody.Interaction.translationInvariant hLN (LinearMap.toMatrix'
-  (parentInteraction A L))` whose term with index `i` is the local parent
-  projector placed on the window of `L` consecutive sites starting at `i`
-  (`ManyBody.placeAlong` along `ManyBody.ringWindow`). The predicate is
-  membership of `WithLp.toLp 2 ψ` in its zero space.
+- **Meaning:** the local terms and the parent Hamiltonian are the terms and the
+  Hamiltonian of this one interaction. The frustration-free ground vectors of
+  the parent model, the vectors annihilated by every local term, are the
+  vectors of its zero space `ManyBody.Interaction.zeroSpace`; the interaction
+  is frustration free in the sense of `ManyBody.Interaction.IsFrustrationFree`
+  whenever the periodic vector of `A` is nonzero. There is no separate TNLean
+  predicate for frustration-freeness.
 - **Source:** Pérez-García, Verstraete, Wolf and Cirac, quant-ph/0608197,
   `MPSarchive.tex`, lines 311–326; Cirac, Pérez-García, Schuch and Verstraete,
   arXiv:2011.12127, `TN-Review-main.tex`, line 537.
-- **Sanctioned bridges:** `MPSTensor.isFrustrationFree_iff_mem_zeroSpace`
-  (with `ManyBody.Interaction.mem_zeroSpace_iff`);
-  `MPSTensor.toLp_mem_ker_parentHamiltonian_iff` identifies the kernel of the
-  parent Hamiltonian with the zero space (`ManyBody.Interaction.zeroSpace_eq_groundSpace`
-  for the positive terms `MPSTensor.posSemidef_parentRingInteraction_term`);
-  `MPSTensor.localTerm_of_le`, `MPSTensor.parentHamiltonian_of_le` and
-  `MPSTensor.parentHamiltonian_eq_sum_localTerm` unfold the linear-map forms.
-- **Caveat:** for `L > N` the local terms are `0` by convention and the
-  predicate holds for every vector; the Euclidean-space forms `localTermES`,
-  `parentHamiltonianES` and their open and periodic variants in
-  `MPS/ParentHamiltonian/Martingale/` are transports of the same linear maps,
-  not separate definitions of the Hamiltonian.
+- **Sanctioned bridges:** `MPSTensor.toLp_mpv_mem_zeroSpace_parentRingInteraction`
+  (the periodic vector lies in the zero space) and
+  `MPSTensor.isFrustrationFree_parentRingInteraction`;
+  `MPSTensor.zeroSpace_parentRingInteraction_eq_map_chainGroundSpace` and
+  `MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_chainGroundSpace`
+  identify the zero space and the ground space at energy `0` with the cyclic
+  chain ground space for `0 < N`, `L ≤ N`
+  (`ManyBody.Interaction.zeroSpace_eq_groundSpace` for the positive terms
+  `MPSTensor.posSemidef_parentRingInteraction_term`);
+  `MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_ker`,
+  `MPSTensor.localTerm_eq_toLin'_term`, `MPSTensor.parentHamiltonian_eq_toLin'_hamiltonian`
+  and `MPSTensor.parentHamiltonian_eq_sum_localTerm` relate the linear-map forms
+  `MPSTensor.localTerm` and `MPSTensor.parentHamiltonian`.
+- **Caveat:** for `L > N` the terms are `0` by convention and the zero space is
+  the whole space.
 
 ## Gauge relations between blocks
 
@@ -1780,9 +1786,8 @@ in `MPS/Preparation/` uses it.
   the product operators `⊗ᵥ mᵥ` with `mᵥ = 1` off `D`.
 - **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
   operators `𝒪₁` and `𝒪'ₛ` acting on sites of the chain).
-- **Sanctioned bridges:** `QuantumCircuit.rectKronecker_mem_supportedOperators`
-  and its chain form `QuantumCircuit.finKronecker_mem_supportedOperators`
-  (with `QuantumCircuit.prodOp_eq_rectKronecker`), `ManyBody.supportedOperators_mono`,
+- **Sanctioned bridges:** `ManyBody.piKronecker_mem_supportedOperators` (product
+  operators that are the identity off `D`), `ManyBody.supportedOperators_mono`,
   `ManyBody.commute_of_mem_supportedOperators_of_disjoint`,
   `ManyBody.supportedOperators_induction`, and
   `ManyBody.placeAlong_mem_supportedOperators` (an operator placed along an

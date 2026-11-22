@@ -232,8 +232,8 @@ theorem map_ker_regionParentHamiltonian_physicalDeform_of_injOn (A : Tensor Γ d
           (globalPhysicalMap F) =
       (Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin e) R K).hamiltonian).ker := by
-  rw [ker_regionParentHamiltonian A R H hH,
-    ker_regionParentHamiltonian (physicalDeform A F) R K hK]
+  rw [ker_hamiltonian_ofPlace A R H hH,
+    ker_hamiltonian_ofPlace (physicalDeform A F) R K hK]
   exact map_regionParentGroundSpace_physicalDeform_of_injOn A F hF R hcover
 
 end TNLean.PEPS

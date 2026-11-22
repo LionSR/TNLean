@@ -238,10 +238,16 @@ lemma parentHamiltonian_annihilates (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤
   rw [parentHamiltonian_eq_sum_localTerm, LinearMap.sum_apply]
   exact Finset.sum_eq_zero fun i _ => localTerm_annihilates_mpv A L N hLN i
 
-/-- The parent Hamiltonian model is frustration-free on the periodic MPS vector:
-each local term individually annihilates `mpv A`. -/
-lemma parentHamiltonian_frustrationFree (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) :
-    IsFrustrationFree A L N (mpv A) :=
-  fun i => localTerm_annihilates_mpv A L N hLN i
+/-- **The periodic MPS vector lies in the zero space of its parent interaction**: every term
+of the parent interaction on the ring annihilates it, for every window length \(L\) (for
+\(L > N\) the terms vanish). [PGVWC07] (quant-ph/0608197), `MPSarchive.tex`, lines 311--330;
+arXiv:2011.12127, `TN-Review-main.tex`, line 2011. -/
+lemma toLp_mpv_mem_zeroSpace_parentRingInteraction (A : MPSTensor d D) (L N : ℕ) [NeZero N] :
+    WithLp.toLp 2 (mpv A : NSiteSpace d N) ∈ (parentRingInteraction A L N).zeroSpace := by
+  rw [ManyBody.Interaction.mem_zeroSpace_iff]
+  intro i
+  by_cases hLN : L ≤ N
+  · exact localTerm_annihilates_mpv A L N hLN i
+  · rw [ManyBody.Interaction.translationInvariant_term_of_not_le _ hLN, Matrix.zero_mulVec]
 
 end MPSTensor

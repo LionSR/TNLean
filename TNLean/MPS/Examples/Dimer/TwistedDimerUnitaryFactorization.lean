@@ -124,7 +124,7 @@ private lemma powN_kronecker (A : Matrix Bond Bond ℂ)
     powN (A ⊗ₖ B) N = (powN A N ⊗ₖ powN B N).submatrix
       (bondFlagEquiv N) (bondFlagEquiv N) := by
   ext a b
-  simp only [powN, Matrix.finKronecker_apply, Matrix.submatrix_apply]
+  simp only [powN, Matrix.piKronecker_apply, Matrix.submatrix_apply]
   exact Finset.prod_mul_distrib
 
 /-- The even-parity flag state, with normalization two to the minus N. -/
@@ -149,15 +149,15 @@ lemma chainUnitary_apply (N : ℕ) (s t : Fin N → Fin 8) :
 
 /-- The product gate is self-adjoint. -/
 theorem chainUnitary_conjTranspose (N : ℕ) : (chainUnitary N)ᴴ = chainUnitary N := by
-  simp only [chainUnitary, Matrix.conjTranspose_submatrix, powN, Matrix.finKronecker_conjTranspose,
+  simp only [chainUnitary, Matrix.conjTranspose_submatrix, powN, Matrix.conjTranspose_piKronecker,
     localV_conjTranspose]
 
 /-- The first whole-space unitary law. -/
 theorem chainUnitary_mul_conjTranspose (N : ℕ) :
     chainUnitary N * (chainUnitary N)ᴴ = 1 := by
   rw [chainUnitary_conjTranspose]
-  simp only [chainUnitary, Matrix.submatrix_mul_equiv, powN, ← Matrix.finKronecker_mul,
-    localV_mul_self, Matrix.finKronecker_one, Matrix.submatrix_one_equiv]
+  simp only [chainUnitary, Matrix.submatrix_mul_equiv, powN, Matrix.piKronecker_mul,
+    localV_mul_self, Matrix.piKronecker_one, Matrix.submatrix_one_equiv]
 
 /-- The second whole-space unitary law. -/
 theorem chainUnitary_conjTranspose_mul (N : ℕ) :
@@ -209,7 +209,7 @@ private lemma decoratedState_eq (N : ℕ) :
   rw [powN_kronecker, powN_kronecker]
   ext s t
   simp only [decoratedState, evenFlagState, Matrix.submatrix_apply, Matrix.kronecker_apply,
-    Matrix.smul_apply, Matrix.add_apply, smul_eq_mul, powN, Matrix.finKronecker_apply,
+    Matrix.smul_apply, Matrix.add_apply, smul_eq_mul, powN, Matrix.piKronecker_apply,
     Equiv.trans_apply, bondFlagEquiv, Equiv.arrowProdEquivProdArrow_apply]
   ring
 
@@ -221,8 +221,8 @@ private lemma conjugate_decoratedState (N : ℕ) :
             (incomingCellEquiv N) (incomingCellEquiv N) := by
   rw [decoratedState_eq]
   simp only [chainUnitary, Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv,
-    powN, Matrix.finKronecker_conjTranspose, Matrix.mul_smul, Matrix.smul_mul,
-    mul_add, add_mul, ← Matrix.finKronecker_mul, localV_conjugate]
+    powN, Matrix.conjTranspose_piKronecker, Matrix.mul_smul, Matrix.smul_mul,
+    mul_add, add_mul, Matrix.piKronecker_mul, localV_conjugate]
 
 /-- The closed twisted-dimer operator is the explicit unitary conjugate of
 independent bond states and the even-parity flag state, for every positive

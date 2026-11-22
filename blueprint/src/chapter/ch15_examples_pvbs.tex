@@ -88,8 +88,8 @@ spectral-gap assertion.
     \lean{MPSTensor.mem_groundSpace_pvbs_two_iff}
     \lean{MPSTensor.groundSpace_pvbs_intersection}
     \lean{MPSTensor.contiguous_mem_groundSpace_pvbs}
-    \lean{MPSTensor.ker_openParentHamiltonianES_pvbs}
-    \lean{MPSTensor.finrank_ker_openParentHamiltonianES_pvbs}
+    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_pvbs}
+    \lean{MPSTensor.finrank_ker_hamiltonian_parentChainInteraction_pvbs}
     \leanok
     \uses{thm:pvbs_open_space}
     The open nearest-neighbour parent Hamiltonian has kernel $\mathcal G_N$
@@ -265,8 +265,8 @@ spectral-gap assertion.
 
 \begin{lemma}[Kernel of the pure particle projection]
     \label{lem:pvbs_pure_window_kernel}
-    \lean{MPSTensor.pvbsPureWindowInteraction_isPositive}
-    \lean{MPSTensor.pvbsPureWindowInteraction_apply_eq_zero_iff}
+    \lean{MPSTensor.posSemidef_pvbsPureWindowInteraction}
+    \lean{MPSTensor.toEuclideanLin_pvbsPureWindowInteraction_apply_eq_zero_iff}
     \leanok
     \uses{def:pvbs_pure_window_interaction}
     The operator $p_R(q)$ is positive, and $p_R(q)v=0$ precisely when

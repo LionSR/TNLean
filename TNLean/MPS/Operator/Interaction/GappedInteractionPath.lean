@@ -7,6 +7,7 @@ import TNLean.MPS.Operator.Interaction.PhysicalGibbsEmbedding
 import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Algebra.Order.Interval.Set.Instances
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Symmetric gapped interaction paths on a common physical space
@@ -34,10 +35,10 @@ namespace MPSTensor
 /-- A common-space symmetric gapped path between two nearest-neighbor
 interactions. This is the path required after blocking and embedding in
 arXiv:1010.3732, `sec:def-sym-phases`, lines 439–453. The gap is measured
-above the entire ground eigenspace; it does not assume a unique ground
-state or zero ground energy. The Hamiltonian on the ring of `N` sites is that
-of the translation-invariant interaction of the two-site term
-(`ManyBody.Interaction.translationInvariant`), source lines 407–427. -/
+above the entire ground eigenspace (`ManyBody.IsGapped`); it does not assume
+a unique ground state or zero ground energy. The Hamiltonian on the ring of
+`N` sites is that of the translation-invariant interaction of the two-site
+term (`ManyBody.Interaction.translationInvariant`), source lines 407–427. -/
 structure SymmetricGappedInteractionPath {G : Type} [Group G] {d : ℕ}
     (U : G →* Matrix.unitaryGroup (Fin d) ℂ)
     (h₀ h₁ : MPOTensor.ChainOperator d 2) where
@@ -54,21 +55,19 @@ structure SymmetricGappedInteractionPath {G : Type} [Group G] {d : ℕ}
   /-- Continuity of the local interaction; source line 423. -/
   continuous : ContinuousOn interaction (Set.Icc (0 : ℝ) 1)
   /-- One positive lower gap bound works for every parameter and chain
-  length. The real number `E` is the least spectral value, and all other
-  spectral values are at least `E + δ`; source lines 424–426. -/
+  length: the Hamiltonian is gapped at an energy `E` with gap `δ`, so `E` is an
+  eigenvalue, the least one, and all other eigenvalues are at least `E + δ`;
+  source lines 424–426. -/
   gap : ∃ δ : ℝ, 0 < δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1,
     ∀ (N : ℕ) (hN : 2 ≤ N), haveI : NeZero N := ⟨by omega⟩; ∃ E : ℝ,
-      (E : ℂ) ∈
-          spectrum ℂ (Interaction.translationInvariant N (interaction γ)).hamiltonian ∧
-      ∀ z ∈ spectrum ℂ (Interaction.translationInvariant N (interaction γ)).hamiltonian,
-        E ≤ z.re ∧ (z.re = E ∨ E + δ ≤ z.re)
+      IsGapped (Interaction.translationInvariant N (interaction γ)).hamiltonian E δ
   /-- The full periodic Hamiltonian commutes with the on-site symmetry
   on every chain. This does not impose the stronger condition that each
   chosen local term separately commutes; source lines 439–453. -/
   symmetric : ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ g : G,
     ∀ (N : ℕ) (hN : 2 ≤ N), haveI : NeZero N := ⟨by omega⟩;
       Commute (Interaction.translationInvariant N (interaction γ)).hamiltonian
-        (Matrix.finKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ))
+        (Matrix.piKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ))
 
 /-- Reversing the parameter of a symmetric gapped interaction path exchanges
 its endpoints and preserves the same uniform gap. This is the symmetry of

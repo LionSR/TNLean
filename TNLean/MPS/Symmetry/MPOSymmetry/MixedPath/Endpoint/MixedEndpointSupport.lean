@@ -211,15 +211,25 @@ theorem continuous_mixedEndpoint_extendedSupport_starProjection
     (bondInterpolationMatrix_ne_zero hD₀ hD₁)
 
 /-- The continuous extension of the source two-site parent interaction,
-using the extended support also at the endpoints.
+using the extended support also at the endpoints: the matrix of the
+projection onto the orthogonal complement of the extended support.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 noncomputable def mixedEndpointParentInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (γ : ℝ) :
-    EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2) →L[ℂ]
-      EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2) :=
-  1 - (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
-    (bondInterpolationMatrix D₀ D₁ γ)).range.starProjection
+    Matrix (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2) (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2) ℂ :=
+  Matrix.toEuclideanLin.symm (1 - (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
+    (bondInterpolationMatrix D₀ D₁ γ)).range.starProjection).toLinearMap
+
+/-- The operator of the extended local interaction is the projection onto the
+orthogonal complement of the extended support.
+Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
+theorem toEuclideanLin_mixedEndpointParentInteraction
+    (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) (γ : ℝ) :
+    Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ) =
+      (1 - (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
+        (bondInterpolationMatrix D₀ D₁ γ)).range.starProjection).toLinearMap :=
+  LinearEquiv.apply_symm_apply _ _
 
 /-- The extended local parent interaction is continuous through the endpoints.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -227,43 +237,49 @@ theorem continuous_mixedEndpointParentInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁) :
-    Continuous (mixedEndpointParentInteraction A₀ A₁) :=
-  continuous_const.sub
-    (continuous_mixedEndpoint_extendedSupport_starProjection A₀ A₁ h₀ h₁ hD₀ hD₁)
+    Continuous (mixedEndpointParentInteraction A₀ A₁) := by
+  have hc : Continuous fun γ : ℝ => (1 : EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2) →L[ℂ]
+      EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2)) -
+        (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
+          (bondInterpolationMatrix D₀ D₁ γ)).range.starProjection :=
+    continuous_const.sub
+      (continuous_mixedEndpoint_extendedSupport_starProjection A₀ A₁ h₀ h₁ hD₀ hD₁)
+  exact (Matrix.toEuclideanLin.symm.toLinearMap.comp
+    (ContinuousLinearMap.coeLM ℂ)).continuous_of_finiteDimensional.comp hc
 
 /-- In the interior the extended interaction is exactly the canonical
 parent interaction of the mixed MPS tensor.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpointParentInteraction_eq_parentInteractionES
+theorem mixedEndpointParentInteraction_eq_toMatrix'_parentInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     {γ : ℝ} (hγ : γ ∈ Set.Ioo (0 : ℝ) 1) :
     mixedEndpointParentInteraction A₀ A₁ γ =
-      LinearMap.toContinuousLinearMap
-        (parentInteractionES (mixedEndpointInterpolation A₀ A₁ γ) 2) := by
+      LinearMap.toMatrix' (parentInteraction (mixedEndpointInterpolation A₀ A₁ γ) 2) := by
   have hproj := congrArg
     (fun S : Submodule ℂ (EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) 2)) =>
       S.starProjection)
     (mixedEndpoint_extendedSupport_eq_groundSpaceES A₀ A₁ hγ)
-  rw [mixedEndpointParentInteraction, hproj]
-  ext v
-  simp [parentInteractionES, Submodule.starProjection_orthogonal]
+  apply Matrix.toEuclideanLin.injective
+  rw [toEuclideanLin_mixedEndpointParentInteraction, toEuclideanLin_toMatrix'_parentInteraction,
+    hproj, Submodule.starProjection_orthogonal]
+  rfl
 
 /-- Along the interior, the canonical parent terms converge to the extended
 term at either endpoint (and at every interior point). The limiting term
 uses the extended support, which need not be the unextended endpoint
 support. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem tendsto_mixedEndpoint_parentInteractionES
+theorem tendsto_toMatrix'_parentInteraction_mixedEndpointInterpolation
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁) (p : ℝ) :
-    Filter.Tendsto (fun γ : ℝ => LinearMap.toContinuousLinearMap
-      (parentInteractionES (mixedEndpointInterpolation A₀ A₁ γ) 2))
+    Filter.Tendsto (fun γ : ℝ =>
+      LinearMap.toMatrix' (parentInteraction (mixedEndpointInterpolation A₀ A₁ γ) 2))
       (nhdsWithin p (Set.Ioo (0 : ℝ) 1))
       (nhds (mixedEndpointParentInteraction A₀ A₁ p)) := by
   have hlim := (continuous_mixedEndpointParentInteraction A₀ A₁ h₀ h₁ hD₀ hD₁).tendsto p
   apply (tendsto_nhdsWithin_of_tendsto_nhds hlim).congr'
   filter_upwards [self_mem_nhdsWithin] with γ hγ
-  exact mixedEndpointParentInteraction_eq_parentInteractionES A₀ A₁ hγ
+  exact mixedEndpointParentInteraction_eq_toMatrix'_parentInteraction A₀ A₁ hγ
 
 end MPOSymmetry
 end MPSTensor

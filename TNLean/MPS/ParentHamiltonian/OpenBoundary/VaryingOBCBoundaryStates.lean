@@ -89,11 +89,12 @@ theorem obcBoundaryState_pair_section (b : ℕ → ℕ)
 /-- Every full-chain boundary state is annihilated by the open
 parent Hamiltonian. No spanning or canonical normalization hypothesis is used.
 Source: PGVWC07, Theorem 9 and equation unique-OBC, lines 1201–1220. -/
-theorem obcParentHamiltonian_apply_obcBoundaryState (b : ℕ → ℕ)
+theorem hamiltonian_obcParentInteraction_apply_obcBoundaryState (b : ℕ → ℕ)
     (A : ∀ k, Fin d → Matrix (Fin (b k)) (Fin (b (k + 1))) ℂ) (N : ℕ)
     (Z : Matrix (Fin (b N)) (Fin (b 0)) ℂ) :
-    obcParentHamiltonian b A N (obcBoundaryState b A N Z) = 0 := by
-  apply (obcParentHamiltonian_apply_eq_zero_iff b A N _).mpr
+    Matrix.toEuclideanLin (obcParentInteraction b A N).hamiltonian
+      (obcBoundaryState b A N Z) = 0 := by
+  apply (hamiltonian_obcParentInteraction_apply_eq_zero_iff b A N _).mpr
   intro p q h u v
   apply (obcPairProjector_apply_eq_zero_iff b A p _).mpr
   exact obcBoundaryState_pair_section b A h Z u v

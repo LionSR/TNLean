@@ -8,6 +8,7 @@ import TNLean.MPS.Tensor.CyclicWindowIndex
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.CyclicWindowPermutation
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Gap.Filtration.SpectatorTransport
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 
 /-!
 # Cyclic windows as open parent Hamiltonians
@@ -33,24 +34,6 @@ open scoped BigOperators
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- The periodic local-term family indexed by the cyclic group of sites. -/
-noncomputable def zmodLocalTermES {N : ℕ} [NeZero N]
-    (A : MPSTensor d D) (R : ℕ) :
-    ZMod N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  fun s ↦ localTermES A R ((ZMod.finEquiv N).symm s)
-
-/-- Reindexing periodic local terms by \(\mathbb Z/N\mathbb Z\) preserves their total sum. -/
-theorem sum_zmodLocalTermES_eq_parentHamiltonianES {N : ℕ} [NeZero N]
-    (A : MPSTensor d D) (R : ℕ) :
-    (∑ s : ZMod N, zmodLocalTermES A R s) = parentHamiltonianES A R N := by
-  rw [parentHamiltonianES_eq_sum_localTermES]
-  calc
-    (∑ s : ZMod N, zmodLocalTermES A R s) =
-        ∑ i : Fin N, zmodLocalTermES A R (ZMod.finEquiv N i) :=
-      ((ZMod.finEquiv N).toEquiv.sum_comp (zmodLocalTermES A R)).symm
-    _ = ∑ i : Fin N, localTermES A R i := by
-      simp [zmodLocalTermES]
 
 /-- Two range-\(R\) cyclic windows are disjoint when their oriented start
 separation \(e\) satisfies \(R \leq e\) and \(e + R \leq N\). -/
@@ -84,18 +67,6 @@ theorem cyclicWindowsDisjoint_cyclicForwardSite_of_oriented_separation
   have hab : a = e + b := by
     simpa [Nat.ModEq, Nat.mod_eq_of_lt haN, Nat.mod_eq_of_lt hebN] using hcancel
   omega
-
-/-- The oriented-separation condition gives the commutation hypothesis used in
-the finite-range Knabe inequality. -/
-theorem zmodLocalTermES_commute_of_oriented_separation {N R e : ℕ} [NeZero N]
-    (A : MPSTensor d D) (hR : R ≤ e) (he : e + R ≤ N)
-    (s : ZMod N) (v : EuclideanSpace ℂ (Cfg d N)) :
-    zmodLocalTermES A R s (zmodLocalTermES A R (s + (e : ZMod N)) v) =
-      zmodLocalTermES A R (s + (e : ZMod N)) (zmodLocalTermES A R s v) := by
-  rw [zmodLocalTermES, zmodLocalTermES,
-    finEquiv_symm_add_eq_cyclicForwardSite]
-  exact localTermES_commute_of_cyclic_windows_disjoint A (by omega)
-    (cyclicWindowsDisjoint_cyclicForwardSite_of_oriented_separation hR he _) v
 
 /-- Split a periodic configuration into a cyclic active block of length \(W\) and
 its ordered complement. -/
@@ -308,28 +279,82 @@ theorem extractWindow_join_cyclicActiveBlock {N W R : ℕ}
   apply Fin.ext
   simp [Nat.mod_eq_of_lt hqrW]
 
-/-- A periodic range-\(R\) local term inside a cyclic active block becomes the
-corresponding nonwrapping local term on the active sites, independently on each
-spectator configuration. -/
-theorem localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv
-    {N W R : ℕ} (A : MPSTensor d D) (hWN : W ≤ N) (s : Fin N)
+/-! ### Blocks of consecutive terms on the ring
+
+For a local matrix `h` on `R` sites, the terms of its translates on the ring
+(`ManyBody.Interaction.translationInvariant`) with windows inside one window of `W` consecutive
+sites add up to the translate of the open-chain Hamiltonian of `h` on `W` sites
+(`ManyBody.Interaction.chainTranslates`); in the cyclic active-block coordinates of its window, a
+term acts on the active block only. -/
+
+section RingTerms
+
+open Fin.CommRing
+
+variable {R N : ℕ}
+
+/-- A term of the translates of `h` on the ring acts at a configuration \(σ\) as `h` on the
+cyclic restriction to its window, read at the window of \(σ\). -/
+theorem toEuclideanLin_translationInvariant_term_apply (hRN : R ≤ N)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N))
+    (σ : Cfg d N) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) v σ =
+      Matrix.toEuclideanLin h (cyclicRestrictES (Fin.pos i) R i σ v) (extractWindow R i σ) := by
+  have : NeZero N := NeZero.of_pos i.pos
+  rw [ManyBody.Interaction.translationInvariant_term_of_le _ hRN i, Matrix.toLpLin_apply,
+    Matrix.toLpLin_apply]
+  change Matrix.mulVec (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hRN i) h)
+    (WithLp.ofLp v) σ = Matrix.mulVec h _ _
+  rw [ManyBody.placeAlong_mulVec_apply_of _ _ _ σ (replaceWindow R hRN i σ)
+    (replaceWindow_ringWindow hRN i σ)
+    (fun τ _ hv ↦ replaceWindow_of_forall_ringWindow_ne hRN i σ τ hv)]
+  rfl
+
+/-- A term of the translates of `h` on the ring is the cyclic average of the conjugates of `h`
+by the restrictions to its window. -/
+theorem toEuclideanLin_translationInvariant_term_eq_inv_smul_sum (hRN : R ≤ N)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) =
+      (((d ^ R : ℕ) : ℂ)⁻¹) • ∑ τ : Cfg d N,
+        (cyclicRestrictES (Fin.pos i) R i τ).adjoint ∘ₗ Matrix.toEuclideanLin h ∘ₗ
+          cyclicRestrictES (Fin.pos i) R i τ := by
+  have : NeZero N := NeZero.of_pos i.pos
+  ext v σ
+  rw [toEuclideanLin_translationInvariant_term_apply hRN,
+    inv_smul_sum_adjoint_comp_cyclicRestrictES_apply hRN]
+
+/-- A term of the translates of `h` on the ring whose window lies inside a cyclic active block
+of `W` sites becomes, in the coordinates of that block, the corresponding term of the translates
+of `h` on the ring of `W` sites, acting independently on every spectator configuration. -/
+theorem toEuclideanLin_translationInvariant_term_conj_cyclicActiveBlock
+    {W : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hWN : W ≤ N) (s : Fin N)
     (q : Fin W) (hqR : q.val + R ≤ W) :
+    haveI : NeZero N := NeZero.of_pos s.pos;
+    haveI : NeZero W := NeZero.of_pos q.pos;
     (cyclicActiveBlockConfigLinearIsometryEquiv d W hWN s).toLinearEquiv.toLinearMap.comp
-        ((localTermES A R (cyclicForwardSite s q.val)).comp
+        ((Matrix.toEuclideanLin
+          ((ManyBody.Interaction.translationInvariant N h).term (cyclicForwardSite s q.val))).comp
           (cyclicActiveBlockConfigLinearIsometryEquiv d W hWN s).symm.toLinearEquiv.toLinearMap) =
       (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-        (LinearMap.toContinuousLinearMap (localTermES A R q))).toLinearMap := by
+        (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin
+          ((ManyBody.Interaction.translationInvariant W h).term q)))).toLinearMap := by
+  have : NeZero N := NeZero.of_pos s.pos
+  have : NeZero W := NeZero.of_pos q.pos
   apply LinearMap.ext
   intro x
   apply PiLp.ext
   rintro ⟨σ, τ⟩
   simp only [LinearMap.comp_apply]
-  change localTermES A R (cyclicForwardSite s q.val)
+  change Matrix.toEuclideanLin
+      ((ManyBody.Interaction.translationInvariant N h).term (cyclicForwardSite s q.val))
       ((cyclicActiveBlockConfigLinearIsometryEquiv d W hWN s).symm x)
         ((cyclicActiveBlockConfigEquiv d W hWN s).symm (σ, τ)) =
-    localTermES A R q (ContinuousLinearMap.rightFiber x τ) σ
-  rw [localTermES_apply A R (cyclicForwardSite s q.val) (by omega),
-    localTermES_apply A R q (by omega)]
+    Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant W h).term q)
+      (ContinuousLinearMap.rightFiber x τ) σ
+  rw [toEuclideanLin_translationInvariant_term_apply (by omega : R ≤ N),
+    toEuclideanLin_translationInvariant_term_apply (by omega : R ≤ W)]
   have hrestrict :
       cyclicRestrictES (d := d) (Fin.pos (cyclicForwardSite s q.val)) R
           (cyclicForwardSite s q.val)
@@ -350,78 +375,45 @@ theorem localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv
   rw [hrestrict,
     extractWindow_join_cyclicActiveBlock hWN s q hqR σ τ]
 
-private def cyclicBlockStartEquiv {R m : ℕ} (hR : 1 ≤ R) :
-    Fin m ≃ NonwrappingStart R (m + R - 1) where
-  toFun q := by
-    have hq := q.isLt
-    let j : Fin (m + R - 1) := ⟨q.val, by omega⟩
-    refine ⟨j, ?_⟩
-    change q.val + R ≤ m + R - 1
-    omega
-  invFun i := ⟨i.1.val, by
-    have hi := i.2
-    omega⟩
-  left_inv q := by
-    apply Fin.ext
-    rfl
-  right_inv i := by
-    apply Subtype.ext
-    apply Fin.ext
-    rfl
+/-- In the cyclic active-block coordinates of its window, a term of the translates of `h` on the
+ring is `h` on the active block, acting independently on every spectator configuration. Source:
+PGVWC07, arXiv:quant-ph/0608197, Theorem 11 proof, lines 1418–1422. -/
+theorem cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply
+    (hRN : R ≤ N) (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N)
+    (ψ : EuclideanSpace ℂ (Cfg d N)) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
+        (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) ψ) =
+      ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R))
+        (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin h))
+        (cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i ψ) := by
+  have : NeZero N := NeZero.of_pos i.pos
+  let U := cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
+  let e := cyclicActiveBlockConfigEquiv d R hRN i
+  apply U.symm.injective
+  rw [LinearIsometryEquiv.symm_apply_apply]
+  ext σ
+  rw [toEuclideanLin_translationInvariant_term_apply hRN,
+    cyclicActiveBlockConfigLinearIsometryEquiv_symm_apply_apply]
+  change Matrix.toEuclideanLin h _ (extractWindow R i σ) =
+    Matrix.toEuclideanLin h (ContinuousLinearMap.rightFiber (U ψ) (e σ).2) (extractWindow R i σ)
+  apply congrArg
+    (fun w : EuclideanSpace ℂ (Cfg d R) => Matrix.toEuclideanLin h w (extractWindow R i σ))
+  ext ω
+  change ψ (cyclicCfg (Fin.pos i) R i ω σ) = ψ (e.symm (ω, (e σ).2))
+  rcases Nat.eq_zero_or_pos R with rfl | hR
+  · have hω : ω = (e σ).1 := Subsingleton.elim _ _
+    rw [hω, Prod.mk.eta, Equiv.symm_apply_apply]
+    exact congrArg ψ (funext fun k ↦ by simp [cyclicCfg])
+  · have hfull (ξ : Cfg d R) : cyclicCfg hR R (⟨0, hR⟩ : Fin R) ω ξ = ω := by
+      funext j
+      simp [cyclicCfg, Nat.mod_eq_of_lt j.isLt]
+    have hj := cyclicCfg_join_cyclicActiveBlock hRN i (⟨0, hR⟩ : Fin R)
+      (by simp) ω (e σ).1 (e σ).2
+    simp only [cyclicForwardSite_zero, hfull, Prod.mk.eta] at hj
+    rw [Equiv.symm_apply_apply] at hj
+    exact congrArg ψ hj
 
-/-- A Knabe block of \(m\) consecutive range-\(R\) periodic terms is the
-fiberwise open parent Hamiltonian on exactly \(m + R - 1\) active sites.
-
-The assumptions \(1 \leq R\), \(R \leq m\), and \(2m \leq N\) ensure that the active
-interval fits inside the periodic chain and contains every one of the \(m\)
-nonwrapping interaction windows. -/
-theorem cyclicWindowSum_zmodLocalTermES_conj_cyclicActiveBlock
-    {N R m : ℕ} [NeZero N] (A : MPSTensor d D)
-    (hR : 1 ≤ R) (hmR : R ≤ m) (hN : 2 * m ≤ N) (s : ZMod N) :
-    let W := m + R - 1
-    let i := (ZMod.finEquiv N).symm s
-    let U := cyclicActiveBlockConfigLinearIsometryEquiv d W (by omega) i
-    U.toLinearEquiv.toLinearMap.comp
-        ((ProjectionGeometry.cyclicWindowSum (zmodLocalTermES A R) m s).comp
-          U.symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-        (LinearMap.toContinuousLinearMap
-          (openParentHamiltonianES A R W))).toLinearMap := by
-  classical
-  dsimp only
-  let i := (ZMod.finEquiv N).symm s
-  let U := cyclicActiveBlockConfigLinearIsometryEquiv d (m + R - 1) (by omega) i
-  apply LinearMap.ext
-  intro x
-  simp only [ProjectionGeometry.cyclicWindowSum, openParentHamiltonianES,
-    LinearMap.comp_apply, LinearMap.sum_apply, map_sum,
-    ContinuousLinearMap.rightFiberwiseMap_sum]
-  calc
-    (∑ q : Fin m,
-        U (zmodLocalTermES A R (s + (q.val : ZMod N)) (U.symm x))) =
-      ∑ q : Fin m,
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - (m + R - 1)))
-          (LinearMap.toContinuousLinearMap
-            (localTermES A R (cyclicBlockStartEquiv hR q).1)) x := by
-        apply Finset.sum_congr rfl
-        intro q _
-        have hstart : (ZMod.finEquiv N).symm (s + (q.val : ZMod N)) =
-            cyclicForwardSite i q.val := by
-          simpa [i] using finEquiv_symm_add_eq_cyclicForwardSite s q.val
-        change U (localTermES A R ((ZMod.finEquiv N).symm
-            (s + (q.val : ZMod N))) (U.symm x)) = _
-        rw [hstart]
-        exact LinearMap.congr_fun
-          (localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv A
-            (by omega) i (cyclicBlockStartEquiv hR q).1
-            (cyclicBlockStartEquiv hR q).2) x
-    _ = ∑ q : NonwrappingStart R (m + R - 1),
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - (m + R - 1)))
-          (LinearMap.toContinuousLinearMap (localTermES A R q.1)) x := by
-      exact Fintype.sum_equiv (cyclicBlockStartEquiv hR) _ _ fun _ ↦ rfl
-    _ = (∑ q : NonwrappingStart R (m + R - 1),
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - (m + R - 1)))
-          (LinearMap.toContinuousLinearMap (localTermES A R q.1))) x := by
-      simp
+end RingTerms
 
 end MPSTensor

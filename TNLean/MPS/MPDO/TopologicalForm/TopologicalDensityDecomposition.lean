@@ -559,7 +559,7 @@ to the all-label recursive density operator.
 Source: arXiv:1606.00608, density identity at line 999. -/
 theorem singleKrausMap_verticalCoisometry_mpo_eq_topologicalDensityOperatorSucc
     (H : BNTFusionTensorClause M) (N : ℕ) :
-    singleKrausMap (Matrix.tensorPower (N + 1) H.verticalCoisometry)
+    singleKrausMap (Matrix.piKronecker fun _ : Fin (N + 1) ↦ H.verticalCoisometry)
         (mpo M (N + 1)) = H.topologicalDensityOperatorSucc N := by
   rw [singleKrausMap_tensorPower_mpo]
   exact H.mpo_changePhysicalBasis_verticalCoisometry_eq_topologicalDensityOperatorSucc N
@@ -575,7 +575,7 @@ reconstruction of Proposition 4.13, not a square-unitary identity.  See
 `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`. -/
 theorem singleKrausMap_conjTranspose_verticalCoisometry_topologicalDensityOperatorSucc_eq_mpo
     (H : BNTFusionTensorClause M) (N : ℕ) :
-    singleKrausMap (Matrix.tensorPower (N + 1) H.verticalCoisometryᴴ)
+    singleKrausMap (Matrix.piKronecker fun _ : Fin (N + 1) ↦ H.verticalCoisometryᴴ)
         (H.topologicalDensityOperatorSucc N) = mpo M (N + 1) := by
   rw [← H.singleKrausMap_verticalCoisometry_mpo_eq_topologicalDensityOperatorSucc N,
     singleKrausMap_tensorPower_mpo H.verticalCoisometry M (N + 1),
@@ -598,9 +598,9 @@ the retained nonzero sectors of Proposition 4.13 and Appendix C.4, lines 2020--2
 `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`. -/
 def HasTopologicalDensityDecomposition (H : BNTFusionTensorClause M) : Prop :=
   ∀ N : ℕ,
-    singleKrausMap (Matrix.tensorPower (N + 1) H.verticalCoisometry)
+    singleKrausMap (Matrix.piKronecker fun _ : Fin (N + 1) ↦ H.verticalCoisometry)
         (mpo M (N + 1)) = H.topologicalDensityOperatorSucc N ∧
-      singleKrausMap (Matrix.tensorPower (N + 1) H.verticalCoisometryᴴ)
+      singleKrausMap (Matrix.piKronecker fun _ : Fin (N + 1) ↦ H.verticalCoisometryᴴ)
         (H.topologicalDensityOperatorSucc N) = mpo M (N + 1)
 
 /-- The line-1001 commutator for the same all-label factors at every positive chain length.

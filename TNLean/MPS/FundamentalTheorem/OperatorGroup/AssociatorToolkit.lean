@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexOfInt
-import TNLean.Algebra.ComplexOfRing
+import QICLean.Algebra.Matrix.ComplexOfRing
 import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.Operator.Defs
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.Associator
@@ -151,22 +151,22 @@ variable {R : Type*} [CommRing R] (f : R →+* ℂ)
 
 /-- `X ⊗ 1` commutes with the entrywise image of a ring homomorphism into `ℂ`. -/
 theorem kronId_complexOfRing {m n : ℕ} (X : Matrix (Fin m) (Fin n) R) (D : ℕ) :
-    kronId (MPSTensor.complexOfRing f X) D =
-      MPSTensor.complexOfRing f ((X ⊗ₖ (1 : Matrix (Fin D) (Fin D) R)).submatrix
+    kronId (Matrix.complexOfRing f X) D =
+      Matrix.complexOfRing f ((X ⊗ₖ (1 : Matrix (Fin D) (Fin D) R)).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm) := by
   ext r c
   simp only [kronId, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
-    MPSTensor.complexOfRing_apply, Matrix.one_apply, map_mul]
+    Matrix.complexOfRing_apply, Matrix.one_apply, map_mul]
   split_ifs <;> simp
 
 /-- `1 ⊗ X` commutes with the entrywise image of a ring homomorphism into `ℂ`. -/
 theorem idKron_complexOfRing {m n : ℕ} (D : ℕ) (X : Matrix (Fin m) (Fin n) R) :
-    idKron D (MPSTensor.complexOfRing f X) =
-      MPSTensor.complexOfRing f (((1 : Matrix (Fin D) (Fin D) R) ⊗ₖ X).submatrix
+    idKron D (Matrix.complexOfRing f X) =
+      Matrix.complexOfRing f (((1 : Matrix (Fin D) (Fin D) R) ⊗ₖ X).submatrix
         finProdFinEquiv.symm finProdFinEquiv.symm) := by
   ext r c
   simp only [idKron, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
-    MPSTensor.complexOfRing_apply, Matrix.one_apply, map_mul]
+    Matrix.complexOfRing_apply, Matrix.one_apply, map_mul]
   split_ifs <;> simp
 
 end ComplexOfRing

@@ -181,17 +181,17 @@ theorem varyingPhysicalParentHamiltonian_uniform_apply_eq_zero_iff
     (A : ∀ k, Fin d → Matrix (Fin (D k)) (Fin (D (k + 1))) ℂ)
     {N : ℕ} (ψ : EuclideanSpace ℂ (Fin N → Fin d)) :
     varyingPhysicalParentHamiltonian (fun _ : Fin N ↦ Fin d) D (fun k ↦ A k.val) ψ = 0 ↔
-      obcParentHamiltonian D A N ψ = 0 := by
+      Matrix.toEuclideanLin (obcParentInteraction D A N).hamiltonian ψ = 0 := by
   classical
   let f : List (Fin d) → ℂ := Function.extend List.ofFn (fun w ↦ ψ w) 0
   have hf (w : Fin N → Fin d) : f (List.ofFn w) = ψ w :=
     List.ofFn_injective.extend_apply (fun w ↦ ψ w) 0 w
   constructor
   · intro hzero
-    apply (obcParentHamiltonian_apply_eq_zero_iff_pair_sections D A ψ f hf).mpr
+    apply (hamiltonian_obcParentInteraction_apply_eq_zero_iff_pair_sections D A ψ f hf).mpr
     exact uniform_parent_list_sections_of_eq_zero D A ψ f hf hzero
   · intro hzero
-    have hpair := obcParentHamiltonian_pair_sections_of_apply_eq_zero D A ψ f hf hzero
+    have hpair := pair_sections_of_hamiltonian_obcParentInteraction_apply_eq_zero D A ψ f hf hzero
     simp only [varyingPhysicalParentHamiltonian, LinearMap.sum_apply]
     apply Finset.sum_eq_zero
     intro j _

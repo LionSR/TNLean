@@ -109,18 +109,19 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 2104--2105 (trunc
 `U = ⊗_{i ∈ Λ} u^{[i]}` gives `U^{[a,b]} = ⊗_{i ∈ [a,b]} u^{[i]}`). -/
 noncomputable def onSiteTruncation (u : Matrix ι ι ℂ) (S : Finset (Fin N)) :
     Matrix (Fin N → ι) (Fin N → ι) ℂ :=
-  finKronecker fun k ↦ if k ∈ S then u else 1
+  Matrix.piKronecker fun k ↦ if k ∈ S then u else 1
 
+omit [Fintype ι] in
 /-- The truncation of an on-site symmetry to all sites is the symmetry `u^{⊗N}`. -/
 theorem onSiteTruncation_univ (u : Matrix ι ι ℂ) :
-    onSiteTruncation u (Finset.univ : Finset (Fin N)) = finKronecker fun _ : Fin N ↦ u := by
+    onSiteTruncation u (Finset.univ : Finset (Fin N)) = Matrix.piKronecker fun _ : Fin N ↦ u := by
   simp [onSiteTruncation]
 
 /-- A truncation of an on-site symmetry with `u† u = 1` satisfies the same relation. -/
 theorem onSiteTruncation_conjTranspose_mul_self {u : Matrix ι ι ℂ} (hu : uᴴ * u = 1)
     (S : Finset (Fin N)) : (onSiteTruncation u S)ᴴ * onSiteTruncation u S = 1 := by
-  rw [onSiteTruncation, finKronecker_conjTranspose, ← finKronecker_mul]
-  convert finKronecker_one (α := fun _ : Fin N ↦ ι) using 2
+  rw [onSiteTruncation, Matrix.conjTranspose_piKronecker, Matrix.piKronecker_mul]
+  convert Matrix.piKronecker_one (ι := fun _ : Fin N ↦ ι) using 2
   funext k
   split_ifs <;> simp [hu]
 
@@ -131,9 +132,10 @@ and `u†`, and they cancel. -/
 theorem groupCommutator_onSiteTruncation {u : Matrix ι ι ℂ} (hu : uᴴ * u = 1)
     (S₁ S₂ : Finset (Fin N)) :
     groupCommutator (onSiteTruncation u S₁) (onSiteTruncation u S₂) = 1 := by
-  rw [groupCommutator, onSiteTruncation, onSiteTruncation, finKronecker_conjTranspose,
-    finKronecker_conjTranspose, ← finKronecker_mul, ← finKronecker_mul, ← finKronecker_mul]
-  convert finKronecker_one (α := fun _ : Fin N ↦ ι) using 2
+  rw [groupCommutator, onSiteTruncation, onSiteTruncation, Matrix.conjTranspose_piKronecker,
+    Matrix.conjTranspose_piKronecker, Matrix.piKronecker_mul, Matrix.piKronecker_mul,
+    Matrix.piKronecker_mul]
+  convert Matrix.piKronecker_one (ι := fun _ : Fin N ↦ ι) using 2
   funext k
   split_ifs <;> simp [hu, Matrix.mul_assoc]
 
@@ -186,9 +188,10 @@ theorem groupCommutator_dressed_onSiteTruncation_pauliX {S₁ S₂ : Finset (Fin
     (hj₁ : j₁ ∈ S₂) (hj₂ : j₂ ∉ S₁) (hj : j₁ ≠ j₂) :
     groupCommutator (onSiteTruncation σZ {j₁} * onSiteTruncation σX S₁)
         (onSiteTruncation σZ {j₂} * onSiteTruncation σX S₂) = -1 := by
-  simp only [groupCommutator, onSiteTruncation, ← finKronecker_mul, finKronecker_conjTranspose]
+  simp only [groupCommutator, onSiteTruncation, Matrix.piKronecker_mul,
+      Matrix.conjTranspose_piKronecker]
   rw [← neg_one_smul ℂ (1 : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ),
-    ← finKronecker_ite_smul_one (α := fun _ ↦ Fin 2) j₁]
+    ← Matrix.piKronecker_ite_smul_one (ι := fun _ ↦ Fin 2) j₁]
   congr 1
   funext k
   simp only [Finset.mem_singleton]

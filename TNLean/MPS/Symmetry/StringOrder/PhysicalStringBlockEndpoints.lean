@@ -118,7 +118,7 @@ private theorem exists_isHermitian_finKronecker_ne_zero
     {n : ℕ} (f : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ →ₗ[ℂ] ℂ)
     {X : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ} (hX : f X ≠ 0) :
     ∃ p : Fin n → Matrix (Fin d) (Fin d) ℂ,
-      (∀ i, (p i).IsHermitian) ∧ f (Matrix.finKronecker p) ≠ 0 := by
+      (∀ i, (p i).IsHermitian) ∧ f (Matrix.piKronecker p) ≠ 0 := by
   classical
   have hunit : ∃ σ τ : Fin n → Fin d, f (Matrix.single σ τ 1) ≠ 0 := by
     by_contra! h
@@ -133,9 +133,9 @@ private theorem exists_isHermitian_finKronecker_ne_zero
     exact hX (by rw [hf]; rfl)
   obtain ⟨σ, τ, hστ⟩ := hunit
   let p₀ : Fin n → Matrix (Fin d) (Fin d) ℂ := fun i => Matrix.single (σ i) (τ i) 1
-  have hp₀ : Matrix.finKronecker p₀ = Matrix.single σ τ 1 := by
+  have hp₀ : Matrix.piKronecker p₀ = Matrix.single σ τ 1 := by
     ext a b
-    simp only [Matrix.finKronecker_apply, p₀, Matrix.single_apply]
+    simp only [Matrix.piKronecker_apply, p₀, Matrix.single_apply]
     rw [Finset.prod_boole]
     congr 1
     apply propext
@@ -153,7 +153,7 @@ private theorem exists_isHermitian_finKronecker_ne_zero
           (LinearMap.proj (a i) : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ] (Fin d → ℂ)))
   let F := f.compMultilinearMap k
   have hF (p : Fin n → Matrix (Fin d) (Fin d) ℂ) :
-      F p = f (Matrix.finKronecker p) := rfl
+      F p = f (Matrix.piKronecker p) := rfl
   have hpartial : ∀ S : Finset (Fin n),
       ∃ p : Fin n → Matrix (Fin d) (Fin d) ℂ,
         (∀ i ∈ S, (p i).IsHermitian) ∧ F p ≠ 0 := by
@@ -197,9 +197,9 @@ theorem exists_isHermitian_physicalStringProductEndpoints
     (hNorm : Kraus.transferMap A 1 = 1) (V : Mat) (hV : V * Vᴴ = 1) :
     ∃ x y : Fin (D ^ 2) → Matrix (Fin d) (Fin d) ℂ,
       (∀ i, (x i).IsHermitian) ∧ (∀ i, (y i).IsHermitian) ∧
-        Matrix.trace (Λ * physicalObservableTransfer A (D ^ 2) (Matrix.finKronecker x) V) ≠ 0 ∧
+        Matrix.trace (Λ * physicalObservableTransfer A (D ^ 2) (Matrix.piKronecker x) V) ≠ 0 ∧
         Matrix.trace
-          (Λ * Vᴴ * physicalObservableTransfer A (D ^ 2) (Matrix.finKronecker y) 1) ≠ 0 := by
+          (Λ * Vᴴ * physicalObservableTransfer A (D ^ 2) (Matrix.piKronecker y) 1) ≠ 0 := by
   classical
   have hV' : Vᴴ * V = 1 := mul_eq_one_comm.mp hV
   let l : Mat →ₗ[ℂ] ℂ := (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp

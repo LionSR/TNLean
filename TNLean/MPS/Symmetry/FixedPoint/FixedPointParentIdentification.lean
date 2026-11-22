@@ -93,28 +93,31 @@ theorem twoSiteBondInteraction_apply_eq_zero_iff_sptFixedPointTensor
 /-- The canonical two-site parent interaction of the matrix-unit fixed point
 is exactly the independent-bond penalty. Source: arXiv:1010.3732,
 Section II.D.2, `eq:phase-nosym:iso-hamiltonian`. -/
-theorem twoSiteBondInteraction_eq_parentInteractionES_sptFixedPointTensor
+theorem twoSiteBondInteraction_eq_parentInteraction_sptFixedPointTensor
     (D : ℕ) (hD : 0 < D) :
-    Matrix.toEuclideanLin
-      (twoSiteBondInteraction
+    twoSiteBondInteraction
         (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
-          (bondPenalty (matrixUnitBondVector D)))) =
-      parentInteractionES (sptFixedPointTensor D) 2 := by
+          (bondPenalty (matrixUnitBondVector D))) =
+      LinearMap.toMatrix' (parentInteraction (sptFixedPointTensor D) 2) := by
+  apply Matrix.toEuclideanLin.injective
   let B := Matrix.toEuclideanLin
     (twoSiteBondInteraction
       (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
         (bondPenalty (matrixUnitBondVector D))))
+  let P := Matrix.toEuclideanLin
+    (LinearMap.toMatrix' (parentInteraction (sptFixedPointTensor D) 2))
   have hB : B.IsSymmetricProjection :=
     twoSiteBondInteraction_bondPenalty_isSymmetricProjection
       (matrixUnitBondVector D) (matrixUnitBondVector_sum_normSq D hD)
-  have hP := parentInteractionES_isSymmetricProjection (sptFixedPointTensor D) 2
+  have hP : P.IsSymmetricProjection :=
+    isSymmetricProjection_toEuclideanLin_toMatrix'_parentInteraction (sptFixedPointTensor D) 2
   apply hB.ext hP
   rw [← Submodule.orthogonal_orthogonal B.range, hB.isSymmetric.orthogonal_range,
-    ← Submodule.orthogonal_orthogonal (parentInteractionES (sptFixedPointTensor D) 2).range,
-    hP.isSymmetric.orthogonal_range]
+    ← Submodule.orthogonal_orthogonal P.range, hP.isSymmetric.orthogonal_range]
   congr 1
   ext v
   exact (twoSiteBondInteraction_apply_eq_zero_iff_sptFixedPointTensor D hD v).trans
-    (parentInteractionES_apply_eq_zero_iff (sptFixedPointTensor D) 2 v).symm
+    (toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff
+      (sptFixedPointTensor D) 2 v).symm
 
 end MPSTensor

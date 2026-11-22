@@ -522,7 +522,7 @@ rectangular matrix as a square unitary.  See
 theorem singleKrausMap_gibbsDecomposition_eq_mpo
     (H : BNTFusionTensorClause M) (hM : IsMPDO M) (N : ℕ) :
     singleKrausMap
-        (Matrix.tensorPower (N + 2) H.verticalCoisometryᴴ)
+        (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.verticalCoisometryᴴ)
         (∑ s : H.TerminalSpectralIndex,
           (H.terminalEigenvalue hM s : ℂ) •
             (H.topologicalSpectralProjectorSucc hM (N + 1) s *
@@ -548,7 +548,7 @@ the adjoint retained-row map.  See
 theorem singleKrausMap_physicalIndexedGibbsDecomposition_eq_mpo
     (H : BNTFusionTensorClause M) (hM : IsMPDO M) (N : ℕ) :
     singleKrausMap
-        (Matrix.tensorPower (N + 2) H.verticalCoisometryᴴ)
+        (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.verticalCoisometryᴴ)
         (∑ i : Fin d,
           (H.physicalIndexedTerminalEigenvalue hM i : ℂ) •
             (H.physicalIndexedTopologicalSpectralProjectorSucc
@@ -611,7 +611,7 @@ def HasTopologicalGibbsDecomposition (H : BNTFusionTensorClause M)
               NormedSpace.exp
                 (-H.topologicalGibbsHamiltonianSuccSucc N)) ∧
       singleKrausMap
-          (Matrix.tensorPower (N + 2) H.verticalCoisometryᴴ)
+          (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.verticalCoisometryᴴ)
           (∑ i : Fin d,
             (H.physicalIndexedTerminalEigenvalue hM i : ℂ) •
               (H.physicalIndexedTopologicalSpectralProjectorSucc

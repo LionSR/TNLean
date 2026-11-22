@@ -74,7 +74,7 @@ theorem IsGInjective.torusParentGroundSpace_eq_commutingClosureSpan_of_isSemiReg
   have h := ha.torusParentKernel_eq_commutingClosureSpan_of_isSemiRegular hU hSemi
     (fun v => canonicalRegionParentInteraction A (torusPlaquetteRegion v))
     (fun v => isRegionParentInteraction_canonical A (torusPlaquetteRegion v))
-  rwa [ker_regionParentHamiltonian A torusPlaquetteRegion _
+  rwa [ker_hamiltonian_ofPlace A torusPlaquetteRegion _
     (fun v => isRegionParentInteraction_canonical A (torusPlaquetteRegion v))] at h
 
 end TNLean.PEPS

@@ -95,21 +95,20 @@ theorem groundSpaceES_reindexPhysical_equiv
   · rintro ⟨w, ⟨x, rfl⟩, rfl⟩
     exact ⟨x, (physicalReindexLinearIsometryEquiv_groundSpaceMapES e A N x).symm⟩
 
-/-- The canonical local parent projection is conjugated by the physical
+/-- The operator of the canonical local parent matrix is conjugated by the physical
 configuration isometry under an alphabet bijection. -/
-theorem parentInteractionES_reindexPhysical_equiv
+theorem toEuclideanLin_toMatrix'_parentInteraction_reindexPhysical_equiv
     (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D) (N : ℕ) :
-    parentInteractionES (Kraus.reindexPhysical e A) N =
+    Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction (Kraus.reindexPhysical e A) N)) =
       (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.conj
-        (parentInteractionES A N) := by
+        (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A N))) := by
+  rw [toEuclideanLin_toMatrix'_parentInteraction, toEuclideanLin_toMatrix'_parentInteraction]
   have hOrth : (groundSpaceES (Kraus.reindexPhysical e A) N)ᗮ =
       ((groundSpaceES A N)ᗮ).map
         (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.toLinearMap := by
     rw [groundSpaceES_reindexPhysical_equiv, Submodule.map_orthogonal_equiv]
-  have hProj := congrArg
-    (fun S : Submodule ℂ (EuclideanSpace ℂ (Cfg d₁ N)) =>
-      S.starProjection.toLinearMap) hOrth
-  refine hProj.trans ?_
+  refine (congrArg (fun S : Submodule ℂ (EuclideanSpace ℂ (Cfg d₁ N)) ↦
+    S.starProjection.toLinearMap) hOrth).trans ?_
   apply LinearMap.ext
   intro v
   exact Submodule.starProjection_map_apply

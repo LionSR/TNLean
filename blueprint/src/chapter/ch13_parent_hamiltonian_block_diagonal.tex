@@ -572,7 +572,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \begin{lemma}[Open-chain ground space of trace-preserving blocks]
     \label{thm:ph_tp_block_open_ground_space}
     \lean{MPSTensor.contiguous_mem_groundSpace_toTensorFromBlocks,
-        MPSTensor.ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES}
+        MPSTensor.ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES}
     \leanok
     Let $d>0$, and let $B=\bigoplus_j\mu_j A^j$, where every $\mu_j$ is nonzero
     and $\sum_a(A^{j,a})^\dagger A^{j,a}=\Id$ for every $j$.
@@ -744,7 +744,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 
 \begin{lemma}[Uniform open-chain kernel threshold for primitive blocks]
     \label{thm:ph_primitive_blocks_open_kernel}
-    \lean{MPSTensor.exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES}
+    \lean{MPSTensor.exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES}
     \leanok
     \uses{def:primitive_mps, def:gauge_phase_equiv}
     Let $d>0$ and $B=\bigoplus_j\mu_jA^j$, with nonzero coefficients $\mu_j$.
@@ -826,7 +826,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \begin{lemma}[Blockwise replacement preserves parent Hamiltonians]
     \label{thm:ph_block_replacement_parent_equality}
     \lean{MPSTensor.groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq,
-        MPSTensor.parentHamiltonianES_toTensorFromBlocks_eq_of_block_groundSpace_eq}
+        MPSTensor.hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_of_block_groundSpace_eq}
     \leanok
     \uses{def:parent_hamiltonian_es}
     Let $A^j$ and $B^j$ have the same respective bond dimensions, and let
@@ -846,7 +846,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 
 \begin{lemma}[Primitive block representatives with unchanged Hamiltonians]
     \label{thm:ph_primitive_representatives_parent_equality}
-    \lean{MPSTensor.exists_hasComplementaryFixedPointGap_family_parentHamiltonianES_eq_of_isNormal}
+    \lean{MPSTensor.exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_isNormal}
     \leanok
     \uses{def:parent_hamiltonian_es}
     Let $A=\bigoplus_j\mu_jA^j$ have nonzero coefficients and normal blocks
@@ -868,7 +868,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 
 \begin{lemma}[Primitive normalization at a fixed C1 length]
     \label{lem:normal-block-primitive-c1-normalization}
-    \lean{MPSTensor.exists_hasComplementaryFixedPointGap_family_parentHamiltonianES_eq_of_common_isNBlkInjective}
+    \lean{MPSTensor.exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_common_isNBlkInjective}
     \leanok
     Suppose that a finite family of nonzero-dimensional MPS tensors is
     block injective at a common positive word length $L_0$, and that its members
@@ -915,7 +915,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 
 \begin{theorem}[The printed open-chain threshold for primitive blocks]
     \label{thm:ph_primitive_blocks_sharp_open_kernel}
-    \lean{MPSTensor.ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_threeBlock_bound}
+    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_threeBlock_bound}
     \leanok
     Let $d>0$, $r\ge2$, and $B=\bigoplus_{j=0}^{r-1}\mu_jA^j$, with all
     coefficients nonzero. Suppose that the blocks have positive bond
@@ -948,7 +948,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 
 \begin{lemma}[A periodic gap for normal block sums]
     \label{thm:normal_block_sum_parent_gap}
-    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isNormal, MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_isNormal}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_isNormal, MPSTensor.exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_threshold_of_isNormal}
     \leanok
     Let $A^0,\ldots,A^{r-1}$ be normal MPS tensors with positive physical and
     bond dimensions, pairwise inequivalent under virtual conjugation and
@@ -956,11 +956,8 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     every $\mu_j$ is nonzero.
     There is a positive integer $R_0$ such that, for every $R\geq R_0$,
     there are constants $\gamma_R>0$ and $N_R\in\mathbb N$ for which
-    the canonical periodic parent Hamiltonian $H_{R,N}$ satisfies
-    \begin{align}
-        \gamma_R\lVert v\rVert\leq\lVert H_{R,N}v\rVert
-    \end{align}
-    for every $N\geq N_R$ and every $v\perp\ker H_{R,N}$.
+    every nonzero eigenvalue of the canonical periodic parent Hamiltonian
+    $H_{R,N}$ is at least $\gamma_R$ for every $N\geq N_R$.
     In particular, at least one positive interaction range has a uniform
     eventual periodic gap.
 \end{lemma}
@@ -976,7 +973,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 
 \begin{lemma}[The gap at the prescribed interaction range]
     \label{thm:normal-block-parent-gap-three-block-bound}
-    \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_common_isNBlkInjective}
+    \lean{MPSTensor.exists_hamiltonian_parentRingInteraction_toTensorFromBlocks_uniform_gap_of_isNBlkInjective}
     \leanok
     Let $A^0,\ldots,A^{r-1}$, $r\geq2$, be MPS tensors with positive
     physical and bond dimensions, block injective at a common positive word
@@ -989,11 +986,9 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \end{align}
     there is a constant $\gamma_R>0$ such that the canonical periodic parent
     Hamiltonian $H_{R,N}$ of $B$ satisfies the block-injective
-    parent-Hamiltonian gap of \cite[Section~IV.C]{Cirac2021Matrix},
-    \begin{align}
-        \gamma_R\lVert v\rVert\leq\lVert H_{R,N}v\rVert
-    \end{align}
-    for every chain length $N\in\mathbb N$ and every $v\perp\ker H_{R,N}$.
+    parent-Hamiltonian gap of \cite[Section~IV.C]{Cirac2021Matrix}: for
+    every chain length $N\geq1$, every nonzero eigenvalue of $H_{R,N}$ is at
+    least $\gamma_R$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:normal-block-primitive-c1-normalization, thm:primitive-block-parent-uniform-gap-three-block-bound}
@@ -1175,7 +1170,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \uses{thm:block_word_span_primitive_normalization, thm:ph_block_periodic_closure_tp,
         thm:parent_hamiltonian_kernel_eq_chain_ground_space,
         lem:local_term_es_average, thm:weighted_sum_kernel,
-        thm:parent_ground_space_es_kernel}
+        thm:parent_ring_ground_space_kernel}
     Normalizing the blocks while retaining simultaneous injectivity at length
     $S$ leaves the parent Hamiltonians and the span of the periodic component
     vectors unchanged, so the trace-preserving block closure theorem applies.
@@ -1274,7 +1269,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
         thm:parent_hamiltonian_kernel_eq_chain_ground_space,
         thm:block_sum_local_ground_space,
         lem:local_term_es_average, thm:weighted_sum_kernel,
-        thm:parent_ground_space_es_kernel}
+        thm:parent_ring_ground_space_kernel}
     Replacing the original canonical tensor by the direct sum containing
     one copy of each normal representative preserves the local spaces and hence
     the periodic local constraints, so the simultaneous

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.FixedPoint.WeightedMatrixUnitParent
 import TNLean.MPS.Symmetry.GappedPath.OrderedGappedInteractionPath
 import TNLean.MPS.Symmetry.SPTClassification.FixedPointGappedPathWitness
-import TNLean.MPS.Symmetry.GappedPath.InteractionHamiltonianSymmetry
+import TNLean.MPS.ParentHamiltonian.Deformation.ParentHamiltonianSymmetry
 import TNLean.MPS.Symmetry.GappedPath.GappedInteractionPathComposition
 
 /-!
@@ -31,21 +31,18 @@ open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 
 namespace MPSTensor
 
-/-- The periodic normalized-bond Hamiltonian has zero ground energy and
-spectral gap at least one for every real parameter. Source:
-arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/
-theorem hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one
+/-- The periodic normalized-bond Hamiltonian is gapped above its zero ground
+energy with gap one for every real parameter. Source: arXiv:1010.3732,
+Section II.F.2, `eq:sym:omega-gamma`. -/
+theorem isGapped_hamiltonian_translationInvariant_normalizedBondInteraction
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
-    (0 : ℂ) ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant N
-      (normalizedBondInteraction D₀ D₁ γ)).hamiltonian ∧
-    ∀ z ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant N
-      (normalizedBondInteraction D₀ D₁ γ)).hamiltonian,
-      0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
+    ManyBody.IsGapped (ManyBody.Interaction.translationInvariant N
+      (normalizedBondInteraction D₀ D₁ γ)).hamiltonian 0 1 := by
   have : NeZero N := ⟨by omega⟩
   simpa only [normalizedBondInteraction,
     hamiltonian_translationInvariant_twoSiteBondPenalty hN] using
-    normalizedPhysicalBondInterpolation_parent_spectrum_gap_one h₀ h₁ γ (by omega : 1 ≤ N)
+    isGapped_normalizedPhysicalBondInterpolation_parent h₀ h₁ γ (by omega : 1 ≤ N)
 
 /-- For a fixed bond parameter, affine interpolation to a covariant
 canonical parent retains the uniform gap when the parent dominates the
@@ -80,43 +77,28 @@ noncomputable def normalizedBondCanonicalParentComparisonPath
     (Matrix.nonneg_iff_posSemidef.mp
       (normalizedBondInteraction_isStarProjection hD₀ hD₁ γ).nonneg)
     (Matrix.nonneg_iff_posSemidef.mp
-      (parentInteraction_toMatrix'_isStarProjection _ 2).nonneg)
+      (isStarProjection_toMatrix'_parentInteraction _ 2).nonneg)
     horder
     ((normalizedBondInteraction_isStarProjection hD₀ hD₁ γ).norm_le _)
     (parentInteraction_toMatrix'_norm_le_one _ 2)
-    hker ?_ ?_ ?_ ?_
-  case refine_4 =>
+    hker ⟨1, zero_lt_one, fun N hN ↦
+      isGapped_hamiltonian_translationInvariant_normalizedBondInteraction hD₀ hD₁ γ hN⟩ ?_ ?_
+  case refine_2 =>
     intro N hN g
+    have : NeZero N := ⟨by omega⟩
     exact hamiltonian_translationInvariant_commute_onSiteTensorPow
-      (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) _ hN
+      (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) _
         (parentInteraction_matrix_commute_onSiteTensorPow _ _
           (sptFixedPointAction_mem_unitaryGroup _ 1
             (fun g => ρ₀.directSum_mem_unitaryGroup ρ₁ g (h₀ g) (h₁ g))
             (fun _ => by simp) g) (hCov g) 2)
-  case refine_3 =>
+  case refine_1 =>
     intro N hN g
     have : NeZero N := ⟨by omega⟩
     simpa only [normalizedBondInteraction, hamiltonian_translationInvariant_twoSiteBondPenalty hN,
       sptFixedPointUnitaryAction, MonoidHom.codRestrict_apply, Subtype.coe_mk] using
       (normalizedPhysicalBondInterpolation_parent_commute_onSite
         ρ₀ ρ₁ h₀ h₁ g γ (by omega : 1 ≤ N)).symm
-  case refine_2 =>
-    exact ⟨1, zero_lt_one, fun N hN z hz =>
-      haveI : NeZero N := ⟨by omega⟩
-      ((hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one
-        hD₀ hD₁ γ hN).2 z hz).2⟩
-  case refine_1 =>
-    intro N hN
-    have : NeZero N := ⟨by omega⟩
-    have hspec : (0 : ℂ) ∈ spectrum ℂ (Matrix.toEuclideanLin
-        (ManyBody.Interaction.translationInvariant N
-          (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) := by
-      rw [Matrix.spectrum_toLpLin]
-      exact (hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one
-        hD₀ hD₁ γ hN).1
-    obtain ⟨x, hx⟩ :=
-      (Module.End.HasEigenvalue.of_mem_spectrum hspec).exists_hasEigenvector
-    exact ⟨x, hx.2, by simpa only [zero_smul] using hx.apply_eq_smul⟩
 
 /-- For a fixed bond parameter, affine interpolation from its bond
 interaction to its canonical parent is symmetric and uniformly gapped.

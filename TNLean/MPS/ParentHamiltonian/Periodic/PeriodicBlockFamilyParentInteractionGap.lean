@@ -36,50 +36,52 @@ Section 6, lines 2649--2675.
 
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d b : ℕ} [NeZero d] {D : Fin b → ℕ}
 
-/-- A finite weighted family of normalized periodic tensors has exact canonical
-open kernels for every sufficiently large interaction range and every volume
-at least that range. Source: Nachtergaele, arXiv:cond-mat/9410110,
-Section 4, Proposition forintersection, and Lemma existenceinteraction.
+/-- A finite weighted family of normalized periodic tensors has, for every sufficiently large
+interaction range and every volume at least that range, the joint boundary space as the kernel
+of the Hamiltonian of the parent interaction on the open chain. Source: Nachtergaele,
+arXiv:cond-mat/9410110, Section 4, Proposition forintersection, and Lemma existenceinteraction.
 Equivalent sectors are selected internally with equality at every length. -/
-theorem exists_ker_openParentHamiltonianES_of_periodic_family
+theorem exists_ker_hamiltonian_parentChainInteraction_of_periodic_family
     (μ : Fin b → ℂ) (A : ∀ j, MPSTensor d (D j)) (hμ : ∀ j, μ j ≠ 0)
     (m : Fin b → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j)) :
     ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
-      LinearMap.ker (openParentHamiltonianES (toTensorFromBlocks μ A) R N) =
+      LinearMap.ker (Matrix.toEuclideanLin
+        (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
         groundSpaceES (toTensorFromBlocks μ A) N := by
   obtain ⟨g, sel, hsel, hD, hP, hDistinct, hCover, hJoint⟩ :=
     exists_periodic_sector_representatives μ A hμ hPeriodic
   let B := fun j => A (sel j)
   have hIndep := eventually_groundSpaceES_iSupIndep_of_isPeriodic B
     (fun j => m (sel j)) hP hDistinct.forall_ne_transport
-  obtain ⟨R₀, hR₀, hKernel⟩ := exists_ker_openParentHamiltonianES_of_periodic_family_independence
-    (fun _ => 1) B (fun _ => one_ne_zero) (fun j => m (sel j)) hP
-    (hIndep.mono fun n hn => (groundSpace_iSupIndep_iff_groundSpaceES_iSupIndep B n).mpr hn)
+  obtain ⟨R₀, hR₀, hKernel⟩ :=
+    exists_ker_hamiltonian_parentChainInteraction_of_periodic_family_independence
+      (fun _ => 1) B (fun _ => one_ne_zero) (fun j => m (sel j)) hP
+      (hIndep.mono fun n hn => (groundSpace_iSupIndep_iff_groundSpaceES_iSupIndep B n).mpr hn)
   refine ⟨R₀, hR₀, fun R N hR hRN => ?_⟩
-  rw [openParentHamiltonianES_eq_of_groundSpaceES_eq (lt_of_lt_of_le hR₀ hR)
-    (hJoint R) N, hJoint N]
+  rw [hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq (hJoint R) N, hJoint N]
   exact hKernel R N hR hRN
 
-/-- A finite weighted family of normalized periodic tensors admits a positive
-canonical interaction with exact joint open kernels. Source: Nachtergaele,
+/-- A finite weighted family of normalized periodic tensors admits a positive semidefinite
+local matrix, the matrix of the canonical parent interaction, whose open-chain translates have
+the joint boundary spaces as kernels. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Section 4 and Lemma existenceinteraction. Equivalent
 sectors are removed internally without changing any finite ground space. -/
-theorem exists_positive_parent_interaction_of_periodic_family
+theorem exists_posSemidef_ker_hamiltonian_chainTranslates_of_periodic_family
     (μ : Fin b → ℂ) (A : ∀ j, MPSTensor d (D j)) (hμ : ∀ j, μ j ≠ 0)
     (m : Fin b → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j)) :
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES (toTensorFromBlocks μ A) N := by
-  obtain ⟨R, hR, hKernel⟩ := exists_ker_openParentHamiltonianES_of_periodic_family
-    μ A hμ m hPeriodic
-  obtain ⟨h, _heq, hh, hKernelInteraction⟩ :=
-    exists_positive_canonical_parent_interaction_of_exact_open_kernels
-      (toTensorFromBlocks μ A) hR (fun N => hKernel R N le_rfl)
-  exact ⟨R, hR, h, hh, hKernelInteraction⟩
+  obtain ⟨R, hR, hKernel⟩ :=
+    exists_ker_hamiltonian_parentChainInteraction_of_periodic_family μ A hμ m hPeriodic
+  exact ⟨R, hR, LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks μ A) R),
+    posSemidef_toMatrix'_parentInteraction _ R, fun N hN => hKernel R N le_rfl hN⟩
 
 /-- A periodic family admits one canonical interaction and a common literal
 infinite-volume commutator gap for all its pure zero-energy states. The constant
@@ -91,7 +93,7 @@ theorem exists_positive_parent_interaction_quasiLocalCommutator_gap_of_periodic_
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES (toTensorFromBlocks μ A) N) ∧
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
@@ -103,15 +105,15 @@ theorem exists_positive_parent_interaction_quasiLocalCommutator_gap_of_periodic_
           ∃ e : ℂ, Tendsto (fun n => φ
             (star (quasiLocalIntervalObservable d a k X) *
               (quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                  (openInteractionMatrix h ((ℓ n + k) + r n)) *
+                  ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian) *
                 quasiLocalIntervalObservable d a k X -
                 quasiLocalIntervalObservable d a k X *
                   quasiLocalIntervalObservable d (a - (ℓ n : ℤ)) ((ℓ n + k) + r n)
-                    (openInteractionMatrix h ((ℓ n + k) + r n))))) f (𝓝 e) ∧
+                    ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
             (γ : ℂ) * φ (star (quasiLocalIntervalObservable d a k X) *
               quasiLocalIntervalObservable d a k X) ≤ e := by
   obtain ⟨R, hR, h, hh, hKernel⟩ :=
-    exists_positive_parent_interaction_of_periodic_family μ A hμ m hPeriodic
+    exists_posSemidef_ker_hamiltonian_chainTranslates_of_periodic_family μ A hμ m hPeriodic
   have hEventual := (eventually_ge_atTop R).mono fun N hN => hKernel N hN
   obtain ⟨γ, hγ, hGap⟩ := exists_pos_quasiLocalCommutator_limit_gap_of_periodic_family
     μ A hμ m hPeriodic h hR hh hEventual

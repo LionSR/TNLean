@@ -191,10 +191,10 @@ theorem decode_weightedOverlapOfRationalParameters_eq_productOperator {q Da Db n
     decodeRationalComplex (weightedOverlapOfRationalParameters A B capA capB PA PB W) =
       (star (decodeRationalComplex capA) * decodeRationalComplex capB) *
         (star A.coeff ⬝ᵥ
-          (Matrix.rectKronecker (fun p ↦ RationalRectMatrixCode.decode (W p)) *ᵥ B.coeff)) := by
+          (Matrix.piKronecker (fun p ↦ RationalRectMatrixCode.decode (W p)) *ᵥ B.coeff)) := by
   rw [decode_weightedOverlapOfRationalParameters A B capA capB PA PB hPA hPB W]
   congr 1
-  simp only [dotProduct, Matrix.mulVec, Matrix.rectKronecker_apply, Pi.star_apply,
+  simp only [dotProduct, Matrix.mulVec, Matrix.piKronecker_apply, Pi.star_apply,
     Finset.mul_sum]
   apply Finset.sum_congr₂
   intro σ _ τ _
@@ -223,7 +223,7 @@ theorem decode_gramOfRationalParameters {q Da Db n : ℕ}
         WithLp.toLp 2 (fun τ ↦ decodeRationalComplex capB * B.coeff τ)⟫_ℂ := by
   rw [gramOfRationalParameters,
     decode_weightedOverlapOfRationalParameters_eq_productOperator A B capA capB PA PB hPA hPB]
-  simp only [RationalRectMatrixCode.decode_identity, Matrix.rectKronecker_one,
+  simp only [RationalRectMatrixCode.decode_identity, Matrix.piKronecker_one,
     Matrix.one_mulVec, EuclideanSpace.inner_eq_star_dotProduct,
     dotProduct, Pi.star_apply, star_mul, Finset.mul_sum]
   apply Finset.sum_congr rfl

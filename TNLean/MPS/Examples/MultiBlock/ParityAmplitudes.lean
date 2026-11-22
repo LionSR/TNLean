@@ -36,7 +36,7 @@ theorem pauliZ_mul_parA (i : Fin 2) :
     pauliZ * parA i = (-1 : ℂ) ^ i.val • (parA i * pauliZ) := by
   ext a b
   fin_cases i <;> fin_cases a <;> fin_cases b <;>
-    norm_num [parA, parAInt, complexOfInt, complexOfRing, pauliZ,
+    norm_num [parA, parAInt, complexOfInt, Matrix.complexOfRing, pauliZ,
       Matrix.mul_apply, Fin.sum_univ_two]
 
 /-- The grading passes through a word with the sign of its occupation. -/
@@ -80,7 +80,7 @@ theorem occupation_sign_mul_mpv_parA {N : ℕ} (σ : Fin N → Fin 2) :
 private theorem parA_one_sq : parA 1 ^ 2 = 1 := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    norm_num [pow_two, parA, parAInt, complexOfInt, complexOfRing,
+    norm_num [pow_two, parA, parAInt, complexOfInt, Matrix.complexOfRing,
       Matrix.mul_apply, Fin.sum_univ_two]
 
 /-- A run of occupied sites has period two on the bond space. -/
@@ -93,14 +93,14 @@ theorem parA_zero_mul_pow_mul_zero (n : ℕ) :
     parA 0 * parA 1 ^ n * parA 0 = (if Even n then 1 else 0 : ℂ) • parA 0 := by
   rw [parA_one_pow]
   split_ifs <;> ext i j <;> fin_cases i <;> fin_cases j <;>
-    norm_num [parA, parAInt, complexOfInt, complexOfRing, Matrix.mul_apply, Fin.sum_univ_two]
+    norm_num [parA, parAInt, complexOfInt, Matrix.complexOfRing, Matrix.mul_apply, Fin.sum_univ_two]
 
 /-- The trace of a zero letter followed by a run tests whether the run is even. -/
 theorem trace_parA_zero_mul_pow (n : ℕ) :
     Matrix.trace (parA 0 * parA 1 ^ n) = if Even n then 1 else 0 := by
   rw [parA_one_pow]
   split_ifs <;>
-    norm_num [parA, parAInt, complexOfInt, complexOfRing, Matrix.trace,
+    norm_num [parA, parAInt, complexOfInt, Matrix.complexOfRing, Matrix.trace,
       Matrix.mul_apply, Fin.sum_univ_two]
 
 private theorem evalWord_parA_runs_mul_zero (rs : List ℕ) :
@@ -129,7 +129,7 @@ theorem trace_evalWord_parA_replicate_one (n : ℕ) :
     Matrix.trace (Kraus.evalWord parA (List.replicate n 1)) = 1 + (-1 : ℂ) ^ n := by
   rw [Kraus.evalWord_replicate, parA_one_pow, neg_one_pow_eq_ite]
   split_ifs <;>
-    norm_num [parA, parAInt, complexOfInt, complexOfRing, Matrix.trace, Fin.sum_univ_two]
+    norm_num [parA, parAInt, complexOfInt, Matrix.complexOfRing, Matrix.trace, Fin.sum_univ_two]
 
 private theorem trace_evalWord_parA_rotate (w : List (Fin 2)) (n : ℕ) :
     Matrix.trace (Kraus.evalWord parA (w.rotate n)) =
@@ -174,9 +174,9 @@ private theorem pauliZ_eq_diagonal_sign :
 
 /-- The tensor product of physical parity operators fixes the periodic vector. -/
 theorem finKronecker_pauliZ_mulVec_mpv_parA (N : ℕ) :
-    (Matrix.finKronecker fun _ : Fin N => pauliZ) *ᵥ (fun σ => mpv parA σ) =
+    (Matrix.piKronecker fun _ : Fin N => pauliZ) *ᵥ (fun σ => mpv parA σ) =
       (fun σ : Fin N → Fin 2 => mpv parA σ) := by
-  rw [pauliZ_eq_diagonal_sign, Matrix.finKronecker_diagonal]
+  rw [pauliZ_eq_diagonal_sign, Matrix.piKronecker_diagonal]
   ext σ
   simpa [Matrix.mulVec_diagonal, Finset.prod_pow_eq_pow_sum] using
     occupation_sign_mul_mpv_parA σ

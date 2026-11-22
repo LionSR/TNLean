@@ -27,7 +27,7 @@ product along one fixed cycle forces a compatible choice of phases on the
 occurrences around that cycle: this is the content of
 `MPOTensor.exists_pi_smul_posSemidef_of_cyclicEtaTensorProduct_posSemidef`,
 obtained from the `N`-ary Kronecker rescaling
-(`Matrix.exists_pi_smul_posSemidef_of_finKronecker_posSemidef`) applied to
+(`Matrix.exists_pi_smul_posSemidef_of_piKronecker_posSemidef`) applied to
 the cyclic tensor product after reindexing along the horizontal bond fiber.
 
 The recurrence declarations and the phase-uniqueness theorem
@@ -192,9 +192,9 @@ theorem cyclicEtaTensorProduct_submatrix_eq_finKronecker
     [NeZero N] (hη : EtaStructure ρ) (eta : etaOperators hη) (k : Fin N → Fin hη.m) :
     (cyclicEtaTensorProduct hη eta k).submatrix
         (cycleFiberToSectorFiber hη k) (cycleFiberToSectorFiber hη k) =
-      Matrix.finKronecker (fun n => eta (k n) (k (n + 1))) := by
+      Matrix.piKronecker (fun n => eta (k n) (k (n + 1))) := by
   ext y z
-  simp only [Matrix.submatrix_apply, Matrix.finKronecker_apply]
+  simp only [Matrix.submatrix_apply, Matrix.piKronecker_apply]
   change (∏ n : Fin N, eta (k n) (k (n + 1))
       ((cycleFiberToSectorFiber hη k y n).2, (cycleFiberToSectorFiber hη k y (n + 1)).1)
       ((cycleFiberToSectorFiber hη k z n).2, (cycleFiberToSectorFiber hη k z (n + 1)).1)) = _
@@ -227,7 +227,7 @@ theorem exists_pi_smul_posSemidef_of_cyclicEtaTensorProduct_posSemidef
     ∃ c : Fin N → ℂ, (∀ n, c n ≠ 0) ∧ (∏ n, c n = 1) ∧
       ∀ n, (c n • eta (k n) (k (n + 1))).PosSemidef := by
   have hN : 1 ≤ N := Nat.one_le_iff_ne_zero.mpr (NeZero.ne N)
-  apply Matrix.exists_pi_smul_posSemidef_of_finKronecker_posSemidef hN
+  apply Matrix.exists_pi_smul_posSemidef_of_piKronecker_posSemidef hN
   · rw [← cyclicEtaTensorProduct_submatrix_eq_finKronecker hη eta k]
     exact hpos.submatrix _
   · exact hne

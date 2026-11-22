@@ -33,7 +33,7 @@ noncomputable def sitewisePhysicalRecovery
     (V : Matrix (Fin e) (Fin d) ℂ) (N : ℕ) [NeZero d] :
     Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ →ₗ[ℂ]
       Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
-  let W := Matrix.tensorPower N V
+  let W := (Matrix.piKronecker fun _ : Fin N ↦ V)
   let P := W * Wᴴ
   Matrix.supportCompletion (singleKrausMap Wᴴ) P
     (Matrix.faithfulDensity (Fin N → Fin d))
@@ -44,7 +44,7 @@ theorem sitewisePhysicalRecovery_isKrausCPTP
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1) (N : ℕ)
     [NeZero d] :
     IsKrausCPTP (sitewisePhysicalRecovery V N) := by
-  let W := Matrix.tensorPower N V
+  let W := (Matrix.piKronecker fun _ : Fin N ↦ V)
   let P := W * Wᴴ
   have hW : Wᴴ * W = 1 := tensorPower_isometry V hV N
   have hPherm : P.IsHermitian := Matrix.isHermitian_mul_conjTranspose_self W
@@ -74,8 +74,8 @@ theorem sitewisePhysicalRecovery_apply_singleKrausMap
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1) (N : ℕ)
     [NeZero d] (X : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
     sitewisePhysicalRecovery V N
-        (singleKrausMap (Matrix.tensorPower N V) X) = X := by
-  let W := Matrix.tensorPower N V
+        (singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V) X) = X := by
+  let W := (Matrix.piKronecker fun _ : Fin N ↦ V)
   let P := W * Wᴴ
   have hW : Wᴴ * W = 1 := tensorPower_isometry V hV N
   have hPherm : P.IsHermitian := Matrix.isHermitian_mul_conjTranspose_self W

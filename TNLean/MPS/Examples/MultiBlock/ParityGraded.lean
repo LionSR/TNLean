@@ -117,8 +117,9 @@ two-by-two matrix algebra. -/
 theorem parA_isNormal : Kraus.IsNormal parA :=
   isNormal_of_single_eq_two_words parA fun i j =>
     ⟨i, j, 0, 0, 1, Int.castRingHom ℂ (if i = 1 ∧ j = 1 then -1 else 0), by
-      rw [one_smul, ← complexOfRing_single (Int.castRingHom ℂ), parAInt_single, complexOfRing_add,
-        complexOfRing_smul, complexOfRing_mul, complexOfRing_mul]
+      rw [one_smul, ← Matrix.complexOfRing_single (Int.castRingHom ℂ), parAInt_single,
+          Matrix.complexOfRing_add,
+        Matrix.complexOfRing_smul, Matrix.complexOfRing_mul, Matrix.complexOfRing_mul]
       rfl⟩
 
 /-! ### The five-dimensional mixed-basis source -/
@@ -169,11 +170,11 @@ theorem parGaugeInv_mul : parGaugeInvInt * parGaugeInt = 1 := by decide
 
 theorem parGaugeComplex_mul_inv :
     complexOfInt parGaugeInt * complexOfInt parGaugeInvInt = 1 :=
-  complexOfRing_mul_eq_one _ parGauge_mul_inv
+  Matrix.complexOfRing_mul_eq_one _ parGauge_mul_inv
 
 theorem parGaugeComplex_inv_mul :
     complexOfInt parGaugeInvInt * complexOfInt parGaugeInt = 1 :=
-  complexOfRing_mul_eq_one _ parGaugeInv_mul
+  Matrix.complexOfRing_mul_eq_one _ parGaugeInv_mul
 
 /-- The slots of Example PAR: the weight `+1` and weight `-1` copies of `parA`. -/
 abbrev parSlots : Finset (Fin 2) := Finset.univ

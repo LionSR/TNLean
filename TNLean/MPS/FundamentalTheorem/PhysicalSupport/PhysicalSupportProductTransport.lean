@@ -71,12 +71,12 @@ private theorem embed_twoSiteSectorProjection_eq_finKronecker
     (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
     ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
         (twoSiteSectorProjection P) =
-      Matrix.finKronecker (fun n ↦ cyclicBondProjectionFactor P i n) := by
+      Matrix.piKronecker (fun n ↦ cyclicBondProjectionFactor P i n) := by
   rw [← tensorPower_two_eq_twoSiteSectorProjection]
   ext σ τ
   rw [ManyBody.placeAlong_apply, ← MPSTensor.extractWindow_eq_comp_ringWindow hN,
     ← MPSTensor.extractWindow_eq_comp_ringWindow hN]
-  simp only [Matrix.tensorPower_apply, Matrix.finKronecker_apply]
+  simp only [Matrix.piKronecker_apply, Matrix.piKronecker_apply]
   by_cases hAgree : ∀ v, (∀ u, ManyBody.ringWindow hN i u ≠ v) → σ v = τ v
   · rw [ite_eq_left hAgree, MPSTensor.prod_cyclicWindow_complement 2 N hN i]
     rw [MPSTensor.forall_ringWindow_ne_imp_iff] at hAgree
@@ -137,7 +137,7 @@ theorem embed_twoSiteSectorProjection_commute
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN j)
         (twoSiteSectorProjection P)) := by
   unfold Commute SemiconjBy
-  simp only [embed_twoSiteSectorProjection_eq_finKronecker, ← Matrix.finKronecker_mul]
+  simp only [embed_twoSiteSectorProjection_eq_finKronecker, Matrix.piKronecker_mul]
   congr 1
   funext n
   simp only [cyclicBondProjectionFactor]
@@ -145,8 +145,8 @@ theorem embed_twoSiteSectorProjection_commute
 
 private theorem finKronecker_list_prod_of_ne_nil {N : ℕ}
     (l : List (Fin N → Matrix (Fin d) (Fin d) ℂ)) (hl : l ≠ []) :
-    (l.map Matrix.finKronecker).prod =
-      Matrix.finKronecker (fun n ↦ (l.map fun A ↦ A n).prod) := by
+    (l.map Matrix.piKronecker).prod =
+      Matrix.piKronecker (fun n ↦ (l.map fun A ↦ A n).prod) := by
   classical
   induction l with
   | nil => exact (hl rfl).elim
@@ -156,7 +156,7 @@ private theorem finKronecker_list_prod_of_ne_nil {N : ℕ}
       | cons B l =>
           rw [List.map_cons, List.prod_cons]
           rw [ih (by simp)]
-          rw [← Matrix.finKronecker_mul]
+          rw [Matrix.piKronecker_mul]
           simp only [List.map_cons, List.prod_cons]
 
 private theorem list_prod_eq_of_mem_idempotent
@@ -201,7 +201,7 @@ private noncomputable def openBondProjectionProduct
 private theorem openBondProjectionProduct_eq_sitewise
     (P : Matrix (Fin d) (Fin d) ℂ) (hP : P * P = P)
     {N : ℕ} (hN : 2 ≤ N) :
-    openBondProjectionProduct P hN = Matrix.tensorPower N P := by
+    openBondProjectionProduct P hN = (Matrix.piKronecker fun _ : Fin N ↦ P) := by
   classical
   let factors : Fin (N - 1) → Fin N → Matrix (Fin d) (Fin d) ℂ :=
     fun i n ↦ cyclicBondProjectionFactor P ⟨i.val, by omega⟩ n
@@ -209,7 +209,7 @@ private theorem openBondProjectionProduct_eq_sitewise
       (List.ofFn fun i : Fin (N - 1) ↦
         ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN ⟨i.val, by omega⟩)
           (twoSiteSectorProjection P)) =
-        (List.ofFn factors).map Matrix.finKronecker := by
+        (List.ofFn factors).map Matrix.piKronecker := by
     rw [List.map_ofFn]
     apply congrArg List.ofFn
     funext i
@@ -220,9 +220,9 @@ private theorem openBondProjectionProduct_eq_sitewise
     omega
   rw [finKronecker_list_prod_of_ne_nil _ hne]
   simp only [List.map_ofFn]
-  change Matrix.finKronecker
+  change Matrix.piKronecker
       (fun n ↦ (List.ofFn fun i : Fin (N - 1) ↦ factors i n).prod) =
-    Matrix.finKronecker (fun _ ↦ P)
+    Matrix.piKronecker (fun _ ↦ P)
   congr 1
   funext n
   apply list_prod_eq_of_mem_idempotent P hP
@@ -287,12 +287,12 @@ private theorem twoSiteSectorProjection_mul_isometricBond
     (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
     (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
     twoSiteSectorProjection (V * Vᴴ) *
-        singleKrausMap (Matrix.tensorPower 2 V) B =
-      singleKrausMap (Matrix.tensorPower 2 V) B := by
+        singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B =
+      singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B := by
   rw [← tensorPower_two_mul_conjTranspose V]
   simp only [singleKrausMap_apply, Matrix.mul_assoc]
-  rw [← Matrix.mul_assoc (Matrix.tensorPower 2 V)ᴴ
-    (Matrix.tensorPower 2 V), tensorPower_isometry V hV 2, Matrix.one_mul]
+  rw [← Matrix.mul_assoc (Matrix.piKronecker fun _ : Fin 2 ↦ V)ᴴ
+    (Matrix.piKronecker fun _ : Fin 2 ↦ V), tensorPower_isometry V hV 2, Matrix.one_mul]
 
 /-- The complete product of commuting lifted bonds is supported on the
 included physical space at every site. No tensor or injectivity hypothesis
@@ -304,19 +304,19 @@ theorem isometricBondProduct_left_supported
     {N : ℕ} (hN : 2 ≤ N)
     (hcomm : ∀ i j : Fin N,
       Commute (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
-          (singleKrausMap (Matrix.tensorPower 2 V) B))
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B))
         (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN j)
-          (singleKrausMap (Matrix.tensorPower 2 V) B))) :
-    Matrix.tensorPower N (V * Vᴴ) *
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B))) :
+    (Matrix.piKronecker fun _ : Fin N ↦ (V * Vᴴ)) *
         (List.ofFn fun i : Fin N =>
           ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
-            (singleKrausMap (Matrix.tensorPower 2 V) B)).prod =
+            (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B)).prod =
       (List.ofFn fun i : Fin N =>
         ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
-          (singleKrausMap (Matrix.tensorPower 2 V) B)).prod := by
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B)).prod := by
   let A : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
     fun i ↦ ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
-      (singleKrausMap (Matrix.tensorPower 2 V) B)
+      (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B)
   let R : Fin (N - 1) → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
     fun i ↦ ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN ⟨i.val, by omega⟩)
       (twoSiteSectorProjection (V * Vᴴ))
@@ -353,7 +353,7 @@ theorem isometricBondProduct_left_supported
     simp only [Matrix.mul_assoc]
     rw [← Matrix.mul_assoc Vᴴ V,
       hV, Matrix.one_mul]
-  have hR : (List.ofFn R).prod = Matrix.tensorPower N (V * Vᴴ) := by
+  have hR : (List.ofFn R).prod = (Matrix.piKronecker fun _ : Fin N ↦ (V * Vᴴ)) := by
     simpa [R, openBondProjectionProduct] using
       openBondProjectionProduct_eq_sitewise (V * Vᴴ) hP hN
   simpa [A, hR] using hRprod
@@ -371,28 +371,28 @@ theorem singleKrausMap_placeAlong_ringWindow_eq_range_mul_lift
     (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
     {N : ℕ} (hN : 2 ≤ N) (i : Fin N)
     (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
-    singleKrausMap (Matrix.tensorPower N V)
+    singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V)
         (ManyBody.placeAlong (X := fun _ ↦ Fin e) (ManyBody.ringWindow hN i) B) =
-      singleKrausMap (Matrix.tensorPower N V) 1 *
+      singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V) 1 *
         ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
-          (singleKrausMap (Matrix.tensorPower 2 V) B) := by
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B) := by
   let ed := windowComplementEquiv (d := d) 2 N hN i
   let ee := windowComplementEquiv (d := e) 2 N hN i
   apply (Matrix.reindex ed ed).injective
   change (Matrix.reindexLinearEquiv ℂ ℂ ed ed)
-      (singleKrausMap (Matrix.tensorPower N V)
+      (singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V)
         (ManyBody.placeAlong (X := fun _ ↦ Fin e) (ManyBody.ringWindow hN i) B)) =
     (Matrix.reindexLinearEquiv ℂ ℂ ed ed)
-      (singleKrausMap (Matrix.tensorPower N V) 1 *
+      (singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V) 1 *
         ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
-          (singleKrausMap (Matrix.tensorPower 2 V) B))
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B))
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ ed ed ed]
   simp only [Matrix.coe_reindexLinearEquiv]
   rw [Matrix.reindex_singleKrausMap ee ed,
     reindex_tensorPower_windowComplement,
     reindex_placeAlong_ringWindow_windowComplement]
   change singleKrausMap
-      (Matrix.tensorPower 2 V ⊗ₖ Matrix.tensorPower (N - 2) V)
+      ((Matrix.piKronecker fun _ : Fin 2 ↦ V) ⊗ₖ (Matrix.piKronecker fun _ : Fin (N - 2) ↦ V))
         (B ⊗ₖ (1 : Matrix (Fin (N - 2) → Fin e)
           (Fin (N - 2) → Fin e) ℂ)) = _
   rw [Matrix.singleKrausMap_kronecker]
@@ -413,7 +413,7 @@ theorem singleKrausMap_placeAlong_ringWindow_eq_range_mul_lift
   have htwo := tensorPower_isometry V hV 2
   simp only [Matrix.mul_assoc]
   rw [← Matrix.mul_assoc
-      (Matrix.tensorPower 2 V)ᴴ (Matrix.tensorPower 2 V),
+      (Matrix.piKronecker fun _ : Fin 2 ↦ V)ᴴ (Matrix.piKronecker fun _ : Fin 2 ↦ V),
     htwo, Matrix.one_mul]
   simp
 
@@ -427,13 +427,13 @@ Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNK2`, lines 1581--1593. -
 theorem singleKrausMap_bondProduct_of_unitary
     (V : Matrix (Fin d) (Fin d) ℂ) (hV : Vᴴ * V = 1) (hV' : V * Vᴴ = 1)
     {N : ℕ} (hN : 2 ≤ N) (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
-    singleKrausMap (Matrix.tensorPower N V)
+    singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V)
         (List.ofFn fun i : Fin N ↦
           ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) B).prod =
       (List.ofFn fun i : Fin N ↦
         ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
-          (singleKrausMap (Matrix.tensorPower 2 V) B)).prod := by
-  have hW : (Matrix.tensorPower N V)ᴴ * Matrix.tensorPower N V = 1 :=
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B)).prod := by
+  have hW : (Matrix.piKronecker fun _ : Fin N ↦ V)ᴴ * (Matrix.piKronecker fun _ : Fin N ↦ V) = 1 :=
     tensorPower_isometry V hV N
   have hne : (List.ofFn fun i : Fin N ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) B) ≠ [] := by
@@ -443,12 +443,12 @@ theorem singleKrausMap_bondProduct_of_unitary
   apply congrArg List.prod
   apply congrArg List.ofFn
   funext i
-  change singleKrausMap (Matrix.tensorPower N V)
+  change singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V)
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) B) = _
   rw [singleKrausMap_placeAlong_ringWindow_eq_range_mul_lift V hV hN i B]
   simp only [singleKrausMap_apply, Matrix.mul_one]
   rw [tensorPower_mul_conjTranspose, hV']
-  rw [Matrix.tensorPower_one, Matrix.one_mul]
+  rw [Matrix.piKronecker_one, Matrix.one_mul]
 
 /-- Isometric inclusion carries a complete periodic product of Hermitian
 bonds to the product of their included bonds, provided the included
@@ -461,23 +461,23 @@ theorem singleKrausMap_bondProduct_of_isometry
     {N : ℕ} (hN : 2 ≤ N)
     (hcomm : ∀ i j : Fin N,
       Commute (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
-          (singleKrausMap (Matrix.tensorPower 2 V) B))
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B))
         (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN j)
-          (singleKrausMap (Matrix.tensorPower 2 V) B))) :
-    singleKrausMap (Matrix.tensorPower N V)
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B))) :
+    singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V)
         (List.ofFn fun i : Fin N =>
           ManyBody.placeAlong (X := fun _ ↦ Fin e) (ManyBody.ringWindow hN i) B).prod =
       (List.ofFn fun i : Fin N =>
         ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
-          (singleKrausMap (Matrix.tensorPower 2 V) B)).prod := by
-  let W := Matrix.tensorPower N V
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B)).prod := by
+  let W := (Matrix.piKronecker fun _ : Fin N ↦ V)
   let Q := singleKrausMap W 1
   let X : Fin N → Matrix (Fin N → Fin e)
       (Fin N → Fin e) ℂ :=
     fun i ↦ ManyBody.placeAlong (X := fun _ ↦ Fin e) (ManyBody.ringWindow hN i) B
   let A : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
     fun i ↦ ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
-      (singleKrausMap (Matrix.tensorPower 2 V) B)
+      (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B)
   have hW : Wᴴ * W = 1 :=
     tensorPower_isometry V hV N
   have hQ : Q * Q = Q := by
@@ -506,14 +506,14 @@ theorem singleKrausMap_bondProduct_of_isometry
       Matrix.isHermitian_mul_mul_conjTranspose W hXherm
     have hAherm : (A i).IsHermitian :=
       ManyBody.isHermitian_placeAlong _
-        (Matrix.isHermitian_mul_mul_conjTranspose (Matrix.tensorPower 2 V) hB)
+        (Matrix.isHermitian_mul_mul_conjTranspose (Matrix.piKronecker fun _ : Fin 2 ↦ V) hB)
     calc
       Q * A i = singleKrausMap W (X i) := hleft.symm
       _ = (singleKrausMap W (X i))ᴴ := hφherm.eq.symm
       _ = (Q * A i)ᴴ := congrArg Matrix.conjTranspose hleft
       _ = A i * Q := by
         rw [Matrix.conjTranspose_mul, hAherm.eq, hQherm.eq]
-  have hQrange : Q = Matrix.tensorPower N (V * Vᴴ) := by
+  have hQrange : Q = (Matrix.piKronecker fun _ : Fin N ↦ (V * Vᴴ)) := by
     simp only [Q, singleKrausMap_apply, Matrix.mul_one, W]
     rw [tensorPower_mul_conjTranspose]
   have hne : List.ofFn X ≠ [] := by
@@ -555,7 +555,7 @@ theorem singleKrausMap_bondProduct_eq_liftedBondProduct
     (F : PhysicalSupportRestrictionData P K)
     (data : TranslationInvariantBondData F.supportDim)
     {N : ℕ} (hN : 2 ≤ N) :
-    singleKrausMap (Matrix.tensorPower N F.inclusion)
+    singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ F.inclusion)
         (List.ofFn fun i : Fin N ↦
           ManyBody.placeAlong (X := fun _ ↦ Fin F.supportDim) (ManyBody.ringWindow hN i)
             data.bond).prod =
@@ -587,7 +587,7 @@ noncomputable def liftedEtaLocalStructureData
         ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
           (F.liftedBond data.bondData.bond)).prod
     have hmpo : mpo K N =
-        singleKrausMap (Matrix.tensorPower N F.inclusion)
+        singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ F.inclusion)
           (mpo (PhysicalSectorFactorization.changePhysicalBasis
             F.inclusionᴴ K) N) := by
       rw [singleKrausMap_tensorPower_mpo, F.reembed]
@@ -598,7 +598,7 @@ noncomputable def liftedEtaLocalStructureData
             data.bondData.bond).prod at hreal
     rw [hmpo, hreal]
     rw [(singleKrausMap
-      (Matrix.tensorPower N F.inclusion)).map_smul]
+      (Matrix.piKronecker fun _ : Fin N ↦ F.inclusion)).map_smul]
     rw [F.singleKrausMap_bondProduct_eq_liftedBondProduct data.bondData hN]
 
 
@@ -627,12 +627,12 @@ theorem exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactoriza
     ((F.liftedTranslationInvariantBondData restrictedData.bondData).toCommutingFormData
       hN).product
   have hmpo : mpo K N =
-      singleKrausMap (Matrix.tensorPower N F.inclusion)
+      singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ F.inclusion)
         (mpo (PhysicalSectorFactorization.changePhysicalBasis
           F.inclusionᴴ K) N) := by
     rw [singleKrausMap_tensorPower_mpo, F.reembed]
   rw [hmpo]
-  change singleKrausMap (Matrix.tensorPower N F.inclusion)
+  change singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ F.inclusion)
       (mpo (PhysicalSectorFactorization.changePhysicalBasis
         F.inclusionᴴ K) N) =
     (List.ofFn fun i : Fin N ↦
@@ -718,8 +718,8 @@ theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
           Matrix.reindex
               (Matrix.etaCyclicEdgeEquiv dl dr e)
               (Matrix.etaCyclicEdgeEquiv dl dr e)
-              (star (Matrix.tensorPower N U) * mpo M N *
-                Matrix.tensorPower N U) =
+              (star (Matrix.piKronecker fun _ : Fin N ↦ U) * mpo M N *
+                (Matrix.piKronecker fun _ : Fin N ↦ U)) =
             (c : ℂ) • Matrix.blockDiagonal' fun k : Fin N → Fin K ↦
               fun x y ↦ ∏ n : Fin N, η (k n) (k (n + 1)) (x n) (y n) := by
   classical
@@ -745,13 +745,13 @@ theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
       ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
         data.bondData.bond).prod at hreal
   have hconj :
-      singleKrausMap (Matrix.tensorPower N Uᴴ) (mpo M N) =
+      singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ Uᴴ) (mpo M N) =
         (c : ℂ) • (List.ofFn fun i : Fin N ↦
           ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm
               (star (U ⊗ₖ U) * data.pairBond * (U ⊗ₖ U)))).prod := by
-    rw [hreal, (singleKrausMap (Matrix.tensorPower N Uᴴ)).map_smul,
+    rw [hreal, (singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ Uᴴ)).map_smul,
       singleKrausMap_bondProduct_of_unitary Uᴴ hV hV' hN]
     congr 1
     apply congrArg List.prod
@@ -760,21 +760,21 @@ theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
     rw [singleKrausMap_sitewise_conjTranspose_two_eq]
     rfl
   have hglobal :
-      singleKrausMap (Matrix.tensorPower N Uᴴ) (mpo M N) =
-        star (Matrix.tensorPower N U) * mpo M N *
-          Matrix.tensorPower N U := by
-    simp only [singleKrausMap_apply, ← Matrix.conjTranspose_tensorPower,
+      singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ Uᴴ) (mpo M N) =
+        star (Matrix.piKronecker fun _ : Fin N ↦ U) * mpo M N *
+          (Matrix.piKronecker fun _ : Fin N ↦ U) := by
+    simp only [singleKrausMap_apply, ← Matrix.conjTranspose_piKronecker,
       Matrix.conjTranspose_conjTranspose, Matrix.star_eq_conjTranspose]
   have hcyclic := reindex_product_placeAlong_ringWindow_of_etaPair_decomposition
     hN dl dr e η (star (U ⊗ₖ U) * data.pairBond * (U ⊗ₖ U)) hB
   calc
     Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
         (Matrix.etaCyclicEdgeEquiv dl dr e)
-        (star (Matrix.tensorPower N U) * mpo M N *
-          Matrix.tensorPower N U) =
+        (star (Matrix.piKronecker fun _ : Fin N ↦ U) * mpo M N *
+          (Matrix.piKronecker fun _ : Fin N ↦ U)) =
       Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
         (Matrix.etaCyclicEdgeEquiv dl dr e)
-        (singleKrausMap (Matrix.tensorPower N Uᴴ) (mpo M N)) :=
+        (singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ Uᴴ) (mpo M N)) :=
           congrArg (Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
             (Matrix.etaCyclicEdgeEquiv dl dr e)) hglobal.symm
     _ = Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)

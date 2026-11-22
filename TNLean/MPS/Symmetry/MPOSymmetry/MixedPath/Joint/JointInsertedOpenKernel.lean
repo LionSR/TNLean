@@ -42,12 +42,13 @@ theorem mem_ker_blockInsertedParentInteraction_iff
 /-- The exact open-chain kernel is the full joint extended boundary range,
 including when any of the nonzero block insertions is singular.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
-theorem ker_openInteractionHamiltonianES_blockInserted_eq
+theorem ker_hamiltonian_chainTranslates_blockInserted_eq
     (A : (x : Fin r) → MPSTensor d (dim x)) (hA : WordTupleSpanTop A 1)
     (W : (x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ)
     (hW : ∀ x, W x ≠ 0) (hN : 2 ≤ N) :
-    LinearMap.ker (openInteractionHamiltonianES
-      (1 - (blockInsertedBoundaryMap A W 2).range.starProjection).toLinearMap N) =
+    LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.chainTranslates 2 N
+      (Matrix.toEuclideanLin.symm
+        (1 - (blockInsertedBoundaryMap A W 2).range.starProjection).toLinearMap)).hamiltonian) =
       (blockInsertedBoundaryMap A W N).range := by
   by_cases hd : d = 0
   · subst d
@@ -62,9 +63,10 @@ theorem ker_openInteractionHamiltonianES_blockInserted_eq
       (Submodule.isSymmetricProjection_starProjection
         ((blockInsertedBoundaryMap A W 2).range)ᗮ).isPositive
   ext v
-  rw [mem_ker_openInteractionHamiltonianES_iff hpos hN,
-    mem_range_blockInsertedBoundaryMap_iff]
-  simp only [mem_ker_blockInsertedParentInteraction_iff]
+  rw [mem_ker_toEuclideanLin_hamiltonian_chainTranslates_iff
+    (Matrix.isPositive_toEuclideanLin_iff.mp (by rw [LinearEquiv.apply_symm_apply]; exact hpos))
+    (by omega) hN, mem_range_blockInsertedBoundaryMap_iff]
+  simp only [LinearEquiv.apply_symm_apply, mem_ker_blockInsertedParentInteraction_iff]
   constructor
   · intro hv
     apply contiguous_mem_of_restriction_intersection_submodules
@@ -90,20 +92,21 @@ theorem ker_openInteractionHamiltonianES_blockInserted_eq
 
 /-- The joint open kernel has the sum of the squared block dimensions.
 Source: arXiv:2203.12563, line 319 and Section 5, lines 1695–1777. -/
-theorem finrank_ker_openInteractionHamiltonianES_blockInserted
+theorem finrank_ker_hamiltonian_chainTranslates_blockInserted
     (A : (x : Fin r) → MPSTensor d (dim x)) (hA : WordTupleSpanTop A 1)
     (W : (x : Fin r) → Matrix (Fin (dim x)) (Fin (dim x)) ℂ)
     (hW : ∀ x, W x ≠ 0) (hN : 2 ≤ N) :
-    Module.finrank ℂ (LinearMap.ker (openInteractionHamiltonianES
-      (1 - (blockInsertedBoundaryMap A W 2).range.starProjection).toLinearMap N)) =
+    Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
+      (ManyBody.Interaction.chainTranslates 2 N (Matrix.toEuclideanLin.symm
+        (1 - (blockInsertedBoundaryMap A W 2).range.starProjection).toLinearMap)).hamiltonian)) =
       ∑ x, dim x * dim x := by
-  rw [ker_openInteractionHamiltonianES_blockInserted_eq A hA W hW hN]
+  rw [ker_hamiltonian_chainTranslates_blockInserted_eq A hA W hW hN]
   exact finrank_range_blockInsertedBoundaryMap A hA W hW (by omega)
 
 /-- The projector onto the exact joint open kernel varies continuously.
 This is finite-volume continuity and contains no uniform spectral-gap claim.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
-theorem continuous_ker_openInteractionHamiltonianES_blockInserted_starProjection
+theorem continuous_ker_hamiltonian_chainTranslates_blockInserted_starProjection
     {X : Type*} [TopologicalSpace X]
     (A : X → (x : Fin r) → MPSTensor d (dim x))
     (hA : ∀ x, Continuous fun t => A t x)
@@ -111,10 +114,11 @@ theorem continuous_ker_openInteractionHamiltonianES_blockInserted_starProjection
     (hW : ∀ x, Continuous fun t => W t x)
     (hSpan : ∀ t, WordTupleSpanTop (A t) 1)
     (hne : ∀ t x, W t x ≠ 0) (hN : 2 ≤ N) :
-    Continuous fun t => (LinearMap.ker (openInteractionHamiltonianES
-      (1 - (blockInsertedBoundaryMap (A t) (W t) 2).range.starProjection).toLinearMap
-        N)).starProjection := by
-  simp_rw [ker_openInteractionHamiltonianES_blockInserted_eq _ (hSpan _) _ (hne _) hN]
+    Continuous fun t => (LinearMap.ker (Matrix.toEuclideanLin
+      (ManyBody.Interaction.chainTranslates 2 N (Matrix.toEuclideanLin.symm
+        (1 - (blockInsertedBoundaryMap (A t) (W t) 2).range.starProjection).toLinearMap)
+          ).hamiltonian)).starProjection := by
+  simp_rw [ker_hamiltonian_chainTranslates_blockInserted_eq _ (hSpan _) _ (hne _) hN]
   have hP := ContinuousLinearMap.continuous_injectiveRangeProjector
     (fun t => blockInsertedBoundaryMap (A t) (W t) N)
     (continuous_blockInsertedBoundaryMap_family A hA W hW N)

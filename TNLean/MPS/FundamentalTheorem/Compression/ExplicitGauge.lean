@@ -214,18 +214,20 @@ bond coordinates by the graded block space. -/
 noncomputable def gaugeOfRingMatrix (τ : BlockSpace D S z ≃ Fin DB)
     (G Ginv : Matrix (Fin DB) (Fin DB) R) (hG : G * Ginv = 1) (hG' : Ginv * G = 1) :
     (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S z → ℂ) :=
-  gaugeOfMatrix τ (complexOfRing f G) (complexOfRing f Ginv) (complexOfRing_mul_eq_one f hG)
-    (complexOfRing_mul_eq_one f hG')
+  gaugeOfMatrix τ (Matrix.complexOfRing f G) (Matrix.complexOfRing f
+      Ginv) (Matrix.complexOfRing_mul_eq_one f hG)
+    (Matrix.complexOfRing_mul_eq_one f hG')
 
 /-- Conjugating the image of a matrix over `R` by the gauge of a matrix over `R` is the image of
 the conjugated matrix, relabelled along the bond coordinates. -/
 theorem conjMatrix_gaugeOfRingMatrix (τ : BlockSpace D S z ≃ Fin DB)
     {G Ginv : Matrix (Fin DB) (Fin DB) R} (hG : G * Ginv = 1) (hG' : Ginv * G = 1)
     {A : Matrix (Fin DB) (Fin DB) ℂ} {AR : Matrix (Fin DB) (Fin DB) R}
-    (hA : A = complexOfRing f AR) :
+    (hA : A = Matrix.complexOfRing f AR) :
     conjMatrix (gaugeOfRingMatrix f τ G Ginv hG hG') A =
-      (complexOfRing f (G * AR * Ginv)).submatrix τ τ := by
-  rw [gaugeOfRingMatrix, conjMatrix_gaugeOfMatrix, hA, ← complexOfRing_mul, ← complexOfRing_mul]
+      (Matrix.complexOfRing f (G * AR * Ginv)).submatrix τ τ := by
+  rw [gaugeOfRingMatrix, conjMatrix_gaugeOfMatrix, hA, ← Matrix.complexOfRing_mul, ←
+      Matrix.complexOfRing_mul]
 
 namespace MultiBlockCompression
 
@@ -240,9 +242,9 @@ diagonal block of each slot `s`, and zero on each zero slot. -/
 noncomputable def ofRing (ord : BlockIndex S z ≃ Fin (S.card + z))
     (τ : BlockSpace D S z ≃ Fin DB) (gauge : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S z → ℂ))
     (K : Fin d → Matrix (Fin DB) (Fin DB) R)
-    (hK : ∀ i, conjMatrix gauge (B i) = (complexOfRing f (K i)).submatrix τ τ)
+    (hK : ∀ i, conjMatrix gauge (B i) = (Matrix.complexOfRing f (K i)).submatrix τ τ)
     (Cg : ∀ s, Fin d → Matrix (Fin (D s)) (Fin (D s)) R)
-    (hC : ∀ s i, C s i = complexOfRing f (Cg s i))
+    (hC : ∀ s i, C s i = Matrix.complexOfRing f (Cg s i))
     (htri : ∀ (i : Fin d) (x y : BlockSpace D S z), ord y.1 < ord x.1 → K i (τ x) (τ y) = 0)
     (hmatched : ∀ (i : Fin d) (s : {s // s ∈ S}) (p q : Fin (D s.1)),
       K i (τ ⟨Sum.inl s, p⟩) (τ ⟨Sum.inl s, q⟩) = Cg s.1 i p q)
@@ -253,14 +255,14 @@ noncomputable def ofRing (ord : BlockIndex S z ≃ Fin (S.card + z))
   ord := ord
   gauge := gauge
   triangular i x y h := by
-    rw [hK, Matrix.submatrix_apply, complexOfRing_apply, htri i x y h, map_zero]
+    rw [hK, Matrix.submatrix_apply, Matrix.complexOfRing_apply, htri i x y h, map_zero]
   matched i s := by
     ext p q
-    rw [Matrix.blockDiag'_apply, hK, Matrix.submatrix_apply, complexOfRing_apply,
-      hmatched i s p q, hC, complexOfRing_apply]
+    rw [Matrix.blockDiag'_apply, hK, Matrix.submatrix_apply, Matrix.complexOfRing_apply,
+      hmatched i s p q, hC, Matrix.complexOfRing_apply]
   unmatched i t := by
     ext p q
-    rw [Matrix.blockDiag'_apply, hK, Matrix.submatrix_apply, complexOfRing_apply,
+    rw [Matrix.blockDiag'_apply, hK, Matrix.submatrix_apply, Matrix.complexOfRing_apply,
       hunmatched i t p q, map_zero, Matrix.zero_apply]
 
 variable {f} in
@@ -269,9 +271,9 @@ diagonal**: if every `K i` vanishes off the diagonal blocks, the extension split
 theorem remainder_ofRing {ord : BlockIndex S z ≃ Fin (S.card + z)}
     {τ : BlockSpace D S z ≃ Fin DB} {gauge : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S z → ℂ)}
     {K : Fin d → Matrix (Fin DB) (Fin DB) R}
-    {hK : ∀ i, conjMatrix gauge (B i) = (complexOfRing f (K i)).submatrix τ τ}
+    {hK : ∀ i, conjMatrix gauge (B i) = (Matrix.complexOfRing f (K i)).submatrix τ τ}
     {Cg : ∀ s, Fin d → Matrix (Fin (D s)) (Fin (D s)) R}
-    {hC : ∀ s i, C s i = complexOfRing f (Cg s i)}
+    {hC : ∀ s i, C s i = Matrix.complexOfRing f (Cg s i)}
     {htri : ∀ (i : Fin d) (x y : BlockSpace D S z), ord y.1 < ord x.1 → K i (τ x) (τ y) = 0}
     {hmatched : ∀ (i : Fin d) (s : {s // s ∈ S}) (p q : Fin (D s.1)),
       K i (τ ⟨Sum.inl s, p⟩) (τ ⟨Sum.inl s, q⟩) = Cg s.1 i p q}
@@ -293,14 +295,14 @@ bond coordinates. -/
 noncomputable def ofRingBlockDiagonal (ord : BlockIndex S z ≃ Fin (S.card + z))
     (τ : BlockSpace D S z ≃ Fin DB) (gauge : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S z → ℂ))
     (blk : Fin d → ∀ b : BlockIndex S z, Matrix (Fin (slotSize D b)) (Fin (slotSize D b)) R)
-    (hblk : ∀ i, conjMatrix gauge (B i) = complexOfRing f (Matrix.blockDiagonal' (blk i)))
+    (hblk : ∀ i, conjMatrix gauge (B i) = Matrix.complexOfRing f (Matrix.blockDiagonal' (blk i)))
     (Cg : ∀ s, Fin d → Matrix (Fin (D s)) (Fin (D s)) R)
-    (hC : ∀ s i, C s i = complexOfRing f (Cg s i))
+    (hC : ∀ s i, C s i = Matrix.complexOfRing f (Cg s i))
     (hmatched : ∀ (i : Fin d) (s : {s // s ∈ S}), blk i (Sum.inl s) = Cg s.1 i)
     (hunmatched : ∀ (i : Fin d) (t : Fin z), blk i (Sum.inr t) = 0) :
     MultiBlockCompression B S C :=
   ofRing f ord τ gauge (fun i => (Matrix.blockDiagonal' (blk i)).submatrix τ.symm τ.symm)
-    (fun i => by rw [hblk, complexOfRing_submatrix, Matrix.submatrix_submatrix]; simp) Cg hC
+    (fun i => by rw [hblk, Matrix.complexOfRing_submatrix, Matrix.submatrix_submatrix]; simp) Cg hC
     (fun i => triangular_of_offDiag fun x y hxy => by
       simp [Matrix.blockDiagonal'_apply_ne _ _ _ hxy])
     (fun i s p q => by simp [hmatched]) fun i t p q => by simp [hunmatched]
@@ -310,9 +312,9 @@ variable {f} in
 theorem remainder_ofRingBlockDiagonal {ord : BlockIndex S z ≃ Fin (S.card + z)}
     {τ : BlockSpace D S z ≃ Fin DB} {gauge : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S z → ℂ)}
     {blk : Fin d → ∀ b : BlockIndex S z, Matrix (Fin (slotSize D b)) (Fin (slotSize D b)) R}
-    {hblk : ∀ i, conjMatrix gauge (B i) = complexOfRing f (Matrix.blockDiagonal' (blk i))}
+    {hblk : ∀ i, conjMatrix gauge (B i) = Matrix.complexOfRing f (Matrix.blockDiagonal' (blk i))}
     {Cg : ∀ s, Fin d → Matrix (Fin (D s)) (Fin (D s)) R}
-    {hC : ∀ s i, C s i = complexOfRing f (Cg s i)}
+    {hC : ∀ s i, C s i = Matrix.complexOfRing f (Cg s i)}
     {hmatched : ∀ (i : Fin d) (s : {s // s ∈ S}), blk i (Sum.inl s) = Cg s.1 i}
     {hunmatched : ∀ (i : Fin d) (t : Fin z), blk i (Sum.inr t) = 0} (i : Fin d) :
     (ofRingBlockDiagonal f ord τ gauge blk hblk Cg hC hmatched hunmatched).remainder i = 0 :=

@@ -57,7 +57,7 @@ Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563v3, `REsubmission.tex`,
 lines 1691 and 1695--1777.
 -/
 
-open scoped Matrix BigOperators Topology
+open scoped Matrix BigOperators Topology ComplexOrder
 
 open Filter
 
@@ -153,23 +153,25 @@ parent Hamiltonian of `A(γ) = ⊕ₓ A_x(γ)` is spanned by the block states
 `|ψ_{A_x(γ)}⟩`, for every ring of length at least two. Source: GLM23,
 `REsubmission.tex`, line 1777: "its ground space is spanned by
 $\{ |\psi_{A_x(\gamma)}\rangle\}$". -/
-theorem ker_parentHamiltonianES_blockMixedTensor
+theorem ker_hamiltonian_parentRingInteraction_blockMixedTensor
     [NeZero s] [∀ x, NeZero (D₀ x)]
     (h₀ : ∀ x, Kraus.IsInjective (A₀ x)) (h₁ : ∀ x, Kraus.IsInjective (A₁ x))
     {γ : ℝ} (hγ : γ ∈ Set.Ioo (0 : ℝ) 1) {N : ℕ} (hN : 2 ≤ N) :
-    LinearMap.ker (parentHamiltonianES (blockMixedTensor A₀ A₁ γ) 2 N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin
+      (parentRingInteraction (blockMixedTensor A₀ A₁ γ) 2 N).hamiltonian) =
       (bntMPSVectorSpan (blockMixedInterpolation A₀ A₁ γ) N).map
         (WithLp.linearEquiv 2 ℂ (NSiteSpace (blockMixedPhysicalDim D₀ D₁) N)).symm.toLinearMap := by
   have := neZero_blockMixedPhysicalDim (D₀ := D₀) (D₁ := D₁)
   have := neZero_blockMixedBond (D₀ := D₀) (D₁ := D₁)
   rw [← range_blockPeriodicMpvMapES]
-  exact ker_parentHamiltonianES_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES
+  exact ker_hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES
     (fun _ => 1) _ (fun _ => one_ne_zero) one_pos
     (wordTupleSpanTop_blockMixedInterpolation A₀ A₁ h₀ h₁ hγ) le_rfl hN
 
 /-- The block states `|ψ_{A_x(γ)}⟩` are linearly independent on the closed
 interval, at every ring of length at least two. With
-`ker_parentHamiltonianES_blockMixedTensor` they form a basis of the periodic
+`ker_hamiltonian_parentRingInteraction_blockMixedTensor` they form a basis of the periodic
 ground space in the open interval. Source: GLM23, `REsubmission.tex`,
 line 1777. -/
 theorem linearIndependent_mpv_blockMixedInterpolation
@@ -198,11 +200,13 @@ theorem continuous_blockMixed_groundSpace_starProjection
     [NeZero s] [∀ x, NeZero (D₀ x)]
     (h₀ : ∀ x, Kraus.IsInjective (A₀ x)) (h₁ : ∀ x, Kraus.IsInjective (A₁ x))
     {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Continuous fun γ : Set.Ioo (0 : ℝ) 1 =>
-      (LinearMap.ker (parentHamiltonianES (blockMixedTensor A₀ A₁ γ) 2 N)).starProjection := by
+      (LinearMap.ker (Matrix.toEuclideanLin
+        (parentRingInteraction (blockMixedTensor A₀ A₁ γ) 2 N).hamiltonian)).starProjection := by
   have := neZero_blockMixedPhysicalDim (D₀ := D₀) (D₁ := D₁)
   have := neZero_blockMixedBond (D₀ := D₀) (D₁ := D₁)
-  exact continuous_parentHamiltonianES_toTensorFromBlocks_kernelProjection_family
+  exact continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_kernelProjection_family
     (fun _ _ => 1) (fun γ : Set.Ioo (0 : ℝ) 1 => blockMixedInterpolation A₀ A₁ γ)
     (fun _ _ => one_ne_zero)
     (fun x => (continuous_blockMixedInterpolation A₀ A₁ x).comp continuous_subtype_val)
@@ -214,25 +218,26 @@ subset and over all rings of length at least two. Source: GLM23,
 `REsubmission.tex`, line 1777: "$H(\gamma)$ is well-behaved in the whole
 path"; the compactness argument is arXiv:1010.3732, Appendix A,
 lines 2575--2578. -/
-theorem exists_uniform_blockMixed_parentHamiltonianES_gap
+theorem exists_uniform_blockMixed_hamiltonian_parentRingInteraction_gap
     [NeZero s] [∀ x, NeZero (D₀ x)]
     (h₀ : ∀ x, Kraus.IsInjective (A₀ x)) (h₁ : ∀ x, Kraus.IsInjective (A₁ x))
     {K : Set ℝ} (hK : IsCompact K) (hKI : K ⊆ Set.Ioo 0 1) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ γ ∈ K, ∀ N : ℕ, 2 ≤ N →
-      ∀ v ∈ (LinearMap.ker (parentHamiltonianES (blockMixedTensor A₀ A₁ γ) 2 N))ᗮ,
-        δ * ‖v‖ ≤ ‖parentHamiltonianES (blockMixedTensor A₀ A₁ γ) 2 N v‖ := by
+    ∃ δ : ℝ, 0 < δ ∧ ∀ γ ∈ K, ∀ (N : ℕ) (hN : 2 ≤ N), haveI : NeZero N := ⟨by omega⟩;
+      ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (parentRingInteraction (blockMixedTensor A₀ A₁ γ) 2 N).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ := by
   have := neZero_blockMixedPhysicalDim (D₀ := D₀) (D₁ := D₁)
   have := neZero_blockMixedBond (D₀ := D₀) (D₁ := D₁)
   have hK' : IsCompact ((↑) ⁻¹' K : Set (Set.Ioo (0 : ℝ) 1)) := by
     rw [Subtype.isCompact_iff, Set.image_preimage_eq_of_subset (by rwa [Subtype.range_coe])]
     exact hK
   obtain ⟨δ, hδ, hgap⟩ :=
-    exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths
+    exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_all_lengths
       (fun _ _ => 1) (fun γ : Set.Ioo (0 : ℝ) 1 => blockMixedInterpolation A₀ A₁ γ)
       (fun _ _ => one_ne_zero)
       (fun x => (continuous_blockMixedInterpolation A₀ A₁ x).comp continuous_subtype_val)
       one_pos (fun γ => wordTupleSpanTop_blockMixedInterpolation A₀ A₁ h₀ h₁ γ.2) le_rfl hK'
-  exact ⟨δ, hδ, fun γ hγ => hgap ⟨γ, hKI hγ⟩ hγ⟩
+  exact ⟨δ, hδ, fun γ hγ N hN => hgap ⟨γ, hKI hγ⟩ hγ N hN⟩
 
 /-- As the parameter tends within the open interval to any point of the closed
 interval, in particular to either endpoint, the ground projections of the
@@ -245,8 +250,10 @@ theorem tendsto_blockMixed_groundSpace_starProjection
     [NeZero s] [∀ x, NeZero (D₀ x)] [∀ x, NeZero (D₁ x)]
     (h₀ : ∀ x, Kraus.IsInjective (A₀ x)) (h₁ : ∀ x, Kraus.IsInjective (A₁ x))
     (γ₀ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Tendsto (fun γ : ℝ =>
-      (LinearMap.ker (parentHamiltonianES (blockMixedTensor A₀ A₁ γ) 2 N)).starProjection)
+      (LinearMap.ker (Matrix.toEuclideanLin
+        (parentRingInteraction (blockMixedTensor A₀ A₁ γ) 2 N).hamiltonian)).starProjection)
       (𝓝[Set.Ioo 0 1] (γ₀ : ℝ))
       (𝓝 (blockPeriodicMpvMapES (blockMixedInterpolation A₀ A₁ γ₀) N).range.starProjection) := by
   have := neZero_blockMixedBond (D₀ := D₀) (D₁ := D₁)
@@ -258,7 +265,8 @@ theorem tendsto_blockMixed_groundSpace_starProjection
     hT.continuousAt (blockPeriodicMpvMapES_blockMixedInterpolation_injective A₀ A₁ h₀ h₁ γ₀ hN)
   refine (hlim.tendsto.mono_left nhdsWithin_le_nhds).congr' ?_
   filter_upwards [self_mem_nhdsWithin] with γ hγ
-  rw [ker_parentHamiltonianES_blockMixedTensor A₀ A₁ h₀ h₁ hγ hN, ← range_blockPeriodicMpvMapES]
+  rw [ker_hamiltonian_parentRingInteraction_blockMixedTensor A₀ A₁ h₀ h₁ hγ hN,
+    ← range_blockPeriodicMpvMapES]
 
 end Block
 

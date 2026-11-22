@@ -18,13 +18,13 @@ A one-site Hilbert space may contain unused sectors in addition to the
 left and right virtual registers of a matrix product state. A neighboring
 interaction still consists of commuting projections if it acts only on
 the outgoing right register and incoming left register in each pair of
-sectors. Consequently its periodic Hamiltonian has no eigenvalues in
-\((0,1)\), independently of the chain length.
+sectors. Consequently every eigenvalue of its periodic Hamiltonian is `0`
+or at least `1`, independently of the chain length.
 
 This is the commuting-projection argument needed when the common physical
 space in Schuch–Pérez-García–Cirac, arXiv:1010.3732, Section II.F.2,
 equation eq:1d-sym:jointsym, also retains unused physical states. The zero
-spectral value requires a separate ground-state identification.
+eigenvalue requires a separate ground-state identification.
 
 ## Canonical parents as isometric interaction extensions
 
@@ -77,19 +77,21 @@ theorem hamiltonian_translationInvariant_quadratic_gap_of_commuting_projection
   simpa only [one_mul, P, ← map_sum, Interaction.hamiltonian_translationInvariant_of_le _ hN,
     bondMatrixEquiv_symm_eq_toEuclideanLin] using h
 
-/-- The spectrum of a periodic sum of commuting projection-valued local
-terms is contained in \(\{0\}\cup[1,\infty)\). Source context:
+/-- Every eigenvalue of a periodic sum of commuting projection-valued local
+terms is `0` or at least `1`. No ground state is asserted. Source context:
 arXiv:1010.3732, Sections II.D.2 and II.F.2. -/
-theorem hamiltonian_translationInvariant_spectrum_gap_one_of_commuting_projection
+theorem hamiltonian_translationInvariant_eigenvalue_gap_one_of_commuting_projection
     {d N : ℕ} (A : MPOTensor.ChainOperator d 2)
     (hA : IsStarProjection A) (hN : 2 ≤ N)
     (hcomm : ∀ i j : Fin N,
       Commute (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A)
         (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) A)) :
     haveI : NeZero N := ⟨by omega⟩;
-    ∀ z ∈ spectrum ℂ (Interaction.translationInvariant N A).hamiltonian,
-      0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) :=
-  haveI : NeZero N := ⟨by omega⟩; spectrum_separated_of_quadratic_gap _
+    ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) μ →
+      μ = 0 ∨ (1 : ℂ) ≤ μ :=
+  haveI : NeZero N := ⟨by omega⟩
+  forall_hasEigenvalue_of_quadratic_gap _
     (Interaction.posSemidef_hamiltonian fun _ ↦
       Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _))
     (hamiltonian_translationInvariant_quadratic_gap_of_commuting_projection A hA hN hcomm)
@@ -167,22 +169,23 @@ theorem sectorBondInteraction_isStarProjection {K d : ℕ}
   exact Matrix.isStarProjection_reindex _ _
     (Matrix.isStarProjection_reindex (Matrix.etaPairSpatialBlockEquiv e) _ hDiag)
 
-/-- Every periodic Hamiltonian of a projection-valued sector bond
-interaction has spectrum in \(\{0\}\cup[1,\infty)\), uniformly in
-its sector dimensions and chain length. This includes identity penalties
-on unused sectors. Source context: arXiv:1010.3732, Sections II.D.2 and
-II.F.2; Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)–(3). -/
-theorem sectorBondInteraction_spectrum_gap_one {K d N : ℕ}
+/-- Every eigenvalue of every periodic Hamiltonian of a projection-valued
+sector bond interaction is `0` or at least `1`, uniformly in its sector
+dimensions and chain length. This includes identity penalties on unused
+sectors. Source context: arXiv:1010.3732, Sections II.D.2 and II.F.2;
+Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)–(3). -/
+theorem sectorBondInteraction_eigenvalue_gap_one {K d N : ℕ}
     (dl dr : Fin K → ℕ) (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
     (η : (q h : Fin K) →
       Matrix (Matrix.EtaEdgeIndex dl dr q h) (Matrix.EtaEdgeIndex dl dr q h) ℂ)
     (hη : ∀ q h, IsStarProjection (η q h)) (hN : 2 ≤ N) :
-    haveI : NeZero N := ⟨by omega⟩; ∀ z ∈ spectrum ℂ
-      (Interaction.translationInvariant N (sectorBondInteraction dl dr e η)).hamiltonian,
-      0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
+    haveI : NeZero N := ⟨by omega⟩;
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (Interaction.translationInvariant N (sectorBondInteraction dl dr e η)).hamiltonian) μ →
+      μ = 0 ∨ (1 : ℂ) ≤ μ := by
   have : NeZero N := ⟨by omega⟩
   let : NeZero N := ⟨by omega⟩
-  exact hamiltonian_translationInvariant_spectrum_gap_one_of_commuting_projection _
+  exact hamiltonian_translationInvariant_eigenvalue_gap_one_of_commuting_projection _
     (sectorBondInteraction_isStarProjection dl dr e η hη) hN
     (sectorBondInteraction_translate_commute dl dr e η hN)
 
@@ -195,21 +198,21 @@ theorem placeAlong_ringWindow_isometry_intertwiner {d m N : ℕ}
     (A : MPOTensor.ChainOperator d 2) (hA : A.IsHermitian)
     (hN : 2 ≤ N) (i : Fin N) :
     placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i)
-        (singleKrausMap (Matrix.tensorPower 2 E) A) *
-        Matrix.tensorPower N E =
-      Matrix.tensorPower N E *
+        (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ E) A) *
+        (Matrix.piKronecker fun _ : Fin N ↦ E) =
+      (Matrix.piKronecker fun _ : Fin N ↦ E) *
         placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A := by
   have h := MPOTensor.singleKrausMap_placeAlong_ringWindow_eq_range_mul_lift
     E hE hN i A
   have hAdj := congrArg Matrix.conjTranspose h
-  have hLocal : (Matrix.tensorPower 2 E * A *
-      (Matrix.tensorPower 2 E)ᴴ).IsHermitian :=
+  have hLocal : ((Matrix.piKronecker fun _ : Fin 2 ↦ E) * A *
+      (Matrix.piKronecker fun _ : Fin 2 ↦ E)ᴴ).IsHermitian :=
     Matrix.isHermitian_mul_mul_conjTranspose _ hA
   simp only [singleKrausMap_apply, Matrix.conjTranspose_mul,
     Matrix.conjTranspose_conjTranspose, Matrix.mul_one,
     (isHermitian_placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) hA).eq,
     (isHermitian_placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i) hLocal).eq] at hAdj
-  have hMul := congrArg (fun M => M * Matrix.tensorPower N E) hAdj
+  have hMul := congrArg (fun M => M * (Matrix.piKronecker fun _ : Fin N ↦ E)) hAdj
   simpa only [singleKrausMap_apply, Matrix.mul_assoc,
     MPOTensor.tensorPower_isometry E hE N,
     Matrix.mul_one] using hMul.symm
@@ -222,7 +225,7 @@ equation eq:1d-sym:jointsym, physical endpoint embeddings. -/
 noncomputable def isometricInteractionExtension {d m : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (A : MPOTensor.ChainOperator d 2) :
     MPOTensor.ChainOperator m 2 :=
-  1 - singleKrausMap (Matrix.tensorPower 2 E) (1 - A)
+  1 - singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ E) (1 - A)
 
 /-- Adding the unused-state penalty preserves the intertwining identity
 on the included chain. Source context: arXiv:1010.3732, Section II.F.2,
@@ -232,21 +235,21 @@ theorem embed_isometricInteractionExtension_intertwiner {d m N : ℕ}
     (A : MPOTensor.ChainOperator d 2) (hA : A.IsHermitian)
     (hN : 2 ≤ N) (i : Fin N) :
     placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i) (isometricInteractionExtension E A) *
-        Matrix.tensorPower N E =
-      Matrix.tensorPower N E *
+        (Matrix.piKronecker fun _ : Fin N ↦ E) =
+      (Matrix.piKronecker fun _ : Fin N ↦ E) *
         placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A := by
   have h := placeAlong_ringWindow_isometry_intertwiner E hE (1 - A)
     (Matrix.isHermitian_one.sub hA) hN i
   change (placeAlongHom (X := fun _ ↦ Fin m) (ringWindow hN i))
-      (singleKrausMap (Matrix.tensorPower 2 E) (1 - A)) *
-      Matrix.tensorPower N E =
-    Matrix.tensorPower N E *
+      (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ E) (1 - A)) *
+      (Matrix.piKronecker fun _ : Fin N ↦ E) =
+    (Matrix.piKronecker fun _ : Fin N ↦ E) *
       (placeAlongHom (X := fun _ ↦ Fin d) (ringWindow hN i)) (1 - A) at h
-  have hSub := congrArg (fun M => Matrix.tensorPower N E - M) h
+  have hSub := congrArg (fun M => (Matrix.piKronecker fun _ : Fin N ↦ E) - M) h
   change (placeAlongHom (X := fun _ ↦ Fin m) (ringWindow hN i))
-      (1 - singleKrausMap (Matrix.tensorPower 2 E) (1 - A)) *
-      Matrix.tensorPower N E =
-    Matrix.tensorPower N E *
+      (1 - singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ E) (1 - A)) *
+      (Matrix.piKronecker fun _ : Fin N ↦ E) =
+    (Matrix.piKronecker fun _ : Fin N ↦ E) *
       (placeAlongHom (X := fun _ ↦ Fin d) (ringWindow hN i)) A
   simpa only [map_sub, map_one, Matrix.sub_mul, Matrix.mul_sub,
     Matrix.one_mul, Matrix.mul_one, sub_sub_cancel] using hSub
@@ -259,8 +262,9 @@ theorem hamiltonian_translationInvariant_isometricInteractionExtension_intertwin
     (A : MPOTensor.ChainOperator d 2) (hA : A.IsHermitian) (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian *
-        Matrix.tensorPower N E =
-      Matrix.tensorPower N E * (Interaction.translationInvariant N A).hamiltonian := by
+        (Matrix.piKronecker fun _ : Fin N ↦ E) =
+      (Matrix.piKronecker fun _ : Fin N ↦ E) * (Interaction.translationInvariant N
+          A).hamiltonian := by
   have : NeZero N := ⟨by omega⟩
   simpa only [Interaction.hamiltonian_translationInvariant_of_le _ hN, Matrix.sum_mul,
     Matrix.mul_sum] using
@@ -277,9 +281,9 @@ theorem isometricInteractionExtension_zero_mode {d m N : ℕ}
     (ψ : Cfg d N → ℂ) (hψ : ψ ≠ 0)
     (hzero : haveI : NeZero N := ⟨by omega⟩;
       (Interaction.translationInvariant N A).hamiltonian.mulVec ψ = 0) :
-    haveI : NeZero N := ⟨by omega⟩; (Matrix.tensorPower N E).mulVec ψ ≠ 0 ∧
+    haveI : NeZero N := ⟨by omega⟩; (Matrix.piKronecker fun _ : Fin N ↦ E).mulVec ψ ≠ 0 ∧
       (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian.mulVec
-        ((Matrix.tensorPower N E).mulVec ψ) = 0 := by
+        ((Matrix.piKronecker fun _ : Fin N ↦ E).mulVec ψ) = 0 := by
   have : NeZero N := ⟨by omega⟩
   have h := congrArg (fun M => M.mulVec ψ)
     (hamiltonian_translationInvariant_isometricInteractionExtension_intertwiner E hE A hA hN)
@@ -289,7 +293,7 @@ theorem isometricInteractionExtension_zero_mode {d m N : ℕ}
     simpa only [Matrix.mulVec_mulVec,
       MPOTensor.tensorPower_isometry E hE N, Matrix.one_mulVec,
       Matrix.mulVec_zero] using
-      congrArg (fun v => (Matrix.tensorPower N E)ᴴ.mulVec v) h0)
+      congrArg (fun v => (Matrix.piKronecker fun _ : Fin N ↦ E)ᴴ.mulVec v) h0)
 
 /-- A nontrivial original zero mode gives zero in the spectrum of the
 isometrically enlarged periodic Hamiltonian. Source context:
@@ -342,8 +346,8 @@ theorem parentInteraction_matrix_rotatePhysical_eq_isometricInteractionExtension
       isometricInteractionExtension E (LinearMap.toMatrix' (parentInteraction A 2)) := by
   rw [parentInteraction_matrix_rotatePhysical_isometry E hE A 2]
   simp only [isometricInteractionExtension, map_sub, singleKrausMap_apply, Matrix.mul_one]
-  rw [show Matrix.rectKronecker (fun _ : Fin 2 => E) =
-    Matrix.tensorPower 2 E from rfl]
+  rw [show Matrix.piKronecker (fun _ : Fin 2 => E) =
+    (Matrix.piKronecker fun _ : Fin 2 ↦ E) from rfl]
   abel
 
 end MPSTensor
