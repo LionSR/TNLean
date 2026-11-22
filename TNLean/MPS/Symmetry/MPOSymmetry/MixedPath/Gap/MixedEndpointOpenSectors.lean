@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointOpenKernel
 import QICLean.Spectral.Gap.ReducingProjectionGap
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 
 /-!
 # Inner physical-sector penalties on the open mixed chain
@@ -62,81 +63,6 @@ theorem toEuclideanLin_translationInvariant_term_apply_fiber {d R N : ℕ}
     exact cyclicActiveBlockConfigLinearIsometryEquiv_apply_apply hRN i v _
   rw [hU, ← hfiber]
   rfl
-
-private theorem commute_toEuclideanLin_diagonal_translationInvariant_term {d R N : ℕ}
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hRN : R ≤ N) (i : Fin N) (f : Cfg d N → ℂ)
-    (hf : ∀ s : Cfg d (N - R), Commute
-      (Matrix.toEuclideanLin (Matrix.diagonal fun ω =>
-        f ((cyclicActiveBlockConfigEquiv d R hRN i).symm (ω, s)))) (Matrix.toEuclideanLin h)) :
-    haveI : NeZero N := NeZero.of_pos i.pos;
-    Commute (Matrix.toEuclideanLin (Matrix.diagonal f))
-      (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i)) := by
-  classical
-  have : NeZero N := NeZero.of_pos i.pos
-  apply (commute_iff_eq _ _).mpr
-  ext v σ
-  let e := cyclicActiveBlockConfigEquiv d R hRN i
-  let w : EuclideanSpace ℂ (Cfg d R) :=
-    WithLp.toLp 2 fun ω => v (e.symm (ω, (e σ).2))
-  have hw : (WithLp.toLp 2 fun ω =>
-      f (e.symm (ω, (e σ).2)) * v (e.symm (ω, (e σ).2))) =
-      Matrix.toEuclideanLin (Matrix.diagonal fun ω => f (e.symm (ω, (e σ).2))) w := by
-    apply PiLp.ext
-    intro ω
-    simp only [Matrix.toEuclideanLin_diagonal_apply]
-    rfl
-  have hc := congrArg (fun T => T w (e σ).1) (hf (e σ).2).eq
-  simp only [Module.End.mul_apply, Matrix.toEuclideanLin_diagonal_apply] at hc
-  simp only [Module.End.mul_apply, Matrix.toEuclideanLin_diagonal_apply,
-    toEuclideanLin_translationInvariant_term_apply_fiber h hRN]
-  change f σ * Matrix.toEuclideanLin h w (e σ).1 = Matrix.toEuclideanLin h _ (e σ).1
-  rw [hw]
-  simpa only [e, Prod.mk.eta, Equiv.symm_apply_apply] using hc
-
-/-- If a local matrix commutes with a chosen single-site diagonal observable at every local
-site, every term of its translates on the ring commutes with that observable at every chain
-site, including spectator sites. -/
-theorem toEuclideanLin_translationInvariant_term_commute_siteDiagonal {d R N : ℕ}
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hRN : R ≤ N) (f : Fin d → ℂ)
-    (hf : ∀ r : Fin R,
-      Commute (Matrix.toEuclideanLin (Matrix.diagonal fun ω : Cfg d R => f (ω r)))
-        (Matrix.toEuclideanLin h))
-    (i k : Fin N) :
-    haveI : NeZero N := NeZero.of_pos i.pos;
-    Commute (Matrix.toEuclideanLin (Matrix.diagonal fun σ : Cfg d N => f (σ k)))
-      (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i)) := by
-  classical
-  have : NeZero N := NeZero.of_pos i.pos
-  apply commute_toEuclideanLin_diagonal_translationInvariant_term h hRN i
-  intro s
-  let x := (cyclicWindowIndexEquiv R N hRN i).symm k
-  have hk : cyclicWindowIndexEquiv R N hRN i x = k := by simp [x]
-  rcases x with r | r
-  · rw [← hk, cyclicWindowIndexEquiv_inl]
-    change Commute
-      (Matrix.toEuclideanLin (Matrix.diagonal fun ω : Cfg d R =>
-        f ((cyclicActiveBlockConfigEquiv d R hRN i).symm (ω, s)
-          (cyclicForwardSite i r.val)))) (Matrix.toEuclideanLin h)
-    simpa only [cyclicActiveBlockConfigEquiv_symm_apply_window] using hf r
-  · rw [← hk, cyclicWindowIndexEquiv_inr]
-    have hsite :
-        (⟨(i.val + R + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩ : Fin N) =
-          cyclicForwardSite i (R + r.val) := by
-      apply Fin.ext
-      simp only [cyclicForwardSite, Fin.val_mk, Nat.add_assoc]
-    rw [hsite]
-    simp only [cyclicActiveBlockConfigEquiv_symm_apply_spectator]
-    apply (commute_iff_eq _ _).mpr
-    ext v ω
-    simp only [Module.End.mul_apply, Matrix.toEuclideanLin_diagonal_apply]
-    have hconst : Matrix.toEuclideanLin (Matrix.diagonal fun _ : Cfg d R => f (s r)) v =
-        f (s r) • v := by
-      apply PiLp.ext
-      intro τ
-      simp only [Matrix.toEuclideanLin_diagonal_apply, PiLp.smul_apply, smul_eq_mul]
-    simp only [hconst, map_smul, PiLp.smul_apply, smul_eq_mul]
 
 namespace MPOSymmetry
 
@@ -534,7 +460,7 @@ theorem mixedEndpointChainRowSector_commute_hamiltonian_chainTranslates
     (by norm_num : 0 < 2), map_sum]
   apply Commute.sum_right
   intro i _
-  exact toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN
+  exact ManyBody.Interaction.toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN
     (fun p => bondInterpolationWeight D₀ D₁ 0 (finProdFinEquiv.symm p).1)
     (mixedEndpointRowSector_commute_parentInteraction_zero A₀ A₁) i.1 k
 
@@ -552,7 +478,7 @@ theorem mixedEndpointChainColumnSector_commute_hamiltonian_chainTranslates
     (by norm_num : 0 < 2), map_sum]
   apply Commute.sum_right
   intro i _
-  exact toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN
+  exact ManyBody.Interaction.toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN
     (fun p => bondInterpolationWeight D₀ D₁ 0 (finProdFinEquiv.symm p).2)
     (mixedEndpointColumnSector_commute_parentInteraction_zero A₀ A₁) i.1 k
 

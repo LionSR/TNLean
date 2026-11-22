@@ -5,7 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Continuity.CompactParentInteractionGap
 import TNLean.MPS.ParentHamiltonian.Gap.CanonicalOpenGap
-import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicInteraction
+import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
+import QICLean.ManyBody.Hamiltonian.KernelGap
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import QICLean.Spectral.Gap.PositiveComparisonGap
 

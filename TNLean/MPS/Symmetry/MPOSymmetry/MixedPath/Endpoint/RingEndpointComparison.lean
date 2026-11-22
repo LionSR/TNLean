@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Endpoint.MixedEndpointProjectorComparison
-import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicInteraction
+import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
+import QICLean.ManyBody.Hamiltonian.KernelGap
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 import QICLean.Spectral.Gap.PositiveComparisonGap
 import TNLean.MPS.ParentHamiltonian.Continuity.CompactParentGap
 import TNLean.MPS.Tensor.GroundSpace.UniqueGroundState
@@ -26,70 +28,6 @@ the interpolation from finite-volume continuity.
 -/
 
 open scoped BigOperators ComplexOrder InnerProductSpace Matrix
-
-/-! ### Translates of the matrix of the extended interaction on the ring
-
-The generic lemmas on the terms of the translates of a local matrix belong in QICLean, next to
-`ManyBody.Interaction.translationInvariant`. -/
-
-namespace ManyBody.Interaction
-
-open scoped MatrixOrder
-
-variable {α : Type*} [Fintype α] [DecidableEq α] {R N : ℕ} [NeZero N]
-
-/-- The term of the translates on the ring is additive in the local matrix. -/
-theorem translationInvariant_term_add (h k : Matrix (Fin R → α) (Fin R → α) ℂ) (i : Fin N) :
-    (translationInvariant N (h + k)).term i =
-      (translationInvariant N h).term i + (translationInvariant N k).term i := by
-  by_cases hRN : R ≤ N
-  · simp only [translationInvariant_term_of_le _ hRN, ManyBody.placeAlong_add]
-  · simp only [translationInvariant_term_of_not_le _ hRN, add_zero]
-
-/-- The term of the translates on the ring of a difference of local matrices. -/
-theorem translationInvariant_term_sub (h k : Matrix (Fin R → α) (Fin R → α) ℂ) (i : Fin N) :
-    (translationInvariant N (h - k)).term i =
-      (translationInvariant N h).term i - (translationInvariant N k).term i := by
-  by_cases hRN : R ≤ N
-  · simp only [translationInvariant_term_of_le _ hRN, ManyBody.placeAlong_sub]
-  · simp only [translationInvariant_term_of_not_le _ hRN, sub_zero]
-
-/-- For `R ≤ N`, every term of the translates of the local identity is the identity. -/
-theorem translationInvariant_term_one (hRN : R ≤ N) (i : Fin N) :
-    (translationInvariant N (1 : Matrix (Fin R → α) (Fin R → α) ℂ)).term i = 1 := by
-  rw [translationInvariant_term_of_le _ hRN, ManyBody.placeAlong_one]
-
-/-- The term of the translates on the ring is monotone in the local matrix. -/
-theorem translationInvariant_term_mono {h h' : Matrix (Fin R → α) (Fin R → α) ℂ} (hle : h ≤ h')
-    (i : Fin N) : (translationInvariant N h).term i ≤ (translationInvariant N h').term i := by
-  by_cases hRN : R ≤ N
-  · rw [translationInvariant_term_of_le _ hRN, translationInvariant_term_of_le _ hRN]
-    exact ManyBody.placeAlong_le_placeAlong _ hle
-  · rw [translationInvariant_term_of_not_le _ hRN, translationInvariant_term_of_not_le _ hRN]
-
-/-- For `R ≤ N`, the term with index `i` of the translates of a diagonal local matrix is the
-diagonal matrix of its values on the window of `R` consecutive sites starting at `i`, including
-a window crossing the periodic seam. -/
-theorem translationInvariant_term_diagonal (hRN : R ≤ N) (f : (Fin R → α) → ℂ) (i : Fin N) :
-    (translationInvariant N (Matrix.diagonal f)).term i =
-      Matrix.diagonal fun σ : Fin N → α ↦ f fun j ↦ σ (i + Fin.castLE hRN j) := by
-  rw [translationInvariant_term_of_le _ hRN, ManyBody.placeAlong_diagonal]
-  rfl
-
-/-- For a positive range, the open-chain Hamiltonian of the translates of a local matrix is the
-sum of the terms of its translates on the ring over the windows that do not cross the right
-endpoint. -/
-theorem hamiltonian_chainTranslates_eq_sum_nonwrappingStart
-    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (hR : 0 < R) :
-    (chainTranslates R N h).hamiltonian =
-      ∑ i : MPSTensor.NonwrappingStart R N, (translationInvariant N h).term i.1 := by
-  rw [hamiltonian]
-  refine Fintype.sum_equiv
-    ⟨fun j ↦ ⟨⟨j.val, by have := j.isLt; omega⟩, by have := j.isLt; change j.val + R ≤ N; omega⟩,
-      fun i ↦ ⟨i.1.val, by have := i.2; omega⟩, fun _ ↦ rfl, fun _ ↦ rfl⟩ _ _ fun j ↦ ?_
-  exact chainTranslates_term_eq_translationInvariant_term h hR j
-
-end ManyBody.Interaction
 
 namespace MPSTensor
 namespace MPOSymmetry

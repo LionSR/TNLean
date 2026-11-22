@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.FiniteIntervalGapComparison
-import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicInteraction
+import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
+import QICLean.ManyBody.Hamiltonian.KernelGap
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 import QICLean.Spectral.Gap.PositiveComparisonGap
 import TNLean.MPS.ParentHamiltonian.Gap.CanonicalGapAtSimultaneousInjectivity
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.CanonicalBoundedRangeGroundSpace

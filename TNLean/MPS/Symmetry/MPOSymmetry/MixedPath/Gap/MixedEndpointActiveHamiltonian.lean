@@ -59,7 +59,7 @@ theorem mixedEndpointChainRowSector_commute_localInteraction
       (Matrix.toEuclideanLin ((translationInvariant N
           (mixedEndpointParentInteraction A₀ A₁ 0)).term i)) :=
   have : NeZero N := ⟨by omega⟩
-  toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN
+  ManyBody.Interaction.toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN
     (fun p => bondInterpolationWeight D₀ D₁ 0 (finProdFinEquiv.symm p).1)
     (mixedEndpointRowSector_commute_parentInteraction_zero A₀ A₁) i k
 
@@ -73,7 +73,7 @@ theorem mixedEndpointChainColumnSector_commute_localInteraction
       (Matrix.toEuclideanLin ((translationInvariant N
           (mixedEndpointParentInteraction A₀ A₁ 0)).term i)) :=
   have : NeZero N := ⟨by omega⟩
-  toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN
+  ManyBody.Interaction.toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN
     (fun p => bondInterpolationWeight D₀ D₁ 0 (finProdFinEquiv.symm p).2)
     (mixedEndpointColumnSector_commute_parentInteraction_zero A₀ A₁) i k
 

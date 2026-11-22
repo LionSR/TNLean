@@ -3,7 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicInteraction
+import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
+import QICLean.Spectral.Gap.PositiveComparisonGap
+import QICLean.ManyBody.Hamiltonian.KernelGap
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.OpenRangeComparison
 import QICLean.Spectral.Gap.WeightedPositiveKernel

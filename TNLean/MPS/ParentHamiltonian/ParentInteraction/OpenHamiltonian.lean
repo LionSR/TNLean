@@ -5,6 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 import TNLean.MPS.Tensor.GroundSpace.UniqueGroundState
+import QICLean.Algebra.Combinatorics.FinSum
+import QICLean.ManyBody.Hamiltonian.FrustrationFree
+import QICLean.ManyBody.Dynamics.InteractionOperations
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 
 /-!
 # The nonwrapping open-chain parent Hamiltonian
@@ -39,141 +43,6 @@ Lemma existenceinteraction; PGVWC07, arXiv:quant-ph/0608197, Theorem 12.
 section
 
 open scoped BigOperators ComplexOrder
-
-/-- Two sums over initial segments of the natural numbers agree when the summands agree at the
-common positions and vanish at the positions beyond the other segment. -/
-theorem Fin.sum_eq_sum_of_val_eq {M : Type*} [AddCommMonoid M] {a b : ℕ} (f : Fin a → M)
-    (g : Fin b → M) (hfg : ∀ (k : ℕ) (ha : k < a) (hb : k < b), f ⟨k, ha⟩ = g ⟨k, hb⟩)
-    (hf : ∀ i : Fin a, b ≤ i.val → f i = 0) (hg : ∀ i : Fin b, a ≤ i.val → g i = 0) :
-    ∑ i, f i = ∑ i, g i := by
-  have key (c : ℕ) (u : Fin c → M) :
-      ∑ i, u i = ∑ k ∈ Finset.range c, if h : k < c then u ⟨k, h⟩ else 0 := by
-    rw [Finset.sum_range]
-    exact Fintype.sum_congr _ _ fun i ↦ by rw [dite_eq_left i.isLt]
-  have hsub (c e : ℕ) (u : Fin c → M) (hu : ∀ i : Fin c, e ≤ i.val → u i = 0) :
-      ∑ k ∈ Finset.range c, (if h : k < c then u ⟨k, h⟩ else 0) =
-        ∑ k ∈ Finset.range (min c e), if h : k < c then u ⟨k, h⟩ else 0 := by
-    refine (Finset.sum_subset (fun k hk ↦ ?_) fun k hk hk' ↦ ?_).symm
-    · rw [Finset.mem_range] at hk ⊢
-      omega
-    · rw [Finset.mem_range] at hk hk'
-      rw [dite_eq_left hk]
-      exact hu _ (by simp only; omega)
-  rw [key, key, hsub a b f hf, hsub b a g hg, min_comm b a]
-  refine Finset.sum_congr rfl fun k hk ↦ ?_
-  rw [Finset.mem_range] at hk
-  rw [dite_eq_left (by omega), dite_eq_left (by omega)]
-  exact hfg k _ _
-
-namespace ManyBody.Interaction
-
-open scoped MatrixOrder Matrix
-
-section Restrict
-
-variable {V : Type*} [Fintype V] [DecidableEq V] {X : V → Type*} [∀ v, Fintype (X v)]
-  [∀ v, DecidableEq (X v)] {ι : Type*} [Fintype ι] {S : ι → Finset V} {Φ : Interaction X S}
-
-/-- For positive semidefinite terms, the Hamiltonian of the restriction of an interaction to the
-indices with a property annihilates a vector exactly when every term with the property does. -/
-theorem mem_ker_toEuclideanLin_hamiltonian_restrict_iff (hΦ : ∀ i, (Φ.term i).PosSemidef)
-    (p : ι → Prop) [DecidablePred p] {v : EuclideanSpace ℂ (Config X)} :
-    v ∈ LinearMap.ker (Matrix.toEuclideanLin (Φ.restrict p).hamiltonian) ↔
-      ∀ i, p i → Matrix.toEuclideanLin (Φ.term i) v = 0 := by
-  rw [LinearMap.mem_ker, Matrix.toLpLin_apply, WithLp.toLp_eq_zero,
-    hamiltonian_mulVec_eq_zero_iff fun i ↦ forall_restrict_term Matrix.PosSemidef.zero (hΦ i)]
-  refine forall_congr' fun i ↦ ?_
-  by_cases hi : p i
-  · simp [hi, Matrix.toLpLin_apply]
-  · simp [hi]
-
-/-- For positive semidefinite terms, the Hamiltonian of an interaction annihilates a vector
-exactly when the operator of every term does. -/
-theorem mem_ker_toEuclideanLin_hamiltonian_iff (hΦ : ∀ i, (Φ.term i).PosSemidef)
-    {v : EuclideanSpace ℂ (Config X)} :
-    v ∈ LinearMap.ker (Matrix.toEuclideanLin Φ.hamiltonian) ↔
-      ∀ i, Matrix.toEuclideanLin (Φ.term i) v = 0 := by
-  simp only [LinearMap.mem_ker, Matrix.toLpLin_apply, WithLp.toLp_eq_zero,
-    hamiltonian_mulVec_eq_zero_iff hΦ]
-
-/-- The Hamiltonians of two restrictions of an interaction commute when every term of the first
-commutes with every term of the second. -/
-theorem commute_hamiltonian_restrict (p q : ι → Prop) [DecidablePred p] [DecidablePred q]
-    (h : ∀ i j, p i → q j → Commute (Φ.term i) (Φ.term j)) :
-    Commute (Φ.restrict p).hamiltonian (Φ.restrict q).hamiltonian :=
-  Commute.sum_left _ _ _ fun i _ ↦ Commute.sum_right _ _ _ fun j _ ↦ by
-    by_cases hi : p i
-    · by_cases hj : q j
-      · simpa [hi, hj] using h i j hi hj
-      · simp [hj]
-    · simp [hi]
-
-/-- For nonnegative terms, the Hamiltonian of a restriction of an interaction is below the
-Hamiltonian. -/
-theorem hamiltonian_restrict_le (hΦ : ∀ i, 0 ≤ Φ.term i) (p : ι → Prop) [DecidablePred p] :
-    (Φ.restrict p).hamiltonian ≤ Φ.hamiltonian :=
-  Finset.sum_le_sum fun i _ ↦ by
-    rw [restrict_term]
-    split_ifs
-    exacts [le_rfl, hΦ i]
-
-/-- Summing the Hamiltonians of a family of restrictions of an interaction gives the Hamiltonian
-of one restriction when every index of the latter lies in exactly one member of the family and
-no other index lies in any. -/
-theorem sum_hamiltonian_restrict_eq_hamiltonian_restrict {κ : Type*} (s : Finset κ)
-    (P : κ → ι → Prop) [∀ n, DecidablePred (P n)] (Q : ι → Prop) [DecidablePred Q] (g : ι → κ)
-    (hg : ∀ i, Q i → g i ∈ s) (h : ∀ i, ∀ n ∈ s, P n i ↔ Q i ∧ n = g i) :
-    ∑ n ∈ s, (Φ.restrict (P n)).hamiltonian = (Φ.restrict Q).hamiltonian := by
-  simp only [hamiltonian, restrict_term]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun i _ ↦ ?_
-  by_cases hQ : Q i
-  · rw [ite_eq_left hQ, Finset.sum_eq_single_of_mem (g i) (hg i hQ) fun n hn hne ↦
-      ite_eq_right fun hP ↦ hne ((h i n hn).mp hP).2]
-    exact ite_eq_left ((h i _ (hg i hQ)).mpr ⟨hQ, rfl⟩)
-  · rw [ite_eq_right hQ]
-    exact Finset.sum_eq_zero fun n hn ↦ ite_eq_right fun hP ↦ hQ ((h i n hn).mp hP).1
-
-/-- For nonnegative terms, the Hamiltonians of two restrictions of an interaction to disjoint
-sets of indices add up to at most the Hamiltonian. -/
-theorem hamiltonian_restrict_add_hamiltonian_restrict_le (hΦ : ∀ i, 0 ≤ Φ.term i)
-    (p q : ι → Prop) [DecidablePred p] [DecidablePred q] (hpq : ∀ i, p i → ¬q i) :
-    (Φ.restrict p).hamiltonian + (Φ.restrict q).hamiltonian ≤ Φ.hamiltonian := by
-  simp only [hamiltonian, restrict_term]
-  rw [← Finset.sum_add_distrib]
-  refine Finset.sum_le_sum fun i _ ↦ ?_
-  by_cases hp : p i
-  · rw [ite_eq_left hp, ite_eq_right (hpq i hp), add_zero]
-  · rw [ite_eq_right hp, zero_add]
-    split_ifs
-    exacts [le_rfl, hΦ i]
-
-end Restrict
-
-/-- **The counting bound of condition C1.** On the open chain, each window of `R` sites lies in
-at most \(W - R + 1\) of the intervals \([n - W, n)\), \(W \le n \le N\); summing the
-Hamiltonians of the restrictions of the translates of a positive semidefinite matrix to the
-windows inside these intervals gives at most \(W - R + 1\) times the Hamiltonian.
-Nachtergaele, arXiv:cond-mat/9410110, condition C1, lines 1030--1041. -/
-theorem sum_hamiltonian_restrict_chainTranslates_le {α : Type*} [Fintype α] [DecidableEq α]
-    {R W : ℕ} (hRW : R ≤ W) {h : Matrix (Fin R → α) (Fin R → α) ℂ} (hh : 0 ≤ h) (N : ℕ) :
-    ∑ n ∈ Finset.Icc W N, ((chainTranslates R N h).restrict
-        fun i ↦ n - W ≤ i.val ∧ i.val + R ≤ n).hamiltonian ≤
-      ((W - R + 1 : ℕ) : ℂ) • (chainTranslates R N h).hamiltonian := by
-  simp only [hamiltonian, restrict_term]
-  rw [Finset.sum_comm, Finset.smul_sum]
-  refine Finset.sum_le_sum fun i _ ↦ ?_
-  rw [← Finset.sum_filter, Finset.sum_const, Nat.cast_smul_eq_nsmul]
-  refine nsmul_le_nsmul_left (ofPlaceAlong_term_nonneg _ (fun _ ↦ hh) i) ?_
-  calc _ ≤ (Finset.Icc (i.val + R) (i.val + W)).card :=
-        Finset.card_le_card fun n hn ↦ by
-          simp only [Finset.mem_filter, Finset.mem_Icc] at hn ⊢
-          omega
-    _ = W - R + 1 := by
-        rw [Nat.card_Icc]
-        omega
-
-end ManyBody.Interaction
 
 namespace MPSTensor
 

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointOpenSectors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Endpoint.MixedEndpointSwap
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 
 /-!
 # Actual open-Hamiltonian transport between the mixed endpoints
@@ -114,16 +115,6 @@ theorem toEuclideanLin_translationInvariant_term_physicalReindex_conj
   rw [LinearIsometryEquiv.symm_apply_apply]
   exact toEuclideanLin_translationInvariant_term_physicalReindex_apply e hh i w
 
-private theorem chainTranslates_zero_term {d : ℕ} (K : Matrix (Cfg d 0) (Cfg d 0) ℂ)
-    (i : Fin (N + 1 - 0)) : (chainTranslates 0 N K).term i = K default default • 1 := by
-  have hK : K = K default default • 1 := by
-    ext a b
-    rw [Subsingleton.elim a default, Subsingleton.elim b default]
-    simp
-  rw [ManyBody.Interaction.chainTranslates, ManyBody.Interaction.ofPlaceAlong_term]
-  conv_lhs => rw [hK]
-  rw [ManyBody.placeAlong_smul, ManyBody.placeAlong_one]
-
 private theorem apply_default_eq_of_physicalReindex_conj (e : Fin d₁ ≃ Fin d₂)
     {h' : Matrix (Cfg d₁ 0) (Cfg d₁ 0) ℂ} {h : Matrix (Cfg d₂ 0) (Cfg d₂ 0) ℂ}
     (hh : Matrix.toEuclideanLin h' =
@@ -150,7 +141,7 @@ theorem toEuclideanLin_hamiltonian_chainTranslates_physicalReindex_conj
       (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.conj
         (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) := by
   rcases Nat.eq_zero_or_pos R with rfl | hR
-  · simp only [ManyBody.Interaction.hamiltonian, chainTranslates_zero_term,
+  · simp only [ManyBody.Interaction.hamiltonian, ManyBody.Interaction.chainTranslates_fin_zero_term,
       apply_default_eq_of_physicalReindex_conj e hh, map_sum, map_smul]
     refine Finset.sum_congr rfl fun i _ ↦ ?_
     congr 1

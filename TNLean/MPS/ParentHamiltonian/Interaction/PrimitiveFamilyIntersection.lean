@@ -7,7 +7,10 @@ import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.JointGroundSpaceIntersection
 import TNLean.MPS.ParentHamiltonian.BoundaryMap.GroundSpaceIndependence
 import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicOriginalIntersection
-import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicInteraction
+import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
+import QICLean.Spectral.Gap.PositiveComparisonGap
+import QICLean.ManyBody.Hamiltonian.KernelGap
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 import TNLean.MPS.ParentHamiltonian.Interaction.OpenInteraction
 

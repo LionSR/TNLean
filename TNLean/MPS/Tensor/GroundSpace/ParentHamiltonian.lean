@@ -10,6 +10,7 @@ import QICLean.ManyBody.Hamiltonian.FrustrationFree
 import QICLean.ManyBody.Hamiltonian.Models
 
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 
 /-!
 # Parent interaction and parent Hamiltonian (definitions)
@@ -391,45 +392,3 @@ only uses chain lengths greater than two. This restriction is documented in
   exact Finset.sum_eq_zero fun i _ ↦ localTerm_of_not_le A (by norm_num) i
 
 end MPSTensor
-
-/-! ### The Hamiltonian of the open-chain translates
-
-Its dependence on the local matrix. The order and projection properties of
-`Matrix.toEuclideanLin` are in `QICLean.Analysis.Norm.MatrixToEuclidean` and
-`QICLean.Analysis.Projection.MatrixStarProjection`, and the sum over the starting positions is
-`ManyBody.Interaction.hamiltonian_chainTranslates_eq_sum_range`. -/
-
-namespace ManyBody.Interaction
-
-section ChainTranslates
-
-open scoped MatrixOrder ComplexOrder
-
-variable {α : Type*} [Fintype α] [DecidableEq α] {k : ℕ}
-
-/-- The Hamiltonian of the open-chain translates is monotone in the local matrix. -/
-theorem hamiltonian_chainTranslates_mono {h h' : Matrix (Fin k → α) (Fin k → α) ℂ} (hle : h ≤ h')
-    (N : ℕ) : (chainTranslates k N h).hamiltonian ≤ (chainTranslates k N h').hamiltonian :=
-  Finset.sum_le_sum fun _ _ ↦ placeAlong_le_placeAlong (X := fun _ ↦ α) _ hle
-
-/-- The Hamiltonian of the open-chain translates is linear in the local matrix. -/
-theorem hamiltonian_chainTranslates_smul (c : ℂ) (h : Matrix (Fin k → α) (Fin k → α) ℂ)
-    (N : ℕ) :
-    (chainTranslates k N (c • h)).hamiltonian = c • (chainTranslates k N h).hamiltonian := by
-  simp only [hamiltonian, ofPlaceAlong_term, placeAlong_smul, Finset.smul_sum]
-
-/-- The open-chain translates of the zero matrix have zero Hamiltonian. -/
-theorem hamiltonian_chainTranslates_zero (N : ℕ) :
-    (chainTranslates k N (0 : Matrix (Fin k → α) (Fin k → α) ℂ)).hamiltonian = 0 := by
-  simp [hamiltonian, ofPlaceAlong_term, placeAlong_zero]
-
-/-- The open-chain translates of a positive semidefinite matrix have a positive semidefinite
-Hamiltonian. -/
-theorem posSemidef_hamiltonian_chainTranslates {h : Matrix (Fin k → α) (Fin k → α) ℂ}
-    (hh : h.PosSemidef) (N : ℕ) : (chainTranslates k N h).hamiltonian.PosSemidef :=
-  posSemidef_hamiltonian fun i ↦ Matrix.nonneg_iff_posSemidef.mp
-    (ofPlaceAlong_term_nonneg _ (fun _ ↦ Matrix.nonneg_iff_posSemidef.mpr hh) i)
-
-end ChainTranslates
-
-end ManyBody.Interaction

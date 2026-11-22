@@ -5,7 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Deformation.InjectiveIsometricDeformationSymmetry
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockSumIntervalSpaces
-import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicInteraction
+import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
+import QICLean.Spectral.Gap.PositiveComparisonGap
+import QICLean.ManyBody.Hamiltonian.KernelGap
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Deformation.ParentHamiltonianSymmetry
 import TNLean.MPS.Operator.Interaction.GappedInteractionPath

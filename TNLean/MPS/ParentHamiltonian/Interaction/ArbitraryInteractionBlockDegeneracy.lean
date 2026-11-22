@@ -8,7 +8,10 @@ import TNLean.MPS.ParentHamiltonian.Gap.Comparison.CyclicWindowOpenHamiltonian
 import TNLean.MPS.Tensor.Overlap
 import QICLean.Spectral.Gap.WeightedPositiveKernel
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockGroundSpaceMapContinuity
-import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicInteraction
+import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
+import QICLean.Spectral.Gap.PositiveComparisonGap
+import QICLean.ManyBody.Hamiltonian.KernelGap
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BoundaryMatrix.PGVWC07CutRank
 
 /-!

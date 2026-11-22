@@ -360,7 +360,8 @@ theorem jointMixedRowSector_commute_translationInvariant_term
     Commute (jointMixedRowSector d₀ d₁ D₀ D₁ k)
       (Matrix.toEuclideanLin
         ((translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).term i)) :=
-  toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN jointMixedRowWeight
+  ManyBody.Interaction.toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN
+    jointMixedRowWeight
     (jointMixedRowSector_commute_parentInteraction_zero A₀ A₁) i k
 
 /-- Every column phase commutes with every actual translated endpoint term. -/
@@ -372,7 +373,8 @@ theorem jointMixedColumnSector_commute_translationInvariant_term
     Commute (jointMixedColumnSector d₀ d₁ D₀ D₁ k)
       (Matrix.toEuclideanLin
         ((translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).term i)) :=
-  toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN jointMixedColumnWeight
+  ManyBody.Interaction.toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN
+    jointMixedColumnWeight
     (jointMixedColumnSector_commute_parentInteraction_zero A₀ A₁) i k
 
 /-- The full phase penalty commutes with the actual periodic endpoint

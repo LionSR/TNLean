@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointOpenKernel
 import QICLean.Spectral.Gap.CompactKernelGap
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 
 /-!
 # Finite-window gap continuity for the actual mixed interaction
@@ -22,37 +23,6 @@ perturbation argument is arXiv:1010.3732, Appendix A, lines 2575–2578.
 -/
 
 open scoped Topology
-
-namespace ManyBody.Interaction
-
-variable {α : Type*} [Fintype α] [DecidableEq α] {R : ℕ}
-
-/-- At a fixed volume, the open-chain Hamiltonian of the translates of a local matrix depends
-continuously on the matrix. -/
-theorem continuous_hamiltonian_chainTranslates (R N : ℕ) :
-    Continuous fun h : Matrix (Fin R → α) (Fin R → α) ℂ ↦
-      (chainTranslates R N h).hamiltonian := by
-  simp only [hamiltonian, chainTranslates, ofPlaceAlong_term]
-  refine continuous_finsetSum _ fun i _ ↦ ?_
-  classical
-  exact (ManyBody.placeAlongHom (X := fun _ : Fin N ↦ α) _).toAlgHom.toLinearMap
-    |>.continuous_of_finiteDimensional
-
-/-- At a fixed volume, the Hamiltonian of the translates of a local matrix on the ring depends
-continuously on the matrix. -/
-theorem continuous_hamiltonian_translationInvariant (R N : ℕ) [NeZero N] :
-    Continuous fun h : Matrix (Fin R → α) (Fin R → α) ℂ ↦
-      (translationInvariant N h).hamiltonian := by
-  by_cases hRN : R ≤ N
-  · simp only [hamiltonian, translationInvariant_term_of_le _ hRN]
-    refine continuous_finsetSum _ fun i _ ↦ ?_
-    classical
-    exact (ManyBody.placeAlongHom (X := fun _ : Fin N ↦ α) _).toAlgHom.toLinearMap
-      |>.continuous_of_finiteDimensional
-  · simp only [hamiltonian, translationInvariant_term_of_not_le _ hRN]
-    exact continuous_const
-
-end ManyBody.Interaction
 
 namespace MPSTensor
 namespace MPOSymmetry

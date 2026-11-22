@@ -9,6 +9,8 @@ import TNLean.MPS.ParentHamiltonian.ParentInteraction.EmbeddedC2
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.FiniteIntervalGapComparison
 import QICLean.Analysis.TensorProduct.EuclideanFiberwiseMap
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PrimitiveGaugeExistence
+import QICLean.Spectral.Gap.PositiveComparisonGap
+import QICLean.Algebra.Combinatorics.FinSum
 
 /-!
 # Comparison of parent interactions on open chains
@@ -21,44 +23,6 @@ gap argument.
 -/
 
 open scoped ComplexOrder
-
-/-- A comparison \(κP \le mQ\) of positive operators with equal kernels transfers a gap \(γ\)
-above the kernel of `P` to the gap \(κγ/m\) above the kernel of `Q`. -/
-theorem LinearMap.IsPositive.norm_gap_of_scaled_comparison {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
-    {P Q : E →ₗ[ℂ] E} (hP : P.IsPositive) {κ γ m : ℝ}
-    (hκ : 0 < κ) (hγ : 0 < γ) (hm : 0 < m)
-    (hOrder : (κ : ℂ) • P ≤ (m : ℂ) • Q)
-    (hKer : LinearMap.ker P = LinearMap.ker Q)
-    (hGap : ∀ v ∈ (LinearMap.ker P)ᗮ, γ * ‖v‖ ≤ ‖P v‖) :
-    ∀ v ∈ (LinearMap.ker Q)ᗮ, (κ * γ / m) * ‖v‖ ≤ ‖Q v‖ := by
-  have hκ' : (κ : ℂ) ≠ 0 := by exact_mod_cast hκ.ne'
-  have hm' : (m : ℂ) ≠ 0 := by exact_mod_cast hm.ne'
-  have hGapScaled : ∀ u ∈ (LinearMap.ker ((κ : ℂ) • P))ᗮ,
-      (κ * γ) * ‖u‖ ≤ ‖((κ : ℂ) • P) u‖ := by
-    intro u hu
-    have hu' : u ∈ (LinearMap.ker P)ᗮ := by
-      simpa only [LinearMap.ker_smul _ _ hκ'] using hu
-    simpa only [LinearMap.smul_apply, norm_smul, Complex.norm_real,
-      Real.norm_eq_abs, abs_of_pos hκ, mul_assoc] using
-      mul_le_mul_of_nonneg_left (hGap u hu') hκ.le
-  have hKerScaled : LinearMap.ker ((κ : ℂ) • P) =
-      LinearMap.ker ((m : ℂ) • Q) := by
-    simp only [LinearMap.ker_smul _ _ hκ', LinearMap.ker_smul _ _ hm', hKer]
-  have hTransfer := LinearMap.IsPositive.norm_gap_of_le_of_ker_eq
-    (E := E) (hP.smul_of_nonneg (by exact_mod_cast hκ.le))
-    (mul_nonneg hκ.le hγ.le) hOrder hKerScaled hGapScaled
-  intro v hv
-  have hv' : v ∈ (LinearMap.ker ((m : ℂ) • Q))ᗮ := by
-    simpa only [LinearMap.ker_smul _ _ hm'] using hv
-  have h := hTransfer v hv'
-  rw [div_mul_eq_mul_div]
-  apply (div_le_iff₀ hm).mpr
-  calc
-    (κ * γ) * ‖v‖ ≤ m * ‖Q v‖ := by
-      simpa only [LinearMap.smul_apply, norm_smul, Complex.norm_real,
-        Real.norm_eq_abs, abs_of_pos hm] using h
-    _ = ‖Q v‖ * m := mul_comm _ _
 
 namespace MPSTensor
 
@@ -159,25 +123,6 @@ section Interaction
 open scoped MatrixOrder
 open ManyBody.Interaction (chainTranslates hamiltonian_chainTranslates_eq_sum_range)
 
-/-- Each position \(i < c\) is the sum \(n + j\) of at most `b` pairs with \(j < b\): a double
-sum of nonnegative terms over \(n < a\), \(j < b\) is at most `b` times the sum over
-\(i < c\). -/
-private theorem sum_range_sum_range_add_le {M : Type*} [AddCommMonoid M] [PartialOrder M]
-    [IsOrderedAddMonoid M] (g : ℕ → M) (hg : ∀ i, 0 ≤ g i) {a b c : ℕ}
-    (hc : ∀ n < a, ∀ j < b, n + j < c) :
-    ∑ n ∈ Finset.range a, ∑ j ∈ Finset.range b, g (n + j) ≤ b • ∑ i ∈ Finset.range c, g i := by
-  rw [Finset.sum_comm]
-  calc ∑ j ∈ Finset.range b, ∑ n ∈ Finset.range a, g (n + j)
-      ≤ ∑ j ∈ Finset.range b, ∑ i ∈ Finset.range c, g i := by
-        refine Finset.sum_le_sum fun j hj ↦ ?_
-        rw [← Finset.sum_image (g := (· + j)) fun x _ y _ hxy ↦ by simpa using hxy]
-        refine Finset.sum_le_sum_of_subset_of_nonneg ?_ fun i _ _ ↦ hg i
-        intro i hi
-        obtain ⟨n, hn, rfl⟩ := Finset.mem_image.mp hi
-        exact Finset.mem_range.mpr
-          (hc n (Finset.mem_range.mp hn) j (Finset.mem_range.mp hj))
-    _ = b • ∑ i ∈ Finset.range c, g i := by rw [Finset.sum_const, Finset.card_range]
-
 /-- **Comparison from one window.** If the open Hamiltonian of a positive semidefinite range-`R`
 matrix `h` on `W` sites dominates a multiple of the local parent projection on `W` sites, then on
 every open chain the Hamiltonian of the translates of `h`, times the window multiplicity
@@ -218,7 +163,7 @@ theorem hamiltonian_chainTranslates_comparison_of_local (A : MPSTensor d D) {R W
         rw [dite_eq_left (show n + W ≤ N by have := Finset.mem_range.mp hn; omega)]
         exact hwindow n _
     _ ≤ (W + 1 - R) • ∑ i ∈ Finset.range (N + 1 - R), g i :=
-        sum_range_sum_range_add_le g hg fun n hn j hj ↦ by omega
+        Finset.sum_range_sum_range_add_le g hg fun n hn j hj ↦ by omega
 
 /-- **Gap transfer at a specified volume.** Under the comparison of
 `hamiltonian_chainTranslates_comparison_of_local`, if the open Hamiltonian of `h` and the

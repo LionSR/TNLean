@@ -6,7 +6,10 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.ArbitraryPhysicalMixedInterpolation
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedPath.Gap.MixedEndpointUniformPathGap
 import TNLean.MPS.ParentHamiltonian.Deformation.IsometricDeformationSymmetry
-import TNLean.MPS.ParentHamiltonian.Interaction.PeriodicInteraction
+import TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison
+import QICLean.Spectral.Gap.PositiveComparisonGap
+import QICLean.ManyBody.Hamiltonian.KernelGap
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 import TNLean.MPS.Operator.Interaction.GappedInteractionPath
 import TNLean.MPS.Symmetry.GappedPath.PhysicalIsometricGapTransport
 import TNLean.MPS.Symmetry.SPTClassification.CommonPhysicalEndpointOrthogonality

@@ -8,6 +8,7 @@ import TNLean.MPS.Tensor.CyclicWindowIndex
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.CyclicWindowPermutation
 import TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Gap.Filtration.SpectatorTransport
+import QICLean.ManyBody.Hamiltonian.LocalTermTranslates
 
 /-!
 # Cyclic windows as open parent Hamiltonians
@@ -416,94 +417,3 @@ theorem cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply
 end RingTerms
 
 end MPSTensor
-
-namespace ManyBody.Interaction
-
-open Fin.CommRing
-
-variable {α : Type*} [Fintype α] [DecidableEq α] {R N : ℕ} [NeZero N]
-
-/-- **A window of terms.** On the ring of `N` sites, the translate to the window of \(W \le N\)
-consecutive sites starting at `i` of the open-chain Hamiltonian of `h` on `W` sites is the sum of
-the terms of the translates of `h` on the ring at the starts \(i, i + 1, \dots, i + (W - R)\): the
-windows of `R` consecutive sites inside that window. -/
-theorem translationInvariant_term_hamiltonian_chainTranslates
-    (h : Matrix (Fin R → α) (Fin R → α) ℂ) {W : ℕ} (hWN : W ≤ N) (i : Fin N) :
-    (translationInvariant N (chainTranslates R W h).hamiltonian).term i =
-      ∑ j : Fin (W + 1 - R), (translationInvariant N h).term (i + (j.val : Fin N)) := by
-  rw [translationInvariant_term_of_le _ hWN, hamiltonian, ManyBody.placeAlong_sum]
-  refine Fintype.sum_congr _ _ fun j ↦ ?_
-  rw [ofPlaceAlong_term, translationInvariant_term_of_le _ (show R ≤ N by have := j.isLt; omega),
-    ManyBody.placeAlong_placeAlong, ManyBody.chainWindow_trans_ringWindow]
-
-/-- **A window that does not wrap.** A term of the translates of `h` on the open chain is the
-term of the translates of `h` on the ring at the same start. -/
-theorem chainTranslates_term_eq_translationInvariant_term
-    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (hR : 0 < R) (i : Fin (N + 1 - R)) :
-    (chainTranslates R N h).term i =
-      (translationInvariant N h).term ⟨i.val, by have := i.isLt; omega⟩ := by
-  have hi := i.isLt
-  rw [chainTranslates, ofPlaceAlong_term, translationInvariant_term_of_le _ (by omega : R ≤ N)]
-  congr 1
-  ext j
-  simp only [ManyBody.val_chainWindow, ManyBody.ringWindow_apply, Fin.val_add, Fin.val_castLE]
-  rw [Nat.mod_eq_of_lt (by have := j.isLt; omega)]
-
-/-- **Separated windows.** Terms of translates on the ring whose windows of `R` consecutive
-sites start `e` sites apart, with \(R \le e\) and \(e + R \le N\), commute: the windows are
-disjoint. -/
-theorem commute_translationInvariant_term_add_of_le
-    (h h' : Matrix (Fin R → α) (Fin R → α) ℂ) {e : ℕ} (hR : R ≤ e) (he : e + R ≤ N)
-    (i : Fin N) :
-    Commute ((translationInvariant N h).term i)
-      ((translationInvariant N h').term (i + (e : Fin N))) := by
-  have hRN : R ≤ N := by omega
-  rw [translationInvariant_term_of_le _ hRN, translationInvariant_term_of_le _ hRN]
-  refine ManyBody.commute_placeAlong_of_disjoint (X := fun _ ↦ α) _
-    (Finset.disjoint_left.mpr fun k hki hkj ↦ ?_) _ _
-  have hj : i + (e : Fin N) = MPSTensor.cyclicForwardSite i e :=
-    Fin.ext (by simp [MPSTensor.cyclicForwardSite, Fin.val_add])
-  rw [hj] at hkj
-  exact MPSTensor.cyclicWindowsDisjoint_cyclicForwardSite_of_oriented_separation hR he i k
-    ((MPSTensor.mem_map_ringWindow_iff hRN i k).mp hki)
-    ((MPSTensor.mem_map_ringWindow_iff hRN _ k).mp hkj)
-
-/-- Separated terms commute, for sites indexed by the cyclic group. -/
-theorem commute_translationInvariant_term_finEquiv_symm_add_of_le
-    (h h' : Matrix (Fin R → α) (Fin R → α) ℂ) {e : ℕ} (hR : R ≤ e) (he : e + R ≤ N)
-    (s : ZMod N) :
-    Commute ((translationInvariant N h).term ((ZMod.finEquiv N).symm s))
-      ((translationInvariant N h').term ((ZMod.finEquiv N).symm (s + (e : ZMod N)))) := by
-  rw [map_add, map_natCast]
-  exact commute_translationInvariant_term_add_of_le h h' hR he _
-
-/-- **A Knabe block.** For \(1 \le R\), the sum of the operators of `m` consecutive terms of the
-translates of `h` on the ring, starting at the site `s`, is the operator of the translate to the
-window of \(m + R - 1\) consecutive sites starting at `s` of the open-chain Hamiltonian of `h` on
-\(m + R - 1\) sites. The sites are indexed by the cyclic group, as in the finite-range Knabe
-inequality. -/
-theorem cyclicWindowSum_toEuclideanLin_translationInvariant_term
-    (h : Matrix (Fin R → α) (Fin R → α) ℂ) {m : ℕ} (hR : 1 ≤ R) (hW : m + R - 1 ≤ N)
-    (s : ZMod N) :
-    ProjectionGeometry.cyclicWindowSum (fun s : ZMod N ↦
-        Matrix.toEuclideanLin ((translationInvariant N h).term ((ZMod.finEquiv N).symm s))) m s =
-      Matrix.toEuclideanLin ((translationInvariant N
-        (chainTranslates R (m + R - 1) h).hamiltonian).term ((ZMod.finEquiv N).symm s)) := by
-  rw [translationInvariant_term_hamiltonian_chainTranslates h hW, map_sum,
-    ProjectionGeometry.cyclicWindowSum]
-  refine Fin.sum_eq_sum_of_val_eq _ _ (fun k _ _ ↦ ?_) (fun i hi ↦ absurd i.isLt (by omega))
-    (fun i hi ↦ absurd i.isLt (by omega))
-  rw [map_add, map_natCast]
-
-/-- The operators of the terms of the translates on the ring, indexed by the cyclic group, add
-up to the operator of the Hamiltonian. -/
-theorem sum_toEuclideanLin_translationInvariant_term_finEquiv_symm
-    (h : Matrix (Fin R → α) (Fin R → α) ℂ) :
-    ∑ s : ZMod N, Matrix.toEuclideanLin
-        ((translationInvariant N h).term ((ZMod.finEquiv N).symm s)) =
-      Matrix.toEuclideanLin (translationInvariant N h).hamiltonian := by
-  rw [hamiltonian, map_sum]
-  exact (ZMod.finEquiv N).symm.toEquiv.sum_comp fun i ↦
-    Matrix.toEuclideanLin ((translationInvariant N h).term i)
-
-end ManyBody.Interaction
