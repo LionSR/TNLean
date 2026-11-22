@@ -84,6 +84,7 @@ import TNLean.MPS.Examples.StringOrderScalarPhase
 import TNLean.MPS.Examples.WState
 import TNLean.MPS.Examples.WStateBlocking
 import TNLean.MPS.Examples.WStateCanonicalBound
+import TNLean.MPS.Examples.WStateDivisorBound
 import TNLean.MPS.Examples.WStatePeriodic
 import TNLean.MPS.Examples.WStatePrimeLengthBound
 import TNLean.MPS.Examples.Z3Anomalous
