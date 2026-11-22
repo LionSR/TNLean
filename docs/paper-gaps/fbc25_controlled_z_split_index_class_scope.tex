@@ -48,25 +48,95 @@ $A^i=R^iL^i$. The formalization proves the following.
 The last item is
 \leanid{ControlledZGauging.simpsTensor_isNontrivialClass}.
 
+The combined symmetry is also realized on the original qubits by an exact
+normal matrix product operator family
+\leanid{ControlledZGauging.combinedFamily_isNormalRepresentation}.
+For $g=(p,q)$ its periodic operator is
+$U^q(\prod_jZ_j)^p$, equivalently the diagonal matrix of the products of
+the split-leg phases around the ring
+\leanid{ControlledZGauging.mpo_combinedFamily}. Its tensors have bond
+dimension one for $q=0$ and two for $q=1$. The actual operators are unitary,
+and both $\ket{\psi_N(A)}$ and the reference product state
+$\ket{0\cdots0}$ are invariant at every positive length. Consequently,
+action reductions exist for each of these two states under the same family.
+At length one the periodic tensor convention evaluates the controlled-$Z$
+factor at the repeated bit, giving $(-1)^{t_0^2}$; this case is included.
+The family's anomaly class vanishes
+\leanid{ControlledZGauging.combinedFamily_anomalyClass_eq_zero}; this
+three-cocycle statement does not compare the two states' action
+two-cocycle classes.
+
+That relative comparison is now proved separately. Explicit rational
+matrices give actual action reductions for the two states and common fusion
+reductions for the combined family. With these reductions fixed, an
+L-symbol is the nonzero complex scalar comparing, on sufficiently long
+words, the boundary contractions for successive action of two group
+elements and for fusing them before acting. For $g=(p,q)$ and $h=(r,s)$
+their L-symbols are
+\begin{align}
+    L_A(g,h)&=(-1)^{ps}4^{qs},\notag\\
+    L_0(g,h)&=1.
+    \label{eq:fbc25_controlled_z_relative_l_values}
+\end{align}
+The ratio in~(\ref{eq:fbc25_controlled_z_relative_l_values}) is cohomologous to the split-index cluster factor
+$\omega(g,h)=(-1)^{qr}$, with one-cochain
+$\phi(p,q)=(-1)^{pq}2^q$. The common fusion gauge cancels in the relative
+factor, and changes of the two action reductions give a two-coboundary.
+Thus for every choice of actual action and common fusion reductions the
+relative L-symbol class equals the split-index class
+\leanid{ControlledZGauging.combinedRelativeLSymbol_H2π_eq_cluster}, which is nonzero
+\leanid{ControlledZGauging.combinedRelativeLSymbol_H2π_ne_zero}.
+
+A further intermediate theorem proves continuity of the actual selected
+L-symbols from continuous state tensors and continuous left action caps.
+For a finite group, their relative class is consequently constant along
+such paths of fixed positive state bond dimensions
+\leanid{MPOTensor.GroupFamily.ActionData.relative_lSymbol_endpoints_H2π_eq}.
+The continuous caps are an explicit premise, not a conclusion about an
+independent physical Hamiltonian path.
+
+There is also a concrete obstruction to a direct arbitrary-boundary route.
+No fusion reductions of this combined family satisfy exact letterwise
+closed reconstruction, even after any positive physical blocking
+\leanid{ControlledZGauging.combinedFamily_not_isClosed}
+\leanid{ControlledZGauging.combinedFamily_block_not_isClosed}.
+The zero and one diagonal letters of the squared controlled-$Z$ generator
+are distinct idempotents, whereas reconstruction through the identity
+label would make them equal. Positive powers preserve this discrepancy.
+Thus changing the caps or merely blocking this fixed family cannot supply
+that closed-fusion premise. This leaves alternative symmetry embeddings
+open.
+
 What is not formalized is the identification of this projective class with
 the phase: that two states with split-index presentations whose bond
 implementations of the combined symmetry carry different classes cannot be
-joined by a symmetric gapped path. This is the content of
-Ref.~\cite{Stephen2024SIMPS}, which classifies phases protected by symmetries
-that act on split-index tensors as on-site symmetries. The formal statement is
-therefore the invariant that labels the phase, not the phase statement
-itself.
+joined by a symmetric gapped path. The relative action invariant is proved;
+its physical path-invariance theorem is not.
+
+There is a distinction between the two source routes.
+Ref.~\cite[Sections~3.4 and~3.4.4]{Stephen2024SIMPS} proves a symmetric
+finite-depth circuit obstruction and a universal fingerprint theorem for
+its circuit-defined phase. Section~6.3 leaves the general SIMPS
+interpretation of the L-symbol classification as a question. This does not
+by itself supply the gapped-path theorem required here.
 
 \section{Elimination plan}
 
-The phase statement would follow from a formal version of the classification
-of Ref.~\cite{Stephen2024SIMPS} for split-index states, or from the
-classification of phases protected by matrix product unitary symmetries
-through the action tensors and their L-symbols, applied to the combined
-$\mathbb{Z}_2\times\mathbb{Z}_2$ family. The latter needs the combined family as an exact
-representation of $\mathbb{Z}_2\times\mathbb{Z}_2$ by normal tensors and a computation of the
-class of its L-symbols relative to the invariant product state
-$\ket{0\cdots0}$.
+The exact normal combined family, its explicit reduction data, and the
+reduction-independent relative action class are constructed. The remaining
+step is physical path invariance with the source's exact hypotheses, for
+example through the matrix product operator phase theorem of
+Ref.~\cite{GarreRubio2023MPOSym}. Applying that theorem also requires
+constructing a suitable alternative symmetry embedding and checking its
+arbitrary-boundary fusion hypotheses; the fixed combined family and its
+positive blockings cannot satisfy exact closed fusion. The direct path
+route must construct continuous action reductions from the physical path
+and handle changes of minimal bond dimension.
+Alternatively, the circuit obstruction
+of Ref.~\cite{Stephen2024SIMPS} can be formalized, together with a precise
+connection between that circuit notion and the intended gapped-path notion.
+The gapped-path requirement must not be replaced by a stronger supplied
+virtual-path premise or a redefinition of the physical phase.
 
 \bibliographystyle{alpha}
 \bibliography{references}
