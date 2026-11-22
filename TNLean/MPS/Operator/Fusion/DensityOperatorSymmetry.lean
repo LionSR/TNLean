@@ -257,10 +257,10 @@ noncomputable def onSite (u : Matrix (Fin d) (Fin d) ℂ) : MPOTensor d 1 :=
 
 /-- The periodic operator of an on-site tensor is the Kronecker power `u^{⊗L}`. -/
 theorem mpo_onSite (u : Matrix (Fin d) (Fin d) ℂ) (L : ℕ) :
-    mpo (onSite u) L = Matrix.finKronecker fun _ : Fin L => u := by
+    mpo (onSite u) L = Matrix.piKronecker fun _ : Fin L => u := by
   ext σ τ
   simp only [mpo_apply, mpoMatrixEntry, evalWord_ofFn, onSite, List.prod_ofFn_smul,
-    Matrix.finKronecker_apply]
+    Matrix.piKronecker_apply]
   simp
 
 section OnSite
@@ -298,7 +298,7 @@ theorem IsStrongOnSiteSymmetry.isWeakOnSiteSymmetry
   have hL' := h g L hL
   simp only [mpo_onSite] at hL' ⊢
   exact Matrix.IsStrongSymmetry.isWeakSymmetry_of_unitary (hM L hL).isHermitian
-    (Matrix.finKronecker_conjTranspose_mul_self (hU g)) ⟨c g L, hL'⟩
+    (Matrix.IsIsometry.piKronecker (hU g)) ⟨c g L, hL'⟩
 
 /-- **Unit modulus of on-site strong eigenvalues.**
 
@@ -309,7 +309,7 @@ theorem IsStrongOnSiteSymmetry.norm_eq_one {M : MPOTensor d D} {X : Matrix (Fin 
     ‖c g L‖ = 1 := by
   have hL' := h g L hL
   simp only [mpo_onSite] at hL'
-  exact Matrix.IsStrongSymmetry.norm_eq_one (Matrix.finKronecker_conjTranspose_mul_self (hU g))
+  exact Matrix.IsStrongSymmetry.norm_eq_one (Matrix.IsIsometry.piKronecker (hU g))
     hL' hρ
 
 /-- **On-site strong eigenvalues are multiplicative.**
@@ -324,9 +324,9 @@ theorem IsStrongOnSiteSymmetry.map_mul {M : MPOTensor d D} {X : Matrix (Fin D) (
   have hk := h k L hL
   have hgk := h (g * k) L hL
   simp only [mpo_onSite] at hg hk hgk
-  have hsplit : (Matrix.finKronecker fun _ : Fin L => U (g * k)) =
-      (Matrix.finKronecker fun _ : Fin L => U g) * Matrix.finKronecker fun _ : Fin L => U k := by
-    rw [← Matrix.finKronecker_mul, _root_.map_mul]
+  have hsplit : (Matrix.piKronecker fun _ : Fin L => U (g * k)) =
+      (Matrix.piKronecker fun _ : Fin L => U g) * Matrix.piKronecker fun _ : Fin L => U k := by
+    rw [Matrix.piKronecker_mul, _root_.map_mul]
   refine smul_left_injective ℂ hρ (hgk.symm.trans ?_)
   change _ = (c g L * c k L) • mpoWithBoundary M X L
   rw [hsplit, Matrix.mul_assoc, hk, Matrix.mul_smul, hg, smul_smul, mul_comm (c k L)]
@@ -336,7 +336,7 @@ theorem IsStrongOnSiteSymmetry.map_one {M : MPOTensor d D} {X : Matrix (Fin D) (
     {U : G →* Matrix (Fin d) (Fin d) ℂ} {c : G → ℕ → ℂ} (h : IsStrongOnSiteSymmetry M X U c)
     {L : ℕ} (hL : 0 < L) (hρ : mpoWithBoundary M X L ≠ 0) : c 1 L = 1 := by
   have h1 := h 1 L hL
-  simp only [mpo_onSite, _root_.map_one, Matrix.finKronecker_one, Matrix.one_mul] at h1
+  simp only [mpo_onSite, _root_.map_one, Matrix.piKronecker_one, Matrix.one_mul] at h1
   exact smul_left_injective ℂ hρ (h1.symm.trans (one_smul ℂ _).symm)
 
 end OnSite

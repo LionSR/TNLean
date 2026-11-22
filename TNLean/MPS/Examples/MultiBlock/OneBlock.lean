@@ -64,7 +64,7 @@ theorem blockC_pos : ∀ s ∈ oneSlot, 0 < (fun _ : Unit => 1) s := fun _ _ => 
 
 theorem tensorB_apply (i : Fin 1) : tensorB i = !![1, 1; 0, 0] := by
   ext a b
-  fin_cases a <;> fin_cases b <;> simp [tensorB, bInt, complexOfRing_apply]
+  fin_cases a <;> fin_cases b <;> simp [tensorB, bInt, Matrix.complexOfRing_apply]
 
 /-- **The invariant lines** (*The asymmetric fundamental theorem of matrix product states*, Example
 6.15): the lines invariant under `B = [[1, 1], [0, 0]]` are `ℂ e₁` and `ℂ (e₁ - e₂)`. -/
@@ -110,36 +110,37 @@ theorem z_eq_one_and_gInt_conj : firstCompression.z = 1 ∧ lastCompression.z = 
 theorem mem_flagVec_first_one (k : Fin (oneSlot.card + firstCompression.z + 1)) (hk : k.val = 1)
     (v : Fin 2 → ℂ) : v ∈ flagVec firstCompression k ↔ v 1 = 0 := by
   rw [mem_flagVec_gaugeOfMatrix firstCompression (τ := firstTau)
-    (hG := complexOfRing_mul_eq_one _ (by decide : (1 : Matrix (Fin 2) (Fin 2) ℤ) * 1 = 1))
-    (hG' := complexOfRing_mul_eq_one _ (by decide : (1 : Matrix (Fin 2) (Fin 2) ℤ) * 1 = 1)) rfl]
+    (hG := Matrix.complexOfRing_mul_eq_one _ (by decide : (1 : Matrix (Fin 2) (Fin 2) ℤ) * 1 = 1))
+    (hG' := Matrix.complexOfRing_mul_eq_one _ (by decide : (1 : Matrix (Fin 2) (Fin 2) ℤ) * 1 =
+        1)) rfl]
   constructor
   · intro h
     have h1 := h (firstTau.symm 1) (by rw [Fin.le_def, hk]; decide)
     erw [Equiv.apply_symm_apply] at h1
-    simpa [complexOfRing_one] using h1
+    simpa [Matrix.complexOfRing_one] using h1
   · intro h y hy
     obtain ⟨n, rfl⟩ := firstTau.symm.surjective y
     fin_cases n
     · exact absurd hy (by rw [Fin.le_def, hk]; decide)
     · erw [Equiv.apply_symm_apply]
-      simpa [complexOfRing_one] using h
+      simpa [Matrix.complexOfRing_one] using h
 
 theorem mem_flagVec_last_one (k : Fin (oneSlot.card + lastCompression.z + 1)) (hk : k.val = 1)
     (v : Fin 2 → ℂ) : v ∈ flagVec lastCompression k ↔ v 0 + v 1 = 0 := by
   rw [mem_flagVec_gaugeOfMatrix lastCompression (τ := lastTau)
-    (hG := complexOfRing_mul_eq_one _ (by decide : gInt * gInvInt = 1))
-    (hG' := complexOfRing_mul_eq_one _ (by decide : gInvInt * gInt = 1)) rfl]
+    (hG := Matrix.complexOfRing_mul_eq_one _ (by decide : gInt * gInvInt = 1))
+    (hG' := Matrix.complexOfRing_mul_eq_one _ (by decide : gInvInt * gInt = 1)) rfl]
   constructor
   · intro h
     have h1 := h (lastTau.symm 1) (by rw [Fin.le_def, hk]; decide)
     erw [Equiv.apply_symm_apply] at h1
-    simpa [gInt, complexOfRing_apply, Matrix.mulVec, dotProduct] using h1
+    simpa [gInt, Matrix.complexOfRing_apply, Matrix.mulVec, dotProduct] using h1
   · intro h y hy
     obtain ⟨n, rfl⟩ := lastTau.symm.surjective y
     fin_cases n
     · exact absurd hy (by rw [Fin.le_def, hk]; decide)
     · erw [Equiv.apply_symm_apply]
-      simpa [gInt, complexOfRing_apply, Matrix.mulVec, dotProduct] using h
+      simpa [gInt, Matrix.complexOfRing_apply, Matrix.mulVec, dotProduct] using h
 
 theorem mem_span_e0 (v : Fin 2 → ℂ) : v ∈ Submodule.span ℂ {e 0} ↔ v 1 = 0 := by
   rw [Submodule.mem_span_singleton]

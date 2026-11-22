@@ -227,7 +227,7 @@ theorem reviewQ_conj_reviewBlock (a : Fin 4) :
   ext p q
   fin_cases a <;> fin_cases p <;> fin_cases q <;>
     norm_num [reviewBlock, reviewBlockInt, reviewQ, complexOfInt, Matrix.mul_apply,
-      Fin.sum_univ_two, Matrix.vecMul, dotProduct, complexOfRing, Fin.ext_iff]
+      Fin.sum_univ_two, Matrix.vecMul, dotProduct, Matrix.complexOfRing, Fin.ext_iff]
 
 /-- The row vector `W₂ = ½ (1, -1)`. -/
 def reviewW₂ : Matrix (Fin 1) (Fin 2) ℂ := (1 / 2 : ℂ) • !![1, -1]
@@ -250,7 +250,7 @@ theorem reviewBlock_compress (a : Fin 4) :
   fin_cases a <;> fin_cases p <;> fin_cases q <;>
     norm_num [reviewBlock, reviewBlockInt, reviewW₂, reviewV₂, negIdentityIntMPS,
       identityIntMPS, complexOfInt, Matrix.mul_apply, Fin.sum_univ_two, Matrix.vecMul,
-      dotProduct, complexOfRing]
+      dotProduct, Matrix.complexOfRing]
 
 /-- **The block has the word traces of the canonical form** `(-1) δ_{ij}`: the second step of
 the review's canonical-form reduction.

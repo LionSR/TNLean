@@ -161,20 +161,20 @@ theorem ExactMPSGroundPath.exists_chain_character
     ∃ χ : G →* ℂ, (∀ g, ‖χ g‖ = 1) ∧
       ∀ t : unitInterval, ∀ g,
         Matrix.toEuclideanLin
-            (Matrix.finKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ))
+            (Matrix.piKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ))
             ((WithLp.linearEquiv 2 ℂ ((Fin N → Fin d) → ℂ)).symm (mpv (Q.tensor t))) =
           χ g • ((WithLp.linearEquiv 2 ℂ ((Fin N → Fin d) → ℂ)).symm (mpv (Q.tensor t))) := by
   let V : G →* Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
-    { toFun := fun g => Matrix.finKronecker fun _ : Fin N =>
+    { toFun := fun g => Matrix.piKronecker fun _ : Fin N =>
         (U g : Matrix (Fin d) (Fin d) ℂ)
       map_one' := by simp
       map_mul' := by
         intro g h
-        simp only [map_mul, Submonoid.coe_mul, Matrix.finKronecker_mul] }
+        simp only [map_mul, Submonoid.coe_mul, ← Matrix.piKronecker_mul] }
   have hV : ∀ g, V g ∈ Matrix.unitaryGroup (Fin N → Fin d) ℂ := by
     intro g
     rw [Matrix.mem_unitaryGroup_iff']
-    exact Matrix.finKronecker_conjTranspose_mul_self
+    exact Matrix.IsIsometry.piKronecker
       (Matrix.mem_unitaryGroup_iff'.mp (SetLike.coe_mem (U g)))
   let v : unitInterval → EuclideanSpace ℂ (Fin N → Fin d) := fun t =>
     (WithLp.linearEquiv 2 ℂ ((Fin N → Fin d) → ℂ)).symm (mpv (Q.tensor t))
@@ -210,12 +210,12 @@ theorem ExactMPSGroundPath.exists_chain_character_mpv
   refine ⟨χ, hχ, ?_⟩
   intro t g σ
   have h := congrArg (fun v : EuclideanSpace ℂ (Fin N → Fin d) => v σ) (hcov t g)
-  change ((Matrix.finKronecker fun _ : Fin N =>
+  change ((Matrix.piKronecker fun _ : Fin N =>
     (U g : Matrix (Fin d) (Fin d) ℂ)) *ᵥ mpv (Q.tensor t)) σ =
       χ g * mpv (Q.tensor t) σ at h
   change mpv (rotatePhysical (U g : Matrix (Fin d) (Fin d) ℂ) (Q.tensor t)) σ = _
   rw [mpv_rotatePhysical]
-  simpa only [Matrix.mulVec, dotProduct, Matrix.finKronecker_apply] using h
+  simpa only [Matrix.mulVec, dotProduct, Matrix.piKronecker_apply] using h
 
 /-- When the continuous ambient tensors themselves are one-site injective,
 one character accounts for the scalar physical symmetry at every parameter

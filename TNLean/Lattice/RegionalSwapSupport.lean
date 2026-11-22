@@ -253,7 +253,7 @@ theorem reindex_sheetSwapOp_eq_reindex_pairSwapOp
       ((ManyBody.siteConfigurationEquiv (X' := fun _ : ι ↦ Fin (q * q)) (Equiv.refl ι)
         fun _ ↦ finProdFinEquiv).symm y) =
       ∏ i, if b i = (if i ∈ R then (a i).swap else a i) then 1 else 0 := by
-    rw [ManyBody.pairSwapOp, ManyBody.prodOp_apply]
+    rw [ManyBody.pairSwapOp, Matrix.piKronecker_apply]
     exact Finset.prod_congr rfl fun i _ ↦ hsite i
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
   rw [hL, hR, Fintype.prod_boole]

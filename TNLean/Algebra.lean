@@ -10,7 +10,6 @@ Authors: TNLean contributors
 
 import TNLean.Algebra.CentralStarSubalgebraMatrix
 import TNLean.Algebra.ComplexOfInt
-import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.CyclicMomentRigidity
 import TNLean.Algebra.EndpointEmbeddingMatrix
 import TNLean.Algebra.FixedPointFreeInvolutionSign

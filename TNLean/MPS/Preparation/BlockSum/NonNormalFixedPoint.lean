@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.Kronecker.MatrixTensorPower
+import QICLean.Algebra.Kronecker.PiKronecker
 import QICLean.Circuit.Protocol.GHZ
 import TNLean.MPS.Tensor.Physical.BlockedPolar
 import TNLean.MPS.CanonicalForm.FixedPointApproximation.FixedPointPairs
@@ -62,8 +62,8 @@ which is made in `TNLean.MPS.Preparation.NonNormalCanonicalForm`.
   isometry for orthonormal pairs.
 * `MPSTensor.nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState` — the GHZ form
   `|Ω'⟩ = W^{⊗M} |χ_M⟩`, with `|χ_M⟩` the state `QuantumCircuit.ghzState` of
-  `QICLean.Circuit.Protocol.GHZ`; `W^{⊗M}` is `Matrix.tensorPower`, an isometry by
-  `Matrix.IsIsometry.tensorPower`.
+  `QICLean.Circuit.Protocol.GHZ`; `W^{⊗M}` is `Matrix.piKronecker`, an isometry by
+  `Matrix.IsIsometry.piKronecker`.
 * `MPSTensor.nonNormalFixedPointState_norm_sq` — `⟨Ω'|Ω'⟩ = 1` when some `βₗ ≠ 0`.
 * `MPSTensor.nonNormalApproxState` — the approximating state
   `V^{⊗M}|Ω'⟩ / ‖V^{⊗M}|Ω'⟩‖` with `V` the partial isometry of the polar decomposition of
@@ -171,9 +171,9 @@ orthogonality is what makes `W` an isometry (`isIsometry_pairIsometry`). -/
 theorem nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState {M : ℕ} (α : Fin b → ℂ)
     (ω : Fin b → Fin D × Fin D → ℂ) (p : Fin M → Fin D × Fin D) :
     nonNormalFixedPointState α ω ((bondRegrouping M D).symm p) =
-      (Matrix.tensorPower M (pairIsometry ω) *ᵥ ghzState α) p := by
+      ((Matrix.piKronecker fun _ : Fin M ↦ (pairIsometry ω)) *ᵥ ghzState α) p := by
   rw [nonNormalFixedPointState_bondRegrouping_symm]
-  simp only [Matrix.mulVec, dotProduct, Matrix.tensorPower_apply, pairIsometry, Matrix.of_apply,
+  simp only [Matrix.mulVec, dotProduct, Matrix.piKronecker_apply, pairIsometry, Matrix.of_apply,
     ghzState, Finset.mul_sum]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun j _ => ?_
@@ -240,7 +240,7 @@ of each blocked site by the fixed point and keeps `V`. -/
 noncomputable def nonNormalApproxVector {d : ℕ} (A : MPSTensor d D) (q M : ℕ)
     (α : Fin b → ℂ) (ω : Fin b → Fin D × Fin D → ℂ) :
     (Fin M → Fin (blockPhysDim d q)) → ℂ :=
-  Matrix.tensorPower M (Matrix.polarIso (physicalMatrix (blockTensor A q))) *ᵥ
+  (Matrix.piKronecker fun _ : Fin M ↦ (Matrix.polarIso (physicalMatrix (blockTensor A q)))) *ᵥ
     nonNormalFixedPointState α ω
 
 /-- The approximating state `|\tilde{φ}_N⟩ = V^{⊗M}|Ω'⟩ / ‖V^{⊗M}|Ω'⟩‖` of arXiv:2307.01696,

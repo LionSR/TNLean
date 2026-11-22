@@ -144,8 +144,8 @@ noncomputable def compressionOf (ord : BlockIndex oneSlot 1 ≃ Fin 2)
     (gaugeOfRingMatrix _ τ G Ginv hG hG') (fun _ => K)
     (fun i => by
       rw [conjMatrix_gaugeOfRingMatrix (Int.castRingHom ℂ) τ hG hG'
-        (show tensorB i = complexOfRing (Int.castRingHom ℂ) bInt from rfl), hK])
-    (fun _ _ => 1) (fun _ _ => (complexOfRing_one _).symm) (fun _ => htri)
+        (show tensorB i = Matrix.complexOfRing (Int.castRingHom ℂ) bInt from rfl), hK])
+    (fun _ _ => 1) (fun _ _ => (Matrix.complexOfRing_one _).symm) (fun _ => htri)
     (fun _ s p q => by
       obtain rfl : s = oneSlotMem := eq_oneSlotMem s
       obtain rfl : p = 0 := Subsingleton.elim p 0
@@ -195,7 +195,7 @@ theorem left_compressionOf :
       Matrix.of fun (_ : Fin 1) j => (G (τ ⟨Sum.inl oneSlotMem, 0⟩) j : ℂ) := by
   rw [MultiBlockCompression.left_gaugeOfMatrix
     (compressionOf ord τ G Ginv K hG hG' hK htri htarget hzero)
-    (hG := complexOfRing_mul_eq_one _ hG) (hG' := complexOfRing_mul_eq_one _ hG') rfl]
+    (hG := Matrix.complexOfRing_mul_eq_one _ hG) (hG' := Matrix.complexOfRing_mul_eq_one _ hG') rfl]
   ext i j
   obtain rfl : i = 0 := Subsingleton.elim i 0
   rfl
@@ -207,7 +207,7 @@ theorem right_compressionOf :
       Matrix.of fun i (_ : Fin 1) => (Ginv i (τ ⟨Sum.inl oneSlotMem, 0⟩) : ℂ) := by
   rw [MultiBlockCompression.right_gaugeOfMatrix
     (compressionOf ord τ G Ginv K hG hG' hK htri htarget hzero)
-    (hG := complexOfRing_mul_eq_one _ hG) (hG' := complexOfRing_mul_eq_one _ hG') rfl]
+    (hG := Matrix.complexOfRing_mul_eq_one _ hG) (hG' := Matrix.complexOfRing_mul_eq_one _ hG') rfl]
   ext i j
   obtain rfl : j = 0 := Subsingleton.elim j 0
   rfl
@@ -251,7 +251,8 @@ theorem left_mul_eq (i : Fin 1) :
   rw [left_firstCompression, left_lastCompression]
   ext a b
   fin_cases a
-  fin_cases b <;> simp [tensorB, bInt, Matrix.mul_apply, Fin.sum_univ_two, complexOfRing_apply]
+  fin_cases b <;> simp [tensorB, bInt, Matrix.mul_apply, Fin.sum_univ_two,
+      Matrix.complexOfRing_apply]
 
 /-- **The one-block identity from length one on** (*The asymmetric fundamental theorem of matrix
 product states*, Example 6.15 and the one-block theorem (blueprint `cor:asym_uniq_one_block`) with
@@ -342,8 +343,8 @@ noncomputable def compressionOfTwo (ord : BlockIndex oneSlot 2 ≃ Fin 3)
     (gaugeOfRingMatrix _ τ G Ginv hG hG') (fun _ => K)
     (fun i => by
       rw [conjMatrix_gaugeOfRingMatrix (Int.castRingHom ℂ) τ hG hG'
-        (show tensorBTwo i = complexOfRing (Int.castRingHom ℂ) bIntTwo from rfl), hK])
-    (fun _ _ => 1) (fun _ _ => (complexOfRing_one _).symm) (fun _ => htri)
+        (show tensorBTwo i = Matrix.complexOfRing (Int.castRingHom ℂ) bIntTwo from rfl), hK])
+    (fun _ _ => 1) (fun _ _ => (Matrix.complexOfRing_one _).symm) (fun _ => htri)
     (fun _ s p q => by
       obtain rfl : s = oneSlotMem := eq_oneSlotMem s
       obtain rfl : p = 0 := Subsingleton.elim p 0
@@ -395,7 +396,7 @@ theorem left_compressionOfTwo :
       Matrix.of fun (_ : Fin 1) j => (G (τ ⟨Sum.inl oneSlotMem, 0⟩) j : ℂ) := by
   rw [MultiBlockCompression.left_gaugeOfMatrix
     (compressionOfTwo ord τ G Ginv K hG hG' hK htri htarget hzero)
-    (hG := complexOfRing_mul_eq_one _ hG) (hG' := complexOfRing_mul_eq_one _ hG') rfl]
+    (hG := Matrix.complexOfRing_mul_eq_one _ hG) (hG' := Matrix.complexOfRing_mul_eq_one _ hG') rfl]
   ext i j
   obtain rfl : i = 0 := Subsingleton.elim i 0
   rfl
@@ -407,7 +408,7 @@ theorem right_compressionOfTwo :
       Matrix.of fun i (_ : Fin 1) => (Ginv i (τ ⟨Sum.inl oneSlotMem, 0⟩) : ℂ) := by
   rw [MultiBlockCompression.right_gaugeOfMatrix
     (compressionOfTwo ord τ G Ginv K hG hG' hK htri htarget hzero)
-    (hG := complexOfRing_mul_eq_one _ hG) (hG' := complexOfRing_mul_eq_one _ hG') rfl]
+    (hG := Matrix.complexOfRing_mul_eq_one _ hG) (hG' := Matrix.complexOfRing_mul_eq_one _ hG') rfl]
   ext i j
   obtain rfl : j = 0 := Subsingleton.elim j 0
   rfl

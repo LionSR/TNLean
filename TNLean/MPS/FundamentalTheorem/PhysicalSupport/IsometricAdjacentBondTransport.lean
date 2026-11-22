@@ -271,7 +271,7 @@ private theorem reindex_tensorPower_three
     (V : Matrix (Fin d) (Fin e) ℂ) :
     Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
         (_root_.finThreeArrowEquiv (Fin e))
-        (Matrix.tensorPower 3 V) = V ⊗ₖ (V ⊗ₖ V) := by
+        (Matrix.piKronecker fun _ : Fin 3 ↦ V) = V ⊗ₖ (V ⊗ₖ V) := by
   ext ⟨i, j, k⟩ ⟨a, b, c⟩
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
     finThreeArrowEquiv_symm_apply, Nat.succ_eq_add_one, Nat.reduceAdd,
@@ -369,13 +369,13 @@ Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and
 theorem singleKrausMap_crossedTwoSiteBondProduct
     (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
     (B C : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
-    singleKrausMap (Matrix.tensorPower 2 V)
+    singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V)
         (placeAlong (X := fun _ ↦ Fin e) (ringWindow le_rfl (0 : Fin 2)) B *
           placeAlong (X := fun _ ↦ Fin e) (ringWindow le_rfl (1 : Fin 2)) C) =
       placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (0 : Fin 2))
-          (singleKrausMap (Matrix.tensorPower 2 V) B) *
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B) *
         placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (1 : Fin 2))
-          (singleKrausMap (Matrix.tensorPower 2 V) C) := by
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) C) := by
   apply (Matrix.reindex (_root_.finTwoArrowEquiv (Fin d))
     (_root_.finTwoArrowEquiv (Fin d))).injective
   rw [Matrix.reindex_singleKrausMap
@@ -396,9 +396,9 @@ theorem singleKrausMap_crossedTwoSiteBondProduct
       (_root_.finTwoArrowEquiv (Fin d))
       (_root_.finTwoArrowEquiv (Fin d))
       (placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (0 : Fin 2))
-        (singleKrausMap (Matrix.tensorPower 2 V) B))
+        (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B))
       (placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (1 : Fin 2))
-        (singleKrausMap (Matrix.tensorPower 2 V) C))
+        (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) C))
   simp only [Matrix.coe_reindexLinearEquiv] at hambient
   rw [← hambient, reindex_placeAlong_ringWindow_two_zero,
     reindex_placeAlong_ringWindow_two_one,
@@ -440,13 +440,13 @@ Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and
 theorem singleKrausMap_adjacentBondProduct
     (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
     (B C : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
-    singleKrausMap (Matrix.tensorPower 3 V)
+    singleKrausMap (Matrix.piKronecker fun _ : Fin 3 ↦ V)
         (placeAlong (X := fun _ ↦ Fin e) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3)) B *
           placeAlong (X := fun _ ↦ Fin e) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3)) C) =
       placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3))
-          (singleKrausMap (Matrix.tensorPower 2 V) B) *
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B) *
         placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3))
-          (singleKrausMap (Matrix.tensorPower 2 V) C) := by
+          (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) C) := by
   apply (Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
     (_root_.finThreeArrowEquiv (Fin d))).injective
   rw [Matrix.reindex_singleKrausMap
@@ -468,9 +468,9 @@ theorem singleKrausMap_adjacentBondProduct
       (_root_.finThreeArrowEquiv (Fin d))
       (_root_.finThreeArrowEquiv (Fin d))
       (placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3))
-        (singleKrausMap (Matrix.tensorPower 2 V) B))
+        (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B))
       (placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3))
-        (singleKrausMap (Matrix.tensorPower 2 V) C))
+        (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) C))
   simp only [Matrix.coe_reindexLinearEquiv] at hambient
   rw [← hambient]
   rw [reindex_placeAlong_ringWindow_three_zero,

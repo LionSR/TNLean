@@ -87,9 +87,9 @@ product of the original pairs: `⊗ₖ |ι_* ω⟩ = K^{⊗M} ⊗ₖ |ω⟩`, re
 theorem pairProductState_embedPair_eq_mulVec {D' M : ℕ} {ι : Fin D' → Fin D}
     (hι : Function.Injective ι) (ω : Fin D' × Fin D' → ℂ) :
     pairProductState (N := M) (embedPair ι ω) =
-      tensorPower M (pairEmbedding ι) *ᵥ pairProductState ω := by
+      (Matrix.piKronecker fun _ : Fin M ↦ (pairEmbedding ι)) *ᵥ pairProductState ω := by
   funext x
-  simp only [mulVec, dotProduct, tensorPower, of_apply, pairEmbedding_apply]
+  simp only [mulVec, dotProduct, Matrix.piKronecker, of_apply, pairEmbedding_apply]
   by_cases hx : ∃ x₀ : Fin M → Fin D' × Fin D', x = fun k => (ι (x₀ k).1, ι (x₀ k).2)
   · obtain ⟨x₀, rfl⟩ := hx
     rw [Finset.sum_eq_single x₀]
@@ -126,10 +126,11 @@ theorem pairProductState_embedPair_eq_mulVec {D' M : ℕ} {ι : Fin D' → Fin D
 `V P_∞` of the normal case (arXiv:2307.01696, eqs. (9) and (10)). -/
 theorem tensorPower_polarIso_mulVec_pairProductState {n D' : ℕ} (B : MPSTensor n D')
     (σ : Matrix (Fin D') (Fin D') ℂ) (M : ℕ) [NeZero M] (τ : Fin M → Fin n) :
-    (tensorPower M (polarIso (physicalMatrix B)) *ᵥ pairProductState (fixedPointPair σ)) τ =
+    ((Matrix.piKronecker fun _ : Fin M ↦ (polarIso (physicalMatrix B))) *ᵥ pairProductState
+        (fixedPointPair σ)) τ =
       mpv (approximatingTensor B σ) τ := by
   rw [mpv_approximatingTensor]
-  simp only [mulVec, dotProduct, tensorPower, of_apply]
+  simp only [mulVec, dotProduct, Matrix.piKronecker, of_apply]
   symm
   exact Fintype.sum_equiv (Equiv.piCongrRight fun _ => finProdFinEquiv.symm) _ _ fun _ => rfl
 
@@ -176,14 +177,15 @@ theorem nonNormalApproxVector_blockSum (hι : ∀ j, Function.Injective (ι j))
     · simp
   have hstate : nonNormalFixedPointState (M := M) α
       (fun j => embedPair (ι j) (fixedPointPair (σ j))) =
-      ∑ j, α j • (tensorPower M (pairEmbedding (ι j)) *ᵥ pairProductState (fixedPointPair (σ j)))
+      ∑ j, α j • ((Matrix.piKronecker fun _ : Fin M ↦ (pairEmbedding (ι j))) *ᵥ pairProductState
+          (fixedPointPair (σ j)))
       := by
     funext x
     simp only [nonNormalFixedPointState, Finset.sum_apply, Pi.smul_apply, smul_eq_mul,
       pairProductState_embedPair_eq_mulVec (hι _)]
   rw [nonNormalApproxVector, hstate, mulVec_sum, Finset.sum_apply]
   refine Finset.sum_congr rfl fun j _ => ?_
-  rw [mulVec_smul, Pi.smul_apply, smul_eq_mul, mulVec_mulVec, tensorPower_mul, hVK,
+  rw [mulVec_smul, Pi.smul_apply, smul_eq_mul, mulVec_mulVec, Matrix.piKronecker_mul, hVK,
     tensorPower_polarIso_mulVec_pairProductState]
 
 /-! ### Orthogonality of states -/

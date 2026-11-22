@@ -513,8 +513,9 @@ the phase and does not change its trace. -/
 theorem czPhase_mul_mpv_stateTensor {n : ℕ} (t : Fin (n + 1) → Fin 2) :
     czPhase t * mpv stateTensor t = mpv stateTensor t := by
   rw [mpv_stateTensor_eq_trace_simpsTensor]
-  exact prod_mul_trace_prod_ofFn_eq (complexOfRing_mul_eq_one (Int.castRingHom ℂ) xInt_mul_xInt)
-    (complexOfRing_mul_eq_one (Int.castRingHom ℂ) xInt_mul_xInt)
+  exact prod_mul_trace_prod_ofFn_eq (Matrix.complexOfRing_mul_eq_one (Int.castRingHom ℂ)
+      xInt_mul_xInt)
+    (Matrix.complexOfRing_mul_eq_one (Int.castRingHom ℂ) xInt_mul_xInt)
     (fun k ↦ simpsTensor (t k) (t (k + 1))) (fun k ↦ czSign (t k) (t (k + 1)))
     fun k ↦ xInt_mul_simpsTensor_mul_xInt _ _
 
@@ -573,8 +574,8 @@ private theorem stateZGaugeInt_conj (i : Fin 2) :
 inverse. -/
 def stateZGauge : GL (Fin 3) ℂ :=
   ⟨complexOfInt stateZGaugeInt, complexOfInt stateZGaugeInt,
-    complexOfRing_mul_eq_one _ stateZGaugeInt_mul_self,
-    complexOfRing_mul_eq_one _ stateZGaugeInt_mul_self⟩
+    Matrix.complexOfRing_mul_eq_one _ stateZGaugeInt_mul_self,
+    Matrix.complexOfRing_mul_eq_one _ stateZGaugeInt_mul_self⟩
 
 /-- **`Z` acts on the letters of `A` by a sign**: `∑_j Z_{ij} A^j = (-1)^i A^i`. -/
 theorem twistedTensor_stateTensor_zAction (i : Fin 2) :

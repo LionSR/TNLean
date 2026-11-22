@@ -67,8 +67,8 @@ private theorem operatorId_map_star {N : ℕ}
 
 private theorem operatorId_tensorPower
     (Q : Matrix (Fin d) (Fin d) ℂ) (x N : ℕ) :
-    tensorPhysicalIdOperator (Matrix.tensorPower N Q) x =
-      Matrix.tensorPower N (physicalIdMatrix Q x) := by
+    tensorPhysicalIdOperator (Matrix.piKronecker fun _ : Fin N ↦ Q) x =
+      (Matrix.piKronecker fun _ : Fin N ↦ (physicalIdMatrix Q x)) := by
   classical
   ext σ τ
   change (∏ n, Q (σ n).divNat (τ n).divNat) *
@@ -88,7 +88,8 @@ Source: arXiv:1703.09188, equation `SSymmetries-dagger`, lines 1305--1311. -/
 noncomputable def daggerWithPhysicalMatrix (Q : Matrix (Fin d) (Fin d) ℂ) :
     FiniteChainOperatorSymmetry d where
   applicable := {N | 0 < N}
-  action := fun {N} X ↦ Matrix.tensorPower N Q * Xᴴ * Matrix.tensorPower N Q
+  action := fun {N} X ↦ (Matrix.piKronecker fun _ : Fin N ↦ Q) * Xᴴ * (Matrix.piKronecker fun _ :
+      Fin N ↦ Q)
 
 /-- The full action \(X\mapsto Q_NX^{\mathsf T}Q_N\), retaining its local
 physical matrix. Source: arXiv:1703.09188, equation `SSymmetries-transpose`,
@@ -96,7 +97,8 @@ lines 1305--1311. -/
 noncomputable def transposeWithPhysicalMatrix (Q : Matrix (Fin d) (Fin d) ℂ) :
     FiniteChainOperatorSymmetry d where
   applicable := {N | 0 < N}
-  action := fun {N} X ↦ Matrix.tensorPower N Q * Xᵀ * Matrix.tensorPower N Q
+  action := fun {N} X ↦ (Matrix.piKronecker fun _ : Fin N ↦ Q) * Xᵀ * (Matrix.piKronecker fun _ :
+      Fin N ↦ Q)
 
 /-- The full adjunction action with \(Q\otimes I_x\) is compatible with
 adjoining the identity ancilla to every original operator.
@@ -109,7 +111,7 @@ theorem daggerWithPhysicalMatrix_tensorPhysicalId_semiconj
       (fun X => (daggerWithPhysicalMatrix (physicalIdMatrix Q x)).action X) := by
   intro X
   change tensorPhysicalIdOperator
-      (Matrix.tensorPower N Q * Xᴴ * Matrix.tensorPower N Q) x = _
+      ((Matrix.piKronecker fun _ : Fin N ↦ Q) * Xᴴ * (Matrix.piKronecker fun _ : Fin N ↦ Q)) x = _
   simp only [daggerWithPhysicalMatrix, operatorId_mul, operatorId_conjTranspose,
     operatorId_tensorPower]
 
@@ -124,7 +126,7 @@ theorem transposeWithPhysicalMatrix_tensorPhysicalId_semiconj
       (fun X => (transposeWithPhysicalMatrix (physicalIdMatrix Q x)).action X) := by
   intro X
   change tensorPhysicalIdOperator
-      (Matrix.tensorPower N Q * Xᵀ * Matrix.tensorPower N Q) x = _
+      ((Matrix.piKronecker fun _ : Fin N ↦ Q) * Xᵀ * (Matrix.piKronecker fun _ : Fin N ↦ Q)) x = _
   simp only [transposeWithPhysicalMatrix, operatorId_mul, operatorId_transpose,
     operatorId_tensorPower]
 

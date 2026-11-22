@@ -25,10 +25,10 @@ namespace Matrix
 of the scalars. Source context: arXiv:1010.3732, Appendix B, lines 2614–2632. -/
 theorem finKronecker_const_smul {d N : ℕ}
     (z : ℂ) (A : Matrix (Fin d) (Fin d) ℂ) :
-    (finKronecker fun _ : Fin N => z • A) =
-      z ^ N • (finKronecker fun _ : Fin N => A) := by
+    (Matrix.piKronecker fun _ : Fin N => z • A) =
+      z ^ N • (Matrix.piKronecker fun _ : Fin N => A) := by
   ext σ τ
-  simp [finKronecker_apply, Finset.prod_mul_distrib]
+  simp [Matrix.piKronecker_apply, Finset.prod_mul_distrib]
 
 end Matrix
 

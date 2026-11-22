@@ -129,7 +129,7 @@ theorem one_sub_norm_nonNormalApproxOverlap_blockSum_le [NeZero b]
   have hvle : ∑ τ, ‖v τ‖ ^ 2 ≤ 1 := by
     have hidem := Matrix.conjTranspose_polarIso_mul_polarIso
       (physicalMatrix (blockTensor A q))
-    have h := sum_norm_sq_tensorPower_mulVec_le (M := M)
+    have h := Matrix.sum_norm_sq_piKronecker_mulVec_le (M := M)
       (W := Matrix.polarIso (physicalMatrix (blockTensor A q)))
       (by rw [hidem, Matrix.polarSupport_mul_polarSupport])
       (nonNormalFixedPointState α ω)

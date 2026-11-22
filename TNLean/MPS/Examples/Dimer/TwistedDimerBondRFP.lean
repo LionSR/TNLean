@@ -171,7 +171,7 @@ theorem mpo_sigmaDimer_eq_bondProduct {N : ℕ} (hN : 0 < N) :
 theorem sigmaDimer_isMPDO : IsMPDO sigmaDimer := by
   intro N hN
   rw [mpo_sigmaDimer_eq_bondProduct hN]
-  exact (Matrix.finKronecker_posSemidef (fun _ : Fin N => sigma)
+  exact (Matrix.piKronecker_posSemidef (fun _ : Fin N => sigma)
     (fun _ => sigma_posSemidef)).submatrix (incomingBondEquiv N)
 
 /-- Every positive-length bond dimer has trace one. -/

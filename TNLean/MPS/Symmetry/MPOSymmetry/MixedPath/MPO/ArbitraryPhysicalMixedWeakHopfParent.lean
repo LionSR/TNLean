@@ -48,7 +48,7 @@ theorem exists_adjointBoundary_changePhysicalBasis
   refine ⟨Y, fun n => ?_⟩
   have htransport (Z : Matrix (Fin D) (Fin D) ℂ) :
       mpoWithBoundary (changePhysicalBasis J W.tensor) Z n =
-        singleKrausMap (Matrix.tensorPower n J) (mpoWithBoundary W.tensor Z n) := by
+        singleKrausMap (Matrix.piKronecker fun _ : Fin n ↦ J) (mpoWithBoundary W.tensor Z n) := by
     simp only [mpoWithBoundary_eq_physCloseN,
       singleKrausMap_tensorPower_physCloseN]
   rw [htransport, htransport]

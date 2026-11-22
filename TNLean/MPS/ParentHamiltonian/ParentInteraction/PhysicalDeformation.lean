@@ -75,9 +75,9 @@ noncomputable def onSiteTensorPow (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
 \(\bigotimes_{n<L}\Lambda\); the algebra of the latter is in
 `QICLean/Algebra/Kronecker/FiniteKroneckerProduct.lean`. -/
 lemma onSiteTensorPow_eq_finKronecker (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
-    onSiteTensorPow L Λ = Matrix.finKronecker fun _ : Fin L => Λ := by
+    onSiteTensorPow L Λ = Matrix.piKronecker fun _ : Fin L => Λ := by
   ext σ τ
-  simp [onSiteTensorPow, Matrix.finKronecker_apply]
+  simp [onSiteTensorPow, Matrix.piKronecker_apply]
 
 /-- The tensor power is the blocked Kronecker lift read through the decoding of blocked
 physical indices. -/
@@ -139,8 +139,8 @@ theorem groundSpaceMap_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPS
     (L : ℕ) (X : Matrix (Fin D) (Fin D) ℂ) :
     groundSpaceMap (rotatePhysical Λ A) L X =
       Matrix.toLin' (onSiteTensorPow L Λ) (groundSpaceMap A L X) := by
-  simpa only [onSiteTensorPow_eq_finKronecker, Matrix.rectKronecker_eq_finKronecker,
-    Matrix.toLin'_apply] using groundSpaceMap_rotatePhysical_rectangular Λ A L X
+  simpa only [onSiteTensorPow_eq_finKronecker,
+      Matrix.toLin'_apply] using groundSpaceMap_rotatePhysical_rectangular Λ A L X
 
 /-- The local ground space of the deformed tensor is the image of the local ground space of
 the original tensor under the tensor power: \(\mathcal G_L(\Lambda A) =

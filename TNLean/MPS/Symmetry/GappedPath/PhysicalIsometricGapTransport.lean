@@ -46,7 +46,7 @@ theorem isometricInteractionExtension_zero_translate_commute {d m N : ℕ}
         1 - placeAlong (X := fun _ ↦ Fin m) (ringWindow hN k)
           (MPOTensor.twoSiteSectorProjection (E * Eᴴ)) := by
     change placeAlong (X := fun _ ↦ Fin m) (ringWindow hN k)
-      (1 - singleKrausMap (Matrix.tensorPower 2 E) (1 - 0)) = _
+      (1 - singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ E) (1 - 0)) = _
     simp only [sub_zero, singleKrausMap_apply, Matrix.mul_one,
       MPOTensor.tensorPower_two_mul_conjTranspose, placeAlong_sub, placeAlong_one]
   rw [heq, heq]
@@ -59,7 +59,7 @@ theorem isometricInteractionExtension_zero_ker_eq_range {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1) (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
       (Interaction.translationInvariant N (isometricInteractionExtension E 0)).hamiltonian) =
-        LinearMap.range (Matrix.toEuclideanLin (Matrix.tensorPower N E)) := by
+        LinearMap.range (Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E)) := by
   have : NeZero N := ⟨by omega⟩
   have hzero : (Interaction.translationInvariant N
       (0 : MPOTensor.ChainOperator d 2)).hamiltonian = 0 := by
@@ -95,7 +95,7 @@ theorem isometricInteractionExtension_inactive_energy_lower_bound {d m N : ℕ}
     {A : MPOTensor.ChainOperator d 2} (hA : A.PosSemidef) (hN : 2 ≤ N)
     (v : EuclideanSpace ℂ (Cfg m N))
     (hv : v ∈ (LinearMap.range
-      (Matrix.toEuclideanLin (Matrix.tensorPower N E)))ᗮ) :
+      (Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E)))ᗮ) :
     haveI : NeZero N := ⟨by omega⟩; ‖v‖ ^ 2 ≤ (⟪Matrix.toEuclideanLin
       (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian v,
         v⟫_ℂ).re := by
@@ -129,7 +129,7 @@ theorem isometricInteractionExtension_inactive_energy_lower_bound {d m N : ℕ}
 private noncomputable def physicalChainLinearIsometry {d m : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1) (N : ℕ) :
     EuclideanSpace ℂ (Cfg d N) →ₗᵢ[ℂ] EuclideanSpace ℂ (Cfg m N) := by
-  let T := Matrix.toEuclideanLin (Matrix.tensorPower N E)
+  let T := Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E)
   have hT : T.adjoint ∘ₗ T = LinearMap.id := by
     simpa only [T, ← Matrix.toEuclideanLin_conjTranspose_eq_adjoint,
       Matrix.toEuclideanLin, Matrix.toLpLin_mul_same, Matrix.toLpLin_one] using
@@ -140,7 +140,7 @@ private noncomputable def physicalChainLinearIsometry {d m : ℕ}
 private theorem physicalChainLinearIsometry_toLinearMap {d m : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1) (N : ℕ) :
     (physicalChainLinearIsometry E hE N).toLinearMap =
-      Matrix.toEuclideanLin (Matrix.tensorPower N E) := rfl
+      Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E) := rfl
 
 private theorem physicalChainLinearIsometry_intertwines {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
@@ -186,7 +186,7 @@ theorem isometricInteractionExtension_ker_eq_map_of_posSemidef {d m N : ℕ}
       (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian) =
       (LinearMap.ker
         (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian)).map
-        (Matrix.toEuclideanLin (Matrix.tensorPower N E)) := by
+        (Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E)) := by
   have : NeZero N := ⟨by omega⟩
   simpa only [physicalChainLinearIsometry_toLinearMap] using
     (physicalChainLinearIsometry E hE N).ker_eq_map_of_intertwines_of_inactive_bound
@@ -205,7 +205,7 @@ theorem isometricInteractionExtension_ker_eq_span_of_posSemidef {d m N : ℕ}
       Submodule.span ℂ {ψ}) :
     haveI : NeZero N := ⟨by omega⟩; LinearMap.ker (Matrix.toEuclideanLin
       (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian) =
-      Submodule.span ℂ {Matrix.toEuclideanLin (Matrix.tensorPower N E) ψ} := by
+      Submodule.span ℂ {Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E) ψ} := by
   have : NeZero N := ⟨by omega⟩
   rw [isometricInteractionExtension_ker_eq_map_of_posSemidef E hE hA hN,
     hground, Submodule.map_span, Set.image_singleton]

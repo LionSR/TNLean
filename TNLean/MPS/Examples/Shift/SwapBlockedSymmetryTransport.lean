@@ -35,12 +35,12 @@ variable {d D Da Db : ℕ}
 private theorem reindex_tensorPower_blockKron
     (Q : Matrix (Fin d) (Fin d) ℂ) (N k : ℕ) :
     Matrix.reindex (MPSTensor.blockedConfigEquiv d N k).symm
-        (MPSTensor.blockedConfigEquiv d N k).symm (Matrix.tensorPower (N * k) Q) =
-      Matrix.tensorPower N (MPSTensor.blockKron k Q) := by
+        (MPSTensor.blockedConfigEquiv d N k).symm (Matrix.piKronecker fun _ : Fin (N * k) ↦ Q) =
+      (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k Q)) := by
   classical
   symm
   exact Matrix.ext fun σ τ => by
-    simpa [Matrix.tensorPower_apply, MPSTensor.blockKron, Matrix.reindex_apply,
+    simpa [Matrix.piKronecker_apply, MPSTensor.blockKron, Matrix.reindex_apply,
       MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp,
       Fintype.prod_prod_type] using
       (finProdFinEquiv.prod_comp (fun v : Fin (N * k) =>
@@ -81,8 +81,8 @@ private theorem block_swap_dagger_action (d k N : ℕ)
     (X : Matrix (Fin N → Fin (Kraus.blockPhysDim (d * d) k))
       (Fin N → Fin (Kraus.blockPhysDim (d * d) k)) ℂ) :
     ((shiftSwapDaggerSymmetry d).block k).action X =
-      Matrix.tensorPower N (MPSTensor.blockKron k (shiftPhysicalSwap d)) * Xᴴ *
-        Matrix.tensorPower N (MPSTensor.blockKron k (shiftPhysicalSwap d)) := by
+      (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) * Xᴴ *
+        (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) := by
   simp only [FiniteChainOperatorSymmetry.block, shiftSwapDaggerSymmetry,
     reindex_mul, reindex_tensorPower_blockKron, Matrix.conjTranspose_reindex]
   congr 2
@@ -93,8 +93,8 @@ private theorem block_swap_transpose_action (d k N : ℕ)
     (X : Matrix (Fin N → Fin (Kraus.blockPhysDim (d * d) k))
       (Fin N → Fin (Kraus.blockPhysDim (d * d) k)) ℂ) :
     ((shiftSwapTransposeSymmetry d).block k).action X =
-      Matrix.tensorPower N (MPSTensor.blockKron k (shiftPhysicalSwap d)) * Xᵀ *
-        Matrix.tensorPower N (MPSTensor.blockKron k (shiftPhysicalSwap d)) := by
+      (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) * Xᵀ *
+        (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) := by
   simp only [FiniteChainOperatorSymmetry.block, shiftSwapTransposeSymmetry,
     reindex_mul, reindex_tensorPower_blockKron]
   congr 2
@@ -102,21 +102,21 @@ private theorem block_swap_transpose_action (d k N : ℕ)
   simp [Matrix.reindex_apply, Matrix.transpose_apply]
 
 private theorem blocked_chainSwap_mul_self (d k N : ℕ) :
-    Matrix.tensorPower N (MPSTensor.blockKron k (shiftPhysicalSwap d)) *
-      Matrix.tensorPower N (MPSTensor.blockKron k (shiftPhysicalSwap d)) = 1 := by
-  rw [Matrix.tensorPower_mul, ← MPSTensor.blockKron_mul, shiftPhysicalSwap_mul_self,
-    MPSTensor.blockKron_one, Matrix.tensorPower_one]
+    (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) *
+      (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) = 1 := by
+  rw [Matrix.piKronecker_mul, ← MPSTensor.blockKron_mul, shiftPhysicalSwap_mul_self,
+    MPSTensor.blockKron_one, Matrix.piKronecker_one]
 
 private theorem blocked_chainSwap_conjTranspose (d k N : ℕ) :
-    (Matrix.tensorPower N (MPSTensor.blockKron k (shiftPhysicalSwap d)))ᴴ =
-      Matrix.tensorPower N (MPSTensor.blockKron k (shiftPhysicalSwap d)) := by
-  simp only [Matrix.conjTranspose_tensorPower, MPSTensor.blockKron_conjTranspose,
+    (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d)))ᴴ =
+      (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) := by
+  simp only [Matrix.conjTranspose_piKronecker, MPSTensor.blockKron_conjTranspose,
     shiftPhysicalSwap, Matrix.conjTranspose_permMatrix, Equiv.Perm.inv_def,
     bondPairSwapEquiv_symm]
 
 private theorem blocked_chainSwap_transpose (d k N : ℕ) :
-    (Matrix.tensorPower N (MPSTensor.blockKron k (shiftPhysicalSwap d)))ᵀ =
-      Matrix.tensorPower N (MPSTensor.blockKron k (shiftPhysicalSwap d)) := by
+    (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d)))ᵀ =
+      (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) := by
   have hQ : (shiftPhysicalSwap d)ᵀ = shiftPhysicalSwap d := by
     simp only [shiftPhysicalSwap, Matrix.transpose_permMatrix,
       Equiv.Perm.inv_def, bondPairSwapEquiv_symm]
@@ -129,11 +129,11 @@ private theorem blocked_chainSwap_transpose (d k N : ℕ) :
   exact congrFun (congrFun hQ _) _
 
 private theorem blocked_chainSwap_map_star (d k N : ℕ) :
-    (Matrix.tensorPower N (MPSTensor.blockKron k (shiftPhysicalSwap d))).map
+    (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))).map
         (starRingEnd ℂ) =
-      Matrix.tensorPower N (MPSTensor.blockKron k (shiftPhysicalSwap d)) := by
+      (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) := by
   ext σ τ
-  simp [Matrix.tensorPower_apply, MPSTensor.blockKron, shiftPhysicalSwap,
+  simp [Matrix.piKronecker_apply, MPSTensor.blockKron, shiftPhysicalSwap,
     Equiv.Perm.permMatrix, PEquiv.toMatrix_apply]
 
 private theorem block_swap_dagger_invariance_iff (d k : ℕ) {E : ℕ}
@@ -171,11 +171,11 @@ private theorem block_conjugation_invariance_iff (d k : ℕ) {E : ℕ}
     Matrix.map_mul, blocked_chainSwap_map_star]
   constructor
   · exact congrArg (fun X ↦
-      Matrix.tensorPower N (MPSTensor.blockKron k (shiftPhysicalSwap d)) * X)
+      (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) * X)
   · intro h
     simpa only [← Matrix.mul_assoc, blocked_chainSwap_mul_self, Matrix.one_mul] using
       congrArg (fun X ↦
-        Matrix.tensorPower N (MPSTensor.blockKron k (shiftPhysicalSwap d)) * X) h
+        (Matrix.piKronecker fun _ : Fin N ↦ (MPSTensor.blockKron k (shiftPhysicalSwap d))) * X) h
 
 /-- After some common positive blocking length, swap multiplication identifies
 strict equivalence under swap-combined adjunction with that under adjunction.

@@ -233,8 +233,8 @@ theorem uu_right_eq :
            ⟨0, 0⟩, ⟨0, -1⟩;
            ⟨0, 0⟩, ⟨1, 1⟩;
            ⟨-1, 0⟩, ⟨0, 0⟩] := by
-  rw [uu_compression.right_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ uuGauge_mul_inv)
-    (hG' := complexOfRing_mul_eq_one _ uuGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
+  rw [uu_compression.right_gaugeOfMatrix (hG := Matrix.complexOfRing_mul_eq_one _ uuGauge_mul_inv)
+    (hG' := Matrix.complexOfRing_mul_eq_one _ uuGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
   congr 1
   decide +kernel
 
@@ -242,8 +242,8 @@ theorem uu_left_eq :
     uu_compression.left oneSlotMem =
       complexOfEisenstein !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨-1, 0⟩;
            ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, -1⟩, ⟨0, 0⟩] := by
-  rw [uu_compression.left_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ uuGauge_mul_inv)
-    (hG' := complexOfRing_mul_eq_one _ uuGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
+  rw [uu_compression.left_gaugeOfMatrix (hG := Matrix.complexOfRing_mul_eq_one _ uuGauge_mul_inv)
+    (hG' := Matrix.complexOfRing_mul_eq_one _ uuGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
   congr 1
   decide +kernel
 
@@ -497,8 +497,8 @@ theorem dd_right_eq :
            ⟨0, 0⟩, ⟨-1, 0⟩;
            ⟨0, 0⟩, ⟨0, -1⟩;
            ⟨1, 1⟩, ⟨0, 0⟩] := by
-  rw [dd_compression.right_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ ddGauge_mul_inv)
-    (hG' := complexOfRing_mul_eq_one _ ddGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
+  rw [dd_compression.right_gaugeOfMatrix (hG := Matrix.complexOfRing_mul_eq_one _ ddGauge_mul_inv)
+    (hG' := Matrix.complexOfRing_mul_eq_one _ ddGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
   congr 1
   decide +kernel
 
@@ -506,8 +506,8 @@ theorem dd_left_eq :
     dd_compression.left oneSlotMem =
       complexOfEisenstein !![⟨0, 0⟩, ⟨0, 0⟩, ⟨0, 0⟩, ⟨0, -1⟩;
            ⟨0, 0⟩, ⟨0, 0⟩, ⟨1, 1⟩, ⟨0, 0⟩] := by
-  rw [dd_compression.left_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ ddGauge_mul_inv)
-    (hG' := complexOfRing_mul_eq_one _ ddGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
+  rw [dd_compression.left_gaugeOfMatrix (hG := Matrix.complexOfRing_mul_eq_one _ ddGauge_mul_inv)
+    (hG' := Matrix.complexOfRing_mul_eq_one _ ddGaugeInv_mul) rfl, ← complexOfEisenstein_submatrix]
   congr 1
   decide +kernel
 

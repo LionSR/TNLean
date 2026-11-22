@@ -154,13 +154,13 @@ formula of CPSV16, lines 1013–1016. Its complement construction is recorded
 in `docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
 theorem sitewiseVerticalCoisometry_mul_physicalMultiplicityWeight
     (H : BNTFusionTensorClause M) (L : ℕ) :
-    Matrix.tensorPower L H.verticalCoisometry *
-        Matrix.tensorPower L H.physicalMultiplicityWeight =
-      Matrix.tensorPower L H.retainedMultiplicityOperator *
-        Matrix.tensorPower L H.verticalCoisometry := by
-  rw [Matrix.tensorPower_mul,
+    (Matrix.piKronecker fun _ : Fin L ↦ H.verticalCoisometry) *
+        (Matrix.piKronecker fun _ : Fin L ↦ H.physicalMultiplicityWeight) =
+      (Matrix.piKronecker fun _ : Fin L ↦ H.retainedMultiplicityOperator) *
+        (Matrix.piKronecker fun _ : Fin L ↦ H.verticalCoisometry) := by
+  rw [Matrix.piKronecker_mul,
     H.verticalCoisometry_mul_physicalMultiplicityWeight,
-    Matrix.tensorPower_mul]
+    Matrix.piKronecker_mul]
 
 /-- On every chain, the sitewise adjoint retained-row map intertwines the
 retained multiplicity factor with the ambient physical Gibbs factor.
@@ -170,13 +170,13 @@ CPSV16, lines 1013–1016. Its complement construction is recorded in
 `docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
 theorem sitewisePhysicalMultiplicityWeight_mul_conjTranspose_verticalCoisometry
     (H : BNTFusionTensorClause M) (L : ℕ) :
-    Matrix.tensorPower L H.physicalMultiplicityWeight *
-        Matrix.tensorPower L H.verticalCoisometryᴴ =
-      Matrix.tensorPower L H.verticalCoisometryᴴ *
-        Matrix.tensorPower L H.retainedMultiplicityOperator := by
-  rw [Matrix.tensorPower_mul,
+    (Matrix.piKronecker fun _ : Fin L ↦ H.physicalMultiplicityWeight) *
+        (Matrix.piKronecker fun _ : Fin L ↦ H.verticalCoisometryᴴ) =
+      (Matrix.piKronecker fun _ : Fin L ↦ H.verticalCoisometryᴴ) *
+        (Matrix.piKronecker fun _ : Fin L ↦ H.retainedMultiplicityOperator) := by
+  rw [Matrix.piKronecker_mul,
     H.physicalMultiplicityWeight_mul_conjTranspose_verticalCoisometry,
-    Matrix.tensorPower_mul]
+    Matrix.piKronecker_mul]
 
 /-- The sitewise tensor power of the retained-row coisometry remains a
 coisometry.
@@ -187,11 +187,11 @@ orientation is documented in
 `docs/paper-gaps/cpsv16_topological_gibbs_physical_complement.tex`. -/
 theorem sitewiseVerticalCoisometry_mul_conjTranspose
     (H : BNTFusionTensorClause M) (L : ℕ) :
-    Matrix.tensorPower L H.verticalCoisometry *
-        (Matrix.tensorPower L H.verticalCoisometry)ᴴ =
+    (Matrix.piKronecker fun _ : Fin L ↦ H.verticalCoisometry) *
+        (Matrix.piKronecker fun _ : Fin L ↦ H.verticalCoisometry)ᴴ =
       1 := by
   rw [MPOTensor.tensorPower_mul_conjTranspose,
-    H.coisometry, Matrix.tensorPower_one]
+    H.coisometry, Matrix.piKronecker_one]
 
 /-- The fixed physical two-site Gibbs term: the ambient one-site energy on
 the first site and the identity on the second.
@@ -265,7 +265,7 @@ length-at-least-two scope is documented in
 theorem exp_neg_physicalTopologicalGibbsHamiltonianSuccSucc
     (H : BNTFusionTensorClause M) (N : ℕ) :
     NormedSpace.exp (-H.physicalTopologicalGibbsHamiltonianSuccSucc N) =
-      Matrix.tensorPower (N + 2) H.physicalMultiplicityWeight := by
+      (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.physicalMultiplicityWeight) := by
   have hneg (i : Fin (N + 2)) :
       -ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow (by omega : 1 ≤ N + 2) i)
           (MPOTensor.oneSiteOperator H.physicalMultiplicityEnergy) =
@@ -293,7 +293,7 @@ def physicalIndexedAmbientTopologicalSpectralProjectorSuccSucc
     (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (N : ℕ) (i : Fin d) :
     Matrix (Fin (N + 2) → Fin d) (Fin (N + 2) → Fin d) ℂ :=
-  let W := Matrix.tensorPower (N + 2) H.verticalCoisometry
+  let W := (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.verticalCoisometry)
   Wᴴ *
       H.physicalIndexedTopologicalSpectralProjectorSucc hM (N + 1) i *
     W
@@ -318,7 +318,7 @@ theorem physicalIndexedAmbientTopologicalSpectralProjectorSuccSucc_isOrthogonalP
           hM N i =
         H.physicalIndexedAmbientTopologicalSpectralProjectorSuccSucc
           hM N i := by
-  let W := Matrix.tensorPower (N + 2) H.verticalCoisometry
+  let W := (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.verticalCoisometry)
   let P :=
     H.physicalIndexedTopologicalSpectralProjectorSucc hM (N + 1) i
   have hP :
@@ -387,7 +387,7 @@ theorem physicalIndexedAmbientTopologicalSpectralProjectorSuccSucc_mul_eq_zero
     H.physicalIndexedAmbientTopologicalSpectralProjectorSuccSucc hM N i *
         H.physicalIndexedAmbientTopologicalSpectralProjectorSuccSucc hM N j =
       0 := by
-  let W := Matrix.tensorPower (N + 2) H.verticalCoisometry
+  let W := (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.verticalCoisometry)
   let P :=
     H.physicalIndexedTopologicalSpectralProjectorSucc hM (N + 1) i
   let Q :=
@@ -416,11 +416,11 @@ length-at-least-two scope in
 `docs/paper-gaps/cpsv16_topological_gibbs_length_one.tex`. -/
 theorem sitewiseRetainedMultiplicityOperator_eq_topologicalMultiplicityWeightFactorSucc
     (H : BNTFusionTensorClause M) (N : ℕ) :
-    Matrix.tensorPower (N + 2) H.retainedMultiplicityOperator =
+    (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.retainedMultiplicityOperator) =
       H.topologicalMultiplicityWeightFactorSucc (N + 1) := by
   rw [H.topologicalMultiplicityWeightFactorSucc_eq_diagonal]
   ext x y
-  simp only [Matrix.tensorPower_apply, retainedMultiplicityOperator,
+  simp only [Matrix.piKronecker_apply, retainedMultiplicityOperator,
     Matrix.diagonal_apply]
   by_cases hxy : x = y
   · subst y
@@ -451,18 +451,18 @@ theorem physicalIndexedAmbientTopologicalSpectralProjectorSuccSucc_commutes_gibb
           (-H.physicalTopologicalGibbsHamiltonianSuccSucc N) *
         H.physicalIndexedAmbientTopologicalSpectralProjectorSuccSucc
           hM N i := by
-  let W := Matrix.tensorPower (N + 2) H.verticalCoisometry
+  let W := (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.verticalCoisometry)
   let P :=
     H.physicalIndexedTopologicalSpectralProjectorSucc hM (N + 1) i
   let Gp :=
-    Matrix.tensorPower (N + 2) H.physicalMultiplicityWeight
+    (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.physicalMultiplicityWeight)
   let Gr :=
-    Matrix.tensorPower (N + 2) H.retainedMultiplicityOperator
+    (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.retainedMultiplicityOperator)
   have hleft : W * Gp = Gr * W :=
     H.sitewiseVerticalCoisometry_mul_physicalMultiplicityWeight (N + 2)
   have hright : Gp * Wᴴ = Wᴴ * Gr := by
     dsimp only [W]
-    rw [Matrix.conjTranspose_tensorPower]
+    rw [Matrix.conjTranspose_piKronecker]
     exact
       H.sitewisePhysicalMultiplicityWeight_mul_conjTranspose_verticalCoisometry
         (N + 2)
@@ -501,19 +501,19 @@ theorem physicalIndexedAmbientProjector_mul_gibbsFactor_eq_transport
     H.physicalIndexedAmbientTopologicalSpectralProjectorSuccSucc hM N i *
         NormedSpace.exp
           (-H.physicalTopologicalGibbsHamiltonianSuccSucc N) =
-      (Matrix.tensorPower (N + 2) H.verticalCoisometry)ᴴ *
+      (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.verticalCoisometry)ᴴ *
           (H.physicalIndexedTopologicalSpectralProjectorSucc
               hM (N + 1) i *
             NormedSpace.exp
               (-H.topologicalGibbsHamiltonianSuccSucc N)) *
-        Matrix.tensorPower (N + 2) H.verticalCoisometry := by
-  let W := Matrix.tensorPower (N + 2) H.verticalCoisometry
+        (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.verticalCoisometry) := by
+  let W := (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.verticalCoisometry)
   let P :=
     H.physicalIndexedTopologicalSpectralProjectorSucc hM (N + 1) i
   let Gp :=
-    Matrix.tensorPower (N + 2) H.physicalMultiplicityWeight
+    (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.physicalMultiplicityWeight)
   let Gr :=
-    Matrix.tensorPower (N + 2) H.retainedMultiplicityOperator
+    (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.retainedMultiplicityOperator)
   have hleft : W * Gp = Gr * W :=
     H.sitewiseVerticalCoisometry_mul_physicalMultiplicityWeight (N + 2)
   rw [H.exp_neg_physicalTopologicalGibbsHamiltonianSuccSucc,
@@ -544,10 +544,10 @@ theorem mpo_eq_sum_physicalIndexedAmbientProjector_mul_gibbsFactor
               hM N i *
             NormedSpace.exp
               (-H.physicalTopologicalGibbsHamiltonianSuccSucc N)) := by
-  let W := Matrix.tensorPower (N + 2) H.verticalCoisometry
+  let W := (Matrix.piKronecker fun _ : Fin (N + 2) ↦ H.verticalCoisometry)
   have hreconstruct :=
     H.singleKrausMap_physicalIndexedGibbsDecomposition_eq_mpo hM N
-  rw [← Matrix.conjTranspose_tensorPower] at hreconstruct
+  rw [← Matrix.conjTranspose_piKronecker] at hreconstruct
   rw [← hreconstruct]
   rw [map_sum]
   apply Finset.sum_congr rfl

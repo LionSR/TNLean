@@ -18,7 +18,8 @@ blocked tensor with the fixed-point tensors `P'_{j,∞}` of the blocks placed in
 space. The results are:
 
 * the partial isometry `V^{⊗M}` does not increase norms
-  (`sum_norm_sq_tensorPower_mulVec_le`), so the normalization of the approximating state can only
+  (`Matrix.sum_norm_sq_piKronecker_mulVec_le`), so the normalization of the approximating state can
+  only
   increase the overlap;
 * the mixed transfer matrix of the limit `P_∞` against `P'_{j,∞}` is the rank-one idempotent
   `ρ ↦ Tr(Π_j ρ) σ'_j` (`mixedMapLM_blockSumPosLimit_apply`), and `t_j` times it for the limit
@@ -46,7 +47,7 @@ correlation lengths of the mixed transfer maps, in place of the block form (S5) 
 * `MPSTensor.embeddedBlockState` — the fixed point `σ'_j = E_j σ_j E_jᴴ` in the full bond space.
 * `MPSTensor.conjTranspose_coordEmbedding`, `MPSTensor.transpose_kronecker_apply_eq_mul_single_mul`
   — coordinate isometries are real, and letters of `Xᵀ ⊗ Y`.
-* `Matrix.sum_star_tensorPower_mulVec_mul`, `Matrix.sum_norm_sq_tensorPower_mulVec_le` —
+* `Matrix.sum_star_piKronecker_mulVec_mul`, `Matrix.sum_norm_sq_piKronecker_mulVec_le` —
   inner products and norms after a tensor power of a partial isometry.
 * `MPSTensor.embedPair_fixedPointPair` — embedded pairs are the pairs of the embedded fixed points.
 * `MPSTensor.mixedMapLM_blockSumPosLimit_smul_apply`, `MPSTensor.mixedMapLM_blockSumPosLimit_apply`

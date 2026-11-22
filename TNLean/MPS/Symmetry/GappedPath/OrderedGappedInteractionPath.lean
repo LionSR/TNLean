@@ -60,10 +60,10 @@ noncomputable def orderedGappedInteractionPath
       IsGapped (Interaction.translationInvariant N A).hamiltonian 0 δ)
     (hSymA : ∀ (N : ℕ) (hN : 2 ≤ N) (g : G),
       haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N A).hamiltonian
-        (Matrix.finKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ)))
+        (Matrix.piKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ)))
     (hSymB : ∀ (N : ℕ) (hN : 2 ≤ N) (g : G),
       haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N B).hamiltonian
-        (Matrix.finKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ))) :
+        (Matrix.piKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ))) :
     SymmetricGappedInteractionPath U A B := by
   have hAffine (γ : ℝ) : A + γ • (B - A) = (1 - γ) • A + γ • B := by module
   have hHam (N : ℕ) (hN : 2 ≤ N) (γ : ℝ) :

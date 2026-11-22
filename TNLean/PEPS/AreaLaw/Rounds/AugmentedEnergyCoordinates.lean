@@ -129,7 +129,7 @@ theorem copyMean_augmentOperator_eq_replicaHamiltonian_kronecker
           ((Fin k → Fin d) × (Fin k → Fin d)) ℂ)).submatrix
         (augmentedSumReplicaCopiesEquiv q d k)
         (augmentedSumReplicaCopiesEquiv q d k) := by
-  simp only [copyMean, siteOp_eq_finKronecker]
+  simp only [copyMean, TensorPower.siteOp_eq_piKronecker]
   change (k : ℂ)⁻¹ • Matrix.replicaHamiltonian (augmentOperator q (fun _ => d) H) k = _
   rw [augmentOperator]
   let e : (∀ v, Fin ((augmentedDimensions (V := V) q (fun _ => d)) v)) ≃
@@ -143,7 +143,7 @@ theorem copyMean_augmentOperator_eq_replicaHamiltonian_kronecker
   simp only [Equiv.symm_symm] at hcov
   rw [hcov]
   have hmean := TensorPower.replicaMean_kronecker_one (B := Bool → Fin d) H k
-  simp only [siteOp_eq_finKronecker] at hmean
+  simp only [TensorPower.siteOp_eq_piKronecker] at hmean
   change (k : ℂ)⁻¹ • Matrix.replicaHamiltonian
       (H ⊗ₖ (1 : Matrix (Bool → Fin d) (Bool → Fin d) ℂ)) k =
     (((k : ℂ)⁻¹ • Matrix.replicaHamiltonian H k) ⊗ₖ

@@ -143,9 +143,9 @@ theorem pureCanonical_exists_isHermitian_physicalStringProductOrder
     ∃ x y : Fin (D ^ 2) → Matrix (Fin d) (Fin d) ℂ,
       (∀ i, (x i).IsHermitian) ∧ (∀ i, (y i).IsHermitian) ∧ ∃ s : ℝ, 0 < s ∧
         Tendsto (fun N : ℕ => ‖Matrix.trace
-          (Λ * physicalObservableTransfer A (D ^ 2) (Matrix.finKronecker x)
+          (Λ * physicalObservableTransfer A (D ^ 2) (Matrix.piKronecker x)
             (twistedTransferIter A u N
-              (physicalObservableTransfer A (D ^ 2) (Matrix.finKronecker y) 1)))‖)
+              (physicalObservableTransfer A (D ^ 2) (Matrix.piKronecker y) 1)))‖)
           atTop (nhds s) := by
   obtain ⟨hIrr, hPrim⟩ :=
     pureCanonical_isIrreducibleMap_and_isPrimitive A Λ hΛpos hΛfix hNorm hPure
@@ -156,6 +156,6 @@ theorem pureCanonical_exists_isHermitian_physicalStringProductOrder
     A hA Λ hΛpos.isUnit hΛtr hΛfix hNorm V hV
   refine ⟨x, y, hxH, hyH, _, mul_pos (norm_pos_iff.mpr hy) (norm_pos_iff.mpr hx), ?_⟩
   exact physicalStringBlock_norm_tendsto A hIrr hPrim Λ hΛpos hΛtr hΛfix hNorm
-    (D ^ 2) (D ^ 2) (Matrix.finKronecker x) (Matrix.finKronecker y) u V μ hV hμ hInter
+    (D ^ 2) (D ^ 2) (Matrix.piKronecker x) (Matrix.piKronecker y) u V μ hV hμ hInter
 
 end MPSTensor

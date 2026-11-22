@@ -262,7 +262,7 @@ def gLoc (k : Fin 2) : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) ℂ :=
 /-- The constant-family finite Kronecker product, indexed by configurations. -/
 def powN {α : Type*} [Fintype α] (A : Matrix α α ℂ) (N : ℕ) :
     Matrix (Fin N → α) (Fin N → α) ℂ :=
-  Matrix.finKronecker fun _ : Fin N => A
+  Matrix.piKronecker fun _ : Fin N => A
 
 /-- The `N`-fold Kronecker power of the local factor `gLoc k`, written
 entrywise: the entry at a pair of strings of (flag bit, left bit) pairs is the
@@ -346,7 +346,7 @@ lemma gPow_add_sub_posSemidef (N : ℕ) :
         ext a b
         have hab : a = b := Subsingleton.elim _ _
         subst hab
-        simp [gPow, powN, Matrix.finKronecker]
+        simp [gPow, powN, Matrix.piKronecker]
       rw [h 0, h 1]
       exact ⟨Matrix.PosSemidef.one.add Matrix.PosSemidef.one,
         by simpa using Matrix.PosSemidef.zero⟩
@@ -364,7 +364,7 @@ lemma gPow_add_sub_posSemidef (N : ℕ) :
                 (gLoc 0 - gLoc 1))).submatrix e e := by
         ext a b
         simp only [Matrix.add_apply, Matrix.sub_apply, Matrix.smul_apply, Matrix.submatrix_apply,
-          Matrix.kroneckerMap_apply, gPow, powN, Matrix.finKronecker_apply,
+          Matrix.kroneckerMap_apply, gPow, powN, Matrix.piKronecker_apply,
           Fin.prod_univ_castSucc, smul_eq_mul, h_fst, h_snd, Function.comp_apply]
         ring
       have hsub : gPow 0 (N + 1) - gPow 1 (N + 1) =
@@ -374,7 +374,7 @@ lemma gPow_add_sub_posSemidef (N : ℕ) :
                 (gLoc 0 + gLoc 1))).submatrix e e := by
         ext a b
         simp only [Matrix.add_apply, Matrix.sub_apply, Matrix.smul_apply, Matrix.submatrix_apply,
-          Matrix.kroneckerMap_apply, gPow, powN, Matrix.finKronecker_apply,
+          Matrix.kroneckerMap_apply, gPow, powN, Matrix.piKronecker_apply,
           Fin.prod_univ_castSucc, smul_eq_mul, h_fst, h_snd, Function.comp_apply]
         ring
       refine ⟨hadd ▸ ?_, hsub ▸ ?_⟩
@@ -391,7 +391,7 @@ scaled by the site normalization $2^{-N}$. -/
 lemma prod_coef_eq_gPow (k : Fin 2) {N : ℕ} (σ τ : Fin N → Fin 8) :
     (∏ n : Fin N, coef k (σ n) (τ n)) =
       (1 / 2 : ℂ) ^ N * gPow k N (flagLeft N σ) (flagLeft N τ) := by
-  simp only [coef_eq_gLoc, gPow, powN, flagLeft, Matrix.finKronecker_apply, Finset.prod_mul_distrib,
+  simp only [coef_eq_gLoc, gPow, powN, flagLeft, Matrix.piKronecker_apply, Finset.prod_mul_distrib,
     Finset.prod_const, Finset.card_univ, Fintype.card_fin]
 
 /-- **The closed operator as a Schur product.**  For a positive chain length,

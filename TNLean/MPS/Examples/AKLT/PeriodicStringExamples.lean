@@ -142,7 +142,7 @@ nonvanishing length, with the length condition derived from the tensor.
 Source: arXiv:0802.0447, Example 1, line 399. -/
 private theorem akltPGWSVC08_fullRing_eq_one {L : ℕ} (hL : L ≠ 1) :
     mpvExpectation akltPGWSVC08Tensor L
-      (Matrix.finKronecker fun _ : Fin L => akltSpinRotationZ) = 1 := by
+      (Matrix.piKronecker fun _ : Fin L => akltSpinRotationZ) = 1 := by
   have hstar : (!![(1 : ℂ), 0; 0, -1] : Mat₂)ᴴ = !![1, 0; 0, -1] := by
     ext i j
     fin_cases i <;> fin_cases j <;> simp
@@ -161,7 +161,7 @@ At every other length the source's whole-ring value is exactly one.
 Source: arXiv:0802.0447, Example 1, line 399, with its zero-vector case made explicit. -/
 theorem akltPGWSVC08_fullRing (L : ℕ) :
     mpvExpectation akltPGWSVC08Tensor L
-      (Matrix.finKronecker fun _ : Fin L => akltSpinRotationZ) =
+      (Matrix.piKronecker fun _ : Fin L => akltSpinRotationZ) =
         if L = 1 then 0 else 1 := by
   split_ifs with hL
   · subst L
@@ -209,7 +209,7 @@ length, including the empty and short rings. Source: arXiv:0802.0447,
 Example 2, lines 406–411. -/
 theorem clusterTensorRMP_fullRing (L : ℕ) :
     mpvExpectation clusterTensorRMP L
-      (Matrix.finKronecker fun _ : Fin L => -pauliX) = 1 := by
+      (Matrix.piKronecker fun _ : Fin L => -pauliX) = 1 := by
   have hunit : SpinCover.pauli 1 * (SpinCover.pauli 1)ᴴ = 1 := by
     ext i j
     fin_cases i <;> fin_cases j <;> norm_num [SpinCover.pauli, Matrix.mul_apply, Fin.sum_univ_two]

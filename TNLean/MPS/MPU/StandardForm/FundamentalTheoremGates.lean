@@ -24,9 +24,9 @@ variable {d D ℓ r N : ℕ}
 theorem twoSiteUnshiftedLayer_mul_left (G : Matrix (Fin ℓ × Fin r) (Fin ℓ × Fin r) ℂ)
     (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ) :
     twoSiteUnshiftedLayer (N := N) (G * u) =
-      Matrix.tensorPower N G * twoSiteUnshiftedLayer (N := N) u := by
+      (Matrix.piKronecker fun _ : Fin N ↦ G) * twoSiteUnshiftedLayer (N := N) u := by
   ext h j
-  simp only [Matrix.mul_apply, Matrix.tensorPower_apply, twoSiteUnshiftedLayer]
+  simp only [Matrix.mul_apply, Matrix.piKronecker_apply, twoSiteUnshiftedLayer]
   rw [Fintype.prod_sum]
   simp only [Finset.prod_mul_distrib]
 
@@ -37,9 +37,9 @@ theorem twoSiteShiftedLayer_mul_kron [NeZero N]
     (x : Matrix (Fin ℓ) (Fin ℓ) ℂ) (y : Matrix (Fin r) (Fin r) ℂ)
     (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ) :
     twoSiteShiftedLayer (N := N) (v * (yᴴ ⊗ₖ xᴴ)) =
-      twoSiteShiftedLayer (N := N) v * Matrix.tensorPower N (x ⊗ₖ y)ᴴ := by
+      twoSiteShiftedLayer (N := N) v * (Matrix.piKronecker fun _ : Fin N ↦ (x ⊗ₖ y))ᴴ := by
   ext i h
-  simp only [Matrix.mul_apply, twoSiteShiftedLayer, Matrix.tensorPower_apply]
+  simp only [Matrix.mul_apply, twoSiteShiftedLayer, Matrix.piKronecker_apply]
   rw [Fintype.prod_sum]
   refine Fintype.sum_equiv (twoSiteShiftedPairEquiv (N := N) (ℓ := ℓ) (r := r)).symm _ _ ?_
   intro g
@@ -70,8 +70,9 @@ theorem twoSiteCircuit_eq_of_gate_gauges [NeZero N]
     rw [Matrix.conjTranspose_kronecker, ← Matrix.mul_kronecker_mul, hx, hy,
       Matrix.one_kronecker_one]
   rw [Matrix.star_eq_conjTranspose, Matrix.star_eq_conjTranspose, twoSiteShiftedLayer_mul_kron,
-    twoSiteUnshiftedLayer_mul_left, Matrix.mul_assoc, ← Matrix.mul_assoc (Matrix.tensorPower _ _),
-    Matrix.tensorPower_mul, hxy, Matrix.tensorPower_one, Matrix.one_mul]
+    twoSiteUnshiftedLayer_mul_left, Matrix.mul_assoc, ← Matrix.mul_assoc (Matrix.piKronecker fun _ :
+        Fin _ ↦ _),
+    Matrix.piKronecker_mul, hxy, Matrix.piKronecker_one, Matrix.one_mul]
 
 /-- **Fundamental theorem, gates, sufficiency.** Two tensors with two-site standard-form data
 whose gates are related by `(x ⊗ y)` and `(y† ⊗ x†)` generate the same periodic operators at

@@ -135,7 +135,7 @@ noncomputable def ofConjInt (BInt CInt : Fin d → Matrix (Fin D) (Fin D) ℤ)
     (h : ∀ i, G * BInt i * Ginv = CInt i) :
     MultiBlockCompression B oneSlot (fun _ : Unit => C) :=
   ofConjMatrix (complexOfInt G) (complexOfInt Ginv)
-    (complexOfRing_mul_eq_one _ hG) (complexOfRing_mul_eq_one _ hG')
+    (Matrix.complexOfRing_mul_eq_one _ hG) (Matrix.complexOfRing_mul_eq_one _ hG')
     (fun i => by rw [hB, ← complexOfInt_mul, ← complexOfInt_mul, h, hC])
 
 /-- **A tensor equal to its target is a one-slot compression datum** with the identity gauge and
@@ -285,8 +285,8 @@ theorem left_ofScalarFlagFour :
     (ofScalarFlagFour BInt cInt hB hc G Ginv hG hG' conjInt hconj htri htarget hzero).left
       oneSlotMem = Matrix.of fun (_ : Fin 1) j => (G 2 j : ℂ) := by
   rw [left_gaugeOfMatrix (ofScalarFlagFour BInt cInt hB hc G Ginv hG hG' conjInt hconj htri
-    htarget hzero) (hG := complexOfRing_mul_eq_one _ hG)
-    (hG' := complexOfRing_mul_eq_one _ hG') rfl]
+    htarget hzero) (hG := Matrix.complexOfRing_mul_eq_one _ hG)
+    (hG' := Matrix.complexOfRing_mul_eq_one _ hG') rfl]
   ext i j
   rfl
 
@@ -296,8 +296,8 @@ theorem right_ofScalarFlagFour :
     (ofScalarFlagFour BInt cInt hB hc G Ginv hG hG' conjInt hconj htri htarget hzero).right
       oneSlotMem = Matrix.of fun i (_ : Fin 1) => (Ginv i 2 : ℂ) := by
   rw [right_gaugeOfMatrix (ofScalarFlagFour BInt cInt hB hc G Ginv hG hG' conjInt hconj htri
-    htarget hzero) (hG := complexOfRing_mul_eq_one _ hG)
-    (hG' := complexOfRing_mul_eq_one _ hG') rfl]
+    htarget hzero) (hG := Matrix.complexOfRing_mul_eq_one _ hG)
+    (hG' := Matrix.complexOfRing_mul_eq_one _ hG') rfl]
   ext i j
   rfl
 

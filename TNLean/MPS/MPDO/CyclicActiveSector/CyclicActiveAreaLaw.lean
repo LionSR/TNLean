@@ -102,7 +102,7 @@ theorem isSAL_of_isSourceZCL
     dsimp only [M]
     rw [← singleKrausMap_tensorPower_mpo]
     exact (hMPDO N hN).mul_mul_conjTranspose_same
-      (Matrix.tensorPower N U)
+      (Matrix.piKronecker fun _ : Fin N ↦ U)
   have hMtrace : ∀ N, 0 < N → Matrix.trace (mpo M N) ≠ 0 := by
     intro N hN
     dsimp only [M, U]

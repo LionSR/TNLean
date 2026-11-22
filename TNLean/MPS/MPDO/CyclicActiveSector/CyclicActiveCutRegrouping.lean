@@ -548,7 +548,7 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
               exact ((lam : ℂ) ^ 2) •
                 (F.cyclicActiveLeftBoundary b
                     ((F.cyclicActiveRetainedWord hL) 0) ⊗ₖ
-                  Matrix.finKronecker (fun i : Fin A ↦
+                  Matrix.piKronecker (fun i : Fin A ↦
                     F.neighboringOperator (F.leftSectorWord j kL i.castSucc)
                       (F.leftSectorWord j kL i.succ)))
             have hLeft : F.cyclicActiveLeftOpenBlock lam b
@@ -557,7 +557,7 @@ theorem reindex_cyclicActiveFourthRegionBlock_eq_cutRaw
               simp [cyclicActiveLeftOpenBlock, PLeft, hL]
             let PRight : Matrix (F.RightOpenEdgeIndex (F.rightSectorWord j kR))
                 (F.RightOpenEdgeIndex (F.rightSectorWord j kR)) ℂ := by
-              exact Matrix.finKronecker (fun i : Fin C ↦
+              exact Matrix.piKronecker (fun i : Fin C ↦
                   F.neighboringOperator (F.rightSectorWord j kR i.castSucc)
                     (F.rightSectorWord j kR i.succ)) ⊗ₖ
                 F.cyclicActiveRightBoundary a

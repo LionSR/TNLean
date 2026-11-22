@@ -77,14 +77,14 @@ theorem isometricInteractionExtension_commute_onSiteTensorPow {d m : ℕ}
     Commute (isometricInteractionExtension E A)
       (onSiteTensorPow 2 (U : Matrix (Fin m) (Fin m) ℂ)) := by
   have hInt : onSiteTensorPow 2 (U : Matrix (Fin m) (Fin m) ℂ) *
-      Matrix.tensorPower 2 E =
-      Matrix.tensorPower 2 E *
+      (Matrix.piKronecker fun _ : Fin 2 ↦ E) =
+      (Matrix.piKronecker fun _ : Fin 2 ↦ E) *
         onSiteTensorPow 2 (V : Matrix (Fin d) (Fin d) ℂ) := by
-    change Matrix.rectKronecker (fun _ : Fin 2 => (U : Matrix (Fin m) (Fin m) ℂ)) *
-      Matrix.rectKronecker (fun _ : Fin 2 => E) =
-      Matrix.rectKronecker (fun _ : Fin 2 => E) *
-        Matrix.rectKronecker (fun _ : Fin 2 => (V : Matrix (Fin d) (Fin d) ℂ))
-    rw [Matrix.rectKronecker_mul, Matrix.rectKronecker_mul]
+    change Matrix.piKronecker (fun _ : Fin 2 => (U : Matrix (Fin m) (Fin m) ℂ)) *
+      Matrix.piKronecker (fun _ : Fin 2 => E) =
+      Matrix.piKronecker (fun _ : Fin 2 => E) *
+        Matrix.piKronecker (fun _ : Fin 2 => (V : Matrix (Fin d) (Fin d) ℂ))
+    rw [Matrix.piKronecker_mul, Matrix.piKronecker_mul]
     simp only [hE]
   have hUnitary {r : ℕ} (R : Matrix.unitaryGroup (Fin r) ℂ) :
       onSiteTensorPow 2 (R : Matrix (Fin r) (Fin r) ℂ) ∈
@@ -148,7 +148,8 @@ Section II.F.2, eq:sym:omega-gamma. -/
 theorem continuous_commonPhysicalNormalizedBondInteraction
     {D₀ D₁ : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (d₀ d₁ : ℕ) :
     Continuous (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁) := by
-  let E := Matrix.tensorPower 2 (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁)
+  let E := (Matrix.piKronecker fun _ : Fin 2 ↦ (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀
+      d₁))
   change Continuous (fun γ => 1 - E * (1 - normalizedBondInteraction D₀ D₁ γ) * Eᴴ)
   exact continuous_const.sub
     ((continuous_const.matrix_mul (continuous_const.sub
@@ -182,17 +183,17 @@ theorem isometricInteractionExtension_ker_le_of_ker_le {d m N : ℕ}
   have hyB := LinearMap.mem_ker.mp (hker hy)
   have hInt : Matrix.toEuclideanLin
       (Interaction.translationInvariant N (isometricInteractionExtension E B)).hamiltonian ∘ₗ
-        Matrix.toEuclideanLin (Matrix.tensorPower N E) =
-      Matrix.toEuclideanLin (Matrix.tensorPower N E) ∘ₗ
+        Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E) =
+      Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E) ∘ₗ
         Matrix.toEuclideanLin (Interaction.translationInvariant N B).hamiltonian := by
     simpa only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same] using
       congrArg Matrix.toEuclideanLin
         (hamiltonian_translationInvariant_isometricInteractionExtension_intertwiner E hE B hB hN)
   change Matrix.toEuclideanLin
     (Interaction.translationInvariant N (isometricInteractionExtension E B)).hamiltonian
-      (Matrix.toEuclideanLin (Matrix.tensorPower N E) y) = 0
+      (Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E) y) = 0
   calc
-    _ = Matrix.toEuclideanLin (Matrix.tensorPower N E)
+    _ = Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E)
         (Matrix.toEuclideanLin (Interaction.translationInvariant N B).hamiltonian y) :=
       LinearMap.congr_fun hInt y
     _ = 0 := by rw [hyB, map_zero]
@@ -277,7 +278,8 @@ theorem commonPhysicalNormalizedBondInteraction_groundSpace
     LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian) =
       Submodule.span ℂ {(Matrix.toEuclideanLin
-        (Matrix.tensorPower N (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁))
+        (Matrix.piKronecker fun _ : Fin N ↦ (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀
+            d₁))
         (WithLp.toLp 2 (mpv (N := N) (weightedMatrixUnitInterpolation D₀ D₁ γ))))} := by
   have : NeZero N := ⟨by omega⟩
   have : NeZero N := ⟨by omega⟩
@@ -293,10 +295,10 @@ MPS vector to that of the rotated tensor. Source context: arXiv:1010.3732,
 Section II.F.2, eq:1d-sym:jointsym. -/
 theorem toEuclideanLin_tensorPower_mpv_rotatePhysical {d m D N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) :
-    Matrix.toEuclideanLin (Matrix.tensorPower N E)
+    Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E)
         (WithLp.toLp 2 (mpv (N := N) A)) =
       WithLp.toLp 2 (mpv (N := N) (rotatePhysical E A)) := by
-  change WithLp.toLp 2 ((Matrix.rectKronecker fun _ : Fin N => E).mulVec (mpv A)) =
+  change WithLp.toLp 2 ((Matrix.piKronecker fun _ : Fin N => E).mulVec (mpv A)) =
     WithLp.toLp 2 (mpv (rotatePhysical E A))
   rw [mpv_eq_groundSpaceMap_one A N, mpv_eq_groundSpaceMap_one (rotatePhysical E A) N,
     groundSpaceMap_rotatePhysical_rectangular]
@@ -367,7 +369,7 @@ theorem commonPhysicalParentInteraction_commute_onSite
     Commute (Interaction.translationInvariant N (LinearMap.toMatrix' (parentInteraction
       (rotatePhysical (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁) B)
         2))).hamiltonian
-      (Matrix.finKronecker fun _ : Fin N =>
+      (Matrix.piKronecker fun _ : Fin N =>
         (commonSptPhysicalAction ρ₀ ρ₁ h₀ h₁ U₀ U₁ g : Matrix _ _ ℂ)) := by
   have : NeZero N := ⟨by omega⟩
   let V := sptFixedPointUnitaryAction (ρ₀.directSum ρ₁)
@@ -427,7 +429,7 @@ theorem commonPhysicalNormalizedBondInteraction_commute_onSite
     (U₁ : G →* Matrix.unitaryGroup (Fin d₁) ℂ) (g : G) (γ : ℝ) (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian
-      (Matrix.finKronecker fun _ : Fin N =>
+      (Matrix.piKronecker fun _ : Fin N =>
         (commonSptPhysicalAction ρ₀ ρ₁ h₀ h₁ U₀ U₁ g : Matrix _ _ ℂ)) := by
   have : NeZero N := ⟨by omega⟩
   let Ug : Matrix (Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁))

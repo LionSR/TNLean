@@ -303,8 +303,8 @@ noncomputable def redGtOne : MultiBlockCompression tensorB labels blocks :=
 
 theorem gauge_redGtOne :
     redGtOne.gauge = gaugeOfMatrix tauGt (toC gtOneInt) (toC gtOneInvInt)
-      (complexOfRing_mul_eq_one _ (by decide +kernel))
-      (complexOfRing_mul_eq_one _ (by decide +kernel)) :=
+      (Matrix.complexOfRing_mul_eq_one _ (by decide +kernel))
+      (Matrix.complexOfRing_mul_eq_one _ (by decide +kernel)) :=
   rfl
 
 theorem leftRow_redGtOne (b : BlockIndex labels 1) :
@@ -349,7 +349,7 @@ theorem left_mul_evalWord_replicate_ne_smul (n : ℕ) (c : ℂ) :
   set V : Matrix (Fin 4) (Fin 2) ℂ := toC !![1, -1; 0, 1; -1, -1; 0, 1] with hV
   set sx : Matrix (Fin 2) (Fin 2) ℂ := toC !![0, 1; 1, 0] with hsx
   have hBV : tensorB 0 * V = V * sx := by
-    rw [hV, hsx, tensorB_eq_complexOfRing, ← complexOfRing_mul, ← complexOfRing_mul]
+    rw [hV, hsx, tensorB_eq_complexOfRing, ← Matrix.complexOfRing_mul, ← Matrix.complexOfRing_mul]
     exact congrArg toC (by decide +kernel)
   have hpow : ∀ n, Kraus.evalWord tensorB (List.replicate n 0) * V = V * sx ^ n := by
     intro n
@@ -360,21 +360,21 @@ theorem left_mul_evalWord_replicate_ne_smul (n : ℕ) (c : ℂ) :
       rw [List.replicate_succ, Kraus.evalWord_cons, Matrix.mul_assoc, ih, ← Matrix.mul_assoc,
         hBV, Matrix.mul_assoc, pow_succ']
   have hsx2 : sx * sx = 1 := by
-    rw [hsx, ← complexOfRing_mul, show (!![0, 1; 1, 0] * !![0, 1; 1, 0] :
-      Matrix (Fin 2) (Fin 2) ℤ) = 1 by decide +kernel, complexOfRing_one]
+    rw [hsx, ← Matrix.complexOfRing_mul, show (!![0, 1; 1, 0] * !![0, 1; 1, 0] :
+      Matrix (Fin 2) (Fin 2) ℤ) = 1 by decide +kernel, Matrix.complexOfRing_one]
   have hsxn : sx ^ n * sx ^ n = 1 := by
     rw [← (Commute.refl sx).mul_pow, hsx2, one_pow]
   have hWV : redGtOne.left slotC2 * V = toC !![-1, 1] := by
     rw [left_redGtOne_slotC2, hV]
     change (toC !![(-2 : ℤ), -3, -1, 1] : Matrix (Fin 1) (Fin 4) ℂ) *
       toC !![(1 : ℤ), -1; 0, 1; -1, -1; 0, 1] = (toC !![(-1 : ℤ), 1] : Matrix (Fin 1) (Fin 2) ℂ)
-    rw [← complexOfRing_mul]
+    rw [← Matrix.complexOfRing_mul]
     exact congrArg toC (by decide +kernel)
   have hW0V : redG.left slotC2 * V = 0 := by
     rw [left_redG_slotC2, hV]
     change (toC !![(0 : ℤ), -1, 0, 1] : Matrix (Fin 1) (Fin 4) ℂ) *
       toC !![(1 : ℤ), -1; 0, 1; -1, -1; 0, 1] = (0 : Matrix (Fin 1) (Fin 2) ℂ)
-    rw [← complexOfRing_mul,
+    rw [← Matrix.complexOfRing_mul,
       show (!![0, -1, 0, 1] * !![1, -1; 0, 1; -1, -1; 0, 1] : Matrix (Fin 1) (Fin 2) ℤ) = 0 by
         decide +kernel]
     exact Matrix.map_zero _ (map_zero _)

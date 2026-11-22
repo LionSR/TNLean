@@ -238,7 +238,7 @@ private theorem placeAlong_ringWindow_groundBond_eq_one_sub {N : ℕ} (hN : 2 �
 
 private theorem singleKrausMap_groundBond_eq_transformedGroundBond
     (F : BeigiSectorGraphData A) :
-    singleKrausMap (Matrix.tensorPower 2 F.unitaryᴴ) (groundBond A) =
+    singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ F.unitaryᴴ) (groundBond A) =
       Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
         (finTwoArrowEquiv (Fin d)).symm F.transformedGroundBond := by
   rw [MPOTensor.singleKrausMap_sitewise_conjTranspose_two_eq]
@@ -252,7 +252,7 @@ Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2), page 3. -
 theorem singleKrausMap_groundBondProduct (F : BeigiSectorGraphData A)
     {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
-    singleKrausMap (Matrix.tensorPower N F.unitaryᴴ)
+    singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ F.unitaryᴴ)
         ((List.ofFn fun i : Fin N ↦
           ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
@@ -283,7 +283,7 @@ private theorem groundBondEmbeddings_commute (F : BeigiSectorGraphData A)
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN j) (groundBond A)) := by
   have : NeZero N := ⟨by omega⟩
   classical
-  let W := Matrix.tensorPower N F.unitaryᴴ
+  let W := (Matrix.piKronecker fun _ : Fin N ↦ F.unitaryᴴ)
   let G : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := fun n ↦
     ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN n) (groundBond A)
   let T : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := fun n ↦
@@ -296,16 +296,16 @@ private theorem groundBondEmbeddings_commute (F : BeigiSectorGraphData A)
     simpa only [Matrix.star_eq_conjTranspose] using hUstarU
   have hUUstar' := F.unitary_mul_conjTranspose
   have hWstarW : Wᴴ * W = 1 := by
-    simp only [W, Matrix.conjTranspose_tensorPower,
+    simp only [W, Matrix.conjTranspose_piKronecker,
       Matrix.conjTranspose_conjTranspose]
-    rw [← Matrix.conjTranspose_tensorPower,
+    rw [← Matrix.conjTranspose_piKronecker,
       MPOTensor.tensorPower_mul_conjTranspose, hUUstar',
-      Matrix.tensorPower_one]
+      Matrix.piKronecker_one]
   have hWWstar : W * Wᴴ = 1 := by
     simp only [W]
     rw [MPOTensor.tensorPower_mul_conjTranspose]
     simp only [Matrix.conjTranspose_conjTranspose]
-    rw [hUstarU', Matrix.tensorPower_one]
+    rw [hUstarU', Matrix.piKronecker_one]
   have hWone : singleKrausMap W 1 = 1 := by
     simp only [singleKrausMap_apply, Matrix.mul_one]
     exact hWWstar
@@ -315,7 +315,7 @@ private theorem groundBondEmbeddings_commute (F : BeigiSectorGraphData A)
       F.unitaryᴴ (by simpa using hUUstar') hN n,
       singleKrausMap_groundBond_eq_transformedGroundBond]
     rw [show singleKrausMap
-      (Matrix.tensorPower N F.unitaryᴴ) 1 = 1 by exact hWone]
+      (Matrix.piKronecker fun _ : Fin N ↦ F.unitaryᴴ) 1 = 1 by exact hWone]
     exact Matrix.one_mul _
   have hT : Commute (T i) (T j) := by
     exact MPOTensor.placeAlong_ringWindow_commute_of_etaPair_decomposition hN
@@ -452,16 +452,16 @@ private theorem groundBondProduct_trace (F : BeigiSectorGraphData A)
           Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1)))) : ℂ) := by
   have : NeZero N := ⟨by omega⟩
   classical
-  let W := Matrix.tensorPower N F.unitaryᴴ
+  let W := (Matrix.piKronecker fun _ : Fin N ↦ F.unitaryᴴ)
   let Q := (List.ofFn fun i : Fin N ↦
     ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)).prod
   have hUUstar := F.unitary_mul_conjTranspose
   have hWstarW : Wᴴ * W = 1 := by
-    simp only [W, Matrix.conjTranspose_tensorPower,
+    simp only [W, Matrix.conjTranspose_piKronecker,
       Matrix.conjTranspose_conjTranspose]
-    rw [← Matrix.conjTranspose_tensorPower,
+    rw [← Matrix.conjTranspose_piKronecker,
       MPOTensor.tensorPower_mul_conjTranspose, hUUstar,
-      Matrix.tensorPower_one]
+      Matrix.piKronecker_one]
   have hprod := F.singleKrausMap_groundBondProduct hN
   have htrace := F.transformedGroundBondProduct_trace hN
   have hconj : singleKrausMap W Q =

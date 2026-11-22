@@ -194,8 +194,8 @@ def czySquareRight : Matrix (Fin 4) (Fin 1) ℂ := !![0; 1; 0; 0]
 
 theorem czySquare_left_eq : czySquare_compression.left oneSlotMem = czySquareLeft := by
   rw [MultiBlockCompression.left_gaugeOfMatrix czySquare_compression
-    (hG := complexOfRing_mul_eq_one _ czySquareGauge_mul_inv)
-    (hG' := complexOfRing_mul_eq_one _ czySquareGaugeInv_mul) rfl]
+    (hG := Matrix.complexOfRing_mul_eq_one _ czySquareGauge_mul_inv)
+    (hG' := Matrix.complexOfRing_mul_eq_one _ czySquareGaugeInv_mul) rfl]
   ext i y
   change ((czySquareGaugeInt 1 y : ℤ) : ℂ) = czySquareLeft i y
   fin_cases i
@@ -203,8 +203,8 @@ theorem czySquare_left_eq : czySquare_compression.left oneSlotMem = czySquareLef
 
 theorem czySquare_right_eq : czySquare_compression.right oneSlotMem = czySquareRight := by
   rw [MultiBlockCompression.right_gaugeOfMatrix czySquare_compression
-    (hG := complexOfRing_mul_eq_one _ czySquareGauge_mul_inv)
-    (hG' := complexOfRing_mul_eq_one _ czySquareGaugeInv_mul) rfl]
+    (hG := Matrix.complexOfRing_mul_eq_one _ czySquareGauge_mul_inv)
+    (hG' := Matrix.complexOfRing_mul_eq_one _ czySquareGaugeInv_mul) rfl]
   ext x j
   change ((czySquareGaugeInvInt x 1 : ℤ) : ℂ) = czySquareRight x j
   fin_cases j

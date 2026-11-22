@@ -38,7 +38,7 @@ theorem onSiteTensorPow_conjTranspose_mul_self {d : ℕ}
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ) (L : ℕ) :
     (onSiteTensorPow L U)ᴴ * onSiteTensorPow L U = 1 := by
   rw [onSiteTensorPow_eq_finKronecker]
-  exact Matrix.finKronecker_conjTranspose_mul_self
+  exact Matrix.IsIsometry.piKronecker
     ((Matrix.mem_unitaryGroup_iff').mp hU)
 
 /-- If physical rotation is an invertible virtual gauge change, the

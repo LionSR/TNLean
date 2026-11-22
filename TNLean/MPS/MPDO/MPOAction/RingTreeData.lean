@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ComplexOfRing
+import QICLean.Algebra.Matrix.ComplexOfRing
 import TNLean.MPS.Operator.Boundary.BoundaryTransport
 import TNLean.MPS.Operator.ReductionComposition
 
@@ -57,16 +57,16 @@ theorem isBiorthogonalDecomposition_complexOfRing
     (hretract : ∀ c, V c * W c = 1)
     (horthogonal : ∀ c b, c ≠ b → V c * W b = 0)
     (hletter : ∀ i, B i = ∑ c, W c * A c i * V c) :
-    IsBiorthogonalDecomposition (fun i ↦ complexOfRing f (B i))
-      (fun c i ↦ complexOfRing f (A c i)) (fun c ↦ complexOfRing f (V c))
-      (fun c ↦ complexOfRing f (W c)) where
+    IsBiorthogonalDecomposition (fun i ↦ Matrix.complexOfRing f (B i))
+      (fun c i ↦ Matrix.complexOfRing f (A c i)) (fun c ↦ Matrix.complexOfRing f (V c))
+      (fun c ↦ Matrix.complexOfRing f (W c)) where
   retract c := by
-    rw [← complexOfRing_mul, hretract, complexOfRing_one]
+    rw [← Matrix.complexOfRing_mul, hretract, Matrix.complexOfRing_one]
   orthogonal c b hcb := by
-    rw [← complexOfRing_mul, horthogonal c b hcb, complexOfRing_zero]
+    rw [← Matrix.complexOfRing_mul, horthogonal c b hcb, Matrix.complexOfRing_zero]
   letter i := by
-    rw [hletter, complexOfRing_sum]
-    exact Finset.sum_congr rfl fun c _ ↦ by rw [complexOfRing_mul, complexOfRing_mul]
+    rw [hletter, Matrix.complexOfRing_sum]
+    exact Finset.sum_congr rfl fun c _ ↦ by rw [Matrix.complexOfRing_mul, Matrix.complexOfRing_mul]
 
 /-- `X ⊗ 1` over `R`, in the bond order of `MPOTensor.kronId`. -/
 def kronIdR {m n : ℕ} (X : Matrix (Fin m) (Fin n) R) (D : ℕ) :
@@ -85,30 +85,30 @@ def mulTensorAssocInvMatrixR (D₁ D₂ D₃ : ℕ) :
   (MPOTensor.mulTensorAssocEquiv D₁ D₂ D₃).symm.toPEquiv.toMatrix
 
 @[simp] theorem complexOfRing_kronIdR {m n : ℕ} (X : Matrix (Fin m) (Fin n) R) (D : ℕ) :
-    complexOfRing f (kronIdR X D) = MPOTensor.kronId (complexOfRing f X) D := by
+    Matrix.complexOfRing f (kronIdR X D) = MPOTensor.kronId (Matrix.complexOfRing f X) D := by
   ext i j
-  simp only [complexOfRing_apply, kronIdR, MPOTensor.kronId, Matrix.submatrix_apply,
+  simp only [Matrix.complexOfRing_apply, kronIdR, MPOTensor.kronId, Matrix.submatrix_apply,
     Matrix.kroneckerMap_apply, Matrix.one_apply, map_mul]
   split_ifs <;> simp
 
 @[simp] theorem complexOfRing_idKronR {m n : ℕ} (D : ℕ) (X : Matrix (Fin m) (Fin n) R) :
-    complexOfRing f (idKronR D X) = MPOTensor.idKron D (complexOfRing f X) := by
+    Matrix.complexOfRing f (idKronR D X) = MPOTensor.idKron D (Matrix.complexOfRing f X) := by
   ext i j
-  simp only [complexOfRing_apply, idKronR, MPOTensor.idKron, Matrix.submatrix_apply,
+  simp only [Matrix.complexOfRing_apply, idKronR, MPOTensor.idKron, Matrix.submatrix_apply,
     Matrix.kroneckerMap_apply, Matrix.one_apply, map_mul]
   split_ifs <;> simp
 
 @[simp] theorem complexOfRing_mulTensorAssocInvMatrixR (D₁ D₂ D₃ : ℕ) :
-    complexOfRing f (mulTensorAssocInvMatrixR D₁ D₂ D₃) =
+    Matrix.complexOfRing f (mulTensorAssocInvMatrixR D₁ D₂ D₃) =
       MPOTensor.mulTensorAssocInvMatrix D₁ D₂ D₃ := by
   ext i j
-  simp only [complexOfRing_apply, mulTensorAssocInvMatrixR,
+  simp only [Matrix.complexOfRing_apply, mulTensorAssocInvMatrixR,
     MPOTensor.mulTensorAssocInvMatrix, PEquiv.toMatrix_apply]
   split_ifs <;> simp
 
 /-- The trace of the complex image is the image of the trace. -/
 @[simp] theorem trace_complexOfRing {n : Type*} [Fintype n] (X : Matrix n n R) :
-    (complexOfRing f X).trace = f X.trace := by
+    (Matrix.complexOfRing f X).trace = f X.trace := by
   simp [Matrix.trace, map_sum]
 
 end MPSTensor

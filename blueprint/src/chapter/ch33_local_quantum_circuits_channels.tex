@@ -76,7 +76,7 @@ change the local dimension act on single sites.
 
 \begin{definition}[Onsite channel]
     \label{def:qc_onsite_channel}
-    \lean{ManyBody.prodOp, ManyBody.prodFamily,
+    \lean{ManyBody.prodFamily,
         QuantumCircuit.IsProtocol.ofOnsite,
         KrausFamily.ancillaState, KrausFamily.attach,
         KrausFamily.attach_op_apply, KrausFamily.map_attach,
@@ -94,8 +94,8 @@ change the local dimension act on single sites.
 \begin{lemma}[Onsite channels are product channels]
     \label{lem:qc_onsite_channel_properties}
     \uses{def:qc_onsite_channel}
-    \lean{QuantumCircuit.Circuit.map_ofLayer_ofOnsite_prodOp,
-        ManyBody.map_prodFamily_prodOp,
+    \lean{QuantumCircuit.Circuit.map_ofLayer_ofOnsite_piKronecker,
+        ManyBody.map_prodFamily_piKronecker,
         KrausFamily.isTP_attach,
         KrausFamily.map_traceRight_map_attach}
     \leanok
@@ -205,7 +205,7 @@ change the local dimension act on single sites.
     \label{def:qc_blocked_local_channel_conversion}
     \uses{def:qc_local_channel_conversion}
     \lean{ManyBody.blockSystem, ManyBody.blockConfigEquiv,
-        ManyBody.reindex_blockConfigEquiv_symm_prodOp}
+        ManyBody.reindex_blockConfigEquiv_symm_piKronecker}
     \leanok
     Following~\cite{Piroli2021LOCC}, grouping $k\ge1$ consecutive sites $jk,\dots,jk+k-1$ of an $Mk$-site ring of local dimension $d$ into block $j\in\Z_M$ of dimension $d^k$ defines the $*$-isomorphism
     \begin{align}
@@ -243,7 +243,7 @@ change the local dimension act on single sites.
         lem:qc_local_channel_conversion_trans, lem:qc_light_cone_geometries}
     \lean{QuantumCircuit.IsProtocol.traceAdjointMap_comp_block_mem_supportedOperators_graphNeighborhood,
         QuantumCircuit.IsProtocol.traceAdjointMap_comp_block_mul,
-        ManyBody.trace_prodOp}
+        Matrix.trace_piKronecker}
     \leanok
     Let $\Psi$ be a local channel protocol of depth $T$ on the blocked ring $\Z_M$. The dual of
     $\Psi\circ\beta_k$ maps $\mathcal A_X$ ($X\subseteq\Z_M$) into

@@ -322,7 +322,7 @@ Supplemental Material, eq. (S7), by the fixed point of the corrected block form
 noncomputable def copyFixedPointState {M : ℕ} (α : Fin b → ℂ)
     (L : (j : Fin b) → Matrix (Fin D × Fin D) (Fin (Dj j) × Fin (Dj j)) ℂ)
     (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ) : (Fin M → Fin D × Fin D) → ℂ :=
-  ∑ j, α j • (tensorPower M (L j) *ᵥ pairProductState (fixedPointPair (σ j)))
+  ∑ j, α j • ((Matrix.piKronecker fun _ : Fin M ↦ (L j)) *ᵥ pairProductState (fixedPointPair (σ j)))
 
 /-- The unnormalized corrected approximating state `V^{⊗M} ∑ⱼ αⱼ L_j^{⊗M} |Ω_j⟩`, with `V` the
 partial isometry of the `q`-site blocked tensor of `A`; the analogue of
@@ -332,7 +332,8 @@ noncomputable def copyApproxVector (A : MPSTensor d D) (q M : ℕ) (α : Fin b �
     (L : (j : Fin b) → Matrix (Fin D × Fin D) (Fin (Dj j) × Fin (Dj j)) ℂ)
     (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ) :
     (Fin M → Fin (blockPhysDim d q)) → ℂ :=
-  tensorPower M (polarIso (physicalMatrix (blockTensor A q))) *ᵥ copyFixedPointState α L σ
+  (Matrix.piKronecker fun _ : Fin M ↦ (polarIso (physicalMatrix (blockTensor A
+      q)))) *ᵥ copyFixedPointState α L σ
 
 /-- **The corrected approximating state of a direct sum with multiplicities.** For blocks with
 nonzero weights whose `q`-site states are orthogonal, `V^{⊗M} ∑ⱼ αⱼ L_j^{⊗M} |Ω_j⟩` is
@@ -360,7 +361,7 @@ theorem copyApproxVector_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι
     · simp
   rw [copyApproxVector, copyFixedPointState, mulVec_sum, Finset.sum_apply]
   refine Finset.sum_congr rfl fun j _ => ?_
-  rw [mulVec_smul, Pi.smul_apply, smul_eq_mul, mulVec_mulVec, tensorPower_mul, hVL,
+  rw [mulVec_smul, Pi.smul_apply, smul_eq_mul, mulVec_mulVec, Matrix.piKronecker_mul, hVL,
     tensorPower_polarIso_mulVec_pairProductState]
 
 end MPSTensor

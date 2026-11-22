@@ -58,9 +58,9 @@ theorem liftedBond_three_zero_one_comm
   have hrestricted : (A * B).IsHermitian :=
     (hA.commute_iff hB).mp hcomm
   have hambient :
-      (singleKrausMap (Matrix.tensorPower 3 F.inclusion) (A * B)).IsHermitian :=
+      (singleKrausMap (Matrix.piKronecker fun _ : Fin 3 ↦ F.inclusion) (A * B)).IsHermitian :=
     Matrix.isHermitian_mul_mul_conjTranspose
-      (Matrix.tensorPower 3 F.inclusion) hrestricted
+      (Matrix.piKronecker fun _ : Fin 3 ↦ F.inclusion) hrestricted
   rw [singleKrausMap_adjacentBondProduct
     F.inclusion F.inclusion_isometry data.bond data.bond] at hambient
   refine Commute.eq ((Matrix.IsHermitian.commute_iff ?_ ?_).mpr ?_)
@@ -98,9 +98,9 @@ theorem liftedBond_two_zero_one_comm
   have hrestricted : (A * B).IsHermitian :=
     (hA.commute_iff hB).mp hcomm
   have hambient :
-      (singleKrausMap (Matrix.tensorPower 2 F.inclusion) (A * B)).IsHermitian :=
+      (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion) (A * B)).IsHermitian :=
     Matrix.isHermitian_mul_mul_conjTranspose
-      (Matrix.tensorPower 2 F.inclusion) hrestricted
+      (Matrix.piKronecker fun _ : Fin 2 ↦ F.inclusion) hrestricted
   rw [singleKrausMap_crossedTwoSiteBondProduct
     F.inclusion F.inclusion_isometry data.bond data.bond] at hambient
   refine Commute.eq ((Matrix.IsHermitian.commute_iff ?_ ?_).mpr ?_)

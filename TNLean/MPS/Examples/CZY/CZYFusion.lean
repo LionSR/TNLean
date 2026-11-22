@@ -81,7 +81,7 @@ theorem czyFusion_nontrivial_triple :
   ext i j
   fin_cases i <;> fin_cases j <;>
     norm_num [czyY01, czyY10, czyY11, czyY01Int, czyY10Int, czyY11Int, czyX11Int,
-      complexOfInt, complexOfRing, Matrix.mul_apply, Fin.sum_univ_succ,
+      complexOfInt, Matrix.complexOfRing, Matrix.mul_apply, Fin.sum_univ_succ,
       Matrix.kroneckerMap_apply, finProdFinEquiv, Fin.divNat, Fin.modNat, Matrix.one_apply]
 
 /-- No scalar relates the printed fusions at `(0,0,0)`: the entry `(0,24)` is two on the
@@ -96,7 +96,7 @@ theorem czyFusion_printed_neutral_no_scalar : ¬ ∃ ω : ℂ,
         finProdFinEquiv.symm finProdFinEquiv.symm) := by
   rintro ⟨ω, h⟩
   have he := congrArg (fun M => M 0 24) h
-  norm_num [czyY00Int, complexOfInt, complexOfRing, Matrix.mul_apply, Fin.sum_univ_succ,
+  norm_num [czyY00Int, complexOfInt, Matrix.complexOfRing, Matrix.mul_apply, Fin.sum_univ_succ,
     Matrix.kroneckerMap_apply, finProdFinEquiv, Fin.divNat, Fin.modNat, Matrix.one_apply] at he
 
 /-- The printed one-sided fusion identity

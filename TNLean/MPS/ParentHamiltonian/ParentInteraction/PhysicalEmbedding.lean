@@ -31,10 +31,10 @@ theorem groundSpaceMap_rotatePhysical_rectangular {d m D : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) (L : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     groundSpaceMap (rotatePhysical E A) L X =
-      (Matrix.rectKronecker fun _ : Fin L => E).mulVec (groundSpaceMap A L X) := by
+      (Matrix.piKronecker fun _ : Fin L => E).mulVec (groundSpaceMap A L X) := by
   ext σ
   simp [groundSpaceMap_apply, evalWord_rotatePhysical_ofFn, Matrix.mulVec,
-    dotProduct, Matrix.sum_mul, Matrix.trace_sum, Matrix.trace_smul, Matrix.rectKronecker_apply]
+    dotProduct, Matrix.sum_mul, Matrix.trace_sum, Matrix.trace_smul, Matrix.piKronecker_apply]
 
 /-- The boundary space of a rectangularly rotated tensor is the image of
 its original boundary space under the tensor power. Source context:
@@ -42,9 +42,9 @@ arXiv:1010.3732, Section II.F.2, equation eq:1d-sym:jointsym. -/
 theorem groundSpace_rotatePhysical_rectangular {d m D : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) (L : ℕ) :
     groundSpace (rotatePhysical E A) L =
-      (groundSpace A L).map (Matrix.toLin' (Matrix.rectKronecker fun _ : Fin L => E)) := by
+      (groundSpace A L).map (Matrix.toLin' (Matrix.piKronecker fun _ : Fin L => E)) := by
   have h : groundSpaceMap (rotatePhysical E A) L =
-      (Matrix.toLin' (Matrix.rectKronecker fun _ : Fin L => E)).comp (groundSpaceMap A L) :=
+      (Matrix.toLin' (Matrix.piKronecker fun _ : Fin L => E)).comp (groundSpaceMap A L) :=
     LinearMap.ext (groundSpaceMap_rotatePhysical_rectangular E A L)
   rw [groundSpace, groundSpace, h, LinearMap.range_comp]
 
@@ -55,7 +55,7 @@ theorem groundSpaceES_rotatePhysical_rectangular {d m D : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) (L : ℕ) :
     groundSpaceES (rotatePhysical E A) L =
       (groundSpaceES A L).map (Matrix.toEuclideanLin
-        (Matrix.rectKronecker fun _ : Fin L => E)) := by
+        (Matrix.piKronecker fun _ : Fin L => E)) := by
   rw [groundSpaceES, groundSpaceES, groundSpace_rotatePhysical_rectangular,
     ← Submodule.map_comp, ← Submodule.map_comp]
   rfl
@@ -66,14 +66,14 @@ Source context: arXiv:1010.3732, Section II.F.2, equation eq:1d-sym:jointsym. -/
 theorem toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry {d m D : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     (A : MPSTensor d D) (L : ℕ) :
-    let T := Matrix.toEuclideanLin (Matrix.rectKronecker fun _ : Fin L => E)
+    let T := Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin L => E)
     Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction (rotatePhysical E A) L)) =
       1 - T ∘ₗ (groundSpaceES A L).starProjection.toLinearMap ∘ₗ T.adjoint := by
-  let T := Matrix.toEuclideanLin (Matrix.rectKronecker fun _ : Fin L => E)
+  let T := Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin L => E)
   have hT : T.adjoint ∘ₗ T = LinearMap.id := by
     simpa only [T, ← Matrix.toEuclideanLin_conjTranspose_eq_adjoint,
       Matrix.toEuclideanLin, Matrix.toLpLin_mul_same, Matrix.toLpLin_one] using
-      congrArg Matrix.toEuclideanLin (Matrix.rectKronecker_conjTranspose_mul_self (N := L) hE)
+      congrArg Matrix.toEuclideanLin (Matrix.IsIsometry.piKronecker (fun _ : Fin (N := L) ↦ hE))
   have hinner (x y : EuclideanSpace ℂ (Cfg d L)) :
       inner ℂ (T x) (T y) = inner ℂ x y := by
     rw [← LinearMap.adjoint_inner_right]
@@ -100,7 +100,7 @@ equation eq:1d-sym:jointsym. -/
 theorem parentInteraction_matrix_rotatePhysical_isometry {d m D : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     (A : MPSTensor d D) (L : ℕ) :
-    let T := Matrix.rectKronecker fun _ : Fin L => E
+    let T := Matrix.piKronecker fun _ : Fin L => E
     LinearMap.toMatrix' (parentInteraction (rotatePhysical E A) L) =
       T * LinearMap.toMatrix' (parentInteraction A L) * Tᴴ + (1 - T * Tᴴ) := by
   intro T
@@ -121,7 +121,7 @@ Section II.F.2, equation eq:1d-sym:jointsym. -/
 theorem toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry_apply_of_adjoint_eq_zero
     {d m D : ℕ} (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     (A : MPSTensor d D) (L : ℕ) (v : EuclideanSpace ℂ (Cfg m L))
-    (hv : (Matrix.toEuclideanLin (Matrix.rectKronecker fun _ : Fin L => E)).adjoint v = 0) :
+    (hv : (Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin L => E)).adjoint v = 0) :
     Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction (rotatePhysical E A) L)) v =
       v := by
   rw [toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry E hE]

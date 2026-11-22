@@ -281,12 +281,12 @@ theorem mpo_sectorCoordinateTensor_posSemidef
   have heq :
       (fun x y ↦ ∏ n : Fin N,
         F.neighboringOperator (k n) (k (n + 1)) (x n) (y n)) =
-        Matrix.finKronecker (fun n : Fin N ↦
+        Matrix.piKronecker (fun n : Fin N ↦
           F.neighboringOperator (k n) (k (n + 1))) := by
     ext x y
-    simp [Matrix.finKronecker_apply]
+    simp [Matrix.piKronecker_apply]
   rw [heq]
-  exact Matrix.finKronecker_posSemidef _ fun n ↦ hpos _ _
+  exact Matrix.piKronecker_posSemidef _ fun n ↦ hpos _ _
 
 /-- Positivity of every neighbouring sector operator makes the original tensor an MPDO.  The
 sector-coordinate operators are positive by their cyclic product decomposition, and the

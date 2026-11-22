@@ -61,7 +61,7 @@ sides use the existing zero-normalization convention.
 Source: arXiv:0802.0447, `MPS`, `EU`, and `RL`. -/
 theorem mpvExpectation_finKronecker_const_eq_trace_div
     (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ) (L : ℕ) :
-    mpvExpectation A L (Matrix.finKronecker fun _ : Fin L => u) =
+    mpvExpectation A L (Matrix.piKronecker fun _ : Fin L => u) =
       LinearMap.trace ℂ Mat (twistedTransferIter A u L) /
         LinearMap.trace ℂ Mat (Kraus.transferMap A ^ L) := by
   rw [mpvExpectation_eq_div, inner_mpvState_toEuclideanLin,
@@ -99,7 +99,7 @@ theorem mpvExpectation_finKronecker_const_eq_phase_pow
     (V : Mat) (μ : ℂ) (hV : V * Vᴴ = 1)
     (hInter : ∀ i, ∑ j, u i j • A j = μ • (V * A i * Vᴴ))
     (L : ℕ) (hL : mpvState A L ≠ 0) :
-    mpvExpectation A L (Matrix.finKronecker fun _ : Fin L => u) = μ ^ L := by
+    mpvExpectation A L (Matrix.piKronecker fun _ : Fin L => u) = μ ^ L := by
   have hden : LinearMap.trace ℂ Mat (Kraus.transferMap A ^ L) ≠ 0 := by
     rw [← inner_mpvState_self_eq_trace A L]
     exact inner_self_ne_zero.mpr hL
@@ -127,7 +127,7 @@ theorem pureCanonical_mpvExpectation_fullRing_tendsto_zero
     (hSpect : spectralRadius ℂ
       (Module.End.toContinuousLinearMap Mat (twistedTransferMap A u)) < 1) :
     Tendsto (fun L : ℕ =>
-      mpvExpectation A L (Matrix.finKronecker fun _ : Fin L => u))
+      mpvExpectation A L (Matrix.piKronecker fun _ : Fin L => u))
       atTop (nhds (0 : ℂ)) := by
   have hmix : spectralRadius ℂ (Module.End.toContinuousLinearMap Mat
       (Kraus.mixedMapLM A (twistedMixedCompanion A u))) < 1 := by
@@ -156,7 +156,7 @@ theorem pureCanonical_mpvExpectation_fullRing_eventually_eq_phase_pow
     (u : Matrix (Fin d) (Fin d) ℂ) (V : Mat) (μ : ℂ) (hV : V * Vᴴ = 1)
     (hInter : ∀ i, ∑ j, u i j • A j = μ • (V * A i * Vᴴ)) :
     ∀ᶠ L : ℕ in atTop,
-      mpvExpectation A L (Matrix.finKronecker fun _ : Fin L => u) = μ ^ L := by
+      mpvExpectation A L (Matrix.piKronecker fun _ : Fin L => u) = μ ^ L := by
   filter_upwards [pureCanonical_eventually_mpvState_ne_zero
     A Λ hΛpos hΛtr hΛfix hNorm hPure] with L hL
   exact mpvExpectation_finKronecker_const_eq_phase_pow A u V μ hV hInter L hL
@@ -168,7 +168,7 @@ theorem pureCanonical_mpvExpectation_fullRing_norm_tendsto_one
     (hV : V * Vᴴ = 1) (hμ : ‖μ‖ = 1)
     (hInter : ∀ i, ∑ j, u i j • A j = μ • (V * A i * Vᴴ)) :
     Tendsto (fun L : ℕ =>
-      ‖mpvExpectation A L (Matrix.finKronecker fun _ : Fin L => u)‖)
+      ‖mpvExpectation A L (Matrix.piKronecker fun _ : Fin L => u)‖)
       atTop (nhds (1 : ℝ)) := by
   apply tendsto_const_nhds.congr'
   filter_upwards [pureCanonical_mpvExpectation_fullRing_eventually_eq_phase_pow
@@ -182,7 +182,7 @@ theorem pureCanonical_mpvExpectation_fullRing_phase_adjusted_tendsto_one
     (hV : V * Vᴴ = 1) (hμ : ‖μ‖ = 1)
     (hInter : ∀ i, ∑ j, u i j • A j = μ • (V * A i * Vᴴ)) :
     Tendsto (fun L : ℕ => (μ ^ L)⁻¹ *
-      mpvExpectation A L (Matrix.finKronecker fun _ : Fin L => u))
+      mpvExpectation A L (Matrix.piKronecker fun _ : Fin L => u))
       atTop (nhds (1 : ℂ)) := by
   apply tendsto_const_nhds.congr'
   filter_upwards [pureCanonical_mpvExpectation_fullRing_eventually_eq_phase_pow
@@ -197,7 +197,7 @@ theorem pureCanonical_mpvExpectation_fullRing_not_tendsto
     (hV : V * Vᴴ = 1) (hμ : ‖μ‖ = 1) (hμne : μ ≠ 1)
     (hInter : ∀ i, ∑ j, u i j • A j = μ • (V * A i * Vᴴ)) :
     ¬ ∃ z : ℂ, Tendsto (fun L : ℕ =>
-      mpvExpectation A L (Matrix.finKronecker fun _ : Fin L => u)) atTop (nhds z) := by
+      mpvExpectation A L (Matrix.piKronecker fun _ : Fin L => u)) atTop (nhds z) := by
   rintro ⟨z, hz⟩
   have hpow : Tendsto (fun L : ℕ => μ ^ L) atTop (nhds z) :=
     hz.congr' (pureCanonical_mpvExpectation_fullRing_eventually_eq_phase_pow
@@ -222,12 +222,12 @@ theorem pureCanonical_mpvExpectation_fullRing_dichotomy
     (spectralRadius ℂ
         (Module.End.toContinuousLinearMap Mat (twistedTransferMap A u)) = 1 ∧
       Tendsto (fun L : ℕ =>
-        ‖mpvExpectation A L (Matrix.finKronecker fun _ : Fin L => u)‖)
+        ‖mpvExpectation A L (Matrix.piKronecker fun _ : Fin L => u)‖)
         atTop (nhds (1 : ℝ))) ∨
     (spectralRadius ℂ
         (Module.End.toContinuousLinearMap Mat (twistedTransferMap A u)) < 1 ∧
       Tendsto (fun L : ℕ =>
-        mpvExpectation A L (Matrix.finKronecker fun _ : Fin L => u))
+        mpvExpectation A L (Matrix.piKronecker fun _ : Fin L => u))
         atTop (nhds (0 : ℂ))) := by
   obtain ⟨hIrr, _⟩ := pureCanonical_isIrreducibleMap_and_isPrimitive
     A Λ hΛpos hΛfix hNorm hPure
@@ -361,7 +361,7 @@ theorem pureCanonical_mpvExpectation_fullRing_le_geometric
       (Module.End.toContinuousLinearMap Mat (twistedTransferMap A u)) <
         (rate : ℝ≥0∞)) :
     ∃ C : ℝ, 0 < C ∧ ∃ N₀ : ℕ, ∀ L : ℕ, N₀ ≤ L →
-      ‖mpvExpectation A L (Matrix.finKronecker fun _ : Fin L => u)‖ ≤
+      ‖mpvExpectation A L (Matrix.piKronecker fun _ : Fin L => u)‖ ≤
         C * (rate : ℝ) ^ L := by
   let : TopologicalSpace Mat :=
     (inferInstance : NormedAddCommGroup Mat).toUniformSpace.toTopologicalSpace

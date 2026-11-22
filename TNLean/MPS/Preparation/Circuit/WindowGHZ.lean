@@ -531,11 +531,11 @@ theorem exists_windowGHZCorrectionRound [NeZero M]
   rw [← mulVec_mulVec]
   -- The corrected vector after the outcome `m`.
   funext x
-  change (finKronecker (fun j => (Equiv.addRight (δ m j)).permMatrix ℂ) *ᵥ
+  change (Matrix.piKronecker (fun j => (Equiv.addRight (δ m j)).permMatrix ℂ) *ᵥ
     (place (X := fun _ : Fin N ↦ Fin d) Sm (Matrix.single m m 1) *ᵥ
       windowGHZDifference hN hr α)) x = _
   set z : Cfg d N := fun i => x i + δ m i with hz
-  rw [finKronecker_permMatrix_mulVec]
+  rw [Matrix.piKronecker_permMatrix_mulVec]
   dsimp only
   rw [show (fun i => (Equiv.addRight (δ m i)) (x i)) = z from rfl,
     place_single_self_mulVec_apply, windowGHZDifference]

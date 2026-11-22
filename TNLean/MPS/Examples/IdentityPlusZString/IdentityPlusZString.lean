@@ -61,13 +61,13 @@ private lemma sigmaZ_eq_diagonal : sigmaZ = Matrix.diagonal siteSign := by
 
 private lemma finKronecker_sigmaX_mul {N : ℕ}
     (B : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ) (σ τ : Fin N → Fin 2) :
-    ((Matrix.finKronecker fun _ : Fin N => sigmaX) * B) σ τ = B (fun n => (σ n).rev) τ :=
-  Matrix.finKronecker_mul_apply_of_eq_ite sigmaX_apply B σ τ
+    ((Matrix.piKronecker fun _ : Fin N => sigmaX) * B) σ τ = B (fun n => (σ n).rev) τ :=
+  Matrix.piKronecker_mul_apply_of_eq_ite sigmaX_apply B σ τ
 
 private lemma mul_finKronecker_sigmaX {N : ℕ}
     (B : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ) (σ τ : Fin N → Fin 2) :
-    (B * Matrix.finKronecker fun _ : Fin N => sigmaX) σ τ = B σ (fun n => (τ n).rev) :=
-  Matrix.mul_finKronecker_apply_of_eq_ite sigmaX_apply' B σ τ
+    (B * Matrix.piKronecker fun _ : Fin N => sigmaX) σ τ = B σ (fun n => (τ n).rev) :=
+  Matrix.mul_piKronecker_apply_of_eq_ite sigmaX_apply' B σ τ
 
 private lemma configurationSign_rev {N : ℕ} (σ : Fin N → Fin 2) :
     configurationSign (fun n => (σ n).rev) = (-1) ^ N * configurationSign σ := by
@@ -89,7 +89,7 @@ theorem isStrongMPOSymmetry_sigmaZ :
     IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaZ) M 1 fun _ _ => 1 := by
   intro _ L _
   simp only [mpoWithBoundary_one]
-  rw [mpo_onSite, sigmaZ_eq_diagonal, Matrix.finKronecker_diagonal, rho_eq_diagonal,
+  rw [mpo_onSite, sigmaZ_eq_diagonal, Matrix.piKronecker_diagonal, rho_eq_diagonal,
     Matrix.diagonal_mul_diagonal, one_smul]
   congr 1
   funext σ
@@ -103,7 +103,7 @@ Project result: for the Example 4.12 tensor (arXiv:1606.00608, lines 932–939),
 arXiv:2504.16985, line 182) exactly when `N` is even, since conjugation flips every spin and
 multiplies `σ_z^{⊗N}` by `(-1)^N`. -/
 theorem isWeakSymmetry_sigmaX_iff_even (N : ℕ) :
-    Matrix.IsWeakSymmetry (Matrix.finKronecker fun _ : Fin N => sigmaX) (mpo M N) ↔
+    Matrix.IsWeakSymmetry (Matrix.piKronecker fun _ : Fin N => sigmaX) (mpo M N) ↔
       Even N := by
   rw [← neg_one_pow_eq_one_iff_even (R := ℂ) (by norm_num)]
   constructor
@@ -141,7 +141,7 @@ Project result: for the Example 4.12 tensor (arXiv:1606.00608, lines 932–939) 
 `σ_x^{⊗N} ρ^{(N)}` has the entry `2` between the all-ones and all-zeros configurations, where
 `ρ^{(N)}` is zero, so it is not a multiple of `ρ^{(N)}` (arXiv:2504.16985, line 182). -/
 theorem not_isStrongSymmetry_sigmaX {N : ℕ} (hN : 0 < N) :
-    ¬ Matrix.IsStrongSymmetry (Matrix.finKronecker fun _ : Fin N => sigmaX) (mpo M N) := by
+    ¬ Matrix.IsStrongSymmetry (Matrix.piKronecker fun _ : Fin N => sigmaX) (mpo M N) := by
   rintro ⟨c, hc⟩
   have h1 := congrFun (congrFun hc (fun _ => 1)) (fun _ => 0)
   rw [finKronecker_sigmaX_mul, rho_eq_diagonal] at h1
@@ -173,7 +173,7 @@ theorem not_isWeakMPOSymmetry_sigmaX :
 
 Project result: the restriction of `isWeakSymmetry_sigmaX_iff_even` to even lengths. -/
 theorem isWeakSymmetry_sigmaX_of_even {N : ℕ} (hN : Even N) :
-    Matrix.IsWeakSymmetry (Matrix.finKronecker fun _ : Fin N => sigmaX) (mpo M N) :=
+    Matrix.IsWeakSymmetry (Matrix.piKronecker fun _ : Fin N => sigmaX) (mpo M N) :=
   (isWeakSymmetry_sigmaX_iff_even N).mpr hN
 
 end MPOTensor.CPSVExample412Literal

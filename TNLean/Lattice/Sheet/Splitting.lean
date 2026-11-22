@@ -144,11 +144,11 @@ theorem threeSplit_symm_apply_of_notMem (t : T → Fin q) (e : E → Fin q)
 /-- A product operator in the coordinates of `threeSplit T E` is the Kronecker product of its
 restrictions to `T`, to `E` and to `(T ∪ E)ᶜ`. -/
 theorem rectKronecker_submatrix_threeSplit (m : ι → Matrix (Fin q) (Fin q) ℂ) :
-    (rectKronecker m).submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
-      (rectKronecker (fun v : T => m v) ⊗ₖ rectKronecker (fun v : E => m v)) ⊗ₖ
-        rectKronecker (fun v : {v // v ∉ T ∪ E} => m v) := by
+    (Matrix.piKronecker m).submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
+      (Matrix.piKronecker (fun v : T => m v) ⊗ₖ Matrix.piKronecker (fun v : E => m v)) ⊗ₖ
+        Matrix.piKronecker (fun v : {v // v ∉ T ∪ E} => m v) := by
   ext ⟨⟨t, e⟩, u⟩ ⟨⟨t', e'⟩, u'⟩
-  simp only [submatrix_apply, rectKronecker_apply, kroneckerMap_apply]
+  simp only [submatrix_apply, Matrix.piKronecker_apply, kroneckerMap_apply]
   rw [← Finset.prod_mul_prod_compl (T ∪ E), Finset.prod_union (M := ℂ) h, ← Finset.prod_coe_sort T,
     ← Finset.prod_coe_sort E, ← Finset.prod_coe_sort (T ∪ E)ᶜ]
   congr 1
@@ -173,7 +173,7 @@ linear map `Φ`, then so does every operator acting on `D`. -/
 theorem exists_eq_of_mem_supportedOperators {κ M : Type*} [AddCommMonoid M] [Module ℂ M]
     {D : Finset ι} (e : (ι → Fin q) ≃ κ) (Φ : M →ₗ[ℂ] Matrix κ κ ℂ)
     (hgen : ∀ m : ι → Matrix (Fin q) (Fin q) ℂ, (∀ i ∉ D, m i = 1) →
-      ∃ A', (rectKronecker m).submatrix e.symm e.symm = Φ A')
+      ∃ A', (Matrix.piKronecker m).submatrix e.symm e.symm = Φ A')
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) :
     ∃ A', A.submatrix e.symm e.symm = Φ A' := by
@@ -200,11 +200,11 @@ theorem exists_threeSplit_eq_kronecker_one {T E : Finset ι} (h : Disjoint T E)
     ((kroneckerBilinear (R := ℂ)).flip
       (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ))
     (fun m hm => ?_) hA
-  refine ⟨rectKronecker (fun v : T => m v) ⊗ₖ rectKronecker (fun v : E => m v), ?_⟩
+  refine ⟨Matrix.piKronecker (fun v : T => m v) ⊗ₖ Matrix.piKronecker (fun v : E => m v), ?_⟩
   rw [rectKronecker_submatrix_threeSplit h]
   change _ = _ ⊗ₖ (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)
   congr 1
-  rw [← rectKronecker_one (ν := {v // v ∉ T ∪ E}) (ι := Fin q)]
+  rw [← Matrix.piKronecker_one (ν := {v // v ∉ T ∪ E}) (ι := Fin q)]
   congr 1
   funext v
   exact hm v v.2
@@ -227,11 +227,11 @@ theorem exists_threeSplit_eq_one_kronecker_kronecker_one {T E : Finset ι} (h : 
     hm v fun hv => Finset.disjoint_left.mp h v.2 (hD hv)
   have hU : ∀ v : {v // v ∉ T ∪ E}, m v = 1 := fun v =>
     hm v fun hv => v.2 (Finset.mem_union_right T (hD hv))
-  refine ⟨rectKronecker (fun v : E => m v), ?_⟩
+  refine ⟨Matrix.piKronecker (fun v : E => m v), ?_⟩
   rw [rectKronecker_submatrix_threeSplit h]
   change _ = ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ _) ⊗ₖ
     (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)
-  simp only [hT, hU, rectKronecker_one]
+  simp only [hT, hU, Matrix.piKronecker_one]
 
 /-- An operator supported disjointly from T is `1_T ⊗ V` in the existing
 three-region coordinates. Empty regions and zero local dimension are included.

@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.Algebra.ComplexOfRing
+import QICLean.Algebra.Matrix.ComplexOfRing
 import TNLean.MPS.FundamentalTheorem.Compression.MultiBlockTrace
 
 /-!
@@ -166,25 +166,26 @@ variable {R : Type*} [CommRing R] (f : R →+* ℂ) {d m n k : ℕ}
 under a ring homomorphism `f : R →+* ℂ`: the certificate is stated, and decided, over `R`. -/
 theorem right_intertwiner_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m) (Fin m) ℂ}
     {C : Fin d → Matrix (Fin n) (Fin n) ℂ} (BR : Fin d → Matrix (Fin m) (Fin m) R)
-    (hB : ∀ i, B i = complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin n) (Fin n) R)
-    (hC : ∀ i, C i = complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin n)
+    (hB : ∀ i, B i = Matrix.complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin n) (Fin n) R)
+    (hC : ∀ i, C i = Matrix.complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin n)
     (N : Matrix (Fin m × Fin n) (Fin k) R) {c : R} (hc : f c ≠ 0)
     (hN : N * (sitewiseEqMatrix BR CR).submatrix rows id = c • 1)
     (X : Matrix (Fin m) (Fin n) ℂ) (hX : ∀ i, B i * X = X * C i) : X = 0 := by
-  obtain rfl : B = fun i => complexOfRing f (BR i) := funext hB
-  obtain rfl : C = fun i => complexOfRing f (CR i) := funext hC
-  refine right_intertwiner_eq_zero_of_certificate _ _ rows (complexOfRing f N) hc ?_ X hX
-  have h := congrArg (complexOfRing f) hN
-  rw [complexOfRing_mul, complexOfRing_submatrix, complexOfRing_smul, complexOfRing_one,
-    show complexOfRing f (sitewiseEqMatrix BR CR) = _ from sitewiseEqMatrix_map f BR CR] at h
+  obtain rfl : B = fun i => Matrix.complexOfRing f (BR i) := funext hB
+  obtain rfl : C = fun i => Matrix.complexOfRing f (CR i) := funext hC
+  refine right_intertwiner_eq_zero_of_certificate _ _ rows (Matrix.complexOfRing f N) hc ?_ X hX
+  have h := congrArg (Matrix.complexOfRing f) hN
+  rw [Matrix.complexOfRing_mul, Matrix.complexOfRing_submatrix, Matrix.complexOfRing_smul,
+      Matrix.complexOfRing_one,
+    show Matrix.complexOfRing f (sitewiseEqMatrix BR CR) = _ from sitewiseEqMatrix_map f BR CR] at h
   exact h
 
 /-- **No nonzero left sitewise intertwiner from a certificate over a subring**: the transposed
 form of `right_intertwiner_eq_zero_of_ringCertificate`. -/
 theorem left_intertwiner_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m) (Fin m) ℂ}
     {C : Fin d → Matrix (Fin n) (Fin n) ℂ} (BR : Fin d → Matrix (Fin m) (Fin m) R)
-    (hB : ∀ i, B i = complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin n) (Fin n) R)
-    (hC : ∀ i, C i = complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin n)
+    (hB : ∀ i, B i = Matrix.complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin n) (Fin n) R)
+    (hC : ∀ i, C i = Matrix.complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin n)
     (N : Matrix (Fin m × Fin n) (Fin k) R) {c : R} (hc : f c ≠ 0)
     (hN : N * (sitewiseEqMatrix (fun i => (BR i)ᵀ) (fun i => (CR i)ᵀ)).submatrix rows id =
       c • 1)
@@ -199,8 +200,8 @@ block with bond dimension one and scalar letters `C^i`, a certificate over `R` f
 vector with `B^i v = C^i v` for all `i` to vanish. -/
 theorem mulVec_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m) (Fin m) ℂ}
     {C : Fin d → Matrix (Fin 1) (Fin 1) ℂ} (BR : Fin d → Matrix (Fin m) (Fin m) R)
-    (hB : ∀ i, B i = complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin 1) (Fin 1) R)
-    (hC : ∀ i, C i = complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin 1)
+    (hB : ∀ i, B i = Matrix.complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin 1) (Fin 1) R)
+    (hC : ∀ i, C i = Matrix.complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin 1)
     (N : Matrix (Fin m × Fin 1) (Fin k) R) {c : R} (hc : f c ≠ 0)
     (hN : N * (sitewiseEqMatrix BR CR).submatrix rows id = c • 1)
     (v : Fin m → ℂ) (hv : ∀ i, B i *ᵥ v = C i 0 0 • v) : v = 0 := by
@@ -216,8 +217,8 @@ theorem mulVec_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m) (Fin m) 
 transposed form of `mulVec_eq_zero_of_ringCertificate`. -/
 theorem vecMul_eq_zero_of_ringCertificate {B : Fin d → Matrix (Fin m) (Fin m) ℂ}
     {C : Fin d → Matrix (Fin 1) (Fin 1) ℂ} (BR : Fin d → Matrix (Fin m) (Fin m) R)
-    (hB : ∀ i, B i = complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin 1) (Fin 1) R)
-    (hC : ∀ i, C i = complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin 1)
+    (hB : ∀ i, B i = Matrix.complexOfRing f (BR i)) (CR : Fin d → Matrix (Fin 1) (Fin 1) R)
+    (hC : ∀ i, C i = Matrix.complexOfRing f (CR i)) (rows : Fin k → Fin d × Fin m × Fin 1)
     (N : Matrix (Fin m × Fin 1) (Fin k) R) {c : R} (hc : f c ≠ 0)
     (hN : N * (sitewiseEqMatrix (fun i => (BR i)ᵀ) (fun i => (CR i)ᵀ)).submatrix rows id =
       c • 1)

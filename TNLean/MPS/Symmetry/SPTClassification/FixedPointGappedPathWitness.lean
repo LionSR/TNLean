@@ -93,7 +93,7 @@ noncomputable def normalizedBondFixedPointGappedPath
     change Commute
       (physicalBondProductParentHamiltonian
         (normalizedBondInterpolationVector D₀ D₁ γ) (by omega))
-      (Matrix.finKronecker (fun _ : Fin N =>
+      (Matrix.piKronecker (fun _ : Fin N =>
         sptFixedPointAction (ρ₀.directSum ρ₁) 1 g))
     exact (normalizedPhysicalBondInterpolation_parent_commute_onSite
       ρ₀ ρ₁ h₀ h₁ g γ (by omega)).symm
@@ -144,11 +144,11 @@ theorem normalizedBondInteraction_commute_onSite
       (normalizedBondInterpolationVector D₀ D₁ γ) S hS hfix (by omega)
       (finRotate 2 0)).map (Unitary.conjStarAlgAut ℂ _ U)
   simp only [Unitary.conjStarAlgAut_apply, U, Matrix.star_eq_conjTranspose] at hlocal
-  have haction : P * Matrix.rectKronecker (fun _ : Fin 2 => S) * Pᴴ =
+  have haction : P * Matrix.piKronecker (fun _ : Fin 2 => S) * Pᴴ =
       onSiteTensorPow 2 (sptFixedPointAction ρ 1 g) := by
-    change P * Matrix.finKronecker (fun _ : Fin 2 => S) * Pᴴ = _
+    change P * Matrix.piKronecker (fun _ : Fin 2 => S) * Pᴴ = _
     simpa only [P, S, X, onSiteTensorPow_eq_finKronecker,
-      Matrix.rectKronecker_apply, Matrix.finKronecker_apply, sptGauge,
+      Matrix.piKronecker_apply, Matrix.piKronecker_apply, sptGauge,
       Matrix.coe_gl_inv_eq_conjTranspose_of_mem_unitaryGroup (ρ.X g⁻¹) hX] using
         incomingBondPerm_conj_sptFixedPointAction ρ g 2
   have hBond : P * bondPenaltyAt (normalizedBondInterpolationVector D₀ D₁ γ)

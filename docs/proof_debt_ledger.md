@@ -1102,7 +1102,7 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   three designs; they are now unified (see the progress note of 2026-09-25,
   second entry). `thm:asymex_normal_units` still points at the prefactor
   certificate, whose statement is unchanged.
-- **Remediation**: one generic module with `complexOfRing (f : R →+* ℂ)`,
+- **Remediation**: one generic module with `Matrix.complexOfRing (f : R →+* ℂ)`,
   its ladder closed by the Mathlib lemmas, generic bond product, action and
   word evaluation; the four heads become same-name `abbrev`s so definition
   tags stay; lemma tags redirect to the strictly more general lemmas; rewrite
@@ -1113,8 +1113,8 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   #7838 and #7833 land.
 - **Progress (2026-09-25, PR #8098, Lean −71 lines)**: the integer and `ℤ√2` heads were
   converted earlier; the golden and Eisenstein heads are now same-name `abbrev`s of
-  `complexOfRing`, with word evaluation, the gauge-inverse identity
-  `complexOfRing_mul_eq_one` and the scaled matrix-unit normality certificate
+  `Matrix.complexOfRing`, with word evaluation, the gauge-inverse identity
+  `Matrix.complexOfRing_mul_eq_one` and the scaled matrix-unit normality certificate
   generic in `Reduction/RingEmbedding.lean` and `Algebra/ComplexOfRing.lean`.
   The per-ring word evaluation, bond product and action of the Eisenstein ring
   and the golden action are deleted in favour of `evalWordR`, `mulTensorR`

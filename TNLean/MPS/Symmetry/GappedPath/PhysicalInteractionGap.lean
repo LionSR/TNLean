@@ -198,21 +198,21 @@ theorem placeAlong_ringWindow_isometry_intertwiner {d m N : ℕ}
     (A : MPOTensor.ChainOperator d 2) (hA : A.IsHermitian)
     (hN : 2 ≤ N) (i : Fin N) :
     placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i)
-        (singleKrausMap (Matrix.tensorPower 2 E) A) *
-        Matrix.tensorPower N E =
-      Matrix.tensorPower N E *
+        (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ E) A) *
+        (Matrix.piKronecker fun _ : Fin N ↦ E) =
+      (Matrix.piKronecker fun _ : Fin N ↦ E) *
         placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A := by
   have h := MPOTensor.singleKrausMap_placeAlong_ringWindow_eq_range_mul_lift
     E hE hN i A
   have hAdj := congrArg Matrix.conjTranspose h
-  have hLocal : (Matrix.tensorPower 2 E * A *
-      (Matrix.tensorPower 2 E)ᴴ).IsHermitian :=
+  have hLocal : ((Matrix.piKronecker fun _ : Fin 2 ↦ E) * A *
+      (Matrix.piKronecker fun _ : Fin 2 ↦ E)ᴴ).IsHermitian :=
     Matrix.isHermitian_mul_mul_conjTranspose _ hA
   simp only [singleKrausMap_apply, Matrix.conjTranspose_mul,
     Matrix.conjTranspose_conjTranspose, Matrix.mul_one,
     (isHermitian_placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) hA).eq,
     (isHermitian_placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i) hLocal).eq] at hAdj
-  have hMul := congrArg (fun M => M * Matrix.tensorPower N E) hAdj
+  have hMul := congrArg (fun M => M * (Matrix.piKronecker fun _ : Fin N ↦ E)) hAdj
   simpa only [singleKrausMap_apply, Matrix.mul_assoc,
     MPOTensor.tensorPower_isometry E hE N,
     Matrix.mul_one] using hMul.symm
@@ -225,7 +225,7 @@ equation eq:1d-sym:jointsym, physical endpoint embeddings. -/
 noncomputable def isometricInteractionExtension {d m : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (A : MPOTensor.ChainOperator d 2) :
     MPOTensor.ChainOperator m 2 :=
-  1 - singleKrausMap (Matrix.tensorPower 2 E) (1 - A)
+  1 - singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ E) (1 - A)
 
 /-- Adding the unused-state penalty preserves the intertwining identity
 on the included chain. Source context: arXiv:1010.3732, Section II.F.2,
@@ -235,21 +235,21 @@ theorem embed_isometricInteractionExtension_intertwiner {d m N : ℕ}
     (A : MPOTensor.ChainOperator d 2) (hA : A.IsHermitian)
     (hN : 2 ≤ N) (i : Fin N) :
     placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i) (isometricInteractionExtension E A) *
-        Matrix.tensorPower N E =
-      Matrix.tensorPower N E *
+        (Matrix.piKronecker fun _ : Fin N ↦ E) =
+      (Matrix.piKronecker fun _ : Fin N ↦ E) *
         placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A := by
   have h := placeAlong_ringWindow_isometry_intertwiner E hE (1 - A)
     (Matrix.isHermitian_one.sub hA) hN i
   change (placeAlongHom (X := fun _ ↦ Fin m) (ringWindow hN i))
-      (singleKrausMap (Matrix.tensorPower 2 E) (1 - A)) *
-      Matrix.tensorPower N E =
-    Matrix.tensorPower N E *
+      (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ E) (1 - A)) *
+      (Matrix.piKronecker fun _ : Fin N ↦ E) =
+    (Matrix.piKronecker fun _ : Fin N ↦ E) *
       (placeAlongHom (X := fun _ ↦ Fin d) (ringWindow hN i)) (1 - A) at h
-  have hSub := congrArg (fun M => Matrix.tensorPower N E - M) h
+  have hSub := congrArg (fun M => (Matrix.piKronecker fun _ : Fin N ↦ E) - M) h
   change (placeAlongHom (X := fun _ ↦ Fin m) (ringWindow hN i))
-      (1 - singleKrausMap (Matrix.tensorPower 2 E) (1 - A)) *
-      Matrix.tensorPower N E =
-    Matrix.tensorPower N E *
+      (1 - singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ E) (1 - A)) *
+      (Matrix.piKronecker fun _ : Fin N ↦ E) =
+    (Matrix.piKronecker fun _ : Fin N ↦ E) *
       (placeAlongHom (X := fun _ ↦ Fin d) (ringWindow hN i)) A
   simpa only [map_sub, map_one, Matrix.sub_mul, Matrix.mul_sub,
     Matrix.one_mul, Matrix.mul_one, sub_sub_cancel] using hSub
@@ -262,8 +262,9 @@ theorem hamiltonian_translationInvariant_isometricInteractionExtension_intertwin
     (A : MPOTensor.ChainOperator d 2) (hA : A.IsHermitian) (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian *
-        Matrix.tensorPower N E =
-      Matrix.tensorPower N E * (Interaction.translationInvariant N A).hamiltonian := by
+        (Matrix.piKronecker fun _ : Fin N ↦ E) =
+      (Matrix.piKronecker fun _ : Fin N ↦ E) * (Interaction.translationInvariant N
+          A).hamiltonian := by
   have : NeZero N := ⟨by omega⟩
   simpa only [Interaction.hamiltonian_translationInvariant_of_le _ hN, Matrix.sum_mul,
     Matrix.mul_sum] using
@@ -280,9 +281,9 @@ theorem isometricInteractionExtension_zero_mode {d m N : ℕ}
     (ψ : Cfg d N → ℂ) (hψ : ψ ≠ 0)
     (hzero : haveI : NeZero N := ⟨by omega⟩;
       (Interaction.translationInvariant N A).hamiltonian.mulVec ψ = 0) :
-    haveI : NeZero N := ⟨by omega⟩; (Matrix.tensorPower N E).mulVec ψ ≠ 0 ∧
+    haveI : NeZero N := ⟨by omega⟩; (Matrix.piKronecker fun _ : Fin N ↦ E).mulVec ψ ≠ 0 ∧
       (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian.mulVec
-        ((Matrix.tensorPower N E).mulVec ψ) = 0 := by
+        ((Matrix.piKronecker fun _ : Fin N ↦ E).mulVec ψ) = 0 := by
   have : NeZero N := ⟨by omega⟩
   have h := congrArg (fun M => M.mulVec ψ)
     (hamiltonian_translationInvariant_isometricInteractionExtension_intertwiner E hE A hA hN)
@@ -292,7 +293,7 @@ theorem isometricInteractionExtension_zero_mode {d m N : ℕ}
     simpa only [Matrix.mulVec_mulVec,
       MPOTensor.tensorPower_isometry E hE N, Matrix.one_mulVec,
       Matrix.mulVec_zero] using
-      congrArg (fun v => (Matrix.tensorPower N E)ᴴ.mulVec v) h0)
+      congrArg (fun v => (Matrix.piKronecker fun _ : Fin N ↦ E)ᴴ.mulVec v) h0)
 
 /-- A nontrivial original zero mode gives zero in the spectrum of the
 isometrically enlarged periodic Hamiltonian. Source context:
@@ -345,8 +346,8 @@ theorem parentInteraction_matrix_rotatePhysical_eq_isometricInteractionExtension
       isometricInteractionExtension E (LinearMap.toMatrix' (parentInteraction A 2)) := by
   rw [parentInteraction_matrix_rotatePhysical_isometry E hE A 2]
   simp only [isometricInteractionExtension, map_sub, singleKrausMap_apply, Matrix.mul_one]
-  rw [show Matrix.rectKronecker (fun _ : Fin 2 => E) =
-    Matrix.tensorPower 2 E from rfl]
+  rw [show Matrix.piKronecker (fun _ : Fin 2 => E) =
+    (Matrix.piKronecker fun _ : Fin 2 ↦ E) from rfl]
   abel
 
 end MPSTensor

@@ -101,7 +101,7 @@ conjugation. -/
 theorem singleKrausMap_sitewise_conjTranspose_two_eq
     (U : Matrix (Fin d) (Fin d) ℂ)
     (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
-    singleKrausMap (Matrix.tensorPower 2 Uᴴ) B =
+    singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ Uᴴ) B =
       Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
         (finTwoArrowEquiv (Fin d)).symm
         (star (U ⊗ₖ U) * pairBondMatrix B * (U ⊗ₖ U)) := by

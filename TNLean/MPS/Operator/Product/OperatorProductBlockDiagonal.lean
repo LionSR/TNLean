@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.Algebra.ComplexOfRing
+import QICLean.Algebra.Matrix.ComplexOfRing
 import TNLean.MPS.Operator.Product.DirectSum
 import TNLean.MPS.Operator.Product.OperatorProduct
 
@@ -100,11 +100,11 @@ sum of the two tensors, formed over `R`. -/
 theorem directSum_complexOfRing {R : Type*} [CommRing R] (f : R →+* ℂ)
     (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
     (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) R) (i j : Fin d) :
-    directSum (fun i j => MPSTensor.complexOfRing f (M i j))
-        (fun i j => MPSTensor.complexOfRing f (N i j)) i j =
-      MPSTensor.complexOfRing f ((Matrix.fromBlocks (M i j) 0 0 (N i j)).submatrix
+    directSum (fun i j => Matrix.complexOfRing f (M i j))
+        (fun i j => Matrix.complexOfRing f (N i j)) i j =
+      Matrix.complexOfRing f ((Matrix.fromBlocks (M i j) 0 0 (N i j)).submatrix
         finSumFinEquiv.symm finSumFinEquiv.symm) := by
-  simp only [directSum, MPSTensor.complexOfRing]
+  simp only [directSum, Matrix.complexOfRing]
   rw [← Matrix.submatrix_map, Matrix.fromBlocks_map, Matrix.map_zero _ (map_zero f),
     Matrix.map_zero _ (map_zero f)]
 

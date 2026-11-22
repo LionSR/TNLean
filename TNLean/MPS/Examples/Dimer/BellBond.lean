@@ -98,7 +98,7 @@ theorem isStrongMPOSymmetry_sigmaZZ :
     IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaZZ) R 1 fun _ _ => 1 := by
   intro _ L hL
   simp only [mpoWithBoundary_one]
-  rw [mpo_onSite, sigmaZZ, Matrix.finKronecker_diagonal, one_smul]
+  rw [mpo_onSite, sigmaZZ, Matrix.piKronecker_diagonal, one_smul]
   ext p q
   rw [Matrix.diagonal_mul]
   by_cases hp : ChainOK L p
@@ -118,8 +118,8 @@ theorem isWeakMPOSymmetry_sigmaXX : IsWeakMPOSymmetry (fun _ : Unit => onSite si
   rw [mpo_onSite]
   change _ * _ = _ * _
   ext p q
-  rw [Matrix.finKronecker_mul_apply_of_eq_ite sigmaXX_apply,
-    Matrix.mul_finKronecker_apply_of_eq_ite sigmaXX_apply', mpo_R_entry_formula hL,
+  rw [Matrix.piKronecker_mul_apply_of_eq_ite sigmaXX_apply,
+    Matrix.mul_piKronecker_apply_of_eq_ite sigmaXX_apply', mpo_R_entry_formula hL,
     mpo_R_entry_formula hL]
   congr 1
   · simp only [chainIndicator, Matrix.of_apply, chainOK_rev_iff]
@@ -131,14 +131,14 @@ Project result: at `N = 1`, `(σ_x ⊗ σ_x) ρ^{(1)}(R)` is not a multiple of `
 (arXiv:2504.16985, line 182): on the two supported configurations the entries of `ρ^{(1)}`
 are in the ratio `16 : 9`, and those of the flipped operator in the ratio `9 : 16`. -/
 theorem not_isStrongSymmetry_sigmaXX_one :
-    ¬ Matrix.IsStrongSymmetry (Matrix.finKronecker fun _ : Fin 1 => sigmaXX) (mpo R 1) := by
+    ¬ Matrix.IsStrongSymmetry (Matrix.piKronecker fun _ : Fin 1 => sigmaXX) (mpo R 1) := by
   rintro ⟨c, hc⟩
   have hok0 : ChainOK 1 (fun _ => (0 : Fin 4)) := by decide
   have hok3 : ChainOK 1 (fun _ => (3 : Fin 4)) := by decide
   have hrev0 : (fun _ : Fin 1 => ((0 : Fin 4)).rev) = fun _ => (3 : Fin 4) := rfl
   have e1 := congrFun (congrFun hc (fun _ => 0)) (fun _ => 0)
   have e2 := congrFun (congrFun hc (fun _ => 0)) (fun _ => 3)
-  rw [Matrix.finKronecker_mul_apply_of_eq_ite sigmaXX_apply, hrev0, Matrix.smul_apply,
+  rw [Matrix.piKronecker_mul_apply_of_eq_ite sigmaXX_apply, hrev0, Matrix.smul_apply,
     mpo_R_entry_formula one_pos, mpo_R_entry_formula one_pos] at e1 e2
   simp only [chainIndicator, Matrix.of_apply, hok0, hok3, and_self, ite_true, wN, φ,
     Fin.prod_univ_one, smul_eq_mul] at e1 e2

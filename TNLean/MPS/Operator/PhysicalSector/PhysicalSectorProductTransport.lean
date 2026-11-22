@@ -52,8 +52,8 @@ theorem reindex_tensorPower_windowComplement
     {d e : ℕ} (V : Matrix (Fin d) (Fin e) ℂ) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
     Matrix.reindex (windowComplementEquiv (d := d) 2 N hN i)
         (windowComplementEquiv (d := e) 2 N hN i)
-        (Matrix.tensorPower N V) =
-      Matrix.tensorPower 2 V ⊗ₖ Matrix.tensorPower (N - 2) V := by
+        (Matrix.piKronecker fun _ : Fin N ↦ V) =
+      (Matrix.piKronecker fun _ : Fin 2 ↦ V) ⊗ₖ (Matrix.piKronecker fun _ : Fin (N - 2) ↦ V) := by
   ext ⟨x, u⟩ ⟨y, v⟩
   let ed := windowComplementEquiv (d := d) 2 N hN i
   let ee := windowComplementEquiv (d := e) 2 N hN i
@@ -72,7 +72,7 @@ theorem reindex_tensorPower_windowComplement
   change (∏ n : Fin N, V (s n) (t n)) = _
   rw [MPSTensor.prod_cyclicWindow_complement 2 N hN i]
   simp only [MPSTensor.extractWindow] at hx hy
-  simp only [Matrix.tensorPower_apply, Matrix.kroneckerMap_apply]
+  simp only [Matrix.piKronecker_apply, Matrix.kroneckerMap_apply]
   apply congrArg₂ (fun a b : ℂ ↦ a * b)
   · apply Finset.prod_congr rfl
     intro r _
@@ -95,7 +95,7 @@ private noncomputable abbrev physicalCoordinateMatrixN
     (F : PhysicalSectorFactorization K) (N : ℕ) :
     Matrix (Fin N → Fin (Fintype.card (SectorSiteIndex F)))
       (Fin N → Fin d) ℂ :=
-  Matrix.tensorPower N F.physicalCoordinateMatrix
+  (Matrix.piKronecker fun _ : Fin N ↦ F.physicalCoordinateMatrix)
 
 /-- The sitewise physical coordinate matrix is an isometry. -/
 private theorem physicalCoordinateMatrixN_isometry
@@ -108,7 +108,7 @@ private theorem physicalCoordinateMatrixN_coisometry
     (F : PhysicalSectorFactorization K) (N : ℕ) :
     F.physicalCoordinateMatrixN N * (F.physicalCoordinateMatrixN N)ᴴ = 1 := by
   rw [physicalCoordinateMatrixN, tensorPower_mul_conjTranspose,
-    F.physicalCoordinateMatrix_coisometry, Matrix.tensorPower_one]
+    F.physicalCoordinateMatrix_coisometry, Matrix.piKronecker_one]
 
 /-- The length-`N` MPO transforms by the sitewise physical coordinate
 matrix.
@@ -129,7 +129,7 @@ private theorem physicalCoordinateMatrixN_two
           (Fin (Fintype.card (SectorSiteIndex F)))).symm
         (finTwoArrowEquiv (Fin d)).symm F.physicalCoordinateMatrixTwo := by
   ext s t
-  simp [physicalCoordinateMatrixN, Matrix.tensorPower_apply,
+  simp [physicalCoordinateMatrixN, Matrix.piKronecker_apply,
     physicalCoordinateMatrixTwo, Matrix.reindex_apply,
     Matrix.kroneckerMap_apply, finTwoArrowEquiv]
 

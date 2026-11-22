@@ -25,12 +25,12 @@ namespace MPOTensor.FiniteGroupDetector
 variable {α ν β : Type*} [Fintype α] [DecidableEq α] [Fintype ν] [DecidableEq ν]
 
 private theorem rectKronecker_prod_map (l : List β) (A : β → ν → Matrix α α ℂ) :
-    (l.map fun r ↦ rectKronecker (A r)).prod =
-      rectKronecker fun s ↦ (l.map fun r ↦ A r s).prod := by
+    (l.map fun r ↦ Matrix.piKronecker (A r)).prod =
+      Matrix.piKronecker fun s ↦ (l.map fun r ↦ A r s).prod := by
   induction l with
   | nil => simp
   | cons r l ih =>
-    simp only [List.map_cons, List.prod_cons, ih, rectKronecker_mul]
+    simp only [List.map_cons, List.prod_cons, ih, Matrix.piKronecker_mul]
 
 private theorem unitary_coe_prod_map (l : List β) (A : β → unitary (Matrix α α ℂ)) :
     ((l.map A).prod : Matrix α α ℂ) = (l.map fun r ↦ (A r : Matrix α α ℂ)).prod := by
@@ -40,10 +40,10 @@ private theorem unitary_coe_prod_map (l : List β) (A : β → unitary (Matrix �
 
 omit [Fintype α] [DecidableEq ν] in
 private theorem rectKronecker_scalar (f : ν → ℂ) :
-    rectKronecker (fun s ↦ f s • (1 : Matrix α α ℂ)) = (∏ s, f s) • 1 := by
-  conv_rhs => rw [← rectKronecker_one (ν := ν) (ι := α)]
+    Matrix.piKronecker (fun s ↦ f s • (1 : Matrix α α ℂ)) = (∏ s, f s) • 1 := by
+  conv_rhs => rw [← Matrix.piKronecker_one (ν := ν) (ι := α)]
   ext x y
-  simp only [rectKronecker_apply, Matrix.smul_apply, smul_eq_mul, Finset.prod_mul_distrib]
+  simp only [Matrix.piKronecker_apply, Matrix.smul_apply, smul_eq_mul, Finset.prod_mul_distrib]
 
 private theorem prod_powers (ζ : ℂ) (m : ℕ) :
     (∏ r : Fin m, ζ ^ r.val) = ζ ^ (m.choose 2) := by
@@ -78,7 +78,7 @@ Source context: the fixed-circuit endpoint audit of arXiv:2405.00439,
 Section V, lines 2081–2087 and 2108–2117. -/
 noncomputable def detectorIntervalTensor (u w : unitary (Matrix α α ℂ)) (N a b : ℕ) :
     Matrix (Fin N × Bool → α) (Fin N × Bool → α) ℂ :=
-  rectKronecker fun s ↦ (intervalSiteFactor (Γ := unitary (Matrix α α ℂ))
+  Matrix.piKronecker fun s ↦ (intervalSiteFactor (Γ := unitary (Matrix α α ℂ))
     u (if s.2 then 1 else w) a b s.1.val : Matrix α α ℂ)
 
 /-- The complete chronological interval word, as an ordinary product of
@@ -95,12 +95,12 @@ noncomputable def detectorTensorWord (u w : unitary (Matrix α α ℂ)) (m N : �
 complete spatial words. No endpoint identification is an input hypothesis.
 Source context: arXiv:2405.00439, `detectG`, lines 2108–2117. -/
 theorem detectorTensorWord_eq_rectKronecker (u w : unitary (Matrix α α ℂ)) (m N : ℕ) :
-    detectorTensorWord u w m N = rectKronecker fun s : Fin N × Bool ↦
+    detectorTensorWord u w m N = Matrix.piKronecker fun s : Fin N × Bool ↦
       (spatialEndpointWord (Γ := unitary (Matrix α α ℂ))
         u (if s.2 then 1 else w) m s.1.val : Matrix α α ℂ) := by
-  simp only [detectorTensorWord, detectorIntervalTensor, rectKronecker_conjTranspose]
+  simp only [detectorTensorWord, detectorIntervalTensor, Matrix.conjTranspose_piKronecker]
   rw [rectKronecker_prod_map, rectKronecker_prod_map,
-    rectKronecker_mul, rectKronecker_mul, rectKronecker_mul]
+    Matrix.piKronecker_mul, Matrix.piKronecker_mul, Matrix.piKronecker_mul]
   congr 1
   funext s
   simp only [spatialEndpointWord, Submonoid.coe_mul, unitary_coe_prod_map]

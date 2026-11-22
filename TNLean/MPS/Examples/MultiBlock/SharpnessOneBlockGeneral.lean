@@ -74,13 +74,13 @@ noncomputable def colE0 : Matrix (Fin (1 + z)) (Fin 1) ℂ :=
 theorem tensorBGen_one : tensorBGen 1 = tensorB := by
   funext a
   ext i j
-  fin_cases i <;> fin_cases j <;> simp [tensorBGen, tensorB, bInt, complexOfRing_apply]
+  fin_cases i <;> fin_cases j <;> simp [tensorBGen, tensorB, bInt, Matrix.complexOfRing_apply]
 
 /-- The case `z = 2` is the tensor `[[1, 1, 0], [0, 0, 1], [0, 0, 0]]`. -/
 theorem tensorBGen_two : tensorBGen 2 = tensorBTwo := by
   funext a
   ext i j
-  fin_cases i <;> fin_cases j <;> simp [tensorBGen, tensorBTwo, bIntTwo, complexOfRing_apply]
+  fin_cases i <;> fin_cases j <;> simp [tensorBGen, tensorBTwo, bIntTwo, Matrix.complexOfRing_apply]
 
 variable {z}
 

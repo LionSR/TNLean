@@ -93,13 +93,13 @@ private theorem singleKrausMap_coordinateInclusion_sigmaMk
 set_option backward.isDefEq.respectTransparency false in
 private theorem tensorPower_commonFixedPointInclusion_sector
     (K d₀ d₁ : ℕ) :
-    (Matrix.tensorPower 2 (commonFixedPointInclusion (K * K) d₀ d₁)).submatrix
+    (Matrix.piKronecker fun _ : Fin 2 ↦ (commonFixedPointInclusion (K * K) d₀ d₁)).submatrix
         ((Matrix.etaPairSpatialBlockEquiv (Matrix.physicalSpectatorEquiv K d₀ d₁)).trans
           (finTwoArrowEquiv (Fin ((K * K + d₀) + d₁))).symm)
         (twoSiteBondEquiv K).symm =
       Matrix.coordinateInclusion (activePairEmbedding K d₀ d₁) := by
   ext x y
-  simp only [Matrix.submatrix_apply, Matrix.tensorPower_apply, Fin.prod_univ_two,
+  simp only [Matrix.submatrix_apply, Matrix.piKronecker_apply, Fin.prod_univ_two,
     Equiv.trans_apply, Matrix.etaPairSpatialBlockEquiv, finTwoArrowEquiv_symm_apply,
     twoSiteBondEquiv, Matrix.cons_val_zero, Matrix.cons_val_one]
   change commonFixedPointInclusion (K * K) d₀ d₁
@@ -164,7 +164,7 @@ theorem physicalSpectatorBondInteraction_eq_isometricInteractionExtension (K d�
   rw [Matrix.reindex_singleKrausMap (twoSiteBondEquiv K)]
   rw [show Matrix.reindex (spectatorPairConfigurationEquiv K d₀ d₁).symm
       (twoSiteBondEquiv K)
-        (Matrix.tensorPower 2 (commonFixedPointInclusion (K * K) d₀ d₁)) =
+        (Matrix.piKronecker fun _ : Fin 2 ↦ (commonFixedPointInclusion (K * K) d₀ d₁)) =
       Matrix.coordinateInclusion (activePairEmbedding K d₀ d₁) from
         tensorPower_commonFixedPointInclusion_sector K d₀ d₁]
   rw [← Matrix.coe_reindexRingEquiv, map_sub, map_one]

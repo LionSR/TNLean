@@ -674,8 +674,9 @@ theorem fibonacci_right_eq (s : {s // s ∈ fibSlots}) :
     decide +kernel
   have h : fibonacci_compression.right s =
       (complexOfGolden fibGaugeInvGolden).submatrix id fun j => fibCoord ⟨Sum.inl s, j⟩ :=
-    fibonacci_compression.right_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ fibGauge_mul_inv)
-      (hG' := complexOfRing_mul_eq_one _ fibGaugeInv_mul) rfl s
+    fibonacci_compression.right_gaugeOfMatrix (hG := Matrix.complexOfRing_mul_eq_one _
+        fibGauge_mul_inv)
+      (hG' := Matrix.complexOfRing_mul_eq_one _ fibGaugeInv_mul) rfl s
   rw [h, ← hgolden]
   rfl
 
@@ -686,8 +687,9 @@ theorem fibonacci_left_eq (s : {s // s ∈ fibSlots}) :
     decide +kernel
   have h : fibonacci_compression.left s =
       (complexOfGolden fibGaugeGolden).submatrix (fun i => fibCoord ⟨Sum.inl s, i⟩) id :=
-    fibonacci_compression.left_gaugeOfMatrix (hG := complexOfRing_mul_eq_one _ fibGauge_mul_inv)
-      (hG' := complexOfRing_mul_eq_one _ fibGaugeInv_mul) rfl s
+    fibonacci_compression.left_gaugeOfMatrix (hG := Matrix.complexOfRing_mul_eq_one _
+        fibGauge_mul_inv)
+      (hG' := Matrix.complexOfRing_mul_eq_one _ fibGaugeInv_mul) rfl s
   rw [h, ← hgolden s.1]
   rfl
 

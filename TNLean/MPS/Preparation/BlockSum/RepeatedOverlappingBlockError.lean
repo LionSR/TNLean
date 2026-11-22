@@ -80,17 +80,19 @@ theorem sum_star_copyApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [NeZer
   set Bq := blockTensor A q
   set m : (Fin M → Fin D × Fin D) → ℂ := fun c =>
     mpv (polarPosTensor Bq) fun k => (virtualPairEquiv D).symm (c k)
-  have hblock : ∀ j, ∑ c, star ((tensorPower M (L j) *ᵥ
+  have hblock : ∀ j, ∑ c, star (((Matrix.piKronecker fun _ : Fin M ↦ (L j)) *ᵥ
       pairProductState (fixedPointPair (σ j))) c) * m c =
       mpvOverlap (ofPhysicalMatrixLM ((L j)ᴴ * Matrix.polarPos (physicalMatrix Bq)))
         (fixedPointTensor (σ j)) M := fun j => by
-    have hdot : ∑ c, star ((tensorPower M (L j) *ᵥ
+    have hdot : ∑ c, star (((Matrix.piKronecker fun _ : Fin M ↦ (L j)) *ᵥ
         pairProductState (fixedPointPair (σ j))) c) * m c =
         ∑ c', star (pairProductState (fixedPointPair (σ j)) c') *
-          (tensorPower M (L j)ᴴ *ᵥ m) c' := by
-      change star (tensorPower M (L j) *ᵥ pairProductState (fixedPointPair (σ j))) ⬝ᵥ m =
-        star (pairProductState (fixedPointPair (σ j))) ⬝ᵥ (tensorPower M (L j)ᴴ *ᵥ m)
-      rw [star_mulVec, ← dotProduct_mulVec, conjTranspose_tensorPower]
+          ((Matrix.piKronecker fun _ : Fin M ↦ (L j))ᴴ *ᵥ m) c' := by
+      change star ((Matrix.piKronecker fun _ : Fin M ↦ (L j)) *ᵥ pairProductState (fixedPointPair (σ
+          j))) ⬝ᵥ m =
+        star (pairProductState (fixedPointPair (σ j))) ⬝ᵥ ((Matrix.piKronecker fun _ : Fin M ↦ (L
+            j))ᴴ *ᵥ m)
+      rw [star_mulVec, ← dotProduct_mulVec, Matrix.conjTranspose_piKronecker]
     rw [hdot, ofPhysicalMatrixLM_mul_polarPos, mpvOverlap]
     let e : (Fin M → Fin (Dj j * Dj j)) ≃ (Fin M → Fin (Dj j) × Fin (Dj j)) :=
       Equiv.piCongrRight fun _ => virtualPairEquiv (Dj j)
@@ -99,7 +101,7 @@ theorem sum_star_copyApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [NeZer
     refine (Fintype.sum_equiv e.symm _ _ fun c => ?_)
     rw [mpv_fixedPointTensor, mpv_rotatePhysical, mul_comm]
     congr 1
-    · simp only [mulVec, dotProduct, tensorPower, of_apply, m]
+    · simp only [mulVec, dotProduct, Matrix.piKronecker, of_apply, m]
       refine (Fintype.sum_equiv eD.symm _ _ fun c' => ?_)
       simp only [conjTranspose_apply, RCLike.star_def, virtualPairEquiv, Equiv.symm_symm, mpv_eq,
         coeff_eq, Equiv.piCongrRight_symm_apply, Pi.map_apply, submatrix_apply,
@@ -119,7 +121,7 @@ theorem sum_star_copyApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [NeZer
 /-- **The corrected approximating vector has norm at most one.** For isometries `L_j` with
 orthogonal ranges, positive semidefinite `σ_j` of trace one, and `β ≠ 0`, the states
 `L_j^{⊗M} |Ω_j⟩` are orthonormal, so `∑ⱼ αⱼ L_j^{⊗M} |Ω_j⟩` with `αⱼ = βⱼ / (∑ₗ |βₗ|²)^{1/2}` is a
-unit vector, and `V^{⊗M}` does not increase norms (`Matrix.sum_norm_sq_tensorPower_mulVec_le`). -/
+unit vector, and `V^{⊗M}` does not increase norms (`Matrix.sum_norm_sq_piKronecker_mulVec_le`). -/
 theorem sum_norm_sq_copyApproxVector_le (A : MPSTensor d D) (q M : ℕ) [NeZero M]
     {β : Fin b → ℂ} (hβ : β ≠ 0)
     {L : (j : Fin b) → Matrix (Fin D × Fin D) (Fin (Dj j) × Fin (Dj j)) ℂ}
@@ -129,13 +131,13 @@ theorem sum_norm_sq_copyApproxVector_le (A : MPSTensor d D) (q M : ℕ) [NeZero 
     ∑ τ, ‖copyApproxVector A q M (ghzAmplitude β) L σ τ‖ ^ 2 ≤ 1 := by
   classical
   set F : Fin b → (Fin M → Fin D × Fin D) → ℂ :=
-    fun j => tensorPower M (L j) *ᵥ pairProductState (fixedPointPair (σ j))
+    fun j => (Matrix.piKronecker fun _ : Fin M ↦ (L j)) *ᵥ pairProductState (fixedPointPair (σ j))
   have horthF : ∀ j k, ∑ c, star (F j c) * F k c = if j = k then 1 else 0 := fun j k => by
     simp only [F]
-    rw [sum_star_tensorPower_mulVec_mul]
+    rw [Matrix.sum_star_piKronecker_mulVec_mul]
     split_ifs with h
     · subst h
-      rw [hiso, tensorPower_one, one_mulVec,
+      rw [hiso, Matrix.piKronecker_one, one_mulVec,
         pairProductState_fixedPointPair_norm_sq (hσ j) (htr j)]
     · rw [horth j k h, tensorPower_zero (NeZero.ne M), zero_mulVec]
       simp
@@ -149,7 +151,7 @@ theorem sum_norm_sq_copyApproxVector_le (A : MPSTensor d D) (q M : ℕ) [NeZero 
     refine Finset.sum_congr rfl fun c _ => ?_
     simp [copyFixedPointState, F, Finset.sum_apply]
   have hidem := Matrix.conjTranspose_polarIso_mul_polarIso (physicalMatrix (blockTensor A q))
-  have h := sum_norm_sq_tensorPower_mulVec_le (M := M)
+  have h := Matrix.sum_norm_sq_piKronecker_mulVec_le (M := M)
     (W := Matrix.polarIso (physicalMatrix (blockTensor A q)))
     (by rw [hidem, Matrix.polarSupport_mul_polarSupport]) (copyFixedPointState (ghzAmplitude β) L σ)
   exact h.trans (Complex.ofReal_injective (hstate.trans Complex.ofReal_one.symm)).le

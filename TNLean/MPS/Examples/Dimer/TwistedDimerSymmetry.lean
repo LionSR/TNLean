@@ -160,7 +160,7 @@ theorem isStrongMPOSymmetry_sigmaZZ :
     IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaZZ) T 1 fun _ _ => 1 := by
   intro _ L hL
   simp only [mpoWithBoundary_one]
-  rw [mpo_onSite, sigmaZZ, Matrix.finKronecker_diagonal, one_smul]
+  rw [mpo_onSite, sigmaZZ, Matrix.piKronecker_diagonal, one_smul]
   ext σ τ
   rw [Matrix.diagonal_mul]
   by_cases hσ : IsCyclicBondMatched L σ
@@ -178,10 +178,10 @@ theorem isStrongMPOSymmetry_flipXXZF :
     IsStrongMPOSymmetry (fun _ : Unit => onSite flipXXZF) T 1 fun _ _ => 1 := by
   intro _ L hL
   simp only [mpoWithBoundary_one]
-  rw [mpo_onSite, flipXXZF, Matrix.finKronecker_mul, sigmaZF, Matrix.finKronecker_diagonal,
+  rw [mpo_onSite, flipXXZF, ← Matrix.piKronecker_mul, sigmaZF, Matrix.piKronecker_diagonal,
     one_smul, Matrix.mul_assoc]
   ext σ τ
-  rw [Matrix.diagonal_mul, Matrix.finKronecker_mul_apply_of_eq_ite flipXX_apply,
+  rw [Matrix.diagonal_mul, Matrix.piKronecker_mul_apply_of_eq_ite flipXX_apply,
     mpo_T_entry_formula hL, mpo_T_entry_formula hL, chainIndicator_flipLR_left, mul_left_comm]
   congr 1
   rw [Finset.mul_sum]
@@ -202,8 +202,8 @@ theorem isWeakMPOSymmetry_flipXX : IsWeakMPOSymmetry (fun _ : Unit => onSite fli
   rw [mpo_onSite]
   change _ * _ = _ * _
   ext σ τ
-  rw [Matrix.finKronecker_mul_apply_of_eq_ite flipXX_apply,
-    Matrix.mul_finKronecker_apply_of_eq_ite flipXX_apply', mpo_T_entry_formula hL,
+  rw [Matrix.piKronecker_mul_apply_of_eq_ite flipXX_apply,
+    Matrix.mul_piKronecker_apply_of_eq_ite flipXX_apply', mpo_T_entry_formula hL,
     mpo_T_entry_formula hL, chainIndicator_flipLR_left, chainIndicator_flipLR_right]
   simp only [coef_flipLR_left]
 
@@ -214,7 +214,7 @@ arXiv:2504.16985, line 182), because every one-site coefficient is diagonal in t
 theorem isWeakMPOSymmetry_sigmaZF : IsWeakMPOSymmetry (fun _ : Unit => onSite sigmaZF) T 1 := by
   intro _ L hL
   simp only [mpoWithBoundary_one]
-  rw [mpo_onSite, sigmaZF, Matrix.finKronecker_diagonal]
+  rw [mpo_onSite, sigmaZF, Matrix.piKronecker_diagonal]
   change _ * _ = _ * _
   ext σ τ
   rw [Matrix.diagonal_mul, Matrix.mul_diagonal]
@@ -264,11 +264,11 @@ Project result: at `N = 1`, `(X_L X_R) ρ^{(1)}(T)` is not a multiple of `ρ^{(1
 (arXiv:2504.16985, line 182): in the flag sector `f = 0` the flip preserves the entries and in
 the sector `f = 1` it reverses their sign. -/
 theorem not_isStrongSymmetry_flipXX_one :
-    ¬ Matrix.IsStrongSymmetry (Matrix.finKronecker fun _ : Fin 1 => flipXX) (mpo T 1) := by
+    ¬ Matrix.IsStrongSymmetry (Matrix.piKronecker fun _ : Fin 1 => flipXX) (mpo T 1) := by
   rintro ⟨c, hc⟩
   have e1 := congrFun (congrFun hc (fun _ => 0)) (fun _ => 0)
   have e2 := congrFun (congrFun hc (fun _ => 1)) (fun _ => 1)
-  rw [Matrix.finKronecker_mul_apply_of_eq_ite flipXX_apply, Matrix.smul_apply] at e1 e2
+  rw [Matrix.piKronecker_mul_apply_of_eq_ite flipXX_apply, Matrix.smul_apply] at e1 e2
   have h0 : (fun _ : Fin 1 => flipLR ((fun _ : Fin 1 => (0 : Fin 8)) 0)) = fun _ => 6 := by
     funext _; decide
   have h1 : (fun _ : Fin 1 => flipLR ((fun _ : Fin 1 => (1 : Fin 8)) 0)) = fun _ => 7 := by
@@ -290,11 +290,11 @@ Project result: at `N = 1`, `Z_F ρ^{(1)}(T)` is not a multiple of `ρ^{(1)}(T)`
 (arXiv:2504.16985, line 182): both flag sectors carry nonzero entries, with opposite signs
 of `Z_F`. -/
 theorem not_isStrongSymmetry_sigmaZF_one :
-    ¬ Matrix.IsStrongSymmetry (Matrix.finKronecker fun _ : Fin 1 => sigmaZF) (mpo T 1) := by
+    ¬ Matrix.IsStrongSymmetry (Matrix.piKronecker fun _ : Fin 1 => sigmaZF) (mpo T 1) := by
   rintro ⟨c, hc⟩
   have e1 := congrFun (congrFun hc (fun _ => 0)) (fun _ => 0)
   have e2 := congrFun (congrFun hc (fun _ => 1)) (fun _ => 1)
-  rw [sigmaZF, Matrix.finKronecker_diagonal, Matrix.diagonal_mul, Matrix.smul_apply] at e1 e2
+  rw [sigmaZF, Matrix.piKronecker_diagonal, Matrix.diagonal_mul, Matrix.smul_apply] at e1 e2
   simp only [entry_00, entry_11, smul_eq_mul, Fin.prod_univ_one] at e1 e2
   norm_num [siteSign, SpinCover.pauli, bitF] at e1 e2
   rw [e1] at e2

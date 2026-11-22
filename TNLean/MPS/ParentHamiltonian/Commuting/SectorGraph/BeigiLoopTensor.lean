@@ -365,7 +365,7 @@ private theorem loopProductState_eq_tensorPower_mulVec
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     {N : ℕ} [NeZero N] :
     F.loopProductState l =
-      (Matrix.tensorPower N F.unitary).mulVec
+      (Matrix.piKronecker fun _ : Fin N ↦ F.unitary).mulVec
         (F.loopCyclicProduct l) := by
   rfl
 
@@ -376,7 +376,7 @@ theorem loopProductState_ne_zero (F : BeigiSectorGraphData A)
     (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
     F.loopProductState (N := N) l ≠ 0 := by
   classical
-  let W := Matrix.tensorPower N F.unitary
+  let W := (Matrix.piKronecker fun _ : Fin N ↦ F.unitary)
   have hWstarW : Wᴴ * W = 1 := by
     apply MPOTensor.tensorPower_isometry
     simpa only [Matrix.star_eq_conjTranspose] using
@@ -410,7 +410,7 @@ theorem loopProductStateES_inner_eq_zero_of_ne
     inner ℂ (F.loopProductStateES (N := N) l)
       (F.loopProductStateES (N := N) m) = 0 := by
   classical
-  let W := Matrix.tensorPower N F.unitary
+  let W := (Matrix.piKronecker fun _ : Fin N ↦ F.unitary)
   have hWstarW : Wᴴ * W = 1 := by
     apply MPOTensor.tensorPower_isometry
     simpa only [Matrix.star_eq_conjTranspose] using
@@ -453,7 +453,7 @@ private theorem groundBondProduct_mulVec_loopProductState
         (F.loopProductState l) = F.loopProductState l := by
   have : NeZero N := ⟨by omega⟩
   classical
-  let W := Matrix.tensorPower N F.unitary
+  let W := (Matrix.piKronecker fun _ : Fin N ↦ F.unitary)
   let Q := (List.ofFn fun i : Fin N ↦
     ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
       (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
@@ -470,13 +470,13 @@ private theorem groundBondProduct_mulVec_loopProductState
   have hWWstar : W * Wᴴ = 1 := by
     simp only [W]
     rw [MPOTensor.tensorPower_mul_conjTranspose, hUUstar,
-      Matrix.tensorPower_one]
-  have hconj : singleKrausMap (Matrix.tensorPower N F.unitaryᴴ) Q = T := by
+      Matrix.piKronecker_one]
+  have hconj : singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ F.unitaryᴴ) Q = T := by
     simpa only [Q, T] using F.singleKrausMap_groundBondProduct hN
   have hmatrix : Q * W = W * T := by
     have hconj' : Wᴴ * Q * W = T := by
       simpa only [singleKrausMap_apply,
-        Matrix.conjTranspose_tensorPower,
+        Matrix.conjTranspose_piKronecker,
         Matrix.conjTranspose_conjTranspose, W] using hconj
     calc
       Q * W = 1 * (Q * W) := by rw [Matrix.one_mul]

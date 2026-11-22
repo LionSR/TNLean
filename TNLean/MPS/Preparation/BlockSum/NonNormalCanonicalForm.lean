@@ -336,7 +336,7 @@ theorem canonicalFixedPointState_eq_tensorPower_mulVec_ghzState (P : SectorDecom
     (κ : (j : Fin P.basisCount) → Fin (P.copies j)) (N M : ℕ)
     (p : Fin M → Fin P.totalDim × Fin P.totalDim) :
     P.canonicalFixedPointState σ κ N M ((bondRegrouping M P.totalDim).symm p) =
-      (Matrix.tensorPower M (pairIsometry (P.embeddedFixedPointPair σ κ)) *ᵥ
+      ((Matrix.piKronecker fun _ : Fin M ↦ (pairIsometry (P.embeddedFixedPointPair σ κ))) *ᵥ
         ghzState (ghzAmplitude (P.coeff N))) p :=
   nonNormalFixedPointState_eq_tensorPower_mulVec_ghzState _ _ p
 

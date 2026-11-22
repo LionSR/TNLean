@@ -44,7 +44,7 @@
 
 \begin{definition}[Finite Kronecker product]%
     \label{def:finite_kronecker_product}
-    \lean{Matrix.finKronecker}
+    \lean{Matrix.piKronecker}
     \leanok
     For square matrices $A_n$ indexed by $n=0,\ldots,N-1$, possibly with
     different index types, their finite Kronecker product is the matrix with
@@ -58,8 +58,8 @@
 
 \begin{lemma}[Elementary finite Kronecker identities]%
     \label{lem:finite_kronecker_elementary}
-    \lean{Matrix.finKronecker_ne_zero}
-    \lean{Matrix.finKronecker_update_smul}
+    \lean{Matrix.piKronecker_ne_zero}
+    \lean{Matrix.piKronecker_update_smul}
     \leanok
     \uses{def:finite_kronecker_product}
     A finite Kronecker product of nonzero matrices is nonzero. Replacing one
@@ -106,7 +106,7 @@
 
 \begin{lemma}[Positive rescaling of a finite Kronecker product]%
     \label{thm:finite_kronecker_positive_rescaling}
-    \lean{Matrix.exists_pi_smul_posSemidef_of_finKronecker_posSemidef}
+    \lean{Matrix.exists_pi_smul_posSemidef_of_piKronecker_posSemidef}
     \leanok
     \uses{def:finite_kronecker_product, lem:finite_kronecker_elementary, thm:kronecker_factor_positive_rescaling}
     Let $N\geq1$, and let $A_0,\ldots,A_{N-1}$ be nonzero complex square

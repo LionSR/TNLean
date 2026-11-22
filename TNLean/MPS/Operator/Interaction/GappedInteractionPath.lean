@@ -67,7 +67,7 @@ structure SymmetricGappedInteractionPath {G : Type} [Group G] {d : ℕ}
   symmetric : ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ g : G,
     ∀ (N : ℕ) (hN : 2 ≤ N), haveI : NeZero N := ⟨by omega⟩;
       Commute (Interaction.translationInvariant N (interaction γ)).hamiltonian
-        (Matrix.finKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ))
+        (Matrix.piKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ))
 
 /-- Reversing the parameter of a symmetric gapped interaction path exchanges
 its endpoints and preserves the same uniform gap. This is the symmetry of

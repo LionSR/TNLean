@@ -8,13 +8,13 @@ import QICLean.Channel.KrausMap.SingleKrausPositivity
 import QICLean.Algebra.Word.OrderedProduct
 import TNLean.MPS.Operator.Periodic.FirstSite
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorCoordinateTransport
-import QICLean.Algebra.Kronecker.MatrixTensorPower
+import QICLean.Algebra.Kronecker.PiKronecker
 
 /-!
 # Sitewise physical matrices on periodic MPOs
 
 A one-site matrix `V` acts on a chain by its sitewise tensor power
-`Matrix.tensorPower N V`, with entries `∏ₙ V (s n) (t n)`. Acting on
+`(Matrix.piKronecker fun _ : Fin N ↦ V)`, with entries `∏ₙ V (s n) (t n)`. Acting on
 the ket leg at every site left-multiplies the closed MPO by this tensor power.
 Acting on both physical legs is the same as changing the physical basis of
 every local MPO matrix before closing the virtual trace.
@@ -82,36 +82,36 @@ private theorem trace_mul_evalWord_ketLeftMul_ofFn
 MPO by its sitewise tensor power. -/
 theorem mpo_ketLeftMul (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
-    mpo (M.ketLeftMul P) N = Matrix.tensorPower N P * mpo M N := by
+    mpo (M.ketLeftMul P) N = (Matrix.piKronecker fun _ : Fin N ↦ P) * mpo M N := by
   ext σ τ
-  simp only [Matrix.mul_apply, mpo_apply, mpoMatrixEntry, Matrix.tensorPower_apply]
+  simp only [Matrix.mul_apply, mpo_apply, mpoMatrixEntry, Matrix.piKronecker_apply]
   simpa only [Matrix.one_mul] using
     trace_mul_evalWord_ketLeftMul_ofFn M P (1 : Matrix (Fin D) (Fin D) ℂ) σ τ
 
 /-- The sitewise tensor power of a one-site isometry is an isometry. -/
 theorem tensorPower_isometry
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1) (N : ℕ) :
-    (Matrix.tensorPower N V)ᴴ * Matrix.tensorPower N V = 1 := by
-  rw [Matrix.conjTranspose_tensorPower, Matrix.tensorPower_mul, hV]
-  exact Matrix.tensorPower_one N
+    (Matrix.piKronecker fun _ : Fin N ↦ V)ᴴ * (Matrix.piKronecker fun _ : Fin N ↦ V) = 1 := by
+  rw [Matrix.conjTranspose_piKronecker, Matrix.piKronecker_mul, hV]
+  exact Matrix.piKronecker_one
 
 /-- The product of a sitewise tensor power with its conjugate transpose is the
 sitewise tensor power of the corresponding one-site product. -/
 theorem tensorPower_mul_conjTranspose
     (V : Matrix (Fin d) (Fin e) ℂ) (N : ℕ) :
-    Matrix.tensorPower N V * (Matrix.tensorPower N V)ᴴ =
-      Matrix.tensorPower N (V * Vᴴ) := by
-  rw [Matrix.conjTranspose_tensorPower]
-  exact Matrix.tensorPower_mul N V Vᴴ
+    (Matrix.piKronecker fun _ : Fin N ↦ V) * (Matrix.piKronecker fun _ : Fin N ↦ V)ᴴ =
+      (Matrix.piKronecker fun _ : Fin N ↦ (V * Vᴴ)) := by
+  rw [Matrix.conjTranspose_piKronecker]
+  exact Matrix.piKronecker_mul (fun _ : Fin N ↦ V) (fun _ : Fin N ↦ Vᴴ)
 
 /-- On two sites, the configuration-indexed tensor power is the Kronecker square. -/
 theorem reindex_tensorPower_two
     (V : Matrix (Fin e) (Fin d) ℂ) :
     Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
         (_root_.finTwoArrowEquiv (Fin d))
-        (Matrix.tensorPower 2 V) = V ⊗ₖ V := by
+        (Matrix.piKronecker fun _ : Fin 2 ↦ V) = V ⊗ₖ V := by
   ext ⟨i, j⟩ ⟨a, b⟩
-  simp [Matrix.reindex_apply, Matrix.tensorPower_apply,
+  simp [Matrix.reindex_apply, Matrix.piKronecker_apply,
     Matrix.kroneckerMap_apply, _root_.finTwoArrowEquiv]
 
 /-- Reindex a pair of bra and ket configurations as a configuration of pairs. -/
@@ -147,11 +147,11 @@ virtual boundary matrix \(X\) on both sides. -/
 theorem singleKrausMap_tensorPower_physCloseN
     (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) (N : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    singleKrausMap (Matrix.tensorPower N V) (physCloseN M N X) =
+    singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V) (physCloseN M N X) =
       physCloseN (changePhysicalBasis V M) N X := by
   ext s t
   simp only [singleKrausMap_apply, Matrix.mul_apply,
-    Matrix.conjTranspose_apply, Matrix.tensorPower_apply, physCloseN_apply,
+    Matrix.conjTranspose_apply, Matrix.piKronecker_apply, physCloseN_apply,
     evalWord_changePhysicalBasis_ofFn, Matrix.sum_mul, Matrix.smul_mul,
     Matrix.trace_sum, Matrix.trace_smul, smul_eq_mul, star_prod]
   have hexpand :
@@ -218,7 +218,7 @@ This is the configuration-index form of
 -/
 theorem singleKrausMap_tensorPower_mpo
     (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) (N : ℕ) :
-    singleKrausMap (Matrix.tensorPower N V) (mpo M N) =
+    singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ V) (mpo M N) =
       mpo (changePhysicalBasis V M) N := by
   simpa only [physCloseN_identity_eq_mpo] using
     singleKrausMap_tensorPower_physCloseN V M N
@@ -232,16 +232,16 @@ theorem isMPDO_of_changePhysicalBasis_isMPDO_of_isometry
     IsMPDO M := by
   intro N hN
   apply Matrix.posSemidef_of_singleKraus_isometry
-    (Matrix.tensorPower N V) (tensorPower_isometry V hV N)
+    (Matrix.piKronecker fun _ : Fin N ↦ V) (tensorPower_isometry V hV N)
   rw [singleKrausMap_tensorPower_mpo]
   exact hM N hN
 
 /-- The sitewise tensor power of a Hermitian one-site matrix is Hermitian. -/
 theorem tensorPower_isHermitian
     {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian) (N : ℕ) :
-    (Matrix.tensorPower N P).IsHermitian := by
+    (Matrix.piKronecker fun _ : Fin N ↦ P).IsHermitian := by
   ext s t
-  simp only [Matrix.conjTranspose_apply, Matrix.tensorPower_apply, star_prod]
+  simp only [Matrix.conjTranspose_apply, Matrix.piKronecker_apply, star_prod]
   apply Finset.prod_congr rfl
   intro n _
   exact hP.apply (s n) (t n)

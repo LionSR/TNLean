@@ -36,7 +36,7 @@ from its complex conjugate at odd lengths. -/
 theorem stringPhaseTensor_fullRing_I_eq_pow (L : ℕ)
     (hL : mpvState stringPhaseTensor L ≠ 0) :
     mpvExpectation stringPhaseTensor L
-      (Matrix.finKronecker fun _ : Fin L =>
+      (Matrix.piKronecker fun _ : Fin L =>
         Complex.I • (1 : Matrix (Fin 4) (Fin 4) ℂ)) = Complex.I ^ L := by
   apply mpvExpectation_finKronecker_const_eq_phase_pow stringPhaseTensor
     (Complex.I • 1) 1 Complex.I (by simp) ?_ L hL
@@ -47,7 +47,7 @@ theorem stringPhaseTensor_fullRing_I_eq_pow (L : ℕ)
 limit for the scalar twist `-1`. This only checks phase-sensitive convergence. -/
 theorem stringPhaseTensor_fullRing_neg_one_not_tendsto :
     ¬ ∃ z : ℂ, Tendsto (fun L : ℕ => mpvExpectation stringPhaseTensor L
-      (Matrix.finKronecker fun _ : Fin L => (-1 : Matrix (Fin 4) (Fin 4) ℂ)))
+      (Matrix.piKronecker fun _ : Fin L => (-1 : Matrix (Fin 4) (Fin 4) ℂ)))
       atTop (nhds z) := by
   apply pureCanonical_mpvExpectation_fullRing_not_tendsto stringPhaseTensor
     ((1 / 2 : ℂ) • 1) stringPhaseTensor_canonical.1

@@ -132,17 +132,17 @@ $\rho^{(N)}(M)=I^{\otimes N}+\sigma_z^{\otimes N}$.
 Source: CPSV16, arXiv:1606.00608, Example 4.12, lines 933--936. -/
 theorem rho_eq_finKronecker (N : ℕ) (_hN : 0 < N) :
     mpo M N =
-      Matrix.finKronecker (fun _ : Fin N => (1 : Matrix (Fin 2) (Fin 2) ℂ)) +
-      Matrix.finKronecker (fun _ : Fin N => sigmaZ) := by
+      Matrix.piKronecker (fun _ : Fin N => (1 : Matrix (Fin 2) (Fin 2) ℂ)) +
+      Matrix.piKronecker (fun _ : Fin N => sigmaZ) := by
   rw [rho_eq_diagonal]
   ext σ τ
   by_cases hστ : σ = τ
   · subst τ
-    simp [Matrix.finKronecker_apply, configurationSign, siteSign, sigmaZ,
+    simp [Matrix.piKronecker_apply, configurationSign, siteSign, sigmaZ,
       Matrix.diagonal_apply_eq]
   · rw [Matrix.diagonal_apply_ne _ hστ]
     obtain ⟨k, hk⟩ := Function.ne_iff.mp hστ
-    simp only [Matrix.add_apply, Matrix.finKronecker_apply]
+    simp only [Matrix.add_apply, Matrix.piKronecker_apply]
     have hone : ∏ n, (1 : Matrix (Fin 2) (Fin 2) ℂ) (σ n) (τ n) = 0 := by
       apply Finset.prod_eq_zero (Finset.mem_univ k)
       exact Matrix.one_apply_ne hk
