@@ -43,17 +43,14 @@ theorem exists_pos_hamiltonian_parentChainInteraction_gap_over_residues
   classical
   let : NeZero m := ⟨Nat.ne_of_gt hm⟩
   choose δ hδ hGap using fun r : Fin m =>
-    LinearMap.exists_pos_mul_norm_le_of_mem_orthogonal_ker
-      (Matrix.toEuclideanLin (parentChainInteraction A R (W + r.val)).hamiltonian)
+    ManyBody.exists_pos_forall_hasEigenvalue
+      (posSemidef_hamiltonian_parentChainInteraction A R (W + r.val))
   let η := Finset.univ.inf' (Finset.univ_nonempty : (Finset.univ : Finset (Fin m)).Nonempty) δ
   have hη : 0 < η := by
     simp only [η, Finset.lt_inf'_iff, Finset.mem_univ, forall_const]
     exact hδ
-  refine ⟨η, hη, fun r hr => (ManyBody.forall_hasEigenvalue_iff_norm
-    (posSemidef_hamiltonian_parentChainInteraction A R (W + r))).mpr fun v hv => ?_⟩
-  exact (mul_le_mul_of_nonneg_right
-    (Finset.inf'_le δ (Finset.mem_univ (⟨r, hr⟩ : Fin m))) (norm_nonneg v)).trans
-    (hGap ⟨r, hr⟩ v hv)
+  exact ⟨η, hη, fun r hr μ hμ => (hGap ⟨r, hr⟩ μ hμ).imp_right
+    (Complex.real_le_real.mpr (Finset.inf'_le δ (Finset.mem_univ (⟨r, hr⟩ : Fin m)))).trans⟩
 
 /-- Residue bounds of the Hamiltonian of the parent interaction on the open chain beyond a
 common quotient threshold give the same gap at every sufficiently large original length.

@@ -77,10 +77,7 @@ theorem exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
       (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) ν → ν = 0 ∨ (γ : ℂ) ≤ ν)
     (fun N γ δ hle hgap ν hν ↦
       (hgap ν hν).imp_right (Complex.real_le_real.mpr hle).trans)
-    (fun N ↦ by
-      obtain ⟨η, hη, hgap⟩ := LinearMap.exists_pos_mul_norm_le_of_mem_orthogonal_ker
-        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian)
-      exact ⟨η, hη, (ManyBody.forall_hasEigenvalue_iff_norm (hpos N)).mpr hgap⟩)
+    (fun N ↦ ManyBody.exists_pos_forall_hasEigenvalue (hpos N))
     (M := 2 * p) (δ := κ * δ / (2 * p - R + 1 : ℕ))
     (div_pos (mul_pos hκ hδ) (Nat.cast_pos.mpr (by omega))) ?_
   intro N hN

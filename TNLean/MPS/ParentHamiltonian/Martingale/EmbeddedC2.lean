@@ -133,12 +133,8 @@ theorem unit_gap_hamiltonian_restrict_parentChainInteraction (A : MPSTensor d D)
     ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
         fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian) μ →
-      μ = 0 ∨ (1 : ℂ) ≤ μ := by
-  have h := (ManyBody.forall_hasEigenvalue_iff_norm (Δ := 1)
-    (posSemidef_hamiltonian_restrict_parentChainInteraction A L N _)).mpr fun v hv ↦ by
-      rw [one_mul,
-        norm_toEuclideanLin_hamiltonian_restrict_parentChainInteraction_of_mem_orthogonal_ker
-          A hLn hnN v hv]
-  simpa only [Complex.ofReal_one] using h
+      μ = 0 ∨ (1 : ℂ) ≤ μ :=
+  ManyBody.forall_hasEigenvalue_one_of_isStarProjection
+    (isStarProjection_hamiltonian_restrict_parentChainInteraction A hLn hnN)
 
 end MPSTensor
