@@ -545,7 +545,7 @@ decomposition.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)--(3), pages 3--4. -/
 theorem placeAlong_ringWindow_commute_of_etaPair_decomposition
-    {K N : ℕ} [NeZero N] (hN : 2 ≤ N) (dl dr : Fin K → ℕ)
+    {K N : ℕ} (hN : 2 ≤ N) (dl dr : Fin K → ℕ)
     (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
     (η : (q h : Fin K) →
       Matrix (Matrix.EtaEdgeIndex dl dr q h) (Matrix.EtaEdgeIndex dl dr q h) ℂ)
@@ -569,6 +569,7 @@ theorem placeAlong_ringWindow_commute_of_etaPair_decomposition
         placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
           (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
             (finTwoArrowEquiv (Fin d)).symm B) := by
+  have : NeZero N := ⟨by omega⟩
   classical
   apply (Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
     (Matrix.etaCyclicEdgeEquiv dl dr e)).injective

@@ -278,7 +278,7 @@ theorem exists_isUnitaryCircuit_sectorEncoder_exact
       (ι : (j : Fin b) → Fin (Dj j) → Fin D),
       (∀ j, Function.Injective (ι j)) →
       (∀ i j, i ≠ j → ∀ a a', ι i a ≠ ι j a') →
-      (∀ j, 0 < Dj j) → ∀ (N : ℕ) [NeZero N] (hsize : 3 * r ≤ N),
+      (∀ j, 0 < Dj j) → ∀ (N : ℕ) (hsize : 3 * r ≤ N),
       IsInjectiveOn (blockTensor (blockSum A ι fun _ => 1) N)
         (blockPairs ι : Set (Fin D × Fin D)) →
       ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
@@ -288,7 +288,8 @@ theorem exists_isUnitaryCircuit_sectorEncoder_exact
   classical
   obtain ⟨C, hC⟩ := exists_isUnitaryCircuit_registerCfg_of_pairProductState_supported
     hr hdig hdig₀ hD
-  refine ⟨C, fun {Dj} A ι hι hdisj hDj N _ hsize hinj => ?_⟩
+  refine ⟨C, fun {Dj} A ι hι hdisj hDj N hsize hinj => ?_⟩
+  have : NeZero N := ⟨by omega⟩
   let S := blockPairs ι
   have hV := injective_sectorColumnMatrix_of_isInjectiveOn A ι hι hdisj hDj (NeZero.ne N) hinj
   let Q := Matrix.polarIso (sectorCoefficientMatrix A ι N)

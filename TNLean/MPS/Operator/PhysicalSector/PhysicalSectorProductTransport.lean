@@ -269,11 +269,12 @@ factorization and the complete positive commuting product form from injectivity
 and SAL; the present theorem records only the conditional product identity.
 Documented in `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 private theorem mpo_eq_product_physicalBond_of_three_le
-    (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N] (hN : 3 ≤ N) :
+    (F : PhysicalSectorFactorization K) {N : ℕ} (hN : 3 ≤ N) :
     mpo K N =
       (List.ofFn fun i : Fin N ↦
         placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ N) i)
           F.physicalBond).prod := by
+  have : NeZero N := ⟨by omega⟩
   let V := F.physicalCoordinateMatrixN N
   have htransport : singleKrausMap V (mpo K N) =
       singleKrausMap V

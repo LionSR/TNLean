@@ -375,12 +375,12 @@ theorem sectorCoordinateBond_etaPair_decomposition
 /-- For every length at least three, the sector-coordinate MPO is exactly
 the ordered product of the translated sector bonds. -/
 theorem mpo_sectorCoordinateTensor_eq_product_sectorBond
-    (F : PhysicalSectorFactorization K) {N : ℕ} [NeZero N]
-    (hN : 3 ≤ N) :
+    (F : PhysicalSectorFactorization K) {N : ℕ} (hN : 3 ≤ N) :
     mpo F.sectorCoordinateTensor N =
       (List.ofFn fun i : Fin N ↦
         placeAlong (X := fun _ ↦ Fin (Fintype.card (SectorSiteIndex F)))
           (ringWindow (by omega : 2 ≤ N) i) F.sectorBond).prod := by
+  have : NeZero N := ⟨by omega⟩
   have hcyclic := reindex_product_placeAlong_ringWindow_of_etaPair_decomposition
     (d := Fintype.card (SectorSiteIndex F)) (N := N) (by omega)
     F.leftDim F.rightDim F.etaSectorFinEquiv F.neighboringOperator
