@@ -71,48 +71,52 @@ theorem mixedEndpointColumnSector_conj_swap (site : Fin 2) :
 /-- The canonical right-endpoint interaction is the transported left-endpoint
 interaction for the reversed pair. Source: arXiv:2203.12563, Section 5,
 lines 1690–1692. -/
-theorem parentInteractionES_mixedEndpointRightTensor_eq_conj
+theorem parentInteraction_mixedEndpointRightTensor_eq_conj
     (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    parentInteractionES (mixedEndpointRightTensor A₁ D₀) 2 =
+    Matrix.toEuclideanLin
+      (LinearMap.toMatrix' (parentInteraction (mixedEndpointRightTensor A₁ D₀) 2)) =
       (physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) 2).toLinearEquiv.conj
-        (parentInteractionES (mixedEndpointLeftTensor A₁ D₀) 2) :=
-  parentInteractionES_reindexPhysical_equiv _ _ _
+        (Matrix.toEuclideanLin
+          (LinearMap.toMatrix' (parentInteraction (mixedEndpointLeftTensor A₁ D₀) 2))) :=
+  toEuclideanLin_toMatrix'_parentInteraction_reindexPhysical_equiv _ _ _
 
 /-- The actual extended second-endpoint term is bounded by the canonical
 embedded right-endpoint term. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpointParentInteraction_one_le_parentInteractionES
+theorem mixedEndpointParentInteraction_one_le_parentInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap ≤
-      parentInteractionES (mixedEndpointRightTensor A₁ D₀) 2 := by
+    Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 1) ≤
+      Matrix.toEuclideanLin
+        (LinearMap.toMatrix' (parentInteraction (mixedEndpointRightTensor A₁ D₀) 2)) := by
   rw [mixedEndpointParentInteraction_one_eq_conj_swap,
-    parentInteractionES_mixedEndpointRightTensor_eq_conj]
+    parentInteraction_mixedEndpointRightTensor_eq_conj]
   exact ((physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) 2).conj_le_conj_iff
     _ _).mpr
-    (mixedEndpointParentInteraction_zero_le_parentInteractionES A₁ A₀)
+    (mixedEndpointParentInteraction_zero_le_parentInteraction A₁ A₀)
 
 /-- The actual extended second-endpoint term and its two outer first-sector
 penalties bound the canonical embedded right-endpoint term.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem parentInteractionES_mixedEndpointRightTensor_le
+theorem parentInteraction_mixedEndpointRightTensor_le
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    parentInteractionES (mixedEndpointRightTensor A₁ D₀) 2 ≤
-      (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap +
+    Matrix.toEuclideanLin
+      (LinearMap.toMatrix' (parentInteraction (mixedEndpointRightTensor A₁ D₀) 2)) ≤
+      Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 1) +
         mixedEndpointRowSector D₀ D₁ 0 + mixedEndpointColumnSector D₀ D₁ 1 := by
   have h :=
     ((physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) 2).conj_le_conj_iff
-     _ _).mpr (parentInteractionES_mixedEndpointLeftTensor_le A₁ A₀)
+     _ _).mpr (parentInteraction_mixedEndpointLeftTensor_le A₁ A₀)
   simpa only [map_add, map_sub, mixedEndpoint_swap_conj_one, mixedEndpointRowSector_conj_swap,
     mixedEndpointColumnSector_conj_swap,
     sub_sub_cancel,
     ← mixedEndpointParentInteraction_one_eq_conj_swap,
-    ← parentInteractionES_mixedEndpointRightTensor_eq_conj] using h
+    ← parentInteraction_mixedEndpointRightTensor_eq_conj] using h
 
 /-- The first-column first-sector penalty lies below the actual second-endpoint
 interaction. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpoint_columnSector_zero_le_parentInteraction_one
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
     mixedEndpointColumnSector D₀ D₁ 0 ≤
-      (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap := by
+      Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 1) := by
   have h :=
     ((physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) 2).conj_le_conj_iff
      _ _).mpr
@@ -126,7 +130,7 @@ interaction. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpoint_rowSector_one_le_parentInteraction_one
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
     mixedEndpointRowSector D₀ D₁ 1 ≤
-      (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap := by
+      Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 1) := by
   have h :=
     ((physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) 2).conj_le_conj_iff
      _ _).mpr

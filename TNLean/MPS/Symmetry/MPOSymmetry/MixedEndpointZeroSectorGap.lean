@@ -72,10 +72,11 @@ theorem bondInterpolationMatrix_zeroSector :
 /-- The actual extended local interaction in this comparator is exactly the
 ordinary `A₀` parent interaction. No injectivity is needed for the equality.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpointParentInteraction_zeroSector_eq_parentInteractionES
+theorem mixedEndpointParentInteraction_zeroSector_eq_toMatrix'_parentInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) :
-    (mixedEndpointParentInteraction A₀ emptyEndpointTensor 0).toLinearMap =
-      parentInteractionES A₀ 2 := by
+    mixedEndpointParentInteraction A₀ emptyEndpointTensor 0 =
+      LinearMap.toMatrix' (parentInteraction A₀ 2) := by
+  apply Matrix.toEuclideanLin.injective
   have hsupport :
       (insertedTwoSiteMap (mixedEndpointBase A₀ emptyEndpointTensor)
         (bondInterpolationMatrix D₀ 0 0)).range = groundSpaceES A₀ 2 := by
@@ -85,17 +86,19 @@ theorem mixedEndpointParentInteraction_zeroSector_eq_parentInteractionES
   have hproj := congrArg
     (fun S : Submodule ℂ (EuclideanSpace ℂ (Cfg (D₀ * D₀) 2)) => S.starProjection)
     hsupport
-  rw [mixedEndpointParentInteraction, hproj]
-  simp only [parentInteractionES, Submodule.starProjection_orthogonal']
+  rw [toEuclideanLin_mixedEndpointParentInteraction, hproj,
+    toEuclideanLin_toMatrix'_parentInteraction]
+  simp only [Submodule.starProjection_orthogonal']
 
 /-- The full actual nonwrapping sum is the ordinary open parent Hamiltonian
 at every volume. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem openInteractionHamiltonianES_zeroSector_eq_openParentHamiltonianES
     (A₀ : MPSTensor (D₀ * D₀) D₀) (M : ℕ) :
     openInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ emptyEndpointTensor 0).toLinearMap M =
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ emptyEndpointTensor 0)) M =
       Matrix.toEuclideanLin (parentChainInteraction A₀ 2 M).hamiltonian := by
-  rw [mixedEndpointParentInteraction_zeroSector_eq_parentInteractionES]
+  rw [mixedEndpointParentInteraction_zeroSector_eq_toMatrix'_parentInteraction,
+    toEuclideanLin_toMatrix'_parentInteraction]
   exact openInteractionHamiltonianES_parentInteractionES A₀ (by norm_num : 0 < 2) M
 
 /-- Every physical configuration is active in the zero second-sector family.

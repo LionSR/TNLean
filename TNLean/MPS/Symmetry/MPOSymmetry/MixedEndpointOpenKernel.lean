@@ -231,10 +231,11 @@ theorem mixedEndpoint_open_ker_eq
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N) :
     LinearMap.ker (openInteractionHamiltonianES
-      (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N) =
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N) =
       (insertedBoundaryMap (mixedEndpointBase A₀ A₁)
-        (bondInterpolationMatrix D₀ D₁ γ) N).range :=
-  ker_openInteractionHamiltonianES_inserted_eq _
+        (bondInterpolationMatrix D₀ D₁ γ) N).range := by
+  rw [toEuclideanLin_mixedEndpointParentInteraction]
+  exact ker_openInteractionHamiltonianES_inserted_eq _
     (isInjective_mixedEndpointBase A₀ A₁ h₀ h₁) _
     (bondInterpolationMatrix_ne_zero hD₀ hD₁ γ) hN
 
@@ -245,7 +246,7 @@ theorem mixedEndpoint_open_ker_finrank
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N) :
     Module.finrank ℂ (LinearMap.ker (openInteractionHamiltonianES
-      (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N)) =
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N)) =
       (D₀ + D₁) * (D₀ + D₁) := by
   rw [mixedEndpoint_open_ker_eq A₀ A₁ h₀ h₁ hD₀ hD₁ γ hN]
   exact finrank_mixedEndpoint_extendedBoundarySupport A₀ A₁ h₀ h₁ hD₀ hD₁ γ (by omega)
@@ -258,7 +259,7 @@ theorem continuous_mixedEndpoint_open_ker_starProjection
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁) (hN : 2 ≤ N) :
     Continuous fun γ : ℝ => (LinearMap.ker (openInteractionHamiltonianES
-      (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N)).starProjection := by
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N)).starProjection := by
   simp_rw [mixedEndpoint_open_ker_eq A₀ A₁ h₀ h₁ hD₀ hD₁ _ hN]
   exact continuous_mixedEndpoint_extendedBoundarySupport_starProjection
     A₀ A₁ h₀ h₁ hD₀ hD₁ (by omega)

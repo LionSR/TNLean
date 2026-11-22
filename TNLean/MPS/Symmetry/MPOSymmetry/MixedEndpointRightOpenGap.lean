@@ -32,15 +32,17 @@ theorem exists_uniform_mixedEndpoint_open_one_gap
     (hA₁ : Kraus.IsInjective A₁) :
     ∃ W : ℕ, 3 ≤ W ∧ ∃ δ : ℝ, 0 < δ ∧
       ∀ N : ℕ, W ≤ N → ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap N))ᗮ,
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 1)) N))ᗮ,
         δ * ‖v‖ ≤ ‖openInteractionHamiltonianES
-          (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap N v‖ := by
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 1)) N v‖ := by
   obtain ⟨W, hW, δ, hδ, hGap⟩ := exists_uniform_mixedEndpoint_open_zero_gap A₁ A₀ hA₁
   refine ⟨W, hW, δ, hδ, ?_⟩
   intro N hWN v hv
   let U := physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N
-  let H := openInteractionHamiltonianES (mixedEndpointParentInteraction A₁ A₀ 0).toLinearMap N
-  let K := openInteractionHamiltonianES (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap N
+  let H := openInteractionHamiltonianES
+    (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₁ A₀ 0)) N
+  let K := openInteractionHamiltonianES
+    (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 1)) N
   have hintertwine (x : EuclideanSpace ℂ (Cfg ((D₁ + D₀) * (D₁ + D₀)) N)) :
       K (U x) = U (H x) :=
     mixedEndpoint_openInteractionHamiltonian_one_apply_swap A₀ A₁ N x
@@ -69,9 +71,9 @@ theorem exists_uniform_mixedEndpoint_open_endpoints_gap
     ∃ W : ℕ, 3 ≤ W ∧ ∃ δ : ℝ, 0 < δ ∧
       ∀ p : ℝ, p = 0 ∨ p = 1 → ∀ N : ℕ, W ≤ N →
         ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES
-          (mixedEndpointParentInteraction A₀ A₁ p).toLinearMap N))ᗮ,
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ p)) N))ᗮ,
           δ * ‖v‖ ≤ ‖openInteractionHamiltonianES
-            (mixedEndpointParentInteraction A₀ A₁ p).toLinearMap N v‖ := by
+            (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ p)) N v‖ := by
   obtain ⟨W₀, hW₀, δ₀, hδ₀, hGap₀⟩ := exists_uniform_mixedEndpoint_open_zero_gap A₀ A₁ hA₀
   obtain ⟨W₁, hW₁, δ₁, hδ₁, hGap₁⟩ := exists_uniform_mixedEndpoint_open_one_gap A₀ A₁ hA₁
   refine ⟨max W₀ W₁, hW₀.trans (le_max_left _ _), min δ₀ δ₁, lt_min hδ₀ hδ₁, ?_⟩

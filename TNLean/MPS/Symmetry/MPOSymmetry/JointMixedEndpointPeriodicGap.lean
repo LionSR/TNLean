@@ -39,22 +39,29 @@ Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem jointMixedEndpoint_periodic_comparison
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N) :
-    periodicInteractionHamiltonianES (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N ≤
+    periodicInteractionHamiltonianES
+      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N ≤
         parentHamiltonianES (toTensorFromBlocks (μ := fun _ => 1)
           (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N ∧
       parentHamiltonianES (toTensorFromBlocks (μ := fun _ => 1)
         (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N ≤
         periodicInteractionHamiltonianES
-          (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N +
+          (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N +
           jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N := by
+  have hE : Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction
+      (toTensorFromBlocks (μ := fun _ => 1) (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2)) =
+      parentInteractionES (toTensorFromBlocks (μ := fun _ => 1)
+        (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 :=
+    toEuclideanLin_toMatrix'_parentInteraction _ _
   constructor
-  · simpa only [periodicInteractionHamiltonianES_parentInteractionES _ (by decide : 0 < 2)] using
+  · simpa only [hE,
+      periodicInteractionHamiltonianES_parentInteractionES _ (by decide : 0 < 2)] using
       periodicInteractionHamiltonianES_mono
-        (jointMixedEndpointParentInteraction_zero_le_parentInteractionES A₀ A₁) N
+        (jointMixedEndpointParentInteraction_zero_le_parentInteraction A₀ A₁) N
   · have h := Finset.sum_le_sum fun (i : Fin N) (_ : i ∈ Finset.univ) =>
       periodicLocalInteractionES_mono
-        (parentInteractionES_jointMixedEndpointLeftTensor_le A₀ A₁) i
-    simp only [periodicLocalInteractionES_parentInteractionES _ (by decide : 0 < 2),
+        (parentInteraction_jointMixedEndpointLeftTensor_le A₀ A₁) i
+    simp only [hE, periodicLocalInteractionES_parentInteractionES _ (by decide : 0 < 2),
       periodicLocalInteractionES_add, Finset.sum_add_distrib] at h
     rw [← parentHamiltonianES_eq_sum_localTermES] at h
     rw [jointMixedPeriodicPhasePenalty_eq_sum_outer hN]
@@ -66,7 +73,8 @@ Section 5, lines 1695–1777. -/
 theorem jointMixedEndpoint_periodic_mul_activeProjection
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N) :
-    periodicInteractionHamiltonianES (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N *
+    periodicInteractionHamiltonianES
+      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N *
         jointMixedPeriodicActiveProjection d₀ d₁ D₀ D₁ N =
       parentHamiltonianES (toTensorFromBlocks (μ := fun _ => 1)
         (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N *
@@ -74,7 +82,8 @@ theorem jointMixedEndpoint_periodic_mul_activeProjection
   obtain ⟨hLower, hUpper⟩ := jointMixedEndpoint_periodic_comparison A₀ A₁ hN
   have hDifference : parentHamiltonianES (toTensorFromBlocks (μ := fun _ => 1)
       (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N -
-      periodicInteractionHamiltonianES (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N ≤
+      periodicInteractionHamiltonianES
+        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N ≤
       jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N := by
     exact sub_le_iff_le_add.mpr (by simpa only [add_comm] using hUpper)
   apply LinearMap.ext
@@ -90,7 +99,7 @@ theorem jointMixedEndpoint_periodic_active_of_mem_ker
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N)
     (v : EuclideanSpace ℂ (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) N))
     (hv : v ∈ LinearMap.ker (periodicInteractionHamiltonianES
-      (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N)) :
+      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N)) :
     jointMixedPeriodicActiveProjection d₀ d₁ D₀ D₁ N v = v :=
   LinearMap.IsSymmetricProjection.apply_eq_self_of_one_sub_le_twice_of_mem_ker
     jointMixedPeriodicActiveProjection_isSymmetricProjection
@@ -103,11 +112,12 @@ theorem jointMixedEndpoint_periodic_ker_eq
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N) :
     LinearMap.ker (periodicInteractionHamiltonianES
-      (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N) =
+      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N) =
         LinearMap.ker (parentHamiltonianES (toTensorFromBlocks (μ := fun _ => 1)
           (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N) :=
   (periodicInteractionHamiltonianES_isPositive
-    (jointMixedEndpointParentInteraction_isPositive A₀ A₁ 0) N).ker_eq_of_le_of_eq_on_projection
+    (Matrix.isPositive_toEuclideanLin_iff.mpr
+      (posSemidef_jointMixedEndpointParentInteraction A₀ A₁ 0)) N).ker_eq_of_le_of_eq_on_projection
       jointMixedPeriodicActiveProjection_isSymmetricProjection
       (jointMixedEndpoint_periodic_comparison A₀ A₁ hN).1
       (jointMixedEndpoint_periodic_mul_activeProjection A₀ A₁ hN)
@@ -125,11 +135,12 @@ theorem jointMixedEndpoint_periodic_norm_gap
       δ * ‖v‖ ≤ ‖parentHamiltonianES (toTensorFromBlocks (μ := fun _ => 1)
         (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N v‖) :
     ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-      (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N))ᗮ,
+      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N))ᗮ,
       min δ (1 / 2) * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-        (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N v‖ :=
+        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N v‖ :=
   (periodicInteractionHamiltonianES_isPositive
-    (jointMixedEndpointParentInteraction_isPositive A₀ A₁ 0) N).norm_gap_of_reducing_projection
+    (Matrix.isPositive_toEuclideanLin_iff.mpr
+      (posSemidef_jointMixedEndpointParentInteraction A₀ A₁ 0)) N).norm_gap_of_reducing_projection
       (parentHamiltonianES_isPositive _ 2 N)
       jointMixedPeriodicActiveProjection_isSymmetricProjection
       (jointMixedPeriodicActiveProjection_commute A₀ A₁ hN)
@@ -197,7 +208,7 @@ theorem jointMixedEndpoint_periodic_groundSpace_eq
     (h₀ : WordTupleSpanTop A₀ 1) (h₁ : WordTupleSpanTop A₁ 1)
     (hD₀ : ∀ x, 0 < D₀ x) (hN : 2 ≤ N) :
     LinearMap.ker (periodicInteractionHamiltonianES
-      (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N) =
+      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N) =
         (blockPeriodicMpvMapES (jointMixedEndpointLeftTensor A₀ d₁ D₁) N).range := by
   by_cases hd : jointMixedPhysicalDim d₀ d₁ D₀ D₁ = 0
   · ext v
@@ -220,7 +231,7 @@ theorem jointMixedEndpoint_periodic_groundSpace_eq_actual
     (h₀ : WordTupleSpanTop A₀ 1) (h₁ : WordTupleSpanTop A₁ 1)
     (hD₀ : ∀ x, 0 < D₀ x) (hN : 2 ≤ N) :
     LinearMap.ker (periodicInteractionHamiltonianES
-      (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N) =
+      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N) =
         (blockPeriodicMpvMapES (jointMixedEndpointInterpolation A₀ A₁ 0) N).range := by
   have hMap : blockPeriodicMpvMapES (jointMixedEndpointInterpolation A₀ A₁ 0) N =
       blockPeriodicMpvMapES (jointMixedEndpointLeftTensor A₀ d₁ D₁) N := by
@@ -249,9 +260,9 @@ theorem exists_uniform_jointMixedEndpoint_periodic_gap
     (hD₀ : ∀ x, 0 < D₀ x) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, 2 ≤ N →
       ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N))ᗮ,
+        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N))ᗮ,
         δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N v‖ := by
+          (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N v‖ := by
   by_cases hd : jointMixedPhysicalDim d₀ d₁ D₀ D₁ = 0
   · refine ⟨1, by norm_num, ?_⟩
     intro N hN v _

@@ -158,7 +158,7 @@ theorem mixedEndpointOpenInnerPenalty_le_twice
     (hN : 2 ≤ N) :
     mixedEndpointOpenInnerPenalty D₀ D₁ N ≤
       (2 : ℂ) • openInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N := by
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N := by
   have hcol (i : NonwrappingStart 2 N) := periodicLocalInteractionES_mono
     (mixedEndpoint_one_sub_columnSector_zero_le_parentInteraction A₀ A₁) i.1
   have hrow (i : NonwrappingStart 2 N) := periodicLocalInteractionES_mono
@@ -356,7 +356,7 @@ theorem one_sub_mixedEndpointOpenActiveProjection_le_twice
     (hN : 2 ≤ N) :
     1 - mixedEndpointOpenActiveProjection D₀ D₁ N ≤
       (2 : ℂ) • openInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N :=
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N :=
   (one_sub_mixedEndpointOpenActiveProjection_le hN).trans
     (mixedEndpointOpenInnerPenalty_le_twice A₀ A₁ hN)
 
@@ -409,7 +409,7 @@ theorem mixedEndpointOpen_inactive_energy_lower_bound
     (hv : mixedEndpointOpenActiveProjection D₀ D₁ N v = 0) :
     (1 / 2 : ℝ) * ‖v‖ ^ 2 ≤
       (inner ℂ v (openInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N v)).re := by
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N v)).re := by
   have hpos := (LinearMap.le_def.mp
     (one_sub_mixedEndpointOpenActiveProjection_le_twice A₀ A₁ hN)).re_inner_nonneg_right v
   simp only [LinearMap.sub_apply, LinearMap.smul_apply, Module.End.one_apply, hv,
@@ -423,7 +423,7 @@ acts by boundary transport. Source: arXiv:2203.12563, Section 5, lines 1690–16
 theorem mixedEndpointRowSector_commute_parentInteraction_zero
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) (r : Fin 2) :
     Commute (mixedEndpointRowSector D₀ D₁ r)
-      (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap := by
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) := by
   have hs : Commute (mixedEndpointRowSector D₀ D₁ r)
       (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
         (bondInterpolationMatrix D₀ D₁ 0)).range.starProjection.toLinearMap := by
@@ -433,6 +433,7 @@ theorem mixedEndpointRowSector_commute_parentInteraction_zero
         (mixedEndpointRowSector_isSymmetric 1)
       rintro _ ⟨_, ⟨v, rfl⟩, rfl⟩
       exact ⟨v, (mixedEndpointRowSector_one_insertedTwoSiteMap A₀ A₁ v).symm⟩
+  rw [toEuclideanLin_mixedEndpointParentInteraction]
   exact (Commute.one_right _).sub_right hs
 
 /-- Both local column selectors reduce the actual extended first-endpoint
@@ -440,7 +441,7 @@ interaction. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpointColumnSector_commute_parentInteraction_zero
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) (r : Fin 2) :
     Commute (mixedEndpointColumnSector D₀ D₁ r)
-      (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap := by
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) := by
   have hs : Commute (mixedEndpointColumnSector D₀ D₁ r)
       (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
         (bondInterpolationMatrix D₀ D₁ 0)).range.starProjection.toLinearMap := by
@@ -450,6 +451,7 @@ theorem mixedEndpointColumnSector_commute_parentInteraction_zero
       rintro _ ⟨_, ⟨v, rfl⟩, rfl⟩
       exact ⟨v, (mixedEndpointColumnSector_zero_insertedTwoSiteMap A₀ A₁ v).symm⟩
     · exact mixedEndpointColumnSector_commute_extendedSupport_starProjection A₀ A₁ _
+  rw [toEuclideanLin_mixedEndpointParentInteraction]
   exact (Commute.one_right _).sub_right hs
 
 /-- The first-sector row selector at an arbitrary site of the open chain.
@@ -475,7 +477,8 @@ theorem mixedEndpointChainRowSector_commute_openInteractionHamiltonianES
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hN : 2 ≤ N) (k : Fin N) :
     Commute (mixedEndpointChainRowSector D₀ D₁ k)
-      (openInteractionHamiltonianES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N) := by
+      (openInteractionHamiltonianES
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N) := by
   apply Commute.sum_right
   intro i _
   exact periodicLocalInteractionES_commute_siteDiagonal _ hN
@@ -489,7 +492,8 @@ theorem mixedEndpointChainColumnSector_commute_openInteractionHamiltonianES
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hN : 2 ≤ N) (k : Fin N) :
     Commute (mixedEndpointChainColumnSector D₀ D₁ k)
-      (openInteractionHamiltonianES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N) := by
+      (openInteractionHamiltonianES
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N) := by
   apply Commute.sum_right
   intro i _
   exact periodicLocalInteractionES_commute_siteDiagonal _ hN
@@ -502,7 +506,8 @@ theorem mixedEndpointOpenInnerPenalty_commute_openInteractionHamiltonianES
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hN : 2 ≤ N) :
     Commute (mixedEndpointOpenInnerPenalty D₀ D₁ N)
-      (openInteractionHamiltonianES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N) := by
+      (openInteractionHamiltonianES
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N) := by
   apply Commute.sum_left
   intro i _
   have hcol : periodicLocalInteractionES (mixedEndpointColumnSector D₀ D₁ 0) i.1 =
@@ -530,16 +535,18 @@ theorem mixedEndpointOpenActiveProjection_commute_openInteractionHamiltonianES
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hN : 2 ≤ N) :
     Commute (mixedEndpointOpenActiveProjection D₀ D₁ N)
-      (openInteractionHamiltonianES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N) := by
+      (openInteractionHamiltonianES
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N) := by
   let E := EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) N)
   let H : E →ₗ[ℂ] E :=
-    openInteractionHamiltonianES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N
+    openInteractionHamiltonianES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N
   let S : Submodule ℂ E := LinearMap.ker (mixedEndpointOpenInnerPenalty D₀ D₁ N)
   have hpos : H.IsPositive := by
     apply LinearMap.nonneg_iff_isPositive.mp
     exact Finset.sum_nonneg fun i _ => LinearMap.nonneg_iff_isPositive.mpr
       (periodicLocalInteractionES_isPositive
-        (mixedEndpointParentInteraction_isPositive A₀ A₁ 0) i.1)
+        (Matrix.isPositive_toEuclideanLin_iff.mpr
+      (posSemidef_mixedEndpointParentInteraction A₀ A₁ 0)) i.1)
   have hS : S.map H ≤ S := by
     rintro _ ⟨v, hv, rfl⟩
     have hc := congrArg (fun T => T v)

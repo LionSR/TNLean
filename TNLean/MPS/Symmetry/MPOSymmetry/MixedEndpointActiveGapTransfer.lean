@@ -36,11 +36,11 @@ theorem mixedEndpoint_open_norm_gap_of_active_norm_gap
     (hGap : ∀ x ∈ (LinearMap.ker (mixedEndpointActiveHamiltonian A₀ A₁ N))ᗮ,
       δ * ‖x‖ ≤ ‖mixedEndpointActiveHamiltonian A₀ A₁ N x‖) :
     ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES
-      (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap (N + 1 + 1)))ᗮ,
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) (N + 1 + 1)))ᗮ,
       min δ (1 / 2) * ‖v‖ ≤ ‖openInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap (N + 1 + 1) v‖ := by
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) (N + 1 + 1) v‖ := by
   let H := openInteractionHamiltonianES
-    (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap (N + 1 + 1)
+    (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) (N + 1 + 1)
   let K := mixedEndpointActiveHamiltonian A₀ A₁ N
   let U := mixedEndpointActiveLinearIsometry D₀ D₁ N
   let Q := mixedEndpointOpenActiveProjection D₀ D₁ (N + 1 + 1)
@@ -48,7 +48,8 @@ theorem mixedEndpoint_open_norm_gap_of_active_norm_gap
     apply LinearMap.nonneg_iff_isPositive.mp
     exact Finset.sum_nonneg fun i _ => LinearMap.nonneg_iff_isPositive.mpr
       (periodicLocalInteractionES_isPositive
-        (mixedEndpointParentInteraction_isPositive A₀ A₁ 0) i.1)
+        (Matrix.isPositive_toEuclideanLin_iff.mpr
+      (posSemidef_mixedEndpointParentInteraction A₀ A₁ 0)) i.1)
   have hK : K.IsPositive := mixedEndpointActiveHamiltonian_isPositive A₀ A₁ N
   have hleft (x : mixedEndpointActiveSpace D₀ D₁ N) : U.toLinearMap.adjoint (U x) = x :=
     LinearMap.congr_fun mixedEndpointActiveLinearIsometry_adjoint_comp x

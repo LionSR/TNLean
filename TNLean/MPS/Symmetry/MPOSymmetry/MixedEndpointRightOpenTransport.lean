@@ -141,9 +141,10 @@ variable {D₀ D₁ : ℕ}
 first-endpoint term for the reversed pair, on the same physical window. -/
 theorem mixedEndpoint_localInteraction_one_eq_conj_swap
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) (i : Fin N) :
-    periodicLocalInteractionES (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap i =
+    periodicLocalInteractionES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 1)) i =
       (physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N).toLinearEquiv.conj
-        (periodicLocalInteractionES (mixedEndpointParentInteraction A₁ A₀ 0).toLinearMap i) := by
+        (periodicLocalInteractionES
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₁ A₀ 0)) i) := by
   rw [mixedEndpointParentInteraction_one_eq_conj_swap,
     periodicLocalInteractionES_physicalReindex_conj]
 
@@ -151,9 +152,11 @@ theorem mixedEndpoint_localInteraction_one_eq_conj_swap
 actual first-endpoint open Hamiltonian for the reversed tensor pair. -/
 theorem mixedEndpoint_openInteractionHamiltonian_one_eq_conj_swap
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) (N : ℕ) :
-    openInteractionHamiltonianES (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap N =
+    openInteractionHamiltonianES
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 1)) N =
       (physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N).toLinearEquiv.conj
-        (openInteractionHamiltonianES (mixedEndpointParentInteraction A₁ A₀ 0).toLinearMap N) := by
+        (openInteractionHamiltonianES
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₁ A₀ 0)) N) := by
   rw [mixedEndpointParentInteraction_one_eq_conj_swap,
     openInteractionHamiltonianES_physicalReindex_conj]
 
@@ -162,14 +165,14 @@ the concrete sector-exchange isometry. -/
 theorem mixedEndpoint_openInteractionHamiltonian_one_apply_swap
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) (N : ℕ)
     (v : EuclideanSpace ℂ (Cfg ((D₁ + D₀) * (D₁ + D₀)) N)) :
-    openInteractionHamiltonianES (mixedEndpointParentInteraction A₀ A₁ 1).toLinearMap N
+    openInteractionHamiltonianES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 1)) N
         (physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N v) =
       physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N
         (openInteractionHamiltonianES
-          (mixedEndpointParentInteraction A₁ A₀ 0).toLinearMap N v) := by
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₁ A₀ 0)) N v) := by
   rw [mixedEndpoint_openInteractionHamiltonian_one_eq_conj_swap]
   change physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N
-    (openInteractionHamiltonianES (mixedEndpointParentInteraction A₁ A₀ 0).toLinearMap N
+    (openInteractionHamiltonianES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₁ A₀ 0)) N
       ((physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N).symm
         (physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N v))) = _
   rw [LinearIsometryEquiv.symm_apply_apply]

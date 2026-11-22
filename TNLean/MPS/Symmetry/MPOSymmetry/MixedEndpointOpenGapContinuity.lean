@@ -78,12 +78,13 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpoint_openInteractionHamiltonianES_eq_of_mem_Ioo
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     {γ : ℝ} (hγ : γ ∈ Set.Ioo (0 : ℝ) 1) (N : ℕ) :
-    openInteractionHamiltonianES (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N =
+    openInteractionHamiltonianES
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N =
       Matrix.toEuclideanLin
           (parentChainInteraction (mixedEndpointInterpolation A₀ A₁ γ) 2 N).hamiltonian := by
-  rw [mixedEndpointParentInteraction_eq_parentInteractionES A₀ A₁ hγ]
+  rw [mixedEndpointParentInteraction_eq_toMatrix'_parentInteraction A₀ A₁ hγ,
+    toEuclideanLin_toMatrix'_parentInteraction]
   exact openInteractionHamiltonianES_parentInteractionES _ (by norm_num) N
-
 
 /-- A strictly smaller gap of the actual fixed-window mixed open Hamiltonian
 persists near every real parameter, including either endpoint. The exact
@@ -95,20 +96,25 @@ theorem eventually_mixedEndpoint_open_gap
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁) (hN : 2 ≤ N)
     {γ₀ δ δ' : ℝ} (hδ : 0 < δ) (hδ' : δ' < δ)
     (hgap : ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES
-      (mixedEndpointParentInteraction A₀ A₁ γ₀).toLinearMap N))ᗮ,
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ₀)) N))ᗮ,
       δ * ‖v‖ ≤ ‖openInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ γ₀).toLinearMap N v‖) :
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ₀)) N v‖) :
     ∀ᶠ γ in 𝓝 γ₀, ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES
-      (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N))ᗮ,
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N))ᗮ,
       δ' * ‖v‖ ≤ ‖openInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N v‖ := by
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N v‖ := by
+  have hc : Continuous fun γ : ℝ => (openInteractionHamiltonianES
+      (Matrix.toEuclideanLin
+        (mixedEndpointParentInteraction A₀ A₁ γ)) N).toContinuousLinearMap := by
+    simp_rw [toEuclideanLin_mixedEndpointParentInteraction]
+    exact continuous_openInteractionHamiltonianES_family _ (continuous_const.sub
+      (continuous_mixedEndpoint_extendedSupport_starProjection A₀ A₁ h₀ h₁ hD₀ hD₁)) N
   exact ContinuousLinearMap.eventually_norm_gap_on_orthogonal
     (fun γ => (openInteractionHamiltonianES
-      (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N).toContinuousLinearMap)
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N).toContinuousLinearMap)
     (fun γ => LinearMap.ker (openInteractionHamiltonianES
-      (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N))
-    (continuous_openInteractionHamiltonianES_family _
-      (continuous_mixedEndpointParentInteraction A₀ A₁ h₀ h₁ hD₀ hD₁) N).continuousAt
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N))
+    hc.continuousAt
     (continuous_mixedEndpoint_open_ker_starProjection A₀ A₁ h₀ h₁ hD₀ hD₁ hN).continuousAt
     le_rfl hδ hδ' hgap
 
@@ -123,14 +129,19 @@ theorem exists_uniform_mixedEndpoint_open_gap_fixed_volume
     {S : Set ℝ} (hS : IsCompact S) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ γ ∈ S,
       ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N))ᗮ,
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N))ᗮ,
         δ * ‖v‖ ≤ ‖openInteractionHamiltonianES
-          (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N v‖ :=
-  ContinuousLinearMap.exists_uniform_norm_gap_of_compact
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N v‖ := by
+  have hc : Continuous fun γ : ℝ => (openInteractionHamiltonianES
+      (Matrix.toEuclideanLin
+        (mixedEndpointParentInteraction A₀ A₁ γ)) N).toContinuousLinearMap := by
+    simp_rw [toEuclideanLin_mixedEndpointParentInteraction]
+    exact continuous_openInteractionHamiltonianES_family _ (continuous_const.sub
+      (continuous_mixedEndpoint_extendedSupport_starProjection A₀ A₁ h₀ h₁ hD₀ hD₁)) N
+  exact ContinuousLinearMap.exists_uniform_norm_gap_of_compact
     (fun γ => (openInteractionHamiltonianES
-      (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N).toContinuousLinearMap)
-    (continuous_openInteractionHamiltonianES_family _
-      (continuous_mixedEndpointParentInteraction A₀ A₁ h₀ h₁ hD₀ hD₁) N)
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N).toContinuousLinearMap)
+    hc
     (continuous_mixedEndpoint_open_ker_starProjection A₀ A₁ h₀ h₁ hD₀ hD₁ hN) hS
 
 end MPOSymmetry

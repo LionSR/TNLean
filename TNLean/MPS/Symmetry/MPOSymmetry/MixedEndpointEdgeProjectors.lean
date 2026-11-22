@@ -243,7 +243,6 @@ def endpointLastEdgeCoreConstraintES (A₀ : MPSTensor (D₀ * D₀) D₀)
       EuclideanSpace ℂ (endpointLastEdgeCfg ι D₀) :=
   (endpointLastEdgeCoreSupportES A₀ ι)ᗮ.starProjection.toLinearMap
 
-
 /-- The actual first-edge canonical constraint is a symmetric projection.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpointFirstEdgeConstraintES_isSymmetricProjection

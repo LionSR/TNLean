@@ -174,10 +174,10 @@ Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem jointMixedEndpointParentInteraction_eq_conj_reflect_swap
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (γ : ℝ) :
-    (jointMixedEndpointParentInteraction A₀ A₁ γ).toLinearMap =
+    Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ γ) =
       (physicalReindexLinearIsometryEquiv
         (jointMixedEndpointPhysicalSwap d₀ d₁ D₀ D₁) 2).toLinearEquiv.conj
-          (jointMixedEndpointParentInteraction A₁ A₀ (1 - γ)).toLinearMap := by
+          (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₁ A₀ (1 - γ))) := by
   let U := physicalReindexLinearIsometryEquiv (jointMixedEndpointPhysicalSwap d₀ d₁ D₀ D₁) 2
   let S := (blockInsertedBoundaryMap (jointMixedEndpointBase A₁ A₀)
     (fun x => bondInterpolationMatrix (D₁ x) (D₀ x) (1 - γ)) 2).range
@@ -185,6 +185,8 @@ theorem jointMixedEndpointParentInteraction_eq_conj_reflect_swap
     (fun T : Submodule ℂ (EuclideanSpace ℂ (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2)) =>
       T.starProjection)
     (jointMixedEndpoint_extendedSupport_eq_map_reflect_swap A₀ A₁ γ)
+  rw [toEuclideanLin_jointMixedEndpointParentInteraction,
+    toEuclideanLin_jointMixedEndpointParentInteraction]
   apply LinearMap.ext
   intro v
   have hmap := Submodule.starProjection_map_apply U S v

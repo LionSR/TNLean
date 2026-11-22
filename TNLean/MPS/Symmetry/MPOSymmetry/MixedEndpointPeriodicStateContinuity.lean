@@ -191,9 +191,11 @@ Source: arXiv:2203.12563, Section 5, line 1690. -/
 theorem mixedEndpoint_periodicInteractionHamiltonianES_eq_of_mem_Ioo
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     {γ : ℝ} (hγ : γ ∈ Set.Ioo (0 : ℝ) 1) (N : ℕ) :
-    periodicInteractionHamiltonianES (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N =
+    periodicInteractionHamiltonianES
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N =
       parentHamiltonianES (mixedEndpointInterpolation A₀ A₁ γ) 2 N := by
-  rw [mixedEndpointParentInteraction_eq_parentInteractionES A₀ A₁ hγ]
+  rw [mixedEndpointParentInteraction_eq_toMatrix'_parentInteraction A₀ A₁ hγ,
+    toEuclideanLin_toMatrix'_parentInteraction]
   exact periodicInteractionHamiltonianES_parentInteractionES _ (by norm_num) N
 
 /-- The kernel of the actual extended periodic Hamiltonian is the line of the
@@ -207,7 +209,7 @@ theorem mixedEndpoint_periodic_ker_eq_range_periodicMpvLineMap
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (γ : unitInterval) (hN : 2 ≤ N) :
     LinearMap.ker (periodicInteractionHamiltonianES
-      (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N) =
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N) =
       (periodicMpvLineMap (mixedEndpointInterpolation A₀ A₁ γ) N).range := by
   by_cases hzero : (γ : ℝ) = 0
   · rw [hzero, mixedEndpoint_periodic_ker_eq A₀ A₁ hN,
@@ -237,7 +239,7 @@ theorem mixedEndpoint_periodic_groundSpace_finrank_closedInterval
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (γ : unitInterval) (hN : 2 ≤ N) :
     Module.finrank ℂ (LinearMap.ker (periodicInteractionHamiltonianES
-      (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N)) = 1 := by
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N)) = 1 := by
   rw [mixedEndpoint_periodic_ker_eq_range_periodicMpvLineMap A₀ A₁ h₀ h₁ γ hN,
     LinearMap.finrank_range_of_inj (periodicMpvLineMap_injective_of_mpv_ne_zero _
       (mpv_mixedEndpointInterpolation_ne_zero A₀ A₁ h₀ h₁ γ hN))]
@@ -253,7 +255,7 @@ theorem continuous_mixedEndpoint_periodic_ker_starProjection
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁) (hN : 2 ≤ N) :
     Continuous fun γ : unitInterval =>
       (LinearMap.ker (periodicInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N)).starProjection := by
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N)).starProjection := by
   have hT := continuous_periodicMpvLineMap_family
     (fun γ : unitInterval => mixedEndpointInterpolation A₀ A₁ γ)
     ((continuous_mixedEndpointInterpolation A₀ A₁).comp continuous_subtype_val) N
@@ -268,7 +270,7 @@ theorem continuous_mixedEndpoint_periodic_ker_starProjection
       (fun γ : unitInterval => ContinuousLinearMap.injectiveRangeProjector
         (periodicMpvLineMap (mixedEndpointInterpolation A₀ A₁ γ) N) (hTinj γ)) =
       (fun γ : unitInterval => (LinearMap.ker (periodicInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N)).starProjection) := by
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N)).starProjection) := by
     funext γ
     rw [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection]
     exact congrArg
@@ -289,16 +291,21 @@ theorem exists_uniform_mixedEndpoint_periodic_gap_fixed_volume
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁) (hN : 2 ≤ N) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval,
       ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N))ᗮ,
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N))ᗮ,
         δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N v‖ := by
-  have hH := (continuous_periodicInteractionHamiltonianES_family _
-    (continuous_mixedEndpointParentInteraction A₀ A₁ h₀ h₁
-      (NeZero.pos D₀) (NeZero.pos D₁)) N).comp
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N v‖ := by
+  have hc : Continuous fun γ : ℝ => (periodicInteractionHamiltonianES
+      (Matrix.toEuclideanLin
+        (mixedEndpointParentInteraction A₀ A₁ γ)) N).toContinuousLinearMap := by
+    simp_rw [toEuclideanLin_mixedEndpointParentInteraction]
+    exact continuous_periodicInteractionHamiltonianES_family _ (continuous_const.sub
+      (continuous_mixedEndpoint_extendedSupport_starProjection A₀ A₁ h₀ h₁
+        (NeZero.pos D₀) (NeZero.pos D₁))) N
+  have hH := hc.comp
     (continuous_subtype_val : Continuous fun γ : unitInterval => (γ : ℝ))
   obtain ⟨δ, hδ, hgap⟩ := ContinuousLinearMap.exists_uniform_norm_gap_of_compact
     (fun γ : unitInterval => (periodicInteractionHamiltonianES
-      (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N).toContinuousLinearMap)
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N).toContinuousLinearMap)
     hH (continuous_mixedEndpoint_periodic_ker_starProjection A₀ A₁ h₀ h₁ hN)
     (S := Set.univ) isCompact_univ
   exact ⟨δ, hδ, fun γ => hgap γ (Set.mem_univ γ)⟩

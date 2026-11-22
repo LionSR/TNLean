@@ -158,10 +158,10 @@ theorem toEuclideanLin_arbitraryPhysicalMixedInteraction_eq_one_sub_weakHopfAver
   have hcompat : MPOTensor.IsBoundaryCompatible Wh.tensor
       (arbitraryPhysicalMixedInterpolation A₀ A₁ γ) := hW ▸
     isBoundaryCompatible_arbitraryPhysicalMixedInterpolation A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ h₀ h₁ γ
-  rw [Wh.one_sub_weakHopfAverage_starProjection hcompat
+  rw [Wh.one_sub_weakHopfAverage_starProjection_eq_toEuclideanLin_toMatrix'_parentInteraction
+      hcompat
       (Kraus.isNBlkInjective_one_of_isInjective
         (isInjective_arbitraryPhysicalMixedInterpolation A₀ A₁ hInj₀ hInj₁ hγ)) two_pos,
-    parentInteractionES_eq_toEuclideanLin_parentMatrix,
     arbitraryPhysicalMixedInteraction_eq_parent_of_mem_Ioo A₀ A₁ hγ]
 
 end MPOSymmetry

@@ -23,15 +23,25 @@ namespace MPSTensor.MPOSymmetry
 
 variable {d₀ d₁ r : ℕ} {D₀ D₁ : Fin r → ℕ}
 
-/-- The actual extended interaction is the complementary projection of the
-joint two-site support. Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
+/-- The actual extended interaction is the matrix of the complementary projection
+of the joint two-site support. Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 noncomputable def jointMixedEndpointParentInteraction
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (γ : ℝ) :
-    EuclideanSpace ℂ (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2) →L[ℂ]
-      EuclideanSpace ℂ (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2) :=
-  1 - (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
-    (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) γ) 2).range.starProjection
+    Matrix (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2)
+      (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2) ℂ :=
+  Matrix.toEuclideanLin.symm (1 - (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
+    (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) γ) 2).range.starProjection).toLinearMap
+
+/-- The operator of the actual extended interaction is the complementary projection of the
+joint two-site support. Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
+theorem toEuclideanLin_jointMixedEndpointParentInteraction
+    (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
+    (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (γ : ℝ) :
+    Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ γ) =
+      (1 - (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
+        (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) γ) 2).range.starProjection).toLinearMap :=
+  LinearEquiv.apply_symm_apply _ _
 
 /-- Padding every original boundary into the first virtual corner gives
 exactly its joint canonical two-site vector.

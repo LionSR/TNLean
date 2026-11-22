@@ -54,9 +54,9 @@ private theorem exists_strict_mixedEndpoint_open_window [NeZero D₀] [NeZero D�
     (γ : unitInterval) :
     ∃ m : ℕ, 2 ≤ m ∧ ∃ η : ℝ, 1 < (m : ℝ) * η ∧
       ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap (m + 1)))ᗮ,
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) (m + 1)))ᗮ,
         η * ‖v‖ ≤ ‖openInteractionHamiltonianES
-          (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap (m + 1) v‖ := by
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) (m + 1) v‖ := by
   by_cases hend : (γ : ℝ) = 0 ∨ (γ : ℝ) = 1
   · obtain ⟨W, hW, η, hη, hgap⟩ :=
       exists_uniform_mixedEndpoint_open_endpoints_gap A₀ A₁ h₀ h₁
@@ -94,9 +94,9 @@ private theorem eventually_mixedEndpoint_periodic_long_gap [NeZero D₀] [NeZero
     ∃ δ : ℝ, 0 < δ ∧ ∃ N₀ : ℕ, ∀ᶠ γ : unitInterval in 𝓝 γ₀,
       ∀ N : ℕ, N₀ ≤ N →
         ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-          (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N))ᗮ,
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N))ᗮ,
           δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-            (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N v‖ := by
+            (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N v‖ := by
   obtain ⟨m, hm, η, hnum, hgap⟩ :=
     exists_strict_mixedEndpoint_open_window A₀ A₁ h₀ h₁ γ₀
   have hmpos : 0 < (m : ℝ) := by exact_mod_cast (by omega : 0 < m)
@@ -155,7 +155,7 @@ private theorem eventually_mixedEndpoint_periodic_long_gap [NeZero D₀] [NeZero
         (posSemidef_hamiltonian_parentChainInteraction _ 2 _)).mpr hOpenCanonical)).2 N hN)
     v hvCanonical
   have hactual : δK * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-      (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N v‖ := by
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N v‖ := by
     rw [mixedEndpoint_periodicInteractionHamiltonianES_eq_of_mem_Ioo A₀ A₁ hγ, hES]
     simpa only [δK, Nat.cast_ofNat, show ((2 : ℝ) - 1) ^ 2 = 1 by norm_num,
       show (m : ℝ) - 2 + 1 = (m : ℝ) - 1 by ring] using hKnabe
@@ -170,16 +170,16 @@ private theorem exists_uniform_mixedEndpoint_periodic_long_gap [NeZero D₀] [Ne
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁) :
     ∃ δ : ℝ, 0 < δ ∧ ∃ N₀ : ℕ, ∀ γ : unitInterval, ∀ N : ℕ, N₀ ≤ N →
       ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N))ᗮ,
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N))ᗮ,
         δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N v‖ := by
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N v‖ := by
   have hcompact : IsCompact (Set.univ : Set unitInterval) := isCompact_univ
   obtain ⟨δ, hδ, N₀, hgap⟩ := hcompact.exists_uniform_pos_nat_bounds
     (fun δ N₀ γ => ∀ N : ℕ, N₀ ≤ N →
       ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N))ᗮ,
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N))ᗮ,
         δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N v‖)
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N v‖)
     (by
       intro δ δ' N₀ γ hle hgap N hN v hv
       exact (mul_le_mul_of_nonneg_right hle (norm_nonneg v)).trans (hgap N hN v hv))
@@ -200,17 +200,17 @@ theorem exists_uniform_mixedEndpoint_periodic_path_gap [NeZero D₀] [NeZero D�
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
       ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N))ᗮ,
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N))ᗮ,
         δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N v‖ := by
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N v‖ := by
   obtain ⟨δ₀, hδ₀, N₀, hlong⟩ :=
     exists_uniform_mixedEndpoint_periodic_long_gap A₀ A₁ h₀ h₁
   obtain ⟨δ, hδ, hgap⟩ := Nat.exists_pos_forall_of_eventually
     (P := fun N δ => 2 ≤ N → ∀ γ : unitInterval,
       ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N))ᗮ,
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N))ᗮ,
         δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N v‖)
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N v‖)
     (fun N η δ hle h hN γ v hv =>
       (mul_le_mul_of_nonneg_right hle (norm_nonneg v)).trans (h hN γ v hv))
     (fun N => by

@@ -40,7 +40,8 @@ theorem mixedEndpointChainRowSector_commute_localInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hN : 2 ≤ N) (i k : Fin N) :
     Commute (mixedEndpointChainRowSector D₀ D₁ k)
-      (periodicLocalInteractionES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i) :=
+      (periodicLocalInteractionES
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i) :=
   periodicLocalInteractionES_commute_siteDiagonal _ hN
     (fun p => bondInterpolationWeight D₀ D₁ 0 (finProdFinEquiv.symm p).1)
     (mixedEndpointRowSector_commute_parentInteraction_zero A₀ A₁) i k
@@ -51,7 +52,8 @@ theorem mixedEndpointChainColumnSector_commute_localInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hN : 2 ≤ N) (i k : Fin N) :
     Commute (mixedEndpointChainColumnSector D₀ D₁ k)
-      (periodicLocalInteractionES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i) :=
+      (periodicLocalInteractionES
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i) :=
   periodicLocalInteractionES_commute_siteDiagonal _ hN
     (fun p => bondInterpolationWeight D₀ D₁ 0 (finProdFinEquiv.symm p).2)
     (mixedEndpointColumnSector_commute_parentInteraction_zero A₀ A₁) i k
@@ -62,7 +64,8 @@ theorem mixedEndpointOpenInnerPenalty_commute_localInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hN : 2 ≤ N) (i : Fin N) :
     Commute (mixedEndpointOpenInnerPenalty D₀ D₁ N)
-      (periodicLocalInteractionES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i) := by
+      (periodicLocalInteractionES
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i) := by
   apply Commute.sum_left
   intro j _
   have hcol : periodicLocalInteractionES (mixedEndpointColumnSector D₀ D₁ 0) j.1 =
@@ -89,12 +92,15 @@ theorem mixedEndpointOpenActiveProjection_commute_localInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hN : 2 ≤ N) (i : Fin N) :
     Commute (mixedEndpointOpenActiveProjection D₀ D₁ N)
-      (periodicLocalInteractionES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i) := by
-  let T := periodicLocalInteractionES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i
+      (periodicLocalInteractionES
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i) := by
+  let T := periodicLocalInteractionES
+    (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i
   let S := LinearMap.ker (mixedEndpointOpenInnerPenalty D₀ D₁ N)
   have hT : T.IsSymmetric :=
     (periodicLocalInteractionES_isPositive
-      (mixedEndpointParentInteraction_isPositive A₀ A₁ 0) i).isSymmetric
+      (Matrix.isPositive_toEuclideanLin_iff.mpr
+      (posSemidef_mixedEndpointParentInteraction A₀ A₁ 0)) i).isSymmetric
   have hS (v : EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) N))
       (hv : v ∈ S) : T v ∈ S := by
     have hc := congrArg (fun L => L v)
@@ -143,11 +149,10 @@ both derived from the actual interaction. -/
 theorem mixedEndpointLocalInteraction_isSymmetricProjection
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hN : 2 ≤ N) (i : Fin N) :
-    (periodicLocalInteractionES
-      (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i).IsSymmetricProjection := by
+    (periodicLocalInteractionES (Matrix.toEuclideanLin
+      (mixedEndpointParentInteraction A₀ A₁ 0)) i).IsSymmetricProjection := by
   apply localExtension_isSymmetricProjection (hRL := hN)
-  exact ⟨(Submodule.isSymmetricProjection_starProjection _).isIdempotentElem.one_sub,
-    (mixedEndpointParentInteraction_isPositive A₀ A₁ 0).isSymmetric⟩
+  exact isSymmetricProjection_toEuclideanLin_mixedEndpointParentInteraction A₀ A₁ 0
 
 /-- The Hilbert space of the explicit active coordinates: two unrestricted
 exterior registers and the first-sector interior chain. -/
@@ -241,7 +246,8 @@ def mixedEndpointActiveLocalInteraction
     (i : NonwrappingStart 2 (N + 1 + 1)) :
     mixedEndpointActiveSpace D₀ D₁ N →ₗ[ℂ] mixedEndpointActiveSpace D₀ D₁ N :=
   mixedEndpointActiveCompression
-    (periodicLocalInteractionES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i.1)
+    (periodicLocalInteractionES
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i.1)
 
 /-- In the explicit active coordinates, a compressed term is the original
 physical term evaluated on the encoded configuration after zero extension. -/
@@ -250,7 +256,8 @@ theorem mixedEndpointActiveLocalInteraction_apply
     (i : NonwrappingStart 2 (N + 1 + 1)) (v : mixedEndpointActiveSpace D₀ D₁ N)
     (ξ : endpointActiveCfg (Fin D₀ ⊕ Fin D₁) D₀ N) :
     mixedEndpointActiveLocalInteraction A₀ A₁ i v ξ =
-      periodicLocalInteractionES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i.1
+      periodicLocalInteractionES
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i.1
         (mixedEndpointActiveLinearIsometry D₀ D₁ N v) (mixedEndpointActivePhysicalCfg ξ) :=
   mixedEndpointActiveLinearIsometry_adjoint_apply _ ξ
 
@@ -260,7 +267,8 @@ theorem mixedEndpointActiveLocalInteraction_intertwines
     (i : NonwrappingStart 2 (N + 1 + 1)) (v : mixedEndpointActiveSpace D₀ D₁ N) :
     mixedEndpointActiveLinearIsometry D₀ D₁ N
         (mixedEndpointActiveLocalInteraction A₀ A₁ i v) =
-      periodicLocalInteractionES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i.1
+      periodicLocalInteractionES
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i.1
         (mixedEndpointActiveLinearIsometry D₀ D₁ N v) :=
   activeCompression_intertwines _
     (mixedEndpointOpenActiveProjection_commute_localInteraction A₀ A₁ (by omega) i.1) v
@@ -288,11 +296,11 @@ theorem ker_mixedEndpointActiveLocalInteraction
     (i : NonwrappingStart 2 (N + 1 + 1)) :
     LinearMap.ker (mixedEndpointActiveLocalInteraction A₀ A₁ i) =
       (LinearMap.ker (periodicLocalInteractionES
-        (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i.1)).comap
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i.1)).comap
           (mixedEndpointActiveLinearIsometry D₀ D₁ N).toLinearMap := by
   ext v
   change mixedEndpointActiveLocalInteraction A₀ A₁ i v = 0 ↔
-    periodicLocalInteractionES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i.1
+    periodicLocalInteractionES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i.1
       (mixedEndpointActiveLinearIsometry D₀ D₁ N v) = 0
   rw [← mixedEndpointActiveLocalInteraction_intertwines]
   constructor
@@ -310,7 +318,7 @@ theorem ker_mixedEndpointActiveLocalInteraction_eq_map_adjoint
     (i : NonwrappingStart 2 (N + 1 + 1)) :
     LinearMap.ker (mixedEndpointActiveLocalInteraction A₀ A₁ i) =
       (LinearMap.ker (periodicLocalInteractionES
-        (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i.1)).map
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i.1)).map
           (mixedEndpointActiveLinearIsometry D₀ D₁ N).toLinearMap.adjoint := by
   rw [ker_mixedEndpointActiveLocalInteraction]
   ext v
@@ -319,7 +327,8 @@ theorem ker_mixedEndpointActiveLocalInteraction_eq_map_adjoint
     refine ⟨mixedEndpointActiveLinearIsometry D₀ D₁ N v, hv, ?_⟩
     exact LinearMap.congr_fun mixedEndpointActiveLinearIsometry_adjoint_comp v
   · rintro ⟨w, hw, rfl⟩
-    let T := periodicLocalInteractionES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i.1
+    let T := periodicLocalInteractionES
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i.1
     change T (((mixedEndpointActiveLinearIsometry D₀ D₁ N).toLinearMap ∘ₗ
       (mixedEndpointActiveLinearIsometry D₀ D₁ N).toLinearMap.adjoint) w) = 0
     rw [mixedEndpointActiveLinearIsometry_comp_adjoint]
@@ -338,7 +347,7 @@ theorem mixedEndpointActiveLocalInteraction_eq_restrictedKernel_projection
     mixedEndpointActiveLocalInteraction A₀ A₁ i =
       (Submodule.starProjection
         (((LinearMap.ker (periodicLocalInteractionES
-          (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i.1)).map
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i.1)).map
             (mixedEndpointActiveLinearIsometry D₀ D₁ N).toLinearMap.adjoint)ᗮ)).toLinearMap := by
   let P := mixedEndpointActiveLocalInteraction A₀ A₁ i
   have hP := mixedEndpointActiveLocalInteraction_isSymmetricProjection A₀ A₁ i
@@ -359,7 +368,7 @@ theorem mixedEndpointActiveHamiltonian_eq_compression
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) (N : ℕ) :
     mixedEndpointActiveHamiltonian A₀ A₁ N =
       mixedEndpointActiveCompression (openInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap (N + 1 + 1)) := by
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) (N + 1 + 1)) := by
   apply LinearMap.ext
   intro v
   simp [mixedEndpointActiveHamiltonian, mixedEndpointActiveLocalInteraction,
@@ -380,7 +389,7 @@ theorem mixedEndpointActiveHamiltonian_intertwines
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) (N : ℕ)
     (v : mixedEndpointActiveSpace D₀ D₁ N) :
     mixedEndpointActiveLinearIsometry D₀ D₁ N (mixedEndpointActiveHamiltonian A₀ A₁ N v) =
-      openInteractionHamiltonianES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap
+      openInteractionHamiltonianES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0))
         (N + 1 + 1) (mixedEndpointActiveLinearIsometry D₀ D₁ N v) := by
   rw [mixedEndpointActiveHamiltonian_eq_compression]
   exact activeCompression_intertwines _
@@ -393,11 +402,11 @@ theorem ker_mixedEndpointActiveHamiltonian
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) (N : ℕ) :
     LinearMap.ker (mixedEndpointActiveHamiltonian A₀ A₁ N) =
       (LinearMap.ker (openInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap (N + 1 + 1))).comap
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) (N + 1 + 1))).comap
           (mixedEndpointActiveLinearIsometry D₀ D₁ N).toLinearMap := by
   ext v
   change mixedEndpointActiveHamiltonian A₀ A₁ N v = 0 ↔
-    openInteractionHamiltonianES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap
+    openInteractionHamiltonianES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0))
       (N + 1 + 1) (mixedEndpointActiveLinearIsometry D₀ D₁ N v) = 0
   rw [← mixedEndpointActiveHamiltonian_intertwines]
   constructor
@@ -415,11 +424,11 @@ theorem mixedEndpointOpenActiveProjection_eq_self_of_mem_kernel
     (hN : 2 ≤ N)
     (v : EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) N))
     (hv : v ∈ LinearMap.ker (openInteractionHamiltonianES
-      (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N)) :
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N)) :
     mixedEndpointOpenActiveProjection D₀ D₁ N v = v := by
   let Q := mixedEndpointOpenActiveProjection D₀ D₁ N
   let H := openInteractionHamiltonianES
-    (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N
+    (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N
   have hQ : Q (Q v) = Q v := LinearMap.congr_fun
     mixedEndpointOpenActiveProjection_isSymmetricProjection.isIdempotentElem.eq v
   have hcomm : H (Q v) = Q (H v) := congrArg (fun T => T v)
@@ -443,11 +452,12 @@ theorem map_ker_mixedEndpointActiveHamiltonian
     (LinearMap.ker (mixedEndpointActiveHamiltonian A₀ A₁ N)).map
         (mixedEndpointActiveLinearIsometry D₀ D₁ N).toLinearMap =
       LinearMap.ker (openInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap (N + 1 + 1)) := by
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) (N + 1 + 1)) := by
   ext w
   constructor
   · rintro ⟨v, hv, rfl⟩
-    change openInteractionHamiltonianES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap
+    change openInteractionHamiltonianES
+      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0))
       (N + 1 + 1) (mixedEndpointActiveLinearIsometry D₀ D₁ N v) = 0
     rw [← mixedEndpointActiveHamiltonian_intertwines, LinearMap.mem_ker.mp hv, map_zero]
   · intro hw
@@ -493,8 +503,9 @@ theorem mem_ker_mixedEndpointActiveLocalInteraction_iff_fibers
         (insertedTwoSiteMap (mixedEndpointBase A₀ A₁)
           (bondInterpolationMatrix D₀ D₁ 0)).range := by
   rw [ker_mixedEndpointActiveLocalInteraction]
-  change periodicLocalInteractionES (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap
+  change periodicLocalInteractionES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0))
     i.1 (mixedEndpointActiveLinearIsometry D₀ D₁ N v) = 0 ↔ _
+  rw [toEuclideanLin_mixedEndpointParentInteraction]
   simp_rw [← mem_ker_insertedParentInteraction_iff]
   let e := cyclicActiveBlockConfigEquiv ((D₀ + D₁) * (D₀ + D₁)) 2 (by omega) i.1
   constructor
@@ -504,7 +515,7 @@ theorem mem_ker_mixedEndpointActiveLocalInteraction_iff_fibers
     have h := congrArg (fun w => w (e.symm (ω, s))) hv
     rw [periodicLocalInteractionES_apply_fiber _ (by omega)] at h
     simpa only [e, Equiv.apply_symm_apply, PiLp.zero_apply,
-      mixedEndpointActiveWindowFiber, mixedEndpointParentInteraction] using h
+      mixedEndpointActiveWindowFiber] using h
   · intro hv
     apply PiLp.ext
     intro σ

@@ -293,7 +293,7 @@ theorem jointMixedPeriodicPhasePenalty_le_twice
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N) :
     jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N ≤
       (2 : ℂ) • periodicInteractionHamiltonianES
-        (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N := by
+        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N := by
   have hcol (i : Fin N) := periodicLocalInteractionES_mono
     (jointMixedEndpoint_one_sub_columnSector_zero_le_parentInteraction A₀ A₁) i
   have hrow (i : Fin N) := periodicLocalInteractionES_mono
@@ -313,7 +313,8 @@ theorem jointMixedRowSector_commute_periodicLocalInteraction
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x))
     (hN : 2 ≤ N) (i k : Fin N) :
     Commute (jointMixedRowSector d₀ d₁ D₀ D₁ k)
-      (periodicLocalInteractionES (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i) :=
+      (periodicLocalInteractionES
+        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) i) :=
   periodicLocalInteractionES_commute_siteDiagonal _ hN jointMixedRowWeight
     (jointMixedRowSector_commute_parentInteraction_zero A₀ A₁) i k
 
@@ -323,7 +324,8 @@ theorem jointMixedColumnSector_commute_periodicLocalInteraction
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x))
     (hN : 2 ≤ N) (i k : Fin N) :
     Commute (jointMixedColumnSector d₀ d₁ D₀ D₁ k)
-      (periodicLocalInteractionES (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap i) :=
+      (periodicLocalInteractionES
+        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) i) :=
   periodicLocalInteractionES_commute_siteDiagonal _ hN jointMixedColumnWeight
     (jointMixedColumnSector_commute_parentInteraction_zero A₀ A₁) i k
 
@@ -334,7 +336,7 @@ theorem jointMixedPeriodicPhasePenalty_commute
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N) :
     Commute (jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N)
       (periodicInteractionHamiltonianES
-        (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N) := by
+        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N) := by
   apply Commute.sum_right
   intro i _
   apply Commute.sum_left
@@ -352,12 +354,13 @@ theorem jointMixedPeriodicActiveProjection_commute
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N) :
     Commute (jointMixedPeriodicActiveProjection d₀ d₁ D₀ D₁ N)
       (periodicInteractionHamiltonianES
-        (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N) := by
+        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N) := by
   let H := periodicInteractionHamiltonianES
-    (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N
+    (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N
   let S := LinearMap.ker (jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N)
   have hH : H.IsPositive := periodicInteractionHamiltonianES_isPositive
-    (jointMixedEndpointParentInteraction_isPositive A₀ A₁ 0) N
+    (Matrix.isPositive_toEuclideanLin_iff.mpr
+      (posSemidef_jointMixedEndpointParentInteraction A₀ A₁ 0)) N
   have hS : S.map H ≤ S := by
     rintro _ ⟨v, hv, rfl⟩
     have hc := LinearMap.congr_fun (jointMixedPeriodicPhasePenalty_commute A₀ A₁ hN).eq v
@@ -375,7 +378,7 @@ theorem one_sub_jointMixedPeriodicActiveProjection_le_twice
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N) :
     1 - jointMixedPeriodicActiveProjection d₀ d₁ D₀ D₁ N ≤
       (2 : ℂ) • periodicInteractionHamiltonianES
-        (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N :=
+        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N :=
   one_sub_jointMixedPeriodicActiveProjection_le.trans
     (jointMixedPeriodicPhasePenalty_le_twice A₀ A₁ hN)
 

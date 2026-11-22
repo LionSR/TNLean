@@ -53,11 +53,12 @@ Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem jointMixedEndpoint_periodic_eq_conj_reflect_swap
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (γ : ℝ) (N : ℕ) :
-    periodicInteractionHamiltonianES (jointMixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N =
+    periodicInteractionHamiltonianES
+      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ γ)) N =
       (physicalReindexLinearIsometryEquiv
         (jointMixedEndpointPhysicalSwap d₀ d₁ D₀ D₁) N).toLinearEquiv.conj
           (periodicInteractionHamiltonianES
-            (jointMixedEndpointParentInteraction A₁ A₀ (1 - γ)).toLinearMap N) := by
+            (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₁ A₀ (1 - γ))) N) := by
   rw [jointMixedEndpointParentInteraction_eq_conj_reflect_swap,
     periodicInteractionHamiltonianES_physicalReindex_conj]
 
@@ -119,13 +120,13 @@ theorem jointMixedEndpoint_periodic_groundSpace_one_eq_actual
     (h₀ : WordTupleSpanTop A₀ 1) (h₁ : WordTupleSpanTop A₁ 1)
     (hD₁ : ∀ x, 0 < D₁ x) (hN : 2 ≤ N) :
     LinearMap.ker (periodicInteractionHamiltonianES
-      (jointMixedEndpointParentInteraction A₀ A₁ 1).toLinearMap N) =
+      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 1)) N) =
         (blockPeriodicMpvMapES (jointMixedEndpointInterpolation A₀ A₁ 1) N).range := by
   let U := physicalReindexLinearIsometryEquiv (jointMixedEndpointPhysicalSwap d₀ d₁ D₀ D₁) N
   have hConj : U.toLinearEquiv.conj (periodicInteractionHamiltonianES
-      (jointMixedEndpointParentInteraction A₁ A₀ 0).toLinearMap N) =
+      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₁ A₀ 0)) N) =
         periodicInteractionHamiltonianES
-          (jointMixedEndpointParentInteraction A₀ A₁ 1).toLinearMap N := by
+          (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 1)) N := by
     simpa only [sub_self] using (jointMixedEndpoint_periodic_eq_conj_reflect_swap A₀ A₁ 1 N).symm
   have hMap (c : EuclideanSpace ℂ (Fin r)) :
       U (blockPeriodicMpvMapES (jointMixedEndpointInterpolation A₁ A₀ 0) N c) =
@@ -150,7 +151,7 @@ theorem jointMixedEndpoint_periodic_groundSpace_endpoints_eq_actual
     (hD₀ : ∀ x, 0 < D₀ x) (hD₁ : ∀ x, 0 < D₁ x)
     (γ : ℝ) (hγ : γ = 0 ∨ γ = 1) (hN : 2 ≤ N) :
     LinearMap.ker (periodicInteractionHamiltonianES
-      (jointMixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N) =
+      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ γ)) N) =
         (blockPeriodicMpvMapES (jointMixedEndpointInterpolation A₀ A₁ γ) N).range := by
   rcases hγ with rfl | rfl
   · exact jointMixedEndpoint_periodic_groundSpace_eq_actual A₀ A₁ h₀ h₁ hD₀ hN
@@ -167,9 +168,9 @@ theorem exists_uniform_jointMixedEndpoint_periodic_one_gap
     (hD₁ : ∀ x, 0 < D₁ x) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, 2 ≤ N →
       ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (jointMixedEndpointParentInteraction A₀ A₁ 1).toLinearMap N))ᗮ,
+        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 1)) N))ᗮ,
         δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (jointMixedEndpointParentInteraction A₀ A₁ 1).toLinearMap N v‖ := by
+          (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 1)) N v‖ := by
   obtain ⟨δ, hδ, hGap⟩ := exists_uniform_jointMixedEndpoint_periodic_gap A₁ A₀ h₁ h₀ hD₁
   refine ⟨δ, hδ, ?_⟩
   intro N hN
@@ -188,9 +189,9 @@ theorem exists_uniform_jointMixedEndpoint_periodic_endpoints_gap
     (hD₀ : ∀ x, 0 < D₀ x) (hD₁ : ∀ x, 0 < D₁ x) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ γ : ℝ, γ = 0 ∨ γ = 1 → ∀ N : ℕ, 2 ≤ N →
       ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (jointMixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N))ᗮ,
+        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ γ)) N))ᗮ,
         δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (jointMixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N v‖ := by
+          (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ γ)) N v‖ := by
   obtain ⟨δ₀, hδ₀, hGap₀⟩ := exists_uniform_jointMixedEndpoint_periodic_gap A₀ A₁ h₀ h₁ hD₀
   obtain ⟨δ₁, hδ₁, hGap₁⟩ := exists_uniform_jointMixedEndpoint_periodic_one_gap A₀ A₁ h₀ h₁ hD₁
   refine ⟨min δ₀ δ₁, lt_min hδ₀ hδ₁, ?_⟩

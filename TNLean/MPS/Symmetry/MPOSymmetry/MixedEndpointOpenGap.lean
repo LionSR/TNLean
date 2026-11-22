@@ -153,9 +153,9 @@ theorem exists_uniform_mixedEndpoint_open_zero_gap
     (hA₀ : Kraus.IsInjective A₀) :
     ∃ W : ℕ, 3 ≤ W ∧ ∃ δ : ℝ, 0 < δ ∧
       ∀ N : ℕ, W ≤ N → ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES
-        (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N))ᗮ,
+        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N))ᗮ,
         δ * ‖v‖ ≤ ‖openInteractionHamiltonianES
-          (mixedEndpointParentInteraction A₀ A₁ 0).toLinearMap N v‖ := by
+          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N v‖ := by
   obtain ⟨W, hW, δ, hδ, hGap⟩ :=
     exists_mixedEndpointActiveHamiltonian_uniform_gap A₀ A₁ hA₀
   refine ⟨W + 1 + 1, by omega, min δ (1 / 2), lt_min hδ (by norm_num), ?_⟩

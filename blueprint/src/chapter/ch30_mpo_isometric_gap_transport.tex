@@ -453,16 +453,15 @@ original bond-$D_p$ tensors.
 
 \begin{definition}[Enlarged mixed local interaction]
     \label{def:mpo_arbitrary_physical_interaction}
-    \lean{MPSTensor.MPOSymmetry.mixedEndpointInteractionMatrix,
-        MPSTensor.MPOSymmetry.toEuclideanLin_mixedEndpointInteractionMatrix,
-        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction}
+    \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction}
     \leanok
     \uses{def:mpo_mixed_extended_support,def:mpo_arbitrary_physical_tensor,
         def:spt_isometric_interaction_extension}
     For any square-alphabet tensors $C_0,C_1$, let
-    $h_{C_0,C_1}(\gamma)$ be the configuration-basis matrix of
+    $h_{C_0,C_1}(\gamma)$ be the matrix of
     $I-\Pi_{\mathcal S'_\gamma}$ for their extended mixed two-site
-    support. It represents exactly that Euclidean operator. Set
+    support, the extended local interaction of
+    Definition~\ref{def:mpo_mixed_extended_support}. Set
     $h_\gamma=h_{B_0,B_1}(\gamma)$, $T=J\otimes J$, and define
     \begin{align}
         \widetilde h_\gamma
@@ -476,18 +475,13 @@ original bond-$D_p$ tensors.
 
 \begin{lemma}[Positivity and continuity through the endpoints]
     \label{thm:mpo_arbitrary_interaction_continuity}
-    \lean{MPSTensor.MPOSymmetry.mixedEndpointInteractionMatrix_posSemidef,
-        MPSTensor.MPOSymmetry.continuous_mixedEndpointInteractionMatrix,
-        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_posSemidef,
+    \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_posSemidef,
         MPSTensor.MPOSymmetry.continuous_arbitraryPhysicalMixedInteraction}
     \leanok
     \uses{def:mpo_arbitrary_physical_interaction,def:injective}
-    For arbitrary $C_0,C_1$ and real $\gamma$,
-    $h_{C_0,C_1}(\gamma)\geq0$; for arbitrary $A_0,A_1$,
+    For arbitrary $A_0,A_1$ and real $\gamma$,
     $\widetilde h_\gamma\geq0$.
-    If $D_0,D_1>0$ and $C_0,C_1$ are injective, then
-    $h_{C_0,C_1}(\gamma)$ is continuous on $\R$.
-    Thus, if $D_0,D_1>0$ and $A_0,A_1$ are one-site injective,
+    If $D_0,D_1>0$ and $A_0,A_1$ are one-site injective, then
     $\widetilde h_\gamma$ is continuous on $\R$, including at $0$ and $1$.
 \end{lemma}
 \begin{proof}\leanok

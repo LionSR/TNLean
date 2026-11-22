@@ -42,12 +42,13 @@ theorem groundSpaceES_jointMixedEndpointLeftTensor_le_extendedSupport
 /-- The extended endpoint term lies below the common canonical parent
 term; no separate block gaps or orthogonality are used.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
-theorem jointMixedEndpointParentInteraction_zero_le_parentInteractionES
+theorem jointMixedEndpointParentInteraction_zero_le_parentInteraction
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) :
-    (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap ≤
-      parentInteractionES (toTensorFromBlocks (μ := fun _ => 1)
-        (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 := by
+    Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0) ≤
+      Matrix.toEuclideanLin
+        (LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks (μ := fun _ => 1)
+        (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2)) := by
   have hle : (groundSpaceES (toTensorFromBlocks (μ := fun _ => 1)
       (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2).starProjection.toLinearMap ≤
       (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
@@ -56,19 +57,21 @@ theorem jointMixedEndpointParentInteraction_zero_le_parentInteractionES
       (Submodule.isSymmetricProjection_starProjection _) |>.mpr
     simpa only [Submodule.range_starProjection] using
       groundSpaceES_jointMixedEndpointLeftTensor_le_extendedSupport A₀ A₁
-  simpa only [jointMixedEndpointParentInteraction, parentInteractionES,
+  simpa only [toEuclideanLin_jointMixedEndpointParentInteraction,
+    toEuclideanLin_toMatrix'_parentInteraction,
     Submodule.starProjection_orthogonal', ContinuousLinearMap.toLinearMap_sub,
     ContinuousLinearMap.toLinearMap_one] using sub_le_sub_left hle 1
 
 /-- The common canonical term differs from the extended term by at most
 the two outer phase penalties. Source: arXiv:2203.12563, Section 5,
 lines 1695–1777. -/
-theorem parentInteractionES_jointMixedEndpointLeftTensor_le
+theorem parentInteraction_jointMixedEndpointLeftTensor_le
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) :
-    parentInteractionES (toTensorFromBlocks (μ := fun _ => 1)
-      (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 ≤
-      (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap +
+    Matrix.toEuclideanLin
+      (LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks (μ := fun _ => 1)
+      (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2)) ≤
+      Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0) +
         (1 - jointMixedRowSector d₀ d₁ D₀ D₁ (0 : Fin 2)) +
         (1 - jointMixedColumnSector d₀ d₁ D₀ D₁ (1 : Fin 2)) := by
   let S := (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
@@ -82,10 +85,10 @@ theorem parentInteractionES_jointMixedEndpointLeftTensor_le
       (D₀ := D₀) (D₁ := D₁) (0 : Fin 2) 1)
     (jointMixedRowSector_commute_extendedSupport_starProjection A₀ A₁ 0)
     (jointMixedColumnSector_commute_extendedSupport_starProjection A₀ A₁ 1)
-  simpa only [parentInteractionES, Submodule.starProjection_orthogonal',
+  simpa only [toEuclideanLin_toMatrix'_parentInteraction, Submodule.starProjection_orthogonal',
     ContinuousLinearMap.toLinearMap_sub, ContinuousLinearMap.toLinearMap_one,
     jointMixedEndpointLeftTensor_starProjection_eq_outerCorner A₀ A₁,
-    jointMixedEndpointParentInteraction] using hupper
+    toEuclideanLin_jointMixedEndpointParentInteraction] using hupper
 
 private theorem extendedSupport_starProjection_le_sector
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
@@ -112,8 +115,9 @@ theorem jointMixedEndpoint_one_sub_columnSector_zero_le_parentInteraction
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) :
     1 - jointMixedColumnSector d₀ d₁ D₀ D₁ (0 : Fin 2) ≤
-      (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap :=
-  sub_le_sub_left (extendedSupport_starProjection_le_sector A₀ A₁ _
+      Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0) := by
+  rw [toEuclideanLin_jointMixedEndpointParentInteraction]
+  exact sub_le_sub_left (extendedSupport_starProjection_le_sector A₀ A₁ _
     (jointMixedColumnSector_isSymmetricProjection 0)
     (jointMixedColumnSector_zero_blockInsertedBoundaryMap A₀ A₁)) 1
 
@@ -123,8 +127,9 @@ theorem jointMixedEndpoint_one_sub_rowSector_one_le_parentInteraction
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) :
     1 - jointMixedRowSector d₀ d₁ D₀ D₁ (1 : Fin 2) ≤
-      (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap :=
-  sub_le_sub_left (extendedSupport_starProjection_le_sector A₀ A₁ _
+      Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0) := by
+  rw [toEuclideanLin_jointMixedEndpointParentInteraction]
+  exact sub_le_sub_left (extendedSupport_starProjection_le_sector A₀ A₁ _
     (jointMixedRowSector_isSymmetricProjection 1)
     (jointMixedRowSector_one_blockInsertedBoundaryMap A₀ A₁)) 1
 

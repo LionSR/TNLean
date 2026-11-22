@@ -19,7 +19,8 @@ overlaps of the original endpoint blocks.
         MPSTensor.MPOSymmetry.jointMixedColumnSector,
         MPSTensor.MPOSymmetry.jointMixedRowSector_apply,
         MPSTensor.MPOSymmetry.jointMixedColumnSector_apply,
-        MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction}
+        MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction,
+        MPSTensor.MPOSymmetry.toEuclideanLin_jointMixedEndpointParentInteraction}
     \leanok
     \uses{def:mpo_joint_mixed_family,def:mpo_joint_mixed_support}
     Let $r(\mu),c(\mu)\in\{0,1\}$ indicate whether the row and column
@@ -182,9 +183,9 @@ overlaps of the original endpoint blocks.
     \label{thm:mpo_joint_local_comparison}
     \lean{LinearMap.IsSymmetricProjection.one_sub_mul_le_add_one_sub,
         LinearMap.IsSymmetricProjection.one_sub_mul_mul_le,
-        MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction_isPositive,
-        MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction_zero_le_parentInteractionES,
-        MPSTensor.MPOSymmetry.parentInteractionES_jointMixedEndpointLeftTensor_le,
+        MPSTensor.MPOSymmetry.posSemidef_jointMixedEndpointParentInteraction,
+        MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction_zero_le_parentInteraction,
+        MPSTensor.MPOSymmetry.parentInteraction_jointMixedEndpointLeftTensor_le,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_one_sub_columnSector_zero_le_parentInteraction,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_one_sub_rowSector_one_le_parentInteraction}
     \leanok

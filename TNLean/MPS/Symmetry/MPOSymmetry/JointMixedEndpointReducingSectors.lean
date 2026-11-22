@@ -131,8 +131,9 @@ theorem jointMixedRowSector_commute_parentInteraction_zero
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (site : Fin 2) :
     Commute (jointMixedRowSector d₀ d₁ D₀ D₁ site)
-      (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap :=
-  (Commute.one_right _).sub_right
+      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) := by
+  rw [toEuclideanLin_jointMixedEndpointParentInteraction]
+  exact (Commute.one_right _).sub_right
     (jointMixedRowSector_commute_extendedSupport_starProjection A₀ A₁ site)
 
 /-- Every local column phase reduces the actual endpoint interaction.
@@ -141,8 +142,9 @@ theorem jointMixedColumnSector_commute_parentInteraction_zero
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (site : Fin 2) :
     Commute (jointMixedColumnSector d₀ d₁ D₀ D₁ site)
-      (jointMixedEndpointParentInteraction A₀ A₁ 0).toLinearMap :=
-  (Commute.one_right _).sub_right
+      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) := by
+  rw [toEuclideanLin_jointMixedEndpointParentInteraction]
+  exact (Commute.one_right _).sub_right
     (jointMixedColumnSector_commute_extendedSupport_starProjection A₀ A₁ site)
 
 /-- The full joint canonical support projector is the product of the actual
@@ -187,10 +189,11 @@ theorem jointMixedEndpointLeftTensor_starProjection_eq_outerCorner
 
 /-- The actual joint interaction is positive at every parameter.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
-theorem jointMixedEndpointParentInteraction_isPositive
+theorem posSemidef_jointMixedEndpointParentInteraction
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (γ : ℝ) :
-    (jointMixedEndpointParentInteraction A₀ A₁ γ).toLinearMap.IsPositive := by
+    (jointMixedEndpointParentInteraction A₀ A₁ γ).PosSemidef := by
+  rw [← Matrix.isPositive_toEuclideanLin_iff, toEuclideanLin_jointMixedEndpointParentInteraction]
   let S := (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
     (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) γ) 2).range
   exact (show (1 - S.starProjection.toLinearMap).IsSymmetricProjection from

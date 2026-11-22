@@ -84,10 +84,8 @@ theorem arbitraryPhysicalMixedInteraction_zero_le_parent
     parentInteraction_matrix_rotatePhysical_eq_isometricInteractionExtension _
       (commonFixedPointInclusion_isometry _ d₀ d₁)]
   apply isometricInteractionExtension_mono
-  rw [Matrix.le_iff, ← Matrix.isPositive_toEuclideanLin_iff, map_sub,
-    ← parentInteractionES_eq_toEuclideanLin_parentMatrix,
-    toEuclideanLin_mixedEndpointInteractionMatrix]
-  exact mixedEndpointParentInteraction_zero_le_parentInteractionES _ _
+  rw [← Matrix.toEuclideanLin_le_toEuclideanLin_iff]
+  exact mixedEndpointParentInteraction_zero_le_parentInteraction _ _
 
 /-- The corresponding local order at the second limiting interaction uses
 the fully embedded original second tensor. Source: arXiv:2203.12563,
@@ -102,10 +100,8 @@ theorem arbitraryPhysicalMixedInteraction_one_le_parent
     parentInteraction_matrix_rotatePhysical_eq_isometricInteractionExtension _
       (commonFixedPointInclusion_isometry _ d₀ d₁)]
   apply isometricInteractionExtension_mono
-  rw [Matrix.le_iff, ← Matrix.isPositive_toEuclideanLin_iff, map_sub,
-    ← parentInteractionES_eq_toEuclideanLin_parentMatrix,
-    toEuclideanLin_mixedEndpointInteractionMatrix]
-  exact mixedEndpointParentInteraction_one_le_parentInteractionES _ _
+  rw [← Matrix.toEuclideanLin_le_toEuclideanLin_iff]
+  exact mixedEndpointParentInteraction_one_le_parentInteraction _ _
 
 /-- The canonical parent of either embedded original tensor. The Boolean
 selects the first tensor at `false` and the second at `true`.
