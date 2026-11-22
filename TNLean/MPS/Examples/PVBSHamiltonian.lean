@@ -32,11 +32,14 @@ namespace MPSTensor
 at every cyclic bond, including either orientation of a two-site ring. -/
 theorem toEuclideanLin_parentRingInteraction_term_pvbs_two_apply (μ : ℝ) {N : ℕ}
     (hN : 2 ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg 2 N)) (σ : Cfg 2 N) :
-    Matrix.toEuclideanLin ((parentRingInteraction (pvbsTensor (μ : ℂ)) hN).term i) v σ =
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin ((parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).term i) v σ =
       (((μ : ℂ) ^ 2 * (σ i).val + (σ (cyclicForwardSite i 1)).val) * v σ -
         (μ : ℂ) * (if σ i = σ (cyclicForwardSite i 1) then 0
           else v (σ ∘ Equiv.swap i (cyclicForwardSite i 1)))) / (1 + (μ : ℂ) ^ 2) := by
-  rw [toEuclideanLin_parentRingInteraction_term_apply, toEuclideanLin_toMatrix'_parentInteraction]
+  have : NeZero N := ⟨by omega⟩
+  rw [toEuclideanLin_parentRingInteraction_term_apply _ hN,
+    toEuclideanLin_toMatrix'_parentInteraction]
   change parentInteraction (pvbsTensor (μ : ℂ)) 2
     (fun τ => v (cyclicCfg (Fin.pos i) 2 i τ σ)) (extractWindow 2 i σ) = _
   rw [parentInteraction_pvbs_two_apply,
@@ -49,12 +52,14 @@ theorem toEuclideanLin_parentRingInteraction_term_pvbs_two_apply (μ : ℝ) {N :
 occupation field with different weights at the two ends of the bond. -/
 theorem toEuclideanLin_parentRingInteraction_term_pvbs_decomposition (μ : ℝ) {N : ℕ}
     (hN : 2 ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg 2 N)) (σ : Cfg 2 N) :
-    Matrix.toEuclideanLin ((parentRingInteraction (pvbsTensor (μ : ℂ)) hN).term i) v σ =
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin ((parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).term i) v σ =
       ((2 * μ / (1 + μ ^ 2) : ℝ) : ℂ) *
-          Matrix.toEuclideanLin ((parentRingInteraction (pvbsTensor 1) hN).term i) v σ +
+          Matrix.toEuclideanLin ((parentRingInteraction (pvbsTensor 1) 2 N).term i) v σ +
         ( (((μ ^ 2 - μ) / (1 + μ ^ 2) : ℝ) : ℂ) * (σ i).val +
           (((1 - μ) / (1 + μ ^ 2) : ℝ) : ℂ) * (σ (cyclicForwardSite i 1)).val ) *
             v σ := by
+  have : NeZero N := ⟨by omega⟩
   have hdreal : 0 < 1 + μ ^ 2 := by positivity
   have hd : (1 + (μ : ℂ) ^ 2) ≠ 0 := by exact_mod_cast hdreal.ne'
   rw [toEuclideanLin_parentRingInteraction_term_pvbs_two_apply μ hN]
@@ -69,11 +74,13 @@ theorem toEuclideanLin_parentRingInteraction_term_pvbs_decomposition (μ : ℝ) 
 of the critical parent and the squared hopping imbalance times particle number. -/
 theorem toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_decomposition (μ : ℝ) {N : ℕ}
     (hN : 2 ≤ N) (v : EuclideanSpace ℂ (Cfg 2 N)) (σ : Cfg 2 N) :
-    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian v σ =
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian v σ =
       ((2 * μ / (1 + μ ^ 2) : ℝ) : ℂ) *
-        Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) hN).hamiltonian v σ +
+        Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) 2 N).hamiltonian v σ +
       ((((μ - 1) ^ 2 / (1 + μ ^ 2) : ℝ) : ℂ) *
         (∑ i : Fin N, ((σ i).val : ℂ))) * v σ := by
+  have : NeZero N := ⟨by omega⟩
   let : NeZero N := ⟨by omega⟩
   have hshift : ∑ i : Fin N, ((σ (cyclicForwardSite i 1)).val : ℂ) =
       ∑ i : Fin N, ((σ i).val : ℂ) := by

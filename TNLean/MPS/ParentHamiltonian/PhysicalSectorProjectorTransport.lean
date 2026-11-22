@@ -267,10 +267,12 @@ private theorem toEuclideanLin_translationInvariant_term_extend_physical
       (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).euclideanExtendByZero
         (Matrix.toEuclideanLin G v))
     (i : Fin M) (v : MPVSpace a M) :
-    Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant hRM H).term i)
+    haveI : NeZero M := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant M H).term i)
         ((Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero v) =
       (Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero
-        (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant hRM G).term i) v) := by
+        (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant M G).term i) v) := by
+  have : NeZero M := NeZero.of_pos i.pos
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d R hRM i
   let V := cyclicActiveBlockConfigLinearIsometryEquiv a R hRM i
   let E := (Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero
@@ -280,7 +282,7 @@ private theorem toEuclideanLin_translationInvariant_term_extend_physical
     physical_embedding_cyclic_active_block e hRM i x
   apply U.injective
   calc
-    U (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant hRM H).term i) (E v)) =
+    U (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant M H).term i) (E v)) =
         ContinuousLinearMap.rightFiberwiseMap
           (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin H)) (U (E v)) :=
       cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply hRM H i (E v)
@@ -290,10 +292,10 @@ private theorem toEuclideanLin_translationInvariant_term_extend_physical
     _ = F (ContinuousLinearMap.rightFiberwiseMap
           (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin G)) (V v)) :=
       ContinuousLinearMap.rightFiberwiseMap_extendByZero _ _ _ _ h (V v)
-    _ = F (V (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant hRM G).term i)
+    _ = F (V (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant M G).term i)
           v)) :=
       congrArg F (cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply hRM G i v).symm
-    _ = U (E (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant hRM G).term i)
+    _ = U (E (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant M G).term i)
           v)) := (hcoord _).symm
 
 /-- The periodic Hamiltonian of the complementary projection of two embedded sector spaces
@@ -307,7 +309,8 @@ theorem physical_sector_hamiltonian_translationInvariant_embed
     (hR : 0 < R) (hRM : R ≤ M)
     (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
     (v : MPVSpace a M) :
-    Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+    haveI : NeZero M := ⟨by omega⟩;
+    Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
         (Matrix.toEuclideanLin.symm
           ((S.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
               |>.euclideanExtendByZero.toLinearMap) ⊔
@@ -315,8 +318,9 @@ theorem physical_sector_hamiltonian_translationInvariant_embed
               |>.euclideanExtendByZero.toLinearMap))ᗮ.starProjection.toLinearMap))).hamiltonian
         ((Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero v) =
       (Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero
-        (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+        (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
           (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap)).hamiltonian v) := by
+  have : NeZero M := ⟨by omega⟩
   simp only [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.sum_apply]
   refine Finset.sum_congr rfl fun i _ ↦
     toEuclideanLin_translationInvariant_term_extend_physical e hRM _ _ (fun w ↦ ?_) i v
@@ -334,15 +338,17 @@ theorem physical_sector_hamiltonian_translationInvariant_embed_eq_zero_iff
     (hR : 0 < R) (hRM : R ≤ M)
     (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
     (v : MPVSpace a M) :
-    Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+    haveI : NeZero M := ⟨by omega⟩;
+    Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
         (Matrix.toEuclideanLin.symm
           ((S.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
               |>.euclideanExtendByZero.toLinearMap) ⊔
             T.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
               |>.euclideanExtendByZero.toLinearMap))ᗮ.starProjection.toLinearMap))).hamiltonian
         ((Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero v) = 0 ↔
-      Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+      Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
         (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap)).hamiltonian v = 0 := by
+  have : NeZero M := ⟨by omega⟩
   rw [physical_sector_hamiltonian_translationInvariant_embed e f h hR hRM S T v]
   let E := (Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero
   exact E.toLinearMap.map_eq_zero_iff E.injective
@@ -358,7 +364,8 @@ theorem physical_sector_hamiltonian_translationInvariant_sum_eq_zero_iff
     (hR : 0 < R) (hRM : R ≤ M)
     (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
     (v : MPVSpace a M) (w : MPVSpace b M) :
-    Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+    haveI : NeZero M := ⟨by omega⟩;
+    Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
         (Matrix.toEuclideanLin.symm
           ((S.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
               |>.euclideanExtendByZero.toLinearMap) ⊔
@@ -366,21 +373,22 @@ theorem physical_sector_hamiltonian_translationInvariant_sum_eq_zero_iff
               |>.euclideanExtendByZero.toLinearMap))ᗮ.starProjection.toLinearMap))).hamiltonian
         ((Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero v +
           (Function.Embedding.piCongrRight (fun _ : Fin M ↦ f)).euclideanExtendByZero w) = 0 ↔
-      Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+      Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
           (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap)).hamiltonian v = 0 ∧
-        Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+        Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
           (Matrix.toEuclideanLin.symm Tᗮ.starProjection.toLinearMap)).hamiltonian w = 0 := by
+  have : NeZero M := ⟨by omega⟩
   let E := (Function.Embedding.piCongrRight (fun _ : Fin M ↦ e)).euclideanExtendByZero
   let F := (Function.Embedding.piCongrRight (fun _ : Fin M ↦ f)).euclideanExtendByZero
-  let H := Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+  let H := Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
     (Matrix.toEuclideanLin.symm
       ((S.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ e))
           |>.euclideanExtendByZero.toLinearMap) ⊔
         T.map ((Function.Embedding.piCongrRight (fun _ : Fin R ↦ f))
           |>.euclideanExtendByZero.toLinearMap))ᗮ.starProjection.toLinearMap))).hamiltonian
-  let G := Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+  let G := Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
     (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap)).hamiltonian
-  let K := Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+  let K := Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
     (Matrix.toEuclideanLin.symm Tᗮ.starProjection.toLinearMap)).hamiltonian
   have hE : H (E v) = E (G v) :=
     physical_sector_hamiltonian_translationInvariant_embed e f h hR hRM S T v

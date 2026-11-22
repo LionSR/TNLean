@@ -67,8 +67,10 @@ theorem toEuclideanLin_parentRingInteraction_term_apply_of_singlet_parentInterac
       Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A 2)) v σ =
         (v σ - v (σ ∘ Fin.rev)) / 2)
     (hN : 2 ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg 2 N)) (σ : Cfg 2 N) :
-    Matrix.toEuclideanLin ((parentRingInteraction A hN).term i) v σ =
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i) v σ =
       (v σ - v (σ ∘ Equiv.swap i (cyclicForwardSite i 1))) / 2 := by
+  have : NeZero N := ⟨by omega⟩
   rw [toEuclideanLin_parentRingInteraction_term_apply A hN i, hA]
   have hrev : (Fin.rev : Fin 2 → Fin 2) = Equiv.swap 0 1 := by
     funext j
@@ -87,8 +89,10 @@ theorem toEuclideanLin_hamiltonian_parentRingInteraction_apply_of_singlet_parent
       Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A 2)) v σ =
         (v σ - v (σ ∘ Fin.rev)) / 2)
     (hN : 2 ≤ N) (v : EuclideanSpace ℂ (Cfg 2 N)) (σ : Cfg 2 N) :
-    Matrix.toEuclideanLin (parentRingInteraction A hN).hamiltonian v σ =
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin (parentRingInteraction A 2 N).hamiltonian v σ =
       (∑ i : Fin N, (v σ - v (σ ∘ Equiv.swap i (cyclicForwardSite i 1)))) / 2 := by
+  have : NeZero N := ⟨by omega⟩
   rw [ManyBody.Interaction.hamiltonian, map_sum]
   simp only [LinearMap.sum_apply, WithLp.ofLp_sum, Finset.sum_apply,
     toEuclideanLin_parentRingInteraction_term_apply_of_singlet_parentInteraction A hA hN,

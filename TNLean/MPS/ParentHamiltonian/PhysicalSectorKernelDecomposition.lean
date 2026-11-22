@@ -88,7 +88,8 @@ Source: physical-sector assembly for the SPWC10 finite-prefix investigation. -/
 theorem ker_physical_sum_translationInvariant_projector
     {a b R M : ℕ} (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
     (hR : 2 ≤ R) (hRM : R ≤ M) :
-    LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+    haveI : NeZero M := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
       (Matrix.toEuclideanLin.symm
         ((S.map
             (Function.Embedding.piCongrRight
@@ -97,14 +98,15 @@ theorem ker_physical_sum_translationInvariant_projector
             (Function.Embedding.piCongrRight
               (fun _ : Fin R ↦ Fin.natAddEmb a)).euclideanExtendByZero.toLinearMap)ᗮ
           |>.starProjection.toLinearMap))).hamiltonian) =
-      (LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+      (LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
         (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap)).hamiltonian)).map
         (Function.Embedding.piCongrRight
           (fun _ : Fin M ↦ Fin.castAddEmb b)).euclideanExtendByZero.toLinearMap ⊔
-      (LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+      (LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
         (Matrix.toEuclideanLin.symm Tᗮ.starProjection.toLinearMap)).hamiltonian)).map
         (Function.Embedding.piCongrRight
           (fun _ : Fin M ↦ Fin.natAddEmb a)).euclideanExtendByZero.toLinearMap := by
+  have : NeZero M := ⟨by omega⟩
   let e : Fin a ↪ Fin (a + b) := Fin.castAddEmb b
   let f : Fin b ↪ Fin (a + b) := Fin.natAddEmb a
   have hdisj (i : Fin a) (j : Fin b) : e i ≠ f j := by

@@ -209,10 +209,11 @@ theorem physical_label_eq_of_translationInvariant_projector_coeff_ne_zero
     (hS : ∀ v ∈ S, ∀ ω : Cfg d R,
       label (ω ⟨0, by omega⟩) ≠ label (ω ⟨1, by omega⟩) → v ω = 0)
     (ψ : MPVSpace d M)
-    (hzero : Matrix.toEuclideanLin (translationInvariant hRM
+    (hzero : haveI : NeZero M := ⟨by omega⟩; Matrix.toEuclideanLin (translationInvariant M
       (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap)).hamiltonian ψ = 0)
     (σ : Cfg d M) (hσ : ψ σ ≠ 0) :
     ∀ i : Fin M, label (σ i) = label (σ ⟨0, by omega⟩) := by
+  have : NeZero M := ⟨by omega⟩
   let _ : NeZero M := ⟨by omega⟩
   have hh : (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap).PosSemidef := by
     rw [← Matrix.isPositive_toEuclideanLin_iff, LinearEquiv.apply_symm_apply]
@@ -265,9 +266,10 @@ theorem coeff_eq_zero_of_translationInvariant_projector_of_physical_labels_ne
     (hS : ∀ v ∈ S, ∀ ω : Cfg d R,
       label (ω ⟨0, by omega⟩) ≠ label (ω ⟨1, by omega⟩) → v ω = 0)
     (ψ : MPVSpace d M)
-    (hzero : Matrix.toEuclideanLin (translationInvariant hRM
+    (hzero : haveI : NeZero M := ⟨by omega⟩; Matrix.toEuclideanLin (translationInvariant M
       (Matrix.toEuclideanLin.symm Sᗮ.starProjection.toLinearMap)).hamiltonian ψ = 0)
     (σ : Cfg d M) (i j : Fin M) (hij : label (σ i) ≠ label (σ j)) : ψ σ = 0 := by
+  have : NeZero M := ⟨by omega⟩
   by_contra hσ
   have heq := physical_label_eq_of_translationInvariant_projector_coeff_ne_zero
     S label hR hRM hS ψ hzero σ hσ
@@ -282,13 +284,15 @@ theorem coeff_eq_zero_of_two_sector_translationInvariant_projector
     (c₁ c₂ : κ) (he : ∀ i, label (e i) = c₁) (hf : ∀ i, label (f i) = c₂)
     (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
     (hR : 2 ≤ R) (hRM : R ≤ M) (ψ : MPVSpace d M)
-    (hzero : Matrix.toEuclideanLin (translationInvariant hRM (Matrix.toEuclideanLin.symm
+    (hzero : haveI : NeZero M := ⟨by omega⟩;
+      Matrix.toEuclideanLin (translationInvariant M (Matrix.toEuclideanLin.symm
       ((S.map
           (Function.Embedding.piCongrRight (fun _ : Fin R ↦ e)).euclideanExtendByZero.toLinearMap ⊔
         T.map
           (Function.Embedding.piCongrRight (fun _ : Fin R ↦ f)).euclideanExtendByZero.toLinearMap)ᗮ
         |>.starProjection.toLinearMap))).hamiltonian ψ = 0)
     (σ : Cfg d M) (i j : Fin M) (hij : label (σ i) ≠ label (σ j)) : ψ σ = 0 := by
+  have : NeZero M := ⟨by omega⟩
   apply coeff_eq_zero_of_translationInvariant_projector_of_physical_labels_ne _ label hR hRM
     (fun v hv ω hω ↦ coeff_eq_zero_of_mem_two_embedded_physical_sectors
       e f label c₁ c₂ he hf S T v hv ω ⟨0, by omega⟩ ⟨1, by omega⟩ hω)
@@ -302,7 +306,8 @@ assembly in the finite-prefix investigation of SPWC10, Theorem 5, lines 850--880
 theorem coeff_eq_zero_of_physical_sum_translationInvariant_projector
     {a b : ℕ} (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
     (hR : 2 ≤ R) (hRM : R ≤ M) (ψ : MPVSpace (a + b) M)
-    (hzero : Matrix.toEuclideanLin (translationInvariant hRM (Matrix.toEuclideanLin.symm
+    (hzero : haveI : NeZero M := ⟨by omega⟩;
+      Matrix.toEuclideanLin (translationInvariant M (Matrix.toEuclideanLin.symm
       ((S.map
           (Function.Embedding.piCongrRight
             (fun _ : Fin R ↦ Fin.castAddEmb b)).euclideanExtendByZero.toLinearMap ⊔
@@ -312,6 +317,7 @@ theorem coeff_eq_zero_of_physical_sum_translationInvariant_projector
         |>.starProjection.toLinearMap))).hamiltonian ψ = 0)
     (σ : Cfg (a + b) M) (i j : Fin M) (hi : (σ i).val < a) (hj : a ≤ (σ j).val) :
     ψ σ = 0 := by
+  have : NeZero M := ⟨by omega⟩
   let label : Fin (a + b) → Bool := fun k ↦ decide (k.val < a)
   have he (k : Fin a) : label (Fin.castAddEmb b k) = true := by
     change decide (k.val < a) = true

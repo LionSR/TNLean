@@ -64,8 +64,10 @@ theorem IsBoundaryCompatible.commute_hamiltonian_parentRingInteraction_of_dualRe
     (h : IsBoundaryCompatible (ofDualRepresentation φ ψ) A)
     (hL : 0 < L) (hLN : L ≤ N) {X : Matrix (Fin D) (Fin D) ℂ}
     (hX : X ∈ commutingBoundaryAlgebra (ofDualRepresentation φ ψ)) :
-    Commute (MPSTensor.parentRingInteraction A hLN).hamiltonian
+    haveI : NeZero N := ⟨by omega⟩;
+    Commute (MPSTensor.parentRingInteraction A L N).hamiltonian
       (mpoWithBoundary (ofDualRepresentation φ ψ) X N) := by
+  have : NeZero N := ⟨by omega⟩
   apply h.commute_hamiltonian_parentRingInteraction_mpoWithBoundary hL hLN ?_ hX
   intro Y
   obtain ⟨Z, hZ⟩ := exists_adjointBoundary_of_dualRepresentation hcomul φ hφ ψ hψ Y

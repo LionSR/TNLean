@@ -144,7 +144,8 @@ two. This uses equality with the already established mixed parent path; no gap
 is asserted for the literal uncompleted average. -/
 theorem exists_uniform_arbitraryPhysicalMixedWeakHopfParent_gap :
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ γ : unitInterval, ∀ N : ℕ, ∀ hN : 2 ≤ N,
-      IsGapped (Interaction.translationInvariant hN
+      haveI : NeZero N := ⟨by omega⟩;
+      IsGapped (Interaction.translationInvariant N
         (arbitraryPhysicalMixedWeakHopfParent A₀ A₁ W γ)).hamiltonian 0 δ := by
   obtain ⟨δ, hδ, hδ₁, hg⟩ := exists_uniform_arbitraryPhysicalMixed_periodic_path_gap
     A₀ A₁ hInj₀ hInj₁

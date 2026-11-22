@@ -133,12 +133,14 @@ open Fin.CommRing
 /-- The term with index `0` of the parent interaction on the ring of `W` sites is the local
 parent interaction: its window is the whole ring. -/
 theorem parentRingInteraction_term_zero_self (A : MPSTensor d D) {W : ℕ} (hW : 0 < W) :
-    (parentRingInteraction A (le_refl W)).term ⟨0, hW⟩ =
+    haveI : NeZero W := ⟨by omega⟩;
+    (parentRingInteraction A W W).term ⟨0, hW⟩ =
       LinearMap.toMatrix' (parentInteraction A W) := by
-  rw [ManyBody.Interaction.translates_term]
+  have : NeZero W := ⟨by omega⟩
+  rw [ManyBody.Interaction.translationInvariant_term_of_le _ (le_refl W)]
   have hw : ManyBody.ringWindow (le_refl W) (⟨0, hW⟩ : Fin W) = Function.Embedding.refl _ :=
     Function.Embedding.ext fun j ↦ Fin.ext (by
-      simp [ManyBody.ringWindow_apply, Fin.val_add, Nat.mod_eq_of_lt j.isLt])
+      simp [ManyBody.ringWindow_apply])
   rw [hw, ManyBody.placeAlong_refl]
 
 private theorem placeAlong_ringWindow_hamiltonian_parentChainInteraction (A : MPSTensor d D)
@@ -146,12 +148,13 @@ private theorem placeAlong_ringWindow_hamiltonian_parentChainInteraction (A : MP
     ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hWN i)
         (parentChainInteraction A R W).hamiltonian =
       ∑ j : Fin (W + 1 - R),
-        (parentRingInteraction A (hRW.trans hWN)).term (i + (j.val : Fin N)) := by
+        (parentRingInteraction A R N).term (i + (j.val : Fin N)) := by
   rw [ManyBody.Interaction.hamiltonian, ManyBody.placeAlong_sum]
   refine Fintype.sum_congr _ _ fun j ↦ ?_
-  rw [ManyBody.Interaction.translates_term, ManyBody.placeAlong_placeAlong,
+  rw [ManyBody.Interaction.ofPlaceAlong_term,
+    ManyBody.Interaction.translationInvariant_term_of_le _ (hRW.trans hWN),
+    ManyBody.placeAlong_placeAlong,
     ManyBody.chainWindow_trans_ringWindow]
-  rfl
 
 /-- **Periodic comparison from an open window.** A two-sided comparison between the local parent
 projection on \(m + R - 1\) sites and the range-\(R\) open-chain parent Hamiltonian on those sites
@@ -165,27 +168,27 @@ theorem hamiltonian_parentRingInteraction_comparison_of_local_open_comparison
       (parentChainInteraction A R (m + R - 1)).hamiltonian)
     (hUpper : (parentChainInteraction A R (m + R - 1)).hamiltonian ≤
       (C : ℂ) • LinearMap.toMatrix' (parentInteraction A (m + R - 1))) :
-    (κ : ℂ) • (parentRingInteraction A (show m + R - 1 ≤ N by omega)).hamiltonian ≤
-        (m : ℂ) • (parentRingInteraction A (show R ≤ N by omega)).hamiltonian ∧
-      (m : ℂ) • (parentRingInteraction A (show R ≤ N by omega)).hamiltonian ≤
-        (C : ℂ) • (parentRingInteraction A (show m + R - 1 ≤ N by omega)).hamiltonian := by
+    (κ : ℂ) • (parentRingInteraction A (m + R - 1) N).hamiltonian ≤
+        (m : ℂ) • (parentRingInteraction A R N).hamiltonian ∧
+      (m : ℂ) • (parentRingInteraction A R N).hamiltonian ≤
+        (C : ℂ) • (parentRingInteraction A (m + R - 1) N).hamiltonian := by
   have hRW : R ≤ m + R - 1 := by omega
   have hWN : m + R - 1 ≤ N := by omega
   have hsum : ∑ i : Fin N, ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hWN i)
       (parentChainInteraction A R (m + R - 1)).hamiltonian =
-      (m : ℂ) • (parentRingInteraction A (hRW.trans hWN)).hamiltonian := by
+      (m : ℂ) • (parentRingInteraction A R N).hamiltonian := by
     simp only [placeAlong_ringWindow_hamiltonian_parentChainInteraction A hRW hWN]
     rw [Finset.sum_comm]
     have hshift (j : Fin (m + R - 1 + 1 - R)) :
-        ∑ i : Fin N, (parentRingInteraction A (hRW.trans hWN)).term (i + (j.val : Fin N)) =
-          (parentRingInteraction A (hRW.trans hWN)).hamiltonian :=
+        ∑ i : Fin N, (parentRingInteraction A R N).term (i + (j.val : Fin N)) =
+          (parentRingInteraction A R N).hamiltonian :=
       Fintype.sum_equiv (Equiv.addRight (j.val : Fin N)) _ _ fun _ ↦ rfl
     simp only [hshift, Finset.sum_const, Finset.card_univ, Fintype.card_fin,
       show m + R - 1 + 1 - R = m by omega, Nat.cast_smul_eq_nsmul]
-  have hring (W : ℕ) (hW : W ≤ N) (c : ℂ) : c • (parentRingInteraction A hW).hamiltonian =
+  have hring (W : ℕ) (hW : W ≤ N) (c : ℂ) : c • (parentRingInteraction A W N).hamiltonian =
       ∑ i : Fin N, ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hW i)
         (c • LinearMap.toMatrix' (parentInteraction A W)) := by
-    simp only [ManyBody.Interaction.hamiltonian, ManyBody.Interaction.translates_term,
+    simp only [ManyBody.Interaction.hamiltonian_translationInvariant_of_le _ hW,
       ManyBody.placeAlong_smul, Finset.smul_sum]
   constructor
   · rw [hring _ hWN, ← hsum]

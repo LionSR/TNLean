@@ -41,7 +41,9 @@ theorem IsBoundaryCompatible.commute_hamiltonian_parentRingInteraction_mpo_block
     (hAdjoint : IsPeriodicAdjointFamily O dual) (hdual : Function.Involutive dual)
     (hNormal : ∀ a, Kraus.IsNormal (O a).toMPSTensor)
     (hDim : ∀ a, 0 < dim a) (hL : 0 < L) (hLN : L ≤ N) (a : Fin r) :
-    Commute (MPSTensor.parentRingInteraction A hLN).hamiltonian (mpo (O a) N) := by
+    haveI : NeZero N := ⟨by omega⟩;
+    Commute (MPSTensor.parentRingInteraction A L N).hamiltonian (mpo (O a) N) := by
+  have : NeZero N := ⟨by omega⟩
   apply h.commute_hamiltonian_parentRingInteraction_mpo_block hL hLN ?_ a
   intro X
   obtain ⟨Y, hY⟩ := hAdjoint.isBoundaryAdjointClosed_blockSum hdual hNormal hDim X

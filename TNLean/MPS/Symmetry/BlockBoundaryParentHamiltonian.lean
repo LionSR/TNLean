@@ -37,7 +37,9 @@ theorem IsBoundaryCompatible.commute_hamiltonian_parentRingInteraction_mpo_block
       ∃ Y : Matrix (Fin (∑ a : Fin r, dim a)) (Fin (∑ a : Fin r, dim a)) ℂ,
         (mpoWithBoundary (blockSum O) X L)ᴴ = mpoWithBoundary (blockSum O) Y L)
     (a : Fin r) :
-    Commute (MPSTensor.parentRingInteraction A hLN).hamiltonian (mpo (O a) N) := by
+    haveI : NeZero N := ⟨by omega⟩;
+    Commute (MPSTensor.parentRingInteraction A L N).hamiltonian (mpo (O a) N) := by
+  have : NeZero N := ⟨by omega⟩
   simpa only [mpoWithBoundary_blockSum_blockBoundarySelector] using
     h.commute_hamiltonian_parentRingInteraction_mpoWithBoundary hL hLN hstar
       (blockBoundarySelector_mem_commutingBoundaryAlgebra O a)

@@ -34,12 +34,14 @@ namespace MPSTensor
 hopping-imbalance coefficient times the particle-number expectation. -/
 theorem hamiltonian_parentRingInteraction_pvbs_energy_decomposition (μ : ℝ) {N : ℕ}
     (hN : 2 ≤ N) (v : EuclideanSpace ℂ (Cfg 2 N)) :
+    haveI : NeZero N := ⟨by omega⟩;
     (⟪v, Matrix.toEuclideanLin
-        (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian v⟫_ℂ).re =
+        (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian v⟫_ℂ).re =
       (2 * μ / (1 + μ ^ 2)) *
-        (⟪v, Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) hN).hamiltonian v⟫_ℂ).re +
+        (⟪v, Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) 2 N).hamiltonian v⟫_ℂ).re +
       ((μ - 1) ^ 2 / (1 + μ ^ 2)) *
         ∑ σ : Cfg 2 N, (∑ i : Fin N, ((σ i).val : ℝ)) * ‖v σ‖ ^ 2 := by
+  have : NeZero N := ⟨by omega⟩
   let w : EuclideanSpace ℂ (Cfg 2 N) :=
     WithLp.toLp 2 (fun σ => (∑ i : Fin N, ((σ i).val : ℂ)) * v σ)
   have hw : (⟪v, w⟫_ℂ).re =
@@ -50,9 +52,9 @@ theorem hamiltonian_parentRingInteraction_pvbs_energy_decomposition (μ : ℝ) {
     change (((∑ i : Fin N, ((σ i).val : ℂ)) * v σ) * conj (v σ)).re = _
     rw [mul_assoc, Complex.mul_conj]
     simp [Complex.sq_norm]
-  have hH : Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian v =
+  have hH : Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian v =
       ((2 * μ / (1 + μ ^ 2) : ℝ) : ℂ) •
-        Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) hN).hamiltonian v +
+        Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) 2 N).hamiltonian v +
       (((μ - 1) ^ 2 / (1 + μ ^ 2) : ℝ) : ℂ) • w := by
     ext σ
     simpa only [PiLp.add_apply, PiLp.smul_apply, smul_eq_mul, mul_assoc] using
@@ -85,9 +87,11 @@ theorem pvbs_particle_number_ge_norm_sq {N : ℕ} (v : EuclideanSpace ℂ (Cfg 2
 space, with a constant independent of the ring length. -/
 theorem hamiltonian_parentRingInteraction_pvbs_energy_lower_bound (μ : ℝ) (hμ : 0 ≤ μ)
     {N : ℕ} (hN : 2 ≤ N) (v : EuclideanSpace ℂ (Cfg 2 N)) (hv : v 0 = 0) :
+    haveI : NeZero N := ⟨by omega⟩;
     ((μ - 1) ^ 2 / (1 + μ ^ 2)) * ‖v‖ ^ 2 ≤
       (⟪v, Matrix.toEuclideanLin
-        (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian v⟫_ℂ).re := by
+        (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian v⟫_ℂ).re := by
+  have : NeZero N := ⟨by omega⟩
   rw [hamiltonian_parentRingInteraction_pvbs_energy_decomposition μ hN]
   have ha : 0 ≤ 2 * μ / (1 + μ ^ 2) := by positivity
   have hc : 0 ≤ (μ - 1) ^ 2 / (1 + μ ^ 2) := by positivity
@@ -99,14 +103,15 @@ theorem hamiltonian_parentRingInteraction_pvbs_energy_lower_bound (μ : ℝ) (h�
 /-- Orthogonality to the actual parent kernel implies zero vacuum amplitude. -/
 theorem pvbs_zero_of_mem_orthogonal_parent_kernel (q : ℂ) {N : ℕ} (hN : 2 ≤ N)
     {v : EuclideanSpace ℂ (Cfg 2 N)}
-    (hv : v ∈ (LinearMap.ker
-      (Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor q) hN).hamiltonian))ᗮ) :
+    (hv : haveI : NeZero N := ⟨by omega⟩; v ∈ (LinearMap.ker
+      (Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor q) 2 N).hamiltonian))ᗮ) :
     v 0 = 0 := by
+  have : NeZero N := ⟨by omega⟩
   have hraw := pvbsVacuum_mem_chainGroundSpace q hN
   rw [← ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) hN,
-    parentHamiltonian_of_le _ hN, LinearMap.mem_ker, Matrix.toLin'_apply] at hraw
+    parentHamiltonian_eq_toLin'_hamiltonian _ 2, LinearMap.mem_ker, Matrix.toLin'_apply] at hraw
   have hΩ : WithLp.toLp 2 (pvbsVacuum N) ∈ LinearMap.ker
-      (Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor q) hN).hamiltonian) := by
+      (Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor q) 2 N).hamiltonian) := by
     rw [LinearMap.mem_ker, Matrix.toLpLin_apply, WithLp.ofLp_toLp, hraw, WithLp.toLp_zero]
   rw [Submodule.mem_orthogonal] at hv
   have h := hv (WithLp.toLp 2 (pvbsVacuum N)) hΩ
@@ -117,12 +122,14 @@ with the uniform gap `(μ - 1)² / (1 + μ²)` for nonnegative real hopping. The
 bound is positive when the hopping is noncritical. -/
 theorem isGapped_hamiltonian_parentRingInteraction_pvbs (μ : ℝ) (hμ : 0 ≤ μ) {N : ℕ}
     (hN : 2 ≤ N) :
-    ManyBody.IsGapped (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian 0
+    haveI : NeZero N := ⟨by omega⟩;
+    ManyBody.IsGapped (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian 0
       ((μ - 1) ^ 2 / (1 + μ ^ 2)) := by
+  have : NeZero N := ⟨by omega⟩
   rw [ManyBody.isGapped_zero_iff_norm
     (posSemidef_hamiltonian_parentRingInteraction (pvbsTensor (μ : ℂ)) hN),
     ManyBody.groundSpace_zero]
-  set H := Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian
+  set H := Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian
   refine ⟨fun hbot ↦ ?_, fun v hv ↦ ?_⟩
   · have h := pvbs_zero_of_mem_orthogonal_parent_kernel (μ : ℂ) hN
       (v := WithLp.toLp 2 (pvbsVacuum N))

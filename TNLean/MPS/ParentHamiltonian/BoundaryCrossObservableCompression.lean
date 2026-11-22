@@ -54,7 +54,7 @@ private theorem prefixGroundProjection_eq_id_sub_term
     change (Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ) (1 - p)).toLinearMap = _
     rw [map_sub, map_one, StarAlgEquiv.apply_symm_apply, Submodule.starProjection_orthogonal]
     rfl
-  rw [ManyBody.Interaction.translates_term, ← hc]
+  rw [ManyBody.Interaction.ofPlaceAlong_term, ← hc]
   change Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
       (placeAlong (X := fun _ ↦ Fin d) (chainWindow 0 (by omega)) p) =
     1 - Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)

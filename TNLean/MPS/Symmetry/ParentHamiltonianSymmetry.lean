@@ -175,20 +175,23 @@ theorem commute_parentRingInteraction_term_onSiteTensorPow {d D N : ℕ}
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hCov : GaugeEquiv A (rotatePhysical U A))
     {L : ℕ} (hLN : L ≤ N) (i : Fin N) :
-    Commute ((parentRingInteraction A hLN).term i) (onSiteTensorPow N U) :=
-  placeAlong_ringWindow_commute_onSiteTensorPow U L hLN i
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Commute ((parentRingInteraction A L N).term i) (onSiteTensorPow N U) := by
+  have : NeZero N := NeZero.of_pos i.pos
+  rw [ManyBody.Interaction.translationInvariant_term_of_le _ hLN i]
+  exact placeAlong_ringWindow_commute_onSiteTensorPow U L hLN i
     (LinearMap.toMatrix' (parentInteraction A L))
     (parentInteraction_matrix_commute_onSiteTensorPow A U hU hCov L)
 
 /-- On every periodic chain at least as long as the interaction range, the
 canonical parent Hamiltonian commutes with the on-site tensor power.
 Source: arXiv:1010.3732, Section II.F.2 and Appendix A. -/
-theorem commute_hamiltonian_parentRingInteraction_onSiteTensorPow {d D N : ℕ}
+theorem commute_hamiltonian_parentRingInteraction_onSiteTensorPow {d D N : ℕ} [NeZero N]
     (A : MPSTensor d D) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hCov : GaugeEquiv A (rotatePhysical U A))
     {L : ℕ} (hLN : L ≤ N) :
-    Commute (parentRingInteraction A hLN).hamiltonian (onSiteTensorPow N U) :=
+    Commute (parentRingInteraction A L N).hamiltonian (onSiteTensorPow N U) :=
   Commute.sum_left _ _ _ fun i _ ↦
     commute_parentRingInteraction_term_onSiteTensorPow A U hU hCov hLN i
 

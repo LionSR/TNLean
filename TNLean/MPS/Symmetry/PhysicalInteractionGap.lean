@@ -75,9 +75,11 @@ theorem hamiltonian_translationInvariant_eigenvalue_gap_one_of_commuting_project
     (hcomm : ∀ i j : Fin N,
       Commute (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A)
         (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) A)) :
+    haveI : NeZero N := ⟨by omega⟩;
     ∀ μ : ℂ, Module.End.HasEigenvalue
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) μ →
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) μ →
       μ = 0 ∨ (1 : ℂ) ≤ μ :=
+  haveI : NeZero N := ⟨by omega⟩
   forall_hasEigenvalue_of_quadratic_gap _
     (Interaction.posSemidef_hamiltonian fun _ ↦
       Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _))
@@ -166,9 +168,11 @@ theorem sectorBondInteraction_eigenvalue_gap_one {K d N : ℕ}
     (η : (q h : Fin K) →
       Matrix (Matrix.EtaEdgeIndex dl dr q h) (Matrix.EtaEdgeIndex dl dr q h) ℂ)
     (hη : ∀ q h, IsStarProjection (η q h)) (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN (sectorBondInteraction dl dr e η)).hamiltonian) μ →
+        (Interaction.translationInvariant N (sectorBondInteraction dl dr e η)).hamiltonian) μ →
       μ = 0 ∨ (1 : ℂ) ≤ μ := by
+  have : NeZero N := ⟨by omega⟩
   let : NeZero N := ⟨by omega⟩
   exact hamiltonian_translationInvariant_eigenvalue_gap_one_of_commuting_projection _
     (sectorBondInteraction_isStarProjection dl dr e η hη) hN

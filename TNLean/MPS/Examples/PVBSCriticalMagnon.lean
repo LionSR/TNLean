@@ -27,10 +27,12 @@ namespace MPSTensor
 exchange term. This identity uses the actual canonical parent interaction. -/
 theorem toEuclideanLin_parentRingInteraction_term_pvbs_critical_oneMagnon {N : ℕ}
     (hN : 2 ≤ N) (f : Fin N → ℂ) (i : Fin N) (σ : Cfg 2 N) :
-    Matrix.toEuclideanLin ((parentRingInteraction (pvbsTensor 1) hN).term i)
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin ((parentRingInteraction (pvbsTensor 1) 2 N).term i)
         (WithLp.toLp 2 (SpinChain.oneMagnon f)) σ =
       (SpinChain.oneMagnon f σ -
         SpinChain.oneMagnon f (σ ∘ Equiv.swap i (cyclicForwardSite i 1))) / 2 := by
+  have : NeZero N := ⟨by omega⟩
   let : NeZero N := ⟨by omega⟩
   have hn : cyclicForwardSite i 1 ≠ i := by
     rw [← cyclicSuccessorEquiv_apply]
@@ -64,7 +66,7 @@ theorem toEuclideanLin_parentRingInteraction_term_pvbs_critical_oneMagnon {N : �
 Laplacian on one-particle coefficients, including the two-site ring. -/
 theorem toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_oneMagnon {N : ℕ}
     [NeZero N] (hN : 2 ≤ N) (f : Fin N → ℂ) :
-    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) hN).hamiltonian
+    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) 2 N).hamiltonian
         (WithLp.toLp 2 (SpinChain.oneMagnon f)) =
       WithLp.toLp 2 (SpinChain.oneMagnon (fun j =>
         f j - (f (cyclicSuccessorEquiv N j) + f ((cyclicSuccessorEquiv N).symm j)) / 2)) := by
@@ -80,8 +82,10 @@ theorem toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_oneMagnon
 state on every ring of at least two sites. -/
 theorem toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_uniformParticle
     {N : ℕ} (hN : 2 ≤ N) :
-    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) hN).hamiltonian
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) 2 N).hamiltonian
       (WithLp.toLp 2 (SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ)))) = 0 := by
+  have : NeZero N := ⟨by omega⟩
   let : NeZero N := ⟨by omega⟩
   rw [toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_oneMagnon hN]
   ext σ

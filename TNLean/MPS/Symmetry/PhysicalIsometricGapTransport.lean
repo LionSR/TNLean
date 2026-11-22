@@ -105,8 +105,7 @@ theorem isometricInteractionExtension_inactive_energy_lower_bound {d m N : ℕ}
   have hProjection := isometricInteractionExtension_isStarProjection E hE 0
     (IsStarProjection.zero _)
   have hP : P.PosSemidef := Interaction.posSemidef_hamiltonian fun _ ↦
-    posSemidef_placeAlong (X := fun _ ↦ Fin m) _
-      (Matrix.nonneg_iff_posSemidef.mp hProjection.nonneg)
+      Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hProjection.nonneg _)
   have hSpec := hamiltonian_translationInvariant_eigenvalue_gap_one_of_commuting_projection _
     hProjection hN (isometricInteractionExtension_zero_translate_commute E hN)
   have hvP : v ∈ (LinearMap.ker (Matrix.toEuclideanLin P))ᗮ := by
@@ -218,18 +217,22 @@ Hamiltonian has trivial kernel, and no sign of `δ` is assumed. -/
 theorem isometricInteractionExtension_eigenvalue_gap {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     {A : MPOTensor.ChainOperator d 2} (hA : A.PosSemidef) (hN : 2 ≤ N) {δ : ℝ}
-    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) μ →
+    (hGap : haveI : NeZero N := ⟨by omega⟩; ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) μ →
       μ = 0 ∨ (δ : ℂ) ≤ μ) :
+    haveI : NeZero N := ⟨by omega⟩;
     ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian) μ →
+        (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian) μ →
       μ = 0 ∨ ((min δ 1 : ℝ) : ℂ) ≤ μ := by
-  have hPA : (Interaction.translationInvariant hN A).hamiltonian.PosSemidef :=
-    Interaction.posSemidef_hamiltonian fun _ ↦ posSemidef_placeAlong (X := fun _ ↦ Fin d) _ hA
-  have hPE : (Interaction.translationInvariant hN
+  have : NeZero N := ⟨by omega⟩
+  have hPA : (Interaction.translationInvariant N A).hamiltonian.PosSemidef :=
+    Interaction.posSemidef_hamiltonian fun _ ↦
+      Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _)
+  have hPE : (Interaction.translationInvariant N
       (isometricInteractionExtension E A)).hamiltonian.PosSemidef :=
-    Interaction.posSemidef_hamiltonian fun _ ↦ posSemidef_placeAlong (X := fun _ ↦ Fin m) _
-      (isometricInteractionExtension_posSemidef E hE hA)
+    Interaction.posSemidef_hamiltonian fun _ ↦
+      Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg
+        (isometricInteractionExtension_posSemidef E hE hA).nonneg _)
   rw [forall_hasEigenvalue_iff_re_inner hPA] at hGap
   rw [forall_hasEigenvalue_iff_re_inner hPE]
   intro v hv

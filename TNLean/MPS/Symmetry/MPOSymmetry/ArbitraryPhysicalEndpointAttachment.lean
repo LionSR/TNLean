@@ -40,17 +40,19 @@ in arXiv:2203.12563, Section 5, lines 1328–1331. -/
 theorem hamiltonian_translationInvariant_affine_eigenvalue_gap_of_order {d N : ℕ}
     (A B : MPOTensor.ChainOperator d 2) (hA : A.PosSemidef) (hAB : A ≤ B)
     (hN : 2 ≤ N)
-    (hker : LinearMap.ker
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) ≤
-      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN B).hamiltonian))
+    (hker : haveI : NeZero N := ⟨by omega⟩; LinearMap.ker
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) ≤
+      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant N B).hamiltonian))
     {δ : ℝ}
-    (hgap : ∀ μ : ℂ, Module.End.HasEigenvalue
-      (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) μ →
+    (hgap : haveI : NeZero N := ⟨by omega⟩; ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) μ →
         μ = 0 ∨ (δ : ℂ) ≤ μ)
     (t : ℝ) (ht : 0 ≤ t) :
+    haveI : NeZero N := ⟨by omega⟩;
     ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian) μ →
+      (Interaction.translationInvariant N (A + t • (B - A))).hamiltonian) μ →
         μ = 0 ∨ (δ : ℂ) ≤ μ := by
+  have : NeZero N := ⟨by omega⟩
   have hAC : A ≤ A + t • (B - A) := by
     rw [Matrix.le_iff]
     simpa using (Matrix.le_iff.mp hAB).smul ht
@@ -58,8 +60,9 @@ theorem hamiltonian_translationInvariant_affine_eigenvalue_gap_of_order {d N : �
       (Interaction.translationInvariant N (A + t • (B - A))).hamiltonian := by
     simp only [Interaction.hamiltonian_translationInvariant_of_le _ hN]
     exact Finset.sum_le_sum fun _ _ ↦ placeAlong_le_placeAlong _ hAC
-  have hHA : (Interaction.translationInvariant hN A).hamiltonian.PosSemidef :=
-    Interaction.posSemidef_hamiltonian fun _ ↦ posSemidef_placeAlong (X := fun _ ↦ Fin d) _ hA
+  have hHA : (Interaction.translationInvariant N A).hamiltonian.PosSemidef :=
+    Interaction.posSemidef_hamiltonian fun _ ↦
+      Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _)
   refine forall_hasEigenvalue_of_le hHA hHC ?_ hgap
   rw [groundSpace_zero, groundSpace_zero]
   exact (hamiltonian_translationInvariant_affine_ker_eq_of_order A B hA hAB hN hker t ht).ge
@@ -339,17 +342,20 @@ theorem exists_uniform_arbitraryPhysicalEndpointAttachment_gap
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁) :
     ∃ δ : ℝ, 0 < δ ∧ δ ≤ 1 ∧ ∀ right : Bool, ∀ t : unitInterval,
       ∀ N : ℕ, ∀ hN : 2 ≤ N,
-      IsGapped (Interaction.translationInvariant hN
+      haveI : NeZero N := ⟨by omega⟩;
+      IsGapped (Interaction.translationInvariant N
         (arbitraryPhysicalEndpointAttachment A₀ A₁ right t)).hamiltonian 0 δ := by
   obtain ⟨δ, hδ, hδone, hgap⟩ :=
     exists_uniform_arbitraryPhysicalMixed_periodic_path_gap A₀ A₁ h₀ h₁
-  refine ⟨δ, hδ, hδone, fun right t N hN ↦ ⟨fun hbot ↦ ?_, fun μ hμ ↦ ?_⟩⟩
+  refine ⟨δ, hδ, hδone, fun right t N hN ↦ ?_⟩
+  have : NeZero N := ⟨by omega⟩
+  refine ⟨fun hbot ↦ ?_, fun μ hμ ↦ ?_⟩
   · have hdim := arbitraryPhysicalEndpointAttachment_groundSpace_finrank A₀ A₁ h₀ h₁ right
       t.property.1 hN
     rw [← groundSpace_zero, hbot, finrank_bot] at hdim
     exact zero_ne_one hdim
   · have hend : ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN (arbitraryPhysicalMixedInteraction A₀ A₁
+        (Interaction.translationInvariant N (arbitraryPhysicalMixedInteraction A₀ A₁
           (if right then 1 else 0))).hamiltonian) μ → μ = 0 ∨ (δ : ℂ) ≤ μ := by
       have h := (hgap (if right then (1 : unitInterval) else 0) N hN).2
       cases right <;> simpa using h

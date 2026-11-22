@@ -72,11 +72,11 @@ theorem IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_bounded_range
     ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPSTensor d (dim j)) (R : ℕ),
       IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩) ∧
       0 < R ∧ R ≤ 3 * D ^ 5 ∧
-      ∀ {L N : ℕ}, R ≤ L → ∀ hLN : L ≤ N,
+      ∀ {L N : ℕ} [NeZero N], R ≤ L → ∀ _hLN : L ≤ N,
         ∀ H : Fin N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N),
           (∀ i, (H i).IsPositive) →
           (∀ i, LinearMap.ker (H i) =
-            LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction A hLN).term i))) →
+            LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i))) →
           LinearMap.ker (∑ i, H i) = (bntMPSVectorSpan B N).map
             (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
   let data := Classical.choice hA
@@ -85,7 +85,7 @@ theorem IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_bounded_range
   refine ⟨data.phaseClasses.g, (fun j ↦ data.dim (data.representativeIndex j)),
     (fun j ↦ data.blocks (data.representativeIndex j)), S + 1,
     data.bntRefinement.representativesBNT, by omega, hBound, ?_⟩
-  exact fun {_L _N} hL hLN H hH hker ↦
+  exact fun {_L _N} _ hL hLN H hH hker ↦
     data.ker_sum_eq_of_wordTupleSpanTop hS hSpan hL hLN H hH hker
 
 end MPSTensor

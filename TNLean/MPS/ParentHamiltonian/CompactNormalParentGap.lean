@@ -377,9 +377,11 @@ interaction. Source: arXiv:2011.12127, Section IV.C, lines 2078--2090. -/
 theorem ker_hamiltonian_parentRingInteraction_eq_range_periodicMpvLineMap_of_isNBlkInjective
     [NeZero D] (A : MPSTensor d D) {p R N : ℕ} (hp : 0 < p)
     (hA : Kraus.IsNBlkInjective A p) (hR : p < R) (hRN : R ≤ N) :
-    LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A hRN).hamiltonian) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A R N).hamiltonian) =
       (periodicMpvLineMap A N).range := by
-  rw [← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction,
+  have : NeZero N := ⟨by omega⟩
+  rw [← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _ hRN,
     parentHamiltonianGroundSpaceES,
     ker_parentHamiltonian_eq_chainGroundSpace A (by omega : 0 < N) hRN,
     chainGroundSpace_eq_mpvSubmodule_normal ⟨p, hp, hA⟩ hA hp
@@ -401,8 +403,10 @@ theorem continuous_hamiltonian_parentRingInteraction_kernelProjection_family_of_
     {X : Type*} [TopologicalSpace X] [NeZero D] {p R N : ℕ}
     (A : X → MPSTensor d D) (hA : Continuous A) (hp : 0 < p)
     (hInj : ∀ x, Kraus.IsNBlkInjective (A x) p) (hR : p < R) (hRN : R ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Continuous fun x => (LinearMap.ker
-      (Matrix.toEuclideanLin (parentRingInteraction (A x) hRN).hamiltonian)).starProjection := by
+      (Matrix.toEuclideanLin (parentRingInteraction (A x) R N).hamiltonian)).starProjection := by
+  have : NeZero N := ⟨by omega⟩
   have hT := continuous_periodicMpvLineMap_family A hA N
   have hTinj (x : X) : Function.Injective (periodicMpvLineMap (A x) N) :=
     periodicMpvLineMap_injective_of_isNBlkInjective (A x) hp (hInj x) (by omega)
@@ -412,7 +416,7 @@ theorem continuous_hamiltonian_parentRingInteraction_kernelProjection_family_of_
       (fun x => ContinuousLinearMap.injectiveRangeProjector
         (periodicMpvLineMap (A x) N) (hTinj x)) =
       (fun x => (LinearMap.ker (Matrix.toEuclideanLin
-        (parentRingInteraction (A x) hRN).hamiltonian)).starProjection) := by
+        (parentRingInteraction (A x) R N).hamiltonian)).starProjection) := by
     funext x
     rw [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection]
     exact congrArg
@@ -431,31 +435,33 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_gap_fixed_volume_of_isN
     (A : X → MPSTensor d D) (hA : Continuous A) (hp : 0 < p)
     (hInj : ∀ x, Kraus.IsNBlkInjective (A x) p) {S : Set X} (hS : IsCompact S)
     (hR : p < R) (hRN : R ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S,
-      ManyBody.IsGapped (parentRingInteraction (A x) hRN).hamiltonian 0 δ := by
+      ManyBody.IsGapped (parentRingInteraction (A x) R N).hamiltonian 0 δ := by
+  have : NeZero N := ⟨by omega⟩
   have hne (x : X) :
-      ManyBody.groundSpace (parentRingInteraction (A x) hRN).hamiltonian 0 ≠ ⊥ := by
+      ManyBody.groundSpace (parentRingInteraction (A x) R N).hamiltonian 0 ≠ ⊥ := by
     rw [ManyBody.groundSpace_zero,
       ker_hamiltonian_parentRingInteraction_eq_range_periodicMpvLineMap_of_isNBlkInjective
         (A x) hp (hInj x) hR hRN]
     exact range_periodicMpvLineMap_ne_bot
       (periodicMpvLineMap_injective_of_isNBlkInjective (A x) hp (hInj x) (by omega))
   suffices hnorm : ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S, ∀ v ∈ (LinearMap.ker
-      (Matrix.toEuclideanLin (parentRingInteraction (A x) hRN).hamiltonian))ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction (A x) hRN).hamiltonian v‖ by
+      (Matrix.toEuclideanLin (parentRingInteraction (A x) R N).hamiltonian))ᗮ,
+      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction (A x) R N).hamiltonian v‖ by
     obtain ⟨δ, hδ, hgap⟩ := hnorm
     exact ⟨δ, hδ, fun x hx ↦ (ManyBody.isGapped_zero_iff_norm
       (posSemidef_hamiltonian_parentRingInteraction (A x) hRN)).mpr ⟨hne x, hgap x hx⟩⟩
   have hBlock (x : X) : Kraus.IsNBlkInjective (A x) R :=
     isNBlkInjective_of_le hp (hInj x) hR.le
   let e := (Matrix.toEuclideanCLM : Matrix (Cfg d N) (Cfg d N) ℂ ≃⋆ₐ[ℂ] _)
-  have hH : Continuous fun x ↦ e (parentRingInteraction (A x) hRN).hamiltonian :=
+  have hH : Continuous fun x ↦ e (parentRingInteraction (A x) R N).hamiltonian :=
     e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp
       (continuous_hamiltonian_parentRingInteraction_family A hA hRN hBlock)
   have hK := continuous_hamiltonian_parentRingInteraction_kernelProjection_family_of_isNBlkInjective
     A hA hp hInj hR hRN
   simp only [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin] at hK ⊢
   exact ContinuousLinearMap.exists_uniform_norm_gap_of_compact
-    (fun x ↦ e (parentRingInteraction (A x) hRN).hamiltonian) hH hK hS
+    (fun x ↦ e (parentRingInteraction (A x) R N).hamiltonian) hH hK hS
 
 end MPSTensor

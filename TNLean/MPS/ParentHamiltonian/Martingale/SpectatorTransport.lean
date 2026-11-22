@@ -117,7 +117,7 @@ theorem toEuclideanLin_parentChainInteraction_term_conj_rightSpectatorConfigLine
     Matrix.toEuclideanLin ((parentChainInteraction A L n).term j)
       (ContinuousLinearMap.rightFiber x s) σ
   rw [Matrix.toLpLin_apply, Matrix.toLpLin_apply, PiLp.toLp_apply, PiLp.toLp_apply,
-    ManyBody.Interaction.translates_term, ManyBody.Interaction.translates_term,
+    ManyBody.Interaction.ofPlaceAlong_term, ManyBody.Interaction.ofPlaceAlong_term,
     placeAlong_chainWindow_mulVec_apply hj', placeAlong_chainWindow_mulVec_apply hj]
   have hcfg (ω : Cfg d L) :
       rightSpectatorConfigEquiv d n r (contiguousCfg j.val L ω (Fin.appendEquiv n r (σ, s))) =

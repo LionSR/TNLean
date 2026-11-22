@@ -71,17 +71,18 @@ theorem ker_sum_eq_bntMPSVectorSpan_of_wordTupleSpanTop
     (hSL : S + 1 ≤ L) (hLN : L ≤ N)
     (H : Fin N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N))
     (hH : ∀ i, (H i).IsPositive)
-    (hker : ∀ i, LinearMap.ker (H i) = LinearMap.ker
-      (Matrix.toEuclideanLin ((parentRingInteraction (toTensorFromBlocks μ A) hLN).term i))) :
+    (hker : haveI : NeZero N := ⟨by omega⟩; ∀ i, LinearMap.ker (H i) = LinearMap.ker
+      (Matrix.toEuclideanLin ((parentRingInteraction (toTensorFromBlocks μ A) L N).term i))) :
     LinearMap.ker (∑ i, H i) = (bntMPSVectorSpan A N).map
       (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
+  have : NeZero N := ⟨by omega⟩
   have hEq : LinearMap.ker (∑ i, H i) = LinearMap.ker
-      (Matrix.toEuclideanLin (parentRingInteraction (toTensorFromBlocks μ A) hLN).hamiltonian) := by
+      (Matrix.toEuclideanLin (parentRingInteraction (toTensorFromBlocks μ A) L N).hamiltonian) := by
     rw [ManyBody.Interaction.hamiltonian, map_sum, WeightedPositiveKernel.ker_sum_eq_iInf hH,
       WeightedPositiveKernel.ker_sum_eq_iInf (fun i ↦ Matrix.isPositive_toEuclideanLin_iff.mpr
         (posSemidef_parentRingInteraction_term _ hLN i))]
     simp only [hker]
-  rw [hEq, ← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction,
+  rw [hEq, ← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _ hLN,
     parentHamiltonianGroundSpaceES,
     ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop μ A hμ hS hSpan hSL hLN]
 

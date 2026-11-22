@@ -66,7 +66,7 @@ theorem ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap
   have : NeZero N := ⟨by omega⟩
   obtain ⟨E, hEspec, hEmin, hline⟩ := Q.ground_line γ hγ N hN
   obtain ⟨E', hE'⟩ := hgap γ hγ N hN
-  let H := (Interaction.translationInvariant hN (P.interaction γ)).hamiltonian
+  let H := (Interaction.translationInvariant N (P.interaction γ)).hamiltonian
   have hmem (μ : ℂ) : μ ∈ spectrum ℂ H ↔ Module.End.HasEigenvalue (Matrix.toEuclideanLin H) μ := by
     rw [← Matrix.spectrum_toLpLin (p := 2), Module.End.hasEigenvalue_iff_mem_spectrum]
   have hEE : E' = E := by
@@ -77,7 +77,7 @@ theorem ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap
     · simpa using hEmin _ ((hmem E').mpr (Module.End.hasEigenvalue_iff.mpr hE'.1))
   subst E'
   have hH : H.IsHermitian := Interaction.isHermitian_hamiltonian
-    (Interaction.isHermitian_translates_term _ (P.hermitian γ hγ))
+    (Interaction.isHermitian_translationInvariant_term (P.hermitian γ hγ))
   refine ⟨E, hH, ?_, ((isGapped_iff_eigenvalues hH).mp hE').2⟩
   have hker : ManyBody.groundSpace H E =
       LinearMap.ker (Matrix.toEuclideanLin (H - (E : ℂ) • 1)) := by

@@ -125,7 +125,7 @@ theorem sum_hamiltonian_restrict_chainTranslates_le {α : Type*} [Fintype α] [D
   rw [Finset.sum_comm, Finset.smul_sum]
   refine Finset.sum_le_sum fun i _ ↦ ?_
   rw [← Finset.sum_filter, Finset.sum_const, Nat.cast_smul_eq_nsmul]
-  refine nsmul_le_nsmul_left (translates_term_nonneg _ hh i) ?_
+  refine nsmul_le_nsmul_left (ofPlaceAlong_term_nonneg _ (fun _ ↦ hh) i) ?_
   calc _ ≤ (Finset.Icc (i.val + R) (i.val + W)).card :=
         Finset.card_le_card fun n hn ↦ by
           simp only [Finset.mem_filter, Finset.mem_Icc] at hn ⊢
@@ -217,7 +217,7 @@ theorem parentChainInteraction_term_mulVec_eq_zero_iff (A : MPSTensor d D) {L N 
     (parentChainInteraction A L N).term i *ᵥ ψ = 0 ↔
       ∀ τ : Cfg d N, contiguousRestrictₗ i.val L (by omega) τ ψ ∈ groundSpace A L := by
   have hi : i.val + L ≤ N := by omega
-  rw [ManyBody.Interaction.translates_term]
+  rw [ManyBody.Interaction.ofPlaceAlong_term]
   constructor
   · intro hψ τ
     rw [← toMatrix'_parentInteraction_mulVec_eq_zero_iff]
@@ -241,14 +241,14 @@ theorem parentChainInteraction_term_mulVec_eq_zero_iff (A : MPSTensor d D) {L N 
 /-- Every term of the parent interaction on the open chain is positive semidefinite. -/
 theorem posSemidef_parentChainInteraction_term (A : MPSTensor d D) (L N : ℕ)
     (i : Fin (N + 1 - L)) : ((parentChainInteraction A L N).term i).PosSemidef :=
-  Matrix.nonneg_iff_posSemidef.mp (ManyBody.Interaction.translates_term_nonneg _
-    (Matrix.nonneg_iff_posSemidef.mpr (posSemidef_toMatrix'_parentInteraction A L)) i)
+  Matrix.nonneg_iff_posSemidef.mp (ManyBody.Interaction.ofPlaceAlong_term_nonneg _
+    (fun _ ↦ Matrix.nonneg_iff_posSemidef.mpr (posSemidef_toMatrix'_parentInteraction A L)) i)
 
 /-- Every term of the parent interaction on the open chain is an orthogonal projection. -/
 theorem isStarProjection_parentChainInteraction_term (A : MPSTensor d D) (L N : ℕ)
     (i : Fin (N + 1 - L)) : IsStarProjection ((parentChainInteraction A L N).term i) := by
   have hP := isStarProjection_toMatrix'_parentInteraction A L
-  rw [ManyBody.Interaction.translates_term]
+  rw [ManyBody.Interaction.ofPlaceAlong_term]
   refine ⟨?_, ?_⟩
   · rw [IsIdempotentElem, ← ManyBody.placeAlong_mul, hP.isIdempotentElem.eq]
   · rw [IsSelfAdjoint, Matrix.star_eq_conjTranspose, ← ManyBody.placeAlong_conjTranspose,

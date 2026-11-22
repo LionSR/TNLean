@@ -48,13 +48,15 @@ theorem hamiltonian_parentRingInteraction_gapped_of_anticommutator
     (hAnti : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
         ∀ v : EuclideanSpace ℂ (Cfg d N),
+          haveI : NeZero N := ⟨by omega⟩;
           let h (k : Fin N) :=
-            Matrix.toEuclideanLin ((parentRingInteraction A (show L ≤ N by omega)).term k);
+            Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
           - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) * (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
               ((⟪h i v, v⟫_ℂ).re + (⟪h j v, v⟫_ℂ).re) ≤
             (⟪h i v, h j v⟫_ℂ).re + (⟪h j v, h i v⟫_ℂ).re) :
     ∃ γ > 0, ∀ (N : ℕ) (hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
-      let H := Matrix.toEuclideanLin (parentRingInteraction A (show L ≤ N by omega)).hamiltonian
+      haveI : NeZero N := ⟨by omega⟩;
+      let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       v ∈ (LinearMap.ker H)ᗮ → γ * ‖v‖ ≤ ‖H v‖ := by
   obtain ⟨hγ, hgap⟩ :=
     hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_anticommutator A L hL

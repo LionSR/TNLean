@@ -236,8 +236,10 @@ theorem continuous_parentRingInteraction_term_family_of_groundProjection
     (A : X → MPSTensor d D) {L N : ℕ} (hLN : L ≤ N)
     (hProj : Continuous fun x => (groundSpaceES (A x) L).starProjection)
     (i : Fin N) :
-    Continuous fun x => (parentRingInteraction (A x) hLN).term i := by
-  simp only [ManyBody.Interaction.translates_term]
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Continuous fun x => (parentRingInteraction (A x) L N).term i := by
+  have : NeZero N := NeZero.of_pos i.pos
+  simp only [ManyBody.Interaction.translationInvariant_term_of_le _ hLN]
   exact (continuous_placeAlong _).comp
     (continuous_toMatrix'_parentInteraction_family_of_groundProjection A L hProj)
 
@@ -248,7 +250,7 @@ theorem continuous_hamiltonian_parentChainInteraction_family_of_groundProjection
     (A : X → MPSTensor d D) {L N : ℕ}
     (hProj : Continuous fun x => (groundSpaceES (A x) L).starProjection) :
     Continuous fun x => (parentChainInteraction (A x) L N).hamiltonian := by
-  simp only [ManyBody.Interaction.hamiltonian, ManyBody.Interaction.translates_term]
+  simp only [ManyBody.Interaction.hamiltonian, ManyBody.Interaction.ofPlaceAlong_term]
   exact continuous_finsetSum _ fun i _ ↦ (continuous_placeAlong _).comp
     (continuous_toMatrix'_parentInteraction_family_of_groundProjection A L hProj)
 
@@ -256,9 +258,9 @@ theorem continuous_hamiltonian_parentChainInteraction_family_of_groundProjection
 the parent interaction on the ring at fixed volume. -/
 theorem continuous_hamiltonian_parentRingInteraction_family_of_groundProjection
     {X : Type*} [TopologicalSpace X] {d D : ℕ}
-    (A : X → MPSTensor d D) {L N : ℕ} (hLN : L ≤ N)
+    (A : X → MPSTensor d D) {L N : ℕ} [NeZero N] (hLN : L ≤ N)
     (hProj : Continuous fun x => (groundSpaceES (A x) L).starProjection) :
-    Continuous fun x => (parentRingInteraction (A x) hLN).hamiltonian := by
+    Continuous fun x => (parentRingInteraction (A x) L N).hamiltonian := by
   simp only [ManyBody.Interaction.hamiltonian]
   exact continuous_finsetSum _ fun i _ ↦
     continuous_parentRingInteraction_term_family_of_groundProjection A hLN hProj i
@@ -287,9 +289,9 @@ theorem continuous_hamiltonian_parentChainInteraction_family
 along a tensor family injective at the interaction range. -/
 theorem continuous_hamiltonian_parentRingInteraction_family
     {X : Type*} [TopologicalSpace X] {d D : ℕ}
-    (A : X → MPSTensor d D) (hA : Continuous A) {L N : ℕ}
+    (A : X → MPSTensor d D) (hA : Continuous A) {L N : ℕ} [NeZero N]
     (hLN : L ≤ N) (hInj : ∀ x, Kraus.IsNBlkInjective (A x) L) :
-    Continuous fun x => (parentRingInteraction (A x) hLN).hamiltonian :=
+    Continuous fun x => (parentRingInteraction (A x) L N).hamiltonian :=
   continuous_hamiltonian_parentRingInteraction_family_of_groundProjection A hLN
     (continuous_groundSpaceES_starProjection_family A hA L hInj)
 

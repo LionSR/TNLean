@@ -60,7 +60,7 @@ theorem placeAlong_chainWindow_groundSpaceProjection_mul
     exact (parentChainInteraction_term_mulVec_eq_zero_iff A _ _).mpr fun τ ↦
       contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hv
         b hb τ
-  rw [ManyBody.Interaction.translates_term, ← hP, ManyBody.placeAlong_sub,
+  rw [ManyBody.Interaction.ofPlaceAlong_term, ← hP, ManyBody.placeAlong_sub,
     ManyBody.placeAlong_one, Matrix.sub_mul, Matrix.one_mul, sub_eq_zero] at hkill
   exact hkill.symm
 variable [NeZero d]

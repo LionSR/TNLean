@@ -121,11 +121,13 @@ theorem weighted_boundary_eq_zero_of_toEuclideanLin_translationInvariant_term_eq
     (A : (j : Fin r) → MPSTensor d (dim j)) (c : Fin r → ℂ)
     (h : Matrix (Cfg d L) (Cfg d L) ℂ)
     (hLN : L ≤ N) (hSpan : WordTupleSpanTop A (N - L)) (i : Fin N)
-    (hzero : Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant hLN h).term i)
+    (hzero : haveI : NeZero N := NeZero.of_pos i.pos;
+      Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i)
       (∑ j, c j • mpvState (A j) N) = 0) :
     ∀ j (X : Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
       c j • Matrix.toEuclideanLin h ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
         (groundSpaceMap (A j) L X)) = 0 := by
+  have : NeZero N := NeZero.of_pos i.pos
   classical
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d L hLN i
   let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
@@ -179,10 +181,13 @@ theorem toEuclideanLin_translationInvariant_term_smul_mpvState_eq_zero_of_wordTu
     (A : (j : Fin r) → MPSTensor d (dim j)) (c : Fin r → ℂ)
     (h : Matrix (Cfg d L) (Cfg d L) ℂ)
     (hLN : L ≤ N) (hSpan : WordTupleSpanTop A (N - L)) (i : Fin N)
-    (hzero : Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant hLN h).term i)
+    (hzero : haveI : NeZero N := NeZero.of_pos i.pos;
+      Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i)
       (∑ j, c j • mpvState (A j) N) = 0) :
-    ∀ j, Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant hLN h).term i)
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    ∀ j, Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i)
       (c j • mpvState (A j) N) = 0 := by
+  have : NeZero N := NeZero.of_pos i.pos
   classical
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d L hLN i
   let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
@@ -211,20 +216,20 @@ zero energy and the complementary word tuples span. Positivity supplies the indi
 annihilation equations rather than adding them as hypotheses.
 Source: PGVWC07, Theorem 11, `2blocks.1`, lines 1407–1422. -/
 theorem toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_wordTupleSpanTop
-    (A : (j : Fin r) → MPSTensor d (dim j)) (c : Fin r → ℂ)
+    [NeZero N] (A : (j : Fin r) → MPSTensor d (dim j)) (c : Fin r → ℂ)
     (hc : ∀ j, c j ≠ 0)
     (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
     (hLN : L ≤ N) (hSpan : WordTupleSpanTop A (N - L))
-    (hzero : Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hLN h).hamiltonian
+    (hzero : Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N h).hamiltonian
       (∑ j, c j • mpvState (A j) N) = 0) :
-    ∀ j, Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hLN h).hamiltonian
+    ∀ j, Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N h).hamiltonian
       (mpvState (A j) N) = 0 := by
   have hpos (i : Fin N) :
-      ((ManyBody.Interaction.translationInvariant hLN h).term i).PosSemidef :=
-    Matrix.nonneg_iff_posSemidef.mp (ManyBody.Interaction.translates_term_nonneg _
+      ((ManyBody.Interaction.translationInvariant N h).term i).PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp (ManyBody.Interaction.translationInvariant_term_nonneg
       (Matrix.nonneg_iff_posSemidef.mpr hh) i)
   have hterms : ∀ i : Fin N,
-      Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant hLN h).term i)
+      Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i)
         (∑ j, c j • mpvState (A j) N) = 0 := by
     rw [Matrix.toLpLin_apply, WithLp.toLp_eq_zero] at hzero
     intro i

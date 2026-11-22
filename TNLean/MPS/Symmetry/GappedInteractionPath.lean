@@ -59,8 +59,8 @@ structure SymmetricGappedInteractionPath {G : Type} [Group G] {d : ℕ}
   eigenvalue, the least one, and all other eigenvalues are at least `E + δ`;
   source lines 424–426. -/
   gap : ∃ δ : ℝ, 0 < δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1,
-    ∀ (N : ℕ) (hN : 2 ≤ N), ∃ E : ℝ,
-      IsGapped (Interaction.translationInvariant hN (interaction γ)).hamiltonian E δ
+    ∀ (N : ℕ) (hN : 2 ≤ N), haveI : NeZero N := ⟨by omega⟩; ∃ E : ℝ,
+      IsGapped (Interaction.translationInvariant N (interaction γ)).hamiltonian E δ
   /-- The full periodic Hamiltonian commutes with the on-site symmetry
   on every chain. This does not impose the stronger condition that each
   chosen local term separately commutes; source lines 439–453. -/

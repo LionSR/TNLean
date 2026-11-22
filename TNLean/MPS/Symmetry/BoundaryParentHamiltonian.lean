@@ -81,8 +81,11 @@ theorem IsBoundaryCompatible.commute_parentRingInteraction_term_mpoWithBoundary
         (mpoWithBoundary T X L)ᴴ = mpoWithBoundary T Y L)
     (i : Fin N) {X : Matrix (Fin D₁) (Fin D₁) ℂ}
     (hX : X ∈ commutingBoundaryAlgebra T) :
-    Commute ((MPSTensor.parentRingInteraction A hLN).term i) (mpoWithBoundary T X N) :=
-  placeAlong_ringWindow_commute_mpoWithBoundary T hLN i
+    haveI : NeZero N := ⟨by omega⟩;
+    Commute ((MPSTensor.parentRingInteraction A L N).term i) (mpoWithBoundary T X N) := by
+  have : NeZero N := ⟨by omega⟩
+  rw [ManyBody.Interaction.translationInvariant_term_of_le _ hLN i]
+  exact placeAlong_ringWindow_commute_mpoWithBoundary T hLN i
     (LinearMap.toMatrix' (MPSTensor.parentInteraction A L))
     (h.parentInteraction_matrix_commute_mpoWithBoundary hL hstar) hX
 
@@ -97,7 +100,9 @@ theorem IsBoundaryCompatible.commute_hamiltonian_parentRingInteraction_mpoWithBo
       ∃ Y : Matrix (Fin D₁) (Fin D₁) ℂ,
         (mpoWithBoundary T X L)ᴴ = mpoWithBoundary T Y L)
     {X : Matrix (Fin D₁) (Fin D₁) ℂ} (hX : X ∈ commutingBoundaryAlgebra T) :
-    Commute (MPSTensor.parentRingInteraction A hLN).hamiltonian (mpoWithBoundary T X N) :=
+    haveI : NeZero N := ⟨by omega⟩;
+    Commute (MPSTensor.parentRingInteraction A L N).hamiltonian (mpoWithBoundary T X N) :=
+  haveI : NeZero N := ⟨by omega⟩
   Commute.sum_left _ _ _ fun i _ ↦
     h.commute_parentRingInteraction_term_mpoWithBoundary hL hLN hstar i hX
 
@@ -112,7 +117,8 @@ theorem IsBoundaryCompatible.parentHamiltonian_commute_mpoWithBoundary
     {X : Matrix (Fin D₁) (Fin D₁) ℂ} (hX : X ∈ commutingBoundaryAlgebra T) :
     Commute (MPSTensor.parentHamiltonian A L N)
       (Matrix.toLin' (mpoWithBoundary T X N)) := by
-  rw [MPSTensor.parentHamiltonian_of_le A hLN]
+  have : NeZero N := ⟨by omega⟩
+  rw [MPSTensor.parentHamiltonian_eq_toLin'_hamiltonian A L]
   exact (h.commute_hamiltonian_parentRingInteraction_mpoWithBoundary hL hLN hstar hX).map
     Matrix.toLinAlgEquiv'
 
@@ -127,9 +133,11 @@ theorem IsBoundaryCompatible.nonzero_parentInteraction_and_hamiltonian_parentRin
       ∃ Y : Matrix (Fin D₁) (Fin D₁) ℂ,
         (mpoWithBoundary T X L)ᴴ = mpoWithBoundary T Y L)
     (hDim : d ^ L > D₂ ^ 2) :
+    haveI : NeZero N := ⟨by omega⟩;
     LinearMap.toMatrix' (MPSTensor.parentInteraction A L) ≠ 0 ∧
       ∀ X ∈ commutingBoundaryAlgebra T,
-        Commute (MPSTensor.parentRingInteraction A hLN).hamiltonian (mpoWithBoundary T X N) :=
+        Commute (MPSTensor.parentRingInteraction A L N).hamiltonian (mpoWithBoundary T X N) :=
+  haveI : NeZero N := ⟨by omega⟩
   ⟨MPSTensor.toMatrix'_parentInteraction_ne_zero A L hDim,
     fun _ hX ↦ h.commute_hamiltonian_parentRingInteraction_mpoWithBoundary hL hLN hstar hX⟩
 

@@ -241,9 +241,9 @@ ground space is the kernel of \(H\). -/
 section RingInteraction
 
 private theorem sum_toEuclideanLin_parentRingInteraction_term (A : MPSTensor d D) {L N : ℕ}
-    (hLN : L ≤ N) :
-    ∑ i, Matrix.toEuclideanLin ((parentRingInteraction A hLN).term i) =
-      Matrix.toEuclideanLin (parentRingInteraction A hLN).hamiltonian := by
+    [NeZero N] (_hLN : L ≤ N) :
+    ∑ i, Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) =
+      Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian := by
   rw [ManyBody.Interaction.hamiltonian, map_sum]
 
 /-- A uniform quadratic-form estimate \(γ\,\operatorname{Re}\langle Hv, v\rangle ≤
@@ -253,14 +253,15 @@ complement of the kernel of \(H\), by positivity of \(H\) and the abstract spect
 `FrustrationFree.spectralGap_of_martingale_of_finiteDimensional`. -/
 theorem hamiltonian_parentRingInteraction_norm_bound_of_quadratic_form
     (A : MPSTensor d D) (L : ℕ) {γ : ℝ} (hγ : 0 < γ)
-    (hQuad : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
-      let H := Matrix.toEuclideanLin (parentRingInteraction A (show L ≤ N by omega)).hamiltonian
+    (hQuad : ∀ (N : ℕ) [NeZero N] (_hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
+      let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       γ * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re) :
-    ∀ (N : ℕ) (hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
-      let H := Matrix.toEuclideanLin (parentRingInteraction A (show L ≤ N by omega)).hamiltonian
-      v ∈ (LinearMap.ker H)ᗮ → γ * ‖v‖ ≤ ‖H v‖ := fun N hLN v ↦
+    ∀ (N : ℕ) [NeZero N] (_hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
+      let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
+      v ∈ (LinearMap.ker H)ᗮ → γ * ‖v‖ ≤ ‖H v‖ := fun N _ hLN v ↦
   FrustrationFree.spectralGap_of_martingale_of_finiteDimensional hγ
-    (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentRingInteraction A _))
+    (Matrix.isPositive_toEuclideanLin_iff.mpr
+      (posSemidef_hamiltonian_parentRingInteraction A (by omega)))
     (hQuad N hLN) v
 
 /-- The explicit gap bound with constant \(1/(4L)\) for the Hamiltonians of the parent
@@ -269,17 +270,22 @@ quadratic-form estimate. -/
 theorem hamiltonian_parentRingInteraction_gap_bound_of_quadratic_form
     (A : MPSTensor d D) (L : ℕ) (hL : 1 < L)
     (hQuad : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
-      let H := Matrix.toEuclideanLin (parentRingInteraction A (show L ≤ N by omega)).hamiltonian
+      haveI : NeZero N := ⟨by omega⟩;
+      let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       ((1 : ℝ) / (4 * (L : ℝ))) * (⟪H v, v⟫_ℂ).re ≤ (⟪H v, H v⟫_ℂ).re) :
     0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
     ∀ (N : ℕ) (hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
-      let H := Matrix.toEuclideanLin (parentRingInteraction A (show L ≤ N by omega)).hamiltonian
+      haveI : NeZero N := ⟨by omega⟩;
+      let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       v ∈ (LinearMap.ker H)ᗮ → ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤ ‖H v‖ := by
   have hγ : 0 < (1 : ℝ) / (4 * (L : ℝ)) := by
     have hLpos : (0 : ℝ) < (L : ℝ) := by
       exact_mod_cast Nat.zero_lt_of_lt hL
     exact div_pos (by norm_num) (mul_pos (by norm_num) hLpos)
-  exact ⟨hγ, hamiltonian_parentRingInteraction_norm_bound_of_quadratic_form A L hγ hQuad⟩
+  exact ⟨hγ, fun N hLN v ↦
+    haveI : NeZero N := ⟨by omega⟩
+    hamiltonian_parentRingInteraction_norm_bound_of_quadratic_form A L hγ
+      (fun N _ hLN v ↦ hQuad N hLN v) N hLN v⟩
 
 /-- Uniform explicit gap-bound reduction from ordered local cross-term row bounds: if for every
 ring of \(N ≥ 2L\) sites the terms \(h_i\) of the parent interaction satisfy
@@ -293,22 +299,25 @@ theorem hamiltonian_parentRingInteraction_gap_bound_of_ordered_local_term_bounds
       (∑ j ∈ Finset.univ.erase i, c N i j) ≤ 1)
     (hCross : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → ∀ v : EuclideanSpace ℂ (Cfg d N),
+        haveI : NeZero N := ⟨by omega⟩;
         let h (k : Fin N) :=
-          Matrix.toEuclideanLin ((parentRingInteraction A (show L ≤ N by omega)).term k);
+          Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
         - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) * c N i j * (⟪h i v, v⟫_ℂ).re ≤
           (⟪h i v, h j v⟫_ℂ).re) :
     0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
     ∀ (N : ℕ) (hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
-      let H := Matrix.toEuclideanLin (parentRingInteraction A (show L ≤ N by omega)).hamiltonian
+      haveI : NeZero N := ⟨by omega⟩;
+      let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       v ∈ (LinearMap.ker H)ᗮ → ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤ ‖H v‖ := by
   refine hamiltonian_parentRingInteraction_gap_bound_of_quadratic_form A L hL fun N hLN v ↦ ?_
+  have : NeZero N := ⟨by omega⟩
   have hQuad := ProjectionGeometry.quadraticForm_sum_projections_of_ordered_rowSum
     (martingale_coefficient_le_one L hL)
-    (fun i ↦ Matrix.toEuclideanLin ((parentRingInteraction A (show L ≤ N by omega)).term i))
+    (fun i ↦ Matrix.toEuclideanLin ((parentRingInteraction A L N).term i))
     (isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A (show L ≤ N by omega))
     (c N) (hRow N hLN)
     (hCross N hLN) v
-  rwa [sum_toEuclideanLin_parentRingInteraction_term] at hQuad
+  rwa [sum_toEuclideanLin_parentRingInteraction_term A (show L ≤ N by omega)] at hQuad
 
 /-- Uniform explicit gap-bound reduction from source anticommutator row bounds.
 
@@ -329,22 +338,25 @@ theorem hamiltonian_parentRingInteraction_gap_bound_of_anticommutator_local_term
       (∑ i ∈ Finset.univ.erase j, c N i j) ≤ 1)
     (hAnti : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → ∀ v : EuclideanSpace ℂ (Cfg d N),
+        haveI : NeZero N := ⟨by omega⟩;
         let h (k : Fin N) :=
-          Matrix.toEuclideanLin ((parentRingInteraction A (show L ≤ N by omega)).term k);
+          Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
         - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) * c N i j * ((⟪h i v, v⟫_ℂ).re + (⟪h j v, v⟫_ℂ).re) ≤
           (⟪h i v, h j v⟫_ℂ).re + (⟪h j v, h i v⟫_ℂ).re) :
     0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
     ∀ (N : ℕ) (hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
-      let H := Matrix.toEuclideanLin (parentRingInteraction A (show L ≤ N by omega)).hamiltonian
+      haveI : NeZero N := ⟨by omega⟩;
+      let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       v ∈ (LinearMap.ker H)ᗮ → ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤ ‖H v‖ := by
   refine hamiltonian_parentRingInteraction_gap_bound_of_quadratic_form A L hL fun N hLN v ↦ ?_
+  have : NeZero N := ⟨by omega⟩
   have hQuad := ProjectionGeometry.quadraticForm_sum_projections_of_anticommutator_rowCol
     (martingale_coefficient_le_one L hL)
-    (fun i ↦ Matrix.toEuclideanLin ((parentRingInteraction A (show L ≤ N by omega)).term i))
+    (fun i ↦ Matrix.toEuclideanLin ((parentRingInteraction A L N).term i))
     (isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A (show L ≤ N by omega))
     (c N) (hRow N hLN)
     (hCol N hLN) (hAnti N hLN) v
-  rwa [sum_toEuclideanLin_parentRingInteraction_term] at hQuad
+  rwa [sum_toEuclideanLin_parentRingInteraction_term A (show L ≤ N by omega)] at hQuad
 
 /-- Uniform explicit gap-bound reduction from a finite-overlap anticommutator martingale
 estimate for the terms of the parent interaction on the rings of \(N ≥ 2L\) sites. With
@@ -362,29 +374,33 @@ theorem hamiltonian_parentRingInteraction_gap_bound_of_finite_overlap_anticommut
       ((Finset.univ.erase j).filter (fun i => overlaps N i j)).card ≤ 2 * (L - 1))
     (hDisjointAnti : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → ¬ overlaps N i j → ∀ v : EuclideanSpace ℂ (Cfg d N),
+        haveI : NeZero N := ⟨by omega⟩;
         let h (k : Fin N) :=
-          Matrix.toEuclideanLin ((parentRingInteraction A (show L ≤ N by omega)).term k)
+          Matrix.toEuclideanLin ((parentRingInteraction A L N).term k)
         0 ≤ (⟪h i v, h j v⟫_ℂ).re + (⟪h j v, h i v⟫_ℂ).re)
     (hAnti : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → overlaps N i j → ∀ v : EuclideanSpace ℂ (Cfg d N),
+        haveI : NeZero N := ⟨by omega⟩;
         let h (k : Fin N) :=
-          Matrix.toEuclideanLin ((parentRingInteraction A (show L ≤ N by omega)).term k);
+          Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
         - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) * (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
             ((⟪h i v, v⟫_ℂ).re + (⟪h j v, v⟫_ℂ).re) ≤
           (⟪h i v, h j v⟫_ℂ).re + (⟪h j v, h i v⟫_ℂ).re) :
     0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
     ∀ (N : ℕ) (hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
-      let H := Matrix.toEuclideanLin (parentRingInteraction A (show L ≤ N by omega)).hamiltonian
+      haveI : NeZero N := ⟨by omega⟩;
+      let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       v ∈ (LinearMap.ker H)ᗮ → ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤ ‖H v‖ := by
   refine hamiltonian_parentRingInteraction_gap_bound_of_quadratic_form A L hL fun N hLN v ↦ ?_
+  have : NeZero N := ⟨by omega⟩
   have hQuad := ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap_anticommutator
     (martingale_coefficient_le_one L hL)
-    (fun i ↦ Matrix.toEuclideanLin ((parentRingInteraction A (show L ≤ N by omega)).term i))
+    (fun i ↦ Matrix.toEuclideanLin ((parentRingInteraction A L N).term i))
     (isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A (show L ≤ N by omega))
     (overlaps N)
     (Nat.mul_pos (by decide) (Nat.sub_pos_of_lt hL)) (hRowCard N hLN) (hColCard N hLN)
     (hDisjointAnti N hLN) (hAnti N hLN) v
-  rwa [sum_toEuclideanLin_parentRingInteraction_term] at hQuad
+  rwa [sum_toEuclideanLin_parentRingInteraction_term A (show L ≤ N by omega)] at hQuad
 
 /-- Uniform explicit gap-bound reduction from finite-overlap ordered cross-term hypotheses for
 the terms of the parent interaction on the rings of \(N ≥ 2L\) sites, with \(m = 2(L-1)\): the
@@ -396,32 +412,37 @@ theorem hamiltonian_parentRingInteraction_gap_bound_of_finite_overlap_ordered_cr
     (overlaps : ∀ N : ℕ, Fin N → Fin N → Prop)
     [∀ N : ℕ, DecidableRel (overlaps N)]
     (hProj : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i : Fin N),
+      haveI : NeZero N := ⟨by omega⟩;
       (Matrix.toEuclideanLin
-        ((parentRingInteraction A (show L ≤ N by omega)).term i)).IsSymmetricProjection)
+        ((parentRingInteraction A L N).term i)).IsSymmetricProjection)
     (hCard : ∀ (N : ℕ) (_hLN : 2 * L ≤ N) (i : Fin N),
       ((Finset.univ.erase i).filter (fun j => overlaps N i j)).card ≤ 2 * (L - 1))
     (hDisjoint : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → ¬ overlaps N i j → ∀ v : EuclideanSpace ℂ (Cfg d N),
+        haveI : NeZero N := ⟨by omega⟩;
         let h (k : Fin N) :=
-          Matrix.toEuclideanLin ((parentRingInteraction A (show L ≤ N by omega)).term k)
+          Matrix.toEuclideanLin ((parentRingInteraction A L N).term k)
         0 ≤ (⟪h i v, h j v⟫_ℂ).re)
     (hCrossTerm : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → overlaps N i j → ∀ v : EuclideanSpace ℂ (Cfg d N),
+        haveI : NeZero N := ⟨by omega⟩;
         let h (k : Fin N) :=
-          Matrix.toEuclideanLin ((parentRingInteraction A (show L ≤ N by omega)).term k);
+          Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
         - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) * (((2 * (L - 1) : ℕ) : ℝ)⁻¹) * (⟪h i v, v⟫_ℂ).re ≤
           (⟪h i v, h j v⟫_ℂ).re) :
     0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
     ∀ (N : ℕ) (hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
-      let H := Matrix.toEuclideanLin (parentRingInteraction A (show L ≤ N by omega)).hamiltonian
+      haveI : NeZero N := ⟨by omega⟩;
+      let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       v ∈ (LinearMap.ker H)ᗮ → ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤ ‖H v‖ := by
   refine hamiltonian_parentRingInteraction_gap_bound_of_quadratic_form A L hL fun N hLN v ↦ ?_
+  have : NeZero N := ⟨by omega⟩
   have hQuad := ProjectionGeometry.quadraticForm_sum_projections_of_finite_overlap
     (martingale_coefficient_le_one L hL)
-    (fun i ↦ Matrix.toEuclideanLin ((parentRingInteraction A (show L ≤ N by omega)).term i))
+    (fun i ↦ Matrix.toEuclideanLin ((parentRingInteraction A L N).term i))
     (hProj N hLN) (overlaps N) (Nat.mul_pos (by decide) (Nat.sub_pos_of_lt hL)) (hCard N hLN)
     (hDisjoint N hLN) (hCrossTerm N hLN) v
-  rwa [sum_toEuclideanLin_parentRingInteraction_term] at hQuad
+  rwa [sum_toEuclideanLin_parentRingInteraction_term A (show L ≤ N by omega)] at hQuad
 
 /-- Uniform explicit gap-bound reduction using the concrete cyclic-window overlap predicate.
 For rings of \(N ≥ 2L\) sites, the row-cardinality estimate is `cyclicWindowsOverlap_card_le`,
@@ -434,21 +455,25 @@ theorem hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_ordered_cro
     (hCrossTerm : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
         ∀ v : EuclideanSpace ℂ (Cfg d N),
+          haveI : NeZero N := ⟨by omega⟩;
           let h (k : Fin N) :=
-            Matrix.toEuclideanLin ((parentRingInteraction A (show L ≤ N by omega)).term k);
+            Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
           - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) * (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
               (⟪h i v, v⟫_ℂ).re ≤
             (⟪h i v, h j v⟫_ℂ).re) :
     0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
     ∀ (N : ℕ) (hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
-      let H := Matrix.toEuclideanLin (parentRingInteraction A (show L ≤ N by omega)).hamiltonian
+      haveI : NeZero N := ⟨by omega⟩;
+      let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       v ∈ (LinearMap.ker H)ᗮ → ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤ ‖H v‖ :=
   hamiltonian_parentRingInteraction_gap_bound_of_finite_overlap_ordered_cross_term A L hL
     (fun N => cyclicWindowsOverlap N L)
-    (fun _ _ i => isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A _ i)
+    (fun N hLN i => isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A
+      (show L ≤ N by omega) i)
     (fun _ hLN i => cyclicWindowsOverlap_card_le hLN hL i)
-    (fun _ _ _ _ _ hnot v =>
-      re_inner_parentRingInteraction_term_nonneg_of_not_cyclicWindowsOverlap A _ hnot v)
+    (fun N hLN _ _ _ hnot v =>
+      re_inner_parentRingInteraction_term_nonneg_of_not_cyclicWindowsOverlap A
+        (show L ≤ N by omega) hnot v)
     hCrossTerm
 
 /-- Uniform explicit gap-bound reduction from the cyclic-window anticommutator martingale
@@ -466,14 +491,16 @@ theorem hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_ant
     (hAnti : ∀ (N : ℕ) (hLN : 2 * L ≤ N) (i j : Fin N),
       j ∈ Finset.univ.erase i → cyclicWindowsOverlap N L i j →
         ∀ v : EuclideanSpace ℂ (Cfg d N),
+          haveI : NeZero N := ⟨by omega⟩;
           let h (k : Fin N) :=
-            Matrix.toEuclideanLin ((parentRingInteraction A (show L ≤ N by omega)).term k);
+            Matrix.toEuclideanLin ((parentRingInteraction A L N).term k);
           - (1 - ((1 : ℝ) / (4 * (L : ℝ)))) * (((2 * (L - 1) : ℕ) : ℝ)⁻¹) *
               ((⟪h i v, v⟫_ℂ).re + (⟪h j v, v⟫_ℂ).re) ≤
             (⟪h i v, h j v⟫_ℂ).re + (⟪h j v, h i v⟫_ℂ).re) :
     0 < (1 : ℝ) / (4 * (L : ℝ)) ∧
     ∀ (N : ℕ) (hLN : 2 * L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)),
-      let H := Matrix.toEuclideanLin (parentRingInteraction A (show L ≤ N by omega)).hamiltonian
+      haveI : NeZero N := ⟨by omega⟩;
+      let H := Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian
       v ∈ (LinearMap.ker H)ᗮ → ((1 : ℝ) / (4 * (L : ℝ))) * ‖v‖ ≤ ‖H v‖ := by
   refine hamiltonian_parentRingInteraction_gap_bound_of_finite_overlap_anticommutator A L hL
     (fun N => cyclicWindowsOverlap N L) ?_ ?_ ?_ hAnti
@@ -483,8 +510,10 @@ theorem hamiltonian_parentRingInteraction_gap_bound_of_cyclic_window_overlap_ant
     simpa only [cyclicWindowsOverlap_comm N L _ j] using cyclicWindowsOverlap_card_le hLN hL j
   · intro N hLN i j _hij hnot v
     exact add_nonneg
-      (re_inner_parentRingInteraction_term_nonneg_of_not_cyclicWindowsOverlap A _ hnot v)
-      (re_inner_parentRingInteraction_term_nonneg_of_not_cyclicWindowsOverlap A _
+      (re_inner_parentRingInteraction_term_nonneg_of_not_cyclicWindowsOverlap A
+        (show L ≤ N by omega) hnot v)
+      (re_inner_parentRingInteraction_term_nonneg_of_not_cyclicWindowsOverlap A
+        (show L ≤ N by omega)
         (fun h => hnot ((cyclicWindowsOverlap_comm N L i j).mpr h)) v)
 
 end RingInteraction

@@ -736,12 +736,16 @@ theorem
     (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Commute (parentRingInteraction
-      (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) hN).hamiltonian
-      (onSiteTensorPow N (U g)) :=
-  Commute.sum_left _ _ _ fun i _ ↦ placeAlong_ringWindow_commute_onSiteTensorPow (U g) 2 hN i _
-    (toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase
-      A hA hTP U hU hSymm g γ)
+        (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N).hamiltonian
+      (onSiteTensorPow N (U g)) := by
+  have : NeZero N := ⟨by omega⟩
+  rw [ManyBody.Interaction.hamiltonian_translationInvariant_of_le _ hN]
+  exact Commute.sum_left _ _ _ fun i _ ↦
+    placeAlong_ringWindow_commute_onSiteTensorPow (U g) 2 hN i _
+      (toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase
+        A hA hTP U hU hSymm g γ)
 
 /-- A symmetry up to a phase of a block-diagonal tensor in trace-preserving
 canonical normalization persists in the open canonical parent Hamiltonian

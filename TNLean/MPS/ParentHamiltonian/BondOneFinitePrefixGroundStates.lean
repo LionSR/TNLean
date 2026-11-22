@@ -60,9 +60,11 @@ theorem exists_cyclic_ground_of_normal_bondOne_local_kernel
     (h : Matrix (Cfg d L) (Cfg d L) ℂ) (B : MPSTensor d 1)
     (hB : Kraus.IsNormal B) (hker : groundSpaceES B L ≤ LinearMap.ker (Matrix.toEuclideanLin h))
     (M : ℕ) (hM : 0 < M) (hLM : L ≤ M) :
+    haveI : NeZero M := ⟨by omega⟩;
     ∃ ψ : MPVSpace d M, ψ ≠ 0 ∧
-      Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hLM h).hamiltonian ψ = 0 ∧
+      Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M h).hamiltonian ψ = 0 ∧
       ∀ (s : Fin M) (σ : Fin M → Fin d), ψ (fun k ↦ σ (k + s)) = ψ σ := by
+  have : NeZero M := ⟨by omega⟩
   exact ⟨mpvState B M, mpvState_ne_zero_of_normal_bondOne B hB M hM,
     toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker
       B h hker hLM,
@@ -81,6 +83,7 @@ theorem uniform_bondOne_ground_family_of_normal_local_kernel
     ∀ M, 0 < M → L ≤ M → mpvState B M ≠ 0 ∧
       LinearMap.ker (periodicInteractionHamiltonianES h M) = ℂ ∙ mpvState B M := by
   intro M hM hLM
+  have : NeZero M := ⟨by omega⟩
   have hnonzero := mpvState_ne_zero_of_normal_bondOne B hB M hM
   have hzero := periodicInteractionHamiltonianES_mpvState_eq_zero_of_groundSpaceES_le_ker
     B h hker hLM
@@ -117,14 +120,16 @@ MPS representation or zero-momentum premise is assumed. Source: SPWC10, Theorem 
 lines 850--880, normal bond-one branch. -/
 theorem uniform_bondOne_ground_family_translationInvariant_of_normal_local_kernel
     (h : Matrix (Cfg d L) (Cfg d L) ℂ)
-    (hUnique : ∀ M (hLM : L ≤ M), Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
-      (ManyBody.Interaction.translationInvariant hLM h).hamiltonian)) = 1)
+    (hUnique : ∀ M [NeZero M], L ≤ M →
+      Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
+      (ManyBody.Interaction.translationInvariant M h).hamiltonian)) = 1)
     (B : MPSTensor d 1) (hB : Kraus.IsNormal B)
     (hker : groundSpaceES B L ≤ LinearMap.ker (Matrix.toEuclideanLin h)) :
-    ∀ M, 0 < M → ∀ hLM : L ≤ M, mpvState B M ≠ 0 ∧
+    ∀ M (hM : 0 < M), L ≤ M → haveI : NeZero M := ⟨by omega⟩; mpvState B M ≠ 0 ∧
       LinearMap.ker (Matrix.toEuclideanLin
-        (ManyBody.Interaction.translationInvariant hLM h).hamiltonian) = ℂ ∙ mpvState B M := by
+        (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState B M := by
   intro M hM hLM
+  have : NeZero M := ⟨by omega⟩
   have hnonzero := mpvState_ne_zero_of_normal_bondOne B hB M hM
   have hzero :=
     toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker

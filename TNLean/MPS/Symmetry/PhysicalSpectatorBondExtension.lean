@@ -95,10 +95,12 @@ and II.F.2, equation eq:1d-sym:jointsym. -/
 theorem physicalSpectatorBondInteraction_eigenvalue_gap_one {N : ℕ}
     (K d₀ d₁ : ℕ) (B : Matrix (Fin K × Fin K) (Fin K × Fin K) ℂ)
     (hB : IsStarProjection B) (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN
+        (Interaction.translationInvariant N
           (physicalSpectatorBondInteraction K d₀ d₁ B)).hamiltonian) μ →
       μ = 0 ∨ (1 : ℂ) ≤ μ := by
+  have : NeZero N := ⟨by omega⟩
   exact sectorBondInteraction_eigenvalue_gap_one _ _ _ _
     (Matrix.physicalSpectatorEdgeInteraction_isStarProjection K d₀ d₁ B hB) hN
 

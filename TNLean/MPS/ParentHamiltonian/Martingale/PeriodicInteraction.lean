@@ -174,9 +174,12 @@ cyclic restriction to its window, read at the window of \(σ\). -/
 theorem toEuclideanLin_translationInvariant_term_apply {R N : ℕ} (hRN : R ≤ N)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N))
     (σ : Cfg d N) :
-    Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant hRN h).term i) v σ =
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) v σ =
       Matrix.toEuclideanLin h (cyclicRestrictES (Fin.pos i) R i σ v) (extractWindow R i σ) := by
-  rw [ManyBody.Interaction.translates_term, Matrix.toLpLin_apply, Matrix.toLpLin_apply]
+  have : NeZero N := NeZero.of_pos i.pos
+  rw [ManyBody.Interaction.translationInvariant_term_of_le _ hRN i, Matrix.toLpLin_apply,
+    Matrix.toLpLin_apply]
   change Matrix.mulVec (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hRN i) h)
     (WithLp.ofLp v) σ = Matrix.mulVec h _ _
   rw [ManyBody.placeAlong_mulVec_apply_of _ _ _ σ (replaceWindow R hRN i σ)
@@ -190,17 +193,19 @@ PGVWC07, arXiv:quant-ph/0608197, Theorem 11 proof, lines 1418–1422. -/
 theorem cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply {R N : ℕ}
     (hRN : R ≤ N) (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N)
     (ψ : EuclideanSpace ℂ (Cfg d N)) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
     cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
-        (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant hRN h).term i) ψ) =
+        (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i) ψ) =
       ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R))
         (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin h))
         (cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i ψ) := by
+  have : NeZero N := NeZero.of_pos i.pos
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
   let e := cyclicActiveBlockConfigEquiv d R hRN i
   apply U.symm.injective
   rw [LinearIsometryEquiv.symm_apply_apply]
   ext σ
-  rw [toEuclideanLin_translationInvariant_term_apply,
+  rw [toEuclideanLin_translationInvariant_term_apply hRN,
     cyclicActiveBlockConfigLinearIsometryEquiv_symm_apply_apply]
   change Matrix.toEuclideanLin h _ (extractWindow R i σ) =
     Matrix.toEuclideanLin h (ContinuousLinearMap.rightFiber (U ψ) (e σ).2) (extractWindow R i σ)

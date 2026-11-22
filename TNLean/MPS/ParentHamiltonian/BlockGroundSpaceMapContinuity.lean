@@ -158,10 +158,10 @@ theorem continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_family
     {X : Type*} [TopologicalSpace X]
     (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hA : ∀ j, Continuous fun x => A x j)
-    (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0) {L N : ℕ}
+    (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0) {L N : ℕ} [NeZero N]
     (hLN : L ≤ N) (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
     Continuous fun x =>
-      (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) hLN).hamiltonian :=
+      (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) L N).hamiltonian :=
   continuous_hamiltonian_parentRingInteraction_family_of_groundProjection _ hLN
     (continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family
       A hA μ hμ L hInj)

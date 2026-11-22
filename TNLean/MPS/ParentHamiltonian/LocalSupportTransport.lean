@@ -72,7 +72,7 @@ theorem adjacent_localTerm_eq_zero_iff_mem_groundSpace_succ
     hA hL (v := WithLp.toLp 2 v)
   rw [mem_groundSpaceES_iff, Matrix.toLpLin_apply, Matrix.toLpLin_apply, WithLp.toLp_eq_zero,
     WithLp.toLp_eq_zero] at h
-  rw [localTerm_of_le A L.le_succ, localTerm_of_le A L.le_succ, Matrix.toLin'_apply,
+  rw [localTerm_eq_toLin'_term A L, localTerm_eq_toLin'_term A L, Matrix.toLin'_apply,
     Matrix.toLin'_apply]
   exact h
 
@@ -476,25 +476,29 @@ theorem localTerm_adjacent_twoSite_commute_of_threeSite_zero_one_commute
 private theorem cyclicRestrictES_three_parentRingInteraction_term_left
     {A : MPSTensor d D} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N)
     (v : EuclideanSpace ℂ (Cfg d N)) :
+    haveI : NeZero N := ⟨by omega⟩;
     LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i τ)
-        (Matrix.toEuclideanLin ((parentRingInteraction A (by omega : 2 ≤ N)).term i) v) =
-      Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 0)
+        (Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i) v) =
+      Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 0)
         (LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i τ) v) := by
+  have : NeZero N := ⟨by omega⟩
   have h := cyclicRestrictₗ_three_localTerm_left (A := A) hN i τ (WithLp.ofLp v)
-  rw [localTerm_of_le A (by omega : 2 ≤ N), localTerm_of_le A (by norm_num : 2 ≤ 3),
+  rw [localTerm_eq_toLin'_term A 2, localTerm_eq_toLin'_term A 2,
     Matrix.toLin'_apply, Matrix.toLin'_apply] at h
   simpa [LinearMap.withLpMap, Matrix.toLpLin_apply] using congrArg (WithLp.toLp 2) h
 
 private theorem cyclicRestrictES_three_parentRingInteraction_term_right
     {A : MPSTensor d D} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N)
     (v : EuclideanSpace ℂ (Cfg d N)) :
+    haveI : NeZero N := ⟨by omega⟩;
     LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i τ)
         (Matrix.toEuclideanLin
-          ((parentRingInteraction A (by omega : 2 ≤ N)).term (cyclicForwardSite i 1)) v) =
-      Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 1)
+          ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) v) =
+      Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 1)
         (LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) 3 i τ) v) := by
+  have : NeZero N := ⟨by omega⟩
   have h := cyclicRestrictₗ_three_localTerm_right (A := A) hN i τ (WithLp.ofLp v)
-  rw [localTerm_of_le A (by omega : 2 ≤ N), localTerm_of_le A (by norm_num : 2 ≤ 3),
+  rw [localTerm_eq_toLin'_term A 2, localTerm_eq_toLin'_term A 2,
     Matrix.toLin'_apply, Matrix.toLin'_apply] at h
   simpa [LinearMap.withLpMap, Matrix.toLpLin_apply] using congrArg (WithLp.toLp 2) h
 
@@ -509,28 +513,30 @@ lines 2170--2180. -/
 theorem re_inner_parentRingInteraction_term_adjacent_twoSite_forward_ge_of_threeSite
     [NeZero d] {A : MPSTensor d D} {c : ℝ}
     (h₃ : ∀ w : EuclideanSpace ℂ (Cfg d 3),
-      -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 0) w,
+      -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 0) w,
             w⟫_ℂ).re +
-          (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 1) w,
+          (⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 1) w,
             w⟫_ℂ).re) ≤
-        (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 0) w,
+        (⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 0) w,
             Matrix.toEuclideanLin
-              ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 1) w⟫_ℂ).re +
-          (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 1) w,
+              ((parentRingInteraction A 2 3).term 1) w⟫_ℂ).re +
+          (⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 1) w,
             Matrix.toEuclideanLin
-              ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 0) w⟫_ℂ).re)
+              ((parentRingInteraction A 2 3).term 0) w⟫_ℂ).re)
     {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) :
-    -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A (by omega : 2 ≤ N)).term i) v,
+    haveI : NeZero N := ⟨by omega⟩;
+    -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i) v,
           v⟫_ℂ).re +
         (⟪Matrix.toEuclideanLin
-            ((parentRingInteraction A (by omega : 2 ≤ N)).term (cyclicForwardSite i 1)) v,
+            ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) v,
           v⟫_ℂ).re) ≤
-      (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by omega : 2 ≤ N)).term i) v,
+      (⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i) v,
           Matrix.toEuclideanLin
-            ((parentRingInteraction A (by omega : 2 ≤ N)).term (cyclicForwardSite i 1)) v⟫_ℂ).re +
+            ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) v⟫_ℂ).re +
         (⟪Matrix.toEuclideanLin
-            ((parentRingInteraction A (by omega : 2 ≤ N)).term (cyclicForwardSite i 1)) v,
-          Matrix.toEuclideanLin ((parentRingInteraction A (by omega : 2 ≤ N)).term i) v⟫_ℂ).re := by
+            ((parentRingInteraction A 2 N).term (cyclicForwardSite i 1)) v,
+          Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i) v⟫_ℂ).re := by
+  have : NeZero N := ⟨by omega⟩
   simp_rw [re_inner_eq_sum_cyclicRestrict_three hN i]
   rw [← Finset.sum_add_distrib, ← Finset.sum_add_distrib]
   change -c * (∑ τ, _) ≤ ∑ τ, _
@@ -550,28 +556,30 @@ arXiv:2011.12127, Section IV.C, lines 2170--2180. -/
 theorem re_inner_parentRingInteraction_term_adjacent_twoSite_backward_ge_of_threeSite
     [NeZero d] {A : MPSTensor d D} {c : ℝ}
     (h₃ : ∀ w : EuclideanSpace ℂ (Cfg d 3),
-      -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 0) w,
+      -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 0) w,
             w⟫_ℂ).re +
-          (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 1) w,
+          (⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 1) w,
             w⟫_ℂ).re) ≤
-        (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 0) w,
+        (⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 0) w,
             Matrix.toEuclideanLin
-              ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 1) w⟫_ℂ).re +
-          (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 1) w,
+              ((parentRingInteraction A 2 3).term 1) w⟫_ℂ).re +
+          (⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 3).term 1) w,
             Matrix.toEuclideanLin
-              ((parentRingInteraction A (by norm_num : 2 ≤ 3)).term 0) w⟫_ℂ).re)
+              ((parentRingInteraction A 2 3).term 0) w⟫_ℂ).re)
     {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) :
-    -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A (by omega : 2 ≤ N)).term i) v,
+    haveI : NeZero N := ⟨by omega⟩;
+    -c * ((⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i) v,
           v⟫_ℂ).re +
         (⟪Matrix.toEuclideanLin
-            ((parentRingInteraction A (by omega : 2 ≤ N)).term (cyclicBackwardSite i 1)) v,
+            ((parentRingInteraction A 2 N).term (cyclicBackwardSite i 1)) v,
           v⟫_ℂ).re) ≤
-      (⟪Matrix.toEuclideanLin ((parentRingInteraction A (by omega : 2 ≤ N)).term i) v,
+      (⟪Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i) v,
           Matrix.toEuclideanLin
-            ((parentRingInteraction A (by omega : 2 ≤ N)).term (cyclicBackwardSite i 1)) v⟫_ℂ).re +
+            ((parentRingInteraction A 2 N).term (cyclicBackwardSite i 1)) v⟫_ℂ).re +
         (⟪Matrix.toEuclideanLin
-            ((parentRingInteraction A (by omega : 2 ≤ N)).term (cyclicBackwardSite i 1)) v,
-          Matrix.toEuclideanLin ((parentRingInteraction A (by omega : 2 ≤ N)).term i) v⟫_ℂ).re := by
+            ((parentRingInteraction A 2 N).term (cyclicBackwardSite i 1)) v,
+          Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i) v⟫_ℂ).re := by
+  have : NeZero N := ⟨by omega⟩
   let j := cyclicBackwardSite i 1
   have hj : cyclicForwardSite j 1 = i := cyclicForwardSite_backwardSite_one (by omega) i
   have h := re_inner_parentRingInteraction_term_adjacent_twoSite_forward_ge_of_threeSite

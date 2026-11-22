@@ -32,14 +32,15 @@ Equivalently, a zero-energy vector for \(H_N(A,L)\) satisfies every cyclic
 theorem ker_parentHamiltonian_le_chainGroundSpace
     (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     LinearMap.ker (parentHamiltonian A L N) ≤ chainGroundSpace A L N := by
+  have : NeZero N := ⟨by omega⟩
   intro ψ hψ
   rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩]
   simp only [Submodule.mem_iInf, Submodule.mem_comap]
   intro i τ
-  have hH : (parentRingInteraction A hLN).hamiltonian.mulVec ψ = 0 := by
-    rwa [LinearMap.mem_ker, parentHamiltonian_of_le A hLN, Matrix.toLin'_apply] at hψ
+  have hH : (parentRingInteraction A L N).hamiltonian.mulVec ψ = 0 := by
+    rwa [LinearMap.mem_ker, parentHamiltonian_eq_toLin'_hamiltonian A L, Matrix.toLin'_apply] at hψ
   have hlocal :
-      Matrix.toEuclideanLin ((parentRingInteraction A hLN).term i) (WithLp.toLp 2 ψ) = 0 := by
+      Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) (WithLp.toLp 2 ψ) = 0 := by
     rw [Matrix.toLpLin_apply, WithLp.ofLp_toLp,
       (ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff
         (posSemidef_parentRingInteraction_term A hLN)).mp hH i, WithLp.toLp_zero]

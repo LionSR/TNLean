@@ -49,12 +49,21 @@ theorem PGVWC07CanonicalFormData.toEuclideanLin_hamiltonian_translationInvariant
     (hC1 : ∀ j, Kraus.IsNBlkInjective (data.blocks j) L₀)
     (hN : 3 * (data.r - 1) * (L₀ + 1) + L ≤ N)
     (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
-    (hzero : Matrix.toEuclideanLin
-      (ManyBody.Interaction.translationInvariant (by omega : L ≤ N) h).hamiltonian
+    (hzero : haveI : NeZero N := ⟨by
+      have := Nat.mul_pos (Nat.mul_pos three_pos (Nat.sub_pos_of_lt hr)) (Nat.add_one_pos L₀)
+      omega⟩;
+      Matrix.toEuclideanLin
+      (ManyBody.Interaction.translationInvariant N h).hamiltonian
         (mpvState A N) = 0) :
+    haveI : NeZero N := ⟨by
+      have := Nat.mul_pos (Nat.mul_pos three_pos (Nat.sub_pos_of_lt hr)) (Nat.add_one_pos L₀)
+      omega⟩;
     ∀ j, Matrix.toEuclideanLin
-      (ManyBody.Interaction.translationInvariant (by omega : L ≤ N) h).hamiltonian
+      (ManyBody.Interaction.translationInvariant N h).hamiltonian
         (mpvState (data.blocks j) N) = 0 := by
+  have : NeZero N := ⟨by
+    have := Nat.mul_pos (Nat.mul_pos three_pos (Nat.sub_pos_of_lt hr)) (Nat.add_one_pos L₀)
+    omega⟩
   classical
   have hpred : 1 ≤ data.r - 1 := by omega
   have hL₀Bound : L₀ ≤ 3 * (data.r - 1) * (L₀ + 1) := by
@@ -87,11 +96,20 @@ theorem PGVWC07CanonicalFormData.blockCount_le_finrank_ker_hamiltonian_translati
     (hC1 : ∀ j, Kraus.IsNBlkInjective (data.blocks j) L₀)
     (hN : 3 * (data.r - 1) * (L₀ + 1) + L ≤ N)
     (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
-    (hzero : Matrix.toEuclideanLin
-      (ManyBody.Interaction.translationInvariant (by omega : L ≤ N) h).hamiltonian
+    (hzero : haveI : NeZero N := ⟨by
+      have := Nat.mul_pos (Nat.mul_pos three_pos (Nat.sub_pos_of_lt hr)) (Nat.add_one_pos L₀)
+      omega⟩;
+      Matrix.toEuclideanLin
+      (ManyBody.Interaction.translationInvariant N h).hamiltonian
         (mpvState A N) = 0) :
+    haveI : NeZero N := ⟨by
+      have := Nat.mul_pos (Nat.mul_pos three_pos (Nat.sub_pos_of_lt hr)) (Nat.add_one_pos L₀)
+      omega⟩;
     data.r ≤ Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
-      (ManyBody.Interaction.translationInvariant (by omega : L ≤ N) h).hamiltonian)) := by
+      (ManyBody.Interaction.translationInvariant N h).hamiltonian)) := by
+  have : NeZero N := ⟨by
+    have := Nat.mul_pos (Nat.mul_pos three_pos (Nat.sub_pos_of_lt hr)) (Nat.add_one_pos L₀)
+    omega⟩
   classical
   let : ∀ j, NeZero (data.dim j) := fun j => ⟨(data.dim_pos j).ne'⟩
   have hpred : 1 ≤ data.r - 1 := by omega
@@ -105,7 +123,7 @@ theorem PGVWC07CanonicalFormData.blockCount_le_finrank_ker_hamiltonian_translati
   have hblocks := data.toEuclideanLin_hamiltonian_translationInvariant_blocks_eq_zero
     hr hDistinct hL₀ hC1 hN h hh hzero
   let K := LinearMap.ker (Matrix.toEuclideanLin
-    (ManyBody.Interaction.translationInvariant (by omega : L ≤ N) h).hamiltonian)
+    (ManyBody.Interaction.translationInvariant N h).hamiltonian)
   let states : Fin data.r → K := fun j => ⟨mpvState (data.blocks j) N, hblocks j⟩
   have hIndependentK : LinearIndependent ℂ states :=
     LinearIndependent.of_comp K.subtype hIndependent

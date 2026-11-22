@@ -116,11 +116,13 @@ open ManyBody.Interaction (translationInvariant)
 section. Source: SPWC10, Theorem 5 proof, lines 869--880. -/
 theorem cyclicRestrictES_toEuclideanLin_translationInvariant_term (hRN : R ≤ N)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) (τ : Cfg d N) (ψ : MPVSpace d N) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
     cyclicRestrictES (Fin.pos i) R i τ
-        (Matrix.toEuclideanLin ((translationInvariant hRN h).term i) ψ) =
+        (Matrix.toEuclideanLin ((translationInvariant N h).term i) ψ) =
       Matrix.toEuclideanLin h (cyclicRestrictES (Fin.pos i) R i τ ψ) := by
+  have : NeZero N := NeZero.of_pos i.pos
   ext ω
-  change Matrix.toEuclideanLin ((translationInvariant hRN h).term i) ψ
+  change Matrix.toEuclideanLin ((translationInvariant N h).term i) ψ
     (cyclicCfg (Fin.pos i) R i ω τ) = _
   rw [toEuclideanLin_translationInvariant_term_apply hRN]
   have hrestrict : cyclicRestrictES (Fin.pos i) R i
@@ -135,8 +137,10 @@ theorem cyclicRestrictES_toEuclideanLin_translationInvariant_term (hRN : R ≤ N
 coefficient section on its window. Source: SPWC10, Theorem 5 proof, lines 869--880. -/
 theorem toEuclideanLin_translationInvariant_term_eq_zero_iff_sections (hRN : R ≤ N)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (i : Fin N) (ψ : MPVSpace d N) :
-    Matrix.toEuclideanLin ((translationInvariant hRN h).term i) ψ = 0 ↔
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((translationInvariant N h).term i) ψ = 0 ↔
       ∀ τ : Cfg d N, Matrix.toEuclideanLin h (cyclicRestrictES (Fin.pos i) R i τ ψ) = 0 := by
+  have : NeZero N := NeZero.of_pos i.pos
   constructor
   · intro hzero τ
     rw [← cyclicRestrictES_toEuclideanLin_translationInvariant_term hRN h i τ ψ, hzero, map_zero]
@@ -148,15 +152,16 @@ theorem toEuclideanLin_translationInvariant_term_eq_zero_iff_sections (hRN : R �
 /-- For a positive semidefinite `h`, the kernel equation of the Hamiltonian of the translates of
 `h` on the ring is equivalent to every local section equation. Source: SPWC10, Theorem 5 proof,
 lines 869--880. -/
-theorem toEuclideanLin_hamiltonian_translationInvariant_eq_zero_iff_sections (hRN : R ≤ N)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef) (ψ : MPVSpace d N) :
-    Matrix.toEuclideanLin (translationInvariant hRN h).hamiltonian ψ = 0 ↔
+theorem toEuclideanLin_hamiltonian_translationInvariant_eq_zero_iff_sections [NeZero N]
+    (hRN : R ≤ N) (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef) (ψ : MPVSpace d N) :
+    Matrix.toEuclideanLin (translationInvariant N h).hamiltonian ψ = 0 ↔
       ∀ (i : Fin N) (τ : Cfg d N),
         Matrix.toEuclideanLin h (cyclicRestrictES (Fin.pos i) R i τ ψ) = 0 := by
   have hterm (i : Fin N) :
-      (Matrix.toEuclideanLin ((translationInvariant hRN h).term i)).IsPositive :=
+      (Matrix.toEuclideanLin ((translationInvariant N h).term i)).IsPositive :=
     Matrix.isPositive_toEuclideanLin_iff.mpr (Matrix.nonneg_iff_posSemidef.mp
-      (ManyBody.Interaction.translates_term_nonneg _ (Matrix.nonneg_iff_posSemidef.mpr hh) i))
+      (ManyBody.Interaction.translationInvariant_term_nonneg
+        (Matrix.nonneg_iff_posSemidef.mpr hh) i))
   rw [ManyBody.Interaction.hamiltonian, map_sum, WeightedPositiveKernel.apply_sum_eq_zero_iff
     hterm ψ]
   exact forall_congr' fun i ↦
@@ -169,13 +174,17 @@ finite-range identity extension in Nachtergaele, arXiv:cond-mat/9410110, equatio
 theorem toEuclideanLin_translationInvariant_term_rightFiber_eq_zero_of_eq_zero
     {W : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hWN : W ≤ N) (s : Fin N) (q : Fin W)
     (hqR : q.val + R ≤ W) (ψ : MPVSpace d N)
-    (hzero : Matrix.toEuclideanLin ((translationInvariant (show R ≤ N by omega) h).term
+    (hzero : haveI : NeZero N := ⟨by omega⟩; Matrix.toEuclideanLin ((translationInvariant N h).term
       (cyclicForwardSite s q.val)) ψ = 0)
     (τ : Cfg d (N - W)) :
-    Matrix.toEuclideanLin ((translationInvariant (show R ≤ W by omega) h).term q)
+    haveI : NeZero W := ⟨by omega⟩;
+    Matrix.toEuclideanLin ((translationInvariant W h).term q)
       (ContinuousLinearMap.rightFiber
         (cyclicActiveBlockConfigLinearIsometryEquiv d W hWN s ψ) τ) = 0 := by
-  rw [toEuclideanLin_translationInvariant_term_eq_zero_iff_sections] at hzero ⊢
+  have : NeZero W := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
+  rw [toEuclideanLin_translationInvariant_term_eq_zero_iff_sections (by omega : R ≤ N)] at hzero
+  rw [toEuclideanLin_translationInvariant_term_eq_zero_iff_sections (by omega : R ≤ W)]
   intro σ
   convert hzero ((cyclicActiveBlockConfigEquiv d W hWN s).symm (σ, τ)) using 2
   ext ω

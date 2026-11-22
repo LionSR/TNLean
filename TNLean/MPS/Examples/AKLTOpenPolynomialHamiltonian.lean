@@ -73,8 +73,9 @@ private theorem toLin'_hamiltonian_parentChainInteraction_aklt {N : ℕ} (hN : 2
     have hj : i.val + j.val < N := by have := j.isLt; omega
     rw [ManyBody.val_chainWindow, ManyBody.ringWindow_apply, Fin.val_add, Fin.val_castLE]
     exact (Nat.mod_eq_of_lt hj).symm
-  rw [localTerm_of_le akltTensor hN, ManyBody.Interaction.translates_term,
-    ManyBody.Interaction.translates_term, hw]
+  have : NeZero N := ⟨by omega⟩
+  rw [localTerm_eq_toLin'_term akltTensor 2, ManyBody.Interaction.ofPlaceAlong_term,
+    ManyBody.Interaction.translationInvariant_term_of_le _ hN, hw]
 
 /-- The exact open-chain shift is \(2(N-1)/3\), one contribution per
 nonwrapping bond. This follows from the local spin-two projector identity

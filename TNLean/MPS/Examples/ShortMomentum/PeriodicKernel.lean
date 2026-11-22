@@ -157,14 +157,17 @@ section RingInteraction
 least eight. -/
 theorem ker_hamiltonian_parentRingInteraction_threeLetterTensor_eq_span {ζ : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) (N : ℕ) (hN : 8 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     LinearMap.ker (Matrix.toEuclideanLin
-        (parentRingInteraction (threeLetterTensor ζ) (by omega : 7 ≤ N)).hamiltonian) =
+        (parentRingInteraction (threeLetterTensor ζ) 7 N).hamiltonian) =
       Submodule.span ℂ {mpvState (threeLetterTensor ζ) N} := by
+  have : NeZero N := ⟨by omega⟩
   have hstate : (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).symm
       (mpv (threeLetterTensor ζ)) = mpvState (threeLetterTensor ζ) N := by
     ext σ
     exact (mpvState_apply (threeLetterTensor ζ) N σ).symm
-  rw [← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction,
+  rw [← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _
+      (by omega : 7 ≤ N),
     parentHamiltonianGroundSpaceES,
     ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
     chainGroundSpace_seven_threeLetterTensor_eq_mpvSubmodule hζ (by omega),
@@ -174,8 +177,8 @@ theorem ker_hamiltonian_parentRingInteraction_threeLetterTensor_eq_span {ζ : �
 theorem ker_hamiltonian_parentRingInteraction_threeLetterTensor_seven_eq_bot {ζ : ℂ}
     (hζ : IsPrimitiveRoot ζ 5) :
     LinearMap.ker (Matrix.toEuclideanLin
-      (parentRingInteraction (threeLetterTensor ζ) (le_refl 7)).hamiltonian) = ⊥ := by
-  rw [← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction,
+      (parentRingInteraction (threeLetterTensor ζ) 7 7).hamiltonian) = ⊥ := by
+  rw [← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _ (le_refl 7),
     parentHamiltonianGroundSpaceES,
     ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) (by omega),
     chainGroundSpace_threeLetterTensor_seven_eq_bot hζ, Submodule.map_bot]

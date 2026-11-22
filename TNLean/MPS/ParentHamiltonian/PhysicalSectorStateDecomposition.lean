@@ -150,7 +150,8 @@ Source: physical-sector assembly for SPWC10, Theorem 5, lines 850--880. -/
 theorem physical_sum_state_decomposition_of_translationInvariant_projector_eq_zero
     {R : ℕ} (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
     (hR : 2 ≤ R) (hRM : R ≤ M) (ψ : MPVSpace (a + b) M)
-    (hzero : Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+    (hzero : haveI : NeZero M := ⟨by omega⟩;
+      Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M
       (Matrix.toEuclideanLin.symm
         ((S.map
             (Function.Embedding.piCongrRight
@@ -165,6 +166,7 @@ theorem physical_sum_state_decomposition_of_translationInvariant_projector_eq_ze
       Function.Embedding.euclideanExtendByZero
           (Function.Embedding.piCongrRight (fun _ : Fin M ↦ Fin.natAddEmb a))
           (WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.natAdd a (w i))) := by
+  have : NeZero M := ⟨by omega⟩
   apply physical_sum_state_decomposition (by omega) ψ
   intro σ i j hi hj
   exact coeff_eq_zero_of_physical_sum_translationInvariant_projector S T hR hRM ψ hzero σ i j

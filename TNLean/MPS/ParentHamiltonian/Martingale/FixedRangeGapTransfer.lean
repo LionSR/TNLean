@@ -68,12 +68,14 @@ theorem exists_hamiltonian_parentRingInteraction_gap_of_larger_range
     (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) =
       groundSpaceES A W)
     {γ : ℝ} (hγ : 0 < γ)
-    (hGap : ∀ᶠ N : ℕ in atTop, ∀ hWN : W ≤ N, ∀ μ : ℂ, Module.End.HasEigenvalue
-      (Matrix.toEuclideanLin (parentRingInteraction A hWN).hamiltonian) μ →
-        μ = 0 ∨ (γ : ℂ) ≤ μ) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ᶠ N : ℕ in atTop, ∀ hRN : R ≤ N, ∀ μ : ℂ, Module.End.HasEigenvalue
-      (Matrix.toEuclideanLin (parentRingInteraction A hRN).hamiltonian) μ →
-        μ = 0 ∨ (δ : ℂ) ≤ μ := by
+    (hGap : ∀ᶠ N : ℕ in atTop, ∀ hWN : W ≤ N, haveI : NeZero N := ⟨by omega⟩;
+      ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentRingInteraction A W N).hamiltonian) μ →
+          μ = 0 ∨ (γ : ℂ) ≤ μ) :
+    ∃ δ : ℝ, 0 < δ ∧ ∀ᶠ N : ℕ in atTop, ∀ hRN : R ≤ N, haveI : NeZero N := ⟨by omega⟩;
+      ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentRingInteraction A R N).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨κ, C, hκ, hC, hLower, hUpper⟩ :=
     exists_pos_toMatrix'_parentInteraction_hamiltonian_parentChainInteraction_comparison A hker
   have hm : 0 < W - R + 1 := by omega
@@ -83,13 +85,9 @@ theorem exists_hamiltonian_parentRingInteraction_gap_of_larger_range
   filter_upwards [hGap, eventually_ge_atTop (2 * (W - R + 1))] with N hGapN hN hRN
   have : NeZero N := ⟨by omega⟩
   have hWN : W ≤ N := by omega
-  have hham : ∀ {L L' : ℕ} (_ : L = L') (h : L ≤ N) (h' : L' ≤ N),
-      (parentRingInteraction A h).hamiltonian = (parentRingInteraction A h').hamiltonian := by
-    rintro L L' rfl h h'
-    rfl
   have hComparison := hamiltonian_parentRingInteraction_comparison_of_local_open_comparison A
     (κ := κ) (C := C) hR hmR hN (by rw [hlength]; exact hLower) (by rw [hlength]; exact hUpper)
-  rw [hham hlength _ hWN] at hComparison
+  rw [hlength] at hComparison
   have h1 := Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr hComparison.1
   have h2 := Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr hComparison.2
   rw [map_smul, map_smul] at h1 h2

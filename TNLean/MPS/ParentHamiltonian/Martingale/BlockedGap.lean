@@ -314,8 +314,9 @@ private theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_an
         ∀ (N : ℕ) (hN : 2 * 2 ≤ N) (i j : Fin N),
           j ∈ Finset.univ.erase i → cyclicWindowsOverlap N 2 i j →
             ∀ v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N),
+              haveI : NeZero N := ⟨by omega⟩;
               let h (k : Fin N) := Matrix.toEuclideanLin
-                ((parentRingInteraction (blockTensor A p) (show 2 ≤ N by omega)).term k);
+                ((parentRingInteraction (blockTensor A p) 2 N).term k);
               - (1 - ((1 : ℝ) / (4 * (2 : ℝ)))) * (((2 * (2 - 1) : ℕ) : ℝ)⁻¹) *
                   ((⟪h i v, v⟫_ℂ).re + (⟪h j v, v⟫_ℂ).re) ≤
                 (⟪h i v, h j v⟫_ℂ).re + (⟪h j v, h i v⟫_ℂ).re := by
@@ -330,8 +331,8 @@ private theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_an
           (groundSpaceES B 3).starProjection‖ ≤ 7 / 16 := by
     rw [blockTensor_threeSite_openChain_defect_norm_eq A p]
     simpa only [B, Nat.add_assoc] using hDefect
-  let T₀ := Matrix.toEuclideanLin ((parentRingInteraction B (by norm_num : 2 ≤ 3)).term 0)
-  let T₁ := Matrix.toEuclideanLin ((parentRingInteraction B (by norm_num : 2 ≤ 3)).term 1)
+  let T₀ := Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 0)
+  let T₁ := Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 1)
   have hThree : ∀ w : EuclideanSpace ℂ (Cfg (blockPhysDim d p) 3),
       -(7 / 16 : ℝ) * ((⟪T₀ w, w⟫_ℂ).re + (⟪T₁ w, w⟫_ℂ).re) ≤
         (⟪T₀ w, T₁ w⟫_ℂ).re + (⟪T₁ w, T₀ w⟫_ℂ).re := by
@@ -383,8 +384,9 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_hamiltonia
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ∀ (N : ℕ) (hN : 4 ≤ N) (v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N)),
+          haveI : NeZero N := ⟨by omega⟩;
           let H := Matrix.toEuclideanLin
-            (parentRingInteraction (blockTensor A p) (show 2 ≤ N by omega)).hamiltonian
+            (parentRingInteraction (blockTensor A p) 2 N).hamiltonian
           v ∈ (LinearMap.ker H)ᗮ → (1 / 8 : ℝ) * ‖v‖ ≤ ‖H v‖ := by
   obtain ⟨p, hp, hInj, hAnti⟩ := hP.exists_blockTensor_anticommutator hρ
   obtain ⟨_, hGap⟩ :=
@@ -407,8 +409,9 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_hamiltonia
     ∃ p : ℕ,
       0 < p ∧ Kraus.IsNBlkInjective A p ∧
         ∃ γ > 0, ∀ (N : ℕ) (hN : 4 ≤ N) (v : EuclideanSpace ℂ (Cfg (blockPhysDim d p) N)),
+          haveI : NeZero N := ⟨by omega⟩;
           let H := Matrix.toEuclideanLin
-            (parentRingInteraction (blockTensor A p) (show 2 ≤ N by omega)).hamiltonian
+            (parentRingInteraction (blockTensor A p) 2 N).hamiltonian
           v ∈ (LinearMap.ker H)ᗮ → γ * ‖v‖ ≤ ‖H v‖ := by
   obtain ⟨p, hp, hInj, hGap⟩ :=
     hP.exists_blockTensor_hamiltonian_parentRingInteraction_gap_eighth hρ

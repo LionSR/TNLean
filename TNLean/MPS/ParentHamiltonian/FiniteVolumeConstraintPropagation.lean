@@ -128,18 +128,20 @@ theorem boundary_eq_zero_of_toEuclideanLin_hamiltonian_translationInvariant_eq_z
     (hc : ∀ j, c j ≠ 0)
     (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
     (hN : 0 < N) (hLN : L ≤ N) (hSpan : WordTupleSpanTop A (N - L))
-    (hzero : Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hLN h).hamiltonian
+    (hzero : haveI : NeZero N := ⟨by omega⟩;
+      Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N h).hamiltonian
       (∑ j, c j • mpvState (A j) N) = 0) :
     ∀ j (X : Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
       Matrix.toEuclideanLin h ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
         (groundSpaceMap (A j) L X)) = 0 := by
+  have : NeZero N := ⟨by omega⟩
   have hpos (i : Fin N) :
-      ((ManyBody.Interaction.translationInvariant hLN h).term i).PosSemidef :=
-    Matrix.nonneg_iff_posSemidef.mp (ManyBody.Interaction.translates_term_nonneg _
+      ((ManyBody.Interaction.translationInvariant N h).term i).PosSemidef :=
+    Matrix.nonneg_iff_posSemidef.mp (ManyBody.Interaction.translationInvariant_term_nonneg
       (Matrix.nonneg_iff_posSemidef.mpr hh) i)
   rw [Matrix.toLpLin_apply, WithLp.toLp_eq_zero] at hzero
   have hterm : Matrix.toEuclideanLin
-      ((ManyBody.Interaction.translationInvariant hLN h).term ⟨0, hN⟩)
+      ((ManyBody.Interaction.translationInvariant N h).term ⟨0, hN⟩)
         (∑ j, c j • mpvState (A j) N) = 0 := by
     rw [Matrix.toLpLin_apply, WithLp.toLp_eq_zero]
     exact (ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff hpos).mp hzero ⟨0, hN⟩
@@ -156,9 +158,11 @@ theorem groundSpaceES_le_ker_of_toEuclideanLin_hamiltonian_translationInvariant_
     (hc : ∀ j, c j ≠ 0)
     (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
     (hN : 0 < N) (hLN : L ≤ N) (hSpan : WordTupleSpanTop A (N - L))
-    (hzero : Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hLN h).hamiltonian
+    (hzero : haveI : NeZero N := ⟨by omega⟩;
+      Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N h).hamiltonian
       (∑ j, c j • mpvState (A j) N) = 0) :
     ∀ j, groundSpaceES (A j) L ≤ LinearMap.ker (Matrix.toEuclideanLin h) := by
+  have : NeZero N := ⟨by omega⟩
   have hboundaries :=
     boundary_eq_zero_of_toEuclideanLin_hamiltonian_translationInvariant_eq_zero
       A c hc h hh hN hLN hSpan hzero
@@ -177,8 +181,10 @@ theorem toEuclideanLin_translationInvariant_term_mpvState_eq_zero_of_groundSpace
     (A : MPSTensor d D) (h : Matrix (Cfg d L) (Cfg d L) ℂ)
     (hker : groundSpaceES A L ≤ LinearMap.ker (Matrix.toEuclideanLin h))
     {M : ℕ} (hLM : L ≤ M) (i : Fin M) :
-    Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant hLM h).term i)
+    haveI : NeZero M := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant M h).term i)
       (mpvState A M) = 0 := by
+  have : NeZero M := NeZero.of_pos i.pos
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d L hLM i
   apply U.injective
   rw [map_zero, cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply]
@@ -204,8 +210,8 @@ larger ring. Source: SPWC10, Theorem 5 proof, lines 877–880. -/
 theorem toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker
     (A : MPSTensor d D) (h : Matrix (Cfg d L) (Cfg d L) ℂ)
     (hker : groundSpaceES A L ≤ LinearMap.ker (Matrix.toEuclideanLin h))
-    {M : ℕ} (hLM : L ≤ M) :
-    Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hLM h).hamiltonian
+    {M : ℕ} [NeZero M] (hLM : L ≤ M) :
+    Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M h).hamiltonian
       (mpvState A M) = 0 := by
   rw [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.sum_apply]
   exact Finset.sum_eq_zero fun i _ =>
@@ -219,10 +225,12 @@ lines 869–880, without an assumed local-kernel inclusion. -/
 theorem toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_all_volumes
     (A : MPSTensor d D) (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
     (hN : 0 < N) (hLN : L ≤ N) (hInj : Kraus.IsNBlkInjective A (N - L))
-    (hzero : Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hLN h).hamiltonian
+    (hzero : haveI : NeZero N := ⟨by omega⟩;
+      Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N h).hamiltonian
       (mpvState A N) = 0) :
-    ∀ M (hLM : L ≤ M), Matrix.toEuclideanLin
-      (ManyBody.Interaction.translationInvariant hLM h).hamiltonian (mpvState A M) = 0 := by
+    ∀ M [NeZero M], L ≤ M → Matrix.toEuclideanLin
+      (ManyBody.Interaction.translationInvariant M h).hamiltonian (mpvState A M) = 0 := by
+  have : NeZero N := ⟨by omega⟩
   let blocks : Fin 1 → MPSTensor d D := fun _ => A
   have hSpan : WordTupleSpanTop blocks (N - L) :=
     wordTupleSpanTop_of_le_one blocks (by omega) (fun _ => hInj)
@@ -230,7 +238,7 @@ theorem toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_all_vol
     simp only [Fin.sum_univ_one, one_smul, blocks]
   have hker := groundSpaceES_le_ker_of_toEuclideanLin_hamiltonian_translationInvariant_eq_zero
     blocks (fun _ => 1) (fun _ => one_ne_zero) h hh hN hLN hSpan (by rwa [hsum])
-  intro M hLM
+  intro M _ hLM
   exact toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker
     A h (hker 0) hLM
 

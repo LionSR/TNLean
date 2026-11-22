@@ -51,7 +51,7 @@ theorem pvbs_fourierMagnon_ne_zero (N : ℕ) [NeZero N] :
 `1 - cos (2π/N)`, including the two-oriented-window convention at length two. -/
 theorem toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_fourierMagnon {N : ℕ}
     [NeZero N] (hN : 2 ≤ N) :
-    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) hN).hamiltonian
+    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) 2 N).hamiltonian
       (WithLp.toLp 2 (SpinChain.oneMagnon
         (fun j : Fin N => ZMod.stdAddChar (ZMod.finEquiv N j)))) =
       (ZMod.cycleFourierGap N : ℂ) •
@@ -76,7 +76,7 @@ theorem pvbs_fourierMagnon_mem_orthogonal_kernel {N : ℕ} [NeZero N] (hN : 2 �
     WithLp.toLp 2 (SpinChain.oneMagnon
       (fun j : Fin N => ZMod.stdAddChar (ZMod.finEquiv N j))) ∈
         (LinearMap.ker
-          (Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) hN).hamiltonian))ᗮ := by
+          (Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) 2 N).hamiltonian))ᗮ := by
   rw [Submodule.mem_orthogonal]
   intro w hw
   have h := (Matrix.isPositive_toEuclideanLin_iff.mpr
@@ -102,9 +102,9 @@ theorem not_exists_eventual_uniform_gap_pvbs_critical :
   let v : EuclideanSpace ℂ (Cfg 2 N) := WithLp.toLp 2 (SpinChain.oneMagnon
     (fun j : Fin N => ZMod.stdAddChar (ZMod.finEquiv N j)))
   have hH : parentHamiltonianES (pvbsTensor 1) 2 N =
-      Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) hN).hamiltonian := by
+      Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) 2 N).hamiltonian := by
     unfold parentHamiltonianES
-    rw [parentHamiltonian_of_le _ hN]
+    rw [parentHamiltonian_eq_toLin'_hamiltonian _ 2]
     rfl
   have hbound := hgap N hN₀ v (hH ▸ pvbs_fourierMagnon_mem_orthogonal_kernel hN)
   rw [hH, toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_fourierMagnon hN,

@@ -73,7 +73,7 @@ noncomputable def normalizedBondFixedPointGappedPath
     refine ⟨1, by norm_num, fun γ _ N hN ↦ ⟨0, ?_⟩⟩
     have hNZ : NeZero N := ⟨by omega⟩
     unfold normalizedBondInteraction
-    rw [@hamiltonian_translationInvariant_twoSiteBondPenalty (D₀ + D₁) N hNZ]
+    rw [@hamiltonian_translationInvariant_twoSiteBondPenalty (D₀ + D₁) N hNZ hN]
     exact isGapped_normalizedPhysicalBondInterpolation_parent hD₀ hD₁ γ (by omega)
   symmetric γ hγ g N hN := by
     have hNZ : NeZero N := ⟨by omega⟩

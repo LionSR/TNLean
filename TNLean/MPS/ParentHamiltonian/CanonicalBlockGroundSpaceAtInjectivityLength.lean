@@ -76,18 +76,19 @@ theorem CPSVCanonicalFormData.ker_sum_eq_of_wordTupleSpanTop
     (hSL : S + 1 ≤ L) (hLN : L ≤ N)
     (H : Fin N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N))
     (hH : ∀ i, (H i).IsPositive)
-    (hker : ∀ i, LinearMap.ker (H i) =
-      LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction A hLN).term i))) :
+    (hker : haveI : NeZero N := ⟨by omega⟩; ∀ i, LinearMap.ker (H i) =
+      LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i))) :
     LinearMap.ker (∑ i, H i) =
       (bntMPSVectorSpan (fun j ↦ data.blocks (data.representativeIndex j)) N).map
         (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
+  have : NeZero N := ⟨by omega⟩
   have hEq : LinearMap.ker (∑ i, H i) =
-      LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A hLN).hamiltonian) := by
+      LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian) := by
     rw [ManyBody.Interaction.hamiltonian, map_sum, WeightedPositiveKernel.ker_sum_eq_iInf hH,
       WeightedPositiveKernel.ker_sum_eq_iInf (fun i ↦ Matrix.isPositive_toEuclideanLin_iff.mpr
         (posSemidef_parentRingInteraction_term A hLN i))]
     simp only [hker]
-  rw [hEq, ← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction,
+  rw [hEq, ← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _ hLN,
     parentHamiltonianGroundSpaceES,
     data.ker_parentHamiltonian_eq_of_wordTupleSpanTop hS hSpan hSL hLN]
 
@@ -100,11 +101,12 @@ theorem IsCPSVCanonicalForm.exists_bnt_ker_sum_eq_of_wordTupleSpanTop
     {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) :
     ∃ (g : ℕ) (dim : Fin g → ℕ) (B : (j : Fin g) → MPSTensor d (dim j)),
       IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩) ∧
-      ∀ {S L N : ℕ}, 0 < S → WordTupleSpanTop B S → S + 1 ≤ L → ∀ hLN : L ≤ N,
+      ∀ {S L N : ℕ}, 0 < S → WordTupleSpanTop B S → ∀ (hSL : S + 1 ≤ L) (hLN : L ≤ N),
+        haveI : NeZero N := ⟨by omega⟩;
         ∀ H : Fin N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N),
           (∀ i, (H i).IsPositive) →
           (∀ i, LinearMap.ker (H i) =
-            LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction A hLN).term i))) →
+            LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i))) →
           LinearMap.ker (∑ i, H i) = (bntMPSVectorSpan B N).map
             (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
   let data := Classical.choice hA

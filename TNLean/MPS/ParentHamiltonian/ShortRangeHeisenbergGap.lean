@@ -126,7 +126,7 @@ periodic version of the one-magnon recurrence in Koma--Nachtergaele, arXiv:cond-
 Lemma 4, equation (3.13). -/
 theorem toEuclideanLin_hamiltonian_parentRingInteraction_shortRangeHeisenbergMagnon {N : ℕ}
     [NeZero N] (hN : 2 ≤ N) :
-    Matrix.toEuclideanLin (parentRingInteraction shortRangeHeisenbergTensor hN).hamiltonian
+    Matrix.toEuclideanLin (parentRingInteraction shortRangeHeisenbergTensor 2 N).hamiltonian
         (shortRangeHeisenbergMagnon N) =
       (ZMod.cycleFourierGap N : ℂ) • shortRangeHeisenbergMagnon N := by
   apply PiLp.ext

@@ -852,12 +852,14 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff (A : MPSTen
 parent interaction on the cyclic restriction to its window, read at the window of \(σ\). -/
 theorem toEuclideanLin_parentRingInteraction_term_apply (A : MPSTensor d D) {L N : ℕ}
     (hLN : L ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) (σ : Cfg d N) :
-    Matrix.toEuclideanLin ((parentRingInteraction A hLN).term i) v σ =
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v σ =
       Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A L))
         (cyclicRestrictES (Fin.pos i) L i σ v) (extractWindow L i σ) := by
-  have h1 : Matrix.toEuclideanLin ((parentRingInteraction A hLN).term i) v σ =
+  have : NeZero N := NeZero.of_pos i.pos
+  have h1 : Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v σ =
       localTerm A L N i v.ofLp σ := by
-    rw [localTerm_of_le A hLN i]
+    rw [localTerm_eq_toLin'_term A L i]
     rfl
   rw [h1, localTerm_apply_of_le A L N hLN]
   change _ = (Matrix.toLin' (LinearMap.toMatrix' (parentInteraction A L))) _ _
@@ -866,10 +868,12 @@ theorem toEuclideanLin_parentRingInteraction_term_apply (A : MPSTensor d D) {L N
 
 private theorem cyclicRestrictES_toEuclideanLin_parentRingInteraction_term (A : MPSTensor d D)
     {L N : ℕ} (hLN : L ≤ N) (i : Fin N) (τ : Cfg d N) (v : EuclideanSpace ℂ (Cfg d N)) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
     cyclicRestrictES (Fin.pos i) L i τ
-        (Matrix.toEuclideanLin ((parentRingInteraction A hLN).term i) v) =
+        (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v) =
       Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A L))
         (cyclicRestrictES (Fin.pos i) L i τ v) := by
+  have : NeZero N := NeZero.of_pos i.pos
   ext ω
   rw [cyclicRestrictES_apply,
     toEuclideanLin_parentRingInteraction_term_apply A hLN i v (cyclicCfg (Fin.pos i) L i ω τ)]
@@ -888,8 +892,10 @@ boundary-filled cyclic restriction of the vector to the window of the term lies 
 ground space \(G_L(A)\). -/
 theorem toEuclideanLin_parentRingInteraction_term_eq_zero_iff (A : MPSTensor d D) {L N : ℕ}
     (hLN : L ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) :
-    Matrix.toEuclideanLin ((parentRingInteraction A hLN).term i) v = 0 ↔
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v = 0 ↔
       ∀ τ : Cfg d N, cyclicRestrictES (Fin.pos i) L i τ v ∈ groundSpaceES A L := by
+  have : NeZero N := NeZero.of_pos i.pos
   constructor
   · intro hv τ
     rw [← toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff,
@@ -904,8 +910,10 @@ theorem toEuclideanLin_parentRingInteraction_term_eq_zero_iff (A : MPSTensor d D
 restriction of the vector to the window of the term lies in the local ground space. -/
 theorem cyclicRestrictES_mem_groundSpaceES_of_parentRingInteraction_term_eq_zero
     (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N) (i : Fin N) {v : EuclideanSpace ℂ (Cfg d N)}
-    (hv : Matrix.toEuclideanLin ((parentRingInteraction A hLN).term i) v = 0) (τ : Cfg d N) :
+    (hv : haveI : NeZero N := NeZero.of_pos i.pos;
+      Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v = 0) (τ : Cfg d N) :
     cyclicRestrictES (Fin.pos i) L i τ v ∈ groundSpaceES A L :=
+  haveI : NeZero N := NeZero.of_pos i.pos
   (toEuclideanLin_parentRingInteraction_term_eq_zero_iff A hLN i v).1 hv τ
 
 /-- **Adjacent terms.** On a chain of \(L+1\) sites, if the two terms of the parent interaction on
@@ -915,8 +923,8 @@ the local terms. -/
 theorem mem_groundSpaceES_succ_of_parentRingInteraction_term_zero_one_eq_zero
     {A : MPSTensor d D} (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
     {v : EuclideanSpace ℂ (Cfg d (L + 1))}
-    (hleft : Matrix.toEuclideanLin ((parentRingInteraction A L.le_succ).term 0) v = 0)
-    (hright : Matrix.toEuclideanLin ((parentRingInteraction A L.le_succ).term 1) v = 0) :
+    (hleft : Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 0) v = 0)
+    (hright : Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 1) v = 0) :
     v ∈ groundSpaceES A (L + 1) := by
   let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace d (L + 1))
   have hLeft : InLeftGround A L (eN v) := by
@@ -938,15 +946,15 @@ interaction on the ring based at `0` and `1`. -/
 theorem parentRingInteraction_term_zero_one_eq_zero_of_mem_groundSpaceES_succ
     (A : MPSTensor d D) {L : ℕ} (hL : 0 < L) {v : EuclideanSpace ℂ (Cfg d (L + 1))}
     (hv : v ∈ groundSpaceES A (L + 1)) :
-    Matrix.toEuclideanLin ((parentRingInteraction A L.le_succ).term 0) v = 0 ∧
-      Matrix.toEuclideanLin ((parentRingInteraction A L.le_succ).term 1) v = 0 := by
+    Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 0) v = 0 ∧
+      Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 1) v = 0 := by
   have hψ := (mem_groundSpaceES_iff A (L + 1) v).1 hv
   constructor
-  · rw [toEuclideanLin_parentRingInteraction_term_eq_zero_iff]
+  · rw [toEuclideanLin_parentRingInteraction_term_eq_zero_iff A L.le_succ]
     intro τ
     rw [mem_groundSpaceES_iff, ← restrictLast_eq_cyclicRestrictES_zero v τ]
     exact groundSpace_inLeftGround A L hψ (τ (Fin.last L))
-  · rw [toEuclideanLin_parentRingInteraction_term_eq_zero_iff]
+  · rw [toEuclideanLin_parentRingInteraction_term_eq_zero_iff A L.le_succ]
     intro τ
     rw [mem_groundSpaceES_iff, ← restrictFirst_eq_cyclicRestrictES_one hL v τ]
     exact groundSpace_inRightGround A L hψ (τ 0)
@@ -956,17 +964,20 @@ theorem parentRingInteraction_term_zero_one_eq_zero_of_mem_groundSpaceES_succ
 theorem parentRingInteraction_term_zero_one_eq_zero_iff_mem_groundSpaceES_succ
     {A : MPSTensor d D} (hA : Kraus.IsInjective A) {L : ℕ} (hL : 1 < L)
     {v : EuclideanSpace ℂ (Cfg d (L + 1))} :
-    Matrix.toEuclideanLin ((parentRingInteraction A L.le_succ).term 0) v = 0 ∧
-      Matrix.toEuclideanLin ((parentRingInteraction A L.le_succ).term 1) v = 0 ↔
+    Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 0) v = 0 ∧
+      Matrix.toEuclideanLin ((parentRingInteraction A L (L + 1)).term 1) v = 0 ↔
         v ∈ groundSpaceES A (L + 1) :=
   ⟨fun h ↦ mem_groundSpaceES_succ_of_parentRingInteraction_term_zero_one_eq_zero hA hL h.1 h.2,
     parentRingInteraction_term_zero_one_eq_zero_of_mem_groundSpaceES_succ A (by omega)⟩
 
 /-- Every term of the parent interaction on the ring is an orthogonal projection. -/
 theorem isStarProjection_parentRingInteraction_term (A : MPSTensor d D) {L N : ℕ}
-    (hLN : L ≤ N) (i : Fin N) : IsStarProjection ((parentRingInteraction A hLN).term i) := by
+    (hLN : L ≤ N) (i : Fin N) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    IsStarProjection ((parentRingInteraction A L N).term i) := by
+  have : NeZero N := NeZero.of_pos i.pos
   have hP := isStarProjection_toMatrix'_parentInteraction A L
-  rw [ManyBody.Interaction.translates_term]
+  rw [ManyBody.Interaction.translationInvariant_term_of_le _ hLN i]
   refine ⟨?_, ?_⟩
   · rw [IsIdempotentElem, ← ManyBody.placeAlong_mul, hP.isIdempotentElem.eq]
   · rw [IsSelfAdjoint, Matrix.star_eq_conjTranspose, ← ManyBody.placeAlong_conjTranspose,
@@ -976,28 +987,37 @@ theorem isStarProjection_parentRingInteraction_term (A : MPSTensor d D) {L N : �
 projection. -/
 theorem isSymmetricProjection_toEuclideanLin_parentRingInteraction_term (A : MPSTensor d D)
     {L N : ℕ} (hLN : L ≤ N) (i : Fin N) :
-    (Matrix.toEuclideanLin ((parentRingInteraction A hLN).term i)).IsSymmetricProjection := by
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    (Matrix.toEuclideanLin ((parentRingInteraction A L N).term i)).IsSymmetricProjection := by
+  have : NeZero N := NeZero.of_pos i.pos
   have hP := isStarProjection_parentRingInteraction_term A hLN i
   exact ⟨by rw [IsIdempotentElem, Module.End.mul_eq_comp, ← Matrix.toEuclideanLin_mul,
       hP.isIdempotentElem.eq], Matrix.isSymmetric_toEuclideanLin_iff.mpr hP.isSelfAdjoint⟩
 
 /-- Every term of the parent interaction on the ring is positive semidefinite. -/
 theorem posSemidef_parentRingInteraction_term (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N)
-    (i : Fin N) : ((parentRingInteraction A hLN).term i).PosSemidef :=
+    (i : Fin N) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    ((parentRingInteraction A L N).term i).PosSemidef :=
+  haveI : NeZero N := NeZero.of_pos i.pos
   Matrix.isPositive_toEuclideanLin_iff.mp
     (isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A hLN i).isPositive
 
 /-- The Hamiltonian of the parent interaction on the ring is positive semidefinite. -/
-theorem posSemidef_hamiltonian_parentRingInteraction (A : MPSTensor d D) {L N : ℕ}
-    (hLN : L ≤ N) : (parentRingInteraction A hLN).hamiltonian.PosSemidef :=
-  ManyBody.Interaction.posSemidef_hamiltonian (posSemidef_parentRingInteraction_term A hLN)
+theorem posSemidef_hamiltonian_parentRingInteraction (A : MPSTensor d D) {L N : ℕ} [NeZero N]
+    (hLN : L ≤ N) : (parentRingInteraction A L N).hamiltonian.PosSemidef :=
+  ManyBody.Interaction.posSemidef_hamiltonian fun i ↦ posSemidef_parentRingInteraction_term A hLN i
 
 /-- **Disjoint windows.** Terms of the parent interaction on the ring whose cyclic windows have
 no common site commute. This is the non-overlap commutation input for the finite-overlap
 martingale reduction. -/
 theorem commute_parentRingInteraction_term_of_cyclic_windows_disjoint (A : MPSTensor d D)
     {L N : ℕ} (hLN : L ≤ N) {i j : Fin N} (hij : CyclicWindowsDisjoint L i j) :
-    Commute ((parentRingInteraction A hLN).term i) ((parentRingInteraction A hLN).term j) := by
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Commute ((parentRingInteraction A L N).term i) ((parentRingInteraction A L N).term j) := by
+  have : NeZero N := NeZero.of_pos i.pos
+  rw [ManyBody.Interaction.translationInvariant_term_of_le _ hLN,
+    ManyBody.Interaction.translationInvariant_term_of_le _ hLN]
   refine ManyBody.commute_placeAlong_of_disjoint (X := fun _ ↦ Fin d) _
     (Finset.disjoint_left.mpr fun k hki hkj ↦ ?_) _ _
   exact hij k ((mem_map_ringWindow_iff hLN i k).mp hki) ((mem_map_ringWindow_iff hLN j k).mp hkj)
@@ -1007,7 +1027,8 @@ theorem localTerm_commute_of_cyclic_windows_disjoint {N : ℕ} (A : MPSTensor d 
     {L : ℕ} (hLN : L ≤ N) {i j : Fin N} (hij : CyclicWindowsDisjoint L i j) :
     localTerm A L N i * localTerm A L N j =
       localTerm A L N j * localTerm A L N i := by
-  rw [localTerm_of_le A hLN, localTerm_of_le A hLN, Module.End.mul_eq_comp,
+  have : NeZero N := NeZero.of_pos i.pos
+  rw [localTerm_eq_toLin'_term A L, localTerm_eq_toLin'_term A L, Module.End.mul_eq_comp,
     Module.End.mul_eq_comp, ← Matrix.toLin'_mul, ← Matrix.toLin'_mul,
     (commute_parentRingInteraction_term_of_cyclic_windows_disjoint A hLN hij).eq]
 
@@ -1017,8 +1038,10 @@ windows have no common site, the ordered cross term is nonnegative:
 theorem re_inner_parentRingInteraction_term_nonneg_of_cyclic_windows_disjoint
     (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N) {i j : Fin N}
     (hij : CyclicWindowsDisjoint L i j) (v : EuclideanSpace ℂ (Cfg d N)) :
-    0 ≤ (⟪Matrix.toEuclideanLin ((parentRingInteraction A hLN).term i) v,
-      Matrix.toEuclideanLin ((parentRingInteraction A hLN).term j) v⟫_ℂ).re :=
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    0 ≤ (⟪Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v,
+      Matrix.toEuclideanLin ((parentRingInteraction A L N).term j) v⟫_ℂ).re :=
+  haveI : NeZero N := NeZero.of_pos i.pos
   LinearMap.IsSymmetricProjection.re_inner_apply_apply_nonneg_of_commute
     (isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A hLN i)
     (isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A hLN j)
@@ -1032,20 +1055,21 @@ terms based at `i` and `j` do not overlap, their ordered cross term is nonnegati
 theorem re_inner_parentRingInteraction_term_nonneg_of_not_cyclicWindowsOverlap
     (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N) {i j : Fin N}
     (hij : ¬ cyclicWindowsOverlap N L i j) (v : EuclideanSpace ℂ (Cfg d N)) :
-    0 ≤ (⟪Matrix.toEuclideanLin ((parentRingInteraction A hLN).term i) v,
-      Matrix.toEuclideanLin ((parentRingInteraction A hLN).term j) v⟫_ℂ).re :=
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    0 ≤ (⟪Matrix.toEuclideanLin ((parentRingInteraction A L N).term i) v,
+      Matrix.toEuclideanLin ((parentRingInteraction A L N).term j) v⟫_ℂ).re :=
   re_inner_parentRingInteraction_term_nonneg_of_cyclic_windows_disjoint A hLN
     (CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap hij) v
 
 /-- The ground space of the finite parent Hamiltonian is the kernel of the operator of the
 Hamiltonian of the parent interaction on the ring. -/
 theorem parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction
-    (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N) :
+    (A : MPSTensor d D) {L N : ℕ} [NeZero N] (_hLN : L ≤ N) :
     parentHamiltonianGroundSpaceES A L N =
-      LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A hLN).hamiltonian) := by
+      LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian) := by
   ext v
-  rw [parentHamiltonianGroundSpaceES, parentHamiltonian_of_le A hLN, LinearMap.mem_ker,
-    Submodule.mem_map_equiv, LinearEquiv.symm_symm, LinearMap.mem_ker]
+  rw [parentHamiltonianGroundSpaceES, parentHamiltonian_eq_toLin'_hamiltonian A L,
+    LinearMap.mem_ker, Submodule.mem_map_equiv, LinearEquiv.symm_symm, LinearMap.mem_ker]
   change _ ↔ WithLp.toLp 2 _ = 0
   rw [WithLp.toLp_eq_zero]
   rfl

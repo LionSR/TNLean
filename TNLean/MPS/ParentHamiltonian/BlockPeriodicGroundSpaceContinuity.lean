@@ -212,11 +212,13 @@ theorem ker_hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_range_blockP
     (hμ : ∀ j, μ j ≠ 0) {S R N : ℕ}
     (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
     (hR : S + 1 ≤ R) (hRN : R ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     LinearMap.ker (Matrix.toEuclideanLin
-      (parentRingInteraction (toTensorFromBlocks μ A) hRN).hamiltonian) =
+      (parentRingInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
       (blockPeriodicMpvMapES A N).range := by
+  have : NeZero N := ⟨by omega⟩
   rw [range_blockPeriodicMpvMapES,
-    ← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction,
+    ← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction _ hRN,
     parentHamiltonianGroundSpaceES,
     ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop μ A hμ hS hSpan hR hRN]
 
@@ -230,9 +232,11 @@ theorem continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_kernelPr
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     {S R N : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     (hR : S + 1 ≤ R) (hRN : R ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Continuous fun x =>
       (LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction
-        (toTensorFromBlocks (μ x) (A x)) hRN).hamiltonian)).starProjection := by
+        (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian)).starProjection := by
+  have : NeZero N := ⟨by omega⟩
   have hInj (x : X) : Function.Injective (blockPeriodicMpvMapES (A x) N) :=
     blockPeriodicMpvMapES_injective_of_wordTupleSpanTop (A x)
       (wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega : S ≤ N))
@@ -256,14 +260,16 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     {S R N : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     {K : Set X} (hK : IsCompact K) (hR : S + 1 ≤ R) (hRN : R ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ ν : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
-      (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) hRN).hamiltonian) ν →
+      (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian) ν →
         ν = 0 ∨ (δ : ℂ) ≤ ν := by
+  have : NeZero N := ⟨by omega⟩
   suffices hnorm : ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K,
       ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-        (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) hRN).hamiltonian))ᗮ,
+        (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian))ᗮ,
         δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-          (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) hRN).hamiltonian v‖ by
+          (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian v‖ by
     obtain ⟨δ, hδ, hgap⟩ := hnorm
     exact ⟨δ, hδ, fun x hx ↦ (ManyBody.forall_hasEigenvalue_iff_norm
       (posSemidef_hamiltonian_parentRingInteraction _ hRN)).mpr (hgap x hx)⟩
@@ -273,7 +279,7 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_
     μ A hμ hA R hSpanR
   let e := (Matrix.toEuclideanCLM : Matrix (Cfg d N) (Cfg d N) ℂ ≃⋆ₐ[ℂ] _)
   have hH : Continuous fun x ↦
-      e (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) hRN).hamiltonian :=
+      e (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian :=
     e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp
       (continuous_hamiltonian_parentRingInteraction_family_of_groundProjection
         (fun x => toTensorFromBlocks (μ x) (A x)) hRN hGround)
@@ -283,7 +289,7 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_
   simp only [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin] at hKernel ⊢
   exact ContinuousLinearMap.exists_uniform_norm_gap_of_compact
     (X := X) (E := EuclideanSpace ℂ (Cfg d N))
-    (fun x ↦ e (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) hRN).hamiltonian)
+    (fun x ↦ e (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian)
     hH hKernel hK
 
 end MPSTensor

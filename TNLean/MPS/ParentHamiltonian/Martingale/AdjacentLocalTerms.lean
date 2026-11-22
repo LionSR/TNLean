@@ -71,11 +71,11 @@ private theorem range_eq_orthogonal_ker_of_isSymmetricProjection
 Source terminology: this is the ground condition on \(Λ_n\) inside \(Λ_{n+1}\) in
 Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem ker_toEuclideanLin_parentRingInteraction_term_two_three_zero (B : MPSTensor d D) :
-    LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction B (show 2 ≤ 3 by omega)).term 0)) =
+    LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 0)) =
       openChainLeftGroundSpaceES B 2 := by
   ext v
   rw [LinearMap.mem_ker, mem_openChainLeftGroundSpaceES_iff,
-    toEuclideanLin_parentRingInteraction_term_eq_zero_iff]
+    toEuclideanLin_parentRingInteraction_term_eq_zero_iff B (by norm_num : 2 ≤ 3)]
   constructor
   · intro hv j
     have h := hv (fun _ => j)
@@ -91,11 +91,11 @@ theorem ker_toEuclideanLin_parentRingInteraction_term_two_three_zero (B : MPSTen
 Source terminology: this is the tail condition on \(Λ_{n+1} \ Λ_{n-l}\) inside \(Λ_{n+1}\) in
 Nachtergaele, arXiv:cond-mat/9410110, eq. (2.4). -/
 theorem ker_toEuclideanLin_parentRingInteraction_term_two_three_one (B : MPSTensor d D) :
-    LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction B (show 2 ≤ 3 by omega)).term 1)) =
+    LinearMap.ker (Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 1)) =
       openChainTailGroundSpaceES B 1 2 := by
   ext v
   rw [LinearMap.mem_ker, mem_openChainTailGroundSpaceES_iff,
-    toEuclideanLin_parentRingInteraction_term_eq_zero_iff]
+    toEuclideanLin_parentRingInteraction_term_eq_zero_iff B (by norm_num : 2 ≤ 3)]
   constructor
   · intro hv u
     rw [tailRestrictₗ_one_eq_restrictFirst]
@@ -113,7 +113,7 @@ symmetric projections with the same kernel. -/
 theorem openChainLeftGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term
     (B : MPSTensor d D) :
     (openChainLeftGroundSpaceES B 2)ᗮ.starProjection.toLinearMap =
-      Matrix.toEuclideanLin ((parentRingInteraction B (show 2 ≤ 3 by omega)).term 0) := by
+      Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 0) := by
   have hP := isSymmetricProjection_toEuclideanLin_parentRingInteraction_term B
     (show 2 ≤ 3 by omega) 0
   apply (Submodule.isSymmetricProjection_starProjection
@@ -127,7 +127,7 @@ symmetric projections with the same kernel. -/
 theorem openChainTailGroundSpaceES_orthogonal_starProjection_eq_parentRingInteraction_term
     (B : MPSTensor d D) :
     (openChainTailGroundSpaceES B 1 2)ᗮ.starProjection.toLinearMap =
-      Matrix.toEuclideanLin ((parentRingInteraction B (show 2 ≤ 3 by omega)).term 1) := by
+      Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 1) := by
   have hP := isSymmetricProjection_toEuclideanLin_parentRingInteraction_term B
     (show 2 ≤ 3 by omega) 1
   apply (Submodule.isSymmetricProjection_starProjection

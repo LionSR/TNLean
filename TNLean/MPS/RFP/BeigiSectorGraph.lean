@@ -360,16 +360,18 @@ private theorem localTerm_commute (F : BeigiSectorGraphData A)
 
 private theorem commute_toEuclideanLin_parentRingInteraction_term
     (F : BeigiSectorGraphData A) {N : ℕ} [NeZero N] (hN : 2 ≤ N) (i j : Fin N) :
-    Commute (Matrix.toEuclideanLin ((parentRingInteraction A hN).term i))
-      (Matrix.toEuclideanLin ((parentRingInteraction A hN).term j)) := by
+    Commute (Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i))
+      (Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term j)) := by
   have hraw := F.localTerm_commute hN i j
-  rw [localTerm_of_le A hN i, localTerm_of_le A hN j] at hraw
+  rw [localTerm_eq_toLin'_term A 2 i, localTerm_eq_toLin'_term A 2 j] at hraw
   exact hraw.map (LinearEquiv.conjAlgEquiv ℂ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm)
 
 private theorem sum_toEuclideanLin_parentRingInteraction_term (A : MPSTensor d D)
     {N : ℕ} (hN : 2 ≤ N) :
-    ∑ i : Fin N, Matrix.toEuclideanLin ((parentRingInteraction A hN).term i) =
-      Matrix.toEuclideanLin (parentRingInteraction A hN).hamiltonian := by
+    haveI : NeZero N := ⟨by omega⟩;
+    ∑ i : Fin N, Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i) =
+      Matrix.toEuclideanLin (parentRingInteraction A 2 N).hamiltonian := by
+  have : NeZero N := ⟨by omega⟩
   rw [ManyBody.Interaction.hamiltonian, map_sum]
 
 private theorem edgeProjector_trace (F : BeigiSectorGraphData A)
@@ -493,16 +495,18 @@ private theorem toLin'_groundBondProduct {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
   exact hfactor i
 
 private theorem conj_localComplementProduct {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     (LinearEquiv.conjAlgEquiv ℂ
       (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm)
         (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod =
       (List.ofFn fun i : Fin N ↦
-        1 - Matrix.toEuclideanLin ((parentRingInteraction A hN).term i)).prod := by
+        1 - Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i)).prod := by
+  have : NeZero N := ⟨by omega⟩
   rw [map_list_prod, List.map_ofFn]
   apply congrArg List.prod
   apply congrArg List.ofFn
   funext i
-  rw [Function.comp_apply, map_sub, map_one, localTerm_of_le A hN i]
+  rw [Function.comp_apply, map_sub, map_one, localTerm_eq_toLin'_term A 2 i]
   rfl
 
 /-- The three realizations of the complete complementary-interaction product,
@@ -525,7 +529,7 @@ private noncomputable def complementProductTransport (A : MPSTensor d D)
     ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)).prod
   qRaw := (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod
   qES := (List.ofFn fun i : Fin N ↦
-    1 - Matrix.toEuclideanLin ((parentRingInteraction A hN).term i)).prod
+    1 - Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i)).prod
   e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
   hMatrix := toLin'_groundBondProduct (A := A) hN
   hES := conj_localComplementProduct (A := A) hN
@@ -534,7 +538,7 @@ private theorem localComplementProductES_trace (F : BeigiSectorGraphData A)
     {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
     LinearMap.trace ℂ (EuclideanSpace ℂ (Cfg d N))
         (List.ofFn fun i : Fin N ↦
-          1 - Matrix.toEuclideanLin ((parentRingInteraction A hN).term i)).prod =
+          1 - Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i)).prod =
       ∑ k : Fin N → Fin F.sectorCount,
         (↑(∏ n : Fin N,
           Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1)))) : ℂ) := by
@@ -559,10 +563,10 @@ private theorem parentHamiltonianGroundSpaceES_finrank_eq_all_sequences
         ∏ n : Fin N, Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1))) := by
   classical
   have hproj := LinearMap.isProj_ker_sum_listProd_one_sub
-    (fun i : Fin N ↦ Matrix.toEuclideanLin ((parentRingInteraction A hN).term i))
+    (fun i : Fin N ↦ Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i))
     (fun i ↦ isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A hN i)
     (fun i j ↦ F.commute_toEuclideanLin_parentRingInteraction_term hN i j)
-  rw [sum_toEuclideanLin_parentRingInteraction_term] at hproj
+  rw [sum_toEuclideanLin_parentRingInteraction_term A hN] at hproj
   have htrace := hproj.trace
   rw [F.localComplementProductES_trace hN] at htrace
   norm_cast at htrace
@@ -603,15 +607,15 @@ theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
       (transport.qRaw (transport.e (transport.e.symm v))) = transport.e.symm v
     rw [transport.e.apply_symm_apply, hraw]
   have hproj := LinearMap.isProj_ker_sum_listProd_one_sub
-    (fun i : Fin N ↦ Matrix.toEuclideanLin ((parentRingInteraction A hN).term i))
+    (fun i : Fin N ↦ Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i))
     (fun i ↦ isSymmetricProjection_toEuclideanLin_parentRingInteraction_term A hN i)
     (fun i j ↦ F.commute_toEuclideanLin_parentRingInteraction_term hN i j)
-  rw [sum_toEuclideanLin_parentRingInteraction_term] at hproj
+  rw [sum_toEuclideanLin_parentRingInteraction_term A hN] at hproj
   have hkerES : transport.e.symm v ∈
-      LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A hN).hamiltonian) :=
+      LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A 2 N).hamiltonian) :=
     hproj.mem_iff_map_id.mpr hfixES
   rw [LinearMap.mem_ker, Matrix.toLpLin_apply, WithLp.toLp_eq_zero] at hkerES
-  rw [LinearMap.mem_ker, parentHamiltonian_of_le A hN, Matrix.toLin'_apply]
+  rw [LinearMap.mem_ker, parentHamiltonian_eq_toLin'_hamiltonian A 2, Matrix.toLin'_apply]
   exact hkerES
 
 /-- Beigi's finite-chain ground-space dimension formula: for a periodic chain

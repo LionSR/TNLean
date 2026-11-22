@@ -52,10 +52,12 @@ private theorem particle_number_uniformParticle {N : ℕ} (σ : Cfg 2 N) :
 independently of the ring length. -/
 theorem toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_uniformParticle (μ : ℝ) {N : ℕ}
     (hN : 2 ≤ N) :
-    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian
       (WithLp.toLp 2 (SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ)))) =
       (((μ - 1) ^ 2 / (1 + μ ^ 2) : ℝ) : ℂ) •
         WithLp.toLp 2 (SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ))) := by
+  have : NeZero N := ⟨by omega⟩
   ext σ
   rw [toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_decomposition μ hN,
     toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_uniformParticle hN]
@@ -66,9 +68,10 @@ theorem toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_uniformParticle (�
 /-- Any gap of the noncritical periodic PVBS Hamiltonian above its zero ground
 energy is at most the energy of its uniform one-particle mode. -/
 theorem hamiltonian_parentRingInteraction_pvbs_gap_le (μ : ℝ) (hμ : μ ≠ 1) {N : ℕ}
-    (hN : 2 ≤ N) {γ : ℝ} (hgap : ManyBody.IsGapped
-      (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian 0 γ) :
+    (hN : 2 ≤ N) {γ : ℝ} (hgap : haveI : NeZero N := ⟨by omega⟩; ManyBody.IsGapped
+      (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian 0 γ) :
     γ ≤ (μ - 1) ^ 2 / (1 + μ ^ 2) := by
+  have : NeZero N := ⟨by omega⟩
   let v : EuclideanSpace ℂ (Cfg 2 N) :=
     WithLp.toLp 2 (SpinChain.oneMagnon (fun _ : Fin N => (1 : ℂ)))
   have hvne : v ≠ 0 := by
@@ -78,7 +81,7 @@ theorem hamiltonian_parentRingInteraction_pvbs_gap_le (μ : ℝ) (hμ : μ ≠ 1
     simp [v] at hz
   have hc : 0 < (μ - 1) ^ 2 / (1 + μ ^ 2) :=
     div_pos (sq_pos_of_ne_zero (sub_ne_zero.mpr hμ)) (by positivity)
-  have heig : Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian v =
+  have heig : Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian v =
       (((μ - 1) ^ 2 / (1 + μ ^ 2) : ℝ) : ℂ) • v :=
     toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_uniformParticle μ hN
   rcases hgap.2 _ (Module.End.hasEigenvalue_of_hasEigenvector
@@ -92,9 +95,10 @@ of at least two sites: the Hamiltonian is gapped above its zero ground energy
 with this constant, and with no larger one. -/
 theorem hamiltonian_parentRingInteraction_pvbs_gap_exact (μ : ℝ) (hμ : 0 < μ) (hμne : μ ≠ 1) :
     0 < (μ - 1) ^ 2 / (1 + μ ^ 2) ∧ ∀ (N : ℕ) (hN : 2 ≤ N),
-      ManyBody.IsGapped (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian 0
+      haveI : NeZero N := ⟨by omega⟩;
+      ManyBody.IsGapped (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian 0
         ((μ - 1) ^ 2 / (1 + μ ^ 2)) ∧
-      ∀ γ : ℝ, ManyBody.IsGapped (parentRingInteraction (pvbsTensor (μ : ℂ)) hN).hamiltonian 0 γ →
+      ∀ γ : ℝ, ManyBody.IsGapped (parentRingInteraction (pvbsTensor (μ : ℂ)) 2 N).hamiltonian 0 γ →
         γ ≤ (μ - 1) ^ 2 / (1 + μ ^ 2) := by
   refine ⟨div_pos (sq_pos_of_ne_zero (sub_ne_zero.mpr hμne)) (by positivity), ?_⟩
   intro N hN

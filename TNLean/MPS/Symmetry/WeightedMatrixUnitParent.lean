@@ -136,8 +136,9 @@ theorem ker_hamiltonian_translationInvariant_normalizedBondInteraction_le_parent
     show mpv (N := N) (weightedMatrixUnitInterpolation D₀ D₁ γ) = mpv B from funext hmpv]
   apply Submodule.span_le.mpr
   rintro x (rfl : x = WithLp.toLp 2 (mpv B))
-  change WithLp.toLp 2 (Matrix.toLin' (parentRingInteraction B hN).hamiltonian (mpv B)) = 0
-  rw [← parentHamiltonian_of_le B hN, parentHamiltonian_annihilates _ 2 N hN, WithLp.toLp_zero]
+  change WithLp.toLp 2 (Matrix.toLin' (parentRingInteraction B 2 N).hamiltonian (mpv B)) = 0
+  rw [← parentHamiltonian_eq_toLin'_hamiltonian B 2, parentHamiltonian_annihilates _ 2 N hN,
+    WithLp.toLp_zero]
 
 /-- Every periodic zero mode of the bond interaction is a zero mode of
 its canonical parent. Source: arXiv:1010.3732, Section II.F.2,

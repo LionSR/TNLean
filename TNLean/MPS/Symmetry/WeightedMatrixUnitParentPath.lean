@@ -36,10 +36,12 @@ energy with gap one for every real parameter. Source: arXiv:1010.3732,
 Section II.F.2, `eq:sym:omega-gamma`. -/
 theorem isGapped_hamiltonian_translationInvariant_normalizedBondInteraction
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N) :
-    ManyBody.IsGapped (ManyBody.Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩;
+    ManyBody.IsGapped (ManyBody.Interaction.translationInvariant N
       (normalizedBondInteraction D₀ D₁ γ)).hamiltonian 0 1 := by
   have : NeZero N := ⟨by omega⟩
-  simpa only [normalizedBondInteraction, hamiltonian_translationInvariant_twoSiteBondPenalty] using
+  simpa only [normalizedBondInteraction,
+    hamiltonian_translationInvariant_twoSiteBondPenalty hN] using
     isGapped_normalizedPhysicalBondInterpolation_parent h₀ h₁ γ (by omega : 1 ≤ N)
 
 /-- For a fixed bond parameter, affine interpolation to a covariant

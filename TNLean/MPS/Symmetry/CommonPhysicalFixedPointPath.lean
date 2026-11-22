@@ -247,11 +247,13 @@ one above zero. Source: arXiv:1010.3732, Section II.F.2, eq:sym:omega-gamma. -/
 theorem isGapped_commonPhysicalNormalizedBondInteraction
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁)
     (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N) :
-    IsGapped (Interaction.translationInvariant hN
+    haveI : NeZero N := ⟨by omega⟩;
+    IsGapped (Interaction.translationInvariant N
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian 0 1 := by
+  have : NeZero N := ⟨by omega⟩
   refine ⟨?_, ?_⟩
   · have hspec : (0 : ℂ) ∈ spectrum ℂ (Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN
+        (Interaction.translationInvariant N
           (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian) := by
       rw [Matrix.spectrum_toLpLin]
       exact commonPhysicalNormalizedBondInteraction_zero_mem_spectrum h₀ h₁ d₀ d₁ γ hN
@@ -515,9 +517,10 @@ noncomputable def commonPhysicalBondCanonicalParentComparisonPath
     (fun N hN g =>
       commonPhysicalParentInteraction_commute_onSite ρ₀ ρ₁ h₀ h₁ U₀ U₁ B g (hCov g) hN)
   intro N hN x hx
+  have : NeZero N := ⟨by omega⟩
   have hxES : WithLp.toLp 2 x ∈ LinearMap.ker
-      (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) := by
-    change WithLp.toLp 2 ((Interaction.translationInvariant hN A).hamiltonian.mulVec x) = 0
+      (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) := by
+    change WithLp.toLp 2 ((Interaction.translationInvariant N A).hamiltonian.mulVec x) = 0
     rw [hx, WithLp.toLp_zero]
   have hparent := commonPhysicalNormalizedBondInteraction_ker_le_parent
     hD₀ hD₁ d₀ d₁ γ hN B (hker N hN) hxES

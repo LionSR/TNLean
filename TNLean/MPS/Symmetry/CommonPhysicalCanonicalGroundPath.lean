@@ -47,20 +47,20 @@ theorem hamiltonian_translationInvariant_affine_ker_eq_of_order {d N : ℕ}
       (Interaction.translationInvariant N B).hamiltonian := by
     simp only [Interaction.hamiltonian_translationInvariant_of_le _ hN]
     exact Finset.sum_le_sum fun _ _ ↦ placeAlong_le_placeAlong _ hAB
-  have hker' : ∀ x, (Interaction.translationInvariant hN A).hamiltonian.mulVec x = 0 →
-      (Interaction.translationInvariant hN B).hamiltonian.mulVec x = 0 := by
+  have hker' : ∀ x, (Interaction.translationInvariant N A).hamiltonian.mulVec x = 0 →
+      (Interaction.translationInvariant N B).hamiltonian.mulVec x = 0 := by
     intro x hx
     have hxES : WithLp.toLp 2 x ∈ LinearMap.ker
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) := by
-      change WithLp.toLp 2 ((Interaction.translationInvariant hN A).hamiltonian.mulVec x) = 0
+        (Matrix.toEuclideanLin (Interaction.translationInvariant N A).hamiltonian) := by
+      change WithLp.toLp 2 ((Interaction.translationInvariant N A).hamiltonian.mulVec x) = 0
       simp [hx]
     simpa only [LinearMap.mem_ker, Matrix.toEuclideanLin, Matrix.toLpLin_apply,
       WithLp.ofLp_toLp, WithLp.toLp_eq_zero] using hker hxES
-  have hsum : (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian =
-      (Interaction.translationInvariant hN A).hamiltonian +
-        t • ((Interaction.translationInvariant hN B).hamiltonian -
-          (Interaction.translationInvariant hN A).hamiltonian) := by
-    simp only [Interaction.hamiltonian, Interaction.translates_term,
+  have hsum : (Interaction.translationInvariant N (A + t • (B - A))).hamiltonian =
+      (Interaction.translationInvariant N A).hamiltonian +
+        t • ((Interaction.translationInvariant N B).hamiltonian -
+          (Interaction.translationInvariant N A).hamiltonian) := by
+    simp only [Interaction.hamiltonian_translationInvariant_of_le _ hN,
       RCLike.real_smul_eq_coe_smul (K := ℂ), placeAlong_add, placeAlong_smul, placeAlong_sub,
       Finset.sum_add_distrib, Finset.sum_sub_distrib, Finset.smul_sum, smul_sub]
   rw [hsum, ← groundSpace_zero, ← groundSpace_zero]

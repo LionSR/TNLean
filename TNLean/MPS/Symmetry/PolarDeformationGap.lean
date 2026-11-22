@@ -38,7 +38,8 @@ Section II.C and Appendix A. -/
 theorem exists_uniform_hamiltonian_parentRingInteraction_gap_polarDeformation
     {d D : ℕ} [NeZero D] {A : MPSTensor d D} (hA : Kraus.IsInjective A) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ N : ℕ, ∀ hN : 2 ≤ N,
-      ManyBody.IsGapped (parentRingInteraction (polarDeformation A γ) hN).hamiltonian 0 δ := by
+      haveI : NeZero N := ⟨by omega⟩;
+      ManyBody.IsGapped (parentRingInteraction (polarDeformation A γ) 2 N).hamiltonian 0 δ := by
   let B : Set.Icc (0 : ℝ) 1 → MPSTensor d D := fun γ => polarDeformation A γ
   have hB : Continuous B := (continuous_polarDeformation A).comp continuous_subtype_val
   have hInj (γ : Set.Icc (0 : ℝ) 1) : Kraus.IsInjective (B γ) :=
@@ -47,9 +48,11 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_gap_polarDeformation
     exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths
       B hB hInj isCompact_univ
   refine ⟨δ, hδ, fun γ hγ N hN => ?_⟩
+  have : NeZero N := ⟨by omega⟩
   have hH : parentHamiltonianES (polarDeformation A γ) 2 N =
-      Matrix.toEuclideanLin (parentRingInteraction (polarDeformation A γ) hN).hamiltonian :=
-    parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow _ hN
+      Matrix.toEuclideanLin (parentRingInteraction (polarDeformation A γ) 2 N).hamiltonian := by
+    rw [ManyBody.Interaction.hamiltonian_translationInvariant_of_le _ hN]
+    exact parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow _ hN
   refine (ManyBody.isGapped_zero_iff_norm
     (posSemidef_hamiltonian_parentRingInteraction (polarDeformation A γ) hN)).mpr
       ⟨groundSpace_hamiltonian_parentRingInteraction_two_ne_bot _ (hInj ⟨γ, hγ⟩) hN, ?_⟩

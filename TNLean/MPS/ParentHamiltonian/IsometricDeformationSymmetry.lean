@@ -599,10 +599,13 @@ theorem hamiltonian_parentRingInteraction_isometricDeformation_commute
       (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
         groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2)
     (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Commute (parentRingInteraction
-      (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) hN).hamiltonian
-      (onSiteTensorPow N U) :=
-  Commute.sum_left _ _ _ fun i _ ↦ placeAlong_ringWindow_commute_onSiteTensorPow U 2 hN i _
+        (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N).hamiltonian
+      (onSiteTensorPow N U) := by
+  have : NeZero N := ⟨by omega⟩
+  rw [ManyBody.Interaction.hamiltonian_translationInvariant_of_le _ hN]
+  exact Commute.sum_left _ _ _ fun i _ ↦ placeAlong_ringWindow_commute_onSiteTensorPow U 2 hN i _
     (toMatrix'_parentInteraction_isometricDeformation_commute A U hU hComm hInv γ)
 
 /-- The canonical open parents along the constructed deformation retain a supplied symmetry of
@@ -652,13 +655,17 @@ theorem hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSi
     (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval)
     {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Commute (parentRingInteraction
       (toTensorFromBlocks (fun _ : Fin 1 => 1)
-        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) hN).hamiltonian
-      (onSiteTensorPow N (U g)) :=
-  Commute.sum_left _ _ _ fun i _ ↦ placeAlong_ringWindow_commute_onSiteTensorPow (U g) 2 hN i _
-    (toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric
-      A hA hNorm U hU hSymm g γ)
+        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) 2 N).hamiltonian
+      (onSiteTensorPow N (U g)) := by
+  have : NeZero N := ⟨by omega⟩
+  rw [ManyBody.Interaction.hamiltonian_translationInvariant_of_le _ hN]
+  exact Commute.sum_left _ _ _ fun i _ ↦
+    placeAlong_ringWindow_commute_onSiteTensorPow (U g) 2 hN i _
+      (toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric
+        A hA hNorm U hU hSymm g γ)
 
 /-- Exact state symmetry of a normalized injective tensor persists in the open canonical
 parent Hamiltonian along its constructed polar deformation.
@@ -704,13 +711,17 @@ theorem hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSi
     (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval)
     {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Commute (parentRingInteraction
       (toTensorFromBlocks (fun _ : Fin 1 => 1)
-        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) hN).hamiltonian
-      (onSiteTensorPow N (U g)) :=
-  Commute.sum_left _ _ _ fun i _ ↦ placeAlong_ringWindow_commute_onSiteTensorPow (U g) 2 hN i _
-    (toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP
-      A hA hTP U hU hSymm g γ)
+        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) 2 N).hamiltonian
+      (onSiteTensorPow N (U g)) := by
+  have : NeZero N := ⟨by omega⟩
+  rw [ManyBody.Interaction.hamiltonian_translationInvariant_of_le _ hN]
+  exact Commute.sum_left _ _ _ fun i _ ↦
+    placeAlong_ringWindow_commute_onSiteTensorPow (U g) 2 hN i _
+      (toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP
+        A hA hTP U hU hSymm g γ)
 
 /-- Exact state symmetry of an injective trace-preserving tensor persists in the open canonical
 parent Hamiltonian along its constructed polar deformation.

@@ -52,10 +52,12 @@ noncomputable def orderedGappedInteractionPath
     (hA : A.PosSemidef) (hB : B.PosSemidef) (hAB : A ≤ B)
     (hAnorm : ‖A‖ ≤ 1) (hBnorm : ‖B‖ ≤ 1)
     (hker : ∀ (N : ℕ) (hN : 2 ≤ N) (x : Cfg d N → ℂ),
-      (Interaction.translationInvariant hN A).hamiltonian.mulVec x = 0 →
-        (Interaction.translationInvariant hN B).hamiltonian.mulVec x = 0)
+      haveI : NeZero N := ⟨by omega⟩;
+      (Interaction.translationInvariant N A).hamiltonian.mulVec x = 0 →
+        (Interaction.translationInvariant N B).hamiltonian.mulVec x = 0)
     (hgap : ∃ δ : ℝ, 0 < δ ∧ ∀ (N : ℕ) (hN : 2 ≤ N),
-      IsGapped (Interaction.translationInvariant hN A).hamiltonian 0 δ)
+      haveI : NeZero N := ⟨by omega⟩;
+      IsGapped (Interaction.translationInvariant N A).hamiltonian 0 δ)
     (hSymA : ∀ (N : ℕ) (hN : 2 ≤ N) (g : G),
       haveI : NeZero N := ⟨by omega⟩; Commute (Interaction.translationInvariant N A).hamiltonian
         (Matrix.finKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ)))
@@ -105,15 +107,16 @@ noncomputable def orderedGappedInteractionPath
         mul_le_mul_of_nonneg_left hBnorm hγ.1]
   · obtain ⟨δ, hδ, hGap⟩ := hgap
     refine ⟨δ, hδ, fun γ hγ N hN ↦ ⟨0, ?_⟩⟩
-    have hHA : (Interaction.translationInvariant hN A).hamiltonian.PosSemidef :=
-      Interaction.posSemidef_hamiltonian fun i ↦
-        posSemidef_placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) hA
-    have hHAB : (Interaction.translationInvariant hN A).hamiltonian ≤
-        (Interaction.translationInvariant hN B).hamiltonian := by
-      simp only [Interaction.hamiltonian]
+    have : NeZero N := ⟨by omega⟩
+    have hHA : (Interaction.translationInvariant N A).hamiltonian.PosSemidef :=
+      Interaction.posSemidef_hamiltonian fun _ ↦
+        Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _)
+    have hHAB : (Interaction.translationInvariant N A).hamiltonian ≤
+        (Interaction.translationInvariant N B).hamiltonian := by
+      simp only [Interaction.hamiltonian_translationInvariant_of_le _ hN]
       exact Finset.sum_le_sum fun i _ ↦
         placeAlong_le_placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) hAB
-    rw [hHam]
+    rw [hHam N hN]
     refine (hGap N hN).of_le hHA ?_ fun x hx ↦ ?_
     · rw [Matrix.le_iff, add_sub_cancel_left]
       exact (Matrix.le_iff.mp hHAB).smul hγ.1

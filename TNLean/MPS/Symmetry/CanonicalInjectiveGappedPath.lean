@@ -32,11 +32,14 @@ gap. -/
 theorem isGapped_hamiltonian_translationInvariant_parent
     {d D N : ℕ} [NeZero D] (A : MPSTensor d D) (hInj : Kraus.IsInjective A)
     (hN : 2 ≤ N) {δ : ℝ}
-    (hGap : ∀ v ∈ (LinearMap.ker
-        (Matrix.toEuclideanLin (parentRingInteraction A hN).hamiltonian))ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction A hN).hamiltonian v‖) :
-    ManyBody.IsGapped (ManyBody.Interaction.translationInvariant hN
+    (hGap : haveI : NeZero N := ⟨by omega⟩; ∀ v ∈ (LinearMap.ker
+        (Matrix.toEuclideanLin (parentRingInteraction A 2 N).hamiltonian))ᗮ,
+      haveI : NeZero N := ⟨by omega⟩;
+      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction A 2 N).hamiltonian v‖) :
+    haveI : NeZero N := ⟨by omega⟩;
+    ManyBody.IsGapped (ManyBody.Interaction.translationInvariant N
       (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian 0 δ := by
+  have : NeZero N := ⟨by omega⟩
   exact (ManyBody.isGapped_zero_iff_norm
     (posSemidef_hamiltonian_parentRingInteraction A hN)).mpr
       ⟨groundSpace_hamiltonian_parentRingInteraction_two_ne_bot A hInj hN, hGap⟩
@@ -76,9 +79,11 @@ noncomputable def canonicalInjectiveGappedPath
         (fun γ => hInj γ γ.property) isCompact_univ
     refine ⟨δ, hδ, fun γ hγ N hN => ⟨0,
       isGapped_hamiltonian_translationInvariant_parent (A γ) (hInj γ hγ) hN ?_⟩⟩
+    have : NeZero N := ⟨by omega⟩
     have hH : parentHamiltonianES (A γ) 2 N =
-        Matrix.toEuclideanLin (parentRingInteraction (A γ) hN).hamiltonian :=
-      parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow (A γ) hN
+        Matrix.toEuclideanLin (parentRingInteraction (A γ) 2 N).hamiltonian := by
+      rw [ManyBody.Interaction.hamiltonian_translationInvariant_of_le _ hN]
+      exact parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow (A γ) hN
     rw [← hH]
     exact hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN
   symmetric γ hγ g N hN := by
