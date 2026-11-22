@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalDGCanonicalJointProbability
 import TNLean.MPS.AreaLaw.PhysicalDGAutomaticRefinement
-import QICLean.Analysis.InterleavedOutputPolynomialBound
+import QICLean.Analysis.Parameter.InterleavedOutputPolynomialBound
 
 /-!
 # Ritz and MPS output from the same successful canonical root

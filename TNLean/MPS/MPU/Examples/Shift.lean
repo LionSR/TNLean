@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Identity
 import Mathlib.LinearAlgebra.Matrix.Permutation
-import QICLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPDO.StackedLayers

@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.EigenspaceMap
+import QICLean.Spectral.Eigenvalue.EigenspaceMap
 import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadPositivity
 import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
-import QICLean.Kraus.InvariantProjection
-import QICLean.Channel.KrausMap
+import QICLean.Channel.Irreducible.InvariantProjection
+import QICLean.Channel.KrausMap.KrausMap
 import QICLean.Kraus.Transfer
 import TNLean.Wielandt.Primitivity.EasyDirections
 import TNLean.MPS.Tensor

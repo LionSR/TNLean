@@ -4,15 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.RegionalGroundEnergy
-import QICLean.Entropy.ZeroEntropy
-import QICLean.Analysis.QuadraticScalarShift
-import QICLean.Entropy.RegionalOperatorCoordinates
-import QICLean.Analysis.CompressionEnergyInterval
-import QICLean.Analysis.MatrixTensorCoordinates
-import QICLean.Analysis.ViableSubspaceCoordinates
+import QICLean.ManyBody.Entropy.ZeroEntropy
+import QICLean.Analysis.Order.QuadraticScalarShift
+import QICLean.ManyBody.Entropy.Cut.RegionalOperatorCoordinates
+import QICLean.Spectral.Eigenvalue.CompressionEnergyInterval
+import QICLean.Analysis.TensorProduct.MatrixTensorCoordinates
+import QICLean.Analysis.Subspace.ViableSubspaceCoordinates
 import QICLean.ManyBody.Sites.RegionMatrix
-import QICLean.Entropy.RegionUnion
-import QICLean.Representation.RelativePin
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import QICLean.ManyBody.Replica.RelativePin
 
 /-!
 # Native interval compressed energy estimates

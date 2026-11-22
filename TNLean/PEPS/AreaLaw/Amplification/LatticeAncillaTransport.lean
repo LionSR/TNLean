@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Amplification.AncillaTransport
 import TNLean.PEPS.AreaLaw.Amplification.LatticeRestoring
-import QICLean.Analysis.MatrixKroneckerContraction
-import QICLean.Analysis.RootChannel
+import QICLean.Analysis.Norm.MatrixKroneckerContraction
+import QICLean.Analysis.Norm.RootChannel
 
 /-!
 # The restoring operator with the two ancillary copies as spectators

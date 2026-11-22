@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.HardTruncationResidual
-import QICLean.Analysis.ShiftedSoftHardTruncation
-import QICLean.Analysis.SoftTruncationRestrictedResidual
+import QICLean.Spectral.Filter.ShiftedSoftHardTruncation
+import QICLean.Spectral.Filter.SoftTruncationHardResidual
 
 /-!
 # Actual original-to-soft regional residual

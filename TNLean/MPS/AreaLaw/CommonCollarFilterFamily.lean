@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.CommonCollarMPOFamily
-import QICLean.Analysis.InvariantTensorWordPower
+import QICLean.Analysis.Projection.InvariantTensorWordPower
 
 /-!
 # The same global improving operator after adding interval collars

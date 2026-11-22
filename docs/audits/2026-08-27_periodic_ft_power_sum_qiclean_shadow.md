@@ -7,7 +7,7 @@ with the index type narrowed.
 
 | Removed | Replacement |
 |---|---|
-| `MPSTensor.weight_multisets_eq_of_power_sums_eq` (`TNLean/MPS/Periodic/FundamentalTheorem.lean`) | `Matrix.sum_pow_eq_implies_multiset_eq` (`QICLean.Algebra.ScalarPowerSumIdentity`) |
+| `MPSTensor.weight_multisets_eq_of_power_sums_eq` (`TNLean/MPS/Periodic/FundamentalTheorem.lean`) | `Matrix.sum_pow_eq_implies_multiset_eq` (`QICLean.Algebra.Polynomial.ScalarPowerSumIdentity`) |
 
 ## What was checked
 
@@ -20,7 +20,7 @@ in the form the caller needs, so the narrowing bought nothing.
 
 There was one call site, inside `equalCase_zgauge_of_power_sums` in the same
 file, which now names the QICLean theorem directly. No import or `open` change
-was needed: `QICLean.Algebra.ScalarPowerSumIdentity` is in the import closure
+was needed: `QICLean.Algebra.Polynomial.ScalarPowerSumIdentity` is in the import closure
 because the deleted body called into it, and the call site sits in the same
 `namespace MPSTensor` — `ZGaugeConstruction` is a `section`, not a namespace — so
 the fully-qualified `Matrix.` spelling resolves exactly as it did inside the

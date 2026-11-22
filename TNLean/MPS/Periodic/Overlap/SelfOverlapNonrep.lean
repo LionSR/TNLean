@@ -8,7 +8,7 @@ import TNLean.MPS.CanonicalForm.CyclicSectors.FixedAdjoint
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 import TNLean.MPS.Periodic.SectorIrreducibility.ProjectionOrtho
 import QICLean.Channel.Peripheral.PeriodicityRemoval
-import QICLean.QPF.Assembly
+import QICLean.Kraus.PrimitiveFixedPoint.Assembly
 
 /-!
 # Periodic overlap: the spectral non-repetition crux

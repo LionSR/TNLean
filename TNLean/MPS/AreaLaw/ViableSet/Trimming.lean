@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.MPS.AreaLaw.SupportedCutRank
-import QICLean.Channel.SchmidtTrimming
-import QICLean.Entropy.RightLocalLift
+import QICLean.Channel.Schmidt.Trimming
+import QICLean.ManyBody.Entropy.Cut.RightLocalLift
 
 /-!
 # Trimming a chain vector across one cut

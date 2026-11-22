@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.UnitaryGroup
-import QICLean.Algebra.UnitaryMulVecInner
+import QICLean.Analysis.Isometry.UnitaryMulVecInner
 import TNLean.PEPS.GInjectiveConcatenation
 import TNLean.PEPS.GInjectiveMPS
 
@@ -172,7 +172,7 @@ positive density normalization from the local site maps.
 this supported physical embedding. `TNLean.PEPS.TorusPhysicalCutDensity` consequently
 obtains one density on the original physical region, chosen before all closure
 labels and coefficients, with rank equal to the expected boundary power.
-`QICLean.Entropy.FlatDensityEntropy` computes all nonnegative finite Rényi
+`QICLean.Entropy.Renyi.FlatDensityEntropy` computes all nonnegative finite Rényi
 orders from the genuine spectral trace powers, including rank at order zero
 and von Neumann entropy at order one. `TNLean.PEPS.TorusSimplyConnectedPhysicalDensity`
 combines these steps for contiguous regions with simply connected closed-cell

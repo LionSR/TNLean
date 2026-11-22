@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.IsometricBondCompression
 import TNLean.MPS.Core.ProjectionTriangularTrace
-import QICLean.Algebra.MatrixUnitaryBetween
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 /-!
 # Periodic decomposition along a one-sided invariant support

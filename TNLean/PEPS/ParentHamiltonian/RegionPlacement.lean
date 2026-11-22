@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Subregion
-import QICLean.Analysis.MatrixFramePerturbation
+import QICLean.Analysis.Isometry.FramePerturbation
 import Mathlib.Algebra.Star.StarProjection
 
 /-!

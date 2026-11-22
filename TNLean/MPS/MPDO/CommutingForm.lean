@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.ZCL
-import QICLean.Algebra.OrthogonalProjection
+import QICLean.Algebra.Hermitian.OrthogonalProjection
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Commuting-form and GSNNCH data for simple MPDOs

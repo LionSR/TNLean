@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.OperatorMPOFromCutRank
 import QICLean.ManyBody.Sites.OperatorSchmidtRank
-import QICLean.Entropy.FilterStationarity
-import QICLean.Algebra.OperatorSchmidtBounds
+import QICLean.ManyBody.Entropy.Filter.Stationarity
+import QICLean.Algebra.OperatorSchmidt.Bounds
 
 /-!
 # Actual operator tensors for a local sum and a scalar

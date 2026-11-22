@@ -7,7 +7,7 @@ import Mathlib.Algebra.Star.StarProjection
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic
 import Mathlib.LinearAlgebra.UnitaryGroup
 import Mathlib.Topology.Instances.Matrix
-import QICLean.Channel.MaximallyEntangled
+import QICLean.Channel.Entanglement.MaximallyEntangled
 
 /-!
 # A continuous unitary path to the factor swap

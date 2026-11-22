@@ -7,7 +7,7 @@ import TNLean.MPS.AreaLaw.BalancedIntervalMergeBounds
 import TNLean.MPS.AreaLaw.BalancedIntervalFailure
 import TNLean.MPS.AreaLaw.BalancedIntervalJointFailure
 import TNLean.MPS.AreaLaw.IntervalSamplingChoices
-import QICLean.Analysis.FiniteProductUnionProbability
+import QICLean.Probability.Measure.FiniteProductSectionProbability
 
 /-!
 # Root failure from guarded coordinate sections

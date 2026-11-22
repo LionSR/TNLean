@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SquareInteractionTerms
-import QICLean.Entropy.FilterZeroFloorEnergy
+import QICLean.ManyBody.Entropy.Filter.ZeroFloorEnergy
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

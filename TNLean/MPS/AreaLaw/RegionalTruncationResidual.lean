@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.WeightedLowRestriction
+import QICLean.Spectral.LowEnergy.WeightedLowRestriction
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
 
@@ -12,7 +12,7 @@ import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
 
 The original nearest-neighbour bond sum supplies boundary exponential estimates. With them,
 the conjugation-bound form of the weighted Sylvester argument in
-`QICLean.Analysis.WeightedLowRestriction` controls the regional truncation excess on the
+`QICLean.Spectral.LowEnergy.WeightedLowRestriction` controls the regional truncation excess on the
 specified low-energy space.
 
 These results support ALVV, arXiv:1602.08828v2,

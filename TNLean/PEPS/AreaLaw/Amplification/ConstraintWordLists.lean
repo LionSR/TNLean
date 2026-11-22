@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.ContractionWordDecay
-import QICLean.Probability.PoissonWordPartition
+import QICLean.Analysis.Norm.ContractionWordDecay
+import QICLean.Probability.PoissonWord.Partition
 
 /-!
 # One clock realization for the full, retained and truncated products

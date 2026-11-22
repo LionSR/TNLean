@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.ActualSelectedChargeEnergy
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyCoefficients
-import QICLean.Representation.ReplicaTransport.Energy
+import QICLean.ManyBody.Replica.BandMetric.Energy
 
 /-!
 # The actual selected defect in density coordinates

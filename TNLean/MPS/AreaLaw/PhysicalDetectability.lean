@@ -3,15 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.DetectabilityLemma
-import QICLean.Analysis.ComplementProdKernel
-import QICLean.Analysis.ComplementProdPartition
-import QICLean.Analysis.ProjectionGeometry
+import QICLean.Analysis.Projection.DetectabilityLemma
+import QICLean.Analysis.Projection.Geometry
 import QICLean.ManyBody.Hamiltonian.Models
-import QICLean.Algebra.HermitianPartSum
+import QICLean.Algebra.Hermitian.HermitianPartSum
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 

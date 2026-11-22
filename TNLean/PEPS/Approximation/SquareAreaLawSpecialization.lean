@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Entropy.MovementEtaRegional
-import QICLean.Entropy.RegionCovariance
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.ManyBody.Entropy.RegionCovariance
 import TNLean.PEPS.AreaLaw.RectangularHamiltonian
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.SquareGridContraction

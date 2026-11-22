@@ -7,8 +7,8 @@ import TNLean.PEPS.Approximation.PinnedNestedFilters
 import TNLean.PEPS.AreaLaw.RectangularHamiltonian
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.SquareGridContraction
-import QICLean.Entropy.FilterOutputCovariance
-import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Entropy.Filter.OutputCovariance
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
 
 /-!
 # Original-grid filter families in canonical square coordinates

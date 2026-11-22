@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.Basic
-import QICLean.Channel.MaximalOverlap
+import QICLean.Channel.Schmidt.MaximalOverlap
 
 /-!
 # Schmidt tails from actual cut approximants

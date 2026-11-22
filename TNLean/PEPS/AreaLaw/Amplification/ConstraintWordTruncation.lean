@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.LatticeConstraints
 import TNLean.PEPS.AreaLaw.LatticeCounts
-import QICLean.Analysis.ContractionWordDecay
-import QICLean.Probability.PoissonWordPartition
-import QICLean.Probability.PoissonWordRealOccupation
+import QICLean.Analysis.Norm.ContractionWordDecay
+import QICLean.Probability.PoissonWord.Partition
+import QICLean.Probability.PoissonWord.RealOccupation
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

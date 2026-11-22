@@ -6,9 +6,9 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scan.ActualTerminalPartitions
 import TNLean.PEPS.AreaLaw.Scan.ActualGlobalReplicaEnergy
 import TNLean.PEPS.AreaLaw.Scan.AugmentedRootCompression
-import QICLean.Algebra.ProjectionRangeIsometry
-import QICLean.Analysis.RegionalRoughLowerNorm
-import QICLean.Analysis.RoughLowerCoefficient
+import QICLean.Algebra.Hermitian.ProjectionRangeIsometry
+import QICLean.ManyBody.Replica.LowDefect.RegionalRoughLowerNorm
+import QICLean.Analysis.Parameter.RoughLowerCoefficient
 
 /-!
 # The actual rough lower comparison at an arbitrary fixed band weight

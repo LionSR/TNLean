@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.UncleTrialTransferNorm
 import TNLean.MPS.Overlap.Basic
-import QICLean.Analysis.SpectralRadiusPowerDecay
+import QICLean.Spectral.Radius.PowerDecay
 import QICLean.Channel.Peripheral.UnitalKraus
 import QICLean.Kraus.MixedMap.SpectralRadius
 import Mathlib.Analysis.SpecificLimits.Normed

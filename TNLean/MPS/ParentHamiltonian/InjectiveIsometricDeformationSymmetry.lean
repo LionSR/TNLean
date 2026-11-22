@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Vec
-import QICLean.Algebra.MatrixReindexUnitary
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.MPS.FundamentalTheorem.UnitaryGauge
 import TNLean.MPS.ParentHamiltonian.IsometricDeformationCovariance
 import TNLean.MPS.Periodic.Applications

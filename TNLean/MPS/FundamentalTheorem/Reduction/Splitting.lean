@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.LinearAlgebra.DirectSum.Finite
-import QICLean.Algebra.DirectSumBlockDiagonal
+import QICLean.Algebra.Module.DirectSumBlockDiagonal
 import TNLean.MPS.FundamentalTheorem.Reduction.ProjectorWeightedSum
 import TNLean.MPS.FundamentalTheorem.Reduction.StarSemisimple
 

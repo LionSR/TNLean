@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ViableSet.ChainPaddingGroundState
 import TNLean.MPS.AreaLaw.ViableSet.PrefixExtraction
 import TNLean.MPS.AreaLaw.ViableSet.FinalMPS
-import QICLean.Analysis.PhaseError
+import QICLean.Analysis.Projection.PhaseError
 
 /-!
 # An MPS in the actual retained prefix span

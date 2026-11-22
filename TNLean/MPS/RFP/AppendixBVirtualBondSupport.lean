@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.RFP.AppendixBStructuralData
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Appendix B virtual-bond support

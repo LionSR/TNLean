@@ -6,13 +6,13 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.OpenMPS
-import QICLean.Algebra.MatrixToEuclidean
+import QICLean.Analysis.Norm.MatrixToEuclidean
 import TNLean.MPS.AreaLaw.Hastings.PartCommutators
-import QICLean.Analysis.PhysicalPowerFilterLowerGap
-import QICLean.Algebra.FiniteSumPowers
-import QICLean.Entropy.SupportedOperatorSchmidtWords
+import QICLean.Spectral.Filter.PhysicalPowerFilterLowerGap
+import QICLean.Algebra.Word.FiniteSumPowers
+import QICLean.ManyBody.Entropy.Cut.SupportedOperatorSchmidtWords
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import QICLean.Algebra.HermitianPartSum
+import QICLean.Algebra.Hermitian.HermitianPartSum
 
 /-!
 # The power approximate ground-state projector on a nearest-neighbour chain

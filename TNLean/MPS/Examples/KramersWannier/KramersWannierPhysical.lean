@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.KramersWannier.KramersWannierTensor
 import TNLean.MPS.Core.CyclicTrace
-import QICLean.Algebra.BinaryCharacterSum
+import QICLean.Algebra.Combinatorics.BinaryCharacterSum
 
 /-!
 # The periodic Kramers–Wannier kernel and spin flip

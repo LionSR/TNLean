@@ -27,7 +27,7 @@ row, under the same fully qualified name.
 
 | Deleted TNLean module | Declarations | QICLean module |
 |---|---|---|
-| `TNLean/Algebra/ComplexSqrt.lean` | 11 | `QICLean/Algebra/ComplexSqrt.lean` |
+| `TNLean/Algebra/ComplexSqrt.lean` | 11 | `QICLean/Analysis/Real/ComplexSqrt.lean` |
 | `TNLean/Circuit/Gates/TwoLevel.lean` | 24 | `QICLean/Circuit/Gate/TwoLevel.lean` |
 | `TNLean/Circuit/Gates/Givens.lean` | 23 | `QICLean/Circuit/Gate/Givens.lean` |
 | `TNLean/Circuit/PartialIsometryDilation.lean` | 5 | `QICLean/Circuit/Gate/PartialIsometryDilation.lean` |
@@ -141,7 +141,7 @@ Importers of a deleted module import the QICLean module of the same row.
 `Circuit/Gates/TwoSiteUniversality` imported `Circuit/Gates/Givens`, which
 imported `Circuit/Gates/ControlledProducts`; since the QICLean module has no
 such import, `TwoSiteUniversality` now imports both. The four modules that lost
-a supported-operator lemma import `QICLean.Entropy.SupportedOperatorAlgebra`,
+a supported-operator lemma import `QICLean.ManyBody.Entropy.Cut.SupportedOperatorAlgebra`,
 which brings the Sites layer.
 The import aggregators `TNLean/Algebra.lean`, `TNLean/Circuit.lean` and
 `TNLean/Circuit/Gates.lean` are regenerated.
@@ -151,8 +151,8 @@ The import aggregators `TNLean/Algebra.lean`, `TNLean/Circuit.lean` and
 Apart from the four pull requests above, the range adds about 200 declarations
 to QICLean and removes two private ones (`Matrix.rpow_mul_one_sub`,
 `QICLean.ComplexGaussian.sqrt_two_complex_sq`), neither used in TNLean. Three
-declarations moved from `QICLean/Entropy/FilterStationarity.lean` to
-`QICLean/Entropy/SupportedOperatorAlgebra.lean`, which the former imports. The
+declarations moved from `QICLean/ManyBody/Entropy/Filter/Stationarity.lean` to
+`QICLean/ManyBody/Entropy/Cut/SupportedOperatorAlgebra.lean`, which the former imports. The
 statements of `Real.exists_softTruncation_order_of_residual_budget` and
 `Real.exists_softTruncation_scaled_order_of_residual_budget` are unchanged.
 

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.TraceChainOperator
-import QICLean.Algebra.TraceReindex
+import QICLean.Algebra.Matrix.MatrixReindex
 
 /-!
 # Finite linear combinations of actual operator chains

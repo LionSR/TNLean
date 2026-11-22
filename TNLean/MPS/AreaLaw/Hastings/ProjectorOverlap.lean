@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.CStarAlgebra.Matrix
-import QICLean.Analysis.GlobalGap
+import QICLean.Analysis.Order.GlobalGap
 
 /-!
 # Overlap with the ground state after an approximate projector

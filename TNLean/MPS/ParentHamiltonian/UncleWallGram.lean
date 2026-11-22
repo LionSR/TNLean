@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.UncleTwoWallTrial
-import QICLean.Kraus.MixedMap
-import QICLean.Kraus.MapIterate
-import QICLean.Algebra.MatrixAux
+import QICLean.Kraus.MixedMap.Basic
+import QICLean.Kraus.Transfer
+import QICLean.Algebra.Matrix.MatrixAux
 
 /-!
 # Finite Gram matrices of a moving domain wall

@@ -3,13 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixAux
+import QICLean.Algebra.Matrix.MatrixAux
 import TNLean.MPS.MPDO.PhysicalSectorPruning
 import TNLean.MPS.MPDO.PhysicalSectorVirtualSpanning
 import TNLean.MPS.MPDO.SectorEtaOperator
 import TNLean.MPS.MPDO.SectorRecurrence
 import TNLean.MPS.MPDO.RecurrentSectorRephasing
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Recurrence after reparameterizing zero-weight sectors

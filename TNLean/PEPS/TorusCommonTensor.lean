@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Complex.Polynomial.Basic
-import QICLean.Algebra.DependentProducts
+import QICLean.Algebra.Combinatorics.DependentProducts
 import TNLean.PEPS.TorusFourLegTransformation
 
 /-!

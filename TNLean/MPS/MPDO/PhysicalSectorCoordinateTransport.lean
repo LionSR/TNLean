@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.FinSum
-import QICLean.Algebra.MatrixIsometryEntries
-import QICLean.Algebra.MatrixUnitaryBetween
+import QICLean.Algebra.Combinatorics.FinSum
+import QICLean.Algebra.Unitary.MatrixIsometryEntries
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.MPS.MPDO.PhysicalSectorBlockedRFP
 
 /-!

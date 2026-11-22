@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.PreBialgebra
 import TNLean.MPS.MPDO.BoundaryAdjointClosed
-import QICLean.Algebra.TraceFormDuality
+import QICLean.Algebra.Matrix.TraceFormDuality
 
 /-!
 # Arbitrary-boundary adjoints from a coalgebra representation

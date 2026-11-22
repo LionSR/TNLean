@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.AreaLaw.FullIntervalFilterTrimming
-import QICLean.Analysis.GroundSpaceAffineFilter
+import QICLean.Spectral.Filter.GroundSpaceAffineFilter
 
 /-!
 # The physical full-ground filter at the same root

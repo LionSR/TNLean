@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.CommutingOverlappingDecomp
-import QICLean.Algebra.TupleEquiv
+import QICLean.Algebra.Kronecker.CommutingDecomposition
+import QICLean.Algebra.Combinatorics.TupleEquiv
 import TNLean.MPS.MPDO.CommutingFormBridge
 
 /-!

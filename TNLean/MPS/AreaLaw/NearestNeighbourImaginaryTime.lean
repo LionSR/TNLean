@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.ExpConjugation
+import QICLean.Analysis.Exponential.ExpConjugation
 import QICLean.ManyBody.Dynamics.BoundedDegreeImaginaryTime
 import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Sites.Lattice.Chain
@@ -14,7 +14,7 @@ import Mathlib.Logic.Function.Iterate
 import Mathlib.Tactic.Positivity
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order

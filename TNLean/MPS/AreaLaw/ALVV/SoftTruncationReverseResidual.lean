@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.SoftTruncationOriginalResidual
 import TNLean.MPS.AreaLaw.RegionalBarrierResidual
-import QICLean.Analysis.SoftTruncationHighProjection
+import QICLean.Spectral.Filter.SoftTruncationHighProjection
 
 /-!
 # Actual low-soft-energy regional residuals

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.ChainBootstrap
 import TNLean.MPS.AreaLaw.SequentialTruncation
-import QICLean.Entropy.LeadingWeights
+import QICLean.Entropy.VonNeumann.LeadingWeights
 
 /-!
 # Hastings' Schmidt-tail constraint on the chain

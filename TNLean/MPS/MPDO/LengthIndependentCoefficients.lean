@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.ConstantPowerSums
+import QICLean.Algebra.Polynomial.ConstantPowerSums
 import TNLean.MPS.MPDO.BNTCoefficients
 
 /-!
@@ -34,8 +34,8 @@ provided by later modules.
 
 The paper derives the $\{0, 1\}$ membership from the power-sum uniqueness
 lemma of its appendix (lines 1155--1163, formalized in
-`QICLean.Algebra.ScalarPowerSumIdentity`); the proofs here use the elementary
-constant-power-sum dichotomy from `QICLean.Algebra.ConstantPowerSums`, which
+`QICLean.Algebra.Polynomial.ScalarPowerSumIdentity`); the proofs here use the elementary
+constant-power-sum dichotomy from `QICLean.Algebra.Polynomial.ConstantPowerSums`, which
 suffices for this specialization.
 
 ## References

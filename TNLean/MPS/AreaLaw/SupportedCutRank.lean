@@ -4,9 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
-import QICLean.Entropy.GapSurprisal
-import QICLean.Channel.UhlmannIsometry
-import QICLean.Algebra.MatrixToEuclidean
+import QICLean.Entropy.Surprisal.GapSurprisal
+import QICLean.Channel.Schmidt.UhlmannIsometry
+import QICLean.Analysis.Norm.MatrixToEuclidean
+import QICLean.Channel.Schmidt.Rank
 
 /-!
 # Cut rank under supported operators

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.ActualSelectedChargeEnergy
 import TNLean.PEPS.AreaLaw.Scan.GenericChargeEnergy
-import QICLean.Representation.ReplicaTransport.Energy
+import QICLean.ManyBody.Replica.BandMetric.Energy
 
 /-!
 # Actual selected energy with an explicit collar exponent

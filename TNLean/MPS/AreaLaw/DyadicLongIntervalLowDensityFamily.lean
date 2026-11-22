@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DyadicRegionalLowDensityWordFamily
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
-import QICLean.Analysis.ShiftedLowEnergyCoordinates
-import QICLean.Analysis.ViableSubspaceCoordinates
+import QICLean.Spectral.LowEnergy.ShiftedLowEnergyCoordinates
+import QICLean.Analysis.Subspace.ViableSubspaceCoordinates
 
 /-!
 # Dyadic low-energy improving families on long prescribed intervals

@@ -11,7 +11,7 @@ import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Positivity
 import Mathlib.Tactic.Ring
 import Lean.Elab.Tactic.Omega
-import QICLean.Analysis.ProbabilityEntropyRankTails
+import QICLean.Entropy.Classical.ProbabilityEntropyRankTails
 
 /-!
 # Dyadic entropy estimates for the degenerate gapped area law

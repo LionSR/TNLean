@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSupport
 import TNLean.MPS.ParentHamiltonian.GroundSpaceMapContinuity
-import QICLean.Algebra.OrderedProduct
+import QICLean.Algebra.Word.OrderedProduct
 
 /-!
 # Extended boundary maps at every chain length

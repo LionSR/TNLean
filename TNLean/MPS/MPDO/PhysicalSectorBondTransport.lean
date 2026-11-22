@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixIsometryEntries
+import QICLean.Algebra.Unitary.MatrixIsometryEntries
 import TNLean.MPS.MPDO.PhysicalSectorBondCommutativity
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Transport of adjacent physical-sector bonds

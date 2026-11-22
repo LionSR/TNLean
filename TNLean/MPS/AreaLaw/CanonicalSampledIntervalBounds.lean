@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.CanonicalSampledIntervalInterleaved
-import QICLean.Analysis.ViableNodeParameters
-import QICLean.Analysis.RandomRangeSubspaceDimension
+import QICLean.Analysis.Parameter.ViableNodeParameters
+import QICLean.Probability.Measurable.VariableRankSampleProjection
 
 /-!
 # Unconditional dimensions and recorded ranks of the canonical parent

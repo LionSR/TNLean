@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.MatrixEntrywiseDeriv
-import QICLean.Analysis.MatrixFrameDeriv
-import QICLean.Analysis.MatrixLinearODE
+import QICLean.Analysis.Calculus.MatrixEntrywiseDeriv
+import QICLean.Analysis.Calculus.MatrixFrameDeriv
+import QICLean.Analysis.Calculus.MatrixLinearODE
 import TNLean.MPS.MPDO.BoundaryActionLMatrixGauge
 
 /-!

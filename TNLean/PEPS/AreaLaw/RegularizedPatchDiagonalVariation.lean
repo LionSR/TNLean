@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate
 import TNLean.PEPS.AreaLaw.RegularizedPatchMarginal
-import QICLean.Analysis.DensitySimplex
+import QICLean.Analysis.Optimization.DensitySimplex
 
 /-!
 # Diagonal variation of an ordered regularized patch objective

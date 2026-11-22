@@ -5,12 +5,12 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BufferedRectangles
 import TNLean.Lattice.MarginalTails
-import QICLean.Entropy.RegionEntropy
-import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Entropy.RegionEntropy
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import TNLean.Lattice.RegionEntropyInequalities
-import QICLean.Entropy.BufferDiscount
-import QICLean.Analysis.HarmonicWeights
-import QICLean.Entropy.TailRadiusWeights
+import QICLean.ManyBody.Entropy.Filter.BufferDiscount
+import QICLean.Analysis.Real.HarmonicWeights
+import QICLean.Entropy.Surprisal.TailRadiusWeights
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.ComplexSqrt
+import QICLean.Analysis.Real.ComplexSqrt
 import QICLean.Circuit.Model.UnitaryRing
-import QICLean.Analysis.UnitaryExpectation
+import QICLean.Analysis.Isometry.UnitaryExpectation
 import TNLean.Circuit.WeightedGHZ
 import TNLean.MPS.Preparation.StateApproximationError
 

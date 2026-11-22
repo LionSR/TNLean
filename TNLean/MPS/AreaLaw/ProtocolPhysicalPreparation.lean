@@ -7,7 +7,7 @@ import TNLean.MPS.AreaLaw.ProtocolStagePhysicalCircuits
 import TNLean.MPS.AreaLaw.ProtocolConditionalPreparation
 import TNLean.MPS.AreaLaw.ProtocolStageArity
 import TNLean.MPS.AreaLaw.ProtocolSweepGeometry
-import QICLean.Analysis.ExplicitThresholds
+import QICLean.Analysis.Real.ExplicitThresholds
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

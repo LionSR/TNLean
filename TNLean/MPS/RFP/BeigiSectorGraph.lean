@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicTransport
 import TNLean.MPS.RFP.BeigiSpatialDecomposition
-import QICLean.Analysis.CommutingProjectionProduct
+import QICLean.Analysis.Projection.CommutingProjectionProduct
 
 /-!
 # The finite sector graph of a commuting parent Hamiltonian

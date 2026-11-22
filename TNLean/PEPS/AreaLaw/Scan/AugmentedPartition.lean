@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.PhysicalPartition
-import QICLean.Representation.ReplicaTransport.Setup
+import QICLean.ManyBody.Replica.BandMetric.Setup
 import Mathlib.Data.Fintype.Sum
 
 /-!

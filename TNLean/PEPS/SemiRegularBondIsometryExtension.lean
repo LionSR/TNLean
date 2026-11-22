@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.SemiRegularBondSupport
-import QICLean.Algebra.MatrixGramUnitary
+import QICLean.Algebra.Unitary.MatrixGramUnitary
 /-!
 # Full physical isometries extending multiplicity restoration
 

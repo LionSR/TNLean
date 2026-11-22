@@ -6,9 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.SharpRegionalLowDensityFamily
 import TNLean.MPS.AreaLaw.LowDensityLogDimension
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
-import QICLean.Analysis.ViableSubspaceSchmidtRank
-import QICLean.Analysis.ViableSubspaceMinimum
-import QICLean.Analysis.ViableSubspaceNestedEnlargement
+import QICLean.Channel.Schmidt.ViableSubspaceSchmidtRank
+import QICLean.Probability.Sampling.ViableSubspaceMinimum
 
 /-!
 # Normalized original-band approximations at independent scales

@@ -2,7 +2,7 @@
 
 Source use: Schumacher–Werner, Papers/quant-ph_0405174/qca.tex,
 blockdims/bruleU/bruleV, lines 977–1001. Reuses the actual same-index
-Skolem–Noether theorem in QICLean/Algebra/SkolemNoetherUnitary.lean,
+Skolem–Noether theorem in QICLean/Algebra/MatrixAlgebra/SkolemNoetherUnitary.lean,
 with its cited CPSV16 Appendix C.4 source.
 
 `Matrix.exists_unitary_conj_of_starAlgEquiv_matrix_between` takes an actual

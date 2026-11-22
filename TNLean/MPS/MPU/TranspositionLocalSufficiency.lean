@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.TranspositionLocalNecessity
 import TNLean.MPS.MPU.SourceFactorsStandardForm
-import QICLean.Algebra.UnitPhaseScalar
+import QICLean.Analysis.Isometry.UnitPhaseScalar
 import TNLean.MPS.MPU.TranspositionGateCertificate
 
 /-!

@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.OpenMPS
-import QICLean.Entropy.FilterMoment
-import QICLean.Analysis.GlobalGap
+import QICLean.Entropy.Surprisal.FilterMoment
+import QICLean.Analysis.Order.GlobalGap
 
 /-!
 # The product of the two marginals across a cut

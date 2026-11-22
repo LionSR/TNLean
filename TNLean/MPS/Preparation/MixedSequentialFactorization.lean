@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.SequentialFactorization
-import QICLean.Algebra.MatrixIsometryKronecker
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 /-!
 # Two-sided sequential factorization with a central input

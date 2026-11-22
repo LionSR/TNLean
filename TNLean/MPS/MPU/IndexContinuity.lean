@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.Index
 import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPDO.PhysicalBlocking
-import QICLean.Algebra.MatrixRankClosed
+import QICLean.Analysis.Topology.MatrixRankClosed
 
 /-!
 # Constancy of the MPU index along canonical-form-II paths

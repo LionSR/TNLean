@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import Mathlib.Order.JordanHolder
 import Mathlib.Topology.Instances.Matrix
-import QICLean.Algebra.MatrixFamilyAction
+import QICLean.Algebra.MatrixAlgebra.MatrixFamilyAction
 import QICLean.Kraus.IrreducibleAction
-import QICLean.Algebra.Subquotient
+import QICLean.Algebra.Module.Subquotient
 import TNLean.MPS.Chain.VaryingBondOBC
 import TNLean.MPS.FundamentalTheorem.Reduction.FlagData
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock

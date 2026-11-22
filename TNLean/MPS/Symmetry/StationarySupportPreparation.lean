@@ -6,9 +6,9 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.SupportedCompressionIrreducible
 import TNLean.MPS.CanonicalForm.Definitions
 import QICLean.Channel.Peripheral.SpectralRadius
-import QICLean.Channel.KrausCornerCompression
-import QICLean.Algebra.MatrixAux
-import QICLean.Algebra.MatrixUnitaryBetween
+import QICLean.Channel.KrausMap.KrausCornerCompression
+import QICLean.Algebra.Matrix.MatrixAux
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 
 /-!

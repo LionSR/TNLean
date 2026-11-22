@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.FNWDimensionConstant.MarkovSpectrum
 import TNLean.MPS.Structure.PrimitiveFixedPoint
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
-import QICLean.Algebra.MatrixAux
+import QICLean.Algebra.Matrix.MatrixAux
 
 /-!
 # The faithful primitive fixed point of the Markov example

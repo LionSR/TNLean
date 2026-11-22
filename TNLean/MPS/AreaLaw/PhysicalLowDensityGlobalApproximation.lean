@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalLowDensitySharpApproximation
 import TNLean.MPS.AreaLaw.NormalizedSequentialApproximation
-import QICLean.Analysis.LogRankRounding
-import QICLean.Entropy.ViableSampling.ViableSubspaceEntropy
-import QICLean.Channel.MaximalOverlap
+import QICLean.Analysis.Real.LogRankRounding
+import QICLean.ManyBody.Entropy.ViableSubspaceEntropy
+import QICLean.Channel.Schmidt.MaximalOverlap
 
 /-!
 # One sharp matrix product approximation to an original low-energy vector

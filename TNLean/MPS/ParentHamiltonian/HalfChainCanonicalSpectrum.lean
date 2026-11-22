@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.HalfChainSpectrum
 import TNLean.MPS.CanonicalForm.Definitions
 import QICLean.Channel.Peripheral.IrreducibleChannel
 import QICLean.Channel.Schwarz.Closure
-import QICLean.Kraus.InvariantProjection
+import QICLean.Channel.Irreducible.InvariantProjection
 
 /-!
 # Half-chain spectrum in the unital canonical convention

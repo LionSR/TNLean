@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftCalibration
 import TNLean.MPS.AreaLaw.PhysicalGroundReferenceTrimming
-import QICLean.Analysis.IntervalSamplingSchedule
+import QICLean.Probability.Sampling.IntervalSamplingSchedule
 
 /-!
 # Uniform soft parameters, original-ground references and sampling schedules

@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.CornerSkolemNoether
-import QICLean.Channel.PositiveConditionalExpectationDirectSum
+import QICLean.Algebra.MatrixAlgebra.CornerSkolemNoether
+import QICLean.Channel.ConditionalExpectation.PositiveConditionalExpectationDirectSum
 import TNLean.MPS.CanonicalForm.SectorComparison.NormalityChain
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.Chain.OneSidedInverse

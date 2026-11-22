@@ -43,7 +43,7 @@ the previous subsection and of matrix-algebra semisimplicity:
   dimensions;
 - fusion (based) rings and NIM-reps;
 - semisimplicity of star-closed matrix algebras, which QICLean proves locally
-  in `QICLean/Algebra/StarClosedSemisimple.lean`.
+  in `QICLean/Algebra/StarSubalgebra/StarClosedSemisimple.lean`.
 
 Every local layer that Mathlib has since covered is then migrated by deleting
 the local definition as above, either in the bump PR or in a follow-up PR. The

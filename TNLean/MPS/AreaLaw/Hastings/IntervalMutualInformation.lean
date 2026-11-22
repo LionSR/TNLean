@@ -5,12 +5,12 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.CutProductExpectation
 import QICLean.ManyBody.Sites.Lattice.Chain
-import QICLean.Entropy.RegionEntropy
-import QICLean.Entropy.FilterOptimizer
-import QICLean.Entropy.FilterChainEnergy
-import QICLean.Entropy.EffectMutualInformation
-import QICLean.Entropy.MovementEtaRegional
-import QICLean.Analysis.SemidefiniteProgram
+import QICLean.ManyBody.Entropy.RegionEntropy
+import QICLean.ManyBody.Entropy.Filter.Optimizer
+import QICLean.ManyBody.Entropy.Filter.ChainEnergy
+import QICLean.Entropy.MutualInformation.EffectMutualInformation
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.Analysis.Optimization.SemidefiniteProgram
 
 /-!
 # The mutual information of two adjacent intervals and one effect

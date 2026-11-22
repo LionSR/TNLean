@@ -6,7 +6,7 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Approximation.AngularInformationBound
 import TNLean.PEPS.Approximation.AngularAnnularCells
-import QICLean.Entropy.RegionStrongSubadditivity
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # The finite annular information induction

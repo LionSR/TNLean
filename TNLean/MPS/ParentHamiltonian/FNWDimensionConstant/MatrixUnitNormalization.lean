@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.FNWDimensionConstant.MatrixUnitPaths
-import QICLean.Algebra.MatrixSingleSpan
-import QICLean.Channel.KrausMap
+import QICLean.Algebra.Matrix.MatrixSingleSpan
+import QICLean.Channel.KrausMap.KrausMap
 
 /-!
 # Normalization and injectivity of weighted matrix-unit tensors

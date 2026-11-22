@@ -3,8 +3,8 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import QICLean.Algebra.PosSemidefSupport
-import QICLean.Representation.FiniteGroupUnitaryAverage
+import QICLean.Analysis.Projection.PosSemidefSupport
+import QICLean.Representation.Twirl.FiniteGroupUnitaryAverage
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousDefect
 import TNLean.MPS.Examples.Z3Anomalous.Z3AnomalousRepresentation
 

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Cohomology.ProjectiveRepresentation
 import Mathlib.Data.Matrix.Block
 import Mathlib.LinearAlgebra.Matrix.Reindex
-import QICLean.Algebra.MatrixReindexUnitary
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 /-!
 # Direct sums with a common projective factor system

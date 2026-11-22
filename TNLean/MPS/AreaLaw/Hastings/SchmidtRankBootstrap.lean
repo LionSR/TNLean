@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.TailEntropy
-import QICLean.Channel.MaximalOverlap
-import QICLean.Analysis.Entropy
-import QICLean.Analysis.KyFanNorm
+import QICLean.Channel.Schmidt.MaximalOverlap
+import QICLean.Entropy.VonNeumann.Entropy
+import QICLean.Spectral.Eigenvalue.KyFanNorm
 
 /-!
 # Entropy from overlaps with mixtures of bounded Schmidt rank

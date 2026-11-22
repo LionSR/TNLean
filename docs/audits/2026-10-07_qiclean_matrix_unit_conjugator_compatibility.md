@@ -3,7 +3,7 @@
 The QICLean upgrades used by the PEPS conditional-information and regularized
 patch-minimum work expose a duplicate declaration when the full TNLean import
 closure is loaded. `TNLean.MPS.Symmetry.LocalVirtualGauge` and
-`QICLean.Algebra.MatrixUnitConjugator` both declared these three names:
+`QICLean.Algebra.MatrixAlgebra.MatrixUnitConjugator` both declared these three names:
 
 - `Matrix.matrixUnitConjugator`
 - `Matrix.matrixUnitConjugator_eq_smul`

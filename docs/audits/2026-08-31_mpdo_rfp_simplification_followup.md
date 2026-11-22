@@ -50,9 +50,9 @@ graph and are removed:
 
 - `Mathlib.LinearAlgebra.Dimension.Constructions` from
   `TNLean/MPS/RFP/BeigiGroundSpaceDimension.lean`;
-- `QICLean.Algebra.MatrixIsometryEntries` from
+- `QICLean.Algebra.Unitary.MatrixIsometryEntries` from
   `TNLean/MPS/RFP/BeigiLoopInjectivity.lean`;
-- `QICLean.Algebra.MatrixIsometryEntries` from `TNLean/MPS/RFP/Defs.lean`.
+- `QICLean.Algebra.Unitary.MatrixIsometryEntries` from `TNLean/MPS/RFP/Defs.lean`.
 
 These removals change no declaration or Blueprint reference. Their net
 reduction is 3 lines.

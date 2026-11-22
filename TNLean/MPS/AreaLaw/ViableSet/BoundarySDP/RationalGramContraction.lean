@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalContraction
 import TNLean.MPS.Chain.WeightedOverlap
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 import Mathlib.LinearAlgebra.Matrix.Reindex
 
 /-!

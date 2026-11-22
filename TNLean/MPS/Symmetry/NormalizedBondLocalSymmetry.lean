@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Algebra.Star.UnitaryStarAlgAut
-import QICLean.Algebra.IsometricFrameEmbedding
+import QICLean.Algebra.Unitary.IsometricFrameEmbedding
 import TNLean.MPS.ParentHamiltonian.PhysicalDeformation
 import TNLean.MPS.Symmetry.BondProductPhysicalSymmetry
 import TNLean.MPS.Symmetry.FixedPointGappedPath

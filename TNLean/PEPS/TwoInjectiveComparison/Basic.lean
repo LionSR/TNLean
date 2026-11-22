@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Data.Matrix.Basis
-import QICLean.Algebra.BipartiteSumUniqueness
+import QICLean.Algebra.Module.BipartiteSumUniqueness
 
 /-!
 # Two-injective-tensor comparison for PEPS

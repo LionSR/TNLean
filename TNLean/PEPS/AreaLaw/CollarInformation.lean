@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BoundaryTheorem
-import QICLean.Entropy.MutualInformationPerturbation
-import QICLean.Analysis.PureStateTraceDistance
+import QICLean.ManyBody.Entropy.MutualInformationPerturbation
+import QICLean.Analysis.TraceNorm.PureStateTraceDistance
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary
 import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
 import TNLean.PEPS.AreaLaw.Scan.CompactCollarCounting

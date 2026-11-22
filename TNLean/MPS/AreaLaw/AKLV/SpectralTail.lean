@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
-import QICLean.Analysis.EnergyTruncation
+import QICLean.Spectral.Filter.EnergyTruncation
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic
 import Mathlib.Analysis.Normed.Algebra.MatrixExponential
 

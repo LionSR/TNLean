@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.VertexVirtualParentTransport
 import TNLean.PEPS.ParentHamiltonian.RegionPlacement
-import QICLean.Analysis.ShiftedDensityPowers
+import QICLean.Analysis.FunctionalCalculus.ShiftedDensityPowers
 import Mathlib.Topology.Order.Compact
 
 /-!

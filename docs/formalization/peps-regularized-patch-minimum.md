@@ -92,7 +92,7 @@ bounds, not those subsequent arguments.
 
 ## Dependencies and scope
 
-The shifted density powers come from `QICLean/Analysis/ShiftedDensityPowers.lean`.
+The shifted density powers come from `QICLean/Analysis/FunctionalCalculus/ShiftedDensityPowers.lean`.
 Continuity and the Euclidean norm bound for placed regional operators belong to
 `TNLean/PEPS/ParentHamiltonian/RegionPlacement.lean`; their algebraic properties are
 QICLean's placement lemmas.

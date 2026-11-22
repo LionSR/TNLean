@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
-import QICLean.Entropy.RegionRank
-import QICLean.Channel.MaximalOverlap
-import QICLean.Entropy.RegionTraceNorm
+import QICLean.ManyBody.Entropy.Cut.RegionRank
+import QICLean.Channel.Schmidt.MaximalOverlap
+import QICLean.ManyBody.Entropy.Cut.RegionTraceNorm
 
 /-!
 # Rank of a reduced state of an open-boundary matrix product state

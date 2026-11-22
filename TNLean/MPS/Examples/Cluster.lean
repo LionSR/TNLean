@@ -8,9 +8,9 @@ import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.StringOrder
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.ZMod2
-import QICLean.Algebra.ComplexSqrt
+import QICLean.Analysis.Real.ComplexSqrt
 import QICLean.Algebra.Cohomology.CocycleCohomology
-import QICLean.Algebra.MatrixScalarIdentity
+import QICLean.Algebra.Hermitian.MatrixScalarIdentity
 
 /-!
 # Cluster state as a Matrix Product State

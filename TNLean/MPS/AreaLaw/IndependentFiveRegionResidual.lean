@@ -8,7 +8,7 @@ import Mathlib.Data.Fin.VecNotation
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
-import QICLean.Analysis.EnergyTruncation
+import QICLean.Spectral.Filter.EnergyTruncation
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.RegionalTruncationResidual

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalGroundReferencePolynomial
 import TNLean.MPS.AreaLaw.IntervalReferenceTrimming
-import QICLean.Analysis.ViableTrimmingRadius
+import QICLean.Analysis.Parameter.ViableRefinementParameters
 
 /-!
 # A common original-ground reference and trimming radius

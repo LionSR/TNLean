@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftFilterFamily
 import TNLean.MPS.AreaLaw.CommonCollarFilterFamily
 import TNLean.MPS.AreaLaw.PrecenterCollarCount
-import QICLean.Analysis.MatrixTensorDecomposition
+import QICLean.Analysis.TensorProduct.MatrixTensorDecomposition
 
 /-!
 # One pre-center soft improving family on every long parent interval

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.RectangularIntervalBlocks
-import QICLean.Analysis.GeometricDecay
+import QICLean.Analysis.Real.GeometricOrderPolynomialBound
 
 /-!
 # Rectangular interval rates from local window minorization

@@ -7,7 +7,7 @@ import Mathlib.Analysis.Complex.ExponentialBounds
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import Mathlib.Algebra.Order.Floor.Semiring
 import Mathlib.Tactic.Positivity
-import QICLean.Analysis.ExplicitThresholds
+import QICLean.Analysis.Real.ExplicitThresholds
 
 /-!
 # The rounded logarithmic splitting radius

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.TraceChainLinearCombination
-import QICLean.Analysis.HermitianPartNorm
+import QICLean.Analysis.Norm.HermitianPartNorm
 
 /-!
 # Hermitian parts of site-dependent matrix product operators

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFree
 import TNLean.MPS.AreaLaw.Hastings.PartCommutators
-import QICLean.Entropy.SupportedOperatorSchmidtWords
+import QICLean.ManyBody.Entropy.Cut.SupportedOperatorSchmidtWords
 
 /-!
 # Rank of the regional frustration-free replacement

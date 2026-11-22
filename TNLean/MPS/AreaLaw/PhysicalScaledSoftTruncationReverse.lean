@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationResidual
-import QICLean.Analysis.SoftTruncationCoercivity
+import QICLean.Spectral.Filter.SoftTruncationCoercivity
 
 /-!
 # The physical soft-truncation residual on the soft spectral window

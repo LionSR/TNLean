@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusWindowCrossTensorAlgebra
-import QICLean.Algebra.MatrixAlgEquiv
+import QICLean.Algebra.MatrixAlgebra.SkolemNoether
 
 /-!
 # The gauge on a staircase bond

@@ -8,7 +8,7 @@ import TNLean.MPS.Symmetry.VaryingBondPhysicalCharacter
 import TNLean.MPS.Symmetry.PolarVirtualCohomology
 import TNLean.MPS.Symmetry.ExactMPSPhaseGaugeInvariance
 import TNLean.MPS.Symmetry.UnitalSupportedPathInvariance
-import QICLean.Algebra.IsometricFrameEmbedding
+import QICLean.Algebra.Unitary.IsometricFrameEmbedding
 
 /-!
 # Virtual classes of exact ground-state paths under a transfer bound

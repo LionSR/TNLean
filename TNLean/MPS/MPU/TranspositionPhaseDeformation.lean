@@ -8,7 +8,7 @@ import TNLean.MPS.MPU.StaircaseGates
 import TNLean.MPS.MPDO.SimpleScaling
 import Mathlib.Analysis.Complex.Trigonometric
 import Mathlib.Tactic.FunProp
-import QICLean.Algebra.UnitPhaseScalar
+import QICLean.Analysis.Isometry.UnitPhaseScalar
 
 /-!
 # Removing the local transposition phase along actual standard forms

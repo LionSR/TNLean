@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftResiduals
-import QICLean.Analysis.SoftTruncationOperatorBounds
-import QICLean.Analysis.GroundEnergyResidual
+import QICLean.Spectral.Filter.SoftHardTruncation
+import QICLean.Spectral.Perturbation.GroundEnergyResidual
 
 /-!
 # The actual central soft replacement inside a parent interval

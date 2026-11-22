@@ -14,7 +14,7 @@ Lean consumer of these results remains in this TNLean change.
 All six results in `TNLean/Lattice/ClusterExpansion/SingleClusterBound.lean`
 concern arbitrary finite complex matrices. None uses a lattice, a support
 condition, or a cluster definition. Their statements and proof bodies agree
-with `QICLean/Analysis/TraceExponentialPerturbation.lean`, apart from qualifying
+with `QICLean/Analysis/Exponential/TraceExponentialPerturbation.lean`, apart from qualifying
 `inv_zero` as `_root_.inv_zero` in the new matrix namespace and whitespace.
 The Euclidean operator norm scopes are identical.
 
@@ -32,7 +32,7 @@ module, its axiom-only test, and its blueprint chapter. Consequently there is
 no tensor-network specialization to retain. The proof module, its test,
 the now-empty generated `ClusterExpansion.lean`, and the parent import are
 removed. No compatibility aliases or import-only replacement modules are added.
-Future consumers should import `QICLean.Analysis.TraceExponentialPerturbation`
+Future consumers should import `QICLean.Analysis.Exponential.TraceExponentialPerturbation`
 and use the matrix declarations directly, after selecting a dependency revision
 that contains the extraction.
 

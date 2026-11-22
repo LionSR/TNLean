@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.MatrixPolar
-import QICLean.Analysis.SqrtLipschitz
-import QICLean.Analysis.MatrixFramePerturbation
+import QICLean.Analysis.FunctionalCalculus.SqrtLipschitz
+import QICLean.Analysis.Isometry.FramePerturbation
 
 /-!
 # Phase-sensitive perturbation of polar frames

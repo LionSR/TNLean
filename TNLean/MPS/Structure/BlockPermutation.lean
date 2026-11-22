@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.BlockPermutation
-import QICLean.Algebra.SkolemNoether
+import QICLean.Algebra.MatrixAlgebra.BlockPermutation
+import QICLean.Algebra.MatrixAlgebra.SkolemNoether
 
 import Mathlib.RingTheory.SimpleRing.Matrix
 import Mathlib.Basic.Complex.Basic
@@ -15,7 +15,7 @@ import Mathlib.LinearAlgebra.Matrix.Reindex
 # Decomposition of algebra automorphisms of products of matrix algebras
 
 This file connects the algebra-level decomposition results from
-`QICLean.Algebra.BlockPermutation` with the MPS gauge-equivalence theory.
+`QICLean.Algebra.MatrixAlgebra.BlockPermutation` with the MPS gauge-equivalence theory.
 
 Given a ℂ-algebra automorphism `T` of `∏_i M_{D_i}(ℂ)`, we decompose it as:
 1. A block permutation `σ : ι ≃ ι`

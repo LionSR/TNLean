@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.Basic
-import QICLean.Channel.KrausRepresentation
-import QICLean.Channel.KrausUnitaryFreedom
+import QICLean.Channel.KrausMap.KrausRepresentation
+import QICLean.Channel.KrausMap.KrausUnitaryFreedom
 import QICLean.Kraus.CPPrimitive
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.BlockingTransfer

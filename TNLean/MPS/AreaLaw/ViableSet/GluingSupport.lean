@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.Basic
 import TNLean.MPS.AreaLaw.ViableSet.Gluing
-import QICLean.Channel.TrimmingEnergy
+import QICLean.Channel.Schmidt.TrimmingEnergy
 
 /-!
 # Left support in three-way cut coordinates

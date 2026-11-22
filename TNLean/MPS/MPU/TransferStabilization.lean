@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixStabilization
-import QICLean.Algebra.MatrixPosDefTransport
-import QICLean.Channel.KrausMap
+import QICLean.Algebra.Matrix.MatrixStabilization
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Channel.KrausMap.KrausMap
 import QICLean.Kraus.Transfer
 import TNLean.MPS.MPU.CanonicalForm
 import TNLean.MPS.MPU.TransferMatrix

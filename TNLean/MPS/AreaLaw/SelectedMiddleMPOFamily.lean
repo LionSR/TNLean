@@ -10,8 +10,8 @@ import TNLean.MPS.AreaLaw.SelectedCoefficientDecomposition
 import TNLean.MPS.AreaLaw.SelectedMiddleData
 import TNLean.MPS.AreaLaw.TraceCoreSlices
 import TNLean.Algebra.TwoMarkerMiddleFactors
-import QICLean.Entropy.SupportedMarginalTails
-import QICLean.Entropy.FilterMoment
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
+import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Sites.Placement
 import Mathlib.Data.Fintype.BigOperators

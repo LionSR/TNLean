@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.IdentityTensor
 import TNLean.MPS.MPDO.PhysicalAdjoint
 import TNLean.MPS.MPDO.OperatorProduct
-import QICLean.Algebra.RankOneSandwich
+import QICLean.Algebra.Matrix.RankOneSandwich
 import TNLean.MPS.MPU.Basic
 
 /-!

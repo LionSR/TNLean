@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalGroundReference
-import QICLean.Analysis.RefinementOutputPolynomialBound
+import QICLean.Analysis.Parameter.RefinementOutputPolynomialBound
 
 /-!
 # A polynomial reference profile for the original ground space

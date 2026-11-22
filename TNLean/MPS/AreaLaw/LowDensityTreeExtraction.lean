@@ -3,13 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.ProjectedPositiveEnergy
-import QICLean.Analysis.ProjectedTrialSpaceEnergy
-import QICLean.Analysis.RitzCompression
-import QICLean.Analysis.ViableSubspaceDimension
-import QICLean.Analysis.LowEnergyPerturbation
-import QICLean.Algebra.HermitianHelpers
-import QICLean.Analysis.EuclideanEigenvectorBasis
+import QICLean.Analysis.Projection.ProjectedPositiveEnergy
+import QICLean.Analysis.Projection.ProjectedTrialSpaceEnergy
+import QICLean.Spectral.LowEnergy.RitzCompression
+import QICLean.Analysis.Subspace.ViableSubspace
+import QICLean.Analysis.Order.LowEnergyPerturbation
+import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
+import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
 
 /-!
 # Extraction of a low-energy window from a close candidate space

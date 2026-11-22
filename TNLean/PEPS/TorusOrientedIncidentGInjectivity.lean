@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.TorusNativeOrientation
 import TNLean.PEPS.GraphOrientedGInjective
 import TNLean.PEPS.TorusOperatorString
-import QICLean.Algebra.TupleEquiv
+import QICLean.Algebra.Combinatorics.TupleEquiv
 
 /-!
 # Native four-leg symmetry and oriented graph G-injectivity

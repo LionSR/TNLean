@@ -12,7 +12,7 @@ import TNLean.MPS.MPU.AdjointSimpleContraction
 import TNLean.MPS.MPU.TensorProductCanonicalForm
 import TNLean.MPS.MPDO.SectorEtaPositivity
 import TNLean.MPS.MPDO.BondSimilarity
-import QICLean.Algebra.MatrixTensorPower
+import QICLean.Algebra.Kronecker.MatrixTensorPower
 
 /-!
 # The two shift products are strictly equivalent

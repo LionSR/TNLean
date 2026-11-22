@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.PEPS.ParentHamiltonian.VertexVirtualParentTransport
 import TNLean.PEPS.ParentHamiltonian.RegionPlacement
 import QICLean.ManyBody.Sites.RegionMatrix
-import QICLean.Entropy.SupportedMarginalTails
-import QICLean.Entropy.FilterMoment
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
+import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Sites.Placement
 

@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedIteration
 import TNLean.MPS.AreaLaw.AdjacentIntervalMerge
-import QICLean.Analysis.ViableSubspaceSamplingEvent
-import QICLean.Analysis.ViableNodeSamplingParameters
+import QICLean.Probability.Sampling.ViableSubspaceSamplingEvent
+import QICLean.Analysis.Parameter.ViableNodeSamplingParameters
 
 /-!
 # One actual sampled and interleaved physical parent

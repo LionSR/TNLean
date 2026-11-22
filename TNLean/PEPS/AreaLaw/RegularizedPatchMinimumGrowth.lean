@@ -7,7 +7,7 @@ import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerDerivative
 import TNLean.PEPS.AreaLaw.RegularizedPatchActualRegulatorTrace
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimumContinuity
 import TNLean.PEPS.AreaLaw.RegularizedPatchLogMinimum
-import QICLean.Analysis.MinimumEnvelope
+import QICLean.Analysis.Real.MinimumEnvelope
 
 /-!
 # Growth of the original patch minimum from its regulator bound

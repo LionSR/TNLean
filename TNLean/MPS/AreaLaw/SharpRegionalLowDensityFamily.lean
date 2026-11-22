@@ -7,8 +7,8 @@ import TNLean.MPS.AreaLaw.IndependentLowDensityBufferedTargets
 import TNLean.MPS.AreaLaw.SharpLowDensityParameters
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
-import QICLean.Analysis.NestedChebyshevViability
-import QICLean.Analysis.ShiftedLowEnergyCoordinates
+import QICLean.Spectral.LowEnergy.ChebyshevViability
+import QICLean.Spectral.LowEnergy.ShiftedLowEnergyCoordinates
 import TNLean.MPS.AreaLaw.SharpRegionalScalarBudgets
 
 /-!

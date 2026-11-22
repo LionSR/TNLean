@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.KitaevNativeCheckerboardBlocking
 import TNLean.PEPS.TorusRectangleBoundaryCard
 import TNLean.PEPS.RegionTransport
-import QICLean.Algebra.ZModIntCast
+import QICLean.Algebra.Combinatorics.ZModIntCast
 
 /-!
 # Boundary CNOTs on the actual native checkerboard block

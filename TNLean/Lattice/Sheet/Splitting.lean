@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.MatrixKroneckerContraction
+import QICLean.Analysis.Norm.MatrixKroneckerContraction
 import TNLean.Circuit.RegionSplit
 import TNLean.Lattice.Sheet.Operators
-import QICLean.Entropy.RegionEntropy
-import QICLean.Entropy.PurificationSplitting
+import QICLean.ManyBody.Entropy.RegionEntropy
+import QICLean.Entropy.MutualInformation.PurificationSplitting
 
 /-!
 # Splitting a sheet along three regions

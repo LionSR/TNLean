@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.TwistedDimerFactorStates
 import TNLean.MPS.MPDO.RFPViaTS
-import QICLean.Algebra.MatrixCyclicPathSum
+import QICLean.Algebra.Matrix.MatrixCyclicPathSum
 
 /-!
 # The mixed-Bell bond dimer

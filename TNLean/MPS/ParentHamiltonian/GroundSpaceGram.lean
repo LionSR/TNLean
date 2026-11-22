@@ -3,15 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.FrobeniusHilbert
-import QICLean.Algebra.RectangularChoi
-import QICLean.Analysis.InjectiveRangeProjector
-import QICLean.Kraus.MapIterate
+import QICLean.Analysis.Norm.FrobeniusHilbert
+import QICLean.Channel.Choi.RectangularChoi
+import QICLean.Analysis.Projection.InjectiveRangeProjector
+import QICLean.Kraus.Transfer
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.Wielandt.SpanGrowth.CumulativeSpan
-import QICLean.Kraus.MixedMap
-import QICLean.Kraus.Transfer
+import QICLean.Kraus.MixedMap.Basic
 
 /-!
 # Gram operators for MPS ground-space maps

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.OpenRegionContraction
 import Mathlib.Algebra.BigOperators.Ring.Finset
-import QICLean.Algebra.MatrixUnitaryBetween
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 /-!
 # Physical maps on an actual open-region contraction

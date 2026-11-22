@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.Overlap.SectorMatch.CyclicTrace
 import TNLean.MPS.Periodic.Overlap.SectorMatch.CyclicTransport
-import QICLean.Algebra.FiniteCycleCoboundary
-import QICLean.Algebra.PiTensorProductPhase
+import QICLean.Algebra.Combinatorics.FiniteCycleCoboundary
+import QICLean.Algebra.Kronecker.PiTensorProductPhase
 import TNLean.MPS.Periodic.GlobalGauge
 import TNLean.MPS.Periodic.SectorContraction
 

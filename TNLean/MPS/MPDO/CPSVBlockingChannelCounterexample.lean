@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.FinSumPermutation
-import QICLean.Analysis.TraceNormContractivity
+import QICLean.Algebra.Combinatorics.FinSumPermutation
+import QICLean.Analysis.Norm.TraceNormContractivity
 import TNLean.MPS.MPDO.NonCartesianActiveSectorCandidate
 import TNLean.MPS.MPDO.PhysicalBlocking
 

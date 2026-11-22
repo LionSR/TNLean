@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.SourceYOneNormalization
 import TNLean.MPS.MPU.SourceYTwoNormalization
 import TNLean.MPS.MPU.SimpleTensorEquivalence
-import QICLean.Algebra.MatrixReindexUnitary
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 /-!
 # Physical-adjoint factors for the actual supplied source decompositions

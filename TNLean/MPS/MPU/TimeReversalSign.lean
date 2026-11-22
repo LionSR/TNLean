@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.TimeReversalTraceGauge
 import TNLean.MPS.MPU.TwoSiteStandardForm
-import QICLean.Algebra.TraceReindex
+import QICLean.Algebra.Matrix.MatrixReindex
 
 /-!
 # Extracting the time-reversal trace sign

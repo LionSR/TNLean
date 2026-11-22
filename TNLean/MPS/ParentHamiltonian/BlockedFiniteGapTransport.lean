@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockedInteractionKernel
-import QICLean.Algebra.MatrixReindexEuclidean
+import QICLean.Spectral.Eigenvalue.MatrixReindexEuclidean
 import TNLean.MPS.ParentHamiltonian.Martingale.EventualKernelOpenGap
 import TNLean.MPS.ParentHamiltonian.PeriodicGroundStatePresentation
 import TNLean.MPS.ParentHamiltonian.GaugePhaseSeparationTransport

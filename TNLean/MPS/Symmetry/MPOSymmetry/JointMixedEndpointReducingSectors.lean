@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointCornerSupport
-import QICLean.Analysis.ReducingProjectionGap
+import QICLean.Spectral.Gap.ReducingProjectionGap
 
 /-!
 # Reducing phase projections of the actual joint endpoint

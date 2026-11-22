@@ -3,18 +3,18 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.ChebyshevViability
-import QICLean.Analysis.InvariantTensorWordPower
-import QICLean.Analysis.LowEnergyCoordinates
-import QICLean.Analysis.MatrixTensorCoordinates
-import QICLean.Analysis.SupportProjectionOrder
-import QICLean.Analysis.ViableSubspaceCoordinates
-import QICLean.Analysis.WeightedProjection
+import QICLean.Spectral.LowEnergy.ChebyshevViability
+import QICLean.Analysis.Projection.InvariantTensorWordPower
+import QICLean.Spectral.LowEnergy.Coordinates
+import QICLean.Analysis.TensorProduct.MatrixTensorCoordinates
+import QICLean.Analysis.Support.ProjectionOrder
+import QICLean.Analysis.Subspace.ViableSubspaceCoordinates
+import QICLean.Analysis.Projection.WeightedProjection
 import QICLean.ManyBody.Hamiltonian.Models
-import QICLean.Algebra.OperatorSchmidtPartition
+import QICLean.ManyBody.Sites.OperatorSchmidtPartition
 import QICLean.ManyBody.Hamiltonian.KernelGap
 import QICLean.ManyBody.Sites.Twirl
-import QICLean.Algebra.MatrixToEuclidean
+import QICLean.Analysis.Norm.MatrixToEuclidean
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeThreeRegion
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters

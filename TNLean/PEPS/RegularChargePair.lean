@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.RegularTorusSite
 import QICLean.Representation.Character.TensorProduct
 import QICLean.Representation.Character.TranslatedOrthogonality
-import QICLean.Algebra.BinaryProjectionFamily
+import QICLean.Algebra.Hermitian.BinaryProjectionFamily
 
 /-!
 # Charge-pair coefficients and the interferometric return measurement

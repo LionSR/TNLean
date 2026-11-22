@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.ResidueCoverGapCriterion
-import QICLean.Topology.UniformSelectionBounds
-import QICLean.Analysis.OrthogonalKernelGap
+import QICLean.Analysis.Topology.UniformSelectionBounds
+import QICLean.Spectral.Gap.OrthogonalKernelGap
 
 /-!
 # A uniform open gap from aligned gaps and residual covers

@@ -7,7 +7,7 @@ import TNLean.MPS.Core.RepeatedWord
 import TNLean.Spectral.TransferOperatorGapInjective
 import TNLean.Spectral.TransferOperatorGapNT
 import TNLean.Spectral.PrimitiveOverlap
-import QICLean.QPF.Assembly
+import QICLean.Kraus.PrimitiveFixedPoint.Assembly
 import TNLean.MPS.CanonicalForm.Reduction
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Overlap.PeripheralToTransferMapGap

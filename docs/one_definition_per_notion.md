@@ -858,7 +858,7 @@ which is legitimate only because the periodic operator is translation invariant.
 ### How `mutualInfoChain` relates to QICLean
 
 * **To QICLean's bipartite mutual information `_root_.mutualInformation`** (alias
-  `Entropy.mutualInformation`, `QICLean/Analysis/Entropy.lean:777`, defined on
+  `Entropy.mutualInformation`, `QICLean/Entropy/VonNeumann/Entropy.lean:777`, defined on
   `Fin dA × Fin dB`): equal, with no hypothesis beyond the positivity argument that both carry
   for Hermiticity (`MPOTensor.mutualInfoChain_eq_mutualInformation`, `MPDO/MutualInfoBridge.lean:209`).
   It is **not** a definitional equality and **not** a pure reindexing: the state is reindexed by
@@ -871,7 +871,7 @@ which is legitimate only because the periodic operator is translation invariant.
     *first* `N-L` sites; they agree by translation invariance of the periodic operator
     (`bipartitionedNormalizedMPO_traceLeft`, `:172`, through `window_block_entropy`,
     `MutualInfoMonotone.lean:137`, and `mpo_submatrix_finRotate_pow`, `AreaLaw.lean:146`).
-* **To `ManyBody.regionMutualInformation ψ R T`** (`QICLean/Entropy/RegionEntropy.lean:142` at the pin):
+* **To `ManyBody.regionMutualInformation ψ R T`** (`QICLean/ManyBody/Entropy/RegionEntropy.lean:142` at the pin):
   a different quantity. QICLean's regional mutual information takes a *vector* `ψ` (its regional
   states are `regionMatrix (|ψ⟩⟨ψ|) R`); `mutualInfoChain` is defined for a mixed state. They meet
   only on doubled tensors: `mutualInfoChain_doubledTensor` (`PureAreaLaw.lean:327`) gives

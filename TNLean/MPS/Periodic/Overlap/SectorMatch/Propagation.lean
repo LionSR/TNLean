@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
-import QICLean.Algebra.IndexInduction
+import QICLean.Algebra.Combinatorics.IndexInduction
 import TNLean.MPS.Periodic.Overlap.SectorOverlapTransport
 import TNLean.MPS.SharedInfra.GaugePhase
 

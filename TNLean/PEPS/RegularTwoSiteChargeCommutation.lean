@@ -5,11 +5,11 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularTwoSiteChargeDetector
 import TNLean.PEPS.RegularChargeDetectorMatrix
-import QICLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.PEPS.RegularTorusGramExpansion
 
-import QICLean.Algebra.PermutationMatrixCommute
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Matrix.PermutationMatrixCommute
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Two local averages commute with the shared charge projector

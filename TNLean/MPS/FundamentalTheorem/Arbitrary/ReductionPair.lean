@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Order.JordanHolder
-import QICLean.Algebra.MatrixFamilyAction
-import QICLean.Algebra.Subquotient
-import QICLean.Algebra.WordAlgebra
+import QICLean.Algebra.MatrixAlgebra.MatrixFamilyAction
+import QICLean.Algebra.Module.Subquotient
+import QICLean.Spectral.Eigenvalue.WordAlgebra
 import TNLean.MPS.Core.ReductionResidual
 import TNLean.MPS.Core.ReductionResidual.Basic
 import TNLean.MPS.Core.TracePairing

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Data.Matrix.Basis
-import QICLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.Matrix.MatrixSingleSpan
 import QICLean.Kraus.Injectivity
 import TNLean.MPS.MPDO.CZXTensor
 

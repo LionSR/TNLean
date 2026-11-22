@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.StripBufferDiscount
 import TNLean.MPS.AreaLaw.MPSApproximation
-import QICLean.Entropy.RegionCovariance
+import QICLean.ManyBody.Entropy.RegionCovariance
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

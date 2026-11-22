@@ -42,8 +42,8 @@
   coordinates" (2026-10-06) recorded the first two MPU copies, `siteProduct` in
   `MPU/FundamentalTheoremGates.lean` and `chainPower` in
   `MPU/Examples/ShiftStrictEquivalence.lean`; this entry supersedes it.
-- **Abstraction:** `Matrix.tensorPower` (`QICLean/Algebra/MatrixTensorPower.lean`, QICLean dependency) for one
-  factor at every site and `Matrix.rectKronecker` (`QICLean/Algebra/FiniteKroneckerProduct.lean`, QICLean dependency) for
+- **Abstraction:** `Matrix.tensorPower` (`QICLean/Algebra/Kronecker/MatrixTensorPower.lean`, QICLean dependency) for one
+  factor at every site and `Matrix.rectKronecker` (`QICLean/Algebra/Kronecker/FiniteKroneckerProduct.lean`, QICLean dependency) for
   site-dependent factors, with `Matrix.tensorPower_apply`,
   `Matrix.IsUnitaryBetween.tensorPower` and `Matrix.tensorPower_mem_unitaryGroup`
   added. The local definitions and their duplicated lemmas are deleted; the lemmas
@@ -445,7 +445,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** Form `Matrix.toEuclideanLin.symm W.starProjection.toLinearMap`
   and prove that it is Hermitian and idempotent, either separately or by
   transporting `isStarProjection_starProjection` through `Matrix.toEuclideanCLM`.
-- **Defined in:** `QICLean/Algebra/MatrixStarProjection.lean` (QICLean dependency),
+- **Defined in:** `QICLean/Analysis/Projection/MatrixStarProjection.lean` (QICLean dependency),
   `Submodule.starProjectionMatrix`, `Submodule.isStarProjection_starProjectionMatrix`,
   and the evaluation lemma `Submodule.toEuclideanLin_starProjectionMatrix`.
 - **Refactored occurrences:** six existing modules:
@@ -486,7 +486,7 @@ abstracted — record why, so it is not re-proposed).
   ```
   turning `hs : |s| ≤ T` and `hv : 0 ≤ v` into
   `Real.exp (v * |s| - c) ≤ Real.exp (v * T - c)`.
-- **Defined in:** `QICLean/Analysis/ExplicitThresholds.lean` (QICLean dependency),
+- **Defined in:** `QICLean/Analysis/Real/ExplicitThresholds.lean` (QICLean dependency),
   `Real.exp_mul_sub_le_exp_mul_sub (hv : 0 ≤ v) (hx : x ≤ T) :
   exp (v * x - c) ≤ exp (v * T - c)`.
 - **Use when:** A Lieb–Robinson factor `exp (v |t| - c)` must be bounded
@@ -525,7 +525,7 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/Lattice/ClusterExpansion/TruncatedPositivity.lean`, all three since
   moved to QICLean's `Analysis/ClusterExpansion`.
 - **Abstraction:** `Matrix.isHermitian_sum_of_subset` in
-  `QICLean/Algebra/HermitianPartSum.lean` (QICLean dependency); all five occurrences use the theorem.
+  `QICLean/Algebra/Hermitian/HermitianPartSum.lean` (QICLean dependency); all five occurrences use the theorem.
 - **Notes:** Retains the additive/star assumptions of `Matrix.isHermitian_sum`;
   no finiteness assumption on the matrix index type is needed. The source line count
   at these call sites is unchanged. The fifth occurrence was integrated from #10155;
@@ -542,7 +542,7 @@ abstracted — record why, so it is not re-proposed).
   `QICLean/ManyBody/Dynamics/GraphLocalization.lean` and
   `QICLean/ManyBody/Dynamics/CommutatorRecursion.lean`.
 - **Abstraction:** `Matrix.isHermitian_sum` in
-  `QICLean/Algebra/HermitianPartSum.lean` (QICLean dependency); all five call sites refactored.
+  `QICLean/Algebra/Hermitian/HermitianPartSum.lean` (QICLean dependency); all five call sites refactored.
 - **Notes:** where the goal is `IsSelfAdjoint`, append `.isSelfAdjoint`. The
   sums with a case split in each term (`CommutatorRecursion.lean`, the second
   skew-adjoint goal) keep `isSelfAdjoint_sum` with an `intro`.
@@ -710,7 +710,7 @@ abstracted — record why, so it is not re-proposed).
   `Scan/FixedWeightTransportSmallness.lean`, `Scan/SourceSelectedSharpEnergy.lean`
   and `Scan/GenericChargeEnergy.lean`.
 - **Abstraction:** `Real.one_le_log_natCast_of_three_le {n : ℕ} (hn : 3 ≤ n) :
-  1 ≤ Real.log n` in `QICLean/Analysis/ExplicitThresholds.lean` (QICLean dependency), next to
+  1 ≤ Real.log n` in `QICLean/Analysis/Real/ExplicitThresholds.lean` (QICLean dependency), next to
   `Real.one_le_log_of_ceil_logRpowThreshold_le`, which covers only thresholds of
   the form `⌈logRpowThreshold C η u v L⌉₊`.
 - **Notes:** `RadiusAsymptotics.lean`, `FixedWeightTransportSmallness.lean` and
@@ -1129,13 +1129,13 @@ abstracted — record why, so it is not re-proposed).
   `exists_uniform_parentHamiltonianES_toTensorFromBlocks_gap_of_compact`
   (`CompactBlockParentGap.lean`), all under `TNLean/MPS/ParentHamiltonian/`.
 - **Abstraction:** `IsCompact.exists_uniform_norm_lower_bound_on_tail` in
-  `QICLean/Analysis/CompactKernelGap.lean` (QICLean dependency); pass `H := fun x N => …` and
+  `QICLean/Spectral/Gap/CompactKernelGap.lean` (QICLean dependency); pass `H := fun x N => …` and
   `V := fun x N => (LinearMap.ker …)ᗮ` and prove only the local bound.
 - **Notes:** the three call sites were refactored on 2026-10-10. The open-chain variant in
   `CompactOpenParentGap.lean` fixes the tail at `R ≤ N` and the kernel-gap lemma in
   `CompactKernelGap.lean` has no tail, so both keep the direct call to
   `exists_uniform_pos_nat_bounds`, now in QICLean
-  (`QICLean/Topology/CompactUniformBounds.lean`).
+  (`QICLean/Analysis/Topology/CompactUniformBounds.lean`).
 
 ### Remainder-absorbing block lengths — promoted (2026-10-10)
 
@@ -1482,13 +1482,13 @@ abstracted — record why, so it is not re-proposed).
 - **Abstraction:** (a) `TNLean.PEPS.regularTwistedSite_one`
   (`TNLean/PEPS/RegularTwistedRegion.lean`); (b)
   `ZMod.intCast_ne_intCast_of_natAbs_sub_lt`
-  (`QICLean/Algebra/ZModIntCast.lean`, QICLean dependency), with the bound discharged by
+  (`QICLean/Algebra/Combinatorics/ZModIntCast.lean`, QICLean dependency), with the bound discharged by
   `omega`; (c) `TNLean.PEPS.conj_fixed_iff_mem_centralizer`
   (`TNLean/PEPS/PairConjugacy.lean`); (d)
   `TNLean.PEPS.IsGInjective.comp_virtualEquiv`
   (`TNLean/PEPS/GInjectivePhysicalMap.lean`); (e)
   `Matrix.conjTranspose_mulVec_eq_of_mulVec_eq`
-  (`QICLean/Algebra/UnitaryMulVecInner.lean`, QICLean dependency).
+  (`QICLean/Analysis/Isometry/UnitaryMulVecInner.lean`, QICLean dependency).
 - **Notes:** −111 Lean lines over 22 files. `TNLean/PEPS/TorusOrientedIncidentGInjectivity.lean`
   keeps its direct G-injectivity proof: there (d) forces a costly
   definitional check of the intertwining relation, which pushed the module
@@ -1664,7 +1664,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** four cut-rank proofs in `TNLean/MPS/MPU/Examples/ControlledZ.lean` and
   `leftRank_oddRingTensor` in `TNLean/MPS/MPU/Examples/OddRing.lean`.
 - **Abstraction:** `Matrix.rank_eq_card_of_eq_mul_of_submatrix_eq_one` in
-  `QICLean/Algebra/MatrixRankOfFactor.lean` (QICLean dependency).
+  `QICLean/Algebra/Matrix/MatrixRankOfFactor.lean` (QICLean dependency).
 - **Refactor:** all five call sites use the lemma; the private helpers are deleted.
 
 ### Functional calculus under a unitary conjugation — promoted (2026-10-08)
@@ -1674,7 +1674,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** general `Matrix` lemmas that had been placed in `TNLean/MPS/MPU/SourceFactorChoice.lean`.
 - **Abstraction:** `Matrix.IsHermitian.cfc_eq_of_eq_unitary_conj`,
   `Matrix.PosSemidef.supportInvSqrt_eq_of_eq_unitary_conj` and
-  `Matrix.conjTranspose_mul_unitary` in `QICLean/Analysis/CfcUnitaryConjugation.lean` (QICLean dependency).
+  `Matrix.conjTranspose_mul_unitary` in `QICLean/Analysis/FunctionalCalculus/CfcUnitaryConjugation.lean` (QICLean dependency).
 - **Refactor:** the MPU module imports the algebra module.
 
 ### Connectivity from two run-support memberships — promoted (2026-10-08)
@@ -1770,9 +1770,9 @@ abstracted — record why, so it is not re-proposed).
   completeness for a projector and its complement.
 - **Occurrences:** The return measurement in `PEPS/RegularChargePair.lean`,
   the physical charge measurement in `PEPS/RegularTwoSitePhysicalChargeMeasurement.lean`,
-  and the physical transport in `QICLean/Algebra/BinaryProjectionFamily.lean`.
+  and the physical transport in `QICLean/Algebra/Hermitian/BinaryProjectionFamily.lean`.
 - **Abstraction:** `Matrix.binaryProjectionFamily_complete` in
-  `QICLean/Algebra/BinaryProjectionFamily.lean` (QICLean dependency); all three calculations use this lemma.
+  `QICLean/Algebra/Hermitian/BinaryProjectionFamily.lean` (QICLean dependency); all three calculations use this lemma.
 - **Related reuse:** `Matrix.scaledProjectionTransport_properties` replaces the
   private transported-projection calculation in the two-site charge measurements.
   It proves positivity and the coefficient-map intertwiner from the explicit
@@ -1882,7 +1882,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** Regular cycle flux creation, two-site charge-projector commutation,
   and regional charge-reference preparation.
 - **Abstraction:** `Matrix.commute_permMatrix_of_entry_invariant` in
-  `QICLean/Algebra/PermutationMatrixCommute.lean` (QICLean dependency), over an arbitrary semiring.
+  `QICLean/Algebra/Matrix/PermutationMatrixCommute.lean` (QICLean dependency), over an arbitrary semiring.
 - **Refactor:** The old private theorem is removed, and all three consumers
   use the shared entry argument.
 
@@ -1914,9 +1914,9 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 - **Pattern:** Expand dependent block-diagonal entries to move conjugate
   transpose through the block construction.
-- **Occurrences:** `QICLean/Representation/FiniteGroupCommutant.lean`,
-  `QICLean/Algebra/ScalarCommutant.lean`, and
-  `QICLean/Algebra/DependentBlockDiagonal.lean`.
+- **Occurrences:** `QICLean/Representation/Permutation/FiniteGroupCommutant.lean`,
+  `QICLean/Algebra/MatrixAlgebra/ScalarCommutant.lean`, and
+  `QICLean/Algebra/Matrix/DependentBlockDiagonal.lean`.
 - **Promotion:** Reuse Mathlib's `Matrix.blockDiagonal'_conjTranspose`.
   The finite-group commutant proof removes its private entrywise copy and
   rewrites directly with this theorem; the companion-library consumers
@@ -2304,13 +2304,13 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** Apply a quadratic matrix identity to a nonzero eigenvector,
   cancel the vector coefficient, and conclude that each eigenvalue is zero
   or the reciprocal flatness parameter.
-- **Occurrences:** The von Neumann calculation in `QICLean/Entropy/FlatDensityEntropy.lean`
+- **Occurrences:** The von Neumann calculation in `QICLean/Entropy/Renyi/FlatDensityEntropy.lean`
   and the spectral real-power trace calculation in
-  `QICLean/Entropy/FlatDensityEntropy.lean`; the same spectral argument would otherwise
+  `QICLean/Entropy/Renyi/FlatDensityEntropy.lean`; the same spectral argument would otherwise
   precede each Rényi order and each boundary-density specialization.
 - **Promotion:**
   `Matrix.IsHermitian.eigenvalues_eq_zero_or_inv_of_mul_self_eq_inv_smul` in
-  `QICLean/Entropy/FlatDensityEntropy.lean` (QICLean dependency). Both entropy calculations consume
+  `QICLean/Entropy/Renyi/FlatDensityEntropy.lean` (QICLean dependency). Both entropy calculations consume
   this lemma, with no repeated eigenvector cancellation proof.
 
 ### finite compact cell quotients — promoted (2026-10-02)
@@ -2383,7 +2383,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `prod_torusSiteGram_eq_sum_translation` in the corresponding three PEPS
   modules (2026-10-02).
 - **Abstraction:** `Fintype.prod_sum_boole` in
-  `QICLean/Algebra/DependentProducts.lean` (QICLean dependency), for dependent finite choice types
+  `QICLean/Algebra/Combinatorics/DependentProducts.lean` (QICLean dependency), for dependent finite choice types
   over an arbitrary commutative semiring.
 - **Notes:** all three proofs now use the combined counting identity. The
   abstraction is a lemma rather than a tactic or a new simplification rule.
@@ -2487,7 +2487,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   (2026-10-02).
 - **Abstraction:**
   `ContinuousLinearMap.exists_uniform_norm_gap_of_compact` in
-  `QICLean/Analysis/CompactKernelGap.lean` (QICLean dependency).
+  `QICLean/Spectral/Gap/CompactKernelGap.lean` (QICLean dependency).
 - **Notes:** the bound follows from finite dimensionality; positivity,
   self-adjointness, and a supplied pointwise gap are unnecessary.
 
@@ -2508,7 +2508,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** quotient algebra recovery, letter-coordinate recovery, and
   continuous range frames.
 - **Abstraction:** `Matrix.gramLeftInverse_mul` in
-  `QICLean/Analysis/ContinuousIdempotentFrames.lean` (QICLean dependency).
+  `QICLean/Analysis/Topology/ContinuousIdempotentFrames.lean` (QICLean dependency).
 - **Notes:** all three proofs use the common lemma.
 
 ### Continuity of Gram left inverses — promoted
@@ -2517,7 +2517,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** trace-quotient multiplication coordinates, reconstructed letter
   coordinates, and continuous range frames.
 - **Abstraction:** `Matrix.continuous_gramLeftInverse` in
-  `QICLean/Analysis/ContinuousIdempotentFrames.lean` (QICLean dependency).
+  `QICLean/Analysis/Topology/ContinuousIdempotentFrames.lean` (QICLean dependency).
 - **Notes:** all three proofs use the common lemma. Inversion is handled by
   `Matrix.nonsing_inv_eq_ringInverse` and `NormedRing.inverse_continuousAt`.
   The local-unit argument uses those Mathlib results directly as well.
@@ -2528,7 +2528,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** quotient algebra recovery, continuous quotient units, and
   continuous primitive elements.
 - **Abstraction:** `Matrix.toLinearMap₂'_apply_mulVec_prod` in
-  `QICLean/Algebra/MatrixAlgebraCoordinates.lean` (QICLean dependency).
+  `QICLean/Algebra/MatrixAlgebra/MatrixAlgebraCoordinates.lean` (QICLean dependency).
 - **Notes:** the three private coordinate-expansion proofs are removed.
 
 ### Restricting continuous data to an open subtype neighborhood — promoted
@@ -2616,7 +2616,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `MPS/Symmetry/FixedPointGappedPath.lean`, and
   `MPS/Symmetry/PhysicalInteractionGap.lean` (2026-10-02).
 - **Abstraction:** `Matrix.isStarProjection_reindex` in
-  `QICLean/Algebra/MatrixStarProjection.lean` (QICLean dependency).
+  `QICLean/Analysis/Projection/MatrixStarProjection.lean` (QICLean dependency).
 - **Notes:** all three callers use the shared lemma. It applies to matrices
   over any additive commutative monoid with multiplication and a star;
   no decidable-equality hypothesis is needed in its statement.
@@ -2628,7 +2628,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `MPS/Symmetry/CommonPhysicalEndpoints.lean`, and
   `MPS/Symmetry/CommonPhysicalEndpointPaths.lean` (2026-10-02).
 - **Abstraction:** `Matrix.coe_gl_inv_eq_conjTranspose_of_mem_unitaryGroup`
-  in `QICLean/Algebra/IsometricFrameEmbedding.lean` (QICLean dependency).
+  in `QICLean/Algebra/Unitary/IsometricFrameEmbedding.lean` (QICLean dependency).
 - **Notes:** all callers use the shared matrix identity; the virtual gauge
   convention is unchanged.
 
@@ -2688,7 +2688,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   in `TNLean/MPS/MPU/VirtualSourceFactorTransport.lean`, and `rawU_virtual_cancel`
   and `rawV_virtual_cancel` in `TNLean/MPS/MPU/SelectedSourceGateVirtualGauge.lean`.
 - **Abstraction:** `Matrix.mul_unitary_adjoint_mul_cancel` in
-  `QICLean/Analysis/CfcUnitaryConjugation.lean` (QICLean dependency).
+  `QICLean/Analysis/FunctionalCalculus/CfcUnitaryConjugation.lean` (QICLean dependency).
 - **Notes:** all three sites use the helper. Net Lean line delta: -2, including
   the helper module and its imports.
 
@@ -2843,7 +2843,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/MPS/Core/ReductionComposition.lean` (the `kronId`/`idKron` lifts of reductions and
   dressed proportionality) and four in `TNLean/MPS/MPDO/ActionTensorReduction.lean` (the
   action-tensor lifts).
-- **Abstraction:** `List.exists_eq_ofFn` in `QICLean/Algebra/OrderedProduct.lean` (QICLean dependency); call sites write
+- **Abstraction:** `List.exists_eq_ofFn` in `QICLean/Algebra/Word/OrderedProduct.lean` (QICLean dependency); call sites write
   `obtain ⟨L, u, rfl⟩ := List.exists_eq_ofFn w`.
 - **Notes:** used before rewriting with `evalWord_ofFn`-style lemmas that are stated on
   `List.ofFn` words. The `l = List.ofFn (fun k ↦ l[k])` variants in
@@ -2897,7 +2897,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/MPS/RFP/BellPairCIDObstruction.lean` and
   `TNLean/PEPS/TorusRowColumnReductionObstruction.lean`.
 - **Abstraction:** `Submodule.eq_top_of_forall_single_mem` in
-  `QICLean/Algebra/MatrixSingleSpan.lean` (QICLean dependency).
+  `QICLean/Algebra/Matrix/MatrixSingleSpan.lean` (QICLean dependency).
 - **Notes:** the goal is `T = ⊤` for a submodule `T` of matrices, or `Kraus.IsInjective A`
   unfolded to it; the hypothesis is membership of every matrix unit.  The 2026-09-17 entry
   claimed that every call site had been refactored, which was wrong for the nine sites listed
@@ -2990,7 +2990,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   four-line windows using the scanner's consecutive runs gives 77 windows
   across 40 files; overlapping windows in three-binder descents count twice.
 - **Abstraction:** `Finset.sum_congr₂` in
-  `QICLean/Algebra/FinSumPermutation.lean` (QICLean dependency), with
+  `QICLean/Algebra/Combinatorics/FinSumPermutation.lean` (QICLean dependency), with
   `{κ : ι → Type*}`, `{t : (i : ι) → Finset (κ i)}`, and an
   `AddCommMonoid` codomain. Both the inner index type and its finite set may
   depend on the outer index. Two applications of Mathlib's `sum_congr`
@@ -3073,7 +3073,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/MPS/MPU/Examples/ShiftTilde.lean`
   (`shiftPhysicalSwap_mem_unitaryGroup`).
 - **Abstraction:** `Equiv.Perm.permMatrix_mem_unitaryGroup` in
-  `QICLean/Algebra/PermutationMatrixUnitary.lean` (QICLean dependency).
+  `QICLean/Algebra/Unitary/MatrixUnitaryBetween.lean` (QICLean dependency).
 - **Notes:** all three call sites now use the common theorem; the
   fundamental-theorem consumer simplifies the coercion of `permGL` to its
   underlying permutation matrix. The theorem moved to QICLean on 2026-10-26
@@ -3142,7 +3142,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Abstraction:**
   `Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one` and
   `Matrix.sum_mul_star_eq_ite_of_conjTranspose_mul_eq_one` in
-  `QICLean/Algebra/MatrixIsometryEntries.lean` (QICLean dependency).
+  `QICLean/Algebra/Unitary/MatrixIsometryEntries.lean` (QICLean dependency).
 - **Notes:** both complex scalar orientations are owned by QICLean's generic
   rectangular matrix layer. All cited TNLean consumers now invoke them
   directly; no MPS- or MPO-specific wrapper is retained.
@@ -3162,7 +3162,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Abstraction:**
   `Matrix.sum_mul_star_eq_ite_of_mul_conjTranspose_eq_one` and
   `Matrix.sum_star_mul_eq_ite_of_mul_conjTranspose_eq_one` in
-  `QICLean/Algebra/MatrixIsometryEntries.lean` (QICLean dependency).
+  `QICLean/Algebra/Unitary/MatrixIsometryEntries.lean` (QICLean dependency).
 - **Notes:** both complex scalar orientations are owned by QICLean's generic
   rectangular matrix layer. All eight TNLean consumers now invoke the public
   row-entry API directly; no tensor-network-specific wrapper is retained.
@@ -3178,7 +3178,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   two private copies before the upstream promotion.
 - **Abstraction:** `Matrix.PosDef.trace_mul_pos_of_posSemidef_of_ne_zero` and
   `Matrix.PosSemidef.trace_mul_pos_of_ne_zero_of_posDef` in
-  `QICLean/Algebra/MatrixAux.lean` (QICLean dependency).
+  `QICLean/Algebra/Matrix/MatrixAux.lean` (QICLean dependency).
 - **Notes:** QICLean owns the canonical statement and derives the cyclic
   product orientation by trace commutativity. All three TNLean derivations
   now use the public theorem directly; no companion API is duplicated locally.
@@ -3194,7 +3194,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   recounted 2026-09-04: the eight packaging proofs formerly counted in the
   mixed-kernel example module went with its deletion.
 - **Abstraction:** none. The former project wrappers were retired with
-  `QICLean.Algebra.MatrixReindex`; the direct extensionality and evaluation
+  `QICLean.Algebra.Matrix.MatrixReindex`; the direct extensionality and evaluation
   proofs are the canonical pattern.
 - **Notes:** the source-gate call sites retain the paper's four-spin coordinate
   order explicitly in their local arguments.
@@ -3284,7 +3284,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/Channel/Peripheral/CesaroRecurrence.lean`, and
   `TNLean/Kraus/Wielandt/Primitivity/VectorSpreadToPrimitive.lean`.
 - **Abstraction:** `Module.End.pow_apply_of_mem_eigenspace` in
-  `QICLean/Algebra/EigenspaceMap.lean` (QICLean dependency) handles the zero vector directly and is used by all
+  `QICLean/Spectral/Eigenvalue/EigenspaceMap.lean` (QICLean dependency) handles the zero vector directly and is used by all
   three consumers.
 
 ### finite-Kraus transfer-power trace pairing — promoted
@@ -3327,7 +3327,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   (2026-08-13).
 - **Abstraction:** `LinearMap.IsSymmetricProjection.rangeCompressionEigenbasis_apply_self`
   and `LinearMap.IsSymmetricProjection.rangeCompressionEigenbasis_apply_compression`
-  in `QICLean/Analysis/TwoProjectionCompressionSpectrum.lean` (QICLean dependency).
+  in `QICLean/Analysis/Projection/TwoProjectionCompressionSpectrum.lean` (QICLean dependency).
 - **Notes:** all six motivating call sites now use the public ambient equations;
   later two-projection block assembly can use the same facts without repeating
   subtype coercion arguments.
@@ -3350,7 +3350,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/Analysis/ProjectionGeometry.lean` and
   `TNLean/Analysis/TwoProjectionAngleBlock.lean` before promotion (2026-08-12).
 - **Abstraction:** `LinearMap.IsIdempotentElem.apply_apply` in
-  `QICLean/Analysis/IdempotentEndomorphism.lean` (QICLean dependency).
+  `QICLean/Algebra/Hermitian/IdempotentEndomorphism.lean` (QICLean dependency).
 - **Notes:** all motivating call sites now use the generic pointwise lemma. The
   abstraction assumes only a semiring, an additive commutative monoid, and a
   module; it does not depend on inner-product or projection symmetry.
@@ -3382,7 +3382,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `BNTMarkovSectorProjectors.lean`, and `InverseMapActiveSectorRecurrence.lean`
   before promotion (2026-08-11).
 - **Abstraction:** `HayashiMarkovDecomposition.h_state_apply_middle_sector` in
-  `QICLean/Analysis/EntropyMarkovReverse.lean` (QICLean dependency).
+  `QICLean/Entropy/StrongSubadditivity/EntropyMarkovReverse.lean` (QICLean dependency).
 - **Notes:** the theorem routes the coordinate evaluation through
   `HayashiMarkov.liftB_conj_apply` and `HayashiMarkov.blockState_apply` while retaining
   the dependent conditional for equal versus unequal sectors. Diagonal and off-diagonal
@@ -3426,7 +3426,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   (2026-08-10).
 - **Abstraction:** `Matrix.singleKrausMap_kronecker` and
   `Matrix.singleKrausMap_mul_of_isometry` in
-  `QICLean/Channel/SingleKrausPositivity.lean` (QICLean dependency).
+  `QICLean/Channel/KrausMap/SingleKrausPositivity.lean` (QICLean dependency).
 - **Notes:** both consumer modules now invoke the two matrix identities directly;
   the private helper copies were removed.
 
@@ -3436,7 +3436,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** duplicate 6-line helpers in `TNLean/MPS/RFP/BNTOrthogonality.lean`
   and `TNLean/MPS/RFP/PhysicalObservableRealization.lean` before promotion
   (2026-08-10).
-- **Abstraction:** `Matrix.submatrix_sum` in `QICLean/Algebra/FinSum.lean` (QICLean dependency).
+- **Abstraction:** `Matrix.submatrix_sum` in `QICLean/Algebra/Combinatorics/FinSum.lean` (QICLean dependency).
 - **Notes:** the theorem is polymorphic over the entry additive commutative
   monoid. Its four motivating calls now share the neutral matrix identity.
 
@@ -3497,7 +3497,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `MaximalRank.lean`, and `WeightedCornerFixedPoints.lean` before promotion
   (2026-08-09).
 - **Abstraction:** `Matrix.conjTranspose_cfc_sqrt` in
-  `QICLean/Analysis/MatrixSqrt.lean` (QICLean dependency).
+  `QICLean/Analysis/FunctionalCalculus/MatrixSqrt.lean` (QICLean dependency).
 - **Notes:** the helper needs no positivity hypothesis because `CFC.sqrt_nonneg`
   is unconditional. All six motivating proofs are now one-line applications;
   the caller files lose fifteen lines.
@@ -3508,7 +3508,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** four occurrences across `Channel/FixedPoint/Corollaries.lean` and
   `WeightedCornerFixedPoints.lean` before promotion (2026-08-09).
 - **Abstraction:** `Matrix.PosDef.isUnit_det_cfc_sqrt` in
-  `QICLean/Analysis/MatrixSqrt.lean` (QICLean dependency).
+  `QICLean/Analysis/FunctionalCalculus/MatrixSqrt.lean` (QICLean dependency).
 - **Notes:** the theorem retains the caller's `DecidableEq` instance so the
   determinant does not require proof-irrelevance transport. The four proof
   blocks become one-line applications.
@@ -3520,7 +3520,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `PerronFrobenius.lean`, and `SpectralRadius.lean` before promotion
   (2026-08-09).
 - **Abstraction:** `Kraus.trace_mul_mapLM_adjoint` in
-  `QICLean/Channel/KrausMap.lean` (QICLean dependency).
+  `QICLean/Channel/KrausMap/KrausMap.lean` (QICLean dependency).
 - **Notes:** transfer-map callers use this canonical finite-Kraus theorem directly,
   relying on the definitional equality of `Kraus.mapLM` and `Kraus.transferMap`.
 
@@ -3534,7 +3534,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Abstraction:**
   `Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily` and
   `Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM` in
-  `QICLean/Kraus/InvariantProjection.lean` (QICLean dependency).
+  `QICLean/Channel/Irreducible/InvariantProjection.lean` (QICLean dependency).
 - **Notes:** QICLean owns the equivalence canonically in `mapLM` notation.
   Transfer-map callers use it directly by definitional equality, without an
   equality conversion or compatibility wrapper.
@@ -3574,7 +3574,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** three occurrences across `MatrixFamilySupport.lean` and
   `WeightedHilbertSchmidt.lean` before promotion.
 - **Abstraction:** `Matrix.PosSemidef.supportProj_congr` in
-  `QICLean/Algebra/PosSemidefSupport.lean` (QICLean dependency).
+  `QICLean/Analysis/Projection/PosSemidefSupport.lean` (QICLean dependency).
 - **Notes:** the lemma isolates the dependent proof transport that ordinary
   rewriting does not resolve directly.
 
@@ -3647,13 +3647,13 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/MPS/MPDO/CZXGaussCircuitTuple.lean`, the involution, holonomy, fiber
   coordinate, and label lemmas in
   `TNLean/MPS/MPDO/CZXGaussInvariantSubspace.lean`, hypercube connectivity in
-  `QICLean/Algebra/HypercubePhasePotential.lean`, and the characteristic-two
-  identity in `QICLean/Algebra/MonomialFixedSubspace.lean`.
+  `QICLean/Algebra/Combinatorics/HypercubePhasePotential.lean`, and the characteristic-two
+  identity in `QICLean/Algebra/Matrix/MonomialFixedSubspace.lean`.
 - **Mathlib replacement:** the characteristic-two identity in
   `MonomialFixedSubspace.lean` now uses `CharTwo.add_self_eq_zero` pointwise;
   finite-case automation is no longer needed at that call site.
 - **Abstraction:** `generalize_decide t₁, …, tₙ` macro
-  (`QICLean/Algebra/GeneralizeDecide.lean`, QICLean dependency); the terms are abstracted in order
+  (`QICLean/Algebra/Combinatorics/GeneralizeDecide.lean`, QICLean dependency); the terms are abstracted in order
   and `decide +revert` quantifies over the fresh variables.
 - **Notes:** all call sites now use the macro. The macro is meant for goals
   whose only free data are values in small finite types with decidable
@@ -3691,9 +3691,9 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/MPS/RFP/StructuralFull.lean` and
   `TNLean/PEPS/TorusWindowChain4.lean`.
 - **Abstraction:** `Fintype.sum_mul_mul_eq_mul_sum_mul` in
-  `QICLean/Algebra/FinSum.lean` (QICLean dependency).
+  `QICLean/Algebra/Combinatorics/FinSum.lean` (QICLean dependency).
 - **Result:** every call site uses the shared lemma, and all 20 current
-  consumer files import `QICLean.Algebra.FinSum` directly. The promotion's
+  consumer files import `QICLean.Algebra.Combinatorics.FinSum` directly. The promotion's
   broad final passes found 18 sites in 13 then-new files, including
   functional binders, one-line semicolon proofs,
   both levels of the nested `distribute` identity in
@@ -3745,7 +3745,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `CPSVVerticalCanonicalForm.lean`, `RFPPositiveFusionDecomposition.lean`,
   `CPSVVerticalDecomposition.lean`, and `PooledKrausFamily.lean` before promotion.
 - **Abstraction:** `Fintype.sum_finSigmaFinEquiv` in
-  `QICLean/Algebra/FinSum.lean` (QICLean dependency).
+  `QICLean/Algebra/Combinatorics/FinSum.lean` (QICLean dependency).
 - **Notes:** the shared lemma is polymorphic over the additive commutative monoid,
   so callers retain only their application-specific summand.
 
@@ -3759,7 +3759,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/MPS/FundamentalTheorem/SectorBNT/ProportionalMatch/Core.lean`, and
   `TNLean/MPS/Periodic/ProportionalOverlap.lean` (2026-08-02).
 - **Abstraction:** `LinearIndependent.coefficient_eq_zero_of_sum_eq_of_complement_smul`
-  in `QICLean/Algebra/FinSum.lean` (QICLean dependency).
+  in `QICLean/Algebra/Combinatorics/FinSum.lean` (QICLean dependency).
 - **Notes:** the lemma is polymorphic over the scalar ring and module. The first
   two callers now retain only their decomposition-specific total-sum and
   complementary-state identities; the periodic overlap bridge is the third
@@ -3787,7 +3787,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `RelativeEntropyDataProcessing.lean`, and `StrongSubadditivityPosDef.lean`
   before promotion.
 - **Abstraction:** `Matrix.partialTraceRight_submatrix_prod_equiv` in
-  `QICLean/Channel/PartialTrace.lean` (QICLean dependency).
+  `QICLean/Algebra/PartialTrace.lean` (QICLean dependency).
 - **Notes:** the two data-processing proofs now call the shared covariance
   theorem; the same theorem is also used to transport partial-trace Petz
   recovery from finite cyclic coordinates to arbitrary finite products.
@@ -3800,7 +3800,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** three occurrences across `StrongSubadditivityPosDef.lean` and
   `SSAEqualityPetzRecovery.lean` before promotion.
 - **Abstraction:** `Matrix.partialTraceRight_submatrix_prodAssoc` in
-  `QICLean/Analysis/Entropy.lean` (QICLean dependency).
+  `QICLean/Entropy/VonNeumann/Entropy.lean` (QICLean dependency).
 - **Notes:** the two strong-subadditivity data-processing proofs and the HJPW
   product-reference recovery proof now use the shared reassociation identity.
 
@@ -3881,7 +3881,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `MPS/Symmetry/Defs.lean`, and `MPS/Periodic/Symmetry/Theorem41Forward.lean`;
   the scalar identity also occurred in `TopologicalDensityDecomposition.lean`.
 - **Abstraction:** `List.prod_ofFn_sum` and `List.prod_ofFn_smul` in
-  `QICLean/Algebra/OrderedProduct.lean` (QICLean dependency).
+  `QICLean/Algebra/Word/OrderedProduct.lean` (QICLean dependency).
 - **Notes:** the common statements hold over arbitrary semirings, and each application
   imports the algebra module directly.  The two older symmetry proofs now pass through
   `evalWord_ofFn_eq_prod` and these shared identities.
@@ -4163,7 +4163,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `TNLean/MPS/Examples/AnomalousCondensation/AnomalousCondensationZ2Z2Split.lean`.
   Each theorem differs only in its statement, never in its proof.
 - **Abstraction:** the `revert_decide_kernel x₁, …, xₙ` tactic macro, in
-  `QICLean/Algebra/GeneralizeDecide.lean` (QICLean dependency) beside the sibling `generalize_decide`
+  `QICLean/Algebra/Combinatorics/GeneralizeDecide.lean` (QICLean dependency) beside the sibling `generalize_decide`
   macro it is modeled on.
 - **Notes:** all sixteen call sites now read `revert_decide_kernel b`. The
   macro is deliberately narrower than `generalize_decide`: it reverts a
@@ -4296,7 +4296,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `PEPS/AreaLaw/Scan/RoundedScalePower.lean`, and
   `PEPS/Approximation/UniformMessageGateCompression.lean`.
 - **Abstraction:** `Nat.ceil_le_add_one_mul_of_le_mul` in
-  `QICLean/Analysis/ExplicitThresholds.lean` (QICLean dependency), proved from Mathlib's
+  `QICLean/Analysis/Real/ExplicitThresholds.lean` (QICLean dependency), proved from Mathlib's
   `Nat.ceil_lt_add_one`, monotonicity of addition, and distributivity.
 - **Refactor:** the three estimates apply the shared lemma; the existing
   scale-power and clearance statements are unchanged. Their proof bodies
@@ -4422,7 +4422,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 ### Appending a tuple endpoint under `List.ofFn`
 - **Pattern:** four proofs expanded `List.ofFn (Fin.snoc f x)` by repeating the
   same `List.ofFn_succ'`, `Fin.snoc_castSucc`, and `Fin.snoc_last` calculation.
-- **Reuse:** `List.ofFn_snoc` in `QICLean/Algebra/OrderedProduct.lean` (QICLean dependency) owns the generic
+- **Reuse:** `List.ofFn_snoc` in `QICLean/Algebra/Word/OrderedProduct.lean` (QICLean dependency) owns the generic
   list identity.
 - **Result:** the parent-Hamiltonian word lemmas and FNW boundary estimate import
   the layer-0 result, while `MPOTensor.evalWord_ofFn_cons_snoc` uses it for both
@@ -4434,7 +4434,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   sends `i.castSucc`, for `i : Fin N`, to `i.succ` by the same cast-heavy
   specialization of `finRotate_of_lt`.
 - **Reuse:** `Fin.finRotate_succ_castSucc` in
-  `QICLean/Algebra/IndexInduction.lean` (QICLean dependency) is the shared finite-index lemma.
+  `QICLean/Algebra/Combinatorics/IndexInduction.lean` (QICLean dependency) is the shared finite-index lemma.
 - **Result:** the public example-specific lemma and the duplicated local proof
   are removed; both closed-chain calculations use the algebra lemma.
 
@@ -4462,7 +4462,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** induct over subsemigroup closure to express each element as a
   nonempty list product of generators.
 - **Reuse:** `Subsemigroup.exists_nonempty_list_prod_of_mem_closure` in
-  `QICLean/Algebra/OrderedProduct.lean` (QICLean dependency) replaces the three local proofs in the MPU
+  `QICLean/Algebra/Word/OrderedProduct.lean` (QICLean dependency) replaces the three local proofs in the MPU
   residual algebra, MPU three-form span, and MPS reduction-residual modules.
 
 ### Four-site composition sum normalization
@@ -4502,7 +4502,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** 2 occurrences in `Channel/Peripheral/IrreducibleChannel.lean` and
   `Channel/Semigroup/Primitivity/Helpers.lean` before promotion (issue #6576).
 - **Abstraction:** `IsChannel.exists_kraus_map_eq_and_normalized` in
-  `QICLean/Channel/KrausMap.lean` (QICLean dependency) packages a finite Kraus family, the equality with
+  `QICLean/Channel/KrausMap/KrausMap.lean` (QICLean dependency) packages a finite Kraus family, the equality with
   its Kraus linear map, and the trace-preserving normalization.
 - **Notes:** issue #6576 deliberately promoted this two-copy pattern before a third
   occurrence because both peripheral arguments require the complete setup. Each
@@ -4522,9 +4522,9 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** prove that `Matrix.toEuclideanLin (A * B)` is the composition of the
   Euclidean linear maps represented by `A` and `B` by expanding both sides through
   `Matrix.toLin_mul` in the standard orthonormal basis.
-- **Reuse:** `Matrix.toEuclideanLin_mul` in `QICLean/Analysis/TraceNormAbs.lean` (QICLean dependency) is the shared
+- **Reuse:** `Matrix.toEuclideanLin_mul` in `QICLean/Analysis/TraceNorm/TraceNormAbs.lean` (QICLean dependency) is the shared
   layer-0 statement.
-- **Result:** `QICLean/Analysis/MatrixReducedProjection.lean` uses the shared theorem directly,
+- **Result:** `QICLean/Analysis/Projection/ReducedProjection.lean` uses the shared theorem directly,
   and `PositiveOnAbelian.Internal.toEuclideanLin_mul` remains as a compatibility wrapper for
   its three existing QICLean Channel call sites. The two-copy candidate was promoted early as required
   by issue #6525, preventing a third layer-crossing copy.
@@ -4643,7 +4643,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `neighboringOperator_entry_eq_of_heq` stays: its conclusion is indexed by a
   sector pair, not a single index family.
 - **Upstream reuse (2026-10-05):** the unchanged generic `Matrix.entry_eq_of_heq`
-  now belongs to `QICLean/Algebra/MatrixDependentEntries.lean`. The original MPDO
+  now belongs to `QICLean/Algebra/Matrix/MatrixReindex.lean`. The original MPDO
   module imports it, preserving the same name and binders for every existing consumer.
   Actual varying-bond interval identification uses the same coordinate transport.
 
@@ -4656,7 +4656,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `Matrix.eq_top_of_prod_trace_separating`,
   `Matrix.eq_zero_of_forall_sum_trace_mul_eq_zero`, and
   `Matrix.eq_zero_of_forall_trace_mul_add_eq_zero` in
-  `QICLean/Algebra/TraceFormDuality.lean`. Generator vanishing extends to the
+  `QICLean/Algebra/Matrix/TraceFormDuality.lean`. Generator vanishing extends to the
   span by `Submodule.span_le` into the kernel of `piTraceForm` or `prodTraceForm`.
 - **Refactored occurrences:** the homogeneous, cumulative and all-word MPDO
   pair criteria, simultaneous word-family separation, joint parent-boundary
@@ -4722,7 +4722,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   $\ker(\rho_A\otimes\rho_B)\subseteq\ker\rho_{AB}$ for a positive
   semidefinite bipartite operator.
 - **Reuse:** `Matrix.PosSemidef.productMarginals_kernel_le` in
-  `QICLean/Channel/MarginalSupportAbsorption.lean` (QICLean dependency) records this support-kernel
+  `QICLean/Channel/PartialTrace/MarginalSupportAbsorption.lean` (QICLean dependency) records this support-kernel
   fact once, using the two marginal support absorptions.
 - **Result:** `MarginalSupportWhitenedChoi` and the new entropy theorem
   `Entropy.mutualInformation_le_log_operatorSchmidtRank` both use the shared
@@ -4731,19 +4731,19 @@ three-plaquette output measurement, and the routed reunion measurement.
   strong-subadditivity argument is a direct corollary of the same statement.
 
 ### Support-correct tensor logarithm
-- **Pattern:** `QICLean/Channel/Schwarz/SSAEqualityDPI.lean` carried a local
+- **Pattern:** `QICLean/Entropy/StrongSubadditivity/SSAEqualityDPI.lean` carried a local
   simultaneous-diagonalization proof of the support-correct tensor logarithm.
 - **Reuse:** `Matrix.log_kronecker_posSemidef` in
-  `QICLean/Analysis/CfcKronecker.lean` (QICLean dependency) is the canonical low-layer theorem.
+  `QICLean/Analysis/FunctionalCalculus/CfcKronecker.lean` (QICLean dependency) is the canonical low-layer theorem.
 - **Result:** the duplicate proof was removed from
-  `QICLean/Channel/Schwarz/SSAEqualityDPI.lean`; the faithful entropy comparison
+  `QICLean/Entropy/StrongSubadditivity/SSAEqualityDPI.lean`; the faithful entropy comparison
   uses the Analysis declaration directly.
 
 ### Transpose covariance of the continuous functional calculus
 - **Pattern:** `TNLean/Analysis/LiebConcavity.lean` carried a private copy of
   the conjugation star-algebra homomorphism and its functional-calculus
   covariance proof solely to commute real powers with transpose.
-- **Reuse:** `Matrix.cfc_transpose` in `QICLean/Analysis/CfcConjugation.lean` (QICLean dependency)
+- **Reuse:** `Matrix.cfc_transpose` in `QICLean/Analysis/FunctionalCalculus/CfcConjugation.lean` (QICLean dependency)
   supplies the public covariance theorem.
 - **Result:** `rpow_transpose` keeps its private interface and now reduces to
   the public theorem after rewriting both powers as continuous functional
@@ -4754,7 +4754,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   of the reference matrix is positive semidefinite and used Hermiticity to
   identify the resulting congruence with an equal-factor sandwich.
 - **Reuse:** `_root_.Matrix.PosSemidef.rpow_mul_mul_rpow` in
-  `QICLean/Analysis/SandwichedRenyiTwo.lean` (QICLean dependency) proves
+  `QICLean/Entropy/Renyi/SandwichedRenyiTwo.lean` (QICLean dependency) proves
   `(ω ^ r * ρ * ω ^ r).PosSemidef` from `ρ.PosSemidef` and
   `ω.PosSemidef`, for arbitrary real `r`.
 - **Result:** `sandwichedRenyiTwoTrace_nonneg`, `sandwichedRenyiTrace_nonneg`,
@@ -4767,7 +4767,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   coordinates of a unit vector form a probability distribution.
 - **Reuse:** `Matrix.IsHermitian.spectralWeight`, `sum_spectralWeight`,
   `re_dotProduct_mulVec_eq_sum`, and `re_dotProduct_cfc_mulVec_eq_sum` in
-  `QICLean/Analysis/SpectralQuadraticForm.lean` (QICLean dependency) provide the basis-independent API used by both
+  `QICLean/Analysis/FunctionalCalculus/SpectralQuadraticForm.lean` (QICLean dependency) provide the basis-independent API used by both
   `SupportLogJensen.lean` and `Channel/Schwarz/DiagonalJensen.lean`.
 - **Result:** the Channel proof imports the lowest-layer Analysis helper instead of carrying its
   own spectral calculation, while the support-aware logarithmic proof uses the same formulas and
@@ -4938,7 +4938,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** proofs repeatedly converted `h : ‖z‖ = 1` into `z ≠ 0` with
   `norm_ne_zero_iff.mp (by rw [h]; exact one_ne_zero)`.
 - **Reuse:** `Complex.ne_zero_of_norm_eq_one` in
-  `QICLean/Algebra/ComplexPhasePositivity.lean` (QICLean dependency) now states this scalar fact once.
+  `QICLean/Analysis/Order/ComplexPhasePositivity.lean` (QICLean dependency) now states this scalar fact once.
 - **Result:** a repository-wide semantic audit migrated 32 call sites across
   18 files, including nested `inv_ne_zero` uses and tactic-form contradiction
   proofs. No exact-hypothesis conversion from `h : ‖z‖ = 1` to `z ≠ 0`
@@ -5187,7 +5187,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   computed its trace by rewriting `Matrix.trace_smul` and `Matrix.trace_one`.
 - **Reuse:** the generic lemmas `Matrix.PosSemidef.smul_one`,
   `Matrix.PosDef.smul_one`, and `Matrix.trace_smul_one` in
-  `QICLean/Algebra/MatrixScalarIdentity.lean` (QICLean dependency) own these arguments under the
+  `QICLean/Algebra/Hermitian/MatrixScalarIdentity.lean` (QICLean dependency) own these arguments under the
   weakest assumptions used by the underlying Mathlib results.
 - **Result:** the repeated proofs in `Theorem49RepeatedCopyCounterexample.lean`,
   `AKLTStringOrder.lean`, `Cluster.lean`, and
@@ -5204,7 +5204,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   `BlockingEigenvalues.lean`, and `OrbitUnitary.lean` under
   `TNLean/MPS/Periodic/` (2026-09-30).
 - **Abstraction:** `orthogonalProjection_mul_eq_ite_of_sum_eq_one` in
-  `QICLean/Algebra/OrthogonalProjection.lean` (QICLean dependency) gives the full multiplication
+  `QICLean/Algebra/Hermitian/OrthogonalProjection.lean` (QICLean dependency) gives the full multiplication
   table. All three consumers use it; no custom tactic is needed.
 
 ### finite-volume continuity from the local interaction — promoted
@@ -5315,7 +5315,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** Pass between a continuous linear map and its matrix in arbitrary
   finite orthonormal input and output bases without changing operator norm.
 - **Helper:** `ContinuousLinearMap.norm_toMatrix_orthonormal` in
-  `QICLean/Analysis/OrthonormalMatrixNorm.lean` (QICLean dependency).
+  `QICLean/Analysis/Norm/KroneckerOperatorNorm.lean` (QICLean dependency).
   The proof uses Mathlib's norm invariance under composition with linear
   isometric equivalences and its Euclidean matrix norm identification.
 - **Call sites:** `Word.norm_preparedMatrix_le_one` in
@@ -5468,7 +5468,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   many vectors as the dimension into an orthonormal basis.
 - **Seen:** The zero and successor cases of
   `LinearIsometry.exists_paired_orthonormalBasis` in
-  `QICLean/Algebra/OrthogonalComplexStructure.lean`.
+  `QICLean/Analysis/Isometry/OrthogonalComplexStructure.lean`.
 - **Abstraction:** Mathlib already supplies both mathematical steps. Two
   occurrences in one proof do not justify a local wrapper or tactic.
 - **Notes:** The empty-index form of the spanning lemma handles dimension
@@ -5614,8 +5614,8 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 - **Pattern:** Bound each term by monotonicity of natural powers, then replace
   a finite sum by its cardinality times that bound.
-- **Seen:** The degree sum in `QICLean/Algebra/TwoWindowCounts.lean` and the iterated
-  sum in `QICLean/Algebra/TwoWindowCounts.lean`.
+- **Seen:** The degree sum in `QICLean/Algebra/Combinatorics/TwoWindowCounts.lean` and the iterated
+  sum in `QICLean/Algebra/Combinatorics/TwoWindowCounts.lean`.
 - **Abstraction:** Existing Mathlib lemmas suffice: `Finset.sum_le_sum`,
   `Finset.sum_le_card_nsmul` and `Finset.sum_const`.
 - **Notes:** Two arguments across two files; no new tactic is needed. The
@@ -5660,7 +5660,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Notes:** These are two related comparisons in one module, below the
   promotion threshold. The mathematical transport theorems should be reused;
   no additional tactic or abstraction is proposed. Both comparisons are in
-  `QICLean/Algebra/GraphDistanceTransport.lean` (QICLean dependency).
+  `QICLean/Algebra/Combinatorics/GraphDistanceTransport.lean` (QICLean dependency).
 
 ### Passing from a natural localization radius to a real radius — resolved (2026-11-17)
 
@@ -6573,7 +6573,7 @@ currently one occurrence, so no general declaration is warranted.
   `exists_one_sub_norm_mpvOverlap_polarPosTensor_le_sq` in
   `TNLean/MPS/Preparation/SecondOrderOverlap.lean` (complex `α`, conclusion on
   `1 - ‖tr T^M‖`) and `IsIdempotentElem.exists_norm_trace_pow_sub_one_le_sq` in
-  `QICLean/Analysis/IdempotentTracePerturbation.lean` (real `α ≤ 1`, conclusion on
+  `QICLean/Analysis/Norm/IdempotentTracePerturbation.lean` (real `α ≤ 1`, conclusion on
   `‖tr T^M - 1‖`).
 - **Notes:** the second is the abstracted form for real `α`. Generalizing it to complex `α`
   with `‖α‖ ≤ 1`, `1 - ‖α‖ ≤ δ²` and `‖1 - α‖ ≤ δ`, concluding on `1 - ‖tr T^M‖`, would let
@@ -6625,7 +6625,7 @@ currently one occurrence, so no general declaration is warranted.
   chain `norm_sum_le`, `Finset.sum_le_sum`, `Finset.mul_sum`,
   `Real.sum_mul_le_sqrt_mul_sqrt` over the spectator configurations.
 - **Abstraction:** `Finset.norm_sum_le_mul_sqrt_mul_sqrt` in
-  `QICLean/Algebra/FiniteCauchySchwarz.lean` (QICLean dependency): termwise bounds
+  `QICLean/Algebra/Combinatorics/FiniteCauchySchwarz.lean` (QICLean dependency): termwise bounds
   `‖z i‖ ≤ c * a i * b i` with `0 ≤ c` give
   `‖∑ i ∈ s, z i‖ ≤ c * (√(∑ a i ^ 2) * √(∑ b i ^ 2))`.
 - **Status:** promoted; the fiber bound in `SpectatorOverlap.lean` and the
@@ -6783,7 +6783,7 @@ current counts and full location lists).
 - **Abstraction:** the `Fintype.sum_reverse_three`,
   `Fintype.sum_last_two_first_four`, `Fintype.sum_last_first_four`,
   `Fintype.sum_last_two_first_five`, and `Fintype.sum_permute_five` helper
-  theorems in `QICLean/Algebra/FinSumPermutation.lean` (QICLean dependency).
+  theorems in `QICLean/Algebra/Combinatorics/FinSumPermutation.lean` (QICLean dependency).
 - **Notes:** the four surviving call sites use the shared results, and the
   unused sixth private helper was removed. Specific theorem statements are the
   lowest sufficient abstraction for the permutations needed; no elaborator
@@ -7042,7 +7042,7 @@ current counts and full location lists).
   `re_trace_posPart_map_le_of_scaledTrace` (scaled-trace case) before
   factoring (review on 2026-08-09).
 - **Abstraction:** `Matrix.re_trace_posPart_map_le_aux` in
-  `QICLean/Analysis/TraceNormContractivity.lean` (QICLean dependency) isolates the shared
+  `QICLean/Analysis/Norm/TraceNormContractivity.lean` (QICLean dependency) isolates the shared
   projection-chaining estimate; both source-facing lemmas are now
   one-`calc`-block corollaries.
 - **Notes:** the abstraction removes ~15 duplicated proof lines from each
@@ -7322,9 +7322,9 @@ spectral split → block extraction → MPV calculation → strict bounds
   almost-everywhere vanishing, then use continuity and
   `Measure.eqOn_open_of_ae_eq` to obtain pointwise vanishing.
 - **Seen:** 2 occurrences across 2 files:
-  `QICLean/Channel/Schwarz/WeylRelativeEntropyIntegral.lean` in
+  `QICLean/Entropy/Relative/WeylRelativeEntropyIntegral.lean` in
   `weyl_sourceB_defect_eq_zero_of_gap_eq_zero`, and
-  `QICLean/Channel/Schwarz/SupportRelativeEntropyGap.lean` in
+  `QICLean/Entropy/Relative/SupportRelativeEntropyGap.lean` in
   `supportSourceBDefect_eq_zero_of_relativeEntropy_sum_eq` (2026-07-27).
 - **Abstraction (proposed):** a measure-theoretic lemma taking `IntegrableOn f (Ioi 0)`,
   `ContinuousOn f (Ioi 0)`, nonnegativity on `Ioi 0`, and zero restricted integral,
@@ -7339,7 +7339,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `P R⁻¹ D y` for a `P`-fixed vector `y`, and use the witness to show that
   the support projection of the left--right operator fixes `y`.
 - **Seen:** 2 occurrences in
-  `QICLean/Channel/Schwarz/SupportLeftRightRelativeModular.lean`, in
+  `QICLean/Entropy/Relative/SupportLeftRightRelativeModular.lean`, in
   `supportRightProj_mul_supportLeftRightSupportProj_eq` and
   `supportLeftRightSupportInv_mulVec_sourceB_eq_projected_relativeModular`
   (2026-07-27).
@@ -7646,7 +7646,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `pow_eq_pow_mod`, `pow_succ`, and commutativity to prove
   `z ^ (k + 1).val = z * z ^ k.val` from `z ^ q = 1`.
 - **Seen:** two occurrences in two files: `Fin.exists_stepOrbit_phases` in
-  `QICLean/Algebra/FinStepOrbit.lean` and the private `map_cyclic_sum` in
+  `QICLean/Algebra/Combinatorics/FinStepOrbit.lean` and the private `map_cyclic_sum` in
   `TNLean/MPS/Periodic/BlockingEigenvalues.lean` (2026-09-30).
 - **Abstraction (proposed):** a cyclic-successor power lemma over a commutative
   monoid; below the three-occurrence promotion threshold.
@@ -8031,7 +8031,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   conjugation norm, orbit-to-intertwiner, and Choi orbit arguments.
 - **Existing results:** Mathlib `Matrix.mem_unitaryGroup_iff` and its primed
   form supply the identities. The promoted
-  `Matrix.mul_unitary_adjoint_mul_cancel` in `QICLean/Analysis/CfcUnitaryConjugation.lean` (QICLean dependency)
+  `Matrix.mul_unitary_adjoint_mul_cancel` in `QICLean/Analysis/FunctionalCalculus/CfcUnitaryConjugation.lean` (QICLean dependency)
   handles the rectangular contraction when its statement applies.
 - **Decision:** The occurrences lie in one file, below the two-file promotion
   threshold. No new tactic or theorem is needed; further uses should first
@@ -8556,7 +8556,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Distribute a matrix product through two finite weighted sums,
   conjugating the bra coefficients and exchanging the two summations.
 - **Helper:** `Matrix.sum_smul_mul_mul_conjTranspose` in
-  `QICLean/Algebra/MatrixDensitySum.lean` (QICLean dependency). Both coefficient families and both
+  `QICLean/Algebra/Matrix/MatrixDensitySum.lean` (QICLean dependency). Both coefficient families and both
   output and input coordinate types are independent; the middle matrix may
   be rectangular.
 - **Refactored occurrences:** The private `sum_density_expansion` in
@@ -8603,7 +8603,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   a multilinear map to a finite set of arguments, expand a sum in each argument,
   and collect the product of the scalar coefficients.
 - **Shared theorem:** `MultilinearMap.map_piecewise_sum_smul` in
-  `QICLean/Algebra/MultilinearSelectedSum.lean` (QICLean dependency). It is a direct application of
+  `QICLean/Algebra/Module/MultilinearSelectedSum.lean` (QICLean dependency). It is a direct application of
   Mathlib's `domDomRestrict`, `map_sum`, and `map_smul_univ`; the unselected
   arguments are fixed throughout.
 - **Refactors:** Both source-contraction proofs now use this theorem. The
@@ -8799,7 +8799,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   Obtain the lower bound by cancelling the filter with its positive power.
 - **Seen:** The lifted regional bound and local inverse-cancellation argument in
   `PEPS/AreaLaw/RegularizedPatchMinimum`; scalar shifted-density power bounds are
-  supplied by `QICLean.Analysis.ShiftedDensityPowers`.
+  supplied by `QICLean.Analysis.FunctionalCalculus.ShiftedDensityPowers`.
 - **Abstraction:** The native lift estimate is factored once. Product bounds use
   a private list induction; there is no new optimizer or contraction-chain type.
 - **Notes:** These are distinct uses of existing isometry and CFC results, below
@@ -9073,7 +9073,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** all four equations use one local arbitrary-matrix transport
   lemma, itself an application of
   `Matrix.toEuclideanLin_reindex_piLpCongrLeft` in
-  `QICLean/Algebra/MatrixReindexEuclidean.lean` (QICLean dependency).
+  `QICLean/Spectral/Eigenvalue/MatrixReindexEuclidean.lean` (QICLean dependency).
 - **Notes:** the four applications occur in one module. A shared scalar-eigenvalue
   corollary is appropriate if the same conversion occurs in another module;
   the underlying matrix-action identity is already shared.
@@ -10194,7 +10194,7 @@ there is no need for a new tactic.
   result is scalar multiplication by the function at the corresponding energy.
 - **Seen:** Two private helper proofs, in
   `MPS/AreaLaw/Huang/ApproximateEnergyFilter.lean` and the companion module
-  `QICLean/Analysis/GroundProjection.lean`.
+  `QICLean/Spectral/Gap/GroundProjection.lean`.
 - **Abstraction:** A public Mathlib or QICLean theorem for the action of a real
   functional calculus on `IsHermitian.eigenvectorBasis` would replace both helpers.
 - **Notes:** The current spectral proof calls the helper once and then uses
@@ -10593,7 +10593,7 @@ there is no need for a new tactic.
 - **Pattern:** Extend finite physical coefficients by zero along an injection,
   transport the linear map through `WithLp`, and prove the norm identity by
   `Fintype.sum_of_injective`.
-- **Defined in:** `QICLean/Analysis/EuclideanExtendByZero.lean` (QICLean dependency),
+- **Defined in:** `QICLean/Analysis/TensorProduct/EuclideanExtendByZero.lean` (QICLean dependency),
   `Function.Embedding.euclideanExtendByZero` and its coordinate identities.
 - **Seen:** dependent full configurations and pair-boundary range transport in
   `ParentHamiltonian/PhysicalAlphabetEmbedding.lean`, and actual local-term
@@ -10711,11 +10711,11 @@ removed after the dependency audit exposed it.
 - **Promoted:** `Complex.mul_star_self_of_norm_eq_one`,
   `Complex.star_mul_self_of_norm_eq_one` and
   `Matrix.IsUnitaryBetween.smul_of_norm_eq_one` in
-  `QICLean/Algebra/UnitPhaseScalar.lean` (QICLean dependency).
+  `QICLean/Analysis/Isometry/UnitPhaseScalar.lean` (QICLean dependency).
 - **Refactored call sites:** phase-gauge construction in
   `TranspositionLocalSufficiency.lean`, standard-form scalar deformation in
   `TranspositionPhaseDeformation.lean`, and the phase alignment in
-  `QICLean/Analysis/PureStateTraceNorm.lean` (QICLean dependency). The sign-gauge construction in
+  `QICLean/Channel/Positive/PureStateTraceNorm.lean` (QICLean dependency). The sign-gauge construction in
   `TimeReversalLocalSufficiency.lean` uses no complex phase.
 - **Related reuse:** The local scalar path uses the existing `mpo_smul`
   law and `TwoSiteStandardFormData` structure; no new path predicate is added.
@@ -11030,7 +11030,7 @@ removed after the dependency audit exposed it.
 - **Seen:** `MPS/AreaLaw/MPSApproximation.lean`,
   `MPS/AreaLaw/SnakeGridApproximation.lean`.
 - **Abstraction:** The lemma `norm_inv_norm_smul_sub_le_two_mul` now lives in
-  `QICLean/Analysis/UnitNormalizationDistance.lean`. Square-grid proofs can
+  `QICLean/Analysis/Norm/UnitNormalizationDistance.lean`. Square-grid proofs can
   therefore import it without importing the chain area-law theorem.
 - **Notes:** Two occurrences; the square proof currently keeps this short
   calculation inside its normalization step and imports only the truncation core.
@@ -11159,7 +11159,7 @@ removed after the dependency audit exposed it.
 - **Seen:** `MPS/ParentHamiltonian/UncleWallGramGeneric.lean`.
 - **Abstraction:** Existing Mathlib quadratic and Haar APIs provide the
   structures and final measure statement. The scalar test is public in
-  `QICLean/Algebra/QuadraticFormRadical.lean` (QICLean dependency):
+  `QICLean/Algebra/Module/QuadraticFormRadical.lean` (QICLean dependency):
   `QuadraticForm.polar_eq_zero_of_nonneg`,
   `QuadraticForm.mem_radical_iff_of_nonneg` and
   `QuadraticForm.radical_ne_top_of_ne_zero`; no genericity premise is added.
@@ -11507,7 +11507,7 @@ removed after the dependency audit exposed it.
 
 ### Coordinate transport of a rectangular conjugation (2026-10-29)
 
-- **Seen:** `QICLean/Algebra/MatrixStarEquivSpatial.lean`.
+- **Seen:** `QICLean/Algebra/MatrixAlgebra/MatrixStarEquivSpatial.lean`.
 - **Pattern:** A square unitary becomes a rectangular unitary by reindexing its columns;
   conjugation then transports the input matrix along the same coordinate equivalence.
 - **Reuse:** `Matrix.reindexLinearEquiv_mul` receives all three equivalences explicitly,
@@ -11623,7 +11623,7 @@ removed after the dependency audit exposed it.
 - **Pattern:** Transport Mathlib's `mulVec_eigenvectorBasis` equation through
   `WithLp.ofLp` and convert real scalar multiplication to the complex field.
 - **Abstraction:** `Matrix.IsHermitian.toEuclideanCLM_eigenvectorBasis` in
-  `QICLean/Analysis/EuclideanEigenvectorBasis.lean`, valid over any `RCLike`
+  `QICLean/Spectral/Eigenvalue/EuclideanEigenvectorBasis.lean`, valid over any `RCLike`
   field and any finite index type.
 - **Occurrences:** The three calculations in
   `MPS/AreaLaw/AKLV/TwoBlockTruncation.lean`,
@@ -11707,7 +11707,7 @@ removed after the dependency audit exposed it.
   `ViableSet/SampledSuccessiveConstruction.lean`, and
   `ViableSet/RationalSampledSuccessiveConstruction.lean`.
 - **Abstraction:** `Nat.exists_dependent_sequence` in
-  `QICLean/Algebra/DependentSequence.lean` (QICLean dependency) chooses a sequence in indexed types,
+  `QICLean/Algebra/Combinatorics/DependentSequence.lean` (QICLean dependency) chooses a sequence in indexed types,
   starting at a prescribed initial value and satisfying every supplied
   successor relation.
 - **Refactored occurrences:** All three final recurrence constructions use
@@ -12010,7 +12010,7 @@ removed after the dependency audit exposed it.
 
 ### Nonzero projection into a close candidate — promoted (2026-11-03)
 
-- **Helper:** `Submodule.IsCloseTo.starProjection_ne_zero` in the companion module `QICLean/Analysis/ViableProjectionNonzero.lean`.
+- **Helper:** `Submodule.IsCloseTo.starProjection_ne_zero` in the companion module `QICLean/Analysis/Subspace/ViableSubspace.lean`.
 - **Uses:** The common projected trial-space injectivity proof and the actual unit ground-vector projection in `MPS/AreaLaw/RegionalGroundEnergy.lean` now call the helper. The untrimmed energy-candidate argument uses the same nonzero-projection implication.
 - **Decision:** State the geometric implication once, with loss below one and a nonzero target vector. No separate norm calculation or nonnegative-loss hypothesis is repeated at a call site.
 
@@ -12087,7 +12087,7 @@ removed after the dependency audit exposed it.
 - **Pattern:** Remove a real multiple of the identity from a regional matrix
   energy by expanding the Euclidean operator and inner product, then identify
   the diagonal inner product with the squared norm.
-- **Abstraction:** `QICLean/Analysis/QuadraticScalarShift.lean` owns the general
+- **Abstraction:** `QICLean/Analysis/Order/QuadraticScalarShift.lean` owns the general
   real-or-complex operator/matrix identities and the concrete complex form
   `Matrix.re_inner_toEuclideanCLM_sub_ofReal_smul_one`. The three consumers
   use that complex form; real-to-complex normalization is proved once there.

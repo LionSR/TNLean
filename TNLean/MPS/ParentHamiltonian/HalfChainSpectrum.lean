@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.HalfChainSchmidt
 import TNLean.MPS.ParentHamiltonian.HalfChainSpectralComparison
-import QICLean.Analysis.MatrixSqrt
+import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Isometric
 
 /-!

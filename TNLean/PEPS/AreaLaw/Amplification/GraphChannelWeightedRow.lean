@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelEventKernel
-import QICLean.Analysis.StretchedExponentialSummability
+import QICLean.Analysis.Real.StretchedExponentialSummability
 
 /-!
 # Uniform weighted rows of the actual graph-ball incidence kernel

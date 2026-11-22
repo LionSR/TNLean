@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.OperatorProduct
-import QICLean.Algebra.OrderedProduct
+import QICLean.Algebra.Word.OrderedProduct
 import Mathlib.LinearAlgebra.Matrix.Reindex
 
 /-!

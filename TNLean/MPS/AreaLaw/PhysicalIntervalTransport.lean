@@ -8,12 +8,12 @@ import TNLean.MPS.AreaLaw.TraceCoreSlices
 import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.Entropy.SupportedMarginalTails
-import QICLean.Entropy.FilterMoment
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
+import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Sites.Placement
-import QICLean.Entropy.RegionUnion
-import QICLean.Entropy.FilterOutputCovariance
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import QICLean.ManyBody.Entropy.Filter.OutputCovariance
 import Mathlib.Data.List.OfFn
 import Mathlib.Order.Interval.Finset.Nat
 import TNLean.MPS.MPDO.TraceChainOperator

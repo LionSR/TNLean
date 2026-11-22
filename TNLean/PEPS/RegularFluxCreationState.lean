@@ -3,12 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.FinSumPermutation
-import QICLean.Algebra.ComplexSqrt
+import QICLean.Algebra.Combinatorics.FinSumPermutation
+import QICLean.Analysis.Real.ComplexSqrt
 import Mathlib.GroupTheory.Subgroup.Centralizer
-import QICLean.Algebra.UnitaryVectorSwap
-import QICLean.Algebra.PermutationMatrixUnitary
-import QICLean.Algebra.MatrixReindexUnitary
+import QICLean.Algebra.Unitary.UnitaryVectorSwap
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 
 /-!

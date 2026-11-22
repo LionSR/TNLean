@@ -63,7 +63,7 @@ Existing callers and the blueprint retain the same theorem name and statement.
 
 The pinned QICLean revision also provides the identical
 `WordMultiplicity.wordCoefficient` definition in
-`QICLean.Algebra.WordCoefficient`. `TNLean/Algebra/TwoMarkerScalarRecovery.lean`
+`QICLean.Algebra.Word.WordMultiplicity`. `TNLean/Algebra/TwoMarkerScalarRecovery.lean`
 imports that module and removes its duplicate definition. The public name,
 ordered-word sum, and existing uses are unchanged. The modified module passed
 strict elaboration and the Mathlib standard linters with warnings as errors

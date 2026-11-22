@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.ExteriorSourceContraction
-import QICLean.Probability.WeightedSourceError
+import QICLean.Probability.Concentration.WeightedSourceError
 
 /-!
 # Weighted source coefficients of actual separated words

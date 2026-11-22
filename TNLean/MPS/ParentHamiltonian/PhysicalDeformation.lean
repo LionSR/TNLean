@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.FiniteKroneckerProduct
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
@@ -73,7 +73,7 @@ noncomputable def onSiteTensorPow (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
 
 /-- The tensor power is the constant-family finite Kronecker product
 \(\bigotimes_{n<L}\Lambda\); the algebra of the latter is in
-`QICLean/Algebra/FiniteKroneckerProduct.lean`. -/
+`QICLean/Algebra/Kronecker/FiniteKroneckerProduct.lean`. -/
 lemma onSiteTensorPow_eq_finKronecker (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ) :
     onSiteTensorPow L Λ = Matrix.finKronecker fun _ : Fin L => Λ := by
   ext σ τ

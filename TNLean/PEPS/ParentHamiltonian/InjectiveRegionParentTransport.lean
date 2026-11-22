@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.InjectiveVertexCoordinates
 import TNLean.PEPS.ParentHamiltonian.RegionParentHamiltonian
-import QICLean.Algebra.MatrixAux
+import QICLean.Algebra.Matrix.MatrixAux
 import Mathlib.LinearAlgebra.Matrix.Rank
 
 /-!

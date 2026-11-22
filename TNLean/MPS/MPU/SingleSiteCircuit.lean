@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Overlap.Basic
-import QICLean.Algebra.FinCastAddNatAdd
+import QICLean.Algebra.Combinatorics.FinSum
 import QICLean.Circuit.Geometry.Graph
 import QICLean.Circuit.Model.CleanWorkspace
 

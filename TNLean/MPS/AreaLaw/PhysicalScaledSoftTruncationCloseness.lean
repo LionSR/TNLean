@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalScaledSoftTruncationResiduals
-import QICLean.Analysis.SpectralResidualComparison
-import QICLean.Analysis.SoftTruncationScaledAccuracy
+import QICLean.Spectral.Perturbation.ResidualComparison
+import QICLean.Spectral.Filter.SoftTruncationAccuracy
 
 /-!
 # Directed physical soft spectral comparisons at prescribed accuracy

@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AKLV.GroundStateTail
-import QICLean.Analysis.CommutingHermitian
-import QICLean.Analysis.CfcConjugation
+import QICLean.Spectral.Eigenvalue.CommutingHermitian
+import QICLean.Analysis.FunctionalCalculus.CfcConjugation
 
 /-!
 # Two-sided energy truncation

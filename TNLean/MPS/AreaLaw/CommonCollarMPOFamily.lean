@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer
-import QICLean.Analysis.MatrixTensorCoordinates
+import QICLean.Analysis.TensorProduct.MatrixTensorCoordinates
 
 /-!
 # One common family under enlargement by interval collars

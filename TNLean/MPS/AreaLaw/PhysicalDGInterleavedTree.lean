@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedNode
 import TNLean.MPS.AreaLaw.IntervalMergeChoice
 import TNLean.MPS.AreaLaw.IntervalFullSpaceProfile
-import QICLean.Analysis.ViableNodeLeafCount
+import QICLean.Analysis.Parameter.ViableNodeParameters
 
 /-!
 # An actual balanced tree with interleaved collective trims

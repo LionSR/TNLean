@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.PhysicalDGViability
 import TNLean.MPS.AreaLaw.IndependentPhysicalDGViability
 import TNLean.MPS.AreaLaw.SharpApproximationParameters
-import QICLean.Analysis.ViableSubspaceSchmidtRank
+import QICLean.Channel.Schmidt.ViableSubspaceSchmidtRank
 
 /-!
 # Normalized approximations from the full physical ground space

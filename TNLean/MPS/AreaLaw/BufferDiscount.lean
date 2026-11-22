@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Counting
-import QICLean.Entropy.TailRadiusWeights
-import QICLean.Entropy.BufferDiscount
+import QICLean.Entropy.Surprisal.TailRadiusWeights
+import QICLean.ManyBody.Entropy.Filter.BufferDiscount
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import QICLean.Algebra.HermitianPartSum
+import QICLean.Algebra.Hermitian.HermitianPartSum
 
 /-!
 # The buffered discount with a constant-width buffer

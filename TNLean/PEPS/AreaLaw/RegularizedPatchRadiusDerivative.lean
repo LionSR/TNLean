@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RegularizedPatchInsertionTrace
-import QICLean.Analysis.ShiftedPowerDerivative
-import QICLean.Analysis.OperatorMean.MatrixPowers
+import QICLean.Spectral.Filter.ShiftedPowerDerivative
+import QICLean.Analysis.FunctionalCalculus.MatrixPowers
 import QICLean.Kraus.Word
 import Mathlib.Analysis.Calculus.FDeriv.Analytic
 import Mathlib.Analysis.InnerProductSpace.Calculus

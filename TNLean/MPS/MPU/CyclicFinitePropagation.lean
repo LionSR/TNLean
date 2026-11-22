@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.CyclicConjugation
 import TNLean.MPS.MPU.FiniteWindowSupport
-import QICLean.Algebra.IndexInduction
+import QICLean.Algebra.Combinatorics.IndexInduction
 import QICLean.ManyBody.Sites.Lattice.Ring
 
 /-!

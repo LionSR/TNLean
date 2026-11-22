@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceGateDensity
-import QICLean.Analysis.SourceContraction
+import QICLean.Analysis.TraceNorm.SourceContraction
 
 /-!
 # Density contractions of actual prepared sources

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.NormalCommutant
-import QICLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.MPDO.BNTAlgebraTensorClausePositivity
 import TNLean.MPS.MPDO.FigureEightPairwise
 import TNLean.MPS.Tactic.Basic

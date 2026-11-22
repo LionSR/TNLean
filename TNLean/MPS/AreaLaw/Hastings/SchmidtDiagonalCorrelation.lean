@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
 import Mathlib.Analysis.Matrix.Order
-import QICLean.Analysis.GlobalGap
+import QICLean.Analysis.Order.GlobalGap
 
 /-!
 # Correlations of Schmidt-diagonal operators: the operator estimate

@@ -7,7 +7,7 @@ import TNLean.PEPS.NormalEdgeBlockingInterior
 import TNLean.PEPS.NormalEdgeSingleCrossing
 import TNLean.PEPS.SquareLatticeCoordinateSwap
 import TNLean.PEPS.BlockingDataEdgeGauge
-import QICLean.Algebra.ScalarCommutant
+import QICLean.Algebra.MatrixAlgebra.ScalarCommutant
 
 /-!
 # The per-edge gauge family at the interior edges of the square lattice

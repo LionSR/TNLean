@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.MixedMap.Gap
-import QICLean.Kraus.InvariantProjection
-import QICLean.Spectral.GaugeConstruction
+import QICLean.Channel.Irreducible.InvariantProjection
+import QICLean.Kraus.MixedMap.GaugeConstruction
 import TNLean.Spectral.MPVOverlapDecayRect
-import QICLean.Spectral.TransferOperatorGapNormalized
+import QICLean.Kraus.MixedMap.TransferOperatorGapNormalized
 
 /-!
 # Transfer-operator gap for normal tensor blocks

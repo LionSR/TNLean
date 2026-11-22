@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenKnabePadding
 import TNLean.MPS.ParentHamiltonian.Martingale.IntervalGapTransport
-import QICLean.Analysis.QuadraticFormGap
+import QICLean.Spectral.Gap.PositiveGapTransfer
 import QICLean.ManyBody.Hamiltonian.Martingale.AbstractCriterion
 
 /-!

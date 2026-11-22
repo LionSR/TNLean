@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.UncleTrialTransferNorm
 import TNLean.MPS.ParentHamiltonian.UncleWallGramBounds
 import QICLean.Channel.Peripheral.UnitalKraus
-import QICLean.Analysis.TraceNormNet
+import QICLean.Channel.TraceNormNet
 
 /-!
 # Linear norm bounds for an actual trial with one pinned wall

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointPeriodicGap
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointSwap
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointRightOpenTransport
-import QICLean.Analysis.IsometricConjugationGap
+import QICLean.Spectral.Gap.IsometricConjugationGap
 
 /-!
 # The actual joint periodic parent at the second endpoint

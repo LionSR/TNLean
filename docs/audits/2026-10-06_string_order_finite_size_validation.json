@@ -465,7 +465,7 @@
       "exit_code": 0
     },
     {
-      "module": "QICLean.Algebra.ScalarCommutant",
+      "module": "QICLean.Algebra.MatrixAlgebra.ScalarCommutant",
       "source_sha256": "e1603f12c84b503befc41003523e85736f54c0a2102449d4f1fa83563b1ccf2d",
       "artifact_sha256": "9303c85d1fb59560ad0f8ac84fc6c741f8c068c2491e56147079f1770971f1f2",
       "elapsed_seconds": 3.438,
@@ -556,7 +556,7 @@
       "exit_code": 0
     },
     {
-      "module": "QICLean.Algebra.TraceFormDuality",
+      "module": "QICLean.Algebra.Matrix.TraceFormDuality",
       "source_sha256": "0dcffb3757429b3cf9aacb788537a40b35d0ce7120ff6f7f158c3582d4d21215",
       "artifact_sha256": "ff43eea765cf108151cf41dd2acd0f2bb9f38e022d85dafc5060c55c860b67d0",
       "elapsed_seconds": 3.57,

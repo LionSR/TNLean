@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.OrthogonalBlockSum
 import TNLean.MPS.Preparation.PositivePartRate
-import QICLean.Analysis.MatrixFramePerturbation
+import QICLean.Analysis.Isometry.FramePerturbation
 
 /-!
 # The positive part of a direct sum of blocks with overlapping states

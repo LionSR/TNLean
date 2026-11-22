@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbient
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteIntervalGapComparison
-import QICLean.Analysis.PositiveComparisonGap
+import QICLean.Spectral.Gap.PositiveComparisonGap
 import QICLean.ManyBody.Hamiltonian.Martingale.TwoGroundProjectionGap
 
 /-!

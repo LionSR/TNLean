@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Data.Matrix.PEquiv
-import QICLean.Channel.PartialTrace
+import QICLean.Algebra.PartialTrace
 import TNLean.MPS.MPDO.Defs
 
 /-!

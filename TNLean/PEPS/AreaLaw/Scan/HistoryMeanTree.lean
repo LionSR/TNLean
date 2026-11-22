@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.HistoryWeights
-import QICLean.Analysis.Transport.Derivative
+import QICLean.Channel.OperatorMean.Derivative
 import Mathlib.Data.Fintype.EquivFin
 
 /-!

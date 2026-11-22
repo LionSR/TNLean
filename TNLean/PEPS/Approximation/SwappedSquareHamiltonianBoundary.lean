@@ -7,7 +7,7 @@ import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
 import TNLean.Lattice.RegionalSwapSupport
 import TNLean.PEPS.Approximation.SheetSwapDoubledTermNorm
 import TNLean.PEPS.SquareLatticeEdgeCount
-import QICLean.Algebra.L2OpNormReindex
+import QICLean.Analysis.Norm.L2OpNormReindex
 
 /-!
 # The boundary perturbation of a doubled square Hamiltonian

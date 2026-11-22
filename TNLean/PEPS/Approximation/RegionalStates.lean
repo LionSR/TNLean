@@ -7,7 +7,7 @@ import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.PinnedRegionalState
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.ParentHamiltonian.RegionReducedDensity
-import QICLean.Analysis.Entropy
+import QICLean.Entropy.VonNeumann.Entropy
 import Mathlib.Algebra.Order.Floor.Semiring
 
 /-!

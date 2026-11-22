@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteIntervalGapComparison
-import QICLean.Analysis.PositiveComparisonGap
+import QICLean.Spectral.Gap.PositiveComparisonGap
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicRangeComparison
 
 /-!

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalDGCanonicalParentFailure
 import TNLean.MPS.AreaLaw.CanonicalIntervalSamplingTreeProfile
-import QICLean.Analysis.ViableNodeLeafCount
+import QICLean.Analysis.Parameter.ViableNodeParameters
 
 /-!
 # One physical family for the actual sampled tree and every history

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.PVBSCriticalMagnon
-import QICLean.Analysis.CycleLaplacianFourier
+import QICLean.Analysis.Real.CycleLaplacianFourier
 
 /-!
 # Thermodynamic gaplessness of the critical PVBS parent

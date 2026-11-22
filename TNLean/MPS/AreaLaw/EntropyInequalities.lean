@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.Lattice.RegionEntropyInequalities
-import QICLean.Entropy.ConditionalEntropy
-import QICLean.Entropy.FilterOptimizer
+import QICLean.Entropy.Conditional.ConditionalEntropy
+import QICLean.ManyBody.Entropy.Filter.Optimizer
 
 /-!
 # Entropy inequalities for regions of a chain

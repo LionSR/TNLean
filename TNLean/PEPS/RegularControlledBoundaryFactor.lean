@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularCycleControlledBoundary
 import TNLean.PEPS.RegularBoundaryState
-import QICLean.Channel.MaximallyEntangled
+import QICLean.Channel.Entanglement.MaximallyEntangled
 
 /-!
 # A common relative-boundary factor of actual controlled blocks

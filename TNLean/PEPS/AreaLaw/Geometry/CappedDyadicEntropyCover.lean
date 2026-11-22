@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.LatticeDyadicRect
 import TNLean.Lattice.MarginalTails
-import QICLean.Entropy.RegionEntropy
-import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Entropy.RegionEntropy
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.PEPS.AreaLaw.TwoFamilies
 

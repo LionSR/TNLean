@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.AffineGramHull
-import QICLean.Algebra.MatrixUnitaryBetween
-import QICLean.Algebra.MatrixAux
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Algebra.Matrix.MatrixAux
 
 /-!
 # Endpoint normalization for MPU prefix Grams

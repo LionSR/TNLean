@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.EfficientSoftLowDensityWindows
 import TNLean.MPS.AreaLaw.SoftTruncationMPOAccuracy
-import QICLean.Analysis.SoftFamilyCalibration
-import QICLean.Analysis.GeometricOrderPolynomialBound
+import QICLean.Analysis.Parameter.SoftFamilyCalibration
+import QICLean.Analysis.Real.GeometricOrderPolynomialBound
 
 /-!
 # Scalar budgets for the calibrated efficient low-density family

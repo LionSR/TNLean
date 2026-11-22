@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.PreBialgebra
 import TNLean.MPS.MPDO.CompleteZipperFusionCoproduct
-import QICLean.Algebra.TraceFormDuality
+import QICLean.Algebra.Matrix.TraceFormDuality
 import Mathlib.RingTheory.MatrixAlgebra
 import Mathlib.RingTheory.TensorProduct.Pi
 

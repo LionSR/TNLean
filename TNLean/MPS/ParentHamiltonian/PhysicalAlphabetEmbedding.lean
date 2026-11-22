@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.VaryingOBCIntersection
-import QICLean.Analysis.EuclideanExtendByZero
+import QICLean.Analysis.TensorProduct.EuclideanExtendByZero
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Data.Fin.Embedding

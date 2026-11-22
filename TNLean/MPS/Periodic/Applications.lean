@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixIsometryEntries
-import QICLean.Channel.KrausRepresentation
-import QICLean.Kraus.MixedMap
+import QICLean.Algebra.Unitary.MatrixIsometryEntries
+import QICLean.Channel.KrausMap.KrausRepresentation
+import QICLean.Kraus.MixedMap.Basic
 import QICLean.Kraus.Transfer
 import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.Periodic.Defs
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 Copyright (c) 2026 TNLean contributors. All rights reserved.

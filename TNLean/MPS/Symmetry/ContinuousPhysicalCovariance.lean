@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.InfinitesimalPhysicalCovariance
-import QICLean.Analysis.KroneckerExponential
-import QICLean.Analysis.CoisometricCompression
+import QICLean.Analysis.Exponential.KroneckerExponential
+import QICLean.Analysis.Isometry.CoisometricCompression
 
 /-!
 # Coherent continuous physical covariance

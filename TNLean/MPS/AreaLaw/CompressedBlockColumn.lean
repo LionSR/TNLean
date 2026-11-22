@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ProtocolSweepPlacement
 import TNLean.Lattice.Compression.SeparateArityCompression
 import TNLean.Lattice.Compression.IdentityBondCutRank
-import QICLean.Analysis.RectangularTraceNormAlgebra
+import QICLean.Analysis.TraceNorm.RectangularTraceNormAlgebra
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Algebra.Order.Floor.Semiring
 

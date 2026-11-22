@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointProjectorComparison
 import TNLean.MPS.ParentHamiltonian.PhysicalReindexProjection
 import TNLean.MPS.Core.PhysicalReindexTransport
-import QICLean.Algebra.TraceReindex
-import QICLean.Algebra.FinCastAddNatAdd
+import QICLean.Algebra.Matrix.MatrixReindex
+import QICLean.Algebra.Combinatorics.FinSum
 
 /-!
 # Exchanging the two mixed endpoint sectors

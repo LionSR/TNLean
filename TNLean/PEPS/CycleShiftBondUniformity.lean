@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Logic.Equiv.Fin.Rotate
 
-import QICLean.Algebra.IndexInduction
+import QICLean.Algebra.Combinatorics.IndexInduction
 import TNLean.PEPS.CycleMPSTensor
 import TNLean.PEPS.FundamentalTheorem
 import TNLean.PEPS.IsoTransport

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.SingletMatrix
+import QICLean.Algebra.Unitary.SingletMatrix
 import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.Core.ScaledNormality
 import TNLean.MPS.Examples.AKLTParentHamiltonian
@@ -45,7 +45,7 @@ for `|+⟩ = -i(|-1⟩+|+1⟩)/√2`. Documented in
 `docs/paper-gaps/rmp_aklt_pauli_basis_sign.tex`.
 
 ## Main definitions
-* `Matrix.singletY` (in `QICLean.Algebra.SingletMatrix`) : the singlet matrix `Y` of
+* `Matrix.singletY` (in `QICLean.Algebra.Unitary.SingletMatrix`) : the singlet matrix `Y` of
   `eq:app:singlet-Y`
 * `MPSTensor.akltRMPSpinOneState` : the three spin-`1` states as coefficient matrices
 * `MPSTensor.akltTensorRMP` : the review's AKLT tensor

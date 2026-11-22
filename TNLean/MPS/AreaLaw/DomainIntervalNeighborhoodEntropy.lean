@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DomainIntervalNeighborhood
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
-import QICLean.Entropy.RegionStrongSubadditivity
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 

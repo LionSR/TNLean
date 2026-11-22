@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowDensityEntropy
-import QICLean.Analysis.LowDensityEntropyParameters
+import QICLean.Analysis.Parameter.LowDensityEntropyParameters
 
 /-!
 # The regularized entropy bound for an original low-energy band

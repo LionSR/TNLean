@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.FiniteGroupDetectorSpatial
-import QICLean.Channel.ComplementaryWeylTwirl
+import QICLean.Channel.Twirl.ComplementaryWeylTwirl
 
 /-!
 # Clock and shift instance of the spatial endpoint obstruction

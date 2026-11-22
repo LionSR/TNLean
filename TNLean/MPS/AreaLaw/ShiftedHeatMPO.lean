@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ClusterTruncationMPO
-import QICLean.Analysis.TraceExponentialPerturbation
+import QICLean.Analysis.Exponential.TraceExponentialPerturbation
 
 /-!
 # Constructed heat operators after a regional energy shift

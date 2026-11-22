@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BoundaryClosedness
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
-import QICLean.Algebra.StarSubalgebraIsotypic
+import QICLean.Algebra.StarSubalgebra.Isotypic
 
 /-!
 # Canonical local parents for star-closed arbitrary-boundary MPO symmetries

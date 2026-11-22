@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.ConjugationStrictEquivalence
 import TNLean.MPS.MPU.Simple
-import QICLean.Algebra.ShiftedZeroTraceNilpotent
+import QICLean.Spectral.Eigenvalue.ShiftedZeroTraceNilpotent
 
 /-!
 # The determinant invariant of conjugation symmetry

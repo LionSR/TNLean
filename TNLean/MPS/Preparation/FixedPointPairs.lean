@@ -3,12 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.MatrixSqrt
-import QICLean.Analysis.SpectralRadiusPowerDecay
+import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
+import QICLean.Spectral.Radius.PowerDecay
 import QICLean.Channel.Peripheral.IrreducibleChannel
-import QICLean.Channel.Primitive
-import QICLean.Kraus.InvariantProjection
-import QICLean.Algebra.MatrixCyclicPathSum
+import QICLean.Channel.Peripheral.Primitive
+import QICLean.Channel.Irreducible.InvariantProjection
+import QICLean.Algebra.Matrix.MatrixCyclicPathSum
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Core.CanonicalNormalization

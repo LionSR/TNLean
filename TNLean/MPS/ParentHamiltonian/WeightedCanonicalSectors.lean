@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.WeightedCanonicalPhysicalLimit
 import TNLean.MPS.ParentHamiltonian.HalfChainSourceSpectrum
-import QICLean.Algebra.ScalarCommutant
-import QICLean.Algebra.L2OpNormReindex
+import QICLean.Algebra.MatrixAlgebra.ScalarCommutant
+import QICLean.Analysis.Norm.L2OpNormReindex
 import Mathlib.LinearAlgebra.Eigenspace.Zero
 
 /-!

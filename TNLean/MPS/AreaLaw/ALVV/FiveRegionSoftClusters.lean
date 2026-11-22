@@ -4,11 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftResiduals
-import QICLean.Analysis.GroundEnergyBounds
-import QICLean.Analysis.LowEnergyCluster
-import QICLean.Analysis.LowEnergyCoordinates
-import QICLean.Analysis.ShiftedLowEnergyCoordinates
-import QICLean.Analysis.SpectralClusterNormPerturbation
+import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
+import QICLean.Spectral.LowEnergy.Cluster
+import QICLean.Spectral.LowEnergy.Coordinates
+import QICLean.Spectral.LowEnergy.ShiftedLowEnergyCoordinates
+import QICLean.Spectral.Perturbation.ClusterNormPerturbation
 
 /-!
 # Physical soft clusters and their actual Hermitian approximants

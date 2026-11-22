@@ -3,12 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.FrameOperator
-import QICLean.Algebra.MatrixUnitaryBetween
+import QICLean.Algebra.Hermitian.FrameOperator
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import Mathlib.LinearAlgebra.Matrix.Vec
 import Mathlib.Analysis.Matrix.PosDef
 import TNLean.MPS.MPU.AffineGramHull
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Global normalization of MPU prefix Grams

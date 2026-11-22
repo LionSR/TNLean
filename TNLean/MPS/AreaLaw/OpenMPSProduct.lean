@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.PlaceAlong
-import QICLean.Algebra.FiniteKroneckerProduct
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import TNLean.MPS.AreaLaw.OpenMPS
 import Mathlib.Logic.Equiv.Fin.Basic
 

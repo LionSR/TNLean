@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.VaryingOBCIntersection
 import QICLean.Kraus.RectangularChain
 import Mathlib.Data.List.OfFn
-import QICLean.Algebra.OrderedProduct
+import QICLean.Algebra.Word.OrderedProduct
 
 /-!
 # Reconstruction along a varying-bond open chain

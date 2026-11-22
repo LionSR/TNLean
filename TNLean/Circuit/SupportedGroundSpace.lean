@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Twirl
 import TNLean.Circuit.SupportedOperators
-import QICLean.Algebra.HermitianHelpers
-import QICLean.Analysis.TraceCFC
+import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
+import QICLean.Analysis.FunctionalCalculus.TraceCFC
 
 /-!
 # Simultaneous regional ground vectors on disjoint supports

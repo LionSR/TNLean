@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.GluingHamiltonian
 import TNLean.MPS.AreaLaw.ViableSet.ViableTrimmedWitness
 import TNLean.MPS.AreaLaw.ViableSet.GluingSupport
-import QICLean.Channel.BoundaryDensityMinimizer
+import QICLean.Channel.Gluing.BoundaryDensityMinimizer
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.FullIntervalViability
 import TNLean.MPS.AreaLaw.IntervalGenerators
-import QICLean.Analysis.ViableTrimmingRank
+import QICLean.Analysis.Parameter.ViableRefinementParameters
 
 /-!
 # Native matrix product vectors from weighted trimming bounds

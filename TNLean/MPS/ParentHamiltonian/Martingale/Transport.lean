@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.Basic
 import TNLean.MPS.ParentHamiltonian.CyclicWindow
-import QICLean.Analysis.ProjectionGeometry
+import QICLean.Analysis.Projection.Geometry
 
 /-!
 # Euclidean local projectors and ground-space / Hamiltonian transport

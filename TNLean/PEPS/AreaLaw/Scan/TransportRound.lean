@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Representation.ReplicaTransport.LeafMeasure
-import QICLean.Representation.ReplicaTransport.Energy
+import QICLean.ManyBody.Replica.BandMetric.LeafMeasure
+import QICLean.ManyBody.Replica.BandMetric.Energy
 import TNLean.PEPS.AreaLaw.Scan.Defs
 import TNLean.PEPS.AreaLaw.Scan.OldStateIntegral
 

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.ResetUnitary
 import TNLean.Lattice.ReplicaSwap
-import QICLean.Entropy.MutualInformationPerturbation
+import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.PEPS.AreaLaw.BufferedRectangles
 import TNLean.Lattice.Sheet.SwapCorrection

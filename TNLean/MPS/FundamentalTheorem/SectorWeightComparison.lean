@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.SharedInfra.SectorDecomposition
 import TNLean.MPS.Overlap.Basic
-import QICLean.Algebra.ScalarPowerSumIdentity
+import QICLean.Algebra.Polynomial.ScalarPowerSumIdentity
 
 import Mathlib.Data.Fintype.BigOperators
 

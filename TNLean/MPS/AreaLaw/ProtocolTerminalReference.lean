@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolInitialization
-import QICLean.Analysis.CyclicInsertion
-import QICLean.Analysis.ProductReferenceDensityError
+import QICLean.Analysis.TensorProduct.CyclicInsertion
+import QICLean.Channel.PartialTrace.ProductReferenceDensityError
 import Mathlib.Data.List.ProdSigma
 import Mathlib.Data.List.Nodup
 import TNLean.Lattice.PartyCircuit.SiteVectorAppend

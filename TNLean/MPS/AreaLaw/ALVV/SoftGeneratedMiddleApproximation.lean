@@ -11,7 +11,7 @@ import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import QICLean.ManyBody.Sites.PlaceAlong
 import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.MPDO.TraceChainHermitian
-import QICLean.Analysis.PrincipalSubmatrixNorm
+import QICLean.Analysis.Norm.PrincipalSubmatrixNorm
 
 /-!
 # A native middle approximation of the same soft Hamiltonian

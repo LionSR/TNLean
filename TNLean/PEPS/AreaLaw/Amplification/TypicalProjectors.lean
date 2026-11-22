@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.ExplicitThresholds
+import QICLean.Analysis.Real.ExplicitThresholds
 import TNLean.PEPS.AreaLaw.TailParameter
 import TNLean.PEPS.AreaLaw.ZeroBoundary
-import QICLean.Entropy.TypicalDensity
+import QICLean.Entropy.Typical.Density
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

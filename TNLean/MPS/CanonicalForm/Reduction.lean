@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Overlap.CastLemmas
 import TNLean.MPS.Structure.InvariantSubspaceDecomp
-import QICLean.Algebra.PosSemidefSupport
-import QICLean.Kraus.InvariantProjection
+import QICLean.Analysis.Projection.PosSemidefSupport
+import QICLean.Channel.Irreducible.InvariantProjection
 
 /-!
 # Iterated invariant-projection splitting: irreducible block decomposition

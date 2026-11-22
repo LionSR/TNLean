@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.MajumdarGhosh
 import TNLean.MPS.ParentHamiltonian.GroundSpace
-import QICLean.Algebra.TraceReindex
+import QICLean.Algebra.Matrix.MatrixReindex
 
 /-!
 # Majumdar-Ghosh: dimer coverings and the review's tensor

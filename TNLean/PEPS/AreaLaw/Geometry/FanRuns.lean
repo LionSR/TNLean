@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.CellFans
-import QICLean.Algebra.IndexInduction
+import QICLean.Algebra.Combinatorics.IndexInduction
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 
 /-!

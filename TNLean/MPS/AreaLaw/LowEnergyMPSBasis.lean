@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LowDensityDesignatedApproximation
 import TNLean.MPS.AreaLaw.OpenMPSSpan
-import QICLean.Analysis.ApproximateBasisImage
-import QICLean.Analysis.ViableSubspaceOrder
+import QICLean.Analysis.Projection.ApproximateBasisImage
+import QICLean.Analysis.Subspace.ViableSubspace
 
 /-!
 # A matrix product basis for an approximation to an original low-energy band

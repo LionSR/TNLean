@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalParityProductSupport
 import TNLean.MPS.AreaLaw.OpenMPS
-import QICLean.Algebra.OperatorSchmidtProducts
-import QICLean.Entropy.SupportedOperatorSchmidtWords
+import QICLean.Algebra.OperatorSchmidt.Bounds
+import QICLean.ManyBody.Entropy.Cut.SupportedOperatorSchmidtWords
 
 /-!
 # Cut ranks of the actual physical parity products

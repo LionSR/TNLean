@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.GaussianFilter.GroundEstimate
-import QICLean.Analysis.GlobalGap
-import QICLean.Analysis.UnitaryEvolution
+import QICLean.Spectral.Filter.Gaussian.GroundEstimate
+import QICLean.Analysis.Order.GlobalGap
+import QICLean.Analysis.Exponential.UnitaryEvolution
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import QICLean.Analysis.GaussianFilter.Kernel
+import QICLean.Analysis.Calculus.Kernel
 
 /-!
 # The Gaussian time average of a gapped Hamiltonian

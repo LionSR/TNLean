@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Fintype.EquivFin
 import Mathlib.Data.Fintype.Prod
-import QICLean.Analysis.ViableSubspaceBootstrap
-import QICLean.Analysis.ViableSubspaceCoordinates
+import QICLean.Probability.Sampling.ViableSubspaceBootstrap
+import QICLean.Analysis.Subspace.ViableSubspaceCoordinates
 
 /-!
 # Configuration matrix units on a short physical region

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.Transfer
 import TNLean.Spectral.TransferOperatorGapInjective
-import QICLean.QPF.Assembly
+import QICLean.Kraus.PrimitiveFixedPoint.Assembly
 
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 

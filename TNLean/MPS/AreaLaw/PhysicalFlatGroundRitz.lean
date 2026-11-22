@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.FullIntervalFilterIteration
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
-import QICLean.Analysis.RitzCompression
-import QICLean.Analysis.ViableSubspaceDimension
+import QICLean.Spectral.LowEnergy.RitzCompression
+import QICLean.Analysis.Subspace.ViableSubspace
 
 /-!
 # Exact Ritz extraction from the same root in the flat case

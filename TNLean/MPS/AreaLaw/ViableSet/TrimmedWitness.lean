@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.ConstantRankCut
 import TNLean.MPS.AreaLaw.ViableSet.Gluing
-import QICLean.Channel.TrimmedWitness
+import QICLean.Channel.Schmidt.TrimmedWitness
 
 /-!
 # The trimmed witness at a cut of the chain

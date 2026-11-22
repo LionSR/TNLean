@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Irreducible.Defs
-import QICLean.Algebra.HermitianHelpers
+import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
 import QICLean.Algebra.PerronFrobenius.PrimitiveAperiodic
 import TNLean.MPS.MPDO.PhysicalSectorDirectedCut
 import TNLean.MPS.MPDO.PhysicalSectorVirtualSpanning

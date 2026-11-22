@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DyadicLongIntervalLowDensityFamily
 import TNLean.MPS.AreaLaw.ShortRegionViableFamily
-import QICLean.Analysis.ViableSubspaceOrder
+import QICLean.Analysis.Subspace.ViableSubspace
 
 /-!
 # Dyadic low-energy improving families on every prescribed interval

@@ -8,7 +8,7 @@ import TNLean.MPS.AreaLaw.SoftTruncationMPOAccuracy
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.MPDO.TraceChainHermitian
 import QICLean.ManyBody.Sites.Twirl
-import QICLean.Analysis.SoftTruncationHeatExpansion
+import QICLean.Spectral.Filter.SoftTruncationHeatExpansion
 import Mathlib.Tactic.Module
 
 /-!

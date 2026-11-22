@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.NestedChebyshevViability
-import QICLean.Analysis.SpectralProjectorPower
-import QICLean.Analysis.TensorOperatorPower
+import QICLean.Spectral.LowEnergy.ChebyshevViability
+import QICLean.Analysis.FunctionalCalculus.ViableSubspaceSpectralProjector
+import QICLean.Analysis.TensorProduct.OperatorPower
 
 /-!
 # Words of one Chebyshev filter between two nested spectral spaces

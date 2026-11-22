@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.RegularOverlappingConstraints
-import QICLean.Representation.FiniteGroupUnitaryAverage
+import QICLean.Representation.Twirl.FiniteGroupUnitaryAverage
 
 /-!
 # Orthogonal projectors for the regular regional constraints

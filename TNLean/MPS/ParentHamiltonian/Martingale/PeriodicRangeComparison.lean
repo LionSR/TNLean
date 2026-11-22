@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian
-import QICLean.Analysis.EuclideanFiberwiseMap
+import QICLean.Analysis.TensorProduct.EuclideanFiberwiseMap
 
 /-!
 # Periodic comparison from a finite open interval

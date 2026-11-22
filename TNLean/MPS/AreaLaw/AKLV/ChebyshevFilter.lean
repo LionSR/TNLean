@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AKLV.PolynomialRank
-import QICLean.Analysis.ChebyshevGroundFilter
+import QICLean.Spectral.Filter.ChebyshevGroundFilter
 
 /-!
 # An actual physical Chebyshev filter with the AKLV rank bound

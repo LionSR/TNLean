@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.MPUCanonicalForm
 import TNLean.MPS.MPDO.FirstSite
 import TNLean.MPS.Periodic.Applications
-import QICLean.Algebra.MatrixReindexUnitary
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 /-!
 # Canonical form under a unitary on the physical output

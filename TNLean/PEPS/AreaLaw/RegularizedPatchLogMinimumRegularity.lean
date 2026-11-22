@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RegularizedPatchRadiusDerivative
 import TNLean.PEPS.AreaLaw.RegularizedPatchLogMinimum
-import QICLean.Analysis.MinimumEnvelope
+import QICLean.Analysis.Real.MinimumEnvelope
 import Mathlib.MeasureTheory.Function.AbsolutelyContinuous
 
 /-!

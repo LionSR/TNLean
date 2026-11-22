@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SupportedCutRank
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
-import QICLean.Channel.SchmidtRankAction
+import QICLean.Channel.Schmidt.RankAction
 
 /-!
 # Bond dimension after applying an operator

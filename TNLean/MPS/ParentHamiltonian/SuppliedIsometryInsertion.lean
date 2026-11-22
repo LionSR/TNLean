@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.RFP.ZeroCorrelationLength
-import QICLean.Channel.Stinespring
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Channel.Dilation.Stinespring
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # One-site insertion coordinates for a supplied physical isometry

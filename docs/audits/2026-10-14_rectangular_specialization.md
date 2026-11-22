@@ -58,8 +58,8 @@ Accepted providers at the frozen TNLean parent:
 | `AreaLaw/VertexBoundaryCorollaries` | Same-constant 4C/2C inequalities |
 | `AreaLaw/TwoFamilies` | Equality between domain and generic finite-product regional entropy |
 | `AreaLaw/ZeroBoundary` | Norm-only q=1/empty-cut facts and physical zero-crossing-boundary theorem, used by consumers |
-| `QICLean/Algebra/HermitianPartSum` | Hermitian-part sum equals a Hermitian total |
-| `QICLean/Algebra/L2OpNormReindex` | Exact Euclidean operator-norm invariance under coordinate permutation |
+| `QICLean/Algebra/Hermitian/HermitianPartSum` | Hermitian-part sum equals a Hermitian total |
+| `QICLean/Analysis/Norm/L2OpNormReindex` | Exact Euclidean operator-norm invariance under coordinate permutation |
 
 No unaccepted provider from another branch is used. The unresolved analytic
 premise is explicitly quantified, not treated as an accepted theorem.

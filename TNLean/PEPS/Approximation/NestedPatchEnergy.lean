@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 
-import QICLean.Analysis.OperatorMean.MatrixPowers
+import QICLean.Analysis.FunctionalCalculus.MatrixPowers
 import TNLean.PEPS.Approximation.SquareInteractionTerms
 import TNLean.PEPS.AreaLaw.Geometry.NestedPatches
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerFilter

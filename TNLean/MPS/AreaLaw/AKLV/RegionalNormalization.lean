@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.SupportedNormalizedGroundSpace
 import TNLean.MPS.AreaLaw.AKLV.NormalizedChain
-import QICLean.Analysis.GroundEnergyBounds
+import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
 import Mathlib.Order.Interval.Finset.Nat
 
 /-!

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.OpenMPSSpan
-import QICLean.Analysis.ViableSubspace
+import QICLean.Analysis.Subspace.ViableSubspace
 import Mathlib.Algebra.Order.BigOperators.Ring.Finset
 import Mathlib.Analysis.InnerProductSpace.PiL2
 

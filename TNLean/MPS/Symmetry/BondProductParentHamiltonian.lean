@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.BondInterpolation
 import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
-import QICLean.Analysis.CommutingProjectionProduct
+import QICLean.Analysis.Projection.CommutingProjectionProduct
 
 /-!
 # Parent Hamiltonian of independent bonds

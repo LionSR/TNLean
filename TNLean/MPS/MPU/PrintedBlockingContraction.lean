@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.PrintedBlockingGates
 import TNLean.MPS.MPU.TwoSiteStandardFormOpenWord
 import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
-import QICLean.Algebra.MatrixCyclicPathSum
+import QICLean.Algebra.Matrix.MatrixCyclicPathSum
 
 /-!
 # Open contraction of the printed blocking circuits

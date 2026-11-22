@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.PhysicalDetectability
 import TNLean.MPS.AreaLaw.PhysicalDetectabilityGap
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
-import QICLean.Algebra.MatrixAux
-import QICLean.Analysis.ProjectionResidual
+import QICLean.Algebra.Matrix.MatrixAux
+import QICLean.Analysis.Projection.Residual
 
 /-!
 # The actual regional frustration-free truncation

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.ContinuousIdempotentFrames
+import QICLean.Analysis.Topology.ContinuousIdempotentFrames
 import Mathlib.Analysis.Normed.Ring.Units
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Topology.Instances.Matrix
@@ -22,7 +22,7 @@ trace data R then give multiplication coefficients (C† C)⁻¹ C† R.
 
 This file establishes continuity of those coefficients on a constant-rank
 neighborhood where a fixed section persists (see
-`QICLean.Analysis.ContinuousIdempotentFrames`). Identifying the coefficients with the
+`QICLean.Analysis.Topology.ContinuousIdempotentFrames`). Identifying the coefficients with the
 quotient product is a separate algebraic step.
 Auxiliary context: arXiv:1010.3732, Section II.F.2, lines 953–993.
 -/

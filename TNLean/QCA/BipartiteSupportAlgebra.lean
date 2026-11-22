@@ -6,9 +6,9 @@ Authors: TNLean contributors
 import Mathlib.Algebra.Star.Subalgebra
 import Mathlib.LinearAlgebra.Basis.VectorSpace
 import Mathlib.LinearAlgebra.Dimension.Free
-import QICLean.Algebra.MatrixKroneckerEmbed
-import QICLean.Algebra.OperatorBlock
-import QICLean.Channel.TensorMap
+import QICLean.Algebra.Kronecker.KroneckerEmbed
+import QICLean.Algebra.OperatorSchmidt.Basic
+import QICLean.Algebra.Kronecker.TensorMap
 
 /-!
 # Bipartite support algebras

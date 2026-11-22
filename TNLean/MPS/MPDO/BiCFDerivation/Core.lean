@@ -4,12 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PerCopyHorizontalCF
-import QICLean.Algebra.TraceFormDuality
+import QICLean.Algebra.Matrix.TraceFormDuality
 import TNLean.MPS.SharedInfra.WordTupleGauge
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
 import Mathlib.LinearAlgebra.Prod
 import Mathlib.RingTheory.Noetherian.Defs
-import QICLean.Algebra.MatrixTracePairing
+import QICLean.Algebra.Matrix.MatrixTracePairing
 
 /-!
 # Finite-word trace separation for MPDO block families

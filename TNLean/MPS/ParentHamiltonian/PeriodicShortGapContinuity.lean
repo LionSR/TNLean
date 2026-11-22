@@ -8,7 +8,7 @@ import TNLean.MPS.ParentHamiltonian.PeriodicBoundaryReduction
 import TNLean.MPS.ParentHamiltonian.Nonvanishing
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteRangeKnabeGap
-import QICLean.Analysis.CompactKernelGap
+import QICLean.Spectral.Gap.CompactKernelGap
 
 /-!
 # Continuity of short periodic parent-Hamiltonian ground lines

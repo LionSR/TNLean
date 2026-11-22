@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Chain.VaryingBondChain
-import QICLean.Algebra.IndexInduction
+import QICLean.Algebra.Combinatorics.IndexInduction
 import QICLean.Kraus.RectangularChain
-import QICLean.Channel.WindowMinorization
+import QICLean.Channel.Choi.WindowMinorization
 
 /-!
 # Actual rectangular intervals of a varying-bond ring

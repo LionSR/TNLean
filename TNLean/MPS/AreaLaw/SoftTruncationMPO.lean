@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ShiftedHeatMPO
 import TNLean.MPS.MPDO.TraceChainLinearCombination
-import QICLean.Analysis.SoftTruncationHeatExpansion
-import QICLean.Algebra.HermitianPartSum
+import QICLean.Spectral.Filter.SoftTruncationHeatExpansion
+import QICLean.Algebra.Hermitian.HermitianPartSum
 
 /-!
 # Actual soft-truncation tensors from separate heat approximants

@@ -4,12 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Reduction
-import QICLean.Algebra.MatrixAux
+import QICLean.Algebra.Matrix.MatrixAux
 import QICLean.Channel.FixedPoint.SupportInvariance
-import QICLean.Channel.KrausMap
-import QICLean.Kraus.InvariantProjection
+import QICLean.Channel.KrausMap.KrausMap
+import QICLean.Channel.Irreducible.InvariantProjection
 import QICLean.Kraus.Transfer
-import QICLean.QPF.Assembly
+import QICLean.Kraus.PrimitiveFixedPoint.Assembly
 import Mathlib.LinearAlgebra.Matrix.IsDiag
 
 /-!

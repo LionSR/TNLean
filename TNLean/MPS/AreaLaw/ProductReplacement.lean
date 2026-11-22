@@ -4,10 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
-import QICLean.Analysis.ProductOverlapReplacement
-import QICLean.Analysis.ChronologicalGarbage
+import QICLean.Analysis.Projection.ProductOverlapReplacement
+import QICLean.Channel.Dilation.ChronologicalGarbage
 import TNLean.MPS.AreaLaw.SupportedCutRank
-import QICLean.Entropy.RightLocalLift
+import QICLean.ManyBody.Entropy.Cut.RightLocalLift
+import QICLean.Channel.Schmidt.Rank
 
 /-!
 # Product replacement without increasing the MPS bond dimension

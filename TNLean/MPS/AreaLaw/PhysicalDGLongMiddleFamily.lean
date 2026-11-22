@@ -3,12 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.ChebyshevViability
-import QICLean.Analysis.LowEnergyCoordinates
-import QICLean.Analysis.ViableSubspaceBootstrap
-import QICLean.Analysis.ViableSubspaceCoordinates
-import QICLean.Analysis.ViableSubspaceDimension
-import QICLean.Analysis.ViableSubspaceOrder
+import QICLean.Spectral.LowEnergy.ChebyshevViability
+import QICLean.Spectral.LowEnergy.Coordinates
+import QICLean.Probability.Sampling.ViableSubspaceBootstrap
+import QICLean.Analysis.Subspace.ViableSubspaceCoordinates
+import QICLean.Analysis.Subspace.ViableSubspace
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual

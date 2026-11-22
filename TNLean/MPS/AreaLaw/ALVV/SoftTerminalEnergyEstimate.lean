@@ -4,12 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.SoftParentEnergy
-import QICLean.Entropy.ViableSampling.CanonicalHalfSamplingParent
-import QICLean.Analysis.RegionalEnergyCalibration
-import QICLean.Analysis.ViableProjectionNonzero
-import QICLean.Analysis.CompressionEnergyInterval
-import QICLean.Analysis.QuadraticScalarShift
-import QICLean.Entropy.RegionalOperatorCoordinates
+import QICLean.ManyBody.Subspace.Sampling.CanonicalHalfSamplingParent
+import QICLean.Analysis.Projection.RegionalEnergyCalibration
+import QICLean.Analysis.Subspace.ViableSubspace
+import QICLean.Spectral.Eigenvalue.CompressionEnergyInterval
+import QICLean.Analysis.Order.QuadraticScalarShift
+import QICLean.ManyBody.Entropy.Cut.RegionalOperatorCoordinates
 
 /-!
 # Soft energy of the actual terminal untrimmed image

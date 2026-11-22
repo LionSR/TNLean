@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceCompressedDensity
-import QICLean.Channel.PartialTrace
+import QICLean.Algebra.PartialTrace
 
 /-!
 # Physical density after tracing retained garbage

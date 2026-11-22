@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.BilinearForm.Orthogonal
-import QICLean.Channel.KrausMap
+import QICLean.Channel.KrausMap.KrausMap
 import QICLean.Channel.Schwarz.Closure
-import QICLean.Channel.InjectivePositiveMapRank
+import QICLean.Channel.PSDConeAutomorphism.InjectivePositiveMapRank
 import QICLean.Kraus.ChoiRankSpan
 import TNLean.MPS.Periodic.RootWordSpan
 import TNLean.MPS.Periodic.Symmetry.Theorem41Reverse

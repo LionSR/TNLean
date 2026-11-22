@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSupport
-import QICLean.Algebra.MatrixCoordinateInclusion
-import QICLean.Algebra.FinCastAddNatAdd
+import QICLean.Algebra.Unitary.MatrixCoordinateInclusion
+import QICLean.Algebra.Combinatorics.FinSum
 
 /-!
 # The embedded first endpoint inside the extended local support

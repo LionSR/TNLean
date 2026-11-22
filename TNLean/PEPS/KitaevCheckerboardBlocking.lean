@@ -11,7 +11,7 @@ import Mathlib.Data.Fin.VecNotation
 import Mathlib.Basic.Complex.Basic
 import Mathlib.Algebra.BigOperators.Group.Finset.Piecewise
 import Mathlib.Tactic.FinCases
-import QICLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.PEPS.SemiRegularBondSupport
 import TNLean.PEPS.QuantumDoubleTensor
 

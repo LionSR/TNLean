@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.Defs
 import TNLean.MPS.Periodic.StepOrbitSectors
-import QICLean.Channel.KrausCornerCompression
+import QICLean.Channel.KrausMap.KrausCornerCompression
 import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral
 import TNLean.MPS.Core.BlockingTransfer
 

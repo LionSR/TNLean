@@ -8,7 +8,7 @@ import TNLean.PEPS.RegularTorusCompatibility
 import QICLean.Representation.Character.Twirl
 import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Extraction of the two closure operators from a torus projector state

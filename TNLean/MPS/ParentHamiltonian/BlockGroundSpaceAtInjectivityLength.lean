@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockWordSpanNormalization
 import TNLean.MPS.ParentHamiltonian.BlockPeriodicClosure
-import QICLean.Analysis.WeightedPositiveKernel
+import QICLean.Spectral.Gap.WeightedPositiveKernel
 
 /-!
 # Periodic ground spaces at the simultaneous injectivity length

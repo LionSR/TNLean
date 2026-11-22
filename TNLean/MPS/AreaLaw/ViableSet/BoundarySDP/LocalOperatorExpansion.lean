@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.FiniteKroneckerProduct
-import QICLean.Entropy.SupportedMarginalTails
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
 
 /-!
 # Two-site operators as finite sums of product operators

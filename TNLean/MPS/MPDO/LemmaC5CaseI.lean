@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixCyclicTracePower
-import QICLean.Algebra.MatrixIsometryEntries
+import QICLean.Algebra.Matrix.MatrixCyclicTracePower
+import QICLean.Algebra.Unitary.MatrixIsometryEntries
 import QICLean.Algebra.PerronFrobenius.Idempotent
 import QICLean.Algebra.PerronFrobenius.PerronVector
 import QICLean.Algebra.PerronFrobenius.RankOne
 import QICLean.Algebra.PerronFrobenius.Substochastic
-import QICLean.Algebra.TraceReindex
-import QICLean.Analysis.MatrixTraceInequalities
+import QICLean.Algebra.Matrix.MatrixReindex
+import QICLean.Analysis.TraceInequality.MatrixTraceInequalities
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.MPDO.ActiveSectorTraceMatrixZCL
 import TNLean.MPS.MPDO.CyclicActiveAdjacentCoefficientExtraction

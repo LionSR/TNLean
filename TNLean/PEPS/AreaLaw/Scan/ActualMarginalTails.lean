@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.LatticeConstraints
 import TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms
-import QICLean.Analysis.RootChannel
+import QICLean.Analysis.Norm.RootChannel
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

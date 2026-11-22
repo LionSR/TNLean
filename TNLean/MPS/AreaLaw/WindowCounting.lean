@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.AreaLaw.Counting
-import QICLean.Algebra.FinsetComplSubtype
+import QICLean.Algebra.Combinatorics.FinSum
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

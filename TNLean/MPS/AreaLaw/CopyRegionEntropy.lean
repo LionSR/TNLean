@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.CopyProduct
 import QICLean.ManyBody.Sites.Lattice.Chain
-import QICLean.Entropy.RegionSplit
-import QICLean.Entropy.MovementEtaRegional
-import QICLean.Entropy.OrderedEntropyAlgebra
+import QICLean.ManyBody.Entropy.Cut.RegionSplit
+import QICLean.ManyBody.Entropy.MovementEtaRegional
+import QICLean.Algebra.Combinatorics.OrderedSetFunction
 
 /-!
 # Regional entropy of consecutive block products

@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.Transfer
-import QICLean.Algebra.HermitianHelpers
-import QICLean.Algebra.PosSemidefSupport
+import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
+import QICLean.Analysis.Projection.PosSemidefSupport
 import QICLean.Channel.FixedPoint.SupportInvariance
 
 import Mathlib.Analysis.Matrix.Spectrum

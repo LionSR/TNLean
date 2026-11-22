@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.OldStateIntegral
-import QICLean.Representation.ReplicaTransport.IntegratedEntropy
+import QICLean.ManyBody.Replica.BandMetric.IntegratedEntropy
 
 /-!
 # Parameter integrability of the actual old-state coherent integral

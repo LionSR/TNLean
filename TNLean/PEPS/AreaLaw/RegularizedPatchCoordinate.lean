@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
-import QICLean.Analysis.CfcConjugation
+import QICLean.Analysis.FunctionalCalculus.CfcConjugation
 
 /-!
 # A unitary change of one regularized density

@@ -6,11 +6,11 @@ Authors: TNLean contributors
 import TNLean.Lattice.StateSpace
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.Entropy.RegionUnion
-import QICLean.Entropy.SupportedMarginalTails
-import QICLean.Entropy.TypicalMarginalMass
-import QICLean.Analysis.TypicalSet
-import QICLean.Algebra.TraceReindex
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
+import QICLean.ManyBody.Entropy.Typical.TypicalMarginalMass
+import QICLean.Entropy.Typical.TypicalSet
+import QICLean.Algebra.Matrix.MatrixReindex
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

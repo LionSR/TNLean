@@ -7,11 +7,11 @@ import TNLean.PEPS.AreaLaw.InitialBuffer
 import TNLean.PEPS.AreaLaw.RotatedChainRule
 import TNLean.PEPS.AreaLaw.SafeBoxChildren
 import TNLean.Lattice.MarginalTails
-import QICLean.Entropy.RegionEntropy
-import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Entropy.RegionEntropy
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.PEPS.AreaLaw.TwoFamilies
-import QICLean.Analysis.ScaleRecurrence
+import QICLean.Analysis.Real.ScaleRecurrence
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

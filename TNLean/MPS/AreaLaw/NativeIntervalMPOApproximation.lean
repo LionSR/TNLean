@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import QICLean.ManyBody.Sites.PlaceAlong
-import QICLean.Analysis.PrincipalSubmatrixNorm
+import QICLean.Analysis.Norm.PrincipalSubmatrixNorm
 
 /-!
 # Native restriction of a supported operator approximation

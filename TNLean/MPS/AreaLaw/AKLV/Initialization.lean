@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AKLV.FavorableFilter
-import QICLean.Analysis.NormSquaredTriangle
-import QICLean.Channel.FilterNormalization
-import QICLean.Entropy.FilterPrefix
+import QICLean.Analysis.Norm.SquaredTriangle
+import QICLean.Channel.Schmidt.FilterNormalization
+import QICLean.ManyBody.Entropy.Filter.Prefix
 import Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional
 
 /-!

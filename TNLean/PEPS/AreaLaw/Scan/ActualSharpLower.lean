@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scan.ActualTerminalPartitions
 import TNLean.PEPS.AreaLaw.Scan.ActualGlobalReplicaEnergy
 import TNLean.PEPS.AreaLaw.Scan.AugmentedRootCompression
-import QICLean.Algebra.ProjectionRangeIsometry
-import QICLean.Analysis.RegionalSharpLowerNorm
+import QICLean.Algebra.Hermitian.ProjectionRangeIsometry
+import QICLean.ManyBody.Replica.LowDefect.RegionalSharpLowerNorm
 
 /-!
 # Sharp lower bounds for the actual fill and charge roots

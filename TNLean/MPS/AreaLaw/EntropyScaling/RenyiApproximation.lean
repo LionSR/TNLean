@@ -5,11 +5,11 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.EntropyScaling.EfficientApproximation
 import TNLean.MPS.AreaLaw.MPSApproximation
-import QICLean.Entropy.FlatDensityEntropy
-import QICLean.Entropy.RenyiTail
+import QICLean.Entropy.Renyi.FlatDensityEntropy
+import QICLean.Entropy.Renyi.Tail
 import QICLean.Entropy.Renyi.Smooth
 import TNLean.MPS.AreaLaw.EntropyScaling.SmoothApproximation
-import QICLean.Analysis.SubnormalizedPureStateError
+import QICLean.Analysis.TraceNorm.SubnormalizedPureStateError
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 
 /-!

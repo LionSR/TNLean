@@ -3,13 +3,13 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixAlgebraCoordinates
+import QICLean.Algebra.MatrixAlgebra.MatrixAlgebraCoordinates
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.LinearAlgebra.Matrix.ToLin
 import Mathlib.Algebra.Algebra.Bilinear
 import Mathlib.Algebra.Algebra.Subalgebra.Basic
-import QICLean.Analysis.NewtonIdempotent
-import QICLean.Analysis.ContinuousIdempotentFrames
+import QICLean.Analysis.Topology.NewtonIdempotent
+import QICLean.Analysis.Topology.ContinuousIdempotentFrames
 import TNLean.MPS.Structure.ContinuousTraceQuotientUnit
 
 /-!

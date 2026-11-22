@@ -3,25 +3,24 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.OperatorSchmidtCut
+import QICLean.Algebra.OperatorSchmidt.OperatorSchmidtCut
 import Mathlib.Data.Finset.SymmDiff
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Logic.Equiv.Basic
 import QICLean.ManyBody.Sites.RegionMatrix
-import QICLean.Algebra.OperatorSchmidtPartition
+import QICLean.ManyBody.Sites.OperatorSchmidtPartition
 import TNLean.Lattice.Sheet.Splitting
 import Mathlib.LinearAlgebra.Matrix.Reindex
 import Mathlib.Data.List.OfFn
 import Mathlib.Basic.Complex.Basic
 import TNLean.MPS.AreaLaw.TwoWindowOperatorForms
-import QICLean.Algebra.WeightedFrequencySchmidtRank
-import QICLean.Algebra.TwoWindowCounts
+import QICLean.Algebra.OperatorSchmidt.WeightedFrequencySchmidtRank
+import QICLean.Algebra.Combinatorics.TwoWindowCounts
 import TNLean.MPS.AreaLaw.IntervalSymmDiff
-import QICLean.Algebra.LowFrequencyWordPartition
-import QICLean.Algebra.OperatorSchmidtBounds
-import QICLean.Algebra.OperatorSchmidtProducts
+import QICLean.Algebra.Word.LowFrequencyWordPartition
+import QICLean.Algebra.OperatorSchmidt.Bounds
 import Mathlib.Algebra.Polynomial.AlgebraMap
-import QICLean.Algebra.OperatorSchmidt
+import QICLean.Algebra.OperatorSchmidt.Basic
 import TNLean.Algebra.TwoWindowPolynomialRecovery
 
 /-!

@@ -48,8 +48,8 @@ private-helper invocation with `Matrix.mulVecLin_mul`,
 `Submodule.map_top`. Its final `Matrix.toLin'` / `toMatrix_openRegionMap`
 rewrite is unchanged. Every public theorem header and definition is
 unchanged. The new theorem is available through the existing import chain
-`RegionReducedDensity` → `QICLean.Channel.MaximalOverlap` →
-`QICLean.Channel.SchmidtRank` → `Mathlib.LinearAlgebra.Matrix.Rank`.
+`RegionReducedDensity` → `QICLean.Channel.Schmidt.MaximalOverlap` →
+`QICLean.Channel.Schmidt.Rank` → `Mathlib.LinearAlgebra.Matrix.Rank`.
 Source-level equivalence does not establish successful Lean elaboration.
 
 ## Required structural recheck

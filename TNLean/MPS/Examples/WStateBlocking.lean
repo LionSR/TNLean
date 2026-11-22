@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.ComplexSqrt
-import QICLean.Algebra.FiniteKroneckerProduct
+import QICLean.Analysis.Real.ComplexSqrt
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Examples.PVBS
 import TNLean.MPS.Examples.WStatePrimeLengthBound

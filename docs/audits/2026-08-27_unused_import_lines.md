@@ -9,7 +9,7 @@ Net delta of this sweep: −23 Lean lines (one of the twenty-four edits is a
 one-for-one replacement, not a deletion).
 
 A later cross-cutting pass added one further line to the table below, the
-`QICLean.Kraus.MixedMap` import of `TNLean/MPS/MPDO/PureRFPSAL.lean`, bringing
+`QICLean.Kraus.MixedMap.Basic` import of `TNLean/MPS/MPDO/PureRFPSAL.lean`, bringing
 the sweep to −24 Lean lines across twenty-five edits. That module keeps four
 other TNLean importers, so the removal narrows one module's import closure
 rather than dropping the mixed-map development from the build.
@@ -58,7 +58,7 @@ declarations.
 
 | File | Change |
 |---|---|
-| `TNLean/MPS/Irreducible/PeriodicBlocking.lean` | `QICLean.Channel.Peripheral.CyclicDecomposition` replaced by `QICLean.Algebra.CornerCompression` |
+| `TNLean/MPS/Irreducible/PeriodicBlocking.lean` | `QICLean.Channel.Peripheral.CyclicDecomposition` replaced by `QICLean.Algebra.Hermitian.CornerCompression` |
 | `TNLean/MPS/CanonicalForm/CyclicSectors/Basic.lean` | `QICLean.Channel.Peripheral.CyclicDecomposition` and `QICLean.Channel.Peripheral.Conjugation` removed |
 | `TNLean/MPS/Periodic/Defs.lean` | `QICLean.Channel.Peripheral.CyclicDecomposition` removed |
 | `TNLean/MPS/Periodic/Symmetry/EqualCaseFTHyp.lean` | `QICLean.Channel.Peripheral.CyclicDecomposition` removed |
@@ -85,8 +85,8 @@ importer set, it does not disconnect it.
 |---|---|
 | `TNLean/MPS/Irreducible/FixedPointProjection.lean` | `QICLean.Channel.Irreducible.Basic` |
 | `TNLean/MPS/MPDO/BondTwoSingletonPhysicalGauge.lean` | `TNLean.MPS.CanonicalForm.CPSVBlocking` |
-| `TNLean/MPS/MPDO/NeighboringTraceObstruction.lean` | `QICLean.Algebra.MatrixCyclicTracePower` |
-| `TNLean/MPS/MPDO/PureRFPSAL.lean` | `QICLean.Kraus.MixedMap` |
+| `TNLean/MPS/MPDO/NeighboringTraceObstruction.lean` | `QICLean.Algebra.Matrix.MatrixCyclicTracePower` |
+| `TNLean/MPS/MPDO/PureRFPSAL.lean` | `QICLean.Kraus.MixedMap.Basic` |
 | `TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.lean` | `TNLean.MPS.MPDO.SimpleTensor` |
 | `TNLean/MPS/Overlap/CastDecay.lean` | `TNLean.Spectral.TransferOperatorGapInjective` |
 | `TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalCrossing.lean` | `TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalLastCrossing` |
@@ -118,10 +118,10 @@ sweep does not re-propose them.
 |---|---|---|---|
 | `TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean` | `TNLean.MPS.Core.TracePairing` | `ker_bot_of_range_le` | `TNLean/PEPS/CycleMPSWordTransport.lean:122` |
 | `TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean` | `TNLean.MPS.Core.TracePairing` | `Matrix.trace_mul_right_eq_zero_iff` | same file, line 160 |
-| `TNLean/MPS/Core/MultiBlock.lean` | `QICLean.Algebra.TraceReindex` | `Matrix.trace_reindex` | `TNLean/MPS/Core/BlockTriangularTrace.lean`, `TNLean/MPS/SharedInfra/BlockAssembly.lean` |
-| `TNLean/Algebra/CommutingProjectionProduct.lean` | `QICLean.Algebra.PiProductTrace` | `Matrix.trace_piProduct` | `TNLean/MPS/RFP/BeigiSectorGraph.lean:457` |
+| `TNLean/MPS/Core/MultiBlock.lean` | `QICLean.Algebra.Matrix.MatrixReindex` | `Matrix.trace_reindex` | `TNLean/MPS/Core/BlockTriangularTrace.lean`, `TNLean/MPS/SharedInfra/BlockAssembly.lean` |
+| `TNLean/Algebra/CommutingProjectionProduct.lean` | `QICLean.Algebra.Kronecker.KroneckerFactorPositivity` | `Matrix.trace_piProduct` | `TNLean/MPS/RFP/BeigiSectorGraph.lean:457` |
 | `TNLean/MPS/FundamentalTheorem/SectorBNT/Basic.lean` | `TNLean.MPS.FundamentalTheorem.SectorWeightComparison` | `Matrix.charpoly_eq_of_forall_trace_pow_eq` | `TNLean/MPS/FundamentalTheorem/SectorBNT/SupplierNormalized.lean:60` |
-| `TNLean/MPS/FundamentalTheorem/SectorWeightComparison.lean` | `QICLean.Algebra.ScalarPowerSumIdentity` | `Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card` | `TNLean/MPS/MPDO/BNTMultiplicityNormalization.lean:150`, `TNLean/MPS/FundamentalTheorem/SectorBNT/WeightEquiv.lean:129` |
+| `TNLean/MPS/FundamentalTheorem/SectorWeightComparison.lean` | `QICLean.Algebra.Polynomial.ScalarPowerSumIdentity` | `Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card` | `TNLean/MPS/MPDO/BNTMultiplicityNormalization.lean:150`, `TNLean/MPS/FundamentalTheorem/SectorBNT/WeightEquiv.lean:129` |
 | `TNLean/MPS/MPDO/BNTSectorAreaLaw.lean` | `TNLean.MPS.MPDO.PhysicalSupportRestriction` | `commonWeightAbsorbedBasisMPOTensor_isInjective` | same file, line 443 |
 | `TNLean/MPS/MPDO/CyclicActiveRetainedCoordinates.lean` | `TNLean.MPS.MPDO.SourceZCLMarginal` | `reducedBlockState_add_three_eq_succ_of_isSourceZCL` | `TNLean/MPS/MPDO/CyclicActiveFourthRegionContraction.lean:652` |
 | `TNLean/MPS/MPDO/VerticalProductReconstruction.lean` | `TNLean.MPS.MPDO.HorizontalBlocking` | `blockTwo` | `TNLean/MPS/MPDO/VerticalProductRetainedBlocks.lean:180` |

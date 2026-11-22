@@ -12,7 +12,7 @@ import TNLean.MPS.Symmetry.BlockingVirtualCovariance
 import TNLean.MPS.Core.CommonNormalBlocking
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.FundamentalTheorem.InjectivePhase
-import QICLean.Algebra.OrthogonalProjection
+import QICLean.Algebra.Hermitian.OrthogonalProjection
 import QICLean.Channel.FixedPoint.Algebra
 import Mathlib.Data.Fintype.Pigeonhole
 import Mathlib.Data.Nat.Nth

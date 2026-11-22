@@ -7,7 +7,7 @@ import TNLean.Lattice.Compression.RestrictedMixedPhysicalTrace
 import TNLean.Lattice.Compression.NoneSourceWordScalar
 import TNLean.Lattice.Compression.SampledEndpointExteriorIdentity
 import TNLean.Lattice.Compression.SelectedFamilyPhysicalBasis
-import QICLean.Channel.PartialTrace
+import QICLean.Algebra.PartialTrace
 
 /-!
 # The actual exterior scalar in a sampled local trace

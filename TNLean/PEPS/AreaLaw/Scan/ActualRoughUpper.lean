@@ -11,8 +11,8 @@ import TNLean.PEPS.AreaLaw.Scan.StatusCutBounds
 import TNLean.PEPS.AreaLaw.Scan.ReceivingRegions
 import TNLean.PEPS.AreaLaw.Scan.AugmentedRootCompression
 import TNLean.PEPS.AreaLaw.Scan.AugmentedReplicaPrevectorProperties
-import QICLean.Algebra.ProjectionRangeIsometry
-import QICLean.Representation.ReplicaPrevectorRoughUpper
+import QICLean.Algebra.Hermitian.ProjectionRangeIsometry
+import QICLean.ManyBody.Replica.Bell.PrevectorRoughUpper
 
 /-!
 # A uniform rough upper bound along the actual scanner

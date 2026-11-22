@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.ChebyshevWordPower
-import QICLean.Analysis.LowEnergyCoordinates
-import QICLean.Analysis.ViableSubspaceCoordinates
-import QICLean.Analysis.ViableSubspaceBootstrap
+import QICLean.Spectral.LowEnergy.ChebyshevWordPower
+import QICLean.Spectral.LowEnergy.Coordinates
+import QICLean.Analysis.Subspace.ViableSubspaceCoordinates
+import QICLean.Probability.Sampling.ViableSubspaceBootstrap
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.IndependentFiveRegionCluster

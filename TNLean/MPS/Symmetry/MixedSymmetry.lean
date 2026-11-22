@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.Cohomology.SymmetryParity
-import QICLean.Algebra.OrderedProduct
+import QICLean.Algebra.Word.OrderedProduct
 import TNLean.MPS.Core.CyclicTrace
 
 /-!

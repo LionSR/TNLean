@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.Defs
-import QICLean.Algebra.SpinCover
+import QICLean.Analysis.Real.EulerAngles
 
 /-!
 # On-site rotational symmetry of the AKLT state

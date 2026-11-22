@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Kronecker
-import QICLean.Algebra.ComplexSqrt
-import QICLean.Algebra.MatrixSingleSpan
-import QICLean.Algebra.Cohomology.TwistedRegularProjective
-import QICLean.Algebra.IsometricFrameEmbedding
+import QICLean.Analysis.Real.ComplexSqrt
+import QICLean.Algebra.Matrix.MatrixSingleSpan
+import QICLean.Analysis.Cohomology.TwistedRegularProjective
+import QICLean.Algebra.Unitary.IsometricFrameEmbedding
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Symmetry.Character
 import TNLean.MPS.Symmetry.CocycleCoboundary

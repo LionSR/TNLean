@@ -10,7 +10,7 @@ import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.LinearCombination
 import Mathlib.Tactic.Module
 import Mathlib.Tactic.NormNum
-import QICLean.Algebra.MatrixUnitaryBetween
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 /-!
 # Interval isometries for a product-projection phase gate

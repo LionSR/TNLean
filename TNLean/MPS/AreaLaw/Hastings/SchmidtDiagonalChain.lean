@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.MatrixL2Contraction
+import QICLean.Analysis.Norm.MatrixL2Contraction
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalOperators
-import QICLean.Analysis.RootChannel
-import QICLean.Analysis.TraceMulBound
-import QICLean.Entropy.FilterStationarity
+import QICLean.Analysis.Norm.RootChannel
+import QICLean.Analysis.TraceInequality.TraceMulBound
+import QICLean.ManyBody.Entropy.Filter.Stationarity
 
 /-!
 # Correlations of Schmidt-diagonal operators on the chain, stage form

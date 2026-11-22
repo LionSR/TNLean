@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.LinearMarkedTensor
 import TNLean.MPS.MPDO.ReflectedMarkedChain
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Pairwise Gram comparison for vertical corners

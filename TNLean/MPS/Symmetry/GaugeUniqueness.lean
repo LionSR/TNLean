@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Basic
 import TNLean.MPS.Chain.OneSidedInverse
-import QICLean.Algebra.ScalarCommutant
+import QICLean.Algebra.MatrixAlgebra.ScalarCommutant
 import TNLean.MPS.Core.Blocking
 
 /-!

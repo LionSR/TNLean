@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.FullIntervalViability
 import TNLean.MPS.AreaLaw.PhysicalDGTreeMPS
-import QICLean.Analysis.ViableSubspaceUnitApproximation
+import QICLean.Analysis.Subspace.ViableSubspace
 
 /-!
 # Normalized witnesses in the same recursively constructed root

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.SupportCompletion
-import QICLean.Algebra.ComplexSqrt
+import QICLean.Analysis.Real.ComplexSqrt
 import TNLean.MPS.MPDO.RFPViaTSSAL
 import TNLean.MPS.MPDO.SimpleTensor
 

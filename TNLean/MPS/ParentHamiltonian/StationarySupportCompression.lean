@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.LocalObservableInsertion
 import TNLean.MPS.ParentHamiltonian.FaithfulPeriodicGroundSpace
 import QICLean.Channel.FixedPoint.SupportInvariance
-import QICLean.Channel.KrausCornerCompression
-import QICLean.Analysis.SupportCompression
+import QICLean.Channel.KrausMap.KrausCornerCompression
+import QICLean.Analysis.Support.Compression
 
 /-!
 # Faithful generators from stationary support compression

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedIteration
 import TNLean.MPS.AreaLaw.CanonicalSampledIntervalBounds
 import TNLean.MPS.AreaLaw.AdjacentIntervalMerge
-import QICLean.Probability.NativeRankUnitarySampling
+import QICLean.Probability.Haar.NativeRankUnitarySampling
 
 /-!
 # Uniform true failure for the physical canonical parent

@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.LinearIndependent.Lemmas
-import QICLean.Algebra.OperatorSchmidtPrescribedFactors
-import QICLean.Algebra.OperatorSchmidtRealignment
-import QICLean.Algebra.OperatorSchmidtReindex
-import QICLean.Entropy.SupportedMarginalTails
+import QICLean.Algebra.OperatorSchmidt.PrescribedFactors
+import QICLean.Algebra.OperatorSchmidt.Realignment
+import QICLean.Algebra.OperatorSchmidt.Reindex
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import TNLean.Circuit.RegionSplit
 
 /-!

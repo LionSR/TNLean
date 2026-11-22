@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic
-import QICLean.Algebra.MatrixUnitaryBetween
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 /-!
 # Polar decomposition of a rectangular complex matrix

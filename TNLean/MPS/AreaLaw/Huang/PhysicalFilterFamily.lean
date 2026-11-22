@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Huang.FilterPolynomial
 import TNLean.MPS.AreaLaw.Huang.ApproximateEnergyFilter
 import TNLean.MPS.AreaLaw.Huang.PhysicalGaussian
-import QICLean.Analysis.PhysicalPowerFilterLowerGap
+import QICLean.Spectral.Filter.PhysicalPowerFilterLowerGap
 
 /-!
 # A finite family of ground filters from a positive nearest-neighbour chain

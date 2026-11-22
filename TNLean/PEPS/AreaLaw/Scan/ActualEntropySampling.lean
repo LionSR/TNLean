@@ -7,7 +7,7 @@ import TNLean.PEPS.AreaLaw.Scan.ActualChargeData
 import TNLean.PEPS.AreaLaw.Scan.SplitEntropyCost
 import TNLean.PEPS.AreaLaw.Scan.OldStateIntegral
 import TNLean.PEPS.AreaLaw.Scan.SupportCompatibility
-import QICLean.Representation.ReplicaTransport.Energy
+import QICLean.ManyBody.Replica.BandMetric.Energy
 
 /-!
 # Actual split entropy sampled in the old transported state

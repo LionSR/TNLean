@@ -7,8 +7,8 @@ import TNLean.MPS.AreaLaw.PhysicalDGClippedReference
 import TNLean.MPS.AreaLaw.InterleavedFilterSuppression
 import TNLean.MPS.AreaLaw.IndependentPhysicalDGPower
 import TNLean.MPS.AreaLaw.IntervalFamilyTrimming
-import QICLean.Analysis.InterleavedTrimmingParameters
-import QICLean.Analysis.ViableTrimmingRadius
+import QICLean.Analysis.Parameter.InterleavedTrimmingIteration
+import QICLean.Analysis.Parameter.ViableRefinementParameters
 
 /-!
 # Physically calibrated families for interleaved interval trimming

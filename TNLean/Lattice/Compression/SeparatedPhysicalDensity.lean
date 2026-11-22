@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SeparatedSchmidtOutput
-import QICLean.Channel.PartialTraceBlocks
+import QICLean.Channel.PartialTrace.Blocks
 
 /-!
 # Reconstructing the separated physical density

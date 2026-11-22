@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.WordRestriction
 import TNLean.Lattice.Compression.BasisMatrixOperator
-import QICLean.Channel.PartialTrace
+import QICLean.Algebra.PartialTrace
 
 /-! # Mixed coordinate traces of restricted chronological words
 

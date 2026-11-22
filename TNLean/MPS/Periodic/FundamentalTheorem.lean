@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Periodic.Defs
-import QICLean.Algebra.ScalarPowerSumIdentity
+import QICLean.Algebra.Polynomial.ScalarPowerSumIdentity
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.Periodic.Overlap.Dichotomy
 import TNLean.MPS.Periodic.Overlap.SelfOverlap

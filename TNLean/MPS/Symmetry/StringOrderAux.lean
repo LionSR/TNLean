@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.ComplexPhasePositivity
-import QICLean.Algebra.MatrixIsometryEntries
-import QICLean.Analysis.MatrixSqrt
+import QICLean.Analysis.Order.ComplexPhasePositivity
+import QICLean.Algebra.Unitary.MatrixIsometryEntries
+import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 import TNLean.MPS.Symmetry.StringOrderDefs
 import TNLean.MPS.Core.TPGauge
 import TNLean.Spectral.TransferOperatorGapNT
@@ -17,7 +17,7 @@ import QICLean.Channel.Irreducible.Ergodicity
 import QICLean.Channel.Irreducible.PerronFrobenius
 import QICLean.Channel.Irreducible.KrausGauge
 import QICLean.Channel.Irreducible.SpectralRadius
-import QICLean.Channel.KrausRepresentation
+import QICLean.Channel.KrausMap.KrausRepresentation
 
 /-!
 # String order: trace-preserving gauge reduction and auxiliary proofs

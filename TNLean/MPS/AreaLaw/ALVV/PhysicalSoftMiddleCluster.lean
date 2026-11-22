@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftUniformClusters
 import TNLean.MPS.AreaLaw.ALVV.SoftGeneratedMiddleApproximation
-import QICLean.Analysis.SoftClusterParameters
+import QICLean.Analysis.Parameter.SoftClusterParameters
 
 /-!
 # A native soft middle approximation with its actual spectral cluster

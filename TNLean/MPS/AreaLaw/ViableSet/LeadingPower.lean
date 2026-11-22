@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.LeadingResidual
-import QICLean.Channel.FilterNormalization
+import QICLean.Channel.Schmidt.FilterNormalization
 
 /-!
 # Power iteration for the LVV compressed density

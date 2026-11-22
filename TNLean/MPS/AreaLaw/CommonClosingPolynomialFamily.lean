@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily
 import TNLean.MPS.MPDO.TraceChainLinearCombination
 import QICLean.ManyBody.Sites.PlaceAlong
-import QICLean.Algebra.MatrixPolynomialParameter
+import QICLean.Algebra.Polynomial.MatrixPolynomialParameter
 
 /-!
 # Common physical polynomial families for polynomial closing matrices

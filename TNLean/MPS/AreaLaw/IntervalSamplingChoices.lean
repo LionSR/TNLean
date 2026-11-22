@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Chain
-import QICLean.Probability.RankUnitaryProductHaar
+import QICLean.Probability.Haar.RankUnitaryProductHaar
 
 /-!
 # Independent Haar choices for interval endpoints

@@ -7,7 +7,7 @@ import TNLean.PEPS.RegularTwoCyclePhysicalFluxMove
 import TNLean.PEPS.RegularCoherentGlobalTransport
 import TNLean.PEPS.ParentHamiltonian.RegionParentHamiltonian
 import TNLean.PEPS.RegularRegionGaugeContraction
-import QICLean.Algebra.MatrixReindexUnitary
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 /-!
 # The global contraction consequence of the two-cycle flux operation

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftResiduals
 import TNLean.MPS.AreaLaw.SelectedRegionalSoftMPO
-import QICLean.Analysis.GroundShiftSpectralComparison
+import QICLean.Spectral.Perturbation.GroundShiftSpectralComparison
 
 /-!
 # Spectral comparisons and an MPO for the same physical soft Hamiltonian

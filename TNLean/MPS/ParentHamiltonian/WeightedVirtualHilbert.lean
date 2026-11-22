@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.FrobeniusHilbert
-import QICLean.Analysis.MatrixSqrt
+import QICLean.Analysis.Norm.FrobeniusHilbert
+import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 
 /-!
 # Weighted virtual matrix Hilbert space

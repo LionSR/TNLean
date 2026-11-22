@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.RegionalExponentialMoment
-import QICLean.Analysis.SoftTruncationRemainder
+import QICLean.Spectral.Filter.SoftTruncationRemainder
 
 /-!
 # The physical residual at independent soft-truncation scale and order

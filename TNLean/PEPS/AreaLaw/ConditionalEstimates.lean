@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.MarginalTails
-import QICLean.Entropy.RegionEntropy
-import QICLean.Entropy.RegionUnion
-import QICLean.Entropy.ConditionalMovementRegional
-import QICLean.Representation.ReplicaEtaForms
+import QICLean.ManyBody.Entropy.RegionEntropy
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import QICLean.ManyBody.Entropy.ConditionalMovementRegional
+import QICLean.ManyBody.Replica.EtaForms
 
 /-!
 # Conditional movement and skew estimates on lattice regions

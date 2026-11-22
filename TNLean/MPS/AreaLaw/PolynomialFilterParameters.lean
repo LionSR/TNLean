@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.PolynomialFilterLogCount
-import QICLean.Analysis.LogPowerAbsorption
+import QICLean.Analysis.Parameter.PolynomialFilterLogCount
+import QICLean.Analysis.Real.LogPowerAbsorption
 import Mathlib.Analysis.Asymptotics.Lemmas
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import Mathlib.Tactic.Linarith

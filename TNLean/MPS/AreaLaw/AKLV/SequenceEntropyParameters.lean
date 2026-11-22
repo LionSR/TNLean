@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AKLV.SequenceParameters
 import TNLean.MPS.AreaLaw.AKLV.OptimizedInitialScale
-import QICLean.Analysis.ProbabilityEntropyRankTails
+import QICLean.Entropy.Classical.ProbabilityEntropyRankTails
 
 /-!
 # Logarithmic rank costs for the actual AKLV sequence

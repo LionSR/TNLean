@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.LocalSupportTransport
 import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
-import QICLean.Algebra.FinSumPermutation
-import QICLean.Algebra.TupleEquiv
+import QICLean.Algebra.Combinatorics.FinSumPermutation
+import QICLean.Algebra.Combinatorics.TupleEquiv
 
 /-!
 # The frame operator of the local ground space

@@ -5,14 +5,15 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.GluingCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
-import QICLean.Algebra.MatrixStarProjection
-import QICLean.Algebra.MatrixRankKronecker
-import QICLean.Algebra.PositiveSemidefiniteNormalization
-import QICLean.Algebra.ProjectionRangeIsometry
-import QICLean.Analysis.IsometricDomainExtension
-import QICLean.Channel.RectangularTraceNormContraction
-import QICLean.Channel.BoundaryDensitySelection
+import QICLean.Analysis.Projection.MatrixStarProjection
+import QICLean.Algebra.Matrix.MatrixRankBaseChange
+import QICLean.Algebra.Hermitian.PositiveSemidefiniteNormalization
+import QICLean.Algebra.Hermitian.ProjectionRangeIsometry
+import QICLean.Analysis.Isometry.IsometricDomainExtension
+import QICLean.Analysis.TraceNorm.RectangularTraceNormContraction
+import QICLean.Channel.Gluing.BoundaryDensitySelection
 import Mathlib.LinearAlgebra.Matrix.Bilinear
+import QICLean.Channel.Schmidt.Rank
 
 /-!
 # A finite family of minimizing boundary states

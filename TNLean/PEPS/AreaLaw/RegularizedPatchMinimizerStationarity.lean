@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RegularizedPatchListCoordinates
-import QICLean.Analysis.ShiftedDensityCommutation
+import QICLean.Analysis.FunctionalCalculus.ShiftedDensityCommutation
 
 /-!
 # Stationarity of the original indexed patch minimum

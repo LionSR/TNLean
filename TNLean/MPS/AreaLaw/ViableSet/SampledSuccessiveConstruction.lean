@@ -8,7 +8,7 @@ import TNLean.MPS.AreaLaw.ViableSet.SampledProjectorPolynomial
 import TNLean.MPS.AreaLaw.ViableSet.SuccessiveStep
 import TNLean.MPS.AreaLaw.ViableSet.BondTrimmingBound
 import TNLean.MPS.AreaLaw.ViableSet.FinalMPS
-import QICLean.Algebra.DependentSequence
+import QICLean.Algebra.Combinatorics.DependentSequence
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

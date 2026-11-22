@@ -9,11 +9,11 @@ import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
-import QICLean.Analysis.EnergyTruncation
-import QICLean.Analysis.GroundEnergyBounds
-import QICLean.Analysis.LowEnergyCluster
-import QICLean.Analysis.LowEnergyPerturbation
-import QICLean.Analysis.ExplicitThresholds
+import QICLean.Spectral.Filter.EnergyTruncation
+import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
+import QICLean.Spectral.LowEnergy.Cluster
+import QICLean.Analysis.Order.LowEnergyPerturbation
+import QICLean.Analysis.Real.ExplicitThresholds
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.IndependentFiveRegionCluster

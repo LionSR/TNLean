@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalDGAutomaticRefinement
 import TNLean.MPS.AreaLaw.PhysicalFlatGroundRitz
-import QICLean.Analysis.RefinementOutputPolynomialBound
+import QICLean.Analysis.Parameter.RefinementOutputPolynomialBound
 
 /-!
 # Polynomial refinement of any actual viable root

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AKLV.SequenceParameters
 import TNLean.MPS.AreaLaw.AKLV.VariableWindowRefinement
-import QICLean.Analysis.GroundEnergyBounds
+import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
 
 /-!
 # A dyadic step for the actual changing-target AKLV sequence

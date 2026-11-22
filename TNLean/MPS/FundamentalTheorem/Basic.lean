@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Structure.LinearExtension
-import QICLean.Algebra.SkolemNoether
+import QICLean.Algebra.MatrixAlgebra.SkolemNoether
 
 /-!
 # The single-block Fundamental Theorem of Matrix Product States

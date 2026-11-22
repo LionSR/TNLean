@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.BondRegroupingLocality
 import TNLean.MPS.Symmetry.SPTFixedPoint
-import QICLean.Algebra.FiniteKroneckerProduct
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 
 /-!
 # Physical symmetry in incoming-bond coordinates

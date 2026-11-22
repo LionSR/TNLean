@@ -12,8 +12,8 @@ import TNLean.PEPS.AreaLaw.Amplification.LatticeExcitedDecay
 import TNLean.PEPS.AreaLaw.Amplification.LatticeAncillaSites
 import TNLean.PEPS.AreaLaw.Amplification.SupportedPolarCorrection
 import TNLean.PEPS.AreaLaw.Amplification.RadiusBound
-import QICLean.Entropy.MutualInformationPerturbation
-import QICLean.Analysis.PureStateTraceDistance
+import QICLean.ManyBody.Entropy.MutualInformationPerturbation
+import QICLean.Analysis.TraceNorm.PureStateTraceDistance
 import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 

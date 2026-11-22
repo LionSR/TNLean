@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.PhysicalRotation
 import QICLean.Kraus.Transfer
-import QICLean.Kraus.MixedMap
+import QICLean.Kraus.MixedMap.Basic
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!

@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixGramUnitary
+import QICLean.Algebra.Unitary.MatrixGramUnitary
 import QICLean.Channel.Irreducible.PerronFrobenius
 import TNLean.MPS.Core.CanonicalNormalization
 import QICLean.Kraus.CPPrimitive
 import TNLean.MPS.Irreducible.FormII
 import TNLean.MPS.Irreducible.Adjoint
-import QICLean.QPF.Assembly
-import QICLean.QPF.Uniqueness
+import QICLean.Kraus.PrimitiveFixedPoint.Assembly
+import QICLean.Kraus.PrimitiveFixedPoint.Uniqueness
 
 /-!
 # Unitary gauges for left-canonical irreducible tensors

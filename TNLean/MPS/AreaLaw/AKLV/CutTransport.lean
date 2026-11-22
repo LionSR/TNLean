@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AKLV.WindowFrequencyRank
 import TNLean.MPS.AreaLaw.IntervalSymmDiff
-import QICLean.Algebra.OperatorSchmidtPartition
+import QICLean.ManyBody.Sites.OperatorSchmidtPartition
 
 /-!
 # Transport of an AKLV frequency estimate to another chain cut

@@ -5,12 +5,12 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Defs
 import QICLean.Kraus.Transfer
-import QICLean.Channel.KrausFreedom
-import QICLean.Channel.KrausRepresentation
-import QICLean.Kraus.MixedMap
-import QICLean.Analysis.SpectralRadiusPowerDecay
+import QICLean.Channel.KrausMap.KrausFreedom
+import QICLean.Channel.KrausMap.KrausRepresentation
+import QICLean.Kraus.MixedMap.Basic
+import QICLean.Spectral.Radius.PowerDecay
 import Mathlib.Analysis.Matrix.Order
-import QICLean.Algebra.MatrixOperatorSpace
+import QICLean.Analysis.Norm.MatrixOperatorSpace
 
 /-!
 # String order: definitions and condition equivalences

@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalDGSampledNode
 import TNLean.MPS.AreaLaw.IntervalSamplingTree
-import QICLean.Analysis.ViableTrimmingRank
-import QICLean.Analysis.ViableNodeLeafCount
+import QICLean.Analysis.Parameter.ViableRefinementParameters
+import QICLean.Analysis.Parameter.ViableNodeParameters
 
 /-!
 # An actual recursive viable tree for the full physical ground space

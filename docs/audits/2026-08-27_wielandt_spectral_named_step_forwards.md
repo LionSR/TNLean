@@ -8,7 +8,7 @@ either declaration.
 
 | Removed declaration | Replacement |
 | --- | --- |
-| `MPSTensor.irreducibleMap_of_irreducibleTensor` (private, `TNLean/Spectral/TransferOperatorGapNT.lean`) | `Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily` (`QICLean/Kraus/InvariantProjection.lean`); eight call sites migrated inside the defining file |
+| `MPSTensor.irreducibleMap_of_irreducibleTensor` (private, `TNLean/Spectral/TransferOperatorGapNT.lean`) | `Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily` (`QICLean/Channel/Irreducible/InvariantProjection.lean`); eight call sites migrated inside the defining file |
 | `MPSTensor.not_posSemidef_of_hermitian_ne_zero_trace_eq_zero` (`TNLean/Wielandt/Primitivity/ImpliesStronglyIrreducibleAux.lean`) | `Matrix.PosSemidef.trace_eq_zero_iff` (Mathlib); the sole call site now writes the one-line proof inline, and the Hermitian hypothesis the wrapper carried was already unused (`_hH`) |
 
 No `@[deprecated] alias` is warranted for either name. The first was `private`

@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.AreaLaw.Hamiltonian
-import QICLean.Algebra.UnitaryTraceZero
-import QICLean.Representation.RegionPowerSymbol
+import QICLean.Algebra.Unitary.UnitaryTraceZero
+import QICLean.ManyBody.Replica.Symbol.RegionPowerSymbol
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

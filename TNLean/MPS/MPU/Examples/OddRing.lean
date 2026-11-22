@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixRankOfFactor
-import QICLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.Matrix.MatrixRankOfFactor
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.SourceCuts

@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.FiniteCauchySchwarz
+import QICLean.Algebra.Combinatorics.FiniteCauchySchwarz
 import TNLean.MPS.ParentHamiltonian.ResidualWindowCoordinates
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceOverlap
-import QICLean.Analysis.TwoProjectionCompression
+import QICLean.Analysis.Projection.TwoProjectionCompression
 /-!
 # Cross-sector overlaps of residual windows
 

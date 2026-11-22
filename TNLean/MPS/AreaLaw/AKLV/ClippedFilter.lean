@@ -6,9 +6,9 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.AKLV.ClippedHamiltonian
 import TNLean.MPS.AreaLaw.AKLV.PhysicalRobustness
 import TNLean.MPS.AreaLaw.AKLV.ChebyshevFilter
-import QICLean.Analysis.EuclideanEigenvectorBasis
-import QICLean.Analysis.LowEnergyPerturbation
-import QICLean.Analysis.OptimizedPureStateTraceError
+import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
+import QICLean.Analysis.Order.LowEnergyPerturbation
+import QICLean.Analysis.TraceNorm.OptimizedPureStateTraceError
 
 /-!
 # The actual clipped AKLV Chebyshev filter

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ComplexOfInt
-import QICLean.Algebra.MonomialMatrix
+import QICLean.Algebra.Matrix.MonomialMatrix
 import TNLean.MPS.Core.CyclicTraceForcedBond
 import TNLean.MPS.Core.ForcedColumnNormality
 import TNLean.MPS.Core.SplitIndexTrace

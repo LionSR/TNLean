@@ -5,10 +5,10 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.EntropyScaling.CutReducedState
-import QICLean.Entropy.RegionalViability
-import QICLean.Analysis.ViableSubspaceBootstrap
-import QICLean.Entropy.ViableSampling.ViableSubspaceTrimming
-import QICLean.Analysis.ViableSubspaceCoordinates
+import QICLean.ManyBody.Entropy.Cut.RegionalViability
+import QICLean.Probability.Sampling.ViableSubspaceBootstrap
+import QICLean.ManyBody.Subspace.Trimming
+import QICLean.Analysis.Subspace.ViableSubspaceCoordinates
 
 /-!
 # Collective trimming on an arbitrary interval

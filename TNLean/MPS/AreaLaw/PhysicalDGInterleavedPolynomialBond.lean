@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedApproximation
-import QICLean.Analysis.InterleavedOutputPolynomialBound
+import QICLean.Analysis.Parameter.InterleavedOutputPolynomialBound
 
 /-!
 # A uniform polynomial bond for the actual interleaved Ritz output

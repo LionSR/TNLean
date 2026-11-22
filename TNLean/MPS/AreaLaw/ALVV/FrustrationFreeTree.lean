@@ -10,8 +10,8 @@ import TNLean.MPS.AreaLaw.FullIntervalViability
 import TNLean.MPS.AreaLaw.IntervalSamplingTree
 import TNLean.MPS.AreaLaw.PhysicalDGAutomaticRefinement
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming
-import QICLean.Analysis.ViableNodeLeafCount
-import QICLean.Analysis.ViableTrimmingRadius
+import QICLean.Analysis.Parameter.ViableNodeParameters
+import QICLean.Analysis.Parameter.ViableRefinementParameters
 
 /-!
 # A merge tree of length-independent node dimension for a unique frustration-free ground state

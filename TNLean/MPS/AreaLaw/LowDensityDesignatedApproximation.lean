@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PositiveDimensionLowDensityApproximation
 import TNLean.MPS.AreaLaw.DesignatedCutTruncation
-import QICLean.Analysis.LogRankRounding
+import QICLean.Analysis.Real.LogRankRounding
 
 /-!
 # One low-energy approximant with a sharp designated cut and global MPS bounds

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hamiltonian
-import QICLean.Entropy.ZeroEntropy
+import QICLean.ManyBody.Entropy.ZeroEntropy
 
 /-!
 # Splitting a range-one Hamiltonian at a cut

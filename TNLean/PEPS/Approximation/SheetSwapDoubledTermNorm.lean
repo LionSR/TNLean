@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Sheet.SwapCorrection
-import QICLean.Analysis.DoubledSystemGap
+import QICLean.Spectral.Gap.DoubledSystemGap
 
 /-!
 # The norm of a swapped doubled interaction

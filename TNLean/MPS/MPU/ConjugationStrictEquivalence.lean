@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.ConjugationCovariantGauge
-import QICLean.Algebra.OrthogonalGroupJoined
+import QICLean.Analysis.Isometry.ConjugationCovariantGauge
+import QICLean.Analysis.Topology.OrthogonalGroupJoined
 import TNLean.MPS.MPU.ConjugationSymmetry
 import TNLean.MPS.MPU.PhysicalMatrixBlocking
 import TNLean.MPS.MPU.StandardFormConjugation

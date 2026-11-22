@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.DetectabilityLemma
-import QICLean.Analysis.WeightedPositiveKernel
+import QICLean.Analysis.Projection.DetectabilityLemma
+import QICLean.Spectral.Gap.WeightedPositiveKernel
 
 /-!
 # The frustration-free regional replacement

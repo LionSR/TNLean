@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.HermitianPartSum
+import QICLean.Algebra.Hermitian.HermitianPartSum
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
 import TNLean.Lattice.MarginalTails
 import TNLean.PEPS.AreaLaw.Scan.DesignatedSampling
-import QICLean.Representation.ReplicaTransport.Setup
+import QICLean.ManyBody.Replica.BandMetric.Setup
 import QICLean.ManyBody.Hamiltonian.PositiveTerm
 
 /-!

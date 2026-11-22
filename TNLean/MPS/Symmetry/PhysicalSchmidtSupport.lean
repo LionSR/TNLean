@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.VaryingBondPhysicalCharacter
 import TNLean.MPS.Preparation.BlockedPolar
-import QICLean.Algebra.MatrixRankClosed
+import QICLean.Analysis.Topology.MatrixRankClosed
 
 /-!
 # Physical Schmidt supports near a change of minimal bond dimension

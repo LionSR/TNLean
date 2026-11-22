@@ -9,8 +9,8 @@ import TNLean.PEPS.AreaLaw.Scan.ReceivingRegions
 import TNLean.PEPS.AreaLaw.Scan.AugmentedRootCompression
 import TNLean.PEPS.AreaLaw.Scan.AugmentedReplicaPrevectorProperties
 import TNLean.PEPS.AreaLaw.TwoFamilies
-import QICLean.Algebra.ProjectionRangeIsometry
-import QICLean.Representation.ReplicaPrevectorSharpUpper
+import QICLean.Algebra.Hermitian.ProjectionRangeIsometry
+import QICLean.ManyBody.Replica.Bell.PrevectorSharpUpper
 
 /-!
 # A sharp upper estimate along the actual fill and charge trees

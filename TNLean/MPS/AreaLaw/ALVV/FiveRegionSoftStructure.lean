@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
-import QICLean.Analysis.SoftTruncationCommutingFamily
+import QICLean.Spectral.Filter.SoftTruncationCommutingFamily
 
 /-!
 # The actual simultaneous soft replacement of five consecutive regions

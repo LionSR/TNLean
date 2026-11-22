@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Analysis.Normed.Operator.Banach
 import Mathlib.Analysis.Normed.Ring.Units
 import QICLean.Channel.FixedPoint.StationaryStates
-import QICLean.Channel.KrausMap
+import QICLean.Channel.KrausMap.KrausMap
 import TNLean.MPS.Defs
 
 /-!

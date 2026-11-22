@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.ProjectiveGaugeTransport
 import TNLean.MPS.CanonicalForm.TranslationInvariantUniqueness
-import QICLean.Algebra.IsometricFrameEmbedding
+import QICLean.Algebra.Unitary.IsometricFrameEmbedding
 
 /-!
 # Virtual symmetry transport at a compact stationary-support limit

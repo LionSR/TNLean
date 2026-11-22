@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.BiCFDerivation.Core
-import QICLean.Algebra.SkolemNoether
+import QICLean.Algebra.MatrixAlgebra.SkolemNoether
 import Mathlib.Algebra.Algebra.Prod
 
 /-!

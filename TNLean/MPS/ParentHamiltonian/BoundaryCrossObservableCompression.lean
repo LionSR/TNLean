@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceOverlap
 import TNLean.MPS.ParentHamiltonian.BulkObservableCommutator
-import QICLean.Analysis.TwoProjectionCompression
+import QICLean.Analysis.Projection.TwoProjectionCompression
 
 /-!
 # Decay of cross-sector compression by prefix locality

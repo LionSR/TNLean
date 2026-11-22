@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import QICLean.Kraus.Injectivity
 import TNLean.Algebra.ComplexOfRing
-import QICLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.MPDO.ActionTensor
 import TNLean.MPS.MPDO.OperatorProduct
 

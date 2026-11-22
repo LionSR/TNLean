@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
 import TNLean.PEPS.AreaLaw.Cylinder
-import QICLean.Analysis.ShiftedDensityTruncation
+import QICLean.Spectral.Projection.ShiftedDensityTruncation
 
 /-!
 # Approximation by cylinders from ordered inverse filters

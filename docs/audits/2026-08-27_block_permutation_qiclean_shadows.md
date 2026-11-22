@@ -8,11 +8,11 @@ encodes misleading terminology.
 
 | Removed | Replacement |
 |---|---|
-| `MPSTensor.ringEquiv_maps_single_support` (`TNLean/MPS/Structure/BlockPermutation.lean`) | `TwoSidedIdeal.ringEquiv_maps_single_support_between` (`QICLean/Algebra/BlockPermutation.lean`) |
+| `MPSTensor.ringEquiv_maps_single_support` (`TNLean/MPS/Structure/BlockPermutation.lean`) | `TwoSidedIdeal.ringEquiv_maps_single_support_between` (`QICLean/Algebra/MatrixAlgebra/BlockPermutation.lean`) |
 | `MPSTensor.componentMapRingHom` (private, same file) | none needed: its only purpose was to supply injectivity, which `TwoSidedIdeal.blockComponentMap_injective` proves directly |
-| `MPSTensor.componentMap_injective` (same file) | `TwoSidedIdeal.blockComponentMap_injective` (`QICLean/Algebra/BlockPermutation.lean`) |
-| `MPSTensor.componentMap_surjective` (same file) | `TwoSidedIdeal.blockComponentMap_surjective` (`QICLean/Algebra/BlockPermutation.lean`) |
-| `MPSTensor.componentMap_bijective` (same file) | `TwoSidedIdeal.blockComponentMap_bijective` (`QICLean/Algebra/BlockPermutation.lean`) |
+| `MPSTensor.componentMap_injective` (same file) | `TwoSidedIdeal.blockComponentMap_injective` (`QICLean/Algebra/MatrixAlgebra/BlockPermutation.lean`) |
+| `MPSTensor.componentMap_surjective` (same file) | `TwoSidedIdeal.blockComponentMap_surjective` (`QICLean/Algebra/MatrixAlgebra/BlockPermutation.lean`) |
+| `MPSTensor.componentMap_bijective` (same file) | `TwoSidedIdeal.blockComponentMap_bijective` (`QICLean/Algebra/MatrixAlgebra/BlockPermutation.lean`) |
 | `MPSTensor.transferMap_smul_apply` (private, `TNLean/MPS/Symmetry/StringOrderAux.lean`) | `MPSTensor.transferMap_smul` (`TNLean/MPS/SharedInfra/Scaling.lean`) |
 
 One declaration is added: `MPSTensor.SectorDecomposition.mpvState_toTensor_eq_sum_coeff`

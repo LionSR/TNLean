@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.RegionFullGroundSpace
-import QICLean.Analysis.ProjectionGeometry
+import QICLean.Analysis.Projection.Geometry
 import QICLean.ManyBody.Hamiltonian.Martingale.AbstractCriterion
 
 /-!

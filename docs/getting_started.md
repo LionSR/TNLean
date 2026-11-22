@@ -170,7 +170,7 @@ alongside the corresponding blueprint chapters:
 3. `QICLean/Kraus/Injectivity.lean` — `Kraus.IsInjective`, `Kraus.IsNormal`. The
    spanning condition the single-block theorem needs.
 4. `TNLean/MPS/Structure/LinearExtension.lean` and
-   `QICLean/Algebra/SkolemNoether.lean` — the two algebraic facts the proof
+   `QICLean/Algebra/MatrixAlgebra/SkolemNoether.lean` — the two algebraic facts the proof
    assembles: the unique multiplicative linear extension taking `A` to `B`,
    and that every automorphism of a matrix algebra is inner.
 5. `TNLean/MPS/FundamentalTheorem/Basic.lean` — `fundamentalTheorem_singleBlock`

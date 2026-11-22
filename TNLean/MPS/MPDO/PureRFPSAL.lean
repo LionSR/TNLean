@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PureAreaLaw
 import QICLean.Kraus.Transfer
-import QICLean.Kraus.MapIterate
 import TNLean.MPS.RFP.Defs
 
 /-!

@@ -11,7 +11,7 @@ the material that was examined and deliberately retained.
 
 | Removed declaration | Replacement |
 |---|---|
-| `Matrix.isNilpotent_of_forall_trace_pow_eq_zero` (`TNLean/Algebra/IsNilpotentOfTracePow.lean`) | `Matrix.isNilpotent_of_forall_trace_pow_eq_zero_of_one_lt` (`QICLean/Algebra/ShiftedZeroTraceNilpotent.lean`) |
+| `Matrix.isNilpotent_of_forall_trace_pow_eq_zero` (`TNLean/Algebra/IsNilpotentOfTracePow.lean`) | `Matrix.isNilpotent_of_forall_trace_pow_eq_zero_of_one_lt` (`QICLean/Spectral/Eigenvalue/ShiftedZeroTraceNilpotent.lean`) |
 | `MPOTensor.swapMatrix_isUnitaryBetween`, private (`TNLean/MPS/MPU/Examples/ShiftSwapMatrices.lean`) | `Matrix.swapMatrix_isUnitaryBetween` (`TNLean/Algebra/SwapMatrix.lean`) |
 | `MPOTensor.mul_conjTranspose_eq_one_of_conjTranspose_mul_eq_one_of_card_eq`, private (`TNLean/MPS/MPDO/BNTTripleFusionSeparation.lean`) | `Matrix.mul_eq_one_comm_of_card_eq` |
 | `MPOTensor.isNilpotent_smul`, private (`TNLean/MPS/MPDO/NeighboringTraceObstructionAmbientCounterexample.lean`) | `IsNilpotent.smul` |

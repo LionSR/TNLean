@@ -9,7 +9,7 @@ import TNLean.MPS.Symmetry.CompactSupportVirtualTransport
 import TNLean.MPS.Symmetry.UnitaryVirtualGauge
 import TNLean.MPS.Overlap.PeriodicRayUnitOverlap
 import Mathlib.Topology.Compactification.OnePoint.Basic
-import QICLean.Analysis.MatrixSqrt
+import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 
 /-!
 # Virtual class stability along a convergent unital sequence

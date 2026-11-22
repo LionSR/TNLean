@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.LongIntervalSoftImprovingFamily
-import QICLean.Entropy.RegionalViability
-import QICLean.Analysis.ViableSubspaceSpectralProjector
+import QICLean.ManyBody.Entropy.Cut.RegionalViability
+import QICLean.Analysis.FunctionalCalculus.ViableSubspaceSpectralProjector
 
 /-!
 # A common physical soft family in the native regional coordinates

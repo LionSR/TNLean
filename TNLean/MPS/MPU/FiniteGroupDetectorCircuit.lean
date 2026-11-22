@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Circuit.Model.Unitary
-import QICLean.Algebra.FiniteKroneckerProduct
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import Mathlib.Order.Interval.Finset.Fin
 
 /-!

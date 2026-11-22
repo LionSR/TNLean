@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.GluingCoordinates
-import QICLean.Analysis.TraceNormNet
+import QICLean.Channel.TraceNormNet
 
 /-!
 # A trace-norm net on the actual boundary space

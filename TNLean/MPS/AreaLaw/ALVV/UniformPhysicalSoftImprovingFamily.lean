@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.TwoWindowSum
+import QICLean.Algebra.Combinatorics.TwoWindowSum
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftUniformClusters
 import TNLean.MPS.AreaLaw.ALVV.UniformSoftMiddleMPO
 import TNLean.MPS.AreaLaw.CommonClosingPolynomialFamily
-import QICLean.Analysis.ChebyshevWordPower
+import QICLean.Spectral.LowEnergy.ChebyshevWordPower
 
 /-!
 # An actual soft improving family before all estimated centers

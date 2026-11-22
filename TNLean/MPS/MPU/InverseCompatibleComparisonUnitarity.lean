@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.UnitaryKronecker
-import QICLean.Algebra.UnitaryEntrywiseConjugation
+import QICLean.Analysis.Isometry.UnitaryKronecker
+import QICLean.Analysis.Isometry.UnitaryEntrywiseConjugation
 import TNLean.MPS.MPU.InverseCompatibleGateIdentity
 import TNLean.MPS.MPU.SimpleTensorEquivalence
 

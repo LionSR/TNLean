@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Channel.KrausCornerCompression
+import QICLean.Channel.KrausMap.KrausCornerCompression
 import QICLean.Channel.FixedPoint.SupportInvariance
-import QICLean.Algebra.SupportedIsometricCompression
+import QICLean.Analysis.Isometry.SupportedIsometricCompression
 import TNLean.MPS.Symmetry.LocalInvariantCompression
 import TNLean.MPS.Symmetry.LocalProjectiveClassStability
 import TNLean.MPS.Symmetry.LocalSpectralSupport

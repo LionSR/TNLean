@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.Injectivity
 import QICLean.Kraus.Wielandt.SpanGrowth.VectorToMatrixSpan
-import QICLean.Algebra.TupleEquiv
+import QICLean.Algebra.Combinatorics.TupleEquiv
 import TNLean.MPS.Core.TensorProduct
 
 /-!

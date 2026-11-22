@@ -25,14 +25,14 @@ The call sites in `GaussianTimeAverage.lean`,
 `BoundaryLocalization.lean` and `BoundaryFactorization.lean` use the QICLean
 names. The blueprint entry in `ch35_hastings_gaussian_time_average.tex` cites
 `Matrix.norm_hermitianUnitaryPath_sub_le`, and the proof-automation row in
-`CLAUDE.md` names `QICLean/Analysis/UnitaryEvolution.lean`.
+`CLAUDE.md` names `QICLean/Analysis/Exponential/UnitaryEvolution.lean`.
 
 ## Pin 8c602ab2d0 (TNLean #10143, QICLean #923 and #924)
 
 | Removed TNLean declaration | QICLean declaration |
 |---|---|
-| `Matrix.PosSemidef.norm_trace_mul_mul_le` | Same name, in `QICLean/Analysis/TraceMulBound.lean` |
-| `Matrix.PosSemidef.re_trace_mul_mul_self_le` | Same name, in `QICLean/Analysis/TraceMulBound.lean` |
+| `Matrix.PosSemidef.norm_trace_mul_mul_le` | Same name, in `QICLean/Analysis/TraceInequality/TraceMulBound.lean` |
+| `Matrix.PosSemidef.re_trace_mul_mul_self_le` | Same name, in `QICLean/Analysis/TraceInequality/TraceMulBound.lean` |
 | `TNLean.MPS.AreaLaw.Hastings.commute_reindex_one_kronecker_of_isSupportedOn` | `Entropy.commute_reindex_one_kronecker_of_isSupportedOn` |
 | `TNLean.MPS.AreaLaw.Hastings.toEuclideanCLM_reindex_cutEquiv_symm` | `Entropy.toEuclideanCLM_reindex_cutEquiv_symm` |
 

@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.TwoSiteStandardForm
-import QICLean.Algebra.UnitaryKronecker
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Analysis.Isometry.UnitaryKronecker
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Open words and local observables in a two-site standard form

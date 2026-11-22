@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Sites.Twirl
-import QICLean.Analysis.RootChannel
+import QICLean.Analysis.Norm.RootChannel
 
 /-!
 # Local root channels and their shells, with spectators

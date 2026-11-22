@@ -7,7 +7,7 @@ import Mathlib.Analysis.SpecialFunctions.Exp
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 import TNLean.MPS.AreaLaw.Hastings.PositiveFactorization
-import QICLean.Analysis.PowerExponential
+import QICLean.Analysis.Real.PowerExponential
 
 /-!
 # Absorbing a square-root prefactor into a slower exponential decay

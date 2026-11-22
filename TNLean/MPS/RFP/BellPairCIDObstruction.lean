@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.SpinCover.Basic
-import QICLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.RFP.ZeroCorrelationLength
 

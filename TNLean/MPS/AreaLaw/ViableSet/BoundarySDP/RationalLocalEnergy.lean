@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalGramContraction
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.LocalOperatorExpansion
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Rational matrix elements of two-site operators

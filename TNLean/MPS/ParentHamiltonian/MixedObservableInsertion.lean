@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.MixedBoundaryGram
 import TNLean.MPS.ParentHamiltonian.LocalObservableInsertion
 import QICLean.Kraus.MixedMap.Gap
-import QICLean.Analysis.OperatorNormConvergence
+import QICLean.Analysis.Norm.OperatorNormConvergence
 import Mathlib.LinearAlgebra.Matrix.Bilinear
 
 /-!

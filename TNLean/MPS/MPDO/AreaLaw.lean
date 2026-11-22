@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import Mathlib.Data.List.Rotate
 import Mathlib.Logic.Equiv.Fin.Rotate
-import QICLean.Analysis.EntropyDecomposition
-import QICLean.Algebra.IndexInduction
+import QICLean.Entropy.VonNeumann.EntropyDecomposition
+import QICLean.Algebra.Combinatorics.IndexInduction
 import TNLean.MPS.MPDO.Defs
 
 /-!

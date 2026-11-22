@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.OpenMPS
-import QICLean.Algebra.OneMarkerWeightedSchmidtRank
+import QICLean.Algebra.OperatorSchmidt.OneMarkerWeightedSchmidtRank
 import QICLean.ManyBody.Sites.OperatorSchmidtRank
 import Mathlib.LinearAlgebra.Matrix.Reindex
 

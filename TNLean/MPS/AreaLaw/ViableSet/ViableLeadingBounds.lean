@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingVector
 import TNLean.MPS.AreaLaw.ViableSet.GluingBounds
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalEnergy
-import QICLean.Analysis.DensityMaxEigenvector
-import QICLean.Analysis.DominantEigenvectorUniqueness
+import QICLean.Spectral.Eigenvalue.DensityMaxEigenvector
+import QICLean.Spectral.Eigenvalue.DominantEigenvectorUniqueness
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

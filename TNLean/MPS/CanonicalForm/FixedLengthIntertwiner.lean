@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import QICLean.Kraus.Wielandt.SpanGrowth.CumulativeSpan
-import QICLean.Algebra.FinSumPermutation
-import QICLean.Algebra.BipartiteSumUniqueness
+import QICLean.Algebra.Combinatorics.FinSumPermutation
+import QICLean.Algebra.Module.BipartiteSumUniqueness
 import TNLean.MPS.CanonicalForm.QuadraticReconstruction
 
 /-!

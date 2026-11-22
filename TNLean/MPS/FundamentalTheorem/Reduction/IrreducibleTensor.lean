@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Eigenspace.Triangularizable
-import QICLean.Algebra.MatrixFamilyAction
+import QICLean.Algebra.MatrixAlgebra.MatrixFamilyAction
 import TNLean.MPS.FundamentalTheorem.Reduction.SimpleSeparation
 import TNLean.MPS.FundamentalTheorem.Reduction.GaugeWordModule
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessFlag

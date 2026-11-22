@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.RegularRegionSupport
-import QICLean.Entropy.FlatDensityEntropy
+import QICLean.Entropy.Renyi.FlatDensityEntropy
 
 /-!
 # An entropy bound for regular G-injective cuts

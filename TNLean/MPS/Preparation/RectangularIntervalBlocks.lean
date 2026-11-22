@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Chain.RectangularIntervals
 import TNLean.MPS.Preparation.RectangularBlocks
-import QICLean.Algebra.MatrixDependentEntries
+import QICLean.Algebra.Matrix.MatrixReindex
 
 /-!
 # Actual block channels as rectangular intervals

@@ -1,7 +1,7 @@
 # Rename of the rectangular bound on the norm of `1 ⊗ B`
 
 QICLean `eb12c672` (QICLean #665) added the theorem
-`Matrix.l2_opNorm_one_kronecker_le` in `QICLean/Analysis/TraceMulBound.lean`,
+`Matrix.l2_opNorm_one_kronecker_le` in `QICLean/Analysis/TraceInequality/TraceMulBound.lean`,
 which states `‖1 ⊗ G‖ ≤ ‖G‖` for a square complex matrix `G`.
 `TNLean/Algebra/MatrixKroneckerContraction.lean` declared a theorem with the same
 fully qualified name stating the inequality for a rectangular matrix `B`, so the

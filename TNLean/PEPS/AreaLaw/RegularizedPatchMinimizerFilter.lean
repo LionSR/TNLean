@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerClipping
-import QICLean.Analysis.ShiftedFilterClipping
+import QICLean.Spectral.Eigenvalue.ShiftedFilterClipping
 
 /-!
 # Clipped inverse-power filters at a regularized patch minimum

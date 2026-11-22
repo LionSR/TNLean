@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.DependentBlockDiagonal
-import QICLean.Algebra.ScalarCommutant
+import QICLean.Algebra.Matrix.DependentBlockDiagonal
+import QICLean.Algebra.MatrixAlgebra.ScalarCommutant
 import TNLean.MPS.SharedInfra.SectorDecomposition
 
 /-!

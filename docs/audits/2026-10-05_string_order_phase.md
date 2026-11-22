@@ -28,11 +28,11 @@ Their original physical correlators are retained.
 that import were:
 
 - `Kraus.mixedMapLM` and `Kraus.mixedMapLM_apply`, owned by
-  `QICLean.Kraus.MixedMap`
+  `QICLean.Kraus.MixedMap.Basic`
 - `pow_tendsto_zero_of_spectralRadius_lt_one`, owned by
-  `QICLean.Analysis.SpectralRadiusPowerDecay`
+  `QICLean.Spectral.Radius.PowerDecay`
 - The matrix operator-norm structures, owned by
-  `QICLean.Algebra.MatrixOperatorSpace` and selected with `TNOperatorSpace`,
+  `QICLean.Analysis.Norm.MatrixOperatorSpace` and selected with `TNOperatorSpace`,
   replacing their incidental availability through the spectral `Kraus` scope
 
 The same file used no declaration from `TNLean.MPS.Symmetry.Defs`; its tensor

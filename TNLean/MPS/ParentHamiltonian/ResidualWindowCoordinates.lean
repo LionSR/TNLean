@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.PeriodicResidualGroundSpace
 import TNLean.MPS.ParentHamiltonian.SpectatorBoundaryGram
 import Mathlib.LinearAlgebra.Matrix.Bilinear
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Three-window coordinates for correlated residual boundaries

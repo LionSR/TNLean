@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Irreducible.Adjoint
 import QICLean.Kraus.CPPrimitive
-import QICLean.QPF.PosDef
+import QICLean.Kraus.PrimitiveFixedPoint.PosDef
 import QICLean.Channel.Schwarz.Basic
 
 /-!

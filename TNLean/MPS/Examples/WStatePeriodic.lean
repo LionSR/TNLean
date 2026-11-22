@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.WState
 import TNLean.MPS.Core.RepeatedWord
-import QICLean.Algebra.NewtonGirard
+import QICLean.Algebra.Polynomial.NewtonGirard
 
 /-!
 # W state: periodic (trace) boundary conditions

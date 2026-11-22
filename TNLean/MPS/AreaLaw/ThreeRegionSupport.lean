@@ -8,10 +8,10 @@ import TNLean.Lattice.Sheet.SupportedSchmidtRank
 import TNLean.Lattice.Sheet.LeftSupportedSchmidtRank
 import TNLean.MPS.AreaLaw.TwoCutEdgeSupports
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.Entropy.SupportedMarginalTails
-import QICLean.Algebra.OperatorBlock
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
+import QICLean.Algebra.OperatorSchmidt.Basic
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Algebra.BigOperators.Fin
 

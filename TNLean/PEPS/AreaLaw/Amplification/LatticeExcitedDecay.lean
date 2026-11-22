@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.LatticeConstraints
-import QICLean.Analysis.PoissonContractionDecay
+import QICLean.Probability.PoissonWord.PoissonContractionDecay
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

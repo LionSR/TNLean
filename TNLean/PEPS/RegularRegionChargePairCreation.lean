@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.RegularProjectorChargePairCoordinates
 import TNLean.PEPS.RegularChargeReferencePreparation
 import TNLean.PEPS.RegularCycleControlledSupport
-import QICLean.Algebra.MatrixReindexUnitary
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.PEPS.RegularPhysicalChargeMotion
 
 /-!

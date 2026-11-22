@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.RingTheory.SimpleModule.Basic
-import QICLean.Algebra.MatrixFamilyAction
+import QICLean.Algebra.MatrixAlgebra.MatrixFamilyAction
 import QICLean.Channel.Schwarz.Basic
 import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessBlocks
 import TNLean.MPS.FundamentalTheorem.Arbitrary.ArbitraryTensor

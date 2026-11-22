@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.RangeOneSupport
-import QICLean.Analysis.OverlapEnergy
+import QICLean.Spectral.Perturbation.OverlapEnergy
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

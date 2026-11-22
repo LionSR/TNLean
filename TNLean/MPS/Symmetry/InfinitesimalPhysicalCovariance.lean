@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.StringOrderDefs
-import QICLean.Analysis.HermitianIntertwiner
+import QICLean.Analysis.Support.HermitianIntertwiner
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
 /-!

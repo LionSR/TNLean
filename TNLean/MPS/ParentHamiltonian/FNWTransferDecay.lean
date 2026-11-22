@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixTracePairing
-import QICLean.Analysis.SpectralRadiusPowerDecay
+import QICLean.Algebra.Matrix.MatrixTracePairing
+import QICLean.Spectral.Radius.PowerDecay
 import TNLean.MPS.ParentHamiltonian.FNWLimitMap
 import TNLean.MPS.ParentHamiltonian.WeightedVirtualHilbert
 

@@ -4,12 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.OpenMPS
-import QICLean.Channel.LeadingEigenvector
-import QICLean.Entropy.ThreeWayCut
-import QICLean.Entropy.RegionSplit
-import QICLean.Analysis.RectangularTraceNormAlgebra
-import QICLean.Analysis.EuclideanReindex
-import QICLean.Analysis.KroneckerOperatorNorm
+import QICLean.Channel.Gluing.LeadingEigenvector
+import QICLean.ManyBody.Entropy.Cut.ThreeWayCut
+import QICLean.ManyBody.Entropy.Cut.RegionSplit
+import QICLean.Analysis.TraceNorm.RectangularTraceNormAlgebra
+import QICLean.Analysis.Isometry.EuclideanReindex
+import QICLean.Analysis.Norm.KroneckerOperatorNorm
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

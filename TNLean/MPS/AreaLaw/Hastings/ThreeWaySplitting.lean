@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.InteractionBudget
-import QICLean.Entropy.ZeroEntropy
-import QICLean.Entropy.FilterStationarity
-import QICLean.Analysis.ContractionChain
+import QICLean.ManyBody.Entropy.ZeroEntropy
+import QICLean.ManyBody.Entropy.Filter.Stationarity
+import QICLean.Analysis.Norm.ContractionChain
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.ManyBody.Dynamics.InteractionOperations
 import QICLean.ManyBody.Hamiltonian.NegativeFrequency

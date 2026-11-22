@@ -7,7 +7,7 @@ import TNLean.MPS.AreaLaw.ViableSet.SampledSuccessiveConstruction
 import TNLean.MPS.AreaLaw.ViableSet.RationalOrthonormalFamily
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalRepresentationBounds
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.PolynomialPrecision
-import QICLean.Algebra.DependentSequence
+import QICLean.Algebra.Combinatorics.DependentSequence
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

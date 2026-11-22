@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import Mathlib.LinearAlgebra.Matrix.ToLin
 import Mathlib.RepresentationTheory.Basic
-import QICLean.Algebra.WordAlgebra
+import QICLean.Spectral.Eigenvalue.WordAlgebra
 import TNLean.MPS.Defs
 
 /-!

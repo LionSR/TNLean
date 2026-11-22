@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.IndependentIntervalSections
 import TNLean.MPS.AreaLaw.BalancedIntervalFailureProbability
-import QICLean.Analysis.ViableSubspaceBootstrap
+import QICLean.Probability.Sampling.ViableSubspaceBootstrap
 
 /-!
 # True failure sections under independent interval laws

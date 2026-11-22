@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixKroneckerEmbed
-import QICLean.Algebra.PositiveSemidefiniteNormalization
+import QICLean.Algebra.Kronecker.KroneckerEmbed
+import QICLean.Algebra.Hermitian.PositiveSemidefiniteNormalization
 import QICLean.Channel.SupportCompletion
-import QICLean.Channel.ProjectiveResolution
+import QICLean.Channel.KrausMap.ProjectiveResolution
 import TNLean.MPS.MPDO.BNTBoundaryDecomposition
 import TNLean.MPS.MPDO.CommonWeightAbsorbedBNTSupport
 import TNLean.MPS.MPDO.FirstSite

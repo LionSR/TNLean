@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.EuclideanEigenvectorBasis
+import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
 import TNLean.MPS.AreaLaw.AKLV.Normalization
-import QICLean.Analysis.GaussianFilter.SpectralGap
-import QICLean.Analysis.LowEnergyCluster
+import QICLean.Spectral.Filter.Gaussian.SpectralGap
+import QICLean.Spectral.LowEnergy.Cluster
 
 /-!
 # The actual low spectral cluster of the two exterior truncations

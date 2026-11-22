@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Circuit.Gate.UnitaryExtension
-import QICLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.MPS.Preparation.ConfigurationLayers
 import QICLean.ManyBody.Sites.ConfigurationMap
 import QICLean.Circuit.Model.Measurement

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
-import QICLean.Entropy.ConditionalTwoFamilies
+import QICLean.ManyBody.Entropy.ConditionalTwoFamilies
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

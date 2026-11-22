@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.UncleWallGramAsymptotics
-import QICLean.Analysis.MatrixTraceInequalities
-import QICLean.Analysis.OperatorMean.PowerDerivative
-import QICLean.Channel.KrausCPTP
+import QICLean.Analysis.TraceInequality.MatrixTraceInequalities
+import QICLean.Channel.OperatorMean.PowerDerivative
+import QICLean.Channel.KrausMap.KrausCPTP
 
 /-!
 # Linear bounds for the moving-wall Gram matrix

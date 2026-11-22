@@ -5,10 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.Trimming
 import TNLean.MPS.AreaLaw.MPSApproximation
-import QICLean.Channel.TrimmingEnergy
-import QICLean.Analysis.OverlapTriangle
-import QICLean.Entropy.FilterPrefix
-import QICLean.Entropy.FilterChainEnergy
+import QICLean.Channel.Schmidt.TrimmingEnergy
+import QICLean.Analysis.Projection.OverlapTriangle
+import QICLean.ManyBody.Entropy.Filter.Prefix
+import QICLean.ManyBody.Entropy.Filter.ChainEnergy
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

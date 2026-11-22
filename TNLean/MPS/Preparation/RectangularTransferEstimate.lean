@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.CornerReferenceOverlap
 import TNLean.MPS.Preparation.PaddedBondState
-import QICLean.Algebra.RectangularChoi
-import QICLean.Channel.KrausCPTP
+import QICLean.Channel.Choi.RectangularChoi
+import QICLean.Channel.KrausMap.KrausCPTP
 import QICLean.Channel.SupportCompletion
 
 /-!

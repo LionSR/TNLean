@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.Data.Fin.Tuple.Basic
-import QICLean.Algebra.Subquotient
+import QICLean.Algebra.Module.Subquotient
 import TNLean.MPS.FundamentalTheorem.Reduction.WordModule
 
 /-!

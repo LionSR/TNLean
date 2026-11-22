@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.MixedSequentialFactorization
-import QICLean.Algebra.OrthogonalProjection
+import QICLean.Algebra.Hermitian.OrthogonalProjection
 
 /-!
 # Mixed sequential preparation on the polar support

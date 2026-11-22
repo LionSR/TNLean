@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.UncleWallGram
-import QICLean.Algebra.MatrixTracePairing
-import QICLean.Channel.KrausCPTP
-import QICLean.Channel.KrausRectangularComposition
+import QICLean.Algebra.Matrix.MatrixTracePairing
+import QICLean.Channel.KrausMap.KrausCPTP
+import QICLean.Kraus.Wielandt.KrausRectangularComposition
 import QICLean.Channel.Peripheral.UnitalKraus
 import Mathlib.Logic.Equiv.Fin.Basic
 

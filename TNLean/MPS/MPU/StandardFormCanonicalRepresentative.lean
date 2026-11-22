@@ -7,8 +7,8 @@ import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.StandardFormInterpolation
 import TNLean.MPS.MPU.CanonicalFormAncillaBlocking
 import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral
-import QICLean.Algebra.MatrixSingleSpan
-import QICLean.Channel.SchmidtRank
+import QICLean.Algebra.Matrix.MatrixSingleSpan
+import QICLean.Channel.Schmidt.Rank
 
 /-!
 # A tensor in canonical form for given standard-form gates

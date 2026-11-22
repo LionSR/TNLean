@@ -7,7 +7,7 @@ import TNLean.MPS.MPU.Examples.TimeReversalTraceSigns
 import TNLean.MPS.MPU.StandardFormDoubling
 import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.TimeReversalSignIntrinsic
-import QICLean.Algebra.MonomialMatrix
+import QICLean.Algebra.Matrix.MonomialMatrix
 
 
 /-!

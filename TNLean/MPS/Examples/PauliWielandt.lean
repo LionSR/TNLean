@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.SpinCover.Basic
-import QICLean.Channel.Semigroup.PauliDissipation
-import QICLean.Algebra.ComplexSqrt
+import QICLean.Entropy.Relative.PauliDissipation
+import QICLean.Analysis.Real.ComplexSqrt
 import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.MPS.Tensor
 

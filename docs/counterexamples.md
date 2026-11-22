@@ -295,7 +295,7 @@ mathematical obstruction.
 
 ### Irreducible channels need not be primitive
 
-- Location: `QICLean/QPF/Primitive.lean`
+- Location: `QICLean/Kraus/PrimitiveFixedPoint/Assembly.lean`
 - Statement refuted: irreducibility of a channel implies primitivity.
 - Witness: an irreducible channel can have period greater than `1`; primitivity
   is a stronger peripheral-spectrum condition.

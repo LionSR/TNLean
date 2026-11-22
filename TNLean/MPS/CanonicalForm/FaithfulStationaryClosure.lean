@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.ProjectorClosure
 import TNLean.MPS.Core.CanonicalNormalization
 import QICLean.Channel.FixedPoint.Algebra
-import QICLean.Channel.KrausMap
+import QICLean.Channel.KrausMap.KrausMap
 
 /-!
 # Invariant-projector closure from a faithful stationary density

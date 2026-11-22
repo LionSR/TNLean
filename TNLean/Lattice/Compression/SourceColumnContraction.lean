@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.SourcePreparation
-import QICLean.Analysis.SourceContraction
+import QICLean.Analysis.TraceNorm.SourceContraction
 import Mathlib.Logic.Equiv.Prod
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-! # Finite contraction of source columns
 

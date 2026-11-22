@@ -6,8 +6,8 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate
 import TNLean.PEPS.AreaLaw.RegularizedPatchMarginal
-import QICLean.Entropy.FilterStationarity
-import QICLean.Analysis.OperatorMean.MatrixPowers
+import QICLean.ManyBody.Entropy.Filter.Stationarity
+import QICLean.Analysis.FunctionalCalculus.MatrixPowers
 
 /-!
 # Trace pairing for an insertion in the ordered regularized product

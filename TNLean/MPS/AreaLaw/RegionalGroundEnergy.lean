@@ -5,10 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.HardTruncationResidual
 import TNLean.MPS.AreaLaw.AKLV.Truncation
-import QICLean.Analysis.GroundEnergyBounds
-import QICLean.Analysis.LowEnergyPerturbation
-import QICLean.Analysis.ProjectedPositiveEnergy
-import QICLean.Analysis.ViableProjectionNonzero
+import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
+import QICLean.Analysis.Order.LowEnergyPerturbation
+import QICLean.Analysis.Projection.ProjectedPositiveEnergy
+import QICLean.Analysis.Subspace.ViableSubspace
 
 /-!
 # Regional excitation energy on the full original ground space

@@ -4,14 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.OpenMPSRank
-import QICLean.Algebra.MatrixToEuclidean
-import QICLean.Algebra.MatrixStarProjection
-import QICLean.Entropy.FilterOptimizer
+import QICLean.Analysis.Norm.MatrixToEuclidean
+import QICLean.Analysis.Projection.MatrixStarProjection
+import QICLean.ManyBody.Entropy.Filter.Optimizer
 import TNLean.Lattice.RegionEntropyInequalities
-import QICLean.Entropy.RegionEntropy
-import QICLean.Entropy.SpectralTail
-import QICLean.Analysis.KyFanNorm
-import QICLean.Representation.RelativePin
+import QICLean.ManyBody.Entropy.RegionEntropy
+import QICLean.Entropy.VonNeumann.SpectralTail
+import QICLean.Spectral.Eigenvalue.KyFanNorm
+import QICLean.ManyBody.Replica.RelativePin
 
 /-!
 # Sequential truncation of a chain vector

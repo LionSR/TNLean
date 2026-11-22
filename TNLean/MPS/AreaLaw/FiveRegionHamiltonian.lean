@@ -7,12 +7,12 @@ import Mathlib.Data.Fin.VecNotation
 import Mathlib.Order.Interval.Finset.Nat
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum
-import QICLean.Analysis.GroundEnergyBounds
+import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
 import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.Entropy.RegionUnion
-import QICLean.Entropy.ZeroEntropy
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import QICLean.ManyBody.Entropy.ZeroEntropy
 import QICLean.ManyBody.Sites.Lattice.Chain
 /-!
 # Five consecutive regions and their original bonds

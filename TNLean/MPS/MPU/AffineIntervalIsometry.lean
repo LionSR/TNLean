@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.AffineGramHull
 import TNLean.MPS.MPU.AffineGramBalancing
-import QICLean.Analysis.MatrixSqrt
+import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 
 /-!
 # Interval isometries from affine Gram normalization

@@ -7,7 +7,7 @@ import TNLean.PEPS.VerticalTwoPlaquetteGeometry
 import TNLean.PEPS.RegularCycleGlobalPermutation
 import TNLean.PEPS.RegularTorusEntropy
 import TNLean.PEPS.TorusPlaquetteFluxMeasurement
-import QICLean.Algebra.ZModIntCast
+import QICLean.Algebra.Combinatorics.ZModIntCast
 
 /-!
 # Vertical movement of a flux on the original six spins

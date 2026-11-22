@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.CanonicalIntervalRawHistory
-import QICLean.Entropy.ViableSampling.CanonicalHalfSamplingParentProbability
-import QICLean.Entropy.RegionalViability
+import QICLean.ManyBody.Subspace.Sampling.CanonicalHalfSamplingParentProbability
+import QICLean.ManyBody.Entropy.Cut.RegionalViability
 
 /-!
 # Fixed-input probability for an actual interval history and terminal image

@@ -4,19 +4,19 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Hamiltonian.GroundSpace
-import QICLean.Algebra.MatrixReindexEuclidean
-import QICLean.Analysis.RegionalLowDefectProjection
-import QICLean.Analysis.RegionalRoughLowerNorm
-import QICLean.Analysis.RegionalSharpLowerNorm
-import QICLean.Entropy.AuxiliaryPairEntropy
-import QICLean.Entropy.SelectedSchmidtEntropy
-import QICLean.Entropy.TypicalDensity
-import QICLean.Representation.CompressedTypicalLabelMass
-import QICLean.Representation.RegionalAuxiliaryLabels
-import QICLean.Representation.ReplicaPrevectorRoughUpper
-import QICLean.Representation.ReplicaPrevectorSharpUpper
-import QICLean.Representation.ReplicaSymmetricBandCommute
-import QICLean.Analysis.OperatorMean.TreeDerivative
+import QICLean.Spectral.Eigenvalue.MatrixReindexEuclidean
+import QICLean.ManyBody.Replica.LowDefect.RegionalLowDefectProjection
+import QICLean.ManyBody.Replica.LowDefect.RegionalRoughLowerNorm
+import QICLean.ManyBody.Replica.LowDefect.RegionalSharpLowerNorm
+import QICLean.ManyBody.Entropy.AuxiliaryPairEntropy
+import QICLean.Entropy.Typical.PureCompression
+import QICLean.Entropy.Typical.Density
+import QICLean.ManyBody.Replica.CompressedSite.CompressedTypicalLabelMass
+import QICLean.ManyBody.Replica.Configuration.RegionalFiveFactorCoordinates
+import QICLean.ManyBody.Replica.Bell.PrevectorRoughUpper
+import QICLean.ManyBody.Replica.Bell.PrevectorSharpUpper
+import QICLean.ManyBody.Replica.Metric.SymmetricBandCommute
+import QICLean.Channel.OperatorMean.TreeDerivative
 
 /-!
 # Data of the norm comparisons from an auxiliary pair

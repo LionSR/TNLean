@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.PositiveConstraints
 import TNLean.PEPS.AreaLaw.TruncationSeries
-import QICLean.Analysis.GapPerturbation
+import QICLean.Spectral.Perturbation.GapPerturbation
 import QICLean.ManyBody.Sites.GraphBall
 
 /-!

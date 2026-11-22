@@ -8,7 +8,7 @@ import TNLean.MPS.AreaLaw.SnakeGridParameters
 import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.PEPS.AreaLaw.TailParameter
 import TNLean.PEPS.AreaLaw.TheoremStatements
-import QICLean.Entropy.RegionCovariance
+import QICLean.ManyBody.Entropy.RegionCovariance
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

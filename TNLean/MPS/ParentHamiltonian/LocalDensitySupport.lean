@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.LocalFaithfulSupport
 import TNLean.MPS.Core.PhysicalDimension
 import TNLean.MPS.ParentHamiltonian.LocalObservableState
-import QICLean.Channel.PositiveFunctional
-import QICLean.Analysis.SemidefiniteProgram
+import QICLean.Channel.Positive.PositiveFunctional
+import QICLean.Analysis.Optimization.SemidefiniteProgram
 import QICLean.Channel.Schwarz.Closure
 
 /-!

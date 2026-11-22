@@ -7,7 +7,7 @@ import TNLean.MPS.Preparation.InhomogeneousDoeblin
 import TNLean.MPS.Preparation.BlockIsometryState
 import TNLean.MPS.Preparation.SecondOrderOverlap
 import QICLean.Channel.Semigroup.CPClosure
-import QICLean.Channel.ChoiResidual
+import QICLean.Channel.Choi.Residual
 
 /-!
 # Residual Choi bounds for actual inhomogeneous blocks

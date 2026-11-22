@@ -16,7 +16,7 @@ The module carried no declarations; it only re-exported `Selectors`. Its single
 in-library importer, `BiCFDerivation/DiagonalRestrictionCounterexample.lean`,
 now imports `Selectors` directly and keeps its separate
 `TNLean.Algebra.TracePairing` import: `Selectors` does not in fact reach
-`QICLean.Algebra.MatrixTracePairing`, and dropping the edge left
+`QICLean.Algebra.Matrix.MatrixTracePairing`, and dropping the edge left
 `Matrix.trace_mul_right_eq_zero_iff` unresolved. The import closure is
 otherwise unchanged. The remaining importer was the generated aggregator
 `TNLean/MPS/MPDO.lean`, which was regenerated, and the bullet naming the facade

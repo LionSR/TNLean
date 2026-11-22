@@ -12,9 +12,9 @@ owners directly.
 | Former TNLean location | QICLean owner | Surface |
 |---|---|---|
 | `TNLean/MPS/Defs.lean` | `QICLean/Kraus/Injectivity.lean` | linear-functional non-injectivity and block-non-injectivity criteria |
-| `TNLean/MPS/MPU/Simple.lean` | `QICLean/Algebra/RankOneSandwich.lean` | rank-one sandwich and trace factorization for matrix lists |
-| `TNLean/MPS/CanonicalForm/ProjectorClosureDecomposition.lean` | `QICLean/Algebra/OrthogonalProjection.lean` | support-isometry factorization with trace/rank equality |
-| `TNLean/MPS/CanonicalForm/NormalCommutant.lean` | `QICLean/Algebra/MatrixGramConjugation.lean` and `QICLean/Kraus/NormalCommutant.lean` | Gram-conjugation algebra, normal-family commutant rigidity, and unitary normalization |
+| `TNLean/MPS/MPU/Simple.lean` | `QICLean/Algebra/Matrix/RankOneSandwich.lean` | rank-one sandwich and trace factorization for matrix lists |
+| `TNLean/MPS/CanonicalForm/ProjectorClosureDecomposition.lean` | `QICLean/Algebra/Hermitian/OrthogonalProjection.lean` | support-isometry factorization with trace/rank equality |
+| `TNLean/MPS/CanonicalForm/NormalCommutant.lean` | `QICLean/Algebra/Unitary/MatrixGramConjugation.lean` and `QICLean/Kraus/NormalCommutant.lean` | Gram-conjugation algebra, normal-family commutant rigidity, and unitary normalization |
 
 The public qualified declaration names are unchanged, so TNLean consumers now
 import the QICLean owner without compatibility aliases. The obsolete

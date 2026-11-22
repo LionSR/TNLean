@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixAux
-import QICLean.Analysis.MatrixSqrt
-import QICLean.Channel.KrausSupportAbsorption
+import QICLean.Algebra.Matrix.MatrixAux
+import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
+import QICLean.Channel.KrausMap.KrausSupportAbsorption
 import TNLean.MPS.FundamentalTheorem.Reduction.AbsorbingCompression
 import TNLean.MPS.MPDO.OperatorFromWordTrace
 import TNLean.MPS.MPU.FactorFreeSandwich

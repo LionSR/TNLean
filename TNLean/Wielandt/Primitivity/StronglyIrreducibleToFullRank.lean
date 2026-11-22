@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Channel.WolfTheorem68
-import QICLean.Kraus.InvariantProjection
+import QICLean.Kraus.Wielandt.PrimitiveCriterion
+import QICLean.Channel.Irreducible.InvariantProjection
 import QICLean.Kraus.PrimitiveFixedPoint
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 import QICLean.Kraus.Transfer

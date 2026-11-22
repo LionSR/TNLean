@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.TupleEquiv
-import QICLean.Algebra.MatrixRankKronecker
-import QICLean.Algebra.TraceReindex
+import QICLean.Algebra.Combinatorics.TupleEquiv
+import QICLean.Algebra.Matrix.MatrixRankBaseChange
+import QICLean.Algebra.Matrix.MatrixReindex
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.SourceCuts
 

@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixGramUnitary
-import QICLean.Analysis.MatrixSqrt
+import QICLean.Algebra.Unitary.MatrixGramUnitary
+import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 
 /-!
 # Unitary polar factors for two unital Kraus operators

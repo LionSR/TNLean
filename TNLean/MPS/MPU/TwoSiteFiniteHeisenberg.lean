@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
 import TNLean.MPS.MPU.TwoSiteStandardFormOpenWord
 import TNLean.MPS.MPU.TwoSiteStandardFormResidualWord
-import QICLean.Algebra.MatrixKroneckerEmbed
+import QICLean.Algebra.Kronecker.KroneckerEmbed
 import Mathlib.Tactic.FinCases
 
 /-!

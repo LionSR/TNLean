@@ -7,8 +7,8 @@ import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.AreaLaw.Huang.ChainGrid
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.Entropy.RegionUnion
-import QICLean.Algebra.HermitianPartSum
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import QICLean.Algebra.Hermitian.HermitianPartSum
 
 /-!
 # The Hamiltonian decomposition associated with the uniform grid

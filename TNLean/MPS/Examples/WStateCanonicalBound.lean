@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.WStatePeriodic
 import TNLean.MPS.ParentHamiltonian.PGVWC07CutRank
-import QICLean.Channel.QuantumWielandt
+import QICLean.Kraus.Wielandt.QuantumWielandt
 
 /-!
 # W state: the single-length bound from a canonical form with condition C1

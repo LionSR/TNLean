@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedFamily
 import TNLean.MPS.AreaLaw.IntervalFamilyTrimmingIteration
-import QICLean.Analysis.InterleavedStoppingParameters
+import QICLean.Analysis.Parameter.InterleavedStoppingParameters
 
 /-!
 # Actual finite interleaved interval filtering and trimming

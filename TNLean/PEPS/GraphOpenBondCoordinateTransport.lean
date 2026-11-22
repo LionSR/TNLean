@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.SemiRegularCanonicalLocalTransport
 import TNLean.PEPS.BondCoordinateTransport
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Fourier transport with arbitrary open virtual boundary data

@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.SoftTerminalNodeEnergy
-import QICLean.Analysis.GroundSpectrumMinimum
-import QICLean.Entropy.RegionalViability
+import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
+import QICLean.ManyBody.Entropy.Cut.RegionalViability
 
 /-!
 # Energy estimation on a selected interval family

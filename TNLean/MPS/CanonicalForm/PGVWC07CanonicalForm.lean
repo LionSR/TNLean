@@ -5,10 +5,10 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.IsDiag
 import Mathlib.LinearAlgebra.Matrix.PosDef
-import QICLean.Algebra.MatrixAux
+import QICLean.Algebra.Matrix.MatrixAux
 import QICLean.Channel.Irreducible.AdjointFamily
 import QICLean.Kraus.Injectivity
-import QICLean.Kraus.InvariantProjection
+import QICLean.Channel.Irreducible.InvariantProjection
 import QICLean.Kraus.Transfer
 import TNLean.MPS.SharedInfra.BlockAssembly
 

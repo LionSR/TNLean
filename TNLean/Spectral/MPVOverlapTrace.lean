@@ -3,10 +3,10 @@ Copyright (c) 2025 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixTracePairing
+import QICLean.Algebra.Matrix.MatrixTracePairing
 import QICLean.Channel.TransferMatrix
 import TNLean.MPS.Overlap.Basic
-import QICLean.Kraus.MixedMap
+import QICLean.Kraus.MixedMap.Basic
 import QICLean.Kraus.Transfer
 
 import Mathlib.LinearAlgebra.Trace

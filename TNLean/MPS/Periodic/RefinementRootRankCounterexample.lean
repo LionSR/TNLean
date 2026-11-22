@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Kraus.ChoiRankSpan
-import QICLean.Algebra.ComplexSqrt
+import QICLean.Analysis.Real.ComplexSqrt
 import TNLean.MPS.Periodic.Defs
-import QICLean.Channel.KrausMap
-import QICLean.Kraus.MapIterate
+import QICLean.Channel.KrausMap.KrausMap
+import QICLean.Kraus.Transfer
 
 /-!
 # A cyclic-reset channel whose square has smaller Kraus rank

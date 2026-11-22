@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Complex.Basic
-import QICLean.Algebra.MonomialMatrix
+import QICLean.Algebra.Matrix.MonomialMatrix
 
 /-!
 # On-site operators on lattice configurations

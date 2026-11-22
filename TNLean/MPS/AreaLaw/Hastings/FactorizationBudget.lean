@@ -7,7 +7,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 import Mathlib.Analysis.SpecialFunctions.Exponential
 import Mathlib.Analysis.Real.Pi.Bounds
-import QICLean.Analysis.PowerExponential
+import QICLean.Analysis.Real.PowerExponential
 
 /-!
 # The error budget of Lemma 1 of Hastings' area law

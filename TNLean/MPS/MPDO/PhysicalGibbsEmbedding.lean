@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.SitewisePhysicalMatrix
-import QICLean.Algebra.FiniteKroneckerProduct
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import Mathlib.Analysis.Normed.Algebra.MatrixExponential
 
 /-!

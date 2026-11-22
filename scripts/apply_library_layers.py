@@ -683,7 +683,10 @@ def apply(root: Path, map_path: Path) -> int:
         for e in mmap.errors:
             print(f"ERROR: {e}")
         return 1
-    present = {old for old in mmap.target if old in tree.sources}
+    # after a first run, the aggregator generator may write a file at an old
+    # path; it is not a module still to be moved
+    present = {old for old in mmap.target
+               if old in tree.sources and not tree.is_aggregator(old)}
     renames = {old: mmap.target[old] for old in present if mmap.target[old] != old}
     decls = declaration_names(tree)
 

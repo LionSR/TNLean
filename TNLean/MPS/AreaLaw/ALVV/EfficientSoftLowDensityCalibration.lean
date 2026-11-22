@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.EfficientSoftLowDensityFamily
 import TNLean.MPS.AreaLaw.ALVV.EfficientSoftLowDensityParameters
-import QICLean.Analysis.SoftFamilyCalibration
-import QICLean.Analysis.GeometricOrderPolynomialBound
+import QICLean.Analysis.Parameter.SoftFamilyCalibration
+import QICLean.Analysis.Real.GeometricOrderPolynomialBound
 
 /-!
 # The calibrated efficient soft improving family for low-density spectra

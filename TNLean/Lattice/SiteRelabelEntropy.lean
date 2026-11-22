@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Entropy.RegionEntropy
-import QICLean.Analysis.EntropyDecomposition
-import QICLean.Entropy.SumSitesProduct
+import QICLean.ManyBody.Entropy.RegionEntropy
+import QICLean.Entropy.VonNeumann.EntropyDecomposition
+import QICLean.ManyBody.Entropy.SumSitesProduct
 
 /-!
 # Regional entropies after relabelling sites and adjoining systems
@@ -30,7 +30,7 @@ of `A`.
 
 The product vector `f ⊗ g` on the sites `A ⊕ B` and its entropies are QICLean's
 `ManyBody.sumSitesProduct`, `ManyBody.regionEntropy_sumSitesProduct` and the two
-mutual-information statements, in `QICLean/Entropy/SumSitesProduct.lean`.
+mutual-information statements, in `QICLean/ManyBody/Entropy/SumSitesProduct.lean`.
 
 ## Main statements
 

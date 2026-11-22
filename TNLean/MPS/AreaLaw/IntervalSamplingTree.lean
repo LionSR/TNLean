@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.BalancedIntervalTree
 import TNLean.MPS.AreaLaw.IntervalSampledImage
 import TNLean.MPS.AreaLaw.IntervalFullSpaceProfile
-import QICLean.Analysis.ViableNodeSamplingParameters
+import QICLean.Analysis.Parameter.ViableNodeSamplingParameters
 
 /-!
 # A recursively selected sampled interval tree

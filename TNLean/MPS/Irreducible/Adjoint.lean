@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Irreducible.FormII
-import QICLean.Kraus.InvariantProjection
+import QICLean.Channel.Irreducible.InvariantProjection
 import QICLean.Kraus.Transfer
 import QICLean.Channel.Irreducible.AdjointFamily
 import QICLean.Channel.Schwarz.KadisonSchwarz

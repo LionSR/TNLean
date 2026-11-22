@@ -5,13 +5,12 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.SoftParentEnergy
 import TNLean.MPS.AreaLaw.AdjacentIntervalMerge
-import QICLean.Analysis.SoftRegionalEnergyParameters
-import QICLean.Analysis.RegionalEnergyCalibration
-import QICLean.Analysis.ViableProjectionNonzero
-import QICLean.Analysis.ViableSubspaceOrder
-import QICLean.Analysis.CompressionEnergyInterval
-import QICLean.Analysis.QuadraticScalarShift
-import QICLean.Entropy.RegionalOperatorCoordinates
+import QICLean.Analysis.Parameter.SoftRegionalEnergyParameters
+import QICLean.Analysis.Projection.RegionalEnergyCalibration
+import QICLean.Analysis.Subspace.ViableSubspace
+import QICLean.Spectral.Eigenvalue.CompressionEnergyInterval
+import QICLean.Analysis.Order.QuadraticScalarShift
+import QICLean.ManyBody.Entropy.Cut.RegionalOperatorCoordinates
 
 /-!
 # Raw regional energy on the same untrimmed word candidate

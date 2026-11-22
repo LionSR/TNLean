@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularPhysicalCutTransfer
-import QICLean.Entropy.FlatDensityEntropy
+import QICLean.Entropy.Renyi.FlatDensityEntropy
 
 /-!
 # Reduced densities under supported physical maps

@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.ExponentialDistanceProfile
-import QICLean.Analysis.StretchedExponentialSummability
+import QICLean.Analysis.Metric.ExponentialDistanceProfile
+import QICLean.Analysis.Real.StretchedExponentialSummability
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelWeightedRow
 import TNLean.PEPS.AreaLaw.GraphExtendedMetric
 

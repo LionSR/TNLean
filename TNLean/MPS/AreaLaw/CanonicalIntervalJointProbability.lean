@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.CanonicalIntervalGuardedProbability
 import TNLean.MPS.AreaLaw.BalancedIntervalFailureProbability
 import TNLean.MPS.AreaLaw.BalancedIntervalJointFailure
-import QICLean.Analysis.ViableSubspaceBootstrap
+import QICLean.Probability.Sampling.ViableSubspaceBootstrap
 
 /-!
 # Joint probability from actual fixed-child parent estimates

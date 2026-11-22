@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import QICLean.Representation.ReplicaTransport.RootMetricFloor
+import QICLean.ManyBody.Replica.BandMetric.RootMetricFloor
 import TNLean.PEPS.AreaLaw.Scan.FillTransport
 
 /-!

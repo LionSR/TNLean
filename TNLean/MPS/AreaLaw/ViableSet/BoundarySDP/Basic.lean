@@ -9,11 +9,11 @@ import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.Endpoints
 import TNLean.MPS.Preparation.IsometricChain
-import QICLean.Algebra.FiniteCauchySchwarz
-import QICLean.Analysis.TraceNormContractivity
-import QICLean.Analysis.TraceNormNet
-import QICLean.Analysis.RectangularTraceNormTopology
-import QICLean.Algebra.MatrixIsometryEntries
+import QICLean.Algebra.Combinatorics.FiniteCauchySchwarz
+import QICLean.Analysis.Norm.TraceNormContractivity
+import QICLean.Channel.TraceNormNet
+import QICLean.Analysis.TraceNorm.RectangularTraceNorm
+import QICLean.Algebra.Unitary.MatrixIsometryEntries
 import Mathlib.Basic.Complex.BigOperators
 import Mathlib.LinearAlgebra.Matrix.Gershgorin
 import Mathlib.Data.NNRat.Floor

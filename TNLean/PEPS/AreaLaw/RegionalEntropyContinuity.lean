@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.TwoFamilies
-import QICLean.Entropy.RegionEntropyContinuity
+import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 
 /-!
 # Regional entropy continuity on a finite lattice

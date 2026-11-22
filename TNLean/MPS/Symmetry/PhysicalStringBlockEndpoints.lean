@@ -6,10 +6,10 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.PhysicalStringEndpointSpan
 import TNLean.MPS.Symmetry.StringOrderDefs
 import TNLean.MPS.Core.Blocking
-import QICLean.Algebra.HermitianHelpers
-import QICLean.Algebra.KroneckerFactorPositivity
+import QICLean.Spectral.Eigenvalue.HermitianExtremalEigenvalues
+import QICLean.Algebra.Kronecker.KroneckerFactorPositivity
 import Mathlib.LinearAlgebra.Multilinear.Basic
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Both physical endpoints on dimension-bounded blocks

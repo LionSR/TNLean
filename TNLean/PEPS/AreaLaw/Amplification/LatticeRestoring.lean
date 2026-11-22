@@ -5,10 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Amplification.TypicalProjectors
 import TNLean.PEPS.AreaLaw.TwoFamilies
-import QICLean.Entropy.RestoringNorm
-import QICLean.Entropy.RestoringGroundComponent
-import QICLean.Entropy.RestoringVectors
-import QICLean.Entropy.SchmidtPinning
+import QICLean.Channel.Dilation.RestoringNorm
+import QICLean.Channel.Dilation.RestoringGroundComponent
+import QICLean.Analysis.Isometry.RestoringVectors
+import QICLean.ManyBody.Entropy.Filter.SchmidtPinning
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointCornerSupport
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSwap
-import QICLean.Algebra.TraceReindex
+import QICLean.Algebra.Matrix.MatrixReindex
 
 /-!
 # Exchanging the endpoints of the actual joint mixed family

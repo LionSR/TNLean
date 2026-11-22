@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Representation.RegionPowerSymbol
-import QICLean.Algebra.MatrixToEuclidean
-import QICLean.Entropy.FilterPower
+import QICLean.ManyBody.Replica.Symbol.RegionPowerSymbol
+import QICLean.Analysis.Norm.MatrixToEuclidean
+import QICLean.ManyBody.Entropy.Filter.Power
 
 /-!
 # Spectral cut-offs of the localized boundary terms after Hastings

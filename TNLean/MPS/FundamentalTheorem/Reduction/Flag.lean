@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 import Mathlib.RingTheory.Noetherian.Basic
-import QICLean.Algebra.TraceInvariantSubmodule
+import QICLean.Algebra.Module.TraceInvariantSubmodule
 import TNLean.MPS.FundamentalTheorem.Reduction.FlagData
 import TNLean.MPS.FundamentalTheorem.Reduction.Identification
 

@@ -9,7 +9,7 @@ import Mathlib.Analysis.Normed.Operator.LinearIsometry
 import Mathlib.Analysis.Normed.Module.Convex
 import Mathlib.Analysis.Normed.Module.RCLike.Real
 import Mathlib.Tactic.Linarith
-import QICLean.Algebra.MatrixAux
+import QICLean.Algebra.Matrix.MatrixAux
 import TNLean.MPS.Symmetry.LocalSpectralSupport
 import TNLean.MPS.Symmetry.ProjectiveGaugeTransport
 import TNLean.MPS.Symmetry.NearbyInjectiveAdjointActions

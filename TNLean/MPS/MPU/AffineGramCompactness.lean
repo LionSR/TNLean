@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.Basic
-import QICLean.Analysis.MatrixSqrt
+import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 import Mathlib.Topology.Algebra.AffineSubspace
 
 /-!

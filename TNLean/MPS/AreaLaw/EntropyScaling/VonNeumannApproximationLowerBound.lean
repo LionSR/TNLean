@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.EntropyScaling.CutReducedState
 import TNLean.MPS.AreaLaw.EntropyScaling.VonNeumannSpectralTail
-import QICLean.Entropy.RegionPureApproximationTail
+import QICLean.ManyBody.Entropy.Cut.RegionPureApproximationTail
 import Mathlib.Analysis.SpecialFunctions.Log.PosLog
 
 /-!

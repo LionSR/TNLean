@@ -7,7 +7,7 @@ import TNLean.PEPS.AreaLaw.Scan.ActualChargeData
 import TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms
 import TNLean.PEPS.AreaLaw.Scan.FillSupportCompatibility
 import TNLean.PEPS.AreaLaw.Scan.TransportDimension
-import QICLean.Representation.ReplicaTransport.Transport
+import QICLean.ManyBody.Replica.BandMetric.Transport
 
 /-!
 # Entropy and energy transport for the actual fill and charge rounds

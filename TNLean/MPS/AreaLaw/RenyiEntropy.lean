@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.AreaLaw.Counting
-import QICLean.Entropy.RegionEntropy
+import QICLean.ManyBody.Entropy.RegionEntropy
 import Mathlib.Analysis.Convex.Jensen
 import Mathlib.Analysis.Convex.SpecificFunctions.Basic
 import QICLean.ManyBody.Hamiltonian.GroundSpace

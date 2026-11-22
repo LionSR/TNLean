@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.CutRank
 import TNLean.MPS.Preparation.SequentialTransition
-import QICLean.Algebra.StackedIsometryCard
+import QICLean.Algebra.Unitary.StackedIsometryCard
 
 /-!
 # Bond dimensions and minimal resources of sequential generation

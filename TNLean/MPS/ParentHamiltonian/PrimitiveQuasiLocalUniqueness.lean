@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.BoundaryObservableCompression
 import TNLean.MPS.ParentHamiltonian.LocalObservableQuasiLocalState
 import TNLean.MPS.ParentHamiltonian.QuasiLocalCommutatorLocality
-import QICLean.Algebra.MatrixStarProjection
+import QICLean.Analysis.Projection.MatrixStarProjection
 import TNLean.QCA.StateSpace
 import TNLean.QCA.QuasiLocalInterval
 import Mathlib.Analysis.CStarAlgebra.GelfandNaimarkSegal

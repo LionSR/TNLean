@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.FiniteSetTruncation
-import QICLean.Entropy.SupportedMarginalTails
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
 import QICLean.ManyBody.Sites.GraphBoundary
 import Mathlib.Combinatorics.SimpleGraph.Density
 

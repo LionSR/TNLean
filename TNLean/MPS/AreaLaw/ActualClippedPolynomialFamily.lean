@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Fin.VecNotation
-import QICLean.Analysis.MatrixTensorCoordinates
-import QICLean.Algebra.MatrixFactorExchange
-import QICLean.Algebra.TwoWindowSum
+import QICLean.Analysis.TensorProduct.MatrixTensorCoordinates
+import QICLean.Algebra.OperatorSchmidt.MatrixFactorExchange
+import QICLean.Algebra.Combinatorics.TwoWindowSum
 import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport

@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.CompactKernelGap
+import QICLean.Spectral.Gap.CompactKernelGap
 import TNLean.MPS.MPDO.CPSVSharpBlocking
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceContinuity
 import TNLean.MPS.ParentHamiltonian.BlockPeriodicGroundSpaceContinuity
 import TNLean.MPS.ParentHamiltonian.BlockOpenGroundSpaceAtSimultaneousInjectivity
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteRangeKnabeGap
 import TNLean.MPS.ParentHamiltonian.Martingale.BlockOpenGapAtSimultaneousInjectivity
-import QICLean.Analysis.KernelGapPerturbation
+import QICLean.Spectral.Perturbation.KernelGapPerturbation
 
 /-!
 # Compact uniform gaps for several simultaneously injective blocks

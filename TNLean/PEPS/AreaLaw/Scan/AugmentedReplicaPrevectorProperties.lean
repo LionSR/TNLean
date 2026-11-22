@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.AugmentedReplicaMetricCoordinates
 import TNLean.PEPS.AreaLaw.Scan.GlobalReplicaEnergyCoordinates
-import QICLean.Representation.ReplicaPrevector
-import QICLean.Representation.RegionalAuxiliaryLabels
-import QICLean.Analysis.RegionalLowDefectProjection
+import QICLean.Representation.Bell.ReplicaPrevector
+import QICLean.ManyBody.Replica.Configuration.RegionalFiveFactorCoordinates
+import QICLean.ManyBody.Replica.LowDefect.RegionalLowDefectProjection
 
 /-!
 # Symmetry and supplied labels of the augmented initial vector

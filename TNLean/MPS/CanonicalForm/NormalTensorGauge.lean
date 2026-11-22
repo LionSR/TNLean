@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.ComplexPhasePositivity
-import QICLean.Algebra.MatrixAux
+import QICLean.Analysis.Order.ComplexPhasePositivity
+import QICLean.Algebra.Matrix.MatrixAux
 import QICLean.Channel.Irreducible.SpectralRadius
 import TNLean.MPS.CanonicalForm.Definitions
-import QICLean.Channel.KrausMap
+import QICLean.Channel.KrausMap.KrausMap
 import QICLean.Kraus.Transfer
 import TNLean.MPS.Irreducible.PerronGauge
 import TNLean.MPS.CanonicalForm.PhaseCover

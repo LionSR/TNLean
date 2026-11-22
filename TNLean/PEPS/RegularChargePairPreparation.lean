@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularChargePair
-import QICLean.Algebra.UnitaryVectorSwap
+import QICLean.Algebra.Unitary.UnitaryVectorSwap
 import Mathlib.LinearAlgebra.Matrix.Vec
 
 /-!

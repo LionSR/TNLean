@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.StationarySupportedDensityPhaseInvariance
-import QICLean.Analysis.SupportCompression
+import QICLean.Analysis.Support.Compression
 import QICLean.Channel.Irreducible.FromSpectral
 import QICLean.Channel.Irreducible.AdjointFamily
 import QICLean.Channel.KoashiImoto.MeanErgodicProjection

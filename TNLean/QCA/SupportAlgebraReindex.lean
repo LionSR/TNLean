@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.QCA.BipartiteSupportAlgebra
-import QICLean.Algebra.SkolemNoetherUnitary
+import QICLean.Algebra.MatrixAlgebra.SkolemNoetherUnitary
 
 /-!
 # Reindexing the factors of a finite support algebra

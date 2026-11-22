@@ -8,7 +8,7 @@ that shadow Mathlib lemmas.
 
 | Removed | Replacement |
 |---|---|
-| `Matrix.partialTraceRight_singleKraus_kronecker_isometry` (`TNLean/MPS/MPDO/PhysicalSupportSALTransport.lean`) | `Matrix.partialTraceRight_kronecker_conj_of_right_isometry` (QICLean, `QICLean/Channel/PartialTrace.lean`) |
+| `Matrix.partialTraceRight_singleKraus_kronecker_isometry` (`TNLean/MPS/MPDO/PhysicalSupportSALTransport.lean`) | `Matrix.partialTraceRight_kronecker_conj_of_right_isometry` (QICLean, `QICLean/Algebra/PartialTrace.lean`) |
 | `MPOTensor.PhysicalSupportRestrictionData.product_isHermitian_of_comm` (private, `TNLean/MPS/MPDO/PhysicalSupportBondCommutativity.lean`) | `Matrix.IsHermitian.commute_iff` (Mathlib, `Mathlib/LinearAlgebra/Matrix/Hermitian.lean:301`), forward direction |
 | `MPOTensor.PhysicalSupportRestrictionData.commute_of_product_isHermitian` (private, same file) | `Matrix.IsHermitian.commute_iff` composed with `Commute.eq`, reverse direction |
 | `MPOTensor.list_prod_eq_one_of_forall` (private, `TNLean/MPS/MPDO/PhysicalSupportProductTransport.lean`) | `List.prod_eq_one` (Mathlib, `Mathlib/Algebra/BigOperators/Group/List/Basic.lean:161`) |

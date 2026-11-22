@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalDGTreeApproximation
-import QICLean.Analysis.RefinementOutputPolynomialBound
+import QICLean.Analysis.Parameter.RefinementOutputPolynomialBound
 
 /-!
 # A uniform polynomial bond for the actual recursive Ritz output

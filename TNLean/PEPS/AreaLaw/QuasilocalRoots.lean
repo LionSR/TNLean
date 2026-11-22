@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.PositiveConstraints
-import QICLean.Analysis.RootChannel
+import QICLean.Analysis.Norm.RootChannel
 
 /-!
 # Square roots of the positive constraints and their local channels

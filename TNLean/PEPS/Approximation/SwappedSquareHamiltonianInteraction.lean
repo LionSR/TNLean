@@ -9,7 +9,7 @@ import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.Lattice.Sheet.SwapCorrection
 import TNLean.Lattice.RegionalSwapSupport
 import TNLean.Circuit.SitewiseTensorSupport
-import QICLean.Analysis.DoubledSystemGap
+import QICLean.Spectral.Gap.DoubledSystemGap
 
 /-!
 # The local interactions of the partially swapped doubled Hamiltonian

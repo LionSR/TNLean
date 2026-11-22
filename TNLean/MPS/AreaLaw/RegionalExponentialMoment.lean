@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.RegionalTruncationResidual
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
-import QICLean.Analysis.ExponentialWeightRestriction
-import QICLean.Analysis.EuclideanEigenvectorBasis
+import QICLean.Spectral.LowEnergy.ExponentialWeightRestriction
+import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
 
 /-!
 # Regional exponential moments on the original low-energy space

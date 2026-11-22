@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.OpenMPSRank
 import TNLean.MPS.MPDO.TraceChainOperator
 import TNLean.MPS.MPDO.Purity
-import QICLean.Algebra.OperatorSchmidtRealignment
+import QICLean.Algebra.OperatorSchmidt.Realignment
 
 /-!
 # An actual site-dependent operator chain from the operator cut ranks

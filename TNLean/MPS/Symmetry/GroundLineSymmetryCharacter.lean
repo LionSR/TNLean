@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.RankOneFactorization
-import QICLean.Algebra.RankOneSandwich
+import QICLean.Algebra.Matrix.RankOneFactorization
+import QICLean.Algebra.Matrix.RankOneSandwich
 import Mathlib.LinearAlgebra.Eigenspace.Minpoly
 import Mathlib.Analysis.Complex.Basic
 import Mathlib.Analysis.CStarAlgebra.Matrix

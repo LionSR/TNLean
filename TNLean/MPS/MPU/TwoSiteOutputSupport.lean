@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixStarEquivSpatial
+import QICLean.Algebra.MatrixAlgebra.MatrixStarEquivSpatial
 import TNLean.MPS.MPU.TwoSiteStandardFormOpenWord
 import TNLean.QCA.BipartiteSupportAlgebra
-import QICLean.Algebra.SkolemNoetherUnitary
+import QICLean.Algebra.MatrixAlgebra.SkolemNoetherUnitary
 import Mathlib.Data.Matrix.Basis
 
 /-!

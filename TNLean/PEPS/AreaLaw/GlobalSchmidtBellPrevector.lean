@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixReindexEuclidean
-import QICLean.Representation.SchmidtBellPrevector
-import QICLean.Analysis.RegionalLowDefectProjection
+import QICLean.Spectral.Eigenvalue.MatrixReindexEuclidean
+import QICLean.Representation.Bell.SchmidtBellPrevector
+import QICLean.ManyBody.Replica.LowDefect.RegionalLowDefectProjection
 
 /-!
 # A common Schmidt--Bell label sequence in physical-site coordinates

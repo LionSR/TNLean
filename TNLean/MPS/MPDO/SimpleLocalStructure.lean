@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.Defs
 import TNLean.MPS.MPDO.SimpleLocalInverseMaps
 import TNLean.MPS.MPDO.ZCL
-import QICLean.Entropy.MarkovChain
+import QICLean.Entropy.StrongSubadditivity.MarkovChain
 import TNLean.MPS.MPDO.MutualInfoMonotone
 import TNLean.MPS.Chain.VirtualInsertion
 import QICLean.Algebra.PerronFrobenius.RankOne

@@ -19,7 +19,7 @@ import TNLean.Spectral.TransferOperatorGapNT
 import QICLean.Channel.Irreducible.PerronFrobenius
 import QICLean.Channel.Schwarz.MultiplicativeDomainFull
 
-import QICLean.Algebra.GramMatrixLI
+import QICLean.Analysis.Topology.GramMatrixLI
 import QICLean.Channel.Peripheral.CyclicDecomposition.Primitivity
 import Mathlib.Analysis.InnerProductSpace.l2Space
 

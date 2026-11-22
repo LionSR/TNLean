@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixRankBaseChange
-import QICLean.Entropy.ClassicalMutualInformation
+import QICLean.Algebra.Matrix.MatrixRankBaseChange
+import QICLean.Entropy.Classical.MutualInformation
 import TNLean.MPS.MPDO.Defs
 
 /-!
@@ -21,7 +21,7 @@ arXiv:1704.06507, it gives the stronger classical estimate
 $I(X:Y) \leq 2\log D$.  The information-versus-rank theorem is formalized in
 `TNLean.Entropy.ClassicalMutualInformation`; rank invariance under scalar
 normalization is supplied by Mathlib, while scalar extension is proved in
-`QICLean.Algebra.MatrixRankBaseChange`.
+`QICLean.Algebra.Matrix.MatrixRankBaseChange`.
 
 ## Main definitions
 

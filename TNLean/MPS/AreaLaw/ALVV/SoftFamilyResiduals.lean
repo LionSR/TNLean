@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.RegionalBarrierResidual
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
-import QICLean.Analysis.SoftTruncationCommutingFamily
-import QICLean.Analysis.ShiftedLowEnergyCoordinates
+import QICLean.Spectral.Filter.SoftTruncationCommutingFamily
+import QICLean.Spectral.LowEnergy.ShiftedLowEnergyCoordinates
 
 /-!
 # Simultaneous residuals for actual regional soft replacements

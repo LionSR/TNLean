@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.PEPS.AreaLaw.GlobalSchmidtBellPrevector
-import QICLean.Analysis.RegionalRoughLowerThree
-import QICLean.Analysis.MeanTreeSublinearRemainder
+import QICLean.ManyBody.Replica.LowDefect.RegionalRoughLowerThree
+import QICLean.Analysis.Real.SublinearRemainder
 
 /-!
 # The rough lower comparison for one selected Schmidt--Bell sequence

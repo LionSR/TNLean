@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Examples.QuantumDoubleLocalConstraint
 import QICLean.Representation.Character.TensorProduct
-import QICLean.Representation.FiniteGroupUnitaryAverage
-import QICLean.Algebra.PermutationMatrixUnitary
-import QICLean.Algebra.PermutationMatrixCommute
+import QICLean.Representation.Twirl.FiniteGroupUnitaryAverage
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Algebra.Matrix.PermutationMatrixCommute
 
 /-!
 # The coherent physical bond action of the blocked quantum double

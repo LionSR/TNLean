@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Defs
 import TNLean.Lattice.FiniteDomain
-import QICLean.Entropy.SupportedMarginalTails
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
 
 /-!
 # Exact nearest-neighbor crossing budgets

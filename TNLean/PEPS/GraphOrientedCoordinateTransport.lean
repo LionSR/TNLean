@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.GraphOpenBondCoordinateTransport
 import TNLean.PEPS.GraphOrientedAveragingBondState
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Fourier transport for arbitrary graph edge orientations

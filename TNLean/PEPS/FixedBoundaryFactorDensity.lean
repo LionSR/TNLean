@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Entropy.FlatDensityEntropy
-import QICLean.Algebra.ComplexSqrt
-import QICLean.Algebra.MatrixUnitaryBetween
-import QICLean.Channel.MaximallyEntangled
-import QICLean.Channel.PartialTrace
+import QICLean.Entropy.Renyi.FlatDensityEntropy
+import QICLean.Analysis.Real.ComplexSqrt
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
+import QICLean.Channel.Entanglement.MaximallyEntangled
+import QICLean.Algebra.PartialTrace
 
 /-!
 # Reduced densities of a fixed boundary factor

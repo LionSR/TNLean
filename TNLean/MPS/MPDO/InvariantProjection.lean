@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.FirstSite
 import TNLean.MPS.MPDO.HorizontalCFMPVRepresentation
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # One-sided invariant matrices for matrix product density operators

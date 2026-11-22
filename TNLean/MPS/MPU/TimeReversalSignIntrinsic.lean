@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.TimeReversalSign
 import TNLean.MPS.MPU.TwoSiteStandardFormCircuit
-import QICLean.Algebra.MatrixAux
+import QICLean.Algebra.Matrix.MatrixAux
 import Mathlib.Topology.Algebra.Field
 
 /-!

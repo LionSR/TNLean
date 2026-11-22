@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Defs
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
-import QICLean.Algebra.TraceFormDuality
+import QICLean.Algebra.Matrix.TraceFormDuality
 
 /-!
 # Finite simultaneous MPS word spans and gauge transport

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
-import QICLean.Entropy.RegionStrongSubadditivity
+import QICLean.ManyBody.Entropy.RegionStrongSubadditivity
 
 /-!
 # A boundary entropy estimate from information on birth targets

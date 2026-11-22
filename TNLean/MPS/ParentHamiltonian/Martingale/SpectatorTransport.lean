@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbient
-import QICLean.Analysis.EuclideanFiberwiseMap
+import QICLean.Analysis.TensorProduct.EuclideanFiberwiseMap
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
 import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
-import QICLean.Analysis.IsometricConjugationGap
+import QICLean.Spectral.Gap.IsometricConjugationGap
 
 /-!
 # Spectator transport for the open-chain C3 estimate

@@ -9,10 +9,9 @@ import TNLean.MPS.AreaLaw.IntervalCollectiveTrimming
 import TNLean.MPS.AreaLaw.LowEnergyMPSBasis
 import TNLean.MPS.AreaLaw.FullIntervalViability
 import TNLean.MPS.AreaLaw.FullIntervalMPS
-import QICLean.Analysis.ViableTrimmingRadius
-import QICLean.Analysis.ViableTrimmingRank
-import QICLean.Analysis.ViableNodeLeafCount
-import QICLean.Analysis.ViableSubspaceDimension
+import QICLean.Analysis.Parameter.ViableRefinementParameters
+import QICLean.Analysis.Parameter.ViableNodeParameters
+import QICLean.Analysis.Subspace.ViableSubspace
 import TNLean.MPS.AreaLaw.PhysicalLDTreeNode
 
 /-!

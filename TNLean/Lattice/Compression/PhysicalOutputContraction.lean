@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.PartyWord
 import Mathlib.Analysis.CStarAlgebra.Matrix
-import QICLean.Channel.PartialTrace
+import QICLean.Algebra.PartialTrace
 
 /-!
 # Physical output components of allowed words

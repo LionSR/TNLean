@@ -13,7 +13,7 @@ module's imports.
 | Removed module | Replacement import |
 |---|---|
 | `TNLean.MPS.MPDO.CyclicActiveMarkov` | `TNLean.MPS.MPDO.CyclicActiveMarkovDecomposition` |
-| `TNLean.MPS.MPDO.CyclicActiveMarkovNormalization` | `QICLean.Algebra.PositiveSemidefiniteNormalization` together with `TNLean.MPS.MPDO.CyclicActiveFourthRegionFormula` |
+| `TNLean.MPS.MPDO.CyclicActiveMarkovNormalization` | `QICLean.Algebra.Hermitian.PositiveSemidefiniteNormalization` together with `TNLean.MPS.MPDO.CyclicActiveFourthRegionFormula` |
 | `TNLean.MPS.MPDO.CyclicActiveFourthRegion` | `TNLean.MPS.MPDO.CyclicActiveFourthRegionFormula` |
 | `TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorMaps` | `TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorCoordinates`, `...OneSiteAmbientSectorMaps`, `...TwoSiteAmbientSectorMaps` |
 

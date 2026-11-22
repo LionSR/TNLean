@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import Mathlib.Data.Matrix.Basis
 import QICLean.Kraus.Injectivity
-import QICLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.Examples.KramersWannier.KramersWannierTensor
 import TNLean.MPS.FundamentalTheorem.Reduction.ExplicitGauge
 import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace

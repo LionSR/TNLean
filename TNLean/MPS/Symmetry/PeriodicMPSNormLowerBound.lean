@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Eigenspace.Charpoly
 import Mathlib.LinearAlgebra.Eigenspace.Zero
-import QICLean.Algebra.TraceInvariantSubmodule
+import QICLean.Algebra.Module.TraceInvariantSubmodule
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs
 import Mathlib.Analysis.Complex.Polynomial.Basic
 import Mathlib.FieldTheory.IsAlgClosed.Spectrum
@@ -17,7 +17,7 @@ import Mathlib.LinearAlgebra.Quotient.Basic
 import QICLean.Channel.Peripheral.JordanBlocks
 import QICLean.Channel.Peripheral.SpectralRadius
 import TNLean.MPS.Preparation.SecondOrderOverlap
-import QICLean.Channel.KrausMap
+import QICLean.Channel.KrausMap.KrausMap
 import Mathlib.Analysis.SpecificLimits.Basic
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.Symmetry.FixedLineLimitSimplicity

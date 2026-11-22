@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.NormalizedVariableTruncation
-import QICLean.Entropy.ViableSampling.ViableSubspaceEntropy
-import QICLean.Channel.MaximalOverlap
+import QICLean.ManyBody.Entropy.ViableSubspaceEntropy
+import QICLean.Channel.Schmidt.MaximalOverlap
 
 /-!
 # One normalized sequential MPS from actual marginal tails

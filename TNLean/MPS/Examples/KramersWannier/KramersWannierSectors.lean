@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.KramersWannier.KramersWannierSource
-import QICLean.Algebra.PosSemidefSupport
+import QICLean.Analysis.Projection.PosSemidefSupport
 
 /-!
 # Kramers–Wannier duality: sectors, partial isometry, and coupling exchange

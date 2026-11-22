@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
-import QICLean.Algebra.ConstantTracePowers
+import QICLean.Spectral.Eigenvalue.ConstantTracePowers
 import TNLean.MPS.FundamentalTheorem.Reduction.Flag
 import TNLean.MPS.MPDO.ActionTensor
 

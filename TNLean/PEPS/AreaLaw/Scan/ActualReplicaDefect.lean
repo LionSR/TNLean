@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.PEPS.AreaLaw.Scan.ActualGlobalReplicaEnergy
-import QICLean.Analysis.RegionalLowDefectMass
+import QICLean.ManyBody.Replica.LowDefect.RegionalLowDefectMass
 
 /-!
 # The gap estimate for the actual charge filtered vector

@@ -7,7 +7,7 @@ import TNLean.PEPS.TorusDirectedBondUpdate
 import TNLean.PEPS.TorusSweptPhysicalEndpointRoute
 import TNLean.PEPS.TorusSweptStringDeformation
 import TNLean.PEPS.TorusPlaquetteFluxMeasurement
-import QICLean.Algebra.ZModIntCast
+import QICLean.Algebra.Combinatorics.ZModIntCast
 import TNLean.PEPS.RegularConnectorHolonomy
 import QICLean.Algebra.MonoidAux
 import Mathlib.GroupTheory.Commutator.Basic

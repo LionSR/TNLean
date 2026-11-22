@@ -1,4 +1,4 @@
-import QICLean.Analysis.ProbabilityEntropy
+import QICLean.Entropy.Classical.ProbabilityEntropy
 
 /-!
 # Entropy under geometric tail constraints

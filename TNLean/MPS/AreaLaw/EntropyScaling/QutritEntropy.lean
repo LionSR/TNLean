@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.EntropyScaling.QutritFamily
-import QICLean.Analysis.EntropySubadditivity
-import QICLean.Entropy.FilterOptimizer
-import QICLean.Entropy.RegionEntropy
+import QICLean.Entropy.VonNeumann.EntropySubadditivity
+import QICLean.ManyBody.Entropy.Filter.Optimizer
+import QICLean.ManyBody.Entropy.RegionEntropy
 import Mathlib.Analysis.SpecialFunctions.BinaryEntropy
 import Mathlib.Tactic.Ring
 

@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Entropy.SupportedMarginalTails
-import QICLean.Entropy.FilterMoment
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
+import QICLean.Entropy.Surprisal.FilterMoment
 import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Sites.Placement
-import QICLean.Channel.SchmidtRank
+import QICLean.Channel.Schmidt.Rank
 import QICLean.ManyBody.Sites.CutMatrix
 import TNLean.MPS.Chain.VaryingBondOBC
 

@@ -7,8 +7,8 @@ import TNLean.MPS.ParentHamiltonian.UncleTrialTransferNorm
 import TNLean.MPS.ParentHamiltonian.UnclePrimitiveTransfer
 import TNLean.MPS.ParentHamiltonian.UncleWallGramBounds
 import QICLean.Channel.Peripheral.UnitalKraus
-import QICLean.Analysis.TraceMulBound
-import QICLean.Analysis.OperatorNormConvergence
+import QICLean.Analysis.TraceInequality.TraceMulBound
+import QICLean.Analysis.Norm.OperatorNormConvergence
 
 /-!
 # Quantitative factorization of the two-wall transfer contraction

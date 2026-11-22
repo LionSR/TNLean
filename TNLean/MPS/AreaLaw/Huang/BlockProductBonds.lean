@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.OpenMPS
-import QICLean.Entropy.SupportedOperatorSchmidtWords
+import QICLean.ManyBody.Entropy.Cut.SupportedOperatorSchmidtWords
 
 /-!
 # Simultaneous bond bounds for two layers of interval operators

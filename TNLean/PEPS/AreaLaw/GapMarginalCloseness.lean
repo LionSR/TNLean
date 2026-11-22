@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Entropy.MutualInformationPerturbation
-import QICLean.Analysis.PureStateTraceDistance
+import QICLean.ManyBody.Entropy.MutualInformationPerturbation
+import QICLean.Analysis.TraceNorm.PureStateTraceDistance
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

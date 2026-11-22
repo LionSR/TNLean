@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.RelativeLowEnergyCloseness
-import QICLean.Representation.CoherentSymbolFunction
+import QICLean.Spectral.LowEnergy.RelativeLowEnergyCloseness
+import QICLean.ManyBody.Replica.Symbol.CoherentSymbolFunction
 import QICLean.ManyBody.Sites.Twirl
-import QICLean.Analysis.OrderedSpectralSpan
-import QICLean.Analysis.EuclideanEigenvectorBasis
+import QICLean.Spectral.LowEnergy.OrderedSpectralSpan
+import QICLean.Spectral.Eigenvalue.EuclideanEigenvectorBasis
 import TNLean.MPS.AreaLaw.ALVV.SpectralProjector
 import TNLean.MPS.AreaLaw.IndependentFiveRegionResidual
 

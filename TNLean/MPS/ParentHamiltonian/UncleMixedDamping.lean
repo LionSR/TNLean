@@ -7,8 +7,8 @@ import TNLean.MPS.ParentHamiltonian.UncleBoundaryWords
 import QICLean.Channel.Schwarz.Basic
 import QICLean.Channel.Peripheral.UnitalKraus
 import QICLean.Kraus.MixedMap.SpectralRadius
-import QICLean.Analysis.OperatorMean.BlockDiagonal
-import QICLean.Analysis.SpectralRadiusPowerDecay
+import QICLean.Channel.OperatorMean.BlockDiagonal
+import QICLean.Spectral.Radius.PowerDecay
 
 /-!
 # Mixed damping from full source perturbation span

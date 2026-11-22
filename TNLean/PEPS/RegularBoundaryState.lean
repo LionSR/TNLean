@@ -5,11 +5,11 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularBoundary
 import QICLean.Representation.Character.TensorProduct
-import QICLean.Algebra.ComplexSqrt
+import QICLean.Analysis.Real.ComplexSqrt
 import Mathlib.LinearAlgebra.Matrix.ToLin
 import Mathlib.LinearAlgebra.Matrix.Rank
 import Mathlib.LinearAlgebra.Matrix.Trace
-import QICLean.Channel.MaximalOverlap
+import QICLean.Channel.Schmidt.MaximalOverlap
 
 /-!
 # The bipartite regular boundary state

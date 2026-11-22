@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryProduct
-import QICLean.Algebra.ScalarCommutant
-import QICLean.Algebra.TraceReindex
+import QICLean.Algebra.MatrixAlgebra.ScalarCommutant
+import QICLean.Algebra.Matrix.MatrixReindex
 
 /-!
 # Boundary trace coefficients in the uncle closure argument

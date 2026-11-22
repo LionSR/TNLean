@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.BalancedGramMetrics
-import QICLean.Algebra.FrobeniusHilbert
-import QICLean.Analysis.MatrixSqrt
+import QICLean.Analysis.Norm.FrobeniusHilbert
+import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 
 /-!
 # Optimality of the balanced positive Gram contraction

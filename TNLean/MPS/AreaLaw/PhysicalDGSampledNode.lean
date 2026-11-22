@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.IntervalSampledImage
 import TNLean.MPS.AreaLaw.IndependentPhysicalDGPower
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming
-import QICLean.Analysis.ViableTrimmingRadius
+import QICLean.Analysis.Parameter.ViableRefinementParameters
 
 /-!
 # One actual sampled and trimmed physical parent

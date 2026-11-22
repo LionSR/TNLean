@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.FullIntervalFilterIteration
 import TNLean.MPS.AreaLaw.PhysicalDGFilterTrimming
-import QICLean.Analysis.QuantitativeFilterIteration
+import QICLean.Analysis.Parameter.QuantitativeFilterIteration
 
 /-!
 # Finite refinement of the same physical root

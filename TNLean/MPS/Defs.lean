@@ -8,7 +8,7 @@ import Mathlib.Data.List.OfFn
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 import Mathlib.LinearAlgebra.Matrix.Trace
 import Mathlib.Order.Filter.AtTopBot.Basic
-import QICLean.Algebra.MatrixKernelRigidity
+import QICLean.Algebra.Matrix.MatrixKernelRigidity
 import QICLean.Kraus.Word
 import QICLean.Kraus.Injectivity
 import TNLean.MPS.Tensor

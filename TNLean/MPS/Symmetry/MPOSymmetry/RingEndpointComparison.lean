@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointProjectorComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteraction
-import QICLean.Analysis.PositiveComparisonGap
+import QICLean.Spectral.Gap.PositiveComparisonGap
 import TNLean.MPS.ParentHamiltonian.CompactParentGap
 import TNLean.MPS.ParentHamiltonian.UniqueGroundState
 import TNLean.MPS.ParentHamiltonian.KernelChainGroundSpace

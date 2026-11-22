@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.EvenFamilySourceGauges
 import TNLean.MPS.MPU.TwoSiteStandardForm
 import TNLean.MPS.MPU.StaircaseGates
-import QICLean.Algebra.MatrixIsometryKronecker
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.MPS.MPU.Index
 import TNLean.MPS.MPU.RepresentativeIndex
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse

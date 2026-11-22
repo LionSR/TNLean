@@ -8,8 +8,8 @@ import TNLean.MPS.AreaLaw.Hastings.InteractionPicture
 import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.MPS.AreaLaw.InteractionBudget
 import QICLean.ManyBody.Dynamics.ProjectedRelativeEvolution
-import QICLean.Analysis.RectangularTraceNorm
-import QICLean.Analysis.ExplicitThresholds
+import QICLean.Analysis.TraceNorm.RectangularTraceNorm
+import QICLean.Analysis.Real.ExplicitThresholds
 
 /-!
 # Localizing the boundary operator `P_B` in Hastings' Lemma 1

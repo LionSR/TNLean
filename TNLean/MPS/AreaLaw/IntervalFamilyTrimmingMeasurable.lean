@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.IntervalFamilyTrimmingIteration
-import QICLean.Analysis.FiniteFamilyImageProjection
-import QICLean.Entropy.ViableSampling.CanonicalSamplingTrimmingMeasurable
-import QICLean.Analysis.ViableSubspaceTensorProjectionMeasurable
+import QICLean.Probability.Measurable.FiniteFamilyImageProjection
+import QICLean.ManyBody.Subspace.Sampling.CanonicalSamplingTrimmingMeasurable
+import QICLean.Probability.Measurable.ViableSubspaceTensorProjectionMeasurable
 
 /-!
 # Borel projections of the literal interleaved interval iteration

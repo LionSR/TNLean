@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ALVV.SoftParentStructure
 import TNLean.MPS.AreaLaw.RegionalGroundEnergy
 import QICLean.ManyBody.Sites.Twirl
-import QICLean.Analysis.QuadraticScalarShift
-import QICLean.Entropy.PositiveLocalLift
+import QICLean.Analysis.Order.QuadraticScalarShift
+import QICLean.ManyBody.Entropy.Cut.PositiveLocalLift
 
 /-!
 # Regional coordinates and energy of the central soft replacement

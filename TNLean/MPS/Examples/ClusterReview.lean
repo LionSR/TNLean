@@ -8,7 +8,7 @@ import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Core.PhysicalIndexMixing
 import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.RFP.Defs
-import QICLean.Algebra.MatrixCyclicPathSum
+import QICLean.Algebra.Matrix.MatrixCyclicPathSum
 import QICLean.Algebra.Cohomology.ProjectiveRepresentation
 
 /-!

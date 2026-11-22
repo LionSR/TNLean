@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.SPTFixedPoint
 import TNLean.MPS.Symmetry.TwoSiteBondContraction
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
-import QICLean.Algebra.ComplexSqrt
+import QICLean.Analysis.Real.ComplexSqrt
 
 /-!
 # The two-site ground space of the SPT fixed point

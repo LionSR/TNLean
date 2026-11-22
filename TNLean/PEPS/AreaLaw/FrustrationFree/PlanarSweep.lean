@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.FrustrationFree.LightCone
 import TNLean.PEPS.AreaLaw.BufferedRectangles
-import QICLean.Algebra.GreedyColoring
-import QICLean.Algebra.OverlapGraph
+import QICLean.Algebra.Combinatorics.GreedyColoring
+import QICLean.Algebra.Combinatorics.OverlapGraph
 
 /-!
 # The colour-ordered sweep on a planar domain and the radius of its light cone

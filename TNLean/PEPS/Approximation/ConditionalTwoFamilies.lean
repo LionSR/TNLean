@@ -4,11 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.MarginalTails
-import QICLean.Entropy.RegionEntropy
-import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Entropy.RegionEntropy
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.PEPS.AreaLaw.TwoFamilies
-import QICLean.Entropy.ConditionalTwoFamilies
+import QICLean.ManyBody.Entropy.ConditionalTwoFamilies
 
 /-!
 # Labelled conditional two-family entropy estimates

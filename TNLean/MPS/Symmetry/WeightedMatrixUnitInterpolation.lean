@@ -9,7 +9,7 @@ import TNLean.MPS.Symmetry.SPTFixedPoint
 import TNLean.MPS.Symmetry.BondInterpolation
 import TNLean.MPS.Symmetry.BondRegrouping
 import TNLean.MPS.Symmetry.BondInterpolationSymmetry
-import QICLean.Algebra.MatrixCyclicPathSum
+import QICLean.Algebra.Matrix.MatrixCyclicPathSum
 
 /-!
 # Weighted matrix-unit tensor for the bond interpolation

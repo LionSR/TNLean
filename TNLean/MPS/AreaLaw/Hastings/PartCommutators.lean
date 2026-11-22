@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.ThreeWaySplitting
 import TNLean.MPS.AreaLaw.Counting
-import QICLean.Entropy.SupportedOperatorAlgebra
+import QICLean.ManyBody.Entropy.Cut.SupportedOperatorAlgebra
 
 /-!
 # Commutators of the Hamiltonian with the parts of the three-way splitting

@@ -8,7 +8,7 @@ import TNLean.MPS.Symmetry.ExactMPSGappedPhase
 import TNLean.MPS.Symmetry.PositiveLengthSymmetryCharacter
 import TNLean.MPS.Symmetry.PhysicalCharacterTwist
 import TNLean.MPS.Symmetry.GlobalVirtualGauge
-import QICLean.Analysis.FiniteKroneckerPowers
+import QICLean.Analysis.FunctionalCalculus.FiniteKroneckerPowers
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.CStarAlgebra.Spectrum
 import Mathlib.Topology.Connected.TotallyDisconnected

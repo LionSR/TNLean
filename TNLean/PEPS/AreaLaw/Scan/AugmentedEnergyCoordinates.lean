@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms
-import QICLean.Representation.RegionalFiveFactorCoordinates
-import QICLean.Representation.ReplicaMeanIdentityExtension
-import QICLean.Analysis.ReplicaLowDefectCoordinateCovariance
+import QICLean.ManyBody.Replica.Configuration.RegionalFiveFactorCoordinates
+import QICLean.Representation.TensorPower.ReplicaMeanIdentityExtension
+import QICLean.ManyBody.Replica.LowDefect.LowDefectCoordinateCovariance
 import Mathlib.Logic.Equiv.Basic
 import Mathlib.Logic.Equiv.Option
 import Mathlib.Logic.Equiv.Sum

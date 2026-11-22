@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.TwistedDimerBondRFP
 import TNLean.MPS.MPDO.TwistedDimerVerticalCF
-import QICLean.Algebra.MatrixSingleSpan
-import QICLean.Algebra.ComplexSqrt
+import QICLean.Algebra.Matrix.MatrixSingleSpan
+import QICLean.Analysis.Real.ComplexSqrt
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.MPDO.Simple
 import TNLean.MPS.MPDO.BondOneOperator

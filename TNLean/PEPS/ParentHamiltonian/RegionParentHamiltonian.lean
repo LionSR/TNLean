@@ -4,13 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.RegionGroundSpace
-import QICLean.Algebra.MatrixStarProjection
+import QICLean.Analysis.Projection.MatrixStarProjection
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.Matrix.Hermitian
 import QICLean.ManyBody.Sites.Placement
 import QICLean.ManyBody.Dynamics.InteractionOperations
 import QICLean.ManyBody.Hamiltonian.FrustrationFree
-import QICLean.Algebra.MatrixAux
+import QICLean.Algebra.Matrix.MatrixAux
 
 /-!
 # Parent Hamiltonians on finite PEPS graphs

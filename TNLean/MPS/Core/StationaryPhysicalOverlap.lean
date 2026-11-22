@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.StationaryPhysicalDensity
-import QICLean.Algebra.TracePurity
-import QICLean.Algebra.TraceReindex
+import QICLean.Analysis.TraceInequality.TracePurity
+import QICLean.Algebra.Matrix.MatrixReindex
 
 /-!
 # Physical density overlaps as quadratic transfer contractions

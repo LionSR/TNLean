@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.LowDensityAccurateViability
 import TNLean.MPS.AreaLaw.LowDensityLogDimension
 import TNLean.MPS.AreaLaw.DGEntropyParameters
-import QICLean.Entropy.ViableSampling.ViableSubspaceEntropy
-import QICLean.Analysis.ViableSubspaceMinimum
+import QICLean.ManyBody.Entropy.ViableSubspaceEntropy
+import QICLean.Probability.Sampling.ViableSubspaceMinimum
 
 /-!
 # Entropy in an original low-energy band

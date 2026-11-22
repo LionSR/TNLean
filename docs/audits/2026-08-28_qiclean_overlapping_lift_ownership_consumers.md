@@ -8,10 +8,10 @@ MPS/MPDO-facing four-cycle construction and obstruction argument.
 
 ## QICLean owners
 
-- `QICLean.Algebra.OverlappingLiftAlgebra` owns the multiplicativity, star,
+- `QICLean.Algebra.Kronecker.OverlappingLiftAlgebra` owns the multiplicativity, star,
   Kronecker, sum, scalar, support-annihilation, and positivity lemmas for
   `Matrix.leftOverlappingLift` and `Matrix.rightOverlappingLift`.
-- `QICLean.Entropy.PositiveOverlappingProduct` owns
+- `QICLean.Entropy.StrongSubadditivity.PositiveOverlappingProduct` owns
   `Matrix.exists_quantumMarkovDecomposition_of_positive_overlapping_product`
   and its generic spatial-decomposition proof.
 

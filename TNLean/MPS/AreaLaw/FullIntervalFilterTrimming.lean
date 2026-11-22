@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.FullIntervalViability
 import TNLean.MPS.AreaLaw.IntervalGenerators
 import TNLean.MPS.AreaLaw.IntervalReferenceTrimming
-import QICLean.Entropy.ViableSampling.ViableSubspaceReferenceFilterTrimming
+import QICLean.ManyBody.Subspace.ReferenceFilterTrimming
 
 /-!
 # Actual filtering and collective trimming at the same full-chain root

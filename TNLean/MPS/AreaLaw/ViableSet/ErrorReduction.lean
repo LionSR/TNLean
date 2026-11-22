@@ -6,8 +6,9 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ViableSet.Basic
 import TNLean.MPS.AreaLaw.ViableSet.OperatorAction
 import TNLean.MPS.AreaLaw.SupportedCutRank
-import QICLean.Entropy.ModularExpectation
+import QICLean.Analysis.FunctionalCalculus.ModularExpectation
 import Mathlib.Analysis.Matrix.Hermitian
+import QICLean.Channel.Schmidt.Rank
 
 /-!
 # The error-reduction step for viable sets

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftClusters
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftNorm
 import TNLean.MPS.AreaLaw.ALVV.SoftClusterPrecision
-import QICLean.Analysis.ViableSubspaceOrder
+import QICLean.Analysis.Subspace.ViableSubspace
 
 /-!
 # Physical soft clusters with uniform numerical precision

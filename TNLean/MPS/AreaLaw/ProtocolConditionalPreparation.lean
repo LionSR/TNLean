@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ProtocolSweepPlacement
 import TNLean.MPS.AreaLaw.ProtocolTerminalWord
 import TNLean.MPS.AreaLaw.ProtocolTerminalReference
-import QICLean.Analysis.RectangularTraceNormAlgebra
+import QICLean.Analysis.TraceNorm.RectangularTraceNormAlgebra
 
 /-!
 # Conditional preparation from the actual local-stage circuits

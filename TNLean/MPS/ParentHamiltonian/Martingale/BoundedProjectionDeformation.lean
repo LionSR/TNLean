@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.BoundedCongruenceGap
+import QICLean.Spectral.Gap.BoundedCongruenceGap
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteIntervalGapComparison
-import QICLean.Analysis.WeightedPositiveKernel
+import QICLean.Spectral.Gap.WeightedPositiveKernel
 
 /-!
 # Deforming a finite family of projection constraints

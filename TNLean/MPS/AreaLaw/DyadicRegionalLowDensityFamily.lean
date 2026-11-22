@@ -6,9 +6,9 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.LowDensityBufferedTargets
 import TNLean.MPS.AreaLaw.LowDensityFilterParameters
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
-import QICLean.Analysis.NestedChebyshevViability
+import QICLean.Spectral.LowEnergy.ChebyshevViability
 import TNLean.MPS.AreaLaw.NestedChebyshevWordViability
-import QICLean.Analysis.LowDensityDyadicScale
+import QICLean.Analysis.Parameter.LowDensityDyadicScale
 
 /-!
 # Regional low-energy families with geometrically decreasing comparison loss

@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.AKLV.InverseGapRobustness
 import TNLean.MPS.AreaLaw.AKLV.SingleWindowPolynomialRank
 import TNLean.MPS.AreaLaw.LocalSolution.SupersiteHierarchy
-import QICLean.Analysis.ChebyshevSpectralFilter
-import QICLean.Analysis.GroundProjection
+import QICLean.Spectral.Filter.ChebyshevSpectralFilter
+import QICLean.Spectral.Gap.GroundProjection
 
 /-!
 # Chebyshev filters of a truncated chain

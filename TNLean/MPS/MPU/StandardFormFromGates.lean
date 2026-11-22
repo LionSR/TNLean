@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.FundamentalTheoremGates
-import QICLean.Algebra.UnitaryKronecker
-import QICLean.Algebra.MatrixGroupJoined
+import QICLean.Analysis.Isometry.UnitaryKronecker
+import QICLean.Analysis.Topology.MatrixGroupJoined
 
 /-!
 # Constructing a standard-form MPU from its two gates

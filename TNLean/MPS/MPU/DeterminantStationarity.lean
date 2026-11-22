@@ -9,7 +9,7 @@ import Mathlib.Analysis.Complex.RealDeriv
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.LinearAlgebra.Matrix.Charpoly.Coeff
 import Mathlib.LinearAlgebra.AffineSpace.AffineSubspace.Basic
-import QICLean.Analysis.HermitianMatrixCone
+import QICLean.Analysis.Optimization.HermitianMatrixCone
 
 /-!
 # Stationarity of determinant maxima

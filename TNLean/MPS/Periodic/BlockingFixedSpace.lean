@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Periodic.BlockingEigenvalues
 import TNLean.MPS.Periodic.SectorIrreducibility.HLift
 import QICLean.Channel.Schwarz.Closure
-import QICLean.Channel.SingleKrausPositivity
+import QICLean.Channel.KrausMap.SingleKrausPositivity
 import Mathlib.LinearAlgebra.Eigenspace.Semisimple
 import Mathlib.FieldTheory.Separable
 import Mathlib.Dynamics.PeriodicPts.Defs

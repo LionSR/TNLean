@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AdjacentIntervalMerge
 import TNLean.MPS.AreaLaw.IntervalGenerators
-import QICLean.Analysis.SampledWordImageBounds
+import QICLean.Probability.Sampling.SampledWordImageBounds
 
 /-!
 # Actual sampled word images on a parent interval

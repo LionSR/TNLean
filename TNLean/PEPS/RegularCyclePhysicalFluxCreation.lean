@@ -8,7 +8,7 @@ import TNLean.PEPS.RegularTwoCycleFluxMove
 import TNLean.PEPS.RegularCycleControlledSupport
 
 
-import QICLean.Algebra.PermutationMatrixCommute
+import QICLean.Algebra.Matrix.PermutationMatrixCommute
 
 /-!
 # Coherent flux creation in an actual regular region

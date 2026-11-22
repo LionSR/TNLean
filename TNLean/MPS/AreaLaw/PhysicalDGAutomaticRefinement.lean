@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.FullIntervalTrimmingMPS
 import TNLean.MPS.AreaLaw.PhysicalDGFilterIteration
 import TNLean.MPS.AreaLaw.PhysicalDGReferenceSpace
-import QICLean.Analysis.ViableRefinementParameters
-import QICLean.Analysis.RitzGroundSpaceCloseness
+import QICLean.Analysis.Parameter.ViableRefinementParameters
+import QICLean.Spectral.LowEnergy.RitzGroundSpaceCloseness
 
 /-!
 # Automatic common-reference refinement of the same candidate

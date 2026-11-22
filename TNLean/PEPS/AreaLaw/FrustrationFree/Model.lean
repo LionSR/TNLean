@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.TheoremStatements
-import QICLean.Analysis.SupportProjectionOrder
+import QICLean.Analysis.Support.ProjectionOrder
 import QICLean.ManyBody.Hamiltonian.FrustrationFree
 
 /-!

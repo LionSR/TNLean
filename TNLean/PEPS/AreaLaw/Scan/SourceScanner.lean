@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.PhysicalScanner
 import TNLean.PEPS.AreaLaw.Scan.AugmentedEnergyCoordinates
-import QICLean.Representation.ReplicaPrevector
+import QICLean.Representation.Bell.ReplicaPrevector
 import TNLean.PEPS.AreaLaw.Scan.SuppliedTargetNormAttachment
 import TNLean.PEPS.AreaLaw.Scan.ActualRoughUpper
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedEnergy

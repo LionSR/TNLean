@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.TwoFamilies
-import QICLean.Entropy.SelectedSchmidtEntropy
+import QICLean.Entropy.Typical.PureCompression
 
 /-!
 # Entropy and dimension of a supplied selected Schmidt spectrum

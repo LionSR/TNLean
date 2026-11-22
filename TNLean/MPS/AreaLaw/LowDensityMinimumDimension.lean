@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.IntervalLowDensityFamily
-import QICLean.Analysis.ViableSubspaceDyadicBootstrap
-import QICLean.Analysis.LowEnergyOrder
+import QICLean.Probability.Sampling.ViableSubspaceDyadicBootstrap
+import QICLean.Spectral.LowEnergy.Order
 
 /-!
 # A physical low-energy viable subspace from least dimensions

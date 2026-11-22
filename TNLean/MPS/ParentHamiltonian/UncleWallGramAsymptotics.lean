@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.UncleWallGram
-import QICLean.Analysis.SpectralRadiusPowerDecay
+import QICLean.Spectral.Radius.PowerDecay
 import QICLean.Kraus.MixedMap.SpectralRadius
 import Mathlib.Analysis.Asymptotics.SpecificAsymptotics
 import Mathlib.Analysis.Normed.Group.InfiniteSum

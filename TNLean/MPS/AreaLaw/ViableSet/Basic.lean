@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
-import QICLean.Algebra.MatrixStarProjection
-import QICLean.Channel.SchmidtTrimming
+import QICLean.Analysis.Projection.MatrixStarProjection
+import QICLean.Channel.Schmidt.Trimming
 
 /-!
 # Viable sets on a chain

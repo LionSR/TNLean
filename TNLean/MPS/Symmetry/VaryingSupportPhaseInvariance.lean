@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.Cohomology.ProjectiveRepresentation
-import QICLean.Algebra.MatrixUnitaryBetween
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import Mathlib.LinearAlgebra.UnitaryGroup
 
 /-!

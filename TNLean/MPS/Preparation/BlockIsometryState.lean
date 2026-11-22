@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.FiniteKroneckerProduct
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
 import TNLean.MPS.Chain.BlockTensor
 import TNLean.MPS.Core.CyclicTrace
-import QICLean.Algebra.MatrixUnitaryBetween
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.MPS.Preparation.FixedPointPairState
 import TNLean.MPS.Preparation.BlockSites
 import TNLean.MPS.Preparation.SupportedPolar

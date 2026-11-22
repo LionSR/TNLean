@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Tactic.Module
-import QICLean.Analysis.SoftTruncationCommutingFamily
-import QICLean.Analysis.SoftTruncationOperatorBounds
+import QICLean.Spectral.Filter.SoftTruncationCommutingFamily
+import QICLean.Spectral.Filter.SoftHardTruncation
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 
 /-!

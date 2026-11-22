@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.KroneckerFactorPositivity
-import QICLean.Channel.SingleKrausPositivity
-import QICLean.Algebra.FiniteKroneckerProduct
-import QICLean.Analysis.FiniteKroneckerPowers
+import QICLean.Algebra.Kronecker.KroneckerFactorPositivity
+import QICLean.Channel.KrausMap.SingleKrausPositivity
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import QICLean.Analysis.FunctionalCalculus.FiniteKroneckerPowers
 import TNLean.MPS.MPDO.PhysicalSupportBondCommutativity
 import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex

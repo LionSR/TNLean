@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.MatrixAux
-import QICLean.Channel.KrausGauge
+import QICLean.Algebra.Matrix.MatrixAux
+import QICLean.Channel.KrausMap.KrausGauge
 import TNLean.MPS.MPDO.NonCartesianActiveSectorObstruction
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.Wielandt.Primitivity.Equivalence

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.TransportRound
 import TNLean.PEPS.AreaLaw.Scan.RegionalMoveEntropy
-import QICLean.Entropy.ConditionalTwoFamilies
+import QICLean.ManyBody.Entropy.ConditionalTwoFamilies
 
 /-!
 # The physical-support upper bound for split entropy

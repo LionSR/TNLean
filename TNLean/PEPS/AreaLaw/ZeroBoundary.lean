@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.Lattice.MarginalTails
-import QICLean.Entropy.RegionEntropy
-import QICLean.Entropy.RegionUnion
-import QICLean.Entropy.ZeroEntropy
+import QICLean.ManyBody.Entropy.RegionEntropy
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
+import QICLean.ManyBody.Entropy.ZeroEntropy
 import TNLean.Lattice.RegionEntropyInequalities
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 

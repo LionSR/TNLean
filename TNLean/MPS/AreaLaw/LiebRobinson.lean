@@ -9,7 +9,7 @@ import TNLean.MPS.AreaLaw.DomainGraphGeometry
 import QICLean.ManyBody.Sites.Lattice.PathGraph
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Dynamics.GraphLocalization
 
 /-!

@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Amplification.GoodRealizationUnitary
 import TNLean.PEPS.Approximation.SheetSplitting
 import QICLean.ManyBody.Sites.PlacedConfiguration
-import QICLean.Analysis.MatrixKroneckerContraction
-import QICLean.Entropy.MutualInformationPerturbation
+import QICLean.Analysis.Norm.MatrixKroneckerContraction
+import QICLean.ManyBody.Entropy.MutualInformationPerturbation
 
 /-!
 # The local unitary of a good realization, on a set of sites

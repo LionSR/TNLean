@@ -62,7 +62,7 @@ and are left as-is.
 `MPSTensor.isNBlkInjective_of_gaugeEquiv` (`TNLean/MPS/Defs.lean`) each carried
 a hand-rolled span-induction argument showing that conjugation by an invertible
 matrix preserves a spanning family. QICLean already exports exactly that fact as
-`Matrix.span_range_gauge_eq_top` (`QICLean/Algebra/MatrixKernelRigidity.lean`),
+`Matrix.span_range_gauge_eq_top` (`QICLean/Algebra/Matrix/MatrixKernelRigidity.lean`),
 so both proof bodies now reduce to a generator identification plus one
 application of it. Both statements, both names, and the Blueprint tag at
 `blueprint/src/chapter/ch02_mps.tex` are unchanged.

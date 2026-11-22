@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.CyclicInsertion
-import QICLean.Analysis.TensorProductContraction
+import QICLean.Analysis.TensorProduct.CyclicInsertion
+import QICLean.Analysis.TensorProduct.TensorProductContraction
 
 /-!
 # Elimination of normalized pair effects

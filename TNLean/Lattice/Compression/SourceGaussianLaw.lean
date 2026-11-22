@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceCircuitSchmidtSources
 import TNLean.Lattice.Compression.SourceCompressedDensity
-import QICLean.Probability.ComplexGaussian.GlobalBranchLaw
+import QICLean.Probability.Gaussian.GlobalBranchLaw
 
 /-!
 # Gaussian samples attached to original sources and local labels

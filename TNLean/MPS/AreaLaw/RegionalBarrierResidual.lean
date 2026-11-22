@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.RegionalTruncationResidual
-import QICLean.Analysis.SoftTruncationRestrictedResidual
-import QICLean.Analysis.ShiftedSoftHardTruncation
-import QICLean.Analysis.SoftTruncationLowRestriction
+import QICLean.Spectral.Filter.SoftTruncationHardResidual
+import QICLean.Spectral.Filter.ShiftedSoftHardTruncation
+import QICLean.Spectral.LowEnergy.SoftTruncationLowRestriction
 
 /-!
 # A regional hard tail with an arbitrary commuting interior

@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.JordanBlockPower
-import QICLean.Algebra.ComplexSqrt
+import QICLean.Spectral.Jordan.BlockPower
+import QICLean.Analysis.Real.ComplexSqrt
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
 import TNLean.MPS.Preparation.OneDimensionalBlocks
 

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.GraphInteractionDiamondCounting
 import TNLean.Lattice.FiniteDomain
-import QICLean.Entropy.SupportedMarginalTails
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
 
 /-!
 # Safe integer rectangles and nested contours around a cut

@@ -3,12 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 import Mathlib.LinearAlgebra.BilinearForm.Properties
-import QICLean.Algebra.OrderedProduct
-import QICLean.Algebra.MatrixTracePairing
-import QICLean.Algebra.RankOneSandwich
-import QICLean.Algebra.ShiftedZeroTraceNilpotent
+import QICLean.Algebra.Word.OrderedProduct
+import QICLean.Algebra.Matrix.MatrixTracePairing
+import QICLean.Algebra.Matrix.RankOneSandwich
+import QICLean.Spectral.Eigenvalue.ShiftedZeroTraceNilpotent
 import TNLean.MPS.Core.BlockingTransfer
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPU.Simple

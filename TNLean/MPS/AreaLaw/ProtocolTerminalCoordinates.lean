@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.SiteRegisters
 import TNLean.Lattice.PartyCircuit.FamilyPhysicalReadout
-import QICLean.Channel.PartialTraceBasisInvariance
-import QICLean.Analysis.SubnormalizedPureStateError
+import QICLean.Channel.PartialTrace.BasisInvariance
+import QICLean.Analysis.TraceNorm.SubnormalizedPureStateError
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Finset.Sort
 

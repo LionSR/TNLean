@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.AugmentedEnergyCoordinates
-import QICLean.Representation.SubsystemTransport
-import QICLean.Representation.ReplicaMetric
+import QICLean.ManyBody.Replica.Label.SubsystemTransport
+import QICLean.ManyBody.Replica.Metric.Metric
 
 /-!
 # Replica metrics in the same augmented site coordinates
