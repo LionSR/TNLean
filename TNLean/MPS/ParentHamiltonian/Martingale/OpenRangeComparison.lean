@@ -64,39 +64,6 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Translate the starts of nonwrapping windows in a finite interval to the
-corresponding starts in an embedded suffix interval. Source: Nachtergaele,
-arXiv:cond-mat/9410110, condition C1. -/
-def nonwrappingSuffixStartEquiv {R W N n : ℕ} (hR : 0 < R) (_hRW : R ≤ W)
-    (hWn : W ≤ n) (hnN : n ≤ N) :
-    NonwrappingStart R W ≃
-      {i : NonwrappingStart R N // n - W ≤ i.1.val ∧ i.1.val + R ≤ n} where
-  toFun q := by
-    have hq : q.1.val + R ≤ W := q.2
-    refine ⟨⟨⟨n - W + q.1.val, by omega⟩, by
-      change n - W + q.1.val + R ≤ N
-      omega⟩, by
-      change n - W ≤ n - W + q.1.val ∧ n - W + q.1.val + R ≤ n
-      omega⟩
-  invFun i := by
-    have hi : n - W ≤ i.1.1.val ∧ i.1.1.val + R ≤ n := i.2
-    refine ⟨⟨i.1.1.val - (n - W), by omega⟩, by
-      change i.1.1.val - (n - W) + R ≤ W
-      omega⟩
-  left_inv q := by
-    apply Subtype.ext
-    apply Fin.ext
-    have hq := q.2
-    simp only
-    omega
-  right_inv i := by
-    apply Subtype.ext
-    apply Subtype.ext
-    apply Fin.ext
-    have hi := i.2
-    simp only
-    omega
-
 /-- A nonwrapping suffix interval, viewed in cyclic active-block coordinates,
 is the same Hamiltonian on the active interval acting independently of all
 spectator coordinates. -/

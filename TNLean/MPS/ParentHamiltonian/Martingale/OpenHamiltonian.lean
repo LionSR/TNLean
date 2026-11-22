@@ -24,9 +24,9 @@ Nachtergaele's C1--C3 martingale theorem.
 * Nachtergaele, arXiv:cond-mat/9410110, equations (3.12)--(3.16).
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:2011.12127, Section IV.C.
 
-**Transitional (#10948).** The declarations of the last section compare the open-chain parent
-Hamiltonian with the Euclidean-space local terms `localTermES` and `parentInteractionES`; they
-are kept for the files that still use those operators and are deleted with their last users.
+**Transitional (#10948).** The two declarations of the last section compare the open-chain parent
+Hamiltonian with the Euclidean-space local terms `localTermES`; they are kept for the files that
+still use those operators and are deleted with their last users.
 -/
 
 open scoped BigOperators ComplexOrder
@@ -504,55 +504,6 @@ theorem hamiltonian_parentChainInteraction_eq_sum_localTermES (A : MPSTensor d D
     exact (localTermES_eq_toEuclideanLin_parentChainInteraction_term A ⟨k, hb⟩ hk).symm
   · rw [← Finset.sum_filter]
     exact Finset.sum_subtype _ (fun i => by simp) _
-
-/-- For a positive range, the operator of an interval Hamiltonian is the sum of the
-Euclidean-space local terms over the starts whose windows lie in the interval. -/
-theorem hamiltonian_restrict_parentChainInteraction_eq_sum_localTermES (A : MPSTensor d D) {L : ℕ}
-    (hL : 0 < L) (l N n : ℕ) :
-    Matrix.toEuclideanLin
-        ((parentChainInteraction A L N).restrict fun i ↦ n - l ≤ i.val ∧ i.val + L ≤
-            n).hamiltonian =
-      ∑ i ∈ Finset.univ.filter fun i : NonwrappingStart L N =>
-        n - l ≤ i.1.val ∧ i.1.val + L ≤ n, localTermES A L i.1 := by
-  classical
-  rw [ManyBody.Interaction.hamiltonian, map_sum]
-  trans ∑ i : Fin N, if i.val + L ≤ N ∧ n - l ≤ i.val ∧ i.val + L ≤ n then localTermES A L i
-    else 0
-  · refine Fin.sum_eq_sum_of_val_eq _ _ (fun k ha hb ↦ ?_)
-      (fun i hi ↦ absurd i.isLt (by omega)) (fun i hi ↦ ite_eq_right (by omega))
-    have hk : (⟨k, hb⟩ : Fin N).val + L ≤ N := by
-      change k + L ≤ N
-      omega
-    rw [ManyBody.Interaction.restrict_term]
-    by_cases hq : n - l ≤ k ∧ k + L ≤ n
-    · rw [ite_eq_left hq, ite_eq_left ⟨hk, hq⟩]
-      exact (localTermES_eq_toEuclideanLin_parentChainInteraction_term A ⟨k, hb⟩ hk).symm
-    · rw [ite_eq_right hq, ite_eq_right fun h ↦ hq h.2, map_zero]
-  · rw [Finset.sum_filter, ← Finset.sum_subtype (Finset.univ.filter fun i : Fin N ↦ i.val + L ≤ N)
-      (fun i ↦ by simp) (fun i ↦ if n - l ≤ i.val ∧ i.val + L ≤ n then localTermES A L i else 0),
-      Finset.sum_filter]
-    exact Finset.sum_congr rfl fun i _ ↦ by
-      by_cases h1 : i.val + L ≤ N <;> by_cases h2 : n - l ≤ i.val ∧ i.val + L ≤ n <;> simp [h1, h2]
-
-theorem hamiltonian_parentChainInteraction_self_eq_parentInteractionES (A : MPSTensor d D)
-    {L : ℕ} (_hL : 0 < L) :
-    Matrix.toEuclideanLin (parentChainInteraction A L L).hamiltonian = parentInteractionES A L := by
-  rw [hamiltonian_parentChainInteraction_self,
-    toEuclideanLin_toMatrix'_parentInteraction]
-  rfl
-
-theorem localTermES_eq_zero_of_hamiltonian_parentChainInteraction_eq_zero
-    (A : MPSTensor d D) (L N : ℕ) {v : EuclideanSpace ℂ (Cfg d N)}
-    (hv : Matrix.toEuclideanLin (parentChainInteraction A L N).hamiltonian v = 0)
-        (i : NonwrappingStart L N) :
-    localTermES A L i.1 v = 0 := by
-  have hLN : L ≤ N := by have := i.2; omega
-  rw [localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A hLN i.1 v]
-  intro τ
-  rw [mem_groundSpaceES_iff]
-  simpa [cyclicRestrictES] using
-    cyclicRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hLN
-      (LinearMap.mem_ker.mpr hv) i.1 i.2 τ
 
 end ChainInteraction
 

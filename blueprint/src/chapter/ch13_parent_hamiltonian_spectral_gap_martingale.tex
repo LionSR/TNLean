@@ -1917,10 +1917,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Full-window compatible interaction]
     \label{thm:open_parent_hamiltonian_full_window}
-    \lean{MPSTensor.hamiltonian_parentChainInteraction_self_eq_parentInteractionES}
+    \lean{MPSTensor.hamiltonian_parentChainInteraction_self}
     \leanok
     \uses{def:open_parent_hamiltonian_es, rem:euclidean_local_projector_ingredients}
-    If $L>0$, then
+    For every $L$,
     \begin{align}
         H^{\mathrm{open}}_{L,L}(A)
          & =P_L^{\mathrm{ES}}(A).
@@ -2288,10 +2288,12 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Zero energy forces every compatible local constraint]
     \label{thm:open_parent_hamiltonian_zero_local_terms}
-    \lean{MPSTensor.localTermES_eq_zero_of_hamiltonian_parentChainInteraction_eq_zero}
+    \lean{ManyBody.Interaction.mem_ker_toEuclideanLin_hamiltonian_iff}
     \leanok
     \uses{def:open_parent_hamiltonian_es}
-    If $H^{\mathrm{open}}_{N,L}(A)v=0$, then, for every $i\in I_{L,N}$,
+    Let $H=\sum_i h_i$ be a finite sum of positive semidefinite matrices.
+    Then $Hv=0$ if and only if $h_iv=0$ for every $i$. In particular, if
+    $H^{\mathrm{open}}_{N,L}(A)v=0$, then, for every $i\in I_{L,N}$,
     \begin{align}
         h_{i,\mathrm{ES}}(A,L)v & =0.
     \end{align}
@@ -2306,8 +2308,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \langle h_{i,\mathrm{ES}}(A,L)v,v\rangle
          & =\re\langle H^{\mathrm{open}}_{N,L}(A)v,v\rangle=0.
     \end{align}
-    Each summand is the squared norm of the image of $v$ under an orthogonal
-    projection. Hence every local term annihilates $v$.
+    Each summand is nonnegative, so each vanishes, and a positive
+    semidefinite matrix annihilates every vector on which its quadratic form
+    vanishes. Hence every local term annihilates $v$.
 \end{proof}
 
 \begin{lemma}[Restriction of an open-boundary MPS vector]

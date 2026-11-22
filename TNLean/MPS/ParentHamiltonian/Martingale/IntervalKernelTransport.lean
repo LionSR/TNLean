@@ -59,8 +59,8 @@ theorem ker_hamiltonian_restrict_parentChainInteraction_eq_of_local_kernel (A : 
           (parentChainInteraction A W W).hamiltonian).toContinuousLinearMap).toLinearMap
   rw [ContinuousLinearMap.mem_ker_rightFiberwiseMap_iff,
     ContinuousLinearMap.mem_ker_rightFiberwiseMap_iff, LinearMap.coe_toContinuousLinearMap,
-    hker, hamiltonian_parentChainInteraction_self_eq_parentInteractionES A (hR.trans_le hRW)]
-  simp only [LinearMap.coe_toContinuousLinearMap, parentInteractionES,
+    hker, hamiltonian_parentChainInteraction_self, toEuclideanLin_toMatrix'_parentInteraction]
+  simp only [LinearMap.coe_toContinuousLinearMap,
     Submodule.ker_starProjection, Submodule.orthogonal_orthogonal]
 /-- The kernel of a terminal interval Hamiltonian is the reassociated tail
 boundary space whenever its active finite-interval kernel is the MPS ground
