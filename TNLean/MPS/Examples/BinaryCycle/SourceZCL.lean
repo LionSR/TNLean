@@ -133,7 +133,7 @@ theorem reducedBlockState_supported_apply (N L : ℕ) (hL : L ≤ N)
   rw [ambientM, reducedBlockState_changePhysicalBasis_of_isometry inclusion
     inclusion_isometry, singleKrausMap_apply]
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-    tensorPower_inclusion_embedConfig, ite_mul, one_mul, zero_mul,
+    piKronecker_inclusion_embedConfig, ite_mul, one_mul, zero_mul,
     Fintype.sum_ite_eq]
   have hstar (q : Fin L → Fin 2) :
       star (if y = q then (1 : ℂ) else 0) = if y = q then 1 else 0 := by

@@ -140,7 +140,7 @@ theorem bondPenaltyAt_commute_sitewise_of_unitary_fixed
       (bondPenaltyAt η hN i) := by
   classical
   unfold bondPenaltyAt
-  rw [← MPOTensor.rectKronecker_mulSingle hN i (bondPenalty η)]
+  rw [← MPOTensor.piKronecker_mulSingle hN i (bondPenalty η)]
   apply (commute_iff_eq _ _).2
   rw [Matrix.piKronecker_mul, Matrix.piKronecker_mul]
   congr 1

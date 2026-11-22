@@ -84,7 +84,7 @@ theorem singleKrausMap_sitewise_eq_coefficient_smul_of_orthogonalSupport
       coefficient s • mpo (K s) N := by
   classical
   rw [hρ, map_sum]
-  simp_rw [map_smul, singleKrausMap_tensorPower_mpo,
+  simp_rw [map_smul, singleKrausMap_piKronecker_mpo,
     changePhysicalBasis_eq_ite_of_pairwise_orthogonal_twoSided_physicalSupport
       K P hP hPorth hSupport s]
   rw [Finset.sum_eq_single s]

@@ -175,7 +175,7 @@ theorem mpv_approximatingTensor_norm_sq {B : MPSTensor n D}
     ∑ s : Fin M → Fin n,
       star (mpv (approximatingTensor B σ) s) * mpv (approximatingTensor B σ) s = 1 := by
   simp_rw [mpv_approximatingTensor]
-  rw [(isIsometry_polarIsoMatrix_of_isInjective hB).sum_star_mul_tensorPower]
+  rw [(isIsometry_polarIsoMatrix_of_isInjective hB).sum_star_mul_prod_const]
   rw [← pairProductState_fixedPointPair_norm_sq (N := M) hσ htr]
   exact Fintype.sum_equiv (Equiv.piCongrRight fun _ => finProdFinEquiv.symm) _ _
     fun _ => rfl

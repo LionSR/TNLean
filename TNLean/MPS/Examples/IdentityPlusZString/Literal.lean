@@ -28,7 +28,7 @@ zero.
 **Formalized here.** The printed tensor `M` in the source's normalization; the
 displayed operator formula at every positive length, entrywise
 (`rho_eq_diagonal`) and as a sum of two finite Kronecker powers
-(`rho_eq_finKronecker`); positivity (`M_isMPDO`) and the trace $2^N$
+(`rho_eq_piKronecker`); positivity (`M_isMPDO`) and the trace $2^N$
 (`trace_rho`); the loss of the $\sigma_z^{\otimes N}$ part when the last
 $N-L\ge 1$ sites of the normalized state are traced out, keeping $L\ge 1$ sites
 (`reducedBlockState_M_eq_scaled_one`); and saturation of the area
@@ -56,7 +56,7 @@ Documented in
 
 ## Main results
 
-* `rho_eq_diagonal`, `rho_eq_finKronecker`: the displayed operator formula.
+* `rho_eq_diagonal`, `rho_eq_piKronecker`: the displayed operator formula.
 * `M_isMPDO`, `trace_rho`: positivity and trace $2^N$ at positive length.
 * `reducedBlockState_M_eq_scaled_one`, `one_site_trace_loses_sigmaZ`: the
   one-site trace loss.
@@ -130,7 +130,7 @@ Kronecker product: for every positive $N$,
 $\rho^{(N)}(M)=I^{\otimes N}+\sigma_z^{\otimes N}$.
 
 Source: CPSV16, arXiv:1606.00608, Example 4.12, lines 933--936. -/
-theorem rho_eq_finKronecker (N : ℕ) (_hN : 0 < N) :
+theorem rho_eq_piKronecker (N : ℕ) (_hN : 0 < N) :
     mpo M N =
       Matrix.piKronecker (fun _ : Fin N => (1 : Matrix (Fin 2) (Fin 2) ℂ)) +
       Matrix.piKronecker (fun _ : Fin N => sigmaZ) := by

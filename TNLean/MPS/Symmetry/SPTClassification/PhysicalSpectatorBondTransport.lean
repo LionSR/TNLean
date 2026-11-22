@@ -91,7 +91,7 @@ private theorem singleKrausMap_coordinateInclusion_sigmaMk
       Sigma.mk.injEq, hi]
 
 set_option backward.isDefEq.respectTransparency false in
-private theorem tensorPower_commonFixedPointInclusion_sector
+private theorem piKronecker_commonFixedPointInclusion_sector
     (K d₀ d₁ : ℕ) :
     (Matrix.piKronecker fun _ : Fin 2 ↦ (commonFixedPointInclusion (K * K) d₀ d₁)).submatrix
         ((Matrix.etaPairSpatialBlockEquiv (Matrix.physicalSpectatorEquiv K d₀ d₁)).trans
@@ -166,7 +166,7 @@ theorem physicalSpectatorBondInteraction_eq_isometricInteractionExtension (K d�
       (twoSiteBondEquiv K)
         (Matrix.piKronecker fun _ : Fin 2 ↦ (commonFixedPointInclusion (K * K) d₀ d₁)) =
       Matrix.coordinateInclusion (activePairEmbedding K d₀ d₁) from
-        tensorPower_commonFixedPointInclusion_sector K d₀ d₁]
+        piKronecker_commonFixedPointInclusion_sector K d₀ d₁]
   rw [← Matrix.coe_reindexRingEquiv, map_sub, map_one]
   simp only [Matrix.coe_reindexRingEquiv, twoSiteBondInteraction,
     ← Matrix.reindex_symm, Equiv.apply_symm_apply]

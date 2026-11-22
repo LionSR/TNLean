@@ -19,7 +19,7 @@ an example constructed in this development, as documented in `ParityGraded`.
 
 ## Main results
 
-* `ParityGraded.finKronecker_pauliZ_mulVec_mpv_parA`: physical parity fixes the vector.
+* `ParityGraded.piKronecker_pauliZ_mulVec_mpv_parA`: physical parity fixes the vector.
 * `ParityGraded.trace_evalWord_parA_eq_zero_of_odd`: odd occupation has zero amplitude.
 * `ParityGraded.trace_evalWord_parA_cyclic_runs`: each cyclic run contributes its even-length
   indicator; `ParityGraded.exists_parA_cyclic_runs` covers every word containing a zero.
@@ -173,7 +173,7 @@ private theorem pauliZ_eq_diagonal_sign :
   fin_cases i <;> fin_cases j <;> norm_num [pauliZ, Matrix.diagonal]
 
 /-- The tensor product of physical parity operators fixes the periodic vector. -/
-theorem finKronecker_pauliZ_mulVec_mpv_parA (N : ℕ) :
+theorem piKronecker_pauliZ_mulVec_mpv_parA (N : ℕ) :
     (Matrix.piKronecker fun _ : Fin N => pauliZ) *ᵥ (fun σ => mpv parA σ) =
       (fun σ : Fin N → Fin 2 => mpv parA σ) := by
   rw [pauliZ_eq_diagonal_sign, Matrix.piKronecker_diagonal]

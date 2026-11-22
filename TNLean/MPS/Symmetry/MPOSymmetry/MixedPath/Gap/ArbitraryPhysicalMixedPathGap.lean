@@ -128,7 +128,7 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv
         (mixedEndpointInterpolation (polarPosTensor A₀) (polarPosTensor A₁) γ)))}
       from hline,
     Submodule.map_span, Set.image_singleton,
-    toEuclideanLin_tensorPower_mpv_rotatePhysical,
+    toEuclideanLin_piKronecker_mpv_rotatePhysical,
     arbitraryPhysicalMixedInterpolation]
 
 /-- The ground space of the actual enlarged path is one-dimensional on the

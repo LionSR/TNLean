@@ -214,7 +214,7 @@ theorem placeAlong_ringWindow_isometry_intertwiner {d m N : ℕ}
     (isHermitian_placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i) hLocal).eq] at hAdj
   have hMul := congrArg (fun M => M * (Matrix.piKronecker fun _ : Fin N ↦ E)) hAdj
   simpa only [singleKrausMap_apply, Matrix.mul_assoc,
-    MPOTensor.tensorPower_isometry E hE N,
+    MPOTensor.piKronecker_const_isometry E hE N,
     Matrix.mul_one] using hMul.symm
 
 /-- Extend a two-site interaction through a physical isometry and give
@@ -291,7 +291,7 @@ theorem isometricInteractionExtension_zero_mode {d m N : ℕ}
   refine ⟨?_, h⟩
   exact fun h0 => hψ (by
     simpa only [Matrix.mulVec_mulVec,
-      MPOTensor.tensorPower_isometry E hE N, Matrix.one_mulVec,
+      MPOTensor.piKronecker_const_isometry E hE N, Matrix.one_mulVec,
       Matrix.mulVec_zero] using
       congrArg (fun v => (Matrix.piKronecker fun _ : Fin N ↦ E)ᴴ.mulVec v) h0)
 

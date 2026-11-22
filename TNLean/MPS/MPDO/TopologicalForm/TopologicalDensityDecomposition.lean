@@ -561,7 +561,7 @@ theorem singleKrausMap_verticalCoisometry_mpo_eq_topologicalDensityOperatorSucc
     (H : BNTFusionTensorClause M) (N : ℕ) :
     singleKrausMap (Matrix.piKronecker fun _ : Fin (N + 1) ↦ H.verticalCoisometry)
         (mpo M (N + 1)) = H.topologicalDensityOperatorSucc N := by
-  rw [singleKrausMap_tensorPower_mpo]
+  rw [singleKrausMap_piKronecker_mpo]
   exact H.mpo_changePhysicalBasis_verticalCoisometry_eq_topologicalDensityOperatorSucc N
 
 /-- The adjoint sitewise vertical map reconstructs the original positive-length density
@@ -578,8 +578,8 @@ theorem singleKrausMap_conjTranspose_verticalCoisometry_topologicalDensityOperat
     singleKrausMap (Matrix.piKronecker fun _ : Fin (N + 1) ↦ H.verticalCoisometryᴴ)
         (H.topologicalDensityOperatorSucc N) = mpo M (N + 1) := by
   rw [← H.singleKrausMap_verticalCoisometry_mpo_eq_topologicalDensityOperatorSucc N,
-    singleKrausMap_tensorPower_mpo H.verticalCoisometry M (N + 1),
-    singleKrausMap_tensorPower_mpo H.verticalCoisometryᴴ
+    singleKrausMap_piKronecker_mpo H.verticalCoisometry M (N + 1),
+    singleKrausMap_piKronecker_mpo H.verticalCoisometryᴴ
       (changePhysicalBasis H.verticalCoisometry M) (N + 1),
     H.changePhysicalBasis_conjTranspose_verticalCoisometry_reconstruction]
 

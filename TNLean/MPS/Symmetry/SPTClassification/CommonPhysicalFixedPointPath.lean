@@ -293,7 +293,7 @@ theorem commonPhysicalNormalizedBondInteraction_groundSpace
 /-- The tensor power of a rectangular physical map carries the periodic
 MPS vector to that of the rotated tensor. Source context: arXiv:1010.3732,
 Section II.F.2, eq:1d-sym:jointsym. -/
-theorem toEuclideanLin_tensorPower_mpv_rotatePhysical {d m D N : ℕ}
+theorem toEuclideanLin_piKronecker_mpv_rotatePhysical {d m D N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) :
     Matrix.toEuclideanLin (Matrix.piKronecker fun _ : Fin N ↦ E)
         (WithLp.toLp 2 (mpv (N := N) A)) =
@@ -317,7 +317,7 @@ theorem commonPhysicalNormalizedBondInteraction_groundSpace_eq_span_mpv
           (weightedMatrixUnitInterpolation D₀ D₁ γ))))} := by
   have : NeZero N := ⟨by omega⟩
   rw [commonPhysicalNormalizedBondInteraction_groundSpace h₀ h₁ d₀ d₁ γ hN,
-    toEuclideanLin_tensorPower_mpv_rotatePhysical]
+    toEuclideanLin_piKronecker_mpv_rotatePhysical]
 
 /-- Every enlarged bond zero mode is a canonical-parent zero mode whenever
 this inclusion holds before adjoining the unused physical states.

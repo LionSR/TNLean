@@ -290,7 +290,7 @@ theorem mpvWithBoundary_toMPSTensor_eq_mul_iff (M N : MPOTensor d D)
 
 /-- The transpose of the Kronecker power of the entrywise conjugate is the adjoint of the
 Kronecker power. -/
-private theorem finKronecker_map_star_transpose (u : Matrix (Fin d) (Fin d) ℂ) (L : ℕ) :
+private theorem transpose_piKronecker_map_star (u : Matrix (Fin d) (Fin d) ℂ) (L : ℕ) :
     (Matrix.piKronecker fun _ : Fin L => u.map (starRingEnd ℂ))ᵀ =
       (Matrix.piKronecker fun _ : Fin L => u)ᴴ := by
   rw [Matrix.transpose_piKronecker, Matrix.conjTranspose_piKronecker]
@@ -328,7 +328,7 @@ theorem isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor (M : MPOTensor d 
   refine forall_congr' fun L => forall_congr' fun _ => ?_
   rw [mpo_onSite, mpo_pairTwist, MonoidHom.comp_apply]
   change _ ↔ _ = _ * _ * (Matrix.piKronecker fun _ : Fin L => (U g).map (starRingEnd ℂ))ᵀ
-  rw [finKronecker_map_star_transpose,
+  rw [transpose_piKronecker_map_star,
     commute_iff_mul_mul_conjTranspose (Matrix.IsIsometry.piKronecker (fun _ ↦ hU g))]
 
 /-- **Strong on-site symmetry on the vectorized state.**
@@ -374,7 +374,7 @@ theorem isWeakOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor
   have hvec := mpvWithBoundary_toMPSTensor_eq_mul_iff
     (pairTwist (U g) ((U g).map (starRingEnd ℂ)) M) M X L 1
   simp only [one_mul, one_smul] at hvec
-  rw [hvec, mpo_onSite, mpoWithBoundary_pairTwist, finKronecker_map_star_transpose,
+  rw [hvec, mpo_onSite, mpoWithBoundary_pairTwist, transpose_piKronecker_map_star,
     commute_iff_mul_mul_conjTranspose (Matrix.IsIsometry.piKronecker (fun _ ↦ hU g)),
     eq_comm]
 

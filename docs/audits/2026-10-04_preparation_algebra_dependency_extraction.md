@@ -11,7 +11,7 @@ The pins and package Lean options are unchanged.
 - Move the four existing `Matrix` contraction identities from
   `ApproximatingState` to their principal domain consumer, `BlockIsometryState`:
   `sum_star_mul_prod_eq_sum_conjTranspose_mul`, `sum_star_mul_prod_of_support`,
-  `IsIsometry.sum_star_mul_prod`, and `IsIsometry.sum_star_mul_tensorPower`.
+  `IsIsometry.sum_star_mul_prod`, and `IsIsometry.sum_star_mul_prod_const`.
 - Move the concrete fixed-point tensor, cyclic pair states and their algebraic
   identities to `FixedPointPairState`. `FixedPointPairs` imports it and retains
   the two spectral convergence theorems.

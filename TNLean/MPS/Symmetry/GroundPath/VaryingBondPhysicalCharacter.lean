@@ -44,7 +44,7 @@ namespace MPSTensor
 /-- Twisting the physical tensor applies the sitewise symmetry matrix to
 its periodic MPS vector. Source context: arXiv:1010.3732, Appendix B,
 lines 2614–2632. -/
-theorem mpv_twistedTensor_eq_finKronecker_mulVec
+theorem mpv_twistedTensor_eq_piKronecker_mulVec
     {G : Type} [Group G] {d D N : ℕ}
     (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) :
     (mpv (twistedTensor A U g) : (Fin N → Fin d) → ℂ) =
@@ -64,13 +64,13 @@ theorem SamePositiveMpvRay.symmetry_eigenvalue
     (hA : ∀ σ : Fin N → Fin d, mpv (twistedTensor A U g) σ = c * mpv A σ) :
     ∀ σ : Fin N → Fin d, mpv (twistedTensor B U g) σ = c * mpv B σ := by
   have hcov : (Matrix.piKronecker fun _ : Fin N => U g) *ᵥ mpv A = c • mpv A := by
-    rw [← mpv_twistedTensor_eq_finKronecker_mulVec]
+    rw [← mpv_twistedTensor_eq_piKronecker_mulVec]
     exact funext hA
   have h := LinearMap.map_eq_smul_of_span_singleton_eq
     (Matrix.toLin' (Matrix.piKronecker fun _ : Fin N => U g))
     (mpv A) (mpv B) c (hAB N hN) hcov
   intro σ
-  rw [mpv_twistedTensor_eq_finKronecker_mulVec]
+  rw [mpv_twistedTensor_eq_piKronecker_mulVec]
   exact congrFun h σ
 
 /-- An independent exact MPS ground-state path has one common scalar

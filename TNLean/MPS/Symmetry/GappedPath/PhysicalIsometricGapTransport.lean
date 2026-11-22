@@ -48,7 +48,7 @@ theorem isometricInteractionExtension_zero_translate_commute {d m N : ℕ}
     change placeAlong (X := fun _ ↦ Fin m) (ringWindow hN k)
       (1 - singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ E) (1 - 0)) = _
     simp only [sub_zero, singleKrausMap_apply, Matrix.mul_one,
-      MPOTensor.tensorPower_two_mul_conjTranspose, placeAlong_sub, placeAlong_one]
+      MPOTensor.piKronecker_two_mul_conjTranspose, placeAlong_sub, placeAlong_one]
   rw [heq, heq]
   exact (Commute.one_left _).sub_left ((Commute.one_right _).sub_right
     (MPOTensor.embed_twoSiteSectorProjection_commute (E * Eᴴ) hN i j))
@@ -133,7 +133,7 @@ private noncomputable def physicalChainLinearIsometry {d m : ℕ}
   have hT : T.adjoint ∘ₗ T = LinearMap.id := by
     simpa only [T, ← Matrix.toEuclideanLin_conjTranspose_eq_adjoint,
       Matrix.toEuclideanLin, Matrix.toLpLin_mul_same, Matrix.toLpLin_one] using
-      congrArg Matrix.toEuclideanLin (MPOTensor.tensorPower_isometry E hE N)
+      congrArg Matrix.toEuclideanLin (MPOTensor.piKronecker_const_isometry E hE N)
   exact T.isometryOfInner fun x y => by
     rw [← LinearMap.adjoint_inner_right, ← LinearMap.comp_apply, hT, LinearMap.id_apply]
 

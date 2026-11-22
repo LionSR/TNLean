@@ -72,7 +72,7 @@ theorem trace_mul_ne_zero_of_disjoint {S T : Finset ι} (hST : Disjoint S T)
     (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) T)
     (htrA : Matrix.trace A ≠ 0) (htrB : Matrix.trace B ≠ 0) :
     Matrix.trace (A * B) ≠ 0 := by
-  have hfactor := trace_rectKronecker_mul_mul hST
+  have hfactor := trace_piKronecker_mul_mul_mul_trace hST
     (fun _ : ι => (1 : Matrix (Fin d) (Fin d) ℂ)) hA hB
   rw [Matrix.piKronecker_one, Matrix.one_mul, Matrix.one_mul, Matrix.one_mul] at hfactor
   intro hzero

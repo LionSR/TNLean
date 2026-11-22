@@ -67,12 +67,12 @@ private noncomputable def cyclicBondProjectionFactor
     Matrix (Fin d) (Fin d) ℂ :=
   if (n.val + N - i.val) % N < 2 then P else 1
 
-private theorem embed_twoSiteSectorProjection_eq_finKronecker
+private theorem placeAlong_twoSiteSectorProjection_eq_piKronecker
     (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
     ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
         (twoSiteSectorProjection P) =
       Matrix.piKronecker (fun n ↦ cyclicBondProjectionFactor P i n) := by
-  rw [← tensorPower_two_eq_twoSiteSectorProjection]
+  rw [← piKronecker_two_eq_twoSiteSectorProjection]
   ext σ τ
   rw [ManyBody.placeAlong_apply, ← MPSTensor.extractWindow_eq_comp_ringWindow hN,
     ← MPSTensor.extractWindow_eq_comp_ringWindow hN]
@@ -137,13 +137,13 @@ theorem embed_twoSiteSectorProjection_commute
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN j)
         (twoSiteSectorProjection P)) := by
   unfold Commute SemiconjBy
-  simp only [embed_twoSiteSectorProjection_eq_finKronecker, Matrix.piKronecker_mul]
+  simp only [placeAlong_twoSiteSectorProjection_eq_piKronecker, Matrix.piKronecker_mul]
   congr 1
   funext n
   simp only [cyclicBondProjectionFactor]
   split_ifs <;> simp
 
-private theorem finKronecker_list_prod_of_ne_nil {N : ℕ}
+private theorem list_prod_map_piKronecker_of_ne_nil {N : ℕ}
     (l : List (Fin N → Matrix (Fin d) (Fin d) ℂ)) (hl : l ≠ []) :
     (l.map Matrix.piKronecker).prod =
       Matrix.piKronecker (fun n ↦ (l.map fun A ↦ A n).prod) := by
@@ -213,12 +213,12 @@ private theorem openBondProjectionProduct_eq_sitewise
     rw [List.map_ofFn]
     apply congrArg List.ofFn
     funext i
-    exact embed_twoSiteSectorProjection_eq_finKronecker P hN ⟨i.val, by omega⟩
+    exact placeAlong_twoSiteSectorProjection_eq_piKronecker P hN ⟨i.val, by omega⟩
   rw [openBondProjectionProduct, hlist]
   have hne : List.ofFn factors ≠ [] := by
     rw [List.ne_nil_iff_length_pos, List.length_ofFn]
     omega
-  rw [finKronecker_list_prod_of_ne_nil _ hne]
+  rw [list_prod_map_piKronecker_of_ne_nil _ hne]
   simp only [List.map_ofFn]
   change Matrix.piKronecker
       (fun n ↦ (List.ofFn fun i : Fin (N - 1) ↦ factors i n).prod) =
@@ -289,10 +289,10 @@ private theorem twoSiteSectorProjection_mul_isometricBond
     twoSiteSectorProjection (V * Vᴴ) *
         singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B =
       singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B := by
-  rw [← tensorPower_two_mul_conjTranspose V]
+  rw [← piKronecker_two_mul_conjTranspose V]
   simp only [singleKrausMap_apply, Matrix.mul_assoc]
   rw [← Matrix.mul_assoc (Matrix.piKronecker fun _ : Fin 2 ↦ V)ᴴ
-    (Matrix.piKronecker fun _ : Fin 2 ↦ V), tensorPower_isometry V hV 2, Matrix.one_mul]
+    (Matrix.piKronecker fun _ : Fin 2 ↦ V), piKronecker_const_isometry V hV 2, Matrix.one_mul]
 
 /-- The complete product of commuting lifted bonds is supported on the
 included physical space at every site. No tensor or injectivity hypothesis
@@ -389,7 +389,7 @@ theorem singleKrausMap_placeAlong_ringWindow_eq_range_mul_lift
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ ed ed ed]
   simp only [Matrix.coe_reindexLinearEquiv]
   rw [Matrix.reindex_singleKrausMap ee ed,
-    reindex_tensorPower_windowComplement,
+    reindex_piKronecker_windowComplement,
     reindex_placeAlong_ringWindow_windowComplement]
   change singleKrausMap
       ((Matrix.piKronecker fun _ : Fin 2 ↦ V) ⊗ₖ (Matrix.piKronecker fun _ : Fin (N - 2) ↦ V))
@@ -405,12 +405,12 @@ theorem singleKrausMap_placeAlong_ringWindow_eq_range_mul_lift
     · have hne : ee.symm x ≠ ee.symm y := fun h ↦ hxy (ee.symm.injective h)
       simp [Matrix.reindex_apply, hxy, hne]
   rw [Matrix.reindex_singleKrausMap ee ed,
-    reindex_tensorPower_windowComplement,
+    reindex_piKronecker_windowComplement,
     reindex_placeAlong_ringWindow_windowComplement, hone]
   simp only [singleKrausMap_apply, Matrix.mul_one,
     Matrix.conjTranspose_kronecker]
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul]
-  have htwo := tensorPower_isometry V hV 2
+  have htwo := piKronecker_const_isometry V hV 2
   simp only [Matrix.mul_assoc]
   rw [← Matrix.mul_assoc
       (Matrix.piKronecker fun _ : Fin 2 ↦ V)ᴴ (Matrix.piKronecker fun _ : Fin 2 ↦ V),
@@ -434,7 +434,7 @@ theorem singleKrausMap_bondProduct_of_unitary
         ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
           (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B)).prod := by
   have hW : (Matrix.piKronecker fun _ : Fin N ↦ V)ᴴ * (Matrix.piKronecker fun _ : Fin N ↦ V) = 1 :=
-    tensorPower_isometry V hV N
+    piKronecker_const_isometry V hV N
   have hne : (List.ofFn fun i : Fin N ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) B) ≠ [] := by
     rw [List.ne_nil_iff_length_pos, List.length_ofFn]
@@ -447,7 +447,7 @@ theorem singleKrausMap_bondProduct_of_unitary
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) B) = _
   rw [singleKrausMap_placeAlong_ringWindow_eq_range_mul_lift V hV hN i B]
   simp only [singleKrausMap_apply, Matrix.mul_one]
-  rw [tensorPower_mul_conjTranspose, hV']
+  rw [piKronecker_const_mul_conjTranspose, hV']
   rw [Matrix.piKronecker_one, Matrix.one_mul]
 
 /-- Isometric inclusion carries a complete periodic product of Hermitian
@@ -479,7 +479,7 @@ theorem singleKrausMap_bondProduct_of_isometry
     fun i ↦ ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
       (singleKrausMap (Matrix.piKronecker fun _ : Fin 2 ↦ V) B)
   have hW : Wᴴ * W = 1 :=
-    tensorPower_isometry V hV N
+    piKronecker_const_isometry V hV N
   have hQ : Q * Q = Q := by
     calc
       Q * Q = singleKrausMap W (1 * 1) :=
@@ -515,7 +515,7 @@ theorem singleKrausMap_bondProduct_of_isometry
         rw [Matrix.conjTranspose_mul, hAherm.eq, hQherm.eq]
   have hQrange : Q = (Matrix.piKronecker fun _ : Fin N ↦ (V * Vᴴ)) := by
     simp only [Q, singleKrausMap_apply, Matrix.mul_one, W]
-    rw [tensorPower_mul_conjTranspose]
+    rw [piKronecker_const_mul_conjTranspose]
   have hne : List.ofFn X ≠ [] := by
     rw [List.ne_nil_iff_length_pos, List.length_ofFn]
     omega
@@ -590,7 +590,7 @@ noncomputable def liftedEtaLocalStructureData
         singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ F.inclusion)
           (mpo (PhysicalSectorFactorization.changePhysicalBasis
             F.inclusionᴴ K) N) := by
-      rw [singleKrausMap_tensorPower_mpo, F.reembed]
+      rw [singleKrausMap_piKronecker_mpo, F.reembed]
     change mpo (PhysicalSectorFactorization.changePhysicalBasis
       F.inclusionᴴ K) N = (c : ℂ) •
         (List.ofFn fun i : Fin N ↦
@@ -630,7 +630,7 @@ theorem exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactoriza
       singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ F.inclusion)
         (mpo (PhysicalSectorFactorization.changePhysicalBasis
           F.inclusionᴴ K) N) := by
-    rw [singleKrausMap_tensorPower_mpo, F.reembed]
+    rw [singleKrausMap_piKronecker_mpo, F.reembed]
   rw [hmpo]
   change singleKrausMap (Matrix.piKronecker fun _ : Fin N ↦ F.inclusion)
       (mpo (PhysicalSectorFactorization.changePhysicalBasis

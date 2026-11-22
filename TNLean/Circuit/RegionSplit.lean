@@ -57,7 +57,7 @@ abbrev sheetSplit (q : ℕ) (S : Finset ι) :
 
 /-- A product operator in the coordinates of `sheetSplit S` is the Kronecker product of its
 restrictions to `S` and to `Sᶜ`. -/
-theorem rectKronecker_submatrix_sheetSplit (S : Finset ι) (m : ι → Matrix (Fin q) (Fin q) ℂ) :
+theorem piKronecker_submatrix_sheetSplit (S : Finset ι) (m : ι → Matrix (Fin q) (Fin q) ℂ) :
     (Matrix.piKronecker m).submatrix (sheetSplit q S).symm (sheetSplit q S).symm =
       Matrix.piKronecker (fun v : S => m v) ⊗ₖ Matrix.piKronecker (fun v : {v // v ∉ S} => m
           v) := by
@@ -80,7 +80,7 @@ theorem exists_kronecker_one_of_mem_supportedOperators {S : Finset ι}
   induction hA using ManyBody.supportedOperators_induction with
   | prod m hm =>
     refine ⟨Matrix.piKronecker fun v : S => m v, ?_⟩
-    rw [rectKronecker_submatrix_sheetSplit]
+    rw [piKronecker_submatrix_sheetSplit]
     congr 1
     rw [← Matrix.piKronecker_one (ν := {v // v ∉ S}) (ι := fun _ ↦ Fin q)]
     congr 1
@@ -105,7 +105,7 @@ theorem exists_one_kronecker_of_mem_supportedOperators {S : Finset ι} {D : Fins
   induction hA using ManyBody.supportedOperators_induction with
   | prod m hm =>
     refine ⟨Matrix.piKronecker fun v : {v // v ∉ S} => m v, ?_⟩
-    rw [rectKronecker_submatrix_sheetSplit]
+    rw [piKronecker_submatrix_sheetSplit]
     congr 1
     rw [← Matrix.piKronecker_one (ν := ↥S) (ι := fun _ ↦ Fin q)]
     congr 1

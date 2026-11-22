@@ -143,7 +143,7 @@ theorem threeSplit_symm_apply_of_notMem (t : T → Fin q) (e : E → Fin q)
 
 /-- A product operator in the coordinates of `threeSplit T E` is the Kronecker product of its
 restrictions to `T`, to `E` and to `(T ∪ E)ᶜ`. -/
-theorem rectKronecker_submatrix_threeSplit (m : ι → Matrix (Fin q) (Fin q) ℂ) :
+theorem piKronecker_submatrix_threeSplit (m : ι → Matrix (Fin q) (Fin q) ℂ) :
     (Matrix.piKronecker m).submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
       (Matrix.piKronecker (fun v : T => m v) ⊗ₖ Matrix.piKronecker (fun v : E => m v)) ⊗ₖ
         Matrix.piKronecker (fun v : {v // v ∉ T ∪ E} => m v) := by
@@ -200,7 +200,7 @@ theorem exists_threeSplit_eq_kronecker_one {T E : Finset ι} (h : Disjoint T E)
       (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ))
     (fun m hm => ?_) hA
   refine ⟨Matrix.piKronecker (fun v : T => m v) ⊗ₖ Matrix.piKronecker (fun v : E => m v), ?_⟩
-  rw [rectKronecker_submatrix_threeSplit h]
+  rw [piKronecker_submatrix_threeSplit h]
   change _ = _ ⊗ₖ (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)
   congr 1
   rw [← Matrix.piKronecker_one (ν := {v // v ∉ T ∪ E}) (ι := fun _ ↦ Fin q)]
@@ -227,7 +227,7 @@ theorem exists_threeSplit_eq_one_kronecker_kronecker_one {T E : Finset ι} (h : 
   have hU : ∀ v : {v // v ∉ T ∪ E}, m v = 1 := fun v =>
     hm v fun hv => v.2 (Finset.mem_union_right T (hD hv))
   refine ⟨Matrix.piKronecker (fun v : E => m v), ?_⟩
-  rw [rectKronecker_submatrix_threeSplit h]
+  rw [piKronecker_submatrix_threeSplit h]
   change _ = ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ _) ⊗ₖ
     (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)
   simp only [hT, hU, Matrix.piKronecker_one]

@@ -60,7 +60,7 @@ theorem evenFlagState_eq_mpo_Mhat (N : ℕ) :
       subst t
       simp [evenFlagState, powN, configurationSign]
   | succ N =>
-      rw [CPSVExample412Literal.rho_eq_finKronecker (N + 1) (by omega)]
+      rw [CPSVExample412Literal.rho_eq_piKronecker (N + 1) (by omega)]
       ext s t
       norm_num [evenFlagState, flagMatrix_zero, flagMatrix_one, powN, Matrix.piKronecker]
 

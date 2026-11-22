@@ -30,9 +30,9 @@ circuit occurs here: the circuits built from supported operators are in QICLean'
 
 ## Main results
 
-* `QuantumCircuit.linearMap_ext_rectKronecker` — linear maps on the operators of the sites
+* `QuantumCircuit.linearMap_ext_piKronecker` — linear maps on the operators of the sites
   agree once they agree on the product operators.
-* `QuantumCircuit.trace_rectKronecker_mul_mul` — product densities factorize traces of
+* `QuantumCircuit.trace_piKronecker_mul_mul_mul_trace` — product densities factorize traces of
   products of operators on disjoint sets.
 
 ## References
@@ -51,7 +51,7 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 omit [DecidableEq ι] in
 /-- Two linear maps on the operators of the sites `ι` agree once they agree on the product
 operators `⊗ᵢ mᵢ`. -/
-theorem linearMap_ext_rectKronecker {M : Type*} [AddCommMonoid M] [Module ℂ M]
+theorem linearMap_ext_piKronecker {M : Type*} [AddCommMonoid M] [Module ℂ M]
     (Φ Ψ : Matrix (ι → Fin d) (ι → Fin d) ℂ →ₗ[ℂ] M)
     (h : ∀ m : ι → Matrix (Fin d) (Fin d) ℂ, Φ (Matrix.piKronecker m) = Ψ (Matrix.piKronecker m)) :
     Φ = Ψ := by
@@ -68,7 +68,7 @@ theorem linearMap_ext_rectKronecker {M : Type*} [AddCommMonoid M] [Module ℂ M]
 
 /-- Product densities factorize expectations of products of operators on disjoint sets of
 sites: `tr(σ AB) tr σ = tr(σ A) tr(σ B)` for `σ = ⊗ᵢ σᵢ`. -/
-theorem trace_rectKronecker_mul_mul {S S' : Finset ι} (hSS' : Disjoint S S')
+theorem trace_piKronecker_mul_mul_mul_trace {S S' : Finset ι} (hSS' : Disjoint S S')
     (σ : ι → Matrix (Fin d) (Fin d) ℂ) {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S') :

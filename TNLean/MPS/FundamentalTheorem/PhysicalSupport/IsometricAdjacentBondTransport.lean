@@ -267,7 +267,7 @@ private theorem pair_product_transport
       rw [leftPair_mul_firstProjection B' P hB',
         lastProjection_mul_rightPair P C' hC']
 
-private theorem reindex_tensorPower_three
+private theorem reindex_piKronecker_three
     (V : Matrix (Fin d) (Fin e) ℂ) :
     Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
         (_root_.finThreeArrowEquiv (Fin e))
@@ -381,7 +381,7 @@ theorem singleKrausMap_crossedTwoSiteBondProduct
   rw [Matrix.reindex_singleKrausMap
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin d)),
-    reindex_tensorPower_two]
+    reindex_piKronecker_two]
   have hrestricted := Matrix.reindexLinearEquiv_mul ℂ ℂ
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin e))
@@ -408,7 +408,7 @@ theorem singleKrausMap_crossedTwoSiteBondProduct
     Matrix.reindex_singleKrausMap
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin d)),
-    reindex_tensorPower_two]
+    reindex_piKronecker_two]
   rw [Matrix.singleKrausMap_mul_of_isometry _
     (Matrix.IsIsometry.kronecker V V hV hV)]
   have hswap := swapPairMatrix_singleKraus_kronecker_self Vᴴ
@@ -452,7 +452,7 @@ theorem singleKrausMap_adjacentBondProduct
   rw [Matrix.reindex_singleKrausMap
       (_root_.finThreeArrowEquiv (Fin e))
       (_root_.finThreeArrowEquiv (Fin d)),
-    reindex_tensorPower_three]
+    reindex_piKronecker_three]
   have hrestricted := Matrix.reindexLinearEquiv_mul ℂ ℂ
       (_root_.finThreeArrowEquiv (Fin e))
       (_root_.finThreeArrowEquiv (Fin e))
@@ -481,7 +481,7 @@ theorem singleKrausMap_adjacentBondProduct
     Matrix.reindex_singleKrausMap
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin d)),
-    reindex_tensorPower_two]
+    reindex_piKronecker_two]
   exact pair_product_transport V hV _ _
 
 end MPOTensor

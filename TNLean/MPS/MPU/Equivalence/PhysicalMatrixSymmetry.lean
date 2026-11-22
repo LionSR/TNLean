@@ -65,7 +65,7 @@ private theorem operatorId_map_star {N : ℕ}
   <;> simp [tensorPhysicalIdOperator, Matrix.reindex_apply,
     Matrix.kroneckerMap_apply, h]
 
-private theorem operatorId_tensorPower
+private theorem tensorPhysicalIdOperator_piKronecker
     (Q : Matrix (Fin d) (Fin d) ℂ) (x N : ℕ) :
     tensorPhysicalIdOperator (Matrix.piKronecker fun _ : Fin N ↦ Q) x =
       (Matrix.piKronecker fun _ : Fin N ↦ (physicalIdMatrix Q x)) := by
@@ -113,7 +113,7 @@ theorem daggerWithPhysicalMatrix_tensorPhysicalId_semiconj
   change tensorPhysicalIdOperator
       ((Matrix.piKronecker fun _ : Fin N ↦ Q) * Xᴴ * (Matrix.piKronecker fun _ : Fin N ↦ Q)) x = _
   simp only [daggerWithPhysicalMatrix, operatorId_mul, operatorId_conjTranspose,
-    operatorId_tensorPower]
+    tensorPhysicalIdOperator_piKronecker]
 
 /-- The full transposition action with \(Q\otimes I_x\) is compatible with
 adjoining the identity ancilla to every original operator.
@@ -128,7 +128,7 @@ theorem transposeWithPhysicalMatrix_tensorPhysicalId_semiconj
   change tensorPhysicalIdOperator
       ((Matrix.piKronecker fun _ : Fin N ↦ Q) * Xᵀ * (Matrix.piKronecker fun _ : Fin N ↦ Q)) x = _
   simp only [transposeWithPhysicalMatrix, operatorId_mul, operatorId_transpose,
-    operatorId_tensorPower]
+    tensorPhysicalIdOperator_piKronecker]
 
 end FiniteChainOperatorSymmetry
 

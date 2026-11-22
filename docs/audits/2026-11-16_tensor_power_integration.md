@@ -20,7 +20,7 @@ unchanged under these definitionally equal substitutions.
 | `MPOTensor.sitewiseMatrixFamily` | `Matrix.rectKronecker` |
 | `MPOTensor.sitewiseMatrixFamily_mul` | `Matrix.rectKronecker_mul` |
 | private `sitewiseMatrixFamily_one` | `Matrix.rectKronecker_one` |
-| private `sitewiseMatrixFamilyMonoidHom` | private `rectKroneckerMonoidHom` |
+| private `sitewiseMatrixFamilyMonoidHom` | private `piKroneckerMonoidHom` |
 | `MPOTensor.siteProduct` and private `chainPower`, `rectangularProduct` | `Matrix.tensorPower` |
 | `siteProduct_mul`, `chainPower_mul` | `Matrix.tensorPower_mul` |
 | `siteProduct_one`, `chainPower_one` | `Matrix.tensorPower_one` |
@@ -44,7 +44,7 @@ Current main added five consumers since the temporary integration:
 `PhysicalMatrixSymmetry`, `PhysicalMatrixBlocking`,
 `PhysicalMatrixSymmetryTransport`, `FundamentalTheoremGatesSupplied`, and
 `Examples/SwapAncillaCompatibility`. They now use the same API.
-The public regrouping theorem becomes `MPOTensor.tensorPower_blockKron_reindex`,
+The public regrouping theorem becomes `MPOTensor.reindex_piKronecker_blockKron`,
 and its existing blueprint tag follows that rename.
 
 The `SitewisePhysicalMatrix` isometry proof retains the measured fast form:

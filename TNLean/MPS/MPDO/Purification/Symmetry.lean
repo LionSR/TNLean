@@ -198,7 +198,7 @@ theorem isStrongMPOSymmetry_iff_purification {ι : Type*} {χ : ι → ℕ}
 
 /-- Twisting the spin leg of the purifying tensor by `u` acts on the purifying state by
 `u^{⊗L} ⊗ 1_anc`. -/
-theorem finKronecker_mul_purificationAmplitude
+theorem piKronecker_mul_purificationAmplitude
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ) (u : Matrix (Fin d) (Fin d) ℂ) (L : ℕ) :
     (Matrix.piKronecker fun _ : Fin L => u) * purificationAmplitude A L =
       purificationAmplitude (fun i k => ∑ j, u i j • A j k) L := by
@@ -209,7 +209,7 @@ theorem finKronecker_mul_purificationAmplitude
 
 /-- Twisting the ancilla leg of the purifying tensor by `v` acts on the purifying state by
 `1 ⊗ v^{⊗L}`, which multiplies the system-by-ancilla matrix on the right by the transpose. -/
-theorem purificationAmplitude_mul_finKronecker_transpose
+theorem purificationAmplitude_mul_transpose_piKronecker
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ) (v : Matrix (Fin dK) (Fin dK) ℂ)
     (L : ℕ) :
     purificationAmplitude A L * (Matrix.piKronecker fun _ : Fin L => v)ᵀ =
@@ -253,7 +253,7 @@ theorem isStrongOnSiteSymmetry_of_gaugePhase_purification {G : Type*} [Monoid G]
   intro g L _
   simp only [mpoWithBoundary_one]
   rw [mpo_onSite, mpo_eq_purificationDensity A e hM, purificationDensity_eq_mul_conjTranspose,
-    Matrix.mul_mul_conjTranspose_eq_smul_iff, finKronecker_mul_purificationAmplitude]
+    Matrix.mul_mul_conjTranspose_eq_smul_iff, piKronecker_mul_purificationAmplitude]
   exact purificationAmplitude_of_gaugePhase (X g) (ζ g) (hA g) L
 
 /-- A square matrix with `v^† v = 1` has unitary transpose. -/
@@ -297,7 +297,7 @@ theorem isWeakOnSiteSymmetry_of_gaugePhase_purification {G : Type*} [Monoid G]
       exact Matrix.IsIsometry.piKronecker (fun _ ↦ transpose_conjTranspose_mul_self (hV g))
     exact mul_eq_one_comm.mp h1
   have hΦ : u * Φ * W = ζ g ^ L • Φ := by
-    rw [finKronecker_mul_purificationAmplitude, purificationAmplitude_mul_finKronecker_transpose]
+    rw [piKronecker_mul_purificationAmplitude, purificationAmplitude_mul_transpose_piKronecker]
     exact purificationAmplitude_of_gaugePhase (X g) (ζ g) (hA g) L
   have hρ : mpo M L = Φ * Φᴴ := by
     rw [mpo_eq_purificationDensity A e hM, purificationDensity_eq_mul_conjTranspose]

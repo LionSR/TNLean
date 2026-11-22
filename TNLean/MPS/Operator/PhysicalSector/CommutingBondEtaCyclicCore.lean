@@ -109,7 +109,7 @@ theorem singleKrausMap_sitewise_conjTranspose_two_eq
     (finTwoArrowEquiv (Fin d))).injective
   rw [Matrix.reindex_singleKrausMap
       (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d)),
-    reindex_tensorPower_two]
+    reindex_piKronecker_two]
   rw [show Matrix.reindex (finTwoArrowEquiv (Fin d))
       (finTwoArrowEquiv (Fin d))
       (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
