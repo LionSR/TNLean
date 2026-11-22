@@ -18,23 +18,24 @@ in Nachtergaele, arXiv:cond-mat/9410110, condition C2, lines 1045--1056.
 
 open scoped InnerProductSpace ComplexOrder
 
-private theorem norm_gap_of_kernel_complement_bound
+private theorem forall_hasEigenvalue_of_kernel_complement_bound
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [FiniteDimensional ℂ E] (H : E →ₗ[ℂ] E) {κ : ℝ} (hκ : 0 < κ)
+    [FiniteDimensional ℂ E] (H : E →ₗ[ℂ] E) {κ : ℝ}
     (hLower : (κ : ℂ) • (LinearMap.ker H)ᗮ.starProjection.toLinearMap ≤ H) :
-    ∀ v ∈ (LinearMap.ker H)ᗮ, κ * ‖v‖ ≤ ‖H v‖ := by
-  have hker : LinearMap.ker ((κ : ℂ) • (LinearMap.ker H)ᗮ.starProjection.toLinearMap) =
-      LinearMap.ker H := by
-    simp only [LinearMap.ker_smul _ _ (Complex.ofReal_ne_zero.mpr hκ.ne'),
-      Submodule.ker_starProjection, Submodule.orthogonal_orthogonal]
-  refine LinearMap.IsPositive.norm_gap_of_le_of_ker_eq
-    ((Submodule.isSymmetricProjection_starProjection _).isPositive.smul_of_nonneg
-      (by exact_mod_cast hκ.le)) hκ.le hLower hker ?_
-  intro v hv
-  rw [hker] at hv
-  simp only [LinearMap.smul_apply, ContinuousLinearMap.coe_coe,
-    (LinearMap.ker H)ᗮ.starProjection_eq_self_iff.mpr hv, norm_smul,
-    Complex.norm_real, Real.norm_eq_abs, abs_of_pos hκ, le_refl]
+    ∀ μ : ℂ, Module.End.HasEigenvalue H μ → μ = 0 ∨ (κ : ℂ) ≤ μ := by
+  have hH : H.IsSymmetric := by
+    simpa only [sub_add_cancel] using hLower.isSymmetric.add
+      ((LinearMap.ker H)ᗮ.starProjection_isSymmetric.smul (c := (κ : ℂ)) (by simp))
+  refine hH.forall_hasEigenvalue_of_re_inner fun v hv ↦ ?_
+  have h := hLower.re_inner_nonneg_left v
+  have hv2 := inner_self_eq_norm_sq (𝕜 := ℂ) v
+  simp only [RCLike.re_eq_complex_re] at hv2
+  rw [LinearMap.sub_apply, LinearMap.smul_apply, ContinuousLinearMap.coe_coe,
+    (LinearMap.ker H)ᗮ.starProjection_eq_self_iff.mpr hv, inner_sub_left, inner_smul_left,
+    hH v v, Complex.conj_ofReal] at h
+  simp only [RCLike.re_eq_complex_re, Complex.sub_re, Complex.mul_re, Complex.ofReal_re,
+    Complex.ofReal_im, zero_mul, sub_zero, hv2] at h
+  linarith
 
 private theorem kernel_complement_bound_of_fiberwise_conj
     {E I S : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
@@ -68,7 +69,7 @@ private theorem kernel_complement_bound_of_fiberwise_conj
       (G := (κ : ℂ) • (LinearMap.ker H)ᗮ.starProjection)
       (H := H.toContinuousLinearMap) hLocal)
 
-private theorem norm_gap_of_fiberwise_conj
+private theorem forall_hasEigenvalue_of_fiberwise_conj
     {E I S : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [FiniteDimensional ℂ E] [Fintype I] [Fintype S]
     (U : E ≃ₗᵢ[ℂ] EuclideanSpace ℂ (I × S)) (G : E →ₗ[ℂ] E)
@@ -76,11 +77,11 @@ private theorem norm_gap_of_fiberwise_conj
     (hκ : 0 < κ) (hPos : H.IsPositive)
     (hConj : U.toLinearEquiv.conj G =
       (ContinuousLinearMap.rightFiberwiseMap (S := S) H.toContinuousLinearMap).toLinearMap)
-    (hGap : ∀ v ∈ (LinearMap.ker H)ᗮ, κ * ‖v‖ ≤ ‖H v‖) :
-    ∀ v ∈ (LinearMap.ker G)ᗮ, κ * ‖v‖ ≤ ‖G v‖ :=
-  norm_gap_of_kernel_complement_bound G hκ
+    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue H μ → μ = 0 ∨ (κ : ℂ) ≤ μ) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue G μ → μ = 0 ∨ (κ : ℂ) ≤ μ :=
+  forall_hasEigenvalue_of_kernel_complement_bound G
     (kernel_complement_bound_of_fiberwise_conj U G H hConj
-      (hPos.smul_orthogonal_ker_projection_le_of_norm_gap hκ.le hGap))
+      (hPos.smul_orthogonal_ker_projection_le_of_forall_hasEigenvalue hκ.le hGap))
 
 namespace MPSTensor
 
@@ -101,16 +102,13 @@ theorem hamiltonian_prefix_parentChainInteraction_gap_of_local_gap
   have hConj :=
     hamiltonian_prefix_parentChainInteraction_conj_rightSpectatorConfigLinearIsometryEquiv
       A (L := R) (n := n) (r := q) (p := n) le_rfl
-  refine (ManyBody.forall_hasEigenvalue_iff_norm
-    (posSemidef_hamiltonian_restrict_parentChainInteraction A R (n + q) _)).mpr ?_
-  exact norm_gap_of_fiberwise_conj (rightSpectatorConfigLinearIsometryEquiv d n q) _
+  exact forall_hasEigenvalue_of_fiberwise_conj (rightSpectatorConfigLinearIsometryEquiv d n q) _
     (Matrix.toEuclideanLin (parentChainInteraction A R n).hamiltonian) hκ
     (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentChainInteraction A R n))
     (by simpa only [LinearEquiv.conj_apply, LinearMap.comp_assoc,
       hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChainInteraction] using!
         hConj)
-    ((ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentChainInteraction A R n)).mp hGap)
+    hGap
 
 /-- Inserting a finite terminal-interval Hamiltonian into a larger chain preserves its gap:
 every eigenvalue of the interval Hamiltonian on the larger chain is `0` or at least the gap.
@@ -128,14 +126,11 @@ theorem hamiltonian_restrict_parentChainInteraction_gap_of_local_gap
         fun i ↦ n - W ≤ i.val ∧ i.val + R ≤ n).hamiltonian) μ →
         μ = 0 ∨ (κ : ℂ) ≤ μ := by
   have hConj := hamiltonian_restrict_parentChainInteraction_conj_cyclicActiveBlock A hR hRW hWn hnN
-  refine (ManyBody.forall_hasEigenvalue_iff_norm
-    (posSemidef_hamiltonian_restrict_parentChainInteraction A R N _)).mpr ?_
-  exact norm_gap_of_fiberwise_conj
+  exact forall_hasEigenvalue_of_fiberwise_conj
     (cyclicActiveBlockConfigLinearIsometryEquiv d W (hWn.trans hnN) ⟨n - W, by omega⟩) _
     (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) hκ
     (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentChainInteraction A R W))
     (by simpa only [LinearEquiv.conj_apply, LinearMap.comp_assoc] using! hConj)
-    ((ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentChainInteraction A R W)).mp hGap)
+    hGap
 
 end MPSTensor

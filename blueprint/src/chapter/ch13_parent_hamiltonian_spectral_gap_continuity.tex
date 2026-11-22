@@ -151,7 +151,7 @@ is recorded in
     \label{lem:open_parent_range_comparison}
     \lean{MPSTensor.hamiltonian_chainTranslates_comparison_of_local,
         MPSTensor.toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length,
-        LinearMap.IsPositive.norm_gap_of_scaled_comparison}
+        LinearMap.IsPositive.forall_hasEigenvalue_of_scaled_comparison}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:open_local_interaction_sum,
         thm:open_parent_hamiltonian_es_c1}
@@ -168,9 +168,9 @@ is recorded in
     $\kappa\gamma/(W-R+1)$. There is no hypothesis on the kernel of $h$
     itself. The transfer rests on the following fact for operators $P,Q$ on
     a finite-dimensional inner-product space with $P\geq0$: if
-    $\kappa P\leq mQ$ with $\kappa,\gamma,m>0$, $\ker P=\ker Q$ and
-    $\gamma\|v\|\leq\|Pv\|$ for $v\perp\ker P$, then
-    $(\kappa\gamma/m)\|v\|\leq\|Qv\|$ for $v\perp\ker Q$. Taking for $h$ the range-$R$ parent interaction compares
+    $\kappa P\leq mQ$ with $\kappa,\gamma,m>0$, $\ker P=\ker Q$ and every
+    eigenvalue of $P$ other than $0$ is at least $\gamma$, then every
+    eigenvalue of $Q$ other than $0$ is at least $\kappa\gamma/m$. Taking for $h$ the range-$R$ parent interaction compares
     $H^{\mathrm{open}}_{N,W}$ with $H^{\mathrm{open}}_{N,R}$; for a one-site
     injective tensor with $R=2$ and $W\geq2$, the kernel hypotheses hold
     automatically. This is a finite-window consequence of condition C1 and

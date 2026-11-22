@@ -35,15 +35,15 @@ namespace FrustrationFree
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [FiniteDimensional ℂ E]
 
-/-- A finite-volume gap bounds the excitation energy after subtracting
-its full ground-space component. Source: Nachtergaele,
+/-- A finite-volume gap, every eigenvalue other than `0` being at least `γ`, bounds the
+excitation energy after subtracting its full ground-space component. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem energy_gap_sub_ground_projection (H : E →ₗ[ℂ] E) (hH : H.IsPositive)
     {γ : ℝ} (hγ : 0 ≤ γ)
-    (hGap : ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖) (v : E) :
+    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue H μ → μ = 0 ∨ (γ : ℂ) ≤ μ) (v : E) :
     γ * (‖v‖ ^ 2 - ‖(LinearMap.ker H).starProjection v‖ ^ 2) ≤
       (⟪H v, v⟫_ℂ).re := by
-  have hOrder := hH.smul_orthogonal_ker_projection_le_of_norm_gap hγ hGap
+  have hOrder := hH.smul_orthogonal_ker_projection_le_of_forall_hasEigenvalue hγ hGap
   have hEnergy : γ * ‖(LinearMap.ker H)ᗮ.starProjection v‖ ^ 2 ≤
       (⟪H v, v⟫_ℂ).re := by
     simpa only [LinearMap.sub_apply, LinearMap.smul_apply, ContinuousLinearMap.coe_coe,
@@ -72,7 +72,7 @@ squared norm remaining after full ground-space projection.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem commutator_ground_gap (H X : E →ₗ[ℂ] E) (hH : H.IsPositive)
     {γ : ℝ} (hγ : 0 ≤ γ)
-    (hGap : ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖)
+    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue H μ → μ = 0 ∨ (γ : ℂ) ≤ μ)
     (ψ : E) (hψ : ψ ∈ LinearMap.ker H) :
     γ * (‖X ψ‖ ^ 2 - ‖(LinearMap.ker H).starProjection (X ψ)‖ ^ 2) ≤
       (⟪(X.adjoint.comp (H.comp X - X.comp H)) ψ, ψ⟫_ℂ).re := by
@@ -90,8 +90,8 @@ theorem commutator_gap_of_tendsto_ground_projection_zero
     (H X : (n : ℕ) → F n →ₗ[ℂ] F n) (ψ : (n : ℕ) → F n)
     {γ e a : ℝ} (hγ : 0 ≤ γ)
     (hPos : ∀ᶠ n in atTop, (H n).IsPositive)
-    (hGap : ∀ᶠ n in atTop, ∀ v ∈ (LinearMap.ker (H n))ᗮ,
-      γ * ‖v‖ ≤ ‖H n v‖)
+    (hGap : ∀ᶠ n in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue (H n) μ →
+      μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hGround : ∀ᶠ n in atTop, ψ n ∈ LinearMap.ker (H n))
     (hNorm : Tendsto (fun n => ‖X n (ψ n)‖ ^ 2) atTop (𝓝 a))
     (hProjection : Tendsto (fun n =>
@@ -115,7 +115,7 @@ rank-one specialization of Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 lines 2649--2675. -/
 theorem commutator_ground_gap_of_ker_eq_span (H X : E →ₗ[ℂ] E) (hH : H.IsPositive)
     {γ : ℝ} (hγ : 0 ≤ γ)
-    (hGap : ∀ v ∈ (LinearMap.ker H)ᗮ, γ * ‖v‖ ≤ ‖H v‖)
+    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue H μ → μ = 0 ∨ (γ : ℂ) ≤ μ)
     (ψ : E) (hψ : ‖ψ‖ = 1) (hker : LinearMap.ker H = ℂ ∙ ψ) :
     γ * (‖X ψ‖ ^ 2 - ‖⟪ψ, X ψ⟫_ℂ‖ ^ 2) ≤
       (⟪(X.adjoint.comp (H.comp X - X.comp H)) ψ, ψ⟫_ℂ).re := by
@@ -134,8 +134,8 @@ theorem commutator_gap_of_tendsto_mean_zero_of_ker_eq_span
     (H X : (n : ℕ) → F n →ₗ[ℂ] F n) (ψ : (n : ℕ) → F n)
     {γ e a : ℝ} (hγ : 0 ≤ γ)
     (hPos : ∀ᶠ n in atTop, (H n).IsPositive)
-    (hGap : ∀ᶠ n in atTop, ∀ v ∈ (LinearMap.ker (H n))ᗮ,
-      γ * ‖v‖ ≤ ‖H n v‖)
+    (hGap : ∀ᶠ n in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue (H n) μ →
+      μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1)
     (hKernel : ∀ᶠ n in atTop, LinearMap.ker (H n) = ℂ ∙ ψ n)
     (hNorm : Tendsto (fun n => ‖X n (ψ n)‖ ^ 2) atTop (𝓝 a))

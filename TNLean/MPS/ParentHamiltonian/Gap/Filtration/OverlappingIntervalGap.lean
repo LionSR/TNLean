@@ -68,12 +68,8 @@ theorem hamiltonian_parentChainInteraction_gap_of_overlapping_interval_gaps
   have hWU := hPL.ker_le_of_le hLL
   have hWV := hPR.ker_le_of_le hLR
   have hTwice := smul_le_smul_of_nonneg_left ((add_le_add
-      (LinearMap.IsPositive.smul_orthogonal_ker_projection_le_of_norm_gap hPL hκ
-        ((ManyBody.forall_hasEigenvalue_iff_norm
-          (posSemidef_hamiltonian_restrict_parentChainInteraction A R N _)).mp hLeft))
-      (LinearMap.IsPositive.smul_orthogonal_ker_projection_le_of_norm_gap hPR hκ
-        ((ManyBody.forall_hasEigenvalue_iff_norm
-          (posSemidef_hamiltonian_restrict_parentChainInteraction A R N _)).mp hRight))).trans
+      (hPL.smul_orthogonal_ker_projection_le_of_forall_hasEigenvalue hκ hLeft)
+      (hPR.smul_orthogonal_ker_projection_le_of_forall_hasEigenvalue hκ hRight)).trans
       ((add_le_add hLL hLR).trans_eq (two_smul ℂ _).symm))
     (Complex.zero_le_real.mpr (by norm_num : (0 : ℝ) ≤ 1 / 2))
   have hLower : ((κ / 2 : ℝ) : ℂ) •
