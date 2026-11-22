@@ -8,7 +8,10 @@ import TNLean.MPS.Tensor.VaryingBond.SnakeGridParameters
 import TNLean.MPS.Tensor.VaryingBond.SequentialTruncation
 import TNLean.PEPS.AreaLaw.SafeRectangles.TailParameter
 import TNLean.PEPS.AreaLaw.Regions.TheoremStatements
-import QICLean.ManyBody.Entropy.RegionCovariance
+import QICLean.ManyBody.Sites.Relabel
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
+import QICLean.Entropy.Surprisal.FilterMoment
+import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.PEPS.AreaLaw.AreaLawTheorem
 
@@ -65,7 +68,7 @@ noncomputable def snakeGridStateEquiv (L q : ℕ) :
     StateSpace (ManyBody.rectangularDomain L L) q ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ (Fin (L * L) → Fin q) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (Entropy.siteConfigurationEquiv (n := fun _ ↦ q) (n' := fun _ ↦ q)
+    (ManyBody.siteConfigurationEquiv (X := fun _ ↦ Fin q) (X' := fun _ ↦ Fin q)
       (snakeGridEquiv L).symm (fun _ ↦ Equiv.refl _))
 
 /-- A one-site square vector already has a bond-one open MPS representation.
@@ -155,7 +158,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
   let e := (snakeGridEquiv L).symm
   have hA (k : ℕ) (v : Site (ManyBody.rectangularDomain L L)) :
       v ∈ A k ↔ e v ∈ leftBlock (L * L) k := by simp [A, e]
-  let f := fun k ↦ Entropy.regionConfigurationEquiv (n := fun _ ↦ q) (n' := fun _ ↦ q)
+  let f := fun k ↦ ManyBody.regionConfigurationEquiv (X := fun _ ↦ Fin q) (X' := fun _ ↦ Fin q)
     (A k) (leftBlock (L * L) k) e (hA k) (fun _ ↦ Equiv.refl _)
   let Q := fun k ↦ spectralProjectionGE (ρ k) (Real.exp (-(S k + w)))
   let P : ∀ k, LeftBlockMatrix (L * L) q k :=
@@ -167,7 +170,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
   have hρ (k : ℕ) : ManyBody.regionState ψ (leftBlock (L * L) k) =
       (ρ k).submatrix (f k).symm (f k).symm := by
     rw [show ρ k = ManyBody.regionState Ω (A k) from rfl]
-    exact Entropy.regionState_relabel _ _ e (hA k) _ Ω
+    exact ManyBody.regionState_relabel _ _ e (hA k) _ Ω
   have hS (k : ℕ) : S k ≤ C₀ * ((L : ℝ) + 1) := by
     have h := harea _ H hH hHJ E₀ Ω hΩ hgap hspan (A k)
     have hc : ((ManyBody.edgeBoundary (ManyBody.planeDomainGraph _) (A k)).card : ℝ) ≤

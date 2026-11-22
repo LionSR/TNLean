@@ -270,7 +270,7 @@ theorem exists_isMeasurementConversion_blockIsometryState (d s c : ℕ) [NeZero 
     simp [φ₀, v₀] at this
   have h₀ : u.toCircuit.IsImplementationOn KrausGate.ev {φ₀} (pairLayerOp hN hr fun _ => W) := by
     rw [← huop]
-    exact Circuit.isImplementationOn_of_kraus_eq (fun p ↦ u.kraus_eq_op p) _
+    exact u.isImplementationOn _
   have hall := (h₀.comp hRE fun v hv => by
     rw [Set.mem_singleton_iff] at hv
     subst hv

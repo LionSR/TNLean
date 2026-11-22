@@ -731,9 +731,9 @@ theorem exists_encoded_uniform_merging_circuit {d r q a A b K₁ K₂ : ℕ}
   have hJ : J.IsIsometry := basisInclusion_isIsometry _
   have hE : E.IsIsometry := basisInclusion_isIsometry _
   obtain ⟨R, hR, hRclean⟩ := exists_isGateProduct_isCleanImplementation_zeroFlagReflection
-    hd (by omega : 0 < a + (2 * q + 2)) s hpool
+    hd s hpool
   obtain ⟨G, hG, hGclean⟩ := exists_isGateProduct_isCleanImplementation_zeroFlagReflection
-    hd (by omega : 0 < a + (2 * q + 2)) (mergingFlagSites a q) hpool₂
+    hd (mergingFlagSites a q) hpool₂
   obtain ⟨W, hW, hWclean, hcolumns⟩ := exists_exact_clean_amplification_circuit
     (by omega : 2 ≤ (a + (2 * q + 2)) + A) J hJ E hE Z₀ (U * (U₁ * U₂)) R G
     hjoint hjointClean hR hRclean S hS hG hGclean

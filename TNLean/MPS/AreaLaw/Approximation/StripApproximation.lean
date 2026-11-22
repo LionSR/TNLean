@@ -5,7 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Entropy.StripBufferDiscount
 import TNLean.MPS.AreaLaw.Approximation.MPSApproximation
-import QICLean.ManyBody.Entropy.RegionCovariance
+import QICLean.ManyBody.Sites.Relabel
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
+import QICLean.Entropy.Surprisal.FilterMoment
+import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
@@ -171,7 +174,7 @@ theorem surprisalTail_stripSnakePrefix_le {L w q R : ℕ} {J Δ : ℝ}
     ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   have hgap := hgap.posSemidef_sub_smul_one
       (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan
-  have ht := Entropy.surprisalTail_cut_le (n := fun _ : Site (stripDomain L w) ↦ q)
+  have ht := Entropy.surprisalTail_cut_le (X := fun _ : Site (stripDomain L w) ↦ Fin q)
     (h := h.term) (D := fun X ↦ X.1) (B := A)
     (fun X ↦ (h.mem X))
     hh hJ hhJ hΩ hΔ heig hgap (ManyBody.regionState_eq_partialTraceRight_cutVector A Ω).symm
@@ -203,19 +206,19 @@ private theorem surprisalTail_submatrix_equiv
 /-- The physical ground vector, expressed on the `L*w` sites of the snake chain. -/
 noncomputable def stripSnakeState {L w : ℕ} (q : ℕ)
     (Ω : StateSpace (stripDomain L w) q) : EuclideanSpace ℂ (Fin (L * w) → Fin q) :=
-  Entropy.relabelVector (n := fun _ : Site (stripDomain L w) ↦ q)
-    (n' := fun _ : Fin (L * w) ↦ q) (stripSnakeEquiv L w).symm (fun _ ↦ Equiv.refl _) Ω
+  ManyBody.relabelVector (X := fun _ : Site (stripDomain L w) ↦ Fin q)
+    (X' := fun _ : Fin (L * w) ↦ Fin q) (stripSnakeEquiv L w).symm (fun _ ↦ Equiv.refl _) Ω
 
 /-- Snake relabelling preserves the normalization of the original lattice vector. -/
 theorem norm_stripSnakeState {L w q : ℕ} (Ω : StateSpace (stripDomain L w) q) :
-    ‖stripSnakeState q Ω‖ = ‖Ω‖ := Entropy.norm_relabelVector _ _ Ω
+    ‖stripSnakeState q Ω‖ = ‖Ω‖ := ManyBody.norm_relabelVector _ _ Ω
 
 /-- Regional entropy on the snake chain is the entropy of the actual physical prefix. -/
 theorem regionEntropy_stripSnakeState {L w q : ℕ} (Ω : StateSpace (stripDomain L w) q)
     (k : ℕ) :
     ManyBody.regionEntropy (X := fun _ ↦ Fin q) (stripSnakeState q Ω)
       (leftBlock (L * w) k) = ManyBody.regionEntropy Ω (stripSnakePrefix L w k) := by
-  apply Entropy.regionEntropy_relabel
+  apply ManyBody.regionEntropy_relabel
     (stripSnakePrefix L w k) (leftBlock (L * w) k) (stripSnakeEquiv L w).symm
     (fun x ↦ by simp [stripSnakePrefix]) (fun _ ↦ Equiv.refl _)
 
@@ -237,10 +240,10 @@ theorem surprisalTail_stripSnakeState_le {L w q R : ℕ} {J Δ : ℝ}
   let P := leftBlock (L * w) k
   let e := (stripSnakeEquiv L w).symm
   have hA : ∀ x, x ∈ A ↔ e x ∈ P := fun x ↦ by simp [A, P, e, stripSnakePrefix]
-  let eA := Entropy.regionConfigurationEquiv (n := fun _ : Site (stripDomain L w) ↦ q)
-    (n' := fun _ : Fin (L * w) ↦ q) A P e hA (fun _ ↦ Equiv.refl _)
-  have hrho := Entropy.regionState_relabel (n := fun _ : Site (stripDomain L w) ↦ q)
-    (n' := fun _ : Fin (L * w) ↦ q) A P e hA (fun _ ↦ Equiv.refl (Fin q)) Ω
+  let eA := ManyBody.regionConfigurationEquiv (X := fun _ : Site (stripDomain L w) ↦ Fin q)
+    (X' := fun _ : Fin (L * w) ↦ Fin q) A P e hA (fun _ ↦ Equiv.refl _)
+  have hrho := ManyBody.regionState_relabel (X := fun _ : Site (stripDomain L w) ↦ Fin q)
+    (X' := fun _ : Fin (L * w) ↦ Fin q) A P e hA (fun _ ↦ Equiv.refl (Fin q)) Ω
   have he : (ManyBody.regionState_isHermitian P (stripSnakeState q Ω)).eigenvalues =
       ((ManyBody.regionState_isHermitian A Ω).submatrix eA.symm).eigenvalues := by
     apply (Matrix.IsHermitian.eigenvalues_eq_eigenvalues_iff _ _).mpr
@@ -479,8 +482,8 @@ theorem exists_stripMPS_norm_sub_le {L w q R : ℕ} {J Δ : ℝ}
   obtain ⟨Ψ, hΨ, hmps, hdist⟩ := strip_approximation_of_prefix_bounds hC hs hN hΩs hε hε1 hS
     (fun hu k _ ↦ surprisalTail_stripSnakeState_le hq hw hJ hΔ h hh hhJ hΩ hgap hspan k _ hu)
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (Entropy.siteConfigurationEquiv (n := fun _ : Site (stripDomain L w) ↦ q)
-      (n' := fun _ : Fin (L * w) ↦ q) (stripSnakeEquiv L w).symm (fun _ ↦ Equiv.refl _))
+    (ManyBody.siteConfigurationEquiv (X := fun _ : Site (stripDomain L w) ↦ Fin q)
+      (X' := fun _ : Fin (L * w) ↦ Fin q) (stripSnakeEquiv L w).symm (fun _ ↦ Equiv.refl _))
   let Φ := U.symm Ψ
   have hΦ : stripSnakeState q Φ = Ψ := U.apply_symm_apply Ψ
   let D := ⌊Real.exp (C + 64 * s * Real.log

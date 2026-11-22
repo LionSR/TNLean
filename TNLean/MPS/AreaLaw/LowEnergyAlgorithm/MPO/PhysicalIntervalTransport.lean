@@ -397,8 +397,8 @@ private theorem localLift_physical_submatrix_eq_natural
     let Cnat := Finset.univ.filter (fun v : Fin T ↦ ¬(a ≤ v.val ∧ v.val < a + L))
     let hDphys : ∀ v : Vphys, v ∈ Cphys ↔ e.symm v ∈ Cnat := fun v ↦ by
       simpa only [Equiv.apply_symm_apply] using (hC (e.symm v)).symm
-    let r := Entropy.regionConfigurationEquiv
-      (n := fun _ : Vphys ↦ q) (n' := fun _ : Fin T ↦ q)
+    let r := ManyBody.regionConfigurationEquiv
+      (X := fun _ : Vphys ↦ Fin q) (X' := fun _ : Fin T ↦ Fin q)
       Cphys Cnat e.symm hDphys (fun _ ↦ Equiv.refl (Fin q))
     (ManyBody.place Cphys Kphys).submatrix
         (fun σ : Fin T → Fin q ↦ σ ∘ e.symm)
@@ -408,7 +408,7 @@ private theorem localLift_physical_submatrix_eq_natural
   have h := Entropy.localLift_relabel
     (n := fun _ : Vphys ↦ q) (n' := fun _ : Fin T ↦ q)
     Cphys Cnat e.symm hDphys (fun _ ↦ Equiv.refl (Fin q)) Kphys
-  simpa only [Matrix.reindex_apply, Entropy.siteConfigurationEquiv,
+  simpa only [Matrix.reindex_apply, ManyBody.siteConfigurationEquiv,
     Equiv.coe_piCongr_symm, Equiv.refl_symm, Equiv.refl_apply, r, Function.comp_def] using h
 
 /-- A physical collar operator becomes a retained matrix tensored with the
@@ -435,8 +435,8 @@ theorem exists_retainedMatrix_of_physical_localLift
   let Cnat := Finset.univ.filter (fun v : Fin T ↦ ¬(a ≤ v.val ∧ v.val < a + L))
   let hDphys : ∀ v : Vphys, v ∈ Cphys ↔ e.symm v ∈ Cnat := fun v ↦ by
     simpa only [Equiv.apply_symm_apply] using (hC (e.symm v)).symm
-  let r := Entropy.regionConfigurationEquiv
-    (n := fun _ : Vphys ↦ q) (n' := fun _ : Fin T ↦ q)
+  let r := ManyBody.regionConfigurationEquiv
+    (X := fun _ : Vphys ↦ Fin q) (X' := fun _ : Fin T ↦ Fin q)
     Cphys Cnat e.symm hDphys (fun _ ↦ Equiv.refl (Fin q))
   let Knat := Matrix.reindex r r Kphys
   let f := fun (η : {v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)} → Fin q)

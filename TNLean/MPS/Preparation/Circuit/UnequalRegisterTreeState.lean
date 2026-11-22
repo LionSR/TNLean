@@ -648,7 +648,7 @@ theorem exists_rounds_blockLayerOp_treeBlockOp (d s c : ℕ) [NeZero d] [NeZero 
   have hleafR : u.toCircuit.IsImplementationOn KrausGate.ev Set.univ
       (blockLayerOp hN fun b => treeLeafOp (hT b) (U b)) := by
     rw [← huop]
-    exact Circuit.isImplementationOn_of_kraus_eq (fun p ↦ u.kraus_eq_op p) _
+    exact u.isImplementationOn _
   have hall : (R₁.comp u.toCircuit).IsImplementationOn KrausGate.ev
       {v | IsZeroOn (treeCentralSites h s hN w) v}
       (blockLayerOp hN fun b => treeBlockOp (hT b) V W (ι₀ b) enc) := by

@@ -65,23 +65,23 @@ theorem trace_cutProductState_mul_localLift_union {c : ℕ} {A B : Finset (Fin L
       ((ManyBody.RegionConfig (fun _ ↦ Fin q) A) ×
         (ManyBody.RegionConfig (fun _ ↦ Fin q) B)) ℂ) :
     (cutProductState L q c Ω * ManyBody.place (A ∪ B)
-        (K.submatrix (Entropy.regionUnionEquiv hAB) (Entropy.regionUnionEquiv hAB))).trace =
+        (K.submatrix (ManyBody.regionUnionEquiv hAB) (ManyBody.regionUnionEquiv hAB))).trace =
       ((ManyBody.regionState Ω A ⊗ₖ ManyBody.regionState Ω B) * K).trace := by
   induction K using Matrix.induction_on' with
   | h_zero => simp [ManyBody.place, ManyBody.place]
   | h_add p r hp hr =>
-    rw [show (p + r).submatrix (Entropy.regionUnionEquiv hAB) (Entropy.regionUnionEquiv hAB) =
-        p.submatrix (Entropy.regionUnionEquiv hAB) (Entropy.regionUnionEquiv hAB) +
-          r.submatrix (Entropy.regionUnionEquiv hAB) (Entropy.regionUnionEquiv hAB) from rfl,
+    rw [show (p + r).submatrix (ManyBody.regionUnionEquiv hAB) (ManyBody.regionUnionEquiv hAB) =
+        p.submatrix (ManyBody.regionUnionEquiv hAB) (ManyBody.regionUnionEquiv hAB) +
+          r.submatrix (ManyBody.regionUnionEquiv hAB) (ManyBody.regionUnionEquiv hAB) from rfl,
       ManyBody.place_add, Matrix.mul_add, trace_add, hp, hr, Matrix.mul_add, trace_add]
   | h_std_basis i j x =>
     rw [show single i j x = single i.1 j.1 x ⊗ₖ single i.2 j.2 1 by
       rw [single_kronecker_single, mul_one]]
     rw [show (single i.1 j.1 x ⊗ₖ single i.2 j.2 (1 : ℂ)).submatrix
-        (Entropy.regionUnionEquiv hAB) (Entropy.regionUnionEquiv hAB) =
-        reindex (Entropy.regionUnionEquiv hAB).symm (Entropy.regionUnionEquiv hAB).symm
+        (ManyBody.regionUnionEquiv hAB) (ManyBody.regionUnionEquiv hAB) =
+        reindex (ManyBody.regionUnionEquiv hAB).symm (ManyBody.regionUnionEquiv hAB).symm
           (single i.1 j.1 x ⊗ₖ single i.2 j.2 (1 : ℂ)) by rw [reindex_apply, Equiv.symm_symm],
-      Entropy.localLift_union_kronecker,
+      ManyBody.place_union_kronecker,
       trace_cutProductState_mul_mul c Ω ((ManyBody.place_mem_supportedOperators _).mono hA)
         ((ManyBody.place_mem_supportedOperators _).mono fun v hv ↦
           Finset.mem_compl.mpr (Finset.disjoint_left.mp hB hv)),
@@ -104,14 +104,14 @@ private theorem exists_bipartite_effect {c : ℕ} {A B : Finset (Fin L)} (hAB : 
       ((ManyBody.RegionConfig (fun _ ↦ Fin q) A) ×
         (ManyBody.RegionConfig (fun _ ↦ Fin q) B)) ℂ,
       M.PosSemidef ∧ ((1 - E).PosSemidef → (1 - M).PosSemidef) ∧
-      (((ManyBody.regionState Ω (A ∪ B)).submatrix (Entropy.regionUnionEquiv hAB).symm
-        (Entropy.regionUnionEquiv hAB).symm) * M).trace = ⟪Ω, toEuclideanLin E Ω⟫_ℂ ∧
+      (((ManyBody.regionState Ω (A ∪ B)).submatrix (ManyBody.regionUnionEquiv hAB).symm
+        (ManyBody.regionUnionEquiv hAB).symm) * M).trace = ⟪Ω, toEuclideanLin E Ω⟫_ℂ ∧
       ((ManyBody.regionState Ω A ⊗ₖ ManyBody.regionState Ω B) * M).trace =
         (cutProductState L q c Ω * E).trace := by
   obtain ⟨σ₀, _⟩ := Function.ne_iff.mp
     ((WithLp.ofLp_eq_zero (x := Ω)).not.mpr (norm_ne_zero_iff.mp (by simp [hΩ])))
   obtain ⟨M₀, rfl⟩ := ManyBody.exists_eq_place_of_mem_supportedOperators hsupp
-  set u := Entropy.regionUnionEquiv (n := fun _ : Fin L ↦ q) hAB
+  set u := ManyBody.regionUnionEquiv (β := fun _ : Fin L ↦ Fin q) hAB
   set e := ManyBody.cutEquiv (fun _ ↦ Fin q) (A ∪ B)
   set M := M₀.submatrix u.symm u.symm
   let f : (ManyBody.RegionConfig (fun _ ↦ Fin q) (A ∪ B)) → Fin L → Fin q :=
@@ -165,8 +165,8 @@ theorem binaryRelativeEntropy_le_intervalMutualInformation
     ext i; simp only [A, B, Finset.mem_union, mem_interval]; omega
   rw [← hU]
   obtain ⟨M, hM0, hM1, h1, h2⟩ := exists_bipartite_effect hAB hA hB hΩ hE hsupp
-  set ρ := (ManyBody.regionState Ω (A ∪ B)).submatrix (Entropy.regionUnionEquiv hAB).symm
-    (Entropy.regionUnionEquiv hAB).symm
+  set ρ := (ManyBody.regionState Ω (A ∪ B)).submatrix (ManyBody.regionUnionEquiv hAB).symm
+    (ManyBody.regionUnionEquiv hAB).symm
   have hρ : ρ.PosSemidef := (ManyBody.regionState_posSemidef _ Ω).submatrix _
   have hρ1 : ρ.trace = 1 := by
     rw [trace_submatrix_equiv, ManyBody.trace_regionState, hΩ]
@@ -205,8 +205,8 @@ theorem re_trace_cutProductState_mul_pos {c l : ℕ} {Ω : EuclideanSpace ℂ (F
   have hB : Disjoint B (leftBlock L c) := Finset.disjoint_left.mpr fun i hi hj ↦ by
     simp only [B, mem_interval] at hi; simp only [mem_leftBlock] at hj; omega
   obtain ⟨M, hM0, -, h1, h2⟩ := exists_bipartite_effect hAB hA hB hΩ hE hsupp
-  set ρ := (ManyBody.regionState Ω (A ∪ B)).submatrix (Entropy.regionUnionEquiv hAB).symm
-    (Entropy.regionUnionEquiv hAB).symm
+  set ρ := (ManyBody.regionState Ω (A ∪ B)).submatrix (ManyBody.regionUnionEquiv hAB).symm
+    (ManyBody.regionUnionEquiv hAB).symm
   have hρ : ρ.PosSemidef := (ManyBody.regionState_posSemidef _ Ω).submatrix _
   have hR : partialTraceRight ρ = ManyBody.regionState Ω A :=
     ManyBody.partialTraceRight_regionState_union hAB Ω

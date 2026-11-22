@@ -4,7 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Entropy.MovementEtaRegional
-import QICLean.ManyBody.Entropy.RegionCovariance
+import QICLean.ManyBody.Sites.Relabel
+import QICLean.ManyBody.Entropy.SupportedMarginalTails
+import QICLean.Entropy.Surprisal.FilterMoment
+import QICLean.ManyBody.Sites.RegionState
 import TNLean.PEPS.AreaLaw.Interactions.RectangularHamiltonian
 import TNLean.PEPS.Tensor.SquareLattice.Basic
 import TNLean.PEPS.Tensor.SquareLattice.SquareGridContraction
@@ -76,7 +79,7 @@ variable {V W : Type*} [Fintype V] [DecidableEq V] [Fintype W] [DecidableEq W]
 
 /-- Relabeling the sites of a finite product state along a bijection leaves the
 entropy of every region unchanged, once the region is relabeled as well. This is
-the constant-dimension case of `Entropy.regionEntropy_relabel`, with identity
+the constant-dimension case of `ManyBody.regionEntropy_relabel`, with identity
 basis maps. Source: polynomial-PEPS `01-preliminaries.tex`, lines 23–31,
 definition of `S_ω(A)`. -/
 theorem finiteProductEntropy_relabel (σ : V ≃ W) (q : ℕ)
@@ -85,7 +88,7 @@ theorem finiteProductEntropy_relabel (σ : V ≃ W) (q : ℕ)
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (σ.arrowCongr (Equiv.refl (Fin q))) Ω)
         (A.map σ.toEmbedding) =
       ManyBody.regionEntropy Ω A := by
-  have h := Entropy.regionEntropy_relabel (n := fun _ : V ↦ q) (n' := fun _ : W ↦ q)
+  have h := ManyBody.regionEntropy_relabel (X := fun _ : V ↦ Fin q) (X' := fun _ : W ↦ Fin q)
     A (A.map σ.toEmbedding) σ (by simp) (fun _ ↦ Equiv.refl _) Ω
   convert h using 2
   ext x

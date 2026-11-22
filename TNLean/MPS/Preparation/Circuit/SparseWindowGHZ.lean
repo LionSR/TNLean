@@ -44,7 +44,7 @@ private theorem exists_circuit_of_isUnitaryCircuit [NeZero N] {K : ℕ}
   obtain ⟨u, hud, huop⟩ := hW
   refine ⟨u.toCircuit, u.forall_isUnitary.mono fun _ hK ↦ Or.inl hK, hud, ?_⟩
   rw [← huop]
-  exact Circuit.isImplementationOn_of_kraus_eq (fun p ↦ u.kraus_eq_op p) _
+  exact u.isImplementationOn _
 
 /-- The physical scratch sites strictly between a block's first and last registers. -/
 noncomputable def windowCentralSites (hN : ∑ k, ℓ k = N) (r : ℕ) : Finset (Fin N) := by
