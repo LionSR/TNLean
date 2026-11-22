@@ -17,8 +17,9 @@ range projector. Off-diagonal virtual rescaling preserves the physical
 range away from zero, giving the punctured limit of the original parent.
 
 **Transitional (#10948).** `continuousAt_parentInteractionES_of_isNBlkInjective`, stated for the
-Euclidean-space operator, is kept for the uncle limits below, which are restated with the uncle
-interaction and Hamiltonian in a later package; the continuity of the matrix of the canonical
+Euclidean-space operator, is kept for the limit of the two-site interactions below, whose limit
+`uncleInteractionES` is still an operator on the Euclidean space; the limits of the Hamiltonians
+are stated for the parent interaction on the ring. The continuity of the matrix of the canonical
 parent interaction is `continuousAt_toMatrix'_parentInteraction_of_isNBlkInjective`.
 -/
 
