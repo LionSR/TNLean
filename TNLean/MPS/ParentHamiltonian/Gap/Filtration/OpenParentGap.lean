@@ -184,7 +184,7 @@ theorem hamiltonian_parentChainInteraction_gap_of_fixedAmbient_c3
     simp only [openPrefixGroundProjectionES, Submodule.range_starProjection]
     rw [hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChainInteraction]
   have hgap :=
-    FrustrationFree.NestedGroundProjections.norm_lower_bound_of_nachtergaele_c1_c3_full_range
+    FrustrationFree.NestedGroundProjections.forall_hasEigenvalue_of_nachtergaele_c1_c3_full_range
       G Q localHamiltonian H N l hzero
       (γ := (1 : ℝ)) (d := (1 : ℝ)) (ε := ε)
       (by norm_num) (by norm_num) hε hεlt hQ hcomm
@@ -197,8 +197,6 @@ theorem hamiltonian_parentChainInteraction_gap_of_fixedAmbient_c3
             (Nat.succ_le_of_lt (Finset.mem_range.mp hn)) x)
       hC3 (Matrix.isPositive_toEuclideanLin_iff.mpr
         (posSemidef_hamiltonian_parentChainInteraction A (l + 1) N)) hground
-  refine (ManyBody.forall_hasEigenvalue_iff_norm
-    (posSemidef_hamiltonian_parentChainInteraction A (l + 1) N)).mpr ?_
   simpa only [H, div_one, one_mul] using hgap
 
 /-- A primitive MPS has a uniform gap of its open-chain parent Hamiltonians: every eigenvalue

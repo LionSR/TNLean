@@ -7,7 +7,7 @@ import TNLean.MPS.AreaLaw.ChebyshevAGSP.InverseGapRobustness
 import TNLean.MPS.AreaLaw.ChebyshevAGSP.SchmidtRank.SingleWindowPolynomialRank
 import TNLean.MPS.AreaLaw.Spectral.SupersiteHierarchy
 import QICLean.Spectral.Filter.ChebyshevSpectralFilter
-import QICLean.Spectral.Gap.GroundProjection
+import QICLean.Spectral.Filter.Gaussian.SpectralGap
 import QICLean.ManyBody.Hamiltonian.FrustrationFree
 
 /-!

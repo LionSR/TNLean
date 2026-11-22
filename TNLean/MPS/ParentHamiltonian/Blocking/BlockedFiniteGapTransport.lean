@@ -81,20 +81,18 @@ theorem hamiltonian_chainTranslates_gap_of_blocked_gap
   have hM : 0 < ((K * L + 1 - R : ℕ) : ℝ) := by
     have hL := NeZero.pos L
     exact_mod_cast (show 0 < K * L + 1 - R by omega)
-  have hGap' := Matrix.norm_gap_toEuclideanLin_reindex
-    (blockedConfigEquiv d N L)
-    ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian)
-    ((ManyBody.forall_hasEigenvalue_iff_norm
-      (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
-        (blockedInteractionMatrix_posSemidef h hh L K) N)).mp hGap)
-  have hTransfer := hP.norm_gap_of_smul_le_of_le_smul hQ
+  have hGap' : ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+      (Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
+        ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian))) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ := fun μ hμ ↦
+    hGap μ ((Matrix.hasEigenvalue_toEuclideanLin_reindex_iff (blockedConfigEquiv d N L)
+      ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian) μ).mp hμ)
+  have hTransfer := hP.forall_hasEigenvalue_of_smul_le_of_le_smul hQ
     zero_lt_one hM hM hγ
     (by simpa only [Complex.ofReal_one, one_smul, Complex.ofReal_natCast] using hUpper')
     (smul_le_smul_of_nonneg_left hLower'
       (show (0 : ℂ) ≤ ((K * L + 1 - R : ℕ) : ℝ) by exact_mod_cast hM.le)) hGap'
-  exact (ManyBody.forall_hasEigenvalue_iff_norm
-    (hamiltonian_chainTranslates_posSemidef h hh (N * L))).mpr
-    (by simpa only [one_mul] using hTransfer)
+  simpa only [one_mul] using hTransfer
 
 variable {b D : ℕ} {E : Fin b → ℕ} [∀ j, NeZero (E j)]
 /-- An exact blocked primitive representation and eventual original MPS

@@ -101,7 +101,7 @@ theorem hamiltonian_parentChainInteraction_gap_of_grouped_c3
       (Matrix.toEuclideanLin (parentChainInteraction A (2 * p) (p * M)).hamiltonian) μ →
         μ = 0 ∨ (((1 - ε * Real.sqrt 2) ^ 2 : ℝ) : ℂ) ≤ μ := by
   have hgap :=
-    FrustrationFree.NestedGroundProjections.norm_lower_bound_of_nachtergaele_c1_c3_full_range
+    FrustrationFree.NestedGroundProjections.forall_hasEigenvalue_of_nachtergaele_c1_c3_full_range
       (groupedNestedGroundProjectionsES A p (p * M))
       (groupedIntervalGroundProjectionES A p (p * M))
       (fun n ↦ Matrix.toEuclideanLin
@@ -122,8 +122,6 @@ theorem hamiltonian_parentChainInteraction_gap_of_grouped_c3
       (by simp only [groupedNestedGroundProjectionsES, openPrefixGroundProjectionES,
         Submodule.range_starProjection,
         hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChainInteraction])
-  refine (ManyBody.forall_hasEigenvalue_iff_norm
-    (posSemidef_hamiltonian_parentChainInteraction A (2 * p) (p * M))).mpr ?_
   simpa only [Nat.reduceAdd, Nat.cast_ofNat, div_one, one_mul] using hgap
 
 end MPSTensor

@@ -261,10 +261,9 @@ theorem hamiltonian_parentRingInteraction_gap_of_quadratic_form
     (hμ : Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian) μ) :
     μ = 0 ∨ (γ : ℂ) ≤ μ :=
-  (ManyBody.forall_hasEigenvalue_iff_norm (posSemidef_hamiltonian_parentRingInteraction A L N)).mpr
-    (FrustrationFree.spectralGap_of_martingale_of_finiteDimensional hγ
-      (Matrix.isPositive_toEuclideanLin_iff.mpr
-        (posSemidef_hamiltonian_parentRingInteraction A L N)) hQuad) μ hμ
+  FrustrationFree.forall_hasEigenvalue_of_martingale_of_finiteDimensional hγ
+    (Matrix.isPositive_toEuclideanLin_iff.mpr
+      (posSemidef_hamiltonian_parentRingInteraction A L N)) hQuad μ hμ
 
 /-- The explicit gap bound with constant \(1/(4L)\) for the Hamiltonians of the parent
 interaction on the rings of \(N ≥ 2L\) sites follows from the corresponding uniform

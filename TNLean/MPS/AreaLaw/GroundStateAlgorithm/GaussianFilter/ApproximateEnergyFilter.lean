@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Spectral.Filter.Gaussian.MatrixIntegral
-import QICLean.Spectral.Gap.GroundProjection
+import QICLean.Spectral.Filter.Gaussian.SpectralGap
 import Mathlib.Analysis.InnerProductSpace.Dual
 import Mathlib.Analysis.Matrix.HermitianFunctionalCalculus
 

@@ -87,11 +87,8 @@ theorem hamiltonian_parentChainInteraction_gap_of_overlapping_interval_gaps
       norm_num [div_eq_mul_inv, mul_comm]
     · rw [smul_smul]
       norm_num
-  refine (ManyBody.forall_hasEigenvalue_iff_norm
-    (posSemidef_hamiltonian_parentChainInteraction A R N)).mpr fun v hv ↦ ?_
-  refine le_trans ?_ (FrustrationFree.norm_gap_of_two_ground_projection_bounds _ _ _
-    (by positivity) (by norm_num : (1 / 2 : ℝ) < 1) hWU hWV hLower hDefect v hv)
-  gcongr
-  linarith
+  exact ManyBody.forall_hasEigenvalue_mono (by linarith)
+    (FrustrationFree.forall_hasEigenvalue_of_two_ground_projection_bounds _ _ _
+      (by positivity) (by norm_num : (1 / 2 : ℝ) < 1) hWU hWV hLower hDefect)
 
 end MPSTensor

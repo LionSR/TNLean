@@ -49,8 +49,6 @@ theorem hamiltonian_parentChainInteraction_gap_of_sparse_grouped_and_terminal
     ∀ z : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentChainInteraction A (2 * p) (p * M + q)).hamiltonian) z →
         z = 0 ∨ (((1 - ε * Real.sqrt 2) ^ 2 * (1 - ε) : ℝ) : ℂ) ≤ z := by
-  refine (ManyBody.forall_hasEigenvalue_iff_norm
-    (posSemidef_hamiltonian_parentChainInteraction A (2 * p) (p * M + q))).mpr ?_
   let N := p * M + q
   let κ := (1 - ε * Real.sqrt 2) ^ 2
   let U := LinearMap.ker
@@ -82,7 +80,7 @@ theorem hamiltonian_parentChainInteraction_gap_of_sparse_grouped_and_terminal
       (show (κ : ℂ) ≤ 1 by exact_mod_cast hκone)
       (LinearMap.nonneg_iff_isPositive.mpr (Matrix.isPositive_toEuclideanLin_iff.mpr
         (posSemidef_hamiltonian_restrict_parentChainInteraction A _ _ _)))
-  apply FrustrationFree.norm_gap_of_two_ground_projection_bounds
+  apply FrustrationFree.forall_hasEigenvalue_of_two_ground_projection_bounds
     (Matrix.toEuclideanLin (parentChainInteraction A (2 * p) N).hamiltonian) U V hκ hc
   · intro v hv
     rw [← hamiltonian_prefix_parentChainInteraction_self_eq_hamiltonian_parentChainInteraction]

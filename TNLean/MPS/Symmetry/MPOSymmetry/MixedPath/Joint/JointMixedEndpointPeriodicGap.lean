@@ -175,15 +175,13 @@ theorem jointMixedEndpoint_periodic_gap
     (posSemidef_jointMixedEndpointParentInteraction A₀ A₁ 0)
   have hK := posSemidef_hamiltonian_parentRingInteraction (toTensorFromBlocks (μ := fun _ => 1)
     (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N
-  exact (ManyBody.forall_hasEigenvalue_iff_norm hH).mpr
-    ((Matrix.isPositive_toEuclideanLin_iff.mpr hH).norm_gap_of_reducing_projection
-      (Matrix.isPositive_toEuclideanLin_iff.mpr hK)
-      jointMixedPeriodicActiveProjection_isSymmetricProjection
-      (jointMixedPeriodicActiveProjection_commute A₀ A₁ hN)
-      (jointMixedEndpoint_periodic_comparison A₀ A₁ hN).1
-      (jointMixedEndpoint_periodic_mul_activeProjection A₀ A₁ hN)
-      (one_sub_jointMixedPeriodicActiveProjection_le_twice A₀ A₁ hN) hδ
-      ((ManyBody.forall_hasEigenvalue_iff_norm hK).mp hGap))
+  exact (Matrix.isPositive_toEuclideanLin_iff.mpr hH).forall_hasEigenvalue_of_reducing_projection
+    (Matrix.isPositive_toEuclideanLin_iff.mpr hK)
+    jointMixedPeriodicActiveProjection_isSymmetricProjection
+    (jointMixedPeriodicActiveProjection_commute A₀ A₁ hN)
+    (jointMixedEndpoint_periodic_comparison A₀ A₁ hN).1
+    (jointMixedEndpoint_periodic_mul_activeProjection A₀ A₁ hN)
+    (one_sub_jointMixedPeriodicActiveProjection_le_twice A₀ A₁ hN) hδ hGap
 
 private theorem jointMixed_chain_eq_zero_of_physicalDim_eq_zero
     (hd : jointMixedPhysicalDim d₀ d₁ D₀ D₁ = 0) (hN : 0 < N)

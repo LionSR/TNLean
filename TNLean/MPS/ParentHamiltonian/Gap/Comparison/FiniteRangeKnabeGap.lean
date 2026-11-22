@@ -128,21 +128,19 @@ theorem hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteract
     let G : EuclideanSpace ℂ (Cfg d (m + R - 1)) →L[ℂ] EuclideanSpace ℂ (Cfg d (m + R - 1)) :=
       LinearMap.toContinuousLinearMap
         (Matrix.toEuclideanLin (parentChainInteraction A R (m + R - 1)).hamiltonian)
-    have hFiber := LinearMap.IsPositive.quadraticForm_sq_ge_rightFiberwiseMap_of_norm_gap
-      (S := Cfg d (N - (m + R - 1))) G
-      (Matrix.isPositive_toEuclideanLin_iff.mpr
-        (posSemidef_hamiltonian_parentChainInteraction A R (m + R - 1))) hγ.le
-      ((ManyBody.forall_hasEigenvalue_iff_norm
-        (posSemidef_hamiltonian_parentChainInteraction A R (m + R - 1))).mp hOpenGap)
+    have hFiber :=
+      LinearMap.IsPositive.quadraticForm_sq_ge_rightFiberwiseMap_of_forall_hasEigenvalue
+        (S := Cfg d (N - (m + R - 1))) G
+        (Matrix.isPositive_toEuclideanLin_iff.mpr
+          (posSemidef_hamiltonian_parentChainInteraction A R (m + R - 1))) hγ.le hOpenGap
     have hApply : U (ProjectionGeometry.cyclicWindowSum P m s x) =
         ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - (m + R - 1))) G (U x) := by
       rw [ManyBody.Interaction.cyclicWindowSum_toEuclideanLin_translationInvariant_term _ hR hWN]
       exact cyclicActiveBlock_toEuclideanLin_translationInvariant_term_apply hWN _ _ x
     have h := hFiber (U x)
     rwa [← hApply, U.inner_map_map, U.inner_map_map] at h
-  refine (ManyBody.forall_hasEigenvalue_iff_norm hPSD).mpr
-    (FrustrationFree.spectralGap_of_martingale_of_finiteDimensional hδ
-      (Matrix.isPositive_toEuclideanLin_iff.mpr hPSD) fun x ↦ ?_)
+  refine FrustrationFree.forall_hasEigenvalue_of_martingale_of_finiteDimensional hδ
+    (Matrix.isPositive_toEuclideanLin_iff.mpr hPSD) fun x ↦ ?_
   have hx := ProjectionGeometry.quadraticForm_sum_projections_of_cyclic_knabe P hProj hN hR hmR
     (fun e heR heN s y ↦ by
       have h := congrArg (fun M ↦ Matrix.toEuclideanLin M y)

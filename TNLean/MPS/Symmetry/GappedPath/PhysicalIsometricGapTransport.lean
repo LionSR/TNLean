@@ -225,23 +225,14 @@ theorem isometricInteractionExtension_eigenvalue_gap {d m N : ℕ}
         (Interaction.translationInvariant N (isometricInteractionExtension E A)).hamiltonian) μ →
       μ = 0 ∨ ((min δ 1 : ℝ) : ℂ) ≤ μ := by
   have : NeZero N := ⟨by omega⟩
-  have hPA : (Interaction.translationInvariant N A).hamiltonian.PosSemidef :=
-    Interaction.posSemidef_hamiltonian fun _ ↦
-      Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _)
   have hPE : (Interaction.translationInvariant N
       (isometricInteractionExtension E A)).hamiltonian.PosSemidef :=
     Interaction.posSemidef_hamiltonian fun _ ↦
       Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg
         (isometricInteractionExtension_posSemidef E hE hA).nonneg _)
-  rw [forall_hasEigenvalue_iff_re_inner hPA] at hGap
-  rw [forall_hasEigenvalue_iff_re_inner hPE]
-  intro v hv
-  rw [← RCLike.re_eq_complex_re, inner_re_symm, RCLike.re_eq_complex_re]
-  refine (physicalChainLinearIsometry E hE N).re_inner_ge_of_intertwines
+  exact (physicalChainLinearIsometry E hE N).forall_hasEigenvalue_of_intertwines
     (Matrix.isSymmetric_toEuclideanLin_iff.mpr hPE.isHermitian)
-    (physicalChainLinearIsometry_intertwines E hE hA.isHermitian hN)
-    (fun x hx ↦ ?_) (physicalChainLinearIsometry_inactive_bound E hE hA hN) v hv
-  rw [← RCLike.re_eq_complex_re, inner_re_symm, RCLike.re_eq_complex_re]
-  exact hGap x hx
+    (physicalChainLinearIsometry_intertwines E hE hA.isHermitian hN) hGap
+    (physicalChainLinearIsometry_inactive_bound E hE hA hN)
 
 end MPSTensor

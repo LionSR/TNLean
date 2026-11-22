@@ -1760,7 +1760,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 
 \begin{lemma}[Norm gap from the full-range C1--C3 estimate]
     \label{thm:nachtergaele_c1_c3_full_range_norm_gap}
-    \lean{FrustrationFree.NestedGroundProjections.norm_lower_bound_of_nachtergaele_c1_c3_full_range}
+    \lean{FrustrationFree.NestedGroundProjections.forall_hasEigenvalue_of_nachtergaele_c1_c3_full_range}
     \leanok
     In the setting of
     Lemma~\ref{thm:nachtergaele_c1_c3_full_range_energy_estimate}, suppose
@@ -3873,7 +3873,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Norm gap implies the squared quadratic-form bound]
     \label{lem:norm_gap_to_squared_quadratic_form}
-    \lean{LinearMap.IsPositive.quadraticForm_sq_ge_of_norm_gap}
+    \lean{LinearMap.IsPositive.quadraticForm_sq_ge_of_forall_hasEigenvalue}
     \leanok
     Let $H$ be a positive operator on a finite-dimensional complex Hilbert
     space and let $\gamma\geq0$. If
@@ -3903,7 +3903,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{lemma}[Right-spectator quadratic-form bound]
     \label{lem:right_spectator_quadratic_form_gap}
     \lean{ContinuousLinearMap.quadraticForm_sq_ge_rightFiberwiseMap,
-        LinearMap.IsPositive.quadraticForm_sq_ge_rightFiberwiseMap_of_norm_gap}
+        LinearMap.IsPositive.quadraticForm_sq_ge_rightFiberwiseMap_of_forall_hasEigenvalue}
     \leanok
     \uses{lem:norm_gap_to_squared_quadratic_form, lem:right-spectator-extension}
     Let $G$ act on a finite active configuration space. If

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.OpenKnabePadding
 import TNLean.MPS.ParentHamiltonian.Gap.Comparison.IntervalGapTransport
 import QICLean.Spectral.Gap.PositiveGapTransfer
+import QICLean.Spectral.Gap.EigenvalueGap
 import QICLean.ManyBody.Hamiltonian.Martingale.AbstractCriterion
 
 /-!
@@ -165,11 +166,9 @@ theorem cyclicWindowSum_hamiltonian_restrict_parentChainInteraction_quadraticFor
   · rw [hinterval]
     exact (Matrix.isPositive_toEuclideanLin_iff.mpr
       (posSemidef_hamiltonian_restrict_parentChainInteraction A R N
-        _)).quadraticForm_sq_ge_of_norm_gap hγ.le
-      ((ManyBody.forall_hasEigenvalue_iff_norm
-        (posSemidef_hamiltonian_restrict_parentChainInteraction A R N _)).mp
-        (hamiltonian_restrict_parentChainInteraction_gap_of_local_gap A hR hRW hWn hnN hγ
-          (hOpenGap W hRW hWm))) v
+        _)).quadraticForm_sq_ge_of_forall_hasEigenvalue hγ.le
+      (hamiltonian_restrict_parentChainInteraction_gap_of_local_gap A hR hRW hWn hnN hγ
+        (hOpenGap W hRW hWm)) v
 
 /-- Gaps above the kernel on finitely many open volumes imply one gap on every open-chain
 length: every eigenvalue is `0` or at least the gap. The explicit coefficient is obtained by
@@ -205,9 +204,8 @@ theorem hamiltonian_parentChainInteraction_gap_of_finite_open_gaps
   refine ⟨hδ, fun N hRN ↦ ?_⟩
   have hPSD := posSemidef_hamiltonian_parentChainInteraction A R N
   let _ : NeZero (N + 2 * m) := ⟨by omega⟩
-  refine (ManyBody.forall_hasEigenvalue_iff_norm hPSD).mpr
-    (FrustrationFree.spectralGap_of_martingale_of_finiteDimensional hδ
-      (Matrix.isPositive_toEuclideanLin_iff.mpr hPSD) fun x ↦ ?_)
+  refine FrustrationFree.forall_hasEigenvalue_of_martingale_of_finiteDimensional hδ
+    (Matrix.isPositive_toEuclideanLin_iff.mpr hPSD) fun x ↦ ?_
   have hx := ProjectionGeometry.quadraticForm_sum_projections_of_cyclic_knabe
     (fun t : ZMod (N + 2 * m) ↦ Matrix.toEuclideanLin
       ((parentChainInteraction A R N).restrict fun i ↦ i.val = t.val).hamiltonian)

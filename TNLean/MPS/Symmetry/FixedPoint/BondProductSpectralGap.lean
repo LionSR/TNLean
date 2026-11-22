@@ -32,9 +32,9 @@ theorem forall_hasEigenvalue_of_quadratic_gap {n : Type*} [Fintype n]
           Matrix.toEuclideanLin A v⟫_ℂ).re) :
     ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin A) μ →
       μ = 0 ∨ (1 : ℂ) ≤ μ := by
-  simpa only [Complex.ofReal_one] using (ManyBody.forall_hasEigenvalue_iff_norm hPos).mpr
-    (FrustrationFree.spectralGap_of_martingale_of_finiteDimensional one_pos
-      (Matrix.isPositive_toEuclideanLin_iff.mpr hPos) (by simpa only [one_mul] using hGap))
+  simpa only [Complex.ofReal_one] using
+    FrustrationFree.forall_hasEigenvalue_of_martingale_of_finiteDimensional one_pos
+      (Matrix.isPositive_toEuclideanLin_iff.mpr hPos) (by simpa only [one_mul] using hGap)
 
 /-- The physical parent Hamiltonian of unit bonds is positive
 semidefinite. Source: arXiv:1010.3732, Section II.F.2. -/
