@@ -133,7 +133,7 @@ noncomputable def sectorBondInteraction {K d : ℕ} (dl dr : Fin K → ℕ)
 interaction commutes, including sectors carrying unused physical states.
 Source context: arXiv:1010.3732, Section II.F.2; Beigi, J. Phys. A 45 (2012)
 025306, Section III, equations (2)–(3). -/
-theorem sectorBondInteraction_translate_commute {K d N : ℕ} [NeZero N]
+theorem sectorBondInteraction_translate_commute {K d N : ℕ}
     (dl dr : Fin K → ℕ) (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
     (η : (q h : Fin K) →
       Matrix (Matrix.EtaEdgeIndex dl dr q h) (Matrix.EtaEdgeIndex dl dr q h) ℂ)
