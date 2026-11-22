@@ -2009,12 +2009,24 @@ tensors.
 
 \begin{definition}[Zero-padded open interactions]
     \label{def:open_knabe_padding}
-    \lean{MPSTensor.zmodOpenLocalTermES}
-    \leanok
     \uses{def:open_parent_hamiltonian_es}
     Let $R,P>0$. On the Hilbert space of an $N$-site chain, index the
     nonwrapping canonical interactions by $s\in\Z/P\Z$. Writing $\bar s$
-    for the representative in $\{0,\ldots,P-1\}$, define
+    for the representative in $\{0,\ldots,P-1\}$, let $\widetilde h_s$ be
+    the sum of the interactions of the open chain whose window starts at
+    $\bar s$; there is at most one. The period indexes the interactions; the
+    physical chain still has $N$ sites.
+\end{definition}
+
+\begin{lemma}[Projection, sum, and separation of padded interactions]
+    \label{thm:open_knabe_padding_properties}
+    \lean{MPSTensor.hamiltonian_restrict_parentChainInteraction_val_eq,
+        MPSTensor.isStarProjection_hamiltonian_restrict_parentChainInteraction_val_eq,
+        MPSTensor.commute_hamiltonian_restrict_parentChainInteraction_of_oriented_separation,
+        MPSTensor.sum_hamiltonian_restrict_parentChainInteraction_val_eq}
+    \leanok
+    \uses{def:open_knabe_padding}
+    The padded interactions are
     \begin{align}
         \widetilde h_s & =
         \begin{cases}
@@ -2023,16 +2035,6 @@ tensors.
         \end{cases}
         \label{eq:open_knabe_padding}
     \end{align}
-    The period indexes the interactions; the physical chain still has $N$ sites.
-\end{definition}
-
-\begin{lemma}[Projection, sum, and separation of padded interactions]
-    \label{thm:open_knabe_padding_properties}
-    \lean{MPSTensor.zmodOpenLocalTermES_isSymmetricProjection,
-        MPSTensor.zmodOpenLocalTermES_commute_of_oriented_separation,
-        MPSTensor.sum_zmodOpenLocalTermES_eq_hamiltonian_parentChainInteraction}
-    \leanok
-    \uses{def:open_knabe_padding}
     Every $\widetilde h_s$ is an orthogonal projection. If $R\leq e$ and
     $e+R\leq P$, then $\widetilde h_s\widetilde h_{s+e}
         =\widetilde h_{s+e}\widetilde h_s$ for every $s$. If $N\leq P$,
@@ -2052,8 +2054,8 @@ tensors.
 
 \begin{lemma}[Clipped windows of padded interactions]
     \label{thm:open_knabe_clipped_windows}
-    \lean{MPSTensor.cyclicWindowSum_zmodOpenLocalTermES_eq_zero_or_interval,
-        MPSTensor.cyclicWindowSum_zmodOpenLocalTermES_quadraticForm_gap}
+    \lean{MPSTensor.cyclicWindowSum_hamiltonian_restrict_parentChainInteraction_eq_zero_or_interval,
+        MPSTensor.cyclicWindowSum_hamiltonian_restrict_parentChainInteraction_quadraticForm_gap}
     \leanok
     \uses{def:open_knabe_padding}
     Let $m>0$, $N\geq R>0$, and $P=N+2m$. Put
@@ -2061,8 +2063,8 @@ tensors.
     range-$R$ open Hamiltonian on an interval $[n-W,n)$, extended by the
     identity on the remaining sites, with
     $R\leq W\leq m+R-1$ and $W\leq n\leq N$.
-    If every open Hamiltonian on $R\leq W\leq m+R-1$ sites has norm
-    gap at least $\gamma>0$ on its kernel complement, then
+    If every nonzero eigenvalue of every open Hamiltonian on
+    $R\leq W\leq m+R-1$ sites is at least $\gamma>0$, then
     $A_s^2\geq\gamma A_s$ for every $s$.
 \end{lemma}
 \begin{proof}\leanok
@@ -2072,8 +2074,8 @@ tensors.
     interval. Its active starts therefore form one interval $[a,b)$, or
     none. In the first case, with $W=b-a+R-1$ and $n=b+R-1$, the local terms
     sum to the interval Hamiltonian on $[a,n)$.
-    Its norm gap is preserved under extension by free sites. Positivity
-    converts this norm gap into $A_s^2\geq\gamma A_s$; the zero case is immediate.
+    Its gap above the kernel is preserved under extension by free sites. Positivity
+    converts this gap into $A_s^2\geq\gamma A_s$; the zero case is immediate.
 \end{proof}
 
 \begin{lemma}[An open-chain finite-size gap criterion]
@@ -2081,17 +2083,17 @@ tensors.
     \lean{MPSTensor.hamiltonian_parentChainInteraction_gap_of_finite_open_gaps}
     \leanok
     \uses{def:open_parent_hamiltonian_es}
-    Let $1\leq R\leq m$, and suppose that every range-$R$ open parent
-    Hamiltonian on $R\leq W\leq m+R-1$ sites has norm gap at least
-    $\gamma$ on its kernel complement. By the cyclic finite-range inequality
+    Let $1\leq R\leq m$, and suppose that every nonzero eigenvalue of
+    every range-$R$ open parent Hamiltonian on $R\leq W\leq m+R-1$ sites is
+    at least $\gamma$. By the cyclic finite-range inequality
     derived in \cite{gap:knabe88_finite_range_coefficient} (rather than the
     printed periodic nearest-neighbor criterion), if $m\gamma>(R-1)^2$, then
     \begin{align}
         \delta & =\frac{m\gamma-(R-1)^2}{m-R+1}>0,
         \label{eq:open_finite_range_knabe_delta}
     \end{align}
-    and $\delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(A)v\|$ for every
-    $N\geq R$ and $v\perp\ker H^{\mathrm{open}}_{N,R}(A)$.
+    and every nonzero eigenvalue of $H^{\mathrm{open}}_{N,R}(A)$ is at
+    least $\delta$ for every $N\geq R$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:open_knabe_padding_properties,thm:open_knabe_clipped_windows,
@@ -2102,7 +2104,8 @@ tensors.
     satisfies $A_s^2\geq\gamma A_s$. The cyclic inequality therefore gives
     $(H^{\mathrm{open}}_{N,R}(A))^2\geq\delta H^{\mathrm{open}}_{N,R}(A)$
     with $\delta$ as in~(\ref{eq:open_finite_range_knabe_delta}).
-    The positive-operator quadratic-form estimate gives the asserted norm gap.
+    For a positive operator this quadratic-form estimate bounds the nonzero
+    eigenvalues from below by $\delta$.
 \end{proof}
 
 \begin{lemma}[Persistence of gaps on finitely many open intervals]

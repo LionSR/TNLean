@@ -29,33 +29,37 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The nonwrapping range-\(R\) interactions on an \(N\)-site open chain,
-indexed by \(\mathbb Z/P\mathbb Z\) and set equal to zero at every
-inactive start. The cyclic period indexes the terms; it does not add physical
-sites to the Hilbert space. -/
-noncomputable def zmodOpenLocalTermES {N P : ℕ} [NeZero P]
-    (A : MPSTensor d D) (R : ℕ) (hR : 0 < R) :
-    ZMod P → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  fun s => if hs : s.val + R ≤ N then
-    localTermES A R ⟨s.val, by omega⟩ else 0
+/-- The Hamiltonian of the windows of the open chain that start at one position is the term of
+that window, and vanishes when no window starts there. -/
+theorem hamiltonian_restrict_parentChainInteraction_val_eq (A : MPSTensor d D) (R N k : ℕ) :
+    ((parentChainInteraction A R N).restrict fun i ↦ i.val = k).hamiltonian =
+      if h : k < N + 1 - R then (parentChainInteraction A R N).term ⟨k, h⟩ else 0 := by
+  rw [ManyBody.Interaction.hamiltonian]
+  split_ifs with h
+  · refine (Finset.sum_eq_single_of_mem _ (Finset.mem_univ ⟨k, h⟩) fun i _ hi ↦ ?_).trans ?_
+    · exact ManyBody.Interaction.restrict_term_of_neg fun hv ↦ hi (Fin.ext hv)
+    · exact ManyBody.Interaction.restrict_term_of_pos rfl
+  · exact Finset.sum_eq_zero fun i _ ↦
+      ManyBody.Interaction.restrict_term_of_neg fun hv ↦ h (hv ▸ i.isLt)
 
-/-- Every padded term is a symmetric projection, including the zero terms. -/
-theorem zmodOpenLocalTermES_isSymmetricProjection {N P R : ℕ} [NeZero P]
-    (A : MPSTensor d D) (hR : 0 < R) (s : ZMod P) :
-    (zmodOpenLocalTermES (N := N) A R hR s).IsSymmetricProjection := by
-  unfold zmodOpenLocalTermES
+/-- Every member of the zero-padded cyclic family of an open chain, the Hamiltonian of the
+windows starting at one position, is an orthogonal projection, including the zero members. -/
+theorem isStarProjection_hamiltonian_restrict_parentChainInteraction_val_eq
+    (A : MPSTensor d D) (R N k : ℕ) :
+    IsStarProjection ((parentChainInteraction A R N).restrict fun i ↦ i.val = k).hamiltonian := by
+  rw [hamiltonian_restrict_parentChainInteraction_val_eq]
   split_ifs
-  · exact localTermES_isSymmetricProjection A R _
-  · exact ⟨by simp [IsIdempotentElem], LinearMap.IsSymmetric.zero⟩
+  · exact isStarProjection_parentChainInteraction_term A R N _
+  · exact .zero _
 
-/-- The active padded interactions commute at every oriented cyclic separation
-between \(R\) and \(P-R\), as required by the cyclic Knabe inequality. -/
-theorem zmodOpenLocalTermES_commute_of_oriented_separation
+/-- The members of the zero-padded cyclic family of an open chain commute at every oriented
+cyclic separation between \(R\) and \(P-R\), as required by the cyclic Knabe inequality. -/
+theorem commute_hamiltonian_restrict_parentChainInteraction_of_oriented_separation
     {N P R e : ℕ} [NeZero P] (A : MPSTensor d D)
-    (hR : 0 < R) (heR : R ≤ e) (heP : e + R ≤ P)
-    (s : ZMod P) (v : EuclideanSpace ℂ (Cfg d N)) :
-    zmodOpenLocalTermES A R hR s (zmodOpenLocalTermES A R hR (s + (e : ZMod P)) v) =
-      zmodOpenLocalTermES A R hR (s + (e : ZMod P)) (zmodOpenLocalTermES A R hR s v) := by
+    (hR : 0 < R) (heR : R ≤ e) (heP : e + R ≤ P) (s : ZMod P) :
+    Commute ((parentChainInteraction A R N).restrict fun i ↦ i.val = s.val).hamiltonian
+      ((parentChainInteraction A R N).restrict fun i ↦
+        i.val = (s + (e : ZMod P)).val).hamiltonian := by
   have he : e < P := by omega
   have hval : (e : ZMod P).val = e := by
     rw [ZMod.val_natCast, Nat.mod_eq_of_lt he]
@@ -69,50 +73,23 @@ theorem zmodOpenLocalTermES_commute_of_oriented_separation
       have h := ZMod.val_add_val_of_le (a := s) (b := (e : ZMod P)) (by omega)
       rw [hval] at h
       omega
-  unfold zmodOpenLocalTermES
-  split_ifs with hs ht
-  · rcases hsep with hsep | hsep
-    · exact localTermES_commute_of_cyclic_windows_disjoint A (by omega)
-        (cyclicWindowsDisjoint_of_nonwrapping_ordered ht hsep) v
-    · exact localTermES_commute_of_cyclic_windows_disjoint A (by omega)
-        (cyclicWindowsDisjoint_of_nonwrapping_ordered hs hsep).symm v
-  · simp
-  · simp
-  · simp
+  refine ManyBody.Interaction.commute_hamiltonian_restrict _ _ fun i j hi hj ↦ ?_
+  rcases hsep with hsep | hsep
+  · exact commute_parentChainInteraction_term_of_add_le A (by omega)
+  · exact (commute_parentChainInteraction_term_of_add_le A (by omega)).symm
 
-/-- If the cyclic period is at least the physical volume, summing the padded
-interactions gives precisely the original open-chain parent Hamiltonian. -/
-theorem sum_zmodOpenLocalTermES_eq_hamiltonian_parentChainInteraction
+/-- If the cyclic period is at least the physical volume, summing the zero-padded cyclic family
+gives the Hamiltonian of the parent interaction on the open chain. -/
+theorem sum_hamiltonian_restrict_parentChainInteraction_val_eq
     {N P R : ℕ} [NeZero P] (A : MPSTensor d D) (hR : 0 < R) (hNP : N ≤ P) :
-    (∑ s : ZMod P, zmodOpenLocalTermES (N := N) A R hR s) =
-      Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian := by
-  classical
-  let f : Fin N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-    fun i => if i.val + R ≤ N then localTermES A R i else 0
-  have hsum : Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian = ∑ i : Fin N,
-      f i := by
-    rw [ManyBody.Interaction.hamiltonian, map_sum]
-    refine Fin.sum_eq_sum_of_val_eq _ _ (fun k ha hb ↦ ?_) (fun i hi ↦ absurd i.isLt (by omega))
-      (fun i hi ↦ ite_eq_right (by omega))
-    have hk : (⟨k, hb⟩ : Fin N).val + R ≤ N := by
-      change k + R ≤ N
-      omega
-    simp only [f, hk, ↓reduceIte]
-    exact (localTermES_eq_toEuclideanLin_parentChainInteraction_term A ⟨k, hb⟩ hk).symm
-  rw [hsum, Fin.sum_castLE_extend_zero f hNP]
-  cases P with
-  | zero => exact (NeZero.ne 0 rfl).elim
-  | succ P =>
-    change (∑ s : Fin (P + 1), _) = _
-    refine Finset.sum_congr rfl ?_
-    intro s _
-    change (if hs : s.val + R ≤ N then localTermES A R ⟨s.val, _⟩ else 0) = _
-    by_cases hlt : s.val < N
-    · simp only [hlt, dite_true, f]
-      split_ifs with hs
-      · rfl
-      · rfl
-    · have hinactive : ¬s.val + R ≤ N := by omega
-      simp [hlt, hinactive]
+    ∑ s : ZMod P, ((parentChainInteraction A R N).restrict fun i ↦ i.val = s.val).hamiltonian =
+      (parentChainInteraction A R N).hamiltonian := by
+  rw [ManyBody.Interaction.sum_hamiltonian_restrict_eq_hamiltonian_restrict Finset.univ _
+    (fun _ ↦ True) (fun i ↦ (i.val : ZMod P)) (fun _ _ ↦ Finset.mem_univ _) fun i n _ ↦ ?_]
+  · exact Finset.sum_congr rfl fun i _ ↦ ManyBody.Interaction.restrict_term_of_pos trivial
+  · have hi : i.val < P := by have := i.isLt; omega
+    refine ⟨fun h ↦ ⟨trivial, ?_⟩, fun h ↦ ?_⟩
+    · rw [h, ZMod.natCast_zmod_val]
+    · rw [h.2, ZMod.val_natCast, Nat.mod_eq_of_lt hi]
 
 end MPSTensor

@@ -43,33 +43,19 @@ theorem exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ ν : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
         (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian) ν →
       ν = 0 ∨ (δ : ℂ) ≤ ν := by
-  suffices hnorm : ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian))ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian v‖ by
-    obtain ⟨δ, hδ, hgap⟩ := hnorm
-    exact ⟨δ, hδ, fun x hx ↦ (ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentChainInteraction _ R N)).mpr (hgap x hx)⟩
   have hProjR := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
     μ A hμ hA R (fun x ↦ wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega))
   have hProjN := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
     μ A hμ hA N (fun x ↦ wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega))
-  have hKernel : Continuous fun x ↦ (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction
-      (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian)).starProjection := by
-    simpa only [ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
-      (μ _) (A _) (hμ _) hS (hSpan _) hR hRN] using hProjN
-  have hCLM : Continuous fun M : Matrix (Cfg d N) (Cfg d N) ℂ ↦
-      LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin M) := by
-    let f : Matrix (Cfg d N) (Cfg d N) ℂ →ₗ[ℂ]
-        (EuclideanSpace ℂ (Cfg d N) →L[ℂ] EuclideanSpace ℂ (Cfg d N)) :=
-      LinearMap.toContinuousLinearMap.toLinearMap ∘ₗ Matrix.toEuclideanLin.toLinearMap
-    exact f.continuous_of_finiteDimensional
-  exact ContinuousLinearMap.exists_uniform_norm_gap_of_compact
-    (fun x ↦ LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin
-      (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian))
-    (hCLM.comp (continuous_hamiltonian_parentChainInteraction_family_of_groundProjection
-      (fun x ↦ toTensorFromBlocks (μ x) (A x)) hProjR))
-    hKernel hK
+  exact hK.exists_uniform_forall_hasEigenvalue
+    (H := fun x ↦ (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian)
+    (continuous_hamiltonian_parentChainInteraction_family_of_groundProjection
+      (fun x ↦ toTensorFromBlocks (μ x) (A x)) hProjR)
+    (fun x ↦ posSemidef_hamiltonian_parentChainInteraction _ R N)
+    (by
+      simpa only [ManyBody.groundSpace_zero,
+        ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
+          (μ _) (A _) (hμ _) hS (hSpan _) hR hRN] using hProjN)
 
 /-- A finite upper bound on the interval length gives one positive gap above the kernel of the
 Hamiltonian of the parent interaction on the open chain, uniform over the compact tensor family

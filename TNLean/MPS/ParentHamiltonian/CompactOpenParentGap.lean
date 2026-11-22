@@ -87,11 +87,11 @@ theorem eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_
   refine ⟨((m : ℝ) * (γ / 2) - ((R : ℝ) - 1) ^ 2) /
     ((m : ℝ) - R + 1), div_pos (sub_pos.mpr hnum) hden, ?_⟩
   filter_upwards [hnear] with x hx N hN
-  refine (ManyBody.forall_hasEigenvalue_iff_norm
-    (posSemidef_hamiltonian_parentChainInteraction _ R N)).mpr ?_
   refine (hamiltonian_parentChainInteraction_gap_of_finite_open_gaps
     (toTensorFromBlocks (d := d) (μ := μ x) (A x)) (by omega) hmR hnum ?_).2 N hN
   intro W hRW hWM
+  refine (ManyBody.forall_hasEigenvalue_iff_norm
+    (posSemidef_hamiltonian_parentChainInteraction _ R W)).mpr ?_
   simpa only [ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
     (μ x) (A x) (hμ x) hS (hSpan x) hR hRW] using hx W hRW hWM
 /-- A compact continuous family of simultaneously injective blocks has one
