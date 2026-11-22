@@ -72,13 +72,13 @@ theorem exists_positive_parent_finite_and_quasiLocal_gap_of_physical_isometry
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N, R ≤ N → LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) = groundSpaceES B N) ∧
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES B N) ∧
       quasiLocalExpectation A hA hρ hFix htr ∈
         parentGroundStateFace h ∧
       ∃ δ : ℝ, 0 < δ ∧
-      (∀ N, ∀ v ∈ (LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
-        δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖) ∧
+      (∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ) ∧
       ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
         φ ∈ parentGroundStateFace h → IsPureQuasiLocalState d φ →

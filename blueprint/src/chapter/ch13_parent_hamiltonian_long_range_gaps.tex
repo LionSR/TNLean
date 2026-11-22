@@ -588,11 +588,8 @@ tensors.
     Let $p\geq1$, $M\geq2$, and $N=pM$. Consider the
     range-$2p$ open parent Hamiltonian $H_N$ and the grouped
     projections above. Let $0\leq\epsilon<1/\sqrt2$ and suppose that
-    $\|Q_nE_n\|\leq\epsilon$ for $0\leq n<M$. Then, for every
-    $v\perp\ker H_N$,
-    \begin{align}
-        (1-\epsilon\sqrt2)^2\|v\| & \leq\|H_Nv\|.
-    \end{align}
+    $\|Q_nE_n\|\leq\epsilon$ for $0\leq n<M$. Then every nonzero
+    eigenvalue of $H_N$ is at least $(1-\epsilon\sqrt2)^2$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -885,13 +882,8 @@ tensors.
     By the grouped martingale estimate of
     \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral},
     for every $R_*\in\mathbb N$ there are $p\geq\max\{1,R_*\}$ and
-    $\gamma>0$ such that
-    \begin{align}
-        \gamma\|v\|\leq
-        \|H^{\mathrm{open}}_{pM,2p}(B)v\|\notag
-    \end{align}
-    for every $M\geq2$ and every
-    $v\perp\ker H^{\mathrm{open}}_{pM,2p}(B)$.
+    $\gamma>0$ such that, for every $M\geq2$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{pM,2p}(B)$ is at least $\gamma$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -913,14 +905,10 @@ tensors.
     Under the hypotheses of
     Lemma~\ref{thm:primitive_block_sum_open_gap_subsequence}, as in the
     open-chain form of \cite[Theorem~1.2]{Nachtergaele1996Spectral}, for every
-    $R_*\in\mathbb N$ there are $p\geq\max\{1,R_*\}$ and $\delta>0$ such that
-    \begin{align}
-        \delta\|v\|\leq
-        \|H^{\mathrm{open}}_{N,2p}(B)v\|\notag
-    \end{align}
-    for every chain length $N$ and every
-    $v\perp\ker H^{\mathrm{open}}_{N,2p}(B)$ (for $N<2p$ the Hamiltonian is
-    zero and the assertion is vacuous).
+    $R_*\in\mathbb N$ there are $p\geq\max\{1,R_*\}$ and $\delta>0$ such
+    that, for every chain length $N$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,2p}(B)$ is at least $\delta$ (for $N<2p$ the
+    Hamiltonian is zero and the assertion is vacuous).
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1812,12 +1800,8 @@ tensors.
     original blocks, the finite-interval conclusion of
     \cite[Theorem~1.2 and Section~6]{Nachtergaele1996Spectral} holds at
     every interaction range $R\geq S+1$: there exists $\delta>0$
-    such that
-    \begin{align}
-        \delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(B)v\|
-        \notag
-    \end{align}
-    for every $N\geq R$ and every $v\perp G_N(B)$.
+    such that, for every $N\geq R$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,R}(B)$ is at least $\delta$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:block_word_span_primitive_normalization,
@@ -1849,8 +1833,8 @@ tensors.
     pairwise inequivalent under virtual similarity and phase. Set
     $D_* = \max\{\sum_j D_j,1\}$ and $B=\bigoplus_j\mu_jA^j$,
     with every $\mu_j\ne0$. For every $R\geq3D_*^5$, there exists
-    $\delta>0$ such that $\delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(B)v\|$
-    for every $N\geq R$ and every $v\perp G_N(B)$.
+    $\delta>0$ such that, for every $N\geq R$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,R}(B)$ is at least $\delta$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,
@@ -1878,12 +1862,8 @@ tensors.
     reconstruction of $A$. If the representatives are simultaneously
     injective at $S>0$ and $R\geq S+1$, then
     $\ker H^{\mathrm{open}}_{N,R}(A)=G_N(A)$ for every $N\geq R$,
-    and there is $\delta>0$ such that
-    \begin{align}
-        \delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(A)v\|
-        \notag
-    \end{align}
-    for every $N\geq R$ and every $v\perp G_N(A)$.
+    and there is $\delta>0$ such that, for every $N\geq R$, every nonzero
+    eigenvalue of $H^{\mathrm{open}}_{N,R}(A)$ is at least $\delta$.
     If the bond dimension $D$ is positive, the conclusion holds at every
     $R\geq3D^5$ without a given injectivity length.
 \end{lemma}
@@ -1910,10 +1890,10 @@ tensors.
 
 \begin{lemma}[Properties of open interaction sums]
     \label{lem:open_local_interaction_sum_properties}
-    \lean{MPSTensor.openInteractionHamiltonianES_mono,
-        MPSTensor.openInteractionHamiltonianES_smul,
-        MPSTensor.openInteractionHamiltonianES_zero,
-        MPSTensor.openInteractionHamiltonianES_isPositive,
+    \lean{ManyBody.Interaction.hamiltonian_chainTranslates_mono,
+        ManyBody.Interaction.hamiltonian_chainTranslates_smul,
+        ManyBody.Interaction.hamiltonian_chainTranslates_zero,
+        ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates,
         MPSTensor.openInteractionHamiltonianES_parentInteractionES}
     \leanok
     Open interaction sums preserve order and positivity, commute with
@@ -1931,12 +1911,12 @@ tensors.
 
 \begin{lemma}[Open gaps for fixed positive parent interactions]
     \label{thm:open_positive_parent_gap}
-    \lean{MPSTensor.IsParentInteraction.exists_pos_open_comparison,
-        MPSTensor.IsParentInteraction.exists_open_uniform_gap_of_canonical_gap,
+    \lean{MPSTensor.IsParentInteraction.exists_pos_hamiltonian_chainTranslates_comparison,
+        MPSTensor.IsParentInteraction.exists_hamiltonian_chainTranslates_uniform_gap_of_canonical_gap,
         MPSTensor.CPSVCanonicalFormData.%
         exists_openInteraction_uniform_gap_of_wordTupleSpanTop}
     \leanok
-    Let $R>0$, and let $h\geq0$ have kernel $G_R(A)$.
+    Let $h\geq0$ be a matrix on $R$ sites with kernel $G_R(A)$.
     There are $\kappa,C>0$, independent of $N$, such that
     \begin{align}
         \kappa H^{\mathrm{open}}_{N,R}(A)
@@ -1944,9 +1924,11 @@ tensors.
         \leq C H^{\mathrm{open}}_{N,R}(A).
         \notag
     \end{align}
-    Hence a uniform canonical open-chain gap $\gamma>0$ for $N\geq R$
-    gives the gap $\kappa\gamma$ for $H^{\mathrm{open}}_N(h)$ on its
-    kernel complement. In particular, this applies to every fixed positive
+    Hence, if every nonzero eigenvalue of the canonical open-chain
+    Hamiltonian $H^{\mathrm{open}}_{N,R}(A)$ is at least $\gamma>0$ for
+    every $N\geq R$, then every nonzero eigenvalue of
+    $H^{\mathrm{open}}_N(h)$ is at least $\kappa\gamma$ for those $N$.
+    In particular, this applies to every fixed positive
     parent interaction of a canonical tensor when its normal representatives
     are simultaneously injective at $S>0$ and $R\geq S+1$.
 \end{lemma}
@@ -1957,28 +1939,29 @@ tensors.
     $\kappa h_R(A)\leq h\leq C h_R(A)$, and summing the translated
     comparisons yields the two-sided operator bounds. Because the two positive
     operators bound one another by positive constants, their kernels coincide,
-    and the lower bound transfers the canonical gap to the common kernel
-    complement.
+    and the lower bound transfers the lower bound on the nonzero eigenvalues.
 \end{proof}
 
 \begin{lemma}[Compact comparison for open parent interactions]
     \label{thm:compact_open_positive_parent_gap}
     \lean{MPSTensor.%
-        exists_uniform_openInteractionHamiltonianES_gap_of_compact_canonical_gap,
+        exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap,
         MPSTensor.CPSVCanonicalFormData.exists_uniform_openInteraction_gap_of_compact,
         MPSTensor.IsCPSVCanonicalForm.%
         exists_uniform_openInteraction_gap_of_compact_of_bounded_range}
     \leanok
     Let $K$ be a compact parameter set. Suppose the local ground projections
     of $A_x$ are continuous, and let $h_x$ be a continuous family of positive
-    interactions with kernel $G_R(A_x)$, where $R>0$. If the canonical open
-    parent Hamiltonians have one positive gap for every $x\in K$ and every
-    $N\geq N_0$, then the interaction sums $H^{\mathrm{open}}_N(h_x)$
-    also have one positive gap for those parameters and lengths.
+    interactions with kernel $G_R(A_x)$. If every nonzero eigenvalue of the
+    canonical open parent Hamiltonians is at least one positive constant for
+    every $x\in K$ and every $N\geq N_0$, then every nonzero eigenvalue of
+    the interaction sums $H^{\mathrm{open}}_N(h_x)$ is at least one positive
+    constant for those parameters and lengths.
 
     For a fixed canonical tensor $A$, this conclusion requires no given
     canonical gap: simultaneous injectivity at $S>0$ and $R\geq S+1$
-    give one gap uniform over $x\in K$ and every $N\geq R$.
+    give one positive lower bound on the nonzero eigenvalues, uniform over
+    $x\in K$ and every $N\geq R$.
     When its bond dimension $D$ is positive, $R\geq3D^5$ suffices without
     a given injectivity length.
 \end{lemma}
@@ -2157,9 +2140,10 @@ tensors.
     \leanok
     Under the block-family hypotheses of
     Lemma~\ref{thm:open_gap_bounded_volume_continuity}, suppose that at
-    $x_0$ one $\gamma>0$ bounds the open norm gaps on $G_N(B_{x_0})^\perp$
-    for every $N\geq R$. Then some $\delta>0$ bounds the open norm gaps
-    on their kernel complements for every $N\geq R$ and every $x$ in
+    $x_0$ one $\gamma>0$ bounds below the nonzero eigenvalues of
+    $H^{\mathrm{open}}_{N,R}(B_{x_0})$ for every $N\geq R$. Then some
+    $\delta>0$ bounds below the nonzero eigenvalues of
+    $H^{\mathrm{open}}_{N,R}(B_x)$ for every $N\geq R$ and every $x$ in
     one neighborhood of $x_0$.
 \end{lemma}
 \begin{proof}\leanok
@@ -2182,10 +2166,9 @@ tensors.
     Put $B_x=\bigoplus_j\mu_j(x)A_x^j$, with every weight nonzero.
     Following the compactness argument of \cite[Appendix~A]{Schuch2011Phases}
     at the stated sufficient range, with no continuity of the weights required,
-    for each fixed $R\geq S+1$ there is $\delta>0$ such that
-    $\delta\|v\|\leq\|H^{\mathrm{open}}_{N,R}(B_x)v\|$ for every
-    $x\in K$, every $N\geq R$, and every
-    $v\perp\ker H^{\mathrm{open}}_{N,R}(B_x)$.
+    for each fixed $R\geq S+1$ there is $\delta>0$ such that, for every
+    $x\in K$ and every $N\geq R$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,R}(B_x)$ is at least $\delta$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,
@@ -2206,7 +2189,8 @@ tensors.
     Put $D_* =\max\{\sum_jD_j,1\}$ and
     $B_x=\bigoplus_j\mu_j(x)A_x^j$, with every weight nonzero.
     For every compact $K$ and every fixed $R\geq3D_*^5$, one positive
-    open norm gap holds uniformly for $x\in K$ and all $N\geq R$.
+    constant bounds below the nonzero eigenvalues of
+    $H^{\mathrm{open}}_{N,R}(B_x)$ uniformly for $x\in K$ and all $N\geq R$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:cpsv_bnt_sharp_span_ambient_cap,thm:block_word_span_propagation,
@@ -2254,11 +2238,9 @@ tensors.
     every $\mu_j\neq0$. Combining the block-injective local spaces of
     \cite[Section~IV.C]{Cirac2021Matrix} with the martingale estimate of
     \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral}, for any
-    fixed $R\geq S+1$ there are $p>0$, with $R\leq2p$, and $\delta>0$ such that
-    \begin{align}
-        \delta\|v\|\leq\|H^{\mathrm{open}}_{pM,R}(B)v\|\notag
-    \end{align}
-    for every $M\geq2$ and every $v\perp G_{pM}^{\mathrm{ES}}(B)$.
+    fixed $R\geq S+1$ there are $p>0$, with $R\leq2p$, and $\delta>0$ such
+    that, for every $M\geq2$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{pM,R}(B)$ is at least $\delta$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -2292,10 +2274,8 @@ tensors.
     of Lemma~\ref{thm:parent_hamiltonian_gap_from_open_knabe_block} (with
     the coefficient discussed in
     \path{docs/paper-gaps/knabe88_finite_range_coefficient.tex}) such that
-    \begin{align}
-        \gamma\|v\|\leq\|H^{\mathrm{open}}_{m+R-1,R}(B)v\|\notag
-    \end{align}
-    for every $v\perp G_{m+R-1}^{\mathrm{ES}}(B)$.
+    every nonzero eigenvalue of $H^{\mathrm{open}}_{m+R-1,R}(B)$ is at least
+    $\gamma$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -2686,12 +2666,12 @@ shorter interaction range.
         MPSTensor.hamiltonian_restrict_parentChainInteraction_gap_of_local_gap,
         MPSTensor.hamiltonian_restrict_parentChainInteraction_conj_cyclicActiveBlock}
     \leanok
-    Let $R>0$. If the range-$R$ parent Hamiltonian on $n$ sites has norm
-    gap $\kappa>0$ on its kernel complement, its extension to the prefix
-    of an $(n+q)$-site chain has the same lower bound.
-    Likewise, if $R\leq W\leq n\leq N$ and the range-$R$ Hamiltonian
-    on $W$ sites has gap at least $\kappa$, its interaction sum on
-    $[n-W,n)$, acting on the $N$-site chain, has gap at least $\kappa$.
+    Let $R>0$. If every nonzero eigenvalue of the range-$R$ parent
+    Hamiltonian on $n$ sites is at least $\kappa>0$, the same holds for its
+    extension to the prefix of an $(n+q)$-site chain.
+    Likewise, if $R\leq W\leq n\leq N$ and every nonzero eigenvalue of the
+    range-$R$ Hamiltonian on $W$ sites is at least $\kappa$, the same holds
+    for its interaction sum on $[n-W,n)$, acting on the $N$-site chain.
     The physical coordinate isometry identifies this interval interaction
     sum with the $W$-site Hamiltonian tensored with the identity on the
     remaining sites. These are the finite-interval gaps used in
@@ -2753,10 +2733,10 @@ shorter interaction range.
     $N$, and let $H_L$ and $H_T$ be its interaction sums on a prefix of
     length $n$ and on a terminal interval of length $W$, respectively.
     Write $P_L$, $P_T$, and $P$ for their orthogonal ground projections.
-    Suppose $\kappa\geq0$, and suppose both interval Hamiltonians have a
-    norm gap at least $\kappa$ on their respective kernel complements.
-    If $\|P-P_LP_T\|\leq1/2$, then
-    $(\kappa/16)\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
+    Suppose $\kappa\geq0$, and suppose every nonzero eigenvalue of each of
+    the two interval Hamiltonians is at least $\kappa$.
+    If $\|P-P_LP_T\|\leq1/2$, then every nonzero eigenvalue of $H$ is at
+    least $\kappa/16$.
     The interval interaction sums always satisfy $H_L\leq H$ and
     $H_T\leq H$.
 \end{lemma}
@@ -3164,12 +3144,8 @@ shorter interaction range.
     three-interval ground-projection defect is at most
     $0\leq\epsilon<1/\sqrt2$ whenever the overlap has at least $p$ sites,
     uniformly in both outer intervals, with the right interval nonempty.
-    Then
-    \[
-        (1-\sqrt2\epsilon)^2(1-\epsilon)\|v\|
-        \leq\|H^{\mathrm{open}}_{N,2p}v\|
-        \qquad(v\perp\ker H^{\mathrm{open}}_{N,2p}).
-    \]
+    Then every nonzero eigenvalue of $H^{\mathrm{open}}_{N,2p}$ is at least
+    $(1-\sqrt2\epsilon)^2(1-\epsilon)$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:sparse_grouped_open_energy_gap,
@@ -3195,11 +3171,8 @@ shorter interaction range.
     are related by a virtual similarity and a phase. Put
     $B=\bigoplus_j\mu_jA_j$, with $\mu_j\ne0$ for every $j$.
     For every $0<\eta<1$, there is $p_0$ such that, for every
-    $p\geq p_0$ and every $N\geq2p$,
-    \[
-        (1-\eta)\|v\|\leq\|H^{\mathrm{open}}_{N,2p}(B)v\|
-        \qquad(v\perp\ker H^{\mathrm{open}}_{N,2p}(B)).
-    \]
+    $p\geq p_0$ and every $N\geq2p$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,2p}(B)$ is at least $1-\eta$.
     This is a quantitative consequence of
     \cite[Theorem~2.1(ii) and Section~6]{Nachtergaele1996Spectral}.
 \end{lemma}
@@ -3225,11 +3198,8 @@ shorter interaction range.
     distinct blocks are related by similarity and multiplication by a
     nonzero complex scalar, and let $B=\bigoplus_j\mu_jA_j$, with
     $\mu_j\ne0$ for every $j$. For every $0<\eta<1$, there is $p_0$
-    such that, for every $p\geq p_0$ and every $N\geq2p$,
-    \[
-        (1-\eta)\|v\|\leq\|H^{\mathrm{open}}_{N,2p}(B)v\|
-        \qquad(v\perp\ker H^{\mathrm{open}}_{N,2p}(B)).
-    \]
+    such that, for every $p\geq p_0$ and every $N\geq2p$, every nonzero
+    eigenvalue of $H^{\mathrm{open}}_{N,2p}(B)$ is at least $1-\eta$.
     Thus the canonical open-chain gap approaches one as the even
     interaction range grows, uniformly over all lengths at least that
     range. This is a quantitative consequence of the projector decay and

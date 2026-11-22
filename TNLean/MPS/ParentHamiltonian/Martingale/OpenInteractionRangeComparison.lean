@@ -7,52 +7,23 @@ import TNLean.MPS.ParentHamiltonian.Martingale.OpenRangeComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
 
 /-!
-# Finite-window comparison for positive open-chain interactions
+# Coordinate form of an extended local interaction on the ring
 
-A positive interaction of range \(R\) need not have the canonical local MPS
-kernel. If its open Hamiltonian on \(W\) sites dominates a positive multiple
-of the canonical length-\(W\) parent projection, the same comparison holds
-on larger open chains, with multiplicity \(W-R+1\). Equality of the global
-kernels then transfers a norm gap at each specified volume.
+An extended local interaction acts on its window with all outside coordinates fixed, and its
+conjugation by the cyclic block reindexing is the corresponding local interaction of the active
+block. These are the coordinate forms of the finite-range extension by the identity in
+Nachtergaele, arXiv:cond-mat/9410110, equation (3.12).
 
-These are finite-window consequences of Nachtergaele,
-arXiv:cond-mat/9410110, condition C1 (lines 1030--1041) and Section 6,
-used in the proof of Theorem 1.2 (lines 933--947). The comparison itself
-requires positivity but no local parent-kernel condition.
-**Transitional (#10948).** The declarations of this file are stated for the Euclidean-space
-operators `openInteractionHamiltonianES`, `periodicLocalInteractionES` and the interval
-Hamiltonian `openSuffixInteractionHamiltonianES`; they are kept until their last users are
-converted. For matrices the comparison and the gap transfer are
-`hamiltonian_chainTranslates_comparison_of_local` and
-`toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length` (OpenRangeComparison).
+The finite-window comparison of the open-chain Hamiltonians of a positive local matrix and the
+transfer of a gap along it are `hamiltonian_chainTranslates_comparison_of_local` and
+`toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length`.
+
+**Transitional (#10948).** Both declarations are stated for the Euclidean-space operator
+`periodicLocalInteractionES` and are kept until its last users are converted.
 -/
 open scoped BigOperators ComplexOrder
 namespace MPSTensor
 variable {d D : ℕ}
-/-- The sum of a fixed range-\(R\) interaction over windows contained in the
-suffix \([n-W,n)\) of an open chain. Source: Nachtergaele,
-arXiv:cond-mat/9410110, condition C1. -/
-noncomputable def openSuffixInteractionHamiltonianES {R : ℕ}
-    (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (W N n : ℕ) : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  ∑ i ∈ Finset.univ.filter (fun i : NonwrappingStart R N =>
-    n - W ≤ i.1.val ∧ i.1.val + R ≤ n), periodicLocalInteractionES h i.1
-
-/-- The sum of all complete suffix Hamiltonians is bounded by
-\(W-R+1\) times the full open Hamiltonian. Source: Nachtergaele,
-arXiv:cond-mat/9410110, condition C1. -/
-theorem sum_openSuffixInteractionHamiltonianES_le {R W N : ℕ}
-    (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (hh : h.IsPositive) (hRW : R ≤ W) :
-    (∑ n ∈ Finset.Icc W N, openSuffixInteractionHamiltonianES h W N n) ≤
-      ((W - R + 1 : ℕ) : ℂ) • openInteractionHamiltonianES h N := by
-  apply sum_nonwrappingWindowTerms_le hRW
-  intro i
-  have hzero : periodicLocalInteractionES
-      (0 : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)) i.1 = 0 := by
-    simp [periodicLocalInteractionES]
-  simpa only [hzero] using periodicLocalInteractionES_mono
-    (LinearMap.nonneg_iff_isPositive.mpr hh) i.1
 /-- An extended local interaction acts on the restricted window, with all
 outside coordinates fixed. This is the coordinate form of finite-range
 extension by the identity in Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
@@ -129,162 +100,4 @@ theorem periodicLocalInteractionES_conj_cyclicActiveBlock
       cyclicCfg_join_cyclicActiveBlock hWN s q hqR]
     simp
   rw [hrestrict, extractWindow_join_cyclicActiveBlock hWN s q hqR σ τ]
-/-- An embedded suffix Hamiltonian is the open Hamiltonian on its active
-interval acting independently on each spectator configuration.
-Source: Nachtergaele, arXiv:cond-mat/9410110, condition C1. -/
-theorem openSuffixInteractionHamiltonianES_conj_cyclicActiveBlock
-    {R W N n : ℕ}
-    (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (hR : 0 < R) (hRW : R ≤ W)
-    (hWn : W ≤ n) (hnN : n ≤ N) :
-    let s : Fin N := ⟨n - W, by omega⟩
-    let U := cyclicActiveBlockConfigLinearIsometryEquiv d W (by omega : W ≤ N) s
-    U.toLinearEquiv.toLinearMap.comp
-      ((openSuffixInteractionHamiltonianES h W N n).comp
-        U.symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-        (LinearMap.toContinuousLinearMap (openInteractionHamiltonianES h W))).toLinearMap := by
-  classical
-  dsimp only
-  let s : Fin N := ⟨n - W, by omega⟩
-  let U := cyclicActiveBlockConfigLinearIsometryEquiv d W (by omega : W ≤ N) s
-  let e := nonwrappingSuffixStartEquiv hR hRW hWn hnN
-  have hsum : openSuffixInteractionHamiltonianES h W N n =
-      ∑ i : {i : NonwrappingStart R N // n - W ≤ i.1.val ∧ i.1.val + R ≤ n},
-        periodicLocalInteractionES h i.1.1 := by
-    rw [openSuffixInteractionHamiltonianES]
-    exact Finset.sum_subtype _ (fun i => by simp) _
-  rw [hsum]
-  apply LinearMap.ext
-  intro x
-  simp only [openInteractionHamiltonianES, LinearMap.comp_apply, LinearMap.sum_apply, map_sum,
-    ContinuousLinearMap.rightFiberwiseMap_sum]
-  calc
-    (∑ i : {i : NonwrappingStart R N // n - W ≤ i.1.val ∧ i.1.val + R ≤ n},
-        U (periodicLocalInteractionES h i.1.1 (U.symm x))) =
-      ∑ q : NonwrappingStart R W,
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-          (LinearMap.toContinuousLinearMap (periodicLocalInteractionES h q.1)) x := by
-        apply Fintype.sum_equiv e.symm
-        intro i
-        have hstart : i.1.1 = cyclicForwardSite s (e.symm i).1.val := by
-          apply Fin.ext
-          have hi := i.2
-          simp only [cyclicForwardSite, Fin.val_mk, s]
-          rw [Nat.mod_eq_of_lt (by omega : n - W + (e.symm i).1.val < N)]
-          change i.1.1.val = n - W + (i.1.1.val - (n - W))
-          omega
-        rw [hstart]
-        exact LinearMap.congr_fun
-          (periodicLocalInteractionES_conj_cyclicActiveBlock h hR
-            (by omega : W ≤ N) s (e.symm i).1 (e.symm i).2) x
-    _ = (∑ q : NonwrappingStart R W,
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-          (LinearMap.toContinuousLinearMap (periodicLocalInteractionES h q.1))) x := by
-      simp
-
-/-- A comparison on a finite interval remains valid after embedding that
-interval in an open chain. No positivity or local kernel condition is needed
-for this transport of order. Source: Nachtergaele,
-arXiv:cond-mat/9410110, Section 6. -/
-theorem openSuffixInteractionHamiltonianES_comparison_of_local
-    (A : MPSTensor d D) {R W N n : ℕ}
-    (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)) (hR : 0 < R) (hRW : R ≤ W)
-    (hWn : W ≤ n) (hnN : n ≤ N) {κ : ℝ}
-    (hLocal : (κ : ℂ) • parentInteractionES A W ≤
-      openInteractionHamiltonianES h W) :
-    (κ : ℂ) • Matrix.toEuclideanLin
-        ((parentChainInteraction A W N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + W ≤
-            n).hamiltonian ≤
-      openSuffixInteractionHamiltonianES h W N n := by
-  let s : Fin N := ⟨n - W, by omega⟩
-  let U := cyclicActiveBlockConfigLinearIsometryEquiv d W (by omega : W ≤ N) s
-  have hShort : U.toLinearEquiv.conj (openSuffixInteractionHamiltonianES h W N n) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-        (LinearMap.toContinuousLinearMap (openInteractionHamiltonianES h W))).toLinearMap := by
-    simpa only [U, LinearEquiv.conj_apply, LinearMap.comp_assoc] using!
-      openSuffixInteractionHamiltonianES_conj_cyclicActiveBlock h hR hRW hWn hnN
-  have hLong : U.toLinearEquiv.conj
-      (Matrix.toEuclideanLin
-          ((parentChainInteraction A W N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + W ≤
-              n).hamiltonian) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-        (LinearMap.toContinuousLinearMap (parentInteractionES A W))).toLinearMap := by
-    simpa only [U, LinearEquiv.conj_apply, LinearMap.comp_assoc,
-      hamiltonian_parentChainInteraction_self_eq_parentInteractionES A (by omega : 0 < W)] using!
-      hamiltonian_restrict_parentChainInteraction_conj_cyclicActiveBlock A
-        (by omega : 0 < W) le_rfl hWn hnN
-  refine (U.conj_le_conj_iff _ _).mp ?_
-  simpa only [map_smul, hLong, hShort, ContinuousLinearMap.rightFiberwiseMap_smul,
-    ContinuousLinearMap.toLinearMap_smul] using
-    (ContinuousLinearMap.rightFiberwiseMap_mono (S := Cfg d (N - W))
-      (G := LinearMap.toContinuousLinearMap ((κ : ℂ) • parentInteractionES A W))
-      (H := LinearMap.toContinuousLinearMap (openInteractionHamiltonianES h W)) hLocal)
-
-/-- A positive interaction dominating the length-\(W\) parent projection on
-\(W\) sites dominates the corresponding open parent Hamiltonian on every
-larger chain, up to the window multiplicity \(W-R+1\).
-Source: Nachtergaele, arXiv:cond-mat/9410110, condition C1 and Section 6. -/
-theorem openInteractionHamiltonianES_comparison_of_local
-    (A : MPSTensor d D) {R W N : ℕ}
-    (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (hh : h.IsPositive) (hR : 0 < R) (hRW : R ≤ W)
-    (_hWN : W ≤ N) {κ : ℝ}
-    (hLocal : (κ : ℂ) • parentInteractionES A W ≤
-      openInteractionHamiltonianES h W) :
-    (κ : ℂ) • Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian ≤
-      ((W - R + 1 : ℕ) : ℂ) • openInteractionHamiltonianES h N := by
-  calc
-    (κ : ℂ) • Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian =
-        (κ : ℂ) • ∑ n ∈ Finset.Icc W N,
-          Matrix.toEuclideanLin
-              ((parentChainInteraction A W N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + W ≤
-                  n).hamiltonian := by
-          rw [sum_hamiltonian_restrict_parentChainInteraction_full_window A W N]
-    _ = ∑ n ∈ Finset.Icc W N,
-          (κ : ℂ) • Matrix.toEuclideanLin
-              ((parentChainInteraction A W N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + W ≤
-                  n).hamiltonian := by
-          rw [Finset.smul_sum]
-    _ ≤ ∑ n ∈ Finset.Icc W N,
-          openSuffixInteractionHamiltonianES h W N n := by
-          apply Finset.sum_le_sum
-          intro n hn
-          have hBounds := Finset.mem_Icc.mp hn
-          exact openSuffixInteractionHamiltonianES_comparison_of_local A h hR hRW
-            hBounds.1 hBounds.2 hLocal
-    _ ≤ ((W - R + 1 : ℕ) : ℂ) • openInteractionHamiltonianES h N :=
-          sum_openSuffixInteractionHamiltonianES_le h hh hRW
-
-/-- A finite-window comparison transfers a norm gap at a specified volume
-when the two global kernels are the same MPS boundary-condition space.
-The transferred gap is \(\kappa\gamma/(W-R+1)\). There is no hypothesis on
-the kernel of the original local interaction. Source: Nachtergaele,
-arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
-theorem openInteractionHamiltonianES_gap_of_long_gap_at_length
-    (A : MPSTensor d D) {R W N : ℕ}
-    (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (hh : h.IsPositive)
-    (hR : 0 < R) (hRW : R ≤ W) (hWN : W ≤ N) {κ γ : ℝ} (hκ : 0 < κ) (hγ : 0 < γ)
-    (hLocal : (κ : ℂ) • parentInteractionES A W ≤
-      openInteractionHamiltonianES h W)
-    (hShortKer : LinearMap.ker (openInteractionHamiltonianES h N) = groundSpaceES A N)
-    (hLongKer : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian) =
-        groundSpaceES A N)
-    (hLong : ∀ v ∈ (groundSpaceES A N)ᗮ,
-      γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian v‖) :
-    ∀ v ∈ (groundSpaceES A N)ᗮ,
-      (κ * γ / (W - R + 1 : ℕ)) * ‖v‖ ≤
-        ‖openInteractionHamiltonianES h N v‖ := by
-  have hOrder := openInteractionHamiltonianES_comparison_of_local A h hh
-    hR hRW hWN hLocal
-  have hTransfer := LinearMap.IsPositive.norm_gap_of_scaled_comparison
-    (E := EuclideanSpace ℂ (Cfg d N))
-    (Matrix.isPositive_toEuclideanLin_iff.mpr
-        (posSemidef_hamiltonian_parentChainInteraction A W N)) hκ hγ
-    (by positivity : 0 < ((W - R + 1 : ℕ) : ℝ)) hOrder
-    (hLongKer.trans hShortKer.symm)
-    (fun v hv => hLong v (by rwa [hLongKer] at hv))
-  simpa only [hShortKer] using hTransfer
-
 end MPSTensor

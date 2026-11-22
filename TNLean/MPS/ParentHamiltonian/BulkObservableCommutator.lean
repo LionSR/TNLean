@@ -23,13 +23,6 @@ These are finite-dimensional locality identities underlying the passage to
 infinite-volume local expectations in Nachtergaele, arXiv:cond-mat/9410110,
 lines 2649--2675. They do not assert the infinite-volume spectral-gap theorem.
 The interaction is arbitrary; positivity and self-adjointness are not needed.
-
-**Transitional (#10948).**
-`openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates` and
-`toEuclideanCLM_hamiltonian_chainTranslates_parentInteraction` compare the Euclidean-space
-operator `openInteractionHamiltonianES` with the Hamiltonians of
-`ManyBody.Interaction.chainTranslates`; they are kept until their last users are converted and
-are then deleted with that operator.
 -/
 
 open scoped Matrix BigOperators
@@ -165,60 +158,19 @@ theorem bulkObservable_adjoint_mul_hamiltonian_chainTranslates_commutator {ℓ r
   rw [bulkObservable_eq_placeAlong_chainWindow]
   exact hlocal
 
-private theorem hamiltonian_chainTranslates_eq_sum_nonwrappingStart
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hRN : R ≤ N) :
-    (chainTranslates R N h).hamiltonian =
-      ∑ i : NonwrappingStart R N,
-        placeAlong (X := fun _ ↦ Fin d) (chainWindow i.1.val i.2) h := by
-  rw [hamiltonian_chainTranslates_eq_sum_range]
-  symm
-  refine Finset.sum_bij (fun i _ => i.1.val) ?_ ?_ ?_ ?_
-  · intro i _
-    have hi := i.2
-    exact Finset.mem_range.mpr (by omega)
-  · exact fun i _ j _ hij => Subtype.ext (Fin.ext hij)
-  · intro b hb
-    simp only [Finset.mem_range] at hb
-    exact ⟨⟨⟨b, by omega⟩, by change b + R ≤ N; omega⟩, Finset.mem_univ _, rfl⟩
-  · exact fun i _ => by rw [dite_eq_left (show i.1.val + R ≤ N from i.2)]
-
-/-- The matrix interaction sum agrees with the Euclidean open-chain
-Hamiltonian. Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
-theorem openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hRN : R ≤ N) :
-    openInteractionHamiltonianES (Matrix.toEuclideanLin h) N =
-      Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian) := by
-  rw [hamiltonian_chainTranslates_eq_sum_nonwrappingStart h hR hRN, map_sum,
-    openInteractionHamiltonianES]
-  refine Finset.sum_congr rfl (fun i _ => ?_)
-  rw [periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow hRN i.1]
-  have hw : chainWindow i.1.val i.2 = ManyBody.ringWindow hRN i.1 := by
-    ext j
-    have hj : i.1.val + j.val < N := by
-      have hi := i.2
-      omega
-    rw [ManyBody.val_chainWindow, ManyBody.ringWindow_apply, Fin.val_add, Fin.val_castLE,
-      Nat.mod_eq_of_lt hj]
-  rw [hw]
-
 /-- The canonical local ground-space complement projection gives the
-Euclidean open parent Hamiltonian under the matrix representation. -/
+Hamiltonian of the parent interaction on the open chain under the matrix representation. -/
 theorem toEuclideanCLM_hamiltonian_chainTranslates_parentInteraction {D : ℕ}
-    (A : MPSTensor d D) (hR : 0 < R) (hRN : R ≤ N) :
+    (A : MPSTensor d D) (R N : ℕ) :
     (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
-      ((chainTranslates _ N ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
+      ((chainTranslates R N ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
           (groundSpaceES A R)ᗮ.starProjection)).hamiltonian)).toLinearMap =
       Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian := by
-  change Matrix.toEuclideanLin ((chainTranslates _ N _).hamiltonian) = _
-  rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates _ hR hRN]
-  have hlocal : Matrix.toEuclideanLin
-      ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
-        (groundSpaceES A R)ᗮ.starProjection) = parentInteractionES A R := by
-    change (Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)
-      ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
-        (groundSpaceES A R)ᗮ.starProjection)).toLinearMap = _
-    rw [StarAlgEquiv.apply_symm_apply]
-    rfl
-  rw [hlocal, openInteractionHamiltonianES_parentInteractionES A hR]
+  have hlocal : (Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
+      (groundSpaceES A R)ᗮ.starProjection = LinearMap.toMatrix' (parentInteraction A R) := by
+    rw [StarAlgEquiv.symm_apply_eq]
+    exact ContinuousLinearMap.coe_injective (toEuclideanLin_toMatrix'_parentInteraction A R).symm
+  rw [hlocal]
+  rfl
 
 end MPSTensor

@@ -15,7 +15,7 @@ import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionExistence
 
 Normalized tensors with a faithful stationary matrix have exact canonical
 parent kernels at every sufficiently large interaction range. The same
-canonical interaction has a uniform finite-volume norm gap at every original
+canonical interaction has a uniform finite-volume gap above the kernel at every original
 length, and a common literal infinite-volume commutator gap in all pure
 zero-energy states. The generated stationary state itself has zero energy;
 its purity is not assumed.
@@ -37,7 +37,7 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-- Faithful stationary normalized generators give exact canonical kernels
-at all sufficiently large interaction ranges and one norm gap at every
+at all sufficiently large interaction ranges and one gap above the kernel at every
 original volume for each such range. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Theorems 1.1--1.2 and Section 6,
 in the supplied generating-data setting. -/
@@ -82,13 +82,13 @@ theorem exists_positive_parent_finite_and_quasiLocal_gap_of_leftCanonical_of_pos
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N, R ≤ N → LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) = groundSpaceES A N) ∧
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES A N) ∧
       quasiLocalExpectation A hA hρ.posSemidef hFix (ne_of_gt hρ.trace_pos) ∈
         parentGroundStateFace h ∧
       ∃ δ : ℝ, 0 < δ ∧
-      (∀ N, ∀ v ∈ (LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
-        δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖) ∧
+      (∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ) ∧
       ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
         φ ∈ parentGroundStateFace h → IsPureQuasiLocalState d φ →
@@ -112,11 +112,8 @@ theorem exists_positive_parent_finite_and_quasiLocal_gap_of_leftCanonical_of_pos
     exists_hamiltonian_parentChainInteraction_gap_of_leftCanonical_of_posDef_fixedPoint A hA hρ hFix
   obtain ⟨hCanonicalKernel, δ, hδ, hFinite⟩ := hRange R le_rfl
   obtain ⟨h, hEq, hh, hKernel⟩ :=
-    exists_positive_canonical_parent_interaction_of_exact_open_kernels A hR hCanonicalKernel
-  have hH (N : ℕ) : openInteractionHamiltonianES (Matrix.toEuclideanLin h) N =
-      Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian := by
-    rw [hEq, toEuclideanLin_canonicalParentInteractionMatrix,
-      openInteractionHamiltonianES_parentInteractionES A hR]
+    exists_posSemidef_eq_toMatrix'_parentInteraction_of_ker_hamiltonian_parentChainInteraction
+      A hCanonicalKernel
   have hMember : quasiLocalExpectation A hA hρ.posSemidef hFix (ne_of_gt hρ.trace_pos) ∈
       parentGroundStateFace h := by
     rw [hEq]
@@ -126,7 +123,7 @@ theorem exists_positive_parent_finite_and_quasiLocal_gap_of_leftCanonical_of_pos
     exists_pos_quasiLocalCommutator_limit_gap_of_leftCanonical_of_posDef_fixedPoint
       A hA hρ hFix h hR hh ((eventually_ge_atTop R).mono fun N hN => hKernel N hN)
   refine ⟨R, hR, h, hh, hKernel, hMember, δ, hδ, ?_, γ, hγ, hGap⟩
-  simpa only [hH] using fun N ↦ (ManyBody.forall_hasEigenvalue_iff_norm
-    (posSemidef_hamiltonian_parentChainInteraction A R N)).mp (hFinite N)
+  rw [hEq]
+  exact hFinite
 
 end MPSTensor

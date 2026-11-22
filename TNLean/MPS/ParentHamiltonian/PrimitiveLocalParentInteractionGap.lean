@@ -25,12 +25,6 @@ The quasi-local formulation, construction of the GNS Hamiltonian, and the
 pure multiblock conclusion are not treated here; see
 docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 
-**Transitional (#10948).**
-`IsParentInteraction.ker_openInteractionHamiltonianES_eq_ker_hamiltonian_parentChainInteraction`,
-stated for
-the Euclidean-space operators, is kept until its last users are converted; the last section states
-it for the Hamiltonians of the open-chain translates and of `parentChainInteraction`. The
-commutator theorems rest on the open-chain gap at the Wielandt range and are converted with it.
 -/
 
 open Filter
@@ -42,22 +36,24 @@ namespace MPSTensor
 
 variable {d D R k : ℕ}
 
-/-- Positive local parent interactions and the canonical projection have
-identical open-chain kernels at every length. Source: CPGSV21,
-arXiv:2011.12127, lines 2170--2172. -/
-theorem
-    IsParentInteraction.ker_openInteractionHamiltonianES_eq_ker_hamiltonian_parentChainInteraction
-    {A : MPSTensor d D}
-    {h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)}
-    (hh : IsParentInteraction A R h) (hR : 0 < R) (N : ℕ) :
-    LinearMap.ker (openInteractionHamiltonianES h N) =
+/-- The Hamiltonians of the open-chain translates of a positive parent interaction and of the
+canonical parent interaction on the open chain have identical kernels at every length.
+Source: CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
+theorem IsParentInteraction.ker_hamiltonian_chainTranslates_eq_ker_parentChainInteraction
+    {A : MPSTensor d D} {h : Matrix (Cfg d R) (Cfg d R) ℂ}
+    (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) (N : ℕ) :
+    LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) := by
-  obtain ⟨κ, C, hκ, hC, hComparison⟩ := hh.exists_pos_open_comparison hR
-  apply ((Matrix.isPositive_toEuclideanLin_iff.mpr
-      (posSemidef_hamiltonian_parentChainInteraction A R N)).ker_eq_of_smul_le_of_le_smul
-    (openInteractionHamiltonianES_isPositive hh.isPositive N) hκ zero_lt_one hC
-    (by simpa only [Complex.ofReal_one, one_smul] using (hComparison N).1)
-    (by simpa only [Complex.ofReal_one, one_smul] using (hComparison N).2)).symm
+  obtain ⟨κ, C, hκ, hC, hComparison⟩ := hh.exists_pos_hamiltonian_chainTranslates_comparison
+  refine ((Matrix.isPositive_toEuclideanLin_iff.mpr
+    (posSemidef_hamiltonian_parentChainInteraction A R N)).ker_eq_of_smul_le_of_le_smul
+    (Matrix.isPositive_toEuclideanLin_iff.mpr
+      (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
+        (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive) N)) hκ zero_lt_one hC ?_ ?_).symm
+  · rw [Complex.ofReal_one, one_smul, ← map_smul, Matrix.toEuclideanLin_le_toEuclideanLin_iff]
+    exact (hComparison N).1
+  · rw [Complex.ofReal_one, one_smul, ← map_smul, Matrix.toEuclideanLin_le_toEuclideanLin_iff]
+    exact (hComparison N).2
 
 /-- Along unit ground vectors, the commutator energies of an open interaction
 with a bulk observable converge to the insertion expectation of the local
@@ -73,7 +69,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.openInteraction_commutator_en
       ψ n ∈ groundSpaceES A ((n + (R - 1) + k) + (R - 1 + n)))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
     let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
-    let H (n : ℕ) := openInteractionHamiltonianES (Matrix.toEuclideanLin h) (N n)
+    let H (n : ℕ) := Matrix.toEuclideanLin (chainTranslates R (N n) h).hamiltonian
     let B (n : ℕ) := ((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
       (bulkObservable X (n + (R - 1)) (R - 1 + n))).toLinearMap
     Tendsto (fun n =>
@@ -85,10 +81,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.openInteraction_commutator_en
     N (fun n => by dsimp [N]; omega) ψ hGround hUnit).congr'
   filter_upwards [Filter.eventually_ge_atTop 1] with n hn
   have hH : Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
-      ((chainTranslates R (N n) h).hamiltonian) = (H n).toContinuousLinearMap :=
-    congrArg LinearMap.toContinuousLinearMap
-      (openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
-        h hR (by dsimp [N]; omega)).symm
+      ((chainTranslates R (N n) h).hamiltonian) = (H n).toContinuousLinearMap := rfl
   dsimp only
   rw [map_mul, map_sub, map_mul, map_mul, ← Matrix.star_eq_conjTranspose,
     map_star, ContinuousLinearMap.star_eq_adjoint, hH,
@@ -96,41 +89,43 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.openInteraction_commutator_en
   rfl
 
 /-- The local commutator inequality for a positive open interaction follows
-from its eventual kernel identity and uniform norm gap. Tensor convergence
+from its eventual kernel identity and uniform gap above the kernel. Tensor convergence
 derives the energy, excitation norm, and ground-projection limits.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_openInteraction_gap
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : (Matrix.toEuclideanLin h).IsPositive)
+    (hh : h.PosSemidef)
     (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
     (hcenter : observableInsertionExpectation A ρ X = 0)
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
     {γ : ℝ} (hγ : 0 ≤ γ)
     (hKernel : ∀ᶠ n in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h)
-        ((n + (R - 1) + k) + (R - 1 + n))) =
+      LinearMap.ker (Matrix.toEuclideanLin
+        (chainTranslates R ((n + (R - 1) + k) + (R - 1 + n)) h).hamiltonian) =
           groundSpaceES A ((n + (R - 1) + k) + (R - 1 + n)))
-    (hGap : ∀ᶠ n in atTop, ∀ v ∈
-      (LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h)
-        ((n + (R - 1) + k) + (R - 1 + n))))ᗮ,
-      γ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h)
-        ((n + (R - 1) + k) + (R - 1 + n)) v‖)
+    (hGap : ∀ᶠ n in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin
+        (chainTranslates R ((n + (R - 1) + k) + (R - 1 + n)) h).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hGround : ∀ᶠ n in atTop,
       ψ n ∈ groundSpaceES A ((n + (R - 1) + k) + (R - 1 + n)))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
     γ * (observableInsertionExpectation A ρ (Xᴴ * X)).re ≤
       (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re := by
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
-  let H (n : ℕ) := openInteractionHamiltonianES (Matrix.toEuclideanLin h) (N n)
+  let H (n : ℕ) := Matrix.toEuclideanLin (chainTranslates R (N n) h).hamiltonian
   have hEnergy := hP.openInteraction_commutator_energy_tendsto hρ h X hR ψ hGround hUnit
   exact hP.commutator_gap_of_bulkObservable_energy_limit hρ X hcenter
     (ℓ := fun n : ℕ => n + (R - 1)) (r := fun n => (R - 1) + n)
     (tendsto_add_atTop_nat (R - 1))
     (tendsto_atTop_mono (fun n => Nat.le_add_left n (R - 1)) tendsto_id)
-    H ψ hγ (Eventually.of_forall fun n => openInteractionHamiltonianES_isPositive hh (N n))
-    hGap hKernel hGround hUnit hEnergy
+    H ψ hγ (Eventually.of_forall fun n => Matrix.isPositive_toEuclideanLin_iff.mpr
+      (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh (N n)))
+    (hGap.mono fun n hn => (ManyBody.forall_hasEigenvalue_iff_norm
+      (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh (N n))).mp hn)
+    hKernel hGround hUnit hEnergy
 
 set_option linter.style.longLine false in
 /-- Every positive parent interaction at range at least \(D^4+1\) has one
@@ -154,9 +149,7 @@ theorem
   obtain ⟨δ, hδ, hcanonicalGap⟩ :=
     exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNormal_of_le A hNormal hR
   obtain ⟨γ, hγ, hgap⟩ :=
-    hh.exists_open_uniform_gap_of_canonical_gap hRpos hδ fun N hN ↦
-      (ManyBody.forall_hasEigenvalue_iff_norm
-        (posSemidef_hamiltonian_parentChainInteraction A R N)).mp (hcanonicalGap N hN)
+    hh.exists_hamiltonian_chainTranslates_uniform_gap_of_canonical_gap hδ hcanonicalGap
   refine ⟨γ, hγ, ?_⟩
   intro k X _ hcenter
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
@@ -166,36 +159,16 @@ theorem
   have hInj : Kraus.IsNBlkInjective A (R - 1) :=
     isNBlkInjective_of_le hD (isNBlkInjective_pow_four_of_isNormal A hNormal) (by omega)
   have hRange : R - 1 + 1 = R := by omega
-  apply hP.localCommutator_gap_of_openInteraction_gap hρ h hh.isPositive X hRpos
+  apply hP.localCommutator_gap_of_openInteraction_gap hρ h
+    (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive) X hRpos
     hcenter ψ hγ.le
   · exact Eventually.of_forall fun n => by
-      rw [hh.ker_openInteractionHamiltonianES_eq_ker_hamiltonian_parentChainInteraction hRpos]
+      rw [hh.ker_hamiltonian_chainTranslates_eq_ker_parentChainInteraction]
       have h := ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
         hInj (by omega : 0 < R - 1) (by dsimp [N]; omega : R - 1 + 1 ≤ N n)
       rwa [hRange] at h
   · exact Eventually.of_forall fun n => hgap (N n) (by dsimp [N]; omega)
   · exact Eventually.of_forall hg
   · exact hu
-
-/-! ### The open-chain interaction Hamiltonians -/
-
-/-- The Hamiltonians of the open-chain translates of a positive parent interaction and of the
-canonical parent interaction on the open chain have identical kernels at every length.
-Source: CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
-theorem IsParentInteraction.ker_hamiltonian_chainTranslates_eq_ker_parentChainInteraction
-    {A : MPSTensor d D} {h : Matrix (Cfg d R) (Cfg d R) ℂ}
-    (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) (N : ℕ) :
-    LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) := by
-  obtain ⟨κ, C, hκ, hC, hComparison⟩ := hh.exists_pos_hamiltonian_chainTranslates_comparison
-  refine ((Matrix.isPositive_toEuclideanLin_iff.mpr
-    (posSemidef_hamiltonian_parentChainInteraction A R N)).ker_eq_of_smul_le_of_le_smul
-    (Matrix.isPositive_toEuclideanLin_iff.mpr
-      (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
-        (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive) N)) hκ zero_lt_one hC ?_ ?_).symm
-  · rw [Complex.ofReal_one, one_smul, ← map_smul, Matrix.toEuclideanLin_le_toEuclideanLin_iff]
-    exact (hComparison N).1
-  · rw [Complex.ofReal_one, one_smul, ← map_smul, Matrix.toEuclideanLin_le_toEuclideanLin_iff]
-    exact (hComparison N).2
 
 end MPSTensor

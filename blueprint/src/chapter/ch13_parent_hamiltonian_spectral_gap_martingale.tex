@@ -1966,11 +1966,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
          & =\lVert v\rVert.
         \label{eq:open_parent_hamiltonian_full_window_norm}
     \end{align}
-    In particular,
-    \begin{align}
-        \lVert v\rVert
-         & \leq\lVert H^{\mathrm{open}}_{L,L}(A)v\rVert.
-    \end{align}
+    In particular, every nonzero eigenvalue of $H^{\mathrm{open}}_{L,L}(A)$
+    is at least $1$; this last assertion also holds for $L=0$.
     In \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}, this gives
     $\gamma_{l+1}=1$ at the full-window volume $N=L=l+1$, without asserting
     that the excited subspace is nonzero or giving a gap for any $N>L$.
@@ -3690,8 +3687,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         thm:open_suffix_parent_hamiltonian_c2_full_range,
         lem:open_parent_hamiltonian_es_positive,
         thm:open_parent_hamiltonian_kernel_ground_space}
-    Let $D\geq1$, let $l>0$, suppose that $A$ is $l$-block injective, and let
-    $N\geq l+1$.  Assume $0\leq\epsilon_l<1/\sqrt{l+1}$ and, for every
+    Assume $0\leq\epsilon_l<1/\sqrt{l+1}$ and, for every
     $0\leq n<N$,
     \begin{align}
         \left\lVert Q_nE_n^{(N)}\right\rVert & \leq\epsilon_l,
@@ -3699,11 +3695,11 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \end{align}
     where $Q_n$ is the ground-space projection of the interval
     $[n-l,n+1)$ and $E_n^{(N)}$ is the fixed-volume martingale difference.
-    Then every $v\in(G_N^{\mathrm{ES}}(A))^\perp$ satisfies
+    Then every nonzero eigenvalue $\mu$ of $H^{\mathrm{open}}_{N,l+1}(A)$
+    satisfies
     \begin{align}
-        \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert
-         & \leq
-        \left\lVert H^{\mathrm{open}}_{N,l+1}(A)v\right\rVert.
+        \left(1-\epsilon_l\sqrt{l+1}\right)^2
+         & \leq\mu.
         \label{eq:open_parent_hamiltonian_fixed_c3_gap}
     \end{align}
     By applying the full-range estimate with $d_{l+1}=\gamma_{l+1}=1$ and
@@ -3759,12 +3755,11 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \epsilon_l & <\frac{1}{\sqrt{l+1}},
         \label{eq:primitive_open_parent_hamiltonian_threshold}
     \end{align}
-    and, for every $N\geq l+1$ and every
-    $v\in(G_N^{\mathrm{ES}}(A))^\perp$,
+    and, for every $N\geq l+1$, every nonzero eigenvalue $\mu$ of
+    $H^{\mathrm{open}}_{N,l+1}(A)$ satisfies
     \begin{align}
-        \left(1-\epsilon_l\sqrt{l+1}\right)^2\lVert v\rVert
-         & \leq
-        \left\lVert H^{\mathrm{open}}_{N,l+1}(A)v\right\rVert.
+        \left(1-\epsilon_l\sqrt{l+1}\right)^2
+         & \leq\mu.
         \label{eq:primitive_open_parent_hamiltonian_gap}
     \end{align}
 \end{lemma}

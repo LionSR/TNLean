@@ -32,13 +32,14 @@ counterexample are recorded in
 `docs/paper-gaps/cpgsv21_short_range_parent_gap.tex`.
 -/
 
-open scoped Topology
+open scoped Topology ComplexOrder
 
 namespace MPSTensor
 
 /-- Continuous positive parent interactions for a compact family of several
 simultaneously injective blocks have a gap uniform in the parameter and all
-admissible open-chain lengths. Nonzero weights need not be continuous.
+admissible open-chain lengths: every eigenvalue of the Hamiltonian of the open-chain translates
+is `0` or at least the gap. Nonzero weights need not be continuous.
 Source: arXiv:1010.3732, Appendix A; Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
 theorem exists_uniform_block_openParentInteraction_gap_of_compact
@@ -48,28 +49,27 @@ theorem exists_uniform_block_openParentInteraction_gap_of_compact
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     {S R : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
     (hR : S + 1 ≤ R)
-    (H : X → EuclideanSpace ℂ (Cfg d R) →L[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (hH : Continuous H)
+    (H : X → Matrix (Cfg d R) (Cfg d R) ℂ) (hH : Continuous H)
     (hParent : ∀ x, IsParentInteraction
-      (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R (H x).toLinearMap)
+      (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R (Matrix.toEuclideanLin (H x)))
     {K : Set X} (hK : IsCompact K) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, R ≤ N →
-      ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES (H x).toLinearMap N))ᗮ,
-        δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (H x).toLinearMap N v‖ := by
+    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin
+        (ManyBody.Interaction.chainTranslates R N (H x)).hamiltonian) z →
+        z = 0 ∨ (δ : ℂ) ≤ z := by
   have hSpanR (x : X) : WordTupleSpanTop (A x) R :=
     wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega)
   obtain ⟨γ, hγ, hGap⟩ :=
     exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_compact_all_lengths
       μ A hμ hA hS hSpan hR hK
-  exact exists_uniform_openInteractionHamiltonianES_gap_of_compact_canonical_gap
+  exact exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap
     (fun x => toTensorFromBlocks (d := d) (μ := μ x) (A x))
     (continuous_groundSpaceES_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
-    H hH hParent hK (by omega) hγ
-    (fun x hx N hN ↦ (ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentChainInteraction _ R N)).mp (hGap x hx N hN))
+    H hH hParent hK hγ hGap
 
 /-- A compact continuous family of pairwise inequivalent normalized normal
-blocks has one positive open-chain gap for continuous positive interactions at
+blocks has one positive open-chain gap (every eigenvalue of the Hamiltonian of the open-chain
+translates is `0` or at least the gap) for continuous positive interactions at
 every range at least \(3\max(\sum_jD_j,1)^5\). The simultaneous injectivity
 length is derived from the dimensions. Source: arXiv:1606.00608, lines
 317--345; arXiv:1010.3732, Appendix A; Nachtergaele,
@@ -82,14 +82,14 @@ theorem exists_uniform_block_openParentInteraction_gap_of_compact_isNormalTensor
     (hNormal : ∀ x j, IsNormalTensor (A x j))
     (hDistinct : ∀ x, BlocksNotGaugePhaseEquiv (A x)) {R : ℕ}
     (hR : 3 * (max (∑ j, dim j) 1) ^ 5 ≤ R)
-    (H : X → EuclideanSpace ℂ (Cfg d R) →L[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (hH : Continuous H)
+    (H : X → Matrix (Cfg d R) (Cfg d R) ℂ) (hH : Continuous H)
     (hParent : ∀ x, IsParentInteraction
-      (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R (H x).toLinearMap)
+      (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R (Matrix.toEuclideanLin (H x)))
     {K : Set X} (hK : IsCompact K) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, R ≤ N →
-      ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES (H x).toLinearMap N))ᗮ,
-        δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (H x).toLinearMap N v‖ := by
+    ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin
+        (ManyBody.Interaction.chainTranslates R N (H x)).hamiltonian) z →
+        z = 0 ∨ (δ : ℂ) ≤ z := by
   classical
   rcases isEmpty_or_nonempty X with hX | hX
   · let := hX
@@ -106,11 +106,9 @@ theorem exists_uniform_block_openParentInteraction_gap_of_compact_isNormalTensor
   obtain ⟨γ, hγ, hGap⟩ :=
     exists_uniform_block_hamiltonian_parentChainInteraction_gap_of_compact_isNormalTensor
       μ A hμ hA hNormal hDistinct hR hK
-  exact exists_uniform_openInteractionHamiltonianES_gap_of_compact_canonical_gap
+  exact exists_uniform_hamiltonian_chainTranslates_gap_of_compact_canonical_gap
     (fun x => toTensorFromBlocks (d := d) (μ := μ x) (A x))
     (continuous_groundSpaceES_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
-    H hH hParent hK (lt_of_lt_of_le (by positivity) hR) hγ
-    (fun x hx N hN ↦ (ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentChainInteraction _ R N)).mp (hGap x hx N hN))
+    H hH hParent hK hγ hGap
 
 end MPSTensor

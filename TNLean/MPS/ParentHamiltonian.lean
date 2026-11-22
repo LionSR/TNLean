@@ -84,7 +84,6 @@ import TNLean.MPS.ParentHamiltonian.CanonicalBoundedRangeGroundSpace
 import TNLean.MPS.ParentHamiltonian.CanonicalGroundSpaceTransport
 import TNLean.MPS.ParentHamiltonian.CanonicalParentGroundState
 import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionExistence
-import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionMatrix
 import TNLean.MPS.ParentHamiltonian.CenteredOverlapFactor
 import TNLean.MPS.ParentHamiltonian.ChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.CoefficientPairing

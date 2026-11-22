@@ -58,11 +58,8 @@ is recorded in
     \uses{lem:open_parent_range_comparison,
         thm:open_parent_hamiltonian_kernel_ground_space}
     Let $A$ be injective at a length $p>0$, and let $R>p$. There is
-    $\delta>0$ such that
-    \[
-        \delta\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,R}(A)v\rVert
-        \qquad(N\geq R,\ v\perp\ker H^{\mathrm{open}}_{N,R}(A)).
-    \]
+    $\delta>0$ such that, for every $N\geq R$, every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,R}(A)$ is at least $\delta$.
     In particular, for a normal tensor of bond dimension $D>0$, every
     fixed $R\geq D^4+1$ has this property. No normalization is required.
 \end{lemma}
@@ -156,18 +153,24 @@ is recorded in
         MPSTensor.toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length,
         LinearMap.IsPositive.norm_gap_of_scaled_comparison}
     \leanok
-    \uses{def:open_parent_hamiltonian_es, thm:open_parent_hamiltonian_es_c1}
-    Let $0<R\leq W\leq N$. If
-    $\kappa\,h_W\leq H^{\mathrm{open}}_{W,R}$ for the range-$W$ parent
-    interaction $h_W$ and some $\kappa>0$, then
-    $\kappa H^{\mathrm{open}}_{N,W}\leq(W-R+1)H^{\mathrm{open}}_{N,R}$. For a
-    tensor for which both open kernels equal $G_N^{\mathrm{ES}}$, a gap
-    $\gamma\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,W}v\rVert$ on
-    $(G_N^{\mathrm{ES}})^\perp$ gives
-    $\frac{\kappa\gamma}{W-R+1}\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,R}v\rVert$
-    on the same complement. The assertion may be used at one volume or
-    uniformly over every $N\geq W$. For a one-site injective tensor with
-    $R=2$ and $W\geq2$, the kernel hypotheses hold automatically.
+    \uses{def:open_parent_hamiltonian_es, def:open_local_interaction_sum,
+        thm:open_parent_hamiltonian_es_c1}
+    Let $R\leq W$, let $h\geq0$ be a matrix on $R$ sites, and write
+    $H^{\mathrm{open}}_N(h)$ for the sum of its translates over the windows
+    of $R$ consecutive sites of an open chain of $N$ sites. If
+    $\kappa\,h_W\leq H^{\mathrm{open}}_W(h)$ for the range-$W$ parent
+    interaction $h_W$ of a tensor $A$ and a real number $\kappa$, then
+    $\kappa H^{\mathrm{open}}_{N,W}(A)\leq(W-R+1)H^{\mathrm{open}}_N(h)$
+    for every $N$. If moreover $\kappa,\gamma>0$, both kernels at the volume
+    $N$ equal $G_N^{\mathrm{ES}}(A)$, and every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{N,W}(A)$ is at least $\gamma$, then every nonzero
+    eigenvalue of $H^{\mathrm{open}}_N(h)$ is at least
+    $\kappa\gamma/(W-R+1)$. There is no hypothesis on the kernel of $h$
+    itself. Taking for $h$ the range-$R$ parent interaction compares
+    $H^{\mathrm{open}}_{N,W}$ with $H^{\mathrm{open}}_{N,R}$; for a one-site
+    injective tensor with $R=2$ and $W\geq2$, the kernel hypotheses hold
+    automatically. This is a finite-window consequence of condition C1 and
+    the comparison argument of \cite{Nachtergaele1996Spectral}.
 \end{lemma}
 
 \begin{proof}
@@ -175,10 +178,12 @@ is recorded in
     \uses{thm:open_parent_hamiltonian_es_c1,
         thm:open_parent_hamiltonian_kernel_ground_space,
         lem:positive_gap_transfer_loewner}
-    Translating the local comparison to every window of $W$ consecutive sites
-    and summing shows that each range-$R$ term lies in at most $W-R+1$ windows.
-    Because both open Hamiltonians have kernel $G_N^{\mathrm{ES}}$, the
-    operator inequality transfers the gap.
+    Place the local comparison on every window of $W$ consecutive sites and
+    sum. Each range-$W$ parent term occurs once, and each translate of $h$
+    lies in at most $W-R+1$ of these windows, so positivity of $h$ gives the
+    operator inequality. Because both positive operators have kernel
+    $G_N^{\mathrm{ES}}$, the inequality transfers the lower bound on the
+    nonzero eigenvalues, divided by the window multiplicity.
 \end{proof}
 
 \begin{lemma}[Strict Knabe windows for injective tensors]
@@ -191,11 +196,11 @@ is recorded in
         lem:open_parent_range_comparison}
     Let $A$ be a one-site injective tensor of nonzero bond dimension. Then the
     open-chain Hamiltonian $H^{\mathrm{open}}_{N,2}(A)$ built from the
-    canonical two-site parent interaction has a positive gap above
-    $G_N^{\mathrm{ES}}(A)$, uniform in all sufficiently large $N$. In
-    particular, there are $m\geq2$ and $\gamma$ with $m\gamma>1$ such that
-    $\gamma\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{m+1,2}(A)v\rVert$ for all
-    $v\perp G_{m+1}^{\mathrm{ES}}(A)$.
+    canonical two-site parent interaction has all its nonzero eigenvalues
+    bounded below by one positive constant, uniformly in all sufficiently
+    large $N$. In particular, there are $m\geq2$ and $\gamma$ with
+    $m\gamma>1$ such that every nonzero eigenvalue of
+    $H^{\mathrm{open}}_{m+1,2}(A)$ is at least $\gamma$.
 \end{lemma}
 
 \begin{proof}
@@ -836,13 +841,14 @@ is recorded in
     \lean{MPSTensor.periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow,
         MPSTensor.periodicLocalInteractionES_commute_onSiteTensorPow,
         MPSTensor.periodicInteractionHamiltonianES_commute_onSiteTensorPow,
-        MPSTensor.openInteractionHamiltonianES_commute_onSiteTensorPow}
+        MPSTensor.hamiltonian_chainTranslates_commute_onSiteTensorPow}
     \leanok
     Let $h$ be an interaction on $R$ sites, let $U$ be a physical
     matrix, and suppose $[h,U^{\otimes R}]=0$. For every $N\geq R$,
     each cyclic extension of $h$ commutes with $U^{\otimes N}$.
-    Consequently both the periodic sum and the sum over nonwrapping
-    windows commute with $U^{\otimes N}$. In configuration coordinates,
+    Consequently the periodic sum commutes with $U^{\otimes N}$, and the
+    sum over nonwrapping windows commutes with $U^{\otimes N}$ at every
+    length $N$. In configuration coordinates,
     cyclic extension is the matrix obtained by placing $h$ on the
     window and the identity on its complement.
 \end{lemma}
@@ -865,7 +871,7 @@ is recorded in
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute,
         MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute,
         MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute,
-        MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute}
+        MPSTensor.isometricDeformation_hamiltonian_chainTranslates_commute}
     \leanok
     Let $A=(A^j)_j$ be a finite block family, combined in direct sum with unit
     coefficients, and let $P=QW$ be its constructed joint left polar
@@ -1005,7 +1011,7 @@ is recorded in
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetric,
         MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetric,
         MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetric,
-        MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSymmetric}
+        MPSTensor.isometricDeformation_hamiltonian_chainTranslates_commute_of_isOnSiteSymmetric}
     \leanok
     Let $A$ be a one-site injective tensor of positive bond dimension,
     in the unital canonical orientation $\E_A(I)=I$. Let
@@ -1051,7 +1057,7 @@ is recorded in
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP,
         MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP,
         MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetric_of_isTP,
-        MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSymmetric_of_isTP}
+        MPSTensor.isometricDeformation_hamiltonian_chainTranslates_commute_of_isOnSiteSymmetric_of_isTP}
     \leanok
     Let $A$ be a one-site injective tensor of positive bond dimension,
     with $\sum_i A_i^\dagger A_i=I$. Let $g\mapsto U_g$ be a unitary
@@ -1272,7 +1278,7 @@ is recorded in
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase,
-        MPSTensor.isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase}
+        MPSTensor.isometricDeformation_hamiltonian_chainTranslates_commute_of_isOnSiteSymmetricUpToPhase}
     \leanok
     In the setting of
     Lemma~\ref{thm:block_isometric_deformation_symmetry_permutation},

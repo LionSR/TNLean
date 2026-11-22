@@ -30,15 +30,6 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Section 4, Proposition
 forintersection, Lemma existenceinteraction, Theorems 1.1--1.2, and
 Section 6, lines 2649--2675. No translation invariance of a state being
 classified, supplied interaction, kernel identity, or finite gap is assumed.
-
-**Transitional (#10948).**
-`exists_positive_parent_interaction_of_periodic_family_independence`, stated for the
-Euclidean-space operator `openInteractionHamiltonianES`, is kept until its last users are
-converted; the last section states it for the Hamiltonians of
-`ManyBody.Interaction.chainTranslates`.
-`exists_positive_parent_interaction_quasiLocalCommutator_gap_of_periodic_family_independence`
-rests on the quasi-local gap of a periodic family, which is converted with the finite-volume gaps
-it uses.
 -/
 
 open SpinChain Filter
@@ -70,24 +61,23 @@ theorem exists_ker_hamiltonian_parentChainInteraction_of_periodic_family_indepen
   simpa only [groundSpace_toTensorFromBlocks_eq_iSup μ A hμ] using hn
 
 /-- A periodic family with eventually independent original middle spaces
-admits a positive canonical interaction with exact joint open kernels.
+admits a positive semidefinite local matrix, the matrix of the canonical parent interaction,
+whose open-chain translates have the joint boundary spaces as kernels.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma existenceinteraction,
 in the explicitly stated periodic-family independence criterion. -/
-theorem exists_positive_parent_interaction_of_periodic_family_independence
+theorem exists_posSemidef_ker_hamiltonian_chainTranslates_of_periodic_family_independence
     (μ : Fin b → ℂ) (A : ∀ j, MPSTensor d (D j)) (hμ : ∀ j, μ j ≠ 0)
     (m : Fin b → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j))
     (hIndep : ∀ᶠ n in atTop, iSupIndep (fun j => groundSpace (A j) n)) :
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES (toTensorFromBlocks μ A) N := by
   obtain ⟨R, hR, hKernel⟩ :=
-      exists_ker_hamiltonian_parentChainInteraction_of_periodic_family_independence
-    μ A hμ m hPeriodic hIndep
-  obtain ⟨h, _heq, hh, hKernelInteraction⟩ :=
-    exists_positive_canonical_parent_interaction_of_exact_open_kernels
-      (toTensorFromBlocks μ A) hR (fun N => hKernel R N le_rfl)
-  exact ⟨R, hR, h, hh, hKernelInteraction⟩
+    exists_ker_hamiltonian_parentChainInteraction_of_periodic_family_independence
+      μ A hμ m hPeriodic hIndep
+  exact ⟨R, hR, LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks μ A) R),
+    posSemidef_toMatrix'_parentInteraction _ R, fun N hN => hKernel R N le_rfl hN⟩
 
 /-- Eventual middle-space independence constructs one canonical interaction
 and a common literal infinite-volume commutator gap for all pure zero-energy
@@ -102,7 +92,7 @@ theorem exists_positive_parent_interaction_quasiLocalCommutator_gap_of_periodic_
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES (toTensorFromBlocks μ A) N) ∧
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
@@ -122,31 +112,11 @@ theorem exists_positive_parent_interaction_quasiLocalCommutator_gap_of_periodic_
             (γ : ℂ) * φ (star (quasiLocalIntervalObservable d a k X) *
               quasiLocalIntervalObservable d a k X) ≤ e := by
   obtain ⟨R, hR, h, hh, hKernel⟩ :=
-    exists_positive_parent_interaction_of_periodic_family_independence μ A hμ m hPeriodic hIndep
+    exists_posSemidef_ker_hamiltonian_chainTranslates_of_periodic_family_independence
+      μ A hμ m hPeriodic hIndep
   have hEventual := (eventually_ge_atTop R).mono fun N hN => hKernel N hN
   obtain ⟨γ, hγ, hGap⟩ := exists_pos_quasiLocalCommutator_limit_gap_of_periodic_family
     μ A hμ m hPeriodic h hR hh hEventual
   exact ⟨R, hR, h, hh, hKernel, γ, hγ, hGap⟩
-
-/-! ### The open-chain interaction Hamiltonians -/
-
-/-- A periodic family with eventually independent original middle spaces
-admits a positive semidefinite local matrix, the matrix of the canonical parent interaction,
-whose open-chain translates have the joint boundary spaces as kernels.
-Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma existenceinteraction,
-in the explicitly stated periodic-family independence criterion. -/
-theorem exists_posSemidef_ker_hamiltonian_chainTranslates_of_periodic_family_independence
-    (μ : Fin b → ℂ) (A : ∀ j, MPSTensor d (D j)) (hμ : ∀ j, μ j ≠ 0)
-    (m : Fin b → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j))
-    (hIndep : ∀ᶠ n in atTop, iSupIndep (fun j => groundSpace (A j) n)) :
-    ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
-      h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
-        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          groundSpaceES (toTensorFromBlocks μ A) N := by
-  obtain ⟨R, hR, hKernel⟩ :=
-    exists_ker_hamiltonian_parentChainInteraction_of_periodic_family_independence
-      μ A hμ m hPeriodic hIndep
-  exact ⟨R, hR, LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks μ A) R),
-    posSemidef_toMatrix'_parentInteraction _ R, fun N hN => hKernel R N le_rfl hN⟩
 
 end MPSTensor

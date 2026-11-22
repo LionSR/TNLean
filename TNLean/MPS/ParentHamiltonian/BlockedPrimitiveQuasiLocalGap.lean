@@ -60,7 +60,7 @@ theorem exists_pos_quasiLocalCommutator_limit_gap_of_blocked_primitive_family
       groundSpaceES (toTensorFromBlocks (μ := μ) B) N)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES A N) :
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
@@ -84,11 +84,11 @@ theorem exists_pos_quasiLocalCommutator_limit_gap_of_blocked_primitive_family
   have hcover : R + L ≤ K * L + 1 :=
     (Nat.le_mul_of_pos_right (R + L) (NeZero.pos L)).trans (Nat.le_succ _)
   have hkerB : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES
-        (Matrix.toEuclideanLin (blockedInteractionMatrix h L K)) N) =
+      LinearMap.ker (Matrix.toEuclideanLin
+        (chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian) =
       groundSpaceES (toTensorFromBlocks (μ := μ) B) N :=
-    (eventually_ker_openInteractionHamiltonianES_blockedInteractionMatrix_eq_groundSpaceES
-      A h hh hR hK hcover hker).mono fun N hN => hN.trans (hJoint N)
+    (eventually_ker_hamiltonian_chainTranslates_blockedInteractionMatrix_eq_groundSpaceES
+      A h hh hcover hker).mono fun N hN => hN.trans (hJoint N)
   obtain ⟨γ, hγ, _hFinite, hGap⟩ :=
     exists_pos_multiblock_quasiLocalCommutator_gap_of_eventual_kernel
       μ B hμ ρ hP hρ hDistinct hK (blockedInteractionMatrix h L K)
@@ -98,13 +98,8 @@ theorem exists_pos_quasiLocalCommutator_limit_gap_of_blocked_primitive_family
       ((Nat.lt_add_of_pos_right (NeZero.pos L)).trans_le hcover)
   refine ⟨γ / (K * L + 1 - R : ℕ), div_pos hγ hM, ?_⟩
   intro φ hφ hφPure
-  have hker' : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES A N := by
-    filter_upwards [hker, eventually_ge_atTop R] with N hN hRN
-    rwa [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN]
   have hSupport := (mem_parentGroundStateFace_iff_groundSpace_support_of_eventual_kernel
-    A h hR hh hker' φ).mp hφ
+    A h hR hh hker φ).mp hφ
   obtain ⟨j, hφj⟩ :=
     (isPure_groundSpace_supported_iff_sector_of_blocked_primitive_family
       A μ B hμ ρ hP hρ hDistinct hJoint φ hφ.1).mp ⟨hSupport.2, hφPure⟩

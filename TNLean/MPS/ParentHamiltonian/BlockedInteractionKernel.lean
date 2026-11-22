@@ -33,12 +33,6 @@ counting statements for arbitrary positive interactions, requiring no local
 MPS-kernel condition. The blocking and comparison results assume positive
 physical dimension; the definition and local positivity certificate do not.
 No normality, primitivity, or translation-invariance hypothesis is imposed.
-
-**Transitional (#10948).**
-`eventually_ker_openInteractionHamiltonianES_blockedInteractionMatrix_eq_groundSpaceES`, stated
-for the Euclidean-space operator `openInteractionHamiltonianES`, is kept until its last users are
-converted. The last section states it for the operators of the Hamiltonians of
-`ManyBody.Interaction.chainTranslates`.
 -/
 
 open scoped ComplexOrder MatrixOrder
@@ -150,7 +144,6 @@ theorem hamiltonian_chainTranslates_blockedInteractionMatrix_reindex
   simp only [dite_eq_left hiL]
   exact placeAlong_chainWindow_hamiltonian_chainTranslates h hiL
 
-
 omit [NeZero d] in
 private theorem sum_aligned_windows_le (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : h.PosSemidef) :
@@ -179,7 +172,6 @@ private theorem sum_aligned_windows_le (h : Matrix (Cfg d R) (Cfg d R) ℂ)
       · intro a _ _
         exact (posSemidef_dite_placeAlong_chainWindow h hh (N * L) a).nonneg
     _ = _ := by simp [Nat.cast_smul_eq_nsmul ℂ]
-
 
 omit [NeZero d] in
 private theorem hamiltonian_chainTranslates_le_sum_aligned_windows
@@ -214,7 +206,6 @@ private theorem hamiltonian_chainTranslates_le_sum_aligned_windows
       placeAlong (X := fun _ ↦ Fin d) (chainWindow j hj) h else 0) (hf s hs).2.2)
   · intro q _ _
     exact (posSemidef_dite_placeAlong_chainWindow h hh (N * L) (q.1 * L + q.2)).nonneg
-
 
 /-- Covering every original term gives two-sided positive comparison,
 with upper multiplicity \(KL-R+1\), independent of volume.
@@ -269,7 +260,6 @@ theorem ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_
     (by simpa only [Complex.ofReal_one, one_smul] using hLower')
     (by simpa using hUpper')).symm
 
-
 /-- Eventual exact original MPS kernels persist for the decoded coarse
 Hamiltonian, with the blocked ground space transported by the canonical
 configuration isometry. Source: Nachtergaele, arXiv:cond-mat/9410110,
@@ -307,39 +297,6 @@ theorem ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_
   (Matrix.ker_toEuclideanLin_reindex_map (blockedConfigEquiv d N L) _).trans
     (ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_reindex
       h hh hKN hcover)
-
-/-- An eventual exact MPS kernel for the original interaction gives the
-exact blocked-tensor kernel for the coarse interaction at all sufficiently
-large blocked volumes. Source: Nachtergaele, arXiv:cond-mat/9410110,
-Theorem 1.2 and Section 3, equations (3.12)--(3.14). -/
-theorem eventually_ker_openInteractionHamiltonianES_blockedInteractionMatrix_eq_groundSpaceES
-    {D : ℕ} (A : MPSTensor d D) (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : h.PosSemidef) (hR : 0 < R) (hK : 0 < K)
-    (hcover : R + L ≤ K * L + 1)
-    (hker : ∀ᶠ n in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) n) =
-        groundSpaceES A n) :
-    ∀ᶠ N in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES
-        (Matrix.toEuclideanLin (blockedInteractionMatrix h L K)) N) =
-          groundSpaceES (blockTensor A L) N := by
-  have hker' : ∀ᶠ n in Filter.atTop,
-      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R n h).hamiltonian) =
-        groundSpaceES A n := by
-    filter_upwards [hker, Filter.eventually_ge_atTop R] with n hn hRn
-    rwa [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRn]
-  filter_upwards [eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace
-    A h hh hcover hker', Filter.eventually_ge_atTop K] with N hN hKN
-  apply Submodule.map_injective_of_injective
-    (blockedConfigLinearIsometryEquiv d N L).injective
-  rw [openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates _ hK hKN,
-    blockedConfigLinearIsometryEquiv, Matrix.ker_toEuclideanLin_reindex_map]
-  exact hN
-
-/-! ### The open-chain Hamiltonians
-
-The eventual kernel transport stated for the operators of the Hamiltonians of the open-chain
-translates `ManyBody.Interaction.chainTranslates`. -/
 
 /-- An eventual exact MPS kernel for the original interaction gives the
 exact blocked-tensor kernel for the coarse interaction at all sufficiently

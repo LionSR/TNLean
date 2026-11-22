@@ -51,7 +51,7 @@ variable {d b R : ℕ} [NeZero d] {D : Fin b → ℕ}
 
 private theorem exists_aligned_canonical_gap_of_periodic_family
     (A : ∀ j, MPSTensor d (D j)) (m : Fin b → ℕ)
-    (hPeriodic : ∀ j, IsPeriodic (m j) (A j)) (hR : 0 < R)
+    (hPeriodic : ∀ j, IsPeriodic (m j) (A j))
     (hKernel : ∀ N, R ≤ N →
       LinearMap.ker
           (Matrix.toEuclideanLin
@@ -63,34 +63,18 @@ private theorem exists_aligned_canonical_gap_of_periodic_family
           (parentChainInteraction (toTensorFromBlocks (fun _ => 1) A) R (n * L)).hamiltonian) z →
         z = 0 ∨ (γ : ℂ) ≤ z := by
   let T := toTensorFromBlocks (fun _ => 1) A
-  let h := canonicalParentInteractionMatrix T R
   have hEventual : ∀ᶠ N in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction T R N).hamiltonian) =
         groundSpaceES T N := by
-    filter_upwards [eventually_ge_atTop R] with N hN
-    rw [toEuclideanLin_canonicalParentInteractionMatrix,
-      openInteractionHamiltonianES_parentInteractionES _ hR]
-    exact hKernel N hN
-  obtain ⟨γ, hγ, hGap⟩ := exists_aligned_hamiltonian_chainTranslates_gap_of_periodic_family_of_dvd
-    (fun _ => 1) A (fun _ => one_ne_zero) m hPeriodic L hL hdiv h
-    (canonicalParentInteractionMatrix_posSemidef T R) hR hEventual
-  refine ⟨γ, hγ, ?_⟩
-  intro n
-  have hEq : Matrix.toEuclideanLin ((chainTranslates R (n * L) h).hamiltonian) =
-      Matrix.toEuclideanLin (parentChainInteraction T R (n * L)).hamiltonian := by
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates_all h hR
-        (n * L),
-      show h = canonicalParentInteractionMatrix T R from rfl,
-      toEuclideanLin_canonicalParentInteractionMatrix,
-      openInteractionHamiltonianES_parentInteractionES _ hR]
-  rw [← hEq]
-  exact (ManyBody.forall_hasEigenvalue_iff_norm
-    (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
-      (canonicalParentInteractionMatrix_posSemidef T R) _)).mpr (hGap n)
+    filter_upwards [eventually_ge_atTop R] with N hN using hKernel N hN
+  exact exists_aligned_hamiltonian_chainTranslates_gap_of_periodic_family_of_dvd
+    (fun _ => 1) A (fun _ => one_ne_zero) m hPeriodic L hL hdiv
+    (LinearMap.toMatrix' (parentInteraction T R))
+    (posSemidef_toMatrix'_parentInteraction T R) hEventual
 
 private theorem exists_canonical_gap_of_empty_periodic_family {D : Fin 0 → ℕ}
     (A : ∀ j : Fin 0, MPSTensor d (D j))
-    (m : Fin 0 → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j)) (hR : 0 < R)
+    (m : Fin 0 → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j))
     (hKernel : ∀ N, R ≤ N →
       LinearMap.ker
           (Matrix.toEuclideanLin
@@ -101,7 +85,7 @@ private theorem exists_canonical_gap_of_empty_periodic_family {D : Fin 0 → ℕ
           (parentChainInteraction (toTensorFromBlocks (fun _ => 1) A) R N).hamiltonian) z →
         z = 0 ∨ (δ : ℂ) ≤ z := by
   obtain ⟨γ, hγ, hGap⟩ := exists_aligned_canonical_gap_of_periodic_family
-    A m hPeriodic hR hKernel 1 zero_lt_one (fun j => Fin.elim0 j)
+    A m hPeriodic hKernel 1 zero_lt_one (fun j => Fin.elim0 j)
   let P (N : ℕ) : Prop := ∀ z : ℂ, Module.End.HasEigenvalue
     (Matrix.toEuclideanLin
         (parentChainInteraction (toTensorFromBlocks (fun _ => 1) A) R N).hamiltonian) z →
@@ -129,7 +113,7 @@ private theorem exists_canonical_gap_of_periodic_family
   classical
   by_cases hb : b = 0
   · subst b
-    exact exists_canonical_gap_of_empty_periodic_family A m hPeriodic hR hKernel
+    exact exists_canonical_gap_of_empty_periodic_family A m hPeriodic hKernel
   let j₀ : Fin b := ⟨0, Nat.pos_of_ne_zero hb⟩
   have hSumDim : 0 < ∑ j, D j :=
     (Nat.pos_of_ne_zero (hPeriodic j₀).bondDim_ne_zero).trans_le
@@ -144,7 +128,7 @@ private theorem exists_canonical_gap_of_periodic_family
       A m hPeriodic hDistinct L hL hdiv
   let _ : ∀ s, NeZero (sdim s) := fun s => ⟨Nat.ne_of_gt (hsdim s)⟩
   obtain ⟨γ, hγ, hAligned⟩ := exists_aligned_canonical_gap_of_periodic_family
-    A m hPeriodic hR hKernel L hL hdiv
+    A m hPeriodic hKernel L hL hdiv
   exact exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_gap_of_primitive_resolution
     (N₀ := R) (toTensorFromBlocks (fun _ => 1) A) B V ρ hP hρ hSep
     hV hSum hInt hCoInt Q hQ hGram hR hL hKernel hγ (fun n _ => hAligned n)
@@ -199,9 +183,9 @@ theorem exists_positive_parent_interaction_finite_quasiLocal_gap_of_periodic_fam
     (μ : Fin b → ℂ) (A : ∀ j, MPSTensor d (D j)) (hμ : ∀ j, μ j ≠ 0)
     (m : Fin b → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j)) :
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
-      h = canonicalParentInteractionMatrix (toTensorFromBlocks μ A) R ∧ h.PosSemidef ∧
+      h = LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks μ A) R) ∧ h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES (toTensorFromBlocks μ A) N) ∧
     ∃ δ : ℝ, 0 < δ ∧
       (∀ N, ∀ z : ℂ, Module.End.HasEigenvalue
@@ -228,17 +212,13 @@ theorem exists_positive_parent_interaction_finite_quasiLocal_gap_of_periodic_fam
     μ A hμ m hPeriodic
   obtain ⟨hKernelCanonical, δ, hδ, hGapCanonical⟩ := hAll R le_rfl
   obtain ⟨h, heq, hh, hKernel⟩ :=
-    exists_positive_canonical_parent_interaction_of_exact_open_kernels
-      (toTensorFromBlocks μ A) hR hKernelCanonical
+    exists_posSemidef_eq_toMatrix'_parentInteraction_of_ker_hamiltonian_parentChainInteraction
+      (toTensorFromBlocks μ A) hKernelCanonical
   have hGapMatrix (N : ℕ) : ∀ z : ℂ, Module.End.HasEigenvalue
     (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)) z →
       z = 0 ∨ (δ : ℂ) ≤ z := by
-    have hEq : Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian) = Matrix.toEuclideanLin
-        (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian := by
-      rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates_all h hR N,
-        heq, toEuclideanLin_canonicalParentInteractionMatrix,
-        openInteractionHamiltonianES_parentInteractionES _ hR]
-    simpa only [hEq] using hGapCanonical N
+    rw [heq]
+    exact hGapCanonical N
   have hEventual := (eventually_ge_atTop R).mono fun N hN => hKernel N hN
   obtain ⟨γ, hγ, hGap⟩ := exists_pos_quasiLocalCommutator_limit_gap_of_periodic_family
     μ A hμ m hPeriodic h hR hh hEventual

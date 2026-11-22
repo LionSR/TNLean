@@ -11,7 +11,7 @@ import TNLean.MPS.ParentHamiltonian.PeriodicQuasiLocalGroundStateGap
 
 A normalized periodic tensor supplies one positive original-chain interaction
 whose open kernels are its boundary spaces above the chosen range. The same
-interaction has a uniform norm gap on the actual finite-chain kernel
+interaction has a uniform gap above the kernel on the actual finite-chain kernel
 complement at every volume and a common infinite-volume commutator gap in
 all pure zero-energy states. The latter conclusion uses the literal interval
 commutators along any exhaustion with both margins diverging. The finite and
@@ -33,7 +33,7 @@ open ManyBody.Interaction (chainTranslates)
 namespace MPSTensor
 variable {d D m : ℕ}
 /-- Periodicity derives one positive original-chain interaction with exact
-kernels above its range, a uniform finite-chain norm gap at every volume, and
+kernels above its range, a uniform finite-chain gap above the kernel at every volume, and
 a common literal infinite-volume commutator gap in every pure zero-energy
 state. The same interaction is used for both gaps. Neither interaction,
 dimension, support, density nor convergence data are supplied.
@@ -46,12 +46,12 @@ theorem IsPeriodic.exists_positive_parent_interaction_finite_and_quasiLocal_gap
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES A N) ∧
     ∃ δ : ℝ, 0 < δ ∧
-      (∀ N, ∀ v ∈ (LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
-        δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖) ∧
+      (∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ) ∧
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
         φ ∈ parentGroundStateFace h → IsPureQuasiLocalState d φ →
@@ -73,7 +73,7 @@ theorem IsPeriodic.exists_positive_parent_interaction_finite_and_quasiLocal_gap
   obtain ⟨R, hR, h, hh, hKernel, δ, hδ, hFinite⟩ :=
     hA.exists_positive_parent_interaction_uniform_gap
   have hEventual : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES A N :=
     (eventually_ge_atTop R).mono fun N hN => hKernel N hN
   obtain ⟨γ, hγ, hQuasi⟩ :=

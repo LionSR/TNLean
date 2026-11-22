@@ -788,19 +788,21 @@ theorem isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSit
 canonical normalization persists in the open sum of inverse-conjugated
 positive interactions along the constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, for several normal blocks. -/
-theorem isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase
+theorem isometricDeformation_hamiltonian_chainTranslates_commute_of_isOnSiteSymmetricUpToPhase
     [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
-    (g : G) (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
-    Commute (openInteractionHamiltonianES
-      (isometricDeformationInteractionES A γ).toLinearMap N)
-      (Matrix.toEuclideanLin (onSiteTensorPow N (U g))) :=
-  openInteractionHamiltonianES_commute_onSiteTensorPow _ (U g) hN
-    (isometricDeformationInteractionES_commute_of_isOnSiteSymmetricUpToPhase
-      A hA hTP U hU hSymm g γ)
+    (g : G) (γ : unitInterval) (N : ℕ) :
+    Commute (ManyBody.Interaction.chainTranslates 2 N
+        ((Matrix.toEuclideanCLM (n := Cfg d 2) (𝕜 := ℂ)).symm
+          (isometricDeformationInteractionES A γ))).hamiltonian
+      (onSiteTensorPow N (U g)) :=
+  hamiltonian_chainTranslates_commute_onSiteTensorPow _ (U g) N
+    (commute_toEuclideanCLM_symm _ _
+      (isometricDeformationInteractionES_commute_of_isOnSiteSymmetricUpToPhase
+        A hA hTP U hU hSymm g γ))
 
 end ParentHamiltonians
 

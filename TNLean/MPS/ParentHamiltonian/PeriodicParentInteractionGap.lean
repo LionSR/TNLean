@@ -50,7 +50,7 @@ theorem IsPeriodic.exists_positive_parent_interaction_quasiLocalCommutator_gap
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES A N) ∧
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
@@ -70,9 +70,10 @@ theorem IsPeriodic.exists_positive_parent_interaction_quasiLocalCommutator_gap
             (γ : ℂ) * φ (star (quasiLocalIntervalObservable d a k X) *
               quasiLocalIntervalObservable d a k X) ≤ e := by
   let : NeZero d := ⟨hA.physDim_ne_zero⟩
-  obtain ⟨R, hR, h, hh, hKernel⟩ := hA.exists_positive_parent_interaction
+  obtain ⟨R, hR, h, hh, hKernel⟩ :=
+    hA.exists_posSemidef_ker_hamiltonian_chainTranslates_eq_groundSpaceES
   have hEventual : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES A N :=
     (eventually_ge_atTop R).mono fun N hN => hKernel N hN
   obtain ⟨γ, hγ, hGap⟩ :=

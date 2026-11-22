@@ -74,7 +74,7 @@ theorem quasiLocalExpectation_localCommutatorObservable_nonneg_of_eventual_kerne
   rw [quasiLocalExpectation_quasiLocalIntervalObservable]
   exact hnonneg
 variable [∀ i, NeZero (D i)]
-/-- One positive constant bounds every finite-chain norm gap and the
+/-- One positive constant bounds every finite-chain gap above the kernel and the
 local commutator expectation in every centered primitive sector.
 The original interaction has arbitrary positive range, and only its eventual
 global kernel is prescribed. Source: Nachtergaele, arXiv:cond-mat/9410110,
@@ -88,28 +88,19 @@ theorem exists_pos_multiblock_localCommutator_gap_of_eventual_kernel
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N) :
     ∃ γ : ℝ, 0 < γ ∧
-      (∀ N : ℕ, ∀ v ∈ (LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
-        γ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖) ∧
+      (∀ N : ℕ, ∀ z : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) z →
+          z = 0 ∨ (γ : ℂ) ≤ z) ∧
       ∀ α : Fin b, ∀ {k : ℕ}
       (X : Matrix (Cfg d k) (Cfg d k) ℂ),
       0 < k → observableInsertionExpectation (A α) (ρ α) X = 0 →
         γ * (observableInsertionExpectation (A α) (ρ α) (Xᴴ * X)).re ≤
           (observableInsertionExpectation (A α) (ρ α) (localCommutatorObservable h X)).re := by
-  obtain ⟨γ, hγ, hgap'⟩ := exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
-    μ A hμ ρ hP hρ hDistinct h hh
-    (hker.mono fun N hN => by
-      rwa [openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates_all h hR N]
-        at hN)
-  have hgap : ∀ N : ℕ, ∀ v ∈ (LinearMap.ker
-      (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
-      γ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖ := fun N ↦ by
-    rw [openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates_all h hR N]
-    exact (ManyBody.forall_hasEigenvalue_iff_norm
-      (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh N)).mp (hgap' N)
+  obtain ⟨γ, hγ, hgap⟩ := exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
+    μ A hμ ρ hP hρ hDistinct h hh hker
   refine ⟨γ, hγ, hgap, ?_⟩
   intro α k X _ hcenter
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
@@ -117,7 +108,7 @@ theorem exists_pos_multiblock_localCommutator_gap_of_eventual_kernel
     tendsto_atTop_mono (fun n => by dsimp [N]; omega) tendsto_id
   obtain ⟨ψ, hg, hu⟩ := (hP α).exists_eventually_unit_groundSpaceES (hρ α) N hN
   apply multiblock_localCommutator_gap_of_openInteraction_gap
-    A ρ hP hρ hDistinct α h (Matrix.isPositive_toEuclideanLin_iff.mpr hh) X hR hcenter ψ hγ.le
+    A ρ hP hρ hDistinct α h hh X hR hcenter ψ hγ.le
   · filter_upwards [hN.eventually hker] with n hn
     rwa [groundSpaceES_toTensorFromBlocks_eq_iSup μ A hμ] at hn
   · exact Eventually.of_forall fun n => hgap (N n)
@@ -137,14 +128,14 @@ theorem exists_pos_multiblock_quasiLocalCommutator_gap_of_eventual_kernel
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N) :
     let ω := fun α => quasiLocalExpectation (A α) (hP α).norm (hP α).fixedPoint_psd
       (hP α).fixedPoint_is_fixed (hP α).trace_ne_zero
     ∃ γ : ℝ, 0 < γ ∧
-      (∀ N : ℕ, ∀ v ∈ (LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
-        γ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖) ∧
+      (∀ N : ℕ, ∀ z : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) z →
+          z = 0 ∨ (γ : ℂ) ≤ z) ∧
       ∀ (α : Fin b) (a : ℤ) {k : ℕ}
       (X : Matrix (Cfg d k) (Cfg d k) ℂ),
       0 < k → ω α (quasiLocalIntervalObservable d a k X) = 0 →
@@ -163,8 +154,8 @@ theorem exists_pos_multiblock_quasiLocalCommutator_gap_of_eventual_kernel
     quasiLocalExpectation_quasiLocalIntervalObservable]
   exact hgap α X hk hcenter
 
-/-- One positive constant simultaneously bounds every finite-chain norm
-gap and the literal infinite-volume commutator energy in every constructed
+/-- One positive constant simultaneously bounds every finite-chain gap above the kernel
+and the literal infinite-volume commutator energy in every constructed
 primitive sector. Both endpoints may diverge along an arbitrary filter;
 the energy limit and its reality are derived from locality and exact eventual
 support. Source: Nachtergaele, arXiv:cond-mat/9410110,
@@ -178,14 +169,14 @@ theorem exists_pos_multiblock_quasiLocalCommutator_limit_gap_of_eventual_kernel
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N) :
     let ω := fun α => quasiLocalExpectation (A α) (hP α).norm (hP α).fixedPoint_psd
       (hP α).fixedPoint_is_fixed (hP α).trace_ne_zero
     ∃ γ : ℝ, 0 < γ ∧
-      (∀ N : ℕ, ∀ v ∈ (LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
-        γ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖) ∧
+      (∀ N : ℕ, ∀ z : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) z →
+          z = 0 ∨ (γ : ℂ) ≤ z) ∧
       ∀ (α : Fin b) (a : ℤ) {k : ℕ}
       (X : Matrix (Cfg d k) (Cfg d k) ℂ),
       0 < k → ω α (quasiLocalIntervalObservable d a k X) = 0 →
@@ -221,16 +212,10 @@ theorem exists_pos_multiblock_quasiLocalCommutator_limit_gap_of_eventual_kernel
         (hP α).fixedPoint_psd (hP α).fixedPoint_is_fixed (hP α).trace_ne_zero).2.2
           (quasiLocalIntervalObservable d a k X)
       have hsquareIm := (Complex.nonneg_iff.mp hsquare).2
-      have hker' : ∀ᶠ N : ℕ in atTop,
-          LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-            groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N := by
-        filter_upwards [hker, eventually_ge_atTop R] with N hN hRN
-        rwa [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
-          h hR hRN]
       have henergy :=
         quasiLocalExpectation_localCommutatorObservable_nonneg_of_eventual_kernel
         μ A hμ α (hP α).norm (hP α).fixedPoint_psd (hP α).fixedPoint_is_fixed
-        (hP α).trace_ne_zero hR h hh hker' a X
+        (hP α).trace_ne_zero hR h hh hker a X
       have henergyIm := (Complex.nonneg_iff.mp henergy).2
       simp only [Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im,
         ← hsquareIm, ← henergyIm, mul_zero, zero_mul, add_zero]

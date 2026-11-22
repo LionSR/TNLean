@@ -52,7 +52,7 @@ theorem exists_pos_quasiLocalCommutator_limit_gap_of_periodic_family
     (m : Fin b → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j))
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks μ A) N) :
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,

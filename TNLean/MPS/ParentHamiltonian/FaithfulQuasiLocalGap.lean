@@ -49,7 +49,7 @@ theorem exists_pos_quasiLocalCommutator_limit_gap_of_leftCanonical_of_posDef_fix
     (hFix : Kraus.map A ρ = ρ)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES A N) :
     let _ : NeZero d := ⟨hA.physDim_ne_zero⟩
     ∃ γ : ℝ, 0 < γ ∧
@@ -75,7 +75,7 @@ theorem exists_pos_quasiLocalCommutator_limit_gap_of_leftCanonical_of_posDef_fix
     exists_periodic_groundSpaceDecomposition_of_leftCanonical_of_posDef_fixedPoint
       A hA hρ hFix
   have hJointKer : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (fun _ => 1) B) N :=
     hker.mono fun N hN => hN.trans (hGS N)
   exact exists_pos_quasiLocalCommutator_limit_gap_of_periodic_family

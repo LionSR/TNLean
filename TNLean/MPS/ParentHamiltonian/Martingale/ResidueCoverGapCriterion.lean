@@ -7,7 +7,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.OverlappingIntervalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.IntervalGapTransport
 import TNLean.MPS.ParentHamiltonian.Martingale.IntervalKernelTransport
 import TNLean.MPS.ParentHamiltonian.BlockedFiniteGapTransport
-import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionMatrix
+import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 
 /-!
 # Extending an aligned open gap to all residues
@@ -188,23 +188,17 @@ theorem IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap_all_of_resi
         μ = 0 ∨ (δ : ℂ) ≤ μ := by
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   have hker : ∀ᶠ n in Filter.atTop, LinearMap.ker
-      (openInteractionHamiltonianES
-        (Matrix.toEuclideanLin (canonicalParentInteractionMatrix A R)) n) =
+      (Matrix.toEuclideanLin (parentChainInteraction A R n).hamiltonian) =
         groundSpaceES A n := by
-    filter_upwards [Filter.eventually_ge_atTop R] with n hn
-    rw [toEuclideanLin_canonicalParentInteractionMatrix,
-      openInteractionHamiltonianES_parentInteractionES A hR]
-    exact hKernel n hn
+    filter_upwards [Filter.eventually_ge_atTop R] with n hn using hKernel n hn
   obtain ⟨γ, hγ, hGap⟩ := hA.exists_aligned_hamiltonian_chainTranslates_gap_of_eventual_kernel
-    (canonicalParentInteractionMatrix A R) (canonicalParentInteractionMatrix_posSemidef A R)
-    hR hker
+    (LinearMap.toMatrix' (parentInteraction A R)) (posSemidef_toMatrix'_parentInteraction A R)
+    hker
   have hLeft : ∀ K ≥ K₀, ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
       (parentChainInteraction A R (K * m + M * m)).hamiltonian) μ → μ = 0 ∨ (γ : ℂ) ≤ μ := by
     intro K _
-    have h := (ManyBody.forall_hasEigenvalue_iff_norm
-      (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
-        (canonicalParentInteractionMatrix_posSemidef A R) _)).mpr (hGap (K + M))
-    rw [canonicalParentInteractionMatrix_eq_toMatrix'_parentInteraction, Nat.add_mul] at h
+    have h := hGap (K + M)
+    rw [Nat.add_mul] at h
     exact h
   obtain ⟨δ, hδ, hResidue⟩ :=
       exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_cover_defect

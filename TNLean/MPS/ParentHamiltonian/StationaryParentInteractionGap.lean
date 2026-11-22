@@ -56,7 +56,7 @@ theorem exists_positive_parent_interaction_quasiLocal_gap_of_leftCanonical_of_po
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N, R ≤ N → LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) = groundSpaceES B N) ∧
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES B N) ∧
       quasiLocalExpectation A hA hρ hFix htr ∈
         parentGroundStateFace h ∧
       ∃ γ : ℝ, 0 < γ ∧

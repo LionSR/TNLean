@@ -33,31 +33,26 @@ namespace MPSTensor
 variable {d D R : ℕ}
 
 /-- The supplied interaction's eventual exact boundary kernels suffice for
-an all-length norm gap. No local kernel condition is added. Source:
+an all-length gap above the kernel. No local kernel condition is added. Source:
 Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2, lines 933--947,
 in the supplied faithful generating-data setting. -/
 theorem exists_given_interaction_gap_of_leftCanonical_of_posDef_fixedPoint
     [NeZero D] (A : MPSTensor d D) (hA : IsLeftCanonical A)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef)
     (hFix : Kraus.map A ρ = ρ)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N in atTop, LinearMap.ker
-      (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) = groundSpaceES A N) :
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES A N) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N,
-      ∀ v ∈ (LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
-        δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖ := by
+      ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨R₀, hR₀, hCanonical⟩ :=
     exists_hamiltonian_parentChainInteraction_gap_of_leftCanonical_of_posDef_fixedPoint A hA hρ hFix
-  exact exists_openInteractionHamiltonianES_gap_of_canonical_gaps_of_eventual_kernel
-    A hR₀
-    (fun W hW ↦ ⟨(hCanonical W hW).1, (hCanonical W hW).2.imp fun δ hδ ↦ ⟨hδ.1, fun N ↦
-      (ManyBody.forall_hasEigenvalue_iff_norm
-        (posSemidef_hamiltonian_parentChainInteraction _ W N)).mp (hδ.2 N)⟩⟩)
-    (Matrix.toEuclideanLin h) hR
-    (Matrix.isPositive_toEuclideanLin_iff.mpr hh) hKernel
+  exact exists_toEuclideanLin_hamiltonian_chainTranslates_gap_of_canonical_gaps_of_eventual_kernel
+    A hR₀ hCanonical h hh hKernel
 
-/-- The same given positive interaction has a uniform finite norm gap and
+/-- The same given positive interaction has a uniform finite gap above the kernel and
 one literal infinite-volume commutator gap in every pure zero-energy state.
 Only its eventual exact open kernels are supplied. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2, lines 933--947, and Section 6,
@@ -68,12 +63,12 @@ theorem exists_given_interaction_finite_quasiLocal_gap_of_leftCanonical_of_posDe
     (hFix : Kraus.map A ρ = ρ)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N in atTop, LinearMap.ker
-      (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) = groundSpaceES A N) :
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES A N) :
     let _ : NeZero d := ⟨hA.physDim_ne_zero⟩
     ∃ δ : ℝ, 0 < δ ∧
-      (∀ N, ∀ v ∈ (LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
-        δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖) ∧
+      (∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ) ∧
       ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
         φ ∈ parentGroundStateFace h → IsPureQuasiLocalState d φ →
@@ -94,7 +89,7 @@ theorem exists_given_interaction_finite_quasiLocal_gap_of_leftCanonical_of_posDe
   let _ : NeZero d := ⟨hA.physDim_ne_zero⟩
   obtain ⟨δ, hδ, hFinite⟩ :=
     exists_given_interaction_gap_of_leftCanonical_of_posDef_fixedPoint
-      A hA hρ hFix h hR hh hKernel
+      A hA hρ hFix h hh hKernel
   obtain ⟨γ, hγ, hInfinite⟩ :=
     exists_pos_quasiLocalCommutator_limit_gap_of_leftCanonical_of_posDef_fixedPoint
       A hA hρ hFix h hR hh hKernel

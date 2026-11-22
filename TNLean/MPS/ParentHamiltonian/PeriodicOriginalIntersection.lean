@@ -11,7 +11,7 @@ import TNLean.MPS.ParentHamiltonian.PrimitiveBlockWordSpan
 import TNLean.MPS.ParentHamiltonian.GaugePhaseSeparationTransport
 import TNLean.MPS.ParentHamiltonian.BlockOpenGroundSpace
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
-import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionMatrix
+import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 /-!
 # Original-chain intersections of a periodic tensor
 
@@ -30,11 +30,6 @@ docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.10)--(3.11),
 Lemma existenceinteraction, and Section 6, lines 2649--2675;
 arXiv:1708.00029, Lemma bdcf, for the cyclic sector resolution.
-
-**Transitional (#10948).** `IsPeriodic.exists_positive_parent_interaction`, stated for the
-Euclidean-space operator, is kept until its user is converted; its statement for the Hamiltonians
-of the open-chain translates is
-`IsPeriodic.exists_posSemidef_ker_hamiltonian_chainTranslates_eq_groundSpaceES`.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -131,23 +126,6 @@ theorem IsPeriodic.exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceE
     (fun M => groundSpace A M) (by omega : 0 < R) hRN hstep' fun s hs τ ↦
       contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hv
         s hs τ
-
-/-- A periodic tensor admits a positive canonical parent interaction whose
-open kernels equal its boundary spaces at every volume at least its range.
-Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma existenceinteraction
-and Theorem 1.1, in the explicit periodic tensor setting. -/
-theorem IsPeriodic.exists_positive_parent_interaction
-    {A : MPSTensor d D} (hA : IsPeriodic m A) :
-    ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
-      h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
-          groundSpaceES A N := by
-  obtain ⟨R, hR, hKernel⟩ := hA.exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES
-  refine ⟨R, hR, canonicalParentInteractionMatrix A R,
-    canonicalParentInteractionMatrix_posSemidef A R, fun N hN => ?_⟩
-  rw [toEuclideanLin_canonicalParentInteractionMatrix,
-    openInteractionHamiltonianES_parentInteractionES A hR]
-  exact hKernel R N le_rfl hN
 
 /-- A periodic tensor admits a positive semidefinite local interaction, the matrix of the
 canonical parent interaction, whose open-chain translates have the boundary spaces as kernels

@@ -461,44 +461,6 @@ theorem parentChainInteraction_C1 (A : MPSTensor d D) {L l : ℕ} (hLl : L ≤ l
 
 Comparison with the Euclidean-space local terms, for the files not yet restated. -/
 
-/-- Each nonwrapping range-\(R\) term lies in at most \(W-R+1\) complete
-length-\(W\) windows. Summing positive terms therefore gives the corresponding
-operator bound. This is the counting argument for Nachtergaele,
-arXiv:cond-mat/9410110, condition C1. -/
-theorem sum_nonwrappingWindowTerms_le {R W N : ℕ} (hRW : R ≤ W)
-    {ι : Type*} [Fintype ι]
-    (f : NonwrappingStart R N → EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι)
-    (hf : ∀ i, 0 ≤ f i) :
-    (∑ n ∈ Finset.Icc W N,
-      ∑ i ∈ Finset.univ.filter (fun i : NonwrappingStart R N =>
-        n - W ≤ i.1.val ∧ i.1.val + R ≤ n), f i) ≤
-      ((W - R + 1 : ℕ) : ℂ) • ∑ i, f i := by
-  classical
-  let windows := fun i : NonwrappingStart R N =>
-    (Finset.Icc W N).filter fun n => n - W ≤ i.1.val ∧ i.1.val + R ≤ n
-  have hwindows_card (i : NonwrappingStart R N) :
-      (windows i).card ≤ W - R + 1 := by
-    calc
-      (windows i).card ≤ (Finset.Icc (i.1.val + R) (i.1.val + W)).card := by
-        apply Finset.card_le_card
-        intro n hn
-        simp only [windows, Finset.mem_filter, Finset.mem_Icc] at hn
-        simp only [Finset.mem_Icc]
-        omega
-      _ = W - R + 1 := by
-        rw [Nat.card_Icc]
-        omega
-  rw [Finset.sum_comm'
-    (s := Finset.Icc W N)
-    (t := fun n => Finset.univ.filter fun i : NonwrappingStart R N =>
-      n - W ≤ i.1.val ∧ i.1.val + R ≤ n)
-    (t' := Finset.univ) (s' := windows) (fun n i => by simp [windows]),
-    Finset.smul_sum]
-  apply Finset.sum_le_sum
-  intro i _
-  simp only [Finset.sum_const, Nat.cast_smul_eq_nsmul]
-  exact nsmul_le_nsmul_left (hf i) (hwindows_card i)
-
 /-- At a start whose window does not cross the right endpoint, the Euclidean-space local term
 is the operator of the term of the parent interaction on the open chain. -/
 theorem localTermES_eq_toEuclideanLin_parentChainInteraction_term (A : MPSTensor d D)

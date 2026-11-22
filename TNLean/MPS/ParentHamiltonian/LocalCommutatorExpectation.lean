@@ -63,14 +63,12 @@ theorem IsParentInteraction.localCommutatorObservable_nonneg
     0 ≤ observableInsertionExpectation (A α) ρ (localCommutatorObservable h X) := by
   let w := (R - 1 + k) + (R - 1)
   have hw : R ≤ w := by dsimp [w]; omega
-  have hH : ((chainTranslates R w h).hamiltonian).PosSemidef := by
-    apply Matrix.isPositive_toEuclideanLin_iff.mp
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hw]
-    exact openInteractionHamiltonianES_isPositive hh.isPositive w
+  have hH : ((chainTranslates R w h).hamiltonian).PosSemidef :=
+    ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
+      (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive) w
   have hker : groundSpaceES (A α) w ≤
       LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R w h).hamiltonian)) := by
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hw,
-      hh.ker_openInteractionHamiltonianES_eq_ker_hamiltonian_parentChainInteraction hR]
+    rw [hh.ker_hamiltonian_chainTranslates_eq_ker_parentChainInteraction]
     apply le_trans ?_ (groundSpaceES_le_ker_hamiltonian_parentChainInteraction
       (toTensorFromBlocks (d := d) (μ := μ) A) R w)
     exact groundSpaceES_block_le_toTensorFromBlocks μ A hμ α w

@@ -59,7 +59,8 @@ theorem IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap
   exact ⟨R, hR, hKernel, γ, hγ, hAll⟩
 
 /-- A normalized periodic tensor admits a positive local matrix interaction
-with exact original-chain open kernels and one norm gap at every volume.
+with exact original-chain open kernels and one gap above the kernel at every volume:
+every eigenvalue of the open-chain Hamiltonian is `0` or at least the gap.
 No interaction, faithful invariant matrix, or sector separation is supplied.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2,
 Lemma existenceinteraction, and Section 6, in the periodic tensor setting. -/
@@ -67,19 +68,13 @@ theorem IsPeriodic.exists_positive_parent_interaction_uniform_gap
     {A : MPSTensor d D} (hA : IsPeriodic m A) :
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
-      (∀ N, R ≤ N → LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) = groundSpaceES A N) ∧
-      ∃ δ : ℝ, 0 < δ ∧ ∀ N, ∀ v ∈ (LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
-        δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖ := by
+      (∀ N, R ≤ N → LinearMap.ker (Matrix.toEuclideanLin
+        (ManyBody.Interaction.chainTranslates R N h).hamiltonian) = groundSpaceES A N) ∧
+      ∃ δ : ℝ, 0 < δ ∧ ∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (ManyBody.Interaction.chainTranslates R N h).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨R, hR, hKernel, δ, hδ, hGap⟩ := hA.exists_pos_hamiltonian_parentChainInteraction_gap
-  refine ⟨R, hR, canonicalParentInteractionMatrix A R,
-    canonicalParentInteractionMatrix_posSemidef A R, ?_, δ, hδ, ?_⟩
-  · simpa only [toEuclideanLin_canonicalParentInteractionMatrix,
-      openInteractionHamiltonianES_parentInteractionES A hR] using hKernel
-  · simpa only [toEuclideanLin_canonicalParentInteractionMatrix,
-      openInteractionHamiltonianES_parentInteractionES A hR] using
-      fun N ↦ (ManyBody.forall_hasEigenvalue_iff_norm
-        (posSemidef_hamiltonian_parentChainInteraction A R N)).mp (hGap N)
+  exact ⟨R, hR, LinearMap.toMatrix' (parentInteraction A R),
+    posSemidef_toMatrix'_parentInteraction A R, hKernel, δ, hδ, hGap⟩
 
 end MPSTensor

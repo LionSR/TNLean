@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockOpenGroundSpace
 import TNLean.MPS.ParentHamiltonian.MultiblockQuasiLocalGroundStates
 
-import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionMatrix
+import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 
 /-!
 # An interaction realizing the ground-state face of primitive sectors

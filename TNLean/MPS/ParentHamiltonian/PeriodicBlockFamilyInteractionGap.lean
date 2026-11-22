@@ -12,7 +12,7 @@ import TNLean.MPS.ParentHamiltonian.AllLengthOpenInteractionMatrix
 
 Let a finite weighted family consist of normalized periodic tensors.
 Every positive interaction of positive range whose open kernels eventually
-equal the joint MPS boundary spaces has one norm gap at every original
+equal the joint MPS boundary spaces has one gap above the kernel at every original
 volume, above its actual finite-volume kernel. The canonical all-range gap
 and a finite-window comparison derive the gap of the supplied interaction.
 No local-kernel identity at its interaction range is assumed.
@@ -49,28 +49,18 @@ and Section 6, lines 2593--2675. -/
 theorem exists_hamiltonian_chainTranslates_gap_of_periodic_family_of_eventual_kernel
     (μ : Fin b → ℂ) (A : ∀ j, MPSTensor d (D j)) (hμ : ∀ j, μ j ≠ 0)
     (m : Fin b → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j))
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks μ A) N) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N,
-      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian) v‖ := by
+      ∀ z : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)) z →
+          z = 0 ∨ (δ : ℂ) ≤ z := by
   obtain ⟨R₀, hR₀, hCanonical⟩ := exists_hamiltonian_parentChainInteraction_gap_of_periodic_family
     μ A hμ m hPeriodic
-  obtain ⟨δ, hδ, hGap⟩ :=
-    exists_openInteractionHamiltonianES_gap_of_canonical_gaps_of_eventual_kernel
-      (toTensorFromBlocks μ A) hR₀
-      (fun W hW ↦ ⟨(hCanonical W hW).1, (hCanonical W hW).2.imp fun δ hδ ↦ ⟨hδ.1, fun N ↦
-        (ManyBody.forall_hasEigenvalue_iff_norm
-          (posSemidef_hamiltonian_parentChainInteraction _ W N)).mp (hδ.2 N)⟩⟩)
-      (Matrix.toEuclideanLin h) hR
-      (Matrix.isPositive_toEuclideanLin_iff.mpr hh) hKernel
-  refine ⟨δ, hδ, ?_⟩
-  intro N
-  simpa only [openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates_all h hR N]
-    using hGap N
-
+  exact exists_toEuclideanLin_hamiltonian_chainTranslates_gap_of_canonical_gaps_of_eventual_kernel
+    (toTensorFromBlocks μ A) hR₀ hCanonical h hh hKernel
 
 /-- One supplied positive interaction with eventual periodic-family open
 kernels has both an all-length finite gap and a common literal infinite-volume
@@ -82,11 +72,12 @@ theorem exists_finite_quasiLocal_gap_of_periodic_family_of_eventual_kernel
     (m : Fin b → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j))
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks μ A) N) :
     ∃ δ : ℝ, 0 < δ ∧
-      (∀ N, ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian) v‖) ∧
+      (∀ N, ∀ z : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)) z →
+          z = 0 ∨ (δ : ℂ) ≤ z) ∧
     ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
         φ ∈ parentGroundStateFace h → IsPureQuasiLocalState d φ →
@@ -106,7 +97,7 @@ theorem exists_finite_quasiLocal_gap_of_periodic_family_of_eventual_kernel
               quasiLocalIntervalObservable d a k X) ≤ e := by
   obtain ⟨δ, hδ, hFinite⟩ :=
     exists_hamiltonian_chainTranslates_gap_of_periodic_family_of_eventual_kernel
-      μ A hμ m hPeriodic h hR hh hKernel
+      μ A hμ m hPeriodic h hh hKernel
   obtain ⟨γ, hγ, hInfinite⟩ := exists_pos_quasiLocalCommutator_limit_gap_of_periodic_family
     μ A hμ m hPeriodic h hR hh hKernel
   exact ⟨δ, hδ, hFinite, γ, hγ, hInfinite⟩

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionMatrix
+import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 import TNLean.MPS.ParentHamiltonian.QuasiLocalParentGroundStateFace
 
 /-!
@@ -32,10 +32,10 @@ theorem quasiLocalExpectation_mem_parentGroundStateFace_canonicalParentInteracti
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
     (hFix : Kraus.transferMap A ρ = ρ) (htr : Matrix.trace ρ ≠ 0) (R : ℕ) :
     quasiLocalExpectation A hTP hρ hFix htr ∈
-      parentGroundStateFace (canonicalParentInteractionMatrix A R) := by
+      parentGroundStateFace (LinearMap.toMatrix' (parentInteraction A R)) := by
   apply quasiLocalExpectation_mem_parentGroundStateFace_of_groundSpaceES_le_ker
     A hTP hρ hFix htr
-  rw [toEuclideanLin_canonicalParentInteractionMatrix]
+  rw [toEuclideanLin_toMatrix'_parentInteraction]
   exact (isParentInteraction_parentInteractionES A R).ker_eq.ge
 
 end MPSTensor

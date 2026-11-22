@@ -8,7 +8,7 @@ import TNLean.MPS.ParentHamiltonian.BulkObservableCommutator
 import TNLean.MPS.ParentHamiltonian.Martingale.NormalOpenGapAtWielandtRange
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 
-import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionMatrix
+import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 
 /-!
 # A local commutator inequality in one primitive sector
@@ -145,7 +145,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_eventually_unit_ground
     exact norm_smul_inv_norm hv
 
 /-- The local commutator inequality for the canonical open interaction follows
-from its eventual ground-space identity and uniform norm gap. The commutator
+from its eventual ground-space identity and uniform gap above the kernel. The commutator
 energy limit is derived from locality and primitive transfer convergence.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_gap
@@ -160,12 +160,10 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_g
           (Matrix.toEuclideanLin
               (parentChainInteraction A R ((n + (R - 1) + k) + (R - 1 + n))).hamiltonian) =
         groundSpaceES A ((n + (R - 1) + k) + (R - 1 + n)))
-    (hGap : ∀ᶠ n in atTop, ∀ v ∈
-      (LinearMap.ker
-          (Matrix.toEuclideanLin
-              (parentChainInteraction A R ((n + (R - 1) + k) + (R - 1 + n))).hamiltonian))ᗮ,
-      γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-          (parentChainInteraction A R ((n + (R - 1) + k) + (R - 1 + n))).hamiltonian v‖)
+    (hGap : ∀ᶠ n in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin
+        (parentChainInteraction A R ((n + (R - 1) + k) + (R - 1 + n))).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hGround : ∀ᶠ n in atTop,
       ψ n ∈ groundSpaceES A ((n + (R - 1) + k) + (R - 1 + n)))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
@@ -174,7 +172,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_g
         ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
           (groundSpaceES A R)ᗮ.starProjection) X)).re := by
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
-  let h := canonicalParentInteractionMatrix A R
+  let h := LinearMap.toMatrix' (parentInteraction A R)
   have hEnergy :
       let B (n : ℕ) := ((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
         (bulkObservable X (n + (R - 1)) (R - 1 + n))).toLinearMap
@@ -192,7 +190,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_g
             (Matrix.toEuclideanLin
                 (parentChainInteraction A R (N n)).hamiltonian).toContinuousLinearMap :=
       congrArg LinearMap.toContinuousLinearMap
-        (toEuclideanCLM_hamiltonian_chainTranslates_parentInteraction A hR (by dsimp [N]; omega))
+        (toEuclideanCLM_hamiltonian_chainTranslates_parentInteraction A R (N n))
     dsimp only
     rw [map_mul, map_sub, map_mul, map_mul, ← Matrix.star_eq_conjTranspose,
       map_star, ContinuousLinearMap.star_eq_adjoint, hH,
@@ -206,7 +204,9 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_g
     (Eventually.of_forall fun n =>
         (Matrix.isPositive_toEuclideanLin_iff.mpr
             (posSemidef_hamiltonian_parentChainInteraction A R (N n))))
-    hGap hKernel hGround hUnit hEnergy
+    (hGap.mono fun n hn => (ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentChainInteraction A R (N n))).mp hn)
+    hKernel hGround hUnit hEnergy
 
 /-- At every range at least \(D^4+1\), a normalized primitive sector obeys
 one positive local commutator bound for all centered local observables.
@@ -245,9 +245,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_ga
       have h := ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
         hInj (by omega : 0 < R - 1) (by dsimp [N]; omega : R - 1 + 1 ≤ N n)
       rwa [hRange] at h
-  · exact Eventually.of_forall fun n => (ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentChainInteraction A R (N n))).mp
-        (hgap (N n) (by dsimp [N]; omega))
+  · exact Eventually.of_forall fun n => hgap (N n) (by dsimp [N]; omega)
   · exact Eventually.of_forall hg
   · exact hu
 

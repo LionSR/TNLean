@@ -8,7 +8,7 @@ import TNLean.MPS.ParentHamiltonian.JointGroundSpaceIntersection
 import TNLean.MPS.ParentHamiltonian.GroundSpaceIndependence
 import TNLean.MPS.ParentHamiltonian.PeriodicOriginalIntersection
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
-import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionMatrix
+import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionExistence
 
 /-!

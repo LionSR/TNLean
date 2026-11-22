@@ -26,11 +26,6 @@ docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 Source context: Nachtergaele, arXiv:cond-mat/9410110, Theorems 1.1--1.2,
 Section 3, lines 1394--1483, Lemma existenceinteraction, lines 2195--2230,
 and Section 6, lines 2649--2675.
-
-**Transitional (#10948).**
-`exists_positive_parent_interaction_quasiLocal_gap_of_leftCanonical_of_posDef_fixedPoint` rests on
-the quasi-local gap of a faithful stationary generator, which is converted with the finite-volume
-gaps it uses.
 -/
 
 open SpinChain Filter
@@ -77,7 +72,7 @@ theorem exists_positive_parent_interaction_quasiLocal_gap_of_leftCanonical_of_po
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N, R ≤ N → LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) = groundSpaceES A N) ∧
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES A N) ∧
       quasiLocalExpectation A hA hρ.posSemidef hFix (ne_of_gt hρ.trace_pos) ∈
         parentGroundStateFace h ∧
       ∃ γ : ℝ, 0 < γ ∧
@@ -101,13 +96,11 @@ theorem exists_positive_parent_interaction_quasiLocal_gap_of_leftCanonical_of_po
   change (∑ i, (A i)ᴴ * A i) = 1 at hA
   obtain ⟨R, hR, hCanonicalKernel⟩ :=
     exists_ker_hamiltonian_parentChainInteraction_of_leftCanonical_of_posDef_fixedPoint A hA hρ hFix
-  let h := canonicalParentInteractionMatrix A R
-  have hh : h.PosSemidef := canonicalParentInteractionMatrix_posSemidef A R
+  let h := LinearMap.toMatrix' (parentInteraction A R)
+  have hh : h.PosSemidef := posSemidef_toMatrix'_parentInteraction A R
   have hKernel : ∀ N, R ≤ N → LinearMap.ker
-      (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) = groundSpaceES A N := by
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES A N := by
     intro N hN
-    rw [toEuclideanLin_canonicalParentInteractionMatrix,
-      openInteractionHamiltonianES_parentInteractionES A hR]
     exact hCanonicalKernel R N le_rfl hN
   obtain ⟨γ, hγ, hGap⟩ :=
     exists_pos_quasiLocalCommutator_limit_gap_of_leftCanonical_of_posDef_fixedPoint

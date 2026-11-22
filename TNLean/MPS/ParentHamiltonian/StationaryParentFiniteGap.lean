@@ -39,7 +39,7 @@ variable {d D : ℕ}
 /-- A stationary MPS state with a nonzero positive virtual matrix has faithful
 compressed generators and a constructed positive parent interaction. The
 original state lies in the zero-energy face. The same interaction has a
-uniform finite-volume norm gap and a positive literal commutator gap in every
+uniform finite-volume gap above the kernel and a positive literal commutator gap in every
 pure state in that face. Dimensions, faithfulness, the interaction, and its
 finite kernel property are derived internally.
 Source context: Nachtergaele, arXiv:cond-mat/9410110, Theorems 1.1--1.2,
@@ -58,13 +58,13 @@ theorem exists_positive_parent_finite_and_quasiLocal_gap_of_leftCanonical_of_pos
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N, R ≤ N → LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) = groundSpaceES B N) ∧
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES B N) ∧
       quasiLocalExpectation A hA hρ hFix htr ∈
         parentGroundStateFace h ∧
       ∃ δ : ℝ, 0 < δ ∧
-      (∀ N, ∀ v ∈ (LinearMap.ker
-        (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
-        δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖) ∧
+      (∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ) ∧
       ∃ γ : ℝ, 0 < γ ∧
       ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
         φ ∈ parentGroundStateFace h → IsPureQuasiLocalState d φ →

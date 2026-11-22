@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.ParentHamiltonian.CanonicalParentInteractionMatrix
+import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
 
 /-!
@@ -17,37 +17,11 @@ use the constructed interaction.
 
 Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma `existenceinteraction`,
 lines 2195--2230, the orthogonal-complement construction of the interaction.
-
-**Transitional (#10948).** `exists_positive_canonical_parent_interaction_of_exact_open_kernels`,
-stated for the Euclidean-space operators, is kept until its users are converted; the statement
-for the Hamiltonians of the open-chain translates is
-`exists_posSemidef_eq_toMatrix'_parentInteraction_of_ker_hamiltonian_parentChainInteraction`.
 -/
 
 open scoped ComplexOrder
 namespace MPSTensor
 variable {d D R : ℕ}
-
-/-- Exact canonical open kernels give a positive interaction equal to the
-canonical local projection matrix, with the same kernels at every volume
-at least its positive range. Source: Nachtergaele, arXiv:cond-mat/9410110,
-Lemma `existenceinteraction`, lines 2195--2230. -/
-theorem exists_positive_canonical_parent_interaction_of_exact_open_kernels
-    (A : MPSTensor d D) (hR : 0 < R)
-    (hKernel : ∀ N, R ≤ N →
-      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
-          groundSpaceES A N) :
-    ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
-      h = canonicalParentInteractionMatrix A R ∧ h.PosSemidef ∧
-      ∀ N, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
-          groundSpaceES A N := by
-  refine ⟨canonicalParentInteractionMatrix A R, rfl,
-    canonicalParentInteractionMatrix_posSemidef A R, ?_⟩
-  intro N hN
-  rw [toEuclideanLin_canonicalParentInteractionMatrix,
-    openInteractionHamiltonianES_parentInteractionES A hR]
-  exact hKernel N hN
 
 open ManyBody.Interaction (chainTranslates) in
 /-- Exact kernels of the Hamiltonians of the parent interaction on the open chain give a positive
