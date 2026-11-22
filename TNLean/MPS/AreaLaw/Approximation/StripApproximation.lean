@@ -174,7 +174,7 @@ theorem surprisalTail_stripSnakePrefix_le {L w q R : ℕ} {J Δ : ℝ}
     ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   have hgap := hgap.posSemidef_sub_smul_one
       (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan
-  have ht := Entropy.surprisalTail_cut_le (X := fun _ : Site (stripDomain L w) ↦ Fin q)
+  have ht := Entropy.surprisalTail_cut_le (n := fun _ : Site (stripDomain L w) ↦ q)
     (h := h.term) (D := fun X ↦ X.1) (B := A)
     (fun X ↦ (h.mem X))
     hh hJ hhJ hΩ hΔ heig hgap (ManyBody.regionState_eq_partialTraceRight_cutVector A Ω).symm
