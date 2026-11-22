@@ -94,7 +94,7 @@ theorem openInteractionHamiltonianES_zeroSector_eq_openParentHamiltonianES
     (A₀ : MPSTensor (D₀ * D₀) D₀) (M : ℕ) :
     openInteractionHamiltonianES
         (mixedEndpointParentInteraction A₀ emptyEndpointTensor 0).toLinearMap M =
-      openParentHamiltonianES A₀ 2 M := by
+      Matrix.toEuclideanLin (parentChainInteraction A₀ 2 M).hamiltonian := by
   rw [mixedEndpointParentInteraction_zeroSector_eq_parentInteractionES]
   exact openInteractionHamiltonianES_parentInteractionES A₀ (by norm_num : 0 < 2) M
 
@@ -155,7 +155,8 @@ theorem mixedEndpointActiveHamiltonian_zeroSector_intertwines
     (A₀ : MPSTensor (D₀ * D₀) D₀) (N : ℕ) (v : mixedEndpointActiveSpace D₀ 0 N) :
     mixedEndpointActiveLinearIsometry D₀ 0 N
         (mixedEndpointActiveHamiltonian A₀ emptyEndpointTensor N v) =
-      openParentHamiltonianES A₀ 2 (N + 1 + 1) (mixedEndpointActiveLinearIsometry D₀ 0 N v) := by
+      Matrix.toEuclideanLin (parentChainInteraction A₀ 2 (N + 1 + 1)).hamiltonian
+          (mixedEndpointActiveLinearIsometry D₀ 0 N v) := by
   simpa only [openInteractionHamiltonianES_zeroSector_eq_openParentHamiltonianES] using
     mixedEndpointActiveHamiltonian_intertwines A₀ emptyEndpointTensor N v
 
@@ -165,7 +166,7 @@ theorem mixedEndpointActiveHamiltonian_zeroSector_eq_conjugate_openParent
     (A₀ : MPSTensor (D₀ * D₀) D₀) (N : ℕ) :
     mixedEndpointActiveHamiltonian A₀ emptyEndpointTensor N =
       (mixedEndpointZeroSectorActiveEquiv D₀ N).toLinearEquiv.toLinearMap.adjoint ∘ₗ
-        openParentHamiltonianES A₀ 2 (N + 1 + 1) ∘ₗ
+        Matrix.toEuclideanLin (parentChainInteraction A₀ 2 (N + 1 + 1)).hamiltonian ∘ₗ
           (mixedEndpointZeroSectorActiveEquiv D₀ N).toLinearEquiv.toLinearMap := by
   simp only [mixedEndpointActiveHamiltonian_eq_compression,
     openInteractionHamiltonianES_zeroSector_eq_openParentHamiltonianES,
@@ -194,15 +195,16 @@ theorem exists_mixedEndpointActiveHamiltonian_zeroSector_uniform_gap
     simp [hv]
   · let : NeZero D₀ := ⟨hD₀⟩
     obtain ⟨W, hW, δ, hδ, hGap⟩ :=
-      exists_openParentHamiltonianES_two_uniform_gap_of_isInjective A₀ hA₀
+      exists_hamiltonian_parentChainInteraction_two_uniform_gap_of_isInjective A₀ hA₀
     refine ⟨W, hW, δ, hδ, ?_⟩
     intro N hWN v hv
     let U : mixedEndpointActiveSpace D₀ 0 N →ₗᵢ[ℂ]
         EuclideanSpace ℂ (Cfg (D₀ * D₀) (N + 1 + 1)) :=
       mixedEndpointActiveLinearIsometry D₀ 0 N
-    have hker : LinearMap.ker (openParentHamiltonianES A₀ 2 (N + 1 + 1)) =
+    have hker : LinearMap.ker
+        (Matrix.toEuclideanLin (parentChainInteraction A₀ 2 (N + 1 + 1)).hamiltonian) =
         groundSpaceES A₀ (N + 1 + 1) :=
-      ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
+      ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
         (Kraus.isNBlkInjective_one_of_isInjective hA₀) (by norm_num) (by omega)
     have hUv : U v ∈ (groundSpaceES A₀ (N + 1 + 1))ᗮ := by
       rw [← hker]
@@ -215,7 +217,9 @@ theorem exists_mixedEndpointActiveHamiltonian_zeroSector_uniform_gap
         exact hw
       simpa only [U, LinearIsometry.inner_map_map] using
         (Submodule.mem_orthogonal _ _).mp hv u hu
-    have h := hGap (N + 1 + 1) hWN (U v) hUv
+    have h := (ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentChainInteraction A₀ 2 (N + 1 + 1))).mp
+        (hGap (N + 1 + 1) hWN) (U v) (by rw [hker]; exact hUv)
     rw [← mixedEndpointActiveHamiltonian_zeroSector_intertwines A₀ N v] at h
     simpa only [U, LinearIsometry.norm_map] using h
 

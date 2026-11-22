@@ -27,10 +27,11 @@ variable {d D : ℕ}
 
 /-- Before the first full interaction window fits, the fixed-ambient prefix
 Hamiltonian vanishes. -/
-theorem openPrefixParentHamiltonianES_eq_zero_of_lt
+theorem hamiltonian_prefix_parentChainInteraction_eq_zero_of_lt
     (A : MPSTensor d D) {L N n : ℕ} (hnL : n < L) :
-    openPrefixParentHamiltonianES A L N n = 0 := by
-  rw [openPrefixParentHamiltonianES, ManyBody.Interaction.hamiltonian_restrict,
+    Matrix.toEuclideanLin
+        ((parentChainInteraction A L N).restrict fun i ↦ i.val + L ≤ n).hamiltonian = 0 := by
+  rw [ManyBody.Interaction.hamiltonian_restrict,
     Finset.filter_false_of_mem fun i _ ↦ by omega, ManyBody.Interaction.partialHamiltonian_empty,
     map_zero]
 
@@ -39,7 +40,7 @@ projection is the identity. -/
 theorem openPrefixGroundProjectionES_eq_one_of_lt
     (A : MPSTensor d D) {L N n : ℕ} (hnL : n < L) :
     openPrefixGroundProjectionES A L N n = 1 := by
-  have hzero := openPrefixParentHamiltonianES_eq_zero_of_lt A (N := N) hnL
+  have hzero := hamiltonian_prefix_parentChainInteraction_eq_zero_of_lt A (N := N) hnL
   simp only [openPrefixGroundProjectionES, hzero, LinearMap.ker_zero,
     Submodule.starProjection_top']
   rfl
@@ -57,12 +58,14 @@ theorem fixedAmbient_martingaleDifference_eq_zero_of_lt
 
 /-- At the first full-window prefix, the prefix and local-interval Hamiltonians
 are the same single local interaction. -/
-theorem openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoint
+theorem hamiltonian_prefix_parentChainInteraction_eq_restrict_at_endpoint
     (A : MPSTensor d D) (L N : ℕ) :
-    openPrefixParentHamiltonianES A L N L =
-      openSuffixParentHamiltonianES A L L N L := by
-  rw [openPrefixParentHamiltonianES, openSuffixParentHamiltonianES,
-    ManyBody.Interaction.hamiltonian_restrict, ManyBody.Interaction.hamiltonian_restrict,
+    Matrix.toEuclideanLin
+        ((parentChainInteraction A L N).restrict fun i ↦ i.val + L ≤ L).hamiltonian =
+      Matrix.toEuclideanLin
+          ((parentChainInteraction A L N).restrict fun i ↦ L - L ≤ i.val ∧ i.val + L ≤
+              L).hamiltonian := by
+  rw [ManyBody.Interaction.hamiltonian_restrict, ManyBody.Interaction.hamiltonian_restrict,
     Finset.filter_congr fun i _ ↦ (by simp : i.val + L ≤ L ↔ L - L ≤ i.val ∧ i.val + L ≤ L)]
 
 /-- At the endpoint \(n=l\), the local ground projection is the next prefix
@@ -72,10 +75,16 @@ theorem openIntervalGroundProjectionES_at_endpoint
     openIntervalGroundProjectionES A (l + 1) l N l =
       openPrefixGroundProjectionES A (l + 1) N (l + 1) := by
   have hHamiltonian :=
-    openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoint A (l + 1) N
+    hamiltonian_prefix_parentChainInteraction_eq_restrict_at_endpoint A (l + 1) N
   have hker :
-      LinearMap.ker (openSuffixParentHamiltonianES A (l + 1) (l + 1) N (l + 1)) =
-        LinearMap.ker (openPrefixParentHamiltonianES A (l + 1) N (l + 1)) :=
+      LinearMap.ker
+          (Matrix.toEuclideanLin
+              ((parentChainInteraction A (l + 1) N).restrict fun i ↦ l + 1 - (l + 1) ≤ i.val ∧
+                  i.val + (l + 1) ≤ l + 1).hamiltonian) =
+        LinearMap.ker
+            (Matrix.toEuclideanLin
+                ((parentChainInteraction A (l + 1) N).restrict fun i ↦ i.val + (l + 1) ≤ l +
+                    1).hamiltonian) :=
     congrArg LinearMap.ker hHamiltonian.symm
   simp only [openIntervalGroundProjectionES, openPrefixGroundProjectionES]
   exact congrArg (fun U : Submodule ℂ (EuclideanSpace ℂ (Cfg d N)) =>

@@ -67,8 +67,8 @@ theorem openInteractionHamiltonianES_isPositive {R : ℕ}
 theorem openInteractionHamiltonianES_parentInteractionES {R : ℕ}
     (A : MPSTensor d D) (hR : 0 < R) (N : ℕ) :
     openInteractionHamiltonianES (parentInteractionES A R) N =
-      openParentHamiltonianES A R N := by
+      Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian := by
   simp only [openInteractionHamiltonianES, periodicLocalInteractionES_parentInteractionES A hR]
-  exact (openParentHamiltonianES_eq_sum_localTermES A hR N).symm
+  exact (hamiltonian_parentChainInteraction_eq_sum_localTermES A hR N).symm
 
 end MPSTensor

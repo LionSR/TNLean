@@ -32,7 +32,8 @@ C3-prime with increment and overlap both equal to \(p\). -/
 theorem grouped_martingaleDifference_norm_le_of_projector_defect
     (A : MPSTensor d D) {p M : ℕ} (hp : 0 < p)
     (hKernel : ∀ n, 2 * p ≤ n →
-      LinearMap.ker (openParentHamiltonianES A (2 * p) n) = groundSpaceES A n)
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (2 * p) n).hamiltonian) =
+          groundSpaceES A n)
     {ε : ℝ} (hε : 0 ≤ ε)
     (hDefect : ∀ K : ℕ,
       ‖(groundSpaceES A (K + p + p)).starProjection -
@@ -49,18 +50,20 @@ theorem grouped_martingaleDifference_norm_le_of_projector_defect
       congrArg (p * ·) (Nat.sub_add_cancel (show 1 ≤ n by omega))
   have hactive := (norm_suffixProjection_comp_prefixDifference_eq_projector_defect
     A (K := p * (n - 1)) (L := p) (Q := p) (by omega)
-    (by simpa only [← two_mul] using
-      hKernel (p * (n - 1) + p) (by nlinarith [Nat.mul_le_mul_left p hn2]))
-    (by simpa only [← two_mul] using
-      hKernel (p * (n - 1) + p + p) (by nlinarith [Nat.mul_le_mul_left p hn2]))).trans_le
+    (by rw [← two_mul]
+        exact hKernel (p * (n - 1) + p) (by nlinarith [Nat.mul_le_mul_left p hn2]))
+    (by rw [← two_mul]
+        exact hKernel (p * (n - 1) + p + p) (by nlinarith [Nat.mul_le_mul_left p hn2]))).trans_le
         (hDefect (p * (n - 1)))
-  simp only [hK, ← two_mul] at hactive
+  rw [← two_mul] at hactive
   let F (N a b : ℕ) : ℝ :=
     ‖LinearMap.toContinuousLinearMap
       ((LinearMap.ker
-        (openSuffixParentHamiltonianES A (2 * p) (2 * p) N b)).starProjection.toLinearMap.comp
+        (Matrix.toEuclideanLin
+            ((parentChainInteraction A (2 * p) N).restrict fun i ↦ b - 2 * p ≤ i.val ∧ i.val + 2 *
+                p ≤ b).hamiltonian)).starProjection.toLinearMap.comp
         (openPrefixGroundProjectionES A (2 * p) N a - openPrefixGroundProjectionES A (2 * p) N b))‖
-  change F (p * (n - 1) + p + p) (p * n) (p * n + p) ≤ ε at hactive
+  change F (p * (n - 1) + p + p) (p * (n - 1) + p) (p * (n - 1) + p + p) ≤ ε at hactive
   rw [hK] at hactive
   have hspectator :
       F (p * n + p + (p * M - (p * n + p))) (p * n) (p * n + p) ≤

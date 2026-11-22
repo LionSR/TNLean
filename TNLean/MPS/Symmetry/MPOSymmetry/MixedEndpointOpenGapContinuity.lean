@@ -79,7 +79,8 @@ theorem mixedEndpoint_openInteractionHamiltonianES_eq_of_mem_Ioo
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     {γ : ℝ} (hγ : γ ∈ Set.Ioo (0 : ℝ) 1) (N : ℕ) :
     openInteractionHamiltonianES (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N =
-      openParentHamiltonianES (mixedEndpointInterpolation A₀ A₁ γ) 2 N := by
+      Matrix.toEuclideanLin
+          (parentChainInteraction (mixedEndpointInterpolation A₀ A₁ γ) 2 N).hamiltonian := by
   rw [mixedEndpointParentInteraction_eq_parentInteractionES A₀ A₁ hγ]
   exact openInteractionHamiltonianES_parentInteractionES _ (by norm_num) N
 

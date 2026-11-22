@@ -37,19 +37,24 @@ variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
 two-site open-chain gap uniform in its parameter and every length at least
 two. Source: arXiv:1010.3732, lines 589--594 and Appendix A; Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
-theorem exists_uniform_openParentHamiltonianES_gap_positivePhysicalDeformation
+theorem exists_uniform_hamiltonian_parentChainInteraction_gap_positivePhysicalDeformation
     (A : (j : Fin r) → MPSTensor d (dim j)) (hSpan : WordTupleSpanTop A 1)
     (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0)
     (Q : Matrix (Fin d) (Fin d) ℂ) (hQ : Q.PosDef) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
-      ∀ v ∈ (LinearMap.ker (openParentHamiltonianES
-        (toTensorFromBlocks μ
-          (fun j => rotatePhysical (positivePhysicalDeformation Q γ) (A j))) 2 N))ᗮ,
-        δ * ‖v‖ ≤ ‖openParentHamiltonianES
-          (toTensorFromBlocks μ
-            (fun j => rotatePhysical (positivePhysicalDeformation Q γ) (A j))) 2 N v‖ := by
+      ∀ v ∈ (LinearMap.ker
+          (Matrix.toEuclideanLin
+              (parentChainInteraction
+                  (toTensorFromBlocks μ
+                      (fun j => rotatePhysical (positivePhysicalDeformation Q γ) (A j))) 2
+                          N).hamiltonian))ᗮ,
+        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
+            (parentChainInteraction
+                (toTensorFromBlocks μ
+                    (fun j => rotatePhysical (positivePhysicalDeformation Q γ) (A j))) 2
+                        N).hamiltonian v‖ := by
   obtain ⟨δ, hδ, hgap⟩ :=
-    exists_uniform_openParentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths
+    exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_compact_all_lengths
       (fun _ : unitInterval => μ)
       (fun γ j => rotatePhysical (positivePhysicalDeformation Q γ) (A j))
       (fun _ => hμ)
@@ -59,7 +64,8 @@ theorem exists_uniform_openParentHamiltonianES_gap_positivePhysicalDeformation
       (fun γ => (wordTupleSpanTop_rotatePhysical_iff _
         (positivePhysicalDeformation_isUnit Q hQ γ) A 1).2 hSpan)
       (R := 2) le_rfl isCompact_univ
-  exact ⟨δ, hδ, fun γ => hgap γ (Set.mem_univ γ)⟩
+  exact ⟨δ, hδ, fun γ N hN => (ManyBody.forall_hasEigenvalue_iff_norm
+    (posSemidef_hamiltonian_parentChainInteraction _ 2 N)).mp (hgap γ (Set.mem_univ γ) N hN)⟩
 
 /-- The source's inverse-conjugated two-site interaction along a supplied
 positive affine path has one gap uniform in the parameter and every open
@@ -103,11 +109,16 @@ arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
 theorem exists_uniform_isometricDeformation_open_parent_gap
     (A : (j : Fin r) → MPSTensor d (dim j)) (hSpan : WordTupleSpanTop A 1) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
-      ∀ v ∈ (LinearMap.ker (openParentHamiltonianES
-        (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N))ᗮ,
-        δ * ‖v‖ ≤ ‖openParentHamiltonianES
-          (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N v‖ :=
-  exists_uniform_openParentHamiltonianES_gap_positivePhysicalDeformation
+      ∀ v ∈ (LinearMap.ker
+          (Matrix.toEuclideanLin
+              (parentChainInteraction
+                  (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2
+                      N).hamiltonian))ᗮ,
+        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
+            (parentChainInteraction
+                (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2
+                    N).hamiltonian v‖ :=
+  exists_uniform_hamiltonian_parentChainInteraction_gap_positivePhysicalDeformation
     (leftPolarBlocks A) ((wordTupleSpanTop_leftPolarBlocks_iff A 1).2 hSpan)
     (fun _ => 1) (by simp) (leftPolarPhysicalFactor A) (leftPolarPhysicalFactor_posDef A)
 
@@ -138,12 +149,17 @@ theorem exists_blocked_isometricDeformation_open_parent_gap_of_isNormalTensor
     (hNormal : ∀ j, IsNormalTensor (A j)) (hDistinct : BlocksNotGaugePhaseEquiv A) :
     ∃ L : ℕ, 0 < L ∧ L + 1 ≤ 3 * (max (∑ j, dim j) 1) ^ 5 ∧
       ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
-        ∀ v ∈ (LinearMap.ker (openParentHamiltonianES
-          (toTensorFromBlocks (fun _ => 1)
-            (isometricDeformationBlocks (fun j => blockTensor (A j) L) γ)) 2 N))ᗮ,
-          δ * ‖v‖ ≤ ‖openParentHamiltonianES
-            (toTensorFromBlocks (fun _ => 1)
-              (isometricDeformationBlocks (fun j => blockTensor (A j) L) γ)) 2 N v‖ := by
+        ∀ v ∈ (LinearMap.ker
+            (Matrix.toEuclideanLin
+                (parentChainInteraction
+                    (toTensorFromBlocks (fun _ => 1)
+                        (isometricDeformationBlocks (fun j => blockTensor (A j) L) γ)) 2
+                            N).hamiltonian))ᗮ,
+          δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
+              (parentChainInteraction
+                  (toTensorFromBlocks (fun _ => 1)
+                      (isometricDeformationBlocks (fun j => blockTensor (A j) L) γ)) 2
+                          N).hamiltonian v‖ := by
   let : ∀ j, NeZero (dim j) := fun j => ⟨(hNormal j).bondDim_ne_zero⟩
   obtain ⟨L, hL, hBound, hSpan⟩ :=
     exists_positive_blockTensor_wordTupleSpanTop_one_of_isNormalTensor A hNormal hDistinct

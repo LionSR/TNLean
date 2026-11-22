@@ -2211,7 +2211,7 @@
 
 \begin{lemma}[Canonical original-chain interaction for a periodic tensor]
     \label{thm:periodic_original_parent_interaction}
-    \lean{MPSTensor.IsPeriodic.exists_ker_openParentHamiltonianES_eq_groundSpaceES,
+    \lean{MPSTensor.IsPeriodic.exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES,
         MPSTensor.IsPeriodic.exists_positive_parent_interaction}
     \leanok
     For the same tensor $A$, there is $R_0>0$ such that, for every $R\ge R_0$
@@ -2549,15 +2549,14 @@
 
 \begin{lemma}[Covering interval energies and kernels]
     \label{thm:open_cover_energy_kernel}
-    \lean{MPSTensor.ker_openParentHamiltonianES_le_ker_openPrefix,
-        MPSTensor.ker_openPrefix_inf_ker_openSuffix_eq_ker_openParentHamiltonianES,
-        MPSTensor.openPrefix_add_openSuffix_le_two_openParentHamiltonianES,
+    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_le_ker_hamiltonian_prefix,
+        MPSTensor.ker_hamiltonian_prefix_inf_ker_hamiltonian_restrict_parentChainInteraction,
         MPSTensor.leftBoundary_inf_reassocTail_range_eq_groundSpaceES_of_open_kernel}
     \leanok
     Let $H_N$ be the canonical range-$R$ open Hamiltonian, and let $H_L,H_T$
     be its restrictions to a prefix of length $n$ and a terminal interval of
-    length $W$, respectively. Then $H_L+H_T\le2H_N$.
-    If $n\le N$ and $N+R\le n+W+1$, every interaction window lies in one
+    length $W$, respectively. Then $\ker H_N\subseteq\ker H_L$.
+    If $N+R\le n+W+1$, every interaction window lies in one
     of these intervals, and
     $\ker H_L\cap\ker H_T=\ker H_N$.
     If the finite kernels equal the MPS boundary spaces and the overlap has
@@ -2566,17 +2565,17 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:fixed-volume-prefix-ground-projections-nested,thm:ph_prefix_kernel_free_right_sites,thm:ph_terminal_interval_kernel,thm:open_parent_overlapping_interval_gap}
-    Each interval contains a subset of the positive local terms of $H_N$.
-    This proves the energy upper bound. A vector annihilated by an interval
-    sum is annihilated by every local projection in that sum. The covering
+    Each interval contains a subset of the positive local terms of $H_N$,
+    and a vector annihilated by a sum of positive terms is annihilated by
+    every term of that sum. This proves the kernel inclusion. The covering
     condition therefore gives the kernel identity. The boundary-space identity
     follows by the physical coordinate isometries adjoining free sites.
 \end{proof}
 
 \begin{lemma}[Finite residue gaps and quotient reconstruction]
     \label{thm:finite_open_residue_gaps}
-    \lean{MPSTensor.exists_pos_openParentHamiltonianES_gap_over_residues,
-        MPSTensor.openParentHamiltonianES_gap_all_large_of_residue_gaps}
+    \lean{MPSTensor.exists_pos_hamiltonian_parentChainInteraction_gap_over_residues,
+        MPSTensor.hamiltonian_parentChainInteraction_gap_all_large_of_residue_gaps}
     \leanok
     For fixed $R,W$ and $m>0$, the finitely many canonical open Hamiltonians
     at lengths $W+r$, $0\le r<m$, have a common positive gap on their
@@ -2592,8 +2591,8 @@
 
 \begin{lemma}[Fixed-overlap residue-cover gap criterion]
     \label{thm:open_residue_cover_gap_criterion}
-    \lean{MPSTensor.exists_pos_openParentHamiltonianES_gap_of_aligned_cover_defect,
-        MPSTensor.IsPeriodic.exists_pos_openParentHamiltonianES_gap_all_of_residue_cover_defect}
+    \lean{MPSTensor.exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_cover_defect,
+        MPSTensor.IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap_all_of_residue_cover_defect}
     \leanok
     Suppose $m>0$, $R>0$, $Mm\ge R$, and the canonical open kernels equal
     $G_N$ for every $N\ge R$. Cover $N=Km+Mm+r$ by the aligned prefix
@@ -2965,7 +2964,7 @@
 
 \begin{lemma}[Open gap from a residual cover limit]
     \label{thm:open_gap_residue_cover_limit}
-    \lean{MPSTensor.IsPeriodic.exists_pos_openParentHamiltonianES_gap_of_residue_cover_limit}
+    \lean{MPSTensor.IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap_of_residue_cover_limit}
     \leanok
     Let $A$ be a periodic tensor of period $m>0$ on a nonzero physical space.
     For $K,M,r\geq0$, let $P$ denote the ground-space projection on
@@ -3584,7 +3583,7 @@
 
 \begin{lemma}[Uniform original-chain open-parent gap for a periodic tensor]
     \label{thm:periodic_open_parent_gap_all_volumes}
-    \lean{MPSTensor.IsPeriodic.exists_pos_openParentHamiltonianES_gap}
+    \lean{MPSTensor.IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap}
     \leanok
 
     Let $A$ be a normalized periodic tensor. There exist $R\ge1$ and
@@ -4167,8 +4166,8 @@
 
 \begin{lemma}[Canonical open kernels from eventual intersections]
     \label{thm:canonical_open_kernel_from_eventual_intersection}
-    \lean{MPSTensor.ker_openParentHamiltonianES_eq_groundSpaceES_of_restriction_intersection,
-        MPSTensor.exists_ker_openParentHamiltonianES_eq_groundSpaceES_of_eventually_restriction_intersection}
+    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_restriction_intersection,
+        MPSTensor.exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_eventually_intersection}
     \leanok
     Let $d\ge1$ and let $A$ be any tensor. Suppose that, for every $q\ge R$,
     \begin{align}
@@ -4477,7 +4476,7 @@
 
 \begin{lemma}[Periodic-family interaction criterion]
     \label{thm:periodic_family_interaction_independence_criterion}
-    \lean{MPSTensor.exists_ker_openParentHamiltonianES_of_periodic_family_independence,
+    \lean{MPSTensor.exists_ker_hamiltonian_parentChainInteraction_of_periodic_family_independence,
         MPSTensor.exists_positive_parent_interaction_of_periodic_family_independence}
     \leanok
     Let $d\ge1$, let $(A_j)$ be a finite family of normalized periodic
@@ -4532,7 +4531,7 @@
 
 \begin{lemma}[All-length gap from aligned estimates and residual covers]
     \label{thm:aligned_residue_cover_gap_limit}
-    \lean{MPSTensor.exists_pos_openParentHamiltonianES_gap_of_aligned_gap_of_residue_cover_limit}
+    \lean{MPSTensor.exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_gap_of_residue_cover_limit}
     \leanok
     Let $A$ be any tensor and $R,L>0$. Assume that its canonical open
     Hamiltonian has kernel $\mathcal G_A(N)$ for every $N\geq R$ and one
@@ -4563,7 +4562,7 @@
 \begin{lemma}[Canonical interactions depend only on local support]
     \label{lem:canonical_interaction_support_transport}
     \lean{MPSTensor.canonicalParentInteractionMatrix_eq_of_groundSpaceES_eq,
-        MPSTensor.openParentHamiltonianES_eq_of_groundSpaceES_eq}
+        MPSTensor.hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq}
     \leanok
     If two tensors have the same $R$-site boundary space, their canonical
     interaction matrices agree. For $R>0$, their canonical open Hamiltonians
@@ -4689,7 +4688,7 @@
 
 \begin{lemma}[Canonical interaction for a periodic family]
     \label{thm:periodic_family_canonical_interaction}
-    \lean{MPSTensor.exists_ker_openParentHamiltonianES_of_periodic_family,
+    \lean{MPSTensor.exists_ker_hamiltonian_parentChainInteraction_of_periodic_family,
         MPSTensor.exists_positive_parent_interaction_of_periodic_family}
     \leanok
     Let $d\ge1$, let $(A_j)$ be a finite family of normalized periodic
@@ -4744,7 +4743,7 @@
 
 \begin{lemma}[Canonical interaction for faithful stationary generators]
     \label{thm:faithful_generators_canonical_interaction}
-    \lean{MPSTensor.exists_ker_openParentHamiltonianES_of_leftCanonical_of_posDef_fixedPoint,
+    \lean{MPSTensor.exists_ker_hamiltonian_parentChainInteraction_of_leftCanonical_of_posDef_fixedPoint,
         MPSTensor.exists_posSemidef_ker_hamiltonian_chainTranslates_of_leftCanonical_of_posDef_fixedPoint}
     \leanok
     Let $A$ have positive bond dimension, satisfy $\sum_iA_i^*A_i=I$,
@@ -4921,7 +4920,7 @@
 
 \begin{lemma}[All-length gap criterion from a primitive resolution]
     \label{thm:all_length_gap_primitive_resolution_criterion}
-    \lean{MPSTensor.exists_pos_openParentHamiltonianES_gap_of_aligned_gap_of_primitive_resolution}
+    \lean{MPSTensor.exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_gap_of_primitive_resolution}
     \leanok
     Assume the preceding hypotheses and $R,L>0$. Suppose that the
     canonical range-$R$ open Hamiltonian has kernel $\mathcal G_A(N)$
@@ -5228,7 +5227,7 @@
 
 \begin{lemma}[Uniform open gaps for faithful stationary generators]
     \label{thm:faithful_generators_uniform_open_gap}
-    \lean{MPSTensor.exists_openParentHamiltonianES_gap_of_leftCanonical_of_posDef_fixedPoint}
+    \lean{MPSTensor.exists_hamiltonian_parentChainInteraction_gap_of_leftCanonical_of_posDef_fixedPoint}
     \leanok
     Let $A$ have positive bond dimension and satisfy
     $\sum_i A_i^*A_i=I$. Suppose that $\rho>0$ and
@@ -5288,7 +5287,7 @@
 
 \begin{lemma}[Uniform original-length open gaps for periodic families]
     \label{thm:periodic_family_uniform_original_open_gap}
-    \lean{MPSTensor.exists_openParentHamiltonianES_gap_of_periodic_family}
+    \lean{MPSTensor.exists_hamiltonian_parentChainInteraction_gap_of_periodic_family}
     \leanok
     Let $d\ge1$, let $(A_j)$ be a finite family of normalized periodic
     tensors with arbitrary periods, and let $\mu_j\ne0$.

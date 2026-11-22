@@ -47,10 +47,11 @@ canonical gaps are explicit inputs. -/
 theorem exists_openInteractionHamiltonianES_gap_of_canonical_gaps_of_eventual_kernel
     (A : MPSTensor d D) {R₀ : ℕ} (_hR₀ : 0 < R₀)
     (hCanonical : ∀ W, R₀ ≤ W →
-      (∀ N, W ≤ N → LinearMap.ker (openParentHamiltonianES A W N) = groundSpaceES A N) ∧
+      (∀ N, W ≤ N → LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian)
+          = groundSpaceES A N) ∧
       ∃ δ : ℝ, 0 < δ ∧ ∀ N,
-        ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A W N))ᗮ,
-          δ * ‖v‖ ≤ ‖openParentHamiltonianES A W N v‖)
+        ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian))ᗮ,
+          δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian v‖)
     {R : ℕ} (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
     (hR : 0 < R) (hh : h.IsPositive)
     (hKernel : ∀ᶠ N : ℕ in atTop,

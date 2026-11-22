@@ -34,7 +34,7 @@ noncomputable def groupedNestedGroundProjectionsES (A : MPSTensor d D)
   isSymmetricProjection n := Submodule.isSymmetricProjection_starProjection _
   antitone_range := fun _ _ h ↦ by
     simpa only [openPrefixGroundProjectionES, Submodule.range_starProjection] using
-      ker_openPrefixParentHamiltonianES_antitone A (2 * p) N (Nat.mul_le_mul_left p h)
+      ker_hamiltonian_prefix_parentChainInteraction_antitone A (2 * p) N (Nat.mul_le_mul_left p h)
 
 /-- The ground projection of the length-\(2p\) interval ending at
 \(p(n+1)\), as in Nachtergaele's condition C3-prime. -/
@@ -42,7 +42,9 @@ noncomputable def groupedIntervalGroundProjectionES (A : MPSTensor d D)
     (p N n : ℕ) :
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
   (LinearMap.ker
-    (openSuffixParentHamiltonianES A (2 * p) (2 * p) N (p * (n + 1)))).starProjection.toLinearMap
+    (Matrix.toEuclideanLin
+        ((parentChainInteraction A (2 * p) N).restrict fun i ↦ p * (n + 1) - 2 * p ≤ i.val ∧ i.val +
+            2 * p ≤ p * (n + 1)).hamiltonian)).starProjection.toLinearMap
 
 /-- Outside the two active grouped indices, the grouped martingale difference
 commutes with the local ground projection. This is the locality step in

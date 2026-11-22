@@ -27,7 +27,7 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 Lemma commutation (ii), and equations (3.12)--(3.16).
 -/
 
-open scoped InnerProductSpace
+open scoped InnerProductSpace ComplexOrder
 namespace MPSTensor
 variable {d D m : ℕ}
 
@@ -37,7 +37,7 @@ length. The range and exact open kernels are derived from periodicity.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 Lemma commutation (ii), and equations (3.12)--(3.16). The projection limit
 remains an explicit hypothesis of this auxiliary criterion. -/
-theorem IsPeriodic.exists_pos_openParentHamiltonianES_gap_of_residue_cover_limit
+theorem IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap_of_residue_cover_limit
     [NeZero d] {A : MPSTensor d D} (hA : IsPeriodic m A)
     (hDefect : ∀ K r : ℕ → ℕ, Filter.Tendsto (fun M =>
       ‖(groundSpaceES A (K M * m + M * m + r M)).starProjection -
@@ -45,11 +45,13 @@ theorem IsPeriodic.exists_pos_openParentHamiltonianES_gap_of_residue_cover_limit
           (reassocTailBoundaryMapES A (K M * m) (M * m) (r M)).range.starProjection‖)
       Filter.atTop (nhds 0)) :
     ∃ R : ℕ, 0 < R ∧
-      (∀ N, R ≤ N → LinearMap.ker (openParentHamiltonianES A R N) = groundSpaceES A N) ∧
+      (∀ N, R ≤ N → LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian)
+          = groundSpaceES A N) ∧
       ∃ N₀ : ℕ, R ≤ N₀ ∧ ∃ δ : ℝ, 0 < δ ∧
-      ∀ N, N₀ ≤ N → ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R N))ᗮ,
-        δ * ‖v‖ ≤ ‖openParentHamiltonianES A R N v‖ := by
-  obtain ⟨R, hR, hKernel⟩ := hA.exists_ker_openParentHamiltonianES_eq_groundSpaceES
+      ∀ N, N₀ ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ := by
+  obtain ⟨R, hR, hKernel⟩ := hA.exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES
   let e (M : ℕ) (z : ℕ × ℕ) : ℝ :=
     ‖(groundSpaceES A (z.1 * m + M * m + z.2)).starProjection -
       (leftBoundaryMapES A (z.1 * m + M * m) z.2).range.starProjection.comp
@@ -60,7 +62,7 @@ theorem IsPeriodic.exists_pos_openParentHamiltonianES_gap_of_residue_cover_limit
   obtain ⟨M, hM, hRM⟩ := (hUniform.and (Filter.eventually_ge_atTop R)).exists
   have hRW : R ≤ M * m := hRM.trans (Nat.le_mul_of_pos_right M hA.period_pos)
   obtain ⟨δ, hδ, hGap⟩ :=
-    hA.exists_pos_openParentHamiltonianES_gap_all_of_residue_cover_defect (K₀ := 0)
+    hA.exists_pos_hamiltonian_parentChainInteraction_gap_all_of_residue_cover_defect (K₀ := 0)
       hR hRW (fun N => hKernel R N le_rfl) (fun K _ r _ => hM (K, r))
   exact ⟨R, hR, (fun N hN => hKernel R N le_rfl hN), M * m, hRW, δ, hδ,
     by simpa only [Nat.zero_add] using hGap⟩

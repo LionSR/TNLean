@@ -23,31 +23,33 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, Lemma commutation
 -/
 
 open Filter
-open scoped InnerProductSpace
+open scoped InnerProductSpace ComplexOrder
 namespace MPSTensor
 variable {d D R L N₀ : ℕ}
 
-/-- An eventual aligned norm gap, exact canonical open kernels, and residual
-cover projection limits imply a single norm gap at every original length.
-The gap is above the actual kernel at each length. Source: Nachtergaele,
+/-- An eventual aligned gap, exact canonical open kernels, and residual
+cover projection limits imply a single gap at every original length: every eigenvalue of the
+open-chain parent Hamiltonian is `0` or at least the gap. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Section 6, Lemma commutation (ii).
 The three supplied estimates are explicit hypotheses of this criterion. -/
-theorem exists_pos_openParentHamiltonianES_gap_of_aligned_gap_of_residue_cover_limit
+theorem exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_gap_of_residue_cover_limit
     (A : MPSTensor d D) (hR : 0 < R) (hL : 0 < L)
     (hKernel : ∀ N, R ≤ N →
-      LinearMap.ker (openParentHamiltonianES A R N) = groundSpaceES A N)
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
+          groundSpaceES A N)
     {γ : ℝ} (hγ : 0 < γ)
-    (hAligned : ∀ n ≥ N₀, ∀ v ∈
-      (LinearMap.ker (openParentHamiltonianES A R (n * L)))ᗮ,
-      γ * ‖v‖ ≤ ‖openParentHamiltonianES A R (n * L) v‖)
+    (hAligned : ∀ n ≥ N₀, ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A R (n * L)).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hDefect : ∀ K r : ℕ → ℕ, Tendsto (fun M =>
       ‖(groundSpaceES A (K M * L + M * L + r M)).starProjection -
         (leftBoundaryMapES A (K M * L + M * L) (r M)).range.starProjection.comp
           (reassocTailBoundaryMapES A (K M * L) (M * L) (r M)).range.starProjection‖)
       atTop (nhds 0)) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N,
-      ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R N))ᗮ,
-        δ * ‖v‖ ≤ ‖openParentHamiltonianES A R N v‖ := by
+      ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
+          μ = 0 ∨ (δ : ℂ) ≤ μ := by
   let e (M : ℕ) (z : ℕ × ℕ) : ℝ :=
     ‖(groundSpaceES A (z.1 * L + M * L + z.2)).starProjection -
       (leftBoundaryMapES A (z.1 * L + M * L) z.2).range.starProjection.comp
@@ -58,23 +60,23 @@ theorem exists_pos_openParentHamiltonianES_gap_of_aligned_gap_of_residue_cover_l
   obtain ⟨M, hM, hRM⟩ := (hUniform.and (eventually_ge_atTop (max R N₀))).exists
   have hRW : R ≤ M * L :=
     (le_max_left R N₀).trans (hRM.trans (Nat.le_mul_of_pos_right M hL))
-  have hLeft : ∀ K ≥ 0, ∀ v ∈
-      (LinearMap.ker (openParentHamiltonianES A R (K * L + M * L)))ᗮ,
-      γ * ‖v‖ ≤ ‖openParentHamiltonianES A R (K * L + M * L) v‖ := by
+  have hLeft : ∀ K ≥ 0, ∀ μ : ℂ, Module.End.HasEigenvalue
+    (Matrix.toEuclideanLin (parentChainInteraction A R (K * L + M * L)).hamiltonian) μ →
+      μ = 0 ∨ (γ : ℂ) ≤ μ := by
     intro K _
     rw [← Nat.add_mul]
     exact hAligned (K + M) (by omega)
   obtain ⟨δ, hδ, hResidue⟩ :=
-    exists_pos_openParentHamiltonianES_gap_of_aligned_cover_defect
+    exists_pos_hamiltonian_parentChainInteraction_gap_of_aligned_cover_defect
       A hR hL hRW hKernel hγ hLeft (fun K _ r _ => hM (K, r))
-  have hTail := openParentHamiltonianES_gap_all_large_of_residue_gaps A hL hResidue
+  have hTail := hamiltonian_parentChainInteraction_gap_all_large_of_residue_gaps A hL hResidue
   exact Nat.exists_pos_forall_of_eventually
-    (P := fun N δ => ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R N))ᗮ,
-      δ * ‖v‖ ≤ ‖openParentHamiltonianES A R N v‖)
-    (fun N δ η hle hgap v hv =>
-      (mul_le_mul_of_nonneg_right hle (norm_nonneg v)).trans (hgap v hv))
-    (fun N => LinearMap.exists_pos_mul_norm_le_of_mem_orthogonal_ker
-      (openParentHamiltonianES A R N)) hδ hTail
+    (P := fun N δ => ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ)
+    (fun N δ η hle hgap => ManyBody.forall_hasEigenvalue_mono hle hgap)
+    (fun N => ManyBody.exists_pos_forall_hasEigenvalue
+      (posSemidef_hamiltonian_parentChainInteraction A R N)) hδ hTail
 
 end MPSTensor
 

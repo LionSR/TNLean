@@ -109,6 +109,37 @@ theorem hamiltonian_restrict_le (hΦ : ∀ i, 0 ≤ Φ.term i) (p : ι → Prop)
     split_ifs
     exacts [le_rfl, hΦ i]
 
+/-- Summing the Hamiltonians of a family of restrictions of an interaction gives the Hamiltonian
+of one restriction when every index of the latter lies in exactly one member of the family and
+no other index lies in any. -/
+theorem sum_hamiltonian_restrict_eq_hamiltonian_restrict {κ : Type*} (s : Finset κ)
+    (P : κ → ι → Prop) [∀ n, DecidablePred (P n)] (Q : ι → Prop) [DecidablePred Q] (g : ι → κ)
+    (hg : ∀ i, Q i → g i ∈ s) (h : ∀ i, ∀ n ∈ s, P n i ↔ Q i ∧ n = g i) :
+    ∑ n ∈ s, (Φ.restrict (P n)).hamiltonian = (Φ.restrict Q).hamiltonian := by
+  simp only [hamiltonian, restrict_term]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun i _ ↦ ?_
+  by_cases hQ : Q i
+  · rw [ite_eq_left hQ, Finset.sum_eq_single_of_mem (g i) (hg i hQ) fun n hn hne ↦
+      ite_eq_right fun hP ↦ hne ((h i n hn).mp hP).2]
+    exact ite_eq_left ((h i _ (hg i hQ)).mpr ⟨hQ, rfl⟩)
+  · rw [ite_eq_right hQ]
+    exact Finset.sum_eq_zero fun n hn ↦ ite_eq_right fun hP ↦ hQ ((h i n hn).mp hP).1
+
+/-- For nonnegative terms, the Hamiltonians of two restrictions of an interaction to disjoint
+sets of indices add up to at most the Hamiltonian. -/
+theorem hamiltonian_restrict_add_hamiltonian_restrict_le (hΦ : ∀ i, 0 ≤ Φ.term i)
+    (p q : ι → Prop) [DecidablePred p] [DecidablePred q] (hpq : ∀ i, p i → ¬q i) :
+    (Φ.restrict p).hamiltonian + (Φ.restrict q).hamiltonian ≤ Φ.hamiltonian := by
+  simp only [hamiltonian, restrict_term]
+  rw [← Finset.sum_add_distrib]
+  refine Finset.sum_le_sum fun i _ ↦ ?_
+  by_cases hp : p i
+  · rw [ite_eq_left hp, ite_eq_right (hpq i hp), add_zero]
+  · rw [ite_eq_right hp, zero_add]
+    split_ifs
+    exacts [le_rfl, hΦ i]
+
 end Restrict
 
 /-- **The counting bound of condition C1.** On the open chain, each window of `R` sites lies in
@@ -431,20 +462,6 @@ theorem parentChainInteraction_C1 (A : MPSTensor d D) {L l : ℕ} (hLl : L ≤ l
 
 The Euclidean-space names of the same operators, for the files not yet restated. -/
 
-/-- The operator of the Hamiltonian of the parent interaction on the open chain. Nachtergaele,
-arXiv:cond-mat/9410110, equation (3.12). -/
-noncomputable abbrev openParentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
-    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  Matrix.toEuclideanLin (parentChainInteraction A L N).hamiltonian
-
-/-- The operator of the Hamiltonian of the parent interaction restricted to the windows inside
-\([n-l,n)\): \(H_{\Lambda_n\setminus\Lambda_{n-l}}\) for \(\Lambda_n=[0,n)\) in Nachtergaele,
-arXiv:cond-mat/9410110, condition C1 (lines 1030--1041). -/
-noncomputable abbrev openSuffixParentHamiltonianES (A : MPSTensor d D) (L l N n : ℕ) :
-    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
-    fun i ↦ n - l ≤ i.val ∧ i.val + L ≤ n).hamiltonian
-
 /-- Each nonwrapping range-\(R\) term lies in at most \(W-R+1\) complete
 length-\(W\) windows. Summing positive terms therefore gives the corresponding
 operator bound. This is the counting argument for Nachtergaele,
@@ -509,11 +526,13 @@ theorem localTermES_eq_toEuclideanLin_parentChainInteraction_term (A : MPSTensor
 
 /-- For a positive range, the operator of the open-chain parent Hamiltonian is the sum of the
 Euclidean-space local terms over the starts whose windows do not cross the right endpoint. -/
-theorem openParentHamiltonianES_eq_sum_localTermES (A : MPSTensor d D) {L : ℕ} (hL : 0 < L)
+theorem hamiltonian_parentChainInteraction_eq_sum_localTermES (A : MPSTensor d D) {L : ℕ}
+    (hL : 0 < L)
     (N : ℕ) :
-    openParentHamiltonianES A L N = ∑ i : NonwrappingStart L N, localTermES A L i.1 := by
+    Matrix.toEuclideanLin (parentChainInteraction A L N).hamiltonian = ∑ i : NonwrappingStart L N,
+        localTermES A L i.1 := by
   classical
-  rw [openParentHamiltonianES, ManyBody.Interaction.hamiltonian, map_sum]
+  rw [ManyBody.Interaction.hamiltonian, map_sum]
   trans ∑ i : Fin N, if i.val + L ≤ N then localTermES A L i else 0
   · refine Fin.sum_eq_sum_of_val_eq _ _ (fun k ha hb ↦ ?_)
       (fun i hi ↦ absurd i.isLt (by omega)) (fun i hi ↦ ite_eq_right (by omega))
@@ -527,13 +546,15 @@ theorem openParentHamiltonianES_eq_sum_localTermES (A : MPSTensor d D) {L : ℕ}
 
 /-- For a positive range, the operator of an interval Hamiltonian is the sum of the
 Euclidean-space local terms over the starts whose windows lie in the interval. -/
-theorem openSuffixParentHamiltonianES_eq_sum_localTermES (A : MPSTensor d D) {L : ℕ}
+theorem hamiltonian_restrict_parentChainInteraction_eq_sum_localTermES (A : MPSTensor d D) {L : ℕ}
     (hL : 0 < L) (l N n : ℕ) :
-    openSuffixParentHamiltonianES A L l N n =
+    Matrix.toEuclideanLin
+        ((parentChainInteraction A L N).restrict fun i ↦ n - l ≤ i.val ∧ i.val + L ≤
+            n).hamiltonian =
       ∑ i ∈ Finset.univ.filter fun i : NonwrappingStart L N =>
         n - l ≤ i.1.val ∧ i.1.val + L ≤ n, localTermES A L i.1 := by
   classical
-  rw [openSuffixParentHamiltonianES, ManyBody.Interaction.hamiltonian, map_sum]
+  rw [ManyBody.Interaction.hamiltonian, map_sum]
   trans ∑ i : Fin N, if i.val + L ≤ N ∧ n - l ≤ i.val ∧ i.val + L ≤ n then localTermES A L i
     else 0
   · refine Fin.sum_eq_sum_of_val_eq _ _ (fun k ha hb ↦ ?_)
@@ -552,30 +573,32 @@ theorem openSuffixParentHamiltonianES_eq_sum_localTermES (A : MPSTensor d D) {L 
     exact Finset.sum_congr rfl fun i _ ↦ by
       by_cases h1 : i.val + L ≤ N <;> by_cases h2 : n - l ≤ i.val ∧ i.val + L ≤ n <;> simp [h1, h2]
 
-theorem openParentHamiltonianES_self_eq_parentInteractionES (A : MPSTensor d D)
+theorem hamiltonian_parentChainInteraction_self_eq_parentInteractionES (A : MPSTensor d D)
     {L : ℕ} (_hL : 0 < L) :
-    openParentHamiltonianES A L L = parentInteractionES A L := by
-  rw [openParentHamiltonianES, hamiltonian_parentChainInteraction_self,
+    Matrix.toEuclideanLin (parentChainInteraction A L L).hamiltonian = parentInteractionES A L := by
+  rw [hamiltonian_parentChainInteraction_self,
     toEuclideanLin_toMatrix'_parentInteraction]
   rfl
 
-theorem openParentHamiltonianES_isPositive (A : MPSTensor d D) (L N : ℕ) :
-    (openParentHamiltonianES A L N).IsPositive :=
-  Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentChainInteraction A L N)
-
-theorem openParentHamiltonianES_C1 (A : MPSTensor d D) {L l N : ℕ}
+theorem hamiltonian_parentChainInteraction_C1 (A : MPSTensor d D) {L l N : ℕ}
     (hLl : L ≤ l) :
-    0 ≤ ∑ n ∈ Finset.Icc l N, openSuffixParentHamiltonianES A L l N n ∧
-      ∑ n ∈ Finset.Icc l N, openSuffixParentHamiltonianES A L l N n ≤
-        ((l - L + 1 : ℕ) : ℂ) • openParentHamiltonianES A L N := by
+    0 ≤ ∑ n ∈ Finset.Icc l N, Matrix.toEuclideanLin
+        ((parentChainInteraction A L N).restrict fun i ↦ n - l ≤ i.val ∧ i.val + L ≤
+            n).hamiltonian ∧
+      ∑ n ∈ Finset.Icc l N, Matrix.toEuclideanLin
+          ((parentChainInteraction A L N).restrict fun i ↦ n - l ≤ i.val ∧ i.val + L ≤
+              n).hamiltonian ≤
+        ((l - L + 1 : ℕ) : ℂ) • Matrix.toEuclideanLin
+            (parentChainInteraction A L N).hamiltonian := by
   have h := parentChainInteraction_C1 A hLl N
   constructor
   · simpa only [map_sum, map_zero] using Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr h.1
   · simpa only [map_sum, map_smul] using Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr h.2
 
-theorem localTermES_eq_zero_of_openParentHamiltonianES_eq_zero
+theorem localTermES_eq_zero_of_hamiltonian_parentChainInteraction_eq_zero
     (A : MPSTensor d D) (L N : ℕ) {v : EuclideanSpace ℂ (Cfg d N)}
-    (hv : openParentHamiltonianES A L N v = 0) (i : NonwrappingStart L N) :
+    (hv : Matrix.toEuclideanLin (parentChainInteraction A L N).hamiltonian v = 0)
+        (i : NonwrappingStart L N) :
     localTermES A L i.1 v = 0 := by
   have hLN : L ≤ N := by have := i.2; omega
   rw [localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A hLN i.1 v]
@@ -584,26 +607,6 @@ theorem localTermES_eq_zero_of_openParentHamiltonianES_eq_zero
   simpa [cyclicRestrictES] using
     cyclicRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hLN
       (LinearMap.mem_ker.mpr hv) i.1 i.2 τ
-
-theorem cyclicRestrictₗ_mem_groundSpace_of_mem_ker_openParentHamiltonianES
-    (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N)
-    {v : EuclideanSpace ℂ (Cfg d N)}
-    (hv : v ∈ LinearMap.ker (openParentHamiltonianES A L N))
-    (i : Fin N) (hi : i.val + L ≤ N) (τ : Fin N → Fin d) :
-    cyclicRestrictₗ (Fin.pos i) L i τ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N) v) ∈
-      groundSpace A L :=
-  cyclicRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hLN hv i hi τ
-
-theorem groundSpaceES_le_ker_openParentHamiltonianES
-    (A : MPSTensor d D) (L N : ℕ) :
-    groundSpaceES A N ≤ LinearMap.ker (openParentHamiltonianES A L N) :=
-  groundSpaceES_le_ker_hamiltonian_parentChainInteraction A L N
-
-theorem ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
-    {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
-    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
-    LinearMap.ker (openParentHamiltonianES A (L₀ + 1) N) = groundSpaceES A N :=
-  ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective hInj hL₀ hL₀N
 
 end ChainInteraction
 

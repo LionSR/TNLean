@@ -56,11 +56,15 @@ theorem exists_hamiltonian_chainTranslates_gap_of_periodic_family_of_eventual_ke
     ∃ δ : ℝ, 0 < δ ∧ ∀ N,
       ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)))ᗮ,
         δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian) v‖ := by
-  obtain ⟨R₀, hR₀, hCanonical⟩ := exists_openParentHamiltonianES_gap_of_periodic_family
+  obtain ⟨R₀, hR₀, hCanonical⟩ := exists_hamiltonian_parentChainInteraction_gap_of_periodic_family
     μ A hμ m hPeriodic
   obtain ⟨δ, hδ, hGap⟩ :=
     exists_openInteractionHamiltonianES_gap_of_canonical_gaps_of_eventual_kernel
-      (toTensorFromBlocks μ A) hR₀ hCanonical (Matrix.toEuclideanLin h) hR
+      (toTensorFromBlocks μ A) hR₀
+      (fun W hW ↦ ⟨(hCanonical W hW).1, (hCanonical W hW).2.imp fun δ hδ ↦ ⟨hδ.1, fun N ↦
+        (ManyBody.forall_hasEigenvalue_iff_norm
+          (posSemidef_hamiltonian_parentChainInteraction _ W N)).mp (hδ.2 N)⟩⟩)
+      (Matrix.toEuclideanLin h) hR
       (Matrix.isPositive_toEuclideanLin_iff.mpr hh) hKernel
   refine ⟨δ, hδ, ?_⟩
   intro N

@@ -49,8 +49,10 @@ theorem IsParentInteraction.exists_pos_open_comparison {R : ℕ} {A : MPSTensor 
     {h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)}
     (hh : IsParentInteraction A R h) (hR : 0 < R) :
     ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧ ∀ N : ℕ,
-      (κ : ℂ) • openParentHamiltonianES A R N ≤ openInteractionHamiltonianES h N ∧
-      openInteractionHamiltonianES h N ≤ (C : ℂ) • openParentHamiltonianES A R N := by
+      (κ : ℂ) • Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian ≤
+          openInteractionHamiltonianES h N ∧
+      openInteractionHamiltonianES h N ≤ (C : ℂ) • Matrix.toEuclideanLin
+          (parentChainInteraction A R N).hamiltonian := by
   obtain ⟨κ, C, hκ, hC, hLower, hUpper⟩ := hh.exists_pos_comparison
   refine ⟨κ, C, hκ, hC, fun N ↦ ⟨?_, ?_⟩⟩
   · simpa only [openInteractionHamiltonianES_smul,
@@ -66,15 +68,16 @@ theorem IsParentInteraction.exists_open_uniform_gap_of_canonical_gap
     {h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)}
     (hh : IsParentInteraction A R h) (hR : 0 < R) {γ : ℝ} (hγ : 0 < γ)
     (hGap : ∀ N : ℕ, R ≤ N → ∀ v ∈
-      (LinearMap.ker (openParentHamiltonianES A R N))ᗮ,
-      γ * ‖v‖ ≤ ‖openParentHamiltonianES A R N v‖) :
+      (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian))ᗮ,
+      γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian v‖) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N → ∀ v ∈
       (LinearMap.ker (openInteractionHamiltonianES h N))ᗮ,
       δ * ‖v‖ ≤ ‖openInteractionHamiltonianES h N v‖ := by
   obtain ⟨κ, C, hκ, hC, hComp⟩ := hh.exists_pos_open_comparison hR
   refine ⟨κ * γ, mul_pos hκ hγ, fun N hN ↦ ?_⟩
   simpa only [div_one] using
-    (openParentHamiltonianES_isPositive A R N).norm_gap_of_smul_le_of_le_smul
+    (Matrix.isPositive_toEuclideanLin_iff.mpr
+        (posSemidef_hamiltonian_parentChainInteraction A R N)).norm_gap_of_smul_le_of_le_smul
       (openInteractionHamiltonianES_isPositive hh.isPositive N)
       (b := 1) hκ zero_lt_one hC hγ
       (by simpa only [Complex.ofReal_one, one_smul] using (hComp N).1)
@@ -93,12 +96,11 @@ theorem CPSVCanonicalFormData.exists_openInteraction_uniform_gap_of_wordTupleSpa
     ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N → ∀ v ∈
       (LinearMap.ker (openInteractionHamiltonianES h N))ᗮ,
       δ * ‖v‖ ≤ ‖openInteractionHamiltonianES h N v‖ := by
-  obtain ⟨γ, hγ, hGap⟩ := data.exists_openParentHamiltonianES_gap_of_wordTupleSpanTop
+  obtain ⟨γ, hγ, hGap⟩ := data.exists_hamiltonian_parentChainInteraction_gap_of_wordTupleSpanTop
     hS hSpan hR
   exact hh.exists_open_uniform_gap_of_canonical_gap (by omega) hγ
-    (fun N hN ↦ by
-      simpa only [data.ker_openParentHamiltonianES_eq_groundSpaceES_of_wordTupleSpanTop
-        hS hSpan hR hN] using hGap N hN)
+    (fun N hN ↦ (ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentChainInteraction A R N)).mp (hGap N hN))
 /-- A supplied uniform open-chain canonical gap transfers to a compact continuous
 family of positive parent interactions with continuous local ground projections.
 This proves the positive comparison step; the canonical family gap is supplied.
@@ -112,8 +114,8 @@ theorem exists_uniform_openInteractionHamiltonianES_gap_of_compact_canonical_gap
     (hH : Continuous H) (hParent : ∀ x, IsParentInteraction (A x) R (H x).toLinearMap)
     {K : Set X} (hK : IsCompact K) (hR : 0 < R) {γ : ℝ} (hγ : 0 < γ)
     (hGap : ∀ x ∈ K, ∀ N : ℕ, N₀ ≤ N →
-      ∀ v ∈ (LinearMap.ker (openParentHamiltonianES (A x) R N))ᗮ,
-        γ * ‖v‖ ≤ ‖openParentHamiltonianES (A x) R N v‖) :
+      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction (A x) R N).hamiltonian))ᗮ,
+        γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction (A x) R N).hamiltonian v‖) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, N₀ ≤ N →
       ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES (H x).toLinearMap N))ᗮ,
         δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (H x).toLinearMap N v‖ := by
@@ -121,13 +123,14 @@ theorem exists_uniform_openInteractionHamiltonianES_gap_of_compact_canonical_gap
     exists_uniform_pos_parentInteractionES_le_of_compact A hProj H hH hParent hK
   refine ⟨κ * γ, mul_pos hκ hγ, fun x hx N hN ↦ ?_⟩
   obtain ⟨_, C, _, hC, hComparison⟩ := (hParent x).exists_pos_open_comparison hR
-  have hLowerN : (κ : ℂ) • openParentHamiltonianES (A x) R N ≤
+  have hLowerN : (κ : ℂ) • Matrix.toEuclideanLin (parentChainInteraction (A x) R N).hamiltonian ≤
       openInteractionHamiltonianES (H x).toLinearMap N := by
     simpa only [openInteractionHamiltonianES_smul,
       openInteractionHamiltonianES_parentInteractionES (A x) hR] using
       openInteractionHamiltonianES_mono (hLower x hx) N
   simpa only [div_one] using
-    (openParentHamiltonianES_isPositive (A x) R N).norm_gap_of_smul_le_of_le_smul
+    (Matrix.isPositive_toEuclideanLin_iff.mpr
+        (posSemidef_hamiltonian_parentChainInteraction (A x) R N)).norm_gap_of_smul_le_of_le_smul
       (openInteractionHamiltonianES_isPositive (hParent x).isPositive N)
       (b := 1) hκ zero_lt_one hC hγ
       (by simpa only [Complex.ofReal_one, one_smul] using hLowerN)
@@ -150,13 +153,12 @@ theorem CPSVCanonicalFormData.exists_uniform_openInteraction_gap_of_compact
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ N : ℕ, R ≤ N →
       ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES (H x).toLinearMap N))ᗮ,
         δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (H x).toLinearMap N v‖ := by
-  obtain ⟨γ, hγ, hGap⟩ := data.exists_openParentHamiltonianES_gap_of_wordTupleSpanTop
+  obtain ⟨γ, hγ, hGap⟩ := data.exists_hamiltonian_parentChainInteraction_gap_of_wordTupleSpanTop
     hS hSpan hR
   exact exists_uniform_openInteractionHamiltonianES_gap_of_compact_canonical_gap
     (fun _ ↦ A) continuous_const H hH hParent hK (by omega) hγ
-    (fun _ _ N hN ↦ by
-      simpa only [data.ker_openParentHamiltonianES_eq_groundSpaceES_of_wordTupleSpanTop
-        hS hSpan hR hN] using hGap N hN)
+    (fun _ _ N hN ↦ (ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentChainInteraction A R N)).mp (hGap N hN))
 /-- At range \(R\geq3D^5\), a compact continuous family of positive parent
 interactions for a fixed canonical tensor of positive bond dimension \(D\)
 has one uniform open-chain gap for all chain lengths \(N\geq R\).

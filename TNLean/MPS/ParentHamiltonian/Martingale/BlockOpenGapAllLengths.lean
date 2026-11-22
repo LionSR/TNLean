@@ -41,52 +41,45 @@ chain lengths \(N\geq R\). Primitive normalization, separation of blocks,
 and equality of the open-chain kernel with the boundary-condition space are
 derived internally. Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2
 and Section 6; arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
-theorem exists_openParentHamiltonianES_toTensorFromBlocks_gap_of_wordTupleSpanTop
+theorem exists_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_wordTupleSpanTop
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) {S R : ℕ} (hS : 0 < S)
     (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N → ∀ v ∈
-      (groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N)ᗮ,
-      δ * ‖v‖ ≤ ‖openParentHamiltonianES
-        (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
+    ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+      (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+        z = 0 ∨ (δ : ℂ) ≤ z := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, _⟩ :=
     exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
   let T := toTensorFromBlocks (d := d) (μ := μ) B
   have hKernel : ∀ L N : ℕ, S + 1 ≤ L → L ≤ N →
-      LinearMap.ker (openParentHamiltonianES T L N) = groundSpaceES T N :=
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction T L N).hamiltonian) =
+          groundSpaceES T N :=
     fun L N hSL hLN ↦
-      ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_wordTupleSpanTop
+      ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
         μ B hμ hS hSpanB hSL hLN
   obtain ⟨p, hRp, hp, γ, hγ, hLong⟩ :=
-    exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_all_of_hasComplementaryFixedPointGap
+    exists_ge_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_all_of_fixedPointGap
       μ B hμ ρ hP hρ (fun i j hij h ↦ by
         simpa only [eqRec_eq_cast] using
           not_gaugePhaseEquiv_of_wordTupleSpanTop B hSpanB i j hij h) R
   obtain ⟨κ, C, hκ, _hC, hLocal, _hUpper⟩ :=
-    exists_pos_parentInteractionES_openParentHamiltonianES_comparison
+    exists_pos_toMatrix'_parentInteraction_hamiltonian_parentChainInteraction_comparison
       T (hKernel R (2 * p) hR (by omega))
-  have hEventual := openParentHamiltonianES_gap_of_long_gap T
-    (by omega : 0 < R) (by omega : R ≤ 2 * p) hκ hγ hLocal
-    (fun N hN ↦ hKernel R N hR (by omega))
-    (fun N hN ↦ hKernel (2 * p) N (by omega) hN)
-    (fun N hN v hv ↦ hLong N v (by rwa [hKernel (2 * p) N (by omega) hN]))
   obtain ⟨δ, hδ, hGapB⟩ := Nat.exists_pos_forall_of_eventually
-    (P := fun N δ ↦ R ≤ N → ∀ v ∈ (groundSpaceES T N)ᗮ,
-      δ * ‖v‖ ≤ ‖openParentHamiltonianES T R N v‖)
-    (fun N γ η hle hgap hN v hv ↦
-      (mul_le_mul_of_nonneg_right hle (norm_nonneg v)).trans (hgap hN v hv))
-    (fun N ↦ (LinearMap.exists_pos_mul_norm_le_of_mem_orthogonal_ker
-      (openParentHamiltonianES T R N)).imp fun η h ↦
-        ⟨h.1, fun hN v hv ↦ h.2 v (by rwa [hKernel R N hR hN])⟩)
-    (div_pos (mul_pos hκ hγ) (Nat.cast_pos.mpr (by omega)))
-    (fun N hN _ ↦ hEventual N hN)
-  have hLocalGS : ∀ L, groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L =
-      groundSpace T L :=
-    fun L ↦ groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq
-      μ μ A B hμ hμ (fun j ↦ hGS j L)
-  refine ⟨δ, hδ, ?_⟩
-  exact fun N hN ↦ by
-    simpa only [openParentHamiltonianES_eq_of_groundSpace_eq (hLocalGS R) N,
-      groundSpaceES, hLocalGS N] using hGapB N hN
+    (P := fun N δ ↦ ∀ z : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction T R N).hamiltonian) z →
+        z = 0 ∨ (δ : ℂ) ≤ z)
+    (fun N γ η hle hgap ↦ ManyBody.forall_hasEigenvalue_mono hle hgap)
+    (fun N ↦ ManyBody.exists_pos_forall_hasEigenvalue
+      (posSemidef_hamiltonian_parentChainInteraction T R N))
+    (div_pos (mul_pos hκ hγ) (Nat.cast_pos.mpr (Nat.succ_pos (2 * p - R))))
+    (fun N hN ↦ toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length T _
+      (posSemidef_toMatrix'_parentInteraction T R) (by omega) hκ hγ hLocal
+      (hKernel R N hR (by omega)) (hKernel (2 * p) N (by omega) hN) (hLong N))
+  have hLocalGS : groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) R = groundSpace T R :=
+    groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq μ μ A B hμ hμ (fun j ↦ hGS j R)
+  refine ⟨δ, hδ, fun N _ ↦ ?_⟩
+  rw [parentChainInteraction_eq_of_groundSpace_eq hLocalGS N]
+  exact hGapB N
 
 end MPSTensor

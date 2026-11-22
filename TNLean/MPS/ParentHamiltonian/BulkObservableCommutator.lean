@@ -208,7 +208,7 @@ theorem toEuclideanCLM_hamiltonian_chainTranslates_parentInteraction {D : ℕ}
     (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
       ((chainTranslates _ N ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
           (groundSpaceES A R)ᗮ.starProjection)).hamiltonian)).toLinearMap =
-      openParentHamiltonianES A R N := by
+      Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian := by
   change Matrix.toEuclideanLin ((chainTranslates _ N _).hamiltonian) = _
   rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates _ hR hRN]
   have hlocal : Matrix.toEuclideanLin

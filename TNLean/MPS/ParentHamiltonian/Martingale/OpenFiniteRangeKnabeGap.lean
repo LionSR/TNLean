@@ -35,14 +35,17 @@ private theorem cyclicWindowSum_zmodOpenLocalTermES_eq_interval
     (hsurj : ∀ i : ℕ, a ≤ i → i < b →
       ∃ q : Fin m, (s + (q.val : ZMod P)).val = i) :
     ProjectionGeometry.cyclicWindowSum (zmodOpenLocalTermES (N := N) A R hR) m s =
-      openSuffixParentHamiltonianES A R (b - a + R - 1) N (b + R - 1) := by
+      Matrix.toEuclideanLin
+          ((parentChainInteraction A R N).restrict fun i ↦ b + R - 1 - (b - a + R - 1) ≤ i.val ∧
+              i.val + R ≤ b + R - 1).hamiltonian := by
   classical
   let Q := Finset.univ.filter fun q : Fin m =>
     (s + (q.val : ZMod P)).val + R ≤ N
   have hstart : ∀ q ∈ Q, (s + (q.val : ZMod P)).val + R ≤ N := by
     intro q hq
     exact (Finset.mem_filter.mp hq).2
-  rw [ProjectionGeometry.cyclicWindowSum, openSuffixParentHamiltonianES_eq_sum_localTermES A hR]
+  rw [ProjectionGeometry.cyclicWindowSum,
+      hamiltonian_restrict_parentChainInteraction_eq_sum_localTermES A hR]
   calc
     (∑ q : Fin m, zmodOpenLocalTermES (N := N) A R hR (s + (q.val : ZMod P))) =
         ∑ q ∈ Q, zmodOpenLocalTermES (N := N) A R hR (s + (q.val : ZMod P)) := by
@@ -95,7 +98,9 @@ theorem cyclicWindowSum_zmodOpenLocalTermES_eq_zero_or_interval
       ∃ W n : ℕ, R ≤ W ∧ W ≤ m + R - 1 ∧ W ≤ n ∧ n ≤ N ∧
         ProjectionGeometry.cyclicWindowSum
           (zmodOpenLocalTermES (N := N) A R hR) m s =
-            openSuffixParentHamiltonianES A R W N n := by
+            Matrix.toEuclideanLin
+                ((parentChainInteraction A R N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + R ≤
+                    n).hamiltonian := by
   classical
   have hs := s.val_lt
   have hqval (q : Fin m) : (q.val : ZMod (N + 2 * m)).val = q.val := by
@@ -164,8 +169,8 @@ theorem cyclicWindowSum_zmodOpenLocalTermES_quadraticForm_gap
     {N R m : ℕ} [NeZero (N + 2 * m)] (A : MPSTensor d D)
     (hR : 0 < R) (hm : 0 < m) (hRN : R ≤ N) {γ : ℝ} (hγ : 0 < γ)
     (hOpenGap : ∀ W : ℕ, R ≤ W → W ≤ m + R - 1 →
-      ∀ u ∈ (LinearMap.ker (openParentHamiltonianES A R W))ᗮ,
-        γ * ‖u‖ ≤ ‖openParentHamiltonianES A R W u‖)
+      ∀ u ∈ (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian))ᗮ,
+        γ * ‖u‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian u‖)
     (s : ZMod (N + 2 * m)) (v : EuclideanSpace ℂ (Cfg d N)) :
     γ * (⟪ProjectionGeometry.cyclicWindowSum
       (zmodOpenLocalTermES (N := N) A R hR) m s v, v⟫_ℂ).re ≤
@@ -177,9 +182,14 @@ theorem cyclicWindowSum_zmodOpenLocalTermES_quadraticForm_gap
     hzero | ⟨W, n, hRW, hWm, hWn, hnN, hinterval⟩
   · simp [hzero]
   · rw [hinterval]
-    exact (openSuffixParentHamiltonianES_isPositive A R W N n).quadraticForm_sq_ge_of_norm_gap hγ.le
-      (openSuffixParentHamiltonianES_norm_gap_of_local_gap A hR hRW hWn hnN hγ
-        (hOpenGap W hRW hWm)) v
+    exact (Matrix.isPositive_toEuclideanLin_iff.mpr
+      (posSemidef_hamiltonian_restrict_parentChainInteraction A R N
+        _)).quadraticForm_sq_ge_of_norm_gap hγ.le
+      ((ManyBody.forall_hasEigenvalue_iff_norm
+        (posSemidef_hamiltonian_restrict_parentChainInteraction A R N _)).mp
+        (hamiltonian_restrict_parentChainInteraction_gap_of_local_gap A hR hRW hWn hnN hγ
+          ((ManyBody.forall_hasEigenvalue_iff_norm
+            (posSemidef_hamiltonian_parentChainInteraction A R W)).mpr (hOpenGap W hRW hWm)))) v
 
 /-- Gaps on finitely many open volumes imply one gap on every open-chain
 length. The explicit coefficient is obtained by zero padding and applying
@@ -188,17 +198,17 @@ the finite-range cyclic Knabe inequality; see
 
 The test volume \(W\) ranges from \(R\) through \(m+R-1\), so boundary windows
 are included as well as windows containing all \(m\) interactions. -/
-theorem openParentHamiltonianES_gap_of_finite_open_gaps
+theorem hamiltonian_parentChainInteraction_gap_of_finite_open_gaps
     (A : MPSTensor d D) {R m : ℕ} (hR : 1 ≤ R) (hmR : R ≤ m)
     {γ : ℝ} (hnum : ((R : ℝ) - 1) ^ 2 < (m : ℝ) * γ)
     (hOpenGap : ∀ W : ℕ, R ≤ W → W ≤ m + R - 1 →
-      ∀ u ∈ (LinearMap.ker (openParentHamiltonianES A R W))ᗮ,
-        γ * ‖u‖ ≤ ‖openParentHamiltonianES A R W u‖) :
+      ∀ u ∈ (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian))ᗮ,
+        γ * ‖u‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian u‖) :
     let δ := ((m : ℝ) * γ - ((R : ℝ) - 1) ^ 2) /
       ((m : ℝ) - (R : ℝ) + 1)
     0 < δ ∧ ∀ N : ℕ, R ≤ N →
-      ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R N))ᗮ,
-        δ * ‖v‖ ≤ ‖openParentHamiltonianES A R N v‖ := by
+      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian))ᗮ,
+        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian v‖ := by
   classical
   dsimp only
   have hm : 0 < m := by omega
@@ -216,7 +226,8 @@ theorem openParentHamiltonianES_gap_of_finite_open_gaps
     ((m : ℝ) - (R : ℝ) + 1)
   let _ : NeZero (N + 2 * m) := ⟨by omega⟩
   exact FrustrationFree.spectralGap_of_martingale_of_finiteDimensional hδ
-    (openParentHamiltonianES_isPositive A R N) (fun x => by
+    (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentChainInteraction A R N))
+        (fun x => by
       have hx := ProjectionGeometry.quadraticForm_sum_projections_of_cyclic_knabe
         (zmodOpenLocalTermES (N := N) (P := N + 2 * m) A R (by omega))
         (zmodOpenLocalTermES_isSymmetricProjection A (by omega))
@@ -226,7 +237,7 @@ theorem openParentHamiltonianES_gap_of_finite_open_gaps
         (γ := γ) (δ := δ) rfl hnum
         (cyclicWindowSum_zmodOpenLocalTermES_quadraticForm_gap A (by omega)
           hm hRN hγ hOpenGap) x
-      rwa [sum_zmodOpenLocalTermES_eq_openParentHamiltonianES A (by omega) (by omega)]
+      rwa [sum_zmodOpenLocalTermES_eq_hamiltonian_parentChainInteraction A (by omega) (by omega)]
         at hx) v hv
 
 end MPSTensor

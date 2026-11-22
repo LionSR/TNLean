@@ -46,45 +46,43 @@ variable {d D : ℕ}
 /-- The grouped windows satisfy the upper and lower energy bounds in
 Nachtergaele's condition C1-prime with constant one, because they form a
 subfamily of the open-chain interaction terms. -/
-theorem grouped_openParentHamiltonianES_C1 (A : MPSTensor d D) {p M : ℕ}
+theorem grouped_hamiltonian_parentChainInteraction_C1 (A : MPSTensor d D) {p M : ℕ}
     (hp : 0 < p) (x : EuclideanSpace ℂ (Cfg d (p * M))) :
     0 ≤ ∑ n ∈ Finset.range M,
-      (⟪openSuffixParentHamiltonianES A (2 * p) (2 * p) (p * M)
-        (p * (n + 1)) x, x⟫_ℂ).re ∧
+      (⟪Matrix.toEuclideanLin
+          ((parentChainInteraction A (2 * p) (p * M)).restrict fun i ↦ p * (n + 1) - 2 * p ≤ i.val ∧
+              i.val + 2 * p ≤ p * (n + 1)).hamiltonian x, x⟫_ℂ).re ∧
       (∑ n ∈ Finset.range M,
-        (⟪openSuffixParentHamiltonianES A (2 * p) (2 * p) (p * M)
-          (p * (n + 1)) x, x⟫_ℂ).re) ≤
-        (⟪openParentHamiltonianES A (2 * p) (p * M) x, x⟫_ℂ).re := by
-  refine ⟨Finset.sum_nonneg fun n _ ↦
-    (openSuffixParentHamiltonianES_isPositive A (2 * p) (2 * p) (p * M)
-      (p * (n + 1))).2 x, ?_⟩
+        (⟪Matrix.toEuclideanLin
+            ((parentChainInteraction A (2 * p) (p * M)).restrict fun i ↦ p * (n + 1) - 2 * p ≤
+                i.val ∧ i.val + 2 * p ≤ p * (n + 1)).hamiltonian x, x⟫_ℂ).re) ≤
+        (⟪Matrix.toEuclideanLin (parentChainInteraction A (2 * p) (p * M)).hamiltonian x,
+            x⟫_ℂ).re := by
+  refine ⟨Finset.sum_nonneg fun n _ ↦ (Matrix.isPositive_toEuclideanLin_iff.mpr
+    (posSemidef_hamiltonian_restrict_parentChainInteraction A (2 * p) (p * M) _)).2 x, ?_⟩
   have hend (n : ℕ) : p * (n + 1) - 1 + 1 = p * (n + 1) :=
     Nat.sub_add_cancel (Nat.mul_pos hp (Nat.succ_pos n))
   have hsum := sum_grouped_le (M := M) hp
-    (fun n ↦ (⟪openSuffixParentHamiltonianES A (2 * p) (2 * p) (p * M)
-      (n + 1) x, x⟫_ℂ).re)
-    (fun n ↦ (openSuffixParentHamiltonianES_isPositive A (2 * p) (2 * p)
-      (p * M) (n + 1)).2 x)
+    (fun n ↦ (⟪Matrix.toEuclideanLin
+        ((parentChainInteraction A (2 * p) (p * M)).restrict fun i ↦ n + 1 - 2 * p ≤ i.val ∧
+            i.val + 2 * p ≤ n + 1).hamiltonian x, x⟫_ℂ).re)
+    (fun n ↦ (Matrix.isPositive_toEuclideanLin_iff.mpr
+      (posSemidef_hamiltonian_restrict_parentChainInteraction A (2 * p) (p * M) _)).2 x)
   simp only [hend] at hsum
-  exact hsum.trans (by
-    simpa only [Nat.sub_add_cancel (by omega : 1 ≤ 2 * p)] using
-      (openParentHamiltonianES_C1_full_range_quadratic_form A (l := 2 * p - 1) x).2)
+  exact hsum.trans
+    (parentChainInteraction_C1_full_range_quadratic_form A (Nat.mul_pos two_pos hp) x).2
 
 /-- Each grouped window has local gap one, including the initial zero window.
 This is Nachtergaele's condition C2 for the grouped filtration at range \(2p\). -/
-theorem grouped_openSuffixParentHamiltonianES_C2 (A : MPSTensor d D) {p M n : ℕ}
-    (hp : 0 < p) (hn : n < M) (x : EuclideanSpace ℂ (Cfg d (p * M))) :
+theorem grouped_hamiltonian_restrict_parentChainInteraction_C2 (A : MPSTensor d D) {p M n : ℕ}
+    (hn : n < M) (x : EuclideanSpace ℂ (Cfg d (p * M))) :
     ‖((LinearMap.id : EuclideanSpace ℂ (Cfg d (p * M)) →ₗ[ℂ]
         EuclideanSpace ℂ (Cfg d (p * M))) -
       groupedIntervalGroundProjectionES A p (p * M) n) x‖ ^ 2 ≤
-      (⟪openSuffixParentHamiltonianES A (2 * p) (2 * p) (p * M)
-        (p * (n + 1)) x, x⟫_ℂ).re := by
-  have hn' : p * (n + 1) - 1 < p * M :=
-    (Nat.sub_lt (Nat.mul_pos hp (Nat.succ_pos n)) Nat.zero_lt_one).trans_le
-      (Nat.mul_le_mul_left p hn)
-  simpa only [openIntervalGroundProjectionES, groupedIntervalGroundProjectionES,
-    Nat.sub_add_cancel (by omega : 1 ≤ 2 * p),
-    Nat.sub_add_cancel (Nat.mul_pos hp (Nat.succ_pos n))] using
-    openSuffixParentHamiltonianES_C2_full_range_norm_sq A (l := 2 * p - 1) hn' x
+      (⟪Matrix.toEuclideanLin
+          ((parentChainInteraction A (2 * p) (p * M)).restrict fun i ↦ p * (n + 1) - 2 * p ≤ i.val ∧
+              i.val + 2 * p ≤ p * (n + 1)).hamiltonian x, x⟫_ℂ).re := by
+  simpa only [groupedIntervalGroundProjectionES] using
+    parentChainInteraction_C2_full_range_norm_sq A (L := 2 * p) (Nat.mul_le_mul_left p hn) x
 
 end MPSTensor

@@ -41,31 +41,33 @@ at all sufficiently large interaction ranges and one norm gap at every
 original volume for each such range. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Theorems 1.1--1.2 and Section 6,
 in the supplied generating-data setting. -/
-theorem exists_openParentHamiltonianES_gap_of_leftCanonical_of_posDef_fixedPoint
+theorem exists_hamiltonian_parentChainInteraction_gap_of_leftCanonical_of_posDef_fixedPoint
     [NeZero D] (A : MPSTensor d D) (hA : IsLeftCanonical A)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef)
     (hFix : Kraus.map A ρ = ρ) :
     ∃ R₀, 0 < R₀ ∧ ∀ R, R₀ ≤ R →
       (∀ N, R ≤ N →
-        LinearMap.ker (openParentHamiltonianES A R N) = groundSpaceES A N) ∧
+        LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
+            groundSpaceES A N) ∧
       ∃ δ : ℝ, 0 < δ ∧ ∀ N,
-        ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R N))ᗮ,
-          δ * ‖v‖ ≤ ‖openParentHamiltonianES A R N v‖ := by
+        ∀ μ : ℂ, Module.End.HasEigenvalue
+          (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
+            μ = 0 ∨ (δ : ℂ) ≤ μ := by
   let _ : NeZero d := ⟨hA.physDim_ne_zero⟩
   obtain ⟨b, _hb, dim, _hdim, B, _V, m, hPeriodic, _hV, _hSum, _hOrth,
     _hInt, _hCoInt, _hCorner, hGS⟩ :=
     exists_periodic_groundSpaceDecomposition_of_leftCanonical_of_posDef_fixedPoint
       A hA hρ hFix
-  obtain ⟨R₀, hR₀, hFamily⟩ := exists_openParentHamiltonianES_gap_of_periodic_family
+  obtain ⟨R₀, hR₀, hFamily⟩ := exists_hamiltonian_parentChainInteraction_gap_of_periodic_family
     (fun _ => 1) B (fun _ => one_ne_zero) m hPeriodic
   refine ⟨R₀, hR₀, fun R hR => ?_⟩
   obtain ⟨hKernel, δ, hδ, hGap⟩ := hFamily R hR
-  have hH := openParentHamiltonianES_eq_of_groundSpaceES_eq (hR₀.trans_le hR) (hGS R)
-  refine ⟨fun N hN => ?_, δ, hδ, fun N v hv => ?_⟩
+  have hH := hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq (hGS R)
+  refine ⟨fun N hN => ?_, δ, hδ, fun N => ?_⟩
   · rw [hH N, hKernel N hN]
     exact (hGS N).symm
-  · rw [hH N] at hv ⊢
-    exact hGap N v hv
+  · rw [hH N]
+    exact hGap N
 
 /-- One constructed parent interaction has exact open kernels, contains the
 generated stationary state in its zero-energy face, and has both an all-length
@@ -107,12 +109,12 @@ theorem exists_positive_parent_finite_and_quasiLocal_gap_of_leftCanonical_of_pos
   let _ : NeZero d := ⟨hA.physDim_ne_zero⟩
   change (∑ i, (A i)ᴴ * A i) = 1 at hA
   obtain ⟨R, hR, hRange⟩ :=
-    exists_openParentHamiltonianES_gap_of_leftCanonical_of_posDef_fixedPoint A hA hρ hFix
+    exists_hamiltonian_parentChainInteraction_gap_of_leftCanonical_of_posDef_fixedPoint A hA hρ hFix
   obtain ⟨hCanonicalKernel, δ, hδ, hFinite⟩ := hRange R le_rfl
   obtain ⟨h, hEq, hh, hKernel⟩ :=
     exists_positive_canonical_parent_interaction_of_exact_open_kernels A hR hCanonicalKernel
   have hH (N : ℕ) : openInteractionHamiltonianES (Matrix.toEuclideanLin h) N =
-      openParentHamiltonianES A R N := by
+      Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian := by
     rw [hEq, toEuclideanLin_canonicalParentInteractionMatrix,
       openInteractionHamiltonianES_parentInteractionES A hR]
   have hMember : quasiLocalExpectation A hA hρ.posSemidef hFix (ne_of_gt hρ.trace_pos) ∈
@@ -124,6 +126,7 @@ theorem exists_positive_parent_finite_and_quasiLocal_gap_of_leftCanonical_of_pos
     exists_pos_quasiLocalCommutator_limit_gap_of_leftCanonical_of_posDef_fixedPoint
       A hA hρ hFix h hR hh ((eventually_ge_atTop R).mono fun N hN => hKernel N hN)
   refine ⟨R, hR, h, hh, hKernel, hMember, δ, hδ, ?_, γ, hγ, hGap⟩
-  simpa only [hH] using hFinite
+  simpa only [hH] using fun N ↦ (ManyBody.forall_hasEigenvalue_iff_norm
+    (posSemidef_hamiltonian_parentChainInteraction A R N)).mp (hFinite N)
 
 end MPSTensor

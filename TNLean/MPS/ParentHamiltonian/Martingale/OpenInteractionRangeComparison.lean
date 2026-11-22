@@ -25,8 +25,7 @@ until their last users are converted. The suffix Hamiltonian `openSuffixInteract
 and its lemmas are converted in a later package; the active-block lemmas
 `periodicLocalInteractionES_apply` and `periodicLocalInteractionES_conj_cyclicActiveBlock` are
 replaced, for matrices, by `toEuclideanLin_translationInvariant_term_apply` and by composition of
-placements (`ManyBody.placeAlong_placeAlong`, `ManyBody.chainWindow_trans_ringWindow`). The last
-section states the comparison and the gap transfer for matrices.
+placements (`ManyBody.placeAlong_placeAlong`, `ManyBody.chainWindow_trans_ringWindow`).
 -/
 open scoped BigOperators ComplexOrder
 namespace MPSTensor
@@ -195,7 +194,9 @@ theorem openSuffixInteractionHamiltonianES_comparison_of_local
     (hWn : W ≤ n) (hnN : n ≤ N) {κ : ℝ}
     (hLocal : (κ : ℂ) • parentInteractionES A W ≤
       openInteractionHamiltonianES h W) :
-    (κ : ℂ) • openSuffixParentHamiltonianES A W W N n ≤
+    (κ : ℂ) • Matrix.toEuclideanLin
+        ((parentChainInteraction A W N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + W ≤
+            n).hamiltonian ≤
       openSuffixInteractionHamiltonianES h W N n := by
   let s : Fin N := ⟨n - W, by omega⟩
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d W (by omega : W ≤ N) s
@@ -204,12 +205,15 @@ theorem openSuffixInteractionHamiltonianES_comparison_of_local
         (LinearMap.toContinuousLinearMap (openInteractionHamiltonianES h W))).toLinearMap := by
     simpa only [U, LinearEquiv.conj_apply, LinearMap.comp_assoc] using!
       openSuffixInteractionHamiltonianES_conj_cyclicActiveBlock h hR hRW hWn hnN
-  have hLong : U.toLinearEquiv.conj (openSuffixParentHamiltonianES A W W N n) =
+  have hLong : U.toLinearEquiv.conj
+      (Matrix.toEuclideanLin
+          ((parentChainInteraction A W N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + W ≤
+              n).hamiltonian) =
       (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
         (LinearMap.toContinuousLinearMap (parentInteractionES A W))).toLinearMap := by
     simpa only [U, LinearEquiv.conj_apply, LinearMap.comp_assoc,
-      openParentHamiltonianES_self_eq_parentInteractionES A (by omega : 0 < W)] using!
-      openSuffixParentHamiltonianES_conj_cyclicActiveBlock A
+      hamiltonian_parentChainInteraction_self_eq_parentInteractionES A (by omega : 0 < W)] using!
+      hamiltonian_restrict_parentChainInteraction_conj_cyclicActiveBlock A
         (by omega : 0 < W) le_rfl hWn hnN
   refine (U.conj_le_conj_iff _ _).mp ?_
   simpa only [map_smul, hLong, hShort, ContinuousLinearMap.rightFiberwiseMap_smul,
@@ -229,15 +233,19 @@ theorem openInteractionHamiltonianES_comparison_of_local
     (_hWN : W ≤ N) {κ : ℝ}
     (hLocal : (κ : ℂ) • parentInteractionES A W ≤
       openInteractionHamiltonianES h W) :
-    (κ : ℂ) • openParentHamiltonianES A W N ≤
+    (κ : ℂ) • Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian ≤
       ((W - R + 1 : ℕ) : ℂ) • openInteractionHamiltonianES h N := by
   calc
-    (κ : ℂ) • openParentHamiltonianES A W N =
+    (κ : ℂ) • Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian =
         (κ : ℂ) • ∑ n ∈ Finset.Icc W N,
-          openSuffixParentHamiltonianES A W W N n := by
-          rw [sum_openSuffixParentHamiltonianES_full_window A W N]
+          Matrix.toEuclideanLin
+              ((parentChainInteraction A W N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + W ≤
+                  n).hamiltonian := by
+          rw [sum_hamiltonian_restrict_parentChainInteraction_full_window A W N]
     _ = ∑ n ∈ Finset.Icc W N,
-          (κ : ℂ) • openSuffixParentHamiltonianES A W W N n := by
+          (κ : ℂ) • Matrix.toEuclideanLin
+              ((parentChainInteraction A W N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + W ≤
+                  n).hamiltonian := by
           rw [Finset.smul_sum]
     _ ≤ ∑ n ∈ Finset.Icc W N,
           openSuffixInteractionHamiltonianES h W N n := by
@@ -248,42 +256,6 @@ theorem openInteractionHamiltonianES_comparison_of_local
             hBounds.1 hBounds.2 hLocal
     _ ≤ ((W - R + 1 : ℕ) : ℂ) • openInteractionHamiltonianES h N :=
           sum_openSuffixInteractionHamiltonianES_le h hh hRW
-
-private theorem norm_gap_of_scaled_comparison {E : Type*}
-    [NormedAddCommGroup E] [InnerProductSpace ℂ E] [FiniteDimensional ℂ E]
-    {P Q : E →ₗ[ℂ] E} (hP : P.IsPositive) {κ γ m : ℝ}
-    (hκ : 0 < κ) (hγ : 0 < γ) (hm : 0 < m)
-    (hOrder : (κ : ℂ) • P ≤ (m : ℂ) • Q)
-    (hKer : LinearMap.ker P = LinearMap.ker Q)
-    (hGap : ∀ v ∈ (LinearMap.ker P)ᗮ, γ * ‖v‖ ≤ ‖P v‖) :
-    ∀ v ∈ (LinearMap.ker Q)ᗮ, (κ * γ / m) * ‖v‖ ≤ ‖Q v‖ := by
-  have hκ' : (κ : ℂ) ≠ 0 := by exact_mod_cast hκ.ne'
-  have hm' : (m : ℂ) ≠ 0 := by exact_mod_cast hm.ne'
-  have hGapScaled : ∀ u ∈ (LinearMap.ker ((κ : ℂ) • P))ᗮ,
-      (κ * γ) * ‖u‖ ≤ ‖((κ : ℂ) • P) u‖ := by
-    intro u hu
-    have hu' : u ∈ (LinearMap.ker P)ᗮ := by
-      simpa only [LinearMap.ker_smul _ _ hκ'] using hu
-    simpa only [LinearMap.smul_apply, norm_smul, Complex.norm_real,
-      Real.norm_eq_abs, abs_of_pos hκ, mul_assoc] using
-      mul_le_mul_of_nonneg_left (hGap u hu') hκ.le
-  have hKerScaled : LinearMap.ker ((κ : ℂ) • P) =
-      LinearMap.ker ((m : ℂ) • Q) := by
-    simp only [LinearMap.ker_smul _ _ hκ', LinearMap.ker_smul _ _ hm', hKer]
-  have hTransfer := LinearMap.IsPositive.norm_gap_of_le_of_ker_eq
-    (E := E) (hP.smul_of_nonneg (by exact_mod_cast hκ.le))
-    (mul_nonneg hκ.le hγ.le) hOrder hKerScaled hGapScaled
-  intro v hv
-  have hv' : v ∈ (LinearMap.ker ((m : ℂ) • Q))ᗮ := by
-    simpa only [LinearMap.ker_smul _ _ hm'] using hv
-  have h := hTransfer v hv'
-  rw [div_mul_eq_mul_div]
-  apply (div_le_iff₀ hm).mpr
-  calc
-    (κ * γ) * ‖v‖ ≤ m * ‖Q v‖ := by
-      simpa only [LinearMap.smul_apply, norm_smul, Complex.norm_real,
-        Real.norm_eq_abs, abs_of_pos hm] using h
-    _ = ‖Q v‖ * m := mul_comm _ _
 
 /-- A finite-window comparison transfers a norm gap at a specified volume
 when the two global kernels are the same MPS boundary-condition space.
@@ -298,127 +270,22 @@ theorem openInteractionHamiltonianES_gap_of_long_gap_at_length
     (hLocal : (κ : ℂ) • parentInteractionES A W ≤
       openInteractionHamiltonianES h W)
     (hShortKer : LinearMap.ker (openInteractionHamiltonianES h N) = groundSpaceES A N)
-    (hLongKer : LinearMap.ker (openParentHamiltonianES A W N) = groundSpaceES A N)
+    (hLongKer : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian) =
+        groundSpaceES A N)
     (hLong : ∀ v ∈ (groundSpaceES A N)ᗮ,
-      γ * ‖v‖ ≤ ‖openParentHamiltonianES A W N v‖) :
+      γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian v‖) :
     ∀ v ∈ (groundSpaceES A N)ᗮ,
       (κ * γ / (W - R + 1 : ℕ)) * ‖v‖ ≤
         ‖openInteractionHamiltonianES h N v‖ := by
   have hOrder := openInteractionHamiltonianES_comparison_of_local A h hh
     hR hRW hWN hLocal
-  have hTransfer := norm_gap_of_scaled_comparison
+  have hTransfer := LinearMap.IsPositive.norm_gap_of_scaled_comparison
     (E := EuclideanSpace ℂ (Cfg d N))
-    (openParentHamiltonianES_isPositive A W N) hκ hγ
+    (Matrix.isPositive_toEuclideanLin_iff.mpr
+        (posSemidef_hamiltonian_parentChainInteraction A W N)) hκ hγ
     (by positivity : 0 < ((W - R + 1 : ℕ) : ℝ)) hOrder
     (hLongKer.trans hShortKer.symm)
     (fun v hv => hLong v (by rwa [hLongKer] at hv))
   simpa only [hShortKer] using hTransfer
-
-/-! ### The comparison for the Hamiltonians of the interactions
-
-The same comparison and gap transfer for a local matrix `h` and the Hamiltonians of its open-chain
-translates (`ManyBody.Interaction.chainTranslates`) and of the parent interaction on the open
-chain (`parentChainInteraction`), in the matrix order. -/
-
-section Interaction
-
-open scoped MatrixOrder
-open ManyBody.Interaction (chainTranslates hamiltonian_chainTranslates_eq_sum_range)
-
-/-- Each position `i < c` is the sum `n + j` of at most `b` pairs with `j < b`: a double sum of
-nonnegative terms over `n < a`, `j < b` is at most `b` times the sum over `i < c`. -/
-private theorem sum_range_sum_range_add_le {M : Type*} [AddCommMonoid M] [PartialOrder M]
-    [IsOrderedAddMonoid M] (g : ℕ → M) (hg : ∀ i, 0 ≤ g i) {a b c : ℕ}
-    (hc : ∀ n < a, ∀ j < b, n + j < c) :
-    ∑ n ∈ Finset.range a, ∑ j ∈ Finset.range b, g (n + j) ≤ b • ∑ i ∈ Finset.range c, g i := by
-  rw [Finset.sum_comm]
-  calc ∑ j ∈ Finset.range b, ∑ n ∈ Finset.range a, g (n + j)
-      ≤ ∑ j ∈ Finset.range b, ∑ i ∈ Finset.range c, g i := by
-        refine Finset.sum_le_sum fun j hj ↦ ?_
-        rw [← Finset.sum_image (g := (· + j)) fun x _ y _ hxy ↦ by simpa using hxy]
-        refine Finset.sum_le_sum_of_subset_of_nonneg ?_ fun i _ _ ↦ hg i
-        intro i hi
-        obtain ⟨n, hn, rfl⟩ := Finset.mem_image.mp hi
-        exact Finset.mem_range.mpr
-          (hc n (Finset.mem_range.mp hn) j (Finset.mem_range.mp hj))
-    _ = b • ∑ i ∈ Finset.range c, g i := by rw [Finset.sum_const, Finset.card_range]
-
-/-- **Comparison from one window.** If the open Hamiltonian of a positive semidefinite range-`R`
-matrix `h` on `W` sites dominates a multiple of the local parent projection on `W` sites, then on
-every open chain the Hamiltonian of the translates of `h`, times the window multiplicity
-\(W-R+1\), dominates the same multiple of the open-chain parent Hamiltonian of range `W`.
-Nachtergaele, arXiv:cond-mat/9410110, condition C1 and Section 6. -/
-theorem hamiltonian_chainTranslates_comparison_of_local (A : MPSTensor d D) {R W N : ℕ}
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef) (hRW : R ≤ W) {κ : ℝ}
-    (hLocal : (κ : ℂ) • LinearMap.toMatrix' (parentInteraction A W) ≤
-      (chainTranslates R W h).hamiltonian) :
-    (κ : ℂ) • (parentChainInteraction A W N).hamiltonian ≤
-      ((W - R + 1 : ℕ) : ℂ) • (chainTranslates R N h).hamiltonian := by
-  let g : ℕ → Matrix (Cfg d N) (Cfg d N) ℂ := fun i ↦
-    if hi : i + R ≤ N then ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow i hi) h
-    else 0
-  have hg : ∀ i, 0 ≤ g i := fun i ↦ by
-    by_cases hi : i + R ≤ N
-    · simp only [g, dite_eq_left hi]
-      exact Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_placeAlong _ hh)
-    · simp only [g, dite_eq_right hi, le_refl]
-  have hwindow (n : ℕ) (hn : n + W ≤ N) :
-      (κ : ℂ) • ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow n hn)
-          (LinearMap.toMatrix' (parentInteraction A W)) ≤
-        ∑ j ∈ Finset.range (W + 1 - R), g (n + j) := by
-    rw [← ManyBody.placeAlong_smul]
-    refine (ManyBody.placeAlong_le_placeAlong _ hLocal).trans_eq ?_
-    rw [hamiltonian_chainTranslates_eq_sum_range, ManyBody.placeAlong_sum]
-    refine Finset.sum_congr rfl fun j hj ↦ ?_
-    have hj' : j + R ≤ W := by have := Finset.mem_range.mp hj; omega
-    simp only [g, dite_eq_left hj', dite_eq_left (show n + j + R ≤ N by omega),
-      ManyBody.placeAlong_placeAlong, ManyBody.chainWindow_trans_chainWindow]
-  rw [hamiltonian_chainTranslates_eq_sum_range, hamiltonian_chainTranslates_eq_sum_range,
-    Finset.smul_sum, show W - R + 1 = W + 1 - R by omega, Nat.cast_smul_eq_nsmul]
-  calc ∑ n ∈ Finset.range (N + 1 - W), (κ : ℂ) • (if hn : n + W ≤ N then
-          ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow n hn)
-            (LinearMap.toMatrix' (parentInteraction A W)) else 0)
-      ≤ ∑ n ∈ Finset.range (N + 1 - W), ∑ j ∈ Finset.range (W + 1 - R), g (n + j) := by
-        refine Finset.sum_le_sum fun n hn ↦ ?_
-        rw [dite_eq_left (show n + W ≤ N by have := Finset.mem_range.mp hn; omega)]
-        exact hwindow n _
-    _ ≤ (W + 1 - R) • ∑ i ∈ Finset.range (N + 1 - R), g i :=
-        sum_range_sum_range_add_le g hg fun n hn j hj ↦ by omega
-
-/-- **Gap transfer at a specified volume.** Under the comparison of
-`hamiltonian_chainTranslates_comparison_of_local`, if the open Hamiltonian of `h` and the
-open-chain parent Hamiltonian of range `W` on `N` sites have the same kernel, the MPS
-boundary-condition space, a gap \(γ\) above the kernel of the latter (every eigenvalue is `0`
-or at least \(γ\)) gives the gap \(κγ/(W-R+1)\) above the kernel of the former. There is no
-hypothesis on the kernel of the local matrix `h` itself. Nachtergaele,
-arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
-theorem toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
-    (A : MPSTensor d D) {R W N : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
-    (hRW : R ≤ W) {κ γ : ℝ} (hκ : 0 < κ) (hγ : 0 < γ)
-    (hLocal : (κ : ℂ) • LinearMap.toMatrix' (parentInteraction A W) ≤
-      (chainTranslates R W h).hamiltonian)
-    (hShortKer : LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-      groundSpaceES A N)
-    (hLongKer : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian) =
-      groundSpaceES A N)
-    (hLong : ∀ μ : ℂ, Module.End.HasEigenvalue
-      (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian) μ →
-        μ = 0 ∨ (γ : ℂ) ≤ μ) :
-    ∀ μ : ℂ, Module.End.HasEigenvalue
-      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ →
-        μ = 0 ∨ ((κ * γ / (W - R + 1 : ℕ) : ℝ) : ℂ) ≤ μ := by
-  have hOrder := hamiltonian_chainTranslates_comparison_of_local A h hh hRW (N := N) hLocal
-  rw [← Matrix.toEuclideanLin_le_toEuclideanLin_iff, map_smul, map_smul] at hOrder
-  refine (ManyBody.forall_hasEigenvalue_iff_norm
-    (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh N)).mpr ?_
-  exact norm_gap_of_scaled_comparison
-    (E := EuclideanSpace ℂ (Cfg d N))
-    (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentChainInteraction A W N))
-    hκ hγ (by positivity : 0 < ((W - R + 1 : ℕ) : ℝ)) (by exact_mod_cast hOrder)
-    (hLongKer.trans hShortKer.symm)
-    ((ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentChainInteraction A W N)).mp hLong)
-
-end Interaction
 
 end MPSTensor

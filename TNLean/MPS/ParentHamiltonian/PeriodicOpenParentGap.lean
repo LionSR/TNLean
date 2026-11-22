@@ -32,27 +32,30 @@ namespace MPSTensor
 variable {d D m : ℕ}
 
 /-- Periodicity alone derives a canonical original-chain interaction range,
-exact open kernels above that range, and one norm gap at every volume.
+exact open kernels above that range, and one gap at every volume: every eigenvalue of the
+open-chain parent Hamiltonian is `0` or at least the gap.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2,
 Lemma commutation (ii), and Section 6, in the periodic tensor setting. -/
-theorem IsPeriodic.exists_pos_openParentHamiltonianES_gap
+theorem IsPeriodic.exists_pos_hamiltonian_parentChainInteraction_gap
     {A : MPSTensor d D} (hA : IsPeriodic m A) :
     ∃ R : ℕ, 0 < R ∧
-      (∀ N, R ≤ N → LinearMap.ker (openParentHamiltonianES A R N) = groundSpaceES A N) ∧
+      (∀ N, R ≤ N → LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian)
+          = groundSpaceES A N) ∧
       ∃ δ : ℝ, 0 < δ ∧
-        ∀ N, ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R N))ᗮ,
-          δ * ‖v‖ ≤ ‖openParentHamiltonianES A R N v‖ := by
+        ∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
+          (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
+            μ = 0 ∨ (δ : ℂ) ≤ μ := by
   let : NeZero d := ⟨hA.physDim_ne_zero⟩
   obtain ⟨R, hR, hKernel, N₀, _hRN, δ, hδ, hGap⟩ :=
-    hA.exists_pos_openParentHamiltonianES_gap_of_residue_cover_limit
+    hA.exists_pos_hamiltonian_parentChainInteraction_gap_of_residue_cover_limit
       hA.residual_cover_projection_defect_tendsto_zero
   obtain ⟨γ, hγ, hAll⟩ := Nat.exists_pos_forall_of_eventually
-    (P := fun N γ => ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R N))ᗮ,
-      γ * ‖v‖ ≤ ‖openParentHamiltonianES A R N v‖)
-    (fun N γ η hle hgap v hv =>
-      (mul_le_mul_of_nonneg_right hle (norm_nonneg v)).trans (hgap v hv))
-    (fun N => LinearMap.exists_pos_mul_norm_le_of_mem_orthogonal_ker
-      (openParentHamiltonianES A R N)) hδ hGap
+    (P := fun N γ => ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ)
+    (fun N γ η hle hgap => ManyBody.forall_hasEigenvalue_mono hle hgap)
+    (fun N => ManyBody.exists_pos_forall_hasEigenvalue
+      (posSemidef_hamiltonian_parentChainInteraction A R N)) hδ hGap
   exact ⟨R, hR, hKernel, γ, hγ, hAll⟩
 
 /-- A normalized periodic tensor admits a positive local matrix interaction
@@ -69,12 +72,14 @@ theorem IsPeriodic.exists_positive_parent_interaction_uniform_gap
       ∃ δ : ℝ, 0 < δ ∧ ∀ N, ∀ v ∈ (LinearMap.ker
         (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
         δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖ := by
-  obtain ⟨R, hR, hKernel, δ, hδ, hGap⟩ := hA.exists_pos_openParentHamiltonianES_gap
+  obtain ⟨R, hR, hKernel, δ, hδ, hGap⟩ := hA.exists_pos_hamiltonian_parentChainInteraction_gap
   refine ⟨R, hR, canonicalParentInteractionMatrix A R,
     canonicalParentInteractionMatrix_posSemidef A R, ?_, δ, hδ, ?_⟩
   · simpa only [toEuclideanLin_canonicalParentInteractionMatrix,
       openInteractionHamiltonianES_parentInteractionES A hR] using hKernel
   · simpa only [toEuclideanLin_canonicalParentInteractionMatrix,
-      openInteractionHamiltonianES_parentInteractionES A hR] using hGap
+      openInteractionHamiltonianES_parentInteractionES A hR] using
+      fun N ↦ (ManyBody.forall_hasEigenvalue_iff_norm
+        (posSemidef_hamiltonian_parentChainInteraction A R N)).mp (hGap N)
 
 end MPSTensor

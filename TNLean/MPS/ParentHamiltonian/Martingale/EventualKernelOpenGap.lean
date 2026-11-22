@@ -57,10 +57,10 @@ theorem exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
   have hpos (N : ℕ) := ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh N
   obtain ⟨N₀, hN₀⟩ := Filter.eventually_atTop.1 hker
   obtain ⟨L₀, hL₀, hCanonicalKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
+    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
       μ A hμ ρ hP hρ hDistinct
   obtain ⟨p, hpBound, hp, δ, hδ, hCanonicalGap⟩ :=
-    exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_all_of_hasComplementaryFixedPointGap
+    exists_ge_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_all_of_fixedPointGap
       μ A hμ ρ hP hρ hDistinct (max R (max N₀ L₀))
   obtain ⟨κ, hκ, hLocal⟩ :=
     LinearMap.IsPositive.exists_pos_smul_orthogonal_ker_projection_le
@@ -87,7 +87,6 @@ theorem exists_hamiltonian_chainTranslates_gap_of_eventual_kernel
   exact toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
     (toTensorFromBlocks (d := d) (μ := μ) A) h hh (by omega) hκ hδ
     hLocal' (hN₀ N (by omega)) (hCanonicalKernel (2 * p) N (by omega) hN)
-    ((ManyBody.forall_hasEigenvalue_iff_norm (posSemidef_hamiltonian_parentChainInteraction
-      (toTensorFromBlocks (d := d) (μ := μ) A) (2 * p) N)).mpr (hCanonicalGap N))
+    (hCanonicalGap N)
 
 end MPSTensor

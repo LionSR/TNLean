@@ -70,8 +70,8 @@ theorem IsParentInteraction.localCommutatorObservable_nonneg
   have hker : groundSpaceES (A α) w ≤
       LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R w h).hamiltonian)) := by
     rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hw,
-      hh.ker_openInteractionHamiltonianES_eq_ker_openParentHamiltonianES hR]
-    apply le_trans ?_ (groundSpaceES_le_ker_openParentHamiltonianES
+      hh.ker_openInteractionHamiltonianES_eq_ker_hamiltonian_parentChainInteraction hR]
+    apply le_trans ?_ (groundSpaceES_le_ker_hamiltonian_parentChainInteraction
       (toTensorFromBlocks (d := d) (μ := μ) A) R w)
     exact groundSpaceES_block_le_toTensorFromBlocks μ A hμ α w
   exact observableInsertionExpectation_adjoint_commutator_nonneg

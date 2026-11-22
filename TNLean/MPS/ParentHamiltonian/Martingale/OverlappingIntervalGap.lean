@@ -29,64 +29,66 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- A prefix contains only interaction terms of the full open chain. -/
-theorem openPrefixParentHamiltonianES_le_openParentHamiltonianES
-    (A : MPSTensor d D) (R N n : ℕ) :
-    openPrefixParentHamiltonianES A R N n ≤ openParentHamiltonianES A R N :=
-  Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr (ManyBody.Interaction.hamiltonian_restrict_le
-    (fun i ↦ Matrix.nonneg_iff_posSemidef.mpr (posSemidef_parentChainInteraction_term A R N i)) _)
-
-/-- An interval Hamiltonian contains only interaction terms of the full open chain. -/
-theorem openSuffixParentHamiltonianES_le_openParentHamiltonianES
-    (A : MPSTensor d D) (R W N n : ℕ) :
-    openSuffixParentHamiltonianES A R W N n ≤ openParentHamiltonianES A R N :=
-  Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr (ManyBody.Interaction.hamiltonian_restrict_le
-    (fun i ↦ Matrix.nonneg_iff_posSemidef.mpr (posSemidef_parentChainInteraction_term A R N i)) _)
-
 /-- Gaps for a prefix and a terminal interval give a full-chain gap if the
 product of their ground projections differs from the full-chain ground
 projection by at most \(1/2\). The two interval energies sum to at most twice
 the full-chain energy, so a common interval gap \(\kappa\) gives a gap
-\(\kappa/16\). This is an auxiliary two-interval consequence of the projector
-estimate in Nachtergaele, arXiv:cond-mat/9410110, Section 6,
-Lemma `commutation` (ii). -/
-theorem openParentHamiltonianES_norm_gap_of_overlapping_interval_gaps
+\(\kappa/16\); each gap says that every eigenvalue is `0` or at least the gap. This is an
+auxiliary two-interval consequence of the projector estimate in Nachtergaele,
+arXiv:cond-mat/9410110, Section 6, Lemma `commutation` (ii). -/
+theorem hamiltonian_parentChainInteraction_gap_of_overlapping_interval_gaps
     (A : MPSTensor d D) (R N n W : ℕ) {κ : ℝ} (hκ : 0 ≤ κ)
-    (hLeft : ∀ v ∈ (LinearMap.ker (openPrefixParentHamiltonianES A R N n))ᗮ,
-      κ * ‖v‖ ≤ ‖openPrefixParentHamiltonianES A R N n v‖)
-    (hRight : ∀ v ∈ (LinearMap.ker (openSuffixParentHamiltonianES A R W N N))ᗮ,
-      κ * ‖v‖ ≤ ‖openSuffixParentHamiltonianES A R W N N v‖)
-    (hDefect : ‖(LinearMap.ker (openParentHamiltonianES A R N)).starProjection -
-      (LinearMap.ker (openPrefixParentHamiltonianES A R N n)).starProjection.comp
-        (LinearMap.ker (openSuffixParentHamiltonianES A R W N N)).starProjection‖ ≤
+    (hLeft : ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+      ((parentChainInteraction A R N).restrict fun i ↦ i.val + R ≤ n).hamiltonian) μ →
+        μ = 0 ∨ (κ : ℂ) ≤ μ)
+    (hRight : ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+      ((parentChainInteraction A R N).restrict
+        fun i ↦ N - W ≤ i.val ∧ i.val + R ≤ N).hamiltonian) μ → μ = 0 ∨ (κ : ℂ) ≤ μ)
+    (hDefect : ‖(LinearMap.ker
+        (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian)).starProjection -
+      (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A R N).restrict
+        fun i ↦ i.val + R ≤ n).hamiltonian)).starProjection.comp
+        (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A R N).restrict
+          fun i ↦ N - W ≤ i.val ∧ i.val + R ≤ N).hamiltonian)).starProjection‖ ≤
       (1 / 2 : ℝ)) :
-    ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R N))ᗮ,
-      (κ / 16) * ‖v‖ ≤ ‖openParentHamiltonianES A R N v‖ := by
-  have hWU := (openPrefixParentHamiltonianES_isPositive A R N n).ker_le_of_le
-    (openPrefixParentHamiltonianES_le_openParentHamiltonianES A R N n)
-  have hWV := (openSuffixParentHamiltonianES_isPositive A R W N N).ker_le_of_le
-    (openSuffixParentHamiltonianES_le_openParentHamiltonianES A R W N N)
-  have hCover : openPrefixParentHamiltonianES A R N n +
-      openSuffixParentHamiltonianES A R W N N ≤ (2 : ℂ) • openParentHamiltonianES A R N := by
-    simpa only [two_smul] using add_le_add
-      (openPrefixParentHamiltonianES_le_openParentHamiltonianES A R N n)
-      (openSuffixParentHamiltonianES_le_openParentHamiltonianES A R W N N)
+    ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) μ →
+        μ = 0 ∨ ((κ / 16 : ℝ) : ℂ) ≤ μ := by
+  have hnn := fun i ↦ Matrix.nonneg_iff_posSemidef.mpr
+    (posSemidef_parentChainInteraction_term A R N i)
+  have hPL := Matrix.isPositive_toEuclideanLin_iff.mpr
+    (posSemidef_hamiltonian_restrict_parentChainInteraction A R N fun i ↦ i.val + R ≤ n)
+  have hPR := Matrix.isPositive_toEuclideanLin_iff.mpr
+    (posSemidef_hamiltonian_restrict_parentChainInteraction A R N
+      fun i ↦ N - W ≤ i.val ∧ i.val + R ≤ N)
+  have hLL := Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr
+    (ManyBody.Interaction.hamiltonian_restrict_le hnn fun i ↦ i.val + R ≤ n)
+  have hLR := Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr
+    (ManyBody.Interaction.hamiltonian_restrict_le hnn fun i ↦ N - W ≤ i.val ∧ i.val + R ≤ N)
+  have hWU := hPL.ker_le_of_le hLL
+  have hWV := hPR.ker_le_of_le hLR
   have hTwice := smul_le_smul_of_nonneg_left ((add_le_add
-      (LinearMap.IsPositive.smul_orthogonal_ker_projection_le_of_norm_gap
-        (openPrefixParentHamiltonianES_isPositive A R N n) hκ hLeft)
-      (LinearMap.IsPositive.smul_orthogonal_ker_projection_le_of_norm_gap
-        (openSuffixParentHamiltonianES_isPositive A R W N N) hκ hRight)).trans hCover)
+      (LinearMap.IsPositive.smul_orthogonal_ker_projection_le_of_norm_gap hPL hκ
+        ((ManyBody.forall_hasEigenvalue_iff_norm
+          (posSemidef_hamiltonian_restrict_parentChainInteraction A R N _)).mp hLeft))
+      (LinearMap.IsPositive.smul_orthogonal_ker_projection_le_of_norm_gap hPR hκ
+        ((ManyBody.forall_hasEigenvalue_iff_norm
+          (posSemidef_hamiltonian_restrict_parentChainInteraction A R N _)).mp hRight))).trans
+      ((add_le_add hLL hLR).trans_eq (two_smul ℂ _).symm))
     (Complex.zero_le_real.mpr (by norm_num : (0 : ℝ) ≤ 1 / 2))
   have hLower : ((κ / 2 : ℝ) : ℂ) •
-      ((LinearMap.ker (openPrefixParentHamiltonianES A R N n))ᗮ.starProjection.toLinearMap +
-        (LinearMap.ker (openSuffixParentHamiltonianES A R W N N))ᗮ.starProjection.toLinearMap) ≤
-      openParentHamiltonianES A R N := by
+      ((LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A R N).restrict
+          fun i ↦ i.val + R ≤ n).hamiltonian))ᗮ.starProjection.toLinearMap +
+        (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A R N).restrict
+          fun i ↦ N - W ≤ i.val ∧ i.val + R ≤ N).hamiltonian))ᗮ.starProjection.toLinearMap) ≤
+      Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian := by
     convert hTwice using 1
     · rw [smul_add, smul_add, smul_smul, smul_smul]
       norm_num [div_eq_mul_inv, mul_comm]
     · rw [smul_smul]
       norm_num
-  intro v hv
+  refine (ManyBody.forall_hasEigenvalue_iff_norm
+    (posSemidef_hamiltonian_parentChainInteraction A R N)).mpr fun v hv ↦ ?_
   refine le_trans ?_ (FrustrationFree.norm_gap_of_two_ground_projection_bounds _ _ _
     (by positivity) (by norm_num : (1 / 2 : ℝ) < 1) hWU hWV hLower hDefect v hv)
   gcongr

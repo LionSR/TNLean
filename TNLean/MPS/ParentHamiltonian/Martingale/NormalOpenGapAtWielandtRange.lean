@@ -49,28 +49,16 @@ theorem exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective
         (Matrix.toEuclideanLin (parentChainInteraction A (p + 1) N).hamiltonian) μ →
           μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨W, _hW, δ, hδ, hlong⟩ :=
-    exists_openParentHamiltonianES_uniform_gap_of_isNBlkInjective A hp hA
-  have h : ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, p + 1 ≤ N → ∀ v ∈ (groundSpaceES A N)ᗮ,
-      δ * ‖v‖ ≤ ‖openParentHamiltonianES A (p + 1) N v‖ := by
-    refine Nat.exists_pos_forall_of_eventually
-      (P := fun N γ => p + 1 ≤ N → ∀ v ∈ (groundSpaceES A N)ᗮ,
-        γ * ‖v‖ ≤ ‖openParentHamiltonianES A (p + 1) N v‖)
-      (fun N γ η hle h hN v hv =>
-        (mul_le_mul_of_nonneg_right hle (norm_nonneg v)).trans (h hN v hv))
-      ?_ hδ (fun N hN _ => hlong N hN)
-    intro N
-    by_cases hN : p + 1 ≤ N
-    · obtain ⟨η, hη, hgap⟩ :=
-        (openParentHamiltonianES A (p + 1) N).exists_pos_mul_norm_le_of_mem_orthogonal_ker
-      exact ⟨η, hη, fun _ => by
-        simpa only [ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
-          hA hp hN] using hgap⟩
-    · exact ⟨1, one_pos, fun h => (hN h).elim⟩
-  obtain ⟨δ, hδ, h⟩ := h
-  refine ⟨δ, hδ, fun N hN ↦ (ManyBody.forall_hasEigenvalue_iff_norm
-    (posSemidef_hamiltonian_parentChainInteraction A (p + 1) N)).mpr ?_⟩
-  rw [ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective hA hp hN]
-  exact h N hN
+    exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective A hp hA
+  exact Nat.exists_pos_forall_of_eventually
+    (P := fun N γ => p + 1 ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (parentChainInteraction A (p + 1) N).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ)
+    (fun N γ η hle h hN => ManyBody.forall_hasEigenvalue_mono hle (h hN))
+    (fun N => (ManyBody.exists_pos_forall_hasEigenvalue
+      (posSemidef_hamiltonian_parentChainInteraction A (p + 1) N)).imp
+        fun η h => ⟨h.1, fun _ => h.2⟩)
+    hδ (fun N hN _ => hlong N hN)
 
 /-- Once a tensor is injective at \(p>0\), every larger interaction range
 \(R>p\) has a positive open-chain gap uniform over all \(N\ge R\): every eigenvalue is `0` or

@@ -82,15 +82,16 @@ theorem zmodOpenLocalTermES_commute_of_oriented_separation
 
 /-- If the cyclic period is at least the physical volume, summing the padded
 interactions gives precisely the original open-chain parent Hamiltonian. -/
-theorem sum_zmodOpenLocalTermES_eq_openParentHamiltonianES
+theorem sum_zmodOpenLocalTermES_eq_hamiltonian_parentChainInteraction
     {N P R : ℕ} [NeZero P] (A : MPSTensor d D) (hR : 0 < R) (hNP : N ≤ P) :
     (∑ s : ZMod P, zmodOpenLocalTermES (N := N) A R hR s) =
-      openParentHamiltonianES A R N := by
+      Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian := by
   classical
   let f : Fin N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
     fun i => if i.val + R ≤ N then localTermES A R i else 0
-  have hsum : openParentHamiltonianES A R N = ∑ i : Fin N, f i := by
-    rw [openParentHamiltonianES, ManyBody.Interaction.hamiltonian, map_sum]
+  have hsum : Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian = ∑ i : Fin N,
+      f i := by
+    rw [ManyBody.Interaction.hamiltonian, map_sum]
     refine Fin.sum_eq_sum_of_val_eq _ _ (fun k ha hb ↦ ?_) (fun i hi ↦ absurd i.isLt (by omega))
       (fun i hi ↦ ite_eq_right (by omega))
     have hk : (⟨k, hb⟩ : Fin N).val + R ≤ N := by

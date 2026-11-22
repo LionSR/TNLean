@@ -35,7 +35,8 @@ Lemma `existenceinteraction`, lines 2195--2230. -/
 theorem exists_positive_canonical_parent_interaction_of_exact_open_kernels
     (A : MPSTensor d D) (hR : 0 < R)
     (hKernel : ∀ N, R ≤ N →
-      LinearMap.ker (openParentHamiltonianES A R N) = groundSpaceES A N) :
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
+          groundSpaceES A N) :
     ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h = canonicalParentInteractionMatrix A R ∧ h.PosSemidef ∧
       ∀ N, R ≤ N →

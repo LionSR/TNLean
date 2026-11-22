@@ -26,7 +26,8 @@ pure multiblock conclusion are not treated here; see
 docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 
 **Transitional (#10948).**
-`IsParentInteraction.ker_openInteractionHamiltonianES_eq_ker_openParentHamiltonianES`, stated for
+`IsParentInteraction.ker_openInteractionHamiltonianES_eq_ker_hamiltonian_parentChainInteraction`,
+stated for
 the Euclidean-space operators, is kept until its last users are converted; the last section states
 it for the Hamiltonians of the open-chain translates and of `parentChainInteraction`. The
 commutator theorems rest on the open-chain gap at the Wielandt range and are converted with it.
@@ -44,14 +45,16 @@ variable {d D R k : ℕ}
 /-- Positive local parent interactions and the canonical projection have
 identical open-chain kernels at every length. Source: CPGSV21,
 arXiv:2011.12127, lines 2170--2172. -/
-theorem IsParentInteraction.ker_openInteractionHamiltonianES_eq_ker_openParentHamiltonianES
+theorem
+    IsParentInteraction.ker_openInteractionHamiltonianES_eq_ker_hamiltonian_parentChainInteraction
     {A : MPSTensor d D}
     {h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)}
     (hh : IsParentInteraction A R h) (hR : 0 < R) (N : ℕ) :
     LinearMap.ker (openInteractionHamiltonianES h N) =
-      LinearMap.ker (openParentHamiltonianES A R N) := by
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) := by
   obtain ⟨κ, C, hκ, hC, hComparison⟩ := hh.exists_pos_open_comparison hR
-  apply ((openParentHamiltonianES_isPositive A R N).ker_eq_of_smul_le_of_le_smul
+  apply ((Matrix.isPositive_toEuclideanLin_iff.mpr
+      (posSemidef_hamiltonian_parentChainInteraction A R N)).ker_eq_of_smul_le_of_le_smul
     (openInteractionHamiltonianES_isPositive hh.isPositive N) hκ zero_lt_one hC
     (by simpa only [Complex.ofReal_one, one_smul] using (hComparison N).1)
     (by simpa only [Complex.ofReal_one, one_smul] using (hComparison N).2)).symm
@@ -135,7 +138,8 @@ positive local commutator bound throughout the normalized primitive sector.
 All finite-volume and limiting estimates are derived internally.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and Section 6;
 CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
-theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_gap_of_isParentInteraction
+theorem
+    _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_gap_of_isParentInteraction
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
     (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
@@ -165,9 +169,10 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_ga
   apply hP.localCommutator_gap_of_openInteraction_gap hρ h hh.isPositive X hRpos
     hcenter ψ hγ.le
   · exact Eventually.of_forall fun n => by
-      rw [hh.ker_openInteractionHamiltonianES_eq_ker_openParentHamiltonianES hRpos]
-      simpa only [hRange] using ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
+      rw [hh.ker_openInteractionHamiltonianES_eq_ker_hamiltonian_parentChainInteraction hRpos]
+      have h := ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
         hInj (by omega : 0 < R - 1) (by dsimp [N]; omega : R - 1 + 1 ≤ N n)
+      rwa [hRange] at h
   · exact Eventually.of_forall fun n => hgap (N n) (by dsimp [N]; omega)
   · exact Eventually.of_forall hg
   · exact hu

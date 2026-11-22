@@ -48,9 +48,13 @@ theorem exists_given_interaction_gap_of_leftCanonical_of_posDef_fixedPoint
         (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N))ᗮ,
         δ * ‖v‖ ≤ ‖openInteractionHamiltonianES (Matrix.toEuclideanLin h) N v‖ := by
   obtain ⟨R₀, hR₀, hCanonical⟩ :=
-    exists_openParentHamiltonianES_gap_of_leftCanonical_of_posDef_fixedPoint A hA hρ hFix
+    exists_hamiltonian_parentChainInteraction_gap_of_leftCanonical_of_posDef_fixedPoint A hA hρ hFix
   exact exists_openInteractionHamiltonianES_gap_of_canonical_gaps_of_eventual_kernel
-    A hR₀ hCanonical (Matrix.toEuclideanLin h) hR
+    A hR₀
+    (fun W hW ↦ ⟨(hCanonical W hW).1, (hCanonical W hW).2.imp fun δ hδ ↦ ⟨hδ.1, fun N ↦
+      (ManyBody.forall_hasEigenvalue_iff_norm
+        (posSemidef_hamiltonian_parentChainInteraction _ W N)).mp (hδ.2 N)⟩⟩)
+    (Matrix.toEuclideanLin h) hR
     (Matrix.isPositive_toEuclideanLin_iff.mpr hh) hKernel
 
 /-- The same given positive interaction has a uniform finite norm gap and

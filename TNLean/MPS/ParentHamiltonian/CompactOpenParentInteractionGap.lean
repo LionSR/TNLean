@@ -59,12 +59,14 @@ theorem exists_uniform_block_openParentInteraction_gap_of_compact
   have hSpanR (x : X) : WordTupleSpanTop (A x) R :=
     wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega)
   obtain ⟨γ, hγ, hGap⟩ :=
-    exists_uniform_openParentHamiltonianES_toTensorFromBlocks_gap_of_compact_all_lengths
+    exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_compact_all_lengths
       μ A hμ hA hS hSpan hR hK
   exact exists_uniform_openInteractionHamiltonianES_gap_of_compact_canonical_gap
     (fun x => toTensorFromBlocks (d := d) (μ := μ x) (A x))
     (continuous_groundSpaceES_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
-    H hH hParent hK (by omega) hγ hGap
+    H hH hParent hK (by omega) hγ
+    (fun x hx N hN ↦ (ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentChainInteraction _ R N)).mp (hGap x hx N hN))
 
 /-- A compact continuous family of pairwise inequivalent normalized normal
 blocks has one positive open-chain gap for continuous positive interactions at
@@ -102,11 +104,13 @@ theorem exists_uniform_block_openParentInteraction_gap_of_compact_isNormalTensor
         (A x) hCap (le_max_left _ _) (hNormal x) (hDistinct x)
     exact wordTupleSpanTop_of_ge (A x) hS hSpan (by omega)
   obtain ⟨γ, hγ, hGap⟩ :=
-    exists_uniform_block_openParentHamiltonianES_gap_of_compact_isNormalTensor
+    exists_uniform_block_hamiltonian_parentChainInteraction_gap_of_compact_isNormalTensor
       μ A hμ hA hNormal hDistinct hR hK
   exact exists_uniform_openInteractionHamiltonianES_gap_of_compact_canonical_gap
     (fun x => toTensorFromBlocks (d := d) (μ := μ x) (A x))
     (continuous_groundSpaceES_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
-    H hH hParent hK (lt_of_lt_of_le (by positivity) hR) hγ hGap
+    H hH hParent hK (lt_of_lt_of_le (by positivity) hR) hγ
+    (fun x hx N hN ↦ (ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentChainInteraction _ R N)).mp (hGap x hx N hN))
 
 end MPSTensor

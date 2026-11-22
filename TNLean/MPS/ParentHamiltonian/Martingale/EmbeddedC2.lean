@@ -49,11 +49,13 @@ theorem hamiltonian_restrict_parentChainInteraction_eq_term (A : MPSTensor d D)
 
 /-- The single-window suffix Hamiltonian as a Euclidean-space local term; kept for the files not
 yet restated (#10948). -/
-theorem openSuffixParentHamiltonianES_eq_localTermES (A : MPSTensor d D)
+theorem hamiltonian_restrict_parentChainInteraction_eq_localTermES (A : MPSTensor d D)
     {L N n : ℕ} (hL : 0 < L) (hLn : L ≤ n) (hnN : n ≤ N) :
-    openSuffixParentHamiltonianES A L L N n =
+    Matrix.toEuclideanLin
+        ((parentChainInteraction A L N).restrict fun i ↦ n - L ≤ i.val ∧ i.val + L ≤
+            n).hamiltonian =
       localTermES A L (⟨n - L, by omega⟩ : Fin N) := by
-  rw [openSuffixParentHamiltonianES, hamiltonian_restrict_parentChainInteraction_eq_term A hLn hnN]
+  rw [hamiltonian_restrict_parentChainInteraction_eq_term A hLn hnN]
   exact (localTermES_eq_toEuclideanLin_parentChainInteraction_term A ⟨n - L, by omega⟩
     (by change n - L + L ≤ N; omega)).symm
 
@@ -73,8 +75,7 @@ theorem toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_starProjec
     Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
       fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian =
       (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
-        fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian))ᗮ.starProjection.toLinearMap
-        := by
+        fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian))ᗮ.starProjection.toLinearMap := by
   have hH := Matrix.isSymmetricProjection_toEuclideanLin_iff.mpr
     (isStarProjection_hamiltonian_restrict_parentChainInteraction A hLn hnN)
   apply hH.ext (Submodule.isSymmetricProjection_starProjection _)

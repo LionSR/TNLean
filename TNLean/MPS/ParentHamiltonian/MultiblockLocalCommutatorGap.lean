@@ -197,15 +197,17 @@ theorem exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
   let T := toTensorFromBlocks (d := d) (μ := μ) A
   have hRpos : 0 < R := by omega
   have hKernel : ∀ N, R ≤ N →
-      LinearMap.ker (openParentHamiltonianES T R N) = groundSpaceES T N :=
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction T R N).hamiltonian) =
+          groundSpaceES T N :=
     fun N hN =>
-      ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_wordTupleSpanTop
+      ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
         μ A hμ hS hSpan hR hN
   obtain ⟨δ, hδ, hcanonical⟩ :=
-    exists_openParentHamiltonianES_toTensorFromBlocks_gap_of_wordTupleSpanTop
+    exists_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_wordTupleSpanTop
       μ A hμ hS hSpan hR
   obtain ⟨γ, hγ, hgap⟩ := hh.exists_open_uniform_gap_of_canonical_gap hRpos hδ
-    (fun N hN v hv => hcanonical N hN v (by rwa [hKernel N hN] at hv))
+    (fun N hN => (ManyBody.forall_hasEigenvalue_iff_norm
+      (posSemidef_hamiltonian_parentChainInteraction T R N)).mp (hcanonical N hN))
   have hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i) := fun i j hij h => by
     simpa only [eqRec_eq_cast] using not_gaugePhaseEquiv_of_wordTupleSpanTop A hSpan i j hij h
@@ -218,7 +220,7 @@ theorem exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
   apply multiblock_localCommutator_gap_of_openInteraction_gap
     A ρ hP hρ hDistinct α h hh.isPositive X hRpos hcenter ψ hγ.le
   · exact Eventually.of_forall fun n => by
-      rw [hh.ker_openInteractionHamiltonianES_eq_ker_openParentHamiltonianES hRpos,
+      rw [hh.ker_openInteractionHamiltonianES_eq_ker_hamiltonian_parentChainInteraction hRpos,
         hKernel (N n) (by dsimp [N]; omega), groundSpaceES_toTensorFromBlocks_eq_iSup μ A hμ]
   · exact Eventually.of_forall fun n => hgap (N n) (by dsimp [N]; omega)
   · exact Eventually.of_forall hg

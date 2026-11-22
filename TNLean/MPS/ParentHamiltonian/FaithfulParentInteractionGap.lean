@@ -28,7 +28,8 @@ Section 3, lines 1394--1483, Lemma existenceinteraction, lines 2195--2230,
 and Section 6, lines 2649--2675.
 
 **Transitional (#10948).**
-`exists_ker_openParentHamiltonianES_of_leftCanonical_of_posDef_fixedPoint`, stated for the
+`exists_ker_hamiltonian_parentChainInteraction_of_leftCanonical_of_posDef_fixedPoint`, stated for
+the
 Euclidean-space operator `openParentHamiltonianES`, is kept until its last users are converted;
 the last section states it for the Hamiltonian of `parentChainInteraction`.
 `exists_positive_parent_interaction_quasiLocal_gap_of_leftCanonical_of_posDef_fixedPoint` rests on
@@ -43,27 +44,27 @@ open ManyBody.Interaction (chainTranslates)
 namespace MPSTensor
 variable {d D : ℕ}
 
-/-- Faithful stationary normalized generators have exact canonical open
-kernels at every volume at least any sufficiently large interaction range.
-No irreducibility, periodicity, or kernel identity is supplied. Source:
-Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.1, Lemma existenceinteraction,
-lines 2195--2230, in the supplied generating-data setting. -/
-theorem exists_ker_openParentHamiltonianES_of_leftCanonical_of_posDef_fixedPoint
+/-- Faithful stationary normalized generators have, for every sufficiently large interaction
+range and every volume at least that range, the boundary space as the kernel of the Hamiltonian
+of the parent interaction on the open chain. No irreducibility, periodicity, or kernel identity
+is supplied. Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.1, Lemma
+existenceinteraction, lines 2195--2230, in the supplied generating-data setting. -/
+theorem exists_ker_hamiltonian_parentChainInteraction_of_leftCanonical_of_posDef_fixedPoint
     [NeZero D] (A : MPSTensor d D) (hA : IsLeftCanonical A)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef)
     (hFix : Kraus.map A ρ = ρ) :
     ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
-      LinearMap.ker (openParentHamiltonianES A R N) = groundSpaceES A N := by
+      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
+        groundSpaceES A N := by
   let _ : NeZero d := ⟨hA.physDim_ne_zero⟩
   obtain ⟨b, _hb, dim, _hdim, B, _V, m, hPeriodic, _hV, _hSum, _hOrth,
     _hInt, _hCoInt, _hCorner, hGS⟩ :=
     exists_periodic_groundSpaceDecomposition_of_leftCanonical_of_posDef_fixedPoint
       A hA hρ hFix
-  obtain ⟨R₀, hR₀, hKernel⟩ := exists_ker_openParentHamiltonianES_of_periodic_family
+  obtain ⟨R₀, hR₀, hKernel⟩ := exists_ker_hamiltonian_parentChainInteraction_of_periodic_family
     (fun _ => 1) B (fun _ => one_ne_zero) m hPeriodic
   refine ⟨R₀, hR₀, fun R N hR hN => ?_⟩
-  rw [openParentHamiltonianES_eq_of_groundSpaceES_eq (hR₀.trans_le hR) (hGS R) N,
-    hKernel R N hR hN]
+  rw [hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq (hGS R) N, hKernel R N hR hN]
   exact (hGS N).symm
 
 /-- One constructed positive parent interaction has exact open kernels and
@@ -103,7 +104,7 @@ theorem exists_positive_parent_interaction_quasiLocal_gap_of_leftCanonical_of_po
   let _ : NeZero d := ⟨hA.physDim_ne_zero⟩
   change (∑ i, (A i)ᴴ * A i) = 1 at hA
   obtain ⟨R, hR, hCanonicalKernel⟩ :=
-    exists_ker_openParentHamiltonianES_of_leftCanonical_of_posDef_fixedPoint A hA hρ hFix
+    exists_ker_hamiltonian_parentChainInteraction_of_leftCanonical_of_posDef_fixedPoint A hA hρ hFix
   let h := canonicalParentInteractionMatrix A R
   have hh : h.PosSemidef := canonicalParentInteractionMatrix_posSemidef A R
   have hKernel : ∀ N, R ≤ N → LinearMap.ker
@@ -120,29 +121,6 @@ theorem exists_positive_parent_interaction_quasiLocal_gap_of_leftCanonical_of_po
       A hA hρ.posSemidef hFix (ne_of_gt hρ.trace_pos) R, γ, hγ, hGap⟩
 
 /-! ### The open-chain interaction Hamiltonians -/
-
-/-- Faithful stationary normalized generators have, for every sufficiently large interaction
-range and every volume at least that range, the boundary space as the kernel of the Hamiltonian
-of the parent interaction on the open chain. No irreducibility, periodicity, or kernel identity
-is supplied. Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.1, Lemma
-existenceinteraction, lines 2195--2230, in the supplied generating-data setting. -/
-theorem exists_ker_hamiltonian_parentChainInteraction_of_leftCanonical_of_posDef_fixedPoint
-    [NeZero D] (A : MPSTensor d D) (hA : IsLeftCanonical A)
-    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef)
-    (hFix : Kraus.map A ρ = ρ) :
-    ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
-      LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
-        groundSpaceES A N := by
-  let _ : NeZero d := ⟨hA.physDim_ne_zero⟩
-  obtain ⟨b, _hb, dim, _hdim, B, _V, m, hPeriodic, _hV, _hSum, _hOrth,
-    _hInt, _hCoInt, _hCorner, hGS⟩ :=
-    exists_periodic_groundSpaceDecomposition_of_leftCanonical_of_posDef_fixedPoint
-      A hA hρ hFix
-  obtain ⟨R₀, hR₀, hKernel⟩ := exists_ker_hamiltonian_parentChainInteraction_of_periodic_family
-    (fun _ => 1) B (fun _ => one_ne_zero) m hPeriodic
-  refine ⟨R₀, hR₀, fun R N hR hN => ?_⟩
-  rw [hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq (hGS R) N, hKernel R N hR hN]
-  exact (hGS N).symm
 
 /-- Faithful stationary normalized generators have a positive semidefinite local matrix, the
 matrix of the canonical parent interaction, whose open-chain translates have the original

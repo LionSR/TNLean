@@ -23,6 +23,8 @@ sufficient and need not be optimal. The sharper theorem assumes
 is documented in `docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex`.
 -/
 
+open scoped ComplexOrder
+
 namespace MPSTensor
 
 variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d]
@@ -32,20 +34,20 @@ range at least \(3\max(\sum_jD_j,1)^5\), for every chain containing an
 interaction. Normalization and an injectivity length are derived internally.
 Source: arXiv:1606.00608, lines 317--345; Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2 and Section 6. -/
-theorem exists_openParentHamiltonianES_toTensorFromBlocks_gap_of_isNormalTensor
+theorem exists_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_isNormalTensor
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (hNormal : ∀ j, IsNormalTensor (A j))
     (hDistinct : BlocksNotGaugePhaseEquiv A) {R : ℕ}
     (hR : 3 * (max (∑ j, dim j) 1) ^ 5 ≤ R) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N → ∀ v ∈
-      (groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N)ᗮ,
-      δ * ‖v‖ ≤ ‖openParentHamiltonianES
-        (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
+    ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, R ≤ N → ∀ z : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin
+          (parentChainInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R N).hamiltonian) z →
+        z = 0 ∨ (δ : ℂ) ≤ z := by
   let : ∀ j, NeZero (dim j) := fun j ↦ ⟨(hNormal j).bondDim_ne_zero⟩
   obtain ⟨S, hS, hBound, hSpan⟩ :=
     exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five_of_isNormalTensor A
       (lt_of_lt_of_le zero_lt_one (le_max_right _ _)) (le_max_left _ _) hNormal hDistinct
-  exact exists_openParentHamiltonianES_toTensorFromBlocks_gap_of_wordTupleSpanTop
+  exact exists_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_of_wordTupleSpanTop
     μ A hμ hS hSpan (hBound.trans hR)
 
 end MPSTensor
