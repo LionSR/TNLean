@@ -177,14 +177,24 @@ theorem exists_uniform_positiveDeformedParentInteractionES_gap
     (A : (j : Fin r) → MPSTensor d (dim j)) (hSpan : WordTupleSpanTop A 1)
     (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0)
     (Q : Matrix (Fin d) (Fin d) ℂ) (hQ : Q.PosDef) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
-      ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (positiveDeformedParentInteractionES Q (toTensorFromBlocks μ A) γ).toLinearMap N))ᗮ,
-        δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (positiveDeformedParentInteractionES Q (toTensorFromBlocks μ A) γ).toLinearMap N v‖ := by
+    ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ (N : ℕ) (hN : 2 ≤ N),
+      haveI : NeZero N := ⟨by omega⟩;
+      ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant N
+          ((Matrix.toEuclideanCLM (n := Cfg d 2) (𝕜 := ℂ)).symm
+            (positiveDeformedParentInteractionES Q (toTensorFromBlocks μ A) γ))).hamiltonian) z →
+          z = 0 ∨ (δ : ℂ) ≤ z := by
+  let e := (Matrix.toEuclideanCLM : Matrix (Cfg d 2) (Cfg d 2) ℂ ≃⋆ₐ[ℂ] _)
+  have hE (T : EuclideanSpace ℂ (Cfg d 2) →L[ℂ] EuclideanSpace ℂ (Cfg d 2)) :
+      Matrix.toEuclideanLin (e.symm T) = T.toLinearMap := by
+    rw [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin]
+    exact congrArg (fun T : EuclideanSpace ℂ (Cfg d 2) →L[ℂ] EuclideanSpace ℂ (Cfg d 2) ↦
+      (T : EuclideanSpace ℂ (Cfg d 2) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d 2))) (e.apply_symm_apply T)
   have hParent (γ : unitInterval) : IsParentInteraction
       (toTensorFromBlocks μ (fun j => rotatePhysical (positivePhysicalDeformation Q γ) (A j)))
-      2 (positiveDeformedParentInteractionES Q (toTensorFromBlocks μ A) γ).toLinearMap := by
+      2 (Matrix.toEuclideanLin
+        (e.symm (positiveDeformedParentInteractionES Q (toTensorFromBlocks μ A) γ))) := by
+    rw [hE]
     simpa only [rotatePhysical_toTensorFromBlocks] using
       isParentInteraction_positiveDeformedParentInteractionES Q hQ (toTensorFromBlocks μ A) γ
   obtain ⟨δ, hδ, hgap⟩ := exists_uniform_block_parentInteraction_gap_of_compact
@@ -197,9 +207,10 @@ theorem exists_uniform_positiveDeformedParentInteractionES_gap
     (fun γ => (wordTupleSpanTop_rotatePhysical_iff _
       (positivePhysicalDeformation_isUnit Q hQ γ) A 1).2 hSpan)
     (R := 2) le_rfl
-    (positiveDeformedParentInteractionES Q (toTensorFromBlocks μ A))
-    (continuous_deformedInteraction_positivePhysicalDeformation Q hQ 2
-      (parentInteractionES (toTensorFromBlocks μ A) 2)) hParent isCompact_univ
+    (fun γ ↦ e.symm (positiveDeformedParentInteractionES Q (toTensorFromBlocks μ A) γ))
+    (e.symm.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp
+      (continuous_deformedInteraction_positivePhysicalDeformation Q hQ 2
+        (parentInteractionES (toTensorFromBlocks μ A) 2))) hParent isCompact_univ
   exact ⟨δ, hδ, fun γ => hgap γ (Set.mem_univ γ)⟩
 
 /-- Positivity of the physical factor turns inverse-adjoint conjugation into

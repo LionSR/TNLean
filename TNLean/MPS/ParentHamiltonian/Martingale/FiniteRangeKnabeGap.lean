@@ -33,11 +33,6 @@ extends any such estimate to all lengths.
 
 The arbitrary finite-range coefficient is the TNLean derivation recorded in
 `docs/paper-gaps/knabe88_finite_range_coefficient.tex`.
-
-**Transitional (#10948).** `parentHamiltonianES_norm_gap_of_forall_hasEigenvalue` reads a gap of
-the Hamiltonian of the parent interaction on the ring as the norm inequality for the
-Euclidean-space operator `parentHamiltonianES`, for the statements about a general local
-operator that are not restated yet; it is deleted with their restatement.
 -/
 
 open scoped BigOperators ComplexOrder InnerProductSpace
@@ -45,30 +40,6 @@ open scoped BigOperators ComplexOrder InnerProductSpace
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- The gap of the Hamiltonian of the parent interaction on the ring, read for the
-Euclidean-space operator: on the ring of zero sites the operator vanishes. -/
-theorem parentHamiltonianES_norm_gap_of_forall_hasEigenvalue (A : MPSTensor d D) (R N : ℕ)
-    {γ : ℝ}
-    (h : ∀ [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue
-      (Matrix.toEuclideanLin (parentRingInteraction A R N).hamiltonian) μ →
-        μ = 0 ∨ (γ : ℂ) ≤ μ) :
-    ∀ v ∈ (LinearMap.ker (parentHamiltonianES A R N))ᗮ,
-      γ * ‖v‖ ≤ ‖parentHamiltonianES A R N v‖ := by
-  rcases Nat.eq_zero_or_pos N with rfl | hN
-  · intro v hv
-    have hH : parentHamiltonianES A R 0 = 0 := by
-      rw [parentHamiltonianES_eq_sum_localTermES, Finset.univ_eq_empty, Finset.sum_empty]
-    rw [hH, LinearMap.ker_zero, Submodule.top_orthogonal_eq_bot, Submodule.mem_bot] at hv
-    rw [hv, norm_zero, mul_zero, map_zero, norm_zero]
-  · have : NeZero N := ⟨hN.ne'⟩
-    have hH : parentHamiltonianES A R N =
-        Matrix.toEuclideanLin (parentRingInteraction A R N).hamiltonian := by
-      rw [parentHamiltonianES, parentHamiltonian_eq_toLin'_hamiltonian]
-      rfl
-    rw [hH]
-    exact (ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentRingInteraction A R N)).mp h
 
 /-- A gap of the Hamiltonians of the parent interaction on all sufficiently large rings extends
 to all rings by taking the minimum with finitely many positive bounds. The gap is stated above

@@ -232,8 +232,11 @@ theorem exists_uniform_blockMixed_parentHamiltonianES_gap
       (fun _ _ => one_ne_zero)
       (fun x => (continuous_blockMixedInterpolation A₀ A₁ x).comp continuous_subtype_val)
       one_pos (fun γ => wordTupleSpanTop_blockMixedInterpolation A₀ A₁ h₀ h₁ γ.2) le_rfl hK'
-  exact ⟨δ, hδ, fun γ hγ N hN => parentHamiltonianES_norm_gap_of_forall_hasEigenvalue _ 2 N
-    (hgap ⟨γ, hKI hγ⟩ hγ N hN)⟩
+  refine ⟨δ, hδ, fun γ hγ N hN => ?_⟩
+  have : NeZero N := ⟨by omega⟩
+  rw [parentHamiltonianES, parentHamiltonian_eq_toLin'_hamiltonian]
+  exact (ManyBody.forall_hasEigenvalue_iff_norm
+    (posSemidef_hamiltonian_parentRingInteraction _ 2 N)).mp (hgap ⟨γ, hKI hγ⟩ hγ N hN)
 
 /-- As the parameter tends within the open interval to any point of the closed
 interval, in particular to either endpoint, the ground projections of the

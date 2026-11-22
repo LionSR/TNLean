@@ -59,15 +59,13 @@ lines 317--345, and arXiv:2011.12127, Section IV.C, lines 2170--2187. -/
 theorem IsCPSVCanonicalForm.exists_parentInteraction_uniform_gap_of_three_bondDim_pow_five_le
     {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A) {R : ℕ}
     (hR : 3 * D ^ 5 ≤ R)
-    {h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)}
-    (hh : IsParentInteraction A R h) :
-    ∃ γ : ℝ, 0 < γ ∧ ∀ N : ℕ, ∀ v ∈
-      (LinearMap.ker (periodicInteractionHamiltonianES h N))ᗮ,
-      γ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES h N v‖ := by
+    {h : Matrix (Cfg d R) (Cfg d R) ℂ}
+    (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) :
+    ∃ γ : ℝ, 0 < γ ∧ ∀ (N : ℕ) [NeZero N], ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N h).hamiltonian) μ →
+        μ = 0 ∨ (γ : ℂ) ≤ μ := by
   obtain ⟨γ, hγ, hGap⟩ :=
     hA.exists_parentRingInteraction_uniform_gap_of_three_bondDim_pow_five_le hR
-  exact hh.exists_uniform_gap_of_canonical_gap
-    (lt_of_lt_of_le (Nat.mul_pos (by omega) (Nat.pow_pos (NeZero.pos D))) hR) hγ
-    fun N ↦ parentHamiltonianES_norm_gap_of_forall_hasEigenvalue A R N (hGap N)
+  exact hh.exists_uniform_gap_of_canonical_gap hγ hGap
 
 end MPSTensor

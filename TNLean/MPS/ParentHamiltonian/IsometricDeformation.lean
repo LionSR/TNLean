@@ -189,11 +189,13 @@ path have a gap uniform in the parameter and every ring of length at least
 two. Source: arXiv:1010.3732, lines 575--625 and Appendix A. -/
 theorem exists_uniform_isometricDeformation_interaction_gap
     (A : (j : Fin r) → MPSTensor d (dim j)) (hSpan : WordTupleSpanTop A 1) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ N : ℕ, 2 ≤ N →
-      ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (isometricDeformationInteractionES A γ).toLinearMap N))ᗮ,
-        δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (isometricDeformationInteractionES A γ).toLinearMap N v‖ := by
+    ∃ δ : ℝ, 0 < δ ∧ ∀ γ : unitInterval, ∀ (N : ℕ) (hN : 2 ≤ N),
+      haveI : NeZero N := ⟨by omega⟩;
+      ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant N
+          ((Matrix.toEuclideanCLM (n := Cfg d 2) (𝕜 := ℂ)).symm
+            (isometricDeformationInteractionES A γ))).hamiltonian) z →
+          z = 0 ∨ (δ : ℂ) ≤ z := by
   exact exists_uniform_positiveDeformedParentInteractionES_gap
     (leftPolarBlocks A) ((wordTupleSpanTop_leftPolarBlocks_iff A 1).2 hSpan)
     (fun _ => 1) (by simp) (leftPolarPhysicalFactor A) (leftPolarPhysicalFactor_posDef A)

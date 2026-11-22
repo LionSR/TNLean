@@ -265,7 +265,10 @@ theorem exists_uniform_jointMixedEndpoint_periodic_gap
         (by decide : 0 < 1) (wordTupleSpanTop_jointMixedEndpointLeftTensor A₀ A₁ h₀ h₁)
         (by decide : 1 + 1 ≤ 2)
     exact ⟨min δ (1 / 2), lt_min hδ (by norm_num), fun N hN =>
-      jointMixedEndpoint_periodic_norm_gap A₀ A₁ hN hδ.le
-        (parentHamiltonianES_norm_gap_of_forall_hasEigenvalue _ 2 N (hGap N))⟩
+      haveI : NeZero N := ⟨by omega⟩
+      jointMixedEndpoint_periodic_norm_gap A₀ A₁ hN hδ.le (by
+        rw [parentHamiltonianES, parentHamiltonian_eq_toLin'_hamiltonian]
+        exact (ManyBody.forall_hasEigenvalue_iff_norm
+          (posSemidef_hamiltonian_parentRingInteraction _ 2 N)).mp (hGap N))⟩
 
 end MPSTensor.MPOSymmetry

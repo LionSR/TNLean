@@ -139,8 +139,15 @@ private theorem eventually_mixedEndpoint_periodic_long_gap [NeZero D₀] [NeZero
       (mixedEndpointInterpolation A₀ A₁ γ) 2 N))ᗮ := by
     rw [← mixedEndpoint_periodicInteractionHamiltonianES_eq_of_mem_Ioo A₀ A₁ hγ]
     exact hv
-  have hKnabe := parentHamiltonianES_norm_gap_of_forall_hasEigenvalue
-    (mixedEndpointInterpolation A₀ A₁ γ) 2 N
+  have : NeZero N := ⟨by omega⟩
+  have hES : parentHamiltonianES (mixedEndpointInterpolation A₀ A₁ γ) 2 N =
+      Matrix.toEuclideanLin
+        (parentRingInteraction (mixedEndpointInterpolation A₀ A₁ γ) 2 N).hamiltonian := by
+    rw [parentHamiltonianES, parentHamiltonian_eq_toLin'_hamiltonian]
+    rfl
+  rw [hES] at hvCanonical
+  have hKnabe := (ManyBody.forall_hasEigenvalue_iff_norm
+    (posSemidef_hamiltonian_parentRingInteraction _ 2 N)).mp
     ((hamiltonian_parentRingInteraction_gap_of_hamiltonian_parentChainInteraction_gap
       (mixedEndpointInterpolation A₀ A₁ γ) (R := 2) (m := m) (by norm_num) hm
       (by simpa only [Nat.cast_ofNat, show ((2 : ℝ) - 1) ^ 2 = 1 by norm_num] using hnum')
@@ -149,7 +156,7 @@ private theorem eventually_mixedEndpoint_periodic_long_gap [NeZero D₀] [NeZero
     v hvCanonical
   have hactual : δK * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
       (mixedEndpointParentInteraction A₀ A₁ γ).toLinearMap N v‖ := by
-    rw [mixedEndpoint_periodicInteractionHamiltonianES_eq_of_mem_Ioo A₀ A₁ hγ]
+    rw [mixedEndpoint_periodicInteractionHamiltonianES_eq_of_mem_Ioo A₀ A₁ hγ, hES]
     simpa only [δK, Nat.cast_ofNat, show ((2 : ℝ) - 1) ^ 2 = 1 by norm_num,
       show (m : ℝ) - 2 + 1 = (m : ℝ) - 1 by ring] using hKnabe
   exact (mul_le_mul_of_nonneg_right (min_le_left δK δE) (norm_nonneg v)).trans hactual
