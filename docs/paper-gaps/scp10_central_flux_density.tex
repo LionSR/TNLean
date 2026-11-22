@@ -1,0 +1,72 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Vacuum Density for Central Complementary Insertions}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3}~\cite{Schuch2010PEPS},
+Definition 6.1, source
+\path{Papers/1001.3807/paper_v3.tex}, lines 1692--1700,
+provides the regular-isometry condition. The identities below are derived
+from the corresponding regular-isometric Gram kernel and centrality of the
+inserted labels; they are not a restatement of the string-deformation lemma.
+
+For a finite native graph, take regular $G$-isometric original tensors
+and a central group label $u_e$ on every oriented edge. Centrality makes
+left multiplication by each $u_e$ commute with the common translation
+appearing in the original local Gram kernel. The local twisted Gram
+kernel is consequently identical to the original one. The actual
+open-region expansion gives, for the open matrix $T_R^u$ on every finite region $R$,
+\begin{align}
+    (T_R^u)^\dagger T_R^u=T_R^\dagger T_R.
+    \label{eq:scp10_central_flux_open_gram}
+\end{align}
+This needs no connectivity or supplied Gram identity.
+\footnote{\leanid{TNLean.PEPS.regularTwistedOpenRegionMatrix_gram_eq_of_central}.}
+
+If $u_e=1$ on all edges incident to an observation region $R$, the
+observed open-region contraction is unchanged. The complementary
+open-region Gram matrix is unchanged by centrality. Substitution into
+the factorization $K_u=T_R^u(T_{R^c}^u)^{\mathsf T}$ proves
+\begin{align}
+    K_uK_u^\dagger=K_0K_0^\dagger.
+    \label{eq:scp10_central_flux_reduced}
+\end{align}
+Here $K_u$ and $K_0$ are the physical coefficient cuts with the given insertions
+and with identity insertions. Equality of the reduced matrices and their traces gives
+\begin{align}
+    \frac{K_uK_u^\dagger}{\operatorname{tr}(K_uK_u^\dagger)}
+    =\frac{K_0K_0^\dagger}{\operatorname{tr}(K_0K_0^\dagger)}.
+    \label{eq:scp10_central_flux_normalized}
+\end{align}
+At zero trace the displayed division means inverse scalar multiplication
+with zero inverse. For nonzero cuts these are the normalized reduced matrices.
+\footnote{\leanid{TNLean.PEPS.regularPhysicalCutMatrix_reduced_eq_of_central};
+\leanid{TNLean.PEPS.regularPhysicalCutMatrix_normalized_reduced_eq_of_central}.}
+These identities supply neither a nonzero-cut premise nor a desired
+factorization or density equality as an assumption. The unnormalized
+identity is meaningful even for zero cuts; nonvanishing of actual torus
+flux cuts is available separately from regular injectivity.
+
+This proves the complementary-contraction step for central insertions,
+including all insertions in an abelian group. Identity on incident bonds
+is an explicit structural hypothesis, not inferred from endpoint
+exclusion. The physical detour theorem computes a sufficient forbidden
+corner-collar geometry separately. Combining it with homotopy completeness
+and the native-to-graph cut conversion is a further composition step.
+Noncentral open flux pairs remain under \ghissue{8703}.
+
+The annular Wilson-loop obstruction is consistent with
+(\ref{eq:scp10_central_flux_reduced}): a path connecting an enclosed endpoint
+to an exterior endpoint cannot make every incident annular bond insertion
+identity while preserving its flux. Endpoint exclusion alone is therefore
+insufficient. The full-lattice Hamiltonian scope of \ghissue{8947} is unchanged.
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
