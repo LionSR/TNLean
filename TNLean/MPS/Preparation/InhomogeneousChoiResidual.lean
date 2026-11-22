@@ -174,9 +174,11 @@ theorem norm_gram_blockTensor_sub_transport_le_of_choi_domination
   have hQcpos : (ChoiRectangular.choiMatrix Q).PosSemidef :=
     (ChoiRectangular.isKrausCP_iff_choiMatrix_posSemidef Q).1 hQcp
   have hQnorm : ‖(ChoiRectangular.choiMatrix Q).transpose‖ ≤ t := by
-    simpa only [Matrix.trace_transpose, hQctr, Complex.ofReal_re] using hQcpos.transpose.l2_opNorm_le_trace_re
+    simpa only [Matrix.trace_transpose, hQctr, Complex.ofReal_re] using
+      hQcpos.transpose.l2_opNorm_le_trace_re
   have hPnorm : ‖(ChoiRectangular.choiMatrix P).transpose‖ ≤ t := by
-    simpa only [Matrix.trace_transpose, hPctr, Complex.ofReal_re] using hPcpos.transpose.l2_opNorm_le_trace_re
+    simpa only [Matrix.trace_transpose, hPctr, Complex.ofReal_re] using
+      hPcpos.transpose.l2_opNorm_le_trace_re
   have hlim (ω : Matrix (Fin D) (Fin D) ℂ) :
       (D : ℂ) • (ChoiRectangular.choiMatrix (Matrix.tracePrepareMap (α := Fin D) ω)).transpose =
         ωᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ) := by

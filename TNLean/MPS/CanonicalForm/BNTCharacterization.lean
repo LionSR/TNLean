@@ -354,7 +354,7 @@ theorem isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
 This specializes arXiv:1606.00608, Proposition 2.7 (`prop:char-BNT`, lines
 271--301 and 1137--1148), to the data of eq. `II_CF1`. -/
 theorem CPSVCanonicalFormData.isCPSVBasisOfNormalTensors_iff_covered_and_minimal
-    {g : ℕ} {dimB : Fin g → ℕ} [∀ j, NeZero (dimB j)]
+    {A : MPSTensor d D} {g : ℕ} {dimB : Fin g → ℕ} [∀ j, NeZero (dimB j)]
     (data : CPSVCanonicalFormData A)
     (basis : (j : Fin g) → MPSTensor d (dimB j)) :
     IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dimB j, basis j⟩) ↔

@@ -178,7 +178,7 @@ then $\neg(\forall i,\; B^i = 0)$.
 Proof: if $B^i = 0$ for all $i$, then $\tr(A^i) = \tr(B^i) = 0$ for each $i$.
 Since the $A^i$ span the full matrix algebra, the trace functional vanishes
 identically, contradicting $\tr(I_D) = D \neq 0$. -/
-theorem trace_ne_zero_of_injective [NeZero D] {A : MPSTensor d D}
+theorem trace_ne_zero_of_injective [NeZero D] {A B : MPSTensor d D}
     (hA : Kraus.IsInjective A) (hAB : SameMPV A B) (hBzero : ∀ i, B i = 0) : False := by
   have htr_zero : Matrix.traceLinearMap (Fin D) ℂ ℂ = 0 := by
     apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)

@@ -397,7 +397,7 @@ theorem mpo_verticalBNTMPO_verticalComponent (L : ℕ) :
     mpo (verticalBNTMPO verticalComponent) L = MPSTensor.pureState A L := by
   rw [verticalBNTMPO_verticalComponent, mpo_doubledTensor]
 
-private theorem pureState_mul_self (B : MPSTensor d D) (L : ℕ) :
+private theorem pureState_mul_self {d D : ℕ} (B : MPSTensor d D) (L : ℕ) :
     MPSTensor.pureState B L * MPSTensor.pureState B L =
       MPSTensor.mpvOverlap B B L • MPSTensor.pureState B L := by
   ext σ τ

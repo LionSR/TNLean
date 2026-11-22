@@ -32,7 +32,7 @@ open scoped Matrix ComplexOrder BigOperators
 
 namespace MPOTensor
 
-variable {d g : ℕ} {bondDim : Fin g → ℕ}
+variable {d D g : ℕ} {bondDim : Fin g → ℕ}
 
 /-! ### Physical-adjoint consequences for MPDO tensors -/
 
