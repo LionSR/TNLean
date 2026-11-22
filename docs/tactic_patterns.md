@@ -10196,7 +10196,7 @@ there is no need for a new tactic.
   result is scalar multiplication by the function at the corresponding energy.
 - **Seen:** Two private helper proofs, in
   `MPS/AreaLaw/GroundStateAlgorithm/GaussianFilter/ApproximateEnergyFilter.lean` and the companion module
-  `QICLean/Spectral/Gap/GroundProjection.lean`.
+  `QICLean/Spectral/Filter/Gaussian/SpectralGap.lean`.
 - **Abstraction:** A public Mathlib or QICLean theorem for the action of a real
   functional calculus on `IsHermitian.eigenvectorBasis` would replace both helpers.
 - **Notes:** The current spectral proof calls the helper once and then uses
