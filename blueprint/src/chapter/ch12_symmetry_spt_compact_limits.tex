@@ -1068,7 +1068,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 
 \begin{lemma}[Contractivity of cyclic local embedding]
     \label{aux:cyclic-local-embedding-norm}
-    \lean{ManyBody.Interaction.norm_translates_term_le}
+    \lean{ManyBody.Interaction.norm_translationInvariant_term_le}
     \leanok
     \uses{lem:qc_placement_norm}
     Embedding an operator on $L$ consecutive sites into an $N$-site ring,
@@ -1124,7 +1124,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 
 \begin{lemma}[Gaussian-filtered finite-ring commutators]
     \label{lem:spt_finite_ring_gaussian_commutator}
-    \lean{ManyBody.Interaction.isHermitian_translates_term,
+    \lean{ManyBody.Interaction.isHermitian_translationInvariant_term,
         ManyBody.Interaction.norm_gaussianFilteredTerm_hamiltonian_translationInvariant_commutator_le,
         ManyBody.Interaction.norm_gaussianFilteredTerm_hamiltonian_translationInvariant_commutator_le_exp}
     \leanok
