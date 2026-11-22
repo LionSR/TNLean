@@ -17,12 +17,8 @@ of that Hamiltonian. This is the local comparison needed to transfer a
 parent-Hamiltonian gap between admissible interaction ranges; see
 `docs/paper-gaps/cpgsv21_block_parent_interaction_range.tex`.
 
-The comparison is stated, in the last section, for the Hamiltonian of the parent interaction on
-the open chain (`parentChainInteraction`) and the matrix of the local parent interaction.
-
-**Transitional (#10948).**
-`exists_pos_parentInteractionES_hamiltonian_parentChainInteraction_comparison` is
-kept, unchanged, for unconverted users and is deleted when its last user is converted.
+The comparison is stated for the Hamiltonian of the parent interaction on the open chain
+(`parentChainInteraction`) and the matrix of the local parent interaction.
 -/
 
 open scoped InnerProductSpace ComplexOrder
@@ -105,28 +101,6 @@ theorem exists_pos_le_smul_orthogonal_ker_projection
 end LinearMap.IsPositive
 
 namespace MPSTensor
-
-/-- If the open-chain kernel equals the local MPS space, its Hamiltonian and
-its parent projection bound one another by positive constants. -/
-theorem exists_pos_parentInteractionES_hamiltonian_parentChainInteraction_comparison
-    {d D R W : ℕ} (A : MPSTensor d D)
-    (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) =
-        groundSpaceES A W) :
-    ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧
-      (κ : ℂ) • parentInteractionES A W ≤ Matrix.toEuclideanLin
-          (parentChainInteraction A R W).hamiltonian ∧
-      Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian ≤ (C : ℂ) •
-          parentInteractionES A W := by
-  obtain ⟨κ, hκ, hLower⟩ :=
-    LinearMap.IsPositive.exists_pos_smul_orthogonal_ker_projection_le
-      (Matrix.isPositive_toEuclideanLin_iff.mpr
-          (posSemidef_hamiltonian_parentChainInteraction A R W))
-  obtain ⟨C, hC, hUpper⟩ :=
-    LinearMap.IsPositive.exists_pos_le_smul_orthogonal_ker_projection
-      (Matrix.isPositive_toEuclideanLin_iff.mpr
-          (posSemidef_hamiltonian_parentChainInteraction A R W))
-  exact ⟨κ, C, hκ, hC, by simpa only [hker, parentInteractionES] using hLower,
-    by simpa only [hker, parentInteractionES] using hUpper⟩
 
 /-! ### The Hamiltonian of the parent interaction on the open chain -/
 

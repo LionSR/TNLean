@@ -28,10 +28,6 @@ Section 3, lines 1394--1483, Lemma existenceinteraction, lines 2195--2230,
 and Section 6, lines 2649--2675.
 
 **Transitional (#10948).**
-`exists_ker_hamiltonian_parentChainInteraction_of_leftCanonical_of_posDef_fixedPoint`, stated for
-the
-Euclidean-space operator `openParentHamiltonianES`, is kept until its last users are converted;
-the last section states it for the Hamiltonian of `parentChainInteraction`.
 `exists_positive_parent_interaction_quasiLocal_gap_of_leftCanonical_of_posDef_fixedPoint` rests on
 the quasi-local gap of a faithful stationary generator, which is converted with the finite-volume
 gaps it uses.

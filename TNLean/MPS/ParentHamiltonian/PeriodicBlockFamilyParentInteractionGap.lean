@@ -33,10 +33,9 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Section 4, Proposition
 forintersection, Lemma existenceinteraction, Theorems 1.1--1.2, and
 Section 6, lines 2649--2675.
 
-**Transitional (#10948).** `exists_ker_hamiltonian_parentChainInteraction_of_periodic_family` and
-`exists_positive_parent_interaction_of_periodic_family`, stated for the Euclidean-space operators
-`openParentHamiltonianES` and `openInteractionHamiltonianES`, are kept until their last users are
-converted; the last section states them for the Hamiltonians of `parentChainInteraction` and of
+**Transitional (#10948).** `exists_positive_parent_interaction_of_periodic_family`, stated for the
+Euclidean-space operator `openInteractionHamiltonianES`, is kept until its last users are
+converted; the last section states it for the Hamiltonians of
 `ManyBody.Interaction.chainTranslates`.
 `exists_positive_parent_interaction_quasiLocalCommutator_gap_of_periodic_family` rests on the
 quasi-local gap of a periodic family, which is converted with the finite-volume gaps it uses.

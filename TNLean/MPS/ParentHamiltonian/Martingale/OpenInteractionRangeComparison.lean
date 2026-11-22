@@ -19,13 +19,12 @@ These are finite-window consequences of Nachtergaele,
 arXiv:cond-mat/9410110, condition C1 (lines 1030--1041) and Section 6,
 used in the proof of Theorem 1.2 (lines 933--947). The comparison itself
 requires positivity but no local parent-kernel condition.
-**Transitional (#10948).** The declarations about the Euclidean-space operators
-(`openInteractionHamiltonianES`, `periodicLocalInteractionES`, `openParentHamiltonianES`) are kept
-until their last users are converted. The suffix Hamiltonian `openSuffixInteractionHamiltonianES`
-and its lemmas are converted in a later package; the active-block lemmas
-`periodicLocalInteractionES_apply` and `periodicLocalInteractionES_conj_cyclicActiveBlock` are
-replaced, for matrices, by `toEuclideanLin_translationInvariant_term_apply` and by composition of
-placements (`ManyBody.placeAlong_placeAlong`, `ManyBody.chainWindow_trans_ringWindow`).
+**Transitional (#10948).** The declarations of this file are stated for the Euclidean-space
+operators `openInteractionHamiltonianES`, `periodicLocalInteractionES` and the interval
+Hamiltonian `openSuffixInteractionHamiltonianES`; they are kept until their last users are
+converted. For matrices the comparison and the gap transfer are
+`hamiltonian_chainTranslates_comparison_of_local` and
+`toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length` (OpenRangeComparison).
 -/
 open scoped BigOperators ComplexOrder
 namespace MPSTensor

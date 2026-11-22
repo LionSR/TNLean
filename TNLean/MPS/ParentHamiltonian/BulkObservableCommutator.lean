@@ -27,9 +27,9 @@ The interaction is arbitrary; positivity and self-adjointness are not needed.
 **Transitional (#10948).**
 `openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates` and
 `toEuclideanCLM_hamiltonian_chainTranslates_parentInteraction` compare the Euclidean-space
-operators `openInteractionHamiltonianES` and `openParentHamiltonianES` with the Hamiltonians of
+operator `openInteractionHamiltonianES` with the Hamiltonians of
 `ManyBody.Interaction.chainTranslates`; they are kept until their last users are converted and
-are then deleted with those operators.
+are then deleted with that operator.
 -/
 
 open scoped Matrix BigOperators

@@ -24,10 +24,9 @@ Nachtergaele's C1--C3 martingale theorem.
 * Nachtergaele, arXiv:cond-mat/9410110, equations (3.12)--(3.16).
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:2011.12127, Section IV.C.
 
-**Transitional (#10948).** `openParentHamiltonianES` and `openSuffixParentHamiltonianES` are now
-abbreviations of the operators of the Hamiltonian of `parentChainInteraction` and of its
-restriction to the windows inside an interval; they and the declarations of the last section are
-kept for the files not yet restated and are deleted with their last users.
+**Transitional (#10948).** The declarations of the last section compare the open-chain parent
+Hamiltonian with the Euclidean-space local terms `localTermES` and `parentInteractionES`; they
+are kept for the files that still use those operators and are deleted with their last users.
 -/
 
 open scoped BigOperators ComplexOrder
@@ -460,7 +459,7 @@ theorem parentChainInteraction_C1 (A : MPSTensor d D) {L l : ℕ} (hLl : L ≤ l
 
 /-! ### Transitional forms (#10948)
 
-The Euclidean-space names of the same operators, for the files not yet restated. -/
+Comparison with the Euclidean-space local terms, for the files not yet restated. -/
 
 /-- Each nonwrapping range-\(R\) term lies in at most \(W-R+1\) complete
 length-\(W\) windows. Summing positive terms therefore gives the corresponding

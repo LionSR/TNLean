@@ -20,22 +20,12 @@ length with the same strict lower bound.
 Nonzero block weights do not affect the local spaces, and no continuity of
 these weights is required. This is the finite-window continuity argument in
 arXiv:1010.3732, Appendix A, lines 2575--2578.
-
-The two statements are also made, in the last section, for the Hamiltonian of the parent
-interaction on the open chain (`parentChainInteraction`).
-
-**Transitional (#10948).**
-`eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_fixed_volume`
-and `eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_bounded_volumes` are kept,
-unchanged, for unconverted users and are deleted when their last user is converted.
 -/
 
 open scoped Topology
 
 namespace MPSTensor
 variable {d : ℕ}
-/-! ### The Hamiltonian of the parent interaction on the open chain -/
-
 /-- A strict norm gap of the Hamiltonian of the parent interaction on the open chain at a fixed
 admissible volume persists near its parameter when the block tensors vary continuously. Source:
 arXiv:1010.3732, Appendix A, lines 2575--2578. -/
