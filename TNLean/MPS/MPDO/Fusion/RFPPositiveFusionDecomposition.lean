@@ -37,6 +37,8 @@ noncomputable section
 
 namespace MPOTensor
 
+variable {d D : ℕ}
+
 /-- The Appendix C.4 vertical-sector hypotheses assembled from a one-site and a
 two-site vertical canonical decomposition of the same tensor together with the
 two trace-preserving completely positive maps of the renormalization

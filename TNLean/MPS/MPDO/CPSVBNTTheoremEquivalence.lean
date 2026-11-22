@@ -29,6 +29,8 @@ noncomputable section
 
 namespace MPOTensor
 
+variable {d D : ℕ}
+
 /-- **Theorem 4.14(i) if and only if (ii).** For an MPDO in literal CPSV
 canonical form, the renormalization fixed-point condition is equivalent to
 the tensor-attached BNT algebra clause.

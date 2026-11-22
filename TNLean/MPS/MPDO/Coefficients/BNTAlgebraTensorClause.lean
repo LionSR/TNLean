@@ -39,6 +39,8 @@ noncomputable section
 
 namespace MPOTensor
 
+variable {d D : ℕ}
+
 /-- Regard a tensor with doubled physical index as an MPO tensor by separating
 the two factors of that index.
 

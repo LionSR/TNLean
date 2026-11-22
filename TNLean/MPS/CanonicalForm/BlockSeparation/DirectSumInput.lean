@@ -38,14 +38,14 @@ variable {d D₁ D₂ L : ℕ}
 
 This is the trace-dual coordinate form of the finite-chain image space
 \(\mathcal G_L^A\) used in the direct-sum argument. -/
-noncomputable def leftTraceWordMap (A : MPSTensor d D) (L : ℕ) :
+noncomputable def leftTraceWordMap {D : ℕ} (A : MPSTensor d D) (L : ℕ) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (Fin L → Fin d) → ℂ :=
   LinearMap.pi fun t : Fin L → Fin d =>
     (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
       (LinearMap.mulRight ℂ (Kraus.evalWord A (List.ofFn t)))
 
 @[simp]
-lemma leftTraceWordMap_apply (A : MPSTensor d D) (L : ℕ)
+lemma leftTraceWordMap_apply {D : ℕ} (A : MPSTensor d D) (L : ℕ)
     (Z : Matrix (Fin D) (Fin D) ℂ) (t : Fin L → Fin d) :
     leftTraceWordMap A L Z t =
       Matrix.trace (Z * Kraus.evalWord A (List.ofFn t)) := by
@@ -221,7 +221,7 @@ theorem leftTraceWordMap_range_eq_of_three_block_trace_relation
       _ = leftTraceWordMap B L W t := by simp
 
 /-- Block injectivity makes the length-`L` trace-test map injective. -/
-theorem leftTraceWordMap_injective_of_isNBlkInjective {A : MPSTensor d D}
+theorem leftTraceWordMap_injective_of_isNBlkInjective {D : ℕ} {A : MPSTensor d D}
     (hA : Kraus.IsNBlkInjective A L) :
     Function.Injective (leftTraceWordMap A L) := by
   classical
@@ -241,7 +241,8 @@ theorem leftTraceWordMap_injective_of_isNBlkInjective {A : MPSTensor d D}
 
 /-- Under block injectivity, the trace-test image has the full boundary-matrix
 dimension. -/
-theorem leftTraceWordMap_range_finrank_eq_of_isNBlkInjective {A : MPSTensor d D}
+theorem leftTraceWordMap_range_finrank_eq_of_isNBlkInjective {D : ℕ}
+    {A : MPSTensor d D}
     (hA : Kraus.IsNBlkInjective A L) :
     Module.finrank ℂ ((leftTraceWordMap A L).range) = D ^ 2 := by
   rw [LinearMap.finrank_range_of_inj

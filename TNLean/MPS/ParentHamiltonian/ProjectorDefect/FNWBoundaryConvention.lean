@@ -40,7 +40,7 @@ def physicalSiteReverse (d N : ℕ) : NSiteSpace d N ≃ₗ[ℂ] NSiteSpace d N 
 
 /-- Physical-site reversal evaluates a coefficient function on the reversed
 configuration. -/
-@[simp] theorem physicalSiteReverse_apply (ψ : NSiteSpace d N) (σ : Cfg d N) :
+@[simp] theorem physicalSiteReverse_apply {N : ℕ} (ψ : NSiteSpace d N) (σ : Cfg d N) :
     physicalSiteReverse d N ψ σ = ψ (σ ∘ Fin.rev) := by
   rfl
 

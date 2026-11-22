@@ -32,7 +32,7 @@ variable {d D : ℕ}
 /-- If `T = 0` and `T(A i) = B i` with `SameMPV A B`, then we get a contradiction.
 
 Uses `trace_ne_zero_of_injective` from `TracePairing`. -/
-private theorem linearExtension_nonzero {A B : MPSTensor d (Nat.succ D')}
+private theorem linearExtension_nonzero {D' : ℕ} {A B : MPSTensor d (Nat.succ D')}
     (hA : Kraus.IsInjective A) (hAB : SameMPV A B)
     {T : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ →ₗ[ℂ]
          Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ}

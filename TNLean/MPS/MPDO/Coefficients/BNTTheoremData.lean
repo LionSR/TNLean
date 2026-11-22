@@ -27,6 +27,8 @@ open scoped BigOperators ComplexOrder
 
 namespace MPOTensor
 
+variable {d D : ℕ}
+
 /-- The algebra clause of arXiv:1606.00608, Theorem IV.13(ii), before comparison
 with a chosen blocked basis.
 

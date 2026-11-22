@@ -27,6 +27,8 @@ open scoped BigOperators ComplexOrder
 
 namespace MPOTensor
 
+variable {d D : ℕ}
+
 /-- Existential BNT-label theorem witness for the source statement.
 
 The BNT-label theorem data depend on a choice of BNT-label type and

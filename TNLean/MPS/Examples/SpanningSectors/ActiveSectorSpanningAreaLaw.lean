@@ -257,7 +257,7 @@ private lemma tensor_isMPDO : IsMPDO tensor := by
   rw [Complex.nonneg_iff]
   exact ⟨cycleWeight_nonneg _, by simp⟩
 
-private lemma reducedBlockState_apply_of_trace_one
+private lemma reducedBlockState_apply_of_trace_one {d D : ℕ}
     (M : MPOTensor d D) {N m : ℕ} (hm : m ≤ N)
     (htrace : (mpo M N).trace = 1) (u v : Fin m → Fin d) :
     M.reducedBlockState N m hm u v =

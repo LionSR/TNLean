@@ -39,6 +39,8 @@ noncomputable section
 
 namespace MPOTensor
 
+variable {d D : ℕ}
+
 /-- The active-support fusion clause of Theorem 4.14(iii), attached to a chosen
 vertical canonical decomposition of the MPO tensor \(M\).
 

@@ -260,7 +260,7 @@ the discarded complements as documented in
 
 Source: arXiv:1606.00608, Theorem 4.14(ii)--(i), lines 972--993, and
 Appendix C.4, lines 2046--2085. -/
-theorem isRFPViaTS (H : BNTAlgebraTensorClause M)
+theorem isRFPViaTS {d D : ℕ} {M : MPOTensor d D} (H : BNTAlgebraTensorClause M)
     (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) : IsRFPViaTS M := by
   let S := H.toTwoSiteExactSectorGauge hCanonical hM
@@ -285,7 +285,7 @@ the discarded complements as documented in
 
 Source: arXiv:1606.00608, Theorem 4.14(ii)--(i), lines 972--993, and
 Appendix C.4, lines 2046--2085. -/
-theorem isRFPViaTS (h : HasBNTAlgebraTensorClause M)
+theorem isRFPViaTS {d D : ℕ} {M : MPOTensor d D} (h : HasBNTAlgebraTensorClause M)
     (hCanonical : MPSTensor.IsCPSVCanonicalForm M.toMPSTensor)
     (hM : IsMPDO M) : IsRFPViaTS M := by
   obtain ⟨H⟩ := h
