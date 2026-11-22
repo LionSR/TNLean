@@ -43,7 +43,7 @@ restrictions.\footnote{Formal declarations:
     \leanid{MPSPreparation.exists_isOneRoundConversion_le_log_repeatedBlockSum}
     and
     \leanid{MPSPreparation.exists_isOneRoundConversion_copyApproxVector}
-    in \doclink{TNLean/MPS/Preparation/NonNormalMeasurementPreparation}.}
+    in \doclink{TNLean/MPS/Preparation/Measurement/NonNormalMeasurementPreparation}.}
 \begin{enumerate}
     \item The $q$-site states of distinct blocks are orthogonal. Without this the
           block form of the positive part fails
@@ -67,7 +67,7 @@ The second formal statement removes the three restrictions above.\footnote{Forma
     \leanid{MPSPreparation.exists_isOneRoundConversion_le_log_of_mpvState_ne_zero}
     and
     \leanid{MPSPreparation.exists_isOneRoundConversion_le_log}
-    in \doclink{TNLean/MPS/Preparation/OverlappingMeasurementPreparation}.}
+    in \doclink{TNLean/MPS/Preparation/Measurement/OverlappingMeasurementPreparation}.}
 For $A$ as above, with every fixed point positive definite and the mixed
 transfer maps of distinct blocks of spectral radius below one, there is $c$
 such that for every $N\geq2$ and $0<\varepsilon\leq1$ at which
@@ -105,7 +105,7 @@ the source. The statement reads the construction as follows.
           of the corrected state \cite{gap:mswc24_repeated_overlap_small_weight_sum}
           does not enter.\footnote{Formal declaration:
               \leanid{MPSTensor.exists_one_sub_norm_inner_sum_blockIsometryState_le}
-              in \doclink{TNLean/MPS/Preparation/OverlappingBlockStates}.}
+              in \doclink{TNLean/MPS/Preparation/BlockSum/OverlappingBlockStates}.}
     \item The rate is $e^{-\gamma q/\xi}$ with $\xi$ bounding the correlation
           lengths of the blocks and of the mixed transfer maps of distinct
           blocks \cite{gap:mswc24_block_form_mixed_overlap}.
@@ -133,7 +133,7 @@ depth on the original chain itself, for arbitrary cyclic block lengths
 $\ell_k\ge3r_1$ and $r_1\ge2$.\footnote{Formal declarations:
     \leanid{MPSPreparation.exists_isMeasurementConversion_windowGHZState}
     and \leanid{MPSPreparation.exists_rounds_sparseBlockShift}
-    in \doclink{TNLean/MPS/Preparation/SparseWindowGHZ}.}
+    in \doclink{TNLean/MPS/Preparation/Circuit/SparseWindowGHZ}.}
 For an odd block, a unitary on its first $r_1+1$ sites moves the first
 register one site to the right, leaving an even scratch gap. The two
 registers are then joined by a teleportation-assisted controlled subtraction

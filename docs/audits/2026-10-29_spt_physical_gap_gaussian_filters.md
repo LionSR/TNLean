@@ -43,7 +43,7 @@ The Gaussian spectral error at the same `q` is exactly the second
 exponential. Thus the code writes the actual uniform exponential
 short-time/tail balance, not just a formula with unspecified filter errors.
 
-`MPS/Symmetry/ExactGroundPathGaussianFilter.lean` extracts one positive
+`MPS/Symmetry/GroundPath/ExactGroundPathGaussianFilter.lean` extracts one positive
 physical gap constant `Δ` valid at every path parameter and ring length.
 The least energies supplied by the independent gap and exact-ground-line
 conditions are identified by their minimality. The exact MPS ground line
@@ -61,7 +61,7 @@ predicate or continuous canonical representative is introduced.
 
 ## Limits and next mathematical steps
 
-`MPS/Preparation/TransferSpectrumFromCorrelations.lean` now writes the
+`MPS/CanonicalForm/Correlation/DecayingCorrelations.lean` now writes the
 conditional passage from an ordinary limiting-correlation rate `r > 0` to
 the bound `|λ| ≤ r` for every nonunit transfer spectral value in a
 trace-preserving gauge. It reuses the existing

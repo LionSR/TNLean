@@ -334,7 +334,7 @@ along $q=M$ are formalized.\footnote{Formal declarations:
     \leanid{MPSTensor.one_sub_norm_nonNormalApproxOverlap_overlappingBlockTensor_le},
     \leanid{MPSTensor.norm_le_of_hasEigenvalue_transferMap_overlappingBlockBasis},
     \leanid{MPSTensor.not_approximationError_le_overlappingBlockTensor} in
-    \doclink{TNLean/MPS/Preparation/OverlappingBlockCounterexample}.} The
+    \doclink{TNLean/MPS/Preparation/BlockSum/OverlappingBlockCounterexample}.} The
 positive part and the support projector are computed from the uniqueness of the
 positive square root of $B^\dagger B$.
 The positive definiteness of the active Gram matrix, both lower bounds in
@@ -344,7 +344,7 @@ quadratic polar-norm bound are also formalized.\footnote{Formal declarations:
     \leanid{MPSTensor.overlappingBlockOverlap_div_two_le_norm_sqrt_diagGram_sub_one},
     \leanid{MPSTensor.overlappingBlockOverlap_div_two_le_norm_polarPos_sub_limit}, and
     \leanid{MPSTensor.exists_norm_polarPos_overlappingBlockTensor_sub_limit_gt_sq} in
-    \doclink{TNLean/MPS/Preparation/OverlappingBlockCounterexample}.}
+    \doclink{TNLean/MPS/Preparation/BlockSum/OverlappingBlockCounterexample}.}
 
 The hypotheses of part~(ii) of the lemma are also formalized for this tensor.
 After ordering its bond coordinates it is the direct sum
@@ -362,19 +362,19 @@ bound.\footnote{Formal declarations:
     \leanid{MPSTensor.isBNTCanonicalForm_overlappingBlockSector},
     \leanid{MPSTensor.reindex_toTensor_overlappingBlockSector} and
     \leanid{MPSTensor.embeddedFixedPointPair_overlappingBlockSector} in
-    \doclink{TNLean/MPS/Preparation/OverlappingBlockCounterexample}.}
+    \doclink{TNLean/MPS/Preparation/BlockSum/OverlappingBlockCounterexample}.}
 
 The corrected bound (\ref{eq:mswc24_mixed_corrected}) for blocks of multiplicity one
 and weight one, with its ingredients, is formalized.\footnote{Formal declarations:
     \leanid{MPSTensor.exists_approximationError_le_overlappingBlockSum} and
     \leanid{MPSTensor.exists_approximationError_le_mul_overlappingBlockSum} in
-    \doclink{TNLean/MPS/Preparation/BlockSumError};
+    \doclink{TNLean/MPS/Preparation/BlockSum/BlockSumError};
     \leanid{MPSTensor.exists_norm_polarPos_blockTensor_blockSum_sub_le} in
-    \doclink{TNLean/MPS/Preparation/OverlappingBlockGram};
+    \doclink{TNLean/MPS/Preparation/BlockSum/OverlappingBlockGram};
     \leanid{MPSTensor.mixedMapLM_blockSumPosLimit_apply},
     \leanid{MPSTensor.exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le} and
     \leanid{MPSTensor.exists_abs_norm_mpvState_blockSum_sq_sub_le} in
-    \doclink{TNLean/MPS/Preparation/OverlappingBlockOverlap}.}
+    \doclink{TNLean/MPS/Preparation/BlockSum/OverlappingBlockOverlap}.}
 
 The bound (\ref{eq:mswc24_mixed_second_order}) at the second-order rate, for blocks of
 multiplicity one and weight one and every $0<\gamma<1$, with its ingredients, is
@@ -383,14 +383,14 @@ formalized.\footnote{Formal declarations:
     \leanid{MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_sq},
     \leanid{MPSTensor.exists_norm_mpvState_sq_sub_norm_sum_mpvOverlap_sq_le} and
     \leanid{MPSTensor.one_sub_norm_nonNormalApproxOverlap_blockSum_le} in
-    \doclink{TNLean/MPS/Preparation/SecondOrderBlockError};
+    \doclink{TNLean/MPS/Preparation/BlockSum/SecondOrderBlockError};
     \leanid{MPSTensor.exists_abs_norm_mpvState_blockSum_sq_sub_le} in
-    \doclink{TNLean/MPS/Preparation/OverlappingBlockOverlap};
+    \doclink{TNLean/MPS/Preparation/BlockSum/OverlappingBlockOverlap};
     \leanid{MPSTensor.exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq},
     \leanid{MPSTensor.mixedTransferMatrixLeft_blockSumPosLimit_mul_mul},
     \leanid{MPSTensor.transferMap_blockSum_embeddedBlockState} and
     \leanid{MPSTensor.im_trace_mixedMapLM_ofPhysicalMatrixLM_fixedPointTensor} in
-    \doclink{TNLean/MPS/Preparation/SecondOrderBlockOverlap};
+    \doclink{TNLean/MPS/Preparation/BlockSum/SecondOrderBlockOverlap};
     \leanid{IsIdempotentElem.exists_norm_trace_pow_sub_one_le_sq} in
     \path{QICLean/Analysis/Norm/IdempotentTracePerturbation.lean}.}
 
@@ -400,7 +400,7 @@ formalized as a case of complex weights below; the case of weight one is derived
 it.\footnote{Formal declarations:
     \leanid{MPSTensor.exists_approximationError_le_overlappingBlockSum_weight} and
     \leanid{MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_weight} in
-    \doclink{TNLean/MPS/Preparation/BlockSumError}.}
+    \doclink{TNLean/MPS/Preparation/BlockSum/BlockSumError}.}
 The counterexample (\ref{eq:mswc24_phase_overlap}), with the hypotheses of part~(ii) for it and
 the failure of the printed bound for $\mu=-1$, is formalized.\footnote{Formal declarations:
     \leanid{MPSTensor.nonNormalApproxOverlap_phaseBlockTensor_of_norm},
@@ -410,7 +410,7 @@ the failure of the printed bound for $\mu=-1$, is formalized.\footnote{Formal de
     \leanid{MPSTensor.not_approximationError_le_phaseBlockTensor},
     \leanid{MPSTensor.isBNTCanonicalForm_phaseBlockSector} and
     \leanid{MPSTensor.isBNTCanonicalForm_and_not_approximationError_le_phaseBlock} in
-    \doclink{TNLean/MPS/Preparation/PhaseWeightCounterexample}.}
+    \doclink{TNLean/MPS/Preparation/BlockSum/PhaseWeightCounterexample}.}
 The bound (\ref{eq:mswc24_mixed_corrected}) for complex weights $\mu_j$, not all zero,
 multiplicity one, $\beta_j=\lvert\mu_j\rvert^N$ and every $0<\gamma<1$, with a constant
 independent of the weights, is formalized. Blocks of weight zero are dropped, and for nonzero
@@ -425,7 +425,7 @@ copy are $\lvert\mu_j\rvert^N$.\footnote{Formal declarations:
     \leanid{MPSTensor.ghzAmplitude_comp_of_eq_zero},
     \leanid{MPSTensor.exists_approximationError_le_overlappingBlockSum_complexWeight} and
     \leanid{MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_complexWeight} in
-    \doclink{TNLean/MPS/Preparation/BlockSumError}.}
+    \doclink{TNLean/MPS/Preparation/BlockSum/BlockSumError}.}
 
 \section{Numerical check}
 A script evaluates the overlap through $P$, using $V^\dagger B=P$ and the support
@@ -486,14 +486,14 @@ $E_{jj'}^{q_0}=0$, so every $\lambda_2$ bounds their eigenvalues and this repair
 second statement below. It is formalized, for every $0<\gamma<1$ and with a constant
 independent of the weights.\footnote{Formal declarations:
     \leanid{Matrix.polarIso_sum_of_orthogonal} in
-    \doclink{TNLean/MPS/Preparation/OrthogonalSumPolar};
+    \doclink{TNLean/MPS/Preparation/Polar/OrthogonalSumPolar};
     \leanid{MPSTensor.nonNormalApproxVector_blockSum} and
     \leanid{MPSTensor.mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero} in
-    \doclink{TNLean/MPS/Preparation/OrthogonalBlockSum};
+    \doclink{TNLean/MPS/Preparation/BlockSum/OrthogonalBlockSum};
     \leanid{MPSTensor.eq_zero_of_hasEigenvalue_mixedMapLM_of_conjTranspose_mul_eq_zero},
     \leanid{MPSTensor.exists_approximationError_le_blockSum} and
     \leanid{MPSTensor.exists_approximationError_le_mul_blockSum} in
-    \doclink{TNLean/MPS/Preparation/BlockSumError}.}
+    \doclink{TNLean/MPS/Preparation/BlockSum/BlockSumError}.}
 The orthogonality holds for instance when distinct blocks use disjoint sets of
 physical indices.
 

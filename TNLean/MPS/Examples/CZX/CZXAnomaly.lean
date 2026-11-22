@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.CZX.CZXSquare
 import TNLean.MPS.Examples.MultiBlock.StackedPairGauge
-import TNLean.MPS.FundamentalTheorem.Reduction.Splitting
+import TNLean.MPS.FundamentalTheorem.Compression.Splitting
 
 /-!
 # CZX: nonsplitting of the stacked square

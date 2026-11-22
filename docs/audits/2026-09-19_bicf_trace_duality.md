@@ -3,8 +3,8 @@
 Date: 2026-09-19
 
 The finite-word trace separation criteria in
-`TNLean/MPS/MPDO/BiCFDerivation/Core.lean` and the simultaneous-span trace
-lemma in `TNLean/MPS/SharedInfra/WordTupleGauge.lean` re-derived, by hand,
+`TNLean/MPS/CanonicalForm/BlockSeparation/TraceSeparation.lean` and the simultaneous-span trace
+lemma in `TNLean/MPS/Tensor/Gauge/WordTupleGauge.lean` re-derived, by hand,
 two facts that the existing matrix trace-pairing interface already supplies:
 that every linear functional on a finite matrix algebra is a trace pairing,
 and that a trace pairing vanishing on a generating set vanishes on the span

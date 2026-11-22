@@ -13,7 +13,7 @@ The process has two artifacts:
 
 Promoted tactics live in the source tree:
 
-- `TNLean/MPS/Tactic/Basic.lean` — MPS/channel/overlap-specific simp sets and
+- `TNLean/MPS/Tensor/Tactic.lean` — MPS/channel/overlap-specific simp sets and
   tactic macros (`mpv_ext`, `transfer_simp`).
 - `TNLean/Tactic/` — cross-cutting tactics not tied to MPS (create the
   directory when the first such tactic is promoted).
@@ -128,7 +128,7 @@ Where it fits in this project:
 
 ## Design rules for promoted tactics
 
-These extend the design notes in `TNLean/MPS/Tactic/Basic.lean`:
+These extend the design notes in `TNLean/MPS/Tensor/Tactic.lean`:
 
 - **No search.** Promoted tactics normalize or discharge a *known* pattern.
   When the pattern does not apply they must fail fast or leave clear unsolved

@@ -28,7 +28,7 @@ one-site periodic vector and no available two-site window.
 
 ## Reuse and architecture
 
-- `MPS/Chain/Interval` defines actual intervals and their ordered products.
+- `MPS/Tensor/Chain/Interval` defines actual intervals and their ordered products.
 - `InhomogeneousChoiResidual` factors the existing Choi/Gram argument into a
   shared residual product bound, including nonuniform strengths.
 - `WindowMixing` constructs cyclic references and assembles complete windows

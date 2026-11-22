@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixAlgebra.MatrixFamilyAction
-import TNLean.MPS.FundamentalTheorem.Reduction.AdmissibleBlock
-import TNLean.MPS.FundamentalTheorem.Reduction.SplitUniquenessGauge
+import TNLean.MPS.FundamentalTheorem.Compression.AdmissibleBlock
+import TNLean.MPS.FundamentalTheorem.Compression.SplitUniquenessGauge
 
 /-!
 # All gauges between completely reducible tensors

@@ -13,7 +13,7 @@ its `VerticalSectorFixedGeneratorHypotheses` parent.
 | `MPOTensor.VerticalSectorHypotheses.SbarTbar` | `MPOTensor.VerticalSectorFixedGeneratorHypotheses.SbarTbar` |
 | `MPOTensor.VerticalSectorHypotheses.TbarSbar` | `MPOTensor.VerticalSectorFixedGeneratorHypotheses.TbarSbar` |
 
-All four lived in `TNLean/MPS/MPDO/VerticalSectorGeneration.lean`; all four
+All four lived in `TNLean/MPS/MPDO/SectorMaps/VerticalSectorGeneration.lean`; all four
 replacements are the parent structure's own definitions.
 
 ## What was checked

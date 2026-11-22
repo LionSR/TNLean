@@ -2,7 +2,7 @@
 
 This audit records the declarations renamed when the several-block
 isometric-deformation symmetry results of
-`TNLean/MPS/ParentHamiltonian/BlockIsometricDeformationSymmetry.lean` were
+`TNLean/MPS/ParentHamiltonian/Deformation/BlockIsometricDeformationSymmetry.lean` were
 restated under symmetry of the matrix product vectors up to a phase
 (`MPSTensor.IsOnSiteSymmetricUpToPhase`) instead of exact symmetry. It is the
 audit note required by `docs/project_conventions.md` §Style. No non-`Archive`

@@ -97,11 +97,11 @@ The formal theorem proves that $B$ is in irreducible form, is
 $2$-refinable, and is not $2$-divisible as a channel.\footnote{See
     \leanid{MPSTensor.refinement_normalization_counterexample} and
     \leanid{MPSTensor.refinementScalarCounterexample} in
-    \path{TNLean/MPS/Periodic/Symmetry/RefinementNormalizationCounterexample.lean}.
+    \path{TNLean/MPS/FundamentalTheorem/Refinement/NormalizationCounterexample.lean}.
     At $p=1$ every tensor is $1$-refinable, while $1$-divisibility is
     exactly the channel condition; see \leanid{MPSTensor.isPRefinable_one}
     and \leanid{MPSTensor.isPDivisibleChannel_one_iff} in
-    \path{TNLean/MPS/Periodic/Symmetry/Theorem41OneSite.lean}.}
+    \path{TNLean/MPS/FundamentalTheorem/Refinement/OneSite.lean}.}
 
 The printed argument breaks at its last line,
 \path{Papers/1708.00029/main.tex:806--810}. It constructs $\widetilde A$ with
@@ -148,7 +148,7 @@ than about the matrices of the tensor: a tensor is in irreducible form when it
 generates, at every length including zero, the same matrix product vectors as
 a scalar-weighted direct sum of periodic left-canonical blocks with positive
 weights.\footnote{The definition is \leanid{MPSTensor.IsIrreducibleForm} in
-    \path{TNLean/MPS/Periodic/Defs.lean}.} It does not fix the transfer map of the
+    \path{TNLean/MPS/Transfer/Irreducible/Periodic.lean}.} It does not fix the transfer map of the
 tensor. Two consequences follow for the former forward canonicalization
 hypothesis, which asked, for every tensor $B$ in this formal irreducible form
 whose family is $p$-refinable, for a left-canonical tensor $\widetilde A$ with
@@ -181,7 +181,7 @@ tensor given as a multiplicity-bearing block form with every multiplicity
 equal to one, the structure already used by the formal equal-case
 theorem,\footnote{The equal-case theorem is
     \leanid{MPSTensor.fundamentalTheorem_periodic_equalCase_irreducibleForm} in
-    \path{TNLean/MPS/Periodic/EqualCaseGlobal.lean}.} and then to follow the
+    \path{TNLean/MPS/FundamentalTheorem/Periodic/EqualCaseGlobal.lean}.} and then to follow the
 printed argument. The single-block ingredients now have formal counterparts:
 \leanid{MPSTensor.IsPeriodic.exists_stepOrbit_blockDecomposition}
 constructs the prescribed periodic blocks and their cyclic projections;
@@ -203,7 +203,7 @@ The exact target bond dimension follows from the equal-case theorem, without
 requiring equality at length zero or assuming an initial canonical form.
 These results are assembled over the full multiplicity-bearing
 decomposition in
-\path{TNLean/MPS/Periodic/Symmetry/Theorem41ForwardBlockForm.lean}: the
+\path{TNLean/MPS/FundamentalTheorem/Refinement/DivisibleOfRefinable.lean}: the
 equal-case gauge is identified on the original orbit supports through
 \leanid{MPSTensor.exists_unitary_matching_of_periodic_block_families}, and
 \leanid{MPSTensor.isPDivisibleChannel_of_isPRefinable_toTensorFromBlocks}
@@ -219,7 +219,7 @@ or root-construction hypothesis.
 The separate reverse implication still requires selecting a channel root
 with Kraus rank no greater than the physical dimension. Its conditional
 statement and bounded-root construction remain in
-\path{TNLean/MPS/Periodic/Symmetry/Theorem41Reverse.lean}; see
+\path{TNLean/MPS/FundamentalTheorem/Refinement/RefinableOfDivisible.lean}; see
 \path{docs/paper-gaps/dccsp17_root_kraus_rank_thm41.tex} and
 \href{https://github.com/LionSR/TNLean/issues/664}{issue \#664}.
 This forward correction therefore does not resolve the unrestricted

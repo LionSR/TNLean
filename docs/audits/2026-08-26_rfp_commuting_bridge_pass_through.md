@@ -8,7 +8,7 @@ non-`Archive` consumer was migrated in the same change.
 
 | Removed | Replacement |
 |---|---|
-| `MPSTensor.commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction` (`TNLean/MPS/RFP/AppendixBStructuralData.lean`) | `MPSTensor.AppendixBProductPairExtraction.commuting_twoSite_localTerms` (same file); the removed theorem's proof body was exactly `hExtract.commuting_twoSite_localTerms N hN` |
+| `MPSTensor.commuting_twoSite_localTerms_of_rfp_of_appendixBExtraction` (`TNLean/MPS/ParentHamiltonian/Commuting/AppendixBStructuralData.lean`) | `MPSTensor.AppendixBProductPairExtraction.commuting_twoSite_localTerms` (same file); the removed theorem's proof body was exactly `hExtract.commuting_twoSite_localTerms N hN` |
 
 ## What was checked
 

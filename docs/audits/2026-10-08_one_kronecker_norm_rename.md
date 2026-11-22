@@ -18,7 +18,7 @@ uses it with a rectangular factor, so it is kept under a new name.
 
 The old fully qualified name now resolves only to QICLean's square theorem.
 The three uses, in `TNLean/Algebra/MatrixKroneckerContraction.lean`,
-`TNLean/PEPS/Approximation/TwoSheetExchange.lean` and
+`TNLean/PEPS/Approximation/Frames/TwoSheetExchange.lean` and
 `TNLean/PEPS/Approximation/SheetSwapCorrection.lean`, now cite the new name. No
 blueprint `\lean{...}` tag cites the old name, and no other use exists in
 `TNLean`, `blueprint`, `docs` or `scripts`.

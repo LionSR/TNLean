@@ -21,7 +21,7 @@ is deliberately source-faithful.
 - **Declaration:** `MPOTensor.TwoSiteStandardFormData W u v`, for a tensor
   `W : MPOTensor (d * d) D`, a gate from the physical pair to the ordered
   intermediate pair `(ℓ,r)`, and a gate from `(r,ℓ)` back to the physical pair.
-- **Defined in:** `TNLean/MPS/MPU/TwoSiteStandardForm.lean`.
+- **Defined in:** `TNLean/MPS/MPU/StandardForm/TwoSiteStandardForm.lean`.
 - **Meaning:** the dimensions are positive, both supplied gates are unitary
   between their coordinate spaces, the second gate contracts as
   $v^{(i_1,i_2)}_{s,l}=\sum_\beta (X_1)_{(i_1,\beta),s}(X_2)_{(\beta,i_2),l}$,
@@ -49,7 +49,7 @@ is deliberately source-faithful.
 
 - **Declaration:** `MPOTensor.IsLevelTriangular w W`, for a tensor
   `W : MPOTensor d D` and levels `w : Fin D → ℕ` on the bond directions.
-- **Defined in:** `TNLean/MPS/MPU/LevelTriangularReduction.lean`.
+- **Defined in:** `TNLean/MPS/MPU/Symmetry/Phases/LevelTriangularReduction.lean`.
 - **Meaning:** no letter has an entry from a higher level to a lower one:
   $(W^{ij})_{\beta\alpha}=0$ whenever $w(\beta)<w(\alpha)$, with $\beta$ the
   row and $\alpha$ the column of the bond matrix. `MPOTensor.levelDiag w W`
@@ -76,8 +76,8 @@ is deliberately source-faithful.
 - **Declarations:**
   `MPOTensor.transported_source_factor_premises_at_selected_ranks` and
   `MPOTensor.IsMPUCanonicalFormII.exists_selected_source_factor_unitary_gauges`.
-- **Defined in:** `TNLean/MPS/MPU/VirtualSourceFactorTransport.lean` and
-  `TNLean/MPS/MPU/SelectedSourceFactorVirtualGauge.lean`.
+- **Defined in:** `TNLean/MPS/MPU/StandardForm/VirtualSourceFactorTransport.lean` and
+  `TNLean/MPS/MPU/StandardForm/SelectedSourceFactorVirtualGauge.lean`.
 - **Meaning:** If two simple canonical-form-II tensors are related by a
   unitary virtual conjugation, their selected source factors obey four exact
   identities after identifying their equal source-cut ranks. The two
@@ -99,7 +99,7 @@ is deliberately source-faithful.
 - **Declaration:** `EquivalentUnderPhysicalMatrixSymmetry kind Q U V`, where
   `U` and `V` have one fixed labelled physical space and independent virtual
   dimensions, and `kind` is adjunction, transposition or conjugation.
-- **Defined in:** `TNLean/MPS/MPU/PhysicalMatrixEquivalence.lean`.
+- **Defined in:** `TNLean/MPS/MPU/Equivalence/PhysicalMatrixEquivalence.lean`.
 - **Meaning:** the original tensors are MPUs, and some common positive
   identity ancilla and common positive canonical blocking give the existing
   strict symmetry-preserving path relation. The physical matrix is retained
@@ -174,7 +174,7 @@ is deliberately source-faithful.
 - **Sanctioned bridges:** `MPSTensor.IsNormalTensor.exists_tpGauge`,
   `MPSTensor.IsNormalTensor.isNormal`, and
   `MPSTensor.IsNormalTensor.selfOverlap_tendsto_one`, all in
-  `TNLean/MPS/CanonicalForm/NormalTensorGauge.lean`.
+  `TNLean/MPS/CanonicalForm/NormalBlocks/NormalTensorGauge.lean`.
 - **Caveat:** `exists_tpGauge` and `isNormal` derive nonzero bond dimension
   internally from spectral normality. Other asymptotic consequences may still
   expose a positive-dimension instance in their signatures. These bridges run
@@ -187,7 +187,7 @@ is deliberately source-faithful.
 - **Declarations:**
   `MPSTensor.IsCPSVBasisOfNormalTensors A blocks` in
   `TNLean/MPS/CanonicalForm/Definitions.lean`, and
-  `MPSTensor.IsBNT A_total g dim A_bnt` in `TNLean/MPS/BNT/Basic.lean`.
+  `MPSTensor.IsBNT A_total g dim A_bnt` in `TNLean/MPS/CanonicalForm/BNT/Basic.lean`.
 - **Meaning:** both say that a finite family of normal blocks spans every
   positive-length matrix-product-vector family and is eventually linearly
   independent. The first uses `IsNormalTensor`; the second uses
@@ -211,7 +211,7 @@ is deliberately source-faithful.
 
 - **Declaration:** `MPSTensor.IsBNTSectorPresentation A P : Prop` for a
   sector decomposition `P`.
-- **Defined in:** `TNLean/MPS/CanonicalForm/BNTRefinement.lean`.
+- **Defined in:** `TNLean/MPS/CanonicalForm/BNTPresentation/Refinement.lean`.
 - **Meaning:** `P` presents `A` by a basis of normal tensors grouped into
   phase classes with copy weights: at least one representative occurs, the
   presentation has the same positive-length matrix-product vectors as `A`,
@@ -239,7 +239,7 @@ is deliberately source-faithful.
 
 - **Declaration:**
   `MPSTensor.IsSpectrallyPeriodic (m : ℕ) (A : MPSTensor d D) : Prop`.
-- **Defined in:** `TNLean/MPS/Periodic/Defs.lean`.
+- **Defined in:** `TNLean/MPS/Transfer/Irreducible/Periodic.lean`.
 - **Meaning:** the transfer map is irreducible, has spectral radius one, and has
   unit-circle eigenvalues exactly the `m`-th roots of unity, with `m > 0`.
   No trace-preserving normalization is assumed.
@@ -247,7 +247,7 @@ is deliberately source-faithful.
   lines 248--261.
 - **Sanctioned bridge:**
   `MPSTensor.IsSpectrallyPeriodic.exists_isPeriodic_tpGauge` in
-  `TNLean/MPS/Periodic/Normalization.lean` gives a pure-similarity
+  `TNLean/MPS/CanonicalForm/Periodic/Normalization.lean` gives a pure-similarity
   trace-preserving representative. For a multiplicity-bearing sector
   decomposition, `MPSTensor.SectorDecomposition.exists_isPeriodic_replaceBasis`
   applies these gauges simultaneously and leaves all multiplicities and weights
@@ -261,7 +261,7 @@ is deliberately source-faithful.
 ### `MPSTensor.IsPeriodic`
 
 - **Declaration:** `MPSTensor.IsPeriodic (m : ℕ) (A : MPSTensor d D) : Prop`.
-- **Defined in:** `TNLean/MPS/Periodic/Defs.lean`.
+- **Defined in:** `TNLean/MPS/Transfer/Irreducible/Periodic.lean`.
 - **Meaning:** the tensor is irreducible and left-canonical, `m > 0`, and the
   peripheral eigenvalues are exactly the `m`-th roots of unity.
 - **Source:** the trace-preserving form obtained in arXiv:1708.00029,
@@ -333,7 +333,7 @@ out.
 ### Proposition 3 of arXiv:0909.5347
 
 - **Declaration:** `MPSTensor.primitivity_tfae`, in
-  `TNLean/Wielandt/Primitivity/Equivalence.lean`.
+  `TNLean/MPS/Transfer/Primitivity/Equivalence.lean`.
 - **Statement:** for `[NeZero D]` and a left-canonical tensor
   (`∑ i, (A i)ᴴ * A i = 1`), the following are equivalent:
   (a) some positive length `q` has `Kraus.vectorSpreadSpan A φ q = ⊤` for every
@@ -393,8 +393,8 @@ out.
 #### `MPSChainTensor.IsInjective` and `MPSChainTensor.IsWindowInjective`
 
 - **Declarations:** `MPSChainTensor.IsInjective A` in
-  `TNLean/MPS/Chain/Defs.lean`, and `MPSChainTensor.IsWindowInjective A L` in
-  `TNLean/PEPS/CycleMPSChainArc.lean`.
+  `TNLean/MPS/Tensor/Chain/Defs.lean`, and `MPSChainTensor.IsWindowInjective A L` in
+  `TNLean/PEPS/Injectivity/Region/CycleMPSChainArc.lean`.
 - **Meaning:** the first requires one-site `Kraus.IsInjective` at every site
   of a non-translation-invariant chain. The second requires every cyclic window
   of length `L` to have full arc-product span.
@@ -409,7 +409,7 @@ out.
 #### `MPOTensor.IsInjective`
 
 - **Declaration:** `MPOTensor.IsInjective (K : MPOTensor d D) : Prop`.
-- **Defined in:** `TNLean/MPS/MPDO/SimpleLocalStructure.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Simple/SimpleLocalStructure.lean`.
 - **Meaning:** an abbreviation for
   `Kraus.IsInjective K.toMPSTensor` on the doubled physical index.
 - **Source:** arXiv:1606.00608 Appendix C.2, where an inverse tensor is used for
@@ -460,7 +460,7 @@ out.
 
 #### `TNLean.PEPS.Approximation.RepaintingUses` and `JunctionUses`
 
-- **Defined in:** `TNLean/PEPS/Approximation/DyadicActiveLabelParties.lean`,
+- **Defined in:** `TNLean/PEPS/Approximation/Guides/DyadicActiveLabelParties.lean`,
   together with `OwnsLevelBlock` and the hierarchy forms `DyadicSquare.Uses` and
   `DyadicJunction.Uses`.
 - **Meaning:** the block parties an event of the dyadic protocol uses.
@@ -482,7 +482,7 @@ out.
 #### `TNLean.PEPS.IsVertexInjective`
 
 - **Declaration:** `TNLean.PEPS.IsVertexInjective (A : Tensor G d) : Prop`.
-- **Defined in:** `TNLean/PEPS/Defs.lean`.
+- **Defined in:** `TNLean/PEPS/Tensor/Network/Defs.lean`.
 - **Meaning:** at every vertex, the physical vectors indexed by incident virtual
   configurations are linearly independent; equivalently, the linearly extended
   virtual-to-physical tensor map has trivial kernel.
@@ -503,7 +503,7 @@ out.
 - **Declaration:** `TNLean.PEPS.Tensor.IsInjective (A : Tensor G d) : Prop`, a
   structure with fields `isVertexInjective : IsVertexInjective A` and
   `bondDim_pos : ∀ e, 0 < A.bondDim e`.
-- **Defined in:** `TNLean/PEPS/Defs.lean`.
+- **Defined in:** `TNLean/PEPS/Tensor/Network/Defs.lean`.
 - **Meaning:** an injective PEPS tensor: vertex injective, with every virtual
   bond space nonzero.
 - **Source:** arXiv:1804.04964 §3, `Papers/1804.04964/paper_normal.tex:979-981`
@@ -526,7 +526,7 @@ out.
   structure extending `NormalPEPSBlockingHypotheses` at the doubly injective
   assignment of `A` and `B`, with fields `bondDim_pos_left` and
   `bondDim_pos_right`.
-- **Defined in:** `TNLean/PEPS/NormalBondDimension.lean`.
+- **Defined in:** `TNLean/PEPS/FundamentalTheorem/Normal/NormalBondDimension.lean`.
 - **Meaning:** two normal PEPS tensors in the setting of the general normal
   Fundamental Theorem: shared edge blockings and one-site comparison regions,
   each region injective for both tensors, and every virtual bond space of both
@@ -548,16 +548,16 @@ out.
   `bondDim_pos : ∀ e, 0 < A.bondDim e`:
   - `TNLean.PEPS.IsNormalCycleArcMPS L A`, extending
     `NormalCycleArcInjectivityHypotheses`, in
-    `TNLean/PEPS/CycleFundamentalTheorem.lean`;
+    `TNLean/PEPS/FundamentalTheorem/Cycle/CycleFundamentalTheorem.lean`;
   - `TNLean.PEPS.IsNormalTorusRectanglePEPS A`, extending
     `NormalTorusRectangleInjectivityHypotheses`, in
-    `TNLean/PEPS/NormalTorusRectanglePEPS.lean`;
+    `TNLean/PEPS/Injectivity/Normal/NormalSquareInjectivity.lean`;
   - `TNLean.PEPS.IsNormalSquareLatticeRectanglePEPS A`, extending
     `NormalSquareLatticeRectangleInjectivityHypotheses`, in
-    `TNLean/PEPS/NormalSquareUnconditionalFundamentalTheorem.lean`;
+    `TNLean/PEPS/FundamentalTheorem/Normal/NormalSquareUnconditionalFundamentalTheorem.lean`;
   - `TNLean.PEPS.IsNormalTorusArcWindowPEPS L K A`, extending
     `NormalTorusArcWindowInjectivityHypotheses`, in
-    `TNLean/PEPS/TorusWindowComplement.lean`.
+    `TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowComplement.lean`.
 - **Meaning:** one normal tensor in the setting of a fixed-lattice corollary:
   the source's injective blocks (`L` consecutive sites on the closed chain,
   `2 × 3` and `3 × 2` rectangles on the torus or the open square lattice,
@@ -589,7 +589,7 @@ out.
 
 - **Declaration:**
   `TNLean.PEPS.RegionBlockedTensorInjective (A : Tensor G d) (R : Finset V) : Prop`.
-- **Defined in:** `TNLean/PEPS/RegionBlock/Basic.lean`.
+- **Defined in:** `TNLean/PEPS/Tensor/Region/RegionBlock.lean`.
 - **Meaning:** the blocked tensor family indexed by virtual configurations on
   the boundary of `R` is linearly independent.
 - **Source:** arXiv:1804.04964 §3, contraction and union of injective regions,
@@ -609,7 +609,7 @@ out.
 
 - **Declaration:**
   `TNLean.PEPS.IsGInjective (ρ : Representation ℂ G W) (T : W →ₗ[ℂ] P) : Prop`.
-- **Defined in:** `TNLean/PEPS/GInjective.lean`.
+- **Defined in:** `TNLean/Algebra/GInjective.lean`.
 - **Meaning:** the virtual-to-physical map `T = 𝒫(A)` is invariant under `ρ`
   and injective on the `ρ`-invariant subspace.
 - **Source:** arXiv:1001.3807, Definition `def:2d-Ug-inj`,
@@ -654,7 +654,7 @@ out.
 
 - **Declaration:** `TNLean.PEPS.IsGIsometric (ρ : Representation ℂ G (ι → ℂ))
   (T : (ι → ℂ) →ₗ[ℂ] (κ → ℂ)) : Prop`.
-- **Defined in:** `TNLean/PEPS/GInjective.lean`.
+- **Defined in:** `TNLean/Algebra/GInjective.lean`.
 - **Meaning:** `IsGInjective ρ T` and `⟪T x, T y⟫ = c ⟪x, y⟫` for invariant
   `x, y` and one constant `c > 0`.
 - **Source:** arXiv:1001.3807, Definition `def:iso:isopeps`,
@@ -669,7 +669,7 @@ out.
 #### `TNLean.PEPS.IsGIsometricMPS`
 
 - **Declaration:** `TNLean.PEPS.IsGIsometricMPS (A : ι → Module.End ℂ (MonoidAlgebra ℂ G)) : Prop`.
-- **Defined in:** `TNLean/PEPS/GIsometric.lean`.
+- **Defined in:** `TNLean/PEPS/Injectivity/GInjective/GIsometric.lean`.
 - **Meaning:** an MPS tensor with bond space `ℂ[G]` carrying the left-regular
   representation `L_g`, invariant (`L_g A^i L_g⁻¹ = A^i`), with
   `𝒫(A†) 𝒫(A) = c σ` for one constant `c > 0`, where `𝒫(A†)|i⟩ = (A^i)†` and
@@ -710,7 +710,7 @@ out.
 - **Declarations:**
   `TNLean.PEPS.IsTorusParallelSection (a b f : TorusVertex width height → G) : Prop`
   and `TNLean.PEPS.IsTorusFlat (a b : TorusVertex width height → G) : Prop`.
-- **Defined in:** `TNLean/PEPS/TorusParallelSection.lean`.
+- **Defined in:** `TNLean/PEPS/Graph/Holonomy/TorusParallelSection.lean`.
 - **Meaning:** `f` is a parallel section of the horizontal transports `a` and
   the vertical transports `b` if `f (x + 1, y) = a (x, y) * f (x, y)` and
   `f (x, y + 1) = b (x, y) * f (x, y)` at every site; `a, b` are flat if
@@ -729,7 +729,7 @@ out.
 - **Declarations:**
   `TNLean.PEPS.IsQuantumDoubleGaussLaw (s : TorusVertex width height → G × G × G × G) : Prop`
   and `TNLean.PEPS.IsQuantumDoubleTrivialHolonomy s : Prop`.
-- **Defined in:** `TNLean/PEPS/Examples/QuantumDouble.lean`.
+- **Defined in:** `TNLean/PEPS/Examples/QuantumDouble/QuantumDouble.lean`.
 - **Meaning:** for the four physical spins `(s₁, s₂, s₃, s₄)` (top left, top
   right, bottom right, bottom left) of each site of the dual quantum-double
   network, Gauss' law is the vertex rule `s₂ s₁ = s₃ s₄` at every site together
@@ -754,7 +754,7 @@ out.
 
 - **Declarations:** `TNLean.PEPS.czxRectangleCoordinatesEquiv`,
   `czxRectangleEffectiveBoundaryConfig`, and `czxRectangleBoundaryMatrix`.
-- **Defined in:** `TNLean/PEPS/Examples/CZXRectangleMap.lean`, using the explicit
+- **Defined in:** `TNLean/PEPS/Examples/CZX/CZXRectangleMap.lean`, using the explicit
   clockwise `torusRectanglePerimeterEquiv` in `CZXRectangleBoundary.lean`.
 - **Meaning:** clockwise crossing-bond coordinates reverse the native
   bottom/left pairs. Effective bits `c` impose the adjacent-pair constraint
@@ -784,7 +784,7 @@ out.
 #### `TNLean.PEPS.IsToricCodeBondCompatible`
 
 - **Declaration:** `IsToricCodeBondCompatible σ`.
-- **Defined in:** `TNLean/PEPS/Examples/ToricCodeTorusAmplitudes.lean`.
+- **Defined in:** `TNLean/PEPS/Examples/ToricCode/ToricCodeTorusAmplitudes.lean`.
 - **Meaning:** the virtual labels determined by the physical spins match on
   every oriented horizontal and vertical bond: the left label of the right
   neighbor equals the current right label, and the bottom label of the upper
@@ -807,7 +807,7 @@ out.
 
 - **Declaration:**
   `TNLean.PEPS.PairConjugacyClass.IsCommuting (C : PairConjugacyClass G) : Prop`.
-- **Defined in:** `TNLean/PEPS/PairConjugacy.lean`.
+- **Defined in:** `TNLean/PEPS/Injectivity/Closure/PairConjugacy.lean`.
 - **Meaning:** the representatives `(g, h)` of a class of pairs under
   simultaneous conjugation commute. Commutation is invariant under
   simultaneous conjugation, so the predicate is well defined on classes.
@@ -834,7 +834,7 @@ out.
 - **Declarations:**
   `TNLean.PEPS.IsTorusClosureCompatible (g h g' h' : G) (q : TorusVertex width height → G) : Prop`
   and `TNLean.PEPS.IsTorusNonseamCompatible (q : TorusVertex width height → α) : Prop`.
-- **Defined in:** `TNLean/PEPS/RegularTorusCompatibility.lean`.
+- **Defined in:** `TNLean/PEPS/Graph/Holonomy/RegularTorusCompatibility.lean`.
 - **Meaning:** in the overlap of a bra network closed by `(g, h)` with a ket
   network closed by `(g', h')`, `IsTorusClosureCompatible g h g' h' q` says that
   the site translations `q v` carry the ket labels to the bra labels across
@@ -861,8 +861,8 @@ out.
   `TNLean.PEPS.IsRegionLabelCompatible (R : Finset V) (q : {v // v ∈ R} → G) (η θ) : Prop`
   and
   `TNLean.PEPS.IsTwistedRegionLabelCompatible (R : Finset V) (u w : Edge Γ → G) (q) (η θ) : Prop`.
-- **Defined in:** `TNLean/PEPS/RegularRegionConnectivity.lean` and
-  `TNLean/PEPS/RegularTwistedRegion.lean`.
+- **Defined in:** `TNLean/PEPS/Graph/Holonomy/RegularRegionConnectivity.lean` and
+  `TNLean/PEPS/Tensor/GraphState/RegularTwistedRegion.lean`.
 - **Meaning:** in the regular-basis expansion of the Gram matrix of an open
   region, `η` (bra) and `θ` (ket) are group labels on the bonds incident to `R`. The
   untwisted predicate says that at every vertex `v ∈ R` each incident label of
@@ -885,7 +885,7 @@ out.
 
 - **Declaration:**
   `TNLean.PEPS.IsTorusRegionIntegerLift (R : Finset (TorusVertex width height)) (L : {v // v ∈ R} → ℤ × ℤ) : Prop`.
-- **Defined in:** `TNLean/PEPS/TorusRegionLiftGauge.lean`.
+- **Defined in:** `TNLean/PEPS/Graph/Holonomy/TorusRegionLiftGauge.lean`.
 - **Meaning:** `L` assigns to every site of the torus region `R` a point of the
   square lattice `ℤ × ℤ` projecting to that site, such that every rightward and
   upward native bond inside `R` is a unit step of the lift. It is a supplied
@@ -909,7 +909,7 @@ out.
 #### `TNLean.PEPS.IsIntegerCellNear`
 
 - **Declaration:** `TNLean.PEPS.IsIntegerCellNear (q a : ℤ × ℤ) : Prop`.
-- **Defined in:** `TNLean/PEPS/IntegerCellExteriorCollar.lean`.
+- **Defined in:** `TNLean/PEPS/Graph/Cell/IntegerCellExteriorCollar.lean`.
 - **Meaning:** the two integer centers differ by at most one in each
   coordinate, so their closed unit cells meet, possibly only at a corner.
 - **Source:** no source predicate. It is locally introduced plane geometry for
@@ -925,7 +925,7 @@ out.
 
 #### `TNLean.PEPS.regularizedPatchDomain` and `regularizedPatchMinimum`
 
-- **Defined in:** `TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalFilters/RegularizedPatchMinimum.lean`.
 - **Meaning:** the domain consists of independent positive semidefinite
   trace-one matrices on the physical spaces of a finite family of regions.
   For shift `b > 0`, the objective is the norm of the reverse index-ordered
@@ -951,7 +951,7 @@ out.
 
 #### `TNLean.PEPS.regularizedPatchCoordinateUpdate` and `regularizedPatchFirstVariation_eq_zero`
 
-- **Defined in:** `TNLean/PEPS/AreaLaw/RegularizedPatchCoordinate.lean` and
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalFilters/RegularizedPatchCoordinate.lean` and
   `RegularizedPatchStationarity.lean`.
 - **Meaning:** unitary conjugation changes exactly one indexed feasible density.
   The actual output derivative along `exp(tB)`, for skew-Hermitian `B`, is the
@@ -970,7 +970,7 @@ out.
 
 #### `TNLean.PEPS.normalizedRegularizedPatchMarginal`
 
-- **Defined in:** `TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/RegionalFilters/RegularizedPatchMarginal.lean`.
 - **Meaning:** `ManyBody.regionState` of the same normalized final filtered
   vector for every region, after the explicit univ-subtype/global configuration
   isometry. These are canonical reduced states, not freely supplied densities.
@@ -990,7 +990,7 @@ out.
 
 - **Declaration:**
   `TNLean.PEPS.IsRegionParentInteraction (A : Tensor Γ d) (R : Finset V) (h : Matrix _ _ ℂ) : Prop`.
-- **Defined in:** `TNLean/PEPS/ParentHamiltonian/RegionParentHamiltonian.lean`.
+- **Defined in:** `TNLean/PEPS/ParentHamiltonian/Region/RegionParentHamiltonian.lean`.
 - **Meaning:** the operator `h` on the physical space of the region `R` is
   positive semidefinite and its kernel is exactly the regional PEPS space
   `TNLean.PEPS.regionGroundSpace A R`, spanned by the contractions of `R` with
@@ -1023,7 +1023,7 @@ model different levels of data and different sources.
 ### `MPSTensor.CanonicalForm`
 
 - **Declaration:** `MPSTensor.CanonicalForm (d : ℕ)`.
-- **Defined in:** `TNLean/MPS/Core/MultiBlock.lean`.
+- **Defined in:** `TNLean/MPS/Tensor/DirectSum/MultiBlock.lean`.
 - **Meaning:** lightweight data for a weighted block-diagonal tensor with an
   injective tensor in each block.
 - **Source:** the block-diagonal shape of Pérez-García--Verstraete--Wolf--Cirac,
@@ -1052,7 +1052,7 @@ model different levels of data and different sources.
 
 - **Declarations:** `MPSTensor.MPUCanonicalFormData A` and
   `MPSTensor.IsMPUCanonicalForm A`.
-- **Defined in:** `TNLean/MPS/MPU/MPUCanonicalForm.lean`.
+- **Defined in:** `TNLean/MPS/MPU/CanonicalForm/MPUCanonicalForm.lean`.
 - **Meaning:** the same weighted reconstruction with irreducible blocks of
   transfer spectral radius one, nonzero weights, and full ambient support
   $\sum_k D_k=D$. Periodic blocks are permitted.
@@ -1069,7 +1069,7 @@ model different levels of data and different sources.
 ### `MPSTensor.IsCanonicalForm`
 
 - **Declaration:** `MPSTensor.IsCanonicalForm μ A : Prop`.
-- **Defined in:** `TNLean/PiAlgebra/CanonicalFormSepAux.lean` despite living in
+- **Defined in:** `TNLean/MPS/CanonicalForm/BlockFamily.lean` despite living in
   the `MPSTensor` namespace.
 - **Meaning:** a stronger separated biCF/CFII-after-blocking specialization:
   one-site injective blocks, left-canonical normalization, non-increasing
@@ -1092,7 +1092,7 @@ model different levels of data and different sources.
 ### `MPSTensor.IsNormalCanonicalForm`
 
 - **Declaration:** `MPSTensor.IsNormalCanonicalForm μ A : Prop`.
-- **Defined in:** `TNLean/PiAlgebra/CanonicalFormSepAux.lean`.
+- **Defined in:** `TNLean/MPS/CanonicalForm/BlockFamily.lean`.
 - **Meaning:** a stronger prepared specialization with irreducible,
   left-canonical, peripherally primitive blocks, non-increasing nonzero weights,
   and positive block dimensions.
@@ -1113,7 +1113,7 @@ model different levels of data and different sources.
 ### `MPSTensor.IsNormalCanonicalFormBNT`
 
 - **Declaration:** `MPSTensor.IsNormalCanonicalFormBNT μ A : Prop`.
-- **Defined in:** `TNLean/MPS/BNT/Construction.lean`.
+- **Defined in:** `TNLean/MPS/CanonicalForm/BNT/Construction.lean`.
 - **Meaning:** `IsNormalCanonicalForm` plus gauge-phase separation between
   distinct blocks.
 - **Source:** the separated-representative reading of arXiv:1606.00608 §II.C,
@@ -1131,7 +1131,7 @@ model different levels of data and different sources.
 
 - **Declaration:**
   `MPSTensor.IsBNTCanonicalForm (P : MPSTensor.SectorDecomposition d)`.
-- **Defined in:** `TNLean/MPS/FundamentalTheorem/SectorBNT/Basic.lean`.
+- **Defined in:** `TNLean/MPS/Tensor/DirectSum/SectorBNT.lean`.
 - **Meaning:** the core paper-faithful two-layer sector canonical form: positive
   basis dimensions, irreducible and left-canonical basis tensors, normalized
   self-overlap, eventual BNT independence, separation of basis representatives,
@@ -1161,12 +1161,12 @@ model different levels of data and different sources.
 
 ### MPDO canonical-form predicates
 
-- `MPOTensor.IsHorizontalCF` in `TNLean/MPS/MPDO/HorizontalBNT.lean` is the
+- `MPOTensor.IsHorizontalCF` in `TNLean/MPS/CanonicalForm/SimpleMPO/HorizontalBNT.lean` is the
   normalized representative-indexed BNT-refined horizontal decomposition. It
   is stronger than the literal CPSV canonical form from arXiv:1606.00608,
   lines 237--244; see
   `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`.
-- `MPOTensor.IsVerticalCF` in `TNLean/MPS/MPDO/VerticalCF.lean` is the vertical
+- `MPOTensor.IsVerticalCF` in `TNLean/MPS/CanonicalForm/VerticalForm/VerticalCF.lean` is the vertical
   basis decomposition with positive multiplicities, positive diagonal weights,
   and a coisometry `U` satisfying `U * Uᴴ = 1` (equivalently, `Uᴴ` is an
   isometry), sourced to arXiv:1606.00608 lines 1895--1921 and 1952--1956. It
@@ -1176,15 +1176,15 @@ model different levels of data and different sources.
   is the retained-support projection; see
   `docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex`.
 - `MPOTensor.HasVerticalBNTGroupingInputs` in
-  `TNLean/MPS/MPDO/VerticalBNTGrouping.lean` is the pair of
+  `TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm.lean` is the pair of
   canonical-form-specific inputs that the grouped vertical construction of
   arXiv:1606.00608, Proposition 4.13, lines 1863--1921 consumes: the
   phase-class grouping of the normal vertical sectors together with their
   physical reducing isometries (`MPOTensor.HasVerticalBNTGroupingWithIsometry`
-  in `TNLean/MPS/MPDO/VerticalBNT.lean`), and the pairwise Figure 8 comparison
+  in `TNLean/MPS/MPDO/Vertical/VerticalBNT.lean`), and the pairwise Figure 8 comparison
   of the Gram dressings of two positive vertical corners of a common
   representative (`MPOTensor.HasGroupedCornerGramDressing` in
-  `TNLean/MPS/MPDO/GroupedSectorGram.lean`, sourced to the proof of
+  `TNLean/MPS/MPDO/Vertical/GroupedSectorGram.lean`, sourced to the proof of
   Proposition 4.13, Figures 7--8 and lines 1909--1919). Its sanctioned bridge
   forward is `MPOTensor.HasVerticalBNTGroupingInputs.verticalCF`, which gives
   `MPOTensor.IsVerticalCF`; there is no bridge back, and neither input is
@@ -1200,7 +1200,7 @@ model different levels of data and different sources.
   none may be assumed: supplying the common grouping properties from one
   canonical form says nothing about the other.
 - `MPOTensor.HasVerticalBNTProductInputs` in
-  `TNLean/MPS/MPDO/VerticalBNTGrouping.lean` records the grouping properties
+  `TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm.lean` records the grouping properties
   for both the one-site tensor and its two-site block, together with three
   properties of the blocked vertical tensor: every invariant orthogonal
   projection reduces its letters; an irreducible isometric corner with a
@@ -1216,7 +1216,7 @@ model different levels of data and different sources.
   `IsRFPViaTS`, they give `HasBNTFusionTensorClause`. These are intermediate
   consequences of each canonical form, not additional hypotheses of the
   source-facing fixed-point theorems.
-- `MPOTensor.IsSimpleCanonicalForm` in `TNLean/MPS/MPDO/SimpleTensor.lean` is
+- `MPOTensor.IsSimpleCanonicalForm` in `TNLean/MPS/CanonicalForm/SimpleMPO/SimpleTensor.lean` is
   the normalized fixed-representative predicate of Appendix C.2: it adds the
   MPDO and nonnilpotent-sector conditions to horizontal canonical form. Its
   sanctioned one-way bridges are
@@ -1225,7 +1225,7 @@ model different levels of data and different sources.
   normalization and supplies the one-site BNT presentation required by
   Definition 4.7. It is not a quotient by nonzero scalar rescaling; see
   `docs/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.tex`.
-- `MPOTensor.IsSimple` in `TNLean/MPS/MPDO/Simple.lean` is the sole
+- `MPOTensor.IsSimple` in `TNLean/MPS/CanonicalForm/SimpleMPO/Simple.lean` is the sole
   simplicity predicate: Definition 4.7 of arXiv:1606.00608 at lines 815--822
   read over the canonical blocks of lines 217--246. It existentially chooses a
   positive physical blocking whose doubled-index tensor has a BNT sector
@@ -1258,7 +1258,7 @@ The following notions use different transfer objects and are not interchangeable
 ### `MPOTensor.IsRFPViaTS`
 
 - **Declaration:** `MPOTensor.IsRFPViaTS (M : MPOTensor d D) : Prop`.
-- **Defined in:** `TNLean/MPS/MPDO/RFPViaTS.lean`.
+- **Defined in:** `TNLean/MPS/Operator/DensityOperator/RFPViaTS.lean`.
 - **Meaning:** there exist trace-preserving completely positive maps
   $\mathcal S$ and $\mathcal T$ on the physical indices satisfying the one-site
   and two-site equations $\mathcal S[M_2(X)]=M_1(X)$ and
@@ -1272,16 +1272,16 @@ The following notions use different transfer objects and are not interchangeable
 ### Twisted-dimer matching and channel-support predicates
 
 - **Declarations:** `MPOTensor.TwistedDimer.IsBondMatchedPair` in
-  `TNLean/MPS/MPDO/TwistedDimer.lean`,
+  `TNLean/MPS/Examples/Dimer/TwistedDimerMPDO.lean`,
   `MPOTensor.TwistedDimer.IsOpenBondMatched` and
   `MPOTensor.TwistedDimer.IsCyclicBondMatched` in
-  `TNLean/MPS/MPDO/TwistedDimerMPDO.lean`,
+  `TNLean/MPS/Examples/Dimer/TwistedDimerDensityOperator.lean`,
   `MPOTensor.TwistedDimer.IsRefineSupported` and
   `MPOTensor.TwistedDimer.IsCoarseSupported` in
-  `TNLean/MPS/MPDO/TwistedDimerRefine.lean` and
-  `TNLean/MPS/MPDO/TwistedDimerViaTS.lean`, and
+  `TNLean/MPS/Examples/Dimer/TwistedDimerRefine.lean` and
+  `TNLean/MPS/Examples/Dimer/TwistedDimerViaTS.lean`, and
   `MPOTensor.TwistedDimer.IsSameChannel` in
-  `TNLean/MPS/MPDO/TwistedDimerCoefficients.lean`.
+  `TNLean/MPS/Examples/Dimer/TwistedDimerCoefficients.lean`.
 - **Meaning:** the first predicate requires one ordered pair of physical letters
   to match the right bit of the first against the left bit of the second; the
   next two quantify it over an open segment or around a ring. The two support
@@ -1339,7 +1339,7 @@ The following notions use different transfer objects and are not interchangeable
 
 - **Declaration:**
   `MPOTensor.periodicTwoPointCorrelation M O₁ O₂ middleGap wrapGap`.
-- **Defined in:** `TNLean/MPS/MPDO/Correlations.lean`.
+- **Defined in:** `TNLean/MPS/MPDO/Entropy/Correlations.lean`.
 - **Meaning:** the unnormalized periodic contraction
   $\tr(\mathbb E_{O_1}\mathcal T_M^{g_{\mathrm{mid}}}
   \mathbb E_{O_2}\mathcal T_M^{g_{\mathrm{wrap}}})$, where
@@ -1364,7 +1364,7 @@ The following notions use different transfer objects and are not interchangeable
 ### `MPOTensor.IsSourceZCL`
 
 - **Declaration:** `MPOTensor.IsSourceZCL (M : MPOTensor d D) : Prop`.
-- **Defined in:** `TNLean/MPS/MPDO/ZCL.lean`.
+- **Defined in:** `TNLean/MPS/Operator/DensityOperator/ZCL.lean`.
 - **Meaning:** $\mathcal T_M\ne0$ and
   $\mathcal T_M^2=\lambda\mathcal T_M$ for some real $\lambda>0$.
 - **Source boundary:** this is a scale-invariant version of CPSV16 Definition
@@ -1376,7 +1376,7 @@ The following notions use different transfer objects and are not interchangeable
 ### `MPOTensor.IsZCL`
 
 - **Declaration:** `MPOTensor.IsZCL (M : MPOTensor d D) : Prop`.
-- **Defined in:** `TNLean/MPS/MPDO/ZCL.lean`.
+- **Defined in:** `TNLean/MPS/Operator/DensityOperator/ZCL.lean`.
 - **Meaning:** the doubled-index transfer map is idempotent,
   $E_M\circ E_M=E_M$.
 - **Sanctioned bridge:**
@@ -1388,7 +1388,7 @@ The following notions use different transfer objects and are not interchangeable
 ### `MPOTensor.TransferRetractData`
 
 - **Declaration:** `MPOTensor.TransferRetractData M n`.
-- **Defined in:** `TNLean/MPS/MPDO/FusionIsometries.lean`.
+- **Defined in:** `TNLean/MPS/MPDO/RFP/FusionIsometries.lean`.
 - **Meaning:** the blocked doubled-index transfer map factors through a
   subspace $\mathcal A_n$ as $S_nT_n=E_n$ and $T_nS_n=\id_{\mathcal A_n}$.
 - **Sanctioned bridges:** `MPOTensor.transferRetractData_one_iff_isZCL` is the
@@ -1402,7 +1402,7 @@ The following notions use different transfer objects and are not interchangeable
 
 - **Declaration:**
   `MPOTensor.HasBlockedAdjointFixedPointAlgebraTower (M : MPOTensor d D) : Prop`.
-- **Defined in:** `TNLean/MPS/MPDO/AlgebraStructure.lean`.
+- **Defined in:** `TNLean/MPS/MPDO/RFP/AlgebraStructure.lean`.
 - **Meaning:** there is a tower of support $*$-algebras $\mathcal A_n$ whose
   carriers equal $\operatorname{Fix}(E_n^\dagger)$ at every positive blocked
   size, with multiplication and inclusion induced by ambient matrices.
@@ -1436,7 +1436,7 @@ The following notions use different transfer objects and are not interchangeable
 
 - **Declarations:** `MPOTensor.HasDefectSupport d G hN D Ψ : Prop` and
   `MPOTensor.HasPrescribedDefectCovariance d G hN D Ψ : Prop`.
-- **Defined in:** `TNLean/MPS/MPDO/GaugeInvariantSubspace.lean`.
+- **Defined in:** `TNLean/MPS/MPDO/CZX/GaugeInvariantSubspace.lean`.
 - **Meaning:** every two-site matter slice of $\Psi_\alpha$ lies in the defect
   subspace selected by the adjacent labels, and the prescribed defect maps
   carry these slices covariantly under $(a,b)\mapsto(ag^{-1},gb)$.
@@ -1482,7 +1482,7 @@ The following notions use different transfer objects and are not interchangeable
 - **Declaration:** `MPSTensor.IsFrustrationFree A L N ψ : Prop`, for a tensor
   `A`, a window length `L`, a ring of `N` sites and `ψ : NSiteSpace d N`: every
   translated local term `MPSTensor.localTerm A L N i` annihilates `ψ`.
-- **Defined in:** `TNLean/MPS/ParentHamiltonian/Defs.lean`.
+- **Defined in:** `TNLean/MPS/Tensor/GroundSpace/ParentHamiltonian.lean`.
 - **Meaning:** for `L ≤ N` the local terms and the parent Hamiltonian are the
   terms and the Hamiltonian of one interaction,
   `MPSTensor.parentRingInteraction A hLN`, the translation-invariant interaction
@@ -1513,7 +1513,7 @@ The following notions use different transfer objects and are not interchangeable
 
 - **Declaration:**
   `MPSTensor.IsGaugeRelated (A : MPSTensor d D₁) (A' : MPSTensor d D₂) : Prop`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Fusion/ZipperUniqueness.lean`.
 - **Meaning:** there are rectangular matrices `X : Fin D₁ × Fin D₂` and
   `Y : Fin D₂ × Fin D₁` with `X * Y = 1`, `Y * X = 1`, and
   `A i * X = X * A' i` for every letter, so that $A'^i = X^{-1}A^iX$. The bond
@@ -1538,7 +1538,7 @@ The following notions use different transfer objects and are not interchangeable
 
 - **Declaration:**
   `MPSPreparation.IsProbabilisticallyGenerated (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/Sequential.lean`.
+- **Defined in:** `TNLean/MPS/Preparation/Sequential/Sequential.lean`.
 - **Meaning:** `ψ` is the state
   $\bra{\varphi_F}A^{[N]}_{i_N}\cdots A^{[1]}_{i_1}\ket{\varphi_I}$ produced
   by arbitrary operations $A^{[k]}$ on a `D`-dimensional ancilla followed by a
@@ -1569,7 +1569,7 @@ The following notions use different transfer objects and are not interchangeable
 
 - **Declaration:**
   `MPSPreparation.IsDeterministicallyGenerated [NeZero d] (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/Sequential.lean`.
+- **Defined in:** `TNLean/MPS/Preparation/Sequential/Sequential.lean`.
 - **Meaning:** there are unitaries `U k` on ancilla ⊗ site and unit vectors
   $\varphi_I,\varphi_F\in\mathbb C^D$ such that, starting from
   $\ket{\varphi_I}\otimes\ket{0}^{\otimes N}$, the ancilla component of the
@@ -1598,7 +1598,7 @@ The following notions use different transfer objects and are not interchangeable
   `MPSPreparation.IsTransitionInteraction [NeZero d] (T : Matrix ((Fin D × Fin d) × Fin d) ((Fin D × Fin d) × Fin d) ℂ) : Prop`
   and
   `MPSPreparation.IsTransitionGenerated [NeZero d] (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/SequentialTransition.lean`.
+- **Defined in:** `TNLean/MPS/Preparation/Sequential/SequentialTransition.lean`.
 - **Meaning:** `IsTransitionInteraction T` says that `T` acts on ancilla
   `ℂ^D`, tag qudit, and site qudit by
   $\ket{\varphi}\ket{t}\ket{0}\mapsto\ket{\varphi}\ket{0}\ket{t}$ for every
@@ -1636,7 +1636,7 @@ The following notions use different transfer objects and are not interchangeable
   `MPSPreparation.IsProbabilisticallyGeneratedWithoutAncilla [NeZero d] {n : ℕ} (ψ : (Fin (n + 2) → Fin d) → ℂ) : Prop`
   and
   `MPSPreparation.IsDeterministicallyGeneratedWithoutAncilla [NeZero d] {n : ℕ} (ψ : (Fin (n + 2) → Fin d) → ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/SequentialNoAncilla.lean`.
+- **Defined in:** `TNLean/MPS/Preparation/Sequential/SequentialNoAncilla.lean`.
 - **Meaning:** `ψ = MPSPreparation.noAncillaState n U` for operations
   `U k` on $\mathbb C^d\otimes\mathbb C^d$, the source's $U^{[k+1]}$ acting on
   sites `k + 1` and `k + 2` of a chain of `n + 2` sites initially in
@@ -1665,7 +1665,7 @@ The following notions use different transfer objects and are not interchangeable
 
 - **Declaration:**
   `MPSPreparation.HasOBCRep (D : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/Sequential.lean`.
+- **Defined in:** `TNLean/MPS/Preparation/Sequential/Sequential.lean`.
 - **Meaning:** `ψ = B.coeff` for some varying-bond open chain
   `B : OBCChainTensor d D N`, that is, `ψ` has an open-boundary MPS
   representation whose bond dimensions are all at most `D`.
@@ -1697,7 +1697,7 @@ The following notions use different transfer objects and are not interchangeable
   `MPSPreparation.IsIsometryOn (b : ℕ) (Q : Fin d → Matrix (Fin D) (Fin D) ℂ) : Prop`,
   `MPSPreparation.IsSupportedBelow (b : ℕ) (v : Fin D → ℂ) : Prop`, and
   `MPSPreparation.IsRowSupportedBelow (a : ℕ) (M : Matrix (Fin D) (Fin D) ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/IsometricChain.lean`.
+- **Defined in:** `TNLean/MPS/Tensor/VaryingBond/IsometricChain.lean`.
 - **Meaning:** `IsIsometryOn b Q` says that the stacked columns
   `(α, i) ↦ Q i α β`, `β < b`, are orthonormal; for `b = D` it is
   $\sum_i Q_i^\dagger Q_i=\mathbb 1$. `IsSupportedBelow b v` says that the
@@ -1726,7 +1726,7 @@ The following notions use different transfer objects and are not interchangeable
 - **Declaration:** `MPSPreparation.HasMixedSequentialFactorization hD V : Prop`,
   for a positive bond dimension and a matrix from a finite input space to
   the physical configurations of a left chain, a central site, and a right chain.
-- **Defined in:** `TNLean/MPS/Preparation/MixedSequentialFactorization.lean`.
+- **Defined in:** `TNLean/MPS/Preparation/Polar/MixedSequentialFactorization.lean`.
 - **Meaning:** $V=(E_L\otimes I_d\otimes E_R)C$, where each side is evaluated
   from its outer boundary inward using isometric site maps, both outer bonds
   have dimension one, every bond has dimension at most $D^2$, and $C$ is an
@@ -2203,7 +2203,7 @@ operators on the configurations. The scope of the local channel model relative t
   nearest-neighbor ring consumer of the same recursion.
 - **Caveat:** the graph theorems take the per-support size bound and the
   per-site norm budget as hypotheses. On a finite induced square-lattice domain
-  they are discharged in `TNLean/PEPS/AreaLaw/GraphPropagation.lean`:
+  they are discharged in `TNLean/PEPS/AreaLaw/Interactions/GraphPropagation.lean`:
   `ManyBody.IsAdmissibleSupport.card_le` gives the size bound
   `v_R = 1 + 2R(R + 1)`,
   `ManyBody.PlaneInteraction.sum_norm_term_containing_le` gives the
@@ -2233,8 +2233,8 @@ operators on the configurations. The scope of the local channel model relative t
   constraints `SpectralFilter.positiveConstraint c_* (SpectralFilter.centeredFilter p (Δ / 2) H Ω hᵢ)`
   from QICLean and their ball expectations
   `ManyBody.regionExpectation (ManyBody.graphBall G aᵢ l) kᵢ`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/PositiveConstraints.lean`; the root channels of
-  Lemma 4.4 in `TNLean/PEPS/AreaLaw/QuasilocalRoots.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Constraints/PositiveConstraints.lean`; the root channels of
+  Lemma 4.4 in `TNLean/PEPS/AreaLaw/Constraints/QuasilocalRoots.lean`.
 - **Meaning:** `kᵢ = |Mᵢ| / c_*`, where `Mᵢ` is the term `hᵢ` filtered below the gap and
   centered at the ground vector; the positive contractions annihilate `Ω`, their sum
   dominates `c_*⁻¹ (H - E₀ I) ≥ (Δ / c_*) (I - |Ω⟩⟨Ω|)`, and the ball tails decay like
@@ -2247,7 +2247,7 @@ operators on the configurations. The scope of the local channel model relative t
   `positiveConstraint_mem_supportedOperators_component`, `quasilocalRoots`.
 - **Caveat:** stated for a general finite graph with the support, multiplicity and
   sphere-growth hypotheses of the propagation estimate. On finite induced square-lattice
-  domains these hypotheses are discharged in `TNLean/PEPS/AreaLaw/LatticeConstraints.lean`:
+  domains these hypotheses are discharged in `TNLean/PEPS/AreaLaw/Constraints/LatticeConstraints.lean`:
   `TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints` and
   `TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots` are Proposition 4.3 and Lemma 4.4
   there, with constants depending only on `p`, `R`, `J` and `Δ`.
@@ -2258,7 +2258,7 @@ operators on the configurations. The scope of the local channel model relative t
 
 - **Declaration:**
   `MPSTensor.IsInjectiveOn (B : MPSTensor n D) (S : Set (Fin D × Fin D)) : Prop`.
-- **Defined in:** `TNLean/MPS/Preparation/SupportedPolar.lean`.
+- **Defined in:** `TNLean/MPS/Tensor/Physical/SupportedPolar.lean`.
 - **Meaning:** every matrix `B^i` vanishes at the entries outside `S`, and the
   matrices `B^i` span every matrix unit `|α⟩⟨β|` with `(α, β) ∈ S`.
 - **Source:** arXiv:2307.01696, footnote to the paragraph "Approximation
@@ -2279,7 +2279,7 @@ operators on the configurations. The scope of the local channel model relative t
   `VaryingBondChain.IsBlockInjective (A : VaryingBondChain d D N) (hN : ∑ k, ℓ k = N) : Prop`,
   for a ring of `N ≥ 1` sites with bond dimensions at most `D`, cut into `M`
   blocks of lengths `ℓ`.
-- **Defined in:** `TNLean/MPS/Preparation/VaryingBondBlocks.lean`.
+- **Defined in:** `TNLean/MPS/Preparation/Inhomogeneous/VaryingBondBlocks.lean`.
 - **Meaning:** for every block `k`, the blocked tensor of block `k` of the
   zero-padded chain (`VaryingBondChain.zeroPad`) spans every matrix unit
   `|α⟩⟨β|` with `α < D_{o_k}` and `β < D_{o_{k+1}}`, the dimensions of the bonds
@@ -2303,7 +2303,7 @@ operators on the configurations. The scope of the local channel model relative t
   `VaryingBondChain.IsPairApproximable (A : VaryingBondChain d D N) (hN : ∑ k, ℓ k = N) (δ : ℝ) : Prop`,
   for a ring of `N ≥ 1` sites with bond dimensions at most `D`, cut into `M`
   blocks of lengths `ℓ`.
-- **Defined in:** `TNLean/MPS/Preparation/InhomogeneousPreparation.lean`.
+- **Defined in:** `TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousPreparation.lean`.
 - **Meaning:** the state `|φ_pos⟩` of the positive parts is nonzero, and there
   are unit vectors `ω^k` on `ℂ^{D_j} ⊗ ℂ^{D_j}`, `j` the bond joining block `k`
   to block `k + 1`, whose product `|Ω⟩ = ⊗ₖ |ω^k⟩_{R_k L_{k+1}}` has error
@@ -2361,7 +2361,7 @@ operators on the configurations. The scope of the local channel model relative t
 
 - **Declaration:**
   `TNLean.MPS.AreaLaw.IsIntervalSpanWithRankBound (L q p r count : ℕ) (xi : ℝ) (S : Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q))) : Prop`.
-- **Defined in:** `TNLean/MPS/AreaLaw/IntervalGenerators.lean`.
+- **Defined in:** `TNLean/MPS/AreaLaw/LowEnergyAlgorithm/IntervalTrimming/IntervalGenerators.lean`.
 - **Meaning:** there are `n ≤ count` vectors `u i` on the interval `[p, r]`
   whose span is exactly `S`, and every internal cut `j < r - p - 1` of every
   `u i` has Schmidt rank `R` with `xi² R ≤ count`.
@@ -2390,7 +2390,7 @@ lift, for correctness, the honest-oracle restriction recorded in
 
 ### `TNLean.MPS.AreaLaw.IsBoundaryProgramSolution`
 
-- **Defined in:** `TNLean/MPS/AreaLaw/ViableSet/FiniteBoundarySelection.lean`.
+- **Defined in:** `TNLean/MPS/AreaLaw/GroundStateAlgorithm/BoundaryState/FiniteBoundarySelection.lean`.
 - **Meaning:** `σ` is a feasible density of the size-trimming convex program at the
   boundary point `X` (positive semidefinite, trace one, supported on `span S ⊗ ℂᵐ`,
   with partial trace within trace-norm distance `η` of `X`) of least left energy
@@ -2404,7 +2404,7 @@ lift, for correctness, the honest-oracle restriction recorded in
 
 ### `TNLean.MPS.AreaLaw.IsAdmissibleLeadingVector`
 
-- **Defined in:** `TNLean/MPS/AreaLaw/ViableSet/FiniteBoundarySelection.lean`.
+- **Defined in:** `TNLean/MPS/AreaLaw/GroundStateAlgorithm/BoundaryState/FiniteBoundarySelection.lean`.
 - **Meaning:** at every boundary point with a nonempty feasible set, the assignment
   returns the leading vector of some `IsBoundaryProgramSolution`.
 - **Source:** LVV13, `algo53.tex`, lines 219 and 484–487 (any solver of the convex
@@ -2432,7 +2432,7 @@ lift, for correctness, the honest-oracle restriction recorded in
 
 ### `TNLean.MPS.AreaLaw.IsAdmissibleFilterFactors`
 
-- **Defined in:** `TNLean/MPS/AreaLaw/Huang/ViableFilter.lean`.
+- **Defined in:** `TNLean/MPS/AreaLaw/GroundStateAlgorithm/GaussianFilter/ViableFilter.lean`.
 - **Meaning:** a finite family `F` of left factors at cut `i` contains, for every
   Gaussian filter approximant, the left factors of some cut decomposition
   `∑ₜ Aₜ ⊗ Bₜ` of that approximant.
@@ -2448,7 +2448,7 @@ lift, for correctness, the honest-oracle restriction recorded in
 
 ### `TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle`
 
-- **Defined in:** `TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean`.
+- **Defined in:** `TNLean/MPS/AreaLaw/GroundStateAlgorithm/QueryProgram/ValidOracle.lean`.
 - **Meaning:** an oracle for the linear-algebra queries of the ground-state program
   that answers the deterministic queries (site extension, Schmidt trimming,
   applying a factor, feasibility) exactly, returns trace-norm nets with the
@@ -2474,7 +2474,7 @@ lift, for correctness, the honest-oracle restriction recorded in
 ### `MPSTensor.IsPeriodicWState`
 
 - **Declaration:** `MPSTensor.IsPeriodicWState (A : MPSTensor 2 D) (N : ℕ) : Prop`.
-- **Defined in:** `TNLean/MPS/Examples/WStatePeriodic.lean`.
+- **Defined in:** `TNLean/MPS/Examples/PVBS/WStatePeriodic.lean`.
 - **Meaning:** the trace contraction
   $\operatorname{tr}(A^{\sigma_1}\cdots A^{\sigma_N})$ equals the unnormalized
   W-state amplitude on every configuration of $N$ sites, that is, $A$ is a
@@ -2524,7 +2524,7 @@ lift, for correctness, the honest-oracle restriction recorded in
 
 - **Declaration:** `MPSTensor.IsOnSiteSymmetricUpToPhase A U : Prop`, for a tensor
   `A : MPSTensor d D` and an on-site representation `U : G →* Matrix (Fin d) (Fin d) ℂ`.
-- **Defined in:** `TNLean/MPS/Symmetry/Defs.lean`.
+- **Defined in:** `TNLean/MPS/Tensor/Gauge/OnSiteSymmetry.lean`.
 - **Meaning:** for every $g$ and chain length $N$ there is a scalar
   $\lambda_{g,N}$ with $U_g^{\otimes N}|\psi_N\rangle=\lambda_{g,N}|\psi_N\rangle$; the
   scalars may depend on both $g$ and $N$, and no relation between them is assumed.
@@ -2554,7 +2554,7 @@ involve no boundary.
 
 - **Declaration:** `MPOTensor.IsMPOFusionAlgebra O N : Prop`, for a family
   `O : ∀ a, MPOTensor d (χ a)` and structure constants `N : ι → ι → ι → ℕ`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Fusion/MPOSymmetry.lean`.
 - **Meaning:** the periodic operators obey the fusion rules
   $O_aO_b=\sum_cN_{ab}^cO_c$ at every positive chain length.
 - **Source:** arXiv:2203.12563, `Papers/2203.12563/REsubmission.tex`,
@@ -2571,7 +2571,7 @@ involve no boundary.
 
 - **Declarations:** `MPOTensor.IsFusionUnit N e : Prop` and
   `MPOTensor.IsInvertibleLabel N e a : Prop`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Fusion/MPOSymmetry.lean`.
 - **Meaning:** conditions on the structure constants alone:
   $N_{eb}^c=N_{be}^c=\delta_{bc}$ for the unit, and some $b$ with
   $N_{ab}^c=N_{ba}^c=\delta_{ce}$ for an invertible label $a$.
@@ -2590,7 +2590,7 @@ involve no boundary.
 - **Declaration:** `MPOTensor.IsMPOSymmetricFamily O A M : Prop`, for block
   tensors `A : ∀ x, MPSTensor d (D x)` and complex coefficients
   `M : ι → κ → κ → ℂ`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Fusion/MPOSymmetry.lean`.
 - **Meaning:** $O_a\ket{\psi_{A_x}}=\sum_yM_{a,x}^y\ket{\psi_{A_y}}$ at every
   positive chain length, with coefficients independent of the length.
 - **Source:** arXiv:2203.12563, lines 567–568, restated at line 1801; the
@@ -2610,7 +2610,7 @@ involve no boundary.
 ### `MPOTensor.IsMPOSymmetric`
 
 - **Declaration:** `MPOTensor.IsMPOSymmetric O A c : Prop`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Fusion/MPOSymmetry.lean`.
 - **Meaning:** the periodic vector of a single tensor is a common eigenvector,
   $O_a\ket{\psi_A}=c_a\ket{\psi_A}$ at every positive length, with
   length-independent eigenvalues.
@@ -2630,7 +2630,7 @@ involve no boundary.
 
 - **Declaration:** `MPOTensor.IsFusionCharacter N e χ : Prop`, for `χ : ι → R`
   in a semiring.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Fusion/MPOSymmetry.lean`.
 - **Meaning:** a one-dimensional representation of the fusion ring:
   $\chi_e=1$ and $\chi_a\chi_b=\sum_cN_{ab}^c\chi_c$.
 - **Source:** project-introduced; the source does not use this notion.
@@ -2648,7 +2648,7 @@ involve no boundary.
 
 - **Declaration:** `MPOTensor.IsNIMRep N M : Prop`, for
   `M : ι → κ → κ → ℕ`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Fusion/MPOSymmetry.lean`.
 - **Meaning:** $\sum_cN_{ab}^cM_{c,x}^y=\sum_zM_{b,x}^zM_{a,z}^y$ for all
   labels and blocks: the matrices $M_a$ represent the fusion ring.
 - **Source:** arXiv:2203.12563, lines 564–565, from the associativity of lines
@@ -2661,7 +2661,7 @@ involve no boundary.
 ### `MPOTensor.GroupFamily.IsNormalRepresentation`
 
 - **Declaration:** `MPOTensor.GroupFamily.IsNormalRepresentation F : Prop`.
-- **Defined in:** `TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean`.
+- **Defined in:** `TNLean/MPS/FundamentalTheorem/OperatorProduct/MPOProduct.lean`.
 - **Meaning:** every doubled-index tensor $T_g$ is normal and
   $U_gU_h=U_{gh}$ holds exactly on every nonempty periodic chain.
 - **Source:** arXiv:2502.20257, `main.tex` lines 1403–1407 (the representation
@@ -2682,7 +2682,7 @@ involve no boundary.
 ### `MPOTensor.GroupFamily.FusionData`
 
 - **Declaration:** `MPOTensor.GroupFamily.FusionData F : Type`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`.
+- **Defined in:** `TNLean/MPS/FundamentalTheorem/OperatorGroup/Associator.lean`.
 - **Meaning:** a choice, for every pair $g,h$, of a reduction
   $(F^<_{g,h},F^>_{g,h})$ of the stacked product of $T_g$ and $T_h$ onto
   $T_{gh}$.
@@ -2698,7 +2698,7 @@ involve no boundary.
 ### `MPSTensor.IsDressedProportional`
 
 - **Declaration:** `MPSTensor.IsDressedProportional B X Y z : Prop`.
-- **Defined in:** `TNLean/MPS/Core/ReductionComposition.lean`.
+- **Defined in:** `TNLean/MPS/Operator/ReductionComposition.lean`.
 - **Meaning:** $XB^{\mathbf w}=z\,YB^{\mathbf w}$ for every sufficiently long
   word $\mathbf w$.
 - **Source:** Molnár–Ge–Schuch–Cirac, arXiv:1706.07329v2, Theorem 22,
@@ -2716,7 +2716,7 @@ involve no boundary.
 ### `MPOTensor.GroupFamily.FixesMPV`
 
 - **Declaration:** `MPOTensor.GroupFamily.FixesMPV T A : Prop`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`.
+- **Defined in:** `TNLean/MPS/FundamentalTheorem/OperatorGroup/AnomalyObstruction.lean`.
 - **Meaning:** the periodic operator $O_N(T)$ fixes the periodic vector
   $\ket{V^{(N)}(A)}$ for every chain length $N\geq1$; nothing is asserted at
   $N=0$.
@@ -2733,7 +2733,7 @@ involve no boundary.
 ### `MPOTensor.GroupFamily.CarriesMPV`
 
 - **Declaration:** `MPOTensor.GroupFamily.CarriesMPV T B B' : Prop`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`.
+- **Defined in:** `TNLean/MPS/FundamentalTheorem/OperatorGroup/PermutedBlocks.lean`.
 - **Meaning:** the periodic operator $O_N(T)$ carries the periodic vector
   $\ket{V^{(N)}(B)}$ to $\ket{V^{(N)}(B')}$ for every chain length $N\geq1$;
   nothing is asserted at $N=0$. The two tensors may have different bond
@@ -2750,7 +2750,7 @@ involve no boundary.
 ### `MPOTensor.GroupFamily.IsOnSite`
 
 - **Declaration:** `MPOTensor.GroupFamily.IsOnSite F : Prop`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/ClosedFusion.lean`.
 - **Meaning:** there are one-site matrices $u_g$ with
   $O_N(T_g)=u_g^{\otimes N}$, entrywise
   $\langle\sigma|O_N(T_g)|\tau\rangle=\prod_n (u_g)_{\sigma_n\tau_n}$, for
@@ -2767,7 +2767,7 @@ involve no boundary.
 
 - **Declaration:** `MPOTensor.GroupFamily.FusionData.IsClosed fd : Prop`, for
   a choice of fusion tensors `fd : FusionData F`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/ClosedFusion.lean`.
 - **Meaning:** closed fusion: the stacked tensor decomposes exactly, letter by
   letter, $(T_gT_h)^{ij}=F^>_{g,h}\,T_{gh}^{ij}\,F^<_{g,h}$ for all $g,h$ and
   all physical indices, with no remainder. Together with
@@ -2787,7 +2787,7 @@ involve no boundary.
 - **Declaration:** `MPOTensor.IsFusionRing (N : ι → ι → ι → ℕ) (e : ι)
   (dual : ι → ι) : Prop`, a structure with fields `assoc`, `isFusionUnit`,
   `dual_dual`, `apply_unit` and `dual_anti`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/FusionRing.lean`.
+- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/FusionRing.lean`.
 - **Meaning:** the structure constants `N_{ab}^c` of a fusion ring: they are
   associative, `e` is a two-sided unit (`MPOTensor.IsFusionUnit`), and the
   duality `a ↦ a*` is an involution with `N_{ab}^e = δ_{b,a*}` and
@@ -2813,7 +2813,7 @@ involve no boundary.
 - **Declaration:** `ad.IsDomainWallAction g hx hy e e' c : Prop` for action tensors
   `ad : BlockActionData F A`, a group element `g`, a domain wall `e` between the blocks `x` and
   `y`, a domain wall `e'` between `x' = g • x` and `y' = g • y`, and a scalar `c`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/DomainWall.lean`.
+- **Defined in:** `TNLean/MPS/FundamentalTheorem/OperatorGroup/DomainWall.lean`.
 - **Meaning:** `e ≠ 0`, `e' ≠ 0`, `c ≠ 0`, and the action tensors of `g`, applied to `O_g`
   acting on `A_x^u e^i A_y^v`, give `c A_{x'}^u e'^i A_{y'}^v` for all words `u`, `v` longer
   than a fixed buffer.
@@ -2830,7 +2830,7 @@ involve no boundary.
 
 - **Declaration:** `ad.IsDomainWallFamily e B : Prop` for domain walls
   `e : (y z : X) → Fin d → Matrix (Fin (D y)) (Fin (D z)) ℂ` and phases `B : G → X → X → ℂ`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/DomainWallFamily.lean`.
+- **Defined in:** `TNLean/MPS/FundamentalTheorem/OperatorGroup/DomainWallFamily.lean`.
 - **Meaning:** every `g` carries `e_{yz}` to `e_{gy,gz}` with phase `B^g_{y,z}`, in the sense of
   `IsDomainWallAction`; in particular all walls and phases are nonzero.
 - **Source boundary:** arXiv:2405.00439, line 1894 and `eq:localcdefG`, with the conventions of
@@ -2844,7 +2844,7 @@ involve no boundary.
 
 - **Declaration:** `IsSeparatingLeftInverse Âx Ây Ax Ay : Prop` for one-site families
   `Âx`, `Ây` of square matrices on the bond spaces of the tensors `Ax`, `Ay`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPOSymmetry/DomainWallString.lean`.
+- **Defined in:** `TNLean/MPS/FundamentalTheorem/OperatorGroup/DomainWallString.lean`.
 - **Meaning:** `physPairing Âx Ax = 1`, `physPairing Âx Ay = 0`, `physPairing Ây Ay = 1` and
   `physPairing Ây Ax = 0`, where `physPairing P Q = ∑_σ P^σ_{αβ} Q^σ_{γδ}`: each family is a left
   inverse of its tensor, read as a map from the virtual to the physical space, and annihilates
@@ -2856,7 +2856,7 @@ involve no boundary.
   `BlockActionData.wallString_mul_wallString_mulVec_mpv` (`signphysop`), and
   `BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_far` and
   `BlockActionData.wallString_mul_wallString_mulVec_mpv_swap_left_near` (`eq:z2int`, glued
-  half-chains), the last three in `TNLean/MPS/Symmetry/MPOSymmetry/DomainWallStringExchange.lean`.
+  half-chains), the last three in `TNLean/MPS/FundamentalTheorem/OperatorGroup/DomainWallStringExchange.lean`.
 
 ## Symmetries of matrix product density operators
 
@@ -2864,7 +2864,7 @@ involve no boundary.
 
 - **Declarations:** `MPOTensor.IsMPDOWithBoundary M X : Prop` and
   `MPOTensor.commutingBoundaryAlgebra M`.
-- **Defined in:** `TNLean/MPS/MPDO/Boundary.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Boundary/Boundary.lean`.
 - **Meaning:** the operator with entries
   $\operatorname{tr}(X M^{i_1j_1}\cdots M^{i_Lj_L})$ is positive semidefinite
   at every positive length. The commuting boundaries form the complex
@@ -2881,7 +2881,7 @@ involve no boundary.
 
 - **Declarations:** `Matrix.IsStrongSymmetry (O ρ : Matrix n n ℂ) : Prop` and
   `Matrix.IsWeakSymmetry (O ρ : Matrix n n ℂ) : Prop`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Fusion/DensityOperatorSymmetry.lean`.
 - **Meaning:** $O\rho=\lambda\rho$ for some complex $\lambda$ (strong), and
   $[O,\rho]=0$ (weak), at one system size.
 - **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:182`.
@@ -2897,7 +2897,7 @@ involve no boundary.
 
 - **Declarations:** `MPOTensor.IsStrongMPOSymmetry O M X c : Prop` and
   `MPOTensor.IsWeakMPOSymmetry O M X : Prop`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Fusion/DensityOperatorSymmetry.lean`.
 - **Meaning:** the periodic operators $O_a^{(L)}$ of a family of matrix
   product operators satisfy $O_a^{(L)}\rho^{(L)}=\lambda_a^{(L)}\rho^{(L)}$
   (strong) or $[O_a^{(L)},\rho^{(L)}]=0$ (weak) for every label and every
@@ -2921,7 +2921,7 @@ involve no boundary.
 - **Declarations:** `MPOTensor.IsStrongOnSiteSymmetry M X U c : Prop` and
   `MPOTensor.IsWeakOnSiteSymmetry M X U : Prop`, for a monoid homomorphism
   `U : G →* Matrix (Fin d) (Fin d) ℂ`.
-- **Defined in:** `TNLean/MPS/Symmetry/MPDO/Defs.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Fusion/DensityOperatorSymmetry.lean`.
 - **Meaning:** the MPO-family predicates above for the on-site family
   $U_g^{\otimes L}$ (the periodic operators of `MPOTensor.onSite (U g)`).
 - **Source:** arXiv:2504.16985, `References/2504.16985/main.tex:182`; the
@@ -2943,7 +2943,7 @@ involve no boundary.
 ### `MPSTensor.SymmetricGappedInteractionPath`
 
 - **Declaration:** `SymmetricGappedInteractionPath U h₀ h₁`.
-- **Defined in:** `TNLean/MPS/Symmetry/GappedInteractionPath.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Interaction/GappedInteractionPath.lean`.
 - **Meaning:** a continuous path of Hermitian two-site interactions of
   operator norm at most one, with prescribed endpoints, whose periodic
   Hamiltonians commute with the fixed on-site unitary symmetry and have a
@@ -2999,7 +2999,7 @@ involve no boundary.
 
 - **Declarations:** `MPSTensor.ExactMPSGroundPath`,
   `MPSTensor.IsSameExactMPSGappedPhase`, and `MPSTensor.SamePositiveMpvRay`.
-- **Defined in:** `TNLean/MPS/Symmetry/ExactMPSGappedPhase.lean`.
+- **Defined in:** `TNLean/MPS/Symmetry/GappedPath/ExactMPSGappedPhase.lean`.
 - **Meaning:** the endpoint tensors are blocked by one common positive length
   and included isometrically, with their whole physical spaces as orthogonal
   summands, into a common unitary representation. Each blocked endpoint
@@ -3133,7 +3133,7 @@ involve no boundary.
 ### `MPUCircuit.IsIntervalInteriorInitialized`
 
 - **Declaration:** `IsIntervalInteriorInitialized j k x z`.
-- **Defined in:** `TNLean/MPS/MPU/IntervalRegisterLayout.lean`.
+- **Defined in:** `TNLean/MPS/MPU/Circuit/Registers/IntervalRegisterLayout.lean`.
 - **Meaning:** each auxiliary site strictly inside the interval from cut $j$
   to cut $k$ has computational label $z$. Physical and outside sites remain
   unrestricted.
@@ -3144,7 +3144,7 @@ involve no boundary.
 ### `MPUCircuit.IsIntervalPartition`
 
 - **Declaration:** `IsIntervalPartition start length tree`.
-- **Defined in:** `TNLean/MPS/MPU/BalancedIntervalTree.lean`.
+- **Defined in:** `TNLean/MPS/MPU/Circuit/Bounds/BalancedIntervalTree.lean`.
 - **Meaning:** an ordered binary subdivision of a positive-length interval
   into single-site leaves, with each internal node labelled by its actual
   joining cut.
@@ -3155,7 +3155,7 @@ involve no boundary.
 ### `MPUCircuit.IsMinimalIntervalColumnImplementation`
 
 - **Declaration:** `IsMinimalIntervalColumnImplementation ... j k ... Z`.
-- **Defined in:** `TNLean/MPS/MPU/MinimalIntervalColumns.lean`.
+- **Defined in:** `TNLean/MPS/MPU/Circuit/Interval/MinimalIntervalColumns.lean`.
 - **Meaning:** on the prescribed initialized interval input, $Z$ gives the
   weighted minimal interval isometry, with its two outer bond encodings,
   and the identity on every outside logical configuration.
@@ -3168,7 +3168,7 @@ involve no boundary.
 ### `MPUCircuit.IsMinimalIntervalCircuitImplementation`
 
 - **Declaration:** `IsMinimalIntervalCircuitImplementation ... j k ... K Z C`.
-- **Defined in:** `TNLean/MPS/MPU/MinimalIntervalCircuit.lean`.
+- **Defined in:** `TNLean/MPS/MPU/Circuit/Interval/MinimalIntervalCircuit.lean`.
 - **Meaning:** $Z$ is a logical unitary supported on the interval and has the
   preceding initialized-column identity. A neighboring-pair circuit $C$ has
   at most $K$ gates and implements $Z$ with the shared workspace returned to
@@ -3186,7 +3186,7 @@ involve no boundary.
 ### `MPOTensor.IsBoundaryClosed`
 
 - **Declaration:** `MPOTensor.IsBoundaryClosed T`.
-- **Defined in:** `TNLean/MPS/MPDO/BoundaryClosedness.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Boundary/BoundaryClosedness.lean`.
 - **Meaning:** for every pair of boundary matrices `X,Y`, there is one
   boundary matrix `Z` such that the product of the corresponding closed
   operators equals the operator with boundary `Z` at every positive length.
@@ -3209,7 +3209,7 @@ involve no boundary.
 ### `MPOTensor.IsBoundaryCompatible`
 
 - **Declaration:** `MPOTensor.IsBoundaryCompatible T A`.
-- **Defined in:** `TNLean/MPS/MPDO/BoundaryClosedness.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Boundary/BoundaryClosedness.lean`.
 - **Meaning:** every operator boundary and state boundary admit one output
   state boundary realizing their action at all positive chain lengths.
   Again the existential boundary precedes the universal positive length.
@@ -3232,7 +3232,7 @@ involve no boundary.
 ### `MPSTensor.IsBiorthogonalDecomposition`
 
 - **Declaration:** `MPSTensor.IsBiorthogonalDecomposition B A V W`.
-- **Defined in:** `TNLean/MPS/MPDO/BoundaryTransport.lean`.
+- **Defined in:** `TNLean/MPS/Operator/Boundary/BoundaryTransport.lean`.
 - **Meaning:** each letter satisfies `B i = ∑ c, W c * A c i * V c`,
   with `V c * W c = 1` and `V c * W e = 0` for distinct labels.
   The rectangular synthesis maps `W` and analysis maps `V` need not be
@@ -3517,7 +3517,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ### `TNLean.PEPS.dependentRegionCylinder`
 
 - **Declaration:** `dependentRegionCylinder R S`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/Cylinder.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Regions/Cylinder.lean`.
 - **Meaning:** the global vectors all of whose complementary coordinate slices
   lie in the inside subspace `S`; in tensor notation, `S ⊗ H_(V\R)`.
 - **Source:** the September 24, 2026 polynomial-PEPS manuscript,
@@ -3535,7 +3535,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 - **Declaration:** `nestedCylinderInnovation R hR S j`, where `hR` states
   that the finite family of regions is monotone.
-- **Defined in:** `TNLean/PEPS/AreaLaw/NestedCylinderOrthogonalization.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Regions/NestedCylinderOrthogonalization.lean`.
 - **Meaning:** the inside image `(I − P_(Wⱼ)) Sⱼ`, where
   `nestedCylinderEarlierInside` constructs `Wⱼ` by lifting the original earlier
   inside projectors into the current region and taking the sum of their ranges.
@@ -3629,7 +3629,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ## Partial rectangle layer entropy
 
 - **Declaration:** `TNLean.PEPS.AreaLaw.IntRect.partial_row_entropy_le`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/WeakRectanglePartialRowEntropy.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/SafeRectangles/WeakRectanglePartialRowEntropy.lean`.
 - **Meaning:** let `Q` be a nonempty integer rectangle of size `s`, let
   `1 ≤ j ≤ s`, and let `Y ⊆ Q^{+j} \ Q^{+(j−1)}` be arbitrary. For a
   normalized pure state `Ω` with local dimension `q ≥ 1` and any physical
@@ -3648,7 +3648,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - **Declarations:** `TNLean.PEPS.AreaLaw.Scan.exists_two_mul_floor_rpow_ceil_mul_le`,
   `TNLean.PEPS.AreaLaw.Scan.mul_collar_add_collar_le_of_two_mul_le`, and
   `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_collar_clearance`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/Scan/BootstrapRoundedClearance.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/BoxExponent/BootstrapRoundedClearance.lean`.
 - **Meaning:** for `C₂ > 0` and `0 < η < 1`, one threshold `N(C₂, η)` gives
   `2⌊⌈C₂s⌉^η⌋ ≤ s` for every natural `s ≥ N`. For natural `D₀ ≥ 1`,
   the scalar implication `2L ≤ s → D₀L + L ≤ D₀s` transfers this bound
@@ -3669,7 +3669,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 ## Binary-entropy cost of the rounded bootstrap bands
 
 - **Declaration:** `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/Scan/BootstrapBinaryEntropyCost.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/BoxExponent/BootstrapBinaryEntropyCost.lean`.
 - **Meaning:** one threshold, chosen for a fixed scanner exponent tuple before
   the auxiliary fraction and all physical data, gives positive rounded band
   count `K = ⌊L/(8m)⌋`, positive metric weight `a = 4/K`, and
@@ -3779,8 +3779,8 @@ source's Proposition 4.1.
 
 - **Declarations:** `TNLean.PEPS.AreaLaw.floor_rpow_ceil_mul_rpow_le` and
   `TNLean.PEPS.AreaLaw.exists_regionEntropy_initial_rounded_collar_le_rpow`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/Scan/RoundedScalePower.lean` and
-  `TNLean/PEPS/AreaLaw/InitialRoundedCollarEntropy.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Scales/RoundedScalePower.lean` and
+  `TNLean/PEPS/AreaLaw/BoxExponent/BootstrapRoundedClearance.lean`.
 - **Meaning:** for fixed `q,R,J,Δ`, one initial constant `C` and exponent
   `e₀` precede `C₂` and all physical instance data. For each positive `C₂`,
   one threshold precedes every safety parameter and ground vector. The
@@ -3811,7 +3811,7 @@ source's Proposition 4.1.
 
 - **Declarations:** `TNLean.PEPS.AreaLaw.Scan.entropy_le_of_replica_comparisons`
   and `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_comparison_loss_threshold`.
-- **Defined in:** `TNLean/PEPS/AreaLaw/Scan/BootstrapReplicaAbsorption.lean`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/BoxExponent/BootstrapReplicaAbsorption.lean`.
 - **Meaning:** two eventual rough scalar comparisons share one nonnegative
   entropy independent of the replica count. Three vanishing remainders can be
   removed at the fixed physical scale, then the coefficient margin gives the

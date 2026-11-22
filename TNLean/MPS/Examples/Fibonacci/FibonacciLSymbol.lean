@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.Fibonacci.FibonacciActionTrees
-import TNLean.MPS.MPDO.BoundaryActionLMatrix
+import TNLean.MPS.FundamentalTheorem.Zipper.BoundaryActionLMatrix
 
 /-!
 # The L-symbol of the Fibonacci regular module equals its F-symbol up to gauge

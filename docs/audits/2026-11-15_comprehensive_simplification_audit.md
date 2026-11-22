@@ -289,7 +289,7 @@ Before integration, fetch and verify the pinned prebuilt Mathlib cache under
 the repository's platform-specific cache policy, then run:
 
 ```sh
-lake build TNLean.MPS.Periodic.Overlap.SectorMatch.Basic
+lake build TNLean.MPS.CanonicalForm.Periodic.Overlap.SectorMatch
 lake build TNLean.MPS.Periodic.Overlap.SectorMatch
 lake build
 python3 scripts/ci_lean_checks.py strict --base origin/main

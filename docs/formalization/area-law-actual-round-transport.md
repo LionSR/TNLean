@@ -1,6 +1,6 @@
 # Transport for the actual finite family of scan rounds
 
-`TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport` applies
+`TNLean.PEPS.AreaLaw.Rounds.ActualRoundTransport` applies
 `TensorPower.ReplicaTransport.transport_finite_family` to the actual fill and
 charge rounds of one collar scanner. The statement is a finite-family
 consequence of Proposition 7.4 of *A two-dimensional area law from a global
@@ -78,8 +78,8 @@ of the source scanner has been constructed.
 
 ## Mathematical dependencies and energy identification
 
-The module imports `TNLean.PEPS.AreaLaw.Scan.ActualTransportEstimates`,
-`TNLean.PEPS.AreaLaw.Scan.Defs`, and
+The module imports `TNLean.PEPS.AreaLaw.Rounds.ActualTransportEstimates`,
+`TNLean.PEPS.AreaLaw.Collar.Defs`, and
 `QICLean.ManyBody.Replica.BandMetric.FiniteFamily`. The first supplies the
 actual fill and charge constructions, the truncated positive energy terms,
 physical support compatibility, commutation, and physical dimension estimates;

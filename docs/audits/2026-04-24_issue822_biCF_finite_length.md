@@ -42,7 +42,7 @@ Added a **formal obstruction** to the stronger Issue-#822 target:
 
 - updated the then-named `HorizontalCFData.biCF` docstring (now
   `HorizontalCFData.finiteWordTraceSeparation`), located in
-  `TNLean/MPS/MPDO/PerCopyHorizontalCF.lean`,
+  `TNLean/MPS/CanonicalForm/BlockSeparation/PerCopyHorizontalCF.lean`,
   so it describes the current honest constructor surface (`WordTupleSpanTop`,
   `PropBlockInjective`, `wordEntryFamily`) instead of claiming the remaining
   derivation is already available;
@@ -119,5 +119,5 @@ mixed-transfer / Wielandt-style quantitative theorem that is not yet present in
 Commands run in this pass:
 
 - `lake env lean TNLean/MPS/MPDO/BiCFDerivation.lean`
-- `lake build TNLean.MPS.MPDO.BiCFDerivation TNLean.MPS.MPDO.PerCopyHorizontalCF`
+- `lake build TNLean.MPS.MPDO.BiCFDerivation TNLean.MPS.CanonicalForm.BlockSeparation.PerCopyHorizontalCF`
 - `rm -rf .lake/build/ir && lake build`

@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.Real.ComplexSqrt
-import TNLean.MPS.RFP.Defs
-import TNLean.MPS.Symmetry.Defs
-import TNLean.MPS.Examples.GHZ
+import TNLean.MPS.Transfer.RenormalizationFixedPoint.Defs
+import TNLean.MPS.Tensor.Gauge.OnSiteSymmetry
+import TNLean.MPS.Examples.GHZ.GHZ
 
 /-!
 # Even-parity (Z₂ group-algebra) MPS tensor

@@ -51,7 +51,7 @@ examples; an independent comparison with the absent note is not claimed.
 
 Passed local validation:
 
-- `lake build TNLean.MPS.FundamentalTheorem.Reduction.UniquenessAllReductions
+- `lake build TNLean.MPS.FundamentalTheorem.Compression.UniquenessAllReductions
   TNLean.MPS.Examples.MultiBlock`.
 - All three changed Lean files elaborate with the exact strict flags from
   `scripts/ci_lean_checks.py`, including warnings as errors. Their standalone

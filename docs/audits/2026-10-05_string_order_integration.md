@@ -56,8 +56,8 @@ visually inspected for legibility and overlap.
 
 The current QIC pin is retained. The focused core consists of:
 
-- `TNLean.MPS.Symmetry.PhysicalStringPhase`
-- `TNLean.MPS.Symmetry.PhysicalStringBlockOrder`
+- `TNLean.MPS.Symmetry.StringOrder.PhysicalStringPhase`
+- `TNLean.MPS.Symmetry.StringOrder.PhysicalStringBlockOrder`
 - `TNLean.MPS.Examples.StringOrderScalarPhase`
 
 Their combined source closure has 50 TNLean modules and 163 QICLean modules.

@@ -1,9 +1,9 @@
 # PEPS union injectivity: the dead namespaced blue mirror blocks
 
-`TNLean/PEPS/RegionBlock/UnionInjectivityGeneralBlue.lean` carried five
+`TNLean/PEPS/Injectivity/Region/DisjointUnionBlueFactorization.lean` carried five
 `ThreeBlockGeometry`-namespaced blue-side lemmas derived from the complement-side
 results through the `swapBlueComplement` involution, and
-`TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean` carried the function-level
+`TNLean/PEPS/Injectivity/Region/DisjointUnionSetup.lean` carried the function-level
 form of the complement-side smul-factorization. None of the six declarations had a
 consumer anywhere in the tree: every match on the five blue names outside their own
 declarations was either the unnamespaced twin of the edge-centred resonate route
@@ -41,7 +41,7 @@ six.
 
 ## Prose repointed
 
-- The module docstring of `TNLean/PEPS/RegionBlock/UnionInjectivity.lean` described
+- The module docstring of `TNLean/PEPS/Injectivity/Region/UnionInjectivity.lean` described
   the retired complement-first order through the deleted
   `regionInteriorBondProd_smul_threeBlockComplWeight_eq`. It now describes the proof
   as written: the annihilation is read at the fused blue/complement leg, the pointwise

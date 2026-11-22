@@ -16,7 +16,7 @@ projection/commutant input.
 
 ## Lean declarations added
 
-File: `TNLean/MPS/Defs.lean`
+File: `TNLean/MPS/Tensor/Defs.lean`
 
 - `MPSTensor.isNBlkInjective_one_of_isInjective`
   - Records that one-site injectivity is `1`-block injectivity.
@@ -66,7 +66,7 @@ Successful local checks in `wave16-B-934-product-word-span`:
 - `lake env lean TNLean/MPS/CanonicalForm/BlockDiagonalCommutant.lean`
 - `lake build TNLean.MPS.CanonicalForm.BlockDiagonalCommutant`
 - `lake build TNLean.MPS.CanonicalForm.BlockDiagonalCommutant TNLean.MPS.MPDO.BiCFDerivation`
-  `TNLean.MPS.BNT.Construction`
+  `TNLean.MPS.CanonicalForm.BNT.Construction`
 - `ulimit -n 8192 && lake build TNLean`
   - The first two full-build invocations reached the command timeout while continuing the local
     build; the final invocation completed successfully, with only pre-existing warnings in unrelated

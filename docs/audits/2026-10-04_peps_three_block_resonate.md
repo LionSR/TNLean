@@ -70,7 +70,7 @@ historical, with the architectural survey and S3 updated to record this slice.
 
 - `lake exe cache get`: all 8,943 prebuilt Mathlib artifacts downloaded;
   `Mathlib.olean` verified before building. Mathlib was not compiled from source.
-- `lake build TNLean.PEPS.RegionBlock.UnionInjectivity`: passed with the package
+- `lake build TNLean.PEPS.Injectivity.Region.UnionInjectivity`: passed with the package
   linter options at source commit `1d82af581` (1,975 jobs including dependencies).
 - The three moved theorem, proof and docstring blocks are byte-identical; each
   name has exactly one declaration and no deleted module import survives.

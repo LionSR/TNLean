@@ -12,7 +12,7 @@ In `TNLean/Algebra/ComplexOfRing.lean`, for a commutative ring `R` and `f : R â†
 injective `f`), and `complexOfRing_mul_eq_one`, which sends `G * H = 1` over `R` to the same
 identity between the images.
 
-In `TNLean/MPS/FundamentalTheorem/Reduction/RingEmbedding.lean`: the word evaluation
+In `TNLean/MPS/FundamentalTheorem/Compression/RingEmbedding.lean`: the word evaluation
 `evalWordR` with `evalWord_complexOfRing`, and the matrix-unit certificates
 `isNBlkInjective_of_complexOfRing_smul_single` and `isNormal_of_complexOfRing_smul_single`.
 The earlier audit kept the golden and Eisenstein certificates apart from the integer one, since

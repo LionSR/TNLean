@@ -19,7 +19,7 @@ coefficients may be enlarged after it is fixed, as explained in
 ## References and removal
 
 A source search found no production caller of the removed predicate or theorem
-outside `TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean`. Their external references were
+outside `TNLean/PEPS/AreaLaw/CollarInformation/SourceScanner.lean`. Their external references were
 confined to `TNLeanTest/PEPS/AreaLaw/Scan/SourceScannerAxioms.lean` and
 `blueprint/src/chapter/ch24_peps_area_law_source_scanner.tex`. The imported test
 now names the direct theorem; the blueprint states its four-comparison conclusion

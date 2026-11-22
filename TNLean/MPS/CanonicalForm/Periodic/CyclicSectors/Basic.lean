@@ -1,0 +1,63 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
+import TNLean.MPS.Tensor.DirectSum.InvariantSubspaceDecomp
+import TNLean.MPS.Transfer.Irreducible.BlockingInfrastructure
+
+/-!
+# Basic projection word lemmas for cyclic-sector decompositions
+
+This file contains the projection-word identities used throughout the
+cyclic-sector normalization argument.
+
+## Main declarations
+
+* `leftSectorTensor`
+* `left_mul_evalWord_leftSectorTensor_of_commutes`
+
+## References
+
+* [Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608, Appendix A]
+-/
+
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Matrix Finset Complex
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+section BasicProjectionWordLemmas
+
+/-- Left-multiply every letter by `P`. -/
+noncomputable def leftSectorTensor (P : MatrixAlg D) (A : MPSTensor d D) : MPSTensor d D :=
+  fun i => P * A i
+
+lemma left_mul_evalWord_leftSectorTensor_of_commutes
+    (P : MatrixAlg D) (A : MPSTensor d D)
+    (hPidem : P * P = P)
+    (hComm : ∀ i : Fin d, P * A i = A i * P) :
+    ∀ w : List (Fin d),
+      P * Kraus.evalWord (leftSectorTensor P A) w = P * Kraus.evalWord A w := by
+  intro w
+  induction w with
+  | nil =>
+      simp only [Kraus.evalWord]
+  | cons i w ih =>
+      simp only [leftSectorTensor, Kraus.evalWord]
+      calc P * (P * A i * Kraus.evalWord (leftSectorTensor P A) w)
+          = P * P * A i * Kraus.evalWord (leftSectorTensor P A) w := by
+            simp only [Matrix.mul_assoc]
+        _ = P * A i * Kraus.evalWord (leftSectorTensor P A) w := by rw [hPidem]
+        _ = A i * (P * Kraus.evalWord (leftSectorTensor P A) w) := by
+            rw [← Matrix.mul_assoc, hComm i, Matrix.mul_assoc]
+        _ = A i * (P * Kraus.evalWord A w) := by rw [ih]
+        _ = P * (A i * Kraus.evalWord A w) := by
+            rw [← Matrix.mul_assoc, ← hComm i, Matrix.mul_assoc]
+
+end BasicProjectionWordLemmas
+
+end MPSTensor

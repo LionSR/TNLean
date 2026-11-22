@@ -84,7 +84,7 @@ case, preservation of the unit gives `tr(Y) = conj(tr(X))`.
 - `MPOTensor.IsBoundaryCompatible.parentHamiltonianES_commute_of_dualRepresentation`
 
 The existing `MPOTensor.IsBoundaryAdjointClosed` definition has been moved
-unchanged into `MPS/MPDO/BoundaryAdjointClosed.lean`, so neither sufficient
+unchanged into `MPS/Operator/Boundary/Boundary.lean`, so neither sufficient
 criterion needs to import the other. Its former defining module imports the
 new foundation and retains all its other declarations.
 

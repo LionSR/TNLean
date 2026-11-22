@@ -10,9 +10,9 @@ is provided and no theorem is renamed.
 
 ## Moved declarations
 
-The uniqueness module `TNLean/PEPS/TorusGaugeUniqueness.lean` sits below the
+The uniqueness module `TNLean/PEPS/FundamentalTheorem/Torus/TorusGaugeUniqueness.lean` sits below the
 module that defined the tensor hypothesis of Theorem 3, so the hypothesis moved
-to a new module `TNLean/PEPS/NormalTorusRectanglePEPS.lean`, imported by both
+to a new module `TNLean/PEPS/Injectivity/Normal/NormalSquareInjectivity.lean`, imported by both
 `TorusGaugeUniqueness.lean` and
 `TorusUnconditionalFundamentalTheorem.lean`.
 
@@ -67,7 +67,7 @@ Each touched Lean module carries one self-contained
 
 ## Counterexample module
 
-`TNLean/PEPS/PhysicalToVirtualCounterexample.lean` is kept. The hypothesis of
+`TNLean/PEPS/FundamentalTheorem/Injective/PhysicalToVirtualCounterexample.lean` is kept. The hypothesis of
 `physical_to_virtual_insertion` is still the edge-blocked three-site chain,
 which its witness satisfies.
 

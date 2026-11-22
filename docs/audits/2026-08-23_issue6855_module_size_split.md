@@ -7,16 +7,16 @@ former downstream import surface is preserved.
 
 | Original module | Extracted module |
 |---|---|
-| `MPS/MPDO/SimpleLocalStructure.lean` | `MPS/MPDO/SimpleLocalInverseMaps.lean` |
-| `MPS/MPDO/PhysicalSectorActiveRestriction.lean` | `MPS/MPDO/PhysicalSectorActiveCoordinates.lean` |
-| `MPS/MPDO/GSNNCHFourCycleMarkov/FourCycle.lean` | `MPS/MPDO/GSNNCHFourCycleMarkov/OverlappingLiftAlgebra.lean` |
-| `MPS/ParentHamiltonian/BoundaryClosingStripping.lean` | `MPS/ParentHamiltonian/BoundaryClosingTraceReconstruction.lean` |
-| `MPS/ParentHamiltonian/BlockIntersectionProperty.lean` | `MPS/ParentHamiltonian/BlockIntersectionBoundaryDecomposition.lean` |
-| `MPS/ParentHamiltonian/UniqueGroundState.lean` | `MPS/ParentHamiltonian/PeriodicBoundaryReduction.lean` |
-| `MPS/ParentHamiltonian/WrappingWindow.lean` | `MPS/ParentHamiltonian/WrappingWindowLastSiteFactorization.lean` |
-| `PEPS/NormalEdgeBlockingTranslated.lean` | `PEPS/NormalEdgeBlockingTranslatedCoordinate.lean` |
-| `PEPS/FundamentalTheorem.lean` | `PEPS/FundamentalTheorem/LocalGaugeExtraction.lean` |
-| `PEPS/RegionBlock/GaugeBridge.lean` | `PEPS/RegionBlock/GaugeBridgeExpansion.lean` |
+| `MPS/Operator/Simple/SimpleLocalStructure.lean` | `MPS/Operator/Simple/SimpleLocalInverseMaps.lean` |
+| `MPS/MPDO/PhysicalSector/PhysicalSectorActiveRestriction.lean` | `MPS/MPDO/PhysicalSector/PhysicalSectorActiveCoordinates.lean` |
+| `MPS/MPDO/CommutingForm/FourCycleMarkov.lean` | `MPS/MPDO/GSNNCHFourCycleMarkov/OverlappingLiftAlgebra.lean` |
+| `MPS/Tensor/GroundSpace/BoundaryClosingStripping.lean` | `MPS/Tensor/GroundSpace/BoundaryClosingTraceReconstruction.lean` |
+| `MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BlockIntersectionProperty.lean` | `MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BlockIntersectionBoundaryDecomposition.lean` |
+| `MPS/Tensor/GroundSpace/UniqueGroundState.lean` | `MPS/Tensor/GroundSpace/PeriodicBoundaryReduction.lean` |
+| `MPS/Tensor/GroundSpace/WrappingWindow.lean` | `MPS/Tensor/GroundSpace/WrappingWindowLastSiteFactorization.lean` |
+| `PEPS/Injectivity/Normal/NormalEdgeBlockingTranslated.lean` | `PEPS/Injectivity/Normal/NormalEdgeBlockingTranslatedCoordinate.lean` |
+| `PEPS/FundamentalTheorem/Injective/FundamentalTheorem.lean` | `PEPS/FundamentalTheorem/Injective/LocalGaugeExtraction.lean` |
+| `PEPS/FundamentalTheorem/Normal/RegionInsertion/InsertedCoefficientExpansion.lean` | `PEPS/FundamentalTheorem/Normal/RegionInsertion/InsertedCoefficientExpansion.lean` |
 
 The Four-Cycle split crosses one genuine proof boundary: six matrix lemmas used
 by the later Markov argument can no longer remain file-private.  They are now

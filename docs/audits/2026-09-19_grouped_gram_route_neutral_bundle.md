@@ -9,7 +9,7 @@ two positive vertical corners of a common representative. The comparison itself 
 already available as a canonical-form-independent property,
 `MPOTensor.HasGroupedCornerGramDressing`, and the generic Gram-conjugation and
 Gram-scalar theorems over it were already in
-`TNLean/MPS/MPDO/GroupedSectorGram.lean`. This change states the remaining two steps
+`TNLean/MPS/MPDO/Vertical/GroupedSectorGram.lean`. This change states the remaining two steps
 of that chain once, over the same property, and removes the duplicated families.
 
 The separation of the two canonical-form predicates is preserved. No implication
@@ -20,7 +20,7 @@ accepted capstone `MPOTensor.verticalCF_of_grouping_and_gramDressing` already di
 
 ## What was added
 
-`TNLean/MPS/MPDO/VerticalBNTGrouping.lean` names the pair of inputs that the grouped
+`TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm.lean` names the pair of inputs that the grouped
 vertical construction consumes.
 
 | Declaration | Content |
@@ -36,8 +36,8 @@ Two route-neutral theorems replace the four deleted ones:
 
 | Declaration | Host |
 |---|---|
-| `MPOTensor.grouped_sector_exists_unitary_normalization_of_dressing` | `TNLean/MPS/MPDO/GroupedGramNormalization.lean` |
-| `MPOTensor.exists_normalized_grouped_sector_maps_of_dressing` | `TNLean/MPS/MPDO/NormalizedGroupedSectors.lean` |
+| `MPOTensor.grouped_sector_exists_unitary_normalization_of_dressing` | `TNLean/MPS/MPDO/Vertical/GroupedSectorGram.lean` |
+| `MPOTensor.exists_normalized_grouped_sector_maps_of_dressing` | `TNLean/MPS/MPDO/Vertical/NormalizedGroupedSectorMaps.lean` |
 
 ## What was removed and what replaces it
 
@@ -67,12 +67,12 @@ consumer outside their own module. `grouped_sector_gram_eq_pos_smul_one` was use
 only by its own module's sibling and by the normalized-maps theorem of the same
 family. The normalized-maps theorems had exactly two consumers, both of which now
 call the route-neutral theorem with their own Gram dressing:
-`TNLean/MPS/MPDO/RFPPositiveFusionDecomposition.lean` for the horizontal route and
+`TNLean/MPS/MPDO/Fusion/RFPPositiveFusionDecomposition.lean` for the horizontal route and
 `TNLean/MPS/MPDO/CPSVVerticalDecomposition.lean` for the literal route. The two
 capstone wrappers `MPOTensor.verticalCF_of_horizontalCF` and
 `MPOTensor.verticalCF_of_cpsvCanonicalForm` keep their statements and now obtain the
 inputs through their own smart constructor. Docstring references in
-`TNLean/MPS/MPDO/CPSVVerticalBNT.lean` and `TNLean/MPS/MPDO/VerticalCF.lean` are
+`TNLean/MPS/MPDO/Vertical/CPSVPeriodicExclusion.lean` and `TNLean/MPS/CanonicalForm/VerticalForm/VerticalCF.lean` are
 migrated, as are the path and declaration references in
 `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`,
 `docs/paper-gaps/cpgsv17_vertical_diagonal_restriction.tex`, and the three ledger
@@ -113,7 +113,7 @@ node and the chapter 21 product-law node, are untouched, and the literal anchors
 
 ## Retained and deferred
 
-`TNLean/MPS/MPDO/CPSVVerticalBNT.lean` and `TNLean/MPS/MPDO/CPSVFigureEight.lean`
+`TNLean/MPS/MPDO/Vertical/CPSVPeriodicExclusion.lean` and `TNLean/MPS/MPDO/Vertical/CPSVOriginalSpaceLemmaL.lean`
 are the genuinely route-specific literal content and are retained; they are the two
 theorems the literal smart constructor calls. The remaining twin families named in
 issue #6855 section 4, the vertical-decomposition, product spectral-family,

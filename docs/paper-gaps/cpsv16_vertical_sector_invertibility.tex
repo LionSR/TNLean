@@ -128,7 +128,7 @@ Two finite-dimensional final implications are formalized. First, an
 endomorphism is the identity if it fixes every length-$L$ contraction product
 and those products span the ambient space.\footnote{Formal declaration:
 \leanid{MPOTensor.eq_id_of_weightedVerticalBondContractionProducts_fixed}
-in \doclink{TNLean/MPS/MPDO/VerticalSectorGeneration}.}
+in \doclink{TNLean/MPS/MPDO/SectorMaps/VerticalSectorGeneration}.}
 CPSV16 does not assume that the products themselves are fixed.
 
 For the second implication, let $\mathcal F$ be the fixed-point space and let
@@ -143,7 +143,7 @@ algebra, and
 then the endomorphism is the identity.\footnote{Formal declarations:
 \leanid{MPOTensor.fixedPointProductSpan} and
 \leanid{MPOTensor.eq_id_of_weightedVerticalBondContractions_fixed_of_productSpan_finrank_le}
-in \doclink{TNLean/MPS/MPDO/VerticalSectorGeneration}.}
+in \doclink{TNLean/MPS/MPDO/SectorMaps/VerticalSectorGeneration}.}
 This implication does not require products of the distinguished contractions
 to be fixed. It isolates the dimension argument used in the source.
 
@@ -153,7 +153,7 @@ formalized for a positive trace-preserving map on a finite direct sum when its
 trace adjoint satisfies the Schwarz inequality and it has a positive-definite
 fixed family.\footnote{Formal declaration:
 \leanid{MPOTensor.fixedPointProductSpan_finrank_le_of_densityBlocks}
-in \doclink{TNLean/MPS/MPDO/VerticalSectorDensityBlocks}.}
+in \doclink{TNLean/MPS/MPDO/SectorMaps/VerticalSectorDensityBlocks}.}
 This result assumes no tensor hypothesis, multiplicativity, or fixedness of
 products. It is nevertheless a full-support corollary: unlike Wolf's
 unrestricted Theorem~6.14~\cite{Wolf2012Quantum}, it assumes a
@@ -204,7 +204,7 @@ simple summand.\footnote{Formal declarations:
 \leanid{MPOTensor.transportedVerticalSectorS_isKrausDirectSumMap}, and
 \leanid{MPOTensor.%
 transportedVerticalSector_composites_traceAdjointSchwarz}
-in \doclink{TNLean/MPS/MPDO/VerticalSectorCompletePositivity}.}
+in \doclink{TNLean/MPS/MPDO/SectorMaps/VerticalSectorCompletePositivity}.}
 
 An alternative route uses the maximal-support witness
 $T_\infty(\mathbf 1)$ for an arbitrary positive trace-preserving map. The
@@ -259,7 +259,7 @@ exists_posDef_fixedFamily_of_fixed_product_span}
 in \doclink{TNLean/Channel/FixedPoint/TraceNonincreasingDirectSum}, and
 \leanid{MPOTensor.%
 eq_id_of_weightedVerticalBondContractions_fixed_of_traceAdjointSchwarz}
-in \doclink{TNLean/MPS/MPDO/VerticalSectorInvertibility}.}
+in \doclink{TNLean/MPS/MPDO/SectorMaps/VerticalSectorIdentity}.}
 
 Thus a positive trace-preserving endomorphism of a finite product has a
 positive-definite fixed family under the same product-span hypothesis. If its
@@ -281,7 +281,7 @@ These are exactly the two composition identities in Appendix~C.4,
 lines~1974--1995, of Ref.~\cite{Cirac2016MPDO_arXiv}.\footnote{Formal
 declaration:
 \leanid{MPOTensor.transportedVerticalSector_composites_eq_id}
-in \doclink{TNLean/MPS/MPDO/VerticalSectorIdentity}.}
+in \doclink{TNLean/MPS/MPDO/SectorMaps/VerticalSectorIdentity}.}
 
 To prove trace preservation directly, let $F^*$ denote the trace adjoint and
 define the trace-loss operator
@@ -425,10 +425,10 @@ line~1997 of Ref.~\cite{Cirac2016MPDO_arXiv}.\footnote{Formal declarations:
 exists_blockEquiv_dim_eq_unitary_forward_of_mutual_inverse_kraus_direct_sum_maps}
 in \doclink{TNLean/Channel/FixedPoint/DirectSumBlockPermutation}, and
 \leanid{MPOTensor.transportedVerticalSector_exists_unitaryBlockEquiv} in
-\doclink{TNLean/MPS/MPDO/VerticalSectorRelabeling}, and
+\doclink{TNLean/MPS/MPDO/SectorMaps/VerticalSectorIdentity}, and
 \leanid{MPOTensor.%
 transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq} in
-\doclink{TNLean/MPS/MPDO/VerticalSectorCoefficientComparison}.}
+\doclink{TNLean/MPS/MPDO/SectorMaps/VerticalSectorCoefficientComparison}.}
 
 \section{Elimination plan}
 

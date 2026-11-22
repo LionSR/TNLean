@@ -8,11 +8,11 @@ The six directory-scoped units are MPU, MPDO, Preparation, FundamentalTheorem, S
 
 ### mpu
 
-Extract binary configuration operations into `MPS/Chain/BinaryPhase` and the identity MPU and source ranks into `MPS/MPU/Identity` and `IdentitySourceRanks`. Retain the new QICLean ComplexSqrt import in ShiftSourceFactors. ClusterIsingSymmetry imports CZXUnitary explicitly.
+Extract binary configuration operations into `MPS/Tensor/Chain/BinaryPhase` and the identity MPU and source ranks into `MPS/Operator/Unitary/Identity` and `IdentitySourceRanks`. Retain the new QICLean ComplexSqrt import in ShiftSourceFactors. ClusterIsingSymmetry imports CZXUnitary explicitly.
 
 ### mpdo
 
-Extract GHZ tensor/sectors into `MPS/Core/GHZ` and binary-group algebra into `Algebra/ZMod2Representation`. The three CZX consumers import those shared interfaces and the identity MPU introduced by the preceding partition.
+Extract GHZ tensor/sectors into `MPS/Tensor/GHZ` and binary-group algebra into `Algebra/ZMod2Representation`. The three CZX consumers import those shared interfaces and the identity MPU introduced by the preceding partition.
 
 ### preparation
 

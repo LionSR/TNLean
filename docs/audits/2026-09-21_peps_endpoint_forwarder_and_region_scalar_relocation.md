@@ -8,7 +8,7 @@ one-declaration file it was alone in.
 
 ## The endpoint forwarder pair
 
-`TNLean/PEPS/InsertionRealization.lean` carried both
+`TNLean/PEPS/FundamentalTheorem/Injective/InsertionRealization.lean` carried both
 `edgeLeftLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq` and
 `edgeRightLocalVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq`, each
 assuming vertex injectivity of the whole tensor, beside the twins
@@ -68,7 +68,7 @@ state coefficient by `exists_stateCoeff_ne_zero_of_regionInjective` and feeds it
 to `prod_perVertexScalar_eq_one_of_exists_stateCoeff_ne_zero`.
 
 The corollary now lives at the end of
-`TNLean/PEPS/RegionBlock/BlockRangeCoincidence.lean`, immediately after the
+`TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/BlockRangeCoincidence.lean`, immediately after the
 existence lemma it consumes, under its own section heading; its statement,
 docstring and proof are carried over unchanged. `TNLean/PEPS/RegionScalarCondition.lean`
 is removed, and `TNLean/PEPS.lean` was regenerated. No declaration is removed
@@ -76,17 +76,17 @@ and no name changes, so no `\lean{...}` tag and no citation of the declaration
 in `docs/paper-gaps/peps_normal_ft_section3_route.tex` is affected.
 
 The two Lean consumers are handled as follows.
-`TNLean/PEPS/TorusFundamentalTheorem.lean` imports
-`TNLean.PEPS.RegionBlock.BlockRangeCoincidence` in place of the removed module,
+`TNLean/PEPS/FundamentalTheorem/Torus/TorusFundamentalTheorem.lean` imports
+`TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.BlockRangeCoincidence` in place of the removed module,
 which leaves its import closure unchanged because the removed module imported
-nothing else. `TNLean/PEPS/NormalGeneralFundamentalTheorem.lean` simply drops
+nothing else. `TNLean/PEPS/FundamentalTheorem/ConnectedGraph/NormalGeneralFundamentalTheorem.lean` simply drops
 the line: each of its three remaining imports already reaches
-`TNLean.PEPS.RegionBlock.BlockRangeCoincidence`, so an explicit import would add
+`TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.BlockRangeCoincidence`, so an explicit import would add
 nothing to its exclusive cone, the criterion used in
 `docs/audits/2026-08-27_unused_import_lines.md`. The prose pointer in the
 docstring of `prod_perVertexScalar_eq_one_of_exists_stateCoeff_ne_zero`
-(`TNLean/PEPS/FundamentalTheorem.lean`) and the file overview of
-`TNLean/PEPS/RegionBlock/BlockRangeCoincidence.lean` name the new location.
+(`TNLean/PEPS/FundamentalTheorem/Injective/FundamentalTheorem.lean`) and the file overview of
+`TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/BlockRangeCoincidence.lean` name the new location.
 
 ## Checked
 
@@ -113,5 +113,5 @@ here.
 ## Deferred
 
 The remaining items of the 2026-09-19 torus note stand: the two occurrences of a
-differently shaped crossing split in `TNLean/PEPS/NormalEdgeSingleCrossing.lean`
+differently shaped crossing split in `TNLean/PEPS/FundamentalTheorem/Normal/NormalEdgeSingleCrossing.lean`
 are untouched.

@@ -48,7 +48,7 @@ Theorem~3 of Ref.~\cite{Molnar2018NormalPEPS};\footnote{Theorem~3 is at
     \path{Papers/1804.04964/paper_normal.tex:1451--1472}; its torus form is
     formalized as
     \leanid{TNLean.PEPS.fundamentalTheorem_normalTorusPEPS_unconditional} in
-    \path{TNLean/PEPS/TorusUnconditionalFundamentalTheorem.lean}.} only the hypotheses
+    \path{TNLean/PEPS/FundamentalTheorem/Torus/TorusUnconditionalFundamentalTheorem.lean}.} only the hypotheses
 differ. Theorem~3 of Ref.~\cite{Molnar2018NormalPEPS} assumes that every
 $2\times3$ \emph{and} every $3\times2$ region is injective and that
 $n, m \geq 7$. The corollary of Ref.~\cite{Molnar2018NormalPEPS} assumes
@@ -91,9 +91,9 @@ Lemma~5 of Ref.~\cite{Molnar2018NormalPEPS} is the one-dimensional
 overlapping-window bond-operator extraction,\footnote{\path{Papers/1804.04964/paper_normal.tex:2045--2255},
     formalized (site-dependent form) as
     \leanid{MPSChainTensor.overlapWindow_exists_bondOperator} in
-    \path{TNLean/PEPS/CycleMPSChainOverlapWindow.lean}, with the closed-chain
+    \path{TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapWindow.lean}, with the closed-chain
     corollary \leanid{TNLean.PEPS.fundamentalTheorem_normalMPSChain_of_overlap}
-    in \path{TNLean/PEPS/CycleMPSChainOverlapCapstone.lean}.} which delivers
+    in \path{TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapCapstone.lean}.} which delivers
 the one-dimensional Fundamental Theorem at $n \geq 2L+1$ in place of the
 three-block bound $n \geq 3L$.
 
@@ -223,7 +223,7 @@ condition in Ref.~\cite{Molnar2018NormalPEPS}\footnote{\path{Papers/1804.04964/p
     injective tensors.''} instantiated at the $L \times K$ blocking; it is not a
 second, stronger hypothesis. The faithful Lean hypothesis bundle is
 \leanid{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses}
-(\path{TNLean/PEPS/TorusWindowComplement.lean}), a single field
+(\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowComplement.lean}), a single field
 \leanid{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.arcWindow_injective}: every cyclic $L \times K$ window is injective in
 the sense of \leanid{TNLean.PEPS.RegionBlockedTensorInjective}. This neither
 exceeds nor falls short of the source's hypothesis.
@@ -246,26 +246,26 @@ regions in which zero-dimensional bonds occur.
 The following surrounding results are formalized at the corollary's minimal
 size:
 the seam-aware window geometry
-(\path{TNLean/PEPS/TorusWindowRegion.lean},
-\path{TNLean/PEPS/TorusWindowComplement.lean}); the deformed-window state
+(\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowRegion.lean},
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowComplement.lean}); the deformed-window state
 vocabulary and the consecutive-window comparison by complement inversion
-(\path{TNLean/PEPS/TorusDeformedWindow.lean}); the chaining, corner
+(\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/DeformedWindow.lean}); the chaining, corner
 completion, and shared-corner cancellation that produce the
 \emph{open-boundary} end-pair equality
 \leanid{TNLean.PEPS.staircasePair_insert_eq_open}
-(\path{TNLean/PEPS/TorusWindowChain2.lean} through
+(\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowExtension.lean} through
 \path{TorusWindowChain6.lean}) without assuming or using injectivity of
 $\mathrm{univ} \setminus S$; the single-bond peeling of that equality onto the
 reference edge
 (\leanid{TNLean.PEPS.regionInsertedCoeff_endWindows_eq_of_staircase},
-\path{TNLean/PEPS/TorusWindowPeeling/SingleBond.lean}); the per-edge witness packaging and
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/SingleBondPeeling.lean}); the per-edge witness packaging and
 the Skolem--Noether read-off
-(\path{TNLean/PEPS/TorusWindowWitness.lean},
-\path{TNLean/PEPS/TorusWindowMult.lean}); the per-step bond-insert transport
+(\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/Witness.lean},
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/ConjugationCoefficient.lean}); the per-step bond-insert transport
 \leanid{TNLean.PEPS.horizontalStaircaseConsecutiveWindow_bondTransport_extend_eq}
 and the now-uniform interior-bond rescaling
 \leanid{TNLean.PEPS.regionInteriorBondProd_staircaseWindow_eq}
-(\path{TNLean/PEPS/TorusWindowBondTransport.lean},
+(\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/BondTransport.lean},
 \path{TorusWindowBondUniform.lean}); the interior-bond insert and the complete
 common-state family
 (\leanid{TNLean.PEPS.interiorBondInsertedRegionInsert} and
@@ -280,14 +280,14 @@ as well as the cross-tensor common-state identity
 which applies the same physical operators to the genuine blocks of a tensor
 with the same closed state without identifying the two virtual boundary
 spaces
-(\path{TNLean/PEPS/RegionBlock/PhysicalOperation.lean},
-\path{TNLean/PEPS/RegionBlock/InteriorBondInsertion.lean}, and
-\path{TNLean/PEPS/TorusWindowVirtualOperationFamily.lean}); and the
+(\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/PhysicalOperation.lean},
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/InteriorBondInsertion.lean}, and
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/VirtualOperationFamily.lean}); and the
 pointwise cross-tensor end extraction
 \leanid{TNLean.PEPS.existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp\_sameState},
 which recovers the unique $B$-bond matrix with the source's $O_1$ and
 $O_3^{\mathsf T}$ orientations
-(\path{TNLean/PEPS/TorusWindowCrossTensorEndOperation.lean}). Every
+(\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/CrossTensorEndOperation.lean}). Every
 inverted region is a union of one-orientation $L \times K$ window translates,
 host-decomposable at $n \geq 2L+1$, $m \geq 2K+1$. The development is
 minimal-size-ready through the single-tensor virtual-operation family, the
@@ -415,7 +415,7 @@ corollary is false or that no source-faithful proof exists.
           (\leanid{TNLean.PEPS.horizontalStaircasePair_ne_arcRectangle}).
           The geometric obstruction to that rectangle construction is
           established in
-          \path{TNLean/PEPS/TorusWindowSingleCrossingObstruction.lean}.
+          \path{TNLean/PEPS/FundamentalTheorem/Torus/Window/SingleCrossingObstruction.lean}.
           It does not exclude a coarse frame obtained from additional
           injectivity information.
     \item \emph{Translation invariance supplies the common normalization.}
@@ -433,7 +433,7 @@ corollary is false or that no source-faithful proof exists.
           and injectivity but no per-edge factorization. This is a machine-checked
           refutation
           (\leanid{TNLean.PEPS.RowColumnReductionObstruction.rowCutGaugeFactorizes_false},
-          \path{TNLean/PEPS/TorusRowColumnReductionObstruction.lean}).
+          \path{TNLean/PEPS/FundamentalTheorem/Torus/TorusRowColumnReductionObstruction.lean}).
 \end{itemize}
 
 \paragraph{5. Reading the source faithfully.}
@@ -517,7 +517,7 @@ insert obtained by adjoining their genuine tensors to a one-endpoint insert;
 and the remaining windows carry the boundary insert of $X$.  Translation
 invariance identifies the non-boundary bond products, so all these inserts
 produce the common state $P_A(W_0)E_A(e,\cdot,X)$.  This is formalized in
-\path{TNLean/PEPS/TorusWindowVirtualOperationFamily.lean}.
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/VirtualOperationFamily.lean}.
 
 If $A$ and $B$ generate the same closed state, apply these same physical
 operators $O_j^A(X)$ to the genuine $B$-blocks.  The partial states of $A$ and
@@ -708,7 +708,7 @@ one edge: no multi-edge cut is ever inverted across.
 \medskip
 \noindent\textbf{The single-crossing geometry, formalized at the end-pair
     boundary level.} The geometric core of Step~4 is in
-\path{TNLean/PEPS/TorusWindowExtraction.lean}: the reference edge $e$ is the
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/EndPairCrossing.lean}: the reference edge $e$ is the
 unique lattice edge joining the two end windows
 (\path{isCrossingEdge_horizontalStaircaseEndWindows}, lifting the abstract
 \path{isCrossingEdge_horizontalStaircase} to the actual
@@ -794,7 +794,7 @@ global contraction forces
 $\lambda^{nm}=1$.\footnote{\leanid{TNLean.PEPS.exists_torusCovariantAbsorbedGaugeFamily},
     \leanid{TNLean.PEPS.component_eq_gaugeVertex_of_cornerProportional}, and
     \leanid{TNLean.PEPS.lambda_pow_card_torus_eq_one}, assembled in
-    \path{TNLean/PEPS/TorusUnconditionalFundamentalTheorem.lean}.} Two of these layers
+    \path{TNLean/PEPS/FundamentalTheorem/Torus/TorusUnconditionalFundamentalTheorem.lean}.} Two of these layers
 are anchored to the Theorem~3 shapes and must be re-anchored:
 
 \begin{itemize}
@@ -847,7 +847,7 @@ application does not help: a row cut crosses the vertical edges of one row
 boundary and a column cut the horizontal edges of one column boundary, two
 disjoint edge sets sharing no bond, so the two cut gauges impose no mutual
 consistency. This is recorded as a machine-checked refutation in
-\path{TNLean/PEPS/TorusRowColumnReductionObstruction.lean}
+\path{TNLean/PEPS/FundamentalTheorem/Torus/TorusRowColumnReductionObstruction.lean}
 (\leanid{TNLean.PEPS.RowColumnReductionObstruction.rowCutGaugeFactorizes_false}):
 an injective contracted-row family and its non-product conjugate share their
 state and injectivity, yet no per-edge product conjugator relates them.
@@ -955,12 +955,12 @@ rank, gauge or larger-size hypothesis is supplied.
 Layer 1 is complete. The seam-avoiding window geometry --- the general
 $a \times b$ injectivity by sliding unions, the staircase end pair, and
 the single-crossing characterization --- is in
-\path{TNLean/PEPS/TorusWindowRegion.lean}. The
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowRegion.lean}. The
 seam-wrapping part --- the cyclic rectangle, the translation-invariant
 window hypotheses, the consecutive-window unions, and the complement
 decompositions of single windows and consecutive-window unions at
 $n \geq 2L+1$, $m \geq 2K+1$ --- is in
-\path{TNLean/PEPS/TorusWindowComplement.lean}. The seam-wrapping band is
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowComplement.lean}. The seam-wrapping band is
 modelled as a cyclic rectangle read through $\mathbb{Z}/n$ value
 distance, so the full-height complement band of $\mathrm{width} - L$
 columns is a single coordinate-translate of a rectangle and stays
@@ -983,7 +983,7 @@ closed-torus deformed-state equality to an open-boundary equality of the
 two inserts on the region, once the set complement is blocked-tensor
 injective: at a fixed region physical configuration the deformed state is
 the complement tensor map applied to the insert, which is injective. Both
-are in \path{TNLean/PEPS/TorusDeformedWindow.lean}. The engine is
+are in \path{TNLean/PEPS/FundamentalTheorem/Torus/Window/DeformedWindow.lean}. The engine is
 specialized to the consecutive-window unions there as
 \path{horizontalUnion_insert_eq_of_deformedState_eq} and its vertical
 counterpart, the union complement injectivity supplied by layer~1. The
@@ -998,7 +998,7 @@ for the descending arm of the staircase.
 The geometry of the chaining and corner-stripping layer is in place. The
 staircase patch $P$, its two end windows, the corner block, and the
 completed corner rectangle are in
-\path{TNLean/PEPS/TorusWindowChain.lean}, with: the disjointness of the two
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/Chain.lean}, with: the disjointness of the two
 end windows at $2L \le n$; the injectivity of each end window and of the
 completed corner rectangle (each an $L \times K$ cyclic window); the patch
 decomposition $P = S \sqcup \text{corner}$ at the no-wraparound bounds
@@ -1008,7 +1008,7 @@ shifted cyclic distance to the base distance from the patch corner through the
 shift arithmetic \path{zmod_val_sub_shift}.
 
 The tensor content of the chaining and stripping is in
-\path{TNLean/PEPS/TorusWindowChain2.lean}. The contraction-extension
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowExtension.lean}. The contraction-extension
 \path{deformedRegionState_extend} writes a sub-region deformed state, read
 as a function of the full physical configuration, as the deformed state of
 a superset $S \supseteq R$ with the window's insert extended by the genuine
@@ -1062,7 +1062,7 @@ inverting $\mathrm{univ} \setminus S$ rather than the added block $P'
     \setminus S$. This collapse is recorded as
 \path{deformedRegionStateAssembled_extendInsert_eq} and its inversion form
 \path{deformedRegionStateAssembled_extendInsert_eq_of_subComplementInjective}
-in \path{TNLean/PEPS/TorusWindowChain2.lean}: the superset closed-state route
+in \path{TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowExtension.lean}: the superset closed-state route
 consumes $\mathrm{univ} \setminus S$ injectivity and never the completed
 corner's. The shared-corner cancellation of Step~3 is an open-boundary
 operation, cancelling the injective completed rectangle
@@ -1122,8 +1122,8 @@ agreeing $\mathrm{univ} \setminus S$ boundary, with fiber multiplicity
 $\mathrm{ribp}(\mathrm{univ} \setminus S)$. This is a four-block ($R$,
 $S \setminus R$, $P \setminus S$, $\mathrm{univ} \setminus P$) merge-and-count,
 beyond the existing three-block fiber tooling of
-\path{TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean}. It is landed in
-\path{TNLean/PEPS/TorusWindowChain4.lean}: the merge-and-count is the two-sub-block
+\path{TNLean/PEPS/Injectivity/Region/DisjointUnionSetup.lean}. It is landed in
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/CornerExtensionTransitivity.lean}: the merge-and-count is the two-sub-block
 collapse \path{mergeCollapse2} over $\mathrm{univ} \setminus S$, with the two host
 labels carried through by the boundary-edge embeddings
 \path{regionBoundaryLabel_regionMerge_compl_of_subset} (the $\mathrm{univ}\setminus R$
@@ -1160,7 +1160,7 @@ the host index using $Q$ injectivity alone, the weaker hypothesis the union
 lemma's two-step does not isolate.
 
 The shared-corner cancellation is formalized in
-\path{TNLean/PEPS/TorusWindowChain5.lean}. Since the corner extension is linear
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/CornerExtensionAdditivity.lean}. Since the corner extension is linear
 in its insert, the injectivity of $\text{\path{extendInsert}}(S\subseteq R)$ reduces
 to its kernel: the only insert on $S$ whose corner extension on $R$ vanishes is
 the zero insert. The linearity lemmas \path{extendInsert_add},
@@ -1192,7 +1192,7 @@ $S\sqcup Q$ with $Q$ the completed corner and cancels $Q$ from an
 open-boundary equality of the two end-window inserts on the completed region.
 
 The required open-boundary patch equality is formalized in
-\path{TNLean/PEPS/TorusWindowChain6.lean}. The descending-arm comparison
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/StaircaseChaining.lean}. The descending-arm comparison
 \path{verticalConsecutiveWindow_extend_eq} is the transpose of the horizontal
 comparison \path{horizontalConsecutiveWindow_extend_eq}: both give
 open-boundary equalities of corner-extended inserts on a consecutive-window
@@ -1263,7 +1263,7 @@ windows' external legs, with $e$ the single interior bond summed over in the
 end-pair contraction. This is the geometric content the bond-$e$ coefficient
 identity reads: the open legs of $S$ split into the left-window external legs and
 the right-window external legs, and the matrix on $e$ is the only datum the two
-windows share. These facts are in \path{TNLean/PEPS/TorusWindowPeeling/BoundaryGeometry.lean}.
+windows share. These facts are in \path{TNLean/PEPS/FundamentalTheorem/Torus/Window/EndPairBoundary.lean}.
 
 The finite-dimensional ``compare the two ends'' argument of Lemma~5 and the
 torus boundary reindexing needed to apply it are now landed.  The theorem
@@ -1294,9 +1294,9 @@ extracts the unique highlighted-edge matrix $X$ assuming injectivity only of
 the two genuine end windows.  No injectivity of a modified insert, a single
 vertex, the end pair, or its complement enters this step.
 The boundary-label and normalized-coupling arguments are in
-\path{TNLean/PEPS/TorusWindowPeeling/EndWindowCoupling.lean}; the single-bond
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/EndWindowCoupling.lean}; the single-bond
 contraction and unique-operation extraction are in
-\path{TNLean/PEPS/TorusWindowPeeling/EndOperation.lean}.
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/EndOperation.lean}.
 
 The Step~4 end relations, their direct composition laws, and the resulting
 cross-tensor algebra isomorphism are complete. The exact normalized
@@ -1386,7 +1386,7 @@ vocabularies the back half mixes: the \emph{deformed-window} inserts the
 overlapping-window staircase produces, and the \emph{region-inserted coefficient}
 \path{regionInsertedCoeff} the per-edge gauge of Step~5 reads.  These were two
 parallel developments with no connecting lemma.  The bridge is now in
-\path{TNLean/PEPS/TorusWindowPeeling/BondInsertedRegion.lean}.
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/BondInsertedRegion.lean}.
 
 The bond-inserted insert $\text{\path{bondInsertedRegionInsert}}\,A\,R\,f\,M$ on a region
 $R$ is the insert whose boundary configuration $\nu$ (read by the complement
@@ -1412,7 +1412,7 @@ contraction split.
 
 The single-bond peeling itself is
 \path{regionInsertedCoeff_endWindows_eq_of_staircase} in
-\path{TNLean/PEPS/TorusWindowPeeling/SingleBond.lean}.  Feeding the end-pair equality
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/SingleBondPeeling.lean}.  Feeding the end-pair equality
 \path{staircasePair_insert_eq_open} the bond-inserted inserts on the two end
 windows (and arbitrary inserts on the intermediate windows), all sharing one deformed
 state, and bridging both sides through
@@ -1426,7 +1426,7 @@ counterpart), so $M$ and $M'$ live on the same bond.
 The window-region witness packaging of \S5.2 is
 \path{windowEdgeCoeffIdentityWitness} (and its hypotheses form
 \path{windowEdgeCoeffIdentityWitness_of_hypotheses}) in
-\path{TNLean/PEPS/TorusWindowWitness.lean}: given the bond-$e$ conjugation coefficient
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/Witness.lean}: given the bond-$e$ conjugation coefficient
 identity, every other \path{EdgeCoeffIdentityWitness} field with the left end window
 as region is discharged from the landed window geometry, the host injectivity supplied
 at the minimal size by \path{regionBlockedTensorInjective_windowComplement}.  The
@@ -1449,7 +1449,7 @@ into $Z$ and the conjugation identity (the lemma
 \path{exists_regionConjCoeffIdentity_of_coeffTransfer}), and feeding that to the
 window-region witness packaging discharges the witness's conjugation field (the lemma
 \path{exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer}).  These are in
-\path{TNLean/PEPS/TorusWindowMult.lean}.  All region-level algebra --- additivity,
+\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/ConjugationCoefficient.lean}.  All region-level algebra --- additivity,
 homogeneity, identity preservation, the two-sided inverse, the Skolem--Noether read-off
 --- is unconditional on the window and host injectivity, both available at the minimal
 size, so the window witness assembles from the coefficient transfer alone, with no
@@ -1599,7 +1599,7 @@ from a single-window span or an assumed coarse frame.
 
 The multiplicativity is carried by the gauge assembly
 \leanid{TNLean.PEPS.exists\_regionEdgeGauge\_of\_coherentFrames}
-(\path{TNLean/PEPS/RegionBlock/CoarseThreeSite11.lean}): two coherent coarse blocking
+(\path{TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/SingleEdgeTransfer.lean}): two coherent coarse blocking
 frames over the two tensors sharing the three regions, the bond dimensions, and the
 single-crossing edge make the chosen forward transfer over the red block
 multiplicative, with no single-vertex injectivity. Its \path{hmul} step is the
@@ -1629,12 +1629,12 @@ one endpoint of the same distinguished edge $e$.
 
 The canonical family is
 \leanid{TNLean.PEPS.staircaseVirtualOperationInsert}
-(\path{TNLean/PEPS/TorusWindowVirtualOperationFamily.lean}).  It uses the boundary insert
+(\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/VirtualOperationFamily.lean}).  It uses the boundary insert
 of $M^{\mathsf T}$ on $W_0$, the interior-bond insert of $M$ on
 $W_1,\ldots,W_{L-1}$, and the boundary insert of $M$ on the remaining windows.  The
 interior construction
 \leanid{TNLean.PEPS.interiorBondInsertedRegionInsert}
-(\path{TNLean/PEPS/RegionBlock/InteriorBondInsertion.lean}) starts from the ordered left
+(\path{TNLean/PEPS/FundamentalTheorem/Torus/Window/InteriorBondInsertion.lean}) starts from the ordered left
 endpoint and adjoins the genuine tensors of the window by corner extension.  This formalizes the virtual insert asserted at
 \path{Papers/1804.04964/paper_normal.tex:2320--2321} of
 Ref.~\cite{Molnar2018NormalPEPS} and uses the same adjoining contraction as
@@ -1730,7 +1730,7 @@ argument, not a noninjectivity conclusion or a restriction on the source
 theorem.\footnote{Formal geometry:
     \leanid{TNLean.PEPS.horizontalStaircasePair\_ne\_arcRectangle} and
     \leanid{TNLean.PEPS.horizontalStaircasePair\_complement\_band\_lt\_window}
-    in \path{TNLean/PEPS/TorusWindowSingleCrossingObstruction.lean}.}
+    in \path{TNLean/PEPS/FundamentalTheorem/Torus/Window/SingleCrossingObstruction.lean}.}
 
 These observations rule out two auxiliary shortcuts; they do not challenge
 the paper's fixed-edge comparison.  The comparison through adjoining the

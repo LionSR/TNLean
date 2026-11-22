@@ -9,7 +9,7 @@ and no compatibility alias is kept.
 
 | Removed | Replacement |
 |---|---|
-| `MPSPreparation.toEuclideanLin_mul_apply` (module `TNLean.MPS.Preparation.WindowSeparation`) | `Matrix.toEuclideanLin_mul_apply` (module `TNLean.Algebra.ToEuclideanLinApply`) |
+| `MPSPreparation.toEuclideanLin_mul_apply` (module `TNLean.MPS.CanonicalForm.Correlation.WindowSeparation`) | `Matrix.toEuclideanLin_mul_apply` (module `TNLean.Algebra.ToEuclideanLinApply`) |
 
 Both state that for square complex matrices `X` and `Y` and a vector `v` of the Euclidean space,
 the matrix `X * Y` acts on `v` as `X` applied after `Y`. The replacement has the same

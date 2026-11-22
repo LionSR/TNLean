@@ -7,7 +7,7 @@ kept.
 
 ## Removed declaration and its replacement
 
-In `TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean`:
+In `TNLean/MPS/FundamentalTheorem/OperatorProduct/MPOProduct.lean`:
 
 - `MPOTensor.GroupFamily.IsRepresentation.exists_fusionTensors`, replaced by
   `MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors`.
@@ -29,5 +29,5 @@ statement is recovered as
 `GroupFamily.IsNormalRepresentation`, `GroupFamily.IsRepresentation.isNormalRepresentation`,
 `GroupFamily.IsNormalRepresentation.sameMPV₂Pos_mulTensor`, and
 `MPOTensor.sameMPV₂Pos_toMPSTensor_of_mpo_eq` moved unchanged from
-`TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean` to `MPOProduct.lean`, which
+`TNLean/MPS/FundamentalTheorem/OperatorGroup/Associator.lean` to `MPOProduct.lean`, which
 `Associator.lean` imports. Their names are unchanged.

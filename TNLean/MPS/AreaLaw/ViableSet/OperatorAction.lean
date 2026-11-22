@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.LeftCoordinates
-import TNLean.MPS.AreaLaw.OpenMPSOperatorAction
+import TNLean.MPS.Tensor.OpenMPS.OpenMPSCutRank
 
 /-!
 # Applying operators to vectors of a viable set

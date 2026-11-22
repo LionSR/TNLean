@@ -12,8 +12,8 @@ migrated to the replacement.
 
 | Removed | File | Replacement |
 |---|---|---|
-| `leftSectorTensor_supported` | `TNLean/MPS/CanonicalForm/CyclicSectors/Basic.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `assocInv_mul_kronId_kronId_assoc` | `TNLean/MPS/Core/ReductionComposition.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `assocInv_pentagon_assoc` | `TNLean/MPS/Core/ReductionComposition.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `directSum_z` | `TNLean/MPS/FundamentalTheorem/Reduction/MultiBlockDirectSum.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `WordModule.toVec` | `TNLean/MPS/FundamentalTheorem/Reduction/WordModule.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `leftSectorTensor_supported` | `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/Basic.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `assocInv_mul_kronId_kronId_assoc` | `TNLean/MPS/Operator/ReductionComposition.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `assocInv_pentagon_assoc` | `TNLean/MPS/Operator/ReductionComposition.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `directSum_z` | `TNLean/MPS/FundamentalTheorem/Compression/MultiBlockDirectSum.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `WordModule.toVec` | `TNLean/MPS/FundamentalTheorem/WordModule/WordModule.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |

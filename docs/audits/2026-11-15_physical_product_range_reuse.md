@@ -6,7 +6,7 @@ and the consolidation deferred in
 
 ## Mathematical contract
 
-The three public statements in `PEPS/PhysicalProductRangeSupport.lean` are
+The three public statements in `PEPS/Injectivity/Multiplicity/PhysicalProductRangeSupport.lean` are
 unchanged, including every typeclass binder:
 
 | Public theorem | Existing replacement proof in `TNLean.Lattice` |
@@ -77,7 +77,7 @@ anchor search, absence of all four private names in the new file, import-cycle
 inspection, the edited module's reader-facing prose check, 100-character line
 limit, `git diff --check`, and the forbidden-token diff check.
 
-The local command `lake build TNLean.PEPS.PhysicalProductRangeSupport` exits
+The local command `lake build TNLean.PEPS.Injectivity.Multiplicity.PhysicalProductRangeSupport` exits
 127 because Lake is not installed. There is no dependency cache and enforced
 networking is disabled. No compiler result is claimed. Hosted acceptance must
 build the changed module, `PhysicalProductFamilyRangeSupport`,

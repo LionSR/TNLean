@@ -58,7 +58,7 @@ on the docstring of `MPOTensor.shiftExampleU₃SwapSourceVColumnEquiv_apply`,
 which is where the reader now meets that reindexing. The tagged endpoints of
 the module — the identity-tensor-identity and swap standard-form theorems, and
 the two-site block capstones of
-`TNLean/MPS/MPU/Examples/ShiftSourceBlockedFormulas.lean` — keep their
+`TNLean/MPS/Examples/Shift/ShiftSourceBlockedFormulas.lean` — keep their
 statements unchanged.
 
 Because the shuffle was public, `docs/project_conventions.md` §Style requires

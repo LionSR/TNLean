@@ -214,14 +214,14 @@ physical embeddings. The resulting blocks are normal, their weights are
 positive, both intertwining identities and exact compression remain valid, and
 the retained sectors reconstruct every vertical letter exactly. This is
 \path{MPOTensor.IsHorizontalCF.exists_normal_verticalBlockDecomp_with_isometry}
-in \path{TNLean/MPS/MPDO/VerticalSpectral.lean}. The orthogonal complement of
+in \path{TNLean/MPS/MPDO/Vertical/VerticalReduction.lean}. The orthogonal complement of
 the retained range projections consists exactly of the omitted zero corners;
 removing those corners therefore introduces no false completeness assertion.
 
 The same normal-corner result is complete under literal CPSV canonical form.
 The theorem
 \path{MPSTensor.IsCPSVCanonicalForm.exists_normal_verticalBlockDecomp_with_isometry}
-in \path{TNLean/MPS/MPDO/CPSVPeriodicExclusion.lean} combines literal
+in \path{TNLean/MPS/MPDO/Vertical/CPSVPeriodicExclusion.lean} combines literal
 invariant-projector closure with literal periodic exclusion. It produces
 positive-dimensional normal blocks $B_k$, positive weights $\nu_k$, and
 pairwise orthogonal isometries $V_k$ satisfying, for every vertical letter
@@ -247,7 +247,7 @@ Proposition~4.13.
 
 The literal sector-compression separation theorem
 \path{MPSTensor.IsCPSVCanonicalForm.exists_sectorCompression_ne_zero_of_corner}
-is proved in \path{TNLean/MPS/MPDO/CPSVVerticalBNT.lean}. For every matrix
+is proved in \path{TNLean/MPS/MPDO/Vertical/CPSVPeriodicExclusion.lean}. For every matrix
 $P$, it states
 \begin{align}
     \left(\exists v:\ P\widetilde M_vP\ne0\right)
@@ -267,7 +267,7 @@ source sectors have actually been grouped.
 The normalized corners are grouped by matrix-product-vector phase class under
 literal CPSV canonical form in
 \path{MPSTensor.IsCPSVCanonicalForm.exists_verticalBNTGrouping_with_isometry},
-proved in \path{TNLean/MPS/MPDO/CPSVVerticalBNT.lean}. The wrapper under the
+proved in \path{TNLean/MPS/MPDO/Vertical/CPSVPeriodicExclusion.lean}. The wrapper under the
 normalized BNT-refined horizontal hypothesis remains
 \path{MPOTensor.IsHorizontalCF.exists_verticalBNTGrouping_with_isometry}.
 The construction chooses one normal representative from each phase class.
@@ -336,21 +336,21 @@ Thus the coefficient denoted $\mu_{\alpha,k}$ in the source is
      & =c_{\alpha,k}.
     \label{eq:cpgsv17_vertical_cf_grouping_source_grouped_coefficient}
 \end{align}
-These results are formalized in \path{TNLean/MPS/MPDO/VerticalBNT.lean},
-\path{TNLean/MPS/MPDO/CPSVVerticalBNT.lean}, and
-\path{TNLean/MPS/MPDO/SectorTrace.lean}.
+These results are formalized in \path{TNLean/MPS/MPDO/Vertical/VerticalBNT.lean},
+\path{TNLean/MPS/MPDO/Vertical/CPSVPeriodicExclusion.lean}, and
+\path{TNLean/MPS/CanonicalForm/VerticalForm/SectorTrace.lean}.
 
 The pairwise Gram-conjugation identity corresponding to the second displayed
 diagram at source lines~1914--1919 is proved in
-\path{TNLean/MPS/MPDO/FigureEightPairwise.lean}. Its dependent identification
+\path{TNLean/MPS/MPDO/Vertical/FigureEightPairwise.lean}. Its dependent identification
 with the actual grouped sector and distinguished copy is proved once, for any
 tensor with the grouped-corner Gram-dressing property, in
-\path{TNLean/MPS/MPDO/GroupedSectorGram.lean}. Normalized BNT-refined
+\path{TNLean/MPS/MPDO/Vertical/GroupedSectorGram.lean}. Normalized BNT-refined
 horizontal form and literal CPSV canonical form each supply that property
 independently, by
 \path{MPOTensor.IsHorizontalCF.hasGroupedCornerGramDressing} and
 \path{MPSTensor.IsCPSVCanonicalForm.hasGroupedCornerGramDressing} in
-\path{TNLean/MPS/MPDO/VerticalBNTGrouping.lean}. Neither proof identifies
+\path{TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm.lean}. Neither proof identifies
 either corner separately with the raw reflected adjoint.
 
 The scalar-commutant theorem
@@ -381,9 +381,9 @@ The grouping theorem exposes the normalization
 \end{align}
 The formal results hold for any tensor with the grouped-corner Gram-dressing
 property: \path{MPOTensor.grouped_sector_gram_eq_pos_smul_one_of_dressing} in
-\path{TNLean/MPS/MPDO/GroupedSectorGram.lean} and
+\path{TNLean/MPS/MPDO/Vertical/GroupedSectorGram.lean} and
 \path{MPOTensor.grouped_sector_exists_unitary_normalization_of_dressing} in
-\path{TNLean/MPS/MPDO/GroupedGramNormalization.lean}. Both the normalized
+\path{TNLean/MPS/MPDO/Vertical/GroupedSectorGram.lean}. Both the normalized
 BNT-refined hypothesis and literal CPSV canonical form furnish that property,
 so each gives these identities without any implication between the two
 canonical-form predicates.
@@ -394,7 +394,7 @@ So are the positive scalar Gram identity and the unitary normalization of
 every grouped gauge. The normalized gauges are composed with the physical
 sector isometries by
 \path{MPOTensor.exists_normalized_grouped_sector_maps_of_dressing} in
-\path{TNLean/MPS/MPDO/NormalizedGroupedSectors.lean}, again from the
+\path{TNLean/MPS/MPDO/Vertical/NormalizedGroupedSectorMaps.lean}, again from the
 Gram-dressing property alone, so both hypotheses reach it. In either case, the
 maps $W_{\alpha,q}$ have mutually orthogonal isometric ranges,
 satisfy the representative intertwining identities, and reconstruct every
@@ -402,16 +402,16 @@ vertical letter exactly.
 
 The representatives form an algebraic basis of normal tensors for the original
 vertical tensor by
-\path{TNLean/MPS/MPDO/VerticalBNTConstruction.lean}. At every positive chain
+\path{TNLean/MPS/MPDO/Vertical/VerticalBNTConstruction.lean}. At every positive chain
 length, this follows from exact reconstruction and cyclicity of trace. At
 length zero, one retained representative of positive bond dimension supplies
 the dimension identity required by the definition of a basis of normal
 tensors.
 
 Finally, \path{MPOTensor.verticalCF_of_horizontalCF} in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean} and the independent literal
+\path{TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm.lean} and the independent literal
 theorem \path{MPOTensor.verticalCF_of_cpsvCanonicalForm} in
-\path{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm.lean} apply the shared
+\path{TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm.lean} apply the shared
 orthogonal-sector coisometry theorem. They identify the dependent sector pairs
 $(\alpha,q)$ with standard finite direct-sum coordinates and prove
 Eqs.~\ref{eq:cpgsv17_vertical_cf_grouping_source_coisometry},
@@ -504,7 +504,7 @@ block-gauge conjugation, and ambient reconstruction are explicit and exact.
 
 The representative-sector decomposition and its positive-length
 matrix-product-vector identity are explicit in
-\path{TNLean/MPS/CanonicalForm/BNTRefinement.lean}. Its effective copy weight
+\path{TNLean/MPS/CanonicalForm/BNTPresentation/Refinement.lean}. Its effective copy weight
 is
 \begin{align}
     \lambda_{\alpha,q}
@@ -521,7 +521,7 @@ digit~$2$ denotes the subscripted character used in the source declaration.
 
 The simultaneous representative word-tuple span and its marked-chain
 consequences are proved in
-\path{TNLean/MPS/MPDO/CPSVRepresentativeGroupedLemmaL.lean}. In that file,
+\path{TNLean/MPS/MPDO/Vertical/CPSVRepresentativeGroupedLemmaL.lean}. In that file,
 \path{MPSTensor.CPSVCanonicalFormData.BNTRefinement.eventuallyRepresentativeWordTupleSpan}
 proves simultaneous representative word-tuple span at every sufficiently large
 length.
@@ -547,7 +547,7 @@ and
 Neither conclusion requires an additional normalization hypothesis.
 
 The original-space marked argument is complete in
-\path{TNLean/MPS/MPDO/CPSVOriginalSpaceLemmaL.lean}. Suppose
+\path{TNLean/MPS/MPDO/Vertical/CPSVOriginalSpaceLemmaL.lean}. Suppose
 \begin{align}
     A^i
      & =V^\dagger B^iV,
@@ -598,7 +598,7 @@ proves invariant-projector closure for the vertical tensor under literal CPSV
 canonical form and \path{MPOTensor.IsMPDO}.
 
 The literal pairwise Figure~8 identity is proved in
-\path{TNLean/MPS/MPDO/CPSVFigureEight.lean} by
+\path{TNLean/MPS/MPDO/Vertical/CPSVOriginalSpaceLemmaL.lean} by
 \path{MPSTensor.IsCPSVCanonicalForm.gramDressing_eq_of_two_grouped_corners}.
 For a common normal representative,
 \path{MPSTensor.IsCPSVCanonicalForm.gram_eq_pos_smul_gram_of_two_grouped_corners}

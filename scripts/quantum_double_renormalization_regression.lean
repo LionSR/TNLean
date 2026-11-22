@@ -1,4 +1,4 @@
-import TNLean.PEPS.Examples.QuantumDoubleRenormalization
+import TNLean.PEPS.Examples.QuantumDouble.QuantumDoubleRenormalization
 import Mathlib.GroupTheory.Perm.Fin
 import Mathlib.Data.ZMod.Basic
 

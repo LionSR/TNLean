@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.ParentHamiltonian.LocalSupportTransport
-import TNLean.MPS.ParentHamiltonian.Martingale.OverlapReduction
+import TNLean.MPS.ParentHamiltonian.Commuting.LocalSupportTransport
+import TNLean.MPS.ParentHamiltonian.Commuting.OverlapReduction
 import TNLean.MPS.RFP.AppendixBSupportProjectionCommutation
 import TNLean.MPS.RFP.ResidualFamilySupport
 

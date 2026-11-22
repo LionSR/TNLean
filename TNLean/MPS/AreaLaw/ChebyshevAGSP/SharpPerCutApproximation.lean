@@ -1,0 +1,171 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.AreaLaw.ChebyshevAGSP.OptimizedTailParameters
+import TNLean.MPS.AreaLaw.ChebyshevAGSP.OptimizedRankBound
+import QICLean.ManyBody.Hamiltonian.GroundSpace
+
+/-!
+# Sharp physical per-cut approximation from AKLV windows
+
+The universal rank coefficient is chosen before all physical data. The
+actual original interaction derives the nontrivial local dimension and
+the upper gap bound independently of a fitting window. Actual filtered
+images or the exact boundary vector attain the fourth-root logarithmic
+rank budget at every cut.
+
+Source: AKLV, arXiv:1301.1162v1, lines 1503--1517. The actual first excited
+energy remains part of the original physical data. No window, filter,
+rank comparison or upper-gap hypothesis is supplied to the conclusion.
+
+**Scope restriction (actual first excited energy):** The positive projector
+lower bound is also required to be an actual first excitation. The theorem
+is not asserted for an arbitrary lower bound without choosing an actual
+gap. The local support and normalization conventions are recorded in
+`docs/paper-gaps/aklv13_two_block_robustness.tex`.
+-/
+
+open ManyBody (interval)
+
+open Matrix
+open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
+
+open ManyBody (IsGapped groundSpace)
+open ManyBody (cutMatrix)
+
+namespace TNLean.MPS.AreaLaw
+
+/-- Two distinct spectral values force a nontrivial local dimension, and
+positive-contraction endpoint perturbations bound the actual unique-ground
+gap by one. The conclusion is independent of a fitting physical window. -/
+theorem aklv_chain_dimension_and_gap_bounds {L q : ℕ}
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
+    (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
+    (hground : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
+      (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
+    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ Φ.hamiltonian) :
+    0 < L ∧ 2 ≤ q ∧ g ≤ 1 := by
+  classical
+  have hH : Φ.hamiltonian.IsHermitian :=
+    (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian
+  have hmu := Matrix.mem_spectrum_real_of_mulVec_eq_smul
+    (by intro hz; simp only [hz, norm_zero, zero_ne_one] at hΩ) hground
+  have hq : 2 ≤ q := hH.two_le_local_dimension_of_two_spectral_values
+    hmu hexcited (by linarith)
+  have hL : 0 < L := by
+    by_contra hnot
+    have hL0 : L = 0 := by omega
+    have hcfg : Subsingleton (Fin L → Fin q) := by subst L; infer_instance
+    let := hcfg
+    obtain ⟨i, hi⟩ := hH.spectrum_real_eq_range_eigenvalues ▸ hmu
+    obtain ⟨j, hj⟩ := hH.spectrum_real_eq_range_eigenvalues ▸ hexcited
+    have heq : mu = mu + g := hi.symm.trans
+      ((congrArg hH.eigenvalues (Subsingleton.elim i j)).trans hj)
+    linarith
+  obtain ⟨-, -, hgap, hspan⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hg Ω).mp
+    ⟨hΩ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
+      WithLp.ofLp_smul]; exact hground, hgap⟩
+  exact ⟨hL, hq, gap_le_one_of_positive_nearest_neighbor_terms hL hq Φ h0 h1 hΩ hgap hspan⟩
+
+/-- The actual same-cut physical approximants obey the sharp fourth-root
+logarithmic rank bound, uniformly over cuts and chain lengths. Their overlap
+with the ground vector is at least `1 - rho / 2`. Both the filtered and exact
+boundary alternatives are retained. -/
+theorem exists_aklv_sharp_physical_per_cut_approximation :
+    ∃ A C : ℝ, 1 ≤ A ∧ 0 < C ∧
+      ∀ (L q : ℕ)
+        (Φ : ManyBody.BondInteraction L q)
+        (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
+      (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
+      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
+      (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
+        (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
+      0 < g → mu + g ∈ spectrum ℝ Φ.hamiltonian →
+      ∀ rho : ℝ, 0 < rho → rho ≤ 1 →
+      let u := 1 + Real.log (q : ℝ) + Real.log (1 / g)
+      let z := aklvAccuracyLog rho
+      let s0 : ℕ := ⌈A * u ^ 2 / g⌉₊
+      2 ≤ q ∧ g ≤ 1 ∧
+      Real.log (aklvAccuracyRankBound q s0 g rho : ℝ) ≤
+        C * (u ^ 3 / g + Real.sqrt (Real.sqrt (z ^ 3 / g)) * (u + Real.log (z + 1))) ∧
+      Real.log (aklvAccuracyRankBound q s0 g rho : ℝ) ≤
+        11 * C * (u ^ 3 / g) * z ∧
+      ∀ k : ℕ, k ≤ L → ∃ y : EuclideanSpace ℂ (Fin L → Fin q),
+        ‖y‖ = 1 ∧ ‖y - Ω‖ ^ 2 ≤ rho ∧
+        1 - rho / 2 ≤ ‖⟪y, Ω⟫_ℂ‖ ∧
+        (cutMatrix (leftBlock L k) y).rank ≤ aklvAccuracyRankBound q s0 g rho ∧
+        (y = Ω ∨ IsAKLVAccuracyFilteredOutput k s0 Φ g rho Ω y) := by
+  obtain ⟨A, hA, _hA21, haccuracy⟩ := exists_aklv_physical_accuracy_window
+  have hC : 0 < aklvAccuracyLogCoefficient A := by
+    have hlog : 0 ≤ Real.log (A + 1) := Real.log_nonneg (by linarith)
+    unfold aklvAccuracyLogCoefficient aklvInitialRankLogCoefficient
+    positivity
+  refine ⟨A, aklvAccuracyLogCoefficient A, hA, hC, ?_⟩
+  intro L q Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1 u z s0
+  obtain ⟨_hL, hq, hg1⟩ :=
+    aklv_chain_dimension_and_gap_bounds Φ h0 h1 mu g Ω hΩ hground hgap hg hexcited
+  refine ⟨hq, hg1, aklvAccuracyRankBound_log_le_fourthRoot hA hg hg1 hrho hrho1 q hq,
+    aklvAccuracyRankBound_log_le_lvv hA hg hg1 hrho hrho1 q hq, ?_⟩
+  intro k hk
+  obtain ⟨y, hy, herror, hrank, hactual⟩ :=
+    haccuracy L q k hq hk Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1
+  refine ⟨y, hy, herror, ?_, hrank, hactual⟩
+  have hdist := @norm_sub_sq ℂ _ _ _ _ y Ω
+  rw [hy, hΩ] at hdist
+  norm_num at hdist
+  calc
+    1 - rho / 2 ≤ 1 - ‖y - Ω‖ ^ 2 / 2 := by linarith
+    _ = (⟪y, Ω⟫_ℂ).re := by linarith
+    _ ≤ ‖⟪y, Ω⟫_ℂ‖ := Complex.re_le_norm _
+
+/-- If the physical gap is bounded below by a fixed positive number, the
+same-cut physical approximants have the cubic local-dimension dependence
+printed in the AKLV estimate.  The comparison constant is explicit in the
+chosen lower gap bound.
+
+Source: AKLV, arXiv:1301.1162v1, lines 1503--1517, restricted to a fixed
+positive lower bound for the gap. -/
+theorem exists_aklv_fixed_gap_physical_per_cut_approximation :
+    ∃ A C : ℝ, 1 ≤ A ∧ 0 < C ∧
+      ∀ (g₀ : ℝ), 0 < g₀ → g₀ ≤ 1 →
+      ∀ (L q : ℕ)
+        (Φ : ManyBody.BondInteraction L q)
+        (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
+      (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
+      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
+      (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
+        (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
+      0 < g → g₀ ≤ g → mu + g ∈ spectrum ℝ Φ.hamiltonian →
+      ∀ rho : ℝ, 0 < rho → rho ≤ 1 →
+      let u := 1 + Real.log (q : ℝ) + Real.log (1 / g)
+      let z := aklvAccuracyLog rho
+      let s0 : ℕ := ⌈A * u ^ 2 / g⌉₊
+      let C₀ := ((1 + 1 / Real.log 2) * (1 + Real.log (1 / g₀))) ^ 3
+      Real.log (aklvAccuracyRankBound q s0 g rho : ℝ) ≤
+        11 * C * C₀ * Real.log (q : ℝ) ^ 3 / g * z ∧
+      ∀ k : ℕ, k ≤ L → ∃ y : EuclideanSpace ℂ (Fin L → Fin q),
+        ‖y‖ = 1 ∧ ‖y - Ω‖ ^ 2 ≤ rho ∧
+        1 - rho / 2 ≤ ‖⟪y, Ω⟫_ℂ‖ ∧
+        (cutMatrix (leftBlock L k) y).rank ≤ aklvAccuracyRankBound q s0 g rho ∧
+        (y = Ω ∨ IsAKLVAccuracyFilteredOutput k s0 Φ g rho Ω y) := by
+  obtain ⟨A, C, hA, hC, hphysical⟩ := exists_aklv_sharp_physical_per_cut_approximation
+  refine ⟨A, C, hA, hC, ?_⟩
+  intro g₀ hg₀ hg₀one L q Φ mu g Ω h0 h1 hΩ hground hgap hg hg₀g hexcited
+    rho hrho hrho1 u z s0 C₀
+  obtain ⟨hq, hg1, _hfourth, hlog, hcut⟩ :=
+    hphysical L q Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1
+  have hcubic := aklv_cubic_cost_of_fixed_gap hg₀ hg₀one hg₀g hg hg1 q hq
+  change u ^ 3 / g ≤ C₀ * Real.log (q : ℝ) ^ 3 / g at hcubic
+  have hz : 0 ≤ z := (aklvAccuracyLog_bounds hrho hrho1).1.trans' (by norm_num)
+  have hcoef : 0 ≤ 11 * C := by positivity
+  refine ⟨hlog.trans ?_, hcut⟩
+  calc
+    11 * C * (u ^ 3 / g) * z ≤ 11 * C * (C₀ * Real.log (q : ℝ) ^ 3 / g) * z :=
+      mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hcubic hcoef) hz
+    _ = 11 * C * C₀ * Real.log (q : ℝ) ^ 3 / g * z := by ring
+
+end TNLean.MPS.AreaLaw

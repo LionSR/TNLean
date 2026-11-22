@@ -44,8 +44,8 @@
 ### 1. Layering is tangled
 
 - `TNLean/MPS/CanonicalForm/NormalReduction.lean` imports `TNLean.MPS.FundamentalTheorem.TransferNormalization`.
-- `TNLean/MPS/CanonicalForm/BNTGrouping.lean` imports `TNLean.MPS.FundamentalTheorem.SectorDecomposition`.
-- `TNLean/MPS/CanonicalForm/EqualNormBridge.lean` imports `TNLean.MPS.FundamentalTheorem.Proportional`.
+- `TNLean/MPS/CanonicalForm/BNT/Grouping.lean` imports `TNLean.MPS.FundamentalTheorem.SectorDecomposition`.
+- `TNLean/MPS/CanonicalForm/EqualNormBridge.lean` imports `TNLean.MPS.Transfer.Spectrum.Proportional`.
 - `TNLean/MPS/CanonicalForm/Assembly.lean` imports `TNLean.MPS.FundamentalTheorem.Full`.
 - `TNLean/MPS/FundamentalTheorem/PeriodicOverlap.lean` imports both `TNLean.MPS.FundamentalTheorem.Full` and `TNLean.MPS.CanonicalForm.Assembly`.
 
@@ -77,7 +77,7 @@ Both appear removable.
 
 ## File-by-file audit
 
-### `TNLean/MPS/CanonicalForm/BNTGrouping.lean`
+### `TNLean/MPS/CanonicalForm/BNT/Grouping.lean`
 
 - Size: 484 lines
 - Actual `sorry`: 0
@@ -100,7 +100,7 @@ Both appear removable.
 - `simp` style:
   - acceptable; no obvious oversized simp sets
 
-### `TNLean/MPS/CanonicalForm/Reduction.lean`
+### `TNLean/MPS/Tensor/DirectSum/IrreducibleDecomposition.lean`
 
 - Size: 234 lines
 - Actual `sorry`: 0
@@ -123,7 +123,7 @@ Both appear removable.
 - `simp` style:
   - fine
 
-### `TNLean/MPS/CanonicalForm/BlockingViaAdjoint.lean`
+### `TNLean/MPS/Transfer/Irreducible/BlockingViaAdjoint.lean`
 
 - Size: 394 lines
 - Actual `sorry`: 0
@@ -147,7 +147,7 @@ Both appear removable.
 - `simp` style:
   - mostly controlled
 
-### `TNLean/MPS/CanonicalForm/Existence.lean`
+### `TNLean/MPS/CanonicalForm/NormalBlocks/IrreducibleDecomposition.lean`
 
 - Size: 547 lines
 - Actual `sorry`: 0
@@ -366,7 +366,7 @@ Both appear removable.
 - `simp` style:
   - controlled, but the file is large enough that proof splitting matters more
 
-### `TNLean/MPS/FundamentalTheorem/Basic.lean`
+### `TNLean/MPS/Tensor/Gauge/FundamentalTheorem.lean`
 
 - Size: 74 lines
 - Actual `sorry`: 0
@@ -389,7 +389,7 @@ Both appear removable.
 - `simp` style:
   - clean
 
-### `TNLean/MPS/FundamentalTheorem/Proportional.lean`
+### `TNLean/MPS/Transfer/Spectrum/Proportional.lean`
 
 - Size: 329 lines
 - Actual `sorry`: 0
@@ -435,7 +435,7 @@ Both appear removable.
 - `simp` style:
   - fine
 
-### `TNLean/MPS/FundamentalTheorem/Multi.lean`
+### `TNLean/MPS/Tensor/DirectSum/GaugeEquiv.lean`
 
 - Size: 292 lines
 - Actual `sorry`: 0
@@ -481,7 +481,7 @@ Both appear removable.
 - `simp` style:
   - clean
 
-### `TNLean/MPS/FundamentalTheorem/FiniteLength.lean`
+### `TNLean/MPS/Tensor/Gauge/FiniteLength.lean`
 
 - Size: 304 lines
 - Actual `sorry`: 0

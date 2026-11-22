@@ -12,16 +12,16 @@ the material that was examined and deliberately retained.
 | Removed declaration | Replacement |
 |---|---|
 | `Matrix.isNilpotent_of_forall_trace_pow_eq_zero` (`TNLean/Algebra/IsNilpotentOfTracePow.lean`) | `Matrix.isNilpotent_of_forall_trace_pow_eq_zero_of_one_lt` (`QICLean/Spectral/Eigenvalue/ShiftedZeroTraceNilpotent.lean`) |
-| `MPOTensor.swapMatrix_isUnitaryBetween`, private (`TNLean/MPS/MPU/Examples/ShiftSwapMatrices.lean`) | `Matrix.swapMatrix_isUnitaryBetween` (`TNLean/Algebra/SwapMatrix.lean`) |
-| `MPOTensor.mul_conjTranspose_eq_one_of_conjTranspose_mul_eq_one_of_card_eq`, private (`TNLean/MPS/MPDO/BNTTripleFusionSeparation.lean`) | `Matrix.mul_eq_one_comm_of_card_eq` |
-| `MPOTensor.isNilpotent_smul`, private (`TNLean/MPS/MPDO/NeighboringTraceObstructionAmbientCounterexample.lean`) | `IsNilpotent.smul` |
-| `TNLean.PEPS.sdiff_union_sdiff_of_subset` (`TNLean/PEPS/TorusWindowChain4.lean`) | `Finset.union_comm` composed with `Finset.sdiff_union_sdiff_cancel` |
+| `MPOTensor.swapMatrix_isUnitaryBetween`, private (`TNLean/MPS/Examples/Shift/ShiftSwapMatrices.lean`) | `Matrix.swapMatrix_isUnitaryBetween` (`TNLean/Algebra/SwapMatrix.lean`) |
+| `MPOTensor.mul_conjTranspose_eq_one_of_conjTranspose_mul_eq_one_of_card_eq`, private (`TNLean/MPS/MPDO/Fusion/BNTTripleFusionSeparation.lean`) | `Matrix.mul_eq_one_comm_of_card_eq` |
+| `MPOTensor.isNilpotent_smul`, private (`TNLean/MPS/Examples/NonCartesianSectors/NeighboringTraceObstructionAmbientCounterexample.lean`) | `IsNilpotent.smul` |
+| `TNLean.PEPS.sdiff_union_sdiff_of_subset` (`TNLean/PEPS/FundamentalTheorem/Torus/Window/CornerExtensionTransitivity.lean`) | `Finset.union_comm` composed with `Finset.sdiff_union_sdiff_cancel` |
 | `TNLean.PEPS.sdiff_disjoint_sdiff` (same file) | `Finset.disjoint_sdiff` weakened along `Finset.sdiff_subset` |
 | `TNLean.PEPS.sdiff_subset_sdiff_left` (same file) | `Finset.sdiff_subset_sdiff_left` |
 | `TNLean.PEPS.sdiff_subset_sdiff_right` (same file) | `Finset.sdiff_subset_sdiff_right` |
 | `Matrix.eq_sum_smul_single`, private (`TNLean/QCA/BipartiteSupportAlgebra.lean`) | `Matrix.matrix_eq_sum_single` together with `Matrix.smul_single` |
-| `MPSTensor.cyclic_offset_eq_sub`, private (`TNLean/MPS/ParentHamiltonian/CyclicTranslation.lean`) | `Fin.val_sub` with an arithmetic side goal |
-| `MPOTensor.vecMulVec_mulVec_eq_smul` (`TNLean/MPS/MPDO/CZXDefectMaps.lean`) | `Matrix.vecMulVec_mulVec` together with `op_smul_eq_smul` |
+| `MPSTensor.cyclic_offset_eq_sub`, private (`TNLean/MPS/Tensor/GroundSpace/CyclicTranslation.lean`) | `Fin.val_sub` with an arithmetic side goal |
+| `MPOTensor.vecMulVec_mulVec_eq_smul` (`TNLean/MPS/MPDO/CZX/CZXDefectMaps.lean`) | `Matrix.vecMulVec_mulVec` together with `op_smul_eq_smul` |
 
 Every removed declaration was a pass-through of the corresponding upstream
 result. The removals follow the pass-through exception of
@@ -83,8 +83,8 @@ declarations `Matrix.PosSemidef.smul_one`, `Matrix.PosDef.smul_one`, and
   consumer, both of which are under active development, so the rewrite is left
   for a separate change.
 - (Landed 2026-09-23.) The private range-indexed two-sided multiplication
-  lemma in `TNLean/PEPS/CycleMPSChainOverlapCapstone.lean` restated the
-  set-indexed lemma of `TNLean/PEPS/CycleMPSOverlapCapstone.lean`. The chain
+  lemma in `TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapCapstone.lean` restated the
+  set-indexed lemma of `TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSOverlapCapstone.lean`. The chain
   module does not import the other capstone, so the surviving statement had
   to move to an earlier module before the duplicate could go. The set-indexed
   `TNLean.PEPS.conj_eq_conj_of_span` now lives in the chain module under its

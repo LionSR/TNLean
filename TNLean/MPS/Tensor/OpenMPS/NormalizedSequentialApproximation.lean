@@ -1,0 +1,199 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import QICLean.ManyBody.Sites.Lattice.Chain
+import TNLean.MPS.Tensor.OpenMPS.NormalizedVariableTruncation
+import QICLean.ManyBody.Entropy.ViableSubspaceEntropy
+import QICLean.Channel.Schmidt.MaximalOverlap
+
+/-!
+# One normalized sequential MPS from actual marginal tails
+
+The regional overlap-to-tail estimate uses the actual vectors and marginal
+spectra. The uniform normalized approximation is an active specialization
+of the sequential construction with variable cut ranks. No spectral gap
+or independent area law is used. The same helpers therefore serve both
+the gapped and buffered low-energy approximations.
+
+The construction projects onto the leading marginal eigenspaces in sequence
+and normalizes the one resulting vector. It supports ALVV,
+arXiv:1602.08828v2, fixed-cut to global approximation at lines 1080–1086
+and the low-density conclusion at lines 1096–1105.
+
+## One normalized MPS with a sharper designated cut
+
+The designated cut and the remaining cuts have different rank and mass
+budgets. One actual sequential product of their leading marginal projections
+retains both bounds after normalization. Boundary cuts need no projection:
+their coefficient matrix has rank at most one.
+
+This supplies the simultaneous approximation reading of ALVV,
+arXiv:1602.08828v2, Theorem `thm:al-ld`, lines 1096–1105.
+-/
+
+section
+
+open ManyBody (interval)
+
+open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace Matrix
+
+namespace TNLean.MPS.AreaLaw
+
+/-- The left block of `k` sites is the interval `[0, k)`. -/
+theorem leftBlock_eq_interval (L k : ℕ) : leftBlock L k = interval L 0 k := by
+  ext i
+  simp
+
+
+/-- The actual normalized regional rank approximant controls the original
+marginal's missing leading mass. The coordinate map is constructed internally.
+This is the Ky Fan step in ALVV, arXiv:1602.08828v2, proof of Theorem 4.9,
+source lines 1080–1086. -/
+theorem one_sub_regional_kyFanNorm_le_twice_error
+    {L q : ℕ} (J : Finset (Fin L))
+    (ψ φ : EuclideanSpace ℂ (Fin L → Fin q)) (hφ : ‖φ‖ = 1)
+    (delta : ℝ) (hdelta1 : delta ≤ 1) (D : ℕ) :
+    let beta := fun _ : Fin L ↦ Fin q
+    let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
+    let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
+      (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
+    let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
+      (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
+      (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
+    let e := Tm.trans
+      (Submodule.euclideanTensorEquiv (J → Fin q) ({v // v ∉ J} → Fin q)).symm
+    Matrix.schmidtRank (WithLp.ofLp (e φ)) ≤ D →
+    1 - delta ≤ ‖⟪φ, ψ⟫_ℂ‖ →
+    1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) J ψ).kyFanNorm D ≤
+      2 * delta := by
+  intro beta tau U Phi Tm e hrank hoverlap
+  have hφe : ‖e φ‖ = 1 := by simpa only [LinearIsometryEquiv.norm_map] using hφ
+  have hinner : ‖⟪e ψ, e φ⟫_ℂ‖ = ‖⟪φ, ψ⟫_ℂ‖ := by
+    rw [e.inner_map_map, norm_inner_symm]
+  have hmass := Matrix.normSq_inner_le_kyFanNorm (e ψ) (e φ) hφe D hrank
+  rw [hinner] at hmass
+  have hactual : Matrix.schmidtCoeffMatrix (WithLp.ofLp (e ψ)) *
+      (Matrix.schmidtCoeffMatrix (WithLp.ofLp (e ψ)))ᴴ = ManyBody.regionState ψ J :=
+    (Submodule.actualRegionSplit_marginal_and_entropy (n := fun _ : Fin L ↦ q) J ψ).1
+  have hmass' : ‖⟪φ, ψ⟫_ℂ‖ ^ 2 ≤
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) J ψ).kyFanNorm D := by
+    simpa only [hactual] using hmass
+  have hsquare := pow_le_pow_left₀ (by linarith only [hdelta1] : 0 ≤ 1 - delta) hoverlap 2
+  nlinarith only [hsquare, hmass', sq_nonneg delta]
+
+/-- Uniform missing marginal mass gives one normalized sequential matrix
+product state, rather than a collection of cut-dependent vectors. Auxiliary
+to ALVV, arXiv:1602.08828v2, Theorem 4.9, source line 1086; the product estimate
+is Verstraete--Cirac Proposition 7.1 in the one-dimensional note. -/
+theorem exists_unit_mps_of_uniform_prefix_mass
+    {L q : ℕ} (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1)
+    (D : ℕ) (delta : ℝ) (hdelta : 0 < delta) (hdelta1 : delta ≤ 1)
+    (htail : ∀ k ∈ Finset.Ico 1 L,
+      1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
+        (leftBlock L k) ψ).kyFanNorm D ≤ delta / (8 * ((L : ℝ) + 1))) :
+    ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
+      IsOpenMPS L q D (fun x ↦ Φ x) ∧ 1 - delta ≤ ‖⟪Φ, ψ⟫_ℂ‖ ∧
+      ‖Φ - ψ‖ ^ 2 ≤ delta / 2 := by
+  classical
+  have hLpos : 0 < (L : ℝ) + 1 := by positivity
+  have hcard : ((Finset.Ico 1 L).card : ℝ) ≤ (L : ℝ) + 1 := by
+    exact_mod_cast (show (Finset.Ico 1 L).card ≤ L + 1 by rw [Nat.card_Ico]; omega)
+  have hsum : (∑ k ∈ Finset.Ico 1 L,
+      (1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
+        (leftBlock L k) ψ).kyFanNorm D)) ≤ delta / 8 := by
+    calc
+      _ ≤ (Finset.Ico 1 L).card • (delta / (8 * ((L : ℝ) + 1))) :=
+        Finset.sum_le_card_nsmul _ _ _ htail
+      _ = ((Finset.Ico 1 L).card : ℝ) * (delta / (8 * ((L : ℝ) + 1))) := by
+        rw [nsmul_eq_mul]
+      _ ≤ ((L : ℝ) + 1) * (delta / (8 * ((L : ℝ) + 1))) :=
+        mul_le_mul_of_nonneg_right hcard (by positivity)
+      _ = delta / 8 := by field_simp
+  obtain ⟨_hpos, hΦ, hrank, hoverlap, hsq⟩ :=
+    normalized_sequentialTruncation_of_prefix_mass ψ hψ (fun _ ↦ D)
+      delta hdelta hdelta1 hsum
+  exact ⟨_, hΦ, isOpenMPS_of_internal_cutMatrix_rank_le _ hrank, hoverlap.le, hsq⟩
+
+end TNLean.MPS.AreaLaw
+
+end
+
+section
+
+open scoped BigOperators ComplexOrder InnerProductSpace Matrix
+open ManyBody (cutMatrix)
+
+namespace TNLean.MPS.AreaLaw
+
+/-- Distinct marginal-mass budgets give one normalized MPS satisfying the
+sharper designated-cut rank and the global bond bound simultaneously.
+The vector is the actual normalized sequential projection product.
+Supporting ALVV, arXiv:1602.08828v2, Theorem `thm:al-ld`, lines 1096–1105. -/
+theorem exists_unit_mps_of_designated_prefix_mass
+    {L q : ℕ} (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1)
+    (k0 Ds Dg : ℕ) (hDs : 1 ≤ Ds) (hDsg : Ds ≤ Dg)
+    (delta : ℝ) (hdelta : 0 < delta) (hdelta1 : delta ≤ 1)
+    (hspecial : k0 ∈ Finset.Ico 1 L →
+      1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
+        (leftBlock L k0) ψ).kyFanNorm Ds ≤ delta / 32)
+    (hother : ∀ k ∈ Finset.Ico 1 L, k ≠ k0 →
+      1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
+        (leftBlock L k) ψ).kyFanNorm Dg ≤ delta / (32 * ((L : ℝ) + 1))) :
+    ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
+      IsOpenMPS L q Dg (fun x ↦ Φ x) ∧ (cutMatrix (leftBlock L k0) Φ).rank ≤ Ds ∧
+      1 - delta < ‖⟪Φ, ψ⟫_ℂ‖ ∧ ‖Φ - ψ‖ ^ 2 ≤ delta / 2 := by
+  classical
+  let D : ℕ → ℕ := fun k ↦ if k = k0 then Ds else Dg
+  have hsmall : 0 ≤ delta / (32 * ((L : ℝ) + 1)) := by positivity
+  have hpt (k : ℕ) (hk : k ∈ Finset.Ico 1 L) :
+      1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
+        (leftBlock L k) ψ).kyFanNorm (D k) ≤
+        delta / (32 * ((L : ℝ) + 1)) + (if k = k0 then delta / 32 else 0) := by
+    by_cases heq : k = k0
+    · subst k
+      simp only [D, ite_true]
+      linarith only [hspecial hk, hsmall]
+    · simp only [D, ite_eq_right heq, add_zero]
+      exact hother k hk heq
+  have hsingle : (∑ k ∈ Finset.Ico 1 L, if k = k0 then delta / 32 else 0) ≤ delta / 32 := by
+    rw [Finset.sum_ite_eq']
+    split_ifs <;> linarith only [hdelta]
+  have hcard : ((Finset.Ico 1 L).card : ℝ) ≤ (L : ℝ) + 1 := by
+    exact_mod_cast (show (Finset.Ico 1 L).card ≤ L + 1 by rw [Nat.card_Ico]; omega)
+  have hconstant : (∑ _k ∈ Finset.Ico 1 L,
+      delta / (32 * ((L : ℝ) + 1))) ≤ delta / 32 := by
+    simp only [Finset.sum_const, nsmul_eq_mul]
+    calc
+      _ ≤ ((L : ℝ) + 1) * (delta / (32 * ((L : ℝ) + 1))) :=
+        mul_le_mul_of_nonneg_right hcard hsmall
+      _ = _ := by field_simp
+  have hsum : (∑ k ∈ Finset.Ico 1 L,
+      (1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
+        (leftBlock L k) ψ).kyFanNorm (D k))) ≤ delta / 8 := by
+    refine (Finset.sum_le_sum hpt).trans ?_
+    rw [Finset.sum_add_distrib]
+    linarith only [hsingle, hconstant, hdelta]
+  let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
+    (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
+      (leftBlock L k) ψ).leadingEigenprojection (D k)
+  let Φ0 := sequentialTruncation P (L - 1) ψ
+  let Φ := (‖Φ0‖ : ℂ)⁻¹ • Φ0
+  obtain ⟨_hpos, hΦ, hrank, hoverlap, hsq⟩ :=
+    normalized_sequentialTruncation_of_prefix_mass ψ hψ D delta hdelta hdelta1 hsum
+  refine ⟨Φ, hΦ, ?_, ?_, hoverlap, hsq⟩
+  · apply isOpenMPS_of_internal_cutMatrix_rank_le Φ
+    intro k hk hkL
+    have hD : D k ≤ Dg := by dsimp only [D]; split_ifs <;> omega
+    exact (hrank k hk hkL).trans hD
+  · rcases Nat.eq_zero_or_pos k0 with rfl | hk0
+    · exact (rank_cutMatrix_zero_le Φ).trans hDs
+    · rcases lt_or_ge k0 L with hkL | hLk
+      · simpa only [D, ite_true] using hrank k0 hk0 hkL
+      · exact (rank_cutMatrix_le_one_of_le hLk Φ).trans hDs
+
+end TNLean.MPS.AreaLaw
+
+end

@@ -25,11 +25,11 @@ transcripts or other evidence archives.
 
 | TNLean module | Upstream file | Declarations |
 | --- | --- | --- |
-| `TNLean/PEPS/Approximation/SquareGridSource.lean` | `lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean` | `Vertex`, `Pinned.IncidentEdge`, `Pinned.State`, `Pinned.LocalTensor`, `Pinned.contractPEPS` |
-| `TNLean/PEPS/Approximation/SquareGridSource.lean` | `lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean` | `Vector.IncidentEdge`, `Vector.State`, `Vector.Tensor`, `Vector.Tensor.contract`, `Vector.Tensor.maxBondDim` |
-| `TNLean/PEPS/Approximation/PinnedRegionalState.lean` | `lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean` | `Pinned.RegionConfiguration`, `Pinned.joinConfigurations`, `Pinned.coefficientMatrix`, `Pinned.reducedDensity` |
-| `TNLean/PEPS/Approximation/SourceApproximation.lean` | `lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean` | `Pinned.HasPEPSApproximation` |
-| `TNLean/PEPS/Approximation/SourceApproximation.lean` | `lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean` | `Vector.PhaseErrorAtMost` |
+| `TNLean/PEPS/Tensor/SquareLattice/SquareGridSource.lean` | `lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean` | `Vertex`, `Pinned.IncidentEdge`, `Pinned.State`, `Pinned.LocalTensor`, `Pinned.contractPEPS` |
+| `TNLean/PEPS/Tensor/SquareLattice/SquareGridSource.lean` | `lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean` | `Vector.IncidentEdge`, `Vector.State`, `Vector.Tensor`, `Vector.Tensor.contract`, `Vector.Tensor.maxBondDim` |
+| `TNLean/PEPS/Approximation/GroundState/PinnedRegionalState.lean` | `lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean` | `Pinned.RegionConfiguration`, `Pinned.joinConfigurations`, `Pinned.coefficientMatrix`, `Pinned.reducedDensity` |
+| `TNLean/PEPS/Approximation/GroundState/SourceApproximation.lean` | `lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean` | `Pinned.HasPEPSApproximation` |
+| `TNLean/PEPS/Approximation/GroundState/SourceApproximation.lean` | `lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean` | `Vector.PhaseErrorAtMost` |
 
 All other modules citing these manuscripts contain original proofs.
 

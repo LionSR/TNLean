@@ -7,7 +7,7 @@ operator construction in GLM23, `Papers/2203.12563/REsubmission.tex`,
 lines 1667–1685, using the actual action-tree comparison at lines 491–552.
 The source-aligned endpoint fusion and action maps are retained.
 
-The new module is `TNLean/MPS/MPDO/BoundaryActionCrossTransport.lean`.
+The new module is `TNLean/MPS/FundamentalTheorem/Zipper/BoundaryActionCrossTransport.lean`.
 The isolated base is commit `e48a690228fd9ddca4251e9e49929753365f31ca`,
 whose tree is `d6f434e01a5c16701fd4abf0b19514e70abc7c31`.
 No import router, workflow, or blueprint is changed.

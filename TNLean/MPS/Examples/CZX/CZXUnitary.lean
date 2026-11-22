@@ -3,11 +3,11 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.Chain.BinaryPhase
+import TNLean.MPS.Tensor.Chain.BinaryPhase
 import QICLean.Algebra.Matrix.MonomialMatrix
-import TNLean.MPS.MPDO.OperatorCyclicSum
+import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 import TNLean.MPS.Examples.CZX.CZXAnomaly
-import TNLean.MPS.MPU.GroupRepresentation
+import TNLean.MPS.CanonicalForm.SimpleMPU.GroupRepresentation
 
 /-!
 # CZX: unitarity and the square of the undecorated operator

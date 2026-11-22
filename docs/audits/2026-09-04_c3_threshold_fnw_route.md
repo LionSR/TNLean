@@ -4,7 +4,7 @@ The projector-defect estimate that Nachtergaele imports from
 Fannes--Nachtergaele--Werner was formalized and then bypassed. The proved
 source estimate `MPSTensor.wholeIncrement_groundProjection_defect_le_fnw_factored`
 had no consumer, while the threshold feeding every gap theorem,
-`TNLean/MPS/ParentHamiltonian/Martingale/C3Threshold.lean`, called an
+`TNLean/MPS/ParentHamiltonian/ProjectorDefect/C3Threshold.lean`, called an
 inverse-Gram reconstruction whose coefficient `(1 - c*r^l)⁻¹ * (C*r^l)` carried
 an unidentified constant `C` and a generic `D^{3/2}` reshuffle factor from
 `Matrix.gramReshuffle_norm_sq_le_card_cube_mul_opNorm_sq`.
@@ -19,8 +19,8 @@ display, `References/cond-mat_9410110/main.tex` lines 1180--1194 and 2401--2412.
 
 | Removed declaration | Replacement |
 | --- | --- |
-| `MPSTensor.IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric` (`TNLean/MPS/ParentHamiltonian/WholeIncrementProjectorDefect.lean`) | `MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric` (`TNLean/MPS/ParentHamiltonian/FNWGeometricDefect.lean`) |
-| `MPSTensor.IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric` (`TNLean/MPS/ParentHamiltonian/OpenChainProjectorDefect.lean`) | `MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_le_fnw_geometric` (`TNLean/MPS/ParentHamiltonian/FNWGeometricDefect.lean`) |
+| `MPSTensor.IsPrimitiveMPS.wholeIncrement_groundProjection_defect_le_geometric` (`TNLean/MPS/ParentHamiltonian/WholeIncrementProjectorDefect.lean`) | `MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric` (`TNLean/MPS/ParentHamiltonian/ProjectorDefect/FNWGeometricDefect.lean`) |
+| `MPSTensor.IsPrimitiveMPS.openChain_groundProjection_defect_le_geometric` (`TNLean/MPS/ParentHamiltonian/OpenChainProjectorDefect.lean`) | `MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_le_fnw_geometric` (`TNLean/MPS/ParentHamiltonian/ProjectorDefect/FNWGeometricDefect.lean`) |
 | `MPSTensor.c3CenteredProjectorResidualES` (`TNLean/MPS/ParentHamiltonian/WholeIncrementProjectorDefect.lean`) | none; the reconstruction it centred is gone |
 | `MPSTensor.c3CenteredProjectorResidualES_norm_le` (same module) | none |
 | `MPSTensor.c3_injectiveRangeProjector_residual_eq_centered_sub_corrections` (same module) | none |
@@ -90,7 +90,7 @@ The rho-weighted matrix instance preamble, recorded as a candidate in
 `docs/tactic_patterns.md` at 122 blocks across eight parent-Hamiltonian modules,
 is promoted in this change to the `weighted_matrix_instances` and
 `weighted_matrix_norm_instances` macros of
-`TNLean/MPS/ParentHamiltonian/WeightedVirtualHilbert.lean`, declared once in
+`TNLean/MPS/ParentHamiltonian/ProjectorDefect/WeightedVirtualHilbert.lean`, declared once in
 term position for statements and once in tactic position for proofs. Every one
 of the 122 blocks is refactored to the macros; the two shorter prefixes of the
 pattern that also occur, the single normed-group binding and the

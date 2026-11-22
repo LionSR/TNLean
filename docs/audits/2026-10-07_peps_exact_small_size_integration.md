@@ -2,7 +2,7 @@
 
 ## Scope
 
-The authored module `TNLean/PEPS/Approximation/ExactSmallSizeApproximation.lean`
+The authored module `TNLean/PEPS/Approximation/Exact/ExactSquareRepresentation.lean`
 proves the pointwise and uniform finite-size approximation corollaries against
 the native model interface owned by TNLean #8788. It does not restate, replace,
 or edit that interface and does not prove `PolynomialPEPSApproximation`.

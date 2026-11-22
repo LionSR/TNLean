@@ -49,7 +49,7 @@ $n$.
 \section{Formalized blocked-basis analogue}
 
 The construction in
-\path{TNLean/MPS/MPDO/AlgebraStructure.lean} chooses bases of the support
+\path{TNLean/MPS/MPDO/RFP/AlgebraStructure.lean} chooses bases of the support
 algebras $\mathcal A_n$. Its multiplication coefficients have indices
 \begin{align}
     i,j &\in \operatorname{Basis}(\mathcal A_n),
@@ -180,7 +180,7 @@ The notation $W^L$ denotes an ordinary matrix power, whereas $W_L$ denotes
 the $L$-fold Kronecker power.
 
 The module
-\path{TNLean/MPS/MPDO/RescalingStableExplicitVerticalBNT.lean} defines the
+\path{TNLean/MPS/Examples/Dimer/RescalingStableExplicitVerticalBNT.lean} defines the
 one-label clause
 \leanid{MPOTensor.RescalingStableLengthDependentRFP.R_oneLabelBNTAlgebraTensorClause}.
 Its normalized vertical component has $16$ physical letters, bond dimension
@@ -544,7 +544,7 @@ The generic declarations do not construct tensor-attached data. That
 construction is supplied by
 \leanid{MPOTensor.BNTAlgebraTensorClause} and the reflected-target argument
 in
-\path{TNLean/MPS/MPDO/BNTAlgebraTensorClauseReflectedTarget.lean}. Given the
+\path{TNLean/MPS/MPDO/AmbientSectorMaps/BNTAlgebraTensorClauseReflectedTarget.lean}. Given the
 same-length product form and a positive BNT-label chi witness, one obtains
 \begin{align}
     O_L(M_\alpha)O_L(M_\beta)

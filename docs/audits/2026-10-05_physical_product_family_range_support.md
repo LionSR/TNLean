@@ -28,7 +28,7 @@ no closure-spanning premise.
 
 ## Public interface
 
-The new module is `TNLean/PEPS/PhysicalProductFamilyRangeSupport.lean`.
+The new module is `TNLean/PEPS/Injectivity/Multiplicity/PhysicalProductFamilyRangeSupport.lean`.
 All declarations are in `TNLean.PEPS`:
 
 - `physicalProductFamilyMatrix` and `physicalProductFamilyMap`: the literal

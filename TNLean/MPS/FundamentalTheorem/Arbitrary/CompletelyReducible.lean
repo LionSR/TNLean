@@ -6,11 +6,10 @@ Authors: TNLean contributors
 import Mathlib.RingTheory.SimpleModule.Basic
 import QICLean.Algebra.MatrixAlgebra.MatrixFamilyAction
 import QICLean.Channel.Schwarz.Basic
-import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessBlocks
+import TNLean.MPS.FundamentalTheorem.Compression.UniquenessBlocks
 import TNLean.MPS.FundamentalTheorem.Arbitrary.ArbitraryTensor
 import TNLean.MPS.FundamentalTheorem.Arbitrary.Basic
-import TNLean.MPS.FundamentalTheorem.Arbitrary.WordModuleGauge
-import TNLean.MPS.FundamentalTheorem.UnitaryGauge
+import TNLean.MPS.Transfer.Irreducible.UnitaryGauge
 
 /-!
 # Completely reducible tensors and unitary gauges

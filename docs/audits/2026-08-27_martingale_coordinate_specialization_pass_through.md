@@ -11,7 +11,7 @@ space and its instances are found by synthesis at every call site.
 | Removed | Replacement |
 |---|---|
 | `FrustrationFree.spectralGap_of_martingale` (`TNLean/MPS/ParentHamiltonian/Martingale/AbstractCriterion.lean`) | `FrustrationFree.spectralGap_of_martingale_of_finiteDimensional` in the same file, of which the removed name was a one-line term-mode forward |
-| `MPSTensor.spectralGap_of_martingale_anticommutator_rowCol` (`TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean`) | `MPSTensor.spectralGap_of_martingale_anticommutator_rowCol_of_finiteDimensional` in the same file, which the removed name reached after a decidability-instance shuffle only |
+| `MPSTensor.spectralGap_of_martingale_anticommutator_rowCol` (`TNLean/MPS/ParentHamiltonian/ParentInteraction/Reduction.lean`) | `MPSTensor.spectralGap_of_martingale_anticommutator_rowCol_of_finiteDimensional` in the same file, which the removed name reached after a decidability-instance shuffle only |
 
 ## What was checked
 
@@ -23,7 +23,7 @@ redirected and no declaration reference had to move.
 
 `FrustrationFree.spectralGap_of_martingale` had exactly one caller,
 `MPSTensor.parentHamiltonianES_norm_bound_of_quadratic_form` in
-`TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean`. The call now names the
+`TNLean/MPS/ParentHamiltonian/ParentInteraction/Reduction.lean`. The call now names the
 finite-dimensional statement; the explicit `(ι := Cfg d N)` ascription is dropped
 because the ambient space is determined by the type of `parentHamiltonianES A L N`.
 

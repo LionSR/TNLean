@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixAlgebra.MatrixFamilyAction
-import TNLean.MPS.FundamentalTheorem.Reduction.AdmissibleBlock
+import TNLean.MPS.FundamentalTheorem.Compression.AdmissibleBlock
 import TNLean.MPS.FundamentalTheorem.Arbitrary.Basic
-import TNLean.MPS.FundamentalTheorem.Reduction.Flag
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
+import TNLean.MPS.FundamentalTheorem.WordModule.Flag
+import TNLean.MPS.FundamentalTheorem.Compression.MultiBlock
 
 /-!
 # Flags and reductions for admissible families

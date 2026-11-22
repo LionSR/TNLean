@@ -10,6 +10,5 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Examples.Rings.EisensteinCertificates
 import TNLean.MPS.Examples.Rings.EisensteinRing
-import TNLean.MPS.Examples.Rings.GoldenCompression
 import TNLean.MPS.Examples.Rings.GoldenRing
 import TNLean.MPS.Examples.Rings.Zsqrt2Ring

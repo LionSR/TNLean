@@ -114,9 +114,9 @@ have yet.
 
 | Deleted TNLean declaration | TNLean module |
 |---|---|
-| `Entropy.IsSupportedOn.add`, `Entropy.IsSupportedOn.neg`, `Entropy.IsSupportedOn.sub` | `MPS/AreaLaw/Hastings/PartCommutators.lean` |
-| `Entropy.IsSupportedOn.smul` | `MPS/AreaLaw/Hastings/ProjectorFactorizationScaling.lean` |
-| `Entropy.IsSupportedOn.conjTranspose` | `MPS/AreaLaw/Hastings/PositiveFactorization.lean` |
+| `Entropy.IsSupportedOn.add`, `Entropy.IsSupportedOn.neg`, `Entropy.IsSupportedOn.sub` | `MPS/AreaLaw/Chain/PartCommutators.lean` |
+| `Entropy.IsSupportedOn.smul` | `MPS/AreaLaw/ProjectorFactorization/ProjectorFactorization.lean` |
+| `Entropy.IsSupportedOn.conjTranspose` | `MPS/AreaLaw/ProjectorFactorization/PositiveFactorization.lean` |
 | `TNLean.Lattice.isSupportedOn_sum` | `Lattice/ZeroEntropy.lean` |
 
 Each is closure of `ManyBody.supportedOperators (fun v ↦ Fin (n v)) D`
@@ -159,9 +159,9 @@ statements of `Real.exists_softTruncation_order_of_residual_budget` and
 `Entropy.IsSupportedOn` and `Entropy.localLift` are now abbreviations of
 `ManyBody.IsSupportedOn` and `ManyBody.place`, so `simp` stops at the Sites
 definitions. Six calls add the Sites name to the simp set:
-`ManyBody.IsSupportedOn` in `MPS/AreaLaw/SoftTruncatedHamiltonianMPO` (two),
-and `ManyBody.place` in `MPS/AreaLaw/SequentialTruncation` (two) and
-`MPS/AreaLaw/Hastings/IntervalMutualInformation` (two).
+`ManyBody.IsSupportedOn` in `MPS/AreaLaw/LowEnergyAlgorithm/MPO/SoftTruncationMPOAccuracy` (two),
+and `ManyBody.place` in `MPS/Tensor/VaryingBond/SequentialTruncation` (two) and
+`MPS/AreaLaw/ProjectorFactorization/IntervalMutualInformation` (two).
 
 A comparison of fully qualified names found no other TNLean declaration
 duplicated by a declaration added in the range. The following are left as
@@ -178,6 +178,6 @@ they are:
   `Set` and `Finset` regions; their unification is the same switch.
 - Every other use of the temporary `Entropy` abbreviations and forwarding
   lemmas, which is deleted in step 4.0 of the plan.
-- `MPSTensor.conj_invSqrtTwo` (`MPS/Examples/AKLTReview.lean`), which has the
+- `MPSTensor.conj_invSqrtTwo` (`MPS/Examples/AKLT/AKLTReview.lean`), which has the
   statement of `Complex.conj_invSqrtTwo`. The pair existed inside TNLean before
   this range.

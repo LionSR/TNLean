@@ -1,7 +1,7 @@
 # Original two-site-blocked condensation symmetry
 
 The remaining original-family boundary of old issue #8041 is proved in
-`TNLean/MPS/Examples/AnomalousCondensation/Z2Z2BlockedAnomaly.lean`.
+`TNLean/MPS/Examples/Z2Z2/Z2Z2BlockedAnomaly.lean`.
 This is a specific constructed example, not a classification of tensors.
 
 ## Source and ownership
@@ -24,7 +24,7 @@ arXiv:2502.20257, the display preceding `eq:3-cocycle`.
 
 Owned files:
 
-- `TNLean/MPS/Examples/AnomalousCondensation/Z2Z2BlockedAnomaly.lean`
+- `TNLean/MPS/Examples/Z2Z2/Z2Z2BlockedAnomaly.lean`
 - `TNLean/MPS/Examples/AnomalousCondensation.lean` (generated import)
 - `blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex`
 - `docs/paper-gaps/glm23_z2z2_anomaly_detector_scope.tex`
@@ -88,7 +88,7 @@ prebuilt Mathlib cache.
   already decompressed. No Mathlib source build was started.
 - The prerequisite targeted build of `Z2Z2AnomalyClass`,
   `MPDO.PhysicalBlocking`, and `Core.ReductionBlocking` passed (9355 jobs).
-- `lake build TNLean.MPS.Examples.AnomalousCondensation.Z2Z2BlockedAnomaly`
+- `lake build TNLean.MPS.Examples.Z2Z2.Z2Z2BlockedAnomaly`
   passed (9356 jobs). Final changed-module compilation took 21 seconds,
   below the repository's 25-second warning and 50-second error thresholds.
 - Strict elaboration of the production module passed without diagnostics,

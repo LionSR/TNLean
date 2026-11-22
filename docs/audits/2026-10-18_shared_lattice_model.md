@@ -14,7 +14,7 @@ opens `TNLean.Lattice`, or names the declarations with the new qualifier.
 No deprecated alias, compatibility module or `export` is kept.
 
 The two-dimensional target `UniformAreaLaw` stays in
-`TNLean/PEPS/AreaLaw/TheoremStatements.lean`. The graph counting modules
+`TNLean/PEPS/AreaLaw/Regions/TheoremStatements.lean`. The graph counting modules
 (`GraphExtendedMetric`, `GraphLatticeDistance`, `GraphInteractionBudget`,
 `GraphLatticeDiamond`, `GraphInteractionDiamondCounting`) and the
 one-dimensional chain model `ChainHamiltonian` are not part of this phase.
@@ -25,18 +25,18 @@ one-dimensional chain model `ChainHamiltonian` are not part of this phase.
 | --- | --- |
 | `TNLean.PEPS.AreaLaw.FiniteDomain` | `TNLean.Lattice.FiniteDomain` |
 | `TNLean.PEPS.AreaLaw.LocalHamiltonian` | `TNLean.Lattice.LocalHamiltonian` |
-| `TNLean.PEPS.AreaLaw.TheoremStatements` (regional states and entropy) | `TNLean.Lattice.RegionalEntropy` (new) |
+| `TNLean.PEPS.AreaLaw.Regions.TheoremStatements` (regional states and entropy) | `TNLean.Lattice.RegionalEntropy` (new) |
 | `TNLean.PEPS.AreaLaw.MarginalTails` | `TNLean.Lattice.MarginalTails` |
 | `TNLean.PEPS.AreaLaw.RegionalEntropyBridge` | `TNLean.Lattice.RegionalEntropyBridge` |
-| `TNLean.PEPS.AreaLaw.TwoFamilies` (the two finite-product identifications) | `TNLean.Lattice.RegionalEntropyBridge` |
+| `TNLean.PEPS.AreaLaw.Templates.TwoFamilies` (the two finite-product identifications) | `TNLean.Lattice.RegionalEntropyBridge` |
 | `TNLean.PEPS.AreaLaw.EntropyDimension` | `TNLean.Lattice.EntropyDimension` |
 | `TNLean.PEPS.AreaLaw.ProductGroundState` | `TNLean.Lattice.ProductGroundState` |
 
-`TNLean.PEPS.AreaLaw.TheoremStatements` keeps only `UniformAreaLaw`, and
-`TNLean.PEPS.AreaLaw.TwoFamilies` keeps its seven declarations on ordered
+`TNLean.PEPS.AreaLaw.Regions.TheoremStatements` keeps only `UniformAreaLaw`, and
+`TNLean.PEPS.AreaLaw.Templates.TwoFamilies` keeps its seven declarations on ordered
 two-family partitions. `TNLean.Lattice.EntropyDimension` no longer imports the
 template geometry; the modules that used that geometry through it now import
-`TNLean.PEPS.AreaLaw.TwoFamilies` directly. `TNLean/MPS/AreaLaw/` imports
+`TNLean.PEPS.AreaLaw.Templates.TwoFamilies` directly. `TNLean/MPS/AreaLaw/` imports
 nothing from `TNLean/PEPS/`.
 
 ## Moved declarations
@@ -64,10 +64,10 @@ such as `hX.card_le` and `h.positiveTerm` keeps resolving. Each
 
 | File | Declarations |
 | --- | --- |
-| `TNLean/PEPS/AreaLaw/GraphPropagation.lean` | `IsAdmissibleSupport.edist_le`, `IsAdmissibleSupport.card_le`, `LocalHamiltonian.normBound_nonneg`, `LocalHamiltonian.sum_norm_term_containing_le`, `LocalHamiltonian.anchors`, `LocalHamiltonian.anchors_mem`, `LocalHamiltonian.anchors_self` (the last three private), `LocalHamiltonian.norm_commutator_le_graphDistance`, `LocalHamiltonian.commutator_eq_zero_of_edist_eq_top`, `LocalHamiltonian.norm_sub_siteExpectation_graphBall_le` |
-| `TNLean/PEPS/AreaLaw/TailParameter.lean` | `LocalHamiltonian.one_sub_rpow_le_typicalMass_edgeBoundary` |
-| `TNLean/PEPS/AreaLaw/ZeroBoundary.lean` | `IsAdmissibleSupport.reachable` |
-| `TNLean/PEPS/AreaLaw/Scan/ActualEnergyTerms.lean` | `LocalHamiltonian.positiveTerm` |
+| `TNLean/PEPS/AreaLaw/Interactions/GraphPropagation.lean` | `IsAdmissibleSupport.edist_le`, `IsAdmissibleSupport.card_le`, `LocalHamiltonian.normBound_nonneg`, `LocalHamiltonian.sum_norm_term_containing_le`, `LocalHamiltonian.anchors`, `LocalHamiltonian.anchors_mem`, `LocalHamiltonian.anchors_self` (the last three private), `LocalHamiltonian.norm_commutator_le_graphDistance`, `LocalHamiltonian.commutator_eq_zero_of_edist_eq_top`, `LocalHamiltonian.norm_sub_siteExpectation_graphBall_le` |
+| `TNLean/PEPS/AreaLaw/SafeRectangles/TailParameter.lean` | `LocalHamiltonian.one_sub_rpow_le_typicalMass_edgeBoundary` |
+| `TNLean/PEPS/AreaLaw/Regions/ZeroBoundary.lean` | `IsAdmissibleSupport.reachable` |
+| `TNLean/PEPS/AreaLaw/Statuses/ActualEnergyTerms.lean` | `LocalHamiltonian.positiveTerm` |
 
 ## Counts
 
@@ -99,11 +99,11 @@ type in place of `Fin L`.
 
 | New module | Declarations | Old module |
 | --- | --- | --- |
-| `RegionEntropyInequalities` | `regionEntropy_union_le`, `regionEntropy_le_union_add`, `regionEntropy_empty`, `regionEntropy_univ`, `regionEntropy_le_card_mul_log` | `TNLean.MPS.AreaLaw.EntropyInequalities` |
-| `RegionEntropyInequalities` | `regionEntropy_union_add_inter_le`, `regionEntropy_sdiff_eq_of_eq_zero`, `regionEntropy_union_eq_of_eq_zero`, `regionEntropy_symmDiff_eq_of_eq_zero` | `TNLean.MPS.AreaLaw.ComponentReduction` |
-| `ZeroEntropy` | `isSupportedOn_sum`, `regionEntropy_eq_zero_of_forall_subset_or_disjoint` | `TNLean.MPS.AreaLaw.ComponentReduction` |
+| `RegionEntropyInequalities` | `regionEntropy_union_le`, `regionEntropy_le_union_add`, `regionEntropy_empty`, `regionEntropy_univ`, `regionEntropy_le_card_mul_log` | `TNLean.MPS.AreaLaw.Chain.EntropyInequalities` |
+| `RegionEntropyInequalities` | `regionEntropy_union_add_inter_le`, `regionEntropy_sdiff_eq_of_eq_zero`, `regionEntropy_union_eq_of_eq_zero`, `regionEntropy_symmDiff_eq_of_eq_zero` | `TNLean.MPS.AreaLaw.Entropy.ComponentReduction` |
+| `ZeroEntropy` | `isSupportedOn_sum`, `regionEntropy_eq_zero_of_forall_subset_or_disjoint` | `TNLean.MPS.AreaLaw.Entropy.ComponentReduction` |
 
-`Entropy.trace_regionState_eq_one` moves from `TNLean.MPS.AreaLaw.SequentialTruncation` to
+`Entropy.trace_regionState_eq_one` moves from `TNLean.MPS.Tensor.VaryingBond.SequentialTruncation` to
 `TNLean.Lattice.RegionEntropyInequalities` and keeps its name. The new
 `TNLean.Lattice.one_le_supportDim_const` is the common proof of the two
 `one_le_supportDim` lemmas.
@@ -119,7 +119,7 @@ These keep their names and statements: `TNLean.Lattice.regionalEntropy_le_card_m
 
 ### Deleted declarations
 
-The own proof of the zero-entropy lemma in `TNLean/PEPS/AreaLaw/ZeroBoundary.lean`
+The own proof of the zero-entropy lemma in `TNLean/PEPS/AreaLaw/Regions/ZeroBoundary.lean`
 becomes unused, so these are deleted: `siteSplit`, `rectKronecker_submatrix_siteSplit`,
 `exists_submatrix_siteSplit_eq_kronecker_one`, `exists_submatrix_siteSplit_eq_one_kronecker`,
 `configurationSplit_eq_siteSplit` and `exists_operator_submatrix_eq`, all in namespace

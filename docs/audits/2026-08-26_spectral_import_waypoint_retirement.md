@@ -9,14 +9,14 @@ importer is migrated, and no Blueprint tag names any of them.
 
 | Removed module | Replacement |
 |---|---|
-| `TNLean.Spectral.MPVOverlapDecay` | `TNLean.Spectral.TransferOperatorGapInjective` |
-| `TNLean.Spectral.TransferOperatorGap` | `TNLean.Spectral.TransferOperatorGapInjective` |
+| `TNLean.Spectral.MPVOverlapDecay` | `TNLean.MPS.Transfer.Spectrum.TransferOperatorGapInjective` |
+| `TNLean.Spectral.TransferOperatorGap` | `TNLean.MPS.Transfer.Spectrum.TransferOperatorGapInjective` |
 | `TNLean.Wielandt.Primitivity.ToNormal` | `QICLean.Kraus.PrimitiveFixedPoint` (already imported by every consumer) |
 
-Migrated importers: `PiAlgebra/CanonicalFormSepAux` (both waypoints),
-`MPS/Overlap/CastDecay`, `MPS/SharedInfra/GaugePhase`,
-`Spectral/PrimitiveOverlap`, `MPS/Core/Correlations`,
-`MPS/Symmetry/StringOrderDefs`. `Wielandt/Primitivity/ToNormal` had no
+Migrated importers: `MPS/CanonicalForm/BlockFamily` (both waypoints),
+`MPS/Transfer/Spectrum/CastDecay`, `MPS/Transfer/Spectrum/GaugePhase`,
+`MPS/Transfer/Spectrum/PrimitiveOverlap`, `MPS/Transfer/Correlation/Correlations`,
+`MPS/Transfer/Correlation/StringOrderDefs`. `Wielandt/Primitivity/ToNormal` had no
 importer outside the generated aggregator.
 
 One declaration went with them:

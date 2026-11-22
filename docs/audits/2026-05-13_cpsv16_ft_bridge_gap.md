@@ -36,7 +36,7 @@ at the lemmas `_CFBNT` (`fixed_right_…_CFBNT`, `fixed_left_…_CFBNT`).
 
 ## The mismatch
 
-`IsCanonicalFormBNT` (`TNLean/MPS/BNT/Construction.lean:99`) bundles, among
+`IsCanonicalFormBNT` (`TNLean/MPS/CanonicalForm/BNT/Construction.lean:99`) bundles, among
 other fields, the **strict-anti** weight ordering:
 
 ```
@@ -128,7 +128,7 @@ follow-up workstream is to:
 2. Provide the unconditional construction of this wrapper from the
    irreducible-primitive-TP block input (extending the existing
    `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks` in
-   `TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean`).
+   `TNLean/MPS/CanonicalForm/BNT/PhaseClassSectorData.lean`).
 
 3. Retire the strict-anti restriction inside `IsCanonicalFormBNT`, or pull
    it apart into a strict-anti wrapper over `IsBNTCanonicalForm`.
@@ -144,7 +144,7 @@ This is a multi-PR sequence and outside the time budget of #1641.
 
 ## Related infrastructure
 
-* `TNLean/MPS/CanonicalForm/PhaseClassSectorData.lean` already provides
+* `TNLean/MPS/CanonicalForm/BNT/PhaseClassSectorData.lean` already provides
   `exists_bnt_sectorDecomp_of_tp_primitive_irr_blocks` returning a
   `SectorDecomposition` + `HasBNTSectorData` from TP/primitive/irreducible
   block input.  It produces the assembled `P.toTensor` equal in MPV to the

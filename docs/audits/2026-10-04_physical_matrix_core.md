@@ -4,7 +4,7 @@
 
 Continue the preparation dependency separation tracked in #8637. Move existing
 MPS-typed reshape and Gram identities out of preparation/convergence modules into
-`TNLean.MPS.Core.PhysicalMatrix`. This is an ownership change, not a new circuit,
+`TNLean.MPS.Tensor.Physical.PhysicalMatrix`. This is an ownership change, not a new circuit,
 channel, tensor, or approximation formalism.
 
 Baseline: `b46e0aabb2c621dcf12946bac229f0d4e9143070`.

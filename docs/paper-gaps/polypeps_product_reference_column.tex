@@ -104,7 +104,7 @@ every bond dimension $D_e>0$.\footnote{Declarations:
 \leanid{TNLean.PEPS.Approximation.Pinned.exists_fixInput_contractPEPS_of_product_reference}
 and
 \leanid{TNLean.PEPS.Approximation.Pinned.exists_peps_of_product_reference} in
-\path{TNLean/PEPS/Approximation/ProductReferenceColumn.lean}.}
+\path{TNLean/PEPS/Approximation/Routing/SquareGridColumn.lean}.}
 
 The paper's order of operations---extracting a column on the party network
 first and then routing it to the $L\times L$ grid---is also formalized. Given an
@@ -120,7 +120,7 @@ $C_1\ge 1,k\ge 0$) and normalized error at most $2\eta$.\footnote{Declarations:
 \leanid{TNLean.PEPS.Approximation.exists_squarePEPS_of_product_reference_dyadicRouting},
 and
 \leanid{TNLean.PEPS.Approximation.hasPEPSApproximation_of_fixInput_dyadicRouting}
-in \path{TNLean/PEPS/Approximation/PartyColumnRouting.lean}.}
+in \path{TNLean/PEPS/Approximation/Routing/PartyColumnRouting.lean}.}
 
 Finally, the output of Section~8.1 for sufficiently large $L$---the existence
 of a compressed dyadic operator network within trace distance $CL^{-5}$ of
@@ -131,7 +131,7 @@ by the routed column.\footnote{The
 hypothesis is \leanid{TNLean.PEPS.Approximation.DyadicOperatorNetworkAt}
 and the implication is
 \leanid{TNLean.PEPS.Approximation.hasPEPSApproximation_of_dyadicOperatorNetworkAt}
-in \path{TNLean/PEPS/Approximation/GroundStateApproximation.lean}.}
+in \path{TNLean/PEPS/Approximation/Routing/GroundStateApproximation.lean}.}
 Theorem~1.1 combines it with the exact PEPS representation for bounded
 $L$.\footnote{\leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation_explicit}
 in \path{TNLean/PEPS/Approximation/PolynomialPEPSClosedConstant.lean}.}
@@ -145,10 +145,10 @@ constructs. The protocol is built from the adaptive patch constraint of
 Proposition~4.1 and satisfies the consequences of Proposition~7.1 used in
 Section~8, with constants $C$ and $b$ chosen before $L$ and the
 Hamiltonian.\footnote{\leanid{TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint}
-in \path{TNLean/PEPS/Approximation/DyadicProtocolConsequences.lean}; the
+in \path{TNLean/PEPS/Approximation/Protocol/DyadicProtocolConsequences.lean}; the
 consequences are the fields of
 \leanid{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol} in
-\path{TNLean/PEPS/Approximation/DyadicProtocol.lean}.}
+\path{TNLean/PEPS/Approximation/Protocol/DyadicProtocol.lean}.}
 
 The joint vector $\Psi$ is the actual final vector of the protocol, read in
 physical and private coordinates, and $\Xi$ is the auxiliary vector of its
@@ -165,7 +165,7 @@ in \path{TNLean/Lattice/PartyCircuit/ProtocolDensityError.lean}, which applies
 from \path{QICLean/Channel/PartialTrace/ProductReferenceDensityError.lean}, instantiated for
 the protocol by
 \leanid{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.rectangularTraceNorm_physicalDensity_sub_le}
-in \path{TNLean/PEPS/Approximation/DyadicProtocol.lean}.}
+in \path{TNLean/PEPS/Approximation/Protocol/DyadicProtocol.lean}.}
 
 Distributed density compression at accuracy $L^{-5}$, applied to the family
 of all protocols with constants chosen before the family member, gives an
@@ -179,10 +179,10 @@ network satisfies the four routing hypotheses of Lemma~8.2 with $B=b$,
 $\Delta=2b(b-1)$, and $c=b$.\footnote{\leanid{TNLean.PEPS.Approximation.DyadicProtocol.exists_partyNetwork_of_contractedOperator}
 and
 \leanid{TNLean.PEPS.Approximation.dyadicOperatorNetworkAt_of_dyadicProtocolBoundsAt}
-in \path{TNLean/PEPS/Approximation/DyadicProtocolCompression.lean}.} The
+in \path{TNLean/PEPS/Approximation/Protocol/DyadicProtocolCompression.lean}.} The
 proof of Theorem~1.1 from this network extracts the column and routes it as
 described above.\footnote{\leanid{TNLean.PEPS.Approximation.hasPEPSApproximation_of_dyadicOperatorNetworkAt}
-in \path{TNLean/PEPS/Approximation/GroundStateApproximation.lean}, through
+in \path{TNLean/PEPS/Approximation/Routing/GroundStateApproximation.lean}, through
 \leanid{TNLean.PEPS.Approximation.hasPEPSApproximation_of_fixInput_dyadicRouting};
 the composite is
 \leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_ratios}

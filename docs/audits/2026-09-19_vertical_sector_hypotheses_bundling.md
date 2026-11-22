@@ -21,17 +21,17 @@ the fields of that structure, and refers to the data by projection.
 
 | Theorem | File | Arguments kept outside the structure |
 |---|---|---|
-| `MPOTensor.transportedVerticalSector_exists_unitaryBlockEquiv` | `TNLean/MPS/MPDO/VerticalSectorRelabeling.lean` | none |
-| `MPOTensor.transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq` | `TNLean/MPS/MPDO/VerticalSectorCoefficientComparison.lean` | none |
-| `MPOTensor.transportedVerticalSector_exists_blockedOperatorRepresentations` | `TNLean/MPS/MPDO/VerticalBlockedOperatorRepresentations.lean` | `{L} (hL : 0 < L)` |
-| `MPOTensor.transportedVerticalSector_exists_positiveFusionDecomposition` | `TNLean/MPS/MPDO/VerticalProductFusionDecomposition.lean` | `hHorizontal`, `hM` |
+| `MPOTensor.transportedVerticalSector_exists_unitaryBlockEquiv` | `TNLean/MPS/MPDO/SectorMaps/VerticalSectorIdentity.lean` | none |
+| `MPOTensor.transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq` | `TNLean/MPS/MPDO/SectorMaps/VerticalSectorCoefficientComparison.lean` | none |
+| `MPOTensor.transportedVerticalSector_exists_blockedOperatorRepresentations` | `TNLean/MPS/MPDO/SectorMaps/VerticalBlockedOperatorRepresentations.lean` | `{L} (hL : 0 < L)` |
+| `MPOTensor.transportedVerticalSector_exists_positiveFusionDecomposition` | `TNLean/MPS/MPDO/Fusion/VerticalProductFusionDecomposition.lean` | `hHorizontal`, `hM` |
 
 The field list each of them carried matches
 `MPOTensor.VerticalSectorFixedGeneratorHypotheses`
-(`TNLean/MPS/MPDO/VerticalSectorCoordinates.lean`) extended by the five
+(`TNLean/MPS/MPDO/SectorMaps/VerticalSectorCoordinates.lean`) extended by the five
 normal-tensor, coisometry, and channel fields of
 `MPOTensor.VerticalSectorHypotheses`
-(`TNLean/MPS/MPDO/VerticalSectorGeneration.lean`), so the restatement neither
+(`TNLean/MPS/MPDO/SectorMaps/VerticalSectorGeneration.lean`), so the restatement neither
 adds nor drops a hypothesis. The two conclusions of
 `transportedVerticalSector_exists_unitaryBlockEquiv` that were introduced by
 `let` bindings for the transported refinement and coarse-graining maps are now
@@ -53,7 +53,7 @@ now uses the argument directly and is otherwise unchanged.
 ## Added builder
 
 `MPOTensor.VerticalSectorHypotheses.ofDecompositions`
-(`TNLean/MPS/MPDO/RFPPositiveFusionDecomposition.lean`) assembles the
+(`TNLean/MPS/MPDO/Fusion/RFPPositiveFusionDecomposition.lean`) assembles the
 hypotheses from a one-site and a two-site `MPOTensor.CPSVVerticalDecomposition`
 of the same tensor together with the two trace-preserving completely positive
 maps of the renormalization fixed-point condition and their intertwining
@@ -65,9 +65,9 @@ twenty-eight projections of those two decompositions positionally. Each now
 builds one value:
 
 - `MPOTensor.exists_positiveFusionDecomposition_of_isRFPViaTS`
-  (`TNLean/MPS/MPDO/RFPPositiveFusionDecomposition.lean`)
+  (`TNLean/MPS/MPDO/Fusion/RFPPositiveFusionDecomposition.lean`)
 - `MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS_of_horizontalCF`
-  (`TNLean/MPS/MPDO/BNTFusionTensorClauseFromRFP.lean`)
+  (`TNLean/MPS/MPDO/Fusion/BNTFusionTensorClauseFromRFP.lean`)
 - `MPOTensor.HasBNTFusionTensorClause.of_isRFPViaTS`
   (`TNLean/MPS/MPDO/CPSVBNTFusionTensorClauseFromRFP.lean`)
 
@@ -90,8 +90,8 @@ alone would create a parallel structure family, which the same file forbids.
 ## Deferred
 
 The eight-field cyclic-sector core repeated across
-`TNLean/MPS/Periodic/Overlap/NoSectorMatch.lean` and
-`TNLean/MPS/Periodic/Overlap/SectorMatch/Propagation.lean` is the other half
+`TNLean/MPS/CanonicalForm/Periodic/Overlap/NoSectorMatch.lean` and
+`TNLean/MPS/CanonicalForm/Periodic/Overlap/SectorMatchPropagation.lean` is the other half
 of the same record and is not touched here. That area carries live proof work,
 and three of its names are blueprint-tagged; it is scheduled separately.
 

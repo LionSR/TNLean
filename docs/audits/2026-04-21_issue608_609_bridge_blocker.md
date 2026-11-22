@@ -13,7 +13,7 @@ Worktree / branch used for this audit:
 Per protocol, before attempting proof code I:
 - read `CLAUDE.md`, `docs/PROOF_INTEGRITY.md`, `docs/style.md`, `docs/blueprint_style_guide.md`
 - read the full issue threads for #608 and #609
-- re-read `TNLean/MPS/Periodic/Overlap.lean`, `TNLean/MPS/Periodic/CornerTransition.lean`, and Appendix A of `Papers/1708.00029/main.tex`
+- re-read `TNLean/MPS/Periodic/Overlap.lean`, `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CornerTransition.lean`, and Appendix A of `Papers/1708.00029/main.tex`
 - posted the required short scouting comments on both issues
 
 ## What I confirmed this session
@@ -78,9 +78,9 @@ Suppose the Eq. A.8 pointwise staircase identification were added. The proof
 of `repeatedBlocks_of_blockedSectorGaugePhase` still needs the paper’s
 `Ω_u`-contraction argument from Eq. A.14–A.18. The current chain API provides
 
-- `decompositionMap` / right inverses in `MPS/Chain/OneSidedInverse.lean`, and
+- `decompositionMap` / right inverses in `MPS/Tensor/Words/OneSidedInverse.lean`, and
 - the **two-site** proportionality theorem `tensor_proportional` in
-  `MPS/Chain/TensorEquality.lean`.
+  `MPS/Tensor/Words/TensorEquality.lean`.
 
 What is still missing is a reusable **m-factor / cyclic repeated-block
 contraction theorem** (or an equivalent generalized tensor-proportionality
@@ -115,7 +115,7 @@ this branch currently contains only the audit artifact.
 The temporary experiment touched:
 - `TNLean/MPS/CanonicalForm/CyclicSectors.lean`
 - `TNLean/MPS/CanonicalForm/Assembly.lean`
-- `TNLean/MPS/Periodic/CornerTransition.lean`
+- `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CornerTransition.lean`
 - `TNLean/MPS/Periodic/Overlap.lean`
 
 The reverted experiment is still useful conceptually: it shows that the

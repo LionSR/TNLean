@@ -148,7 +148,7 @@ were removed from `RescalingStableLengthDependentRFP.lean` and
 `**Scope restriction (fixed representative)**` stamp on
 `doubledPhysTraceTransfer_retainedBlock_not_isNilpotent`: under the convention
 the dimer is simple, so the disclaimer was stale. The disambiguating sentence
-in `TNLean/MPS/MPU/Simple.lean`, which distinguishes MPU simplicity
+in `TNLean/MPS/Operator/Unitary/Simple.lean`, which distinguishes MPU simplicity
 (arXiv:1703.09188 Definition III.2) from the CPSV16 predicate, is kept: it
 names a predicate that still exists and separates two unrelated notions.
 
@@ -250,7 +250,7 @@ correction.
 
 | Removed declaration | Replacement |
 |---|---|
-| `MPSTensor.scalarUnitTensor_isNormalTensor` (in `RFP/PhaseMultiplicityCounterexample.lean`) | Same name, relocated to `TNLean/MPS/FundamentalTheorem/SectorBNT/Examples.lean` beside `scalarUnitTensor`. |
+| `MPSTensor.scalarUnitTensor_isNormalTensor` (in `RFP/PhaseMultiplicityCounterexample.lean`) | Same name, relocated to `TNLean/MPS/CanonicalForm/BNTPresentation/Examples.lean` beside `scalarUnitTensor`. |
 | `MPSTensor.phaseFlipTensor` | None; the retired reading was its only consumer. |
 | `MPSTensor.signPhase`, `MPSTensor.norm_signPhase` | None. |
 | `MPSTensor.phaseFlipTensor_is_two_phase_copies` | None. |
@@ -350,7 +350,7 @@ hypotheses, which is what the `false-source` kind is reserved for.
 `docs/paper-gaps/cpgsv17_bicf_block_separation.tex` keeps its verdict. In both,
 the sections that cited the removed Lean declarations were rewritten to state
 why the witness is out of scope, and the one docstring in
-`TNLean/MPS/MPDO/PerCopyHorizontalCF.lean` that named a removed declaration now
+`TNLean/MPS/CanonicalForm/BlockSeparation/PerCopyHorizontalCF.lean` that named a removed declaration now
 cites only the note.
 
 ## Historical and living records

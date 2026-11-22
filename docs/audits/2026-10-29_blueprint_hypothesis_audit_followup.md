@@ -13,7 +13,7 @@ Issue: #7726.
   Commit `f4c2d204a` (#9243) supplies the dimension-zero branches.
 - `MPS/ParentHamiltonian/ProductPair.lean` was retired by `3ce26ade4`;
   its two cited markers are not live obligations.
-- All three cited markers in `MPS/MPDO/PhysicalSectorProductTransport.lean`
+- All three cited markers in `MPS/Operator/PhysicalSector/PhysicalSectorProductTransport.lean`
   now name `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
   The restored citations are in `0b09bf147` (#7956).
 
@@ -37,7 +37,7 @@ The new support node carries `leanok` on statement and proof, since both
 cancellation statements are proved. Exact historical head `b930ce68ef139badc6010f56a307b527a3691f51` passed the
 [hosted build](https://github.com/LionSR/TNLean/actions/runs/40919421992/job/123629836921):
 the log records the matching `PR_HEAD_SHA`, a successful full build, and strict
-`: ok` for the complete `TNLean/PEPS/CycleMPSChainArc.lean` module followed by
+`: ok` for the complete `TNLean/PEPS/Injectivity/Region/CycleMPSChainArc.lean` module followed by
 `All strict Lean checks passed`. Every reported applicable check succeeded.
 
 The refreshed branch reconciles main

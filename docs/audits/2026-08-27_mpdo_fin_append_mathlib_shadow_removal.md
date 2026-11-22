@@ -8,8 +8,8 @@ tuple lemmas, together with two proof shortenings that keep their statements.
 
 | Removed | Replacement |
 |---|---|
-| `append_zero_eq` (root namespace, `TNLean/MPS/MPDO/PureAreaLaw.lean`) | `Fin.append_right_nil` (Mathlib, `Mathlib/Data/Fin/Tuple/Basic.lean`) |
-| `MPOTensor.append_empty` (`private`, `TNLean/MPS/MPDO/MutualInfoBridge.lean`) | `Fin.append_right_nil` (Mathlib, same file) |
+| `append_zero_eq` (root namespace, `TNLean/MPS/Operator/DensityOperator/PureAreaLaw.lean`) | `Fin.append_right_nil` (Mathlib, `Mathlib/Data/Fin/Tuple/Basic.lean`) |
+| `MPOTensor.append_empty` (`private`, `TNLean/MPS/MPDO/Entropy/MutualInfoBridge.lean`) | `Fin.append_right_nil` (Mathlib, same file) |
 
 Both stated that appending an empty right block is the left block precomposed
 with the length cast — verbatim the content of `Fin.append_right_nil`, which
@@ -21,8 +21,8 @@ to the literal `Fin 0`. The two use sites were migrated: the simp-only call in
 
 ## Proofs shortened, statements kept
 
-`append_glue` (`TNLean/MPS/MPDO/MutualInfoMonotone.lean`) and the `private`
-`append_sub_self` (`TNLean/MPS/MPDO/MutualInfoBridge.lean`) keep their
+`append_glue` (`TNLean/MPS/Operator/DensityOperator/MutualInfoMonotone.lean`) and the `private`
+`append_sub_self` (`TNLean/MPS/MPDO/Entropy/MutualInfoBridge.lean`) keep their
 statements and call sites; only their bodies change, from explicit
 `Fin.addCases` splits to one Mathlib rewrite each — `Fin.append_cast_right` and
 `Fin.append_right_nil` respectively. `append_glue` now mirrors the shape of

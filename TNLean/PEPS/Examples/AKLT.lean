@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Trace
 import QICLean.Algebra.Unitary.SingletMatrix
-import TNLean.PEPS.TorusSiteTensor
+import TNLean.PEPS.Tensor.Torus.TorusSiteTensor
 
 /-!
 # AKLT: the two-dimensional AKLT state on the square lattice as a PEPS

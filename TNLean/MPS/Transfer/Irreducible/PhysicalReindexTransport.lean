@@ -1,0 +1,225 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.Transfer.Irreducible.BlockingInfrastructure
+
+/-!
+# Physical reindexing along alphabet equivalences
+
+This file proves that changing physical letters by a bijection preserves the
+basic tensor properties used by blocking and canonical-form arguments.
+
+## Main statements
+
+* `reindexPhysical_cast_dim` — physical reindexing commutes with bond-dimension casts.
+* `transferMap_reindexPhysical_equiv` — the transfer map is unchanged by a physical
+  alphabet bijection.
+* `leftCanonical_reindexPhysical_equiv` and
+  `isPrimitive_transferMap_reindexPhysical_equiv` — left-canonical normalization and
+  transfer-map primitivity are preserved.
+* `hasInvariantProj_reindexPhysical_equiv`, `isIrreducibleTensor_reindexPhysical_equiv`,
+  `isInjective_reindexPhysical_equiv`, and `isNormal_reindexPhysical_equiv` — invariant
+  projections, irreducibility, one-site injectivity, and normality are preserved.
+* `gaugePhaseEquiv_reindexPhysical_equiv` — gauge-phase equivalence is preserved
+  when both tensors are reindexed by the same physical alphabet bijection.
+* `linearIndependent_mpvState_of_configEquiv` transports linear independence
+  through an arbitrary equivalence of configuration spaces.
+* `mpvOverlap_reindexPhysical_equiv` and
+  `linearIndependent_mpvState_reindexPhysical_equiv` — closed overlaps and
+  linear independence of MPV states are preserved.
+-/
+
+open scoped Matrix BigOperators
+
+namespace MPSTensor
+
+/-- Physical reindexing commutes with bond-dimension casts. -/
+theorem reindexPhysical_cast_dim {d₁ d₂ D₁ D₂ : ℕ} (e : Fin d₁ ≃ Fin d₂)
+    (h : D₁ = D₂) (A : MPSTensor d₂ D₁) :
+    Kraus.reindexPhysical e (cast (congr_arg (MPSTensor d₂) h) A) =
+      cast (congr_arg (MPSTensor d₁) h) (Kraus.reindexPhysical e A) := by
+  subst h
+  rfl
+
+/-- Reindexing by a physical-index equivalence does not change the transfer map. -/
+theorem transferMap_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
+    (A : MPSTensor d₂ D) :
+    Kraus.transferMap (ι := Fin d₁) (n := Fin D) (Kraus.reindexPhysical e A) =
+      Kraus.transferMap (ι := Fin d₂) (n := Fin D) A := by
+  ext X i j
+  simp only [Kraus.transferMap_apply, Kraus.reindexPhysical]
+  have hsum :
+      (∑ x : Fin d₁, A (e x) * X * (A (e x))ᴴ) =
+        ∑ x : Fin d₂, A x * X * (A x)ᴴ :=
+    Fintype.sum_equiv e
+      (fun x : Fin d₁ => A (e x) * X * (A (e x))ᴴ)
+      (fun x : Fin d₂ => A x * X * (A x)ᴴ)
+      (fun _ => rfl)
+  exact congr_fun (congr_fun hsum i) j
+
+/-- Reindexing by a physical-index equivalence preserves left-canonical normalization. -/
+theorem leftCanonical_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
+    (A : MPSTensor d₂ D) :
+    (∑ i : Fin d₁,
+        (Kraus.reindexPhysical e A i)ᴴ * Kraus.reindexPhysical e A i = 1) ↔
+      (∑ i : Fin d₂, (A i)ᴴ * A i = 1) := by
+  simp only [Kraus.reindexPhysical]
+  have hsum :
+      (∑ i : Fin d₁, (A (e i))ᴴ * A (e i)) =
+        ∑ i : Fin d₂, (A i)ᴴ * A i :=
+    Fintype.sum_equiv e
+      (fun i : Fin d₁ => (A (e i))ᴴ * A (e i))
+      (fun i : Fin d₂ => (A i)ᴴ * A i)
+      (fun _ => rfl)
+  rw [hsum]
+
+/-- Reindexing by a physical-index equivalence preserves transfer-map primitivity. -/
+theorem isPrimitive_transferMap_reindexPhysical_equiv {d₁ d₂ D : ℕ}
+    (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D) :
+    _root_.IsPrimitive
+        (Kraus.transferMap (ι := Fin d₁) (n := Fin D) (Kraus.reindexPhysical e A)) ↔
+      _root_.IsPrimitive (Kraus.transferMap (ι := Fin d₂) (n := Fin D) A) := by
+  rw [transferMap_reindexPhysical_equiv e A]
+
+/-- Reindexing by a physical-index equivalence preserves invariant projections. -/
+theorem hasInvariantProj_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
+    (A : MPSTensor d₂ D) :
+    Kraus.HasInvariantProj (Kraus.reindexPhysical e A) ↔ Kraus.HasInvariantProj A := by
+  constructor
+  · rintro ⟨P, hPproj, hP0, hP1, hLower⟩
+    refine ⟨P, hPproj, hP0, hP1, ?_⟩
+    intro i
+    simpa [Kraus.reindexPhysical] using hLower (e.symm i)
+  · rintro ⟨P, hPproj, hP0, hP1, hLower⟩
+    exact ⟨P, hPproj, hP0, hP1, fun i => hLower (e i)⟩
+
+/-- Reindexing by a physical-index equivalence preserves tensor irreducibility. -/
+theorem isIrreducibleTensor_reindexPhysical_equiv {d₁ d₂ D : ℕ}
+    (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D) :
+    Kraus.IsIrreducibleFamily (Kraus.reindexPhysical e A) ↔ Kraus.IsIrreducibleFamily A := by
+  rw [Kraus.IsIrreducibleFamily, Kraus.IsIrreducibleFamily,
+    hasInvariantProj_reindexPhysical_equiv e A]
+
+/-- Reindexing by a physical-index equivalence preserves algebraic injectivity. -/
+theorem isInjective_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
+    (A : MPSTensor d₂ D) :
+    Kraus.IsInjective (Kraus.reindexPhysical e A) ↔ Kraus.IsInjective A := by
+  have hRange : Set.range (Kraus.reindexPhysical e A) = Set.range A := by
+    ext X
+    constructor
+    · rintro ⟨i, rfl⟩
+      exact ⟨e i, rfl⟩
+    · rintro ⟨i, rfl⟩
+      exact ⟨e.symm i, by simp [Kraus.reindexPhysical]⟩
+  simp [Kraus.IsInjective, hRange]
+
+/-- Reindexing by a physical-index equivalence preserves normality: the words of each length
+range over the same matrices. -/
+theorem isNormal_reindexPhysical_equiv {d₁ d₂ D : ℕ} (e : Fin d₁ ≃ Fin d₂)
+    (A : MPSTensor d₂ D) :
+    Kraus.IsNormal (Kraus.reindexPhysical e A) ↔ Kraus.IsNormal A := by
+  have hr : ∀ N : ℕ, Set.range (fun σ : Fin N → Fin d₁ ↦
+      Kraus.evalWord (Kraus.reindexPhysical e A) (List.ofFn σ)) =
+      Set.range (fun σ : Fin N → Fin d₂ ↦ Kraus.evalWord A (List.ofFn σ)) := by
+    intro N
+    ext X
+    constructor
+    · rintro ⟨σ, rfl⟩
+      exact ⟨fun i ↦ e (σ i), by
+        simp [Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]⟩
+    · rintro ⟨σ, rfl⟩
+      exact ⟨fun i ↦ e.symm (σ i), by
+        simp [Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]⟩
+  simp only [Kraus.IsNormal, Kraus.IsNBlkInjective, Kraus.wordSpan, hr]
+
+/-- Reindexing both tensors by a physical-index equivalence preserves gauge-phase equivalence. -/
+theorem gaugePhaseEquiv_reindexPhysical_equiv {d₁ d₂ D : ℕ}
+    (e : Fin d₁ ≃ Fin d₂) (A B : MPSTensor d₂ D) :
+    GaugePhaseEquiv (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) ↔
+      GaugePhaseEquiv A B := by
+  constructor
+  · rintro ⟨X, ζ, hζ, hXB⟩
+    refine ⟨X, ζ, hζ, ?_⟩
+    intro i
+    simpa [Kraus.reindexPhysical] using hXB (e.symm i)
+  · rintro ⟨X, ζ, hζ, hXB⟩
+    refine ⟨X, ζ, hζ, ?_⟩
+    intro i
+    simpa [Kraus.reindexPhysical] using hXB (e i)
+
+/-- Reindexing both tensors by a physical-index equivalence preserves their
+closed MPV overlap.
+
+Source context: arXiv:1606.00608, the physical-basis identifications used in
+canonical-form blocking at lines 317--345. -/
+theorem mpvOverlap_reindexPhysical_equiv {d₁ d₂ D₁ D₂ N : ℕ}
+    (e : Fin d₁ ≃ Fin d₂) (A : MPSTensor d₂ D₁) (B : MPSTensor d₂ D₂) :
+    mpvOverlap (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) N =
+      mpvOverlap A B N := by
+  classical
+  let E : Cfg d₁ N ≃ Cfg d₂ N :=
+    Equiv.arrowCongr (Equiv.refl (Fin N)) e
+  simp only [mpvOverlap, mpv_reindexPhysical]
+  exact Fintype.sum_equiv E
+    (fun σ : Cfg d₁ N ↦
+      mpv A (fun n ↦ e (σ n)) * star (mpv B (fun n ↦ e (σ n))))
+    (fun σ : Cfg d₂ N ↦ mpv A σ * star (mpv B σ))
+    (fun σ ↦ by
+      have hσ : (fun n ↦ e (σ n)) = E σ := by
+        funext n
+        rfl
+      rw [hσ])
+
+/-- An equivalence of finite configuration spaces transports linear
+independence between MPV families whose coefficients correspond under that
+equivalence.
+
+Source context: arXiv:1606.00608, the blocking and physical-basis
+identifications used at lines 317--345 and in Appendix C.4, lines 1951--1956. -/
+theorem linearIndependent_mpvState_of_configEquiv
+    {d₁ d₂ N₁ N₂ : ℕ} {ι : Type*} {dim : ι → ℕ}
+    (e : Cfg d₁ N₁ ≃ Cfg d₂ N₂)
+    (A : (j : ι) → MPSTensor d₁ (dim j))
+    (B : (j : ι) → MPSTensor d₂ (dim j))
+    (hAB : ∀ (j : ι) (σ : Cfg d₂ N₂),
+      mpv (A j) (e.symm σ) = mpv (B j) σ)
+    (hLI : LinearIndependent ℂ (fun j ↦ mpvState (B j) N₂)) :
+    LinearIndependent ℂ (fun j ↦ mpvState (A j) N₁) := by
+  let F : MPVSpace d₁ N₁ ≃ₗ[ℂ] MPVSpace d₂ N₂ :=
+    (EuclideanSpace.equiv (Cfg d₁ N₁) ℂ).toLinearEquiv |>.trans
+      (LinearEquiv.piCongrLeft' ℂ (fun _ : Cfg d₁ N₁ ↦ ℂ) e) |>.trans
+      (EuclideanSpace.equiv (Cfg d₂ N₂) ℂ).symm.toLinearEquiv
+  have hF : ∀ j : ι, F (mpvState (A j) N₁) = mpvState (B j) N₂ := by
+    intro j
+    ext σ
+    exact hAB j σ
+  have hMapped : LinearIndependent ℂ
+      (fun j ↦ F (mpvState (A j) N₁)) := by
+    simpa only [hF] using hLI
+  exact LinearIndependent.of_comp F.toLinearMap hMapped
+
+/-- A physical-index equivalence preserves linear independence of a family
+of MPV states at a fixed chain length.
+
+Source context: arXiv:1606.00608, the physical-basis identifications used in
+canonical-form blocking at lines 317--345. -/
+theorem linearIndependent_mpvState_reindexPhysical_equiv
+    {d₁ d₂ r N : ℕ} {dim : Fin r → ℕ}
+    (e : Fin d₁ ≃ Fin d₂) (A : (j : Fin r) → MPSTensor d₂ (dim j))
+    (hLI : LinearIndependent ℂ (fun j ↦ mpvState (A j) N)) :
+    LinearIndependent ℂ
+      (fun j ↦ mpvState (Kraus.reindexPhysical e (A j)) N) := by
+  let E : Cfg d₁ N ≃ Cfg d₂ N :=
+    Equiv.arrowCongr (Equiv.refl (Fin N)) e
+  apply linearIndependent_mpvState_of_configEquiv E
+    (fun j ↦ Kraus.reindexPhysical e (A j)) A
+  · intro j σ
+    rw [mpv_reindexPhysical]
+    congr 1
+    funext n
+    simp [E, Equiv.arrowCongr]
+  · exact hLI
+
+end MPSTensor

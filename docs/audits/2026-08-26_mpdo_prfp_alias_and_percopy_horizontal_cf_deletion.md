@@ -17,14 +17,14 @@ already carried by a surviving entry.
 
 | Removed | Replacement |
 |---|---|
-| `MPOTensor.IsPRFPWithTracePreservingSpinReduction` (`TNLean/MPS/MPDO/PRFP.lean`) | `MPOTensor.IsPRFP` in the same file. The alias was definitionally equal to it; the trace-preserving spin reduction it advertised is proved unconditionally, for every ancillary dimension, by `MPOTensor.hasTracePreservingSpinReduction`, so recording it in a predicate added no hypothesis and no information. |
+| `MPOTensor.IsPRFPWithTracePreservingSpinReduction` (`TNLean/MPS/MPDO/Purification/PRFP.lean`) | `MPOTensor.IsPRFP` in the same file. The alias was definitionally equal to it; the trace-preserving spin reduction it advertised is proved unconditionally, for every ancillary dimension, by `MPOTensor.hasTracePreservingSpinReduction`, so recording it in a predicate added no hypothesis and no information. |
 | `MPOTensor.IsPRFPWithTracePreservingSpinReduction.isPRFP` | None needed: with the alias gone the statement is `IsPRFP M → IsPRFP M`. Its body was `h`. |
 | `MPOTensor.IsPRFP.withTracePreservingSpinReduction` | None needed, for the same reason; its body was `h`. |
 | `MPOTensor.IsPRFPWithTracePreservingSpinReduction.hasTracePreservingSpinReduction` | `MPOTensor.hasTracePreservingSpinReduction`, which proves the same trace-preserving completely positive structure for every ancillary dimension without assuming a purification fixed point. The removed theorem merely extracted the ancillary dimension from the witness and applied it. |
-| `MPOTensor.IsPerCopyHorizontalCF` (`TNLean/MPS/MPDO/PerCopyHorizontalCF.lean`) | `MPOTensor.IsHorizontalCF` (`TNLean/MPS/MPDO/HorizontalBNT.lean`) is the canonical-form predicate the development uses. The removed predicate was a stronger flattened per-copy variant with no consumer and no sanctioned bridge to the survivor; the bundled hypothesis structure `MPOTensor.HorizontalCFData` it packaged is retained and still consumed. |
+| `MPOTensor.IsPerCopyHorizontalCF` (`TNLean/MPS/CanonicalForm/BlockSeparation/PerCopyHorizontalCF.lean`) | `MPOTensor.IsHorizontalCF` (`TNLean/MPS/CanonicalForm/SimpleMPO/HorizontalBNT.lean`) is the canonical-form predicate the development uses. The removed predicate was a stronger flattened per-copy variant with no consumer and no sanctioned bridge to the survivor; the bundled hypothesis structure `MPOTensor.HorizontalCFData` it packaged is retained and still consumed. |
 | `MPOTensor.blockwise_opposite_insert_eq_of_mpv_agree` (same file) | `MPOTensor.blockwise_insert_eq_of_mpv_agree` in the same file, applied twice: the removed theorem chained that theorem's two instances through the shared left action. |
-| `MPOTensor.blockwise_opposite_insert_eq_of_rotated_mpo_entries` (same file) | None. Its only caller was the theorem below, which is itself removed here. The invariant-projection conclusion it prepared is proved along the surviving route by `MPOTensor.basis_braRight_eq_ketLeftBraRight_of_invariant` in `TNLean/MPS/MPDO/InvariantProjection.lean`. |
-| `MPOTensor.blockwise_braRight_eq_ketLeftBraRight_of_invariant` (`TNLean/MPS/MPDO/InvariantProjection.lean`) | `MPOTensor.basis_braRight_eq_ketLeftBraRight_of_invariant` in the same file, which draws the same blockwise conclusion from the representative-indexed canonical form instead of the stronger per-copy separation hypothesis. |
+| `MPOTensor.blockwise_opposite_insert_eq_of_rotated_mpo_entries` (same file) | None. Its only caller was the theorem below, which is itself removed here. The invariant-projection conclusion it prepared is proved along the surviving route by `MPOTensor.basis_braRight_eq_ketLeftBraRight_of_invariant` in `TNLean/MPS/CanonicalForm/SimpleMPO/InvariantProjection.lean`. |
+| `MPOTensor.blockwise_braRight_eq_ketLeftBraRight_of_invariant` (`TNLean/MPS/CanonicalForm/SimpleMPO/InvariantProjection.lean`) | `MPOTensor.basis_braRight_eq_ketLeftBraRight_of_invariant` in the same file, which draws the same blockwise conclusion from the representative-indexed canonical form instead of the stronger per-copy separation hypothesis. |
 
 ## Blueprint deletions
 
@@ -45,7 +45,7 @@ already carried by a surviving entry.
 
 ## Retained on purpose
 
-* `MPOTensor.hasTracePreservingSpinReduction` (`TNLean/MPS/MPDO/PRFP.lean`)
+* `MPOTensor.hasTracePreservingSpinReduction` (`TNLean/MPS/MPDO/Purification/PRFP.lean`)
   now has no Lean consumer, but it carries the `\lean{}` tag of
   `cor:mpdo_has_trace_preserving_spin_reduction` and states the tpCPM
   structure of arXiv:1606.00608, lines 761--764. Blueprint-cited declarations
@@ -62,11 +62,11 @@ already carried by a surviving entry.
 * `docs/glossary.md`: the `MPOTensor.IsPerCopyHorizontalCF` bullet was removed
   from the MPDO canonical-form predicate list. The `IsHorizontalCF` and
   `IsVerticalCF` bullets are unchanged.
-* `TNLean/MPS/MPDO/PerCopyHorizontalCF.lean`: the module docstring no longer
+* `TNLean/MPS/CanonicalForm/BlockSeparation/PerCopyHorizontalCF.lean`: the module docstring no longer
   advertises the removed consequences for the three contractions of
   Proposition 4.13.
-* `TNLean/MPS/MPDO/InvariantProjection.lean`: the now-unused import of
-  `TNLean.MPS.MPDO.PerCopyHorizontalCF` was dropped.
+* `TNLean/MPS/CanonicalForm/SimpleMPO/InvariantProjection.lean`: the now-unused import of
+  `TNLean.MPS.CanonicalForm.BlockSeparation.PerCopyHorizontalCF` was dropped.
 
 ## Subsequent PRFP correction
 

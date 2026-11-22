@@ -4,11 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.Polynomial.TailPowerSumUniqueness
-import TNLean.MPS.CanonicalForm.PhaseCover
-import TNLean.MPS.CanonicalForm.Reduction
+import TNLean.MPS.CanonicalForm.BNT.PhaseCover
+import TNLean.MPS.Tensor.DirectSum.IrreducibleDecomposition
 import TNLean.MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients
-import TNLean.MPS.Periodic.Overlap.Dichotomy
-import TNLean.MPS.Periodic.ScaledNormalization
+import TNLean.MPS.CanonicalForm.Periodic.Overlap.Dichotomy
+import TNLean.MPS.CanonicalForm.Periodic.ScaledNormalization
 
 /-!
 # Power-sum structure of length-dependent coefficients, without blocking

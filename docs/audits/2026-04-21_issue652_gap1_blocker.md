@@ -8,7 +8,7 @@
 Date: 2026-04-21
 Branch: `feat/652-bnt-grouping-unconditional`
 Target files:
-- `TNLean/MPS/CanonicalForm/BNTGrouping.lean`
+- `TNLean/MPS/CanonicalForm/BNT/Grouping.lean`
 - `TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean`
 
 ## Goal
@@ -27,12 +27,12 @@ Close the remaining non-periodic canonical-form reduction gap by:
 
 I re-read the current statements and surrounding infrastructure in:
 
-- `TNLean/MPS/CanonicalForm/BNTGrouping.lean`
+- `TNLean/MPS/CanonicalForm/BNT/Grouping.lean`
 - `TNLean/MPS/CanonicalForm/EqualNormBridge.lean`
 - `TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean`
 - `TNLean/MPS/CanonicalForm/Assembly/TPPrimitiveReduction.lean`
-- `TNLean/MPS/Core/BlockingInfrastructure.lean`
-- `TNLean/MPS/BNT/Construction.lean`
+- `TNLean/MPS/Transfer/Irreducible/BlockingInfrastructure.lean`
+- `TNLean/MPS/CanonicalForm/BNT/Construction.lean`
 - `TNLean/MPS/FundamentalTheorem/Full.lean`
 - `TNLean/MPS/FundamentalTheorem/SectorDecomposition.lean`
 

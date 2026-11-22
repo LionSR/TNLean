@@ -126,11 +126,11 @@ from Ref.~\cite{DeLasCuevas2017Irreducible}: it asserts the existence of a
 trace-preserving completely positive root channel and imposes no Kraus-rank
 bound.\footnote{The definition is
 \leanid{MPSTensor.IsPDivisibleChannel} in
-\path{TNLean/MPS/Periodic/Symmetry/Theorem41Defs.lean}.}
+\path{TNLean/MPS/FundamentalTheorem/Refinement/Defs.lean}.}
 
 The proved reverse step takes a selected bounded-rank root explicitly. The
 theorem \leanid{MPSTensor.isPRefinable_of_channel_root_hasKrausRankLE} in
-\path{TNLean/MPS/Periodic/Symmetry/Theorem41Reverse.lean}
+\path{TNLean/MPS/FundamentalTheorem/Refinement/RefinableOfDivisible.lean}
 assumes $\mathcal E_B=\mathcal F^p$ and a Kraus representation of
 $\mathcal F$ with at most $d$ operators. Padding that representation with
 zeros gives a $d$-letter tensor $A$ satisfying
@@ -239,7 +239,7 @@ These calculations have not been formalized in Lean.
 The seven-dimensional variant with sector dimensions $(1,2,2,1,1)$ is
 formalized by
 \leanid{MPSTensor.supplied_root_rank_counterexample} in
-\path{TNLean/MPS/Periodic/RefinementSuppliedRootObstruction.lean}.
+\path{TNLean/MPS/FundamentalTheorem/Refinement/SuppliedRootObstruction.lean}.
 Its root has Choi rank $10$, while its square has Choi rank $9$.
 The theorem records that the nine-letter target is periodic and has a
 one-block irreducible form, that the supplied root is a channel, and that
@@ -249,7 +249,7 @@ irreducibility follows by propagating an invariant subspace through the
 five sectors. Replacing the middle two-dimensional reset by a unitary
 again preserves the square and gives a root of rank $10-4+1=7$.
 This alternative root and the resulting refinement are now formalized in
-\path{TNLean/MPS/Periodic/Symmetry/RefinementCyclicResetAlternativeRoot.lean}.
+\path{TNLean/MPS/FundamentalTheorem/Refinement/CyclicResetAlternativeRoot.lean}.
 In coordinates $0,\ldots,6$, its Kraus family is
 \begin{align}
  (K_0,\ldots,K_6)&=
@@ -291,9 +291,9 @@ that property. It does not settle the general case: the unequal sector
 dimensions of the cyclic example above force every element of its original
 Kraus span to be singular. The rank identity and multiplication argument are formalized in
 \path{QICLean/Kraus/ChoiRankSpan.lean} and
-\path{TNLean/MPS/Periodic/RootWordSpan.lean}. The theorem
+\path{TNLean/MPS/FundamentalTheorem/Refinement/RootWordSpan.lean}. The theorem
 \leanid{MPSTensor.isPRefinable_of_root_isUnit_mem_wordSpan_pred}
-in \path{TNLean/MPS/Periodic/Symmetry/RefinementFromInvertibleWordSpan.lean}
+in \path{TNLean/MPS/FundamentalTheorem/Refinement/FromInvertibleWordSpan.lean}
 proves refinement from such a tensor root, allowing its initial Kraus
 alphabet to have any finite size. This is a sufficient condition and does
 not assert that an arbitrary divisible channel has such a root.
@@ -303,8 +303,8 @@ Indeed, a subspace invariant under the root's Kraus operators is invariant
 under all their $p$-fold products. If the root has period $m$, the arbitrary
 blocking theorem then gives $\gcd(m,p)=1$, since its $p$th power remains
 irreducible. These two necessary conditions are formalized in
-\path{TNLean/MPS/Periodic/RefinementRootIrreducibility.lean} and
-\path{TNLean/MPS/Periodic/RefinementRootPeriod.lean}. The declarations
+\path{TNLean/MPS/FundamentalTheorem/Refinement/RootIrreducibility.lean} and
+\path{TNLean/MPS/FundamentalTheorem/Refinement/RootPeriod.lean}. The declarations
 \leanid{MPSTensor.isIrreducibleFamily_of_transferMap_eq_blockTensor} and
 \leanid{MPSTensor.IsPeriodic.coprime_of_isIrreducibleFamily_blockTensor}
 allow different Kraus alphabet sizes for the target and root; neither
@@ -361,13 +361,13 @@ The declarations
 \leanid{Channel.choiRank_le_pow_of_injective} prove the composition and
 power inequalities. The resulting refinement theorem is
 \leanid{MPSTensor.isPRefinable_of_isPDivisibleChannel_of_injective} in
-\path{TNLean/MPS/Periodic/Symmetry/RefinementFromInjectiveTransfer.lean}.
+\path{TNLean/MPS/FundamentalTheorem/Refinement/RefinableOfDivisible.lean}.
 It requires no canonical-form assumption.
 
 \section{All qubit targets, including singular and reducible ones}
 
 There is also a complete dimension-two result, formalized in
-\path{TNLean/MPS/Periodic/RefinementQubitRootRank.lean}.
+\path{TNLean/MPS/FundamentalTheorem/Refinement/QubitRootRank.lean}.
 If $\mathcal F$ is a channel on $M_2(\mathbb C)$ and $p>0$, then
 \begin{align}
  \operatorname{rank}C_{\mathcal F}

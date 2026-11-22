@@ -1,6 +1,6 @@
 # Duplicate representative-indexed first-site theorems in horizontal BNT (2026-08-27)
 
-`TNLean/MPS/MPDO/HorizontalBNT.lean` carried two theorems that restate,
+`TNLean/MPS/CanonicalForm/SimpleMPO/HorizontalBNT.lean` carried two theorems that restate,
 verbatim, results already owned by the modules it imports. Both were removed
 under the repository-local pass-through exception of
 `docs/project_conventions.md` §Style, so no transition declaration is left
@@ -13,8 +13,8 @@ and the representative index renamed (`j` against `k`).
 
 | Removed | Replacement |
 |---|---|
-| `MPOTensor.representative_opposite_insert_eq_of_rotated_mpo_entries` (`TNLean/MPS/MPDO/HorizontalBNT.lean`) | `MPOTensor.basis_opposite_insert_eq_of_rotated_mpo_entries` in `TNLean/MPS/MPDO/HorizontalCFMPVRepresentation.lean`. The two statements agree on all seven explicit binders — the tensor, the sector decomposition, the canonical-form hypothesis, the positive-length matrix product vector agreement, the physical operator, and the two entrywise first-site identities — and on the conclusion that the two opposite-corner insertions agree on every minimal representative. At the audited head the removed name had no non-`Archive` Lean consumer. |
-| `MPOTensor.representative_braRight_eq_ketLeftBraRight_of_invariant` (same file) | `MPOTensor.basis_braRight_eq_ketLeftBraRight_of_invariant` in `TNLean/MPS/MPDO/InvariantProjection.lean`. The two statements agree in binder kind and order, and the proof bodies were textually the same appeal to the canonical form together with the invariant-projection first-site agreement. Its two consumers inside `HorizontalBNT.lean`, `MPOTensor.IsHorizontalCF.exists_representative_braRight_eq_ketLeftBraRight` and `MPOTensor.IsHorizontalCF.braRight_eq_ketLeftBraRight_of_invariant`, now call the survivor with an unchanged argument list; `HorizontalBNT.lean` already imports `TNLean.MPS.MPDO.InvariantProjection`, so no import changed. |
+| `MPOTensor.representative_opposite_insert_eq_of_rotated_mpo_entries` (`TNLean/MPS/CanonicalForm/SimpleMPO/HorizontalBNT.lean`) | `MPOTensor.basis_opposite_insert_eq_of_rotated_mpo_entries` in `TNLean/MPS/CanonicalForm/SimpleMPO/HorizontalCFMPVRepresentation.lean`. The two statements agree on all seven explicit binders — the tensor, the sector decomposition, the canonical-form hypothesis, the positive-length matrix product vector agreement, the physical operator, and the two entrywise first-site identities — and on the conclusion that the two opposite-corner insertions agree on every minimal representative. At the audited head the removed name had no non-`Archive` Lean consumer. |
+| `MPOTensor.representative_braRight_eq_ketLeftBraRight_of_invariant` (same file) | `MPOTensor.basis_braRight_eq_ketLeftBraRight_of_invariant` in `TNLean/MPS/CanonicalForm/SimpleMPO/InvariantProjection.lean`. The two statements agree in binder kind and order, and the proof bodies were textually the same appeal to the canonical form together with the invariant-projection first-site agreement. Its two consumers inside `HorizontalBNT.lean`, `MPOTensor.IsHorizontalCF.exists_representative_braRight_eq_ketLeftBraRight` and `MPOTensor.IsHorizontalCF.braRight_eq_ketLeftBraRight_of_invariant`, now call the survivor with an unchanged argument list; `HorizontalBNT.lean` already imports `TNLean.MPS.CanonicalForm.SimpleMPO.InvariantProjection`, so no import changed. |
 
 ## Blueprint
 

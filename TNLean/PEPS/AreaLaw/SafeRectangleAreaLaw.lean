@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.AreaLawTheorem
-import TNLean.PEPS.AreaLaw.InitialBufferReal
-import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary
+import TNLean.PEPS.AreaLaw.SafeRectangles.InitialBufferReal
+import TNLean.PEPS.AreaLaw.Templates.TemplateCutBoundary
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

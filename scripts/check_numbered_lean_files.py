@@ -24,26 +24,26 @@ ARCHIVE_ROOT = "TNLean/Archive/"
 # for their mathematical responsibility, then use a concept-named aggregator.
 NUMBERED_DEBT_ALLOWLIST: frozenset[str] = frozenset(
     {
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite10.lean",
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite11.lean",
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite4.lean",
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite5.lean",
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite6.lean",
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite7.lean",
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite8.lean",
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite9.lean",
-        "TNLean/PEPS/RegionBlock/Recovery2.lean",
-        "TNLean/PEPS/RegionBlock/Recovery3.lean",
-        "TNLean/PEPS/RegionBlock/Recovery4.lean",
-        "TNLean/PEPS/RegionBlock/Recovery7.lean",
-        "TNLean/PEPS/RegionBlock/Recovery8.lean",
-        "TNLean/PEPS/RegionBlock/Recovery9.lean",
-        "TNLean/PEPS/RegionBlock/UnionInjectivityGeneral2.lean",
-        "TNLean/PEPS/RegionBlock/UnionInjectivityOverlap3.lean",
-        "TNLean/PEPS/TorusWindowChain2.lean",
-        "TNLean/PEPS/TorusWindowChain4.lean",
-        "TNLean/PEPS/TorusWindowChain5.lean",
-        "TNLean/PEPS/TorusWindowChain6.lean",
+        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/RelaxedTripleMergeAssembly.lean",
+        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/SingleEdgeTransfer.lean",
+        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/FiberCollapse.lean",
+        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/ThreeRegionMerge.lean",
+        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/InsertedCoefficientDescent.lean",
+        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/InsertedCoefficientDescentBundle.lean",
+        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/SingleCrossingDescent.lean",
+        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/RelaxedTripleMerge.lean",
+        "TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/RegionTransferMatrix.lean",
+        "TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/SpanningStep.lean",
+        "TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/IncidentMatrixForm.lean",
+        "TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/ResonateIdentity.lean",
+        "TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/IncidentMatrixRealization.lean",
+        "TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/ResonateReconcile.lean",
+        "TNLean/PEPS/Injectivity/Region/DisjointUnion.lean",
+        "TNLean/PEPS/Injectivity/Region/OverlapUnionBridgeRow.lean",
+        "TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowExtension.lean",
+        "TNLean/PEPS/FundamentalTheorem/Torus/Window/CornerExtensionTransitivity.lean",
+        "TNLean/PEPS/FundamentalTheorem/Torus/Window/CornerExtensionAdditivity.lean",
+        "TNLean/PEPS/FundamentalTheorem/Torus/Window/StaircaseChaining.lean",
     }
 )
 
@@ -52,9 +52,9 @@ NUMBERED_DEBT_ALLOWLIST: frozenset[str] = frozenset(
 SEMANTIC_EXCEPTIONS: dict[str, str] = {
     "TNLean/MPS/Examples/ZMod2.lean":
         "ZMod 2 is the mathematical coefficient group used by the example.",
-    "TNLean/MPS/Examples/AnomalousCondensation/AnomalousCondensationZ2Z2.lean":
+    "TNLean/MPS/Examples/Z2Z2/AnomalousCondensationZ2Z2.lean":
         "Z2 x Z2 is the anomalous symmetry group whose condensation defect is formalized.",
-    "TNLean/MPS/ParentHamiltonian/Martingale/EmbeddedC2.lean":
+    "TNLean/MPS/ParentHamiltonian/ParentInteraction/EmbeddedC2.lean":
         "Condition C2 is Nachtergaele's martingale condition formalized by this module.",
 }
 

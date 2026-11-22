@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.CZX.CZXTensor
-import TNLean.MPS.MPDO.OperatorCyclicSum
+import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 
 /-!
 # CZY: the anomalous `ℤ₂` operator of the Levin–Gu edge and its stacked square

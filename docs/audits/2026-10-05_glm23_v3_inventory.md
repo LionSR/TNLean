@@ -180,9 +180,9 @@ Module paths are relative to the repository. Names below are exact existing decl
 
 ### B01. MPS tensor, arbitrary and periodic boundaries, and S_A^n
 Source: `304–315`; `MPSssubs`. Kind: definitions. Status: **merged**.
-- Lean: `MPSTensor.groundSpaceMap` in `TNLean/MPS/ParentHamiltonian/GroundSpace.lean`
-- Lean: `MPSTensor.groundSpace` in `TNLean/MPS/ParentHamiltonian/GroundSpace.lean`
-- Lean: `MPSTensor.mpv` in `TNLean/MPS/Defs.lean`
+- Lean: `MPSTensor.groundSpaceMap` in `TNLean/MPS/Tensor/GroundSpace/GroundSpace.lean`
+- Lean: `MPSTensor.groundSpace` in `TNLean/MPS/Tensor/GroundSpace/GroundSpace.lean`
+- Lean: `MPSTensor.mpv` in `TNLean/MPS/Tensor/Defs.lean`
 - Blueprint: `def:ground_space_map` in `blueprint/src/chapter/ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex:19` (`leanok`)
 - Blueprint: `def:ground_space_parent` in `blueprint/src/chapter/ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex:215` (`leanok`)
 - Blueprint: `def:mpv` in `blueprint/src/chapter/ch02_mps.tex:133` (`leanok`)
@@ -190,16 +190,16 @@ Source: `304–315`; `MPSssubs`. Kind: definitions. Status: **merged**.
 
 ### B02. Boundary dimension, block-injective normal form, finite blocking and asymptotic block separation
 Source: `312–317`; `MPSssubs`. Kind: background claims. Status: **restricted**.
-- Lean: `MPSTensor.groundSpace` in `TNLean/MPS/ParentHamiltonian/GroundSpace.lean`
-- Lean: `MPSTensor.IsBNT` in `TNLean/MPS/BNT/Basic.lean`
+- Lean: `MPSTensor.groundSpace` in `TNLean/MPS/Tensor/GroundSpace/GroundSpace.lean`
+- Lean: `MPSTensor.IsBNT` in `TNLean/MPS/CanonicalForm/BNT/Basic.lean`
 - Blueprint: `def:ground_space_parent` in `blueprint/src/chapter/ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex:215` (`leanok`)
 - Blueprint: `def:bnt` in `blueprint/src/chapter/ch10_bnt_definitions_and_characterization.tex:3` (`leanok`)
 - Boundary: Shared foundational background; the exact packaged implication from the paper’s direct-sum standing assumptions to all hypotheses used here must be stated. “Any MPS becomes injective after blocking” is not literal without periodic/block qualifications; use existing canonical/periodic APIs. This is not GLM23-specific coverage credit.
 
 ### B03. Gapped frustration-free parent; PBC block-count and OBC sum-of-squared-bonds degeneracy; GHZ spin-flip example
 Source: `319`; unlabelled. Kind: background theorem and example. Status: **restricted**.
-- Lean: `MPSTensor.parentInteraction` in `TNLean/MPS/ParentHamiltonian/Defs.lean`
-- Lean: `MPSTensor.groundSpace` in `TNLean/MPS/ParentHamiltonian/GroundSpace.lean`
+- Lean: `MPSTensor.parentInteraction` in `TNLean/MPS/Tensor/GroundSpace/ParentHamiltonian.lean`
+- Lean: `MPSTensor.groundSpace` in `TNLean/MPS/Tensor/GroundSpace/GroundSpace.lean`
 - Blueprint: `def:parent_interaction` in `blueprint/src/chapter/ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex:3188` (`leanok`)
 - Blueprint: `def:ground_space_parent` in `blueprint/src/chapter/ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex:215` (`leanok`)
 - Issue: [#190](https://github.com/LionSR/TNLean/issues/190) (not verified in this inventory)
@@ -208,8 +208,8 @@ Source: `319`; unlabelled. Kind: background theorem and example. Status: **restr
 
 ### B04. MPO with arbitrary boundary and distinct injective blocks
 Source: `321–323`; unlabelled. Kind: definition. Status: **merged**.
-- Lean: `MPOTensor.mpoWithBoundary` in `TNLean/MPS/MPDO/Boundary.lean`
-- Lean: `MPOTensor.mpoWithBoundary_one` in `TNLean/MPS/MPDO/Boundary.lean`
+- Lean: `MPOTensor.mpoWithBoundary` in `TNLean/MPS/Operator/Boundary/Boundary.lean`
+- Lean: `MPOTensor.mpoWithBoundary_one` in `TNLean/MPS/Operator/Boundary/Boundary.lean`
 - Blueprint: `def:mpdo_commuting_boundary` in `blueprint/src/chapter/ch20_mpdo_symmetry.tex:10` (`leanok`)
 - Boundary: Definition permits all boundaries even though Boundary.lean also studies commuting boundaries.
 
@@ -223,8 +223,8 @@ Source: `325–358`; `algcond`. Kind: definition. Status: **missing**.
 
 ### A02. Closedness produces exact fusion tensors, natural-number multiplicities and letterwise reconstruction (fusiontensors)
 Source: `361–381`; `fusiontensors`. Kind: existence theorem. Status: **restricted**.
-- Lean: `MPOTensor.exists_fusionTensors_of_mpo_mul_eq_sum` in `TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean`
-- Lean: `MPOTensor.CompleteZipperFusionFamily.ofCompression` in `TNLean/MPS/MPDO/CompleteZipperFusionOfCompression.lean`
+- Lean: `MPOTensor.exists_fusionTensors_of_mpo_mul_eq_sum` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/FusionTensors.lean`
+- Lean: `MPOTensor.CompleteZipperFusionFamily.ofCompression` in `TNLean/MPS/FundamentalTheorem/OperatorProduct/CompleteZipperFusionOfCompression.lean`
 - Blueprint: `cor:asym_fusion_action_multiplicity` in `blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex:247` (`leanok`)
 - Blueprint: `thm:mpdo_complete_zipper_of_compression` in `blueprint/src/chapter/ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex:182` (`leanok`)
 - Issue: [#7968](https://github.com/LionSR/TNLean/issues/7968) (open)
@@ -233,8 +233,8 @@ Source: `361–381`; `fusiontensors`. Kind: existence theorem. Status: **restric
 
 ### A03. Fusion tensors are biorthogonal; multiplicities count independent channels (eq:orthoW)
 Source: `361–391`; `fusiontensors`, `eq:orthoW`. Kind: orthogonality theorem. Status: **restricted**.
-- Lean: `MPSTensor.exists_multiplicityReductions_of_isNormal` in `TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean`
-- Lean: `MPOTensor.CompleteZipperFusionFamily` in `TNLean/MPS/MPDO/CompleteZipperFusionDefs.lean`
+- Lean: `MPSTensor.exists_multiplicityReductions_of_isNormal` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/FusionTensors.lean`
+- Lean: `MPOTensor.CompleteZipperFusionFamily` in `TNLean/MPS/Operator/Fusion/CompleteZipperFusionDefs.lean`
 - Blueprint: `thm:asym_multiplicity_reductions` in `blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex:221` (`leanok`)
 - Blueprint: `def:mpdo_complete_zipper_fusion_family` in `blueprint/src/chapter/ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex:1` (`leanok`)
 - Issue: [#7968](https://github.com/LionSR/TNLean/issues/7968) (open)
@@ -243,8 +243,8 @@ Source: `361–391`; `fusiontensors`, `eq:orthoW`. Kind: orthogonality theorem. 
 
 ### A04. Periodic operators obey O_a O_b = sum_c N_ab^c O_c
 Source: `361`; unlabelled. Kind: consequence. Status: **restricted**.
-- Lean: `MPOTensor.IsMPOFusionAlgebra` in `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`
-- Lean: `MPOTensor.mpo_mul_eq_sum_of_multiBlockCompression` in `TNLean/MPS/FundamentalTheorem/Reduction/CompressionPeriodic.lean`
+- Lean: `MPOTensor.IsMPOFusionAlgebra` in `TNLean/MPS/Operator/Fusion/MPOSymmetry.lean`
+- Lean: `MPOTensor.mpo_mul_eq_sum_of_multiBlockCompression` in `TNLean/MPS/FundamentalTheorem/OperatorProduct/CompressionPeriodic.lean`
 - Blueprint: `def:mpo_fusion_algebra` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:293` (`leanok`)
 - Blueprint: `cor:asym_compression_periodic` in `blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex:188` (`leanok`)
 - Issue: [#7968](https://github.com/LionSR/TNLean/issues/7968) (open)
@@ -253,9 +253,9 @@ Source: `361`; unlabelled. Kind: consequence. Status: **restricted**.
 
 ### F01. Associativity gives invertible multiplicity F change-of-basis (Fsymbolsdef)
 Source: `392–409`; `Fsymbolsdef`. Kind: definition and existence. Status: **conditional**.
-- Lean: `MPOTensor.CompleteZipperFusionFamily.printedFMatrix` in `TNLean/MPS/MPDO/CompleteZipperFusion.lean`
-- Lean: `MPOTensor.CompleteZipperFusionFamily.rightTripleSynthesis_mul_printedFMatrix` in `TNLean/MPS/MPDO/CompleteZipperFusion.lean`
-- Lean: `MPOTensor.CompleteZipperFusionFamily.printedFMatrix_mul_inversePrintedFMatrix` in `TNLean/MPS/MPDO/CompleteZipperFusionInverse.lean`
+- Lean: `MPOTensor.CompleteZipperFusionFamily.printedFMatrix` in `TNLean/MPS/Operator/Fusion/CompleteZipperFusion.lean`
+- Lean: `MPOTensor.CompleteZipperFusionFamily.rightTripleSynthesis_mul_printedFMatrix` in `TNLean/MPS/Operator/Fusion/CompleteZipperFusion.lean`
+- Lean: `MPOTensor.CompleteZipperFusionFamily.printedFMatrix_mul_inversePrintedFMatrix` in `TNLean/MPS/Operator/Fusion/CompleteZipperFusionInverse.lean`
 - Blueprint: `thm:mpdo_complete_zipper_printed_fmove` in `blueprint/src/chapter/ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex:347` (`leanok`)
 - Issue: [#7968](https://github.com/LionSR/TNLean/issues/7968) (open)
 - Boundary: Complete-zipper hypotheses and simultaneous left inverse are supplied. This is valid reusable conditional F theory, not closedness⇒F. Orientation is source-specific: printed F and its inverse must not be conflated.
@@ -263,7 +263,7 @@ Source: `392–409`; `Fsymbolsdef`. Kind: definition and existence. Status: **co
 
 ### F02. Multiplicity F pentagon (pentagon0F)
 Source: `410–414`; `pentagon0F`. Kind: theorem. Status: **conditional**.
-- Lean: `MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_pentagon` in `TNLean/MPS/MPDO/CompleteZipperFusionPentagon.lean`
+- Lean: `MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_pentagon` in `TNLean/MPS/Operator/Fusion/CompleteZipperFusionPentagon.lean`
 - Blueprint: `thm:mpdo_complete_zipper_fusion_pentagon` in `blueprint/src/chapter/ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex:634` (`leanok`)
 - Issue: [#7968](https://github.com/LionSR/TNLean/issues/7968) (open)
 - Boundary: Merged pentagon for complete zipper families; source-faithful constructor missing.
@@ -271,10 +271,10 @@ Source: `410–414`; `pentagon0F`. Kind: theorem. Status: **conditional**.
 
 ### F03. Fusion GL-multiplicity gauge, F covariance, quotient by gauge
 Source: `416–424`; unlabelled. Kind: gauge theorem and equivalence. Status: **conditional**.
-- Lean: `MPOTensor.CompleteZipperFusionFamily.regauge_fusionTensor` in `TNLean/MPS/MPDO/CompleteZipperFusionGauge.lean`
-- Lean: `MPOTensor.CompleteZipperFusionFamily.printedFMatrix_regauge` in `TNLean/MPS/MPDO/CompleteZipperFusionGauge.lean`
-- Lean: `MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_regauge` in `TNLean/MPS/MPDO/CompleteZipperFusionGauge.lean`
-- Lean: `MPOTensor.exists_unique_zipperFusionGauge` in `TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness.lean`
+- Lean: `MPOTensor.CompleteZipperFusionFamily.regauge_fusionTensor` in `TNLean/MPS/Operator/Fusion/CompleteZipperFusionGauge.lean`
+- Lean: `MPOTensor.CompleteZipperFusionFamily.printedFMatrix_regauge` in `TNLean/MPS/Operator/Fusion/CompleteZipperFusionGauge.lean`
+- Lean: `MPOTensor.CompleteZipperFusionFamily.inversePrintedFMatrix_regauge` in `TNLean/MPS/Operator/Fusion/CompleteZipperFusionGauge.lean`
+- Lean: `MPOTensor.exists_unique_zipperFusionGauge` in `TNLean/MPS/Operator/Fusion/ZipperUniqueness.lean`
 - Blueprint: `thm:mpdo_complete_zipper_fmatrix_gauge` in `blueprint/src/chapter/ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex:447` (`leanok`)
 - Blueprint: `cor:asym_zipper_fusion_uniqueness` in `blueprint/src/chapter/ch25_asymmetric_ft_splitting.tex:273` (`leanok`)
 - Issue: [#7968](https://github.com/LionSR/TNLean/issues/7968) (open), [#8088](https://github.com/LionSR/TNLean/issues/8088) (closed)
@@ -291,8 +291,8 @@ Source: `426`; unlabelled. Kind: scope claim. Status: **missing**.
 
 ### A05. Arbitrary-boundary MPO-symmetric MPS, one output boundary independent of n (eq:compatible)
 Source: `431–458`; `eq:compatible`. Kind: definition. Status: **missing**.
-- Lean: `MPOTensor.IsMPOSymmetricFamily` in `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`
-- Lean: `MPSTensor.groundSpaceMap` in `TNLean/MPS/ParentHamiltonian/GroundSpace.lean`
+- Lean: `MPOTensor.IsMPOSymmetricFamily` in `TNLean/MPS/Operator/Fusion/MPOSymmetry.lean`
+- Lean: `MPSTensor.groundSpaceMap` in `TNLean/MPS/Tensor/GroundSpace/GroundSpace.lean`
 - Blueprint: `def:mpo_symmetric_family` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:595` (`leanok`)
 - Blueprint: `def:ground_space_map` in `blueprint/src/chapter/ch13_parent_hamiltonian_injective_ground_spaces_local_parent_interaction.tex:19` (`leanok`)
 - Issue: [#7968](https://github.com/LionSR/TNLean/issues/7968) (open)
@@ -301,9 +301,9 @@ Source: `431–458`; `eq:compatible`. Kind: definition. Status: **missing**.
 
 ### A06. Arbitrary-boundary invariance produces exact multiplicity action tensors (fusiontensors2)
 Source: `459–480`; `fusiontensors2`. Kind: existence theorem. Status: **restricted**.
-- Lean: `MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum` in `TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean`
-- Lean: `MPOTensor.actTensor` in `TNLean/MPS/MPDO/ActionTensor.lean`
-- Lean: `MPSTensor.IsReduction.actTensor_idKron` in `TNLean/MPS/MPDO/ActionTensorReduction.lean`
+- Lean: `MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/FusionTensors.lean`
+- Lean: `MPOTensor.actTensor` in `TNLean/MPS/Operator/Product/ActionTensor.lean`
+- Lean: `MPSTensor.IsReduction.actTensor_idKron` in `TNLean/MPS/Operator/ActionTensorReduction.lean`
 - Blueprint: `cor:asym_fusion_action_multiplicity` in `blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex:247` (`leanok`)
 - Blueprint: `def:mpug_action_tensor` in `blueprint/src/chapter/ch29_mpu_gauging.tex:4608` (`leanok`)
 - Blueprint: `thm:mpug_action_tensor_reductions` in `blueprint/src/chapter/ch29_mpu_gauging.tex:4684` (`leanok`)
@@ -313,8 +313,8 @@ Source: `459–480`; `fusiontensors2`. Kind: existence theorem. Status: **restri
 
 ### A07. Biorthogonal action tensors (eq:orthoV)
 Source: `481–490`; `eq:orthoV`. Kind: orthogonality theorem. Status: **restricted**.
-- Lean: `MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum` in `TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean`
-- Lean: `MPOTensor.exists_unique_zipperActionGauge` in `TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness.lean`
+- Lean: `MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/FusionTensors.lean`
+- Lean: `MPOTensor.exists_unique_zipperActionGauge` in `TNLean/MPS/Operator/Fusion/ZipperUniqueness.lean`
 - Blueprint: `cor:asym_fusion_action_multiplicity` in `blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex:247` (`leanok`)
 - Blueprint: `cor:asym_zipper_action_uniqueness` in `blueprint/src/chapter/ch25_asymmetric_ft_splitting.tex:297` (`leanok`)
 - Issue: [#7968](https://github.com/LionSR/TNLean/issues/7968) (open)
@@ -323,7 +323,7 @@ Source: `481–490`; `eq:orthoV`. Kind: orthogonality theorem. Status: **restric
 
 ### L01. Two action trees, invertible multiplicity L-symbol comparison, and contraction formula (rawrels, eq:F_symbol2, 1Fsymbol)
 Source: `491–550`; `rawrels`, `eq:F_symbol2`, `1Fsymbol`. Kind: definition and existence. Status: **missing**.
-- Lean: `MPOTensor.actTensor_mulTensor` in `TNLean/MPS/MPDO/ActionTensorReduction.lean`
+- Lean: `MPOTensor.actTensor_mulTensor` in `TNLean/MPS/Operator/ActionTensorReduction.lean`
 - Blueprint: `thm:mpug_action_tensor_reductions` in `blueprint/src/chapter/ch29_mpu_gauging.tex:4684` (`leanok`)
 - Issue: [#8045](https://github.com/LionSR/TNLean/issues/8045) (open)
 - Boundary: Scalar group L-symbols are not an implementation of multiplicity L-symbols. The word “non-zero constants” must mean invertible change of basis, not every matrix entry nonzero.
@@ -339,15 +339,15 @@ Source: `552–562`; `coupledpent`. Kind: theorem. Status: **missing**.
 
 ### L03. NIM-rep associativity identity for M and N
 Source: `564–565`; unlabelled. Kind: theorem. Status: **merged**.
-- Lean: `MPOTensor.sum_fusion_mul_eq_sum_mul_of_isMPOSymmetricFamily` in `TNLean/MPS/Symmetry/MPOSymmetry/NIMRep.lean`
-- Lean: `MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily` in `TNLean/MPS/Symmetry/MPOSymmetry/NIMRep.lean`
+- Lean: `MPOTensor.sum_fusion_mul_eq_sum_mul_of_isMPOSymmetricFamily` in `TNLean/MPS/FundamentalTheorem/OperatorProduct/NIMRep.lean`
+- Lean: `MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily` in `TNLean/MPS/FundamentalTheorem/OperatorProduct/NIMRep.lean`
 - Blueprint: `thm:mpo_symmetric_nimrep` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:828` (`leanok`)
 - Boundary: Proved from weaker periodic data plus normal blocks and a faithful block-independence hypothesis. Source arbitrary-boundary bridge still A05/A06.
 
 ### L04. Periodic action O_a ψ_x = sum_y M_ax^y ψ_y
 Source: `567–591`; unlabelled. Kind: consequence. Status: **restricted**.
-- Lean: `MPOTensor.IsMPOSymmetricFamily` in `TNLean/MPS/Symmetry/MPOSymmetry/Defs.lean`
-- Lean: `MPOTensor.mpo_mulVec_mpv_eq_sum_of_multiBlockCompression` in `TNLean/MPS/FundamentalTheorem/Reduction/CompressionPeriodic.lean`
+- Lean: `MPOTensor.IsMPOSymmetricFamily` in `TNLean/MPS/Operator/Fusion/MPOSymmetry.lean`
+- Lean: `MPOTensor.mpo_mulVec_mpv_eq_sum_of_multiBlockCompression` in `TNLean/MPS/FundamentalTheorem/OperatorProduct/CompressionPeriodic.lean`
 - Blueprint: `def:mpo_symmetric_family` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:595` (`leanok`)
 - Blueprint: `cor:asym_compression_periodic` in `blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex:188` (`leanok`)
 - Issue: [#7968](https://github.com/LionSR/TNLean/issues/7968) (open)
@@ -356,7 +356,7 @@ Source: `567–591`; unlabelled. Kind: consequence. Status: **restricted**.
 
 ### L05. Action GL-multiplicity gauges and joint F/L covariance; quotient of coupled-pentagon solutions
 Source: `593–602`; unlabelled. Kind: gauge and classification definition. Status: **missing**.
-- Lean: `MPOTensor.exists_unique_zipperActionGauge` in `TNLean/MPS/Symmetry/MPOSymmetry/ZipperUniqueness.lean`
+- Lean: `MPOTensor.exists_unique_zipperActionGauge` in `TNLean/MPS/Operator/Fusion/ZipperUniqueness.lean`
 - Blueprint: `cor:asym_zipper_action_uniqueness` in `blueprint/src/chapter/ch25_asymmetric_ft_splitting.tex:297` (`leanok`)
 - Issue: [#8045](https://github.com/LionSR/TNLean/issues/8045) (open)
 - Boundary: Uniqueness for supplied exact zipper decompositions exists; full L covariance/equivalence construction missing.
@@ -372,8 +372,8 @@ Source: `604`; unlabelled. Kind: existence example. Status: **missing**.
 
 ### O01. Single injective block with every action multiplicity one forces F gauge-trivial via λ
 Source: `607–634`; `nonuniqueGS`. Kind: no-go theorem. Status: **restricted**.
-- Lean: `MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_omega_of_invariant` in `TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`
-- Lean: `MPOTensor.not_isMPOSymmetric_of_forall_not_isFusionCharacter` in `TNLean/MPS/Symmetry/MPOSymmetry/Character.lean`
+- Lean: `MPOTensor.GroupFamily.IsNormalRepresentation.isTrivialGaugeClass_omega_of_invariant` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/AnomalyObstruction.lean`
+- Lean: `MPOTensor.not_isMPOSymmetric_of_forall_not_isFusionCharacter` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/Character.lean`
 - Blueprint: `thm:mpug_anomaly_obstruction` in `blueprint/src/chapter/ch29_mpu_gauging.tex:4948` (`leanok`)
 - Blueprint: `cor:mpo_symmetric_no_go` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:879` (`leanok`)
 - Issue: [#7968](https://github.com/LionSR/TNLean/issues/7968) (open), [#8045](https://github.com/LionSR/TNLean/issues/8045) (open)
@@ -382,7 +382,7 @@ Source: `607–634`; `nonuniqueGS`. Kind: no-go theorem. Status: **restricted**.
 
 ### O02. Nontrivial MPO algebra excludes unique gapped MPS ground state without action multiplicity
 Source: `636`; unlabelled. Kind: physical consequence. Status: **restricted**.
-- Lean: `MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass` in `TNLean/MPS/Symmetry/MPOSymmetry/AnomalyObstruction.lean`
+- Lean: `MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/AnomalyObstruction.lean`
 - Blueprint: `thm:mpug_anomaly_obstruction` in `blueprint/src/chapter/ch29_mpu_gauging.tex:4948` (`leanok`)
 - Issue: [#7968](https://github.com/LionSR/TNLean/issues/7968) (open), [#8050](https://github.com/LionSR/TNLean/issues/8050) (open)
 - Boundary: Needs general O01 and faithful bridge between ground-space degeneracy, normal blocks, and symmetry.
@@ -390,8 +390,8 @@ Source: `636`; unlabelled. Kind: physical consequence. Status: **restricted**.
 
 ### G01. Group labels, exact group fusion, projector identity O_e and representation on its range
 Source: `638–660`; `groupcase`, `fusiontensorG`. Kind: specialization and consequence. Status: **restricted**.
-- Lean: `MPOTensor.GroupFamily.isMPOFusionAlgebra` in `TNLean/MPS/Symmetry/MPOSymmetry/GroupFusion.lean`
-- Lean: `MPOTensor.GroupFamily.FusionData.IsClosed` in `TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean`
+- Lean: `MPOTensor.GroupFamily.isMPOFusionAlgebra` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/GroupFusion.lean`
+- Lean: `MPOTensor.GroupFamily.FusionData.IsClosed` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/ClosedFusion.lean`
 - Blueprint: `thm:mpug_group_fusion_rules` in `blueprint/src/chapter/ch29_mpu_gauging.tex:188` (`leanok`)
 - Blueprint: `thm:mposym_closed_fusion_onsite` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:195` (`leanok`)
 - Issue: [#7968](https://github.com/LionSR/TNLean/issues/7968) (open), [#8054](https://github.com/LionSR/TNLean/issues/8054) (open)
@@ -400,10 +400,10 @@ Source: `638–660`; `groupcase`, `fusiontensorG`. Kind: specialization and cons
 
 ### G02. Group F=ω, three-cocycle condition, coboundary gauge and H³ class
 Source: `662–681`; `3cocygroup`. Kind: definition and theorem. Status: **merged, restricted**.
-- Lean: `MPOTensor.GroupFamily.FusionData.omega` in `TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`
-- Lean: `MPOTensor.GroupFamily.FusionData.isCocycle_omega` in `TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`
-- Lean: `MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge` in `TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`
-- Lean: `MPOTensor.GroupFamily.IsNormalRepresentation.anomalyClass` in `TNLean/MPS/Symmetry/MPOSymmetry/AssociatorCohomology.lean`
+- Lean: `MPOTensor.GroupFamily.FusionData.omega` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/Associator.lean`
+- Lean: `MPOTensor.GroupFamily.FusionData.isCocycle_omega` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/Associator.lean`
+- Lean: `MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/Associator.lean`
+- Lean: `MPOTensor.GroupFamily.IsNormalRepresentation.anomalyClass` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/AssociatorCohomology.lean`
 - Lean: `TNLean.Algebra.ScalarThreeCochain.anomalyClass` in `TNLean/Algebra/ScalarThreeCocycleGroupCohomology.lean`
 - Blueprint: `def:mpug_anomaly_three_cochain` in `blueprint/src/chapter/ch29_mpu_gauging.tex:4357` (`leanok`)
 - Blueprint: `thm:mpug_anomaly_three_cocycle` in `blueprint/src/chapter/ch29_mpu_gauging.tex:4492` (`leanok`)
@@ -414,16 +414,16 @@ Source: `662–681`; `3cocygroup`. Kind: definition and theorem. Status: **merge
 
 ### G03. Nonnegative integer group action with identity is a permutation action on blocks
 Source: `683–702`; `MPOsymG`. Kind: theorem and definition. Status: **merged**.
-- Lean: `MPOTensor.exists_equiv_mpo_mulVec_eq_of_isInvertibleLabel` in `TNLean/MPS/Symmetry/MPOSymmetry/Character.lean`
-- Lean: `MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily` in `TNLean/MPS/Symmetry/MPOSymmetry/NIMRep.lean`
+- Lean: `MPOTensor.exists_equiv_mpo_mulVec_eq_of_isInvertibleLabel` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/Character.lean`
+- Lean: `MPOTensor.exists_isNIMRep_of_isMPOSymmetricFamily` in `TNLean/MPS/FundamentalTheorem/OperatorProduct/NIMRep.lean`
 - Blueprint: `thm:mpo_invertible_labels` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:898` (`leanok`)
 - Blueprint: `thm:mpo_symmetric_nimrep` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:828` (`leanok`)
 - Boundary: Group action law/coherence must be retained when assembling chosen label permutations, not just existence of independent equivalences.
 
 ### G04. Scalar L from action/fusion tensors and pentagongroups compatibility
 Source: `703–719`; `F1group`, `pentagongroups`. Kind: definition and theorem. Status: **merged, restricted**.
-- Lean: `MPOTensor.GroupFamily.BlockActionData.lSymbol` in `TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`
-- Lean: `MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol` in `TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`
+- Lean: `MPOTensor.GroupFamily.BlockActionData.lSymbol` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/PermutedBlocks.lean`
+- Lean: `MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/PermutedBlocks.lean`
 - Lean: `TNLean.Algebra.LSymbol.IsCompatible` in `TNLean/Algebra/LSymbol.lean`
 - Blueprint: `def:mpug_permuted_block_l_symbol` in `blueprint/src/chapter/ch29_mpu_gauging.tex:4986` (`leanok`)
 - Blueprint: `thm:mpug_permuted_block_l_compatibility` in `blueprint/src/chapter/ch29_mpu_gauging.tex:5039` (`leanok`)
@@ -434,7 +434,7 @@ Source: `703–719`; `F1group`, `pentagongroups`. Kind: definition and theorem. 
 Source: `720–726`; `gdgroup`. Kind: gauge theorem. Status: **restricted**.
 - Lean: `TNLean.Algebra.LSymbol.gauge` in `TNLean/Algebra/LSymbol.lean`
 - Lean: `TNLean.Algebra.LSymbol.IsCompatible.gauge` in `TNLean/Algebra/LSymbol.lean`
-- Lean: `MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge` in `TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`
+- Lean: `MPOTensor.GroupFamily.FusionData.omega_eq_fusionGauge` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/Associator.lean`
 - Blueprint: `def:mpug_l_gauge` in `blueprint/src/chapter/ch29_mpu_gauging.tex:7812` (`leanok`)
 - Blueprint: `thm:mpug_l_gauge_preservation` in `blueprint/src/chapter/ch29_mpu_gauging.tex:7922` (`leanok`)
 - Blueprint: `thm:mpug_anomaly_three_cocycle_gauge` in `blueprint/src/chapter/ch29_mpu_gauging.tex:4542` (`leanok`)
@@ -502,7 +502,7 @@ Source: `763–814`; `gxdecomp`. Kind: tensor decomposition theorem. Status: **m
 
 ### G12. odot product, projective law intactens, ω-associativity nonasso, global linearity vs boundary associator
 Source: `816–836`; `defodot`, `intactens`, `nonasso`. Kind: definition and theorems. Status: **missing**.
-- Lean: `MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol` in `TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`
+- Lean: `MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/PermutedBlocks.lean`
 - Blueprint: `thm:mpug_permuted_block_l_compatibility` in `blueprint/src/chapter/ch29_mpu_gauging.tex:5039` (`leanok`)
 - Issue: [#7332](https://github.com/LionSR/TNLean/issues/7332) (open)
 - Boundary: Dressed scalar compatibility supplies an ingredient, not the source’s defined tensor product and its laws. Stabilizer statement must use the stabilizer of the chosen block, not fixed H on arbitrary x.
@@ -511,7 +511,7 @@ Source: `816–836`; `defodot`, `intactens`, `nonasso`. Kind: definition and the
 ### G13. On-site F trivial; virtual projective representation; singleton classes H²(G,U(1))
 Source: `840–856`; `Lgroupdef`, `coupengroup`. Kind: on-site specialization. Status: **restricted**.
 - Lean: `TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isCompatible` in `TNLean/Algebra/StabilizerCocycleLSymbol.lean`
-- Lean: `MPSTensor.cohomologousTo_of_isInjective` in `TNLean/MPS/Symmetry/CocycleCoboundary.lean`
+- Lean: `MPSTensor.cohomologousTo_of_isInjective` in `TNLean/MPS/Symmetry/OnSite/VirtualRepresentation.lean`
 - Blueprint: `thm:mpug_stabilizer_cocycle_l_symbol` in `blueprint/src/chapter/ch29_mpu_gauging.tex:8986` (`leanok`)
 - Blueprint: `thm:cocycle_gauge_independence` in `blueprint/src/chapter/ch12_symmetry_virtual_and_cohomology.tex:517` (`leanok`)
 - Issue: [#7332](https://github.com/LionSR/TNLean/issues/7332) (open)
@@ -563,9 +563,9 @@ Source: `959–991`; unlabelled. Kind: generalization. Status: **missing**.
 
 ### P01. Weaker PBC group representation with U_e=I and permuted normal/injective state blocks
 Source: `994–998`; `sec:PBC`. Kind: definition. Status: **merged**.
-- Lean: `MPOTensor.GroupFamily` in `TNLean/MPS/MPU/GroupRepresentation.lean`
-- Lean: `MPOTensor.GroupFamily.IsNormalRepresentation` in `TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean`
-- Lean: `MPOTensor.GroupFamily.CarriesMPV` in `TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`
+- Lean: `MPOTensor.GroupFamily` in `TNLean/MPS/CanonicalForm/SimpleMPU/GroupRepresentation.lean`
+- Lean: `MPOTensor.GroupFamily.IsNormalRepresentation` in `TNLean/MPS/FundamentalTheorem/OperatorProduct/MPOProduct.lean`
+- Lean: `MPOTensor.GroupFamily.CarriesMPV` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/PermutedBlocks.lean`
 - Blueprint: `def:mpug_group_representation` in `blueprint/src/chapter/ch29_mpu_gauging.tex:110` (`leanok`)
 - Blueprint: `def:mpug_anomaly_three_cochain` in `blueprint/src/chapter/ch29_mpu_gauging.tex:4357` (`leanok`)
 - Blueprint: `def:mpug_permuted_block_l_symbol` in `blueprint/src/chapter/ch29_mpu_gauging.tex:4986` (`leanok`)
@@ -573,24 +573,24 @@ Source: `994–998`; `sec:PBC`. Kind: definition. Status: **merged**.
 
 ### P02. PBC fusion reductions for every interior word, including n=0 orthogonality (fusiontensorG2)
 Source: `1001–1026`; `fusiontensorG2`. Kind: existence theorem. Status: **merged**.
-- Lean: `MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors` in `TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean`
+- Lean: `MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors` in `TNLean/MPS/FundamentalTheorem/OperatorProduct/MPOProduct.lean`
 - Blueprint: `cor:asym_fusion_tensors_group` in `blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex:105` (`leanok`)
 - Issue: [#7330](https://github.com/LionSR/TNLean/issues/7330) (open)
 - Boundary: General normal representation route, not just unitary representations.
 
 ### P03. Nilpotent residual tails and anomaly comparison after long words
 Source: `1028–1060`; unlabelled. Kind: nilpotence and associator theorem. Status: **merged**.
-- Lean: `MPSTensor.IsReduction.isReductionResidualNilpotencyBound_trans` in `TNLean/MPS/Core/ReductionResidualComposition.lean`
-- Lean: `MPOTensor.GroupFamily.FusionData.isReductionResidualNilpotencyBound_left` in `TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`
-- Lean: `MPOTensor.GroupFamily.FusionData.isCocycle_omega` in `TNLean/MPS/Symmetry/MPOSymmetry/Associator.lean`
+- Lean: `MPSTensor.IsReduction.isReductionResidualNilpotencyBound_trans` in `TNLean/MPS/FundamentalTheorem/Reduction/ReductionResidualComposition.lean`
+- Lean: `MPOTensor.GroupFamily.FusionData.isReductionResidualNilpotencyBound_left` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/Associator.lean`
+- Lean: `MPOTensor.GroupFamily.FusionData.isCocycle_omega` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/Associator.lean`
 - Blueprint: `thm:mpoalg_composite_reduction` in `blueprint/src/chapter/ch30_mpo_algebras.tex:451` (`leanok`)
 - Blueprint: `thm:mpug_anomaly_three_cocycle` in `blueprint/src/chapter/ch29_mpu_gauging.tex:4492` (`leanok`)
 - Boundary: Residual nilpotence does not imply every off-diagonal letter vanishes after the naive blocking. Use proved dressed/exterior length bounds.
 
 ### P04. PBC action reduction (mpoMPSsten)
 Source: `1062–1090`; `mpoMPSsten`. Kind: existence theorem. Status: **merged**.
-- Lean: `MPOTensor.exists_isReduction_actTensor_of_isNormal` in `TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean`
-- Lean: `MPOTensor.GroupFamily.nonempty_blockActionData` in `TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`
+- Lean: `MPOTensor.exists_isReduction_actTensor_of_isNormal` in `TNLean/MPS/FundamentalTheorem/OperatorProduct/MPOProduct.lean`
+- Lean: `MPOTensor.GroupFamily.nonempty_blockActionData` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/PermutedBlocks.lean`
 - Blueprint: `cor:asym_action_tensors` in `blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex:134` (`leanok`)
 - Blueprint: `thm:mpug_permuted_block_l_symbol_spec` in `blueprint/src/chapter/ch29_mpu_gauging.tex:5011` (`leanok`)
 - Issue: [#7330](https://github.com/LionSR/TNLean/issues/7330) (open)
@@ -598,8 +598,8 @@ Source: `1062–1090`; `mpoMPSsten`. Kind: existence theorem. Status: **merged**
 
 ### P05. Dressed scalar L and coupled pentagon for PBC group action
 Source: `1091–1129`; unlabelled. Kind: definition and theorem. Status: **merged**.
-- Lean: `MPOTensor.GroupFamily.BlockActionData.lSymbol` in `TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`
-- Lean: `MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol` in `TNLean/MPS/Symmetry/MPOSymmetry/PermutedBlocks.lean`
+- Lean: `MPOTensor.GroupFamily.BlockActionData.lSymbol` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/PermutedBlocks.lean`
+- Lean: `MPOTensor.GroupFamily.BlockActionData.isCompatible_lSymbol` in `TNLean/MPS/FundamentalTheorem/OperatorGroup/PermutedBlocks.lean`
 - Blueprint: `def:mpug_permuted_block_l_symbol` in `blueprint/src/chapter/ch29_mpu_gauging.tex:4986` (`leanok`)
 - Blueprint: `thm:mpug_permuted_block_l_compatibility` in `blueprint/src/chapter/ch29_mpu_gauging.tex:5039` (`leanok`)
 - Issue: [#7331](https://github.com/LionSR/TNLean/issues/7331) (open)
@@ -607,8 +607,8 @@ Source: `1091–1129`; unlabelled. Kind: definition and theorem. Status: **merge
 
 ### P06. Exterior-buffer identities oPBCMPO/oPBCMPSs and equivalence to periodic operator/action equality
 Source: `1131–1207`; `oPBCMPO`, `oPBCMPSs`. Kind: theorems. Status: **restricted**.
-- Lean: `MPSTensor.IsReductionExteriorBufferLength` in `TNLean/MPS/Core/ReductionBlocking.lean`
-- Lean: `MPOTensor.mpo_mul_eq_sum_of_multiBlockCompression` in `TNLean/MPS/FundamentalTheorem/Reduction/CompressionPeriodic.lean`
+- Lean: `MPSTensor.IsReductionExteriorBufferLength` in `TNLean/MPS/Tensor/Reduction/ReductionBlocking.lean`
+- Lean: `MPOTensor.mpo_mul_eq_sum_of_multiBlockCompression` in `TNLean/MPS/FundamentalTheorem/OperatorProduct/CompressionPeriodic.lean`
 - Blueprint: `def:mps_reduction_exterior_buffer_length` in `blueprint/src/chapter/ch25_asymmetric_ft_reductions.tex:1018` (`leanok`)
 - Blueprint: `cor:asym_compression_periodic` in `blueprint/src/chapter/ch25_asymmetric_ft_mpo_coefficients.tex:188` (`leanok`)
 - Issue: [#7330](https://github.com/LionSR/TNLean/issues/7330) (open), [#7331](https://github.com/LionSR/TNLean/issues/7331) (open)
@@ -617,9 +617,9 @@ Source: `1131–1207`; `oPBCMPO`, `oPBCMPSs`. Kind: theorems. Status: **restrict
 
 ### P07. Injective group representation with U_e=I and exact closed fusion is on-site; anomaly trivial; anomalous U_e=I excludes arbitrary-boundary closure
 Source: `1209–1216`; unlabelled. Kind: unnumbered Lemma and consequence. Status: **restricted**.
-- Lean: `MPOTensor.GroupFamily.isOnSite_of_closed_fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean`
-- Lean: `MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean`
-- Lean: `MPOTensor.GroupFamily.anomalyClass_eq_zero_of_closed_fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/ClosedFusion.lean`
+- Lean: `MPOTensor.GroupFamily.isOnSite_of_closed_fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/ClosedFusion.lean`
+- Lean: `MPOTensor.GroupFamily.bondDim_eq_one_of_closed_fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/ClosedFusion.lean`
+- Lean: `MPOTensor.GroupFamily.anomalyClass_eq_zero_of_closed_fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/ClosedFusion.lean`
 - Blueprint: `thm:mposym_closed_fusion_onsite` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:195` (`leanok`)
 - Issue: [#8047](https://github.com/LionSR/TNLean/issues/8047) (closed), [#8143](https://github.com/LionSR/TNLean/issues/8143) (closed), [#7968](https://github.com/LionSR/TNLean/issues/7968) (open)
 - Boundary: Closed-fusion⇒on-site/triviality merged and faithful. The advertised equivalence with arbitrary-boundary closedness awaits AB2.
@@ -635,8 +635,8 @@ Source: `1219–1231`; `sec:classif`. Kind: main theorem. Status: **missing**.
 
 ### C02. Physical fusion-category/WHA symmetry; Def. 1 defsym; same F class allows different MPO/WHA representations
 Source: `1234–1248`; `sec:fixsym`, `defsym`. Kind: definitions and structural claims. Status: **missing**.
-- Lean: `MPOTensor.CompleteZipperFusionFamily.coproduct` in `TNLean/MPS/MPDO/CompleteZipperFusionCoproduct.lean`
-- Lean: `MPOTensor.CompleteZipperFusionFamily.coproduct_coassoc` in `TNLean/MPS/MPDO/CompleteZipperFusionCoassoc.lean`
+- Lean: `MPOTensor.CompleteZipperFusionFamily.coproduct` in `TNLean/MPS/Operator/Fusion/CompleteZipperFusionCoproduct.lean`
+- Lean: `MPOTensor.CompleteZipperFusionFamily.coproduct_coassoc` in `TNLean/MPS/Operator/Fusion/CompleteZipperFusionCoassoc.lean`
 - Blueprint: `thm:mpoalg_fusion_coproduct` in `blueprint/src/chapter/ch30_mpo_algebras.tex:908` (`leanok`)
 - Blueprint: `thm:mpoalg_fusion_coproduct_coassoc` in `blueprint/src/chapter/ch30_mpo_algebras.tex:964` (`leanok`)
 - Issue: [#8050](https://github.com/LionSR/TNLean/issues/8050) (open), [#8315](https://github.com/LionSR/TNLean/issues/8315) (open)
@@ -645,7 +645,7 @@ Source: `1234–1248`; `sec:fixsym`, `defsym`. Kind: definitions and structural 
 
 ### C03. defphase: common embedding, local continuous uniformly gapped PBC path commuting with fixed direct-sum MPO representation
 Source: `1250–1265`; `defphase`. Kind: Definition 2 and scope. Status: **missing**.
-- Lean: `MPSTensor.SymmetricGappedInteractionPath` in `TNLean/MPS/Symmetry/GappedInteractionPath.lean`
+- Lean: `MPSTensor.SymmetricGappedInteractionPath` in `TNLean/MPS/Operator/Interaction/GappedInteractionPath.lean`
 - Blueprint: `def:spt_common_space_gapped_path` in `blueprint/src/chapter/ch12_symmetry_spt.tex:4904` (`leanok`)
 - Issue: [#8050](https://github.com/LionSR/TNLean/issues/8050) (open)
 - Boundary: Existing path type fixes an on-site group action. Source allows non-on-site comparison, endpoint physical/bond spaces and representation changes via embedding. Do not define phase as L equivalence.
@@ -653,7 +653,7 @@ Source: `1250–1265`; `defphase`. Kind: Definition 2 and scope. Status: **missi
 
 ### C04. Exact MPS ground spaces with local action tensors throughout interpolation; no claim for paths beyond exact MPS
 Source: `1267–1272`; unlabelled. Kind: scope and assumptions. Status: **missing**.
-- Lean: `MPSTensor.ExactMPSGroundPath` in `TNLean/MPS/Symmetry/ExactMPSGappedPhase.lean`
+- Lean: `MPSTensor.ExactMPSGroundPath` in `TNLean/MPS/Symmetry/GappedPath/ExactMPSGappedPhase.lean`
 - Blueprint: `def:spt_exact_mps_gapped_phase` in `blueprint/src/chapter/ch12_symmetry_spt.tex:4927` (`leanok`)
 - Issue: [#8050](https://github.com/LionSR/TNLean/issues/8050) (open)
 - Boundary: Adapt shared exact-ground-path mechanics, retaining independent physical gap and all source multiblock data. This is source restriction, not an extra formalization assumption.
@@ -661,7 +661,7 @@ Source: `1267–1272`; unlabelled. Kind: scope and assumptions. Status: **missin
 
 ### C05. Parent-Hamiltonian local projector; group average and C*-WHA canonical-left-integral symmetrization; commutation, Hermiticity and nonzero term
 Source: `1274–1320`; unlabelled. Kind: symmetrization theorem. Status: **restricted**.
-- Lean: `MPSTensor.parentInteractionES_commute_onSiteTensorPow` in `TNLean/MPS/Symmetry/ParentHamiltonianSymmetry.lean`
+- Lean: `MPSTensor.parentInteractionES_commute_onSiteTensorPow` in `TNLean/MPS/ParentHamiltonian/Deformation/ParentHamiltonianSymmetry.lean`
 - Blueprint: `thm:spt_parent_hamiltonian_symmetry` in `blueprint/src/chapter/ch12_symmetry_spt.tex:5062` (`leanok`)
 - Issue: [#8050](https://github.com/LionSR/TNLean/issues/8050) (open)
 - Boundary: On-site parent symmetry ingredients exist. WHA averaging and Appendix B proof missing; ensure kernel/ground-space preservation and gap bound, not only nonzero trace.
@@ -685,7 +685,7 @@ Source: `1328–1330`; unlabelled. Kind: reduction lemma. Status: **missing**.
 
 ### C08. A simultaneous block-separating left inverse (leftinv)
 Source: `1332–1350`; `leftinv`. Kind: left inverse construction. Status: **restricted**.
-- Lean: `MPOTensor.exists_blockTensor_isMPOBlockLeftInverse` in `TNLean/MPS/MPDO/CompleteZipperFusionBlocked.lean`
+- Lean: `MPOTensor.exists_blockTensor_isMPOBlockLeftInverse` in `TNLean/MPS/FundamentalTheorem/Zipper/CompleteZipperFusionBlocked.lean`
 - Blueprint: `thm:mpdo_complete_zipper_of_compression_blocked` in `blueprint/src/chapter/ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex:229` (`leanok`)
 - Issue: [#8050](https://github.com/LionSR/TNLean/issues/8050) (open)
 - Boundary: MPO simultaneous inverse after finite blocking is merged. Need MPS analogue/source faithful block-injectivity and continuous choices for paths.
@@ -693,7 +693,7 @@ Source: `1332–1350`; `leftinv`. Kind: left inverse construction. Status: **res
 
 ### C09. Gapped exact-MPS parent path induces continuous block tensors; locally continuous left inverses and action bases
 Source: `1352–1387`; unlabelled. Kind: continuity theorem. Status: **missing**.
-- Lean: `MPSTensor.continuous_parentInteraction_matrix_family` in `TNLean/MPS/Symmetry/CanonicalInjectiveGappedPath.lean`
+- Lean: `MPSTensor.continuous_parentInteraction_matrix_family` in `TNLean/MPS/Symmetry/GappedPath/CanonicalInjectiveGappedPath.lean`
 - Blueprint: `thm:spt_canonical_injective_gapped_path` in `blueprint/src/chapter/ch12_symmetry_spt.tex:151` (`leanok`)
 - Issue: [#8050](https://github.com/LionSR/TNLean/issues/8050) (open)
 - Boundary: Forward tensor⇒continuous parent machinery does not prove reverse gapped path⇒continuous canonical/tensor action choices. Source cites SCP11.
@@ -717,7 +717,7 @@ Source: `1551–1577`; unlabelled. Kind: extension theorem. Status: **missing**.
 
 ### C12. A(γ)=A W(γ) with mixed matrix units, D=D0+D1 (defAgamma)
 Source: `1580–1598`; `defAgamma`. Kind: construction. Status: **missing**.
-- Lean: `TNLean/MPS/Symmetry/EmbeddedFixedPointTensor.lean` (related module only)
+- Lean: `TNLean/MPS/Symmetry/FixedPoint/EmbeddedFixedPointTensor.lean` (related module only)
 - Blueprint: no verified declaration-owning node for this full claim; create or update a source-faithful node
 - Issue: [#8050](https://github.com/LionSR/TNLean/issues/8050) (open)
 - Boundary: Existing fixed-point interpolation is reuse only: endpoints in source need not be fixed points or zero correlation length.
@@ -733,7 +733,7 @@ Source: `1600–1685`; `Agammasym`. Kind: construction and theorem. Status: **mi
 
 ### C14. Enlarged MPO injectivity, interior A(γ) injectivity, unique gapped parent
 Source: `1687–1691`; unlabelled. Kind: injectivity and gap theorem. Status: **missing**.
-- Lean: `MPSTensor.canonicalInjectiveGappedPath` in `TNLean/MPS/Symmetry/CanonicalInjectiveGappedPath.lean`
+- Lean: `MPSTensor.canonicalInjectiveGappedPath` in `TNLean/MPS/Symmetry/GappedPath/CanonicalInjectiveGappedPath.lean`
 - Blueprint: `thm:spt_canonical_injective_gapped_path` in `blueprint/src/chapter/ch12_symmetry_spt.tex:151` (`leanok`)
 - Issue: [#8050](https://github.com/LionSR/TNLean/issues/8050) (open)
 - Boundary: The existing on-site path constructor is not the MPO proof. Interior pointwise gaps do not alone establish a uniform full-path gap.
@@ -741,7 +741,7 @@ Source: `1687–1691`; unlabelled. Kind: injectivity and gap theorem. Status: **
 
 ### C15. Continuous extended local supports S′γ, Gram–Schmidt projector limits, endpoint ground states and gaps
 Source: `1692`; unlabelled. Kind: endpoint convergence and gap theorem. Status: **missing**.
-- Lean: `TNLean/MPS/ParentHamiltonian/CompactParentGap.lean` (related module only)
+- Lean: `TNLean/MPS/ParentHamiltonian/Continuity/CompactParentGap.lean` (related module only)
 - Blueprint: no verified declaration-owning node for this full claim; create or update a source-faithful node
 - Issue: [#8050](https://github.com/LionSR/TNLean/issues/8050) (open), [#190](https://github.com/LionSR/TNLean/issues/190) (not verified in this inventory)
 - Boundary: Must verify the asserted endpoint ground spaces and uniform gap through rank-changing bonds. Merely continuous projectors/interior gap is insufficient.
@@ -765,9 +765,9 @@ Source: `1782–1793`; `fig:bound`, `sketch`. Kind: boundary interpretation. Sta
 
 ### C18. Positive common NIM-rep eigenvector yields symmetric boundary state (symboundary), spectral radii=FP dimensions
 Source: `1795–1805`; `symboundary`. Kind: positive-boundary theorem. Status: **merged**.
-- Lean: `MPOTensor.IsNIMRep.exists_pos_left_eigenvector` in `TNLean/MPS/Symmetry/MPOSymmetry/SymmetricBoundary.lean`
-- Lean: `MPOTensor.IsNIMRep.spectralRadius_eq_perronFrobeniusDim` in `TNLean/MPS/Symmetry/MPOSymmetry/SymmetricBoundary.lean`
-- Lean: `MPOTensor.exists_pos_symmetric_boundary_state` in `TNLean/MPS/Symmetry/MPOSymmetry/SymmetricBoundary.lean`
+- Lean: `MPOTensor.IsNIMRep.exists_pos_left_eigenvector` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/SymmetricBoundary.lean`
+- Lean: `MPOTensor.IsNIMRep.spectralRadius_eq_perronFrobeniusDim` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/SymmetricBoundary.lean`
+- Lean: `MPOTensor.exists_pos_symmetric_boundary_state` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/SymmetricBoundary.lean`
 - Blueprint: `thm:mposym_nimrep_pos_eigenvector` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1221` (`leanok`)
 - Blueprint: `thm:mposym_symmetric_boundary_state` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1254` (`leanok`)
 - Issue: [#8049](https://github.com/LionSR/TNLean/issues/8049) (closed), [#8142](https://github.com/LionSR/TNLean/issues/8142) (closed)
@@ -776,7 +776,7 @@ Source: `1795–1805`; `symboundary`. Kind: positive-boundary theorem. Status: *
 ### C19. Group eigenvalue 1; regular action quantum dimension; arbitrary-PBC groups lie outside WHA boundary framework
 Source: `1805–1808`; unlabelled. Kind: specializations and scope. Status: **restricted**.
 - Lean: `FibonacciCompression.mpo_fibTau_mulVec_boundary` in `TNLean/MPS/Examples/Fibonacci/FibonacciBoundary.lean`
-- Lean: `MPOTensor.IsFusionRing.perronFrobeniusDim_pos` in `TNLean/MPS/Symmetry/MPOSymmetry/FusionRing.lean`
+- Lean: `MPOTensor.IsFusionRing.perronFrobeniusDim_pos` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/FusionRing.lean`
 - Blueprint: `ex:mposym_fibonacci_boundary_state` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1289` (`leanok`)
 - Blueprint: `thm:mposym_fusion_ring_regular` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1188` (`leanok`)
 - Issue: [#8049](https://github.com/LionSR/TNLean/issues/8049) (closed)
@@ -859,17 +859,17 @@ Source: `1875–1888`; unlabelled. Kind: phase counting. Status: **restricted**.
 
 ### K04. Printed one-qubit Klein generators, representation and the two invariant subspaces
 Source: `1884–1886`; unlabelled. Kind: explicit operator and invariant-state example. Status: **merged**.
-- Lean: `KleinSymmetry.operator_mul` in `TNLean/MPS/Examples/KleinSymmetry.lean`
-- Lean: `KleinSymmetry.generators_preserve_constantSpinSpace` in `TNLean/MPS/Examples/KleinSymmetry.lean`
-- Lean: `KleinSymmetry.generators_preserve_clusterPairSpace` in `TNLean/MPS/Examples/KleinSymmetry.lean`
+- Lean: `KleinSymmetry.operator_mul` in `TNLean/MPS/Examples/Z2Z2/KleinSymmetry.lean`
+- Lean: `KleinSymmetry.generators_preserve_constantSpinSpace` in `TNLean/MPS/Examples/Z2Z2/KleinSymmetry.lean`
+- Lean: `KleinSymmetry.generators_preserve_clusterPairSpace` in `TNLean/MPS/Examples/Z2Z2/KleinSymmetry.lean`
 - Blueprint: `thm:asymex_klein_spin_representation` in `blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex:1381` (`leanok`)
 - Blueprint: `thm:asymex_klein_spin_spaces` in `blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex:1427` (`leanok`)
 - Issue: [#8051](https://github.com/LionSR/TNLean/issues/8051) (open)
 
 ### K05. Printed realization carries class (0,0,1), diagonal signs (+,+,−), and displayed L ratios
 Source: `1884–1886`; unlabelled. Kind: anomaly and L signs. Status: **restricted**.
-- Lean: `KleinSymmetry.cyclicInvariant_omega_printedFamily` in `TNLean/MPS/Examples/KleinSymmetryAnomaly.lean`
-- Lean: `KleinSymmetry.not_isTrivialGaugeClass_omega_printedFamily` in `TNLean/MPS/Examples/KleinSymmetryAnomaly.lean`
+- Lean: `KleinSymmetry.cyclicInvariant_omega_printedFamily` in `TNLean/MPS/Examples/Z2Z2/KleinSymmetryAnomaly.lean`
+- Lean: `KleinSymmetry.not_isTrivialGaugeClass_omega_printedFamily` in `TNLean/MPS/Examples/Z2Z2/KleinSymmetryAnomaly.lean`
 - Lean: `TNLean.Algebra.LSymbol.apply_self_of_kleinCocycleFamily` in `TNLean/Algebra/KleinCocyclePhase.lean`
 - Blueprint: `thm:asymex_klein_printed_anomaly` in `blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex:1580` (`leanok`)
 - Blueprint: `thm:asymex_klein_l_symbol_signs` in `blueprint/src/chapter/ch25_asymmetric_examples_z2z2.tex:1286` (`leanok`)
@@ -879,9 +879,9 @@ Source: `1884–1886`; unlabelled. Kind: anomaly and L signs. Status: **restrict
 
 ### S01. su(2)₄ five-label fusion table and unit
 Source: `1890–1905`; unlabelled. Kind: fusion-table example. Status: **merged**.
-- Lean: `MPOTensor.su24Fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
-- Lean: `MPOTensor.isFusionUnit_su24Fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
-- Lean: `MPOTensor.isNIMRep_su24Fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.su24Fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.isFusionUnit_su24Fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.isNIMRep_su24Fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
 - Blueprint: `def:mposym_su24_reps3` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1024` (`leanok`)
 - Blueprint: `thm:mposym_su24_reps3_units` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1040` (`leanok`)
 - Blueprint: `thm:mposym_su24_reps3_nimreps` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1060` (`leanok`)
@@ -889,8 +889,8 @@ Source: `1890–1905`; unlabelled. Kind: fusion-table example. Status: **merged*
 
 ### S02. Exactly regular five-block and TY four-block phases; positive-Frobenius-Schur F data
 Source: `1906–1911`; unlabelled. Kind: categorical classification. Status: **restricted**.
-- Lean: `MPOTensor.su24TY` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
-- Lean: `MPOTensor.isNIMRep_su24TY` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.su24TY` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.isNIMRep_su24TY` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
 - Blueprint: `thm:mposym_su24_reps3_nimreps` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1060` (`leanok`)
 - Issue: [#8348](https://github.com/LionSR/TNLean/issues/8348) (open), [#8045](https://github.com/LionSR/TNLean/issues/8045) (open)
 - Boundary: Concrete NIM-reps exist; explicit F/L and categorical completeness do not. Rank/duality plus categorifiability must be justified.
@@ -898,16 +898,16 @@ Source: `1906–1911`; unlabelled. Kind: categorical classification. Status: **r
 
 ### S03. TY module table including multiplicity 2 on s
 Source: `1911–1925`; unlabelled. Kind: NIM-rep table. Status: **merged**.
-- Lean: `MPOTensor.su24TY` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
-- Lean: `MPOTensor.isNIMRep_su24TY` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.su24TY` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.isNIMRep_su24TY` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
 - Blueprint: `thm:mposym_su24_reps3_nimreps` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1060` (`leanok`)
 - Issue: [#8052](https://github.com/LionSR/TNLean/issues/8052) (closed)
 
 ### S04. Integer subcategory leaves xyz and s separately; whole symmetry disallows integer-sector-only threefold/onefold phases
 Source: `1927–1929`; unlabelled. Kind: restriction and physical interpretation. Status: **restricted**.
-- Lean: `MPOTensor.su24TY_repS3ToSU24_castSucc` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
-- Lean: `MPOTensor.su24TY_repS3ToSU24_last` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
-- Lean: `MPOTensor.su24TY_repS3ToSU24_mix` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.su24TY_repS3ToSU24_castSucc` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.su24TY_repS3ToSU24_last` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.su24TY_repS3ToSU24_mix` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
 - Blueprint: `thm:mposym_reps3_in_su24` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1102` (`leanok`)
 - Issue: [#8348](https://github.com/LionSR/TNLean/issues/8348) (open)
 - Boundary: Table restriction merged; interpretation/exhaustiveness relies on category and Hamiltonian classification.
@@ -915,8 +915,8 @@ Source: `1927–1929`; unlabelled. Kind: restriction and physical interpretation
 
 ### R01. Rep(S₃) fusion, inclusion into integer su(2)₄; Wigner 6j F data; phases indexed by subgroups with trivial H²
 Source: `1933–1936`; unlabelled. Kind: fusion and categorical claims. Status: **restricted**.
-- Lean: `MPOTensor.repS3Fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
-- Lean: `MPOTensor.su24Fusion_repS3ToSU24` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.repS3Fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.su24Fusion_repS3ToSU24` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
 - Blueprint: `def:mposym_su24_reps3` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1024` (`leanok`)
 - Blueprint: `thm:mposym_su24_reps3_units` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1040` (`leanok`)
 - Issue: [#8348](https://github.com/LionSR/TNLean/issues/8348) (open), [#8045](https://github.com/LionSR/TNLean/issues/8045) (open)
@@ -925,8 +925,8 @@ Source: `1933–1936`; unlabelled. Kind: fusion and categorical claims. Status: 
 
 ### R02. H=1 gives one block with π multiplicity 2, no conflict with multiplicity-one obstruction; L from TY restriction
 Source: `1938–1940`; unlabelled. Kind: one-block example. Status: **restricted**.
-- Lean: `MPOTensor.repS3Z1` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
-- Lean: `MPOTensor.isFusionCharacter_repS3Fusion_iff` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.repS3Z1` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.isFusionCharacter_repS3Fusion_iff` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
 - Blueprint: `thm:mposym_su24_reps3_nimreps` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1060` (`leanok`)
 - Blueprint: `thm:mposym_su24_reps3_one_block` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1126` (`leanok`)
 - Issue: [#8045](https://github.com/LionSR/TNLean/issues/8045) (open)
@@ -935,9 +935,9 @@ Source: `1938–1940`; unlabelled. Kind: one-block example. Status: **restricted
 
 ### R03. H=Z₂ NIM-rep table; L restriction from regular su(2)₄ half-integer sector
 Source: `1943–1957`; unlabelled. Kind: two-block example. Status: **restricted**.
-- Lean: `MPOTensor.repS3Z2` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
-- Lean: `MPOTensor.isNIMRep_repS3Z2` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
-- Lean: `MPOTensor.su24Fusion_repS3ToSU24_half` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.repS3Z2` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.isNIMRep_repS3Z2` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.su24Fusion_repS3ToSU24_half` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
 - Blueprint: `thm:mposym_su24_reps3_nimreps` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1060` (`leanok`)
 - Blueprint: `thm:mposym_reps3_in_su24` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1102` (`leanok`)
 - Issue: [#8348](https://github.com/LionSR/TNLean/issues/8348) (open), [#8045](https://github.com/LionSR/TNLean/issues/8045) (open)
@@ -946,9 +946,9 @@ Source: `1943–1957`; unlabelled. Kind: two-block example. Status: **restricted
 
 ### R04. H=Z₃ table and TY restriction
 Source: `1959–1972`; unlabelled. Kind: three-block example with source error. Status: **corrected-source**.
-- Lean: `MPOTensor.repS3Z3` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
-- Lean: `MPOTensor.isNIMRep_repS3Z3` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
-- Lean: `MPOTensor.not_isNIMRep_repS3Z3Printed` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.repS3Z3` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.isNIMRep_repS3Z3` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.not_isNIMRep_repS3Z3Printed` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
 - Blueprint: `thm:mposym_su24_reps3_nimreps` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1060` (`leanok`)
 - Issue: [#8052](https://github.com/LionSR/TNLean/issues/8052) (closed), [#8348](https://github.com/LionSR/TNLean/issues/8348) (open)
 - Boundary: Printed ψ swaps y,z and violates fusion; corrected ψ=I. Counterexample + corrected NIM-rep merged; L-symbol restriction still missing. glm23_reps3_z3_table.
@@ -956,7 +956,7 @@ Source: `1959–1972`; unlabelled. Kind: three-block example with source error. 
 
 ### R05. H=S₃ regular table and L=F
 Source: `1974–1987`; unlabelled. Kind: regular-module example. Status: **restricted**.
-- Lean: `MPOTensor.isNIMRep_repS3Fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/RepS3SU24NIMRep.lean`
+- Lean: `MPOTensor.isNIMRep_repS3Fusion` in `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/RepS3SU24NIMRep.lean`
 - Blueprint: `thm:mposym_su24_reps3_nimreps` in `blueprint/src/chapter/ch30_mpo_symmetry_basics.tex:1060` (`leanok`)
 - Issue: [#8045](https://github.com/LionSR/TNLean/issues/8045) (open), [#8348](https://github.com/LionSR/TNLean/issues/8348) (open)
 - Boundary: Fusion/NIM-rep table merged; actual L=F and exhaustive category list remain.
@@ -981,8 +981,8 @@ Source: `2003–2024`; unlabelled. Kind: explicit construction. Status: **missin
 
 ### X02. ftexam explicit fusion entries ω(g,h,k)⁻¹; exact fusion and inverse anomaly
 Source: `2024–2044`; `ftexam`. Kind: fusion and anomaly computation. Status: **restricted**.
-- Lean: `MPOTensor.GroupCocycle.fusionV` in `TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean`
-- Lean: `MPOTensor.GroupCocycle.fusionData_omega` in `TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean`
+- Lean: `MPOTensor.GroupCocycle.fusionV` in `TNLean/MPS/MPU/Representation/GroupCocycleMPO/FusionTensors.lean`
+- Lean: `MPOTensor.GroupCocycle.fusionData_omega` in `TNLean/MPS/MPU/Representation/GroupCocycleMPO/FusionTensors.lean`
 - Blueprint: `def:asymex_group_cocycle_fusion_tensors` in `blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex:272` (`leanok`)
 - Blueprint: `thm:asymex_group_cocycle_inverse_cocycle` in `blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex:314` (`leanok`)
 - Issue: [#8054](https://github.com/LionSR/TNLean/issues/8054) (open)
@@ -991,10 +991,10 @@ Source: `2024–2044`; `ftexam`. Kind: fusion and anomaly computation. Status: *
 
 ### X03. W_g diagonal cocycle gate, L_g regular shift, W_e=I; Z₂ CZ(I⊗Z) example
 Source: `2046–2070`; unlabelled. Kind: gate definitions and example. Status: **merged**.
-- Lean: `MPOTensor.GroupCocycle.wGate` in `TNLean/MPS/MPU/GroupCocycleMPO.lean`
-- Lean: `MPOTensor.GroupCocycle.leftShift` in `TNLean/MPS/MPU/GroupCocycleMPO.lean`
-- Lean: `MPOTensor.GroupCocycle.wGate_one` in `TNLean/MPS/MPU/GroupCocycleMPO.lean`
-- Lean: `MPOTensor.GroupCocycle.wGate_cyclicTwo` in `TNLean/MPS/MPU/GroupCocycleMPO/Instances.lean`
+- Lean: `MPOTensor.GroupCocycle.wGate` in `TNLean/MPS/MPU/Representation/GroupCocycleMPO.lean`
+- Lean: `MPOTensor.GroupCocycle.leftShift` in `TNLean/MPS/MPU/Representation/GroupCocycleMPO.lean`
+- Lean: `MPOTensor.GroupCocycle.wGate_one` in `TNLean/MPS/MPU/Representation/GroupCocycleMPO.lean`
+- Lean: `MPOTensor.GroupCocycle.wGate_cyclicTwo` in `TNLean/MPS/MPU/Representation/GroupCocycleMPO/Instances.lean`
 - Blueprint: `def:asymex_group_cocycle_tensor` in `blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex:32` (`leanok`)
 - Blueprint: `thm:asymex_group_cocycle_one` in `blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex:220` (`leanok`)
 - Blueprint: `thm:asymex_group_cocycle_z2` in `blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex:375` (`leanok`)
@@ -1033,10 +1033,10 @@ Source: `2202–2205`; unlabelled. Kind: compression construction. Status: **mis
 
 ### X08. PBC tensor, group law and Z₂ decorated CZX realization
 Source: `2205–2224`; unlabelled. Kind: PBC operator construction and example. Status: **corrected-source**.
-- Lean: `MPOTensor.GroupCocycle.tensor` in `TNLean/MPS/MPU/GroupCocycleMPO.lean`
-- Lean: `MPOTensor.GroupCocycle.mpo_tensor_mul` in `TNLean/MPS/MPU/GroupCocycleMPO.lean`
-- Lean: `MPOTensor.GroupCocycle.mpo_tensor_one` in `TNLean/MPS/MPU/GroupCocycleMPO.lean`
-- Lean: `MPOTensor.GroupCocycle.mpo_tensor_cyclicTwo` in `TNLean/MPS/MPU/GroupCocycleMPO/Instances.lean`
+- Lean: `MPOTensor.GroupCocycle.tensor` in `TNLean/MPS/MPU/Representation/GroupCocycleMPO.lean`
+- Lean: `MPOTensor.GroupCocycle.mpo_tensor_mul` in `TNLean/MPS/MPU/Representation/GroupCocycleMPO.lean`
+- Lean: `MPOTensor.GroupCocycle.mpo_tensor_one` in `TNLean/MPS/MPU/Representation/GroupCocycleMPO.lean`
+- Lean: `MPOTensor.GroupCocycle.mpo_tensor_cyclicTwo` in `TNLean/MPS/MPU/Representation/GroupCocycleMPO/Instances.lean`
 - Blueprint: `def:asymex_group_cocycle_tensor` in `blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex:32` (`leanok`)
 - Blueprint: `thm:asymex_group_cocycle_mul` in `blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex:193` (`leanok`)
 - Blueprint: `thm:asymex_group_cocycle_one` in `blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex:220` (`leanok`)
@@ -1046,8 +1046,8 @@ Source: `2205–2224`; unlabelled. Kind: PBC operator construction and example. 
 
 ### X09. Explicit PBC tensors obey fusion reduction and left zipper
 Source: `2224–2242`; unlabelled. Kind: fusion and zipper theorem. Status: **merged**.
-- Lean: `MPOTensor.GroupCocycle.fusionV_mul_mulTensor` in `TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean`
-- Lean: `MPOTensor.GroupCocycle.isReduction_fusion` in `TNLean/MPS/MPU/GroupCocycleMPO/FusionTensors.lean`
+- Lean: `MPOTensor.GroupCocycle.fusionV_mul_mulTensor` in `TNLean/MPS/MPU/Representation/GroupCocycleMPO/FusionTensors.lean`
+- Lean: `MPOTensor.GroupCocycle.isReduction_fusion` in `TNLean/MPS/MPU/Representation/GroupCocycleMPO/FusionTensors.lean`
 - Blueprint: `thm:asymex_group_cocycle_fusion` in `blueprint/src/chapter/ch25_asymmetric_examples_group_cocycle.tex:285` (`leanok`)
 - Issue: [#8054](https://github.com/LionSR/TNLean/issues/8054) (open)
 - Boundary: Source-corrected tensor and explicit fusion maps. Generic family is not a normal representation; explicit nonvanishing comparison proves its computed anomaly.
@@ -1102,7 +1102,7 @@ Source: `2455`; unlabelled. Kind: Appendix A action analogue. Status: **missing*
 
 ### AB1. Averaged local complement is nonzero projector onto S⊥
 Source: `2457–2463`; `app:sumnonull`. Kind: Appendix B on-site proof. Status: **restricted**.
-- Lean: `MPSTensor.parentInteractionES_commute_onSiteTensorPow` in `TNLean/MPS/Symmetry/ParentHamiltonianSymmetry.lean`
+- Lean: `MPSTensor.parentInteractionES_commute_onSiteTensorPow` in `TNLean/MPS/ParentHamiltonian/Deformation/ParentHamiltonianSymmetry.lean`
 - Blueprint: `thm:spt_parent_hamiltonian_symmetry` in `blueprint/src/chapter/ch12_symmetry_spt.tex:5062` (`leanok`)
 - Issue: [#8050](https://github.com/LionSR/TNLean/issues/8050) (open)
 - Boundary: Source uses nonzero trace of Π_S but that alone does not prove I−Π_S nonzero. Need proper support/nontrivial interaction condition or a documented source correction. For unitary invariant S, averaged Π_S=Π_S is direct.
@@ -1128,7 +1128,7 @@ Source: `2466`; unlabelled. Kind: Appendix B WHA proof. Status: **missing**.
 
 ## Unmerged work observed during audit
 
-The candidate changes add `TNLean/MPS/MPDO/BoundaryTransport.lean`, `TNLean/MPS/Symmetry/MPOSymmetry/GroupAction.lean`, and `blueprint/src/chapter/ch30_mpo_symmetry_group_action.tex`, with aggregator changes. These are **unmerged / not build-verified by this report**. AB1 and the coherent-action part of GC1/G03 should be reconciled to their final reviewed signatures when they land; no in-progress work is credited in the 103 baseline rows.
+The candidate changes add `TNLean/MPS/Operator/Boundary/BoundaryTransport.lean`, `TNLean/MPS/Symmetry/MPOSymmetry/Fusion/GroupAction.lean`, and `blueprint/src/chapter/ch30_mpo_symmetry_group_action.tex`, with aggregator changes. These are **unmerged / not build-verified by this report**. AB1 and the coherent-action part of GC1/G03 should be reconciled to their final reviewed signatures when they land; no in-progress work is credited in the 103 baseline rows.
 
 ## Exhaustive source-label index
 

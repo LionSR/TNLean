@@ -1,0 +1,207 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import QICLean.Algebra.Word.OrderedProduct
+import TNLean.MPS.Tensor.Words.CyclicTrace
+import TNLean.MPS.Tensor.Gauge.FundamentalTheorem
+import TNLean.MPS.Tensor.Physical.Blocking
+
+/-!
+# MPS Symmetry Primitives
+
+This module defines the symmetry-twisted tensor construction and proves its
+functoriality, establishing the algebraic foundations for on-site symmetric MPS.
+
+For an injective MPS tensor, on-site symmetry under a group representation
+implies that each twisted tensor has the same matrix-product-vector family as
+the original.  The single-block Fundamental Theorem then converts equality of
+MPV families into a virtual gauge.
+
+## Main definitions
+
+* `MPSTensor.twistedTensor` : twist an MPS tensor by a group representation on the physical index
+* `MPSTensor.IsOnSiteSymmetric` : predicate for on-site symmetry under a representation
+* `MPSTensor.IsOnSiteSymmetricUpToPhase` : on-site symmetry of each periodic vector up to
+  a scalar depending on the group element and the chain length
+* `MPSTensor.blockKronAction` : the on-site representation lifted to the blocked
+  physical space by the Kronecker power of each group element's physical action
+
+## Main results
+
+* `MPSTensor.twistedTensor_one` : twisting by the identity is trivial
+* `MPSTensor.twistedTensor_mul` : twisting is functorial (composition law)
+* `MPSTensor.twistedTensor_gaugeEquiv` : physical twisting commutes with virtual conjugation
+* `MPSTensor.gauge_product_intertwines` : the chosen product `X(h) * X(g)` implements `g*h`
+* `MPSTensor.gaugeEquiv_twistedTensor_of_injective` :
+  injective symmetric tensors have gauge-equivalent twists
+* `MPSTensor.twistedTensor_blockTensor_comm` : twisting by `blockKronAction`
+  commutes with physical blocking
+* `MPSTensor.isOnSiteSymmetric_blockTensor` : on-site symmetry transfers to the
+  blocked tensor under the Kronecker-power action
+
+## References
+
+* Pérez-García et al., *Matrix Product State Representations*, arXiv:0608197
+* Pérez-García et al., *String order and symmetries in quantum spin lattices*,
+  arXiv:0802.0447
+-/
+
+open scoped Matrix BigOperators
+open Kraus (blockPhysDim blockTensor)
+
+namespace MPSTensor
+
+variable {G : Type*} [Monoid G] {d D : ℕ}
+
+/-- Tensor twisted by physical action of `g ∈ G`.
+
+If `U : G →* Matrix (Fin d) (Fin d) ℂ` is an on-site representation, then
+`twistedTensor A U g` has components
+`(twistedTensor A U g) i = ∑ j, U g i j • A j`. -/
+noncomputable def twistedTensor (A : MPSTensor d D)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) : MPSTensor d D :=
+  fun i => ∑ j : Fin d, U g i j • A j
+
+/-- `A` is on-site symmetric under `U` if each group twist has the same MPV as `A`. -/
+def IsOnSiteSymmetric (A : MPSTensor d D)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ) : Prop :=
+  ∀ g : G, SameMPV A (twistedTensor A U g)
+
+/-- `A` is on-site symmetric under `U` up to a phase if, for each group element `g` and
+each chain length `N`, the periodic vector of the twisted tensor is a scalar multiple
+`λ_{g,N}` of the periodic vector of `A`: \(U_g^{\otimes N}|\psi_N\rangle =
+\lambda_{g,N}|\psi_N\rangle\). The scalar may depend on both `g` and `N`.
+Source: arXiv:1010.3732, `Papers/1010.3732/paper_v3.tex` lines 655--657 (a symmetry
+\(U_g^{\otimes N}\) of the MPS), lines 1313--1314 and 2590--2593 (an MPS with a
+\(U_g\)-invariant parent Hamiltonian is invariant under \(U_g\) up to a phase). -/
+def IsOnSiteSymmetricUpToPhase (A : MPSTensor d D)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ) : Prop :=
+  ∀ (g : G) (N : ℕ), ∃ c : ℂ, ∀ s : Fin N → Fin d, mpv (twistedTensor A U g) s = c * mpv A s
+
+/-- Exact on-site symmetry is on-site symmetry up to the trivial phase. -/
+theorem IsOnSiteSymmetric.isOnSiteSymmetricUpToPhase {A : MPSTensor d D}
+    {U : G →* Matrix (Fin d) (Fin d) ℂ} (h : IsOnSiteSymmetric A U) :
+    IsOnSiteSymmetricUpToPhase A U :=
+  fun g N => ⟨1, fun s => by rw [one_mul, h g N s]⟩
+
+/-- Twisting by the identity group element is trivial. -/
+@[simp] lemma twistedTensor_one (A : MPSTensor d D)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ) :
+    twistedTensor A U 1 = A := by
+  funext i
+  simp [twistedTensor, Matrix.one_apply]
+
+/-- Functoriality/composition law for twists:
+
+twisting by `g * h` is the same as first twisting by `h` and then by `g`. -/
+lemma twistedTensor_mul (A : MPSTensor d D)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ) (g h : G) :
+    twistedTensor A U (g * h) = twistedTensor (twistedTensor A U h) U g := by
+  funext i
+  calc
+    twistedTensor A U (g * h) i
+        = ∑ k : Fin d, (∑ j : Fin d, U g i j * U h j k) • A k := by
+            simp [twistedTensor, Matrix.mul_apply]
+    _ = ∑ k : Fin d, ∑ j : Fin d, (U g i j * U h j k) • A k := by
+          simp_rw [Finset.sum_smul]
+    _ = ∑ j : Fin d, ∑ k : Fin d, (U g i j * U h j k) • A k := Finset.sum_comm
+    _ = twistedTensor (twistedTensor A U h) U g i := by
+          simp [twistedTensor, Finset.smul_sum, smul_smul]
+
+/-- Twisting commutes with virtual conjugation. -/
+lemma twistedTensor_gaugeEquiv
+    (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (Y : GL (Fin D) ℂ) (g : G) :
+    twistedTensor (fun j =>
+      (Y : Matrix (Fin D) (Fin D) ℂ) * A j *
+        ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) U g =
+      fun i => (Y : Matrix (Fin D) (Fin D) ℂ) * twistedTensor A U g i *
+        ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+  funext i
+  simp only [twistedTensor]
+  rw [Finset.mul_sum, Finset.sum_mul]
+  congr 1
+  ext j
+  simp [Matrix.mul_assoc]
+
+/-- The product `X(h) * X(g)` intertwines `A` with `twist(g * h)`.
+The supplied gauge matrices are retained, with this order of multiplication. -/
+lemma gauge_product_intertwines
+    (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (X : G → GL (Fin D) ℂ)
+    (hX : ∀ g i, twistedTensor A U g i =
+      (X g : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (((X g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
+    (g h : G) (i : Fin d) :
+    twistedTensor A U (g * h) i =
+      ((X h * X g : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
+        (((X h * X g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+  rw [twistedTensor_mul]
+  conv_lhs =>
+    rw [show twistedTensor A U h = fun j =>
+      (X h : Matrix (Fin D) (Fin D) ℂ) * A j *
+        (((X h)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) from funext (hX h)]
+  rw [twistedTensor_gaugeEquiv A U (X h) g]
+  simp only
+  rw [hX g i]
+  simp only [Matrix.GeneralLinearGroup.coe_mul, mul_inv_rev, Matrix.mul_assoc]
+
+/-- If `A` is injective and on-site symmetric under `U`, then each twisted tensor is
+gauge equivalent to `A`.
+
+On-site symmetry supplies `SameMPV A (twistedTensor A U g)`, and
+`sameMPV_iff_gaugeEquiv_of_injective` converts equal MPV families into
+gauge equivalence for injective tensors. -/
+theorem gaugeEquiv_twistedTensor_of_injective
+    (A : MPSTensor d D) (hA : Kraus.IsInjective A)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (hSymm : IsOnSiteSymmetric A U) :
+    ∀ g : G, GaugeEquiv A (twistedTensor A U g) := by
+  intro g
+  exact (sameMPV_iff_gaugeEquiv_of_injective hA).1 (hSymm g)
+
+/-! ### The Kronecker-power physical action through blocking
+
+For a physical-index operator, the blocked operator `blockKron` acts on the
+blocked physical index by the entrywise product over the decoded sites.  The
+following definitions and lemmas package this lift as a group action and show
+that twisting by it commutes with physical blocking. -/
+
+/-- The on-site representation lifted to the blocked physical space by the
+Kronecker power of each group element's physical action. -/
+noncomputable def blockKronAction (L : ℕ)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ) :
+    G →* Matrix (Fin (blockPhysDim d L)) (Fin (blockPhysDim d L)) ℂ where
+  toFun g := blockKron L (U g)
+  map_one' := by rw [map_one, blockKron_one]
+  map_mul' g h := by rw [map_mul, blockKron_mul]
+
+@[simp] lemma blockKronAction_apply (L : ℕ)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) :
+    blockKronAction L U g = blockKron L (U g) := rfl
+
+/-- Twisting by `blockKronAction` agrees with blocking the twisted tensor:
+`twistedTensor (blockTensor A L) (blockKronAction L U) g = blockTensor
+(twistedTensor A U g) L`.  This is the case `W = U g` of `blockTensor_rotatePhysical`, since
+`twistedTensor A U g` is the physical rotation of `A` by `U g`. -/
+lemma twistedTensor_blockTensor_comm
+    (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) (L : ℕ) :
+    twistedTensor (blockTensor A L) (blockKronAction L U) g =
+      blockTensor (twistedTensor A U g) L :=
+  (blockTensor_rotatePhysical (U g) A L).symm
+
+/-- On-site symmetry transfers to the blocked tensor under the Kronecker-power
+action: if `A` is on-site symmetric under `U`, then `blockTensor A L` is on-site
+symmetric under `blockKronAction L U`.  Blocking preserves the underlying matrix
+product vector family, so no injectivity of `A` is needed. -/
+theorem isOnSiteSymmetric_blockTensor
+    (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ) (L : ℕ)
+    (hSymm : IsOnSiteSymmetric A U) :
+    IsOnSiteSymmetric (blockTensor A L) (blockKronAction L U) := by
+  intro g
+  rw [twistedTensor_blockTensor_comm]
+  exact (hSymm g).blockTensor L
+
+end MPSTensor

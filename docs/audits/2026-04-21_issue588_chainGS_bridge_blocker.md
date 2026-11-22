@@ -3,7 +3,7 @@
 Date: 2026-04-21
 Branch: `feat/588-chainGroundSpace-bridge`
 Scope: discharge the single remaining `sorry` in
-`TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`
+`TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean`
 without adding new `sorry`/`axiom`.
 
 For this scoped issue-588 run, I also treated the following paths as
@@ -11,7 +11,7 @@ forbidden edit targets:
 
 - `TNLean/MPS/Periodic/*.lean`
 - `TNLean/MPS/CanonicalForm/SectorIrreducibility.lean`
-- `TNLean/MPS/MPDO/AlgebraStructure.lean`
+- `TNLean/MPS/MPDO/RFP/AlgebraStructure.lean`
 - `TNLean/MPS/ParentHamiltonian/{Martingale,DegenerateGS}.lean`
 - `TNLean/Channel/Determinant.lean`
 
@@ -20,7 +20,7 @@ forbidden edit targets:
 - `CLAUDE.md`, `docs/PROOF_INTEGRITY.md`, `docs/style.md`
 - issue #588 full thread / prior blocker comments
 - `TNLean/MPS/ParentHamiltonian/{UniqueGroundState,IntersectionProperty,CyclicWindow,WrappingWindow}.lean`
-- `TNLean/MPS/Defs.lean`, `TNLean/MPS/BNT/Construction.lean`
+- `TNLean/MPS/Tensor/Defs.lean`, `TNLean/MPS/CanonicalForm/BNT/Construction.lean`
 - `TNLean/MPS/Irreducible/*`
 - `TNLean/Wielandt/*` with focus on `SpanGrowth/CumulativeToWordSpan.lean`,
   `RectangularSpan/Basic.lean`, `QuantumWielandt.lean`, `PaperResults/WielandtInequality.lean`
@@ -45,8 +45,8 @@ lake env lean /tmp/issue588_test.lean
 ```
 
 ```lean
-import TNLean.MPS.ParentHamiltonian.WrappingWindow
-import TNLean.Wielandt.RectangularSpan.Basic
+import TNLean.MPS.Tensor.GroundSpace.WrappingWindow
+import TNLean.MPS.Transfer.Primitivity.RectangularSpan
 
 open scoped Matrix BigOperators
 
@@ -106,7 +106,7 @@ Thus, once one has an open-chain representation
 `ψ = groundSpaceMap A N X`, the wrapping step for the reduced range `L₀ + 1`
 can be finished: the complement length `N - (L₀ + 1)` need not itself have
 full exact word span; it is enough to pad to a positive multiple of `L₀` using
-`wordSpan_top_of_mul` from `TNLean/Wielandt/RectangularSpan/Basic.lean`.
+`wordSpan_top_of_mul` from `TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean`.
 
 ## The real blocker
 

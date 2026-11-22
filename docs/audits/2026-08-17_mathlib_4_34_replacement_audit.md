@@ -297,7 +297,7 @@ normalization in:
 - `Channel/Schwarz/SchwarzSubnormal.lean`.
 
 `tendsto_div_nhds_one_iff_eq₀` replaces a manually assembled quotient limit in
-`MPS/SharedInfra/GaugePhase.lean`.
+`MPS/Transfer/Spectrum/GaugePhase.lean`.
 
 Status: direct proof simplifications.
 
@@ -360,7 +360,7 @@ Finset.equivMap_symm_apply
 image under an embedding. It replaces two local equivalence constructors:
 
 - `SpinChain.siteTranslation` in `QCA/Translation.lean`;
-- `TNLean.PEPS.regionVertexMapEquiv` in `PEPS/RegionTransport.lean`.
+- `TNLean.PEPS.regionVertexMapEquiv` in `PEPS/Tensor/Region/RegionTransport.lean`.
 
 The project-specific translation and graph-transport APIs remain, but their
 consumers now use the upstream finite-image equivalence directly. Inverse
@@ -423,7 +423,7 @@ ingredient but does not justify deleting the local Caratheodory argument.
 Mathlib added `spectrum.resolvent_sub_resolvent` in
 `Mathlib.Algebra.Algebra.Spectrum.Basic`. The local theorem
 `inverseGram_sub_limitingInverse_eq_resolvent` in
-`MPS/ParentHamiltonian/C3CorrectionBounds.lean` concerns direct inverses of
+`MPS/ParentHamiltonian/BoundaryMap/C3CorrectionBounds.lean` concerns direct inverses of
 continuous linear maps and already uses `Ring.inverse_sub_inverse`. Recasting it
 through algebraic spectra would add resolvent-set hypotheses and conversions.
 

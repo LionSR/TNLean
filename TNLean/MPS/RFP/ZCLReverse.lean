@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.FixedPoint.StationarySupport
-import TNLean.MPS.RFP.BNTDirectSumBasis
+import TNLean.MPS.CanonicalForm.RenormalizationFixedPoint.BNTDirectSumBasis
 import TNLean.MPS.RFP.PhysicalObservableRealization
 import QICLean.Algebra.Combinatorics.FinSumPermutation
 

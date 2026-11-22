@@ -10,12 +10,12 @@ Scope: add the periodic reintegration layer requested by #704 without new `sorry
 - issue #704 body / comments
 - `audits/2026-04-22_issue699_open_boundary_region_blocker.md`
 - `audits/2026-04-21_issue588_chainGS_bridge_blocker.md`
-- `TNLean/MPS/ParentHamiltonian/WrappingWindow.lean`
-- `TNLean/MPS/ParentHamiltonian/CyclicWindow.lean`
-- `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean` (read-only)
-- `TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean` (read-only)
-- `TNLean/Wielandt/RectangularSpan/Basic.lean`
-- `TNLean/MPS/FundamentalTheorem/FiniteLength.lean`
+- `TNLean/MPS/Tensor/GroundSpace/WrappingWindow.lean`
+- `TNLean/MPS/Tensor/GroundSpace/CyclicWindow.lean`
+- `TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean` (read-only)
+- `TNLean/MPS/Tensor/GroundSpace/IntersectionProperty.lean` (read-only)
+- `TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean`
+- `TNLean/MPS/Tensor/Gauge/FiniteLength.lean`
 - `Papers/2011.12127/TN-Review-main.tex` lines 2049–2078
 
 ## Baseline verification

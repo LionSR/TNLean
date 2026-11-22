@@ -50,7 +50,7 @@ In `TNLean/MPS/FundamentalTheorem/Reduction/Examples/IsingSectorAction.lean`:
   `MPSTensor.MultiBlockCompression.isReduction` applied to
   `IsingTwist.sectorCompression`.
 
-In `TNLean/MPS/FundamentalTheorem/Reduction/MPOProduct.lean`:
+In `TNLean/MPS/FundamentalTheorem/OperatorProduct/MPOProduct.lean`:
 
 - `MPOTensor.isReduction_evalWord`, a reindexing of
   `MPSTensor.IsReduction.evalWord` along the pair-alphabet identification

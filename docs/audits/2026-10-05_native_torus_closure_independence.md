@@ -51,9 +51,9 @@ parallel structures.
 
 Strict compilation passed for:
 
-- `TNLean/PEPS/NativeTorusClosures.lean`
-- `TNLean/PEPS/NativeTorusClosureIndependence.lean`
-- `TNLean/PEPS/NativeTorusClosureDimension.lean`
+- `TNLean/PEPS/Injectivity/CutSpace/NativeTorusClosures.lean`
+- `TNLean/PEPS/Injectivity/CutSpace/NativeTorusClosureIndependence.lean`
+- `TNLean/PEPS/Injectivity/CutSpace/NativeTorusClosureDimension.lean`
 - `TNLeanTest/PEPS/NativeTorusClosureDimension.lean`
 
 All were checked with automatic implicits disabled, maximum synthesis pending

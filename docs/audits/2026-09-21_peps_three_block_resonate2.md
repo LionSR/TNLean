@@ -74,7 +74,7 @@ deleted them; the affected rows are marked.
 
 ## The last import edge
 
-`TNLean/PEPS/RegionBlock/UnionInjectivity.lean` was the only handwritten
+`TNLean/PEPS/Injectivity/Region/UnionInjectivity.lean` was the only handwritten
 importer besides the generated aggregator. Its proofs name no declaration of the
 removed file: the two names it takes from that import cone,
 `regionBlockedTensorInjective_blue` and

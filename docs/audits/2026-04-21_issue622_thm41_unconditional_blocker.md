@@ -39,7 +39,7 @@ There are **two distinct missing bridges**.
 **Historical (superseded 2026-09-30).** This subsection records the state on
 2026-04-21. The conditional theorem it names has since been removed; the equal
 case is now `MPSTensor.fundamentalTheorem_periodic_equalCase_derivedPeriods` in
-`TNLean/MPS/Periodic/IrreducibleFormPeriods.lean`, stated over the source's
+`TNLean/MPS/FundamentalTheorem/Periodic/IrreducibleFormPeriods.lean`, stated over the source's
 irreducible form (arXiv:1708.00029, `thm:bdequal`, lines 643--693) with neither
 `PeriodicOverlapHypothesis` nor `hPowEq`, and the overlap files listed below no
 longer contain admitted proofs. Bridge 2 below has not been re-audited.
@@ -50,7 +50,7 @@ The natural next step is to apply the periodic equal-case fundamental theorem to
 - `MPSTensor.PeriodicEqualCaseFT` in
   `TNLean/MPS/Periodic/Symmetry.lean` — an abstract `Prop` hypothesis;
 - `MPSTensor.fundamentalTheorem_periodic_equalCase` in
-  `TNLean/MPS/Periodic/FundamentalTheorem.lean` — a **conditional** theorem
+  `TNLean/MPS/FundamentalTheorem/Periodic/RepeatedBlocks.lean` — a **conditional** theorem
   requiring both
   - `PeriodicOverlapHypothesis`, and
   - the per-block power-equality hypothesis `hPowEq`.
@@ -83,7 +83,7 @@ as missing in `TNLean/MPS/Periodic/Overlap.lean`:
 - `sectorGaugePhaseEquiv_succ_of_cyclicTransport`
 - `repeatedBlocks_of_blockedSectorGaugePhase`
 
-The accompanying file `TNLean/MPS/Periodic/CornerTransition.lean` explicitly
+The accompanying file `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CornerTransition.lean` explicitly
 states that the ambient staircase tensors are available there, but that the
 identification with the compressed blocked-sector tensors through the compression
 isometries `φ k` must be supplied by the missing Tier-A bridges in

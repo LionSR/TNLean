@@ -90,7 +90,7 @@ Local validation on this branch:
 
 - `lake build TNLean.MPS.CanonicalForm.BlockDiagonalCommutant`
 - `lake build TNLean.MPS.ParentHamiltonian.DegenerateGS`
-- `lake build TNLean.MPS.ParentHamiltonian.DegenerateGS TNLean.MPS.SharedInfra.BlockAssembly TNLean.Algebra.ScalarCommutant TNLean.MPS.CanonicalForm.BlockDiagonalCommutant`
+- `lake build TNLean.MPS.ParentHamiltonian.DegenerateGS TNLean.MPS.Tensor.DirectSum.BlockAssembly TNLean.Algebra.ScalarCommutant TNLean.MPS.CanonicalForm.BlockDiagonalCommutant`
 - `lake build TNLean`
 - `cd blueprint && leanblueprint web && leanblueprint checkdecls` initially needed the root `TNLean.olean`; after `lake build TNLean`, `cd blueprint && leanblueprint checkdecls` succeeded.
 - Proof-integrity grep over the touched Lean/blueprint files found only the pre-existing deferred proof in `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean` (`parentHamiltonianGroundSpace_le_bntSpan_of_block_decomposition`).

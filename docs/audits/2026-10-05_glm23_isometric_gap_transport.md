@@ -56,10 +56,10 @@ supplies the active quadratic bound; Cauchy–Schwarz returns a norm bound.
 
 - `TNLean/Algebra/IsometricGapTransfer.lean`: reusable exact kernel,
   quadratic-form and norm-gap transport for an isometric intertwiner.
-- `TNLean/MPS/MPDO/PhysicalSupportProductTransport.lean`:
+- `TNLean/MPS/FundamentalTheorem/PhysicalSupport/PhysicalSupportProductTransport.lean`:
   `embed_twoSiteSectorProjection_commute` proves the auxiliary support
   commutation without projection or Hermiticity assumptions.
-- `TNLean/MPS/Symmetry/PhysicalIsometricGapTransport.lean`: derives all
+- `TNLean/MPS/Symmetry/GappedPath/PhysicalIsometricGapTransport.lean`: derives all
   physical hypotheses and gives the noncommuting transport theorems.
 - `TNLeanTest/PhysicalIsometricGapTransport.lean`: arbitrary-positive
   interaction, two-site-ring, uniform-in-length and spectral regressions;

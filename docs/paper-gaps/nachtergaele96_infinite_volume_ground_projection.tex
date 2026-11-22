@@ -52,7 +52,7 @@ Consequently
     \label{eq:infinite_gap_commutator}
 \end{align}
 These assertions are proved in
-\path{TNLean/MPS/ParentHamiltonian/Martingale/GroundExpectationGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Gap/Spectator/GroundExpectationGap.lean}.
 
 The projection in (\ref{eq:infinite_gap_commutator}) is onto the entire
 ground space. For a normalized ground vector $\psi$, the condition
@@ -113,7 +113,7 @@ Faithfulness of $\rho$ makes this trace zero precisely when every $C_b$ is
 zero. The identity
 $(X\Gamma_k(Y))_b=\operatorname{tr}(C_bY)$ and the nondegeneracy of the
 trace pairing finish the argument. This is proved in
-\path{TNLean/MPS/ParentHamiltonian/LocalFaithfulSupport.lean}.
+\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/LocalFaithfulSupport.lean}.
 The argument applies also at $k=0$.
 
 If $\sum_iA_i^*A_i=I$, the functional is positive and normalized.
@@ -126,7 +126,7 @@ The range equality follows by comparing the vanishing conditions for
 $\eta_{A,\rho}(X^*X)$ and
 $\operatorname{tr}(\sigma_kX^*X)$, then testing the orthogonal-complement
 projections of the two subspaces. The result is proved in
-\path{TNLean/MPS/ParentHamiltonian/LocalDensitySupport.lean}.
+\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/LocalDensitySupport.lean}.
 Stationarity is unnecessary for these finite densities. Without stationarity
 the conclusion does not assert consistency across intervals.
 
@@ -140,7 +140,7 @@ $G_B(k)$ is the image of the corner $PM_DP$ under the boundary map of $A$.
 Hence $\eta_{A,\rho}(X^*X)=0$ exactly when $X$ annihilates this corner
 image, and when $A$ is left canonical the density $\sigma_k$ has this
 corner image as its range. These statements are proved in
-\path{TNLean/MPS/ParentHamiltonian/StationaryLocalSupport.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Stationary/StationaryLocalSupport.lean}.
 
 The remaining step is the passage from an arbitrary GVBS boundary limit,
 Equation~(1.1) of Ref.~\cite{Nachtergaele1996Spectral}, to normalized
@@ -164,9 +164,9 @@ boundary compression of an interior observable is the reshuffling of
 $E_A^\ell E_X E_A^r$. When both free intervals tend to infinity, this
 converges to $\eta_A(X)$ times the limiting boundary Gram operator.
 These identities and limits are proved in
-\path{TNLean/MPS/ParentHamiltonian/LocalObservableInsertion.lean}.
+\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/LocalObservableInsertion.lean}.
 The required general compression inequality is proved in
-\path{TNLean/MPS/ParentHamiltonian/GroundSpaceCompressionNorm.lean}:
+\path{TNLean/MPS/ParentHamiltonian/BulkObservable/GroundSpaceCompressionNorm.lean}:
 for an injective boundary map $T$, with $K=(T^*T)^{-1}$ and range
 projection $P$, it gives
 \begin{align}
@@ -178,19 +178,19 @@ to vanishing of the full compression defect, even when the Hilbert spaces
 vary. In particular, for $\eta_A(X)=0$, the complete ground-space projection
 of $X\psi_n$ tends to zero uniformly over unit boundary ground vectors.
 This consequence and local expectation convergence are proved in
-\path{TNLean/MPS/ParentHamiltonian/BoundaryObservableCompression.lean}.
+\path{TNLean/MPS/ParentHamiltonian/BulkObservable/BoundaryObservableCompression.lean}.
 The finite expectations are positive, normalized, complex linear, and
 consistent under adjoining identity sites. Their operator norm is one;
 these state properties are proved in
-\path{TNLean/MPS/ParentHamiltonian/LocalObservableExpectation.lean} and
-\path{TNLean/MPS/ParentHamiltonian/LocalObservableState.lean}.
+\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/LocalObservableExpectation.lean} and
+\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/LocalObservableState.lean}.
 
 The fixed local commutator identity is also proved. For an interaction $h$
 of range $R\geq1$ and an observable $X$ on $k\geq1$ sites, put
 $t=R-1$, $w=2t+k$, and $B=I_t\otimes X\otimes I_t$. If both free
 intervals have at least $t$ sites, then $X_n^*[H_n(h),X_n]$ is the
 identity-tensor inclusion of $B^*[H_w(h),B]$. This locality identity is in
-\path{TNLean/MPS/ParentHamiltonian/BulkObservableCommutator.lean}.
+\path{TNLean/MPS/ParentHamiltonian/BulkObservable/BulkObservableCommutator.lean}.
 Combining it with the primitive expectation and full projection limits gives
 \begin{align}
     \gamma\operatorname{Re}\eta_A(X^*X)
@@ -203,23 +203,23 @@ $D>0$ is the bond dimension. Comparison with the canonical interaction
 preserves the open-chain kernel and gives a uniform gap. There is no
 supplied energy-limit assumption and no finite-volume uniqueness assumption.
 The canonical and positive-interaction statements are proved in
-\path{TNLean/MPS/ParentHamiltonian/PrimitiveLocalCommutatorGap.lean} and
-\path{TNLean/MPS/ParentHamiltonian/PrimitiveLocalParentInteractionGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/BulkObservable/PrimitiveLocalCommutatorGap.lean} and
+\path{TNLean/MPS/ParentHamiltonian/BulkObservable/PrimitiveLocalParentInteractionGap.lean}.
 
 The consistent local expectations now have a continuous positive extension
 $\omega_A$ to the quasi-local algebra, with $\omega_A(I)=\|\omega_A\|=1$.
 Finite-region compatibility, interval evaluation, and translation invariance
 are proved in
-\path{TNLean/MPS/ParentHamiltonian/LocalObservableRegionExpectation.lean},
-\path{TNLean/MPS/ParentHamiltonian/LocalObservableQuasiLocalState.lean}, and
-\path{TNLean/MPS/ParentHamiltonian/LocalObservableTranslationInvariance.lean}.
+\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/LocalObservableRegionExpectation.lean},
+\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/LocalObservableQuasiLocalState.lean}, and
+\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/LocalObservableTranslationInvariance.lean}.
 If $j_{a,k}$ includes a $k$-site matrix observable at position $a$, then
 $\omega_A(j_{a,k}(X))=\eta_A(X)$. Consequently
 (\ref{eq:primitive_local_commutator_gap}) is also the quasi-local inequality
 $\gamma\operatorname{Re}\omega_A(j_{a,k}(X)^*j_{a,k}(X))
 \leq\operatorname{Re}\omega_A(j_{a-t,w}(B^*[H_w(h),B]))$.
 This formulation is proved in
-\path{TNLean/MPS/ParentHamiltonian/QuasiLocalPrimitiveGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/QuasiLocalMultiblockGap.lean}.
 
 \newpage
 \section{The multiblock projection limit and sector purity}
@@ -236,14 +236,14 @@ with the prefix projections, so
     \label{eq:multiblock_prefix_cross_compression}
 \end{align}
 This estimate is proved in
-\path{TNLean/MPS/ParentHamiltonian/BoundaryCrossObservableCompression.lean}.
+\path{TNLean/MPS/ParentHamiltonian/BulkObservable/BoundaryCrossObservableCompression.lean}.
 The diagonal compression tends to zero by centering. The sum of the sector
 projections approaches the projection onto their joint span. Thus all
 column compressions vanish in norm, and so does the full ground projection
 of $X\psi_n$ for bounded vectors in the chosen sector. The finite-sector
 assembly and tensor consequence are proved in
-\path{TNLean/MPS/ParentHamiltonian/GroundSpaceSectorCompressionDecay.lean} and
-\path{TNLean/MPS/ParentHamiltonian/BlockBoundaryObservableCompression.lean}.
+\path{TNLean/MPS/ParentHamiltonian/BoundaryMap/GroundSpaceSectorCompressionDecay.lean} and
+\path{TNLean/MPS/ParentHamiltonian/BulkObservable/BoundaryObservableCompression.lean}.
 
 For a weighted direct sum of normalized primitive blocks with nonzero
 weights, simultaneous injectivity at $S>0$ gives the exact joint kernel
@@ -252,8 +252,8 @@ this local kernel consequently has one positive commutator constant for
 all sectors and centered local observables. The finite-interval statement
 and its formulation in the constructed quasi-local sector states are proved
 in
-\path{TNLean/MPS/ParentHamiltonian/MultiblockLocalCommutatorGap.lean} and
-\path{TNLean/MPS/ParentHamiltonian/QuasiLocalMultiblockGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/BulkObservable/MultiblockLocalCommutatorGap.lean} and
+\path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/QuasiLocalMultiblockGap.lean}.
 No energy limit, projection limit, or finite-volume uniqueness is supplied
 as a hypothesis of these existence results. A further corollary starts with
 the original simultaneous word-spanning family and constructs primitive
@@ -261,7 +261,7 @@ representatives with faithful invariant matrices, preserving every block
 ground space and the original positive interaction.
 
 The exact local support of the completed state is also proved in
-\path{TNLean/MPS/ParentHamiltonian/LocalParentExpectation.lean}:
+\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/LocalParentExpectation.lean}:
 an observable annihilating $G_k(A)$ has expectation zero at every position.
 In particular, $\omega_A(j_{a,N}(P_{G_N(A)}))=1$ for every interval,
 including $N=0$. For any competing normalized positive state $\varphi$
@@ -273,19 +273,19 @@ algebra. In a convex decomposition of $\omega_A$, positivity forces both
 constituents to inherit each support constraint. Uniqueness therefore proves
 purity among all states, without imposing translation invariance on the
 constituents. These statements are proved in
-\path{TNLean/MPS/ParentHamiltonian/PrimitiveQuasiLocalUniqueness.lean} and
-\path{TNLean/MPS/ParentHamiltonian/PrimitiveQuasiLocalPurity.lean}.
+\path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/PrimitiveQuasiLocalUniqueness.lean} and
+\path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/PrimitiveQuasiLocalUniqueness.lean}.
 
 The literal quasi-local commutator observable is eventually equal to the
 fixed patch, as proved in
-\path{TNLean/MPS/ParentHamiltonian/QuasiLocalCommutatorLocality.lean}.
+\path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/QuasiLocalCommutatorLocality.lean}.
 Local support and positivity make its sector expectation real and
 nonnegative, by
-\path{TNLean/MPS/ParentHamiltonian/LocalCommutatorExpectation.lean}.
+\path{TNLean/MPS/ParentHamiltonian/BulkObservable/LocalCommutatorExpectation.lean}.
 Consequently the literal limit in (\ref{eq:infinite_gap_source}) now exists
 and satisfies the complex-order inequality in each constructed pure sector,
 with one common positive constant at $R\geq S+1$. This is proved in
-\path{TNLean/MPS/ParentHamiltonian/QuasiLocalMultiblockLimitGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/QuasiLocalMultiblockGap.lean}.
 The zero-energy face is now classified for a given finite family of
 inequivalent primitive sectors under the eventual kernel hypothesis,
 as described below. The remaining passage from arbitrary periodic GVBS
@@ -303,7 +303,7 @@ Applying $\varphi$ shows that $\varphi(1-P_{G_N})=0$.
 No uniform lower bound on $\kappa_N$, translation invariance of
 $\varphi$, or parent-kernel identity at the original range is required.
 This implication is proved in
-\path{TNLean/MPS/ParentHamiltonian/QuasiLocalGroundStateSupport.lean}.
+\path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/QuasiLocalGroundStateSupport.lean}.
 
 For finitely many inequivalent primitive sectors with faithful invariant
 matrices, eventual joint support also determines the entire state:
@@ -318,21 +318,21 @@ mass tend to one; compactness supplies limiting coefficients. Compression
 of each local observable identifies its expectation, and continuity extends
 the identity to the completed quasi-local algebra. Translation invariance
 of $\varphi$ is not assumed. This implication is proved in
-\path{TNLean/MPS/ParentHamiltonian/MultiblockQuasiLocalFace.lean}.
+\path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/MultiblockQuasiLocalFace.lean}.
 
 Conversely, eventual annihilation of the joint MPS space by the
 open-chain sums gives zero local expectation in every constructed
 sector state. Each summand has the same expectation in such a state,
 and a volume of length at least $R$ contains at least one summand.
 Positivity is unnecessary for this converse implication, proved in
-\path{TNLean/MPS/ParentHamiltonian/LocalParentExpectationFromOpenKernel.lean}.
+\path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/QuasiLocalOpenInteractionExpectation.lean}.
 
 The zero-energy face therefore equals the convex hull in
 (\ref{eq:multiblock_supported_state_decomposition}). Since each primitive
 sector state is pure among all quasi-local states, and a pure state in a
 finite convex decomposition equals a constituent, the pure zero-energy
 states are exactly the constructed sectors. Both equivalences are proved in
-\path{TNLean/MPS/ParentHamiltonian/MultiblockQuasiLocalGroundStates.lean}.
+\path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/MultiblockQuasiLocalGroundStates.lean}.
 This classification concerns the given finite primitive sector family;
 more general periodic GVBS presentations are not thereby classified.
 
@@ -356,22 +356,22 @@ The coincident kernels transfer the canonical gap to the lower bound
 $\kappa\delta/(W-R+1)$. A minimum with the positive gaps of the finitely
 many shorter volumes gives a common constant $\gamma>0$ for every length.
 The comparison and its consequence are proved in
-\path{TNLean/MPS/ParentHamiltonian/Martingale/OpenInteractionRangeComparison.lean}
-and \path{TNLean/MPS/ParentHamiltonian/Martingale/EventualKernelOpenGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Interaction/OpenInteractionRangeComparison.lean}
+and \path{TNLean/MPS/ParentHamiltonian/Interaction/EventualKernelOpenGap.lean}.
 
 Full joint projection decay and finite-range locality then give
 (\ref{eq:infinite_gap_source}) in every constructed sector with this same
 $\gamma$. The ground-state classification identifies every pure zero-energy
 state with such a sector, so the bound holds in every pure state of the
 zero-energy face. This paired finite- and infinite-volume conclusion is
-proved in \path{TNLean/MPS/ParentHamiltonian/QuasiLocalGroundStateGap.lean}.
+proved in \path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/QuasiLocalGroundStateGap.lean}.
 Simultaneous word span of an original, unnormalized family suffices:
 normalization preserves the joint spaces at every length, and the range of
 $h$ remains arbitrary and positive.
 
 For a given inequivalent primitive family, a positive canonical interaction
 with these ground states is also constructed in
-\path{TNLean/MPS/ParentHamiltonian/PrimitiveGroundStateInteractionExistence.lean}.
+\path{TNLean/MPS/ParentHamiltonian/QuasiLocalState/MultiblockQuasiLocalGroundStates.lean}.
 Its range $R$ is derived, its finite-chain kernel equals the prescribed MPS
 space for every $N\geq R$, and its zero-energy face and pure states have the
 stated classifications. These are the existence and gap assertions for the
@@ -402,7 +402,7 @@ space orders the corresponding projections, and exact transport gives
 The primitive classification and (\ref{eq:exact_blocked_presentation}) imply
 that all such states are convex combinations of $T_L\omega_j$, and that their
 pure states are exactly the $T_L\omega_j$. These assertions are proved in
-\path{TNLean/MPS/ParentHamiltonian/BlockedQuasiLocalFace.lean}. Competing states
+\path{TNLean/MPS/ParentHamiltonian/Blocking/BlockedQuasiLocalFace.lean}. Competing states
 need not be invariant under any translation.
 
 For a periodic tensor, the primitive cyclic sectors after period-blocking
@@ -412,7 +412,7 @@ matrices. Removing gauge-phase repetitions preserves the joint spaces. Thus
 (\ref{eq:exact_blocked_presentation}) holds for a nonempty finite family of
 inequivalent primitive tensors; no sector matrices or inequivalence
 hypotheses are supplied separately. This construction is proved in
-\path{TNLean/MPS/ParentHamiltonian/PeriodicGroundStatePresentation.lean}.
+\path{TNLean/MPS/ParentHamiltonian/BlockGroundSpace/Sector/PeriodicGroundStatePresentation.lean}.
 
 There is also an exact criterion relating local zero energy to interval
 support. For any tensor $A$, a positive interaction of positive range whose
@@ -426,10 +426,10 @@ eventual open-chain kernel is $G_A(N)$ satisfies
 Projection ordering extends eventual symmetric support to all intervals.
 Conversely, each interaction term annihilates the MPS space of a sufficiently
 large containing volume. This criterion is proved in
-\path{TNLean/MPS/ParentHamiltonian/EventualKernelGroundStateSupport.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Blocking/EventualKernelGroundStateSupport.lean}.
 Together with the periodic presentation it classifies the entire original
 zero-energy face and its pure states in
-\path{TNLean/MPS/ParentHamiltonian/PeriodicQuasiLocalGroundStates.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Periodic/PeriodicBlockFamilyGroundStates.lean}.
 
 Nonwrapping interaction windows commute exactly with configuration
 regrouping. To compare Hamiltonians, let $\widehat h$ be $H_h(KL)$
@@ -443,7 +443,7 @@ Every original window is covered by an aligned $KL$-site window; each
 occurs at most $KL+1-R$ times. Positivity therefore gives coincident
 kernels. These identities and the eventual blocked kernel condition are
 proved in
-\path{TNLean/MPS/ParentHamiltonian/BlockedInteractionKernel.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Blocking/BlockedInteractionKernel.lean}.
 
 Apply the primitive gap theorem to the blocked interaction. Configuration
 reindexing preserves the entire kernel and its orthogonal complement. Thus
@@ -453,7 +453,7 @@ many shorter divisible volumes gives one constant for every length $NL$,
 using the actual kernel at each volume. For a periodic tensor this gives a
 uniform gap at every period-divisible volume, with its primitive sector
 data derived internally. The transfer is proved in
-\path{TNLean/MPS/ParentHamiltonian/BlockedFiniteGapTransport.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Blocking/BlockedFiniteGapTransport.lean}.
 Section~11 below extends the finite-volume estimate to every residue
 length for a single normalized periodic tensor.
 
@@ -480,7 +480,7 @@ $\varphi(X)=0$ satisfy
 The limit is literal, with complex order as in the source, and both margins
 may diverge along any filter. Translation invariance of a competing state is
 not assumed. This is proved in
-\path{TNLean/MPS/ParentHamiltonian/PeriodicQuasiLocalGroundStateGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Periodic/PeriodicBlockFamilyQuasiLocalGap.lean}.
 
 The same conclusion holds for the joint tensor
 $T=\bigoplus_j\mu_jA_j$ of a finite family of normalized periodic tensors
@@ -488,7 +488,7 @@ with nonzero weights. Blocking by the product of their periods gives an
 exact primitive presentation at every length, with faithful invariant
 matrices and inequivalence derived internally. The constant is chosen before
 all states, observables, filters, and margins. This extension is proved in
-\path{TNLean/MPS/ParentHamiltonian/PeriodicBlockFamilyQuasiLocalGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Periodic/PeriodicBlockFamilyQuasiLocalGap.lean}.
 An empty family has an empty zero-energy state face; no ground-state existence
 is asserted in that case.
 
@@ -514,7 +514,7 @@ interval representation. Hence the estimate applies also to observables
 crossing block boundaries and to negative interval starts. Its reality and
 nonnegativity follow from the positive-functional identity above; no energy
 convergence is supplied as a hypothesis. The generic transport is proved in
-\path{TNLean/MPS/ParentHamiltonian/BlockedQuasiLocalGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Blocking/BlockedQuasiLocalGap.lean}.
 Section~11 gives the finite-volume estimate at every original length.
 
 
@@ -562,7 +562,7 @@ kernel of all local terms. Iterating the intersection then gives
  h\geq0,\qquad \ker H_h(N)=G_A(N)\quad(N\geq R).
 \end{align}
 This construction includes every original length. It is proved in
-\path{TNLean/MPS/ParentHamiltonian/PeriodicOriginalIntersection.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Interaction/PeriodicOriginalIntersection.lean}.
 
 Section~9 now applies to this derived interaction. Consequently periodicity
 alone gives one positive $\delta$, the exact open kernels above, the
@@ -570,7 +570,7 @@ zero-energy face classification of Section~8, and the literal
 infinite-volume inequality for every pure zero-energy state and every
 centered local observable. The constant precedes all states and exhaustions.
 The existence and gap composition is proved in
-\path{TNLean/MPS/ParentHamiltonian/PeriodicParentInteractionGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Periodic/PeriodicOpenParentGap.lean}.
 The finite-volume gap at every original length is established in
 Section~11. Identification of a general GVBS presentation with these tensor
 support spaces remains separate.
@@ -623,8 +623,8 @@ along every choice of $K$ and $r$. A surjective configuration isometry
 preserves this norm; taking the adjoint puts the two projections in the
 displayed order.
 The estimates and their physical transport are proved in
-\path{TNLean/MPS/ParentHamiltonian/ResidualWindowJointProjectionDecay.lean} and
-\path{TNLean/MPS/ParentHamiltonian/ResidualCoverProjectionDefect.lean}.
+\path{TNLean/MPS/ParentHamiltonian/ProjectorDefect/Residual/ResidualWindowJointProjectionDecay.lean} and
+\path{TNLean/MPS/ParentHamiltonian/ProjectorDefect/Residual/ResidualWindowJointProjectionDecay.lean}.
 
 The convergence is uniform in the exterior lengths. Indeed, if there were
 arbitrarily large $M$ for which some pair $(K,r)$ had defect greater than
@@ -648,7 +648,7 @@ The construction involves neither a divisibility
 condition on $N$ nor additional sector, kernel, or decay hypotheses.
 The common interaction range, exact kernels for $N\geq R$, and the
 all-length gap are proved together in
-\path{TNLean/MPS/ParentHamiltonian/PeriodicOpenParentGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Periodic/PeriodicOpenParentGap.lean}.
 The identification of the support spaces of a general GVBS presentation
 with these tensor boundary spaces remains separate.
 
@@ -660,7 +660,7 @@ state satisfies the literal infinite-volume commutator inequality of
 Section~9 with $\gamma$. The two constants need not agree. All four choices
 precede the state, local observable, and interval exhaustion. This combined
 statement is proved in
-\path{TNLean/MPS/ParentHamiltonian/PeriodicParentGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Periodic/PeriodicOpenParentGap.lean}.
 
 \section{Stationary faithful generators and their parent gaps}
 
@@ -680,14 +680,14 @@ The isometric resolution identifies the support spaces at every length:
  \qquad(N\geq0).
 \]
 The full presentation, including both intertwining directions, is proved in
-\path{TNLean/MPS/ParentHamiltonian/FaithfulPeriodicGroundSpace.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Stationary/FaithfulPeriodicGroundSpace.lean}.
 No minimality or purity assumption is used, and repeated corners are allowed.
 
 For stationary data, the compatible finite expectations define a quasi-local
 state $\omega_{A,\rho}$. The same density $\sigma_k$ represents every translated
 interval restriction of this state, and its range remains $G_A(k)$. This
 literal state-support statement is proved in
-\path{TNLean/MPS/ParentHamiltonian/FaithfulLocalStateSupport.lean}.
+\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/LocalDensitySupport.lean}.
 
 The periodic presentation also gives an infinite-volume gap for these
 supplied generators without assuming that $A$ is irreducible or periodic.
@@ -704,7 +704,7 @@ margins diverging,
 The periodic-family gap theorem applies to the same interaction after the
 all-length support identity. The constant precedes the state, observable,
 and exhaustion. This conditional exact-kernel consequence is proved in
-\path{TNLean/MPS/ParentHamiltonian/FaithfulQuasiLocalGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Stationary/FaithfulParentFiniteGap.lean}.
 
 The interaction and kernel identity can now also be constructed from the
 faithful stationary generators. Their periodic presentation and the family
@@ -717,7 +717,7 @@ Choose the canonical projection of range $R_0$. It is positive, has these
 exact open kernels, and annihilates the generated state on every translate.
 The preceding commutator theorem applies to this same interaction. Thus
 neither an interaction nor an eventual kernel identity is supplied in
-\path{TNLean/MPS/ParentHamiltonian/FaithfulParentInteractionGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Stationary/FaithfulParentInteractionGap.lean}.
 
 The original-length family gap also gives a uniform finite-volume bound
 for every sufficiently large canonical range. For each such range $R$ there
@@ -730,7 +730,7 @@ The exact boundary-kernel assertion still concerns $N\geq R$.
 Thus the constructed interaction has both finite and infinite gaps, and
 contains the generated stationary state in its zero-energy face. This is
 proved in
-\path{TNLean/MPS/ParentHamiltonian/FaithfulParentFiniteGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Stationary/FaithfulParentFiniteGap.lean}.
 
 A given positive interaction $h$ of range $R>0$ needs only the eventual
 identity $\ker H_h(N)=G_A(N)$. Choose a long window $W$ beyond both this
@@ -743,9 +743,9 @@ remaining finitely many volumes extends the bound above their actual
 kernels. The same given $h$ has the literal infinite-volume commutator gap.
 No assumption on $\ker h$ at the interaction range is added. These results
 are proved in
-\path{TNLean/MPS/ParentHamiltonian/Martingale/CanonicalGapToInteractionGap.lean}
+\path{TNLean/MPS/ParentHamiltonian/Interaction/OpenInteractionRangeComparison.lean}
 and
-\path{TNLean/MPS/ParentHamiltonian/FaithfulGivenInteractionGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Stationary/FaithfulParentFiniteGap.lean}.
 They give Theorem~1.2 in the supplied faithful stationary-generator setting.
 For a positive finite-volume Hamiltonian, the norm gap is equivalent to
 the lower bound on its nonzero spectrum; it therefore gives
@@ -768,7 +768,7 @@ $A_iV=VB_i$. Moreover,
  \eta_{A,\rho}(X)=\eta_{B,\sigma}(X)
 \]
 at every finite length, including zero. These assertions are proved in
-\path{TNLean/MPS/ParentHamiltonian/StationarySupportCompression.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Stationary/StationarySupportCompression.lean}.
 The compressed bond dimension is positive because its stationary trace is
 nonzero. This restriction preserves the specified state; it need not preserve
 the original tensor's full boundary spaces. Invariance of $P$ alone does not
@@ -777,7 +777,7 @@ For every $k\geq0$, the original quasi-local state nevertheless has one
 positive density of trace one on every translated $k$-site interval, whose
 range is exactly $G_B(k)$. This follows from the preserved finite expectations
 and the faithful support theorem for $B,\sigma$, and is proved in
-\path{TNLean/MPS/ParentHamiltonian/StationaryLocalStateSupport.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Stationary/StationarySupportCompression.lean}.
 
 Equality of the finite insertion expectations also identifies the actual
 quasi-local states:
@@ -787,7 +787,7 @@ quasi-local states:
 Every finite-region observable can be placed in a containing interval, where
 the two functionals agree. Continuity and density of the local observables
 then give equality on the quasi-local algebra. This is proved in
-\path{TNLean/MPS/ParentHamiltonian/QuasiLocalExpectationEquality.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Stationary/QuasiLocalExpectationEquality.lean}.
 Thus the support restriction preserves the entire specified state, rather
 than merely its finite density ranges.
 
@@ -798,7 +798,7 @@ and the same interaction has one positive infinite-volume commutator gap
 in every pure state in that face. This construction assumes only normalized
 generators and a nonzero positive stationary matrix; bond and physical
 dimensions are derived. It is proved in
-\path{TNLean/MPS/ParentHamiltonian/StationaryParentInteractionGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Stationary/StationaryParentFiniteGap.lean}.
 The original stationary state need not be pure.
 The same construction now also supplies $\delta>0$ with
 \begin{align}
@@ -807,7 +807,7 @@ The same construction now also supplies $\delta>0$ with
 \end{align}
 The constants for the finite and infinite gaps belong to this same
 interaction. The all-length result is proved in
-\path{TNLean/MPS/ParentHamiltonian/StationaryParentFiniteGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Stationary/StationaryParentFiniteGap.lean}.
 
 For a supplied physical-first isometry
 $V:\mathbb C^D\to\mathbb C^d\otimes\mathbb C^D$, put
@@ -819,7 +819,7 @@ $A_i(a,b)=V((i,a),b)$. Direct matrix multiplication gives
 \end{align}
 Trace duality identifies this one-site Heisenberg insertion with the
 corresponding Schr\"odinger insertion. These identities are proved in
-\path{TNLean/MPS/ParentHamiltonian/SuppliedIsometryInsertion.lean}.
+\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/SuppliedIsometryInsertion.lean}.
 The multi-site order is now explicit as well. Write
 $F_X(B)=V^*(X\otimes B)V$. For every finite list and every matrix $\rho$,
 \begin{align}
@@ -830,7 +830,7 @@ Here the physical observable transfer on the right uses forward matrix
 words. The identity includes the empty list and needs no positivity,
 normalization, or stationarity. Its induction uses one-site trace duality
 and the product rule for inserted transfers, and is proved in
-\path{TNLean/MPS/ParentHamiltonian/SourceOrderedInsertion.lean}. Thus the
+\path{TNLean/MPS/ParentHamiltonian/LocalExpectation/SuppliedIsometryInsertion.lean}. Thus the
 source-written product has precisely the reversed physical order in the
 present convention.
 
@@ -875,7 +875,7 @@ preimages gives, for each $\varepsilon>0$, eventually
 The two tensors may have different periods and bond dimensions. The argument
 uses the original mixed transfer operator and therefore supplies the estimate
 at every sufficiently large original length. These results are proved in
-\path{TNLean/MPS/ParentHamiltonian/PeriodicGroundSpaceIndependence.lean}.
+\path{TNLean/MPS/ParentHamiltonian/BlockGroundSpace/Sector/PeriodicGroundSpaceIndependence.lean}.
 
 For a finite family, sufficiently small pairwise overlaps imply independence
 by the lower Gram estimate. On the common middle interval, independence makes
@@ -888,11 +888,11 @@ can consequently be combined:
 \]
 This geometric implication is proved without normalization or virtual
 injectivity in
-\path{TNLean/MPS/ParentHamiltonian/JointGroundSpaceIntersection.lean}.
+\path{TNLean/MPS/ParentHamiltonian/BlockGroundSpace/JointGroundSpaceIntersection.lean}.
 Iteration gives the exact canonical open kernels once the individual
 intersections and middle independence hold eventually; the latter two facts
 remain explicit in
-\path{TNLean/MPS/ParentHamiltonian/PeriodicFamilyInteractionCriterion.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Periodic/PeriodicFamilyInteractionCriterion.lean}.
 
 An arbitrary finite periodic family need not be inequivalent. Select one
 representative of each gauge and phase class first. Gauge invariance of
@@ -904,7 +904,7 @@ periodic-family commutator theorem then supplies a common positive
 infinite-volume gap for that constructed interaction. No sector separation,
 independence, interaction, or kernel identity is supplied. The result is
 proved in
-\path{TNLean/MPS/ParentHamiltonian/PeriodicBlockFamilyParentInteractionGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Periodic/PeriodicBlockFamilyParentInteractionGap.lean}.
 It concerns an explicitly supplied finite periodic generating family; the
 identification with an arbitrary source GVBS boundary-limit presentation
 remains separate.
@@ -919,7 +919,7 @@ some $R_0>0$, every $R\geq R_0$ has exact kernels at $N\geq R$ and a
 uniform norm gap above the actual kernel at every $N\geq0$. The same
 constructed canonical interaction has the literal infinite-volume gap.
 No primitive-resolution or residual-limit hypothesis is supplied in
-\path{TNLean/MPS/ParentHamiltonian/PeriodicBlockFamilyOpenParentGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Periodic/PeriodicBlockFamilyOpenParentGap.lean}.
 The empty family is included by its direct all-length Hamiltonian formula.
 
 
@@ -929,7 +929,7 @@ conclusions. The finite-volume bound uses its actual kernel also at short
 lengths; the infinite-volume bound concerns the identical supplied
 interaction. No interaction-range lower threshold or local-kernel equality
 is required. This given-interaction form is proved in
-\path{TNLean/MPS/ParentHamiltonian/PeriodicBlockFamilyInteractionGap.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Periodic/PeriodicBlockFamilyOpenParentGap.lean}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

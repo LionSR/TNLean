@@ -10,12 +10,12 @@ Current branch `wave14-A-588-range-reduction` lands the reusable open-chain step
 that this audit had identified as missing:
 
 - `MPSTensor.tailRestrictₗ_contiguousRestrictₗ` in
-  `TNLean/MPS/ParentHamiltonian/RestrictTransport.lean` identifies a suffix
+  `TNLean/MPS/Tensor/GroundSpace/RestrictTransport.lean` identifies a suffix
   restriction of a contiguous `(K + L)` window with the contiguous `L`-window
   beginning at `s + K`, after inserting the fixed prefix into the outside
   configuration.
 - `MPSTensor.contiguous_mem_groundSpace_of_isNBlkInjective` in
-  `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean` iterates
+  `TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean` iterates
   `groundSpace_extend_right_of_isNBlkInjective`: contiguous `(L₀ + 1)`-window
   ground-space constraints now imply full open-chain membership
   `ψ ∈ groundSpace A N`.
@@ -51,11 +51,11 @@ periodic reintegration:
 
 - `MPSTensor.eq_cyclic_site_of_offset_eq` and
   `MPSTensor.cyclicRestrictₗ_restrictLast` in
-  `TNLean/MPS/ParentHamiltonian/CyclicWindow.lean` record the modular-index
+  `TNLean/MPS/Tensor/GroundSpace/CyclicWindow.lean` record the modular-index
   calculation and the one-site peeling identity for cyclic windows.
 - `MPSTensor.chainGroundSpace_le_chainGroundSpace_succ` and
   `MPSTensor.chainGroundSpace_le_chainGroundSpace_of_le` in
-  `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean` show that periodic-chain
+  `TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean` show that periodic-chain
   constraints are antitone in the interaction range.
 - `MPSTensor.chainGroundSpace_le_groundSpace_of_isNBlkInjective` combines that
   cyclic monotonicity with the Wave 14 open-chain theorem, proving that cyclic
@@ -98,9 +98,9 @@ to obtain the same generator-commutation conclusion as in the injective proof.
 
 ## Files changed by the Wave 14 and Wave 15D branches
 
-- `TNLean/MPS/ParentHamiltonian/RestrictTransport.lean` (Wave 14)
-- `TNLean/MPS/ParentHamiltonian/CyclicWindow.lean` (Wave 15D)
-- `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`
+- `TNLean/MPS/Tensor/GroundSpace/RestrictTransport.lean` (Wave 14)
+- `TNLean/MPS/Tensor/GroundSpace/CyclicWindow.lean` (Wave 15D)
+- `TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean`
 - `blueprint/src/chapter/ch14_parent_hamiltonian.tex` (Wave 15D)
 - `audits/2026-04-22_issue588_normal_range_reduction_partial.md`
 
@@ -120,7 +120,7 @@ MPV-line containment theorem; the existing proof placeholder in
 It lands the next reusable Lean statement on the closure-property path:
 
 - `MPSTensor.chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective`
-  in `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`.
+  in `TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean`.
 
 The theorem starts from exactly the post-open-chain situation: an $N$-site vector
 `ψ ∈ chainGroundSpace A L N` with `ψ = groundSpaceMap A N X`, an
@@ -160,13 +160,13 @@ remove algebraic endgame noise from the remaining closure-property blocker:
 
 - `MPSTensor.eq_zero_of_mul_evalWord_eq_zero_of_wordSpan_eq_top` and
   `MPSTensor.eq_zero_of_mul_evalWord_eq_zero_of_isNBlkInjective_of_le_mul` in
-  `TNLean/MPS/ParentHamiltonian/WrappingWindow.lean`.  These formalize the
+  `TNLean/MPS/Tensor/GroundSpace/WrappingWindow.lean`.  These formalize the
   padding observation from the 2026-04-21 audit: if an operator annihilates all
   complement words of length `k`, then padding to any full exact word span
   length `n ≥ k` forces the operator to be zero; for an `L₀`-block-injective
   tensor, any positive multiple of `L₀` is such a full span.
 - `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_long_word_commutes`
-  in `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`.  Once the wrapped
+  in `TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean`.  Once the wrapped
   boundary identities are upgraded to a long-word commutation family
   `X A^ω = A^ω X` for some `|ω| = m ≥ L₀`, this theorem applies the existing
   block-stripping centrality theorem and the matrix-center calculation to put
@@ -196,7 +196,7 @@ common-middle endgame that was missing after Wave 17A, without assuming
 commutation directly:
 
 - `MPSTensor.commutes_words_of_two_sided_middle_compatibility` in
-  `TNLean/MPS/ParentHamiltonian/WrappingWindow.lean`: if the two one-sided
+  `TNLean/MPS/Tensor/GroundSpace/WrappingWindow.lean`: if the two one-sided
   identities have been compared to a single same-witness family indexed by a
   common middle word,
   ```text
@@ -209,7 +209,7 @@ commutation directly:
 - `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_positive_word_commutes`
   and
   `MPSTensor.groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_two_sided_middle_compatibility`
-  in `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`: same-witness
+  in `TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean`: same-witness
   common-middle compatibilities now put `Γ_N(X)` directly in the MPV line via the
   positive-length amplification and the Wave 17A centrality endgame.
 
@@ -237,7 +237,7 @@ pre-existing proof placeholder remains.  It lands the reindexing and conditional
 endgame layer for the actual wrapped-window witness comparison:
 
 - `MPSTensor.wrappedMiddleBackground` and `MPSTensor.mirrorMiddleBackground` in
-  `TNLean/MPS/ParentHamiltonian/WrappingWindow.lean` build the two background
+  `TNLean/MPS/Tensor/GroundSpace/WrappingWindow.lean` build the two background
   configurations whose exposed complements are the same middle word `μ`.
 - `MPSTensor.wrappedMiddleBackground_complement` and
   `MPSTensor.mirrorMiddleBackground_complement` prove the corresponding

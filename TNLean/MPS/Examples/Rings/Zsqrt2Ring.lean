@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import Mathlib.NumberTheory.Zsqrtd.ToReal
 import QICLean.Algebra.Matrix.MatrixSingleSpan
-import TNLean.MPS.FundamentalTheorem.Reduction.ExplicitGauge
+import TNLean.MPS.FundamentalTheorem.Compression.ExplicitGauge
 
 /-!
 # Exact arithmetic for the Ising twist: matrices over `ℤ[√2]` and their complex images

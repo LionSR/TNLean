@@ -8,18 +8,16 @@ import Mathlib.Topology.Instances.Matrix
 import QICLean.Algebra.MatrixAlgebra.MatrixFamilyAction
 import QICLean.Kraus.IrreducibleAction
 import QICLean.Algebra.Module.Subquotient
-import TNLean.MPS.Chain.VaryingBondOBC
-import TNLean.MPS.FundamentalTheorem.Reduction.FlagData
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
-import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessBlocks
-import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessAllReductions
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
+import TNLean.MPS.Tensor.VaryingBond.VaryingBondOBC
+import TNLean.MPS.FundamentalTheorem.WordModule.FlagData
+import TNLean.MPS.FundamentalTheorem.Compression.MultiBlock
+import TNLean.MPS.FundamentalTheorem.Compression.UniquenessBlocks
+import TNLean.MPS.FundamentalTheorem.Compression.UniquenessAllReductions
+import TNLean.MPS.FundamentalTheorem.Compression.MultiBlockTrace
 import TNLean.MPS.FundamentalTheorem.Arbitrary.Basic
 import TNLean.MPS.FundamentalTheorem.Arbitrary.FlagExistence
-import TNLean.MPS.FundamentalTheorem.Arbitrary.WordModuleGauge
-import TNLean.MPS.CanonicalForm.Existence
-import TNLean.MPS.Core.TracePairing
-import TNLean.MPS.Preparation.MinimalCutRepresentationPadding
+import TNLean.MPS.CanonicalForm.NormalBlocks.IrreducibleDecomposition
+import TNLean.MPS.Tensor.Words.TracePairing
 
 /-!
 # The fundamental theorem for arbitrary tensors

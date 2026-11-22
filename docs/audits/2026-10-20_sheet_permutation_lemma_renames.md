@@ -2,7 +2,7 @@
 
 Two lemmas about moving the sheet of one index of a family to the front of a list of sheets are
 plain statements about `List.Perm`; they use no frames, holes or positions. They move from
-`TNLean/PEPS/Approximation/DyadicProtocolStack.lean` to `TNLean/Lattice/Sheet/Stack.lean`, so that
+`TNLean/PEPS/Approximation/FrameChanges/DyadicProtocolStack.lean` to `TNLean/Lattice/Sheet/Stack.lean`, so that
 the one-dimensional chain can use them without importing two-dimensional code. Statements and
 proofs are unchanged; only the namespace changes:
 

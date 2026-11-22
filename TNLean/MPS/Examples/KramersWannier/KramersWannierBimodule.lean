@@ -5,10 +5,10 @@ Authors: Sirui Lu
 -/
 import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.Examples.KramersWannier.KramersWannierSource
-import TNLean.MPS.FundamentalTheorem.Reduction.MPOProduct
-import TNLean.MPS.MPDO.BondOneOperator
-import TNLean.MPS.MPDO.StackedLayers
-import TNLean.MPS.Symmetry.MPOSymmetry.Defs
+import TNLean.MPS.FundamentalTheorem.OperatorProduct.MPOProduct
+import TNLean.MPS.Operator.Periodic.BondOneOperator
+import TNLean.MPS.CanonicalForm.SimpleMPO.StackedLayers
+import TNLean.MPS.Operator.Fusion.MPOSymmetry
 
 /-!
 # Kramers–Wannier duality as a matrix product operator bimodule

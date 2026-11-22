@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.Rings.Zsqrt2Ring
-import TNLean.MPS.MPDO.BondSimilarity
-import TNLean.MPS.MPDO.DirectSum
+import TNLean.MPS.Operator.Periodic.BondSimilarity
+import TNLean.MPS.Operator.Product.DirectSum
 
 /-!
 # Fusion of periodic operators from a letter identity over `ℤ[√2]`

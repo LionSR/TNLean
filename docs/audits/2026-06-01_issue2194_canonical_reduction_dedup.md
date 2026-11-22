@@ -57,10 +57,10 @@ The canonical-form and sector-comparison targets build:
 
 ```text
 lake build \
-  TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorTransport \
-  TNLean.MPS.CanonicalForm.SectorComparison.TPPrimitiveReduction \
+  TNLean.MPS.CanonicalForm.Periodic.CyclicSectors.CommonSectorTransport \
+  TNLean.MPS.CanonicalForm.NormalBlocks.TPGauge \
   TNLean.MPS.CanonicalForm.NormalReduction \
-  TNLean.MPS.CanonicalForm.Existence
+  TNLean.MPS.CanonicalForm.NormalBlocks.IrreducibleDecomposition
 ```
 
 Result:

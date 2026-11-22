@@ -68,14 +68,14 @@ build just the library with `lake build TNLean`. To verify one module with the
 package's Lean options, including the Mathlib standard linter set, run:
 
 ```bash
-lake build TNLean.MPS.FundamentalTheorem.Basic
+lake build TNLean.MPS.Tensor.Gauge.FundamentalTheorem
 ```
 
 For a faster elaboration check that does not apply those package options or
 run the standard linter set, use:
 
 ```bash
-lake env lean TNLean/MPS/FundamentalTheorem/Basic.lean
+lake env lean TNLean/MPS/Tensor/Gauge/FundamentalTheorem.lean
 ```
 
 Once the build succeeds, open the repository folder in VS Code
@@ -122,7 +122,7 @@ A handful of names recur throughout the library and are worth knowing before
 you start reading. The root-level `MPSTensor` abbreviation and the finite-family
 API live in the companion QICLean library; its operations and predicates use
 the `Kraus` namespace. TNLean retains the matrix-product-state vocabulary in
-`TNLean/MPS/Defs.lean`:
+`TNLean/MPS/Tensor/Defs.lean`:
 
 | Name | What it is | Defined in |
 |---|---|---|
@@ -131,8 +131,8 @@ the `Kraus` namespace. TNLean retains the matrix-product-state vocabulary in
 | `Kraus.IsInjective` | The matrices of a tensor span the full matrix algebra. | `QICLean/Kraus/Injectivity.lean` |
 | `Kraus.IsNormal` | The tensor becomes injective after blocking sites (eventual full Kraus rank). | `QICLean/Kraus/Injectivity.lean` |
 | `Kraus.transferMap` | The completely positive map $E_A(X) = \sum_i A_i X A_i^\dagger$. | `QICLean/Kraus/Transfer.lean` |
-| `MPSTensor.SameMPV` / `MPSTensor.GaugeEquiv` | Two tensors generate the same states at every system size / are related by conjugation `B i = X * A i * X⁻¹`. | `TNLean/MPS/Defs.lean` |
-| `fundamentalTheorem_singleBlock` | The single-block fundamental theorem: injective + same states implies gauge equivalent. | `TNLean/MPS/FundamentalTheorem/Basic.lean` |
+| `MPSTensor.SameMPV` / `MPSTensor.GaugeEquiv` | Two tensors generate the same states at every system size / are related by conjugation `B i = X * A i * X⁻¹`. | `TNLean/MPS/Tensor/Defs.lean` |
+| `fundamentalTheorem_singleBlock` | The single-block fundamental theorem: injective + same states implies gauge equivalent. | `TNLean/MPS/Tensor/Gauge/FundamentalTheorem.lean` |
 
 For anything not in this short list — what a predicate means, which source it
 comes from, and which bridges between similarly named predicates are
@@ -163,17 +163,17 @@ alongside the corresponding blueprint chapters:
 1. `QICLean/Kraus/Word.lean` (in the QICLean dependency) — `MPSTensor`,
    `Kraus.evalWord`. The basic objects: a tensor is a family of matrices,
    and a word evaluates to a matrix product.
-2. `TNLean/MPS/Defs.lean` — `MPSTensor.mpv` (the matrix-product-vector
+2. `TNLean/MPS/Tensor/Defs.lean` — `MPSTensor.mpv` (the matrix-product-vector
    coefficient), `MPSTensor.SameMPV`, `MPSTensor.GaugeEquiv`. What it means
    for two tensors to generate the same states, and what a gauge transformation
    is. Read alongside `blueprint/src/chapter/ch02_mps.tex`.
 3. `QICLean/Kraus/Injectivity.lean` — `Kraus.IsInjective`, `Kraus.IsNormal`. The
    spanning condition the single-block theorem needs.
-4. `TNLean/MPS/Structure/LinearExtension.lean` and
+4. `TNLean/MPS/Tensor/Words/LinearExtension.lean` and
    `QICLean/Algebra/MatrixAlgebra/SkolemNoether.lean` — the two algebraic facts the proof
    assembles: the unique multiplicative linear extension taking `A` to `B`,
    and that every automorphism of a matrix algebra is inner.
-5. `TNLean/MPS/FundamentalTheorem/Basic.lean` — `fundamentalTheorem_singleBlock`
+5. `TNLean/MPS/Tensor/Gauge/FundamentalTheorem.lean` — `fundamentalTheorem_singleBlock`
    itself, built from the previous two files. Read alongside
    `blueprint/src/chapter/ch03_single.tex`, "The Single-Block Fundamental
    Theorem".

@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PolynomialPEPSExplicitConstant
-import TNLean.PEPS.Approximation.ExactFiniteException
+import TNLean.PEPS.Approximation.Exact.ExactFiniteException
 import TNLean.PEPS.AreaLaw.SquareAreaLawExplicitConstant
-import TNLean.PEPS.Approximation.AngularInformationFromGap
+import TNLean.PEPS.Approximation.Information.AngularInformationFromGap
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

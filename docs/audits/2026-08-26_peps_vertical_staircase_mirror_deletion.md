@@ -3,7 +3,7 @@
 This audit records the repository-local pass-through exception
 (`docs/project_conventions.md` §Style) for the removal of
 `TNLean/PEPS/TorusWindowFamilyVertical.lean` and
-`TNLean/PEPS/TorusCoordinateSwap.lean`.
+`TNLean/PEPS/FundamentalTheorem/Torus/TorusCoordinateSwap.lean`.
 
 At the audited head neither file had a non-`Archive` consumer: no module under
 `TNLean/` imported them except the generated aggregator `TNLean/PEPS.lean`, no
@@ -20,12 +20,12 @@ This closes the leftover of ledger entry D10 (closed 2026-07-23, PR #4634): the
 transport re-derivation landed, but the mirror shells themselves were never
 retired. The live vertical-staircase development —
 `verticalStaircaseEdge_val` and `isCrossingEdge_verticalStaircase`
-(`TNLean/PEPS/TorusWindowRegion.lean`),
+(`TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowRegion.lean`),
 `verticalStaircaseConsecutiveWindow_bondTransport_extend_eq`
-(`TNLean/PEPS/TorusWindowBondTransport.lean`) and its `_uniform` companion
-(`TNLean/PEPS/TorusWindowBondUniform.lean`) — works directly in
+(`TNLean/PEPS/FundamentalTheorem/Torus/Window/BondTransport.lean`) and its `_uniform` companion
+(`TNLean/PEPS/FundamentalTheorem/Torus/Window/BondUniform.lean`) — works directly in
 `torusArcRectangle` coordinates and is untouched.
-`TNLean/PEPS/SquareLatticeCoordinateSwap.lean` is a separate, live surface and is
+`TNLean/PEPS/FundamentalTheorem/Normal/SquareLatticeCoordinateSwap.lean` is a separate, live surface and is
 likewise untouched.
 
 ## Removed declarations with dated deprecation text

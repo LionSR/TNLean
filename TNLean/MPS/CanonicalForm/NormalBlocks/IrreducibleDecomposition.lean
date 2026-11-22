@@ -1,0 +1,353 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.Tensor.DirectSum.IrreducibleDecomposition
+import TNLean.MPS.Transfer.Irreducible.PerronGauge
+import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
+import TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap
+import TNLean.MPS.Transfer.Primitivity.StronglyIrreducibleToFullRank
+
+/-!
+# Canonical form existence reductions from the source proofs
+
+This file collects the arbitrary-tensor reductions toward the canonical-form construction for
+MPS tensors from Cirac–Pérez-García–Schuch–Verstraete, arXiv:1606.00608.
+
+The file contains the following reductions from arXiv:1606.00608 and the
+translation-invariant canonical-form theorem of Pérez-García, Verstraete, Wolf,
+and Cirac:
+
+* arXiv:1606.00608, lines 201-219: iterated invariant-projection splitting gives an
+  irreducible block decomposition.
+* arXiv:1606.00608, lines 1058-1077: after canonical form has been obtained,
+  the canonical-form-II gauge makes the associated maps trace-preserving and
+  gives diagonal full-rank fixed points.
+* Pérez-García, Verstraete, Wolf, and Cirac, proof of Theorem Th:TIcanonical,
+  lines 765-770 and 827-832: the full-rank fixed-point gauge and the final
+  dual fixed-point diagonalization.
+
+We also keep a couple of formulations for already-normalized primitive / injective block families,
+but those are **not** obtained from arbitrary input in this file.
+
+Note: the Appendix-A CFII story is genuinely two-step:
+first a generally non-unitary TP similarity from the adjoint Perron--Frobenius eigenvector,
+then a unitary diagonalization **within** that TP gauge.
+
+The reductions below are composed with finite-family weight normalization to
+obtain the arbitrary-input positive-length PGVWC07 canonical form.  After a
+positive global rescaling, the conclusion gives positive weights, unital blocks,
+diagonal full-rank dual fixed points, scalar transfer-map fixed points, and the
+bond-dimension bound.  If every positive-length MPV coefficient vanishes, the
+nonzero-block family is empty.
+
+The later Fundamental-Theorem reductions--TP gauge, period removal, common
+blocking, and normal/BNT predicates--are subsequent consequences of the
+canonical-form outputs, not missing conclusions of PGVWC07 Theorem
+Th:TIcanonical.
+
+Maintainer note: the blueprint cites
+`MPSTensor.exists_pgvwc07_normalized_exact_form_after_rescaling_allow_empty` in
+`TNLean.MPS.CanonicalForm.NormalReduction.WeightNormalization`.  The
+positive-length bond-dimension bound is recorded by
+`MPSTensor.exists_pgvwc07_unital_dualDiag_from_arbitrary` in
+`TNLean.MPS.CanonicalForm.NormalReduction.TPGauge`.  The audit boundary is
+recorded in `docs/paper-gaps/pgvwc07_ti_canonical_form_scope.tex`.
+For Pérez-García, Verstraete, Wolf, and Cirac, the faithful proof order is the
+one in `Papers/quant-ph_0608197/MPSarchive.tex`: lines 765–770 for
+spectral-radius normalization and the full-rank fixed-point gauge, lines
+771–815 for deriving the invariant support from a singular positive fixed point
+and then splitting the trace, lines 816–826 for iteration and non-scalar
+fixed-point splitting, and lines 827–832 for dual fixed-point diagonalization.
+
+## External input — Quantum Wielandt strong irreducibility ⇒ full Kraus rank
+
+This file imports `TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank`,
+which supplies the hardest direction of the Quantum Wielandt primitivity equivalence:
+
+> **Proposition 3(c)→(b) of arXiv:0909.5347 / Wolf Theorem 6.7 case (iii).**
+> If `E_A` is **strongly irreducible** — the Kraus operators' word products
+> eventually span the full matrix algebra `M_D(ℂ)` — then the fixed-point
+> space of `E_A` has full Kraus rank: `dim S_1(A) = D` (the Kraus operators
+> themselves span `M_D(ℂ)` at word-length `1`).
+
+In MPS notation after blocking: `IsStronglyIrreducible A` (Kraus word products
+eventually span `M_D(ℂ)`) implies `IsInjective A` (the single-site
+Kraus operators `{A_i}` already span `M_D(ℂ)`).  This is a
+step in the canonical-form existence argument: it upgrades the cumulative word
+span to single-site injectivity, which then yields block injectivity at every
+positive length.
+
+The formal statement:
+
+> `Wielandt.Primitivity.StronglyIrreducibleToFullRank` proves
+> `isNormal_of_isIrreducibleMap_of_isPrimitive`: a left-canonical tensor whose
+> transfer map is irreducible with peripheral spectrum `{1}` is normal.  This
+> is the hardest direction in the Sanz–Pérez-García–Wolf–Cirac primitivity
+> equivalence.
+
+## External input — invariant subspace decomposition in the canonical-form proof
+
+The iterated invariant-projection splitting in arXiv:1606.00608, lines
+201–219, is formalized in
+`TNLean.MPS.Structure.InvariantSubspaceDecomp`.
+This external input provides:
+
+> **Pérez-García, Verstraete, Wolf, and Cirac, proof of Theorem
+> Th:TIcanonical, lines 765–833.**
+> An invariant orthogonal projection `P` on the bond space (satisfying
+> `(1-P) A_i P = 0` for all `i`) yields an MPV-equivalent two-block direct-sum
+> tensor with strictly smaller block dimensions.
+
+The formal statement:
+
+> `MPSTensor.exists_twoBlock_decomp_of_lowerZero` produces a two-block
+> block-diagonal tensor MPV-equivalent to the original, with a strict dimension
+> decrease (`exists_twoBlock_decomp_of_lowerZero_strict`).
+
+## External input — Wolf spectral theory: Perron-Frobenius fixed point
+
+The Appendix A PF/TP gauge step uses the Perron-Frobenius theorem for
+completely positive maps (Wolf Chapter 6), formalized in
+`QICLean.Channel.PerronFrobenius.Existence`:
+
+> An irreducible CP map on `M_D(ℂ)` with spectral radius `1` has a
+> positive-definite fixed point `ρ > 0`.  This provides the TP gauge
+> transformation `A_i ↦ ρ^{1/2} A_i ρ^{-1/2}` that makes the
+> tensor left-canonical.
+
+The complementary transfer-map gap connection to peripheral primitivity is supplied by
+`QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral` (Wolf Proposition 6.8).
+-/
+open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Filter
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+/-!
+## (1) Irreducible block decomposition
+
+We use `MPSTensor.exists_irreducible_blockDecomp` from `Reduction.lean` directly below.
+-/
+
+
+/-!
+## (2) Perron–Frobenius / trace-preserving gauge for irreducible blocks
+
+We use `MPSTensor.exists_tp_data_of_irreducible` from
+`MPS/Irreducible/PerronGauge.lean` directly below.
+-/
+
+
+/-!
+## (3) CFII normalization for irreducible trace-preserving blocks
+
+We collect `exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor` together with the
+fact that unitary conjugation preserves MPVs.
+
+Important: this is the **second** half of the Appendix-A normalization story. The preceding
+PF / TP-gauge step is generally a non-unitary similarity; the unitary appearing here acts only
+after one has already moved into the one-sided TP gauge.
+-/
+
+/-- **CFII fixed-point normalization for irreducible trace-preserving blocks.**
+
+For an irreducible tensor `A` in the TP gauge (`∑ Aᵢ†Aᵢ = I`) and with `0 < D`, there exist
+
+* a unitary `U`,
+* a diagonal positive-definite matrix `Λ`,
+
+such that the unitary conjugate tensor
+`B i := U† * A i * U` is still TP, has `Λ` as a fixed point of its transfer map, and is
+`SameMPV₂`-equivalent to `A` (unitary gauge equivalence).
+
+This is the formal analogue of bringing a block into **Canonical Form II** (CFII) *after*
+one has already chosen a TP representative; it does not say that the original pre-TP-gauge tensor
+is related to a CFII representative by a unitary similarity alone. -/
+theorem exists_CFII_data_of_TP_of_isIrreducibleTensor
+    (A : MPSTensor d D)
+    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
+    (hD : 0 < D) :
+    ∃ (U : Matrix.unitaryGroup (Fin D) ℂ)
+      (Λ : Matrix (Fin D) (Fin D) ℂ),
+        let B : MPSTensor d D :=
+          fun i =>
+            (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ);
+        SameMPV₂ A B ∧
+        Λ.PosDef ∧ Λ.IsDiag ∧
+        (∑ i : Fin d, (B i)ᴴ * (B i) = 1) ∧
+        Kraus.transferMap (ι := Fin d) (n := Fin D) B Λ = Λ := by
+  classical
+  obtain ⟨U, Λ, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩ :=
+    exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleTensor
+      (d := d) (D := D) A hTP hIrr hD
+  refine ⟨U, Λ, ?_⟩
+  -- MPV is invariant under unitary conjugation.
+  have hSame :
+      SameMPV₂ A
+        (fun i =>
+          (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ)) := by
+    intro N σ
+    exact sameMPV_conj_unitary (d := d) (D := D) A U N σ
+  -- Collect the statements under the `let B := ...` binder.
+  exact ⟨hSame, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩
+
+
+/-!
+## (4) Normality from primitive complementary-gap hypotheses
+
+For overlap and canonical-form hypotheses involving primitive transfer maps, we use the results from
+`PeripheralToTransferMapGap.lean` directly.
+-/
+
+/-!
+## Zero-block vanishing at positive length
+
+These facts show that an all-zero tensor contributes nothing on nonempty words,
+hence nothing to matrix product vectors at positive lengths.  They justify
+discarding zero blocks under the physical positive-length relation.
+-/
+
+/-- An all-zero tensor evaluates to zero on every nonempty word. -/
+theorem evalWord_eq_zero_of_all_zero (A : MPSTensor d D)
+    (hzero : ∀ i : Fin d, A i = 0)
+    (w : List (Fin d)) (hw : w ≠ []) :
+    Kraus.evalWord A w = 0 := by
+  cases w with
+  | nil =>
+      exact (hw rfl).elim
+  | cons i w =>
+      simp only [Kraus.evalWord, hzero i, zero_mul]
+
+/-- An all-zero tensor contributes zero to the MPV for every positive system size. -/
+theorem mpv_eq_zero_of_all_zero (A : MPSTensor d D)
+    (hzero : ∀ i : Fin d, A i = 0)
+    {N : ℕ} (σ : Fin N → Fin d) (hN : 0 < N) :
+    mpv A σ = 0 := by
+  have hw : List.ofFn σ ≠ [] :=
+    List.length_pos_iff_ne_nil.mp (by simpa only [List.length_ofFn] using hN)
+  unfold mpv coeff
+  rw [evalWord_eq_zero_of_all_zero (A := A) hzero (w := List.ofFn σ) hw]
+  simp only [Matrix.trace_zero]
+
+/-!
+## Irreducible decomposition from arbitrary input
+
+The arbitrary-input part of this file stops at the nonzero irreducible block decomposition below.
+The blockwise trace-preserving gauge is constructed in `NormalReduction/TPGauge.lean`; subsequent
+period removal and normalization are developed in the normal-reduction modules.
+
+The normal-canonical-form file starts from a primitive weighted block family with positive bond
+dimensions and non-increasing nonzero weight moduli. This file does **not** construct that input
+from an arbitrary tensor.
+
+Subsequent stages toward a complete canonical-form existence theorem are:
+
+* Apply the TP-irreducible-to-primitive blocking theorem and then perform the post-blocking cyclic
+  sector bookkeeping and weight normalization needed for non-increasing nonzero weight moduli.
+* Use the resulting data to reach the stronger normal / injective-by-blocking hypotheses needed by
+  the normal-canonical-form lemmas and the `IsCanonicalForm` constructors.
+-/
+
+/-!
+## Removing zero blocks at positive lengths
+
+The irreducible block decomposition may contain blocks whose matrices all vanish.  Such a block
+contributes zero to every matrix product vector of positive length.  We therefore retain only the
+nonzero blocks.  Their total bond dimension is bounded by the original bond dimension directly
+from the dimension identity of the invariant-subspace decomposition; no empty-word comparison is
+needed.
+-/
+
+/-- **Nonzero irreducible block decomposition at positive lengths.**
+
+Every MPS tensor is represented at every positive length by a direct sum of nonzero irreducible
+blocks.  Each retained block has positive bond dimension, and the sum of their bond dimensions is
+at most the original bond dimension.
+
+This is the positive-length form of the recursive decomposition in Pérez-García, Verstraete,
+Wolf, and Cirac, Theorem `Th:TIcanonical`, proof lines 771--826.  The source notes that zero blocks
+may occur; they vanish identically on nonempty rings and are discarded here. -/
+theorem exists_irreducible_blockDecomp_nonzeroBlocks (A : MPSTensor d D) :
+    ∃ (r : ℕ) (dim : Fin r → ℕ)
+      (blocks : (k : Fin r) → MPSTensor d (dim k)),
+      (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
+      (∀ k, ∃ i, blocks k i ≠ 0) ∧
+      (∀ k, 0 < dim k) ∧
+      SameMPV₂Pos A
+        (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) blocks) ∧
+      ∑ k : Fin r, dim k ≤ D := by
+  classical
+  obtain ⟨r₀, dim₀, blocks₀, hIrr₀, hSame₀, hDim₀⟩ :=
+    exists_irreducible_blockDecomp (d := d) (D := D) A
+  set isNonzero : Fin r₀ → Prop := fun k => ∃ i, blocks₀ k i ≠ 0 with isNonzero_def
+  set nonzeroSet : Finset (Fin r₀) := Finset.univ.filter (fun k => isNonzero k)
+    with nonzeroSet_def
+  set nonzeroEquiv : nonzeroSet ≃ Fin nonzeroSet.card := nonzeroSet.equivFin
+    with nonzeroEquiv_def
+  set r := nonzeroSet.card with r_def
+  set dim : Fin r → ℕ := fun j => dim₀ (nonzeroEquiv.symm j).1 with dim_def
+  set newBlocks : (k : Fin r) → MPSTensor d (dim k) :=
+    fun j => blocks₀ (nonzeroEquiv.symm j).1 with newBlocks_def
+  refine ⟨r, dim, newBlocks, ?_, ?_, ?_, ?_, ?_⟩
+  · intro k
+    exact hIrr₀ (nonzeroEquiv.symm k).1
+  · intro k
+    exact (Finset.mem_filter.mp (nonzeroEquiv.symm k).2).2
+  · intro k
+    obtain ⟨i, hi⟩ := (Finset.mem_filter.mp (nonzeroEquiv.symm k).2).2
+    by_contra h
+    push Not at h
+    have hd0 : dim k = 0 := Nat.le_zero.mp h
+    have hEmpty : IsEmpty (Fin (dim k)) := by rw [hd0]; infer_instance
+    have hzero : newBlocks k i = 0 := by ext a b; exact (hEmpty.false a).elim
+    exact hi hzero
+  · intro N hN σ
+    have hA : mpv A σ = ∑ k : Fin r₀, mpv (blocks₀ k) σ := by
+      have h := hSame₀ N σ
+      rw [h, mpv_toTensorFromBlocks_eq_sum]
+      simp only [one_pow, one_smul]
+    have hNonzero :
+        mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ =
+          ∑ j : Fin r, mpv (newBlocks j) σ := by
+      rw [mpv_toTensorFromBlocks_eq_sum]
+      simp only [one_pow, one_smul]
+    have hNonzeroSum : nonzeroSet.sum (fun k => mpv (blocks₀ k) σ) =
+        ∑ j : Fin r, mpv (newBlocks j) σ := by
+      rw [← nonzeroSet.sum_coe_sort (fun k => mpv (blocks₀ k) σ)]
+      exact (nonzeroEquiv.symm.sum_comp
+        (fun x : nonzeroSet => mpv (blocks₀ x.1) σ)).symm
+    have hAllEqNonzero : (∑ k : Fin r₀, mpv (blocks₀ k) σ) =
+        nonzeroSet.sum (fun k => mpv (blocks₀ k) σ) := by
+      rw [nonzeroSet_def, Finset.sum_filter]
+      apply Finset.sum_congr rfl
+      intro k _
+      by_cases hk : isNonzero k
+      · simp [hk]
+      · have hkz : ∀ i, blocks₀ k i = 0 := by
+          intro i
+          by_contra hi
+          exact hk ⟨i, hi⟩
+        have hzero := mpv_eq_zero_of_all_zero (blocks₀ k) hkz σ hN
+        rw [ite_eq_right hk]
+        exact hzero
+    calc
+      mpv A σ = ∑ k : Fin r₀, mpv (blocks₀ k) σ := hA
+      _ = nonzeroSet.sum (fun k => mpv (blocks₀ k) σ) := hAllEqNonzero
+      _ = ∑ j : Fin r, mpv (newBlocks j) σ := hNonzeroSum
+      _ = mpv (toTensorFromBlocks (d := d) (μ := fun _ : Fin r => (1 : ℂ)) newBlocks) σ :=
+        hNonzero.symm
+  · have hSelectedDim : nonzeroSet.sum dim₀ = ∑ j : Fin r, dim j := by
+      rw [← nonzeroSet.sum_coe_sort dim₀]
+      exact (nonzeroEquiv.symm.sum_comp (fun x : nonzeroSet => dim₀ x.1)).symm
+    calc
+      ∑ j : Fin r, dim j = nonzeroSet.sum dim₀ := hSelectedDim.symm
+      _ ≤ ∑ k : Fin r₀, dim₀ k :=
+        Finset.sum_le_univ_sum_of_nonneg (fun _ => Nat.zero_le _)
+      _ = D := hDim₀
+
+end MPSTensor

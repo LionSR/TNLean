@@ -19,7 +19,7 @@ and recovers this one as a special case.
 
 | Removed declaration | Replacement |
 |---|---|
-| `TNLean.PEPS.threeBlock_reconcile` | none needed: the reconcile was already dead, with no reference outside its own file. No surviving declaration restates it. The nearest live statement, `TNLean.PEPS.bondLocal_iff_coeffTransfer` (`TNLean/PEPS/RegionBlock/ThreeBlockTransfer.lean`), is a different result: it characterizes a bond-local transfer kernel between two tensors, quantified over a matrix on the second tensor, and yields no row equality; it is proved from the block-frame coefficient transfer of `BlockCoeffTransfer.lean`, a path that does not pass through `UnionInjectivityGeneral*` |
+| `TNLean.PEPS.threeBlock_reconcile` | none needed: the reconcile was already dead, with no reference outside its own file. No surviving declaration restates it. The nearest live statement, `TNLean.PEPS.bondLocal_iff_coeffTransfer` (`TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/ThreeBlockTransfer.lean`), is a different result: it characterizes a bond-local transfer kernel between two tensors, quantified over a matrix on the second tensor, and yields no row equality; it is proved from the block-frame coefficient transfer of `BlockCoeffTransfer.lean`, a path that does not pass through `UnionInjectivityGeneral*` |
 | `TNLean.PEPS.threeBlockInsertedCoeff_eq_iff_regionInsertedCoeff_eq` | none needed: it existed only to read the reconcile's hypothesis as the three-block resonate equality |
 | `TNLean.PEPS.threeBlock_middle_strip_descent` | none needed: a proof step of the reconcile |
 | `TNLean.PEPS.threeBlock_red_readoff_eq_of_coeff_eq` | none needed: a proof step of the reconcile |
@@ -34,7 +34,7 @@ The file became importer-free when the unused-import sweep recorded in
 `ThreeBlockTransfer` import edge; the generated aggregator
 `TNLean/PEPS/RegionBlock.lean` was its only remaining importer and is
 regenerated. Two prose pointers are corrected: the module docstring of
-`TNLean/PEPS/RegionBlock/ThreeBlockTransfer.lean` no longer claims to wire in
+`TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/ThreeBlockTransfer.lean` no longer claims to wire in
 the deleted engine, since that file wires only the host-block union injectivity
 and the two-block backbone; and the `region_cover_union_cases` candidate entry
 of `docs/tactic_patterns.md` now cites a surviving site and the corrected count
@@ -51,10 +51,10 @@ chain. The chain's capstone `exists_regionEdgeGauge_of_coherentFrames`
 | Removed declaration | File | Replacement |
 |---|---|---|
 | `TNLean.PEPS.coeffTransferMap_mul_of_coherentFrames` | `TNLean/PEPS/RegionBlock/CoarseThreeSiteMul.lean` | `coeffTransferMap_eq_regionEdgeTransfer` followed by `regionEdgeTransfer_mul` (both `CoarseThreeSite11.lean`), which is verbatim the removed proof |
-| `TNLean.PEPS.isBondLocalTransferKernel_of_coherentFrames` | `TNLean/PEPS/RegionBlock/CoarseThreeSite11.lean` | `bondLocal_iff_coeffTransfer` (`ThreeBlockTransfer.lean`) composed with `exists_regionInsertedCoeff_eq_sharedRegion` (`CoarseThreeSite11.lean`) |
-| `TNLean.PEPS.redBundleInsertedCoeff_add` | `TNLean/PEPS/RegionBlock/CoarseThreeSite6.lean` | `redBundleInsertedCoeff_singleton` (`CoarseThreeSite8.lean`) and `redBundleInsertedCoeff_bondModelMatrix_eq_configSum` (`CoarseThreeSite10.lean`), the forms the live single-edge route reads |
-| `TNLean.PEPS.redBundleInsertedCoeff_smul` | `TNLean/PEPS/RegionBlock/CoarseThreeSite6.lean` | the same pair |
-| `TNLean.PEPS.sameAwayFromRBBundle_hostMerge` | `TNLean/PEPS/RegionBlock/CoarseThreeSite9.lean` | `sameAwayFromRBBundle_regionBoundaryLabel_iff` (`CoarseThreeSite9.lean`), whose reverse direction repeats the same red, blue and complement case analysis and is the form the route uses |
+| `TNLean.PEPS.isBondLocalTransferKernel_of_coherentFrames` | `TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/SingleEdgeTransfer.lean` | `bondLocal_iff_coeffTransfer` (`ThreeBlockTransfer.lean`) composed with `exists_regionInsertedCoeff_eq_sharedRegion` (`CoarseThreeSite11.lean`) |
+| `TNLean.PEPS.redBundleInsertedCoeff_add` | `TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/InsertedCoefficientDescent.lean` | `redBundleInsertedCoeff_singleton` (`CoarseThreeSite8.lean`) and `redBundleInsertedCoeff_bondModelMatrix_eq_configSum` (`CoarseThreeSite10.lean`), the forms the live single-edge route reads |
+| `TNLean.PEPS.redBundleInsertedCoeff_smul` | `TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/InsertedCoefficientDescent.lean` | the same pair |
+| `TNLean.PEPS.sameAwayFromRBBundle_hostMerge` | `TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/RelaxedTripleMerge.lean` | `sameAwayFromRBBundle_regionBoundaryLabel_iff` (`CoarseThreeSite9.lean`), whose reverse direction repeats the same red, blue and complement case analysis and is the form the route uses |
 
 The standalone multiplicativity theorem was a three-rewrite consequence of two
 retained lemmas, and both are still called inside the capstone, so no content is

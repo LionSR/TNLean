@@ -4,7 +4,7 @@ Base: `eb588dc15332a3798431015e6c27ecbaf329b2d1`.
 Original module blob: `46f91f8cf65d48aca820a7953fcdad274157478b`.
 
 This implements rank 11 of the comprehensive simplification audit in #10637.
-In `MPS/MPDO/SitewisePhysicalMatrix.lean`:
+In `MPS/Operator/PhysicalSector/SitewisePhysicalMatrix.lean`:
 
 - Move `sitewisePhysicalMatrix_one`, with its proof and simp attribute unchanged, before the isometry theorem.
 - Derive `sitewisePhysicalMatrix_isometry` from the adjoint, multiplication and identity laws and the supplied Gram equation.

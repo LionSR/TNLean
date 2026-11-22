@@ -10,7 +10,7 @@ begun in `docs/audits/2026-08-26_mpdo_cyclic_sector_bnt_retirements.md`.
 
 | Removed module | Replacement import |
 |---|---|
-| `TNLean.MPS.MPDO.BiCFDerivation.Basic` | `TNLean.MPS.MPDO.BiCFDerivation.Selectors` |
+| `TNLean.MPS.MPDO.BiCFDerivation.Basic` | `TNLean.MPS.CanonicalForm.BlockSeparation.Selectors` |
 
 The module carried no declarations; it only re-exported `Selectors`. Its single
 in-library importer, `BiCFDerivation/DiagonalRestrictionCounterexample.lean`,
@@ -85,5 +85,5 @@ reaching up into the fundamental-theorem layer. Dropping the edge removes
 fourteen modules — ten in TNLean, four in QICLean, about 3,600 source lines —
 and no Mathlib module from the compile closure of that file. Nothing was added
 in its place: `Mathlib.Data.Matrix.Basis` and `Mathlib.Logic.Equiv.Fin.Basic`
-remain reachable through `TNLean.MPS.MPDO.PerCopyHorizontalCF`, and
+remain reachable through `TNLean.MPS.CanonicalForm.BlockSeparation.PerCopyHorizontalCF`, and
 `Fintype.sum_prod_type` through `Mathlib.Data.Fintype.BigOperators`.

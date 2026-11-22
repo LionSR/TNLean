@@ -4,11 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import QICLean.Algebra.Hermitian.OrthogonalProjection
-import TNLean.MPS.FundamentalTheorem.Reduction.AbsorbingCompression
+import TNLean.MPS.FundamentalTheorem.Compression.AbsorbingCompression
 import TNLean.MPS.Examples.CZX.CZXReviewTensor
-import TNLean.MPS.MPDO.OperatorFromWordTrace
-import TNLean.MPS.MPDO.SimpleScaling
-import TNLean.MPS.MPDO.StackedLayers
+import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
+import TNLean.MPS.CanonicalForm.SimpleMPO.SimpleScaling
+import TNLean.MPS.CanonicalForm.SimpleMPO.StackedLayers
 
 /-!
 # The CZX matrix product unitary of the review: canonical form of its square

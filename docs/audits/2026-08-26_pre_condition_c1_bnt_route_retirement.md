@@ -27,7 +27,7 @@ residue in `BNTBlockIntersection.lean` as deletable.
 
 ## Removed declarations and their replacements
 
-In `TNLean/MPS/ParentHamiltonian/BNTBlockIntersection.lean`:
+In `TNLean/MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BNTBlockIntersection.lean`:
 
 | Removed | Replacement |
 |---|---|
@@ -38,7 +38,7 @@ In `TNLean/MPS/ParentHamiltonian/BNTBlockIntersection.lean`:
 | `MPSTensor.pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital` | `MPSTensor.pgvwc07_directSum_restriction_intersection_of_ge_of_bnt_directSum_unital_c1` |
 | `MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital` | `MPSTensor.pgvwc07_iSup_restriction_intersection_eventually_of_bnt_directSum_unital_c1` |
 
-In `TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalChain.lean`:
+In `TNLean/MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BNTBlockDiagonalChain.lean`:
 
 | Removed | Replacement |
 |---|---|
@@ -46,7 +46,7 @@ In `TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalChain.lean`:
 | `MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital` | `MPSTensor.chainGroundSpace_toTensorFromBlocks_le_iSup_and_iSupIndep_of_bnt_unital_c1` |
 | `MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital` | `MPSTensor.chainGroundSpace_toTensorFromBlocks_two_inclusions_and_iSupIndep_of_bnt_unital_c1` |
 
-In `TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalBoundaryClosing.lean`:
+In `TNLean/MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BNTBlockDiagonalBoundaryClosing.lean`:
 
 | Removed | Replacement |
 |---|---|

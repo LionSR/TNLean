@@ -7,7 +7,7 @@ endomorphism, duplicating `Submodule.subquot` and `Submodule.subquotMap` of
 The definitions were identical term for term, so every statement is rewritten
 in the general vocabulary and the three flag-specific declarations are
 deleted. The only consumer outside the defining module was
-`TNLean/MPS/FundamentalTheorem/Reduction/MultiBlock.lean`; no blueprint
+`TNLean/MPS/FundamentalTheorem/Compression/MultiBlock.lean`; no blueprint
 `\lean{...}` tag cited the removed names.
 
 ## Removed declarations and their replacements

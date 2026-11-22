@@ -8,7 +8,7 @@ deprecated alias is kept (`docs/project_conventions.md`).
 
 ## Removed declarations and replacements
 
-All in `TNLean/MPS/Core/Blocking.lean`, each replaced by the declaration of the
+All in `TNLean/MPS/Tensor/Physical/Blocking.lean`, each replaced by the declaration of the
 same name in `QICLean/Kraus/Blocking.lean`:
 
 | Removed | Kind | Replacement |
@@ -31,7 +31,7 @@ same name in `QICLean/Kraus/Blocking.lean`:
 | `MPSTensor.length_flattenBlockedWord` | lemma | `Kraus.length_flattenBlockedWord` |
 | `MPSTensor.evalWord_replicate` | lemma | `Kraus.evalWord_replicate` |
 
-In `TNLean/MPS/Preparation/RectangularBlocks.lean`, each replaced by the
+In `TNLean/MPS/Preparation/Inhomogeneous/RectangularBlocks.lean`, each replaced by the
 declaration of the same name in `QICLean/Kraus/RectangularChain.lean`:
 
 | Removed | Kind | Replacement |
@@ -79,7 +79,7 @@ Left for a decision:
 * `MPSTensor.IsLeftCanonical`, an abbreviation of `Kraus.IsTP`. It is the
   tensor-network name of the condition and carries about a thousand uses.
 * `MPSTensor.exists_rankOne_mem_wordSpan_blockTensor`
-  (`TNLean/Wielandt/RankOne/ExtractionFull.lean`). It applies the `Kraus`
+  (`TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean`). It applies the `Kraus`
   theorem of the same name after restating the hypothesis
   `Kraus.wordSpan A N₀ = ⊤` as `Kraus.IsNBlkInjective A N₀`. The two
   hypotheses are equal by definition, but the statement is spelled differently.

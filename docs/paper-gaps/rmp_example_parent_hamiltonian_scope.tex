@@ -208,8 +208,8 @@ structural properties. The GHZ tensor has matrices
 \end{align}
 The corresponding file proves that this tensor is an RFP, is not injective, and
 has the expected $\mathbb Z_2$ symmetry.\footnote{See
-\path{TNLean/MPS/Examples/GHZ.lean}:54--86 and the module summary at
-\path{TNLean/MPS/Examples/GHZ.lean}:21--29.}
+\path{TNLean/MPS/Examples/GHZ/GHZ.lean}:54--86 and the module summary at
+\path{TNLean/MPS/Examples/GHZ/GHZ.lean}:21--29.}
 
 The cluster module uses the reflected one-dimensional convention. Write
 $A_{\mathrm{cl}}$ for this tensor:
@@ -224,29 +224,29 @@ $A_{\mathrm{cl}}$ for this tensor:
     \label{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_one}
 \end{align}
 It proves non-injectivity at one site and injectivity after blocking two
-sites.\footnote{See \path{TNLean/MPS/Examples/Cluster.lean}:62--78 and
-\path{TNLean/MPS/Examples/Cluster.lean}:200--215.}
+sites.\footnote{See \path{TNLean/MPS/Examples/Cluster/Cluster.lean}:62--78 and
+\path{TNLean/MPS/Examples/Cluster/Cluster.lean}:200--215.}
 
 The AKLT module defines the spin-$1$ tensor and proves two-block injectivity,
-hence normality.\footnote{See \path{TNLean/MPS/Examples/AKLT.lean}:49--58 and
-\path{TNLean/MPS/Examples/AKLT.lean}:222--237.}
+hence normality.\footnote{See \path{TNLean/MPS/Examples/AKLT/AKLT.lean}:49--58 and
+\path{TNLean/MPS/Examples/AKLT/AKLT.lean}:222--237.}
 
 The general parent-Hamiltonian API is also available. For a block length $L$,
 the local interaction is the orthogonal projector onto
 $\mathcal G_L(A)^\perp$, and the finite-chain parent Hamiltonian is the sum of
 its translates.\footnote{See
-\path{TNLean/MPS/ParentHamiltonian/Defs.lean}:66--75 and
-\path{TNLean/MPS/ParentHamiltonian/Defs.lean}:23--27.}
+\path{TNLean/MPS/Tensor/GroundSpace/ParentHamiltonian.lean}:66--75 and
+\path{TNLean/MPS/Tensor/GroundSpace/ParentHamiltonian.lean}:23--27.}
 The formal library already proves that this parent Hamiltonian annihilates the
 MPS vector.\footnote{See
-\path{TNLean/MPS/ParentHamiltonian/Basic.lean}:118--128.}
+\path{TNLean/MPS/Tensor/GroundSpace/ParentHamiltonianBasic.lean}:118--128.}
 
 The normal-MPS range-reduction theorem still depends on the periodic-boundary
 comparison. This is the remaining formal gap in the general unique-ground-state
 statement.\footnote{Formal declaration:
 \leanid{MPSTensor.wrapped_mirror_witness_agree_of_chainGroundSpace}. See
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:666--709 and
-\path{TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean}:734--771.}
+\path{TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean}:666--709 and
+\path{TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean}:734--771.}
 
 The AKLT target stated in the sources is now formalized, and the cluster target
 is formalized for the reflected convention
@@ -264,7 +264,7 @@ state.\footnote{Formal declarations:
 \leanid{MPSTensor.aklt_groundSpace_intersection_two},
 \leanid{MPSTensor.aklt_chainGroundSpace_two_eq_mpvSubmodule}, and
 \leanid{MPSTensor.aklt_parentHamiltonian_two_unique_gs} in
-\path{TNLean/MPS/Examples/AKLTParentHamiltonian.lean}.} The three-site
+\path{TNLean/MPS/Examples/AKLT/AKLTParentHamiltonian.lean}.} The three-site
 cluster parent space is the $+1$ eigenspace of $\sigma^z_1\sigma^x_2\sigma^z_3$
 for the reflected convention
 (\ref{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_zero})--(\ref{eq:rmp_example_parent_hamiltonian_scope_formal_cluster_one})
@@ -308,11 +308,11 @@ is $-N$ and its eigenspace is one-dimensional.\footnote{Formal declarations:
 \leanid{MPSTensor.clusterSource_stabilizer_unique_gs},
 \leanid{MPSTensor.clusterSource_hamiltonian_eigenspace_eq_mpvSubmodule}, and
 \leanid{MPSTensor.clusterSource_energy_lower_bound} in
-\path{TNLean/MPS/Examples/ClusterSourceGroundState.lean}.}
+\path{TNLean/MPS/Examples/Cluster/ClusterSourceGroundState.lean}.}
 The periodic three-site parent ground space of the source tensor is exactly
 the same common $-1$ eigenspace, and hence is also one-dimensional.\footnote{
 \leanid{MPSTensor.clusterSource_iInf_eigenspace_eq_chainGroundSpace} in
-\path{TNLean/MPS/Examples/ClusterParentHamiltonian.lean}.} The
+\path{TNLean/MPS/Examples/Cluster/ClusterParentHamiltonian.lean}.} The
 identification, for the reflected convention,
 of the parent interaction with $\tfrac12(I-K)$, where
 $K=\sigma^z\otimes\sigma^x\otimes\sigma^z$ and $I$ is the three-qubit identity,
@@ -323,7 +323,7 @@ identities.\footnote{Formal declarations:
 \leanid{MPSTensor.cluster_iInf_eigenspace_eq_chainGroundSpace},
 \leanid{MPSTensor.cluster_iInf_eigenspace_eq_mpvSubmodule}, and
 \leanid{MPSTensor.cluster_stabilizer_unique_gs} in
-\path{TNLean/MPS/Examples/ClusterParentHamiltonian.lean}.}
+\path{TNLean/MPS/Examples/Cluster/ClusterParentHamiltonian.lean}.}
 
 The polynomial AKLT Hamiltonian
 (\ref{eq:rmp_example_parent_hamiltonian_scope_aklt_polynomial}) is now
@@ -350,7 +350,7 @@ $-\tfrac{2N}{3}$ is spanned by the AKLT state.\footnote{Formal declarations:
 \leanid{MPSTensor.akltHamiltonian_add_eq_parentHamiltonian},
 \leanid{MPSTensor.akltHamiltonian_eigenvalue_ge}, and
 \leanid{MPSTensor.akltHamiltonian_eigenspace_eq_mpvSubmodule} in
-\path{TNLean/MPS/Examples/AKLTPolynomialHamiltonian.lean}.}
+\path{TNLean/MPS/Examples/AKLT/AKLTPolynomialHamiltonian.lean}.}
 
 The fourfold open-boundary degeneracy of the AKLT chain is formalized for the
 open-chain two-site projector parent Hamiltonian of the AKLT tensor, whose
@@ -368,9 +368,9 @@ is a sharper unconditional statement, not merely a bound.\footnote{Formal declar
 \leanid{MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_groundSpaceES},
 \leanid{MPSTensor.aklt_finrank_ker_openParentHamiltonianES_two}, and
 \leanid{MPSTensor.aklt_ker_openParentHamiltonianES_two_eq_span_openState}
-in \path{TNLean/MPS/Examples/AKLTOpenBoundary.lean};
+in \path{TNLean/MPS/Examples/AKLT/AKLTOpenBoundary.lean};
 \leanid{MPSTensor.finrank_ker_openParentHamiltonianES_of_isNBlkInjective} in
-\path{TNLean/MPS/ParentHamiltonian/Martingale/OpenHamiltonian.lean}.} The
+\path{TNLean/MPS/ParentHamiltonian/ParentInteraction/OpenHamiltonian.lean}.} The
 spin decomposition is now also formalized. In the bond basis of the AKLT
 tensor, the virtual generators are $J=(\sigma^x,-\sigma^y,-\sigma^z)/2$.
 The physical spin action telescopes along the chain to

@@ -11,19 +11,19 @@ terminology.
 
 | Removed | Replacement |
 |---|---|
-| `MPSTensor.overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv` (private, `TNLean/MPS/CanonicalForm/BNTCharacterization.lean`) | `MPSTensor.overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv`, new public theorem in `TNLean/MPS/Overlap/NormalTensorDichotomy.lean` beside `IsNormalTensor.mpv_phase_alternative`, of which it is the contrapositive |
-| `MPSTensor.overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv` (private, `TNLean/MPS/RFP/BeigiLoopBNTIdentification.lean`) | the same new public theorem in `TNLean/MPS/Overlap/NormalTensorDichotomy.lean` |
-| `MPOTensor.equivReindexMap_symm_apply_self` (private, `TNLean/MPS/MPDO/RFPViaTSBlocking.lean`) | `MPOTensor.equivReindexMap_symm_apply_self`, moved from `TNLean/MPS/MPDO/BNTChannelComposition.lean` to their common ancestor `TNLean/MPS/MPDO/PhysicalBlocking.lean` under the same fully qualified name |
-| `MPOTensor.KatoDeformedRFPObstruction.negMulLog_pow_inv_mul` (private, `TNLean/MPS/MPDO/KatoDeformedRFPObstruction.lean`) | `Real.mul_negMulLog_inv`, new public theorem in `TNLean/Algebra/NegMulLog.lean` |
-| `MPOTensor.CPSVExample412Literal.negMulLog_pow_inv_mul` (private, `TNLean/MPS/MPDO/CPSVExample412Literal.lean`) | `Real.mul_negMulLog_inv` in `TNLean/Algebra/NegMulLog.lean` |
-| `MPSTensor.compressedTensor_adjointTransferMap_primitive_and_irreducible_of_corner` (private, `TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorDecomposition.lean`) | `MPSTensor.compressedTensor_adjointTransferMap_cornerBridge` (`TNLean/MPS/CanonicalForm/CyclicSectors/CornerBridge.lean`), which the removed wrapper forwarded to with an identical argument list |
-| `MPSTensor.mpv_twoBlockTensor_eq` (private, `TNLean/MPS/CanonicalForm/Reduction.lean`) | `MPSTensor.mpv_twoBlockTensor_eq` in `TNLean/MPS/Structure/InvariantSubspaceDecomp.lean`, now public — the module that owns `twoBlockTensor` and `twoBlockBlocks` |
-| `MPSTensor.cyclic_projection_mem_multiplicativeDomain` (private, `TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorDecomposition.lean`) | `MPSTensor.cyclic_projection_mem_multiplicativeDomain`, the same statement now public in `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` |
-| `MPSTensor.cyclic_projection_mul_left` (private, same file) | `MPSTensor.cyclic_projection_mul_left` in `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` |
-| `MPSTensor.cyclic_projection_mul_right` (private, same file) | `MPSTensor.cyclic_projection_mul_right` in `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` |
-| `MPSTensor.fin_cyclic_induction` (private, `TNLean/MPS/Periodic/Overlap/SectorMatch/Propagation.lean`) | `Fin.cyclic_induction`, new public theorem in `TNLean/Algebra/FinCyclicInduction.lean` |
-| `PEPS.fin_cyclic_induction` (private, `TNLean/PEPS/CycleMPSChainOverlapCapstone.lean`) | the same `Fin.cyclic_induction` in `TNLean/Algebra/FinCyclicInduction.lean` |
-| `MPSTensor.selfOverlap_tendsto_one_of_irreducible_primitive_TP` (private, `TNLean/MPS/Periodic/Overlap/SectorMatch/Propagation.lean`) | `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible` in `TNLean/MPS/Overlap/PeripheralToTransferMapGap.lean` |
+| `MPSTensor.overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv` (private, `TNLean/MPS/CanonicalForm/BNTPresentation/Characterization.lean`) | `MPSTensor.overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv`, new public theorem in `TNLean/MPS/CanonicalForm/NormalBlocks/NormalTensorDichotomy.lean` beside `IsNormalTensor.mpv_phase_alternative`, of which it is the contrapositive |
+| `MPSTensor.overlap_tendsto_zero_of_not_mpvBlockPhaseEquiv` (private, `TNLean/MPS/ParentHamiltonian/Commuting/SectorGraph/BeigiLoopBNTIdentification.lean`) | the same new public theorem in `TNLean/MPS/CanonicalForm/NormalBlocks/NormalTensorDichotomy.lean` |
+| `MPOTensor.equivReindexMap_symm_apply_self` (private, `TNLean/MPS/MPDO/RFP/RFPViaTSBlocking.lean`) | `MPOTensor.equivReindexMap_symm_apply_self`, moved from `TNLean/MPS/MPDO/BNTSectors/BNTChannelComposition.lean` to their common ancestor `TNLean/MPS/Operator/Product/PhysicalBlocking.lean` under the same fully qualified name |
+| `MPOTensor.KatoDeformedRFPObstruction.negMulLog_pow_inv_mul` (private, `TNLean/MPS/Examples/MPDOCounterexamples/KatoDeformedRFPObstruction.lean`) | `Real.mul_negMulLog_inv`, new public theorem in `TNLean/Algebra/NegMulLog.lean` |
+| `MPOTensor.CPSVExample412Literal.negMulLog_pow_inv_mul` (private, `TNLean/MPS/Examples/IdentityPlusZString/Literal.lean`) | `Real.mul_negMulLog_inv` in `TNLean/Algebra/NegMulLog.lean` |
+| `MPSTensor.compressedTensor_adjointTransferMap_primitive_and_irreducible_of_corner` (private, `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CyclicSectorDecomposition.lean`) | `MPSTensor.compressedTensor_adjointTransferMap_cornerBridge` (`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CornerBridge.lean`), which the removed wrapper forwarded to with an identical argument list |
+| `MPSTensor.mpv_twoBlockTensor_eq` (private, `TNLean/MPS/Tensor/DirectSum/IrreducibleDecomposition.lean`) | `MPSTensor.mpv_twoBlockTensor_eq` in `TNLean/MPS/Tensor/DirectSum/InvariantSubspaceDecomp.lean`, now public — the module that owns `twoBlockTensor` and `twoBlockBlocks` |
+| `MPSTensor.cyclic_projection_mem_multiplicativeDomain` (private, `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CyclicSectorDecomposition.lean`) | `MPSTensor.cyclic_projection_mem_multiplicativeDomain`, the same statement now public in `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/HLift.lean` |
+| `MPSTensor.cyclic_projection_mul_left` (private, same file) | `MPSTensor.cyclic_projection_mul_left` in `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/HLift.lean` |
+| `MPSTensor.cyclic_projection_mul_right` (private, same file) | `MPSTensor.cyclic_projection_mul_right` in `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/HLift.lean` |
+| `MPSTensor.fin_cyclic_induction` (private, `TNLean/MPS/CanonicalForm/Periodic/Overlap/SectorMatchPropagation.lean`) | `Fin.cyclic_induction`, new public theorem in `TNLean/Algebra/FinCyclicInduction.lean` |
+| `PEPS.fin_cyclic_induction` (private, `TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSChainOverlapCapstone.lean`) | the same `Fin.cyclic_induction` in `TNLean/Algebra/FinCyclicInduction.lean` |
+| `MPSTensor.selfOverlap_tendsto_one_of_irreducible_primitive_TP` (private, `TNLean/MPS/CanonicalForm/Periodic/Overlap/SectorMatchPropagation.lean`) | `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible` in `TNLean/MPS/Transfer/Spectrum/PrimitiveOverlap.lean` |
 
 ## What was checked
 
@@ -31,7 +31,7 @@ terminology.
 implication: two normal tensors that are not related by a matrix-product-vector
 phase equivalence have overlap tending to zero. Both derived it from
 `IsNormalTensor.mpv_phase_alternative`, which lives in
-`TNLean/MPS/Overlap/NormalTensorDichotomy.lean`; both holders import that module
+`TNLean/MPS/CanonicalForm/NormalBlocks/NormalTensorDichotomy.lean`; both holders import that module
 directly. The survivor is stated there, next to the alternative it negates, and
 uses the file's own `variable {d D₁ D₂ : ℕ}` binders and `nhds` spelling. The four
 call sites in `BNTCharacterization.lean` and the two in
@@ -41,7 +41,7 @@ call sites in `BNTCharacterization.lean` and the two in
 equivalence and then by the inverse equivalence returns the original matrix
 appeared once as a public theorem and once as a private lemma, with byte-identical
 proofs. Both `BNTChannelComposition.lean` and `RFPViaTSBlocking.lean` import
-`TNLean.MPS.MPDO.PhysicalBlocking`, so the declaration moved there, keeping the
+`TNLean.MPS.Operator.Product.PhysicalBlocking`, so the declaration moved there, keeping the
 fully qualified name `MPOTensor.equivReindexMap_symm_apply_self`. The
 `\lean{...}` payload of `thm:mpdo_absorbed_bnt_channel_assembly` in
 `blueprint/src/chapter/ch21_mpdo_rfp_simple_local_refinement_channels_physical_coordinates.tex`
@@ -51,7 +51,7 @@ confirms it still resolves.
 **Negated multiplication by a logarithm.** The identity relating a nonzero real
 multiplied by the negated-multiply-logarithm of its inverse to the logarithm of
 the real itself was proved twice, in two modules that both import
-`TNLean/MPS/MPDO/AreaLaw.lean`. The survivor is stated in `TNLean/Algebra/NegMulLog.lean`, in the `Real`
+`TNLean/MPS/Operator/DensityOperator/AreaLaw.lean`. The survivor is stated in `TNLean/Algebra/NegMulLog.lean`, in the `Real`
 namespace where the Mathlib lemmas it composes live; it is upstreamable, since
 Mathlib's `Analysis/SpecialFunctions/Log/NegMulLog.lean` has no lemma of this
 shape. Both consuming modules import the lightweight owner directly.
@@ -80,9 +80,9 @@ the left and on the right — existed in three places at once. Two were the
 `private` theorems of `CyclicSectorDecomposition.lean`; the other two were
 inline re-derivations of the same Kadison–Schwarz argument, one inside
 `MPSTensor.sectorFixedPointAlgebraRigidity_of_irreducible_tp` in
-`TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` and one inside
+`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/HLift.lean` and one inside
 `MPSTensor.cornerRestriction_primitive_and_irreducible_of_cyclicDecomp` in
-`TNLean/MPS/Periodic/Overlap/SelfOverlapSetup.lean`. The two inline copies
+`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/PeriodicSectorDecomposition.lean`. The two inline copies
 differed from the named ones only in spelling the transfer map through a local
 abbreviation.
 
@@ -146,7 +146,7 @@ states, so the lightweight owner recorded above lost its last consumer.
 
 | Removed | Replacement |
 |---|---|
-| `Real.mul_negMulLog_inv` (`TNLean/Algebra/NegMulLog.lean`, module deleted) | `Matrix.vonNeumannEntropy_inv_card_smul_one` in `TNLean/MPS/MPDO/AreaLaw.lean`, the entropy $\log d$ of $d^{-1}I$, and its corollary `MPOTensor.blockEntropy_eq_of_reducedBlockState_eq_smul_one`, which the Kato and Example 4.12 block-entropy lemmas now apply directly |
-| `MPOTensor.CPSVExample412Literal.vonNeumannEntropy_inv_card_smul_one` (private, `TNLean/MPS/MPDO/CPSVExample412FourCycleEntropy.lean`) | the same statement, now public as `Matrix.vonNeumannEntropy_inv_card_smul_one` in `TNLean/MPS/MPDO/AreaLaw.lean` |
+| `Real.mul_negMulLog_inv` (`TNLean/Algebra/NegMulLog.lean`, module deleted) | `Matrix.vonNeumannEntropy_inv_card_smul_one` in `TNLean/MPS/Operator/DensityOperator/AreaLaw.lean`, the entropy $\log d$ of $d^{-1}I$, and its corollary `MPOTensor.blockEntropy_eq_of_reducedBlockState_eq_smul_one`, which the Kato and Example 4.12 block-entropy lemmas now apply directly |
+| `MPOTensor.CPSVExample412Literal.vonNeumannEntropy_inv_card_smul_one` (private, `TNLean/MPS/Examples/IdentityPlusZString/FourCycleEntropy.lean`) | the same statement, now public as `Matrix.vonNeumannEntropy_inv_card_smul_one` in `TNLean/MPS/Operator/DensityOperator/AreaLaw.lean` |
 
 Neither removed name had a blueprint `\lean{...}` tag.

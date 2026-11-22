@@ -78,6 +78,6 @@ to the product of `Finset`s of functions `Fin m → Fin d`.
 - `Mathlib/Data/Fintype/EquivFin.lean` — definition of `Fintype.equivFin`
 - `Mathlib/Data/Fintype/Basic.lean` — `Pi.fintype` instances
 - `Mathlib/Data/Fin/Fin.mp` — binary product decomposition of `Fin (m*n)`
-- `TNLean/MPS/Core/BlockingInfrastructure.lean` — `directToIteratedBlockIndex`, `iteratedBlockIndex`, etc.
+- `TNLean/MPS/Transfer/Irreducible/BlockingInfrastructure.lean` — `directToIteratedBlockIndex`, `iteratedBlockIndex`, etc.
 - `TNLean/MPS/CanonicalForm/Assembly/CyclicSectorDecomposition.lean` — `flattenWordOfBlock_cast_eq`, `groupedBlockCastAgrees_iff_flatten_eq`
 - `TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean` — `unconditional_commonPrimitiveIrreducibleBlocks`

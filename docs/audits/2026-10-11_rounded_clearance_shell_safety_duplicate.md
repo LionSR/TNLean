@@ -1,10 +1,10 @@
 # Rounded clearance: the duplicate shell-safety lemma (2026-10-11)
 
-`TNLean/PEPS/AreaLaw/Scan/RoundedClearance.lean` carried
+`TNLean/PEPS/AreaLaw/SafeRectangles/RoundedClearance.lean` carried
 `TNLean.PEPS.AreaLaw.IsSafe.cappedDyadicPartition_shell`, which reproved the
 shell-cell safety of
 `TNLean.PEPS.AreaLaw.IsSafe.isSafe_cappedDyadicPartition_shell`
-(`TNLean/PEPS/AreaLaw/WeakRectangleShellSafety.lean`) under the budget
+(`TNLean/PEPS/AreaLaw/SafeRectangles/SafeRectangleDilation.lean`) under the budget
 `(D₀ + 1) * L ≤ D₀ * Q.size` instead of the equal `D₀ * L + L ≤ D₀ * Q.size`.
 Its only consumer was `Scan.exists_safe_shell_cells_of_rounded_scales` in the
 same file, plus one regression example and one axiom check in

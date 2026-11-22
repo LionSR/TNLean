@@ -13,7 +13,7 @@ actual finite star-automorphism. It derives exact inverse support from
 forward disjointness, without an inverse local family, inverse compatibility,
 or a quasi-local automorphism premise.
 
-`MPS/MPU/TwoSiteFiniteInverse.lean` applies this to the actual finite MPU
+`MPS/MPU/QuasiLocal/TwoSiteFiniteInverse.lean` applies this to the actual finite MPU
 unitary. The actual forward standard-form window identity supplies every
 commutator needed away from the retained region. For target `[b,b+L)` in
 ambient chain `[a,a+N)`, the derived inverse support is the ambient intersection
@@ -23,10 +23,10 @@ faithfulness of the existing algebraic-local inclusion.
 
 The boundary collars are part of this first conclusion. The later cyclic
 argument below removes them on rings of length N≥6k.
-`MPS/MPU/CyclicConjugation.lean` additionally derives exact cyclic covariance
+`MPS/MPU/QuasiLocal/CyclicConjugation.lean` additionally derives exact cyclic covariance
 of both actual finite conjugations, reusing the existing periodic MPO
 closed-trace invariance, matrix reindexing, and finite site-permutation support.
-`MPS/MPU/FiniteWindowSupport.lean` identifies the actual identity-tensor
+`MPS/MPU/QuasiLocal/FiniteWindowSupport.lean` identifies the actual identity-tensor
 windows with the existing finite chain-window operators. It derives the
 actual forward support bound for every matrix C on the complete central
 2k-site interval: on N=p+6k+s sites, conjugating its placement at p+2k
@@ -37,7 +37,7 @@ embedding. Existing finite support reconstruction therefore recovers a
 window matrix from support membership; the actual forward bound applies
 to every supported central operator, not only a separately supplied
 placement matrix.
-`MPS/MPU/CyclicFinitePropagation.lean` now derives an actual forward bound
+`MPS/MPU/QuasiLocal/CyclicConjugation.lean` now derives an actual forward bound
 at every singleton of every ring N≥6k, with uniform ring radius 4k.
 The central singleton is included in its complete central 2k interval;
 its actual output 6k window lies in the stated ring neighbourhood.
@@ -48,7 +48,7 @@ identity proved at its existing owner.
 `QCA/IntervalSupport.lean` identifies arbitrary canonical finite local
 inclusions with the existing general site embedding after numbering the
 ambient chain. Thus no new support predicate or tensor-factor construction
-is introduced. `MPS/MPU/TwoSiteCyclicInverse.lean` uses this identification
+is introduced. `MPS/MPU/QuasiLocal/TwoSiteCyclicInverse.lean` uses this identification
 to reflect actual forward singleton commutators. On every ring N≥6k,
 the actual adjoint-MPU conjugate of any local target J lies in its ring
 neighbourhood of radius 4k, with no boundary collars. The only supplied

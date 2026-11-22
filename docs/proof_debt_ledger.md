@@ -51,8 +51,8 @@ each open debt attached as a native sub-issue.
   The 27 retired declaration targets and three retired labels are listed below,
   recovered from the [PR #7779 file diff](https://github.com/LionSR/TNLean/pull/7779/files).
   The warm-cache package gate for
-  `TNLean.MPS.RFP.NNCPHGroundSpace` and
-  `TNLean.MPS.RFP.NNCPHGroundSpacesMultiSector` passes (9,111 jobs).
+  `TNLean.MPS.RFP.AppendixBChainCommutation` and
+  `TNLean.MPS.RFP.NNCPHMultiSector` passes (9,111 jobs).
   The gate exposed one transitive import, repaired by importing
   `ParentHamiltonian.Basic` directly. All five retained edited Lean modules have
   clean diagnostics. Source Blueprint synchronization passes globally; 41 retained
@@ -233,9 +233,9 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   repo-wide (their own definition), including attribute-carrying
   declarations and instances cleared by a root build. Largest
   concentrations:
-  `Wielandt/RectangularSpan/Universality.lean` (144 ln),
-  `Wielandt/RankOne/ExtractionFull.lean` (123 ln),
-  `MPS/ParentHamiltonian/BNTBlockIntersection.lean` (117 ln).
+  `MPS/Transfer/Primitivity/RectangularSpan.lean` (144 ln),
+  `MPS/Transfer/Primitivity/RectangularSpan.lean` (123 ln),
+  `MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BNTBlockIntersection.lean` (117 ln).
 - **Why it's excess**: no proof, no blueprint `\lean{}` tag, no doc
   reference — staged helpers for abandoned proof attempts.
 - **First PR**: the Wielandt-module wave (~30 declarations, ~300+ lines) —
@@ -251,7 +251,7 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   `auxSteps` and `mainSteps`. No definitions or source-labelled conclusions
   are removed, and no replacement declarations are introduced.
 - **Evidence update (2026-08-26)**: the
-  `MPS/ParentHamiltonian/BNTBlockIntersection.lean` concentration was the
+  `MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BNTBlockIntersection.lean` concentration was the
   pre-Condition-C1 branch of the BNT block-diagonal route. Thirteen
   declarations across `BNTBlockIntersection.lean`,
   `BNTBlockDiagonalChain.lean`, and `BNTBlockDiagonalBoundaryClosing.lean`
@@ -287,7 +287,7 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
   the companion library as well as this repository; see
   `docs/audits/2026-08-27_mpu_reduced_to_hat_qiclean_forwarder.md`.
 - **Evidence update (2026-08-27)**: the BNT refinement record in
-  `MPS/CanonicalForm/BNTRefinement.lean` contributed three structure fields that
+  `MPS/CanonicalForm/BNTPresentation/Refinement.lean` contributed three structure fields that
   a name search cannot clear at all, because a field's spelling is shared with
   the local name that populates it. Two restated the copy-gauge relation that
   the regrouped carrier already states, and the third pinned a field to the
@@ -296,17 +296,17 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
 - **Evidence update (2026-08-30)**: three successive thirty-area surveys found
   eight unused declarations with no production Lean consumer or Blueprint tag.
   Five canonical-form forwarding theorems and the constructor orphaned by
-  their removal in `PiAlgebra/CanonicalFormSepAux.lean` were deleted, with
+  their removal in `MPS/CanonicalForm/BlockFamily.lean` were deleted, with
   their glossary listings migrated (−37 Lean lines). The second pass also
   discharged the deferred
   `PEPS.edgeGaugeOfCycleGauge` construction from
-  `PEPS/CycleMPSFundamentalTheorem.lean`; its round-trip theorem had already
+  `PEPS/FundamentalTheorem/Cycle/CycleMPSFundamentalTheorem.lean`; its round-trip theorem had already
   been removed, and the inverse construction had no remaining consumer
   (−12 net Lean lines including the shorter module description). The two
   batches remove 49 net Lean lines. The third pass removed the
   attribute-carrying projection wrapper
   `MPOTensor.BNTFusionTensorClause.retainedMultiplicityWeightEntry_verticalCopyCoordinateEquiv_symm`
-  from `MPS/MPDO/TopologicalMultiplicityEnergy.lean` (−14 Lean lines). Its
+  from `MPS/MPDO/TopologicalForm/TopologicalMultiplicityEnergy.lean` (−14 Lean lines). Its
   linter-bearing target build passed, confirming that its `@[simp]` attribute
   was not used implicitly within the module. The three batches therefore
   remove 63 net Lean lines. See
@@ -343,9 +343,9 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
 
 ### S12. Collapse duplicated spectral-split proofs onto `ProjectionSpectralSplit`/corner-compression API — net 520 lines, risk 5/10
 - **Status**: burned down (#7218, follow-ups #7224 and #7237)
-- **What**: `MPS/Structure/InvariantSubspaceDecomp.lean`'s strict-case
+- **What**: `MPS/Tensor/DirectSum/InvariantSubspaceDecomp.lean`'s strict-case
   theorem re-proves its base theorem's 129-line body near-verbatim
-  (728 → ~380 ln after fix); `MPS/CanonicalForm/CyclicSectors/Compression.lean`
+  (728 → ~380 ln after fix); `MPS/CanonicalForm/Periodic/CyclicSectors/Compression.lean`
   hand-derives its 7 conclusions entrywise despite already constructing
   the isometry the existing `cornerCompression*` API needs (433 → ~140 ln).
 - **Why it's excess**: both are one construction (diagonalize via
@@ -359,7 +359,7 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
 - **Outcome (2026-08-27)**: commit `f3ae05159` factors the two-block
   decomposition through the shared private theorem
   `exists_twoBlock_decomp_of_lowerZero_aux` and reduces
-  `MPS/CanonicalForm/CyclicSectors/Compression.lean` to the support-isometry
+  `MPS/CanonicalForm/Periodic/CyclicSectors/Compression.lean` to the support-isometry
   route. Follow-ups #7224 and #7237 close the remaining review items. The
   present files are approximately 399 and 160 lines, respectively, rather
   than the 728- and 433-line versions measured by the original audit.
@@ -422,7 +422,7 @@ live mathematics. Tracked under [#4529](https://github.com/LionSR/TNLean/issues/
 - **Status**: closed 2026-07-23 (#4568; #4594 and #4628)
 - **What**: the injective-only QPF theorem bodies are direct corollaries in
   `QPF/{PosDef,Uniqueness,Assembly}.lean`; all seven injective-named spectral
-  corollaries now live in `Spectral/TransferOperatorGapInjective.lean`.
+  corollaries now live in `MPS/Transfer/Spectrum/TransferOperatorGapInjective.lean`.
 - **Why it's excess**: `IsInjective` strictly implies irreducibility via
   an existing one-composition bridge
   (`injective_implies_irreducibleCP` + `isIrreducibleTensor_of_isIrreducibleMap`),
@@ -631,7 +631,7 @@ description of current `main`.
   are outside the build entirely (verified 2026-07-20). PEPS/ has 121 flat
   files (Torus* 49, Normal* 23, Cycle* 16); MPS/MPDO 187 (PhysicalSector*
   36); all 8 directories with > 30 files lack an aggregator;
-  `PEPS/FundamentalTheorem.lean` (981 lines) shadows the directory of the
+  `PEPS/FundamentalTheorem/Injective/FundamentalTheorem.lean` (981 lines) shadows the directory of the
   same name.
 - **Remediation**: script-generate one pure-import aggregator per directory
   with a CI completeness check (Mathlib's `mk_all` pattern; the executable
@@ -719,7 +719,7 @@ description of current `main`.
   `MPS/Irreducible/FixedPointProjection.lean:85-122` imports the Algebra
   file yet re-proves hermiticity/idempotence via ~70 lines of private
   spectral machinery. Four Channel/FixedPoint files (layer 2b) import
-  `MPS/Irreducible/FixedPointProjection` (layer 5) for this generic fact —
+  `MPS/Transfer/Irreducible/FixedPointProjection` (layer 5) for this generic fact —
   a layering inversion. 7 generic `supportInvSqrt` lemmas sit in
   `Channel/.../PetzRecovery.lean:79-220` away from `Analysis/MatrixSqrt.lean`.
 - **Remediation**: hoist the general-Fintype family into
@@ -782,7 +782,7 @@ description of current `main`.
   `NormalEdgeGaugeFamily.lean:287` independently re-derives its horizontal
   twin at line 212.
 - **Remediation**: define the coordinate-swap lattice isomorphism next to
-  `PEPS/IsoTransport.lean`, prove a transport lemma pack, derive vertical
+  `PEPS/Tensor/Network/IsoTransport.lean`, prove a transport lemma pack, derive vertical
   statements as horizontal + transport, retire the mirror files
   (~1,200 lines).
 - **First PR**: the swap isomorphism `torusGraph w h ≃g torusGraph h w` +
@@ -1083,7 +1083,7 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
 
 ## D16. Ring-homomorphism transport of exact-arithmetic example tensors written four times  —  duplication, impact 7/10, effort 5/10
 - **Status**: mostly resolved (golden and Eisenstein heads converted); open ([#7846](https://github.com/LionSR/TNLean/issues/7846); 2026-09-19 architectural survey)
-- **Evidence**: `MPS/FundamentalTheorem/Reduction/ExplicitGauge.lean`, `MPS/Examples/Rings/{Zsqrt2Ring,GoldenRing,EisensteinRing}.lean`
+- **Evidence**: `MPS/FundamentalTheorem/Compression/ExplicitGauge.lean`, `MPS/Examples/Rings/{Zsqrt2Ring,GoldenRing,EisensteinRing}.lean`
   each define `complexOfR X := X.map f` for a ring homomorphism `f : R →+* ℂ`
   and re-prove the same 8–14-lemma ladder (`_mul`, `_one`, `_zero`, `_add`,
   `_sub`, `_smul`, `_sum`, `_single`, `_submatrix`, `_transpose`,

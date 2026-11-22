@@ -4,7 +4,7 @@
 
 The new capstone is
 `TNLean.PEPS.DependentTorus.finrank_fourCutSpace` in
-`TNLean/PEPS/DependentTorusClosureDimension.lean`:
+`TNLean/PEPS/Injectivity/CutSpace/DependentTorusClosureDimension.lean`:
 
     finrank ℂ (fourCutSpace D A) = Nat.card (CommutingPairConjugacyClass G).
 
@@ -99,9 +99,9 @@ from G-injectivity.
 
 Three new production modules contain 17 public declarations:
 
-- `TNLean/PEPS/DependentTorusClosureExtraction.lean` (seven declarations)
-- `TNLean/PEPS/DependentTorusClosureIndependence.lean` (seven declarations)
-- `TNLean/PEPS/DependentTorusClosureDimension.lean` (three declarations)
+- `TNLean/PEPS/Injectivity/CutSpace/DependentTorusClosureExtraction.lean` (seven declarations)
+- `TNLean/PEPS/Injectivity/CutSpace/DependentTorusClosureIndependence.lean` (seven declarations)
+- `TNLean/PEPS/Injectivity/CutSpace/DependentTorusClosureDimension.lean` (three declarations)
 
 The new blueprint fragment is
 `blueprint/src/chapter/ch24_peps_dependent_closure_dimension.tex`. Its scope is

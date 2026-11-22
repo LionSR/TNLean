@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.MultiBlock.Worked
-import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessLongWords
-import TNLean.MPS.Periodic.Defs
+import TNLean.MPS.FundamentalTheorem.Compression.UniquenessLongWords
+import TNLean.MPS.Transfer.Irreducible.Periodic
 import TNLean.MPS.CanonicalForm.Definitions
-import TNLean.MPS.SharedInfra.BlockAssembly
+import TNLean.MPS.Tensor.DirectSum.BlockAssembly
 
 /-!
 # Counterexamples for the fundamental theorem for arbitrary tensors

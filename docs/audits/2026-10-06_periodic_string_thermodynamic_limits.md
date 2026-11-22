@@ -20,9 +20,9 @@ The existing paper-gap note is extended with this closure distinction and the fu
 
 Exact source hashes, commands, artifact hashes, and elapsed times are recorded in `2026-10-06_periodic_string_validation.json`. The final strict logs are empty. Every invocation used one Lean thread and a 90-second bound. The shared baseline artifacts were not overwritten after relocating the lower owner; the final checks used a private unified import overlay.
 
-- `TNLean.MPS.Preparation.WindowCorrelator`: passed in 8.014s; source SHA-256 `b9f75bb238c54497fd1d4a5dc9a07e7375cda3b3874463a89ac04dfc3b26b831`
-- `TNLean.MPS.Symmetry.PeriodicPhysicalString`: passed in 8.014s; source SHA-256 `b31fabb7bddb167b10c099e020233b2f24f46bffe19eecc7f69689951d4aa781`
-- `TNLean.MPS.Symmetry.PeriodicFullRingString`: passed in 8.016s; source SHA-256 `910869cc18db1554649ebb081856e67e87ebbda6a7cb733dcdfe095d2ea8223e`
+- `TNLean.MPS.CanonicalForm.Correlation.WindowCorrelator`: passed in 8.014s; source SHA-256 `b9f75bb238c54497fd1d4a5dc9a07e7375cda3b3874463a89ac04dfc3b26b831`
+- `TNLean.MPS.Symmetry.StringOrder.PeriodicPhysicalString`: passed in 8.014s; source SHA-256 `b31fabb7bddb167b10c099e020233b2f24f46bffe19eecc7f69689951d4aa781`
+- `TNLean.MPS.Symmetry.StringOrder.PeriodicFullRingString`: passed in 8.016s; source SHA-256 `910869cc18db1554649ebb081856e67e87ebbda6a7cb733dcdfe095d2ea8223e`
 - `TNLean.MPS.Examples.PeriodicFullRingPhase`: passed in 6.011s; source SHA-256 `d973edac7a28706c200a665773d391d496b78d750dbfbdeb900452ddd948a523`
 - `TNLeanTest.PeriodicStringExpectations`: passed in 6.011s; source SHA-256 `603453835aa1be7f9d03d9e0fbe6193aac70438f9a60b9b9c29c06bb28a6700e`
 

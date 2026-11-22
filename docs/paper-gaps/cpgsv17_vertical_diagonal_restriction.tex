@@ -90,7 +90,7 @@ Eqs.~\ref{eq:cpgsv17_vertical_diagonal_restriction_diag_zero}
 and~\ref{eq:cpgsv17_vertical_diagonal_restriction_diag_one} is diagonal.
 No blocking length can therefore span $M_2(\mathbb C)$, so the restricted
 tensor is not normal. This example is formalized in
-\path{TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean}.
+\path{TNLean/MPS/CanonicalForm/DiagonalRestrictionCounterexample.lean}.
 
 This construction is not a counterexample to Proposition~4.13 of
 Ref.~\cite{Cirac2016MPDO_arXiv}. The formal horizontal structure records
@@ -106,12 +106,12 @@ The literal theorem now assumes the CPSV canonical form of Proposition~4.13
 together with the MPDO positivity hypothesis, and it concludes vertical
 canonical form.\footnote{Formal declaration:
     \leanid{MPOTensor.verticalCF\_of\_cpsvCanonicalForm} in
-    \doclink{TNLean/MPS/MPDO/CPSVVerticalCanonicalForm}.}
+    \doclink{TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm}.}
 A separate theorem retains the normalized BNT-refined horizontal hypothesis
 \path{MPOTensor.IsHorizontalCF} for arguments that already use this stronger
 form.\footnote{Formal declaration:
     \leanid{MPOTensor.verticalCF\_of\_horizontalCF} in
-    \doclink{TNLean/MPS/MPDO/VerticalCanonicalForm}.}
+    \doclink{TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm}.}
 
 The proof follows the three stages of Proposition~4.13 in
 Ref.~\cite{Cirac2016MPDO_arXiv}:
@@ -221,12 +221,12 @@ all-length inequality printed in Ref.~\cite{Cirac2016MPDO_arXiv}.
 Invariant-projector closure is established for the vertically viewed tensor.
 It produces a complete orthogonal family of irreducible reducing corners with
 exact physical isometries in
-\path{TNLean/MPS/MPDO/VerticalReduction.lean}. After exactly the zero corners
+\path{TNLean/MPS/MPDO/Vertical/VerticalReduction.lean}. After exactly the zero corners
 are discarded, the retained corners are spectrally normalized to normal
 tensors. This construction preserves the isometries, both intertwining
 identities, exact compression, and literal reconstruction of every vertical
 letter; it is implemented in
-\path{TNLean/MPS/MPDO/VerticalSpectral.lean}.
+\path{TNLean/MPS/MPDO/Vertical/VerticalReduction.lean}.
 
 The positive-weight part of the third stage is also complete. For each grouped
 sector $\alpha$, define
@@ -248,14 +248,14 @@ $d_\alpha$. Under the normalization $\mu_{\alpha,1}>0$, MPDO positivity forces
     \label{eq:cpgsv17_vertical_diagonal_restriction_positive_sector_weight}
 \end{align}
 These results are contained in
-\path{TNLean/MPS/MPDO/VerticalBNT.lean} and
-\path{TNLean/MPS/MPDO/SectorTrace.lean}.
+\path{TNLean/MPS/MPDO/Vertical/VerticalBNT.lean} and
+\path{TNLean/MPS/CanonicalForm/VerticalForm/SectorTrace.lean}.
 
 The pairwise Gram-conjugation identity represented by the second diagram at
 lines~1914--1919 of Ref.~\cite{Cirac2016MPDO_arXiv} is proved in
-\path{TNLean/MPS/MPDO/FigureEightPairwise.lean}. Its dependent transport to
+\path{TNLean/MPS/MPDO/Vertical/FigureEightPairwise.lean}. Its dependent transport to
 the grouped sectors is proved in
-\path{TNLean/MPS/MPDO/GroupedSectorGram.lean}. Normal-tensor rigidity then
+\path{TNLean/MPS/MPDO/Vertical/GroupedSectorGram.lean}. Normal-tensor rigidity then
 gives
 \begin{align}
     X_{\alpha,k}^\dagger X_{\alpha,k}
@@ -268,30 +268,30 @@ Here $\omega_{\alpha,k}>0$. Hence the relative gauge
 $X_{\alpha,k}X_{\alpha,1}^{-1}$ is proportional to a unitary. The grouping
 chooses $X_{\alpha,1}=I$. The positive scalar identity and unitary
 normalization of the grouped gauge are proved in
-\path{TNLean/MPS/MPDO/GroupedGramNormalization.lean}; the theorem docstrings
+\path{TNLean/MPS/MPDO/Vertical/GroupedSectorGram.lean}; the theorem docstrings
 record the corresponding source passage at lines~1903--1921 of
 Ref.~\cite{Cirac2016MPDO_arXiv}.
 
 Projector closure and the absence of periodic vectors already yield an abstract
 positive-length normal-block decomposition in
-\path{TNLean/MPS/CanonicalForm/ProjectorClosureSpectral.lean}. The
+\path{TNLean/MPS/CanonicalForm/NormalBlocks/ProjectorClosureSpectral.lean}. The
 isometry-preserving refinement is supplied by
-\path{TNLean/MPS/MPDO/VerticalSpectral.lean}. The normal blocks are grouped
+\path{TNLean/MPS/MPDO/Vertical/VerticalReduction.lean}. The normal blocks are grouped
 into pairwise gauge-phase-distinct BNT representatives in
-\path{TNLean/MPS/MPDO/VerticalBNT.lean}. Every copy is represented by a
+\path{TNLean/MPS/MPDO/Vertical/VerticalBNT.lean}. Every copy is represented by a
 positive coefficient, a unit-modulus phase, and an invertible bond-space gauge,
 while the physical isometries and literal vertical reconstruction are
 preserved.
 
 The unitary gauge normalizations are transported to the representative bond
 spaces and composed with the physical sector isometries in
-\path{TNLean/MPS/MPDO/NormalizedGroupedSectors.lean}. The
+\path{TNLean/MPS/MPDO/Vertical/NormalizedGroupedSectorMaps.lean}. The
 basis-of-normal-tensors property is established in
-\path{TNLean/MPS/MPDO/VerticalBNTConstruction.lean}, using exact
+\path{TNLean/MPS/MPDO/Vertical/VerticalBNTConstruction.lean}, using exact
 reconstruction at positive lengths and a retained positive-dimensional
 representative at length zero. The resulting orthogonal sector maps are
 assembled into the final coisometry in
-\path{TNLean/MPS/MPDO/VerticalCanonicalForm.lean}. Together with MPDO
+\path{TNLean/MPS/MPDO/Vertical/VerticalCanonicalForm.lean}. Together with MPDO
 positivity, the normalized BNT-refined horizontal form therefore gives both
 the displayed vertical identity and exact reconstruction. Proposition~4.13
 prints the former; its statement that the vertical tensor is itself in

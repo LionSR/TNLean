@@ -1,0 +1,324 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.MPDO.Coefficients.BNTAlgebraTensorClause
+import TNLean.MPS.Operator.DensityOperator.RFPViaTS
+import TNLean.MPS.MPDO.Vertical.VerticalCanonicalForm
+import TNLean.MPS.MPDO.Fusion.VerticalProductFusionDecomposition
+
+/-!
+# Positive vertical fusion from the renormalization fixed-point condition
+
+This file derives the positive fusion decomposition of the one-site vertical
+basis of normal tensors directly from the renormalization fixed-point maps,
+normalized BNT-refined horizontal form, and matrix-product-density-operator
+positivity.
+
+## Main results
+
+* `HasVerticalBNTGroupingInputs.exists_cpsvVerticalDecomposition`: construction of a
+  vertical canonical decomposition retaining the source
+  basis-of-normal-tensors predicate, from phase-class grouping and the
+  grouped-corner Gram comparison.
+* `exists_positiveFusionDecomposition_of_isRFPViaTS`: the BNT-refined positive
+  fusion theorem corresponding to CPSV16, Appendix C.4, lines 2020--2029.
+
+## References
+
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
+  Proposition 4.13 and Appendix C.4, lines 1951--2029
+-/
+
+open scoped Matrix BigOperators ComplexOrder Kronecker
+
+noncomputable section
+
+namespace MPOTensor
+
+/-- The Appendix C.4 vertical-sector hypotheses assembled from a one-site and a
+two-site vertical canonical decomposition of the same tensor together with the
+two trace-preserving completely positive maps of the renormalization
+fixed-point condition and their intertwining identities.
+
+Source: arXiv:1606.00608, Definition 4.1 and Appendix C.4,
+lines 1955--1995. -/
+def VerticalSectorHypotheses.ofDecompositions {d D : ℕ} {M : MPOTensor d D}
+    (D₁ : CPSVVerticalDecomposition M)
+    (D₂ : CPSVVerticalDecomposition (blockTwo M))
+    (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
+    (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]
+      Matrix (Fin d) (Fin d) ℂ)
+    (hTCPTP : IsKrausCPTP T) (hSCPTP : IsKrausCPTP S)
+    (hTphys : ∀ X, T (physClose1 M X) = physClose2 M X)
+    (hSphys : ∀ X, S (physClose2 M X) = physClose1 M X) :
+    VerticalSectorHypotheses (g₁ := D₁.labelCount) (g₂ := D₂.labelCount)
+      (d := d) (D := D) :=
+  { dim₁ := D₁.bondDim
+    mult₁ := D₁.multiplicity
+    weight₁ := D₁.weight
+    dim₂ := D₂.bondDim
+    mult₂ := D₂.multiplicity
+    weight₂ := D₂.weight
+    hMult₁ := D₁.multiplicity_pos
+    hWeight₁ := D₁.weight_pos
+    hMult₂ := D₂.multiplicity_pos
+    hWeight₂ := D₂.weight_pos
+    M := M
+    A₁ := D₁.tensor
+    A₂ := D₂.tensor
+    U₁ := D₁.verticalCoisometry
+    U₂ := D₂.verticalCoisometry
+    T := T
+    S := S
+    hForward₁ := D₁.forward
+    hReconstruct₁ := D₁.reconstruction
+    hForward₂ := D₂.forward
+    hReconstruct₂ := D₂.reconstruction
+    hTphys := hTphys
+    hSphys := hSphys
+    hBNT₁ := D₁.isCPSVBNT
+    hBNT₂ := D₂.isCPSVBNT
+    hU₁ := D₁.coisometry
+    hU₂ := D₂.coisometry
+    hTCPTP := hTCPTP
+    hSCPTP := hSCPTP }
+
+/-- Orthogonal grouped vertical sectors assemble into a vertical canonical
+decomposition while retaining the CPSV16 basis predicate.
+
+Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
+theorem cpsvVerticalDecomposition_of_grouped_orthogonal_sectors
+    (M : MPOTensor d D) {g : ℕ} (dim : Fin g → ℕ) (mult : Fin g → ℕ)
+    (hMult : ∀ α, 0 < mult α)
+    (weight : (α : Fin g) → Fin (mult α) → ℂ)
+    (hWeight : ∀ α q, (0 : ℂ) < weight α q)
+    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (hBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
+      (fun α ↦ ⟨dim α, A α⟩))
+    (W : (p : (α : Fin g) × Fin (mult α)) →
+      Matrix (Fin d) (Fin (dim p.1)) ℂ)
+    (hIso : ∀ p, (W p)ᴴ * W p = 1)
+    (hOrth : ∀ p q, p ≠ q → (W p)ᴴ * W q = 0)
+    (hInter : ∀ p ab, verticalTensor M ab * W p =
+      W p * ((weight p.1 p.2) • A p.1 ab))
+    (hReconstruct : ∀ ab, verticalTensor M ab =
+      ∑ q : Fin (∑ α, mult α),
+        flattenGroupedSectorMap dim mult W q *
+          ((verticalCopyWeights mult weight q) •
+            verticalCopyBlocks dim mult A q ab) *
+          (flattenGroupedSectorMap dim mult W q)ᴴ) :
+    Nonempty (CPSVVerticalDecomposition M) := by
+  classical
+  let Wflat : (q : Fin (∑ α, mult α)) →
+      Matrix (Fin d) (Fin (verticalCopyDim dim mult q)) ℂ :=
+    flattenGroupedSectorMap dim mult W
+  let B : (q : Fin (∑ α, mult α)) →
+      MPSTensor (D * D) (verticalCopyDim dim mult q) :=
+    fun q ab ↦ verticalCopyWeights mult weight q •
+      verticalCopyBlocks dim mult A q ab
+  let rowEquiv : ((q : Fin (∑ α, mult α)) ×
+      Fin (verticalCopyDim dim mult q)) ≃
+      Fin (∑ q : Fin (∑ α, mult α), verticalCopyDim dim mult q) :=
+    finSigmaFinEquiv
+  let U : Matrix
+      (Fin (∑ q : Fin (∑ α, mult α), verticalCopyDim dim mult q))
+      (Fin d) ℂ :=
+    Matrix.reindex rowEquiv (Equiv.refl _) (Matrix.sigmaBlockRow Wflat)
+  have hIsoFlat : ∀ q, (Wflat q)ᴴ * Wflat q = 1 := by
+    intro q
+    exact hIso (finSigmaFinEquiv.symm q)
+  have hOrthFlat : ∀ q l, q ≠ l → (Wflat q)ᴴ * Wflat l = 0 := by
+    intro q l hql
+    exact hOrth (finSigmaFinEquiv.symm q) (finSigmaFinEquiv.symm l)
+      (finSigmaFinEquiv.symm.injective.ne hql)
+  have hInterFlat : ∀ q ab, verticalTensor M ab * Wflat q =
+      Wflat q * B q ab := by
+    intro q ab
+    exact hInter (finSigmaFinEquiv.symm q) ab
+  have hReconstructFlat : ∀ ab, verticalTensor M ab =
+      ∑ q, Wflat q * B q ab * (Wflat q)ᴴ := by
+    intro ab
+    exact hReconstruct ab
+  have hU : U * Uᴴ = 1 := by
+    dsimp only [U]
+    rw [Matrix.conjTranspose_reindex,
+      show Matrix.reindex rowEquiv (Equiv.refl (Fin d))
+          (Matrix.sigmaBlockRow Wflat) =
+        Matrix.reindexLinearEquiv ℂ ℂ rowEquiv (Equiv.refl _)
+          (Matrix.sigmaBlockRow Wflat) by rfl,
+      show Matrix.reindex (Equiv.refl (Fin d)) rowEquiv
+          (Matrix.sigmaBlockRow Wflat)ᴴ =
+        Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) rowEquiv
+          (Matrix.sigmaBlockRow Wflat)ᴴ by rfl,
+      Matrix.reindexLinearEquiv_mul ℂ ℂ rowEquiv (Equiv.refl _) rowEquiv,
+      Matrix.sigmaBlockRow_isCoisometry Wflat hIsoFlat hOrthFlat,
+      Matrix.reindexLinearEquiv_one]
+  have hForward : ∀ ab, U * verticalTensor M ab * Uᴴ =
+      verticalAssembledTensor dim mult weight A ab := by
+    intro ab
+    have hSigma := Matrix.sigmaBlockRow_conjugation
+      (verticalTensor M) B Wflat hIsoFlat hOrthFlat hInterFlat ab
+    dsimp only [U]
+    rw [Matrix.conjTranspose_reindex,
+      show Matrix.reindex rowEquiv (Equiv.refl (Fin d))
+          (Matrix.sigmaBlockRow Wflat) =
+        Matrix.reindexLinearEquiv ℂ ℂ rowEquiv (Equiv.refl _)
+          (Matrix.sigmaBlockRow Wflat) by rfl,
+      show verticalTensor M ab =
+        Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) (Equiv.refl _)
+          (verticalTensor M ab) by rfl,
+      Matrix.reindexLinearEquiv_mul ℂ ℂ rowEquiv (Equiv.refl _) (Equiv.refl _),
+      show Matrix.reindex (Equiv.refl (Fin d)) rowEquiv
+          (Matrix.sigmaBlockRow Wflat)ᴴ =
+        Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) rowEquiv
+          (Matrix.sigmaBlockRow Wflat)ᴴ by rfl,
+      Matrix.reindexLinearEquiv_mul ℂ ℂ rowEquiv (Equiv.refl _) rowEquiv,
+      hSigma]
+    rfl
+  have hReconstruction : ∀ ab, verticalTensor M ab = Uᴴ *
+      verticalAssembledTensor dim mult weight A ab * U := by
+    intro ab
+    have hSigma := Matrix.sigmaBlockRow_reconstruction
+      (verticalTensor M) B Wflat hReconstructFlat ab
+    rw [hSigma]
+    dsimp only [U]
+    rw [Matrix.conjTranspose_reindex]
+    change (Matrix.sigmaBlockRow Wflat)ᴴ *
+        Matrix.blockDiagonal' (fun q ↦ B q ab) * Matrix.sigmaBlockRow Wflat =
+      Matrix.reindexLinearEquiv ℂ ℂ (Equiv.refl _) rowEquiv
+          (Matrix.sigmaBlockRow Wflat)ᴴ *
+        Matrix.reindexLinearEquiv ℂ ℂ rowEquiv rowEquiv
+          (Matrix.blockDiagonal' (fun q ↦ B q ab)) *
+        Matrix.reindexLinearEquiv ℂ ℂ rowEquiv (Equiv.refl _)
+          (Matrix.sigmaBlockRow Wflat)
+    rw [Matrix.reindexLinearEquiv_mul ℂ ℂ (Equiv.refl _) rowEquiv rowEquiv,
+      Matrix.reindexLinearEquiv_mul ℂ ℂ (Equiv.refl _) rowEquiv (Equiv.refl _)]
+    rfl
+  exact ⟨{
+    labelCount := g
+    bondDim := dim
+    multiplicity := mult
+    weight := weight
+    tensor := A
+    verticalCoisometry := U
+    multiplicity_pos := hMult
+    weight_pos := hWeight
+    isCPSVBNT := hBNT
+    coisometry := hU
+    forward := hForward
+    reconstruction := hReconstruction
+  }⟩
+
+/-- Phase-class grouping and the grouped-corner Gram comparison give a vertical
+decomposition retaining the CPSV16 basis of normal tensors.
+
+Literal CPSV canonical form and normalized BNT-refined horizontal form supply
+these assumptions independently.
+
+Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
+theorem HasVerticalBNTGroupingInputs.exists_cpsvVerticalDecomposition
+    {M : MPOTensor d D} (h : HasVerticalBNTGroupingInputs M) :
+    Nonempty (CPSVVerticalDecomposition M) := by
+  classical
+  obtain ⟨r, dim, mu, blocks, V, hDimPos, _, hNormal, hIso, _, _, hInterStar,
+    _, hReconstruct, hdim, X, zeta, _, _, hXDist, _, _, hSpectralBNT, _, _, _, _,
+    hCoeffPos, hGroupedIso, hGroupedOrth, hGroupedInter, _, hGroupedCorner,
+    hGroupedReconstruct⟩ :=
+      h.grouping
+  let C := MPSTensor.mpvPhaseClassData blocks
+  have hSame : MPSTensor.SameMPV₂Pos (verticalTensor M)
+      (MPSTensor.toTensorFromBlocks (d := D * D) (μ := mu) blocks) :=
+    MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
+      (verticalTensor M) mu blocks V hIso hInterStar hReconstruct
+  have hBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
+      (fun j ↦ ⟨dim (C.repr j), blocks (C.repr j)⟩) :=
+    hSpectralBNT.of_sameMPV₂Pos hSame.symm
+  obtain ⟨_, W, _, hWIso, hWOrth, hWInter, hWReconstruct⟩ :=
+    exists_normalized_grouped_sector_maps_of_dressing blocks
+      h.gramDressing mu V hDimPos
+      hNormal hdim X zeta hXDist hCoeffPos hGroupedIso hGroupedOrth
+      hGroupedInter hGroupedCorner hGroupedReconstruct
+  have hWReconstructFlat : ∀ ab, verticalTensor M ab =
+      ∑ q : Fin (∑ j, C.copies j),
+        flattenGroupedSectorMap (fun j ↦ dim (C.repr j)) C.copies W q *
+          ((verticalCopyWeights C.copies
+              (fun j q ↦ mu (C.enum j q) * zeta j q) q) •
+            verticalCopyBlocks (fun j ↦ dim (C.repr j)) C.copies
+              (fun j ↦ blocks (C.repr j)) q ab) *
+          (flattenGroupedSectorMap
+            (fun j ↦ dim (C.repr j)) C.copies W q)ᴴ := by
+    intro ab
+    rw [hWReconstruct ab]
+    let f : ((j : Fin C.g) × Fin (C.copies j)) →
+        Matrix (Fin d) (Fin d) ℂ := fun p ↦
+      W p * ((mu (C.enum p.1 p.2) * zeta p.1 p.2) •
+        blocks (C.repr p.1) ab) * (W p)ᴴ
+    change (∑ j, ∑ q, f ⟨j, q⟩) =
+      ∑ q, f (finSigmaFinEquiv.symm q)
+    exact (Fintype.sum_finSigmaFinEquiv f).symm
+  exact cpsvVerticalDecomposition_of_grouped_orthogonal_sectors M
+    (fun j ↦ dim (C.repr j)) C.copies C.copies_pos
+    (fun j q ↦ mu (C.enum j q) * zeta j q) hCoeffPos
+    (fun j ↦ blocks (C.repr j)) hBNT W hWIso hWOrth hWInter
+    hWReconstructFlat
+
+/-- A matrix product density operator in normalized BNT-refined horizontal form
+that satisfies the renormalization fixed-point condition has a positive fusion
+decomposition of its vertical basis of normal tensors.
+
+For every pair of BNT labels, the fusion map is a coisometry onto the active
+direct sum.  Both forward conjugation and exact reconstruction are asserted,
+so zero product tensors and proper active supports are permitted.
+
+**Local fix (Figure-11 fixed-pair support):** A fixed pair may have an empty
+active family; no unsupported corner is inserted.  Documented in
+`docs/paper-gaps/cpsv16_figure11_per_pair_support.tex`.
+
+**Local fix (Figure-11 fusion coisometry):** The fusion map has retained-row
+orientation and satisfies $UU^\dagger=1$.  Its adjoint gives the exact
+reconstruction.  Documented in
+`docs/paper-gaps/cpsv16_figure11_fusion_coisometry.tex`.
+
+Source: CPSV16, Proposition 4.13, lines 1863--1921, and Appendix C.4,
+lines 2020--2029. -/
+theorem exists_positiveFusionDecomposition_of_isRFPViaTS
+    (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
+    (hRFP : IsRFPViaTS M) :
+    ∃ (g : ℕ) (dim : Fin g → ℕ)
+      (A : (α : Fin g) → MPSTensor (D * D) (dim α)),
+      MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
+          (fun α ↦ ⟨dim α, A α⟩) ∧
+      ∃ (chi : DiagonalChiFamily (Fin g))
+        (U : ∀ α β : Fin g,
+          Matrix ((γ : Fin g) × (Fin (chi.dim α β γ) × Fin (dim γ)))
+            (Fin (dim α * dim β)) ℂ),
+        chi.PosEntries ∧
+        (∀ α β, U α β * (U α β)ᴴ = 1) ∧
+        (∀ (α β : Fin g) (i j : Fin D),
+          U α β *
+              (mulTensor (verticalBNTMPO (A α))
+                (verticalBNTMPO (A β))) i j *
+              (U α β)ᴴ =
+            Matrix.blockDiagonal' fun γ ↦
+              chi.matrix α β γ ⊗ₖ verticalBNTMPO (A γ) i j) ∧
+        ∀ (α β : Fin g) (i j : Fin D),
+          (mulTensor (verticalBNTMPO (A α))
+            (verticalBNTMPO (A β))) i j =
+            (U α β)ᴴ *
+              (Matrix.blockDiagonal' fun γ ↦
+                chi.matrix α β γ ⊗ₖ verticalBNTMPO (A γ) i j) *
+              U α β := by
+  classical
+  obtain ⟨D₁⟩ := (hHorizontal.hasVerticalBNTGroupingInputs M hM).exists_cpsvVerticalDecomposition
+  obtain ⟨D₂⟩ := (hHorizontal.blockTwo.hasVerticalBNTGroupingInputs
+    (blockTwo M) hM.blockTwo).exists_cpsvVerticalDecomposition
+  obtain ⟨Smap, T, hSCPTP, hTCPTP, hSphys, hTphys⟩ := hRFP
+  refine ⟨D₁.labelCount, D₁.bondDim, D₁.tensor, D₁.isCPSVBNT, ?_⟩
+  exact transportedVerticalSector_exists_positiveFusionDecomposition
+    (VerticalSectorHypotheses.ofDecompositions D₁ D₂ T Smap hTCPTP hSCPTP
+      hTphys hSphys) (hHorizontal.hasVerticalBNTProductInputs M hM) hM
+
+end MPOTensor

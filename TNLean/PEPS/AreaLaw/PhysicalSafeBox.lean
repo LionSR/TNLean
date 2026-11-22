@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Scan.PhysicalBoxBootstrap
-import TNLean.PEPS.AreaLaw.Scan.BoxClearanceComparison
-import TNLean.PEPS.AreaLaw.Geometry.CellCounting
+import TNLean.PEPS.AreaLaw.BoxExponent.PhysicalBoxBootstrap
+import TNLean.PEPS.AreaLaw.BoxExponent.BoxClearanceComparison
+import TNLean.PEPS.AreaLaw.Squares.CellCounting
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

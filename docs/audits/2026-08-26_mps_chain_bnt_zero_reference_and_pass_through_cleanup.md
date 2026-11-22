@@ -14,7 +14,7 @@ and `scripts`, then confirmed by a full `lake build` and by
 
 | Removed | Replacement |
 |---|---|
-| `IsInjectiveChain` (root namespace, `TNLean/MPS/Chain/Defs.lean`) | `MPSChainTensor.IsInjective`, which it abbreviated verbatim |
+| `IsInjectiveChain` (root namespace, `TNLean/MPS/Tensor/Chain/Defs.lean`) | `MPSChainTensor.IsInjective`, which it abbreviated verbatim |
 | `MPSTensor.eventually_linearIndependent_of_overlap_tendsto_orthonormal` | `MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal` applied with the same argument list; the `Fin g` index type is already a `Finite` instance, so no adapter is needed |
 | `MPSTensor.bntFamilies_eventually_linearIndependent` | `MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal`; it was a second forwarding layer over the lemma above |
 | `MPSTensor.propBlockInjective_of_blocksNotGaugePhaseEquiv_directSum` | `propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords A hBlk (hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv A hIrr hLeft hOverlap hBlocks hBlk hBlk3 hInj hL)` |
@@ -22,7 +22,7 @@ and `scripts`, then confirmed by a full `lake build` and by
 | `MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors` | `⟨L + (r - 1) * (L + (L + L)), wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors …⟩` at the use site |
 | `MPSTensor.exists_wordTupleSpanTop_of_blocksNotGaugePhaseEquiv_directSum_selectors_c1` | the same existential packaging at length `(L₀ + 1) + (r - 1) * ((L₀ + 1) + ((L₀ + 1) + (L₀ + 1)))` |
 
-The three-layer chain in `TNLean/MPS/BNT/Basic.lean` had five live call sites
+The three-layer chain in `TNLean/MPS/CanonicalForm/BNT/Basic.lean` had five live call sites
 (two in `Basic.lean`, one in `Construction.lean`, two in
 `PermutationRigidityPrimitive.lean`); all were rewritten to the surviving
 finite-index lemma, which is the only one of the three carrying a proof.
@@ -50,11 +50,11 @@ No other blueprint tag named a removed declaration.
 ## Retained on purpose
 
 `MPSTensor.exists_twoBlock_decomp_of_lowerZero`
-(`TNLean/MPS/Structure/InvariantSubspaceDecomp.lean`) loses its only
+(`TNLean/MPS/Tensor/DirectSum/InvariantSubspaceDecomp.lean`) loses its only
 application with the non-strict fixed-point decomposition. It is retained
 because it is blueprint-cited in
 `blueprint/src/chapter/ch09_canonical_ft_reduction.tex`. The section docstring
-in `TNLean/MPS/Irreducible/FixedPointProjection.lean` was retargeted to the
+in `TNLean/MPS/Transfer/Irreducible/FixedPointProjection.lean` was retargeted to the
 strict form, which is what the surviving theorem actually applies.
 
 `docs/paper-gaps/pgvwc07_direct_sum_input.tex` cited the retired selector datum
@@ -65,6 +65,6 @@ so the footnote still substantiates its claim. The stale caveat in
 
 ## Imports
 
-No import was removed. `TNLean/MPS/BNT/DirectSumSelectors.lean` keeps its four
+No import was removed. `TNLean/MPS/CanonicalForm/BlockSeparation/DirectSumSelectors.lean` keeps its four
 imports: the surviving length-`L` and Condition-C1 span theorems still consume
 `MPDO.BiCFDerivation.Selectors` and the file-level `variable {d L : ℕ}`.

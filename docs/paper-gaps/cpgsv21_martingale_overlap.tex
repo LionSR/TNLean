@@ -590,9 +590,9 @@ without this stronger one-sided estimate.\footnote{The formal anchors are
     \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}.
     The final gap statement is
     \leanid{MPSTensor.parentHamiltonian_gapped_of_anticommutator} in
-    \path{TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean}.
+    \path{TNLean/MPS/ParentHamiltonian/ParentInteraction/Reduction.lean}.
     The ordered cross-term reduction in
-    \path{TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean} is
+    \path{TNLean/MPS/ParentHamiltonian/ParentInteraction/Reduction.lean} is
     \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_ordered_cross_term}.
     The cyclic-window norm-compression reductions
     \path{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_norm_bound},
@@ -778,7 +778,7 @@ cyclic overlap.
 
 The source-matching entry \path{thm:anticommutator_gap_bound} points to
 \leanid{MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator}
-in \path{TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean}; its hypothesis
+in \path{TNLean/MPS/ParentHamiltonian/ParentInteraction/Reduction.lean}; its hypothesis
 is (\ref{eq:cpgsv21_martingale_overlap_cyclic_anticommutator_target}).
 The Blueprint entries that recorded the special and constant-$\eta$
 cyclic-window norm-compression reductions, and the entry for the
@@ -1115,7 +1115,7 @@ identities and the current weighted route.
 \begin{itemize}
     \item The exact Choi reshuffling is
           \leanid{MPSTensor.groundSpaceGram_eq_gramReshuffle} in
-          \path{TNLean/MPS/ParentHamiltonian/GroundSpaceGram.lean}; subtraction
+          \path{TNLean/MPS/ParentHamiltonian/BoundaryMap/GroundSpaceGram.lean}; subtraction
           compatibility is \leanid{Matrix.gramReshuffle_sub}.
 
     \item The geometric power estimate is
@@ -1198,10 +1198,10 @@ identities and the current weighted route.
           not claimed sharp or identified with the FNW coefficient.
 
     \item The spectator-indexed tail and left boundary maps are defined in
-          \path{TNLean/MPS/ParentHamiltonian/SpectatorBoundary.lean}. Their Hilbert
+          \path{TNLean/MPS/ParentHamiltonian/BoundaryMap/SpectatorBoundary.lean}. Their Hilbert
           realizations are \leanid{MPSTensor.tailBoundaryMapES} and
           \leanid{MPSTensor.leftBoundaryMapES} in
-          \path{TNLean/MPS/ParentHamiltonian/SpectatorBoundaryGram.lean}. That module
+          \path{TNLean/MPS/ParentHamiltonian/BoundaryMap/SpectatorBoundaryGram.lean}. That module
           proves their exact ranges, factorizations through
           $\Gamma_{K+L}^{\mathrm{ES}}$, and injectivity from the local boundary map.
           Their Grams are direct sums of $\mathcal K_L$ on tail fibers and

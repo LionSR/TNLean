@@ -1,0 +1,374 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import QICLean.Algebra.Kronecker.KroneckerFactorPositivity
+import QICLean.Algebra.SpinCover.Basic
+import TNLean.MPS.Operator.DensityOperator.AreaLaw
+import TNLean.MPS.Examples.IdentityPlusZString.BinaryConfigurationSign
+import TNLean.MPS.Operator.DensityOperator.RFPViaTS
+
+/-!
+# CPSV16 Example 4.12: the printed tensor generating $I^{\otimes N}+\sigma_z^{\otimes N}$
+
+**Source.** Cirac, Pérez-García, Schuch, Verstraete 2017 (arXiv:1606.00608),
+Example 4.12, `Papers/1606.00608/MPDO-22-12-17-2.tex` lines 932--939: a tensor
+$M$ with $d=D=2$ whose only nonzero components are
+\[
+  1=M_{00}^{00}=M_{00}^{11}=M_{11}^{00}=-M_{11}^{11},
+\]
+generating $\rho^{(N)}(M)=I^{\otimes N}+\sigma_z^{\otimes N}$; the source states
+that tracing one spin leaves a reduced state proportional to the identity, that
+the tensor is SAL and has ZCL, that it is not of the commuting form
+(`rhoNComm`), and that it is an RFP in the sense of Definition 4.1 (line 657).
+Thus $M^{00}=I$ and $M^{11}=\sigma_z$, with the off-diagonal physical letters
+zero.
+
+**Formalized here.** The printed tensor `M` in the source's normalization; the
+displayed operator formula at every positive length, entrywise
+(`rho_eq_diagonal`) and as a sum of two finite Kronecker powers
+(`rho_eq_finKronecker`); positivity (`M_isMPDO`) and the trace $2^N$
+(`trace_rho`); the loss of the $\sigma_z^{\otimes N}$ part when the last
+$N-L\ge 1$ sites of the normalized state are traced out, keeping $L\ge 1$ sites
+(`reducedBlockState_M_eq_scaled_one`); and saturation of the area
+law (`M_isSAL`). The failure of the commuting form is
+`MPOTensor.CPSVExample412Literal.M_not_isGSNNCH` in
+`TNLean.MPS.MPDO.GSNNCHFourCycleMarkov.ExampleFourCycleObstruction`. The
+density-normalized representative $\tfrac12 M$, with its explicit channels for
+Definition 4.1, is `MPOTensor.CPSVExample412NormalizedRFP.Mhat` in
+`TNLean.MPS.MPDO.CPSVExample412NormalizedRFP`; it is defined as
+`((1 / 2 : ℝ) : ℂ) • M`.
+
+**Local fix (normalization):** the printed tensor has physical-trace transfer
+$I+\sigma_z$, whose square is twice itself, so it satisfies the ZCL
+idempotence of Definition 4.2 only up to the scale $2$ (`M_isSourceZCL`) and is
+not an RFP via trace-preserving maps (`M_not_isRFPViaTS`); the source's RFP
+claim is proved for $\tfrac12 M$ (`CPSVExample412NormalizedRFP.Mhat_isRFPViaTS`).
+Documented in
+`docs/paper-gaps/cpsv16_example_4_12_normalization.tex`, whose complete text is
+<https://sirui-lu.com/QICLean/paper-gaps/cpsv16_example_4_12_normalization.pdf>.
+
+## Main definitions
+
+* `sigmaZ`: the Pauli matrix $\sigma_z$.
+* `M`: the printed tensor of Example 4.12.
+
+## Main results
+
+* `rho_eq_diagonal`, `rho_eq_finKronecker`: the displayed operator formula.
+* `M_isMPDO`, `trace_rho`: positivity and trace $2^N$ at positive length.
+* `reducedBlockState_M_eq_scaled_one`, `one_site_trace_loses_sigmaZ`: the
+  one-site trace loss.
+* `M_isSAL`: saturation of the area law.
+* `M_isSourceZCL`, `physTraceTransfer_M_not_idempotent`, `M_not_isRFPViaTS`:
+  the normalization mismatch.
+
+## References
+
+- [arXiv:1606.00608](https://arxiv.org/abs/1606.00608) -- J. I. Cirac,
+  D. Pérez-García, N. Schuch, F. Verstraete, *Matrix product density operators:
+  Renormalization fixed points and boundary theories*
+-/
+
+open scoped Matrix BigOperators ComplexOrder
+
+namespace MPOTensor.CPSVExample412Literal
+
+/-- The paper's $\sigma_z=|0\rangle\langle0|-|1\rangle\langle1|$, using the
+public Pauli matrix construction.
+
+Source: CPSV16, arXiv:1606.00608, Example 4.12, lines 935--937. -/
+noncomputable def sigmaZ : Matrix (Fin 2) (Fin 2) ℂ :=
+  SpinCover.pauli 2
+
+@[simp] private lemma sigmaZ_apply_ne {i j : Fin 2} (h : i ≠ j) : sigmaZ i j = 0 := by
+  fin_cases i <;> fin_cases j <;> simp_all [sigmaZ, SpinCover.pauli]
+
+/-- The literal $d=D=2$ tensor $M$ printed in CPSV16 Example 4.12:
+$M^{00}=I$, $M^{11}=\sigma_z$, and $M^{01}=M^{10}=0$.
+
+Source: CPSV16, arXiv:1606.00608, Example 4.12, lines 932--935. -/
+noncomputable def M : MPOTensor 2 2 :=
+  fun i j => if i = j then Matrix.diagonal ![(1 : ℂ), sigmaZ i i] else 0
+
+private lemma prod_M_diagonal :
+    ∀ {N : ℕ} (σ : Fin N → Fin 2),
+      (List.ofFn fun k => M (σ k) (σ k)).prod =
+        Matrix.diagonal ![(1 : ℂ), configurationSign σ] := by
+  intro N
+  induction N with
+  | zero =>
+      intro σ
+      ext a b
+      fin_cases a <;> fin_cases b <;> simp [configurationSign]
+  | succ N ih =>
+      intro σ
+      rw [List.ofFn_succ, List.prod_cons, M, ite_eq_left rfl,
+        ih (fun i => σ i.succ), Matrix.diagonal_mul_diagonal]
+      ext a b
+      fin_cases a <;> fin_cases b <;>
+        simp [configurationSign, Fin.prod_univ_succ, siteSign, sigmaZ]
+
+/-- The exact entrywise version of
+$\rho^{(N)}(M)=I^{\otimes N}+\sigma_z^{\otimes N}$.
+
+Source: CPSV16, arXiv:1606.00608, Example 4.12, equations at lines 933--936. -/
+theorem rho_eq_diagonal (N : ℕ) :
+    mpo M N = Matrix.diagonal fun σ => 1 + configurationSign σ := by
+  ext σ τ
+  by_cases hστ : σ = τ
+  · subst τ
+    rw [Matrix.diagonal_apply_eq, mpo_apply, mpoMatrixEntry, evalWord_ofFn,
+      prod_M_diagonal, Matrix.trace_diagonal]
+    simp [Fin.sum_univ_two]
+  · rw [Matrix.diagonal_apply_ne _ hστ, mpo_apply, mpoMatrixEntry,
+      evalWord_ofFn_eq_zero_of_ne M (by simp [M]) hστ, Matrix.trace_zero]
+
+/-- Formula-driven form of the source identity using the public finite
+Kronecker product: for every positive $N$,
+$\rho^{(N)}(M)=I^{\otimes N}+\sigma_z^{\otimes N}$.
+
+Source: CPSV16, arXiv:1606.00608, Example 4.12, lines 933--936. -/
+theorem rho_eq_finKronecker (N : ℕ) (_hN : 0 < N) :
+    mpo M N =
+      Matrix.finKronecker (fun _ : Fin N => (1 : Matrix (Fin 2) (Fin 2) ℂ)) +
+      Matrix.finKronecker (fun _ : Fin N => sigmaZ) := by
+  rw [rho_eq_diagonal]
+  ext σ τ
+  by_cases hστ : σ = τ
+  · subst τ
+    simp [Matrix.finKronecker_apply, configurationSign, siteSign, sigmaZ,
+      Matrix.diagonal_apply_eq]
+  · rw [Matrix.diagonal_apply_ne _ hστ]
+    obtain ⟨k, hk⟩ := Function.ne_iff.mp hστ
+    simp only [Matrix.add_apply, Matrix.finKronecker_apply]
+    have hone : ∏ n, (1 : Matrix (Fin 2) (Fin 2) ℂ) (σ n) (τ n) = 0 := by
+      apply Finset.prod_eq_zero (Finset.mem_univ k)
+      exact Matrix.one_apply_ne hk
+    have hz : ∏ n, sigmaZ (σ n) (τ n) = 0 := by
+      apply Finset.prod_eq_zero (Finset.mem_univ k)
+      exact sigmaZ_apply_ne hk
+    rw [hone, hz, add_zero]
+
+/-- The literal tensor generates positive semidefinite operators at every
+positive chain length, hence is an MPDO tensor in the project convention.
+
+Source: CPSV16, arXiv:1606.00608, Example 4.12, lines 933--937. -/
+theorem M_isMPDO : IsMPDO M := by
+  intro N _
+  rw [rho_eq_diagonal]
+  apply Matrix.PosSemidef.diagonal
+  intro σ
+  rcases configurationSign_eq_one_or_neg_one σ with h | h <;>
+    change (0 : ℂ) ≤ 1 + configurationSign σ <;> rw [h] <;> norm_num
+
+
+/-! ### Trace, one-site loss, and saturation of the area law -/
+
+/-- The trace of the literal positive-length operator is $2^N$.
+
+Source formula: CPSV16, arXiv:1606.00608, Example 4.12, lines 933--936. -/
+theorem trace_rho (N : ℕ) (hN : 0 < N) :
+    Matrix.trace (mpo M N) = (2 : ℂ) ^ N := by
+  rw [rho_eq_diagonal, Matrix.trace_diagonal, Finset.sum_add_distrib,
+    sum_configurationSign_eq_zero hN, add_zero]
+  simp
+
+private lemma normalizedMPO_M_eq (N : ℕ) (hN : 0 < N) :
+    normalizedMPO M N = ((2 : ℂ)⁻¹ ^ N) • mpo M N := by
+  rw [normalizedMPO, trace_rho N hN, inv_pow]
+
+private lemma reducedBlockState_M_apply {N L : ℕ} (hL : L ≤ N) (hN : 0 < N)
+    (u v : Fin L → Fin 2) :
+    reducedBlockState M N L hL u v =
+      if u = v then ((2 : ℂ)⁻¹ ^ N) *
+        ((2 : ℂ) ^ (N - L) + configurationSign u *
+          (∑ w : Fin (N - L) → Fin 2, configurationSign w))
+      else 0 := by
+  set K := N - L with hK
+  have hNK : N = L + K := by omega
+  have hcard : Fintype.card (Fin K → Fin 2) = 2 ^ K := by simp
+  rw [reducedBlockState_eq_sum M hL u v, normalizedMPO_M_eq N hN,
+    rho_eq_diagonal N]
+  by_cases huv : u = v
+  · subst v
+    simp only [Matrix.smul_apply, smul_eq_mul, Matrix.diagonal_apply_eq]
+    rw [ite_true]
+    simp_rw [mul_add]
+    rw [Finset.sum_add_distrib]
+    congr 1
+    · rw [Finset.sum_const, Finset.card_univ, hcard]
+      simp [nsmul_eq_mul]
+      ring
+    · calc
+        ∑ w : Fin K → Fin 2,
+            (2 : ℂ)⁻¹ ^ N * configurationSign (Fin.append u w ∘ Fin.cast hNK) =
+            ∑ w : Fin K → Fin 2,
+              (2 : ℂ)⁻¹ ^ N * (configurationSign u * configurationSign w) := by
+              refine Finset.sum_congr rfl (fun w _ => ?_)
+              rw [configurationSign_append_cast hNK u w]
+        _ = (2 : ℂ)⁻¹ ^ N *
+            (configurationSign u * ∑ w : Fin K → Fin 2, configurationSign w) := by
+              simp [Finset.mul_sum]
+  · have hterm : ∀ w : Fin K → Fin 2,
+        (Matrix.diagonal fun σ : Fin N → Fin 2 => 1 + configurationSign σ)
+          (Fin.append u w ∘ Fin.cast hNK) (Fin.append v w ∘ Fin.cast hNK) = 0 := by
+      intro w
+      apply Matrix.diagonal_apply_ne
+      intro heq
+      apply huv
+      funext i
+      have hi := congrFun heq (Fin.cast hNK.symm (Fin.castAdd K i))
+      simpa [Fin.append_left] using hi
+    simp only [Matrix.smul_apply, smul_eq_mul]
+    rw [ite_eq_right huv]
+    apply Finset.sum_eq_zero
+    intro w _
+    rw [hterm w, mul_zero]
+
+/-- Tracing any nonempty complement removes the entire
+$\sigma_z^{\otimes N}$ contribution.  The normalized reduced state on $L<N$
+sites is the maximally mixed state $2^{-L}I^{\otimes L}$.
+
+In particular, taking $N=L+1$ is the one-site trace loss stated in the source.
+
+Source: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
+theorem reducedBlockState_M_eq_scaled_one {N L : ℕ}
+    (hLpos : 1 ≤ L) (hLN : L < N) (hL : L ≤ N := Nat.le_of_lt hLN) :
+    reducedBlockState M N L hL =
+      ((2 : ℂ)⁻¹ ^ L) •
+        (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ) := by
+  ext u v
+  rw [reducedBlockState_M_apply hL (by omega) u v]
+  by_cases huv : u = v
+  · subst v
+    rw [ite_eq_left rfl, sum_configurationSign_eq_zero (Nat.sub_pos_of_lt hLN)]
+    simp only [mul_zero, add_zero, Matrix.smul_apply, smul_eq_mul,
+      Matrix.one_apply_eq]
+    simp only [mul_one, inv_pow]
+    field_simp
+    rw [← pow_add]
+    congr 1
+    omega
+  · rw [ite_eq_right huv, Matrix.smul_apply, smul_eq_mul, Matrix.one_apply_ne huv, mul_zero]
+
+/-- The source's one-site-loss statement in its literal normalization:
+a one-site partial trace of $\rho^{(L+1)}(M)$ is proportional to the identity.
+The reduced-state construction normalizes first, giving exactly $2^{-L}I$.
+
+Source: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
+theorem one_site_trace_loses_sigmaZ (L : ℕ) (hL : 1 ≤ L) :
+    reducedBlockState M (L + 1) L (by omega) =
+      ((2 : ℂ)⁻¹ ^ L) •
+        (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ) :=
+  reducedBlockState_M_eq_scaled_one hL (by omega)
+
+private lemma blockEntropy_M_eq {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N)
+    (hL : L ≤ N) (hM : (mpo M N).PosSemidef) :
+    blockEntropy M N L hL hM = L * Real.log 2 :=
+  blockEntropy_eq_of_reducedBlockState_eq_smul_one M hL hM
+    (reducedBlockState_M_eq_scaled_one hLpos hLN)
+
+/-- The literal tensor satisfies saturation of the area law: every nonempty proper
+reduced block is maximally mixed, so $S_L=L\log 2$ and the mutual information
+is independent of $L$.
+
+Source claim: CPSV16, arXiv:1606.00608, Example 4.12, line 937; the entropy
+calculation is the direct derivation from the printed formula at lines 933--936. -/
+theorem M_isSAL : IsSAL M := by
+  refine ⟨M_isMPDO, ?_, ?_⟩
+  · intro N hN
+    rw [trace_rho N hN]
+    exact pow_ne_zero N (by norm_num)
+  · intro N L hLpos hLhalf
+    have hM : (mpo M N).PosSemidef := M_isMPDO N (by omega)
+    simp only [mutualInfoChain]
+    have hLval : blockEntropy M N L
+        (Nat.le_of_lt (hLhalf.trans_le (Nat.div_le_self N 2))) hM =
+        (L : ℝ) * Real.log 2 := by
+      apply blockEntropy_M_eq hLpos (by omega) _ hM
+    have hNLval : blockEntropy M N (N - L) (Nat.sub_le N L) hM =
+        ((N - L : ℕ) : ℝ) * Real.log 2 := by
+      apply blockEntropy_M_eq (by omega) (by omega) _ hM
+    have hL1val : blockEntropy M N (L + 1)
+        (hLhalf.trans_le (Nat.div_le_self N 2)) hM =
+        ((L + 1 : ℕ) : ℝ) * Real.log 2 := by
+      apply blockEntropy_M_eq (by omega) (by omega) _ hM
+    have hNL1val : blockEntropy M N (N - (L + 1))
+        (Nat.sub_le N (L + 1)) hM =
+        ((N - (L + 1) : ℕ) : ℝ) * Real.log 2 := by
+      apply blockEntropy_M_eq (by omega) (by omega) _ hM
+    rw [hLval, hNLval, hL1val, hNL1val]
+    rw [Nat.cast_sub (by omega), Nat.cast_sub (by omega)]
+    push_cast
+    ring
+
+/-- The physical-trace transfer of the literal printed tensor is
+$I+\sigma_z=\operatorname{diag}(2,0)$.
+
+Source tensor: CPSV16, arXiv:1606.00608, Example 4.12, lines 932--937. -/
+theorem physTraceTransfer_M :
+    physTraceTransfer M = !![(2 : ℂ), 0; 0, 0] := by
+  ext a b
+  fin_cases a <;> fin_cases b <;>
+    norm_num [physTraceTransfer, M, sigmaZ, SpinCover.pauli, Fin.sum_univ_two]
+
+/-- The project's scale-invariant `IsSourceZCL` relation for the literal
+representative has scale $\lambda=2$:
+$(I+\sigma_z)^2=2(I+\sigma_z)$.
+
+Definition 4.2 of the source requires literal idempotence, whereas the tensor
+printed in Example 4.12 satisfies only this scale-two relation; this is the
+module's normalization Local fix.
+
+Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
+theorem physTraceTransfer_M_sq :
+    physTraceTransfer M * physTraceTransfer M =
+      (2 : ℂ) • physTraceTransfer M := by
+  rw [physTraceTransfer_M]
+  ext a b
+  fin_cases a <;> fin_cases b <;>
+    norm_num [Matrix.mul_apply, Fin.sum_univ_two]
+
+/-- The literal tensor satisfies the project's scale-invariant `IsSourceZCL`
+relation with the explicit positive scale $\lambda=2$.
+
+`IsSourceZCL` allows a positive scale and is therefore broader than the literal
+idempotence in CPSV16 Definition 4.2. This theorem records the corrected
+scale-two relation for the printed tensor, not the paper's literal ZCL
+assertion (the module's normalization Local fix).
+
+Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, line 937. -/
+theorem M_isSourceZCL : IsSourceZCL M := by
+  refine ⟨?_, 2, by norm_num, physTraceTransfer_M_sq⟩
+  rw [physTraceTransfer_M]
+  intro h
+  have := congrArg (fun A : Matrix (Fin 2) (Fin 2) ℂ => A 0 0) h
+  norm_num at this
+
+/-- The transfer of the literal printed tensor is not idempotent.  This is the
+normalization mismatch hidden by the source's statement that the same printed
+representative is an RFP (the module's normalization Local fix).
+
+Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, lines 937--938. -/
+theorem physTraceTransfer_M_not_idempotent :
+    physTraceTransfer M * physTraceTransfer M ≠ physTraceTransfer M := by
+  rw [physTraceTransfer_M]
+  intro h
+  have := congrArg (fun A : Matrix (Fin 2) (Fin 2) ℂ => A 0 0) h
+  norm_num [Matrix.mul_apply, Fin.sum_univ_two] at this
+
+/-- The literal printed representative cannot satisfy Definition 4.1 with
+trace-preserving physical maps, since that condition forces literal transfer
+idempotence. The normalized representative $\tfrac12 M$ is treated in
+`TNLean.MPS.MPDO.CPSVExample412NormalizedRFP`.
+
+Source comparison: CPSV16, arXiv:1606.00608, Example 4.12, lines 937--938. -/
+theorem M_not_isRFPViaTS : ¬ IsRFPViaTS M := by
+  intro h
+  exact physTraceTransfer_M_not_idempotent
+    (physTraceTransfer_sq_of_isRFPViaTS M h)
+
+
+end MPOTensor.CPSVExample412Literal

@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicInvariant
-import TNLean.MPS.Core.GHZ
+import TNLean.MPS.Tensor.GHZ
 import TNLean.MPS.Examples.CZX.CZXAnomalyClass
-import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
-import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks
+import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorToolkit
+import TNLean.MPS.FundamentalTheorem.OperatorGroup.PermutedBlocks
 
 /-!
 # The CZX anomaly from the L-symbols of the two product states

@@ -2,12 +2,12 @@
 
 This audit records the repository-local pass-through exception of
 `docs/project_conventions.md` §Style for one theorem in
-`TNLean/MPS/Periodic/FundamentalTheorem.lean` that restated a QICLean theorem
+`TNLean/MPS/FundamentalTheorem/Periodic/RepeatedBlocks.lean` that restated a QICLean theorem
 with the index type narrowed.
 
 | Removed | Replacement |
 |---|---|
-| `MPSTensor.weight_multisets_eq_of_power_sums_eq` (`TNLean/MPS/Periodic/FundamentalTheorem.lean`) | `Matrix.sum_pow_eq_implies_multiset_eq` (`QICLean.Algebra.Polynomial.ScalarPowerSumIdentity`) |
+| `MPSTensor.weight_multisets_eq_of_power_sums_eq` (`TNLean/MPS/FundamentalTheorem/Periodic/RepeatedBlocks.lean`) | `Matrix.sum_pow_eq_implies_multiset_eq` (`QICLean.Algebra.Polynomial.ScalarPowerSumIdentity`) |
 
 ## What was checked
 

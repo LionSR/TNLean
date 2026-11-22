@@ -51,7 +51,7 @@ is Equation \path{eq:inj_equal_edge} in
 
 \section{Formal representation}
 
-The definitions in \path{TNLean/PEPS/Defs.lean} represent finite graphs, edges,
+The definitions in \path{TNLean/PEPS/Tensor/Network/Defs.lean} represent finite graphs, edges,
 incident edges, tensors, virtual configurations, state coefficients, equality
 of states, and vertex injectivity. Vertex injectivity means that the local
 physical vectors indexed by local virtual configurations are linearly
@@ -59,7 +59,7 @@ independent. This agrees with the injectivity assumption in
 Ref.~\cite{Molnar2018NormalPEPS}, where each tensor is injective as a map from
 its virtual space to its physical space.
 
-The file \path{TNLean/PEPS/VirtualInsertion.lean} realizes virtual operations
+The file \path{TNLean/PEPS/Tensor/Network/VirtualInsertion.lean} realizes virtual operations
 at an injective vertex. A chosen left inverse of the local tensor map converts
 a local virtual endomorphism into a physical operation. This is the local
 linear-algebraic step used in the three-site MPS argument of
@@ -69,7 +69,7 @@ Ref.~\cite{Molnar2018NormalPEPS}. The basis identity
 matrix action on one virtual boundary leg with the sum over the new index on
 the distinguished edge.
 
-The file \path{TNLean/PEPS/Blocking.lean} contains the edge-centered blocking
+The file \path{TNLean/PEPS/Tensor/Network/Blocking.lean} contains the edge-centered blocking
 data. Its declarations split a local virtual configuration at a distinguished
 incident edge and decompose the vertex product into the left endpoint, the
 middle region, and the right endpoint. The edge-blocked coefficient is proved

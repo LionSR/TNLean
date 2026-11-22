@@ -9,14 +9,18 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.FundamentalTheorem
 
 import TNLean.MPS.FundamentalTheorem.Arbitrary
-import TNLean.MPS.FundamentalTheorem.Basic
-import TNLean.MPS.FundamentalTheorem.FiniteLength
+import TNLean.MPS.FundamentalTheorem.Compression
+import TNLean.MPS.FundamentalTheorem.FixedLength
 import TNLean.MPS.FundamentalTheorem.InjectivePhase
-import TNLean.MPS.FundamentalTheorem.Multi
-import TNLean.MPS.FundamentalTheorem.PositiveLinearExtension
+import TNLean.MPS.FundamentalTheorem.OperatorGroup
+import TNLean.MPS.FundamentalTheorem.OperatorProduct
+import TNLean.MPS.FundamentalTheorem.Periodic
+import TNLean.MPS.FundamentalTheorem.PhysicalSupport
 import TNLean.MPS.FundamentalTheorem.ProductAlgebra
-import TNLean.MPS.FundamentalTheorem.Proportional
 import TNLean.MPS.FundamentalTheorem.Reduction
+import TNLean.MPS.FundamentalTheorem.Refinement
 import TNLean.MPS.FundamentalTheorem.SectorBNT
-import TNLean.MPS.FundamentalTheorem.SectorWeightComparison
-import TNLean.MPS.FundamentalTheorem.UnitaryGauge
+import TNLean.MPS.FundamentalTheorem.Sectors
+import TNLean.MPS.FundamentalTheorem.TimeReversalIndex
+import TNLean.MPS.FundamentalTheorem.WordModule
+import TNLean.MPS.FundamentalTheorem.Zipper

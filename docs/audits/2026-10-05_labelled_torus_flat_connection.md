@@ -2,7 +2,7 @@
 
 ## Mathematical scope
 
-`TNLean/PEPS/TorusBondFlatConnection.lean` proves the group-valued seam
+`TNLean/PEPS/Injectivity/TorusSector/TorusBondFlatConnection.lean` proves the group-valued seam
 reduction required in SCP10, Theorem 5.5 and `eq:2d:move-strings`, for the
 native labelled horizontal and vertical bonds. It does not assert the
 remaining tensor-network spanning or local-inverse steps of that theorem.

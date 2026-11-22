@@ -35,14 +35,14 @@ are derivations inside `FibonacciAction.lean`, not exported substitute names.
 | `complexOfGolden_single` | `TNLean/MPS/Examples/Rings/GoldenRing.lean` | `MPSTensor.complexOfRing_single goldenToComplex i j`. |
 | `complexOfGolden_smul` | `TNLean/MPS/Examples/Rings/GoldenRing.lean` | `MPSTensor.complexOfRing_smul goldenToComplex c X`. |
 | `complexOfZsqrt2_single` | `TNLean/MPS/Examples/Rings/Zsqrt2Ring.lean` | `MPSTensor.complexOfRing_single zsqrt2ToComplex i j`. |
-| `defectEis_apply_one_zero` | `TNLean/MPS/Examples/Z3Anomalous/Z3AnomalousDefect.lean` | Evaluate `Z3Anomalous.defectEis 1 0` using `summandEis`, `defectBond`, `identityEis`, `uEis`, and `uDagEis`; the only nonzero block is `uEis 1 0` on coordinates 1 and 2. |
-| `pairTarget_eq` | `TNLean/MPS/Examples/Z3Anomalous/Z3AnomalousDefectCompression.lean` | `Z3Anomalous.summandMPS_eq (ab.1 + ab.2) i`, after unfolding `pairTarget` and `pairTargetEis`. |
-| `uMPS_apply_three` | `TNLean/MPS/Examples/Z3Anomalous/Z3AnomalousTensor.lean` | `Z3Anomalous.uMPS_eq 3`, `uEisMPS`, and the `(1, 0)` clause of `uEis`, followed by entrywise evaluation of `complexOfEisenstein`. |
-| `uMPS_apply_seven` | `TNLean/MPS/Examples/Z3Anomalous/Z3AnomalousTensor.lean` | `Z3Anomalous.uMPS_eq 7`, `uEisMPS`, and the `(2, 1)` clause of `uEis`, followed by entrywise evaluation of `complexOfEisenstein`. |
-| `uMPS_apply_two` | `TNLean/MPS/Examples/Z3Anomalous/Z3AnomalousTensor.lean` | `Z3Anomalous.uMPS_eq 2`, `uEisMPS`, and the `(0, 2)` clause of `uEis`, followed by entrywise evaluation of `complexOfEisenstein`. |
-| `mpvExpectation_add` | `TNLean/MPS/Preparation/DepthLowerBoundCore.lean` | Expand `MPSTensor.mpvExpectation` and use `map_add`, `LinearMap.add_apply`, and `inner_add_right`. |
-| `conjTranspose_physicalMatrix_approximatingTensor_mul_blocked` | `TNLean/MPS/Preparation/OrthogonalBlockSum.lean` | `Matrix.conjTranspose_polarIso_mul_eq_zero h` in `Preparation/PolarUniqueness.lean`, after expanding `approximatingTensor`, `physicalMatrix_rotatePhysical`, and `polarIsoMatrix`; conjugate transpose reverses the product, and `Matrix.submatrix_mul` transports the bond coordinates. |
-| `posSemidef_embeddedBlockState` (private) | `TNLean/MPS/Preparation/OverlappingBlockOverlap.lean` | `Matrix.PosSemidef.mul_mul_conjTranspose_same`: apply `hσ.mul_mul_conjTranspose_same _` to the definition of `MPSTensor.embeddedBlockState`. |
+| `defectEis_apply_one_zero` | `TNLean/MPS/Examples/Z3/Z3AnomalousDefect.lean` | Evaluate `Z3Anomalous.defectEis 1 0` using `summandEis`, `defectBond`, `identityEis`, `uEis`, and `uDagEis`; the only nonzero block is `uEis 1 0` on coordinates 1 and 2. |
+| `pairTarget_eq` | `TNLean/MPS/Examples/Z3/Z3AnomalousDefectCompression.lean` | `Z3Anomalous.summandMPS_eq (ab.1 + ab.2) i`, after unfolding `pairTarget` and `pairTargetEis`. |
+| `uMPS_apply_three` | `TNLean/MPS/Examples/Z3/Z3AnomalousTensor.lean` | `Z3Anomalous.uMPS_eq 3`, `uEisMPS`, and the `(1, 0)` clause of `uEis`, followed by entrywise evaluation of `complexOfEisenstein`. |
+| `uMPS_apply_seven` | `TNLean/MPS/Examples/Z3/Z3AnomalousTensor.lean` | `Z3Anomalous.uMPS_eq 7`, `uEisMPS`, and the `(2, 1)` clause of `uEis`, followed by entrywise evaluation of `complexOfEisenstein`. |
+| `uMPS_apply_two` | `TNLean/MPS/Examples/Z3/Z3AnomalousTensor.lean` | `Z3Anomalous.uMPS_eq 2`, `uEisMPS`, and the `(0, 2)` clause of `uEis`, followed by entrywise evaluation of `complexOfEisenstein`. |
+| `mpvExpectation_add` | `TNLean/MPS/Preparation/Normal/DepthLowerBoundCore.lean` | Expand `MPSTensor.mpvExpectation` and use `map_add`, `LinearMap.add_apply`, and `inner_add_right`. |
+| `conjTranspose_physicalMatrix_approximatingTensor_mul_blocked` | `TNLean/MPS/Preparation/BlockSum/OrthogonalBlockSum.lean` | `Matrix.conjTranspose_polarIso_mul_eq_zero h` in `Preparation/PolarUniqueness.lean`, after expanding `approximatingTensor`, `physicalMatrix_rotatePhysical`, and `polarIsoMatrix`; conjugate transpose reverses the product, and `Matrix.submatrix_mul` transports the bond coordinates. |
+| `posSemidef_embeddedBlockState` (private) | `TNLean/MPS/Preparation/BlockSum/OverlappingBlockOverlap.lean` | `Matrix.PosSemidef.mul_mul_conjTranspose_same`: apply `hσ.mul_mul_conjTranspose_same _` to the definition of `MPSTensor.embeddedBlockState`. |
 
 ## Worked examples and source citations
 

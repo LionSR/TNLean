@@ -1,0 +1,657 @@
+/-
+Copyright (c) 2026 Sirui Lu. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Sirui Lu
+-/
+import QICLean.Kraus.BlockTriangularWord
+import QICLean.Algebra.Module.FlagBlockTriangular
+import TNLean.MPS.Tensor.Words.Basic
+import TNLean.MPS.Tensor.Reduction.Reduction
+import TNLean.MPS.FundamentalTheorem.WordModule.Flag
+import TNLean.MPS.Tensor.Words.TracePairing
+
+/-!
+# The multi-block asymmetric compression data
+
+This file records the conclusion of the multi-block asymmetric compression theorem
+(`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5, Theorem 7.7) as a
+structure, and derives from it the biorthogonality, compression, remainder and dimension clauses
+(iv)–(vii) of that theorem.
+
+A tensor `B` is compressed onto a finite family of blocks `C s`, `s ∈ S`, when there is a change
+of coordinates on the bond space of `B` in which every `B^i` is block upper triangular for one
+common decomposition into `|S| + z` blocks, the block of the slot `s` is `C s`, and the remaining
+`z` blocks are one-dimensional and zero.
+
+## Main definitions
+
+* `MPSTensor.BlockIndex`, `MPSTensor.slotSize`, `MPSTensor.BlockSpace`: the block labels, their
+  sizes and the resulting graded coordinate space.
+* `MPSTensor.conjMatrix`: the matrix of a bond-space operator in the block coordinates.
+* `MPSTensor.MultiBlockCompression`: the data of Theorem 7.7, clauses (i)–(iii).
+* `MPSTensor.MultiBlockCompression.left`, `MPSTensor.MultiBlockCompression.right`: the
+  compression pair of a slot (the note's `W_s` and `V_s`).
+* `MPSTensor.MultiBlockCompression.remainder`: the remainder `R^i` of clause (vi).
+* `MPSTensor.FlagData.cflag`: the flag of a labelled invariant flag, read as a flag of complex
+  subspaces.
+
+## Main results
+
+* `MPSTensor.MultiBlockCompression.dim_eq`: the dimension count, clause (vii).
+* `MPSTensor.MultiBlockCompression.left_mul_right_self`,
+  `MPSTensor.MultiBlockCompression.left_mul_right_of_ne`: biorthogonality, clause (iv).
+* `MPSTensor.MultiBlockCompression.left_mul_evalWord_mul_right`,
+  `MPSTensor.MultiBlockCompression.isReduction`: the compression identity, clause (v).
+* `MPSTensor.MultiBlockCompression.evalWord_remainder_eq_zero`: nilpotency of the remainder,
+  clause (vi).
+* `MPSTensor.FlagData.exists_blockCoordinates`,
+  `MPSTensor.FlagData.exists_blockCoordinates_of_equiv`: coordinates on the steps of a labelled
+  invariant flag, turning the one-letter actions into the prescribed diagonal blocks.
+* `MPSTensor.exists_multiBlockCompression_of_isNormal`: the theorem itself, that a tensor whose
+  positive-length word traces are the sums of the word traces of a finite family of normal
+  blocks admits a multi-block compression onto that family.
+
+## References
+
+Blueprint chapter *The Multi-Block Asymmetric Fundamental Theorem* (`ch:asymmetric_ft`):
+`thm:asym_multiblock`, *Multi-block asymmetric compression theorem*.
+
+## The single-block asymmetric compression theorem
+
+The one-block case of the multi-block asymmetric compression theorem
+(`Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`, §7.5, Theorem 7.7)
+recovers the reduction theorem of Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Proposition 20,
+and sharpens the nilpotency length of its residual to `D_B - D_A + 1`: with one target slot the
+number of blocks is `1 + z = D_B - D_A + 1`.
+
+### Main results
+
+* `MPSTensor.exists_isReduction_and_nilpotent_of_isNormal`: a tensor with the same
+  positive-length periodic vectors as a normal tensor of positive bond dimension admits a
+  rectangular reduction onto it whose residual is nilpotent of length `D_B - D_A + 1`.
+-/
+
+section
+
+open scoped Matrix
+
+namespace MPSTensor
+
+variable {d DB : ℕ} {ι : Type*} {D : ι → ℕ}
+
+/-- Block labels of a multi-block compression: the target slots `s ∈ S` together with `z`
+one-dimensional zero slots (Theorem 7.7(i)–(iii)). -/
+abbrev BlockIndex (S : Finset ι) (z : ℕ) : Type _ := {s // s ∈ S} ⊕ Fin z
+
+/-- Block sizes: the bond dimension `D s` on a target slot, and `1` on a zero slot. The
+definition is reducible so that the diagonal block of a target slot has the bond dimension of
+that slot on the nose. -/
+abbrev slotSize (D : ι → ℕ) {S : Finset ι} {z : ℕ} (b : BlockIndex S z) : ℕ :=
+  Sum.rec (motive := fun _ => ℕ) (fun s => D s.1) (fun _ => 1) b
+
+/-- The graded coordinate space of a multi-block compression. -/
+abbrev BlockSpace (D : ι → ℕ) (S : Finset ι) (z : ℕ) : Type _ :=
+  (b : BlockIndex S z) × Fin (slotSize D b)
+
+variable [DecidableEq ι]
+
+section ConjMatrix
+
+variable {S : Finset ι} {z : ℕ}
+
+/-- A coordinate change of the bond space, read as a linear equivalence of matrix algebras. -/
+noncomputable def conjMatrixEquiv (g : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S z → ℂ)) :
+    Matrix (Fin DB) (Fin DB) ℂ ≃ₗ[ℂ]
+      Matrix (BlockSpace D S z) (BlockSpace D S z) ℂ :=
+  Matrix.toLin' ≪≫ₗ g.conj ≪≫ₗ LinearMap.toMatrix'
+
+/-- The matrix of a bond-space operator `A` in the block coordinates given by `g`. -/
+noncomputable def conjMatrix (g : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S z → ℂ))
+    (A : Matrix (Fin DB) (Fin DB) ℂ) : Matrix (BlockSpace D S z) (BlockSpace D S z) ℂ :=
+  conjMatrixEquiv g A
+
+variable (g : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S z → ℂ))
+
+theorem conjMatrix_apply (A : Matrix (Fin DB) (Fin DB) ℂ) :
+    conjMatrix g A = LinearMap.toMatrix' (g.conj (Matrix.toLin' A)) := rfl
+
+/-- The matrix of the coordinate change itself. -/
+noncomputable def gaugeMatrix : Matrix (BlockSpace D S z) (Fin DB) ℂ :=
+  LinearMap.toMatrix' (g : (Fin DB → ℂ) →ₗ[ℂ] (BlockSpace D S z → ℂ))
+
+/-- The matrix of the inverse coordinate change. -/
+noncomputable def gaugeMatrixInv : Matrix (Fin DB) (BlockSpace D S z) ℂ :=
+  LinearMap.toMatrix' (g.symm : (BlockSpace D S z → ℂ) →ₗ[ℂ] (Fin DB → ℂ))
+
+@[simp] theorem gaugeMatrix_mul_gaugeMatrixInv : gaugeMatrix g * gaugeMatrixInv g = 1 := by
+  rw [gaugeMatrix, gaugeMatrixInv, ← LinearMap.toMatrix'_comp]
+  simp
+
+@[simp] theorem gaugeMatrixInv_mul_gaugeMatrix : gaugeMatrixInv g * gaugeMatrix g = 1 := by
+  rw [gaugeMatrix, gaugeMatrixInv, ← LinearMap.toMatrix'_comp]
+  simp
+
+theorem conjMatrix_eq_gaugeMatrix_mul (A : Matrix (Fin DB) (Fin DB) ℂ) :
+    conjMatrix g A = gaugeMatrix g * A * gaugeMatrixInv g := by
+  rw [conjMatrix_apply, LinearEquiv.conj_apply, LinearMap.toMatrix'_comp,
+    LinearMap.toMatrix'_comp, LinearMap.toMatrix'_toLin', gaugeMatrix, gaugeMatrixInv]
+
+theorem conjMatrix_mul (A A' : Matrix (Fin DB) (Fin DB) ℂ) :
+    conjMatrix g (A * A') = conjMatrix g A * conjMatrix g A' := by
+  rw [conjMatrix_apply, conjMatrix_apply, conjMatrix_apply, Matrix.toLin'_mul,
+    LinearEquiv.conj_comp, LinearMap.toMatrix'_comp]
+
+@[simp] theorem conjMatrix_one : conjMatrix g 1 = 1 := by
+  rw [conjMatrix_apply, Matrix.toLin'_one, LinearEquiv.conj_id, LinearMap.toMatrix'_id]
+
+@[simp] theorem conjMatrix_zero : conjMatrix g (0 : Matrix (Fin DB) (Fin DB) ℂ) = 0 :=
+  map_zero (conjMatrixEquiv g)
+
+theorem conjMatrix_sub (A A' : Matrix (Fin DB) (Fin DB) ℂ) :
+    conjMatrix g (A - A') = conjMatrix g A - conjMatrix g A' :=
+  map_sub (conjMatrixEquiv g) A A'
+
+theorem conjMatrix_sum {κ : Type*} (t : Finset κ) (f : κ → Matrix (Fin DB) (Fin DB) ℂ) :
+    conjMatrix g (∑ x ∈ t, f x) = ∑ x ∈ t, conjMatrix g (f x) :=
+  map_sum (conjMatrixEquiv g) f t
+
+theorem conjMatrix_injective : Function.Injective (conjMatrix (D := D) g) :=
+  (conjMatrixEquiv g).injective
+
+/-- Word evaluation commutes with the change of block coordinates. -/
+theorem evalWord_conjMatrix (B : MPSTensor d DB) (w : List (Fin d)) :
+    Kraus.evalWord (fun i => conjMatrix g (B i)) w = conjMatrix g (Kraus.evalWord B w) := by
+  induction w with
+  | nil => simp [Kraus.evalWord]
+  | cons i w ih => rw [Kraus.evalWord, ih, Kraus.evalWord, conjMatrix_mul]
+
+end ConjMatrix
+
+/-- **Multi-block asymmetric compression data** (P5 note, Theorem 7.7(i)–(iii)). There are `z`
+zero slots, an ordering `ord` of the `|S| + z` blocks, and a change of coordinates `gauge` of the
+bond space of `B` in which every `B^i` is block upper triangular, the diagonal block of the slot
+`s` is `C s`, and the diagonal block of each zero slot is the `1 × 1` zero matrix. -/
+structure MultiBlockCompression (B : MPSTensor d DB) (S : Finset ι)
+    (C : ∀ s, MPSTensor d (D s)) where
+  /-- the number of zero slots -/
+  z : ℕ
+  /-- the ordering of the blocks -/
+  ord : BlockIndex S z ≃ Fin (S.card + z)
+  /-- the change of coordinates of the bond space -/
+  gauge : (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S z → ℂ)
+  /-- every one-site matrix is block upper triangular, clause (i) -/
+  triangular : ∀ i, (conjMatrix gauge (B i)).BlockTriangular fun x => ord x.1
+  /-- the diagonal block of a target slot is the corresponding block, clause (ii) -/
+  matched : ∀ (i : Fin d) (s : {s // s ∈ S}),
+    (conjMatrix gauge (B i)).blockDiag' (Sum.inl s) = C s.1 i
+  /-- the diagonal block of a zero slot vanishes, clause (iii) -/
+  unmatched : ∀ (i : Fin d) (t : Fin z), (conjMatrix gauge (B i)).blockDiag' (Sum.inr t) = 0
+
+namespace MultiBlockCompression
+
+variable {B : MPSTensor d DB} {S : Finset ι} {C : ∀ s, MPSTensor d (D s)}
+  (P : MultiBlockCompression B S C)
+
+/-- **The dimension count** (P5 note, Theorem 7.7(vii), `eq:p5-main-dimension`). -/
+theorem dim_eq : DB = ∑ s ∈ S, D s + P.z := by
+  have h := P.gauge.finrank_eq
+  rw [Module.finrank_fintype_fun_eq_card, Module.finrank_fintype_fun_eq_card, Fintype.card_fin,
+    Fintype.card_sigma, Fintype.sum_sum_type] at h
+  simpa [Finset.sum_attach S D] using h
+
+/-- The compression out of the bond space of `B` onto the slot `s` (the note's `W_s`). -/
+noncomputable def left (s : {s // s ∈ S}) : Matrix (Fin (D s.1)) (Fin DB) ℂ :=
+  Matrix.blockProj (slotSize D) (Sum.inl s) * gaugeMatrix P.gauge
+
+/-- The compression into the bond space of `B` from the slot `s` (the note's `V_s`). -/
+noncomputable def right (s : {s // s ∈ S}) : Matrix (Fin DB) (Fin (D s.1)) ℂ :=
+  gaugeMatrixInv P.gauge * Matrix.blockEmbed (slotSize D) (Sum.inl s)
+
+/-- Sandwiching a bond-space operator between two compressions reads off the corresponding
+off-diagonal block of its matrix in the block coordinates. -/
+theorem left_mul_mul_right (A : Matrix (Fin DB) (Fin DB) ℂ) (s t : {s // s ∈ S}) :
+    P.left s * A * P.right t =
+      Matrix.blockProj (slotSize D) (Sum.inl s) * conjMatrix P.gauge A *
+        Matrix.blockEmbed (slotSize D) (Sum.inl t) := by
+  simp only [left, right, conjMatrix_eq_gaugeMatrix_mul, Matrix.mul_assoc]
+
+/-- **Biorthogonality of a slot with itself** (P5 note, `eq:p5-main-biorthogonality`). -/
+theorem left_mul_right_self (s : {s // s ∈ S}) : P.left s * P.right s = 1 := by
+  simp only [left, right, Matrix.mul_assoc]
+  rw [← Matrix.mul_assoc (gaugeMatrix P.gauge), gaugeMatrix_mul_gaugeMatrixInv, Matrix.one_mul,
+    Matrix.blockProj_mul_blockEmbed_self]
+
+/-- **Biorthogonality of two distinct slots** (P5 note, `eq:p5-main-biorthogonality`). -/
+theorem left_mul_right_of_ne {s t : {s // s ∈ S}} (h : s ≠ t) : P.left s * P.right t = 0 := by
+  simp only [left, right, Matrix.mul_assoc]
+  rw [← Matrix.mul_assoc (gaugeMatrix P.gauge), gaugeMatrix_mul_gaugeMatrixInv, Matrix.one_mul,
+    Matrix.blockProj_mul_blockEmbed_of_ne (fun hst => h (Sum.inl_injective hst))]
+
+/-- **The compression identity** (P5 note, `eq:p5-main-compression`). Compressing a word of `B`
+to the slot `s` gives the corresponding word of `C s`. -/
+theorem left_mul_evalWord_mul_right (s : {s // s ∈ S}) (w : List (Fin d)) :
+    P.left s * Kraus.evalWord B w * P.right s = Kraus.evalWord (C s.1) w := by
+  rw [P.left_mul_mul_right, Matrix.blockProj_mul_mul_blockEmbed, ← evalWord_conjMatrix,
+    Matrix.blockDiag'_evalWord P.ord.injective P.triangular]
+  simp [P.matched]
+
+/-- Each slot of a multi-block compression is a rectangular reduction of `B`. -/
+theorem isReduction (s : {s // s ∈ S}) :
+    MPSTensor.IsReduction B (C s.1) (P.left s) (P.right s) :=
+  ⟨P.left_mul_right_self s, P.left_mul_evalWord_mul_right s⟩
+
+/-- **The remainder** `R^i = B^i - ∑_s V_s C_s^i W_s` (P5 note,
+`eq:p5-main-reconstruction`). -/
+noncomputable def remainder : MPSTensor d DB :=
+  fun i => B i - ∑ s : {s // s ∈ S}, P.right s * C s.1 i * P.left s
+
+/-- Conjugating a slot-supported operator back to the block coordinates places it in the
+diagonal block of that slot. -/
+theorem conjMatrix_right_mul_mul_left (s : {s // s ∈ S})
+    (X : Matrix (Fin (D s.1)) (Fin (D s.1)) ℂ) :
+    conjMatrix P.gauge (P.right s * X * P.left s) =
+      Matrix.blockEmbed (slotSize D) (Sum.inl s) * X *
+        Matrix.blockProj (slotSize D) (Sum.inl s) := by
+  simp only [conjMatrix_eq_gaugeMatrix_mul, left, right, Matrix.mul_assoc]
+  rw [gaugeMatrix_mul_gaugeMatrixInv, Matrix.mul_one,
+    ← Matrix.mul_assoc (gaugeMatrix P.gauge), gaugeMatrix_mul_gaugeMatrixInv, Matrix.one_mul]
+
+/-- In the block coordinates the remainder is the matrix of `B^i` with its diagonal blocks
+removed. -/
+theorem conjMatrix_remainder (i : Fin d) :
+    conjMatrix P.gauge (P.remainder i) =
+      conjMatrix P.gauge (B i) -
+        Matrix.blockDiagonal' (conjMatrix P.gauge (B i)).blockDiag' := by
+  have hsum : ∑ s : {s // s ∈ S}, conjMatrix P.gauge (P.right s * C s.1 i * P.left s) =
+      Matrix.blockDiagonal' (conjMatrix P.gauge (B i)).blockDiag' := by
+    rw [← Matrix.sum_blockEmbed_mul_mul_blockProj, Fintype.sum_sum_type]
+    have h2 : ∑ t : Fin P.z, Matrix.blockEmbed (slotSize D) (Sum.inr t) *
+        (conjMatrix P.gauge (B i)).blockDiag' (Sum.inr t) *
+        Matrix.blockProj (slotSize D) (Sum.inr t) = 0 :=
+      Finset.sum_eq_zero fun t _ => by rw [P.unmatched i t]; simp
+    rw [h2, add_zero]
+    exact Finset.sum_congr rfl fun s _ => by
+      rw [P.conjMatrix_right_mul_mul_left, P.matched i s]
+  rw [remainder, conjMatrix_sub, conjMatrix_sum, hsum]
+
+/-- **Nilpotency of the remainder** (P5 note, `eq:p5-main-nilpotency`). A product of as many
+remainder matrices as there are blocks vanishes. -/
+theorem evalWord_remainder_eq_zero (w : List (Fin d)) (hw : S.card + P.z ≤ w.length) :
+    Kraus.evalWord P.remainder w = 0 := by
+  have hstrict : ∀ i, Matrix.StrictBlockTriangular (⇑P.ord)
+      (conjMatrix P.gauge (P.remainder i)) := by
+    intro i
+    rw [P.conjMatrix_remainder i]
+    exact Matrix.StrictBlockTriangular.sub_blockDiagonal'_blockDiag' P.ord.injective
+      (P.triangular i)
+  have hzero := Matrix.evalWord_eq_zero_of_strictBlockTriangular hstrict w hw
+  rw [evalWord_conjMatrix] at hzero
+  refine conjMatrix_injective P.gauge ?_
+  rw [hzero, conjMatrix_zero]
+
+end MultiBlockCompression
+
+
+/-- Conjugating an endomorphism of a coordinate space by a relabelling of the coordinates
+reindexes its matrix. -/
+theorem toMatrix'_conj_funCongrLeft {α γ : Type*} [Fintype α] [DecidableEq α] [Fintype γ]
+    [DecidableEq γ] (τ : γ ≃ α) (Y : Module.End ℂ (α → ℂ)) :
+    LinearMap.toMatrix' ((LinearEquiv.funCongrLeft ℂ ℂ τ).conj Y) =
+      (LinearMap.toMatrix' Y).submatrix τ τ := by
+  ext c c'
+  have hv : (LinearEquiv.funCongrLeft ℂ ℂ τ).symm (Pi.single c' (1 : ℂ)) =
+      Pi.single (τ c') (1 : ℂ) := by
+    funext a
+    simp only [LinearEquiv.funCongrLeft_symm, LinearEquiv.funCongrLeft_apply,
+      LinearMap.funLeft_apply, Pi.single_apply, Equiv.symm_apply_eq]
+  simp only [LinearMap.toMatrix'_apply, Matrix.submatrix_apply, LinearEquiv.conj_apply_apply,
+    LinearEquiv.funCongrLeft_apply, LinearMap.funLeft_apply, hv]
+
+/-- The prescribed diagonal block at a block label: the target block on a slot, and the
+`1 × 1` zero matrix on a zero slot. -/
+def blockOf (D : ι → ℕ) {S : Finset ι} {z : ℕ} (C : ∀ s, MPSTensor d (D s)) (i : Fin d) :
+    ∀ b : BlockIndex S z, Matrix (Fin (slotSize D b)) (Fin (slotSize D b)) ℂ :=
+  Sum.rec (motive := fun b => Matrix (Fin (slotSize D b)) (Fin (slotSize D b)) ℂ)
+    (fun s => C s.1 i) fun _ => 0
+
+section FlagCoordinates
+
+open WordAlgebra
+
+omit [DecidableEq ι]
+
+variable {M : Type*} [AddCommGroup M] [Module ℂ M] [Module (WordAlgebra d) M]
+  [IsScalarTower ℂ (WordAlgebra d) M] {S : Finset ι} {C : ∀ s, MPSTensor d (D s)}
+
+/-- The flag of a labelled invariant flag, read as a flag of complex subspaces. -/
+noncomputable def FlagData.cflag (F : FlagData M S C) : Fin (F.r + 1) → Submodule ℂ M :=
+  fun k => (F.H k).restrictScalars ℂ
+
+theorem FlagData.cflag_zero (F : FlagData M S C) : F.cflag 0 = ⊥ := by
+  simp [FlagData.cflag, F.H_zero]
+
+theorem FlagData.cflag_last (F : FlagData M S C) : F.cflag (Fin.last F.r) = ⊤ := by
+  simp [FlagData.cflag, F.H_last]
+
+theorem FlagData.cflag_mono (F : FlagData M S C) : Monotone F.cflag :=
+  fun _ _ hab _ hx => F.H_mono hab hx
+
+/-- Every member of the flag is invariant under the action of a one-letter word. -/
+theorem FlagData.lsmul_mem_cflag (F : FlagData M S C) (i : Fin d) (k : Fin (F.r + 1)) :
+    ∀ x ∈ F.cflag k, Algebra.lsmul ℂ ℂ M (ofWord [i]) x ∈ F.cflag k :=
+  fun _ hx => (F.H k).smul_mem _ hx
+
+variable [FiniteDimensional ℂ M]
+
+omit [FiniteDimensional ℂ M] in
+/-- **Coordinates on a module isomorphic to a step of a labelled invariant flag**, in which the
+one-letter actions become the prescribed diagonal blocks: the corresponding block on a matched
+step, the `1 x 1` zero matrix on an unmatched step (P5 note, Theorem 7.7, clauses (ii) and
+(iii)). -/
+theorem FlagData.exists_blockCoordinates_of_equiv (F : FlagData M S C) (k : Fin F.r)
+    {Q : Type*} [AddCommGroup Q] [Module ℂ Q] [Module (WordAlgebra d) Q]
+    [IsScalarTower ℂ (WordAlgebra d) Q] [FiniteDimensional ℂ Q]
+    (γ : Q ≃ₗ[WordAlgebra d] F.step k) :
+    ∃ ψ : Q ≃ₗ[ℂ] (Fin (slotSize D (F.label k)) → ℂ), ∀ i : Fin d,
+      LinearMap.toMatrix' (ψ.conj (Algebra.lsmul ℂ ℂ Q (ofWord [i]))) =
+        blockOf D C i (F.label k) := by
+  classical
+  rcases hk : F.label k with s | t
+  · obtain ⟨ε⟩ := F.matched k s hk
+    set δ : Q ≃ₗ[WordAlgebra d] (C s.1).WordModule := γ ≪≫ₗ ε with hδ
+    refine ⟨(δ.restrictScalars ℂ) ≪≫ₗ (C s.1).wordRep.asModuleEquiv, fun i => ?_⟩
+    have hstep : ∀ x : Q, (C s.1).wordRep.asModuleEquiv (δ ((ofWord [i] : WordAlgebra d) • x)) =
+        C s.1 i *ᵥ (C s.1).wordRep.asModuleEquiv (δ x) := by
+      intro x
+      rw [map_smul, MPSTensor.asModuleEquiv_ofWord_smul]
+      simp [Kraus.evalWord]
+    have hmap : ((δ.restrictScalars ℂ) ≪≫ₗ (C s.1).wordRep.asModuleEquiv).conj
+        (Algebra.lsmul ℂ ℂ Q (ofWord [i])) = Matrix.toLin' (C s.1 i) := by
+      refine LinearMap.ext fun y => ?_
+      rw [LinearEquiv.conj_apply_apply, Matrix.toLin'_apply]
+      exact (hstep _).trans (congrArg (fun z => C s.1 i *ᵥ z)
+        (((δ.restrictScalars ℂ) ≪≫ₗ (C s.1).wordRep.asModuleEquiv).apply_symm_apply y))
+    rw [hmap, LinearMap.toMatrix'_toLin']
+    rfl
+  · have hdim : Module.finrank ℂ Q =
+        Module.finrank ℂ (Fin (slotSize D (Sum.inr t : BlockIndex S F.z)) → ℂ) := by
+      rw [(γ.restrictScalars ℂ).finrank_eq, F.unmatched_finrank k t hk,
+        Module.finrank_fintype_fun_eq_card]
+      simp
+    refine ⟨LinearEquiv.ofFinrankEq _ _ hdim, fun i => ?_⟩
+    have hzero : Algebra.lsmul ℂ ℂ Q (ofWord [i]) = 0 := by
+      refine LinearMap.ext fun x => ?_
+      rw [Algebra.lsmul_apply, LinearMap.zero_apply]
+      refine γ.injective ?_
+      rw [map_smul, F.unmatched_smul k t hk i (γ x), map_zero]
+    rw [hzero]
+    simp [blockOf]
+
+/-- **Coordinates on the steps of a labelled invariant flag**, in which the one-letter actions
+become the prescribed diagonal blocks: the corresponding block on a matched step, the `1 × 1`
+zero matrix on an unmatched step (P5 note, Theorem 7.7, clauses (ii) and (iii)). -/
+theorem FlagData.exists_blockCoordinates (F : FlagData M S C) (k : Fin F.r) :
+    ∃ ψ : Submodule.subquot (F.cflag k.castSucc) (F.cflag k.succ) ≃ₗ[ℂ]
+        (Fin (slotSize D (F.label k)) → ℂ),
+      ∀ i : Fin d, LinearMap.toMatrix' (ψ.conj (Submodule.subquotMap (F.cflag k.castSucc)
+        (F.cflag k.succ) (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i k.castSucc)
+        (F.lsmul_mem_cflag i k.succ))) = blockOf D C i (F.label k) := by
+  classical
+  let β : Submodule.subquot (F.cflag k.castSucc) (F.cflag k.succ) ≃ₗ[ℂ] F.step k :=
+    Submodule.Quotient.restrictScalarsEquiv ℂ ((F.H k.castSucc).comap (F.H k.succ).subtype)
+  have hβ : ∀ (i : Fin d) (x : Submodule.subquot (F.cflag k.castSucc) (F.cflag k.succ)),
+      β (Submodule.subquotMap (F.cflag k.castSucc) (F.cflag k.succ)
+          (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i k.castSucc)
+          (F.lsmul_mem_cflag i k.succ) x) =
+        (ofWord [i] : WordAlgebra d) • β x := by
+    intro i x
+    refine Submodule.Quotient.induction_on _ x fun v => ?_
+    rfl
+  rcases hk : F.label k with s | t
+  · obtain ⟨ε⟩ := F.matched k s hk
+    refine ⟨β.trans ((ε.restrictScalars ℂ).trans (C s.1).wordRep.asModuleEquiv), fun i => ?_⟩
+    have hcomm : ∀ x : Submodule.subquot (F.cflag k.castSucc) (F.cflag k.succ),
+        (C s.1).wordRep.asModuleEquiv (ε (β (Submodule.subquotMap (F.cflag k.castSucc)
+            (F.cflag k.succ) (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i k.castSucc)
+            (F.lsmul_mem_cflag i k.succ) x))) =
+          Matrix.toLin' (C s.1 i) ((C s.1).wordRep.asModuleEquiv (ε (β x))) := by
+      intro x
+      rw [hβ i x, map_smul, MPSTensor.asModuleEquiv_ofWord_smul, Matrix.toLin'_apply]
+      simp [Kraus.evalWord]
+    have hmap : (β.trans ((ε.restrictScalars ℂ).trans (C s.1).wordRep.asModuleEquiv)).conj
+        (Submodule.subquotMap (F.cflag k.castSucc) (F.cflag k.succ)
+          (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i k.castSucc)
+          (F.lsmul_mem_cflag i k.succ)) = Matrix.toLin' (C s.1 i) := by
+      refine LinearMap.ext fun y => ?_
+      rw [LinearEquiv.conj_apply_apply]
+      simpa using hcomm ((β.trans ((ε.restrictScalars ℂ).trans
+        (C s.1).wordRep.asModuleEquiv)).symm y)
+    rw [hmap, LinearMap.toMatrix'_toLin']
+    rfl
+  · have hdim : Module.finrank ℂ (Submodule.subquot (F.cflag k.castSucc) (F.cflag k.succ)) =
+        Module.finrank ℂ (Fin (slotSize D (Sum.inr t : BlockIndex S F.z)) → ℂ) := by
+      rw [β.finrank_eq, F.unmatched_finrank k t hk, Module.finrank_fintype_fun_eq_card]
+      simp
+    refine ⟨LinearEquiv.ofFinrankEq _ _ hdim, fun i => ?_⟩
+    have hzero : Submodule.subquotMap (F.cflag k.castSucc) (F.cflag k.succ)
+        (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i k.castSucc)
+        (F.lsmul_mem_cflag i k.succ) = 0 := by
+      refine LinearMap.ext fun x => ?_
+      have hx := hβ i x
+      rw [F.unmatched_smul k t hk i (β x)] at hx
+      simpa using β.map_eq_zero_iff.1 hx
+    rw [hzero]
+    simp [blockOf]
+
+end FlagCoordinates
+
+section FromFlag
+
+open WordAlgebra
+
+omit [DecidableEq ι]
+
+variable {M : Type*} [AddCommGroup M] [Module ℂ M] [Module (WordAlgebra d) M]
+  [IsScalarTower ℂ (WordAlgebra d) M] {S : Finset ι} {C : ∀ s, MPSTensor d (D s)}
+
+/-- The step labels of a labelled invariant flag, as a bijection onto the block labels. -/
+noncomputable def FlagData.labelEquiv (F : FlagData M S C) : Fin F.r ≃ BlockIndex S F.z :=
+  Equiv.ofBijective F.label F.label_bijective
+
+/-- A labelled invariant flag has one step for each block label. -/
+theorem FlagData.r_eq (F : FlagData M S C) : F.r = S.card + F.z := by
+  simpa [Fintype.card_sum] using Fintype.card_congr F.labelEquiv
+
+/-- The order of the block labels given by the positions of the steps of a labelled invariant
+flag. -/
+noncomputable def FlagData.slotOrder (F : FlagData M S C) :
+    BlockIndex S F.z ≃ Fin (S.card + F.z) :=
+  F.labelEquiv.symm.trans (finCongr F.r_eq)
+
+/-- The graded coordinate space indexed by the steps of a labelled invariant flag is the graded
+coordinate space indexed by the block labels. -/
+noncomputable def FlagData.blockSpaceEquiv (F : FlagData M S C) :
+    ((k : Fin F.r) × Fin (slotSize D (F.label k))) ≃ BlockSpace D S F.z :=
+  Equiv.sigmaCongrLeft (β := fun b : BlockIndex S F.z => Fin (slotSize D b)) F.labelEquiv
+
+theorem FlagData.blockSpaceEquiv_symm_fst (F : FlagData M S C) (b : BlockSpace D S F.z) :
+    (F.blockSpaceEquiv.symm b).1 = F.labelEquiv.symm b.1 := rfl
+
+variable [FiniteDimensional ℂ M]
+
+/-- The coordinates on the steps of a labelled invariant flag chosen in
+`MPSTensor.FlagData.exists_blockCoordinates`. -/
+noncomputable def FlagData.stepCoord (F : FlagData M S C) (k : Fin F.r) :
+    Submodule.subquot (F.cflag k.castSucc) (F.cflag k.succ) ≃ₗ[ℂ]
+      (Fin (slotSize D (F.label k)) → ℂ) :=
+  Classical.choose (F.exists_blockCoordinates k)
+
+theorem FlagData.toMatrix'_conj_stepCoord (F : FlagData M S C) (k : Fin F.r) (i : Fin d) :
+    LinearMap.toMatrix' ((F.stepCoord k).conj (Submodule.subquotMap (F.cflag k.castSucc)
+      (F.cflag k.succ) (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i k.castSucc)
+      (F.lsmul_mem_cflag i k.succ))) = blockOf D C i (F.label k) :=
+  Classical.choose_spec (F.exists_blockCoordinates k) i
+
+/-- Coordinates on the bond space adapted to a labelled invariant flag, chosen in
+`exists_linearEquiv_blockTriangular_of_flag` from the step coordinates `FlagData.stepCoord`. -/
+noncomputable def FlagData.adaptedCoord (F : FlagData M S C) :
+    M ≃ₗ[ℂ] ((Σ k : Fin F.r, Fin (slotSize D (F.label k))) → ℂ) :=
+  Classical.choose (exists_linearEquiv_blockTriangular_of_flag F.cflag F.cflag_zero F.cflag_last
+    F.cflag_mono (fun i => Algebra.lsmul ℂ ℂ M (ofWord [i])) F.lsmul_mem_cflag
+    (fun k => slotSize D (F.label k)) F.stepCoord)
+
+/-- The four properties of the adapted coordinates: block upper triangularity of the one-letter
+actions, their diagonal blocks, the coordinates of a vector of a step, and the vanishing of the
+coordinates of a vector of a step at all later positions (blueprint `lem:asym_composition_gauge`,
+*Composition-series triangular gauge*, and its proof). -/
+theorem FlagData.adaptedCoord_spec (F : FlagData M S C) :
+    (∀ i : Fin d, (LinearMap.toMatrix' (F.adaptedCoord.conj
+        (Algebra.lsmul ℂ ℂ M (ofWord [i])))).BlockTriangular Sigma.fst) ∧
+      (∀ (i : Fin d) (k : Fin F.r), Matrix.blockDiag' (LinearMap.toMatrix' (F.adaptedCoord.conj
+          (Algebra.lsmul ℂ ℂ M (ofWord [i])))) k =
+        LinearMap.toMatrix' ((F.stepCoord k).conj (Submodule.subquotMap (F.cflag k.castSucc)
+          (F.cflag k.succ) (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i k.castSucc)
+          (F.lsmul_mem_cflag i k.succ)))) ∧
+      (∀ (k : Fin F.r) (v : F.cflag k.succ) (j : Fin (slotSize D (F.label k))),
+        F.adaptedCoord (v : M) ⟨k, j⟩ = F.stepCoord k (Submodule.Quotient.mk v) j) ∧
+      (∀ k : Fin F.r, ∀ v ∈ F.cflag k.castSucc, ∀ l : Fin F.r, k ≤ l →
+        ∀ j, F.adaptedCoord v ⟨l, j⟩ = 0) :=
+  Classical.choose_spec (exists_linearEquiv_blockTriangular_of_flag F.cflag F.cflag_zero
+    F.cflag_last F.cflag_mono (fun i => Algebra.lsmul ℂ ℂ M (ofWord [i])) F.lsmul_mem_cflag
+    (fun k => slotSize D (F.label k)) F.stepCoord)
+
+end FromFlag
+
+section FromFlagGauge
+
+open WordAlgebra
+
+variable {S : Finset ι} {C : ∀ s, MPSTensor d (D s)} {B : MPSTensor d DB}
+
+/-- The change of coordinates of the bond space of `B` given by a labelled invariant flag of its
+word module: the flag-adapted coordinates, regraded by the block labels. -/
+noncomputable def FlagData.gauge (F : FlagData B.WordModule S C) :
+    (Fin DB → ℂ) ≃ₗ[ℂ] (BlockSpace D S F.z → ℂ) :=
+  (B.wordRep.asModuleEquiv.symm.trans F.adaptedCoord).trans
+    (LinearEquiv.funCongrLeft ℂ ℂ F.blockSpaceEquiv.symm)
+
+theorem FlagData.conjMatrix_gauge (F : FlagData B.WordModule S C) (i : Fin d) :
+    conjMatrix F.gauge (B i) =
+      (LinearMap.toMatrix' (F.adaptedCoord.conj
+        (Algebra.lsmul ℂ ℂ B.WordModule (ofWord [i])))).submatrix
+        F.blockSpaceEquiv.symm F.blockSpaceEquiv.symm := by
+  have hfi : B.wordRep.asModuleEquiv.symm.conj (Matrix.toLin' (B i)) =
+      Algebra.lsmul ℂ ℂ B.WordModule (ofWord [i]) := by
+    rw [MPSTensor.lsmul_wordModule_ofWord B [i]]
+    simp [Kraus.evalWord]
+  rw [conjMatrix_apply, FlagData.gauge,
+    show ((B.wordRep.asModuleEquiv.symm.trans F.adaptedCoord).trans
+        (LinearEquiv.funCongrLeft ℂ ℂ F.blockSpaceEquiv.symm)).conj (Matrix.toLin' (B i)) =
+      (LinearEquiv.funCongrLeft ℂ ℂ F.blockSpaceEquiv.symm).conj
+        (F.adaptedCoord.conj (B.wordRep.asModuleEquiv.symm.conj (Matrix.toLin' (B i)))) from rfl,
+    hfi, toMatrix'_conj_funCongrLeft]
+
+/-- In the coordinates given by a labelled invariant flag, every one-site matrix is block upper
+triangular for the order of the steps (blueprint `thm:asym_multiblock`, *Multi-block asymmetric
+compression theorem*, clause (i)). -/
+theorem FlagData.blockTriangular_conjMatrix_gauge (F : FlagData B.WordModule S C) (i : Fin d) :
+    (conjMatrix F.gauge (B i)).BlockTriangular fun x => F.slotOrder x.1 := by
+  intro x y hlt
+  rw [F.conjMatrix_gauge i, Matrix.submatrix_apply]
+  refine F.adaptedCoord_spec.1 i ?_
+  simp only [FlagData.blockSpaceEquiv_symm_fst]
+  exact hlt
+
+/-- In the coordinates given by a labelled invariant flag, the diagonal blocks of every one-site
+matrix are the prescribed ones (blueprint `thm:asym_multiblock`, *Multi-block asymmetric compression
+theorem*, clauses (ii)–(iii)). -/
+theorem FlagData.blockDiag'_conjMatrix_gauge (F : FlagData B.WordModule S C) (i : Fin d)
+    (b : BlockIndex S F.z) : (conjMatrix F.gauge (B i)).blockDiag' b = blockOf D C i b := by
+  obtain ⟨k, rfl⟩ := F.label_bijective.2 b
+  have hx : ∀ p : Fin (slotSize D (F.label k)),
+      F.blockSpaceEquiv.symm ⟨F.label k, p⟩ =
+        (⟨k, p⟩ : (k : Fin F.r) × Fin (slotSize D (F.label k))) :=
+    fun p => F.blockSpaceEquiv.symm_apply_apply ⟨k, p⟩
+  ext p q
+  have hd := congrFun (congrFun (F.adaptedCoord_spec.2.1 i k) p) q
+  rw [Matrix.blockDiag'_apply] at hd
+  rw [F.conjMatrix_gauge i, Matrix.blockDiag'_apply, Matrix.submatrix_apply, hx p, hx q, hd,
+    F.toMatrix'_conj_stepCoord k i]
+
+/-- **The multi-block compression of a labelled invariant flag** (blueprint
+`prop:asym_uniq_dictionary`, *A compression is a labelled flag with an adapted basis*, converse
+direction; blueprint `thm:asym_multiblock`, clauses (i)–(iii)). A labelled invariant flag of the
+word module of `B` gives a multi-block compression of `B`: the change of coordinates is the
+flag-adapted one, regraded by the block labels, and the slots are ordered by the positions of their
+steps. -/
+noncomputable def FlagData.toMultiBlockCompression (F : FlagData B.WordModule S C) :
+    MultiBlockCompression B S C where
+  z := F.z
+  ord := F.slotOrder
+  gauge := F.gauge
+  triangular := F.blockTriangular_conjMatrix_gauge
+  matched i s := F.blockDiag'_conjMatrix_gauge i (Sum.inl s)
+  unmatched i t := F.blockDiag'_conjMatrix_gauge i (Sum.inr t)
+
+end FromFlagGauge
+
+open WordAlgebra in
+/-- **The multi-block asymmetric compression theorem** (P5 note, Theorem 7.7,
+`thm:p5-asymmetric-compression`, clauses (i)–(iii)). A tensor whose positive-length word traces
+are the sums of the word traces of a finite family of normal blocks of positive bond dimension
+admits a multi-block compression onto that family. -/
+theorem exists_multiBlockCompression_of_isNormal (S : Finset ι) (C : ∀ s, MPSTensor d (D s))
+    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) (B : MPSTensor d DB)
+    (htr : ∀ w : List (Fin d), w ≠ [] →
+      Matrix.trace (Kraus.evalWord B w) = ∑ s ∈ S, Matrix.trace (Kraus.evalWord (C s) w)) :
+    Nonempty (MultiBlockCompression B S C) := by
+  classical
+  obtain ⟨F⟩ := exists_flagData C hC hD B.WordModule
+    fun w hw => by rw [traceWord_wordModule]; exact htr w hw
+  exact ⟨F.toMultiBlockCompression⟩
+
+end MPSTensor
+
+end
+
+section
+
+namespace MPSTensor
+
+variable {d DA DB : ℕ}
+
+/-- **Single-block asymmetric compression** (Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2,
+Proposition 20, with the nilpotency length of Proposition 21 sharpened to `D_B - D_A + 1`).
+A tensor `B` with the same positive-length periodic vectors as a normal tensor `A` of positive
+bond dimension is a rectangular reduction onto `A`, and the residual of the reduction is
+nilpotent: every product of `D_B - D_A + 1` of its matrices vanishes. -/
+theorem exists_isReduction_and_nilpotent_of_isNormal (A : MPSTensor d DA)
+    (hA : Kraus.IsNormal A) (hDA : 0 < DA) (B : MPSTensor d DB) (hSame : SameMPV₂Pos B A) :
+    ∃ (V : Matrix (Fin DA) (Fin DB) ℂ) (W : Matrix (Fin DB) (Fin DA) ℂ),
+      IsReduction B A V W ∧
+        ∀ w : List (Fin d), DB - DA + 1 ≤ w.length →
+          Kraus.evalWord (fun i => B i - W * A i * V) w = 0 := by
+  obtain ⟨P⟩ := exists_multiBlockCompression_of_isNormal (ι := Unit) (D := fun _ => DA)
+    {()} (fun _ => A) (fun _ _ => hA) (fun _ _ => hDA) B
+    fun w hw => by simpa using hSame.trace_evalWord w hw
+  set s₀ : {s // s ∈ ({()} : Finset Unit)} := ⟨(), Finset.mem_singleton_self ()⟩ with hs₀
+  refine ⟨P.left s₀, P.right s₀, P.isReduction s₀, ?_⟩
+  have hdim : DB = DA + P.z := by simpa using P.dim_eq
+  have hcard : ({()} : Finset Unit).card = 1 := rfl
+  have hsingle : ∀ s : {s // s ∈ ({()} : Finset Unit)}, s = s₀ :=
+    fun s => Subtype.ext (Subsingleton.elim _ _)
+  have hsum : ∀ i : Fin d, (∑ s : {s // s ∈ ({()} : Finset Unit)},
+      P.right s * A i * P.left s) = P.right s₀ * A i * P.left s₀ :=
+    fun i => Finset.sum_eq_single_of_mem s₀ (Finset.mem_univ s₀)
+      fun b _ hb => absurd (hsingle b) hb
+  have hrem : (fun i => B i - P.right s₀ * A i * P.left s₀) = P.remainder := by
+    funext i
+    simp only [MultiBlockCompression.remainder, hsum i]
+  intro w hw
+  rw [hrem]
+  refine P.evalWord_remainder_eq_zero w ?_
+  omega
+
+end MPSTensor
+
+end

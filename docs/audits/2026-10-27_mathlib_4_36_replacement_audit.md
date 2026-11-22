@@ -27,7 +27,7 @@ linear independence of a matrix's rows into surjectivity of its action.
 `Matrix.mulVec_injective_iff` in `Matrix/ToLin.lean` already identifies
 injectivity with linear independence of columns.
 
-In `TNLean/PEPS/ParentHamiltonian/InjectiveRegionSupport.lean`, the private
+In `TNLean/PEPS/ParentHamiltonian/Injective/InjectiveRegionSupport.lean`, the private
 `range_mul_transpose_of_injective` declaration is removed entirely, with no
 compatibility alias. Its sole caller,
 `range_regionReducedDensity_eq_regionGroundSpace_of_injective_complement`,
@@ -98,7 +98,7 @@ Source-level equivalence does not establish successful Lean elaboration.
   implementation was identified in the bounded search.
 - **Fusion/based rings and NIM-representations.**
   No matching new based-ring, fusion-ring or NIM-representation interface
-  was identified. TNLean's `MPS/Symmetry/MPOSymmetry/FusionRing.lean` and
+  was identified. TNLean's `MPS/Symmetry/MPOSymmetry/Fusion/FusionRing.lean` and
   `NIMRep.lean` remain local layers; this draft does not claim their
   migration is complete or infer completeness from keyword absence.
 - **Star-closed matrix-algebra semisimplicity.**

@@ -3,7 +3,7 @@
 The identity `(-1) ^ (x + y).val = (-1) ^ x.val * (-1) ^ y.val` for `x y : ZMod 2`
 was proved twice under the short name `neg_one_pow_val_add`: once in `ℂˣ`, in
 `TNLean/Algebra/ScalarThreeCocycleCyclicExamples.lean` (with the two sides
-exchanged), and once in `ℂ`, in `TNLean/MPS/MPDO/CZXGaussCircuitTuple.lean`. Both
+exchanged), and once in `ℂ`, in `TNLean/MPS/MPDO/CZX/CZXGaussCircuitTuple.lean`. Both
 are instances of one statement over a monoid with distributive negation, now
 `ZMod.neg_one_pow_val_add` in `TNLean/Algebra/BinaryCharacterSum.lean`.
 

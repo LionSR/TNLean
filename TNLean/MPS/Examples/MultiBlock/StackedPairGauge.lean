@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import QICLean.Kraus.Injectivity
 import QICLean.Algebra.Matrix.MatrixSingleSpan
-import TNLean.MPS.FundamentalTheorem.Reduction.ProjectorWeightedSum
+import TNLean.MPS.FundamentalTheorem.Compression.ProjectorWeightedSum
 
 /-!
 # The adapted inner-bond basis shared by stacked pair products

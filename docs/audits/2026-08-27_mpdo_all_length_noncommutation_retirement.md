@@ -1,7 +1,7 @@
 # Deletion of the all-length non-commutation route (2026-08-27)
 
 This note records the simplification of the active periodic-sector proof route
-in `TNLean/MPS/MPDO/CyclicProjector.lean`. The old all-length interface has no
+in `TNLean/MPS/MPDO/Vertical/CyclicProjector.lean`. The old all-length interface has no
 non-`Archive` Lean consumers. Under TNLean's explicit no-public-API-
 compatibility policy, its predicate and two wrapper theorems are deleted
 directly rather than retained as deprecated declarations. The two obsolete

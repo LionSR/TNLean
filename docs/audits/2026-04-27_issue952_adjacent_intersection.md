@@ -29,7 +29,7 @@ principal-angle estimate must be applied.
 
 ### Local ground-space transport
 
-- `MPSTensor.mem_groundSpaceES_iff` (`TNLean/MPS/ParentHamiltonian/Defs.lean`):
+- `MPSTensor.mem_groundSpaceES_iff` (`TNLean/MPS/Tensor/GroundSpace/ParentHamiltonian.lean`):
   membership in `groundSpaceES A L` is equivalent to membership of the transported
   vector in the original `groundSpace A L`.
 

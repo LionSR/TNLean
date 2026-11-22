@@ -94,7 +94,7 @@ at its promotion threshold. The central ledger is already edited by active
 
 ## Verification
 
-- Focused `lake build TNLean.MPS.Preparation.ArbitraryTensorAfterBlocking`
+- Focused `lake build TNLean.MPS.Preparation.Measurement.OverlappingLogLogPreparation`
   passes: **19,209 jobs**. It includes the canonical constructor, sector
   construction, generalized logarithmic preparation and both final results.
 - All four edited proof modules pass direct strict elaboration with automatic
@@ -257,7 +257,7 @@ exposes no more specific approval reason; this is not a Lean elaboration result.
 No workflow approval, rerun, policy change, or merge of the PR was requested.
 
 Local reconciliation validation passes: the two campaign aggregates plus
-`TNLean.MPS.MPU.Examples.ShiftTildeSymmetricPhases` build (20,387 jobs); strict
+`TNLean.MPS.Examples.Shift.ShiftTildeSymmetricPhases` build (20,387 jobs); strict
 checks against main `95f5970db777f4c2fd1e16d1ac36281b84f46aff` pass all six
 campaign Lean files, and the reconciled MPU file separately passes the same
 strict flags. Its contents match main byte-for-byte. All four campaign proof

@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.SpinCover.Basic
 import QICLean.Algebra.Matrix.MatrixSingleSpan
-import TNLean.MPS.CanonicalForm.NormalTensorGauge
-import TNLean.MPS.RFP.ZeroCorrelationLength
+import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
+import TNLean.MPS.CanonicalForm.Correlation.ZeroCorrelationLength
 
 /-!
 # The Bell-pair chain: adjacent regions obstruct the unrestricted CID forward implication

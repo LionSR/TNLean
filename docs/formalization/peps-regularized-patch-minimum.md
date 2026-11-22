@@ -12,7 +12,7 @@ No upstream Lean proof text is reused.
 
 ## Independent densities and an ordered product
 
-`TNLean/PEPS/AreaLaw/RegularizedPatchMinimum.lean` uses the existing finite
+`TNLean/PEPS/AreaLaw/RegionalFilters/RegularizedPatchMinimum.lean` uses the existing finite
 ordered site type, dependent local configuration spaces, and the placement
 `ManyBody.place`. No lattice, Hamiltonian, physical state, or
 alternative regional coordinate model is introduced.
@@ -94,7 +94,7 @@ bounds, not those subsequent arguments.
 
 The shifted density powers come from `QICLean/Analysis/FunctionalCalculus/ShiftedDensityPowers.lean`.
 Continuity and the Euclidean norm bound for placed regional operators belong to
-`TNLean/PEPS/ParentHamiltonian/RegionPlacement.lean`; their algebraic properties are
+`TNLean/PEPS/ParentHamiltonian/Placement/RegionPlacement.lean`; their algebraic properties are
 QICLean's placement lemmas.
 The minimum does not depend on cylinder orthogonalization. These results
 cover the finite-dimensional auxiliary statements only; they do not complete

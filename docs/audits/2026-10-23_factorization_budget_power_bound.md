@@ -1,7 +1,7 @@
 # The power bound of the Lemma 1 error budget
 
 This audit records one public declaration removed from
-`TNLean/MPS/AreaLaw/Hastings/FactorizationBudget.lean`. It is the audit note required by
+`TNLean/MPS/AreaLaw/ProjectorFactorization/FactorizationBudget.lean`. It is the audit note required by
 `docs/project_conventions.md` §Style. Every non-`Archive` use on `main` has been migrated, no
 open pull request uses the removed name, no blueprint `\lean{...}` tag cites it, and no
 compatibility alias is kept.

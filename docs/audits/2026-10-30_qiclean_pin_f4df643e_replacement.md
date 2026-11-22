@@ -12,7 +12,7 @@ declare each name twice.
 
 | Removed TNLean declaration | QICLean declaration | QICLean source |
 |---|---|---|
-| `Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose` (`TNLean/MPS/Core/Blocking.lean`) | Same name | `QICLean/Kraus/Injectivity.lean`, QICLean #988 |
+| `Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose` (`TNLean/MPS/Tensor/Physical/Blocking.lean`) | Same name | `QICLean/Kraus/Injectivity.lean`, QICLean #988 |
 | `WordMultiplicity.wordCoefficient` (`TNLean/Algebra/TwoMarkerScalarRecovery.lean`) | Same name | `QICLean/Algebra/Word/WordMultiplicity.lean`, QICLean #1005 |
 
 The block-injectivity statements are identical, and the proofs differ only in
@@ -21,7 +21,7 @@ words with the prescribed letter counts. TNLean writes the filter under
 `by classical; exact`, while QICLean writes it under `open Classical in`. Both
 choose the decidability of the count equation classically.
 
-`TNLean/MPS/Core/Blocking.lean` already reaches `QICLean.Kraus.Injectivity`
+`TNLean/MPS/Tensor/Physical/Blocking.lean` already reaches `QICLean.Kraus.Injectivity`
 through `QICLean.Kraus.Blocking`. `TNLean/Algebra/TwoMarkerScalarRecovery.lean`
 now imports `QICLean.Algebra.Word.WordMultiplicity`. The consumers keep their full
 names, and so do the blueprint tags in

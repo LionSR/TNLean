@@ -83,11 +83,11 @@ TNLean.MPS.AreaLaw.ALVV.CalibratedRootEnergy -> TNLean.MPS.AreaLaw.LowEnergyAlgo
 TNLean.MPS.AreaLaw.ALVV.CanonicalWordTrim -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalWordTrim  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.CanonicalWordTrimTargetTree -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalWordTrimTargetTree  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.CanonicalWordTrimTree -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalWordTrimTree  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.ALVV.DGCanonicalNodeEvent -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGSampledNode @2  # proof:LowEnergyAlgorithm; merged into PhysicalDGSampledNode
+TNLean.MPS.AreaLaw.ALVV.DGCanonicalNodeEvent -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.DGCanonicalNodeEvent  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.DGCanonicalNodeParent -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.DGCanonicalNodeParent  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.DGCanonicalNodeTree -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.DGCanonicalNodeTree  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.ALVV.DGConstantNodeEvent -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGSampledNode @1  # proof:LowEnergyAlgorithm; merged into PhysicalDGSampledNode
-TNLean.MPS.AreaLaw.ALVV.DGConstantNodeParent -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGSampledNode @3  # proof:LowEnergyAlgorithm; merged into PhysicalDGSampledNode
+TNLean.MPS.AreaLaw.ALVV.DGConstantNodeEvent -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.DGConstantNodeEvent  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.ALVV.DGConstantNodeParent -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.DGConstantNodeParent  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.DGConstantNodeTree -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.DGConstantNodeTree  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.DGConstantNodeTreeApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.DGConstantNodeTreeApproximation  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.EfficientSoftLowDensityCalibration -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.EfficientSoftLowDensityCalibration  # proof:LowEnergyAlgorithm
@@ -129,9 +129,9 @@ TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyAssignment -> TNLean.MPS.AreaLaw.Low
 TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyUpdates -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftWordNodeEnergy @1  # proof:LowEnergyAlgorithm; merged into SoftWordNodeEnergy
 TNLean.MPS.AreaLaw.ALVV.PhysicalSoftIntervalHistory -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.PhysicalSoftIntervalHistory  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.PhysicalSoftMiddleCluster -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.PhysicalSoftMiddleCluster  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.ALVV.PhysicalSoftResampling -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.PhysicalSoftResampling @0  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.ALVV.PhysicalSoftResampling -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.PhysicalSoftResampling  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.PhysicalSoftSamplingData -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.PhysicalSoftSamplingData  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.ALVV.PhysicalSoftTreeRefinement -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.PhysicalSoftResampling @1  # proof:LowEnergyAlgorithm; merged into PhysicalSoftResampling
+TNLean.MPS.AreaLaw.ALVV.PhysicalSoftTreeRefinement -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.PhysicalSoftTreeRefinement  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.RegionalChildEnergyCenter -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftWordNodeEnergy @2  # proof:LowEnergyAlgorithm; merged into SoftWordNodeEnergy
 TNLean.MPS.AreaLaw.ALVV.RegionalSlices -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.RegionalFactors.RegionalSlices  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.SelectedSoftTerminalNodeEnergy -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SelectedSoftTerminalNodeEnergy  # proof:LowEnergyAlgorithm
@@ -139,24 +139,24 @@ TNLean.MPS.AreaLaw.ALVV.SoftClusterPrecision -> TNLean.MPS.AreaLaw.LowEnergyAlgo
 TNLean.MPS.AreaLaw.ALVV.SoftFamilyResiduals -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftFamilyResiduals @0  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.SoftFourthOrderBudget -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftFourthOrderBudget  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.SoftGeneratedMiddleApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.SoftGeneratedMiddleApproximation  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.ALVV.SoftParentEnergy -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftParentEnergy @0  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.ALVV.SoftParentEnergy -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftParentEnergy  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.SoftParentStructure -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftParentStructure  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.ALVV.SoftTerminalEnergyCalibration -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftParentEnergy @2  # proof:LowEnergyAlgorithm; merged into SoftParentEnergy
-TNLean.MPS.AreaLaw.ALVV.SoftTerminalEnergyEstimate -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftParentEnergy @1  # proof:LowEnergyAlgorithm; merged into SoftParentEnergy
+TNLean.MPS.AreaLaw.ALVV.SoftTerminalEnergyCalibration -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftTerminalEnergyCalibration  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.ALVV.SoftTerminalEnergyEstimate -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftTerminalEnergyEstimate  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.SoftTerminalNodeEnergy -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftTerminalNodeEnergy  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.SoftTruncationOriginalResidual -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftTruncationOriginalResidual  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.SoftTruncationReverseResidual -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.SoftTruncation.SoftTruncationReverseResidual  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.SoftTruncationScaleFreeBond -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.SoftTruncationScaleFreeBond  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.ALVV.SoftWordEnergyEstimate -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftParentEnergy @3  # proof:LowEnergyAlgorithm; merged into SoftParentEnergy
+TNLean.MPS.AreaLaw.ALVV.SoftWordEnergyEstimate -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftWordEnergyEstimate  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.SoftWordNodeEnergy -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SoftWordNodeEnergy @0  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.SpectralProjector -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.SpectralProjector  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.SuccessfulTreeEnergyInduction -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.EnergyEstimate.SuccessfulTreeEnergyInduction  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftCalibration -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.UniformPhysicalSoftCalibration  # tn
-TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftFilterFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.UniformPhysicalSoftImprovingFamily @1  # proof:LowEnergyAlgorithm; merged into UniformPhysicalSoftImprovingFamily
-TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftImprovingFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.UniformPhysicalSoftImprovingFamily @0  # tn
+TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftFilterFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.UniformPhysicalSoftFilterFamily  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftImprovingFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.UniformPhysicalSoftImprovingFamily  # tn
 TNLean.MPS.AreaLaw.ALVV.UniformSoftMiddleMPO -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.UniformSoftMiddleMPO  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ALVV.UniqueGroundStateTree -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.UniqueGroundStateTree  # tn
-TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ActualClippedPolynomialFamily @0  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ActualClippedPolynomialFamily  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.AdjacentIntervalMerge -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.AdjacentIntervalMerge @0  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.AdjacentIntervalMergeMeasurable -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.AdjacentIntervalMerge @1  # proof:LowEnergyAlgorithm; merged into AdjacentIntervalMerge
 TNLean.MPS.AreaLaw.Algorithm.Cost -> TNLean.MPS.AreaLaw.GroundStateAlgorithm.QueryProgram.Cost  # proof:GroundStateAlgorithm
@@ -190,14 +190,14 @@ TNLean.MPS.AreaLaw.CanonicalHalfSampledIntervalParent -> TNLean.MPS.AreaLaw.LowE
 TNLean.MPS.AreaLaw.CanonicalHalfSampledIntervalProfile -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalGenerators @1  # proof:LowEnergyAlgorithm; merged into IntervalGenerators
 TNLean.MPS.AreaLaw.CanonicalIntervalGuardedProbability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.IndependentIntervalProbability @1  # proof:LowEnergyAlgorithm; merged into IndependentIntervalProbability
 TNLean.MPS.AreaLaw.CanonicalIntervalJointProbability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalJointProbability  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.CanonicalIntervalRawHistory -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalRawHistory @0  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.CanonicalIntervalRawHistory -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalRawHistory  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.CanonicalIntervalRawHistoryProperties -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalRawHistoryProperties  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.CanonicalIntervalRawProbability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalRawHistory @1  # proof:LowEnergyAlgorithm; merged into CanonicalIntervalRawHistory
-TNLean.MPS.AreaLaw.CanonicalIntervalRawTreeProbability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalRawHistory @2  # proof:LowEnergyAlgorithm; merged into CanonicalIntervalRawHistory
+TNLean.MPS.AreaLaw.CanonicalIntervalRawProbability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalRawProbability  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.CanonicalIntervalRawTreeProbability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalRawTreeProbability  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.CanonicalIntervalResampling -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalResampling @0  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.CanonicalIntervalResamplingGood -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalRawHistory @3  # proof:LowEnergyAlgorithm; merged into CanonicalIntervalRawHistory
+TNLean.MPS.AreaLaw.CanonicalIntervalResamplingGood -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalResamplingGood  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.CanonicalIntervalResamplingProfile -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalResampling @1  # proof:LowEnergyAlgorithm; merged into CanonicalIntervalResampling
-TNLean.MPS.AreaLaw.CanonicalIntervalResamplingSelection -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalRawHistory @4  # proof:LowEnergyAlgorithm; merged into CanonicalIntervalRawHistory
+TNLean.MPS.AreaLaw.CanonicalIntervalResamplingSelection -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalResamplingSelection  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.CanonicalIntervalSamplingOperation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.IntervalSamplingChoices @1  # proof:LowEnergyAlgorithm; merged into IntervalSamplingChoices
 TNLean.MPS.AreaLaw.CanonicalIntervalSamplingSections -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.IndependentIntervalSections @1  # proof:LowEnergyAlgorithm; merged into IndependentIntervalSections
 TNLean.MPS.AreaLaw.CanonicalIntervalSamplingTree -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.CanonicalIntervalSamplingTree @0  # proof:LowEnergyAlgorithm
@@ -208,7 +208,7 @@ TNLean.MPS.AreaLaw.CanonicalSampledIntervalBounds -> TNLean.MPS.AreaLaw.LowEnerg
 TNLean.MPS.AreaLaw.CanonicalSampledIntervalInterleaved -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.CanonicalSampledIntervalInterleaved @0  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ChainNeighborhood -> TNLean.MPS.AreaLaw.Chain.ChainNeighborhood  # qiclean:sites
 TNLean.MPS.AreaLaw.ChainStageIncidence -> TNLean.MPS.AreaLaw.SweepPreparation.ChainStageIncidence @0  # proof:SweepPreparation
-TNLean.MPS.AreaLaw.ChebyshevNestedViability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ActualClippedPolynomialFamily @1  # tn; merged into ActualClippedPolynomialFamily
+TNLean.MPS.AreaLaw.ChebyshevNestedViability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ChebyshevNestedViability  # tn
 TNLean.MPS.AreaLaw.ClusterTruncationCutRank -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.ClusterTruncationCutRank  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.ClusterTruncationMPO -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.OperatorMPOFromCutRank @1  # tn; merged into OperatorMPOFromCutRank
 TNLean.MPS.AreaLaw.CommonClosingPolynomialFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.CommonClosingPolynomialFamily  # tn
@@ -232,11 +232,11 @@ TNLean.MPS.AreaLaw.DomainIntervalNeighborhoodEntropy -> TNLean.MPS.AreaLaw.Entro
 TNLean.MPS.AreaLaw.DomainLogarithmicSeparation -> TNLean.MPS.AreaLaw.Entropy.DomainLogarithmicSeparation  # qiclean:entropy
 TNLean.MPS.AreaLaw.DomainPartialSwap -> TNLean.MPS.AreaLaw.Chain.DomainPartialSwap  # qiclean:hamiltonian
 TNLean.MPS.AreaLaw.DoubledHamiltonian -> TNLean.MPS.AreaLaw.Chain.DoubledHamiltonian @0  # qiclean:hamiltonian
-TNLean.MPS.AreaLaw.DyadicIntervalLowDensityFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.DyadicLongIntervalLowDensityFamily @1  # proof:LowEnergyAlgorithm; merged into DyadicLongIntervalLowDensityFamily
-TNLean.MPS.AreaLaw.DyadicLongIntervalLowDensityFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.DyadicLongIntervalLowDensityFamily @0  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.DyadicRegionalLowDensityFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.RegionalLowDensityFamily @1  # proof:LowEnergyAlgorithm; merged into LowDensityFilterParameters
-TNLean.MPS.AreaLaw.DyadicRegionalLowDensitySingleStep -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.RegionalLowDensityFamily @2  # proof:LowEnergyAlgorithm; merged into LowDensityFilterParameters
-TNLean.MPS.AreaLaw.DyadicRegionalLowDensityWordFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.RegionalLowDensityFamily @3  # proof:LowEnergyAlgorithm; merged into LowDensityFilterParameters
+TNLean.MPS.AreaLaw.DyadicIntervalLowDensityFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.DyadicIntervalLowDensityFamily  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.DyadicLongIntervalLowDensityFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.DyadicLongIntervalLowDensityFamily  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.DyadicRegionalLowDensityFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.DyadicRegionalLowDensityFamily  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.DyadicRegionalLowDensitySingleStep -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.DyadicRegionalLowDensitySingleStep  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.DyadicRegionalLowDensityWordFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.DyadicRegionalLowDensityWordFamily  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.EntropyInequalities -> TNLean.MPS.AreaLaw.Chain.EntropyInequalities @0  # qiclean:sites; mixed: boundaryEdges geometry and one entropy lemma
 TNLean.MPS.AreaLaw.EntropyScaling.CutReducedState -> TNLean.MPS.Tensor.OpenMPS.CutReducedState  # tn; layer override: open-boundary MPS statement
 TNLean.MPS.AreaLaw.FiveRegionHamiltonian -> TNLean.MPS.AreaLaw.Chain.FiveRegionHamiltonian  # qiclean:hamiltonian
@@ -345,7 +345,7 @@ TNLean.MPS.AreaLaw.IntervalFamilyTrimmingIteration -> TNLean.MPS.AreaLaw.LowEner
 TNLean.MPS.AreaLaw.IntervalFamilyTrimmingMeasurable -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalFamilyTrimmingMeasurable  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.IntervalFullSpaceProfile -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalGenerators @2  # proof:LowEnergyAlgorithm; merged into IntervalGenerators
 TNLean.MPS.AreaLaw.IntervalGenerators -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTrimming.IntervalGenerators @0  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.IntervalLowDensityFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.DyadicLongIntervalLowDensityFamily @2  # proof:LowEnergyAlgorithm; merged into DyadicLongIntervalLowDensityFamily
+TNLean.MPS.AreaLaw.IntervalLowDensityFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.IntervalLowDensityFamily  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.IntervalMPOTransfer -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.IntervalMPOTransfer @0  # tn
 TNLean.MPS.AreaLaw.IntervalMergeChoice -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.IntervalTree.BalancedIntervalTree @6  # proof:LowEnergyAlgorithm; merged into BalancedIntervalTree
 TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy -> TNLean.MPS.AreaLaw.Entropy.IntervalNeighborhoodEntropy @0  # qiclean:entropy
@@ -366,15 +366,15 @@ TNLean.MPS.AreaLaw.LocalSumMPO -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.Oper
 TNLean.MPS.AreaLaw.LogarithmicAreaLaw -> TNLean.MPS.AreaLaw.Entropy.LogarithmicAreaLaw  # qiclean:entropy
 TNLean.MPS.AreaLaw.LogarithmicSeparation -> TNLean.MPS.AreaLaw.Entropy.LogarithmicSeparation  # qiclean:entropy
 TNLean.MPS.AreaLaw.LongIntervalLowDensityFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LongIntervalLowDensityFamily  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.LowDensityAccurateViability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.DyadicLongIntervalLowDensityFamily @3  # proof:LowEnergyAlgorithm; merged into DyadicLongIntervalLowDensityFamily
+TNLean.MPS.AreaLaw.LowDensityAccurateViability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityAccurateViability  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.LowDensityBufferedTargets -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.IndependentLowDensityBufferedTargets @1  # proof:LowEnergyAlgorithm; merged into IndependentLowDensityBufferedTargets
 TNLean.MPS.AreaLaw.LowDensityDesignatedApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityDesignatedApproximation  # tn
 TNLean.MPS.AreaLaw.LowDensityEntropy -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityEntropy @1  # proof:LowEnergyAlgorithm; merged into DGEntropyParameters
 TNLean.MPS.AreaLaw.LowDensityEntropyBound -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityEntropy @2  # proof:LowEnergyAlgorithm; merged into DGEntropyParameters
-TNLean.MPS.AreaLaw.LowDensityFilterParameters -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.RegionalLowDensityFamily @0  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.LowDensityFilterParameters -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityFilterParameters  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.LowDensityLogDimension -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityLogDimension  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.LowDensityMinimumDimension -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.DyadicLongIntervalLowDensityFamily @4  # proof:LowEnergyAlgorithm; merged into DyadicLongIntervalLowDensityFamily
-TNLean.MPS.AreaLaw.LowDensityTreeAlgorithm -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDTreeRefinement @1  # proof:LowEnergyAlgorithm; merged into PhysicalLDTreeRefinement
+TNLean.MPS.AreaLaw.LowDensityMinimumDimension -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityMinimumDimension  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.LowDensityTreeAlgorithm -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityTreeAlgorithm  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.LowDensityTreeExtraction -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityTreeExtraction  # qiclean:matrix
 TNLean.MPS.AreaLaw.LowEnergyFilterParameters -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.LowEnergyFilterParameters @0  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.LowEnergyIntervalFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.LowEnergyIntervalFamily  # proof:LowEnergyAlgorithm
@@ -400,37 +400,37 @@ TNLean.MPS.AreaLaw.OverlapEnergy -> TNLean.MPS.AreaLaw.Chain.RangeOneSupport @1 
 TNLean.MPS.AreaLaw.PartialSwap -> TNLean.MPS.AreaLaw.Chain.PartialSwap  # qiclean:hamiltonian
 TNLean.MPS.AreaLaw.PhysicalBufferedTargets -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.PhysicalBufferedTargets  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalChebyshevViability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.PhysicalChebyshevViability  # tn
-TNLean.MPS.AreaLaw.PhysicalDGApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGViability @1  # proof:LowEnergyAlgorithm; merged into PhysicalDGViability
+TNLean.MPS.AreaLaw.PhysicalDGApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGApproximation  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGAutomaticRefinement -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGFilterTrimming @2  # proof:LowEnergyAlgorithm; merged into PhysicalDGFilterTrimming
 TNLean.MPS.AreaLaw.PhysicalDGCanonicalApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGCanonicalApproximation  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGCanonicalEnergyApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.PhysicalDGCanonicalEnergyApproximation  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.PhysicalDGCanonicalJointProbability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedIteration @3  # proof:LowEnergyAlgorithm; merged into PhysicalDGInterleavedIteration
-TNLean.MPS.AreaLaw.PhysicalDGCanonicalParentFailure -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedIteration @1  # proof:LowEnergyAlgorithm; merged into PhysicalDGInterleavedIteration
-TNLean.MPS.AreaLaw.PhysicalDGCanonicalSamplingData -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedIteration @2  # proof:LowEnergyAlgorithm; merged into PhysicalDGInterleavedIteration
+TNLean.MPS.AreaLaw.PhysicalDGCanonicalJointProbability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGCanonicalJointProbability  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.PhysicalDGCanonicalParentFailure -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGCanonicalParentFailure  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.PhysicalDGCanonicalSamplingData -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGCanonicalSamplingData  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGClippedReference -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGClippedReference  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGEntropy -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGEntropy  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGFilterIteration -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGFilterTrimming @1  # proof:LowEnergyAlgorithm; merged into PhysicalDGFilterTrimming
 TNLean.MPS.AreaLaw.PhysicalDGFilterTrimming -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGFilterTrimming @0  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGGlobalApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGGlobalApproximation  # tn
-TNLean.MPS.AreaLaw.PhysicalDGInterleavedApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedTree @1  # proof:LowEnergyAlgorithm; merged into PhysicalDGInterleavedTree
+TNLean.MPS.AreaLaw.PhysicalDGInterleavedApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedApproximation  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGInterleavedFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedFamily  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.PhysicalDGInterleavedIteration -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedIteration @0  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.PhysicalDGInterleavedIteration -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedIteration  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGInterleavedNode -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedNode  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGInterleavedPolynomialBond -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedPolynomialBond  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.PhysicalDGInterleavedTree -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedTree @0  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.PhysicalDGInterleavedTree -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGInterleavedTree  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGIntervalTree -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGIntervalTree  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGIntervalTrimming  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGLongMiddleFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGLongMiddleFamily  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGReferenceSpace -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGReferenceSpace  # tn
 TNLean.MPS.AreaLaw.PhysicalDGReferenceTrimming -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGReferenceTrimming  # tn
-TNLean.MPS.AreaLaw.PhysicalDGSampledNode -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGSampledNode @0  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.PhysicalDGSharpApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGViability @2  # proof:LowEnergyAlgorithm; merged into PhysicalDGViability
-TNLean.MPS.AreaLaw.PhysicalDGTreeApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGTreeParameters @1  # proof:LowEnergyAlgorithm; merged into PhysicalDGTreeParameters
-TNLean.MPS.AreaLaw.PhysicalDGTreeMPS -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGTreeParameters @2  # proof:LowEnergyAlgorithm; merged into PhysicalDGTreeParameters
-TNLean.MPS.AreaLaw.PhysicalDGTreeParameters -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGTreeParameters @0  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.PhysicalDGSampledNode -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGSampledNode  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.PhysicalDGSharpApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGSharpApproximation  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.PhysicalDGTreeApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGTreeApproximation  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.PhysicalDGTreeMPS -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGTreeMPS  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.PhysicalDGTreeParameters -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGTreeParameters  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGTreePolynomialBond -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGTreePolynomialBond  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDGTreeWitness -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGTreeWitness  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.PhysicalDGViability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGViability @0  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.PhysicalDGViability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalDGViability  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDetectability -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.PhysicalDetectability @0  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalDetectabilityGap -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.PhysicalDetectability @1  # proof:LowEnergyAlgorithm; merged into PhysicalDetectability
 TNLean.MPS.AreaLaw.PhysicalFlatGroundRitz -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalFlatGroundRitz  # proof:LowEnergyAlgorithm
@@ -440,13 +440,13 @@ TNLean.MPS.AreaLaw.PhysicalGroundReference -> TNLean.MPS.AreaLaw.LowEnergyAlgori
 TNLean.MPS.AreaLaw.PhysicalGroundReferencePolynomial -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalGroundReferencePolynomial  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalGroundReferenceTrimming -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.DegenerateGround.PhysicalGroundReferenceTrimming  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalIntervalTransport -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.PhysicalIntervalTransport @0  # tn; mixed: interval coordinate transport and MPO factors
-TNLean.MPS.AreaLaw.PhysicalLDSampledTree -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDTreeNode @2  # proof:LowEnergyAlgorithm; merged into PhysicalLDTreeNode
-TNLean.MPS.AreaLaw.PhysicalLDTree -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDTreeNode @1  # tn; merged into PhysicalLDTreeNode
-TNLean.MPS.AreaLaw.PhysicalLDTreeNode -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDTreeNode @0  # tn
-TNLean.MPS.AreaLaw.PhysicalLDTreeRefinement -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDTreeRefinement @0  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.PhysicalLowDensityApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.SharpRegionalLowDensityFamily @2  # proof:LowEnergyAlgorithm; merged into SharpRegionalScalarBudgets
+TNLean.MPS.AreaLaw.PhysicalLDSampledTree -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDSampledTree  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.PhysicalLDTree -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDTree  # tn
+TNLean.MPS.AreaLaw.PhysicalLDTreeNode -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDTreeNode  # tn
+TNLean.MPS.AreaLaw.PhysicalLDTreeRefinement -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLDTreeRefinement  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.PhysicalLowDensityApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLowDensityApproximation  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalLowDensityGlobalApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLowDensityGlobalApproximation  # tn
-TNLean.MPS.AreaLaw.PhysicalLowDensitySharpApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.SharpRegionalLowDensityFamily @3  # proof:LowEnergyAlgorithm; merged into SharpRegionalScalarBudgets
+TNLean.MPS.AreaLaw.PhysicalLowDensitySharpApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.PhysicalLowDensitySharpApproximation  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalLowEnergyCloseness -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.PhysicalLowEnergyCloseness  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalLowEnergyFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.PhysicalLowEnergyFamily  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.PhysicalParityProductRank -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.FrustrationFree.PhysicalParityProductRank  # proof:LowEnergyAlgorithm
@@ -502,7 +502,7 @@ TNLean.MPS.AreaLaw.RegionalEnergyMerge -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.
 TNLean.MPS.AreaLaw.RegionalEnergyMergePhysical -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.RegionalEnergyMergePhysical  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.RegionalExponentialMoment -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.RegionalExponentialMoment  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.RegionalGroundEnergy -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.Truncation.HardTruncationResidual @1  # proof:LowEnergyAlgorithm; merged into HardTruncationResidual
-TNLean.MPS.AreaLaw.RegionalLowDensityFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.RegionalLowDensityFamily @4  # proof:LowEnergyAlgorithm; merged into LowDensityFilterParameters
+TNLean.MPS.AreaLaw.RegionalLowDensityFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.RegionalLowDensityFamily  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.RegionalMiddleFactors -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.RegionalFactors.RegionalMiddleFactors  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.RegionalSoftSpectralApproximation -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.RegionalSoftSpectralApproximation  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.RegionalSoftTruncationMPO -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.SoftTruncationMPOAccuracy @2  # proof:LowEnergyAlgorithm; merged into SoftTruncationMPOAccuracy
@@ -522,8 +522,8 @@ TNLean.MPS.AreaLaw.SharpChainCompression -> TNLean.MPS.AreaLaw.SweepPreparation.
 TNLean.MPS.AreaLaw.SharpLowDensityParameters -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.SharpApproximationParameters @1  # proof:LowEnergyAlgorithm; merged into SharpApproximationParameters
 TNLean.MPS.AreaLaw.SharpPhysicalCompression -> TNLean.MPS.AreaLaw.SweepPreparation.SharpPhysicalCompression  # proof:SweepPreparation
 TNLean.MPS.AreaLaw.SharpRankCount -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.SharpRankCount  # proof:LowEnergyAlgorithm
-TNLean.MPS.AreaLaw.SharpRegionalLowDensityFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.SharpRegionalLowDensityFamily @1  # proof:LowEnergyAlgorithm; merged into SharpRegionalScalarBudgets
-TNLean.MPS.AreaLaw.SharpRegionalScalarBudgets -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.SharpRegionalLowDensityFamily @0  # tn
+TNLean.MPS.AreaLaw.SharpRegionalLowDensityFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.SharpRegionalLowDensityFamily  # proof:LowEnergyAlgorithm
+TNLean.MPS.AreaLaw.SharpRegionalScalarBudgets -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.SharpRegionalScalarBudgets  # tn
 TNLean.MPS.AreaLaw.ShiftedHeatMPO -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.MPO.OperatorMPOFromCutRank @3  # tn; merged into OperatorMPOFromCutRank
 TNLean.MPS.AreaLaw.ShortRegionViableFamily -> TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ShortRegionViableFamily  # proof:LowEnergyAlgorithm
 TNLean.MPS.AreaLaw.SnakeGridApproximation -> TNLean.PEPS.AreaLaw.SnakeGridApproximation @0  # tn; square-grid statement moved from MPS/AreaLaw; mentions IsOpenMPS
@@ -2071,10 +2071,10 @@ TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbientMartingaleBound -> TNLean.MP
 TNLean.MPS.ParentHamiltonian.Martingale.FixedRangeGapTransfer -> TNLean.MPS.ParentHamiltonian.Gap.Comparison.PeriodicRangeComparison @1  # tn; merged into MPS.ParentHamiltonian.Martingale.PeriodicRangeComparison
 TNLean.MPS.ParentHamiltonian.Martingale.Gap -> TNLean.MPS.ParentHamiltonian.ParentInteraction.Reduction @1  # tn; merged into MPS.ParentHamiltonian.Martingale.Reduction
 TNLean.MPS.ParentHamiltonian.Martingale.GroundExpectationGap -> TNLean.MPS.ParentHamiltonian.Gap.Spectator.GroundExpectationGap  # qiclean:hamiltonian
-TNLean.MPS.ParentHamiltonian.Martingale.GroupedOpenGap -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.GroupedOpenGap @0  # tn; merge target
+TNLean.MPS.ParentHamiltonian.Martingale.GroupedOpenGap -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.GroupedOpenGap  # tn; merge target
 TNLean.MPS.ParentHamiltonian.Martingale.GroupedProjections -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.GroupedProjections  # tn
-TNLean.MPS.ParentHamiltonian.Martingale.GroupedProjectorEstimate -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.GroupedOpenGap @2  # tn; merged into MPS.ParentHamiltonian.Martingale.GroupedOpenGap
-TNLean.MPS.ParentHamiltonian.Martingale.GroupedSpectatorNorm -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.GroupedOpenGap @1  # tn; merged into MPS.ParentHamiltonian.Martingale.GroupedOpenGap
+TNLean.MPS.ParentHamiltonian.Martingale.GroupedProjectorEstimate -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.GroupedProjectorEstimate  # tn
+TNLean.MPS.ParentHamiltonian.Martingale.GroupedSpectatorNorm -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.GroupedSpectatorNorm  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.GroupedWindowBounds -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.GroupedWindowBounds  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.IntervalGapTransport -> TNLean.MPS.ParentHamiltonian.Gap.Comparison.IntervalGapTransport  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.IntervalKernelTransport -> TNLean.MPS.ParentHamiltonian.Gap.Comparison.IntervalKernelTransport  # tn
@@ -4513,7 +4513,6 @@ TNLean.Wielandt.SpanGrowth.VectorToMatrixSpan -> TNLean.MPS.Tensor.Words.WordSpa
 ! TNLean.PEPS.Graph.Region.EdgeMapSubgraph -> TNLean.PEPS.Tensor.Network.IsoTransport  # uses map_endpoints
 ! TNLean.PEPS.Graph.Region.EdgeScalarSolve -> TNLean.PEPS.Tensor.Network.Defs  # uses IncidentEdge, symm
 ! TNLean.PEPS.Graph.Region.SquareLatticeEdgeCount -> TNLean.PEPS.Injectivity.Normal.NormalBlocking  # no declaration of the target is named: drop the import or import the lower module it relies on
-! TNLean.PEPS.Graph.Torus.KitaevPeriodicTiling -> TNLean.PEPS.Examples.ToricCode.KitaevCheckerboardBlocking  # no declaration of the target is named: drop the import or import the lower module it relies on
 ! TNLean.PEPS.Graph.Torus.TorusLabelledBondGeometry -> TNLean.PEPS.Injectivity.TorusSector.TorusBondClosureSeamMovement  # uses torusBondClosureLabelsAt, exists_torusBondGauge_eq_closureAt
 ! TNLean.PEPS.Graph.Torus.TorusLabelledBondGeometry -> TNLean.PEPS.Injectivity.TorusSector.TorusBondFlatConnection  # uses torusBondGauge, IsTorusBondFlat, torusBondClosureLabels, exists_torusBondGauge_eq_closure
 ! TNLean.PEPS.Graph.Torus.TorusLatticeGraph -> TNLean.PEPS.Tensor.Network.Defs  # uses symm

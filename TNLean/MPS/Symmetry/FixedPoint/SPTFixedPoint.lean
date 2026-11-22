@@ -1,0 +1,467 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import Mathlib.LinearAlgebra.Matrix.Kronecker
+import QICLean.Analysis.Real.ComplexSqrt
+import QICLean.Algebra.Matrix.MatrixSingleSpan
+import QICLean.Analysis.Cohomology.TwistedRegularProjective
+import QICLean.Algebra.Unitary.IsometricFrameEmbedding
+import TNLean.MPS.Transfer.RenormalizationFixedPoint.Defs
+import TNLean.MPS.Symmetry.OnSite.OnSiteSymmetry
+import TNLean.MPS.Symmetry.OnSite.VirtualRepresentation
+
+/-!
+# SPT fixed points: the zero-correlation-length MPS of a projective representation
+
+**Source.** Cirac, Pérez-García, Schuch, Verstraete (arXiv:2011.12127), §III.A,
+paragraph "Symmetry protected topological order",
+`Papers/2011.12127/TN-Review-main.tex` lines 1147–1157: within each SPT phase "a
+representative MPS with zero correlation length can be constructed starting from any
+solution of the 1- and 2-cocycle condition"; the source then prints such a tensor on
+the physical space `ℂ^G ⊗ ℂ^G` and the bond space `ℂ^G`, states that its symmetry
+relation `S_g(A) = e^{iφ(g)} X_g† A X_g` is equivalent to the 2-cocycle equation, and
+that its transfer matrix is a rank-one projector.
+
+**Formalized here.** For a projective representation `ρ` of `G` on `ℂ^D` with factor
+system `ω` and a character `φ : G →* ℂ`, the tensor with physical space `ℂ^D ⊗ ℂ^D`
+and letters `A^{(a,b)} = D^{-1/2} |a⟩⟨b|` is the renormalization fixed point in the
+phase of `[ω]`:
+* its transfer map is `X ↦ D⁻¹ tr(X) · 1`, a rank-one projector, so the tensor has
+  zero correlation length; the tensor is injective, hence normal;
+* the linear representation `U(g) = φ(g) (W_gᵀ ⊗ W_g⁻¹)`, `W_g = ρ(g⁻¹)`, of `G` on
+  the physical space satisfies `∑ⱼ U(g)ᵢⱼ Aʲ = φ(g) W_g Aⁱ W_g⁻¹`; the phases of `ρ`
+  cancel in `U` exactly because they obey the 2-cocycle equation;
+* the tensor is on-site symmetric with character `φ`, its length-`N` periodic vector
+  acquires the factor `φ(g)^N`, and every virtual representation implementing that same
+  character has factor system cohomologous to `ω`.
+
+**Local fix (fixed-point tensor):** the printed tensor
+`A^{ab}_{xy} = e^{i(ω(a,x) + φ(b))} δ_{y,ax}` has letters proportional to the twisted
+left-regular matrices, which commute with the printed gauges; it is not normal and its
+transfer map is not of rank one for nontrivial `G`.  The construction here is the
+dimer fixed point that the printed claims describe; documented in
+`docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`.
+
+**From a cocycle alone.** The source starts from a 2-cocycle `ω`, while
+`sptFixedPointAction`, `twistedTensor_sptFixedPointTensor`,
+`sptFixedPointTensor_isOnSiteSymmetricUpToCharacter`, `cohomologousTo_of_sptFixedPointTensor` and
+`exists_virtualRep_sptFixedPointTensor` take a projective representation `ρ` as input.
+For finite `G`, `exists_unitary_sptFixedPoint_of_isCocycle` supplies `ρ` from `ω`: the
+twisted regular representation on `ℂ^G` is unitary, with factor system the pointwise
+phase `ω / |ω|`, which is cohomologous to `ω`, and the resulting fixed point realizes that class.
+The earlier restriction to a supplied representation is recorded as resolved in
+`docs/paper-gaps/rmp_spt_fixed_point_supplied_representation.tex`.
+
+The character restriction formerly recorded in
+`docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex` is resolved: the physical symmetry
+and the virtual cocycle class are proved for every character. Unitarity of the physical action
+for a general group requires a unit-modulus character; for a finite group this follows from
+finite order and is derived inside the realization theorem.
+
+**Mixed symmetries.** This module is the linear on-site specialization. The
+extension in `TNLean.MPS.Symmetry.MixedSPTFixedPoint` treats time reversal and
+reflection, the distinct phase and virtual conjugation parities, and actual
+`U(1)`-valued Mathlib cohomology classes. It reuses this module's corrected
+injective dimer tensor and rank-one transfer map. See
+`docs/paper-gaps/rmp_spt_fixed_point_onsite_scope.tex`.
+
+## Main definitions
+
+* `MPSTensor.sptFixedPointTensor` : the letters `D^{-1/2} |a⟩⟨b|`
+* `MPSTensor.sptFixedPointAction` : the physical representation `φ(g) (W_gᵀ ⊗ W_g⁻¹)`
+
+## Main results
+
+* `MPSTensor.transferMap_sptFixedPointTensor`
+* `MPSTensor.sptFixedPointTensor_isTransferIdempotent`
+* `MPSTensor.finrank_range_transferMap_sptFixedPointTensor`
+* `MPSTensor.sptFixedPointTensor_isInjective`, `MPSTensor.sptFixedPointTensor_isNormal`
+* `MPSTensor.eq_of_sum_smul_sptFixedPointTensor_eq`
+* `MPSTensor.twistedTensor_sptFixedPointTensor`
+* `MPSTensor.sptFixedPointTensor_isOnSiteSymmetricUpToCharacter`
+* `MPSTensor.cohomologousTo_of_sptFixedPointTensor`
+* `MPSTensor.exists_virtualRep_sptFixedPointTensor`
+* `MPSTensor.sptFixedPointAction_mem_unitaryGroup`
+* `MPSTensor.exists_unitary_sptFixedPoint_of_isCocycle`
+
+## References
+
+- [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- Cirac, Pérez-García,
+  Schuch, Verstraete, *Matrix product states and projected entangled pair states:
+  Concepts, symmetries, theorems*
+-/
+
+open scoped Matrix BigOperators Kronecker
+
+noncomputable section
+
+namespace MPSTensor
+
+open scoped ScalarCohomology
+
+variable {D : ℕ}
+
+/-- The pair of bond labels `(a, b)` encoded by a physical index of `ℂ^D ⊗ ℂ^D`: the source
+parameterizes the local physical space as a tensor product `(a, b)` of two bond labels.
+Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` line 1149). -/
+abbrev sptPair (i : Fin (D * D)) : Fin D × Fin D := finProdFinEquiv.symm i
+
+/-- The normalization `D^{-1/2}` of the letters `D^{-1/2} |a⟩⟨b|` of the fixed-point tensor.
+Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` lines 1149–1150),
+with the local fix of the module docstring (`docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`). -/
+abbrev sptScale (D : ℕ) : ℂ := ((Real.sqrt D : ℂ))⁻¹
+
+/-- The normalization of the letters: `star c * c = D⁻¹` for `c = D^{-1/2}`, the scale of the
+letters `D^{-1/2} |a⟩⟨b|` in arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1149–1150), with the local fix of the module docstring
+(`docs/paper-gaps/rmp_spt_fixed_point_tensor.tex`). -/
+lemma star_sptScale_mul_sptScale : star (sptScale D) * sptScale D = (D : ℂ)⁻¹ := by
+  rw [sptScale, star_inv₀, Complex.star_def, Complex.conj_ofReal,
+    Complex.ofReal_sqrt_inv_mul_self _ (Nat.cast_nonneg D), Complex.ofReal_natCast]
+
+/-- The matrix-unit normalization is nonzero at positive bond dimension.
+Source: arXiv:2011.12127, Section III.A, lines 1149–1150 in
+Papers/2011.12127/TN-Review-main.tex. -/
+lemma sptScale_ne_zero [NeZero D] : sptScale D ≠ 0 := by
+  refine inv_ne_zero (Complex.ofReal_ne_zero.mpr ((Real.sqrt_ne_zero').mpr ?_))
+  exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne D)
+
+/-- **The SPT fixed-point tensor.** The letter at the physical index `(a, b)` is
+`D^{-1/2} |a⟩⟨b|`.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1149–1150), with the local fix of the
+module docstring. -/
+def sptFixedPointTensor (D : ℕ) : MPSTensor (D * D) D := fun i =>
+  sptScale D • Matrix.single (sptPair i).1 (sptPair i).2 1
+
+private lemma sum_pair {M : Type*} [AddCommMonoid M] (f : Fin D × Fin D → M) :
+    ∑ i : Fin (D * D), f (sptPair i) = ∑ a : Fin D, ∑ b : Fin D, f (a, b) := by
+  rw [← Fintype.sum_prod_type']
+  exact Fintype.sum_equiv finProdFinEquiv.symm _ _ (fun _ => rfl)
+
+/-- **The transfer map is `X ↦ D⁻¹ tr(X) · 1`.** Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` line 1157): the transfer matrix is a
+rank-one projector. -/
+theorem transferMap_sptFixedPointTensor (X : Matrix (Fin D) (Fin D) ℂ) :
+    Kraus.transferMap (sptFixedPointTensor D) X = ((D : ℂ)⁻¹ * X.trace) • 1 := by
+  classical
+  rw [Kraus.transferMap_apply]
+  ext x y
+  simp only [sptFixedPointTensor, Matrix.conjTranspose_smul, Matrix.conjTranspose_single,
+    star_one, Matrix.smul_mul, Matrix.mul_smul, smul_smul, Matrix.single_mul_mul_single,
+    one_mul, mul_one, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
+  rw [sum_pair (fun p => star (sptScale D) * sptScale D * Matrix.single p.1 p.1 (X p.2 p.2) x y)]
+  simp only [star_sptScale_mul_sptScale, Matrix.single_apply, Matrix.one_apply, Matrix.trace,
+    Matrix.diag_apply]
+  by_cases hxy : x = y
+  · subst hxy
+    simp [Finset.mul_sum]
+  · simp only [hxy, ite_false, mul_zero]
+    refine Finset.sum_eq_zero fun a _ => Finset.sum_eq_zero fun b _ => ?_
+    rw [ite_eq_right_iff.mpr fun ha => absurd (ha.1.symm.trans ha.2) hxy, mul_zero]
+
+/-- **The transfer map is idempotent.** Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` line 1157). -/
+theorem sptFixedPointTensor_isTransferIdempotent :
+    IsTransferIdempotent (sptFixedPointTensor D) := by
+  rcases eq_or_ne D 0 with rfl | hD
+  · ext X : 1; exact Subsingleton.elim _ _
+  ext X : 1
+  simp only [LinearMap.comp_apply, transferMap_sptFixedPointTensor, Matrix.trace_smul,
+    Matrix.trace_one, Fintype.card_fin, smul_eq_mul]
+  congr 1
+  field_simp
+
+/-- **The transfer map has rank one.** For `D > 0` its range is the line spanned by
+the identity.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` line 1157). -/
+theorem finrank_range_transferMap_sptFixedPointTensor [NeZero D] :
+    Module.finrank ℂ (LinearMap.range (Kraus.transferMap (sptFixedPointTensor D))) = 1 := by
+  have hrange : LinearMap.range (Kraus.transferMap (sptFixedPointTensor D)) =
+      Submodule.span ℂ {(1 : Matrix (Fin D) (Fin D) ℂ)} := by
+    apply le_antisymm
+    · rintro _ ⟨X, rfl⟩
+      rw [transferMap_sptFixedPointTensor]
+      exact Submodule.smul_mem _ _ (Submodule.subset_span rfl)
+    · rw [Submodule.span_le, Set.singleton_subset_iff]
+      refine ⟨1, ?_⟩
+      rw [transferMap_sptFixedPointTensor, Matrix.trace_one, Fintype.card_fin,
+        inv_mul_cancel₀ (Nat.cast_ne_zero.mpr (NeZero.ne D)), one_smul]
+  rw [hrange, finrank_span_singleton one_ne_zero]
+
+/-- **The fixed-point tensor is injective**: its letters are nonzero multiples of
+the matrix units.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1149–1157), the fixed point whose
+transfer matrix is a rank-one projector. -/
+theorem sptFixedPointTensor_isInjective [NeZero D] :
+    Kraus.IsInjective (sptFixedPointTensor D) := by
+  classical
+  have hc : sptScale D ≠ 0 := sptScale_ne_zero
+  refine Submodule.eq_top_of_forall_single_mem _ fun a b => ?_
+  have hmem : sptFixedPointTensor D (finProdFinEquiv (a, b)) ∈
+      Submodule.span ℂ (Set.range (sptFixedPointTensor D)) := Submodule.subset_span ⟨_, rfl⟩
+  have := Submodule.smul_mem _ (sptScale D)⁻¹ hmem
+  rw [show sptFixedPointTensor D (finProdFinEquiv (a, b)) =
+      sptScale D • Matrix.single a b 1 by simp [sptFixedPointTensor], smul_smul,
+    inv_mul_cancel₀ hc, one_smul] at this
+  exact this
+
+/-- **The fixed-point tensor is normal.**  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1149–1157). -/
+theorem sptFixedPointTensor_isNormal [NeZero D] : Kraus.IsNormal (sptFixedPointTensor D) :=
+  sptFixedPointTensor_isInjective.isNormal
+
+/-- The entry `(a, b)` of a linear combination of the letters is `D^{-1/2}` times the
+coefficient of the letter `(a, b)`.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1149–1157), with the local fix of the
+module docstring. -/
+theorem sum_smul_sptFixedPointTensor_apply (c : Fin (D * D) → ℂ) (a b : Fin D) :
+    (∑ j, c j • sptFixedPointTensor D j) a b = sptScale D * c (finProdFinEquiv (a, b)) := by
+  classical
+  rw [← finProdFinEquiv.sum_comp]
+  simp [Matrix.sum_apply, sptFixedPointTensor, Matrix.single_apply, Fintype.sum_prod_type,
+    ite_and, mul_comm]
+
+/-- **The letters are linearly independent**: for `D > 0` a linear combination of the
+letters determines its coefficients.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1149–1157), with the local fix of the
+module docstring. -/
+theorem eq_of_sum_smul_sptFixedPointTensor_eq [NeZero D] {c c' : Fin (D * D) → ℂ}
+    (h : ∑ j, c j • sptFixedPointTensor D j = ∑ j, c' j • sptFixedPointTensor D j) :
+    c = c' := by
+  have hc : sptScale D ≠ 0 := sptScale_ne_zero
+  funext j
+  obtain ⟨⟨a, b⟩, rfl⟩ := finProdFinEquiv.surjective j
+  have hab := congrFun (congrFun h a) b
+  rw [sum_smul_sptFixedPointTensor_apply, sum_smul_sptFixedPointTensor_apply] at hab
+  exact mul_left_cancel₀ hc hab
+
+/-! ### The physical symmetry -/
+
+section Symmetry
+
+variable {G : Type} [Group G] {ω : ScalarCocycle G}
+
+/-- The virtual gauge `W_g = ρ(g⁻¹)` of the physical symmetry `g`.  Source:
+arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` lines 1152–1155), the
+gauge matrices `X_g` of the fixed-point construction. -/
+abbrev sptGauge (ρ : ProjectiveRepresentation (D := D) ω) (g : G) : GL (Fin D) ℂ :=
+  ρ.X g⁻¹
+
+/-- The operator `W_gᵀ ⊗ W_g⁻¹` on `ℂ^D ⊗ ℂ^D`, the factor of the physical action
+`U(g) = φ(g) (W_gᵀ ⊗ W_g⁻¹)`.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1149–1157), with the local fix of the
+module docstring. -/
+def sptKron (W : GL (Fin D) ℂ) : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ :=
+  (W : Matrix (Fin D) (Fin D) ℂ)ᵀ ⊗ₖ ((W⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+
+/-- Scalars cancel in `W ↦ Wᵀ ⊗ W⁻¹`. Source: arXiv:1010.3732,
+Section II.F.2, lines 880--896, the virtual expression for the physical symmetry. -/
+lemma sptKron_eq_of_eq_smul {W V : GL (Fin D) ℂ} {c : ℂ}
+    (h : (W : Matrix (Fin D) (Fin D) ℂ) = c • (V : Matrix (Fin D) (Fin D) ℂ)) :
+    sptKron W = sptKron V := by
+  classical
+  rcases eq_or_ne D 0 with rfl | hD
+  · exact Subsingleton.elim _ _
+  have hc : c ≠ 0 := by
+    rintro rfl
+    have h1 := congrArg (· * ((W⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) h
+    simp only [Units.mul_inv, zero_smul, Matrix.zero_mul] at h1
+    have : NeZero D := ⟨hD⟩
+    exact one_ne_zero h1
+  have hinv : ((W⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) =
+      c⁻¹ • ((V⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+    have h1 : (c⁻¹ • ((V⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) *
+        (W : Matrix (Fin D) (Fin D) ℂ) = 1 := by
+      rw [h, Matrix.smul_mul, Matrix.mul_smul, smul_smul, inv_mul_cancel₀ hc, one_smul,
+        Units.inv_mul]
+    calc ((W⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+        = (c⁻¹ • ((V⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) *
+            (W : Matrix (Fin D) (Fin D) ℂ) * ((W⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ) := by
+          rw [h1, Matrix.one_mul]
+      _ = _ := by rw [Matrix.mul_assoc, Units.mul_inv, Matrix.mul_one]
+  rw [sptKron, sptKron, h, hinv, Matrix.transpose_smul, Matrix.smul_kronecker,
+    Matrix.kronecker_smul, smul_smul, mul_inv_cancel₀ hc, one_smul]
+
+private lemma sptKron_mul (W V : GL (Fin D) ℂ) : sptKron W * sptKron V = sptKron (V * W) := by
+  rw [sptKron, sptKron, sptKron, ← Matrix.mul_kronecker_mul, ← Matrix.transpose_mul,
+    mul_inv_rev]
+  rfl
+
+private lemma sptKron_one : sptKron (1 : GL (Fin D) ℂ) = 1 := by
+  simp [sptKron]
+
+/-- The physical representation `U(g) = φ(g) (W_gᵀ ⊗ W_g⁻¹)` on `ℂ^D ⊗ ℂ^D`.  The factor
+system of `ρ` cancels between the two tensor factors, so `U` is a linear
+representation.  Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1149–1157), with the local fix of the
+module docstring. -/
+def sptFixedPointAction (ρ : ProjectiveRepresentation (D := D) ω) (φ : G →* ℂ) :
+    G →* Matrix (Fin (D * D)) (Fin (D * D)) ℂ where
+  toFun g := φ g • Matrix.reindexAlgEquiv ℂ ℂ finProdFinEquiv (sptKron (sptGauge ρ g))
+  map_one' := by
+    have h1 : (ρ.X 1 : Matrix (Fin D) (Fin D) ℂ) =
+        (ω (1, 1) : ℂ) • ((1 : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+      have := congrArg (· * (((ρ.X 1)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
+        (ρ.map_mul 1 1)
+      simpa [Matrix.mul_assoc, Matrix.smul_mul] using this
+    rw [map_one, one_smul, sptGauge, inv_one, sptKron_eq_of_eq_smul h1, sptKron_one, map_one]
+  map_mul' g h := by
+    rw [smul_mul_smul_comm, ← map_mul (Matrix.reindexAlgEquiv ℂ ℂ finProdFinEquiv),
+      sptKron_mul, map_mul φ]
+    congr 2
+    refine (sptKron_eq_of_eq_smul (c := (ω (h⁻¹, g⁻¹) : ℂ)) ?_).symm
+    rw [sptGauge, sptGauge, sptGauge, mul_inv_rev, Units.val_mul]
+    exact ρ.map_mul _ _
+
+/-- **Symmetry relation of the fixed-point tensor.**
+`∑ⱼ U(g)ᵢⱼ Aʲ = φ(g) W_g Aⁱ W_g⁻¹`, the relation `S_g(A) = e^{iφ(g)} X_g† A X_g` of
+arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` line 1157). -/
+theorem twistedTensor_sptFixedPointTensor (ρ : ProjectiveRepresentation (D := D) ω)
+    (φ : G →* ℂ) (g : G) (i : Fin (D * D)) :
+    twistedTensor (sptFixedPointTensor D) (sptFixedPointAction ρ φ) g i =
+      φ g • ((sptGauge ρ g : Matrix (Fin D) (Fin D) ℂ) * sptFixedPointTensor D i *
+        (((sptGauge ρ g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
+  classical
+  ext x y
+  simp only [twistedTensor, sptFixedPointAction, MonoidHom.coe_mk, OneHom.coe_mk,
+    Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply, Matrix.submatrix_apply,
+    Matrix.smul_apply, Matrix.sum_apply, sptFixedPointTensor, smul_eq_mul, sptKron,
+    Matrix.single_apply,
+    Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_apply]
+  rw [← finProdFinEquiv.sum_comp]
+  simp only [Equiv.symm_apply_apply, Fintype.sum_prod_type, ite_and, mul_ite, mul_one,
+    mul_zero, ite_mul, zero_mul, Finset.sum_ite_eq, Finset.mem_univ, ite_true]
+  simp only [Matrix.kroneckerMap_apply, Matrix.transpose_apply, sptPair]
+  rw [Finset.sum_eq_single x (fun b _ hb => by simp [hb]) (by simp),
+    Finset.sum_eq_single y (fun b _ hb => by simp [hb]) (by simp)]
+  simp only [ite_true]
+  ring
+
+/-- **On-site symmetry with the prescribed character.** Each twist is gauge equivalent to
+`φ(g) A`. Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1155–1157). -/
+theorem sptFixedPointTensor_isOnSiteSymmetricUpToCharacter
+    (ρ : ProjectiveRepresentation (D := D) ω) (φ : G →* ℂ) :
+    IsOnSiteSymmetricUpToCharacter (sptFixedPointTensor D) (sptFixedPointAction ρ φ) φ :=
+  fun g => ⟨sptGauge ρ g, fun i => by
+    simpa only [Pi.smul_apply, Matrix.mul_smul, Matrix.smul_mul] using
+      twistedTensor_sptFixedPointTensor ρ φ g i⟩
+
+/-- **The virtual cocycle class of the fixed-point tensor is `[ω]`.** Every virtual
+projective representation of the symmetry with the prescribed character has a factor system
+cohomologous to `ω`. Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1147–1149). -/
+theorem cohomologousTo_of_sptFixedPointTensor [NeZero D]
+    (ρ : ProjectiveRepresentation (D := D) ω) (φ : G →* ℂ) {ω' : ScalarCocycle G}
+    (ρ' : ProjectiveRepresentation (D := D) ω')
+    (hρ' : ∀ g i, twistedTensor (sptFixedPointTensor D) (sptFixedPointAction ρ φ) g i =
+      φ g • ((ρ'.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * sptFixedPointTensor D i *
+        (((ρ'.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) :
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (ScalarCocycle.isMulCocycle₂_of_projRep ρ' (NeZero.pos D))) =
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (ScalarCocycle.isMulCocycle₂_of_projRep ρ (NeZero.pos D))) := by
+  refine cohomologousTo_of_isInjective _ sptFixedPointTensor_isInjective
+    (sptFixedPointAction ρ 1) (Nat.pos_of_ne_zero (NeZero.ne D))
+    (ρ₁ := ρ) (ρ₂ := ρ')
+    (fun g i => by simpa using twistedTensor_sptFixedPointTensor ρ 1 g i) ?_
+  intro g i
+  have hc : φ g ≠ 0 := ((Group.isUnit g).map φ).ne_zero
+  have h := (twistedTensor_sptFixedPointTensor ρ φ g i).symm.trans (hρ' g i)
+  have hcancel := smul_right_injective (M := Matrix (Fin D) (Fin D) ℂ) hc h
+  have hbase := twistedTensor_sptFixedPointTensor ρ 1 g i
+  simp only [MonoidHom.one_apply, one_smul] at hbase
+  exact hbase.trans hcancel
+
+/-- **The fixed-point tensor realizes the prescribed character and class `[ω]`.**
+The supplied virtual representation implements the character-valued symmetry and has the
+prescribed factor system. Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1147–1157). -/
+theorem exists_virtualRep_sptFixedPointTensor [NeZero D]
+    (ρ : ProjectiveRepresentation (D := D) ω) (φ : G →* ℂ) :
+    ∃ ω' : ScalarCocycle G, ∃ ρ' : ProjectiveRepresentation (D := D) ω',
+      (∀ g i, twistedTensor (sptFixedPointTensor D) (sptFixedPointAction ρ φ) g i =
+        φ g • ((ρ'.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * sptFixedPointTensor D i *
+          (((ρ'.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) ∧
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (ScalarCocycle.isMulCocycle₂_of_projRep ρ' (NeZero.pos D))) =
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (ScalarCocycle.isMulCocycle₂_of_projRep ρ (NeZero.pos D))) :=
+  ⟨ω, ρ, twistedTensor_sptFixedPointTensor ρ φ, rfl⟩
+
+/-- **A unitary virtual action and unit-modulus character give a unitary physical action.**
+The action `U(g) = φ(g) (W_gᵀ ⊗ W_g⁻¹)` is unitary because `W_g⁻¹ = W_g†` and `|φ(g)| = 1`.
+Source: arXiv:2011.12127, §III.A
+(`Papers/2011.12127/TN-Review-main.tex` lines 1152–1157), where the gauges `X_g` are
+unitary. -/
+theorem sptFixedPointAction_mem_unitaryGroup (ρ : ProjectiveRepresentation (D := D) ω)
+    (φ : G →* ℂ)
+    (hρ : ∀ g, (ρ.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup (Fin D) ℂ)
+    (hφ : ∀ g, ‖φ g‖ = 1) (g : G) :
+    sptFixedPointAction ρ φ g ∈ Matrix.unitaryGroup (Fin (D * D)) ℂ := by
+  have hW := hρ g⁻¹
+  have hinv := Matrix.coe_gl_inv_eq_conjTranspose_of_mem_unitaryGroup
+    (sptGauge ρ g) hW
+  have hφunitary : φ g ∈ unitary ℂ :=
+    ((Group.isUnit g).map φ).mem_unitary_of_star_mul_self (by
+      simpa [Complex.star_def, Complex.normSq_eq_norm_sq, hφ g] using
+        (Complex.normSq_eq_conj_mul_self (z := φ g)).symm)
+  simp only [sptFixedPointAction, MonoidHom.coe_mk, OneHom.coe_mk,
+    Matrix.coe_reindexAlgEquiv]
+  apply Unitary.smul_mem_of_mem hφunitary
+  apply Matrix.reindex_mem_unitaryGroup
+  rw [sptKron, hinv, ← Matrix.star_eq_conjTranspose]
+  exact Matrix.kronecker_mem_unitary (Matrix.transpose_mem_unitaryGroup_iff.mpr hW)
+    (Unitary.star_mem hW)
+
+/-- **The SPT fixed point of a cocycle class of a finite group.**  Every scalar
+2-cocycle `ω` of a finite group has a unitary projective representation on `ℂ^G` whose
+factor system is cohomologous to `ω`, namely the twisted regular representation of the
+inverse of its pointwise phase
+(`ScalarCocycle.regularProjectiveForClass`).  With this representation the
+fixed-point tensor of bond dimension `|G|` is symmetric under a unitary physical action,
+and every virtual projective representation of that symmetry has a factor system
+cohomologous to `ω`.  The tensor is injective by `sptFixedPointTensor_isInjective`.
+Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
+lines 1147–1157), the fixed point built "starting from any solution of the 1- and
+2-cocycle condition". The character of a finite group has unit modulus because each of
+its values is a root of unity. -/
+theorem exists_unitary_sptFixedPoint_of_isCocycle [Fintype G] (hω : groupCohomology.IsMulCocycle₂ ω)
+    (φ : G →* ℂ) :
+    ∃ (η : ScalarCocycle G) (ρ : ProjectiveRepresentation (D := Fintype.card G) η),
+      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+        (ScalarCocycle.isMulCocycle₂_of_projRep ρ Fintype.card_pos)) =
+        groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω) ∧
+      (∀ g, (ρ.X g : Matrix (Fin (Fintype.card G)) (Fin (Fintype.card G)) ℂ) ∈
+        Matrix.unitaryGroup (Fin (Fintype.card G)) ℂ) ∧
+      (∀ g, sptFixedPointAction ρ φ g ∈
+        Matrix.unitaryGroup (Fin (Fintype.card G * Fintype.card G)) ℂ) ∧
+      IsOnSiteSymmetricUpToCharacter (sptFixedPointTensor (Fintype.card G))
+        (sptFixedPointAction ρ φ) φ ∧
+      ∀ {ω' : ScalarCocycle G} (ρ' : ProjectiveRepresentation (D := Fintype.card G) ω'),
+        (∀ g i, twistedTensor (sptFixedPointTensor (Fintype.card G))
+            (sptFixedPointAction ρ φ) g i =
+          φ g • ((ρ'.X (g⁻¹) : Matrix (Fin (Fintype.card G)) (Fin (Fintype.card G)) ℂ) *
+            sptFixedPointTensor (Fintype.card G) i *
+            (((ρ'.X (g⁻¹))⁻¹ : GL (Fin (Fintype.card G)) ℂ) :
+              Matrix (Fin (Fintype.card G)) (Fin (Fintype.card G)) ℂ))) →
+        groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+          (ScalarCocycle.isMulCocycle₂_of_projRep ρ' Fintype.card_pos)) =
+          groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω) := by
+  classical
+  have : NeZero (Fintype.card G) := ⟨Fintype.card_ne_zero⟩
+  have hη := (ScalarCocycle.H2π_circlePhaseInclusion hω).symm
+  have hu := ω.regularProjectiveForClass_mem_unitaryGroup hω
+  have hφ : ∀ g, ‖φ g‖ = 1 := fun g =>
+    Complex.norm_eq_one_of_pow_eq_one
+      (by rw [← map_pow, pow_orderOf_eq_one, map_one]) (orderOf_pos g).ne'
+  exact ⟨_, ω.regularProjectiveForClass hω, hη, hu,
+    sptFixedPointAction_mem_unitaryGroup _ φ hu hφ,
+    sptFixedPointTensor_isOnSiteSymmetricUpToCharacter _ φ,
+    fun ρ' hρ' => (cohomologousTo_of_sptFixedPointTensor _ φ ρ' hρ').trans hη⟩
+
+end Symmetry
+
+end MPSTensor

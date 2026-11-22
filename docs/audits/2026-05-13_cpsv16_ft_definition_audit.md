@@ -29,7 +29,7 @@ in our Lean encoding? Each section gives:
 
 ### 1.1 `IsCanonicalForm` (block-data version)
 
-(a) **Lean:** `TNLean/PiAlgebra/CanonicalFormSepAux.lean:231–251`.
+(a) **Lean:** `TNLean/MPS/CanonicalForm/BlockFamily.lean:231–251`.
 
 (b) **Content:** A `Prop`-valued structure on the *separated block data*
 `(μ : Fin r → ℂ, A : (k : Fin r) → MPSTensor d (dim k))` with five fields:
@@ -101,7 +101,7 @@ get the gauge matrix from the phase relation).
 
 ### 1.2 `IsCanonicalFormBNT` (the load-bearing structure)
 
-(a) **Lean:** `TNLean/MPS/BNT/Construction.lean:99–110`.
+(a) **Lean:** `TNLean/MPS/CanonicalForm/BNT/Construction.lean:99–110`.
 
 (b) **Content:** Extends `IsCanonicalForm` with two extra fields:
 
@@ -181,7 +181,7 @@ paper proof crucially exploits:
    geometrically off-dominant.
 
 A multiplicity-aware structure for the same data exists in the codebase as
-`SectorDecomposition` (`TNLean/MPS/SharedInfra/SectorDecomposition.lean:61`),
+`SectorDecomposition` (`TNLean/MPS/Tensor/DirectSum/SectorDecomposition.lean:61`),
 which carries the paper-faithful $(j, q)$ indexing, the multiset `weight j q`,
 and the coefficient `coeff P N j = ∑_q (weight j q)^N`. But the proportional
 FT chain is keyed on `IsCanonicalFormBNT`, not `SectorDecomposition`, so the
@@ -216,8 +216,8 @@ yes/no answer.
 
 ### 1.3 `IsNormalCanonicalForm` and `IsNormalCanonicalFormBNT`
 
-(a) **Lean:** `TNLean/PiAlgebra/CanonicalFormSepAux.lean:317–332` and
-`TNLean/MPS/BNT/Construction.lean:187–198`.
+(a) **Lean:** `TNLean/MPS/CanonicalForm/BlockFamily.lean:317–332` and
+`TNLean/MPS/CanonicalForm/BNT/Construction.lean:187–198`.
 
 (b) **Content:** `IsNormalCanonicalForm` has
 `block_irreducible`, `leftCanonical`, `block_primitive`, `mu_antitone`,
@@ -241,7 +241,7 @@ NCF-BNT variant), so the practical narrowing is via 1.2.
 ### 1.4 `IsLeftCanonicalBlockFamily`, `HasNormalizedSelfOverlap`,
 `HasInjectiveBlocks`, `HasStrictOrderedNonzeroWeights`
 
-(a) **Lean:** `TNLean/PiAlgebra/CanonicalFormSepAux.lean:69, 128, 165, 200`.
+(a) **Lean:** `TNLean/MPS/CanonicalForm/BlockFamily.lean:69, 128, 165, 200`.
 
 (b) **Content:** Field projections of `IsCanonicalForm` / `IsCanonicalFormBNT`
 into single-condition wrappers (each carries one of the fields above with the
@@ -262,7 +262,7 @@ because `HasStrictOrderedNonzeroWeights` carries `mu_strict_anti`.
 
 ### 2.1 `IsBNT`
 
-(a) **Lean:** `TNLean/MPS/BNT/Basic.lean:75–87`.
+(a) **Lean:** `TNLean/MPS/CanonicalForm/BNT/Basic.lean:75–87`.
 
 (b) **Content:**
 
@@ -288,7 +288,7 @@ structure IsBNT {d Dtot : ℕ} (A_total : MPSTensor d Dtot)
 
 - `normal` ↔ "the $A_j$ are NT": matches in *spirit* but the Lean `IsNormal`
   is the **algebraic** notion (`∃ N, IsNBlkInjective A N`,
-  `TNLean/MPS/Defs.lean:243–244`) — eventual block injectivity — whereas the
+  `TNLean/MPS/Tensor/Defs.lean:243–244`) — eventual block injectivity — whereas the
   paper's NT (CPSV16 §II p. 7) is the **spectral** notion: no nontrivial
   invariant projector and unique peripheral eigenvalue. By Wielandt's theorem
   these are equivalent up to blocking (paper §II just before
@@ -318,7 +318,7 @@ projections.
 
 ### 3.1 `IsNormal`
 
-(a) **Lean:** `TNLean/MPS/Defs.lean:243–244`.
+(a) **Lean:** `TNLean/MPS/Tensor/Defs.lean:243–244`.
 
 (b) **Content:**
 
@@ -350,7 +350,7 @@ consequence.
 The codebase has a separate spectral-primitivity surface at
 `TNLean/Channel/Peripheral/Spectrum.lean:181` (`IsPrimitive` on a channel,
 `peripheralEigenvalues E = {1}`) and `IsIrreducibleTensor` at
-`TNLean/MPS/CanonicalForm/Reduction.lean:54` (no invariant orthogonal
+`TNLean/MPS/Tensor/DirectSum/IrreducibleDecomposition.lean:54` (no invariant orthogonal
 projection). These match the paper's two conditions. `IsNormalCanonicalForm`
 (§1.3) carries both.
 
@@ -383,7 +383,7 @@ So this broadening doesn't bite the FT.
 
 ### 4.1 `mpv` and `mpvState`
 
-(a) **Lean:** `TNLean/MPS/Defs.lean:70` and `TNLean/MPS/Overlap/Basic.lean:40`.
+(a) **Lean:** `TNLean/MPS/Tensor/Defs.lean:70` and `TNLean/MPS/Tensor/Overlap.lean:40`.
 
 (b) **Content:**
 
@@ -408,7 +408,7 @@ into the EuclideanSpace coefficient vector.
 
 ### 4.2 `toTensorFromBlocks`
 
-(a) **Lean:** `TNLean/MPS/SharedInfra/BlockAssembly.lean:23–28`.
+(a) **Lean:** `TNLean/MPS/Tensor/DirectSum/BlockAssembly.lean:23–28`.
 
 (b) **Content:**
 
@@ -474,7 +474,7 @@ unavailable here.
 
 ### 5.1 `mpvOverlap` and `mpvInner`
 
-(a) **Lean:** `TNLean/MPS/Overlap/Basic.lean:49–54`.
+(a) **Lean:** `TNLean/MPS/Tensor/Overlap.lean:49–54`.
 
 (b) **Content:**
 
@@ -532,7 +532,7 @@ with the way `hAllDecay` enters Step 1.
 
 ### 6.1 `SameMPV₂`
 
-(a) **Lean:** `TNLean/MPS/Defs.lean:90`.
+(a) **Lean:** `TNLean/MPS/Tensor/Defs.lean:90`.
 (b) **Content:** `∀ N σ, mpv A σ = mpv B σ` (heterogeneous bond-dim version).
 (c) **Paper:** Equal-MPV hypothesis of Corollary `II_cor2` (CPSV16 p. 9).
 (d) **Comparison.** Exact match.
@@ -540,7 +540,7 @@ with the way `hAllDecay` enters Step 1.
 
 ### 6.2 `ProportionalMPV₂`
 
-(a) **Lean:** `TNLean/MPS/Defs.lean:108–109`.
+(a) **Lean:** `TNLean/MPS/Tensor/Defs.lean:108–109`.
 (b) **Content:** `∀ N, ∃ c : ℂ, ∀ σ, mpv A σ = c * mpv B σ`.
 (c) **Paper:** Theorem `thm1` (CPSV16 p. 9): "If for all $N$, $A$ and $B$
 generate MPV that are proportional to each other..." The scalar in the
@@ -552,7 +552,7 @@ nonzero variant.
 
 ### 6.3 `NonzeroProportionalMPV₂`
 
-(a) **Lean:** `TNLean/MPS/Defs.lean:122–124`.
+(a) **Lean:** `TNLean/MPS/Tensor/Defs.lean:122–124`.
 (b) **Content:** `∀ N, ∃ c : ℂ, c ≠ 0 ∧ ∀ σ, mpv A σ = c * mpv B σ`.
 (c) **Paper:** Theorem `thm1`, projective reading; see also
 `docs/paper-gaps/cpsv16_nonzero_proportionality_reading.tex`.
@@ -562,7 +562,7 @@ other".
 
 ### 6.4 `EventuallyNonzeroProportionalMPV₂` (the actual FT hypothesis)
 
-(a) **Lean:** `TNLean/MPS/Defs.lean:136–141`.
+(a) **Lean:** `TNLean/MPS/Tensor/Defs.lean:136–141`.
 
 (b) **Content:**
 
@@ -638,7 +638,7 @@ exists. No discrepancy.
 
 ### 7.1 `GaugeEquiv`
 
-(a) **Lean:** `TNLean/MPS/Defs.lean:78–79`.
+(a) **Lean:** `TNLean/MPS/Tensor/Defs.lean:78–79`.
 
 (b) **Content:**
 
@@ -654,7 +654,7 @@ invertible $X$. (Also CPSV21 Def. 4.3.)
 
 ### 7.2 `GaugePhaseEquiv`
 
-(a) **Lean:** `TNLean/MPS/Defs.lean:200–203`.
+(a) **Lean:** `TNLean/MPS/Tensor/Defs.lean:200–203`.
 
 (b) **Content:**
 
@@ -730,7 +730,7 @@ Covered in §4.2.
 
 ### 8.2 `BlockPermutationGaugePhaseConclusion`
 
-(a) **Lean:** `TNLean/MPS/BNT/Construction.lean:549–559`.
+(a) **Lean:** `TNLean/MPS/CanonicalForm/BNT/Construction.lean:549–559`.
 
 (b) **Content:**
 
@@ -992,22 +992,22 @@ the obstruction is definitional, not mathematical.
   `audits/2026-05-13_cpsv16_ft_sorry_discharge_plan.md` (discharge plan);
   `docs/paper-gaps/cpsv16_ft_one_copy_scope_restriction.tex` (scope restriction).
 - **Code:**
-  - `TNLean/MPS/BNT/Construction.lean` (`IsCanonicalFormBNT`,
+  - `TNLean/MPS/CanonicalForm/BNT/Construction.lean` (`IsCanonicalFormBNT`,
     `IsNormalCanonicalFormBNT`, `BlockPermutationGaugePhaseConclusion`).
-  - `TNLean/MPS/BNT/Basic.lean` (`IsBNT`).
-  - `TNLean/PiAlgebra/CanonicalFormSepAux.lean` (`IsCanonicalForm`,
+  - `TNLean/MPS/CanonicalForm/BNT/Basic.lean` (`IsBNT`).
+  - `TNLean/MPS/CanonicalForm/BlockFamily.lean` (`IsCanonicalForm`,
     `IsNormalCanonicalForm`, `HasInjectiveBlocks`, `IsLeftCanonicalBlockFamily`,
     `HasNormalizedSelfOverlap`, `HasStrictOrderedNonzeroWeights`).
-  - `TNLean/MPS/Defs.lean` (`mpv`, `GaugeEquiv`, `SameMPV₂`,
+  - `TNLean/MPS/Tensor/Defs.lean` (`mpv`, `GaugeEquiv`, `SameMPV₂`,
     `ProportionalMPV₂`, `NonzeroProportionalMPV₂`,
     `EventuallyNonzeroProportionalMPV₂`, `GaugePhaseEquiv`, `IsNormal`,
     `IsNBlkInjective`).
-  - `TNLean/MPS/Overlap/Basic.lean` (`MPVSpace`, `mpvState`, `mpvInner`,
+  - `TNLean/MPS/Tensor/Overlap.lean` (`MPVSpace`, `mpvState`, `mpvInner`,
     `mpvOverlap`).
-  - `TNLean/MPS/SharedInfra/BlockAssembly.lean` (`toTensorFromBlocks`).
-  - `TNLean/MPS/SharedInfra/SectorDecomposition.lean` (`SectorDecomposition`,
+  - `TNLean/MPS/Tensor/DirectSum/BlockAssembly.lean` (`toTensorFromBlocks`).
+  - `TNLean/MPS/Tensor/DirectSum/SectorDecomposition.lean` (`SectorDecomposition`,
     `SectorWeightData.coeff`).
-  - `TNLean/MPS/CanonicalForm/Reduction.lean` (`IsIrreducibleTensor`).
+  - `TNLean/MPS/Tensor/DirectSum/IrreducibleDecomposition.lean` (`IsIrreducibleTensor`).
   - `TNLean/Channel/Peripheral/Spectrum.lean` (`IsPrimitive` on channels).
   - `TNLean/Wielandt/Primitivity/PaperDefinitions.lean` (`IsPrimitivePaper`).
   - `TNLean/MPS/FundamentalTheorem/Full/` (the proportional FT chain).

@@ -6,7 +6,7 @@ Authors: Sirui Lu
 import QICLean.Analysis.Real.ComplexSqrt
 import TNLean.MPS.Examples.Ising.IsingGauge
 import TNLean.MPS.Examples.Ising.Zsqrt2OperatorFusion
-import TNLean.MPS.MPDO.SimpleScaling
+import TNLean.MPS.CanonicalForm.SimpleMPO.SimpleScaling
 
 /-!
 # Ising anyon chain: closed-path kernels and the gauges of the fusion products

@@ -116,17 +116,17 @@ a paper-gap note (decision 1.D4).
 2. **Independent and narrow** (each its own change, any order, rebuild limited to the edited
    modules and their few importers): family 6 rules R1, R2, R4 (R3 after step 1) and its PEPS
    deletions; family 7 S2, S4; family 5 FF12, FF12′ and FF10.
-3. **Families 4 and 5 together** (one change): `MPS/ParentHamiltonian/Defs.lean` has 1195
+3. **Families 4 and 5 together** (one change): `MPS/Tensor/GroundSpace/ParentHamiltonian.lean` has 1195
    transitive importers and `UniqueGroundState.lean` 866, so each forces a wide rebuild; doing
    FF1, FF2 and both steps of family 4 in one change pays it once, preferably together with the
    #10948 parent-interaction work.
 4. **Family 1**, steps S0–S3 as one change and S4–S5, then S6–S7 as one change. `BNT/Basic`
    (1,244 importers), `CanonicalFormSepAux` (1,139), `Core/MultiBlock` (1,640) and `Definitions`
    (1,084) make every step a wide rebuild; the grouping keeps it to three.
-5. **Family 2** with the F2 split of `MPS/MPDO/CommutingForm.lean` (348 importers), and
+5. **Family 2** with the F2 split of `MPS/Operator/Simple/CommutingForm.lean` (348 importers), and
    **family 3** (`AreaLaw.lean`, 507 importers) — both are in `MPS/MPDO` and can share a rebuild;
    both after family 1's S2–S4 have landed, because of textual overlaps in `MPS/MPDO`.
-6. **Family 7 S1** (`MPS/RFP/Defs.lean`, most of `MPS/RFP` and `MPS/MPDO`) after family 3.
+6. **Family 7 S1** (`MPS/Transfer/RenormalizationFixedPoint/Defs.lean`, most of `MPS/RFP` and `MPS/MPDO`) after family 3.
 7. **Family 7 S3 and S5** with F1 (the split of `PEPS`) and #10944 E3 (configuration spaces),
    so that the PEPS modules are rewritten once.
 8. Deferred, each with its own issue: family 6 D3 (union closure as a hypothesis, 47 PEPS
@@ -425,13 +425,13 @@ that name `CPSVCanonicalFormData`, `IsCPSVCanonicalForm`, `CPSVCanonicalFormII*`
 
 #### Bridge modules
 
-- `TNLean/MPS/BNT/Bridge.lean`: deleted. Of its four theorems three are
+- `TNLean/MPS/CanonicalForm/BNTPresentation/Bridge.lean`: deleted. Of its four theorems three are
   translations to or from `IsBNT`; `blocks_dim_pos` moves to Definitions.lean.
   Direct importers (7): BNT.lean (aggregator), RFP/BNTDirectSumBasis.lean,
   RFP/ResidualIsometry.lean, MPDO/VerticalBNTConstruction.lean,
   MPDO/SourceBNTBlocking.lean, MPDO/BNTAlgebraTensorClause.lean,
   MPDO/BNTFusionTensorClauseFromRFP.lean; 253 modules downstream.
-- `TNLean/MPS/FundamentalTheorem/SectorBNT/CanonicalFormBridge.lean`: relates two
+- `TNLean/MPS/CanonicalForm/BNTPresentation/CanonicalFormBridge.lean`: relates two
   different objects (a canonical form of `A`, a sector presentation), so it is a
   theorem; its construction duplicates `BNTRefinement.isBNTSectorPresentation` up
   to the left-canonical gauge. Merged into CanonicalForm/BNTRefinement.lean as
@@ -948,7 +948,7 @@ Proved relations at HEAD (all hypothesis lists are those of the Lean statements)
   formula `I_L = S_L + S_{N-L} - S_N` (l.797); it is the one place where translation invariance
   enters. Its proof is the present body of `mutualInfoChain_eq_mutualInformation`.
 * **`mutualInfoChain_eq_mutualInformation`: deleted** (holds by `rfl` after the redefinition).
-* **`MPS/MPDO/MutualInfoBridge`: dissolved** (the architecture table's "deleted in F2"): its
+* **`MPS/MPDO/Entropy/MutualInfoBridge`: dissolved** (the architecture table's "deleted in F2"): its
   definitions and marginal theorems move to `AreaLaw.lean`, the operator-Schmidt decomposition to
   `MutualInfoAreaLaw.lean`.
 * **`ManyBody.regionMutualInformation`: different notion** (pure vector, arbitrary regions); its name
@@ -968,7 +968,7 @@ Proved relations at HEAD (all hypothesis lists are those of the Lean statements)
 ### Change list
 
 Deleted: `MPOTensor.mutualInfoChain_eq_mutualInformation` (1 declaration); module
-`TNLean/MPS/MPDO/MutualInfoBridge.lean` (13 declarations, 12 moved unchanged).
+`TNLean/MPS/MPDO/Entropy/MutualInfoBridge.lean` (13 declarations, 12 moved unchanged).
 
 Restated (old → new):
 
@@ -1663,7 +1663,7 @@ MPS/FundamentalTheorem 1). Translations between them: `isNBlkInjective_iff_block
 | `IsNormalTorusRectanglePEPS A` (`PEPS/NormalTorusRectanglePEPS.lean:51`) | every non-wrapping `2×3`, `3×2` torus rectangle injective, nonzero bonds | `:1453-1471` | 3 / 20 |
 | `IsNormalSquareLatticeRectanglePEPS A` (`PEPS/NormalSquareUnconditionalFundamentalTheorem.lean:115`) | same on the open square lattice | `:1453-1471` | 1 / 6 |
 | `IsNormalTorusArcWindowPEPS L K A` (`PEPS/TorusWindowComplement.lean:484`) | every cyclic `L × K` window injective, nonzero bonds | `:2297-2318` | 6 / 15 |
-| `SingletonRegionInjectivityComparison κ A`, `SingletonRegionInjectivityFromVertexInjectivity κ A` (`PEPS/SingletonRegion.lean`), `EdgeMiddleRegionInjectivityComparison`, `EdgeMiddleKernelDescentData` (`PEPS/EdgeMiddlePhysical/Basic.lean:206, 270`) | implications stored as structures | `:981-1009` | 3 / 9, 1 / 6, 1 / 17, 2 / 6 |
+| `SingletonRegionInjectivityComparison κ A`, `SingletonRegionInjectivityFromVertexInjectivity κ A` (`PEPS/Injectivity/Region/SingletonRegion.lean`), `EdgeMiddleRegionInjectivityComparison`, `EdgeMiddleKernelDescentData` (`PEPS/EdgeMiddlePhysical/Basic.lean:206, 270`) | implications stored as structures | `:981-1009` | 3 / 9, 1 / 6, 1 / 17, 2 / 6 |
 
 #### Proved relations (file:line at HEAD)
 
@@ -1780,10 +1780,10 @@ MPS/FundamentalTheorem 1). Translations between them: `isNBlkInjective_iff_block
 | `MPSTensor.isNBlkInjective_of_ge_of_unital`, `MPSTensor.isNBlkInjective_of_le_of_unital` (two copies of PVWC07 `:896-898`) | one QICLean theorem `Kraus.isNBlkInjective_of_le_of_unital` next to `Kraus.wordSpan_eq_top_of_ge_of_isTP` (both TNLean callers import neither copy's module, so the survivor must sit below both) | 5 files / 9 occurrences (R3); blueprint `thm:wordspan_propagation_unital` (`ch08_wielandt_word_span_and_block_injectivity.tex:12`) retargeted |
 | `MPSTensor.isNBlkInjective_smul` (copy of `isNBlkInjective_smul_iff`) | `(isNBlkInjective_smul_iff hz _ _).2` | 4 files / 8 occurrences (R4); 4 lines to reflow |
 | `Kraus.HasEventuallyFullWordSpan`, `Kraus.hasEventuallyFullWordSpan_iff_exists_pos_of_isTP`, `Kraus.HasEventuallyFullWordSpan.blockTensor`, `MPSTensor.isNormal → HasEventuallyFullWordSpan` (`Wielandt/SpanGrowth/InvertibleWordSpan.lean:43`) | `Kraus.IsNormal` | QICLean 24 occ; TNLean 3 modules / 5 occ (hand) |
-| `SingletonRegionTensorInjective`, `singletonRegionTensorFamily`, `IsVertexInjective.singletonRegionTensorInjective`, `SingletonRegionInjectivityComparison`, `SingletonRegionInjectivityFromVertexInjectivity` and its `ofSingletonComparison` | `LinearIndependent ℂ (A.component v)`; `regionBlockedTensorInjective_of_isVertexInjective` | `PEPS/SingletonRegion.lean` deleted (156 lines); 3 modules use the comparison structures (`RegionBlock/UnionClosure.lean`, `EdgeMiddlePhysical/Basic.lean` 5 theorems); blueprint `thm:peps_singletonRegionTensorInjective`, `thm:peps_singletonRegionInjectivityFromVertexInjectivity`, the definition block at `ch24_peps_ft_edge_middle.tex:404-405` |
+| `SingletonRegionTensorInjective`, `singletonRegionTensorFamily`, `IsVertexInjective.singletonRegionTensorInjective`, `SingletonRegionInjectivityComparison`, `SingletonRegionInjectivityFromVertexInjectivity` and its `ofSingletonComparison` | `LinearIndependent ℂ (A.component v)`; `regionBlockedTensorInjective_of_isVertexInjective` | `PEPS/Injectivity/Region/SingletonRegion.lean` deleted (156 lines); 3 modules use the comparison structures (`RegionBlock/UnionClosure.lean`, `EdgeMiddlePhysical/Basic.lean` 5 theorems); blueprint `thm:peps_singletonRegionTensorInjective`, `thm:peps_singletonRegionInjectivityFromVertexInjectivity`, the definition block at `ch24_peps_ft_edge_middle.tex:404-405` |
 | `EdgeMiddleKernelDescentData`, `edgeMiddleKernelDescentData`, `edgeMiddleKernelCondition*`, `initial_kernelCondition` (edge version), `EdgeMiddleRegionInjectivityComparison` and its 8 theorems | `regionBlockedTensorInjective_of_isVertexInjective` at `edgeMiddleVertices e`, transported as in `VertexComplement/Injective.lean` | `EdgeMiddlePhysical/KernelDescent.lean` (731 lines) deleted; 6 modules / 26 occ of the `edgeBlockedThreeSiteInjective` lemmas keep their statements; blueprint 9 `\lean` entries in `ch24_peps_ft_edge_middle.tex` and `ch24_peps_ft_edge_kernel_gauges_kernel_descent_recovery.tex` (`def:peps_edgeMiddleRegionInjectivityComparison`, `thm:peps_edgeMiddleTensorInjective_of_kernelDescent`, `thm:peps_edgeBlockedThreeSiteInjective*`, `thm:peps_edgeMiddleTensorInjective_*`) |
 | `HasInjectiveBlocks` | `∀ k, Kraus.IsInjective (A k)` | 2 modules / 4 occ (hand; family 1 region) |
-| `IsNormalTensor.isNBlkInjective_pow_four`, private `isNBlkInjective_cap_pow_four` | `isNBlkInjective_pow_four_of_isNormal hA.isNormal` (moved below `MPS/ParentHamiltonian`, next to its TP form in `MPS/CanonicalForm/SectorComparison/NormalityChain.lean`) | 2 modules / 4 occ; blueprint `lem:spc_aux_normal_fourth_power_blocking` (`ch12_symmetry_spt_compact_limits.tex:1667`) retargeted |
+| `IsNormalTensor.isNBlkInjective_pow_four`, private `isNBlkInjective_cap_pow_four` | `isNBlkInjective_pow_four_of_isNormal hA.isNormal` (moved below `MPS/ParentHamiltonian`, next to its TP form in `MPS/CanonicalForm/NormalBlocks/NormalityChain.lean`) | 2 modules / 4 occ; blueprint `lem:spc_aux_normal_fourth_power_blocking` (`ch12_symmetry_spt_compact_limits.tex:1667`) retargeted |
 | `exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical`, `blockTensor_isInjective_mul_of_blockTensor_isInjective`, `IsNormalTensor.blockTensor_isInjective_of_bondDim_le` | restated with `Kraus.IsNBlkInjective` conclusions. Callers that need the blocked tensor apply `isNBlkInjective_iff_blockTensor_isInjective` once | 1 / 4, 5 / 8, 2 / 2; blueprint `thm:bounded_injective_blocking_normal_left_canonical`, `lem:spc_aux_bounded_normal_fourth_power_blocking` |
 
 Added (in `New.lean`, all elaborated): `Kraus.isInjective_iff_wordSpan_one_eq_top`,
@@ -1822,16 +1822,16 @@ deletion, not kept), `VaryingBondChain.isBlockInjective_iff_forall_isInjectiveOn
 
 #### Modules deleted or merged
 
-* `TNLean/PEPS/SingletonRegion.lean`: deleted. Its importers (`RegionBlock/UnionClosure.lean`,
+* `TNLean/PEPS/Injectivity/Region/SingletonRegion.lean`: deleted. Its importers (`RegionBlock/UnionClosure.lean`,
   `EdgeMiddlePhysical/Basic.lean`, `TNLean/PEPS.lean`) drop the import.
-* `TNLean/PEPS/EdgeMiddlePhysical/KernelDescent.lean`: deleted (2 importers).
+* `TNLean/PEPS/FundamentalTheorem/Injective/EdgeMiddleKernelDescent.lean`: deleted (2 importers).
 * No module is named for a bridge between two formulations of one object in this family.
 
 ### Order of application
 
 1. **QICLean first (step Q1).** Delete `HasEventuallyFullWordSpan` (24 occurrences; QICLean's
    Wielandt users switch to `IsNormal`). Add `Kraus.isNBlkInjective_of_le` (positive length,
-   moved from `Wielandt/SpanGrowth/CumulativeSpan.lean`, a leaf module) and
+   moved from `MPS/Tensor/Words/WordSpan.lean`, a leaf module) and
    `Kraus.isNBlkInjective_of_le_of_unital`. Then bump the pin in TNLean. The bump recompiles every
    module importing `QICLean.Kraus.Injectivity`, which is nearly the whole library. Fold it
    into an already planned pin bump.
@@ -1990,7 +1990,7 @@ MPS/Preparation (union of the rows above). Blueprint labels: `def:physical_block
 `MPOTensor.TransferRetractData` caveats rewritten. Paper-gap note to update:
 `docs/paper-gaps/cpsv16_pure_zcl_local_orthogonality_scope.tex` (the single-block convention it
 documents disappears; it keeps only the statement that the BNT-level theorem is
-`IsPositiveGapBNTZCL`). Rebuild: `MPS/RFP/Defs.lean` is imported by most of `MPS/RFP` and
+`IsPositiveGapBNTZCL`). Rebuild: `MPS/Transfer/RenormalizationFixedPoint/Defs.lean` is imported by most of `MPS/RFP` and
 `MPS/MPDO`; one change.
 
 ### S2. Deterministic sequential generation: two names

@@ -12,7 +12,7 @@ package lean options (no new warnings on the touched files),
 
 ## 1. Superseded positive-weight irreducible-form witness
 
-`TNLean/MPS/Periodic/NormalCanonicalPeriodOne.lean`
+`TNLean/MPS/CanonicalForm/Periodic/NormalCanonicalPeriodOne.lean`
 
 | Removed | Replacement |
 |---|---|
@@ -30,7 +30,7 @@ phase-normalized pair, so no gap or blueprint edit was needed.
 
 ## 2. Periodic-tensor alias namespace
 
-`TNLean/MPS/Periodic/Defs.lean`
+`TNLean/MPS/Transfer/Irreducible/Periodic.lean`
 
 Every member of the `MPSTensor.PeriodicMPSTensor` namespace forwarded to the
 chain-level declaration of the same name, and none had a Lean consumer.
@@ -52,8 +52,8 @@ redirected to the survivors in the same change (labels
 marks are unchanged, since the surviving declarations state exactly the same
 mathematics.
 
-`import TNLean.MPS.Chain.Defs` was deliberately kept in
-`TNLean/MPS/Periodic/Defs.lean`: `TNLean/MPS/Periodic/StateVectorDecomposition.lean`
+`import TNLean.MPS.Tensor.Chain.Defs` was deliberately kept in
+`TNLean/MPS/Transfer/Irreducible/Periodic.lean`: `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/StateVectorDecomposition.lean`
 reaches `MPSChainTensor` only transitively through this import.
 
 ## 3. Zero-reference declarations
@@ -64,14 +64,14 @@ mentions are historical snapshots under `docs/audits/`, left in place.
 
 | Removed | File | Replacement |
 |---|---|---|
-| `MPSTensor.piTensorProduct_eq_smul_of_cyclic_products` | `MPS/Periodic/Overlap/SectorMatch/CyclicTrace.lean` | none — unreferenced |
+| `MPSTensor.piTensorProduct_eq_smul_of_cyclic_products` | `MPS/CanonicalForm/Periodic/Overlap/SectorMatchCyclicTrace.lean` | none — unreferenced |
 | `MPSTensor.sameMPV₂_single_block` | `MPS/FundamentalTheorem/ProductAlgebra.lean` | none — unreferenced |
 | `MPSTensor.fundamentalTheorem_singleBlock_fromMPV₂` | `MPS/FundamentalTheorem/ProductAlgebra.lean` | none — unreferenced |
-| `MPSTensor.SectorBNT.Examples.signFlipDecomp_weight_unit_per_block` | `MPS/FundamentalTheorem/SectorBNT/Examples.lean` | none — unreferenced |
-| `MPSTensor.SectorBNT.Examples.halvedDecomp_weight_unit_per_block` | `MPS/FundamentalTheorem/SectorBNT/Examples.lean` | none — unreferenced |
-| `MPSTensor.BasisOfPeriodicTensors` | `MPS/Periodic/Defs.lean` | none — unreferenced |
-| `MPSTensor.gaugePhaseEquiv_to_repeatedBlocks_of_leftCanonical_irreducible` | `MPS/Periodic/Overlap/GaugePhase.lean` | none — unreferenced |
-| `MPSTensor.cornerProd_single` | `MPS/Periodic/CornerTransition.lean` | none — unreferenced |
+| `MPSTensor.SectorBNT.Examples.signFlipDecomp_weight_unit_per_block` | `MPS/CanonicalForm/BNTPresentation/Examples.lean` | none — unreferenced |
+| `MPSTensor.SectorBNT.Examples.halvedDecomp_weight_unit_per_block` | `MPS/CanonicalForm/BNTPresentation/Examples.lean` | none — unreferenced |
+| `MPSTensor.BasisOfPeriodicTensors` | `MPS/Transfer/Irreducible/Periodic.lean` | none — unreferenced |
+| `MPSTensor.gaugePhaseEquiv_to_repeatedBlocks_of_leftCanonical_irreducible` | `MPS/CanonicalForm/Periodic/CyclicSectors/GaugePhase.lean` | none — unreferenced |
+| `MPSTensor.cornerProd_single` | `MPS/CanonicalForm/Periodic/CyclicSectors/CornerTransition.lean` | none — unreferenced |
 
 `sameMPV₂_single_block` was cited only by `fundamentalTheorem_singleBlock_fromMPV₂`,
 which is removed in the same change; the surviving general route through
@@ -86,7 +86,7 @@ review rather than widened into this change.
 
 ## 4. Unconsumed prepared-block adapters
 
-`TNLean/MPS/FundamentalTheorem/SectorBNT/Supplier.lean`
+`TNLean/MPS/CanonicalForm/BNTPresentation/PreparedBlocks.lean`
 
 Three bundled adapters over `PreparedBNTBlocks` were added without a consumer
 and still have none. Each is a one-line application of the corresponding
@@ -103,7 +103,7 @@ The three unbundled suppliers are blueprint-tagged
 (`blueprint/src/chapter/ch10_bnt_sector_canonical_form.tex`) and are retained
 unchanged, as is
 `MPSTensor.PreparedBNTBlocks.exists_isBNTCanonicalForm_exact` in
-`TNLean/MPS/FundamentalTheorem/SectorBNT/PreparedReconstruction.lean`, which
+`TNLean/MPS/CanonicalForm/BNTPresentation/PreparedReconstruction.lean`, which
 remains the one bundled method. The module docstring was reworded to describe
 the suppliers this file actually provides and to point at
 `PreparedReconstruction` for the bundled method.
@@ -117,7 +117,7 @@ appears.
 
 ## 5. Mathlib permutation-matrix shadows
 
-`TNLean/MPS/FundamentalTheorem/SectorBNT/FundamentalCoord.lean`
+`TNLean/MPS/FundamentalTheorem/Sectors/FundamentalCoord.lean`
 
 | Removed | Replacement |
 |---|---|

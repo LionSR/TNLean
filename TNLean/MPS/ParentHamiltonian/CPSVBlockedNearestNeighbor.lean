@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.CPSVSharpBlocking
-import TNLean.MPS.MPDO.SourceBNTBlocking
-import TNLean.MPS.ParentHamiltonian.BlockDiagonalOneSiteSpan
-import TNLean.MPS.ParentHamiltonian.CoisometricReconstruction
+import TNLean.MPS.CanonicalForm.BlockSeparation.SharpBlocking
+import TNLean.MPS.CanonicalForm.BlockSeparation.SimultaneousBlocking
+import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BlockDiagonalOneSiteSpan
+import TNLean.MPS.ParentHamiltonian.BlockGroundSpace.CoisometricReconstruction
 
 /-!
 # Nearest-neighbor parent Hamiltonians after sharp CPSV blocking

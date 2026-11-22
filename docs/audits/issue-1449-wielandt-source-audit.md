@@ -3,7 +3,7 @@
 **Audit date**: 2026-05-07
 **Source**: Sanz-Perez-Garcia-Wolf-Cirac, *A quantum version of Wielandt's inequality*, arXiv:0909.5347, Theorem 1
 **Blueprint**: `blueprint/src/chapter/ch08_wielandt.tex`
-**Formal**: `TNLean/Wielandt/Inequality/Bounds.lean`
+**Formal**: `TNLean/MPS/Transfer/Primitivity/Bounds.lean`
 
 ---
 

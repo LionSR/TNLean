@@ -1,7 +1,7 @@
 # The QICLean reduced-projection forwarder in the MPU transport module
 
 This audit records the removal of one zero-content forwarder from
-`TNLean/MPS/MPU/ReducedToHatTransport.lean`. It is the audit note required by
+`TNLean/MPS/MPU/Index/ReducedToHatTransport.lean`. It is the audit note required by
 `docs/project_conventions.md` §Style for a removal under the pass-through
 exception: the removed declaration is named below together with the surviving
 declaration that supersedes it, and the blueprint tag that cited the old name
@@ -11,7 +11,7 @@ was removed in the same change, so no `@[deprecated] alias` is retained.
 
 | Removed | Replacement |
 | --- | --- |
-| `MPOTensor.exists_units_for_hat_reducedProjection` (`TNLean/MPS/MPU/ReducedToHatTransport.lean`) | `Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor` (`QICLean/Analysis/Projection/ReducedProjection.lean`) |
+| `MPOTensor.exists_units_for_hat_reducedProjection` (`TNLean/MPS/MPU/Index/ReducedToHatTransport.lean`) | `Matrix.exists_units_supportInvExtension_reducedProjection_rightFactor` (`QICLean/Analysis/Projection/ReducedProjection.lean`) |
 
 ## What was checked
 

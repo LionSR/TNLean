@@ -4,10 +4,10 @@ cyclic-sector `hLift` and orthogonal-corner rigidity
 ## Scope
 
 Target files re-read for this retry:
-- `TNLean/MPS/Periodic/Overlap/SelfOverlap.lean`
-- `TNLean/MPS/Periodic/Overlap/DifferentPeriod.lean`
-- `TNLean/MPS/Periodic/Overlap/NoSectorMatch.lean`
-- `TNLean/MPS/Periodic/Overlap/Dichotomy.lean`
+- `TNLean/MPS/CanonicalForm/Periodic/Overlap/SelfOverlap.lean`
+- `TNLean/MPS/CanonicalForm/Periodic/Overlap/DifferentPeriod.lean`
+- `TNLean/MPS/CanonicalForm/Periodic/Overlap/NoSectorMatch.lean`
+- `TNLean/MPS/CanonicalForm/Periodic/Overlap/Dichotomy.lean`
 - `Papers/1708.00029/main.tex` (Appendix A, especially lines 908–960)
 - issue #448 and its full comment history
 
@@ -21,7 +21,7 @@ Worktree / branch used:
 than the issue title suggests
 
 On current `main`:
-- `TNLean/MPS/Periodic/Overlap/DifferentPeriod.lean` has **no** `sorry`
+- `TNLean/MPS/CanonicalForm/Periodic/Overlap/DifferentPeriod.lean` has **no** `sorry`
 - `periodicOverlap_tendsto_zero_of_ne_period` is already proved
 
 So the remaining work inside issue #448 is now concentrated in:
@@ -34,21 +34,21 @@ So the remaining work inside issue #448 is now concentrated in:
 Use declaration-name search (for example, `rg`) rather than absolute line
 numbers here, since these files are still moving on current `main`.
 
-#### `TNLean/MPS/Periodic/Overlap/SelfOverlap.lean`
+#### `TNLean/MPS/CanonicalForm/Periodic/Overlap/SelfOverlap.lean`
 - `sectorFixedPointAlgebraRigidity_cyclic_sector_supported` (private theorem)
 - `not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces`
 - `periodicSelfOverlap_tendsto`
 
-#### `TNLean/MPS/Periodic/Overlap/DifferentPeriod.lean`
+#### `TNLean/MPS/CanonicalForm/Periodic/Overlap/DifferentPeriod.lean`
 - none
 
-#### `TNLean/MPS/Periodic/Overlap/NoSectorMatch.lean`
+#### `TNLean/MPS/CanonicalForm/Periodic/Overlap/NoSectorMatch.lean`
 - `exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp`
 - `exists_sector_match_of_gaugePhaseEquiv`
 - `not_gaugePhaseEquiv_of_no_sector_match`
 - `periodicOverlap_tendsto_zero_of_no_sector_match`
 
-#### `TNLean/MPS/Periodic/Overlap/Dichotomy.lean`
+#### `TNLean/MPS/CanonicalForm/Periodic/Overlap/Dichotomy.lean`
 - `periodicOverlapDichotomy`
 - `periodicBasis_eventuallyLinearlyIndependent`
 
@@ -60,8 +60,8 @@ The April 17 issue comment said Cases 1–2 were still routed through the old
 That is no longer the first missing step on current `main`:
 `compressedTensor_adjointTransferMap_cornerBridge` is already available as a
 public theorem in
-`TNLean/MPS/CanonicalForm/CyclicSectors/CornerBridge.lean`, and
-`TNLean/MPS/Periodic/Overlap/SelfOverlap.lean` now uses that result rather
+`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CornerBridge.lean`, and
+`TNLean/MPS/CanonicalForm/Periodic/Overlap/SelfOverlap.lean` now uses that result rather
 than defining its own local bridge lemma.
 
 The honest frontier has moved **earlier** in the argument.

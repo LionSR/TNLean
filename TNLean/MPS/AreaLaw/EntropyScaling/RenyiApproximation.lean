@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.EntropyScaling.EfficientApproximation
-import TNLean.MPS.AreaLaw.MPSApproximation
+import TNLean.MPS.AreaLaw.Approximation.MPSApproximation
 import QICLean.Entropy.Renyi.FlatDensityEntropy
 import QICLean.Entropy.Renyi.Tail
 import QICLean.Entropy.Renyi.Smooth

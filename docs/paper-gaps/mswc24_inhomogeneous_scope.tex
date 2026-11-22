@@ -28,7 +28,7 @@ $\varepsilon(\Omega,\phi_{\mathrm{pos}})$.
 The formal statements\footnote{Formal declarations:
     \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_isometricExtension}
     and \leanid{MPSPreparation.exists_isPreparedInDepth_of_isPairApproximable}
-    in \doclink{TNLean/MPS/Preparation/PartialIsometryPreparation}.}
+    in \doclink{TNLean/MPS/Preparation/Inhomogeneous/PartialIsometryPreparation}.}
 work on a ring of $N$ sites cut into blocks of lengths $\ell_k$, with bond
 dimensions $D_0,\dots,D_{N-1}\le D$ varying along the ring as in the source,
 and blocked tensors that need not be injective. They assume that every block
@@ -93,10 +93,10 @@ $\ket\Omega$ lies in the range of $\bigotimes_k\Pi_k$, and
 $(\bigotimes_kW_k)\ket\Omega=(\bigotimes_kV_k)\ket\Omega$; the corresponding
 statements\footnote{Formal declarations:
     \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous} in
-    \doclink{TNLean/MPS/Preparation/InhomogeneousPreparation}, and
+    \doclink{TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousPreparation}, and
     \leanid{MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn}
     and \leanid{MPSPreparation.exists_isPreparedInDepth_chainBlockIsometryState}
-    in \doclink{TNLean/MPS/Preparation/DepthUpperBound}.}
+    in \doclink{TNLean/MPS/Preparation/Normal/DepthUpperBound}.}
 prepare $(\bigotimes_kV_k)\ket\Omega$ itself and keep the injectivity
 hypothesis, together with the block length $3D$, for that purpose.
 
@@ -105,14 +105,14 @@ The rectangular matrices $A_k^i$ of size $D_k\times D_{k+1}$ are padded with
 zeros to $D\times D$ matrices\footnote{Formal declarations:
     \leanid{VaryingBondChain.zeroPad} and
     \leanid{VaryingBondChain.coeff_zeroPad}
-    in \doclink{TNLean/MPS/Chain/VaryingBondChain}.}.
+    in \doclink{TNLean/MPS/Tensor/VaryingBond/VaryingBondChain}.}.
 The padded chain has the same state, which is proved. For a block of at least
 one site, its blocked tensor $B_k$ vanishes outside the upper-left corner
 $[0,D_{o_k})\times[0,D_{o_{k+1}})$, which is also proved, and its entries on
 that corner are those of the rectangular blocked tensor. This identification
 is proved by
 \leanid{VaryingBondChain.zeroPad_rectangularBlockTensor} in
-\doclink{TNLean/MPS/Preparation/RectangularBlocks}, together with the ordered
+\doclink{TNLean/MPS/Preparation/Inhomogeneous/RectangularBlocks}, together with the ordered
 composition formula for the actual rectangular site transfer maps.
 The injectivity hypothesis of the statement for injective blocked tensors
 is stated directly for $B_k$, as spanning every matrix unit in the corner. For a block of length zero the
@@ -161,7 +161,7 @@ $\delta\ge1$. This is a local fix of the intended reading, not a restriction.
           largest of these depths is absorbed into the constant of the depth
           bound. This argument is formalized in
           \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_of_log_lower}
-          in \doclink{TNLean/MPS/Preparation/InhomogeneousSequence}, including
+          in \doclink{TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousSequence}, including
           the one-site ring with depth zero. The positive lower-growth
           hypothesis remains explicit; it is not inferred from the upper bound.
     \item \emph{Sequence-level statement.} With unit pairs satisfying
@@ -194,7 +194,7 @@ $\delta\ge1$. This is a local fix of the intended reading, not a restriction.
 
           A conditional variant is now formalized in
           \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate}
-          in \doclink{TNLean/MPS/Preparation/InhomogeneousUniformRate}.
+          in \doclink{TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousUniformRate}.
           It assumes a rate $KN^ke^{-rq}$, with $K,r>0$ and $k\ge0$
           independent of $N$, at every scale $1\le q\le N$ for some
           partition with $q\le\ell_j\le2q$.
@@ -202,7 +202,7 @@ $\delta\ge1$. This is a local fix of the intended reading, not a restriction.
           gives the accuracy-dependent depth for every positive ring length.
           If $q>N$, the ring is prepared exactly in depth $O(N)$ by
           \leanid{MPSPreparation.exists_isPreparedInDepth_normalizedChainState}
-          in \doclink{TNLean/MPS/Preparation/InhomogeneousExactPreparation}:
+          in \doclink{TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousSequence}:
           the whole ring is one block, and its normalized positive-part state
           is the input pair. Generic finite-dimensional synthesis is used
           only for the fixed finite set $N<3D$. This proves the stated
@@ -228,9 +228,9 @@ length. The declarations are
 \leanid{MPSChainTensor.traceNorm_transferMap_blockTensor_sub_le_of_choi_domination},
 and
 \leanid{MPSPreparation.exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination}
-in \doclink{TNLean/MPS/Chain/Transfer},
-\doclink{TNLean/MPS/Preparation/InhomogeneousDoeblin}, and
-\doclink{TNLean/MPS/Preparation/InhomogeneousPositivePartRate}.
+in \doclink{TNLean/MPS/Tensor/Chain/Transfer},
+\doclink{TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousDoeblin}, and
+\doclink{TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousDoeblin}.
 
 This condition is imposed on ordered products over actual intervals, not on
 powers of the individual site maps. Separate sitewise spectral gaps are
@@ -262,7 +262,7 @@ estimates are not used as a substitute for that normalization.
 
 Consequently
 \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_ordered_mixing}
-in \doclink{TNLean/MPS/Preparation/InhomogeneousMixingPreparation}
+in \doclink{TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousMixingPreparation}
 derives pair error at most $C_\sigma KN e^{-rq}$ and physical depth
 $O(\log(N/\varepsilon))$. It assumes nonzero periodic targets at every
 positive ring length, as required to interpret the source's normalized
@@ -275,7 +275,7 @@ and it does not cover varying reference states or rectangular bond spaces.
 
 The direct consumer
 \leanid{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_of_choi_domination}
-in \doclink{TNLean/MPS/Preparation/InhomogeneousDoeblinPreparation}
+in \doclink{TNLean/MPS/Preparation/Inhomogeneous/InhomogeneousDoeblinPreparation}
 now connects the actual-site sufficient condition above to physical
 preparation. With trace-preserving site maps fixing the same faithful
 $\sigma$, and uniform Choi domination $0<\eta\le1$, inverse Gram
@@ -338,7 +338,7 @@ from these quantitative tensor-product bounds.
 
 The tensor-level comparison
 \leanid{MPSTensor.exists_norm_gram_transferMatrix_sub_le} in
-\doclink{TNLean/MPS/Preparation/PositivePartRate} uses one constant $K_D>0$
+\doclink{TNLean/MPS/CanonicalForm/FixedPointApproximation/PositivePartRate} uses one constant $K_D>0$
 chosen before the physical dimension, tensor, and positive semidefinite
 reference. It bounds the Gram error by the transfer-matrix error and
 conversely, both in the $L^2$ operator norm. No trace-one, stationarity, or
@@ -436,7 +436,7 @@ $C_D\sqrt K\,N e^{-rq/2}$ for blocks of lengths between $q$ and $2q$.
 Whole-ring mixing supplies nonvanishing beyond a fixed cutoff.
 The theorem
 \leanid{MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_mixing}
-in \doclink{TNLean/MPS/Preparation/RectangularPreparation}
+in \doclink{TNLean/MPS/Preparation/Inhomogeneous/RectangularPreparation}
 therefore gives physical depth $C\log(N/\varepsilon)$ for all
 $N\ge N_0$ and $0<\varepsilon\le1$, with $N_0,C$ selected first.
 This is a quantitative sufficient condition, and does not derive the
@@ -470,7 +470,7 @@ without introducing a common enlarged channel or changing the physical tensors.
 The family window at $N=s$ gives $\eta\le1$. Weakening to $\eta/2$ yields
 $K=4D$ and $r=-\log(1-\eta/2)/s>0$. The theorem
 \leanid{MPSPreparation.exists_isPreparedInDepth_le_log_eventually_of_rectangular_window_domination}
-in \doclink{TNLean/MPS/Preparation/RectangularWindowPreparation}
+in \doclink{TNLean/MPS/Preparation/Inhomogeneous/RectangularPreparation}
 then gives the original physical ring preparation conclusion with $N_0\ge s$
 and $C$ chosen before $N,\varepsilon$. Dimension-one bonds and singular references
 are included. This local condition remains additional quantitative input;

@@ -9,7 +9,7 @@ Net delta of this sweep: −23 Lean lines (one of the twenty-four edits is a
 one-for-one replacement, not a deletion).
 
 A later cross-cutting pass added one further line to the table below, the
-`QICLean.Kraus.MixedMap.Basic` import of `TNLean/MPS/MPDO/PureRFPSAL.lean`, bringing
+`QICLean.Kraus.MixedMap.Basic` import of `TNLean/MPS/MPDO/Purification/PureRFPSAL.lean`, bringing
 the sweep to −24 Lean lines across twenty-five edits. That module keeps four
 other TNLean importers, so the removal narrows one module's import closure
 rather than dropping the mixed-map development from the build.
@@ -38,39 +38,39 @@ were proved live only by importers several modules downstream.
 
 ## Removed
 
-### `TNLean.MPS.Core.TracePairing`
+### `TNLean.MPS.Tensor.Words.TracePairing`
 
 | File | Line removed |
 |---|---|
-| `TNLean/MPS/Chain/TensorEquality.lean` | `import TNLean.Algebra.TracePairing` |
-| `TNLean/MPS/ParentHamiltonian/Nonvanishing.lean` | `import TNLean.Algebra.TracePairing` |
-| `TNLean/MPS/MPDO/PhysicalSectorSupportRecurrence.lean` | `import TNLean.Algebra.TracePairing` |
-| `TNLean/MPS/MPDO/RFPViaTS.lean` | `import TNLean.Algebra.TracePairing` |
+| `TNLean/MPS/Tensor/Words/TensorEquality.lean` | `import TNLean.Algebra.TracePairing` |
+| `TNLean/MPS/Tensor/GroundSpace/Nonvanishing.lean` | `import TNLean.Algebra.TracePairing` |
+| `TNLean/MPS/Operator/PhysicalSector/PhysicalSectorSupportRecurrence.lean` | `import TNLean.Algebra.TracePairing` |
+| `TNLean/MPS/Operator/DensityOperator/RFPViaTS.lean` | `import TNLean.Algebra.TracePairing` |
 
 The module was subsequently moved from `TNLean/Algebra/TracePairing.lean` to
-`TNLean/MPS/Core/TracePairing.lean`; `TNLean/MPS/Core.lean` now keeps it
-root-reachable. `TNLean/MPS/FundamentalTheorem/FiniteLength.lean`,
-`TNLean/MPS/Structure/LinearExtension.lean` and
-`TNLean/MPS/MPDO/BiCFDerivation/DirectSumInput.lean` are genuine users of its
+`TNLean/MPS/Tensor/Words/TracePairing.lean`; `TNLean/MPS/Core.lean` now keeps it
+root-reachable. `TNLean/MPS/Tensor/Gauge/FiniteLength.lean`,
+`TNLean/MPS/Tensor/Words/LinearExtension.lean` and
+`TNLean/MPS/CanonicalForm/BlockSeparation/DirectSumInput.lean` are genuine users of its
 declarations.
 
 ### The QICLean cyclic-decomposition umbrella
 
 | File | Change |
 |---|---|
-| `TNLean/MPS/Irreducible/PeriodicBlocking.lean` | `QICLean.Channel.Peripheral.CyclicDecomposition` replaced by `QICLean.Algebra.Hermitian.CornerCompression` |
-| `TNLean/MPS/CanonicalForm/CyclicSectors/Basic.lean` | `QICLean.Channel.Peripheral.CyclicDecomposition` and `QICLean.Channel.Peripheral.Conjugation` removed |
-| `TNLean/MPS/Periodic/Defs.lean` | `QICLean.Channel.Peripheral.CyclicDecomposition` removed |
+| `TNLean/MPS/Transfer/Irreducible/PeriodicBlocking.lean` | `QICLean.Channel.Peripheral.CyclicDecomposition` replaced by `QICLean.Algebra.Hermitian.CornerCompression` |
+| `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/Basic.lean` | `QICLean.Channel.Peripheral.CyclicDecomposition` and `QICLean.Channel.Peripheral.Conjugation` removed |
+| `TNLean/MPS/Transfer/Irreducible/Periodic.lean` | `QICLean.Channel.Peripheral.CyclicDecomposition` removed |
 | `TNLean/MPS/Periodic/Symmetry/EqualCaseFTHyp.lean` | `QICLean.Channel.Peripheral.CyclicDecomposition` removed |
-| `TNLean/MPS/CanonicalForm/SectorComparison/TPPrimitiveReduction.lean` | `QICLean.Channel.Peripheral.CyclicDecomposition` removed |
+| `TNLean/MPS/CanonicalForm/NormalBlocks/TPGauge.lean` | `QICLean.Channel.Peripheral.CyclicDecomposition` removed |
 
-**`TNLean/MPS/CanonicalForm/CyclicSectors/Compression.lean` keeps its umbrella
+**`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/Compression.lean` keeps its umbrella
 import deliberately.** Nothing inside `Compression.lean` uses it, but it is the
-only path by which `TNLean/MPS/CanonicalForm/CyclicSectors/CornerBridge.lean`
+only path by which `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CornerBridge.lean`
 (which imports `Compression` directly) reaches `PreservesCorner`,
 `cornerRestriction`, `IsIrreducibleOnCorner`, `IsIrreducibleMap` and
 `IsPrimitive.conj_iff_cross`, all used in its proofs, and the only path by which
-`TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean` reaches
+`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/HLift.lean` reaches
 `Kraus.fixed_eq_scalar_of_irreducible_unital`. A later sweep should not
 re-propose it without first giving `CornerBridge.lean` and `HLift.lean` the
 narrower imports they actually need — an explicitness fix that adds lines
@@ -83,30 +83,30 @@ importer set, it does not disconnect it.
 
 | File | Module dropped |
 |---|---|
-| `TNLean/MPS/Irreducible/FixedPointProjection.lean` | `QICLean.Channel.Irreducible.Basic` |
-| `TNLean/MPS/MPDO/BondTwoSingletonPhysicalGauge.lean` | `TNLean.MPS.CanonicalForm.CPSVBlocking` |
-| `TNLean/MPS/MPDO/NeighboringTraceObstruction.lean` | `QICLean.Algebra.Matrix.MatrixCyclicTracePower` |
-| `TNLean/MPS/MPDO/PureRFPSAL.lean` | `QICLean.Kraus.MixedMap.Basic` |
-| `TNLean/MPS/MPDO/Theorem49RepeatedCopyCounterexample.lean` | `TNLean.MPS.MPDO.SimpleTensor` |
-| `TNLean/MPS/Overlap/CastDecay.lean` | `TNLean.Spectral.TransferOperatorGapInjective` |
-| `TNLean/MPS/ParentHamiltonian/BNTBlockDiagonalCrossing.lean` | `TNLean.MPS.ParentHamiltonian.BNTBlockDiagonalLastCrossing` |
-| `TNLean/MPS/Periodic/Defs.lean` | `TNLean.MPS.Irreducible.PeriodicBlocking` |
-| `TNLean/MPS/Periodic/StateVectorDecomposition.lean` | `TNLean.MPS.Core.CyclicTrace` |
-| `TNLean/PEPS/RegionBlock/ThreeBlockTransfer.lean` | `TNLean.PEPS.RegionBlock.ThreeBlockReconcile` |
-| `TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean` | `TNLean.PEPS.RegionBlock.BlockRangeCoincidence` |
-| `TNLean/PEPS/TorusGaugedWeightCovariance.lean` | `TNLean.PEPS.RegionBlock.ProportionalityFromAbsorbed` |
-| `TNLean/PiAlgebra/CanonicalFormSepAux.lean` | `TNLean.MPS.FundamentalTheorem.Proportional` |
-| `TNLean/Wielandt/Inequality/Bounds.lean` | `TNLean.Wielandt.Inequality.EigenvectorSpreading` |
-| `TNLean/Wielandt/RectangularSpan/Basic.lean` | `QICLean.Kraus.Wielandt.RankOne.Construction` |
+| `TNLean/MPS/Transfer/Irreducible/FixedPointProjection.lean` | `QICLean.Channel.Irreducible.Basic` |
+| `TNLean/MPS/Examples/BondTwoSingleton/BondTwoSingletonPhysicalGauge.lean` | `TNLean.MPS.CanonicalForm.NormalBlocks.Blocking` |
+| `TNLean/MPS/MPDO/PhysicalSector/NeighboringTraceObstruction.lean` | `QICLean.Algebra.Matrix.MatrixCyclicTracePower` |
+| `TNLean/MPS/MPDO/Purification/PureRFPSAL.lean` | `QICLean.Kraus.MixedMap.Basic` |
+| `TNLean/MPS/Examples/MPDOCounterexamples/Theorem49RepeatedCopyCounterexample.lean` | `TNLean.MPS.CanonicalForm.SimpleMPO.SimpleTensor` |
+| `TNLean/MPS/Transfer/Spectrum/CastDecay.lean` | `TNLean.MPS.Transfer.Spectrum.TransferOperatorGapInjective` |
+| `TNLean/MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BNTBlockDiagonalCrossing.lean` | `TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BoundaryMatrix.BNTBlockDiagonalLastCrossing` |
+| `TNLean/MPS/Transfer/Irreducible/Periodic.lean` | `TNLean.MPS.Transfer.Irreducible.PeriodicBlocking` |
+| `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/StateVectorDecomposition.lean` | `TNLean.MPS.Tensor.Words.CyclicTrace` |
+| `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/ThreeBlockTransfer.lean` | `TNLean.PEPS.RegionBlock.ThreeBlockReconcile` |
+| `TNLean/PEPS/Injectivity/Region/DisjointUnionSetup.lean` | `TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.BlockRangeCoincidence` |
+| `TNLean/PEPS/FundamentalTheorem/Torus/TorusGaugedWeightCovariance.lean` | `TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.ProportionalityFromAbsorbed` |
+| `TNLean/MPS/CanonicalForm/BlockFamily.lean` | `TNLean.MPS.Transfer.Spectrum.Proportional` |
+| `TNLean/MPS/Transfer/Primitivity/Bounds.lean` | `TNLean.MPS.Transfer.Primitivity.Bounds` |
+| `TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean` | `QICLean.Kraus.Wielandt.RankOne.Construction` |
 
-`TNLean/MPS/Overlap/CastDecay.lean` deserves a word. Its
-`TNLean.Spectral.TransferOperatorGapInjective` line was introduced one commit
+`TNLean/MPS/Transfer/Spectrum/CastDecay.lean` deserves a word. Its
+`TNLean.MPS.Transfer.Spectrum.TransferOperatorGapInjective` line was introduced one commit
 earlier by PR #7211 as the migration target for the deleted
 `Spectral.MPVOverlapDecay` waypoint (see
 `docs/audits/2026-08-26_spectral_import_waypoint_retirement.md`). It is removed
 here because the migration target turned out to be redundant at that particular
 consumer, which already reaches everything it needs through
-`TNLean.Spectral.TransferOperatorGapNT` — not because the migration was wrong.
+`TNLean.MPS.Transfer.Spectrum.TransferOperatorGapNT` — not because the migration was wrong.
 
 ## Proved live, and retained
 
@@ -116,27 +116,27 @@ sweep does not re-propose them.
 
 | File | Import retained | Identifier that forced it | Consumer |
 |---|---|---|---|
-| `TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean` | `TNLean.MPS.Core.TracePairing` | `ker_bot_of_range_le` | `TNLean/PEPS/CycleMPSWordTransport.lean:122` |
-| `TNLean/MPS/MPDO/BiCFDerivation/DiagonalRestrictionCounterexample.lean` | `TNLean.MPS.Core.TracePairing` | `Matrix.trace_mul_right_eq_zero_iff` | same file, line 160 |
-| `TNLean/MPS/Core/MultiBlock.lean` | `QICLean.Algebra.Matrix.MatrixReindex` | `Matrix.trace_reindex` | `TNLean/MPS/Core/BlockTriangularTrace.lean`, `TNLean/MPS/SharedInfra/BlockAssembly.lean` |
-| `TNLean/Algebra/CommutingProjectionProduct.lean` | `QICLean.Algebra.Kronecker.KroneckerFactorPositivity` | `Matrix.trace_piProduct` | `TNLean/MPS/RFP/BeigiSectorGraph.lean:457` |
-| `TNLean/MPS/FundamentalTheorem/SectorBNT/Basic.lean` | `TNLean.MPS.FundamentalTheorem.SectorWeightComparison` | `Matrix.charpoly_eq_of_forall_trace_pow_eq` | `TNLean/MPS/FundamentalTheorem/SectorBNT/SupplierNormalized.lean:60` |
-| `TNLean/MPS/FundamentalTheorem/SectorWeightComparison.lean` | `QICLean.Algebra.Polynomial.ScalarPowerSumIdentity` | `Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card` | `TNLean/MPS/MPDO/BNTMultiplicityNormalization.lean:150`, `TNLean/MPS/FundamentalTheorem/SectorBNT/WeightEquiv.lean:129` |
-| `TNLean/MPS/MPDO/BNTSectorAreaLaw.lean` | `TNLean.MPS.MPDO.PhysicalSupportRestriction` | `commonWeightAbsorbedBasisMPOTensor_isInjective` | same file, line 443 |
-| `TNLean/MPS/MPDO/CyclicActiveRetainedCoordinates.lean` | `TNLean.MPS.MPDO.SourceZCLMarginal` | `reducedBlockState_add_three_eq_succ_of_isSourceZCL` | `TNLean/MPS/MPDO/CyclicActiveFourthRegionContraction.lean:652` |
-| `TNLean/MPS/MPDO/VerticalProductReconstruction.lean` | `TNLean.MPS.MPDO.HorizontalBlocking` | `blockTwo` | `TNLean/MPS/MPDO/VerticalProductRetainedBlocks.lean:180` |
-| `TNLean/MPS/MPDO/VerticalProductReconstruction.lean` | `TNLean.MPS.CanonicalForm.BNTTransport` | `IsCPSVBasisOfNormalTensors.of_sameMPV₂Pos` | `TNLean/MPS/MPDO/VerticalProductSpectralFamily.lean:494` |
-| `TNLean/MPS/MPDO/VerticalProductReconstruction.lean` | `TNLean.MPS.MPDO.VerticalBNTConstruction` | `sameMPV₂Pos_toTensorFromBlocks_of_reconstruction` | `TNLean/MPS/MPDO/VerticalProductSpectralFamily.lean:439` |
-| `TNLean/MPS/ParentHamiltonian/BlockIntersectionBoundaryDecomposition.lean` | `TNLean.MPS.ParentHamiltonian.BoundaryMatrixIdentities` | `pgvwc07_boundary_matrix_identities_of_compatibility` | `TNLean/MPS/ParentHamiltonian/BlockIntersectionProperty.lean:285` |
-| `TNLean/MPS/ParentHamiltonian/BoundaryClosingTraceReconstruction.lean` | `TNLean.MPS.ParentHamiltonian.BoundaryMatrixBlock` | `boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq` | `TNLean/MPS/ParentHamiltonian/BoundaryClosingStripping.lean:280` |
-| `TNLean/MPS/ParentHamiltonian/WrappingWindowLastSiteFactorization.lean` | `TNLean.MPS.ParentHamiltonian.BlockStrip` | `commutes_all_of_commutes_long_words_of_isNBlkInjective` | `TNLean/MPS/ParentHamiltonian/WrappingWindow.lean:635` |
-| `TNLean/MPS/Periodic/SectorIrreducibility/ProjectionOrtho.lean` | `TNLean.MPS.Irreducible.PeriodicBlocking` | `orbitSumProjection` | `TNLean/MPS/Periodic/SectorIrreducibility/OrbitSum.lean:46` |
-| `TNLean/MPS/Structure/InvariantSubspaceDecomp/Basic.lean` | `TNLean.Algebra.ProjectionTriangularTrace` | `Kraus.diagPart`, `sameMPV_diagPart_of_lowerZero` | `TNLean/MPS/Structure/InvariantSubspaceDecomp.lean:171` |
-| `TNLean/PEPS/FundamentalTheorem/LocalGaugeExtraction.lean` | `TNLean.PEPS.TensorFactorScalar` | `piProduct_forms_scalar` | `TNLean/PEPS/FundamentalTheorem/Uniqueness.lean:382` |
-| `TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean` | `TNLean.PEPS.RegionBlock.Recovery11` | `regionInteriorBondProd`, `regionFiber_card` | same file, line 340 |
-| `TNLean/PEPS/VertexComplement/Basic.lean` | `TNLean.PEPS.FiniteKernelDescent` | `FiniteRegionKernelDescent` | `TNLean/PEPS/RegionBlock/KernelDescent.lean:549` |
-| `TNLean/Wielandt/SpanGrowth/VectorToMatrixSpan.lean` | `QICLean.Kraus.Wielandt.SpanGrowth.VectorToMatrixSpan` | `Kraus.wordSpan_top_of_mul` | `TNLean/MPS/ParentHamiltonian/WrappingWindow.lean:694` |
-| `TNLean/Wielandt/SpanGrowth/VectorToMatrixSpan.lean` | `TNLean.Wielandt.SpanGrowth.EigenvectorSpreading` | `wordSpan_eq_top_iff_isNBlkInjective` | `TNLean/Wielandt/RectangularSpan/Basic.lean:139` |
+| `TNLean/MPS/Tensor/GroundSpace/IntersectionProperty.lean` | `TNLean.MPS.Tensor.Words.TracePairing` | `ker_bot_of_range_le` | `TNLean/PEPS/Tensor/Cycle/CycleMPSWordTransport.lean:122` |
+| `TNLean/MPS/CanonicalForm/DiagonalRestrictionCounterexample.lean` | `TNLean.MPS.Tensor.Words.TracePairing` | `Matrix.trace_mul_right_eq_zero_iff` | same file, line 160 |
+| `TNLean/MPS/Tensor/DirectSum/MultiBlock.lean` | `QICLean.Algebra.Matrix.MatrixReindex` | `Matrix.trace_reindex` | `TNLean/MPS/Core/BlockTriangularTrace.lean`, `TNLean/MPS/Tensor/DirectSum/BlockAssembly.lean` |
+| `TNLean/Algebra/CommutingProjectionProduct.lean` | `QICLean.Algebra.Kronecker.KroneckerFactorPositivity` | `Matrix.trace_piProduct` | `TNLean/MPS/ParentHamiltonian/Commuting/SectorGraph/BeigiSectorGraph.lean:457` |
+| `TNLean/MPS/Tensor/DirectSum/SectorBNT.lean` | `TNLean.MPS.Tensor.DirectSum.SectorWeightComparison` | `Matrix.charpoly_eq_of_forall_trace_pow_eq` | `TNLean/MPS/CanonicalForm/BNTPresentation/PreparedBlocksNormalized.lean:60` |
+| `TNLean/MPS/Tensor/DirectSum/SectorWeightComparison.lean` | `QICLean.Algebra.Polynomial.ScalarPowerSumIdentity` | `Matrix.sum_pow_eq_implies_card_eq_and_multiset_eq_of_le_max_card` | `TNLean/MPS/MPDO/Coefficients/BNTMultiplicityNormalization.lean:150`, `TNLean/MPS/FundamentalTheorem/Sectors/WeightEquiv.lean:129` |
+| `TNLean/MPS/MPDO/BNTSectors/BNTSectorAreaLaw.lean` | `TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalSupportRestriction` | `commonWeightAbsorbedBasisMPOTensor_isInjective` | same file, line 443 |
+| `TNLean/MPS/MPDO/CyclicActiveSector/CyclicActiveRetainedCoordinates.lean` | `TNLean.MPS.MPDO.Entropy.SourceZCLMarginal` | `reducedBlockState_add_three_eq_succ_of_isSourceZCL` | `TNLean/MPS/MPDO/CyclicActiveSector/CyclicActiveFourthRegionContraction.lean:652` |
+| `TNLean/MPS/MPDO/Fusion/VerticalProductReconstruction.lean` | `TNLean.MPS.MPDO.Vertical.HorizontalBlocking` | `blockTwo` | `TNLean/MPS/MPDO/Fusion/VerticalProductRetainedBlocks.lean:180` |
+| `TNLean/MPS/MPDO/Fusion/VerticalProductReconstruction.lean` | `TNLean.MPS.CanonicalForm.BNT.Transport` | `IsCPSVBasisOfNormalTensors.of_sameMPV₂Pos` | `TNLean/MPS/MPDO/Fusion/VerticalProductSpectralFamily.lean:494` |
+| `TNLean/MPS/MPDO/Fusion/VerticalProductReconstruction.lean` | `TNLean.MPS.MPDO.Vertical.VerticalBNTConstruction` | `sameMPV₂Pos_toTensorFromBlocks_of_reconstruction` | `TNLean/MPS/MPDO/Fusion/VerticalProductSpectralFamily.lean:439` |
+| `TNLean/MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BlockIntersectionBoundaryDecomposition.lean` | `TNLean.MPS.ParentHamiltonian.BlockGroundSpace.BoundaryMatrix.BoundaryMatrixIdentities` | `pgvwc07_boundary_matrix_identities_of_compatibility` | `TNLean/MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BlockIntersectionProperty.lean:285` |
+| `TNLean/MPS/Tensor/GroundSpace/BoundaryClosingTraceReconstruction.lean` | `TNLean.MPS.Tensor.GroundSpace.BoundaryMatrixBlock` | `boundary_matrix_commutes_of_isNBlkInjective_of_block_matEq` | `TNLean/MPS/Tensor/GroundSpace/BoundaryClosingStripping.lean:280` |
+| `TNLean/MPS/Tensor/GroundSpace/WrappingWindowLastSiteFactorization.lean` | `TNLean.MPS.Tensor.GroundSpace.BlockStrip` | `commutes_all_of_commutes_long_words_of_isNBlkInjective` | `TNLean/MPS/Tensor/GroundSpace/WrappingWindow.lean:635` |
+| `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/ProjectionOrtho.lean` | `TNLean.MPS.Transfer.Irreducible.PeriodicBlocking` | `orbitSumProjection` | `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/OrbitSum.lean:46` |
+| `TNLean/MPS/Tensor/DirectSum/InvariantSubspaceDecomp.lean` | `TNLean.Algebra.ProjectionTriangularTrace` | `Kraus.diagPart`, `sameMPV_diagPart_of_lowerZero` | `TNLean/MPS/Tensor/DirectSum/InvariantSubspaceDecomp.lean:171` |
+| `TNLean/PEPS/FundamentalTheorem/Injective/LocalGaugeExtraction.lean` | `TNLean.PEPS.FundamentalTheorem.Injective.TensorFactorScalar` | `piProduct_forms_scalar` | `TNLean/PEPS/FundamentalTheorem/Injective/Uniqueness.lean:382` |
+| `TNLean/PEPS/Injectivity/Region/DisjointUnionSetup.lean` | `TNLean.PEPS.RegionBlock.Recovery11` | `regionInteriorBondProd`, `regionFiber_card` | same file, line 340 |
+| `TNLean/PEPS/Tensor/Region/VertexComplement.lean` | `TNLean.PEPS.Tensor.Network.FiniteKernelDescent` | `FiniteRegionKernelDescent` | `TNLean/PEPS/Injectivity/Region/RegionKernelDescent.lean:549` |
+| `TNLean/MPS/Tensor/Words/WordSpan.lean` | `QICLean.Kraus.Wielandt.SpanGrowth.VectorToMatrixSpan` | `Kraus.wordSpan_top_of_mul` | `TNLean/MPS/Tensor/GroundSpace/WrappingWindow.lean:694` |
+| `TNLean/MPS/Tensor/Words/WordSpan.lean` | `TNLean.MPS.Tensor.Words.WordSpan` | `wordSpan_eq_top_iff_isNBlkInjective` | `TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean:139` |
 
 The pattern in that table is worth naming: most of these imports are dead
 *inside* their own file and live only through re-export. Sixteen of the
@@ -154,20 +154,20 @@ The final root build succeeds with those two imports restored.
 
 | File | Module dropped | Local outcome |
 |---|---|---|
-| `TNLean/PEPS/FundamentalTheorem/GaugeAction.lean` | `TNLean.PEPS.EdgeGaugeFamily` | changed module builds without the line |
-| `TNLean/MPS/ParentHamiltonian/BoundaryOverlap.lean` | `TNLean.MPS.ParentHamiltonian.BlockStrip` | changed module builds without the line |
-| `TNLean/MPS/ParentHamiltonian/BlockStrip.lean` | `TNLean.MPS.FundamentalTheorem.FiniteLength` | changed module builds without the line |
-| `TNLean/MPS/Core/TransferPeripheral.lean` | `QICLean.Channel.Peripheral.CyclicGroupKraus` | restored: the root build named `Kraus.peripheralEigenvalues_eq_range_primitiveRoot` in `TNLean/MPS/Periodic/NormalizedSelfOverlap.lean` |
-| `TNLean/PiAlgebra/CanonicalFormSepAux.lean` | `TNLean.MPS.Overlap.PeripheralToTransferMapGap` | restored: the build named `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible` at lines 230 and 328 |
+| `TNLean/PEPS/FundamentalTheorem/Injective/GaugeAction.lean` | `TNLean.PEPS.FundamentalTheorem.Injective.EdgeGaugeFamily` | changed module builds without the line |
+| `TNLean/MPS/Tensor/GroundSpace/BoundaryOverlap.lean` | `TNLean.MPS.Tensor.GroundSpace.BlockStrip` | changed module builds without the line |
+| `TNLean/MPS/Tensor/GroundSpace/BlockStrip.lean` | `TNLean.MPS.Tensor.Gauge.FiniteLength` | changed module builds without the line |
+| `TNLean/MPS/Transfer/Irreducible/TransferPeripheral.lean` | `QICLean.Channel.Peripheral.CyclicGroupKraus` | restored: the root build named `Kraus.peripheralEigenvalues_eq_range_primitiveRoot` in `TNLean/MPS/CanonicalForm/Periodic/Overlap/NormalizedSelfOverlap.lean` |
+| `TNLean/MPS/CanonicalForm/BlockFamily.lean` | `TNLean.MPS.Transfer.Spectrum.PrimitiveOverlap` | restored: the build named `MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible` at lines 230 and 328 |
 
 ## Already absent
 
 Four lines named by the survey no longer existed in the tree and needed no
-edit: `TNLean/PEPS/CycleMPSChainArc.lean` and
-`TNLean/PEPS/CycleMPSInjectivity.lean` (both `TNLean.Algebra.TracePairing`),
-and the `TNLean/MPS/MPDO/CyclicProjector.lean`,
-`TNLean/MPS/ParentHamiltonian/PeriodicBoundaryReduction.lean` (four lines),
-`TNLean/MPS/RFP/BNTOrthogonality.lean`, `TNLean/MPS/RFP/BeigiSectorGraph.lean`
+edit: `TNLean/PEPS/Injectivity/Region/CycleMPSChainArc.lean` and
+`TNLean/PEPS/Injectivity/Region/CycleMPSInjectivity.lean` (both `TNLean.Algebra.TracePairing`),
+and the `TNLean/MPS/MPDO/Vertical/CyclicProjector.lean`,
+`TNLean/MPS/Tensor/GroundSpace/PeriodicBoundaryReduction.lean` (four lines),
+`TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/BNTOrthogonality.lean`, `TNLean/MPS/ParentHamiltonian/Commuting/SectorGraph/BeigiSectorGraph.lean`
 and `TNLean/PEPS/RegionScalarCondition.lean` entries.
 
 `docs/audits/lean_spaghetti_canonicalform_ft.md:756` is directional support
@@ -181,8 +181,8 @@ same day and are folded in here rather than given a note of their own.
 
 | File | Module dropped | Why it went dead |
 |---|---|---|
-| `TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorDecomposition.lean` | `QICLean.Channel.Schwarz.MultiplicativeDomainFull` | the Kadison–Schwarz argument moved to `TNLean/MPS/Periodic/SectorIrreducibility/HLift.lean`, leaving no multiplicative-domain name in the file; the `open KadisonSchwarz` line went with it (see `docs/audits/2026-08-27_cross_cutting_private_duplication.md`) |
-| `TNLean/MPS/CanonicalForm/NormalReduction/Main.lean` | `TNLean.MPS.CanonicalForm.Existence` | no identifier the file elaborates comes from that import's exclusive cone |
+| `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CyclicSectorDecomposition.lean` | `QICLean.Channel.Schwarz.MultiplicativeDomainFull` | the Kadison–Schwarz argument moved to `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/HLift.lean`, leaving no multiplicative-domain name in the file; the `open KadisonSchwarz` line went with it (see `docs/audits/2026-08-27_cross_cutting_private_duplication.md`) |
+| `TNLean/MPS/CanonicalForm/NormalBlocks/NormalCanonicalForm.lean` | `TNLean.MPS.CanonicalForm.NormalBlocks.IrreducibleDecomposition` | no identifier the file elaborates comes from that import's exclusive cone |
 
 The second row is import hygiene plus a shorter critical path for that one
 module — it no longer waits on a thirty-module, 6,879-line upstream cone — and

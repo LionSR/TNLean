@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.RFP.NNCPHGroundSpacesMultiSector
-import TNLean.MPS.RFP.BeigiLoopBNTIdentification
+import TNLean.MPS.RFP.NNCPHMultiSector
+import TNLean.MPS.ParentHamiltonian.Commuting.SectorGraph.BeigiLoopBNTIdentification
 import TNLean.MPS.RFP.ZCLReverse
 
 /-!

@@ -124,10 +124,10 @@ freedom.
 ### Files corrected for Theorem 2.1(4)
 
 - `TNLean/Channel/KrausUnitaryFreedom.lean`
-- `TNLean/MPS/Periodic/Applications.lean`
-- `TNLean/MPS/Periodic/Symmetry/Theorem41Forward.lean`
-- `TNLean/MPS/Periodic/Symmetry/Theorem41Reverse.lean`
-- `TNLean/MPS/Symmetry/StringOrderDefs.lean`
+- `TNLean/MPS/Transfer/Irreducible/PeriodicRotation.lean`
+- `TNLean/MPS/FundamentalTheorem/Refinement/IsometryTensor.lean`
+- `TNLean/MPS/FundamentalTheorem/Refinement/RefinableOfDivisible.lean`
+- `TNLean/MPS/Transfer/Correlation/StringOrderDefs.lean`
 
 ### Transfer matrices and normal forms
 
@@ -530,8 +530,8 @@ The Chapter 4 search finds many unqualified numerical near matches. Inspection
 shows that they refer to other sources, principally the matrix-product density
 operator paper of Cirac, Pérez-García, Schuch, and Verstraete. The entropy
 development in `TNLean/Entropy/ClassicalMutualInformation.lean`, the files
-`TNLean/MPS/MPDO/DiagonalCutRank.lean` and
-`TNLean/MPS/MPDO/DiagonalFiniteChain.lean`, the corresponding blueprint entry
+`TNLean/MPS/Operator/Periodic/DiagonalCutRank.lean` and
+`TNLean/MPS/MPDO/Entropy/DiagonalFiniteChain.lean`, the corresponding blueprint entry
 in `ch21_mpdo_rfp_area_law_diagonal_and_pure_state_bounds.tex`, and the note
 `docs/paper-gaps/cpgsv17_mpdo_mutual_information_bound.tex` cite Riazanov and
 Vyalyi, arXiv:1704.06507, Theorem 4.1. All other matches refer to papers by De

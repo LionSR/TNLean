@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.KramersWannier.KramersWannierTensor
-import TNLean.MPS.Core.CyclicTrace
+import TNLean.MPS.Tensor.Words.CyclicTrace
 import QICLean.Algebra.Combinatorics.BinaryCharacterSum
 
 /-!

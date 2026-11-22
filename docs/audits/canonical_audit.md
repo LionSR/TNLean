@@ -181,7 +181,7 @@ theorem entries (they should be folded into the proof of
 `_common_length_common_sector_theorem`).
 
 ### Cluster E — zero-tail transport quadruple
-(`TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean`,
+(`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CommonSectorTransport.lean`,
 all four variants exposed via `\lean{...}` in
 `thm:zero_tail_common_flat_of_blocked_word_comparison`)
 
@@ -505,27 +505,27 @@ verifiable.
 
 | File | Declaration | Action | Replacement / new name | Compile risk |
 |---|---|---|---|---|
-| `TNLean/MPS/CanonicalForm/NormalReduction/TPGauge.lean` | `exists_pgvwc07_unital_dualDiag_data_of_irreducible` | `private` (or rename to `MPSTensor.PGVWC07.unital_dualDiag_single_block`) | keep call sites | none — file-local |
+| `TNLean/MPS/CanonicalForm/NormalBlocks/TPGauge.lean` | `exists_pgvwc07_unital_dualDiag_data_of_irreducible` | `private` (or rename to `MPSTensor.PGVWC07.unital_dualDiag_single_block`) | keep call sites | none — file-local |
 | same | `exists_pgvwc07_unital_dualDiag_blockwise` | `private` | `MPSTensor.PGVWC07.unital_dualDiag_blockwise` | none |
 | same | `exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail` | `private` | `MPSTensor.PGVWC07.unital_dualDiag_arbitrary_with_zeroTail` | none |
 | same | `exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail_bondDimBound` | `private` | rename to `…_bondDim_total_eq` (the conclusion is `D_0 + Σ = D`, not a bound) | none |
 | same | `exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound` | `private` | rename to `…_positive_length` | none |
 | same | `exists_pgvwc07_positiveLengthWitness` | `private` | `MPSTensor.PGVWC07.positiveLengthWitness` | none |
 | same | `PGVWC07PositiveLengthWitness` (`structure`) | move to `namespace MPSTensor.PGVWC07`; rename to `Internal.PositiveLengthWitness` | keep all field names | none |
-| `TNLean/MPS/CanonicalForm/NormalReduction/WeightNormalization.lean` | all `_normalized_*` theorems except `_allow_empty` | `private` | drop `pgvwc07_` from the names since the file is already `NormalReduction/` | none |
-| `TNLean/MPS/CanonicalForm/Existence.lean` | `exists_blockTensor_isPrimitive` (line 216), `exists_blockTensor_leftCanonical_isPrimitive` (line 232) | `private` (or delete and inline) | n/a | none — file-local |
-| `TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorDecomposition.lean` | `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor` (line 79) | `private` | n/a | none — file-local |
-| `TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean` | `zeroTail_commonFlat_of_blockwise`, `_of_word_eq`, `_of_groupedBlockCastAgrees`, and their `_commonFlatAt_*` and `sameMPV₂Pos_blockTensor_commonFlatAt_*` companions | `private` | keep public: `_of_reindexed`, `_commonFlatAt_of_reindexed`, `sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed`, `zeroTail_commonFlat_transport_of_reindexed`, and the abbrev pair | none — all callers in same file |
-| `TNLean/MPS/CanonicalForm/CommonPeriodCyclicSectors.lean` | `commonPeriodBlocking_apply` (`rfl`-lemma, line 60) | mark `@[simp]` or delete | n/a | none |
+| `TNLean/MPS/CanonicalForm/NormalBlocks/WeightNormalization.lean` | all `_normalized_*` theorems except `_allow_empty` | `private` | drop `pgvwc07_` from the names since the file is already `NormalReduction/` | none |
+| `TNLean/MPS/CanonicalForm/NormalBlocks/IrreducibleDecomposition.lean` | `exists_blockTensor_isPrimitive` (line 216), `exists_blockTensor_leftCanonical_isPrimitive` (line 232) | `private` (or delete and inline) | n/a | none — file-local |
+| `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CyclicSectorDecomposition.lean` | `exists_cyclic_sector_decomp_of_TP_of_isIrreducibleTensor` (line 79) | `private` | n/a | none — file-local |
+| `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CommonSectorTransport.lean` | `zeroTail_commonFlat_of_blockwise`, `_of_word_eq`, `_of_groupedBlockCastAgrees`, and their `_commonFlatAt_*` and `sameMPV₂Pos_blockTensor_commonFlatAt_*` companions | `private` | keep public: `_of_reindexed`, `_commonFlatAt_of_reindexed`, `sameMPV₂Pos_blockTensor_commonFlatAt_of_reindexed`, `zeroTail_commonFlat_transport_of_reindexed`, and the abbrev pair | none — all callers in same file |
+| `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CommonPeriodBlocking.lean` | `commonPeriodBlocking_apply` (`rfl`-lemma, line 60) | mark `@[simp]` or delete | n/a | none |
 
 ### 6.3 Files and decl names for Step 5.3 (Lean deletions)
 
 | File | Declaration | Action | Compile risk |
 |---|---|---|---|
-| `TNLean/MPS/CanonicalForm/NormalReduction/WeightNormalization.lean` | `exists_pgvwc07_normalized_exact_form_after_rescaling_with_zeroTail`, `exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero` | delete | none — verified zero external references |
-| `TNLean/MPS/CanonicalForm/NormalReduction/TPGauge.lean` | `PGVWC07PositiveLengthWitness.weight_ne_zero` (after the `structure` move in 5.2) | delete (inline at single use) | none |
-| `TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorData.lean` | `afterBlocking_reindexedCommonSectorDataWithZeroTail_of_sameMPV₂` | delete | none |
-| `TNLean/MPS/CanonicalForm/SectorComparison/CommonSectorTransport.lean` | `afterBlocking_commonLengthCommonSectorData_of_reindexed` | delete | none |
+| `TNLean/MPS/CanonicalForm/NormalBlocks/WeightNormalization.lean` | `exists_pgvwc07_normalized_exact_form_after_rescaling_with_zeroTail`, `exists_pgvwc07_normalized_projective_form_or_forall_pos_mpv_eq_zero` | delete | none — verified zero external references |
+| `TNLean/MPS/CanonicalForm/NormalBlocks/TPGauge.lean` | `PGVWC07PositiveLengthWitness.weight_ne_zero` (after the `structure` move in 5.2) | delete (inline at single use) | none |
+| `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CommonSectorData.lean` | `afterBlocking_reindexedCommonSectorDataWithZeroTail_of_sameMPV₂` | delete | none |
+| `TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CommonSectorTransport.lean` | `afterBlocking_commonLengthCommonSectorData_of_reindexed` | delete | none |
 | `TNLean/MPS/CanonicalForm/SectorComparison/StructuralData.lean` | `afterBlocking_tpPrimitiveBlockDecompositions_of_sameMPV₂` (line 185) | delete | none — only consumer is the now-removed blueprint entry `thm:ft_after_blocking_structural` |
 
 ### 6.4 Replacement-name guidance per `docs/blueprint_style_guide.md` + `docs/prose_style.md`

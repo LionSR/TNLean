@@ -88,9 +88,9 @@ The separate periodic-symmetry material later in Chapter 11b is tracked by
 
 The current `sorry` occurrences in the split periodic-overlap files are:
 
-- `TNLean/MPS/Periodic/Overlap/SelfOverlap.lean:607`,
+- `TNLean/MPS/CanonicalForm/Periodic/Overlap/SelfOverlap.lean:607`,
   `not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces`, tracked by #1807.
-- `TNLean/MPS/Periodic/Overlap/NoSectorMatch.lean:164`,
+- `TNLean/MPS/CanonicalForm/Periodic/Overlap/NoSectorMatch.lean:164`,
   `exists_nondecaying_sectorOverlap_of_blockedGaugePhaseEquiv_cyclicDecomp`,
   tracked by #448.
 - `TNLean/MPS/Periodic/Overlap/SectorMatch.lean:129`,
@@ -101,9 +101,9 @@ The current `sorry` occurrences in the split periodic-overlap files are:
   `repeatedBlocks_of_blockedSectorGaugePhase`, tracked by #450.
 - `TNLean/MPS/Periodic/Overlap/SectorMatch.lean:439`,
   `periodicOverlap_gaugeEquiv_of_sector_match`, tracked by #450.
-- `TNLean/MPS/Periodic/Overlap/Dichotomy.lean:58`,
+- `TNLean/MPS/CanonicalForm/Periodic/Overlap/Dichotomy.lean:58`,
   `periodicOverlapDichotomy`, tracked by #81.
-- `TNLean/MPS/Periodic/Overlap/Dichotomy.lean:88`,
+- `TNLean/MPS/CanonicalForm/Periodic/Overlap/Dichotomy.lean:88`,
   `periodicBasis_eventuallyLinearlyIndependent`, tracked by #81.
 
 Line numbers are only a snapshot.  Declaration names and tracker links are the

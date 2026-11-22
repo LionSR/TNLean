@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.FrustrationFree.LightCone
-import TNLean.PEPS.AreaLaw.BufferedRectangles
+import TNLean.Lattice.BufferedRectangles
 import QICLean.Algebra.Combinatorics.GreedyColoring
 import QICLean.Algebra.Combinatorics.OverlapGraph
 

@@ -88,7 +88,7 @@ TNLean/MPS/ParentHamiltonian/
 
 - [ ] **PH-0a**: Define ground space $\mathcal{G}_L(A)$
   - **Blueprint**: `\begin{definition}[Ground space]` with `\lean{MPSTensor.groundSpace}`, `\leanok`
-  - **Lean**: `TNLean/MPS/ParentHamiltonian/GroundSpace.lean`
+  - **Lean**: `TNLean/MPS/Tensor/GroundSpace/GroundSpace.lean`
   - **Math**: $\mathcal{G}_L = \bigl\{\sum_{i_1,\ldots,i_L} \tr(A^{i_1}\cdots A^{i_L} X)\ket{i_1\cdots i_L} : X \in \MN{D}\bigr\}$
   - **Depends on**: `def:eval_word`, `def:mpv` (ch02)
   - **Key property**: $\dim(\mathcal{G}_L) \leq D^2$ (the image of a $D^2$-dim space)
@@ -96,14 +96,14 @@ TNLean/MPS/ParentHamiltonian/
 
 - [ ] **PH-0b**: Define parent interaction $h \geq 0$ with $\ker(h) = \mathcal{G}_L$
   - **Blueprint**: `\begin{definition}[Parent interaction]` with `\lean{MPSTensor.parentInteraction}`
-  - **Lean**: `TNLean/MPS/ParentHamiltonian/Defs.lean`
+  - **Lean**: `TNLean/MPS/Tensor/GroundSpace/ParentHamiltonian.lean`
   - **Math**: Hermitian PSD operator on $(\mathbb{C}^d)^{\otimes L}$ whose kernel equals $\mathcal{G}_L$; concretely the orthogonal projector onto $\mathcal{G}_L^\perp$
   - **Depends on**: PH-0a
   - ★★★
 
 - [ ] **PH-0c**: Define parent Hamiltonian $H_N = \sum_{i=1}^N h_i$
   - **Blueprint**: `\begin{definition}[Parent Hamiltonian]` with `\lean{MPSTensor.parentHamiltonian}`
-  - **Lean**: `TNLean/MPS/ParentHamiltonian/Defs.lean`
+  - **Lean**: `TNLean/MPS/Tensor/GroundSpace/ParentHamiltonian.lean`
   - **Math**: $h_i$ acts as $h$ on sites $i, \ldots, i{+}L{-}1 \pmod{N}$ and as identity elsewhere
   - **Depends on**: PH-0b
   - **Design decision**: represent $N$-site space as `(Fin N → Fin d) → ℂ`, matching existing `mpv`
@@ -111,7 +111,7 @@ TNLean/MPS/ParentHamiltonian/
 
 - [ ] **PH-0d**: Define frustration-freeness
   - **Blueprint**: `\begin{definition}[Frustration-free Hamiltonian]` with `\lean{MPSTensor.IsFrustrationFree}`
-  - **Lean**: `TNLean/MPS/ParentHamiltonian/Defs.lean`
+  - **Lean**: `TNLean/MPS/Tensor/GroundSpace/ParentHamiltonian.lean`
   - **Math**: $H = \sum h_i \geq 0$ is frustration-free if $H\ket{\psi} = 0$ implies $h_i\ket{\psi} = 0$ for all $i$
   - **Depends on**: PH-0c
   - ★★☆
@@ -121,38 +121,38 @@ TNLean/MPS/ParentHamiltonian/
 
 - [ ] **PH-1a**: MPS is in the ground space: $H_N\ket{\psi(A)} = 0$
   - **Blueprint**: `\begin{theorem}[MPS is a ground state]` with `\lean{MPSTensor.parentHamiltonian_annihilates}`
-  - **Lean**: `TNLean/MPS/ParentHamiltonian/Basic.lean`
+  - **Lean**: `TNLean/MPS/Tensor/GroundSpace/ParentHamiltonianBasic.lean`
   - **Proof sketch** (for blueprint): Each $h_i\ket{\psi(A)} = 0$ because $\ket{\psi(A)}$ restricted to any $L$ consecutive sites lies in $\mathcal{G}_L$ (by construction, with $X$ = product of matrices on the complement). Sum of zeros is zero.
   - **Depends on**: PH-0a through PH-0d
   - ★★★
 
 - [ ] **PH-1b**: Parent Hamiltonian is frustration-free
   - **Blueprint**: `\begin{corollary}[Frustration-freeness]` with `\lean{MPSTensor.parentHamiltonian_frustrationFree}`
-  - **Lean**: `TNLean/MPS/ParentHamiltonian/Basic.lean`
+  - **Lean**: `TNLean/MPS/Tensor/GroundSpace/ParentHamiltonianBasic.lean`
   - **Proof sketch**: Immediate from PH-1a + each $h_i \geq 0$
   - **Depends on**: PH-1a
   - ★★☆
 
 - [ ] **PH-1c**: Dimension bound $\dim(\mathcal{G}_L) \leq D^2$
   - **Blueprint**: `\begin{lemma}[Dimension bound on ground space]` with `\lean{MPSTensor.groundSpace_finrank_le}`
-  - **Lean**: `TNLean/MPS/ParentHamiltonian/GroundSpace.lean`
+  - **Lean**: `TNLean/MPS/Tensor/GroundSpace/GroundSpace.lean`
   - **Proof sketch**: $\mathcal{G}_L$ is the image of $X \mapsto \sum \tr(A^w X)\ket{w}$ from $\MN{D}$, which has dimension $D^2$.
   - **Depends on**: PH-0a
   - ★★☆
 
 - [ ] **PH-1d**: Non-triviality: $d^L > D^2 \implies \mathcal{G}_L \neq (\mathbb{C}^d)^{\otimes L}$
   - **Blueprint**: `\begin{lemma}[Non-trivial parent interaction exists]` with `\lean{MPSTensor.groundSpace_ne_top}`
-  - **Lean**: `TNLean/MPS/ParentHamiltonian/GroundSpace.lean`
+  - **Lean**: `TNLean/MPS/Tensor/GroundSpace/GroundSpace.lean`
   - **Proof sketch**: $\dim\mathcal{G}_L \leq D^2 < d^L = \dim((\mathbb{C}^d)^{\otimes L})$, so $\mathcal{G}_L \subsetneq (\mathbb{C}^d)^{\otimes L}$.
   - **Depends on**: PH-1c
   - ★★
 
 ### Layer 2: Unique Ground State (Injective Case)
-📖 **Read first**: [CPGSV21] lines 2013–2094 (invert-and-regrow argument); [FNW92] §3–4; [PGVWC07] §5–6; also [MPGSC18] `Papers/1804.04964/paper_normal.tex` §3 for the algebraic one-sided-inverse technique (already formalized in `MPS/Chain/OneSidedInverse.lean`)
+📖 **Read first**: [CPGSV21] lines 2013–2094 (invert-and-regrow argument); [FNW92] §3–4; [PGVWC07] §5–6; also [MPGSC18] `Papers/1804.04964/paper_normal.tex` §3 for the algebraic one-sided-inverse technique (already formalized in `MPS/Tensor/Words/OneSidedInverse.lean`)
 
 - [ ] **PH-2a**: Intersection property
   - **Blueprint**: `\begin{lemma}[Intersection property]` with `\lean{MPSTensor.groundSpace_intersection}`
-  - **Lean**: `TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean`
+  - **Lean**: `TNLean/MPS/Tensor/GroundSpace/IntersectionProperty.lean`
   - **Math**: For injective $A$: $\mathcal{G}_{1,\ldots,L+1} \cap \mathcal{G}_{2,\ldots,L+2} = \mathcal{G}_{1,\ldots,L+2}$
   - **Proof sketch** (for blueprint): Take $\ket{\phi} \in \mathcal{G}_{1,\ldots,L+1} \cap \mathcal{G}_{2,\ldots,L+2}$. From membership in $\mathcal{G}_{1,\ldots,L+1}$, there exists $X$ with $\phi = \sum \tr(A^w X)\ket{w}$. From membership in $\mathcal{G}_{2,\ldots,L+2}$, there exists $Y$. On the overlap (sites $2,\ldots,L+1$), injectivity gives a left-inverse $A^{-1}$. Apply it to uniquely determine $X$ (and hence $Y$), showing $\phi \in \mathcal{G}_{1,\ldots,L+2}$.
   - **Depends on**: PH-0a, `def:injective` (ch02)
@@ -161,7 +161,7 @@ TNLean/MPS/ParentHamiltonian/
 
 - [ ] **PH-2b**: Closure property
   - **Blueprint**: `\begin{lemma}[Closure under extension]` with `\lean{MPSTensor.groundSpace_mono}`
-  - **Lean**: `TNLean/MPS/ParentHamiltonian/IntersectionProperty.lean`
+  - **Lean**: `TNLean/MPS/Tensor/GroundSpace/IntersectionProperty.lean`
   - **Math**: $\mathcal{G}_L \hookrightarrow \mathcal{G}_{L+1}$ (appropriate embedding)
   - **Depends on**: PH-0a
   - ★★★
@@ -169,7 +169,7 @@ TNLean/MPS/ParentHamiltonian/
 - [ ] **PH-2c**: Unique ground state ($2L_0$ sites)
   - **Blueprint**: `\begin{theorem}[Unique ground state — injective case]` citing \cite{PGVWC07}
   - **Lean tag**: `\lean{MPSTensor.parentHamiltonian_unique_gs_injective}`
-  - **Lean**: `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`
+  - **Lean**: `TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean`
   - **Math**: If $A$ is injective after blocking $L_0$ sites, the parent Hamiltonian on $2L_0$ sites has a unique ground state.
   - **Proof sketch**: Iterate the intersection property across the chain. Injectivity forces the boundary condition $X$ to be uniquely determined, hence only one ground state.
   - **Depends on**: PH-2a, PH-2b
@@ -178,7 +178,7 @@ TNLean/MPS/ParentHamiltonian/
 - [ ] **PH-2d**: Optimal unique ground state ($L_0+1$ sites)
   - **Blueprint**: `\begin{theorem}[Unique ground state — optimal range]` citing \cite{FNW92}, \cite{PGVWC07}
   - **Lean tag**: `\lean{MPSTensor.parentHamiltonian_unique_gs_normal}`
-  - **Lean**: `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`
+  - **Lean**: `TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean`
   - **Math**: For a normal MPS with injectivity length $L_0$, the parent Hamiltonian on $L_0+1$ sites has a unique ground state.
   - **Proof sketch**: Refined "regrow by 1" intersection argument.
   - **Depends on**: PH-2a, PH-2b, PH-2c
@@ -195,8 +195,8 @@ TNLean/MPS/ParentHamiltonian/
     the old `MPSTensor.parentHamiltonian_gs_eq_bnt_span` target is historical.
   - **Lean**: no current `DegenerateGS.lean` file on `main`; the expected
     theorem is a future block-diagonal intersection theorem, likely in
-    `TNLean/MPS/ParentHamiltonian/BlockIntersectionProperty.lean`, composed
-    with `TNLean/MPS/ParentHamiltonian/UniqueGroundState.lean`.
+    `TNLean/MPS/ParentHamiltonian/BlockGroundSpace/BoundaryMatrix/BlockIntersectionProperty.lean`, composed
+    with `TNLean/MPS/Tensor/GroundSpace/UniqueGroundState.lean`.
   - **Math**: For $N \geq L_0+1$, the ground space of the parent Hamiltonian equals $\spn\{\ket{V^{(N)}(A_j)} : j = 1,\ldots,g\}$ where $\{A_j\}$ is a basis of normal tensors.
   - **Proof sketch**: Each BNT element generates a ground state (by block structure). Converse: any ground state restricted to an injective block is determined by the intersection property. Block-diagonal structure prevents mixing.
   - **Depends on**: PH-2d, `def:canonical_form_bnt` (ch10)
@@ -275,9 +275,9 @@ TNLean/MPS/ParentHamiltonian/
 
 | Existing component | Files | Status | Used by |
 |---|---|---|---|
-| `MPSTensor` + `evalWord` + `coeff` + `mpv` | `MPS/Defs.lean` | ✅ | All |
-| `IsInjective`, `IsNormal`, `IsNBlkInjective` | `MPS/Defs.lean` | ✅ | PH-2* |
-| `GaugeEquiv.sameMPV` | `MPS/Defs.lean` | ✅ | Background |
+| `MPSTensor` + `evalWord` + `coeff` + `mpv` | `MPS/Tensor/Defs.lean` | ✅ | All |
+| `IsInjective`, `IsNormal`, `IsNBlkInjective` | `MPS/Tensor/Defs.lean` | ✅ | PH-2* |
+| `GaugeEquiv.sameMPV` | `MPS/Tensor/Defs.lean` | ✅ | Background |
 | `transferMap` | `MPS/Core/Transfer.lean` | ✅ | PH-5* |
 | Spectral gap of transfer matrix | `Spectral/SpectralGap.lean` | ✅ | PH-5b,c |
 | `IsCanonicalFormBNT` | `MPS/CanonicalForm/` | ✅ | PH-3a |

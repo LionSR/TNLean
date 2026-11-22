@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.FundamentalTheorem.SectorBNT.FundamentalCoord
-import TNLean.MPS.MPDO.PhysicalBlocking
-import TNLean.MPS.MPDO.PureAreaLaw
+import TNLean.MPS.FundamentalTheorem.Sectors.FundamentalCoord
+import TNLean.MPS.Operator.Product.PhysicalBlocking
+import TNLean.MPS.Operator.DensityOperator.PureAreaLaw
 import TNLean.MPS.RFP.PhaseOscillation
 
 /-!

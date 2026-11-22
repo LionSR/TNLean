@@ -264,7 +264,7 @@ A practical compromise is:
 
 ## 10. Concrete file plan for TNLean
 
-1. **Defs upgrade** (`TNLean/MPS/Defs.lean`):
+1. **Defs upgrade** (`TNLean/MPS/Tensor/Defs.lean`):
    - add `SameMPV₂`, `ProportionalMPV₂`, and `GaugeEquiv₂`.
 
 2. **Canonical form computations** (`TNLean/MPS/CanonicalForm.lean` + new `MultiBlock.lean`):

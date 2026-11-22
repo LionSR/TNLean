@@ -61,10 +61,10 @@ projective-twist correction is part of the same integrated String Order batch.
 
 ## Owners and unchanged extractions
 
-- `MPS/Core/ObservableTransfer` receives the existing physical-observable
+- `MPS/Transfer/ObservableTransfer` receives the existing physical-observable
   definitions and elementary lemmas byte-for-byte from `RFP/ZeroCorrelationLength`.
   The previous owner imports the new lightweight owner. There is one definition.
-- `MPS/Core/Blocking` receives
+- `MPS/Tensor/Physical/Blocking` receives
   `Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose` with its complete
   declaration and body unchanged. `ParentHamiltonian/PGVWC07CutRank` explicitly
   imports that owner. There is one definition.
@@ -86,10 +86,10 @@ validation JSON. Structural checks found no TNLean import cycle.
 Four actual files passed Lean 4.35.0-rc3 with the package options, one thread,
 and warnings treated as errors:
 
-1. `MPS/Core/ObservableTransfer`
-2. `MPS/Symmetry/PhysicalStringEndpointSpan`
-3. `MPS/Core/Blocking`
-4. `MPS/Symmetry/PhysicalStringBlockEndpoints`
+1. `MPS/Transfer/ObservableTransfer`
+2. `MPS/Symmetry/StringOrder/PhysicalStringEndpointSpan`
+3. `MPS/Tensor/Physical/Blocking`
+4. `MPS/Symmetry/StringOrder/PhysicalStringBlockEndpoints`
 
 The algebraic endpoint check used the source-matched, already checked lightweight
 `StringOrderDefs` from the same batch's phase correction. That integration
