@@ -187,6 +187,6 @@ theorem norm_heisenberg_sub_regionExpectation_domainNeighborhood_le
     (lineDomainGraph Λ)
     (⟨h, hSupport⟩ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin q) fun k ↦ (X k).1)
     hHerm R (fun k ↦ (X k).2.2) (fun k ↦ (X k).2.isChainSupport.card_le)
-    (domainGraph_card_sphere_le_two Λ) b₀ hBudget S hA ℓ t
+    (lineDomainGraph_card_sphere_le_two Λ) b₀ hBudget S hA ℓ t
 
 end TNLean.MPS.AreaLaw

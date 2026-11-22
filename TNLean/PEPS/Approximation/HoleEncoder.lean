@@ -115,16 +115,6 @@ theorem identityHoleEncoder_norm (x : ι → ℂ) :
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Out : V → Type*} [∀ v, DecidableEq (Out v)] [∀ v, Fintype (Out v)] {n : ℕ}
 
-omit [∀ v, Fintype (Out v)] in
-private theorem dependentRegionOperatorLift_sum {κ : Type*} [Fintype κ] (R : Finset V)
-    (B : κ → Matrix ((w : {w : V // w ∈ R}) → Out w.1)
-      ((w : {w : V // w ∈ R}) → Out w.1) ℂ) :
-    ManyBody.place R (∑ k, B k) =
-      ∑ k, ManyBody.place R (B k) := by
-  classical
-  ext α β
-  simp [ManyBody.place, Matrix.reindex_apply, Matrix.sum_apply, Finset.sum_mul]
-
 /-- The tag records the branch and one actual inside innovation basis index. -/
 abbrev HoleEncoderTag (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ)) :=
@@ -187,7 +177,7 @@ theorem holeEncoder_gram (R : Fin n → Finset V) (hR : Monotone R)
   dsimp only [B]
   simp_rw [← ManyBody.place_conjTranspose,
     ← ManyBody.place_mul, coordinateResetMatrix_gram]
-  rw [← dependentRegionOperatorLift_sum,
+  rw [← ManyBody.place_sum,
     ← coordinateRangeProjector_eq_sum_basis _ (holeEncoderBasis R hR S j)]
 
 open Classical in

@@ -278,7 +278,7 @@ theorem exists_ambientSupDistance_le_of_mem_graphNeighborhood
   obtain ⟨x, hx, p, hp⟩ := ManyBody.mem_graphNeighborhood_iff_exists_walk.mp hy
   have hxd := (Scan.ambientDepth_le_iff_mem_dilation T hT x.val L).mpr (hS x hx)
   have hvar := Scan.abs_ambientDepth_sub_le_walk_length T hT Subtype.val
-    (fun _ _ ↦ Scan.ambientSupDistance_le_one_of_domainGraph_adj) p
+    (fun _ _ ↦ Scan.ambientSupDistance_le_one_of_planeDomainGraph_adj) p
   obtain ⟨t, ht, hmin⟩ := T.exists_mem_eq_inf' hT (Scan.ambientSupDistance y.val)
   refine ⟨t, ht, ?_⟩
   have hdepth : Scan.ambientDepth T hT y.val = Scan.ambientSupDistance t y.val := by

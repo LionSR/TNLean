@@ -54,7 +54,7 @@ open Classical in
 All charge-path existence, geometry, counting, and selected-coordinate probability
 bounds are derived. The sole multiplicity premise counts labels at each anchor.
 The time-window cardinality includes its final endpoint. -/
-theorem sum_chargePathWeight_bad_endpoint_domainGraph_le
+theorem sum_chargePathWeight_bad_endpoint_planeDomainGraph_le
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
@@ -78,7 +78,7 @@ theorem sum_chargePathWeight_bad_endpoint_domainGraph_le
     apply S.sum_badChargePaths_le x k _ _ (by positivity)
     intro y
     rw [hgraph]
-    exact card_nearbyChargeLabels_domainGraph_le Λ S.anchor S.r₀ μ hmult y
+    exact card_nearbyChargeLabels_planeDomainGraph_le Λ S.anchor S.r₀ μ hmult y
   · intro c hc
     let choices : ℕ → Bool × Fin S.M := fun t ↦
       if ht : t < k then c ⟨t, ht⟩ g else (false, ⟨0, hM⟩)
@@ -88,11 +88,11 @@ theorem sum_chargePathWeight_bad_endpoint_domainGraph_le
     have hx : S.bandState g (offsets g) k (fun t ↦ choices t) x = some side := by
       rw [hchoices]
       exact hc.1
-    obtain ⟨events, he⟩ := S.bandState_has_chargeAncestry_domainGraph hT hgraph hdepth
+    obtain ⟨events, he⟩ := S.bandState_has_chargeAncestry_planeDomainGraph hT hgraph hdepth
       g (offsets g) choices hL hclear k side x hxA hx
     have hvariation : ∀ i y, y ∈ S.ball i →
         |S.depth y - S.depth (S.anchor i)| ≤ S.r₀ :=
-      S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth
+      S.abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball hT hgraph hdepth
     have hmem := he.mem_badChargePaths S hn hvariation hc.2
     refine ⟨events, hmem, ?_⟩
     intro e hevent

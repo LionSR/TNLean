@@ -38,7 +38,7 @@ open TensorPower TensorPower.ReplicaTransport
 C_ent, e_ent, C_en, e_en` satisfying the finite-family transport bound, such as QICLean's
 universal transport constants, which depend on none of `q, R, J, Δ`. Source: `08-scanner.tex`,
 lines 442–490. -/
-theorem actualCharges_selection_domainGraph_of_finiteFamilyTransportBound
+theorem actualCharges_selection_planeDomainGraph_of_finiteFamilyTransportBound
     {c₀ Cent eent Cen een : ℝ} (htransport : FiniteFamilyTransportBound c₀ Cent eent Cen een) :
     ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
       [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
@@ -82,7 +82,7 @@ theorem actualCharges_selection_domainGraph_of_finiteFamilyTransportBound
   intro Λ T q R J Δ _ _ aux _ h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ
     L μ hn hr hDpos hD hL hCpos hC hrows hmult hclear a ha haℓ hm hM n E ℓ
   obtain ⟨β, Cβ, hCβ, hβ0, hβ, hsum⟩ :=
-    actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound htransport
+    actualCharges_integral_bound_planeDomainGraph_of_finiteFamilyTransportBound htransport
         aux h hh hhJ Ω S
       hT hgraph hdepth hanchor hΔ hΩ hn hr hDpos hD hL hCpos hC
       hrows hmult hclear ha haℓ
@@ -102,7 +102,7 @@ The initial and final filtered norms retain the original roots and vector.
 Source: area-law manuscript, `08-scanner.tex`, lines 442–490.
 This is the finite averaging consequence; the physical endpoint estimates of
 Proposition 9.2 are not asserted here. -/
-theorem actualCharges_selection_domainGraph :
+theorem actualCharges_selection_planeDomainGraph :
     ∃ c₀ Cent eent : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
@@ -145,6 +145,6 @@ theorem actualCharges_selection_domainGraph :
                   B / (ρ * ((S.n * S.m : ℕ) : ℝ) * (p₁ - p₀)) := by
   obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := exists_finiteFamilyTransportBound
   exact ⟨c₀, Cent, eent, hc₀,
-    actualCharges_selection_domainGraph_of_finiteFamilyTransportBound htransport⟩
+    actualCharges_selection_planeDomainGraph_of_finiteFamilyTransportBound htransport⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

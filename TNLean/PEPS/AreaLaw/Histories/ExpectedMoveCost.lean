@@ -173,7 +173,7 @@ incidence contributes its old-middle cost with probability at least `c / (nD)`,
 where `c = 1 / (2(C₁ + 1)) > 0`. The factor `2` is the independent uniform side
 choice. Ambient geometry supplies all selected slots; no sampling certificate
 is assumed (`08-scanner.tex`, lines 331–337). -/
-theorem good_splitIncidenceCost_le_expected_chargeMoveCost_domainGraph
+theorem good_splitIncidenceCost_le_expected_chargeMoveCost_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L μ : ℕ}
@@ -194,7 +194,7 @@ theorem good_splitIncidenceCost_le_expected_chargeMoveCost_domainGraph
   classical
   have hslots (g : Fin S.K) (p : Bool × I) (hp : p ∈ S.splitIncidences h g) :
       ∃ slot : Fin S.M, S.selected g (h.1 g) (k + 1) (p.1, slot) = some p.2 := by
-    obtain ⟨slot, hs, _⟩ := good_split_sampling_domainGraph hT S hgraph hdepth h g p.1 p.2
+    obtain ⟨slot, hs, _⟩ := good_split_sampling_planeDomainGraph hT S hgraph hdepth h g p.1 p.2
       hn hm hk hr hD hDpos hL hC hrows hmult hclear hgood
       ((S.mem_splitIncidences h g p).mp hp)
     exact ⟨slot, hs.1⟩

@@ -95,7 +95,7 @@ theorem domain_integrable_and_integral_channelWordOmissionDefect_le
       (Finset.mem_univ i)
   exact hbound (Site Λ) κ Aux q (planeDomainGraph Λ) a k hk₀ hk₁
     (fun i => mem_supportedOperators_reachable_of_forall_tail _ _ hc hα (htail i))
-    card_graphBall_domainGraph_le hfiber N hN (fun i l _ => htail i l) P S B hB r hr hfar t
+    card_graphBall_planeDomainGraph_le hfiber N hN (fun i l _ => htail i l) P S B hB r hr hfar t
 
 /-- **Expected channel omission on a lattice domain**
 (`eq:amplification-channel-omission`, `09-amplification.tex`, lines 203–215).

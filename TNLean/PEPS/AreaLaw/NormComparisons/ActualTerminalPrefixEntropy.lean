@@ -89,7 +89,7 @@ theorem terminalPartition_positiveEntropy_le
     cases j with
     | inl j =>
       obtain ⟨hnear, hfar, _, _, hnearCard, hfarCard⟩ :=
-        S.state_prefix_approximation_domainGraph hT hgraph hdepth j.2 g hn
+        S.state_prefix_approximation_planeDomainGraph hT hgraph hdepth j.2 g hn
           (Nat.le_of_lt_succ j.1.isLt) hr hDpos hD hL hrows
       obtain ⟨⟨iN, hiN⟩, ⟨iF, hiF⟩⟩ :=
         S.front_positiveDepthPrefix_mem_fixed_family hn hL g (j.2.1 g) j.1.val
@@ -98,7 +98,7 @@ theorem terminalPartition_positiveEntropy_le
         by simpa only [hiN] using hnearCard, by simpa only [hiF] using hfarCard⟩
     | inr j =>
       obtain ⟨hnear, hfar, _, _, hnearCard, hfarCard⟩ :=
-        S.oldChargeState_prefix_approximation_domainGraph hT hgraph hdepth j.2 g hn
+        S.oldChargeState_prefix_approximation_planeDomainGraph hT hgraph hdepth j.2 g hn
           (Nat.succ_le_of_lt j.1.isLt) hr hDpos hD hL hrows
       obtain ⟨⟨iN, hiN⟩, ⟨iF, hiF⟩⟩ :=
         S.front_positiveDepthPrefix_mem_fixed_family hn hL g (j.2.1 g) (j.1.val + 1)

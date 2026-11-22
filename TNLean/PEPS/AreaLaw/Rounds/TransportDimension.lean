@@ -93,14 +93,14 @@ theorem logDim_quantumFillMove_le (g r k : ℕ) (σ : PhysicalPartition V)
   exact log_fill_moved_dimension_le S.A S.depth S.n _ _ k σ hq
 
 /-- Each actual charge move has the explicit physical transport cap. -/
-theorem logDim_quantumChargeMove_le_domainGraph {Λ : Finset (ℤ × ℤ)}
+theorem logDim_quantumChargeMove_le_planeDomainGraph {Λ : Finset (ℤ × ℤ)}
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (g r k : ℕ) (c : Bool × Fin S.M) (σ : PhysicalPartition (Site Λ))
     (n : Site Λ ⊕ Bool → ℕ) {q : ℕ} (hq : 1 ≤ q)
     (hphysical : ∀ x, n (Sum.inl x) = q) :
     logDim n (S.quantumChargeMove g r k c σ).subsystem ≤ transportLogDimBound q S.r₀ := by
   rw [quantumChargeMove_subsystem, logDim_physical_eq _ n q hphysical]
-  exact S.log_chargeStep_moved_dimension_le_domainGraph hgraph g r k c σ hq
+  exact S.log_chargeStep_moved_dimension_le_planeDomainGraph hgraph g r k c σ hq
 
 /-- Every move of an actual fill round satisfies the same cap as its charges. -/
 theorem fillTransportData_logDim_move_le {k : ℕ}
@@ -118,7 +118,7 @@ theorem fillTransportData_logDim_move_le {k : ℕ}
     exact Nat.one_le_pow _ _ this)
 
 /-- Every move of an actual charge round satisfies the physical cap. -/
-theorem chargeTransportData_logDim_move_le_domainGraph {Λ : Finset (ℤ × ℤ)}
+theorem chargeTransportData_logDim_move_le_planeDomainGraph {Λ : Finset (ℤ × ℤ)}
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ) {k : ℕ}
     (histTree : Matrix.MeanTree (History S.K S.m S.M k))
     (choiceTree : History S.K S.m S.M k → Matrix.MeanTree (ChargeChoices S.K S.M))
@@ -127,12 +127,12 @@ theorem chargeTransportData_logDim_move_le_domainGraph {Λ : Finset (ℤ × ℤ)
     (h : History S.K S.m S.M k) (c : ChargeChoices S.K S.M) (g : Fin S.K) :
     logDim n ((S.chargeTransportData histTree choiceTree).move h c g).subsystem ≤
       transportLogDimBound q S.r₀ :=
-  S.logDim_quantumChargeMove_le_domainGraph hgraph g (h.1 g) (k + 1) (c g)
+  S.logDim_quantumChargeMove_le_planeDomainGraph hgraph g (h.1 g) (k + 1) (c g)
     (S.oldChargeState h g) n hq hphysical
 
 /-- A designated support with any split leaf in an actual charge round has the
 physical cap. No cap is asserted when its split-leaf set is empty. -/
-theorem chargeTransportData_logDim_support_le_domainGraph {Λ : Finset (ℤ × ℤ)}
+theorem chargeTransportData_logDim_support_le_planeDomainGraph {Λ : Finset (ℤ × ℤ)}
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ) {k L q : ℕ}
     (histTree : Matrix.MeanTree (History S.K S.m S.M k))
     (choiceTree : History S.K S.m S.M k → Matrix.MeanTree (ChargeChoices S.K S.M))
@@ -150,16 +150,16 @@ theorem chargeTransportData_logDim_support_le_domainGraph {Λ : Finset (ℤ × �
   rw [logDim_physical_eq _ n q hphysical]
   cases c with
   | none =>
-    exact S.log_designatedSupport_dimension_le_of_old_not_constant_domainGraph
+    exact S.log_designatedSupport_dimension_le_of_old_not_constant_planeDomainGraph
       hgraph h g i hq hL fun hc ↦ hg (augmentedPartition_contains_of_constant _ _ hc)
   | some c =>
     simp only [TransportData.leafPart, chargeTransportData_new] at hg
-    exact S.log_designatedSupport_dimension_le_of_state_not_constant_domainGraph
+    exact S.log_designatedSupport_dimension_le_of_state_not_constant_planeDomainGraph
       hgraph (extendHistory h c) g i hq hL
         fun hc ↦ hg (augmentedPartition_contains_of_constant _ _ hc)
 
 /-- Nonempty actual fill split-leaf sets satisfy the same designated-support cap. -/
-theorem fillTransportData_logDim_support_le_domainGraph {Λ : Finset (ℤ × ℤ)}
+theorem fillTransportData_logDim_support_le_planeDomainGraph {Λ : Finset (ℤ × ℤ)}
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ) {k L q : ℕ}
     (histTree : Matrix.MeanTree (History S.K S.m S.M k))
     (n : Site Λ ⊕ Bool → ℕ) (hq : 1 ≤ q) (hphysical : ∀ x, n (Sum.inl x) = q)
@@ -176,11 +176,11 @@ theorem fillTransportData_logDim_support_le_domainGraph {Λ : Finset (ℤ × ℤ
   rw [logDim_physical_eq _ n q hphysical]
   cases c with
   | none =>
-    exact S.log_designatedSupport_dimension_le_of_state_not_constant_domainGraph
+    exact S.log_designatedSupport_dimension_le_of_state_not_constant_planeDomainGraph
       hgraph h g i hq hL fun hc ↦ hg (augmentedPartition_contains_of_constant _ _ hc)
   | some c =>
     simp only [TransportData.leafPart, fillTransportData_new] at hg
-    exact S.log_designatedSupport_dimension_le_of_old_not_constant_domainGraph
+    exact S.log_designatedSupport_dimension_le_of_old_not_constant_planeDomainGraph
       hgraph h g i hq hL fun hc ↦ hg (augmentedPartition_contains_of_constant _ _ hc)
 
 end CollarScan

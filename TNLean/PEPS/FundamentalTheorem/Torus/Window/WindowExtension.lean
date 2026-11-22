@@ -25,7 +25,7 @@ For nested regions `R ⊆ S`, the deformed state on `R` with insert `C` equals t
 deformed state on `S` with the *extended* insert `extendInsert R S C`, where the
 extended insert pairs `C` with the genuine network block of the added vertices
 `S \ R`.  The extension reuses the three-block factorization
-`ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical`
+`ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_complPhysical`
 of `TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean`: with red block \(R\),
 blue block \(S\setminus R\), and complement \(V\setminus S\), the host
 \(V\setminus R\) is the complement block of the deformed state on \(R\), and the
@@ -288,7 +288,7 @@ theorem deformedRegionStateAssembled_bareExtend
     · refine Finset.sum_congr rfl (fun bc' _ => ?_)
       rw [Finset.sum_mul]
     · refine Finset.sum_congr rfl (fun μ _ => ?_)
-      have hfac := g.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical
+      have hfac := g.regionInteriorBondProd_smul_regionBlockedWeight_complPhysical
         (regionComplementBoundaryConfig (G := G) A R μ) σblue σcompl
       rw [smul_eq_mul, mul_comm (C μ σR), ← mul_assoc,
         show ((regionInteriorBondProd (G := G) A (Finset.univ \ S) : ℂ) *

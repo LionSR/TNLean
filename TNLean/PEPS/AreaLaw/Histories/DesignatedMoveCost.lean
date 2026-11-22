@@ -100,7 +100,7 @@ theorem designatedSplitIncidenceCost_le_splitIncidenceCost (L : ℕ) {k : ℕ}
 moves dominates `c / (nD)` times the truncated designated-support incidence
 cost, for `c = 1 / (2(C₁ + 1)) > 0`. The physical geometry and multiplicity
 bounds supply the sampling estimate (`08-scanner.tex`, lines 331–337). -/
-theorem good_designatedSplitIncidenceCost_le_expected_chargeMoveCost_domainGraph
+theorem good_designatedSplitIncidenceCost_le_expected_chargeMoveCost_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L μ : ℕ}
@@ -119,7 +119,7 @@ theorem good_designatedSplitIncidenceCost_le_expected_chargeMoveCost_domainGraph
       ((1 / (2 * (S.C₁ + 1))) / ((S.n : ℝ) * S.D)) *
           S.designatedSplitIncidenceCost L h cost ≤
         ∑ c : ChargeChoices S.K S.M, chargeWeight c * S.chargeMoveCost h cost c := by
-  have hbound := good_splitIncidenceCost_le_expected_chargeMoveCost_domainGraph
+  have hbound := good_splitIncidenceCost_le_expected_chargeMoveCost_planeDomainGraph
     hT S hgraph hdepth h cost hcost hn hm hk hr hD hDpos hL hC hrows hmult hclear hgood
   refine ⟨hbound.1, ?_⟩
   exact (mul_le_mul_of_nonneg_left

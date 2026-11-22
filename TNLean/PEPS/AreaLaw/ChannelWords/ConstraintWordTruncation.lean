@@ -214,7 +214,7 @@ theorem card_filter_anchor_mem_graphNeighborhood_le {κ : Type*} [Fintype κ]
       _ = μ * (graphBall (planeDomainGraph Λ) s r).card := by
           rw [Finset.sum_const, nsmul_eq_mul, mul_comm]
       _ ≤ μ * (2 * ((r : ℝ) + 1) ^ 2) :=
-          mul_le_mul_of_nonneg_left (card_graphBall_domainGraph_le s r) hμ
+          mul_le_mul_of_nonneg_left (card_graphBall_planeDomainGraph_le s r) hμ
   calc ((Finset.univ.filter fun i => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r).card : ℝ)
       ≤ ((∑ s ∈ S, ((graphBall (planeDomainGraph Λ) s r).biUnion
           fun x => Finset.univ.filter fun i => a i = x).card : ℕ) : ℝ) := by

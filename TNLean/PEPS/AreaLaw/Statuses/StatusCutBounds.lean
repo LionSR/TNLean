@@ -111,7 +111,7 @@ variable {I : Type*} [Fintype I] [LinearOrder I]
 /-- Every completed physical status has at most `40nD` cut edges in
 each of U, UY, Y, P₀, V, with sharper constants for all but Y. No prefix,
 edge-count, or good-history certificate is assumed. -/
-theorem state_cut_bounds_domainGraph
+theorem state_cut_bounds_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
@@ -133,7 +133,7 @@ theorem state_cut_bounds_domainGraph
     (edgeBoundary (planeDomainGraph Λ) (receiving (S.state h g) true)).card ≤
       16 * S.n * S.D := by
   have hb := S.prefix_uncertainty_rows h.1 g hn hk hr hDpos hD hL
-  have ha := state_prefix_approximation_domainGraph hT S hgraph hdepth
+  have ha := state_prefix_approximation_planeDomainGraph hT S hgraph hdepth
     h g hn hk hr hDpos hD hL hrows
   have hLpos : 1 ≤ L := (Nat.mul_pos (Nat.mul_pos (by decide) g.pos) (by omega)).trans_le hL
   exact physical_status_cut_bounds hT S.A S.depth hdepth (S.state h g) hLpos hDpos
@@ -148,7 +148,7 @@ theorem state_cut_bounds_domainGraph
 /-- Every pre-charge physical status has at most `40nD` cut edges in
 each of U, UY, Y, P₀, V, with sharper constants for all but Y. No prefix,
 edge-count, or good-history certificate is assumed. -/
-theorem oldChargeState_cut_bounds_domainGraph
+theorem oldChargeState_cut_bounds_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
@@ -171,7 +171,7 @@ theorem oldChargeState_cut_bounds_domainGraph
     (edgeBoundary (planeDomainGraph Λ) (receiving (S.oldChargeState h g) true)).card ≤
       16 * S.n * S.D := by
   have hb := S.prefix_uncertainty_rows h.1 g hn hk hr hDpos hD hL
-  have ha := oldChargeState_prefix_approximation_domainGraph hT S hgraph hdepth
+  have ha := oldChargeState_prefix_approximation_planeDomainGraph hT S hgraph hdepth
     h g hn hk hr hDpos hD hL hrows
   have hLpos : 1 ≤ L := (Nat.mul_pos (Nat.mul_pos (by decide) g.pos) (by omega)).trans_le hL
   exact physical_status_cut_bounds hT S.A S.depth hdepth (S.oldChargeState h g) hLpos hDpos

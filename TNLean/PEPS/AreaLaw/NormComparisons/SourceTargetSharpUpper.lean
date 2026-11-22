@@ -190,7 +190,7 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
   classical
   obtain ⟨Ctr, Ctarget, hCtr, hCtarget, Nt, hNt, htarget⟩ :=
     exists_truncated_target_typical_window hq R hJ hΔ hC_T
-  obtain ⟨CB, hCB, hbudget⟩ := exists_statusMarginal_cutBudget_le_log hq R hCtr.le
+  obtain ⟨CB, hCB, hbudget⟩ := exists_statusMarginal_cutLogBudget_le_log hq R hCtr.le
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   have hc₀ : 0 < 1 / (32 * Real.sqrt

@@ -199,7 +199,7 @@ theorem ThreeBlockGeometry.complCoeff_combination_eq_zero
               regionBlockedWeight (G := G) A g.blue bβ' σblue from ?_]
     · refine Finset.sum_congr rfl (fun bdry _ => ?_)
       congr 1
-      rw [g.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue
+      rw [g.regionInteriorBondProd_smul_regionBlockedWeight_complPhysical_blue
         bdry σblue σcompl]
     · -- Beta-reduce, distribute the `bβ'`-sum out of each `c bdry` scalar, and swap
       -- the `bdry`/`bβ'` summation order.

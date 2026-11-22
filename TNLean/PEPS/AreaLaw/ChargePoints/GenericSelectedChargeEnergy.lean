@@ -67,7 +67,7 @@ private theorem actualCharge_energyError_nonneg
 open Classical in
 /-- Combine the selected actual excess-energy estimate with the literal
 density-form coefficient cap. `htransport` is the energy conclusion at the
-point selected by `actualCharges_selection_energy_domainGraph`.
+point selected by `actualCharges_selection_energy_planeDomainGraph`.
 `hcoefficient` is the exact conclusion of
 `ScannerExponents.exists_actualCharge_energy_coefficients` at that same point.
 The state, charge stage, parameter and prevector are not changed.

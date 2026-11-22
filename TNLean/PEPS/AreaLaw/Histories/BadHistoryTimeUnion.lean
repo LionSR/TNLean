@@ -53,7 +53,7 @@ open Classical in
 /-- Union over all actual prefix times, both sides, all bands, and compact endpoints,
 with independent offsets averaged. The only site-count hypotheses are the source
 ambient row bound and bounded interaction-label multiplicity. -/
-theorem sum_historyWeight_bad_through_domainGraph_le
+theorem sum_historyWeight_bad_through_planeDomainGraph_le
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
@@ -108,7 +108,7 @@ theorem sum_historyWeight_bad_through_domainGraph_le
     _ ≤ ∑ t : Fin (N + 1), C * S.badEndpointTail t μ := by
       apply Finset.sum_le_sum
       intro t _
-      exact S.sum_historyWeight_bad_completed_domainGraph_le hT hgraph hdepth
+      exact S.sum_historyWeight_bad_completed_planeDomainGraph_le hT hgraph hdepth
         hn hm hM hL hclear hmult
     _ = C * ∑ t : Fin (N + 1), S.badEndpointTail t μ := (Finset.mul_sum ..).symm
     _ ≤ _ := mul_le_mul_of_nonneg_right hC (Finset.sum_nonneg fun t _ ↦ htail t)

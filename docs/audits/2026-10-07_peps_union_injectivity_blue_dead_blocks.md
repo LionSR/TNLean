@@ -22,7 +22,7 @@ an `axiom`, and no Blueprint `\lean{...}` tag cites any of the six.
 | `TNLean.PEPS.ThreeBlockGeometry.threeBlockBlueFiber_card` | none needed: no consumer; one line through `swapBlueComplement` as above |
 | `TNLean.PEPS.ThreeBlockGeometry.threeBlockDoubleSum_eq_smul_single_blue` | none needed: no consumer; one line through `swapBlueComplement` as above |
 | `TNLean.PEPS.ThreeBlockGeometry.threeBlockDoubleSum_eq_complCoeff_sum_blue` | none needed: no consumer; one line through `swapBlueComplement` as above |
-| `TNLean.PEPS.ThreeBlockGeometry.regionInteriorBondProd_smul_threeBlockComplWeight_eq` (`UnionInjectivityGeneral.lean`) | none needed: the union proof (`ThreeBlockGeometry.complCoeff_combination_eq_zero`, `UnionInjectivityGeneral2.lean`) strips the blue block first through the pointwise blue capstone `regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue` (`UnionInjectivityGeneralBlue.lean`), never the complement-first order this theorem served |
+| `TNLean.PEPS.ThreeBlockGeometry.regionInteriorBondProd_smul_threeBlockComplWeight_eq` (`UnionInjectivityGeneral.lean`) | none needed: the union proof (`ThreeBlockGeometry.complCoeff_combination_eq_zero`, `UnionInjectivityGeneral2.lean`) strips the blue block first through the pointwise blue capstone `regionInteriorBondProd_smul_regionBlockedWeight_complPhysical_blue` (`UnionInjectivityGeneralBlue.lean`), never the complement-first order this theorem served |
 
 ## What was checked before the deletion
 
@@ -30,7 +30,7 @@ Each of the six final name components was searched across `TNLean`, `blueprint`,
 `docs` and `scripts`, and every match was attributed by the namespace in scope at
 its site, first on 2026-09-23 and again on 2026-10-07, after the edge-centred
 resonate modules were retired. The namespaced forms had no consumer; the capstone
-`regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue` proves
+`regionInteriorBondProd_smul_regionBlockedWeight_complPhysical_blue` proves
 itself by `swapBlueComplement_complPhysical` together with the complement-side
 pointwise factorization, bypassing all five deleted blue lemmas. The forty-odd
 consumers behind the shared short names resolve to the survivors
@@ -46,7 +46,7 @@ six.
   `regionInteriorBondProd_smul_threeBlockComplWeight_eq`. It now describes the proof
   as written: the annihilation is read at the fused blue/complement leg, the pointwise
   blue smul-factorization
-  `regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue`,
+  `regionInteriorBondProd_smul_regionBlockedWeight_complPhysical_blue`,
   applied for each host boundary configuration, rewrites it as a blue-block
   combination, injectivity of the blue block strips the blue part,
   and injectivity of the complement block finishes.
@@ -70,7 +70,7 @@ six.
 Retained: the involution `swapBlueComplement` with its three `@[simp]` projections
 and `swapBlueComplement_complPhysical` (used by the capstone), the complement
 coupling coefficient `threeBlockComplCoeff`, the pointwise capstone
-`regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue`
+`regionInteriorBondProd_smul_regionBlockedWeight_complPhysical_blue`
 and its function-level form `regionInteriorBondProd_smul_geometryBlueWeight_eq`.
 
 Deferred: after this deletion the three `@[simp]` rfl projections

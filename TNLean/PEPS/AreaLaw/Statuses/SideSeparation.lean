@@ -105,7 +105,7 @@ private theorem front_sum_lt_neg_lead {k : ℕ} (g r : ℕ)
   omega
 
 omit [Fintype I] [LinearOrder I] in
-private theorem designatedSupport_not_near_far_domainGraph
+private theorem designatedSupport_not_near_far_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
@@ -137,12 +137,14 @@ private theorem designatedSupport_not_near_far_domainGraph
       (Finset.ext fun _ ↦ by simp [ball, ManyBody.mem_graphBall])
   rw [heq] at hxD hyD
   have hxcompact := Finset.mem_filter.mp (hnear hxP)
-  have hball := ball_subset_of_mem_ball_domainGraph hT S hgraph hdepth hclear hxD
+  have hball := ball_subset_of_mem_ball_planeDomainGraph hT S hgraph hdepth hclear hxD
     hxcompact.1 hxcompact.2
   have hxl := hlead false x hxcompact.1 hxσ
   have hyl := hlead true y (hball hyD) hyσ
-  have hxv := abs_le.mp (abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth i x hxD)
-  have hyv := abs_le.mp (abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth i y hyD)
+  have hxv := abs_le.mp
+    (abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball hT S hgraph hdepth i x hxD)
+  have hyv := abs_le.mp
+    (abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball hT S hgraph hdepth i y hyD)
   have hsep := S.front_sum_lt_neg_lead g r hn hk hr hDpos hD
   simp only [orientedDepth, Bool.false_eq_true, ↓reduceIte] at hxl hyl
   omega
@@ -150,7 +152,7 @@ private theorem designatedSupport_not_near_far_domainGraph
 /-- A designated support cannot meet both physical receiving sides in any completed
 history within the source horizon. This also excludes a direct near-to-far split
 with no middle incidence. -/
-theorem state_designatedSupport_not_near_far_domainGraph
+theorem state_designatedSupport_not_near_far_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
@@ -164,14 +166,14 @@ theorem state_designatedSupport_not_near_far_domainGraph
         receiving (S.state h g) false).Nonempty ∧
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) ∩
         receiving (S.state h g) true).Nonempty) := by
-  apply designatedSupport_not_near_far_domainGraph hT S hgraph hdepth g (h.1 g)
+  apply designatedSupport_not_near_far_planeDomainGraph hT S hgraph hdepth g (h.1 g)
     (S.state h g) hn hk hr hDpos hD (S.state_near_subset_truncationSet h g hL) _ hclear i
   apply S.bandState_assigned_lead
-  exact abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth
+  exact abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball hT S hgraph hdepth
 
 /-- A designated support cannot meet both physical receiving sides immediately
 before an actual charge, including histories with an unusually long charge lead. -/
-theorem old_designatedSupport_not_near_far_domainGraph
+theorem old_designatedSupport_not_near_far_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
@@ -185,11 +187,11 @@ theorem old_designatedSupport_not_near_far_domainGraph
         receiving (S.oldChargeState h g) false).Nonempty ∧
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) ∩
         receiving (S.oldChargeState h g) true).Nonempty) := by
-  apply designatedSupport_not_near_far_domainGraph hT S hgraph hdepth g (h.1 g)
+  apply designatedSupport_not_near_far_planeDomainGraph hT S hgraph hdepth g (h.1 g)
     (S.oldChargeState h g) hn hk hr hDpos hD
     (S.oldChargeState_near_subset_truncationSet h g hL) _ hclear i
   apply S.oldChargeState_assigned_lead
-  exact abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth
+  exact abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball hT S hgraph hdepth
 
 end CollarScan
 end TNLean.PEPS.AreaLaw.Scan

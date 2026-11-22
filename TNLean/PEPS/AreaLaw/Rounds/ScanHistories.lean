@@ -231,7 +231,7 @@ private theorem ball_subset_of_middle {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonem
   obtain ⟨y, hy⟩ := hsplit
   obtain ⟨hyb, hym⟩ := Finset.mem_inter.mp hy
   obtain ⟨hyA, hydepth⟩ := Finset.mem_filter.mp (hsub hym)
-  have hb := domainGraph_ball_subset_of_clearance Λ T hT S.A L S.r₀ hclear
+  have hb := planeDomainGraph_ball_subset_of_clearance Λ T hT S.A L S.r₀ hclear
     ⟨y, hyA, by simpa only [hdepth] using hydepth,
       by simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hyb⟩
   simpa only [ball, hgraph] using hb
@@ -270,21 +270,21 @@ theorem historyProperties_of_scales {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempt
   have hm : 2 ≤ S.m := by omega
   have hm0 : 0 < S.m := by omega
   have hball_depth : ∀ i x, x ∈ S.ball i → |S.depth x - S.depth (S.anchor i)| ≤ S.r₀ :=
-    fun i x hx ↦ abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth i x hx
+    fun i x hx ↦ abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball hT S hgraph hdepth i x hx
   refine
     { support_eq_ball := ?_
       old_support_eq_ball := ?_
       split_unique := fun h hk g g' side side' i hs hs' ↦
-        state_designatedSplitIncidence_unique_domainGraph hT S hgraph hdepth h hn0 hk hr0
+        state_designatedSplitIncidence_unique_planeDomainGraph hT S hgraph hdepth h hn0 hk hr0
           hDpos hD hL hrows hclear g g' side side' i hs hs'
       old_split_unique := fun h hk g g' side side' i hs hs' ↦
-        old_designatedSplitIncidence_unique_domainGraph hT S hgraph hdepth h hn0 hk hr0
+        old_designatedSplitIncidence_unique_planeDomainGraph hT S hgraph hdepth h hn0 hk hr0
           hDpos hD hL hrows hclear g g' side side' i hs hs'
       terminal_split := fun h hk g side i hs ↦
-        state_designatedSplitIncidence_isTerminalSplit_domainGraph hT S hgraph hdepth h hn0
+        state_designatedSplitIncidence_isTerminalSplit_planeDomainGraph hT S hgraph hdepth h hn0
           hk hr0 hDpos hD hL hrows hclear g side i hs
       old_terminal_split := fun h hk g side i hs ↦
-        old_designatedSplitIncidence_isTerminalSplit_domainGraph hT S hgraph hdepth h hn0
+        old_designatedSplitIncidence_isTerminalSplit_planeDomainGraph hT S hgraph hdepth h hn0
           hk hr0 hDpos hD hL hrows hclear g side i hs
       band_commute := fun h h' g g' hg preCharge preCharge' q _ _ ht replicas ↦
         S.commute_quantumHistoryPartition h h' g g' hg preCharge preCharge' q ht replicas
@@ -293,34 +293,34 @@ theorem historyProperties_of_scales {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempt
       old_assigned_lead := fun h g side x hxA hx ↦
         S.oldChargeState_assigned_lead h g hball_depth side x hxA hx
       prefix_comparison := fun h g hk ↦ by
-        obtain ⟨h1, h2, -, -, h5, h6⟩ := state_prefix_approximation_domainGraph hT S hgraph
+        obtain ⟨h1, h2, -, -, h5, h6⟩ := state_prefix_approximation_planeDomainGraph hT S hgraph
           hdepth h g hn0 hk hr0 hDpos hD hL hrows
         exact ⟨h1, h2, h5, h6⟩
       old_prefix_comparison := fun h g hk ↦ by
-        obtain ⟨h1, h2, -, -, h5, h6⟩ := oldChargeState_prefix_approximation_domainGraph hT S
+        obtain ⟨h1, h2, -, -, h5, h6⟩ := oldChargeState_prefix_approximation_planeDomainGraph hT S
           hgraph hdepth h g hn0 hk hr0 hDpos hD hL hrows
         exact ⟨h1, h2, h5, h6⟩
       cut_bounds := fun h g hk ↦
-        state_cut_bounds_domainGraph hT S hgraph hdepth h g hn0 hk hr0 hDpos hD hL hrows
+        state_cut_bounds_planeDomainGraph hT S hgraph hdepth h g hn0 hk hr0 hDpos hD hL hrows
           hclear
       old_cut_bounds := fun h g hk ↦
-        oldChargeState_cut_bounds_domainGraph hT S hgraph hdepth h g hn0 hk hr0 hDpos hD hL
+        oldChargeState_cut_bounds_planeDomainGraph hT S hgraph hdepth h g hn0 hk hr0 hDpos hD hL
           hrows hclear
       split_count := fun h hk ↦
-        sum_card_state_designatedSplitIncidence_le_domainGraph hT S hgraph hdepth h hn hm hk
+        sum_card_state_designatedSplitIncidence_le_planeDomainGraph hT S hgraph hdepth h hn hm hk
           hr0 hDpos hmargin hL hrows hmult hclear
       old_split_count := fun h hk ↦
-        sum_card_old_designatedSplitIncidence_le_domainGraph hT S hgraph hdepth h hn hm hk
+        sum_card_old_designatedSplitIncidence_le_planeDomainGraph hT S hgraph hdepth h hn hm hk
           hr0 hDpos hmargin hL hrows hmult hclear
       charge_dilution := fun k i _ hq0 hq1 ↦
-        designated_split_mixture_dilution_domainGraph (k := k) hT S hgraph hdepth i hn0 hm0
+        designated_split_mixture_dilution_planeDomainGraph (k := k) hT S hgraph hdepth i hn0 hm0
           hr0 hD hDpos hCpos hL hrows hclear hq0 hq1
       fill_dilution := fun k i _ hq0 hq1 ↦
-        fill_split_mixture_dilution_domainGraph (k := k) hT S hgraph hdepth i hn0 hm0 hr0 hD
+        fill_split_mixture_dilution_planeDomainGraph (k := k) hT S hgraph hdepth i hn0 hm0 hr0 hD
           hDpos hCpos hL hrows hclear hq0 hq1
       bad_history := hbad
       good_sampling := fun h g side i hk hgood hs ↦
-        S.good_designated_split_sampling_domainGraph hT hgraph hdepth h g side i hn hm hk hr
+        S.good_designated_split_sampling_planeDomainGraph hT hgraph hdepth h g side i hn hm hk hr
           hD hDpos hL hC hrows hmult hclear hgood hs }
   · intro k h g side i hs
     have heq := S.designatedSupport_eq_ball_of_state_split h g side i hL hs

@@ -70,7 +70,7 @@ variable {I : Type*} [Fintype I] [LinearOrder I]
 the entropy integrated over all complete rounds. The proof inserts each charge
 stage at its odd round and derives the nonnegativity of the remaining fill gains.
 Only interval integrability, not continuity in the parameter, is used. -/
-theorem sum_actualCharge_integral_le_sum_actualRounds_entropyGain_domainGraph
+theorem sum_actualCharge_integral_le_sum_actualRounds_entropyGain_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x => ambientDepth T hT x.val) {L μ : ℕ}
@@ -146,7 +146,7 @@ theorem sum_actualCharge_integral_le_sum_actualRounds_entropyGain_domainGraph
         apply intervalIntegral.integral_mono_on h01 (hQ.const_mul α) ((hGint (e s)).mono_set hsub)
         intro p _
         rw [heq]
-        exact S.actualChargeEntropyDefect_le_entropyGain_domainGraph hT hgraph hdepth hm0 hM
+        exact S.actualChargeEntropyDefect_le_entropyGain_planeDomainGraph hT hgraph hdepth hm0 hM
           n E hsupport hn hm (Nat.succ_le_iff.mpr s.isLt) hr hD hDpos hL hC hrows hmult
           hclear ht k pre p
       _ ≤ ∫ p in (0 : ℝ)..1, (S.actualRoundData hm0 hM (e s)).entropyGain n t k pre p :=
@@ -161,7 +161,7 @@ theorem sum_actualCharge_integral_le_sum_actualRounds_entropyGain_domainGraph
 /-- The integrated bound for all actual charge stages at any constants `c₀, C_ent, e_ent, C_en,
 e_en` satisfying the finite-family transport bound, such as QICLean's universal transport
 constants, which depend on none of `q, R, J, Δ`. Source: `08-scanner.tex`, lines 442–479. -/
-theorem actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound
+theorem actualCharges_integral_bound_planeDomainGraph_of_finiteFamilyTransportBound
     {c₀ Cent eent Cen een : ℝ} (htransport : FiniteFamilyTransportBound c₀ Cent eent Cen een) :
     ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
       [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
@@ -209,11 +209,11 @@ theorem actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound
   let n := augmentedDimensions (V := Site Λ) q aux
   let E := S.actualEnergyTerms h Ω J Δ L aux
   obtain ⟨β, Cβ, hCβ, hβ0, hβ, hround⟩ :=
-    actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound
+    actualRounds_entropy_integral_le_planeDomainGraph_of_finiteFamilyTransportBound
         htransport aux S hgraph (by omega) hDpos hD hCpos ha haℓ
   refine ⟨β, Cβ, hCβ, hβ0, hβ, ?_⟩
   intro k pre hpre hne p₀ p₁ h0 h01 h1
-  have hcharge := S.sum_actualCharge_integral_le_sum_actualRounds_entropyGain_domainGraph
+  have hcharge := S.sum_actualCharge_integral_le_sum_actualRounds_entropyGain_planeDomainGraph
     hT hgraph hdepth hm hM n E (fun _ => rfl) hn (by omega) hr hD hDpos hL hC
     hrows hmult hclear (half_pos ha).le k pre hne h0 h01 h1
   have hscaled := mul_le_mul_of_nonneg_left hcharge (mul_nonneg (Nat.cast_nonneg k) ha.le)
@@ -225,7 +225,7 @@ stages on any closed subinterval of `[0, 1]` (`08-scanner.tex`, lines 442–479)
 The error is paid for every complete fill and charge round, independently of
 the retained subinterval's length. The same logarithmic error works for all
 replica counts and all nonzero symmetric supplied vectors. -/
-theorem actualCharges_integral_bound_domainGraph :
+theorem actualCharges_integral_bound_planeDomainGraph :
     ∃ c₀ Cent eent : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
@@ -267,6 +267,6 @@ theorem actualCharges_integral_bound_domainGraph :
                     (Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k) := by
   obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := exists_finiteFamilyTransportBound
   exact ⟨c₀, Cent, eent, hc₀,
-    actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound htransport⟩
+    actualCharges_integral_bound_planeDomainGraph_of_finiteFamilyTransportBound htransport⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

@@ -49,7 +49,7 @@ theorem isGoodOldHistory_of_isGoodCompletedHistory {V : Type*} [Fintype V] [Deci
 open Classical in
 /-- Conditional on all offsets, the completed-history bad event has a finite bound
 with only compact collar volume, two sides, and the number of bands. -/
-theorem sum_chargePathWeight_bad_completed_domainGraph_le
+theorem sum_chargePathWeight_bad_completed_planeDomainGraph_le
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
@@ -101,7 +101,7 @@ theorem sum_chargePathWeight_bad_completed_domainGraph_le
       intro a ha
       have hxA : a.2.2 ∈ S.A :=
         (Finset.mem_filter.mp (Finset.mem_product.mp (Finset.mem_product.mp ha).2).2).1
-      exact S.sum_chargePathWeight_bad_endpoint_domainGraph_le hT hgraph hdepth offsets
+      exact S.sum_chargePathWeight_bad_endpoint_planeDomainGraph_le hT hgraph hdepth offsets
         a.1 a.2.1 a.2.2 hxA hn hM hL hclear hmult
     _ = _ := by
       simp only [Finset.sum_const, nsmul_eq_mul, tests, points, Finset.card_product,
@@ -111,7 +111,7 @@ theorem sum_chargePathWeight_bad_completed_domainGraph_le
 open Classical in
 /-- Averaging the actual independent initial offsets preserves the finite bad-history bound.
 The weights are the scanner's classical history weights, not transported quantum measures. -/
-theorem sum_historyWeight_bad_completed_domainGraph_le
+theorem sum_historyWeight_bad_completed_planeDomainGraph_le
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
@@ -136,14 +136,14 @@ theorem sum_historyWeight_bad_completed_domainGraph_le
       apply Finset.sum_le_sum
       intro offsets _
       apply mul_le_mul_of_nonneg_left _ (by positivity)
-      exact S.sum_chargePathWeight_bad_completed_domainGraph_le hT hgraph hdepth offsets
+      exact S.sum_chargePathWeight_bad_completed_planeDomainGraph_le hT hgraph hdepth offsets
         hn hM hL hclear hmult
     _ = B := by simp [Nat.cast_pow, hm0]
 
 open Classical in
 /-- The same finite bound applies to old charge histories, because fills cannot
 create bad lead. This covers the source's sampling-time goodness convention. -/
-theorem sum_historyWeight_bad_old_domainGraph_le
+theorem sum_historyWeight_bad_old_planeDomainGraph_le
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
@@ -155,7 +155,7 @@ theorem sum_historyWeight_bad_old_domainGraph_le
     (∑ h : History S.K S.m S.M k, if ¬ S.IsGoodOldHistory h then historyWeight h else 0) ≤
       (S.K * 2 * (S.A.filter fun x ↦ S.depth x ≤ L).card : ℕ) * S.badEndpointTail k μ := by
   classical
-  apply le_trans _ (S.sum_historyWeight_bad_completed_domainGraph_le hT hgraph hdepth
+  apply le_trans _ (S.sum_historyWeight_bad_completed_planeDomainGraph_le hT hgraph hdepth
     hn hm hM hL hclear hmult)
   apply Finset.sum_le_sum
   intro h _

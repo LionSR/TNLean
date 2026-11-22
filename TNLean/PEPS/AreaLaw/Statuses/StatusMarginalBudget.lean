@@ -90,7 +90,7 @@ theorem statusMarginalBudgetConstant_pos (q R : ℕ) {Cr : ℝ} (hCr : 0 ≤ Cr)
 /-- The explicit coefficient `statusMarginalBudgetConstant q R Cr` bounds all five actual cut
 budgets, at every completed and pre-charge status (`08-scanner.tex`, lines 32–58 and
 400–414; `07-comparators.tex`, lines 70–85). -/
-theorem statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
+theorem statusMarginal_cutLogBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
     {Cr : ℝ} (hCr : 0 ≤ Cr) :
     ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
@@ -152,21 +152,21 @@ theorem statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
       (statusMarginalRegions_containment S.depth (S.state h g)
         (S.state_far_compl_subset_truncationSet h g hL) hQ)
       (statusMarginalRegions_boundary S.depth (S.state h g)
-        (state_cut_bounds_domainGraph hT S hgraph hdepth h g (by omega) hk
+        (state_cut_bounds_planeDomainGraph hT S hgraph hdepth h g (by omega) hk
           hr hDpos hD hL hrows hclear) hQ)
   · intro hk Q hQ
     exact hboundEither Q
       (statusMarginalRegions_containment S.depth (S.oldChargeState h g)
         (S.oldChargeState_far_compl_subset_truncationSet h g hL) hQ)
       (statusMarginalRegions_boundary S.depth (S.oldChargeState h g)
-        (oldChargeState_cut_bounds_domainGraph hT S hgraph hdepth h g (by omega) hk
+        (oldChargeState_cut_bounds_planeDomainGraph hT S hgraph hdepth h g (by omega) hk
           hr hDpos hD hL hrows hclear) hQ)
 
 /-- A single coefficient bounds all five actual cut budgets, at every completed
 and pre-charge status. The lower bound by one also holds when there are no bands.
 The literal scale inequalities are geometric premises; no asymptotic premise,
 cut-containment certificate or cut-edge estimate is supplied. -/
-theorem exists_statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
+theorem exists_statusMarginal_cutLogBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
     {Cr : ℝ} (hCr : 0 ≤ Cr) :
     ∃ CB : ℝ, 0 < CB ∧
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
@@ -192,7 +192,7 @@ theorem exists_statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ
               ManyBody.cutLogBudget
                 (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
                 (fun _ ↦ q) Q ≤ B) :=
-  ⟨_, statusMarginalBudgetConstant_pos q R hCr, statusMarginal_cutBudget_le_log hq R hCr⟩
+  ⟨_, statusMarginalBudgetConstant_pos q R hCr, statusMarginal_cutLogBudget_le_log hq R hCr⟩
 
 end CollarScan
 end TNLean.PEPS.AreaLaw.Scan

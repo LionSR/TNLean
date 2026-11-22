@@ -38,7 +38,7 @@ split-probability factors in `energyError` are retained.
 
 ## Statement and quantifiers
 
-`actualRounds_transport_domainGraph` uses this order:
+`actualRounds_transport_planeDomainGraph` uses this order:
 
 1. Universal `c₀, Cent, eent, Cen, een`, with `0 < c₀`, selected once from
    QICLean's finite-family theorem.
@@ -93,10 +93,10 @@ For each parity it uses the existing producers:
 | Premise | Fill | Charge |
 | --- | --- | --- |
 | Admissibility | `actualFillData_isAdmissible` | `actualChargeData_isAdmissible` |
-| Support compatibility | `fillTransportData_supportCompatible_domainGraph` | `chargeTransportData_supportCompatible_domainGraph` |
+| Support compatibility | `fillTransportData_supportCompatible_planeDomainGraph` | `chargeTransportData_supportCompatible_planeDomainGraph` |
 | Cross-band commutation | `fillTransportData_crossBandCommute` | `chargeTransportData_crossBandCommute` |
-| Moved dimensions | `fillTransportData_logDim_move_le` | `chargeTransportData_logDim_move_le_domainGraph` |
-| Split-support dimensions | `fillTransportData_logDim_support_le_domainGraph` | `chargeTransportData_logDim_support_le_domainGraph` |
+| Moved dimensions | `fillTransportData_logDim_move_le` | `chargeTransportData_logDim_move_le_planeDomainGraph` |
+| Split-support dimensions | `fillTransportData_logDim_support_le_planeDomainGraph` | `chargeTransportData_logDim_support_le_planeDomainGraph` |
 
 `actualEnergyTerms_spec` supplies positive supported contractions. The cap on
 a designated support retains the nonempty-split-leaf premise; unsplit supports

@@ -194,7 +194,7 @@ private theorem generic_actualCharge_energy_of_threshold_le
           (S.actualChargeEntropyDefect hm hM s dims E
             (a / 2) k (pre k) p) ^ (1 / 8 : ℝ) +
           A * (2 * ℓ) ^ (1 / 8 : ℝ) / 2 * ((1 - p) * b + p)) :=
-      S.actualCharge_energyError_le_domainGraph hT hgraph hdepth aux h Ω Δ
+      S.actualCharge_energyError_le_planeDomainGraph hT hgraph hdepth aux h Ω Δ
         hnS hs hrS hDpos hmargin hL hCpos hrows hmult hclear ha k pre hsym hpre hp
     _ ≤ _ :=
       mul_le_mul_of_nonneg_left

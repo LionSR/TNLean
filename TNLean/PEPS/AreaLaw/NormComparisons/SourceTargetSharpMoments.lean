@@ -164,7 +164,7 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
   have hCtr : 0 < Ctr := by
     rw [hCtrEq]; exact latticeTruncationRadiusConstant_pos R hΔ (by positivity)
   have htarget := hwindow q hq
-  have hbudget := statusMarginal_cutBudget_le_log hq R hCtr.le
+  have hbudget := statusMarginal_cutLogBudget_le_log hq R hCtr.le
   set CB := statusMarginalBudgetConstant q R Ctr
   have hCB : 0 < CB := statusMarginalBudgetConstant_pos q R hCtr.le
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=

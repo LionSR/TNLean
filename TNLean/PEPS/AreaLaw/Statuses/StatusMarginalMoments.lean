@@ -185,7 +185,7 @@ theorem exists_truncated_statusMarginal_moment_bounds
   obtain ⟨Ctr, hCtr, htr⟩ := exists_truncated_regionState_moment_tail_bounds R hJ hΔ hCcard
   refine ⟨Ctr, hCtr, ?_⟩
   intro q _
-  obtain ⟨CB, hCB, hbudget⟩ := exists_statusMarginal_cutBudget_le_log
+  obtain ⟨CB, hCB, hbudget⟩ := exists_statusMarginal_cutLogBudget_le_log
     (Nat.one_le_iff_ne_zero.mpr (NeZero.ne q)) R hCtr.le
   refine ⟨CB, hCB, ?_⟩
   intro Λ T _ hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hdepth hanchor L hn hradius hcard
@@ -387,7 +387,7 @@ theorem exists_suppliedTarget_statusMarginal_moment_bounds
                         Real.log (Entropy.surprisalMoment
                           (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
                           u * ManyBody.regionEntropy Ωt Q + (C₀ * B) * u ^ 2) := by
-  obtain ⟨CB, hCB, hbudget⟩ := exists_statusMarginal_cutBudget_le_log hq R hCr
+  obtain ⟨CB, hCB, hbudget⟩ := exists_statusMarginal_cutLogBudget_le_log hq R hCr
   refine ⟨CB, hCB, ?_⟩
   intro Λ T _ hT S hgraph hdepth hanchor L hn hradius hr hDpos hD hL hrows hclear
   obtain ⟨hB, hcut⟩ := hbudget Λ T hT S hgraph hdepth hanchor L hn hradius

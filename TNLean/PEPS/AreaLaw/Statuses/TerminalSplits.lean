@@ -43,7 +43,7 @@ variable (S : CollarScan V I)
 
 /-- Within the source horizon, a designated support has at most one actual
 splitting band and side. The hypotheses are ambient geometry and source scales. -/
-theorem state_designatedSplitIncidence_unique_domainGraph
+theorem state_designatedSplitIncidence_unique_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
@@ -63,14 +63,14 @@ theorem state_designatedSplitIncidence_unique_domainGraph
       S.front f (h.1 f) k s - S.r₀ ≤ orientedDepth S.depth s (S.anchor i) ∧
       orientedDepth S.depth s (S.anchor i) ≤ S.front f (h.1 f) k s + S.D + 2 * S.r₀ := by
     have heq := S.designatedSupport_eq_ball_of_state_split h f s i hL he
-    exact state_split_anchor_bounds_domainGraph hT S hgraph hdepth h f s i hn hL hrows hclear
+    exact state_split_anchor_bounds_planeDomainGraph hT S hgraph hdepth h f s i hn hL hrows hclear
       (by simpa only [designatedSplitIncidence, heq] using he)
   exact S.front_intervals_unique h.1 hn hk hr hDpos hD g g' side side' (S.depth (S.anchor i))
     (bounds g side hs) (bounds g' side' hs')
 
 /-- Within the source horizon, a designated support has at most one actual
 splitting band and side. The hypotheses are ambient geometry and source scales. -/
-theorem old_designatedSplitIncidence_unique_domainGraph
+theorem old_designatedSplitIncidence_unique_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
@@ -90,7 +90,7 @@ theorem old_designatedSplitIncidence_unique_domainGraph
       S.front f (h.1 f) (k + 1) s - S.r₀ ≤ orientedDepth S.depth s (S.anchor i) ∧
       orientedDepth S.depth s (S.anchor i) ≤ S.front f (h.1 f) (k + 1) s + S.D + 2 * S.r₀ := by
     have heq := S.designatedSupport_eq_ball_of_split h f s i hL he
-    exact old_split_anchor_bounds_domainGraph hT S hgraph hdepth h f s i hn hL hrows hclear
+    exact old_split_anchor_bounds_planeDomainGraph hT S hgraph hdepth h f s i hn hL hrows hclear
       (by simpa only [designatedSplitIncidence, heq] using he)
   exact S.front_intervals_unique h.1 hn hk hr hDpos hD g g' side side' (S.depth (S.anchor i))
     (bounds g side hs) (bounds g' side' hs')
@@ -172,7 +172,7 @@ theorem oldChargeState_ball_other_band_initial_part {k : ℕ} (h : History S.K S
 
 /-- An actual designated split incidence satisfies the full physical terminal
 split definition: exactly one receiving side, and a single part in every other band. -/
-theorem state_designatedSplitIncidence_isTerminalSplit_domainGraph
+theorem state_designatedSplitIncidence_isTerminalSplit_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
@@ -190,9 +190,9 @@ theorem state_designatedSplitIncidence_isTerminalSplit_domainGraph
   have heq := S.designatedSupport_eq_ball_of_state_split h g side i hL hs
   have hm : (S.ball i ∩ middle (S.state h g)).Nonempty := by
     simpa only [heq] using hs.2
-  have hvar := S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth i
+  have hvar := S.abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball hT hgraph hdepth i
   have hball : S.ball i ⊆ S.A :=
-    ball_subset_of_middle_domainGraph hT S hgraph hdepth hclear _ i (fun y hyn ↦
+    ball_subset_of_middle_planeDomainGraph hT S hgraph hdepth hclear _ i (fun y hyn ↦
       ⟨(initial_middle_depth S.A S.depth _ _
         (S.bandState_unassigned g (h.1 g) k (fun t ↦ h.2 t g) y hyn).1 false).1,
         (Finset.mem_Icc.mp (S.state_depth_bounds h g hL y hyn)).2⟩) hm
@@ -201,7 +201,7 @@ theorem state_designatedSplitIncidence_isTerminalSplit_domainGraph
     intro x hx hxside
     have hop : S.designatedSplitIncidence (S.state h g) L i (!side) :=
       ⟨⟨x, Finset.mem_inter.mpr ⟨hx, hxside⟩⟩, hs.2⟩
-    have he := (state_designatedSplitIncidence_unique_domainGraph hT S hgraph hdepth h
+    have he := (state_designatedSplitIncidence_unique_planeDomainGraph hT S hgraph hdepth h
       hn hk hr hDpos hD hL hrows hclear g g side (!side) i hs hop).2
     cases side <;> simp at he
   · intro g' hgg
@@ -212,7 +212,7 @@ theorem state_designatedSplitIncidence_isTerminalSplit_domainGraph
       (S.state_ball_other_band_initial_part h g g' hgg i (by omega) hball hvar hm x hx)
 /-- An actual designated split incidence satisfies the full physical terminal
 split definition: exactly one receiving side, and a single part in every other band. -/
-theorem old_designatedSplitIncidence_isTerminalSplit_domainGraph
+theorem old_designatedSplitIncidence_isTerminalSplit_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
@@ -230,15 +230,15 @@ theorem old_designatedSplitIncidence_isTerminalSplit_domainGraph
   have heq := S.designatedSupport_eq_ball_of_split h g side i hL hs
   have hm : (S.ball i ∩ middle (S.oldChargeState h g)).Nonempty := by
     simpa only [heq] using hs.2
-  have hvar := S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth i
-  have hball := ball_subset_of_oldChargeState_middle_domainGraph hT S hgraph hdepth hclear
+  have hvar := S.abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball hT hgraph hdepth i
+  have hball := ball_subset_of_oldChargeState_middle_planeDomainGraph hT S hgraph hdepth hclear
     h g hL i hm
   refine ⟨hs.2, hs.1, ?_, ?_⟩
   · apply Finset.disjoint_left.mpr
     intro x hx hxside
     have hop : S.designatedSplitIncidence (S.oldChargeState h g) L i (!side) :=
       ⟨⟨x, Finset.mem_inter.mpr ⟨hx, hxside⟩⟩, hs.2⟩
-    have he := (old_designatedSplitIncidence_unique_domainGraph hT S hgraph hdepth h
+    have he := (old_designatedSplitIncidence_unique_planeDomainGraph hT S hgraph hdepth h
       hn hk hr hDpos hD hL hrows hclear g g side (!side) i hs hop).2
     cases side <;> simp at he
   · intro g' hgg

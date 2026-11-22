@@ -105,7 +105,7 @@ namespace CollarScan
 /-- Every terminal support of an actual charge round satisfies the transport
 compatibility condition. The only support identification is its physical
 embedding; compatibility is derived from the source geometric margins. -/
-theorem chargeTransportData_supportCompatible_domainGraph
+theorem chargeTransportData_supportCompatible_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
@@ -128,13 +128,13 @@ theorem chargeTransportData_supportCompatible_domainGraph
   cases c with
   | none =>
     change (augmentedPartition (S.oldChargeState h g)).Contains _ ∨ _
-    rcases old_designatedSupport_classification_domainGraph hT S hgraph hdepth h
+    rcases old_designatedSupport_classification_planeDomainGraph hT S hgraph hdepth h
       hn hk hr hDpos hD hL hrows hclear g i with hc | ⟨side, hs⟩
     · exact Or.inl (augmentedPartition_contains_of_constant _ _ hc)
     · exact Or.inr hs.augmented
   | some c =>
     simp only [TransportData.leafPart, chargeTransportData_new]
-    rcases state_designatedSupport_classification_domainGraph hT S hgraph hdepth
+    rcases state_designatedSupport_classification_planeDomainGraph hT S hgraph hdepth
       (extendHistory h c) hn hk hr hDpos hD hL hrows hclear g i with hc | ⟨side, hs⟩
     · exact Or.inl (augmentedPartition_contains_of_constant _ _ hc)
     · exact Or.inr hs.augmented
@@ -160,7 +160,7 @@ namespace CollarScan
 
 /-- Both endpoints of an actual fill satisfy designated-support compatibility,
 derived from the geometric scanner hypotheses rather than supplied as a premise. -/
-theorem fillTransportData_supportCompatible_domainGraph
+theorem fillTransportData_supportCompatible_planeDomainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
@@ -182,13 +182,13 @@ theorem fillTransportData_supportCompatible_domainGraph
   cases c with
   | none =>
     change (augmentedPartition (S.state h g)).Contains _ ∨ _
-    rcases state_designatedSupport_classification_domainGraph hT S hgraph hdepth h
+    rcases state_designatedSupport_classification_planeDomainGraph hT S hgraph hdepth h
       hn (Nat.le_of_succ_le hk) hr hDpos hD hL hrows hclear g i with hc | ⟨side, hs⟩
     · exact Or.inl (augmentedPartition_contains_of_constant _ _ hc)
     · exact Or.inr hs.augmented
   | some c =>
     simp only [TransportData.leafPart, fillTransportData_new]
-    rcases old_designatedSupport_classification_domainGraph hT S hgraph hdepth h
+    rcases old_designatedSupport_classification_planeDomainGraph hT S hgraph hdepth h
       hn hk hr hDpos hD hL hrows hclear g i with hc | ⟨side, hs⟩
     · exact Or.inl (augmentedPartition_contains_of_constant _ _ hc)
     · exact Or.inr hs.augmented

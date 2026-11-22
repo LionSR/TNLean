@@ -174,7 +174,7 @@ which depend on none of `q, R, J, Δ`. The bound involves no Hamiltonian and no 
 clause of the transport bound does not involve its energy terms, so the proof takes the empty
 family of energy terms, and only the domain graph and the scan sizes enter. Source:
 `08-scanner.tex`, lines 442–457. -/
-theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound
+theorem actualRounds_entropy_integral_le_planeDomainGraph_of_finiteFamilyTransportBound
     {c₀ Cent eent Cen een : ℝ} (htransport : FiniteFamilyTransportBound c₀ Cent eent Cen een) :
     ∀ {Λ : Finset (ℤ × ℤ)} {q R : ℕ}
       [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
@@ -259,7 +259,7 @@ theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBou
 norm difference plus exactly `2 * S.n * S.m` copies of the common error
 (`08-scanner.tex`, lines 442–457). The supplied vector is nonzero and symmetric;
 no physical prevector, energy identification or norm comparison is required. -/
-theorem actualRounds_entropy_integral_le_domainGraph :
+theorem actualRounds_entropy_integral_le_planeDomainGraph :
     ∃ c₀ Cent eent : ℝ, 0 < c₀ ∧
       ∀ {Λ : Finset (ℤ × ℤ)} {q R : ℕ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
@@ -287,6 +287,6 @@ theorem actualRounds_entropy_integral_le_domainGraph :
                   (Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k) := by
   obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := exists_finiteFamilyTransportBound
   exact ⟨c₀, Cent, eent, hc₀,
-    actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound htransport⟩
+    actualRounds_entropy_integral_le_planeDomainGraph_of_finiteFamilyTransportBound htransport⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

@@ -144,7 +144,7 @@ theorem split_interval_band_unique {g g' r r' k a b : ℕ} {z : ℤ}
 /-- Actual old splits in the induced lattice graph satisfy the unconditional
 anchor interval. Ambient row counts and physical cut clearance discharge the
 geometric hypotheses; goodness is not required. -/
-theorem old_split_anchor_bounds_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
+theorem old_split_anchor_bounds_planeDomainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool) (i : I)
@@ -159,8 +159,8 @@ theorem old_split_anchor_bounds_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T
       orientedDepth S.depth side (S.anchor i) ≤
         S.front g (h.1 g) (k + 1) side + S.D + 2 * S.r₀ := by
   apply S.old_split_anchor_bounds h g side i hn _ _
-    (S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth) hsplit
-  · exact ball_subset_of_oldChargeState_middle_domainGraph hT S hgraph hdepth hclear h g hL i
+    (S.abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball hT hgraph hdepth) hsplit
+  · exact ball_subset_of_oldChargeState_middle_planeDomainGraph hT S hgraph hdepth hclear h g hL i
       hsplit.2
   · intro x hx
     exact depthRow_length_le_of_ambientRows hT hdepth hrows
@@ -168,7 +168,7 @@ theorem old_split_anchor_bounds_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T
 
 /-- The same geometric interval holds for every completed actual history,
 including the new leaves after arbitrary charges. -/
-theorem state_split_anchor_bounds_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
+theorem state_split_anchor_bounds_planeDomainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool) (i : I)
@@ -182,8 +182,8 @@ theorem state_split_anchor_bounds_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT :
     S.front g (h.1 g) k side - S.r₀ ≤ orientedDepth S.depth side (S.anchor i) ∧
       orientedDepth S.depth side (S.anchor i) ≤ S.front g (h.1 g) k side + S.D + 2 * S.r₀ := by
   apply S.state_split_anchor_bounds h g side i hn _ _
-    (S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth) hsplit
-  · apply ball_subset_of_middle_domainGraph hT S hgraph hdepth hclear _ i _ hsplit.2
+    (S.abs_depth_sub_anchor_le_planeDomainGraph_of_mem_ball hT hgraph hdepth) hsplit
+  · apply ball_subset_of_middle_planeDomainGraph hT S hgraph hdepth hclear _ i _ hsplit.2
     intro x hx
     exact ⟨(initial_middle_depth S.A S.depth _ _
       (S.bandState_unassigned g (h.1 g) k (fun t ↦ h.2 t g) x hx).1 false).1,
