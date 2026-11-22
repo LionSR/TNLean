@@ -13,7 +13,7 @@ import TNLean.MPS.ParentHamiltonian.Martingale.OpenRangeComparison
 Suppose the canonical parent Hamiltonians have exact MPS boundary kernels
 and uniform gaps at every sufficiently large interaction range. Any positive
 interaction whose open kernels eventually agree with those same spaces then
-has one positive norm gap at every volume, measured above its actual kernel.
+has one positive gap at every volume: every nonzero eigenvalue is at least it.
 
 On one sufficiently long interval, finite dimensionality supplies a positive
 multiple of the canonical excitation projection below the given Hamiltonian.

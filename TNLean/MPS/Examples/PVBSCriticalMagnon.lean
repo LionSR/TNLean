@@ -65,11 +65,13 @@ theorem toEuclideanLin_parentRingInteraction_term_pvbs_critical_oneMagnon {N : �
 /-- The actual critical periodic PVBS parent acts by the normalized cycle
 Laplacian on one-particle coefficients, including the two-site ring. -/
 theorem toEuclideanLin_hamiltonian_parentRingInteraction_pvbs_critical_oneMagnon {N : ℕ}
-    [NeZero N] (hN : 2 ≤ N) (f : Fin N → ℂ) :
+    (hN : 2 ≤ N) (f : Fin N → ℂ) :
+    haveI : NeZero N := ⟨by omega⟩;
     Matrix.toEuclideanLin (parentRingInteraction (pvbsTensor 1) 2 N).hamiltonian
         (WithLp.toLp 2 (SpinChain.oneMagnon f)) =
       WithLp.toLp 2 (SpinChain.oneMagnon (fun j =>
         f j - (f (cyclicSuccessorEquiv N j) + f ((cyclicSuccessorEquiv N).symm j)) / 2)) := by
+  have : NeZero N := ⟨by omega⟩
   rw [ManyBody.Interaction.hamiltonian, map_sum]
   ext σ
   simp only [LinearMap.sum_apply, WithLp.ofLp_sum, Finset.sum_apply,

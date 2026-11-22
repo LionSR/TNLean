@@ -14,7 +14,8 @@ import TNLean.MPS.ParentHamiltonian.QuasiLocalCommutatorLocality
 # Finite-chain and quasi-local gaps from eventual kernel equality
 
 A positive finite-range interaction whose sufficiently long open-chain kernels
-are the joint MPS boundary-condition spaces has a uniform finite-chain norm gap.
+are the joint MPS boundary-condition spaces has a uniform finite-chain gap: every
+nonzero eigenvalue of its finite-chain Hamiltonians is at least one positive constant.
 For a finite family of distinct primitive sectors, the same positive constant
 bounds the literal infinite-volume commutator energy in every constructed
 sector state. The two outer endpoints may diverge along any filter.

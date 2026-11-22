@@ -9,8 +9,8 @@ import TNLean.MPS.ParentHamiltonian.Martingale.OpenRangeComparison
 # Gaps of interval Hamiltonians after adjoining free sites
 
 An interval Hamiltonian, acting on a larger chain, is an orthogonal direct
-sum of copies of its finite-interval operator. Its norm gap on the kernel
-complement is therefore preserved. The proof transports the kernel
+sum of copies of its finite-interval operator. Its gap, the lower bound on its
+nonzero eigenvalues, is therefore preserved. The proof transports the kernel
 projection and its positive comparison under the physical coordinate
 isometry. This supplies the fixed-ambient interpretation of the local gaps
 in Nachtergaele, arXiv:cond-mat/9410110, condition C2, lines 1045--1056.
