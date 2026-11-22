@@ -348,16 +348,4 @@ theorem cluster_iInf_eigenspace_eq_mpvSubmodule {N : ℕ} (hN : 3 ≤ N) :
   exact chainGroundSpace_eq_mpvSubmodule_normal cluster_isNormal cluster_isNBlkInjective_two
     (by norm_num) (by omega) (by norm_num) hN (by omega)
 
-/-- The common \(+1\) eigenspace of the translated cluster stabilizers on
-\(N\ge3\) periodic sites is one-dimensional. Since each stabilizer is a
-self-adjoint involution, this says that the cluster state is the unique ground
-state of \(\sum_i \tfrac12(1 - \sigma^z_i\sigma^x_{i+1}\sigma^z_{i+2})\), the
-form the interaction of arXiv:quant-ph/0608197, local TeX lines 374--387,
-takes on the present tensor. -/
-theorem cluster_stabilizer_unique_gs {N : ℕ} (hN : 3 ≤ N) :
-    HasUniqueGroundState
-      (⨅ i : Fin N, Module.End.eigenspace (clusterChainStabilizer i) 1) := by
-  rw [cluster_iInf_eigenspace_eq_chainGroundSpace hN]
-  exact parentHamiltonian_unique_gs cluster_isNBlkInjective_two (by norm_num) (by norm_num) hN
-
 end MPSTensor

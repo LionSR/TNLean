@@ -299,7 +299,7 @@ eigenspace.
 
 \begin{lemma}[The cluster state spans the common $+1$ eigenspace of the $ZXZ$ stabilizers]
     \label{thm:cluster_stabilizer_unique_gs}
-    \lean{MPSTensor.cluster_iInf_eigenspace_eq_mpvSubmodule, MPSTensor.cluster_stabilizer_unique_gs}
+    \lean{MPSTensor.cluster_iInf_eigenspace_eq_mpvSubmodule}
     \leanok
     \uses{def:cluster_tensor, def:mpv_submodule, def:cluster_chain_stabilizer}
     For $N\ge3$,
@@ -308,20 +308,19 @@ eigenspace.
          & = \C\,V^{(N)}(A_{\mathrm{cl}}),
         \notag
     \end{align}
-    and this common eigenspace is one-dimensional.
+    where the cluster state $V^{(N)}(A_{\mathrm{cl}})$ is nonzero by the
+    block-injectivity nonvanishing theorem.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:cluster_stabilizer_chain_ground_space, thm:cluster_normal, thm:chain_ground_space_eq_mpv_normal, thm:parent_hamiltonian_unique_gs}
+    \uses{thm:cluster_stabilizer_chain_ground_space, thm:cluster_normal, thm:chain_ground_space_eq_mpv_normal, thm:mpv_ne_zero_blk_injective}
     By Lemma~\ref{thm:cluster_stabilizer_chain_ground_space} the common
     eigenspace is $\mathcal G_{N,3}(A_{\mathrm{cl}})$. The cluster tensor is
     injective after blocking $L_0 = 2$ sites
     (Lemma~\ref{thm:cluster_normal}), so
     Lemma~\ref{thm:chain_ground_space_eq_mpv_normal} with $L = 3 \le N$
-    gives $\mathcal G_{N,3}(A_{\mathrm{cl}}) = \C\,V^{(N)}(A_{\mathrm{cl}})$,
-    and Theorem~\ref{thm:parent_hamiltonian_unique_gs} gives
-    $\dim\mathcal G_{N,3}(A_{\mathrm{cl}}) = 1$.
+    gives $\mathcal G_{N,3}(A_{\mathrm{cl}}) = \C\,V^{(N)}(A_{\mathrm{cl}})$.
 \end{proof}
 
 \begin{lemma}[Periodic ground space for the source cluster matrices]
@@ -368,7 +367,7 @@ eigenspace.
 \end{proof}
 
 \begin{lemma}[Source cluster ground state]\label{thm:cluster_source_periodic_ground_state}
-    \lean{MPSTensor.clusterSource_mpv_eq_globalZ, MPSTensor.clusterSource_mpv_ne_zero, MPSTensor.clusterSource_iInf_eigenspace_eq_mpvSubmodule, MPSTensor.clusterSource_stabilizer_unique_gs, MPSTensor.clusterSource_hamiltonian_eigenspace_eq_mpvSubmodule, MPSTensor.clusterSource_energy_lower_bound}
+    \lean{MPSTensor.clusterSource_mpv_eq_globalZ, MPSTensor.clusterSource_mpv_ne_zero, MPSTensor.clusterSource_iInf_eigenspace_eq_mpvSubmodule, MPSTensor.clusterSource_hamiltonian_eigenspace_eq_mpvSubmodule, MPSTensor.clusterSource_energy_lower_bound}
     \leanok
     \uses{def:cluster_tensor, thm:cluster_source_ground_space_three_eigenspace, def:cluster_chain_stabilizer, def:mpv_submodule}
     For $N\ge3$, let
@@ -619,7 +618,8 @@ eigenspace.
         \notag
     \end{align}
     As noted in \cite[line~2095]{Cirac2021Matrix}, the two-site parent
-    Hamiltonian therefore has a unique ground state even though the AKLT
+    Hamiltonian therefore has a unique ground state, the AKLT state being
+    nonzero and spanning its ground space at energy $0$, even though the AKLT
     tensor becomes injective only after blocking $L_0 = 2$ sites. On two
     periodic sites the two-site chain ground space is
     $\mathcal G_2(A_{\mathrm{AKLT}})$ itself, so the condition $N\ge3$ is
@@ -811,7 +811,6 @@ eigenspace.
         MPSTensor.akltHamiltonian_eigenvalue_ge,
         MPSTensor.akltHamiltonian_eigenspace_eq_ker,
         MPSTensor.akltHamiltonian_eigenspace_eq_mpvSubmodule,
-        MPSTensor.akltHamiltonian_hasUniqueGroundState,
         MPSTensor.akltHamiltonian_hasEigenvalue,
         MPSTensor.isPositive_conj_of_add_eq_smul_parentHamiltonian,
         MPSTensor.neg_le_of_hasEigenvalue_of_add_eq_smul_parentHamiltonian,

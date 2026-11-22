@@ -45,7 +45,7 @@ the periodic chain.
 * `MPSTensor.chainGroundSpace_rotatePhysical` and
   `MPSTensor.ker_parentHamiltonian_rotatePhysical` — the ground spaces of the two parent
   Hamiltonians correspond one-to-one through \(\Lambda^{\otimes N}\).
-* `MPSTensor.hasUniqueGroundState_chainGroundSpace_rotatePhysical` — uniqueness of the
+* `MPSTensor.chainGroundSpace_rotatePhysical_eq_span` — uniqueness of the
   ground state transfers along the correspondence.
 -/
 
@@ -433,13 +433,16 @@ noncomputable def onSiteTensorPowEquiv (N : ℕ) {Λ : Matrix (Fin d) (Fin d) �
 
 /-- arXiv:2011.12127, lines 2037--2038: if the parent Hamiltonian of \(A\) has a unique
 ground state, then so does the parent Hamiltonian of the deformed tensor \(\Lambda A\), since
-the two ground spaces correspond through the invertible map \(\Lambda^{\otimes N}\). -/
-theorem hasUniqueGroundState_chainGroundSpace_rotatePhysical
+the two ground spaces correspond through the invertible map \(\Lambda^{\otimes N}\): if the
+chain ground space of \(A\) is the line through a nonzero vector \(\psi\), the chain ground
+space of \(\Lambda A\) is the line through the nonzero vector \(\Lambda^{\otimes N}\psi\). -/
+theorem chainGroundSpace_rotatePhysical_eq_span
     {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ : IsUnit Λ) {A : MPSTensor d D} {L N : ℕ}
-    (hA : HasUniqueGroundState (chainGroundSpace A L N)) :
-    HasUniqueGroundState (chainGroundSpace (rotatePhysical Λ A) L N) := by
-  rw [HasUniqueGroundState, chainGroundSpace_rotatePhysical hΛ]
-  exact (LinearEquiv.finrank_map_eq (onSiteTensorPowEquiv N hΛ) (chainGroundSpace A L N)).trans hA
+    {ψ : NSiteSpace d N} (hA : chainGroundSpace A L N = ℂ ∙ ψ ∧ ψ ≠ 0) :
+    chainGroundSpace (rotatePhysical Λ A) L N = ℂ ∙ Matrix.toLin' (onSiteTensorPow N Λ) ψ ∧
+      Matrix.toLin' (onSiteTensorPow N Λ) ψ ≠ 0 := by
+  refine ⟨?_, (onSiteTensorPowEquiv N hΛ).map_ne_zero_iff.mpr hA.2⟩
+  rw [chainGroundSpace_rotatePhysical hΛ, hA.1, Submodule.map_span, Set.image_singleton]
 
 /-! ### The matrix of the canonical parent interaction -/
 

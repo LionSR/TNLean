@@ -385,11 +385,12 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
 
 \begin{lemma}[Uniqueness of the ground state is preserved]\label{thm:unique_ground_state_physical_rotation}
     \lean{MPSTensor.onSiteTensorPowEquiv}
-    \lean{MPSTensor.hasUniqueGroundState_chainGroundSpace_rotatePhysical}
+    \lean{MPSTensor.chainGroundSpace_rotatePhysical_eq_span}
     \leanok
     \uses{def:physical_rotation, def:chain_ground_space, def:has_unique_ground_state}
-    Let $\Lambda\in\MN{d}$ be invertible. If $\dim\mathcal G_{N,L}(A)=1$, then
-    $\dim\mathcal G_{N,L}(\Lambda A)=1$.
+    Let $\Lambda\in\MN{d}$ be invertible. If $\mathcal G_{N,L}(A)$ is the
+    line through a nonzero vector $\psi$, then $\mathcal G_{N,L}(\Lambda A)$
+    is the line through the nonzero vector $\Lambda^{\otimes N}\psi$.
 \end{lemma}
 
 \begin{proof}
@@ -397,5 +398,6 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
     \uses{thm:chain_ground_space_physical_rotation, lem:on_site_tensor_pow_mul}
     By (\ref{eq:chain_ground_space_physical_rotation}), $\mathcal G_{N,L}(\Lambda A)$
     is the image of $\mathcal G_{N,L}(A)$ under the linear automorphism
-    $\Lambda^{\otimes N}$, which preserves dimension.
+    $\Lambda^{\otimes N}$, which maps the line through $\psi$ onto the line
+    through $\Lambda^{\otimes N}\psi$ and nonzero vectors to nonzero vectors.
 \end{proof}

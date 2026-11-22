@@ -337,13 +337,18 @@ theorem aklt_chainGroundSpace_two_eq_mpvSubmodule {N : ℕ} (hN : 3 ≤ N) :
     exact Submodule.smul_mem _ a (mpv_mem_chainGroundSpace akltTensor 2 N (by omega) (by omega))
 
 /-- The two-site AKLT parent Hamiltonian on a periodic chain of \(N\ge3\) sites
-has a unique ground state, arXiv:2011.12127, line 2095. -/
+has a unique ground state, arXiv:2011.12127, line 2095: the AKLT state is nonzero and spans
+the ground space at energy \(0\) of the parent Hamiltonian on the ring. -/
 theorem aklt_parentHamiltonian_two_unique_gs {N : ℕ} (hN : 3 ≤ N) :
-    HasUniqueGroundState (chainGroundSpace akltTensor 2 N) := by
-  rw [HasUniqueGroundState, aklt_chainGroundSpace_two_eq_mpvSubmodule hN]
-  have hmpv := mpv_ne_zero_of_isNBlkInjective aklt_isNBlkInjective_two (by norm_num)
-    (show 2 + 1 ≤ N by omega)
-  change Module.finrank ℂ (ℂ ∙ (mpv akltTensor : NSiteSpace 3 N)) = 1
-  exact finrank_span_singleton (K := ℂ) hmpv
+    haveI : NeZero N := ⟨by omega⟩;
+    ManyBody.groundSpace (parentRingInteraction akltTensor 2 N).hamiltonian 0 =
+        ℂ ∙ mpvState akltTensor N ∧
+      mpvState akltTensor N ≠ 0 := by
+  refine ⟨?_, mpvState_ne_zero_of_isNBlkInjective aklt_isNBlkInjective_two (by norm_num)
+    (show 2 + 1 ≤ N by omega)⟩
+  rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_chainGroundSpace _ (by omega)
+      (by omega), aklt_chainGroundSpace_two_eq_mpvSubmodule hN, mpvSubmodule,
+    Submodule.map_span, Set.image_singleton]
+  rfl
 
 end MPSTensor
