@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.GroundSpace
+import QICLean.Algebra.MatrixStarProjection
+import QICLean.Algebra.MatrixToEuclidean
 import QICLean.ManyBody.Hamiltonian.FrustrationFree
 import QICLean.ManyBody.Hamiltonian.Models
 
@@ -406,63 +408,14 @@ theorem isFrustrationFree_iff_mem_zeroSpace (A : MPSTensor d D) (L : ℕ) [NeZer
 
 end MPSTensor
 
-/-! ### Generic facts (to upstream to QICLean)
+/-! ### The Hamiltonian of the open-chain translates
 
-The order and projection properties of `Matrix.toEuclideanLin`, and the open-chain translates
-as a sum over the starting positions. They are stated here, under the names they will have in
-QICLean, so that every file of the parent-Hamiltonian development can use them. -/
-
-namespace Matrix
-
-open scoped MatrixOrder
-
-variable {n : Type*} [Fintype n] [DecidableEq n]
-
-/-- The operator of a matrix is below the operator of another exactly when the matrices are in
-the Loewner order. -/
-theorem toEuclideanLin_le_toEuclideanLin_iff {A B : Matrix n n ℂ} :
-    toEuclideanLin A ≤ toEuclideanLin B ↔ A ≤ B := by
-  rw [LinearMap.le_def, ← map_sub, isPositive_toEuclideanLin_iff, Matrix.le_iff]
-
-/-- The continuous operator of a matrix is below the continuous operator of another exactly
-when the matrices are in the Loewner order. -/
-theorem toEuclideanCLM_le_toEuclideanCLM_iff {A B : Matrix n n ℂ} :
-    (toEuclideanCLM : Matrix n n ℂ ≃⋆ₐ[ℂ] _) A ≤ (toEuclideanCLM : Matrix n n ℂ ≃⋆ₐ[ℂ] _) B ↔
-      A ≤ B := by
-  rw [ContinuousLinearMap.le_def, ← map_sub, ← ContinuousLinearMap.isPositive_toLinearMap_iff,
-    coe_toEuclideanCLM_eq_toEuclideanLin, isPositive_toEuclideanLin_iff, Matrix.le_iff]
-
-/-- The operator of a matrix is a symmetric projection exactly when the matrix is an orthogonal
-projection. -/
-theorem isSymmetricProjection_toEuclideanLin_iff {P : Matrix n n ℂ} :
-    (toEuclideanLin P).IsSymmetricProjection ↔ IsStarProjection P := by
-  have hmul : toEuclideanLin (P * P) = toEuclideanLin P * toEuclideanLin P := by
-    rw [Module.End.mul_eq_comp]
-    exact toLpLin_mul_same 2 P P
-  refine ⟨fun h ↦ ⟨toEuclideanLin.injective ?_, ?_⟩, fun h ↦ ⟨?_, ?_⟩⟩
-  · rw [hmul]
-    exact h.isIdempotentElem.eq
-  · exact (isSymmetric_toEuclideanLin_iff.mp h.isSymmetric).isSelfAdjoint
-  · rw [IsIdempotentElem, ← hmul, h.isIdempotentElem.eq]
-  · exact isSymmetric_toEuclideanLin_iff.mpr h.isSelfAdjoint
-
-end Matrix
+Its dependence on the local matrix. The order and projection properties of
+`Matrix.toEuclideanLin` are in `QICLean.Algebra.MatrixToEuclidean` and
+`QICLean.Algebra.MatrixStarProjection`, and the sum over the starting positions is
+`ManyBody.Interaction.hamiltonian_chainTranslates_eq_sum_range`. -/
 
 namespace ManyBody.Interaction
-
-/-- **The open-chain translates as a sum over the starts.** The Hamiltonian of the translates of
-`h` along the open chain is the sum over the starts `0, …, N - k` of `h` placed on the window of
-`k` sites at that start; every start in the summation range gives a window, and the conditional
-only records this. Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
-theorem hamiltonian_chainTranslates_eq_sum_range {α : Type*} [Fintype α] [DecidableEq α]
-    {k : ℕ} (h : Matrix (Fin k → α) (Fin k → α) ℂ) (N : ℕ) :
-    (chainTranslates k N h).hamiltonian =
-      ∑ i ∈ Finset.range (N + 1 - k),
-        if hi : i + k ≤ N then placeAlong (X := fun _ ↦ α) (chainWindow i hi) h else 0 := by
-  rw [hamiltonian, Finset.sum_range]
-  refine Fintype.sum_congr _ _ fun i ↦ ?_
-  rw [dite_eq_left (by have := i.isLt; omega)]
-  rfl
 
 section ChainTranslates
 
@@ -479,19 +432,19 @@ theorem hamiltonian_chainTranslates_mono {h h' : Matrix (Fin k → α) (Fin k �
 theorem hamiltonian_chainTranslates_smul (c : ℂ) (h : Matrix (Fin k → α) (Fin k → α) ℂ)
     (N : ℕ) :
     (chainTranslates k N (c • h)).hamiltonian = c • (chainTranslates k N h).hamiltonian := by
-  simp only [hamiltonian, translates_term, placeAlong_smul, Finset.smul_sum]
+  simp only [hamiltonian, ofPlaceAlong_term, placeAlong_smul, Finset.smul_sum]
 
 /-- The open-chain translates of the zero matrix have zero Hamiltonian. -/
 theorem hamiltonian_chainTranslates_zero (N : ℕ) :
     (chainTranslates k N (0 : Matrix (Fin k → α) (Fin k → α) ℂ)).hamiltonian = 0 := by
-  simp [hamiltonian, translates_term, placeAlong_zero]
+  simp [hamiltonian, ofPlaceAlong_term, placeAlong_zero]
 
 /-- The open-chain translates of a positive semidefinite matrix have a positive semidefinite
 Hamiltonian. -/
 theorem posSemidef_hamiltonian_chainTranslates {h : Matrix (Fin k → α) (Fin k → α) ℂ}
     (hh : h.PosSemidef) (N : ℕ) : (chainTranslates k N h).hamiltonian.PosSemidef :=
   posSemidef_hamiltonian fun i ↦ Matrix.nonneg_iff_posSemidef.mp
-    (translates_term_nonneg _ (Matrix.nonneg_iff_posSemidef.mpr hh) i)
+    (ofPlaceAlong_term_nonneg _ (fun _ ↦ Matrix.nonneg_iff_posSemidef.mpr hh) i)
 
 end ChainTranslates
 
