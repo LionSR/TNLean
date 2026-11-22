@@ -286,7 +286,8 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_density
     have hid : εp * (S.n : ℝ) ^ (Exponents.scannerNu : ℝ) = 1 := by
       dsimp only [εp]
       rw [← Real.rpow_add hnpos, neg_add_cancel, Real.rpow_zero]
-    nlinarith [mul_le_mul_of_nonneg_left hpow hεp.le]
+    have h4 : εp * 4 ≤ 1 := (mul_le_mul_of_nonneg_left hpow hεp.le).trans_eq hid
+    linarith only [h4, hεp]
   have hℓ1 : 1 ≤ ℓ := by
     have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
     dsimp only [ℓ, transportLogDimBound]
