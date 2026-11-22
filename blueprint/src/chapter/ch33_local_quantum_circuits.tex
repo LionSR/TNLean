@@ -44,7 +44,7 @@ preparation of matrix product states.
         QuantumCircuit.UnitaryCircuit, QuantumCircuit.UnitaryCircuit.op,
         QuantumCircuit.UnitaryCircuit.depth, QuantumCircuit.Geometry,
         QuantumCircuit.Geometry.ring, QuantumCircuit.Geometry.ring_cell,
-        QuantumCircuit.rectKronecker_mem_supportedOperators}
+        ManyBody.piKronecker_mem_supportedOperators}
     \leanok
     A \emph{bond geometry} on a finite site set $I$ is a family $(B_b)_{b\in\beta}$ of subsets $B_b\subseteq I$. An operator on $(\C^d)^{\otimes I}$ \emph{acts on} $X\subseteq I$ if it lies in $\mathcal A_X=\MN{d}^{\otimes X}\otimes\mathbb 1_{I\setminus X}=\operatorname{span}\{\bigotimes_{i\in I}m_i:m_i=\mathbb 1\text{ for }i\notin X\}$. A \emph{layer} is a product of unitaries on pairwise disjoint bonds and of one-site unitaries on the remaining sites; it has depth $1$ if it contains a gate on a bond and depth $0$ otherwise. A \emph{local circuit of depth $T$} is a product $U=W_k\cdots W_1$ of layers of total depth at most $T$, and a state $\ket\psi$ is \emph{prepared in depth $T$} if $\ket\psi=U\bigotimes_{i\in I}\ket{v_i}$.
 

@@ -1786,9 +1786,8 @@ in `MPS/Preparation/` uses it.
   the product operators `⊗ᵥ mᵥ` with `mᵥ = 1` off `D`.
 - **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
   operators `𝒪₁` and `𝒪'ₛ` acting on sites of the chain).
-- **Sanctioned bridges:** `QuantumCircuit.rectKronecker_mem_supportedOperators`
-  and its chain form `QuantumCircuit.finKronecker_mem_supportedOperators`
-  (with `QuantumCircuit.prodOp_eq_rectKronecker`), `ManyBody.supportedOperators_mono`,
+- **Sanctioned bridges:** `ManyBody.piKronecker_mem_supportedOperators` (product
+  operators that are the identity off `D`), `ManyBody.supportedOperators_mono`,
   `ManyBody.commute_of_mem_supportedOperators_of_disjoint`,
   `ManyBody.supportedOperators_induction`, and
   `ManyBody.placeAlong_mem_supportedOperators` (an operator placed along an

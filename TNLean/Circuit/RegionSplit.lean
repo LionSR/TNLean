@@ -79,11 +79,10 @@ theorem exists_kronecker_one_of_mem_supportedOperators {S : Finset ι}
         A' ⊗ₖ (1 : Matrix ({v // v ∉ S} → Fin q) ({v // v ∉ S} → Fin q) ℂ) := by
   induction hA using ManyBody.supportedOperators_induction with
   | prod m hm =>
-    rw [prodOp_eq_rectKronecker]
     refine ⟨Matrix.piKronecker fun v : S => m v, ?_⟩
     rw [rectKronecker_submatrix_sheetSplit]
     congr 1
-    rw [← Matrix.piKronecker_one (ν := {v // v ∉ S}) (ι := Fin q)]
+    rw [← Matrix.piKronecker_one (ν := {v // v ∉ S}) (ι := fun _ ↦ Fin q)]
     congr 1
     funext v
     exact hm v v.2
@@ -105,11 +104,10 @@ theorem exists_one_kronecker_of_mem_supportedOperators {S : Finset ι} {D : Fins
         (1 : Matrix (S → Fin q) (S → Fin q) ℂ) ⊗ₖ A' := by
   induction hA using ManyBody.supportedOperators_induction with
   | prod m hm =>
-    rw [prodOp_eq_rectKronecker]
     refine ⟨Matrix.piKronecker fun v : {v // v ∉ S} => m v, ?_⟩
     rw [rectKronecker_submatrix_sheetSplit]
     congr 1
-    rw [← Matrix.piKronecker_one (ν := ↥S) (ι := Fin q)]
+    rw [← Matrix.piKronecker_one (ν := ↥S) (ι := fun _ ↦ Fin q)]
     congr 1
     funext v
     exact hm v fun hv => Finset.disjoint_left.mp hD hv v.2

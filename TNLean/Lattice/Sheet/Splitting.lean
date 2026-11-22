@@ -179,7 +179,6 @@ theorem exists_eq_of_mem_supportedOperators {κ M : Type*} [AddCommMonoid M] [Mo
     ∃ A', A.submatrix e.symm e.symm = Φ A' := by
   induction hA using ManyBody.supportedOperators_induction with
   | prod m hm =>
-    rw [prodOp_eq_rectKronecker]
     exact hgen m hm
   | add x y _ _ hx hy =>
     obtain ⟨X, hX⟩ := hx
@@ -204,7 +203,7 @@ theorem exists_threeSplit_eq_kronecker_one {T E : Finset ι} (h : Disjoint T E)
   rw [rectKronecker_submatrix_threeSplit h]
   change _ = _ ⊗ₖ (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)
   congr 1
-  rw [← Matrix.piKronecker_one (ν := {v // v ∉ T ∪ E}) (ι := Fin q)]
+  rw [← Matrix.piKronecker_one (ν := {v // v ∉ T ∪ E}) (ι := fun _ ↦ Fin q)]
   congr 1
   funext v
   exact hm v v.2
