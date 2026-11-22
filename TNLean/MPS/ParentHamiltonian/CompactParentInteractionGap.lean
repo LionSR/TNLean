@@ -26,27 +26,6 @@ open scoped Topology ComplexOrder MatrixOrder
 
 namespace MPSTensor
 
-/-- A compact continuous family of positive parent interactions bounds the
-canonical parent projections below by one positive constant. Source:
-arXiv:1010.3732, Appendix A; arXiv:2011.12127, lines 2170--2172. -/
-theorem exists_uniform_pos_parentInteractionES_le_of_compact
-    {X : Type*} [TopologicalSpace X] {d D R : ℕ}
-    (A : X → MPSTensor d D)
-    (hProj : Continuous fun x => (groundSpaceES (A x) R).starProjection)
-    (H : X → EuclideanSpace ℂ (Cfg d R) →L[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (hH : Continuous H) (hParent : ∀ x, IsParentInteraction (A x) R (H x).toLinearMap)
-    {S : Set X} (hS : IsCompact S) :
-    ∃ κ : ℝ, 0 < κ ∧ ∀ x ∈ S,
-      (κ : ℂ) • parentInteractionES (A x) R ≤ (H x).toLinearMap := by
-  have hK : Continuous fun x => (LinearMap.ker (H x).toLinearMap).starProjection := by
-    simpa only [(hParent _).ker_eq] using hProj
-  obtain ⟨κ, hκ, hGap⟩ :=
-    ContinuousLinearMap.exists_uniform_norm_gap_of_compact H hH hK hS
-  refine ⟨κ, hκ, fun x hx ↦ ?_⟩
-  simpa only [(hParent x).ker_eq, parentInteractionES] using
-    (hParent x).isPositive.smul_orthogonal_ker_projection_le_of_norm_gap
-      hκ.le (hGap x hx)
-
 /-- A compact continuous family of positive parent interactions, given by their matrices, bounds
 the canonical parent projections below by one positive constant. Source:
 arXiv:1010.3732, Appendix A; arXiv:2011.12127, lines 2170--2172. -/
@@ -62,12 +41,18 @@ theorem exists_uniform_pos_toMatrix'_parentInteraction_le_of_compact
   let e := (Matrix.toEuclideanCLM : Matrix (Cfg d R) (Cfg d R) ℂ ≃⋆ₐ[ℂ] _)
   have hH' : Continuous fun x ↦ e (H x) :=
     e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp hH
-  obtain ⟨κ, hκ, hLower⟩ := exists_uniform_pos_parentInteractionES_le_of_compact A hProj
-    (fun x ↦ e (H x)) hH' hParent hS
+  have hParent' : ∀ x, IsParentInteraction (A x) R (e (H x)).toLinearMap := hParent
+  have hK : Continuous fun x ↦ (LinearMap.ker (e (H x)).toLinearMap).starProjection := by
+    simpa only [(hParent' _).ker_eq] using hProj
+  obtain ⟨κ, hκ, hGap⟩ :=
+    ContinuousLinearMap.exists_uniform_norm_gap_of_compact (fun x ↦ e (H x)) hH' hK hS
   refine ⟨κ, hκ, fun x hx ↦ ?_⟩
   rw [← Matrix.toEuclideanLin_le_toEuclideanLin_iff, map_smul,
     toEuclideanLin_toMatrix'_parentInteraction]
-  exact hLower x hx
+  have h := (hParent' x).isPositive.smul_orthogonal_ker_projection_le_of_norm_gap
+    hκ.le (hGap x hx)
+  rw [(hParent' x).ker_eq] at h
+  exact h
 
 /-- A gap of the canonical parent Hamiltonians uniform on a compact parameter set transfers to
 a continuous family of positive parent interactions with the same local kernels: every eigenvalue
