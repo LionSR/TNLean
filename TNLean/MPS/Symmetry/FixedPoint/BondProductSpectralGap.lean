@@ -72,11 +72,11 @@ theorem isGapped_physicalBondProductParentHamiltonian
     apply bondProductState_ne_zero η hη N
     rw [← Module.End.mul_apply, incomingBondUnitaryLin_star_mul_self D N] at h
     simpa using h
-  refine (ManyBody.isGapped_zero_iff_norm hpos).mpr ⟨?_, ?_⟩
+  refine ManyBody.isGapped_zero_iff.mpr ⟨?_, ?_⟩
   · rw [ManyBody.groundSpace_zero, ← hlin, physicalBondProductParentHamiltonian_groundSpace η hη hN,
       Ne, Submodule.span_singleton_eq_bot]
     exact hUψ
-  · rw [← ManyBody.forall_hasEigenvalue_iff_norm hpos, Complex.ofReal_one]
+  · rw [Complex.ofReal_one]
     refine forall_hasEigenvalue_of_quadratic_gap _ hpos fun v ↦ ?_
     rw [← hlin]
     exact physicalBondProductParentHamiltonian_gap_one η hη hN v

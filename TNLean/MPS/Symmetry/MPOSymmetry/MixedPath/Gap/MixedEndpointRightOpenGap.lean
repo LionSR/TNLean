@@ -38,37 +38,10 @@ theorem exists_uniform_mixedEndpoint_open_one_gap
         μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨W, hW, δ, hδ, hGap⟩ := exists_uniform_mixedEndpoint_open_zero_gap A₁ A₀ hA₁
   refine ⟨W, hW, δ, hδ, ?_⟩
-  intro N hWN
-  refine (ManyBody.forall_hasEigenvalue_iff_norm
-    (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
-      (posSemidef_mixedEndpointParentInteraction A₀ A₁ 1) N)).mpr ?_
-  intro v hv
-  let U := physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N
-  let H := Matrix.toEuclideanLin (chainTranslates 2 N
-      (mixedEndpointParentInteraction A₁ A₀ 0)).hamiltonian
-  let K := Matrix.toEuclideanLin (chainTranslates 2 N
-      (mixedEndpointParentInteraction A₀ A₁ 1)).hamiltonian
-  have hintertwine (x : EuclideanSpace ℂ (Cfg ((D₁ + D₀) * (D₁ + D₀)) N)) :
-      K (U x) = U (H x) :=
-    mixedEndpoint_hamiltonian_chainTranslates_one_apply_swap A₀ A₁ N x
-  have hperp : U.symm v ∈ (LinearMap.ker H)ᗮ := by
-    apply ((LinearMap.ker H).mem_orthogonal (U.symm v)).mpr
-    intro z hz
-    have hz' : U z ∈ LinearMap.ker K := by
-      change K (U z) = 0
-      rw [hintertwine, LinearMap.mem_ker.mp hz, map_zero]
-    have h := ((LinearMap.ker K).mem_orthogonal v).mp hv (U z) hz'
-    rw [← U.inner_map_map z (U.symm v), U.apply_symm_apply]
-    exact h
-  have h := (ManyBody.forall_hasEigenvalue_iff_norm
-    (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
-      (posSemidef_mixedEndpointParentInteraction A₁ A₀ 0) N)).mp (hGap N hWN) (U.symm v) hperp
-  rw [U.symm.norm_map] at h
-  have hKv : K v = U (H (U.symm v)) := by
-    simpa only [U.apply_symm_apply] using hintertwine (U.symm v)
-  change δ * ‖v‖ ≤ ‖K v‖
-  rw [hKv, U.norm_map]
-  exact h
+  intro N hWN μ hμ
+  exact hGap N hWN μ ((ManyBody.hasEigenvalue_iff_of_intertwine
+    (physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N).toLinearEquiv
+    (mixedEndpoint_hamiltonian_chainTranslates_one_apply_swap A₀ A₁ N) μ).mp hμ)
 
 /-- One eventual lower bound on the nonzero eigenvalues works at both endpoints, retaining the
 actual extended ground spaces at each end. -/

@@ -183,14 +183,14 @@ theorem exists_uniform_jointMixedEndpoint_periodic_one_gap
   intro N hN
   have : NeZero N := ⟨by omega⟩
   let U := physicalReindexLinearIsometryEquiv (jointMixedEndpointPhysicalSwap d₀ d₁ D₀ D₁) N
-  refine (ManyBody.forall_hasEigenvalue_iff_norm
-    (ManyBody.Interaction.posSemidef_hamiltonian_translationInvariant
-      (posSemidef_jointMixedEndpointParentInteraction A₀ A₁ 1))).mpr ?_
-  apply (U.norm_gap_iff_of_conj _ _ ?_ δ).mp
-    ((ManyBody.forall_hasEigenvalue_iff_norm
-      (ManyBody.Interaction.posSemidef_hamiltonian_translationInvariant
-        (posSemidef_jointMixedEndpointParentInteraction A₁ A₀ 0))).mp (hGap N hN))
-  simpa only [sub_self] using (jointMixedEndpoint_periodic_eq_conj_reflect_swap A₀ A₁ 1 N).symm
+  have hPQ : U.toLinearEquiv.conj (Matrix.toEuclideanLin
+      (translationInvariant N (jointMixedEndpointParentInteraction A₁ A₀ 0)).hamiltonian) =
+      Matrix.toEuclideanLin
+        (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 1)).hamiltonian := by
+    simpa only [sub_self] using (jointMixedEndpoint_periodic_eq_conj_reflect_swap A₀ A₁ 1 N).symm
+  intro μ hμ
+  exact hGap N hN μ ((ManyBody.hasEigenvalue_iff_of_intertwine U.toLinearEquiv
+    (fun ψ ↦ (U.map_apply_eq_of_conj _ _ hPQ ψ).symm) μ).mp hμ)
 
 /-- One strictly positive constant bounds the nonzero eigenvalues of the Hamiltonians of the
 translates of the extended interaction at both endpoints, uniformly over rings of at least two
