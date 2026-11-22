@@ -174,11 +174,10 @@ theorem canonicalRegionParentInteraction_eigenvalue_gap_one (A : Tensor Γ d) (R
     ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (canonicalRegionParentInteraction A R)) μ → μ = 0 ∨ (1 : ℂ) ≤ μ := by
   classical
-  have h := (ManyBody.forall_hasEigenvalue_iff_norm (Δ := 1)
-    (canonicalRegionParentInteraction_posSemidef A R)).mpr fun ψ hψ ↦ by
-      rw [(isRegionParentInteraction_canonical A R).ker_toEuclideanLin] at hψ
-      rw [canonicalRegionParentInteraction_apply_eq_self A R hψ, one_mul]
-  simpa only [Complex.ofReal_one] using h
+  exact ManyBody.forall_hasEigenvalue_one_of_isStarProjection
+    ⟨canonicalRegionParentInteraction_isIdempotentElem A R,
+      Matrix.isHermitian_iff_isSelfAdjoint.mp
+        (canonicalRegionParentInteraction_posSemidef A R).isHermitian⟩
 
 /-- The spectrum of the canonical regional projector contains only zero and one.
 Source: CPGSV21, arXiv:2011.12127, projector parent interactions, line 2170. -/
@@ -238,12 +237,7 @@ theorem place_canonical_eigenvalue_gap_one (A : Tensor Γ d) (R : Finset V) :
       (ManyBody.place (X := fun _ ↦ Fin _) R (canonicalRegionParentInteraction A R))) μ →
         μ = 0 ∨ (1 : ℂ) ≤ μ := by
   classical
-  have hP := place_canonical_isSymmetricProjection A R
-  have h := (ManyBody.forall_hasEigenvalue_iff_norm (Δ := 1)
-    (ManyBody.posSemidef_place (X := fun _ ↦ Fin _)
-      (canonicalRegionParentInteraction_posSemidef A R))).mpr fun ψ hψ ↦ by
-      rw [← hP.isSymmetric.orthogonal_range, Submodule.orthogonal_orthogonal] at hψ
-      rw [(LinearMap.IsIdempotentElem.mem_range_iff hP.isIdempotentElem).mp hψ, one_mul]
-  simpa only [Complex.ofReal_one] using h
+  exact ManyBody.forall_hasEigenvalue_one_of_isStarProjection
+    (Matrix.isSymmetricProjection_toEuclideanLin_iff.mp (place_canonical_isSymmetricProjection A R))
 
 end TNLean.PEPS

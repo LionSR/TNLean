@@ -438,11 +438,9 @@ theorem unit_gap_hamiltonian_parentChainInteraction_self (A : MPSTensor d D) (L 
     ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentChainInteraction A L L).hamiltonian) μ →
         μ = 0 ∨ (1 : ℂ) ≤ μ := by
-  have h := (ManyBody.forall_hasEigenvalue_iff_norm (Δ := 1)
-    (posSemidef_hamiltonian_parentChainInteraction A L L)).mpr fun v hv ↦ by
-      rw [one_mul,
-        norm_toEuclideanLin_hamiltonian_parentChainInteraction_self_of_mem_orthogonal_ker A L v hv]
-  simpa only [Complex.ofReal_one] using h
+  rw [hamiltonian_parentChainInteraction_self]
+  exact ManyBody.forall_hasEigenvalue_one_of_isStarProjection
+    (isStarProjection_toMatrix'_parentInteraction A L)
 
 /-- **Condition C1.** For the prefixes \(\Lambda_n=[0,n)\) of the open chain, each term of the
 range-\(L\) parent interaction lies in at most \(l-L+1\) of the intervals
