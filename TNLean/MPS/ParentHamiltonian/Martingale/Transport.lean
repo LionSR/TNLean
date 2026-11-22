@@ -26,8 +26,9 @@ The Hilbert-space ingredients of the parent-Hamiltonian martingale method:
   `parentRingInteraction A L N`: positivity, idempotence and symmetric-projection structure of
   the terms, their kernels through cyclic restrictions, commutation and non-overlap
   positivity for disjoint cyclic windows;
-* kernel identification: the ground space of the finite parent Hamiltonian is the kernel of
-  the Hamiltonian of the parent interaction on the ring.
+* kernel identification: the ground space at energy \(0\) of the Hamiltonian of the parent
+  interaction on the ring is the kernel of the finite parent Hamiltonian, read in the Euclidean
+  space.
 -/
 
 open scoped BigOperators ComplexOrder InnerProductSpace
@@ -77,14 +78,6 @@ theorem CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap {N L : ℕ}
     refine ⟨(k.val + N - j.val) % N, Finset.mem_range.mpr hkj, ?_⟩
     exact (eq_cyclic_site_of_offset_eq (Fin.pos j) (i := j) (k := k)
       (r := (k.val + N - j.val) % N) rfl).symm
-
-/-- Ground-space submodule for the finite-size parent Hamiltonian,
-transported to the `EuclideanSpace` (inner-product) setting so that
-orthogonal complements are available. -/
-noncomputable def parentHamiltonianGroundSpaceES (A : MPSTensor d D)
-    (L N : ℕ) : Submodule ℂ (EuclideanSpace ℂ (Cfg d N)) :=
-  (LinearMap.ker (parentHamiltonian A L N)).map
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap
 
 attribute [local instance] Classical.propDecidable
 
@@ -634,19 +627,6 @@ theorem re_inner_parentRingInteraction_term_nonneg_of_not_cyclicWindowsOverlap
       Matrix.toEuclideanLin ((parentRingInteraction A L N).term j) v⟫_ℂ).re :=
   re_inner_parentRingInteraction_term_nonneg_of_cyclic_windows_disjoint A hLN
     (CyclicWindowsDisjoint.of_not_cyclicWindowsOverlap hij) v
-
-/-- The ground space of the finite parent Hamiltonian is the kernel of the operator of the
-Hamiltonian of the parent interaction on the ring. -/
-theorem parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction
-    (A : MPSTensor d D) (L N : ℕ) [NeZero N] :
-    parentHamiltonianGroundSpaceES A L N =
-      LinearMap.ker (Matrix.toEuclideanLin (parentRingInteraction A L N).hamiltonian) := by
-  ext v
-  rw [parentHamiltonianGroundSpaceES, parentHamiltonian_eq_toLin'_hamiltonian A L,
-    LinearMap.mem_ker, Submodule.mem_map_equiv, LinearEquiv.symm_symm, LinearMap.mem_ker]
-  change _ ↔ WithLp.toLp 2 _ = 0
-  rw [WithLp.toLp_eq_zero]
-  rfl
 
 /-- **The parent interaction on the ring is frustration free** whenever the periodic MPS vector
 on \(N\) sites is nonzero: its terms are positive semidefinite and annihilate that vector. This

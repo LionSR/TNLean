@@ -144,15 +144,13 @@
         MPSTensor.MPOSymmetry.mixedEndpoint_hamiltonian_translationInvariant_comparison,
         MPSTensor.MPOSymmetry.mixedEndpoint_ker_hamiltonian_translationInvariant_eq,
         MPSTensor.MPOSymmetry.mixedEndpoint_hamiltonian_translationInvariant_gap,
-        MPSTensor.MPOSymmetry.mixedEndpoint_ker_hamiltonian_translationInvariant_eq_span,
-        MPSTensor.MPOSymmetry.mixedEndpoint_finrank_ker_hamiltonian_translationInvariant,
+        MPSTensor.MPOSymmetry.mixedEndpoint_groundSpace_hamiltonian_translationInvariant_eq_span,
         MPSTensor.MPOSymmetry.exists_uniform_isGapped_mixedEndpoint_hamiltonian_translationInvariant,
         MPSTensor.MPOSymmetry.parentRingInteraction_mixedEndpointRightTensor_term_le_three_extended,
         MPSTensor.MPOSymmetry.mixedEndpoint_hamiltonian_translationInvariant_one_comparison,
         MPSTensor.MPOSymmetry.mixedEndpoint_ker_hamiltonian_translationInvariant_one_eq,
         MPSTensor.MPOSymmetry.mixedEndpoint_hamiltonian_translationInvariant_one_gap,
-        MPSTensor.MPOSymmetry.mixedEndpoint_ker_hamiltonian_translationInvariant_one_eq_span,
-        MPSTensor.MPOSymmetry.mixedEndpoint_finrank_ker_hamiltonian_translationInvariant_one,
+        MPSTensor.MPOSymmetry.mixedEndpoint_groundSpace_hamiltonian_translationInvariant_one_eq_span,
         MPSTensor.MPOSymmetry.exists_uniform_isGapped_mixedEndpoint_hamiltonian_translationInvariant_one,
         MPSTensor.MPOSymmetry.exists_uniform_isGapped_mixedEndpoint_hamiltonian_translationInvariant_endpoints}
     \leanok
@@ -166,8 +164,8 @@
         H'_{p,N}      & \leq K_{p,N}\leq3H'_{p,N}, \\
         \ker H'_{p,N} & =\ker K_{p,N}.
     \end{align}
-    If $A_p$ is injective and $D_p>0$, this kernel is exactly the
-    one-dimensional span of its embedded periodic MPS.
+    If $A_p$ is injective and $D_p>0$, the embedded periodic MPS is
+    nonzero and this kernel is exactly the line it spans.
     If every nonzero eigenvalue of $K_{p,N}$ is at least $\delta_p>0$,
     then every nonzero eigenvalue of $H'_{p,N}$ is at least $\delta_p/3$.
     Consequently, if both endpoint tensors are injective,
@@ -184,9 +182,9 @@
         thm:periodic-fixed-interaction-order,
         thm:periodic-fixed-interaction-canonical,lem:local_term_es_average,
         lem:transported_es_positive,lem:positive-comparison-kernel-gap,
-        thm:parent_ground_space_es_kernel,
+        thm:parent_ring_ground_space_kernel,
         thm:parent_hamiltonian_kernel_eq_chain_ground_space,
-        thm:chain_ground_space_eq_mpv_blk,thm:ground_space_unique_periodic,
+        thm:ground_space_unique_periodic,
         thm:mpo_mixed_first_support,thm:compact_parent_gap}
     A missing outer row sector on one edge is an inner row sector of
     the previous edge; a missing outer column sector is an inner column
@@ -201,9 +199,9 @@
     Positivity and Lemma~\ref{lem:positive-comparison-kernel-gap} give
     equal kernels and transfer the canonical gap with factor $1/3$.
     When $A_p$ is injective and $D_p>0$, the embedded tensor $B_p$ is
-    one-site injective. Lemmas~\ref{thm:chain_ground_space_eq_mpv_blk}
-    and~\ref{thm:ground_space_unique_periodic} identify its canonical
-    kernel as the one-dimensional periodic MPS span. Applying
+    one-site injective. Lemma~\ref{thm:ground_space_unique_periodic}
+    identifies its canonical kernel as the line through its periodic MPS,
+    which is nonzero. Applying
     Theorem~\ref{thm:compact_parent_gap} to the constant family $B_p$
     over a one-point parameter space yields a positive canonical
     gap independent of the chain length, and taking the smaller of the two

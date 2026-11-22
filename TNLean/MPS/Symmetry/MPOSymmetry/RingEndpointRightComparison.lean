@@ -177,45 +177,22 @@ theorem mixedEndpoint_hamiltonian_translationInvariant_one_gap
   have hμ' := h μ hμ
   rwa [show (1 / 3 * δ : ℝ) = δ / 3 by ring] at hμ'
 
-/-- At an injective second endpoint, the Hamiltonian of the translates of the extended
-interaction has precisely the embedded MPS ground line, for every ring of at least two
-sites. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpoint_ker_hamiltonian_translationInvariant_one_eq_span [NeZero D₁]
+/-- At an injective second endpoint, the embedded periodic MPS is nonzero and the ground
+space at energy \(0\) of the Hamiltonian of the translates of the extended interaction is the
+line through it, for every ring of at least two sites. Source: arXiv:2203.12563, Section 5,
+lines 1690–1692. -/
+theorem mixedEndpoint_groundSpace_hamiltonian_translationInvariant_one_eq_span [NeZero D₁]
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hA₁ : Kraus.IsInjective A₁) (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
-    LinearMap.ker (Matrix.toEuclideanLin
-      (translationInvariant N (mixedEndpointParentInteraction A₀ A₁ 1)).hamiltonian) =
-      Submodule.span ℂ {(WithLp.toLp 2
-        (mpv (mixedEndpointRightTensor A₁ D₀) :
-          NSiteSpace ((D₀ + D₁) * (D₀ + D₁)) N))} := by
+    ManyBody.groundSpace
+        (translationInvariant N (mixedEndpointParentInteraction A₀ A₁ 1)).hamiltonian 0 =
+        ℂ ∙ mpvState (mixedEndpointRightTensor A₁ D₀) N ∧
+      mpvState (mixedEndpointRightTensor A₁ D₀) N ≠ 0 := by
   have : NeZero N := ⟨by omega⟩
-  rw [mixedEndpoint_ker_hamiltonian_translationInvariant_one_eq A₀ A₁ hN,
-    ← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction,
-    parentHamiltonianGroundSpaceES,
-    ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) hN,
-    chainGroundSpace_eq_mpvSubmodule
-      (isInjective_mixedEndpointRightTensor A₁ hA₁ D₀) hN (by decide) hN,
-    mpvSubmodule, Submodule.map_span, Set.image_singleton]
-  rfl
-
-/-- The Hamiltonian of the translates of the extended second-endpoint interaction has a
-one-dimensional kernel on every ring of at least two sites. Source: arXiv:2203.12563,
-Section 5, lines 1690–1692. -/
-theorem mixedEndpoint_finrank_ker_hamiltonian_translationInvariant_one [NeZero D₁]
-    (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
-    (hA₁ : Kraus.IsInjective A₁) (hN : 2 ≤ N) :
-    haveI : NeZero N := ⟨by omega⟩;
-    Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
-      (translationInvariant N (mixedEndpointParentInteraction A₀ A₁ 1)).hamiltonian)) = 1 := by
-  have : NeZero N := ⟨by omega⟩
-  rw [mixedEndpoint_ker_hamiltonian_translationInvariant_one_eq A₀ A₁ hN,
-    ← parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction,
-    parentHamiltonianGroundSpaceES,
-    ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) hN,
-    LinearEquiv.finrank_map_eq]
-  exact groundSpace_unique_periodic
-    (isInjective_mixedEndpointRightTensor A₁ hA₁ D₀) hN (by decide) hN
+  rw [ManyBody.groundSpace_zero, mixedEndpoint_ker_hamiltonian_translationInvariant_one_eq A₀ A₁ hN,
+    ← ManyBody.groundSpace_zero]
+  exact groundSpace_unique_periodic (isInjective_mixedEndpointRightTensor A₁ hA₁ D₀) (by decide) hN
 
 /-- The Hamiltonian of the translates of the extended second-endpoint interaction of the
 arbitrary mixed tensor is gapped at zero with one strictly positive gap for every ring of at

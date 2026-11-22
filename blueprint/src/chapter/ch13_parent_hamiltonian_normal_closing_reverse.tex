@@ -663,19 +663,17 @@ theorem replaces the complementary-word comparison.
     \label{thm:ground_space_unique_periodic}
     \lean{MPSTensor.groundSpace_unique_periodic}
     \leanok
-    \uses{thm:chain_ground_space_eq_mpv_blk, thm:mpv_ne_zero_blk_injective}
-    For an injective tensor $A$ with $D \ge 1$, if $N \ge 2$ and
-    $1 < L \le N$, then the periodic chain ground space is one-dimensional.
+    \uses{thm:parent_hamiltonian_unique_gs}
+    For an injective tensor $A$ with $D \ge 1$ and $1 < L \le N$, the
+    periodic MPS vector $V^{(N)}(A)$ is nonzero and the ground space at
+    energy $0$ of the parent Hamiltonian on the ring is the line it spans.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    \uses{thm:chain_ground_space_eq_mpv_blk, thm:mpv_ne_zero_blk_injective}
-    By Lemma~\ref{thm:chain_ground_space_eq_mpv_blk}, the ground space is the
-    line $\spn\bigl\{V^{(N)}(A)\bigr\}$. An injective tensor is injective
-    after blocking one site, so the block-injectivity nonvanishing theorem
-    with $L_0=1$ gives $V^{(N)}(A)\ne0$ for $N\ge2$. Therefore the spanning
-    line is one-dimensional.
+    \uses{thm:parent_hamiltonian_unique_gs}
+    An injective tensor is injective after blocking one site, so
+    Theorem~\ref{thm:parent_hamiltonian_unique_gs} with $L_0=1$ applies.
 \end{proof}
 
 \begin{theorem}[Unique ground state after blocking]%

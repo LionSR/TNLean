@@ -809,14 +809,16 @@ theorem parentHamiltonian_unique_gs {A : MPSTensor d D} [NeZero D]
     mpvSubmodule, Submodule.map_span, Set.image_singleton]
   rfl
 
-/-- One-dimensional periodic chain ground space for an injective tensor:
-\(\dim\mathcal G_{N,L}(A)=1\). -/
+/-- Unique periodic ground state for an injective tensor at every interaction range
+\(1<L\le N\): the periodic MPS vector is nonzero and the ground space at energy \(0\) of the
+parent Hamiltonian on the ring is the line through it. This is the case \(L₀=1\) of
+`parentHamiltonian_unique_gs`. -/
 theorem groundSpace_unique_periodic {A : MPSTensor d D} [NeZero D] (hA : Kraus.IsInjective A)
-    {L N : ℕ} (hN : 2 ≤ N) (hL : 1 < L) (hLN : L ≤ N) :
-    Module.finrank ℂ (chainGroundSpace A L N) = 1 := by
-  rw [chainGroundSpace_eq_mpvSubmodule hA hN hL hLN]
-  exact finrank_span_singleton (K := ℂ)
-    (mpv_ne_zero_of_isNBlkInjective (Kraus.isNBlkInjective_one_of_isInjective hA) one_pos hN)
+    {L N : ℕ} (hL : 1 < L) (hLN : L ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
+    ManyBody.groundSpace (parentRingInteraction A L N).hamiltonian 0 = ℂ ∙ mpvState A N ∧
+      mpvState A N ≠ 0 :=
+  parentHamiltonian_unique_gs (Kraus.isNBlkInjective_one_of_isInjective hA) one_pos hL hLN
 
 /-- Unique ground state for tensors injective after blocking at range \(2L₀\): the periodic
 MPS vector is nonzero and spans the ground space at energy \(0\) of the parent Hamiltonian
