@@ -35,10 +35,12 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
         MPSTensor.MPOSymmetry.mixedEndpointColumnSector_commute_parentInteraction_zero,
         MPSTensor.MPOSymmetry.mixedEndpointChainRowSector,
         MPSTensor.MPOSymmetry.mixedEndpointChainColumnSector,
-        MPSTensor.MPOSymmetry.mixedEndpointChainRowSector_commute_openInteractionHamiltonianES,
-        MPSTensor.MPOSymmetry.mixedEndpointChainColumnSector_commute_openInteractionHamiltonianES,
-        MPSTensor.MPOSymmetry.mixedEndpointOpenInnerPenalty_commute_openInteractionHamiltonianES,
-        MPSTensor.MPOSymmetry.mixedEndpointOpenActiveProjection_commute_openInteractionHamiltonianES,
+        MPSTensor.MPOSymmetry.mixedEndpointChainRowSector_commute_hamiltonian_chainTranslates,
+        MPSTensor.MPOSymmetry.mixedEndpointChainColumnSector_commute_hamiltonian_chainTranslates,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenInnerPenalty_commute_hamiltonian_chainTranslates,
+        MPSTensor.MPOSymmetry.mixedEndpointOpenActiveProjection_commute_hamiltonian_chainTranslates,
+        MPSTensor.toEuclideanLin_translationInvariant_term_apply_fiber,
+        MPSTensor.toEuclideanLin_translationInvariant_term_commute_siteDiagonal,
         MPSTensor.MPOSymmetry.mixedEndpointActivePhysicalCfg_injective,
         MPSTensor.MPOSymmetry.mixedEndpointOpenInnerActive_activePhysicalCfg,
         MPSTensor.MPOSymmetry.mem_range_mixedEndpointActivePhysicalCfg_iff,
@@ -82,7 +84,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
         MPSTensor.MPOSymmetry.mixedEndpointActiveWindowFiber,
         MPSTensor.MPOSymmetry.mem_ker_mixedEndpointActiveLocalInteraction_iff_fibers,
         MPSTensor.MPOSymmetry.mem_ker_mixedEndpointActiveHamiltonian_iff_fibers,
-        MPSTensor.MPOSymmetry.mixedEndpoint_open_norm_gap_of_active_norm_gap}
+        MPSTensor.MPOSymmetry.mixedEndpoint_open_gap_of_active_norm_gap}
     \leanok
     \uses{def:mpo_mixed_extended_support,def:mpo_mixed_physical_sectors}
     Let $Q_N$ select the configurations for which every column register
@@ -423,7 +425,7 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
         MPSTensor.MPOSymmetry.bondInterpolationWeight_zeroSector,
         MPSTensor.MPOSymmetry.bondInterpolationMatrix_zeroSector,
         MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_zeroSector_eq_toMatrix'_parentInteraction,
-        MPSTensor.MPOSymmetry.openInteractionHamiltonianES_zeroSector_eq_openParentHamiltonianES,
+        MPSTensor.MPOSymmetry.hamiltonian_chainTranslates_zeroSector_eq_hamiltonian_parentChainInteraction,
         MPSTensor.MPOSymmetry.mixedEndpointOpenInnerActive_zeroSector,
         MPSTensor.MPOSymmetry.mixedEndpointOpenActiveProjection_zeroSector,
         MPSTensor.MPOSymmetry.mixedEndpointActiveLinearIsometry_zeroSector_surjective,
@@ -442,20 +444,19 @@ $\eta\|v\|\leq\|Hv\|$ for every $v\perp\ker H$.
         MPSTensor.cyclicRestrictES_physicalReindex,
         MPSTensor.periodicLocalInteractionES_physicalReindex_apply,
         MPSTensor.periodicLocalInteractionES_physicalReindex_conj,
-        MPSTensor.openInteractionHamiltonianES_physicalReindex_conj,
+        MPSTensor.toEuclideanLin_translationInvariant_term_physicalReindex_apply,
+        MPSTensor.toEuclideanLin_translationInvariant_term_physicalReindex_conj,
+        MPSTensor.toEuclideanLin_hamiltonian_chainTranslates_physicalReindex_conj,
         MPSTensor.MPOSymmetry.mixedEndpoint_localInteraction_one_eq_conj_swap,
-        MPSTensor.MPOSymmetry.mixedEndpoint_openInteractionHamiltonian_one_eq_conj_swap,
-        MPSTensor.MPOSymmetry.mixedEndpoint_openInteractionHamiltonian_one_apply_swap,
+        MPSTensor.MPOSymmetry.mixedEndpoint_hamiltonian_chainTranslates_one_eq_conj_swap,
+        MPSTensor.MPOSymmetry.mixedEndpoint_hamiltonian_chainTranslates_one_apply_swap,
         MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_open_one_gap,
         MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_open_endpoints_gap}
     \leanok
     \uses{def:mpo_mixed_extended_support,def:injective}
     If both given endpoint tensors are one-site injective, there exist $W\geq3$ and
-    $\delta>0$ such that, for $p\in\{0,1\}$, $N\geq W$, and
-    $v\perp\ker H'^{\mathrm{open}}_{p,N}$,
-    \begin{align}
-        \delta\|v\|\leq\|H'^{\mathrm{open}}_{p,N}v\|.
-    \end{align}
+    $\delta>0$ such that, for $p\in\{0,1\}$ and $N\geq W$, every
+    nonzero eigenvalue of $H'^{\mathrm{open}}_{p,N}$ is at least $\delta$.
     The kernels are the extended open kernels with free
     exterior registers.
 \end{lemma}

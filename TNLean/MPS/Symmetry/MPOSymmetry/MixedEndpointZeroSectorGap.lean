@@ -33,6 +33,8 @@ namespace MPOSymmetry
 
 noncomputable section
 
+open ManyBody.Interaction (chainTranslates)
+
 variable {D₀ N : ℕ}
 
 /-- The unique tensor on the empty second bond and physical sector.
@@ -92,14 +94,12 @@ theorem mixedEndpointParentInteraction_zeroSector_eq_toMatrix'_parentInteraction
 
 /-- The full actual nonwrapping sum is the ordinary open parent Hamiltonian
 at every volume. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem openInteractionHamiltonianES_zeroSector_eq_openParentHamiltonianES
+theorem hamiltonian_chainTranslates_zeroSector_eq_hamiltonian_parentChainInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (M : ℕ) :
-    openInteractionHamiltonianES
-        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ emptyEndpointTensor 0)) M =
-      Matrix.toEuclideanLin (parentChainInteraction A₀ 2 M).hamiltonian := by
-  rw [mixedEndpointParentInteraction_zeroSector_eq_toMatrix'_parentInteraction,
-    toEuclideanLin_toMatrix'_parentInteraction]
-  exact openInteractionHamiltonianES_parentInteractionES A₀ (by norm_num : 0 < 2) M
+    (chainTranslates 2 M
+        (mixedEndpointParentInteraction A₀ emptyEndpointTensor 0)).hamiltonian =
+      (parentChainInteraction A₀ 2 M).hamiltonian := by
+  rw [mixedEndpointParentInteraction_zeroSector_eq_toMatrix'_parentInteraction]
 
 /-- Every physical configuration is active in the zero second-sector family.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -160,7 +160,8 @@ theorem mixedEndpointActiveHamiltonian_zeroSector_intertwines
         (mixedEndpointActiveHamiltonian A₀ emptyEndpointTensor N v) =
       Matrix.toEuclideanLin (parentChainInteraction A₀ 2 (N + 1 + 1)).hamiltonian
           (mixedEndpointActiveLinearIsometry D₀ 0 N v) := by
-  simpa only [openInteractionHamiltonianES_zeroSector_eq_openParentHamiltonianES] using
+  simpa only
+    [hamiltonian_chainTranslates_zeroSector_eq_hamiltonian_parentChainInteraction] using
     mixedEndpointActiveHamiltonian_intertwines A₀ emptyEndpointTensor N v
 
 /-- Exact unitary compression identity for the zero-sector active family.
@@ -172,7 +173,7 @@ theorem mixedEndpointActiveHamiltonian_zeroSector_eq_conjugate_openParent
         Matrix.toEuclideanLin (parentChainInteraction A₀ 2 (N + 1 + 1)).hamiltonian ∘ₗ
           (mixedEndpointZeroSectorActiveEquiv D₀ N).toLinearEquiv.toLinearMap := by
   simp only [mixedEndpointActiveHamiltonian_eq_compression,
-    openInteractionHamiltonianES_zeroSector_eq_openParentHamiltonianES,
+    hamiltonian_chainTranslates_zeroSector_eq_hamiltonian_parentChainInteraction,
     mixedEndpointZeroSectorActiveEquiv_toLinearMap, mixedEndpointActiveCompression]
 
 /-- The actual zero-second-sector active Hamiltonians have an intrinsic
@@ -216,7 +217,7 @@ theorem exists_mixedEndpointActiveHamiltonian_zeroSector_uniform_gap
       obtain ⟨u, rfl⟩ := mixedEndpointActiveLinearIsometry_zeroSector_surjective D₀ N w
       have hu : u ∈ LinearMap.ker (mixedEndpointActiveHamiltonian A₀ emptyEndpointTensor N) := by
         rw [ker_mixedEndpointActiveHamiltonian,
-          openInteractionHamiltonianES_zeroSector_eq_openParentHamiltonianES]
+          hamiltonian_chainTranslates_zeroSector_eq_hamiltonian_parentChainInteraction]
         exact hw
       simpa only [U, LinearIsometry.inner_map_map] using
         (Submodule.mem_orthogonal _ _).mp hv u hu

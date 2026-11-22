@@ -110,7 +110,6 @@ theorem arbitraryPhysicalMixedInteraction_groundSpace_eq_span_mpv
     isometricInteractionExtension_ker_eq_map_of_posSemidef _
       (commonFixedPointInclusion_isometry _ d₀ d₁)
       (posSemidef_mixedEndpointParentInteraction _ _ γ) hN,
-    ← periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian _ hN,
     mixedEndpoint_periodic_ker_eq_range_periodicMpvLineMap _ _
       (isInjective_polarPosTensor h₀) (isInjective_polarPosTensor h₁) γ hN]
   have hline := ContinuousLinearMap.range_smulRight_apply
@@ -159,7 +158,8 @@ theorem exists_uniform_arbitraryPhysicalMixed_periodic_path_gap
       haveI : NeZero N := ⟨by omega⟩;
       IsGapped (Interaction.translationInvariant N
         (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian 0 δ := by
-  obtain ⟨δ, hδ, hgap⟩ := exists_uniform_mixedEndpoint_periodic_path_gap
+  obtain ⟨δ, hδ, hgap⟩ :=
+    exists_uniform_isGapped_mixedEndpoint_hamiltonian_translationInvariant_path
     (polarPosTensor A₀) (polarPosTensor A₁)
     (isInjective_polarPosTensor h₀) (isInjective_polarPosTensor h₁)
   refine ⟨min δ 1, lt_min hδ zero_lt_one, min_le_right _ _, ?_⟩
@@ -167,14 +167,6 @@ theorem exists_uniform_arbitraryPhysicalMixed_periodic_path_gap
   have : NeZero N := ⟨by omega⟩
   let h := mixedEndpointParentInteraction (polarPosTensor A₀) (polarPosTensor A₁) γ
   have hA : h.PosSemidef := posSemidef_mixedEndpointParentInteraction _ _ γ
-  have hHA : (Interaction.translationInvariant N h).hamiltonian.PosSemidef :=
-    Interaction.posSemidef_hamiltonian fun _ ↦
-      Matrix.LE.le.posSemidef (Interaction.translationInvariant_term_nonneg hA.nonneg _)
-  have hnorm : ∀ x ∈ (LinearMap.ker
-      (Matrix.toEuclideanLin (Interaction.translationInvariant N h).hamiltonian))ᗮ,
-      δ * ‖x‖ ≤ ‖Matrix.toEuclideanLin (Interaction.translationInvariant N h).hamiltonian x‖ := by
-    rw [← periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian _ hN]
-    exact hgap γ N hN
   refine ⟨fun hbot ↦ ?_, ?_⟩
   · have hdim := arbitraryPhysicalMixedInteraction_groundSpace_finrank A₀ A₁ h₀ h₁ γ hN
     rw [← groundSpace_zero, hbot, finrank_bot] at hdim
@@ -182,7 +174,7 @@ theorem exists_uniform_arbitraryPhysicalMixed_periodic_path_gap
   · intro μ hμ
     have hμ' := isometricInteractionExtension_eigenvalue_gap _
       (commonFixedPointInclusion_isometry _ d₀ d₁) hA hN
-      ((forall_hasEigenvalue_iff_norm hHA).mpr hnorm) μ hμ
+      (isGapped_zero_iff.mp (hgap γ N hN)).2 μ hμ
     simpa only [Complex.ofReal_zero, zero_add] using hμ'
 
 end MPOSymmetry

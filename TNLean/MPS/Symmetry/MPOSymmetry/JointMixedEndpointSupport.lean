@@ -160,33 +160,35 @@ theorem continuous_jointMixedEndpoint_extendedBoundarySupport_starProjection
 /-- The actual two-site joint support determines the exact open-chain kernel
 at every length at least two. Source: arXiv:2203.12563,
 Section 5, lines 1695–1777. -/
-theorem ker_openInteractionHamiltonianES_jointMixedEndpoint_eq
+theorem ker_hamiltonian_chainTranslates_jointMixedEndpoint_eq
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x))
     (h₀ : WordTupleSpanTop A₀ 1) (h₁ : WordTupleSpanTop A₁ 1)
     (hD₀ : ∀ x, 0 < D₀ x) (hD₁ : ∀ x, 0 < D₁ x) (γ : ℝ) (hN : 2 ≤ N) :
-    LinearMap.ker (openInteractionHamiltonianES
-      (1 - (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
-        (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) γ) 2).range.starProjection).toLinearMap N) =
+    LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.chainTranslates 2 N
+      (Matrix.toEuclideanLin.symm (1 - (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
+        (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) γ) 2).range.starProjection).toLinearMap)
+          ).hamiltonian) =
       (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
         (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) γ) N).range :=
-  ker_openInteractionHamiltonianES_blockInserted_eq _
+  ker_hamiltonian_chainTranslates_blockInserted_eq _
     (wordTupleSpanTop_jointMixedEndpointBase A₀ A₁ h₀ h₁) _
     (fun x => bondInterpolationMatrix_ne_zero (hD₀ x) (hD₁ x) γ) hN
 
 /-- The open-kernel projector for the actual family is continuous at each
 fixed chain length, with no gap assumption.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
-theorem continuous_ker_openInteractionHamiltonianES_jointMixedEndpoint_starProjection
+theorem continuous_ker_hamiltonian_chainTranslates_jointMixedEndpoint_starProjection
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x))
     (h₀ : WordTupleSpanTop A₀ 1) (h₁ : WordTupleSpanTop A₁ 1)
     (hD₀ : ∀ x, 0 < D₀ x) (hD₁ : ∀ x, 0 < D₁ x) (hN : 2 ≤ N) :
-    Continuous fun γ : ℝ => (LinearMap.ker (openInteractionHamiltonianES
-      (1 - (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
-        (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) γ) 2).range.starProjection).toLinearMap
-          N)).starProjection :=
-  continuous_ker_openInteractionHamiltonianES_blockInserted_starProjection
+    Continuous fun γ : ℝ => (LinearMap.ker (Matrix.toEuclideanLin
+      (ManyBody.Interaction.chainTranslates 2 N
+        (Matrix.toEuclideanLin.symm (1 - (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
+          (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) γ) 2).range.starProjection).toLinearMap)
+            ).hamiltonian)).starProjection :=
+  continuous_ker_hamiltonian_chainTranslates_blockInserted_starProjection
     (fun _ => jointMixedEndpointBase A₀ A₁) (fun _ => continuous_const)
     (fun γ x => bondInterpolationMatrix (D₀ x) (D₁ x) γ)
     (fun x => continuous_bondInterpolationMatrix (D₀ x) (D₁ x))

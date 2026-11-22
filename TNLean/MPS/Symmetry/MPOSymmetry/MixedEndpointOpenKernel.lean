@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
+import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteractionSections
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointRestriction
 import TNLean.MPS.Symmetry.MPOSymmetry.RingEndpointComparison
 
@@ -79,55 +80,25 @@ theorem cyclicRestrictES_eq_rightFiber
   rw [cyclicActiveBlockConfigLinearIsometryEquiv_apply_apply,
     cyclicCfg_eq_join_cyclicActiveBlock]
 
-/-- A translated local interaction annihilates a vector precisely when
-it annihilates every cyclic-window restriction. -/
-theorem mem_ker_periodicLocalInteractionES_iff [NeZero d]
-    (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (hRN : R ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) :
-    v ∈ LinearMap.ker (periodicLocalInteractionES h i) ↔
-      ∀ τ : Cfg d N, cyclicRestrictES (Fin.pos i) R i τ v ∈ LinearMap.ker h := by
-  let U := cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i
-  let G := ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R))
-    (LinearMap.toContinuousLinearMap h)
-  have hconj : v ∈ LinearMap.ker (periodicLocalInteractionES h i) ↔
-      U v ∈ LinearMap.ker G.toLinearMap := by
-    simp only [LinearMap.mem_ker]
-    rw [periodicLocalInteractionES, dite_eq_left hRN]
-    change U.symm (G (U v)) = 0 ↔ G (U v) = 0
-    constructor
-    · intro hv
-      have hv' := congrArg U hv
-      simpa only [LinearIsometryEquiv.apply_symm_apply, map_zero] using hv'
-    · intro hv
-      rw [hv, map_zero]
-  rw [hconj]
-  change U v ∈ LinearMap.ker
-    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R))
-      (LinearMap.toContinuousLinearMap h)).toLinearMap ↔ _
-  rw [ContinuousLinearMap.mem_ker_rightFiberwiseMap_iff]
-  change (∀ s, ContinuousLinearMap.rightFiber (U v) s ∈ LinearMap.ker h) ↔ _
-  constructor
-  · intro hv τ
-    rw [cyclicRestrictES_eq_rightFiber hRN]
-    exact hv _
-  · intro hv s
-    let ω : Cfg d R := fun _ => ⟨0, NeZero.pos d⟩
-    have hs := hv ((cyclicActiveBlockConfigEquiv d R hRN i).symm (ω, s))
-    rw [cyclicRestrictES_eq_rightFiber hRN] at hs
-    simpa only [Equiv.apply_symm_apply] using hs
-
-/-- Positivity identifies the open-chain kernel with its individual
-nonwrapping local constraints. -/
-theorem mem_ker_openInteractionHamiltonianES_iff [NeZero d]
-    {h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R)}
-    (hh : h.IsPositive) (hRN : R ≤ N) (v : EuclideanSpace ℂ (Cfg d N)) :
-    v ∈ LinearMap.ker (openInteractionHamiltonianES h N) ↔
+/-- Positivity identifies the kernel of the open-chain Hamiltonian of the translates of a local
+matrix with its individual nonwrapping local constraints. -/
+theorem mem_ker_toEuclideanLin_hamiltonian_chainTranslates_iff
+    {h : Matrix (Cfg d R) (Cfg d R) ℂ} (hh : h.PosSemidef) (hR : 0 < R) (hRN : R ≤ N)
+    (v : EuclideanSpace ℂ (Cfg d N)) :
+    v ∈ LinearMap.ker (Matrix.toEuclideanLin
+        (ManyBody.Interaction.chainTranslates R N h).hamiltonian) ↔
       ∀ i : NonwrappingStart R N, ∀ τ : Cfg d N,
-        cyclicRestrictES (Fin.pos i.1) R i.1 τ v ∈ LinearMap.ker h := by
-  rw [openInteractionHamiltonianES,
-    WeightedPositiveKernel.ker_sum_eq_iInf
-      (fun i : NonwrappingStart R N => periodicLocalInteractionES_isPositive hh i.1)]
-  simp only [Submodule.mem_iInf, mem_ker_periodicLocalInteractionES_iff h hRN]
+        cyclicRestrictES (Fin.pos i.1) R i.1 τ v ∈ LinearMap.ker (Matrix.toEuclideanLin h) := by
+  have : NeZero N := ⟨by omega⟩
+  have hterm (i : NonwrappingStart R N) : (Matrix.toEuclideanLin
+      ((ManyBody.Interaction.translationInvariant N h).term i.1)).IsPositive :=
+    Matrix.isPositive_toEuclideanLin_iff.mpr (Matrix.nonneg_iff_posSemidef.mp
+      (ManyBody.Interaction.translationInvariant_term_nonneg
+        (Matrix.nonneg_iff_posSemidef.mpr hh) i.1))
+  rw [LinearMap.mem_ker, ManyBody.Interaction.hamiltonian_chainTranslates_eq_sum_nonwrappingStart
+    h hR, map_sum, WeightedPositiveKernel.apply_sum_eq_zero_iff hterm v]
+  exact forall_congr' fun i ↦
+    toEuclideanLin_translationInvariant_term_eq_zero_iff_sections hRN h i.1 v
 
 namespace MPOSymmetry
 
@@ -148,11 +119,12 @@ range as its kernel. Singular nonzero insertions are allowed, so the theorem
 covers both endpoints without identifying their free boundary indices with
 the smaller canonical boundary space.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem ker_openInteractionHamiltonianES_inserted_eq
+theorem ker_hamiltonian_chainTranslates_inserted_eq
     (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (W : Matrix (Fin D) (Fin D) ℂ) (hW : W ≠ 0) (hN : 2 ≤ N) :
-    LinearMap.ker (openInteractionHamiltonianES
-      (1 - (insertedTwoSiteMap A W).range.starProjection).toLinearMap N) =
+    LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.chainTranslates 2 N
+      (Matrix.toEuclideanLin.symm
+        (1 - (insertedTwoSiteMap A W).range.starProjection).toLinearMap)).hamiltonian) =
       (insertedBoundaryMap A W N).range := by
   have hd : d ≠ 0 := by
     intro hd
@@ -174,9 +146,11 @@ theorem ker_openInteractionHamiltonianES_inserted_eq
       (Submodule.isSymmetricProjection_starProjection
         ((insertedTwoSiteMap A W).range)ᗮ).isPositive
   ext v
-  rw [mem_ker_openInteractionHamiltonianES_iff hpos hN,
+  rw [mem_ker_toEuclideanLin_hamiltonian_chainTranslates_iff
+    (Matrix.isPositive_toEuclideanLin_iff.mp (by rw [LinearEquiv.apply_symm_apply]; exact hpos))
+    (by omega) hN,
     mem_range_insertedBoundaryMap_iff]
-  simp only [mem_ker_insertedParentInteraction_iff]
+  simp only [LinearEquiv.apply_symm_apply, mem_ker_insertedParentInteraction_iff]
   constructor
   · intro hv
     apply contiguous_mem_of_restriction_intersection_submodules
@@ -201,26 +175,29 @@ theorem ker_openInteractionHamiltonianES_inserted_eq
 /-- The kernel of the actual open-chain sum has dimension `D²`, derived
 from the injective extended boundary map.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem finrank_ker_openInteractionHamiltonianES_inserted
+theorem finrank_ker_hamiltonian_chainTranslates_inserted
     (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (W : Matrix (Fin D) (Fin D) ℂ) (hW : W ≠ 0) (hN : 2 ≤ N) :
-    Module.finrank ℂ (LinearMap.ker (openInteractionHamiltonianES
-      (1 - (insertedTwoSiteMap A W).range.starProjection).toLinearMap N)) = D * D := by
-  rw [ker_openInteractionHamiltonianES_inserted_eq A hA W hW hN]
+    Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
+      (ManyBody.Interaction.chainTranslates 2 N (Matrix.toEuclideanLin.symm
+        (1 - (insertedTwoSiteMap A W).range.starProjection).toLinearMap)).hamiltonian)) =
+      D * D := by
+  rw [ker_hamiltonian_chainTranslates_inserted_eq A hA W hW hN]
   exact finrank_range_insertedBoundaryMap A hA W hW (by omega)
 
 /-- Orthogonal projection onto the exact open-chain kernel is continuous
 for any continuous injective tensor and nonzero insertion family.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem continuous_ker_openInteractionHamiltonianES_inserted_starProjection
+theorem continuous_ker_hamiltonian_chainTranslates_inserted_starProjection
     {X : Type*} [TopologicalSpace X]
     (A : X → MPSTensor d D) (hA : Continuous A)
     (W : X → Matrix (Fin D) (Fin D) ℂ) (hW : Continuous W)
     (hInj : ∀ x, Kraus.IsInjective (A x)) (hne : ∀ x, W x ≠ 0) (hN : 2 ≤ N) :
-    Continuous fun x => (LinearMap.ker (openInteractionHamiltonianES
-      (1 - (insertedTwoSiteMap (A x) (W x)).range.starProjection).toLinearMap
-        N)).starProjection := by
-  simp_rw [ker_openInteractionHamiltonianES_inserted_eq _ (hInj _) _ (hne _) hN]
+    Continuous fun x => (LinearMap.ker (Matrix.toEuclideanLin
+      (ManyBody.Interaction.chainTranslates 2 N (Matrix.toEuclideanLin.symm
+        (1 - (insertedTwoSiteMap (A x) (W x)).range.starProjection).toLinearMap)).hamiltonian
+          )).starProjection := by
+  simp_rw [ker_hamiltonian_chainTranslates_inserted_eq _ (hInj _) _ (hne _) hN]
   exact continuous_range_insertedBoundaryMap_starProjection A hA W hW hInj hne (by omega)
 
 /-- The actual mixed interaction has the extended boundary range as its
@@ -230,12 +207,11 @@ theorem mixedEndpoint_open_ker_eq
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N) :
-    LinearMap.ker (openInteractionHamiltonianES
-      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N) =
+    LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.chainTranslates 2 N
+      (mixedEndpointParentInteraction A₀ A₁ γ)).hamiltonian) =
       (insertedBoundaryMap (mixedEndpointBase A₀ A₁)
         (bondInterpolationMatrix D₀ D₁ γ) N).range := by
-  rw [toEuclideanLin_mixedEndpointParentInteraction]
-  exact ker_openInteractionHamiltonianES_inserted_eq _
+  exact ker_hamiltonian_chainTranslates_inserted_eq _
     (isInjective_mixedEndpointBase A₀ A₁ h₀ h₁) _
     (bondInterpolationMatrix_ne_zero hD₀ hD₁ γ) hN
 
@@ -245,11 +221,27 @@ theorem mixedEndpoint_open_ker_finrank
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N) :
-    Module.finrank ℂ (LinearMap.ker (openInteractionHamiltonianES
-      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N)) =
+    Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin (ManyBody.Interaction.chainTranslates 2 N
+      (mixedEndpointParentInteraction A₀ A₁ γ)).hamiltonian)) =
       (D₀ + D₁) * (D₀ + D₁) := by
   rw [mixedEndpoint_open_ker_eq A₀ A₁ h₀ h₁ hD₀ hD₁ γ hN]
   exact finrank_mixedEndpoint_extendedBoundarySupport A₀ A₁ h₀ h₁ hD₀ hD₁ γ (by omega)
+
+/-- The open-chain Hamiltonian of the translates of the extended interaction has a nonzero
+kernel at every real parameter and every chain length at least two.
+Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
+theorem groundSpace_mixedEndpoint_hamiltonian_chainTranslates_ne_bot
+    (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
+    (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
+    (hD₀ : 0 < D₀) (hD₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N) :
+    ManyBody.groundSpace (ManyBody.Interaction.chainTranslates 2 N
+      (mixedEndpointParentInteraction A₀ A₁ γ)).hamiltonian 0 ≠ ⊥ := by
+  rw [ManyBody.groundSpace_zero]
+  intro hbot
+  have h := mixedEndpoint_open_ker_finrank A₀ A₁ h₀ h₁ hD₀ hD₁ γ hN
+  rw [hbot, finrank_bot] at h
+  have hpos : 0 < (D₀ + D₁) * (D₀ + D₁) := Nat.mul_pos (by omega) (by omega)
+  omega
 
 /-- Projection onto the kernel of the actual mixed open-chain sum is
 continuous at both endpoints for every fixed chain length at least two.
@@ -258,8 +250,9 @@ theorem continuous_mixedEndpoint_open_ker_starProjection
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (h₀ : Kraus.IsInjective A₀) (h₁ : Kraus.IsInjective A₁)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁) (hN : 2 ≤ N) :
-    Continuous fun γ : ℝ => (LinearMap.ker (openInteractionHamiltonianES
-      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ γ)) N)).starProjection := by
+    Continuous fun γ : ℝ => (LinearMap.ker (Matrix.toEuclideanLin
+      (ManyBody.Interaction.chainTranslates 2 N
+        (mixedEndpointParentInteraction A₀ A₁ γ)).hamiltonian)).starProjection := by
   simp_rw [mixedEndpoint_open_ker_eq A₀ A₁ h₀ h₁ hD₀ hD₁ _ hN]
   exact continuous_mixedEndpoint_extendedBoundarySupport_starProjection
     A₀ A₁ h₀ h₁ hD₀ hD₁ (by omega)

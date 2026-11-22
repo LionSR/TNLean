@@ -101,7 +101,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 
 \begin{lemma}[Commutation from an invariant star algebra]
     \label{thm:glm_parent_invariant_star_algebra}
-    \lean{MPSTensor.parentInteractionES_commute_of_starAlgebra_invariant}
+    \lean{MPSTensor.commute_toMatrix'_parentInteraction_of_starAlgebra_invariant}
     \leanok
     \uses{def:parent_interaction}
     Let $\mathcal B$ be a unital $*$-subalgebra of operators on the
@@ -119,8 +119,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 
 \begin{lemma}[Local commutation from an adjoint-closed range]
     \label{thm:glm_boundary_parent_local}
-    \lean{MPOTensor.IsBoundaryCompatible.parentInteractionES_commute_mpoWithBoundary,
-        MPOTensor.IsBoundaryCompatible.groundSpaceES_mem_invtSubmodule,
+    \lean{MPOTensor.IsBoundaryCompatible.groundSpaceES_mem_invtSubmodule,
         MPOTensor.IsBoundaryCompatible.groundSpaceES_invariant_boundaryStarAlgebra,
         MPOTensor.IsBoundaryCompatible.parentInteraction_mpoWithBoundary_mulVec,
         MPOTensor.IsBoundaryCompatible.parentInteraction_commute_mpoWithBoundary,

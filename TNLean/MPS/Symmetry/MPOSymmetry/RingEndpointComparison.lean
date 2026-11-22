@@ -24,15 +24,11 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692. These comparisons hold o
 periodic chains of length at least two. They do not infer a uniform gap along
 the interpolation from finite-volume continuity.
 
-**Transitional (#10948).** The last section states the comparison, the common kernel and the
-gap for the Hamiltonian of the translates on the ring of the matrix of the extended interaction
-(`ManyBody.Interaction.translationInvariant`), with the gap as a lower bound on the nonzero
-eigenvalues. The declarations before it are stated for the Euclidean-space operators
-`periodicLocalInteractionES`, `periodicInteractionHamiltonianES`, `parentHamiltonianES` and
-`localTermES`; they are kept for the mixed-endpoint files that still use them
-(`RingEndpointRightComparison`, `MixedEndpointOpenSectors`, `MixedEndpointActiveHamiltonian`,
-`JointMixedEndpointPeriodicSectors`, `JointMixedEndpointPeriodicGap`,
-`MixedEndpointPeriodicStateContinuity`) and are deleted when those are converted.
+**Transitional (#10948).** `periodicLocalInteractionES_add`, `periodicLocalInteractionES_sub`,
+`periodicLocalInteractionES_one` and `periodicLocalInteractionES_diagonal_apply`, stated for the
+Euclidean-space translate `periodicLocalInteractionES`, are kept for
+`JointMixedEndpointPeriodicSectors` and `JointMixedEndpointPeriodicGap` and are deleted when
+those files are restated.
 -/
 
 open scoped BigOperators ComplexOrder InnerProductSpace Matrix
@@ -111,255 +107,6 @@ theorem periodicLocalInteractionES_diagonal_apply (hRN : R ≤ N) (i : Fin N)
       e, Equiv.symm_apply_apply]
   rw [hUv, hwindow]
 
-private theorem extractWindow_two_zero (i : Fin N) (σ : Cfg d N) :
-    extractWindow 2 i σ 0 = σ i := by
-  simp [extractWindow, Nat.mod_eq_of_lt i.isLt]
-
-private theorem extractWindow_two_one (i : Fin N) (σ : Cfg d N) :
-    extractWindow 2 i σ 1 = σ (finRotate N i) := by
-  apply congrArg σ
-  apply Fin.ext
-  simp [finRotate_apply, Fin.add_def]
-
-namespace MPOSymmetry
-
-variable {D₀ D₁ : ℕ}
-
-/-- The first row selector on a bond is the second row selector on the
-preceding bond, including the periodic seam. Source: arXiv:2203.12563,
-Section 5, lines 1690–1692. -/
-theorem periodicLocalInteractionES_mixedEndpointRowSector_previous
-    (hN : 2 ≤ N) (i : Fin N) :
-    periodicLocalInteractionES (mixedEndpointRowSector D₀ D₁ 0) i =
-      periodicLocalInteractionES (mixedEndpointRowSector D₀ D₁ 1)
-        ((finRotate N).symm i) := by
-  ext v σ
-  simp only [mixedEndpointRowSector, periodicLocalInteractionES_diagonal_apply hN,
-    extractWindow_two_zero, extractWindow_two_one, Equiv.apply_symm_apply]
-
-/-- The second column selector on a bond is the first column selector on the
-following bond, including the periodic seam. Source: arXiv:2203.12563,
-Section 5, lines 1690–1692. -/
-theorem periodicLocalInteractionES_mixedEndpointColumnSector_next
-    (hN : 2 ≤ N) (i : Fin N) :
-    periodicLocalInteractionES (mixedEndpointColumnSector D₀ D₁ 1) i =
-      periodicLocalInteractionES (mixedEndpointColumnSector D₀ D₁ 0)
-        (finRotate N i) := by
-  ext v σ
-  simp only [mixedEndpointColumnSector, periodicLocalInteractionES_diagonal_apply hN,
-    extractWindow_two_zero, extractWindow_two_one]
-
-/-- The missing first row sector is penalized by the previous actual
-extended interaction. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem periodicLocalInteractionES_outerRowPenalty_le_previous
-    (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
-    (hN : 2 ≤ N) (i : Fin N) :
-    periodicLocalInteractionES (1 - mixedEndpointRowSector D₀ D₁ 0) i ≤
-      periodicLocalInteractionES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0))
-        ((finRotate N).symm i) := by
-  have h := periodicLocalInteractionES_mono
-    (mixedEndpoint_one_sub_rowSector_one_le_parentInteraction A₀ A₁)
-    ((finRotate N).symm i)
-  simpa only [periodicLocalInteractionES_sub, periodicLocalInteractionES_one hN,
-    periodicLocalInteractionES_mixedEndpointRowSector_previous hN i] using h
-
-/-- The missing second column sector is penalized by the next actual
-extended interaction. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem periodicLocalInteractionES_outerColumnPenalty_le_next
-    (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
-    (hN : 2 ≤ N) (i : Fin N) :
-    periodicLocalInteractionES (1 - mixedEndpointColumnSector D₀ D₁ 1) i ≤
-      periodicLocalInteractionES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0))
-        (finRotate N i) := by
-  have h := periodicLocalInteractionES_mono
-    (mixedEndpoint_one_sub_columnSector_zero_le_parentInteraction A₀ A₁)
-    (finRotate N i)
-  simpa only [periodicLocalInteractionES_sub, periodicLocalInteractionES_one hN,
-    periodicLocalInteractionES_mixedEndpointColumnSector_next hN i] using h
-
-/-- One canonical endpoint term is controlled by three adjacent actual
-extended terms. No ring inequality is assumed. Source: arXiv:2203.12563,
-Section 5, lines 1690–1692. -/
-theorem localTermES_mixedEndpointLeftTensor_le_three_extended
-    (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
-    (hN : 2 ≤ N) (i : Fin N) :
-    localTermES (mixedEndpointLeftTensor A₀ D₁) 2 i ≤
-      periodicLocalInteractionES
-        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i +
-      periodicLocalInteractionES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0))
-        ((finRotate N).symm i) +
-      periodicLocalInteractionES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0))
-        (finRotate N i) := by
-  let E := EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) N)
-  let K : E →ₗ[ℂ] E := localTermES (mixedEndpointLeftTensor A₀ D₁) 2 i
-  let H : E →ₗ[ℂ] E :=
-    periodicLocalInteractionES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) i
-  let R : E →ₗ[ℂ] E := periodicLocalInteractionES (1 - mixedEndpointRowSector D₀ D₁ 0) i
-  let C : E →ₗ[ℂ] E :=
-    periodicLocalInteractionES (1 - mixedEndpointColumnSector D₀ D₁ 1) i
-  let P : E →ₗ[ℂ] E := periodicLocalInteractionES
-    (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) ((finRotate N).symm i)
-  let Q : E →ₗ[ℂ] E := periodicLocalInteractionES
-    (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) (finRotate N i)
-  have hE : Matrix.toEuclideanLin (LinearMap.toMatrix'
-      (parentInteraction (mixedEndpointLeftTensor A₀ D₁) 2)) =
-      parentInteractionES (mixedEndpointLeftTensor A₀ D₁) 2 :=
-    toEuclideanLin_toMatrix'_parentInteraction _ _
-  have hlocal : K ≤ H + R + C := by
-    simpa only [hE,
-      periodicLocalInteractionES_parentInteractionES
-      (mixedEndpointLeftTensor A₀ D₁) (by decide : 0 < 2),
-      periodicLocalInteractionES_add] using
-      periodicLocalInteractionES_mono
-        (parentInteraction_mixedEndpointLeftTensor_le A₀ A₁) i
-  have hR : R ≤ P :=
-    periodicLocalInteractionES_outerRowPenalty_le_previous A₀ A₁ hN i
-  have hC : C ≤ Q :=
-    periodicLocalInteractionES_outerColumnPenalty_le_next A₀ A₁ hN i
-  change (H + R + C - K).IsPositive at hlocal
-  change (P - R).IsPositive at hR
-  change (Q - C).IsPositive at hC
-  change (H + P + Q - K).IsPositive
-  convert (hlocal.add hR).add hC using 1
-  abel
-
-/-- The actual extended endpoint Hamiltonian and the canonical parent of the
-embedded endpoint satisfy `H′ ≤ K ≤ 3 H′` on every ring of at least two sites.
-The factor three comes from counting each bond and its two neighbors.
-Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpoint_periodic_comparison
-    (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
-    (hN : 2 ≤ N) :
-    periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N ≤
-        parentHamiltonianES (mixedEndpointLeftTensor A₀ D₁) 2 N ∧
-      parentHamiltonianES (mixedEndpointLeftTensor A₀ D₁) 2 N ≤
-        (3 : ℂ) • periodicInteractionHamiltonianES
-          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N := by
-  have hE : Matrix.toEuclideanLin (LinearMap.toMatrix'
-      (parentInteraction (mixedEndpointLeftTensor A₀ D₁) 2)) =
-      parentInteractionES (mixedEndpointLeftTensor A₀ D₁) 2 :=
-    toEuclideanLin_toMatrix'_parentInteraction _ _
-  constructor
-  · simpa only [hE,
-      periodicInteractionHamiltonianES_parentInteractionES
-      (mixedEndpointLeftTensor A₀ D₁) (by decide : 0 < 2)] using
-      periodicInteractionHamiltonianES_mono
-        (mixedEndpointParentInteraction_zero_le_parentInteraction A₀ A₁) N
-  · have h := Finset.sum_le_sum fun (i : Fin N) (_ : i ∈ Finset.univ) =>
-      localTermES_mixedEndpointLeftTensor_le_three_extended A₀ A₁ hN i
-    rw [← parentHamiltonianES_eq_sum_localTermES] at h
-    simp only [Finset.sum_add_distrib, Equiv.sum_comp] at h
-    convert h using 1
-    simp only [periodicInteractionHamiltonianES]
-    module
-
-/-- The ring kernel of the actual extended endpoint equals the canonical
-endpoint kernel. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpoint_periodic_ker_eq
-    (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
-    (hN : 2 ≤ N) :
-    LinearMap.ker (periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N) =
-      LinearMap.ker (parentHamiltonianES (mixedEndpointLeftTensor A₀ D₁) 2 N) := by
-  obtain ⟨hLower, hUpper⟩ := mixedEndpoint_periodic_comparison A₀ A₁ hN
-  exact (periodicInteractionHamiltonianES_isPositive
-    (Matrix.isPositive_toEuclideanLin_iff.mpr
-      (posSemidef_mixedEndpointParentInteraction A₀ A₁ 0)) N).ker_eq_of_smul_le_of_le_smul
-      (parentHamiltonianES_isPositive _ 2 N)
-      (a := 1) (b := 1) (c := 3) (by norm_num) (by norm_num) (by norm_num)
-      (by simpa only [Complex.ofReal_one, one_smul] using hLower)
-      (by simpa only [Complex.ofReal_one, Complex.ofReal_ofNat, one_smul] using hUpper)
-
-/-- A canonical endpoint gap `δ` transfers to the actual extended endpoint
-with gap `δ / 3`. The comparison and common kernel are derived from the
-mixed tensor, rather than supplied as hypotheses.
-Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpoint_periodic_norm_gap
-    (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
-    (hN : 2 ≤ N) {δ : ℝ} (hδ : 0 < δ)
-    (hGap : ∀ v ∈ (LinearMap.ker
-      (parentHamiltonianES (mixedEndpointLeftTensor A₀ D₁) 2 N))ᗮ,
-      δ * ‖v‖ ≤ ‖parentHamiltonianES (mixedEndpointLeftTensor A₀ D₁) 2 N v‖) :
-    ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N))ᗮ,
-      (δ / 3) * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N v‖ := by
-  obtain ⟨hLower, hUpper⟩ := mixedEndpoint_periodic_comparison A₀ A₁ hN
-  have hScaled := smul_le_smul_of_nonneg_left hLower (by norm_num : 0 ≤ (3 : ℂ))
-  simpa only [one_mul] using
-    LinearMap.IsPositive.norm_gap_of_smul_le_of_le_smul
-      (parentHamiltonianES_isPositive (mixedEndpointLeftTensor A₀ D₁) 2 N)
-        (periodicInteractionHamiltonianES_isPositive
-          (Matrix.isPositive_toEuclideanLin_iff.mpr
-      (posSemidef_mixedEndpointParentInteraction A₀ A₁ 0)) N)
-        (a := 1) (b := 3) (c := 3) (by norm_num) (by norm_num) (by norm_num) hδ
-        (by simpa only [Complex.ofReal_one, Complex.ofReal_ofNat, one_smul] using hUpper)
-        (by simpa only [Complex.ofReal_ofNat] using hScaled) hGap
-
-/-- At an injective first endpoint, the actual extended periodic Hamiltonian
-has precisely the embedded MPS ground line, for every ring of at least two
-sites. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpoint_periodic_groundSpace_eq [NeZero D₀]
-    (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
-    (hA₀ : Kraus.IsInjective A₀) (hN : 2 ≤ N) :
-    LinearMap.ker (periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N) =
-      Submodule.span ℂ {(WithLp.toLp 2
-        (mpv (mixedEndpointLeftTensor A₀ D₁) :
-          NSiteSpace ((D₀ + D₁) * (D₀ + D₁)) N))} := by
-  rw [mixedEndpoint_periodic_ker_eq A₀ A₁ hN,
-    ← parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES,
-    parentHamiltonianGroundSpaceES,
-    ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) hN,
-    chainGroundSpace_eq_mpvSubmodule
-      (isInjective_mixedEndpointLeftTensor A₀ hA₀ D₁) hN (by decide) hN,
-    mpvSubmodule, Submodule.map_span, Set.image_singleton]
-  rfl
-
-/-- The actual extended first endpoint has a unique periodic ground state
-on every ring of at least two sites. Source: arXiv:2203.12563, Section 5,
-lines 1690–1692. -/
-theorem mixedEndpoint_periodic_groundSpace_finrank [NeZero D₀]
-    (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
-    (hA₀ : Kraus.IsInjective A₀) (hN : 2 ≤ N) :
-    Module.finrank ℂ (LinearMap.ker (periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N)) = 1 := by
-  rw [mixedEndpoint_periodic_ker_eq A₀ A₁ hN,
-    ← parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES,
-    parentHamiltonianGroundSpaceES,
-    ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) hN,
-    LinearEquiv.finrank_map_eq]
-  exact groundSpace_unique_periodic
-    (isInjective_mixedEndpointLeftTensor A₀ hA₀ D₁) hN (by decide) hN
-
-/-- The extended first endpoint of the actual arbitrary mixed tensor has a
-strictly positive gap uniform over every periodic length at least two.
-Injectivity of the first endpoint supplies its canonical gap; the concrete
-three-term comparison transfers it. No gap assumption and no continuity
-argument at a rank-changing endpoint is used.
-Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem exists_uniform_mixedEndpoint_periodic_gap [NeZero D₀]
-    (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
-    (hA₀ : Kraus.IsInjective A₀) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, 2 ≤ N →
-      ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N))ᗮ,
-        δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N v‖ := by
-  obtain ⟨δ, hδ, hGap⟩ :=
-    exists_uniform_hamiltonian_parentRingInteraction_gap_of_compact_isInjective_all_lengths
-      (fun _ : Unit => mixedEndpointLeftTensor A₀ D₁) continuous_const
-      (fun _ => isInjective_mixedEndpointLeftTensor A₀ hA₀ D₁)
-      (S := Set.univ) isCompact_univ
-  refine ⟨δ / 3, div_pos hδ (by norm_num), fun N hN => ?_⟩
-  have : NeZero N := ⟨by omega⟩
-  exact mixedEndpoint_periodic_norm_gap A₀ A₁ hN hδ (by
-    rw [parentHamiltonianES, parentHamiltonian_eq_toLin'_hamiltonian]
-    exact ((ManyBody.isGapped_zero_iff_norm (posSemidef_hamiltonian_parentRingInteraction _ 2
-      N)).mp (hGap () (Set.mem_univ ()) N hN)).2)
-
-end MPOSymmetry
 end MPSTensor
 
 /-! ### Translates of the matrix of the extended interaction on the ring
@@ -410,6 +157,19 @@ theorem translationInvariant_term_diagonal (hRN : R ≤ N) (f : (Fin R → α) �
       Matrix.diagonal fun σ : Fin N → α ↦ f fun j ↦ σ (i + Fin.castLE hRN j) := by
   rw [translationInvariant_term_of_le _ hRN, ManyBody.placeAlong_diagonal]
   rfl
+
+/-- For a positive range, the open-chain Hamiltonian of the translates of a local matrix is the
+sum of the terms of its translates on the ring over the windows that do not cross the right
+endpoint. -/
+theorem hamiltonian_chainTranslates_eq_sum_nonwrappingStart
+    (h : Matrix (Fin R → α) (Fin R → α) ℂ) (hR : 0 < R) :
+    (chainTranslates R N h).hamiltonian =
+      ∑ i : MPSTensor.NonwrappingStart R N, (translationInvariant N h).term i.1 := by
+  rw [hamiltonian]
+  refine Fintype.sum_equiv
+    ⟨fun j ↦ ⟨⟨j.val, by have := j.isLt; omega⟩, by have := j.isLt; change j.val + R ≤ N; omega⟩,
+      fun i ↦ ⟨i.1.val, by have := i.2; omega⟩, fun _ ↦ rfl, fun _ ↦ rfl⟩ _ _ fun j ↦ ?_
+  exact chainTranslates_term_eq_translationInvariant_term h hR j
 
 end ManyBody.Interaction
 

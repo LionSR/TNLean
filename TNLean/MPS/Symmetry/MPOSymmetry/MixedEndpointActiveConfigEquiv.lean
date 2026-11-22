@@ -245,9 +245,9 @@ theorem range_mixedEndpointActiveInclusion :
     LinearMap.range (mixedEndpointActiveInclusion D₀ D₁ N) =
       LinearMap.range (mixedEndpointOpenActiveProjection D₀ D₁ (N + 1 + 1)) := by
   classical
-  rw [range_mixedEndpointOpenActiveProjection (by omega)]
+  rw [range_mixedEndpointOpenActiveProjection]
   ext v
-  rw [mem_ker_mixedEndpointOpenInnerPenalty_iff (by omega)]
+  rw [mem_ker_mixedEndpointOpenInnerPenalty_iff]
   constructor
   · rintro ⟨w, rfl⟩ σ hσ
     exact mixedEndpointActiveInclusion_apply_inactive w σ hσ

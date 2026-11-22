@@ -19,6 +19,11 @@ The explicit sector exchange therefore identifies the actual second
 endpoint open Hamiltonian with the first endpoint of the reversed tensor
 pair. No support, kernel, reduction, or spectral-gap hypothesis is used.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692.
+
+**Transitional (#10948).** `periodicLocalInteractionES_physicalReindex_apply` and
+`periodicLocalInteractionES_physicalReindex_conj`, stated for the Euclidean-space translate
+`periodicLocalInteractionES`, are kept for `JointMixedEndpointRightPeriodicGap` and are deleted
+when that file is restated.
 -/
 
 open scoped BigOperators
@@ -26,6 +31,8 @@ open scoped BigOperators
 namespace MPSTensor
 
 noncomputable section
+
+open ManyBody.Interaction (translationInvariant chainTranslates)
 
 variable {d₁ d₂ R N : ℕ}
 
@@ -52,6 +59,89 @@ theorem cyclicRestrictES_physicalReindex
   change v (fun k => e (cyclicCfg (Fin.pos i) R i ω τ k)) =
     v (cyclicCfg (Fin.pos i) R i (fun r => e (ω r)) (fun k => e (τ k)))
   rw [reindex_cyclicCfg]
+
+/-- If a local matrix is the conjugate of another by the physical reindexing isometry, each
+term of its translates on the ring intertwines with the corresponding term of the other under
+the full-chain physical reindexing isometry. -/
+theorem toEuclideanLin_translationInvariant_term_physicalReindex_apply
+    (e : Fin d₁ ≃ Fin d₂)
+    {h' : Matrix (Cfg d₁ R) (Cfg d₁ R) ℂ} {h : Matrix (Cfg d₂ R) (Cfg d₂ R) ℂ}
+    (hh : Matrix.toEuclideanLin h' =
+      (physicalReindexLinearIsometryEquiv e R).toLinearEquiv.conj (Matrix.toEuclideanLin h))
+    (i : Fin N) (v : EuclideanSpace ℂ (Cfg d₂ N)) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((translationInvariant N h').term i)
+        (physicalReindexLinearIsometryEquiv e N v) =
+      physicalReindexLinearIsometryEquiv e N
+        (Matrix.toEuclideanLin ((translationInvariant N h).term i) v) := by
+  have : NeZero N := NeZero.of_pos i.pos
+  by_cases hRN : R ≤ N
+  · apply PiLp.ext
+    intro σ
+    rw [toEuclideanLin_translationInvariant_term_apply hRN, hh,
+      cyclicRestrictES_physicalReindex]
+    change physicalReindexLinearIsometryEquiv e R
+        (Matrix.toEuclideanLin h ((physicalReindexLinearIsometryEquiv e R).symm
+          (physicalReindexLinearIsometryEquiv e R
+            (cyclicRestrictES (Fin.pos i) R i (fun k => e (σ k)) v))))
+        (extractWindow R i σ) =
+      Matrix.toEuclideanLin ((translationInvariant N h).term i) v (fun k => e (σ k))
+    rw [LinearIsometryEquiv.symm_apply_apply,
+      physicalReindexLinearIsometryEquiv_apply_apply,
+      toEuclideanLin_translationInvariant_term_apply hRN]
+    rfl
+  · rw [ManyBody.Interaction.translationInvariant_term_of_not_le _ hRN,
+      ManyBody.Interaction.translationInvariant_term_of_not_le _ hRN]
+    simp
+
+/-- Physical alphabet reindexing conjugates the terms of the translates on the ring. This also
+covers interaction lengths exceeding the chain length, where both terms are zero. -/
+theorem toEuclideanLin_translationInvariant_term_physicalReindex_conj
+    (e : Fin d₁ ≃ Fin d₂)
+    {h' : Matrix (Cfg d₁ R) (Cfg d₁ R) ℂ} {h : Matrix (Cfg d₂ R) (Cfg d₂ R) ℂ}
+    (hh : Matrix.toEuclideanLin h' =
+      (physicalReindexLinearIsometryEquiv e R).toLinearEquiv.conj (Matrix.toEuclideanLin h))
+    (i : Fin N) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((translationInvariant N h').term i) =
+      (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.conj
+        (Matrix.toEuclideanLin ((translationInvariant N h).term i)) := by
+  have : NeZero N := NeZero.of_pos i.pos
+  apply LinearMap.ext
+  intro v
+  obtain ⟨w, rfl⟩ := (physicalReindexLinearIsometryEquiv e N).surjective v
+  change Matrix.toEuclideanLin ((translationInvariant N h').term i)
+      (physicalReindexLinearIsometryEquiv e N w) =
+    physicalReindexLinearIsometryEquiv e N
+      (Matrix.toEuclideanLin ((translationInvariant N h).term i)
+        ((physicalReindexLinearIsometryEquiv e N).symm
+          (physicalReindexLinearIsometryEquiv e N w)))
+  rw [LinearIsometryEquiv.symm_apply_apply]
+  exact toEuclideanLin_translationInvariant_term_physicalReindex_apply e hh i w
+
+/-- The open-chain Hamiltonian of the translates of a local matrix of positive range is
+conjugated by the full-chain physical isometry when the local matrix is conjugated by the local
+physical isometry. -/
+theorem toEuclideanLin_hamiltonian_chainTranslates_physicalReindex_conj
+    (e : Fin d₁ ≃ Fin d₂)
+    {h' : Matrix (Cfg d₁ R) (Cfg d₁ R) ℂ} {h : Matrix (Cfg d₂ R) (Cfg d₂ R) ℂ}
+    (hh : Matrix.toEuclideanLin h' =
+      (physicalReindexLinearIsometryEquiv e R).toLinearEquiv.conj (Matrix.toEuclideanLin h))
+    (hR : 0 < R) (N : ℕ) :
+    Matrix.toEuclideanLin (chainTranslates R N h').hamiltonian =
+      (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.conj
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) := by
+  by_cases hRN : R ≤ N
+  · have : NeZero N := ⟨by omega⟩
+    simp only [ManyBody.Interaction.hamiltonian_chainTranslates_eq_sum_nonwrappingStart _ hR,
+      map_sum]
+    exact Fintype.sum_congr _ _ fun i ↦
+      toEuclideanLin_translationInvariant_term_physicalReindex_conj e hh i.1
+  · have : IsEmpty (Fin (N + 1 - R)) := ⟨fun i ↦ hRN (by have := i.isLt; omega)⟩
+    simp only [ManyBody.Interaction.hamiltonian, Finset.univ_eq_empty, Finset.sum_empty,
+      map_zero]
+
+/-! ### Transitional: the Euclidean-space translate under physical reindexing -/
 
 private theorem localInteraction_apply_cyclicRestriction
     {d : ℕ}
@@ -121,18 +211,6 @@ theorem periodicLocalInteractionES_physicalReindex_conj
   rw [LinearIsometryEquiv.symm_apply_apply]
   exact periodicLocalInteractionES_physicalReindex_apply e h i w
 
-/-- The actual open sum is conjugated by the full-chain physical isometry
-when its local interaction is conjugated by the local physical isometry. -/
-theorem openInteractionHamiltonianES_physicalReindex_conj
-    (e : Fin d₁ ≃ Fin d₂)
-    (h : EuclideanSpace ℂ (Cfg d₂ R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d₂ R)) (N : ℕ) :
-    openInteractionHamiltonianES
-        ((physicalReindexLinearIsometryEquiv e R).toLinearEquiv.conj h) N =
-      (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.conj
-        (openInteractionHamiltonianES h N) := by
-  simp only [openInteractionHamiltonianES, periodicLocalInteractionES_physicalReindex_conj,
-    map_sum]
-
 namespace MPOSymmetry
 
 variable {D₀ D₁ : ℕ}
@@ -141,38 +219,42 @@ variable {D₀ D₁ : ℕ}
 first-endpoint term for the reversed pair, on the same physical window. -/
 theorem mixedEndpoint_localInteraction_one_eq_conj_swap
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) (i : Fin N) :
-    periodicLocalInteractionES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 1)) i =
+    haveI : NeZero N := NeZero.of_pos i.pos;
+    Matrix.toEuclideanLin ((translationInvariant N
+        (mixedEndpointParentInteraction A₀ A₁ 1)).term i) =
       (physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N).toLinearEquiv.conj
-        (periodicLocalInteractionES
-          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₁ A₀ 0)) i) := by
-  rw [mixedEndpointParentInteraction_one_eq_conj_swap,
-    periodicLocalInteractionES_physicalReindex_conj]
+        (Matrix.toEuclideanLin ((translationInvariant N
+            (mixedEndpointParentInteraction A₁ A₀ 0)).term i)) := by
+  exact toEuclideanLin_translationInvariant_term_physicalReindex_conj _
+    (mixedEndpointParentInteraction_one_eq_conj_swap A₀ A₁) i
 
 /-- The actual second-endpoint open Hamiltonian is the conjugate of the
 actual first-endpoint open Hamiltonian for the reversed tensor pair. -/
-theorem mixedEndpoint_openInteractionHamiltonian_one_eq_conj_swap
+theorem mixedEndpoint_hamiltonian_chainTranslates_one_eq_conj_swap
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) (N : ℕ) :
-    openInteractionHamiltonianES
-      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 1)) N =
+    Matrix.toEuclideanLin (chainTranslates 2 N
+        (mixedEndpointParentInteraction A₀ A₁ 1)).hamiltonian =
       (physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N).toLinearEquiv.conj
-        (openInteractionHamiltonianES
-          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₁ A₀ 0)) N) := by
-  rw [mixedEndpointParentInteraction_one_eq_conj_swap,
-    openInteractionHamiltonianES_physicalReindex_conj]
+        (Matrix.toEuclideanLin (chainTranslates 2 N
+            (mixedEndpointParentInteraction A₁ A₀ 0)).hamiltonian) := by
+  exact toEuclideanLin_hamiltonian_chainTranslates_physicalReindex_conj _
+    (mixedEndpointParentInteraction_one_eq_conj_swap A₀ A₁) (by norm_num) N
 
 /-- Pointwise intertwining of the actual endpoint open Hamiltonians under
 the concrete sector-exchange isometry. -/
-theorem mixedEndpoint_openInteractionHamiltonian_one_apply_swap
+theorem mixedEndpoint_hamiltonian_chainTranslates_one_apply_swap
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) (N : ℕ)
     (v : EuclideanSpace ℂ (Cfg ((D₁ + D₀) * (D₁ + D₀)) N)) :
-    openInteractionHamiltonianES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 1)) N
+    Matrix.toEuclideanLin
+        (chainTranslates 2 N (mixedEndpointParentInteraction A₀ A₁ 1)).hamiltonian
         (physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N v) =
       physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N
-        (openInteractionHamiltonianES
-          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₁ A₀ 0)) N v) := by
-  rw [mixedEndpoint_openInteractionHamiltonian_one_eq_conj_swap]
+        (Matrix.toEuclideanLin (chainTranslates 2 N
+            (mixedEndpointParentInteraction A₁ A₀ 0)).hamiltonian v) := by
+  rw [mixedEndpoint_hamiltonian_chainTranslates_one_eq_conj_swap]
   change physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N
-    (openInteractionHamiltonianES (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₁ A₀ 0)) N
+    (Matrix.toEuclideanLin (chainTranslates 2 N
+        (mixedEndpointParentInteraction A₁ A₀ 0)).hamiltonian
       ((physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N).symm
         (physicalReindexLinearIsometryEquiv (mixedEndpointPhysicalSwap D₀ D₁) N v))) = _
   rw [LinearIsometryEquiv.symm_apply_apply]

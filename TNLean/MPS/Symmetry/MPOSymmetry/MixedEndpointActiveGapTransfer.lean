@@ -25,31 +25,33 @@ namespace MPOSymmetry
 
 noncomputable section
 
+open ManyBody.Interaction (chainTranslates)
+
 variable {D₀ D₁ N : ℕ}
 
 /-- A gap of the actual compressed endpoint block transfers to the full
-actual open-chain Hamiltonian. The inactive energy bound and exact kernel
+actual open-chain Hamiltonian, as a lower bound on its nonzero eigenvalues.
+The inactive energy bound and exact kernel
 transport are derived, rather than supplied as hypotheses. -/
-theorem mixedEndpoint_open_norm_gap_of_active_norm_gap
+theorem mixedEndpoint_open_gap_of_active_norm_gap
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     {δ : ℝ} (hδ : 0 ≤ δ)
     (hGap : ∀ x ∈ (LinearMap.ker (mixedEndpointActiveHamiltonian A₀ A₁ N))ᗮ,
       δ * ‖x‖ ≤ ‖mixedEndpointActiveHamiltonian A₀ A₁ N x‖) :
-    ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES
-      (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) (N + 1 + 1)))ᗮ,
-      min δ (1 / 2) * ‖v‖ ≤ ‖openInteractionHamiltonianES
-        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) (N + 1 + 1) v‖ := by
-  let H := openInteractionHamiltonianES
-    (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) (N + 1 + 1)
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin (chainTranslates 2 (N + 1 + 1)
+        (mixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian) μ →
+      μ = 0 ∨ ((min δ (1 / 2) : ℝ) : ℂ) ≤ μ := by
+  refine (ManyBody.forall_hasEigenvalue_iff_norm
+    (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
+      (posSemidef_mixedEndpointParentInteraction A₀ A₁ 0) (N + 1 + 1))).mpr ?_
+  let H := Matrix.toEuclideanLin (chainTranslates 2 (N + 1 + 1)
+      (mixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian
   let K := mixedEndpointActiveHamiltonian A₀ A₁ N
   let U := mixedEndpointActiveLinearIsometry D₀ D₁ N
   let Q := mixedEndpointOpenActiveProjection D₀ D₁ (N + 1 + 1)
-  have hH : H.IsPositive := by
-    apply LinearMap.nonneg_iff_isPositive.mp
-    exact Finset.sum_nonneg fun i _ => LinearMap.nonneg_iff_isPositive.mpr
-      (periodicLocalInteractionES_isPositive
-        (Matrix.isPositive_toEuclideanLin_iff.mpr
-      (posSemidef_mixedEndpointParentInteraction A₀ A₁ 0)) i.1)
+  have hH : H.IsPositive := Matrix.isPositive_toEuclideanLin_iff.mpr
+    (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates
+      (posSemidef_mixedEndpointParentInteraction A₀ A₁ 0) (N + 1 + 1))
   have hK : K.IsPositive := mixedEndpointActiveHamiltonian_isPositive A₀ A₁ N
   have hleft (x : mixedEndpointActiveSpace D₀ D₁ N) : U.toLinearMap.adjoint (U x) = x :=
     LinearMap.congr_fun mixedEndpointActiveLinearIsometry_adjoint_comp x

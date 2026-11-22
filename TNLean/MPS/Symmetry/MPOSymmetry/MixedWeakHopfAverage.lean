@@ -196,17 +196,11 @@ theorem mixedWeakHopfCompletedInteraction_commute [NeZero D₀] [NeZero D₁]
       rw [hW]
       exact isBoundaryCompatible_mixedEndpointInterpolation
         T₀ T₁ A₀ A₁ V₀ V₁ W₀ W₁ h₀ h₁ t
-    have hcomm := hcompat.parentInteractionES_commute_mpoWithBoundary (by decide)
+    have hcomm := hcompat.parentInteraction_matrix_commute_mpoWithBoundary (by decide)
       (fun Z => let ⟨Y, hY⟩ := W.exists_conjTranspose_mpoWithBoundary_eq Z
         ⟨Y, hY 2⟩) X
-    have hp : Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ t) =
-        parentInteractionES (mixedEndpointInterpolation A₀ A₁ t) 2 := by
-      rw [mixedEndpointParentInteraction_eq_toMatrix'_parentInteraction A₀ A₁ ht]
-      exact toEuclideanLin_toMatrix'_parentInteraction _ _
-    rw [← hp] at hcomm
-    apply Matrix.toEuclideanLin.injective
-    simpa only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same,
-      Module.End.mul_eq_comp] using hcomm.eq
+    rw [← mixedEndpointParentInteraction_eq_toMatrix'_parentInteraction A₀ A₁ ht] at hcomm
+    exact hcomm.eq
   rw [← closure_Ioo (zero_ne_one' ℝ)] at hγ
   exact Set.EqOn.closure hs (hc.matrix_mul continuous_const)
     (continuous_const.matrix_mul hc) hγ

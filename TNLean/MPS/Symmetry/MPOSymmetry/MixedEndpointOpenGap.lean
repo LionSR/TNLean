@@ -23,12 +23,14 @@ for the actual extended open Hamiltonian.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692.
 -/
 
-open scoped BigOperators
+open scoped BigOperators ComplexOrder
 
 namespace MPSTensor
 namespace MPOSymmetry
 
 noncomputable section
+
+open ManyBody.Interaction (chainTranslates)
 
 variable {D₀ D₁ N : ℕ}
 
@@ -143,8 +145,8 @@ theorem exists_mixedEndpointActiveHamiltonian_uniform_gap
         (D₁ := D₁) A₀ n hδ'.le).mpr hNorm₀
       exact mixedEndpointActiveHamiltonian_norm_gap_of_normalized A₀ A₁ hA₀ hδ' hNorm
 
-/-- The actual extended first-endpoint open Hamiltonian has a positive
-volume-independent gap for all sufficiently large windows. The inactive
+/-- The nonzero eigenvalues of the actual extended first-endpoint open Hamiltonian have a
+positive volume-independent lower bound for all sufficiently large windows. The inactive
 sectors contribute the derived one-half lower bound. The two exterior
 registers remain free, so no smaller padded-endpoint ground space is used.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -152,17 +154,16 @@ theorem exists_uniform_mixedEndpoint_open_zero_gap
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁)
     (hA₀ : Kraus.IsInjective A₀) :
     ∃ W : ℕ, 3 ≤ W ∧ ∃ δ : ℝ, 0 < δ ∧
-      ∀ N : ℕ, W ≤ N → ∀ v ∈ (LinearMap.ker (openInteractionHamiltonianES
-        (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N))ᗮ,
-        δ * ‖v‖ ≤ ‖openInteractionHamiltonianES
-          (Matrix.toEuclideanLin (mixedEndpointParentInteraction A₀ A₁ 0)) N v‖ := by
+      ∀ N : ℕ, W ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+          (chainTranslates 2 N (mixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨W, hW, δ, hδ, hGap⟩ :=
     exists_mixedEndpointActiveHamiltonian_uniform_gap A₀ A₁ hA₀
   refine ⟨W + 1 + 1, by omega, min δ (1 / 2), lt_min hδ (by norm_num), ?_⟩
   intro N hWN
   have hlen : N - 2 + 1 + 1 = N := by omega
   rw [← hlen]
-  exact mixedEndpoint_open_norm_gap_of_active_norm_gap A₀ A₁ hδ.le
+  exact mixedEndpoint_open_gap_of_active_norm_gap A₀ A₁ hδ.le
     (hGap (N - 2) (by omega))
 
 end

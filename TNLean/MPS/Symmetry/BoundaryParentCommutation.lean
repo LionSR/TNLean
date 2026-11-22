@@ -29,11 +29,6 @@ ambient complement must be distinguished from averaging the parent interaction:
 if the averaging map sends the ambient identity to a proper support projection,
 the two operations differ by its complementary projection. See the accompanying
 `docs/paper-gaps/glm23_wha_parent_completion.tex` source review.
-
-**Transitional (#10948).** `MPSTensor.parentInteractionES_commute_of_starAlgebra_invariant` and
-`MPOTensor.IsBoundaryCompatible.parentInteractionES_commute_mpoWithBoundary` state the
-commutation for the Euclidean-space operator of the local parent; they are kept until their last
-users are converted. The last section states it for the matrix of the local parent.
 -/
 
 open scoped Matrix
@@ -81,27 +76,6 @@ private theorem invariant_adjoin_of_conjTranspose_mem
     rw [Matrix.toLpLin_mul_same]
     exact ihB _ (ihC x hx)
 
-namespace MPSTensor
-
-/-- A star algebra preserving the local MPS support commutes with the
-canonical local parent interaction. This is the orthogonal-reduction form
-of the local symmetry assertion in GLM23, arXiv:2203.12563v3, lines 1276--1320;
-it does not assert a weak-Hopf averaging formula. -/
-theorem parentInteractionES_commute_of_starAlgebra_invariant
-    {d D L : ℕ} (A : MPSTensor d D)
-    (S : StarSubalgebra ℂ (Matrix (Cfg d L) (Cfg d L) ℂ))
-    (hS : S.IsInvariantSubspace (groundSpaceES A L))
-    {B : Matrix (Cfg d L) (Cfg d L) ℂ} (hB : B ∈ S) :
-    Commute (parentInteractionES A L) (Matrix.toEuclideanLin B) := by
-  apply LinearMap.ext
-  intro x
-  change (groundSpaceES A L)ᗮ.starProjection (Matrix.toEuclideanLin B x) =
-    Matrix.toEuclideanLin B ((groundSpaceES A L)ᗮ.starProjection x)
-  exact S.starProjection_toEuclideanLin_comm
-    (fun C hC ↦ S.orthogonal_mem_invtSubmodule hS C hC) hB x
-
-end MPSTensor
-
 namespace MPOTensor
 
 variable {d D₁ D₂ L : ℕ} {T : MPOTensor d D₁} {A : MPSTensor d D₂}
@@ -140,24 +114,6 @@ theorem IsBoundaryCompatible.groundSpaceES_invariant_boundaryStarAlgebra
     exact ⟨Y, hY.symm⟩
   · rintro B ⟨X, rfl⟩
     exact h.groundSpaceES_mem_invtSubmodule X hL
-
-/-- Every arbitrary-boundary operator commutes with the canonical local
-parent when the boundary range is adjoint-closed. Source: the local symmetry
-conclusion in GLM23, arXiv:2203.12563v3, lines 1276--1320. This theorem uses
-orthogonal reduction and makes no nonzeroness claim about averaging a parent
-term by a nonunital weak-Hopf map. -/
-theorem IsBoundaryCompatible.parentInteractionES_commute_mpoWithBoundary
-    (h : IsBoundaryCompatible T A) (hL : 0 < L)
-    (hstar : ∀ X : Matrix (Fin D₁) (Fin D₁) ℂ,
-      ∃ Y : Matrix (Fin D₁) (Fin D₁) ℂ,
-        (mpoWithBoundary T X L)ᴴ = mpoWithBoundary T Y L)
-    (X : Matrix (Fin D₁) (Fin D₁) ℂ) :
-    Commute (MPSTensor.parentInteractionES A L)
-      (Matrix.toEuclideanLin (mpoWithBoundary T X L)) :=
-  MPSTensor.parentInteractionES_commute_of_starAlgebra_invariant A
-    (StarAlgebra.adjoin ℂ (Set.range (fun Y ↦ mpoWithBoundary T Y L)))
-    (h.groundSpaceES_invariant_boundaryStarAlgebra hL hstar)
-    (StarAlgebra.subset_adjoin ℂ _ ⟨X, rfl⟩)
 
 end MPOTensor
 
