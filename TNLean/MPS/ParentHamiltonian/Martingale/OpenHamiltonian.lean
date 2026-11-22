@@ -579,21 +579,6 @@ theorem hamiltonian_parentChainInteraction_self_eq_parentInteractionES (A : MPST
     toEuclideanLin_toMatrix'_parentInteraction]
   rfl
 
-theorem hamiltonian_parentChainInteraction_C1 (A : MPSTensor d D) {L l N : ℕ}
-    (hLl : L ≤ l) :
-    0 ≤ ∑ n ∈ Finset.Icc l N, Matrix.toEuclideanLin
-        ((parentChainInteraction A L N).restrict fun i ↦ n - l ≤ i.val ∧ i.val + L ≤
-            n).hamiltonian ∧
-      ∑ n ∈ Finset.Icc l N, Matrix.toEuclideanLin
-          ((parentChainInteraction A L N).restrict fun i ↦ n - l ≤ i.val ∧ i.val + L ≤
-              n).hamiltonian ≤
-        ((l - L + 1 : ℕ) : ℂ) • Matrix.toEuclideanLin
-            (parentChainInteraction A L N).hamiltonian := by
-  have h := parentChainInteraction_C1 A hLl N
-  constructor
-  · simpa only [map_sum, map_zero] using Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr h.1
-  · simpa only [map_sum, map_smul] using Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr h.2
-
 theorem localTermES_eq_zero_of_hamiltonian_parentChainInteraction_eq_zero
     (A : MPSTensor d D) (L N : ℕ) {v : EuclideanSpace ℂ (Cfg d N)}
     (hv : Matrix.toEuclideanLin (parentChainInteraction A L N).hamiltonian v = 0)

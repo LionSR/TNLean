@@ -47,18 +47,6 @@ theorem hamiltonian_restrict_parentChainInteraction_eq_term (A : MPSTensor d D)
   rw [ManyBody.Interaction.hamiltonian_restrict, ManyBody.Interaction.partialHamiltonian, hfilter,
     Finset.sum_singleton]
 
-/-- The single-window suffix Hamiltonian as a Euclidean-space local term; kept for the files not
-yet restated (#10948). -/
-theorem hamiltonian_restrict_parentChainInteraction_eq_localTermES (A : MPSTensor d D)
-    {L N n : ℕ} (hL : 0 < L) (hLn : L ≤ n) (hnN : n ≤ N) :
-    Matrix.toEuclideanLin
-        ((parentChainInteraction A L N).restrict fun i ↦ n - L ≤ i.val ∧ i.val + L ≤
-            n).hamiltonian =
-      localTermES A L (⟨n - L, by omega⟩ : Fin N) := by
-  rw [hamiltonian_restrict_parentChainInteraction_eq_term A hLn hnN]
-  exact (localTermES_eq_toEuclideanLin_parentChainInteraction_term A ⟨n - L, by omega⟩
-    (by change n - L + L ≤ N; omega)).symm
-
 /-- The Hamiltonian of the single window inside an interval of length \(L\) is an orthogonal
 projection. -/
 theorem isStarProjection_hamiltonian_restrict_parentChainInteraction (A : MPSTensor d D)

@@ -2079,7 +2079,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Finite-overlap condition C1 for the compatible open chain]
     \label{thm:open_parent_hamiltonian_es_c1}
-    \lean{MPSTensor.hamiltonian_parentChainInteraction_C1}
+    \lean{MPSTensor.parentChainInteraction_C1}
     \leanok
     \uses{def:open_parent_hamiltonian_es,
         def:open_suffix_parent_hamiltonian_es}
@@ -2151,8 +2151,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % gamma_{l+1} in the printed proof, lines 1240--1248.
 \begin{lemma}[Embedded fixed-window condition C2]
     \label{thm:open_suffix_parent_hamiltonian_es_c2}
-    \lean{MPSTensor.hamiltonian_restrict_parentChainInteraction_eq_localTermES,
-        MPSTensor.isStarProjection_hamiltonian_restrict_parentChainInteraction,
+    \lean{MPSTensor.isStarProjection_hamiltonian_restrict_parentChainInteraction,
         MPSTensor.toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_starProjection,
         MPSTensor.toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_id_sub_starProjection,
         MPSTensor.parentChainInteraction_C2,
