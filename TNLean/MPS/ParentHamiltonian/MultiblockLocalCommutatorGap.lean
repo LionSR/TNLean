@@ -248,12 +248,9 @@ theorem exists_pos_multiblock_localCommutator_gap_of_wordTupleSpanTop
             X)).re := by
   let T := toTensorFromBlocks (d := d) (μ := μ) A
   let h := LinearMap.toMatrix' (parentInteraction T R)
-  have hmatrix : Matrix.toEuclideanLin h = parentInteractionES T R :=
-    toEuclideanLin_toMatrix'_parentInteraction T R
-  apply exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
+  exact exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
     μ A hμ ρ hP hρ hS hSpan hR h
-  rw [hmatrix]
-  exact isParentInteraction_parentInteractionES T R
+    (isParentInteraction_toEuclideanLin_toMatrix'_parentInteraction T R)
 
 end BlockFamily
 

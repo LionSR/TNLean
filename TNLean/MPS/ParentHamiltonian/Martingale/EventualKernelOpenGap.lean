@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteIntervalGapComparison
-import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteractionRangeComparison
+import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
+import TNLean.MPS.ParentHamiltonian.Martingale.OpenRangeComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.PrimitiveBlockOpenGapAllLengths
 
 /-!

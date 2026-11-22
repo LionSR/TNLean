@@ -19,10 +19,9 @@ These are the local-to-global comparisons for positive parent interactions
 in CPGSV21, arXiv:2011.12127, Section IV.C, lines 1995--2007 and 2183--2187.
 
 **Transitional (#10948).** The declarations about `periodicLocalInteractionES` and
-`periodicInteractionHamiltonianES` are kept until their last users are converted; those whose
-statements lack `R ≤ N` are converted once QICLean has a ring interaction defined for every
-range. The last section states the facts for the terms of
-`ManyBody.Interaction.translationInvariant`.
+`periodicInteractionHamiltonianES` are kept until their last users, the mixed-endpoint files of
+`TNLean/MPS/Symmetry/MPOSymmetry`, are converted. The last section states the facts for the terms
+of `ManyBody.Interaction.translationInvariant`.
 -/
 
 open scoped BigOperators ComplexOrder

@@ -832,7 +832,6 @@ usually defines the object):
 - `MPS.ParentHamiltonian.Gap.PrimitiveBlockOpenGapAllLengths` ← `MPS.ParentHamiltonian.Martingale.PrimitiveBlockOpenGapAllLengths`, `MPS.ParentHamiltonian.Martingale.BlockOpenGapAllLengths`, `MPS.ParentHamiltonian.Martingale.NormalBlockOpenGap`
 - `MPS.ParentHamiltonian.Interaction.ArbitraryInteractionBlockDegeneracy` ← `MPS.ParentHamiltonian.CyclicBlockState`, `MPS.ParentHamiltonian.ArbitraryInteractionBlockDegeneracy`, `MPS.ParentHamiltonian.CanonicalArbitraryInteractionDegeneracy`
 - `MPS.ParentHamiltonian.Interaction.OpenInteraction` ← `MPS.ParentHamiltonian.Martingale.OpenInteraction`, `MPS.ParentHamiltonian.CanonicalParentInteractionExistence`
-- `MPS.ParentHamiltonian.Interaction.OpenInteractionRangeComparison` ← `MPS.ParentHamiltonian.Martingale.OpenInteractionRangeComparison`, `MPS.ParentHamiltonian.Martingale.CanonicalGapToInteractionGap`
 - `MPS.ParentHamiltonian.Interaction.ParentInteractionGap` ← `MPS.ParentHamiltonian.Martingale.ParentInteractionGap`, `MPS.ParentHamiltonian.Martingale.CanonicalGapAtBoundedRange`
 - `MPS.ParentHamiltonian.Interaction.PhysicalSectorProjectorTransport` ← `MPS.ParentHamiltonian.PhysicalSectorProjectorTransport`, `MPS.ParentHamiltonian.PhysicalSectorKernelDecomposition`
 - `MPS.ParentHamiltonian.Interaction.PrimeLengthBondDimensionDichotomy` ← `MPS.ParentHamiltonian.PrimeLengthBondDimensionDichotomy`, `MPS.ParentHamiltonian.FinitePrefixUniformBond`

@@ -11,27 +11,11 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 The local MPS ground space has dimension at most \(D^2\). When the ambient
 dimension \(d^L\) is larger, its complementary orthogonal projection is nonzero,
 both as a matrix and in function-space coordinates.
-
-**Transitional (#10948).** `parentInteractionES_ne_zero`, the same fact for the Euclidean-space
-operator, is kept until its users are converted; the matrix form is
-`toMatrix'_parentInteraction_ne_zero`.
 -/
 
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- If \(d^L > D^2\), the Euclidean canonical parent interaction is nonzero. -/
-theorem parentInteractionES_ne_zero (A : MPSTensor d D) (L : ℕ)
-    (hDim : d ^ L > D ^ 2) : parentInteractionES A L ≠ 0 := by
-  intro hzero
-  apply groundSpace_ne_top A L hDim
-  apply top_unique
-  intro v _
-  have hmem := (parentInteractionES_apply_eq_zero_iff A L
-    ((WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm v)).mp
-      (by simp only [hzero, LinearMap.zero_apply])
-  simpa using (mem_groundSpaceES_iff A L _).mp hmem
 
 /-- If \(d^L > D^2\), the matrix of the canonical parent interaction is nonzero. -/
 theorem toMatrix'_parentInteraction_ne_zero (A : MPSTensor d D) (L : ℕ)

@@ -1883,31 +1883,23 @@
     \label{lem:open_interaction_subwindow_coordinates}
     \lean{MPSTensor.cyclicCfg_join_cyclicActiveBlock,
         MPSTensor.extractWindow_join_cyclicActiveBlock,
-        MPSTensor.periodicLocalInteractionES_apply,
-        MPSTensor.periodicLocalInteractionES_conj_cyclicActiveBlock}
+        MPSTensor.toEuclideanLin_translationInvariant_term_apply}
     \leanok
     \uses{def:cyclic_active_block_coordinates,
         def:open_local_interaction_sum}
     Suppose $W\leq N$, fix a cyclic start $s$, and let $q<W$ satisfy
     $q+R\leq W$. Replacing the range-$R$ subwindow beginning at $s+q$
     changes only the active configuration. Restriction to this subwindow
-    agrees with restriction at $q$ inside the active block. When $R>0$, any local
-    operator, extended by the identity, satisfies
-    \[
-        U_s h_{s+q}^{(N)}U_s^{-1}
-        =\bigl(h_q^{(W)}\bigr)^{\oplus[d]^{N-W}}.
-    \]
-    Its action is obtained by applying $h$ to the restricted window with
-    outside coordinates fixed. If $0<R\leq W\leq n\leq N$, translation
-    $q\mapsto n-W+q$ also identifies the nonwrapping starts on $W$ sites
-    with the range-$R$ starts contained in $[n-W,n)$.
+    agrees with restriction at $q$ inside the active block. For $R\leq N$,
+    the translate of any operator $h$ on $R$ sites to a window of the ring
+    of $N$ sites acts by applying $h$ to the restricted window with outside
+    coordinates fixed.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:cyclic_active_block_coordinates}
     In active-block coordinates, subwindow replacement changes only the
-    first coordinate. The start bijection has inverse subtraction of
-    $n-W$. Applying the local operator separately on each complementary
-    configuration gives the conjugation identity.
+    first coordinate. The translate of $h$ is $h$ placed on its window,
+    which leaves every coordinate outside the window unchanged.
 \end{proof}
 
 \begin{lemma}[Uniform finite-chain gap from an eventual kernel identity]

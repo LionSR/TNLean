@@ -35,8 +35,7 @@ theorem quasiLocalExpectation_mem_parentGroundStateFace_canonicalParentInteracti
       parentGroundStateFace (LinearMap.toMatrix' (parentInteraction A R)) := by
   apply quasiLocalExpectation_mem_parentGroundStateFace_of_groundSpaceES_le_ker
     A hTP hρ hFix htr
-  rw [toEuclideanLin_toMatrix'_parentInteraction]
-  exact (isParentInteraction_parentInteractionES A R).ker_eq.ge
+  exact (isParentInteraction_toEuclideanLin_toMatrix'_parentInteraction A R).ker_eq.ge
 
 end MPSTensor
 

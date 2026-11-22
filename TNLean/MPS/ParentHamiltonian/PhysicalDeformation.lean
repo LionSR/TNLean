@@ -47,9 +47,6 @@ the periodic chain.
   Hamiltonians correspond one-to-one through \(\Lambda^{\otimes N}\).
 * `MPSTensor.hasUniqueGroundState_chainGroundSpace_rotatePhysical` — uniqueness of the
   ground state transfers along the correspondence.
-**Transitional (#10948).** `isParentInteraction_parentInteractionES`, stated for the
-Euclidean-space operator `parentInteractionES`, is kept until its users are converted; the last
-section states it for the operator of the matrix of the canonical parent interaction.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
@@ -177,15 +174,6 @@ structure IsParentInteraction (A : MPSTensor d D) (L : ℕ)
   isPositive : h.IsPositive
   /-- The kernel of the interaction is the local ground space. -/
   ker_eq : LinearMap.ker h = groundSpaceES A L
-
-/-- The canonical parent interaction, the orthogonal projector onto
-\(\mathcal G_L(A)^\perp\), is a parent interaction in the sense of the source definition. -/
-theorem isParentInteraction_parentInteractionES (A : MPSTensor d D) (L : ℕ) :
-    IsParentInteraction A L (parentInteractionES A L) where
-  isPositive := parentInteractionES_isPositive A L
-  ker_eq := by
-    ext v
-    rw [LinearMap.mem_ker, parentInteractionES_apply_eq_zero_iff]
 
 /-- The deformed interaction
 \(h' = ({\Lambda^{-1}}^\dagger)^{\otimes L}\, h\, (\Lambda^{-1})^{\otimes L}\) of

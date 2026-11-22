@@ -16,10 +16,6 @@ matrix descriptions in the configuration basis and the Euclidean Hilbert
 space. These identities connect the parent-Hamiltonian gap estimates to
 the matrix formulation of local interactions used in arXiv:1010.3732,
 Section II.B (`Papers/1010.3732/paper_v3.tex`, lines 357--390).
-
-**Transitional (#10948).** `parentInteractionES_eq_toEuclideanLin_parentMatrix`, the identity
-between the Euclidean-space operator `parentInteractionES` and the matrix of the local parent
-interaction, is kept until its last users are converted, then deleted with that operator.
 -/
 
 open scoped Matrix.Norms.L2Operator
@@ -27,15 +23,6 @@ open scoped Matrix.Norms.L2Operator
 namespace MPSTensor
 
 variable {d D : ℕ}
-
-/-- The canonical parent interaction is represented by the same matrix in
-the function and Euclidean realizations of the finite configuration space.
-Source: arXiv:1010.3732, Section II.D. -/
-theorem parentInteractionES_eq_toEuclideanLin_parentMatrix
-    (A : MPSTensor d D) (L : ℕ) :
-    parentInteractionES A L = Matrix.toEuclideanLin
-      (LinearMap.toMatrix' (parentInteraction A L)) :=
-  (toEuclideanLin_toMatrix'_parentInteraction A L).symm
 
 /-- A cyclic parent term is the matrix of its local interaction placed on the window of `L`
 consecutive sites starting at `i`. Source: arXiv:1010.3732, Section II.B, the local Hamiltonian
