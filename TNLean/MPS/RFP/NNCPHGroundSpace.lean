@@ -61,9 +61,9 @@ theorem rfp_implies_hasNNCPHGroundSpaces_single
     (hRFP : IsTransferIdempotent A) (hNT : IsNormalTensor A) :
     HasNNCPHGroundSpaces A (fun _ : Fin 1 ↦ A) := by
   have : NeZero D := ⟨hNT.bondDim_ne_zero⟩
-  rw [hasNNCPHGroundSpaces_iff_forall_isNNCPHGroundState_and_groundSpaceSpanning]
+  rw [hasNNCPHGroundSpaces_iff_forall_isNNCPH_and_groundSpaceSpanning]
   exact
-    ⟨rfp_implies_nncph_ground_state A hRFP hNT,
+    ⟨rfp_implies_nncph A hRFP hNT,
       rfp_hasParentHamiltonianGroundSpaceSpanning_single A hRFP hNT⟩
 
 end MPSTensor

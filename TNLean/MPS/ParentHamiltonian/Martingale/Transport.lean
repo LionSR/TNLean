@@ -380,15 +380,6 @@ theorem localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES {N : �
     rw [hker]
     rfl
 
-/-- If a transported local term vanishes, every cyclic restriction to its window
-is an element of the corresponding MPS ground space. -/
-theorem cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero {N : ℕ}
-    (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) (i : Fin N)
-    {v : EuclideanSpace ℂ (Cfg d N)} (hv : localTermES A L i v = 0)
-    (τ : Cfg d N) :
-    cyclicRestrictES (d := d) (Fin.pos i) L i τ v ∈ groundSpaceES A L :=
-  (localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A hLN i v).1 hv τ
-
 /-- At site \(0\) of an \((L+1)\)-site chain, fixing the final site is the
 cyclic length-\(L\) restriction in the canonical Hilbert-space coordinates.
 
@@ -556,61 +547,6 @@ theorem localTermES_isSymmetricProjection {N : ℕ} (A : MPSTensor d D) (L : ℕ
     (i : Fin N) : (localTermES A L i).IsSymmetricProjection :=
   ⟨localTermES_isIdempotentElem A L i, (localTermES_isPositive A L i).isSymmetric⟩
 
-/-- Transported local terms on site-disjoint cyclic windows commute pointwise.
-
-If \(L ≤ N\) and no site belongs to both cyclic windows based at \(i\) and \(j\), then
-applying the two transported local ES terms in either order gives the same vector.
-This is the non-overlap commutation input for the finite-overlap martingale
-reduction. -/
-theorem localTermES_commute_of_cyclic_windows_disjoint {N : ℕ} (A : MPSTensor d D)
-    {L : ℕ} (hLN : L ≤ N) {i j : Fin N} (hij : CyclicWindowsDisjoint L i j)
-    (v : EuclideanSpace ℂ (Cfg d N)) :
-    localTermES A L i (localTermES A L j v) =
-      localTermES A L j (localTermES A L i v) := by
-  ext σ
-  let P := parentInteractionES A L
-  let F : Cfg d L → Cfg d L → ℂ := fun α β =>
-    v (replaceWindow L hLN j (replaceWindow L hLN i σ α) β)
-  have hleft :
-      cyclicRestrictES (d := d) (Fin.pos i) L i σ (localTermES A L j v) =
-        WithLp.toLp 2 (fun α => P (WithLp.toLp 2 (fun β => F α β))
-          (extractWindow L j σ)) := by
-    ext α
-    rw [cyclicRestrictES_apply]
-    rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos i) L hLN]
-    rw [localTermES_apply A L j hLN v (replaceWindow L hLN i σ α)]
-    rw [extractWindow_replaceWindow_of_cyclic_windows_disjoint (d := d) hLN hij.symm σ α]
-    have hrestrict :
-        cyclicRestrictES (d := d) (Fin.pos j) L j (replaceWindow L hLN i σ α) v =
-          WithLp.toLp 2 (fun β => F α β) := by
-      ext β
-      rw [cyclicRestrictES_apply]
-      rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos j) L hLN]
-    rw [hrestrict]
-  have hright :
-      cyclicRestrictES (d := d) (Fin.pos j) L j σ (localTermES A L i v) =
-        WithLp.toLp 2 (fun β => P (WithLp.toLp 2 (fun α => F α β))
-          (extractWindow L i σ)) := by
-    ext β
-    rw [cyclicRestrictES_apply]
-    rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos j) L hLN]
-    rw [localTermES_apply A L i hLN v (replaceWindow L hLN j σ β)]
-    rw [extractWindow_replaceWindow_of_cyclic_windows_disjoint (d := d) hLN hij σ β]
-    have hrestrict :
-        cyclicRestrictES (d := d) (Fin.pos i) L i (replaceWindow L hLN j σ β) v =
-          WithLp.toLp 2 (fun α => F α β) := by
-      ext α
-      rw [cyclicRestrictES_apply]
-      rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos i) L hLN]
-      simp only [F]
-      rw [← replaceWindow_commute_of_cyclic_windows_disjoint (d := d) hLN hij σ α β]
-    rw [hrestrict]
-  rw [localTermES_apply A L i hLN (localTermES A L j v) σ]
-  rw [localTermES_apply A L j hLN (localTermES A L i v) σ]
-  rw [hleft, hright]
-  simpa [P] using separateLinearMap_apply_commute P P F (extractWindow L i σ)
-    (extractWindow L j σ)
-
 /-- The Euclidean-space parent Hamiltonian is positive because it is a finite
 sum of positive Euclidean-space local terms. -/
 theorem parentHamiltonianES_isPositive (A : MPSTensor d D) (L N : ℕ) :
@@ -639,11 +575,6 @@ theorem parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES
     rw [LinearMap.mem_ker]
     have hv' := congrArg e hv
     simpa [parentHamiltonianES, e] using hv'
-
-@[simp] theorem mem_parentHamiltonianGroundSpaceES_iff
-    (A : MPSTensor d D) (L N : ℕ) (v : EuclideanSpace ℂ (Cfg d N)) :
-    v ∈ parentHamiltonianGroundSpaceES A L N ↔ parentHamiltonianES A L N v = 0 := by
-  rw [parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES, LinearMap.mem_ker]
 
 /-! ### The local parent interaction and the parent interaction on the ring
 
@@ -919,6 +850,31 @@ theorem parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction
     LinearMap.mem_ker, Submodule.mem_map_equiv, LinearEquiv.symm_symm, LinearMap.mem_ker]
   change _ ↔ WithLp.toLp 2 _ = 0
   rw [WithLp.toLp_eq_zero]
+  rfl
+
+/-- **The parent interaction on the ring is frustration free** whenever the periodic MPS vector
+on \(N\) sites is nonzero: its terms are positive semidefinite and annihilate that vector. This
+is the statement that every MPS is a ground state of a frustration-free parent Hamiltonian,
+[PGVWC07] (quant-ph/0608197), `MPSarchive.tex`, lines 311--330, and arXiv:2011.12127,
+`TN-Review-main.tex`, line 537. -/
+theorem isFrustrationFree_parentRingInteraction (A : MPSTensor d D) (L N : ℕ) [NeZero N]
+    (hA : (mpv A : NSiteSpace d N) ≠ 0) : (parentRingInteraction A L N).IsFrustrationFree :=
+  ManyBody.Interaction.isFrustrationFree_of_zeroSpace_ne_bot
+    (fun i ↦ posSemidef_parentRingInteraction_term A L i)
+    ((Submodule.ne_bot_iff _).mpr
+      ⟨_, toLp_mpv_mem_zeroSpace_parentRingInteraction A L N, by simpa using hA⟩)
+
+/-- The ground space at energy \(0\) of the Hamiltonian of the parent interaction on the ring
+is the kernel of the parent Hamiltonian, read in the Euclidean space. -/
+theorem groundSpace_hamiltonian_parentRingInteraction_eq_map_ker
+    (A : MPSTensor d D) (L N : ℕ) [NeZero N] :
+    ManyBody.groundSpace (parentRingInteraction A L N).hamiltonian 0 =
+      (LinearMap.ker (parentHamiltonian A L N)).map
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
+  ext v
+  rw [ManyBody.mem_groundSpace_iff_mulVec, parentHamiltonian_eq_toLin'_hamiltonian A L,
+    Submodule.mem_map_equiv, LinearEquiv.symm_symm, LinearMap.mem_ker, Complex.ofReal_zero,
+    zero_smul]
   rfl
 
 end MPSTensor

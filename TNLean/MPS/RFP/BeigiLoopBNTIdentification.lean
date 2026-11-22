@@ -357,11 +357,9 @@ private theorem BeigiSectorGraphData.mpvState_mem_span_normalizedMinimalLoopTens
 /-- The periodic MPV state of the NNCPH tensor eventually belongs to the span of the normalized
 minimal loop MPV states. -/
 private theorem BeigiSectorGraphData.eventually_mpvState_mem_span_normalizedMinimalLoopTensor
-    {r : ℕ} {dim : Fin r → ℕ} {A : (j : Fin r) → MPSTensor d (dim j)}
     {B : MPSTensor d D} (F : BeigiSectorGraphData B)
     (hparent : ∃ c N₀ : ℕ, ∀ N : ℕ, N₀ < N →
-      Module.finrank ℂ (parentHamiltonianGroundSpaceES B 2 N) = c)
-    (hNNCPH : HasNNCPHGroundSpaces B A) :
+      Module.finrank ℂ (parentHamiltonianGroundSpaceES B 2 N) = c) :
     ∀ᶠ N in Filter.atTop,
       mpvState (d := d) B N ∈
         Submodule.span ℂ (Set.range fun l : Loop F.edgeWeight =>
@@ -376,7 +374,7 @@ private theorem BeigiSectorGraphData.eventually_mpvState_mem_span_normalizedMini
     rw [LinearMap.sum_apply]
     apply Finset.sum_eq_zero
     intro i _hi
-    exact (hNNCPH N hTwo).isFrustrationFree i
+    exact localTerm_annihilates_mpv B 2 N (by omega) i
   exact F.mpvState_mem_span_normalizedMinimalLoopTensor hparent hTwo hGround
 
 /-- Each BNT component in an all-chain NNCPH ground-space family eventually
@@ -472,7 +470,7 @@ theorem nncph_implies_rfp
     F.normalizedMinimalLoopTensor_isNormalTensor
   have hparent :=
     eventually_parentHamiltonianGroundSpaceES_finrank_eq_of_isBNT hBNT hNNCPH
-  have hMem := F.eventually_mpvState_mem_span_normalizedMinimalLoopTensor hparent hNNCPH
+  have hMem := F.eventually_mpvState_mem_span_normalizedMinimalLoopTensor hparent
   have hCross : ∀ l m : Loop F.edgeWeight, l ≠ m →
       Filter.Tendsto
         (fun N => mpvOverlap (d := d) (F.normalizedMinimalLoopTensor l)

@@ -111,19 +111,23 @@ theorem mpv_mem_chainGroundSpace (A : MPSTensor d D) (L N : ℕ)
   simp only [Matrix.mul_one] at h
   exact h
 
-/-- A vector in the periodic chain ground space is annihilated by every local
-parent-Hamiltonian term.
+/-- A vector in the periodic chain ground space lies in the zero space of the parent
+interaction on the ring: every translated parent interaction annihilates it.
 
 This is the local constraint direction in the parent-Hamiltonian construction:
 membership in every cyclic \(L\)-site ground-space window implies the
 frustration-free equations for the translated parent interactions. -/
-theorem isFrustrationFree_of_mem_chainGroundSpace (A : MPSTensor d D)
+theorem toLp_mem_zeroSpace_parentRingInteraction_of_mem_chainGroundSpace (A : MPSTensor d D)
     {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N)
     {ψ : NSiteSpace d N} (hψ : ψ ∈ chainGroundSpace A L N) :
-    IsFrustrationFree A L N ψ := by
+    haveI : NeZero N := ⟨by omega⟩;
+    WithLp.toLp 2 ψ ∈ (parentRingInteraction A L N).zeroSpace := by
+  have : NeZero N := ⟨by omega⟩
   rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩] at hψ
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
+  rw [ManyBody.Interaction.mem_zeroSpace_iff]
   intro i
+  change localTerm A L N i ψ = 0
   ext σ
   rw [localTerm_apply_of_le A L N hLN i]
   have hrestrict :

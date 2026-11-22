@@ -77,13 +77,15 @@ theorem bntMPSVectorSpan_le_ker_parentHamiltonian_toTensorFromBlocks
   rw [bntMPSVectorSpan]
   refine Submodule.span_le.mpr ?_
   rintro _ ⟨j, rfl⟩
+  have : NeZero N := ⟨by omega⟩
   refine LinearMap.mem_ker.mpr ?_
   rw [parentHamiltonian_eq_sum_localTerm, LinearMap.sum_apply]
   refine Finset.sum_eq_zero fun i _ => ?_
-  exact isFrustrationFree_of_mem_chainGroundSpace
-    (toTensorFromBlocks (d := d) (μ := μ) A) hN hLN
-    ((chainGroundSpace_block_le_toTensorFromBlocks μ A (hμ j) hN hLN)
-      (mpv_mem_chainGroundSpace (A j) L N hN hLN)) i
+  exact ManyBody.Interaction.mem_zeroSpace_iff.mp
+    (toLp_mem_zeroSpace_parentRingInteraction_of_mem_chainGroundSpace
+      (toTensorFromBlocks (d := d) (μ := μ) A) hN hLN
+      ((chainGroundSpace_block_le_toTensorFromBlocks μ A (hμ j) hN hLN)
+        (mpv_mem_chainGroundSpace (A j) L N hN hLN))) i
 
 /-- Boundary-condition equality for the block-diagonal periodic chain.
 

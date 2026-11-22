@@ -110,27 +110,6 @@ theorem rfp_implies_nncph_of_leftCanonical
     IsNNCPH A N :=
   (AppendixBStructuralData.ofRFP A hNT hRFP hLeft).isNNCPH hN
 
-/-- Ground-vector form of `rfp_implies_nncph_of_leftCanonical`.
-
-The translated parent terms commute and annihilate the periodic MPS vector.
-The source ground-space spanning clause remains separate.
-
-**Scope restriction (ground vector):** The source implication includes the
-ground-space spanning equation and is stated in canonical-form scope.  This
-theorem proves the commutation and zero-energy equations under an explicit
-left-canonical hypothesis.  The two restrictions are recorded in
-`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
-
-Source: arXiv:1606.00608, Definition 3.9, source lines 517--524, and
-Theorem 3.10, source lines 534--540. -/
-theorem rfp_implies_nncph_ground_state_of_leftCanonical
-    (A : MPSTensor d D) [NeZero D]
-    (hRFP : IsTransferIdempotent A) (hNT : Kraus.IsNormal A) (hLeft : IsLeftCanonical A)
-    (N : ℕ) (hN : 2 < N) :
-    IsNNCPHGroundState A N :=
-  (rfp_implies_nncph_of_leftCanonical A hRFP hNT hLeft N hN).isNNCPHGroundState
-    (by omega)
-
 /-- A normal renormalization fixed-point tensor has commuting length-two parent
 interactions on every periodic chain of length (N>2).
 
@@ -162,25 +141,5 @@ theorem rfp_implies_nncph (A : MPSTensor d D)
   have hNN := rfp_implies_nncph_of_leftCanonical
     (Kraus.tpGauge (d := d) (D := D) A σ) hRFP' hNormal' hLeft N hN
   exact hGauge.symm.isNNCPH hNN
-
-/-- Ground-vector form of `rfp_implies_nncph`.
-
-Besides the proved commutation equations, the periodic MPS vector is annihilated
-by every two-site parent interaction.  The source all-chain ground-space
-spanning equation remains separate.
-
-Source: arXiv:1606.00608, Definition 3.9, lines 517--524, and Theorem 3.10,
-lines 534--540.
-
-**Scope restriction (single normal tensor and ground vector):** The source
-theorem is stated for canonical-form tensors and includes the all-chain
-ground-space spanning equation. This theorem treats one CPSV normal tensor and
-proves only commutation and annihilation of its periodic MPS vector. Documented
-in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
-theorem rfp_implies_nncph_ground_state (A : MPSTensor d D)
-    (hRFP : IsTransferIdempotent A) (hNT : IsNormalTensor A)
-    (N : ℕ) (hN : 2 < N) :
-    IsNNCPHGroundState A N :=
-  (rfp_implies_nncph A hRFP hNT N hN).isNNCPHGroundState (by omega)
 
 end MPSTensor

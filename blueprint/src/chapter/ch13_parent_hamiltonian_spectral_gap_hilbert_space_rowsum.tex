@@ -35,15 +35,6 @@
     identification.
 \end{proof}
 
-\begin{lemma}[Membership criterion under the canonical $\ell^2$ identification]
-    \label{lem:mem_parent_ground_space_es}
-    \lean{MPSTensor.mem_parentHamiltonianGroundSpaceES_iff}
-    \leanok
-    \uses{thm:parent_ground_space_es_kernel}
-    A vector belongs to $\mathcal G_{N,L}^{\mathrm{ES}}(A)$ exactly when the
-    parent Hamiltonian annihilates it.
-\end{lemma}
-
 \begin{remark}[Local projectors under the canonical $\ell^2$ identification]
     \label{rem:euclidean_local_projector_ingredients}
     \lean{MPSTensor.parentInteractionES}
@@ -170,7 +161,7 @@
 \begin{lemma}[Local-term kernel via cyclic restrictions]
     \label{lem:local_term_es_kernel_restrictions}
     \lean{MPSTensor.localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES}
-    \lean{MPSTensor.cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero}
+    \lean{MPSTensor.cyclicRestrictES_mem_groundSpaceES_of_parentRingInteraction_term_eq_zero}
     \leanok
     \uses{lem:parent_interaction_es_kernel, rem:euclidean_local_projector_ingredients}
     For $L\le N$, a Hilbert-space local term $h_{i,\mathrm{ES}}$ annihilates a
@@ -316,28 +307,18 @@
     $H_N(A,L)\psi=\sum_i h_i(A,L)\psi=0$.
 \end{proof}
 
-\begin{definition}[Hilbert-space cyclic constraint space]
-    \label{def:chain_ground_space_es}
-    \lean{MPSTensor.chainGroundSpaceES}
-    \leanok
-    \uses{def:chain_ground_space}
-    The Hilbert-space cyclic constraint space is the image of
-    $G_L^{(N)}(A)$ by the canonical $\ell^2$ identification:
-    $G_{L,\mathrm{ES}}^{(N)}(A)=e_N^{-1}G_L^{(N)}(A)$.
-\end{definition}
-
 \begin{lemma}[The finite-volume kernel is the cyclic constraint space]
     \label{thm:parent_hamiltonian_kernel_eq_chain_ground_space}
     \lean{MPSTensor.ker_parentHamiltonian_eq_chainGroundSpace}
-    \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_chainGroundSpaceES}
+    \lean{MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_chainGroundSpace}
+    \lean{MPSTensor.zeroSpace_parentRingInteraction_eq_map_chainGroundSpace}
     \leanok
-    \uses{def:parent_hamiltonian, def:parent_hamiltonian_es, def:chain_ground_space, thm:parent_hamiltonian_kernel_le_chain_ground_space, lem:chain_ground_space_le_parent_hamiltonian_kernel, def:chain_ground_space_es}
+    \uses{def:parent_hamiltonian, def:parent_hamiltonian_es, def:chain_ground_space, thm:parent_hamiltonian_kernel_le_chain_ground_space, lem:chain_ground_space_le_parent_hamiltonian_kernel}
     Assume $N>0$ and $L\le N$. Then
     $\ker H_N(A,L)=G_L^{(N)}(A)$. Equivalently, after the canonical
-    Hilbert-space identification,
-    $\mathcal K_N^{\mathrm{ES}}(A,L)=e_N^{-1}G_L^{(N)}(A)$, where
-    $\mathcal K_N^{\mathrm{ES}}(A,L)$ is the zero-energy space of
-    $H_{N,L}^{\mathrm{ES}}(A)$.
+    Hilbert-space identification $e_N$, the ground space at energy $0$ of the
+    parent Hamiltonian on the ring is $e_N^{-1}G_L^{(N)}(A)$, and so is the
+    space of vectors annihilated by every translated parent interaction.
 \end{lemma}
 
 \begin{proof}
@@ -384,7 +365,7 @@
     \lean{MPSTensor.CyclicWindowsDisjoint}
     \lean{MPSTensor.CyclicWindowsDisjoint.symm}
     \lean{MPSTensor.localTerm_commute_of_cyclic_windows_disjoint}
-    \lean{MPSTensor.localTermES_commute_of_cyclic_windows_disjoint}
+    \lean{MPSTensor.commute_parentRingInteraction_term_of_cyclic_windows_disjoint}
     \lean{MPSTensor.re_inner_parentRingInteraction_term_nonneg_of_cyclic_windows_disjoint}
     \leanok
     \uses{lem:transported_es_local_projections, rem:projection_geometry_rowsum_identities}

@@ -56,12 +56,12 @@ translated parent interaction vanish, and hence gives zero total energy. -/
 theorem chainGroundSpace_le_ker_parentHamiltonian
     (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
     chainGroundSpace A L N ≤ LinearMap.ker (parentHamiltonian A L N) := by
+  have : NeZero N := ⟨by omega⟩
   intro ψ hψ
-  rw [LinearMap.mem_ker]
-  have hff : IsFrustrationFree A L N ψ :=
-    isFrustrationFree_of_mem_chainGroundSpace A hN hLN hψ
-  rw [parentHamiltonian_eq_sum_localTerm, LinearMap.sum_apply]
-  exact Finset.sum_eq_zero fun i _ => hff i
+  rw [LinearMap.mem_ker, parentHamiltonian_eq_toLin'_hamiltonian A L, Matrix.toLin'_apply]
+  exact (ManyBody.Interaction.mem_zeroSpace_iff_hamiltonian_mulVec_eq_zero
+    fun i ↦ posSemidef_parentRingInteraction_term A L i).mp
+    (toLp_mem_zeroSpace_parentRingInteraction_of_mem_chainGroundSpace A hN hLN hψ)
 
 /-- In the nondegenerate range, the finite periodic parent-Hamiltonian kernel is
 exactly the cyclic chain ground space. -/
@@ -71,18 +71,33 @@ theorem ker_parentHamiltonian_eq_chainGroundSpace
   le_antisymm (ker_parentHamiltonian_le_chainGroundSpace A hN hLN)
     (chainGroundSpace_le_ker_parentHamiltonian A hN hLN)
 
-/-- The cyclic chain ground space transported to the Euclidean-space model. -/
-noncomputable def chainGroundSpaceES (A : MPSTensor d D) (L N : ℕ) :
-    Submodule ℂ (EuclideanSpace ℂ (Cfg d N)) :=
-  (chainGroundSpace A L N).map
-    (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap
-
-/-- In the nondegenerate range, the Euclidean-space finite parent-Hamiltonian
-ground space is the transported cyclic chain ground space. -/
-theorem parentHamiltonianGroundSpaceES_eq_chainGroundSpaceES
+/-- **The ground space of the parent Hamiltonian on the ring.** In the nondegenerate range
+\(0 < N\), \(L \le N\), the ground space at energy \(0\) of the Hamiltonian of the parent
+interaction on the ring is the cyclic chain ground space, read in the Euclidean space. -/
+theorem groundSpace_hamiltonian_parentRingInteraction_eq_map_chainGroundSpace
     (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
-    parentHamiltonianGroundSpaceES A L N = chainGroundSpaceES A L N := by
-  simp [parentHamiltonianGroundSpaceES, chainGroundSpaceES,
+    haveI : NeZero N := ⟨by omega⟩;
+    ManyBody.groundSpace (parentRingInteraction A L N).hamiltonian 0 =
+      (chainGroundSpace A L N).map
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
+  have : NeZero N := ⟨by omega⟩
+  rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
     ker_parentHamiltonian_eq_chainGroundSpace A hN hLN]
+
+/-- **The zero space of the parent interaction on the ring.** In the nondegenerate range
+\(0 < N\), \(L \le N\), the vectors annihilated by every translated parent interaction are
+those of the cyclic chain ground space, read in the Euclidean space: the frustration-free
+ground space is the intersection of the local ground-space constraints. [PGVWC07]
+(quant-ph/0608197), Section 3.3. -/
+theorem zeroSpace_parentRingInteraction_eq_map_chainGroundSpace
+    (A : MPSTensor d D) {L N : ℕ} (hN : 0 < N) (hLN : L ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
+    (parentRingInteraction A L N).zeroSpace =
+      (chainGroundSpace A L N).map
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap := by
+  have : NeZero N := ⟨by omega⟩
+  rw [ManyBody.Interaction.zeroSpace_eq_groundSpace
+    fun i ↦ posSemidef_parentRingInteraction_term A L i]
+  exact groundSpace_hamiltonian_parentRingInteraction_eq_map_chainGroundSpace A hN hLN
 
 end MPSTensor

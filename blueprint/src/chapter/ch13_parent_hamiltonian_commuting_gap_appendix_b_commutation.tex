@@ -346,18 +346,16 @@
     adjacent pair on the periodic chain.
 \end{proof}
 
-\begin{lemma}[Left-canonical RFP commutation and zero energy]
+\begin{lemma}[Left-canonical RFP commutation]
     \label{thm:left_canonical_rfp_chain_commutation}
     \lean{MPSTensor.AppendixBStructuralData.isNNCPH}
     \lean{MPSTensor.rfp_implies_nncph_of_leftCanonical}
-    \lean{MPSTensor.rfp_implies_nncph_ground_state_of_leftCanonical}
     \leanok
     \uses{thm:appendixB_adjacent_chain_commutation, lem:nncph_from_adjacent_two_site_commutation}
     A normal left-canonical renormalization fixed-point tensor of nonzero
     virtual dimension has pairwise
     commuting length-two parent interactions on every periodic chain of length
-    $N>2$, and its periodic matrix product vector is annihilated by every such
-    interaction. The removal of the left-canonical hypothesis and the
+    $N>2$. The removal of the left-canonical hypothesis and the
     ground-space spanning equation in
     \cite[Definition~3.9]{Cirac2016MPDO_arXiv} remain separate.
 \end{lemma}
@@ -368,8 +366,7 @@
     structural theorem yields a datum whose adjacent translated parent
     interactions commute, and
     Lemma~\ref{lem:nncph_from_adjacent_two_site_commutation} upgrades this to
-    pairwise commutation. The standard frustration-free identity then shows
-    that each interaction annihilates the periodic matrix product vector.
+    pairwise commutation.
 \end{proof}
 
 \begin{lemma}[Appendix B overlapping condition from the lifted commutator]

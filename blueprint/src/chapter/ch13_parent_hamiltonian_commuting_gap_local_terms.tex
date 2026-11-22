@@ -365,31 +365,6 @@
     overlap-reduction lemma gives the remaining disjoint pairs by locality.
 \end{proof}
 
-\begin{definition}[Commutation and zero-energy equations for nearest-neighbor local terms]%
-    \label{def:is_nncph_ground_state}
-    \lean{MPSTensor.IsNNCPHGroundState}
-    \leanok
-    \uses{def:is_nncph, def:is_frustration_free}
-    The nearest-neighbor commuting ground-state condition consists of the
-    commutation equation and the zero-energy equation for the nearest-neighbor
-    local terms:
-    \begin{align}
-        h_i h_j        & =h_j h_i,
-        \notag                     \\
-        h_i V^{(N)}(A) & =0.
-        \notag
-    \end{align}
-    This is the zero-energy part of the condition appearing in
-    \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}: the MPS vector has zero
-    energy for the translated two-site local terms, and those terms commute.
-    The missing source assertion is that the whole parent-Hamiltonian ground
-    space is spanned by the corresponding periodic MPS vectors from the BNT
-    components, as recorded in
-    Definition~\ref{def:parent_hamiltonian_ground_space_spanning}.
-    % Scope restriction recorded in
-    % docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex.
-\end{definition}
-
 \begin{definition}[Parent-Hamiltonian ground-space spanning condition]%
     \label{def:parent_hamiltonian_ground_space_spanning}
     \lean{MPSTensor.HasParentHamiltonianGroundSpaceSpanning}
@@ -409,22 +384,22 @@
     \label{def:has_nncph_ground_space}
     \lean{MPSTensor.HasNNCPHGroundSpace}
     \leanok
-    \uses{def:is_nncph_ground_state, def:parent_hamiltonian_ground_space_spanning}
+    \uses{def:is_nncph, def:parent_hamiltonian_ground_space_spanning}
     For a fixed chain length $N$, the nearest-neighbor commuting
     parent-Hamiltonian ground-space condition is the conjunction of the
-    nearest-neighbor commutation equation, the zero-energy equation for the MPS
-    vector, and the ground-space spanning equation:
+    nearest-neighbor commutation equation and the ground-space spanning
+    equation:
     \begin{align}
-        h_i h_j       & =h_j h_i,
-        \notag                    \\
-        h_iV^{(N)}(B) & =0,
-        \notag                    \\
+        h_i h_j & =h_j h_i,
+        \notag              \\
         \ker H_2^{(N)}(B)
-                      & =
+                & =
         \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
         \notag
     \end{align}
-    The source statement in
+    The zero-energy equation $h_iV^{(N)}(B)=0$ of the source holds for every
+    tensor by Lemma~\ref{lem:parent_hamiltonian_ff} and is not part of the
+    condition. The source statement in
     \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv} quantifies this condition
     over all $N>2$.
 \end{definition}
@@ -438,12 +413,10 @@
     \cite[Theorem~3.10(iii)]{Cirac2016MPDO_arXiv}, the fixed-chain condition
     of Definition~\ref{def:has_nncph_ground_space} holds for every $N>2$:
     \begin{align}
-        h_i h_j       & =h_j h_i,
-        \notag                    \\
-        h_iV^{(N)}(B) & =0,
-        \notag                    \\
+        h_i h_j & =h_j h_i,
+        \notag              \\
         \ker H_2^{(N)}(B)
-                      & =
+                & =
         \spn\{V^{(N)}(A_j):j=1,\ldots,g\}.
         \notag
     \end{align}
@@ -454,45 +427,33 @@
 \begin{remark}[Elementary consequences of the commuting definition]
     \label{rem:nncph_ground_spaces_decomposition}
     \lean{MPSTensor.IsNNCPH.isCommutingParentHam}
-    \lean{MPSTensor.IsNNCPHGroundState.isNNCPH}
-    \lean{MPSTensor.IsNNCPHGroundState.isFrustrationFree}
-    \lean{MPSTensor.IsNNCPH.isNNCPHGroundState}
-    \lean{MPSTensor.HasNNCPHGroundSpace.isNNCPHGroundState}
     \lean{MPSTensor.HasNNCPHGroundSpace.isNNCPH}
-    \lean{MPSTensor.HasNNCPHGroundSpace.isFrustrationFree}
     \lean{MPSTensor.HasNNCPHGroundSpace.groundSpaceSpanning}
     \lean{MPSTensor.HasNNCPHGroundSpace.hasParentHamiltonianGroundSpaceSpanning}
     \lean{MPSTensor.HasNNCPHGroundSpaces.hasNNCPHGroundSpace}
     \lean{MPSTensor.HasNNCPHGroundSpaces.hasParentHamiltonianGroundSpaceSpanning}
-    \lean{MPSTensor.hasNNCPHGroundSpaces_iff_forall_isNNCPHGroundState_and_groundSpaceSpanning}
     \lean{MPSTensor.hasNNCPHGroundSpaces_iff_forall_isNNCPH_and_groundSpaceSpanning}
     \lean{MPSTensor.IsCommutingParentHam.symm}
     \lean{MPSTensor.IsCommutingParentHam.ham_comm_localTerm}
     \leanok
     \uses{lem:parent_hamiltonian_ff, def:has_nncph_ground_space}
     The nearest-neighbor condition is the length-$2$ specialization of the
-    general commuting condition. The ground-vector condition combines this
-    commuting equation with the frustration-free equation for $V^{(N)}(A)$.
-    For $N\ge2$, Lemma~\ref{lem:parent_hamiltonian_ff} with $L=2$ gives
-    $h_iV^{(N)}(A)=0$ for every site $i$. The fixed-chain ground-space
-    condition also contains
+    general commuting condition. By Lemma~\ref{lem:parent_hamiltonian_ff}
+    with $L=2$, the zero-energy equation $h_iV^{(N)}(A)=0$ holds for every
+    site $i$ and every tensor, so it is not a separate condition. The
+    fixed-chain ground-space condition contains the commutation equation and
     $\ker H_2^{(N)}(B) = \spn\{V^{(N)}(A_j):j=1,\ldots,g\}$,
     and quantifying this condition over all $N>2$ gives the nearest-neighbor
     case of the spanning condition above.
     Conversely, the all-chain condition in
     Definition~\ref{def:has_nncph_ground_spaces} is the conjunction of the
-    all-chain ground-vector equations and the nearest-neighbor instance of the
-    spanning condition above.
-    Since the displayed zero-energy equation follows from the
-    parent-Hamiltonian construction for $N>2$, independently of the
-    commutation and spanning equations, this is equivalently
+    all-chain commutation equations and the nearest-neighbor instance of the
+    spanning condition above:
     \begin{align}
          & \forall N>2,\quad
         \left[\begin{array}{l}
                       \forall\, i,j,\quad
                       h_i^{(N)}h_j^{(N)}=h_j^{(N)}h_i^{(N)}, \\
-                      \forall\, i,\quad
-                      h_i^{(N)}V^{(N)}(B)=0,                 \\
                       \ker H_2^{(N)}(B)
                       =
                       \spn\{V^{(N)}(A_j):j=1,\ldots,g\}
@@ -514,7 +475,7 @@
 
 \begin{lemma}[Chain ground-space vectors are frustration-free]
     \label{thm:chain_ground_space_implies_frustration_free}
-    \lean{MPSTensor.isFrustrationFree_of_mem_chainGroundSpace}
+    \lean{MPSTensor.toLp_mem_zeroSpace_parentRingInteraction_of_mem_chainGroundSpace}
     \leanok
     \uses{def:chain_ground_space, def:is_frustration_free}
     Assume $N>0$ and $L\le N$. Let $\psi$ be a vector in the periodic chain

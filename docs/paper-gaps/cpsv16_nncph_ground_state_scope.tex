@@ -80,29 +80,28 @@ nearest-neighbor commuting parent predicate records\footnote{Formal predicate:
         \qquad i,j\in\{0,\ldots,N-1\}.
     \label{eq:cpsv16_nncph_ground_state_scope_formal_commutation}
 \end{align}
-The ground-state predicate additionally records the frustration-free
-ground-vector equations\footnote{Formal predicate:
-\leanid{MPSTensor.IsNNCPHGroundState}.}
+The source additionally lists the frustration-free ground-vector equations
 \begin{align}
     h_i V^{(N)}(A)
         &=0,
         \qquad i\in\{0,\ldots,N-1\}.
     \label{eq:cpsv16_nncph_ground_state_scope_ground_vector}
 \end{align}
-It therefore captures the annihilation clause of
-Theorem~\cpsvref{thm:main-MPS}(iii) of Ref.~\cite{Cirac2016MPDO_arXiv} for the
-canonical projector parent interaction used in the formal development.
+For the canonical projector parent interaction used in the formal development
+these equations hold for every tensor $A$ and every $N$:\footnote{Formal
+declaration: \leanid{MPSTensor.toLp_mpv_mem_zeroSpace_parentRingInteraction}.}
+they are the annihilation clause of
+Theorem~\cpsvref{thm:main-MPS}(iii) of Ref.~\cite{Cirac2016MPDO_arXiv}, and no
+separate predicate records them.
 
 For $N>L$, the source definition of a parent Hamiltonian also requires the
 periodic MPS vectors to span the entire ground-state subspace. The formal
 development names this condition parent-Hamiltonian ground-space
 spanning;\footnote{Formal declaration:
 \leanid{MPSTensor.HasParentHamiltonianGroundSpaceSpanning}.} it is not part of
-the ground-vector condition.\footnote{Formal predicate:
-\leanid{MPSTensor.IsNNCPHGroundState}.} The fixed-chain ground-space condition
+the commutation condition. The fixed-chain ground-space condition
 combines\footnote{Formal predicate: \leanid{MPSTensor.HasNNCPHGroundSpace}.}
-(\ref{eq:cpsv16_nncph_ground_state_scope_formal_commutation}),
-(\ref{eq:cpsv16_nncph_ground_state_scope_ground_vector}), and
+(\ref{eq:cpsv16_nncph_ground_state_scope_formal_commutation}) and
 \begin{align}
     \ker H_2^{(N)}(B)
         &=
@@ -116,9 +115,9 @@ fixed-chain condition over $N>2$. This predicate names a condition rather than
 establishing (\ref{eq:cpsv16_nncph_ground_state_scope_ground_space_spanning})
 for a concrete canonical-form tensor. The separation is formalized
 directly:\footnote{Formal equivalence:
-\leanid{MPSTensor.hasNNCPHGroundSpaces_iff_forall_isNNCPHGroundState_and_groundSpaceSpanning}.}
+\leanid{MPSTensor.hasNNCPHGroundSpaces_iff_forall_isNNCPH_and_groundSpaceSpanning}.}
 the all-chain source condition consists precisely of the all-chain
-ground-vector condition paired with the nearest-neighbor ground-space spanning
+commutation condition paired with the nearest-neighbor ground-space spanning
 clause.
 
 The forward inclusion in
@@ -135,7 +134,7 @@ annihilates every component vector $V^{(N)}(A_j)$, then
 \footnote{Formal declarations:
 \leanid{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_annihilates}
 and
-\leanid{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_frustrationFree}.}
+\leanid{MPSTensor.bntMPSVectorSpan_le_ker_parentHamiltonian_of_forall_mem_zeroSpace}.}
 For a block-diagonal tensor with nonzero weights, the spanning equality reduces
 to the reverse containment via
 (\ref{eq:cpsv16_nncph_ground_state_scope_easy_kernel_inclusion}).\footnote{Formal
@@ -276,17 +275,15 @@ Constructing the source projectors and identifying their transported actions
 with the hatted maps remains open; this local coefficient-space result is not
 used in the chain commutator proof.
 
-The forward commutation and zero-energy statements are proved for normal
-left-canonical RFP tensors.\footnote{Formal declarations:
-\leanid{MPSTensor.rfp_implies_nncph_of_leftCanonical} and
-\leanid{MPSTensor.rfp_implies_nncph_ground_state_of_leftCanonical}.} For a
+The forward commutation statement is proved for normal
+left-canonical RFP tensors.\footnote{Formal declaration:
+\leanid{MPSTensor.rfp_implies_nncph_of_leftCanonical}.} For a
 CPSV normal tensor, spectral-radius-one normalization supplies a pure
 trace-preserving gauge. Gauge invariance of the physical RFP relation and of
 the canonical parent interactions transports the result
-unconditionally,\footnote{Formal declarations:
-\leanid{MPSTensor.rfp_implies_nncph} and
-\leanid{MPSTensor.rfp_implies_nncph_ground_state}.} proving commutation and
-zero energy for a single CPSV normal tensor without an external axiom.
+unconditionally,\footnote{Formal declaration:
+\leanid{MPSTensor.rfp_implies_nncph}.} proving commutation
+for a single CPSV normal tensor without an external axiom.
 
 For the same tensor, transfer idempotence and normality imply one-site
 injectivity. The injective periodic-chain theorem identifies the kernel of the

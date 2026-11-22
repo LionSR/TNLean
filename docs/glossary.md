@@ -1477,32 +1477,41 @@ The following notions use different transfer objects and are not interchangeable
 
 ## Parent Hamiltonians on the ring
 
-### `MPSTensor.IsFrustrationFree`
+### `MPSTensor.parentRingInteraction`
 
-- **Declaration:** `MPSTensor.IsFrustrationFree A L N ψ : Prop`, for a tensor
-  `A`, a window length `L`, a ring of `N` sites and `ψ : NSiteSpace d N`: every
-  translated local term `MPSTensor.localTerm A L N i` annihilates `ψ`.
-- **Defined in:** `TNLean/MPS/ParentHamiltonian/Defs.lean`.
-- **Meaning:** the local terms and the parent Hamiltonian are the
-  terms and the Hamiltonian of one interaction,
-  `MPSTensor.parentRingInteraction A L N`, the translation-invariant interaction
+- **Declaration:** `MPSTensor.parentRingInteraction A L N`, for a tensor `A`, a
+  window length `L` and a ring of `N ≥ 1` sites (`[NeZero N]`): the
+  translation-invariant interaction
   `ManyBody.Interaction.translationInvariant N (LinearMap.toMatrix'
   (parentInteraction A L))` whose term with index `i` is, for `L ≤ N`, the local
   parent projector placed on the window of `L` consecutive sites starting at `i`
-  (`ManyBody.placeAlong` along `ManyBody.ringWindow`), and zero for `L > N`. The predicate is
-  membership of `WithLp.toLp 2 ψ` in its zero space.
+  (`ManyBody.placeAlong` along `ManyBody.ringWindow`), and zero for `L > N`.
+- **Defined in:** `TNLean/MPS/ParentHamiltonian/Defs.lean`.
+- **Meaning:** the local terms and the parent Hamiltonian are the terms and the
+  Hamiltonian of this one interaction. The frustration-free ground vectors of
+  the parent model, the vectors annihilated by every local term, are the
+  vectors of its zero space `ManyBody.Interaction.zeroSpace`; the interaction
+  is frustration free in the sense of `ManyBody.Interaction.IsFrustrationFree`
+  whenever the periodic vector of `A` is nonzero. There is no separate TNLean
+  predicate for frustration-freeness.
 - **Source:** Pérez-García, Verstraete, Wolf and Cirac, quant-ph/0608197,
   `MPSarchive.tex`, lines 311–326; Cirac, Pérez-García, Schuch and Verstraete,
   arXiv:2011.12127, `TN-Review-main.tex`, line 537.
-- **Sanctioned bridges:** `MPSTensor.isFrustrationFree_iff_mem_zeroSpace`
-  (with `ManyBody.Interaction.mem_zeroSpace_iff`);
-  `MPSTensor.toLp_mem_ker_parentHamiltonian_iff` identifies the kernel of the
-  parent Hamiltonian with the zero space (`ManyBody.Interaction.zeroSpace_eq_groundSpace`
-  for the positive terms `MPSTensor.posSemidef_parentRingInteraction_term`);
+- **Sanctioned bridges:** `MPSTensor.toLp_mpv_mem_zeroSpace_parentRingInteraction`
+  (the periodic vector lies in the zero space) and
+  `MPSTensor.isFrustrationFree_parentRingInteraction`;
+  `MPSTensor.zeroSpace_parentRingInteraction_eq_map_chainGroundSpace` and
+  `MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_chainGroundSpace`
+  identify the zero space and the ground space at energy `0` with the cyclic
+  chain ground space for `0 < N`, `L ≤ N`
+  (`ManyBody.Interaction.zeroSpace_eq_groundSpace` for the positive terms
+  `MPSTensor.posSemidef_parentRingInteraction_term`);
+  `MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_ker`,
   `MPSTensor.localTerm_eq_toLin'_term`, `MPSTensor.parentHamiltonian_eq_toLin'_hamiltonian`
-  and `MPSTensor.parentHamiltonian_eq_sum_localTerm` unfold the linear-map forms.
-- **Caveat:** for `L > N` the local terms are `0` by convention and the
-  predicate holds for every vector; the Euclidean-space forms `localTermES`,
+  and `MPSTensor.parentHamiltonian_eq_sum_localTerm` relate the linear-map forms
+  `MPSTensor.localTerm` and `MPSTensor.parentHamiltonian`.
+- **Caveat:** for `L > N` the terms are `0` by convention and the zero space is
+  the whole space; the Euclidean-space forms `localTermES`,
   `parentHamiltonianES` and their open and periodic variants in
   `MPS/ParentHamiltonian/Martingale/` are transports of the same linear maps,
   not separate definitions of the Hamiltonian.
