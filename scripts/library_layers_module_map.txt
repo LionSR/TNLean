@@ -2085,7 +2085,6 @@ TNLean.MPS.ParentHamiltonian.Martingale.OpenChain -> TNLean.MPS.ParentHamiltonia
 TNLean.MPS.ParentHamiltonian.Martingale.OpenFiniteRangeKnabeGap -> TNLean.MPS.ParentHamiltonian.Gap.Comparison.OpenFiniteRangeKnabeGap  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.OpenGapContinuity -> TNLean.MPS.ParentHamiltonian.Continuity.OpenGapContinuity @1  # tn; merge target
 TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian -> TNLean.MPS.ParentHamiltonian.ParentInteraction.OpenHamiltonian @0  # tn; merge target
-TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction -> TNLean.MPS.ParentHamiltonian.Interaction.OpenInteraction @0  # tn; merge target
 TNLean.MPS.ParentHamiltonian.Martingale.OpenKnabePadding -> TNLean.MPS.ParentHamiltonian.Gap.Comparison.OpenKnabePadding  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.OpenParentGap -> TNLean.MPS.ParentHamiltonian.Gap.Filtration.OpenParentGap  # tn
 TNLean.MPS.ParentHamiltonian.Martingale.OpenParentInteractionGap -> TNLean.MPS.ParentHamiltonian.Continuity.OpenParentInteractionGap  # tn

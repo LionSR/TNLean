@@ -17,10 +17,6 @@ For an injective one-site tensor and every periodic chain of length at least
 two, the ground space is the line spanned by its nonzero matrix product
 vector. The line projection varies continuously with the tensor. This
 controls the finitely many lengths below a large-chain uniform gap threshold.
-
-**Transitional (#10948).** `ker_parentHamiltonianES_two_eq_range_periodicMpvLineMap`, stated
-for the Euclidean-space operator, is kept until its users are converted; the last section states
-it for the Hamiltonian of the parent interaction on the ring.
 -/
 
 namespace MPSTensor
@@ -86,29 +82,6 @@ theorem periodicMpvLineMap_injective_of_isInjective
       (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A) = 0 := by
     simpa [periodicMpvLineMap, sub_smul] using congrArg (fun v => v - periodicMpvLineMap A N c') hcc
   exact sub_eq_zero.mp ((smul_eq_zero.mp hsmul).resolve_right hψ)
-
-/-- The kernel of the two-site periodic parent Hamiltonian is precisely the
-range of the scalar-to-state map when the tensor is one-site injective and
-the chain has at least two sites. -/
-theorem ker_parentHamiltonianES_two_eq_range_periodicMpvLineMap
-    {d D N : ℕ} [NeZero D] (A : MPSTensor d D)
-    (hA : Kraus.IsInjective A) (hN : 2 ≤ N) :
-    LinearMap.ker (parentHamiltonianES A 2 N) =
-      (periodicMpvLineMap A N).range := by
-  rw [← parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES,
-    parentHamiltonianGroundSpaceES,
-    ker_parentHamiltonian_eq_chainGroundSpace A (by omega : 0 < N)
-      (by omega : 2 ≤ N),
-    chainGroundSpace_eq_mpvSubmodule hA hN (by norm_num : 1 < 2)
-      (by omega : 2 ≤ N)]
-  simp only [mpvSubmodule, periodicMpvLineMap]
-  rw [Submodule.map_span]
-  simp only [Set.image_singleton]
-  change (ℂ ∙ ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A))) = _
-  exact
-    (ContinuousLinearMap.range_smulRight_apply
-      (by norm_num : (1 : ℂ →L[ℂ] ℂ) ≠ 0)
-      ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (mpv A))).symm
 
 /-! ### The parent interaction on the ring -/
 

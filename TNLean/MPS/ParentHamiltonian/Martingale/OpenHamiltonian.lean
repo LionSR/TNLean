@@ -23,10 +23,6 @@ Nachtergaele's C1--C3 martingale theorem.
 
 * Nachtergaele, arXiv:cond-mat/9410110, equations (3.12)--(3.16).
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:2011.12127, Section IV.C.
-
-**Transitional (#10948).** The two declarations of the last section compare the open-chain parent
-Hamiltonian with the Euclidean-space local terms `localTermES`; they are kept for the files that
-still use those operators and are deleted with their last users.
 -/
 
 open scoped BigOperators ComplexOrder
@@ -456,54 +452,6 @@ theorem parentChainInteraction_C1 (A : MPSTensor d D) {L l : ℕ} (hLl : L ≤ l
           (posSemidef_parentChainInteraction_term A L N i)),
     ManyBody.Interaction.sum_hamiltonian_restrict_chainTranslates_le hLl
       (Matrix.nonneg_iff_posSemidef.mpr (posSemidef_toMatrix'_parentInteraction A L)) N⟩
-
-/-! ### Transitional forms (#10948)
-
-Comparison with the Euclidean-space local terms, for the files not yet restated. -/
-
-/-- At a start whose window does not cross the right endpoint, the Euclidean-space local term
-is the operator of the term of the parent interaction on the open chain. -/
-theorem localTermES_eq_toEuclideanLin_parentChainInteraction_term (A : MPSTensor d D)
-    {L N : ℕ} (i : Fin N) (hi : i.val + L ≤ N) :
-    localTermES A L i =
-      Matrix.toEuclideanLin ((parentChainInteraction A L N).term ⟨i.val, by omega⟩) := by
-  have hLN : L ≤ N := by omega
-  have h₁ := localTermES_isSymmetricProjection A L i
-  have h₂ := Matrix.isSymmetricProjection_toEuclideanLin_iff.mpr
-    (isStarProjection_parentChainInteraction_term A L N ⟨i.val, by omega⟩)
-  refine h₁.ext h₂ ?_
-  rw [← Submodule.orthogonal_orthogonal (LinearMap.range (localTermES A L i)),
-    h₁.isSymmetric.orthogonal_range, ← Submodule.orthogonal_orthogonal (LinearMap.range
-      (Matrix.toEuclideanLin ((parentChainInteraction A L N).term ⟨i.val, by omega⟩))),
-    h₂.isSymmetric.orthogonal_range]
-  congr 1
-  ext v
-  rw [LinearMap.mem_ker, LinearMap.mem_ker,
-    localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A hLN i v,
-    Matrix.toLpLin_apply, WithLp.toLp_eq_zero, parentChainInteraction_term_mulVec_eq_zero_iff]
-  refine forall_congr' fun τ ↦ ?_
-  rw [mem_groundSpaceES_iff, ← cyclicRestrictₗ_eq_contiguousRestrictₗ (Fin.pos i) hLN hi]
-  rfl
-
-/-- For a positive range, the operator of the open-chain parent Hamiltonian is the sum of the
-Euclidean-space local terms over the starts whose windows do not cross the right endpoint. -/
-theorem hamiltonian_parentChainInteraction_eq_sum_localTermES (A : MPSTensor d D) {L : ℕ}
-    (hL : 0 < L)
-    (N : ℕ) :
-    Matrix.toEuclideanLin (parentChainInteraction A L N).hamiltonian = ∑ i : NonwrappingStart L N,
-        localTermES A L i.1 := by
-  classical
-  rw [ManyBody.Interaction.hamiltonian, map_sum]
-  trans ∑ i : Fin N, if i.val + L ≤ N then localTermES A L i else 0
-  · refine Fin.sum_eq_sum_of_val_eq _ _ (fun k ha hb ↦ ?_)
-      (fun i hi ↦ absurd i.isLt (by omega)) (fun i hi ↦ ite_eq_right (by omega))
-    have hk : (⟨k, hb⟩ : Fin N).val + L ≤ N := by
-      change k + L ≤ N
-      omega
-    simp only [hk, ↓reduceIte]
-    exact (localTermES_eq_toEuclideanLin_parentChainInteraction_term A ⟨k, hb⟩ hk).symm
-  · rw [← Finset.sum_filter]
-    exact Finset.sum_subtype _ (fun i => by simp) _
 
 end ChainInteraction
 

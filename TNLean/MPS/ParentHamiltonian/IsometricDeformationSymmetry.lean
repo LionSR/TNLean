@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.InjectiveIsometricDeformationSymmetry
 import TNLean.MPS.ParentHamiltonian.BlockSumIntervalSpaces
-import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
+import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteraction
+import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
 import TNLean.MPS.Symmetry.InteractionHamiltonianSymmetry
 
@@ -38,9 +39,6 @@ a phase. Symmetry up to a phase is derived for one or several blocks in the prin
 normalization in `TNLean.MPS.ParentHamiltonian.BlockIsometricDeformationSymmetry`;
 see docs/paper-gaps/spc11_isometric_symmetry_unitary_virtual.tex
 (https://sirui-lu.com/TNLean/paper-gaps/spc11_isometric_symmetry_unitary_virtual.pdf).
-
-**Transitional (#10948).** `periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow`,
-stated for the Euclidean-space operators, is kept until its last user is converted.
 -/
 
 open scoped Matrix Kronecker BigOperators ComplexOrder
@@ -146,55 +144,6 @@ theorem groundSpaceES_invariant_rotatePhysical_iff_of_commute
         groundSpaceES_invariant_rotatePhysical_of_commute (rotatePhysical Q A) U Q⁻¹
           (commute_matrix_inv_of_isUnit hQ hComm) L hInv
   · exact groundSpaceES_invariant_rotatePhysical_of_commute A U Q hComm L
-
-/-- The cyclic extension of a local operator agrees with its matrix placed on the window of
-`R` consecutive sites starting at `i` (`ManyBody.placeAlong` along `ManyBody.ringWindow`), in the
-configuration basis.
-Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
-supplied explicitly where required. -/
-theorem periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow
-    {R N : ℕ} (hRN : R ≤ N) (i : Fin N)
-    (K : Matrix (Cfg d R) (Cfg d R) ℂ) :
-    periodicLocalInteractionES (Matrix.toEuclideanLin K) i = Matrix.toEuclideanLin
-      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hRN i) K) := by
-  apply LinearMap.ext
-  intro v
-  ext σ
-  simp only [periodicLocalInteractionES, dite_eq_left hRN, LinearEquiv.conj_apply,
-    LinearMap.comp_apply]
-  dsimp only [LinearIsometryEquiv.symm, LinearIsometryEquiv.toLinearEquiv]
-  simp only [LinearEquiv.symm_symm, LinearEquiv.coe_coe]
-  change ((cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i).symm
-    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R))
-      (Matrix.toEuclideanLin K).toContinuousLinearMap
-      (cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i v))) σ =
-        (Matrix.toEuclideanLin
-          (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hRN i) K) v) σ
-  rw [cyclicActiveBlockConfigLinearIsometryEquiv_symm_apply_apply]
-  change (Matrix.toEuclideanLin K (ContinuousLinearMap.rightFiber
-    (cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i v)
-      (cyclicActiveBlockConfigEquiv d R hRN i σ).2))
-        (cyclicActiveBlockConfigEquiv d R hRN i σ).1 = _
-  simp only [Matrix.toEuclideanLin, Matrix.toLpLin_apply, WithLp.ofLp_toLp]
-  rw [ManyBody.placeAlong_mulVec_apply_of _ _ _ σ (replaceWindow R hRN i σ)
-    (replaceWindow_ringWindow hRN i σ)
-    (fun τ _ hv ↦ replaceWindow_of_forall_ringWindow_ne hRN i σ τ hv)]
-  have he : cyclicActiveBlockConfigEquiv d R hRN i =
-      MPOTensor.windowComplementEquiv R N hRN i := by
-    ext ω r
-    · rfl
-    · simp [cyclicActiveBlockConfigEquiv, MPOTensor.windowComplementEquiv,
-        cyclicWindowIndexEquiv, cyclicShiftEquiv, Nat.add_assoc]
-  simp only [Matrix.mulVec, dotProduct]
-  have hcfg (τ : Cfg d R) :
-      (cyclicActiveBlockConfigEquiv d R hRN i).symm
-        (τ, (cyclicActiveBlockConfigEquiv d R hRN i σ).2) =
-          replaceWindow R hRN i σ τ := by
-    apply (cyclicActiveBlockConfigEquiv d R hRN i).injective
-    simp [he]
-  simp only [ContinuousLinearMap.rightFiber, WithLp.ofLp_toLp,
-    cyclicActiveBlockConfigLinearIsometryEquiv_apply_apply, hcfg]
-  rfl
 
 private theorem placeAlong_chainWindow_commute_onSiteTensorPow {R N : ℕ}
     (U : Matrix (Fin d) (Fin d) ℂ) (a : ℕ) (ha : a + R ≤ N)

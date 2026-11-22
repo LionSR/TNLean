@@ -10,17 +10,21 @@
 
 \begin{definition}[Parent Hamiltonian under the canonical $\ell^2$ identification]
     \label{def:parent_hamiltonian_es}
-    \lean{MPSTensor.parentHamiltonianES}
+    \lean{MPSTensor.parentRingInteraction}
     \leanok
     \uses{def:parent_hamiltonian, def:nsite_space_parent}
-    Denote by $H_{N,L}^{\mathrm{ES}}(A)$ the conjugate of $H_N(A,L)$ by the
-    coordinate identification between the coefficient space and
-    $\ell^2(\{0,\ldots,d-1\}^N)$.
+    For $N\ge1$, the parent interaction on the ring of $N$ sites assigns to
+    each site $i$ the matrix of the local parent interaction placed on the
+    cyclic window of $L$ sites starting at $i$, and zero when $L>N$. Denote
+    by $H_{N,L}^{\mathrm{ES}}(A)$ the operator on
+    $\ell^2(\{0,\ldots,d-1\}^N)$ of the sum of these matrices; it is the
+    conjugate of $H_N(A,L)$ by the coordinate identification between the
+    coefficient space and $\ell^2(\{0,\ldots,d-1\}^N)$.
 \end{definition}
 
 \begin{lemma}[Kernel under the canonical $\ell^2$ identification]
     \label{thm:parent_ground_space_es_kernel}
-    \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES}
+    \lean{MPSTensor.parentHamiltonianGroundSpaceES_eq_ker_hamiltonian_parentRingInteraction}
     \lean{MPSTensor.groundSpace_hamiltonian_parentRingInteraction_eq_map_ker}
     \leanok
     Under the canonical $\ell^2$ identification of the $N$-site state space, the
@@ -39,10 +43,8 @@
 
 \begin{remark}[Local projectors under the canonical $\ell^2$ identification]
     \label{rem:euclidean_local_projector_ingredients}
-    \lean{MPSTensor.parentInteractionES}
     \lean{MPSTensor.cyclicRestrictES}
-    \lean{MPSTensor.localTermES}
-    \lean{MPSTensor.localTermES_apply}
+    \lean{MPSTensor.toEuclideanLin_parentRingInteraction_term_apply}
     \leanok
     \uses{def:ground_space_es, rem:cyclic_window_operators}
     Let $P_L^{\mathrm{ES}}(A)$ denote the orthogonal projector onto
@@ -54,28 +56,13 @@
     projector.
 \end{remark}
 
-\begin{lemma}[Positivity of the Hilbert-space local projector]
-    \label{lem:euclidean_local_projector_positive}
-    \lean{MPSTensor.parentInteractionES_isPositive}
-    \leanok
-    \uses{rem:euclidean_local_projector_ingredients}
-    The Hilbert-space local projector $P_L^{\mathrm{ES}}(A)$ is positive.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    Orthogonal projectors are positive.
-\end{proof}
-
 \begin{lemma}[Cyclic averaging for the Hilbert-space local terms]
     \label{lem:local_term_es_average}
-    \lean{MPSTensor.parentHamiltonianES_eq_sum_localTermES}
     \lean{MPSTensor.inv_smul_sum_adjoint_comp_cyclicRestrictES_apply}
     \lean{MPSTensor.toEuclideanLin_translationInvariant_term_eq_inv_smul_sum}
     \leanok
-    \uses{rem:euclidean_local_projector_ingredients, lem:euclidean_local_projector_positive}
-    The Hilbert-space parent Hamiltonian is the sum of the Hilbert-space local
-    terms, $H_{N,\mathrm{ES}}=\sum_i h_{i,\mathrm{ES}}$. Let $L\le N$ and let
+    \uses{rem:euclidean_local_projector_ingredients, def:canonical_parent_interaction_matrix}
+    Let $L\le N$ and let
     $T$ be an operator on the $L$-site Hilbert space. For every $N$-site vector
     $v$ and every configuration $\sigma$, the cyclic average
     $d^{-L}\sum_{\tau}R_{i,\tau}^{\dagger}TR_{i,\tau}v$ has the coefficient of
@@ -101,8 +88,8 @@
 
 \begin{lemma}[Positivity of the Hilbert-space Hamiltonian]
     \label{lem:transported_es_positive}
-    \lean{MPSTensor.localTermES_isPositive}
-    \lean{MPSTensor.parentHamiltonianES_isPositive}
+    \lean{MPSTensor.posSemidef_parentRingInteraction_term}
+    \lean{MPSTensor.posSemidef_hamiltonian_parentRingInteraction}
     \leanok
     \uses{lem:local_term_es_average}
     Each Hilbert-space local term $h_{i,\mathrm{ES}}$ is positive, hence the full
@@ -120,8 +107,8 @@
 
 \begin{lemma}[Hilbert-space local terms are symmetric projections]
     \label{lem:transported_es_local_projections}
-    \lean{MPSTensor.parentInteractionES_isSymmetricProjection}
-    \lean{MPSTensor.localTermES_isSymmetricProjection}
+    \lean{MPSTensor.isSymmetricProjection_toEuclideanLin_toMatrix'_parentInteraction}
+    \lean{MPSTensor.isSymmetricProjection_toEuclideanLin_parentRingInteraction_term}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients, lem:transported_es_positive}
     The Hilbert-space local projector $P_L^{\mathrm{ES}}(A)$ is a symmetric
@@ -144,7 +131,7 @@
 
 \begin{lemma}[Kernel of the Hilbert-space parent interaction]
     \label{lem:parent_interaction_es_kernel}
-    \lean{MPSTensor.parentInteractionES_apply_eq_zero_iff}
+    \lean{MPSTensor.toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff}
     \leanok
     \uses{def:ground_space_es, rem:euclidean_local_projector_ingredients}
     The Hilbert-space local interaction $P_L^{\mathrm{ES}}(A)$ annihilates
@@ -162,7 +149,7 @@
 
 \begin{lemma}[Local-term kernel via cyclic restrictions]
     \label{lem:local_term_es_kernel_restrictions}
-    \lean{MPSTensor.localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES}
+    \lean{MPSTensor.toEuclideanLin_parentRingInteraction_term_eq_zero_iff}
     \lean{MPSTensor.cyclicRestrictES_mem_groundSpaceES_of_parentRingInteraction_term_eq_zero}
     \leanok
     \uses{lem:parent_interaction_es_kernel, rem:euclidean_local_projector_ingredients}

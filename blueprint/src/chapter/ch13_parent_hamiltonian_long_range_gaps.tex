@@ -1880,7 +1880,7 @@ tensors.
 
 \begin{definition}[Open sums of a local interaction]
     \label{def:open_local_interaction_sum}
-    \lean{MPSTensor.openInteractionHamiltonianES}
+    \lean{ManyBody.Interaction.chainTranslates}
     \leanok
     For a local operator $h$ on $R$ sites, let
     $H^{\mathrm{open}}_N(h)$ be the sum of its translates over starts
@@ -1893,20 +1893,16 @@ tensors.
     \lean{ManyBody.Interaction.hamiltonian_chainTranslates_mono,
         ManyBody.Interaction.hamiltonian_chainTranslates_smul,
         ManyBody.Interaction.hamiltonian_chainTranslates_zero,
-        ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates,
-        MPSTensor.openInteractionHamiltonianES_parentInteractionES}
+        ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates}
     \leanok
     Open interaction sums preserve order and positivity, commute with
     scalar multiplication, and vanish for the zero interaction.
-    When $R>0$, the sum of the canonical parent projection is the
-    canonical open parent Hamiltonian.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:open_local_interaction_sum}
     Extension by the identity and physical coordinate isometries preserve
     order, positivity, and scalar multiplication. Summation preserves
-    these properties. Extending the local parent projection gives each
-    canonical parent term.
+    these properties.
 \end{proof}
 
 \begin{lemma}[Open gaps for fixed positive parent interactions]
@@ -2443,9 +2439,9 @@ tensors.
 
 \begin{definition}[Periodic sum of a fixed interaction]
     \label{def:periodic-fixed-interaction}
-    \lean{MPSTensor.periodicLocalInteractionES,MPSTensor.periodicInteractionHamiltonianES}
+    \lean{ManyBody.Interaction.translationInvariant}
     \leanok
-    Let $h$ act on the physical space of $R$ consecutive sites. For
+    Let $h$ be a matrix on the physical space of $R$ consecutive sites, and let $N\ge1$. For
     $R\leq N$, let $U_i$ be the unitary which places the cyclic interval
     of length $R$ starting at $i$ first and the remaining sites second.
     Define
@@ -2459,16 +2455,13 @@ tensors.
 
 \begin{lemma}[Order and positivity of periodic interaction sums]
     \label{thm:periodic-fixed-interaction-order}
-    \lean{MPSTensor.periodicLocalInteractionES_mono,
-        MPSTensor.periodicLocalInteractionES_smul,
-        MPSTensor.periodicInteractionHamiltonianES_zero,
-        MPSTensor.periodicInteractionHamiltonianES_mono,
-        MPSTensor.periodicInteractionHamiltonianES_smul,
-        MPSTensor.periodicInteractionHamiltonianES_isPositive}
+    \lean{ManyBody.Interaction.hamiltonian_translationInvariant_mono,
+        ManyBody.Interaction.hamiltonian_translationInvariant_smul,
+        ManyBody.Interaction.posSemidef_hamiltonian_translationInvariant}
     \leanok
-    Cyclic extension and its periodic sum preserve operator inequalities
-    and commute with scalar multiplication. In particular, for every
-    volume $N$,
+    The periodic sum preserves operator inequalities
+    and commutes with scalar multiplication: for every
+    volume $N\ge1$,
     \begin{align}
         h\leq k & \quad\Longrightarrow\quad H_N(h)\leq H_N(k),\notag                      \\
         H_N(ch) & =cH_N(h),                                          & H_N(0) & =0,\notag \\
@@ -2485,12 +2478,12 @@ tensors.
 
 \begin{lemma}[Canonical parent projections give the canonical Hamiltonian]
     \label{thm:periodic-fixed-interaction-canonical}
-    \lean{MPSTensor.periodicLocalInteractionES_parentInteractionES,
-        MPSTensor.periodicInteractionHamiltonianES_parentInteractionES}
+    \lean{MPSTensor.localTerm_eq_toLin'_term,
+        MPSTensor.parentHamiltonian_eq_toLin'_hamiltonian}
     \leanok
     For a tensor $A$ and a positive interaction range $R$, the periodic
     sum of the canonical parent projection $h_R=I-P_{G_R(A)}$ is exactly the
-    canonical parent Hamiltonian, at every volume:
+    canonical parent Hamiltonian, term by term and at every volume $N\ge1$:
     \begin{align}
         H_N(h_R)=H_{R,N}(A).\notag
     \end{align}

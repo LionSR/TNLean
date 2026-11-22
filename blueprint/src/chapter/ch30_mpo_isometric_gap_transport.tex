@@ -422,35 +422,6 @@ original bond-$D_p$ tensors.
 
 \subsection{The continuous positive interaction}
 
-\begin{lemma}[Coordinate representation of a periodic interaction]
-    \label{thm:mpo_periodic_interaction_coordinates}
-    \lean{MPSTensor.periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian}
-    \leanok
-    \uses{thm:parent_interaction_sum_on_site_symmetry}
-    For any local matrix $a$ on $(\C^d)^{\otimes R}$, with $R\leq N$,
-    its action on a cyclic window agrees with the operator defined by applying $a$
-    to that window and fixing the exterior configuration. Their periodic
-    sums therefore agree. In particular, for $R=2$ and $N\geq2$,
-    the sum of the Euclidean local operators is the operator with
-    configuration-basis matrix $\sum_{i=0}^{N-1}a_i$.
-    No positivity or projection assumption on $a$ is needed.
-\end{lemma}
-\begin{proof}\leanok
-    For a configuration $\sigma$, let $\sigma|_i$ be its ordered
-    cyclic window and let $\sigma[i\leftarrow\tau]$ replace that
-    window by $\tau$. Both local operators have the coefficient formula
-    \begin{align}
-        (a_iv)_\sigma
-        =\sum_{\tau\in\{0,\ldots,d-1\}^{R}}
-        a_{\sigma|_i,\tau}\,v_{\sigma[i\leftarrow\tau]}.
-        \label{eq:mpo_periodic_matrix_action}
-    \end{align}
-    The cyclic window and its complement partition the sites, so their
-    coordinate permutation extracts and replaces precisely these indices;
-    summing (\ref{eq:mpo_periodic_matrix_action}) over the cyclic origins
-    gives the periodic identity.
-\end{proof}
-
 \begin{definition}[Enlarged mixed local interaction]
     \label{def:mpo_arbitrary_physical_interaction}
     \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction}
@@ -538,7 +509,6 @@ original bond-$D_p$ tensors.
 \begin{proof}\leanok
     \uses{thm:mpo_polar_support_injective,
         thm:mpo_mixed_periodic_line_continuity,
-        thm:mpo_periodic_interaction_coordinates,
         thm:mpo_arbitrary_interaction_continuity,
         thm:mpo_isometry_positive_kernel}
     The support-coordinate theorem gives the nonzero periodic vector
@@ -569,7 +539,6 @@ original bond-$D_p$ tensors.
 \begin{proof}\leanok
     \uses{thm:mpo_polar_support_injective,
         thm:mpo_mixed_uniform_periodic_path_gap,
-        thm:mpo_periodic_interaction_coordinates,
         thm:mpo_arbitrary_interaction_continuity,
         thm:mpo_isometry_positive_gap,
         thm:mpo_arbitrary_periodic_ground_line}

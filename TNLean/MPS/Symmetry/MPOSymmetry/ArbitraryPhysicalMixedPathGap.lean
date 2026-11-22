@@ -5,7 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedInterpolation
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointUniformPathGap
-import TNLean.MPS.ParentHamiltonian.InteractionMatrixRepresentation
+import TNLean.MPS.ParentHamiltonian.IsometricDeformationSymmetry
+import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteraction
+import TNLean.MPS.Symmetry.GappedInteractionPath
 import TNLean.MPS.Symmetry.PhysicalIsometricGapTransport
 import TNLean.MPS.Symmetry.CommonPhysicalEndpointOrthogonality
 

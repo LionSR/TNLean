@@ -155,7 +155,6 @@ import TNLean.MPS.ParentHamiltonian.HalfChainSourceSpectrum
 import TNLean.MPS.ParentHamiltonian.HalfChainSpectralComparison
 import TNLean.MPS.ParentHamiltonian.HalfChainSpectrum
 import TNLean.MPS.ParentHamiltonian.InjectiveIsometricDeformationSymmetry
-import TNLean.MPS.ParentHamiltonian.InteractionMatrixRepresentation
 import TNLean.MPS.ParentHamiltonian.IntersectionProperty
 import TNLean.MPS.ParentHamiltonian.IntervalObservableCoordinates
 import TNLean.MPS.ParentHamiltonian.IntervalStateProjection

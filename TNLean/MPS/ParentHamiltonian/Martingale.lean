@@ -46,7 +46,6 @@ import TNLean.MPS.ParentHamiltonian.Martingale.OpenChain
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenFiniteRangeKnabeGap
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenGapContinuity
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
-import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenKnabePadding
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenParentGap
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenParentInteractionGap

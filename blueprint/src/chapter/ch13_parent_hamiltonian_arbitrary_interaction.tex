@@ -29,10 +29,11 @@ We follow the cyclic-cut argument of
 
 \begin{lemma}[A translated interaction in active-block coordinates]
     \label{lem:cyclic_active_local_interaction}
-    \lean{MPSTensor.cyclicActiveBlock_periodicLocalInteractionES_apply}
+    \lean{MPSTensor.toEuclideanLin_translationInvariant_term_apply_fiber}
     \leanok
     \uses{def:periodic-fixed-interaction, lem:cyclic_mpv_active_boundary}
-    Let $L\le N$, let $h$ be linear on $L$ sites, and fix a cyclic cut $i$.
+    Let $L\le N$, let $h$ be a matrix on $L$ sites with translate $h_i$ to the
+    cyclic window starting at $i$, and fix a cyclic cut $i$.
     Let $U_i$ be the coordinate isometry of
     Lemma~\ref{lem:cyclic_mpv_active_boundary}, which splits the active block
     at $i$ from its complement. Then

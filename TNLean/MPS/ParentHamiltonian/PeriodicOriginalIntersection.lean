@@ -10,7 +10,8 @@ import TNLean.MPS.ParentHamiltonian.CyclicBoundaryIntersection
 import TNLean.MPS.ParentHamiltonian.PrimitiveBlockWordSpan
 import TNLean.MPS.ParentHamiltonian.GaugePhaseSeparationTransport
 import TNLean.MPS.ParentHamiltonian.BlockOpenGroundSpace
-import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
+import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteraction
+import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 /-!
 # Original-chain intersections of a periodic tensor

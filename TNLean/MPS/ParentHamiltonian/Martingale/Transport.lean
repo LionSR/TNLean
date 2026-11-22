@@ -10,30 +10,24 @@ import QICLean.Analysis.ProjectionGeometry
 import QICLean.Analysis.TraceNormAbs
 
 /-!
-# Euclidean local projectors and ground-space / Hamiltonian transport
+# Cyclic restrictions, the local parent interaction and the parent interaction on the ring
 
-The `EuclideanSpace`-based formulation of the parent-Hamiltonian martingale
-method:
+The Hilbert-space ingredients of the parent-Hamiltonian martingale method:
 
-* `parentInteractionES` — the \(L\)-site parent interaction as an orthogonal
-  projector on the Hilbert-space model `EuclideanSpace ℂ (Cfg d L)`;
 * `cyclicRestrictES` — cyclic-window restriction, and the cyclic average of the conjugates
   \(R_{i,\tau}^\dagger T R_{i,\tau}\) of an operator on a window;
-* `localTermES` and `parentHamiltonianES` — Euclidean-space representatives of
-  the local terms and the full parent Hamiltonian;
 * `restrictLast_eq_cyclicRestrictES_zero` and
   `restrictFirst_eq_cyclicRestrictES_one` — the endpoint coordinate
   identifications used for adjacent open-chain conditions;
-* positivity, idempotence, and symmetric-projection structure of the
-  Euclidean-space local terms;
-* commutation and non-overlap positivity for disjoint cyclic windows;
-* kernel identification: the Euclidean-space ground space equals \(\ker h_L\);
-* the same facts for the matrices: the local parent interaction
-  `LinearMap.toMatrix' (parentInteraction A L)` (whose operator is the orthogonal projection onto
-  the complement of the local ground space) and the terms and Hamiltonian of the parent
-  interaction on the ring `parentRingInteraction A L N`. Statements about the Euclidean-space
-  operators `parentInteractionES`, `localTermES` and `parentHamiltonianES`
-  are being replaced by these (TNLean issue 10948).
+* the local parent interaction `LinearMap.toMatrix' (parentInteraction A L)`, whose operator
+  is the orthogonal projection onto the complement of the local ground space, with its
+  positivity and kernel;
+* the terms and Hamiltonian of the parent interaction on the ring
+  `parentRingInteraction A L N`: positivity, idempotence and symmetric-projection structure of
+  the terms, their kernels through cyclic restrictions, commutation and non-overlap
+  positivity for disjoint cyclic windows;
+* kernel identification: the ground space of the finite parent Hamiltonian is the kernel of
+  the Hamiltonian of the parent interaction on the ring.
 -/
 
 open scoped BigOperators ComplexOrder InnerProductSpace
@@ -42,36 +36,7 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-! ### Euclidean local projector ingredients -/
-
-/-- The \(L\)-site parent interaction viewed directly on the Hilbert-space model
-`EuclideanSpace ℂ (Cfg d L)`. Equivalently, this is the orthogonal projector
-onto the orthogonal complement of the Euclidean realization of \(G_L(A)\). -/
-noncomputable def parentInteractionES (A : MPSTensor d D) (L : ℕ) :
-    EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) :=
-  ((groundSpaceES A L)ᗮ.starProjection.toLinearMap)
-
-/-- The `EuclideanSpace` parent interaction is the symmetric projection onto
-the orthogonal complement of the Euclidean realization of \(G_L(A)\). -/
-theorem parentInteractionES_isSymmetricProjection (A : MPSTensor d D) (L : ℕ) :
-    (parentInteractionES A L).IsSymmetricProjection :=
-  Submodule.isSymmetricProjection_starProjection ((groundSpaceES A L)ᗮ)
-
-/-- The `EuclideanSpace` parent interaction is positive because it is an
-orthogonal projection. -/
-theorem parentInteractionES_isPositive (A : MPSTensor d D) (L : ℕ) :
-    (parentInteractionES A L).IsPositive :=
-  (parentInteractionES_isSymmetricProjection A L).isPositive
-
-/-- The kernel of the Euclidean parent interaction is exactly the Euclidean MPS
-local ground space. -/
-theorem parentInteractionES_apply_eq_zero_iff (A : MPSTensor d D) (L : ℕ)
-    (v : EuclideanSpace ℂ (Cfg d L)) :
-    parentInteractionES A L v = 0 ↔ v ∈ groundSpaceES A L := by
-  change (groundSpaceES A L)ᗮ.starProjection v = 0 ↔ v ∈ groundSpaceES A L
-  rw [Submodule.starProjection_orthogonal']
-  simp only [sub_apply, one_apply_eq_self]
-  rw [sub_eq_zero, eq_comm, Submodule.starProjection_eq_self_iff]
+/-! ### Cyclic restrictions -/
 
 /-- The cyclic window restriction map transported from `NSiteSpace` to the
 Hilbert-space model `EuclideanSpace`. -/
@@ -80,14 +45,7 @@ noncomputable def cyclicRestrictES {N : ℕ} (hN : 0 < N) (L : ℕ) (i : Fin N)
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) :=
   LinearMap.withLpMap 2 (cyclicRestrictₗ (d := d) hN L i τ)
 
-/-! ### Ground-space and Hamiltonian transport to `EuclideanSpace` -/
-
-/-- The translated local parent-Hamiltonian term transported to the
-`EuclideanSpace` model. -/
-noncomputable def localTermES {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N) :
-    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d N))
-  e.symm.toLinearMap.comp ((localTerm A L N i).comp e.toLinearMap)
+/-! ### Disjoint cyclic windows and the ground space of the parent Hamiltonian -/
 
 /-- Site-disjointness for two cyclic \(L\)-windows on an \(N\)-site periodic chain.
 
@@ -127,19 +85,6 @@ noncomputable def parentHamiltonianGroundSpaceES (A : MPSTensor d D)
     (L N : ℕ) : Submodule ℂ (EuclideanSpace ℂ (Cfg d N)) :=
   (LinearMap.ker (parentHamiltonian A L N)).map
     (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap
-
-/-- The Euclidean-space representative of the parent Hamiltonian. -/
-noncomputable def parentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
-    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  let e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d N))
-  e.symm.toLinearMap.comp ((parentHamiltonian A L N).comp e.toLinearMap)
-
-/-- The Euclidean-space parent Hamiltonian is the sum of its Euclidean-space
-local terms. -/
-theorem parentHamiltonianES_eq_sum_localTermES (A : MPSTensor d D) (L N : ℕ) :
-    parentHamiltonianES A L N = ∑ i : Fin N, localTermES A L i := by
-  ext v σ
-  simp [parentHamiltonianES, parentHamiltonian_eq_sum_localTerm, localTermES]
 
 attribute [local instance] Classical.propDecidable
 
@@ -311,62 +256,6 @@ private theorem cyclicRestrictES_adjoint_apply {N : ℕ} (hN : 0 < N) {L : ℕ}
     simpa using EuclideanSpace.inner_single_left (extractWindow L i σ) (1 : ℂ) v
   · rw [h, cyclicRestrictES_single_of_not_sameOutsideWindow hN i σ τ hστ, inner_zero_left]
 
-/-- Evaluate a transported local term through the cyclic restriction to its window. -/
-@[simp] theorem localTermES_apply {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N)
-    (hLN : L ≤ N) (v : EuclideanSpace ℂ (Cfg d N)) (σ : Cfg d N) :
-    localTermES A L i v σ =
-      parentInteractionES A L ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v)
-        (extractWindow L i σ) := by
-  have hcfg :
-      WithLp.toLp 2 (fun τ => v.ofLp (replaceWindow L hLN i σ τ)) =
-      (cyclicRestrictES (d := d) (Fin.pos i) L i σ) v := by
-    ext τ
-    simp [cyclicRestrictES, cyclicCfg_eq_replaceWindow, hLN]
-  have hloc : localTermES A L i v σ =
-      parentInteraction A L (fun τ => v.ofLp (replaceWindow L hLN i σ τ))
-        (extractWindow L i σ) :=
-    localTerm_apply_of_le A L N hLN i v.ofLp σ
-  rw [hloc]
-  simp [parentInteraction, parentInteractionES, hcfg]
-
-private theorem cyclicRestrictES_localTermES {N : ℕ} (A : MPSTensor d D) {L : ℕ}
-    (hLN : L ≤ N) (i : Fin N) (τ : Cfg d N) (v : EuclideanSpace ℂ (Cfg d N)) :
-    cyclicRestrictES (d := d) (Fin.pos i) L i τ (localTermES A L i v) =
-      parentInteractionES A L (cyclicRestrictES (d := d) (Fin.pos i) L i τ v) := by
-  ext ω
-  rw [cyclicRestrictES_apply]
-  rw [localTermES_apply A L i hLN v (cyclicCfg (d := d) (Fin.pos i) L i ω τ)]
-  have hsame : SameOutsideWindow (L := L) i (cyclicCfg (d := d) (Fin.pos i) L i ω τ) τ :=
-    sameOutsideWindow_of_cyclicCfg_eq (d := d) (Fin.pos i) i rfl
-  have hrestrict :
-      cyclicRestrictES (d := d) (Fin.pos i) L i τ =
-        cyclicRestrictES (d := d) (Fin.pos i) L i (cyclicCfg (d := d) (Fin.pos i) L i ω τ) :=
-    cyclicRestrictES_eq_of_sameOutsideWindow (d := d) (Fin.pos i) i hsame
-  have hextract : extractWindow L i (cyclicCfg (d := d) (Fin.pos i) L i ω τ) = ω := by
-    rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos i) L hLN]
-    exact extractWindow_replaceWindow L hLN i τ ω
-  rw [← hrestrict, hextract]
-
-/-- A transported local term vanishes exactly when every boundary-filled cyclic
-restriction to its window lies in the \(L\)-site MPS ground space. -/
-theorem localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES {N : ℕ}
-    (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) (i : Fin N)
-    (v : EuclideanSpace ℂ (Cfg d N)) :
-    localTermES A L i v = 0 ↔
-      ∀ τ : Cfg d N,
-        cyclicRestrictES (d := d) (Fin.pos i) L i τ v ∈ groundSpaceES A L := by
-  constructor
-  · intro hv τ
-    rw [← parentInteractionES_apply_eq_zero_iff]
-    rw [← cyclicRestrictES_localTermES A hLN i τ v, hv, map_zero]
-  · intro hv
-    ext σ
-    rw [localTermES_apply A L i hLN v σ]
-    have hker := (parentInteractionES_apply_eq_zero_iff A L
-      (cyclicRestrictES (d := d) (Fin.pos i) L i σ v)).2 (hv σ)
-    rw [hker]
-    rfl
-
 /-- At site \(0\) of an \((L+1)\)-site chain, fixing the final site is the
 cyclic length-\(L\) restriction in the canonical Hilbert-space coordinates.
 
@@ -482,86 +371,6 @@ theorem inv_smul_sum_adjoint_comp_cyclicRestrictES_apply {N L : ℕ} (hLN : L �
   simp_rw [hsummand]
   rw [Finset.sum_ite, Finset.sum_const, Finset.sum_const_zero, add_zero, ← Fintype.card_subtype,
     sameOutsideWindow_card hLN i σ, nsmul_eq_mul, ← mul_assoc, inv_mul_cancel₀ hne, one_mul]
-
-/-- The transported local term is positive because it is a finite cyclic average
-of the positive operators \(R_{i,\tau}^\dagger P_L R_{i,\tau}\). -/
-theorem localTermES_isPositive {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N) :
-    (localTermES A L i).IsPositive := by
-  by_cases hLN : L ≤ N
-  · have h : localTermES A L i = (((d ^ L : ℕ) : ℂ)⁻¹) • ∑ τ : Cfg d N,
-        (cyclicRestrictES (Fin.pos i) L i τ).adjoint ∘ₗ parentInteractionES A L ∘ₗ
-          cyclicRestrictES (Fin.pos i) L i τ := by
-      ext v σ
-      rw [inv_smul_sum_adjoint_comp_cyclicRestrictES_apply hLN, localTermES_apply A L i hLN]
-    rw [h]
-    refine (LinearMap.isPositive_sum _ fun τ _ => ?_).smul_of_nonneg (by positivity)
-    simpa [LinearMap.adjoint_adjoint] using
-      (LinearMap.IsPositive.conj_adjoint (hT := parentInteractionES_isPositive A L)
-        ((cyclicRestrictES (Fin.pos i) L i τ).adjoint))
-  · simp [localTermES, localTerm_of_not_le A hLN]
-
-private theorem localTermES_isIdempotentElem {N : ℕ} (A : MPSTensor d D) (L : ℕ)
-    (i : Fin N) : IsIdempotentElem (localTermES A L i) := by
-  by_cases hLN : L ≤ N
-  · rw [isIdempotentElem_iff]
-    ext v σ
-    change localTermES A L i (localTermES A L i v) σ = localTermES A L i v σ
-    rw [localTermES_apply A L i hLN (localTermES A L i v) σ]
-    rw [cyclicRestrictES_localTermES A hLN i σ v]
-    rw [localTermES_apply A L i hLN v σ]
-    have hPapply :
-        parentInteractionES A L
-            (parentInteractionES A L ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v)) =
-          parentInteractionES A L ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v) := by
-      simpa [Module.End.mul_apply] using
-        LinearMap.congr_fun
-          (parentInteractionES_isSymmetricProjection A L).isIdempotentElem.eq
-          ((cyclicRestrictES (d := d) (Fin.pos i) L i σ) v)
-    rw [hPapply]
-  · simpa [localTermES, localTerm_of_not_le A hLN] using
-      (IsIdempotentElem.zero :
-        IsIdempotentElem
-          (0 : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N)))
-
-/-- Each transported local parent-Hamiltonian term is a symmetric projection.
-
-This is the Euclidean-space version of the fact that the local term is the
-orthogonal projector onto the complement of the translated local ground space.
-For \(L ≤ N\), idempotence follows by restricting to the cyclic window, applying
-the local projector `parentInteractionES`, and using \(P_L^2 = P_L\); for \(L > N\)
-the definition gives the zero projection. -/
-theorem localTermES_isSymmetricProjection {N : ℕ} (A : MPSTensor d D) (L : ℕ)
-    (i : Fin N) : (localTermES A L i).IsSymmetricProjection :=
-  ⟨localTermES_isIdempotentElem A L i, (localTermES_isPositive A L i).isSymmetric⟩
-
-/-- The Euclidean-space parent Hamiltonian is positive because it is a finite
-sum of positive Euclidean-space local terms. -/
-theorem parentHamiltonianES_isPositive (A : MPSTensor d D) (L N : ℕ) :
-    (parentHamiltonianES A L N).IsPositive := by
-  rw [parentHamiltonianES_eq_sum_localTermES]
-  exact LinearMap.isPositive_sum _ fun i _ => localTermES_isPositive A L i
-
-/-- The Euclidean-space parent-Hamiltonian ground space is exactly the kernel of
-the Euclidean-space parent Hamiltonian. -/
-theorem parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES
-    (A : MPSTensor d D) (L N : ℕ) :
-    parentHamiltonianGroundSpaceES A L N =
-      LinearMap.ker (parentHamiltonianES A L N) := by
-  let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
-  ext v
-  constructor
-  · intro hv
-    rw [parentHamiltonianGroundSpaceES, Submodule.mem_map] at hv
-    obtain ⟨w, hw, rfl⟩ := hv
-    rw [LinearMap.mem_ker] at hw ⊢
-    simpa [parentHamiltonianES, e] using congrArg e.symm hw
-  · intro hv
-    rw [LinearMap.mem_ker] at hv
-    rw [parentHamiltonianGroundSpaceES, Submodule.mem_map]
-    refine ⟨e v, ?_, by simp [e]⟩
-    rw [LinearMap.mem_ker]
-    have hv' := congrArg e hv
-    simpa [parentHamiltonianES, e] using hv'
 
 /-! ### The local parent interaction and the parent interaction on the ring
 

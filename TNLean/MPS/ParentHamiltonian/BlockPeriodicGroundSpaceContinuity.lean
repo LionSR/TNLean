@@ -20,12 +20,6 @@ one positive gap at each such fixed volume.
 
 Source: arXiv:1010.3732, Appendix A, lines 2575--2578; arXiv:2011.12127,
 Section IV.C, lines 2114--2129.
-
-**Transitional (#10948).**
-`ker_parentHamiltonianES_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES` and
-`continuous_parentHamiltonianES_toTensorFromBlocks_kernelProjection_family`,
-stated for the Euclidean-space operator, are kept until their users are converted; the last
-section states them for the Hamiltonian of the parent interaction on the ring.
 -/
 
 open scoped BigOperators Matrix Topology ComplexOrder
@@ -127,48 +121,6 @@ theorem continuous_blockPeriodicMpvMapES_family
   convert h using 1
   ext x σ
   simp [blockPeriodicMpvMapES, Fintype.linearCombination, Finset.sum_apply]
-
-/-- Above a simultaneous injectivity length, the periodic parent kernel
-is the range of the component-vector map, including at the shortest ring
-containing the interaction. Source: arXiv:2011.12127, Section IV.C,
-lines 2114--2129. -/
-theorem ker_parentHamiltonianES_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES
-    [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
-    (hμ : ∀ j, μ j ≠ 0) {S R N : ℕ}
-    (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
-    (hR : S + 1 ≤ R) (hRN : R ≤ N) :
-    LinearMap.ker (parentHamiltonianES
-      (toTensorFromBlocks (d := d) (μ := μ) A) R N) =
-      (blockPeriodicMpvMapES A N).range := by
-  rw [range_blockPeriodicMpvMapES,
-    ← parentHamiltonianGroundSpaceES_eq_ker_parentHamiltonianES,
-    parentHamiltonianGroundSpaceES,
-    ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop μ A hμ hS hSpan hR hRN]
-
-/-- The periodic ground-space projection is continuous for a family with
-one common positive simultaneous injectivity length. The nonzero weights
-may vary arbitrarily, since they leave the periodic component span unchanged.
-Source: arXiv:1010.3732, Appendix A, lines 2575--2578. -/
-theorem continuous_parentHamiltonianES_toTensorFromBlocks_kernelProjection_family
-    {X : Type*} [TopologicalSpace X] [NeZero d] [∀ j, NeZero (dim j)]
-    (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
-    (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
-    {S R N : ℕ} (hS : 0 < S) (hSpan : ∀ x, WordTupleSpanTop (A x) S)
-    (hR : S + 1 ≤ R) (hRN : R ≤ N) :
-    Continuous fun x => (LinearMap.ker (parentHamiltonianES
-      (toTensorFromBlocks (d := d) (μ := μ x) (A x)) R N)).starProjection := by
-  have hInj (x : X) : Function.Injective (blockPeriodicMpvMapES (A x) N) :=
-    blockPeriodicMpvMapES_injective_of_wordTupleSpanTop (A x)
-      (wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega : S ≤ N))
-  have hProj := ContinuousLinearMap.continuous_injectiveRangeProjector
-    (fun x => blockPeriodicMpvMapES (A x) N)
-    (continuous_blockPeriodicMpvMapES_family A hA N) hInj
-  have hKernel (x : X) :=
-    ker_parentHamiltonianES_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES
-      (μ x) (A x) (hμ x) hS (hSpan x) hR hRN
-  simpa only [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection,
-    ← hKernel] using hProj
 
 /-! ### The parent interaction on the ring -/
 

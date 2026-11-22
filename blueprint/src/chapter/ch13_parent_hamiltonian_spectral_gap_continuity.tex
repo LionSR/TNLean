@@ -454,10 +454,10 @@ is recorded in
         MPSTensor.blockPeriodicMpvMapES_apply,
         MPSTensor.blockPeriodicMpvMapES_eq_blockGroundSpaceMapES,
         MPSTensor.continuous_blockPeriodicMpvMapES_family,
-        MPSTensor.ker_parentHamiltonianES_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES,
+        MPSTensor.ker_hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES,
         MPSTensor.blockPeriodicMpvMapES_injective_of_wordTupleSpanTop,
         MPSTensor.range_blockPeriodicMpvMapES,
-        MPSTensor.continuous_parentHamiltonianES_toTensorFromBlocks_kernelProjection_family,
+        MPSTensor.continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_kernelProjection_family,
         MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_wordTupleSpanTop}
     \leanok
     \uses{thm:compact_kernel_gap}
@@ -842,17 +842,13 @@ is recorded in
 
 \begin{lemma}[On-site symmetry of open and periodic interaction sums]
     \label{thm:parent_interaction_sum_on_site_symmetry}
-    \lean{MPSTensor.periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow,
-        MPSTensor.hamiltonian_chainTranslates_commute_onSiteTensorPow}
+    \lean{MPSTensor.hamiltonian_chainTranslates_commute_onSiteTensorPow}
     \leanok
     Let $h$ be an interaction on $R$ sites, let $U$ be a physical
     matrix, and suppose $[h,U^{\otimes R}]=0$. The sum of the translates
     of $h$ over the nonwrapping windows of the open chain commutes with
     $U^{\otimes N}$ at every length $N$; the periodic sum is
-    Lemma~\ref{thm:spt_interaction_hamiltonian_symmetry}. In
-    configuration coordinates, for $N\geq R$,
-    cyclic extension is the matrix obtained by placing $h$ on the
-    window and the identity on its complement.
+    Lemma~\ref{thm:spt_interaction_hamiltonian_symmetry}.
 \end{lemma}
 
 \begin{proof}

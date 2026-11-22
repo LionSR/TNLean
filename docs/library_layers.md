@@ -831,7 +831,7 @@ usually defines the object):
 - `MPS.ParentHamiltonian.Gap.PrimitiveBlockGapThreshold` ← `MPS.ParentHamiltonian.Martingale.PrimitiveBlockGapThreshold`, `MPS.ParentHamiltonian.Martingale.BlockGapAtSimultaneousInjectivity`, `MPS.ParentHamiltonian.Martingale.PrimitiveBlockGapAtC1Range`, `MPS.ParentHamiltonian.Martingale.PrimitiveBlockUniformGap`
 - `MPS.ParentHamiltonian.Gap.PrimitiveBlockOpenGapAllLengths` ← `MPS.ParentHamiltonian.Martingale.PrimitiveBlockOpenGapAllLengths`, `MPS.ParentHamiltonian.Martingale.BlockOpenGapAllLengths`, `MPS.ParentHamiltonian.Martingale.NormalBlockOpenGap`
 - `MPS.ParentHamiltonian.Interaction.ArbitraryInteractionBlockDegeneracy` ← `MPS.ParentHamiltonian.CyclicBlockState`, `MPS.ParentHamiltonian.ArbitraryInteractionBlockDegeneracy`, `MPS.ParentHamiltonian.CanonicalArbitraryInteractionDegeneracy`
-- `MPS.ParentHamiltonian.Interaction.OpenInteraction` ← `MPS.ParentHamiltonian.Martingale.OpenInteraction`, `MPS.ParentHamiltonian.CanonicalParentInteractionExistence`
+- `MPS.ParentHamiltonian.Interaction.OpenInteraction` ← `MPS.ParentHamiltonian.CanonicalParentInteractionExistence`
 - `MPS.ParentHamiltonian.Interaction.ParentInteractionGap` ← `MPS.ParentHamiltonian.Martingale.ParentInteractionGap`, `MPS.ParentHamiltonian.Martingale.CanonicalGapAtBoundedRange`
 - `MPS.ParentHamiltonian.Interaction.PhysicalSectorProjectorTransport` ← `MPS.ParentHamiltonian.PhysicalSectorProjectorTransport`, `MPS.ParentHamiltonian.PhysicalSectorKernelDecomposition`
 - `MPS.ParentHamiltonian.Interaction.PrimeLengthBondDimensionDichotomy` ← `MPS.ParentHamiltonian.PrimeLengthBondDimensionDichotomy`, `MPS.ParentHamiltonian.FinitePrefixUniformBond`
@@ -1618,7 +1618,7 @@ existing directory of that layer has the same objects (old `MPS/BNT`, `MPS/Perio
   disappears. Generic part: `Gap/Spectator` (fibrewise operators over spectator
   coordinates, all `qiclean:analysis`), the interaction sums now in `ParentInteraction`
   (`Transport`, `OpenHamiltonian`, `FiniteIntervalGapComparison`, `Reduction`) and `Interaction`
-  (`OpenInteraction`, `PeriodicInteraction`, `PeriodicInteractionSections`, `LocalEquivalenceBounds`,
+  (`PeriodicInteraction`, `PeriodicInteractionSections`, `LocalEquivalenceBounds`,
   `EventualKernelOpenGap`, range comparison for arbitrary interactions), `Commuting`
   (`OverlapReduction`), `ProjectorDefect` (`C3Threshold`), `Continuity`, `Blocking`
   (residue covers). The method's own objects are named for themselves: `Gap/Filtration`
@@ -1646,7 +1646,7 @@ existing directory of that layer has the same objects (old `MPS/BNT`, `MPS/Perio
 | `PrimitiveGaugeExistence` (`Gap/Comparison`) | CanonicalForm and ParentHamiltonian | `exists_hasComplementaryFixedPointGap_gauge_of_isNormal` (a normal tensor has a trace-preserving primitive gauge with faithful fixed point), `parentHamiltonianES_eq_of_groundSpace_eq` | gauge lemma to the CanonicalForm layer beside `NormalTensorGauge`; the ground-space lemma to `ParentInteraction`; gap theorems stay |
 | `PhysicalDeformation` (`ParentInteraction`) | ParentInteraction and Deformation | `IsParentInteraction` (used by `ParentInteractionComparison`, `LocalParentExpectation`) | predicate and basic lemmas to `ParentInteraction`; `onSiteTensorPow` and the deformed interaction to `Deformation` |
 | `Martingale.OpenRangeComparison` | ParentInteraction | `openParentHamiltonianES_eq_of_groundSpace_eq` forces `BlockOpenGroundSpaceAtSimultaneousInjectivity` into `Gap` | move the lemma to `ParentInteraction`; the importer returns to `BlockGroundSpace` |
-| `Martingale.PeriodicInteraction`, `Martingale.OpenInteraction` (`Interaction`) | QICLean (generic interaction sums) and ParentInteraction | `periodicLocalInteractionES`, `openInteractionHamiltonianES` of arbitrary local operators; the import of `PeriodicRangeComparison` is only for `localTermES_self_zero_eq_parentInteractionES` | move that lemma to `Transport`; the sums then sit below `Gap` and are QICLean material (`qiclean:hamiltonian`) |
+| `Martingale.PeriodicInteraction` (`Interaction`) | QICLean (generic interaction sums) | order, scalar multiples and positivity of the Hamiltonian of the translates of a local matrix on the ring, and the transfer of an eigenvalue gap along a two-sided comparison | QICLean material (`qiclean:hamiltonian`) |
 | `Martingale.CyclicWindowOpenHamiltonian` (`Gap/Comparison`) | ParentInteraction | imports `SpectatorTransport` but uses none of its constants (needs only the fibrewise maps) | import `SpectatorMaps` instead; the module can then live in `ParentInteraction` |
 | `BulkObservableCommutator` (`BulkObservable`) | QICLean (`openInteractionMatrix`, `localCommutatorObservable`) and ParentInteraction | imports `IsometricDeformationSymmetry` for `periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow` | move that lemma to `PeriodicInteraction`; the generic definitions to QICLean |
 | `PeriodicOriginalIntersection`, `PrimitiveFamilyIntersection` (`Interaction`) | BlockGroundSpace and Interaction | `exists_eventually_cyclic_wordSpan`, `exists_eventually_groundSpace_restriction_intersection`, `eventually_iSup_groundSpace_restriction_intersection_*` versus `exists_ker_openParentHamiltonianES_*`, `exists_positive_parent_interaction*` | intersection statements to `BlockGroundSpace/Sector`, interaction existence stays |

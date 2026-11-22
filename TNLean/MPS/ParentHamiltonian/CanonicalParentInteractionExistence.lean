@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
-import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
+import TNLean.MPS.ParentHamiltonian.Martingale.PeriodicInteraction
+import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
 
 /-!
 # The positive canonical interaction from exact open kernels
