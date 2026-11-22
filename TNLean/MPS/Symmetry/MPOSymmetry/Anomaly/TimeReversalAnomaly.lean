@@ -583,7 +583,7 @@ theorem nonempty_bondGauge_timeReversal (hF : F.IsNormalRepresentation)
     have hV : Matrix.piKronecker (fun _ : Fin N ↦ v) *
         (Matrix.piKronecker fun _ : Fin N ↦ v)ᴴ = 1 :=
       mul_eq_one_comm.mp (Matrix.IsIsometry.piKronecker
-        (by simpa [Matrix.star_eq_conjTranspose] using Matrix.mem_unitaryGroup_iff'.mp hv))
+        (fun _ ↦ Matrix.mem_unitaryGroup_iff'.mp hv))
     rw [mpo_timeReversal, hT g N hN, Matrix.mul_assoc, hV, Matrix.mul_one]
   have key : ∀ g, ∃ P Q : Matrix (Fin (F.bondDim g)) (Fin (F.bondDim g)) ℂ,
       P * Q = 1 ∧ Q * P = 1 ∧

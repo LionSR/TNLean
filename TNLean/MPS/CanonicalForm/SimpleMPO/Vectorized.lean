@@ -329,7 +329,7 @@ theorem isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor (M : MPOTensor d 
   rw [mpo_onSite, mpo_pairTwist, MonoidHom.comp_apply]
   change _ ↔ _ = _ * _ * (Matrix.piKronecker fun _ : Fin L => (U g).map (starRingEnd ℂ))ᵀ
   rw [finKronecker_map_star_transpose,
-    commute_iff_mul_mul_conjTranspose (Matrix.IsIsometry.piKronecker (hU g))]
+    commute_iff_mul_mul_conjTranspose (Matrix.IsIsometry.piKronecker (fun _ ↦ hU g))]
 
 /-- **Strong on-site symmetry on the vectorized state.**
 
@@ -375,7 +375,7 @@ theorem isWeakOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor
     (pairTwist (U g) ((U g).map (starRingEnd ℂ)) M) M X L 1
   simp only [one_mul, one_smul] at hvec
   rw [hvec, mpo_onSite, mpoWithBoundary_pairTwist, finKronecker_map_star_transpose,
-    commute_iff_mul_mul_conjTranspose (Matrix.IsIsometry.piKronecker (hU g)),
+    commute_iff_mul_mul_conjTranspose (Matrix.IsIsometry.piKronecker (fun _ ↦ hU g)),
     eq_comm]
 
 /-- Strong on-site symmetry of the boundary-weighted vectorized state.

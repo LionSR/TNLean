@@ -290,11 +290,11 @@ theorem isWeakOnSiteSymmetry_of_gaugePhase_purification {G : Type*} [Monoid G]
   set Φ := purificationAmplitude A L
   set u := Matrix.piKronecker fun _ : Fin L => U g
   set W := (Matrix.piKronecker fun _ : Fin L => V g)ᵀ
-  have hu : uᴴ * u = 1 := Matrix.IsIsometry.piKronecker (hU g)
+  have hu : uᴴ * u = 1 := Matrix.IsIsometry.piKronecker (fun _ ↦ hU g)
   have hW : W * Wᴴ = 1 := by
     have h1 : Wᴴ * W = 1 := by
       simp only [W, Matrix.transpose_piKronecker]
-      exact Matrix.IsIsometry.piKronecker (transpose_conjTranspose_mul_self (hV g))
+      exact Matrix.IsIsometry.piKronecker (fun _ ↦ transpose_conjTranspose_mul_self (hV g))
     exact mul_eq_one_comm.mp h1
   have hΦ : u * Φ * W = ζ g ^ L • Φ := by
     rw [finKronecker_mul_purificationAmplitude, purificationAmplitude_mul_finKronecker_transpose]

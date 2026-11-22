@@ -175,7 +175,7 @@ theorem ExactMPSGroundPath.exists_chain_character
     intro g
     rw [Matrix.mem_unitaryGroup_iff']
     exact Matrix.IsIsometry.piKronecker
-      (Matrix.mem_unitaryGroup_iff'.mp (SetLike.coe_mem (U g)))
+      (fun _ ↦ Matrix.mem_unitaryGroup_iff'.mp (SetLike.coe_mem (U g)))
   let v : unitInterval → EuclideanSpace ℂ (Fin N → Fin d) := fun t =>
     (WithLp.linearEquiv 2 ℂ ((Fin N → Fin d) → ℂ)).symm (mpv (Q.tensor t))
   have hv : Continuous v := continuous_mpvES_family (fun t : unitInterval => Q.tensor t)

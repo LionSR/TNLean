@@ -217,7 +217,7 @@ theorem wBlockEncoding_conjTranspose_mul_self {k : ℕ} (hk : 0 < k) :
 theorem rectKronecker_wBlockEncoding_isometry {k : ℕ} (hk : 0 < k) (m : ℕ) :
     (Matrix.piKronecker fun _ : Fin m => wBlockEncoding k)ᴴ *
       Matrix.piKronecker (fun _ : Fin m => wBlockEncoding k) = 1 :=
-  Matrix.IsIsometry.piKronecker (wBlockEncoding_conjTranspose_mul_self hk)
+  Matrix.IsIsometry.piKronecker (fun _ ↦ wBlockEncoding_conjTranspose_mul_self hk)
 
 private theorem product_vacuum_blocks {k : ℕ} (m : ℕ)
     (σ : Fin m → Fin (blockPhysDim 2 k)) :

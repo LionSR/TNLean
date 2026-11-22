@@ -39,7 +39,7 @@ theorem onSiteTensorPow_conjTranspose_mul_self {d : ℕ}
     (onSiteTensorPow L U)ᴴ * onSiteTensorPow L U = 1 := by
   rw [onSiteTensorPow_eq_finKronecker]
   exact Matrix.IsIsometry.piKronecker
-    ((Matrix.mem_unitaryGroup_iff').mp hU)
+    (fun _ ↦ (Matrix.mem_unitaryGroup_iff').mp hU)
 
 /-- If physical rotation is an invertible virtual gauge change, the
 finite-window ground space is invariant under the tensor power of the
