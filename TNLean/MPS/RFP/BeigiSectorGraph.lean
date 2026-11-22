@@ -250,7 +250,8 @@ coordinates.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III, equation (2), page 3. -/
 theorem singleKrausMap_groundBondProduct (F : BeigiSectorGraphData A)
-    {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
+    {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     singleKrausMap (Matrix.tensorPower N F.unitaryᴴ)
         ((List.ofFn fun i : Fin N ↦
           ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
@@ -264,6 +265,7 @@ theorem singleKrausMap_groundBondProduct (F : BeigiSectorGraphData A)
             (star (F.unitary ⊗ₖ F.unitary) *
               twoSiteParentGroundProjectorMatrix A *
                 (F.unitary ⊗ₖ F.unitary)))).prod := by
+  have : NeZero N := ⟨by omega⟩
   have hUstarU : F.unitaryᴴ * F.unitary = 1 := by
     simpa only [Matrix.star_eq_conjTranspose] using
       Unitary.star_mul_self_of_mem F.unitary_mem
@@ -274,10 +276,12 @@ theorem singleKrausMap_groundBondProduct (F : BeigiSectorGraphData A)
   simpa only [groundBond, transformedGroundBond] using hprod
 
 private theorem groundBondEmbeddings_commute (F : BeigiSectorGraphData A)
-    {N : ℕ} [NeZero N] (hN : 2 ≤ N) (i j : Fin N) :
+    {N : ℕ} (hN : 2 ≤ N) (i j : Fin N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Commute
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A))
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN j) (groundBond A)) := by
+  have : NeZero N := ⟨by omega⟩
   classical
   let W := Matrix.tensorPower N F.unitaryᴴ
   let G : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := fun n ↦
@@ -326,8 +330,10 @@ private theorem groundBondEmbeddings_commute (F : BeigiSectorGraphData A)
   exact hback
 
 private theorem localTerm_commute (F : BeigiSectorGraphData A)
-    {N : ℕ} [NeZero N] (hN : 2 ≤ N) (i j : Fin N) :
+    {N : ℕ} (hN : 2 ≤ N) (i j : Fin N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Commute (localTerm A 2 N i) (localTerm A 2 N j) := by
+  have : NeZero N := ⟨by omega⟩
   classical
   let G : Fin N → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := fun n ↦
     ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN n) (groundBond A)
@@ -359,9 +365,11 @@ private theorem localTerm_commute (F : BeigiSectorGraphData A)
   exact add_left_cancel (add_left_cancel (add_left_cancel hcomp))
 
 private theorem commute_toEuclideanLin_parentRingInteraction_term
-    (F : BeigiSectorGraphData A) {N : ℕ} [NeZero N] (hN : 2 ≤ N) (i j : Fin N) :
+    (F : BeigiSectorGraphData A) {N : ℕ} (hN : 2 ≤ N) (i j : Fin N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Commute (Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i))
       (Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term j)) := by
+  have : NeZero N := ⟨by omega⟩
   have hraw := F.localTerm_commute hN i j
   rw [localTerm_eq_toLin'_term A 2 i, localTerm_eq_toLin'_term A 2 j] at hraw
   exact hraw.map (LinearEquiv.conjAlgEquiv ℂ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm)
@@ -383,7 +391,8 @@ private theorem edgeProjector_trace (F : BeigiSectorGraphData A)
   exact (F.edgeProjector_isProj a b).trace
 
 private theorem transformedGroundBondProduct_trace (F : BeigiSectorGraphData A)
-    {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
+    {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Matrix.trace
         (List.ofFn fun i : Fin N ↦
           ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
@@ -392,6 +401,7 @@ private theorem transformedGroundBondProduct_trace (F : BeigiSectorGraphData A)
       ∑ k : Fin N → Fin F.sectorCount,
         (↑(∏ n : Fin N,
           Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1)))) : ℂ) := by
+  have : NeZero N := ⟨by omega⟩
   classical
   let e := Matrix.etaCyclicEdgeEquiv (N := N) F.leftDim F.rightDim F.sectorEquiv
   let edgeBlock (k : Fin N → Fin F.sectorCount) :
@@ -432,13 +442,15 @@ private theorem transformedGroundBondProduct_trace (F : BeigiSectorGraphData A)
       norm_cast
 
 private theorem groundBondProduct_trace (F : BeigiSectorGraphData A)
-    {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
+    {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Matrix.trace
         (List.ofFn fun i : Fin N ↦
           ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)).prod =
       ∑ k : Fin N → Fin F.sectorCount,
         (↑(∏ n : Fin N,
           Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1)))) : ℂ) := by
+  have : NeZero N := ⟨by omega⟩
   classical
   let W := Matrix.tensorPower N F.unitaryᴴ
   let Q := (List.ofFn fun i : Fin N ↦
@@ -466,10 +478,12 @@ private theorem groundBondProduct_trace (F : BeigiSectorGraphData A)
         Matrix.one_mul]
     _ = _ := by rw [hconj]; exact htrace
 
-private theorem toLin'_groundBondProduct {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
+private theorem toLin'_groundBondProduct {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Matrix.toLin' ((List.ofFn fun i : Fin N ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)).prod) =
       (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod := by
+  have : NeZero N := ⟨by omega⟩
   classical
   have hfactor (i : Fin N) : Matrix.toLin'
       (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)) =
@@ -512,7 +526,7 @@ private theorem conj_localComplementProduct {N : ℕ} (hN : 2 ≤ N) :
 /-- The three realizations of the complete complementary-interaction product,
 together with the canonical identifications between them. -/
 private structure ComplementProductTransport (A : MPSTensor d D)
-    (N : ℕ) [NeZero N] (hN : 2 ≤ N) where
+    (N : ℕ) (_hN : 2 ≤ N) where
   qMatrix : Matrix (Cfg d N) (Cfg d N) ℂ
   qRaw : Module.End ℂ (NSiteSpace d N)
   qES : Module.End ℂ (EuclideanSpace ℂ (Cfg d N))
@@ -523,25 +537,28 @@ private structure ComplementProductTransport (A : MPSTensor d D)
 /-- The canonical matrix, raw-linear, and Euclidean transport witness for the
 complete complementary-interaction product. -/
 private noncomputable def complementProductTransport (A : MPSTensor d D)
-    {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
-    ComplementProductTransport A N hN where
-  qMatrix := (List.ofFn fun i : Fin N ↦
-    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)).prod
-  qRaw := (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod
-  qES := (List.ofFn fun i : Fin N ↦
-    1 - Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i)).prod
-  e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
-  hMatrix := toLin'_groundBondProduct (A := A) hN
-  hES := conj_localComplementProduct (A := A) hN
+    {N : ℕ} (hN : 2 ≤ N) :
+    ComplementProductTransport A N hN :=
+  haveI : NeZero N := ⟨by omega⟩
+  { qMatrix := (List.ofFn fun i : Fin N ↦
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i) (groundBond A)).prod
+    qRaw := (List.ofFn fun i : Fin N ↦ 1 - localTerm A 2 N i).prod
+    qES := (List.ofFn fun i : Fin N ↦
+      1 - Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i)).prod
+    e := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
+    hMatrix := toLin'_groundBondProduct (A := A) hN
+    hES := conj_localComplementProduct (A := A) hN }
 
 private theorem localComplementProductES_trace (F : BeigiSectorGraphData A)
-    {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
+    {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     LinearMap.trace ℂ (EuclideanSpace ℂ (Cfg d N))
         (List.ofFn fun i : Fin N ↦
           1 - Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i)).prod =
       ∑ k : Fin N → Fin F.sectorCount,
         (↑(∏ n : Fin N,
           Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1)))) : ℂ) := by
+  have : NeZero N := ⟨by omega⟩
   classical
   let transport := complementProductTransport A hN
   change LinearMap.trace ℂ (EuclideanSpace ℂ (Cfg d N)) transport.qES = _
@@ -557,10 +574,12 @@ private theorem localComplementProductES_trace (F : BeigiSectorGraphData A)
         F.groundBondProduct_trace hN
 
 private theorem parentHamiltonianGroundSpaceES_finrank_eq_all_sequences
-    (F : BeigiSectorGraphData A) {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
+    (F : BeigiSectorGraphData A) {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Module.finrank ℂ (parentHamiltonianGroundSpaceES A 2 N) =
       ∑ k : Fin N → Fin F.sectorCount,
         ∏ n : Fin N, Module.finrank ℂ (F.edgeGroundSpace (k n) (k (n + 1))) := by
+  have : NeZero N := ⟨by omega⟩
   classical
   have hproj := LinearMap.isProj_ker_sum_listProd_one_sub
     (fun i : Fin N ↦ Matrix.toEuclideanLin ((parentRingInteraction A 2 N).term i))
@@ -587,7 +606,7 @@ generalization to an explicit commutativity hypothesis, are recorded in
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section III. -/
 theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
-    (F : BeigiSectorGraphData A) {N : ℕ} [NeZero N] (hN : 2 ≤ N)
+    (F : BeigiSectorGraphData A) {N : ℕ} (hN : 2 ≤ N)
     (v : NSiteSpace d N)
     (hv : ((List.ofFn fun i : Fin N ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
@@ -596,6 +615,7 @@ theorem mem_ker_parentHamiltonian_of_groundBondProduct_mulVec_eq_self
           (twoSiteParentGroundProjectorMatrix A))).prod).mulVec v = v) :
     v ∈ LinearMap.ker (parentHamiltonian A 2 N) := by
   classical
+  have : NeZero N := ⟨by omega⟩
   let transport := complementProductTransport A hN
   have hraw : transport.qRaw v = v := by
     rw [← transport.hMatrix, Matrix.toLin'_apply]

@@ -50,10 +50,12 @@ of the two-site parent interaction on the ring, with eigenvalue \(1-\cos(2\pi/N)
 periodic version of the one-magnon recurrence in Koma--Nachtergaele, arXiv:cond-mat/9512120,
 Lemma 4, equation (3.13). -/
 theorem toEuclideanLin_hamiltonian_parentRingInteraction_shortRangeHeisenbergMagnon {N : ℕ}
-    [NeZero N] (hN : 2 ≤ N) :
+    (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     Matrix.toEuclideanLin (parentRingInteraction shortRangeHeisenbergTensor 2 N).hamiltonian
         (shortRangeHeisenbergMagnon N) =
       (ZMod.cycleFourierGap N : ℂ) • shortRangeHeisenbergMagnon N := by
+  have : NeZero N := ⟨by omega⟩
   apply PiLp.ext
   intro σ
   rw [toEuclideanLin_hamiltonian_parentRingInteraction_apply_of_singlet_parentInteraction

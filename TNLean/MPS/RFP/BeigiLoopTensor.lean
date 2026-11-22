@@ -321,7 +321,8 @@ private theorem blockGroundProduct_mulVec_loopCyclicProduct
 
 private theorem transformedGroundBondProduct_mulVec_loopCyclicProduct
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
-    {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
+    {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     ((List.ofFn fun i : Fin N ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
         (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
@@ -330,6 +331,7 @@ private theorem transformedGroundBondProduct_mulVec_loopCyclicProduct
             twoSiteParentGroundProjectorMatrix A *
               (F.unitary ⊗ₖ F.unitary)))).prod).mulVec
         (F.loopCyclicProduct l) = F.loopCyclicProduct l := by
+  have : NeZero N := ⟨by omega⟩
   classical
   let e := Matrix.etaCyclicEdgeEquiv (N := N)
     F.leftDim F.rightDim F.sectorEquiv
@@ -441,13 +443,15 @@ theorem loopProductStateES_linearIndependent
 
 private theorem groundBondProduct_mulVec_loopProductState
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
-    {N : ℕ} [NeZero N] (hN : 2 ≤ N) :
+    {N : ℕ} (hN : 2 ≤ N) :
+    haveI : NeZero N := ⟨by omega⟩;
     ((List.ofFn fun i : Fin N ↦
       ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
         (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
           (finTwoArrowEquiv (Fin d)).symm
           (twoSiteParentGroundProjectorMatrix A))).prod).mulVec
         (F.loopProductState l) = F.loopProductState l := by
+  have : NeZero N := ⟨by omega⟩
   classical
   let W := Matrix.tensorPower N F.unitary
   let Q := (List.ofFn fun i : Fin N ↦

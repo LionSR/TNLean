@@ -152,14 +152,16 @@ noncomputable def uncleHamiltonianES {d a b : ℕ}
 /-- At every fixed periodic chain length, the actual canonical parent
 Hamiltonian converges in operator norm to the sum of the explicit uncle
 projectors. This is the finite-chain uncle-Hamiltonian form theorem. -/
-theorem tendsto_parentHamiltonianES_twoBlockPerturbation {d a b : ℕ}
+theorem tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation {d a b : ℕ}
     (A P : MPSTensor d a) (B Q : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (hU : Kraus.IsInjective (uncleTensor A B R L)) {N : ℕ} (hN : 2 ≤ N) :
-    Filter.Tendsto (fun ε : ℂ => LinearMap.toContinuousLinearMap
-      (parentHamiltonianES (twoBlockPerturbation A P B Q R L ε) 2 N))
+    haveI : NeZero N := ⟨by omega⟩;
+    Filter.Tendsto (fun ε : ℂ => Matrix.toEuclideanCLM (𝕜 := ℂ)
+      (parentRingInteraction (twoBlockPerturbation A P B Q R L ε) 2 N).hamiltonian)
       (𝓝[≠] 0) (𝓝 (uncleHamiltonianES A B R L N)) := by
+  have : NeZero N := ⟨by omega⟩
   have hP := tendsto_parentInteractionES_twoBlockPerturbation A P B Q R L hU
   have hloc (i : Fin N) (τ : Cfg d N) :=
     ((continuous_const : Continuous fun H :
@@ -176,9 +178,11 @@ theorem tendsto_parentHamiltonianES_twoBlockPerturbation {d a b : ℕ}
         (tendsto_finsetSum Finset.univ fun τ _ => hloc i τ)
   convert hsum using 1
   · funext ε
-    rw [parentHamiltonianES_eq_sum_localTermES]
     apply ContinuousLinearMap.ext
     intro v
+    change Matrix.toEuclideanLin
+      (parentRingInteraction (twoBlockPerturbation A P B Q R L ε) 2 N).hamiltonian v = _
+    rw [ManyBody.Interaction.hamiltonian, map_sum]
     change (∑ i : Fin N, localTermES (twoBlockPerturbation A P B Q R L ε) 2 i) v = _
     simp only [LinearMap.sum_apply, sum_apply, smul_apply]
     apply Finset.sum_congr rfl
@@ -189,15 +193,16 @@ theorem tendsto_parentHamiltonianES_twoBlockPerturbation {d a b : ℕ}
 
 /-- The same finite-chain uncle limit holds along real perturbation parameters,
 with complex tensor entries and arbitrary diagonal perturbation blocks. -/
-theorem tendsto_parentHamiltonianES_twoBlockPerturbation_real {d a b : ℕ}
+theorem tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation_real {d a b : ℕ}
     (A P : MPSTensor d a) (B Q : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (hU : Kraus.IsInjective (uncleTensor A B R L)) {N : ℕ} (hN : 2 ≤ N) :
-    Filter.Tendsto (fun ε : ℝ => LinearMap.toContinuousLinearMap
-      (parentHamiltonianES (twoBlockPerturbation A P B Q R L (ε : ℂ)) 2 N))
+    haveI : NeZero N := ⟨by omega⟩;
+    Filter.Tendsto (fun ε : ℝ => Matrix.toEuclideanCLM (𝕜 := ℂ)
+      (parentRingInteraction (twoBlockPerturbation A P B Q R L (ε : ℂ)) 2 N).hamiltonian)
       (𝓝[≠] 0) (𝓝 (uncleHamiltonianES A B R L N)) := by
-  apply (tendsto_parentHamiltonianES_twoBlockPerturbation A P B Q R L hU hN).comp
+  apply (tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation A P B Q R L hU hN).comp
   exact Complex.continuous_ofReal.continuousWithinAt.tendsto_nhdsWithin
     fun ε hε => by simpa using hε
 

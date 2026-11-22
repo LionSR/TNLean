@@ -27,16 +27,9 @@ prime-length construction; it is not inferred from an arbitrary invariant
 line or supplied as an all-volume nonvanishing condition.
 
 Source: SPWC10, arXiv:0909.5347, Theorem 5 and proof, main.tex lines 850--880.
-
-**Transitional (#10948).** `uniform_bondOne_ground_family_of_normal_local_kernel`, stated for the
-Euclidean-space operators of a local operator, is kept for
-`exists_uniform_bondOne_ground_family_of_prime_length_bound`, whose prime-length input is
-restated once QICLean has a ring interaction defined for every range; the statement for the
-translates on the ring of a local matrix is
-`uniform_bondOne_ground_family_translationInvariant_of_normal_local_kernel`.
 -/
 
-open scoped Matrix
+open scoped Matrix ComplexOrder
 
 namespace MPSTensor
 
@@ -70,50 +63,6 @@ theorem exists_cyclic_ground_of_normal_bondOne_local_kernel
       B h hker hLM,
     mpvState_cyclic_invariant B⟩
 
-/-- All-volume uniqueness identifies the actual product vectors as
-one uniform bond-one family, including every positive short volume.
-No short MPS representation or zero-momentum premise is assumed.
-Source: SPWC10, Theorem 5, lines 850--880, normal bond-one branch. -/
-theorem uniform_bondOne_ground_family_of_normal_local_kernel
-    (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L)
-    (hUnique : ∀ M, L ≤ M →
-      Module.finrank ℂ (LinearMap.ker (periodicInteractionHamiltonianES h M)) = 1)
-    (B : MPSTensor d 1) (hB : Kraus.IsNormal B)
-    (hker : groundSpaceES B L ≤ LinearMap.ker h) :
-    ∀ M, 0 < M → L ≤ M → mpvState B M ≠ 0 ∧
-      LinearMap.ker (periodicInteractionHamiltonianES h M) = ℂ ∙ mpvState B M := by
-  intro M hM hLM
-  have : NeZero M := ⟨by omega⟩
-  have hnonzero := mpvState_ne_zero_of_normal_bondOne B hB M hM
-  have hzero := periodicInteractionHamiltonianES_mpvState_eq_zero_of_groundSpaceES_le_ker
-    B h hker hLM
-  exact ⟨hnonzero, eq_span_singleton_of_mem_of_finrank_eq_one (hUnique M hLM) hzero hnonzero⟩
-
-/-- A bond-one ground representation at one sufficiently long prime
-volume supplies the same bond-one ground family at every permitted
-positive volume. The normal tensor and local-kernel inclusion are derived
-by the actual prime-length reduction, not assumed as hypotheses.
-Source: SPWC10, Theorem 5 proof, lines 861--880, bond-one input branch. -/
-theorem exists_uniform_bondOne_ground_family_of_prime_length_bound
-    (h : MPVSpace d L →ₗ[ℂ] MPVSpace d L) (hh : h.IsPositive)
-    (hUnique : ∀ M, L ≤ M →
-      Module.finrank ℂ (LinearMap.ker (periodicInteractionHamiltonianES h M)) = 1)
-    {N : ℕ} (A : MPSTensor d 1) (hPrime : N.Prime) (hBound : L + 4 ≤ N)
-    (hA : mpvState A N ≠ 0)
-    (hzero : periodicInteractionHamiltonianES h N (mpvState A N) = 0) :
-    ∃ B : MPSTensor d 1, ∀ M, 0 < M → L ≤ M → mpvState B M ≠ 0 ∧
-      LinearMap.ker (periodicInteractionHamiltonianES h M) = ℂ ∙ mpvState B M := by
-  have hthreshold : max (((1 : ℕ) ^ 2 + 1) ^ 2)
-      (3 * (1 - 1) * (((1 : ℕ) ^ 2 + 1) ^ 2 + 1)) = 4 := by norm_num
-  obtain ⟨D₀, hD₀, hD, B, hnormal, hker, _, _⟩ :=
-    exists_normal_eventual_ground_data_of_prime_length_bound h hh hUnique A hPrime
-      (by simpa only [hthreshold] using hBound) hA hzero
-  have hdim : D₀ = 1 := by omega
-  subst D₀
-  exact ⟨B, uniform_bondOne_ground_family_of_normal_local_kernel h hUnique B hnormal hker⟩
-
-/-! ### Translates of a local matrix on the ring -/
-
 /-- All-volume uniqueness for the translates on the ring of a local matrix identifies the actual
 product vectors as one uniform bond-one family, including every positive short volume. No short
 MPS representation or zero-momentum premise is assumed. Source: SPWC10, Theorem 5,
@@ -135,5 +84,34 @@ theorem uniform_bondOne_ground_family_translationInvariant_of_normal_local_kerne
     toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker
       B h hker hLM
   exact ⟨hnonzero, eq_span_singleton_of_mem_of_finrank_eq_one (hUnique M hLM) hzero hnonzero⟩
+
+/-- A bond-one ground representation at one sufficiently long prime
+volume supplies the same bond-one ground family at every permitted
+positive volume. The normal tensor and local-kernel inclusion are derived
+by the actual prime-length reduction, not assumed as hypotheses.
+Source: SPWC10, Theorem 5 proof, lines 861--880, bond-one input branch. -/
+theorem exists_uniform_bondOne_ground_family_of_prime_length_bound
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
+    (hUnique : ∀ M [NeZero M], L ≤ M →
+      Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant M h).hamiltonian)) = 1)
+    {N : ℕ} (A : MPSTensor d 1) (hPrime : N.Prime) (hBound : L + 4 ≤ N)
+    (hA : mpvState A N ≠ 0)
+    (hzero : haveI : NeZero N := ⟨hPrime.ne_zero⟩;
+      Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant N h).hamiltonian (mpvState A N) = 0) :
+    ∃ B : MPSTensor d 1, ∀ M (hM : 0 < M), L ≤ M → haveI : NeZero M := ⟨by omega⟩;
+      mpvState B M ≠ 0 ∧
+      LinearMap.ker (Matrix.toEuclideanLin
+        (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState B M := by
+  have hthreshold : max (((1 : ℕ) ^ 2 + 1) ^ 2)
+      (3 * (1 - 1) * (((1 : ℕ) ^ 2 + 1) ^ 2 + 1)) = 4 := by norm_num
+  obtain ⟨D₀, hD₀, hD, B, hnormal, hker, _, _⟩ :=
+    exists_normal_eventual_ground_data_of_prime_length_bound h hh hUnique A hPrime
+      (by simpa only [hthreshold] using hBound) hA hzero
+  have hdim : D₀ = 1 := by omega
+  subst D₀
+  exact ⟨B, uniform_bondOne_ground_family_translationInvariant_of_normal_local_kernel
+    h hUnique B hnormal hker⟩
 
 end MPSTensor

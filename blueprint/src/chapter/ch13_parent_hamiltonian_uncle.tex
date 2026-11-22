@@ -136,8 +136,8 @@ one scalar need not be a similarity transformation.
     \lean{MPSTensor.uncleInteractionES}
     \lean{MPSTensor.uncleHamiltonianES}
     \lean{MPSTensor.tendsto_parentInteractionES_twoBlockPerturbation}
-    \lean{MPSTensor.tendsto_parentHamiltonianES_twoBlockPerturbation}
-    \lean{MPSTensor.tendsto_parentHamiltonianES_twoBlockPerturbation_real}
+    \lean{MPSTensor.tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation}
+    \lean{MPSTensor.tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation_real}
     \leanok
     \uses{lem:uncle_local_projector_continuity,lem:uncle_regularization,
         def:blocked_configuration_isometry,def:parent_hamiltonian}
@@ -165,7 +165,7 @@ one scalar need not be a similarity transformation.
 \begin{lemma}[Uncle limits under an injective perturbation]
     \label{cor:uncle_parent_limit_injective_perturbation}
     \lean{MPSTensor.tendsto_parentInteractionES_twoBlockPerturbation_of_isInjective_perturbation,
-        MPSTensor.tendsto_parentHamiltonianES_twoBlockPerturbation_of_isInjective_perturbation}
+        MPSTensor.tendsto_hamiltonian_parentRingInteraction_twoBlockPerturbation_of_isInjective_perturbation}
     \leanok
     \uses{lem:uncle_injective_perturbation, thm:two_block_uncle_parent_limit}
     If the full matrices $T_i$ of Lemma~\ref{lem:uncle_injective_perturbation}

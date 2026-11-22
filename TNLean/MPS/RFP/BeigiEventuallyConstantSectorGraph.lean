@@ -51,8 +51,10 @@ theorem isEdge_iff_edgeWeight_ne_zero (F : BeigiSectorGraphData A)
   · intro hweight hbot
     exact hweight (Submodule.finrank_eq_zero.mpr hbot)
 
-private theorem next_eq_add_one {N : ℕ} [NeZero N] (hN : 0 < N) (i : Fin N) :
+private theorem next_eq_add_one {N : ℕ} (hN : 0 < N) (i : Fin N) :
+    haveI : NeZero N := ⟨by omega⟩;
     FiniteWeightedDigraph.next hN i = i + 1 := by
+  have : NeZero N := ⟨by omega⟩
   apply Fin.ext
   simp [FiniteWeightedDigraph.next, Fin.add_def]
 

@@ -39,7 +39,8 @@ Source: Hastings–Koma, arXiv:math-ph/0507008, Section 3;
 SPC11, arXiv:1010.3732, Section II.F, lines 929–953. -/
 theorem ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound
     (Q : ExactMPSGroundPath P) :
-    ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) [NeZero N] (_hN : 2 ≤ N),
+    ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) (hN : 2 ≤ N),
+      haveI : NeZero N := ⟨by omega⟩;
       ∀ (A B : MPOTensor.ChainOperator d N) (X Y : Finset (Fin N)),
       ∀ (hX : X.Nonempty) (hY : Y.Nonempty),
       A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X →
@@ -59,7 +60,8 @@ theorem ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound
               (2 * ‖A‖ * ‖B‖ / T) * Real.exp (-T ^ 2 / (2 * (s : ℝ))))) * ‖ψ‖ ^ 2 := by
   obtain ⟨Δ, hΔ, hdata⟩ := Q.exists_uniform_ground_line_spectral_gap
   refine ⟨Δ, hΔ, ?_⟩
-  intro γ hγ N _ hN A B X Y hX hY hA hB hXY hcenter q T a hq hT ha
+  intro γ hγ N hN A B X Y hX hY hA hB hXY hcenter q T a hq hT ha
+  have : NeZero N := ⟨by omega⟩
   obtain ⟨E₀, hH, hline, hgap⟩ := hdata γ hγ N hN
   have hne : ManyBody.groundSpace
       (Interaction.translationInvariant N (P.interaction γ)).hamiltonian E₀ ≠ ⊥ := by
@@ -80,7 +82,8 @@ Source: Hastings–Koma, arXiv:math-ph/0507008, Section 3;
 SPC11, arXiv:1010.3732, Section II.F, lines 929–953. -/
 theorem ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound
     (Q : ExactMPSGroundPath P) :
-    ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) [NeZero N] (_hN : 2 ≤ N),
+    ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) (hN : 2 ≤ N),
+      haveI : NeZero N := ⟨by omega⟩;
       ∀ (A B : MPOTensor.ChainOperator d N) (X Y : Finset (Fin N)),
       ∀ (hX : X.Nonempty) (hY : Y.Nonempty),
       A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X →
@@ -101,7 +104,8 @@ theorem ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound
                 (2 / T) * Real.exp (-T ^ 2 / (2 * (s : ℝ))))) := by
   obtain ⟨Δ, hΔ, hEst⟩ := Q.exists_uniform_centered_correlation_gaussian_bound
   refine ⟨Δ, hΔ, ?_⟩
-  intro γ hγ N _ hN A B X Y hX hY hA hB hXY q T a hq hT ha
+  intro γ hγ N hN A B X Y hX hY hA hB hXY q T a hq hT ha
+  have : NeZero N := ⟨by omega⟩
   let ψ := mpvState (Q.tensor γ) N
   have hψne : ψ ≠ 0 := by
     exact ((EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm.map_eq_zero_iff).not.mpr
