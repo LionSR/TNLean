@@ -151,7 +151,7 @@ theorem groundSpace_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTen
     (L : ℕ) :
     groundSpace (rotatePhysical Λ A) L =
       (groundSpace A L).map (Matrix.toLin' (onSiteTensorPow L Λ)) := by
-  simpa only [onSiteTensorPow_eq_finKronecker, Matrix.rectKronecker_eq_finKronecker] using
+  simpa only [onSiteTensorPow_eq_finKronecker] using
     groundSpace_rotatePhysical_rectangular Λ A L
 
 /-- The Hilbert-space realization of the local ground space of the deformed tensor is the
@@ -160,7 +160,7 @@ theorem groundSpaceES_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPST
     (L : ℕ) :
     groundSpaceES (rotatePhysical Λ A) L =
       (groundSpaceES A L).map (Matrix.toEuclideanLin (onSiteTensorPow L Λ)) := by
-  simpa only [onSiteTensorPow_eq_finKronecker, Matrix.rectKronecker_eq_finKronecker] using
+  simpa only [onSiteTensorPow_eq_finKronecker] using
     groundSpaceES_rotatePhysical_rectangular Λ A L
 
 /-! ### The deformed parent interaction -/
