@@ -166,7 +166,11 @@ is recorded in
     $H^{\mathrm{open}}_{N,W}(A)$ is at least $\gamma$, then every nonzero
     eigenvalue of $H^{\mathrm{open}}_N(h)$ is at least
     $\kappa\gamma/(W-R+1)$. There is no hypothesis on the kernel of $h$
-    itself. Taking for $h$ the range-$R$ parent interaction compares
+    itself. The transfer rests on the following fact for operators $P,Q$ on
+    a finite-dimensional inner-product space with $P\geq0$: if
+    $\kappa P\leq mQ$ with $\kappa,\gamma,m>0$, $\ker P=\ker Q$ and
+    $\gamma\|v\|\leq\|Pv\|$ for $v\perp\ker P$, then
+    $(\kappa\gamma/m)\|v\|\leq\|Qv\|$ for $v\perp\ker Q$. Taking for $h$ the range-$R$ parent interaction compares
     $H^{\mathrm{open}}_{N,W}$ with $H^{\mathrm{open}}_{N,R}$; for a one-site
     injective tensor with $R=2$ and $W\geq2$, the kernel hypotheses hold
     automatically. This is a finite-window consequence of condition C1 and
@@ -839,16 +843,14 @@ is recorded in
 \begin{lemma}[On-site symmetry of open and periodic interaction sums]
     \label{thm:parent_interaction_sum_on_site_symmetry}
     \lean{MPSTensor.periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow,
-        MPSTensor.periodicLocalInteractionES_commute_onSiteTensorPow,
-        MPSTensor.periodicInteractionHamiltonianES_commute_onSiteTensorPow,
         MPSTensor.hamiltonian_chainTranslates_commute_onSiteTensorPow}
     \leanok
     Let $h$ be an interaction on $R$ sites, let $U$ be a physical
-    matrix, and suppose $[h,U^{\otimes R}]=0$. For every $N\geq R$,
-    each cyclic extension of $h$ commutes with $U^{\otimes N}$.
-    Consequently the periodic sum commutes with $U^{\otimes N}$, and the
-    sum over nonwrapping windows commutes with $U^{\otimes N}$ at every
-    length $N$. In configuration coordinates,
+    matrix, and suppose $[h,U^{\otimes R}]=0$. The sum of the translates
+    of $h$ over the nonwrapping windows of the open chain commutes with
+    $U^{\otimes N}$ at every length $N$; the periodic sum is
+    Lemma~\ref{thm:spt_interaction_hamiltonian_symmetry}. In
+    configuration coordinates, for $N\geq R$,
     cyclic extension is the matrix obtained by placing $h$ on the
     window and the identity on its complement.
 \end{lemma}
@@ -870,7 +872,7 @@ is recorded in
         MPSTensor.isometricDeformationInteractionES_commute,
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute,
         MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute,
-        MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute,
+        MPSTensor.isometricDeformation_hamiltonian_translationInvariant_commute,
         MPSTensor.isometricDeformation_hamiltonian_chainTranslates_commute}
     \leanok
     Let $A=(A^j)_j$ be a finite block family, combined in direct sum with unit
@@ -1010,7 +1012,7 @@ is recorded in
         MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetric,
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetric,
         MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetric,
-        MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetric,
+        MPSTensor.isometricDeformation_hamiltonian_translationInvariant_commute_of_isOnSiteSymmetric,
         MPSTensor.isometricDeformation_hamiltonian_chainTranslates_commute_of_isOnSiteSymmetric}
     \leanok
     Let $A$ be a one-site injective tensor of positive bond dimension,
@@ -1056,7 +1058,7 @@ is recorded in
         MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetric_of_isTP,
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP,
         MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP,
-        MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.isometricDeformation_hamiltonian_translationInvariant_commute_of_isOnSiteSymmetric_of_isTP,
         MPSTensor.isometricDeformation_hamiltonian_chainTranslates_commute_of_isOnSiteSymmetric_of_isTP}
     \leanok
     Let $A$ be a one-site injective tensor of positive bond dimension,
@@ -1277,7 +1279,7 @@ is recorded in
         MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase,
-        MPSTensor.isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.isometricDeformation_hamiltonian_translationInvariant_commute_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.isometricDeformation_hamiltonian_chainTranslates_commute_of_isOnSiteSymmetricUpToPhase}
     \leanok
     In the setting of

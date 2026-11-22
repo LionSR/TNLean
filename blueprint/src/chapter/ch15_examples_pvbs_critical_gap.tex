@@ -64,9 +64,9 @@
     \lean{MPSTensor.not_exists_eventual_uniform_gap_pvbs_critical}
     \leanok
     \uses{def:pvbs_tensor, def:parent_hamiltonian_es}
-    There are no $\delta>0$ and $N_0$ such that every ring of length
-    $N\ge N_0$ satisfies
-    $\delta\|v\|\le\|H_1v\|$ for all $v\perp\ker H_1$.
+    There are no $\delta>0$ and $N_0$ such that, on every ring of length
+    $N\ge\max\{N_0,1\}$, every nonzero eigenvalue of $H_1$ is at least
+    $\delta$.
     This is thermodynamic gaplessness in the finite-periodic-volume
     criterion; no zero gap above the enlarged kernel of a fixed finite
     ring is asserted.
@@ -76,8 +76,8 @@
     \uses{thm:pvbs_critical_fourier_magnon, thm:short_range_parent_gap_counterexample}
     Because the Fourier energies $\eta_N$ tend to zero, for any $\delta>0$ and
     threshold $N_0$ there exists $N\ge\max\{N_0,2\}$ with $0<\eta_N<\delta$.
-    Evaluating the putative bound on the nonzero kernel-orthogonal vector
-    $\psi_N$ forces $\delta\le\eta_N$, a contradiction; as recorded
+    The putative bound at the positive eigenvalue $\eta_N$ of the nonzero
+    vector $\psi_N$ forces $\delta\le\eta_N$, a contradiction; as recorded
     in~\cite{gap:bn12_pvbs_periodic_gap}, this establishes the critical
     specialization of the one-particle dispersion following equation~(8)
     in~\cite{BachmannNachtergaele2012PVBS}.

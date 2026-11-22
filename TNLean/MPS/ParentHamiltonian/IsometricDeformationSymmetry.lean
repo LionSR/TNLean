@@ -7,6 +7,7 @@ import TNLean.MPS.ParentHamiltonian.InjectiveIsometricDeformationSymmetry
 import TNLean.MPS.ParentHamiltonian.BlockSumIntervalSpaces
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenInteraction
 import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
+import TNLean.MPS.Symmetry.InteractionHamiltonianSymmetry
 
 /-!
 # Parent-Hamiltonian symmetry along the constructed polar deformation
@@ -38,15 +39,13 @@ normalization in `TNLean.MPS.ParentHamiltonian.BlockIsometricDeformationSymmetry
 see docs/paper-gaps/spc11_isometric_symmetry_unitary_virtual.tex
 (https://sirui-lu.com/TNLean/paper-gaps/spc11_isometric_symmetry_unitary_virtual.pdf).
 
-**Transitional (#10948).** `parentInteractionES_commute_onSiteTensorPow_of_invariant`,
-`periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow`,
-`periodicLocalInteractionES_commute_onSiteTensorPow`,
-and `periodicInteractionHamiltonianES_commute_onSiteTensorPow`, stated for the Euclidean-space
-operators, are kept until their last users are converted. The statements about the deformed
-interaction `isometricDeformationInteractionES` and its open and periodic sums are converted
-with that interaction in a later package. The last section states the facts for the matrix of
-the parent interaction and for the Hamiltonians of the interactions on the ring and on the open
-chain.
+**Transitional (#10948).** `parentInteractionES_commute_onSiteTensorPow_of_invariant` and
+`periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow`, stated for the
+Euclidean-space operators, are kept until their last users are converted. The deformed
+interaction `isometricDeformationInteractionES` is still an operator; its open and periodic sums
+are the Hamiltonians of the translates of its matrix. The last section states the facts for the
+matrix of the parent interaction and for the Hamiltonians of the interactions on the ring and on
+the open chain.
 -/
 
 open scoped Matrix Kronecker BigOperators ComplexOrder
@@ -204,35 +203,6 @@ theorem periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow
     cyclicActiveBlockConfigLinearIsometryEquiv_apply_apply, hcfg]
   rfl
 
-/-- A local interaction commuting with the on-site action retains this symmetry after cyclic
-extension.
-Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
-supplied explicitly where required. -/
-theorem periodicLocalInteractionES_commute_onSiteTensorPow
-    {R N : ℕ} (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (U : Matrix (Fin d) (Fin d) ℂ) (hRN : R ≤ N) (i : Fin N)
-    (hComm : Commute h (Matrix.toEuclideanLin (onSiteTensorPow R U))) :
-    Commute (periodicLocalInteractionES h i)
-      (Matrix.toEuclideanLin (onSiteTensorPow N U)) := by
-  obtain ⟨K, rfl⟩ := Matrix.toEuclideanLin.surjective h
-  have hK : Commute K (onSiteTensorPow R U) :=
-    Commute.of_map (Matrix.toLpLinAlgEquiv 2).injective hComm
-  rw [periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow hRN i K]
-  exact (placeAlong_ringWindow_commute_onSiteTensorPow U R hRN i K hK).map
-    (Matrix.toLpLinAlgEquiv 2)
-
-/-- A periodic sum of symmetric local interactions commutes with the global on-site action.
-Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
-supplied explicitly where required. -/
-theorem periodicInteractionHamiltonianES_commute_onSiteTensorPow
-    {R N : ℕ} (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (U : Matrix (Fin d) (Fin d) ℂ) (hRN : R ≤ N)
-    (hComm : Commute h (Matrix.toEuclideanLin (onSiteTensorPow R U))) :
-    Commute (periodicInteractionHamiltonianES h N)
-      (Matrix.toEuclideanLin (onSiteTensorPow N U)) := by
-  exact Commute.sum_left _ _ _ fun i _ =>
-    periodicLocalInteractionES_commute_onSiteTensorPow h U hRN i hComm
-
 private theorem placeAlong_chainWindow_commute_onSiteTensorPow {R N : ℕ}
     (U : Matrix (Fin d) (Fin d) ℂ) (a : ℕ) (ha : a + R ≤ N)
     (K : Matrix (Cfg d R) (Cfg d R) ℂ) (hK : Commute K (onSiteTensorPow R U)) :
@@ -359,7 +329,7 @@ theorem isometricDeformationInteractionES_commute
 retain a supplied symmetry on every ring of length at least two.
 Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
 supplied explicitly where required. -/
-theorem isometricDeformation_periodicInteractionHamiltonianES_commute
+theorem isometricDeformation_hamiltonian_translationInvariant_commute
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A))
@@ -367,11 +337,15 @@ theorem isometricDeformation_periodicInteractionHamiltonianES_commute
       (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
         groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2)
     (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
-    Commute
-      (periodicInteractionHamiltonianES (isometricDeformationInteractionES A γ).toLinearMap N)
-      (Matrix.toEuclideanLin (onSiteTensorPow N U)) := by
-  exact periodicInteractionHamiltonianES_commute_onSiteTensorPow _ U hN
-    (isometricDeformationInteractionES_commute A U hU hComm hInv γ)
+    haveI : NeZero N := ⟨by omega⟩;
+    Commute (ManyBody.Interaction.translationInvariant N
+        ((Matrix.toEuclideanCLM (n := Cfg d 2) (𝕜 := ℂ)).symm
+          (isometricDeformationInteractionES A γ))).hamiltonian
+      (onSiteTensorPow N U) :=
+  haveI : NeZero N := ⟨by omega⟩
+  hamiltonian_translationInvariant_commute_onSiteTensorPow U _
+    (commute_toEuclideanCLM_symm _ _ <|
+      isometricDeformationInteractionES_commute A U hU hComm hInv γ)
 
 /-- The open sums of the source positive interactions along the constructed deformation retain a
 supplied symmetry on every chain of length at least two.
@@ -433,17 +407,21 @@ theorem isometricDeformationInteractionES_commute_of_isOnSiteSymmetric
 inverse-conjugated positive interactions along its constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, in the already-blocked
 single injective case in the unital canonical orientation. -/
-theorem isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetric
+theorem isometricDeformation_hamiltonian_translationInvariant_commute_of_isOnSiteSymmetric
     (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hNorm : Kraus.transferMap A 1 = 1)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval)
     {N : ℕ} (hN : 2 ≤ N) :
-    Commute (periodicInteractionHamiltonianES
-      (isometricDeformationInteractionES (fun _ : Fin 1 => A) γ).toLinearMap N)
-      (Matrix.toEuclideanLin (onSiteTensorPow N (U g))) := by
-  exact periodicInteractionHamiltonianES_commute_onSiteTensorPow _ (U g) hN
-    (isometricDeformationInteractionES_commute_of_isOnSiteSymmetric A hA hNorm U hU hSymm g γ)
+    haveI : NeZero N := ⟨by omega⟩;
+    Commute (ManyBody.Interaction.translationInvariant N
+        ((Matrix.toEuclideanCLM (n := Cfg d 2) (𝕜 := ℂ)).symm
+          (isometricDeformationInteractionES (fun _ : Fin 1 => A) γ))).hamiltonian
+      (onSiteTensorPow N (U g)) :=
+  haveI : NeZero N := ⟨by omega⟩
+  hamiltonian_translationInvariant_commute_onSiteTensorPow (U g) _
+    (commute_toEuclideanCLM_symm _ _ <|
+      isometricDeformationInteractionES_commute_of_isOnSiteSymmetric A hA hNorm U hU hSymm g γ)
 
 /-- Exact state symmetry of a normalized injective tensor persists in the open sum of
 inverse-conjugated positive interactions along its constructed polar deformation.
@@ -482,17 +460,22 @@ theorem isometricDeformationInteractionES_commute_of_isOnSiteSymmetric_of_isTP
 inverse-conjugated positive interactions along its constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, in the already-blocked
 single injective case with the printed trace-preserving normalization. -/
-theorem isometricDeformation_periodicInteractionHamiltonianES_commute_of_isOnSiteSymmetric_of_isTP
+theorem isometricDeformation_hamiltonian_translationInvariant_commute_of_isOnSiteSymmetric_of_isTP
     (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hTP : ∑ i, (A i)ᴴ * A i = 1)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval)
     {N : ℕ} (hN : 2 ≤ N) :
-    Commute (periodicInteractionHamiltonianES
-      (isometricDeformationInteractionES (fun _ : Fin 1 => A) γ).toLinearMap N)
-      (Matrix.toEuclideanLin (onSiteTensorPow N (U g))) := by
-  exact periodicInteractionHamiltonianES_commute_onSiteTensorPow _ (U g) hN
-    (isometricDeformationInteractionES_commute_of_isOnSiteSymmetric_of_isTP A hA hTP U hU hSymm g γ)
+    haveI : NeZero N := ⟨by omega⟩;
+    Commute (ManyBody.Interaction.translationInvariant N
+        ((Matrix.toEuclideanCLM (n := Cfg d 2) (𝕜 := ℂ)).symm
+          (isometricDeformationInteractionES (fun _ : Fin 1 => A) γ))).hamiltonian
+      (onSiteTensorPow N (U g)) :=
+  haveI : NeZero N := ⟨by omega⟩
+  hamiltonian_translationInvariant_commute_onSiteTensorPow (U g) _
+    (commute_toEuclideanCLM_symm _ _ <|
+      isometricDeformationInteractionES_commute_of_isOnSiteSymmetric_of_isTP
+        A hA hTP U hU hSymm g γ)
 
 /-- Exact state symmetry of an injective trace-preserving tensor persists in the open sum of
 inverse-conjugated positive interactions along its constructed polar deformation.

@@ -31,14 +31,14 @@
 
 \begin{lemma}[Three-site anticommutator embedding into cyclic adjacent pairs]
     \label{thm:three_site_anticommutator_cyclic_transport}
-    \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite}
-    \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
+    \lean{MPSTensor.re_inner_parentRingInteraction_term_adjacent_twoSite_forward_ge_of_threeSite}
+    \lean{MPSTensor.re_inner_parentRingInteraction_term_adjacent_twoSite_backward_ge_of_threeSite}
     \leanok
     \uses{rem:euclidean_local_projector_ingredients, rem:cyclic_window_operators}
     Fix a tensor $A$ with physical dimension $d>0$ and a coefficient
-    $c\in\mathbb R$. For every chain length $N$ and site $i\in\Fin{N}$, set
-    $h_i^{(N)}:=h_{i,\mathrm{ES}}^{(N,2)}(A)$, the Euclidean range-two parent
-    term of this same tensor $A$ at $i$. Suppose that, for
+    $c\in\mathbb R$. For every chain length $N\geq1$ and site
+    $i\in\Fin{N}$, let $h_i^{(N)}$ be the range-two parent term of this
+    same tensor $A$ at $i$ on the ring of $N$ sites. Suppose that, for
     every three-site vector $w$,
     \begin{align}
         -c(\re\langle h_0^{(3)}w,w\rangle+\re\langle h_1^{(3)}w,w\rangle)

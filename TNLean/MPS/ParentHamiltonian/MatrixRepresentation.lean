@@ -17,13 +17,9 @@ space. These identities connect the parent-Hamiltonian gap estimates to
 the matrix formulation of local interactions used in arXiv:1010.3732,
 Section II.B (`Papers/1010.3732/paper_v3.tex`, lines 357--390).
 
-**Transitional (#10948).** The identities between the Euclidean-space operators
-(`parentInteractionES`, `localTermES`, `parentHamiltonianES`) and the matrices, and
-`localTerm_eq_toLin'_placeAlong_ringWindow` (which is `localTerm_eq_toLin'_term` read through
-`ManyBody.Interaction.translationInvariant_term_of_le`), are kept until their last users are
-converted, then deleted with those operators.
-`parentInteraction_toMatrix'_isStarProjection` is `isStarProjection_toMatrix'_parentInteraction`
-(Martingale/Transport.lean); its users move to that name in the cleanup.
+**Transitional (#10948).** `parentInteractionES_eq_toEuclideanLin_parentMatrix`, the identity
+between the Euclidean-space operator `parentInteractionES` and the matrix of the local parent
+interaction, is kept until its last users are converted, then deleted with that operator.
 -/
 
 open scoped Matrix.Norms.L2Operator
@@ -32,30 +28,14 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- The local parent matrix is the matrix of its Euclidean representative
-in the canonical orthonormal basis. Source: arXiv:1010.3732, Section II.B,
-the local term \(h\) of the parent Hamiltonian. -/
-theorem parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix
-    (A : MPSTensor d D) (L : ℕ) :
-    LinearMap.toMatrix' (parentInteraction A L) =
-      LinearMap.toMatrix (EuclideanSpace.basisFun (Cfg d L) ℂ).toBasis
-        (EuclideanSpace.basisFun (Cfg d L) ℂ).toBasis
-        (parentInteractionES A L) := by
-  classical
-  ext i j
-  simp [LinearMap.toMatrix'_apply, LinearMap.toMatrix_apply,
-    EuclideanSpace.basisFun_toBasis, PiLp.basisFun_apply,
-    parentInteraction, parentInteractionES]
-
 /-- The canonical parent interaction is represented by the same matrix in
 the function and Euclidean realizations of the finite configuration space.
 Source: arXiv:1010.3732, Section II.D. -/
 theorem parentInteractionES_eq_toEuclideanLin_parentMatrix
     (A : MPSTensor d D) (L : ℕ) :
     parentInteractionES A L = Matrix.toEuclideanLin
-      (LinearMap.toMatrix' (parentInteraction A L)) := by
-  rw [Matrix.toEuclideanLin_eq_toLin_orthonormal,
-    parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix, Matrix.toLin_toMatrix]
+      (LinearMap.toMatrix' (parentInteraction A L)) :=
+  (toEuclideanLin_toMatrix'_parentInteraction A L).symm
 
 /-- A cyclic parent term is the matrix of its local interaction placed on the window of `L`
 consecutive sites starting at `i`. Source: arXiv:1010.3732, Section II.B, the local Hamiltonian
@@ -69,37 +49,10 @@ theorem localTerm_eq_toLin'_placeAlong_ringWindow (A : MPSTensor d D)
   rw [localTerm_eq_toLin'_term A L i,
     ManyBody.Interaction.translationInvariant_term_of_le _ hLN i]
 
-/-- Euclidean form of the placed cyclic parent term. Source:
-arXiv:1010.3732, Section II.B, the local Hamiltonian sum. -/
-theorem localTermES_eq_toEuclideanLin_placeAlong_ringWindow (A : MPSTensor d D)
-    {L N : ℕ} (hLN : L ≤ N) (i : Fin N) :
-    localTermES A L i = Matrix.toEuclideanLin
-      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hLN i)
-        (LinearMap.toMatrix' (parentInteraction A L))) := by
-  rw [localTermES, localTerm_eq_toLin'_placeAlong_ringWindow A hLN i]
-  rfl
-
-/-- The full periodic parent Hamiltonian is the Euclidean representative
-of the Hamiltonian of the parent interaction on the ring, the sum of the placed local parent
-matrices. Source: arXiv:1010.3732, Section II.B, the local Hamiltonian sum. -/
-theorem parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow
-    (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N) :
-    parentHamiltonianES A L N = Matrix.toEuclideanLin
-      (∑ i : Fin N, ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hLN i)
-        (LinearMap.toMatrix' (parentInteraction A L))) := by
-  rw [parentHamiltonianES_eq_sum_localTermES, map_sum]
-  simp_rw [localTermES_eq_toEuclideanLin_placeAlong_ringWindow A hLN]
-
-/-- The matrix of a canonical parent interaction is an orthogonal projection.
-Source: arXiv:1010.3732, Section II.B, the choice of the local term as a projector. -/
-theorem parentInteraction_toMatrix'_isStarProjection (A : MPSTensor d D) (L : ℕ) :
-    IsStarProjection (LinearMap.toMatrix' (parentInteraction A L)) :=
-  isStarProjection_toMatrix'_parentInteraction A L
-
 /-- Canonical parent interactions have Hilbert-space operator norm at most
 one, as do the projector local terms of arXiv:1010.3732, Section II.B. -/
 theorem parentInteraction_toMatrix'_norm_le_one (A : MPSTensor d D) (L : ℕ) :
     ‖LinearMap.toMatrix' (parentInteraction A L)‖ ≤ 1 :=
-  (parentInteraction_toMatrix'_isStarProjection A L).norm_le _
+  (isStarProjection_toMatrix'_parentInteraction A L).norm_le _
 
 end MPSTensor

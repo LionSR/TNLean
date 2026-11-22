@@ -61,7 +61,7 @@ noncomputable def canonicalInjectiveGappedPath
   interaction γ := LinearMap.toMatrix' (parentInteraction (A γ) 2)
   interaction_zero := rfl
   interaction_one := rfl
-  hermitian γ _ := (parentInteraction_toMatrix'_isStarProjection (A γ) 2).isSelfAdjoint
+  hermitian γ _ := (isStarProjection_toMatrix'_parentInteraction (A γ) 2).isSelfAdjoint
   norm_le_one γ _ := parentInteraction_toMatrix'_norm_le_one (A γ) 2
   continuous := by
     apply continuousOn_iff_continuous_domRestrict.mpr
@@ -80,8 +80,9 @@ noncomputable def canonicalInjectiveGappedPath
     exact ⟨δ, hδ, fun γ hγ N hN => ⟨0, hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN⟩⟩
   symmetric γ hγ g N hN := by
     rw [← onSiteTensorPow_eq_finKronecker]
-    have hSym := hamiltonian_translationInvariant_commute_onSiteTensorPow (U g)
-      (LinearMap.toMatrix' (parentInteraction (A γ) 2)) hN
+    have : NeZero N := ⟨by omega⟩
+    have hSym := hamiltonian_translationInvariant_commute_onSiteTensorPow (N := N) (U g)
+      (LinearMap.toMatrix' (parentInteraction (A γ) 2))
       (parentInteraction_matrix_commute_onSiteTensorPow (A γ) (U g)
         (SetLike.coe_mem _) (hCov γ hγ g) 2)
     exact hSym

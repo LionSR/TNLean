@@ -77,7 +77,7 @@ noncomputable def normalizedBondCanonicalParentComparisonPath
     (Matrix.nonneg_iff_posSemidef.mp
       (normalizedBondInteraction_isStarProjection hD₀ hD₁ γ).nonneg)
     (Matrix.nonneg_iff_posSemidef.mp
-      (parentInteraction_toMatrix'_isStarProjection _ 2).nonneg)
+      (isStarProjection_toMatrix'_parentInteraction _ 2).nonneg)
     horder
     ((normalizedBondInteraction_isStarProjection hD₀ hD₁ γ).norm_le _)
     (parentInteraction_toMatrix'_norm_le_one _ 2)
@@ -85,8 +85,9 @@ noncomputable def normalizedBondCanonicalParentComparisonPath
       isGapped_hamiltonian_translationInvariant_normalizedBondInteraction hD₀ hD₁ γ hN⟩ ?_ ?_
   case refine_2 =>
     intro N hN g
+    have : NeZero N := ⟨by omega⟩
     exact hamiltonian_translationInvariant_commute_onSiteTensorPow
-      (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) _ hN
+      (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) _
         (parentInteraction_matrix_commute_onSiteTensorPow _ _
           (sptFixedPointAction_mem_unitaryGroup _ 1
             (fun g => ρ₀.directSum_mem_unitaryGroup ρ₁ g (h₀ g) (h₁ g))

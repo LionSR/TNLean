@@ -344,7 +344,7 @@ theorem commonPhysicalNormalizedBondInteraction_ker_le_parent
   exact isometricInteractionExtension_ker_le_of_ker_le _
     (commonFixedPointInclusion_isometry _ d₀ d₁) _ _
     (normalizedBondInteraction_isStarProjection h₀ h₁ γ)
-    (parentInteraction_toMatrix'_isStarProjection B 2).isSelfAdjoint.isHermitian hN
+    (isStarProjection_toMatrix'_parentInteraction B 2).isSelfAdjoint.isHermitian hN
     (normalizedBondInteraction_translate_commute γ hN)
     (commonPhysicalNormalizedBondInteraction_translate_commute d₀ d₁ γ hN) hker
 
@@ -387,7 +387,7 @@ theorem commonPhysicalParentInteraction_commute_onSite
     (SetLike.coe_mem (U g)) hCovA 2
   change Commute (Interaction.translationInvariant N
     (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian (onSiteTensorPow N Ug)
-  exact hamiltonian_translationInvariant_commute_onSiteTensorPow Ug _ hN hLocal
+  exact hamiltonian_translationInvariant_commute_onSiteTensorPow Ug _ hLocal
 
 /-- The enlarged normalized bond interaction commutes with the fixed
 two-site physical representation. Source: arXiv:1010.3732,
@@ -439,7 +439,7 @@ theorem commonPhysicalNormalizedBondInteraction_commute_onSite
   change Commute (Interaction.translationInvariant N
     (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian
     (onSiteTensorPow N Ug)
-  exact hamiltonian_translationInvariant_commute_onSiteTensorPow Ug _ hN hLocal
+  exact hamiltonian_translationInvariant_commute_onSiteTensorPow Ug _ hLocal
 
 /-- The normalized direct-sum bond interpolation is a symmetric uniformly
 gapped path in the common physical space, retaining both original physical
@@ -506,7 +506,7 @@ noncomputable def commonPhysicalBondCanonicalParentComparisonPath
   let A := commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ
   let C := rotatePhysical (commonFixedPointInclusion ((D₀ + D₁) * (D₀ + D₁)) d₀ d₁) B
   have hA := commonPhysicalNormalizedBondInteraction_isStarProjection hD₀ hD₁ d₀ d₁ γ
-  have hC := parentInteraction_toMatrix'_isStarProjection C 2
+  have hC := isStarProjection_toMatrix'_parentInteraction C 2
   refine orderedGappedInteractionPath U A _
     (Matrix.nonneg_iff_posSemidef.mp hA.nonneg)
     (Matrix.nonneg_iff_posSemidef.mp hC.nonneg)

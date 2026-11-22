@@ -395,10 +395,11 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_interaction_hamiltonian_symmetry}
     \lean{MPSTensor.hamiltonian_translationInvariant_commute_onSiteTensorPow}
     \leanok
-    If a two-site interaction commutes with the tensor square of an
-    on-site matrix, then its translation-invariant periodic Hamiltonian
-    commutes with the full tensor power at every chain length at least
-    two. Unitarity is not needed for this algebraic identity.
+    If an interaction $h$ on $R$ sites commutes with $U^{\otimes R}$
+    for an on-site matrix $U$, then on every ring of $N\geq1$ sites the
+    sum of the cyclic translates of $h$, which is zero when $N<R$,
+    commutes with $U^{\otimes N}$. Unitarity is not needed for this
+    algebraic identity.
 \end{lemma}
 
 \begin{proof}\leanok
