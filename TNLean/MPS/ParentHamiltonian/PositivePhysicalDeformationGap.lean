@@ -111,40 +111,27 @@ theorem continuous_positivePhysicalDeformation_inv
   exact (continuousAt_matrix_inv _ hinv).comp
     (continuous_positivePhysicalDeformation Q).continuousAt
 
-/-- Tensor powers of continuous physical maps vary continuously as operators.
+/-- Tensor powers of continuous physical maps vary continuously.
 Source: arXiv:1010.3732, the definition of \(\Lambda_\gamma\) at lines 615--617. -/
-theorem continuous_onSiteTensorPow_toContinuousLinearMap_family
+theorem continuous_onSiteTensorPow_family
     {X : Type*} [TopologicalSpace X] (M : X → Matrix (Fin d) (Fin d) ℂ)
     (hM : Continuous M) (L : ℕ) :
-    Continuous fun x =>
-      (Matrix.toEuclideanLin (onSiteTensorPow L (M x))).toContinuousLinearMap := by
-  have hpow : Continuous fun x => onSiteTensorPow L (M x) :=
-    continuous_matrix fun σ τ => by
-      simpa only [onSiteTensorPow_apply] using
-        continuous_finsetProd Finset.univ (fun n _ => hM.matrix_elem (σ n) (τ n))
-  let e : Matrix (Cfg d L) (Cfg d L) ℂ ≃ₗ[ℂ]
-      (EuclideanSpace ℂ (Cfg d L) →L[ℂ] EuclideanSpace ℂ (Cfg d L)) :=
-    Matrix.toEuclideanLin.trans LinearMap.toContinuousLinearMap
-  exact e.toContinuousLinearEquiv.continuous.comp hpow
+    Continuous fun x => onSiteTensorPow L (M x) :=
+  continuous_matrix fun σ τ => by
+    simpa only [onSiteTensorPow_apply] using
+      continuous_finsetProd Finset.univ (fun n _ => hM.matrix_elem (σ n) (τ n))
 
 /-- The positive interaction obtained by inverse physical conjugation is a
-continuous family in operator norm. Source: arXiv:1010.3732, lines 615--623. -/
+continuous family of matrices. Source: arXiv:1010.3732, lines 615--623. -/
 theorem continuous_deformedInteraction_positivePhysicalDeformation
     (Q : Matrix (Fin d) (Fin d) ℂ) (hQ : Q.PosDef) (L : ℕ)
-    (h : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L)) :
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ) :
     Continuous fun γ : unitInterval =>
-      (deformedInteraction L (positivePhysicalDeformation Q γ) h).toContinuousLinearMap := by
+      deformedInteraction L (positivePhysicalDeformation Q γ) h := by
   have hInv := continuous_positivePhysicalDeformation_inv Q hQ
-  change Continuous fun γ : unitInterval =>
-    ((Matrix.toEuclideanLin
-      (onSiteTensorPow L ((positivePhysicalDeformation Q γ)⁻¹)ᴴ)).toContinuousLinearMap).comp
-      h.toContinuousLinearMap |>.comp
-        (Matrix.toEuclideanLin
-          (onSiteTensorPow L (positivePhysicalDeformation Q γ)⁻¹)).toContinuousLinearMap
-  exact ((continuous_onSiteTensorPow_toContinuousLinearMap_family
-    (fun γ => ((positivePhysicalDeformation Q γ)⁻¹)ᴴ) hInv.matrix_conjTranspose L).clm_comp
-      (continuous_const : Continuous fun _ : unitInterval => h.toContinuousLinearMap)).clm_comp
-    (continuous_onSiteTensorPow_toContinuousLinearMap_family _ hInv L)
+  exact ((continuous_onSiteTensorPow_family
+    (fun γ => ((positivePhysicalDeformation Q γ)⁻¹)ᴴ) hInv.matrix_conjTranspose L).matrix_mul
+      continuous_const).matrix_mul (continuous_onSiteTensorPow_family _ hInv L)
 
 /-- The source's two-site positive interaction along the affine deformation,
 \(h_\gamma=\Lambda_\gamma h_0\Lambda_\gamma\), where
@@ -152,27 +139,27 @@ theorem continuous_deformedInteraction_positivePhysicalDeformation
 initial parent projection. Positivity of the supplied factor makes the inverse
 Hermitian, so inverse-adjoint conjugation equals the source formula.
 Source: arXiv:1010.3732, lines 610--623. -/
-noncomputable def positiveDeformedParentInteractionES {D : ℕ}
+noncomputable def positiveDeformedParentInteraction {D : ℕ}
     (Q : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D) (γ : unitInterval) :
-    EuclideanSpace ℂ (Cfg d 2) →L[ℂ] EuclideanSpace ℂ (Cfg d 2) :=
-  (deformedInteraction 2 (positivePhysicalDeformation Q γ)
-    (parentInteractionES A 2)).toContinuousLinearMap
+    Matrix (Cfg d 2) (Cfg d 2) ℂ :=
+  deformedInteraction 2 (positivePhysicalDeformation Q γ)
+    (LinearMap.toMatrix' (parentInteraction A 2))
 
 /-- The source interaction has exactly the deformed local ground space as
 its kernel, and is positive. Source: arXiv:1010.3732, lines 623--625. -/
-theorem isParentInteraction_positiveDeformedParentInteractionES {D : ℕ}
+theorem isParentInteraction_toEuclideanLin_positiveDeformedParentInteraction {D : ℕ}
     (Q : Matrix (Fin d) (Fin d) ℂ) (hQ : Q.PosDef) (A : MPSTensor d D)
     (γ : unitInterval) :
     IsParentInteraction (rotatePhysical (positivePhysicalDeformation Q γ) A) 2
-      (positiveDeformedParentInteractionES Q A γ).toLinearMap := by
-  exact (isParentInteraction_parentInteractionES A 2).deformedInteraction 2
+      (Matrix.toEuclideanLin (positiveDeformedParentInteraction Q A γ)) := by
+  exact (isParentInteraction_toEuclideanLin_toMatrix'_parentInteraction A 2).deformedInteraction 2
     (positivePhysicalDeformation_isUnit Q hQ γ)
 
 /-- The source's positive two-site interactions have a gap uniform in the
 parameter and every periodic length at least two. The positive factor is on
 the retained physical space, and the initial joint one-site span is supplied
 following blocking. Source: arXiv:1010.3732, Appendix A, lines 2475--2580. -/
-theorem exists_uniform_positiveDeformedParentInteractionES_gap
+theorem exists_uniform_positiveDeformedParentInteraction_gap
     [NeZero d] [∀ j, NeZero (dim j)]
     (A : (j : Fin r) → MPSTensor d (dim j)) (hSpan : WordTupleSpanTop A 1)
     (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0)
@@ -181,22 +168,15 @@ theorem exists_uniform_positiveDeformedParentInteractionES_gap
       haveI : NeZero N := ⟨by omega⟩;
       ∀ z : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
         (ManyBody.Interaction.translationInvariant N
-          ((Matrix.toEuclideanCLM (n := Cfg d 2) (𝕜 := ℂ)).symm
-            (positiveDeformedParentInteractionES Q (toTensorFromBlocks μ A) γ))).hamiltonian) z →
+          (positiveDeformedParentInteraction Q (toTensorFromBlocks μ A) γ)).hamiltonian) z →
           z = 0 ∨ (δ : ℂ) ≤ z := by
-  let e := (Matrix.toEuclideanCLM : Matrix (Cfg d 2) (Cfg d 2) ℂ ≃⋆ₐ[ℂ] _)
-  have hE (T : EuclideanSpace ℂ (Cfg d 2) →L[ℂ] EuclideanSpace ℂ (Cfg d 2)) :
-      Matrix.toEuclideanLin (e.symm T) = T.toLinearMap := by
-    rw [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin]
-    exact congrArg (fun T : EuclideanSpace ℂ (Cfg d 2) →L[ℂ] EuclideanSpace ℂ (Cfg d 2) ↦
-      (T : EuclideanSpace ℂ (Cfg d 2) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d 2))) (e.apply_symm_apply T)
   have hParent (γ : unitInterval) : IsParentInteraction
       (toTensorFromBlocks μ (fun j => rotatePhysical (positivePhysicalDeformation Q γ) (A j)))
       2 (Matrix.toEuclideanLin
-        (e.symm (positiveDeformedParentInteractionES Q (toTensorFromBlocks μ A) γ))) := by
-    rw [hE]
+        (positiveDeformedParentInteraction Q (toTensorFromBlocks μ A) γ)) := by
     simpa only [rotatePhysical_toTensorFromBlocks] using
-      isParentInteraction_positiveDeformedParentInteractionES Q hQ (toTensorFromBlocks μ A) γ
+      isParentInteraction_toEuclideanLin_positiveDeformedParentInteraction Q hQ
+        (toTensorFromBlocks μ A) γ
   obtain ⟨δ, hδ, hgap⟩ := exists_uniform_block_parentInteraction_gap_of_compact
     (fun _ : unitInterval => μ)
     (fun γ j => rotatePhysical (positivePhysicalDeformation Q γ) (A j))
@@ -207,23 +187,21 @@ theorem exists_uniform_positiveDeformedParentInteractionES_gap
     (fun γ => (wordTupleSpanTop_rotatePhysical_iff _
       (positivePhysicalDeformation_isUnit Q hQ γ) A 1).2 hSpan)
     (R := 2) le_rfl
-    (fun γ ↦ e.symm (positiveDeformedParentInteractionES Q (toTensorFromBlocks μ A) γ))
-    (e.symm.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp
-      (continuous_deformedInteraction_positivePhysicalDeformation Q hQ 2
-        (parentInteractionES (toTensorFromBlocks μ A) 2))) hParent isCompact_univ
+    (fun γ ↦ positiveDeformedParentInteraction Q (toTensorFromBlocks μ A) γ)
+    (continuous_deformedInteraction_positivePhysicalDeformation Q hQ 2 _) hParent isCompact_univ
   exact ⟨δ, hδ, fun γ => hgap γ (Set.mem_univ γ)⟩
 
 /-- Positivity of the physical factor turns inverse-adjoint conjugation into
 the two-sided inverse conjugation printed in the source.
 Source: arXiv:1010.3732, lines 615--623. -/
-theorem positiveDeformedParentInteractionES_eq {D : ℕ}
+theorem positiveDeformedParentInteraction_eq {D : ℕ}
     (Q : Matrix (Fin d) (Fin d) ℂ) (hQ : Q.PosDef) (A : MPSTensor d D)
     (γ : unitInterval) :
-    (positiveDeformedParentInteractionES Q A γ).toLinearMap =
-      Matrix.toEuclideanLin (onSiteTensorPow 2 (positivePhysicalDeformation Q γ)⁻¹) ∘ₗ
-        parentInteractionES A 2 ∘ₗ
-          Matrix.toEuclideanLin (onSiteTensorPow 2 (positivePhysicalDeformation Q γ)⁻¹) := by
-  change deformedInteraction 2 (positivePhysicalDeformation Q γ) (parentInteractionES A 2) = _
-  rw [deformedInteraction, (positivePhysicalDeformation_posDef Q hQ γ).isHermitian.inv]
+    positiveDeformedParentInteraction Q A γ =
+      onSiteTensorPow 2 (positivePhysicalDeformation Q γ)⁻¹ *
+        LinearMap.toMatrix' (parentInteraction A 2) *
+          onSiteTensorPow 2 (positivePhysicalDeformation Q γ)⁻¹ := by
+  rw [positiveDeformedParentInteraction, deformedInteraction,
+    (positivePhysicalDeformation_posDef Q hQ γ).isHermitian.inv]
 
 end MPSTensor

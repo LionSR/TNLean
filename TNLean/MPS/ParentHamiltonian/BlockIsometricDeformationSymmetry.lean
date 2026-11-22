@@ -710,16 +710,15 @@ theorem toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymm
 canonical normalization persists in the inverse-conjugated positive
 interaction along the constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, for several normal blocks. -/
-theorem isometricDeformationInteractionES_commute_of_isOnSiteSymmetricUpToPhase
+theorem isometricDeformationInteraction_commute_of_isOnSiteSymmetricUpToPhase
     [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) (γ : unitInterval) :
-    Commute (isometricDeformationInteractionES A γ).toLinearMap
-      (Matrix.toEuclideanLin (onSiteTensorPow 2 (U g))) :=
-  isometricDeformationInteractionES_commute A (U g) (hU g)
+    Commute (isometricDeformationInteraction A γ) (onSiteTensorPow 2 (U g)) :=
+  isometricDeformationInteraction_commute A (U g) (hU g)
     (commute_leftPolarPhysicalFactor_of_isOnSiteSymmetricUpToPhase
       A hA hTP U hU hSymm g)
     (groundSpaceES_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase A hA U hU hSymm g 2) γ
@@ -779,14 +778,12 @@ theorem isometricDeformation_hamiltonian_translationInvariant_commute_of_isOnSit
     (g : G) (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     Commute (ManyBody.Interaction.translationInvariant N
-        ((Matrix.toEuclideanCLM (n := Cfg d 2) (𝕜 := ℂ)).symm
-          (isometricDeformationInteractionES A γ))).hamiltonian
+        (isometricDeformationInteraction A γ)).hamiltonian
       (onSiteTensorPow N (U g)) :=
   haveI : NeZero N := ⟨by omega⟩
   hamiltonian_translationInvariant_commute_onSiteTensorPow (U g) _
-    (commute_toEuclideanCLM_symm _ _
-      (isometricDeformationInteractionES_commute_of_isOnSiteSymmetricUpToPhase
-        A hA hTP U hU hSymm g γ))
+    (isometricDeformationInteraction_commute_of_isOnSiteSymmetricUpToPhase
+      A hA hTP U hU hSymm g γ)
 
 /-- A symmetry up to a phase of a block-diagonal tensor in trace-preserving
 canonical normalization persists in the open sum of inverse-conjugated
@@ -800,13 +797,11 @@ theorem isometricDeformation_hamiltonian_chainTranslates_commute_of_isOnSiteSymm
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) (γ : unitInterval) (N : ℕ) :
     Commute (ManyBody.Interaction.chainTranslates 2 N
-        ((Matrix.toEuclideanCLM (n := Cfg d 2) (𝕜 := ℂ)).symm
-          (isometricDeformationInteractionES A γ))).hamiltonian
+        (isometricDeformationInteraction A γ)).hamiltonian
       (onSiteTensorPow N (U g)) :=
   hamiltonian_chainTranslates_commute_onSiteTensorPow _ (U g) N
-    (commute_toEuclideanCLM_symm _ _
-      (isometricDeformationInteractionES_commute_of_isOnSiteSymmetricUpToPhase
-        A hA hTP U hU hSymm g γ))
+    (isometricDeformationInteraction_commute_of_isOnSiteSymmetricUpToPhase
+      A hA hTP U hU hSymm g γ)
 
 end ParentHamiltonians
 

@@ -599,11 +599,11 @@ is recorded in
         MPSTensor.continuous_positivePhysicalDeformation,
         MPSTensor.positivePhysicalDeformation_isUnit,
         MPSTensor.exists_uniform_hamiltonian_parentRingInteraction_gap_positivePhysicalDeformation,
-        MPSTensor.positiveDeformedParentInteractionES,
-        MPSTensor.isParentInteraction_positiveDeformedParentInteractionES,
-        MPSTensor.positiveDeformedParentInteractionES_eq,
+        MPSTensor.positiveDeformedParentInteraction,
+        MPSTensor.isParentInteraction_toEuclideanLin_positiveDeformedParentInteraction,
+        MPSTensor.positiveDeformedParentInteraction_eq,
         MPSTensor.continuous_deformedInteraction_positivePhysicalDeformation,
-        MPSTensor.exists_uniform_positiveDeformedParentInteractionES_gap}
+        MPSTensor.exists_uniform_positiveDeformedParentInteraction_gap}
     \leanok
     \uses{thm:physical_action_joint_span_compact_gap,
         thm:compact_positive_parent_interaction_gap}
@@ -704,9 +704,9 @@ is recorded in
         MPSTensor.isometricDeformationBlocks_one,
         MPSTensor.continuous_isometricDeformationBlocks,
         MPSTensor.wordTupleSpanTop_isometricDeformationBlocks_iff,
-        MPSTensor.isometricDeformationInteractionES,
-        MPSTensor.continuous_isometricDeformationInteractionES,
-        MPSTensor.isParentInteraction_isometricDeformationInteractionES,
+        MPSTensor.isometricDeformationInteraction,
+        MPSTensor.continuous_isometricDeformationInteraction,
+        MPSTensor.isParentInteraction_toEuclideanLin_isometricDeformationInteraction,
         MPSTensor.exists_uniform_isometricDeformation_parent_gap,
         MPSTensor.exists_uniform_isometricDeformation_interaction_gap,
         MPSTensor.exists_blocked_isometricDeformation_parent_gap_of_isNormalTensor}
@@ -811,7 +811,7 @@ is recorded in
 \begin{lemma}[Invariant local spaces and commuting physical deformations]
     \label{thm:parent_invariant_space_physical_deformation}
     \lean{MPSTensor.onSiteTensorPow_commute,
-        MPSTensor.parentInteractionES_commute_onSiteTensorPow_of_invariant,
+        MPSTensor.toMatrix'_parentInteraction_commute_onSiteTensorPow_of_invariant,
         MPSTensor.groundSpaceES_invariant_rotatePhysical_of_commute,
         MPSTensor.groundSpaceES_invariant_rotatePhysical_iff_of_commute,
         MPSTensor.deformedInteraction_commute_onSiteTensorPow}
@@ -869,7 +869,7 @@ is recorded in
     \lean{MPSTensor.groundSpaceES_invariant_leftPolarBlocks,
         MPSTensor.groundSpaceES_invariant_isometricDeformationBlocks,
         MPSTensor.toMatrix'_parentInteraction_isometricDeformation_commute,
-        MPSTensor.isometricDeformationInteractionES_commute,
+        MPSTensor.isometricDeformationInteraction_commute,
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute,
         MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute,
         MPSTensor.isometricDeformation_hamiltonian_translationInvariant_commute,
@@ -1009,7 +1009,7 @@ is recorded in
     \label{thm:injective_isometric_deformation_parent_symmetry}
     \lean{MPSTensor.groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric,
         MPSTensor.toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric,
-        MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetric,
+        MPSTensor.isometricDeformationInteraction_commute_of_isOnSiteSymmetric,
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetric,
         MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetric,
         MPSTensor.isometricDeformation_hamiltonian_translationInvariant_commute_of_isOnSiteSymmetric,
@@ -1055,7 +1055,7 @@ is recorded in
 \begin{lemma}[Derived parent symmetry in trace-preserving normalization]
     \label{thm:injective_isometric_deformation_parent_symmetry_tp}
     \lean{MPSTensor.toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP,
-        MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetric_of_isTP,
+        MPSTensor.isometricDeformationInteraction_commute_of_isOnSiteSymmetric_of_isTP,
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP,
         MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP,
         MPSTensor.isometricDeformation_hamiltonian_translationInvariant_commute_of_isOnSiteSymmetric_of_isTP,
@@ -1276,7 +1276,7 @@ is recorded in
     \label{thm:block_isometric_deformation_parent_symmetry}
     \lean{MPSTensor.groundSpaceES_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase,
-        MPSTensor.isometricDeformationInteractionES_commute_of_isOnSiteSymmetricUpToPhase,
+        MPSTensor.isometricDeformationInteraction_commute_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.isometricDeformation_hamiltonian_translationInvariant_commute_of_isOnSiteSymmetricUpToPhase,
@@ -1318,7 +1318,7 @@ is recorded in
 \begin{lemma}[Uniform open-chain gap along the positive affine deformation]
     \label{thm:positive_affine_physical_deformation_open_gap}
     \lean{MPSTensor.exists_uniform_hamiltonian_parentChainInteraction_gap_positivePhysicalDeformation,
-        MPSTensor.exists_uniform_positiveDeformedParentInteractionES_open_gap}
+        MPSTensor.exists_uniform_positiveDeformedParentInteraction_open_gap}
     \leanok
     Let $(A^j)_j$ be simultaneously one-site injective blocks of positive
     bond dimensions, let all block weights be nonzero, and let $Q>0$ on

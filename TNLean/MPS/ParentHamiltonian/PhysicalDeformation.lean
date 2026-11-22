@@ -52,7 +52,7 @@ Euclidean-space operator `parentInteractionES`, is kept until its users are conv
 section states it for the operator of the matrix of the canonical parent interaction.
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators ComplexOrder
 open Kraus (decodeBlockEquiv)
 
 namespace MPSTensor
@@ -191,19 +191,26 @@ theorem isParentInteraction_parentInteractionES (A : MPSTensor d D) (L : ℕ) :
 \(h' = ({\Lambda^{-1}}^\dagger)^{\otimes L}\, h\, (\Lambda^{-1})^{\otimes L}\) of
 arXiv:2011.12127, lines 2190--2192, and equation deformed-parent-1 at lines 2033--2035. -/
 noncomputable def deformedInteraction (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ)
-    (h : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L)) :
-    EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) :=
-  Matrix.toEuclideanLin (onSiteTensorPow L (Λ⁻¹)ᴴ) ∘ₗ h ∘ₗ
-    Matrix.toEuclideanLin (onSiteTensorPow L Λ⁻¹)
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ) : Matrix (Cfg d L) (Cfg d L) ℂ :=
+  onSiteTensorPow L (Λ⁻¹)ᴴ * h * onSiteTensorPow L Λ⁻¹
 
-/-- The deformed interaction of a positive operator is positive: it is the conjugate
-\(S^\dagger h S\) with \(S = (\Lambda^{-1})^{\otimes L}\). -/
-theorem deformedInteraction_isPositive (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ)
-    {h : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L)}
-    (hh : h.IsPositive) : (deformedInteraction L Λ h).IsPositive := by
-  rw [deformedInteraction, ← onSiteTensorPow_conjTranspose,
-    Matrix.toEuclideanLin_conjTranspose_eq_adjoint]
-  exact hh.adjoint_conj _
+/-- The operator of the deformed interaction is the operator of the interaction between the
+operators of the two tensor powers. -/
+theorem toEuclideanLin_deformedInteraction (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ)
+    (h : Matrix (Cfg d L) (Cfg d L) ℂ) :
+    Matrix.toEuclideanLin (deformedInteraction L Λ h) =
+      Matrix.toEuclideanLin (onSiteTensorPow L (Λ⁻¹)ᴴ) ∘ₗ Matrix.toEuclideanLin h ∘ₗ
+        Matrix.toEuclideanLin (onSiteTensorPow L Λ⁻¹) := by
+  rw [deformedInteraction, Matrix.mul_assoc]
+  simp only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same]
+
+/-- The deformed interaction of a positive semidefinite matrix is positive semidefinite: it is
+the conjugate \(S^\dagger h S\) with \(S = (\Lambda^{-1})^{\otimes L}\). -/
+theorem posSemidef_deformedInteraction (L : ℕ) (Λ : Matrix (Fin d) (Fin d) ℂ)
+    {h : Matrix (Cfg d L) (Cfg d L) ℂ} (hh : h.PosSemidef) :
+    (deformedInteraction L Λ h).PosSemidef := by
+  rw [deformedInteraction, ← onSiteTensorPow_conjTranspose]
+  exact hh.conjTranspose_mul_mul_same _
 
 /-- Composition of the Hilbert-space maps of two tensor powers is the map of the tensor
 power of the product. -/
@@ -217,10 +224,11 @@ lemma toEuclideanLin_onSiteTensorPow_mul_apply (L : ℕ) (Λ Λ' : Matrix (Fin d
 
 /-- The kernel of the deformed interaction is the local ground space of the deformed
 tensor: \(\ker h' = \Lambda^{\otimes L}\ker h = \mathcal G_L(\Lambda A)\). -/
-theorem ker_deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ : IsUnit Λ)
-    {A : MPSTensor d D} {h : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L)}
-    (hker : LinearMap.ker h = groundSpaceES A L) :
-    LinearMap.ker (deformedInteraction L Λ h) = groundSpaceES (rotatePhysical Λ A) L := by
+theorem ker_toEuclideanLin_deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ}
+    (hΛ : IsUnit Λ) {A : MPSTensor d D} {h : Matrix (Cfg d L) (Cfg d L) ℂ}
+    (hker : LinearMap.ker (Matrix.toEuclideanLin h) = groundSpaceES A L) :
+    LinearMap.ker (Matrix.toEuclideanLin (deformedInteraction L Λ h)) =
+      groundSpaceES (rotatePhysical Λ A) L := by
   have hdet : IsUnit Λ.det := (Matrix.isUnit_iff_isUnit_det Λ).1 hΛ
   have hleft : ∀ v : EuclideanSpace ℂ (Cfg d L),
       Matrix.toEuclideanLin (onSiteTensorPow L Λ)
@@ -243,7 +251,8 @@ theorem ker_deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ
       Matrix.toEuclideanLin, Matrix.toLpLin_one, LinearMap.id_apply]
   rw [groundSpaceES_rotatePhysical, ← hker]
   ext v
-  simp only [LinearMap.mem_ker, deformedInteraction, LinearMap.comp_apply, Submodule.mem_map]
+  simp only [LinearMap.mem_ker, toEuclideanLin_deformedInteraction, LinearMap.comp_apply,
+    Submodule.mem_map]
   constructor
   · intro hv
     refine ⟨Matrix.toEuclideanLin (onSiteTensorPow L Λ⁻¹) v, ?_, hleft v⟩
@@ -251,7 +260,7 @@ theorem ker_deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ} (hΛ
     rw [hadj, map_zero] at hzero
     simpa [LinearMap.mem_ker] using hzero
   · rintro ⟨u, hu, rfl⟩
-    have hu' : h u = 0 := hu
+    have hu' : Matrix.toEuclideanLin h u = 0 := hu
     rw [hright, hu', map_zero]
 
 /-- arXiv:2011.12127, lines 2190--2192: if \(A^i = \sum_j \Lambda_{ij} B^j\) with \(\Lambda\)
@@ -259,12 +268,13 @@ invertible and \(h\) is a parent interaction for \(B\) on \(k\) sites, then
 \(h' = ({\Lambda^{-1}}^\dagger)^{\otimes k} h (\Lambda^{-1})^{\otimes k}\) is a parent
 interaction for \(A\).  Here \(B\) is the tensor `A` and \(A\) is `rotatePhysical Λ A`. -/
 theorem IsParentInteraction.deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ}
-    (hΛ : IsUnit Λ) {A : MPSTensor d D}
-    {h : EuclideanSpace ℂ (Cfg d L) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L)}
-    (hh : IsParentInteraction A L h) :
-    IsParentInteraction (rotatePhysical Λ A) L (MPSTensor.deformedInteraction L Λ h) where
-  isPositive := deformedInteraction_isPositive L Λ hh.isPositive
-  ker_eq := ker_deformedInteraction L hΛ hh.ker_eq
+    (hΛ : IsUnit Λ) {A : MPSTensor d D} {h : Matrix (Cfg d L) (Cfg d L) ℂ}
+    (hh : IsParentInteraction A L (Matrix.toEuclideanLin h)) :
+    IsParentInteraction (rotatePhysical Λ A) L
+      (Matrix.toEuclideanLin (MPSTensor.deformedInteraction L Λ h)) where
+  isPositive := Matrix.isPositive_toEuclideanLin_iff.mpr
+    (posSemidef_deformedInteraction L Λ (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive))
+  ker_eq := ker_toEuclideanLin_deformedInteraction L hΛ hh.ker_eq
 
 /-! ### The chain ground spaces
 
