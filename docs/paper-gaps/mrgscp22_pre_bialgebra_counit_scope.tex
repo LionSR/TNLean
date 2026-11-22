@@ -8,11 +8,11 @@
 
 \title{Pre-Bialgebras of Matrix Product Operator Algebras: Existence of the Counit of the Fusion Coproduct}
 \author{}
-\date{2026-11-03}
+\date{2026-11-16}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source definition}
 
@@ -151,7 +151,7 @@ used.\footnote{Formal declarations:
     \path{lem:mpoalg_fusion_counit_unital_representation} in
     \path{blueprint/src/chapter/ch30_mpo_algebras.tex}.}
 
-\section{What is missing}
+\section{Why arbitrary fusion families still need a counit witness}
 
 A complete zipper fusion family records the blocks, the fusion tensors and
 their left inverses of Ref.~\cite{Bultinck2017Anyons}, not the unital
@@ -173,23 +173,93 @@ satisfying~(\ref{eq:mrgscp22_counit_letters}), a boundary element
 satisfying~(\ref{eq:mrgscp22_unit_condition}), or the source's data
 $(\mathcal A,\phi,\psi)$ for its letters as an argument.  With any of them,
 the statement is the source's statement that $\mathcal A^*$ is a
-pre-bialgebra (line~1640), read on the boundary algebra.  What is not
-formalized is the source's construction of the family itself: starting from
-a pre-bialgebra $\mathcal A$ with a unital injective physical
-representation, decomposing the tensor products of the irreducible
-representations of $\mathcal A^*$ to obtain the fusion tensors and their
-left inverses, and checking the fields of a complete zipper fusion family.
+pre-bialgebra (line~1640), read on the boundary algebra.
 
-\section{Elimination plan}
+The source's construction of the family is now formalized for a
+finite-dimensional \emph{cosemisimple} pre-bialgebra $\mathcal A$ and an
+injective unital physical representation $\phi$. Cosemisimplicity is an
+explicit hypothesis of the source at line~1642: it means that the convolution
+algebra $\mathcal A^*$ is semisimple. A general pre-bialgebra with a faithful
+physical representation is not asserted to have a semisimple dual.
 
-Formalize that construction, from a pre-bialgebra with a unital injective
-physical representation to a complete zipper fusion family together with
-the identification $\psi$ of its letters.  The formalized source-data
-statement then supplies the counit for every family so constructed, and the
-scope restriction is discharged.  Adding~(\ref{eq:mrgscp22_unit_condition})
-as a field of the family instead would add a hypothesis to the results
-stated for the family of Ref.~\cite{Bultinck2017Anyons}, which does not
-assert it.
+\section{Construction from the source assumptions}
+
+In the cosemisimple setting of \cite[Section~4.1]{Molnar2022MPOAlgebrasI},
+the Wedderburn--Artin theorem over $\C$ gives finitely many positive bond
+dimensions $D_c$ and an algebra isomorphism
+$\psi\colon\mathcal A^*\to\bigoplus_c M_{D_c}(\C)$.
+Write $\phi_{ik}(x)=\phi(x)_{ik}$. Injectivity and finite-dimensional
+annihilator duality give, respectively,
+\begin{align}
+    \bigcap_{i,k}\ker\phi_{ik}                & =\{0\},
+    \label{eq:mrgscp22_coefficient_separation}                 \\
+    \operatorname{span}_{\C}\{\phi_{ik}:i,k\} & =\mathcal A^*.
+    \label{eq:mrgscp22_dual_span}
+\end{align}
+Define $T_c^{ik}=\psi(\phi_{ik})_c$. Transport through $\psi$ gives
+\begin{align}
+    \operatorname{span}_{\C}\{(T_c^{ik})_c:i,k\}
+     & =\prod_c M_{D_c}(\C).
+    \label{eq:mrgscp22_simultaneous_span}
+\end{align}
+Projection to each block gives block injectivity. The simultaneous span
+also gives coefficients $K_{(c,x,y),(i,k)}$ with
+\begin{align}
+    \sum_{i,k}K_{(c,x,y),(i,k)}(T_e^{ik})_{x'y'}
+     & =\delta_{ce}\delta_{xx'}\delta_{yy'}.
+    \label{eq:mrgscp22_one_letter_inverse}
+\end{align}
+Here $x,y$ index block $c$, and $x',y'$ index block $e$; the right side
+is zero for distinct blocks. No blocking is required.
+
+The direct sum of the simple dual representations is faithful. Write
+$\rho_N(x)$ for the represented iterated coproduct at system size $N$.
+Every arbitrary-boundary operator is $\rho_N(x)$ for one $x$ independent
+of $N$, and every $x$ has such a boundary. Multiplicativity gives
+\begin{align}
+    \rho_N(xy) & =\rho_N(x)\rho_N(y) \qquad (N>0).
+    \label{eq:mrgscp22_represented_multiplication}
+\end{align}
+Thus products have one output boundary at all positive lengths. The
+boundary representation and matrix-unit decomposition give multiplicities
+$N_{ab}^c$, analysis maps $V_{ab}^{c\mu}:\C^{D_a}\otimes\C^{D_b}\to\C^{D_c}$,
+and synthesis maps $W_{ab}^{c\mu}:\C^{D_c}\to\C^{D_a}\otimes\C^{D_b}$,
+where $1\leq\mu\leq N_{ab}^c$, satisfying
+\begin{align}
+    \sum_j T_a^{ij}\otimes T_b^{jk}
+     & =\sum_{c,\mu}W_{ab}^{c\mu}T_c^{ik}V_{ab}^{c\mu},
+    \label{eq:mrgscp22_biorthogonal_reconstruction}     \\
+    V_{ab}^{c\mu}W_{ab}^{e\nu}
+     & =\delta_{ce}\delta_{\mu\nu}I_{D_c}.
+    \label{eq:mrgscp22_biorthogonal_inverse}
+\end{align}
+For $c\ne e$ the last right side denotes the zero map from $\C^{D_e}$
+to $\C^{D_c}$. These identities imply both zipper identities. Together
+with (\ref{eq:mrgscp22_one_letter_inverse}) they give a complete zipper
+fusion family $F$. Its letter identification and the counit are
+\begin{align}
+    F^{ik}               & =(T_c^{ik})_c=\psi(\phi_{ik}),
+    \label{eq:mrgscp22_constructed_letter}                \\
+    \varepsilon(\psi(f)) & =f(1_{\mathcal A}),
+    \label{eq:mrgscp22_constructed_counit}                \\
+    \varepsilon(F^{ik})  & =\phi_{ik}(1_{\mathcal A})
+    =\phi(1_{\mathcal A})_{ik}=\delta_{ik}.
+    \label{eq:mrgscp22_constructed_counit_letter}
+\end{align}
+Here $f\in\mathcal A^*$, and the last equality uses unitality of $\phi$.
+The established counit construction therefore applies without an
+additional witness.\footnote{Formal declarations in
+    \doclink{TNLean/MPS/MPDO/DualRepresentationFusion}:
+    \leanid{MPOTensor.isBoundaryClosed_ofDualRepresentation},
+    \leanid{MPOTensor.DualRepresentationFusion.wordTupleSpanTop_tensor},
+    \leanid{MPOTensor.DualRepresentationFusion.family},
+    \leanid{MPOTensor.DualRepresentationFusion.family_tensor},
+    \leanid{MPOTensor.DualRepresentationFusion.toPreBialgebra}, and
+    \leanid{MPOTensor.exists_completeZipperFusionFamily_of_cosemisimple}.}
+
+This resolves the construction obligation for the source's cosemisimple
+setting. The counterexample for arbitrary complete zipper families above
+remains valid: existence of a counit is not added to their definition.
 
 \bibliographystyle{alpha}
 \bibliography{references}

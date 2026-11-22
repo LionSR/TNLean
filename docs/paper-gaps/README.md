@@ -895,17 +895,16 @@ For the matrix product operator symmetries of arXiv:2203.12563:
 
 For the matrix product operator algebras of arXiv:2204.05940:
 
-- `mrgscp22_pre_bialgebra_counit_scope.tex` (scope restriction, open) records
-  that the formal pre-bialgebra structure now carries the source's counit
-  (Definitions 3.1 and 4.1), and that the fusion coproduct of a complete
-  zipper fusion family satisfies both counit laws for the functional taking
-  the Kronecker delta on the letters; that functional is the source's
-  evaluation at the unit.  It exists exactly when the one-site identity is a
-  one-site operator of the family, and it is constructed for every family
-  whose letters are the images of the matrix coefficients of a unital
-  representation; for an arbitrary family its existence is not forced by the
-  fields and is taken as an argument, until the construction of the family
-  from a pre-bialgebra is formalized.
+- `mrgscp22_pre_bialgebra_counit_scope.tex` (scope restriction, resolved)
+  records the counit criterion for arbitrary complete zipper families and
+  the construction from a finite-dimensional cosemisimple pre-bialgebra
+  with an injective unital physical representation. Wedderburn--Artin gives
+  the dual block decomposition; boundary closedness gives exact fusion
+  tensors and their biorthogonal left inverses; physical faithfulness gives
+  the simultaneous one-letter inverse. The existing counit construction
+  then applies to the identified letters. Cosemisimplicity is the explicit
+  source hypothesis at line 1642, not a consequence of physical faithfulness.
+  Arbitrary complete zipper families still need a counit witness.
 
 For the strong and weak symmetries of matrix product density operators in
 arXiv:2504.16985:
