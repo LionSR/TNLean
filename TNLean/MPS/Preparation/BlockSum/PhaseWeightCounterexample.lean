@@ -326,10 +326,10 @@ theorem phaseBlockEquiv_symm_apply {μ : ℂ} (hμ : μ ≠ 0) (x : Fin 2) :
 /-- **`phaseBlockTensor μ` is the canonical form** `⊕ⱼ μ_{j,1} A_j` of arXiv:2307.01696,
 eq. (S2), of `phaseBlockSector`, after ordering the bond coordinates. -/
 theorem reindex_toTensor_phaseBlockSector {μ : ℂ} (hμ : μ ≠ 0) (i : Fin 2) :
-    reindex (phaseBlockEquiv hμ) (phaseBlockEquiv hμ) ((phaseBlockSector hμ).toTensor i) =
+    Matrix.reindex (phaseBlockEquiv hμ) (phaseBlockEquiv hμ) ((phaseBlockSector hμ).toTensor i) =
       phaseBlockTensor μ i := by
   ext x y
-  rw [reindex_apply, submatrix_apply, phaseBlockEquiv_symm_apply, phaseBlockEquiv_symm_apply]
+  rw [Matrix.reindex_apply, submatrix_apply, phaseBlockEquiv_symm_apply, phaseBlockEquiv_symm_apply]
   fin_cases x <;> fin_cases y <;>
     simp only [phaseBlockCopyCoord, Fin.zero_eta, Fin.mk_one, cons_val_zero, cons_val_one] <;>
     first
@@ -377,7 +377,7 @@ theorem isBNTCanonicalForm_and_not_approximationError_le_phaseBlock :
       (∀ j, IsNormalTensor ((phaseBlockSector (neg_ne_zero.2 one_ne_zero)).basis j)) ∧
       (∀ j, (1 : Matrix (Fin 1) (Fin 1) ℂ).PosDef ∧ (1 : Matrix (Fin 1) (Fin 1) ℂ).IsDiag ∧
         Kraus.transferMap ((phaseBlockSector (neg_ne_zero.2 one_ne_zero)).basis j) 1 = 1) ∧
-      (∀ i, reindex (phaseBlockEquiv (neg_ne_zero.2 one_ne_zero))
+      (∀ i, Matrix.reindex (phaseBlockEquiv (neg_ne_zero.2 one_ne_zero))
         (phaseBlockEquiv (neg_ne_zero.2 one_ne_zero))
         ((phaseBlockSector (neg_ne_zero.2 one_ne_zero)).toTensor i) = phaseBlockTensor (-1) i) ∧
       (∀ j (lam₂ μ : ℂ), Module.End.HasEigenvalue

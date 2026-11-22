@@ -17,6 +17,7 @@ import TNLean.MPS.Examples.Ising.IsingFusionAlgebraPsiSigma
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebraSigma
 import TNLean.MPS.Examples.Ising.IsingGSymbol
 import TNLean.MPS.Examples.Ising.IsingGauge
+import TNLean.MPS.Examples.Ising.IsingLetterBlockwise
 import TNLean.MPS.Examples.Ising.IsingLetterSectorOne
 import TNLean.MPS.Examples.Ising.IsingLetterSectorPsi
 import TNLean.MPS.Examples.Ising.IsingLetterSectorSigmaAbelian

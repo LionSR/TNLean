@@ -27,11 +27,16 @@ namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 open TNLean.Lattice.PartyCircuit
 variable {P : Type}
 
-private theorem projectAllChoices_comp (A : P → Bool) {a b c : Layout P}
+private theorem projectAllChoices_comp_fst (A : P → Bool) {a b c : Layout P}
     (w : SourceCircuit a b) (v : SourceCircuit b c)
     (ξ : Choices (fun _ ↦ true) (w.comp v)) :
-    projectAllChoices A (w.comp v) ξ =
-      (projectAllChoices A w ξ.1, projectAllChoices A v ξ.2) := by
+    (projectAllChoices A (w.comp v) ξ).1 = projectAllChoices A w ξ.1 := by
+  rfl
+
+private theorem projectAllChoices_comp_snd (A : P → Bool) {a b c : Layout P}
+    (w : SourceCircuit a b) (v : SourceCircuit b c)
+    (ξ : Choices (fun _ ↦ true) (w.comp v)) :
+    (projectAllChoices A (w.comp v) ξ).2 = projectAllChoices A v ξ.2 := by
   rfl
 
 private theorem projectAllChoices_frame (A : P → Bool) (r : Reg P)
@@ -134,7 +139,6 @@ private theorem selectedRemainingComparison_of_selectedLocalPartComparison {Q R 
     lift r q hlift v
   exact h.trans hLift
 
-set_option maxHeartbeats 400000 in -- comparing party layouts unfolds the shared circuit syntax
 /-- The chronological induction compares words through the canonical
 selected-operation proposition before the final owner-lifting conversion.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
@@ -221,7 +225,8 @@ private theorem selectedLocalPartComparison_circuit
     | @gate C ι _ _ owner a b c G tail =>
         exact selectedLocalPartComparison_gate owner G tail p η
     | @comp a b c v z ihv ihz =>
-        rw [projectAllChoices_comp]
+        rw [partialWord.eq_2, partialWord.eq_2, Word.mapOwner.eq_2,
+          projectAllChoices_comp_fst, projectAllChoices_comp_snd]
         exact Word.restrict_localPart_comp_eval_heq sq
           (partialWord (fun _ : P ↦ true) v η.1)
           (partialWord (fun _ : P ↦ true) z η.2)

@@ -3,7 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.Examples.Ising.IsingGauge
+import TNLean.MPS.Examples.Ising.IsingLetterBlockwise
 
 /-!
 # The Ising letter identity: the trivial sector
@@ -44,8 +44,9 @@ letters, each of which is block diagonal in the block coordinates with the block
 
 The sector decomposition of the letter identity is check T2-G3 of
 `Notes/OpenProblemsTN/checks/asym_ising_action_data.md`, §1.3; that file is a verification
-record, not the source. The sector matrices and the gauge are those of `IsingGauge`; the sectors
-are assembled in `IsingWeightedTwist`.
+record, not the source. The sector matrices and the gauge are those of `IsingGauge`; the letters
+are decided in the blockwise form of `IsingLetterBlockwise`, one product per entry, and the
+sectors are assembled in `IsingWeightedTwist`.
 -/
 
 namespace IsingTwist
@@ -57,6 +58,9 @@ the trivial sector is block diagonal with the prescribed blocks. -/
 theorem conjSector_eq_blockDiagonal_of_rho_zero :
     ∀ h h' : Fin 10, isingRho h = 0 → isingRho h' = 0 →
       conjSector 0 h h' = Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ h h')) := by
-  decide +kernel
+  have key : ∀ h h' : Fin 10, isingRho h = 0 → isingRho h' = 0 →
+      conjBlockwise h h' = Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ h h')) := by
+    decide +kernel
+  exact fun h h' hh hh' => (conjSector_eq_conjBlockwise hh h').trans (key h h' hh hh')
 
 end IsingTwist
