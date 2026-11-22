@@ -276,7 +276,7 @@ theorem commute_place_of_productSiteTransport
   change D = ManyBody.place (R ∪ S) E at hE
   have hEJ : E * regionPhysicalProductMatrix (R ∪ S) J = 0 :=
     (ManyBody.place_mul_piKronecker_eq_zero_iff J E
-      (Matrix.piKronecker_ne_zero _ fun w ↦ hJ0 w)).mp (by rw [← hE]; exact hDJ)
+      (Matrix.piKronecker_ne_zero fun w ↦ hJ0 w)).mp (by rw [← hE]; exact hDJ)
   change P * Q = Q * P
   apply sub_eq_zero.mp
   change D = 0

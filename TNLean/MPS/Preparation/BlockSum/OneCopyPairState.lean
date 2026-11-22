@@ -217,7 +217,8 @@ theorem nonNormalApproxVector_repeatedBlockSum_oneCopy (hι : ∀ j k, Function.
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [mulVec_smul, mulVec_smul, pairProductState_embedPair_eq_mulVec (hι j (k j)), mulVec_mulVec,
     Matrix.piKronecker_mul, polarIso_blockTensor_repeatedBlockSum_mul_pairEmbedding hι hdisj μ hq,
-    Matrix.piKronecker_smul, smul_mulVec, ← Matrix.piKronecker_mul, ← mulVec_mulVec, smul_smul]
+    Matrix.piKronecker_smul, Fintype.card_fin, smul_mulVec, ← Matrix.piKronecker_mul,
+    ← mulVec_mulVec, smul_smul]
 
 /-- Rescaling the coefficients by `t > 0` does not change the overlap of the normalized corrected
 state with the target. -/

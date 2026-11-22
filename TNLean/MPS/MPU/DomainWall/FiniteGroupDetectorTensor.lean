@@ -41,7 +41,7 @@ private theorem unitary_coe_prod_map (l : List β) (A : β → unitary (Matrix �
 omit [Fintype α] [DecidableEq ν] in
 private theorem rectKronecker_scalar (f : ν → ℂ) :
     Matrix.piKronecker (fun s ↦ f s • (1 : Matrix α α ℂ)) = (∏ s, f s) • 1 := by
-  conv_rhs => rw [← Matrix.piKronecker_one (ν := ν) (ι := α)]
+  conv_rhs => rw [← Matrix.piKronecker_one (ν := ν) (ι := fun _ ↦ α)]
   ext x y
   simp only [Matrix.piKronecker_apply, Matrix.smul_apply, smul_eq_mul, Finset.prod_mul_distrib]
 

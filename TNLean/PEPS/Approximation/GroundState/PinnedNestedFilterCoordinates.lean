@@ -182,7 +182,7 @@ theorem squareAreaLawState_output (F : FilterFamily q m X) (Ω : State L q) :
   simpa only [reindex_extendedMatrices] using
     Entropy.relabelVector_liftProd_chainList
       (n := fun _ : Vertex L ↦ q)
-      (X' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ Fin q)
+      (n' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
       (extendRegions X) (canonicalRegions X) (ManyBody.rectangleSiteEquiv L L)
       hD (fun _ ↦ Equiv.refl (Fin q)) (extendedMatrices F) (fun _ ↦ True) Ω
 

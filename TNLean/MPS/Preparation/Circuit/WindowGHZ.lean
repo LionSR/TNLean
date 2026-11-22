@@ -495,7 +495,7 @@ theorem exists_windowGHZCorrectionRound [NeZero M]
       (V : RegionConfig (fun _ : Fin N ↦ Fin d) D → (i : Fin N) → Matrix (Fin d) (Fin d) ℂ),
       (∀ m i, V m i ∈ unitaryGroup (Fin d) ℂ) ∧
       ∀ m, ∃ c : ℂ, ∀ α : Cfg d r₁ → ℂ,
-        (prodOp (V m) * place (X := fun _ : Fin N ↦ Fin d) D (Matrix.single m m 1)) *ᵥ
+        (piKronecker (V m) * place (X := fun _ : Fin N ↦ Fin d) D (Matrix.single m m 1)) *ᵥ
           windowGHZDifference hN hr α = c • windowGHZState hN hr α := by
   classical
   set e₀ := registerSite hN hr (0 : Fin M) with he₀def
