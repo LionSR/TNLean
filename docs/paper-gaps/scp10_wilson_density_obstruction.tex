@@ -1,0 +1,76 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{A Physical Wilson-Loop Obstruction to Equal Local Density}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+\gapnote{open-gap}{open}
+
+Schuch, Cirac, and P\'erez-Garc\'ia,
+\cite[Lemma~6.14 and Theorem~6.15]{Schuch2010PEPS},
+source \path{Papers/1001.3807/paper_v3.tex}, lines 2199--2267,
+describe flux-string deformation and detection of a single fluxon's type.
+Theorem 6.15 measures a conjugate $xgx^{-1}$ on the supporting plaquette,
+so it determines the conjugacy class $[g]$. The assertion below is a
+consequence of regular isometry for general observed closed walks; it is
+not a literal special case of the source's particular plaquette measurement.
+
+Let $\Gamma$ be a finite graph, $G$ a finite group and $a$ a family of regular
+$G$-isometric physical sites. Let $R$ be an observation region whose induced
+graph is connected, and let $\gamma:o\to o$ be a finite closed walk entirely
+in that induced graph. For an assignment $u$ of oriented bond insertions,
+let $H_u(\gamma)$ be its ordered transport around $\gamma$, with inverse
+transport on reversed edges. Write $[H_u(\gamma)]$ for its conjugacy class.
+Let $M_u(\sigma,\tau)$ be the actual physical coefficient matrix across
+$R$ and $R^c$, with the insertion $u$ on the original bond contraction.
+For two assignments $u,v$, the proved assertion is
+\begin{align}
+    [H_u(\gamma)]\ne[H_v(\gamma)]
+    \ \Longrightarrow\
+    M_u\ne0,\quad M_v\ne0,\quad
+    \frac{M_uM_u^\dagger}{\operatorname{tr}(M_uM_u^\dagger)}
+    \ne
+    \frac{M_vM_v^\dagger}{\operatorname{tr}(M_vM_v^\dagger)}.
+    \label{eq:scp10_wilson_density_separation}
+\end{align}
+There is no connectedness assumption on $R^c$ and no simple-connectedness
+assumption on $R$. The walk and the two computed holonomy classes are explicit
+inputs; no physical measurement or density inequality is supplied.
+\footnote{\leanid{TNLean.PEPS.regularPhysicalCutMatrix_normalized_reduced_ne_of_closedWalk_holonomy}.}
+
+The complete closed-walk measurement is constructed from local regular
+isometry. Its projector $Q$ onto the class $[H_u(\gamma)]$ acts on every
+open boundary column, hence on the actual cuts:
+\begin{align}
+    QM_u=M_u,\qquad QM_v=0.
+    \label{eq:scp10_wilson_density_projector}
+\end{align}
+Local physical inverses prove both cuts nonzero. Put
+$\rho_u=M_uM_u^\dagger/\operatorname{tr}(M_uM_u^\dagger)$ and define
+$\rho_v$ similarly. Equation~(\ref{eq:scp10_wilson_density_projector}) gives
+$Q\rho_u=\rho_u$ and $Q\rho_v=0$. Thus $\rho_u=\rho_v$ would force
+$\rho_u=0$, contradicting $\operatorname{tr}\rho_u=1$.
+
+On a native torus with both periods at least three, the native bond labels
+are converted to directed graph transport and the native physical cut
+equals the graph cut above. The same implication therefore holds for
+actual native bond insertions.
+\footnote{\leanid{TNLean.PEPS.IsGIsometric.torusBond_normalized_density_ne_of_closedWalk_holonomy}.}
+Taking $v=1$ supplies a sufficient criterion for failure of vacuum density.
+
+This is a sufficient obstruction, not a classification of annular
+observations or a converse density theorem. Deriving a suitable observed
+walk with nontrivial holonomy from a proposed endpoint placement remains
+a geometric obligation. In particular, endpoint exclusion alone supplies
+no vanishing-holonomy premise. This physical obstruction is distinct from
+the nonabelian seam-word obstruction to restricted homotopy, whose
+coefficient group need not be the physical insertion group.
+The broader source interpretation remains open under \ghissue{8703};
+no Hamiltonian common-kernel result from \ghissue{8947} is used.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
