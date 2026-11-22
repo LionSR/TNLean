@@ -80,9 +80,9 @@ snapshot based on the parent's exact
 
 Its only changed mathematical source bytes are:
 
-- `QICLean/Analysis/WeylMonotonicity.lean`, exactly the reviewed blob from
+- `QICLean/Analysis/Order/WeylMonotonicity.lean`, exactly the reviewed blob from
   QICLean draft #1011, `c04b69cdc483bc79c2512bbf1aba33e03e111d3e`.
-- New `QICLean/Analysis/RelativeLowEnergyCloseness.lean`, exactly the
+- New `QICLean/Spectral/LowEnergy/RelativeLowEnergyCloseness.lean`, exactly the
   reviewed blob from QICLean draft #1013,
   `4e688e3d81704e0906aae8b75cf31bf8dd4ea32b`.
 

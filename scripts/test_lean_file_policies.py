@@ -367,7 +367,7 @@ class ImportLayerPolicyTests(unittest.TestCase):
         sources = {"TNLean.Algebra.A": "import TNLean.MPS.Defs\ndef a := 0\n"}
         # Recording a new violation in the same change does not admit it.
         errors = layers.check_layers(sources, frozenset({entry}), frozenset())
-        self.assertEqual(errors, [f"Entry added to DEBT; this set may only shrink: {entry}"])
+        self.assertEqual(errors, [f"Entry added to UPWARD_IMPORTS; this set may only shrink: {entry}"])
         # The same entry is accepted when it is already recorded at the base.
         self.assertEqual(layers.check_layers(sources, frozenset({entry}), frozenset({entry})), [])
         # Without a base (the checker is being introduced) the recorded set is the baseline.
@@ -377,16 +377,16 @@ class ImportLayerPolicyTests(unittest.TestCase):
         self.assertEqual(len(layers.check_layers({}, frozenset({entry}), frozenset({entry}))), 1)
 
     def test_debt_is_read_from_a_checker_revision(self) -> None:
-        source = 'DEBT: frozenset[str] = frozenset(\n    {\n        "A -> B",\n    }\n)\n'
+        source = 'UPWARD_IMPORTS: frozenset[str] = frozenset(\n    {\n        "A -> B",\n    }\n)\n'
         self.assertEqual(layers.debt_from_source(source), frozenset({"A -> B"}))
-        self.assertEqual(layers.debt_from_source("DEBT = frozenset({})\n"), frozenset())
+        self.assertEqual(layers.debt_from_source("UPWARD_IMPORTS = frozenset({})\n"), frozenset())
         with self.assertRaises(ValueError):
-            layers.debt_from_source("DEBT = compute()\n")
+            layers.debt_from_source("UPWARD_IMPORTS = compute()\n")
 
     def test_record_is_read_by_name_and_may_be_absent(self) -> None:
-        source = 'DEBT = frozenset({})\nMUTUAL_DIRECTORIES = frozenset({"A <-> B"})\n'
+        source = 'UPWARD_IMPORTS = frozenset({})\nMUTUAL_LAYER_DIRECTORIES = frozenset({"A <-> B"})\n'
         self.assertEqual(
-            layers.record_from_source(source, "MUTUAL_DIRECTORIES"), frozenset({"A <-> B"})
+            layers.record_from_source(source, "MUTUAL_LAYER_DIRECTORIES"), frozenset({"A <-> B"})
         )
         self.assertIsNone(layers.record_from_source(source, "EXAMPLES_IMPORTS"))
         with self.assertRaises(ValueError):
@@ -469,7 +469,7 @@ class MutualDirectoryPolicyTests(unittest.TestCase):
         # Recording a new pair in the same change does not admit it.
         self.assertEqual(
             check(self.SOURCES, frozenset({pair}), frozenset()),
-            [f"Pair added to MUTUAL_DIRECTORIES; this set may only shrink: {pair}"],
+            [f"Pair added to MUTUAL_LAYER_DIRECTORIES; this set may only shrink: {pair}"],
         )
         # Without a base (the record is being introduced) the recorded set is the baseline.
         self.assertEqual(check(self.SOURCES, frozenset({pair}), None), [])
@@ -481,7 +481,7 @@ class MutualDirectoryPolicyTests(unittest.TestCase):
     def test_recorded_pairs_match_the_tree(self) -> None:
         root = Path(__file__).resolve().parent.parent
         sources = layers.tracked_sources(root)
-        self.assertEqual(set(layers.mutual_directories(sources)), layers.MUTUAL_DIRECTORIES)
+        self.assertEqual(set(layers.mutual_directories(sources)), layers.MUTUAL_LAYER_DIRECTORIES)
 
 
 class ExamplesImportPolicyTests(unittest.TestCase):

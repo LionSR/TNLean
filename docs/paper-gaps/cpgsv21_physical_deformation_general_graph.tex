@@ -48,12 +48,12 @@ translation-invariance assumption is imposed on the tensor.\footnote{Formal
     \leanid{TNLean.PEPS.regionParentGroundSpacePhysicalEquiv},
     \leanid{TNLean.PEPS.finrank_regionParentGroundSpace_physicalDeform}, and
     \leanid{TNLean.PEPS.map_ker_regionParentHamiltonian_physicalDeform}, in
-    \doclink{TNLean/PEPS/ParentHamiltonian/RegionPhysicalGroundSpaceTransport}.
+    \doclink{TNLean/PEPS/ParentHamiltonian/Region/RegionPhysicalGroundSpaceTransport}.
     Local interactions are treated in
-    \doclink{TNLean/PEPS/ParentHamiltonian/RegionPhysicalDeformation}.}
+    \doclink{TNLean/PEPS/ParentHamiltonian/Region/RegionPhysicalDeformation}.}
 Invertibility gives ground-space correspondence; the stronger statement
 that the full spectra agree requires unitary on-site maps.\footnote{See
-    \doclink{TNLean/PEPS/ParentHamiltonian/RegionPhysicalHamiltonianTransport}.}
+    \doclink{TNLean/PEPS/ParentHamiltonian/Region/RegionPhysicalHamiltonianTransport}.}
 
 \section{Periodic-chain comparison}
 
@@ -65,7 +65,7 @@ for every invertible $\Lambda$ and all $N$ and $L$, and the corresponding
 Hamiltonian-kernel identity for $0<N$ and $L\le N$.\footnote{Formal
     declarations: \leanid{MPSTensor.chainGroundSpace_rotatePhysical} and
     \leanid{MPSTensor.ker_parentHamiltonian_rotatePhysical}, in
-    \doclink{TNLean/MPS/ParentHamiltonian/PhysicalDeformation}.}
+    \doclink{TNLean/MPS/ParentHamiltonian/ParentInteraction/PhysicalDeformation}.}
 
 On the cycle with $N\ge3$ sites, let $T_A$ be the tensor whose component at a
 vertex with physical index $i$ is the matrix entry $(A^i)_{ab}$, with $a$ on
@@ -83,13 +83,13 @@ yields (\ref{eq:cpgsv21_physical_deformation_general_graph_ground_space}) for
 $N\ge3$ and $0<L<N$. None of these steps assumes injectivity or a positive
 physical or bond dimension.\footnote{Formal declarations:
     \leanid{TNLean.PEPS.map_regionGroundSpace_cycleTensorOfMPS}, in
-    \doclink{TNLean/PEPS/ParentHamiltonian/CycleGroundSpace};
+    \doclink{TNLean/PEPS/ParentHamiltonian/Cycle/CycleGroundSpace};
     \leanid{TNLean.PEPS.regionParentGroundSpace_cycleTensorOfMPS}, in
-    \doclink{TNLean/PEPS/ParentHamiltonian/CycleParentGroundSpace}; and
+    \doclink{TNLean/PEPS/ParentHamiltonian/Cycle/CycleParentGroundSpace}; and
     \leanid{TNLean.PEPS.physicalDeform_cycleTensorOfMPS},
     \leanid{TNLean.PEPS.globalPhysicalMap_const_eq_onSiteTensorPow} and
     \leanid{TNLean.PEPS.map_chainGroundSpace_physicalEquiv_of_cycle}, in
-    \doclink{TNLean/PEPS/ParentHamiltonian/CyclePhysicalDeformation}.}
+    \doclink{TNLean/PEPS/ParentHamiltonian/Cycle/CyclePhysicalDeformation}.}
 
 The comparison of parent spaces is stated only for $N\ge3$ and $0<L<N$,
 because outside that range the two constructions differ. For $L=N$ the graph

@@ -12,6 +12,6 @@ migrated to the replacement.
 
 | Removed | File | Replacement |
 |---|---|---|
-| `boundary_snd_notMem` | `TNLean/PEPS/TorusAbsorbedCovariance.lean` | `TNLean.PEPS.boundary_right_not_mem` |
-| `mem_endPair_of_mem_leftWindow` (private) | `TNLean/PEPS/TorusWindowExtraction.lean` | `horizontalStaircaseLeftWindow_subset_endPair` |
-| `mem_endPair_of_mem_rightWindow` (private) | `TNLean/PEPS/TorusWindowExtraction.lean` | `horizontalStaircaseRightWindow_subset_endPair` |
+| `boundary_snd_notMem` | `TNLean/PEPS/FundamentalTheorem/Torus/TorusAbsorbedCovariance.lean` | `TNLean.PEPS.boundary_right_not_mem` |
+| `mem_endPair_of_mem_leftWindow` (private) | `TNLean/PEPS/FundamentalTheorem/Torus/Window/EndPairCrossing.lean` | `horizontalStaircaseLeftWindow_subset_endPair` |
+| `mem_endPair_of_mem_rightWindow` (private) | `TNLean/PEPS/FundamentalTheorem/Torus/Window/EndPairCrossing.lean` | `horizontalStaircaseRightWindow_subset_endPair` |

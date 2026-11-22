@@ -7,12 +7,12 @@ its own module docstring.
 
 | Removed | Replacement |
 |---|---|
-| `MPOTensor.diagonalTransferMap` (`TNLean/MPS/MPDO/VerticalCF.lean`) | `Kraus.transferMap (MPOTensor.diagonalTensor M)`; the removed definition's body was exactly that expression |
+| `MPOTensor.diagonalTransferMap` (`TNLean/MPS/CanonicalForm/VerticalForm/VerticalCF.lean`) | `Kraus.transferMap (MPOTensor.diagonalTensor M)`; the removed definition's body was exactly that expression |
 
 ## What was checked
 
 A repository-wide search for `diagonalTransferMap` outside `.lake` returned two
-hits, both inside `TNLean/MPS/MPDO/VerticalCF.lean`: the definition itself and
+hits, both inside `TNLean/MPS/CanonicalForm/VerticalForm/VerticalCF.lean`: the definition itself and
 its bullet in the module docstring's main-definitions list. There is no
 consumer in `TNLean/`, none in `Archive/`, and no blueprint `\lean{...}` tag
 naming it, so no transition declaration is warranted.

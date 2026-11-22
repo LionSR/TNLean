@@ -12,4 +12,4 @@ migrated to the replacement.
 
 | Removed | File | Replacement |
 |---|---|---|
-| `continuous_localTermES_family` | `TNLean/MPS/ParentHamiltonian/GroundSpaceMapContinuity.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `continuous_localTermES_family` | `TNLean/MPS/ParentHamiltonian/BoundaryMap/GroundSpaceMapContinuity.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |

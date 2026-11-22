@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""Reject imports that point upward between the lower layers of TNLean.
+"""Reject imports that point upward between the layers of TNLean.
 
-The layers below the tensor-network directories are listed in ``LAYERS``, from
-the bottom up; ``ALLOWED`` says which layers each may import.  A module of
-``TNLean`` outside these layers is not constrained here.  The architecture
-they implement is described in ``docs/many_body_circuit_architecture.md``.
+The layers are listed in ``LAYERS``, from the bottom up; ``ALLOWED`` says which
+layers each may import.  The layers below the tensor networks are described in
+``docs/many_body_circuit_architecture.md``, those of the tensor networks in
+``docs/library_layers.md``.
 
 Imports are read after Lean comments are removed, so a commented-out import
 is not a dependency and a trailing comment does not hide one.  An import-only
 module (an aggregator) is not checked itself, but a module that imports it is
 checked against everything the aggregator re-exports.
 
-``DEBT`` is a ratchet.  It lists the imports that violated the rules when the
+``UPWARD_IMPORTS`` is a ratchet.  It lists the imports that violated the rules when the
 check was introduced.  A new violation fails, and so does an entry that no
 longer violates a rule: remove it in the change that repairs the import.  With
 ``--base-ref`` the set is also compared with its value at the merge base, and
@@ -20,7 +20,7 @@ an added entry fails, so a new violation cannot be admitted by recording it.
 Two further ratchets of the same kind cover every module of ``TNLean``, with
 the same reading of imports and the same treatment of aggregators.
 
-``MUTUAL_DIRECTORIES`` lists the unordered pairs of directories that import
+``MUTUAL_LAYER_DIRECTORIES`` lists the unordered pairs of directories that import
 each other: some module of the first imports a module of the second, and some
 module of the second imports a module of the first.  The directory of a module
 is its first two path components below ``TNLean/MPS`` and ``TNLean/PEPS`` and
@@ -73,8 +73,10 @@ SITE_MODULES_IN_CIRCUIT: frozenset[str] = frozenset(
 DYNAMICS_MODULES_IN_CIRCUIT: frozenset[str] = frozenset()
 
 # Layer name and the module-name prefixes it owns, from the bottom up.  A module
-# belongs to the first layer that claims it.
-LAYERS: tuple[tuple[str, tuple[str, ...]], ...] = (
+# belongs to the first layer that claims it.  The first six are the layers below
+# the tensor networks; the others are named for the object their statements are
+# about (``docs/library_layers.md``).
+LOWER_LAYERS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("algebra", ("TNLean.Algebra", "TNLean.Tactic")),
     ("sites", (*sorted(SITE_MODULES_IN_CIRCUIT),)),
     ("dynamics", (*sorted(DYNAMICS_MODULES_IN_CIRCUIT),)),
@@ -84,7 +86,77 @@ LAYERS: tuple[tuple[str, tuple[str, ...]], ...] = (
         ("TNLean.Lattice.PartyCircuit", "TNLean.Lattice.Compression", "TNLean.Lattice.Sheet"),
     ),
     ("hamiltonian", ("TNLean.Lattice",)),
+    ("cellular", ("TNLean.QCA", "TNLean.QICLeanInterface")),
 )
+TENSOR_NETWORK_LAYERS: tuple[str, ...] = (
+    "MPS/Tensor",
+    "MPS/Transfer",
+    "MPS/Operator",
+    "MPS/CanonicalForm",
+    "MPS/FundamentalTheorem",
+    "MPS/ParentHamiltonian",
+    "MPS/Symmetry",
+    "MPS/MPDO",
+    "MPS/MPU",
+    "MPS/Preparation",
+    "MPS/AreaLaw",
+    "MPS/RFP",
+    "MPS/Examples",
+    "PEPS/Graph",
+    "PEPS/Tensor",
+    "PEPS/Injectivity",
+    "PEPS/FundamentalTheorem",
+    "PEPS/ParentHamiltonian",
+    "PEPS/AreaLaw",
+    "PEPS/Approximation",
+    "PEPS/Examples",
+)
+LAYERS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    *LOWER_LAYERS,
+    *((name, ("TNLean." + name.replace("/", "."),)) for name in TENSOR_NETWORK_LAYERS),
+)
+
+# The tensor-network layers each tensor-network layer may import directly; the
+# relation is closed transitively below, and each of them may import every lower
+# layer.
+DIRECTLY_BELOW: dict[str, tuple[str, ...]] = {
+    "MPS/Tensor": (),
+    "MPS/Transfer": ("MPS/Tensor",),
+    "MPS/Operator": ("MPS/Transfer",),
+    "MPS/CanonicalForm": ("MPS/Operator",),
+    "MPS/FundamentalTheorem": ("MPS/CanonicalForm",),
+    "MPS/ParentHamiltonian": ("MPS/FundamentalTheorem",),
+    "MPS/Symmetry": ("MPS/ParentHamiltonian",),
+    "MPS/MPDO": ("MPS/ParentHamiltonian",),
+    "MPS/MPU": ("MPS/ParentHamiltonian",),
+    "MPS/Preparation": ("MPS/ParentHamiltonian",),
+    "MPS/AreaLaw": ("MPS/ParentHamiltonian",),
+    "MPS/RFP": ("MPS/ParentHamiltonian",),
+    "MPS/Examples": (
+        "MPS/Symmetry",
+        "MPS/MPDO",
+        "MPS/MPU",
+        "MPS/Preparation",
+        "MPS/AreaLaw",
+        "MPS/RFP",
+    ),
+    "PEPS/Graph": (),
+    "PEPS/Tensor": ("PEPS/Graph", "MPS/ParentHamiltonian"),
+    "PEPS/Injectivity": ("PEPS/Tensor",),
+    "PEPS/FundamentalTheorem": ("PEPS/Injectivity",),
+    "PEPS/ParentHamiltonian": ("PEPS/FundamentalTheorem",),
+    "PEPS/AreaLaw": ("PEPS/ParentHamiltonian",),
+    "PEPS/Approximation": ("PEPS/AreaLaw",),
+    "PEPS/Examples": ("PEPS/Approximation", "MPS/Examples"),
+}
+
+
+def _below(layer: str) -> frozenset[str]:
+    found: set[str] = set()
+    for lower in DIRECTLY_BELOW[layer]:
+        found |= {lower} | _below(lower)
+    return frozenset(found)
+
 
 # The layers each layer may import, besides itself.  Circuits and Hamiltonians
 # are siblings above the site layer: neither imports the other.
@@ -95,11 +167,70 @@ ALLOWED: dict[str, frozenset[str]] = {
     "circuit": frozenset({"algebra", "sites"}),
     "hamiltonian": frozenset({"algebra", "sites", "dynamics"}),
     "party": frozenset({"algebra", "sites", "circuit"}),
+    "cellular": frozenset({"algebra", "sites", "dynamics", "circuit", "hamiltonian", "party"}),
+    **{
+        layer: _below(layer) | frozenset(name for name, _ in LOWER_LAYERS)
+        for layer in TENSOR_NETWORK_LAYERS
+    },
 }
 
 # Existing violations only, as "importing module -> imported module".  Never add
 # an entry: move the shared declaration down to the layer both sides may import.
-DEBT: frozenset[str] = frozenset({})
+UPWARD_IMPORTS: frozenset[str] = frozenset(
+    {
+        "TNLean.MPS.FundamentalTheorem.SectorBNT.PowerSumCoefficients -> TNLean.MPS.ParentHamiltonian.Gap.Comparison.PrimitiveGaugeExistence",
+        "TNLean.PEPS.AreaLaw.RestoringOperator.GoodRealizationUnitary -> TNLean.PEPS.Approximation.SheetSplitting",
+        "TNLean.PEPS.Graph.Cell.TorusPlaquetteRealization -> TNLean.PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement",
+        "TNLean.PEPS.Graph.Cell.TorusSimplyConnectedComplement -> TNLean.PEPS.Injectivity.Normal.NormalPairBlocking",
+        "TNLean.PEPS.Graph.Holonomy.RegularBoundaryRoute -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion",
+        "TNLean.PEPS.Graph.Holonomy.RegularInternalGaugeTransport -> TNLean.PEPS.Injectivity.Flux.RegularTwoCycleGlobalFluxMove",
+        "TNLean.PEPS.Graph.Holonomy.RegularRegionConnectivity -> TNLean.PEPS.Tensor.GraphState.RegularOpenRegion",
+        "TNLean.PEPS.Graph.Holonomy.RegularRegionCoordinates -> TNLean.PEPS.Tensor.GraphState.RegularRegionCycleRank",
+        "TNLean.PEPS.Graph.Holonomy.RegularRegionCounting -> TNLean.PEPS.Tensor.GraphState.RegularOpenRegion",
+        "TNLean.PEPS.Graph.Holonomy.RegularRegionTreeGauge -> TNLean.PEPS.Tensor.GraphState.RegularTwistedRegion",
+        "TNLean.PEPS.Graph.Holonomy.RegularTorusBondCounting -> TNLean.PEPS.Injectivity.Closure.RegularTorusGramExpansion",
+        "TNLean.PEPS.Graph.Holonomy.RegularTorusCompatibility -> TNLean.PEPS.Injectivity.Closure.TorusGClosure",
+        "TNLean.PEPS.Graph.Holonomy.RegularTwistedRegionConnectivity -> TNLean.PEPS.Tensor.GraphState.RegularTwistedRegion",
+        "TNLean.PEPS.Graph.Holonomy.RegularWalkHolonomy -> TNLean.PEPS.Tensor.GraphState.RegularClosedGauge",
+        "TNLean.PEPS.Graph.Holonomy.TorusDirectedBondUpdate -> TNLean.PEPS.Tensor.Torus.TorusTranslationInvariant",
+        "TNLean.PEPS.Graph.Holonomy.TorusParallelSection -> TNLean.PEPS.Tensor.Torus.TorusSiteTensor",
+        "TNLean.PEPS.Graph.Holonomy.TorusRegionLiftGauge -> TNLean.PEPS.Injectivity.TorusSector.RegularTorusCut",
+        "TNLean.PEPS.Graph.Plaquette.TorusJointFluxGeometry -> TNLean.PEPS.Injectivity.Flux.TorusTranslatedFluxMove",
+        "TNLean.PEPS.Graph.Plaquette.TorusSweptPatchEndpointGeometry -> TNLean.PEPS.Injectivity.Flux.TorusPlaquetteFluxMeasurement",
+        "TNLean.PEPS.Graph.Plaquette.TranslatedTwoPlaquetteGeometry -> TNLean.PEPS.FundamentalTheorem.Torus.Window.WindowComplement",
+        "TNLean.PEPS.Graph.Plaquette.TranslatedTwoPlaquetteGeometry -> TNLean.PEPS.Tensor.Region.RegionTransport",
+        "TNLean.PEPS.Graph.Plaquette.TwoPlaquetteGeometry -> TNLean.PEPS.Tensor.GraphState.RegularRegionCycleRank",
+        "TNLean.PEPS.Graph.Plaquette.TwoPlaquetteGeometry -> TNLean.PEPS.Tensor.Network.IsoTransport",
+        "TNLean.PEPS.Graph.Plaquette.VerticalTwoPlaquetteGeometry -> TNLean.PEPS.FundamentalTheorem.Torus.TorusCoordinateSwap",
+        "TNLean.PEPS.Graph.Region.EdgeMapSubgraph -> TNLean.PEPS.Tensor.Network.IsoTransport",
+        "TNLean.PEPS.Graph.Region.EdgeScalarSolve -> TNLean.PEPS.Tensor.Network.Defs",
+        "TNLean.PEPS.Graph.Region.SquareLatticeEdgeCount -> TNLean.PEPS.Injectivity.Normal.NormalBlocking",
+        "TNLean.PEPS.Graph.Torus.TorusLabelledBondGeometry -> TNLean.PEPS.Injectivity.TorusSector.TorusBondClosureSeamMovement",
+        "TNLean.PEPS.Graph.Torus.TorusLabelledBondGeometry -> TNLean.PEPS.Injectivity.TorusSector.TorusBondFlatConnection",
+        "TNLean.PEPS.Graph.Torus.TorusLatticeGraph -> TNLean.PEPS.Tensor.Network.Defs",
+        "TNLean.PEPS.Graph.Torus.TorusRectangleBoundaryCard -> TNLean.PEPS.Tensor.Torus.TorusSiteTensor",
+        "TNLean.PEPS.Graph.Torus.TorusRectangleConnectivity -> TNLean.PEPS.Tensor.Region.RegionBlock",
+        "TNLean.PEPS.Graph.Torus.TorusRectangleConnectivity -> TNLean.PEPS.Tensor.Torus.TorusTranslationInvariant",
+        "TNLean.PEPS.Graph.Torus.TorusSingletonRegion -> TNLean.PEPS.Injectivity.Entropy.RegularTorusEntropy",
+        "TNLean.PEPS.Graph.Walk.TorusWalkWinding -> TNLean.PEPS.Injectivity.TorusSector.RegularTorusCut",
+        "TNLean.PEPS.Injectivity.Charge.RegularTwistedStateNonzero -> TNLean.PEPS.FundamentalTheorem.Normal.NormalComparisonScalar",
+        "TNLean.PEPS.Injectivity.Flux.RegularTwoCycleGlobalFluxMove -> TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian",
+        "TNLean.PEPS.Injectivity.Multiplicity.GraphOpenAveragingBondState -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.GaugeInjectivity",
+        "TNLean.PEPS.Injectivity.Region.DisjointUnionSetup -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.CoefficientTransfer",
+        "TNLean.PEPS.Injectivity.Region.ReindexInjectivity -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion",
+        "TNLean.PEPS.Injectivity.Regular.GInjectivePhysicalMap -> TNLean.PEPS.ParentHamiltonian.Region.RegionPhysicalDeformation",
+        "TNLean.PEPS.Injectivity.Regular.RegularCoherentGlobalTransport -> TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian",
+        "TNLean.PEPS.Tensor.GraphState.GraphBondContraction -> TNLean.PEPS.FundamentalTheorem.Injective.GaugeAction",
+        "TNLean.PEPS.Tensor.GraphState.GraphDependentCutCoordinates -> TNLean.PEPS.ParentHamiltonian.Region.RegionParentHamiltonian",
+        "TNLean.PEPS.Tensor.GraphState.RegularClosedGauge -> TNLean.PEPS.Injectivity.Regular.RegularRegionGaugeContraction",
+        "TNLean.PEPS.Tensor.GraphState.RegularRegionGram -> TNLean.PEPS.Injectivity.Regular.RegularSiteGram",
+        "TNLean.PEPS.Tensor.Region.OpenRegionContraction -> TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.BlockRangeCoincidence",
+        "TNLean.PEPS.Tensor.Region.OpenRegionContraction -> TNLean.PEPS.Injectivity.Normal.NormalBlocking",
+        "TNLean.PEPS.Tensor.SquareLattice.Basic -> TNLean.PEPS.Injectivity.Normal.NormalBlocking",
+        "TNLean.PEPS.Tensor.SquareLattice.SquareGridSource -> TNLean.PEPS.Injectivity.Normal.NormalBlocking",
+        "TNLean.QCA.Blocking -> TNLean.MPS.Tensor.Physical.Blocking",
+    }
+)
 
 # Top-level directories whose subdirectories count as directories of their own.
 DEEP_ROOTS: frozenset[str] = frozenset({"MPS", "PEPS"})
@@ -107,61 +238,18 @@ DEEP_ROOTS: frozenset[str] = frozenset({"MPS", "PEPS"})
 # Existing pairs of directories that import each other, as "A <-> B" with A
 # before B in sorted order.  Never add a pair: move the shared declaration to a
 # directory both sides already import.
-MUTUAL_DIRECTORIES: frozenset[str] = frozenset(
+MUTUAL_LAYER_DIRECTORIES: frozenset[str] = frozenset(
     {
-        "MPS <-> MPS/Overlap",
-        "MPS/BNT <-> MPS/CanonicalForm",
-        "MPS/BNT <-> MPS/FundamentalTheorem",
-        "MPS/BNT <-> MPS/MPDO",
-        "MPS/CanonicalForm <-> MPS/Core",
-        "MPS/CanonicalForm <-> MPS/FundamentalTheorem",
-        "MPS/CanonicalForm <-> MPS/Irreducible",
-        "MPS/CanonicalForm <-> MPS/MPU",
-        "MPS/CanonicalForm <-> MPS/Overlap",
-        "MPS/CanonicalForm <-> MPS/Periodic",
-        "MPS/CanonicalForm <-> MPS/Preparation",
-        "MPS/CanonicalForm <-> MPS/SharedInfra",
-        "MPS/CanonicalForm <-> PiAlgebra",
-        "MPS/Chain <-> MPS/Core",
-        "MPS/Chain <-> MPS/FundamentalTheorem",
-        "MPS/Chain <-> MPS/Structure",
-        "MPS/Core <-> MPS/FundamentalTheorem",
-        "MPS/Core <-> MPS/MPDO",
-        "MPS/Core <-> MPS/ParentHamiltonian",
-        "MPS/Core <-> Spectral",
-        "MPS/Examples <-> MPS/MPU",
-        "MPS/FundamentalTheorem <-> MPS/MPDO",
-        "MPS/FundamentalTheorem <-> MPS/MPU",
         "MPS/FundamentalTheorem <-> MPS/ParentHamiltonian",
-        "MPS/FundamentalTheorem <-> MPS/Periodic",
-        "MPS/FundamentalTheorem <-> MPS/Preparation",
-        "MPS/FundamentalTheorem <-> MPS/Structure",
-        "MPS/FundamentalTheorem <-> MPS/Symmetry",
-        "MPS/MPDO <-> MPS/MPU",
-        "MPS/MPDO <-> MPS/ParentHamiltonian",
-        "MPS/MPDO <-> MPS/RFP",
-        "MPS/MPDO <-> MPS/Symmetry",
-        "MPS/MPU <-> MPS/Preparation",
-        "MPS/MPU <-> MPS/Symmetry",
-        "MPS/MPU <-> QCA",
-        "MPS/Overlap <-> MPS/Symmetry",
-        "MPS/Overlap <-> Spectral",
-        "MPS/ParentHamiltonian <-> MPS/Preparation",
-        "MPS/ParentHamiltonian <-> MPS/RFP",
-        "MPS/ParentHamiltonian <-> MPS/Symmetry",
-        "MPS/Periodic <-> MPS/SharedInfra",
-        "MPS/Preparation <-> MPS/SharedInfra",
-        "MPS/Preparation <-> Spectral",
-        "MPS/SharedInfra <-> Spectral",
-        "MPS/Structure <-> MPS/Symmetry",
-        "PEPS <-> PEPS/EdgeMiddlePhysical",
-        "PEPS <-> PEPS/FundamentalTheorem",
-        "PEPS <-> PEPS/ParentHamiltonian",
-        "PEPS <-> PEPS/RegionBlock",
-        "PEPS <-> PEPS/TorusWindowPeeling",
         "PEPS/Approximation <-> PEPS/AreaLaw",
-        "PEPS/RegionBlock <-> PEPS/TorusWindowPeeling",
-        "PEPS/RegionBlock <-> PEPS/VertexComplement",
+        "PEPS/FundamentalTheorem <-> PEPS/Graph",
+        "PEPS/FundamentalTheorem <-> PEPS/Injectivity",
+        "PEPS/FundamentalTheorem <-> PEPS/Tensor",
+        "PEPS/Graph <-> PEPS/Injectivity",
+        "PEPS/Graph <-> PEPS/Tensor",
+        "PEPS/Injectivity <-> PEPS/ParentHamiltonian",
+        "PEPS/Injectivity <-> PEPS/Tensor",
+        "PEPS/ParentHamiltonian <-> PEPS/Tensor",
     }
 )
 
@@ -358,10 +446,10 @@ def record_from_source(source: str, name: str) -> frozenset[str] | None:
 
 
 def debt_from_source(source: str) -> frozenset[str]:
-    """Read ``DEBT`` from one revision of this checker."""
-    debt = record_from_source(source, "DEBT")
+    """Read ``UPWARD_IMPORTS`` from one revision of this checker."""
+    debt = record_from_source(source, "UPWARD_IMPORTS")
     if debt is None:
-        raise ValueError("DEBT assignment not found")
+        raise ValueError("UPWARD_IMPORTS assignment not found")
     return debt
 
 
@@ -425,7 +513,7 @@ def ratchet_errors(
 
 def check_layers(
     sources: Mapping[str, str],
-    debt: frozenset[str] = DEBT,
+    debt: frozenset[str] = UPWARD_IMPORTS,
     base_debt: frozenset[str] | None = None,
 ) -> list[str]:
     """Return the error messages of the layer check; an empty list means it passes."""
@@ -434,14 +522,14 @@ def check_layers(
         debt,
         base_debt,
         new="Import points outside the allowed layers",
-        stale="Repaired import still listed in DEBT; remove it",
-        added="Entry added to DEBT; this set may only shrink",
+        stale="Repaired import still listed in UPWARD_IMPORTS; remove it",
+        added="Entry added to UPWARD_IMPORTS; this set may only shrink",
     )
 
 
 def check_mutual_directories(
     sources: Mapping[str, str],
-    recorded: frozenset[str] = MUTUAL_DIRECTORIES,
+    recorded: frozenset[str] = MUTUAL_LAYER_DIRECTORIES,
     base: frozenset[str] | None = None,
 ) -> list[str]:
     """Return the error messages of the check on directories that import each other."""
@@ -458,9 +546,9 @@ def check_mutual_directories(
         new="Directories import each other",
         stale=(
             "Directories no longer import each other but are listed in "
-            "MUTUAL_DIRECTORIES; remove the pair"
+            "MUTUAL_LAYER_DIRECTORIES; remove the pair"
         ),
-        added="Pair added to MUTUAL_DIRECTORIES; this set may only shrink",
+        added="Pair added to MUTUAL_LAYER_DIRECTORIES; this set may only shrink",
         describe=describe,
     )
 
@@ -481,7 +569,7 @@ def check_examples_imports(
     )
 
 
-RECORDS: tuple[str, ...] = ("DEBT", "MUTUAL_DIRECTORIES", "EXAMPLES_IMPORTS")
+RECORDS: tuple[str, ...] = ("UPWARD_IMPORTS", "MUTUAL_LAYER_DIRECTORIES", "EXAMPLES_IMPORTS")
 
 
 def main() -> int:
@@ -531,8 +619,8 @@ def main() -> int:
             print(f"::error title=Import layer check failed::{error}")
             return 1
 
-    errors = check_layers(sources, DEBT, base["DEBT"])
-    errors += check_mutual_directories(sources, MUTUAL_DIRECTORIES, base["MUTUAL_DIRECTORIES"])
+    errors = check_layers(sources, UPWARD_IMPORTS, base["UPWARD_IMPORTS"])
+    errors += check_mutual_directories(sources, MUTUAL_LAYER_DIRECTORIES, base["MUTUAL_LAYER_DIRECTORIES"])
     errors += check_examples_imports(sources, EXAMPLES_IMPORTS, base["EXAMPLES_IMPORTS"])
     for message in errors:
         print(f"::error title=Import layer policy::{message}")
@@ -546,8 +634,8 @@ def main() -> int:
         )
         return 1
     print(
-        f"Import layers respected ({len(DEBT)} recorded violations, "
-        f"{len(MUTUAL_DIRECTORIES)} recorded pairs of directories that import each "
+        f"Import layers respected ({len(UPWARD_IMPORTS)} recorded violations, "
+        f"{len(MUTUAL_LAYER_DIRECTORIES)} recorded pairs of directories that import each "
         f"other and {len(EXAMPLES_IMPORTS)} recorded imports of worked examples remain)."
     )
     return 0

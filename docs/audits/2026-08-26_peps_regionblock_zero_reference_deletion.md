@@ -9,14 +9,14 @@ deleted rather than documented.
 
 | Removed declaration | File |
 |---|---|
-| `TNLean.PEPS.regionInsertedCoeff_applyGauge_eq_innerOuterSum` | `TNLean/PEPS/RegionBlock/GaugeBridgeExpansion.lean` |
-| `TNLean.PEPS.sameAwayFromRBBundle_iff_redHostAgrees` | `TNLean/PEPS/RegionBlock/CoarseThreeSite9.lean` |
+| `TNLean.PEPS.regionInsertedCoeff_applyGauge_eq_innerOuterSum` | `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/InsertedCoefficientExpansion.lean` |
+| `TNLean.PEPS.sameAwayFromRBBundle_iff_redHostAgrees` | `TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/RelaxedTripleMerge.lean` |
 | `TNLean.PEPS.CoherentCoarseBlockingFrame.legEquivRed_eq_legEquivComplement_on_rc` | `TNLean/PEPS/RegionBlock/CoarseThreeSite2.lean` |
 | `TNLean.PEPS.CoherentCoarseBlockingFrame.legEquivBlue_eq_legEquivComplement_on_bc` | `TNLean/PEPS/RegionBlock/CoarseThreeSite2.lean` |
 | `TNLean.PEPS.regionBoundaryGaugeInv_mul` | `TNLean/PEPS/RegionBlock/GaugeInjectivity2.lean` |
-| `TNLean.PEPS.insertOuterBondProd_congr` | `TNLean/PEPS/RegionBlock/InsertResidual.lean` |
-| `TNLean.PEPS.regionInsertionOp_add` | `TNLean/PEPS/RegionBlock/Realization.lean` |
-| `TNLean.PEPS.regionInsertionOp_smul` | `TNLean/PEPS/RegionBlock/Realization.lean` |
+| `TNLean.PEPS.insertOuterBondProd_congr` | `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/InsertResidual.lean` |
+| `TNLean.PEPS.regionInsertionOp_add` | `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/Realization.lean` |
+| `TNLean.PEPS.regionInsertionOp_smul` | `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/Realization.lean` |
 
 ## Supersession of an earlier replacement column
 
@@ -34,7 +34,7 @@ site, exactly as the deleted proofs did.
 ## Follow-on cascade
 
 `regionInsertedCoeff_applyGauge_eq_doubleSum`
-(`TNLean/PEPS/RegionBlock/GaugeBridgeExpansion.lean`) had exactly two
+(`TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/InsertedCoefficientExpansion.lean`) had exactly two
 references: its own definition and the single use inside the lemma deleted
 here. It became zero-reference with that change and was deferred for a separate
 look; that look has been taken and it is removed. Its removal in turn leaves
@@ -78,4 +78,4 @@ The local lemma stated that a product of three zero-defaulted scalar selectors i
 the selector of their conjunction. Two applications of the Mathlib binary form give
 the same rewrite, up to the associativity of the conjunction, which `and_assoc`
 supplies on the residual propositional goal in
-`TNLean/PEPS/RegionBlock/CoarseThreeSite4.lean`.
+`TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/FiberCollapse.lean`.

@@ -13,16 +13,16 @@ tag naming one was redirected to its survivor in the same change.
 
 | Removed | Replacement |
 |---|---|
-| `MPOTensor.reindex_product_embedLocalOperator_two_of_etaPair_decomposition` (`TNLean/MPS/MPDO/CommutingBondEtaCyclicCore.lean`) | `MPOTensor.reindex_product_embedLocalOperator_of_etaPair_decomposition` in the same file, instantiated at `N := 2` with `(by omega : 2 ≤ 2)`. The removed theorem's whole body was that instantiation. |
-| `MPOTensor.RescalingStableLengthDependentRFP.oneLabelChiScaled_posEntries` (`TNLean/MPS/MPDO/RescalingStableLengthDependentRFP.lean`) | None. The lemma had no consumer and no Blueprint `\lean{}` tag. Its sibling `oneLabelChi_posEntries` is deliberately retained: it is consumed at `TNLean/MPS/MPDO/RescalingStableChiUniformity.lean:138`. |
-| `MPOTensor.BNTFusionTensorClause.projectorQBlock` (`TNLean/MPS/MPDO/TopologicalProjectors.lean`) | `MPOTensor.BNTFusionCoisometryFamily.projectorQBlock`, reached from a clause by `H.toBNTFusionCoisometryFamily`. |
+| `MPOTensor.reindex_product_embedLocalOperator_two_of_etaPair_decomposition` (`TNLean/MPS/Operator/PhysicalSector/CommutingBondEtaCyclicCore.lean`) | `MPOTensor.reindex_product_embedLocalOperator_of_etaPair_decomposition` in the same file, instantiated at `N := 2` with `(by omega : 2 ≤ 2)`. The removed theorem's whole body was that instantiation. |
+| `MPOTensor.RescalingStableLengthDependentRFP.oneLabelChiScaled_posEntries` (`TNLean/MPS/Examples/Dimer/RescalingStableLengthDependentRFP.lean`) | None. The lemma had no consumer and no Blueprint `\lean{}` tag. Its sibling `oneLabelChi_posEntries` is deliberately retained: it is consumed at `TNLean/MPS/Examples/Dimer/RescalingStableChiUniformity.lean:138`. |
+| `MPOTensor.BNTFusionTensorClause.projectorQBlock` (`TNLean/MPS/MPDO/TopologicalForm/TopologicalProjectors.lean`) | `MPOTensor.BNTFusionCoisometryFamily.projectorQBlock`, reached from a clause by `H.toBNTFusionCoisometryFamily`. |
 | `MPOTensor.BNTFusionTensorClause.fusionCoisometry_mul_physTraceTransfer_mul_conjTranspose` | `MPOTensor.BNTFusionCoisometryFamily.fusionCoisometry_mul_physTraceTransfer_mul_conjTranspose` at `H.toBNTFusionCoisometryFamily`. |
 | `MPOTensor.BNTFusionTensorClause.projectorQBlock_isStarProjection` | `MPOTensor.BNTFusionCoisometryFamily.projectorQBlock_isStarProjection` at `H.toBNTFusionCoisometryFamily`, with the coefficient family `BNTLabelCoefficientFamily.ofChi H.chi` and its positive-length trace-power form. |
 | `MPOTensor.BNTFusionTensorClause.conjugatedProjectorQBlock` | `MPOTensor.BNTFusionCoisometryFamily.conjugatedProjectorQBlock` at `H.toBNTFusionCoisometryFamily`. |
 | `MPOTensor.BNTFusionTensorClause.conjugatedProjectorQBlock_isOrthogonalProjection` | `MPOTensor.BNTFusionCoisometryFamily.conjugatedProjectorQBlock_isOrthogonalProjection` at `H.toBNTFusionCoisometryFamily`, same coefficient-family arguments. |
 | `MPOTensor.EtaLocalStructureData.exists_unitary_blockActions_of_pairBond` (`TNLean/MPS/MPDO/CommutingFormSpatialBridge.lean`) | `MPOTensor.TranslationInvariantBondData.exists_unitary_blockActions_of_pairBond` in the same file, reached by `data.bondData`. The removed theorem's whole body was that projection. |
-| `MPOTensor.physCloseN_three_apply` (`TNLean/MPS/MPDO/PhysicalClosure.lean`) | None needed. The flat-coordinate (`Fin 3 -> Fin d`) restatement of `MPOTensor.physCloseN_apply` at `N = 3`; its whole proof was `simp [physCloseN, List.ofFn_succ, evalWord_cons, Matrix.mul_assoc]`, the same unfold used inline for the length-four case at `TNLean/MPS/MPDO/BNTChannelComposition.lean:87`. It carried no `@[simp]`, had no consumer, and no sibling `physCloseN_two_apply`/`physCloseN_four_apply` exists. |
-| `MPOTensor.finOneArrowEquiv` (`TNLean/MPS/MPDO/PhysicalGibbsEmbedding.lean`) | `Equiv.funUnique (Fin 1) (Fin d)` from Mathlib. The removed `private def` rebuilt that equivalence by hand; both use sites now name the Mathlib equivalence directly. It was `private`, so no Blueprint tag or out-of-file consumer named it. |
+| `MPOTensor.physCloseN_three_apply` (`TNLean/MPS/Operator/DensityOperator/PhysicalClosure.lean`) | None needed. The flat-coordinate (`Fin 3 -> Fin d`) restatement of `MPOTensor.physCloseN_apply` at `N = 3`; its whole proof was `simp [physCloseN, List.ofFn_succ, evalWord_cons, Matrix.mul_assoc]`, the same unfold used inline for the length-four case at `TNLean/MPS/MPDO/BNTSectors/BNTChannelComposition.lean:87`. It carried no `@[simp]`, had no consumer, and no sibling `physCloseN_two_apply`/`physCloseN_four_apply` exists. |
+| `MPOTensor.finOneArrowEquiv` (`TNLean/MPS/Operator/Interaction/PhysicalGibbsEmbedding.lean`) | `Equiv.funUnique (Fin 1) (Fin d)` from Mathlib. The removed `private def` rebuilt that equivalence by hand; both use sites now name the Mathlib equivalence directly. It was `private`, so no Blueprint tag or out-of-file consumer named it. |
 
 ## Blueprint and documentation redirects
 
@@ -60,19 +60,19 @@ tag naming one was redirected to its survivor in the same change.
 ## Retained on purpose
 
 * `MPOTensor.BNTFusionIsometryFamily.projectorQBlock` and the four sibling
-  declarations of the same names in `TNLean/MPS/MPDO/TopologicalProjectors.lean`
+  declarations of the same names in `TNLean/MPS/MPDO/TopologicalForm/TopologicalProjectors.lean`
   are independent: they are stated against `fusionIsometry`, not
   `fusionCoisometry`, and carry their own Blueprint role.
 * `MPOTensor.EtaLocalStructureData.exists_positive_eta_pairBond_decomposition`
-  (`TNLean/MPS/MPDO/CommutingBondEtaDecomposition.lean`) keeps live consumers at
-  `TNLean/MPS/MPDO/FixedBondPositivePhysicalSectorConstructor.lean:538` and
-  `TNLean/MPS/MPDO/CommutingBondEtaCyclicTransport.lean:66`.
+  (`TNLean/MPS/Operator/PhysicalSector/CommutingBondEtaDecomposition.lean`) keeps live consumers at
+  `TNLean/MPS/MPDO/CommutingForm/FixedBondPositivePhysicalSectorConstructor.lean:538` and
+  `TNLean/MPS/FundamentalTheorem/PhysicalSupport/PhysicalSupportProductTransport.lean:66`.
 * `MPOTensor.reindex_product_embedLocalOperator_of_etaPair_decomposition`, the
   general cyclic-transport theorem, keeps four consumers.
 
 ## Proof-text deduplication in the same change
 
-`TNLean/MPS/MPDO/CompleteZipperFusionSupport.lean` re-derived three fusion-stage
+`TNLean/MPS/Operator/Fusion/CompleteZipperFusionSupport.lean` re-derived three fusion-stage
 identities inline, twice each. They are now three `private theorem`s in the same
 file — `leftIntermediateLetter_eq_sum`,
 `leftTripleDirectSumLetter_eq_submatrix`, and

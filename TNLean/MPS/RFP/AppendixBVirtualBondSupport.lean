@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.RFP.AppendixBStructuralData
-import QICLean.Algebra.FinSumPermutation
+import TNLean.MPS.ParentHamiltonian.Commuting.AppendixBStructuralData
+import QICLean.Algebra.Combinatorics.FinSumPermutation
 
 /-!
 # Appendix B virtual-bond support

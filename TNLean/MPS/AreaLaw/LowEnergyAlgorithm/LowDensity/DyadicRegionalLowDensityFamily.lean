@@ -1,0 +1,310 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.IndependentLowDensityBufferedTargets
+import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.LowDensity.LowDensityFilterParameters
+import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.ActualClippedPolynomialFamily
+import QICLean.Spectral.LowEnergy.ChebyshevViability
+import TNLean.MPS.AreaLaw.LowEnergyAlgorithm.ImprovingFamily.NestedChebyshevWordViability
+import QICLean.Analysis.Parameter.LowDensityDyadicScale
+
+/-!
+# Regional low-energy families with geometrically decreasing comparison loss
+
+A constant depending only on the fixed bandwidth determines one window
+scale and one polynomial degree. The same physical clipping, polynomial
+family and count envelope satisfy both original-window comparisons and
+the count-suppression inequality. The numerical count base may exceed the
+local dimension; the physical Hamiltonian and local spaces are unchanged.
+
+This is the buffered five-region construction supporting ALVV,
+arXiv:1602.08828v2, Theorem `t:aisgapless`, lines 1027–1041.
+Assumption (LD), lines 281–284, declares the bandwidth fixed. Dependence
+on that fixed bandwidth is retained explicitly in the chosen constant.
+This is not the subsequent low-density minimal-dimension argument.
+
+**Scope restriction (interior windows):** The stated five-region geometry
+is retained. The buffer `6*w ≤ eta` is the source lower-cutoff condition
+after `w = mu/(3*log n)`. Boundary and short intervals remain separate;
+see `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
+-/
+
+open ManyBody (interval)
+
+open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator TensorProduct
+
+namespace TNLean.MPS.AreaLaw
+
+open Matrix
+
+/-- The actual fixed-bandwidth physical filter family on any prescribed
+region whose symmetric difference with the native retained interval contains
+at most `2*ell` sites. The scalar bounds are chosen before geometry and the
+Hamiltonian. The numerical base grows by powers of two before the family is constructed.
+The actual residual gives comparison loss `1 / (200 * 2^(4*i))`.
+The same global clipped polynomial supplies the regional operators, and
+its exact collar cost fits the same count envelope used in the suppression
+bound. Every word of length `a` in the family improves the upper target to
+the lower one with the suppression raised to the power `a`, as in the
+repeated filter of Theorem `t:alg1`, lines 1777–1817, used by Theorem
+`t:alg2`, lines 1869–1878. Any consequence `Q` of this word improvement is
+recorded in its place, so that its instances need not repeat the
+construction. ALVV, arXiv:1602.08828v2,
+Theorem `t:aisgapless`, lines 1027–1041, and Proposition 5.7, lines 1311–1333. -/
+theorem exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause
+    (etaLD : ℝ) (hLD : 0 < etaLD)
+    (Q : ∀ (L q : ℕ) (J : Finset (Fin L)) (N : ℕ),
+      (Fin N → Matrix (J → Fin q) (J → Fin q) ℂ) →
+      Submodule ℂ (EuclideanSpace ℂ (J → Fin q) ⊗[ℂ] EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) →
+      Submodule ℂ (EuclideanSpace ℂ (J → Fin q) ⊗[ℂ] EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) →
+      ℝ → Prop)
+    (hQ : ∀ (L q : ℕ) (J : Finset (Fin L)) (N : ℕ)
+      (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ)
+      (hi lo : Submodule ℂ
+        (EuclideanSpace ℂ (J → Fin q) ⊗[ℂ] EuclideanSpace ℂ ({v // v ∉ J} → Fin q)))
+      (Delta : ℝ),
+      (∀ (a : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (delta : ℝ),
+        Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) delta S hi → delta < 1 →
+        let grow := ⨆ v : Fin a → Fin N, S.map ((List.ofFn (fun j ↦
+          Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W (v j)))).prod : _ →ₗ[ℂ] _)
+        Module.finrank ℂ grow ≤ N ^ a * Module.finrank ℂ S ∧
+          Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q))
+            (Delta ^ a / (1 - delta) ^ 2) grow lo) →
+      Q L q J N W hi lo Delta) :
+    ∃ C : ℝ, 100 ≤ C ∧ 19 + etaLD ≤ C ∧
+      ∀ (L q m a b i : ℕ) (w : ℝ), 2 ≤ q → q ≤ m → 0 < w →
+      let mi := m * 2 ^ i
+      let g := min w 1
+      let u := 1 + Real.log (mi : ℝ) + Real.log (1 / g)
+      let ell : ℕ := ⌈C * u ^ 2 / g⌉₊
+      let D := (mi * ell ^ 2) ^ (22 * ell)
+      let nu := (1 / 200 : ℝ) / 2 ^ (4 * i)
+      21 ≤ ell ∧
+      Real.log (D : ℝ) ≤ 22 * (C + 1) * (6 + 2 * Real.log (C + 1)) / g * u ^ 3 ∧
+      ∀ (_hab : a + 2 * ell ≤ b) (_hbL : b + 2 * ell ≤ L - 1),
+      ∀ Jtarget : Finset (Fin L),
+      (interval L (a + ell) (b + ell + 1) \ Jtarget).card +
+        (Jtarget \ interval L (a + ell) (b + ell + 1)).card ≤ 2 * ell →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      (∀ i, 0 ≤ Φ.term i) → (∀ i, Φ.term i ≤ 1) →
+    let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
+    let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
+      ∑ i ∈ Finset.univ.filter
+        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
+    let Cross : Finset (Fin (L - 1)) := Finset.univ.filter
+      (fun i ↦ i.val + 1 ∈
+        ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
+    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ Cross, Φ.term i
+    let K : Finset (Fin 5) := {0, 2, 4}
+    let B : ℝ → (Fin 5 → ℝ) → Finset (Fin 5) →
+        Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun t e T ↦
+      (∑ j, ((if j ∈ T then
+        cfc (fun r : ℝ ↦ min r (e j + t)) (A j) else A j) -
+          (e j : ℂ) • 1)) + Y
+    ∃ (e : Fin 5 → ℝ) (E0 : ℝ) (x z : (Fin L → Fin q) → ℂ)
+      (hO : (B (ell : ℝ) e ∅).IsHermitian) (hC : (B (ell : ℝ) e K).IsHermitian),
+      star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
+      (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
+      B (ell : ℝ) e ∅ = Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1 ∧
+      star z ⬝ᵥ z = 1 ∧ B (ell : ℝ) e ∅ *ᵥ z = (E0 : ℂ) • z ∧
+      (B (ell : ℝ) e ∅ - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 4 ∧
+      ‖B (ell : ℝ) e K‖ ≤ 7 * (ell : ℝ) ∧
+      let J := Jtarget
+      let beta := fun _ : Fin L ↦ Fin q
+      let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
+      let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
+        (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
+      let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
+        (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
+        (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
+      ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ), N ≤ D ^ 2 ∧
+        ∀ eta : ℝ, 6 * w ≤ eta → eta ≤ etaLD →
+      let lower := Submodule.spectralSpanLE hC.eigenvectorBasis hC.eigenvalues
+        (E0 + eta - 2 * w)
+      let higher := Submodule.spectralSpanLE hC.eigenvectorBasis hC.eigenvalues
+        (E0 + eta - w)
+      let Delta := (2 * Real.exp (-2 * ((ell ^ 2 : ℕ) : ℝ) *
+        Real.sqrt (w / (7 * (ell : ℝ) - (E0 + eta - 2 * w))))) ^ 2
+      lower ≤ higher ∧
+      Submodule.IsCloseTo nu
+        (Submodule.spectralSpanLE hO.eigenvectorBasis hO.eigenvalues (E0 + eta)) higher ∧
+      Submodule.IsCloseTo nu lower
+        (Submodule.spectralSpanLE hO.eigenvectorBasis hO.eigenvalues (E0 + eta - 3 * w)) ∧
+      (D : ℝ) ^ 12 * Delta ≤ 1 / 100000 ∧
+        ∃ p : Polynomial ℝ, p.natDegree = ell ^ 2 ∧ p.eval (E0 + eta - 2 * w) = 1 ∧
+          ∃ M : Fin N → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ,
+            Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
+                Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+                  (Polynomial.aeval (B (ell : ℝ) e K) (p.map (algebraMap ℝ ℂ))) ∘L
+                Tm.symm.toContinuousLinearEquiv.toContinuousLinearMap =
+              ∑ j, TensorProduct.mapL
+                (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j))
+                (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := {v // v ∉ J} → Fin q) (M j)) ∧
+            Q L q J N W (higher.map Tm.toLinearEquiv.toLinearMap)
+              (lower.map Tm.toLinearEquiv.toLinearMap) Delta := by
+  classical
+  have :=
+    Real.exists_fixed_bandwidth_low_density_filter_parameters etaLD hLD
+  obtain ⟨C, hC, hCeta, hparams⟩ := this
+  refine ⟨C, hC, hCeta, ?_⟩
+  intro L q m a b i w hq hqm hw mi g u ell D nu
+  have hmmi : m ≤ mi := Nat.le_mul_of_pos_right m (pow_pos (by decide) i)
+  have hqmi : q ≤ mi := hqm.trans hmmi
+  -- Project the facts rather than destructuring them, so that the large statement is
+  -- not checked again at each step.
+  have hparamsMi := hparams mi w (hq.trans hqmi) hw
+  have hell := hparamsMi.1
+  have hcut := hparamsMi.2.1
+  have hlogD := hparamsMi.2.2.1
+  have hresBudget := hparamsMi.2.2.2.1
+  have htrade := hparamsMi.2.2.2.2
+  have hell1 : 1 ≤ ell := (by decide : 1 ≤ 21).trans hell
+  have haccuracy :
+      (288 * Real.exp (11 / 8)) * Real.exp (-((ell : ℝ) - etaLD) / 8) ≤ 1 ∧
+      2 * (6 + etaLD) * ((288 * Real.exp (11 / 8)) *
+        Real.exp (-((ell : ℝ) - etaLD) / 8)) ≤ nu * w ^ 2 := by
+    have := hresBudget etaLD hLD.le le_rfl
+    obtain ⟨hxi1, _hsmallConstant⟩ := this
+    let u0 := 1 + Real.log (m : ℝ) + Real.log (1 / g)
+    let ell0 : ℕ := ⌈C * u0 ^ 2 / g⌉₊
+    have := hparams m w (hq.trans hqm) hw
+    obtain ⟨_hell0, _hcut0, _hlogD0, hres0, _htrade0⟩ := this
+    have := hres0 etaLD hLD.le le_rfl
+    obtain ⟨_hxi01, hsmall0⟩ := this
+    have hg : 0 < g := lt_min hw zero_lt_one
+    have hg1 : g ≤ 1 := min_le_right _ _
+    have hmR : (2 : ℝ) ≤ m := by exact_mod_cast hq.trans hqm
+    have hm0 : (0 : ℝ) < m := by linarith only [hmR]
+    have hlogm : 0 ≤ Real.log (m : ℝ) := Real.log_nonneg (by linarith only [hmR])
+    have hlogg : 0 ≤ Real.log (1 / g) := Real.log_nonneg ((one_le_div hg).mpr hg1)
+    have hu0 : 1 ≤ u0 := by dsimp only [u0]; linarith only [hlogm, hlogg]
+    have hlogmi : Real.log (mi : ℝ) = Real.log (m : ℝ) + (i : ℝ) * Real.log 2 := by
+      simp only [mi, Nat.cast_mul, Nat.cast_pow, Nat.cast_ofNat,
+        Real.log_mul hm0.ne' (pow_ne_zero i (by norm_num : (2 : ℝ) ≠ 0)), Real.log_pow]
+    have hushift : u = u0 + (i : ℝ) * Real.log 2 := by
+      dsimp only [u, u0]
+      rw [hlogmi]
+      ring
+    have hexp : Real.exp (-((ell : ℝ) - etaLD) / 8) ≤
+        Real.exp (-((ell0 : ℝ) - etaLD) / 8) / (2 : ℝ) ^ (4 * i) := by
+      simpa only [ell, ell0, hushift] using
+        Real.low_density_dyadic_residual_le hC hu0 hg hg1 i etaLD
+    let xi0 := (288 * Real.exp (11 / 8)) * Real.exp (-((ell0 : ℝ) - etaLD) / 8)
+    let xi := (288 * Real.exp (11 / 8)) * Real.exp (-((ell : ℝ) - etaLD) / 8)
+    have hxidecay : xi ≤ xi0 / (2 : ℝ) ^ (4 * i) := by
+      calc
+        xi ≤ (288 * Real.exp (11 / 8)) *
+            (Real.exp (-((ell0 : ℝ) - etaLD) / 8) / (2 : ℝ) ^ (4 * i)) :=
+          mul_le_mul_of_nonneg_left hexp (by positivity)
+        _ = xi0 / (2 : ℝ) ^ (4 * i) := by dsimp only [xi0]; ring
+    have hsmall : 2 * (6 + etaLD) * xi ≤ nu * w ^ 2 := by
+      calc
+        _ ≤ 2 * (6 + etaLD) * (xi0 / (2 : ℝ) ^ (4 * i)) :=
+          mul_le_mul_of_nonneg_left hxidecay (by linarith only [hLD])
+        _ = (2 * (6 + etaLD) * xi0) / (2 : ℝ) ^ (4 * i) := by ring
+        _ ≤ ((1 / 200 : ℝ) * w ^ 2) / (2 : ℝ) ^ (4 * i) :=
+          div_le_div_of_nonneg_right hsmall0 (by positivity)
+        _ = nu * w ^ 2 := by dsimp only [nu]; ring
+    exact ⟨hxi1, hsmall⟩
+  refine ⟨hell, hlogD, ?_⟩
+  intro hab hbL Jtarget hcollar Φ h0 h1 k A Cross Y K B
+  obtain ⟨hxi1, hsmall⟩ := haccuracy
+  have htargetData :=
+    exists_five_region_low_energy_targets_of_residual_budget_at_error
+      L q a b ell etaLD w nu hw (by dsimp only [nu]; positivity)
+      hcut hxi1 hsmall hq hell1 hab hbL Φ h0 h1
+  refine htargetData.elim fun e hd ↦ hd.elim fun E0 hd ↦ hd.elim fun x hd ↦
+    hd.elim fun z hd ↦ hd.elim fun hO hd ↦ hd.elim fun hC hd ↦ ?_
+  have hxunit := hd.1
+  have hx := hd.2.1
+  have hlo := hd.2.2.1
+  have hcenter := hd.2.2.2.1
+  have hzunit := hd.2.2.2.2.1
+  have hz := hd.2.2.2.2.2.1
+  have hE0low := hd.2.2.2.2.2.2.1
+  have hE0 := hd.2.2.2.2.2.2.2.1
+  have hE04 := hd.2.2.2.2.2.2.2.2.1
+  have hnorm := hd.2.2.2.2.2.2.2.2.2.1
+  have htargets := hd.2.2.2.2.2.2.2.2.2.2
+  refine ⟨e, E0, x, z, hO, hC, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
+    hE0, hE04, hnorm, ?_⟩
+  intro J beta tau U Phi Tm
+  have hdegree : 1 ≤ ell ^ 2 := by
+    rw [pow_two]
+    simpa only [Nat.one_mul] using Nat.mul_le_mul hell1 hell1
+  have :=
+    exists_actual_regional_clipped_polynomial_family_fin
+      L q a b ell (ell ^ 2) hell1 hq hdegree hab hbL Φ e (ell : ℝ) J
+  refine this.elim fun N hd ↦ hd.elim fun W hd ↦ ?_
+  have hNraw := hd.1
+  have hdecomp := hd.2
+  have hN : N ≤ D ^ 2 := by
+    apply hNraw.trans
+    simpa only [Nat.mul_add] using
+      collar_card_le_square_of_larger_count_base q mi ell
+        ((interval L (a + ell) (b + ell + 1) \ Jtarget).card +
+          (Jtarget \ interval L (a + ell) (b + ell + 1)).card)
+        (((q * ell ^ 2) ^ (18 * ell + 2 * (ell ^ 2 / ell))) ^ 2)
+        hq hqmi hell1 hcollar le_rfl
+  refine ⟨N, W, hN, ?_⟩
+  intro eta hbuffer hetaLD lower higher Delta
+  have htargetsEta := htargets eta hbuffer hetaLD
+  have hnest := htargetsEta.1
+  have hupperClose := htargetsEta.2.1
+  have hlowerClose := htargetsEta.2.2
+  have hupper : E0 + eta - w ≤ 7 * (ell : ℝ) := by
+    linarith only [hE04, hcut, hetaLD, hw, (Nat.cast_nonneg ell : (0 : ℝ) ≤ ell)]
+  have hR : 0 < 7 * (ell : ℝ) - (E0 + eta - 2 * w) := by
+    linarith only [hupper, hw]
+  have hRup : 7 * (ell : ℝ) - (E0 + eta - 2 * w) ≤ 7 * (ell : ℝ) := by
+    linarith only [hE0, hbuffer, hw]
+  have heigen (j : Fin L → Fin q) :
+      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
+          (B (ell : ℝ) e K) (hC.eigenvectorBasis j) =
+        (hC.eigenvalues j : ℂ) • hC.eigenvectorBasis j :=
+    hC.toEuclideanCLM_eigenvectorBasis j
+  have :=
+    exists_chebyshev_nested_word_viability_of_polynomial_family
+      (B (ell : ℝ) e K) hC hC.eigenvectorBasis hC.eigenvalues heigen W Tm
+      (fun Q hQ ↦ (hdecomp Q hQ).imp fun M hM ↦ by
+        -- The two tensor coordinates agree after reducible unfolding only.
+        have hconj := hM.2
+        with_reducible exact hconj)
+      (E0 + eta - 2 * w) (E0 + eta - w) (7 * (ell : ℝ))
+      (by linarith only [hw]) hupper hnorm
+  refine this.elim fun p hd ↦ ?_
+  have hpdegree := hd.1
+  have hp0 := hd.2.1
+  refine hd.2.2.elim fun M hd ↦ ?_
+  have hM := hd.1
+  have himprove := hd.2
+  refine ⟨hnest, hupperClose, hlowerClose, ?_, p, hpdegree, hp0, M, hM, ?_⟩
+  · have hgs : 4 * g / 5 ≤ w := by
+      have hg : 0 < g := lt_min hw zero_lt_one
+      have hgw : g ≤ w := min_le_left _ _
+      linarith only [hg, hgw]
+    have hsqrt := Real.sqrt_le_sqrt (div_le_div_of_nonneg_right hgs hR.le)
+    have hDelta : Delta ≤
+        4 * Real.exp (-4 * (ell : ℝ) ^ 2 * Real.sqrt
+          ((4 * g / 5) / (7 * (ell : ℝ) - (E0 + eta - 2 * w)))) := by
+      have heq : Delta = 4 * Real.exp (-4 * (ell : ℝ) ^ 2 * Real.sqrt
+          (w / (7 * (ell : ℝ) - (E0 + eta - 2 * w)))) := by
+        dsimp only [Delta]
+        rw [Nat.cast_pow]
+        rw [mul_pow, ← Real.exp_nat_mul]
+        norm_num only [Nat.cast_ofNat]
+        congr 2
+        ring
+      rw [heq]
+      apply mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr ?_) (by norm_num)
+      nlinarith only [mul_nonneg (sq_nonneg (ell : ℝ)) (sub_nonneg.mpr hsqrt)]
+    apply (mul_le_mul_of_nonneg_left hDelta (by positivity)).trans
+    simpa only [neg_mul] using htrade _ hR hRup
+  · refine hQ L q J N W _ _ Delta ?_
+    simpa only [Delta,
+      show (E0 + eta - w) - (E0 + eta - 2 * w) = w by ring] using himprove
+
+end TNLean.MPS.AreaLaw

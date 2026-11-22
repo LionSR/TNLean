@@ -15,7 +15,7 @@ or matrix product state hypothesis.
 
 | Removed TNLean declaration | QICLean declaration |
 |---|---|
-| `TNLean.MPS.AreaLaw.norm_inv_norm_smul_sub_le_two_mul` | `norm_inv_norm_smul_sub_le_two_mul` (`QICLean/Analysis/UnitNormalizationDistance.lean`) |
+| `TNLean.MPS.AreaLaw.norm_inv_norm_smul_sub_le_two_mul` | `norm_inv_norm_smul_sub_le_two_mul` (`QICLean/Analysis/Norm/UnitNormalizationDistance.lean`) |
 
 Under the new pin, the four call sites in `TNLean.MPS.AreaLaw` and its subnamespaces
 would refer ambiguously to the old name. These are `MPSApproximation.lean`,

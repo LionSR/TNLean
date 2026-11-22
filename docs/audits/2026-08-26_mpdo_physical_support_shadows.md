@@ -8,10 +8,10 @@ that shadow Mathlib lemmas.
 
 | Removed | Replacement |
 |---|---|
-| `Matrix.partialTraceRight_singleKraus_kronecker_isometry` (`TNLean/MPS/MPDO/PhysicalSupportSALTransport.lean`) | `Matrix.partialTraceRight_kronecker_conj_of_right_isometry` (QICLean, `QICLean/Channel/PartialTrace.lean`) |
-| `MPOTensor.PhysicalSupportRestrictionData.product_isHermitian_of_comm` (private, `TNLean/MPS/MPDO/PhysicalSupportBondCommutativity.lean`) | `Matrix.IsHermitian.commute_iff` (Mathlib, `Mathlib/LinearAlgebra/Matrix/Hermitian.lean:301`), forward direction |
+| `Matrix.partialTraceRight_singleKraus_kronecker_isometry` (`TNLean/MPS/CanonicalForm/SimpleMPO/PhysicalSupportSALTransport.lean`) | `Matrix.partialTraceRight_kronecker_conj_of_right_isometry` (QICLean, `QICLean/Algebra/PartialTrace.lean`) |
+| `MPOTensor.PhysicalSupportRestrictionData.product_isHermitian_of_comm` (private, `TNLean/MPS/FundamentalTheorem/PhysicalSupport/PhysicalSupportBondCommutativity.lean`) | `Matrix.IsHermitian.commute_iff` (Mathlib, `Mathlib/LinearAlgebra/Matrix/Hermitian.lean:301`), forward direction |
 | `MPOTensor.PhysicalSupportRestrictionData.commute_of_product_isHermitian` (private, same file) | `Matrix.IsHermitian.commute_iff` composed with `Commute.eq`, reverse direction |
-| `MPOTensor.list_prod_eq_one_of_forall` (private, `TNLean/MPS/MPDO/PhysicalSupportProductTransport.lean`) | `List.prod_eq_one` (Mathlib, `Mathlib/Algebra/BigOperators/Group/List/Basic.lean:161`) |
+| `MPOTensor.list_prod_eq_one_of_forall` (private, `TNLean/MPS/FundamentalTheorem/PhysicalSupport/PhysicalSupportProductTransport.lean`) | `List.prod_eq_one` (Mathlib, `Mathlib/Algebra/BigOperators/Group/List/Basic.lean:161`) |
 
 ## What was checked
 
@@ -20,7 +20,7 @@ that shadow Mathlib lemmas.
 `Matrix.partialTraceRight_kronecker_conj_of_right_isometry` on the same four
 explicit arguments, with the same hypothesis on the discarded factor. The
 QICLean lemma is already in the import closure of the file through
-`TNLean.MPS.MPDO.AreaLaw`, so no import changed. The wrapper had exactly one
+`TNLean.MPS.Operator.DensityOperator.AreaLaw`, so no import changed. The wrapper had exactly one
 Lean consumer, the proof of
 `MPOTensor.blockReducedState_singleKraus_sitewise` in the same file, which now
 names the QICLean lemma directly with the argument list unchanged. This residue

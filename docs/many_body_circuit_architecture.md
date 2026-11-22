@@ -37,7 +37,7 @@ translating between the two spread through the code.
   by unfolding it to the general definition.
 - **Pass-throughs are deleted.** A declaration whose whole body applies another
   declaration to its own arguments is the same statement under a second name;
-  its callers use the target. `MPS/Core/Blocking`, where 16 of 31 declarations
+  its callers use the target. `MPS/Tensor/Physical/Blocking`, where 16 of 31 declarations
   are `MPSTensor.x := Kraus.x`, is the model case.
 - **Bridges are not repaired.** A lemma or module translating between two
   formulations of one object disappears when the formulations become one. A
@@ -204,7 +204,7 @@ the pin and deletes what was replaced, with no copy and no alias left behind.
 `TNLean/Circuit` and `TNLean/Lattice` to these layers and rejects an import
 that points upward or sideways. Imports are read with comments removed, and an
 imported aggregator counts as everything it re-exports. It runs in the module-policy job of
-`pr-ci.yml`. Its `DEBT` set lists recorded violations and may only shrink; CI
+`pr-ci.yml`. Its `UPWARD_IMPORTS` set lists recorded violations and may only shrink; CI
 compares the set with its value at the base revision, so a new violation
 cannot be admitted by recording it. The 17 imports recorded when the check was
 introduced were repaired by step 0.3, and the set is empty:
@@ -236,7 +236,7 @@ shrink, compared with the base revision in the same way: a new entry fails,
 and an entry that no longer holds must be removed in the change that repairs
 it.
 
-- `MUTUAL_DIRECTORIES`, in the same script, lists the pairs of directories
+- `MUTUAL_LAYER_DIRECTORIES`, in the same script, lists the pairs of directories
   that import each other, with directories taken at depth two below
   `TNLean/MPS` and `TNLean/PEPS` and at depth one elsewhere. It recorded 59
   pairs when introduced, such as `MPS/MPDO` and `MPS/ParentHamiltonian`. A
@@ -748,22 +748,22 @@ model is ported.
 | Module | Verdict | Action |
 |---|---|---|
 | `Lattice/RegionalEntropyBridge` | two definitions of regional state and entropy | deleted at step 4.0 |
-| `MPS/MPDO/MutualInfoBridge` | `mutualInfoChain` beside QICLean's mutual information | deleted in F2 |
+| `MPS/MPDO/Entropy/MutualInfoBridge` | `mutualInfoChain` beside QICLean's mutual information | deleted in F2 |
 | QICLean `Channel/Wigner/ProjectiveCarrierBridge` | two representations of vectors | deleted with the single representation |
 | QICLean `Channel/CompletelyPositiveBridge` | a local notion beside Mathlib's `CompletelyPositiveMap`; imported by no module | build on Mathlib's type or delete |
 | `Wielandt/Primitivity/PrimitiveBridge` | several predicates for primitivity | F4 |
-| `MPS/BNT/Bridge`, `MPS/FundamentalTheorem/SectorBNT/CanonicalFormBridge` | several predicates for a basis of normal tensors and for a canonical form | F4 |
-| `MPS/MPDO/CommutingFormBridge` | three data structures for one commuting form | F2 |
-| QICLean `Channel/Semigroup/LindbladForm/TraceBridge`, `MPS/CanonicalForm/CyclicSectors/CornerBridge`, `MPS/MPDO/PureRFPBridge`, `MPS/Examples/Z3Anomalous/Z3AnomalousCocycleBridge`, `PEPS/Approximation/AngularSeparationBridges` | theorems | renamed for what they prove |
-| `PEPS/RegionBlock/GaugeBridge`, `GaugeBridgeExpansion` | one computation in two modules | merged and renamed in F1 |
-| `MPS/Examples/ShortMomentum/ShortOverlapBridges`, `PEPS/RegionBlock/UnionInjectivityOverlapBridge` | "bridge" is the mathematical object or a proof step | none; the second is renamed with its family in F1 |
+| `MPS/CanonicalForm/BNTPresentation/Bridge`, `MPS/CanonicalForm/BNTPresentation/CanonicalFormBridge` | several predicates for a basis of normal tensors and for a canonical form | F4 |
+| `MPS/Operator/PhysicalSector/CommutingFormBridge` | three data structures for one commuting form | F2 |
+| QICLean `Channel/Semigroup/LindbladForm/TraceBridge`, `MPS/CanonicalForm/Periodic/CyclicSectors/CornerBridge`, `MPS/MPDO/Purification/PureStateRFPEquivalence`, `MPS/Examples/Z3/Z3AnomalousCocycleBridge`, `PEPS/Approximation/Guides/AngularSeparationBridges` | theorems | renamed for what they prove |
+| `PEPS/FundamentalTheorem/Normal/RegionInsertion/InsertedCoefficientExpansion`, `GaugeBridgeExpansion` | one computation in two modules | merged and renamed in F1 |
+| `MPS/Examples/Weyl/ShortOverlapBridges`, `PEPS/Injectivity/Region/OverlapUnion` | "bridge" is the mathematical object or a proof step | none; the second is renamed with its family in F1 |
 
 ## Rules during the migration
 
 - A new declaration goes where "Where a declaration goes" puts it. A module
   that mentions no layer, gate or depth is not added to `TNLean/Circuit`; until
   step 1.2 it goes in QICLean beside `Entropy.IsSupportedOn`.
-- No entry is added to `DEBT`, `MUTUAL_DIRECTORIES` or `EXAMPLES_IMPORTS` in
+- No entry is added to `UPWARD_IMPORTS`, `MUTUAL_LAYER_DIRECTORIES` or `EXAMPLES_IMPORTS` in
   `scripts/check_import_layers.py`, nor to `PASS_THROUGH` in
   `scripts/check_pass_through_declarations.py`.
 - No new pass-through declaration, translating lemma between two formulations,

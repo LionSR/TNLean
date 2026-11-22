@@ -44,7 +44,7 @@ The current library already provides all of the following.
 - `bilateral_commonPeriod_blocking_tp_primitive_normal`
   (`TNLean/MPS/CanonicalForm/Assembly/StructuralTheorem.lean`)
 - `sameMPV₂_blockTensor_of_sameMPV₂_toTensorFromBlocks`
-  (`TNLean/MPS/Core/BlockingInfrastructure.lean`)
+  (`TNLean/MPS/Transfer/Irreducible/BlockingInfrastructure.lean`)
 - `isPrimitive_transferMap_blockTensor_of_dvd`
 - `isIrreducibleTensor_blockTensor_of_tp_primitive_irr`
 - `isNormal_of_tp_primitive_irreducible`
@@ -54,7 +54,7 @@ So the common-period arithmetic is **not** the blocker anymore.
 ### Special-case same-side grouping
 
 - `exists_bnt_grouping`
-  (`TNLean/MPS/CanonicalForm/BNTGrouping.lean`)
+  (`TNLean/MPS/CanonicalForm/BNT/Grouping.lean`)
 - `exists_bnt_grouping_of_gaugePhaseEquiv`
 - `exists_sectorDecomp_of_tp_primitive_irr_blocks`
   (`TNLean/MPS/CanonicalForm/EqualNormBridge.lean`)

@@ -178,10 +178,10 @@ $\beta\neq0$.\footnote{Formal declarations:
     \leanid{MPSTensor.polarIso_blockTensor_repeatedBlockSum},
     \leanid{MPSTensor.polarPos_blockTensor_repeatedBlockSum} and
     \leanid{MPSTensor.copyApproxVector_repeatedBlockSum} in
-    \doclink{TNLean/MPS/Preparation/RepeatedBlockSum};
+    \doclink{TNLean/MPS/Preparation/BlockSum/RepeatedBlockSum};
     \leanid{MPSTensor.exists_approximationError_le_repeatedBlockSum} and
     \leanid{MPSTensor.exists_approximationError_le_mul_repeatedBlockSum} in
-    \doclink{TNLean/MPS/Preparation/BlockSumError}.} The orthogonality
+    \doclink{TNLean/MPS/Preparation/BlockSum/BlockSumError}.} The orthogonality
 restriction is the one recorded in \cite{gap:mswc24_block_form_mixed_overlap},
 where for two overlapping blocks of multiplicity one the error lies between
 $\tau^{2q}/16$ (for $N/q\geq3$) and $(N/q)\tau^{2q}$, with $\tau$ the eigenvalue of their mixed transfer
@@ -272,17 +272,17 @@ independent of the weights, is formalized, with the ingredients above and the re
 of \cite{gap:mswc24_repeated_overlap_small_weight_sum}.\footnote{Formal declarations:
     \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum} and
     \leanid{MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum} in
-    \doclink{TNLean/MPS/Preparation/RepeatedOverlappingBlockWeights};
+    \doclink{TNLean/MPS/Preparation/BlockSum/RepeatedOverlappingBlockWeights};
     \leanid{MPSTensor.sum_star_copyApproxVector_mul_mpv} and
     \leanid{MPSTensor.sum_norm_sq_copyApproxVector_le} in
-    \doclink{TNLean/MPS/Preparation/RepeatedOverlappingBlockError};
+    \doclink{TNLean/MPS/Preparation/BlockSum/RepeatedOverlappingBlockError};
     \leanid{MPSTensor.exists_norm_polarPos_blockTensor_repeatedBlockSum_sub_le},
     \leanid{MPSTensor.mixedMapLM_copyPosLimitRow_apply} and
     \leanid{MPSTensor.exists_norm_mpvOverlap_sub_bntWeight_le_of_norm_sub_copyPosLimitRow_le} in
-    \doclink{TNLean/MPS/Preparation/RepeatedOverlappingBlockOverlap};
+    \doclink{TNLean/MPS/Preparation/BlockSum/RepeatedOverlappingBlockOverlap};
     \leanid{MPSTensor.exists_norm_gram_sum_sub_le} and
     \leanid{Matrix.norm_polarPos_sub_le_sqrt} in
-    \doclink{TNLean/MPS/Preparation/OverlappingBlockGram}.}
+    \doclink{TNLean/MPS/Preparation/BlockSum/OverlappingBlockGram}.}
 The weaker bound with the factor $\min(1,b)^{-1/2}$ is not formalized separately.
 
 \section{Copies with weights of different phases}\label{sec:mswc24_rc_phases}
@@ -358,17 +358,17 @@ whose $q$-site states are orthogonal, $\varepsilon\leq Cy\,e^{Cy}$ and $\varepsi
 at every $q\geq1$ and $M\geq1$ with $\beta\neq0$, and for overlapping blocks the bound
 (\ref{eq:mswc24_rc_overlap_bound}) at every $q\geq1$, for all nonzero weights with constants
 independent of the weights.\footnote{Formal declarations:
-    \leanid{Matrix.polarIso_mul_eq_zero} in \doclink{TNLean/MPS/Preparation/PolarUniqueness};
+    \leanid{Matrix.polarIso_mul_eq_zero} in \doclink{TNLean/MPS/Tensor/Physical/PolarUniqueness};
     \leanid{MPSTensor.polarIso_blockTensor_repeatedBlockSum_mul_pairEmbedding},
     \leanid{MPSTensor.oneCopyWeight},
     \leanid{MPSTensor.oneCopyWeight_of_subsingleton},
     \leanid{MPSTensor.nonNormalApproxOverlap_repeatedBlockSum_oneCopy},
     \leanid{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_oneCopy} and
     \leanid{MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum_oneCopy}
-    in \doclink{TNLean/MPS/Preparation/OneCopyPairState};
+    in \doclink{TNLean/MPS/Preparation/BlockSum/OneCopyPairState};
     \leanid{MPSTensor.exists_approximationError_le_repeatedBlockSum_oneCopy} and
     \leanid{MPSTensor.exists_approximationError_le_mul_repeatedBlockSum_oneCopy} in
-    \doclink{TNLean/MPS/Preparation/BlockSumError}.} The failure of the coefficients
+    \doclink{TNLean/MPS/Preparation/BlockSum/BlockSumError}.} The failure of the coefficients
 $\sum_k\lvert\mu_{j,k}\rvert^N$ and $c_j^M$ is checked numerically and not formalized.
 
 \bibliographystyle{alpha}

@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.TailPowerSumUniqueness
-import TNLean.MPS.Core.ScaledNormality
-import TNLean.MPS.FundamentalTheorem.Basic
+import QICLean.Algebra.Polynomial.TailPowerSumUniqueness
+import TNLean.MPS.Tensor.Words.ScaledNormality
+import TNLean.MPS.Tensor.Gauge.FundamentalTheorem
 import TNLean.MPS.FundamentalTheorem.SectorBNT.UnblockedPowerSumCoefficients
-import TNLean.MPS.ParentHamiltonian.Nonvanishing
+import TNLean.MPS.Tensor.GroundSpace.Nonvanishing
 
 /-!
 # The fundamental theorem for injective tensors up to a phase

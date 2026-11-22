@@ -13,7 +13,7 @@ recorded separately in
 ## Four library facts restated locally
 
 All four were `private` in
-`TNLean/MPS/MPDO/CyclicActiveFourthRegionContraction.lean` and carried no
+`TNLean/MPS/MPDO/CyclicActiveSector/CyclicActiveFourthRegionContraction.lean` and carried no
 blueprint tag.
 
 | Removed declaration | Replacement |
@@ -42,7 +42,7 @@ was written out four times.
 | `MPOTensor.PhysicalSectorFactorization.leftTensor_eq_of_heq` | `Matrix.entry_eq_of_heq` |
 
 `Matrix.entry_eq_of_heq` is new, in
-`TNLean/MPS/MPDO/PhysicalSectorFactorization.lean`. It generalizes over two
+`TNLean/MPS/Operator/PhysicalSector/PhysicalSectorFactorization.lean`. It generalizes over two
 independent index families, so it covers rectangular families as well. The
 matrix family enters as an explicit lambda, which is what lets the per-boundary
 weight or virtual-index argument be captured rather than threaded through the
@@ -57,7 +57,7 @@ single-index-family helper does not apply.
 
 ## The dead three-site fiber split
 
-Four declarations in `TNLean/MPS/MPDO/CyclicActiveRetainedCoordinates.lean` have
+Four declarations in `TNLean/MPS/MPDO/CyclicActiveSector/CyclicActiveRetainedCoordinates.lean` have
 no consumer anywhere in the production corpus and no blueprint tag:
 `threeSectorFiberEquiv` and its three `@[simp]` inverse-coordinate lemmas
 `threeSectorFiberEquiv_symm_apply_zero`, `..._one`, and `..._two`, all in the
@@ -88,7 +88,7 @@ compatibility declarations are restored.
 | `MPOTensor.PhysicalSectorFactorization.trace_twoSuffixSectorContraction_eq` (private) | renamed to `MPOTensor.PhysicalSectorFactorization.trace_suffixSectorContraction_two_eq` |
 
 The sole consumer,
-`TNLean/MPS/MPDO/CyclicActiveAdjacentCoefficientExtraction.lean`, now imports
+`TNLean/MPS/MPDO/CyclicActiveSector/CyclicActiveAdjacentCoefficientExtraction.lean`, now imports
 `CyclicActiveFourthRegionContraction` directly, and its two private helpers were
 renamed `trace_suffixSectorContraction_one_eq` and
 `trace_suffixSectorContraction_two_eq` so production code points directly at

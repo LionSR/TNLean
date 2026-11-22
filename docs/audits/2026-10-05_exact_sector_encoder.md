@@ -9,7 +9,7 @@ audit records the algebraic factorization and its ownership.
 
 The elementary coordinate embeddings, weighted block sum, nonempty-word,
 periodic-vector and blocked-physical-matrix identities now live in
-`MPS/Core/BlockSum`. Their declaration names are unchanged. Their former
+`MPS/Tensor/DirectSum/BlockSum`. Their declaration names are unchanged. Their former
 bodies are removed from `OrthogonalBlockSum`; `blockPairs` and its membership
 identity are removed from `OverlappingBlockInjectivity`. The current-main
 `Preparation/BondEmbedding` module also reuses the ten pure coordinate/pair

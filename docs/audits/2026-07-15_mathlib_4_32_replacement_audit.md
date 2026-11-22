@@ -53,7 +53,7 @@ TNLean code.
    In particular, `Matrix.exists_mulVec_eq_zero_iff` directly converts
    determinant singularity into a nonzero kernel vector. TNLean has already
    adopted it in two places. It can also shorten the final determinant argument
-   in `TNLean/MPS/BNT/Basic.lean` by eliminating an intermediate injectivity and
+   in `TNLean/MPS/CanonicalForm/BNT/Basic.lean` by eliminating an intermediate injectivity and
    unit-matrix detour.
 
 3. **Self-adjoint decomposition has been abstracted and the positive-map API
@@ -68,8 +68,8 @@ TNLean targets:
 
 - `TNLean.Channel.Basic`;
 - `TNLean.Algebra.NewtonGirard`;
-- `TNLean.PEPS.FundamentalTheorem.Uniqueness`;
-- `TNLean.PEPS.NormalEdgeGaugeFamily`.
+- `TNLean.PEPS.FundamentalTheorem.Injective.Uniqueness`;
+- `TNLean.PEPS.FundamentalTheorem.Normal.NormalEdgeGaugeFamily`.
 
 These failures are documented below. This audit does not claim that a repaired
 full build passed. In particular, the initial-build evidence must not be read as
@@ -238,7 +238,7 @@ local determinant/kernel equivalence.
 
 #### Further exact simplification in BNT
 
-The remaining clear target is `TNLean/MPS/BNT/Basic.lean:324--352`, inside
+The remaining clear target is `TNLean/MPS/CanonicalForm/BNT/Basic.lean:324--352`, inside
 `exists_invertible_changeBasis`. After proving the local fact
 
 ```lean
@@ -368,7 +368,7 @@ Use `Matrix.instIsometricContinuousFunctionalCalculus` under
 but remove the two local `CStarMatrix` CFC instances and the transport proof in
 `continuous_matrixAbs`.
 
-### `TNLean/MPS/BNT/Basic.lean`
+### `TNLean/MPS/CanonicalForm/BNT/Basic.lean`
 
 Status: **small exact proof simplification**.
 
@@ -400,14 +400,14 @@ Replace the deprecated function-style `map_isSelfAdjoint` call by
 `hX.isSelfAdjoint.map' hE.toPositiveLinearMap`. Keep
 `IsPositiveMap.toPositiveLinearMap` and `IsPositiveMap.map_isHermitian`.
 
-### `TNLean/PEPS/FundamentalTheorem/Uniqueness.lean`
+### `TNLean/PEPS/FundamentalTheorem/Injective/Uniqueness.lean`
 
 Status: **required 4.32 API adaptation, not a replacement opportunity**.
 
 At lines 393 and 418, install the available `Nonempty` proof as an instance and
 use `Matrix.det_zero` without an explicit argument.
 
-### `TNLean/PEPS/NormalEdgeGaugeFamily.lean`
+### `TNLean/PEPS/FundamentalTheorem/Normal/NormalEdgeGaugeFamily.lean`
 
 Status: **required 4.32 API adaptation, not a replacement opportunity**.
 
@@ -494,13 +494,13 @@ The expensive proof shapes are the broad `congr 1`/`ring` step in
 and reduce normalization, rather than merely adding a global heartbeat bound.
 No repaired full build is claimed here.
 
-### 3. `TNLean.PEPS.FundamentalTheorem.Uniqueness`: `Matrix.det_zero` binder change
+### 3. `TNLean.PEPS.FundamentalTheorem.Injective.Uniqueness`: `Matrix.det_zero` binder change
 
 Locations:
 
 ```text
-TNLean/PEPS/FundamentalTheorem/Uniqueness.lean:393
-TNLean/PEPS/FundamentalTheorem/Uniqueness.lean:418
+TNLean/PEPS/FundamentalTheorem/Injective/Uniqueness.lean:393
+TNLean/PEPS/FundamentalTheorem/Injective/Uniqueness.lean:418
 ```
 
 Relevant Mathlib commit:
@@ -524,12 +524,12 @@ The old calls `Matrix.det_zero ⟨i⟩` therefore try to apply an equality as a
 function. The local nonempty proof must instead be installed as an instance,
 after which `Matrix.det_zero` is used without an explicit argument.
 
-### 4. `TNLean.PEPS.NormalEdgeGaugeFamily`: the same `Matrix.det_zero` binder change
+### 4. `TNLean.PEPS.FundamentalTheorem.Normal.NormalEdgeGaugeFamily`: the same `Matrix.det_zero` binder change
 
 Location:
 
 ```text
-TNLean/PEPS/NormalEdgeGaugeFamily.lean:153
+TNLean/PEPS/FundamentalTheorem/Normal/NormalEdgeGaugeFamily.lean:153
 ```
 
 The branch already has `hne : Nonempty (Fin n)`, but the old call
@@ -571,7 +571,7 @@ That warning is upgrade-relevant because the replacement's argument order also
 causes the build failure described above.
 
 The style linter also emitted parser diagnostics while examining header text in
-`TNLean/Spectral/MPVOverlapTrace.lean` at occurrences of the `ᴴ` notation.
+`TNLean/MPS/Transfer/Spectrum/MPVOverlapTrace.lean` at occurrences of the `ᴴ` notation.
 These appeared inside `linter.style.header` output and were not one of the four
 required targets reported as failed by Lake.
 

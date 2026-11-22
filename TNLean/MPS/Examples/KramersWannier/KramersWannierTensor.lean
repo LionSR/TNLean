@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.Algebra.ComplexOfInt
-import TNLean.MPS.MPDO.Defs
+import TNLean.MPS.Operator.Defs
 
 /-!
 # Kramers–Wannier duality and translation tensors

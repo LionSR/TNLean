@@ -23,7 +23,7 @@ comparison automatically assembles over the weighted direct sum and composes wit
 the common cyclic-sector family.
 
 The issue #1075 refinement adds a canonical grouping map in
-`TNLean/MPS/Core/BlockingInfrastructure.lean`:
+`TNLean/MPS/Transfer/Irreducible/BlockingInfrastructure.lean`:
 
 - `blockWordChunk`
 - `directToIteratedBlockIndex`
@@ -110,7 +110,7 @@ periodic fundamental theorem route and of parent-Hamiltonian arguments.
 ## 2026-05-01: reindexPhysical lemma (wave 27)
 
 Added `reindexPhysical_directToIteratedBlockIndex_blockTensor` in
-`TNLean/MPS/Core/BlockingInfrastructure.lean`.  This lemma bypasses the
+`TNLean/MPS/Transfer/Irreducible/BlockingInfrastructure.lean`.  This lemma bypasses the
 `Fin.cast` / `Fintype.equivFin` identification entirely and proves that the
 explicit block-grouping bijection `directToIteratedBlockIndex`, applied to
 the iterated block tensor via `reindexPhysical`, recovers the direct block

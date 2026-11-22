@@ -1,6 +1,6 @@
 # Removal of the root-namespace tangent-line logarithm bound
 
-`TNLean/MPS/Preparation/DepthLowerBoundConstant.lean` declared the tangent-line
+`TNLean/MPS/Preparation/Normal/DepthLowerBoundConstant.lean` declared the tangent-line
 bound `log x ≤ l x - 1 - log l` (for `x, l > 0`) as the root-namespace theorem
 `Real.log_le_mul_sub_one_sub_log`. It had one use, in the proof of
 `MPSTensor.exists_mul_log_le_of_infidelity_le_one_half_of_isNormal` in the same

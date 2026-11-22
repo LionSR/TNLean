@@ -36,7 +36,7 @@ Since $Q>0$, cancellation in $UP=PX$ gives $UW=WX$.
 Thus $Q_\gamma=\gamma Q+(1-\gamma)I$ commutes with $U$, and
 $UQ_\gamma W=Q_\gamma WX$.
 These statements are proved in
-\path{TNLean/MPS/ParentHamiltonian/IsometricDeformationCovariance.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Deformation/IsometricDeformationCovariance.lean}.
 The identity extension in (\ref{eq:symmetric_polar_factor}) is included:
 its square is not identified with $PP^*$ outside $\operatorname{ran}P$.
 
@@ -55,7 +55,7 @@ has the same commutation property. Each embedded local interaction
 commutes with $U^{\otimes N}$, so both open and periodic interaction sums
 preserve the symmetry.
 These conditional statements are proved in
-\path{TNLean/MPS/ParentHamiltonian/IsometricDeformationSymmetry.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Deformation/IsometricDeformationSymmetry.lean}.
 
 This implication requires invariance of the original MPS boundary space.
 An arbitrary virtual unitary $X$ satisfying $UP=PX$ need not preserve the
@@ -76,7 +76,7 @@ invariance of the original two-site boundary space. Hence both canonical
 parent projections and the positive interactions in
 (\ref{eq:symmetric_polar_interaction}) preserve the symmetry throughout
 the deformation. The derivation is proved in
-\path{TNLean/MPS/ParentHamiltonian/InjectiveIsometricDeformationSymmetry.lean},
+\path{TNLean/MPS/ParentHamiltonian/Deformation/InjectiveIsometricDeformationSymmetry.lean},
 and its parent-Hamiltonian consequences in the preceding symmetry module.
 
 The normalization convention requires a coordinate qualification.
@@ -110,7 +110,7 @@ invariance of every local MPS space of $\bigoplus_k A^k$. Both supplied
 hypotheses of the conditional parent-space implication are thereby derived,
 and the parent-symmetry conclusions hold along the whole deformation.
 These statements are proved in
-\path{TNLean/MPS/ParentHamiltonian/BlockIsometricDeformationSymmetry.lean}.
+\path{TNLean/MPS/ParentHamiltonian/Deformation/BlockIsometricDeformationSymmetry.lean}.
 
 \section{Invariance up to a phase}
 The source's symmetry is a symmetry of the state, which is invariant under
@@ -152,7 +152,7 @@ change the image of a subspace, so every local MPS space is invariant under
 $U_g^{\otimes L}$ itself. All parent-symmetry conclusions of the
 several-block case therefore hold under symmetry up to a phase. These
 statements are proved in
-\path{TNLean/MPS/ParentHamiltonian/BlockIsometricDeformationSymmetry.lean};
+\path{TNLean/MPS/ParentHamiltonian/Deformation/BlockIsometricDeformationSymmetry.lean};
 the one-block case $r=1$ is the already-blocked single injective block in the
 printed normalization.
 

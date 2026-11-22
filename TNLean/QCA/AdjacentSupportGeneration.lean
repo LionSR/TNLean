@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.QCA.SupportAlgebraFactors
-import QICLean.Algebra.CommutingStarSubalgebraProduct
-import QICLean.Algebra.StarSubalgebraEquiv
-import QICLean.Algebra.MatrixAlgHomCentralizer
+import QICLean.Algebra.StarSubalgebra.CommutingProduct
+import QICLean.Algebra.StarSubalgebra.Equiv
+import QICLean.Algebra.MatrixAlgebra.MatrixAlgHomCentralizer
 import Mathlib.Data.Fintype.BigOperators
 
 /-!

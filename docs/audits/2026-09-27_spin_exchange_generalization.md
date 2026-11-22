@@ -6,9 +6,9 @@ uses are migrated, no blueprint `\lean{...}` tag cites a removed name, and no
 compatibility alias is kept.
 
 The exchange interaction, the one-site operators and the total spin were defined
-only for the spin-1/2 operators in `TNLean/MPS/Examples/SpinHalf.lean`, and the
+only for the spin-1/2 operators in `TNLean/MPS/Examples/Spin/SpinHalf.lean`, and the
 AKLT development needed a copy for spin 1. They now live once in
-`TNLean/MPS/Examples/SpinOperator.lean`, parameterized by an operator family
+`TNLean/MPS/Examples/Spin/SpinOperator.lean`, parameterized by an operator family
 `S : Fin 3 → Matrix (Fin d) (Fin d) ℂ`. The spin-1/2 and spin-1 chains pass
 `spinHalfOperator` and `spinOneOperator`.
 
@@ -30,5 +30,5 @@ AKLT development needed a copy for spin 1. They now live once in
   `∑ α, spinHalfOperator α * spinHalfOperator α = (3 / 4 : ℂ) • 1`.
 
 The private per-example transport lemma `majumdarGhoshHamiltonian_apply_eq_smul_iff`
-in `TNLean/MPS/Examples/MajumdarGhoshLowerBound.lean` is removed. Its role is taken
-by the shared lemmas of `TNLean/MPS/ParentHamiltonian/ShiftedParentHamiltonian.lean`.
+in `TNLean/MPS/Examples/MajumdarGhosh/MajumdarGhoshLowerBound.lean` is removed. Its role is taken
+by the shared lemmas of `TNLean/MPS/ParentHamiltonian/ParentInteraction/ShiftedParentHamiltonian.lean`.

@@ -76,7 +76,7 @@ This implication is formalized without a left-canonical or unital
 normalization.\footnote{Formal declarations:
 \leanid{MPSTensor.commutes_of_hasInvariantProjectorClosure_of_lowerZero} and
 \leanid{MPSTensor.exists_reducing_projection_of_hasInvariantProj} in
-\doclink{TNLean/MPS/CanonicalForm/ProjectorClosure}.}
+\doclink{TNLean/MPS/CanonicalForm/NormalBlocks/ProjectorClosure}.}
 
 \section{The spectral implication}
 
@@ -90,7 +90,7 @@ isometries $V_k$ satisfying
 This is formalized by
 \leanid{MPSTensor.exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure}
 in
-\doclink{TNLean/MPS/CanonicalForm/ProjectorClosureDecomposition}.
+\doclink{TNLean/MPS/CanonicalForm/NormalBlocks/ProjectorClosureDecomposition}.
 
 Two normalization-free spectral steps complete the source proposition. First,
 each nonzero irreducible corner has a Perron eigenpair
@@ -124,7 +124,7 @@ Each rescaled corner is therefore normal. Both steps are formalized without a
 normalization hypothesis.\footnote{Formal declarations:
 \leanid{MPSTensor.isNormalTensor_invSqrt_smul_of_unique_peripheral} and
 \leanid{MPSTensor.exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure}
-in \doclink{TNLean/MPS/CanonicalForm/ProjectorClosureSpectral}.}
+in \doclink{TNLean/MPS/CanonicalForm/NormalBlocks/ProjectorClosureSpectral}.}
 
 The cited proposition does not assume a left-canonical identity such as
 \begin{align}

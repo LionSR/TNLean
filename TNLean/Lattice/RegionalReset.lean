@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.GaussianFilter.PhysicalBufferUniform
-import QICLean.Analysis.GaussianFilter.LocalizationParameters
-import QICLean.Analysis.GaussianFilter.Reindex
-import QICLean.Entropy.RegionPurificationSplitting
-import QICLean.Entropy.ProductMarginals
+import QICLean.Entropy.MutualInformation.PhysicalBufferUniform
+import QICLean.Analysis.Parameter.LocalizationParameters
+import QICLean.Spectral.Filter.Gaussian.Reindex
+import QICLean.ManyBody.Entropy.RegionPurificationSplitting
+import QICLean.Entropy.MutualInformation.ProductMarginals
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.Circuit.RegionalSwap
 import QICLean.ManyBody.Sites.SupportedUnitary

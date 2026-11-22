@@ -9,19 +9,19 @@ Lean files, blueprint, issue threads, and the relevant paper passages.
 The injective case is already on the Fundamental-Theorem route.
 
 * `MPSTensor.gaugeEquiv_twistedTensor_of_injective` in
-  `TNLean/MPS/Symmetry/Defs.lean` proves, for every group element `g`,
+  `TNLean/MPS/Tensor/Gauge/OnSiteSymmetry.lean` proves, for every group element `g`,
   `GaugeEquiv A (twistedTensor A U g)` from injectivity and on-site symmetry.
   Its proof is exactly
   `(sameMPV_iff_gaugeEquiv_of_injective hA).1 (hSymm g)`.
 * `MPSTensor.sameMPV_iff_gaugeEquiv_of_injective` in
-  `TNLean/MPS/FundamentalTheorem/Basic.lean` is the wrapper around
+  `TNLean/MPS/Tensor/Gauge/FundamentalTheorem.lean` is the wrapper around
   `MPSTensor.fundamentalTheorem_singleBlock`.
 * `MPSTensor.virtual_rep_of_symmetric_injective` in
-  `TNLean/MPS/Symmetry/VirtualRepresentation.lean` chooses those gauges and uses
+  `TNLean/MPS/Symmetry/OnSite/VirtualRepresentation.lean` chooses those gauges and uses
   gauge uniqueness plus `MPSTensor.twistedTensor_mul` to package them as a
   bond-space projective representation.
 * `MPSTensor.hasStringOrder_of_symmetric_injective` in
-  `TNLean/MPS/Symmetry/StringOrder.lean` consumes
+  `TNLean/MPS/Symmetry/StringOrder/StringOrder.lean` consumes
   `virtual_rep_of_symmetric_injective` later.  It is downstream of the FT-based
   virtual representation theorem, not the proof of that theorem.
 

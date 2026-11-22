@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.CZX.CZXReviewTensor
-import TNLean.MPS.MPDO.CZXTensor
-import TNLean.MPS.MPU.GroupCocycleMPO.Instances
+import TNLean.MPS.MPDO.CZX.CZXTensor
+import TNLean.MPS.MPU.Representation.GroupCocycleMPO.Instances
 
 /-!
 # The decorated CZX matrix product unitary: the tensor and its operator

@@ -92,12 +92,12 @@ The factor `(λ j)^N · (∑_q (ω j q)^N)` is the **sector coefficient** descri
 * `TNLean/MPS/FundamentalTheorem/SectorDecomposition.lean` (1 ref).
 
 #### Tier 4 — non-FT consumers (re-prove on new surface, then retire the one-copy import)
-* `TNLean/MPS/BNT/Construction.lean` (28 refs) — defines `IsCanonicalFormBNT` itself, plus `cross_overlap_tendsto_zero`, `isBNT`, etc.
-* `TNLean/MPS/RFP/StructuralForm.lean` (1 ref).
+* `TNLean/MPS/CanonicalForm/BNT/Construction.lean` (28 refs) — defines `IsCanonicalFormBNT` itself, plus `cross_overlap_tendsto_zero`, `isBNT`, etc.
+* `TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralForm.lean` (1 ref).
 * `TNLean/MPS/ParentHamiltonian/BiCF/BlockDiagonalCommutant.lean` (30 refs).
 * `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean` (18 refs).
 * `TNLean/PiAlgebra/CanonicalFormSep.lean` (1 ref).
-* `TNLean/PiAlgebra/CanonicalFormSepAux.lean` (1 ref).
+* `TNLean/MPS/CanonicalForm/BlockFamily.lean` (1 ref).
 
 ### Bridging machinery to delete
 
@@ -118,7 +118,7 @@ The factor `(λ j)^N · (∑_q (ω j q)^N)` is the **sector coefficient** descri
 
 ### Phase 1 — design the new primary predicate
 
-Create `TNLean/MPS/FundamentalTheorem/SectorBNT/Basic.lean` (or chosen location, NOT under `SectorDecomposition/`) with:
+Create `TNLean/MPS/Tensor/DirectSum/SectorBNT.lean` (or chosen location, NOT under `SectorDecomposition/`) with:
 
 ```lean
 structure IsBNTCanonicalForm (P : SectorDecomposition d) : Prop where
@@ -224,7 +224,7 @@ Phase 7 is the cleanup — file deletions. Net negative LoC.
 
 ## What is preserved (NOT retired)
 
-* `TNLean/MPS/BNT/Basic.lean` — `eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal` (line 195) and `coefficient_eventually_eq_of_eventually_linearIndependent` (line 172). These are the analytic engines, applicable to any normal MPS family with appropriate decay. They will be **used** by the new surface, not deleted.
+* `TNLean/MPS/CanonicalForm/BNT/Basic.lean` — `eventually_linearIndependent_of_two_family_overlap_tendsto_orthonormal` (line 195) and `coefficient_eventually_eq_of_eventually_linearIndependent` (line 172). These are the analytic engines, applicable to any normal MPS family with appropriate decay. They will be **used** by the new surface, not deleted.
 * `SectorDecomposition` infrastructure — the abstract sector-decomposition machinery (basis, coeff, weights). This is fine and not one-copy.
 * `mpvOverlap`, `mpvInner`, `mpvState`, `IsInjective`, `IsIrreducible`, `IsLeftCanonical`, `GaugePhaseEquiv`, all the low-level normal-tensor lemmas. They are not coupled to one-copy.
 

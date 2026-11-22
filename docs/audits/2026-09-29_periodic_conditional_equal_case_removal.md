@@ -12,7 +12,7 @@ Lean consumer outside this pair on main at `fafa75e42`.
 
 The source result remains
 `MPSTensor.fundamentalTheorem_periodic_equalCase_derivedPeriods` in
-`TNLean/MPS/Periodic/IrreducibleFormPeriods.lean`, with its existing blueprint
+`TNLean/MPS/FundamentalTheorem/Periodic/IrreducibleFormPeriods.lean`, with its existing blueprint
 entry `thm:periodic_ft`. The two obsolete conditional blueprint entries had
 no incoming references outside the removed pair and are deleted together.
 The scalar power-sum and Z-gauge helpers remain unchanged.

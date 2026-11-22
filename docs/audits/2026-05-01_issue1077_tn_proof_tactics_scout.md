@@ -46,7 +46,7 @@ A tactic here should probably be called only after the proof has chosen the leng
 
 ### 3. Blocking-word normalization
 
-The blocked-word work in `TNLean/MPS/Core/BlockingInfrastructure.lean` now has a clean vocabulary:
+The blocked-word work in `TNLean/MPS/Transfer/Irreducible/BlockingInfrastructure.lean` now has a clean vocabulary:
 
 ```text
 direct blocked index i

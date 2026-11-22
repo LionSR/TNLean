@@ -9,14 +9,14 @@ identically before and after the removal.
 
 | Removed | Replacement |
 |---|---|
-| `MPOTensor.VerticalCopyBlocks.verticalAssembledTensor_apply_copy_ne` (`TNLean/MPS/MPDO/VerticalCopyBlocks.lean`) | `MPOTensor.verticalAssembledTensor_apply_copy_ne` (`TNLean/MPS/MPDO/VerticalSectorCoordinates.lean`) |
-| `MPOTensor.VerticalProductRetainedBlocks.verticalAssembledTensor_apply_copy_ne` (`TNLean/MPS/MPDO/VerticalProductRetainedBlocks.lean`) | `MPOTensor.verticalAssembledTensor_apply_copy_ne` (`TNLean/MPS/MPDO/VerticalSectorCoordinates.lean`) |
+| `MPOTensor.VerticalCopyBlocks.verticalAssembledTensor_apply_copy_ne` (`TNLean/MPS/MPDO/Fusion/VerticalCopyBlocks.lean`) | `MPOTensor.verticalAssembledTensor_apply_copy_ne` (`TNLean/MPS/MPDO/SectorMaps/VerticalSectorCoordinates.lean`) |
+| `MPOTensor.VerticalProductRetainedBlocks.verticalAssembledTensor_apply_copy_ne` (`TNLean/MPS/MPDO/Fusion/VerticalProductRetainedBlocks.lean`) | `MPOTensor.verticalAssembledTensor_apply_copy_ne` (`TNLean/MPS/MPDO/SectorMaps/VerticalSectorCoordinates.lean`) |
 
 ## What was checked
 
 Both removed theorems carried the shared owner's exact signature and a
 single-line proof delegating to it. Both files sit inside `namespace MPOTensor`
-and import `TNLean.MPS.MPDO.VerticalSectorCoordinates` transitively, so the
+and import `TNLean.MPS.MPDO.SectorMaps.VerticalSectorCoordinates` transitively, so the
 three unqualified uses — one in `VerticalCopyBlocks.lean` and two in the
 `rw [...]` steps of `VerticalProductRetainedBlocks.lean` — now resolve to
 `MPOTensor.verticalAssembledTensor_apply_copy_ne` with no call-site edit.

@@ -3,8 +3,8 @@
 Date: 2026-09-19
 
 The finite-word trace separation criteria in
-`TNLean/MPS/MPDO/BiCFDerivation/Core.lean` and the simultaneous-span trace
-lemma in `TNLean/MPS/SharedInfra/WordTupleGauge.lean` re-derived, by hand,
+`TNLean/MPS/CanonicalForm/BlockSeparation/TraceSeparation.lean` and the simultaneous-span trace
+lemma in `TNLean/MPS/Tensor/Gauge/WordTupleGauge.lean` re-derived, by hand,
 two facts that the existing matrix trace-pairing interface already supplies:
 that every linear functional on a finite matrix algebra is a trace pairing,
 and that a trace pairing vanishing on a generating set vanishes on the span
@@ -21,7 +21,7 @@ was removed, no statement changed, and no blueprint tag moved.
 | `MPSTensor.pair_trace_zero_on_span` (private) | a four-case span induction repeating additivity and homogeneity of the pair trace pairing | `Submodule.span_le` into the kernel of the coproduct of the two trace forms |
 | `MPSTensor.block_matrices_eq_zero_of_wordTupleSpanTop_trace` | a four-case span induction for the block-indexed trace pairing | `Submodule.span_le` into the kernel of the sum over blocks of the trace form composed with the block projection |
 
-Both files now import `QICLean.Algebra.MatrixTracePairing`, which owns the
+Both files now import `QICLean.Algebra.Matrix.MatrixTracePairing`, which owns the
 trace bilinear form and its nondegeneracy.
 
 ## Retained and why

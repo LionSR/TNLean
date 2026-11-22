@@ -12,7 +12,7 @@ Worktree / branch used for this retry:
 Per protocol, before attempting proof code I:
 - read the current issue #609 thread and posted the required short scout comment
 - re-read the target theorem and surrounding private bridge lemmas in `TNLean/MPS/Periodic/Overlap.lean`
-- re-read `TNLean/MPS/Chain/OneSidedInverse.lean`, `TNLean/MPS/Chain/TensorEquality.lean`, `TNLean/MPS/Chain/FundamentalTheorem.lean`, `TNLean/MPS/Chain/SameStateBridge.lean`, `TNLean/MPS/Chain/BlockedChainFT.lean`
+- re-read `TNLean/MPS/Tensor/Words/OneSidedInverse.lean`, `TNLean/MPS/Tensor/Words/TensorEquality.lean`, `TNLean/MPS/Tensor/Chain/FundamentalTheorem.lean`, `TNLean/MPS/Chain/SameStateBridge.lean`, `TNLean/MPS/Tensor/Chain/BlockedChainFT.lean`
 - re-read the relevant contraction paper segment `Papers/1708.00029/main.tex` around Eqs. A.14–A.18
 - checked existing blocker history (`audits/2026-04-21_issue608_609_bridge_blocker.md`, PR #733 docstring update)
 
@@ -34,13 +34,13 @@ so the missing step is the upgrade from those **sectorwise blocked** gauges to o
 
 At first glance, the post-#8 chain API looks promising:
 
-- `TNLean/MPS/Chain/FundamentalTheorem.lean`
+- `TNLean/MPS/Tensor/Chain/FundamentalTheorem.lean`
   provides
   `MPSChainTensor.fundamentalTheorem_injective_chain`
   from
   `SameMPV (chainCombinedTensor A) (chainCombinedTensor B)`
   to cyclic chain gauge equivalence.
-- `TNLean/MPS/Chain/BlockedChainFT.lean`
+- `TNLean/MPS/Tensor/Chain/BlockedChainFT.lean`
   packages the injective blocked-chain endpoint.
 
 However, both stop exactly where the periodic Case-3 proof still gets stuck:
@@ -80,7 +80,7 @@ I checked whether the existing chain route could replace them:
 
 - `fundamentalTheorem_injective_chain` needs `SameMPV`, not just fixed-length `SameState`
 - `fundamentalTheorem_injective_chain_of_sameState` in `SameStateBridge.lean` is only a wrapper around the **hypothetical** bridge object `SameStateBridgeHyp`
-- `tensor_proportional` in `TNLean/MPS/Chain/TensorEquality.lean` is still only the **2-site** proportionality theorem and does not supply the full `m`-cycle bridge
+- `tensor_proportional` in `TNLean/MPS/Tensor/Words/TensorEquality.lean` is still only the **2-site** proportionality theorem and does not supply the full `m`-cycle bridge
 
 So the present library contains the ingredients *around* the target step, but not the target step itself.
 
@@ -143,12 +143,12 @@ Until that bridge exists, the target theorem remains blocked.
 ## Files inspected this retry
 
 - `TNLean/MPS/Periodic/Overlap.lean`
-- `TNLean/MPS/Chain/OneSidedInverse.lean`
-- `TNLean/MPS/Chain/TensorEquality.lean`
-- `TNLean/MPS/Chain/FundamentalTheorem.lean`
+- `TNLean/MPS/Tensor/Words/OneSidedInverse.lean`
+- `TNLean/MPS/Tensor/Words/TensorEquality.lean`
+- `TNLean/MPS/Tensor/Chain/FundamentalTheorem.lean`
 - `TNLean/MPS/Chain/SameStateBridge.lean`
-- `TNLean/MPS/Chain/BlockedChainFT.lean`
-- `TNLean/MPS/ParentHamiltonian/BlockStrip.lean`
+- `TNLean/MPS/Tensor/Chain/BlockedChainFT.lean`
+- `TNLean/MPS/Tensor/GroundSpace/BlockStrip.lean`
 - `Papers/1708.00029/main.tex`
 
 No Lean proof code is committed in this branch at the time of writing this note.

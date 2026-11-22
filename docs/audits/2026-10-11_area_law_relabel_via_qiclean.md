@@ -7,9 +7,9 @@ LionSR/QICLean#711 proves, for an arbitrary finite set of sites with a
 dimension per site, that a region-preserving bijection of sites and basis
 labels transports the regional state by conjugation and leaves the regional
 entropy unchanged (`Entropy.regionState_relabel`,
-`Entropy.regionEntropy_relabel` in `QICLean/Entropy/RegionCovariance.lean`).
+`Entropy.regionEntropy_relabel` in `QICLean/ManyBody/Entropy/RegionCovariance.lean`).
 LionSR/QICLean#780 adds the matching norm statement
-`Entropy.norm_relabelVector`. `TNLean/PEPS/AreaLaw/RegionalReindex.lean` now
+`Entropy.norm_relabelVector`. `TNLean/PEPS/AreaLaw/Regions/RegionalReindex.lean` now
 reads these at constant local dimension `q` with identity basis bijections,
 through `reducedState_eq_regionState` and `regionalEntropy_eq_regionEntropy`.
 The statements of `reducedState_relabel`, `regionalEntropy_relabel` and

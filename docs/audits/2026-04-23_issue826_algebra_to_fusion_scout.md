@@ -32,7 +32,7 @@ adjoint fixed-point descent and the diagonal `χ` trace-power language. This PR
 now contributes only the still-useful extra pieces:
 
 - a public upstream transfer-map adjoint lemma in
-  `TNLean/MPS/CanonicalForm/BlockingViaAdjoint.lean`;
+  `TNLean/MPS/Transfer/Irreducible/BlockingViaAdjoint.lean`;
 - the stabilized-adjoint-fixed-point sufficient condition
   `MPOTensor.AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq`;
 - the corresponding wrapper

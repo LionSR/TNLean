@@ -6,7 +6,7 @@ configuration, root manifest and documentation-build manifest pin a later
 revision that contains it, `6940c86aca0686bf250e3f10adce4638c158e1b9`.
 
 Four private theorems have been removed from
-`TNLean/MPS/AreaLaw/ViableSet/Gluing.lean`:
+`TNLean/MPS/AreaLaw/GroundStateAlgorithm/BoundaryState/Gluing.lean`:
 
 | Removed private theorem | Replacement |
 |---|---|

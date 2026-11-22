@@ -3,13 +3,13 @@
 Date: 2026-10-12. PR: refactor(MPS/MPU): move generic swap-symmetry
 infrastructure out of the examples. Issue: #9212.
 
-`TNLean/MPS/MPU/Examples/SwapSymmetryTransport.lean` contained declarations
+`TNLean/MPS/Examples/Shift/SwapSymmetryTransport.lean` contained declarations
 that carry no swap-specific content. They are moved beside the structures they
 concern. Statements and proofs are unchanged, and no deprecated aliases are kept.
 
 ## Moved declarations
 
-Moved to `TNLean/MPS/MPU/Equivalence.lean`, beside
+Moved to `TNLean/MPS/MPU/Equivalence/Equivalence.lean`, beside
 `FiniteChainOperatorSymmetry` and `IsInvariantUnderSymmetry`, with unchanged
 names:
 

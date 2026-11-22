@@ -14,7 +14,7 @@ to differ is a generalization, not an added hypothesis.
 
 The principal declaration is
 `TNLean.PEPS.ThreeBlockDependent.regionalBoundarySpace_inf_eq_openBoundarySpace`
-in `TNLean/PEPS/ParentHamiltonian/ThreeBlockGInjectiveIntersection.lean`.
+in `TNLean/PEPS/ParentHamiltonian/ThreeBlock/ThreeBlockGInjectiveIntersection.lean`.
 It has only the source's finite-group, matched semi-regular representation,
 and local G-injectivity assumptions, in finite coordinate spaces.
 

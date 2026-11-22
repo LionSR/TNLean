@@ -50,7 +50,6 @@ private theorem restrict_sources_partialWord_all_eq_nil {a b : Layout P}
     (slotLayout_partialSlots_eq (fun _ : P ↦ true) w ξ)).symm.trans
       (restrict_allResidualSourceLayout_isNone w)
 
-set_option maxHeartbeats 400000 in -- comparing party layouts unfolds the shared circuit syntax
 /-- The literal restriction of the actual all-party hoisted branch to the grouped
 owner `none` is precisely the product of its empty-participant coefficient sums.
 Source: polynomial-PEPS, `04-compression.tex`, lines 24–28, 246–251 and 351–417. -/
@@ -61,16 +60,17 @@ theorem restrict_partialWord_all_localPart_eval_heq_emptyGateScalar
       (w.emptyGateScalar • ContinuousLinearMap.id ℂ ℂ) := by
   induction w with
   | id a =>
-      simp only [emptyGateScalar, one_smul]
+      rw [partialWord.eq_1, emptyGateScalar, one_smul]
       exact restrict_allMapped_localPart (Word.id a)
   | @comp a b d w v ihw ihv =>
+      rw [partialWord.eq_2, emptyGateScalar]
       exact Word.restrict_localPart_comp_scalar Option.isNone
         (partialWord (fun _ : P ↦ true) w ξ.1) (partialWord (fun _ : P ↦ true) v ξ.2)
         (restrict_affectedOwner_all a) (restrict_affectedOwner_all b)
         (restrict_affectedOwner_all d) (restrict_sources_partialWord_all_eq_nil w ξ.1)
         (restrict_sources_partialWord_all_eq_nil v ξ.2) _ _ (ihw ξ.1) (ihv ξ.2)
   | localMap p ha hb U tail =>
-      simp only [emptyGateScalar, one_smul]
+      rw [partialWord.eq_3, emptyGateScalar, one_smul]
       exact restrict_allMapped_localPart (Word.localMap p ha hb U tail)
   | @gate C ι _ _ owner a b c G tail =>
       classical
@@ -81,9 +81,10 @@ theorem restrict_partialWord_all_localPart_eval_heq_emptyGateScalar
         simpa only [emptyGateScalar_gate_of_isEmpty] using
           restrict_partialWord_localPart_gate_heq_coeffSum_of_isEmpty owner G tail ξ
   | swap r t tail =>
-      simp only [emptyGateScalar, one_smul]
+      rw [partialWord.eq_5, emptyGateScalar, one_smul]
       exact restrict_allMapped_localPart (Word.swap r t tail)
   | @frame r a b w ih =>
+      rw [partialWord.eq_6, emptyGateScalar]
       exact Word.restrict_localPart_frame_scalar Option.isNone
         ⟨affectedOwner (fun _ : P ↦ true) r.owner, r.space⟩
         (partialWord (fun _ : P ↦ true) w ξ) (by simp [affectedOwner])

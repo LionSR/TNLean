@@ -95,7 +95,7 @@ None of these affects a statement.
 - Area-law Lemma 6.1(6): the constant `2^q` can be `2^{q−1}`.
 - Area-law Lemma 3.1 bounds `z_u²` by `u²`, and Lemma 3.2 uses the margin `D`
   where `r + D` is available. Both are loose but correct.
-- `TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean`: the module docstring says the
+- `TNLean/PEPS/AreaLaw/SafeRectangles/InitialBoxEstimate.lean`: the module docstring says the
   constants work for every admissible safety parameter. The theorem is stated
   for natural-number parameters; the real-parameter case is the transfer
   recorded in `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.

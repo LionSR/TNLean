@@ -4,8 +4,8 @@ Two statements in the proof of Hastings’ bootstrap lemma concern arbitrary Her
 
 | Removed TNLean declaration | QICLean replacement | Module |
 | --- | --- | --- |
-| `TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_eq_probabilityEntropy_eigenvalues₀` | `vonNeumannEntropy_eq_probabilityEntropy_eigenvalues₀` | `QICLean/Analysis/Entropy.lean` |
-| `TNLean.MPS.AreaLaw.Hastings.sum_eigenvalues₀_filter_le` | `Matrix.IsHermitian.sum_eigenvalues₀_filter_le` | `QICLean/Analysis/KyFanNorm.lean` |
+| `TNLean.MPS.AreaLaw.Hastings.vonNeumannEntropy_eq_probabilityEntropy_eigenvalues₀` | `vonNeumannEntropy_eq_probabilityEntropy_eigenvalues₀` | `QICLean/Entropy/VonNeumann/Entropy.lean` |
+| `TNLean.MPS.AreaLaw.Hastings.sum_eigenvalues₀_filter_le` | `Matrix.IsHermitian.sum_eigenvalues₀_filter_le` | `QICLean/Spectral/Eigenvalue/KyFanNorm.lean` |
 
 The first identity expresses the spectral entropy as the entropy of the descending eigenvalue list. The second subtracts the sum of the largest eigenvalues from the real trace to obtain the remaining eigenvalue sum. Neither requires positivity or unit trace; the cutoff in the second identity may exceed the dimension.
 

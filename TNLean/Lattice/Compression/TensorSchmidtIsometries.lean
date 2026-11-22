@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.PartyCircuit.FinitePairSources
-import QICLean.Channel.SchmidtDecomposition
+import QICLean.Channel.Schmidt.Decomposition
 
 /-!
 # Schmidt isometries of a normalized pair vector

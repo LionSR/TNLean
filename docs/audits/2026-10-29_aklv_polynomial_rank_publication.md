@@ -58,12 +58,12 @@ artifacts from the integration checkout.
 The pinned revision already provides
 `Kraus.isNBlkInjective_of_isNBlkInjective_conjTranspose` in
 `QICLean/Kraus/Injectivity.lean`. Its identical local declaration in
-`TNLean/MPS/Core/Blocking.lean` is removed to avoid declaring the name twice.
+`TNLean/MPS/Tensor/Physical/Blocking.lean` is removed to avoid declaring the name twice.
 Existing callers and the blueprint retain the same theorem name and statement.
 
 The pinned QICLean revision also provides the identical
 `WordMultiplicity.wordCoefficient` definition in
-`QICLean.Algebra.WordCoefficient`. `TNLean/Algebra/TwoMarkerScalarRecovery.lean`
+`QICLean.Algebra.Word.WordMultiplicity`. `TNLean/Algebra/TwoMarkerScalarRecovery.lean`
 imports that module and removes its duplicate definition. The public name,
 ordered-word sum, and existing uses are unchanged. The modified module passed
 strict elaboration and the Mathlib standard linters with warnings as errors

@@ -18,7 +18,7 @@ kept.
 
 Each replacement has the same statement. The first two follow from the monoid
 homomorphism `QuantumCircuit.permOpHom`; the third is moved unchanged from
-`TNLean/MPS/Preparation/BlockUnitary.lean`. Modules that open `QuantumCircuit`
+`TNLean/MPS/Tensor/VaryingBond/BlockUnitary.lean`. Modules that open `QuantumCircuit`
 resolve the short names to the replacements without further change.
 
 Private copies of the same three facts in
@@ -26,7 +26,7 @@ Private copies of the same three facts in
 `QuantumCircuit.permOp_list_prod` is now the image of a list product under
 `QuantumCircuit.permOpHom`.
 
-Because `TNLean/MPS/MPU/PermutedEncodedMergingCircuit.lean` now sees both
+Because `TNLean/MPS/MPU/Circuit/Merging/PermutedEncodedMergingCircuit.lean` now sees both
 adjoint lemmas, `MPSPreparation.permOp_conjTranspose` (cited by the blueprint)
 is kept with its statement and proved by `QuantumCircuit.permOp_conjTranspose`,
 and the uses in that module name the latter explicitly.

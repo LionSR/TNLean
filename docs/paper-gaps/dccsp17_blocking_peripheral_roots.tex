@@ -35,23 +35,23 @@ roots, not a change to the period $m/r$ asserted in the lemma.
 The spectral mapping identity holds for every tensor and every positive
 blocking length.\footnote{Formal declaration:
     \leanid{MPSTensor.peripheralEigenvalues_blockTensor}, in
-    \doclink{TNLean/MPS/Periodic/BlockingSpectrum.lean}.}
+    \doclink{TNLean/MPS/CanonicalForm/Periodic/Blocking/Spectrum.lean}.}
 For a periodic tensor of period $m$, the peripheral spectrum of
 $\mathcal E_A^p$ is exactly the set of $q$-th roots of unity.\footnote{Formal
     declaration: \leanid{MPSTensor.IsPeriodic.peripheral_blockTensor}, in
-    \doclink{TNLean/MPS/Periodic/BlockingSpectrum.lean}.}
+    \doclink{TNLean/MPS/CanonicalForm/Periodic/Blocking/Spectrum.lean}.}
 The same line asserts that each compressed block $C_\alpha$ has the printed
 root set as its peripheral spectrum; with the same correction, that spectrum is
 again the set of $q$-th roots of unity.\footnote{Formal declaration:
     \leanid{MPSTensor.IsPeriodic.peripheral_compressed_stepOrbit_eq}, in
-    \doclink{TNLean/MPS/Periodic/BlockingEigenvalues.lean}.}
+    \doclink{TNLean/MPS/CanonicalForm/Periodic/Blocking/Eigenvalues.lean}.}
 The full decomposition derives the cyclic projections, constructs the
 $\gcd(m,p)$ nonzero left-canonical compressed blocks, and, for $p>0$, proves
 irreducibility and exact period $m/\gcd(m,p)$ for each; the isometries, total
 dimension, and equality of matrix product vectors are retained.\footnote{Formal
     declaration:
     \leanid{MPSTensor.IsPeriodic.exists_stepOrbit_blockDecomposition}, in
-    \doclink{TNLean/MPS/Periodic/PrescribedBlocking.lean}.}
+    \doclink{TNLean/MPS/CanonicalForm/Periodic/Blocking/PrescribedBlocking.lean}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}

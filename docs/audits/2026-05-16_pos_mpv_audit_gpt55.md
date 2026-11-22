@@ -8,7 +8,7 @@
 
 **Date:** 2026-05-16  
 **Scope:** scout only; no Lean source edits.  
-**Target stack:** `TNLean/MPS/FundamentalTheorem/SectorBNT/`, plus the arbitrary-input reduction chain under `TNLean/MPS/CanonicalForm/Reduction.lean`, `TNLean/MPS/CanonicalForm/Existence.lean`, and `TNLean/MPS/CanonicalForm/SectorComparison/*.lean`.
+**Target stack:** `TNLean/MPS/FundamentalTheorem/SectorBNT/`, plus the arbitrary-input reduction chain under `TNLean/MPS/Tensor/DirectSum/IrreducibleDecomposition.lean`, `TNLean/MPS/CanonicalForm/NormalBlocks/IrreducibleDecomposition.lean`, and `TNLean/MPS/CanonicalForm/SectorComparison/*.lean`.
 
 ## Executive summary
 
@@ -208,10 +208,10 @@ The same pattern applies upward through `StrongMatch`, `CoeffIdentity`, `Fundame
 
 ### 4.1 Definitions confirming the length-zero issue
 
-* `TNLean/MPS/Defs.lean:90-91` defines `SameMPV₂ A B` as equality for all `N : ℕ` and all `σ : Fin N → Fin d`.
-* `TNLean/MPS/Defs.lean:99-100` defines `SameMPV₂Pos A B` as equality for `0 < N` only.
-* `TNLean/MPS/Defs.lean:70-71` defines `mpv A σ` as `coeff A (List.ofFn σ)`.
-* `TNLean/MPS/CanonicalForm/Existence.lean:476-478` proves, for `σ : Fin 0 → Fin d`, `mpv A σ = (D : ℂ)`.
+* `TNLean/MPS/Tensor/Defs.lean:90-91` defines `SameMPV₂ A B` as equality for all `N : ℕ` and all `σ : Fin N → Fin d`.
+* `TNLean/MPS/Tensor/Defs.lean:99-100` defines `SameMPV₂Pos A B` as equality for `0 < N` only.
+* `TNLean/MPS/Tensor/Defs.lean:70-71` defines `mpv A σ` as `coeff A (List.ofFn σ)`.
+* `TNLean/MPS/CanonicalForm/NormalBlocks/IrreducibleDecomposition.lean:476-478` proves, for `σ : Fin 0 → Fin d`, `mpv A σ = (D : ℂ)`.
 * I also checked this with a temporary `/tmp` Lean file: `lake env lean /tmp/mpv_zero_check.lean` verified
   ```lean
   example {d D : ℕ} (A : MPSTensor d D) (σ : Fin 0 → Fin d) :
@@ -289,7 +289,7 @@ There is also an all-zero edge case: if the stripped nonzero family is empty, `I
 
 **Files likely touched:**
 
-* `TNLean/MPS/Defs.lean` or `SectorBNT/DominantMatch.lean` for helper lemmas:
+* `TNLean/MPS/Tensor/Defs.lean` or `SectorBNT/DominantMatch.lean` for helper lemmas:
   * `SameMPV₂.toSameMPV₂Pos`
   * `SameMPV₂Pos.symm`
   * `SameMPV₂Pos.toEventuallyNonzeroProportionalMPV₂`

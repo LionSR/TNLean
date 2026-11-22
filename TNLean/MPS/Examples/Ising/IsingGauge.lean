@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.Ising.IsingTensors
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
-import TNLean.MPS.FundamentalTheorem.Reduction.ProjectorWeightedSum
+import TNLean.MPS.FundamentalTheorem.Compression.MultiBlockTrace
+import TNLean.MPS.FundamentalTheorem.Compression.ProjectorWeightedSum
 
 /-!
 # The weighted Ising bond object, its stacked product, and the gauge

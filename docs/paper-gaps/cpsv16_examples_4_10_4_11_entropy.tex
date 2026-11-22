@@ -260,7 +260,7 @@ repair.
 
 \paragraph{Local correction for the Example~4.10 tensor.}
 
-The module \doclink{TNLean/MPS/MPDO/CPSVExample410Operator} defines the
+The module \doclink{TNLean/MPS/Examples/CorrelatedFlip/Operator} defines the
 left--right correlated flip at $p=1/4$, not the repeated-left expression. The
 declaration \leanid{MPOTensor.CPSVExample410Operator.M_isMPDO} proves
 positivity at every chain length. Its physical-trace transfer is the nonzero
@@ -285,7 +285,7 @@ correlation length for the corrected tensor.
 
 \paragraph{Project-derived Example~4.10 spectra and entropies.}
 
-The module \doclink{TNLean/MPS/MPDO/CPSVExample410Spectrum} identifies each
+The module \doclink{TNLean/MPS/Examples/CorrelatedFlip/Spectrum} identifies each
 normalized reduced operator as an isometric image of a diagonal bond-window
 distribution. The declarations
 \leanid{MPOTensor.CPSVExample410Spectrum.charpoly_roots_one},
@@ -311,7 +311,7 @@ root multisets
 These are consequences of the corrected $p=1/4$ interpretation, not formulas
 printed in Ref.~\cite{Cirac2016MPDO_arXiv}.
 
-The module \doclink{TNLean/MPS/MPDO/CPSVExample410Entropy} derives the block
+The module \doclink{TNLean/MPS/Examples/CorrelatedFlip/Entropy} derives the block
 entropies from these root multisets. The declarations
 \leanid{MPOTensor.CPSVExample410Entropy.blockEntropy_one},
 \leanid{MPOTensor.CPSVExample410Entropy.blockEntropy_two},
@@ -341,7 +341,7 @@ into failure of saturation, and
 \paragraph{Certified scalar endpoints.}
 
 The module
-\doclink{TNLean/MPS/MPDO/CPSVExamples410411Arithmetic} certifies the scalar
+\doclink{TNLean/MPS/Examples/CorrelatedFlip/EntropyArithmetic} certifies the scalar
 endpoints. The declarations
 \leanid{CPSVExamples410411Arithmetic.example410_integer_inequality} and
 \leanid{CPSVExamples410411Arithmetic.example411_integer_inequality} prove the
@@ -353,7 +353,7 @@ project in commit \texttt{a79bfc93314f3f721abecdbc184065497672d7e5}.
 
 \paragraph{Project-derived effective-binary finite-ring blocks.}
 
-The module \doclink{TNLean/MPS/MPDO/CPSVExample411BinarySupport} proves the
+The module \doclink{TNLean/MPS/Examples/BinaryCycle/BinarySupport} proves the
 exact internal edge product in
 \leanid{MPOTensor.CPSVExample411BinarySupport.internalEdgeProduct_eq}, every
 entry of $W^m$ in
@@ -380,7 +380,7 @@ two-qubit site by
     \label{eq:cpsv16_examples_4_10_4_11_entropy_example411_support_inclusion}
 \end{align}
 It is not identified with the four-dimensional site by an equivalence. The
-module \doclink{TNLean/MPS/MPDO/CPSVExample411Ambient} proves the supported
+module \doclink{TNLean/MPS/Examples/BinaryCycle/Ambient} proves the supported
 one-site slice and vanishing on unsupported local physical legs. The
 declarations
 \leanid{MPOTensor.CPSVExample411Ambient.mpo_ambientM_eq_singleKrausMap} and
@@ -396,7 +396,7 @@ declaration
 
 \paragraph{Project-derived source-ZCL obstruction.}
 
-The module \doclink{TNLean/MPS/MPDO/CPSVExample411SourceZCL} records
+The module \doclink{TNLean/MPS/Examples/BinaryCycle/SourceZCL} records
 \begin{align}
     \rho^{(4)}_2(00,00)
         &= \frac{14}{41},
@@ -461,7 +461,7 @@ no claim about that convention.
 
 \paragraph{Project-derived length-four spectra.}
 
-The module \doclink{TNLean/MPS/MPDO/CPSVExample411Spectrum} proves the
+The module \doclink{TNLean/MPS/Examples/BinaryCycle/Spectrum} proves the
 effective nonzero root multisets
 \begin{align}
     L=1:\quad
@@ -498,7 +498,7 @@ These finite-periodic spectra are project-derived, not source statements.
 
 \paragraph{Project-derived entropy and saturation obstruction.}
 
-The module \doclink{TNLean/MPS/MPDO/CPSVExample411Entropy} proves that the
+The module \doclink{TNLean/MPS/Examples/BinaryCycle/Entropy} proves that the
 effective binary tensor is an MPDO and evaluates the four block entropies from
 the root multisets. In natural-logarithm units,
 \begin{align}

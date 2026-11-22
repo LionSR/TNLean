@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.CZX.CZXTensor
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
+import TNLean.MPS.FundamentalTheorem.Compression.MultiBlockTrace
 
 /-!
 # CZX plus identity: a non-simple fusion with length-oscillating integer coefficients

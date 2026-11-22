@@ -362,7 +362,7 @@ not viable; path β is the correct next step.
 * `TNLean/MPS/FundamentalTheorem/Full/ProportionalExpansion.lean:434`
   (`eventuallyNonzeroProportionalMPV₂_tail_succ_of_total_and_selected`
    — the downstream consumer requiring the exact identity).
-* `TNLean/MPS/BNT/Basic.lean:172`
+* `TNLean/MPS/CanonicalForm/BNT/Basic.lean:172`
   (`coefficient_eventually_eq_of_eventually_linearIndependent` — the
   LI coefficient-matching tool, applicable only to a single LI family).
 * `TNLean/MPS/FundamentalTheorem/SectorDecomposition/` (path β

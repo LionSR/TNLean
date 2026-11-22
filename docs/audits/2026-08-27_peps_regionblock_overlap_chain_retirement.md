@@ -43,13 +43,13 @@ modules that own their subject matter, with statements and proofs unchanged:
 
 | Declaration | From | To |
 |---|---|---|
-| `TNLean.PEPS.regionPhysicalConfigCongr` | `UnionInjectivityOverlap5.lean` | `TNLean/PEPS/RegionBlock/Basic.lean` |
-| `TNLean.PEPS.regionPhysicalConfigCongr_apply` | `UnionInjectivityOverlap5.lean` | `TNLean/PEPS/RegionBlock/Basic.lean` |
-| `TNLean.PEPS.regionBlockedWeight_congr` | `UnionInjectivityOverlap5.lean` | `TNLean/PEPS/RegionBlock/Basic.lean` |
-| `TNLean.PEPS.isRegionBoundaryEdge_congr` | `UnionInjectivityOverlap3.lean` | `TNLean/PEPS/RegionBlock/Basic.lean` |
-| `TNLean.PEPS.regionBoundaryConfigCongr` | `UnionInjectivityOverlap3.lean` | `TNLean/PEPS/RegionBlock/Basic.lean` |
-| `TNLean.PEPS.regionBoundaryConfigCongr_apply` | `UnionInjectivityOverlap3.lean` | `TNLean/PEPS/RegionBlock/Basic.lean` |
-| `TNLean.PEPS.ThreeBlockGeometry.complPhysical_surjective` | `UnionInjectivityOverlap5.lean` | `TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean` |
+| `TNLean.PEPS.regionPhysicalConfigCongr` | `UnionInjectivityOverlap5.lean` | `TNLean/PEPS/Tensor/Region/RegionBlock.lean` |
+| `TNLean.PEPS.regionPhysicalConfigCongr_apply` | `UnionInjectivityOverlap5.lean` | `TNLean/PEPS/Tensor/Region/RegionBlock.lean` |
+| `TNLean.PEPS.regionBlockedWeight_congr` | `UnionInjectivityOverlap5.lean` | `TNLean/PEPS/Tensor/Region/RegionBlock.lean` |
+| `TNLean.PEPS.isRegionBoundaryEdge_congr` | `UnionInjectivityOverlap3.lean` | `TNLean/PEPS/Tensor/Region/RegionBlock.lean` |
+| `TNLean.PEPS.regionBoundaryConfigCongr` | `UnionInjectivityOverlap3.lean` | `TNLean/PEPS/Tensor/Region/RegionBlock.lean` |
+| `TNLean.PEPS.regionBoundaryConfigCongr_apply` | `UnionInjectivityOverlap3.lean` | `TNLean/PEPS/Tensor/Region/RegionBlock.lean` |
+| `TNLean.PEPS.ThreeBlockGeometry.complPhysical_surjective` | `UnionInjectivityOverlap5.lean` | `TNLean/PEPS/Injectivity/Region/DisjointUnionSetup.lean` |
 
 The three boundary-transport results moved as well because the weight transport
 is stated in terms of them, and `Basic.lean` is upstream of the file that held
@@ -64,17 +64,17 @@ The `PEPS/RegionBlock` import aggregator was regenerated.
 
 ## Imports
 
-Two files imported the waypoint: `TNLean/PEPS/RegionTransportInsertion.lean` and
-`TNLean/PEPS/RegionBlock/CoarseThreeSite11.lean`. `CoarseThreeSite11` reaches
+Two files imported the waypoint: `TNLean/PEPS/FundamentalTheorem/Normal/RegionTransportInsertion.lean` and
+`TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/SingleEdgeTransfer.lean`. `CoarseThreeSite11` reaches
 both new homes through its remaining imports and lost the line outright.
 
 `RegionTransportInsertion` did not. The 2026-08-27 cycle-and-edge audit
 (`docs/audits/2026-08-27_peps_cycle_edge_simp_retirement.md` §Imports) had
-dropped that file's `TNLean.PEPS.RegionBlock.Insertion` line on the ground that
+dropped that file's `TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.Insertion` line on the ground that
 the waypoint still reached it; with the waypoint gone the line was restored, and
 it now names the module that supplies `regionInsertedCoeff`. The same audit had
-dropped `TNLean.PEPS.RegionBlock.Algebra` from
-`TNLean/PEPS/RegionTransferCovariance.lean` on the same ground, and the root
+dropped `TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.InsertionAlgebra` from
+`TNLean/PEPS/FundamentalTheorem/Normal/RegionTransferCovariance.lean` on the same ground, and the root
 build caught the consequence: `regionInsertedCoeff_injective` became unknown
 there. That line was restored too. Both restorations name a module the file
 genuinely uses; both files now reach a far smaller cone than the waypoint gave

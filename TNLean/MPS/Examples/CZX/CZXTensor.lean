@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.Data.Matrix.Basis
-import TNLean.MPS.FundamentalTheorem.Reduction.ExplicitGauge
-import TNLean.MPS.MPDO.OperatorProduct
+import TNLean.MPS.FundamentalTheorem.Compression.ExplicitGauge
+import TNLean.MPS.Operator.Product.OperatorProduct
 
 /-!
 # CZX: the undecorated matrix product operator and its stacked square

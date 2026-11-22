@@ -142,7 +142,7 @@ algebraic rate hypothesis, but preparation does not request a four-column
 isometry into that one-site space: its ordinary circuit blocks have at
 least six sites, or its exact short-ring branch is used. The usual AKLT
 transfer matrix has residual eigenvalue `-1/3` on the three Pauli directions
-(see `MPS/Examples/AKLTCorrelation.lean`), giving periodic squared norm
+(see `MPS/Examples/AKLT/AKLTCorrelation.lean`), giving periodic squared norm
 `1+3(-1/3)^N`. Its one-site periodic vector is zero, so the general theorem
 correctly requires a nonzero finite-ring replacement before claiming an
 all-positive-length normalized family. This paragraph is a mathematical

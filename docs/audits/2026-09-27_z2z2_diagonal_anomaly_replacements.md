@@ -1,7 +1,7 @@
 # Diagonal Z2 x Z2 anomaly declarations replaced by the full-group computation
 
 This audit records the declarations removed from
-`TNLean/MPS/Examples/AnomalousCondensation/Z2Z2AnomalyClass.lean` when the
+`TNLean/MPS/Examples/Z2Z2/Z2Z2AnomalyClass.lean` when the
 anomaly computation for the diagonal subgroup `{e, xy}` was replaced by the
 computation for the full group, carried out for the dressed exact
 representation `Z2Z2Condensation.kleinFamily`. It is the audit note required by
@@ -40,7 +40,7 @@ All names are in the namespace `Z2Z2Condensation`.
 ## Later rename (2026-10-10)
 
 The order-two family of `Z2Z2AnomalyClass` was generalized to
-`TNLean/MPS/Symmetry/MPOSymmetry/AssociatorOrderTwo.lean`, so the replacements above now
+`TNLean/MPS/FundamentalTheorem/OperatorGroup/AssociatorOrderTwo.lean`, so the replacements above now
 read as follows (names outside `Z2Z2Condensation` are in `MPOTensor.GroupFamily`):
 
 - `pairFamily A`: `orderTwoFamily eTensor A`.

@@ -5,11 +5,11 @@ Authors: Sirui Lu
 -/
 import Mathlib.Data.Matrix.Basis
 import QICLean.Kraus.Injectivity
-import QICLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.Examples.KramersWannier.KramersWannierTensor
-import TNLean.MPS.FundamentalTheorem.Reduction.ExplicitGauge
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
-import TNLean.MPS.MPDO.OperatorProduct
+import TNLean.MPS.FundamentalTheorem.Compression.ExplicitGauge
+import TNLean.MPS.FundamentalTheorem.Compression.MultiBlockTrace
+import TNLean.MPS.Operator.Product.OperatorProduct
 
 /-!
 # Kramers–Wannier fusion `D~² = 2^L (1 + η) T` on the periodic Ising chain

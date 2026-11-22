@@ -6,12 +6,12 @@ conclusion forgotten, and each is proved by destructuring the rung above and
 repackaging the surviving components. The top of the ladder is the pair
 
 * `MPSTensor.exists_blockDecomp_of_commuting_projections_with_letter_and_isometry`
-  (`TNLean/MPS/CanonicalForm/CyclicSectors/CommutingProj.lean`), and
+  (`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CommutingProj.lean`), and
 * `MPSTensor.exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry`
-  (`TNLean/MPS/CanonicalForm/CyclicSectors/FixedAdjoint.lean`),
+  (`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/FixedAdjoint.lean`),
 
 which is live — it is consumed at
-`TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorRelation.lean` — and is
+`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CyclicSectorRelation.lean` — and is
 the pair the blueprint tags in
 `blueprint/src/appendix/ft_mps/ch09_canonical_blocking_and_sectors.tex`.
 
@@ -22,9 +22,9 @@ This audit records their removal.
 
 | Removed | Replacement |
 | --- | --- |
-| `MPSTensor.exists_blockDecomp_of_commuting_projections` (`TNLean/MPS/CanonicalForm/CyclicSectors/CommutingProj.lean`) | `MPSTensor.exists_blockDecomp_of_commuting_projections_with_letter` (same file), whose conclusion adds the corner-letter identity |
-| `MPSTensor.exists_blockDecomp_of_adjoint_fixed_projections` (`TNLean/MPS/CanonicalForm/CyclicSectors/FixedAdjoint.lean`) | `MPSTensor.exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry` (same file) |
-| `MPSTensor.exists_blockDecomp_of_adjoint_fixed_projections_with_letter` (`TNLean/MPS/CanonicalForm/CyclicSectors/FixedAdjoint.lean`) | `MPSTensor.exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry` (same file) |
+| `MPSTensor.exists_blockDecomp_of_commuting_projections` (`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CommutingProj.lean`) | `MPSTensor.exists_blockDecomp_of_commuting_projections_with_letter` (same file), whose conclusion adds the corner-letter identity |
+| `MPSTensor.exists_blockDecomp_of_adjoint_fixed_projections` (`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/FixedAdjoint.lean`) | `MPSTensor.exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry` (same file) |
+| `MPSTensor.exists_blockDecomp_of_adjoint_fixed_projections_with_letter` (`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/FixedAdjoint.lean`) | `MPSTensor.exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry` (same file) |
 
 Each removed statement is its surviving neighbour with hypotheses unchanged and
 one conjunct dropped from the existential body: the commuting-projection rung
@@ -70,9 +70,9 @@ removed their isometry-free rungs.
 
 | Removed | Replacement |
 | --- | --- |
-| `MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter` (`TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorRelation.lean`) | `MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry` (same file) |
+| `MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter` (`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/CyclicSectorRelation.lean`) | `MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry` (same file) |
 | `MPSTensor.exists_cyclic_sector_decomp_after_blocking` (same file) | the same isometry rung |
-| `MPSTensor.exists_compressedTensor_of_supported_projection_with_letter` (`TNLean/MPS/CanonicalForm/CyclicSectors/Compression.lean`) | `MPSTensor.exists_compressedTensor_of_supported_projection_with_letter_and_isometry` (same file) |
+| `MPSTensor.exists_compressedTensor_of_supported_projection_with_letter` (`TNLean/MPS/CanonicalForm/Periodic/CyclicSectors/Compression.lean`) | `MPSTensor.exists_compressedTensor_of_supported_projection_with_letter_and_isometry` (same file) |
 | `MPSTensor.exists_compressedTensor_of_supported_projection` (same file) | the same isometry rung |
 
 Each removed rung had the hypotheses of its replacement and forgot the

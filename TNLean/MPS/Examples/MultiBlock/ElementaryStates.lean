@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.MultiBlock.GHZSectors
 import TNLean.MPS.Examples.MultiBlock.RepeatedBlock
-import TNLean.MPS.Examples.GHZ
-import TNLean.MPS.Overlap.Basic
+import TNLean.MPS.Examples.GHZ.GHZ
+import TNLean.MPS.Tensor.Overlap
 
 /-!
 # GHZ and product states: the upper-triangular sources generate the review's states

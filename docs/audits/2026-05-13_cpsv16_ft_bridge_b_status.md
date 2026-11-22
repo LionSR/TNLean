@@ -10,7 +10,7 @@ explicitly open with documented obstruction.
 
 This memo documents the current state of the connection between
 `IsCanonicalFormBNT` (the existing one-copy-per-sector local hypothesis in
-`TNLean/MPS/BNT/Construction.lean`) and the paper-faithful per-block
+`TNLean/MPS/CanonicalForm/BNT/Construction.lean`) and the paper-faithful per-block
 projection lemmas of
 `TNLean/MPS/FundamentalTheorem/SectorDecomposition/PerBlockProjection.lean`
 (Plan C, PR #1643).

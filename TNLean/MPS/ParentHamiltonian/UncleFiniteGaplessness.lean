@@ -3,11 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.ParentHamiltonian.UncleGroundSpace
-import TNLean.MPS.ParentHamiltonian.UncleGroundGram
-import TNLean.MPS.ParentHamiltonian.UncleTrialGroundProjection
-import TNLean.MPS.ParentHamiltonian.UncleVariationalAsymptotics
-import TNLean.MPS.ParentHamiltonian.UncleEndpointEnergyBound
+import TNLean.MPS.ParentHamiltonian.Uncle.UncleGroundSpace
+import TNLean.MPS.ParentHamiltonian.UncleNormGrowth
+import TNLean.MPS.ParentHamiltonian.Uncle.UncleVariationalEigenvalue
+import TNLean.MPS.ParentHamiltonian.Uncle.UncleEndpointEnergyBound
 
 /-!
 # Generic finite-volume gaplessness of the actual uncle Hamiltonian

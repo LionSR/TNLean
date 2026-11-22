@@ -4,10 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
-import TNLean.PEPS.AreaLaw.ZeroBoundary
-import TNLean.PEPS.AreaLaw.Scan.AmbientDepth
-import TNLean.PEPS.AreaLaw.Geometry.CellCounting
-import TNLean.PEPS.AreaLaw.Amplification.RadiusScales
+import TNLean.PEPS.AreaLaw.Regions.ZeroBoundary
+import TNLean.PEPS.AreaLaw.Collar.AmbientDepth
+import TNLean.PEPS.AreaLaw.Squares.CellCounting
+import TNLean.PEPS.AreaLaw.Scales.RadiusScales
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

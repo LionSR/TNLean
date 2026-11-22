@@ -110,14 +110,14 @@ The four LEGACY DEAD BRANCH labels classified in
 
 The following 10 theorems had their `private` keyword removed:
 
-In `TNLean/MPS/CanonicalForm/NormalReduction/TPGauge.lean`:
+In `TNLean/MPS/CanonicalForm/NormalBlocks/TPGauge.lean`:
 
 * `exists_pgvwc07_unital_dualDiag_data_of_irreducible`
 * `exists_pgvwc07_unital_dualDiag_blockwise`
 * `exists_pgvwc07_unital_dualDiag_from_arbitrary_with_zeroTail`
 * `exists_pgvwc07_unital_dualDiag_from_arbitrary_posMPV_bondDimBound`
 
-In `TNLean/MPS/CanonicalForm/NormalReduction/WeightNormalization.lean`:
+In `TNLean/MPS/CanonicalForm/NormalBlocks/WeightNormalization.lean`:
 
 * `PGVWC07PositiveLengthWitness.exists_weight_normalization`
 * `PGVWC07PositiveLengthWitness.exists_weight_normalization_projective`
@@ -129,7 +129,7 @@ In `TNLean/MPS/CanonicalForm/NormalReduction/WeightNormalization.lean`:
 The structure `MPSTensor.PGVWC07PositiveLengthWitness` was already public
 during Step 5.2 (because of cross-file usage between `TPGauge.lean` and
 `WeightNormalization.lean`); confirmed by
-`grep -n "structure PGVWC07PositiveLengthWitness" TNLean/MPS/CanonicalForm/NormalReduction/TPGauge.lean`
+`grep -n "structure PGVWC07PositiveLengthWitness" TNLean/MPS/CanonicalForm/NormalBlocks/TPGauge.lean`
 returning `73:structure PGVWC07PositiveLengthWitness (A : MPSTensor d D) where`
 with no `private` keyword. Likewise the existence theorem
 `exists_pgvwc07_positiveLengthWitness` and the bond-dim bound theorem

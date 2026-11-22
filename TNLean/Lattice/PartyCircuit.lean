@@ -43,6 +43,7 @@ import TNLean.Lattice.PartyCircuit.OriginalCircuitLift
 import TNLean.Lattice.PartyCircuit.OriginalCircuitSequence
 import TNLean.Lattice.PartyCircuit.OriginalCircuitSourceBound
 import TNLean.Lattice.PartyCircuit.OriginalProducerResources
+import TNLean.Lattice.PartyCircuit.PairEffectChain
 import TNLean.Lattice.PartyCircuit.PairEffectElimination
 import TNLean.Lattice.PartyCircuit.PairEffectSourcePreparation
 import TNLean.Lattice.PartyCircuit.PairSourceCombination

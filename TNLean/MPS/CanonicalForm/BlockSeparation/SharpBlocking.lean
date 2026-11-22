@@ -1,0 +1,246 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import QICLean.Channel.KrausMap.KrausGauge
+import TNLean.MPS.CanonicalForm.BNTPresentation.Refinement
+import TNLean.MPS.CanonicalForm.BlockSeparation.DirectSumSelectors
+import TNLean.MPS.CanonicalForm.BlockSeparation.BNTDirectSum
+import TNLean.MPS.CanonicalForm.BlockSeparation.SimultaneousBlocking
+import TNLean.MPS.Tensor.Gauge.WordTupleGauge
+
+/-!
+# Sharp blocking bound for literal CPSV canonical form
+
+A CPSV basis of normal tensors whose total representative bond dimension is at most `K`
+has simultaneous product-algebra span at a positive length no greater than `3 * K ^ 5`.
+Applying this estimate to the representatives of literal CPSV canonical-form data
+proves Proposition `propblockinj` of arXiv:1606.00608.
+
+## Main results
+
+* `IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop_le_three_cap_pow_five`:
+  the quantitative simultaneous spanning theorem for a source BNT.
+* `IsCPSVCanonicalForm.exists_bnt_biCF_after_blocking_le_three_bondDim_pow_five`:
+  literal CPSV canonical form becomes block-injective canonical form after blocking at most
+  `3 * D ^ 5` sites.
+
+## References
+
+* arXiv:1606.00608, lines 317--345.
+-/
+
+open scoped Matrix BigOperators
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+/-- The block-separation estimate leaves room for one additional site. -/
+private theorem three_mul_pred_mul_pow_four_add_one_succ_le_three_mul_pow_five
+    {K : ℕ} (hK : 0 < K) :
+    3 * ((K - 1) * (K ^ 4 + 1)) + 1 ≤ 3 * K ^ 5 := by
+  have hKleK4 : K ≤ K ^ 4 := by
+    simpa using pow_le_pow_right' (a := K) hK (by omega : 1 ≤ 4)
+  have hCore : (K - 1) * (K ^ 4 + 1) < K ^ 5 := by
+    calc
+      (K - 1) * (K ^ 4 + 1) = (K - 1) * K ^ 4 + (K - 1) := by ring
+      _ < (K - 1) * K ^ 4 + K ^ 4 := Nat.add_lt_add_left (by omega) _
+      _ = ((K - 1) + 1) * K ^ 4 := by ring
+      _ = K ^ 5 := by rw [Nat.sub_add_cancel (by omega)]; ring
+  omega
+
+/-- Normal, pairwise gauge-phase inequivalent blocks of positive dimensions
+whose total dimension is at most \(K\) have simultaneous word span at a
+positive length \(L\) satisfying \(L+1\leq3K^5\).
+Source: arXiv:1606.00608, lines 317--345, and the quantum Wielandt bound. -/
+theorem exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five_of_isNormalTensor
+    {g K : ℕ} {dim : Fin g → ℕ}
+    (B : (j : Fin g) → MPSTensor d (dim j))
+    (hK : 0 < K) (hDim : ∑ j, dim j ≤ K)
+    (hNormal : ∀ j, IsNormalTensor (B j))
+    (hDistinct : BlocksNotGaugePhaseEquiv B) :
+    ∃ L : ℕ, 0 < L ∧ L + 1 ≤ 3 * K ^ 5 ∧ WordTupleSpanTop B L := by
+  classical
+  have hdimPos (j : Fin g) : 0 < dim j :=
+    Nat.pos_of_ne_zero (hNormal j).bondDim_ne_zero
+  have hdimLe : ∀ j, dim j ≤ K := by
+    intro j
+    exact (Finset.single_le_sum (fun k _ => Nat.zero_le (dim k))
+      (Finset.mem_univ j)).trans hDim
+  have hK4pos : 0 < K ^ 4 := Nat.pow_pos hK
+  let : ∀ j : Fin g, NeZero (dim j) := fun j => ⟨(hdimPos j).ne'⟩
+  choose σ _hσ _hσfix hTP hGauge hPrim hIrr using
+    fun j => (hNormal j).exists_tpGauge
+  let prepared : (j : Fin g) → MPSTensor d (dim j) :=
+    fun j => Kraus.tpGauge (B j) (σ j)
+  have hPreparedDistinct : BlocksNotGaugePhaseEquiv (d := d) prepared := by
+    intro j k hjk hdim hGPE
+    apply hDistinct j k hjk hdim
+    exact gaugePhaseEquiv_of_gaugeEquiv_left_right_cast hdim
+      (hGauge j) (by simpa [prepared] using hGPE) (hGauge k)
+  have hPreparedNormal : ∀ j, Kraus.IsNormal (prepared j) := by
+    intro j
+    exact isNormal_of_tp_primitive_irreducible
+      (prepared j) (hTP j) (hPrim j) (hIrr j)
+  have hBlk0 : ∀ j, Kraus.IsNBlkInjective (prepared j) (K ^ 4) := by
+    intro j
+    have hOwn : Kraus.IsNBlkInjective (prepared j) ((dim j) ^ 4) :=
+      isNBlkInjective_pow_four_of_isNormal_leftCanonical
+        (prepared j) (hTP j) (hPreparedNormal j)
+    exact isNBlkInjective_of_le (Nat.pow_pos (hdimPos j)) hOwn
+      (Nat.pow_le_pow_left (hdimLe j) 4)
+  by_cases hCountZero : g = 0
+  · subst g
+    refine ⟨1, by omega, ?_, ?_⟩
+    · have hK5pos : 0 < K ^ 5 := Nat.pow_pos hK
+      omega
+    · unfold WordTupleSpanTop
+      apply top_unique
+      intro X _
+      have hX : X = 0 := by
+        funext j
+        exact Fin.elim0 j
+      rw [hX]
+      exact Submodule.zero_mem _
+  by_cases hCountOne : g = 1
+  · refine ⟨K ^ 4, hK4pos, ?_, ?_⟩
+    · have hProduct : 3 * K ^ 4 ≤ 3 * K ^ 5 := by
+        calc
+          3 * K ^ 4 ≤ (3 * K) * K ^ 4 := Nat.mul_le_mul_right _ (by omega)
+          _ = 3 * K ^ 5 := by ring
+      omega
+    · have hPreparedSpan :=
+        wordTupleSpanTop_of_card_eq_one_of_isNBlkInjective
+          prepared hCountOne hBlk0
+      exact wordTupleSpanTop_of_family_gaugeEquiv_symm hPreparedSpan hGauge
+  · have hCountTwo : 2 ≤ g := by omega
+    have hBlk1 : ∀ j, Kraus.IsNBlkInjective (prepared j) (K ^ 4 + 1) := by
+      intro j
+      exact isNBlkInjective_of_le hK4pos (hBlk0 j) (by omega)
+    have hBlk3 : ∀ j, Kraus.IsNBlkInjective (prepared j)
+        ((K ^ 4 + 1) + ((K ^ 4 + 1) + (K ^ 4 + 1))) := by
+      intro j
+      exact isNBlkInjective_of_le hK4pos (hBlk0 j) (by omega)
+    have hIrrBlocks : HasIrreducibleBlocks (d := d) prepared :=
+      HasIrreducibleBlocks.ofForall hIrr
+    have hLeft : IsLeftCanonicalBlockFamily (d := d) prepared :=
+      IsLeftCanonicalBlockFamily.ofForall hTP
+    have hOverlap : HasNormalizedSelfOverlap (d := d) prepared :=
+      HasNormalizedSelfOverlap.ofForall fun j =>
+        overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
+          (prepared j) (hIrr j) (hTP j) (hPrim j)
+    have hPreparedSpan : WordTupleSpanTop prepared
+        ((g - 1) * ((K ^ 4 + 1) + ((K ^ 4 + 1) + (K ^ 4 + 1)))) :=
+      wordTupleSpanTop_threeBlock_mul_pred_of_blocksNotGaugePhaseEquiv_c1
+        prepared hIrrBlocks hLeft hOverlap hPreparedDistinct
+        hBlk0 hBlk1 hBlk3 hK4pos hCountTwo
+    have hSpan : WordTupleSpanTop B
+        ((g - 1) * ((K ^ 4 + 1) + ((K ^ 4 + 1) + (K ^ 4 + 1)))) :=
+      wordTupleSpanTop_of_family_gaugeEquiv_symm hPreparedSpan hGauge
+    refine ⟨(g - 1) * ((K ^ 4 + 1) + ((K ^ 4 + 1) + (K ^ 4 + 1))),
+      Nat.mul_pos (by omega) (by omega), ?_, hSpan⟩
+    have hCountLeSum : g ≤ ∑ j, dim j := by
+      calc
+        g = ∑ _j : Fin g, 1 := by simp
+        _ ≤ ∑ j : Fin g, dim j :=
+          Finset.sum_le_sum fun j _ => hdimPos j
+    have hCountLe : g ≤ K := hCountLeSum.trans hDim
+    have hPredLe : g - 1 ≤ K - 1 := Nat.sub_le_sub_right hCountLe 1
+    have hFirst :
+        (g - 1) * ((K ^ 4 + 1) + ((K ^ 4 + 1) + (K ^ 4 + 1))) ≤
+          (K - 1) * ((K ^ 4 + 1) + ((K ^ 4 + 1) + (K ^ 4 + 1))) :=
+      Nat.mul_le_mul_right _ hPredLe
+    refine (Nat.add_le_add_right hFirst 1).trans ?_
+    calc
+      (K - 1) * ((K ^ 4 + 1) + ((K ^ 4 + 1) + (K ^ 4 + 1))) + 1 =
+          3 * ((K - 1) * (K ^ 4 + 1)) + 1 := by ring
+      _ ≤ 3 * K ^ 5 :=
+        three_mul_pred_mul_pow_four_add_one_succ_le_three_mul_pow_five hK
+
+/-- A CPSV basis of normal tensors with total representative bond dimension
+at most \(K\) has simultaneous product-algebra span at a positive length
+\(L\) with \(L+1\leq3K^5\). The additional site in the parent-interaction
+bound is included in this estimate. Source: arXiv:1606.00608, lines 317--345. -/
+theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five
+    {g K : ℕ} {dim : Fin g → ℕ}
+    {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
+    (hK : 0 < K) (hDim : ∑ j, dim j ≤ K)
+    (hBNT : IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩)) :
+    ∃ L : ℕ, 0 < L ∧ L + 1 ≤ 3 * K ^ 5 ∧ WordTupleSpanTop B L :=
+  exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five_of_isNormalTensor
+    B hK hDim hBNT.blocks_normal hBNT.blocks_not_gaugePhaseEquiv
+
+/-- A CPSV basis of normal tensors with total representative bond dimension
+at most \(K\) has simultaneous product-algebra span at a positive length
+at most \(3K^5\). Source: arXiv:1606.00608, lines 317--345. -/
+theorem IsCPSVBasisOfNormalTensors.exists_positive_wordTupleSpanTop_le_three_cap_pow_five
+    {g K : ℕ} {dim : Fin g → ℕ}
+    {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
+    (hK : 0 < K) (hDim : ∑ j, dim j ≤ K)
+    (hBNT : IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩)) :
+    ∃ L : ℕ, 0 < L ∧ L ≤ 3 * K ^ 5 ∧ WordTupleSpanTop B L := by
+  obtain ⟨L, hL, hBound, hSpan⟩ :=
+    hBNT.exists_positive_wordTupleSpanTop_succ_le_three_cap_pow_five hK hDim
+  exact ⟨L, hL, by omega, hSpan⟩
+
+/-- The representative dimensions in literal CPSV canonical-form data sum to at most
+the ambient bond dimension. -/
+theorem CPSVCanonicalFormData.sum_representative_dim_le
+    {A : MPSTensor d D} (data : CPSVCanonicalFormData A) :
+    ∑ j : Fin data.phaseClasses.g,
+      data.dim (data.representativeIndex j) ≤ D := by
+  classical
+  let firstCopyIndex : Fin data.phaseClasses.g → Fin data.r := fun j =>
+    data.classCopyEquiv ⟨j, ⟨0, data.phaseClasses.copies_pos j⟩⟩
+  have hFirstCopyIndex : ∀ j, firstCopyIndex j = data.representativeIndex j := by
+    intro j
+    exact mpvPhaseClassData_enum_zero_eq_repr data.blocks j
+  have hInjective : Function.Injective firstCopyIndex := by
+    intro j k hjk
+    have hSigma := data.classCopyEquiv.injective hjk
+    exact congrArg Sigma.fst hSigma
+  calc
+    (∑ j : Fin data.phaseClasses.g,
+        data.dim (data.representativeIndex j)) =
+        ∑ j : Fin data.phaseClasses.g, data.dim (firstCopyIndex j) := by
+          apply Finset.sum_congr rfl
+          intro j _
+          rw [hFirstCopyIndex j]
+    _ = ∑ k ∈ Finset.image firstCopyIndex Finset.univ, data.dim k :=
+      (Finset.sum_image hInjective.injOn).symm
+    _ ≤ ∑ k ∈ Finset.univ, data.dim k :=
+      Finset.sum_le_sum_of_subset (Finset.subset_univ _)
+    _ = ∑ k : Fin data.r, data.dim k := rfl
+    _ ≤ D := data.total_dim_le
+
+/-- **CPSV16 Proposition `propblockinj`.** A tensor in literal CPSV canonical form has a
+basis of normal tensors that becomes simultaneously block-injective after blocking a
+positive number `L ≤ 3 * D ^ 5` of sites.
+
+The conclusion is the one-letter span of the full product algebra of the chosen BNT.
+
+Source: arXiv:1606.00608, lines 317--345. -/
+theorem IsCPSVCanonicalForm.exists_bnt_biCF_after_blocking_le_three_bondDim_pow_five
+    {A : MPSTensor d D} [NeZero D] (hA : IsCPSVCanonicalForm A) :
+    ∃ g : ℕ, ∃ dim : Fin g → ℕ,
+      ∃ B : (j : Fin g) → MPSTensor d (dim j),
+        IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) ∧
+        ∃ L : ℕ, 0 < L ∧ L ≤ 3 * D ^ 5 ∧
+          WordTupleSpanTop (fun j => Kraus.blockTensor (B j) L) 1 := by
+  let data := Classical.choice hA
+  let ref := data.bntRefinement
+  let dim : Fin data.phaseClasses.g → ℕ := fun j =>
+    data.dim (data.representativeIndex j)
+  let B : (j : Fin data.phaseClasses.g) → MPSTensor d (dim j) := fun j =>
+    data.blocks (data.representativeIndex j)
+  have hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) := by
+    simpa [dim, B] using ref.representativesBNT
+  obtain ⟨L, hL, hLbound, hSpan⟩ :=
+    hBNT.exists_positive_wordTupleSpanTop_le_three_cap_pow_five
+      (NeZero.pos D) (by simpa [dim] using data.sum_representative_dim_le)
+  exact ⟨data.phaseClasses.g, dim, B, hBNT, L, hL, hLbound,
+    wordTupleSpanTop_blockTensor_one B hSpan⟩
+
+end MPSTensor

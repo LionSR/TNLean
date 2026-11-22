@@ -5,11 +5,11 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.ProductVector
-import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Entropy.Cut.RegionUnion
 import QICLean.ManyBody.Sites.Lattice.Chain
-import QICLean.Analysis.CfcConjugation
-import QICLean.Analysis.EnergyTruncation
-import QICLean.Analysis.GroundEnergyBounds
+import QICLean.Analysis.FunctionalCalculus.CfcConjugation
+import QICLean.Spectral.Filter.EnergyTruncation
+import QICLean.Spectral.Eigenvalue.GroundEnergyBounds
 import Mathlib.Analysis.CStarAlgebra.Matrix
 
 /-!

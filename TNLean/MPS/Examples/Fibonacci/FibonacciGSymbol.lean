@@ -3,12 +3,12 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import QICLean.Algebra.ComplexSqrt
+import QICLean.Analysis.Real.ComplexSqrt
 import TNLean.MPS.Examples.Fibonacci.FibonacciDimension
 import TNLean.MPS.Examples.Fibonacci.FibonacciFSymbol
-import TNLean.MPS.MPDO.BondSimilarity
-import TNLean.MPS.MPDO.SimpleScaling
-import TNLean.MPS.Symmetry.MPOSymmetry.Similarity
+import TNLean.MPS.Operator.Periodic.BondSimilarity
+import TNLean.MPS.CanonicalForm.SimpleMPO.SimpleScaling
+import TNLean.MPS.Symmetry.MPOSymmetry.Fusion.Similarity
 
 /-!
 # Fibonacci string-net: the source's G-symbol tensor and the F-symbol blocks

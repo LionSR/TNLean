@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import Mathlib.NumberTheory.Real.GoldenRatio
 import TNLean.MPS.Examples.Fibonacci.FibonacciAnomaly
-import TNLean.MPS.MPDO.DirectSum
+import TNLean.MPS.Operator.Product.DirectSum
 
 /-!
 # Fibonacci string-net: the operator tensor from the F-symbols

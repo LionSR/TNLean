@@ -9,8 +9,8 @@ the same-MPV transport applied to the first-site hypothesis.
 
 | Removed | Replacement |
 |---|---|
-| `MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_basis_injective` (`TNLean/MPS/MPDO/PostBlockedRepresentativeSpan.lean`) | `MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree` (same file) |
-| `MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_common_blockInjective` (`TNLean/MPS/MPDO/PostBlockedRepresentativeSpan.lean`) | `MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree` (same file) |
+| `MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_basis_injective` (`TNLean/MPS/CanonicalForm/BlockSeparation/PostBlockedRepresentativeSpan.lean`) | `MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree` (same file) |
+| `MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree_of_common_blockInjective` (`TNLean/MPS/CanonicalForm/BlockSeparation/PostBlockedRepresentativeSpan.lean`) | `MPSTensor.IsBNTCanonicalForm.insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree` (same file) |
 
 The survivor reaches the same conclusion — equality of the inserted tensors on
 every basis representative — from strictly fewer hypotheses: it derives the
@@ -34,5 +34,5 @@ take a first-site hypothesis directly rather than through same-MPV transport —
 
 ## Net effect
 
-`TNLean/MPS/MPDO/PostBlockedRepresentativeSpan.lean` goes from 409 to 366
+`TNLean/MPS/CanonicalForm/BlockSeparation/PostBlockedRepresentativeSpan.lean` goes from 409 to 366
 lines, plus the two dropped blueprint tag lines.

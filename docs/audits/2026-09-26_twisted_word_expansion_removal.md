@@ -7,7 +7,7 @@ kept.
 
 ## Removed declaration and its replacement
 
-In `TNLean/MPS/Symmetry/Defs.lean`:
+In `TNLean/MPS/Tensor/Gauge/OnSiteSymmetry.lean`:
 
 - `MPSTensor.evalWord_twistedTensor_ofFn`, the expansion of a word of the
   twisted tensor `twistedTensor A U g` as a sum over intermediate words with
@@ -15,11 +15,11 @@ In `TNLean/MPS/Symmetry/Defs.lean`:
 
 Its only use was the proof of `MPSTensor.twistedTensor_blockTensor_comm`. That
 theorem is now the case `W = U g` of `MPSTensor.blockTensor_rotatePhysical`
-(moved to `TNLean/MPS/Core/Blocking.lean`), because `twistedTensor A U g` is
+(moved to `TNLean/MPS/Tensor/Physical/Blocking.lean`), because `twistedTensor A U g` is
 definitionally `rotatePhysical (U g) A` and `blockKronAction L U g` is
 definitionally `blockKron L (U g)`. The word expansion itself survives in
 general form as `MPSTensor.evalWord_rotatePhysical_ofFn`
-(`TNLean/MPS/Core/PhysicalRotation.lean`), which the proof of
+(`TNLean/MPS/Tensor/Physical/PhysicalRotation.lean`), which the proof of
 `blockTensor_rotatePhysical` uses.
 
 The blueprint entry `lem:eval_word_twisted_tensor` is removed with the

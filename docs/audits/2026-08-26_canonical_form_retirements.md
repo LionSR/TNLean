@@ -1,9 +1,9 @@
 # Canonical-form retirement audit
 
 Audited in the canonical-form layer: the phase-cover module
-`TNLean/MPS/CanonicalForm/PhaseCover.lean`, the normal-commutant module
+`TNLean/MPS/CanonicalForm/BNT/PhaseCover.lean`, the normal-commutant module
 `TNLean/MPS/CanonicalForm/NormalCommutant.lean`, and the BNT-refinement
-module `TNLean/MPS/CanonicalForm/BNTRefinement.lean`.
+module `TNLean/MPS/CanonicalForm/BNTPresentation/Refinement.lean`.
 
 ## Phase-cover forwards
 

@@ -13,12 +13,12 @@ migrated to the replacement.
 | Removed | File | Replacement |
 |---|---|---|
 | `sqrt_rpow_neg_two_mul'` (private) | `TNLean/PEPS/AreaLaw/AmplificationProof.lean` | `TNLean.PEPS.AreaLaw.sqrt_rpow_neg_two_mul` |
-| `mem_unitBox_self` | `TNLean/PEPS/AreaLaw/Geometry/BirthSeparationAngular.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `isQuarterSectorial_univ` | `TNLean/PEPS/AreaLaw/Geometry/BirthSeparationAngular.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `isQuarterSectorial_empty` | `TNLean/PEPS/AreaLaw/Geometry/BirthSeparationAngular.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `mem_beltAtom_add_iff` | `TNLean/PEPS/AreaLaw/Geometry/BirthSeparationAtoms.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `scaleHomeomorph_apply` (private) | `TNLean/PEPS/AreaLaw/Geometry/BirthSeparationStar.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `smul_mem_repairFanCone_iff` | `TNLean/PEPS/AreaLaw/Geometry/RepairFanCones.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `integral_etaOld_rpow_nonneg` | `TNLean/PEPS/AreaLaw/Scan/EnergyBalance.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `integral_etaNew_rpow_nonneg` | `TNLean/PEPS/AreaLaw/Scan/EnergyBalance.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
-| `termEnergy_nonneg` | `TNLean/PEPS/AreaLaw/Scan/EnergyBalance.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `mem_unitBox_self` | `TNLean/PEPS/AreaLaw/BirthTemplates/BirthSeparationAngular.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `isQuarterSectorial_univ` | `TNLean/PEPS/AreaLaw/BirthTemplates/BirthSeparationAngular.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `isQuarterSectorial_empty` | `TNLean/PEPS/AreaLaw/BirthTemplates/BirthSeparationAngular.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `mem_beltAtom_add_iff` | `TNLean/PEPS/AreaLaw/BirthTemplates/BirthSeparationAtoms.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `scaleHomeomorph_apply` (private) | `TNLean/PEPS/AreaLaw/BirthTemplates/BirthSeparationStar.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `smul_mem_repairFanCone_iff` | `TNLean/PEPS/AreaLaw/Stars/RepairFanCones.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `integral_etaOld_rpow_nonneg` | `TNLean/PEPS/AreaLaw/ChargePoints/EnergyBalance.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `integral_etaNew_rpow_nonneg` | `TNLean/PEPS/AreaLaw/ChargePoints/EnergyBalance.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |
+| `termEnergy_nonneg` | `TNLean/PEPS/AreaLaw/ChargePoints/EnergyBalance.lean` | None: no remaining use in `TNLean/`, `TNLeanTest/`, `scripts/`, `blueprint/` or `docs/` |

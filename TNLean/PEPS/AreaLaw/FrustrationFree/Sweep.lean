@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.FrustrationFree.Model
 import TNLean.PEPS.AreaLaw.FrustrationFree.PlanarSweep
-import QICLean.Analysis.SweepContraction
+import QICLean.Analysis.Projection.SweepContraction
 import QICLean.ManyBody.Sites.Twirl
 
 /-!

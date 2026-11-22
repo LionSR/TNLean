@@ -1,4 +1,4 @@
-import TNLean.PEPS.Examples.CZXWrappingRectangle
+import TNLean.PEPS.Examples.CZX.CZXWrappingRectangle
 
 /-! Actual-name regressions for cyclic coordinate rectangles. These test the
 region itself crossing each seam, the faithful map and the printed operator,

@@ -40,13 +40,13 @@ It also does not concern adjoint closure: extension by zero can preserve
 adjoint closure while destroying physical unitality.\footnote{
     The obstruction is stated in
     \leanid{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedMPO_ne_weakHopfTensor},
-    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/MixedWeakHopfRealizationObstruction}.
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/MixedPath/MPO/MixedWeakHopfRealizationObstruction}.
     The literal enlarged realization requested by \ghissue{10762} must therefore
     be changed. The independent adjoint-closure question \ghissue{10763} is not
     settled here.}
 
 The conditional enlarged-space theorems in
-\doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedWeakHopf}
+\doclink{TNLean/MPS/Symmetry/MPOSymmetry/MixedPath/MPO/ArbitraryPhysicalMixedWeakHopf}
 assume precisely the equality excluded above. For their parent-commutation
 statements, injectivity and nonzero endpoint bond dimensions imply
 $d_0,d_1>0$. Hence these hypotheses are incompatible: the conditional
@@ -113,10 +113,10 @@ Compatibility then gives local commutation in the interior; continuity
 extends it to the endpoints. Local commutation implies commutation of the
 periodic sum with the periodic common MPO at every $N\ge2$.\footnote{
     The conditional average identities and active-space commutation are in
-    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/MixedWeakHopfAverage}.
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/MixedPath/MPO/MixedWeakHopfAverage}.
     The enlarged construction, positivity, continuity, periodic commutation and
     uniform gap are in
-    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedWeakHopfParent}.
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/MixedPath/MPO/ArbitraryPhysicalMixedWeakHopfParent}.
     The gap is transferred by exact equality with the previously proved path,
     not by claiming that averaging preserves a spectral gap.}
 

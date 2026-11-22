@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Analysis.VonNeumannEntropySpectralTail
-import QICLean.Entropy.RegionEntropy
+import QICLean.Entropy.VonNeumann.VonNeumannEntropySpectralTail
+import QICLean.ManyBody.Entropy.RegionEntropy
 
 /-!
 # Regional entropy from a supplied spectral tail

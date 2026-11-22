@@ -3,9 +3,9 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import QICLean.Algebra.MatrixSingleSpan
-import TNLean.MPS.FundamentalTheorem.Reduction.ExplicitGauge
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
+import QICLean.Algebra.Matrix.MatrixSingleSpan
+import TNLean.MPS.FundamentalTheorem.Compression.ExplicitGauge
+import TNLean.MPS.FundamentalTheorem.Compression.MultiBlockTrace
 
 /-!
 # One-slot compression data and integer certificates

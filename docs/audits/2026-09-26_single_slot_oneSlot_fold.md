@@ -2,7 +2,7 @@
 
 This audit records the removal of four abbreviations. Each of them restated the
 one-element slot set, or its unique member, that
-`TNLean/MPS/FundamentalTheorem/Reduction/ExplicitGauge.lean` already provides as
+`TNLean/MPS/FundamentalTheorem/Compression/ExplicitGauge.lean` already provides as
 `MPSTensor.oneSlot` and `MPSTensor.oneSlotMem`. It is the audit note required by
 `docs/project_conventions.md` §Style. All non-`Archive` uses are migrated, no
 blueprint `\lean{...}` tag cites a removed name, and no compatibility alias is
@@ -10,7 +10,7 @@ kept.
 
 ## Removed declarations and their replacements
 
-In `TNLean/MPS/Examples/Z3Anomalous/Z3AnomalousFusion.lean`, which is also used
+In `TNLean/MPS/Examples/Z3/Z3AnomalousFusion.lean`, which is also used
 by `Z3AnomalousInverseFusion.lean` and `Z3AnomalyClass.lean`:
 
 - `Z3Anomalous.singleSlot : Finset Unit := Finset.univ`, replaced by

@@ -1,6 +1,6 @@
 # BNT fourfold fusion: retirement of the dead weighted-coordinate section
 
-`TNLean/MPS/MPDO/BNTFourfoldFusionIndices.lean` carried two independent
+`TNLean/MPS/MPDO/Fusion/BNTFourfoldFusionIndices.lean` carried two independent
 families. The first declared five weighted fourfold-fusion coordinate spaces
 and ten coordinate reassociations between them along the three-edge and
 two-edge route patterns; the second declares the five bond-coordinate types,
@@ -33,11 +33,11 @@ together with their three section headers:
 
 There is no replacement declaration and none is needed: the removed family was
 never applied anywhere. The live carrier of the same index patterns is the
-categorical family of `TNLean/MPS/MPDO/CompleteZipperFusionFourfold.lean`,
+categorical family of `TNLean/MPS/Operator/Fusion/CompleteZipperFusionFourfold.lean`,
 whose namespace `MPOTensor.CompleteZipperFusionFamily` declares its own
 `Fourfold*Multiplicity` abbrevs, and whose pentagon development re-declares
 the ten route equivalences as `private def` twins on that family in
-`TNLean/MPS/MPDO/CompleteZipperFusionPentagon.lean`. Neither of those modules
+`TNLean/MPS/Operator/Fusion/CompleteZipperFusionPentagon.lean`. Neither of those modules
 imports `BNTFourfoldFusionIndices.lean`, so the bare-name collisions resolve
 to the other carrier in every case. The index-pattern citations of
 arXiv:1511.08090 (lines 279-299) carried by the removed docstrings are
@@ -77,7 +77,7 @@ and `fourfoldBondMatrix_threeEdge_eq_twoEdge`. The two theorems carry the
 `blueprint/src/chapter/ch21_mpdo_rfp_fusion_isometries_complete_zipper_coherence.tex`,
 and the section is self-contained on `Fam.bondDim`,
 `mulTensorAssocEquiv`, `finProdFinEquiv` and the `PEquiv` API, so the import
-of `TNLean.MPS.MPDO.BNTFinalSectorFusion` stays as it is.
+of `TNLean.MPS.MPDO.Fusion.BNTFinalSectorFusion` stays as it is.
 
 ## What is deferred
 

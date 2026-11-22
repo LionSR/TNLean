@@ -71,11 +71,11 @@ Lemma~\cpsvref{propSN} and before the proof corresponding to
 Proposition~\cpsvref{prop3to4} of Ref.~\cite{Cirac2016MPDO_arXiv}. The
 construction is developed across five supporting modules.\footnote{The supporting
 formal modules are
-\doclink{TNLean/MPS/MPDO/PhysicalSectorActiveFactorSupport},
-\doclink{TNLean/MPS/MPDO/PhysicalSectorActiveSupportData},
-\doclink{TNLean/MPS/MPDO/PhysicalSectorActiveRestriction},
-\doclink{TNLean/MPS/MPDO/PhysicalSectorActiveNeighboring}, and
-\doclink{TNLean/MPS/MPDO/PhysicalSectorCoordinateTransport}.}
+\doclink{TNLean/MPS/MPDO/PhysicalSector/PhysicalSectorActiveFactorSupport},
+\doclink{TNLean/MPS/MPDO/PhysicalSector/PhysicalSectorActiveSupportData},
+\doclink{TNLean/MPS/MPDO/PhysicalSector/PhysicalSectorActiveRestriction},
+\doclink{TNLean/MPS/MPDO/PhysicalSector/PhysicalSectorActiveNeighboring}, and
+\doclink{TNLean/MPS/Operator/PhysicalSector/PhysicalSectorCoordinateTransport}.}
 
 \begin{enumerate}
     \item For each active sector $k$, choose isometries $V^L_k$ and $V^R_k$
@@ -224,10 +224,10 @@ The dependency chain is
     \label{eq:cpsv16_active_physical_support_compression_blueprint_dependency}
 \end{align}
 \footnote{The formal dependency path connects
-\doclink{TNLean/MPS/MPDO/PhysicalSectorActiveRestriction},
-\doclink{TNLean/MPS/MPDO/PhysicalSectorActiveNeighboring},
-\doclink{TNLean/MPS/MPDO/PhysicalSectorActiveBond}, and
-\doclink{TNLean/MPS/MPDO/GSNNCHSectorSum}.}
+\doclink{TNLean/MPS/MPDO/PhysicalSector/PhysicalSectorActiveRestriction},
+\doclink{TNLean/MPS/MPDO/PhysicalSector/PhysicalSectorActiveNeighboring},
+\doclink{TNLean/MPS/MPDO/BNTSectors/BNTPhysicalSectorGSNNCH}, and
+\doclink{TNLean/MPS/Operator/PhysicalSector/GSNNCHSectorSum}.}
 This chain feeds the capstone theorem for the BNT physical-sector GSNNCH
 form.\footnote{Capstone declaration:
 \leanid{MPOTensor.hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization},

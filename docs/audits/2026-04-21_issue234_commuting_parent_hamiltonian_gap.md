@@ -5,7 +5,7 @@
 Issue #234 is no longer missing its basic surface.
 On current `main`, the repository already contains:
 
-- `TNLean/MPS/ParentHamiltonian/Commuting.lean` with
+- `TNLean/MPS/ParentHamiltonian/Commuting/Defs.lean` with
   - `MPSTensor.IsCommutingParentHam`
   - `MPSTensor.IsNNCPH`
   - `MPSTensor.rfp_implies_nncph`
@@ -26,7 +26,7 @@ It is the pair of deeper follow-up gaps described below.
 ## Small formal progress landed so far
 
 The first parent-Hamiltonian follow-up added two theorem wrappers to
-`TNLean/MPS/ParentHamiltonian/Commuting.lean`:
+`TNLean/MPS/ParentHamiltonian/Commuting/Defs.lean`:
 
 - `MPSTensor.HasProductPairLocalProjectors.isNNCPH`
 - `MPSTensor.ProductPairBridge.isNNCPH`
@@ -88,12 +88,12 @@ After the wrappers and Appendix B structural data above, the missing internal th
 
 ### What is already available
 
-- `TNLean/MPS/RFP/StructuralFull.lean` proves the full Appendix B structural form
+- `TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralFull.lean` proves the full Appendix B structural form
   `rfp_nt_structural_full`.
-- `TNLean/MPS/RFP/AppendixBStructuralData.lean` now records this output as
+- `TNLean/MPS/ParentHamiltonian/Commuting/AppendixBStructuralData.lean` now records this output as
   `AppendixBStructuralData` and names the remaining chain-space extraction as
   `AppendixBProductPairExtraction`.
-- `TNLean/MPS/ParentHamiltonian/Commuting.lean` exposes the final wrapper
+- `TNLean/MPS/ParentHamiltonian/Commuting/Defs.lean` exposes the final wrapper
   `ProductPairBridge.isNNCPH`, while `TNLean/MPS/RFP/CommutingBridge.lean` exposes the
   RFP-specific conditional theorem `rfp_implies_nncph_of_appendixBExtraction`.
 

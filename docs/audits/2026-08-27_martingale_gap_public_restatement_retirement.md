@@ -2,9 +2,9 @@
 
 This audit records the repository-local pass-through exception of
 `docs/project_conventions.md` §Style for four gap-bound theorems in
-`TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean` that restated, character for
+`TNLean/MPS/ParentHamiltonian/ParentInteraction/Reduction.lean` that restated, character for
 character, theorems already carried by
-`TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean`.
+`TNLean/MPS/ParentHamiltonian/ParentInteraction/Reduction.lean`.
 
 | Removed | Replacement |
 |---|---|
@@ -44,7 +44,7 @@ proof of `parentHamiltonianES_gap_bound_of_overlap_norm_bound`; it disappeared
 with the block.
 
 No module outside `Martingale/` referenced any of the four removed names.
-`TNLean/MPS/ParentHamiltonian/Martingale/BlockedGap.lean` consumes
+`TNLean/MPS/ParentHamiltonian/Gap/Filtration/BlockedGap.lean` consumes
 `parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator`
 directly, which is independent evidence that the `Reduction.lean` copies are the
 live ones. Three docstrings that named a removed theorem — the module docstring
@@ -81,7 +81,7 @@ duplicated the neighbouring entry; the surrounding sentence is rewritten to name
 the single surviving statement. The blueprint-relation paragraph now describes
 `thm:anticommutator_gap_bound`, `thm:overlap_norm_gap_bound` and
 `thm:overlap_norm_gap_bound_constant` as pointing to the cyclic-window
-reductions in `TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean`, and no
+reductions in `TNLean/MPS/ParentHamiltonian/ParentInteraction/Reduction.lean`, and no
 sentence describes a two-layer entry-point-versus-public-reformulation split for
 these four, since that split is what the change removes.
 

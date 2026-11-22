@@ -5,7 +5,7 @@ pinned QICLean `acda92aa70e69b37507e422bceb5414036859fe6`.
 
 ## Existing upstream authority
 
-`QICLean/Algebra/TraceFormDuality.lean` already supplies the nondegenerate
+`QICLean/Algebra/Matrix/TraceFormDuality.lean` already supplies the nondegenerate
 finite-family and product trace forms, their full-span criteria, and both
 zero-pairing criteria. Mathlib's `LinearMap.BilinForm.toDual` supplies the
 single-functional representation. No dependency bump or parallel bilinear

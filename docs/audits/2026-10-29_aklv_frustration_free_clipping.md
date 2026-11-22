@@ -14,7 +14,7 @@ v4.35.0-rc3, Mathlib `c55e6e786f49471c72fbddbec5415808896aec1e`, QICLean
 ## Actual statement and construction
 
 The one new public lemma in
-`TNLean/MPS/AreaLaw/AKLV/FrustrationFreeClipping.lean` takes the original
+`TNLean/MPS/AreaLaw/ChebyshevAGSP/FrustrationFree/FrustrationFreeClipping.lean` takes the original
 nearest-neighbor supported positive contractions, two retained boundary bonds
 `a < b`, a unit vector Ω with original energy zero, original projector gap
 `0 < g ≤ 1`, and cutoff `t ≥ 1024/g`.

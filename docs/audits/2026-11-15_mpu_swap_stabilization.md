@@ -192,10 +192,10 @@ covers that balancing condition for the shift examples.
 
 ## Lean implementation boundary
 
-The additive `TNLean/MPS/MPU/PhysicalAncillaLeftMul.lean` defines the full
+The additive `TNLean/MPS/MPU/CanonicalForm/PhysicalAncillaLeftMul.lean` defines the full
 reindexed Kronecker matrix $Q\otimes I_x$, its matrix properties, and the
 tensor-level ancilla commutation identity. The additive
-`TNLean/MPS/MPU/Examples/SwapSymmetryStabilization.lean` defines $Q_x$ using
+`TNLean/MPS/Examples/Shift/SwapSymmetryStabilization.lean` defines $Q_x$ using
 that matrix and the two explicit swap-combined enlarged blocked actions.
 Its fixed-$x,k$ and existential common-positive-$x,k$ comparisons reuse:
 

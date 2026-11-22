@@ -1,0 +1,207 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.FundamentalTheorem.PhysicalSupport.GSNNCHOrthogonalSectors
+import TNLean.MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportProductTransport
+
+/-!
+# Commuting products on the BNT physical sectors
+
+The positive commuting bond of Proposition C.8 may be constructed on the
+injective restriction of each absorbed BNT representative and then included
+in the original physical space. The included bonds remain supported on their
+pairwise orthogonal BNT sectors and realize the sector MPOs exactly on every
+periodic chain of length at least two.
+
+## References
+
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
+  Appendix C.2, equations `PjKiPj` and `generateMPDO`, and Proposition
+  `prop3to4`, lines 1733--1792
+-/
+
+namespace MPOTensor
+
+open scoped ComplexOrder
+
+variable {d D : ℕ}
+
+/-- Pairwise orthogonal physical restrictions carrying positive physical-sector
+factorizations determine an orthogonal family of positive commuting bonds. Each
+sector MPO is the exact periodic product of its bond.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl`, `Appetakhetc`,
+`PjKiPj`, and `generateMPDO`, lines 1383--1450 and 1680--1770. -/
+theorem nonempty_orthogonalCommutingSectorFamily_of_restrictedPhysicalSectorFactorization
+    {g : ℕ} {dim : Fin g → ℕ}
+    (K : (s : Fin g) → MPOTensor d (dim s))
+    (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
+    (hP : ∀ s, IsOrthogonalProjection (P s))
+    (hPorth : ∀ {s t}, s ≠ t → P s * P t = 0)
+    (restriction : (s : Fin g) → PhysicalSupportRestrictionData (P s) (K s))
+    (G : (s : Fin g) → PhysicalSectorFactorization
+      (PhysicalSectorFactorization.changePhysicalBasis
+        (Matrix.conjTranspose ((restriction s).inclusion)) (K s)))
+    (hη : ∀ s k h, ((G s).neighboringOperator k h).PosSemidef) :
+    Nonempty (OrthogonalCommutingSectorFamily K) := by
+  classical
+  let data : (s : Fin g) → EtaLocalStructureData (K s) :=
+    fun s ↦ Classical.choose
+      ((restriction s).exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization
+        (G s) (hη s))
+  have hdata : ∀ s : Fin g,
+      twoSiteSectorProjection (P s) * (data s).bondData.bond *
+          twoSiteSectorProjection (P s) = (data s).bondData.bond ∧
+        ∀ N (hN : 2 ≤ N),
+          mpo (K s) N = ((data s).bondData.toCommutingFormData hN).product :=
+    fun s ↦ Classical.choose_spec
+      ((restriction s).exists_etaLocalStructureData_lifted_supported_of_physicalSectorFactorization
+        (G s) (hη s))
+  exact ⟨{
+    projection := P
+    projection_isOrthogonal := hP
+    projection_orthogonal := fun hst ↦ hPorth hst
+    bondData := fun s ↦ (data s).bondData
+    bond_supported := fun s ↦ (hdata s).1
+    realizes_mpo := fun s N hN ↦ (hdata s).2 N hN }⟩
+
+/-- Pairwise orthogonal projections that absorb each injective sector tensor on
+both sides give an orthogonal commuting sector family once the restricted
+tensors have positive physical-sector factorizations.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl`, `Appetakhetc`,
+`PjKiPj`, and `generateMPDO`, lines 1383--1450 and 1680--1770.
+
+**Scope restriction (factorization after restriction):** The positive
+physical-sector factorization is assumed on the range of each projection. The
+remaining source-facing theorem must derive it from the ambient factorization
+in `AppUkU=rl`; see
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
+theorem nonempty_orthogonalCommutingSectorFamily_of_twoSidedPhysicalSlice
+    {g : ℕ} {dim : Fin g → ℕ}
+    (K : (s : Fin g) → MPOTensor d (dim s))
+    (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
+    (hP : ∀ s, IsOrthogonalProjection (P s))
+    (hPorth : ∀ {s t}, s ≠ t → P s * P t = 0)
+    (hInjective : ∀ s, (K s).IsInjective)
+    (hSupport : ∀ s β α,
+      P s * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
+        physicalSlice (K s) β α * P s = physicalSlice (K s) β α)
+    (G : (s : Fin g) → PhysicalSectorFactorization
+      (PhysicalSectorFactorization.changePhysicalBasis
+        (Matrix.conjTranspose
+          ((physicalSupportRestrictionDataOfTwoSidedPhysicalSlice
+            (P s) (K s) (hP s) (hInjective s) (hSupport s)).inclusion))
+        (K s)))
+    (hη : ∀ s k h, ((G s).neighboringOperator k h).PosSemidef) :
+    Nonempty (OrthogonalCommutingSectorFamily K) := by
+  let restriction : (s : Fin g) → PhysicalSupportRestrictionData (P s) (K s) :=
+    fun s ↦ physicalSupportRestrictionDataOfTwoSidedPhysicalSlice
+      (P s) (K s) (hP s) (hInjective s) (hSupport s)
+  exact nonempty_orthogonalCommutingSectorFamily_of_restrictedPhysicalSectorFactorization
+    K P hP hPorth restriction G hη
+
+/-- Saturation of the area law for every absorbed BNT representative gives a
+family of positive commuting bond products supported on the corresponding
+pairwise orthogonal BNT projectors.
+
+The hypotheses preceding `hSectorSAL` are precisely the data selecting the
+BNT physical projectors. The sectorwise SAL hypothesis is established from
+the simple-MPDO hypotheses in
+`commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos`.
+
+This constructs the sector family used in the later GSNNCH direct sum.
+
+**Scope restriction (projector-selection and sectorwise-SAL hypotheses):** The
+theorem assumes more than the five blockwise identities printed in CPSV16
+Appendix C.2, Proposition `prop3to4`, lines 1786--1796.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
+theorem nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
+    (S : MPSTensor.SectorDecomposition (d * d))
+    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q')
+    {R : (s : Fin S.basisCount) →
+      Matrix (Fin (S.basisDim s)) (Fin (S.basisDim s)) ℂ}
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
+    (hC : MPSTensor.IsMPOBlockLeftInverse
+      (fun j ↦ S.basisMPOTensor j) C)
+    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ)
+    (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
+    (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
+    (hSectorSAL : ∀ s : Fin S.basisCount,
+      IsSAL (commonWeightAbsorbedBasisMPOTensor S hWeight s)) :
+    Nonempty (OrthogonalCommutingSectorFamily
+      (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s)) := by
+  classical
+  let restriction : (s : Fin S.basisCount) →
+      PhysicalSupportRestrictionData
+        (bntSectorProjection hC hρ hη hR s)
+        (commonWeightAbsorbedBasisMPOTensor S hWeight s) :=
+    fun s ↦ Classical.choice
+      (nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis
+        S hWeight hC hρ hη hR hSpan s)
+  let data : (s : Fin S.basisCount) → EtaLocalStructureData
+      (commonWeightAbsorbedBasisMPOTensor S hWeight s) :=
+    fun s ↦ Classical.choose
+      ((restriction s).exists_etaLocalStructureData_lifted_supported
+        (hSectorSAL s))
+  have hdata : ∀ s : Fin S.basisCount,
+      twoSiteSectorProjection (bntSectorProjection hC hρ hη hR s) *
+          (data s).bondData.bond *
+          twoSiteSectorProjection (bntSectorProjection hC hρ hη hR s) =
+            (data s).bondData.bond ∧
+        ∀ N (hN : 2 ≤ N),
+          mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N =
+            ((data s).bondData.toCommutingFormData hN).product :=
+    fun s ↦ Classical.choose_spec
+      ((restriction s).exists_etaLocalStructureData_lifted_supported
+        (hSectorSAL s))
+  exact ⟨{
+    projection := fun s ↦ bntSectorProjection hC hρ hη hR s
+    projection_isOrthogonal := fun s ↦
+      bntSectorProjection_isOrthogonal hC hρ hη hR s
+    projection_orthogonal := fun hst ↦
+      bntSectorProjection_mul_eq_zero hC hρ hη hR hst
+    bondData := fun s ↦ (data s).bondData
+    bond_supported := fun s ↦ (hdata s).1
+    realizes_mpo := fun s N hN ↦ (hdata s).2 N hN }⟩
+
+/-- Once the absorbed BNT representatives satisfy SAL, their supported
+commuting products assemble with the natural BNT multiplicities to give the
+GSNNCH form of the original tensor.
+
+This is a sufficient-condition theorem obtained after the physical projectors,
+sectorwise SAL witnesses, supported bonds, and exact sector products have been
+constructed.
+
+**Scope restriction (supplied BNT sectors):** The hypotheses are stronger
+than the five blockwise identities printed in CPSV16 Appendix C.2,
+Proposition `prop3to4`, lines 1786--1796.  See
+`docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
+theorem hasGSNNCHForm_of_bntSectorSAL
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q')
+    {R : (s : Fin S.basisCount) →
+      Matrix (Fin (S.basisDim s)) (Fin (S.basisDim s)) ℂ}
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
+    (hC : MPSTensor.IsMPOBlockLeftInverse
+      (fun j ↦ S.basisMPOTensor j) C)
+    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ)
+    (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
+    (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
+    (hSectorSAL : ∀ s : Fin S.basisCount,
+      IsSAL (commonWeightAbsorbedBasisMPOTensor S hWeight s)) :
+    HasGSNNCHForm M := by
+  obtain ⟨F⟩ :=
+    nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
+      S hWeight hC hρ hη hR hSpan hSectorSAL
+  exact hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor
+    M S hM hWeight F
+
+end MPOTensor

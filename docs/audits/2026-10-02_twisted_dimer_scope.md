@@ -61,7 +61,7 @@ channels in the existing development.
 
 The identity is proved by
 `MPOTensor.TwistedDimer.mpo_eq_unitary_factorization` in
-`TNLean/MPS/MPDO/TwistedDimerUnitaryFactorization.lean`. The exact factor
+`TNLean/MPS/Examples/Dimer/TwistedDimerUnitaryFactorization.lean`. The exact factor
 identifications and their channels are in `TwistedDimerFactorStates.lean`
 and `TwistedDimerBondRFP.lean`. The construction provenance is preserved in
 [the September 5 calculation](2026-09-05_twisted_dimer_unitary_factorization.md).

@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.FiniteKroneckerProduct
-import TNLean.MPS.Core.WordGrading
+import QICLean.Algebra.Kronecker.FiniteKroneckerProduct
+import TNLean.MPS.Tensor.Words.Basic
 import TNLean.MPS.Examples.MultiBlock.ParityGraded
-import TNLean.MPS.Examples.GHZ
+import TNLean.MPS.Examples.GHZ.GHZ
 
 /-!
 # Occupation parity and cyclic runs of the sign-weighted pair tensor

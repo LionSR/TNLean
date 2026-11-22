@@ -1,17 +1,17 @@
 # PEPS restored-layer retirement (merge-artefact re-deletion)
 
 On 2026-09-19 four bounded simplifications landed on `main`: the retirement of
-the vertex-injective forwarder layer in `TNLean/PEPS/VirtualInsertion.lean`
+the vertex-injective forwarder layer in `TNLean/PEPS/Tensor/Network/VirtualInsertion.lean`
 (recorded in
 `docs/audits/2026-09-19_peps_virtual_insertion_forwarder_retirement.md`), the
 deletion of the unused vertical staircase end pair in
-`TNLean/PEPS/TorusWindowRegion.lean` (recorded in
+`TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowRegion.lean` (recorded in
 `docs/audits/2026-08-26_peps_vertical_staircase_mirror_deletion.md`), the
 replacement of an eleven-line set-difference proof in
-`TNLean/PEPS/TorusWindowChain4.lean` by the Mathlib statement
+`TNLean/PEPS/FundamentalTheorem/Torus/Window/CornerExtensionTransitivity.lean` by the Mathlib statement
 `Finset.sdiff_union_sdiff_cancel` (recorded in
 `docs/audits/2026-09-19_upstream_shadow_removals.md`), and a docstring
-correction in `TNLean/PEPS/RegionBlock/ThreeBlockTransfer.lean` (recorded in
+correction in `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/ThreeBlockTransfer.lean` (recorded in
 `docs/audits/2026-09-19_peps_regionblock_dead_closures.md`). Hours later an
 unrelated branch merged with bot commits that re-added all four pieces
 verbatim while resolving conflicts in two blueprint chapter files; the branch's
@@ -26,7 +26,7 @@ deletes the restored layer again.
 All Lean removals are re-deletions of the earlier removals; the replacement
 column names the surviving declaration each call site would use.
 
-From `TNLean/PEPS/VirtualInsertion.lean` (eleven one-line forwarders, each
+From `TNLean/PEPS/Tensor/Network/VirtualInsertion.lean` (eleven one-line forwarders, each
 whose body is the per-vertex theorem applied at one vertex, plus the restored
 `Main contents` bullet for `physRealizeLocalOp_spec`):
 
@@ -44,31 +44,31 @@ whose body is the per-vertex theorem applied at one vertex, plus the restored
 | `localVirtualOpOfPhysicalOp_eq_of_projected_realization_eq` | `localVirtualOpOfPhysicalOpAt_eq_of_projected_realization_eq A (hA v)` |
 | `localVirtualOpOfPhysicalOp_eq_iff_projected_realization_eq` | `localVirtualOpOfPhysicalOpAt_eq_iff_projected_realization_eq A (hA v)` |
 
-From `TNLean/PEPS/TorusWindowRegion.lean` (the vertical staircase end pair,
+From `TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowRegion.lean` (the vertical staircase end pair,
 with its section header; the horizontal pair carries the window chain):
 
 | Removed declaration | Existing replacement |
 |---|---|
 | `verticalStaircaseEdge_val` | `horizontalStaircaseEdge_val` (transposed argument) |
-| `isCrossingEdge_verticalStaircase` | `isCrossingEdge_horizontalStaircase`; the vertical route runs through `isCrossingEdge_torusVerticalEdge` in `TNLean/PEPS/TorusEdgeBlockingCrossing.lean` |
+| `isCrossingEdge_verticalStaircase` | `isCrossingEdge_horizontalStaircase`; the vertical route runs through `isCrossingEdge_torusVerticalEdge` in `TNLean/PEPS/FundamentalTheorem/Torus/TorusEdgeBlockingCrossing.lean` |
 
 Also removed there: the restored module-docstring sentence claiming the
 vertical comparison goes through the reference-blocking route cited above; the
 route it cites names `isCrossingEdge_torusVerticalEdge` (imported) and
 `isCrossingEdge_torusVerticalRectangleBlockingDatum` (defined in
-`TNLean/PEPS/TorusRectangleReferenceData.lean`, not imported by this file),
+`TNLean/PEPS/FundamentalTheorem/Torus/TorusRectangleReferenceData.lean`, not imported by this file),
 and the sentence duplicated the preceding paragraph.
 
-In `TNLean/PEPS/TorusWindowChain4.lean` no declaration is removed: the proof
+In `TNLean/PEPS/FundamentalTheorem/Torus/Window/CornerExtensionTransitivity.lean` no declaration is removed: the proof
 of `threeBlockBlueCoeff_comp` again closes the union identity
 `(S \ R) ∪ (P \ S) = P \ R` with
 `(Finset.union_comm _ _).trans (Finset.sdiff_union_sdiff_cancel hSP hRS)`
 (Mathlib, `Mathlib/Data/Finset/SDiff.lean`) instead of an eleven-line
 `by ext w; …` argument. The statement and the blueprint tag are unchanged.
 
-In `TNLean/PEPS/RegionBlock/ThreeBlockTransfer.lean` the module docstring
+In `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/ThreeBlockTransfer.lean` the module docstring
 again reads "into the per-edge gauge of
-`TNLean.PEPS.RegionBlock.RegionReconcile`": the restored wording's
+`TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.BlockEndpointInversion`": the restored wording's
 "three-block transfer engine" names nothing in `RegionReconcile.lean`, and
 `ThreeBlockReconcile.lean` no longer exists in `RegionBlock/`.
 
@@ -93,7 +93,7 @@ again reads "into the per-edge gauge of
 
 - `localProjector_apply_localTensorMap` in `VirtualInsertion.lean`: a
   pass-through of the same shape, but the bare `simp` calls in
-  `TNLean/PEPS/LocalGauge.lean` fire on it (see
+  `TNLean/PEPS/FundamentalTheorem/Injective/LocalGauge.lean` fire on it (see
   `docs/audits/2026-08-27_peps_cycle_edge_simp_retirement.md`).
 - The definitions `physRealizeLocalOp`, `localProjector`,
   `localVirtualOpOfPhysicalOp`, and `localLeftInverse`: untagged conveniences

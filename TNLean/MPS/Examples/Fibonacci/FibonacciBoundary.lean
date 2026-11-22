@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.Fibonacci.FibonacciDimension
-import TNLean.MPS.Symmetry.MPOSymmetry.SymmetricBoundary
+import TNLean.MPS.Symmetry.MPOSymmetry.Fusion.SymmetricBoundary
 
 /-!
 # Fibonacci: the positive symmetric boundary state

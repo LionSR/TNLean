@@ -29,7 +29,7 @@ were deliberately not regenerated or edited in this campaign.
 
 ## BNT and canonical-form layer
 
-In `TNLean/MPS/BNT/Construction.lean`, the following unused projections and
+In `TNLean/MPS/CanonicalForm/BNT/Construction.lean`, the following unused projections and
 intermediate construction rungs are removed:
 
 - `MPSTensor.IsNormalCanonicalFormBNT.toHasIrreducibleBlocks`;
@@ -53,47 +53,47 @@ and `isBNT`, rather than the deleted projections.
 The following zero-consumer or strictly weaker public leaves are removed:
 
 - `MPOTensor.DiagonalChiFamily.PosEntries.comap` from
-  `TNLean/MPS/MPDO/AlgebraStructure.lean`; its live caller
+  `TNLean/MPS/MPDO/RFP/AlgebraStructure.lean`; its live caller
   `pulledBlockedChiFamily_toDiagonal_posEntries` in
-  `TNLean/MPS/MPDO/BNTCoefficients.lean` proves the indexed positivity directly;
+  `TNLean/MPS/MPDO/Coefficients/BNTCoefficients.lean` proves the indexed positivity directly;
 - `MPSTensor.IsResidualIsometryFamily.wordTupleSpanTop_one` from
   `TNLean/MPS/RFP/ResidualWordSpan.lean`; the sole proof now calls
   `wordTupleSpanTop_of_wordEntryFamily_linearIndependent` directly;
 - the theorem `entry_eq_zero_or_eq_one_of_lengthIndependent` in the namespace
   `MPOTensor.BNTLabelCoefficientFamily.HasPositiveLengthChiTracePowerForm`, from
-  `TNLean/MPS/MPDO/LengthIndependentCoefficients.lean`, strictly subsumed by
+  `TNLean/MPS/MPDO/Coefficients/LengthIndependentCoefficients.lean`, strictly subsumed by
   `entry_eq_one_of_lengthIndependent`;
 - `traceMatrix_row_sum`, `traceMatrix_rank_ge_two_minor`,
   `left_factor_injective`, and `right_factor_injective` from
-  `TNLean/MPS/MPDO/NonCartesianActiveSectorCandidate.lean`, and
+  `TNLean/MPS/Examples/NonCartesianSectors/NonCartesianActiveSectorCandidate.lean`, and
   `sectorCount_eq_four` from
-  `TNLean/MPS/MPDO/NonCartesianActiveSectorObstruction.lean`, all in the
+  `TNLean/MPS/Examples/NonCartesianSectors/NonCartesianActiveSectorObstruction.lean`, all in the
   `MPOTensor.NonCartesianActiveSectorCandidate` namespace.
 
-`TNLean/MPS/MPDO/BiCFDerivation/Selectors.lean` also replaces the broad
+`TNLean/MPS/CanonicalForm/BlockSeparation/Selectors.lean` also replaces the broad
 `PairHomogenization` import by the direct `Core` owner. No biCF statement is
 changed.
 
 ## Private Mathlib and QICLean shadows
 
-`TNLean/MPS/MPDO/OperatorProduct.lean` generalizes
+`TNLean/MPS/Operator/Product/OperatorProduct.lean` generalizes
 `MPOTensor.listProd_conj_of_conjTranspose_mul_self` from a `Fin` column index
 to an arbitrary finite decidable type. The private cloned induction theorem of
 the same mathematical content in
-`TNLean/MPS/MPDO/BNTFusionCoisometries.lean` is removed, and its consumer uses
+`TNLean/MPS/MPDO/Fusion/BNTFusionCoisometries.lean` is removed, and its consumer uses
 the generalized owner.
 
 `TNLean/MPS/RFP/BellPairCIDObstruction.lean` removes the private matrix
 `pauliZ` and its private square and trace lemmas. The proofs use
 `SpinCover.pauli 2`, `SpinCover.pauli_mul_eq`, and `SpinCover.trace_pauli` from
-QICLean. `TNLean/MPS/MPDO/CPSVExample410Spectrum.lean` retains the private
+QICLean. `TNLean/MPS/Examples/CorrelatedFlip/Spectrum.lean` retains the private
 `single_mul_single_eq_if` and `trace_single_eq_if` lemmas as readable local
 interfaces, proved from `Matrix.single_mul_single_same`,
 `Matrix.single_mul_single_of_ne`, `Matrix.trace_single_eq_same`, and
 `Matrix.trace_single_eq_of_ne`. It removes only the private `trace_zero` shadow
 and uses `Matrix.trace_zero` directly.
 
-`TNLean/MPS/MPDO/CyclicActiveFourthRegionContraction.lean` removes the private
+`TNLean/MPS/MPDO/CyclicActiveSector/CyclicActiveFourthRegionContraction.lean` removes the private
 index restatement `fourthRegion_retained_internal_index`, which is subsumed by
 `Fin.succAbove_last_apply`; the two call sites prove the required equality
 directly by extensionality and simplification. It also removes the three private
@@ -110,7 +110,7 @@ not changed.
 
 ## Physical and vertical carriers
 
-In `TNLean/MPS/MPDO/PhysicalSectorActiveCoordinates.lean`, the one-use theorem
+In `TNLean/MPS/MPDO/PhysicalSector/PhysicalSectorActiveCoordinates.lean`, the one-use theorem
 `dependentSupportInclusion_range_eq_dependentPhysicalSupportProj` in the
 `MPOTensor.PhysicalSectorFactorization` namespace is removed;
 `PhysicalSectorActiveRestriction.lean` calls the underlying
@@ -121,7 +121,7 @@ both inactive-sector dimension invariants, including
 them. Thus its contract continues to force both coordinate dimensions to vanish
 in an inactive sector, alongside the retained active-sector positivity data.
 
-In `TNLean/MPS/MPDO/VerticalProductSpectralFamily.lean`, the unprojected fields
+In `TNLean/MPS/MPDO/Fusion/VerticalProductSpectralFamily.lean`, the unprojected fields
 `MPOTensor.RetainedProductSpectralFamily.local_compression`,
 `local_sameMPV₂Pos`, and `local_dimension_bound` are removed. The existence
 proof still obtains the stronger supplier outputs but discards these three
@@ -130,14 +130,14 @@ all flattened consequences consumed later, remain unchanged.
 
 ## Wielandt prerequisites
 
-`TNLean/Wielandt/Primitivity/Equivalence.lean` removes the four descriptive
+`TNLean/MPS/Transfer/Primitivity/Equivalence.lean` removes the four descriptive
 forwarders `MPSTensor.prop3_ba`, `MPSTensor.prop3_ac`, `MPSTensor.prop3_cb`, and
 `MPSTensor.prop3_qIndex_le_iIndex`. Combined equivalence theorems now call the
 owned implications
 `isPrimitivePaper_of_hasEventuallyFullKrausRank`,
 `isStronglyIrreduciblePaper_of_isPrimitivePaper`,
 `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper`, and
-`qIndex_le_iIndex` directly. `TNLean/Wielandt/Inequality/Bounds.lean` is migrated
+`qIndex_le_iIndex` directly. `TNLean/MPS/Transfer/Primitivity/Bounds.lean` is migrated
 to the last owner. The normal-tensor basis retains the same mathematical
 primitivity equivalences and quantitative bound.
 

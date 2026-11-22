@@ -44,7 +44,7 @@ The replacement names in the rows for
 `verticalStaircasePatch`, `verticalStaircaseWindow`, and
 `verticalStaircaseUnion` — were themselves removed on 2026-08-26 with
 `TNLean/PEPS/TorusWindowFamilyVertical.lean` and
-`TNLean/PEPS/TorusCoordinateSwap.lean`. See
+`TNLean/PEPS/FundamentalTheorem/Torus/TorusCoordinateSwap.lean`. See
 `docs/audits/2026-08-26_peps_vertical_staircase_mirror_deletion.md`.
 
 The replacement names in the rows for

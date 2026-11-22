@@ -23,7 +23,7 @@ combined‑family LI is asking for strictly more than the paper needs.
 
 ### 0.2 The scope restriction
 
-`TNLean/MPS/BNT/Construction.lean` lines 96–98 document the
+`TNLean/MPS/CanonicalForm/BNT/Construction.lean` lines 96–98 document the
 *surface* on which all downstream FT theorems live:
 
 > **Scope restriction (one‑copy‑per‑sector):** `mu_strict_anti` forces

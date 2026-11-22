@@ -3,9 +3,9 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
-import TNLean.MPS.Examples.Rings.GoldenCompression
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
-import TNLean.MPS.MPDO.OperatorFromWordTrace
+import TNLean.MPS.Examples.Rings.GoldenRing
+import TNLean.MPS.FundamentalTheorem.Compression.MultiBlockTrace
+import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
 
 /-!
 # Example F: the Fibonacci fusion `τ ⊗ τ = 1 ⊕ τ`

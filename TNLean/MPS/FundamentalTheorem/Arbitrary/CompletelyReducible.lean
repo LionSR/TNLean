@@ -4,13 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.RingTheory.SimpleModule.Basic
-import QICLean.Algebra.MatrixFamilyAction
+import QICLean.Algebra.MatrixAlgebra.MatrixFamilyAction
 import QICLean.Channel.Schwarz.Basic
-import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessBlocks
+import TNLean.MPS.FundamentalTheorem.Compression.UniquenessBlocks
 import TNLean.MPS.FundamentalTheorem.Arbitrary.ArbitraryTensor
 import TNLean.MPS.FundamentalTheorem.Arbitrary.Basic
-import TNLean.MPS.FundamentalTheorem.Arbitrary.WordModuleGauge
-import TNLean.MPS.FundamentalTheorem.UnitaryGauge
+import TNLean.MPS.Transfer.Irreducible.UnitaryGauge
 
 /-!
 # Completely reducible tensors and unitary gauges

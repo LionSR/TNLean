@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.SequentialTruncation
-import TNLean.MPS.AreaLaw.SupportedCutRank
-import QICLean.Channel.SchmidtTrimming
-import QICLean.Entropy.RightLocalLift
+import TNLean.MPS.Tensor.VaryingBond.SequentialTruncation
+import TNLean.MPS.Tensor.OpenMPS.SupportedCutRank
+import QICLean.Channel.Schmidt.Trimming
+import QICLean.ManyBody.Entropy.Cut.RightLocalLift
 
 /-!
 # Trimming a chain vector across one cut

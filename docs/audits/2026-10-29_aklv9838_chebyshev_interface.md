@@ -27,7 +27,7 @@ tested public prerequisite and contains only the two new AGSP/rank modules.
 ## Compiled public interfaces
 
 `TNLean.MPS.AreaLaw.AKLV.exists_normalized_chain_chebyshev_agsp_of_inverse_gap_cutoff`
-is in `TNLean/MPS/AreaLaw/AKLV/ChebyshevProjector.lean`.
+is in `TNLean/MPS/AreaLaw/ChebyshevAGSP/ChebyshevProjector.lean`.
 It requires:
 
 - Original bonds `h : Fin (L-1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ`,

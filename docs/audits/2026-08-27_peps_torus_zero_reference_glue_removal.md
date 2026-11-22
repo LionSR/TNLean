@@ -23,21 +23,21 @@ is named.
 
 | Removed declaration | File | Replacement |
 |---|---|---|
-| `nestedThreeBlockGeometry_red` | `TNLean/PEPS/TorusWindowChain2.lean` | none needed (zero consumers); the projection is `rfl` |
-| `nestedThreeBlockGeometry_blue` | `TNLean/PEPS/TorusWindowChain2.lean` | none needed (zero consumers); the projection is `rfl` |
-| `nestedThreeBlockGeometry_complement` | `TNLean/PEPS/TorusWindowChain2.lean` | none needed (zero consumers); the projection is `rfl` |
-| `nestedThreeBlockGeometry_sdiff_red` | `TNLean/PEPS/TorusWindowChain2.lean` | none needed (zero consumers); the identity is `rfl` |
-| `restrictSubRegionσ_restrict` | `TNLean/PEPS/TorusWindowChain2.lean` | none needed (zero consumers); the identity is `rfl`. The live composition lemma `restrictSubRegionσ_restrictSubRegionσ` (`TorusWindowChain4.lean`) is a different statement and stays |
-| `deformedRegionStateAssembled_eq_of_curried_eq` | `TNLean/PEPS/TorusWindowChain2.lean` | none needed (zero consumers); the surviving direction `deformedRegionState_eq_of_assembled_eq` and the engine `deformedRegionStateAssembled_insert_eq_of_complementInjective` are what the chain uses |
-| `bareExtendInsert_zero` | `TNLean/PEPS/TorusWindowChain5.lean` | none needed (zero consumers once `extendInsert_zero`, its only caller, went) |
-| `extendInsert_zero` | `TNLean/PEPS/TorusWindowChain5.lean` | none needed (zero consumers); the additivity `extendInsert_add` and homogeneity `extendInsert_const_smul` the chain does use are kept |
-| `horizontalStaircaseEndPair_subset_patch` | `TNLean/PEPS/TorusWindowChain6.lean` | none needed (zero consumers); the live inclusion is `horizontalStaircasePatch_subset_completedUnion` |
-| `translateEquiv_symm_apply` | `TNLean/PEPS/TorusTranslation.lean` | none needed (zero consumers); the value is `rfl` |
-| `translateIncidentEdge_coe` | `TNLean/PEPS/TorusTranslation.lean` | none needed (zero consumers); the value is `rfl`. The definition `translateIncidentEdge` is kept — it is cited by a `\lean{...}` tag in `blueprint/src/chapter/ch24_peps_ft_torus_translation_and_reference_windows.tex` |
-| `bondDim_boundaryEdgeMap_translate_eq` | `TNLean/PEPS/TorusWitnessTransport.lean` | `bondDim_boundaryEdgeMap_translate`, its own proof term, which keeps live callers in `TorusGaugedWeightCovariance.lean` and `TorusCovariantAbsorbedFamily.lean` |
-| `glReindex_transportedAbsorbedGauge_eq` | `TNLean/PEPS/TorusCovariantAbsorbedFamily.lean` | `glReindex_self` after substituting the two parameter equalities; `glReindex_self` stays live in the same file |
-| `NormalTorusArcWindowInjectivityHypotheses.horizontalUnion_injective` | `TNLean/PEPS/TorusWindowComplement.lean` | `NormalTorusArcWindowInjectivityHypotheses.arcRectangle_injective` at the `(L+1) × K` rectangle |
-| `NormalTorusArcWindowInjectivityHypotheses.verticalUnion_injective` | `TNLean/PEPS/TorusWindowComplement.lean` | `NormalTorusArcWindowInjectivityHypotheses.arcRectangle_injective` at the `L × (K+1)` rectangle |
+| `nestedThreeBlockGeometry_red` | `TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowExtension.lean` | none needed (zero consumers); the projection is `rfl` |
+| `nestedThreeBlockGeometry_blue` | `TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowExtension.lean` | none needed (zero consumers); the projection is `rfl` |
+| `nestedThreeBlockGeometry_complement` | `TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowExtension.lean` | none needed (zero consumers); the projection is `rfl` |
+| `nestedThreeBlockGeometry_sdiff_red` | `TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowExtension.lean` | none needed (zero consumers); the identity is `rfl` |
+| `restrictSubRegionσ_restrict` | `TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowExtension.lean` | none needed (zero consumers); the identity is `rfl`. The live composition lemma `restrictSubRegionσ_restrictSubRegionσ` (`TorusWindowChain4.lean`) is a different statement and stays |
+| `deformedRegionStateAssembled_eq_of_curried_eq` | `TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowExtension.lean` | none needed (zero consumers); the surviving direction `deformedRegionState_eq_of_assembled_eq` and the engine `deformedRegionStateAssembled_insert_eq_of_complementInjective` are what the chain uses |
+| `bareExtendInsert_zero` | `TNLean/PEPS/FundamentalTheorem/Torus/Window/CornerExtensionAdditivity.lean` | none needed (zero consumers once `extendInsert_zero`, its only caller, went) |
+| `extendInsert_zero` | `TNLean/PEPS/FundamentalTheorem/Torus/Window/CornerExtensionAdditivity.lean` | none needed (zero consumers); the additivity `extendInsert_add` and homogeneity `extendInsert_const_smul` the chain does use are kept |
+| `horizontalStaircaseEndPair_subset_patch` | `TNLean/PEPS/FundamentalTheorem/Torus/Window/StaircaseChaining.lean` | none needed (zero consumers); the live inclusion is `horizontalStaircasePatch_subset_completedUnion` |
+| `translateEquiv_symm_apply` | `TNLean/PEPS/Graph/Torus/TorusTranslation.lean` | none needed (zero consumers); the value is `rfl` |
+| `translateIncidentEdge_coe` | `TNLean/PEPS/Graph/Torus/TorusTranslation.lean` | none needed (zero consumers); the value is `rfl`. The definition `translateIncidentEdge` is kept — it is cited by a `\lean{...}` tag in `blueprint/src/chapter/ch24_peps_ft_torus_translation_and_reference_windows.tex` |
+| `bondDim_boundaryEdgeMap_translate_eq` | `TNLean/PEPS/FundamentalTheorem/Torus/TorusWitnessTranslate.lean` | `bondDim_boundaryEdgeMap_translate`, its own proof term, which keeps live callers in `TorusGaugedWeightCovariance.lean` and `TorusCovariantAbsorbedFamily.lean` |
+| `glReindex_transportedAbsorbedGauge_eq` | `TNLean/PEPS/FundamentalTheorem/Torus/TorusReferenceAbsorbedFamily.lean` | `glReindex_self` after substituting the two parameter equalities; `glReindex_self` stays live in the same file |
+| `NormalTorusArcWindowInjectivityHypotheses.horizontalUnion_injective` | `TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowComplement.lean` | `NormalTorusArcWindowInjectivityHypotheses.arcRectangle_injective` at the `(L+1) × K` rectangle |
+| `NormalTorusArcWindowInjectivityHypotheses.verticalUnion_injective` | `TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowComplement.lean` | `NormalTorusArcWindowInjectivityHypotheses.arcRectangle_injective` at the `L × (K+1)` rectangle |
 
 The two `…Union_injective` lemmas are a mirror pair with identical shape and
 identical (zero) reference counts; they are removed together so the tree is not
@@ -47,7 +47,7 @@ them.
 
 ## Deliberately kept
 
-`TNLean.PEPS.deformedRegionState_block` (`TNLean/PEPS/TorusDeformedWindow.lean`)
+`TNLean.PEPS.deformedRegionState_block` (`TNLean/PEPS/FundamentalTheorem/Torus/Window/DeformedWindow.lean`)
 was proposed alongside these and is **not** removed. It is a source-cited
 substantive identity (arXiv:1804.04964 §3, lines 1205--1210 of
 `Papers/1804.04964/paper_normal.tex`; `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`,

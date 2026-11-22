@@ -4,21 +4,20 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Order.JordanHolder
-import QICLean.Algebra.MatrixFamilyAction
-import QICLean.Algebra.Subquotient
-import QICLean.Algebra.WordAlgebra
-import TNLean.MPS.Core.ReductionResidual
-import TNLean.MPS.Core.ReductionResidual.Basic
-import TNLean.MPS.Core.TracePairing
-import TNLean.MPS.FundamentalTheorem.Reduction.AdmissibleBlock
+import QICLean.Algebra.MatrixAlgebra.MatrixFamilyAction
+import QICLean.Algebra.Module.Subquotient
+import QICLean.Spectral.Eigenvalue.WordAlgebra
+import TNLean.MPS.Tensor.Reduction.ReductionResidual
+import TNLean.MPS.Tensor.Words.TracePairing
+import TNLean.MPS.FundamentalTheorem.Compression.AdmissibleBlock
 import TNLean.MPS.FundamentalTheorem.Arbitrary.ArbitraryTensor
 import TNLean.MPS.FundamentalTheorem.Arbitrary.Basic
 import TNLean.MPS.FundamentalTheorem.Arbitrary.FlagExistence
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
-import TNLean.MPS.FundamentalTheorem.Reduction.ReachableSubspace
-import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessAllReductions
-import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessFlag
+import TNLean.MPS.FundamentalTheorem.Compression.MultiBlockTrace
+import TNLean.MPS.FundamentalTheorem.Compression.MultiBlock
+import TNLean.MPS.FundamentalTheorem.WordModule.ReachableSubspace
+import TNLean.MPS.FundamentalTheorem.Compression.UniquenessAllReductions
+import TNLean.MPS.FundamentalTheorem.Compression.LabelledFlag
 
 /-!
 # Reduction pairs onto arbitrary targets and onto one block

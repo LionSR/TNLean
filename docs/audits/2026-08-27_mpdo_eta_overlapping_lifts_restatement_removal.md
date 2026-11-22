@@ -9,13 +9,13 @@ layer up, a theorem already proved for the underlying data.
 `MPOTensor.EtaLocalStructureData` carries a `bondData` field of type
 `MPOTensor.TranslationInvariantBondData`, and its `pairBond` is by definition
 `data.bondData.pairBond`. Four theorems in
-`TNLean/MPS/MPDO/CommutingOverlappingCoordinates.lean` therefore stated nothing
+`TNLean/MPS/Operator/PhysicalSector/CommutingOverlappingCoordinates.lean` therefore stated nothing
 beyond their `TranslationInvariantBondData` twins in the same file; each body
 was the single projection `data.bondData.<twin>`. At the audited head none of
 the four had a consumer anywhere outside its own defining block: the two call
 sites that read like consumers —
 `TNLean/MPS/MPDO/CommutingFormSpatialBridge.lean:61--63` and
-`TNLean/MPS/MPDO/CommutingBondEtaDecomposition.lean:315` — are inside theorems
+`TNLean/MPS/Operator/PhysicalSector/CommutingBondEtaDecomposition.lean:315` — are inside theorems
 whose `data` is a `TranslationInvariantBondData`, so they resolve to the
 surviving twins. The removals use the repository-local pass-through exception
 of `docs/project_conventions.md` §Style, so no transition declaration is left
@@ -24,7 +24,7 @@ behind.
 ## Removed declarations
 
 All four removed names lived in
-`TNLean/MPS/MPDO/CommutingOverlappingCoordinates.lean`, namespace
+`TNLean/MPS/Operator/PhysicalSector/CommutingOverlappingCoordinates.lean`, namespace
 `MPOTensor.EtaLocalStructureData`; all four replacements live in the same file,
 namespace `MPOTensor.TranslationInvariantBondData`, reached from an eta-local
 structure by `data.bondData`.
@@ -54,23 +54,23 @@ structure by `data.bondData`.
   definition the bond of its underlying translation-invariant data, so the
   surrounding sentences remain true verbatim; this is the same justification the
   2026-08-26 note gives for the migration it performed two paragraphs below. The
-  `\doclink{TNLean/MPS/MPDO/CommutingOverlappingCoordinates}` footnote is
+  `\doclink{TNLean/MPS/Operator/PhysicalSector/CommutingOverlappingCoordinates}` footnote is
   unchanged: that file still supplies the coordinate and commutation
   hypotheses.
 * The module docstring of
-  `TNLean/MPS/MPDO/CommutingOverlappingCoordinates.lean` retargets its two
+  `TNLean/MPS/Operator/PhysicalSector/CommutingOverlappingCoordinates.lean` retargets its two
   reindex bullets to the `TranslationInvariantBondData` names and drops the
   eta-local commutation bullet, whose twin the list already carried.
 
 ## Retained on purpose
 
 * `MPOTensor.EtaLocalStructureData.pairBond`
-  (`TNLean/MPS/MPDO/CommutingOverlappingCoordinates.lean`) is retained: it is
-  consumed at `TNLean/MPS/MPDO/CommutingBondEtaDecomposition.lean:340`, and its
+  (`TNLean/MPS/Operator/PhysicalSector/CommutingOverlappingCoordinates.lean`) is retained: it is
+  consumed at `TNLean/MPS/Operator/PhysicalSector/CommutingBondEtaDecomposition.lean:340`, and its
   `\lean{}` tag on `def:mpdo_three_site_overlapping_coordinates` is untouched.
 * `MPOTensor.EtaLocalStructureData.exists_positive_eta_pairBond_decomposition`
-  (`TNLean/MPS/MPDO/CommutingBondEtaDecomposition.lean`) is retained, with the
+  (`TNLean/MPS/Operator/PhysicalSector/CommutingBondEtaDecomposition.lean`) is retained, with the
   live consumers already recorded by the 2026-08-26 note.
 * `private theorem two_le_three`
-  (`TNLean/MPS/MPDO/CommutingOverlappingCoordinates.lean`) is retained: the
+  (`TNLean/MPS/Operator/PhysicalSector/CommutingOverlappingCoordinates.lean`) is retained: the
   surviving `TranslationInvariantBondData` theorems still use it.

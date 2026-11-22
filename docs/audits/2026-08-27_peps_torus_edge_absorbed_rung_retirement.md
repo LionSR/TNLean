@@ -3,7 +3,7 @@
 This audit records the repository-local pass-through exception
 (`docs/project_conventions.md` §Style) for the removal of
 `TNLean.PEPS.lambda_pow_card_torus_eq_one_of_edgeAbsorbed` from
-`TNLean/PEPS/TorusFundamentalTheorem.lean`.
+`TNLean/PEPS/FundamentalTheorem/Torus/TorusFundamentalTheorem.lean`.
 
 ## Why
 
@@ -40,7 +40,7 @@ performs the assembly.
 
 ## Import consequence
 
-`import TNLean.PEPS.RegionBlock.ProportionalityFromAbsorbed` was the removed
+`import TNLean.PEPS.FundamentalTheorem.Normal.RegionInsertion.ProportionalityFromAbsorbed` was the removed
 theorem's only reason to be in the module and went with it. This frees no
 compile cone: the seven modules below it remain in the root build through their
 other importers.

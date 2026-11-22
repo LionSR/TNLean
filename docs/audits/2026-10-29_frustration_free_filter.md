@@ -55,7 +55,7 @@ clients are separate, reusing the existing original-vector entropy theorem.
 ## Exact imported proof provenance and dependencies
 
 The entire original 129-line
-`TNLean/MPS/AreaLaw/AKLV/FrustrationFreeClipping.lean` is copied BYTE EXACT
+`TNLean/MPS/AreaLaw/ChebyshevAGSP/FrustrationFree/FrustrationFreeClipping.lean` is copied BYTE EXACT
 from draft #10430 at `3b93fea3d76535e87d1e297107baddce73d8af78`, together
 with its exact original 41-line unready Blueprint entry. This is an explicit
 logical dependency on that unaccepted draft, not duplicate proof work or a

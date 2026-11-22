@@ -37,7 +37,7 @@ these intrinsic numerical identities. It does not construct the source's
 printed blocked gates or their sequential unwinding. The unrestricted source
 proposition remains `notready`, and #7111 remains open.
 
-New source is `MPS/MPU/CanonicalTwistedTransfer.lean`, with four public
+New source is `MPS/MPU/Symmetry/TimeReversal/CanonicalTwistedTransfer.lean`, with four public
 statements and matching scope-specific `notready` Blueprint anchors. Native
 validation covers pinned API review, generated imports, local import graph,
 declaration coverage, mathematical roles, prose, TeX formatting, tactic scan,

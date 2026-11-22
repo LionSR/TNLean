@@ -322,9 +322,9 @@ TNLean/
 | Old Path | New Path | Rationale |
 |----------|----------|-----------|
 | `Wielandt/Theorem1` | `Wielandt/PaperResults/WielandtInequality` | The _main theorem_ deserves its mathematical name |
-| `Wielandt/Prop3` | `Wielandt/Primitivity/Equivalence` | "Proposition 3" = primitivity 3-way equivalence |
-| `Wielandt/Prop3_ac` | `Wielandt/Primitivity/ImpliesStronglyIrreducible` | Direction (a)→(c) of Prop 3 |
-| `Wielandt/Prop3_cb` | `Wielandt/Primitivity/StronglyIrreducibleToFullRank` | Direction (c)→(b) of Prop 3 |
+| `Wielandt/Prop3` | `MPS/Transfer/Primitivity/Equivalence` | "Proposition 3" = primitivity 3-way equivalence |
+| `Wielandt/Prop3_ac` | `MPS/Transfer/Primitivity/ImpliesStronglyIrreducible` | Direction (a)→(c) of Prop 3 |
+| `Wielandt/Prop3_cb` | `MPS/Transfer/Primitivity/StronglyIrreducibleToFullRank` | Direction (c)→(b) of Prop 3 |
 | `Wielandt/Lemma1` | `Wielandt/PaperResults/NonzeroTraceWord` | Lemma 1 = nonzero trace word |
 | `Wielandt/Lemma2` | `Wielandt/PaperResults/EigenvectorSpreadingPaper` | Lemma 2(a) = eigenvector spreading |
 | `Wielandt/Lemma2b` | `Wielandt/PaperResults/VectorToMatrixSpan` | Lemma 2(b) core = vector→matrix |
@@ -336,7 +336,7 @@ TNLean/
 | Old Path | New Path | Rationale |
 |----------|----------|-----------|
 | `MPS/BNTPermutationThm44` | `MPS/BNT/PermutationRigidity` | Drop "Thm44", describe content |
-| `MPS/CanonicalFormExistence1606` | `MPS/CanonicalForm/Existence` | Drop arXiv number |
+| `MPS/CanonicalFormExistence1606` | `MPS/CanonicalForm/NormalBlocks/IrreducibleDecomposition` | Drop arXiv number |
 | `Axioms/BrouwerFixedPointDensityMatrices` | `Axioms/BrouwerFixedPoint` | Shorter, clear |
 | `Channel/PositiveMap` | `Channel/Basic` | This is the base definitions file |
 | `MPS/TPGaugeFromAdjointFixedPoint` | `MPS/Basic/TPGauge` | Shorter name |
@@ -591,7 +591,7 @@ TNLean/Channel/PeripheralClosure.lean        → TNLean/Archive/PeripheralClosur
 
 ### MPS
 ```
-TNLean/MPS/Defs.lean                         → (no change, top-level)
+TNLean/MPS/Tensor/Defs.lean                         → (no change, top-level)
 
 TNLean/MPS/Transfer.lean                     → TNLean/MPS/Basic/Transfer.lean
 TNLean/MPS/Blocking.lean                     → TNLean/MPS/Basic/Blocking.lean
@@ -602,35 +602,35 @@ TNLean/MPS/MultiBlock.lean                   → TNLean/MPS/Basic/MultiBlock.lea
 TNLean/MPS/TransferNormalization.lean        → TNLean/MPS/Basic/TransferNormalization.lean
 TNLean/MPS/TPGaugeFromAdjointFixedPoint.lean → TNLean/MPS/Basic/TPGauge.lean
 
-TNLean/MPS/BNT.lean                          → TNLean/MPS/BNT/Basic.lean
+TNLean/MPS/BNT.lean                          → TNLean/MPS/CanonicalForm/BNT/Basic.lean
 TNLean/MPS/BasisNormal.lean                  → TNLean/MPS/BNT/BasisNormal.lean
-TNLean/MPS/BNTConstruction.lean              → TNLean/MPS/BNT/Construction.lean
+TNLean/MPS/BNTConstruction.lean              → TNLean/MPS/CanonicalForm/BNT/Construction.lean
 TNLean/MPS/BNTPermutationThm44.lean          → TNLean/MPS/BNT/PermutationRigidity.lean
 TNLean/MPS/BNTPermutationSimple.lean         → TNLean/MPS/BNT/PermutationSimple.lean
 
-TNLean/MPS/CanonicalFormReduction.lean       → TNLean/MPS/CanonicalForm/Reduction.lean
+TNLean/MPS/CanonicalFormReduction.lean       → TNLean/MPS/Tensor/DirectSum/IrreducibleDecomposition.lean
 TNLean/MPS/CanonicalFormFromPrimitive.lean   → TNLean/MPS/CanonicalForm/FromPrimitive.lean
 TNLean/MPS/CanonicalFormFromPeripheralPrimitive.lean → TNLean/MPS/CanonicalForm/FromPeripheralPrimitive.lean
-TNLean/MPS/CanonicalFormExistence1606.lean   → TNLean/MPS/CanonicalForm/Existence.lean
+TNLean/MPS/CanonicalFormExistence1606.lean   → TNLean/MPS/CanonicalForm/NormalBlocks/IrreducibleDecomposition.lean
 TNLean/MPS/NormalCanonicalFormPipeline.lean  → TNLean/MPS/CanonicalForm/NormalPipeline.lean
 
-TNLean/MPS/FundamentalTheorem.lean           → TNLean/MPS/FundamentalTheorem/Basic.lean
-TNLean/MPS/FundamentalTheoremProportional.lean → TNLean/MPS/FundamentalTheorem/Proportional.lean
-TNLean/MPS/FundamentalTheoremMulti.lean      → TNLean/MPS/FundamentalTheorem/Multi.lean
+TNLean/MPS/FundamentalTheorem.lean           → TNLean/MPS/Tensor/Gauge/FundamentalTheorem.lean
+TNLean/MPS/FundamentalTheoremProportional.lean → TNLean/MPS/Transfer/Spectrum/Proportional.lean
+TNLean/MPS/FundamentalTheoremMulti.lean      → TNLean/MPS/Tensor/DirectSum/GaugeEquiv.lean
 TNLean/MPS/FundamentalTheoremFull.lean       → TNLean/MPS/FundamentalTheorem/Full.lean
 TNLean/MPS/CoefficientConvergence.lean       → TNLean/MPS/FundamentalTheorem/CoefficientConvergence.lean
 
-TNLean/MPS/IrreducibleFormII.lean            → TNLean/MPS/Irreducible/FormII.lean
-TNLean/MPS/IrreducibleAdjoint.lean           → TNLean/MPS/Irreducible/Adjoint.lean
-TNLean/MPS/FixedPointInvariantProjection.lean → TNLean/MPS/Irreducible/FixedPointProjection.lean
+TNLean/MPS/IrreducibleFormII.lean            → TNLean/MPS/Transfer/Irreducible/DiagonalFixedPoint.lean
+TNLean/MPS/IrreducibleAdjoint.lean           → TNLean/MPS/Transfer/Irreducible/DiagonalFixedPoint.lean
+TNLean/MPS/FixedPointInvariantProjection.lean → TNLean/MPS/Transfer/Irreducible/FixedPointProjection.lean
 
-TNLean/MPS/MPVOverlap.lean                   → TNLean/MPS/Overlap/Basic.lean
-TNLean/MPS/CastOverlapDecay.lean             → TNLean/MPS/Overlap/CastDecay.lean
+TNLean/MPS/MPVOverlap.lean                   → TNLean/MPS/Tensor/Overlap.lean
+TNLean/MPS/CastOverlapDecay.lean             → TNLean/MPS/Transfer/Spectrum/CastDecay.lean
 TNLean/MPS/PeripheralToSpectralGap.lean      → TNLean/MPS/Overlap/PeripheralToSpectralGap.lean
 
-TNLean/MPS/BlockPermutationMPS.lean          → TNLean/MPS/Structure/BlockPermutation.lean
-TNLean/MPS/InvariantSubspaceDecomp.lean      → TNLean/MPS/Structure/InvariantSubspaceDecomp.lean
-TNLean/MPS/LinearExtension.lean              → TNLean/MPS/Structure/LinearExtension.lean
+TNLean/MPS/BlockPermutationMPS.lean          → TNLean/MPS/CanonicalForm/BlockPermutation.lean
+TNLean/MPS/InvariantSubspaceDecomp.lean      → TNLean/MPS/Tensor/DirectSum/InvariantSubspaceDecomp.lean
+TNLean/MPS/LinearExtension.lean              → TNLean/MPS/Tensor/Words/LinearExtension.lean
 TNLean/MPS/PrimitivityBridge.lean            → TNLean/MPS/Structure/PrimitivityBridge.lean
 
 TNLean/MPS/BlockingPeriodicityCFII_viaAdjoint.lean → TNLean/MPS/Periodicity/CFIIViaAdjoint.lean
@@ -650,34 +650,34 @@ TNLean/Wielandt/FittingDecomposition.lean     → (no change, top-level)
 TNLean/Wielandt/QuantumWielandt.lean          → (no change, top-level)
 
 TNLean/Wielandt/PrimitivePaper.lean           → TNLean/Wielandt/Primitivity/Defs.lean
-TNLean/Wielandt/PrimitiveEquiv.lean           → TNLean/Wielandt/Primitivity/EasyDirections.lean
-TNLean/Wielandt/Prop3.lean                    → TNLean/Wielandt/Primitivity/Equivalence.lean
-TNLean/Wielandt/Prop3_ac.lean                 → TNLean/Wielandt/Primitivity/ImpliesStronglyIrreducible.lean
-TNLean/Wielandt/Prop3_cb.lean                 → TNLean/Wielandt/Primitivity/StronglyIrreducibleToFullRank.lean
+TNLean/Wielandt/PrimitiveEquiv.lean           → TNLean/MPS/Transfer/Primitivity/EasyDirections.lean
+TNLean/Wielandt/Prop3.lean                    → TNLean/MPS/Transfer/Primitivity/Equivalence.lean
+TNLean/Wielandt/Prop3_ac.lean                 → TNLean/MPS/Transfer/Primitivity/ImpliesStronglyIrreducible.lean
+TNLean/Wielandt/Prop3_cb.lean                 → TNLean/MPS/Transfer/Primitivity/StronglyIrreducibleToFullRank.lean
 TNLean/Wielandt/PrimitiveImpliesIrreducible.lean → TNLean/Wielandt/Primitivity/ImpliesIrreducible.lean
-TNLean/Wielandt/PrimitivityNormal.lean        → TNLean/Wielandt/Primitivity/Normal.lean
+TNLean/Wielandt/PrimitivityNormal.lean        → TNLean/MPS/Transfer/Primitivity/Normal.lean
 TNLean/Wielandt/PrimitivityToNormal.lean      → TNLean/Wielandt/Primitivity/ToNormal.lean
 
-TNLean/Wielandt/CumulativeSpan.lean           → TNLean/Wielandt/SpanGrowth/CumulativeSpan.lean
+TNLean/Wielandt/CumulativeSpan.lean           → TNLean/MPS/Tensor/Words/WordSpan.lean
 TNLean/Wielandt/CumulativeToWordSpan.lean     → TNLean/Wielandt/SpanGrowth/CumulativeToExact.lean
-TNLean/Wielandt/EigenvectorSpreading.lean     → TNLean/Wielandt/SpanGrowth/EigenvectorSpreading.lean
-TNLean/Wielandt/InvertibleWordSpanGrowth.lean → TNLean/Wielandt/SpanGrowth/InvertibleWordSpan.lean
-TNLean/Wielandt/NonzeroTraceProduct.lean      → TNLean/Wielandt/SpanGrowth/NonzeroTraceProduct.lean
+TNLean/Wielandt/EigenvectorSpreading.lean     → TNLean/MPS/Tensor/Words/WordSpan.lean
+TNLean/Wielandt/InvertibleWordSpanGrowth.lean → TNLean/MPS/Transfer/Primitivity/InvertibleWordSpan.lean
+TNLean/Wielandt/NonzeroTraceProduct.lean      → TNLean/MPS/Tensor/Words/WordSpan.lean
 TNLean/Wielandt/WielandtBound.lean            → TNLean/Wielandt/SpanGrowth/WielandtBound.lean
 
 TNLean/Wielandt/RankOneConstruction.lean      → TNLean/Wielandt/RankOne/Construction.lean
 TNLean/Wielandt/RankOneElement.lean           → TNLean/Wielandt/RankOne/Element.lean
 TNLean/Wielandt/RankOneExtraction.lean        → TNLean/Wielandt/RankOne/Extraction.lean
-TNLean/Wielandt/RankOneExtractionFull.lean    → TNLean/Wielandt/RankOne/ExtractionFull.lean
+TNLean/Wielandt/RankOneExtractionFull.lean    → TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean
 TNLean/Wielandt/RankOneManufacture.lean       → TNLean/Wielandt/RankOne/Manufacture.lean
 TNLean/Wielandt/RankOneProducts.lean          → TNLean/Wielandt/RankOne/Products.lean
 TNLean/Wielandt/RankOneSpanGrowth.lean        → TNLean/Wielandt/RankOne/SpanGrowth.lean
 TNLean/Wielandt/RankOneBoundedWord.lean       → TNLean/Wielandt/RankOne/BoundedWord.lean
 
 TNLean/Wielandt/RectangularRanges.lean        → TNLean/Wielandt/RectangularSpan/Ranges.lean
-TNLean/Wielandt/RectangularSpan.lean          → TNLean/Wielandt/RectangularSpan/Basic.lean
-TNLean/Wielandt/RectSpanGrowth.lean           → TNLean/Wielandt/RectangularSpan/Growth.lean
-TNLean/Wielandt/RectSpanUniversality.lean     → TNLean/Wielandt/RectangularSpan/Universality.lean
+TNLean/Wielandt/RectangularSpan.lean          → TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean
+TNLean/Wielandt/RectSpanGrowth.lean           → TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean
+TNLean/Wielandt/RectSpanUniversality.lean     → TNLean/MPS/Transfer/Primitivity/RectangularSpan.lean
 
 TNLean/Wielandt/Theorem1.lean                 → TNLean/Wielandt/PaperResults/WielandtInequality.lean
 TNLean/Wielandt/Lemma1.lean                   → TNLean/Wielandt/PaperResults/NonzeroTraceWord.lean

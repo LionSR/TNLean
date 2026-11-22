@@ -143,16 +143,16 @@ flowchart BT
 | `PEPS/Graph` | finite graphs, tori, cycles, cells and plaquettes, regions and their boundaries, walks and holonomy of group labels; no tensor | base |
 | `PEPS/Tensor` | PEPS tensors on a graph, contraction, open regions, blocked regions | `PEPS/Graph`, the MPS chain up to `MPS/ParentHamiltonian` |
 | `PEPS/Injectivity` | injective, G-injective, semi-regular and normal tensors, injectivity of regions, flux and charge sectors | `PEPS/Tensor` and below |
-| `PEPS/FundamentalTheorem` | gauge equivalence and uniqueness on connected graphs, cycles, tori; normal tensors | `PEPS/Injectivity` and below |
-| `PEPS/ParentHamiltonian` | parent Hamiltonians of injective, G-injective, semi-regular tensors, regions and reblocking | `PEPS/FundamentalTheorem` and below |
+| `PEPS/FundamentalTheorem/Injective/FundamentalTheorem` | gauge equivalence and uniqueness on connected graphs, cycles, tori; normal tensors | `PEPS/Injectivity` and below |
+| `PEPS/ParentHamiltonian` | parent Hamiltonians of injective, G-injective, semi-regular tensors, regions and reblocking | `PEPS/FundamentalTheorem/Injective/FundamentalTheorem` and below |
 | `PEPS/AreaLaw` | the area law for gapped ground states of the square grid (no tensor network) | `PEPS/ParentHamiltonian` and below |
 | `PEPS/Approximation` | the polynomial PEPS approximation of gapped square-grid ground states | `PEPS/AreaLaw` and below |
 | `PEPS/Examples` | named two-dimensional models | everything in `PEPS` and `MPS/Examples` |
 
-MPS never imports PEPS. The four modules that did (`MPS/AreaLaw/SnakeGrid*`, `MPS/Symmetry/GInjective`) are moved:
+MPS never imports PEPS. The four modules that did (`MPS/AreaLaw/SnakeGrid*`, `MPS/Symmetry/OnSite/GInjective`) are moved:
 
 - the snake-grid modules state square-grid results and go to `PEPS/AreaLaw`;
-- the predicate `IsGInjective` of `PEPS/GInjective` mentions only a linear map
+- the predicate `IsGInjective` of `Algebra/GInjective` mentions only a linear map
   and a representation, so it goes to `base` (`Algebra/GInjective`) and is
   flagged for QICLean.
 
@@ -240,7 +240,7 @@ declarations that sit in the wrong module (for example `IncidentEdge` in
 - **`PEPS/Graph`** (65): `Cell` 17, `Holonomy` 18, `Plaquette` 7, `Region` 7, `Torus` 9, `Walk` 7
 - **`PEPS/Tensor`** (45): `Cycle` 3, `GraphState` 15, `Network` 7, `Region` 8, `SquareLattice` 4, `Torus` 8
 - **`PEPS/Injectivity`** (288): `Boundary` 13, `Charge` 31, `Closure` 10, `CutSpace` 25, `Entropy` 13, `Flux` 32, `FluxString` 15, `GInjective` 16, `Multiplicity` 30, `Normal` 12, `Region` 15, `Regular` 29, `SemiRegular` 12, `TorusCharge` 9, `TorusSector` 26
-- **`PEPS/FundamentalTheorem`** (140): `ConnectedGraph` 3, `Cycle` 10, `Injective` 20, `Normal` 17, `Normal.CoarseThreeSite` 10, `Normal.RegionInsertion` 23, `Torus` 23, `Torus.Window` 34
+- **`PEPS/FundamentalTheorem/Injective/FundamentalTheorem`** (140): `ConnectedGraph` 3, `Cycle` 10, `Injective` 20, `Normal` 17, `Normal.CoarseThreeSite` 10, `Normal.RegionInsertion` 23, `Torus` 23, `Torus.Window` 34
 - **`PEPS/ParentHamiltonian`** (144): `Cycle` 3, `GInjective` 11, `Injective` 16, `Placement` 5, `Reblocking` 10, `Region` 14, `Regular` 24, `SemiRegular` 28, `ThreeBlock` 6, `Torus` 27
 - **`PEPS/AreaLaw`** (478): `(top)` 24, `BirthTemplates` 14, `BoxExponent` 18, `ChannelWords` 20, `ChargePoints` 26, `Collar` 9, `CollarInformation` 11, `Constraints` 10, `Fans` 27, `FinalRegions` 15, `FrustrationFree` 4, `Histories` 34, `InitialRegions` 17, `Interactions` 9, `Layers` 22, `NormComparisons` 21, `RegionalFilters` 16, `Regions` 14, `RepairStages` 19, `RestoringOperator` 10, `Rounds` 35, `SafeRectangles` 8, `Scales` 20, `Squares` 14, `Stars` 11, `Statuses` 25, `Templates` 25
 - **`PEPS/Approximation`** (199): `(top)` 9, `Cells` 12, `DoubledHamiltonian` 5, `DyadicHierarchy` 4, `Exact` 4, `FrameChanges` 22, `Frames` 18, `GroundState` 7, `Guides` 29, `Information` 17, `NestedPatches` 8, `PartyCircuit` 28, `PatchRewrite` 7, `Protocol` 23, `Routing` 6
@@ -273,12 +273,12 @@ declarations that sit in the wrong module (for example `IncidentEdge` in
 | `MPS/Periodic` | 77 | `MPS/FundamentalTheorem/Refinement` 20, `MPS/CanonicalForm/Periodic/Overlap` 18, `MPS/CanonicalForm/Periodic/CyclicSectors` 11, `MPS/FundamentalTheorem/Periodic` 10, `MPS/CanonicalForm/Periodic/Blocking` 8, `MPS/CanonicalForm/Periodic` 6, `MPS/Transfer/Irreducible` 3, `MPS/Tensor` 1 |
 | `MPS/Tactic` | 1 | `MPS/Tensor` 1 |
 | `PEPS/EdgeMiddlePhysical` | 2 | `PEPS/FundamentalTheorem/Injective` 2 |
-| `PEPS/TwoInjectiveComparison` | 2 | `PEPS/FundamentalTheorem/Injective` 2 |
+| `PEPS/FundamentalTheorem/Injective/TwoInjectiveComparison` | 2 | `PEPS/FundamentalTheorem/Injective` 2 |
 | `PEPS/VertexComplement` | 2 | `PEPS/Tensor/Region` 1, `PEPS/Injectivity/Region` 1 |
 | `PEPS/TorusWindowPeeling` | 7 | `PEPS/FundamentalTheorem/Torus/Window` 7 |
 | `PEPS/RegionBlock` | 48 | `PEPS/FundamentalTheorem/Normal/RegionInsertion` 24, `PEPS/FundamentalTheorem/Normal/CoarseThreeSite` 10, `PEPS/Injectivity/Region` 10, `PEPS/Tensor/Region` 2, `PEPS/FundamentalTheorem/Torus/Window` 2 |
-| `PEPS/FundamentalTheorem` | 6 | `PEPS/FundamentalTheorem/Injective` 6 |
-| `MPS/Defs`, `MPS/OpenBoundary` (files) | 2 | `MPS/Tensor` |
+| `PEPS/FundamentalTheorem/Injective/FundamentalTheorem` | 6 | `PEPS/FundamentalTheorem/Injective` 6 |
+| `MPS/Tensor/Defs`, `MPS/Tensor/OpenBoundary` (files) | 2 | `MPS/Tensor` |
 | `Archive` | 4 | Not in the map (outside the production build); see the questions. |
 
 The top-level directories `Spectral`, `Wielandt` and `PiAlgebra` disappear. So
@@ -337,12 +337,12 @@ No library module imports an example after the map.
 
 | Directory | Modules | Model, and the theorems it instantiates |
 |---|---:|---|
-| `MPS/Examples/AKLT` | 14 | AKLT chain: injectivity and normality, parent Hamiltonian (two-site, polynomial form, spin-2 projector), open-boundary fourfold degeneracy and singlet/triplet sectors, correlation length, on-site `SO(3)` and `ℤ₂ × ℤ₂` symmetry with nontrivial cohomology class, string order (virtual and physical), time reversal and reflection; with the cluster state: degenerate entanglement spectrum and periodic symmetry overlaps |
-| `MPS/Examples/Cluster` | 7 | Cluster state: tensor from controlled-`Z`, stabilizer parent Hamiltonian, `ℤ₂ × ℤ₂` SPT fixed point, physical string order, ground state of the source tensor; zero correlation length of GHZ and cluster states (renormalization fixed points) |
-| `MPS/Examples/GHZ` | 4 | GHZ state (qubit and `d`-level): non-injective normal form with `d` blocks, `G`-injective fixed-point tensor, parent-Hamiltonian ground space |
-| `MPS/Examples/GHZCluster` | 3 | `ℤ₄ × ℤ₂` GHZ–cluster tensor: physical action, L-symbols, failure of the blocked comparison |
-| `MPS/Examples/PVBS` | 18 | Product vacua with boundary states and the W state (its one-particle case): open and periodic ground spaces, parent interaction, exact and uniform gaps, critical gaplessness, localization; W state with open and periodic boundary, isometric blocking, canonical-form length bounds |
-| `MPS/Examples/MajumdarGhosh` | 6 | Majumdar–Ghosh chain: dimer coverings, Hamiltonian, ground space of the parent Hamiltonian, total spin |
+| `MPS/Examples/AKLT/AKLT` | 14 | AKLT chain: injectivity and normality, parent Hamiltonian (two-site, polynomial form, spin-2 projector), open-boundary fourfold degeneracy and singlet/triplet sectors, correlation length, on-site `SO(3)` and `ℤ₂ × ℤ₂` symmetry with nontrivial cohomology class, string order (virtual and physical), time reversal and reflection; with the cluster state: degenerate entanglement spectrum and periodic symmetry overlaps |
+| `MPS/Examples/Cluster/Cluster` | 7 | Cluster state: tensor from controlled-`Z`, stabilizer parent Hamiltonian, `ℤ₂ × ℤ₂` SPT fixed point, physical string order, ground state of the source tensor; zero correlation length of GHZ and cluster states (renormalization fixed points) |
+| `MPS/Examples/GHZ/GHZ` | 4 | GHZ state (qubit and `d`-level): non-injective normal form with `d` blocks, `G`-injective fixed-point tensor, parent-Hamiltonian ground space |
+| `MPS/Examples/GHZCluster/GHZCluster` | 3 | `ℤ₄ × ℤ₂` GHZ–cluster tensor: physical action, L-symbols, failure of the blocked comparison |
+| `MPS/Examples/PVBS/PVBS` | 18 | Product vacua with boundary states and the W state (its one-particle case): open and periodic ground spaces, parent interaction, exact and uniform gaps, critical gaplessness, localization; W state with open and periodic boundary, isometric blocking, canonical-form length bounds |
+| `MPS/Examples/MajumdarGhosh/MajumdarGhosh` | 6 | Majumdar–Ghosh chain: dimer coverings, Hamiltonian, ground space of the parent Hamiltonian, total spin |
 | `MPS/Examples/Spin` | 3 | Spin operators and the exchange interaction (no tensor network; QICLean-bound) |
 | `MPS/Examples/MultiBlock` | 22 | Worked examples and sharpness counterexamples of the fundamental theorem for multi-block and arbitrary tensors: reductions, flags, one-block thresholds, multiplicity, Jordan extensions, periodic irreducible non-normal tensor |
 | `MPS/Examples/Wielandt` | 5 | Cyclic quantum Wielandt example (index `D(D-1)`, obstruction, spanning length) and the three-Pauli channel (primitivity index versus matrix-span index) |
@@ -361,10 +361,10 @@ No library module imports an example after the map.
 | `MPS/Examples/WeakHopf` | 2 | Weak Hopf algebras of a Bell pair and of a finite set (MPO algebras of fixed points) |
 | `MPS/Examples/Rings` | 4 | Exact rings `ℤ[√2]`, golden integers, Eisenstein integers used to decide letter identities (no tensor network; QICLean-bound) |
 | `MPS/Examples` (top level) | 8 | single models: product states, even-parity tensor, Kitaev chain, identity plus `Z`-string MPDO, one-label fixed point, odd-ring unitary, hard-truncation cutoff, scalar-phase string order, periodic full-ring phase |
-| `PEPS/Examples/CZX` | 12 | CZX PEPS: on-site and boundary symmetry, boundary anomaly, open regions and rectangles |
-| `PEPS/Examples/QuantumDouble` | 7 | Quantum double models: primal and dual tensors, bond averaging, local and plaquette parent terms, renormalization |
+| `PEPS/Examples/CZX/CZX` | 12 | CZX PEPS: on-site and boundary symmetry, boundary anomaly, open regions and rectangles |
+| `PEPS/Examples/QuantumDouble/QuantumDouble` | 7 | Quantum double models: primal and dual tensors, bond averaging, local and plaquette parent terms, renormalization |
 | `PEPS/Examples/ToricCode` | 9 | Toric code: virtual parity, four torus sectors |
-| `PEPS/Examples/Cluster` | 3 | Two-dimensional and honeycomb cluster states, stabilizers of graph-state circuits |
+| `PEPS/Examples/Cluster/Cluster` | 3 | Two-dimensional and honeycomb cluster states, stabilizers of graph-state circuits |
 | `PEPS/Examples` (top level) | 5 | AKLT, GHZ, RVB, classical Gibbs weights as PEPS |
 | `MPS/Examples/BinaryCycle` | 5 | binary cycle MPDO (Example 4.11 of arXiv:1606.00608): ambient sectors, binary support, entropy, spectrum, zero correlation length of the source |
 | `MPS/Examples/BondTwoSingleton` | 4 | bond-two singleton model: Gram boundary, physical gauge, length-dependent renormalization fixed point |
@@ -564,7 +564,7 @@ Remedies by host module (the declarations to move and where):
 - **`MPS/ParentHamiltonian/Gap/Comparison/PrimitiveGaugeExistence`:**
   `exists_hasComplementaryFixedPointGap_gauge_of_isNormal` goes to
   `MPS/CanonicalForm`, removing the last MPS pair.
-- **`QCA/Blocking`:** the import of `MPS/Core/Blocking` is replaced by
+- **`QCA/Blocking`:** the import of `MPS/Tensor/Physical/Blocking` is replaced by
   `QICLean.Kraus.Blocking`, since only `Kraus.blockPhysDim` and
   `Kraus.decodeBlockEquiv` are used. `MPSTensor.blockedConfigEquiv` and
   `ofFn_blockedConfigEquiv` mention no tensor and go to QICLean's
@@ -1064,7 +1064,7 @@ kind:
 |---|---:|
 | `PEPS/AreaLaw` | 147 |
 | `MPS/MPU`, `QCA` | 144 |
-| `PEPS/Graph` … `PEPS/FundamentalTheorem` | 111 |
+| `PEPS/Graph` … `PEPS/FundamentalTheorem/Injective/FundamentalTheorem` | 111 |
 | `MPS/AreaLaw` | 108 |
 | `PEPS/ParentHamiltonian`, `PEPS/Approximation` | 107 |
 | `MPS/Symmetry`, `MPS/Preparation` | 46 |
@@ -1073,7 +1073,7 @@ kind:
 | `MPS/CanonicalForm`, `FundamentalTheorem` | 12 |
 | `MPS/MPDO` | 12 |
 | Examples | 8 |
-| `PEPS/GInjective` | 1 |
+| `Algebra/GInjective` | 1 |
 
 The map does not design a TNLean home for them. They move with their
 neighbours, keep a plain object name, and leave with the QICLean work.
@@ -1145,7 +1145,7 @@ The application performs these steps:
    under `TNLean/`, and short paths in backticks. Text inside
    `\lean{…}`, `\uses{…}`, `\label{…}` and `\ref{…}` is never rewritten, and
    neither is a dotted name that is also a declaration name.
-5. **Recorded pairs.** `MUTUAL_DIRECTORIES` in
+5. **Recorded pairs.** `MUTUAL_LAYER_DIRECTORIES` in
    `scripts/check_import_layers.py` is replaced by the pairs that remain.
 6. **Aggregators.** They are regenerated with
    `scripts/generate_import_aggregators.py`.
@@ -1189,9 +1189,9 @@ rewritten by hand in the same change, from this document.
    above. Each one deletes recorded entries.
 2. **Extend `check_import_layers.py`.** Should it take the layers of this
    document (`LAYERS` and `ALLOWED` of `apply_library_layers.py`), with the
-   52 recorded imports as its `DEBT`?
+   52 recorded imports as its `UPWARD_IMPORTS`?
    *Recommendation:* yes, in the change that applies the map. That change also
-   replaces `MUTUAL_DIRECTORIES` wholesale, since the directory names change.
+   replaces `MUTUAL_LAYER_DIRECTORIES` wholesale, since the directory names change.
    The comparison with the base revision will report the renamed pairs as
    added, so this one change needs an exemption from that rule.
 3. **The non-tensor theorems.** The two-dimensional area law (534 modules) and
@@ -1246,7 +1246,7 @@ few destinations changed then. The module map, the lists in Part I and
 - `BlockWordSpanPropagation` is in `CanonicalForm/BlockSeparation`;
 - the periodic physical-dimension and rotation modules are in
   `Transfer/Irreducible`;
-- `PEPS/Approximation/Basic` is in `PEPS/Tensor/SquareLattice`. References to "section 3" (layer overrides) and "section 5" (edges)
+- `PEPS/Tensor/SquareLattice/Basic` is in `PEPS/Tensor/SquareLattice`. References to "section 3" (layer overrides) and "section 5" (edges)
 point to the per-module notes of the module map and to "Declaration-level work"
 above.
 
@@ -1428,7 +1428,7 @@ pass-throughs are gone.
 
 `Definitions` (normal tensors, CPSV canonical-form data, form II data; absorbs
 `SingleBlock`), `BlockFamily` (separate hypotheses on weighted block families, from
-`PiAlgebra/CanonicalFormSepAux`), `RetainedBlockReconstruction`, `PhysicalReindex`,
+`MPS/CanonicalForm/BlockFamily`), `RetainedBlockReconstruction`, `PhysicalReindex`,
 `TranslationInvariant` (the translation-invariant canonical form predicate, from
 `PGVWC07CanonicalForm`), `BlockPermutation` (automorphisms of products of matrix
 algebras, from `Structure`). These import nothing in this part except each other; every
@@ -1689,7 +1689,7 @@ BNTSectors; MPOAction; CZX; Examples last. No two siblings import each other.
 | `MPS/MPDO/Fusion` | fusion isometries and coisometries (Thm. 4.14(iii)), triple fusion and final sectors, blocked fusion and complete zipper data from it, fusion tensor clause, vertical product tensors and their positive fusion decomposition | 21 | Vertical, Coefficients, SectorMaps |
 | `MPS/MPDO/AmbientSectorMaps` | one-site and two-site ambient sector maps, two-site multiplicity spectrum and exact sector gauges, their corners, direct-sum unitaries and reflected targets | 8 (10) | Vertical, Coefficients, SectorMaps, Fusion |
 | `MPS/MPDO/TopologicalForm` | local projectors of the length-independent fusion form, recursive fusion histories, density decomposition, terminal spectral projections, multiplicity energy, commuting Gibbs Hamiltonian (also in physical coordinates) | 7 (8) | SectorMaps, Fusion |
-| `MPS/MPDO/CommutingForm` | fixed matrix-product tensors of commuting-bond products, positive fixed-bond sectors, sector rescaling of GSNNCH forms, four-cycle Markov structure of commuting Gibbs states, boundary traces of neighbouring operators | 6 (8) | none |
+| `MPS/Operator/Simple/CommutingForm` | fixed matrix-product tensors of commuting-bond products, positive fixed-bond sectors, sector rescaling of GSNNCH forms, four-cycle Markov structure of commuting Gibbs states, boundary traces of neighbouring operators | 6 (8) | none |
 | `MPS/MPDO/PhysicalSector` | physical-sector factorizations of MPDOs: active factor supports and restrictions, neighbouring operators, trace matrices and their ZCL relations, virtual and gauge transport, directed cuts, sector pairing with the trace transfer, bond-one case, neighbouring-operator preparations | 21 (24) | Entropy |
 | `MPS/MPDO/CyclicActiveSector` | cyclic-active sectors: restriction, retained coordinates, fourth-region marginals, cut coordinates and states, Markov (Hayashi) decomposition, area law, coefficient extraction, Case I of Lemma C.5, visibility of fixed-product sectors | 15 | Entropy, PhysicalSector, CommutingForm |
 | `MPS/MPDO/BNTSectors` | BNT sectors of a simple tensor: sector probabilities, SAL and ZCL of sectors, separating projectors, coefficient positivity, blocked channels across sectors, boundary decomposition, commuting products and GSNNCH form on the sectors | 10 (12) | Entropy, PhysicalSector, CyclicActiveSector, CommutingForm |
@@ -1792,13 +1792,13 @@ QuasiLocal < Symmetry`. `Circuit` and `DomainWall` import no sibling, and no sib
 
 | path | objects | modules | imports (siblings) |
 |---|---|---|---|
-| `MPS/MPU/CanonicalForm` | Canonical form and canonical form II of an MPU tensor: positive gauges, reduced and injective canonical representatives, transfer stabilization, the virtual sandwich `U ↦ AUB`, virtual unitary rigidity (including the even-chain version), physical identity ancillas, physical left actions, the physical adjoint, independent tensor products and the composition flattening, and the parity counterexample | 16 (23) | none |
-| `MPS/MPU/Simple` | Simple MPU tensors: the simple-tensor equivalence theorem, the complete networks for the gates `u` and `v`, the cut factors `X_i, Y_i, Z_i` with their normalizations and physical closures, the staircase gates, the three-legged decomposition, truncated symmetries, support compression, rectangular reductions and their ranks, uniqueness of cut decompositions, CF-II under blocking, and bond similarities | 27 (30) | CanonicalForm |
-| `MPS/MPU/Index` | The MPU index: cut ranks under blocking, composition and tensor products, the index of the identity and of representatives, continuity along paths, bond padding | 18 (19) | CanonicalForm, Simple |
+| `MPS/CanonicalForm/SimpleMPU/FullSupport` | Canonical form and canonical form II of an MPU tensor: positive gauges, reduced and injective canonical representatives, transfer stabilization, the virtual sandwich `U ↦ AUB`, virtual unitary rigidity (including the even-chain version), physical identity ancillas, physical left actions, the physical adjoint, independent tensor products and the composition flattening, and the parity counterexample | 16 (23) | none |
+| `MPS/Operator/Unitary/Simple` | Simple MPU tensors: the simple-tensor equivalence theorem, the complete networks for the gates `u` and `v`, the cut factors `X_i, Y_i, Z_i` with their normalizations and physical closures, the staircase gates, the three-legged decomposition, truncated symmetries, support compression, rectangular reductions and their ranks, uniqueness of cut decompositions, CF-II under blocking, and bond similarities | 27 (30) | CanonicalForm |
+| `MPS/MPU/Index/Index` | The MPU index: cut ranks under blocking, composition and tensor products, the index of the identity and of representatives, continuity along paths, bond padding | 18 (19) | CanonicalForm, Simple |
 | `MPS/MPU/Representation` | Group representations by MPUs: the physical adjoint as inverse, dagger gauges and fusion scalars, inverse-compatible cut decompositions and their properties, common blocking of action and pair reductions, the index of a representation | 19 (25) | CanonicalForm, Simple, Index |
 | `MPS/MPU/Representation/GroupCocycleMPO` | Group MPUs from a three-cocycle (arbitrary boundary, fusion algebra, fusion tensors, cyclic and Klein instances) and the periodic support projector | 5 | imports its parent `GroupCocycleMPO.lean` |
-| `MPS/MPU/StandardForm` | Two-site standard forms (gates `u, v`): the periodic circuit, open and residual words, the two-block form, doubling, interpolation, tensors built from gates, the canonical representative, and the fundamental theorem of MPUs (letters, gates, half factors, arbitrary compact decompositions, virtual gauges of selected factors, even periodic families), together with conjugation of standard-form gates | 30 | CanonicalForm, Simple, Index |
-| `MPS/MPU/Equivalence` | Strict equivalence and equivalence of MPUs (ancillas and blocking), symmetries that retain a physical matrix, symmetric paths under physical left actions, and clause (iv) of the index theorem in both directions | 8 | CanonicalForm, Index, StandardForm |
+| `MPS/Operator/Unitary/StandardForm` | Two-site standard forms (gates `u, v`): the periodic circuit, open and residual words, the two-block form, doubling, interpolation, tensors built from gates, the canonical representative, and the fundamental theorem of MPUs (letters, gates, half factors, arbitrary compact decompositions, virtual gauges of selected factors, even periodic families), together with conjugation of standard-form gates | 30 | CanonicalForm, Simple, Index |
+| `MPS/MPU/Equivalence/Equivalence` | Strict equivalence and equivalence of MPUs (ancillas and blocking), symmetries that retain a physical matrix, symmetric paths under physical left actions, and clause (iv) of the index theorem in both directions | 8 | CanonicalForm, Index, StandardForm |
 | `MPS/MPU/QuasiLocal` | The quasi-local automorphism of an MPU: finite-chain conjugation, buffered local actions, propagation, the inverse, surjectivity, translation covariance, the canonical pair image, comparison with the GNVW index, and the Margolus local rule | 23 (26) | CanonicalForm, Simple, Index, StandardForm |
 | `MPS/MPU/Symmetry/Conjugation` | Conjugation-invariant standard forms: orthogonal and symplectic standard forms, the MPS sign | 3 | none |
 | `MPS/MPU/Symmetry/TimeReversal` | Time reversal: local gate certificates, necessity and sufficiency, the sign, the intrinsic periodic trace, twisted transfers, blocking parity, the printed blocking circuits, the MPS class | 19 | Conjugation |
@@ -1822,7 +1822,7 @@ The Circuits layer takes the 4 Margolus gate modules. The 5 modules on star-suba
 go to QICLean's `Algebra`.
 
 #### Directories named for a source or a proof stage
-None of the present directories (`MPS/MPU`, `MPS/MPU/GroupCocycleMPO`, `QCA`) is named for a source or a stage.
+None of the present directories (`MPS/MPU`, `MPS/MPU/Representation/GroupCocycleMPO`, `QCA`) is named for a source or a stage.
 Several module names keep the paper's wording: the prefixes `Source…`, `Printed…`, `Supplied…` and the suffix
 `…PleasantProperties`. Rule 8 keeps these names, but they are candidates for later renaming.
 
@@ -1849,7 +1849,7 @@ circuit model: `IsGateProduct`, `IsCleanImplementation`, `ManyBody.placeAlong`, 
   AffineGramHull, AffineGramTransfer, AffineIntervalIsometry, BalancedGramMetrics, MinimalPhysicalCuts,
   PrefixGramNormalizer}`, `MPS/Preparation/MinimalCutRepresentation{Cuts, Factorization, Intervals, Bases}`, and
   `MPSPreparation.twoCfg_injective`. The assignment places all of these in `MPS/Tensor`. Also needed is the
-  configuration type `MPSTensor.Cfg` from `MPS/Overlap/Basic`, which should become QICLean's site configuration
+  configuration type `MPSTensor.Cfg` from `MPS/Tensor/Overlap`, which should become QICLean's site configuration
   type.
 
 `MPS/MPU/DomainWall` is named for its objects. Only the two domain-wall theorems in it mention a tensor network.
@@ -2128,7 +2128,7 @@ only the `tn` modules (MPS approximation statements) would stay.
 The `Algorithm.*` programs (`Query`, `SweepProgram`, `SampledProgram`,
 `ValidOracle`) mix query costs with MPS outputs by nature; no split proposed.
 
-### `PEPS/Graph`, `PEPS/Tensor`, `PEPS/Injectivity`, `PEPS/FundamentalTheorem`
+### `PEPS/Graph`, `PEPS/Tensor`, `PEPS/Injectivity`, `PEPS/FundamentalTheorem/Injective/FundamentalTheorem`
 
 #### Subdirectories
 Counts are after merges. The "imports" column lists the sibling directories a
@@ -2177,7 +2177,7 @@ directory imports a later one.
 | `Injectivity/Charge` | charge excitations: charge coordinates and detectors, charge pairs, their preparation, readout and interference, motion of charges, character-weighted contractions | 31 | Closure, Entropy, Flux, Multiplicity, Regular, SemiRegular |
 | `Injectivity/TorusCharge` | charges on the native torus: two-spin detection, creation and readout of pairs, motion of charges, crossings of charges and fluxes | 9 | Charge, Entropy, Flux, FluxString |
 
-##### `PEPS/FundamentalTheorem` (140)
+##### `PEPS/FundamentalTheorem/Injective/FundamentalTheorem` (140)
 
 | path | objects | modules | imports |
 |---|---|---|---|
@@ -2292,7 +2292,7 @@ this part points upward.
 | `RegionParentHamiltonian` (`ParentHamiltonian/Region`) | Tensor, ParentHamiltonian | `regionConfigEquiv`, `place_eq_regionConfigEquiv`, `place_mulVec_assemble` (placement of a regional operator) | to `Tensor/Region`, or replaced by QICLean's placement of a local operator |
 | `RegionPhysicalDeformation` (`ParentHamiltonian/Region`) | Tensor, ParentHamiltonian | `physicalDeform`, `openRegionWeight_physicalDeform`, `openRegionMap_physicalDeform` | to `Tensor/Region/RegionPhysicalMap` |
 
-`PEPS/GInjective` lies outside this part and the import graph assigned it to
+`Algebra/GInjective` lies outside this part and the import graph assigned it to
 `base`. It defines `IsGInjective`, `IsGIsometric` and `siteMap`, so by its
 statements it belongs to `PEPS/Injectivity`, for instance as
 `Injectivity/GInjective/GInjective`. The modules here import it downward wherever

@@ -10,10 +10,10 @@ Scope: discharge the #588 / `UniqueGroundState.lean` range-reduction sorry witho
 - issue #699 body / comments
 - `audits/2026-04-21_issue588_chainGS_bridge_blocker.md`
 - `Papers/2011.12127/TN-Review-main.tex` lines 2049–2078
-- `TNLean/MPS/Chain/OneSidedInverse.lean`
+- `TNLean/MPS/Tensor/Words/OneSidedInverse.lean`
 - `TNLean/MPS/ParentHamiltonian/{IntersectionProperty,WrappingWindow,CyclicWindow,UniqueGroundState}.lean`
-- `TNLean/MPS/Defs.lean`
-- supporting blocking API in `TNLean/MPS/Core/Blocking.lean` and `TNLean/MPS/Chain/BlockedChainFT.lean`
+- `TNLean/MPS/Tensor/Defs.lean`
+- supporting blocking API in `TNLean/MPS/Tensor/Physical/Blocking.lean` and `TNLean/MPS/Tensor/Chain/BlockedChainFT.lean`
 
 ## Main new finding
 

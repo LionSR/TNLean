@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SelectedPhysicalPrivateGrouping
 import TNLean.Lattice.Compression.SelectedPhysicalPartyGrouping
-import QICLean.Channel.PartialTraceBasisInvariance
+import QICLean.Channel.PartialTrace.BasisInvariance
 
 /-!
 # Physical mixed-vector traces in the original coordinates

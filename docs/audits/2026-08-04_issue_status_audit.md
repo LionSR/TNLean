@@ -44,7 +44,7 @@ tracker**.
 | Issue | Evidence |
 |---|---|
 | #631 sharp rank-one Neumark extension | PR #5109 merged 2026-07-29. `POVM.exists_orthonormal_basis_restriction_of_rank_one` (`TNLean/Channel/POVM/RankOneNaimark.lean:145`), sorry-free, blueprint `thm:sharp_rank_one_naimark` `\leanok`. |
-| #2318 W state as MPS + lower bound | Item (a) done by PR #2946: `TNLean/MPS/Examples/WState.lean` sorry-free. Item (b) explicitly delegated to open #2947. Closed with pointer to #2947. |
+| #2318 W state as MPS + lower bound | Item (a) done by PR #2946: `TNLean/MPS/Examples/PVBS/WState.lean` sorry-free. Item (b) explicitly delegated to open #2947. Closed with pointer to #2947. |
 | #2470 PEPS RegionInsertionTransfer from SameState | Discharged via the coherent-frame route: `exists_regionEdgeGauge_of_blockingData` (`TNLean/PEPS/CoherentFrameInstance2.lean:174`) → `regionInsertionTransfer_of_coeffTransfer` (`RegionBlock/RegionReconcile.lean:323`). Closure comment cites the alternate route; one docstring at `RegionReconcile.lean:310-318` is now stale. |
 | #2616 PEPS torus reference blocking datum + transport | All three deliverables exist (`torusHorizontalReferenceBlockingDatum`, `regionInsertedCoeff_translate_coeffIdentity` at `RegionTransferCovariance.lean:139`, `transportBlockingDataAlong_redBlue`); feeds `fundamentalTheorem_normalTorusPEPS_unconditional` (`TorusFundamentalTheorem2.lean:298`, `\leanok`, sorry-free). |
 | #3965 Wolf Ch1 conditional-expectation classification | PRs #4138/#4147. `StarSubalgebra.exists_block_densities_of_positive_retraction` (`TNLean/Channel/PositiveConditionalExpectationDirectSum.lean:672`), blueprint `thm:positive_retraction_finite_star_algebra` `\leanok`, scope restriction resolved per `https://sirui-lu.com/QICLean/paper-gaps/wolf_prop1_5_one_factor_scope.pdf` (QICLean paper-gap note). |
@@ -52,8 +52,8 @@ tracker**.
 | #5086 tenkz plane frame with declared basis | Label `all-resolved`, bot reports 3/3 sub-issues closed; acceptance verified in tree (`rmp-iii-a-ghz-state`, `fig21d_cubic` respelled, kernel guards `plane-rise-low`/`plane-slant-band` at `tenkz-kernel.code.tex:4578,4594`). Caveat for closer: `planes-interleave` guard still lattice-tier only. |
 | #5422 Wolf Prop 6.2 (TP peripheral Jordan blocks) | PR #5431 merged 2026-08-04. `IsPositiveMap.peripheral_Jordan_trivial_of_tracePreserving` (`TNLean/Channel/Peripheral/JordanBlocks.lean:222`), blueprint `thm:peripheral_jordan_trivial` `\leanok` with scope restriction stated. Unital half already split to #5447. |
 | #5428 Wolf Cor 6.8 stationary density basis | PR #5431. `IsPositiveMap.exists_stationaryDensity_basis_of_fixedPointsSubmodule` (`TNLean/Channel/FixedPoint/StationarySpan.lean:206`), blueprint `cor:stationary_density_span` `\leanok`. |
-| #5429 Blueprint entries for Kato CPSV capstone | PR #5440: `thm:kato_deformed_mpdo_cf_sal_capstone` (`blueprint/src/chapter/ch21_mpdo_rfp_foundations.tex:293-343`) with `\lean{}`/`\leanok`; decls sorry-free at `TNLean/MPS/MPDO/KatoDeformedRFPObstruction.lean:579,852,896`. |
-| #5444 Rescaling-stability block-rescaling fix | PR #5448 merged 2026-08-04: `oneLabelCoeffs_rescaling_stable_not_lengthIndependent` (`TNLean/MPS/MPDO/RescalingStableLengthDependentRFP.lean:242-272`) implements exactly the prescribed fix. |
+| #5429 Blueprint entries for Kato CPSV capstone | PR #5440: `thm:kato_deformed_mpdo_cf_sal_capstone` (`blueprint/src/chapter/ch21_mpdo_rfp_foundations.tex:293-343`) with `\lean{}`/`\leanok`; decls sorry-free at `TNLean/MPS/Examples/MPDOCounterexamples/KatoDeformedRFPObstruction.lean:579,852,896`. |
+| #5444 Rescaling-stability block-rescaling fix | PR #5448 merged 2026-08-04: `oneLabelCoeffs_rescaling_stable_not_lengthIndependent` (`TNLean/MPS/Examples/Dimer/RescalingStableLengthDependentRFP.lean:242-272`) implements exactly the prescribed fix. |
 
 Closeable candidates needing maintainer judgment (left open, commented):
 

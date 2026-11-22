@@ -49,7 +49,7 @@ cross-overlap between basis blocks $j$ and $k$ by
 \end{align}
 This overlap is written \leanid{MPSTensor.mpvOverlap} in the
 formalization.\footnote{Declaration \leanid{MPSTensor.mpvOverlap} in
-    \doclink{TNLean/MPS/Overlap/Basic}.}
+    \doclink{TNLean/MPS/Tensor/Overlap}.}
 
 For every ordered pair $j\ne k$, the retired argument sought constants
 $C_{j,k}\geq 0$ and rates $\eta_{j,k}\in[0,1)$ such that
@@ -82,11 +82,11 @@ Definition~4.2 of Ref.~\cite{Cirac2021Matrix} packages
 \emph{eventual linear independence} of the basis MPVs and does not state a
 rate. The formalization records this eventual-linear-independence input in the
 shared sector-decomposition infrastructure,\footnote{%
-    \doclink{TNLean/MPS/SharedInfra/SectorDecomposition}.}
+    \doclink{TNLean/MPS/Tensor/DirectSum/SectorDecomposition}.}
 while (\ref{eq:bnt-rate_qualitative_cross_overlap_decay}) is provided
 pointwise by
 \leanid{MPSTensor.mpvOverlap_tendsto_zero_of_not_gaugePhaseEquiv_cast_left_of_irreducible_TP}.\footnote{%
-    \doclink{TNLean/MPS/Overlap/CastDecay}.}
+    \doclink{TNLean/MPS/Transfer/Spectrum/CastDecay}.}
 Neither source equips $\eta_{j,k}$ with a quantitative relation to the
 spectral-weight ratios.
 
@@ -115,7 +115,7 @@ together with the geometric bound
 The surviving \path{TNLean/MPS/FundamentalTheorem/SectorBNT} surface does not package such constants. It
 keeps the raw BNT weights in \leanid{MPSTensor.SectorDecomposition} and records
 qualitative consequences in
-\doclink{TNLean/MPS/FundamentalTheorem/SectorBNT/Api}: the raw power-sum
+\doclink{TNLean/MPS/CanonicalForm/BNT/SectorOverlap}: the raw power-sum
 coefficient identity \leanid{MPSTensor.SectorDecomposition.coeff_eq_sum_weight_pow},
 within-family cross-decay
 \leanid{MPSTensor.IsBNTCanonicalForm.cross_overlap_basis_tendsto_zero}, the
@@ -123,7 +123,7 @@ combined-family linear-independence criterion
 \leanid{MPSTensor.IsBNTCanonicalForm.combined_family_eventually_li}, and the
 modulus-free non-vanishing coefficient statement
 \leanid{MPSTensor.SectorDecomposition.coeff_not_eventually_zero} from
-\doclink{TNLean/MPS/SharedInfra/SectorDecomposition}. None of these
+\doclink{TNLean/MPS/Tensor/DirectSum/SectorDecomposition}. None of these
 declarations supplies the constants in
 (\ref{eq:bnt-rate_nonnegative_prefactor})--%
 (\ref{eq:bnt-rate_weight_compatibility}).

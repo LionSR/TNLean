@@ -2,8 +2,8 @@
 
 This audit records the deletion of the norm-compression and operator-norm
 branch of the conditional martingale gap ladder from
-`TNLean/MPS/ParentHamiltonian/Martingale/Gap.lean` and
-`TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean`, together with the
+`TNLean/MPS/ParentHamiltonian/ParentInteraction/Reduction.lean` and
+`TNLean/MPS/ParentHamiltonian/ParentInteraction/Reduction.lean`, together with the
 blueprint nodes that stated it. It is the audit note required by
 `docs/project_conventions.md` §Style. No compatibility alias is provided for
 any removed declaration.
@@ -90,7 +90,7 @@ excitation ranges intersect.
 
 ## What was checked
 
-* Linter-bearing builds of `TNLean.MPS.ParentHamiltonian.Martingale.Gap`,
+* Linter-bearing builds of `TNLean.MPS.ParentHamiltonian.ParentInteraction.Reduction`,
   `...Reduction`, `...AbstractCriterion`, and `...BlockedGap`, then a root
   build of `TNLean.MPS.ParentHamiltonian` — all clean.
 * Grep over `TNLean/` and `blueprint/src/` for each removed declaration name

@@ -22,39 +22,20 @@ ARCHIVE_ROOT = "TNLean/Archive/"
 
 # Existing structural debt only.  Never add a new path: split into modules named
 # for their mathematical responsibility, then use a concept-named aggregator.
-NUMBERED_DEBT_ALLOWLIST: frozenset[str] = frozenset(
-    {
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite10.lean",
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite11.lean",
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite4.lean",
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite5.lean",
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite6.lean",
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite7.lean",
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite8.lean",
-        "TNLean/PEPS/RegionBlock/CoarseThreeSite9.lean",
-        "TNLean/PEPS/RegionBlock/Recovery2.lean",
-        "TNLean/PEPS/RegionBlock/Recovery3.lean",
-        "TNLean/PEPS/RegionBlock/Recovery4.lean",
-        "TNLean/PEPS/RegionBlock/Recovery7.lean",
-        "TNLean/PEPS/RegionBlock/Recovery8.lean",
-        "TNLean/PEPS/RegionBlock/Recovery9.lean",
-        "TNLean/PEPS/RegionBlock/UnionInjectivityGeneral2.lean",
-        "TNLean/PEPS/RegionBlock/UnionInjectivityOverlap3.lean",
-        "TNLean/PEPS/TorusWindowChain2.lean",
-        "TNLean/PEPS/TorusWindowChain4.lean",
-        "TNLean/PEPS/TorusWindowChain5.lean",
-        "TNLean/PEPS/TorusWindowChain6.lean",
-    }
-)
+NUMBERED_DEBT_ALLOWLIST: frozenset[str] = frozenset()
 
 # These suffixes identify mathematical objects or source labels, not the order
 # in which a proof was split.  Each exception is exact and reviewable.
 SEMANTIC_EXCEPTIONS: dict[str, str] = {
     "TNLean/MPS/Examples/ZMod2.lean":
         "ZMod 2 is the mathematical coefficient group used by the example.",
-    "TNLean/MPS/Examples/AnomalousCondensation/AnomalousCondensationZ2Z2.lean":
+    "TNLean/MPS/Examples/Z2Z2.lean":
+        "Z2 x Z2 is the symmetry group of the examples collected in this directory.",
+    "TNLean/MPS/Examples/Z3.lean":
+        "Z3 is the symmetry group of the examples collected in this directory.",
+    "TNLean/MPS/Examples/Z2Z2/AnomalousCondensationZ2Z2.lean":
         "Z2 x Z2 is the anomalous symmetry group whose condensation defect is formalized.",
-    "TNLean/MPS/ParentHamiltonian/Martingale/EmbeddedC2.lean":
+    "TNLean/MPS/ParentHamiltonian/ParentInteraction/EmbeddedC2.lean":
         "Condition C2 is Nachtergaele's martingale condition formalized by this module.",
 }
 

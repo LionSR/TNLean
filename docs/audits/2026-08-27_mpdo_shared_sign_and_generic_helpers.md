@@ -12,25 +12,25 @@ removed name encoded misleading terminology.
 
 | Removed declaration | Replacement |
 |---|---|
-| `MPOTensor.KatoDeformedRFPObstruction.sqrt2_sq_complex` (`TNLean/MPS/MPDO/KatoDeformedRFPObstruction.lean`) | `Complex.ofReal_sqrt_sq` (`TNLean/Algebra/ComplexSqrt.lean`), at three call sites |
-| `MPOTensor.submatrix_equiv_injective` (private, `TNLean/MPS/MPDO/LocalPurificationRFP.lean`) | `(Matrix.reindex e.symm e.symm).injective`, the `Equiv` bundling the same submatrix map |
-| `MPOTensor.cast_via_common_dimension` (private, `TNLean/MPS/MPDO/GroupedReferenceCorner.lean`) | `cast_cast` (Lean core, `Init/PropLemmas.lean`), whose single call site collapses to `exact cast_cast _ _ _` |
+| `MPOTensor.KatoDeformedRFPObstruction.sqrt2_sq_complex` (`TNLean/MPS/Examples/MPDOCounterexamples/KatoDeformedRFPObstruction.lean`) | `Complex.ofReal_sqrt_sq` (`TNLean/Algebra/ComplexSqrt.lean`), at three call sites |
+| `MPOTensor.submatrix_equiv_injective` (private, `TNLean/MPS/MPDO/Purification/LocalPurificationRFP.lean`) | `(Matrix.reindex e.symm e.symm).injective`, the `Equiv` bundling the same submatrix map |
+| `MPOTensor.cast_via_common_dimension` (private, `TNLean/MPS/MPDO/Vertical/GroupedSectorGram.lean`) | `cast_cast` (Lean core, `Init/PropLemmas.lean`), whose single call site collapses to `exact cast_cast _ _ _` |
 
 `sqrt2_sq_complex` was the last hand-rolled occurrence of the
 "Complex squares of real square roots" pattern promoted in
 `docs/tactic_patterns.md`; the three `rw [sqrt2_sq_complex]` steps become
 `norm_num [Complex.ofReal_sqrt_sq 2 _]`, the form already used at
-`TNLean/MPS/MPDO/CPSVExample410Operator.lean`.
+`TNLean/MPS/Examples/CorrelatedFlip/Operator.lean`.
 
 `MPOTensor.reindex_kronecker_assoc`
-(`TNLean/MPS/MPDO/IsometricAdjacentBondTransport.lean`) was examined in the same
+(`TNLean/MPS/FundamentalTheorem/PhysicalSupport/IsometricAdjacentBondTransport.lean`) was examined in the same
 pass and **retained**: Mathlib's `Matrix.kronecker_assoc` and `kronecker_assoc'`
 prove only the forward reindex direction, while the local lemma is the inverse
 and is consumed as a rewrite rule in that direction.
 
 ## 2. One owner for two duplicated model helpers
 
-`TNLean/MPS/MPDO/BondTwoSingletonPhysicalGauge.lean` re-declared two helpers of
+`TNLean/MPS/Examples/BondTwoSingleton/BondTwoSingletonPhysicalGauge.lean` re-declared two helpers of
 the base model it imports.
 
 | Removed declaration | Replacement |
@@ -54,7 +54,7 @@ upstream and needed no change here.
 
 `KatoDeformedRFPObstruction.lean` and `CPSVExample412Literal.lean` each carried
 a full copy of the same eight-declaration sign calculus. Both copies are
-replaced by the new module `TNLean/MPS/MPDO/BinaryConfigurationSign.lean`, whose
+replaced by the new module `TNLean/MPS/Examples/IdentityPlusZString/BinaryConfigurationSign.lean`, whose
 site weight is the Pauli diagonal entry `SpinCover.pauli 2 i i` — the common
 specialisation of the two local spellings (`pauliZ` and `sigmaZ`).
 

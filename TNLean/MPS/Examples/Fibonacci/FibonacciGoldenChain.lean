@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.Fibonacci.FibonacciGSymbol
-import TNLean.MPS.MPDO.OperatorCyclicSum
-import TNLean.MPS.MPDO.SiteOperatorKernel
+import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
+import TNLean.MPS.Examples.Fibonacci.SiteOperatorKernel
 
 /-!
 # Fibonacci: the golden chain commutes with the topological symmetry

@@ -44,7 +44,6 @@ import TNLean.QCA.LocalNorm
 import TNLean.QCA.MargolusAlternatingLocalRule
 import TNLean.QCA.MargolusCoherentCoordinates
 import TNLean.QCA.MargolusConstantGates
-import TNLean.QCA.MargolusTensorLocalRule
 import TNLean.QCA.MargolusUnitaryGates
 import TNLean.QCA.NearestNeighborBlocking
 import TNLean.QCA.OverlappingSupportAlgebra

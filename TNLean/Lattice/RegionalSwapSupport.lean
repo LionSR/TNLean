@@ -3,11 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.PermutationMatrixUnitary
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 import TNLean.Circuit.SitePermutation
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.Circuit.RegionalSwap
-import QICLean.Analysis.DoubledSystemGap
+import QICLean.Spectral.Gap.DoubledSystemGap
 import QICLean.ManyBody.Dynamics.InteractionOperations
 import QICLean.ManyBody.Sites.ConfigurationMap
 import QICLean.ManyBody.Sites.PairSwap

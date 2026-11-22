@@ -4,9 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.StringOrderScalarPhase
-import TNLean.MPS.Examples.AKLTPhysicalStringOrder
-import TNLean.MPS.Examples.ClusterPhysicalStringOrder
-import TNLean.MPS.Symmetry.PhysicalStringBlockOrder
+import TNLean.MPS.Examples.AKLT.AKLTPhysicalStringOrder
+import TNLean.MPS.Examples.Cluster.ClusterPhysicalStringOrder
+import TNLean.MPS.Symmetry.StringOrder.PhysicalStringBlockOrder
 
 /-!
 # Physical string-order phase regressions

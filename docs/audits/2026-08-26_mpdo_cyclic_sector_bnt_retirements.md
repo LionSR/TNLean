@@ -12,10 +12,10 @@ module's imports.
 
 | Removed module | Replacement import |
 |---|---|
-| `TNLean.MPS.MPDO.CyclicActiveMarkov` | `TNLean.MPS.MPDO.CyclicActiveMarkovDecomposition` |
-| `TNLean.MPS.MPDO.CyclicActiveMarkovNormalization` | `QICLean.Algebra.PositiveSemidefiniteNormalization` together with `TNLean.MPS.MPDO.CyclicActiveFourthRegionFormula` |
-| `TNLean.MPS.MPDO.CyclicActiveFourthRegion` | `TNLean.MPS.MPDO.CyclicActiveFourthRegionFormula` |
-| `TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorMaps` | `TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorCoordinates`, `...OneSiteAmbientSectorMaps`, `...TwoSiteAmbientSectorMaps` |
+| `TNLean.MPS.MPDO.CyclicActiveMarkov` | `TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveMarkovDecomposition` |
+| `TNLean.MPS.MPDO.CyclicActiveMarkovNormalization` | `QICLean.Algebra.Hermitian.PositiveSemidefiniteNormalization` together with `TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveFourthRegionFormula` |
+| `TNLean.MPS.MPDO.CyclicActiveFourthRegion` | `TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveFourthRegionFormula` |
+| `TNLean.MPS.MPDO.BNTAlgebraTensorClauseAmbientSectorMaps` | `TNLean.MPS.MPDO.AmbientSectorMaps.BNTAlgebraTensorClauseAmbientSectorCoordinates`, `...OneSiteAmbientSectorMaps`, `...TwoSiteAmbientSectorMaps` |
 
 The two in-library importers were migrated to the underlying modules:
 `CyclicActiveCutCoordinates.lean` now imports `CyclicActiveFourthRegionFormula`,
@@ -61,7 +61,7 @@ The three common-weight helpers
 `hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor`, and
 `commonWeightAbsorbedBasisMPOTensor_isInjective` are retained: each has a live
 consumer and a blueprint tag. The now-unused import of
-`TNLean.MPS.MPDO.CommonWeightAbsorbedBNTSupport` was dropped from
+`TNLean.MPS.MPDO.BNTSectors.BNTChannelComposition` was dropped from
 `BNTPhysicalSectorGSNNCH.lean`.
 
 ## The deprecated witness-repackaging module

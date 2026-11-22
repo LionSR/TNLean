@@ -2,7 +2,7 @@
 
 The theorem `Equiv.Perm.permMatrix_mem_unitaryGroup` states that a complex
 permutation matrix is unitary. This finite-dimensional matrix fact now belongs
-to `QICLean/Algebra/PermutationMatrixUnitary.lean`, where it is also used in the
+to `QICLean/Algebra/Unitary/MatrixUnitaryBetween.lean`, where it is also used in the
 construction of a unitary having trace pairing zero with a Hermitian matrix.
 
 The declaration, including its proof, is unchanged. The original file

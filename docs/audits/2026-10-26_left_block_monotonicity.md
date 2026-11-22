@@ -1,7 +1,7 @@
 # Left-block monotonicity
 
 The theorem `TNLean.MPS.AreaLaw.leftBlock_mono` now belongs to
-`TNLean/MPS/AreaLaw/OpenMPS.lean`, immediately after the membership criterion
+`TNLean/MPS/Tensor/VaryingBond/OpenMPS.lean`, immediately after the membership criterion
 for left blocks. Its name, statement and proof are unchanged. Both sequential
 truncation and the three-way cut coordinates use this elementary fact without
 an additional import.

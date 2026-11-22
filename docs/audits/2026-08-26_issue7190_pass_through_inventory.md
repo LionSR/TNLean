@@ -10,7 +10,7 @@ consumers and Blueprint references were migrated before deletion.
 |---|---|
 | `MPSTensor.gaugeEquiv_toTensorFromBlocks_implies_sameMPV` | `MPSTensor.GaugeEquiv.sameMPV` |
 | `MPSTensor.IsBNTCanonicalForm.weight_unit_exists_of_struct` | `MPSTensor.IsBNTCanonicalForm.weight_unit_exists` |
-| `MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero` | `MPSTensor.SectorDecomposition.coeff_not_eventually_zero`, now owned by `TNLean.MPS.SharedInfra.SectorDecomposition` |
+| `MPSTensor.IsBNTCanonicalForm.coeff_not_eventually_zero` | `MPSTensor.SectorDecomposition.coeff_not_eventually_zero`, now owned by `TNLean.MPS.Tensor.DirectSum.SectorDecomposition` |
 | `SectorBNT.Examples.singletonDecomp` | `MPSTensor.singleSectorDecomposition` |
 
 The private helper `cyclic_projection_nonzero_of_sum_one` was also removed after its proof was

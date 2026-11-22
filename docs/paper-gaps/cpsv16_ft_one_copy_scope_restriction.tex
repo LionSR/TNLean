@@ -107,7 +107,7 @@ from finitely many polynomial identities. It does not use a limiting argument.
 
 The surviving formal normal-CF-BNT structure is
 \leanid{MPSTensor.IsNormalCanonicalFormBNT}.\footnote{Defined in
-\path{TNLean/MPS/BNT/Construction.lean}. The earlier non-normal wrapper was
+\path{TNLean/MPS/CanonicalForm/BNT/Construction.lean}. The earlier non-normal wrapper was
 retired after its downstream consumers were replaced by explicit
 separated-block hypotheses.} This structure no longer requires strict
 decrease of the weight moduli. It requires only non-increasing order by
@@ -166,7 +166,7 @@ $N=1,\ldots,\max(x_a,x_b)$ are equal as multisets. This finite algebraic fact
 follows from the Newton--Girard identities: the power sums determine the
 elementary symmetric polynomials, which determine the multiset of roots.
 
-A module named \path{QICLean/Algebra/ScalarPowerSumIdentity.lean}\footnote{Introduced in commit
+A module named \path{QICLean/Algebra/Polynomial/ScalarPowerSumIdentity.lean}\footnote{Introduced in commit
 \texttt{dd54b79e}.} was added early in the project, but it does not specialize
 to the fixed-length statement in the form required by Step~4 of the source
 proof. The result must therefore be available as a standalone theorem,

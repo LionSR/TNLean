@@ -8,10 +8,10 @@ tag cited any of them.
 
 ## Sitewise physical matrix re-declaration
 
-`TNLean/MPS/MPDO/PhysicalSectorProductTransport.lean` privately re-declared
+`TNLean/MPS/Operator/PhysicalSector/PhysicalSectorProductTransport.lean` privately re-declared
 the sitewise tensor power of a one-site matrix, already available as
 `MPOTensor.sitewisePhysicalMatrix` in
-`TNLean/MPS/MPDO/SitewisePhysicalMatrix.lean`, and reproved its isometry,
+`TNLean/MPS/Operator/PhysicalSector/SitewisePhysicalMatrix.lean`, and reproved its isometry,
 coisometry, and MPO-transport lemmas from scratch.
 
 | Removed | Replacement |
@@ -21,7 +21,7 @@ coisometry, and MPO-transport lemmas from scratch.
 | the proof of `…physicalCoordinateMatrixN_coisometry` (private) | `MPOTensor.sitewisePhysicalMatrix_mul_conjTranspose` with `MPOTensor.sitewisePhysicalMatrix_one` |
 | the proof of `…physicalCoordinateMatrixN_mpo` (private) | `MPOTensor.singleKrausMap_sitewisePhysicalMatrix_mpo` |
 | `…reindex_physicalCoordinateMatrixN_windowComplement` (private) | `MPOTensor.reindex_sitewisePhysicalMatrix_windowComplement` applied to `F.physicalCoordinateMatrix`, at both of its former call sites |
-| `MPOTensor.reindex_sitewisePhysicalMatrix_windowComplement` (private copy in `TNLean/MPS/MPDO/PhysicalSupportProductTransport.lean`) | the same statement, now public in `PhysicalSectorProductTransport.lean`, which the support module transitively imports |
+| `MPOTensor.reindex_sitewisePhysicalMatrix_windowComplement` (private copy in `TNLean/MPS/FundamentalTheorem/PhysicalSupport/PhysicalSupportProductTransport.lean`) | the same statement, now public in `PhysicalSectorProductTransport.lean`, which the support module transitively imports |
 
 The window-complement lemma was byte-identical in the support module and, in
 the sector module, a specialization of it. The general statement is hosted in
@@ -39,7 +39,7 @@ relied on unfolding the old body,
 
 ## Blocked-coordinate channel transport
 
-`TNLean/MPS/MPDO/PhysicalSectorPhysicalTransport.lean` spelled out the same
+`TNLean/MPS/MPDO/PhysicalSector/PhysicalSectorPhysicalTransport.lean` spelled out the same
 reindex/conjugate/reindex composition four times, together with four copies of
 its trace-preserving complete positivity proof.
 

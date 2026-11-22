@@ -262,7 +262,7 @@ How the proposition relates to the approximate-ground-state-projector (AGSP) rou
 - **The 1D trade-off in Lean (read).** The one-dimensional formalization uses an AGSP with
   operator Schmidt rank `D` and shrinking factor `δ` subject to the trade-off `D δ ≤ 1/2`.
   This is `exists_cut_product_filtered_output`,
-  `TNLean/MPS/AreaLaw/AKLV/Initialization.lean:47`, hypothesis `htrade`. Under it, a product
+  `TNLean/MPS/AreaLaw/ChebyshevAGSP/Initialization.lean:47`, hypothesis `htrade`. Under it, a product
   vector already has overlap `≥ 1/√(2D)` with the ground state.
 - **The trade-off in 2D and above (inferred, following the AGSP literature).**
   - Known AGSPs have `log D` growing at least linearly in `|∂A|`, while `δ` is set by the

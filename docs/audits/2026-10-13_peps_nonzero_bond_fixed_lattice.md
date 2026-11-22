@@ -17,7 +17,7 @@ assignment, not by a tensor, so it cannot carry the convention. Following
 extends it at `regionInjectivityDataOf A` and adds the field
 `bondDim_pos : ∀ e, 0 < A.bondDim e`.
 
-- `IsNormalCycleArcMPS L A` in `TNLean/PEPS/CycleFundamentalTheorem.lean`,
+- `IsNormalCycleArcMPS L A` in `TNLean/PEPS/FundamentalTheorem/Cycle/CycleFundamentalTheorem.lean`,
   extending `NormalCycleArcInjectivityHypotheses`. Source: the closed-chain
   corollary, `Papers/1804.04964/paper_normal.tex:1597-1622` ("two normal MPS
   on `n ≥ 3L` sites with the property that blocking any `L` consecutive sites
@@ -25,14 +25,14 @@ extends it at `regionInjectivityDataOf A` and adds the field
   `IsNormalCycleArcMPS.pairHypotheses` builds `NormalPEPSPairHypotheses` on the
   cycle from two such tensors.
 - `IsNormalTorusRectanglePEPS A` in
-  `TNLean/PEPS/TorusUnconditionalFundamentalTheorem.lean`, extending
+  `TNLean/PEPS/FundamentalTheorem/Torus/TorusUnconditionalFundamentalTheorem.lean`, extending
   `NormalTorusRectangleInjectivityHypotheses`. Source: Theorem 3,
   `Papers/1804.04964/paper_normal.tex:1453-1471` ("two normal 2D PEPS tensors
   such that every `2 × 3` and `3 × 2` region is injective"). The helper
   `IsNormalTorusRectanglePEPS.unionClosure` gives union closure of injective
   regions.
 - `IsNormalSquareLatticeRectanglePEPS A` in
-  `TNLean/PEPS/NormalSquareUnconditionalFundamentalTheorem.lean`, extending
+  `TNLean/PEPS/FundamentalTheorem/Normal/NormalSquareUnconditionalFundamentalTheorem.lean`, extending
   `NormalSquareLatticeRectangleInjectivityHypotheses`. Source: the same
   Theorem 3, read on the open square lattice.
 
@@ -78,7 +78,7 @@ positivity; every caller supplies it from a tensor hypothesis above.
 
 ## Counterexample module
 
-`TNLean/PEPS/PhysicalToVirtualCounterexample.lean` is kept. It refutes
+`TNLean/PEPS/FundamentalTheorem/Injective/PhysicalToVirtualCounterexample.lean` is kept. It refutes
 `physical_to_virtual_insertion` without positivity, and that lemma's hypothesis
 is still the edge-blocked three-site chain, which its witness satisfies. Its
 positivity is therefore not derivable from its hypotheses, and its callers take
@@ -92,10 +92,10 @@ explicit positivity:
 - `torusAbsorbedGauge_unique_scalar`,
   `torusCovariantAbsorbedGauge_unique_classScalar` and
   `torusGauge_unique_scalar_of_perVertex` in
-  `TNLean/PEPS/TorusGaugeUniqueness.lean` (Theorem 3, "X and Y are unique up to
+  `TNLean/PEPS/FundamentalTheorem/Torus/TorusGaugeUniqueness.lean` (Theorem 3, "X and Y are unique up to
   a multiplicative constant");
 - `torusGauge_unique_scalar_of_normalArcWindows` in
-  `TNLean/PEPS/TorusWindowGaugeUniqueness.lean` (the window corollary's
+  `TNLean/PEPS/FundamentalTheorem/Torus/Window/GaugeUniqueness.lean` (the window corollary's
   uniqueness clause).
 
 They can take `IsNormalTorusRectanglePEPS` and `IsNormalTorusArcWindowPEPS`.

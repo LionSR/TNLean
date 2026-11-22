@@ -6,7 +6,7 @@ The source-faithful capstone is:
 
 `TNLean.PEPS.DependentTorus.fourCutSpace_eq_commutingClosureSpan`
 
-in `TNLean/PEPS/DependentTorusClosureTheorem.lean`.
+in `TNLean/PEPS/Injectivity/CutSpace/DependentTorusClosureTheorem.lean`.
 
 It proves that the intersection of the four literal edge-cut ranges equals
 the span of the actual commuting closure vectors for four arbitrary

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Examples.MultiBlock.Running
 import TNLean.MPS.Examples.MultiBlock.SharpnessOneBlockGeneral
-import TNLean.MPS.FundamentalTheorem.Reduction.UniquenessAllReductions
+import TNLean.MPS.FundamentalTheorem.Compression.UniquenessAllReductions
 
 /-!
 # Two flags with one block

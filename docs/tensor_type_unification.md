@@ -18,14 +18,14 @@ stripped before counting, so a name mentioned only in prose is not a use.
 | Type | Definition | Modules | Uses |
 |---|---|--:|--:|
 | `MPSTensor d D := Fin d → Matrix (Fin D) (Fin D) ℂ` | QICLean `Kraus/Word.lean` | 1,628 (+10 in QICLean) | 10,437 |
-| `MPOTensor d D := Fin d → Fin d → Matrix (Fin D) (Fin D) ℂ` | `MPS/MPDO/Defs.lean` | 788 | 3,828 |
-| `MPSChainTensor d D n := Fin n → MPSTensor d D` (site-dependent, constant bond) | `MPS/Chain/Defs.lean` | 63 | 518 |
-| `OBCChainTensor d D N` (open chain, bond dimensions `Fin (N+1) → ℕ`, rectangular letters) | `MPS/Chain/VaryingBondOBC.lean` | 44 | 442 |
-| `VaryingBondChain d D N` (periodic chain, bond dimensions `Fin N → ℕ`) | `MPS/Chain/VaryingBondChain.lean` | 20 | 86 |
-| `OpenMPSRepresentation`, `IsOpenMPS` (area law; wrap `OBCChainTensor`) | `MPS/AreaLaw/OpenMPS.lean` | 134 | 346 |
-| `IsometryTree d χ R h n` (tree of isometries `Matrix (Fin n → Fin d) (Fin χ) ℂ`) | `MPS/Preparation/IsometryTree.lean` | 5 | 46 |
-| `TNLean.PEPS.Tensor G d` (graph, bond dimensions `Edge G → ℕ`, vector-valued) | `PEPS/Defs.lean` | 113 | 889 |
-| `PEPS.Approximation.Tensor q L`, `TwoBlockTensor` | `PEPS/Approximation`, `PEPS/TwoInjectiveComparison` | 11 | 59 |
+| `MPOTensor d D := Fin d → Fin d → Matrix (Fin D) (Fin D) ℂ` | `MPS/Operator/Defs.lean` | 788 | 3,828 |
+| `MPSChainTensor d D n := Fin n → MPSTensor d D` (site-dependent, constant bond) | `MPS/Tensor/Chain/Defs.lean` | 63 | 518 |
+| `OBCChainTensor d D N` (open chain, bond dimensions `Fin (N+1) → ℕ`, rectangular letters) | `MPS/Tensor/VaryingBond/VaryingBondOBC.lean` | 44 | 442 |
+| `VaryingBondChain d D N` (periodic chain, bond dimensions `Fin N → ℕ`) | `MPS/Tensor/VaryingBond/VaryingBondChain.lean` | 20 | 86 |
+| `OpenMPSRepresentation`, `IsOpenMPS` (area law; wrap `OBCChainTensor`) | `MPS/Tensor/VaryingBond/OpenMPS.lean` | 134 | 346 |
+| `IsometryTree d χ R h n` (tree of isometries `Matrix (Fin n → Fin d) (Fin χ) ℂ`) | `MPS/Preparation/Tree/IsometryTree.lean` | 5 | 46 |
+| `TNLean.PEPS.Tensor G d` (graph, bond dimensions `Edge G → ℕ`, vector-valued) | `PEPS/Tensor/Network/Defs.lean` | 113 | 889 |
+| `PEPS.Approximation.Tensor q L`, `TwoBlockTensor` | `PEPS/Approximation`, `PEPS/FundamentalTheorem/Injective/TwoInjectiveComparison` | 11 | 59 |
 | unnamed `Fin _ → Matrix (Fin _) (Fin _) ℂ` | everywhere | 137 (+100 in QICLean) | 699 (+489) |
 | unnamed `Fin _ → Fin _ → Matrix` | everywhere | 51 | 168 |
 
@@ -171,7 +171,7 @@ state or an operator on a chain, are tensor-network notions and live in TNLean.
 
 The abbreviation `MPSTensor` leaves QICLean (it names a tensor network; its 10 QICLean
 modules state their lemmas for the Kraus family type) and is defined in TNLean beside
-`MPTensor`, in a new module `TNLean/MPS/Tensor.lean` imported by `MPS/Defs`. QICLean's root
+`MPTensor`, in a new module `TNLean/MPS/Tensor.lean` imported by `MPS/Tensor/Defs`. QICLean's root
 `evalWord` of `MultiBlockWord` is deleted: it is `Kraus.evalWord` at the bond type
 `Σ k, Fin (dim k)`.
 
@@ -371,10 +371,10 @@ unchanged.
 compile verbatim: from QICLean `evalWord_append`, `evalWord_smul`,
 `evalWord_reindexPhysical`, `evalWord_conjTranspose`, `wordSpan`, `IsInjective`,
 `IsNBlkInjective`, `blockTensor`, `isNBlkInjective_iff_blockTensor_isInjective`; from TNLean
-`MPS/Defs` `coeff`, `mpv`, `mpv_zero_length` (`simp` still produces `D`),
-`mpv_reindexPhysical`, `GaugeEquiv`, `SameMPV`; from `MPS/MPDO/Defs` `toMPSTensor`,
+`MPS/Tensor/Defs` `coeff`, `mpv`, `mpv_zero_length` (`simp` still produces `D`),
+`mpv_reindexPhysical`, `GaugeEquiv`, `SameMPV`; from `MPS/Operator/Defs` `toMPSTensor`,
 `MPOTensor.evalWord`, `evalWord_toMPSTensor_ofFn`, `transferMap`,
-`transferMap_eq_toMPSTensor`; from `MPS/MPDO/ActionTensor` `actTensor` and the induction
+`transferMap_eq_toMPSTensor`; from `MPS/Operator/Product/ActionTensor` `actTensor` and the induction
 proof of `evalWord_actTensor`. The one forced textual change is a named argument: the body
 of `IsNormal` uses `IsNBlkInjective (d := d) (D := D)`, which must become
 `(ι := Fin d) (n := Fin D)` (error F1: "Invalid argument name `d`"). The generic and the old
@@ -423,7 +423,7 @@ rebuild all of TNLean should share one full build with other pending work.
 |---|---|---|--:|---|---|
 | T.1a | QICLean | Generalize `Kraus/Word`, `WordSpan`, `Injectivity`, `Transfer` (39 declarations) to `{ι n : Type*}`; add `Kraus.block` with `evalWord_block`, `transferMap_block`, `isNBlkInjective_iff_isInjective_block`; define `blockTensor` from `block`; generalize `rectangularEval` to bond types; delete root `evalWord` of `MultiBlockWord`; remove `MPSTensor` | 4 defining + 7 (50 named arguments) + 10 (`MPSTensor`) + consumers of root `evalWord` | named arguments: yes; definitions: by hand | QICLean downstream of `Kraus/Word` |
 | T.1b | TNLean, pin move | `TNLean/MPS/Tensor.lean`: `MPTensor`, `MPSTensor`, `MPOTensor` (curried); named-argument sweep | 1 new + 88 (1,345 named arguments, 1,337 of them on `Kraus.transferMap`) | yes (`tensor_sweep.py named-args`) | all of TNLean (5,417), with the pin move |
-| T.1c | TNLean | Restate on `MPTensor α β` the definitions of `MPS/Defs` (68 declarations; 20 named arguments in 7 modules) and the definitions that pair-alphabet tensors are fed to: the uses of `toMPSTensor` sit inside 138 distinct application heads, 95 of them TNLean definitions (1,278 uses), the most used `GaugeEquiv` 58, `IsInjective` 50, `SameMPV₂Pos` 49, `evalWord` 43, `IsMPUCanonicalForm` 41, `IsReduction` 40, `IsCPSVCanonicalForm` 33, `mpvOverlap` 24, `transferMap` 21, `mpv` 18, `IsNormal` 17, `IsNormalTensor` 15 (counts from a textual scan, approximate); move them to the namespace `MPTensor` | at most 127 defining modules, by directory | no: a restatement, done only where the proof does not use `Fin` | `MPS/Defs` downstream (3,168) |
+| T.1c | TNLean | Restate on `MPTensor α β` the definitions of `MPS/Tensor/Defs` (68 declarations; 20 named arguments in 7 modules) and the definitions that pair-alphabet tensors are fed to: the uses of `toMPSTensor` sit inside 138 distinct application heads, 95 of them TNLean definitions (1,278 uses), the most used `GaugeEquiv` 58, `IsInjective` 50, `SameMPV₂Pos` 49, `evalWord` 43, `IsMPUCanonicalForm` 41, `IsReduction` 40, `IsCPSVCanonicalForm` 33, `mpvOverlap` 24, `transferMap` 21, `mpv` 18, `IsNormal` 17, `IsNormalTensor` 15 (counts from a textual scan, approximate); move them to the namespace `MPTensor` | at most 127 defining modules, by directory | no: a restatement, done only where the proof does not use `Fin` | `MPS/Tensor/Defs` downstream (3,168) |
 | T.2a | TNLean | `toMPSTensor` and `normalizedFlattening` retyped to the product basis, `M.toMPSTensor ↦ ↿M`; bridge lemmas deleted | 264 (1,892 uses): 31 scriptable (100 uses), 143 with pair-alphabet arithmetic (1,072), 31 with compound conversions (155), 59 declaring bridges (565) | 31 fully, 174 partly, 59 by hand | `MPDO/Defs` downstream (1,470) |
 | T.2a′ | TNLean | `MPOTensor` uncurried; `M i j ↦ M (i, j)`, driven by the elaborator's errors; `MPOTensor.evalWord`, `MPOTensor.transferMap` deleted | 434 (≤ 4,565 applications) | no; error-driven, one directory per pull request | `MPDO/Defs` downstream (1,470) |
 | T.2b | TNLean | One blocking: `Kraus.block` and `MPTensor.blockOp`; `blockPhysDim`, `wordOfBlock`, `decodeBlock(Equiv)`, `blockTwo`, `blockedDoubledIndexEquiv` deleted; structure transports renamed `.block` | 370 (3,417 uses): 87 scriptable (527), 149 with `Fin (blockPhysDim …)` arithmetic (1,452), 121 operator blockings after T.2a′ (1,168), 13 defining (270) | 87 fully, 149 partly | `Core/Blocking` downstream (2,283) |
@@ -432,7 +432,7 @@ rebuild all of TNLean should share one full build with other pending work.
 | T.4 | TNLean | Delete the temporary names: `toMPSTensor`, `Kraus.blockTensor`, `MPOTensor.blockTensor`, `blockTwo`, the decoding equivalences; `MPSTensor`, `MPOTensor` stay as named special cases | small | yes | small |
 
 Order and sharing. T.1a and T.1b ride one QICLean pin move and its full rebuild. T.1c changes
-`MPS/Defs` and can share that rebuild when its first part (the definitions of `MPS/Defs`) goes
+`MPS/Tensor/Defs` and can share that rebuild when its first part (the definitions of `MPS/Tensor/Defs`) goes
 into the same pull request as T.1b; its later parts are per directory. T.2a depends on
 T.1c for every consumer it feeds `↿M` to. T.2a′ precedes the operator part of T.2b. T.2c is a
 restatement, not a sweep (the method forbids a sweep to replace index arithmetic by basis

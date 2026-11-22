@@ -7,7 +7,7 @@ character for character.
 
 | Removed | Replacement |
 |---|---|
-| `MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_ordered_cross_term` (`TNLean/MPS/ParentHamiltonian/Martingale/Reduction.lean`) | `MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_ordered_cross_term` in the same file, twenty-two lines earlier, which carries the proof |
+| `MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_overlap_ordered_cross_term` (`TNLean/MPS/ParentHamiltonian/ParentInteraction/Reduction.lean`) | `MPSTensor.parentHamiltonianES_gap_bound_of_cyclic_window_ordered_cross_term` in the same file, twenty-two lines earlier, which carries the proof |
 
 ## What was checked
 

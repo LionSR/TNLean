@@ -49,12 +49,12 @@ Module `FrustrationFree/Model.lean`.
 
 ## Step 1: sweep contraction, `eq:sweep`
 
-Module `QICLean/Analysis/SweepContraction.lean` (moved from TNLean), abstract (an inner product space, no sites).
+Module `QICLean/Analysis/Projection/SweepContraction.lean` (moved from TNLean), abstract (an inner product space, no sites).
 
 The note writes the sweep with `G_i = (1 - k_i)^{1/2}`. We use instead the orthogonal
 projections `Π_i` onto the ranges of the terms and the factors `1 - Π_i`, so that QICLean's
 detectability lemma (`ContinuousLinearMap.re_inner_sum_complementProd_le`,
-`QICLean/Analysis/DetectabilityLemma.lean`) applies unchanged. This changes the sweep
+`QICLean/Analysis/Projection/DetectabilityLemma.lean`) applies unchanged. This changes the sweep
 operator, not any hypothesis of the note, and gives a constant at least as good:
 `Π_i ≥ k_i = h_i/J` gives `∑ Π_i ≥ g (1 - P)` with `g = Δ/J`, and a projection's own
 contribution vanishes after its factor, so the bound has `d²` in place of `(d+1)²`.
@@ -67,11 +67,11 @@ contribution vanishes after its factor, so the bound has `d²` in place of `(d+1
 3. `norm_pow_complementProd_le`: `‖D^t v‖ ≤ θ^t ‖v‖` for `v ⊥ Ω`, with
    `θ = (1 + γ/(d+1)²)^{-1/2}`, the constant of `eq:sweep`.
 
-Modules `QICLean/Analysis/SupportProjectionOrder.lean` and `QICLean/ManyBody/Sites/Twirl.lean`
+Modules `QICLean/Analysis/Support/ProjectionOrder.lean` and `QICLean/ManyBody/Sites/Twirl.lean`
 (moved from TNLean), on matrices.
 
 4. QICLean's support projection `Π_A = hA.supportProj` of a positive semidefinite `A`
-   (`QICLean/Analysis/SupportProjectionOrder.lean`, `QICLean/Algebra/PosSemidefSupport.lean`)
+   (`QICLean/Analysis/Support/ProjectionOrder.lean`, `QICLean/Analysis/Projection/PosSemidefSupport.lean`)
    is an orthogonal projection annihilating `ker A`. New: `A ≤ J • Π_A` when `A ≤ J`, and
    `Π_A ∈ supportedOperators X D` when `A` is (by `ManyBody.cfc_mem_supportedOperators`).
 5. `sum_supportProj_ge`: under `eq:model`, `∑ Π_X ≥ (Δ/J) (1 - P)`.

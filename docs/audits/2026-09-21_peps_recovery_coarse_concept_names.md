@@ -12,9 +12,9 @@ content. No declaration is renamed, added, or removed, so every blueprint
 
 | Absorbed modules | Surviving module |
 |---|---|
-| `TNLean/PEPS/RegionBlock/Recovery5.lean`, `TNLean/PEPS/RegionBlock/Recovery6.lean` | `TNLean/PEPS/RegionBlock/RecoveryOutRegionEndpoint.lean` |
-| `TNLean/PEPS/RegionBlock/Recovery10.lean`, `TNLean/PEPS/RegionBlock/Recovery11.lean` | `TNLean/PEPS/RegionBlock/RecoveryCoefficientTransfer.lean` |
-| `TNLean/PEPS/RegionBlock/CoarseThreeSite2.lean`, `TNLean/PEPS/RegionBlock/CoarseThreeSite3.lean` | `TNLean/PEPS/RegionBlock/CoarseThreeSiteCoherentFrame.lean` |
+| `TNLean/PEPS/RegionBlock/Recovery5.lean`, `TNLean/PEPS/RegionBlock/Recovery6.lean` | `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/OutRegionEndpoint.lean` |
+| `TNLean/PEPS/RegionBlock/Recovery10.lean`, `TNLean/PEPS/RegionBlock/Recovery11.lean` | `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/CoefficientTransfer.lean` |
+| `TNLean/PEPS/RegionBlock/CoarseThreeSite2.lean`, `TNLean/PEPS/RegionBlock/CoarseThreeSite3.lean` | `TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/CoherentFrame.lean` |
 
 Each pair is phase-honest. The first pair is the out-of-region endpoint of a
 boundary edge: the endpoint identity together with the blocked-region tensor map
@@ -47,8 +47,8 @@ not already compile against.
 
 | Old path | New path |
 |---|---|
-| `TNLean/PEPS/CoherentFrameInstance2.lean` | `TNLean/PEPS/BlockingDataEdgeGauge.lean` |
-| `TNLean/PEPS/RegionBlock/GaugeInjectivity2.lean` | `TNLean/PEPS/RegionBlock/GaugeInjectivityBoundaryCoupling.lean` |
+| `TNLean/PEPS/CoherentFrameInstance2.lean` | `TNLean/PEPS/FundamentalTheorem/Normal/BlockingDataEdgeGauge.lean` |
+| `TNLean/PEPS/RegionBlock/GaugeInjectivity2.lean` | `TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/GaugeInjectivityBoundaryCoupling.lean` |
 
 Neither module can be merged into its predecessor: `CoherentFrameInstance.lean`
 is 879 lines and `GaugeInjectivity.lean` is 887, so either merge would exceed

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebra
-import TNLean.MPS.MPDO.SimpleScaling
+import TNLean.MPS.CanonicalForm.SimpleMPO.SimpleScaling
 
 /-!
 # Ising anyon chain: the sigma operator on the constant closed path

@@ -9,11 +9,11 @@ The chain of sector-projector theorems for the four-site marginal of a tensor
 saturating the area law consists of
 
 - `MPOTensor.exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL`
-  (`TNLean/MPS/MPDO/BNTSourceSectorProjectors.lean`),
+  (`TNLean/MPS/CanonicalForm/SimpleMPO/FourSiteSectorProjectors.lean`),
 - `MPOTensor.exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL`
-  (`TNLean/MPS/MPDO/BNTProjectorSelection.lean`), and
+  (`TNLean/MPS/CanonicalForm/SimpleMPO/BNTProjectorSelection.lean`), and
 - `MPOTensor.exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent`
-  (`TNLean/MPS/MPDO/BNTSeparatingProjectors.lean`),
+  (`TNLean/MPS/MPDO/BNTSectors/BNTSeparatingProjectors.lean`),
 
 each importing the previous one. All three stated the same comparison data in
 the same way: a reindexed three-site marginal bound by a `let`, a simultaneous
@@ -24,14 +24,14 @@ further `let` bindings naming the two halves of
 The preamble was byte-identical in the first two statements and differed only
 by one binder offset in the third. Each of the three proofs then re-derived the
 same two halves of the closure theorem, and the two downstream proofs in
-`TNLean/MPS/MPDO/BNTSectorAreaLaw.lean` and
-`TNLean/MPS/MPDO/BNTSectorAnalyticProperties.lean` re-derived them once more
+`TNLean/MPS/MPDO/BNTSectors/BNTSectorAreaLaw.lean` and
+`TNLean/MPS/MPDO/BNTSectors/BNTSectorAnalyticProperties.lean` re-derived them once more
 after discarding the entire conclusion of the theorem they invoked.
 
 ## The witness structure
 
 `MPOTensor.ThreeSiteClosureWitness M S`, in
-`TNLean/MPS/MPDO/BNTSourceSectorProjectors.lean`, names the comparison data of
+`TNLean/MPS/CanonicalForm/SimpleMPO/FourSiteSectorProjectors.lean`, names the comparison data of
 a tensor `M` and a sector decomposition `S`: the simultaneous left inverse `C`
 and its defining property `hC`, the family closure `hρ` of the normalized
 three-site marginal with the normalized three-site closing matrices, the

@@ -9,7 +9,7 @@ resolves to a single owner.
 
 | Removed declaration | Replacement |
 | --- | --- |
-| `MPSTensor.groundSpaceESHasOrthogonalProjection` (private, `TNLean/MPS/ParentHamiltonian/Martingale/C3Threshold.lean`) | `MPSTensor.groundSpaceES_hasOrthogonalProjection` (`TNLean/MPS/ParentHamiltonian/FNWContraction.lean`), reached through the existing import of that module |
+| `MPSTensor.groundSpaceESHasOrthogonalProjection` (private, `TNLean/MPS/ParentHamiltonian/ProjectorDefect/C3Threshold.lean`) | `MPSTensor.groundSpaceES_hasOrthogonalProjection` (`TNLean/MPS/ParentHamiltonian/FNWContraction.lean`), reached through the existing import of that module |
 | `MPSTensor.groundSpaceESHasOrthogonalProjection` (private, `TNLean/MPS/ParentHamiltonian/FNWContraction.lean`) | `MPSTensor.groundSpaceES_hasOrthogonalProjection` (same module, promoted and renamed to the underscore-separated theorem convention) |
 
 Both modules keep their `attribute [local instance]` line, now naming the

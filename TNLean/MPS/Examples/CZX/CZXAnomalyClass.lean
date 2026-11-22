@@ -5,8 +5,9 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicInvariant
 import TNLean.MPS.Examples.CZX.CZXDecoratedFusion
-import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
-import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
+import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorCohomology
+import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorToolkit
+import TNLean.MPS.FundamentalTheorem.OperatorGroup.AnomalyObstruction
 
 /-!
 # The anomaly class of the decorated CZX representation
@@ -40,7 +41,20 @@ of fusion tensors.
   nontrivial for every choice of fusion tensors.
 * `CZXCompression.czxFamily_anomalyClass_ne_zero`: the anomaly class is nonzero
   in the degree-three group cohomology `H³(ℤ₂, ℂˣ)`.
+
+## No normal matrix product state is invariant under the decorated CZX operator
+
+The decorated CZX representation of `ℤ₂` has nontrivial anomaly class
+(`CZXCompression.not_isTrivialGaugeClass_omega_czx`), so by the anomaly obstruction
+(`MPOTensor.GroupFamily.IsNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass`)
+no normal matrix product state of positive bond dimension is invariant under it.
+
+Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 570 (an anomalous
+symmetry has no invariant injective matrix product state) and lines 1128--1136;
+arXiv:2502.20257, `main.tex` line 1545.
 -/
+
+section
 
 noncomputable section
 
@@ -351,3 +365,36 @@ theorem czxFamily_anomalyClass_ne_zero :
     ((GroupFamily.FusionData.isTrivialGaugeClass_omega_iff _ _).2 h)
 
 end CZXCompression
+end
+
+end
+
+section
+
+noncomputable section
+
+open scoped Matrix
+open MPOTensor
+
+namespace CZXCompression
+
+/-- **The decorated CZX operator fixes no normal matrix product state**: there is no
+normal matrix product state of positive bond dimension whose periodic vector is fixed
+by the decorated CZX operator at every positive length.
+
+Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 570 and lines
+1128--1136; arXiv:2502.20257, `main.tex` line 1545. -/
+theorem not_exists_normal_fixesMPV_czxDecoratedTensor :
+    ¬ ∃ (D : ℕ) (A : MPSTensor 2 D), 0 < D ∧ Kraus.IsNormal A ∧
+      GroupFamily.FixesMPV czxDecoratedTensor A := by
+  rintro ⟨D, A, hD, hA, hU⟩
+  refine czxFamily_isNormalRepresentation.not_exists_invariant_of_not_isTrivialGaugeClass
+    czxFusionData (not_isTrivialGaugeClass_omega_czx czxFusionData) ⟨D, A, hD, hA, ?_⟩
+  refine Multiplicative.forall_zmod_two (fun N _ ↦ ?_) hU
+  change mpo (MPOTensor.idTensor 2) N *ᵥ _ = _
+  rw [mpo_idTensor, Matrix.one_mulVec]
+
+end CZXCompression
+end
+
+end

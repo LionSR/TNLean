@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceGaussianCoefficients
-import QICLean.Probability.WeightedSourceError
-import QICLean.Probability.MatrixTraceNormIntegrability
+import QICLean.Probability.Concentration.WeightedSourceError
+import QICLean.Probability.Concentration.MatrixTraceNormIntegrability
 
 /-!
 # Integrability of actual Gaussian source contractions

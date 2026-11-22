@@ -7,7 +7,7 @@ import TNLean.MPS.Examples.Ising.IsingFusionAlgebraOnePsi
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebraOneSigma
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebraPsiSigma
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebraSigma
-import TNLean.MPS.Symmetry.MPOSymmetry.Character
+import TNLean.MPS.Symmetry.MPOSymmetry.Fusion.Character
 
 /-!
 # The Ising matrix product operators as a fusion algebra

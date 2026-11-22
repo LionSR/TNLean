@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Core.CyclicTrace
+import TNLean.MPS.Tensor.Words.CyclicTrace
 import QICLean.ManyBody.Sites.ProductVector
-import TNLean.MPS.OpenBoundary
+import TNLean.MPS.Tensor.OpenBoundary
 
 /-!
 # Product states: bond-dimension-one MPS

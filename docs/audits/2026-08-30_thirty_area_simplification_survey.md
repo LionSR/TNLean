@@ -20,7 +20,7 @@ evidence for S2 and issue #4564.
 ## New evidence for S2 and issue #4564
 
 Five forwarding theorems in
-`TNLean/PiAlgebra/CanonicalFormSepAux.lean` had no production Lean consumer
+`TNLean/MPS/CanonicalForm/BlockFamily.lean` had no production Lean consumer
 and no Blueprint tag:
 
 - `MPSTensor.IsCanonicalForm.toHasInjectiveBlocks` (line 236); no production
@@ -43,7 +43,7 @@ The first four names occurred in the sanctioned-bridge lists in
 consumers and have been replaced by the direct constructors or structure
 fields. The similarly named normal-form
 projections to irreducibility and left-canonical data remain live through
-`TNLean/MPS/BNT/Construction.lean` and are not candidates.
+`TNLean/MPS/CanonicalForm/BNT/Construction.lean` and are not candidates.
 
 Deleting `MPSTensor.IsCanonicalForm.toHasInjectiveBlocks` removed the sole
 consumer of `HasInjectiveBlocks.ofForall`. That constructor had no Blueprint
@@ -59,7 +59,7 @@ rewrites the glossary in place.
 The narrower second pass independently reconfirmed the five `PiAlgebra`
 forwarders and found one further zero-reference declaration:
 `TNLean.PEPS.edgeGaugeOfCycleGauge` in
-`TNLean/PEPS/CycleMPSFundamentalTheorem.lean`. This construction had already
+`TNLean/PEPS/FundamentalTheorem/Cycle/CycleMPSFundamentalTheorem.lean`. This construction had already
 been isolated for a follow-up in
 `docs/audits/2026-08-26_peps_normal_cycle_zero_reference_deletion.md` after its
 round-trip theorem was removed. A fresh search found no production Lean
@@ -80,13 +80,13 @@ production consumer and whose simplification attribute did not fire in the
 linter-bearing module build:
 `MPOTensor.BNTFusionTensorClause.retainedMultiplicityWeightEntry_verticalCopyCoordinateEquiv_symm`
 in
-`TNLean/MPS/MPDO/TopologicalMultiplicityEnergy.lean`. It was a projection
+`TNLean/MPS/MPDO/TopologicalForm/TopologicalMultiplicityEnergy.lean`. It was a projection
 wrapper over the corresponding retained-multiplicity coordinate formula and
 had no Blueprint tag. Deleting it removes exactly 14 Lean lines, as measured by
 `git diff --numstat` for the file.
 
 The linter-bearing verification
-`lake build TNLean.MPS.MPDO.TopologicalMultiplicityEnergy` passed after the
+`lake build TNLean.MPS.MPDO.TopologicalForm.TopologicalMultiplicityEnergy` passed after the
 deletion. Thus the build, rather than name counting alone, confirms that the
 `@[simp]` declaration was not used implicitly within the checked module. This
 batch is recorded under S2 rather than as a new issue.

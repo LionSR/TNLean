@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.QCA.GNVWIndex
-import QICLean.Algebra.MatrixStarEquivSpatial
-import QICLean.Algebra.MatrixIsometryKronecker
+import QICLean.Algebra.MatrixAlgebra.MatrixStarEquivSpatial
+import QICLean.Algebra.Unitary.MatrixUnitaryBetween
 
 /-!
 # Unitary gates from the actual adjacent support factors

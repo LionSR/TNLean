@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.Algebra.ComplexOfInt
-import TNLean.MPS.FundamentalTheorem.Reduction.AssemblyLemmas
+import TNLean.MPS.FundamentalTheorem.Compression.AssemblyLemmas
 
 /-!
 # GHZ sectors: an upper-triangular tensor generating the GHZ state

@@ -48,8 +48,8 @@ contraction in the proof of Theorem 5.9.
 All of the following passed with Lean's standard Mathlib linter set and
 warnings treated as errors:
 
-- `TNLean.PEPS.TorusMatchedProjectorExpansion`
-- `TNLean.PEPS.TorusMatchedCutClosureMembership`
+- `TNLean.PEPS.Injectivity.TorusSector.TorusMatchedProjectorExpansion`
+- `TNLean.PEPS.Injectivity.TorusSector.TorusMatchedCutClosureMembership`
 - `TNLeanTest.PEPS.MatchedTorusProjectors`
 
 The regression file checks the exact opposite-bond indexing on a two-by-two

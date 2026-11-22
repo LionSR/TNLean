@@ -12,7 +12,9 @@ import TNLean.Algebra.CentralStarSubalgebraMatrix
 import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing
 import TNLean.Algebra.CyclicMomentRigidity
+import TNLean.Algebra.EndpointEmbeddingMatrix
 import TNLean.Algebra.FixedPointFreeInvolutionSign
+import TNLean.Algebra.GInjective
 import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.KleinCocyclePhase
 import TNLean.Algebra.LSymbolFreeAction

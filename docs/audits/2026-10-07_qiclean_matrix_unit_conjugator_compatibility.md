@@ -2,8 +2,8 @@
 
 The QICLean upgrades used by the PEPS conditional-information and regularized
 patch-minimum work expose a duplicate declaration when the full TNLean import
-closure is loaded. `TNLean.MPS.Symmetry.LocalVirtualGauge` and
-`QICLean.Algebra.MatrixUnitConjugator` both declared these three names:
+closure is loaded. `TNLean.MPS.Symmetry.ContinuousFamily.LocalVirtualGauge` and
+`QICLean.Algebra.MatrixAlgebra.MatrixUnitConjugator` both declared these three names:
 
 - `Matrix.matrixUnitConjugator`
 - `Matrix.matrixUnitConjugator_eq_smul`
@@ -25,7 +25,7 @@ All three public names remain available through the existing TNLean import.
 No compatibility alias, hypothesis, proof, or tensor-specific declaration is
 added or changed. Existing blueprint declaration references retain their names.
 
-The direct TNLean importers are `TNLean.MPS.Symmetry.GlobalVirtualGauge` and the
+The direct TNLean importers are `TNLean.MPS.Symmetry.ContinuousFamily.GlobalVirtualGauge` and the
 `TNLean.MPS.Symmetry` aggregator. The generic differentiable-action consumer in
 QICLean and the continuous local/global gauge consumers in TNLean are checked
 together by `TNLeanTest/QICConjugatorCompatibility.lean`.

@@ -13,7 +13,7 @@ stronger hypothesis than the rectangular injectivity of Theorem 3 of
 arXiv:1804.04964 (lines 1449--1452 of `Papers/1804.04964/paper_normal.tex`).
 Under `CLAUDE.md` §Faithfulness rule it is therefore a specialization, not the
 formalization of the source's reference datum. The source-faithful datum,
-`TNLean/PEPS/TorusRectangleReferenceData.lean`, has been in place and is what
+`TNLean/PEPS/FundamentalTheorem/Torus/TorusRectangleReferenceData.lean`, has been in place and is what
 the translation-invariant gauge family consumes.
 
 ## Zero-consumer evidence
@@ -23,14 +23,14 @@ were from the generated aggregator `TNLean/PEPS.lean`; no `\lean{...}` tag under
 `blueprint/src/` names any declaration below; the only prose references were the
 `\leanid{}` footnote in `docs/paper-gaps/peps_normal_ft_section3_route.tex` (now
 removed with the paragraph it annotated) and a docstring cross-reference in
-`TNLean/PEPS/TorusRectangleReferenceData.lean` (now reworded). With the singleton
+`TNLean/PEPS/FundamentalTheorem/Torus/TorusRectangleReferenceData.lean` (now reworded). With the singleton
 datum gone the accompanying **Scope restriction
 (NormalTorusRectangleInjectivityHypotheses)** marker in that paper-gap note
 described nothing in the library and was removed too.
 
 ## Removed declarations with replacements
 
-All replacements live in `TNLean/PEPS/TorusRectangleReferenceData.lean`.
+All replacements live in `TNLean/PEPS/FundamentalTheorem/Torus/TorusRectangleReferenceData.lean`.
 
 | Removed declaration | Replacement |
 |---|---|

@@ -19,7 +19,7 @@ Their theorems `MPSTensor.exists_approximationError_le_blockSum`,
 `MPSTensor.exists_approximationError_le_mul_blockSum`,
 `MPSTensor.exists_approximationError_le_overlappingBlockSum_complexWeight` and
 `MPSTensor.exists_approximationError_le_mul_overlappingBlockSum_complexWeight`
-are kept under their names in `TNLean/MPS/Preparation/BlockSumError.lean`. The
+are kept under their names in `TNLean/MPS/Preparation/BlockSum/BlockSumError.lean`. The
 complex-weight theorems no longer assume `|μⱼ| ≤ 1` or that some weight has
 modulus one, and their constant does not depend on the weights.
 

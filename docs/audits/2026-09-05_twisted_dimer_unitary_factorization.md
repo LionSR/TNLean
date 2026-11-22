@@ -1,6 +1,6 @@
 # Twisted-dimer unitary bond–flag factorization
 
-Date: September 5, 2026. Scope: the project construction discussed in issues #7776 and #7751, read live on this date. Both issues were open. This note records mathematical provenance and the direct operator calculation formalized in `TNLean/MPS/MPDO/TwistedDimerUnitaryFactorization.lean` in PR #7780. The coordinating parent confirmed a clean targeted build and axiom audit on this date; the exact declarations are recorded below. The strict non-decoration specification in #7751 remains unresolved.
+Date: September 5, 2026. Scope: the project construction discussed in issues #7776 and #7751, read live on this date. Both issues were open. This note records mathematical provenance and the direct operator calculation formalized in `TNLean/MPS/Examples/Dimer/TwistedDimerUnitaryFactorization.lean` in PR #7780. The coordinating parent confirmed a clean targeted build and axiom audit on this date; the exact declarations are recorded below. The strict non-decoration specification in #7751 remains unresolved.
 
 ## Source provenance
 
@@ -166,7 +166,7 @@ $$
 2^{-N}\sum_{k=0}^1\prod_m C_k(L_m,L'_m)(-1)^{kF_m}.
 $$
 
-Cyclic relabeling of the product is valid also at $N=1$. This is exactly the closed-chain formula in `TNLean/MPS/MPDO/TwistedDimerMPDO.lean:220–221`, using the coefficient definition in `TwistedDimer.lean`. The existing declaration is `MPOTensor.TwistedDimer.mpo_T_entry_formula`, whose hypothesis is explicitly positive length. This audit inspected that source and the bit-coordinate definitions; it did not run Lean builds.
+Cyclic relabeling of the product is valid also at $N=1$. This is exactly the closed-chain formula in `TNLean/MPS/Examples/Dimer/TwistedDimerDensityOperator.lean:220–221`, using the coefficient definition in `TwistedDimer.lean`. The existing declaration is `MPOTensor.TwistedDimer.mpo_T_entry_formula`, whose hypothesis is explicitly positive length. This audit inspected that source and the bit-coordinate definitions; it did not run Lean builds.
 
 The positive-length restriction cannot be removed. At $N=0$ the original closed MPO is the trace of the identity on its eight-dimensional virtual space, namely $8$. The displayed bond–flag expression instead has empty bond product $1$ and $\omega_0=1+1=2$, hence value $2$.
 
@@ -174,13 +174,13 @@ The positive-length restriction cannot be removed. At $N=0$ the original closed 
 
 The displayed bond–flag coupling can be removed by an explicit whole-space unitary after the stated neighboring-register regrouping. This is a project-derived operator-family factorization. It is not an on-site tensor factorization or a virtual-gauge equivalence, and no whole-site depth-one or other formal circuit-depth theorem is claimed. The operator identity does not itself classify the factors as renormalization fixed-point tensors. A strict non-decoration assertion allowing only some of those operations still needs a precise specification and a separate argument in #7751.
 
-The formalization in `TNLean/MPS/MPDO/TwistedDimerUnitaryFactorization.lean`, included in PR #7780, proves `MPOTensor.TwistedDimer.mpo_eq_unitary_factorization` with the explicit hypothesis `hN : 0 < N` and conclusion `mpo T N = chainUnitary N * decoratedState N * (chainUnitary N)ᴴ`. In the same namespace, `localV_conjTranspose`, `localV_mul_self`, and `localV_conjugate` prove the local identities; `chainUnitary_conjTranspose`, `chainUnitary_mul_conjTranspose`, and `chainUnitary_conjTranspose_mul` prove the full-space self-adjointness and both unitary laws for every natural length. The coordinating parent reported a clean 3058-job targeted build with no warnings and an axiom audit of the factorization and unitary laws containing only `propext`, `Classical.choice`, and `Quot.sound`. This audit did not duplicate that build.
+The formalization in `TNLean/MPS/Examples/Dimer/TwistedDimerUnitaryFactorization.lean`, included in PR #7780, proves `MPOTensor.TwistedDimer.mpo_eq_unitary_factorization` with the explicit hypothesis `hN : 0 < N` and conclusion `mpo T N = chainUnitary N * decoratedState N * (chainUnitary N)ᴴ`. In the same namespace, `localV_conjTranspose`, `localV_mul_self`, and `localV_conjugate` prove the local identities; `chainUnitary_conjTranspose`, `chainUnitary_mul_conjTranspose`, and `chainUnitary_conjTranspose_mul` prove the full-space self-adjointness and both unitary laws for every natural length. The coordinating parent reported a clean 3058-job targeted build with no warnings and an axiom audit of the factorization and unitary laws containing only `propext`, `Classical.choice`, and `Quot.sound`. This audit did not duplicate that build.
 
 Blueprint coverage in `blueprint/src/chapter/ch21_mpdo_rfp_bnt_coefficients.tex` uses the incoming-cell convention and the physical-coordinate identity exactly as formalized. The labels are `def:mpdo_twisted_dimer_controlled_flip`, `lem:mpdo_twisted_dimer_bond_state_entries`, `lem:mpdo_twisted_dimer_controlled_flip`, `def:mpdo_twisted_dimer_bond_flag_regrouping`, and `thm:mpdo_twisted_dimer_unitary_factorization`. These results do not settle strict N3 in #7751.
 
 ## Flag identification and normalization, issue #7782
 
-The live issue #7782 and `TNLean/MPS/MPDO/TwistedDimerFactorStates.lean` were read on September 5, 2026. The parent confirmed compilation and an axiom audit using only the three standard axioms above. The initial factor-state implementation is commit `aca5e6100`; the current source was inspected for the exact declarations below.
+The live issue #7782 and `TNLean/MPS/Examples/Dimer/TwistedDimerFactorStates.lean` were read on September 5, 2026. The parent confirmed compilation and an axiom audit using only the three standard axioms above. The initial factor-state implementation is commit `aca5e6100`; the current source was inspected for the exact declarations below.
 
 In namespace `MPOTensor.TwistedDimer`, `evenFlagState_eq_mpo_Mhat` identifies the flag operator with the existing density-normalized CPSV16 Example 4.12 tensor at every natural length:
 
@@ -198,7 +198,7 @@ The corresponding new Blueprint labels are `thm:mpdo_twisted_dimer_flag_factor` 
 
 ## The exact bond RFP tensor, issue #7783
 
-The live issue #7783 and the base implementation `TNLean/MPS/MPDO/TwistedDimerBondRFP.lean`, commit `e50d9f802`, were inspected on September 5, 2026. The parent confirmed compilation and an axiom audit using only the three standard axioms. This is an independent channel proof for a specified bond tensor, not a classification inferred solely from the earlier operator identity.
+The live issue #7783 and the base implementation `TNLean/MPS/Examples/Dimer/TwistedDimerBondRFP.lean`, commit `e50d9f802`, were inspected on September 5, 2026. The parent confirmed compilation and an axiom audit using only the three standard axioms. This is an independent channel proof for a specified bond tensor, not a classification inferred solely from the earlier operator identity.
 
 The source is `Notes/OpenProblemsTN/strategies/p6_round44_graded_dimer_twist.tex:162–193`, proposition `prop:p6-r44-dimer`. Its SHA256 was recomputed again for this continuation and still equals `01cad261200337e3b8ea53dc20900c005ed1bcb6123f2205a1cd381c86163ff7`. The local ignored file was not added. The bond-state definition at lines 162–165 is:
 

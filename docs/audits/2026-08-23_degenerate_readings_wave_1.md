@@ -30,7 +30,7 @@ Both are deleted; `NonzeroProportionalMPV₂` is the only named proportionality
 predicate. One inline eventual-proportionality hypothesis with no
 nonvanishing condition on the scalar still occurs, outside any named
 predicate, in `MPSTensor.mpvOverlap_norm_tendsto_one_of_eventually_proportionalMPV₂`
-(`TNLean/MPS/FundamentalTheorem/Proportional.lean`); the scalar's eventual
+(`TNLean/MPS/Transfer/Spectrum/Proportional.lean`); the scalar's eventual
 nonvanishing is derived there from the self-overlap convergence hypotheses
 rather than assumed.
 
@@ -57,11 +57,11 @@ are removed. The hypothesis stays, unstamped.
 
 | Declaration | Module | Replacement |
 |---|---|---|
-| `MPSTensor.ProportionalMPV₂` | `TNLean/MPS/Defs.lean` | `MPSTensor.NonzeroProportionalMPV₂` (same module). |
-| `MPSTensor.NonzeroProportionalMPV₂.toProportionalMPV₂` | `TNLean/MPS/Defs.lean` | None needed; the target predicate no longer exists. |
-| `MPSTensor.PeripheralProportionalCaseRootFromRescaling` | `TNLean/MPS/Periodic/FundamentalTheorem.lean` | None; the live proportional periodic route is `TNLean/MPS/Periodic/ProportionalOverlap.lean` with `MPSTensor.peripheralProportionalCase_periodicFT_of_sameMPV₂Pos`. |
-| `MPSTensor.peripheralProportionalCase_periodicFT_of_rootFromRescaling` | `TNLean/MPS/Periodic/FundamentalTheorem.lean` | None; the live proportional periodic route is `TNLean/MPS/Periodic/ProportionalOverlap.lean`, which takes `NonzeroProportionalMPV₂` hypotheses directly rather than rescaling to `SameMPV₂Pos` first. |
-| `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos` | `TNLean/MPS/FundamentalTheorem/SectorBNT/Supplier.lean` | `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized` (`SupplierNormalized.lean`); the prepared-block family alone is `MPSTensor.exists_prepared_BNT_blocks_afterBlocking_pos`. |
+| `MPSTensor.ProportionalMPV₂` | `TNLean/MPS/Tensor/Defs.lean` | `MPSTensor.NonzeroProportionalMPV₂` (same module). |
+| `MPSTensor.NonzeroProportionalMPV₂.toProportionalMPV₂` | `TNLean/MPS/Tensor/Defs.lean` | None needed; the target predicate no longer exists. |
+| `MPSTensor.PeripheralProportionalCaseRootFromRescaling` | `TNLean/MPS/FundamentalTheorem/Periodic/RepeatedBlocks.lean` | None; the live proportional periodic route is `TNLean/MPS/FundamentalTheorem/Periodic/ProportionalOverlap.lean` with `MPSTensor.peripheralProportionalCase_periodicFT_of_sameMPV₂Pos`. |
+| `MPSTensor.peripheralProportionalCase_periodicFT_of_rootFromRescaling` | `TNLean/MPS/FundamentalTheorem/Periodic/RepeatedBlocks.lean` | None; the live proportional periodic route is `TNLean/MPS/FundamentalTheorem/Periodic/ProportionalOverlap.lean`, which takes `NonzeroProportionalMPV₂` hypotheses directly rather than rescaling to `SameMPV₂Pos` first. |
+| `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos` | `TNLean/MPS/CanonicalForm/BNTPresentation/PreparedBlocks.lean` | `MPSTensor.exists_isBNTCanonicalForm_afterBlocking_pos_normalized` (`SupplierNormalized.lean`); the prepared-block family alone is `MPSTensor.exists_prepared_BNT_blocks_afterBlocking_pos`. |
 
 ## Removed blueprint nodes
 
@@ -74,9 +74,9 @@ are removed. The hypothesis stays, unstamped.
 
 ## Prose updated
 
-- `TNLean/MPS/FundamentalTheorem/Proportional.lean`: module and theorem
+- `TNLean/MPS/Transfer/Spectrum/Proportional.lean`: module and theorem
   docstrings name the surviving predicates.
-- `TNLean/MPS/FundamentalTheorem/SectorBNT/SupplierNormalized.lean`: scope
+- `TNLean/MPS/CanonicalForm/BNTPresentation/PreparedBlocksNormalized.lean`: scope
   stamp replaced by one sentence stating the convention.
 - `docs/glossary.md`: supplier bridge and caveat repointed to the normalized
   supplier.

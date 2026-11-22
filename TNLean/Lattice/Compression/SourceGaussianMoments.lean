@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.SourceGaussianContraction
 import TNLean.Lattice.Compression.GaussianSourceIntegrability
-import QICLean.Probability.MatrixTraceNormIntegrability
+import QICLean.Probability.Concentration.MatrixTraceNormIntegrability
 
 /-!
 # Second moments of actual source coefficients

@@ -1,0 +1,197 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.Tensor.Defs
+import TNLean.MPS.Tensor.Overlap
+import TNLean.MPS.Tensor.OpenBoundary
+
+import Mathlib.LinearAlgebra.Dimension.Finite
+import Mathlib.LinearAlgebra.Pi
+
+/-!
+# Ground space for parent Hamiltonians
+
+For a tensor \(A\) and block length \(L\), the local ground space is
+\(G_L(A) = \operatorname{range} Γ_L\), where
+\(X ↦ (σ ↦ \operatorname{tr}(A^σ X))\).
+-/
+
+open scoped Matrix
+
+namespace MPSTensor
+
+variable {d D : ℕ}
+
+/-- The local Hilbert space on \(N\) sites, written in the computational basis as
+functions on configurations `σ : Fin N → Fin d`. -/
+abbrev NSiteSpace (d N : ℕ) := Cfg d N → ℂ
+
+/-- The boundary-condition parametrization \(Γ_L\); its image is the local MPS
+ground space. -/
+noncomputable def groundSpaceMap (A : MPSTensor d D) (L : ℕ) :
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] NSiteSpace d L :=
+  LinearMap.pi fun σ : Fin L → Fin d =>
+    (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
+      (LinearMap.mulLeft ℂ (Kraus.evalWord A (List.ofFn σ)))
+
+@[simp] lemma groundSpaceMap_apply (A : MPSTensor d D) (L : ℕ)
+    (X : Matrix (Fin D) (Fin D) ℂ) (σ : Fin L → Fin d) :
+    groundSpaceMap A L X σ = Matrix.trace (Kraus.evalWord A (List.ofFn σ) * X) := by
+  simp [groundSpaceMap, Matrix.traceLinearMap_apply]
+
+/-- The length-three case of `groundSpaceMap_apply`, with the word expanded into
+an ordered triple product:
+\[
+  Γ_3(X)(a,b,c) = \operatorname{tr}\bigl(A^a A^b A^c X\bigr).
+\] -/
+lemma groundSpaceMap_three_apply (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
+    (a b c : Fin d) :
+    groundSpaceMap A 3 X ![a, b, c] = Matrix.trace (A a * (A b * (A c * X))) := by
+  simp [groundSpaceMap_apply, List.ofFn_succ, Kraus.evalWord, Matrix.mul_assoc]
+
+/-- Ground space on \(L\) consecutive sites:
+\(G_L(A) = \operatorname{range} Γ_L\). -/
+noncomputable def groundSpace (A : MPSTensor d D) (L : ℕ) :
+    Submodule ℂ (NSiteSpace d L) :=
+  (groundSpaceMap A L).range
+
+/-- A rank-one boundary matrix \(|r)(l|\) produces the open-boundary state with
+boundary vectors \((l|\) and \(|r)\):
+\[
+  Γ_L(|r)(l|)(σ) = (l|A^σ|r).
+\] -/
+lemma groundSpaceMap_vecMulVec (A : MPSTensor d D) (L : ℕ) (l r : Fin D → ℂ) :
+    groundSpaceMap A L (Matrix.vecMulVec r l) = openState l r A L := by
+  funext σ
+  simp only [openState, openCoeff_def]
+  rw [groundSpaceMap_apply, Matrix.mul_vecMulVec, Matrix.trace_vecMulVec, dotProduct_comm]
+
+/-- Bridge: the local ground space is spanned by the open-boundary states
+\(σ ↦ (l|A^σ|r)\), with the boundary vectors \((l|\) and \(|r)\) ranging over
+\(ℂ^D × ℂ^D\).
+
+This is the boundary-vector description of the open-boundary ground space in
+arXiv:2011.12127, line 1174 ("we can define boundary vectors on both sides").
+Every boundary matrix is a sum of matrix units, and each matrix unit is the
+rank-one matrix of two standard basis vectors. -/
+theorem groundSpace_eq_span_openState (A : MPSTensor d D) (L : ℕ) :
+    groundSpace A L = Submodule.span ℂ (Set.range fun p : (Fin D → ℂ) × (Fin D → ℂ) =>
+      openState p.1 p.2 A L) := by
+  apply le_antisymm
+  · rintro _ ⟨X, rfl⟩
+    rw [Matrix.matrix_eq_sum_single X, map_sum]
+    refine Submodule.sum_mem _ fun i _ => ?_
+    rw [map_sum]
+    refine Submodule.sum_mem _ fun j _ => ?_
+    rw [show Matrix.single i j (X i j) = X i j • Matrix.single i j (1 : ℂ) by
+      rw [Matrix.smul_single, smul_eq_mul, mul_one]]
+    rw [map_smul, Matrix.single_eq_single_vecMulVec_single, groundSpaceMap_vecMulVec]
+    exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨(Pi.single j 1, Pi.single i 1), rfl⟩)
+  · rw [Submodule.span_le]
+    rintro _ ⟨p, rfl⟩
+    exact ⟨Matrix.vecMulVec p.2 p.1, groundSpaceMap_vecMulVec A L p.1 p.2⟩
+
+lemma trace_gauge_boundary (X : GL (Fin D) ℂ) (E Y : Matrix (Fin D) (Fin D) ℂ) :
+    Matrix.trace (((X : Matrix (Fin D) (Fin D) ℂ) * E *
+        ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) * Y) =
+      Matrix.trace (E * (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) *
+        Y * (X : Matrix (Fin D) (Fin D) ℂ))) := by
+  set Xmat : Matrix (Fin D) (Fin D) ℂ := (X : Matrix (Fin D) (Fin D) ℂ)
+  set Xinv : Matrix (Fin D) (Fin D) ℂ :=
+    ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)
+  calc
+    Matrix.trace ((Xmat * E * Xinv) * Y)
+        = Matrix.trace (Xmat * E * (Xinv * Y)) := by simp [Matrix.mul_assoc]
+    _ = Matrix.trace ((Xinv * Y) * Xmat * E) := by
+        simpa using Matrix.trace_mul_cycle Xmat E (Xinv * Y)
+    _ = Matrix.trace (E * (Xinv * Y * Xmat)) := by
+        simpa [Matrix.mul_assoc] using Matrix.trace_mul_comm ((Xinv * Y) * Xmat) E
+
+/-- A virtual gauge change does not change the local ground space. -/
+theorem GaugeEquiv.groundSpace_le {A B : MPSTensor d D}
+    (h : GaugeEquiv A B) (L : ℕ) :
+    groundSpace B L ≤ groundSpace A L := by
+  rcases h with ⟨X, hX⟩
+  rintro ψ ⟨Y, rfl⟩
+  refine ⟨((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * Y *
+      (X : Matrix (Fin D) (Fin D) ℂ), ?_⟩
+  ext σ
+  rw [groundSpaceMap_apply, groundSpaceMap_apply]
+  rw [evalWord_gauge X hX]
+  exact (trace_gauge_boundary X (Kraus.evalWord A (List.ofFn σ)) Y).symm
+
+/-- Gauge-equivalent tensors have identical local ground spaces at every
+length. -/
+theorem GaugeEquiv.groundSpace_eq {A B : MPSTensor d D}
+    (h : GaugeEquiv A B) (L : ℕ) :
+    groundSpace A L = groundSpace B L := by
+  apply le_antisymm
+  · exact h.symm.groundSpace_le L
+  · exact h.groundSpace_le L
+
+/-- Rescaling every matrix of a tensor by a nonzero scalar leaves the local MPS
+space unchanged at every length.
+
+Multiplying each \(A^i\) by \(\zeta\) multiplies every length-\(L\) word by
+\(\zeta^L\), which is absorbed by the boundary matrix. This is the scalar half
+of the "without loss of generality" normalization taken at
+arXiv:cond-mat/9410110, equations (3.1)--(3.2b), lines 1394--1435. -/
+theorem groundSpace_smul_eq (A : MPSTensor d D) (ζ : ℂ) (hζ : ζ ≠ 0) (L : ℕ) :
+    groundSpace (ζ • A) L = groundSpace A L := by
+  have hMap (X : Matrix (Fin D) (Fin D) ℂ) :
+      groundSpaceMap (ζ • A) L X = groundSpaceMap A L ((ζ ^ L) • X) := by
+    ext σ
+    rw [groundSpaceMap_apply, groundSpaceMap_apply]
+    change Matrix.trace
+        (Kraus.evalWord (fun i ↦ ζ • A i) (List.ofFn σ) * X) = _
+    rw [Kraus.evalWord_smul]
+    simp [Matrix.trace_smul]
+  apply le_antisymm
+  · rintro _ ⟨X, rfl⟩
+    exact ⟨(ζ ^ L) • X, (hMap X).symm⟩
+  · rintro _ ⟨Y, rfl⟩
+    refine ⟨(ζ ^ L)⁻¹ • Y, ?_⟩
+    rw [hMap]
+    congr 1
+    rw [smul_smul, mul_inv_cancel₀ (pow_ne_zero L hζ), one_smul]
+
+/-- The span of the periodic MPS vectors associated to a finite family of BNT
+components.
+
+See arXiv:1606.00608, Definition 3.9, source lines 522--524. The source writes
+the component vectors as \(|V^{(N)}(A_j)\rangle\), \(j=1,\ldots,g\). -/
+noncomputable def bntMPSVectorSpan {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPSTensor d (dim j)) (N : ℕ) :
+    Submodule ℂ (NSiteSpace d N) :=
+  Submodule.span ℂ (Set.range fun j : Fin r => (mpv (A j) : NSiteSpace d N))
+
+lemma groundSpace_finrank_le (A : MPSTensor d D) (L : ℕ) :
+    Module.finrank ℂ (groundSpace A L) ≤ D ^ 2 := by
+  have hRange : Module.finrank ℂ (groundSpace A L) ≤
+      Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) := by
+    exact LinearMap.finrank_range_le (groundSpaceMap A L)
+  have hMatrix : Module.finrank ℂ (Matrix (Fin D) (Fin D) ℂ) = D ^ 2 :=
+    by simp [Module.finrank_matrix, Fintype.card_fin, pow_two]
+  exact hRange.trans (by simp [hMatrix])
+
+/-- The ambient local space has dimension \(d^L\). -/
+lemma nSiteSpace_finrank (d L : ℕ) :
+    Module.finrank ℂ (NSiteSpace d L) = d ^ L := by
+  calc
+    Module.finrank ℂ (NSiteSpace d L)
+        = Fintype.card (Cfg d L) := by
+            simp [NSiteSpace, Module.finrank_fintype_fun_eq_card]
+    _ = d ^ L := by simp
+
+/-- If \(d^L > D^2\), then \(G_L(A)\) is a proper subspace. -/
+lemma groundSpace_ne_top (A : MPSTensor d D) (L : ℕ) (hDim : d ^ L > D ^ 2) :
+    groundSpace A L ≠ ⊤ := by
+  intro hTop
+  have hLe' : Module.finrank ℂ (groundSpace A L) ≤ D ^ 2 := groundSpace_finrank_le A L
+  rw [hTop] at hLe'
+  have hLe : d ^ L ≤ D ^ 2 := by simpa [nSiteSpace_finrank] using hLe'
+  omega
+
+end MPSTensor

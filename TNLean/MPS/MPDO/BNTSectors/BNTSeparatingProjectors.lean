@@ -1,0 +1,362 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.MPS.CanonicalForm.SimpleMPO.BNTProjectorSelection
+
+/-!
+# Separating projectors for a simple tensor satisfying saturation of the area law
+
+For the four-site quantum-Markov decomposition, the BNT projectors resolve the
+positive-weight Markov support. The remaining zero-weight Markov summands
+annihilate every physical slice. Assigning them to one BNT label therefore
+gives orthogonal projectors which resolve the full physical identity and retain
+the local separation relation.
+
+**Local fix (inactive sectors):** The source removes zero-weight Markov
+summands before defining the separating projectors. The formal decomposition
+retains them and assigns them to one BNT label, as documented in
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+## Main declarations
+
+* `completedBntSectorProjection`: the BNT projector after assigning every
+  zero-weight Markov summand to a distinguished BNT label.
+* `exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent`:
+  the separating projectors selected by SAL after copy independence is supplied.
+* `exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL`:
+  the source-faithful standing-context theorem, with copy independence derived
+  from ZCL.
+
+## References
+
+* [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
+  Appendix C.2, equations `Pis` and `PjKiPj`, lines 1680--1737
+-/
+
+open scoped Matrix BigOperators
+
+namespace MPOTensor
+
+variable {d g : ℕ} {dim : Fin g → ℕ}
+
+/-- The BNT label of a Markov sector, with every zero-weight sector assigned
+to a fixed label.
+
+The source removes zero-weight Markov summands before defining the sets
+$S_j$. Retaining the summands and assigning them to one label gives the same
+separation relation on every physical slice.
+
+**Local fix (inactive sectors):** This total assignment replaces the source's
+implicit removal of zero-weight summands; see
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `QkKjs` and `Pis`, lines
+1698--1737. -/
+noncomputable def completedBntSectorLabel
+    {K : (s : Fin g) → MPOTensor d (dim s)}
+    {R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ}
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    {C : Matrix (MPSTensor.BlockEntryIndex dim) (Fin d × Fin d) ℂ}
+    (hC : MPSTensor.IsMPOBlockLeftInverse K C)
+    (hρ : IsThreeSiteFamilyClosure K R ρ) (hη : EtaStructure ρ)
+    (hR : ∀ s : Fin g, R s ≠ 0) (s₀ : Fin g) (k : Fin hη.m) : Fin g :=
+  if hk : hη.p k ≠ 0 then
+    bntSectorLabel hC hρ hη hR ⟨k, hk⟩
+  else s₀
+
+/-- The projector obtained by summing all Markov-sector projections carrying
+one completed BNT label.
+
+**Local fix (inactive sectors):** The completed label assigns the retained
+zero-weight summands to one BNT sector; see
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `Pis`, lines 1680--1712. -/
+noncomputable def completedBntSectorProjection
+    {K : (s : Fin g) → MPOTensor d (dim s)}
+    {R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ}
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    {C : Matrix (MPSTensor.BlockEntryIndex dim) (Fin d × Fin d) ℂ}
+    (hC : MPSTensor.IsMPOBlockLeftInverse K C)
+    (hρ : IsThreeSiteFamilyClosure K R ρ) (hη : EtaStructure ρ)
+    (hR : ∀ s : Fin g, R s ≠ 0) (s₀ s : Fin g) :
+    Matrix (Fin d) (Fin d) ℂ :=
+  ∑ k : Fin hη.m,
+    if completedBntSectorLabel hC hρ hη hR s₀ k = s then
+      hη.sectorProjection k
+    else 0
+
+/-- Each completed BNT-sector matrix is an orthogonal projection.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `Pis`, lines 1680--1712. -/
+theorem completedBntSectorProjection_isOrthogonal
+    {K : (s : Fin g) → MPOTensor d (dim s)}
+    {R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ}
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    {C : Matrix (MPSTensor.BlockEntryIndex dim) (Fin d × Fin d) ℂ}
+    (hC : MPSTensor.IsMPOBlockLeftInverse K C)
+    (hρ : IsThreeSiteFamilyClosure K R ρ) (hη : EtaStructure ρ)
+    (hR : ∀ s : Fin g, R s ≠ 0) (s₀ s : Fin g) :
+    IsOrthogonalProjection
+      (completedBntSectorProjection hC hρ hη hR s₀ s) := by
+  classical
+  apply isOrthogonalProjection_sum_of_pairwise_mul_eq_zero
+  · intro k
+    by_cases hk : completedBntSectorLabel hC hρ hη hR s₀ k = s
+    · simpa [completedBntSectorProjection, hk] using
+        hη.sectorProjection_isOrthogonal k
+    · simp [hk, IsOrthogonalProjection]
+  · intro k l hkl
+    by_cases hk : completedBntSectorLabel hC hρ hη hR s₀ k = s
+    · by_cases hl : completedBntSectorLabel hC hρ hη hR s₀ l = s
+      · simp only [hk, hl, ite_eq_left]
+        exact hη.sectorProjection_mul_eq_zero hkl
+      · simp [hl]
+    · simp [hk]
+
+/-- Completed projectors with distinct BNT labels are mutually orthogonal.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `Pis`, lines 1680--1712. -/
+theorem completedBntSectorProjection_mul_eq_zero
+    {K : (s : Fin g) → MPOTensor d (dim s)}
+    {R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ}
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    {C : Matrix (MPSTensor.BlockEntryIndex dim) (Fin d × Fin d) ℂ}
+    (hC : MPSTensor.IsMPOBlockLeftInverse K C)
+    (hρ : IsThreeSiteFamilyClosure K R ρ) (hη : EtaStructure ρ)
+    (hR : ∀ s : Fin g, R s ≠ 0) (s₀ : Fin g)
+    {s t : Fin g} (hst : s ≠ t) :
+    completedBntSectorProjection hC hρ hη hR s₀ s *
+        completedBntSectorProjection hC hρ hη hR s₀ t = 0 := by
+  classical
+  rw [completedBntSectorProjection, completedBntSectorProjection,
+    Finset.sum_mul_sum]
+  apply Finset.sum_eq_zero
+  intro k _
+  apply Finset.sum_eq_zero
+  intro l _
+  by_cases hk : completedBntSectorLabel hC hρ hη hR s₀ k = s
+  · by_cases hl : completedBntSectorLabel hC hρ hη hR s₀ l = t
+    · simp only [hk, hl, ite_eq_left]
+      apply hη.sectorProjection_mul_eq_zero
+      intro hkl
+      apply hst
+      rw [← hk, ← hl, hkl]
+    · simp [hl]
+  · simp [hk]
+
+/-- The completed BNT-sector projectors resolve the full physical identity.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `Pis`, lines 1680--1696. -/
+theorem sum_completedBntSectorProjection
+    {K : (s : Fin g) → MPOTensor d (dim s)}
+    {R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ}
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    {C : Matrix (MPSTensor.BlockEntryIndex dim) (Fin d × Fin d) ℂ}
+    (hC : MPSTensor.IsMPOBlockLeftInverse K C)
+    (hρ : IsThreeSiteFamilyClosure K R ρ) (hη : EtaStructure ρ)
+    (hR : ∀ s : Fin g, R s ≠ 0) (s₀ : Fin g) :
+    ∑ s : Fin g, completedBntSectorProjection hC hρ hη hR s₀ s = 1 := by
+  classical
+  simp only [completedBntSectorProjection]
+  rw [Finset.sum_comm]
+  simpa using hη.sum_sectorProjection
+
+/-- The completed BNT projectors separate the physical slices of distinct
+normal representatives. Whenever $s\ne t$ or $i\ne s$,
+\[
+  P_s K_i^{\beta\alpha} P_t=0.
+\]
+
+Zero-weight Markov sectors are assigned to the distinguished label `s₀`.
+Their diagonal corners vanish for every physical slice, so this assignment
+does not change the separation relation.
+
+Source: arXiv:1606.00608, Appendix C.2, equation `PjKiPj`, lines
+1680--1737. -/
+theorem completedBntSectorProjection_mul_physicalSlice_mul_eq_zero
+    {K : (s : Fin g) → MPOTensor d (dim s)}
+    {R : (s : Fin g) → Matrix (Fin (dim s)) (Fin (dim s)) ℂ}
+    {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
+    {C : Matrix (MPSTensor.BlockEntryIndex dim) (Fin d × Fin d) ℂ}
+    (hC : MPSTensor.IsMPOBlockLeftInverse K C)
+    (hρ : IsThreeSiteFamilyClosure K R ρ) (hη : EtaStructure ρ)
+    (hR : ∀ s : Fin g, R s ≠ 0) (s₀ i s t : Fin g)
+    (hst : s ≠ t ∨ i ≠ s) (β α : Fin (dim i)) :
+    completedBntSectorProjection hC hρ hη hR s₀ s *
+        physicalSlice (K i) β α *
+          completedBntSectorProjection hC hρ hη hR s₀ t = 0 := by
+  classical
+  rw [completedBntSectorProjection, completedBntSectorProjection,
+    Finset.sum_mul, Finset.sum_mul_sum]
+  apply Finset.sum_eq_zero
+  intro k _
+  apply Finset.sum_eq_zero
+  intro l _
+  by_cases hks : completedBntSectorLabel hC hρ hη hR s₀ k = s
+  · by_cases hlt : completedBntSectorLabel hC hρ hη hR s₀ l = t
+    · simp only [hks, hlt, ite_eq_left]
+      by_cases hkl : k = l
+      · subst l
+        have hst_eq : s = t := hks.symm.trans hlt
+        have hi : i ≠ s := by
+          rcases hst with hst | hi
+          · exact False.elim (hst hst_eq)
+          · exact hi
+        by_cases hk : hη.p k ≠ 0
+        · have hlabel :
+              bntSectorLabel hC hρ hη hR ⟨k, hk⟩ = s := by
+            simpa [completedBntSectorLabel, hk] using hks
+          apply sectorProjection_mul_physicalSlice_mul_self_eq_zero_of_ne_label
+            hC hρ hη hR ⟨k, hk⟩ i
+          · intro hilabel
+            exact hi (hilabel.trans hlabel)
+        · exact
+            sectorProjection_mul_physicalSlice_mul_self_eq_zero_of_probability_eq_zero
+              hC hρ hη hR i β α k (not_ne_iff.mp hk)
+      · exact
+          sectorProjection_mul_physicalSlice_mul_sectorProjection_eq_zero_of_ne
+            hC hρ hη hR i β α hkl
+    · simp [hlt]
+  · simp [hks]
+
+/-- Under copy-independent BNT weights, a simple tensor in biCF which satisfies
+SAL has separating projectors for its BNT representatives.
+
+More precisely, there is a distinguished BNT label $s_0$ and a family of
+orthogonal projectors $P_s$ which resolves the physical identity. Whenever
+$s\ne t$ or $i\ne s$,
+\[
+  P_s K_i^{\beta\alpha}P_t=0.
+\]
+The distinguished label exists because a BNT canonical form has a copy with
+unit-modulus weight. Every zero-weight Markov summand is assigned to this
+label. Such summands annihilate all physical slices, so the assignment restores
+$\sum_sP_s=\mathbf 1$ without changing the displayed relation.
+
+The hypotheses are the source context at the beginning of Case II: the BNT
+canonical form and simultaneous span express biCF, nonnilpotence expresses
+simplicity, copy independence is the conclusion immediately preceding the
+projector lemma, and SAL supplies the four-site quantum-Markov decomposition.
+There is no independent closing-matrix hypothesis.
+
+**Scope restriction (copy-independent weights):** This theorem assumes copy
+independence explicitly, while the source obtains it from ZCL before the
+separating-projector lemma. The standing-context theorem
+`exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL` derives this
+equality from the source ZCL equation and the canonical-form gauge identity; see
+`docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+**Local fix (inactive sectors):** The source discards zero-weight Markov
+summands. Here they are assigned to the distinguished label $s_0$, which
+restores the ambient identity resolution without changing any physical slice;
+see `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
+
+Source: arXiv:1606.00608, Appendix C.2, equations `CFK`, `biCFK`, `Pis`, and
+`PjKiPj`, lines 1626--1737. -/
+theorem exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent
+    {D : ℕ} (M : MPOTensor d D)
+    (S : MPSTensor.SectorDecomposition (d * d))
+    (hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hCF : MPSTensor.IsBNTCanonicalForm S)
+    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q')
+    (hnonNil : ∀ j,
+      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+    (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
+    (hSAL : IsSAL M) :
+    ∃ W : ThreeSiteClosureWitness M S,
+      ∃ s₀ : Fin S.basisCount,
+        (∀ s, IsOrthogonalProjection
+          (completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ s)) ∧
+        (∀ s t, s ≠ t →
+          completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ s *
+            completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ t = 0) ∧
+        (∑ s, completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ s) = 1 ∧
+        ∀ (i s t : Fin S.basisCount), s ≠ t ∨ i ≠ s →
+          ∀ (β α : Fin (S.basisDim i)),
+            completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ s *
+                physicalSlice (S.basisMPOTensor i) β α *
+              completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀ t = 0 := by
+  obtain ⟨s₀, _q₀, _hs₀⟩ := hCF.weight_unit_exists
+  obtain ⟨W, _hunique, _hproj, _horth, _hsum⟩ :=
+    exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL
+      M S hM hWeight hnonNil hSpan hSAL
+  refine ⟨W, s₀, ?_, ?_, ?_, ?_⟩
+  · intro s
+    exact completedBntSectorProjection_isOrthogonal W.hC W.hρ W.hη W.hR s₀ s
+  · intro s t hst
+    exact completedBntSectorProjection_mul_eq_zero W.hC W.hρ W.hη W.hR s₀ hst
+  · exact sum_completedBntSectorProjection W.hC W.hρ W.hη W.hR s₀
+  · intro i s t hst β α
+    exact completedBntSectorProjection_mul_physicalSlice_mul_eq_zero
+      W.hC W.hρ W.hη W.hR s₀ i s t hst β α
+
+/-- **Separating projectors in the source standing context.**
+
+Let $M$ be a simple tensor in block-injective canonical form which satisfies
+ZCL and SAL. Its horizontal canonical form is presented through the direct
+sum of the weighted BNT copies and their block-diagonal gauge. Simplicity says
+that no representative has nilpotent physical-trace transfer, while biCF gives
+the simultaneous one-site span after the common blocking. Then the BNT
+representatives admit orthogonal projectors $P_s$ such that
+\[
+  \sum_s P_s=\mathbf 1,
+  \qquad
+  P_sK_i^{\beta\alpha}P_t=0
+  \quad\text{whenever }s\ne t\text{ or }i\ne s.
+\]
+
+Unlike the preceding specialization, this theorem does not assume that the
+copy weights agree. It derives their equality from the source ZCL equation
+and the horizontal canonical-form gauge identity.
+
+Source: arXiv:1606.00608, Appendix C.2, Case II and Lemma `lemmus`, lines
+1626--1691; the projector argument continues through line 1737. -/
+theorem exists_bntSeparatingProjectors_of_horizontalCF_isSourceZCL_isSAL
+    {D : ℕ} (M : MPOTensor d D)
+    (S : MPSTensor.SectorDecomposition (d * d))
+    (hCF : MPSTensor.IsBNTCanonicalForm S)
+    (hTotal : S.totalDim = D)
+    (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
+    (hEq : ∀ i : Fin (d * d),
+      M.toMPSTensor i =
+        cast (by rw [hTotal] :
+            Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
+              Matrix (Fin D) (Fin D) ℂ)
+          ((MPSTensor.globalGaugeOfBlocks X :
+                Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
+            S.toTensor i *
+            (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
+                GL (Fin S.totalDim) ℂ) :
+              Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
+    (hnonNil : ∀ j,
+      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+    (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
+    (hZCL : IsSourceZCL M)
+    (hSAL : IsSAL M) :
+    ∃ P : Fin S.basisCount → Matrix (Fin d) (Fin d) ℂ,
+      (∀ s, IsOrthogonalProjection (P s)) ∧
+      (∀ s t, s ≠ t → P s * P t = 0) ∧
+      (∑ s, P s) = 1 ∧
+      ∀ (i s t : Fin S.basisCount), s ≠ t ∨ i ≠ s →
+        ∀ (β α : Fin (S.basisDim i)),
+          P s * physicalSlice (S.basisMPOTensor i) β α * P t = 0 := by
+  subst D
+  have hGauge : MPSTensor.GaugeEquiv S.toTensor M.toMPSTensor := by
+    refine ⟨MPSTensor.globalGaugeOfBlocks X, ?_⟩
+    intro i
+    simpa using hEq i
+  have hM : MPSTensor.SameMPV₂Pos M.toMPSTensor S.toTensor :=
+    fun N _hN σ ↦ (hGauge.sameMPV N σ).symm
+  have hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
+      S.weight j q = S.weight j q' :=
+    weight_copy_independent_of_isSourceZCL S rfl X hEq hZCL hnonNil
+  obtain ⟨_W, _s₀, hProj, hOrth, hSum, hSeparate⟩ :=
+    exists_bntSeparatingProjectors_of_sameMPV₂Pos_isSAL_of_weight_copy_independent
+      M S hM hCF hWeight hnonNil hSpan hSAL
+  exact ⟨_, hProj, hOrth, hSum, hSeparate⟩
+
+end MPOTensor

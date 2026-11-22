@@ -11,7 +11,7 @@ kept.
 
 | Removed | Replacement |
 |---|---|
-| `TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.lattice_mem_final_or_terminal_of_isEmpty` (module `TNLean.PEPS.AreaLaw.Geometry.RepairFinalLatticeCoverage`) | `TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.lattice_mem_terminal_or_unique_final_of_isEmpty` (module `TNLean.PEPS.AreaLaw.Geometry.RepairFinalLatticePartition`) |
+| `TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.lattice_mem_final_or_terminal_of_isEmpty` (module `TNLean.PEPS.AreaLaw.Geometry.RepairFinalLatticeCoverage`) | `TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.lattice_mem_terminal_or_unique_final_of_isEmpty` (module `TNLean.PEPS.AreaLaw.FinalRegions.RepairFinalLatticePartition`) |
 
 The replacement has the same hypotheses: the metric hypotheses, `1 ≤ S_*`, a positive boundary
 and an empty generation `N`. Its conclusion is stronger. It places every lattice point in the

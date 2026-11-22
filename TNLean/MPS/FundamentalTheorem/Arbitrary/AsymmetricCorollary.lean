@@ -5,11 +5,11 @@ Authors: TNLean contributors
 -/
 import QICLean.Kraus.IrreducibleAction
 import TNLean.MPS.CanonicalForm.Definitions
-import TNLean.MPS.CanonicalForm.NormalTensorGauge
+import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.FundamentalTheorem.Arbitrary.Basic
 import TNLean.MPS.FundamentalTheorem.Arbitrary.FlagExistence
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlock
-import TNLean.MPS.FundamentalTheorem.Reduction.MultiBlockTrace
+import TNLean.MPS.FundamentalTheorem.Compression.MultiBlock
+import TNLean.MPS.FundamentalTheorem.Compression.MultiBlockTrace
 
 /-!
 # The asymmetric fundamental theorem as a corollary

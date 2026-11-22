@@ -28,7 +28,7 @@ for each merge (imports unioned, module docstrings combined, each part wrapped
 in its own ``section`` so that ``variable``, ``open`` and local attributes stay
 local), rewriting of ``import`` lines in ``TNLean/`` and ``scripts/``, of module
 names and paths in ``blueprint/src``, ``docs/``, ``CLAUDE.md`` and ``scripts/``
-(never inside ``\\lean{…}``), and of ``MUTUAL_DIRECTORIES`` in
+(never inside ``\\lean{…}``), and of ``MUTUAL_LAYER_DIRECTORIES`` in
 ``scripts/check_import_layers.py``; the aggregators are then regenerated.  The
 application is idempotent: an entry whose old module is gone and whose new
 module exists is already applied.
@@ -387,8 +387,11 @@ def check(root: Path, rev: str | None, map_path: Path, verbose: bool) -> int:
     problems: list[str] = list(mmap.errors)
     report: list[str] = []
 
-    present = {old for old in mmap.target if old in tree.sources}
-    missing = sorted(old for old in mmap.target if old not in tree.sources)
+    # after an application the aggregator generator may write a file at an old
+    # path; such an entry is applied, not present
+    present = {old for old in mmap.target
+               if old in tree.sources and not tree.is_aggregator(old)}
+    missing = sorted(old for old in mmap.target if old not in present)
     already = [old for old in missing if mmap.target[old] in tree.sources]
     report.append(f"map: {len(mmap.target)} entries, {len(present)} present, "
                   f"{len(missing)} missing ({len(already)} of them already applied); "
@@ -683,7 +686,10 @@ def apply(root: Path, map_path: Path) -> int:
         for e in mmap.errors:
             print(f"ERROR: {e}")
         return 1
-    present = {old for old in mmap.target if old in tree.sources}
+    # after a first run, the aggregator generator may write a file at an old
+    # path; it is not a module still to be moved
+    present = {old for old in mmap.target
+               if old in tree.sources and not tree.is_aggregator(old)}
     renames = {old: mmap.target[old] for old in present if mmap.target[old] != old}
     decls = declaration_names(tree)
 
@@ -754,7 +760,8 @@ def apply(root: Path, map_path: Path) -> int:
     # 3. references in documents and scripts
     targets = [root / "CLAUDE.md"] + list(root.glob("docs/**/*.md")) \
         + list(root.glob("docs/**/*.tex")) + list(root.glob("blueprint/src/**/*.tex")) \
-        + [p for p in root.glob("scripts/*.py") if p.name != "apply_library_layers.py"]
+        + [p for p in root.glob("scripts/*.py")
+           if p.name != "apply_library_layers.py" and not p.name.startswith("test_")]
     for path in targets:
         text = path.read_text(encoding="utf-8")
         new_text = rewrite_text(text, renames, decls, latex=path.suffix == ".tex")
@@ -766,9 +773,9 @@ def apply(root: Path, map_path: Path) -> int:
     graph, _ = graph_after(after, ModuleMap(""), set())
     pairs = sorted(mutual_pairs(graph))
     checker = (root / CHECKER_PATH).read_text(encoding="utf-8")
-    block = "MUTUAL_DIRECTORIES: frozenset[str] = frozenset(\n    {\n" + "".join(
+    block = "MUTUAL_LAYER_DIRECTORIES: frozenset[str] = frozenset(\n    {\n" + "".join(
         f'        "{p}",\n' for p in pairs) + "    }\n)"
-    checker = re.sub(r"MUTUAL_DIRECTORIES: frozenset\[str\] = frozenset\(\n    \{\n.*?\n    \}\n\)",
+    checker = re.sub(r"MUTUAL_LAYER_DIRECTORIES: frozenset\[str\] = frozenset\(\n    \{\n.*?\n    \}\n\)",
                      lambda _: block, checker, flags=re.S)
     (root / CHECKER_PATH).write_text(checker, encoding="utf-8")
 

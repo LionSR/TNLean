@@ -6,11 +6,11 @@ This memo surveys the remaining non-FT files that mention the old one-copy `IsCa
 
 Short summary:
 
-* `TNLean/MPS/RFP/StructuralForm.lean`: trivial port (1-line signature change). It only projects block injectivity.
+* `TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralForm.lean`: trivial port (1-line signature change). It only projects block injectivity.
 * `TNLean/MPS/ParentHamiltonian/BiCF/BlockDiagonalCommutant.lean`: moderate for selector/trace-separation lemmas, research-level for statements that pass through assembled tensor projection spans with copy multiplicities.
 * `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean`: research-level. The headline theorem is source-true, but the current proof surface is tied to one scalar weight per BNT basis block and cannot survive copy multiplicity by a signature edit.
 * `TNLean/PiAlgebra/CanonicalFormSep.lean`: no direct old-BNT theorem; the nearby strict-weight FT lemmas are one-copy FT artifacts and should not be treated as non-FT cleanup.
-* `TNLean/PiAlgebra/CanonicalFormSepAux.lean`: no direct old-BNT theorem; it defines old additive interfaces and has doc-only mentions.
+* `TNLean/MPS/CanonicalForm/BlockFamily.lean`: no direct old-BNT theorem; it defines old additive interfaces and has doc-only mentions.
 
 ## Source anchors used throughout
 
@@ -46,7 +46,7 @@ Short summary:
 | old LI via `toHasNormalizedSelfOverlap` plus cross decay | `hP.combined_family_eventually_li hQ hAB` or `hP.bnt_data` | Use `bnt_data` for one family; use the API lemma for two families. |
 | old `toTensorFromBlocks mu A` | `P.toTensor` with flattened copies, or a grouped theorem stated directly over `P.basis` and `P.coeff` | This is not a drop-in replacement when copies repeat a basis block. |
 
-## `TNLean/MPS/RFP/StructuralForm.lean`
+## `TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralForm.lean`
 
 ### Top-level old-BNT theorem
 
@@ -247,7 +247,7 @@ The strict-weight lemmas rely on `r_j = 1` or an already-collapsed one-copy pres
 
 No non-FT cleanup needed for the old-BNT mention. Any attempt to turn these strict-weight FT lemmas into full multi-copy FT lemmas is research-level, but it belongs with FT migration, not this non-FT consumer cleanup.
 
-## `TNLean/PiAlgebra/CanonicalFormSepAux.lean`
+## `TNLean/MPS/CanonicalForm/BlockFamily.lean`
 
 ### Top-level old-BNT declarations
 
@@ -296,8 +296,8 @@ trivial port (1-line signature change) for the doc-only references, if any clean
 
 Easiest first:
 
-1. `TNLean/MPS/RFP/StructuralForm.lean`: move `rfp_bnt_structural` to `P : SectorDecomposition d` plus `IsBNTCanonicalForm P`.
-2. `TNLean/PiAlgebra/CanonicalFormSepAux.lean`: update doc-only strict-order wording if desired.
+1. `TNLean/MPS/CanonicalForm/RenormalizationFixedPoint/StructuralForm.lean`: move `rfp_bnt_structural` to `P : SectorDecomposition d` plus `IsBNTCanonicalForm P`.
+2. `TNLean/MPS/CanonicalForm/BlockFamily.lean`: update doc-only strict-order wording if desired.
 3. `TNLean/PiAlgebra/CanonicalFormSep.lean`: update the docstring at line 602 only; leave strict FT lemmas for the FT workstream.
 4. `TNLean/MPS/ParentHamiltonian/BiCF/BlockDiagonalCommutant.lean`: first port basis-only selector/pair-separation/finite-word trace-separation declarations; defer assembled projection/commutant declarations until grouped-sector projection statements are chosen.
 5. `TNLean/MPS/ParentHamiltonian/DegenerateGS.lean`: do last. Start with the forward inclusion over `P.toTensor`; treat reverse inclusion and equality as new multi-copy parent-Hamiltonian work rather than a signature edit.

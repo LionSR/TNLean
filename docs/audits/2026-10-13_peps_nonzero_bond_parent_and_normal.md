@@ -14,17 +14,17 @@ provided.
 Each theorem below paired `IsVertexInjective A` with positivity of the same
 tensor. It now takes `A.IsInjective` in place of the pair.
 
-In `TNLean/PEPS/ParentHamiltonian/InjectiveRegionSupport.lean`:
+In `TNLean/PEPS/ParentHamiltonian/Injective/InjectiveRegionSupport.lean`:
 
 - `openRegionMap_injective_of_isInjective` (renamed);
 - `range_regionReducedDensity_eq_regionGroundSpace_of_isInjective` (renamed);
 - `rank_regionReducedDensity_of_isInjective` (renamed).
 
-In `TNLean/PEPS/ParentHamiltonian/InjectiveCoveringParentGroundSpace.lean`:
+In `TNLean/PEPS/ParentHamiltonian/Injective/InjectiveCoveringParentGroundSpace.lean`:
 
 - `finrank_regionParentGroundSpace_eq_one_of_isInjective_of_cover` (renamed).
 
-In `TNLean/PEPS/ParentHamiltonian/InjectiveNearestNeighborParent.lean`:
+In `TNLean/PEPS/ParentHamiltonian/Injective/InjectiveNearestNeighborParent.lean`:
 
 - `finrank_regionParentGroundSpace_edgePairs_eq_one`;
 - `finrank_regionParentGroundSpace_edgeAndIsolated_eq_one`;
@@ -78,7 +78,7 @@ structure NormalPEPSPairHypotheses (A B : Tensor G d) extends
   bondDim_pos_right : ∀ e : Edge G, 0 < B.bondDim e
 ```
 
-in `TNLean/PEPS/NormalBondDimension.lean` is the hypothesis "two normal PEPS"
+in `TNLean/PEPS/FundamentalTheorem/Normal/NormalBondDimension.lean` is the hypothesis "two normal PEPS"
 of the source theorem: the shared blockings, which encode normality as defined
 at line 1318, together with the nonzero bond spaces. It carries one
 `**Local fix (nonzero virtual spaces):**` marker citing
@@ -171,7 +171,7 @@ refutation.
   source statement as its hypothesis set, and every caller supplies the
   positivity from `NormalPEPSPairHypotheses` or from the fixed-lattice
   corollaries, so it needs no counterexample.
-- `TNLean/PEPS/PhysicalToVirtualCounterexample.lean` is kept. It refutes
+- `TNLean/PEPS/FundamentalTheorem/Injective/PhysicalToVirtualCounterexample.lean` is kept. It refutes
   `physical_to_virtual_insertion` without positivity. That theorem keeps
   `hpos` explicit because its hypothesis is chain data, and the witness
   satisfies `EdgeBlockedThreeSiteInjective`.

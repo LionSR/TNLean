@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Compression.PreparedSourceContraction
-import QICLean.Probability.ComplexGaussian.SourceTransportExpansion
-import QICLean.Algebra.MultilinearSelectedSum
+import QICLean.Probability.Gaussian.ProductSourceTransport
+import QICLean.Algebra.Module.MultilinearSelectedSum
 
 /-!
 # Source contractions in endpoint frames

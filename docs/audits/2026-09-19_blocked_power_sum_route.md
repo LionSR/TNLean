@@ -65,7 +65,7 @@ strengthening is therefore dropped as unused rather than migrated.
 the unblocked development consumes:
 
 * `MPSTensor.exists_leftCanonical_normalTensor_scale_of_isNormal`, cited by path
-  from `TNLean/MPS/Periodic/ScaledNormalization.lean`;
+  from `TNLean/MPS/CanonicalForm/Periodic/ScaledNormalization.lean`;
 * `MPSTensor.gaugePhaseEquiv_of_smul_smul_cast`;
 * `MPSTensor.exists_eventually_linearIndependent_of_normalTensor_distinct`;
 * `MPSTensor.sum_smul_mpvState_eq_zero`.
