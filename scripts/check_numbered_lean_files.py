@@ -22,36 +22,17 @@ ARCHIVE_ROOT = "TNLean/Archive/"
 
 # Existing structural debt only.  Never add a new path: split into modules named
 # for their mathematical responsibility, then use a concept-named aggregator.
-NUMBERED_DEBT_ALLOWLIST: frozenset[str] = frozenset(
-    {
-        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/RelaxedTripleMergeAssembly.lean",
-        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/SingleEdgeTransfer.lean",
-        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/FiberCollapse.lean",
-        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/ThreeRegionMerge.lean",
-        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/InsertedCoefficientDescent.lean",
-        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/InsertedCoefficientDescentBundle.lean",
-        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/SingleCrossingDescent.lean",
-        "TNLean/PEPS/FundamentalTheorem/Normal/CoarseThreeSite/RelaxedTripleMerge.lean",
-        "TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/RegionTransferMatrix.lean",
-        "TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/SpanningStep.lean",
-        "TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/IncidentMatrixForm.lean",
-        "TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/ResonateIdentity.lean",
-        "TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/IncidentMatrixRealization.lean",
-        "TNLean/PEPS/FundamentalTheorem/Normal/RegionInsertion/ResonateReconcile.lean",
-        "TNLean/PEPS/Injectivity/Region/DisjointUnion.lean",
-        "TNLean/PEPS/Injectivity/Region/OverlapUnionBridgeRow.lean",
-        "TNLean/PEPS/FundamentalTheorem/Torus/Window/WindowExtension.lean",
-        "TNLean/PEPS/FundamentalTheorem/Torus/Window/CornerExtensionTransitivity.lean",
-        "TNLean/PEPS/FundamentalTheorem/Torus/Window/CornerExtensionAdditivity.lean",
-        "TNLean/PEPS/FundamentalTheorem/Torus/Window/StaircaseChaining.lean",
-    }
-)
+NUMBERED_DEBT_ALLOWLIST: frozenset[str] = frozenset()
 
 # These suffixes identify mathematical objects or source labels, not the order
 # in which a proof was split.  Each exception is exact and reviewable.
 SEMANTIC_EXCEPTIONS: dict[str, str] = {
     "TNLean/MPS/Examples/ZMod2.lean":
         "ZMod 2 is the mathematical coefficient group used by the example.",
+    "TNLean/MPS/Examples/Z2Z2.lean":
+        "Z2 x Z2 is the symmetry group of the examples collected in this directory.",
+    "TNLean/MPS/Examples/Z3.lean":
+        "Z3 is the symmetry group of the examples collected in this directory.",
     "TNLean/MPS/Examples/Z2Z2/AnomalousCondensationZ2Z2.lean":
         "Z2 x Z2 is the anomalous symmetry group whose condensation defect is formalized.",
     "TNLean/MPS/ParentHamiltonian/ParentInteraction/EmbeddedC2.lean":

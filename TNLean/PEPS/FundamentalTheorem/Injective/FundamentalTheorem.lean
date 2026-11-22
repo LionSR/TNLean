@@ -18,7 +18,7 @@ import TNLean.PEPS.FundamentalTheorem.Injective.LocalGaugeExtraction
 This root-only capstone records the full statement of the PEPS Fundamental
 Theorem (arXiv:1804.04964, Section 3, Theorem 2), with the forward
 bond-dimension obligation and converse gaps documented in the paper-gap notes
-cited below. The separate root-only audit is tracked by issue #1512.
+cited below.
 
 **Local fix (positive virtual spaces):** The paper's virtual bond spaces have
 positive dimension, whereas `Tensor.bondDim` can take the value zero.  Results
@@ -604,7 +604,7 @@ theorem fundamentalTheorem_PEPS_of_bondDim (A B : Tensor G d)
 square of its index size.
 
 Source: standard dimension count; used to discharge the bond-dimension equality
-hypothesis of `fundamentalTheorem_PEPS_of_bondDim` (issue #874). -/
+hypothesis of `fundamentalTheorem_PEPS_of_bondDim`. -/
 theorem bondDim_eq_of_matrixAlgEquiv {m n : ℕ}
     (Φ : Matrix (Fin m) (Fin m) ℂ ≃ₐ[ℂ] Matrix (Fin n) (Fin n) ℂ) : m = n := by
   have hfr : Module.finrank ℂ (Matrix (Fin m) (Fin m) ℂ) =

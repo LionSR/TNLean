@@ -12,4 +12,5 @@ import TNLean.MPS.Tensor.Reduction.Reduction
 import TNLean.MPS.Tensor.Reduction.ReductionBlocking
 import TNLean.MPS.Tensor.Reduction.ReductionCrossMatrix
 import TNLean.MPS.Tensor.Reduction.ReductionResidual
+import TNLean.MPS.Tensor.Reduction.ReductionResidualData
 import TNLean.MPS.Tensor.Reduction.ReductionUniqueness

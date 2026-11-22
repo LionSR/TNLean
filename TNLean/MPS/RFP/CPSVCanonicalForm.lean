@@ -79,7 +79,7 @@ open scoped Matrix BigOperators ENNReal Kraus
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {d D : ℕ} {A : MPSTensor d D}
 
 /-- Transfer idempotence is preserved and reflected by exact reconstruction through a
 coisometry.

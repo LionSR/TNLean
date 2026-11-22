@@ -38,7 +38,7 @@ open Filter Topology
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {d D : ℕ} {A : MPSTensor d D}
 
 /-- Every sector of a full-support sector decomposition is represented in any
 basis of normal tensors for the same matrix product vectors.
