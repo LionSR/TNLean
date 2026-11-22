@@ -857,7 +857,7 @@ eigenspace.
 
 \begin{definition}[Open-chain AKLT polynomial Hamiltonian]%
     \label{def:aklt_open_polynomial_hamiltonian}
-    \lean{MPSTensor.akltOpenHamiltonian, MPSTensor.akltOpenHamiltonianES}
+    \lean{MPSTensor.akltOpenHamiltonian}
     \leanok
     \uses{def:aklt_polynomial_hamiltonian}
     Combining the polynomial of~\cite[local TeX lines~340--349]{PerezGarcia2007Matrix}
@@ -874,12 +874,12 @@ eigenspace.
 
 \begin{lemma}[Ground energy of the open AKLT chain]%
     \label{thm:aklt_open_polynomial_ground_space}
-    \lean{MPSTensor.akltOpenHamiltonianES_add_eq_parent,
-        MPSTensor.akltOpenHamiltonianES_add_isPositive,
-        MPSTensor.akltOpenHamiltonianES_eigenvalue_ge,
-        MPSTensor.akltOpenHamiltonianES_eigenspace_eq_groundSpaceES,
-        MPSTensor.akltOpenHamiltonianES_groundSpace_finrank,
-        MPSTensor.akltOpenHamiltonianES_hasEigenvalue}
+    \lean{MPSTensor.akltOpenHamiltonian_add_eq_parent,
+        MPSTensor.akltOpenHamiltonian_add_isPositive,
+        MPSTensor.akltOpenHamiltonian_eigenvalue_ge,
+        MPSTensor.akltOpenHamiltonian_eigenspace_eq_groundSpace,
+        MPSTensor.akltOpenHamiltonian_groundSpace_finrank,
+        MPSTensor.akltOpenHamiltonian_hasEigenvalue}
     \leanok
     \uses{def:aklt_open_polynomial_hamiltonian, def:open_parent_hamiltonian_es,
         def:ground_space_es}
@@ -909,7 +909,7 @@ eigenspace.
 
 \begin{lemma}[Singlet and triplet AKLT edge modes]%
     \label{thm:aklt_parent_hamiltonian}
-    \lean{MPSTensor.akltOpenHamiltonianES_ground_spinZero_finrank,
+    \lean{MPSTensor.akltOpenHamiltonian_ground_spinZero_finrank,
         MPSTensor.akltBoundarySpin, MPSTensor.aklt_spinOne_commutator,
         MPSTensor.aklt_totalSpin_groundSpaceMap, MPSTensor.akltBoundarySpin_casimir,
         MPSTensor.aklt_totalSpinSq_groundSpaceMap,
@@ -920,7 +920,7 @@ eigenspace.
         MPSTensor.aklt_finrank_groundSpace_inf_eigenspace_totalSpinSq_two,
         MPSTensor.aklt_finrank_openParent_ground_spinZero,
         MPSTensor.aklt_finrank_openParent_ground_spinOne,
-        MPSTensor.akltOpenHamiltonianES_ground_spinOne_finrank}
+        MPSTensor.akltOpenHamiltonian_ground_spinOne_finrank}
     \leanok
     \uses{def:aklt_open_polynomial_hamiltonian, def:ground_space_map}
     For $N\ge2$, the open AKLT ground space contains one spin-$0$

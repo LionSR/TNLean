@@ -258,25 +258,21 @@ theorem aklt_finrank_openParent_ground_spinOne {N : ℕ} (hN : 2 ≤ N) :
 
 /-- The physical open bilinear-biquadratic AKLT Hamiltonian has exactly one
 spin-zero ground state. Source: arXiv:2011.12127, lines 1171--1174. -/
-theorem akltOpenHamiltonianES_ground_spinZero_finrank {N : ℕ} (hN : 2 ≤ N) :
+theorem akltOpenHamiltonian_ground_spinZero_finrank {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ
-      ((Module.End.eigenspace (akltOpenHamiltonianES N)
-        (-(2 * (N - 1) / 3) : ℂ)).map
-          (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap ⊓
-            LinearMap.ker (totalSpinSq spinOneOperator) : Submodule ℂ (NSiteSpace 3 N)) = 1 := by
-  rw [akltOpenHamiltonianES_eigenspace_eq_groundSpaceES hN, groundSpaceES_map_withLp N]
+      (Module.End.eigenspace (akltOpenHamiltonian N) (-(2 * (N - 1) / 3) : ℂ) ⊓
+        LinearMap.ker (totalSpinSq spinOneOperator) : Submodule ℂ (NSiteSpace 3 N)) = 1 := by
+  rw [akltOpenHamiltonian_eigenspace_eq_groundSpace hN, groundSpaceES_map_withLp N]
   exact aklt_finrank_groundSpace_inf_ker_totalSpinSq hN
 
 /-- The remaining physical open AKLT ground states form a spin-one triplet.
 Source: arXiv:2011.12127, lines 1171--1174. -/
-theorem akltOpenHamiltonianES_ground_spinOne_finrank {N : ℕ} (hN : 2 ≤ N) :
+theorem akltOpenHamiltonian_ground_spinOne_finrank {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ
-      ((Module.End.eigenspace (akltOpenHamiltonianES N)
-        (-(2 * (N - 1) / 3) : ℂ)).map
-          (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap ⊓
-            Module.End.eigenspace (totalSpinSq spinOneOperator) 2 :
-            Submodule ℂ (NSiteSpace 3 N)) = 3 := by
-  rw [akltOpenHamiltonianES_eigenspace_eq_groundSpaceES hN, groundSpaceES_map_withLp N]
+      (Module.End.eigenspace (akltOpenHamiltonian N) (-(2 * (N - 1) / 3) : ℂ) ⊓
+        Module.End.eigenspace (totalSpinSq spinOneOperator) 2 :
+          Submodule ℂ (NSiteSpace 3 N)) = 3 := by
+  rw [akltOpenHamiltonian_eigenspace_eq_groundSpace hN, groundSpaceES_map_withLp N]
   exact aklt_finrank_groundSpace_inf_eigenspace_totalSpinSq_two hN
 
 end MPSTensor

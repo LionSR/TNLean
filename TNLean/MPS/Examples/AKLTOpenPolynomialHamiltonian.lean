@@ -36,13 +36,6 @@ def akltOpenHamiltonian (N : ℕ) : NSiteSpace 3 N →ₗ[ℂ] NSiteSpace 3 N :=
       (1 / 3 : ℂ) • (spinExchange spinOneOperator i.1 (cyclicForwardSite i.1 1) ∘ₗ
         spinExchange spinOneOperator i.1 (cyclicForwardSite i.1 1)))
 
-/-- The same open AKLT Hamiltonian on the standard physical Hilbert space.
-Source: arXiv:2011.12127, lines 1171--1174. -/
-def akltOpenHamiltonianES (N : ℕ) :
-    EuclideanSpace ℂ (Cfg 3 N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg 3 N) :=
-  (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).symm.toLinearMap ∘ₗ
-    akltOpenHamiltonian N ∘ₗ (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap
-
 /-- The starts of the two-site windows of the open chain, as the indices of the terms of the
 parent interaction on the open chain. -/
 private def twoSiteStartEquiv (N : ℕ) : Fin (N + 1 - 2) ≃ NonwrappingStart 2 N where
@@ -80,20 +73,15 @@ private theorem toLin'_hamiltonian_parentChainInteraction_aklt {N : ℕ} (hN : 2
 /-- The exact open-chain shift is \(2(N-1)/3\), one contribution per
 nonwrapping bond. This follows from the local spin-two projector identity
 of arXiv:quant-ph/0608197, equation `HAKLT`. -/
-theorem akltOpenHamiltonianES_add_eq_parent {N : ℕ} (hN : 2 ≤ N) :
-    akltOpenHamiltonianES N + (2 * (N - 1) / 3 : ℂ) • LinearMap.id =
-      (2 : ℂ) • Matrix.toEuclideanLin (parentChainInteraction akltTensor 2 N).hamiltonian := by
-  change _ = (2 : ℂ) • ((WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).symm.toLinearMap ∘ₗ
-    Matrix.toLin' (parentChainInteraction akltTensor 2 N).hamiltonian ∘ₗ
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap)
+theorem akltOpenHamiltonian_add_eq_parent {N : ℕ} (hN : 2 ≤ N) :
+    akltOpenHamiltonian N + (2 * (N - 1) / 3 : ℂ) • LinearMap.id =
+      (2 : ℂ) • Matrix.toLin' (parentChainInteraction akltTensor 2 N).hamiltonian := by
   rw [toLin'_hamiltonian_parentChainInteraction_aklt hN]
   refine LinearMap.ext fun ψ => ?_
-  apply (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).injective
   ext σ
-  simp only [akltOpenHamiltonianES, akltOpenHamiltonian,
+  simp only [akltOpenHamiltonian,
     LinearMap.add_apply, LinearMap.smul_apply, LinearMap.id_apply,
-    LinearMap.sum_apply, LinearMap.comp_apply, map_add, map_smul, map_sum,
-    LinearEquiv.coe_toLinearMap, LinearEquiv.apply_symm_apply,
+    LinearMap.sum_apply, LinearMap.comp_apply,
     Finset.sum_apply, Pi.add_apply, Pi.smul_apply, smul_eq_mul,
     aklt_localTerm_two_apply hN, Finset.mul_sum, Finset.sum_add_distrib]
   simp only [show ∀ x y z : ℂ, 2 * (1 / 2 * (x + y + z)) = x + y + z from
@@ -102,11 +90,14 @@ theorem akltOpenHamiltonianES_add_eq_parent {N : ℕ} (hN : 2 ≤ N) :
   push_cast [Nat.cast_sub (by omega : 1 ≤ N)]
   ring
 
-/-- The shifted open-chain polynomial Hamiltonian is positive.
+/-- The shifted open-chain polynomial Hamiltonian, transported to the \(\ell^2\) space of
+coefficient vectors, is positive.
 Source: arXiv:2011.12127, lines 1171--1174; the energy shift is derived here. -/
-theorem akltOpenHamiltonianES_add_isPositive {N : ℕ} (hN : 2 ≤ N) :
-    (akltOpenHamiltonianES N + (2 * (N - 1) / 3 : ℂ) • LinearMap.id).IsPositive := by
-  rw [akltOpenHamiltonianES_add_eq_parent hN]
+theorem akltOpenHamiltonian_add_isPositive {N : ℕ} (hN : 2 ≤ N) :
+    ((WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).symm.toLinearMap ∘ₗ
+      (akltOpenHamiltonian N + (2 * (N - 1) / 3 : ℂ) • LinearMap.id) ∘ₗ
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap).IsPositive := by
+  rw [akltOpenHamiltonian_add_eq_parent hN]
   exact (Matrix.isPositive_toEuclideanLin_iff.mpr
     (posSemidef_hamiltonian_parentChainInteraction akltTensor 2 N)).smul_of_nonneg
     (by norm_num [Complex.le_def])
@@ -114,45 +105,51 @@ theorem akltOpenHamiltonianES_add_isPositive {N : ℕ} (hN : 2 ≤ N) :
 /-- Every eigenvalue is bounded below by the open-chain ground energy.
 Source: arXiv:2011.12127, lines 1171--1174; the value is derived from the
 local projector identity. -/
-theorem akltOpenHamiltonianES_eigenvalue_ge {N : ℕ} (hN : 2 ≤ N) {μ : ℂ}
-    (hμ : Module.End.HasEigenvalue (akltOpenHamiltonianES N) μ) :
+theorem akltOpenHamiltonian_eigenvalue_ge {N : ℕ} (hN : 2 ≤ N) {μ : ℂ}
+    (hμ : Module.End.HasEigenvalue (akltOpenHamiltonian N) μ) :
     -(2 * (N - 1) / 3 : ℂ) ≤ μ := by
   obtain ⟨v, hv⟩ := hμ.exists_hasEigenvector
   have hpos : 0 ≤ μ + (2 * (N - 1) / 3 : ℂ) :=
-    (akltOpenHamiltonianES_add_isPositive hN).nonneg_of_apply_eq_smul (v := v)
-      hv.2 (by simp [Module.End.mem_eigenspace_iff.1 hv.1, add_smul])
+    (akltOpenHamiltonian_add_isPositive hN).nonneg_of_apply_eq_smul
+      (v := (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).symm v)
+      ((LinearEquiv.map_ne_zero_iff _).mpr hv.2)
+      (by simp [Module.End.mem_eigenspace_iff.1 hv.1, add_smul])
   rw [← sub_nonneg, sub_neg_eq_add]
   exact hpos
 
 /-- The lowest-energy space of the open polynomial Hamiltonian is exactly
 the open AKLT matrix-product space. Source: arXiv:2011.12127, lines 1171--1174. -/
-theorem akltOpenHamiltonianES_eigenspace_eq_groundSpaceES {N : ℕ} (hN : 2 ≤ N) :
-    Module.End.eigenspace (akltOpenHamiltonianES N) (-(2 * (N - 1) / 3) : ℂ) =
-      groundSpaceES akltTensor N := by
+theorem akltOpenHamiltonian_eigenspace_eq_groundSpace {N : ℕ} (hN : 2 ≤ N) :
+    Module.End.eigenspace (akltOpenHamiltonian N) (-(2 * (N - 1) / 3) : ℂ) =
+      (groundSpaceES akltTensor N).map
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).toLinearMap := by
   rw [← aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN]
   ext v
-  have hv := LinearMap.congr_fun (akltOpenHamiltonianES_add_eq_parent hN) v
+  have hv := LinearMap.congr_fun (akltOpenHamiltonian_add_eq_parent hN) v
   simp only [LinearMap.add_apply, LinearMap.smul_apply, LinearMap.id_apply] at hv
-  rw [Module.End.mem_eigenspace_iff, LinearMap.mem_ker,
-    ← smul_eq_zero_iff_right (by norm_num : (2 : ℂ) ≠ 0), ← hv,
-    neg_smul, ← sub_eq_zero, sub_neg_eq_add]
+  rw [Module.End.mem_eigenspace_iff, Submodule.mem_map_equiv, LinearMap.mem_ker,
+    ← (WithLp.linearEquiv 2 ℂ (NSiteSpace 3 N)).map_eq_zero_iff,
+    ← smul_eq_zero_iff_right (by norm_num : (2 : ℂ) ≠ 0)]
+  change _ ↔ (2 : ℂ) • Matrix.toLin' (parentChainInteraction akltTensor 2 N).hamiltonian v = 0
+  rw [← hv, neg_smul, ← sub_eq_zero, sub_neg_eq_add]
 
 /-- The open polynomial AKLT Hamiltonian has four ground states for every
 \(N\ge2\). Source: arXiv:2011.12127, lines 1171--1174. -/
-theorem akltOpenHamiltonianES_groundSpace_finrank {N : ℕ} (hN : 2 ≤ N) :
+theorem akltOpenHamiltonian_groundSpace_finrank {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ
-      (Module.End.eigenspace (akltOpenHamiltonianES N) (-(2 * (N - 1) / 3) : ℂ)) = 4 := by
-  rw [akltOpenHamiltonianES_eigenspace_eq_groundSpaceES hN,
-    ← aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN]
+      (Module.End.eigenspace (akltOpenHamiltonian N) (-(2 * (N - 1) / 3) : ℂ)) = 4 := by
+  rw [akltOpenHamiltonian_eigenspace_eq_groundSpace hN,
+    ← aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN,
+    LinearEquiv.finrank_map_eq]
   exact aklt_finrank_ker_hamiltonian_parentChainInteraction_two hN
 
 /-- The lower energy bound is attained on the open AKLT chain.
 Source: arXiv:2011.12127, lines 1171--1174; the value is derived here. -/
-theorem akltOpenHamiltonianES_hasEigenvalue {N : ℕ} (hN : 2 ≤ N) :
-    Module.End.HasEigenvalue (akltOpenHamiltonianES N) (-(2 * (N - 1) / 3) : ℂ) := by
+theorem akltOpenHamiltonian_hasEigenvalue {N : ℕ} (hN : 2 ≤ N) :
+    Module.End.HasEigenvalue (akltOpenHamiltonian N) (-(2 * (N - 1) / 3) : ℂ) := by
   rw [Module.End.hasEigenvalue_iff]
   intro h
-  have hd := akltOpenHamiltonianES_groundSpace_finrank hN
+  have hd := akltOpenHamiltonian_groundSpace_finrank hN
   rw [h] at hd
   norm_num at hd
 
