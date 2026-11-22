@@ -423,9 +423,9 @@ open Fin.CommRing
 
 variable {α : Type*} [Fintype α] [DecidableEq α] {R N : ℕ} [NeZero N]
 
-/-- **A window of terms.** On the ring of `N` sites, the translate to the window of `W ≤ N`
+/-- **A window of terms.** On the ring of `N` sites, the translate to the window of \(W \le N\)
 consecutive sites starting at `i` of the open-chain Hamiltonian of `h` on `W` sites is the sum of
-the terms of the translates of `h` on the ring at the starts `i, i + 1, …, i + (W - R)`: the
+the terms of the translates of `h` on the ring at the starts \(i, i + 1, \dots, i + (W - R)\): the
 windows of `R` consecutive sites inside that window. -/
 theorem translationInvariant_term_hamiltonian_chainTranslates
     (h : Matrix (Fin R → α) (Fin R → α) ℂ) {W : ℕ} (hWN : W ≤ N) (i : Fin N) :
@@ -450,7 +450,8 @@ theorem chainTranslates_term_eq_translationInvariant_term
   rw [Nat.mod_eq_of_lt (by have := j.isLt; omega)]
 
 /-- **Separated windows.** Terms of translates on the ring whose windows of `R` consecutive
-sites start `e` sites apart, with `R ≤ e` and `e + R ≤ N`, commute: the windows are disjoint. -/
+sites start `e` sites apart, with \(R \le e\) and \(e + R \le N\), commute: the windows are
+disjoint. -/
 theorem commute_translationInvariant_term_add_of_le
     (h h' : Matrix (Fin R → α) (Fin R → α) ℂ) {e : ℕ} (hR : R ≤ e) (he : e + R ≤ N)
     (i : Fin N) :
@@ -476,10 +477,10 @@ theorem commute_translationInvariant_term_finEquiv_symm_add_of_le
   rw [map_add, map_natCast]
   exact commute_translationInvariant_term_add_of_le h h' hR he _
 
-/-- **A Knabe block.** For `1 ≤ R`, the sum of the operators of `m` consecutive terms of the
+/-- **A Knabe block.** For \(1 \le R\), the sum of the operators of `m` consecutive terms of the
 translates of `h` on the ring, starting at the site `s`, is the operator of the translate to the
-window of `m + R - 1` consecutive sites starting at `s` of the open-chain Hamiltonian of `h` on
-`m + R - 1` sites. The sites are indexed by the cyclic group, as in the finite-range Knabe
+window of \(m + R - 1\) consecutive sites starting at `s` of the open-chain Hamiltonian of `h` on
+\(m + R - 1\) sites. The sites are indexed by the cyclic group, as in the finite-range Knabe
 inequality. -/
 theorem cyclicWindowSum_toEuclideanLin_translationInvariant_term
     (h : Matrix (Fin R → α) (Fin R → α) ℂ) {m : ℕ} (hR : 1 ≤ R) (hW : m + R - 1 ≤ N)

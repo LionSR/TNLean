@@ -29,7 +29,7 @@ variable {d R N : ℕ}
 /-! ### Translates of a local matrix on the ring
 
 The terms and the Hamiltonian of the translation-invariant interaction of a local matrix `h`
-on the ring (`ManyBody.Interaction.translationInvariant`), for `R ≤ N`; statements about vectors
+on the ring (`ManyBody.Interaction.translationInvariant`), for \(R \le N\); statements about vectors
 take the operators `Matrix.toEuclideanLin`. -/
 
 section TranslationInvariant

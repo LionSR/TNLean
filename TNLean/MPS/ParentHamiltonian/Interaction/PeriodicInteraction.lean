@@ -32,8 +32,9 @@ namespace ManyBody
 open scoped MatrixOrder
 
 /-- **Gap transfer along a comparison.** If positive semidefinite matrices satisfy
-`κ A ≤ B ≤ C A` with `κ, C > 0` and every eigenvalue of `A` other than zero is at least `γ > 0`,
-then every eigenvalue of `B` other than zero is at least `κ γ`. -/
+\(\kappa A \le B \le C A\) with \(\kappa, C > 0\) and every eigenvalue of `A` other than zero is
+at least \(\gamma > 0\), then every eigenvalue of `B` other than zero is at least
+\(\kappa \gamma\). -/
 theorem forall_hasEigenvalue_of_smul_le_of_le_smul {n : Type*} [Fintype n] [DecidableEq n]
     {A B : Matrix n n ℂ} (hA : A.PosSemidef) (hB : B.PosSemidef) {κ C γ : ℝ}
     (hκ : 0 < κ) (hC : 0 < C) (hγ : 0 < γ) (hLower : (κ : ℂ) • A ≤ B)

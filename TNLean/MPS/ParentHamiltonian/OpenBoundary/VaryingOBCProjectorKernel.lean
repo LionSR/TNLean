@@ -149,8 +149,8 @@ private theorem obcPairCfg_self {N p q : ℕ} (h : p + 2 + q = N) (σ : Fin N �
   exact (key (Fin.cast h.symm v)).trans (congrArg σ (Fin.ext rfl))
 
 /-- **The parent interaction on the open chain with varying bonds.** On the open chain of `N`
-sites, the term at the position `p`, for `p + 2 ≤ N`, is the matrix of the pair projector at `p`
-placed on the two sites `p` and `p + 1` (`ManyBody.Interaction.ofPlaceAlong`); there is no term
+sites, the term at the position `p`, for \(p + 2 \le N\), is the matrix of the pair projector at `p`
+placed on the two sites `p` and \(p + 1\) (`ManyBody.Interaction.ofPlaceAlong`); there is no term
 across the endpoints. Its Hamiltonian is the open parent Hamiltonian. Source: PGVWC07,
 Theorem 9, lines 1201–1217. -/
 noncomputable abbrev obcParentInteraction (b : ℕ → ℕ)

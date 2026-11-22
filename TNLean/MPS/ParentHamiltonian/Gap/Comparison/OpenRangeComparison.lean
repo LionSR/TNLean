@@ -159,8 +159,9 @@ section Interaction
 open scoped MatrixOrder
 open ManyBody.Interaction (chainTranslates hamiltonian_chainTranslates_eq_sum_range)
 
-/-- Each position `i < c` is the sum `n + j` of at most `b` pairs with `j < b`: a double sum of
-nonnegative terms over `n < a`, `j < b` is at most `b` times the sum over `i < c`. -/
+/-- Each position \(i < c\) is the sum \(n + j\) of at most `b` pairs with \(j < b\): a double
+sum of nonnegative terms over \(n < a\), \(j < b\) is at most `b` times the sum over
+\(i < c\). -/
 private theorem sum_range_sum_range_add_le {M : Type*} [AddCommMonoid M] [PartialOrder M]
     [IsOrderedAddMonoid M] (g : ℕ → M) (hg : ∀ i, 0 ≤ g i) {a b c : ℕ}
     (hc : ∀ n < a, ∀ j < b, n + j < c) :

@@ -151,10 +151,10 @@ theorem hamiltonian_restrict_add_hamiltonian_restrict_le (hΦ : ∀ i, 0 ≤ Φ.
 end Restrict
 
 /-- **The counting bound of condition C1.** On the open chain, each window of `R` sites lies in
-at most `W - R + 1` of the intervals `[n - W, n)`, `W ≤ n ≤ N`; summing the Hamiltonians of the
-restrictions of the translates of a positive semidefinite matrix to the windows inside these
-intervals gives at most `W - R + 1` times the Hamiltonian. Nachtergaele, arXiv:cond-mat/9410110,
-condition C1, lines 1030--1041. -/
+at most \(W - R + 1\) of the intervals \([n - W, n)\), \(W \le n \le N\); summing the
+Hamiltonians of the restrictions of the translates of a positive semidefinite matrix to the
+windows inside these intervals gives at most \(W - R + 1\) times the Hamiltonian.
+Nachtergaele, arXiv:cond-mat/9410110, condition C1, lines 1030--1041. -/
 theorem sum_hamiltonian_restrict_chainTranslates_le {α : Type*} [Fintype α] [DecidableEq α]
     {R W : ℕ} (hRW : R ≤ W) {h : Matrix (Fin R → α) (Fin R → α) ℂ} (hh : 0 ≤ h) (N : ℕ) :
     ∑ n ∈ Finset.Icc W N, ((chainTranslates R N h).restrict
