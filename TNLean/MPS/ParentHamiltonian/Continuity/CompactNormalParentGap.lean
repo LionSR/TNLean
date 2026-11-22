@@ -313,23 +313,15 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_gap_fixed_volume_of_isN
       ManyBody.groundSpace (parentRingInteraction (A x) R N).hamiltonian 0 ≠ ⊥ :=
     groundSpace_hamiltonian_parentRingInteraction_ne_bot_of_isNBlkInjective (A x) hp (hInj x)
       hR hRN
-  suffices hnorm : ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S, ∀ v ∈ (LinearMap.ker
-      (Matrix.toEuclideanLin (parentRingInteraction (A x) R N).hamiltonian))ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction (A x) R N).hamiltonian v‖ by
-    obtain ⟨δ, hδ, hgap⟩ := hnorm
-    exact ⟨δ, hδ, fun x hx ↦ (ManyBody.isGapped_zero_iff_norm
-      (posSemidef_hamiltonian_parentRingInteraction (A x) _ _)).mpr ⟨hne x, hgap x hx⟩⟩
   have hBlock (x : X) : Kraus.IsNBlkInjective (A x) R :=
     isNBlkInjective_of_le hp (hInj x) hR.le
-  let e := (Matrix.toEuclideanCLM : Matrix (Cfg d N) (Cfg d N) ℂ ≃⋆ₐ[ℂ] _)
-  have hH : Continuous fun x ↦ e (parentRingInteraction (A x) R N).hamiltonian :=
-    e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp
-      (continuous_hamiltonian_parentRingInteraction_family A hA hRN hBlock)
   have hK := continuous_hamiltonian_parentRingInteraction_kernelProjection_family_of_isNBlkInjective
     A hA hp hInj hR hRN
-  simp only [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin] at hK ⊢
-  exact ContinuousLinearMap.exists_uniform_norm_gap_of_compact
-    (fun x ↦ e (parentRingInteraction (A x) R N).hamiltonian) hH hK hS
+  simp only [← ManyBody.groundSpace_zero] at hK
+  obtain ⟨δ, hδ, hgap⟩ := hS.exists_uniform_forall_hasEigenvalue
+    (continuous_hamiltonian_parentRingInteraction_family A hA hRN hBlock)
+    (fun x ↦ posSemidef_hamiltonian_parentRingInteraction (A x) _ _) hK
+  exact ⟨δ, hδ, fun x hx ↦ ManyBody.isGapped_zero_iff.mpr ⟨hne x, hgap x hx⟩⟩
 
 /-- A continuous compact family injective at one common positive length
 \(p\) has one positive gap valid on every ring of \(N\ge p+1\) sites: the Hamiltonian of the

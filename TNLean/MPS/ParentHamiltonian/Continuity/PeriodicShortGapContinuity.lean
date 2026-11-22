@@ -165,25 +165,17 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_two_gap_fixed_volume
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S,
       ManyBody.IsGapped (parentRingInteraction (A x) 2 N).hamiltonian 0 δ := by
   have : NeZero N := ⟨by omega⟩
-  suffices hnorm : ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ S, ∀ v ∈ (LinearMap.ker
-      (Matrix.toEuclideanLin (parentRingInteraction (A x) 2 N).hamiltonian))ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction (A x) 2 N).hamiltonian v‖ by
-    obtain ⟨δ, hδ, hgap⟩ := hnorm
-    exact ⟨δ, hδ, fun x hx ↦ (ManyBody.isGapped_zero_iff_norm
-      (posSemidef_hamiltonian_parentRingInteraction (A x) _ _)).mpr
-        ⟨groundSpace_hamiltonian_parentRingInteraction_two_ne_bot (A x) (hInj x) hN, hgap x hx⟩⟩
   have hBlock (x : X) : Kraus.IsNBlkInjective (A x) 2 :=
     isNBlkInjective_of_le (by omega : 0 < 1)
       (Kraus.isNBlkInjective_one_of_isInjective (hInj x))
       (by omega : 1 ≤ 2)
-  let e := (Matrix.toEuclideanCLM : Matrix (Cfg d N) (Cfg d N) ℂ ≃⋆ₐ[ℂ] _)
-  have hH : Continuous fun x ↦ e (parentRingInteraction (A x) 2 N).hamiltonian :=
-    e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp
-      (continuous_hamiltonian_parentRingInteraction_family A hA hN hBlock)
   have hK := continuous_hamiltonian_parentRingInteraction_two_kernelProjection_family
     A hA hInj hN
-  simp only [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin] at hK ⊢
-  exact ContinuousLinearMap.exists_uniform_norm_gap_of_compact
-    (fun x ↦ e (parentRingInteraction (A x) 2 N).hamiltonian) hH hK hS
+  simp only [← ManyBody.groundSpace_zero] at hK
+  obtain ⟨δ, hδ, hgap⟩ := hS.exists_uniform_forall_hasEigenvalue
+    (continuous_hamiltonian_parentRingInteraction_family A hA hN hBlock)
+    (fun x ↦ posSemidef_hamiltonian_parentRingInteraction (A x) _ _) hK
+  exact ⟨δ, hδ, fun x hx ↦ ManyBody.isGapped_zero_iff.mpr
+    ⟨groundSpace_hamiltonian_parentRingInteraction_two_ne_bot (A x) (hInj x) hN, hgap x hx⟩⟩
 
 end MPSTensor

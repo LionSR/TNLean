@@ -186,31 +186,17 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_
       (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian) ν →
         ν = 0 ∨ (δ : ℂ) ≤ ν := by
   have : NeZero N := ⟨by omega⟩
-  suffices hnorm : ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K,
-      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-        (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-          (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian v‖ by
-    obtain ⟨δ, hδ, hgap⟩ := hnorm
-    exact ⟨δ, hδ, fun x hx ↦ (ManyBody.forall_hasEigenvalue_iff_norm
-      (posSemidef_hamiltonian_parentRingInteraction _ _ _)).mpr (hgap x hx)⟩
   have hSpanR (x : X) : WordTupleSpanTop (A x) R :=
     wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega : S ≤ R)
   have hGround := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
     μ A hμ hA R hSpanR
-  let e := (Matrix.toEuclideanCLM : Matrix (Cfg d N) (Cfg d N) ℂ ≃⋆ₐ[ℂ] _)
-  have hH : Continuous fun x ↦
-      e (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian :=
-    e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional.comp
-      (continuous_hamiltonian_parentRingInteraction_family_of_groundProjection
-        (fun x => toTensorFromBlocks (μ x) (A x)) hRN hGround)
   have hKernel :=
     continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_kernelProjection_family
       μ A hμ hA hS hSpan hR hRN
-  simp only [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin] at hKernel ⊢
-  exact ContinuousLinearMap.exists_uniform_norm_gap_of_compact
-    (X := X) (E := EuclideanSpace ℂ (Cfg d N))
-    (fun x ↦ e (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian)
-    hH hKernel hK
+  simp only [← ManyBody.groundSpace_zero] at hKernel
+  exact hK.exists_uniform_forall_hasEigenvalue
+    (continuous_hamiltonian_parentRingInteraction_family_of_groundProjection
+      (fun x => toTensorFromBlocks (μ x) (A x)) hRN hGround)
+    (fun _ ↦ posSemidef_hamiltonian_parentRingInteraction _ _ _) hKernel
 
 end MPSTensor
