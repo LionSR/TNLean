@@ -40,7 +40,7 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -143,7 +143,7 @@ theorem sourceTarget_finalScale_mutualInformation_explicit
   have hC₀ : 0 ≤ C₀ := by dsimp only [C₀]; positivity
   have hCvol : 0 ≤ C_T + 1 := by linarith
   have htarget := fun n (hn : truncationEntropyThreshold q g (C_T + 1) ≤ n) =>
-    abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le q hq g (C_T + 1) hg hn
+    abs_regionEntropy_sub_le_of_truncationEntropyThreshold_le q hq g (C_T + 1) hg hn
   have hsmall := fun n (hn : finalSharpTransportThreshold q Ctr ct ≤ n) =>
     finalSharp_transport_smallness_of_threshold_le hq hCtr.le hct hn
   intro Ce hCe

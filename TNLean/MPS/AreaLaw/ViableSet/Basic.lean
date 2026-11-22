@@ -87,14 +87,14 @@ abbrev LeftBlockVector (L q k : ℕ) : Type :=
 right of the cut, as a vector on the left block. -/
 noncomputable def cutColumn (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ)
     (b : (v : {v : Fin L // v ∉ leftBlock L k}) → Fin q) : LeftBlockVector L q k :=
-  WithLp.toLp 2 fun a ↦ cutMatrix ψ k a b
+  WithLp.toLp 2 fun a ↦ ManyBody.cutMatrix (leftBlock L k) ψ a b
 
 /-- The entries of a cut-matrix column. -/
 @[simp]
 theorem cutColumn_apply (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ)
     (b : (v : {v : Fin L // v ∉ leftBlock L k}) → Fin q)
     (a : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
-    cutColumn ψ k b a = cutMatrix ψ k a b :=
+    cutColumn ψ k b a = ManyBody.cutMatrix (leftBlock L k) ψ a b :=
   rfl
 
 /-- The vectors on the chain whose reduced density on the first `k` sites is supported on
@@ -163,7 +163,8 @@ theorem toLp_spanProjection_mulVec {k : ℕ} (S : Set (LeftBlockVector L q k))
 matrix `M` after `k` sites exactly when every column of `M` lies in `Span(S)`. -/
 theorem spanProjection_mul_cutMatrix_eq_iff {k : ℕ} {S : Set (LeftBlockVector L q k)}
     {ψ : EuclideanSpace ℂ (Fin L → Fin q)} :
-    spanProjection S * cutMatrix ψ k = cutMatrix ψ k ↔ ψ ∈ leftSupportSubmodule S := by
+    spanProjection S * ManyBody.cutMatrix (leftBlock L k) ψ =
+        ManyBody.cutMatrix (leftBlock L k) ψ ↔ ψ ∈ leftSupportSubmodule S := by
   rw [mem_leftSupportSubmodule]
   simp_rw [← Submodule.starProjection_eq_self_iff]
   constructor
@@ -178,13 +179,6 @@ theorem spanProjection_mul_cutMatrix_eq_iff {k : ℕ} {S : Set (LeftBlockVector 
     rw [cutColumn, ← toLp_spanProjection_mulVec] at this
     simpa [Matrix.mul_apply, mulVec, dotProduct] using this
 
-/-- The reduced density on the first `k` sites is `M Mᴴ` for the cut matrix `M`. -/
-theorem regionState_leftBlock_eq (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
-    ManyBody.regionState (X := fun _ ↦ Fin q) ψ (leftBlock L k) =
-      cutMatrix ψ k * (cutMatrix ψ k)ᴴ := by
-  simp only [ManyBody.regionState_eq_partialTraceRight_cutVector,
-    Matrix.partialTraceRight_vecMulVec_eq, cutMatrix]
-
 /-- **Support in density form.** The reduced density `ρ` of `ψ` on the first `k` sites is
 supported on `Span(S)`, `P ρ = ρ`, exactly when `ψ ∈ Span(S) ⊗ H_R`. This is the support
 condition of Definition `def:viable` (arXiv:1307.5143v1, algo53.tex, lines 240–242). -/
@@ -193,9 +187,10 @@ theorem spanProjection_mul_regionState_eq_iff {k : ℕ} {S : Set (LeftBlockVecto
     spanProjection S * ManyBody.regionState (X := fun _ ↦ Fin q) ψ (leftBlock L k) =
         ManyBody.regionState (X := fun _ ↦ Fin q) ψ (leftBlock L k) ↔
       ψ ∈ leftSupportSubmodule S := by
-  rw [← spanProjection_mul_cutMatrix_eq_iff, regionState_leftBlock_eq]
+  rw [← spanProjection_mul_cutMatrix_eq_iff,
+    ManyBody.regionState_eq_cutMatrix_mul_conjTranspose ψ (leftBlock L k)]
   set P := spanProjection S
-  set M := cutMatrix ψ k
+  set M := ManyBody.cutMatrix (leftBlock L k) ψ
   constructor
   · intro h
     have h0 : (1 - P) * (M * Mᴴ) = 0 := by rw [Matrix.sub_mul, Matrix.one_mul, h, sub_self]
@@ -216,12 +211,12 @@ theorem leftApply_cutVector_eq_iff {k : ℕ} (P : LeftBlockMatrix L q k)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
     leftApply P (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ) =
         ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ ↔
-      P * cutMatrix ψ k = cutMatrix ψ k := by
+      P * ManyBody.cutMatrix (leftBlock L k) ψ = ManyBody.cutMatrix (leftBlock L k) ψ := by
   constructor
   · intro h
     exact congrArg (fun w ↦ schmidtCoeffMatrix (WithLp.ofLp w)) h
   · intro h
-    change toEuclid (P * cutMatrix ψ k) = _
+    change toEuclid (P * ManyBody.cutMatrix (leftBlock L k) ψ) = _
     rw [h]
     rfl
 
@@ -303,7 +298,7 @@ theorem IsViable.exists_singleton_exact_of_localDimension_one
       let p := ManyBody.cutEquiv (fun _ ↦ Fin 1) (leftBlock L i) z
       have hb : p.2 = b := Subsingleton.elim _ _
       have hz := congrArg (fun w ↦ w p.1) hzero
-      rw [cutColumn_apply, cutMatrix_apply] at hz
+      rw [cutColumn_apply, ManyBody.cutMatrix_apply] at hz
       have hp : (ManyBody.cutEquiv (fun _ ↦ Fin 1) (leftBlock L i)).symm (p.1, b) = z := by
         rw [← hb]
         exact (ManyBody.cutEquiv (fun _ ↦ Fin 1) (leftBlock L i)).symm_apply_apply z
@@ -374,7 +369,7 @@ theorem IsViable.exists_singleton_exact_of_chainLength_zero
         funext x
         exact x.1.elim0
       have hz := congrArg (fun w ↦ w p.1) hzero
-      rw [cutColumn_apply, cutMatrix_apply] at hz
+      rw [cutColumn_apply, ManyBody.cutMatrix_apply] at hz
       have hp : (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock 0 i)).symm (p.1, b) = z := by
         rw [← hb]
         exact (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock 0 i)).symm_apply_apply z
@@ -652,7 +647,7 @@ theorem cutColumn_eq_sum_extendSite {i : ℕ} (hi0 : 0 < i) (hiL : i ≤ L)
   ext x
   rw [WithLp.ofLp_sum, Finset.sum_apply]
   simp only [extendSite_apply hi0 hiL, Finset.sum_ite_eq, Finset.mem_univ, ite_true,
-    cutColumn_apply, cutMatrix_apply]
+    cutColumn_apply, ManyBody.cutMatrix_apply]
   refine congrArg (fun y ↦ ψ y) ?_
   funext j
   by_cases h1 : (j : ℕ) < i - 1

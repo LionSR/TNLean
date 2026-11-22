@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.AreaLaw.Hamiltonian
 import QICLean.Algebra.UnitaryTraceZero
 import QICLean.Representation.RegionPowerSymbol
@@ -147,12 +148,10 @@ An endpoint unitary gives an orthogonal unit trial vector. Only the first bond c
 change its expectation, and the change is at most one because the bond lies between
 zero and the identity. The rank-one gap inequality is essential to the conclusion. -/
 theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Ω}) : Δ ≤ 1 := by
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Ω}) : Δ ≤ 1 := by
   classical
   let x : Fin L := ⟨0, hL⟩
   obtain ⟨U, hU⟩ := Matrix.IsHermitian.exists_unitary_trace_mul_eq_zero
@@ -175,45 +174,45 @@ theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (
   have horth : ⟪Ω, toEuclideanLin K Ω⟫_ℂ = 0 := by
     simpa only [K, ManyBody.inner_place] using hU
   have hgap : Δ ≤
-      (⟪toEuclideanLin K Ω, toEuclideanLin (∑ i, h i) (toEuclideanLin K Ω)⟫_ℂ).re - E₀ := by
-    simpa [hφ, horth] using (hgap.posSemidef_sub_smul_one
+      (⟪toEuclideanLin K Ω, toEuclideanLin Φ.hamiltonian (toEuclideanLin K Ω)⟫_ℂ).re - E₀ := by
+    simpa [hφ, horth, ManyBody.Interaction.hamiltonian] using (hgap.posSemidef_sub_smul_one
       (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian hΩ
       hspan).gap_le (toEuclideanLin K Ω)
   have hnonneg (i : Fin (L - 1)) (v : EuclideanSpace ℂ (Fin L → Fin q)) :
-      0 ≤ (⟪v, toEuclideanLin (h i) v⟫_ℂ).re := by
+      0 ≤ (⟪v, toEuclideanLin (Φ.term i) v⟫_ℂ).re := by
     simpa only [RCLike.re_to_complex] using
       (isPositive_toEuclideanLin_iff.mpr (h0 i).posSemidef).re_inner_nonneg_right v
   have hnorm (i : Fin (L - 1)) (v : EuclideanSpace ℂ (Fin L → Fin q))
-      (hv : ‖v‖ = 1) : |(⟪v, toEuclideanLin (h i) v⟫_ℂ).re| ≤ 1 := by
+      (hv : ‖v‖ = 1) : |(⟪v, toEuclideanLin (Φ.term i) v⟫_ℂ).re| ≤ 1 := by
     calc
-      |(⟪v, toEuclideanLin (h i) v⟫_ℂ).re| ≤ ‖⟪v, toEuclideanLin (h i) v⟫_ℂ‖ :=
+      |(⟪v, toEuclideanLin (Φ.term i) v⟫_ℂ).re| ≤ ‖⟪v, toEuclideanLin (Φ.term i) v⟫_ℂ‖ :=
         Complex.abs_re_le_norm _
-      _ ≤ ‖v‖ * ‖toEuclideanLin (h i) v‖ := norm_inner_le_norm _ _
-      _ ≤ ‖v‖ * (‖h i‖ * ‖v‖) :=
+      _ ≤ ‖v‖ * ‖toEuclideanLin (Φ.term i) v‖ := norm_inner_le_norm _ _
+      _ ≤ ‖v‖ * (‖Φ.term i‖ * ‖v‖) :=
         mul_le_mul_of_nonneg_left (Entropy.norm_toEuclideanLin_le _ _) (norm_nonneg _)
       _ ≤ 1 := by
         simpa only [hv, mul_one, one_mul] using
           (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 i)).mpr (h1 i)
   have hsame (i : Fin (L - 1)) (hi : i.val ≠ 0) :
-      ⟪toEuclideanLin K Ω, toEuclideanLin (h i) (toEuclideanLin K Ω)⟫_ℂ =
-        ⟪Ω, toEuclideanLin (h i) Ω⟫_ℂ := by
+      ⟪toEuclideanLin K Ω, toEuclideanLin (Φ.term i) (toEuclideanLin K Ω)⟫_ℂ =
+        ⟪Ω, toEuclideanLin (Φ.term i) Ω⟫_ℂ := by
     have hx : x ∉ interval L i.val (i.val + 2) := by
       simp only [mem_interval, x]
       omega
     have hc := Entropy.commute_localLift_of_isSupportedOn (n := fun _ : Fin L ↦ q)
-      (Q := {x}) (D := interval L i.val (i.val + 2)) (c := h i)
-      (Finset.disjoint_singleton_left.mpr hx) (U : Matrix _ _ ℂ) (hs i)
+      (Q := {x}) (D := interval L i.val (i.val + 2)) (c := Φ.term i)
+      (Finset.disjoint_singleton_left.mpr hx) (U : Matrix _ _ ℂ) (Φ.mem i)
     rw [← LinearMap.adjoint_inner_right, ← toEuclideanLin_conjTranspose_eq_adjoint,
       ← Entropy.toEuclideanLin_mul_apply, ← Entropy.toEuclideanLin_mul_apply, Matrix.mul_assoc,
       ← hc.eq, ← Matrix.mul_assoc, hK, Matrix.one_mul]
   have hdiff (i : Fin (L - 1)) :
-      (⟪toEuclideanLin K Ω, toEuclideanLin (h i) (toEuclideanLin K Ω)⟫_ℂ).re -
-        (⟪Ω, toEuclideanLin (h i) Ω⟫_ℂ).re ≤ if i.val = 0 then 1 else 0 := by
+      (⟪toEuclideanLin K Ω, toEuclideanLin (Φ.term i) (toEuclideanLin K Ω)⟫_ℂ).re -
+        (⟪Ω, toEuclideanLin (Φ.term i) Ω⟫_ℂ).re ≤ if i.val = 0 then 1 else 0 := by
     split_ifs with hi
     · linarith [hnonneg i Ω, (abs_le.mp (hnorm i (toEuclideanLin K Ω) hφ)).2]
     · simp only [hsame i hi, sub_self, le_refl]
-  have hE : (⟪Ω, toEuclideanLin (∑ i, h i) Ω⟫_ℂ).re = E₀ := by
-    have heig : toEuclideanLin (∑ i, h i) Ω = (E₀ : ℂ) • Ω := by
+  have hE : (⟪Ω, toEuclideanLin Φ.hamiltonian Ω⟫_ℂ).re = E₀ := by
+    have heig : toEuclideanLin Φ.hamiltonian Ω = (E₀ : ℂ) • Ω := by
       rw [← coe_toEuclideanCLM_eq_toEuclideanLin]
       exact (ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _))
     rw [heig, inner_smul_right, inner_self_eq_norm_sq_to_K, hΩ]
@@ -223,17 +222,17 @@ theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (
       Fin.ext ((Finset.mem_filter.mp hi).2.trans (Finset.mem_filter.mp hj).2.symm)
   have hsum :
       (∑ i : Fin (L - 1),
-        ((⟪toEuclideanLin K Ω, toEuclideanLin (h i) (toEuclideanLin K Ω)⟫_ℂ).re -
-          (⟪Ω, toEuclideanLin (h i) Ω⟫_ℂ).re)) ≤
+        ((⟪toEuclideanLin K Ω, toEuclideanLin (Φ.term i) (toEuclideanLin K Ω)⟫_ℂ).re -
+          (⟪Ω, toEuclideanLin (Φ.term i) Ω⟫_ℂ).re)) ≤
         ((Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val = 0)).card : ℝ) := by
     simpa only [← Finset.sum_filter, Finset.sum_const, nsmul_eq_mul, mul_one] using
       Finset.sum_le_sum (s := Finset.univ) (fun i _ ↦ hdiff i)
   have henergy :
-      (⟪toEuclideanLin K Ω, toEuclideanLin (∑ i, h i) (toEuclideanLin K Ω)⟫_ℂ).re - E₀ ≤
+      (⟪toEuclideanLin K Ω, toEuclideanLin Φ.hamiltonian (toEuclideanLin K Ω)⟫_ℂ).re - E₀ ≤
         1 := by
     rw [← hE]
-    simpa only [map_sum, LinearMap.sum_apply, inner_sum, Complex.re_sum,
-      Finset.sum_sub_distrib] using hsum.trans (by exact_mod_cast hcard)
+    simpa only [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.sum_apply, inner_sum,
+      Complex.re_sum, Finset.sum_sub_distrib] using hsum.trans (by exact_mod_cast hcard)
   exact hgap.trans henergy
 
 end TNLean.MPS.AreaLaw

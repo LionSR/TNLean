@@ -59,9 +59,9 @@ theorem exists_threshold_three_mul_le_of_log (D : ℕ) {c : ℝ} (hc : 0 < c) :
 
 /-- Every vector on one site is a product vector, so no gates are needed. -/
 theorem isPreparedInDepth_zero_one_site {d : ℕ} (ψ : Cfg d 1 → ℂ) :
-    IsPreparedInDepth 0 ψ := by
-  refine ⟨1, ⟨[], rfl, rfl⟩, fun _ a => ψ (fun _ => a), funext fun s => ?_⟩
-  rw [Matrix.one_mulVec, productVector, Fin.prod_univ_one]
+    IsPreparedInDepth (Geometry.ring 1) 0 ψ := by
+  refine ⟨1, IsUnitaryCircuit.one _ _ 0, fun _ a => ψ (fun _ => a), funext fun s => ?_⟩
+  simp only [Matrix.one_mulVec, Fin.prod_univ_one]
   exact congrArg ψ (funext fun i => congrArg s (Subsingleton.elim _ _))
 
 /-- **All positive ring lengths with logarithmically growing blocks.** There are a threshold
@@ -80,7 +80,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_of_log_lower (d D : ℕ) (hd : 0 
       (hN : ∑ k, ℓ k = N) (A : VaryingBondChain d D N) (L : ℕ) (δ : ℝ),
       (∀ k, c * Real.log N ≤ ℓ k) → (∀ k, ℓ k ≤ L) → IsPairApproximable A hN δ →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ T ≤ C * L ∧
-        IsPreparedInDepth T (fun s => ψ s) ∧
+        IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
         1 - ‖⟪ψ, (‖state A‖ : ℂ)⁻¹ • state A⟫_ℂ‖ ≤ δ ∧
         (N < N₀ → ψ = (‖state A‖ : ℂ)⁻¹ • state A) := by
   classical
@@ -148,7 +148,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_sequence (d D : ℕ) (hd : 0 < d)
       (fun n => Real.log (n + 1 : ℕ))) :
     ∃ (C N₀ : ℕ) (ψ : ∀ n, MPVSpace d (n + 1)) (T : ℕ → ℕ),
       (∀ n, ‖ψ n‖ = 1 ∧ T n ≤ C * L n ∧
-        IsPreparedInDepth (T n) (fun s => ψ n s) ∧
+        IsPreparedInDepth (Geometry.ring (n + 1)) (T n) (fun s => ψ n s) ∧
         1 - ‖⟪ψ n, (‖state (A n)‖ : ℂ)⁻¹ • state (A n)⟫_ℂ‖ ≤ δ n ∧
         (n + 1 < N₀ → ψ n = (‖state (A n)‖ : ℂ)⁻¹ • state (A n))) ∧
       Filter.Tendsto

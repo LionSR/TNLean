@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointFrameSupport
-import TNLean.MPS.ParentHamiltonian.Martingale.SupportedParentProjection
+import QICLean.Analysis.SupportedParentProjection
 
 /-!
 # Reduction of the actual joint endpoint interaction by its boundary frame

@@ -21,6 +21,8 @@ lines 1733–1770.
 
 open scoped Matrix BigOperators ComplexOrder Kronecker
 
+open ManyBody
+
 namespace Matrix
 
 /-- The range of an isometrically conjugated matrix is the isometric
@@ -48,30 +50,32 @@ namespace MPSTensor
 complements has range equal to the periodic ground space.
 Source context: arXiv:1010.3732, Section II.D.2, the independent-bond
 parent Hamiltonian. -/
-theorem interactionHamiltonian_ker_eq_range_groundProduct {d N : ℕ}
+theorem hamiltonian_translationInvariant_ker_eq_range_groundProduct {d N : ℕ}
     (A : MPOTensor.ChainOperator d 2) (hA : IsStarProjection A)
     (hN : 2 ≤ N)
     (hcomm : ∀ i j : Fin N,
-      Commute (MPOTensor.embedLocalOperator 2 N hN i A)
-        (MPOTensor.embedLocalOperator 2 N hN j A)) :
-    LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian A hN)) =
+      Commute (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A)
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) A)) :
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) =
       LinearMap.range (Matrix.toEuclideanLin
-        (List.ofFn fun i : Fin N => 1 - MPOTensor.embedLocalOperator 2 N hN i A).prod) := by
+        (List.ofFn fun i : Fin N =>
+          1 - placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A).prod) := by
   let P (i : Fin N) := (bondMatrixEquiv d N).symm
-    (MPOTensor.embedLocalOperator 2 N hN i A)
+    (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A)
   have hP (i : Fin N) : (P i).IsSymmetricProjection :=
     bondMatrixEquiv_symm_isSymmetricProjection _
-      (MPOTensor.embedLocalOperator_isStarProjection 2 N hN i hA)
+      (hA.map (placeAlongHom (X := fun _ ↦ Fin d) (ringWindow hN i)))
   have hPC (i j : Fin N) : Commute (P i) (P j) :=
     (hcomm i j).map (bondMatrixEquiv d N).symm
   have h := (LinearMap.range_listProd_one_sub_eq_ker_sum P hP hPC).symm
   have hProd : (bondMatrixEquiv d N).symm
-      (List.ofFn fun i : Fin N => 1 - MPOTensor.embedLocalOperator 2 N hN i A).prod =
+      (List.ofFn fun i : Fin N =>
+        1 - placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A).prod =
       (List.ofFn fun i : Fin N => 1 - P i).prod := by
     simp only [map_list_prod, List.map_ofFn, Function.comp_def, map_sub, map_one, P]
   rw [← hProd] at h
   simpa only [P, ← map_sum, bondMatrixEquiv_symm_eq_toEuclideanLin,
-    interactionHamiltonian] using h
+    Interaction.hamiltonian, Interaction.translates_term] using h
 
 /-- Extending a local parent projection through a physical isometry and
 penalizing unused physical states again gives an orthogonal projection.
@@ -98,33 +102,32 @@ theorem isometricInteractionExtension_groundProduct {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     (A : MPOTensor.ChainOperator d 2) (hA : A.IsHermitian) (hN : 2 ≤ N)
     (hcomm : ∀ i j : Fin N,
-      Commute (MPOTensor.embedLocalOperator 2 N hN i (isometricInteractionExtension E A))
-        (MPOTensor.embedLocalOperator 2 N hN j (isometricInteractionExtension E A))) :
+      Commute (placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i)
+          (isometricInteractionExtension E A))
+        (placeAlong (X := fun _ ↦ Fin m) (ringWindow hN j)
+          (isometricInteractionExtension E A))) :
     (List.ofFn fun i : Fin N =>
-      1 - MPOTensor.embedLocalOperator 2 N hN i (isometricInteractionExtension E A)).prod =
+      1 - placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i)
+          (isometricInteractionExtension E A)).prod =
       singleKrausMap (Matrix.tensorPower N E)
-        (List.ofFn fun i : Fin N => 1 - MPOTensor.embedLocalOperator 2 N hN i A).prod := by
+        (List.ofFn fun i : Fin N =>
+          1 - placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A).prod := by
   have hLift (i : Fin N) :
-      MPOTensor.embedLocalOperator 2 N hN i
+      placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i)
           (singleKrausMap (Matrix.tensorPower 2 E) (1 - A)) =
-        1 - MPOTensor.embedLocalOperator 2 N hN i (isometricInteractionExtension E A) := by
-    change (MPOTensor.embedLocalOperatorAlgHom (d := m) 2 N hN i)
-        (singleKrausMap (Matrix.tensorPower 2 E) (1 - A)) =
-      1 - (MPOTensor.embedLocalOperatorAlgHom (d := m) 2 N hN i)
-        (1 - singleKrausMap (Matrix.tensorPower 2 E) (1 - A))
-    simp only [map_sub, map_one, sub_sub_cancel]
+        1 - placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i)
+          (isometricInteractionExtension E A) := by
+    rw [isometricInteractionExtension, placeAlong_sub, placeAlong_one, sub_sub_cancel]
   have hLiftComm (i j : Fin N) :
-      Commute (MPOTensor.embedLocalOperator 2 N hN i
+      Commute (placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i)
           (singleKrausMap (Matrix.tensorPower 2 E) (1 - A)))
-        (MPOTensor.embedLocalOperator 2 N hN j
+        (placeAlong (X := fun _ ↦ Fin m) (ringWindow hN j)
           (singleKrausMap (Matrix.tensorPower 2 E) (1 - A))) := by
     rw [hLift i, hLift j]
     exact (Commute.one_left _).sub_left ((Commute.one_right _).sub_right (hcomm i j))
-  have hOld (i : Fin N) : MPOTensor.embedLocalOperator 2 N hN i (1 - A) =
-      1 - MPOTensor.embedLocalOperator 2 N hN i A := by
-    change (MPOTensor.embedLocalOperatorAlgHom (d := d) 2 N hN i) (1 - A) =
-      1 - (MPOTensor.embedLocalOperatorAlgHom (d := d) 2 N hN i) A
-    simp only [map_sub, map_one]
+  have hOld (i : Fin N) : placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) (1 - A) =
+      1 - placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A := by
+    rw [placeAlong_sub, placeAlong_one]
   have hImage := MPOTensor.singleKrausMap_bondProduct_of_isometry E hE (1 - A)
     (Matrix.isHermitian_one.sub hA) hN hLiftComm
   simpa only [hLift, hOld] using hImage.symm
@@ -137,22 +140,25 @@ theorem isometricInteractionExtension_ker_eq_map {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     (A : MPOTensor.ChainOperator d 2) (hA : IsStarProjection A) (hN : 2 ≤ N)
     (hcommOld : ∀ i j : Fin N,
-      Commute (MPOTensor.embedLocalOperator 2 N hN i A)
-        (MPOTensor.embedLocalOperator 2 N hN j A))
+      Commute (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A)
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) A))
     (hcommNew : ∀ i j : Fin N,
-      Commute (MPOTensor.embedLocalOperator 2 N hN i (isometricInteractionExtension E A))
-        (MPOTensor.embedLocalOperator 2 N hN j (isometricInteractionExtension E A))) :
+      Commute (placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i)
+          (isometricInteractionExtension E A))
+        (placeAlong (X := fun _ ↦ Fin m) (ringWindow hN j)
+          (isometricInteractionExtension E A))) :
     LinearMap.ker (Matrix.toEuclideanLin
-      (interactionHamiltonian (isometricInteractionExtension E A) hN)) =
-      (LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian A hN))).map
+      (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian) =
+      (LinearMap.ker
+        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian)).map
         (Matrix.toEuclideanLin (Matrix.tensorPower N E)) := by
-  rw [interactionHamiltonian_ker_eq_range_groundProduct _
+  rw [hamiltonian_translationInvariant_ker_eq_range_groundProduct _
     (isometricInteractionExtension_isStarProjection E hE A hA) hN hcommNew]
   rw [isometricInteractionExtension_groundProduct E hE A
     hA.isSelfAdjoint.isHermitian hN hcommNew]
   rw [Matrix.range_toEuclideanLin_singleKrausMap_of_isometry _
     (MPOTensor.tensorPower_isometry E hE N)]
-  rw [interactionHamiltonian_ker_eq_range_groundProduct A hA hN hcommOld]
+  rw [hamiltonian_translationInvariant_ker_eq_range_groundProduct A hA hN hcommOld]
 
 /-- A ground space generated by a single vector extends to the span of
 its physical image. Source context: arXiv:1010.3732, Sections II.D.2 and II.F.2. -/
@@ -160,16 +166,19 @@ theorem isometricInteractionExtension_ker_eq_span {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     (A : MPOTensor.ChainOperator d 2) (hA : IsStarProjection A) (hN : 2 ≤ N)
     (hcommOld : ∀ i j : Fin N,
-      Commute (MPOTensor.embedLocalOperator 2 N hN i A)
-        (MPOTensor.embedLocalOperator 2 N hN j A))
+      Commute (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A)
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) A))
     (hcommNew : ∀ i j : Fin N,
-      Commute (MPOTensor.embedLocalOperator 2 N hN i (isometricInteractionExtension E A))
-        (MPOTensor.embedLocalOperator 2 N hN j (isometricInteractionExtension E A)))
+      Commute (placeAlong (X := fun _ ↦ Fin m) (ringWindow hN i)
+          (isometricInteractionExtension E A))
+        (placeAlong (X := fun _ ↦ Fin m) (ringWindow hN j)
+          (isometricInteractionExtension E A)))
     (ψ : EuclideanSpace ℂ (Fin N → Fin d))
-    (hground : LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian A hN)) =
+    (hground : LinearMap.ker
+        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) =
       Submodule.span ℂ {ψ}) :
     LinearMap.ker (Matrix.toEuclideanLin
-      (interactionHamiltonian (isometricInteractionExtension E A) hN)) =
+      (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian) =
       Submodule.span ℂ {Matrix.toEuclideanLin (Matrix.tensorPower N E) ψ} := by
   rw [isometricInteractionExtension_ker_eq_map E hE A hA hN hcommOld hcommNew,
     hground, Submodule.map_span, Set.image_singleton]

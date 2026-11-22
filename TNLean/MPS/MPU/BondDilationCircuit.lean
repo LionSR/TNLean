@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.Overlap.Basic
 import TNLean.MPS.MPU.NormalizedBondDilation
 import TNLean.MPS.MPU.BondRegisterBounds
-import TNLean.Circuit.CleanUnitaryImplementation
+import QICLean.Circuit.Compile.ChainUniversality
+import QICLean.Circuit.Model.CleanWorkspace
 
 /-!
 # Exact neighboring-pair circuit for the normalized bond dilation
@@ -15,7 +16,7 @@ For a bond of dimension `r`, the normalized joining-bond dilation is a full
 unitary on a space of dimension `2 * r²`. It embeds in a packet of
 `max 2 (Nat.clog d (2 * r²) + 1)` qudits, whose Hilbert dimension is at most
 `2 * d³ * r²`. Exact neighboring-pair synthesis therefore gives a circuit with
-at most `38 * (2 * d³ * r²)⁶` gates.
+at most `12 * (2 * d³ * r²)⁵` gates.
 
 Both the circuit and its basis inclusion are derived. The designated
 first-flag reset state is encoded by the all-zero physical configuration.
@@ -83,14 +84,23 @@ theorem exists_normalizedBondDilation_circuit {d : ℕ} (hd : 2 ≤ d)
         (Cfg d (bondDilationPacketSites d (Fintype.card ι)))
         (Cfg d (bondDilationPacketSites d (Fintype.card ι))) ℂ,
       e (Sum.inl z) = (fun _ ↦ ⟨0, by omega⟩) ∧
-      IsPairProduct d (bondDilationPacketSites d (Fintype.card ι))
-        (38 * (2 * d ^ 3 * Fintype.card ι ^ 2) ^ 6) U ∧
-      IsCleanImplementation (initializedBasisMatrix e) U (normalizedBondDilation P z) := by
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph
+          (bondDilationPacketSites d (Fintype.card ι))))
+        (12 * (2 * d ^ 3 * Fintype.card ι ^ 2) ^ 5) U ∧
+      IsCleanImplementation (basisInclusion e) U (normalizedBondDilation P z) := by
   obtain ⟨e, he⟩ := exists_bondDilationPacket_embedding_zero hd z
-  obtain ⟨U, hU, hclean⟩ := exists_isPairProduct_isCleanImplementation hd
-    (le_max_left _ _) e (normalizedBondDilation_mem_unitaryGroup hP z)
+  have : NeZero (bondDilationPacketSites d (Fintype.card ι)) :=
+    ⟨by
+      have h : 2 ≤ bondDilationPacketSites d (Fintype.card ι) := le_max_left _ _
+      omega⟩
+  obtain ⟨U, hU, hclean⟩ := exists_isGateProduct_isCleanImplementation
+    (fun U hU ↦ isGateProduct_pathGraph_le_card_pow
+      (n := bondDilationPacketSites d (Fintype.card ι)) (α := Fin d)
+      (by simpa only [Fintype.card_fin] using hd) hU)
+    e (normalizedBondDilation_mem_unitaryGroup hP z)
   refine ⟨e, U, he, hU.mono ?_, hclean⟩
-  exact Nat.mul_le_mul_left 38
-    (Nat.pow_le_pow_left (bondDilationPacket_dimension_le hd Fintype.card_pos) 6)
+  rw [Fintype.card_fin]
+  exact Nat.mul_le_mul_left 12
+    (Nat.pow_le_pow_left (bondDilationPacket_dimension_le hd Fintype.card_pos) 5)
 
 end MPUCircuit

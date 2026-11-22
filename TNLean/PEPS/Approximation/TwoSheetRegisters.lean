@@ -132,8 +132,8 @@ and move them back.
 Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 500–515. -/
 def correctionLayoutWord (l₁ l₂ : List (Hole pos q Party)) (own₁ own₂ : ι → Party) {P : Party}
     (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
-    (W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ) :
+    (W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ) :
     Word (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂)
       (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂) :=
   frontCorrectionWord (tagRegs l₁) (tagRegs l₂) own₁ own₂ h₁ h₂ W
@@ -143,13 +143,13 @@ mixed by `W`; those on `T ∪ E` and the tags are untouched. -/
 theorem eval_correctionLayoutWord (h : Disjoint T E) (l₁ l₂ : List (Hole pos q Party))
     (own₁ own₂ : ι → Party) {P : Party}
     (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
-    (W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
     (τ₁ : TagSpace l₁) (c₁ : ι → Fin q) (τ₂ : TagSpace l₂) (c₂ : ι → Fin q) :
     (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).eval
         ((appendIso (layoutRegs q l₁ own₁) (layoutRegs q l₂ own₂)).symm
           (layoutVec l₁ own₁ τ₁ c₁ ⊗ₜ layoutVec l₂ own₂ τ₂ c₂)) =
-      ∑ u, W u ((fun x : ↥(T ∪ E)ᶜ => c₁ x), (fun x : ↥(T ∪ E)ᶜ => c₂ x)) •
+      ∑ u, W u ((fun x : {v // v ∉ T ∪ E} => c₁ x), (fun x : {v // v ∉ T ∪ E} => c₂ x)) •
         (appendIso (layoutRegs q l₁ own₁) (layoutRegs q l₂ own₂)).symm
           (layoutVec l₁ own₁ τ₁ (merge h ((fun x : T => c₁ x), u.1) c₁) ⊗ₜ
             layoutVec l₂ own₂ τ₂ (merge h ((fun x : T => c₂ x), u.2) c₂)) :=
@@ -157,10 +157,10 @@ theorem eval_correctionLayoutWord (h : Disjoint T E) (l₁ l₂ : List (Hole pos
     (tagVec l₂ τ₂) c₂
 
 theorem sum_single_merge₂ (h : Disjoint T E) (l₁ l₂ : List (Hole pos q Party))
-    (W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
     (τ₁ : TagSpace l₁) (c₁ : ι → Fin q) (τ₂ : TagSpace l₂) (c₂ : ι → Fin q) :
-    ∑ u, W u ((fun x : ↥(T ∪ E)ᶜ => c₁ x), (fun x : ↥(T ∪ E)ᶜ => c₂ x)) •
+    ∑ u, W u ((fun x : {v // v ∉ T ∪ E} => c₁ x), (fun x : {v // v ∉ T ∪ E} => c₂ x)) •
         (EuclideanSpace.single ((τ₁, merge h ((fun x : T => c₁ x), u.1) c₁),
           (τ₂, merge h ((fun x : T => c₂ x), u.2) c₂)) (1 : ℂ) :
           EuclideanSpace ℂ ((TagSpace l₁ × (ι → Fin q)) × (TagSpace l₂ × (ι → Fin q)))) =
@@ -173,8 +173,8 @@ the two frames as `1_tags ⊗ (1_{T E} ⊗ W)`. -/
 theorem twoLayoutIso_correctionLayoutWord (h : Disjoint T E) (l₁ l₂ : List (Hole pos q Party))
     (own₁ own₂ : ι → Party) {P : Party}
     (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
-    (W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
     (z : Mem (layoutRegs q l₁ own₁ ++ layoutRegs q l₂ own₂)) :
     twoLayoutIso l₁ l₂ own₁ own₂ ((correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).eval z) =
       act (liftTags (l₁ := l₁) (l₂ := l₂) (twoSheetPlace h W)) (twoLayoutIso l₁ l₂ own₁ own₂ z) :=
@@ -185,8 +185,8 @@ theorem twoLayoutIso_correctionLayoutWord (h : Disjoint T E) (l₁ l₂ : List (
 theorem correctionLayoutWord_props (l₁ l₂ : List (Hole pos q Party))
     (own₁ own₂ : ι → Party) {P : Party}
     (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
-    {W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ} (hW : ‖W‖ ≤ 1) :
+    {W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ} (hW : ‖W‖ ≤ 1) :
     (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).IsAllowed ∧
       (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).UsesOnly {P} ∧
       (correctionLayoutWord l₁ l₂ own₁ own₂ h₁ h₂ W).sourceCount = 0 :=

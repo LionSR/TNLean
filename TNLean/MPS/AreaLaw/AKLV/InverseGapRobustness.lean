@@ -193,26 +193,24 @@ The block commutations and decomposition are the algebraic data coming
 from their disjoint supports; no tail, residual or new gap is assumed. -/
 theorem exists_robust_ground_twoSidedEnergyTruncation_of_inverse_gap_cutoff {L q : ℕ}
     (I : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (a b : Fin (L - 1)) (z e g t : ℝ)
     (X N Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hX : X.PosSemidef) (hN : N.PosSemidef) (hY : Y.PosSemidef)
     (hXN : Commute X N) (hXY : Commute X Y) (hNY : Commute N Y)
-    (hB : X + N + Y = (∑ i ∈ I, h i) - (z : ℂ) • 1)
+    (hB : X + N + Y = Φ.partialHamiltonian I - (z : ℂ) • 1)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (he0 : 0 ≤ e) (he6 : e ≤ 6) (hg : 0 < g) (hg1 : g ≤ 1)
     (ht : 32768 / g ≤ t)
     (heig : Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-      (X + N + Y + (h a + h b)) Ω = (e : ℂ) • Ω)
+      (X + N + Y + (Φ.term a + Φ.term b)) Ω = (e : ℂ) • Ω)
     (hgap : ∀ v : EuclideanSpace ℂ (Fin L → Fin q),
       g * (‖v‖ ^ 2 - ‖⟪Ω, v⟫_ℂ‖ ^ 2) ≤
         (⟪v, Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-          (X + N + Y + (h a + h b)) v⟫_ℂ).re - e * ‖v‖ ^ 2) :
+          (X + N + Y + (Φ.term a + Φ.term b)) v⟫_ℂ).re - e * ‖v‖ ^ 2) :
     let ι := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-    let K := twoSidedEnergyTruncation X (N + (h a + h b)) Y t
+    let K := twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
     ∃ (e' : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
       ‖φ‖ = 1 ∧ ι K φ = (e' : ℂ) • φ ∧ 0 ≤ e' ∧ e' ≤ e ∧
       (∀ v : EuclideanSpace ℂ (Fin L → Fin q),
@@ -220,7 +218,7 @@ theorem exists_robust_ground_twoSidedEnergyTruncation_of_inverse_gap_cutoff {L q
           (⟪v, ι K v⟫_ℂ).re - e' * ‖v‖ ^ 2) ∧
       ∃ θ : ℝ, ‖Ω - Complex.exp (θ * Complex.I) • φ‖ ^ 2 ≤ Real.exp (-t / 16) := by
   intro ι K
-  let A := h a + h b
+  let A := Φ.term a + Φ.term b
   have hA : A.PosSemidef := Matrix.nonneg_iff_posSemidef.mp (add_nonneg (h0 a) (h0 b))
   have hAcap : A ≤ (2 : ℂ) • 1 := by
     simpa only [two_smul] using add_le_add (h1 a) (h1 b)
@@ -234,7 +232,7 @@ theorem exists_robust_ground_twoSidedEnergyTruncation_of_inverse_gap_cutoff {L q
       X N Y A hX hN hY hA hXN hXY hNY hAcap
       Ω hΩ e g t hg ht0.le hcut (by simpa only [hH] using heig)
       (by simpa only [hH] using hgap)
-  obtain ⟨hweak, θ, hθ⟩ := robust_ground_of_clipped_ground_gap I h hs h0 h1 a b z e g t
+  obtain ⟨hweak, θ, hθ⟩ := robust_ground_of_clipped_ground_gap I Φ h0 h1 a b z e g t
     X N Y hX hN hY hXN hXY hNY hB Ω hΩ he0 he6 hg hg1 htg heig e' φ hφ hφeig he'e
     hstrong horth
   exact ⟨e', φ, hφ, hφeig, he'0, he'e, hweak, θ, hθ⟩
@@ -247,23 +245,21 @@ The regional positivity and `0 ≤ e ≤ 6` are precisely the normalization
 of Section 6.1; commutations, decompositions and all analytic estimates
 are derived. Source: arXiv:1301.1162v1, Theorem 6.1 and Section 6.3. -/
 theorem normalized_chain_robustness_of_inverse_gap_cutoff {L q : ℕ}
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (a b : Fin (L - 1)) (hab : a.val < b.val) (x m y e g t : ℝ)
-    (hX : (leftCutBlock h a x).PosSemidef)
-    (hN : (middleCutBlock h a b m).PosSemidef)
-    (hY : (rightCutBlock h b y).PosSemidef)
+    (hX : (leftCutBlock Φ a x).PosSemidef)
+    (hN : (middleCutBlock Φ a b m).PosSemidef)
+    (hY : (rightCutBlock Φ b y).PosSemidef)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (he0 : 0 ≤ e) (he6 : e ≤ 6) (hg : 0 < g) (hg1 : g ≤ 1)
     (ht : 32768 / g ≤ t) :
     let ι := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-    let X := leftCutBlock h a x
-    let N := middleCutBlock h a b m
-    let Y := rightCutBlock h b y
-    let H := (∑ i, h i) - ((x + m + y : ℝ) : ℂ) • 1
-    let K := twoSidedEnergyTruncation X (N + (h a + h b)) Y t
+    let X := leftCutBlock Φ a x
+    let N := middleCutBlock Φ a b m
+    let Y := rightCutBlock Φ b y
+    let H := Φ.hamiltonian - ((x + m + y : ℝ) : ℂ) • 1
+    let K := twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
     ι H Ω = (e : ℂ) • Ω →
     (H - (e : ℂ) • 1 - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
@@ -273,12 +269,12 @@ theorem normalized_chain_robustness_of_inverse_gap_cutoff {L q : ℕ}
         (1 - Matrix.vecMulVec (WithLp.ofLp φ) (star (WithLp.ofLp φ)))).PosSemidef ∧
       ∃ θ : ℝ, ‖Ω - Complex.exp (θ * Complex.I) • φ‖ ^ 2 ≤ Real.exp (-t / 16) := by
   intro ι X N Y H _ heig hgap
-  obtain ⟨I, hB⟩ := exists_normalizedCutBlock_eq_sum_sub h a b hab x m y
-  obtain ⟨hXN, hXY, hNY⟩ := normalizedCutBlock_commutations h hs a b hab x m y
-  have hH : X + N + Y + (h a + h b) = H := normalizedCutBlock_sum h a b hab x m y
+  obtain ⟨I, hB⟩ := exists_normalizedCutBlock_eq_sum_sub Φ a b hab x m y
+  obtain ⟨hXN, hXY, hNY⟩ := normalizedCutBlock_commutations Φ a b hab x m y
+  have hH : X + N + Y + (Φ.term a + Φ.term b) = H := normalizedCutBlock_sum Φ a b hab x m y
   obtain ⟨e', φ, hφ, hφeig, he'0, he'e, hquad, θ, hθ⟩ :=
     exists_robust_ground_twoSidedEnergyTruncation_of_inverse_gap_cutoff
-      I h hs h0 h1 a b (x + m + y) e g t
+      I Φ h0 h1 a b (x + m + y) e g t
     X N Y hX hN hY hXN hXY hNY hB Ω hΩ he0 he6 hg hg1 ht
     (by simpa only [hH] using heig) (by
       intro v
@@ -286,10 +282,10 @@ theorem normalized_chain_robustness_of_inverse_gap_cutoff {L q : ℕ}
       rw [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin H] at hv
       change g * (‖v‖ ^ 2 - ‖⟪Ω, v⟫_ℂ‖ ^ 2) ≤ (⟪v, ι H v⟫_ℂ).re - e * ‖v‖ ^ 2 at hv
       simpa only [hH] using hv)
-  have hAHerm : (h a + h b).IsHermitian := IsSelfAdjoint.of_nonneg
+  have hAHerm : (Φ.term a + Φ.term b).IsHermitian := IsSelfAdjoint.of_nonneg
     (add_nonneg (h0 a) (h0 b))
   exact ⟨e', φ, hφ, hφeig, he'0, he'e,
-    posSemidef_gap_twoSidedEnergyTruncation_of_quadratic X N Y (h a + h b) hN.isHermitian
+    posSemidef_gap_twoSidedEnergyTruncation_of_quadratic X N Y (Φ.term a + Φ.term b) hN.isHermitian
       hAHerm t e' (g / 2) φ hquad, θ, hθ⟩
 
 end TNLean.MPS.AreaLaw.AKLV

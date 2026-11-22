@@ -86,23 +86,23 @@ theorem terminalPartition_collar_entropy_identity
   change Q = X ∪ positiveNear S.depth σ at hnear
   change positiveNear S.depth σ ∪ Y = positiveNearMiddle S.depth σ at hUYeq
   change V = (Q ∪ Y)ᶜ at hfar
-  have hpre : FiniteProduct.collarPreQuantity β Ωt X (positiveNear S.depth σ) Y V =
+  have hpre : ManyBody.collarPreQuantity β Ωt X (positiveNear S.depth σ) Y V =
       gpre := by
     change ManyBody.regionEntropy Ωt (X ∪ positiveNear S.depth σ) +
       ManyBody.regionEntropy Ωt V - ManyBody.regionEntropy Ωt Y =
       ManyBody.regionEntropy Ωt Q + ManyBody.regionEntropy Ωt (Q ∪ Y)ᶜ -
         ManyBody.regionEntropy Ωt Y
     rw [← hnear, hfar]
-  have hpost : FiniteProduct.collarPostQuantity β Ωt (positiveNear S.depth σ) Y =
+  have hpost : ManyBody.collarPostQuantity β Ωt (positiveNear S.depth σ) Y =
       gpost := by
-    unfold FiniteProduct.collarPostQuantity
+    unfold ManyBody.collarPostQuantity
     rw [hUYeq]
   have hid : 2 * ManyBody.regionEntropy Ωt X +
-      (FiniteProduct.collarPreQuantity β Ωt X (positiveNear S.depth σ) Y V -
-        FiniteProduct.collarPostQuantity β Ωt (positiveNear S.depth σ) Y) =
+      (ManyBody.collarPreQuantity β Ωt X (positiveNear S.depth σ) Y V -
+        ManyBody.collarPostQuantity β Ωt (positiveNear S.depth σ) Y) =
       ManyBody.regionMutualInformation Ωt X V +
         ManyBody.regionMutualInformation Ωt X (Y ∪ V) :=
-    FiniteProduct.collarLeaf_entropy_identity β Ωt hXU hXY hXV hUY hUV hYV hcover
+    ManyBody.collarLeaf_regionEntropy_identity β Ωt hXU hXY hXV hUY hUV hYV hcover
   rw [hpre, hpost] at hid
   simpa only [sub_eq_add_neg, add_assoc] using hid
 
@@ -145,22 +145,22 @@ theorem two_mutualInformation_le_actualTerminal_average
         Disjoint (Y j g) (V j g) ∧ X ∪ U j g ∪ Y j g ∪ V j g = Finset.univ ∧
         (S.truncationSet L)ᶜ ⊆ V j g :=
     terminalPartition_collar_geometry hT S hdepth H L hL j g
-  have hpre (j) (g) : FiniteProduct.collarPreQuantity β Ωt X (U j g) (Y j g) (V j g) =
+  have hpre (j) (g) : ManyBody.collarPreQuantity β Ωt X (U j g) (Y j g) (V j g) =
       gpre j g := by
     change ManyBody.regionEntropy Ωt (X ∪ U j g) + ManyBody.regionEntropy Ωt (V j g) -
       ManyBody.regionEntropy Ωt (Y j g) =
       ManyBody.regionEntropy Ωt (Q j g) + ManyBody.regionEntropy Ωt (Q j g ∪ Y j g)ᶜ -
         ManyBody.regionEntropy Ωt (Y j g)
     rw [← (hgeom j g).1, (hgeom j g).2.2.1]
-  have hpost (j) (g) : FiniteProduct.collarPostQuantity β Ωt (U j g) (Y j g) =
+  have hpost (j) (g) : ManyBody.collarPostQuantity β Ωt (U j g) (Y j g) =
       gpost j g := by
-    unfold FiniteProduct.collarPostQuantity
+    unfold ManyBody.collarPostQuantity
     rw [(hgeom j g).2.1]
   have hband (g : Fin S.K) :
       2 * ManyBody.regionMutualInformation Ωt X (S.truncationSet L)ᶜ ≤
         2 * ManyBody.regionEntropy Ωt X +
           ∑ j, tree.weight j * (gpre j g - gpost j g) := by
-    have havg := FiniteProduct.two_mutualInformation_le_collarLeaf_average β Ωt
+    have havg := ManyBody.two_regionMutualInformation_le_collarLeaf_average β Ωt
       Finset.univ tree.weight (fun j _ ↦ tree.weight_nonneg j)
       (by simpa using tree.sum_weight) X (S.truncationSet L)ᶜ
       (fun j ↦ U j g) (fun j ↦ Y j g) (fun j ↦ V j g)

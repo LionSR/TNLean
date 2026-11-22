@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.EncodedUniformMergingCircuit
-import TNLean.Circuit.QuantitativeSitePermutation
+import QICLean.Circuit.Compile.SwapRouting
+import QICLean.Circuit.Model.CleanWorkspace
 
 /-!
 # Exact encoded merging in the original site coordinates
@@ -28,49 +29,30 @@ namespace MPSPreparation
 
 variable {d n A : ℕ}
 
-/-- The inverse site permutation is the exact adjoint of its operator.
-
-See the coordinate changes in §5 of the circuit manuscript. -/
-theorem permOp_conjTranspose (τ : Equiv.Perm (Fin n)) :
-    (permOp (d := d) τ)ᴴ = permOp τ.symm :=
-  QuantumCircuit.permOp_conjTranspose τ
-
 /-- Pulling a logical matrix into permuted coordinates is adjoint conjugation.
 
 See the coordinate changes in §5 of the circuit manuscript. -/
-theorem permOp_conjTranspose_mul_mul (τ : Equiv.Perm (Fin n))
+theorem conjTranspose_sitePermOp_mul_mul (τ : Equiv.Perm (Fin n))
     (X : Matrix (Cfg d n) (Cfg d n) ℂ) :
-    (permOp τ)ᴴ * X * permOp τ = X.submatrix (· ∘ τ.symm) (· ∘ τ.symm) := by
-  simpa only [QuantumCircuit.permOp_conjTranspose, Equiv.symm_symm] using
-    permOp_mul_mul_conjTranspose τ.symm X
-
-/-- A permutation sends logical support to its image under that permutation.
-
-See the coordinate changes in §5 of the circuit manuscript. -/
-theorem permOp_conjugate_mem_supportedOperators (τ : Equiv.Perm (Fin n))
-    {S : Finset (Fin n)} {X : Matrix (Cfg d n) (Cfg d n) ℂ}
-    (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
-    permOp τ * X * (permOp τ)ᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image τ) := by
-  have hid : embedOp id X = X := by
-    ext x y
-    rw [embedOp_apply,
-      ite_eq_left (show AgreeOff id x y from fun i hi ↦ absurd rfl (hi i))]
-    rfl
-  have heq : permOp τ * X * (permOp τ)ᴴ = embedOp τ X := by
-    rw [permOp_mul_mul_conjTranspose]
-    conv_lhs => rw [← hid, embedOp_submatrix_perm]
-    rfl
-  rw [heq]
-  exact embedOp_mem_supportedOperators_image τ.injective hX
+    (ManyBody.sitePermOp (α := Fin d) τ)ᴴ * X * ManyBody.sitePermOp τ =
+      X.submatrix (· ∘ τ.symm) (· ∘ τ.symm) := by
+  have h : ManyBody.sitePermOp (α := Fin d) τ = (ManyBody.sitePermOp (α := Fin d) τ⁻¹)ᴴ := by
+    rw [ManyBody.conjTranspose_sitePermOp, inv_inv]
+  rw [ManyBody.conjTranspose_sitePermOp, h]
+  ext x y
+  simp only [mul_apply, ManyBody.sitePermOp_apply, conjTranspose_apply, submatrix_apply, ite_mul,
+    one_mul, zero_mul, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
+  simp [apply_ite star, Equiv.Perm.coe_inv]
 
 /-- Multiplication by a site permutation reindexes the rows of any rectangular matrix.
 
 See the coordinate changes in §5 of the circuit manuscript. -/
-theorem permOp_mul_rectangular {κ : Type*} (τ : Equiv.Perm (Fin n))
+theorem sitePermOp_mul_rectangular {κ : Type*} (τ : Equiv.Perm (Fin n))
     (F : Matrix (Cfg d n) κ ℂ) :
-    (permOp (d := d) τ * F : Matrix (Cfg d n) κ ℂ) = F.submatrix (· ∘ τ) id := by
+    (ManyBody.sitePermOp (α := Fin d) τ * F : Matrix (Cfg d n) κ ℂ) =
+      F.submatrix (· ∘ τ) id := by
   ext x i
-  simp only [Matrix.mul_apply, permOp, Matrix.of_apply, Matrix.submatrix_apply,
+  simp only [Matrix.mul_apply, ManyBody.sitePermOp_apply, Matrix.submatrix_apply,
     ite_mul, one_mul, zero_mul, Finset.sum_ite_eq', Finset.mem_univ, ite_true,
     id_eq]
 
@@ -85,24 +67,26 @@ theorem conjugate_workspaceFixedSitePerm_columns {κ : Type*}
     (C : Matrix (Cfg d (n + A)) (Cfg d (n + A)) ℂ)
     (E F : Matrix (Cfg d n) κ ℂ)
     (hcolumns : C *
-        (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := n) (a := A)) * E) =
-      initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := n) (a := A)) * F) :
-    ((permOp (workspaceFixedSitePerm (a := A) τ) * C *
-        (permOp (workspaceFixedSitePerm (a := A) τ))ᴴ) *
-        (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := n) (a := A)) *
-          (permOp (d := d) τ * E : Matrix (Cfg d n) κ ℂ)) : Matrix (Cfg d (n + A)) κ ℂ) =
-      initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := n) (a := A)) *
-        (permOp (d := d) τ * F : Matrix (Cfg d n) κ ℂ) := by
-  let J := initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := n) (a := A))
-  let Q := permOp (d := d) (workspaceFixedSitePerm (a := A) τ)
-  let P := permOp (d := d) τ
-  have hQJ : Q * J = J * P := isCleanImplementation_permOp_workspaceFixedSitePerm τ
+        (basisInclusion (workspaceEmbedding (n := n) (0 : Fin A → Fin d)) * E) =
+      basisInclusion (workspaceEmbedding (n := n) (0 : Fin A → Fin d)) * F) :
+    ((ManyBody.sitePermOp (α := Fin d) (workspaceFixedSitePerm (a := A) τ) * C *
+        (ManyBody.sitePermOp (α := Fin d) (workspaceFixedSitePerm (a := A) τ))ᴴ) *
+        (basisInclusion (workspaceEmbedding (n := n) (0 : Fin A → Fin d)) *
+          (ManyBody.sitePermOp (α := Fin d) τ * E : Matrix (Cfg d n) κ ℂ)) :
+          Matrix (Cfg d (n + A)) κ ℂ) =
+      basisInclusion (workspaceEmbedding (n := n) (0 : Fin A → Fin d)) *
+        (ManyBody.sitePermOp (α := Fin d) τ * F : Matrix (Cfg d n) κ ℂ) := by
+  let J := basisInclusion (workspaceEmbedding (n := n) (0 : Fin A → Fin d))
+  let Q := ManyBody.sitePermOp (α := Fin d) (workspaceFixedSitePerm (a := A) τ)
+  let P := ManyBody.sitePermOp (α := Fin d) τ
+  have hroute := isCleanImplementation_sitePermOp_workspaceFixedSitePerm
+    (0 : Fin A → Fin d) τ
+  have hQJ : Q * J = J * P := hroute
   have hQHJ : Qᴴ * J = J * Pᴴ :=
-    (isCleanImplementation_permOp_workspaceFixedSitePerm (d := d) (a := A) τ).conjTranspose
-      (permOp_mem_unitary _) (permOp_mem_unitary _)
+    hroute.conjTranspose (ManyBody.sitePermOp_mem_unitary _) (ManyBody.sitePermOp_mem_unitary _)
   have hPunitary : Pᴴ * P = 1 := by
     simpa only [Matrix.star_eq_conjTranspose] using
-      Unitary.star_mul_self_of_mem (permOp_mem_unitary (d := d) τ)
+      Unitary.star_mul_self_of_mem (ManyBody.sitePermOp_mem_unitary (α := Fin d) τ)
   have hinput : Qᴴ * (J * (P * E)) = J * E := by
     rw [← Matrix.mul_assoc, hQHJ]
     calc
@@ -143,12 +127,12 @@ theorem exists_permuted_encoded_uniform_merging_circuit
         siteEquiv.symm '' support)
     (Z₁ Z₂ : Matrix (Cfg d L) (Cfg d L) ℂ)
     (C₁ C₂ : Matrix (Cfg d (L + A)) (Cfg d (L + A)) ℂ)
-    (hC₁ : IsPairProduct d (L + A) K₁ C₁)
-    (hC₂ : IsPairProduct d (L + A) K₂ C₂)
+    (hC₁ : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (L + A))) K₁ C₁)
+    (hC₂ : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (L + A))) K₂ C₂)
     (hclean₁ : IsCleanImplementation
-      (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := L) (a := A))) C₁ Z₁)
+      (basisInclusion (workspaceEmbedding (n := L) (0 : Fin A → Fin d))) C₁ Z₁)
     (hclean₂ : IsCleanImplementation
-      (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := L) (a := A))) C₂ Z₂)
+      (basisInclusion (workspaceEmbedding (n := L) (0 : Fin A → Fin d))) C₂ Z₂)
     (hZ₁support : Z₁ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support)
     (hZ₂support : Z₂ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support)
     (V : Matrix (ρ × (Fin r × Fin r))
@@ -156,86 +140,88 @@ theorem exists_permuted_encoded_uniform_merging_circuit
     (hchild :
       (Z₁.submatrix (· ∘ siteEquiv.symm) (· ∘ siteEquiv.symm) *
         Z₂.submatrix (· ∘ siteEquiv.symm) (· ∘ siteEquiv.symm)) *
-          initializedBasisMatrix (zeroFlagEmbedding (d := d) s) =
-      initializedBasisMatrix
+          basisInclusion (zeroFlagEmbedding (d := d) s) =
+      basisInclusion
         (appendBasisEmbedding f (compatibleBondDilationEmbedding hd e)) *
         ((1 : Matrix ρ ρ ℂ) ⊗ₖ
-          initializedBasisMatrix (joiningChildBasisEmbedding (r := r) hd)) * V)
+          basisInclusion (joiningChildBasisEmbedding (r := r) hd)) * V)
     (hparent : (normalizedJoiningParent hr P V).IsIsometry) :
     ∃ Z : Matrix (Cfg d L) (Cfg d L) ℂ,
     ∃ C : Matrix (Cfg d (L + A)) (Cfg d (L + A)) ℂ,
       Z ∈ unitary (Matrix (Cfg d L) (Cfg d L) ℂ) ∧
       Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support ∧
-      IsPairProduct d (L + A)
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (L + A)))
         (encodedUniformMergingGateCount d q L A b
           (K₁ + 4 * (L + A) ^ 2) (K₂ + 4 * (L + A) ^ 2) r + 4 * (L + A) ^ 2) C ∧
       IsCleanImplementation
-        (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := L) (a := A))) C Z ∧
-      C * (initializedBasisMatrix
-          (zeroWorkspaceEmbedding (d := d) (n := L) (a := A)) *
-        (initializedBasisMatrix (zeroFlagEmbedding (d := d) s)).submatrix
+        (basisInclusion (workspaceEmbedding (n := L) (0 : Fin A → Fin d))) C Z ∧
+      C * (basisInclusion
+          (workspaceEmbedding (n := L) (0 : Fin A → Fin d)) *
+        (basisInclusion (zeroFlagEmbedding (d := d) s)).submatrix
           (fun x : Cfg d L ↦ x ∘ siteEquiv) id) =
-        initializedBasisMatrix
-          (zeroWorkspaceEmbedding (d := d) (n := L) (a := A)) *
+        basisInclusion
+          (workspaceEmbedding (n := L) (0 : Fin A → Fin d)) *
           (encodedJoiningParent hd hr f e P V).submatrix
             (fun x : Cfg d L ↦ x ∘ siteEquiv) id := by
   have hlength : a + (2 * q + 2) = L := by
     simpa only [Fintype.card_fin] using Fintype.card_congr siteEquiv
   subst L
-  let J := initializedBasisMatrix
-    (zeroWorkspaceEmbedding (d := d) (n := a + (2 * q + 2)) (a := A))
-  let Q := permOp (d := d) (workspaceFixedSitePerm (a := A) siteEquiv)
-  let R := permOp (d := d) siteEquiv
-  have hroute := isCleanImplementation_permOp_workspaceFixedSitePerm (d := d) (a := A) siteEquiv
-  have hrouteAdj := hroute.conjTranspose (permOp_mem_unitary _) (permOp_mem_unitary _)
-  have hQ : IsPairProduct d ((a + (2 * q + 2)) + A)
-      (2 * ((a + (2 * q + 2)) + A) ^ 2) Q := isPairProduct_permOp _
-  have hC₁' := ((hQ.star.mul hC₁).mul hQ).mono
+  let Q := ManyBody.sitePermOp (α := Fin d) (workspaceFixedSitePerm (a := A) siteEquiv)
+  let R := ManyBody.sitePermOp (α := Fin d) siteEquiv
+  have hroute := isCleanImplementation_sitePermOp_workspaceFixedSitePerm
+    (0 : Fin A → Fin d) siteEquiv
+  have hrouteAdj := hroute.conjTranspose (ManyBody.sitePermOp_mem_unitary _)
+    (ManyBody.sitePermOp_mem_unitary _)
+  have hQ : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph ((a + (2 * q + 2)) + A)))
+      (2 * ((a + (2 * q + 2)) + A) ^ 2) Q := isGateProduct_sitePermOp _
+  have hC₁' := ((hQ.conjTranspose.mul hC₁).mul hQ).mono
     (le_of_eq (by ring :
       (2 * ((a + (2 * q + 2)) + A) ^ 2 + K₁) +
           2 * ((a + (2 * q + 2)) + A) ^ 2 =
         K₁ + 4 * ((a + (2 * q + 2)) + A) ^ 2))
-  have hC₂' := ((hQ.star.mul hC₂).mul hQ).mono
+  have hC₂' := ((hQ.conjTranspose.mul hC₂).mul hQ).mono
     (le_of_eq (by ring :
       (2 * ((a + (2 * q + 2)) + A) ^ 2 + K₂) +
           2 * ((a + (2 * q + 2)) + A) ^ 2 =
         K₂ + 4 * ((a + (2 * q + 2)) + A) ^ 2))
   have hclean₁' := (hrouteAdj.mul hclean₁).mul hroute
   have hclean₂' := (hrouteAdj.mul hclean₂).mul hroute
-  rw [permOp_conjTranspose_mul_mul siteEquiv Z₁] at hclean₁'
-  rw [permOp_conjTranspose_mul_mul siteEquiv Z₂] at hclean₂'
+  rw [conjTranspose_sitePermOp_mul_mul siteEquiv Z₁] at hclean₁'
+  rw [conjTranspose_sitePermOp_mul_mul siteEquiv Z₂] at hclean₂'
   obtain ⟨Z, W, hW, hZ, hWclean, _, hcolumns, hsupport⟩ :=
     exists_encoded_uniform_merging_circuit hd hr f e he hP s hpool hpool₂
       _ _ (Qᴴ * C₁ * Q) (Qᴴ * C₂ * Q) hC₁' hC₂' hclean₁' hclean₂' V hchild hparent
-  have hnew := isPairProduct_isCleanImplementation_conjugate_workspaceFixedSitePerm
-    siteEquiv hW hWclean
-  have hZ₁' : Z₁.submatrix (· ∘ siteEquiv.symm) (· ∘ siteEquiv.symm) ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin d) (support.image siteEquiv.symm) := by
-    rw [← permOp_conjTranspose_mul_mul]
-    simpa only [QuantumCircuit.permOp_conjTranspose, Equiv.symm_symm] using
-      permOp_conjugate_mem_supportedOperators siteEquiv.symm hZ₁support
-  have hZ₂' : Z₂.submatrix (· ∘ siteEquiv.symm) (· ∘ siteEquiv.symm) ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin d) (support.image siteEquiv.symm) := by
-    rw [← permOp_conjTranspose_mul_mul]
-    simpa only [QuantumCircuit.permOp_conjTranspose, Equiv.symm_symm] using
-      permOp_conjugate_mem_supportedOperators siteEquiv.symm hZ₂support
-  have hZsupport := hsupport (support.image siteEquiv.symm) hZ₁' hZ₂'
+  have hnew := And.intro
+    (IsGateProduct.sitePermOp_mul_mul_conjTranspose (workspaceFixedSitePerm (a := A) siteEquiv) hW)
+    (IsCleanImplementation.conjugate_workspaceFixedSitePerm siteEquiv hWclean)
+  have hpull : ∀ Y : Matrix (Cfg d (a + (2 * q + 2))) (Cfg d (a + (2 * q + 2))) ℂ,
+      Y ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support →
+      Y.submatrix (· ∘ siteEquiv.symm) (· ∘ siteEquiv.symm) ∈
+        ManyBody.supportedOperators (fun _ ↦ Fin d) (support.image siteEquiv.symm) := by
+    intro Y hY
+    have h := ManyBody.sitePermOp_mul_mul_conjTranspose_mem_supportedOperators (α := Fin d)
+      siteEquiv⁻¹ hY
+    rw [ManyBody.conjTranspose_sitePermOp, inv_inv] at h
+    rw [← conjTranspose_sitePermOp_mul_mul, ManyBody.conjTranspose_sitePermOp]
+    simpa only [Equiv.Perm.coe_inv] using h
+  have hZsupport := hsupport (support.image siteEquiv.symm) (hpull Z₁ hZ₁support)
+    (hpull Z₂ hZ₂support)
     (by simpa only [Finset.coe_image] using hinputSupport)
     (by simpa only [Finset.coe_image] using hpacketSupport)
   have hreturnedSupport : R * Z * Rᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support := by
     simpa only [Finset.image_image, Function.comp_def, Equiv.apply_symm_apply,
         Finset.image_id'] using
-      permOp_conjugate_mem_supportedOperators siteEquiv hZsupport
-  have hreturnedUnitary := hnew.2.logical_mem_unitary
-    (initializedBasisMatrix_isIsometry _) hnew.1.mem_unitary
+      ManyBody.sitePermOp_mul_mul_conjTranspose_mem_supportedOperators siteEquiv hZsupport
+  have hreturnedUnitary := hnew.2.logical_mem_unitaryGroup
+    (basisInclusion_isIsometry _) hnew.1.mem_unitaryGroup
   refine ⟨R * Z * Rᴴ, Q * W * Qᴴ, hreturnedUnitary, hreturnedSupport,
     hnew.1, hnew.2, ?_⟩
   have hreturnedColumns := conjugate_workspaceFixedSitePerm_columns siteEquiv W
-    (initializedBasisMatrix (zeroFlagEmbedding (d := d) s))
+    (basisInclusion (zeroFlagEmbedding (d := d) s))
     (encodedJoiningParent hd hr f e P V) hcolumns
-  rw [permOp_mul_rectangular (d := d) siteEquiv
-    (initializedBasisMatrix (zeroFlagEmbedding (d := d) s)),
-    permOp_mul_rectangular (d := d) siteEquiv (encodedJoiningParent hd hr f e P V)]
+  rw [sitePermOp_mul_rectangular (d := d) siteEquiv
+    (basisInclusion (zeroFlagEmbedding (d := d) s)),
+    sitePermOp_mul_rectangular (d := d) siteEquiv (encodedJoiningParent hd hr f e P V)]
     at hreturnedColumns
   exact hreturnedColumns
 

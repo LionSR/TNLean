@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Overlap.Basic
-import TNLean.Circuit.CleanUnitaryImplementation
+import QICLean.Circuit.Compile.ChainUniversality
+import QICLean.Circuit.Model.CleanWorkspace
 import TNLean.MPS.MPU.RegisterLayout
 
 /-!
@@ -74,16 +75,16 @@ theorem exists_leaf_logical_unitary [Fintype ρ] [Fintype σ]
     {V : Matrix (Fin d × (ρ × σ)) (Fin d) ℂ} (hV : V.IsIsometry) :
     ∃ Z : Matrix (Cfg d (1 + (qρ + qσ))) (Cfg d (1 + (qρ + qσ))) ℂ,
       Z ∈ unitary (Matrix (Cfg d (1 + (qρ + qσ))) (Cfg d (1 + (qρ + qσ))) ℂ) ∧
-      Z * initializedBasisMatrix (leafInputEmbedding (d := d) (qρ := qρ) (qσ := qσ)) =
-        initializedBasisMatrix (leafOutputEmbedding eρ eσ) * V := by
+      Z * basisInclusion (leafInputEmbedding (d := d) (qρ := qρ) (qσ := qσ)) =
+        basisInclusion (leafOutputEmbedding eρ eσ) * V := by
   classical
-  have hencoded := (initializedBasisMatrix_isIsometry (leafOutputEmbedding eρ eσ)).mul
+  have hencoded := (basisInclusion_isIsometry (leafOutputEmbedding eρ eσ)).mul
     _ _ hV
   obtain ⟨Z, hZ, hcolumns⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq
     hencoded (leafInputEmbedding (d := d) (qρ := qρ) (qσ := qσ))
   refine ⟨Z, hZ, ?_⟩
-  rw [mul_initializedBasisMatrix]
   ext x y
+  rw [mul_basisInclusion_apply]
   exact hcolumns x y
 
 /-- An encoded one-site interval has an actual neighboring-pair circuit with
@@ -98,17 +99,22 @@ theorem exists_exact_clean_leaf_circuit [Fintype ρ] [Fintype σ]
     ∃ U : Matrix (Cfg d ((1 + (qρ + qσ)) + 1))
         (Cfg d ((1 + (qρ + qσ)) + 1)) ℂ,
       Z ∈ unitary (Matrix (Cfg d (1 + (qρ + qσ))) (Cfg d (1 + (qρ + qσ))) ℂ) ∧
-      Z * initializedBasisMatrix (leafInputEmbedding (d := d) (qρ := qρ) (qσ := qσ)) =
-        initializedBasisMatrix (leafOutputEmbedding eρ eσ) * V ∧
-      IsPairProduct d ((1 + (qρ + qσ)) + 1)
+      Z * basisInclusion (leafInputEmbedding (d := d) (qρ := qρ) (qσ := qσ)) =
+        basisInclusion (leafOutputEmbedding eρ eσ) * V ∧
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph ((1 + (qρ + qσ)) + 1)))
         (38 * (d ^ ((1 + (qρ + qσ)) + 1)) ^ 6) U ∧
       IsCleanImplementation
-        (initializedBasisMatrix
-          (zeroWorkspaceEmbedding (d := d) (n := 1 + (qρ + qσ)) (a := 1))) U Z := by
+        (basisInclusion
+          (workspaceEmbedding (n := 1 + (qρ + qσ)) (0 : Fin 1 → Fin d))) U Z := by
   obtain ⟨Z, hZ, hcolumns⟩ := exists_leaf_logical_unitary eρ eσ hV
-  obtain ⟨U, hU, hclean⟩ := exists_isPairProduct_isCleanImplementation hd (by omega)
-    (zeroWorkspaceEmbedding (d := d) (n := 1 + (qρ + qσ)) (a := 1)) hZ
-  exact ⟨Z, U, hZ, hcolumns, hU, hclean⟩
+  obtain ⟨U, hU, hclean⟩ := exists_isGateProduct_isCleanImplementation
+    (fun U hU ↦ isGateProduct_pathGraph_le_card_pow (n := (1 + (qρ + qσ)) + 1) (α := Fin d)
+      (by simpa only [Fintype.card_fin] using hd) hU)
+    (workspaceEmbedding (n := 1 + (qρ + qσ)) (0 : Fin 1 → Fin d)) hZ
+  refine ⟨Z, U, hZ, hcolumns, hU.mono ?_, hclean⟩
+  rw [Fintype.card_fin]
+  exact Nat.mul_le_mul (by norm_num)
+    (Nat.pow_le_pow_right (pow_pos (by omega : 0 < d) _) (by norm_num))
 
 omit [NeZero d] in
 /-- The Hilbert-space dimension of the leaf packet with its reusable

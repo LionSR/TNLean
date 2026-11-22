@@ -7,7 +7,7 @@ import TNLean.MPS.MPU.IntervalJointFlagInitialization
 import TNLean.MPS.MPU.MinimalIntervalColumns
 import TNLean.MPS.MPU.MinimalCutJoiningParent
 import TNLean.MPS.MPU.IntervalInitializationBounds
-import TNLean.Circuit.InitializedRegisterProjection
+import QICLean.Circuit.Protocol.ZeroRegister.Projection
 
 /-!
 # The actual initialized input of an interval merge
@@ -409,13 +409,13 @@ theorem minimalIntervalJointInitializedChildColumns_of_supported_individual {d D
         (intervalConsecutiveSupport d D N m.val k.val))
     (hX : IsMinimalIntervalColumnImplementation hd U hU hbound B P j m (Nat.le_of_lt hjm) X)
     (hY : IsMinimalIntervalColumnImplementation hd U hU hbound B P m k (Nat.le_of_lt hmk) Y) :
-    (X * Y) * initializedBasisMatrix
+    (X * Y) * basisInclusion
       (jointPlacedBasisEmbedding (intervalPacketSites d D N j.val m.val)
         (intervalPacketSites d D N m.val k.val)
           (intervalPacketSites_disjoint (d := d) (D := D) (N := N) hjm hmk)
         (intervalInputEmbedding j.val m.val) (intervalInputEmbedding m.val k.val)
         (intervalJointInitializedOutsideEmbedding (d := d) (D := D) j m k hjm hmk)) =
-      initializedBasisMatrix
+      basisInclusion
         (jointPlacedBasisEmbedding (intervalPacketSites d D N j.val m.val)
           (intervalPacketSites d D N m.val k.val)
           (intervalPacketSites_disjoint (d := d) (D := D) (N := N) hjm hmk)

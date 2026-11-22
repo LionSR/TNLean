@@ -77,17 +77,19 @@ theorem continuous_parentInteraction_matrix_family
 /-- For an injective tensor, a canonical parent norm gap is a spectral gap
 above the zero ground energy. Source: arXiv:1010.3732, Section II.C and
 Appendix A, spectral interpretation of the parent gap. -/
-theorem interactionHamiltonian_parent_spectrum_gap
+theorem hamiltonian_translationInvariant_parent_spectrum_gap
     {d D N : ℕ} [NeZero D] (A : MPSTensor d D) (hInj : Kraus.IsInjective A)
     (hN : 2 ≤ N) {δ : ℝ}
     (hGap : ∀ v ∈ (LinearMap.ker (parentHamiltonianES A 2 N))ᗮ,
       δ * ‖v‖ ≤ ‖parentHamiltonianES A 2 N v‖) :
-    let H := interactionHamiltonian (LinearMap.toMatrix' (parentInteraction A 2)) hN
+    let H := (ManyBody.Interaction.translationInvariant hN
+      (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian
     (0 : ℂ) ∈ spectrum ℂ H ∧
       ∀ z ∈ spectrum ℂ H, 0 ≤ z.re ∧ (z.re = 0 ∨ δ ≤ z.re) := by
-  let H := interactionHamiltonian (LinearMap.toMatrix' (parentInteraction A 2)) hN
+  let H := (ManyBody.Interaction.translationInvariant hN
+    (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian
   have hH : parentHamiltonianES A 2 N = Matrix.toEuclideanLin H :=
-    parentHamiltonianES_eq_toEuclideanLin_sum_embedLocalOperator A hN
+    parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow A hN
   constructor
   · change (0 : ℂ) ∈ spectrum ℂ H
     rw [← Matrix.spectrum_toLpLin (p := 2)]
@@ -147,11 +149,11 @@ noncomputable def canonicalInjectiveGappedPath
         (fun γ => hInj γ γ.property) isCompact_univ
     refine ⟨δ, hδ, fun γ hγ N hN => ⟨0, ?_⟩⟩
     simpa only [Complex.ofReal_zero, zero_add] using
-      interactionHamiltonian_parent_spectrum_gap (A γ) (hInj γ hγ) hN
+      hamiltonian_translationInvariant_parent_spectrum_gap (A γ) (hInj γ hγ) hN
         (hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN)
   symmetric γ hγ g N hN := by
     rw [← onSiteTensorPow_eq_finKronecker]
-    have hSym := interactionHamiltonian_commute_onSiteTensorPow (U g)
+    have hSym := hamiltonian_translationInvariant_commute_onSiteTensorPow (U g)
       (LinearMap.toMatrix' (parentInteraction (A γ) 2)) hN
       (parentInteraction_matrix_commute_onSiteTensorPow (A γ) (U g)
         (SetLike.coe_mem _) (hCov γ hγ g) 2)

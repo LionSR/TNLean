@@ -16,7 +16,7 @@ permitted within one block
 \begin{definition}[Onsite instruments with conditional continuation]
     \label{def:qc_onsite_feedforward}
     \uses{def:qc_onsite_channel}
-    \lean{QuantumCircuit.OnsiteChannel.feedforwardMap}
+    \lean{KrausFamily.map}
     \leanok
     An onsite instrument has local Kraus operators $K_{i,j}$ satisfying
     $\sum_jK_{i,j}^{\dagger}K_{i,j}=I$. For the communicated tuple of outcomes
@@ -32,16 +32,13 @@ permitted within one block
 \begin{lemma}[Trace preservation with classical feedforward]
     \label{thm:qc_onsite_feedforward_cptp}
     \uses{def:qc_onsite_feedforward}
-    \lean{QuantumCircuit.OnsiteChannel.feedforwardMap_isKrausCPTP,
-        QuantumCircuit.OnsiteChannel.feedforwardMap_const,
-        QuantumCircuit.OnsiteChannel.comp_feedforwardMap}
+    \lean{KrausFamily.IsTP.isKrausCPTP_sum_comp,
+        KrausFamily.sum_comp_singleKrausMap_const}
     \leanok
     If each $\Psi_J$ is trace preserving and completely positive, then so is
     $\mathcal F$. If $\Psi_J=\Psi$ is independent of $J$, then
     $\mathcal F=\Psi\circ\Phi$, where $\Phi$ is the channel of the onsite
-    instrument with its outcomes forgotten. A further linear map $\Theta$
-    may be composed into every continuation in
-    (\ref{eq:qc_onsite_feedforward}).
+    instrument with its outcomes forgotten.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -52,7 +49,8 @@ permitted within one block
          & =\sum_JK_J^{\dagger}\Bigl(\sum_aB_{J,a}^{\dagger}B_{J,a}\Bigr)K_J
         =\sum_JK_J^{\dagger}K_J=I, \notag
     \end{align}
-    and the two composition identities follow by linearity of the finite sum.
+    and the identity for a constant continuation follows by linearity of the
+    finite sum.
 \end{proof}
 
 \begin{definition}[Finite adaptive local protocol]
@@ -75,9 +73,9 @@ permitted within one block
     \label{thm:qc_adaptive_protocol_properties}
     \uses{def:qc_adaptive_protocol}
     \lean{QuantumCircuit.IsAdaptiveProtocol.isKrausCPTP,
-        QuantumCircuit.IsAdaptiveChannelProtocol.onsite_comp,
+        QuantumCircuit.IsAdaptiveProtocol.step,
         QuantumCircuit.IsAdaptiveProtocol.comp,
-        QuantumCircuit.IsAdaptiveChannelProtocol.channelLayer,
+        QuantumCircuit.IsAdaptiveProtocol.mono,
         QuantumCircuit.IsProtocol.adaptive,
         QuantumCircuit.IsAdaptiveConversion.refl,
         QuantumCircuit.IsAdaptiveConversion.mono,
@@ -110,7 +108,7 @@ permitted within one block
 \begin{definition}[The average channel of a measurement round]
     \label{def:qc_measurement_round_channel}
     \uses{def:qc_measurement_rounds}
-    \lean{QuantumCircuit.MeasurementRound.map}
+    \lean{QuantumCircuit.Circuit.map}
     \leanok
     For a measurement round with circuit $U$, outcome projectors $P_m$, and
     conditional product unitaries $V_m$, its average channel is
@@ -120,10 +118,9 @@ permitted within one block
 \begin{lemma}[Measurement rounds act on density matrices]
     \label{thm:qc_measurement_round_channel}
     \uses{def:qc_measurement_round_channel, def:qc_measurement_rounds}
-    \lean{QuantumCircuit.MeasurementRound.sum_kraus,
-        QuantumCircuit.MeasurementRound.map_isKrausCPTP,
-        QuantumCircuit.MeasurementRound.map_vecMulVec,
-        QuantumCircuit.MeasurementRound.map_vecMulVec_of_isPreparationOf}
+    \lean{QuantumCircuit.Circuit.map_vecMulVec,
+        QuantumCircuit.Circuit.IsImplementationOn.map_vecMulVec_eq,
+        QuantumCircuit.IsMeasurementConversion.isAdaptiveConversion}
     \leanok
     The average map of a measurement round is trace preserving and
     completely positive. On a pure input $\ket v\bra v$, its output is
@@ -147,7 +144,7 @@ permitted within one block
 \begin{lemma}[Measurement rounds are adaptive protocols]
     \label{thm:qc_measurement_round_adaptive}
     \uses{def:qc_measurement_round_channel, def:qc_adaptive_protocol}
-    \lean{QuantumCircuit.MeasurementRound.adaptive}
+    \lean{QuantumCircuit.Circuit.isAdaptiveProtocol_map}
     \leanok
     The average channel of a computational-basis measurement round is a
     finite adaptive protocol whose quantum-depth bound is the length of

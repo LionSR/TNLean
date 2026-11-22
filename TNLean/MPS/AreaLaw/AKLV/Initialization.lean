@@ -154,15 +154,13 @@ Section 6.1, lines 1016--1024. The product overlap is with the clipped target. -
 theorem exists_aklv_physical_product_initialization :
     ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧
       ∀ (L q a : ℕ)
-        (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+        (Φ : ManyBody.BondInteraction L q)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) → ‖Ω‖ = 1 →
-      (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
-      ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+      (∀ i, 0 ≤ Φ.term i) → (∀ i, Φ.term i ≤ 1) → ‖Ω‖ = 1 →
+      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
+      (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-      0 < g → mu + g ∈ spectrum ℝ (∑ i, h i) →
+      0 < g → mu + g ∈ spectrum ℝ Φ.hamiltonian →
       let u : ℝ := 1 + Real.log (q : ℝ) + Real.log (1 / g)
       let s : ℕ := ⌈A * u ^ 2 / g⌉₊
       let t0 : ℝ := 1024 + 16 * Real.log (1 / g)
@@ -173,10 +171,10 @@ theorem exists_aklv_physical_product_initialization :
       ∃ (e : Fin 3 → ℝ) (E0 E : ℝ) (φ : EuclideanSpace ℂ (Fin L → Fin q))
         (p : Polynomial ℝ),
         (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
-          (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
-          ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+          (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
+          ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
         E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t0 Finset.univ
+        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t0 Finset.univ
         B.PosSemidef ∧ ‖B‖ ≤ 2 * t0 + (s : ℝ) ∧ 0 ≤ E ∧ ‖φ‖ = 1 ∧
         toEuclideanLin B φ = (E : ℂ) • φ ∧
         (B - (E : ℂ) • 1 - ((9 * g / 10 : ℝ) : ℂ) •
@@ -202,11 +200,11 @@ theorem exists_aklv_physical_product_initialization :
           ‖ψ - φ‖ ^ 2 ≤ 1 / 64 ∧ ‖ψ - Ω‖ ^ 2 ≤ 1 / 16 := by
   obtain ⟨A, hA, hA21, hphysical⟩ := exists_aklv_physical_favorable_filter
   refine ⟨A, hA, hA21, ?_⟩
-  intro L q a h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited u s t0 D ha
+  intro L q a Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited u s t0 D ha
   obtain ⟨hq, hg1, hs, hdelta, htrade, hlogD, e, E0, E, φ, p,
       hregional, hEeq, hE0, hE6, hBpos, hBnorm, hE, hφ, heigen, hprojector,
       hclose, hdegree, hpE, hfix, hrank, _herr, hperp⟩ :=
-    hphysical L q a h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited ha
+    hphysical L q a Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited ha
   let delta : ℝ := 4 * Real.exp (-(4 * (s ^ 2 : ℕ) *
     Real.sqrt ((9 * g / 10) / (2 * t0 + (s : ℝ)))))
   change 0 < delta at hdelta
@@ -218,7 +216,7 @@ theorem exists_aklv_physical_product_initialization :
     exists_cut_product_filtered_output _ φ hφ hfix hdelta.le hD hperp hrank
       (by linarith)
   let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-    Polynomial.aeval (aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t0 Finset.univ) p
+    Polynomial.aeval (aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t0 Finset.univ) p
   let ψ := c • (‖toEuclideanLin K χ‖⁻¹ : ℂ) • toEuclideanLin K χ
   have hψφ : ‖ψ - φ‖ ^ 2 ≤ 1 / 64 := by
     calc

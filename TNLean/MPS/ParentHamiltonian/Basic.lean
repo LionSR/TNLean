@@ -55,15 +55,14 @@ theorem parentInteraction_eq_of_groundSpace_eq {A B : MPSTensor d D} {L : ℕ}
 theorem localTerm_eq_of_parentInteraction_eq {A B : MPSTensor d D} {L : ℕ}
     (h : parentInteraction A L = parentInteraction B L) (N : ℕ) (i : Fin N) :
     localTerm A L N i = localTerm B L N i := by
-  unfold localTerm
-  rw [h]
+  simp only [localTerm, parentRingInteraction, h]
 
 /-- Two tensors with the same local MPS space at length \(L\) have the same
 finite-chain parent Hamiltonian on every periodic chain. -/
 theorem parentHamiltonian_eq_of_groundSpace_eq {A B : MPSTensor d D} {L : ℕ}
     (h : groundSpace A L = groundSpace B L) (N : ℕ) :
     parentHamiltonian A L N = parentHamiltonian B L N := by
-  unfold parentHamiltonian
+  rw [parentHamiltonian_eq_sum_localTerm, parentHamiltonian_eq_sum_localTerm]
   exact Finset.sum_congr rfl fun i _ =>
     localTerm_eq_of_parentInteraction_eq
       (parentInteraction_eq_of_groundSpace_eq h) N i
@@ -82,16 +81,6 @@ theorem GaugeEquiv.localTerm_eq {A B : MPSTensor d D}
     (h : GaugeEquiv A B) (L N : ℕ) (i : Fin N) :
     localTerm A L N i = localTerm B L N i :=
   localTerm_eq_of_parentInteraction_eq (h.parentInteraction_eq L) N i
-
-/-- Pointwise formula for a translated local term when the window length is at
-most the chain length. -/
-@[simp] theorem localTerm_apply_of_le (A : MPSTensor d D) (L N : ℕ)
-    (hLN : L ≤ N) (i : Fin N) (ψ : NSiteSpace d N) (σ : Cfg d N) :
-    localTerm A L N i ψ σ =
-      parentInteraction A L
-        (fun τ => ψ (replaceWindow L hLN i σ τ)) (extractWindow L i σ) := by
-  rw [localTerm, dite_eq_left hLN]
-  rfl
 
 /-- Every translated local parent interaction is idempotent.
 
@@ -236,12 +225,9 @@ lemma mpv_window_mem_groundSpace (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N)
 lemma localTerm_annihilates_mpv (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) (i : Fin N) :
     localTerm A L N i (mpv A) = 0 := by
   ext σ
-  simp only [localTerm, hLN, ↓reduceDIte, LinearMap.pi_apply, LinearMap.comp_apply,
-    LinearMap.proj_apply, Pi.zero_apply]
+  rw [localTerm_apply_of_le A L N hLN i]
   have hmem := mpv_window_mem_groundSpace A L N hLN i σ
   have hkill := parentInteraction_apply_mem_groundSpace A L _ hmem
-  change (parentInteraction A L (fun τ => mpv A (replaceWindow L hLN i σ τ)))
-    (extractWindow L i σ) = 0
   rw [hkill]
   rfl
 
@@ -249,7 +235,7 @@ lemma localTerm_annihilates_mpv (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) 
 \(H_N V^{(N)}(A) = 0\). -/
 lemma parentHamiltonian_annihilates (A : MPSTensor d D) (L N : ℕ) (hLN : L ≤ N) :
     parentHamiltonian A L N (mpv A) = 0 := by
-  simp only [parentHamiltonian, LinearMap.sum_apply]
+  rw [parentHamiltonian_eq_sum_localTerm, LinearMap.sum_apply]
   exact Finset.sum_eq_zero fun i _ => localTerm_annihilates_mpv A L N hLN i
 
 /-- The parent Hamiltonian model is frustration-free on the periodic MPS vector:

@@ -18,10 +18,9 @@ ground state $\Psi_0$.
         TNLean.MPS.AreaLaw.Hastings.sum_supports_eq_left_add_buffer_add_right,
         ManyBody.Interaction.partialHamiltonian,
         ManyBody.Interaction.isHermitian_partialHamiltonian,
-        TNLean.MPS.AreaLaw.Hastings.groundCentered,
-        TNLean.MPS.AreaLaw.Hastings.groundCentered_add,
-        Matrix.IsHermitian.groundCentered,
-        Matrix.IsHermitian.ofReal_re_inner
+        ManyBody.centeredObservable,
+        ManyBody.centeredObservable_add,
+        ManyBody.isHermitian_centeredObservable
     }
     \leanok
     \uses{def:chain_model}
@@ -32,8 +31,8 @@ ground state $\Psi_0$.
         H_L          & =\sum_{X\subseteq\lbrack0,j-m)}h_X,\qquad
         H_R=\sum_{X\subseteq\lbrack j+m,L)}h_X,\qquad
         H_B=\sum_{X\not\subseteq\lbrack0,j-m),\,X\not\subseteq\lbrack j+m,L)}h_X,
-        \label{eq:hastings_three_way_parts}                                 \\
-        \widetilde M & =M-\operatorname{Re}\langle\Psi_0,M\Psi_0\rangle\,1.
+        \label{eq:hastings_three_way_parts}                                     \\
+        \widetilde M & =M-\frac{\langle\Psi_0,M\Psi_0\rangle}{\|\Psi_0\|^2}\,1.
         \label{eq:hastings_ground_centered}
     \end{align}
 \end{definition}
@@ -42,11 +41,11 @@ ground state $\Psi_0$.
     \label{thm:hastings_three_way_splitting_sum}
     \lean{
         ManyBody.ChainInteraction.hamiltonian_eq_leftPart_add_bufferPart_add_rightPart,
-        ManyBody.ChainInteraction.groundCentered_parts_sum,
-        ManyBody.ChainInteraction.groundCentered_parts_sum_of_eigen,
-        ManyBody.ChainInteraction.isGapped_groundCentered_parts_sum,
-        TNLean.MPS.AreaLaw.Hastings.inner_groundCentered,
-        TNLean.MPS.AreaLaw.Hastings.groundCentered_of_eigen
+        ManyBody.ChainInteraction.centeredObservable_parts_sum,
+        ManyBody.ChainInteraction.centeredObservable_parts_sum_of_eigen,
+        ManyBody.ChainInteraction.isGapped_centeredObservable_parts_sum,
+        ManyBody.inner_centeredObservable_eq_zero,
+        ManyBody.centeredObservable_of_apply_eq_smul
     }
     \leanok
     \uses{def:hastings_three_way_splitting}
@@ -65,9 +64,9 @@ ground state $\Psi_0$.
     Since $X\ne\emptyset$ and $\lbrack0,j-m)\cap\lbrack j+m,L)=\emptyset$, the three support
     classes partition the terms of $H$, giving $H=H_L+H_B+H_R$. Additivity of
     (\ref{eq:hastings_ground_centered}) and
-    $\operatorname{Re}\langle\Psi_0,H\Psi_0\rangle=E_0$ give
+    $\langle\Psi_0,H\Psi_0\rangle=E_0$ for the unit vector $\Psi_0$ give
     (\ref{eq:hastings_centered_sum}) and
-    $\langle\Psi_0,\widetilde M\Psi_0\rangle=0$ for $M=M^\dagger$.
+    $\langle\Psi_0,\widetilde M\Psi_0\rangle=0$.
 \end{proof}
 
 \begin{lemma}[Supports of the three parts]
@@ -78,7 +77,7 @@ ground state $\Psi_0$.
         ManyBody.ChainInteraction.isSupportedOn_rightPart,
         ManyBody.ChainInteraction.isSupportedOn_bufferPart,
         TNLean.MPS.AreaLaw.Hastings.subset_window_of_mem_bufferSupports,
-        ManyBody.IsSupportedOn.groundCentered
+        ManyBody.centeredObservable_mem
     }
     \leanok
     \uses{def:hastings_three_way_splitting}
@@ -100,8 +99,8 @@ ground state $\Psi_0$.
         TNLean.MPS.AreaLaw.card_supports_containing_le,
         TNLean.MPS.AreaLaw.Hastings.card_bufferSupports_le,
         ManyBody.ChainInteraction.norm_bufferPart_le,
-        TNLean.MPS.AreaLaw.Hastings.norm_groundCentered_le,
-        ManyBody.ChainInteraction.norm_groundCentered_bufferPart_le
+        ManyBody.norm_centeredObservable_le,
+        ManyBody.ChainInteraction.norm_centeredObservable_bufferPart_le
     }
     \leanok
     \uses{def:hastings_three_way_splitting,

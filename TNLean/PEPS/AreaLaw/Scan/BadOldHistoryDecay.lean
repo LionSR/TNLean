@@ -31,7 +31,7 @@ open Filter
 open scoped BigOperators
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

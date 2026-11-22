@@ -22,8 +22,7 @@ this bound with the area law to prove Theorem~B.
         TNLean.MPS.AreaLaw.leftBlock,
         TNLean.MPS.AreaLaw.mem_leftBlock,
         TNLean.MPS.AreaLaw.leftBlock_eq_interval,
-        TNLean.MPS.AreaLaw.cutMatrix,
-        TNLean.MPS.AreaLaw.cutMatrix_apply
+        ManyBody.cutMatrix_apply
     }
     \leanok
     \uses{def:chain_model}
@@ -449,7 +448,6 @@ this bound with the area law to prove Theorem~B.
         Entropy.exists_localLift_eq_localLift_of_subset,
         Entropy.norm_sq_toEuclideanLin_localLift_eq_trace,
         Entropy.norm_toEuclideanLin_localLift_le,
-        ManyBody.trace_regionState_eq_one,
         Matrix.PosSemidef.trace_complement_spectralProjectionGE_le_surprisalTail,
         Matrix.PosSemidef.rank_spectralProjectionGE_exp_le,
         TNLean.MPS.AreaLaw.cutMatrix_localLift,
@@ -492,7 +490,7 @@ this bound with the area law to prove Theorem~B.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:chain_open_mps}
+    \uses{def:chain_open_mps,thm:area_law_regional_state_identities}
     Write $M_k(\psi)$ for the cut matrix of $\psi$ at $k$, with the
     configurations of the first $k$ sites as rows. For an operator $\Pi$ on
     the first $k$ sites, the extension $\Pi\otimes1$ acts on it by left

@@ -50,10 +50,8 @@ theorem exists_physical_soft_interval_history
     (hR : 3 * (32 * Real.exp (-(T1 - 156 - 2 * g) / 8) +
       (t / m) * (T1 / t) ^ m) ≤ tau * g / 1000000)
     (N p r : ℕ) (hpr : p ≤ r) (hrN : r ≤ N + 1) (hlong : 4 * ell < r - p)
-      (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-      (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval (N + 1) i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+      (Φ : ManyBody.BondInteraction (N + 1) q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let samplingD := (m * k + 1) * (q * k) ^ (36 * ell + 4 * (k / ell))
     let samplingM := 3 * t * (1 + Real.log (m : ℝ)) + 4 * (ell : ℝ) + 34
     let precision := min 1 (tau * g ^ 2 / (20000 * (samplingM + g + 8)))
@@ -68,7 +66,7 @@ theorem exists_physical_soft_interval_history
       3 * tau / 200 ≤ (((3 / 100 : ℝ) / (samplingD : ℝ) ^ 2) ^ 2) / 100 →
       3 * tau / 200 ≤ 1 / 200 →
       0 < xiTrim → 0 ≤ epsilonRef → epsilonRef ≤ 1 / 100000 →
-    let Hraw := ∑ i, h i
+    let Hraw := Φ.hamiltonian
     let hRaw : Hraw.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     ∀ mu0 : ℝ, mu0 ∈ spectrum ℝ Hraw →
@@ -97,10 +95,10 @@ theorem exists_physical_soft_interval_history
     let Delta := (2 * Real.exp (-2 * (k : ℝ) * Real.sqrt ((g / 2) / upper))) ^ 2
     let Sbulk : Finset (Fin 5) := {0, 2, 4}
     let cuts : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, N + 1]
-    let A := fun j : Fin 5 ↦ ∑ i ∈ Finset.univ.filter
-      (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ), h i
-    let Y := ∑ i ∈ Finset.univ.filter (fun i : Fin N ↦ i.val + 1 ∈
-      ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)), h i
+    let A := fun j : Fin 5 ↦ Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ))
+    let Y := Φ.partialHamiltonian (Finset.univ.filter (fun i : Fin N ↦ i.val + 1 ∈
+      ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)))
     let J := interval (N + 1) p r
     let eJ := intervalShiftOrderIso hpr hrN
     let midConfig := J → Fin q
@@ -110,7 +108,7 @@ theorem exists_physical_soft_interval_history
       Real.log (Real.log (1 + xi / (t * (2 : ℝ) ^ (m + 1)))))/
         (-Real.log (2 * (Real.exp (1 / 3 : ℝ) - 1)))⌉₊
     let bond := ((order ^ 2 * q ^ order) * 2) * (m + 1)
-    let Hraw := ∑ i, h i
+    let Hraw := Φ.hamiltonian
     let hRaw : Hraw.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     ∃ (e : Fin 5 → ℝ) (x : (Fin (N + 1) → Fin q) → ℂ) (E : ℝ),
@@ -185,7 +183,7 @@ theorem exists_physical_soft_interval_history
   obtain ⟨a, b, hab, hb, hpc, hdr, hcard, hleft, hright, hFamily⟩ :=
     exists_uniform_native_long_interval_soft_improving_family q ell m k g tau t T0 T1
       hq hell hm hk hg htau htau1 hscale hT0 htfloor hT1 hO hR
-      N p r hpr hrN hlong h hs h0 h1
+      N p r hpr hrN hlong Φ h0 h1
   refine ⟨a, b, hab, hb, hpc, hdr, hcard, hleft, hright, ?_⟩
   intro Msoft xi upper D Delta Sbulk cuts A Y J eJ midConfig HM coords order bond Hraw hRaw
   obtain ⟨e, x, E, hx, hxe, he, hE0, hE4, n, W, hn, hW, hCenter⟩ := hFamily

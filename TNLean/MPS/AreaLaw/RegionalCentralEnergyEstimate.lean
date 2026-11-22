@@ -41,14 +41,12 @@ are included. Auxiliary to ALVV, arXiv:1602.08828v2, `def:soft-trunc`,
 lines 1178–1185, and `eq:defjgapped`, lines 1380–1384. -/
 theorem exists_regional_central_energy_estimate {L q l u v r : ℕ}
     (hq : 0 < q) (hlu : l ≤ u) (huv : u ≤ v) (hvr : v ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
-    let A := aklvRegionalHamiltonians l u h 1
-    let M := aklvRegionalHamiltonians u v h 1
-    let B := aklvRegionalHamiltonians v r h 1
-    let P := aklvRegionalHamiltonians l r h 1
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
+    let A := aklvRegionalHamiltonians l u Φ 1
+    let M := aklvRegionalHamiltonians u v Φ 1
+    let B := aklvRegionalHamiltonians v r Φ 1
+    let P := aklvRegionalHamiltonians l r Φ 1
     ∃ (eA eM eB eP : ℝ) (xA xM xB xP : (Fin L → Fin q) → ℂ),
       star xA ⬝ᵥ xA = 1 ∧ A *ᵥ xA = (eA : ℂ) • xA ∧
       (A - (eA : ℂ) • 1).PosSemidef ∧
@@ -65,12 +63,12 @@ theorem exists_regional_central_energy_estimate {L q l u v r : ℕ}
   intro A M B P
   obtain ⟨eA, eRest, eP, x, z, hx, hAx, hRestx, hA, hRest,
     hz, hPz, hP, hlower, hupper, _⟩ :=
-    exists_adjacent_interval_energy_merge hq hlu (huv.trans hvr) hrL h hs h0 h1
+    exists_adjacent_interval_energy_merge hq hlu (huv.trans hvr) hrL Φ h0 h1
   obtain ⟨eM, eB, eRest', y, w, hy, hMy, hBy, hM, hB,
     hw, hRestw, hRest', hlower', hupper', _⟩ :=
-    exists_adjacent_interval_energy_merge hq huv hvr hrL h hs h0 h1
+    exists_adjacent_interval_energy_merge hq huv hvr hrL Φ h0 h1
   have heRest : eRest' = eRest := groundEnergy_eq_of_normalized_eigenvectors
-    (aklvRegionalHamiltonians u r h 1) eRest' eRest w x
+    (aklvRegionalHamiltonians u r Φ 1) eRest' eRest w x
     hRestw hw hRestx hx hRest' hRest
   refine ⟨eA, eM, eB, eP, x, y, y, z, hx, hAx, hA, hy, hMy, hM,
     hy, hBy, hB, hz, hPz, hP, ?_, ?_, ?_⟩

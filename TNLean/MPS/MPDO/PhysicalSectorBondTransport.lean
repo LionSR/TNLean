@@ -23,198 +23,43 @@ three-site physical coordinates.
 
 open scoped Matrix Kronecker
 
+open ManyBody
+
 namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D}
 
-private theorem extractWindow_two_eq_zero_of_three {N : ℕ}
-    (i : Fin N) (σ : Fin N → Fin d) :
-    MPSTensor.extractWindow 2 i σ =
-      MPSTensor.extractWindow 2 (0 : Fin 3) (MPSTensor.extractWindow 3 i σ) := by
-  funext r
-  fin_cases r <;> simp [MPSTensor.extractWindow, Nat.mod_eq_of_lt i.isLt]
-
-private theorem extractWindow_two_finRotate_eq_one_of_three {N : ℕ}
-    (i : Fin N) (σ : Fin N → Fin d) :
-    MPSTensor.extractWindow 2 (finRotate N i) σ =
-      MPSTensor.extractWindow 2 (1 : Fin 3) (MPSTensor.extractWindow 3 i σ) := by
-  have hrot : (finRotate N i).val = (i.val + 1) % N := coe_finRotate_mod i
-  funext r
-  apply congrArg σ
-  apply Fin.ext
-  fin_cases r
-  · simp [Fin.add_def]
-  · simp only [Fin.val_one, hrot]
-    rw [Nat.mod_add_mod]
-
-private theorem agreesOutsideWindow_two_zero_three_iff
-    (σ τ : Fin 3 → Fin d) :
-    AgreesOutsideWindow (d := d) 2 (by decide) (0 : Fin 3) σ τ ↔
-      τ 2 = σ 2 := by
-  rw [agreesOutsideWindow_iff]
-  constructor
-  · intro h
-    exact h 2 (by decide)
-  · intro h k hk
-    fin_cases k
-    · simp at hk
-    · simp at hk
-    · exact h
-
-private theorem agreesOutsideWindow_two_one_three_iff
-    (σ τ : Fin 3 → Fin d) :
-    AgreesOutsideWindow (d := d) 2 (by decide) (1 : Fin 3) σ τ ↔
-      τ 0 = σ 0 := by
-  rw [agreesOutsideWindow_iff]
-  constructor
-  · intro h
-    exact h 0 (by decide)
-  · intro h k hk
-    fin_cases k
-    · exact h
-    · simp at hk
-    · simp at hk
-
-private theorem offset_from_finRotate {N : ℕ} (hN : 2 ≤ N) (i k : Fin N) :
-    (k.val + N - (finRotate N i).val) % N =
-      if (k.val + N - i.val) % N = 0 then N - 1
-      else (k.val + N - i.val) % N - 1 := by
-  let r := (k.val + N - i.val) % N
-  have hrN : r < N := Nat.mod_lt _ (by omega)
-  have hrot : (finRotate N i).val = (i.val + 1) % N := coe_finRotate_mod i
-  by_cases hr : r = 0
-  · have hk : k = i := by
-      have hk' := MPSTensor.eq_cyclic_site_of_offset_eq (Fin.pos i) hr
-      simpa [Nat.mod_eq_of_lt i.isLt] using hk'
-    subst k
-    rw [ite_eq_left hr]
-    have hforward : finRotate N i = MPSTensor.cyclicForwardSite i 1 := by
-      ext
-      simp [finRotate_apply, Fin.add_def, MPSTensor.cyclicForwardSite]
-    rw [hforward]
-    exact MPSTensor.cyclicForwardSite_one_offset i
-  · rw [ite_eq_right hr]
-    change (k.val + N - (finRotate N i).val) % N = r - 1
-    have hk : k = ⟨((finRotate N i).val + (r - 1)) % N,
-        Nat.mod_lt _ (by omega)⟩ := by
-      have hk' := MPSTensor.eq_cyclic_site_of_offset_eq (Fin.pos i)
-        (i := i) (k := k) (r := r) rfl
-      apply Fin.ext
-      change k.val = ((finRotate N i).val + (r - 1)) % N
-      calc
-        k.val = (i.val + r) % N := congrArg Fin.val hk'
-        _ = (i.val + 1 + (r - 1)) % N := by congr 1; omega
-        _ = ((i.val + 1) % N + (r - 1)) % N := by rw [Nat.mod_add_mod]
-        _ = ((finRotate N i).val + (r - 1)) % N := by rw [hrot]
-    rw [hk, MPSTensor.offset_mod_eq (finRotate N i).isLt (by omega : r - 1 < N)]
-
-/-- Embedding the first bond of a three-site window agrees with embedding that
-bond directly in the ambient periodic chain. -/
-theorem embedLocalOperator_two_zero_nested {N : ℕ} (hN : 3 ≤ N)
+open Fin.CommRing in
+/-- The first bond of a three-site window, placed inside the window of three
+consecutive sites starting at `i`, is the bond placed on the window of two
+consecutive sites starting at `i`. -/
+theorem placeAlong_ringWindow_two_zero_nested {N : ℕ} (hN : 3 ≤ N)
     (i : Fin N) (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
-    embedLocalOperator (d := d) 3 N (by omega) i
-        (embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3) B) =
-      embedLocalOperator (d := d) 2 N (by omega) i B := by
-  ext σ τ
-  have hAgree :
-      (AgreesOutsideWindow (d := d) 3 (by omega) i σ τ ∧
-        AgreesOutsideWindow (d := d) 2 (by decide) (0 : Fin 3)
-          (MPSTensor.extractWindow 3 i σ) (MPSTensor.extractWindow 3 i τ)) ↔
-        AgreesOutsideWindow (d := d) 2 (by omega) i σ τ := by
-    rw [agreesOutsideWindow_two_zero_three_iff]
-    constructor
-    · rintro ⟨h3, h2⟩
-      rw [agreesOutsideWindow_iff] at h3 ⊢
-      intro k hk2
-      by_cases hk3 : (k.val + N - i.val) % N < 3
-      · have hoff : (k.val + N - i.val) % N = 2 := by omega
-        have hk := MPSTensor.eq_cyclic_site_of_offset_eq (Fin.pos i) hoff
-        subst k
-        simpa [MPSTensor.extractWindow, Nat.mod_eq_of_lt (by omega : 2 < N)] using h2
-      · exact h3 k hk3
-    · intro h2
-      rw [agreesOutsideWindow_iff] at h2
-      constructor
-      · rw [agreesOutsideWindow_iff]
-        intro k hk3
-        exact h2 k (by omega)
-      · apply h2
-        change ¬ (((i.val + 2) % N + N - i.val) % N < 2)
-        rw [MPSTensor.offset_mod_eq i.isLt (by omega : 2 < N)]
-        omega
-  simp only [embedLocalOperator_apply]
-  rw [extractWindow_two_eq_zero_of_three i σ,
-    extractWindow_two_eq_zero_of_three i τ]
-  by_cases h3 : AgreesOutsideWindow (d := d) 3 (by omega) i σ τ
-  · rw [ite_eq_left h3]
-    by_cases h2 : AgreesOutsideWindow (d := d) 2 (by decide) (0 : Fin 3)
-        (MPSTensor.extractWindow 3 i σ) (MPSTensor.extractWindow 3 i τ)
-    · rw [ite_eq_left h2, ite_eq_left (hAgree.mp ⟨h3, h2⟩)]
-    · rw [ite_eq_right h2, ite_eq_right (fun h ↦ h2 (hAgree.mpr h).2)]
-  · rw [ite_eq_right h3, ite_eq_right (fun h ↦ h3 (hAgree.mpr h).1)]
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3)) B) =
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ N) i) B := by
+  have : NeZero N := ⟨by omega⟩
+  have hw : ringWindow (by decide : 2 ≤ 3) (0 : Fin 3) = chainWindow 0 (by decide) := by
+    ext j
+    fin_cases j <;> rfl
+  rw [hw, placeAlong_placeAlong, chainWindow_trans_ringWindow, Nat.cast_zero, add_zero]
 
-/-- Embedding the second bond of a three-site window agrees with embedding the
-translated bond directly in the ambient periodic chain. -/
-theorem embedLocalOperator_two_one_nested {N : ℕ} (hN : 3 ≤ N)
+open Fin.CommRing in
+/-- The second bond of a three-site window, placed inside the window of three
+consecutive sites starting at `i`, is the bond placed on the window of two
+consecutive sites starting at the next site. -/
+theorem placeAlong_ringWindow_two_one_nested {N : ℕ} (hN : 3 ≤ N)
     (i : Fin N) (B : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
-    embedLocalOperator (d := d) 3 N (by omega) i
-        (embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) B) =
-      embedLocalOperator (d := d) 2 N (by omega) (finRotate N i) B := by
-  ext σ τ
-  have hAgree :
-      (AgreesOutsideWindow (d := d) 3 (by omega) i σ τ ∧
-        AgreesOutsideWindow (d := d) 2 (by decide) (1 : Fin 3)
-          (MPSTensor.extractWindow 3 i σ) (MPSTensor.extractWindow 3 i τ)) ↔
-        AgreesOutsideWindow (d := d) 2 (by omega) (finRotate N i) σ τ := by
-    rw [agreesOutsideWindow_two_one_three_iff]
-    constructor
-    · rintro ⟨h3, hlocal⟩
-      rw [agreesOutsideWindow_iff] at h3 ⊢
-      intro k hk
-      let r := (k.val + N - i.val) % N
-      have hoff := offset_from_finRotate (by omega : 2 ≤ N) i k
-      by_cases hr : r = 0
-      · have hki := MPSTensor.eq_cyclic_site_of_offset_eq (Fin.pos i)
-          (i := i) (k := k) (r := r) rfl
-        have hki' : k = i := by simpa [hr, Nat.mod_eq_of_lt i.isLt] using hki
-        have hiEq : τ i = σ i := by
-          simpa [MPSTensor.extractWindow, Nat.mod_eq_of_lt i.isLt] using hlocal
-        simpa [hki'] using hiEq
-      · apply h3 k
-        change ¬ r < 3
-        change ¬ ((k.val + N - (finRotate N i).val) % N < 2) at hk
-        rw [hoff, ite_eq_right hr] at hk
-        omega
-    · intro h2
-      rw [agreesOutsideWindow_iff] at h2
-      constructor
-      · rw [agreesOutsideWindow_iff]
-        intro k hk3
-        apply h2 k
-        let r := (k.val + N - i.val) % N
-        have hoff := offset_from_finRotate (by omega : 2 ≤ N) i k
-        have hr : r ≠ 0 := by
-          change ¬ r < 3 at hk3
-          omega
-        rw [hoff, ite_eq_right hr]
-        change ¬ r < 3 at hk3
-        omega
-      · have hi := h2 i
-        have hoff := offset_from_finRotate (by omega : 2 ≤ N) i i
-        have hzero : (i.val + N - i.val) % N = 0 := by
-          rw [show i.val + N - i.val = N by omega, Nat.mod_self]
-        specialize hi (by rw [hoff, ite_eq_left hzero]; omega)
-        simpa [MPSTensor.extractWindow, Nat.mod_eq_of_lt i.isLt] using hi
-  simp only [embedLocalOperator_apply]
-  rw [extractWindow_two_finRotate_eq_one_of_three i σ,
-    extractWindow_two_finRotate_eq_one_of_three i τ]
-  by_cases h3 : AgreesOutsideWindow (d := d) 3 (by omega) i σ τ
-  · rw [ite_eq_left h3]
-    by_cases h2 : AgreesOutsideWindow (d := d) 2 (by decide) (1 : Fin 3)
-        (MPSTensor.extractWindow 3 i σ) (MPSTensor.extractWindow 3 i τ)
-    · rw [ite_eq_left h2, ite_eq_left (hAgree.mp ⟨h3, h2⟩)]
-    · rw [ite_eq_right h2, ite_eq_right (fun h ↦ h2 (hAgree.mpr h).2)]
-  · rw [ite_eq_right h3, ite_eq_right (fun h ↦ h3 (hAgree.mpr h).1)]
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i)
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3)) B) =
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ N) (finRotate N i)) B := by
+  have : NeZero N := ⟨by omega⟩
+  have hw : ringWindow (by decide : 2 ≤ 3) (1 : Fin 3) = chainWindow 1 (by decide) := by
+    ext j
+    fin_cases j <;> rfl
+  have hi : i + ((1 : ℕ) : Fin N) = finRotate N i := by
+    rw [finRotate_apply, Nat.cast_one]
+  rw [hw, placeAlong_placeAlong, chainWindow_trans_ringWindow, hi]
 
 /-- The first two sites extracted from the inverse three-site regrouping have
 the expected two-site outer and neighboring coordinates.
@@ -585,10 +430,14 @@ window.
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (`3to4`), lines
 1589--1593. -/
 theorem physicalBond_zero_one_comm (F : PhysicalSectorFactorization K) :
-    embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3) F.physicalBond *
-        embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) F.physicalBond =
-      embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) F.physicalBond *
-        embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3) F.physicalBond := by
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3))
+          F.physicalBond *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3))
+          F.physicalBond =
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3))
+          F.physicalBond *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3))
+          F.physicalBond := by
   apply (Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
     (_root_.finThreeArrowEquiv (Fin d))).injective
   change (Matrix.reindexLinearEquiv ℂ ℂ (_root_.finThreeArrowEquiv (Fin d))
@@ -599,8 +448,8 @@ theorem physicalBond_zero_one_comm (F : PhysicalSectorFactorization K) :
       (_root_.finThreeArrowEquiv (Fin d)) (_root_.finThreeArrowEquiv (Fin d)),
     ← Matrix.reindexLinearEquiv_mul ℂ ℂ (_root_.finThreeArrowEquiv (Fin d))
       (_root_.finThreeArrowEquiv (Fin d)) (_root_.finThreeArrowEquiv (Fin d)),
-    Matrix.coe_reindexLinearEquiv, F.reindex_embedLocalOperator_zero,
-    F.reindex_embedLocalOperator_one, F.physicalPairBonds_comm]
+    Matrix.coe_reindexLinearEquiv, F.reindex_placeAlong_ringWindow_zero,
+    F.reindex_placeAlong_ringWindow_one, F.physicalPairBonds_comm]
 
 /-- Adjacent translates of the physical bond commute on every periodic chain
 of length at least three, including the pair crossing the periodic boundary.
@@ -610,32 +459,36 @@ same support with opposite cyclic order, rather than forming the three-site
 configuration used in the source calculation.
 
 **Scope restriction (N ≥ 3):** This theorem treats the three-site local
-configuration and its embeddings.  The crossed-order case at `N = 2` is
+configuration and its placements.  The crossed-order case at `N = 2` is
 supplied separately by `physicalBond_two_zero_one_comm`, as documented in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines 1571--1593. -/
 theorem physicalBond_adjacent_comm (F : PhysicalSectorFactorization K)
     {N : ℕ} (hN : 3 ≤ N) (i : Fin N) :
-    embedLocalOperator (d := d) 2 N (by omega) i F.physicalBond *
-        embedLocalOperator (d := d) 2 N (by omega) (finRotate N i) F.physicalBond =
-      embedLocalOperator (d := d) 2 N (by omega) (finRotate N i) F.physicalBond *
-        embedLocalOperator (d := d) 2 N (by omega) i F.physicalBond := by
-  let P := embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3) F.physicalBond
-  let Q := embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3) F.physicalBond
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ N) i) F.physicalBond *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ N) (finRotate N i))
+          F.physicalBond =
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ N) (finRotate N i))
+          F.physicalBond *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow (by omega : 2 ≤ N) i) F.physicalBond := by
+  let P := placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3))
+    F.physicalBond
+  let Q := placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3))
+    F.physicalBond
   calc
-    _ = embedLocalOperator (d := d) 3 N (by omega) i P *
-        embedLocalOperator (d := d) 3 N (by omega) i Q := by
-      rw [embedLocalOperator_two_zero_nested, embedLocalOperator_two_one_nested]
-    _ = embedLocalOperator (d := d) 3 N (by omega) i (P * Q) := by
-      rw [embedLocalOperator_mul]
-    _ = embedLocalOperator (d := d) 3 N (by omega) i (Q * P) := by
+    _ = placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) P *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) Q := by
+      rw [placeAlong_ringWindow_two_zero_nested, placeAlong_ringWindow_two_one_nested]
+    _ = placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) (P * Q) := by
+      rw [placeAlong_mul]
+    _ = placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) (Q * P) := by
       rw [F.physicalBond_zero_one_comm]
-    _ = embedLocalOperator (d := d) 3 N (by omega) i Q *
-        embedLocalOperator (d := d) 3 N (by omega) i P := by
-      rw [embedLocalOperator_mul]
+    _ = placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) Q *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) P := by
+      rw [placeAlong_mul]
     _ = _ := by
-      rw [embedLocalOperator_two_zero_nested, embedLocalOperator_two_one_nested]
+      rw [placeAlong_ringWindow_two_zero_nested, placeAlong_ringWindow_two_one_nested]
 
 /-- Translates of the physical bond with disjoint cyclic supports commute.
 
@@ -649,11 +502,12 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition C.8, lines
 theorem physicalBond_disjoint_comm (F : PhysicalSectorFactorization K)
     {N : ℕ} (hN : 2 ≤ N) {i j : Fin N}
     (hij : ¬ MPSTensor.cyclicWindowsOverlap N 2 i j) :
-    embedLocalOperator (d := d) 2 N hN i F.physicalBond *
-        embedLocalOperator (d := d) 2 N hN j F.physicalBond =
-      embedLocalOperator (d := d) 2 N hN j F.physicalBond *
-        embedLocalOperator (d := d) 2 N hN i F.physicalBond :=
-  embedLocalOperator_commute_of_not_cyclicWindowsOverlap 2 N hN hij
-    F.physicalBond F.physicalBond
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) F.physicalBond *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) F.physicalBond =
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) F.physicalBond *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) F.physicalBond :=
+  (commute_placeAlong_of_disjoint (X := fun _ ↦ Fin d) (ringWindow hN i)
+    (MPOTensor.disjoint_map_ringWindow_of_not_cyclicWindowsOverlap hN hij)
+    F.physicalBond F.physicalBond).eq
 
 end MPOTensor.PhysicalSectorFactorization

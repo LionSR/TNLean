@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointSupport
 import TNLean.Algebra.MatrixCoordinateInclusion
-import TNLean.Algebra.FinCastAddNatAdd
+import QICLean.Algebra.FinCastAddNatAdd
 
 /-!
 # The embedded first endpoint inside the extended local support

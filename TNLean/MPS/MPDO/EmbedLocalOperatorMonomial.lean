@@ -45,26 +45,28 @@ theorem windowPerm_apply (L : ℕ) {N : ℕ} (hLN : L ≤ N) (i : Fin N)
 /-- Placing a monomial window operator on a periodic chain gives a monomial chain
 operator whose permutation acts on the window and whose phase is read off the
 window. -/
-theorem embedLocalOperator_monomial (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
+theorem placeAlong_ringWindow_monomial (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
     (σ : Equiv.Perm (Fin L → Fin d)) (φ : (Fin L → Fin d) → ℂ) :
-    embedLocalOperator (d := d) L N hLN i (monomial σ φ) =
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hLN i) (monomial σ φ) =
       monomial (windowPerm L hLN i σ) fun s ↦ φ (MPSTensor.extractWindow L i s) := by
   ext t s
-  rw [embedLocalOperator_apply, monomial_apply, monomial_apply, windowPerm_apply]
+  rw [ManyBody.placeAlong_apply, monomial_apply, monomial_apply, windowPerm_apply,
+    ← MPSTensor.extractWindow_eq_comp_ringWindow hLN,
+    ← MPSTensor.extractWindow_eq_comp_ringWindow hLN]
   by_cases h : t = MPSTensor.replaceWindow L hLN i s (σ (MPSTensor.extractWindow L i s))
-  · have hagree : AgreesOutsideWindow (d := d) L hLN i t s := by
-      rw [AgreesOutsideWindow, h]
+  · have hagree : ∀ v, (∀ u, ManyBody.ringWindow hLN i u ≠ v) → t v = s v := by
+      rw [MPSTensor.forall_ringWindow_ne_imp_iff_replaceWindow, h]
       simp
     rw [ite_eq_left hagree, ite_eq_left h, ite_eq_left]
     rw [h]
     simp
   · rw [ite_eq_right h]
-    by_cases hagree : AgreesOutsideWindow (d := d) L hLN i t s
+    by_cases hagree : ∀ v, (∀ u, ManyBody.ringWindow hLN i u ≠ v) → t v = s v
     · rw [ite_eq_left hagree, ite_eq_right]
       intro hw
       apply h
       rw [← hw]
-      exact hagree.symm
+      exact ((MPSTensor.forall_ringWindow_ne_imp_iff_replaceWindow hLN i t s).mp hagree).symm
     · rw [ite_eq_right hagree]
 
 /-! ### Two-site windows -/

@@ -22,6 +22,8 @@ The argument includes the endpoints, where some bond coefficients vanish.
 
 open scoped Matrix MatrixOrder ComplexOrder
 
+open ManyBody
+
 namespace MPSTensor
 
 /-- The two-site boundary vector factors into the internal bond coefficient
@@ -137,15 +139,15 @@ theorem incomingBondUnitaryLin_normalizedBondInterpolation_state
 This holds for every real interpolation parameter, including both
 endpoints. Source: arXiv:1010.3732, Section II.F.2,
 `eq:sym:omega-gamma`. -/
-theorem interactionHamiltonian_normalizedBondInteraction_groundSpace
+theorem hamiltonian_translationInvariant_normalizedBondInteraction_groundSpace
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin
-      (interactionHamiltonian (normalizedBondInteraction D₀ D₁ γ) hN)) =
+      (Interaction.translationInvariant hN (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) =
       Submodule.span ℂ
         ({WithLp.toLp 2 (mpv (N := N) (weightedMatrixUnitInterpolation D₀ D₁ γ))} :
           Set (EuclideanSpace ℂ (Cfg ((D₀ + D₁) * (D₀ + D₁)) N))) := by
   have : NeZero N := ⟨by omega⟩
-  rw [normalizedBondInteraction, interactionHamiltonian_twoSiteBondPenalty,
+  rw [normalizedBondInteraction, hamiltonian_translationInvariant_twoSiteBondPenalty,
     ← bondMatrixEquiv_symm_eq_toEuclideanLin,
     ← physicalBondProductParentHamiltonianLin_eq_matrix,
     physicalBondProductParentHamiltonian_groundSpace _
@@ -155,68 +157,77 @@ theorem interactionHamiltonian_normalizedBondInteraction_groundSpace
 /-- A canonical parent annihilates every periodic bond zero mode when
 its periodic vector equals the weighted bond vector. Source: arXiv:1010.3732, Section II.F.2,
 `eq:sym:omega-gamma`, comparison with the canonical parent. -/
-theorem ker_interactionHamiltonian_normalizedBondInteraction_le_parent_of_mpv_eq
+theorem ker_hamiltonian_translationInvariant_normalizedBondInteraction_le_parent_of_mpv_eq
     {D₀ D₁ E N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N)
     (B : MPSTensor ((D₀ + D₁) * (D₀ + D₁)) E)
     (hmpv : ∀ σ : Cfg ((D₀ + D₁) * (D₀ + D₁)) N,
       mpv (weightedMatrixUnitInterpolation D₀ D₁ γ) σ = mpv B σ) :
     LinearMap.ker (Matrix.toEuclideanLin
-      (interactionHamiltonian (normalizedBondInteraction D₀ D₁ γ) hN)) ≤
-    LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
-      (LinearMap.toMatrix' (parentInteraction B 2)) hN)) := by
-  rw [interactionHamiltonian_normalizedBondInteraction_groundSpace h₀ h₁ γ hN,
+      (Interaction.translationInvariant hN (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) ≤
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+      (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian) := by
+  rw [hamiltonian_translationInvariant_normalizedBondInteraction_groundSpace h₀ h₁ γ hN,
     show mpv (N := N) (weightedMatrixUnitInterpolation D₀ D₁ γ) = mpv B from funext hmpv]
   apply Submodule.span_le.mpr
   rintro x (rfl : x = WithLp.toLp 2 (mpv B))
-  change Matrix.toEuclideanLin (∑ i : Fin N, MPOTensor.embedLocalOperator 2 N hN i
-    (LinearMap.toMatrix' (parentInteraction B 2)))
+  have hH : parentHamiltonianES B 2 N = Matrix.toEuclideanLin
+      (Interaction.translationInvariant hN
+        (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian :=
+    parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow B hN
+  change Matrix.toEuclideanLin (Interaction.translationInvariant hN
+    (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian
     (WithLp.toLp 2 (mpv B)) = 0
-  rw [← parentHamiltonianES_eq_toEuclideanLin_sum_embedLocalOperator]
+  rw [← hH]
   change WithLp.toLp 2 (parentHamiltonian B 2 N (mpv B)) = 0
   rw [parentHamiltonian_annihilates _ 2 N hN, WithLp.toLp_zero]
 
 /-- Every periodic zero mode of the bond interaction is a zero mode of
 its canonical parent. Source: arXiv:1010.3732, Section II.F.2,
 `eq:sym:omega-gamma`, comparison with the canonical parent. -/
-theorem ker_interactionHamiltonian_normalizedBondInteraction_le_parent
+theorem ker_hamiltonian_translationInvariant_normalizedBondInteraction_le_parent
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin
-      (interactionHamiltonian (normalizedBondInteraction D₀ D₁ γ) hN)) ≤
-    LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
+      (Interaction.translationInvariant hN (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) ≤
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
       (LinearMap.toMatrix' (parentInteraction
-        (weightedMatrixUnitInterpolation D₀ D₁ γ) 2)) hN)) :=
-  ker_interactionHamiltonian_normalizedBondInteraction_le_parent_of_mpv_eq
+        (weightedMatrixUnitInterpolation D₀ D₁ γ) 2))).hamiltonian) :=
+  ker_hamiltonian_translationInvariant_normalizedBondInteraction_le_parent_of_mpv_eq
     h₀ h₁ γ hN _ (fun _ => rfl)
 
 /-- Function-coordinate form of the periodic kernel inclusion. Source:
 arXiv:1010.3732, Section II.F.2, canonical parent comparison. -/
-theorem interactionHamiltonian_parent_mulVec_eq_zero_of_normalizedBondInteraction_of_mpv_eq
+theorem
+    hamiltonian_translationInvariant_parent_mulVec_eq_zero_of_normalizedBondInteraction_of_mpv_eq
     {D₀ D₁ E N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N)
     (B : MPSTensor ((D₀ + D₁) * (D₀ + D₁)) E)
     (hmpv : ∀ σ : Cfg ((D₀ + D₁) * (D₀ + D₁)) N,
       mpv (weightedMatrixUnitInterpolation D₀ D₁ γ) σ = mpv B σ)
     (x : Cfg ((D₀ + D₁) * (D₀ + D₁)) N → ℂ)
-    (hx : (interactionHamiltonian (normalizedBondInteraction D₀ D₁ γ) hN).mulVec x = 0) :
-    (interactionHamiltonian (LinearMap.toMatrix' (parentInteraction B 2)) hN).mulVec x = 0 := by
+    (hx : (Interaction.translationInvariant hN
+      (normalizedBondInteraction D₀ D₁ γ)).hamiltonian.mulVec x = 0) :
+    (Interaction.translationInvariant hN
+      (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian.mulVec x = 0 := by
   have hxES : WithLp.toLp 2 x ∈ LinearMap.ker (Matrix.toEuclideanLin
-      (interactionHamiltonian (normalizedBondInteraction D₀ D₁ γ) hN)) := by
-    change WithLp.toLp 2 ((interactionHamiltonian
-      (normalizedBondInteraction D₀ D₁ γ) hN).mulVec x) = 0
+      (Interaction.translationInvariant hN (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) := by
+    change WithLp.toLp 2 ((Interaction.translationInvariant hN
+      (normalizedBondInteraction D₀ D₁ γ)).hamiltonian.mulVec x) = 0
     rw [hx, WithLp.toLp_zero]
-  have hparent := (ker_interactionHamiltonian_normalizedBondInteraction_le_parent_of_mpv_eq
-    h₀ h₁ γ hN B hmpv) hxES
+  have hparent :=
+    (ker_hamiltonian_translationInvariant_normalizedBondInteraction_le_parent_of_mpv_eq
+      h₀ h₁ γ hN B hmpv) hxES
   simpa only [LinearMap.mem_ker, Matrix.toEuclideanLin, Matrix.toLpLin_apply,
     WithLp.ofLp_toLp, WithLp.toLp_eq_zero] using hparent
 
 /-- Function-coordinate form of the periodic kernel inclusion. Source:
 arXiv:1010.3732, Section II.F.2, canonical parent comparison. -/
-theorem interactionHamiltonian_parent_mulVec_eq_zero_of_normalizedBondInteraction
+theorem hamiltonian_translationInvariant_parent_mulVec_eq_zero_of_normalizedBondInteraction
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (γ : ℝ) (hN : 2 ≤ N)
     (x : Cfg ((D₀ + D₁) * (D₀ + D₁)) N → ℂ)
-    (hx : (interactionHamiltonian (normalizedBondInteraction D₀ D₁ γ) hN).mulVec x = 0) :
-    (interactionHamiltonian (LinearMap.toMatrix' (parentInteraction
-      (weightedMatrixUnitInterpolation D₀ D₁ γ) 2)) hN).mulVec x = 0 :=
-  interactionHamiltonian_parent_mulVec_eq_zero_of_normalizedBondInteraction_of_mpv_eq
+    (hx : (Interaction.translationInvariant hN
+      (normalizedBondInteraction D₀ D₁ γ)).hamiltonian.mulVec x = 0) :
+    (Interaction.translationInvariant hN (LinearMap.toMatrix' (parentInteraction
+      (weightedMatrixUnitInterpolation D₀ D₁ γ) 2))).hamiltonian.mulVec x = 0 :=
+  hamiltonian_translationInvariant_parent_mulVec_eq_zero_of_normalizedBondInteraction_of_mpv_eq
     h₀ h₁ γ hN _ (fun _ => rfl) x hx
 
 end MPSTensor

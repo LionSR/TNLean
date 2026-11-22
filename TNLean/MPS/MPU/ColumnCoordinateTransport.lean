@@ -31,14 +31,14 @@ theorem matrix_columns_reindex {ι κ α β γ δ : Type*}
     (hE : ∀ b, e (E (f.symm b)) = F b)
     (hG : ∀ c, e (G (g.symm c)) = H c)
     (X : Matrix ι ι ℂ) (V : Matrix γ α ℂ)
-    (h : X * initializedBasisMatrix E = initializedBasisMatrix G * V) :
-    Matrix.reindex e e X * initializedBasisMatrix F =
-      initializedBasisMatrix H * Matrix.reindex g f V := by
-  rw [← initializedBasisMatrix_reindex_of_mapping e f E F hE,
-    ← initializedBasisMatrix_reindex_of_mapping e g G H hG]
+    (h : X * basisInclusion E = basisInclusion G * V) :
+    Matrix.reindex e e X * basisInclusion F =
+      basisInclusion H * Matrix.reindex g f V := by
+  rw [← basisInclusion_reindex_of_mapping e f E F hE,
+    ← basisInclusion_reindex_of_mapping e g G H hG]
   change Matrix.reindexLinearEquiv ℂ ℂ e e X *
-      Matrix.reindexLinearEquiv ℂ ℂ e f (initializedBasisMatrix E) =
-    Matrix.reindexLinearEquiv ℂ ℂ e g (initializedBasisMatrix G) *
+      Matrix.reindexLinearEquiv ℂ ℂ e f (basisInclusion E) =
+    Matrix.reindexLinearEquiv ℂ ℂ e g (basisInclusion G) *
       Matrix.reindexLinearEquiv ℂ ℂ g f V
   rw [Matrix.reindexLinearEquiv_mul, Matrix.reindexLinearEquiv_mul, h]
 

@@ -38,10 +38,10 @@ The widths are even, so the two registers of a node are `2L` sites apart for som
 unitary of a node is a register gate (`MPSPreparation.treeRegGate`). As for the trees of equal
 blocks, the registers of the coarser depths are not strictly between the two registers of a
 finer node, so the depths `0, …, h` of the trees of all the blocks of a ring are applied one
-after the other, each in depth `4s + K + 2`
+after the other, each in depth at most `4s + K`
 (`MPSPreparation.exists_rounds_blockLayerOp_treeLevelsOp`),
-and the leaves of all the blocks by one local circuit
-(`MPSPreparation.isCircuitOn_blockLayerOp_treeLeafOp`).
+and the leaves of all the blocks by one unitary circuit
+(`MPSPreparation.isUnitaryCircuitOn_blockLayerOp_treeLeafOp`).
 
 ## Main definitions
 
@@ -55,7 +55,7 @@ and the leaves of all the blocks by one local circuit
 * `MPSPreparation.exists_rounds_registerLayersOp` — layers of register gates, applied one after
   the other with measurements.
 * `MPSPreparation.exists_rounds_blockLayerOp_treeLevelsOp`.
-* `MPSPreparation.isCircuitOn_blockLayerOp_treeLeafOp`.
+* `MPSPreparation.isUnitaryCircuitOn_blockLayerOp_treeLeafOp`.
 
 ## References
 
@@ -87,9 +87,9 @@ noncomputable def registerLayersOp (gs : ℕ → List (RegisterGate d N s)) :
 /-- **Layers of register gates with measurements.** Let `gs 0, …, gs (m - 1)` be layers of
 register gates, the gates of each layer on pairwise disjoint stretches, such that no register of
 a gate of a layer is strictly between the two registers of a gate of a later layer. If every
-gate is a product of at most `K` gates on neighbouring sites, some sequence of measurement rounds
-of total depth `m (4s + K + 2)` implements the product of the layers on the vectors with `|0⟩`
-strictly between the two registers of every gate.
+gate is a product of at most `K` gates on neighbouring sites, some measurement circuit of depth
+at most `m (4s + K)` implements the product of the layers on the vectors with `|0⟩` strictly
+between the two registers of every gate.
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("every isometry in
 eq. (16) takes constant time using measurement"), one level of the tree after the other. -/
@@ -98,39 +98,43 @@ theorem exists_rounds_registerLayersOp [NeZero d] [NeZero s] {K : ℕ}
     (hdisj : ∀ j < m, (gs j).Pairwise fun g g' => Disjoint g.span g'.span)
     (hreg : ∀ j' j, j' < j → j < m → ∀ g' ∈ gs j', ∀ g ∈ gs j,
       Disjoint (Finset.univ.image g'.sites) g.interior)
-    (hK : ∀ j < m, ∀ g ∈ gs j, IsPairProduct d (s + s) K g.X) :
-    ∃ Rs : List (MeasurementRound d N),
-      (Rs.map MeasurementRound.depth).sum = m * (4 * s + K + 2) ∧
-      MeasurementRound.IsRoundsImplementationOn Rs
+    (hK : ∀ j < m, ∀ g ∈ gs j,
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (s + s))) K g.X) :
+    ∃ R : Circuit (Geometry.ring N) KrausGate (ManyBody.Qudits (Fin N) d)
+        (ManyBody.Qudits (Fin N) d),
+      R.Forall KrausGate.ev KrausFamily.IsUnitaryOrMeasurement ∧ R.depth ≤ m * (4 * s + K) ∧
+      R.IsImplementationOn KrausGate.ev
         {v | ∀ j < m, ∀ g ∈ gs j, IsZeroOn g.interior v} (registerLayersOp gs m) := by
   set E := {v : Cfg d N → ℂ | ∀ j < m, ∀ g ∈ gs j, IsZeroOn g.interior v}
-  suffices aux : ∀ j ≤ m, ∃ Rs : List (MeasurementRound d N),
-      (Rs.map MeasurementRound.depth).sum = j * (4 * s + K + 2) ∧
-      MeasurementRound.IsRoundsImplementationOn Rs E (registerLayersOp gs j) ∧
+  suffices aux : ∀ j ≤ m, ∃ R : Circuit (Geometry.ring N) KrausGate (ManyBody.Qudits (Fin N) d)
+        (ManyBody.Qudits (Fin N) d),
+      R.Forall KrausGate.ev KrausFamily.IsUnitaryOrMeasurement ∧ R.depth ≤ j * (4 * s + K) ∧
+      R.IsImplementationOn KrausGate.ev E (registerLayersOp gs j) ∧
       ∀ v ∈ E, ∀ j', j ≤ j' → j' < m → ∀ g ∈ gs j',
         IsZeroOn g.interior (registerLayersOp gs j *ᵥ v) by
-    obtain ⟨Rs, h1, h2, -⟩ := aux m le_rfl
-    exact ⟨Rs, h1, h2⟩
+    obtain ⟨R, h1, h2, h3, -⟩ := aux m le_rfl
+    exact ⟨R, h1, h2, h3⟩
   intro j
   induction j with
   | zero =>
     intro _
-    refine ⟨[], by simp, ?_, fun v hv j' _ hj' g hg => ?_⟩
-    · simpa [registerLayersOp] using
-        MeasurementRound.isRoundsImplementationOn_nil (d := d) (N := N) E
+    refine ⟨Circuit.done _, trivial, Nat.zero_le _, ?_, fun v hv j' _ hj' g hg => ?_⟩
+    · rw [show registerLayersOp gs 0 = 1 from rfl]
+      exact Circuit.isImplementationOn_done E
     · simpa [registerLayersOp] using hv j' hj' g hg
   | succ j ih =>
     intro hj
-    obtain ⟨Rs, hRs, hRsE, hRsZ⟩ := ih (by omega)
-    obtain ⟨Rs', hRs', hRs'E⟩ := RegisterGate.exists_rounds (hdisj j (by omega)) (K := K)
+    obtain ⟨R, hRf, hRd, hRE, hRZ⟩ := ih (by omega)
+    obtain ⟨R', hR'f, hR'd, hR'E⟩ := RegisterGate.exists_rounds (hdisj j (by omega)) (K := K)
       (hK j (by omega))
-    refine ⟨Rs ++ Rs', ?_, ?_, fun v hv j' hj' hj'm g hg => ?_⟩
-    · rw [List.map_append, List.sum_append, hRs, hRs']; ring
-    · exact hRsE.append hRs'E fun v hv g hg => hRsZ v hv j le_rfl (by omega) g hg
+    refine ⟨R.comp R', hRf.comp _ hR'f,
+      (Circuit.depth_comp _ _).trans ((Nat.add_le_add hRd hR'd).trans_eq (by ring)), ?_,
+      fun v hv j' hj' hj'm g hg => ?_⟩
+    · exact hRE.comp hR'E fun v hv g hg => hRZ v hv j le_rfl (by omega) g hg
     · rw [registerLayersOp, ← mulVec_mulVec]
-      refine (hRsZ v hv j' (by omega) hj'm g hg).mulVec_of_mem_supportedOperators
+      refine (hRZ v hv j' (by omega) hj'm g hg).mulVec_of_mem_supportedOperators
         (T := Finset.univ.filter fun x ↦ ∃ g' ∈ gs j, x ∈ Finset.univ.image g'.sites) ?_
-        (list_prod_mem_supportedOperators _ fun A hA => ?_)
+        (list_prod_mem fun A hA => ?_)
       · rw [Finset.disjoint_left]
         intro x hx hx'
         obtain ⟨g', hg', hx'⟩ := (Finset.mem_filter.mp hx').2
@@ -138,7 +142,8 @@ theorem exists_rounds_registerLayersOp [NeZero d] [NeZero s] {K : ℕ}
       · obtain ⟨g', hg', rfl⟩ := List.mem_map.mp hA
         exact ManyBody.supportedOperators_mono (D' := Finset.univ.filter fun x ↦ ∃ g' ∈ gs j,
             x ∈ Finset.univ.image g'.sites)
-          (fun x hx => Finset.mem_filter.mpr ⟨Finset.mem_univ _, g', hg', hx⟩)
+          (fun x hx => Finset.mem_filter.mpr ⟨Finset.mem_univ _, g', hg', by
+            rwa [Finset.map_eq_image] at hx⟩)
           g'.op_mem_supportedOperators
 
 end Layers
@@ -342,6 +347,11 @@ theorem nodeWindow_injective₂ (hT : IsTreeLayout h s n w) {j : ℕ} (hj : j �
   unfold nodeOffset at he'
   split_ifs at he' <;> omega
 
+/-- The two registers of a node are distinct sites. -/
+theorem nodeWindow_injective (hT : IsTreeLayout h s n w) {j p : ℕ} (hj : j ≤ h + 1)
+    (hp : p < 2 ^ j) : Function.Injective (nodeWindow hT j p) := fun t t' he =>
+  (Prod.ext_iff.mp (nodeWindow_injective₂ hT hj (a₁ := (⟨p, hp⟩, t)) (a₂ := (⟨p, hp⟩, t')) he)).2
+
 variable (h n w) in
 /-- The number of sites of the node `p` of depth `j`: its leaves, and for the last node also the
 sites after the leaves. -/
@@ -448,12 +458,17 @@ section BlockOps
 
 variable {d h s n : ℕ} [NeZero s] {w : ℕ → ℕ} (hT : IsTreeLayout h s n w)
 
-/-- The unitaries of the nodes of depth `j` of the tree of a block.
+/-- The unitaries of the nodes of depth `j` of the tree of a block; there are no nodes beyond
+the depth `h + 1`.
 
 Source: arXiv:2307.01696, eq. (16) (the layer `(V⁽ʲ⁾)^{⊗ ⋯}` of the tree). -/
 noncomputable def treeLevelOp (X : ℕ → ℕ → Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ) (j : ℕ) :
     Matrix (Cfg d n) (Cfg d n) ℂ :=
-  ((List.finRange (2 ^ j)).map fun p : Fin (2 ^ j) => embedOp (nodeWindow hT j p) (X j p)).prod
+  if hj : j ≤ h + 1 then
+    ((List.finRange (2 ^ j)).map fun p : Fin (2 ^ j) =>
+      ManyBody.placeAlong (X := fun _ : Fin n ↦ Fin d)
+        ⟨nodeWindow hT j p, nodeWindow_injective hT hj p.isLt⟩ (X j p)).prod
+  else 1
 
 /-- The depths `j, …, j + m - 1` of the tree of a block, the depth `j` applied first. -/
 noncomputable def treeLevelsOp (X : ℕ → ℕ → Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ) (j : ℕ) :
@@ -466,7 +481,8 @@ noncomputable def treeLeafOp
     (U : ∀ p : Fin (2 ^ (h + 1)), Matrix (Cfg d (leafLen h n w p)) (Cfg d (leafLen h n w p)) ℂ) :
     Matrix (Cfg d n) (Cfg d n) ℂ :=
   ((List.finRange (2 ^ (h + 1))).map fun p : Fin (2 ^ (h + 1)) =>
-    embedOp (leafWindow hT p) (U p)).prod
+    ManyBody.placeAlong (X := fun _ : Fin n ↦ Fin d)
+      ⟨leafWindow hT p, leafWindow_injective hT p.isLt⟩ (U p)).prod
 
 theorem treeLevelsOp_succ' (X : ℕ → ℕ → Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ) (j : ℕ) :
     ∀ m, treeLevelsOp hT X j (m + 1) = treeLevelsOp hT X (j + 1) m * treeLevelOp hT X j
@@ -632,11 +648,15 @@ theorem list_prod_map_op_treeLevelGates {j : ℕ} (hj : j ≤ h) :
   rw [blockLayerOp_eq_list_prod, List.map_flatMap, List.flatMap_def,
     List.prod_flatten, List.map_map]
   refine congrArg List.prod (List.map_congr_left fun b _ => ?_)
-  rw [Function.comp_apply, treeLevelOp, embedOp_list_prod (blockSite_injective hN b), List.map_map,
-    List.map_map]
+  rw [Function.comp_apply, treeLevelOp, dite_eq_left (by omega : j ≤ h + 1),
+    ← ManyBody.placeAlongHom_apply, map_list_prod, List.map_map, List.map_map]
   refine congrArg List.prod (List.map_congr_left fun p _ => ?_)
-  simp only [Function.comp_apply, RegisterGate.op, treeRegGate_sites b hj p.isLt]
-  rw [embedOp_embedOp (blockSite_injective hN b)]
+  have hemb : (treeRegGate hN hT X j b p hj p.isLt).sitesEmb =
+      (⟨nodeWindow (hT b) j p, nodeWindow_injective (hT b) (by omega) p.isLt⟩ :
+        Fin (s + s) ↪ Fin (ℓ b)).trans ⟨blockSite hN b, blockSite_injective hN b⟩ :=
+    Function.Embedding.ext fun t => congrFun (treeRegGate_sites b hj p.isLt) t
+  simp only [Function.comp_apply, ManyBody.placeAlongHom_apply, RegisterGate.op]
+  rw [hemb, ManyBody.placeAlong_placeAlong]
   rfl
 
 theorem registerLayersOp_treeLevelGates :
@@ -662,9 +682,9 @@ theorem mem_treeCentralSites {h s : ℕ} {hN : ∑ b, ℓ b = N} {w : Fin M → 
   classical
   simp [treeCentralSites]
 
-/-- **The depths `0, …, h` of the trees of all the blocks in depth `(h + 1)(4s + K + 2)` with
+/-- **The depths `0, …, h` of the trees of all the blocks in depth `(h + 1)(4s + K)` with
 measurements.** If every unitary `X b j p` of the nodes is a product of at most `K` gates on
-neighbouring sites, some sequence of measurement rounds of total depth `(h + 1)(4s + K + 2)`
+neighbouring sites, some measurement circuit of depth at most `(h + 1)(4s + K)`
 implements the depths `0, …, h` of the trees of all the blocks on the vectors with `|0⟩` at the
 sites `s, …, o - s - 1` of every block, `o` the number of sites of its leaves: whatever the
 outcomes, every output is a scalar multiple of the product of the unitaries applied to the
@@ -673,61 +693,80 @@ input.
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("every isometry in
 eq. (16) takes constant time using measurement"), for blocks of any lengths. -/
 theorem exists_rounds_blockLayerOp_treeLevelsOp [NeZero d] {K : ℕ}
-    (hK : ∀ b j p, IsPairProduct d (s + s) K (X b j p)) :
-    ∃ Rs : List (MeasurementRound d N),
-      (Rs.map MeasurementRound.depth).sum = (h + 1) * (4 * s + K + 2) ∧
-      MeasurementRound.IsRoundsImplementationOn Rs
+    (hK : ∀ b j p, IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (s + s))) K (X b j p)) :
+    ∃ R : Circuit (Geometry.ring N) KrausGate (ManyBody.Qudits (Fin N) d)
+        (ManyBody.Qudits (Fin N) d),
+      R.Forall KrausGate.ev KrausFamily.IsUnitaryOrMeasurement ∧
+      R.depth ≤ (h + 1) * (4 * s + K) ∧
+      R.IsImplementationOn KrausGate.ev
         {v | IsZeroOn (treeCentralSites h s hN w) v}
         (blockLayerOp hN fun b => treeLevelsOp (hT b) (X b) 0 (h + 1)) := by
-  obtain ⟨Rs, hRs, hRsE⟩ := exists_rounds_registerLayersOp (treeLevelGates hN hT X) (h + 1)
+  obtain ⟨R, hRf, hRd, hRE⟩ := exists_rounds_registerLayersOp (treeLevelGates hN hT X) (h + 1)
     (fun j _ => pairwise_treeLevelGates j)
     (fun j' j hjj _ g' hg' g hg => disjoint_range_sites_interior_treeLevelGates hjj hg' hg)
     (K := K) fun j _ g hg => by
       obtain ⟨-, b, p, rfl⟩ := mem_treeLevelGates hg
       exact hK b j p
-  rw [registerLayersOp_treeLevelGates (h + 1) le_rfl] at hRsE
-  refine ⟨Rs, hRs, hRsE.mono fun v hv j _ g hg => ?_⟩
+  rw [registerLayersOp_treeLevelGates (h + 1) le_rfl] at hRE
+  refine ⟨R, hRf, hRd, hRE.mono fun v hv j _ g hg => ?_⟩
   refine (show IsZeroOn _ v from hv).mono fun x hx => ?_
   obtain ⟨hj, b, p, rfl⟩ := mem_treeLevelGates hg
   obtain ⟨m, hm, hm1, hm2, rfl⟩ := mem_interior_treeRegGate hj p.isLt hx
   have := nodeStop_le (h := h) (w := w b) (by omega : j ≤ h + 1) p.isLt
   exact mem_treeCentralSites.mpr ⟨b, _, by simp only; omega, by simp only; omega, rfl⟩
 
-/-- **The leaves of all the blocks by one local circuit.** If every unitary of the leaves is a
-product of at most `K` gates on neighbouring sites, the leaves of all the blocks form a local
-circuit of depth `K`. -/
-theorem isCircuitOn_blockLayerOp_treeLeafOp {K : ℕ}
+/-- **The leaves of all the blocks by one unitary circuit.** If every unitary of the leaves is
+a product of at most `K` gates on neighbouring sites, the leaves of all the blocks form a unitary
+circuit of depth at most `K` on the ring. -/
+theorem isUnitaryCircuitOn_blockLayerOp_treeLeafOp {K : ℕ}
     (U : ∀ b (p : Fin (2 ^ (h + 1))),
       Matrix (Cfg d (leafLen h (ℓ b) (w b) p)) (Cfg d (leafLen h (ℓ b) (w b) p)) ℂ)
-    (hU : ∀ b (p : Fin (2 ^ (h + 1))), IsPairProduct d (leafLen h (ℓ b) (w b) p) K (U b p)) :
-    IsCircuitOn Finset.univ K (blockLayerOp hN fun b => treeLeafOp (hT b) (U b)) := by
-  refine (IsCircuitOn.finset_noncommProd Finset.univ (fun b => Finset.univ.image (blockSite hN b))
-    (fun b _ b' _ h' => Finset.disjoint_coe.mp (by simpa using disjoint_range_blockSite hN h')) _
-    (fun b _ => ?_) _).mono_set (Finset.subset_univ _)
-  change IsCircuitOn _ K (embedOp (blockSite hN b) (treeLeafOp (hT b) (U b)))
-  rw [treeLeafOp, embedOp_list_prod (blockSite_injective hN b), List.map_map]
-  have hcomp : (embedOp (blockSite hN b) ∘ fun p : Fin (2 ^ (h + 1)) =>
-      embedOp (leafWindow (hT b) p) (U b p)) =
-      fun p : Fin (2 ^ (h + 1)) => embedOp (blockSite hN b ∘ leafWindow (hT b) p) (U b p) :=
-    funext fun p => embedOp_embedOp (blockSite_injective hN b) _ _
-  rw [hcomp]
-  refine (isCircuitOn_list_prod_embedOp (fun p : Fin (2 ^ (h + 1)) =>
-    blockSite hN b ∘ leafWindow (hT b) p) (U b)
-    (fun p => (blockSite_injective hN b).comp (leafWindow_injective (hT b) p.isLt))
-    (fun p i i' hi => blockSite_succ hN b _ _ (leafWindow_succ (hT b) p.isLt i i' hi)) (hU b) _
-    ?_).mono_set ?_
+    (hU : ∀ b (p : Fin (2 ^ (h + 1))),
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (leafLen h (ℓ b) (w b) p))) K
+        (U b p)) :
+    IsUnitaryCircuitOn (Geometry.ring N) Finset.univ K
+      (blockLayerOp hN fun b => treeLeafOp (hT b) (U b)) := by
+  classical
+  -- the leaf `p` of the block `b` as sites of the ring
+  let e : ∀ b (p : Fin (2 ^ (h + 1))), Fin (leafLen h (ℓ b) (w b) p) ↪ Fin N := fun b p =>
+    (⟨leafWindow (hT b) p, leafWindow_injective (hT b) p.isLt⟩ :
+      Fin (leafLen h (ℓ b) (w b) p) ↪ Fin (ℓ b)).trans ⟨blockSite hN b, blockSite_injective hN b⟩
+  refine (IsUnitaryCircuitOn.finset_noncommProd Geometry.ring_cell_nonempty Finset.univ
+    (fun b => Finset.univ.map ⟨blockSite hN b, blockSite_injective hN b⟩)
+    (fun b _ b' _ h' => Finset.disjoint_coe.mp (by simpa using disjoint_range_blockSite hN h'))
+    (fun b => ManyBody.placeAlong (X := fun _ : Fin N ↦ Fin d)
+      ⟨blockSite hN b, blockSite_injective hN b⟩ (treeLeafOp (hT b) (U b)))
+    (fun b _ => ?_) (pairwise_commute_blockSite hN _)).mono_set (Finset.subset_univ _)
+  have hprod : ManyBody.placeAlong (X := fun _ : Fin N ↦ Fin d)
+      ⟨blockSite hN b, blockSite_injective hN b⟩ (treeLeafOp (hT b) (U b)) =
+      ((List.finRange (2 ^ (h + 1))).map fun p =>
+        ManyBody.placeAlong (X := fun _ : Fin N ↦ Fin d) (e b p) (U b p)).prod := by
+    rw [treeLeafOp, ← ManyBody.placeAlongHom_apply, map_list_prod, List.map_map]
+    refine congrArg List.prod (List.map_congr_left fun p _ => ?_)
+    rw [Function.comp_apply, ManyBody.placeAlongHom_apply]
+    exact ManyBody.placeAlong_placeAlong (X := fun _ : Fin N ↦ Fin d) _ _ _
+  rw [hprod]
+  refine (IsUnitaryCircuitOn.list_prod Geometry.ring_cell_nonempty
+    (fun p => Finset.univ.map (e b p))
+    (fun p => ManyBody.placeAlong (X := fun _ : Fin N ↦ Fin d) (e b p) (U b p))
+    (List.finRange _) ?_ (fun p _ => IsGateProduct.isUnitaryCircuitOn_ring
+      (ManyBody.windowEquiv (e b p))
+      (fun i i' hi => show blockSite hN b (leafWindow (hT b) p i') =
+          blockSite hN b (leafWindow (hT b) p i) + 1 from
+        blockSite_succ hN b _ _ (leafWindow_succ (hT b) p.isLt i i' hi))
+      (hU b p))).mono_set ?_
   · refine List.Pairwise.imp (fun {p p'} (hne : p ≠ p') => ?_) (List.nodup_finRange _)
     refine Finset.disjoint_coe.mp ?_
-    simp only [Finset.coe_image, Finset.coe_univ, Set.image_univ]
+    simp only [Finset.coe_map, Finset.coe_univ, Set.image_univ, e,
+      Function.Embedding.coe_trans, Function.Embedding.coeFn_mk]
     rw [Set.range_comp, Set.range_comp]
     exact (disjoint_range_leafWindow (hT b) p.isLt p'.isLt
       (fun h' => hne (Fin.ext h'))).image (blockSite_injective hN b).injOn
       (Set.subset_univ _) (Set.subset_univ _)
   · intro x hx
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hx
-    obtain ⟨p, -, hx⟩ := hx
-    obtain ⟨i, -, rfl⟩ := Finset.mem_image.mp hx
-    exact Finset.mem_image.mpr ⟨_, Finset.mem_univ _, rfl⟩
+    obtain ⟨p, -, hx⟩ := Finset.mem_biUnion.mp hx
+    obtain ⟨i, -, rfl⟩ := Finset.mem_map.mp hx
+    exact Finset.mem_map.mpr ⟨_, Finset.mem_univ _, rfl⟩
 
 end Ring
 

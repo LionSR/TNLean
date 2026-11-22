@@ -35,18 +35,18 @@ Consequently `SublinearCollarBound` reduces to its mutual-information inequality
 
 ## Main definitions
 
-* `FiniteProduct.collarPreQuantity`, `FiniteProduct.collarPostQuantity`: the leaf
+* `ManyBody.collarPreQuantity`, `ManyBody.collarPostQuantity`: the leaf
   quantities `g_pre` and `g_post`.
 
 ## Main statements
 
-* `FiniteProduct.collarLeaf_entropy_identity`: the identity
+* `ManyBody.collarLeaf_regionEntropy_identity`: the identity
   `2 S(X) + g_pre - g_post = I(X : V) + I(X : YV)`.
-* `FiniteProduct.two_mutualInformation_le_collarLeaf_average`: the lower bound by
+* `ManyBody.two_regionMutualInformation_le_collarLeaf_average`: the lower bound by
   `2 I(X : W)` after an average over leaves.
-* `FiniteProduct.abs_mutualInformation_sub_le_of_traceDistance`: continuity of mutual
+* `ManyBody.abs_regionMutualInformation_sub_le_of_traceDistance`: continuity of mutual
   information with only the dimension of the first region.
-* `FiniteProduct.mutualInformation_le_add_of_traceDistance_le_rpow`: the transfer
+* `ManyBody.regionMutualInformation_le_add_of_traceDistance_le_rpow`: the transfer
   from the truncated to the original ground state.
 * `Geometry.Template.collar_cut_card_le`: the cut and size assertions.
 * `sublinearCollarBound_of_mutualInformation_le`: Proposition 9.6 follows from its
@@ -70,8 +70,9 @@ open Matrix
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped ComplexOrder
 open TNLean.Lattice
+open ManyBody (planeDomainGraph edgeBoundary ambientDilation)
 
-namespace FiniteProduct
+namespace ManyBody
 
 open TNLean.PEPS.AreaLaw
 
@@ -91,24 +92,24 @@ noncomputable def collarPostQuantity (ψ : EuclideanSpace ℂ ((v : ι) → β v
   ManyBody.regionEntropy ψ U + ManyBody.regionEntropy ψ (U ∪ Y) - ManyBody.regionEntropy ψ Y
 
 /-- Mutual information of two regions is symmetric. -/
-theorem mutualInformation_comm (ψ : EuclideanSpace ℂ ((v : ι) → β v)) (R T : Finset ι) :
+theorem regionMutualInformation_comm (ψ : EuclideanSpace ℂ ((v : ι) → β v)) (R T : Finset ι) :
     ManyBody.regionMutualInformation ψ R T = ManyBody.regionMutualInformation ψ T R := by
   unfold ManyBody.regionMutualInformation
   rw [Finset.union_comm]
   ring
 
 /-- Discarding part of the second region cannot increase mutual information. -/
-theorem mutualInformation_mono_right (ψ : EuclideanSpace ℂ ((v : ι) → β v))
+theorem regionMutualInformation_mono_right (ψ : EuclideanSpace ℂ ((v : ι) → β v))
     {X W V : Finset ι} (hWV : W ⊆ V) (hXV : Disjoint X V) :
     ManyBody.regionMutualInformation ψ X W ≤ ManyBody.regionMutualInformation ψ X V := by
-  rw [mutualInformation_comm β ψ X W, mutualInformation_comm β ψ X V]
+  rw [regionMutualInformation_comm β ψ X W, regionMutualInformation_comm β ψ X V]
   exact ManyBody.regionMutualInformation_mono_left β ψ W V X hWV hXV.symm
 
 /-- **The leaf entropy identity.** Let `X, U, Y, V` be pairwise disjoint regions
 covering all sites. For every vector `ψ`, purity gives
 `2 S(X) + g_pre - g_post = I(X : V) + I(X : YV)`. No normalization is needed.
 Source: `08-scanner.tex`, lines 868–873 and 900–905 (`scanner:ManyBody.regionEntropy-identity`). -/
-theorem collarLeaf_entropy_identity (ψ : EuclideanSpace ℂ ((v : ι) → β v))
+theorem collarLeaf_regionEntropy_identity (ψ : EuclideanSpace ℂ ((v : ι) → β v))
     {X U Y V : Finset ι} (hXU : Disjoint X U) (hXY : Disjoint X Y) (hXV : Disjoint X V)
     (hUY : Disjoint U Y) (hUV : Disjoint U V) (hYV : Disjoint Y V)
     (hcover : X ∪ U ∪ Y ∪ V = Finset.univ) :
@@ -157,16 +158,16 @@ theorem collarLeaf_entropy_identity (ψ : EuclideanSpace ℂ ((v : ι) → β v)
 /-- **The lower bound at one leaf.** If moreover a region `W` lies in the far part
 `V`, then `2 I(X : W) ≤ 2 S(X) + g_pre - g_post`, since both `V` and `YV` contain `W`.
 Source: `08-scanner.tex`, lines 906–910. -/
-theorem two_mutualInformation_le_collarLeaf (ψ : EuclideanSpace ℂ ((v : ι) → β v))
+theorem two_regionMutualInformation_le_collarLeaf (ψ : EuclideanSpace ℂ ((v : ι) → β v))
     {X U Y V W : Finset ι} (hXU : Disjoint X U) (hXY : Disjoint X Y) (hXV : Disjoint X V)
     (hUY : Disjoint U Y) (hUV : Disjoint U V) (hYV : Disjoint Y V)
     (hcover : X ∪ U ∪ Y ∪ V = Finset.univ) (hWV : W ⊆ V) :
     2 * ManyBody.regionMutualInformation ψ X W ≤
       2 * ManyBody.regionEntropy ψ X +
           (collarPreQuantity β ψ X U Y V - collarPostQuantity β ψ U Y) := by
-  rw [collarLeaf_entropy_identity β ψ hXU hXY hXV hUY hUV hYV hcover]
-  have h₁ := mutualInformation_mono_right β ψ hWV hXV
-  have h₂ := mutualInformation_mono_right β ψ (hWV.trans Finset.subset_union_right)
+  rw [collarLeaf_regionEntropy_identity β ψ hXU hXY hXV hUY hUV hYV hcover]
+  have h₁ := regionMutualInformation_mono_right β ψ hWV hXV
+  have h₂ := regionMutualInformation_mono_right β ψ (hWV.trans Finset.subset_union_right)
     (Finset.disjoint_union_right.mpr ⟨hXY, hXV⟩)
   linarith
 
@@ -176,7 +177,7 @@ of all sites, and let a fixed region `W` lie in every `Vᵢ`. Then
 `2 I(X : W) ≤ 2 S(X) + ⟨g_pre - g_post⟩`. The leaves and weights are arbitrary, so
 the bound holds whatever the selected history.
 Source: `08-scanner.tex`, lines 906–911. -/
-theorem two_mutualInformation_le_collarLeaf_average (ψ : EuclideanSpace ℂ ((v : ι) → β v))
+theorem two_regionMutualInformation_le_collarLeaf_average (ψ : EuclideanSpace ℂ ((v : ι) → β v))
     {κ : Type*} (s : Finset κ) (p : κ → ℝ) (hp : ∀ i ∈ s, 0 ≤ p i)
     (hsum : ∑ i ∈ s, p i = 1) (X W : Finset ι) (U Y V : κ → Finset ι)
     (hXU : ∀ i ∈ s, Disjoint X (U i)) (hXY : ∀ i ∈ s, Disjoint X (Y i))
@@ -189,7 +190,7 @@ theorem two_mutualInformation_le_collarLeaf_average (ψ : EuclideanSpace ℂ ((v
   have hleaf : ∀ i ∈ s, p i * (2 * ManyBody.regionMutualInformation ψ X W) ≤
       p i * (2 * ManyBody.regionEntropy ψ X + (collarPreQuantity β ψ X (U i) (Y i) (V i) -
         collarPostQuantity β ψ (U i) (Y i))) := fun i hi ↦
-    mul_le_mul_of_nonneg_left (two_mutualInformation_le_collarLeaf β ψ (hXU i hi)
+    mul_le_mul_of_nonneg_left (two_regionMutualInformation_le_collarLeaf β ψ (hXU i hi)
       (hXY i hi) (hXV i hi) (hUY i hi) (hUV i hi) (hYV i hi) (hcover i hi) (hWV i hi))
       (hp i hi)
   have h := Finset.sum_le_sum hleaf
@@ -202,7 +203,7 @@ information `I(X : J)` changes by at most `8 √δ log(e dim X)`. The dimensions
 and of the remaining sites do not enter.
 Source: Lemma 2.1, `01-preliminaries.tex`, lines 33–46, as applied in
 `08-scanner.tex`, lines 936–941. -/
-theorem abs_mutualInformation_sub_le_of_traceDistance
+theorem abs_regionMutualInformation_sub_le_of_traceDistance
     {ψ η : EuclideanSpace ℂ ((v : ι) → β v)} (hψ : ‖ψ‖ = 1) (hη : ‖η‖ = 1)
     {X J : Finset ι} (hXJ : Disjoint X J) :
     |ManyBody.regionMutualInformation ψ X J - ManyBody.regionMutualInformation η X J| ≤
@@ -246,7 +247,7 @@ at trace distance at most `C₁ n^(-500)`, and let `log dim X ≤ C₂ n²` for 
 `I_Ω(X : J) ≤ I_Ω'(X : J) + 8 √C₁ (1 + C₂) n^(-248)`. The constant depends only on
 `C₁, C₂`, not on the size of `J`.
 Source: `08-scanner.tex`, lines 936–942. -/
-theorem mutualInformation_le_add_of_traceDistance_le_rpow
+theorem regionMutualInformation_le_add_of_traceDistance_le_rpow
     {Ω Ω' : EuclideanSpace ℂ ((v : ι) → β v)} (hΩ : ‖Ω‖ = 1) (hΩ' : ‖Ω'‖ = 1)
     {X J : Finset ι} (hXJ : Disjoint X J) {C₁ C₂ : ℝ} {n : ℕ} (hn : 1 ≤ n)
     (hδ : traceDistance (vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))
@@ -254,7 +255,7 @@ theorem mutualInformation_le_add_of_traceDistance_le_rpow
     (hdim : Real.log (Fintype.card (ManyBody.RegionConfig β X)) ≤ C₂ * (n : ℝ) ^ 2) :
     ManyBody.regionMutualInformation Ω X J ≤
       ManyBody.regionMutualInformation Ω' X J + 8 * √C₁ * (1 + C₂) * (n : ℝ) ^ (-248 : ℝ) := by
-  have h := abs_mutualInformation_sub_le_of_traceDistance β hΩ hΩ' hXJ
+  have h := abs_regionMutualInformation_sub_le_of_traceDistance β hΩ hΩ' hXJ
   set δ := traceDistance (vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))
     (vecMulVec (WithLp.ofLp Ω') (star (WithLp.ofLp Ω')))
   have hn0 : (0 : ℝ) < n := by exact_mod_cast hn
@@ -290,7 +291,7 @@ theorem mutualInformation_le_add_of_traceDistance_le_rpow
   have := (abs_le.mp h).2
   linarith
 
-end FiniteProduct
+end ManyBody
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -308,10 +309,10 @@ theorem Template.collar_cut_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
     (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
     {L : ℕ} (hL : L ≤ s₀) :
-    (edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card ≤ 4 * n ∧
-    (edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points L)).card ≤
+    (edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T.points)).card ≤ 4 * n ∧
+    (edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T.points L)).card ≤
       4 * n ∧
-    (edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points L) \
+    (edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T.points L) \
       A.filter fun x ↦ x.val ∈ T.points)).card ≤ 8 * n ∧
     (A.filter fun x ↦ x.val ∈ ambientDilation T.points L).card ≤ 10 * n ^ 2 := by
   have hsd : (A.filter fun x ↦ x.val ∈ ambientDilation T.points L) \
@@ -384,11 +385,12 @@ theorem sublinearCollarBound_of_mutualInformation_le_at {q R : ℕ} {J Δ D₀ C
                 (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
               max C 10 * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) ∧
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ max C 10 * n ∧
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
+              max C 10 * n ∧
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
               max C 10 * n ∧
-            ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+            ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
                 A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ max C 10 * n ∧
             ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
@@ -400,14 +402,15 @@ theorem sublinearCollarBound_of_mutualInformation_le_at {q R : ℕ} {J Δ D₀ C
   have hC10 : (10 : ℝ) ≤ max C 10 := le_max_right _ _
   refine ⟨(hI n s₀ hn Λ h hh hhJ E₀ Ω hΩ hgap hspan A T hsep hL).trans
     (mul_le_mul_of_nonneg_right (le_max_left _ _) (by positivity)), ?_, ?_, ?_, ?_⟩
-  · have : ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ 4 * n := by
+  · have : ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
+        4 * n := by
       exact_mod_cast hX
     nlinarith
-  · have : ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+  · have : ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T.points
         ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤ 4 * n := by
       exact_mod_cast hS
     nlinarith
-  · have : ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+  · have : ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
         ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
         A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ 8 * n := by
       exact_mod_cast hY

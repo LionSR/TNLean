@@ -164,7 +164,8 @@ theorem exists_isPreparedInDepth_blockMatVector (d D : ℕ) (hdD : D * D ≤ d ^
           (∀ k, (W k).IsIsometry) ∧
           (∀ k, W k * polarSupportMatrix (chainBlockTensor A hN k) =
             polarIsoMatrix (chainBlockTensor A hN k)) ∧
-          IsPreparedInDepth (C * L) fun s => blockMatVector W hN (pairFamilyVector ω) s := by
+          IsPreparedInDepth (Geometry.ring N) (C * L)
+            fun s => blockMatVector W hN (pairFamilyVector ω) s := by
   classical
   rcases Nat.eq_zero_or_pos D with rfl | hD
   · -- no unit pair on the zero space
@@ -176,7 +177,11 @@ theorem exists_isPreparedInDepth_blockMatVector (d D : ℕ) (hdD : D * D ≤ d ^
     Function.Embedding.nonempty_of_card_le (by simpa using hDd)
   have hdig : Function.Injective dig := dig.injective
   obtain ⟨Cb, hCb⟩ := exists_blockUnitary_isometricExtension hd0 hdig hD
-  obtain ⟨Kw, hKw⟩ := exists_isPairProduct (n := D + D) hd0 (by omega)
+  have : NeZero (D + D) := ⟨by omega⟩
+  obtain ⟨Kw, hKw⟩ : ∃ Kw, ∀ X : Matrix (Cfg d (D + D)) (Cfg d (D + D)) ℂ,
+      X ∈ unitary (Matrix (Cfg d (D + D)) (Cfg d (D + D)) ℂ) →
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (D + D))) Kw X :=
+    ⟨_, fun X hX ↦ isGateProduct_pathGraph_unitaryGateCount hX⟩
   refine ⟨Cb + Kw, fun {M} _ ℓ N _ hN A ω hω L hℓ hL => ?_⟩
   choose Wp hWu hWp using fun k => exists_pairUnitary hd0 hdig (ω k) (hω k)
   have hr : ∀ k, D + D ≤ ℓ k := fun k => by have := hℓ k; omega
@@ -187,9 +192,10 @@ theorem exists_isPreparedInDepth_blockMatVector (d D : ℕ) (hdD : D * D ≤ d ^
     omega
   refine ⟨X, hX, hXE, blockLayerOp hN U * pairLayerOp hN hr Wp, ?_,
     fun _ => Pi.single ⟨0, hd0⟩ 1, funext fun s => ?_⟩
-  · have hc := (isCircuitOn_pairLayerOp hN hr fun k => hKw (Wp k) (hWu k)).mul
-      (isCircuitOn_blockLayerOp hN fun k => (hUpp k).mono (Nat.mul_le_mul_left Cb (hL k)))
-    refine (hc.mono ?_).isBondCircuitOfDepth
+  · have hc := (isUnitaryCircuitOn_blockLayerOp hN fun k =>
+        (hUpp k).mono (Nat.mul_le_mul_left Cb (hL k))).mul
+      (isUnitaryCircuitOn_pairLayerOp hN hr fun k => hKw (Wp k) (hWu k))
+    refine (hc.mono ?_).isUnitaryCircuit
     have : Kw ≤ Kw * L := Nat.le_mul_of_pos_right _ hL1
     nlinarith
   · exact blockMatVector_pairFamilyVector_eq_mulVec hd0 hN hr hdig X ω
@@ -224,7 +230,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_isometricExtension (d D : ℕ)
           (∀ k, W k * polarSupportMatrix (chainBlockTensor (zeroPad A) hN k) =
             polarIsoMatrix (chainBlockTensor (zeroPad A) hN k)) ∧
           ‖blockMatVector W hN (pairFamilyVector (padPairs A ℓ ω))‖ = 1 ∧
-          IsPreparedInDepth (C * L)
+          IsPreparedInDepth (Geometry.ring N) (C * L)
             (fun s => blockMatVector W hN (pairFamilyVector (padPairs A ℓ ω)) s) ∧
           1 - ‖⟪blockMatVector W hN (pairFamilyVector (padPairs A ℓ ω)),
               (‖state A‖ : ℂ)⁻¹ • state A⟫_ℂ‖ =
@@ -254,7 +260,8 @@ theorem exists_isPreparedInDepth_of_isPairApproximable (d D : ℕ) :
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
       (A : VaryingBondChain d D N) (L : ℕ) (δ : ℝ),
         (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) → IsPairApproximable A hN δ →
-          ∃ ψ : MPVSpace d N, ‖ψ‖ = 1 ∧ IsPreparedInDepth (C * L) (fun s => ψ s) ∧
+          ∃ ψ : MPVSpace d N, ‖ψ‖ = 1 ∧
+            IsPreparedInDepth (Geometry.ring N) (C * L) (fun s => ψ s) ∧
             1 - ‖⟪ψ, (‖state A‖ : ℂ)⁻¹ • state A⟫_ℂ‖ ≤ δ := by
   rcases Nat.lt_or_ge d 2 with hd1 | hd2
   · refine ⟨0, fun ℓ N _ hN A L δ _ _ ⟨hne, ω, hω, hδ⟩ => ?_⟩

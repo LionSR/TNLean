@@ -36,6 +36,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
+open ManyBody (planeDomainGraph edgeBoundary ambientDilation)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- A rectangle avoiding cut endpoints has a linear physical edge-boundary
@@ -45,9 +47,9 @@ the physical-to-ambient boundary comparison in Lemma 9.4. -/
 theorem card_edgeBoundary_rectRegion_le_of_disjoint
     (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (Q : IntRect)
     (hdisj : Disjoint Q.toFinset (Geometry.boundaryEndpoints Λ A)) :
-    (edgeBoundary Λ (rectRegion A Q)).card ≤ 48 * Q.size := by
+    (edgeBoundary (planeDomainGraph Λ) (rectRegion A Q)).card ≤ 48 * Q.size := by
   classical
-  have hboundary : (edgeBoundary Λ (rectRegion A Q)).card ≤
+  have hboundary : (edgeBoundary (planeDomainGraph Λ) (rectRegion A Q)).card ≤
       (ambientBoundary Q.toFinset).card :=
     Geometry.card_edgeBoundary_filter_le_ambientBoundary Λ A Q.toFinset hdisj
   have houter := card_ambientBoundary_le_outer_layer Q.toFinset
@@ -60,7 +62,7 @@ theorem card_edgeBoundary_rectRegion_le_of_disjoint
 /-- The area law gives a linear entropy bound with one constant chosen before
 the nonnegative real clearance and every physical instance.
 Source: Theorem 1.1 and the safe rectangles of `02-initial.tex`, lines 223–228. -/
-theorem exists_regionalEntropy_safe_rect_le_linear
+theorem exists_regionEntropy_safe_rect_le_linear
     (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ K : ℝ, 0 ≤ K ∧
       ∀ d : ℝ, 0 ≤ d →
@@ -85,7 +87,7 @@ theorem exists_regionalEntropy_safe_rect_le_linear
     exact (not_lt_of_ge (mul_nonneg hd (Nat.cast_nonneg Q.size))) hbad
   calc
     ManyBody.regionEntropy Ω (rectRegion A Q) ≤
-        C * (edgeBoundary Λ (rectRegion A Q)).card := harea Λ h hh
+        C * (edgeBoundary (planeDomainGraph Λ) (rectRegion A Q)).card := harea Λ h hh
             (fun X ↦ (hhJ X).trans (by linarith)) E₀ Ω hΩ hgap hspan _
     _ ≤ C * (48 * (Q.size : ℝ)) :=
       mul_le_mul_of_nonneg_left
@@ -137,7 +139,7 @@ theorem exists_initialBuffer_and_real_boxEntropy_recurrence
   classical
   obtain ⟨c, hc, b₀, hb₀, hbuffer⟩ :=
     exists_condEntropy_le_initialBuffer_real q R hq hJ hΔ
-  obtain ⟨K, hK, hlinear⟩ := exists_regionalEntropy_safe_rect_le_linear q R hq hJ hΔ
+  obtain ⟨K, hK, hlinear⟩ := exists_regionEntropy_safe_rect_le_linear q R hq hJ hΔ
   have hb : 0 ≤ max b₀ K := hb₀.trans (le_max_left _ _)
   refine ⟨c, hc, max b₀ K, hb, ?_, ?_⟩
   · intro d hd Λ h hh hhJ E₀ Ω hΩ hgap hspan A Q hclear r hr Q₀ hQ₀ hpad
@@ -149,7 +151,7 @@ theorem exists_initialBuffer_and_real_boxEntropy_recurrence
     have hF0 (t : ℕ) : 0 ≤ F t := by
       apply Real.sSup_nonneg
       rintro s ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hspan, _, _, rfl⟩
-      exact regionalEntropy_nonneg Λ q Ω hΩ _
+      exact regionEntropy_nonneg Λ q Ω hΩ _
     have hFle (t : ℕ) : F t ≤ K * (t : ℝ) := by
       refine Real.sSup_le (fun s hs ↦ ?_) (mul_nonneg hK (Nat.cast_nonneg t))
       obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hspan, hclear, hQ, rfl⟩ := hs

@@ -33,6 +33,8 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 open TNLean.Lattice
 
+open ManyBody (ambientDilation_zero)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open ActualTerminals
@@ -567,7 +569,7 @@ theorem eventually_actualScan_suppliedPrevector_sharp_upper
     let X := S.A.filter fun x ↦ x.val ∈ T
     let β := fun _ : Site Λ ↦ Fin q
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (ManyBody.splitEquiv β X) Ωt
+      (ManyBody.cutEquiv β X) Ωt
     let z := Matrix.IsHermitian.spectralRestrictionMass
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
     0 < z →
@@ -575,15 +577,15 @@ theorem eventually_actualScan_suppliedPrevector_sharp_upper
     let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
     let pre : (k : ℕ) → Config k (fun v ↦ Fin (n v)) → ℂ := fun k ↦
       replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
-    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     (∀ᶠ k : ℕ in atTop,
       (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
         ‖WithLp.toLp 2
-          (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
-            (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
+          (((1 : Matrix (Fin k → ManyBody.ComplConfig β X)
+            (Fin k → ManyBody.ComplConfig β X) ℂ) ⊗ₖ
             labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-            (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
+            (fun x : (Fin k → ManyBody.ComplConfig β X) ×
               (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) →
     ∃ c : ℝ, 0 ≤ c ∧
       Tendsto (Real.bellOverlapRemainder d c S.K) atTop (𝓝 0) ∧

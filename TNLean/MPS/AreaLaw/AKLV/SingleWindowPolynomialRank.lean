@@ -42,12 +42,12 @@ private local instance configurationDecidableEq {V : Type*} (q : ℕ) :
 /-- The regional split with the finite-set complement and the entropy
 cut coordinates have the same operator Schmidt rank. -/
 theorem operatorSchmidtRank_sheetSplit_eq_cutOperator
-    {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ} (A : Finset V)
+    {V : Type*} [Finite V] [DecidableEq V] {q : ℕ} (A : Finset V)
     (K : Matrix (V → Fin q) (V → Fin q) ℂ) :
     operatorSchmidtRank (K.reindex (sheetSplit q A) (sheetSplit q A)) =
       operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) A K) := by
-  exact operatorSchmidtRank_reindex_prodCongr (ManyBody.cutOperator A K)
-    (Equiv.refl _) (ManyBody.complementEquiv (fun _ ↦ Fin q) A)
+  have := Fintype.ofFinite V
+  rfl
 
 private theorem one_eq_classical {n : Type*} (d : DecidableEq n) :
     @OfNat.ofNat (Matrix n n ℂ) 1 (@One.toOfNat1 _ (@Matrix.one n ℂ d _ _)) =
@@ -59,75 +59,77 @@ private theorem one_eq_classical {n : Type*} (d : DecidableEq n) :
 
 /-- Restricting spectator sites to fixed configurations recovers the
 original cut operator without increasing its operator Schmidt rank. -/
-theorem operatorSchmidtRank_le_embedOp
+theorem operatorSchmidtRank_le_placeAlong
     {V W : Type*} [Fintype V] [DecidableEq V] [Fintype W] [DecidableEq W]
     {q : ℕ} (e : V ↪ W) (A : Finset V) (B : Finset W)
     (hAB : ∀ v, e v ∈ B ↔ v ∈ A) (τ : W → Fin q)
     (K : Matrix (V → Fin q) (V → Fin q) ℂ) :
     operatorSchmidtRank (K.reindex (sheetSplit q A) (sheetSplit q A)) ≤
-      operatorSchmidtRank ((embedOp e K).reindex (sheetSplit q B) (sheetSplit q B)) := by
+      operatorSchmidtRank ((ManyBody.placeAlong (X := fun _ ↦ Fin q) e K).reindex
+        (sheetSplit q B) (sheetSplit q B)) := by
   classical
   let eA : A → B := fun i ↦ ⟨e i, (hAB i).mpr i.property⟩
-  let eC : ↥Aᶜ → ↥Bᶜ := fun i ↦ ⟨e i, by
-    simpa only [Finset.mem_compl, hAB] using i.property⟩
+  let eC : {v // v ∉ A} → {v // v ∉ B} := fun i ↦ ⟨e i, fun h ↦ i.property ((hAB i).mp h)⟩
   have heA : Function.Injective eA := fun i j hij ↦
     Subtype.ext (e.injective (congrArg Subtype.val hij))
   have heC : Function.Injective eC := fun i j hij ↦
     Subtype.ext (e.injective (congrArg Subtype.val hij))
   let f : (A → Fin q) → (B → Fin q) := fun x ↦
     Function.extend eA x (fun j ↦ τ j)
-  let g : (↥Aᶜ → Fin q) → (↥Bᶜ → Fin q) := fun x ↦
+  let g : ({v // v ∉ A} → Fin q) → ({v // v ∉ B} → Fin q) := fun x ↦
     Function.extend eC x (fun j ↦ τ j)
-  have hread (x : A → Fin q) (y : ↥Aᶜ → Fin q) :
+  have hread (x : A → Fin q) (y : {v // v ∉ A} → Fin q) :
       (sheetSplit q B).symm (f x, g y) ∘ e = (sheetSplit q A).symm (x, y) := by
     funext i
     by_cases hi : i ∈ A
     · have hei : e i ∈ B := (hAB i).mpr hi
       simp only [Function.comp_apply, sheetSplit,
-        ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _ hei,
-        ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _ hi]
+        ManyBody.cutEquiv_symm_apply_mem _ _ hei,
+        ManyBody.cutEquiv_symm_apply_mem _ _ hi]
       exact heA.extend_apply x (fun j ↦ τ j) ⟨i, hi⟩
     · have hei : e i ∉ B := fun h ↦ hi ((hAB i).mp h)
       simp only [Function.comp_apply, sheetSplit,
-        ManyBody.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hei,
-        ManyBody.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hi]
-      exact heC.extend_apply y (fun j ↦ τ j) ⟨i, Finset.mem_compl.mpr hi⟩
-  have hout (x : A → Fin q) (y : ↥Aᶜ → Fin q) (j : W)
+        ManyBody.cutEquiv_symm_apply_not_mem _ _ hei,
+        ManyBody.cutEquiv_symm_apply_not_mem _ _ hi]
+      exact heC.extend_apply y (fun j ↦ τ j) ⟨i, hi⟩
+  have hout (x : A → Fin q) (y : {v // v ∉ A} → Fin q) (j : W)
       (hj : ∀ i, e i ≠ j) : (sheetSplit q B).symm (f x, g y) j = τ j := by
     by_cases hB : j ∈ B
-    · rw [sheetSplit, ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _ hB]
+    · rw [sheetSplit, ManyBody.cutEquiv_symm_apply_mem _ _ hB]
       exact Function.extend_apply' (f := eA) x (fun j ↦ τ j) ⟨j, hB⟩ (by
         rintro ⟨i, hi⟩
         exact hj i (congrArg Subtype.val hi))
-    · rw [sheetSplit, ManyBody.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hB]
-      exact Function.extend_apply' (f := eC) y (fun j ↦ τ j) ⟨j, Finset.mem_compl.mpr hB⟩ (by
+    · rw [sheetSplit, ManyBody.cutEquiv_symm_apply_not_mem _ _ hB]
+      exact Function.extend_apply' (f := eC) y (fun j ↦ τ j) ⟨j, hB⟩ (by
         rintro ⟨i, hi⟩
         exact hj i (congrArg Subtype.val hi))
   have hmatrix : K.reindex (sheetSplit q A) (sheetSplit q A) =
-      ((embedOp e K).reindex (sheetSplit q B) (sheetSplit q B)).submatrix
-        (Prod.map f g) (Prod.map f g) := by
+      ((ManyBody.placeAlong (X := fun _ ↦ Fin q) e K).reindex
+        (sheetSplit q B) (sheetSplit q B)).submatrix (Prod.map f g) (Prod.map f g) := by
     ext ⟨x₁, x₂⟩ ⟨y₁, y₂⟩
-    simp only [reindex_apply, submatrix_apply, embedOp_apply, Prod.map]
-    rw [ite_eq_left (show AgreeOff e ((sheetSplit q B).symm (f x₁, g x₂))
-      ((sheetSplit q B).symm (f y₁, g y₂)) from
-        fun j hj ↦ (hout x₁ x₂ j hj).trans (hout y₁ y₂ j hj).symm),
-      hread, hread]
+    simp only [reindex_apply, submatrix_apply, ManyBody.placeAlong_apply, Prod.map]
+    rw [ite_eq_left (show ∀ j, (∀ i, e i ≠ j) → (sheetSplit q B).symm (f x₁, g x₂) j =
+        (sheetSplit q B).symm (f y₁, g y₂) j from
+        fun j hj ↦ (hout x₁ x₂ j hj).trans (hout y₁ y₂ j hj).symm)]
+    exact congrArg₂ K (hread x₁ x₂).symm (hread y₁ y₂).symm
   rw [hmatrix]
   exact operatorSchmidtRank_submatrix_prod_le _ f f g g
 
-/-- The supported extension is a unital algebra homomorphism. -/
-private def embedOpAlgHom {V W : Type*} [Fintype V] [DecidableEq V]
+/-- The placement along an embedding, as a unital algebra homomorphism for the
+classical decidable equality of configurations fixed in this file. -/
+private def placeAlongAlgHom {V W : Type*} [Fintype V] [DecidableEq V]
     [Fintype W] [DecidableEq W] {q : ℕ} (e : V ↪ W) :
     Matrix (V → Fin q) (V → Fin q) ℂ →ₐ[ℂ] Matrix (W → Fin q) (W → Fin q) ℂ where
-  toFun := embedOp e
-  map_one' := by simpa only [one_eq_classical] using (embedOp_one (d := q) e)
-  map_mul' X Y := (embedOp_mul e.injective X Y).symm
-  map_zero' := embedOp_zero e
-  map_add' := embedOp_add e
+  toFun := ManyBody.placeAlong (X := fun _ ↦ Fin q) e
+  map_one' := by
+    simpa only [one_eq_classical] using ManyBody.placeAlong_one (X := fun _ ↦ Fin q) e
+  map_mul' K K' := ManyBody.placeAlong_mul (X := fun _ ↦ Fin q) e K K'
+  map_zero' := ManyBody.placeAlong_zero (X := fun _ ↦ Fin q) e
+  map_add' := ManyBody.placeAlong_add (X := fun _ ↦ Fin q) e
   commutes' z := by
-    simp only [Algebra.algebraMap_eq_smul_one, embedOp_smul]
+    simp only [Algebra.algebraMap_eq_smul_one, ManyBody.placeAlong_smul]
     congr 1
-    simpa only [one_eq_classical] using (embedOp_one (d := q) e)
+    simpa only [one_eq_classical] using ManyBody.placeAlong_one (X := fun _ ↦ Fin q) e
 
 /-- A polynomial in a single physical window and its two exterior
 operators has the rank bound inherited from the two-window estimate.
@@ -161,7 +163,7 @@ theorem operatorSchmidtRank_aeval_single_window_le_pow
       have := congrArg Fin.val hij
       dsimp at this
       omega⟩
-  let E := embedOpAlgHom (q := q) e
+  let E := placeAlongAlgHom (q := q) e
   let b := N + c
   let F : ((Fin (2 * w) ⊕ Fin (2 * w)) ⊕ Fin 3) →
       Matrix (Fin T → Fin q) (Fin T → Fin q) ℂ :=
@@ -170,9 +172,10 @@ theorem operatorSchmidtRank_aeval_single_window_le_pow
       {X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
       (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
       (hSR : ∀ i ∈ S, e i ∈ R) : E X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) R := by
-    apply ManyBody.supportedOperators_mono ?_ (embedOp_mem_supportedOperators_image e.injective hX)
+    apply ManyBody.supportedOperators_mono ?_
+      (ManyBody.placeAlong_mem_supportedOperators_map (X := fun _ ↦ Fin q) e hX)
     intro j hj
-    obtain ⟨i, hi, rfl⟩ := Finset.mem_image.mp hj
+    obtain ⟨i, hi, rfl⟩ := Finset.mem_map.mp hj
     exact hSR i hi
   have hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval T r.val (r.val + 2) : Finset (Fin T)) := fun _ ↦ zero_mem _
@@ -224,7 +227,7 @@ theorem operatorSchmidtRank_aeval_single_window_le_pow
       (0 ≤ i.val ∧ i.val < c + w + 1)
     dsimp [b, N]
     omega
-  have hrestrict := operatorSchmidtRank_le_embedOp e A B hAB (fun _ ↦ τ)
+  have hrestrict := operatorSchmidtRank_le_placeAlong e A B hAB (fun _ ↦ τ)
     (Polynomial.aeval ((∑ r, W r) + PL + PR) P)
   apply hrestrict.trans
   dsimp only at hrank

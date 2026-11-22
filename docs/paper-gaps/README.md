@@ -726,7 +726,7 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   nearest-neighbor parent Hamiltonian for the blocked tensor from the sharper
   original-lattice range claim and its quantification over all sufficiently
   long periodic chains.
-- `nachtergaele96_theorem_2_1_lower_endpoint.tex` records that Nachtergaele's
+- [nachtergaele96_theorem_2_1_lower_endpoint.tex](https://sirui-lu.com/QICLean/paper-gaps/nachtergaele96_theorem_2_1_lower_endpoint.pdf) (QICLean) records that Nachtergaele's
   Theorem 2.1(i) is false as printed. Its conditions C1, C2 and C3 carry lower
   endpoints while its proof estimates every martingale difference, and a
   one-site chain whose leftmost interaction is weakened satisfies all three
@@ -763,10 +763,11 @@ non-periodic FT cleanup loop unless explicitly brought back into scope.
   positive-loop product state is proved to belong to the finite parent ground
   space for lengths at least two. Identifying these states with the chosen
   normal-tensor basis and proving that they span remain open.
-- `cpsv16_parent_commuting_hamiltonian_scope.tex` records that the current
-  parent commuting Hamiltonian predicate keeps only the idempotent-product
-  consequence of CPSV16 Definition D.2, while the source definition also has
-  tensor-product locality and orthogonal-projector hypotheses.
+- `cpsv16_parent_commuting_hamiltonian_scope.tex` records that CPSV16
+  Definition D.2 is formalized by the commuting parent Hamiltonian predicate on
+  a system of sites (the earlier idempotent-product predicate, satisfied by every
+  idempotent, was removed), and that the three-site RFP layer still does not
+  identify its coefficient-space maps with source projectors.
 
 For Wolf Chapter 3 positive maps:
 

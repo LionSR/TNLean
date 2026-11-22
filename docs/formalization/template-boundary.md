@@ -9,7 +9,7 @@ The theorem `template_boundary_card_le` states the actual unordered ambient
 nearest-neighbor boundary bound `4*n` for every `0 ≤ j ≤ s₀` when `Ctpl ≥ 24`.
 `template_shell_boundary_card_le` gives `8*n` for `T_j \ T`.
 
-`ambientBoundary S` uses the existing `edgeBoundary` and `ManyBody.planeDomainGraph` on
+`ambientBoundary S` uses QICLean's `ManyBody.edgeBoundary` of `ManyBody.planeDomainGraph` on
 `ambientDilation S 1`, then maps subtype endpoints back with `Sym2.map`.
 The exact crossing characterization proves that every ambient edge is present.
 Injectivity preserves the cardinality of unordered edges, and the crossing

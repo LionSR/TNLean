@@ -236,8 +236,8 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
 \begin{lemma}[The state of a tensor injective on a set of bond pairs, with
         measurements]
     \label{thm:ldp_injective_on_measurement}
-    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of_isInjectiveOn,
-        MPSPreparation.isPreparedWithMeasurementsAndCircuitInDepth_of_isPreparedInDepth}
+    \lean{MPSPreparation.exists_isOneRoundConversion_blockIsometryState_of_isInjectiveOn,
+        MPSPreparation.exists_isOneRoundConversion_of_isPreparedInDepth}
     \leanok
     \uses{def:qc_measurement_circuit_preparation, thm:ldp_window_ghz_measurement,
         thm:ldp_block_sum_unitary, thm:ldp_sequential_factorization_on,
@@ -314,9 +314,9 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
 \begin{lemma}[Every translation-invariant MPS with measurements, in depth
         $O(\log(N/\varepsilon))$]
     \label{thm:ldp_overlapping_measurement_depth}
-    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero,
+    \lean{MPSPreparation.exists_isOneRoundConversion_le_log_of_mpvState_ne_zero,
         MPSPreparation.exists_mpvState_repeatedBlockSum_ne_zero,
-        MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log}
+        MPSPreparation.exists_isOneRoundConversion_le_log}
     \leanok
     \uses{thm:ldp_injective_on_measurement, thm:ldp_overlapping_unequal_blocks_error,
         lem:ldp_overlapping_block_injectivity, lem:ldp_overlapping_one_block_chain,

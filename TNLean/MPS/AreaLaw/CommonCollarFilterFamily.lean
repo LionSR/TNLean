@@ -44,10 +44,10 @@ theorem exists_common_collar_filter_family
     let J := interval L p r
     let ep := intervalShiftOrderIso (hpc.trans (hcd.trans hdr)) hrL
     let HM := EuclideanSpace ℂ (J → Fin q)
-    let HE := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)
-    let tau := (ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _)
+    let HE := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)
+    let tau := (ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-    let Phi := ((EuclideanSpace.basisFun (↥(Jᶜ) → Fin q) ℂ).tensorProduct
+    let Phi := ((EuclideanSpace.basisFun ({v // v ∉ J} → Fin q) ℂ).tensorProduct
       (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
     let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ HE HM)
     ∃ (n : ℕ) (W : Fin n → Matrix (J → Fin q) (J → Fin q) ℂ),
@@ -60,20 +60,20 @@ theorem exists_common_collar_filter_family
           EuclideanSpace ℂ (Fin L → Fin q)),
         let Z := (Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)).symm Kwhole
         0 ≤ Delta →
-        (∃ M0 : Fin n0 → Matrix (↥(Eᶜ) → Fin q) (↥(Eᶜ) → Fin q) ℂ,
+        (∃ M0 : Fin n0 → Matrix ({v // v ∉ E} → Fin q) ({v // v ∉ E} → Fin q) ℂ,
           Z = (∑ i, M0 i ⊗ₖ W0 i).submatrix
-            ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))
-            ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))) →
+            ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))
+            ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))) →
         (∀ t ∈ T, Kwhole t ∈ T) → (∀ z ∈ Tᗮ, Kwhole z ∈ Tᗮ) →
         (∀ t ∈ T, ‖t‖ ≤ ‖Kwhole t‖) →
         (∀ z ∈ Tᗮ, ‖Kwhole z‖ ^ 2 ≤ Delta * ‖z‖ ^ 2) →
         let K := Tm.toContinuousLinearEquiv.conjContinuousAlgEquiv Kwhole
         let Tc := T.map Tm.toLinearEquiv.toLinearMap
-        ∃ M : Fin n → Matrix (↥(Jᶜ) → Fin q) (↥(Jᶜ) → Fin q) ℂ,
+        ∃ M : Fin n → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ,
           Z = (∑ i, M i ⊗ₖ W i).submatrix tau tau ∧
           K = ∑ i, TensorProduct.mapL
             (Matrix.toEuclideanCLM (n := J → Fin q) (𝕜 := ℂ) (W i))
-            (Matrix.toEuclideanCLM (n := ↥(Jᶜ) → Fin q) (𝕜 := ℂ) (M i)) ∧
+            (Matrix.toEuclideanCLM (n := {v // v ∉ J} → Fin q) (𝕜 := ℂ) (M i)) ∧
           (∀ t ∈ Tc, K t ∈ Tc) ∧ (∀ z ∈ Tcᗮ, K z ∈ Tcᗮ) ∧
           (∀ t ∈ Tc, ‖t‖ ≤ ‖K t‖) ∧
           (∀ z ∈ Tcᗮ, ‖K z‖ ^ 2 ≤ Delta * ‖z‖ ^ 2) ∧
@@ -97,7 +97,7 @@ theorem exists_common_collar_filter_family
     (Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)).apply_symm_apply Kwhole
   have hdec : K = ∑ i, TensorProduct.mapL
       (Matrix.toEuclideanCLM (n := J → Fin q) (𝕜 := ℂ) (W i))
-      (Matrix.toEuclideanCLM (n := ↥(Jᶜ) → Fin q) (𝕜 := ℂ) (M i)) := by
+      (Matrix.toEuclideanCLM (n := {v // v ∉ J} → Fin q) (𝕜 := ℂ) (M i)) := by
     exact (congrArg (fun A : EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ]
         EuclideanSpace ℂ (Fin L → Fin q) ↦
       Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L A ∘L
@@ -111,7 +111,7 @@ theorem exists_common_collar_filter_family
   simpa only [Fintype.card_fin] using
     Submodule.IsViable.word_power_of_tensor_decomposition K
       (fun i ↦ Matrix.toEuclideanCLM (n := J → Fin q) (𝕜 := ℂ) (W i))
-      (fun i ↦ Matrix.toEuclideanCLM (n := ↥(Jᶜ) → Fin q) (𝕜 := ℂ) (M i))
+      (fun i ↦ Matrix.toEuclideanCLM (n := {v // v ∉ J} → Fin q) (𝕜 := ℂ) (M i))
       hdec hDelta hKT' hKTo' hlow' hhigh' a S delta hS hdelta
 
 end TNLean.MPS.AreaLaw

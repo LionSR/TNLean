@@ -41,7 +41,7 @@ current exponent up to the initial exponent. The threshold is chosen before
 the lower exponent and all geometric and physical data. The conclusion concerns
 the same unit vector as the supplied pointwise safe-rectangle estimate.
 Source: auxiliary to `08-scanner.tex`, lines 693–703 and 705–729. -/
-theorem exists_regionalEntropy_rounded_shell_le_uniform_rpow
+theorem exists_regionEntropy_rounded_shell_le_uniform_rpow
     {C₂ e₀ : ℝ} (hC₂ : 0 < C₂) (he₀ : 0 < e₀) (he₀₁ : e₀ < 1) :
     ∃ N : ℕ, 1 ≤ N ∧
       ∀ b : ℝ, 0 < b →
@@ -76,11 +76,11 @@ theorem exists_regionalEntropy_rounded_shell_le_uniform_rpow
     exact_mod_cast (show 0 < Q.size by omega)
   have hC : 0 ≤ C :=
     (mul_nonneg_iff_of_pos_right (Real.rpow_pos_of_pos hspos (1 + e))).mp
-      ((regionalEntropy_nonneg Λ q Ω hΩ (rectRegion A Q)).trans (hbox Q hsafe))
+      ((regionEntropy_nonneg Λ q Ω hΩ (rectRegion A Q)).trans (hbox Q hsafe))
   obtain ⟨hLpos, htwo, hclearance⟩ := hN Q.size hs
   have hL : L ≤ Q.size := (Nat.le_mul_of_pos_left L zero_lt_two).trans htwo
   have hbudget : D₀ * L + L ≤ D₀ * Q.size := hclearance D₀ hD₀
-  have hshell := IntRect.regionalEntropy_shell_le_of_safe_box
+  have hshell := IntRect.regionEntropy_shell_le_of_safe_box
     Λ q D₀ Ω hΩ A Q hsafe j L (Nat.log 2 L) hj hL
     (Nat.pow_log_le_self 2 hLpos.ne')
     (Nat.lt_pow_succ_log_self (b := 2) (by decide) L) hbudget e C he hC hbox

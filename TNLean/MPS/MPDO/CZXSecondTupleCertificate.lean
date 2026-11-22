@@ -438,7 +438,8 @@ theorem isTrivialHolonomy_fiberPhaseStar_iff (hN : 3 ≤ N)
 bond $(j,j+1)$ of the periodic chain. -/
 def placedGaussOperatorStar (N : ℕ) (hN : 2 ≤ N) (j : Fin N) :
     ChainOperator (Fintype.card (Fin 4 × Multiplicative (ZMod 2))) N :=
-  embedLocalOperator 2 N hN j
+  ManyBody.placeAlong (X := fun _ ↦ Fin (Fintype.card (Fin 4 × Multiplicative (ZMod 2))))
+    (ManyBody.ringWindow hN j)
     (Matrix.reindexAlgEquiv ℂ ℂ windowCoordinates
       (TNLean.Algebra.gaussOperator circuitTupleStar gen))
 
@@ -458,10 +459,8 @@ theorem placedGaussProjector_circuitTupleStar (N : ℕ) (hN : 2 ≤ N) (j : Fin 
     placedGaussProjector 4 (Multiplicative (ZMod 2)) N hN j circuitTupleStar =
       (2 : ℂ)⁻¹ • (1 + placedGaussOperatorStar N hN j) := by
   rw [placedGaussProjector, gaussWindowProjector, gaussProjector_circuitTupleStar, map_smul,
-    map_add, map_one, placedGaussOperatorStar]
-  change embedLocalOperatorAlgHom 2 N hN j _ = _
-  rw [map_smul, map_add, map_one]
-  rfl
+    map_add, map_one, placedGaussOperatorStar, ManyBody.placeAlong_smul, ManyBody.placeAlong_add,
+    ManyBody.placeAlong_one]
 
 /-- The common fixed subspace of the placed Gauss projectors of the second
 displayed tuple is the common fixed subspace of the placed Gauss operators
@@ -481,7 +480,7 @@ theorem placedGaussOperatorStar_eq_monomial (N : ℕ) (hN : 2 ≤ N) (j : Fin N)
         (windowPerm 2 hN j (windowCoordinates.symm.trans (localPerm.trans windowCoordinates)))
         fun t ↦ localPhaseStar (windowCoordinates.symm (MPSTensor.extractWindow 2 j t)) := by
   rw [placedGaussOperatorStar, gaussOperator_circuitTupleStar_gen, Matrix.coe_reindexAlgEquiv,
-    reindex_monomial, embedLocalOperator_monomial]
+    reindex_monomial, placeAlong_ringWindow_monomial]
   rfl
 
 /-- The phase of the placed Gauss operator of the second displayed tuple is the

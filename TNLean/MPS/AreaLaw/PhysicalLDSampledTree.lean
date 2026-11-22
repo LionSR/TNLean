@@ -50,13 +50,11 @@ theorem exists_physical_ld_sampled_interval_tree (etaLD : ℝ) (hLD : 0 < etaLD)
       let u := 1 + Real.log (mi : ℝ) + Real.log (1 / g)
       let ell : ℕ := ⌈C * u ^ 2 / g⌉₊
       let D := (mi * ell ^ 2) ^ (22 * ell)
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ (h0 : ∀ i, 0 ≤ Φ.term i), (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let G := fun eta : ℝ ↦ Submodule.spectralSpanLE
@@ -110,10 +108,10 @@ theorem exists_physical_ld_sampled_interval_tree (etaLD : ℝ) (hLD : 0 < etaLD)
           ∀ v ∈ S0, IsOpenMPS L q (1000000 * Dref ^ 2 * (L + 1) * count ^ 2)
             (fullIntervalRead L q v)) :=
   exists_physical_ld_sampled_interval_tree_of_clause etaLD hLD
-    (fun L q m w hq h h0 count Dref S0 ↦
+    (fun L q m w hq Φ h0 count Dref S0 ↦
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let G := fun eta : ℝ ↦ Submodule.spectralSpanLE
@@ -123,7 +121,7 @@ theorem exists_physical_ld_sampled_interval_tree (etaLD : ℝ) (hLD : 0 < etaLD)
         ∀ v ∈ S0, IsOpenMPS L q (1000000 * Dref ^ 2 * (L + 1) * count ^ 2)
           (fullIntervalRead L q v))
     (by
-      intro _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ hclose _ hMPS
+      intro _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ hclose _ hMPS
       exact ⟨hclose, hMPS⟩)
 
 end TNLean.MPS.AreaLaw

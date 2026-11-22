@@ -125,8 +125,7 @@ theorem isFrustrationFree_of_mem_chainGroundSpace (A : MPSTensor d D)
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
   intro i
   ext σ
-  simp only [localTerm, hLN, ↓reduceDIte, LinearMap.pi_apply, LinearMap.comp_apply,
-    LinearMap.proj_apply, Pi.zero_apply]
+  rw [localTerm_apply_of_le A L N hLN i]
   have hrestrict :
       (fun τ => ψ (replaceWindow L hLN i σ τ)) =
         cyclicRestrictₗ hN L i σ ψ := by

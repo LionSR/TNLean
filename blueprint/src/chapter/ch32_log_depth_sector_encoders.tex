@@ -78,7 +78,7 @@ develops an operator-norm refinement motivated by that discussion.
 
 \begin{lemma}[A genuine unitary implements the whole block encoder]
     \label{thm:ldp_whole_block_encoder}
-    \lean{MPSPreparation.exists_isLocalCircuitOfDepth_registerEncoder,
+    \lean{MPSPreparation.exists_isUnitaryCircuit_registerEncoder,
         MPSPreparation.mul_registerEncoder_eq_blockIsometryEncoder}
     \leanok
     \uses{def:ldp_register_block_encoders, def:qc_local_circuit}
@@ -146,7 +146,7 @@ develops an operator-norm refinement motivated by that discussion.
 
 \begin{lemma}[Coherent local conversion through a common seed]
     \label{thm:ldp_common_encoder_conversion}
-    \lean{QuantumCircuit.IsLocalCircuitOfDepth.norm_encoder_conversion_le}
+    \lean{QuantumCircuit.IsUnitaryCircuit.norm_encoder_conversion_le}
     \leanok
     \uses{def:qc_local_circuit}
     Let $U_A,U_B$ be genuine local unitaries of depths $T_A,T_B$ on the

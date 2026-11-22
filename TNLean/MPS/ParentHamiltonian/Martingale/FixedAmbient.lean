@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.InnerProductSpace.Semisimple
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
-import TNLean.MPS.ParentHamiltonian.Martingale.ProjectionCancellation
+import QICLean.ManyBody.Hamiltonian.Martingale.ProjectionCancellation
 
 /-!
 # Fixed-ambient open-chain ground projections

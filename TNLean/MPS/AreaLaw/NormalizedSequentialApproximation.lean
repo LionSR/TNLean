@@ -44,14 +44,15 @@ theorem one_sub_regional_kyFanNorm_le_twice_error
     (ψ φ : EuclideanSpace ℂ (Fin L → Fin q)) (hφ : ‖φ‖ = 1)
     (delta : ℝ) (hdelta1 : delta ≤ 1) (D : ℕ) :
     let beta := fun _ : Fin L ↦ Fin q
-    let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-    let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
       (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
     let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+      (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
       (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
-    let e := Tm.trans (Submodule.euclideanTensorEquiv (J → Fin q) (↥(Jᶜ) → Fin q)).symm
+    let e := Tm.trans
+      (Submodule.euclideanTensorEquiv (J → Fin q) ({v // v ∉ J} → Fin q)).symm
     Matrix.schmidtRank (WithLp.ofLp (e φ)) ≤ D →
     1 - delta ≤ ‖⟪φ, ψ⟫_ℂ‖ →
     1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) J ψ).kyFanNorm D ≤

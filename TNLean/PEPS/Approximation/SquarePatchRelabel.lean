@@ -59,11 +59,13 @@ theorem SquarePatch.exists_relabel (e : V ≃ W) {pos : V → ℝ × ℝ}
     have hrank : rankOne (U r v) =
         Matrix.reindex (Equiv.arrowCongr (R r) (Equiv.refl (Fin q)))
           (Equiv.arrowCongr (R r) (Equiv.refl (Fin q))) (rankOne v) := rfl
-    simp only [hrank, E, Matrix.coe_reindexAlgEquiv,
-      ← QuantumCircuit.embedOp_equiv_eq_reindex, QuantumCircuit.place_eq_embedOp,
-      QuantumCircuit.embedOp_embedOp Subtype.val_injective,
-      QuantumCircuit.embedOp_embedOp e.injective]
-    rfl
+    ext x y
+    simp only [hrank, E, Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply,
+      Matrix.submatrix_apply, ManyBody.place_apply]
+    refine if_congr ⟨fun h u hu ↦ h (e u) (by simpa [squareSample] using hu),
+      fun h w hw ↦ ?_⟩ rfl rfl
+    rw [← e.apply_symm_apply w]
+    exact h (e.symm w) fun hm ↦ hw (by simpa [squareSample] using hm)
   let P' : SquarePatch (fun w ↦ pos (e.symm w)) q := {
     center := P.center
     scale := P.scale

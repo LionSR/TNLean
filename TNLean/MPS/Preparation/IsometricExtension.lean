@@ -147,7 +147,7 @@ theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg
     ∃ C : ℕ, ∀ q, 3 * D ≤ q → ∀ A : MPSChainTensor d D q,
       ∃ (U : Matrix (Cfg d q) (Cfg d q) ℂ)
         (W : Matrix (Fin (blockPhysDim d q)) (Fin (D * D)) ℂ),
-        IsPairProduct d q (C * q) U ∧ W.IsIsometry ∧
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph q)) (C * q) U ∧ W.IsIsometry ∧
         W * polarSupportMatrix (MPSChainTensor.blockTensor A) =
           polarIsoMatrix (MPSChainTensor.blockTensor A) ∧
         ∀ (l r : Fin D) τ, U τ (blockInputCfg hd q dig l r) =
@@ -175,7 +175,7 @@ theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg
     exact hUZ x (dec i)
   refine ⟨U, W, hU, ?_, ?_, fun l r' τ => ?_⟩
   · -- the columns of `W` are columns of the unitary `U` at distinct configurations
-    have hUu := Unitary.star_mul_self_of_mem hU.mem_unitary
+    have hUu := Unitary.star_mul_self_of_mem hU.mem_unitaryGroup
     ext x x'
     rw [mul_apply, ← dec.symm.sum_comp]
     have h := congrFun (congrFun hUu

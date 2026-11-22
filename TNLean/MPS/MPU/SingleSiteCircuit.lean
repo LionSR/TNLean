@@ -4,8 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Overlap.Basic
-import TNLean.Circuit.CleanImplementationPlacement
-import TNLean.Algebra.FinCastAddNatAdd
+import QICLean.Algebra.FinCastAddNatAdd
+import QICLean.Circuit.Geometry.Graph
+import QICLean.Circuit.Model.CleanWorkspace
 
 /-!
 # A single-site unitary with one clean padding qudit
@@ -24,6 +25,36 @@ open Matrix MPSTensor QuantumCircuit
 
 namespace MPUCircuit
 
+/-- An operator on the logical sites, placed on the logical sites of a register with a workspace
+appended in the zero configuration, implements itself cleanly. The identity holds for arbitrary
+operators, without a unitarity premise. -/
+theorem isCleanImplementation_placeAlong_workspace {d n A : ℕ} [NeZero d]
+    (Z : Matrix (Cfg d n) (Cfg d n) ℂ) :
+    IsCleanImplementation (basisInclusion (workspaceEmbedding (n := n) (0 : Fin A → Fin d)))
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.castAddEmb A) Z) Z := by
+  unfold IsCleanImplementation
+  ext z x
+  rw [mul_basisInclusion_apply, basisInclusion_workspaceEmbedding_mul_apply,
+    ManyBody.placeAlong_apply, workspaceEmbedding_apply]
+  have hoff : (∀ v, (∀ u, Fin.castAddEmb A u ≠ v) → z v = Fin.append x 0 v) ↔
+      ∀ j, z (Fin.natAdd n j) = (0 : Fin A → Fin d) j := by
+    constructor
+    · intro h j
+      have hj := h (Fin.natAdd n j) fun u hu ↦ by
+        have hv := congrArg Fin.val hu
+        simp only [Fin.castAddEmb_apply, Fin.val_castAdd, Fin.val_natAdd] at hv
+        have := u.isLt
+        omega
+      rwa [Fin.append_right] at hj
+    · intro h v hv
+      induction v using Fin.addCases with
+      | left j => exact (hv j rfl).elim
+      | right j => rw [Fin.append_right]; exact h j
+  by_cases h : ∀ j, z (Fin.natAdd n j) = (0 : Fin A → Fin d) j
+  · rw [ite_eq_left (hoff.mpr h), ite_eq_left h]
+    exact congrArg₂ Z rfl (funext fun u ↦ Fin.append_left x 0 u)
+  · rw [ite_eq_right (fun h' ↦ h (hoff.mp h')), ite_eq_right h]
+
 variable {d : ℕ}
 
 /-- Apply a single-site operator to the first of two sites and leave the
@@ -31,7 +62,7 @@ second site unchanged. Source: the single-site endpoint construction in
 Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 noncomputable def singleSitePaddedOperator (U : Matrix (Cfg d 1) (Cfg d 1) ℂ) :
     Matrix (Cfg d 2) (Cfg d 2) ℂ :=
-  embedOp (Fin.castAdd 1) U
+  ManyBody.placeAlong (X := fun _ ↦ Fin d) (Fin.castAddEmb 1) U
 
 /-- Padding by an identity preserves actual unitarity, including scalar
 phase. Source: the single-site endpoint construction in Section 5 of
@@ -40,30 +71,25 @@ theorem singleSitePaddedOperator_mem_unitary
     {U : Matrix (Cfg d 1) (Cfg d 1) ℂ}
     (hU : U ∈ unitary (Matrix (Cfg d 1) (Cfg d 1) ℂ)) :
     singleSitePaddedOperator U ∈ unitary (Matrix (Cfg d 2) (Cfg d 2) ℂ) :=
-  embedOp_mem_unitary (Fin.castAdd_injective 1 1) hU
+  ManyBody.placeAlong_mem_unitaryGroup _ hU
 
-/-- The padded operator is one allowed neighboring pair gate. Source:
-arXiv:2508.08160, local `main.tex`, line 820, and the single-site endpoint
-construction in Section 5 of the circuit audit. -/
-theorem singleSitePaddedOperator_isNeighbourGate
+/-- A single-site unitary therefore has a one-gate neighboring-pair
+implementation on two qudits: it is a unitary supported on the cell of the
+two sites. Source: arXiv:2508.08160, local `main.tex`, line 820, and the
+single-site endpoint in Section 5 of
+`docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
+theorem singleSitePaddedOperator_isGateProduct
     {U : Matrix (Cfg d 1) (Cfg d 1) ℂ}
     (hU : U ∈ unitary (Matrix (Cfg d 1) (Cfg d 1) ℂ)) :
-    IsNeighbourGate (singleSitePaddedOperator U) := by
+    IsGateProduct (Geometry.graph (SimpleGraph.pathGraph 2)) 1 (singleSitePaddedOperator U) := by
   have hpair : ({0, 1} : Finset (Fin 2)) = Finset.univ := by
     ext i
     fin_cases i <;> simp
-  refine ⟨singleSitePaddedOperator_mem_unitary hU, 0, 1, by decide, ?_⟩
-  rw [hpair]
-  exact (by simp)
-
-/-- A single-site unitary therefore has a one-gate neighboring-pair
-implementation on two qudits. Source: the single-site endpoint in Section 5
-of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem singleSitePaddedOperator_isPairProduct
-    {U : Matrix (Cfg d 1) (Cfg d 1) ℂ}
-    (hU : U ∈ unitary (Matrix (Cfg d 1) (Cfg d 1) ℂ)) :
-    IsPairProduct d 2 1 (singleSitePaddedOperator U) :=
-  IsPairProduct.of_isNeighbourGate (singleSitePaddedOperator_isNeighbourGate hU)
+  refine IsGateProduct.of_mem_supportedOperators
+    (b := Geometry.pathCell (p := (0 : Fin 2)) (p' := 1) (by decide))
+    (singleSitePaddedOperator_mem_unitary hU) ?_
+  rw [Geometry.pathCell_cell, hpair, ManyBody.supportedOperators_univ]
+  exact Submodule.mem_top (R := ℂ)
 
 variable [NeZero d]
 
@@ -74,31 +100,9 @@ Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem singleSitePaddedOperator_isCleanImplementation
     (U : Matrix (Cfg d 1) (Cfg d 1) ℂ) :
     IsCleanImplementation
-      (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := 1) (a := 1)))
-      (singleSitePaddedOperator U) U := by
-  classical
-  change singleSitePaddedOperator U *
-    initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := 1) (a := 1)) = _
-  rw [mul_initializedBasisMatrix]
-  ext z x
-  change embedOp (Fin.castAdd 1) U z (Fin.append x 0) = _
-  rw [embedOp_apply, initializedBasisMatrix_zeroWorkspace_mul_apply]
-  have hguard : AgreeOff (Fin.castAdd 1) z (Fin.append x 0) ↔
-      ∀ j : Fin 1, z (Fin.natAdd 1 j) = 0 := by
-    constructor
-    · intro h j
-      have hj : ∀ i : Fin 1, Fin.castAdd 1 i ≠ Fin.natAdd 1 j := fun i ↦
-        Fin.castAdd_ne_natAdd i j
-      simpa only [Fin.append_right, Pi.zero_apply] using h (Fin.natAdd 1 j) hj
-    · intro h j
-      refine Fin.addCases (fun i hi ↦ ?_) (fun i _ ↦ ?_) j
-      · exact False.elim (hi i rfl)
-      · simpa only [Fin.append_right, Pi.zero_apply] using h i
-  have hrestrict : (Fin.append x (0 : Cfg d 1)) ∘ Fin.castAdd 1 = x := by
-    funext i
-    exact Fin.append_left _ _ i
-  simp only [hguard, hrestrict]
-  rfl
+      (basisInclusion (workspaceEmbedding (n := 1) (0 : Fin 1 → Fin d)))
+      (singleSitePaddedOperator U) U :=
+  isCleanImplementation_placeAlong_workspace U
 
 /-- Every actual single-site unitary in positive physical dimension has an
 exact one-pair-gate circuit with one clean padding qudit; no circuit or
@@ -110,12 +114,12 @@ theorem exists_singleSite_clean_pair_circuit
     {U : Matrix (Cfg d 1) (Cfg d 1) ℂ}
     (hU : U ∈ unitary (Matrix (Cfg d 1) (Cfg d 1) ℂ)) :
     ∃ C : Matrix (Cfg d 2) (Cfg d 2) ℂ,
-      IsPairProduct d 2 1 C ∧
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph 2)) 1 C ∧
         IsCleanImplementation
-          (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := 1) (a := 1)))
+          (basisInclusion (workspaceEmbedding (n := 1) (0 : Fin 1 → Fin d)))
           C U := by
   exact ⟨singleSitePaddedOperator U,
-    singleSitePaddedOperator_isPairProduct hU,
+    singleSitePaddedOperator_isGateProduct hU,
     singleSitePaddedOperator_isCleanImplementation U⟩
 
 end MPUCircuit

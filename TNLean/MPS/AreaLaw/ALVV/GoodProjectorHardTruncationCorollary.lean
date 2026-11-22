@@ -132,35 +132,33 @@ Schmidt rank at most `(qℓ)^{68ℓ}` across both middle cuts. This is the form 
 theorem exists_three_bulk_hard_truncation_good_projector
     (L q a b ell : ℕ) (t : ℝ) (hq : 0 < q) (hell : 1 ≤ ell) (ht0 : 0 ≤ t)
     (hab : a + 2 * ell ≤ b) (hbL : b + 2 * ell ≤ L - 1)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let I : Fin 5 → Finset (Fin (L - 1)) := fun j ↦
       Finset.univ.filter (fun i ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-      fun j ↦ ∑ i ∈ I j, h i
+      fun j ↦ ∑ i ∈ I j, Φ.term i
     let J : Finset (Fin (L - 1)) := Finset.univ.filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ J, h i
+    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ J, Φ.term i
     let K : Finset (Fin 5) := {0, 2, 4}
     let jmin : Fin (Fintype.card (Fin L → Fin q)) :=
       ⟨Fintype.card (Fin L → Fin q) - 1,
         Nat.sub_lt (Fintype.card_pos_iff.mpr ⟨fun _ ↦ (Fin.mk (0 : ℕ) hq : Fin q)⟩) one_pos⟩
     ∃ (e : Fin 5 → ℝ) (E0 : ℝ) (x : (Fin L → Fin q) → ℂ),
       let S := ∑ j, e j
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := (∑ i, h i) - (S : ℂ) • 1
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian - (S : ℂ) • 1
       let Ht : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
         (∑ j, ((if j ∈ K then cfc (fun r : ℝ ↦ min r (e j + t)) (A j) else A j) -
           (e j : ℂ) • 1)) + Y
       let F : ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) →
           Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
         Sum.elim (Sum.elim
-          (fun r ↦ h ⟨a + r.val, (Nat.add_lt_add_left r.isLt a).trans_le
+          (fun r ↦ Φ.term ⟨a + r.val, (Nat.add_lt_add_left r.isLt a).trans_le
             (hab.trans ((Nat.le_add_right b (2 * ell)).trans hbL))⟩)
-          (fun r ↦ h ⟨b + r.val, (Nat.add_lt_add_left r.isLt b).trans_le hbL⟩))
+          (fun r ↦ Φ.term ⟨b + r.val, (Nat.add_lt_add_left r.isLt b).trans_le hbL⟩))
           ![cfc (fun r : ℝ ↦ min r (e 0 + t)) (A 0) - ((e 0 + e 1 + e 3 : ℝ) : ℂ) • 1,
             cfc (fun r : ℝ ↦ min r (e 2 + t)) (A 2) - (e 2 : ℂ) • 1,
             cfc (fun r : ℝ ↦ min r (e 4 + t)) (A 4) - (e 4 : ℂ) • 1]
@@ -216,7 +214,7 @@ theorem exists_three_bulk_hard_truncation_good_projector
                 (q * ell) ^ (68 * ell)   := by
   intro k I A J Y K jmin
   obtain ⟨e, E0, x, hrest⟩ := exists_three_bulk_hard_truncation_spectral_comparison
-    L q a b ell t hq hell ht0 hab hbL h hs h0 h1
+    L q a b ell t hq hell ht0 hab hbL Φ h0 h1
   refine ⟨e, E0, x, ?_⟩
   intro S H Ht F
   obtain ⟨hx, hxe, hpos, hHtF, hleft, hright, hL0, hM, hR, hH, hHt, hrest⟩ := hrest

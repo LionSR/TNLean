@@ -24,6 +24,7 @@ MPS approximation theorem is used.
 -/
 
 open ManyBody (interval interval_zero_eq_univ mem_interval)
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -40,7 +41,8 @@ ALVV, arXiv:1602.08828v2, `def:trimming`, lines 646–655; LVV13,
 arXiv:1307.5143v1, `def:viable`, lines 240–244. -/
 private theorem rank_cutMatrix_full_region {L q : ℕ} {J : Finset (Fin L)}
     (hJ : J = leftBlock L L) (u : EuclideanSpace ℂ (J → Fin q)) (k : ℕ) :
-    (cutMatrix (WithLp.toLp 2 (fun x : Fin L → Fin q ↦ u (fun v ↦ x v.val))) k).rank =
+    (cutMatrix (leftBlock L k)
+      (WithLp.toLp 2 (fun x : Fin L → Fin q ↦ u (fun v ↦ x v.val)))).rank =
       Matrix.schmidtRank (WithLp.ofLp (ManyBody.cutVector
         (Finset.univ.filter fun v : J ↦ v.val.val < k) u)) := by
   subst J
@@ -58,7 +60,7 @@ Supporting ALVV, arXiv:1602.08828v2, collective trimming,
 lines 660–697, and its final full-chain merge, lines 1777–1817. -/
 theorem rank_cutMatrix_fullIntervalRead {L q : ℕ}
     (u : EuclideanSpace ℂ (interval L 0 L → Fin q)) (k : ℕ) (hk : 0 < k) :
-    (cutMatrix (WithLp.toLp 2 (fullIntervalRead L q u)) k).rank =
+    (cutMatrix (leftBlock L k) (WithLp.toLp 2 (fullIntervalRead L q u))).rank =
       Matrix.schmidtRank (WithLp.ofLp (ManyBody.cutVector
         (intervalTrimCut L 0 L (k - 1)) u)) := by
   have hJ : interval L 0 L = leftBlock L L := by

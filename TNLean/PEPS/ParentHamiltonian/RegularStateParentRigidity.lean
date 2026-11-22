@@ -127,9 +127,11 @@ spaces. Source: CPGSV21, Section IV.C.1, lines 2003–2011. -/
 theorem canonical_regionParentHamiltonian_eq_of_regionGroundSpace_eq [Fintype ι]
     {A B : Tensor Γ d} (R : ι → Finset V)
     (hR : ∀ i, regionGroundSpace A (R i) = regionGroundSpace B (R i)) :
-    regionParentHamiltonian R (fun i => canonicalRegionParentInteraction A (R i)) =
-      regionParentHamiltonian R (fun i => canonicalRegionParentInteraction B (R i)) := by
-  unfold regionParentHamiltonian
+    (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R
+        (fun i => canonicalRegionParentInteraction A (R i))).hamiltonian =
+      (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R
+        (fun i => canonicalRegionParentInteraction B (R i))).hamiltonian := by
+  simp only [ManyBody.Interaction.hamiltonian_ofPlace]
   apply Finset.sum_congr rfl
   intro i _
   exact congrArg (ManyBody.place (X := fun _ ↦ Fin _) (R i))

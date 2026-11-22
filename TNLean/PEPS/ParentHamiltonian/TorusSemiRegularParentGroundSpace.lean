@@ -48,7 +48,8 @@ theorem IsGInjective.torusParentKernel_eq_commutingClosureSpan_of_isSemiRegular
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hP : ∀ v, IsRegionParentInteraction (groupBondTensor (torusNativeIncidentSite a))
       (torusPlaquetteRegion v) (P v)) :
-    (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion P)).ker =
+    (Matrix.mulVecLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d)
+        torusPlaquetteRegion P).hamiltonian).ker =
       Submodule.span ℂ (Set.range (fun p : {p : G × G // Commute p.1 p.2} =>
         torusGClosure (width := width) (height := height) U a p.1.1 p.1.2)) := by
   apply (Submodule.eq_of_le_of_finrank_eq

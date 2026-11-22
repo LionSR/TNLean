@@ -71,7 +71,6 @@ theorem localCommutatorObservable_eq_of_quasiLocalIntervalObservable_eq
     {R k t : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hR : 0 < R) (a b : ℤ)
     (X : Matrix (Cfg d k) (Cfg d k) ℂ) (Y : Matrix (Cfg d t) (Cfg d t) ℂ)
-    (hk : 0 < k) (ht : 0 < t)
     (hXY : quasiLocalIntervalObservable d a k X = quasiLocalIntervalObservable d b t Y) :
     quasiLocalIntervalObservable d (a - ((R - 1 : ℕ) : ℤ))
         ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X) =
@@ -95,8 +94,8 @@ theorem localCommutatorObservable_eq_of_quasiLocalIntervalObservable_eq
   have hra : R - 1 ≤ ra := by dsimp [ra, e]; omega
   have hℓb : R - 1 ≤ ℓb := by dsimp [ℓb, c]; omega
   have hrb : R - 1 ≤ rb := by dsimp [rb, e]; omega
-  have hA := quasiLocalIntervalObservable_commutator_locality a h X hR hk hℓa hra
-  have hB := quasiLocalIntervalObservable_commutator_locality b h Y hR ht hℓb hrb
+  have hA := quasiLocalIntervalObservable_commutator_locality a h X hR hℓa hra
+  have hB := quasiLocalIntervalObservable_commutator_locality b h Y hR hℓb hrb
   rw [ha, hlen, hXY] at hA
   rw [hb] at hB
   exact hA.symm.trans hB
@@ -105,7 +104,7 @@ local commutator energy. Normalization and translation invariance are unnecessar
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem quasiLocalIntervalObservable_localCommutatorObservable_nonneg
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) (hpos : ∀ Z, 0 ≤ φ (star Z * Z))
-    {R k : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R)
+    {R k : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : h.PosSemidef)
     (hzero : ∀ a : ℤ, φ (quasiLocalIntervalObservable d a R h) = 0)
     (a : ℤ) (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
@@ -115,9 +114,9 @@ theorem quasiLocalIntervalObservable_localCommutatorObservable_nonneg
     ((R - 1 + k) + (R - 1))
   let H := openInteractionMatrix h ((R - 1 + k) + (R - 1))
   let Z := bulkObservable X (R - 1) (R - 1)
-  have hH : H.PosSemidef := openInteractionMatrix_posSemidef h hh hR _
+  have hH : H.PosSemidef := openInteractionMatrix_posSemidef h hh _
   have hz : f H = 0 :=
-    apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero φ.toLinearMap h hR
+    apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero φ.toLinearMap h
       hzero (a - ((R - 1 : ℕ) : ℤ)) ((R - 1 + k) + (R - 1))
   change 0 ≤ f (Zᴴ * (H * Z - Z * H))
   rw [PositiveLinearMap.apply_conjTranspose_commutator_eq f H Z hH hz]
@@ -133,8 +132,7 @@ theorem blocking_localCommutator_energy_le
     (hh : h.PosSemidef) (hK : 0 < K) (hcover : R + L ≤ K * L + 1)
     (hzero : ∀ a : ℤ, φ (quasiLocalIntervalObservable d a R h) = 0)
     (a : ℤ) {k : ℕ}
-    (Y : Matrix (Cfg (blockPhysDim d L) k) (Cfg (blockPhysDim d L) k) ℂ)
-    (hk : 0 < k) :
+    (Y : Matrix (Cfg (blockPhysDim d L) k) (Cfg (blockPhysDim d L) k) ℂ) :
     (quasiLocalBlockingFunctional d L).symm φ
       (quasiLocalIntervalObservable (blockPhysDim d L) (a - ((K - 1 : ℕ) : ℤ))
         ((K - 1 + k) + (K - 1))
@@ -153,16 +151,16 @@ theorem blocking_localCommutator_energy_le
   let C := Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
     (openInteractionMatrix (blockedInteractionMatrix h L K) N)
   have hKN : K ≤ N := by dsimp [N, n]; omega
-  have hH : H.PosSemidef := openInteractionMatrix_posSemidef h hh hR (N * L)
+  have hH : H.PosSemidef := openInteractionMatrix_posSemidef h hh (N * L)
   have hC : C.PosSemidef :=
     (openInteractionMatrix_posSemidef (blockedInteractionMatrix h L K)
-      (blockedInteractionMatrix_posSemidef h hh hR L K) hK N).submatrix
+      (blockedInteractionMatrix_posSemidef h hh L K) N).submatrix
         (blockedConfigEquiv d N L).symm
   have hfH : f H = 0 :=
     apply_quasiLocalIntervalObservable_openInteractionMatrix_eq_zero
-      φ.toLinearMap h hR hzero ((a - (n : ℤ)) * L) (N * L)
+      φ.toLinearMap h hzero ((a - (n : ℤ)) * L) (N * L)
   have hBound := (openInteractionMatrix_blockedInteractionMatrix_comparison
-    h hh hR hK hKN hcover).2
+    h hh hKN hcover).2
   have hEnergy := PositiveLinearMap.apply_conjTranspose_commutator_le
     f C H Z hC hH hfH ((K * L + 1 - R : ℕ) : ℝ) (by simpa [C, H] using hBound)
   have hLeft : f (Zᴴ * (C * Z - Z * C)) =
@@ -181,7 +179,7 @@ theorem blocking_localCommutator_energy_le
         (openInteractionMatrix (blockedInteractionMatrix h L K) N)
         (bulkObservable Y n n)).symm]
     rw [quasiLocalIntervalObservable_bulkObservable_commutator a
-      (blockedInteractionMatrix h L K) Y hK hk
+      (blockedInteractionMatrix h L K) Y hK
       (show K - 1 ≤ n by dsimp [n]; omega)
       (show K - 1 ≤ n by dsimp [n]; omega)]
   let X := Matrix.reindex (blockedConfigEquiv d k L) (blockedConfigEquiv d k L) Y
@@ -207,7 +205,7 @@ theorem blocking_localCommutator_energy_le
     apply congrArg φ
     rw [← Matrix.star_eq_conjTranspose, map_mul, map_sub, map_mul, map_mul, map_star, hZ]
     have hLoc := quasiLocalIntervalObservable_commutator_locality (a * L) h X hR
-      (Nat.mul_pos hk (NeZero.pos L)) hMargin hMargin
+      hMargin hMargin
     dsimp only [H, N]
     rw [Nat.add_mul, Nat.add_mul]
     simpa only [Nat.add_mul, Int.natCast_mul, Int.sub_mul] using hLoc
@@ -258,7 +256,7 @@ theorem quasiLocalCommutator_gap_of_blocking
     rw [map_mul, map_star, hY]
   have hGap := hgap b Y ht hCenter
   rw [hVariance] at hGap
-  have hEnergy := blocking_localCommutator_energy_le φ hpos h hR hh hK hcover hzero b Y ht
+  have hEnergy := blocking_localCommutator_energy_le φ hpos h hR hh hK hcover hzero b Y
   have hDecoded : quasiLocalIntervalObservable d (b * L) (t * L)
       (Matrix.reindex (blockedConfigEquiv d t L) (blockedConfigEquiv d t L) Y) =
       quasiLocalIntervalObservable d a k X := by
@@ -266,8 +264,7 @@ theorem quasiLocalCommutator_gap_of_blocking
     exact hY
   have hEnergyEq := localCommutatorObservable_eq_of_quasiLocalIntervalObservable_eq
     h hR (b * L) a
-    (Matrix.reindex (blockedConfigEquiv d t L) (blockedConfigEquiv d t L) Y) X
-    (Nat.mul_pos ht (NeZero.pos L)) hk hDecoded
+    (Matrix.reindex (blockedConfigEquiv d t L) (blockedConfigEquiv d t L) Y) X hDecoded
   rw [hEnergyEq] at hEnergy
   have hEnergyRe := (Complex.le_def.mp hEnergy).1
   have hM : 0 < ((K * L + 1 - R : ℕ) : ℝ) := by
@@ -325,7 +322,7 @@ theorem quasiLocalCommutator_limit_gap_of_blocking
   intro a k X hk hcenter
   refine ⟨φ (quasiLocalIntervalObservable d (a - ((R - 1 : ℕ) : ℤ))
     ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X)), ?_, ?_⟩
-  · exact tendsto_apply_quasiLocalIntervalObservable_commutator φ a h X hR hk hℓ hr
+  · exact tendsto_apply_quasiLocalIntervalObservable_commutator φ a h X hR hℓ hr
   · rw [Complex.le_def]
     constructor
     · simpa only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero] using
@@ -334,7 +331,7 @@ theorem quasiLocalCommutator_limit_gap_of_blocking
         (hpos (quasiLocalIntervalObservable d a k X))).2
       have henergyIm := (Complex.nonneg_iff.mp
         (quasiLocalIntervalObservable_localCommutatorObservable_nonneg
-          φ hpos h hR hh hzero a X)).2
+          φ hpos h hh hzero a X)).2
       simp only [Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im,
         ← hsquareIm, ← henergyIm, mul_zero, zero_mul, add_zero]
 end MPSTensor

@@ -107,7 +107,8 @@ theorem cutMatrix_toEuclideanLin_eq_sum {J : Finset ι} {A : ι → LeftBlockMat
     (hK : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K =
       ∑ j ∈ J, A j ⊗ₖ B j)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
-    cutMatrix (toEuclideanLin K ψ) i = ∑ j ∈ J, A j * cutMatrix ψ i * (B j)ᵀ := by
+    ManyBody.cutMatrix (leftBlock L i) (toEuclideanLin K ψ) =
+      ∑ j ∈ J, A j * ManyBody.cutMatrix (leftBlock L i) ψ * (B j)ᵀ := by
   rw [cutMatrix_toEuclideanLin, hK, Matrix.sum_mulVec]
   ext a b
   simp only [schmidtCoeffMatrix_apply, Finset.sum_apply, Matrix.sum_apply]

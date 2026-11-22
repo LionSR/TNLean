@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
-import TNLean.Circuit.SiteEmbeddingNorm
+import QICLean.ManyBody.Sites.PlaceAlong
 import QICLean.Analysis.PrincipalSubmatrixNorm
 
 /-!
@@ -42,44 +42,48 @@ theorem exists_native_interval_slice_of_mpo_approximation {N q l r D : ℕ}
     let sigma0 : Fin (N + 1) → Fin q := fun _ ↦ ⟨0, hq⟩
     let insert := insertInterval (L := r - l) l sigma0
     let eJ := intervalShiftOrderIso hlr hrL
-    let e : Fin (r - l) → Fin (N + 1) := fun u ↦ (eJ u).val
+    let e : Fin (r - l) ↪ Fin (N + 1) :=
+      eJ.toEquiv.toEmbedding.trans (Function.Embedding.subtype _)
     ∃ (Acore : Fin (r - l) → MPOTensor q D)
       (C0 : Matrix (Fin D) (Fin D) ℂ),
       let Z := MPOTensor.traceChainOperator Acore C0
-      let Zphys := QuantumCircuit.embedOp e Z
+      let Zphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) e Z
       Z.IsHermitian ∧ Zphys.IsHermitian ∧
-        P = QuantumCircuit.embedOp e (P.submatrix insert insert) ∧
+        P = ManyBody.placeAlong (X := fun _ ↦ Fin q) e (P.submatrix insert insert) ∧
         ‖P.submatrix insert insert - Z‖ ≤ xi ∧ ‖P - Zphys‖ ≤ xi := by
   classical
   intro sigma0 insert eJ e
-  have he : Function.Injective e := Subtype.val_injective.comp eJ.injective
-  have hrange : Set.range e = (interval (N + 1) l r : Set (Fin (N + 1))) := by
-    simpa only [e, Function.comp_def, Subtype.range_val_subtype, Finset.setOfPred_mem] using
-      eJ.surjective.range_comp
-        (Subtype.val : interval (N + 1) l r → Fin (N + 1))
-  have hrange' : Finset.univ.image e = interval (N + 1) l r :=
-    Finset.coe_injective (by simpa using hrange)
-  obtain ⟨M, hM⟩ := QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators he
-    (by simpa only [hrange'] using (show _ ∈ ManyBody.supportedOperators _ _ from hPs))
+  have hmap : Finset.univ.map e = interval (N + 1) l r := by
+    ext i
+    simp only [Finset.mem_map, Finset.mem_univ, true_and]
+    constructor
+    · rintro ⟨u, rfl⟩
+      exact (eJ u).property
+    · intro hi
+      exact ⟨eJ.symm ⟨i, hi⟩, congrArg Subtype.val (eJ.apply_symm_apply ⟨i, hi⟩)⟩
+  have hs : P ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Finset.univ.map e) := by
+    rw [hmap]
+    exact hPs
+  obtain ⟨M, hM⟩ := ManyBody.exists_eq_placeAlong_of_mem_supportedOperators e hs
   have hread (sigma : Fin (r - l) → Fin q) : insert sigma ∘ e = sigma := by
     funext u
-    simp [insert, insertInterval, e, eJ, intervalShiftOrderIso, u.isLt]
+    change insert sigma (eJ u).val = sigma u
+    simp [insert, insertInterval, eJ, intervalShiftOrderIso, u.isLt]
   have hgoff (sigma tau : Fin (r - l) → Fin q) :
-      QuantumCircuit.AgreeOff e (insert sigma) (insert tau) := by
+      ∀ v, (∀ u, e u ≠ v) → insert sigma v = insert tau v := by
     intro v hv
     have hout : ¬(l ≤ v.val ∧ v.val < l + (r - l)) := by
       intro hvin
       have hvJ : v ∈ interval (N + 1) l r := mem_interval.mpr (by omega)
-      have hvRange : v ∈ Set.range e := by
-        rw [hrange]
-        exact Finset.mem_coe.mpr hvJ
-      obtain ⟨u, hu⟩ := hvRange
+      rw [← hmap] at hvJ
+      obtain ⟨u, -, hu⟩ := Finset.mem_map.mp hvJ
       exact hv u hu
     simp only [insert, insertInterval, dite_eq_right hout]
   have hsliceP : P.submatrix insert insert = M := by
     ext sigma tau
-    rw [Matrix.submatrix_apply, hM, QuantumCircuit.embedOp_apply,
-      ite_eq_left (hgoff sigma tau), hread sigma, hread tau]
+    rw [Matrix.submatrix_apply, hM, ManyBody.placeAlong_apply,
+      ite_eq_left (hgoff sigma tau)]
+    exact congrArg₂ M (hread sigma) (hread tau)
   have hbound : l + (r - l) ≤ N + 1 := by omega
   let C0 := MPOTensor.actualRetainedIntervalClosing (L := r - l)
     Aglobal 1 l hbound (fun v ↦ sigma0 v.val) (fun v ↦ sigma0 v.val)
@@ -104,15 +108,15 @@ theorem exists_native_interval_slice_of_mpo_approximation {N q l r D : ℕ}
     let hMError : ‖M - Z‖ ≤ xi :=
       (congrArg (fun X : Matrix (Fin (r - l) → Fin q) (Fin (r - l) → Fin q) ℂ ↦
         ‖X - Z‖ ≤ xi) hsliceP).mp hNativeError
-    let hDifference : P - QuantumCircuit.embedOp e Z =
-        QuantumCircuit.embedOp e (M - Z) :=
-      (congrArg (fun X ↦ X - QuantumCircuit.embedOp e Z) hM).trans
-        (QuantumCircuit.embedOp_sub e M Z).symm
+    let hDifference : P - ManyBody.placeAlong (X := fun _ ↦ Fin q) e Z =
+        ManyBody.placeAlong (X := fun _ ↦ Fin q) e (M - Z) :=
+      (congrArg (fun K ↦ K - ManyBody.placeAlong (X := fun _ ↦ Fin q) e Z) hM).trans
+        (ManyBody.placeAlong_sub (X := fun _ ↦ Fin q) e M Z).symm
     ⟨Acore, C0, hZ,
-      (QuantumCircuit.embedOp_conjTranspose e Z).trans
-        (congrArg (QuantumCircuit.embedOp e) hZ.eq),
-      hM.trans (congrArg (QuantumCircuit.embedOp e) hsliceP.symm), hNativeError,
+      ManyBody.isHermitian_placeAlong (X := fun _ ↦ Fin q) e hZ,
+      hM.trans (congrArg (ManyBody.placeAlong (X := fun _ ↦ Fin q) e) hsliceP.symm),
+      hNativeError,
       (congrArg norm hDifference).le.trans
-        ((QuantumCircuit.norm_embedOp_le e he _).trans hMError)⟩
+        ((ManyBody.norm_placeAlong_le (X := fun _ ↦ Fin q) e _).trans hMError)⟩
 
 end TNLean.MPS.AreaLaw

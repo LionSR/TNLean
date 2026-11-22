@@ -71,7 +71,7 @@ noncomputable def toCoefficientRescaledGSNNCHData
     rw [F.bond_supported s]
   neighboring_comm := by
     intro s
-    simp only [embedLocalOperator_smul, Matrix.mul_smul, Matrix.smul_mul]
+    simp only [ManyBody.placeAlong_smul, Matrix.mul_smul, Matrix.smul_mul]
     rw [(F.bondData s).bond_comm hN ⟨0, by omega⟩ ⟨1, by omega⟩]
 
 /-- The rescaled periodic bond product is `coefficient / multiplicity` times
@@ -87,7 +87,7 @@ theorem toCoefficientRescaledGSNNCHData_sectorProduct
       coefficient hCoefficient N hN).sectorProduct s =
       ((coefficient s / multiplicity s : ℝ) : ℂ) • mpo (K s) N := by
   simp only [GSNNCHData.sectorProduct, GSNNCHData.bondAt,
-    toCoefficientRescaledGSNNCHData, embedLocalOperator_smul]
+    toCoefficientRescaledGSNNCHData, ManyBody.placeAlong_smul]
   rw [List.prod_ofFn_smul]
   have hN0 : N ≠ 0 := by omega
   have hroot :

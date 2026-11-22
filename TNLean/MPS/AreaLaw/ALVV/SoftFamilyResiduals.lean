@@ -54,20 +54,18 @@ lines 1195–1255 and 1373–1392. -/
 theorem norm_simultaneous_soft_reverse_residual
     {L q v : ℕ} (k : Fin (v + 1) → ℕ) (hk : Monotone k)
     (J : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (e p : Fin v → ℝ) (S : Finset (Fin v)) (t : ℝ) (m : ℕ)
     (ht : 0 < t) (hm : 2 ≤ m)
     (hpl : ∀ j ∈ S, e j - 10 ≤ p j) (hpu : ∀ j ∈ S, p j ≤ e j)
     (he : ∀ j, ((∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i) -
+      (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i) -
         (e j : ℂ) • 1).PosSemidef) :
     let I := fun j : Fin v ↦ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-    let A := fun j : Fin v ↦ ∑ i ∈ I j, h i
-    let Y := ∑ i ∈ J, h i
+    let A := fun j : Fin v ↦ ∑ i ∈ I j, Φ.term i
+    let Y := ∑ i ∈ J, Φ.term i
     let H := (∑ j, (A j - (e j : ℂ) • 1)) + Y
     let B := ∑ j, ((if j ∈ S then (p j : ℂ) • 1 +
       cfc (Real.softTruncation t m) (A j - (p j : ℂ) • 1) else A j) - (e j : ℂ) • 1)
@@ -89,7 +87,7 @@ theorem norm_simultaneous_soft_reverse_residual
   have hA (j : Fin v) : (A j).IsHermitian :=
     (posSemidef_sum _ fun i _ ↦ (h0 i).posSemidef).isHermitian
   have hcomm : Pairwise fun i j : Fin v ↦ Commute (A i) (A j) :=
-    pairwise_commute_sum_internal_consecutive_regions k hk h hs
+    pairwise_commute_sum_internal_consecutive_regions k hk Φ
   obtain ⟨_hBpos, _hBle, hBA, hproj⟩ := softTruncation_commuting_family_bounds
     A e p S hA (fun j ↦ le_iff.mpr (he j)) hpl hpu hcomm t m ht hm'
   let C : ℝ := J.card
@@ -101,7 +99,7 @@ theorem norm_simultaneous_soft_reverse_residual
   have hT0 : 0 ≤ T := hU0.trans hT
   have hshift (v : Fin L → Fin q) :
       toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-        ((B + (D : ℂ) • 1) + ∑ i ∈ J, h i) (basis v) =
+        ((B + (D : ℂ) • 1) + ∑ i ∈ J, Φ.term i) (basis v) =
         ((a v + D : ℝ) : ℂ) • basis v := by
     have hid : (B + (D : ℂ) • 1) + Y = G + (D : ℂ) • 1 := by
       dsimp only [G]
@@ -145,8 +143,8 @@ theorem norm_simultaneous_soft_reverse_residual
       exact hpe.trans (le_iff.mpr (he j))
     have hcomm' : Commute (B + (D : ℂ) • 1) (A j) :=
       (hBA j).add_left ((Commute.one_left (A j)).smul_left (D : ℂ))
-    have htail := norm_soft_residual_low_of_barrier (I j) J h
-      (fun i _ ↦ hs i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) (B + (D : ℂ) • 1)
+    have htail := norm_soft_residual_low_of_barrier (I j) J Φ
+      (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) (B + (D : ℂ) • 1)
       (p j) (p j + U) b0 (mu + eta + D) (1 / 8) t T m hp
       (by norm_num) (by norm_num) ht hm' hT0
       (_root_.add_le_add (le_refl (p j)) hT) hcomm' (hproj j hj U hU0)
@@ -186,20 +184,18 @@ error is included in the cutoff margin. Auxiliary to ALVV, arXiv:1602.08828v2,
 theorem norm_simultaneous_soft_original_residual
     {L q v : ℕ} (k : Fin (v + 1) → ℕ) (hk : Monotone k)
     (J : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (e p : Fin v → ℝ) (S : Finset (Fin v)) (t : ℝ) (m : ℕ)
     (ht : 0 < t) (hm : 1 ≤ m)
     (hpl : ∀ j ∈ S, e j - 10 ≤ p j) (hpu : ∀ j ∈ S, p j ≤ e j)
     (he : ∀ j, ((∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i) -
+      (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i) -
         (e j : ℂ) • 1).PosSemidef) :
     let I := fun j : Fin v ↦ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-    let A := fun j : Fin v ↦ ∑ i ∈ I j, h i
-    let Y := ∑ i ∈ J, h i
+    let A := fun j : Fin v ↦ ∑ i ∈ I j, Φ.term i
+    let Y := ∑ i ∈ J, Φ.term i
     let Braw := ∑ j, (A j - (e j : ℂ) • 1)
     let H := Braw + Y
     let B := ∑ j, ((if j ∈ S then (p j : ℂ) • 1 +
@@ -226,7 +222,7 @@ theorem norm_simultaneous_soft_original_residual
   have hA (j : Fin v) : (A j).IsHermitian :=
     (posSemidef_sum _ fun i _ ↦ (h0 i).posSemidef).isHermitian
   have hcomm : Pairwise fun i j : Fin v ↦ Commute (A i) (A j) :=
-    pairwise_commute_sum_internal_consecutive_regions k hk h hs
+    pairwise_commute_sum_internal_consecutive_regions k hk Φ
   have hdenom : 2 ≤ u - (E + eta) - 2 * C := by
     change E ≤ C at hE
     dsimp only [u]
@@ -258,8 +254,8 @@ theorem norm_simultaneous_soft_original_residual
       change eta + 3 * C + 12 ≤ T at hT
       dsimp only [u]
       linarith only [hpj, hT]
-    have htail := norm_soft_residual_low_of_barrier (I j) J h
-      (fun i _ ↦ hs i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) Braw
+    have htail := norm_soft_residual_low_of_barrier (I j) J Φ
+      (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) Braw
       (p j) (e j + u) u (E + eta) (1 / 8) t T m hp
       (by norm_num) (by norm_num) ht hm hT0 hcut hBA hproj
       basis a hEigen hgap

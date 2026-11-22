@@ -47,12 +47,10 @@ Supporting ALVV, arXiv:1602.08828v2, `l:rs`, lines 530–558, `l:er`,
 lines 597–622, `lem:trimming`, lines 660–697, and `t:alg1`, lines 1777–1817. -/
 theorem exists_physical_dg_sampled_interval_node_event_of_le_radius :
     ∃ K : ℝ, 0 < K ∧ ∀ (L q : ℕ),
-    ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+    ∀ (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
     0 < gamma →
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -113,10 +111,10 @@ theorem exists_physical_dg_sampled_interval_node_event_of_le_radius :
   classical
   obtain ⟨K, hK, hreference⟩ := exists_physical_dg_interval_collective_trimming_bound
   refine ⟨K, hK, ?_⟩
-  intro L q h hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g u epsilonRef b
   obtain ⟨B, hB, hlogB, htrim⟩ :=
-    hreference L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hreference L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       epsilonRef (by norm_num [epsilonRef]) (by norm_num [epsilonRef])
   refine ⟨B, hB, hlogB, ?_⟩
   intro Dref xiMax
@@ -156,7 +154,7 @@ theorem exists_physical_dg_sampled_interval_node_event_of_le_radius :
   obtain ⟨T, N, F, hN, hTG, hGT, hdim, hwords⟩ :=
     exists_independent_long_middle_actual_dg_word_family m q ell t g epsilon Delta
       hq hqm hell ht hg hg1 hepsilon hepsilon1 htail hfilter
-      L p r hpr hrL hlong h hsupp h0 h1 mu hmu hgapg
+      L p r hpr hrL hlong Φ h0 h1 mu hmu hgapg
   have himprove : ∀ (a : ℕ)
       (S : Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q))) (delta : ℝ),
       Submodule.IsViable delta S
@@ -223,12 +221,10 @@ Supporting ALVV, arXiv:1602.08828v2, `l:rs`, lines 530–558, `l:er`,
 lines 597–622, `lem:trimming`, lines 660–697, and `t:alg1`, lines 1777–1817. -/
 theorem exists_physical_dg_sampled_interval_node_event :
     ∃ K : ℝ, 0 < K ∧ ∀ (L q : ℕ),
-    ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+    ∀ (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
     0 < gamma →
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -288,10 +284,10 @@ theorem exists_physical_dg_sampled_interval_node_event :
   classical
   obtain ⟨K, hK, hphysical⟩ := exists_physical_dg_sampled_interval_node_event_of_le_radius
   refine ⟨K, hK, ?_⟩
-  intro L q h hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g u epsilonRef b
   obtain ⟨B, hB, hlogB, hNodes⟩ :=
-    hphysical L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hphysical L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨B, hB, hlogB, ?_⟩
   intro Dref xi
   have hrG : 1 ≤ rG := Submodule.one_le_finrank_iff.mpr

@@ -56,6 +56,8 @@ lines 1240–1259.
 
 open scoped Matrix ComplexOrder
 
+open ManyBody
+
 namespace MPSTensor
 namespace MPOSymmetry
 
@@ -136,7 +138,7 @@ periodic boundary operator of the common MPO whose boundary commutes with
 the MPO letters, given adjoint closure of the two-site boundary range.
 Source: arXiv:2203.12563, Section 5, lines 1582 and 1687–1692, with
 `defphase`, lines 1253–1259. -/
-theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
+theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
     [NeZero D₀] [NeZero D₁]
     (hInj₀ : Kraus.IsInjective A₀) (hInj₁ : Kraus.IsInjective A₁)
     (h₀ : IsBiorthogonalDecomposition (MPOTensor.actTensor T₀ A₀)
@@ -151,10 +153,11 @@ theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWith
     {X : Matrix (Fin (χ₀ + χ₁)) (Fin (χ₀ + χ₁)) ℂ}
     (hX : X ∈ MPOTensor.commutingBoundaryAlgebra
       (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁)) :
-    Commute (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)
+    Commute (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) X N) :=
   Commute.sum_left _ _ _ fun i _ =>
-    MPOTensor.embedLocalOperator_commute_mpoWithBoundary _ hN i _
+    MPOTensor.placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
       (arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
         A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁ hstar hγ) hX
 
@@ -163,7 +166,7 @@ the closed interval, the enlarged mixed path Hamiltonian commutes with the
 periodic common MPO, given adjoint closure of its two-site boundary range.
 Source: arXiv:2203.12563, Section 5, lines 1582 and 1687–1692, with
 `defphase`, lines 1253–1259. -/
-theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
+theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
     [NeZero D₀] [NeZero D₁]
     (hInj₀ : Kraus.IsInjective A₀) (hInj₁ : Kraus.IsInjective A₁)
     (h₀ : IsBiorthogonalDecomposition (MPOTensor.actTensor T₀ A₀)
@@ -175,10 +178,11 @@ theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
         (MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) X 2)ᴴ =
           MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) Y 2)
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
-    Commute (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)
+    Commute (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpo (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) N) := by
   rw [← MPOTensor.mpoWithBoundary_one]
-  exact interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
+  exact hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁ hstar hγ hN (Subalgebra.one_mem _)
 
 end Commutation
@@ -241,9 +245,10 @@ theorem
     {X : Matrix (Fin (1 + 1)) (Fin (1 + 1)) ℂ}
     (hX : X ∈ MPOTensor.commutingBoundaryAlgebra
       (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁)) :
-    Commute (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)
+    Commute (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) X N) :=
-  interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
+  hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁
     (fun X ↦ exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq
       A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hu₀ hu₁ h₀ h₁ hY₀ hY₁ X 2) hγ hN hX
@@ -255,7 +260,7 @@ on-site matrices, when both action gauges are proportional to Hermitian
 matrices. Source: arXiv:2203.12563, Section 5, lines 1582 and 1687–1692,
 and `docs/paper-gaps/glm23_mixed_path_parent_commutation.tex`, paragraph
 "When closure holds". -/
-theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_isHermitian
+theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_isHermitian
     [NeZero D₀] [NeZero D₁]
     (hInj₀ : Kraus.IsInjective A₀) (hInj₁ : Kraus.IsInjective A₁)
     (hu₀ : (MPOTensor.physicalSlice T₀ 0 0).IsHermitian)
@@ -267,9 +272,10 @@ theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_
     (hY₀ : ∃ c : ℂ, c ≠ 0 ∧ (c • bondOneActionGauge (W₀ 0)).IsHermitian)
     (hY₁ : ∃ c : ℂ, c ≠ 0 ∧ (c • bondOneActionGauge (W₁ 0)).IsHermitian)
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
-    Commute (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)
+    Commute (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpo (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) N) :=
-  interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
+  hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁
     (fun X ↦ exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq
       A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hu₀ hu₁ h₀ h₁ hY₀ hY₁ X 2) hγ hN
@@ -283,7 +289,7 @@ commutes with the periodic common operator. Source: arXiv:2203.12563,
 Section 5, lines 1582 and 1687–1692; arXiv:0802.0447, Lemma 1 and
 Theorem 2; and `docs/paper-gaps/glm23_mixed_path_parent_commutation.tex`,
 paragraph "When closure holds". -/
-theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_canonical
+theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_canonical
     [NeZero D₀] [NeZero D₁]
     (hInj₀ : Kraus.IsInjective A₀) (hInj₁ : Kraus.IsInjective A₁)
     (hNorm₀ : Kraus.transferMap A₀ 1 = 1) (hNorm₁ : Kraus.transferMap A₁ 1 = 1)
@@ -300,9 +306,10 @@ theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_
     (h₁ : IsBiorthogonalDecomposition (MPOTensor.actTensor T₁ A₁)
       (fun _ : Fin 1 => A₁) V₁ W₁)
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
-    Commute (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)
+    Commute (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpo (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) N) :=
-  interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_isHermitian
+  hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_isHermitian
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁
     (Matrix.isHermitian_of_mem_unitaryGroup_of_mul_self_eq_one hu₀ hu₀2)
     (Matrix.isHermitian_of_mem_unitaryGroup_of_mul_self_eq_one hu₁ hu₁2) h₀ h₁

@@ -38,11 +38,9 @@ arXiv:1602.08828v2, `t:alg1`, lines 1777–1817, with the stated modified-tree s
 theorem exists_physical_dg_tree_ritz_polynomial_approximation
     (q : ℕ) (gamma : ℝ) (hgamma : 0 < gamma) :
     ∃ C : ℝ, 0 < C ∧ ∃ k : ℕ, ∀ (L : ℕ)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu : ℝ),
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu : ℝ),
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -90,7 +88,7 @@ theorem exists_physical_dg_tree_ritz_polynomial_approximation
   obtain ⟨C, hC, k, hpoly⟩ := Real.exists_refinement_output_polynomial_bound
     gamma g u Ktree Kref Dfilter hgamma hg hg1 hu hKtree.le hKref.le hDfilter
   refine ⟨C, hC, k, ?_⟩
-  intro L h hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G r eta heta
+  intro L Φ h0 h1 mu nu H hH hmu hnu hmunu hgap G r eta heta
   let A := ‖H‖ - mu
   let c := gamma / A
   let Kraw := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) (1 - ‖H‖⁻¹ • H)
@@ -99,7 +97,7 @@ theorem exists_physical_dg_tree_ritz_polynomial_approximation
   have hr : 1 ≤ r := Submodule.one_le_finrank_iff.mpr
     (hH.spectralSpanLE_ne_bot_of_mem_spectrum hmu le_rfl)
   obtain ⟨_hM, hA, _hc, hc1, _hfix, _hKGo, _hhigh⟩ :=
-    physical_dg_normalized_ground_filter_spec h h0 mu nu gamma hgamma hmu hnu hmunu hgap
+    physical_dg_normalized_ground_filter_spec Φ h0 mu nu gamma hgamma hmu hnu hmunu hgap
   change 0 < A at hA
   change gamma / A ≤ 1 at hc1
   have hgammaA : gamma ≤ A := (div_le_one hA).mp hc1
@@ -107,14 +105,14 @@ theorem exists_physical_dg_tree_ritz_polynomial_approximation
     (show 0 ≤ H from Finset.sum_nonneg fun i _ ↦ h0 i) hmu
   have hnorm : ‖H‖ ≤ (L : ℝ) + 1 := by
     calc
-      _ ≤ ∑ i, ‖h i‖ := norm_sum_le _ _
+      _ ≤ ∑ i, ‖Φ.term i‖ := norm_sum_le _ _
       _ ≤ ∑ _i : Fin (L - 1), (1 : ℝ) := Finset.sum_le_sum fun i _ ↦
-        (CStarAlgebra.norm_le_one_iff_of_nonneg (h i) (h0 i)).mpr (h1 i)
+        (CStarAlgebra.norm_le_one_iff_of_nonneg (Φ.term i) (h0 i)).mpr (h1 i)
       _ = ((L - 1 : ℕ) : ℝ) := by simp
       _ ≤ _ := by exact_mod_cast (show L - 1 ≤ L + 1 by omega)
   have hAL : A ≤ (L : ℝ) + 1 := by dsimp only [A]; linarith only [hnorm, hmu0]
   obtain ⟨_hell, _hlogD, Btree, hBtree, hlogBtree, hfamilies⟩ :=
-    hconstruct L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hconstruct L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   let Dtree := r ^ 2 * Btree
   let width := 4 * ell
   have hwidth : 1 ≤ width := by dsimp only [width]; omega

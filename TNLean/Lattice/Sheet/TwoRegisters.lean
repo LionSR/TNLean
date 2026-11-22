@@ -139,17 +139,21 @@ abbrev sitesR (T E : Finset ι) : List ι := listR (sites ι) (T ∪ E)ᶜ
 /-- The raw registers of `U` on two sheets, identified with `ℂ^{(U → Fin q) × (U → Fin q)}`. -/
 def pairUIso (own₁ own₂ : ι → Party) :
     Mem (siteRegs q own₁ (sitesU T E) ++ siteRegs q own₂ (sitesU T E)) ≃ₗᵢ[ℂ]
-      EuclideanSpace ℂ ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) :=
-  (appendIso _ _).trans ((((groupIso own₁ _ (equivT nodup_sites mem_sites)).rTensor _).trans
-    ((groupIso own₂ _ (equivT nodup_sites mem_sites)).lTensor _)).trans (pairIso _ _))
+      EuclideanSpace ℂ (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) :=
+  (appendIso _ _).trans ((((groupIso own₁ _ ((equivT nodup_sites mem_sites).trans
+      (Finset.complSubtypeEquiv (T ∪ E)).symm)).rTensor _).trans
+    ((groupIso own₂ _ ((equivT nodup_sites mem_sites).trans
+      (Finset.complSubtypeEquiv (T ∪ E)).symm)).lTensor _)).trans (pairIso _ _))
 
 theorem pairUIso_siteVec (own₁ own₂ : ι → Party) (c₁ c₂ : ι → Fin q) :
     pairUIso (T := T) (E := E) own₁ own₂ ((appendIso _ _).symm
         (siteVec own₁ (sitesU T E) c₁ ⊗ₜ siteVec own₂ (sitesU T E) c₂)) =
-      EuclideanSpace.single ((fun x : ↥(T ∪ E)ᶜ => c₁ x), (fun x : ↥(T ∪ E)ᶜ => c₂ x))
+      EuclideanSpace.single ((fun x : {v // v ∉ T ∪ E} => c₁ x), (fun x : {v // v ∉ T ∪ E} => c₂ x))
         (1 : ℂ) := by
-  change pairIso _ _ ((groupIso own₂ _ (equivT nodup_sites mem_sites)).lTensor _
-    ((groupIso own₁ _ (equivT nodup_sites mem_sites)).rTensor _
+  change pairIso _ _ ((groupIso own₂ _ ((equivT nodup_sites mem_sites).trans
+      (Finset.complSubtypeEquiv (T ∪ E)).symm)).lTensor _
+    ((groupIso own₁ _ ((equivT nodup_sites mem_sites).trans
+      (Finset.complSubtypeEquiv (T ∪ E)).symm)).rTensor _
       (appendIso _ _ ((appendIso _ _).symm
         (siteVec own₁ (sitesU T E) c₁ ⊗ₜ siteVec own₂ (sitesU T E) c₂))))) = _
   rw [LinearIsometryEquiv.apply_symm_apply, LinearIsometryEquiv.rTensor_tmul,
@@ -166,8 +170,8 @@ apply the matrix `W` to them as one private contraction at `P`, and move them ba
 Polynomial-PEPS manuscript, proof of Lemma 6.6, `05-frames.tex`, lines 500–515. -/
 def frontCorrectionWord (k₁ k₂ : Layout Party) (own₁ own₂ : ι → Party) {P : Party}
     (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
-    (W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ) :
+    (W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ) :
     Word ((k₁ ++ siteRegs q own₁ (sites ι)) ++ (k₂ ++ siteRegs q own₂ (sites ι)))
       ((k₁ ++ siteRegs q own₁ (sites ι)) ++ (k₂ ++ siteRegs q own₂ (sites ι))) :=
   let pU : ι → Bool := fun x => decide (x ∈ (T ∪ E)ᶜ)
@@ -205,13 +209,14 @@ def frontCorrectionWord (k₁ k₂ : Layout Party) (own₁ own₂ : ι → Party
   Word.unassocWord k₁ (siteRegs q own₁ (sites ι)) (k₂ ++ siteRegs q own₂ (sites ι))
 
 theorem pairUIso_symm_single (h : Disjoint T E) (own₁ own₂ : ι → Party) (c₁ c₂ : ι → Fin q)
-    (u : (↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) :
+    (u : ({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) :
     (pairUIso (T := T) (E := E) own₁ own₂).symm (EuclideanSpace.single u (1 : ℂ)) =
       (appendIso _ _).symm (siteVec own₁ (sitesU T E) (merge h ((fun x : T => c₁ x), u.1) c₁) ⊗ₜ
         siteVec own₂ (sitesU T E) (merge h ((fun x : T => c₂ x), u.2) c₂)) := by
   rw [LinearIsometryEquiv.symm_apply_eq, pairUIso_siteVec, merge_restrict_U, merge_restrict_U]
 
-theorem merge_self_of_mem_union (h : Disjoint T E) (u : ↥(T ∪ E)ᶜ → Fin q) (c : ι → Fin q)
+omit [Fintype ι] in
+theorem merge_self_of_mem_union (h : Disjoint T E) (u : {v // v ∉ T ∪ E} → Fin q) (c : ι → Fin q)
     {x : ι} (hx : x ∈ T ∪ E) : merge h ((fun y : T => c y), u) c x = c x := by
   rcases Finset.mem_union.mp hx with hT | hE
   · exact threeSplit_symm_apply_of_mem_left h _ _ _ hT
@@ -225,14 +230,14 @@ mixed by `W`; those on `T ∪ E` and the front registers are untouched. -/
 theorem eval_frontCorrectionWord (h : Disjoint T E) (k₁ k₂ : Layout Party)
     (own₁ own₂ : ι → Party) {P : Party}
     (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
-    (W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
     (t₁ : Mem k₁) (c₁ : ι → Fin q) (t₂ : Mem k₂) (c₂ : ι → Fin q) :
     (frontCorrectionWord k₁ k₂ own₁ own₂ h₁ h₂ W).eval
         ((appendIso (k₁ ++ siteRegs q own₁ (sites ι)) (k₂ ++ siteRegs q own₂ (sites ι))).symm
           ((appendIso k₁ (siteRegs q own₁ (sites ι))).symm (t₁ ⊗ₜ siteVec own₁ (sites ι) c₁) ⊗ₜ
             (appendIso k₂ (siteRegs q own₂ (sites ι))).symm (t₂ ⊗ₜ siteVec own₂ (sites ι) c₂))) =
-      ∑ u, W u ((fun x : ↥(T ∪ E)ᶜ => c₁ x), (fun x : ↥(T ∪ E)ᶜ => c₂ x)) •
+      ∑ u, W u ((fun x : {v // v ∉ T ∪ E} => c₁ x), (fun x : {v // v ∉ T ∪ E} => c₂ x)) •
         (appendIso (k₁ ++ siteRegs q own₁ (sites ι)) (k₂ ++ siteRegs q own₂ (sites ι))).symm
           ((appendIso k₁ (siteRegs q own₁ (sites ι))).symm
               (t₁ ⊗ₜ siteVec own₁ (sites ι) (merge h ((fun x : T => c₁ x), u.1) c₁)) ⊗ₜ
@@ -245,7 +250,7 @@ theorem eval_frontCorrectionWord (h : Disjoint T E) (k₁ k₂ : Layout Party)
   have hloc : (isoL (pairUIso (T := T) (E := E) own₁ own₂).symm ∘L act W ∘L
       isoL (pairUIso own₁ own₂)) ((appendIso _ _).symm
         (siteVec own₁ (sitesU T E) c₁ ⊗ₜ siteVec own₂ (sitesU T E) c₂)) =
-      ∑ u, W u ((fun x : ↥(T ∪ E)ᶜ => c₁ x), (fun x : ↥(T ∪ E)ᶜ => c₂ x)) •
+      ∑ u, W u ((fun x : {v // v ∉ T ∪ E} => c₁ x), (fun x : {v // v ∉ T ∪ E} => c₂ x)) •
         (appendIso _ _).symm (siteVec own₁ (sitesU T E) (merge h ((fun x : T => c₁ x), u.1) c₁) ⊗ₜ
           siteVec own₂ (sitesU T E) (merge h ((fun x : T => c₂ x), u.2) c₂)) := by
     simp only [ContinuousLinearMap.comp_apply, isoL_apply]
@@ -254,8 +259,8 @@ theorem eval_frontCorrectionWord (h : Disjoint T E) (k₁ k₂ : Layout Party)
     rw [LinearIsometryEquiv.map_smul, EuclideanSpace.basisFun_repr, act_single_apply,
       EuclideanSpace.basisFun_apply, pairUIso_symm_single h]
   rw [hloc]
-  set κ : (↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q) → ℂ :=
-    fun u => W u ((fun x : ↥(T ∪ E)ᶜ => c₁ x), (fun x : ↥(T ∪ E)ᶜ => c₂ x))
+  set κ : ({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q) → ℂ :=
+    fun u => W u ((fun x : {v // v ∉ T ∪ E} => c₁ x), (fun x : {v // v ∉ T ∪ E} => c₂ x))
   simp only [TensorProduct.sum_tmul, ← TensorProduct.smul_tmul', map_sum, map_smul]
   refine Finset.sum_congr rfl fun u _ => ?_
   congr 1
@@ -267,19 +272,21 @@ theorem eval_frontCorrectionWord (h : Disjoint T E) (k₁ k₂ : Layout Party)
     Word.eval_exchangeBlocks_appendIso_symm, Word.eval_unassocWord_appendIso_symm,
     eval_unpartWord, eval_unpartWordApp]
 
+omit [Fintype ι] in
 theorem threeSplit_fst (h : Disjoint T E) (c : ι → Fin q) :
     (threeSplit q T E h c).1 = ((fun x : T => c x), (fun x : E => c x)) :=
   rfl
 
+omit [Fintype ι] in
 theorem threeSplit_snd (h : Disjoint T E) (c : ι → Fin q) :
-    (threeSplit q T E h c).2 = fun x : ↥(T ∪ E)ᶜ => c x :=
+    (threeSplit q T E h c).2 = fun x : {v // v ∉ T ∪ E} => c x :=
   rfl
 
 /-- The operator `W` on the two copies of `U = (T ∪ E)ᶜ`, tensored with the identity on the
 two copies of `T` and `E`, on the raw registers of two sheets. -/
 abbrev twoSheetPlace (h : Disjoint T E)
-    (W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ) :
+    (W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ) :
     Matrix ((ι → Fin q) × (ι → Fin q)) ((ι → Fin q) × (ι → Fin q)) ℂ :=
   (((1 : Matrix (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q)))
       (((T → Fin q) × (E → Fin q)) × ((T → Fin q) × (E → Fin q))) ℂ) ⊗ₖ W).submatrix
@@ -295,10 +302,10 @@ def liftFront (G : Matrix ((ι → Fin q) × (ι → Fin q)) ((ι → Fin q) × 
     (Equiv.prodProdProdComm _ _ _ _) (Equiv.prodProdProdComm _ _ _ _)
 
 theorem sum_single_merge₂_liftFront (h : Disjoint T E)
-    (W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
     (τ₁ : κ₁) (c₁ : ι → Fin q) (τ₂ : κ₂) (c₂ : ι → Fin q) :
-    ∑ u, W u ((fun x : ↥(T ∪ E)ᶜ => c₁ x), (fun x : ↥(T ∪ E)ᶜ => c₂ x)) •
+    ∑ u, W u ((fun x : {v // v ∉ T ∪ E} => c₁ x), (fun x : {v // v ∉ T ∪ E} => c₂ x)) •
         (EuclideanSpace.single ((τ₁, merge h ((fun x : T => c₁ x), u.1) c₁),
           (τ₂, merge h ((fun x : T => c₂ x), u.2) c₂)) (1 : ℂ) :
           EuclideanSpace ℂ ((κ₁ × (ι → Fin q)) × (κ₂ × (ι → Fin q)))) =
@@ -309,13 +316,13 @@ theorem sum_single_merge₂_liftFront (h : Disjoint T E)
     WithLp.ofLp_smul, Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Matrix.col_apply, liftFront,
     Matrix.submatrix_apply, Matrix.kroneckerMap_apply, Matrix.one_apply,
     Equiv.prodProdProdComm_apply, Equiv.prodCongr_apply, Prod.map]
-  set u₀ : (↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q) :=
-    ((fun x : ↥(T ∪ E)ᶜ => c₁' x), (fun x : ↥(T ∪ E)ᶜ => c₂' x))
+  set u₀ : ({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q) :=
+    ((fun x : {v // v ∉ T ∪ E} => c₁' x), (fun x : {v // v ∉ T ∪ E} => c₂' x))
   set B : Prop := τ₁' = τ₁ ∧ τ₂' = τ₂
   set A : Prop := (((fun x : T => c₁ x) = fun x : T => c₁' x) ∧
       (fun x : E => c₁' x) = fun x : E => c₁ x) ∧
     (((fun x : T => c₂ x) = fun x : T => c₂' x) ∧ (fun x : E => c₂' x) = fun x : E => c₂ x)
-  have key : ∀ u : (↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q),
+  have key : ∀ u : ({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q),
       (Pi.single ((τ₁, merge h ((fun x : T => c₁ x), u.1) c₁),
         (τ₂, merge h ((fun x : T => c₂ x), u.2) c₂)) (1 : ℂ) :
           (κ₁ × (ι → Fin q)) × (κ₂ × (ι → Fin q)) → ℂ)
@@ -346,8 +353,8 @@ theorem twoFrontLayoutIso_frontCorrectionWord (h : Disjoint T E) (k₁ : Layout 
     (i₁ : Mem k₁ ≃ₗᵢ[ℂ] EuclideanSpace ℂ κ₁) (k₂ : Layout Party)
     (i₂ : Mem k₂ ≃ₗᵢ[ℂ] EuclideanSpace ℂ κ₂) (own₁ own₂ : ι → Party) {P : Party}
     (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
-    (W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
     (z : Mem ((k₁ ++ siteRegs q own₁ (sites ι)) ++ (k₂ ++ siteRegs q own₂ (sites ι)))) :
     twoFrontLayoutIso k₁ i₁ own₁ k₂ i₂ own₂
         ((frontCorrectionWord k₁ k₂ own₁ own₂ h₁ h₂ W).eval z) =
@@ -364,8 +371,8 @@ theorem twoFrontLayoutIso_frontCorrectionWord (h : Disjoint T E) (k₁ : Layout 
 theorem frontCorrectionWord_props (k₁ k₂ : Layout Party)
     (own₁ own₂ : ι → Party) {P : Party}
     (h₁ : ∀ x ∈ (T ∪ E)ᶜ, own₁ x = P) (h₂ : ∀ x ∈ (T ∪ E)ᶜ, own₂ x = P)
-    {W : Matrix ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-      ((↥(T ∪ E)ᶜ → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ} (hW : ‖W‖ ≤ 1) :
+    {W : Matrix (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      (({v // v ∉ T ∪ E} → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ} (hW : ‖W‖ ≤ 1) :
     (frontCorrectionWord k₁ k₂ own₁ own₂ h₁ h₂ W).IsAllowed ∧
       (frontCorrectionWord k₁ k₂ own₁ own₂ h₁ h₂ W).UsesOnly {P} ∧
       (frontCorrectionWord k₁ k₂ own₁ own₂ h₁ h₂ W).sourceCount = 0 := by

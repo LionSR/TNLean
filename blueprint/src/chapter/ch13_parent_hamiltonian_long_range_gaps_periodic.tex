@@ -87,7 +87,7 @@
 
 \begin{lemma}[MPS support descends to contained intervals]
     \label{thm:mps_support_contained_interval}
-    \lean{MPSTensor.chainWindowOperator_groundSpaceProjection_mul,
+    \lean{MPSTensor.placeAlong_chainWindow_groundSpaceProjection_mul,
         MPSTensor.quasiLocalState_groundSpaceProjection_eq_one_of_contained_interval}
     \leanok
     Let $A$ be any MPS tensor. Let $P_A(I)$ be the projection onto its
@@ -535,7 +535,7 @@
 
 \begin{lemma}[Nonwrapping windows commute with physical blocking]
     \label{thm:blocked_interaction_window}
-    \lean{MPSTensor.chainWindowOperator_blocking_reindex}
+    \lean{MPSTensor.placeAlong_chainWindow_blocking_reindex}
     \leanok
     Let $d,L,K>0$, let $b+K\leq N$, and let $h$ be any operator on
     $K$ blocked sites. Write $W_{N,b}(h)$ for its nonwrapping placement
@@ -579,7 +579,7 @@
 
 \begin{lemma}[Aligned positive windows are bounded by the full open sum]
     \label{thm:aligned_positive_window_sum}
-    \lean{MPSTensor.sum_aligned_chainWindowOperator_le_openInteractionMatrix}
+    \lean{MPSTensor.sum_aligned_placeAlong_chainWindow_le_openInteractionMatrix}
     \leanok
     Let $d\geq0$, $K,L>0$, and let $Y\geq0$ be an operator on $KL$
     original sites. For every $N\geq0$,

@@ -603,16 +603,15 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 
 \begin{lemma}[Physical cut boundaries and changed sites]
     \label{thm:al_physical_cut_calculus}
-    \lean{TNLean.PEPS.AreaLaw.mem_edgeBoundary_pair_iff,
-        TNLean.PEPS.AreaLaw.edgeBoundary_compl,
-        TNLean.PEPS.AreaLaw.edgeBoundary_union_subset,
-        TNLean.PEPS.AreaLaw.edgeBoundary_sdiff_subset,
-        TNLean.PEPS.AreaLaw.card_edgeBoundary_union_le,
-        TNLean.PEPS.AreaLaw.card_edgeBoundary_sdiff_le,
-        TNLean.PEPS.AreaLaw.card_edgeBoundary_le_of_endpoint_cover,
-        TNLean.PEPS.AreaLaw.card_edgeBoundary_le_four_mul_card,
-        TNLean.PEPS.AreaLaw.edgeBoundary_subset_union_symmDiff,
-        TNLean.PEPS.AreaLaw.card_edgeBoundary_le_add_four_mul_symmDiff}
+    \lean{ManyBody.edgeBoundary_compl,
+        ManyBody.edgeBoundary_union_subset,
+        ManyBody.edgeBoundary_sdiff_subset,
+        ManyBody.card_edgeBoundary_union_le,
+        ManyBody.card_edgeBoundary_sdiff_le,
+        ManyBody.card_edgeBoundary_le_of_endpoint_cover,
+        ManyBody.card_edgeBoundary_le_mul_card,
+        ManyBody.edgeBoundary_subset_union_symmDiff,
+        ManyBody.card_edgeBoundary_le_add_mul_card_symmDiff}
     \leanok
     \uses{def:area_law_hamiltonian}
     For finite $\Lambda\subset\mathbb Z^2$ and $B,C\subseteq\Lambda$ (with
@@ -629,7 +628,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
     giving the changed-site bound of \cite[Lemma~9.1(2)]{OpenAI2026AreaLaw}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:area_law_ambient_boundary_crossing}
+    \uses{lem:area_law_ambient_boundary_crossing,thm:area_law_lattice_degree}
     Endpoint case analysis gives the set inclusions, and each site of $\Lambda$
     has degree at most $4$.
 \end{proof}
@@ -1626,8 +1625,8 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 % 08-scanner.tex, lines 400--414, at openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 \begin{lemma}[Marginal tails of the truncated physical Hamiltonian]
     \label{thm:al_scan_actual_marginal_tails}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.log_surprisalMoment_truncated_reducedState_le,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.surprisalTail_truncated_reducedState_le}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.log_surprisalMoment_truncated_regionState_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.surprisalTail_truncated_regionState_le}
     \leanok
     \uses{def:al_scan_actual_energy_terms,def:area_law_ground_entropy,
         thm:al_exact_cut_budget}
@@ -1676,7 +1675,7 @@ $d_\Lambda$ the induced nearest-neighbor graph metric on $\Lambda$, following
 % Source: Proposition 4.5 and Lemma 3.1, used in 08-scanner.tex, lines 400--414.
 \begin{lemma}[A truncated ground vector with all marginal tail bounds]
     \label{thm:al_scan_exists_marginal_tails}
-    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_reducedState_moment_tail_bounds}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_regionState_moment_tail_bounds}
     \leanok
     \uses{thm:al_lattice_truncation,thm:al_scan_actual_marginal_tails}
     For fixed $R\in\mathbb N$, $J\ge0$, $\Delta>0$, and $C_0\ge0$, there exists
@@ -2177,7 +2176,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \label{thm:al_scan_common_moment_interval}
     \lean{TNLean.PEPS.AreaLaw.Scan.tailRadius_antitone_budget,
         TNLean.PEPS.AreaLaw.Scan.tailRadius_eq_div_sqrt,
-        TNLean.PEPS.AreaLaw.Scan.CollarScan.log_surprisalMoment_truncated_reducedState_le_common}
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.log_surprisalMoment_truncated_regionState_le_common}
     \uses{thm:al_scan_actual_marginal_tails,thm:al_exact_cut_budget}
     Under the hypotheses of Lemma~\ref{thm:al_scan_actual_marginal_tails}, if
     $\mathcal B_Q\le\mathcal B$, then with $C_0=512\mathrm e(2/g)$ and

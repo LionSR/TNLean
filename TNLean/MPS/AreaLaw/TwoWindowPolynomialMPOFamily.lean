@@ -83,10 +83,10 @@ private noncomputable def actualCrossingFrequencyGridMPOFamilyStatement
     (selected_middle_fixed_interval_bounds hab hb v.1 v.2.1).2.1
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : crossingFrequencyIndex ell k →
       Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) := fun v ↦
     (Finset.univ.erase (Sum.inl (Sum.inl v.1))).erase (Sum.inl (Sum.inr v.2.1))
@@ -106,7 +106,7 @@ private noncomputable def actualCrossingFrequencyGridMPOFamilyStatement
       (ManyBody.RegionConfig β (E v \ J) × ManyBody.RegionConfig β (E v \ J)) ×
       (ManyBody.RegionConfig β (J \ E v) × ManyBody.RegionConfig β (J \ E v))
     let Wfiber := fun (v : crossingFrequencyIndex ell k) (u : ζ) ↦
-      FiniteProduct.changingRegionalMiddleFamily β (E v) J (Vphys v u)
+      changingRegionalMiddleFamily β (E v) J (Vphys v u)
     let Igrid := fun v : crossingFrequencyIndex ell k ↦ Σ u : ζ, Ifiber v u
     let Wgrid := fun (v : crossingFrequencyIndex ell k) (r : Igrid v) ↦ Wfiber v r.1 r.2
     let Iall := Σ v : crossingFrequencyIndex ell k, Igrid v
@@ -130,14 +130,14 @@ private noncomputable def actualCrossingFrequencyGridMPOFamilyStatement
         let Dphys := fun (v : crossingFrequencyIndex ell k) (u : ζ) ↦
           ∑ t ∈ O v, z v u t • F t
         ∀ c : crossingFrequencyIndex ell k → ζ → Fin (k + 1) → ℂ,
-          ∃ M : Iall → Matrix (ManyBody.RegionConfig β Jᶜ)
-              (ManyBody.RegionConfig β Jᶜ) ℂ,
+          ∃ M : Iall → Matrix (ManyBody.ComplConfig β J)
+              (ManyBody.ComplConfig β J) ℂ,
             (∑ v : crossingFrequencyIndex ell k, ∑ u : ζ, ∑ r : Fin (k + 1),
               c v u r • twoMarkerCoefficient (Dphys v u) (WL v.1) (WR v.2.1)
                 r.val v.2.2.1.val v.2.2.2.val) =
               (∑ r, M r ⊗ₖ Wall r).submatrix
-                ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
-                ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
+                ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _))
+                ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _))
 
 /-- The finite union of the common fixed-middle grid families covers every
 selected crossing pair and every low-frequency pair. The middle and its
@@ -173,10 +173,10 @@ private theorem exists_crossing_frequency_grid_mpo_family
     (selected_middle_fixed_interval_bounds hab hb v.1 v.2.1).2.1
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let O : crossingFrequencyIndex ell k →
       Finset ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) := fun v ↦
     (Finset.univ.erase (Sum.inl (Sum.inl v.1))).erase (Sum.inl (Sum.inr v.2.1))
@@ -199,7 +199,7 @@ private theorem exists_crossing_frequency_grid_mpo_family
     (ManyBody.RegionConfig β (E v \ J) × ManyBody.RegionConfig β (E v \ J)) ×
     (ManyBody.RegionConfig β (J \ E v) × ManyBody.RegionConfig β (J \ E v))
   let Wfiber := fun (v : crossingFrequencyIndex ell k) (u : ζ) ↦
-    FiniteProduct.changingRegionalMiddleFamily β (E v) J (Vphys v u)
+    changingRegionalMiddleFamily β (E v) J (Vphys v u)
   let Igrid := fun v : crossingFrequencyIndex ell k ↦ Σ u : ζ, Ifiber v u
   let Wgrid := fun (v : crossingFrequencyIndex ell k) (r : Igrid v) ↦ Wfiber v r.1 r.2
   let Iall := Σ v : crossingFrequencyIndex ell k, Igrid v
@@ -254,8 +254,8 @@ private theorem exists_crossing_frequency_grid_mpo_family
       c v u r • twoMarkerCoefficient (Dphys v u) (WL v.1) (WR v.2.1)
         r.val v.2.2.1.val v.2.2.2.val) =
       ∑ v : crossingFrequencyIndex ell k, (∑ r : Igrid v, M v r ⊗ₖ Wgrid v r).submatrix
-        ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
-        ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
+        ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _))
+        ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _)) := by
       apply Finset.sum_congr rfl
       intro v _hv
       exact hM v
@@ -294,10 +294,10 @@ theorem exists_common_physical_polynomial_mpo_family
     (selected_middle_fixed_interval_bounds hab hb v.1 v.2.1).2.1
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let J := interval L (a + ell) (b + ell + 1)
   let eJ := intervalShiftOrderIso
     (show a + ell ≤ b + ell + 1 by omega)
@@ -315,7 +315,7 @@ theorem exists_common_physical_polynomial_mpo_family
       (ManyBody.RegionConfig β (E v \ J) × ManyBody.RegionConfig β (E v \ J)) ×
       (ManyBody.RegionConfig β (J \ E v) × ManyBody.RegionConfig β (J \ E v))
     let Wfiber := fun (v : crossingFrequencyIndex ell k) (u : Fin ((k + 1) ^ (4 * ell + 1))) ↦
-      FiniteProduct.changingRegionalMiddleFamily β (E v) J (Vphys v u)
+      changingRegionalMiddleFamily β (E v) J (Vphys v u)
     let Igrid := fun v : crossingFrequencyIndex ell k ↦
       Σ u : Fin ((k + 1) ^ (4 * ell + 1)), Ifiber v u
     let Wgrid := fun (v : crossingFrequencyIndex ell k) (r : Igrid v) ↦ Wfiber v r.1 r.2
@@ -338,12 +338,12 @@ theorem exists_common_physical_polynomial_mpo_family
             Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
         ∀ c : Fin (k + 1) → ℂ,
-          ∃ M : Iall → Matrix (ManyBody.RegionConfig β Jᶜ)
-              (ManyBody.RegionConfig β Jᶜ) ℂ,
+          ∃ M : Iall → Matrix (ManyBody.ComplConfig β J)
+              (ManyBody.ComplConfig β J) ℂ,
             (∑ r : Fin (k + 1), c r • (∑ a, F a) ^ r.val) =
               (∑ r, M r ⊗ₖ Wall r).submatrix
-                ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
-                ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
+                ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _))
+                ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _)) := by
   classical
   let Ksites := interval L (a + 2 * ell) (b + 1)
   let E := fun v : crossingFrequencyIndex ell k ↦
@@ -355,10 +355,10 @@ theorem exists_common_physical_polynomial_mpo_family
     (selected_middle_fixed_interval_bounds hab hb v.1 v.2.1).2.1
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let J := interval L (a + ell) (b + ell + 1)
   let eJ := intervalShiftOrderIso
     (show a + ell ≤ b + ell + 1 by omega)
@@ -379,7 +379,7 @@ theorem exists_common_physical_polynomial_mpo_family
     (ManyBody.RegionConfig β (E v \ J) × ManyBody.RegionConfig β (E v \ J)) ×
     (ManyBody.RegionConfig β (J \ E v) × ManyBody.RegionConfig β (J \ E v))
   let Wfiber := fun (v : crossingFrequencyIndex ell k) (u : Fin ((k + 1) ^ (4 * ell + 1))) ↦
-    FiniteProduct.changingRegionalMiddleFamily β (E v) J (Vphys v u)
+    changingRegionalMiddleFamily β (E v) J (Vphys v u)
   let Igrid := fun v : crossingFrequencyIndex ell k ↦
     Σ u : Fin ((k + 1) ^ (4 * ell + 1)), Ifiber v u
   let Wgrid := fun (v : crossingFrequencyIndex ell k) (r : Igrid v) ↦ Wfiber v r.1 r.2
@@ -419,10 +419,10 @@ theorem exists_common_physical_polynomial_mpo_family_fin
   let Ksites := interval L (a + 2 * ell) (b + 1)
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let J := interval L (a + ell) (b + ell + 1)
   let eJ := intervalShiftOrderIso
     (show a + ell ≤ b + ell + 1 by omega)
@@ -446,12 +446,12 @@ theorem exists_common_physical_polynomial_mpo_family_fin
             Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
         ∀ c : Fin (k + 1) → ℂ,
-          ∃ M : Fin N → Matrix ((Jᶜ : Finset (Fin L)) → Fin q) ((Jᶜ : Finset (Fin L)) → Fin q) ℂ,
+          ∃ M : Fin N → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ,
             (∑ r : Fin (k + 1), c r • (∑ a, F a) ^ r.val) =
               (∑ r, M r ⊗ₖ W r).submatrix
-                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _))
-                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _)) := by
   classical
   let E := fun v : crossingFrequencyIndex ell k ↦
@@ -474,7 +474,7 @@ theorem exists_common_physical_polynomial_mpo_family_fin
     (ManyBody.RegionConfig β (E v \ J) × ManyBody.RegionConfig β (E v \ J)) ×
     (ManyBody.RegionConfig β (J \ E v) × ManyBody.RegionConfig β (J \ E v))
   let Wfiber := fun (v : crossingFrequencyIndex ell k) (u : Fin ((k + 1) ^ (4 * ell + 1))) ↦
-    FiniteProduct.changingRegionalMiddleFamily β (E v) J (Vphys v u)
+    changingRegionalMiddleFamily β (E v) J (Vphys v u)
   let Igrid := fun v : crossingFrequencyIndex ell k ↦
     Σ u : Fin ((k + 1) ^ (4 * ell + 1)), Ifiber v u
   let Wgrid := fun (v : crossingFrequencyIndex ell k) (r : Igrid v) ↦ Wfiber v r.1 r.2
@@ -490,8 +490,8 @@ theorem exists_common_physical_polynomial_mpo_family_fin
     obtain ⟨M, hM⟩ := hdecomp PL PR hPL hPR c
     refine ⟨fun r ↦ M (e.symm r), hM.trans ?_⟩
     exact congrArg (fun A ↦ A.submatrix
-      ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
-      ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)))
+      ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _))
+      ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _)))
       (e.symm.sum_comp (fun r ↦ M r ⊗ₖ Wall r)).symm
 
 /-- The common middle family represents the evaluation of every polynomial of
@@ -513,10 +513,10 @@ theorem exists_common_physical_aeval_mpo_family_fin
   let Ksites := interval L (a + 2 * ell) (b + 1)
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let J := interval L (a + ell) (b + ell + 1)
   let eJ := intervalShiftOrderIso
     (show a + ell ≤ b + ell + 1 by omega)
@@ -540,12 +540,12 @@ theorem exists_common_physical_aeval_mpo_family_fin
             Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
         ∀ P : Polynomial ℂ, P.natDegree ≤ k →
-          ∃ M : Fin N → Matrix ((Jᶜ : Finset (Fin L)) → Fin q) ((Jᶜ : Finset (Fin L)) → Fin q) ℂ,
+          ∃ M : Fin N → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ,
             Polynomial.aeval (∑ a, F a) P =
               (∑ r, M r ⊗ₖ W r).submatrix
-                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _))
-                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _)) := by
   classical
   obtain ⟨N, W, hN, hW, hTrace, hdecomp⟩ :=

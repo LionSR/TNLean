@@ -53,15 +53,13 @@ before the physical chain, gap and requested accuracy. -/
 theorem exists_aklv_sharp_physical_sequential_mps_approximation :
     ∃ A C : ℝ, 1 ≤ A ∧ 0 < C ∧
       ∀ (L q : ℕ)
-        (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+        (Φ : ManyBody.BondInteraction L q)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h j) (interval L j.val (j.val + 2))) →
-      (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
-      (∑ j, h j) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
-      ((∑ j, h j) - (mu : ℂ) • 1 - (g : ℂ) •
+      (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
+      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
+      (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-      0 < g → mu + g ∈ spectrum ℝ (∑ j, h j) →
+      0 < g → mu + g ∈ spectrum ℝ Φ.hamiltonian →
       ∀ epsilon : ℝ, 0 < epsilon → epsilon ≤ 1 →
       let rho := epsilon ^ 2 / (16 * ((L : ℝ) + 1))
       let u := 1 + Real.log (q : ℝ) + Real.log (1 / g)
@@ -82,7 +80,7 @@ theorem exists_aklv_sharp_physical_sequential_mps_approximation :
       ‖aklvNormalizedSpectralTruncation Ω D - Ω‖ ≤ epsilon := by
   obtain ⟨A, C, hA, hC, hphysical⟩ := exists_aklv_sharp_physical_per_cut_approximation
   refine ⟨A, C, hA, hC, ?_⟩
-  intro L q h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited epsilon hepsilon hepsilon1
+  intro L q Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited epsilon hepsilon hepsilon1
     rho u z s0 D
   have hrho : 0 < rho := by dsimp [rho]; positivity
   have hrho1 : rho ≤ 1 := by
@@ -91,7 +89,7 @@ theorem exists_aklv_sharp_physical_sequential_mps_approximation :
     have hL : (0 : ℝ) ≤ L := Nat.cast_nonneg _
     nlinarith
   obtain ⟨_hq, _hg1, hlog, hlogLVV, hcut⟩ :=
-    hphysical L q h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1
+    hphysical L q Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited rho hrho hrho1
   have hlogExplicit : Real.log (D : ℝ) ≤ 11 * C * (u ^ 3 / g) *
       Real.log (2048 * ((L : ℝ) + 1) / epsilon ^ 2) := by
     rw [← aklvAccuracyLog_sequential hepsilon]
@@ -114,15 +112,13 @@ theorem exists_aklv_fixed_gap_physical_sequential_mps_approximation :
     ∃ A C : ℝ, 1 ≤ A ∧ 0 < C ∧
       ∀ (g₀ : ℝ), 0 < g₀ → g₀ ≤ 1 →
       ∀ (L q : ℕ)
-        (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+        (Φ : ManyBody.BondInteraction L q)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h j) (interval L j.val (j.val + 2))) →
-      (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
-      (∑ j, h j) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
-      ((∑ j, h j) - (mu : ℂ) • 1 - (g : ℂ) •
+      (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
+      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
+      (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-      0 < g → g₀ ≤ g → mu + g ∈ spectrum ℝ (∑ j, h j) →
+      0 < g → g₀ ≤ g → mu + g ∈ spectrum ℝ Φ.hamiltonian →
       ∀ epsilon : ℝ, 0 < epsilon → epsilon ≤ 1 →
       let rho := epsilon ^ 2 / (16 * ((L : ℝ) + 1))
       let u := 1 + Real.log (q : ℝ) + Real.log (1 / g)
@@ -138,13 +134,13 @@ theorem exists_aklv_fixed_gap_physical_sequential_mps_approximation :
   obtain ⟨A, C, hA, hC, hsequential⟩ :=
     exists_aklv_sharp_physical_sequential_mps_approximation
   refine ⟨A, C, hA, hC, ?_⟩
-  intro g₀ hg₀ hg₀one L q h mu g Ω hsupp h0 h1 hΩ hground hgap hg hg₀g hexcited
+  intro g₀ hg₀ hg₀one L q Φ mu g Ω h0 h1 hΩ hground hgap hg hg₀g hexcited
     epsilon hepsilon hepsilon1 rho u z s0 D C₀
   obtain ⟨_hfourth, hlog, _hexplicit, _htail, hnonzero, hnorm, hmps, herror⟩ :=
-    hsequential L q h mu g Ω hsupp h0 h1 hΩ hground hgap hg hexcited
+    hsequential L q Φ mu g Ω h0 h1 hΩ hground hgap hg hexcited
       epsilon hepsilon hepsilon1
   obtain ⟨_hL, hq, hg1⟩ :=
-    aklv_chain_dimension_and_gap_bounds h hsupp h0 h1 mu g Ω hΩ hground hgap hg hexcited
+    aklv_chain_dimension_and_gap_bounds Φ h0 h1 mu g Ω hΩ hground hgap hg hexcited
   have hcubic := aklv_cubic_cost_of_fixed_gap hg₀ hg₀one hg₀g hg hg1 q hq
   change u ^ 3 / g ≤ C₀ * Real.log (q : ℝ) ^ 3 / g at hcubic
   have hz : 0 ≤ z := by

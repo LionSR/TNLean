@@ -36,9 +36,9 @@ theorem isMinimalIntervalColumnImplementation_of_joint_initialized_columns
       (Fin (cutCoefficientRank (operatorCoefficientTensor U) t.val)) ℂ)
     (j m k : Fin (N + 1)) (hjm : j.val < m.val) (hmk : m.val < k.val)
     (Z : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ)
-    (h : Z * initializedBasisMatrix
+    (h : Z * basisInclusion
         (intervalJointInputEmbedding (d := d) (D := D) j m k hjm hmk) =
-      (initializedBasisMatrix (minimalIntervalOutputEmbedding hd U hU hbound j k) *
+      (basisInclusion (minimalIntervalOutputEmbedding hd U hU hbound j k) *
         (vectorizedWeightedInterval (minimalOperatorInterval U B (hjm.le.trans hmk.le))
           (CFC.sqrt (P j)) (CFC.sqrt (dualGramMetric (P k))) ⊗ₖ
             (1 : Matrix (OutsidePlacedConfig d (intervalPacketSites d D N j.val k.val))
@@ -46,10 +46,10 @@ theorem isMinimalIntervalColumnImplementation_of_joint_initialized_columns
         (intervalJointInputConfigEquiv j m k hjm hmk)) :
     IsMinimalIntervalColumnImplementation hd U hU hbound B P j k (hjm.le.trans hmk.le) Z := by
   unfold IsMinimalIntervalColumnImplementation
-  rw [mul_initializedBasisMatrix]
-  rw [mul_initializedBasisMatrix] at h
   ext x p
   have hh := congrFun (congrFun h x) ((intervalJointInputConfigEquiv j m k hjm hmk).symm p)
+  rw [mul_basisInclusion_apply] at hh
+  rw [mul_basisInclusion_apply]
   simpa only [Matrix.submatrix_apply, id_eq, intervalJointInputEmbedding_eq_parent_input,
     Equiv.apply_symm_apply] using hh
 

@@ -149,11 +149,15 @@ theorem exists_ker_regionParentHamiltonian_transport_of_isGInjective
     (hK : ∀ i, IsRegionParentInteraction
       { bondDim := A.bondDim, component := b } (R i) (K i)) :
     ∃ F : V → Matrix (Fin e) (Fin d) ℂ,
-      (Matrix.mulVecLin (regionParentHamiltonian R H)).ker.map (globalPhysicalMap F) =
-        (Matrix.mulVecLin (regionParentHamiltonian R K)).ker ∧
-      Set.InjOn (globalPhysicalMap F) (Matrix.mulVecLin (regionParentHamiltonian R H)).ker ∧
-      Module.finrank ℂ (Matrix.mulVecLin (regionParentHamiltonian R K)).ker =
-        Module.finrank ℂ (Matrix.mulVecLin (regionParentHamiltonian R H)).ker := by
+      (Matrix.mulVecLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R H).hamiltonian).ker.map
+          (globalPhysicalMap F) =
+        (Matrix.mulVecLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin e) R K).hamiltonian).ker ∧
+      Set.InjOn (globalPhysicalMap F)
+        (Matrix.mulVecLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R H).hamiltonian).ker ∧
+      Module.finrank ℂ (Matrix.mulVecLin
+          (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin e) R K).hamiltonian).ker =
+        Module.finrank ℂ (Matrix.mulVecLin
+          (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R H).hamiltonian).ker := by
   obtain ⟨F, _, hmap, hinj, hdim⟩ :=
     exists_regionParentGroundSpace_transport_of_isGInjective A b ρ hA hB R hcover
   rw [ker_regionParentHamiltonian A R H hH,

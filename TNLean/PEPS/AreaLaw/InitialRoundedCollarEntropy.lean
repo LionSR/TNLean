@@ -41,7 +41,7 @@ namespace TNLean.PEPS.AreaLaw
 with one threshold before the safety parameter and original ground vector.
 Source: Proposition 3.3, `02-initial.tex`, lines 590–604, and the initial shell
 input to Proposition 9.5, `08-scanner.tex`, lines 693–729. -/
-theorem exists_regionalEntropy_initial_rounded_collar_le_rpow
+theorem exists_regionEntropy_initial_rounded_collar_le_rpow
     (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ C e₀ : ℝ, 0 ≤ C ∧ 0 < e₀ ∧ e₀ < 1 ∧
       ∀ C₂ : ℝ, 0 < C₂ → ∃ N : ℕ, 1 ≤ N ∧
@@ -61,7 +61,7 @@ theorem exists_regionalEntropy_initial_rounded_collar_le_rpow
                   C * (24 + 64 / ((2 : ℝ) ^ e₀ - 1)) *
                     (C₂ + 1) ^ (η * e₀) * (Q.size : ℝ) ^ (1 + η * e₀) := by
   obtain ⟨C, e₀, hC, he₀, he₀₁, hshell⟩ :=
-    exists_regionalEntropy_weak_rectangle_shell_le_rpow q R hq hJ hΔ
+    exists_regionEntropy_weak_rectangle_shell_le_rpow q R hq hJ hΔ
   refine ⟨C, e₀, hC, he₀, he₀₁, ?_⟩
   intro C₂ hC₂
   obtain ⟨_, _, _, hℓ₁, _⟩ := Scan.BootstrapParameters.parameter_bounds he₀ he₀₁

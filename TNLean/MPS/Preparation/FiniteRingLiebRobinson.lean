@@ -5,16 +5,14 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Dynamics.GraphPropagation
 import Mathlib.Combinatorics.SimpleGraph.CycleGraph
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.SupportedMatrixElements
 import QICLean.Entropy.RegionUnion
+import QICLean.Circuit.Geometry.Ring
+import QICLean.ManyBody.Sites.Lattice.Ring
 import TNLean.MPS.Overlap.Basic
-import TNLean.MPS.Preparation.CyclicOperatorSupport
-import TNLean.MPS.Preparation.EmbedLocalOperatorNorm
+import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.Symmetry.GappedInteractionPath
 import Mathlib.Analysis.Normed.Group.Constructions
 import Mathlib.Tactic.Ring
-import TNLean.Circuit.LocalCircuit
 import Mathlib.Data.Fin.Basic
 import Mathlib.Tactic.NormNum
 import Mathlib.Data.Finset.Card
@@ -83,25 +81,6 @@ private theorem reaches_ringSupportDistance (X Y : Set (Fin N))
   classical
   exact Nat.find_spec (exists_reaches X Y hX hY)
 
-/-- The displacement-based separation predicate agrees with the strict
-shortest-path distance inequality. -/
-theorem isSeparatedBy_iff_lt_ringSupportDistance
-    (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty) (r : ℕ) :
-    IsSeparatedBy X Y r ↔ r < ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY := by
-  classical
-  constructor
-  · intro h
-    by_contra hlt
-    have hle := Nat.le_of_not_gt hlt
-    obtain ⟨x, hx, y, hy, m, hm, heq⟩ :=
-      reaches_ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY
-    exact h x hx y hy m (hm.trans (by exact_mod_cast hle)) heq
-  · intro hr x hx y hy m hm heq
-    have hReach : reaches (X : Set (Fin N)) (Y : Set (Fin N)) r := ⟨x, hx, y, hy, m, hm, heq⟩
-    have hle : ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY ≤ r :=
-      Nat.find_min' (exists_reaches (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) hReach
-    exact (Nat.not_lt_of_ge hle) hr
-
 
 /-- Each step of a walk in the cycle graph moves by one site, so the endpoint of a
 walk is reached from its start by an integer displacement of absolute value at most
@@ -143,6 +122,29 @@ theorem ringSupportDistance_le_edist (X Y : Set (Fin N))
   obtain ⟨m, hm, heq⟩ := exists_int_eq_add_of_walk p
   rw [← hp]
   exact_mod_cast Nat.find_min' (exists_reaches X Y hX hY) ⟨x, hx, y, hy, m, hm, heq⟩
+
+/-- Separation in the cycle graph agrees with the strict inequality for the displacement-based
+shortest-path distance. -/
+theorem isGraphSeparated_iff_lt_ringSupportDistance
+    (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty) (r : ℕ) :
+    ManyBody.IsGraphSeparated (SimpleGraph.cycleGraph N) X Y r ↔
+      r < ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY := by
+  classical
+  constructor
+  · intro h
+    by_contra hlt
+    have hle := Nat.le_of_not_gt hlt
+    obtain ⟨x, hx, y, hy, m, hm, heq⟩ :=
+      reaches_ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY
+    have hmem : y ∈ ManyBody.graphNeighborhood (SimpleGraph.cycleGraph N) {x}
+        (ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) :=
+      ManyBody.mem_graphNeighborhood_cycleGraph.mpr ⟨x, Finset.mem_singleton_self x, m, hm, heq⟩
+    obtain ⟨x', hx', hxy⟩ := ManyBody.mem_graphNeighborhood.mp hmem
+    rw [Finset.mem_singleton.mp hx'] at hxy
+    exact (h x hx y hy).not_ge (hxy.trans (by exact_mod_cast hle))
+  · intro hr x hx y hy
+    exact lt_of_lt_of_le (by exact_mod_cast hr)
+      (ringSupportDistance_le_edist (X : Set (Fin N)) (Y : Set (Fin N)) hX hY hx hy)
 
 end MPSPreparation
 
@@ -213,7 +215,8 @@ theorem norm_heisenberg_commutator_le_exp_abs_of_disjoint
     {d N : ℕ} [NeZero N]
     (h : Fin N → Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ)
     (hHerm : ∀ j, (h j).IsHermitian)
-    (hSupport : ∀ j, h j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ringBond j))
+    (hSupport : ∀ j,
+      h j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ((Geometry.ring N).cell j))
     (hNorm : ∀ j, ‖h j‖ ≤ 1)
     (A B : Matrix (MPSTensor.Cfg d N) (MPSTensor.Cfg d N) ℂ)
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
@@ -230,7 +233,9 @@ theorem norm_heisenberg_commutator_le_exp_abs_of_disjoint
         (Real.exp ((8 * Real.exp a) * |t|) - 1) := by
   classical
   let Φ : ManyBody.Interaction (fun _ : Fin N ↦ Fin d) (fun j : Fin N ↦ ({j, j + 1} : Finset _)) :=
-    ⟨h, fun j ↦ (by simpa only [Finset.coe_pair, ringBond] using hSupport j)⟩
+    ⟨h, fun j ↦ by
+      have hj := hSupport j
+      rwa [Geometry.ring_cell] at hj⟩
   have hBound := ManyBody.norm_heisenberg_commutator_le_graphDistance_of_disjoint
     (SimpleGraph.cycleGraph N) Φ hHerm (fun _ ↦ 1) (fun j ↦ edist_le_one_of_mem_bond j)
     a ha (4 * Real.exp a)
@@ -249,10 +254,10 @@ open MPSPreparation NormedSpace QuantumCircuit
 open scoped Matrix.Norms.L2Operator
 
 /-- A bounded Hermitian two-site interaction satisfies the finite-ring
-Lieb–Robinson estimate after cyclic embedding. The estimate is uniform in
-the ring length and local Hilbert-space dimension, and allows arbitrary ground
+Lieb–Robinson estimate for its translation-invariant Hamiltonian on the ring. The estimate is
+uniform in the ring length and local Hilbert-space dimension, and allows arbitrary ground
 energy. Source context: Hastings–Koma, arXiv:math-ph/0507008, Appendix A. -/
-theorem norm_interactionHamiltonian_commutator_le_exp_abs_of_disjoint
+theorem norm_hamiltonian_translationInvariant_commutator_le_exp_abs_of_disjoint
     {d N : ℕ} [NeZero N] (hN : 2 ≤ N)
     (h : MPOTensor.ChainOperator d 2) (hHerm : h.IsHermitian) (hNorm : ‖h‖ ≤ 1)
     (A B : MPOTensor.ChainOperator d N)
@@ -261,18 +266,23 @@ theorem norm_interactionHamiltonian_commutator_le_exp_abs_of_disjoint
     (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
     (hXY : Disjoint (X : Set (Fin N)) (Y : Set (Fin N)))
     (a : ℝ) (ha : 0 ≤ a) (t : ℝ) :
-    ‖(exp (t • (Complex.I • interactionHamiltonian h hN)) * A *
-        exp ((-t) • (Complex.I • interactionHamiltonian h hN))) * B -
-      B * (exp (t • (Complex.I • interactionHamiltonian h hN)) * A *
-        exp ((-t) • (Complex.I • interactionHamiltonian h hN)))‖ ≤
+    ‖(exp (t • (Complex.I • (ManyBody.Interaction.translationInvariant hN h).hamiltonian)) * A *
+        exp ((-t) • (Complex.I • (ManyBody.Interaction.translationInvariant hN h).hamiltonian))) *
+          B -
+      B * (exp (t • (Complex.I • (ManyBody.Interaction.translationInvariant hN h).hamiltonian)) *
+        A * exp ((-t) • (Complex.I •
+          (ManyBody.Interaction.translationInvariant hN h).hamiltonian)))‖ ≤
       2 * ‖A‖ * ‖B‖ * X.card *
         Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) *
         (Real.exp ((8 * Real.exp a) * |t|) - 1) := by
   apply norm_heisenberg_commutator_le_exp_abs_of_disjoint
-    (fun j => MPOTensor.embedLocalOperator 2 N hN j h)
-    (fun j => MPOTensor.embedLocalOperator_isHermitian 2 N hN j hHerm)
-    (fun j => embedLocalOperator_twoSite_mem_supportedOperators hN j h)
-    (fun j => (MPOTensor.norm_embedLocalOperator_le 2 N hN j h).trans hNorm)
+    (fun j => (ManyBody.Interaction.translationInvariant hN h).term j)
+    (ManyBody.Interaction.isHermitian_translates_term _ hHerm)
+    (fun j => by
+      have hmem := ManyBody.placeAlong_mem_supportedOperators (X := fun _ ↦ Fin d)
+        (ManyBody.ringWindow hN j) h
+      rwa [ManyBody.map_ringWindow_two, ← Geometry.ring_cell] at hmem)
+    (fun j => (ManyBody.Interaction.norm_translates_term_le _ h j).trans hNorm)
     A B X Y hX hY hA hB hXY a ha t
 
 end MPSTensor

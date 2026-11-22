@@ -12,7 +12,7 @@ The source is `References/cond-mat_9410110/main.tex:1030–1094,1119–1130,1195
 
 The exact transcription and counterexample are `FrustrationFree.UnrestrictedNachtergaeleEstimate` and `FrustrationFree.not_unrestrictedNachtergaeleEstimate` in [NachtergaeleLowerEndpoint.lean](../../TNLean/MPS/ParentHamiltonian/Martingale/NachtergaeleLowerEndpoint.lean). The corrected statements are `energy_lower_bound_of_nachtergaele_c1_c3_threshold` and `energy_lower_bound_of_nachtergaele_c1_c3_of_martingaleDifference_below_eq_zero` in [NachtergaeleFullRangeEstimate.lean](../../TNLean/MPS/ParentHamiltonian/Martingale/NachtergaeleFullRangeEstimate.lean). The first controls the martingale mass above the threshold; the second recovers the printed coefficient when the omitted differences annihilate the vector. The full-range norm corollary uses the abstract finite-dimensional spectral theorem.
 
-The mathematical obstruction is settled by a false-source correction, rather than a proof of the false unrestricted claim. The repair and its MPS applicability are recorded in [the lower-endpoint note](../paper-gaps/nachtergaele96_theorem_2_1_lower_endpoint.tex). In the compatible open MPS specialization, the early local terms vanish and the boundary C3 product is zero, so the full coefficient applies.
+The mathematical obstruction is settled by a false-source correction, rather than a proof of the false unrestricted claim. The repair and its MPS applicability are recorded in [the lower-endpoint note](https://sirui-lu.com/QICLean/paper-gaps/nachtergaele96_theorem_2_1_lower_endpoint.pdf). In the compatible open MPS specialization, the early local terms vanish and the boundary C3 product is zero, so the full coefficient applies.
 
 ### 2. The block-injective periodic gap (#7676)
 

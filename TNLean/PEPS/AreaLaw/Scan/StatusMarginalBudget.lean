@@ -23,7 +23,7 @@ at `openai/math@adc7f124`.
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -62,13 +62,13 @@ private theorem statusMarginalRegions_containment (depth : V → ℤ)
 
 private theorem statusMarginalRegions_boundary {Λ : Finset (ℤ × ℤ)}
     (depth : Site Λ → ℤ) (σ : PhysicalPartition (Site Λ)) {n D : ℕ}
-    (hcuts : (edgeBoundary Λ (positiveNear depth σ)).card ≤ 20 * n * D ∧
-      (edgeBoundary Λ (positiveNearMiddle depth σ)).card ≤ 20 * n * D ∧
-      (edgeBoundary Λ (middle σ)).card ≤ 40 * n * D ∧
-      (edgeBoundary Λ (receiving σ false)).card ≤ 16 * n * D ∧
-      (edgeBoundary Λ (receiving σ true)).card ≤ 16 * n * D)
+    (hcuts : (edgeBoundary (planeDomainGraph Λ) (positiveNear depth σ)).card ≤ 20 * n * D ∧
+      (edgeBoundary (planeDomainGraph Λ) (positiveNearMiddle depth σ)).card ≤ 20 * n * D ∧
+      (edgeBoundary (planeDomainGraph Λ) (middle σ)).card ≤ 40 * n * D ∧
+      (edgeBoundary (planeDomainGraph Λ) (receiving σ false)).card ≤ 16 * n * D ∧
+      (edgeBoundary (planeDomainGraph Λ) (receiving σ true)).card ≤ 16 * n * D)
     {Q : Finset (Site Λ)} (hQ : Q ∈ statusMarginalRegions depth σ) :
-    (edgeBoundary Λ Q).card ≤ 40 * n * D := by
+    (edgeBoundary (planeDomainGraph Λ) Q).card ≤ 40 * n * D := by
   classical
   simp only [statusMarginalRegions, Finset.mem_insert, Finset.mem_singleton] at hQ
   rcases hQ with rfl | rfl | rfl | rfl | rfl <;> nlinarith [hcuts.1, hcuts.2.1,
@@ -108,10 +108,14 @@ theorem statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
         ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
       1 ≤ B ∧ ∀ (k : ℕ) (h : History S.K S.m S.M k) (g : Fin S.K),
         (k ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state h g),
-          cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤ B) ∧
+          ManyBody.cutLogBudget
+            (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+            (fun _ ↦ q) Q ≤ B) ∧
         (k + 1 ≤ S.n * S.m →
           ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState h g),
-            cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤ B) := by
+            ManyBody.cutLogBudget
+              (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+              (fun _ ↦ q) Q ≤ B) := by
   classical
   have hbudget := latticeCutBudget_le_log hq R hCr (show (0 : ℝ) ≤ 40 by norm_num)
   have hC := latticeCutBudgetConstant_nonneg q R hCr (show (0 : ℝ) ≤ 40 by norm_num)
@@ -121,8 +125,9 @@ theorem statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
   have hnR : (2 : ℝ) ≤ S.n := by exact_mod_cast hn
   have hDR : (1 : ℝ) ≤ S.D := by exact_mod_cast hDpos
   have hbound (Q : Finset (Site Λ)) (hQ : Q ⊆ S.truncationSet L)
-      (hcut : (edgeBoundary Λ Q).card ≤ 40 * S.n * S.D) :
-      cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤
+      (hcut : (edgeBoundary (planeDomainGraph Λ) Q).card ≤ 40 * S.n * S.D) :
+      ManyBody.cutLogBudget
+          (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) Q ≤
         (C + 1) * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12) := by
     rw [hgraph, hradius]
     refine (hbudget Λ S.anchor hanchor (S.truncationSet L) Q hQ
@@ -130,15 +135,16 @@ theorem statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
     exact mul_le_mul_of_nonneg_right (by linarith) (by positivity)
   have hboundEither (Q : Finset (Site Λ))
       (hQ : Q ⊆ S.truncationSet L ∨ Qᶜ ⊆ S.truncationSet L)
-      (hcut : (edgeBoundary Λ Q).card ≤ 40 * S.n * S.D) :
-      cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤
+      (hcut : (edgeBoundary (planeDomainGraph Λ) Q).card ≤ 40 * S.n * S.D) :
+      ManyBody.cutLogBudget
+          (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) (fun _ ↦ q) Q ≤
         (C + 1) * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12) := by
     rcases hQ with hQ | hQ
     · exact hbound Q hQ hcut
-    · simpa only [cutBudget_compl] using
-        hbound Qᶜ hQ (by simpa only [edgeBoundary_compl] using hcut)
-  refine ⟨(one_le_cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor ∅).trans
-    (hbound ∅ (Finset.empty_subset _) (by simp [edgeBoundary])), ?_⟩
+    · simpa only [ManyBody.cutLogBudget_compl] using
+        hbound Qᶜ hQ (by simpa only [ManyBody.edgeBoundary_compl] using hcut)
+  refine ⟨(Entropy.one_le_cutLogBudget _ _).trans
+    (hbound ∅ (Finset.empty_subset _) (by simp [ManyBody.edgeBoundary_empty])), ?_⟩
   intro k h g
   constructor
   · intro hk Q hQ
@@ -178,10 +184,14 @@ theorem exists_statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ
         let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
         1 ≤ B ∧ ∀ (k : ℕ) (h : History S.K S.m S.M k) (g : Fin S.K),
           (k ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state h g),
-            cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤ B) ∧
+            ManyBody.cutLogBudget
+              (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+              (fun _ ↦ q) Q ≤ B) ∧
           (k + 1 ≤ S.n * S.m →
             ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState h g),
-              cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Q ≤ B) :=
+              ManyBody.cutLogBudget
+                (fun i ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
+                (fun _ ↦ q) Q ≤ B) :=
   ⟨_, statusMarginalBudgetConstant_pos q R hCr, statusMarginal_cutBudget_le_log hq R hCr⟩
 
 end CollarScan

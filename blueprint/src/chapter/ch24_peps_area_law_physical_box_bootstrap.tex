@@ -219,7 +219,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 
 \begin{lemma}[Physical powers and the box supremum]
     \label{thm:arealaw-box-supremum-powers}
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_of_boxEntropy_power}
+    \lean{TNLean.PEPS.AreaLaw.regionEntropy_le_of_boxEntropy_power}
     \leanok
     For $q\geq1$, if $F_{\rm box}(r)\le Cr^{1+e}$ for all $r\ge1$ with $1+e>0$, then every
     safe rectangle $Q$ satisfies $S_\Omega(A\cap Q)\le C\operatorname{size}(Q)^{1+e}$.
@@ -329,7 +329,7 @@ For real $D_0>2R+10$, write $F_{\mathrm{box},D_0}(r)$ for the safe-box supremum
 
 \begin{lemma}[Improved entropy bound for safe rectangles]
     \label{thm:arealaw-physical-safe-rectangle-real}
-    \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_boxError}
+    \lean{TNLean.PEPS.AreaLaw.exists_regionEntropy_safe_rect_le_boxError}
     \leanok
     \uses{def:area_law_hamiltonian,def:area_law_ground_entropy,
         def:area_law_safe_rectangle}

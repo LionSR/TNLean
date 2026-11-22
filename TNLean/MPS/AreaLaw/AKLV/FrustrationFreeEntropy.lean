@@ -50,14 +50,12 @@ AKLV, arXiv:1301.1162v1, `t:ent`, lines 810–846, with the logarithmic rate of 
 module's local fix. -/
 theorem exists_aklv_frustrationFree_physical_entropy_bound :
     ∃ C : ℝ, 0 < C ∧ ∀ (L q : ℕ)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (Φ : ManyBody.BondInteraction L q)
       (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
       2 ≤ q →
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h j) (interval L j.val (j.val + 2))) →
-      (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
-      (∑ j, h j) *ᵥ WithLp.ofLp Ω = 0 →
-      ((∑ j, h j) - (g : ℂ) •
+      (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
+      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0 →
+      (Φ.hamiltonian - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
       0 < g → g ≤ 1 → ∀ k : ℕ, k ≤ L →
       ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k) ≤
@@ -72,7 +70,7 @@ theorem exists_aklv_frustrationFree_physical_entropy_bound :
   have hW : 0 < W := by dsimp only [W]; positivity
   have hR : 0 < R := by dsimp only [R]; positivity
   refine ⟨C, by dsimp only [C]; positivity, ?_⟩
-  intro L q h g Ω hq hsupp h0 h1 hΩ hzero hgap hg hg1 k hk
+  intro L q Φ g Ω hq h0 h1 hΩ hzero hgap hg hg1 k hk
   classical
   let g0 := g / 8192
   let u := 1 + log (q : ℝ) + log (1 / g)
@@ -99,10 +97,10 @@ theorem exists_aklv_frustrationFree_physical_entropy_bound :
   · obtain ⟨a, hcenter, hfit⟩ := hfit
     obtain ⟨_hBpos, _hBH, _hBnorm, _hBΩ, _hBgap, hfilter⟩ :=
       exists_aklv_frustrationFree_chebyshev_filter (a := a) (s := s)
-        (by omega : 1 ≤ q) (by omega : 6 ≤ s) hfit h hsupp h0 h1 Ω hΩ
+        (by omega : 1 ≤ q) (by omega : 6 ≤ s) hfit Φ h0 h1 Ω hΩ
         g t hg hg1 le_rfl hzero hgap
     obtain ⟨p, _hdegree, _hp0, hfix, _herror, _hshortRank, hrank, hperp⟩ := hfilter ell
-    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h (fun _ ↦ 0) t Finset.univ
+    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ
     let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval B p
     have hrankD : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
         (leftBlock L (a + s / 2)) K) ≤ D := by
@@ -156,21 +154,19 @@ AKLV, arXiv:1301.1162v1, Theorem `t:ent`, lines 820–846, with the logarithmic 
 the module's local fix. -/
 theorem exists_aklv_frustrationFree_entropy_bound_of_mem_spectrum :
     ∃ C : ℝ, 0 < C ∧ ∀ (L q : ℕ)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (Φ : ManyBody.BondInteraction L q)
       (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h j) (interval L j.val (j.val + 2))) →
-      (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
-      (∑ j, h j) *ᵥ WithLp.ofLp Ω = 0 →
-      ((∑ j, h j) - (g : ℂ) •
+      (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
+      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0 →
+      (Φ.hamiltonian - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-      0 < g → g ∈ spectrum ℝ (∑ j, h j) → ∀ k : ℕ, k ≤ L →
+      0 < g → g ∈ spectrum ℝ Φ.hamiltonian → ∀ k : ℕ, k ≤ L →
       ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k) ≤
         C / g * (1 + log (q : ℝ) + log (1 / g)) ^ 3 := by
   obtain ⟨C, hC, hbound⟩ := exists_aklv_frustrationFree_physical_entropy_bound
-  refine ⟨C, hC, fun L q h g Ω hsupp h0 h1 hΩ hzero hgap hg hexcited k hk ↦ ?_⟩
+  refine ⟨C, hC, fun L q Φ g Ω h0 h1 hΩ hzero hgap hg hexcited k hk ↦ ?_⟩
   obtain ⟨hq, hg1⟩ :=
-    aklv_frustrationFree_dimension_and_gap_bounds h hsupp h0 h1 g Ω hΩ hzero hgap hg hexcited
-  exact hbound L q h g Ω hq hsupp h0 h1 hΩ hzero hgap hg hg1 k hk
+    aklv_frustrationFree_dimension_and_gap_bounds Φ h0 h1 g Ω hΩ hzero hgap hg hexcited
+  exact hbound L q Φ g Ω hq h0 h1 hΩ hzero hgap hg hg1 k hk
 
 end TNLean.MPS.AreaLaw

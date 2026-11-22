@@ -47,10 +47,8 @@ theorem exists_uniform_physical_soft_filter_family
     (hR : 3 * (32 * Real.exp (-(T1 - 156 - 2 * g) / 8) +
       (t / m) * (T1 / t) ^ m) ≤ tau * g / 1000000)
     (N a b : ℕ) (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ N)
-      (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-      (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval (N + 1) i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+      (Φ : ManyBody.BondInteraction (N + 1) q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let Msoft := 3 * t * (1 + Real.log (m : ℝ)) + 4 * (ell : ℝ) + 34
     let xi := min 1 (tau * g ^ 2 / (20000 * (Msoft + g + 8)))
     let upper := Msoft + xi + 4 + g
@@ -58,10 +56,10 @@ theorem exists_uniform_physical_soft_filter_family
     let Delta := (2 * Real.exp (-2 * (k : ℝ) * Real.sqrt ((g / 2) / upper))) ^ 2
     let Sbulk : Finset (Fin 5) := {0, 2, 4}
     let cuts : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, N + 1]
-    let A := fun j : Fin 5 ↦ ∑ i ∈ Finset.univ.filter
-      (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ), h i
-    let Y := ∑ i ∈ Finset.univ.filter (fun i : Fin N ↦ i.val + 1 ∈
-      ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)), h i
+    let A := fun j : Fin 5 ↦ Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ))
+    let Y := Φ.partialHamiltonian (Finset.univ.filter (fun i : Fin N ↦ i.val + 1 ∈
+      ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)))
     let J := interval (N + 1) (a + ell) (b + ell + 1)
     let eJ := intervalShiftOrderIso
       ((Nat.add_le_add_right ((Nat.le_add_right a (2 * ell)).trans hab) ell).trans
@@ -70,10 +68,10 @@ theorem exists_uniform_physical_soft_filter_family
         (Nat.le_mul_of_pos_left ell (by decide : 0 < 2)) b).trans hb))
     let beta := fun _ : Fin (N + 1) ↦ Fin q
     let midConfig := ManyBody.RegionConfig beta J
-    let extConfig := ManyBody.RegionConfig beta Jᶜ
+    let extConfig := ManyBody.ComplConfig beta J
     let HM := EuclideanSpace ℂ midConfig
     let HE := EuclideanSpace ℂ extConfig
-    let split := (ManyBody.splitEquiv beta J).trans
+    let split := (ManyBody.cutEquiv beta J).trans
       (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
     let Phi := ((EuclideanSpace.basisFun extConfig ℂ).tensorProduct
@@ -83,7 +81,7 @@ theorem exists_uniform_physical_soft_filter_family
       Real.log (Real.log (1 + xi / (t * (2 : ℝ) ^ (m + 1)))))/
         (-Real.log (2 * (Real.exp (1 / 3 : ℝ) - 1)))⌉₊
     let bond := ((order ^ 2 * q ^ order) * 2) * (m + 1)
-    let Hraw := ∑ i, h i
+    let Hraw := Φ.hamiltonian
     let hRaw : Hraw.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     ∃ (e : Fin 5 → ℝ) (x : (Fin (N + 1) → Fin q) → ℂ) (E : ℝ),
@@ -137,7 +135,7 @@ theorem exists_uniform_physical_soft_filter_family
   obtain ⟨e, x, E, hx, hxe, he, hE0, hE4, Acore, C, n0, W0, hn0, hW0, hcenter0⟩ :=
     exists_uniform_physical_soft_improving_family q ell m k g tau t T0 T1
       hq hell hm hk hg htau htau1 hscale hT0 htfloor hT1 hO hR
-      N a b hab hb h hs h0 h1
+      N a b hab hb Φ h0 h1
   refine ⟨e, x, E, hx, hxe, he, hE0, hE4, n0, W0, ?_⟩
   intro Fops
   refine ⟨hn0, hW0, ?_⟩

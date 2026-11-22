@@ -11,7 +11,7 @@
 
 \begin{lemma}[Local embeddings in window-complement coordinates]
     \label{thm:mpdo_cyclic_local_embedding_reindex}
-    \lean{MPOTensor.reindex_embedLocalOperator_windowComplement}
+    \lean{MPOTensor.reindex_placeAlong_ringWindow_windowComplement}
     \leanok
     \uses{def:mpdo_cyclic_window_complement_coordinates}
     In cyclic window-complement coordinates, every local embedding has the form
@@ -29,8 +29,8 @@
 
 \begin{lemma}[Two-site local embeddings in pair coordinates]
     \label{thm:mpdo_generic_two_site_translation_identities}
-    \lean{MPOTensor.reindex_embedLocalOperator_two_zero,
-        MPOTensor.reindex_embedLocalOperator_two_one}
+    \lean{MPOTensor.reindex_placeAlong_ringWindow_two_zero,
+        MPOTensor.reindex_placeAlong_ringWindow_two_one}
     \leanok
     Identifying two-site configurations with ordered
     pairs, embedding an arbitrary two-site operator $B$ beginning at site zero

@@ -16,7 +16,6 @@ import QICLean.Entropy.RegionUnion
 import QICLean.Entropy.FilterOutputCovariance
 import Mathlib.Data.List.OfFn
 import Mathlib.Order.Interval.Finset.Nat
-import TNLean.Circuit.PairProduct
 import TNLean.MPS.MPDO.TraceChainOperator
 
 /-!
@@ -59,10 +58,10 @@ def identityExtendInterval {T L q B : ℕ}
 /-- When the two physical configurations agree off the interval, the exterior
 identity letters leave precisely the supplied ordered interior product.
 Supporting ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1332–1333. -/
-private theorem prod_identityExtendInterval_of_agreeOff {T L q B : ℕ}
+private theorem prod_identityExtendInterval_of_eq_outside {T L q B : ℕ}
     (A : Fin L → MPOTensor q B) (a : ℕ) (ha : a + L ≤ T)
     (σ τ : Fin T → Fin q)
-    (h : QuantumCircuit.AgreeOff (fun r : Fin L ↦ (⟨a + r.val, by omega⟩ : Fin T)) σ τ) :
+    (h : ∀ v, (∀ r : Fin L, (⟨a + r.val, by omega⟩ : Fin T) ≠ v) → σ v = τ v) :
     (List.ofFn (fun v ↦ identityExtendInterval A a ha v (σ v) (τ v))).prod =
       (List.ofFn (fun r : Fin L ↦
         A r (σ ⟨a + r.val, by omega⟩) (τ ⟨a + r.val, by omega⟩))).prod := by
@@ -115,33 +114,31 @@ private theorem prod_identityExtendInterval_of_agreeOff {T L q B : ℕ}
 operator on the full chain. Its closing matrix and bond dimension are exactly
 those of the supplied core, including empty chains and zero dimensions.
 Supporting ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1332–1333. -/
-private theorem trace_identityExtendInterval_eq_embedOp {T L q B : ℕ}
+private theorem trace_identityExtendInterval_eq_placeAlong {T L q B : ℕ}
     (A : Fin L → MPOTensor q B) (C : Matrix (Fin B) (Fin B) ℂ)
     (a : ℕ) (ha : a + L ≤ T) :
     (Matrix.of fun σ τ : Fin T → Fin q ↦ Matrix.trace (C *
       (List.ofFn (fun v ↦ identityExtendInterval A a ha v (σ v) (τ v))).prod)) =
-      QuantumCircuit.embedOp
-        (fun r : Fin L ↦ (⟨a + r.val, by omega⟩ : Fin T))
+      ManyBody.placeAlong (X := fun _ ↦ Fin q) (ManyBody.chainWindow a ha)
         (Matrix.of fun σ τ : Fin L → Fin q ↦ Matrix.trace
           (C * (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod)) := by
   classical
   ext σ τ
-  rw [QuantumCircuit.embedOp_apply]
-  by_cases h : QuantumCircuit.AgreeOff
-      (fun r : Fin L ↦ (⟨a + r.val, by omega⟩ : Fin T)) σ τ
+  rw [ManyBody.placeAlong_apply]
+  by_cases h : ∀ v, (∀ u, ManyBody.chainWindow a ha u ≠ v) → σ v = τ v
   · rw [ite_eq_left h]
-    simpa only [Matrix.of_apply, Function.comp_def] using
-      congrArg (fun P : Matrix (Fin B) (Fin B) ℂ ↦ Matrix.trace (C * P))
-        (prod_identityExtendInterval_of_agreeOff A a ha σ τ h)
+    simp only [Matrix.of_apply]
+    exact congrArg (fun P : Matrix (Fin B) (Fin B) ℂ ↦ Matrix.trace (C * P))
+      (prod_identityExtendInterval_of_eq_outside A a ha σ τ h)
   · rw [ite_eq_right h]
     obtain ⟨v, hv, hne⟩ : ∃ v : Fin T,
-        (∀ r : Fin L, (⟨a + r.val, by omega⟩ : Fin T) ≠ v) ∧ σ v ≠ τ v := by
-      simpa only [QuantumCircuit.AgreeOff, not_forall, not_imp, exists_prop] using h
+        (∀ r : Fin L, ManyBody.chainWindow a ha r ≠ v) ∧ σ v ≠ τ v := by
+      simpa only [not_forall, not_imp, exists_prop] using h
     have hout : ¬(a ≤ v.val ∧ v.val < a + L) := by
       intro hi
       apply hv ⟨v.val - a, by omega⟩
       apply Fin.ext
-      dsimp
+      change a + (v.val - a) = v.val
       omega
     have hz : identityExtendInterval A a ha v (σ v) (τ v) = 0 := by
       simp [identityExtendInterval, hout, hne]
@@ -181,17 +178,18 @@ def intervalShiftOrderIso {L a b : ℕ} (hab : a ≤ b) (hb : b ≤ L) :
 /-- The literal inclusion of nested physical intervals is the natural coordinate
 shift. Supporting ALVV, arXiv:1602.08828v2, Proposition 5.7,
 lines 1332–1333. -/
-private theorem nestedInterval_inclusion_comp_shift {T c a b d : ℕ}
+private theorem nestedInterval_inclusion_trans_shift {T c a b d : ℕ}
     (hca : c ≤ a) (hab : a ≤ b) (hbd : b ≤ d) (hd : d ≤ T) :
-    (fun i : Fin (b - a) ↦
-      (⟨(intervalShiftOrderIso hab (hbd.trans hd) i).val,
-        mem_interval.mpr (by
-          have hi := (intervalShiftOrderIso hab (hbd.trans hd) i).property
-          rw [mem_interval] at hi
-          constructor <;> omega)⟩ : ↥(interval T c d))) =
-      fun i ↦ intervalShiftOrderIso (show c ≤ d by omega) hd
-        ⟨a - c + i.val, by omega⟩ := by
-  funext i
+    (intervalShiftOrderIso hab (hbd.trans hd)).toEquiv.toEmbedding.trans
+        (⟨fun x : ↥(interval T a b) ↦
+          (⟨x.val, mem_interval.mpr (by
+            have hx := mem_interval.mp x.property
+            constructor <;> omega)⟩ : ↥(interval T c d)),
+          fun x y hxy ↦ Subtype.ext (by have h := congrArg Subtype.val hxy; exact h)⟩ :
+          ↥(interval T a b) ↪ ↥(interval T c d)) =
+      (ManyBody.chainWindow (a - c) (show a - c + (b - a) ≤ d - c by omega)).trans
+        (intervalShiftOrderIso (show c ≤ d by omega) hd).toEquiv.toEmbedding := by
+  refine Function.Embedding.ext fun i ↦ ?_
   apply Subtype.ext
   apply Fin.ext
   change a + i.val = c + (a - c + i.val)
@@ -200,26 +198,26 @@ private theorem nestedInterval_inclusion_comp_shift {T c a b d : ℕ}
 /-- Extending from the smaller physical interval agrees with padding in the
 larger interval's increasing coordinates. Supporting ALVV,
 arXiv:1602.08828v2, Proposition 5.7, lines 1332–1333. -/
-private theorem embedOp_nestedInterval_inclusion {T q c a b d : ℕ}
+private theorem placeAlong_nestedInterval_inclusion {T q c a b d : ℕ}
     (hca : c ≤ a) (hab : a ≤ b) (hbd : b ≤ d) (hd : d ≤ T)
     (M : Matrix (Fin (b - a) → Fin q) (Fin (b - a) → Fin q) ℂ) :
     let eK := intervalShiftOrderIso hab (hbd.trans hd)
     let eE := intervalShiftOrderIso (show c ≤ d by omega) hd
-    let inc := fun x : ↥(interval T a b) ↦
-      (⟨x.val, mem_interval.mpr (by
+    let inc : ↥(interval T a b) ↪ ↥(interval T c d) :=
+      ⟨fun x ↦ (⟨x.val, mem_interval.mpr (by
         have hx := mem_interval.mp x.property
-        constructor <;> omega)⟩ : ↥(interval T c d))
-    QuantumCircuit.embedOp inc (QuantumCircuit.embedOp eK M) =
-      QuantumCircuit.embedOp eE (QuantumCircuit.embedOp
-        (fun i : Fin (b - a) ↦ (⟨a - c + i.val, by omega⟩ : Fin (d - c))) M) := by
+        constructor <;> omega)⟩ : ↥(interval T c d)),
+        fun x y hxy ↦ Subtype.ext (by have h := congrArg Subtype.val hxy; exact h)⟩
+    ManyBody.placeAlong (X := fun _ ↦ Fin q) inc
+        (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding M) =
+      ManyBody.placeAlong (X := fun _ ↦ Fin q) eE.toEquiv.toEmbedding
+        (ManyBody.placeAlong (X := fun _ ↦ Fin q)
+          (ManyBody.chainWindow (a - c) (show a - c + (b - a) ≤ d - c by omega)) M) := by
   intro eK eE inc
-  have hinc : Function.Injective inc := by
-    intro x y hxy
-    exact Subtype.ext (congrArg (fun z : ↥(interval T c d) ↦ z.val) hxy)
-  rw [QuantumCircuit.embedOp_embedOp hinc,
-    QuantumCircuit.embedOp_embedOp eE.injective]
-  exact congrArg (fun f : Fin (b - a) → ↥(interval T c d) ↦ QuantumCircuit.embedOp f M)
-    (nestedInterval_inclusion_comp_shift hca hab hbd hd)
+  rw [ManyBody.placeAlong_placeAlong, ManyBody.placeAlong_placeAlong]
+  exact congrArg
+    (fun w : Fin (b - a) ↪ ↥(interval T c d) ↦ ManyBody.placeAlong (X := fun _ ↦ Fin q) w M)
+    (nestedInterval_inclusion_trans_shift hca hab hbd hd)
 
 end TNLean.MPS.AreaLaw
 
@@ -236,30 +234,33 @@ private theorem trace_identityExtendInterval_nested_inclusion
     (A : Fin (b - a) → MPOTensor q B) (C : Matrix (Fin B) (Fin B) ℂ) :
     let eK := intervalShiftOrderIso hab (hbd.trans hd)
     let eE := intervalShiftOrderIso (show c ≤ d by omega) hd
-    let inc := fun x : ↥(interval T a b) ↦
-      (⟨x.val, mem_interval.mpr (by
+    let inc : ↥(interval T a b) ↪ ↥(interval T c d) :=
+      ⟨fun x ↦ (⟨x.val, mem_interval.mpr (by
         have hx := mem_interval.mp x.property
-        constructor <;> omega)⟩ : ↥(interval T c d))
-    QuantumCircuit.embedOp inc
-        (QuantumCircuit.embedOp eK (Matrix.of fun σ τ : Fin (b - a) → Fin q ↦
-          Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod))) =
-      QuantumCircuit.embedOp eE (Matrix.of fun σ τ : Fin (d - c) → Fin q ↦
-        Matrix.trace (C * (List.ofFn (fun v ↦
-          identityExtendInterval (T := d - c) A (a - c) (by omega)
-            v (σ v) (τ v))).prod)) := by
+        constructor <;> omega)⟩ : ↥(interval T c d)),
+        fun x y hxy ↦ Subtype.ext (by have h := congrArg Subtype.val hxy; exact h)⟩
+    ManyBody.placeAlong (X := fun _ ↦ Fin q) inc
+        (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
+          (Matrix.of fun σ τ : Fin (b - a) → Fin q ↦
+            Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod))) =
+      ManyBody.placeAlong (X := fun _ ↦ Fin q) eE.toEquiv.toEmbedding
+        (Matrix.of fun σ τ : Fin (d - c) → Fin q ↦
+          Matrix.trace (C * (List.ofFn (fun v ↦
+            identityExtendInterval (T := d - c) A (a - c) (by omega)
+              v (σ v) (τ v))).prod)) := by
   intro eK eE inc
-  have hpad := trace_identityExtendInterval_eq_embedOp (T := d - c)
+  have hpad := trace_identityExtendInterval_eq_placeAlong (T := d - c)
     A C (a - c) (by omega)
   calc
-    _ = QuantumCircuit.embedOp eE
-        (QuantumCircuit.embedOp
-          (fun i : Fin (b - a) ↦ (⟨a - c + i.val, by omega⟩ : Fin (d - c)))
+    _ = ManyBody.placeAlong (X := fun _ ↦ Fin q) eE.toEquiv.toEmbedding
+        (ManyBody.placeAlong (X := fun _ ↦ Fin q)
+          (ManyBody.chainWindow (a - c) (show a - c + (b - a) ≤ d - c by omega))
           (Matrix.of fun σ τ : Fin (b - a) → Fin q ↦
             Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod))) :=
-      embedOp_nestedInterval_inclusion hca hab hbd hd _
+      placeAlong_nestedInterval_inclusion hca hab hbd hd _
     _ = _ := congrArg
-      (fun X : Matrix (Fin (d - c) → Fin q) (Fin (d - c) → Fin q) ℂ ↦
-        QuantumCircuit.embedOp eE X) hpad.symm
+      (fun K : Matrix (Fin (d - c) → Fin q) (Fin (d - c) → Fin q) ℂ ↦
+        ManyBody.placeAlong (X := fun _ ↦ Fin q) eE.toEquiv.toEmbedding K) hpad.symm
 
 end MPOTensor
 
@@ -351,19 +352,19 @@ private theorem localLift_retainedInterval {T L q : ℕ}
 coordinates recovers that operator, including empty configuration spaces.
 Supporting natural interval coordinates in ALVV, arXiv:1602.08828v2,
 Proposition 5.7, lines 1324–1333. -/
-private theorem embedOp_equiv_submatrix
+private theorem submatrix_placeAlong_equiv
     {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq κ]
     {q : ℕ} (e : ι ≃ κ) (X : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
-    (QuantumCircuit.embedOp e X).submatrix
+    (ManyBody.placeAlong (X := fun _ ↦ Fin q) e.toEmbedding X).submatrix
       (fun σ : ι → Fin q ↦ σ ∘ e.symm) (fun σ : ι → Fin q ↦ σ ∘ e.symm) = X := by
   classical
   ext σ τ
-  rw [Matrix.submatrix_apply, QuantumCircuit.embedOp_apply]
-  have h : QuantumCircuit.AgreeOff e (σ ∘ e.symm) (τ ∘ e.symm) := by
-    intro v hv
-    exact False.elim (hv (e.symm v) (e.apply_symm_apply v))
+  rw [Matrix.submatrix_apply, ManyBody.placeAlong_apply]
+  have h : ∀ v, (∀ u, e.toEmbedding u ≠ v) → (σ ∘ e.symm) v = (τ ∘ e.symm) v :=
+    fun v hv ↦ False.elim (hv (e.symm v) (e.apply_symm_apply v))
   rw [ite_eq_left h]
-  congr 1 <;> funext i <;> simp only [Function.comp_apply, e.symm_apply_apply]
+  congr 1 <;> funext i <;>
+    simp only [Function.comp_apply, Equiv.coe_toEmbedding, e.symm_apply_apply]
 
 /-- The supplied physical local lift in natural chain coordinates is the
 natural collar lift with the same regional matrix transported to those
@@ -444,13 +445,15 @@ theorem trace_identityExtendInterval_nested_natural
     (A : Fin (b - a) → MPOTensor q B) (C : Matrix (Fin B) (Fin B) ℂ) :
     let eK := intervalShiftOrderIso hab (hbd.trans hd)
     let eE := intervalShiftOrderIso (show c ≤ d by omega) hd
-    let inc := fun x : ↥(interval T a b) ↦
-      (⟨x.val, mem_interval.mpr (by
+    let inc : ↥(interval T a b) ↪ ↥(interval T c d) :=
+      ⟨fun x ↦ (⟨x.val, mem_interval.mpr (by
         have hx := mem_interval.mp x.property
-        constructor <;> omega)⟩ : ↥(interval T c d))
-    (QuantumCircuit.embedOp inc
-      (QuantumCircuit.embedOp eK (Matrix.of fun σ τ : Fin (b - a) → Fin q ↦
-        Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod)))).submatrix
+        constructor <;> omega)⟩ : ↥(interval T c d)),
+        fun x y hxy ↦ Subtype.ext (by have h := congrArg Subtype.val hxy; exact h)⟩
+    (ManyBody.placeAlong (X := fun _ ↦ Fin q) inc
+      (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
+        (Matrix.of fun σ τ : Fin (b - a) → Fin q ↦
+          Matrix.trace (C * (List.ofFn (fun v ↦ A v (σ v) (τ v))).prod)))).submatrix
         (fun σ : Fin (d - c) → Fin q ↦ σ ∘ eE.symm)
         (fun σ : Fin (d - c) → Fin q ↦ σ ∘ eE.symm) =
       (Matrix.of fun σ τ : Fin (d - c) → Fin q ↦ Matrix.trace (C *
@@ -459,10 +462,10 @@ theorem trace_identityExtendInterval_nested_natural
   intro eK eE inc
   have hME := trace_identityExtendInterval_nested_inclusion hca hab hbd hd A C
   have hread := congrArg
-    (fun X : Matrix (↥(interval T c d) → Fin q) (↥(interval T c d) → Fin q) ℂ ↦
-      X.submatrix (fun σ : Fin (d - c) → Fin q ↦ σ ∘ eE.symm)
+    (fun K : Matrix (↥(interval T c d) → Fin q) (↥(interval T c d) → Fin q) ℂ ↦
+      K.submatrix (fun σ : Fin (d - c) → Fin q ↦ σ ∘ eE.symm)
         (fun σ : Fin (d - c) → Fin q ↦ σ ∘ eE.symm)) hME
-  exact hread.trans (embedOp_equiv_submatrix eE.toEquiv _)
+  exact hread.trans (submatrix_placeAlong_equiv eE.toEquiv _)
 
 end MPOTensor
 
@@ -486,30 +489,29 @@ theorem exists_traceChainOperator_of_supported_interval
     (hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A (interval L c d)) :
     ∃ (B : ℕ) (Acore : Fin (d - c) → MPOTensor q B)
       (C0 : Matrix (Fin B) (Fin B) ℂ),
-      A = QuantumCircuit.embedOp (Subtype.val : interval L c d → Fin L)
-        (QuantumCircuit.embedOp (intervalShiftOrderIso hcd hd)
+      A = ManyBody.place (X := fun _ ↦ Fin q) (interval L c d)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin q)
+          (intervalShiftOrderIso hcd hd).toEquiv.toEmbedding
           (MPOTensor.traceChainOperator Acore C0)) := by
-  classical
   let eI := intervalShiftOrderIso hcd hd
-  let e : Fin (d - c) → Fin L := fun u ↦ (eI u).val
-  have he : Function.Injective e := Subtype.val_injective.comp eI.injective
-  have hrange : Finset.univ.image e = interval L c d := by
+  let w : Fin (d - c) ↪ Fin L := eI.toEquiv.toEmbedding.trans (Function.Embedding.subtype _)
+  have hrange : Finset.univ.map w = interval L c d := by
     ext i
-    simp only [Finset.mem_image, Finset.mem_univ, true_and]
+    simp only [Finset.mem_map, Finset.mem_univ, true_and]
     constructor
     · rintro ⟨u, rfl⟩
       exact (eI u).property
     · intro hi
       refine ⟨eI.symm ⟨i, hi⟩, ?_⟩
       exact congrArg Subtype.val (eI.apply_symm_apply ⟨i, hi⟩)
-  have hs := hA
-  rw [← hrange] at hs
-  obtain ⟨M, hM⟩ := QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators he hs
+  have hs : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Finset.univ.map w) := by
+    rw [hrange]
+    exact hA
+  obtain ⟨M, hM⟩ := ManyBody.exists_eq_placeAlong_of_mem_supportedOperators w hs
   obtain ⟨B, Acore, C0, hcore⟩ := MPOTensor.exists_traceChainOperator_of_finite_matrix M
   refine ⟨B, Acore, C0, ?_⟩
-  rw [hM, hcore]
-  exact (QuantumCircuit.embedOp_embedOp Subtype.val_injective eI
-    (MPOTensor.traceChainOperator Acore C0)).symm
+  rw [hM, hcore, ← ManyBody.placeAlong_subtype]
+  exact (ManyBody.placeAlong_placeAlong _ _ _).symm
 
 end TNLean.MPS.AreaLaw
 

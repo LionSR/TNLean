@@ -85,7 +85,7 @@ theorem nestedPatch_minimizer_marginal_closeness
     (fun _ ↦ div_nonneg hκ.le (Nat.cast_nonneg m)) hb Ωᵤ
     ((AreaLaw.norm_rectangleAreaLawState Ω).trans hΩ) hx
   obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toPlaneInteraction_hermitianPart hh hΩ hgap hspan
-  have hgap := FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy
+  have hgap := ManyBody.re_trace_abs_regionState_sub_le_one_sixteenth_of_energy
     (fun _ : Lattice.Site Λ ↦ Fin q)
         (ManyBody.Interaction.isHermitian_hamiltonian
           h.isHermitian_toPlaneInteraction_hermitianPart_term) hΩ'

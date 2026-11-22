@@ -39,6 +39,7 @@ Hastings, arXiv:0705.2024v4, section "Matrix Product States", lines 536–544 of
 
 open Matrix
 open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -133,9 +134,8 @@ theorem one_sub_kyFanNorm_le_of_factorization (hq : 1 ≤ q)
     (by simp only [hnormsq]; simp only [hdot]; exact hov')
   -- The marginal is `C Cᴴ` for the cut matrix `C`.
   have hρeq : ManyBody.regionState (X := fun _ ↦ Fin q) Ω (leftBlock L j) =
-      cutMatrix Ω j * (cutMatrix Ω j)ᴴ := by
-    rw [ManyBody.regionState_eq_partialTraceRight_cutVector]
-    exact partialTraceRight_vecMulVec_eq _
+      cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ :=
+    ManyBody.regionState_eq_cutMatrix_mul_conjTranspose Ω (leftBlock L j)
   have hkf : ∀ {A B : Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L j))
       (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L j)) ℂ} (_ : A = B)
       (hA : A.IsHermitian) (hB : B.IsHermitian), hA.kyFanNorm (k * q ^ (2 * m)) =

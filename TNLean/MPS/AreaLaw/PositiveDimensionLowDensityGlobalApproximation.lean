@@ -22,6 +22,7 @@ data; the capped-width comparison is recorded in
 -/
 
 open ManyBody (interval)
+open ManyBody (cutMatrix)
 
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace Matrix
 
@@ -35,13 +36,11 @@ theorem exists_fixed_bandwidth_low_energy_strict_isOpenMPS_approximation
     (etaLD : ℝ) (hLD : 0 < etaLD) :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q : ℕ) (v : ℝ) (hq : 0 < q), 0 < v →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1),
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, hq⟩⟩
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let G := fun c : ℝ ↦ Submodule.spectralSpanLE
@@ -63,10 +62,10 @@ theorem exists_fixed_bandwidth_low_energy_strict_isOpenMPS_approximation
   obtain ⟨K, hK, hactual⟩ :=
     exists_fixed_bandwidth_low_energy_normalized_isOpenMPS_approximation etaLD hLD
   refine ⟨K, hK, ?_⟩
-  intro L q v hq hv h hs h0 h1 config H hH G bcap g u delta hdelta hdelta1 b
+  intro L q v hq hv Φ h0 h1 config H hH G bcap g u delta hdelta hdelta1 b
   by_cases hq2 : 2 ≤ q
   · obtain ⟨B, hB, hlogB, hvec⟩ :=
-      hactual L q v hq2 hv h hs h0 h1
+      hactual L q v hq2 hv Φ h0 h1
         (delta / 2) (by positivity) (by linarith only [hdelta1])
     have hscale : 16 * ((L : ℝ) + 1) / (delta / 2) =
         32 * ((L : ℝ) + 1) / delta := by field_simp; ring
@@ -108,7 +107,7 @@ theorem exists_fixed_bandwidth_low_energy_strict_isOpenMPS_approximation
       have hmps : IsOpenMPS L 1 (Module.finrank ℂ (G etaLD) * 1) (fun x ↦ ψ x) := by
         apply isOpenMPS_of_cutMatrix_rank_le ψ
         intro k
-        have hrank := Matrix.rank_le_card_height (cutMatrix ψ k)
+        have hrank := Matrix.rank_le_card_height (cutMatrix (leftBlock L k) ψ)
         have hcard : Fintype.card
             (ManyBody.RegionConfig (fun _ ↦ Fin 1)
             (leftBlock L k)) = 1 := by simp [ManyBody.RegionConfig]

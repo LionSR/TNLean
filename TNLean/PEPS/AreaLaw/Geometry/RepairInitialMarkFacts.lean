@@ -24,6 +24,7 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 noncomputable section
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -43,7 +44,7 @@ theorem initialRepairStage_mark_spec (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
       (2 ^ (pitchScaleIndex k - fineScaleIndex k)) (a k) (b k)
     let D := initialRepairStage o Λ A C k₀ hC h₀
     (∀ k, ((F k).card : ℝ) ≤
-      64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card *
+      64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card *
         (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * (k : ℝ) / 2)) ∧
     Set.Finite {k | (F k).Nonempty} ∧
     (∀ p : D.markIndex, 0 < D.scale p ∧ ∃ k z,

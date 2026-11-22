@@ -47,7 +47,8 @@ comparison of the general proof give `eq:far`.
 -/
 
 open Matrix TNLean.Lattice
-open ManyBody (PlaneInteraction Config)
+open ManyBody (PlaneInteraction Config edgeBoundary graphNeighborhood ambientDilation
+  mem_ambientDilation_iff planeDomainGraph)
 open scoped InnerProductSpace Kronecker Matrix.Norms.L2Operator
 
 namespace TNLean.PEPS.AreaLaw.FrustrationFree
@@ -208,11 +209,11 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
             ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
               C₀ * (n : ℝ) ^ 2 →
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
-            ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
+            ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
                 A.filter fun x ↦ x.val ∈ T)).card : ℝ) ≤ C₀ * n →
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
               C₀ * n →
             ManyBody.regionMutualInformation Ω
@@ -223,18 +224,18 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
             ∃ r : ℕ, (r : ℝ) ≤ frustrationFreeAmplificationConstant q R J Δ C₀ M *
                 (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
               (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
-                Disjoint Jset (graphNeighborhood Λ (2 * r)
+                Disjoint Jset (graphNeighborhood (planeDomainGraph Λ)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
-                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
+                    ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r)) →
                 ManyBody.regionMutualInformation Ω X Jset ≤
                   frustrationFreeAmplificationConstant q R J Δ C₀ M * ((n : ℝ) ^ M)⁻¹) ∧
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
                     (Scan.ambientSupDistance t z : ℝ)) →
-                graphNeighborhood Λ (2 * r)
+                graphNeighborhood (planeDomainGraph Λ)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
-                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A) := by
+                      ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) (2 * r) ⊆ A) := by
   intro n hn2 hnN Λ h Ω hff A T hcard hXcut hYcut hScut hI
   have hh := hff.isHermitian
   have hhJ := hff.norm_term_le hJ.le
@@ -326,10 +327,10 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
   obtain ⟨c⟩ := exists_overlapColoring (Λ := Λ) (R := R)
   set D := hff.sweepOp c ^ t
   obtain ⟨Lt, hLsupp, -, hLadj, hcone⟩ := hff.exists_sweepOp_pow_lightCone c t hBblocks ξb
-  let N := graphNeighborhood Λ (2 * r) S₀
+  let N := graphNeighborhood (planeDomainGraph Λ) S₀ (2 * r)
   have hLN : Lt ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) N :=
-    ManyBody.supportedOperators_mono (graphNeighborhood_mono_radius (by omega) S₀) hLsupp
-  have hS₀N : S₀ ⊆ N := subset_graphNeighborhood _ S₀
+    ManyBody.supportedOperators_mono (ManyBody.graphNeighborhood_mono _ _ (by omega)) hLsupp
+  have hS₀N : S₀ ⊆ N := ManyBody.subset_graphNeighborhood
   -- The vector `ζ = R₀ φ` and its excited component.
   let ζ : Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X) → ℂ :=
     Rp *ᵥ φ

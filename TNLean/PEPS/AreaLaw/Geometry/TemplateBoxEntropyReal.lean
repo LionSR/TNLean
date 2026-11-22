@@ -27,6 +27,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 -/
 
 open TNLean.Lattice
+open ManyBody (ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -66,7 +67,7 @@ theorem template_entropy_bounds_of_real_safe_box
       ManyBody.regionEntropy Ω (A.filter fun x ↦ x.1 ∈ S) ≤
         max C 0 * (cappedDyadicPartition S K).sum
           (fun c ↦ ((2 : ℝ) ^ c.1) ^ (1 + e)) := by
-    refine regionalEntropy_filter_le_weighted_cover_of_forall Λ q Ω hΩ A S K e
+    refine regionEntropy_filter_le_weighted_cover_of_forall Λ q Ω hΩ A S K e
       (max C 0) fun c hc ↦ ?_
     obtain ⟨hk, hsub, _⟩ := (mem_cappedDyadicPartition S K c.1 c.2).mp hc
     have hsize : (latticeDyadicRect c.1 c.2).size ≤ s₀ := by

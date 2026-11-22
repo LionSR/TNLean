@@ -43,7 +43,7 @@ theorem swapped_doubled_boundary_bound_edgeBoundary
     let F := Matrix.reindex p p (sheetSwapOp q A)
     ‖F * K * Fᴴ - K‖ ≤
       swapBoundaryCoefficient R * ((1 + 2 * R * (R + 1) : ℕ) : ℝ) *
-        J * ((edgeBoundary Λ A).card : ℝ) := by
+        J * ((edgeBoundary (planeDomainGraph Λ) A).card : ℝ) := by
   intro p K F
   classical
   have hsum := h.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing A
@@ -64,13 +64,13 @@ theorem swapped_doubled_boundary_bound_edgeBoundary
       (mul_le_mul_of_nonneg_left (hhJ X) (by norm_num))
   refine (Finset.sum_le_card_nsmul _ _ (4 * J) (fun X _ ↦ hterm X)).trans ?_
   have hcard : ((ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card : ℝ) ≤
-      ((edgeBoundary Λ A).card : ℝ) *
+      ((edgeBoundary (planeDomainGraph Λ) A).card : ℝ) *
         (((1 + 2 * R * (R + 1)) * 2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) := by
     exact_mod_cast TNLean.PEPS.AreaLaw.card_crossingTerms_le_edgeBoundary Λ R A
   calc
     _ = ((ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card : ℝ) * (4 * J) :=
       nsmul_eq_mul _ _
-    _ ≤ (((edgeBoundary Λ A).card : ℝ) *
+    _ ≤ (((edgeBoundary (planeDomainGraph Λ) A).card : ℝ) *
         (((1 + 2 * R * (R + 1)) * 2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ)) * (4 * J) :=
       mul_le_mul_of_nonneg_right hcard (by positivity)
     _ = _ := by

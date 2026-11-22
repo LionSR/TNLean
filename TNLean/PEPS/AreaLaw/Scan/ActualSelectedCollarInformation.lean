@@ -30,6 +30,8 @@ open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 open TNLean.Lattice
 
+open ManyBody (ambientDilation_zero)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open ActualTerminals
@@ -60,8 +62,8 @@ theorem actualCharge_two_mutualInformation_le_selectedSharpExpression
     let β := fun _ : Site Λ ↦ Fin q
     let X := S.A.filter fun x ↦ x.val ∈ T
     let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
-    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.splitEquiv β X) Ωt
-    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.cutEquiv β X) Ωt
+    let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
       (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -111,7 +113,7 @@ theorem actualCharge_two_mutualInformation_le_selectedSharpExpression
     exact (Finset.mem_compl.mp hout) (Finset.mem_filter.mpr
       ⟨(Finset.mem_filter.mp hx).1, hd.trans (Nat.cast_nonneg L)⟩)
   have hcontinuity := (abs_le.mp
-    (FiniteProduct.abs_mutualInformation_sub_le_of_traceDistance β hΩt hΩ hXoutside)).1
+    (ManyBody.abs_regionMutualInformation_sub_le_of_traceDistance β hΩt hΩ hXoutside)).1
   linarith only [htruncated, hcontinuity]
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

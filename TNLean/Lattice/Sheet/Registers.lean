@@ -122,8 +122,9 @@ def equivT (hS : S.Nodup) (hall : ∀ x, x ∈ S) : Fin (listT S T).length ≃ T
   (List.Nodup.getEquiv _ (nodup_listT hS)).trans (Equiv.subtypeEquivRight (mem_listT hall))
 
 /-- The positions of `listU S T E` enumerate `U = (T ∪ E)ᶜ`. -/
-def equivU (hS : S.Nodup) (hall : ∀ x, x ∈ S) : Fin (listU S T E).length ≃ ↥(T ∪ E)ᶜ :=
-  (List.Nodup.getEquiv _ (nodup_listU hS)).trans (Equiv.subtypeEquivRight (mem_listU hall))
+def equivU (hS : S.Nodup) (hall : ∀ x, x ∈ S) : Fin (listU S T E).length ≃ {v // v ∉ T ∪ E} :=
+  (List.Nodup.getEquiv _ (nodup_listU hS)).trans
+    (Equiv.subtypeEquivRight fun x => (mem_listU hall x).trans Finset.mem_compl)
 
 omit [Fintype ι] in
 theorem groupIso_listT_siteVec (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ S)
@@ -135,7 +136,7 @@ theorem groupIso_listT_siteVec (own : ι → Party) (hS : S.Nodup) (hall : ∀ x
 theorem groupIso_listU_siteVec (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ S)
     (c : ι → Fin q) :
     groupIso own (listU S T E) (equivU hS hall) (siteVec own (listU S T E) c) =
-      EuclideanSpace.single (fun x : ↥(T ∪ E)ᶜ => c x) (1 : ℂ) :=
+      EuclideanSpace.single (fun x : {v // v ∉ T ∪ E} => c x) (1 : ℂ) :=
   groupIso_siteVec own _ _ Subtype.val (fun _ => rfl) c
 
 /-- **Grouping two regions.** The raw registers of `T`, held by `pA`, and those of
@@ -145,7 +146,7 @@ owner. The registers `ℓ₀` in front and the raw registers of `E` are untouche
 def groupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ S) (ℓ₀ : Layout Party)
     {pA pB : Party} (hA : ∀ x ∈ T, own x = pA) (hB : ∀ x ∈ (T ∪ E)ᶜ, own x = pB) :
     Word (ℓ₀ ++ siteRegs q own S)
-      (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
+      (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc ({v // v ∉ T ∪ E} → Fin q)⟩ ::
         (ℓ₀ ++ siteRegs q own (listE S T E))) :=
   .comp (Word.frameList ℓ₀ (partWord own _ S)) <|
   .comp (Word.frameList ℓ₀ (Word.frameList (siteRegs q own (listT S T))
@@ -159,7 +160,7 @@ def groupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ S) (ℓ�
   .comp (.frame _ (Word.exchangeBlocks ℓ₀ (siteRegs q own (listU S T E))
     (siteRegs q own (listE S T E)))) <|
   .frame _ (Word.localMap pB (ℓ₁ := siteRegs q own (listU S T E))
-    (ℓ₂ := [⟨pB, euc (↥(T ∪ E)ᶜ → Fin q)⟩])
+    (ℓ₂ := [⟨pB, euc ({v // v ∉ T ∪ E} → Fin q)⟩])
     (owner_siteRegs fun x hx => hB x ((mem_listU hall x).mp hx)) owner_of_mem_one
     (isoL ((groupIso own _ (equivU hS hall)).trans (oneIso pB _).symm))
     (ℓ₀ ++ siteRegs q own (listE S T E)))
@@ -167,10 +168,10 @@ def groupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ S) (ℓ�
 /-- **Ungrouping two regions**, the inverse of `groupWord` for the owners `own`. -/
 def ungroupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ S) (ℓ₀ : Layout Party)
     {pA pB : Party} (hA : ∀ x ∈ T, own x = pA) (hB : ∀ x ∈ (T ∪ E)ᶜ, own x = pB) :
-    Word (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
+    Word (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc ({v // v ∉ T ∪ E} → Fin q)⟩ ::
         (ℓ₀ ++ siteRegs q own (listE S T E)))
       (ℓ₀ ++ siteRegs q own S) :=
-  .comp (.frame _ (Word.localMap pB (ℓ₁ := [⟨pB, euc (↥(T ∪ E)ᶜ → Fin q)⟩])
+  .comp (.frame _ (Word.localMap pB (ℓ₁ := [⟨pB, euc ({v // v ∉ T ∪ E} → Fin q)⟩])
     (ℓ₂ := siteRegs q own (listU S T E)) owner_of_mem_one
     (owner_siteRegs fun x hx => hB x ((mem_listU hall x).mp hx))
     (isoL ((oneIso pB _).trans (groupIso own _ (equivU hS hall)).symm))
@@ -194,11 +195,11 @@ theorem eval_groupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ 
     (hB : ∀ x ∈ (T ∪ E)ᶜ, own x = pB) (t : Mem ℓ₀) (c : ι → Fin q) :
     (groupWord own hS hall ℓ₀ hA hB).eval ((appendIso ℓ₀ _).symm (t ⊗ₜ siteVec own S c)) =
       ((EuclideanSpace.single (fun x : T => c x) (1 : ℂ) : EuclideanSpace ℂ (T → Fin q)) ⊗ₜ
-        ((EuclideanSpace.single (fun x : ↥(T ∪ E)ᶜ => c x) (1 : ℂ) :
-            EuclideanSpace ℂ (↥(T ∪ E)ᶜ → Fin q)) ⊗ₜ
+        ((EuclideanSpace.single (fun x : {v // v ∉ T ∪ E} => c x) (1 : ℂ) :
+            EuclideanSpace ℂ ({v // v ∉ T ∪ E} → Fin q)) ⊗ₜ
           (appendIso ℓ₀ (siteRegs q own (listE S T E))).symm
             (t ⊗ₜ siteVec own (listE S T E) c)) :
-        Mem (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
+        Mem (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc ({v // v ∉ T ∪ E} → Fin q)⟩ ::
           (ℓ₀ ++ siteRegs q own (listE S T E)))) := by
   simp only [groupWord, Circuit.eval_comp, ContinuousLinearMap.comp_apply]
   rw [Circuit.eval_frameList_appendIso_symm, eval_partWord, Circuit.eval_frameList_appendIso_symm,
@@ -214,17 +215,17 @@ theorem eval_ungroupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x �
     (hB : ∀ x ∈ (T ∪ E)ᶜ, own x = pB) (t : Mem ℓ₀) (c : ι → Fin q) :
     (ungroupWord own hS hall ℓ₀ hA hB).eval
         ((EuclideanSpace.single (fun x : T => c x) (1 : ℂ) : EuclideanSpace ℂ (T → Fin q)) ⊗ₜ
-          ((EuclideanSpace.single (fun x : ↥(T ∪ E)ᶜ => c x) (1 : ℂ) :
-              EuclideanSpace ℂ (↥(T ∪ E)ᶜ → Fin q)) ⊗ₜ
+          ((EuclideanSpace.single (fun x : {v // v ∉ T ∪ E} => c x) (1 : ℂ) :
+              EuclideanSpace ℂ ({v // v ∉ T ∪ E} → Fin q)) ⊗ₜ
             (appendIso ℓ₀ (siteRegs q own (listE S T E))).symm
               (t ⊗ₜ siteVec own (listE S T E) c)) :
-          Mem (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
+          Mem (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc ({v // v ∉ T ∪ E} → Fin q)⟩ ::
             (ℓ₀ ++ siteRegs q own (listE S T E)))) =
       (appendIso ℓ₀ _).symm (t ⊗ₜ siteVec own S c) := by
   simp only [ungroupWord, Circuit.eval_comp, ContinuousLinearMap.comp_apply]
   rw [Circuit.eval_frame, Circuit.eval_frame, lTensor_tmul,
     ← appendIso_one_symm pB (ℓ₀ ++ siteRegs q own (listE S T E))
-      (EuclideanSpace.single (fun x : ↥(T ∪ E)ᶜ => c x) (1 : ℂ)),
+      (EuclideanSpace.single (fun x : {v // v ∉ T ∪ E} => c x) (1 : ℂ)),
     eval_localMap, isoL_apply, LinearIsometryEquiv.trans_apply,
     LinearIsometryEquiv.apply_symm_apply, ← groupIso_listU_siteVec own hS hall c,
     LinearIsometryEquiv.symm_apply_apply, lTensor_tmul, Word.eval_exchangeBlocks_appendIso_symm,
@@ -288,19 +289,22 @@ section Placement
 variable [Fintype ι] [DecidableEq ι] {S : List ι} {T E : Finset ι}
 
 /-- The configuration equal to `ab.1` on `T`, to `c` on `E`, and to `ab.2` on `(T ∪ E)ᶜ`. -/
-def merge (h : Disjoint T E) (ab : (T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) (c : ι → Fin q) :
+def merge (h : Disjoint T E) (ab : (T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) (c : ι → Fin q) :
     ι → Fin q :=
   (threeSplit q T E h).symm ((ab.1, fun x : E => c x), ab.2)
 
-theorem merge_restrict_T (h : Disjoint T E) (ab : (T → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
+omit [Fintype ι] in
+theorem merge_restrict_T (h : Disjoint T E) (ab : (T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
     (c : ι → Fin q) : (fun x : T => merge h ab c x) = ab.1 :=
   funext fun x => threeSplit_symm_apply_of_mem_left h _ _ _ x.2
 
-theorem merge_restrict_U (h : Disjoint T E) (ab : (T → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-    (c : ι → Fin q) : (fun x : ↥(T ∪ E)ᶜ => merge h ab c x) = ab.2 :=
-  funext fun x => threeSplit_symm_apply_of_notMem h _ _ _ (Finset.mem_compl.mp x.2)
+omit [Fintype ι] in
+theorem merge_restrict_U (h : Disjoint T E) (ab : (T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+    (c : ι → Fin q) : (fun x : {v // v ∉ T ∪ E} => merge h ab c x) = ab.2 :=
+  funext fun x => threeSplit_symm_apply_of_notMem h _ _ _ x.2
 
-theorem merge_of_mem_E (h : Disjoint T E) (ab : (T → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
+omit [Fintype ι] in
+theorem merge_of_mem_E (h : Disjoint T E) (ab : (T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
     (c : ι → Fin q) {x : ι} (hx : x ∈ E) : merge h ab c x = c x :=
   threeSplit_symm_apply_of_mem_right h _ _ _ hx
 
@@ -329,38 +333,39 @@ theorem eval_place (own own' : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈
     (hA : ∀ x ∈ T, own x = pA) (hB : ∀ x ∈ (T ∪ E)ᶜ, own x = pB)
     (hA' : ∀ x ∈ T, own' x = pA') (hB' : ∀ x ∈ (T ∪ E)ᶜ, own' x = pB')
     (hE : ∀ x ∈ E, own x = own' x)
-    (f : Mem (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
+    (f : Mem (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc ({v // v ∉ T ∪ E} → Fin q)⟩ ::
         (ℓ₀ ++ siteRegs q own (listE S T E))) →L[ℂ]
-      Mem (⟨pA', euc (T → Fin q)⟩ :: ⟨pB', euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
+      Mem (⟨pA', euc (T → Fin q)⟩ :: ⟨pB', euc ({v // v ∉ T ∪ E} → Fin q)⟩ ::
         (ℓ₀ ++ siteRegs q own (listE S T E))))
-    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (M : Matrix ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
     (hf : ∀ z, pairHeadIso _ (f z) = (act M).rTensor _ (pairHeadIso _ z))
     (t : Mem ℓ₀) (c : ι → Fin q) :
     (ungroupWord own' hS hall ℓ₀ hA' hB').eval
         ((relabelRest own own' hall h hE ℓ₀ _ _).eval
           (f ((groupWord own hS hall ℓ₀ hA hB).eval
             ((appendIso ℓ₀ _).symm (t ⊗ₜ siteVec own S c))))) =
-      ∑ ab, M ab ((fun x : T => c x), (fun x : ↥(T ∪ E)ᶜ => c x)) •
+      ∑ ab, M ab ((fun x : T => c x), (fun x : {v // v ∉ T ∪ E} => c x)) •
         (appendIso ℓ₀ _).symm (t ⊗ₜ siteVec own' S (merge h ab c)) := by
   rw [eval_groupWord]
   set R₀ := (appendIso ℓ₀ (siteRegs q own (listE S T E))).symm
     (t ⊗ₜ siteVec own (listE S T E) c)
   have hz : f ((EuclideanSpace.single (fun x : T => c x) (1 : ℂ) :
         EuclideanSpace ℂ (T → Fin q)) ⊗ₜ
-      ((EuclideanSpace.single (fun x : ↥(T ∪ E)ᶜ => c x) (1 : ℂ) :
-        EuclideanSpace ℂ (↥(T ∪ E)ᶜ → Fin q)) ⊗ₜ R₀)) =
-      ∑ ab, M ab ((fun x : T => c x), (fun x : ↥(T ∪ E)ᶜ => c x)) •
+      ((EuclideanSpace.single (fun x : {v // v ∉ T ∪ E} => c x) (1 : ℂ) :
+        EuclideanSpace ℂ ({v // v ∉ T ∪ E} → Fin q)) ⊗ₜ R₀)) =
+      ∑ ab, M ab ((fun x : T => c x), (fun x : {v // v ∉ T ∪ E} => c x)) •
         ((EuclideanSpace.single ab.1 (1 : ℂ) : EuclideanSpace ℂ (T → Fin q)) ⊗ₜ
-          ((EuclideanSpace.single ab.2 (1 : ℂ) : EuclideanSpace ℂ (↥(T ∪ E)ᶜ → Fin q)) ⊗ₜ
-            R₀) : Mem (⟨pA', euc (T → Fin q)⟩ :: ⟨pB', euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
+          ((EuclideanSpace.single ab.2 (1 : ℂ) : EuclideanSpace ℂ ({v // v ∉ T ∪ E} → Fin q)) ⊗ₜ
+            R₀) : Mem (⟨pA', euc (T → Fin q)⟩ :: ⟨pB', euc ({v // v ∉ T ∪ E} → Fin q)⟩ ::
               (ℓ₀ ++ siteRegs q own (listE S T E)))) := by
-    apply (pairHeadIso (p := pA') (q := pB') (α := T → Fin q) (β := ↥(T ∪ E)ᶜ → Fin q)
+    apply (pairHeadIso (p := pA') (q := pB') (α := T → Fin q) (β := {v // v ∉ T ∪ E} → Fin q)
       (ℓ₀ ++ siteRegs q own (listE S T E))).injective
     rw [hf, pairHeadIso_tmul, pairIso_single_tmul_single, rTensor_tmul, map_sum]
     refine Eq.trans ?_ (Finset.sum_congr rfl fun ab _ => by
       rw [LinearIsometryEquiv.map_smul, pairHeadIso_tmul, pairIso_single_tmul_single])
     conv_lhs => rw [← (EuclideanSpace.basisFun _ ℂ).sum_repr
-      (act M (EuclideanSpace.single ((fun x : T => c x), (fun x : ↥(T ∪ E)ᶜ => c x)) 1))]
+      (act M (EuclideanSpace.single ((fun x : T => c x), (fun x : {v // v ∉ T ∪ E} => c x)) 1))]
     rw [TensorProduct.sum_tmul]
     refine Finset.sum_congr rfl fun ab _ => ?_
     rw [EuclideanSpace.basisFun_repr, EuclideanSpace.basisFun_apply, act_single_apply,
@@ -375,9 +380,10 @@ theorem eval_place (own own' : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈
       fun x hx => (merge_of_mem_E h ab c ((mem_listE hall h x).mp hx)).symm]
   exact eval_ungroupWord own' hS hall ℓ₀ hA' hB' t (merge h ab c)
 
-theorem merge_eq_iff (h : Disjoint T E) (ab : (T → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
+omit [Fintype ι] in
+theorem merge_eq_iff (h : Disjoint T E) (ab : (T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
     (c c' : ι → Fin q) : c' = merge h ab c ↔
-      ab = ((fun x : T => c' x), (fun x : ↥(T ∪ E)ᶜ => c' x)) ∧
+      ab = ((fun x : T => c' x), (fun x : {v // v ∉ T ∪ E} => c' x)) ∧
         (fun x : E => c' x) = (fun x : E => c x) := by
   constructor
   · rintro rfl
@@ -396,9 +402,10 @@ theorem merge_eq_iff (h : Disjoint T E) (ab : (T → Fin q) × (↥(T ∪ E)ᶜ 
 /-- The coordinates of the placed monomial: `∑_{ab} M_{ab, (c|_T, c|_U)} |τ, merge ab c⟩` is the
 column `(τ, c)` of `1_tags ⊗ (1_E ⊗ M)`. -/
 theorem sum_single_merge {κ : Type} [Fintype κ] [DecidableEq κ] (h : Disjoint T E)
-    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (M : Matrix ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
     (τ : κ) (c : ι → Fin q) :
-    ∑ ab, M ab ((fun x : T => c x), (fun x : ↥(T ∪ E)ᶜ => c x)) •
+    ∑ ab, M ab ((fun x : T => c x), (fun x : {v // v ∉ T ∪ E} => c x)) •
         (EuclideanSpace.single (τ, merge h ab c) (1 : ℂ) : EuclideanSpace ℂ (κ × (ι → Fin q))) =
       act ((1 : Matrix κ κ ℂ) ⊗ₖ sheetPlace h M) (EuclideanSpace.single (τ, c) (1 : ℂ)) := by
   ext ⟨τ', c'⟩
@@ -407,14 +414,14 @@ theorem sum_single_merge {κ : Type} [Fintype κ] [DecidableEq κ] (h : Disjoint
     Finset.sum_apply, Pi.smul_apply, smul_eq_mul, Matrix.col_apply, Matrix.kroneckerMap_apply,
     Matrix.one_apply, sheetPlace_apply]
   have key : ∀ ab, (Pi.single (τ, merge h ab c) (1 : ℂ) : κ × (ι → Fin q) → ℂ) (τ', c') =
-      if ab = ((fun x : T => c' x), (fun x : ↥(T ∪ E)ᶜ => c' x)) then
+      if ab = ((fun x : T => c' x), (fun x : {v // v ∉ T ∪ E} => c' x)) then
         (if τ' = τ then 1 else 0) *
           (if (fun x : E => c' x) = (fun x : E => c x) then 1 else 0) else 0 := by
     intro ab
     rw [Pi.single_apply]
     simp only [Prod.mk.injEq, merge_eq_iff]
     by_cases h₁ : τ' = τ <;>
-      by_cases h₂ : ab = ((fun x : T => c' x), (fun x : ↥(T ∪ E)ᶜ => c' x)) <;>
+      by_cases h₂ : ab = ((fun x : T => c' x), (fun x : {v // v ∉ T ∪ E} => c' x)) <;>
       by_cases h₃ : (fun x : E => c' x) = (fun x : E => c x) <;> simp [h₁, h₂, h₃]
   simp_rw [key, mul_ite, mul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
   split_ifs <;> ring
@@ -508,11 +515,12 @@ theorem frontLayoutIso_place {T E : Finset ι} (k : Layout Party)
     (hA : ∀ x ∈ T, own x = pA) (hB : ∀ x ∈ (T ∪ E)ᶜ, own x = pB)
     (hA' : ∀ x ∈ T, own' x = pA') (hB' : ∀ x ∈ (T ∪ E)ᶜ, own' x = pB')
     (hE : ∀ x ∈ E, own x = own' x)
-    (f : Mem (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
+    (f : Mem (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc ({v // v ∉ T ∪ E} → Fin q)⟩ ::
         (k ++ siteRegs q own (listE (sites ι) T E))) →L[ℂ]
-      Mem (⟨pA', euc (T → Fin q)⟩ :: ⟨pB', euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
+      Mem (⟨pA', euc (T → Fin q)⟩ :: ⟨pB', euc ({v // v ∉ T ∪ E} → Fin q)⟩ ::
         (k ++ siteRegs q own (listE (sites ι) T E))))
-    (M : Matrix ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ((T → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (M : Matrix ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      ((T → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
     (hf : ∀ z, pairHeadIso _ (f z) = (act M).rTensor _ (pairHeadIso _ z))
     (z : Mem (k ++ siteRegs q own (sites ι))) :
     frontLayoutIso k i own' ((ungroupWord own' nodup_sites mem_sites k hA' hB').eval

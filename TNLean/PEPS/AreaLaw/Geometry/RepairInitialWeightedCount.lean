@@ -31,6 +31,7 @@ noncomputable section
 
 open scoped BigOperators
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -48,7 +49,7 @@ theorem initialRepairStage_weighted_sum_le (P : ℝ) {c : ℝ} (hc : 0 ≤ c)
         D.scale p ≤ (2 : ℝ) ^ k → w p ≤ c * ((k : ℝ) + 1) ^ P) →
       (∑ᶠ p : D.markIndex, w p) ≤
         576 * c * polynomialDyadicBudget P * (2 * (C : ℝ) + 1) ^ 2 *
-          (edgeBoundary Λ A).card := by
+          (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
   intro D w hw
   set B := polynomialDyadicBudget P
@@ -106,14 +107,14 @@ theorem initialRepairStage_weighted_sum_le (P : ℝ) {c : ℝ} (hc : 0 ≤ c)
     (hsumlayer k).trans (mul_le_mul_of_nonneg_right (hcount_real k) (hcap_nonneg k))
   have hsparse (k : ℕ) :
       (9 * ((F k).card : ℝ)) * (c * ((k : ℝ) + 1) ^ P) ≤
-        (9 * (64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card *
+        (9 * (64 * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card *
           (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * k / 2))) *
             (c * ((k : ℝ) + 1) ^ P) :=
     mul_le_mul_of_nonneg_right
       (mul_le_mul_of_nonneg_left (hFcard k) (by norm_num)) (hcap_nonneg k)
   have hrow (k : ℕ) :
       (∑ p ∈ Finset.univ.filter (fun p : D.markIndex ↦ layer p = k), w p) ≤
-        576 * c * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card *
+        576 * c * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card *
           (((k : ℝ) + 1) ^ P *
             (2 : ℝ) ^ (-(Exponents.geometryDelta : ℝ) * k / 2)) := by
     convert (hsumcount k).trans (hsparse k) using 1
@@ -122,7 +123,7 @@ theorem initialRepairStage_weighted_sum_le (P : ℝ) {c : ℝ} (hc : 0 ≤ c)
   refine (Finset.sum_le_sum (fun k _ ↦ hrow k)).trans ?_
   rw [← Finset.mul_sum]
   convert mul_le_mul_of_nonneg_left (hbudget K)
-    (show 0 ≤ 576 * c * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card by
+    (show 0 ≤ 576 * c * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card by
       positivity) using 1
   ring
 
@@ -141,7 +142,7 @@ theorem exists_uniform_initialRepairStage_weighted_sum_bound (P : ℝ) :
           (∀ (p : D.markIndex) (k : ℕ), k₀ ≤ k →
             D.scale p ≤ (2 : ℝ) ^ k → w p ≤ c * ((k : ℝ) + 1) ^ P) →
           (∑ᶠ p : D.markIndex, w p) ≤
-            576 * c * B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
+            576 * c * B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card :=
   ⟨_, polynomialDyadicBudget_pos P, fun _ hc ↦ initialRepairStage_weighted_sum_le P hc⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

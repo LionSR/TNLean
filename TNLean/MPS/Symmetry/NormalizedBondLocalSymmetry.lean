@@ -19,17 +19,6 @@ Source: arXiv:1010.3732, Section II.F.2, equation eq:1d-sym:jointsym.
 
 open scoped Matrix Kronecker
 
-namespace MPOTensor
-
-/-- Embedding an operator on the entire chain at the origin preserves it. -/
-theorem embedLocalOperator_full_zero {d N : ℕ} [NeZero N]
-    (B : ChainOperator d N) : embedLocalOperator N N le_rfl 0 B = B := by
-  ext σ τ
-  unfold embedLocalOperator AgreesOutsideWindow MPSTensor.replaceWindow MPSTensor.extractWindow
-  simp (disch := exact Fin.isLt _) [Nat.mod_eq_of_lt]
-
-end MPOTensor
-
 namespace MPSTensor
 
 /-- Each local normalized bond interaction commutes with the two-site
@@ -80,7 +69,11 @@ theorem normalizedBondInteraction_commute_onSite
     have h := embed_twoSiteBondInteraction_eq_conj (N := 2) (by omega) 0
       (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
         (bondPenalty (normalizedBondInterpolationVector D₀ D₁ γ)))
-    rw [MPOTensor.embedLocalOperator_full_zero] at h
+    have hw : ManyBody.ringWindow (by omega : 2 ≤ 2) (0 : Fin 2) =
+        Function.Embedding.refl (Fin 2) := by
+      ext j
+      fin_cases j <;> rfl
+    rw [hw, ManyBody.placeAlong_refl] at h
     simpa only [normalizedBondInteraction, bondPenaltyAt, P,
       ← Matrix.reindex_symm, Equiv.apply_symm_apply] using h.symm
   rw [haction, hBond] at hlocal

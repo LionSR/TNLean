@@ -28,7 +28,7 @@ an orthogonal physical support.
 
 open scoped Matrix BigOperators ComplexOrder Kronecker
 
-open MPOTensor
+open MPOTensor ManyBody
 
 namespace MPOTensor
 
@@ -281,16 +281,16 @@ private theorem reindex_tensorPower_three
   rw [Fin.prod_univ_succ, Fin.prod_univ_succ, Fin.prod_univ_succ]
   simp
 
-private theorem reindex_embedLocalOperator_three_zero
+private theorem reindex_placeAlong_ringWindow_three_zero
     (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
     Matrix.reindex (_root_.finThreeArrowEquiv (Fin e))
         (_root_.finThreeArrowEquiv (Fin e))
-        (embedLocalOperator (d := e) 2 3 (by decide) (0 : Fin 3) B) =
+        (placeAlong (X := fun _ ↦ Fin e) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3)) B) =
       leftPairMatrix
         (Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
           (_root_.finTwoArrowEquiv (Fin e)) B) := by
   ext σ τ
-  have hAgree := agreesOutsideWindow_finThreeArrowEquiv_three_zero σ τ
+  have hAgree := forall_ringWindow_ne_imp_finThreeArrowEquiv_three_zero σ τ
   have hσ :
       MPSTensor.extractWindow 2 (0 : Fin 3)
           ((_root_.finThreeArrowEquiv (Fin e)).symm σ) =
@@ -305,9 +305,9 @@ private theorem reindex_embedLocalOperator_three_zero
     fin_cases r <;> rfl
   by_cases h : τ.2.2 = σ.2.2
   · have ha := hAgree.mpr h
-    simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
-      embedLocalOperator_apply]
-    rw [ite_eq_left ha]
+    simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply]
+    rw [placeAlong_apply, ite_eq_left ha, ← MPSTensor.extractWindow_eq_comp_ringWindow,
+      ← MPSTensor.extractWindow_eq_comp_ringWindow]
     simp only [leftPairMatrix]
     rw [hσ, hτ]
     change
@@ -317,27 +317,22 @@ private theorem reindex_embedLocalOperator_three_zero
             ((_root_.finTwoArrowEquiv (Fin e)).symm (τ.1, τ.2.1)) *
           (if σ.2.2 = τ.2.2 then 1 else 0)
     rw [ite_eq_left h.symm, mul_one]
-  · have ha : ¬ AgreesOutsideWindow (d := e) 2 (by decide) (0 : Fin 3)
-        ((_root_.finThreeArrowEquiv (Fin e)).symm σ)
-        ((_root_.finThreeArrowEquiv (Fin e)).symm τ) :=
-      fun ha ↦ h (hAgree.mp ha)
-    simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
-      embedLocalOperator_apply]
-    rw [ite_eq_right ha]
+  · simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply]
+    rw [placeAlong_apply, ite_eq_right (hAgree.not.mpr h)]
     simp only [leftPairMatrix]
     change 0 = B _ _ * (if σ.2.2 = τ.2.2 then 1 else 0)
     rw [ite_eq_right (fun hs ↦ h hs.symm), mul_zero]
 
-private theorem reindex_embedLocalOperator_three_one
+private theorem reindex_placeAlong_ringWindow_three_one
     (B : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
     Matrix.reindex (_root_.finThreeArrowEquiv (Fin e))
         (_root_.finThreeArrowEquiv (Fin e))
-        (embedLocalOperator (d := e) 2 3 (by decide) (1 : Fin 3) B) =
+        (placeAlong (X := fun _ ↦ Fin e) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3)) B) =
       rightPairMatrix
         (Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
           (_root_.finTwoArrowEquiv (Fin e)) B) := by
   ext σ τ
-  have hAgree := agreesOutsideWindow_finThreeArrowEquiv_three_one σ τ
+  have hAgree := forall_ringWindow_ne_imp_finThreeArrowEquiv_three_one σ τ
   have hσ :
       MPSTensor.extractWindow 2 (1 : Fin 3)
           ((_root_.finThreeArrowEquiv (Fin e)).symm σ) =
@@ -352,19 +347,14 @@ private theorem reindex_embedLocalOperator_three_one
     fin_cases r <;> rfl
   by_cases h : τ.1 = σ.1
   · have ha := hAgree.mpr h
-    simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
-      embedLocalOperator_apply]
-    rw [ite_eq_left ha]
+    simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply]
+    rw [placeAlong_apply, ite_eq_left ha, ← MPSTensor.extractWindow_eq_comp_ringWindow,
+      ← MPSTensor.extractWindow_eq_comp_ringWindow]
     rw [hσ, hτ]
     change B _ _ = (if σ.1 = τ.1 then 1 else 0) * B _ _
     rw [ite_eq_left h.symm, one_mul]
-  · have ha : ¬ AgreesOutsideWindow (d := e) 2 (by decide) (1 : Fin 3)
-        ((_root_.finThreeArrowEquiv (Fin e)).symm σ)
-        ((_root_.finThreeArrowEquiv (Fin e)).symm τ) :=
-      fun ha ↦ h (hAgree.mp ha)
-    simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply,
-      embedLocalOperator_apply]
-    rw [ite_eq_right ha]
+  · simp only [Fin.isValue, Matrix.reindex_apply, Matrix.submatrix_apply]
+    rw [placeAlong_apply, ite_eq_right (hAgree.not.mpr h)]
     simp only [rightPairMatrix, Matrix.kroneckerMap_apply,
       Matrix.one_apply]
     change 0 = (if σ.1 = τ.1 then 1 else 0) * B _ _
@@ -380,11 +370,11 @@ theorem singleKrausMap_crossedTwoSiteBondProduct
     (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
     (B C : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
     singleKrausMap (Matrix.tensorPower 2 V)
-        (embedLocalOperator (d := e) 2 2 (by decide) (0 : Fin 2) B *
-          embedLocalOperator (d := e) 2 2 (by decide) (1 : Fin 2) C) =
-      embedLocalOperator (d := d) 2 2 (by decide) (0 : Fin 2)
+        (placeAlong (X := fun _ ↦ Fin e) (ringWindow le_rfl (0 : Fin 2)) B *
+          placeAlong (X := fun _ ↦ Fin e) (ringWindow le_rfl (1 : Fin 2)) C) =
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (0 : Fin 2))
           (singleKrausMap (Matrix.tensorPower 2 V) B) *
-        embedLocalOperator (d := d) 2 2 (by decide) (1 : Fin 2)
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (1 : Fin 2))
           (singleKrausMap (Matrix.tensorPower 2 V) C) := by
   apply (Matrix.reindex (_root_.finTwoArrowEquiv (Fin d))
     (_root_.finTwoArrowEquiv (Fin d))).injective
@@ -396,22 +386,22 @@ theorem singleKrausMap_crossedTwoSiteBondProduct
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin e))
-      (embedLocalOperator (d := e) 2 2 (by decide) (0 : Fin 2) B)
-      (embedLocalOperator (d := e) 2 2 (by decide) (1 : Fin 2) C)
+      (placeAlong (X := fun _ ↦ Fin e) (ringWindow le_rfl (0 : Fin 2)) B)
+      (placeAlong (X := fun _ ↦ Fin e) (ringWindow le_rfl (1 : Fin 2)) C)
   simp only [Matrix.coe_reindexLinearEquiv] at hrestricted
-  rw [← hrestricted, reindex_embedLocalOperator_two_zero,
-    reindex_embedLocalOperator_two_one]
+  rw [← hrestricted, reindex_placeAlong_ringWindow_two_zero,
+    reindex_placeAlong_ringWindow_two_one]
   have hambient := Matrix.reindexLinearEquiv_mul ℂ ℂ
       (_root_.finTwoArrowEquiv (Fin d))
       (_root_.finTwoArrowEquiv (Fin d))
       (_root_.finTwoArrowEquiv (Fin d))
-      (embedLocalOperator (d := d) 2 2 (by decide) (0 : Fin 2)
+      (placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (0 : Fin 2))
         (singleKrausMap (Matrix.tensorPower 2 V) B))
-      (embedLocalOperator (d := d) 2 2 (by decide) (1 : Fin 2)
+      (placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (1 : Fin 2))
         (singleKrausMap (Matrix.tensorPower 2 V) C))
   simp only [Matrix.coe_reindexLinearEquiv] at hambient
-  rw [← hambient, reindex_embedLocalOperator_two_zero,
-    reindex_embedLocalOperator_two_one,
+  rw [← hambient, reindex_placeAlong_ringWindow_two_zero,
+    reindex_placeAlong_ringWindow_two_one,
     Matrix.reindex_singleKrausMap
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin d)),
@@ -451,11 +441,11 @@ theorem singleKrausMap_adjacentBondProduct
     (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
     (B C : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
     singleKrausMap (Matrix.tensorPower 3 V)
-        (embedLocalOperator (d := e) 2 3 (by decide) (0 : Fin 3) B *
-          embedLocalOperator (d := e) 2 3 (by decide) (1 : Fin 3) C) =
-      embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3)
+        (placeAlong (X := fun _ ↦ Fin e) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3)) B *
+          placeAlong (X := fun _ ↦ Fin e) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3)) C) =
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3))
           (singleKrausMap (Matrix.tensorPower 2 V) B) *
-        embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3)
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3))
           (singleKrausMap (Matrix.tensorPower 2 V) C) := by
   apply (Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
     (_root_.finThreeArrowEquiv (Fin d))).injective
@@ -467,24 +457,24 @@ theorem singleKrausMap_adjacentBondProduct
       (_root_.finThreeArrowEquiv (Fin e))
       (_root_.finThreeArrowEquiv (Fin e))
       (_root_.finThreeArrowEquiv (Fin e))
-      (embedLocalOperator (d := e) 2 3 (by decide) (0 : Fin 3) B)
-      (embedLocalOperator (d := e) 2 3 (by decide) (1 : Fin 3) C)
+      (placeAlong (X := fun _ ↦ Fin e) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3)) B)
+      (placeAlong (X := fun _ ↦ Fin e) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3)) C)
   simp only [Matrix.coe_reindexLinearEquiv] at hrestricted
   rw [← hrestricted]
-  rw [reindex_embedLocalOperator_three_zero,
-    reindex_embedLocalOperator_three_one]
+  rw [reindex_placeAlong_ringWindow_three_zero,
+    reindex_placeAlong_ringWindow_three_one]
   have hambient := Matrix.reindexLinearEquiv_mul ℂ ℂ
       (_root_.finThreeArrowEquiv (Fin d))
       (_root_.finThreeArrowEquiv (Fin d))
       (_root_.finThreeArrowEquiv (Fin d))
-      (embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3)
+      (placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (0 : Fin 3))
         (singleKrausMap (Matrix.tensorPower 2 V) B))
-      (embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3)
+      (placeAlong (X := fun _ ↦ Fin d) (ringWindow (by decide : 2 ≤ 3) (1 : Fin 3))
         (singleKrausMap (Matrix.tensorPower 2 V) C))
   simp only [Matrix.coe_reindexLinearEquiv] at hambient
   rw [← hambient]
-  rw [reindex_embedLocalOperator_three_zero,
-    reindex_embedLocalOperator_three_one,
+  rw [reindex_placeAlong_ringWindow_three_zero,
+    reindex_placeAlong_ringWindow_three_one,
     Matrix.reindex_singleKrausMap
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin d)),

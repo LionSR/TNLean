@@ -177,7 +177,8 @@ theorem log_sq_supportDim_le (hq : 1 ≤ q) (X : ChainSupport L R) :
 /-- **The cut budget of an interval is bounded by a constant.** The parameter `ℬ` of the
 marginal tail bound at an interval cut is at most `B_R`. -/
 theorem cutLogBudget_interval_le (hq : 1 ≤ q) (a b : ℕ) :
-    cutLogBudget L q R (interval L a b) ≤ chainBudgetConst q R := by
+    ManyBody.cutLogBudget (fun X : ChainSupport L R ↦ X.1) (fun _ ↦ q) (interval L a b) ≤
+      chainBudgetConst q R := by
   set Cr := ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) (interval L a b)
   have hl : 0 ≤ Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) := by
     apply Real.log_nonneg
@@ -193,7 +194,8 @@ theorem cutLogBudget_interval_le (hq : 1 ≤ q) (a b : ℕ) :
   have hcard : (Cr.card : ℝ) ≤ chainCrossConst R := by
     exact_mod_cast card_crossingTerms_interval_le (L := L) (R := R) a b
   have := mul_le_mul_of_nonneg_right hcard (sq_nonneg (Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1))))
-  unfold cutLogBudget Entropy.cutLogBudget chainBudgetConst cutBudgetConst
+  rw [ManyBody.cutLogBudget]
+  unfold Entropy.cutLogBudget chainBudgetConst cutBudgetConst
   linarith
 
 /-- **Single splitting, including the initial interval.** If a set of diameter at most

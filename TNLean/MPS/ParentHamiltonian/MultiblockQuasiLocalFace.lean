@@ -109,8 +109,7 @@ private theorem sectorWeight_centered_evaluation_tendsto_zero
       ∑ j, (sectorWeight φ A n j : ℂ) * observableInsertionExpectation (A j) (ρ j) X)
       atTop (𝓝 0) := by
   have hdec := bulkObservable_iSup_groundSpace_sector_decomposition_tendsto_zero
-    A ρ hP hρ hDistinct (show 0 < 2 * m + 1 by omega) X
-      (tendsto_sub_atTop_nat m) (tendsto_sub_atTop_nat m)
+    A ρ hP hρ hDistinct X (tendsto_sub_atTop_nat m) (tendsto_sub_atTop_nat m)
   let N := fun n : ℕ => ((n - m) + (2 * m + 1)) + (n - m)
   let p := fun n => groundSpaceProjectionMatrix (toTensorFromBlocks (μ := μ) A) (N n)
   let Y := fun n => ∑ j, observableInsertionExpectation (A j) (ρ j) X •

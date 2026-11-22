@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.AreaLaw.FullIntervalFilterTrimming
 import QICLean.Analysis.GroundSpaceAffineFilter
 
@@ -73,9 +74,9 @@ full degenerate ground space. The physical two-value spectral convention
 makes the normalization positive. Supporting ALVV, arXiv:1602.08828v2,
 hypothesis (DG), lines 275–279, and final filter, lines 1620–1643. -/
 theorem physical_dg_normalized_ground_filter_spec
-    {L q : ℕ} (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, 0 ≤ h i) (mu nu gamma : ℝ) (hgamma : 0 < gamma) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    {L q : ℕ} (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (mu nu gamma : ℝ) (hgamma : 0 < gamma) :
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -121,9 +122,9 @@ are derived from the actual Hamiltonian;
 the common reference and numerical trimming budgets are explicit inputs.
 Supporting ALVV, arXiv:1602.08828v2, proof of `t:alg1`, lines 1809–1817. -/
 theorem isCloseTo_nativeFullIntervalSpace_filterTrimStep_of_physical_dg
-    {L q : ℕ} (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, 0 ≤ h i) (mu nu gamma : ℝ) (hgamma : 0 < gamma) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    {L q : ℕ} (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (mu nu gamma : ℝ) (hgamma : 0 < gamma) :
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -149,7 +150,7 @@ theorem isCloseTo_nativeFullIntervalSpace_filterTrimStep_of_physical_dg
   let Kn := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
     ((M - mu)⁻¹ • (M • 1 - H))
   obtain ⟨hM, hden, hc, hc1, hfix, hKGo, hhigh⟩ :=
-    physical_dg_normalized_ground_filter_spec h h0 mu nu gamma hgamma
+    physical_dg_normalized_ground_filter_spec Φ h0 mu nu gamma hgamma
       hmu hnu hmunu hgap
   have hnext := isCloseTo_nativeFullIntervalSpace_filterTrimStep hD hxi hc hc1
     hdelta0 hdelta hepsilon Kn (fun x hx ↦ by rw [hfix x hx]; exact hx) hKGo

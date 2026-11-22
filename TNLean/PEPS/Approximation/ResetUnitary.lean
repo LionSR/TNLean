@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.GaussianFilter.PhysicalBufferUniform
 import QICLean.Analysis.GaussianFilter.LocalizationParameters
 import QICLean.Analysis.GaussianFilter.Reindex
-import QICLean.Entropy.FiniteProductSplitting
+import QICLean.Entropy.RegionPurificationSplitting
 import QICLean.Entropy.ProductMarginals
 import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
 import TNLean.Lattice.RegionalReset
@@ -158,8 +158,8 @@ theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq :
         Finset.univ.filter (IsRegionBoundaryEdge R)
       let Z := boundary.biUnion fun x ↦
         ({x.1.1, x.1.2} : Finset (SquareLatticeVertex L L))
-      let B := Lattice.graphNeighborhood Λ ⌈resetRadius J Δ r * (1 + b + Real.log L)⌉₊
-        (Q.image a ∪ Z.image a)
+      let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ) (Q.image a ∪ Z.image a)
+        ⌈resetRadius J Δ r * (1 + b + Real.log L)⌉₊
       ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
       ∃ (z : ℝ) (M : Matrix (Lattice.Configuration Λ (q * q))
           (Lattice.Configuration Λ (q * q)) ℂ),
@@ -260,8 +260,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_localized_filter (q : ℕ
           Finset.univ.filter (IsRegionBoundaryEdge R)
         let Z := boundary.biUnion fun x ↦
           ({x.1.1, x.1.2} : Finset (SquareLatticeVertex L L))
-        let B := Lattice.graphNeighborhood Λ ⌈K * (1 + b + Real.log L)⌉₊
-          (Q.image a ∪ Z.image a)
+        let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
+          (Q.image a ∪ Z.image a) ⌈K * (1 + b + Real.log L)⌉₊
         ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
         ∃ (z : ℝ) (M : Matrix (Lattice.Configuration Λ (q * q))
             (Lattice.Configuration Λ (q * q)) ℂ),
@@ -300,8 +300,8 @@ theorem _root_.ManyBody.SquareInteraction.reset_unitary (q : ℕ) (hq : 1 ≤ q)
         Finset.univ.filter (IsRegionBoundaryEdge R)
       let Z := boundary.biUnion fun x ↦
         ({x.1.1, x.1.2} : Finset (SquareLatticeVertex L L))
-      let B := Lattice.graphNeighborhood Λ ⌈resetRadius J Δ r * (1 + b + Real.log L)⌉₊
-        (Q.image a ∪ Z.image a)
+      let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ) (Q.image a ∪ Z.image a)
+        ⌈resetRadius J Δ r * (1 + b + Real.log L)⌉₊
       ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
       ∃ U : Matrix (Lattice.Configuration Λ (q * q)) (Lattice.Configuration Λ (q * q)) ℂ,
         U ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ ∧
@@ -348,8 +348,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_unitary (q : ℕ) (hq : 1
           Finset.univ.filter (IsRegionBoundaryEdge R)
         let Z := boundary.biUnion fun x ↦
           ({x.1.1, x.1.2} : Finset (SquareLatticeVertex L L))
-        let B := Lattice.graphNeighborhood Λ ⌈K * (1 + b + Real.log L)⌉₊
-          (Q.image a ∪ Z.image a)
+        let B := ManyBody.graphNeighborhood (ManyBody.planeDomainGraph Λ)
+          (Q.image a ∪ Z.image a) ⌈K * (1 + b + Real.log L)⌉₊
         ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
         ∃ U : Matrix (Lattice.Configuration Λ (q * q)) (Lattice.Configuration Λ (q * q)) ℂ,
           U ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ ∧

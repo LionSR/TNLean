@@ -37,7 +37,7 @@ arXiv:1703.09188, eq:appendix-1, lines 2300–2306. -/
 noncomputable def finiteRingNeighbourhood (a : ℤ) (N : ℕ) [NeZero N]
     (J : Finset ℤ) (R : ℕ) : Finset ℤ := by
   classical
-  exact (QuantumCircuit.neighbourhood
+  exact (ManyBody.graphNeighborhood (SimpleGraph.cycleGraph N)
     (Finset.univ.filter fun (i : Fin N) ↦ (finiteChainSiteEquiv a N i).val ∈ J) R).image
       (fun i => (finiteChainSiteEquiv a N i).val)
 
@@ -61,7 +61,7 @@ theorem finiteRingNeighbourhood_subset_regionSumset
   classical
   intro y hy
   obtain ⟨i, hi, rfl⟩ := Finset.mem_image.mp hy
-  obtain ⟨j, hj, m, hm, hij⟩ := QuantumCircuit.mem_neighbourhood.mp hi
+  obtain ⟨j, hj, m, hm, hij⟩ := ManyBody.mem_graphNeighborhood_cycleGraph.mp hi
   have hbounds := hbuffer (finiteChainSiteEquiv a N j).val (Finset.mem_filter.mp hj).2
   simp only [finiteChainSiteEquiv_val] at hbounds
   have hm' := abs_le.mp hm
@@ -135,13 +135,14 @@ theorem finiteChainConjugation_symm_mem_range_ringNeighbourhood
         Equiv.apply_symm_apply] using Finset.mem_singleton.mp (Finset.mem_filter.mp hj).2
   have hF := MPOTensor.mpo_conjugation_mem_supportedOperators_singleton hU k hk hN S ix hC
   have hB := intervalCoordinates_localInclusion_mem_supportedOperators hJ B
-  have hDisjoint : Disjoint T (QuantumCircuit.neighbourhood {ix} (4 * k)) := by
+  have hDisjoint :
+      Disjoint T (ManyBody.graphNeighborhood (SimpleGraph.cycleGraph N) {ix} (4 * k)) := by
     rw [Finset.disjoint_left]
     intro j hj hnear
-    obtain ⟨y, hy, m, hm, hjy⟩ := QuantumCircuit.mem_neighbourhood.mp hnear
+    obtain ⟨y, hy, m, hm, hjy⟩ := ManyBody.mem_graphNeighborhood_cycleGraph.mp hnear
     obtain rfl := Finset.mem_singleton.mp hy
-    have hix : ix ∈ QuantumCircuit.neighbourhood T (4 * k) := by
-      refine QuantumCircuit.mem_neighbourhood.mpr ⟨j, hj, -m, ?_, ?_⟩
+    have hix : ix ∈ ManyBody.graphNeighborhood (SimpleGraph.cycleGraph N) T (4 * k) := by
+      refine ManyBody.mem_graphNeighborhood_cycleGraph.mpr ⟨j, hj, -m, ?_, ?_⟩
       · simpa only [abs_neg] using hm
       · rw [hjy]
         push_cast

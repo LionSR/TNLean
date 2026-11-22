@@ -118,7 +118,7 @@ theorem tendsto_mpvConnectedCorrelator_limitCorrelator [NeZero D]
     simpa only [Pi.div_apply, div_one, add_sub_cancel_left] using hlim
   apply hlim'.congr'
   filter_upwards [eventually_ge_atTop 1] with n hn
-  exact (mpvConnectedCorrelator_eq_of_compl hL0 hA hρfix hρtr htr X Y ht hn).symm
+  exact (mpvConnectedCorrelator_eq_of_compl hA hρfix hρtr htr X Y ht hn).symm
 
 /-- An eventual bound on the actual finite-ring correlators survives the
 thermodynamic limit. The convergence is derived from block injectivity,

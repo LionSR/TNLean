@@ -26,7 +26,7 @@ open ManyBody (Edge)
 open scoped BigOperators
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (planeDomainGraph edgeBoundary)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -84,7 +84,7 @@ theorem inl_not_mem_crossingTerms (A : Finset (Site Λ))
 theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
     (e : Edge (planeDomainGraph Λ)) :
     Sum.inr e ∈ ManyBody.crossingTerms nearestNeighborSupport A ↔
-      s(e.1.1, e.1.2) ∈ edgeBoundary Λ A := by
+      s(e.1.1, e.1.2) ∈ edgeBoundary (planeDomainGraph Λ) A := by
   classical
   constructor
   · intro h
@@ -93,14 +93,13 @@ theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
     change (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∈ A) ∧
       (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∉ A) at h'
     obtain ⟨⟨x, hx, hxA⟩, y, hy, hyA⟩ := h'
-    apply Finset.mem_filter.mpr
-    refine ⟨SimpleGraph.mem_edgeFinset.mpr e.2.2, ?_⟩
-    refine ⟨x, hxA, y, hyA, ?_⟩
+    rw [ManyBody.mk_mem_edgeBoundary_iff]
+    refine ⟨e.2.2, ?_⟩
     simp only [Finset.mem_insert, Finset.mem_singleton] at hx hy
     rcases hx with rfl | rfl <;> rcases hy with rfl | rfl <;>
-      first | exact absurd hxA hyA | rfl | exact Sym2.eq_swap
+      first | exact absurd hxA hyA | exact Or.inl ⟨hxA, hyA⟩ | exact Or.inr ⟨hxA, hyA⟩
   · intro h
-    obtain ⟨x, hxA, y, hyA, hxy⟩ := (Finset.mem_filter.mp h).2
+    obtain ⟨x, hxA, y, hyA, hxy⟩ := (ManyBody.mem_edgeBoundary.mp h).2
     simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
     change (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∈ A) ∧
       (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∉ A)
@@ -123,7 +122,8 @@ theorem card_nearestNeighbor_insideConfig (q : ℕ)
 /-- Forgetting the canonical endpoint order counts each unordered boundary edge once. -/
 theorem card_crossingTerms_nearestNeighbor
     (A : Finset (Site Λ)) :
-    (ManyBody.crossingTerms nearestNeighborSupport A).card = (edgeBoundary Λ A).card := by
+    (ManyBody.crossingTerms nearestNeighborSupport A).card =
+      (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
   let f : Site Λ ⊕ Edge (planeDomainGraph Λ) → Sym2 (Site Λ) :=
     Sum.elim (fun v ↦ s(v, v)) (fun e ↦ s(e.1.1, e.1.2))
@@ -150,7 +150,7 @@ theorem card_crossingTerms_nearestNeighbor
   · intro b hb
     obtain ⟨x, y⟩ := b
     have hxy : (planeDomainGraph Λ).Adj x y :=
-      SimpleGraph.mem_edgeFinset.mp (Finset.mem_filter.mp hb).1
+      (ManyBody.mem_edgeBoundary.mp hb).1
     let e := ManyBody.Edge.ofAdj hxy
     have he : s(e.1.1, e.1.2) = s(x, y) := by
       rcases ManyBody.Edge.ofAdj_endpoints hxy with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
@@ -163,7 +163,8 @@ theorem nearestNeighbor_crossing_budget (q : ℕ) (J : ℝ)
     {m : ℕ} (regions : Fin m → Finset (Site Λ)) (a : Fin m → ℝ) :
     (∑ j : Fin m, a j ^ 2 * ∑ i ∈ ManyBody.crossingTerms nearestNeighborSupport (regions j),
       (Fintype.card (↥(nearestNeighborSupport i ∩ regions j) → Fin q) : ℝ) ^ 2 * J) =
-      (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 * (edgeBoundary Λ (regions j)).card := by
+      (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 *
+        (edgeBoundary (planeDomainGraph Λ) (regions j)).card := by
   classical
   rw [Finset.mul_sum]
   apply Finset.sum_congr rfl

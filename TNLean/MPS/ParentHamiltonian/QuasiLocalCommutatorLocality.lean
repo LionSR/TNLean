@@ -33,15 +33,16 @@ both interaction margins are present. Source: Nachtergaele,
 arXiv:cond-mat/9410110, lines 2649--2675. -/
 theorem quasiLocalIntervalObservable_bulkObservable_commutator (a : ℤ) {R k ℓ r : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
-    (hR : 0 < R) (hk : 0 < k) (hℓ : R - 1 ≤ ℓ) (hr : R - 1 ≤ r) :
+    (hR : 0 < R) (hℓ : R - 1 ≤ ℓ) (hr : R - 1 ≤ r) :
     quasiLocalIntervalObservable d (a - (ℓ : ℤ)) ((ℓ + k) + r)
       ((bulkObservable X ℓ r)ᴴ *
         (openInteractionMatrix h ((ℓ + k) + r) * bulkObservable X ℓ r -
           bulkObservable X ℓ r * openInteractionMatrix h ((ℓ + k) + r))) =
       quasiLocalIntervalObservable d (a - ((R - 1 : ℕ) : ℤ))
         ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X) := by
-  rw [bulkObservable_adjoint_mul_openInteractionMatrix_commutator h X hR hk hℓ hr]
-  rw [quasiLocalIntervalObservable_chainWindowOperator _ _ _ _ (by omega) (by omega)]
+  rw [bulkObservable_adjoint_mul_openInteractionMatrix_commutator h X hR hℓ hr]
+  rw [quasiLocalIntervalObservable_placeAlong_chainWindow (a - (ℓ : ℤ)) ((ℓ + k) + r)
+    (ℓ - (R - 1)) (localCommutatorObservable h X) (by omega)]
   congr 2
   omega
 
@@ -50,7 +51,7 @@ eventually equal to one fixed local observable. Source: Nachtergaele,
 arXiv:cond-mat/9410110, lines 2649--2675. -/
 theorem eventually_quasiLocalIntervalObservable_bulkObservable_commutator_eq
     (a : ℤ) {R k : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R) (hk : 0 < k)
+    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     ∀ᶠ n in f,
@@ -62,14 +63,14 @@ theorem eventually_quasiLocalIntervalObservable_bulkObservable_commutator_eq
           ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X) := by
   filter_upwards [hℓ.eventually (eventually_ge_atTop (R - 1)),
     hr.eventually (eventually_ge_atTop (R - 1))] with n hln hrn
-  exact quasiLocalIntervalObservable_bulkObservable_commutator a h X hR hk hln hrn
+  exact quasiLocalIntervalObservable_bulkObservable_commutator a h X hR hln hrn
 
 /-- The literal finite-volume commutator energies converge in the quasi-local
 algebra to their fixed local representative. Source: Nachtergaele,
 arXiv:cond-mat/9410110, lines 2649--2675. -/
 theorem tendsto_quasiLocalIntervalObservable_bulkObservable_commutator
     (a : ℤ) {R k : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R) (hk : 0 < k)
+    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n ↦
@@ -81,7 +82,7 @@ theorem tendsto_quasiLocalIntervalObservable_bulkObservable_commutator
         ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X))) :=
   tendsto_const_nhds.congr'
     (Filter.EventuallyEq.symm
-      (eventually_quasiLocalIntervalObservable_bulkObservable_commutator_eq a h X hR hk hℓ hr))
+      (eventually_quasiLocalIntervalObservable_bulkObservable_commutator_eq a h X hR hℓ hr))
 
 /-- Evaluation of the literal commutator energy converges to evaluation of
 its fixed local representative. Because the quasi-local observable is
@@ -90,7 +91,7 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, lines 2649--2675. -/
 theorem tendsto_apply_quasiLocalIntervalObservable_bulkObservable_commutator
     (ω : QuasiLocalAlgebra d → ℂ) (a : ℤ) {R k : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
-    (hR : 0 < R) (hk : 0 < k)
+    (hR : 0 < R)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n ↦ ω
@@ -102,14 +103,14 @@ theorem tendsto_apply_quasiLocalIntervalObservable_bulkObservable_commutator
         ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X)))) :=
   tendsto_const_nhds.congr'
     (Filter.EventuallyEq.fun_comp (Filter.EventuallyEq.symm
-      (eventually_quasiLocalIntervalObservable_bulkObservable_commutator_eq a h X hR hk hℓ hr)) ω)
+      (eventually_quasiLocalIntervalObservable_bulkObservable_commutator_eq a h X hR hℓ hr)) ω)
 
 /-- The literal quasi-local product \(X^*[H_N,X]\) is the fixed local
 commutator observable once the finite volume contains both interaction
 margins. Source: Nachtergaele, arXiv:cond-mat/9410110, lines 2649--2675. -/
 theorem quasiLocalIntervalObservable_commutator_locality (a : ℤ) {R k ℓ r : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
-    (hR : 0 < R) (hk : 0 < k) (hℓ : R - 1 ≤ ℓ) (hr : R - 1 ≤ r) :
+    (hR : 0 < R) (hℓ : R - 1 ≤ ℓ) (hr : R - 1 ≤ r) :
     star (quasiLocalIntervalObservable d a k X) *
         (quasiLocalIntervalObservable d (a - (ℓ : ℤ)) ((ℓ + k) + r)
             (openInteractionMatrix h ((ℓ + k) + r)) *
@@ -121,7 +122,7 @@ theorem quasiLocalIntervalObservable_commutator_locality (a : ℤ) {R k ℓ r : 
         ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X) := by
   simpa only [← Matrix.star_eq_conjTranspose, map_mul, map_sub, map_star,
     quasiLocalIntervalObservable_bulkObservable] using
-      quasiLocalIntervalObservable_bulkObservable_commutator a h X hR hk hℓ hr
+      quasiLocalIntervalObservable_bulkObservable_commutator a h X hR hℓ hr
 
 /-- Evaluation of the literal finite-volume quasi-local commutator energy
 converges to evaluation of the fixed local commutator observable. This holds
@@ -130,7 +131,7 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, lines 2649--2675. -/
 theorem tendsto_apply_quasiLocalIntervalObservable_commutator
     (ω : QuasiLocalAlgebra d → ℂ) (a : ℤ) {R k : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
-    (hR : 0 < R) (hk : 0 < k)
+    (hR : 0 < R)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop) :
     Tendsto (fun n ↦ ω (star (quasiLocalIntervalObservable d a k X) *
@@ -144,6 +145,6 @@ theorem tendsto_apply_quasiLocalIntervalObservable_commutator
         ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X)))) := by
   simpa only [← Matrix.star_eq_conjTranspose, map_mul, map_sub, map_star,
     quasiLocalIntervalObservable_bulkObservable] using
-      tendsto_apply_quasiLocalIntervalObservable_bulkObservable_commutator ω a h X hR hk hℓ hr
+      tendsto_apply_quasiLocalIntervalObservable_bulkObservable_commutator ω a h X hR hℓ hr
 
 end SpinChain

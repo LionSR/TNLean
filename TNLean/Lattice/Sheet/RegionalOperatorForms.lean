@@ -37,17 +37,17 @@ theorem exists_threeSplit_eq_kronecker_one_kronecker_one
     ∃ B : Matrix (T → Fin q) (T → Fin q) ℂ,
       A.submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
         (B ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
-          (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) := by
+          (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) := by
   refine exists_eq_of_mem_supportedOperators (threeSplit q T E h)
     (((kroneckerBilinear (R := ℂ)).flip
-      (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)).comp
+      (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)).comp
       ((kroneckerBilinear (R := ℂ)).flip
         (1 : Matrix (E → Fin q) (E → Fin q) ℂ)))
     (fun m hm => ?_) hA
   have hE : ∀ v : E, m v = 1 := fun v =>
     hm v fun hv => Finset.disjoint_left.mp h (hD hv) v.2
-  have hU : ∀ v : ↥(T ∪ E)ᶜ, m v = 1 := fun v =>
-    hm v fun hv => (Finset.mem_compl.mp v.2) (Finset.mem_union_left E (hD hv))
+  have hU : ∀ v : {v // v ∉ T ∪ E}, m v = 1 := fun v =>
+    hm v fun hv => v.2 (Finset.mem_union_left E (hD hv))
   refine ⟨rectKronecker (fun v : T => m v), ?_⟩
   rw [rectKronecker_submatrix_threeSplit h]
   simp only [hE, hU, rectKronecker_one]
@@ -61,7 +61,7 @@ theorem exists_threeSplit_eq_one_kronecker
     (hD : D ⊆ ((T ∪ E)ᶜ : Finset ι))
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) :
-    ∃ B : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ,
+    ∃ B : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ,
       A.submatrix (threeSplit q T E h).symm (threeSplit q T E h).symm =
         (1 : Matrix ((T → Fin q) × (E → Fin q))
           ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ B := by
@@ -74,7 +74,7 @@ theorem exists_threeSplit_eq_one_kronecker
     hm v fun hv => (Finset.mem_compl.mp (hD hv)) (Finset.mem_union_left E v.2)
   have hE : ∀ v : E, m v = 1 := fun v =>
     hm v fun hv => (Finset.mem_compl.mp (hD hv)) (Finset.mem_union_right T v.2)
-  refine ⟨rectKronecker (fun v : ↥(T ∪ E)ᶜ => m v), ?_⟩
+  refine ⟨rectKronecker (fun v : {v // v ∉ T ∪ E} => m v), ?_⟩
   rw [rectKronecker_submatrix_threeSplit h]
   change _ = (1 : Matrix ((T → Fin q) × (E → Fin q))
     ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ _

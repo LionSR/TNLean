@@ -127,24 +127,24 @@ noncomputable def powerNormalization (L : ℕ) (E₀ : ℝ) : ℝ :=
 /-- One sampled term `C^m P_I`, the random matrix `X_i` of the proof of Corollary `c:agsp`.
 Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, line 641. -/
 noncomputable def scaledBondComplementWord
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {m : ℕ}
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {m : ℕ}
     (I : Fin m → Fin L) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  powerNormalization L E₀ ^ m • bondComplementWord h I
+  powerNormalization L E₀ ^ m • bondComplementWord Φ I
 
 /-- **Definition `d:sagsp`.** The sampling approximate ground-state projector
 `K = C^m ℓ⁻¹ ∑_{j=1}^ℓ P_{I_j}` of the words `I_1, …, I_ℓ`. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, line 611; the words are drawn by `sampleMeasure`. -/
 noncomputable def sampledProjector
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  powerNormalization L E₀ ^ m • ((ℓ : ℝ)⁻¹ • ∑ k, bondComplementWord h (I k))
+  powerNormalization L E₀ ^ m • ((ℓ : ℝ)⁻¹ • ∑ k, bondComplementWord Φ (I k))
 
 /-- The sampled projector is the average of the sampled terms `C^m P_{I_j}`, the form in which
 Theorem `t:mcb` applies (`algo53.tex`, line 641). -/
 lemma sampledProjector_eq_average
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) :
-    sampledProjector h E₀ I = (ℓ : ℝ)⁻¹ • ∑ k, scaledBondComplementWord h E₀ (I k) := by
+    sampledProjector Φ E₀ I = (ℓ : ℝ)⁻¹ • ∑ k, scaledBondComplementWord Φ E₀ (I k) := by
   simp only [sampledProjector, scaledBondComplementWord, ← Finset.smul_sum]
   exact smul_comm _ _ _
 
@@ -152,18 +152,19 @@ lemma sampledProjector_eq_average
 `C = (1 - ε₀/n)⁻¹` is well defined and at least one. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, lines 283–284 and 607. -/
 lemma groundEnergy_nonneg_and_le [NeZero L]
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) :
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) :
     0 ≤ E₀ ∧ E₀ + 1 ≤ L := by
   have hΓ := hΩ
   have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
-  set H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+  set H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
   have hH : H.PosSemidef := posSemidef_sum Finset.univ fun i _ ↦ h0 i
   have hHu : H ≤ ((L - 1 : ℕ) : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) := by
-    simpa only [H, Finset.card_univ, Fintype.card_fin, Nat.cast_smul_eq_nsmul] using
-      Finset.sum_le_card_nsmul Finset.univ h 1 fun i _ ↦ h1 i
+    simpa only [H, ManyBody.Interaction.hamiltonian, Finset.card_univ, Fintype.card_fin,
+      Nat.cast_smul_eq_nsmul] using
+      Finset.sum_le_card_nsmul Finset.univ Φ.term 1 fun i _ ↦ h1 i
   have hE : RCLike.re ⟪Γ, toEuclideanLin H Γ⟫_ℂ = E₀ := by
     have : toEuclideanLin H Γ = (E₀ : ℂ) • Γ :=
       ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Γ)
@@ -185,29 +186,29 @@ lemma groundEnergy_nonneg_and_le [NeZero L]
 /-- A letter `P_i = 1 - H_i` is a contraction, since `0 ≤ P_i ≤ 1`. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, lines 606 and 641. -/
 lemma norm_bondComplement_le_one
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1) (i : Fin L) :
-    ‖bondComplement h i‖ ≤ 1 := by
-  have hP0 : 0 ≤ paddedBond h i := by
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1) (i : Fin L) :
+    ‖bondComplement Φ i‖ ≤ 1 := by
+  have hP0 : 0 ≤ paddedBond Φ i := by
     unfold paddedBond
     split_ifs
     exacts [(h0 _).nonneg, le_rfl]
-  have hP1 : paddedBond h i ≤ 1 := by
+  have hP1 : paddedBond Φ i ≤ 1 := by
     unfold paddedBond
     split_ifs
     exacts [h1 _, zero_le_one]
-  have hB0 : 0 ≤ bondComplement h i := sub_nonneg.mpr hP1
+  have hB0 : 0 ≤ bondComplement Φ i := sub_nonneg.mpr hP1
   exact (CStarAlgebra.norm_le_one_iff_of_nonneg _ hB0).mpr (sub_le_self _ hP0)
 
 /-- A word `P_I` in the letters is a contraction, `‖P_I‖ ≤ 1`. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, line 641. -/
 lemma norm_bondComplementWord_le_one
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1) {m : ℕ} (I : Fin m → Fin L) :
-    ‖bondComplementWord h I‖ ≤ 1 := by
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1) {m : ℕ} (I : Fin m → Fin L) :
+    ‖bondComplementWord Φ I‖ ≤ 1 := by
   refine Matrix.l2_opNorm_list_prod_le_one _ fun a ha ↦ ?_
   obtain ⟨j, rfl⟩ := List.mem_ofFn.mp ha
-  exact norm_bondComplement_le_one h h0 h1 _
+  exact norm_bondComplement_le_one Φ h0 h1 _
 
 /-- With `0 ≤ ε₀ < n`, the normalization `C = (1 - ε₀/n)⁻¹` is at least one. -/
 lemma one_le_powerNormalization [NeZero L] {E₀ : ℝ} (hE₀ : 0 ≤ E₀) (hE₀L : E₀ < L) :
@@ -221,8 +222,9 @@ lemma one_le_powerNormalization [NeZero L] {E₀ : ℝ} (hE₀ : 0 ≤ E₀) (hE
 `eq:a-exp`. Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, lines 606–611 and
 641. -/
 lemma integral_scaledBondComplementWord [NeZero L]
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) (m : ℕ) :
-    ∫ I, scaledBondComplementWord h E₀ I ∂wordMeasure m L = powerProjector (∑ i, h i) L E₀ m := by
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) (m : ℕ) :
+    ∫ I, scaledBondComplementWord Φ E₀ I ∂wordMeasure m L =
+      powerProjector Φ.hamiltonian L E₀ m := by
   rw [integral_fintype (Integrable.of_finite), powerProjector_eq_sum_bondComplementWord
     (Nat.pos_of_neZero L), Finset.smul_sum]
   refine Finset.sum_congr rfl fun I _ ↦ ?_
@@ -234,58 +236,58 @@ lemma integral_scaledBondComplementWord [NeZero L]
 /-- **The deviation bound `R = C^m + 1`.** Landau, Vazirani and Vidick, arXiv:1307.5143v1,
 `algo53.tex`, line 641. -/
 lemma norm_scaledBondComplementWord_sub_le [NeZero L]
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {m : ℕ}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {m : ℕ}
     (I : Fin m → Fin L) :
-    ‖scaledBondComplementWord h E₀ I - powerProjector (∑ i, h i) L E₀ m‖ ≤
+    ‖scaledBondComplementWord Φ E₀ I - powerProjector Φ.hamiltonian L E₀ m‖ ≤
       powerNormalization L E₀ ^ m + 1 := by
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le Φ h0 h1 hΩ hspan
   have hC : 0 ≤ powerNormalization L E₀ ^ m :=
     pow_nonneg (zero_le_one.trans (one_le_powerNormalization hE₀ (by linarith))) m
-  calc _ ≤ ‖scaledBondComplementWord h E₀ I‖ + ‖powerProjector (∑ i, h i) L E₀ m‖ :=
+  calc _ ≤ ‖scaledBondComplementWord Φ E₀ I‖ + ‖powerProjector Φ.hamiltonian L E₀ m‖ :=
         norm_sub_le _ _
     _ ≤ powerNormalization L E₀ ^ m + 1 := by
-        rw [norm_powerProjector (Nat.pos_of_neZero L) h h0 h1 hΩ hgap hspan hΔ m,
+        rw [norm_powerProjector (Nat.pos_of_neZero L) Φ h0 h1 hΩ hgap hspan hΔ m,
           scaledBondComplementWord, norm_smul, Real.norm_of_nonneg hC]
         gcongr
-        exact mul_le_of_le_one_right hC (norm_bondComplementWord_le_one h h0 h1 I)
+        exact mul_le_of_le_one_right hC (norm_bondComplementWord_le_one Φ h0 h1 I)
 
 /-- **Accuracy of the sampled projector** (item 1 of Corollary `c:agsp`, in the
 non-asymptotic form given by Theorem `t:mcb`). For `ℓ ≥ 1` independent uniform words and
 `t > 0`, `P(‖K - A‖ ≥ t) ≤ 2 q^n exp (-ℓ t² / (2 R² + 2 R t / 3))` with `R = C^m + 1`.
 Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, lines 616–624 and 640–643. -/
 lemma measureReal_le_norm_sampledProjector_sub_le [NeZero L]
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (ℓ m : ℕ) [NeZero ℓ]
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (ℓ m : ℕ) [NeZero ℓ]
     {t : ℝ} (ht : 0 < t) :
     (sampleMeasure ℓ m L).real
-        {I | t ≤ ‖sampledProjector h E₀ I - powerProjector (∑ i, h i) L E₀ m‖} ≤
+        {I | t ≤ ‖sampledProjector Φ E₀ I - powerProjector Φ.hamiltonian L E₀ m‖} ≤
       2 * q ^ L * Real.exp (-(ℓ * t ^ 2 / (2 * (powerNormalization L E₀ ^ m + 1) ^ 2 +
         2 * (powerNormalization L E₀ ^ m + 1) * t / 3))) := by
-  set A := powerProjector (∑ i, h i) L E₀ m
+  set A := powerProjector Φ.hamiltonian L E₀ m
   set R := powerNormalization L E₀ ^ m + 1
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le Φ h0 h1 hΩ hspan
   have hR1 : 1 ≤ R := le_add_of_nonneg_left
     (pow_nonneg (zero_le_one.trans (one_le_powerNormalization hE₀ (by linarith))) m)
   rcases isEmpty_or_nonempty (Fin L → Fin q) with hd | hd
   · have : {I : Fin ℓ → Fin m → Fin L |
-        t ≤ ‖sampledProjector h E₀ I - A‖} = ∅ := by
+        t ≤ ‖sampledProjector Φ E₀ I - A‖} = ∅ := by
       ext I
       simp only [Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false, not_le]
-      rw [Subsingleton.elim (sampledProjector h E₀ I - A) 0, norm_zero]
+      rw [Subsingleton.elim (sampledProjector Φ E₀ I - A) 0, norm_zero]
       exact ht
     rw [this, measureReal_empty]
     positivity
   set X : Fin ℓ → (Fin ℓ → Fin m → Fin L) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-    fun k I ↦ scaledBondComplementWord h E₀ (I k)
+    fun k I ↦ scaledBondComplementWord Φ E₀ (I k)
   have hind : iIndepFun X (sampleMeasure ℓ m L) :=
-    iIndepFun_pi (X := fun _ ↦ scaledBondComplementWord h E₀)
+    iIndepFun_pi (X := fun _ ↦ scaledBondComplementWord Φ E₀)
       fun _ ↦ (measurable_of_countable _).aemeasurable
   have heval : ∀ k, IdentDistrib (fun I : Fin ℓ → Fin m → Fin L ↦ I k) (fun I ↦ I 0)
       (sampleMeasure ℓ m L) (sampleMeasure ℓ m L) := fun k ↦
@@ -293,16 +295,16 @@ lemma measureReal_le_norm_sampledProjector_sub_le [NeZero L]
       rw [sampleMeasure, (measurePreserving_eval _ k).map_eq,
         (measurePreserving_eval _ 0).map_eq]⟩
   have hident : ∀ k, IdentDistrib (X k) (X 0) (sampleMeasure ℓ m L) (sampleMeasure ℓ m L) :=
-    fun k ↦ (heval k).comp (measurable_of_countable (scaledBondComplementWord h E₀))
+    fun k ↦ (heval k).comp (measurable_of_countable (scaledBondComplementWord Φ E₀))
   have hmean : ∀ k, ∫ I, X k I ∂sampleMeasure ℓ m L = A := fun k ↦ by
     rw [sampleMeasure, integral_comp_eval (measurable_of_countable _).aestronglyMeasurable]
-    exact integral_scaledBondComplementWord h E₀ m
+    exact integral_scaledBondComplementWord Φ E₀ m
   have hdev : ∀ k, ∀ᵐ I ∂sampleMeasure ℓ m L, ‖X k I - A‖ ≤ R := fun k ↦
     Filter.Eventually.of_forall fun I ↦
-      norm_scaledBondComplementWord_sub_le h h0 h1 hΩ hgap hspan hΔ (I k)
+      norm_scaledBondComplementWord_sub_le Φ h0 h1 hΩ hgap hspan hΔ (I k)
   have hbern := Matrix.measureReal_le_norm_average_sub_le hind hident
     (fun k ↦ measurable_of_countable _) hmean hdev ht.le
-  have hset : {I : Fin ℓ → Fin m → Fin L | t ≤ ‖sampledProjector h E₀ I - A‖} =
+  have hset : {I : Fin ℓ → Fin m → Fin L | t ≤ ‖sampledProjector Φ E₀ I - A‖} =
       {I | t ≤ ‖(ℓ : ℝ)⁻¹ • ∑ k, X k I - A‖} := by
     ext I
     simp only [Set.mem_ofPred_eq, X, sampledProjector_eq_average]
@@ -316,7 +318,7 @@ lemma measureReal_le_norm_sampledProjector_sub_le [NeZero L]
     simpa using norm_integral_le_of_norm_le_const (μ := sampleMeasure ℓ m L)
       (Filter.Eventually.of_forall hf)
   have hsq : ∀ I, ‖X 0 I - A‖ * ‖X 0 I - A‖ ≤ R ^ 2 := fun I ↦ by
-    have := norm_scaledBondComplementWord_sub_le h h0 h1 hΩ hgap hspan hΔ (I 0)
+    have := norm_scaledBondComplementWord_sub_le Φ h0 h1 hΩ hgap hspan hΔ (I 0)
     rw [← sq]
     gcongr
   have hmax := max_le
@@ -529,11 +531,11 @@ word. Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, lines 626–
 The number of words is stated through `C^m`; see the module docstring for the dependence of
 `C^m` on the ground energy. -/
 theorem one_sub_le_measureReal_sampledProjector [NeZero L]
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) {η : ℝ}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) {η : ℝ}
     (hη : 0 < η)
     {ℓ κ : ℕ} [NeZero ℓ]
     (hℓ : (2 * (powerNormalization L E₀ ^ m + 1) ^ 2 +
@@ -541,22 +543,22 @@ theorem one_sub_le_measureReal_sampledProjector [NeZero L]
           Real.log (8 * q ^ L * L ^ 3) ≤ ℓ)
     (hκ : 2 * (m : ℝ) / L + 2 * Real.log (4 * ℓ * L ^ 4) ≤ κ) :
     1 - 1 / (2 * (L : ℝ) ^ 3) ≤ (sampleMeasure ℓ m L).real
-      {I | ‖sampledProjector h E₀ I - powerProjector (∑ i, h i) L E₀ m‖ < η ∧
+      {I | ‖sampledProjector Φ E₀ I - powerProjector Φ.hamiltonian L E₀ m‖ < η ∧
         ∀ k j, letterCount (I k) j ≤ κ} := by
   set μ := sampleMeasure ℓ m L
-  set A := powerProjector (∑ i, h i) L E₀ m
+  set A := powerProjector Φ.hamiltonian L E₀ m
   set R := powerNormalization L E₀ ^ m + 1
   set D := 2 * R ^ 2 + 2 * R * η / 3
   have hL : (0 : ℝ) < L := Nat.cast_pos.mpr (Nat.pos_of_neZero L)
   have hℓ0 : (0 : ℝ) < ℓ := Nat.cast_pos.mpr (Nat.pos_of_neZero ℓ)
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le Φ h0 h1 hΩ hspan
   have hR1 : 1 ≤ R := le_add_of_nonneg_left
     (pow_nonneg (zero_le_one.trans (one_le_powerNormalization hE₀ (by linarith))) m)
   have hD : 0 < D := by positivity
   -- the accuracy failure
-  set B₁ := {I : Fin ℓ → Fin m → Fin L | η ≤ ‖sampledProjector h E₀ I - A‖}
+  set B₁ := {I : Fin ℓ → Fin m → Fin L | η ≤ ‖sampledProjector Φ E₀ I - A‖}
   have hB₁ : μ.real B₁ ≤ 1 / (4 * (L : ℝ) ^ 3) := by
-    refine (measureReal_le_norm_sampledProjector_sub_le h h0 h1 hΩ hgap hspan hΔ ℓ m hη).trans ?_
+    refine (measureReal_le_norm_sampledProjector_sub_le Φ h0 h1 hΩ hgap hspan hΔ ℓ m hη).trans ?_
     rcases Nat.eq_zero_or_pos q with rfl | hq
     · simp [zero_pow (NeZero.ne L)]
     have hqL : (1 : ℝ) ≤ (q : ℝ) ^ L := one_le_pow₀ (Nat.one_le_cast.mpr hq)
@@ -598,7 +600,7 @@ theorem one_sub_le_measureReal_sampledProjector [NeZero L]
           rw [Real.exp_neg, Real.exp_log (by positivity)]
           field_simp
   -- the good event contains the complement of the two failures
-  have hsub : (B₁ ∪ B₂)ᶜ ⊆ {I | ‖sampledProjector h E₀ I - A‖ < η ∧
+  have hsub : (B₁ ∪ B₂)ᶜ ⊆ {I | ‖sampledProjector Φ E₀ I - A‖ < η ∧
       ∀ k j, letterCount (I k) j ≤ κ} := by
     intro I hI
     simp only [Set.mem_compl_iff, Set.mem_union, not_or, B₁, B₂, Set.mem_ofPred_eq, not_le,
@@ -620,11 +622,11 @@ theorem one_sub_le_measureReal_sampledProjector [NeZero L]
 /-- The source's form of the success probability, `1 - 1/n³`. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, lines 626–649. -/
 theorem one_sub_inv_pow_three_le_measureReal_sampledProjector [NeZero L]
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) {η : ℝ}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) {η : ℝ}
     (hη : 0 < η)
     {ℓ κ : ℕ} [NeZero ℓ]
     (hℓ : (2 * (powerNormalization L E₀ ^ m + 1) ^ 2 +
@@ -632,9 +634,9 @@ theorem one_sub_inv_pow_three_le_measureReal_sampledProjector [NeZero L]
           Real.log (8 * q ^ L * L ^ 3) ≤ ℓ)
     (hκ : 2 * (m : ℝ) / L + 2 * Real.log (4 * ℓ * L ^ 4) ≤ κ) :
     1 - 1 / (L : ℝ) ^ 3 ≤ (sampleMeasure ℓ m L).real
-      {I | ‖sampledProjector h E₀ I - powerProjector (∑ i, h i) L E₀ m‖ < η ∧
+      {I | ‖sampledProjector Φ E₀ I - powerProjector Φ.hamiltonian L E₀ m‖ < η ∧
         ∀ k j, letterCount (I k) j ≤ κ} := by
-  refine le_trans ?_ (one_sub_le_measureReal_sampledProjector h h0 h1 hΩ hgap hspan hΔ m hη hℓ hκ)
+  refine le_trans ?_ (one_sub_le_measureReal_sampledProjector Φ h0 h1 hΩ hgap hspan hΔ m hη hℓ hκ)
   have : (0 : ℝ) < (L : ℝ) ^ 3 := by have := Nat.pos_of_neZero L; positivity
   gcongr 1 - ?_
   rw [div_le_div_iff_of_pos_left one_pos (by positivity) this]
@@ -660,31 +662,30 @@ length `m` such that `‖A - |Γ⟩⟨Γ|‖ ≤ η`, `‖K - A‖ < η`, every 
 operator Schmidt rank at most `q^{2κ}` across every cut. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, lines 584–588, 602–603 and 626–649. -/
 theorem exists_sampledProjector [NeZero L]
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {η : ℝ} (hη : 0 < η)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {η : ℝ} (hη : 0 < η)
     (m : ℕ)
     (hm : ((L - E₀) / Δ) * Real.log (1 / η) ≤ m) :
     ∃ I : Fin (sampledProjectorWordCount q L E₀ η m) → Fin m → Fin L,
-      ‖powerProjector (∑ i, h i) L E₀ m - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
+      ‖powerProjector Φ.hamiltonian L E₀ m - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
         η ∧
-      ‖sampledProjector h E₀ I - powerProjector (∑ i, h i) L E₀ m‖ < η ∧
+      ‖sampledProjector Φ E₀ I - powerProjector Φ.hamiltonian L E₀ m‖ < η ∧
       (∀ k j, letterCount (I k) j ≤
         sampledProjectorLetterBound L (sampledProjectorWordCount q L E₀ η m) m) ∧
       ∀ k (b : Fin (L - 1)), Matrix.operatorSchmidtRank (ManyBody.cutOperator
-        (X := fun _ ↦ Fin q) (leftBlock L (b + 1)) (bondComplementWord h (I k))) ≤
+        (X := fun _ ↦ Fin q) (leftBlock L (b + 1)) (bondComplementWord Φ (I k))) ≤
         q ^ (2 * sampledProjectorLetterBound L (sampledProjectorWordCount q L E₀ η m) m) := by
   set ℓ := sampledProjectorWordCount q L E₀ η m
   set κ := sampledProjectorLetterBound L ℓ m
-  have hprob := one_sub_le_measureReal_sampledProjector h h0 h1 hΩ hgap hspan hΔ m hη (ℓ := ℓ)
+  have hprob := one_sub_le_measureReal_sampledProjector Φ h0 h1 hΩ hgap hspan hΔ m hη (ℓ := ℓ)
       (κ := κ)
     ((Nat.le_ceil _).trans (by simp [ℓ, sampledProjectorWordCount]))
     (Nat.le_ceil _)
   have hpos : 0 < (sampleMeasure ℓ m L).real
-      {I | ‖sampledProjector h E₀ I - powerProjector (∑ i, h i) L E₀ m‖ < η ∧
+      {I | ‖sampledProjector Φ E₀ I - powerProjector Φ.hamiltonian L E₀ m‖ < η ∧
         ∀ k j, letterCount (I k) j ≤ κ} := by
     refine lt_of_lt_of_le ?_ hprob
     have : (1 : ℝ) ≤ (L : ℝ) ^ 3 :=
@@ -692,8 +693,8 @@ theorem exists_sampledProjector [NeZero L]
     rw [sub_pos, div_lt_one (by positivity)]
     linarith
   obtain ⟨I, hK, hcount⟩ := nonempty_of_measureReal_ne_zero hpos.ne'
-  refine ⟨I, norm_powerProjector_sub_le (Nat.pos_of_neZero L) h h0 h1 hΩ hgap hspan hΔ hη m hm, hK,
-    hcount, fun k b ↦ operatorSchmidtRank_cutOperator_bondComplementWord_le h hs b (I k) ?_⟩
+  refine ⟨I, norm_powerProjector_sub_le (Nat.pos_of_neZero L) Φ h0 h1 hΩ hgap hspan hΔ hη m hm, hK,
+    hcount, fun k b ↦ operatorSchmidtRank_cutOperator_bondComplementWord_le Φ b (I k) ?_⟩
   have hb : b.val < L := by omega
   refine le_of_eq_of_le ?_ (hcount k ⟨b, hb⟩)
   unfold letterCount

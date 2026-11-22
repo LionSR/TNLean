@@ -1520,13 +1520,23 @@ left multiplication, right vector $b$ and left functional the trace.
     At step $j$, increment temporary coordinate $j$ modulo $d$ when
     data coordinate $j$ is zero and either $j=0$ or the preceding
     temporary coordinate is one. This is a reversible permutation
-    on the full register. Put $c_d=38(d^3)^6+1$; a step uses at
-    most $4ac_d$ gates after routing.
+    on the full register. Put $c_d=6(d^3)^4$; a step is a product of
+    at most $c_d$ gates on pairs of sites, gates on one site being
+    free.
 \end{definition}
 
 \begin{lemma}[Conjunction on the entire logical space]
     \label{thm:mpu_reversible_zero_conjunction}
-    \lean{QuantumCircuit.zeroConjunctionPerm_apply_clean, QuantumCircuit.zeroConjunctionIncrement_update, QuantumCircuit.zeroPrefixBit_eq_one, QuantumCircuit.zeroConjunctionStep_state, QuantumCircuit.zeroConjunctionStep_isLocalPerm, QuantumCircuit.isPairProduct_zeroConjunctionStep, QuantumCircuit.isPairProduct_zeroConjunctionPerm}
+    \lean{QuantumCircuit.zeroConjunctionPerm_apply_clean,
+        QuantumCircuit.zeroConjunctionPerm_apply_clean_last_eq_one_iff,
+        QuantumCircuit.zeroConjunctionIncrement_update,
+        QuantumCircuit.zeroConjunctionStep_apply, QuantumCircuit.zeroPrefixBit_eq_one,
+        QuantumCircuit.zeroConjunctionStep_state,
+        QuantumCircuit.permMatrix_zeroConjunctionStep_mem_supportedOperators,
+        QuantumCircuit.card_zeroConjunctionStepSites_le,
+        QuantumCircuit.IsGateProduct.sitesAndPairs_of_mem_supportedOperators,
+        QuantumCircuit.isGateProduct_zeroConjunctionStep,
+        QuantumCircuit.isGateProduct_zeroConjunctionPerm}
     \leanok
     \uses{def:mpu_reversible_zero_conjunction,
         thm:mpu_quantitative_unitary_synthesis,
@@ -1534,31 +1544,38 @@ left multiplication, right vector $b$ and left functional the trace.
     For $d\geq2$ and every logical configuration $x$, the conjunction
     keeps $x$ and writes in temporary coordinate $j$ whether its
     first $j+1$ data coordinates are all zero. Each step acts on
-    at most three sites. The full conjunction has a
-    neighboring-pair circuit of at most $4c_da^2$ gates.
+    at most three sites. The full conjunction is a product of at
+    most $c_da$ gates on pairs of sites.
 \end{lemma}
 \begin{proof}\leanok
     By induction on the completed prefix, at the next step its temporary
     coordinate is still zero, and the previous Boolean value records
     the earlier prefix test. The controlled increment is independent
     of its target and supported on at most three sites, so synthesizing
-    that finite permutation and concatenating the routed steps gives the circuit.
+    that finite permutation on its sites and concatenating the steps gives the circuit.
 \end{proof}
 
 \begin{definition}[Reflection using a temporary zero-test register]
     \label{def:mpu_clean_zero_register_reflection}
-    \lean{QuantumCircuit.zeroRegisterReflection, QuantumCircuit.zeroScratchPhaseLocal, QuantumCircuit.zeroScratchPhase, QuantumCircuit.zeroRegisterReflectionGateCount}
+    \lean{QuantumCircuit.zeroRegisterReflection, QuantumCircuit.zeroScratchPhase,
+        QuantumCircuit.zeroRegisterReflectionGateCount}
     \leanok
     \uses{def:mpu_reversible_zero_conjunction}
     For $a\geq1$, compute the prefix conjunction, change the phase
     by minus one when the final temporary coordinate is one, and
-    undo the conjunction. Its gate bound is
-    $K(d,a)=8c_da^2+4a$.
+    undo the conjunction. Its gate bound on pairs of sites is
+    $K(d,a)=2c_da=12(d^3)^4a$.
 \end{definition}
 
 \begin{lemma}[Exact initialized-register reflections]
     \label{thm:mpu_clean_zero_register_reflection}
-    \lean{QuantumCircuit.zeroRegisterReflection_mul_cleanEmbedding, QuantumCircuit.zeroScratchPhaseLocal_mem_unitary, QuantumCircuit.isPairProduct_zeroScratchPhase, QuantumCircuit.isPairProduct_zeroRegisterReflection, QuantumCircuit.zeroRegisterReflection_mem_unitary, QuantumCircuit.zeroRegisterReflection_eq_diagonal, QuantumCircuit.zeroRegisterReflection_apply_clean, QuantumCircuit.zeroRegisterReflectionGateCount_eq, QuantumCircuit.isPairProduct_embedOp_zeroRegisterReflection, QuantumCircuit.embedOp_zeroRegisterReflection_apply_clean, QuantumCircuit.isPairProduct_neg_one}
+    \lean{Matrix.diagonal_ite_neg_one_mem_unitaryGroup,
+        QuantumCircuit.zeroScratchPhase_mem_supportedOperators,
+        QuantumCircuit.isGateProduct_zeroRegisterReflection,
+        QuantumCircuit.isGateProduct_pathGraph_zeroRegisterReflection,
+        QuantumCircuit.zeroRegisterReflection_mem_unitaryGroup,
+        QuantumCircuit.zeroRegisterReflection_eq_diagonal,
+        QuantumCircuit.zeroRegisterReflection_apply_clean}
     \leanok
     \uses{def:mpu_clean_zero_register_reflection,
         thm:mpu_reversible_zero_conjunction}
@@ -1567,11 +1584,9 @@ left multiplication, right vector $b$ and left functional the trace.
     for every logical input, returns the temporary register to zero
     while applying $I-2|0\rangle\langle0|$ to the tested register.
     This is an exact equality of linear maps and costs at most
-    $K(d,a)$ neighboring-pair gates.
-    Injective placement on an $n$-site chain costs at most $2nK(d,a)$;
-    all other logical sites are unrestricted. For an empty tested
-    register the reflection is the global phase $-I$, implemented
-    by one neighboring-pair gate when $n\geq2$.
+    $K(d,a)$ gates on pairs of sites, hence at most $4aK(d,a)$
+    neighboring-pair gates on the chain of its $2a$ sites. For an
+    empty tested register the reflection is the global phase $-I$.
 \end{lemma}
 \begin{proof}\leanok
     On a clean temporary register the final Boolean value tests
@@ -1579,8 +1594,8 @@ left multiplication, right vector $b$ and left functional the trace.
     phase changes no coordinate, so the inverse permutation erases
     every temporary value. Linear extension gives the complete
     initialized-subspace identity. The costs add the forward and
-    inverse conjunctions and the one-site phase; arbitrary placement
-    uses swap routing.
+    inverse conjunctions, the one-site phase being free; on the chain
+    every gate on a pair is routed by swaps.
 \end{proof}
 
 \begin{lemma}[Products in padded bond coordinates]
@@ -1680,26 +1695,27 @@ left multiplication, right vector $b$ and left functional the trace.
     \leanok
     Set
     \begin{align}
-        G(d,n)=2n+3(d^n)^2(2n+1)(4n3^n).
+        G(d,n)=3(d^n)^2(2n-1)(2^n-2).
     \end{align}
 \end{definition}
 
 \begin{lemma}[Exact synthesis with a dimension bound]
     \label{thm:mpu_quantitative_unitary_synthesis}
-    \lean{QuantumCircuit.isPairProduct_unitaryGateCount, QuantumCircuit.isPairProduct_ctrlOp_le_exponential, QuantumCircuit.isPairProduct_twoLevel_le_exponential, QuantumCircuit.unitaryGateCount_le_hilbertDimension_pow, QuantumCircuit.isPairProduct_le_hilbertDimension_pow, QuantumCircuit.exists_isPairProduct_apply_embedding_eq}
+    \lean{QuantumCircuit.isGateProduct_pathGraph_unitaryGateCount, QuantumCircuit.isGateProduct_ctrlOp_twoLevel, QuantumCircuit.isGateProduct_twoLevel, QuantumCircuit.unitaryGateCount_le, QuantumCircuit.isGateProduct_pathGraph_le_card_pow, QuantumCircuit.exists_isGateProduct_pathGraph_apply_embedding_eq}
     \leanok
     \uses{def:mpu_quantitative_unitary_synthesis}
-    Every unitary on $n\geq2$ qudits of dimension $d\geq2$
+    Every unitary on $n\geq1$ qudits of dimension $d$
     has an exact neighboring-pair circuit of at most
-    $G(d,n)\leq38(d^n)^6$ gates, including its global phase.
+    $2nG(d,n)$ gates, including its global phase, one-site unitaries
+    being free; for $d\geq2$, $2nG(d,n)\leq12(d^n)^5$.
     An isometry together with an injective placement of its input
     basis extends to such a circuit with the prescribed columns.
     Call a two-level gate special if its two-by-two block is a real
     rotation $\begin{pmatrix}c&-s\\s&c\end{pmatrix}$ with $c^2+s^2=1$
     or a phase $\operatorname{diag}(\nu,\overline\nu)$ with $|\nu|=1$.
     A special two-level gate with $k$ controls has cost at most
-    $4n3^k$; a special two-level gate between arbitrary configurations
-    has cost at most $(2n+1)(4n3^n)$.
+    $(2^{k+1}-2)\,2n$; a special two-level gate between arbitrary configurations
+    has cost at most $(2n-1)(2^n-2)\,2n$.
 \end{lemma}
 \begin{proof}\leanok
     Eliminate matrix entries by two-level unitaries, express each
@@ -1710,10 +1726,11 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{lemma}[Arbitrary placement of a circuit]
     \label{thm:mpu_arbitrary_circuit_placement}
-    \lean{QuantumCircuit.IsPairProduct.embedOp_injective}
+    \lean{QuantumCircuit.IsGateProduct.of_sitesAndPairs,
+        QuantumCircuit.IsGateProduct.isUnitaryCircuitOn_of_hom}
     \leanok
-    On a chain of $n$ sites with positive local dimension,
-    injectively placing a neighboring-pair circuit of $K$ gates
+    On a chain of $n$ sites,
+    injectively placing a circuit of $K$ gates on pairs of sites
     requires at most $2nK$ neighboring-pair gates.
 \end{lemma}
 \begin{proof}\leanok
@@ -1753,7 +1770,7 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{lemma}[Circuits for image reflections]
     \label{thm:mpu_image_reflection_circuits}
-    \lean{Matrix.subspaceReflection_image, QuantumCircuit.IsPairProduct.subspaceReflection_image, QuantumCircuit.IsPairProduct.pow, QuantumCircuit.IsPairProduct.postselectionAmplificationStep}
+    \lean{Matrix.subspaceReflection_image, QuantumCircuit.IsGateProduct.subspaceReflection_image, QuantumCircuit.IsGateProduct.pow, QuantumCircuit.IsGateProduct.postselectionAmplificationStep}
     \leanok
     If a unitary $U$ has a $K$-gate circuit and reflection about
     $EE^\dagger$ has an $L$-gate circuit, then reflection about
@@ -1762,14 +1779,14 @@ left multiplication, right vector $b$ and left functional the trace.
         I-2(UE)(UE)^\dagger=U(I-2EE^\dagger)U^\dagger.
     \end{align}
     A $K$-gate circuit repeated $k$ times costs at most $kK$.
-    On $n\geq2$ sites of positive local dimension $d$, an
+    On $n\geq1$ sites, an
     amplification round with reflection
-    costs $K,L$ costs at most $2n+K+L$, including its phase.
+    costs $K,L$ costs at most $K+L$, including its phase.
 \end{lemma}
 \begin{proof}\leanok
     Unitary conjugation gives the identity. Concatenate the forward
     circuit, the reflection, and the inverse circuit. Repetition
-    concatenates copies; the prescribed global phase costs at most $2n$.
+    concatenates copies; the prescribed global phase is a one-site phase and costs nothing.
 \end{proof}
 
 \begin{lemma}[Balanced recursion with polynomial overhead]
@@ -1883,11 +1900,12 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Initialized basis inclusion]
     \label{def:mpu_initialized_basis_inclusion}
-    \lean{Matrix.initializedBasisMatrix, QuantumCircuit.zeroWorkspaceEmbedding}
+    \lean{Matrix.basisInclusion, QuantumCircuit.workspaceEmbedding}
     \leanok
     For an injection of logical basis vectors into a larger basis,
-    let $J$ be its inclusion matrix. Appending an all-zero temporary
-    register gives the zero-workspace inclusion as a special case.
+    let $J$ be its inclusion matrix. Appending a temporary register
+    in a fixed configuration, such as the all-zero one, gives the
+    workspace inclusion as a special case.
 \end{definition}
 
 \begin{definition}[Implementation with a reusable initialized workspace]
@@ -1901,7 +1919,7 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{lemma}[Composition and inverse calls with one workspace]
     \label{thm:mpu_clean_unitary_composition}
-    \lean{QuantumCircuit.IsCleanImplementation.mul, QuantumCircuit.IsCleanImplementation.one, QuantumCircuit.IsCleanImplementation.pow, QuantumCircuit.IsCleanImplementation.conjTranspose, QuantumCircuit.IsCleanImplementation.star, QuantumCircuit.IsCleanImplementation.inv, QuantumCircuit.IsCleanImplementation.mulVec, QuantumCircuit.IsCleanImplementation.logical_mem_unitary, QuantumCircuit.IsCleanImplementation.conjTranspose_of_isometry, QuantumCircuit.IsCleanImplementation.kronecker_one}
+    \lean{QuantumCircuit.IsCleanImplementation.mul, QuantumCircuit.IsCleanImplementation.one, QuantumCircuit.IsCleanImplementation.pow, QuantumCircuit.IsCleanImplementation.conjTranspose, QuantumCircuit.IsCleanImplementation.inv, QuantumCircuit.IsCleanImplementation.mulVec, QuantumCircuit.IsCleanImplementation.logical_mem_unitaryGroup,QuantumCircuit.IsCleanImplementation.conjTranspose_of_isometry, QuantumCircuit.IsCleanImplementation.kronecker_one}
     \leanok
     \uses{def:mpu_clean_unitary_implementation}
     Initialized-workspace implementations compose and repeat using
@@ -1921,17 +1939,17 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{lemma}[Encoding and implementing isometric columns]
     \label{thm:mpu_initialized_isometry_synthesis}
-    \lean{QuantumCircuit.exists_isPairProduct_mul_initializedBasisMatrix_eq, Matrix.initializedBasisMatrix_isIsometry, QuantumCircuit.mul_initializedBasisMatrix, QuantumCircuit.exists_isPairProduct_isCleanImplementation, QuantumCircuit.isCleanImplementation_zeroRegisterReflection}
+    \lean{QuantumCircuit.exists_isGateProduct_mul_basisInclusion_eq, Matrix.basisInclusion_isIsometry, Matrix.mul_basisInclusion_apply, QuantumCircuit.exists_isGateProduct_isCleanImplementation, QuantumCircuit.isCleanImplementation_zeroRegisterReflection}
     \leanok
     \uses{def:mpu_initialized_basis_inclusion,
         thm:mpu_quantitative_unitary_synthesis,
         thm:mpu_clean_zero_register_reflection}
     A basis inclusion is an isometry, and multiplication by it selects
     the corresponding columns. For an isometry $V$, injective input
-    and output encodings in a register of $n\geq2$ qudits of
+    and output encodings in a register of $n\geq1$ qudits of
     dimension $d\geq2$ give an exact
     circuit $U$ with $UJ_{\rm in}=J_{\rm out}V$ and at most
-    $38(d^n)^6$ gates. When $V$ is a logical unitary and the two
+    $12(d^n)^5$ gates. When $V$ is a logical unitary and the two
     inclusions coincide, this is an initialized-workspace implementation.
     The constructed zero-register reflection also satisfies this
     complete logical-space identity.
@@ -2027,7 +2045,7 @@ left multiplication, right vector $b$ and left functional the trace.
     physical zero and an exact neighboring-pair circuit implementing
     the bond dilation on its entire encoded space. Its dimension is
     at most $2d^3r^2$, and its gate count is at most
-    $38(2d^3r^2)^6$.
+    $12(2d^3r^2)^5$.
 \end{lemma}
 \begin{proof}\leanok
     Choosing a cardinality embedding, exchanging the prescribed reset
@@ -2037,7 +2055,8 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Reflections on selected initialized flags]
     \label{def:mpu_selected_flag_reflection}
-    \lean{QuantumCircuit.selectedZeroRegisterSites, QuantumCircuit.selectedZeroRegisterLogical, QuantumCircuit.selectedZeroRegisterReflection, QuantumCircuit.selectedZeroRegisterReflectionGateCount, QuantumCircuit.selectedZeroRegisterPoolSites, QuantumCircuit.selectedZeroRegisterReflectionPool, QuantumCircuit.selectedZeroRegisterReflectionPoolGateCount}
+    \lean{QuantumCircuit.selectedZeroRegisterSites, QuantumCircuit.selectedZeroRegisterLogical,
+        QuantumCircuit.selectedZeroRegisterReflection, QuantumCircuit.sitesAndPairsHom}
     \leanok
     An injective choice of $a$ sites in an $n$-site logical register
     defines the diagonal reflection with phase $-1$ precisely when
@@ -2048,14 +2067,26 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{lemma}[Selected flags with one common scratch pool]
     \label{thm:mpu_selected_flag_reflection}
-    \lean{QuantumCircuit.selectedZeroRegisterSites_castAdd, QuantumCircuit.selectedZeroRegisterSites_natAdd, QuantumCircuit.selectedZeroRegisterLogical_mem_unitary, QuantumCircuit.selectedZeroRegisterLogical_eq_one_sub, QuantumCircuit.isPairProduct_selectedZeroRegisterReflection, QuantumCircuit.isCleanImplementation_selectedZeroRegisterReflection, QuantumCircuit.selectedZeroRegisterLogical_empty, QuantumCircuit.exists_isPairProduct_isCleanImplementation_selectedZeroRegister, QuantumCircuit.selectedZeroRegisterPoolSites_castAdd, QuantumCircuit.selectedZeroRegisterPoolSites_natAdd, QuantumCircuit.isPairProduct_selectedZeroRegisterReflectionPool, QuantumCircuit.isCleanImplementation_selectedZeroRegisterReflectionPool, QuantumCircuit.exists_isPairProduct_isCleanImplementation_selectedZeroRegisterPool}
+    \lean{QuantumCircuit.selectedZeroRegisterSites_castAdd,
+        QuantumCircuit.selectedZeroRegisterSites_natAdd,
+        QuantumCircuit.selectedZeroRegisterLogical_mem_unitaryGroup,
+        QuantumCircuit.selectedZeroRegisterLogical_eq_one_sub,
+        QuantumCircuit.selectedZeroRegisterLogical_empty,
+        QuantumCircuit.selectedZeroRegisterReflection_apply,
+        QuantumCircuit.selectedZeroRegisterReflection_mem_unitaryGroup,
+        QuantumCircuit.selectedZeroRegisterReflection_mem_supportedOperators,
+        QuantumCircuit.selectedZeroRegisterReflection_apply_clean,
+        QuantumCircuit.isCleanImplementation_selectedZeroRegisterReflection,
+        QuantumCircuit.isGateProduct_selectedZeroRegisterReflection,
+        QuantumCircuit.isGateProduct_pathGraph_selectedZeroRegisterReflection,
+        QuantumCircuit.exists_isGateProduct_isCleanImplementation_selectedZeroRegister}
     \leanok
-    For $d\geq2$ and $n\geq2$, the selected-flags reflection has a
+    For $d\geq2$ and $n\geq1$, the selected-flags reflection has a
     circuit on $n+A$ sites. It returns all $A$ scratch sites
     to zero on every logical input and costs at most
-    $2(n+A)K_d(a)$ gates when $a>0$. For $a=0$, one neighboring-pair
-    gate implements the required phase $-1$. Unselected logical
-    sites are unrestricted.
+    $2(n+A)K_d(a)$ neighboring-pair gates. For $a=0$, the required
+    phase $-1$ costs no gate. Unselected logical sites are
+    unrestricted.
 \end{lemma}
 \begin{proof}\leanok
     Place the reversible zero conjunction on the selected flags and
@@ -2075,18 +2106,19 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{lemma}[A circuit for the prescribed attenuation]
     \label{thm:mpu_physical_success_attenuation}
-    \lean{MPUCircuit.attenuationQuditRotation_mem_unitary, MPUCircuit.attenuationQuditRotation_mulVec_zero, MPUCircuit.isPairProduct_siteOp_attenuationQuditRotation, MPUCircuit.isPairProduct_siteOp_mergingAttenuation}
+    \lean{MPUCircuit.attenuationQuditRotation_mem_unitary, MPUCircuit.attenuationQuditRotation_mulVec_zero, MPUCircuit.isGateProduct_placeAt_attenuationQuditRotation, MPUCircuit.isGateProduct_placeAt_mergingAttenuation}
     \leanok
     The rotation is unitary whenever $t^2\leq1$, and sends zero to
     $t\lvert0\rangle+\sqrt{1-t^2}\lvert1\rangle$ exactly.
-    At any site of an $n\geq2$ qudit chain it costs at most $2n$
-    neighboring-pair gates. The prescribed merger attenuation
+    At any site of a qudit chain it is a one-site unitary, a product
+    of neighboring-pair gates of every cost, including cost zero.
+    The prescribed merger attenuation
     $t=r\sin(\pi/(4\ell_r+2))$ satisfies the required inequality.
 \end{lemma}
 \begin{proof}\leanok
     The binary rotation is extended by the identity. Its first
-    column gives the asserted amplitudes. Route its single-site
-    support along the chain. The amplification round bound proves
+    column gives the asserted amplitudes. A one-site unitary is
+    applied without any two-site gate. The amplification round bound proves
     feasibility of the prescribed angle.
 \end{proof}
 
@@ -2151,8 +2183,9 @@ left multiplication, right vector $b$ and left functional the trace.
     The product encoding is injective and maps the specified reset
     labels and flags to zero. Extend the encoded full logical unitary,
     including the identity on the attenuation qudit, to the whole
-    packet. Quantitative synthesis and the register-capacity estimate
-    give the stated gate bound.
+    packet. Quantitative synthesis uses at most
+    $12(d^{2q+2})^5\leq38(d^{2q+2})^6$ gates, and the register-capacity
+    estimate gives the stated gate bound.
 \end{proof}
 
 \begin{definition}[Separate leaf bond encodings]
@@ -2182,7 +2215,8 @@ left multiplication, right vector $b$ and left functional the trace.
     Encode the orthonormal output columns and extend them to a full
     logical unitary with the prescribed initialized input columns.
     Extend this full unitary along the one-scratch-qudit inclusion
-    and synthesize the resulting unitary. The complete clean identity
+    and synthesize the resulting unitary; on a packet of dimension $m$
+    this uses at most $12m^5\leq38m^6$ gates. The complete clean identity
     ensures cleanup of adjoint calls as well.
 \end{proof}
 
@@ -2201,7 +2235,7 @@ left multiplication, right vector $b$ and left functional the trace.
         \qquad \ell>0,
     \end{align}
     the amplified circuit has cost
-    $\ell(1+2K+B+L)+K$ and acts exactly as normalized postselection
+    $\ell(2K+B+L)+K$ and acts exactly as normalized postselection
     on the columns $JE$. It also implements a full logical unitary
     cleanly along $J$, so its adjoint may use the same workspace.
     The given circuits are the induction data for this recursive
@@ -2212,7 +2246,8 @@ left multiplication, right vector $b$ and left functional the trace.
     unitarity of $Z$, hence cleanup of the inverse child call.
     Each amplification round is the child circuit, the initial
     reflection, its inverse, the successful reflection, and the
-    scalar phase $-1$. Products and powers preserve the complete
+    scalar phase $-1$, a one-site unitary of no cost. Products and
+    powers preserve the complete
     clean identity. The exact subspace-amplification formula gives
     the normalized successful columns with their phase retained.
 \end{proof}
@@ -2229,13 +2264,14 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{lemma}[Clean placement into a larger shared pool]
     \label{thm:mpu_clean_circuit_placement}
-    \lean{QuantumCircuit.cleanImplementationSites_castAdd, QuantumCircuit.cleanImplementationSites_natAdd, QuantumCircuit.initializedBasisMatrix_zeroWorkspace_mul_apply, QuantumCircuit.IsCleanImplementation.embedOp, QuantumCircuit.isPairProduct_isCleanImplementation_embedOp}
+    \lean{QuantumCircuit.cleanImplementationSites_castAdd, QuantumCircuit.cleanImplementationSites_natAdd, QuantumCircuit.basisInclusion_workspaceEmbedding_mul_apply, QuantumCircuit.IsGateProduct.placeAlong_pathGraph, QuantumCircuit.IsCleanImplementation.placeAlong, QuantumCircuit.isGateProduct_isCleanImplementation_placeAlong}
     \leanok
     Suppose a local circuit satisfies its complete clean identity
     on every logical input. Its placed circuit satisfies the same
     identity on the full logical register and restores the entire
-    larger scratch pool to zero. If the local dimension $d$ is
-    positive and the local circuit has $K$ gates, its routed circuit on $n+A$ sites has at most $2(n+A)K$ gates.
+    larger scratch pool to zero. If the local circuit has $K$ gates on
+    neighbouring sites, its routed circuit on $n+A$ sites has at most $2(n+A)K$ gates on
+    neighbouring sites.
     No additional cleanup hypothesis is required for the placed circuit.
 \end{lemma}
 \begin{proof}\leanok
@@ -2343,7 +2379,7 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{lemma}[Disjoint children and the exact parent register]
     \label{thm:mpu_interval_register_support}
-    \lean{MPUCircuit.intervalLogicalSupport_disjoint, MPUCircuit.joiningFlagSupport_disjoint_left, MPUCircuit.joiningFlagSupport_disjoint_right, MPUCircuit.intervalLogicalSupport_split, MPUCircuit.cutBondRegisterWidth_le, MPUCircuit.cutBondRegisterWidth_internal, MPUCircuit.cutBondSiteEmbedding_disjoint, MPUCircuit.cutBondSiteEmbedding_mem_left, MPUCircuit.cutBondSiteEmbedding_mem_right, MPUCircuit.leafLogicalSiteEmbedding_mem, MPUCircuit.leafPacketSites_mem, MPUCircuit.intervalConsecutiveSupport_disjoint, MPUCircuit.interval_supportedOperators_commute, MPUCircuit.cutBondSiteEmbedding_range_iff, MPUCircuit.leafLogicalSiteEmbedding_range, MPUCircuit.leafPacketSites_range, MPUCircuit.cutBondRegisterWidth_zero, MPUCircuit.cutBondRegisterWidth_last, MPUCircuit.intervalInteriorAuxiliarySupport_split, MPUCircuit.intervalInteriorAuxiliarySupport_leaf, MPUCircuit.isIntervalInteriorInitialized_split, MPUCircuit.intervalLogicalSupport_full, MPUCircuit.isIntervalInteriorInitialized_leaf, MPUCircuit.leafConsecutiveSites_range, MPUCircuit.leaf_embedOp_mem_supportedOperators}
+    \lean{MPUCircuit.intervalLogicalSupport_disjoint, MPUCircuit.joiningFlagSupport_disjoint_left, MPUCircuit.joiningFlagSupport_disjoint_right, MPUCircuit.intervalLogicalSupport_split, MPUCircuit.cutBondRegisterWidth_le, MPUCircuit.cutBondRegisterWidth_internal, MPUCircuit.cutBondSiteEmbedding_disjoint, MPUCircuit.cutBondSiteEmbedding_mem_left, MPUCircuit.cutBondSiteEmbedding_mem_right, MPUCircuit.leafLogicalSiteEmbedding_mem, MPUCircuit.leafPacketSites_mem, MPUCircuit.intervalConsecutiveSupport_disjoint, MPUCircuit.interval_supportedOperators_commute, MPUCircuit.cutBondSiteEmbedding_range_iff, MPUCircuit.leafLogicalSiteEmbedding_range, MPUCircuit.leafPacketSites_range, MPUCircuit.cutBondRegisterWidth_zero, MPUCircuit.cutBondRegisterWidth_last, MPUCircuit.intervalInteriorAuxiliarySupport_split, MPUCircuit.intervalInteriorAuxiliarySupport_leaf, MPUCircuit.isIntervalInteriorInitialized_split, MPUCircuit.intervalLogicalSupport_full, MPUCircuit.isIntervalInteriorInitialized_leaf, MPUCircuit.leafConsecutiveSites_range, MPUCircuit.leaf_placeAlong_mem_supportedOperators}
     \leanok
     For adjacent nonempty child intervals $\lbrack j,m)$ and $\lbrack m,k)$,
     their logical supports are disjoint. Their union together with
@@ -2375,7 +2411,14 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{lemma}[The constructed reflection is the initialized-range reflection]
     \label{thm:mpu_initialized_flag_projection}
-    \lean{QuantumCircuit.initializedBasisMatrix_mul_conjTranspose, QuantumCircuit.zeroFlagEmbedding_apply_selected, QuantumCircuit.mem_range_zeroFlagEmbedding_iff, QuantumCircuit.zeroFlagEmbedding_range_projection, QuantumCircuit.isStarProjection_zeroFlagEmbedding_range, QuantumCircuit.selectedZeroRegisterLogical_eq_subspaceReflection, QuantumCircuit.exists_isPairProduct_isCleanImplementation_zeroFlagReflection}
+    \lean{Matrix.basisInclusion_mul_conjTranspose,
+        QuantumCircuit.zeroFlagEmbedding_apply_selected,
+        QuantumCircuit.zeroFlagEmbedding_apply_of_notMem,
+        QuantumCircuit.mem_range_zeroFlagEmbedding_iff,
+        QuantumCircuit.zeroFlagEmbedding_range_projection,
+        QuantumCircuit.isStarProjection_zeroFlagEmbedding_range,
+        QuantumCircuit.selectedZeroRegisterLogical_eq_subspaceReflection,
+        QuantumCircuit.exists_isGateProduct_isCleanImplementation_zeroFlagReflection}
     \leanok
     For any injective basis encoding, its range projection is the
     diagonal indicator of its encoded configurations. Consequently,
@@ -2385,7 +2428,7 @@ left multiplication, right vector $b$ and left functional the trace.
         \bigl(\mathbf 1_{\text{all selected flags zero}}\bigr).
     \end{align}
     This is an orthogonal projection, and the reversible selected-zero
-    circuit reflects it exactly. For $d\geq2$, an $n\geq2$ logical
+    circuit reflects it exactly. For $d\geq2$, an $n\geq1$ logical
     register and a scratch pool of size $A$ at least the number of
     selected flags, a circuit implements $I-2EE^\dagger$
     with the selected-reflection gate bound and returns the whole
@@ -2577,7 +2620,7 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{lemma}[The one-site endpoint is one pair gate]
     \label{thm:mpu_single_site_padding}
-    \lean{MPUCircuit.singleSitePaddedOperator_mem_unitary, MPUCircuit.singleSitePaddedOperator_isNeighbourGate, MPUCircuit.singleSitePaddedOperator_isPairProduct, MPUCircuit.singleSitePaddedOperator_isCleanImplementation, MPUCircuit.exists_singleSite_clean_pair_circuit}
+    \lean{MPUCircuit.isCleanImplementation_placeAlong_workspace, MPUCircuit.singleSitePaddedOperator_mem_unitary, MPUCircuit.singleSitePaddedOperator_isGateProduct, MPUCircuit.singleSitePaddedOperator_isCleanImplementation, MPUCircuit.exists_singleSite_clean_pair_circuit}
     \leanok
     Every one-site unitary in positive physical dimension has an exact
     implementation by one neighboring two-qudit gate with one padding
@@ -2608,7 +2651,7 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{lemma}[An exact circuit for the encoded joining step]
     \label{thm:mpu_encoded_merging}
-    \lean{MPUCircuit.embedOp_suffix_eq_reindex, MPUCircuit.initializedBasisMatrix_appendBasisEmbedding, MPUCircuit.isCleanImplementation_embedOp_suffix, MPUCircuit.embedOp_prefix_eq_reindex, MPUCircuit.isCleanImplementation_embedOp_prefix, MPUCircuit.compatibleBondDilationEmbedding_eq_append, MPUCircuit.isCleanImplementation_oneSiteBasis, MPUCircuit.isCleanImplementation_compatible_attenuation, MPUCircuit.exists_compatible_merging_preparation_circuit, MPUCircuit.exists_placed_compatible_merging_preparation_circuit, MPUCircuit.joiningSuccessProjection_merging_preparation, MPUCircuit.diagonal_mul_initializedBasisMatrix, MPUCircuit.appendBasisEmbedding_merging_flags, MPUCircuit.mergingFlagProjection_mul_encoded_basis, MPUCircuit.encoded_merging_preparation_success, MPUCircuit.isCleanImplementation_zeroWorkspace_empty, MPUCircuit.exists_clean_encoded_merging_preparation, MPUCircuit.success_gram_of_encoded_columns, MPUCircuit.exists_encoded_uniform_merging_circuit}
+    \lean{MPUCircuit.isGateProduct_placeAlong_of_succ, MPUCircuit.placeAlong_natAddEmb_eq_reindex, MPUCircuit.basisInclusion_appendBasisEmbedding, MPUCircuit.isCleanImplementation_placeAlong_natAddEmb, MPUCircuit.placeAlong_castAddEmb_eq_reindex, MPUCircuit.isCleanImplementation_placeAlong_castAddEmb, MPUCircuit.compatibleBondDilationEmbedding_eq_append, MPUCircuit.isCleanImplementation_oneSiteBasis, MPUCircuit.placeAt_last_eq_placeAlong_natAddEmb, MPUCircuit.isCleanImplementation_compatible_attenuation, MPUCircuit.exists_compatible_merging_preparation_circuit, MPUCircuit.exists_placed_compatible_merging_preparation_circuit, MPUCircuit.joiningSuccessProjection_merging_preparation, MPUCircuit.diagonal_mul_basisInclusion, MPUCircuit.appendBasisEmbedding_merging_flags, MPUCircuit.mergingFlagProjection_mul_encoded_basis, MPUCircuit.encoded_merging_preparation_success, MPUCircuit.isCleanImplementation_zeroWorkspace_empty, MPUCircuit.exists_clean_encoded_merging_preparation, MPUCircuit.success_gram_of_encoded_columns, MPUCircuit.exists_encoded_uniform_merging_circuit}
     \leanok
     Let $d\geq2$, $r>0$, and $P>0$. Encode each bond label in $q$
     qudits with its distinguished label represented by physical zero.
@@ -2697,7 +2740,7 @@ remain separate assertions.
 
 \begin{lemma}[Joint child columns follow from individual columns]
     \label{thm:mpu_joint_child_columns}
-    \lean{MPUCircuit.mul_embedOp_disjoint_apply, MPUCircuit.placedConfigEquiv_fst, MPUCircuit.placedConfigEquiv_snd, MPUCircuit.jointPlacedConfigEquiv_left, MPUCircuit.jointPlacedConfigEquiv_right, MPUCircuit.jointPlacedConfigEquiv_snd, MPUCircuit.agreeOffPair_iff_outside_eq, MPUCircuit.reindex_mul_embedOp_of_disjoint, MPUCircuit.initializedBasisMatrix_jointPlacedBasisEmbedding, MPUCircuit.jointPlacedColumns_of_individual}
+    \lean{MPUCircuit.mul_placeAlong_disjoint_apply, MPUCircuit.placedConfigEquiv_fst, MPUCircuit.placedConfigEquiv_snd, MPUCircuit.jointPlacedConfigEquiv_left, MPUCircuit.jointPlacedConfigEquiv_right, MPUCircuit.jointPlacedConfigEquiv_snd, MPUCircuit.agreeOffPair_iff_outside_eq, MPUCircuit.reindex_mul_placeAlong_of_disjoint, MPUCircuit.basisInclusion_jointPlacedBasisEmbedding, MPUCircuit.jointPlacedColumns_of_individual}
     \leanok
     Suppose the two child packets are disjoint and their individual
     column identities are $XE_g=E_{g'}V$ and $YE_h=E_{h'}W$.
@@ -2727,7 +2770,7 @@ remain separate assertions.
     Reserve an additional $16g^2$ for coordinate permutations, and use
     $M=M_0+16g^2$ as a common leaf and node overhead. The common
     reflection bound is $F=1+K_d(A)\,2g$, where
-    $K_d(a)=8(38d^{18}+1)a^2+4a$.
+    $K_d(a)=12d^{12}a$.
     Define the midpoint-tree count using leaf cost $M$, joining cost
     $M$, and two reflection costs $F$. Finally put
     \begin{align}
@@ -2738,12 +2781,12 @@ remain separate assertions.
 
 \begin{lemma}[An explicit uniform numerical resource bound]
     \label{thm:mpu_uniform_numeric_resources}
-    \lean{MPUCircuit.bondRegisterWidth_le_bondDim, MPUCircuit.placedLeafGateCount_le_uniform, MPUCircuit.joiningPacketGateCount_le_uniform, MPUCircuit.selectedZeroRegisterReflectionPoolGateCount_le_uniform, MPUCircuit.uniformReflectionGateCount_le_cubic, MPUCircuit.uniformCircuitTreeGateCount_le_polynomial, MPUCircuit.uniformCircuitTreeGateCount_le_polynomial_bond}
+    \lean{MPUCircuit.bondRegisterWidth_le_bondDim, MPUCircuit.placedLeafGateCount_le_uniform, MPUCircuit.joiningPacketGateCount_le_uniform, MPUCircuit.zeroRegisterReflectionPoolGateCount_le_uniform, MPUCircuit.uniformReflectionGateCount_le_cubic, MPUCircuit.uniformCircuitTreeGateCount_le_polynomial, MPUCircuit.uniformCircuitTreeGateCount_le_polynomial_bond}
     \leanok
     The placed leaf cost and the stated routed joining-packet cost
     are at most $M_0$ for $d\geq2$ and $D>0$. Every selected reflection
-    testing at most $A$ flags, including the empty selection, has cost
-    at most $F$. For $N>0$, the latter satisfies
+    testing at most $A$ flags, routed on the open chain of $g$ sites,
+    has cost at most $2g\,K_d(a)\leq F$. For $N>0$, the latter satisfies
     \begin{align}
         F\leq(15200d^{18}+401)\bigl(N(q+1)\bigr)^3.
     \end{align}
@@ -2769,7 +2812,7 @@ remain separate assertions.
 
 \begin{lemma}[Selected-zero reflections act only on their flags]
     \label{thm:mpu_selected_reflection_support}
-    \lean{QuantumCircuit.embedOp_diagonal, QuantumCircuit.selectedZeroRegisterLogical_eq_embedOp, QuantumCircuit.selectedZeroRegisterLogical_mem_supportedOperators, QuantumCircuit.selectedZeroRegisterLogical_mem_supportedOperators_of_range_subset}
+    \lean{QuantumCircuit.selectedZeroRegisterLogical_mem_supportedOperators}
     \leanok
     The reflection which changes sign precisely when a selected set
     of qudits is zero is supported on those qudits. All states of
@@ -2777,10 +2820,9 @@ remain separate assertions.
     selection, whose reflection is the scalar minus identity.
 \end{lemma}
 \begin{proof}\leanok
-    A diagonal operator placed on a selected packet depends only on
-    the selected configuration, and has a Kronecker delta on the
-    remaining coordinates, and applying this identity to the local diagonal
-    all-zero reflection gives the placed reflection.
+    The reflection is a diagonal operator whose entries depend only on
+    the configuration of the selected qudits, and such a diagonal
+    operator is supported on them.
 \end{proof}
 
 \begin{lemma}[Exact amplification preserves interval support]
@@ -2881,7 +2923,7 @@ remain separate assertions.
 
 \begin{lemma}[Supported global children determine their joint columns]
     \label{thm:mpu_supported_child_columns}
-    \lean{MPUCircuit.initializedBasisMatrix_placedBasisEmbedding, MPUCircuit.reindex_embedOp_placedConfigEquiv, MPUCircuit.placedColumns_iff_localColumns, MPUCircuit.jointPlacedColumns_of_supported_individual}
+    \lean{MPUCircuit.basisInclusion_placedBasisEmbedding, MPUCircuit.reindex_placeAlong_placedConfigEquiv, MPUCircuit.placedColumns_iff_localColumns, MPUCircuit.jointPlacedColumns_of_supported_individual}
     \leanok
     Let two global operators have disjoint child supports. Their
     individual initialized-column identities, each retaining every
@@ -2909,12 +2951,12 @@ remain separate assertions.
 
 \begin{lemma}[Coordinate regrouping has additive circuit cost]
     \label{thm:mpu_quantitative_site_permutation}
-    \lean{Equiv.Perm.swapFactorsAux_length_le, Equiv.Perm.swapFactors_length_le_card, QuantumCircuit.permOp_list_prod, QuantumCircuit.isPairProduct_permOp, QuantumCircuit.IsPairProduct.conjugate_permOp, QuantumCircuit.workspaceFixedSitePerm_castAdd, QuantumCircuit.workspaceFixedSitePerm_natAdd, QuantumCircuit.isCleanImplementation_permOp_workspaceFixedSitePerm, QuantumCircuit.IsCleanImplementation.conjugate_workspaceFixedSitePerm, QuantumCircuit.isPairProduct_isCleanImplementation_conjugate_workspaceFixedSitePerm}
+    \lean{Equiv.Perm.swapFactorsAux_length_le, Equiv.Perm.swapFactors_length_le_card, ManyBody.list_prod_map_sitePermOp, QuantumCircuit.isGateProduct_sitePermOp, QuantumCircuit.IsGateProduct.sitePermOp_mul_mul_conjTranspose, QuantumCircuit.workspaceFixedSitePerm_castAdd, QuantumCircuit.workspaceFixedSitePerm_natAdd, QuantumCircuit.isCleanImplementation_sitePermOp_workspaceFixedSitePerm, QuantumCircuit.IsCleanImplementation.conjugate_workspaceFixedSitePerm}
     \leanok
     Every permutation of $n$ qudit sites has a neighboring
     pair-gate circuit of at most $2n^2$ gates. Conjugating a circuit
     of cost $K$ by that permutation gives cost at most $K+4n^2$,
-    including its exact scalar phase. For positive local dimension $d$,
+    including its exact scalar phase. For every fixed workspace configuration,
     a logical site permutation fixing the appended workspace preserves
     every all-input clean implementation identity. For a register of total size $n+A$,
     this conjugation costs at most $K+4(n+A)^2$.
@@ -3092,7 +3134,7 @@ remain separate assertions.
 
 \begin{lemma}[Interval columns of the leaf circuits]
     \label{thm:mpu_actual_leaf_columns}
-    \lean{MPUCircuit.intervalPacketLogicalSite_leafIntervalSiteEquiv, MPUCircuit.leafConsecutiveSites_eq_comp_intervalPacketSites, MPUCircuit.embedOp_reindex_siteEquiv, MPUCircuit.leafIntervalConfigEquiv_leafInput, MPUCircuit.leafIntervalConfigEquiv_leafOutput, MPUCircuit.initializedBasisMatrix_reindex_of_mapping, MPUCircuit.leafColumns_reindex_interval, MPUCircuit.minimalLeafInterval_reindex, MPUCircuit.isMinimalIntervalColumnImplementation_leaf_of_columns, MPUCircuit.exists_normalized_minimalInterval_family_with_placed_leaf_columns_of_unitary}
+    \lean{MPUCircuit.intervalPacketLogicalSite_leafIntervalSiteEquiv, MPUCircuit.leafConsecutiveSites_eq_comp_intervalPacketSites, MPUCircuit.placeAlong_reindex_siteEquiv, MPUCircuit.leafIntervalConfigEquiv_leafInput, MPUCircuit.leafIntervalConfigEquiv_leafOutput, MPUCircuit.basisInclusion_reindex_of_mapping, MPUCircuit.leafColumns_reindex_interval, MPUCircuit.minimalLeafInterval_reindex, MPUCircuit.isMinimalIntervalColumnImplementation_leaf_of_columns, MPUCircuit.exists_normalized_minimalInterval_family_with_placed_leaf_columns_of_unitary}
     \leanok
     For $d\geq2$ and $N\geq2$, a finite unitary of consecutive cut
     ranks at most $D$ admits one normalized minimal basis and metric
@@ -3123,7 +3165,7 @@ remain separate assertions.
 
 \begin{lemma}[The root interval gives the physical unitary]
     \label{thm:mpu_actual_root_columns}
-    \lean{MPUCircuit.intervalPacketSites_full_range, MPUCircuit.outsidePlacedConfig_full_subsingleton, MPUCircuit.minimalIntervalInputEmbedding_full_apply, MPUCircuit.minimalIntervalOutputEmbedding_full_apply, MPUCircuit.minimalIntervalRootColumns_eq_physical_of_fullInterval, MPUCircuit.minimalIntervalRootColumns_eq_physical, MPUCircuit.physicalGlobalConfigEmbedding_apply, MPUCircuit.initializedBasisMatrix_physicalGlobalConfigEmbedding, MPUCircuit.physicalGlobalColumns_of_clean_logicalColumns, MPUCircuit.minimalIntervalRootColumns_eq_physical_global}
+    \lean{MPUCircuit.intervalPacketSites_full_range, MPUCircuit.outsidePlacedConfig_full_subsingleton, MPUCircuit.minimalIntervalInputEmbedding_full_apply, MPUCircuit.minimalIntervalOutputEmbedding_full_apply, MPUCircuit.minimalIntervalRootColumns_eq_physical_of_fullInterval, MPUCircuit.minimalIntervalRootColumns_eq_physical, MPUCircuit.physicalGlobalConfigEmbedding_apply, MPUCircuit.basisInclusion_physicalGlobalConfigEmbedding, MPUCircuit.physicalGlobalColumns_of_clean_logicalColumns, MPUCircuit.minimalIntervalRootColumns_eq_physical_global}
     \leanok
     Let a logical operator satisfy the full-interval column
     identity of the given finite unitary $U$. Normalize the minimal
@@ -3229,7 +3271,7 @@ remain separate assertions.
 
 \begin{lemma}[The encoded merger in original coordinates]
     \label{thm:mpu_permuted_encoded_merger}
-    \lean{MPSPreparation.permOp_conjTranspose, MPSPreparation.permOp_conjTranspose_mul_mul, MPSPreparation.permOp_conjugate_mem_supportedOperators, MPSPreparation.permOp_mul_rectangular, MPSPreparation.conjugate_workspaceFixedSitePerm_columns, MPUCircuit.exists_permuted_encoded_uniform_merging_circuit}
+    \lean{MPSPreparation.conjTranspose_sitePermOp_mul_mul, MPSPreparation.sitePermOp_mul_rectangular, MPSPreparation.conjugate_workspaceFixedSitePerm_columns, MPUCircuit.exists_permuted_encoded_uniform_merging_circuit}
     \leanok
     Suppose two full clean child circuits have the stated encoded joint columns,
     logical support inside a prescribed set, and an isometric normalized parent.
@@ -3297,7 +3339,7 @@ remain separate assertions.
 
 \begin{lemma}[Coordinates of basis inclusions]
     \label{thm:mpu_basis_encoding_coordinates}
-    \lean{MPUCircuit.basisEncodingEquivOfRangeEq_apply, MPUCircuit.initializedBasisMatrix_trans, MPUCircuit.initializedBasisMatrix_equivOfRangeEq, MPUCircuit.initializedBasisMatrix_prodMap, MPUCircuit.initializedBasisMatrix_append_joiningChild}
+    \lean{MPUCircuit.basisEncodingEquivOfRangeEq_apply, Matrix.basisInclusion_mul_basisInclusion, MPUCircuit.basisInclusion_equivOfRangeEq, MPUCircuit.basisInclusion_prodMap, MPUCircuit.basisInclusion_append_joiningChild}
     \leanok
     The matrices of initialized basis inclusions respect composition and products.
     The derived label bijection relates equal-range encodings. Appending
@@ -3402,7 +3444,7 @@ remain separate assertions.
 
 \begin{lemma}[The reset label in the output inclusion]
     \label{thm:mpu_joining_reset_columns}
-    \lean{MPUCircuit.initializedBasisMatrix_mul_basisResetOutput, MPUCircuit.joiningSpectatorColumns_basisResetOutput}
+    \lean{MPUCircuit.basisInclusion_mul_basisResetOutput, MPUCircuit.joiningSpectatorColumns_basisResetOutput}
     \leanok
     Multiplication of an initialized basis inclusion by the reset columns selects
     its prescribed reset label. The same identity retains every spectator
@@ -3475,7 +3517,7 @@ remain separate assertions.
 
 \begin{lemma}[The encoded contraction gives the parent columns]
     \label{thm:mpu_encoded_actual_parent_columns}
-    \lean{MPUCircuit.initializedBasisMatrix_pullback_rows, MPUCircuit.encodedJoiningParent_pullback_columns, MPUCircuit.regroupedIntervalJointOutputEmbedding_reset_apply, MPUCircuit.initializedBasisMatrix_regroupedOutput_mul_normalizedParent, MPUCircuit.encodedJoiningParent_minimalIntervalColumns}
+    \lean{MPUCircuit.basisInclusion_pullback_rows, MPUCircuit.encodedJoiningParent_pullback_columns, MPUCircuit.regroupedIntervalJointOutputEmbedding_reset_apply, MPUCircuit.basisInclusion_regroupedOutput_mul_normalizedParent, MPUCircuit.encodedJoiningParent_minimalIntervalColumns}
     \leanok
     Suppose the joint output inclusion has its derived product-coordinate
     description and the joining metric is positive definite. Returning the encoded

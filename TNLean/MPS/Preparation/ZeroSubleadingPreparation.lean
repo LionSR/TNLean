@@ -111,7 +111,7 @@ theorem exists_isPreparedInDepth_normalizedMPVState_of_subleading_eigenvalues_eq
         ∀ (N : ℕ) (hN0 : D ^ 2 + 3 * D + 1 ≤ N),
           letI : NeZero N := NeZero.of_pos (by omega)
           ‖mpvState A N‖ = 1 ∧
-            IsPreparedInDepth T (fun s => normalizedMPVState A N s) := by
+            IsPreparedInDepth (Geometry.ring N) T (fun s => normalizedMPVState A N s) := by
   obtain ⟨Cb, hCb⟩ := exists_isPreparedInDepth_blockIsometryState d D
   refine ⟨Cb * (2 * (D ^ 2 + 3 * D + 1)), ?_⟩
   intro A hnormal hA σ hσ htr hfix hzero N hN0

@@ -21,10 +21,10 @@ original windows. For a positive interaction, these aligned terms are bounded
 by the sum over all original starts, with coefficient one. Volumes shorter
 than the interaction range are included.
 
-The window and blocking identities assume positive physical dimension,
-positive block length, and positive window length. The positive-term counting
-bound requires only the latter two assumptions. No tensor, normalization,
-state, or spectral-gap data enter these operator identities.
+The window and blocking identities assume positive physical dimension and
+positive block length. The positive-term counting bound requires only the
+latter. No tensor, normalization, state, or spectral-gap data enter these
+operator identities.
 
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3, equation (3.12),
 and site regrouping at lines 825--836; CPGSV17, arXiv:1703.09188,
@@ -35,58 +35,67 @@ derived positive-term counting statement.
 open SpinChain
 open scoped ComplexOrder MatrixOrder
 open Kraus (blockPhysDim)
+open ManyBody (placeAlong chainWindow)
 
 namespace MPSTensor
 
 variable {d L : ℕ} [NeZero d] [NeZero L]
 
-/-- Physical blocking commutes with placement on a nonwrapping window:
-a window starting at blocked site \(b\) starts at original site \(bL\).
-This is an operator identity, requiring no tensor or state data.
+/-- Physical blocking commutes with placement on a window that does not wrap
+around the chain: a window starting at blocked site \(b\) starts at original
+site \(bL\). This is an operator identity, requiring no tensor or state data.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3 and lines 825--836;
 CPGSV17, arXiv:1703.09188, Appendix, lines 2308 and 2313--2320. -/
-theorem chainWindowOperator_blocking_reindex {K N b : ℕ}
+theorem placeAlong_chainWindow_blocking_reindex {K N b : ℕ}
     (h : Matrix (Cfg (blockPhysDim d L) K) (Cfg (blockPhysDim d L) K) ℂ)
-    (hK : 0 < K) (hb : b + K ≤ N) :
+    (hb : b + K ≤ N) :
     Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
-        (chainWindowOperator N b h) =
-      chainWindowOperator (N * L) (b * L)
+        (placeAlong (X := fun _ ↦ Fin (blockPhysDim d L)) (chainWindow b hb) h) =
+      placeAlong (X := fun _ ↦ Fin d)
+        (chainWindow (b * L) (by simpa only [Nat.add_mul] using Nat.mul_le_mul_right L hb))
         (Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L) h) := by
+  have hbL : b * L + K * L ≤ N * L := by
+    simpa only [Nat.add_mul] using Nat.mul_le_mul_right L hb
   apply (intervalCoordinates d ((0 : ℤ) * L) (N * L)).symm.injective
   apply quasiLocalObservable_injective d (finiteChainRegion ((0 : ℤ) * L) (N * L))
   change quasiLocalIntervalObservable d ((0 : ℤ) * L) (N * L)
     (Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
-      (chainWindowOperator N b h)) =
+      (placeAlong (X := fun _ ↦ Fin (blockPhysDim d L)) (chainWindow b hb) h)) =
     quasiLocalIntervalObservable d ((0 : ℤ) * L) (N * L)
-      (chainWindowOperator (N * L) (b * L)
+      (placeAlong (X := fun _ ↦ Fin d) (chainWindow (b * L) hbL)
         (Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L) h))
   rw [← quasiLocalBlocking_quasiLocalIntervalObservable]
-  rw [quasiLocalIntervalObservable_chainWindowOperator 0 N b h hK hb,
+  rw [quasiLocalIntervalObservable_placeAlong_chainWindow 0 N b h hb,
     quasiLocalBlocking_quasiLocalIntervalObservable]
-  rw [quasiLocalIntervalObservable_chainWindowOperator _ _ _ _
-    (Nat.mul_pos hK (NeZero.pos L))
-    (by simpa only [Nat.add_mul] using Nat.mul_le_mul_right L hb)]
+  rw [quasiLocalIntervalObservable_placeAlong_chainWindow _ _ _ _ hbL]
   simp only [zero_add, zero_mul, Nat.cast_mul]
 
 /-- The reindexed open interaction sum on a blocked chain is the sum of
-original-chain windows whose starts are multiples of the block length.
-This includes volumes shorter than the interaction range, when both sums
-vanish. Source: Nachtergaele, arXiv:cond-mat/9410110,
-equation (3.12), under the site regrouping at lines 825--836. -/
+original-chain windows whose starts are multiples of the block length; every
+start in the summation range gives a window of the chain. This includes
+volumes shorter than the interaction range, when both sums vanish. Source:
+Nachtergaele, arXiv:cond-mat/9410110, equation (3.12), under the site
+regrouping at lines 825--836. -/
 theorem openInteractionMatrix_blocking_reindex {K : ℕ}
-    (h : Matrix (Cfg (blockPhysDim d L) K) (Cfg (blockPhysDim d L) K) ℂ)
-    (hK : 0 < K) (N : ℕ) :
+    (h : Matrix (Cfg (blockPhysDim d L) K) (Cfg (blockPhysDim d L) K) ℂ) (N : ℕ) :
     Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
         (openInteractionMatrix h N) =
-      ∑ i ∈ Finset.range (N + 1 - K), chainWindowOperator (N * L) (i * L)
-        (Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L) h) := by
+      ∑ i ∈ Finset.range (N + 1 - K),
+        if hi : i * L + K * L ≤ N * L then
+          placeAlong (X := fun _ ↦ Fin d) (chainWindow (i * L) hi)
+            (Matrix.reindex (blockedConfigEquiv d K L) (blockedConfigEquiv d K L) h)
+        else 0 := by
   change (Matrix.reindexLinearEquiv ℂ ℂ (blockedConfigEquiv d N L)
     (blockedConfigEquiv d N L)) (openInteractionMatrix h N) = _
   rw [openInteractionMatrix, map_sum]
   refine Finset.sum_congr rfl fun i hi => ?_
-  exact chainWindowOperator_blocking_reindex h hK (by
-    have hi' := Finset.mem_range.mp hi
-    omega)
+  have hi' : i + K ≤ N := by
+    have hi'' := Finset.mem_range.mp hi
+    omega
+  have hiL : i * L + K * L ≤ N * L := by
+    simpa only [Nat.add_mul] using Nat.mul_le_mul_right L hi'
+  simp only [dite_eq_left hi', dite_eq_left hiL]
+  exact placeAlong_chainWindow_blocking_reindex h hi'
 
 omit [NeZero d] in
 /-- For a positive interaction, summing only windows aligned with the block
@@ -94,10 +103,12 @@ partition is bounded by the open sum over all windows, with coefficient one.
 This holds at every volume and needs no positive physical-dimension hypothesis.
 Source: a positive-term counting consequence of Nachtergaele,
 arXiv:cond-mat/9410110, equation (3.12). -/
-theorem sum_aligned_chainWindowOperator_le_openInteractionMatrix {K : ℕ}
+theorem sum_aligned_placeAlong_chainWindow_le_openInteractionMatrix {K : ℕ}
     (h : Matrix (Cfg d (K * L)) (Cfg d (K * L)) ℂ)
-    (hh : h.PosSemidef) (hK : 0 < K) (N : ℕ) :
-    (∑ i ∈ Finset.range (N + 1 - K), chainWindowOperator (N * L) (i * L) h) ≤
+    (hh : h.PosSemidef) (N : ℕ) :
+    (∑ i ∈ Finset.range (N + 1 - K),
+      if hi : i * L + K * L ≤ N * L then
+        placeAlong (X := fun _ ↦ Fin d) (chainWindow (i * L) hi) h else 0) ≤
       openInteractionMatrix h (N * L) := by
   have hsub : (Finset.range (N + 1 - K)).image (fun i => i * L) ⊆
       Finset.range (N * L + 1 - K * L) := by
@@ -110,20 +121,18 @@ theorem sum_aligned_chainWindowOperator_le_openInteractionMatrix {K : ℕ}
       simpa only [Nat.add_mul] using Nat.mul_le_mul_right L hb
     exact Finset.mem_range.mpr (by omega)
   have hsum : (∑ j ∈ (Finset.range (N + 1 - K)).image (fun i => i * L),
-      chainWindowOperator (N * L) j h) =
-      ∑ i ∈ Finset.range (N + 1 - K), chainWindowOperator (N * L) (i * L) h :=
+      if hj : j + K * L ≤ N * L then
+        placeAlong (X := fun _ ↦ Fin d) (chainWindow j hj) h else 0) =
+      ∑ i ∈ Finset.range (N + 1 - K),
+        if hi : i * L + K * L ≤ N * L then
+          placeAlong (X := fun _ ↦ Fin d) (chainWindow (i * L) hi) h else 0 :=
     Finset.sum_image (fun i _ j _ hij => mul_left_injective₀ (NeZero.ne L) hij)
   rw [← hsum, openInteractionMatrix]
   refine Finset.sum_le_sum_of_subset_of_nonneg hsub ?_
-  intro j hj _hj
-  have hKL : 0 < K * L := Nat.mul_pos hK (NeZero.pos L)
-  have hb : j + K * L ≤ N * L := by
-    have hj' := Finset.mem_range.mp hj
-    omega
-  rw [Matrix.nonneg_iff_posSemidef,
-    chainWindowOperator_eq_embedLocalOperatorAlgHom (by omega) hb]
-  exact Matrix.nonneg_iff_posSemidef.mp
-    (map_nonneg (chainWindowStarAlgHom (d := d) (K * L) (N * L) j
-      (by omega) hb) hh.nonneg)
+  intro j _ _
+  by_cases hj : j + K * L ≤ N * L
+  · simp only [dite_eq_left hj]
+    exact Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_placeAlong _ hh)
+  · simp only [dite_eq_right hj, le_refl]
 
 end MPSTensor

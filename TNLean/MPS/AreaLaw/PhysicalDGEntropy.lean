@@ -50,12 +50,10 @@ https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf. 
 theorem exists_physical_dg_interval_entropy_bound :
     ∃ Cbound : ℝ, 0 < Cbound ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
       0 < gamma →
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -81,24 +79,24 @@ theorem exists_physical_dg_interval_entropy_bound :
     dsimp only [Cbound]
     positivity
   refine ⟨Cbound, hC, ?_⟩
-  intro L q p r hpr hrL h hs h0 h1 mu nu gamma hgamma H hH
+  intro L q p r hpr hrL Φ h0 h1 mu nu gamma hgamma H hH
     hmu hnu hmunu hgap G g J ψ hψG hψ
   let beta := fun _ : Fin L ↦ Fin q
-  let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+  let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-  let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+  let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
     (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
   let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-    (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+    (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
     (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
-  let w := (Submodule.euclideanTensorEquiv (J → Fin q) (↥(Jᶜ) → Fin q)).symm (Tm ψ)
+  let w := (Submodule.euclideanTensorEquiv (J → Fin q) ({v // v ∉ J} → Fin q)).symm (Tm ψ)
   let Cψ := Matrix.schmidtCoeffMatrix (WithLp.ofLp w)
   let hρ := Matrix.posSemidef_self_mul_conjTranspose Cψ
   let u : ℝ := 1 + Real.log (q : ℝ) + Real.log (1 / g)
   let ellq : ℕ := ⌈A * u ^ 2 / g⌉₊
   let Dq : ℕ := (q * ellq ^ 2) ^ (22 * ellq)
   obtain ⟨_hDq, _hlogDq, W0, hWdim, hW0, haccuracy⟩ :=
-    hphysical L q p r hpr hrL h hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hphysical L q p r hpr hrL Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   have hq : 2 ≤ q :=
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
   have hq1 : 1 ≤ q := Nat.le_trans (by decide : 1 ≤ 2) hq
@@ -134,7 +132,7 @@ theorem exists_physical_dg_interval_entropy_bound :
     exact hlog
   obtain ⟨hp, hsum, hentropy, htail_of_viable⟩ :=
     Submodule.unit_cut_spectral_probability
-      (σ := J → Fin q) (β := ↥(Jᶜ) → Fin q) Tm G ψ hψG hψ
+      (σ := J → Fin q) (β := {v // v ∉ J} → Fin q) Tm G ψ hψG hψ
   let probability := hρ.isHermitian.eigenvalues₀
   have htail (i : ℕ) (_hi : i < Fintype.card (J → Fin q)) :
       (∑ a ∈ Finset.univ.filter (fun a : Fin (Fintype.card (J → Fin q)) ↦

@@ -80,7 +80,8 @@ theorem IsGInjective.torusParentKernel_le_commutingClosureSpan
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hP : ∀ v, IsRegionParentInteraction (groupBondTensor (torusIncidentSite a))
       (torusPlaquetteRegion v) (P v)) :
-    (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion P)).ker ≤
+    (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+        torusPlaquetteRegion P).hamiltonian).ker ≤
       Submodule.span ℂ (Set.range (fun p : {p : G × G // Commute p.1 p.2} =>
         torusGClosure (width := width) (height := height)
           (leftRegularMatrix G) a p.1.1 p.1.2)) := by
@@ -88,8 +89,9 @@ theorem IsGInjective.torusParentKernel_le_commutingClosureSpan
   intro Ψ hΨ
   have hlocal : ∀ v,
       ManyBody.place («X» := fun _ ↦ Fin _) (torusPlaquetteRegion v) (P v) *ᵥ Ψ = 0 :=
-    (regionParentHamiltonian_mulVec_eq_zero_iff torusPlaquetteRegion P
-      (fun v => (hP v).1) Ψ).mp hΨ
+    (ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff
+      (Φ := ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d) torusPlaquetteRegion P) (ψ := Ψ)
+      fun v ↦ ManyBody.posSemidef_place («X» := fun _ ↦ Fin _) (hP v).1).mp hΨ
   obtain ⟨F, hF, hrec, hleft, hright, hsupport⟩ :=
     ha.exists_torusParentCoordinates P hP Ψ hlocal
   let f : RegularHalfEdgeConfig Γₜ G → ℂ := fun α =>

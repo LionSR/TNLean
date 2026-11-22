@@ -53,12 +53,11 @@ private theorem designatedSupport_eq_ball_of_not_constant {L : ℕ}
     push Not at hh
     exact hnc ⟨σ x, hh⟩
   obtain ⟨y, hyD, hy⟩ := hey
-  have hcross : () ∈ crossingLabels S.graph (S.truncationSet L) S.r₀
-      (fun _ : Unit ↦ S.anchor i) {x} := by
-    apply Finset.mem_filter.mpr
-    refine ⟨Finset.mem_univ _, ⟨x, hxD, by simp⟩, y, hyD, ?_⟩
+  have hcross : () ∈ ManyBody.crossingTerms
+      (fun _ : Unit ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) {x} := by
+    refine ManyBody.mem_crossingTerms.mpr ⟨⟨x, hxD, by simp⟩, y, hyD, ?_⟩
     simpa using (fun he : y = x ↦ hy (congrArg σ he))
-  exact (truncationRadius_eq_of_mem_crossingLabels (Finset.singleton_subset_iff.mpr hxT)
+  exact (truncationRadius_eq_of_mem_crossingTerms (Finset.singleton_subset_iff.mpr hxT)
     hcross).2.2.trans (Finset.ext fun _ ↦ by simp [ball, ManyBody.mem_graphBall])
 
 /-- At a completed status, any designated support not contained in one physical

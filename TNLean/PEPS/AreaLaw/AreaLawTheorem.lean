@@ -45,6 +45,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
+open ManyBody (planeDomainGraph innerBoundary endpointBoundary)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Theorem 1.1 of the area-law manuscript, `00-introduction.tex`, lines 39–53:
@@ -69,8 +71,10 @@ theorem uniformAreaLaw_vertex_boundary_bounds :
             ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
             groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
               ∀ A : Finset (Site Λ),
-                ManyBody.regionEntropy Ω A ≤ 4 * C * (innerBoundary Λ A).card ∧
-                ManyBody.regionEntropy Ω A ≤ 2 * C * (endpointBoundary Λ A).card :=
+                ManyBody.regionEntropy Ω A ≤
+                    4 * C * (innerBoundary (planeDomainGraph Λ) A).card ∧
+                ManyBody.regionEntropy Ω A ≤
+                    2 * C * (endpointBoundary (planeDomainGraph Λ) A).card :=
   uniformAreaLaw.vertex_boundary_bounds
 
 /-- Corollary 1.2 of the area-law manuscript for rectangles,

@@ -30,8 +30,8 @@ one fixed depth-two circuit. Source context: arXiv:2405.00439, Section V,
 lines 2081–2087. -/
 noncomputable def detectorRetainedInterval (u w : unitary (Matrix (Fin d) (Fin d) ℂ))
     (M : ℕ) [NeZero M] (a b : ℕ) : Matrix (Fin M × Bool → Fin d) (Fin M × Bool → Fin d) ℂ :=
-  QuantumCircuit.circuitOp (dressedPairCircuit (cellSuccessor M) u w
-    (Finset.univ.filter fun k ↦ a ≤ k.val ∧ k.val ≤ b))
+  (dressedPairCircuit (cellSuccessor M) u w
+    (Finset.univ.filter fun k ↦ a ≤ k.val ∧ k.val ≤ b)).op
 
 /-- Gate deletion gives the specified dressed tensor interval, with the
 identity proved from the layer products and the interval geometry.
@@ -47,7 +47,7 @@ theorem detectorRetainedInterval_eq_intervalTensor
     ext k
     simp [a', b', Fin.le_def]
   rw [detectorRetainedInterval, hset,
-    circuitOp_dressedPairCircuit_single_entry (cellSuccessor N) u w _ a'
+    op_dressedPairCircuit_single_entry (cellSuccessor N) u w _ a'
       (Finset.mem_Icc.mpr ⟨le_rfl, hab'⟩)
       (cellSuccessor_Icc_single_entry a' b' (Or.inr hb)),
     detectorIntervalTensor, rectKronecker_mul]
@@ -166,13 +166,13 @@ theorem exists_detectorCircuitWord_even (k : ℕ) [NeZero (2 * k)]
     (hN : 2 * (2 * k) + 2 < N) :
     ∃ u w : unitary (Matrix (Fin (2 * k)) (Fin (2 * k)) ℂ),
       u ^ (2 * k) = 1 ∧
-      (dressedPairCircuit (cellSuccessor N) u w Finset.univ).length = 2 ∧
-      QuantumCircuit.circuitOp (dressedPairCircuit (cellSuccessor N) u w Finset.univ) =
+      (dressedPairCircuit (cellSuccessor N) u w Finset.univ).layers.length = 2 ∧
+      (dressedPairCircuit (cellSuccessor N) u w Finset.univ).op =
         rectKronecker (fun _ : Fin N × Bool ↦ (u : Matrix (Fin (2 * k)) (Fin (2 * k)) ℂ)) ∧
       detectorCircuitWord u w (2 * k) N = -1 := by
   let hζ := Complex.isPrimitiveRoot_exp (2 * k) (NeZero.ne (2 * k))
   exact ⟨detectorShiftFin (2 * k), detectorClockFin hζ, detectorShiftFin_pow_order (2 * k),
-    dressedPairCircuit_length _ _ _ _, circuitOp_dressedPairCircuit_univ _ _ _,
+    dressedPairCircuit_length _ _ _ _, op_dressedPairCircuit_univ _ _ _,
     detectorCircuitWord_clock_even hζ hN⟩
 
 end MPOTensor.FiniteGroupDetector

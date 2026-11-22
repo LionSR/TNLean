@@ -4,8 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.SparseRegisterPadding
-import TNLean.Circuit.Measurement.CoherentRounds
-import TNLean.Circuit.Teleportation.ZeroSubspace
+import QICLean.Circuit.Model.Measurement
 
 /-!
 # Constant-depth coherent GHZ preparation on sparse registers
@@ -16,8 +15,8 @@ teleportation scratch space, all of which is restored exactly. A one-site parity
 rotation accommodates every combination of even and odd block lengths.
 
 The quantum depth depends only on `d` and `r`, never on block lengths or their number.
-Measurements, on-site corrections, and global classical feedforward are free in the existing
-measurement-round model. All outcomes are retained, and the final correction has a scalar
+Measurements, on-site corrections, and global classical feedforward are free in the measurement
+circuit model. All outcomes are retained, and the final correction has a scalar
 independent of the coherent label amplitudes. This realizes the constant-depth GHZ seed in
 arXiv:2307.01696, paragraph "Long-range MPS using measurements".
 
@@ -35,18 +34,17 @@ namespace MPSPreparation
 
 variable {d M N r : ℕ} {ℓ : Fin M → ℕ}
 
-private theorem exists_rounds_of_isCircuitOn [NeZero d] [NeZero N] {K : ℕ}
-    {W : Matrix (Cfg d N) (Cfg d N) ℂ} (hW : IsCircuitOn Finset.univ K W) :
-    ∃ Rs : List (MeasurementRound d N), (Rs.map MeasurementRound.depth).sum = K + 2 ∧
-      MeasurementRound.IsRoundsImplementationOn Rs Set.univ W := by
-  obtain ⟨Ls, hlen, -, hLs⟩ := hW
-  let R := TeleportHop.round Ls [] TeleportHop.valid_nil
-  refine ⟨[R], ?_, ?_⟩
-  · simp [R, MeasurementRound.depth, TeleportHop.round, hlen]
-  · have h := (TeleportHop.isImplementationOn_round (d := d) Ls
-      (TeleportHop.valid_nil (N := N))).isRoundsImplementationOn
-    rw [TeleportHop.chainPerm_nil, Matrix.one_mul, ← hLs] at h
-    exact h.mono fun _ _ => fun _ _ _ hi => by simp [TeleportHop.pairSites] at hi
+/-- A unitary circuit is a measurement circuit implementing its operator on every vector. -/
+private theorem exists_circuit_of_isUnitaryCircuit [NeZero N] {K : ℕ}
+    {W : Matrix (Cfg d N) (Cfg d N) ℂ} (hW : IsUnitaryCircuit (Geometry.ring N) K W) :
+    ∃ c : Circuit (Geometry.ring N) KrausGate (ManyBody.Qudits (Fin N) d)
+        (ManyBody.Qudits (Fin N) d),
+      c.Forall KrausGate.ev KrausFamily.IsUnitaryOrMeasurement ∧ c.depth ≤ K ∧
+        c.IsImplementationOn KrausGate.ev Set.univ W := by
+  obtain ⟨u, hud, huop⟩ := hW
+  refine ⟨u.toCircuit, u.forall_isUnitary.mono fun _ hK ↦ Or.inl hK, hud, ?_⟩
+  rw [← huop]
+  exact Circuit.isImplementationOn_of_kraus_eq (fun p ↦ u.kraus_eq_op p) _
 
 /-- The physical scratch sites strictly between a block's first and last registers. -/
 noncomputable def windowCentralSites (hN : ∑ k, ℓ k = N) (r : ℕ) : Finset (Fin N) := by
@@ -63,73 +61,88 @@ theorem mem_windowCentralSites {hN : ∑ k, ℓ k = N} {r : ℕ} {i : Fin N} :
 /-- The distant controlled-subtraction layer has a constant-depth measurement implementation
 on every coherent state whose central physical scratch sites carry zero. Odd gaps are handled
 by constant-size padding rotations; every scratch site is restored by the exact operator
-identity. -/
+identity. On each branch the scalar does not depend on the input. -/
 theorem exists_rounds_sparseBlockShift [NeZero d] (hr : 2 ≤ r) :
     ∃ C : ℕ, ∀ {M N : ℕ} [NeZero N] {ℓ : Fin M → ℕ}
       (hN : ∑ k, ℓ k = N) (hℓ : ∀ k, 3 * r ≤ ℓ k),
-      ∃ Rs : List (MeasurementRound d N), (Rs.map MeasurementRound.depth).sum = C ∧
-        MeasurementRound.IsRoundsImplementationOn Rs
-          {v | IsZeroOn (d := d) (windowCentralSites hN r) v}
-          (blockLayerOp hN (fun k => embedOp (SparseRegister.ends (by have := hℓ k; omega))
+      ∃ c : Circuit (Geometry.ring N) KrausGate (ManyBody.Qudits (Fin N) d)
+          (ManyBody.Qudits (Fin N) d),
+        c.Forall KrausGate.ev KrausFamily.IsUnitaryOrMeasurement ∧ c.depth ≤ C ∧
+        c.IsImplementationOn KrausGate.ev {v | IsZeroOn (d := d) (windowCentralSites hN r) v}
+          (blockLayerOp hN (fun k => ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            ⟨SparseRegister.ends (by have := hℓ k; omega), SparseRegister.ends_injective _⟩
             ((tailShift r).permMatrix ℂ))) ∧
-        ∀ m : MeasurementRound.OutcomeHistory Rs, ∃ c : ℂ,
+        ∀ p : c.Index, ∃ z : ℂ,
           ∀ v : Cfg d N → ℂ, IsZeroOn (windowCentralSites hN r) v →
-            MeasurementRound.historyKraus Rs m *ᵥ v = c •
-              (blockLayerOp hN (fun k => embedOp (SparseRegister.ends (by have := hℓ k; omega))
+            c.kraus KrausGate.ev p *ᵥ v = z •
+              (blockLayerOp hN (fun k => ManyBody.placeAlong (X := fun _ ↦ Fin d)
+                ⟨SparseRegister.ends (by have := hℓ k; omega), SparseRegister.ends_injective _⟩
                 ((tailShift r).permMatrix ℂ)) *ᵥ v) := by
   classical
-  have hd : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
-  obtain ⟨KP, hKP⟩ := SparseRegister.exists_isCircuitOn_paddingAll (d := d) hd (by omega : 1 ≤ r)
-  obtain ⟨KX, hKX⟩ := exists_isPairProduct (d := d) (n := r + r) hd (by omega)
-  refine ⟨2 * KP + 4 * r + KX + 6, fun {M N} _ {ℓ} hN hℓ => ?_⟩
-  let : NeZero r := ⟨by omega⟩
+  obtain ⟨KP, hKP⟩ := SparseRegister.exists_isUnitaryCircuitOn_paddingAll (d := d) (r := r)
+  have : NeZero (r + r) := ⟨by omega⟩
+  obtain ⟨KX, hKX⟩ : ∃ KX, ∀ X : Matrix (Cfg d (r + r)) (Cfg d (r + r)) ℂ,
+      X ∈ unitary (Matrix (Cfg d (r + r)) (Cfg d (r + r)) ℂ) →
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (r + r))) KX X :=
+    ⟨_, fun X hX ↦ isGateProduct_pathGraph_unitaryGateCount hX⟩
+  refine ⟨2 * KP + 4 * r + KX, fun {M N} _ {ℓ} hN hℓ => ?_⟩
+  have : NeZero r := ⟨by omega⟩
   let hp : ∀ k, r + 1 ≤ ℓ k := fun k => by have := hℓ k; omega
   let π := SparseRegister.paddingAll hN hp
   let gs := List.ofFn (SparseRegister.gate (d := d) hN hr hℓ)
-  obtain ⟨RsP, hRsP, hP⟩ := exists_rounds_of_isCircuitOn (hKP hN hp).1
-  obtain ⟨RsQ, hRsQ, hQ⟩ := exists_rounds_of_isCircuitOn (hKP hN hp).2
-  obtain ⟨RsG, hRsG, hG⟩ := RegisterGate.exists_rounds
+  obtain ⟨cP, hPf, hPd, hP⟩ := exists_circuit_of_isUnitaryCircuit (hKP hN hp).1.isUnitaryCircuit
+  obtain ⟨cQ, hQf, hQd, hQ⟩ := exists_circuit_of_isUnitaryCircuit (hKP hN hp).2.isUnitaryCircuit
+  obtain ⟨cG, hGf, hGd, hG⟩ := RegisterGate.exists_rounds
     (SparseRegister.pairwise_gates (d := d) hN hr hℓ) (K := KX) (by
       intro g hg
       obtain ⟨k, rfl⟩ := List.mem_ofFn.mp hg
       exact hKX _ (Equiv.Perm.permMatrix_mem_unitaryGroup _))
-  have hmap : ∀ v ∈ {v | IsZeroOn (d := d) (windowCentralSites hN r) v},
-      (cfgPerm π).permMatrix ℂ *ᵥ v ∈ {v | ∀ g ∈ gs, IsZeroOn g.interior v} := by
-    intro v hv g hg x hx i hi
+  have hmap : ∀ v ∈ (Set.univ : Set (Cfg d N → ℂ)) ∩
+      {v | IsZeroOn (d := d) (windowCentralSites hN r) v},
+      ManyBody.sitePermOp π *ᵥ v ∈ {v | ∀ g ∈ gs, IsZeroOn g.interior v} := by
+    rintro v ⟨-, hv⟩ g hg x hx i hi
     obtain ⟨k, rfl⟩ := List.mem_ofFn.mp hg
     obtain ⟨⟨p, hp₁, hp₂, hi'⟩, hfix⟩ := SparseRegister.gate_interior hN hr hℓ k hi
-    rw [Matrix.permMatrix_mulVec] at hx
-    have h := hv (cfgPerm π x) hx i (mem_windowCentralSites.mpr ⟨k, p, hp₁, hp₂, hi'⟩)
+    rw [ManyBody.sitePermOp_mulVec] at hx
+    have h := hv (x ∘ π) hx i (mem_windowCentralSites.mpr ⟨k, p, hp₁, hp₂, hi'⟩)
     change x (π i) = 0 at h
-    simpa only [π, hfix] using h
-  have hPQ := ((hP.mono (Set.subset_univ _)).append hG hmap).append hQ
+    have hfix' : π i = i := hfix
+    rwa [hfix'] at h
+  have hPQ := ((hP.mono Set.inter_subset_left).comp hG hmap).comp hQ
     (fun _ _ => Set.mem_univ _)
-  have hImpl : MeasurementRound.IsRoundsImplementationOn (RsP ++ RsG ++ RsQ)
-      {v | IsZeroOn (windowCentralSites hN r) v}
-      (blockLayerOp hN (fun k => embedOp (SparseRegister.ends (by have := hℓ k; omega))
+  have heq := SparseRegister.padding_conj_gates (d := d) hN hr hℓ
+  rw [Matrix.mul_assoc] at heq
+  have hImpl : ((cP.comp cG).comp cQ).IsImplementationOn KrausGate.ev
+      {v | IsZeroOn (d := d) (windowCentralSites hN r) v}
+      (blockLayerOp hN (fun k => ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        ⟨SparseRegister.ends (by have := hℓ k; omega), SparseRegister.ends_injective _⟩
         ((tailShift r).permMatrix ℂ))) := by
-    have heq := SparseRegister.padding_conj_gates (d := d) hN hr hℓ
-    rw [Matrix.mul_assoc] at heq
-    simpa only [← List.append_assoc, heq] using hPQ
-  refine ⟨RsP ++ RsG ++ RsQ, ?_, hImpl, fun m => ?_⟩
-  · simp only [List.map_append, List.sum_append, hRsP, hRsG, hRsQ]
-    omega
-  · apply hImpl.exists_history_scalar (E := zeroOnSubmodule (windowCentralSites hN r)) _ m
+    rw [← heq]
+    exact hPQ.mono fun v hv => ⟨Set.mem_univ v, hv⟩
+  have hWu : blockLayerOp hN (fun k => ManyBody.placeAlong (X := fun _ ↦ Fin d)
+      ⟨SparseRegister.ends (by have := hℓ k; omega), SparseRegister.ends_injective _⟩
+      ((tailShift r).permMatrix ℂ)) ∈ Matrix.unitaryGroup (Cfg d N) ℂ := by
     unfold blockLayerOp
-    refine Finset.noncommProd_induction _ _ _ (fun X => X ∈ unitary _) ?_ ?_ ?_
+    refine Finset.noncommProd_induction _ _ _ (fun X => X ∈ Matrix.unitaryGroup _ ℂ) ?_ ?_ ?_
     · exact fun _ _ ha hb => Submonoid.mul_mem _ ha hb
     · exact Submonoid.one_mem _
     · intro k _
-      apply embedOp_mem_unitary (blockSite_injective hN k)
-      exact embedOp_mem_unitary (SparseRegister.ends_injective _)
-        (Equiv.Perm.permMatrix_mem_unitaryGroup _)
+      exact ManyBody.placeAlong_mem_unitaryGroup _ (ManyBody.placeAlong_mem_unitaryGroup _
+        (Equiv.Perm.permMatrix_mem_unitaryGroup _))
+  refine ⟨(cP.comp cG).comp cQ, (hPf.comp _ hGf).comp _ hQf, ?_, hImpl, fun p => ?_⟩
+  · have h1 := Circuit.depth_comp (cP.comp cG) cQ
+    have h2 := Circuit.depth_comp cP cG
+    omega
+  · obtain ⟨z, hz⟩ := hImpl.exists_smul_of_isometry
+      (E := zeroOnSubmodule (windowCentralSites hN r)) (Matrix.mem_unitaryGroup_iff'.mp hWu) p
+    exact ⟨z, fun v hv => hz v hv⟩
 
 private theorem windowGHZInitial_ne_zero [NeZero d] [NeZero M]
     (hN : ∑ k, ℓ k = N) (hr : ∀ k, r + r ≤ ℓ k) :
-    productVector (windowGHZInitial (d := d) hN hr) ≠ 0 := by
+    (fun σ : Cfg d N ↦ ∏ i, windowGHZInitial (d := d) hN hr i (σ i)) ≠ 0 := by
   intro h0
   have h1 := congrFun h0 fun _ => 0
-  have h2 : productVector (windowGHZInitial (d := d) hN hr) (fun _ => (0 : Fin d)) = 1 :=
+  have h2 : ∏ i, windowGHZInitial (d := d) hN hr i ((fun _ => (0 : Fin d)) i) = 1 :=
     Finset.prod_eq_one fun i _ => by unfold windowGHZInitial; split_ifs <;> simp
   exact one_ne_zero (h2.symm.trans h1)
 
@@ -138,7 +151,9 @@ private theorem seed_copy_isZeroOn [NeZero d] [NeZero M]
     (S : Matrix (Cfg d r) (Cfg d r) ℂ) :
     IsZeroOn (d := d) (windowCentralSites hN r)
       ((pairLayerOp hN hr (fun _ => (copyShift r).permMatrix ℂ) *
-        embedOp (registerSite hN hr 0) S) *ᵥ productVector (windowGHZInitial (d := d) hN hr)) := by
+        ManyBody.placeAlong (X := fun _ ↦ Fin d)
+          ⟨registerSite hN hr 0, registerSite_injective hN hr 0⟩ S) *ᵥ
+        fun σ ↦ ∏ i, windowGHZInitial (d := d) hN hr i (σ i)) := by
   classical
   have hoff : ∀ i ∈ windowCentralSites hN r, ∀ k j, pairSite hN hr k j ≠ i := by
     intro i hi k' j h
@@ -146,7 +161,7 @@ private theorem seed_copy_isZeroOn [NeZero d] [NeZero M]
     have := (blockSite_mem_pairSite hN hr k p).mp ⟨k', j, h⟩
     omega
   have hi : IsZeroOn (d := d) (windowCentralSites hN r)
-      (productVector (windowGHZInitial (d := d) hN hr)) := by
+      (fun σ ↦ ∏ i, windowGHZInitial (d := d) hN hr i (σ i)) := by
     intro x hx i hi
     have hn : ¬∃ k j, k ≠ 0 ∧ registerSite hN hr k j = i := by
       rintro ⟨k, j, -, h⟩
@@ -157,12 +172,16 @@ private theorem seed_copy_isZeroOn [NeZero d] [NeZero M]
     rw [ite_eq_right hn] at hx'
     simpa [Pi.single_apply] using hx'
   have hS : IsZeroOn (d := d) (windowCentralSites hN r)
-      (embedOp (registerSite hN hr 0) S *ᵥ productVector (windowGHZInitial (d := d) hN hr)) := by
-    refine hi.mulVec_of_mem_supportedOperators ?_
-      (embedOp_mem_supportedOperators (registerSite_injective hN hr 0) S)
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+          ⟨registerSite hN hr 0, registerSite_injective hN hr 0⟩ S *ᵥ
+        fun σ ↦ ∏ i, windowGHZInitial (d := d) hN hr i (σ i)) := by
+    refine hi.mulVec_of_mem_supportedOperators
+      (T := Finset.univ.map ⟨registerSite hN hr 0, registerSite_injective hN hr 0⟩) ?_
+      (ManyBody.placeAlong_mem_supportedOperators (X := fun _ : Fin N ↦ Fin d)
+        ⟨registerSite hN hr 0, registerSite_injective hN hr 0⟩ S)
     rw [Finset.disjoint_left]
     intro i hi hi'
-    obtain ⟨j, -, hj⟩ := Finset.mem_image.mp hi'
+    obtain ⟨j, -, hj⟩ := Finset.mem_map.mp hi'
     exact hoff i hi 0 (Fin.castAdd r j) hj
   rw [← mulVec_mulVec, pairLayerOp_mulVec_eq_comp hN hr
     (fun _ _ => Matrix.permMatrix_mulVec (copyShift r))]
@@ -176,49 +195,69 @@ dimension and fixed register width `r ≥ 2`, the depth bound is independent of 
 and their number. Every cyclic partition with block widths at least `3r` is allowed, including
 one block and arbitrary parity patterns. Every physical site outside the specified final
 registers is restored to zero, with no postselection or unrecorded ancillas. -/
-theorem exists_isPreparedWithMeasurementRoundsInDepth_windowGHZState [NeZero d] (hr₁ : 2 ≤ r) :
+theorem exists_isMeasurementConversion_windowGHZState [NeZero d] (hr₁ : 2 ≤ r) :
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N]
       (hN : ∑ k, ℓ k = N) (hr : ∀ k, r + r ≤ ℓ k), (∀ k, 3 * r ≤ ℓ k) →
       ∀ α : Cfg d r → ℂ, ∑ u, star (α u) * α u = 1 →
-        IsPreparedWithMeasurementRoundsInDepth C (windowGHZState hN hr α) := by
+        ∃ v : Fin N → Fin d → ℂ, IsMeasurementConversion (Geometry.ring N) C
+          (fun σ ↦ ∏ i, v i (σ i)) (windowGHZState hN hr α) := by
   classical
-  have hd : 0 < d := Nat.pos_of_ne_zero (NeZero.ne d)
-  obtain ⟨KS, hKS⟩ := exists_isPairProduct (d := d) (n := r) hd hr₁
-  obtain ⟨KA, hKA⟩ := exists_isPairProduct (d := d) (n := r + r) hd (by omega)
+  have : NeZero r := ⟨by omega⟩
+  have : NeZero (r + r) := ⟨by omega⟩
+  obtain ⟨KS, hKS⟩ : ∃ KS, ∀ X : Matrix (Cfg d r) (Cfg d r) ℂ,
+      X ∈ unitary (Matrix (Cfg d r) (Cfg d r) ℂ) →
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph r)) KS X :=
+    ⟨_, fun X hX ↦ isGateProduct_pathGraph_unitaryGateCount hX⟩
+  obtain ⟨KA, hKA⟩ : ∃ KA, ∀ X : Matrix (Cfg d (r + r)) (Cfg d (r + r)) ℂ,
+      X ∈ unitary (Matrix (Cfg d (r + r)) (Cfg d (r + r)) ℂ) →
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (r + r))) KA X :=
+    ⟨_, fun X hX ↦ isGateProduct_pathGraph_unitaryGateCount hX⟩
   obtain ⟨CB, hCB⟩ := exists_rounds_sparseBlockShift (d := d) hr₁
-  refine ⟨KS + KA + 2 + CB, fun {M} _ ℓ {N} _ hN hr hℓ α hα => ?_⟩
+  refine ⟨KS + KA + CB, fun {M} _ ℓ {N} _ hN hr hℓ α hα => ?_⟩
   obtain ⟨S, hSu, hS⟩ := exists_windowGHZSeedUnitary α hα
-  have hseed : IsCircuitOn Finset.univ KS (embedOp (registerSite hN hr 0) S) := by
-    refine ((hKS S hSu).isCircuitOn (registerSite_injective hN hr 0) fun i j h => ?_).mono_set
+  have hseed : IsUnitaryCircuitOn (Geometry.ring N) Finset.univ KS
+      (ManyBody.placeAlong (X := fun _ : Fin N ↦ Fin d)
+        ⟨registerSite hN hr 0, registerSite_injective hN hr 0⟩ S) :=
+    (IsGateProduct.isUnitaryCircuitOn_ring
+      (ManyBody.windowEquiv ⟨registerSite hN hr 0, registerSite_injective hN hr 0⟩)
+      (fun i j h => by
+        change registerSite hN hr 0 j = registerSite hN hr 0 i + 1
+        rw [registerSite_eq, registerSite_eq]
+        exact blockSite_succ hN 0 _ _ (by simp; omega)) (hKS S hSu)).mono_set
       (Finset.subset_univ _)
-    rw [registerSite_eq, registerSite_eq]
-    exact blockSite_succ hN 0 _ _ (by simp; omega)
-  have hcopy := isCircuitOn_pairLayerOp hN hr fun _ =>
+  have hcopy := isUnitaryCircuitOn_pairLayerOp hN hr fun _ =>
     hKA _ (Equiv.Perm.permMatrix_mem_unitaryGroup (copyShift r))
-  obtain ⟨RsA, hRsA, hA⟩ := exists_rounds_of_isCircuitOn (hseed.mul hcopy)
-  obtain ⟨RsB, hRsB, hB, -⟩ := hCB hN hℓ
-  let v := windowGHZInitial (d := d) hN hr
-  have hAB := (hA.mono (show {productVector v} ⊆ Set.univ from Set.subset_univ _)).append hB (by
+  obtain ⟨cA, hAf, hAd, hA⟩ := exists_circuit_of_isUnitaryCircuit (hcopy.mul hseed).isUnitaryCircuit
+  obtain ⟨cB, hBf, hBd, hB, -⟩ := hCB hN hℓ
+  set φ : Cfg d N → ℂ := fun σ ↦ ∏ i, windowGHZInitial (d := d) hN hr i (σ i) with hφ
+  have hAB := (hA.mono (Set.subset_univ {φ})).comp hB (by
     intro w hw
     rw [Set.mem_singleton_iff] at hw
     subst hw
     exact seed_copy_isZeroOn hN hr S)
-  obtain ⟨R, hRdepth, hR⟩ := exists_windowGHZCorrectionRound (d := d) hN hr
-  refine ⟨v, (RsA ++ RsB) ++ [R], ?_, windowGHZInitial_ne_zero hN hr, fun w hw _ => ?_⟩
-  · simp only [List.map_append, List.sum_append, hRsA, hRsB, List.map_cons, List.map_nil,
-      List.sum_cons, List.sum_nil, hRdepth]
-    omega
-  obtain ⟨u, hu, hw⟩ := MeasurementRound.mem_outputs_append.mp hw
-  obtain ⟨c, rfl⟩ := hAB _ rfl u hu
-  obtain ⟨w', hw', rfl⟩ := MeasurementRound.mem_outputs_smul c hw
-  have hdiff := windowGHZDifference_eq_mulVec hN hr α S hS
-    (fun k => embedOp (SparseRegister.ends (by have := hℓ k; omega)) ((tailShift r).permMatrix ℂ))
-    (fun k => SparseRegister.ends_shift_mulVec (by have := hℓ k; omega))
-  rw [Matrix.mul_assoc] at hdiff
-  rw [hdiff] at hw'
-  obtain ⟨m, hm⟩ := R.mem_outputs_cons.mp hw'
-  rw [MeasurementRound.outputs_nil, Set.mem_singleton_iff] at hm
-  obtain ⟨c', hc'⟩ := hR m
-  exact ⟨c * c', by rw [hm, hc' α, smul_smul]⟩
+  have hdiff : (blockLayerOp hN (fun k => ManyBody.placeAlong (X := fun _ ↦ Fin d)
+        ⟨SparseRegister.ends (by have := hℓ k; omega), SparseRegister.ends_injective _⟩
+        ((tailShift r).permMatrix ℂ)) *
+      (pairLayerOp hN hr (fun _ => (copyShift r).permMatrix ℂ) *
+        ManyBody.placeAlong (X := fun _ : Fin N ↦ Fin d)
+          ⟨registerSite hN hr 0, registerSite_injective hN hr 0⟩ S)) *ᵥ φ =
+      windowGHZDifference hN hr α := by
+    rw [← Matrix.mul_assoc]
+    exact windowGHZDifference_eq_mulVec hN hr α S hS _
+      (fun k => SparseRegister.ends_shift_mulVec (by have := hℓ k; omega))
+  have h₁ : IsMeasurementConversion (Geometry.ring N) (KA + KS + CB) φ
+      (windowGHZDifference hN hr α) := by
+    rw [← hdiff]
+    exact hAB.isMeasurementConversion (hAf.comp _ hBf)
+      ((Circuit.depth_comp _ _).trans (Nat.add_le_add hAd hBd))
+      (windowGHZInitial_ne_zero hN hr) (Set.mem_singleton φ)
+  obtain ⟨D, V, hV, hR⟩ := exists_windowGHZCorrectionRound (d := d) hN hr
+  have h₂ : IsMeasurementConversion (Geometry.ring N) 0 (windowGHZDifference hN hr α)
+      (windowGHZState hN hr α) := by
+    refine ⟨h₁.ne_zero, Circuit.measureCorrect D V, Circuit.forall_measureCorrect D hV,
+      (Circuit.depth_measureCorrect D V).le, fun p => ?_⟩
+    obtain ⟨c, hc⟩ := hR (Layer.measure.outcome p.1)
+    exact ⟨c, by rw [Circuit.kraus_measureCorrect]; exact hc α⟩
+  exact ⟨windowGHZInitial hN hr, (h₁.trans h₂).mono (by omega)⟩
 
 end MPSPreparation

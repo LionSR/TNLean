@@ -113,7 +113,7 @@ theorem exists_isPreparedInDepth_allLengthPolynomialState {d D : ℕ} (A : MPSTe
         mpvState A N ≠ 0 ∧ ∃ T : ℕ,
           ‖allLengthPolynomialState A σ (correlationLength lam₂) η N‖ = 1 ∧
           (T : ℝ) ≤ c * ((1 + η) * Real.log N) ∧
-          IsPreparedInDepth T
+          IsPreparedInDepth (Geometry.ring N) T
             (fun s => allLengthPolynomialState A σ (correlationLength lam₂) η N s) ∧
           1 - ‖⟪allLengthPolynomialState A σ (correlationLength lam₂) η N,
             normalizedMPVState A N⟫_ℂ‖ ≤ C * (N : ℝ) ^ (-η) := by

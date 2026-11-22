@@ -84,17 +84,15 @@ lines 1178–1185 and 1348–1392. -/
 theorem norm_five_region_soft_three_bulk_le {L q k1 k2 k3 k4 ell : ℕ}
     (h12 : k1 ≤ k2) (h23 : k2 ≤ k3) (h34 : k3 ≤ k4) (h4L : k4 ≤ L)
     (hwindow1 : k2 - k1 ≤ 2 * ell) (hwindow3 : k4 - k3 ≤ 2 * ell)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, k1, k2, k3, k4, L]
     let I := fun j : Fin 5 ↦ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-    let A := fun j : Fin 5 ↦ ∑ i ∈ I j, h i
+    let A := fun j : Fin 5 ↦ ∑ i ∈ I j, Φ.term i
     let J := Finset.univ.filter
       (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
+    let Y := ∑ i ∈ J, Φ.term i
     ∀ (e : Fin 5 → ℝ) (x : (Fin L → Fin q) → ℂ),
       star x ⬝ᵥ x = 1 →
       (∀ j, A j *ᵥ x = (e j : ℂ) • x) →
@@ -109,11 +107,11 @@ theorem norm_five_region_soft_three_bulk_le {L q k1 k2 k3 k4 ell : ℕ}
   classical
   intro k I A J Y e x hx hxe he p t m hpl hpu ht hm B G
   obtain ⟨hk, _hR, _hAs, hA, hY, hYcap, hJ, _hsum⟩ :=
-    five_region_original_bond_data L q k1 k2 k3 k4 h12 h23 h34 h4L h hs h0 h1
+    five_region_original_bond_data L q k1 k2 k3 k4 h12 h23 h34 h4L Φ h0 h1
   have he0 (j : Fin 5) : 0 ≤ e j :=
     (hA j).1.nonneg_of_normalized_eigenvector (e j) x (hxe j) hx
   have hcomm : Pairwise fun i j : Fin 5 ↦ Commute (A i) (A j) :=
-    pairwise_commute_sum_internal_consecutive_regions k hk h hs
+    pairwise_commute_sum_internal_consecutive_regions k hk Φ
   let S : Finset (Fin 5) := {0, 2, 4}
   obtain ⟨hBpos, _hBle, _hBA, _hproj⟩ := softTruncation_commuting_family_bounds
     A e p S (fun j ↦ (hA j).1.isHermitian) (fun j ↦ le_iff.mpr (he j))

@@ -29,7 +29,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -121,22 +121,22 @@ Source: polynomial-PEPS `03-patches.tex`, lines 323–326. The statement
 holds for every finite induced domain, including holes and disconnected domains. -/
 theorem card_edgeBoundary_closedSquareSample_le (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ)
     {r : ℝ} (hr : 0 ≤ r) :
-    ((edgeBoundary Λ (closedSquareSample Λ c r)).card : ℝ) ≤ 8 * r + 4 := by
+    ((edgeBoundary (planeDomainGraph Λ) (closedSquareSample Λ c r)).card : ℝ) ≤ 8 * r + 4 := by
   classical
   let a : ℤ × ℤ := (⌈c.1 - r⌉, ⌈c.2 - r⌉)
   let b : ℤ × ℤ := (⌊c.1 + r⌋, ⌊c.2 + r⌋)
-  have hcard : (edgeBoundary Λ (closedSquareSample Λ c r)).card ≤
+  have hcard : (edgeBoundary (planeDomainGraph Λ) (closedSquareSample Λ c r)).card ≤
       (rectangleBoundaryEdges a b).card := by
     apply Finset.card_le_card_of_injOn (Sym2.map Subtype.val)
     · intro e he
-      obtain ⟨he, x, hx, y, hy, rfl⟩ := Finset.mem_filter.mp he
+      obtain ⟨he, x, hx, y, hy, rfl⟩ := ManyBody.mem_edgeBoundary.mp he
       have hxy : (planeDomainGraph Λ).Adj x y := by simpa using he
       exact mem_rectangleBoundaryEdges hxy
         (mem_closedSquareSample_iff_int.mp hx)
         (fun h ↦ hy (mem_closedSquareSample_iff_int.mpr h))
     · exact (Sym2.map.injective Subtype.val_injective).injOn
   have hbound := hcard.trans (card_rectangleBoundaryEdges_le a b)
-  have hreal : ((edgeBoundary Λ (closedSquareSample Λ c r)).card : ℝ) ≤
+  have hreal : ((edgeBoundary (planeDomainGraph Λ) (closedSquareSample Λ c r)).card : ℝ) ≤
       2 * ((Finset.Icc ⌈c.1 - r⌉ ⌊c.1 + r⌋).card : ℝ) +
         2 * ((Finset.Icc ⌈c.2 - r⌉ ⌊c.2 + r⌋).card : ℝ) := by
     exact_mod_cast hbound
@@ -190,31 +190,14 @@ theorem abs_squareRadius_sub_le_one_of_adj {Λ : Finset (ℤ × ℤ)} {c : ℝ �
   rw [abs_le]
   constructor <;> linarith
 
-/-- An unordered pair crosses a cut exactly when its adjacent endpoints are on opposite sides. -/
-theorem mem_edgeBoundary_pair_iff {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
-    {x y : Site Λ} :
-    s(x, y) ∈ edgeBoundary Λ A ↔ (planeDomainGraph Λ).Adj x y ∧
-      ((x ∈ A ∧ y ∉ A) ∨ (y ∈ A ∧ x ∉ A)) := by
-  classical
-  simp only [edgeBoundary, Finset.mem_filter, SimpleGraph.mem_edgeFinset,
-    SimpleGraph.mem_edgeSet, Sym2.eq_iff]
-  constructor
-  · rintro ⟨hxy, a, ha, b, hb, hab⟩
-    rcases hab with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
-    · exact ⟨hxy, Or.inl ⟨ha, hb⟩⟩
-    · exact ⟨hxy, Or.inr ⟨ha, hb⟩⟩
-  · rintro ⟨hxy, h | h⟩
-    · exact ⟨hxy, x, h.1, y, h.2, Or.inl ⟨rfl, rfl⟩⟩
-    · exact ⟨hxy, y, h.1, x, h.2, Or.inr ⟨rfl, rfl⟩⟩
-
 /-- The exact crossing interval is left-closed and right-open.
 Source: polynomial-PEPS `03-patches.tex`, lines 218–223. -/
 theorem mem_edgeBoundary_closedSquareSample_iff {Λ : Finset (ℤ × ℤ)} {c : ℝ × ℝ}
     {r : ℝ} {x y : Site Λ} (hxy : (planeDomainGraph Λ).Adj x y) :
-    s(x, y) ∈ edgeBoundary Λ (closedSquareSample Λ c r) ↔
+    s(x, y) ∈ edgeBoundary (planeDomainGraph Λ) (closedSquareSample Λ c r) ↔
       min (squareRadius c x.1) (squareRadius c y.1) ≤ r ∧
         r < max (squareRadius c x.1) (squareRadius c y.1) := by
-  rw [mem_edgeBoundary_pair_iff, and_iff_right hxy]
+  rw [ManyBody.mk_mem_edgeBoundary_iff, and_iff_right hxy]
   simp only [mem_closedSquareSample_iff_radius, not_le, min_le_iff, lt_max_iff]
   grind
 

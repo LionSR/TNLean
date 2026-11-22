@@ -55,19 +55,19 @@ private theorem exists_common_physical_aeval_mpo_clm_family_fin
   let Ksites := interval L (a + 2 * ell) (b + 1)
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let J := interval L (a + ell) (b + ell + 1)
   let eJ := intervalShiftOrderIso
     (show a + ell ≤ b + ell + 1 by omega)
     (show b + ell + 1 ≤ L by omega)
   let D := (q * k) ^ (18 * ell + 2 * (k / ell))
   let β := fun _ : Fin L ↦ Fin q
-  let tau := (ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)
+  let tau := (ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _)
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-  let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jᶜ) ℂ).tensorProduct
+  let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig β J) ℂ).tensorProduct
     (EuclideanSpace.basisFun (ManyBody.RegionConfig β J) ℂ)).repr
   let T := U.trans Phi.symm
   ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),
@@ -83,25 +83,25 @@ private theorem exists_common_physical_aeval_mpo_clm_family_fin
             Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
         ∀ P : Polynomial ℂ, P.natDegree ≤ k →
-          ∃ M : Fin N → Matrix ((Jᶜ : Finset (Fin L)) → Fin q) ((Jᶜ : Finset (Fin L)) → Fin q) ℂ,
+          ∃ M : Fin N → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ,
             Polynomial.aeval (∑ a, F a) P =
               (∑ r, M r ⊗ₖ W r).submatrix
-                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _))
-                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _)) ∧
             T.toContinuousLinearEquiv.toContinuousLinearMap ∘L
                 Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
                   (Polynomial.aeval (∑ a, F a) P) =
               (∑ r, TensorProduct.mapL
                 (Matrix.toEuclideanCLM (𝕜 := ℂ)
-                  (n := ManyBody.RegionConfig β Jᶜ) (M r))
+                  (n := ManyBody.ComplConfig β J) (M r))
                 (Matrix.toEuclideanCLM (𝕜 := ℂ)
                   (n := ManyBody.RegionConfig β J) (W r))) ∘L
                 T.toContinuousLinearEquiv.toContinuousLinearMap := by
   let J := interval L (a + ell) (b + ell + 1)
   let β := fun _ : Fin L ↦ Fin q
-  let tau := (ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)
+  let tau := (ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _)
   obtain ⟨N, W, hN, hW, _hTrace, hdecomp⟩ :=
     exists_common_physical_aeval_mpo_family_fin
       WL WR hleft hright hab hb hell hq hk Acore C0
@@ -134,28 +134,28 @@ theorem exists_common_physical_aeval_mpo_middleFirst_family_fin
   let Ksites := interval L (a + 2 * ell) (b + 1)
   let eK := intervalShiftOrderIso
     (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)
-  let Mphys := QuantumCircuit.embedOp eK
+  let Mphys := ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding
     (Matrix.of fun σ τ : Fin ((b + 1) - (a + 2 * ell)) → Fin q ↦
       Matrix.trace (C0 * (List.ofFn (fun u ↦ Acore u (σ u) (τ u))).prod))
-  let Pmid := QuantumCircuit.embedOp (Subtype.val : Ksites → Fin L) Mphys
+  let Pmid := ManyBody.place (X := fun _ ↦ Fin q) Ksites Mphys
   let J := interval L (a + ell) (b + ell + 1)
   let eJ := intervalShiftOrderIso
     (show a + ell ≤ b + ell + 1 by omega)
     (show b + ell + 1 ≤ L by omega)
   let D := (q * k) ^ (18 * ell + 2 * (k / ell))
   let β := fun _ : Fin L ↦ Fin q
-  let tau := (ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)
+  let tau := (ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _)
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-  let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jᶜ) ℂ).tensorProduct
+  let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig β J) ℂ).tensorProduct
     (EuclideanSpace.basisFun (ManyBody.RegionConfig β J) ℂ)).repr
   let T : EuclideanSpace ℂ (Fin L → Fin q) ≃ₗᵢ[ℂ]
-      (EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ) ⊗[ℂ]
+      (EuclideanSpace ℂ (ManyBody.ComplConfig β J) ⊗[ℂ]
         EuclideanSpace ℂ (ManyBody.RegionConfig β J)) := U.trans Phi.symm
   let Tm : EuclideanSpace ℂ (Fin L → Fin q) ≃ₗᵢ[ℂ]
       (EuclideanSpace ℂ (ManyBody.RegionConfig β J) ⊗[ℂ]
-        EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ)) :=
+        EuclideanSpace ℂ (ManyBody.ComplConfig β J)) :=
     T.trans (TensorProduct.commIsometry ℂ
-    (EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ))
+    (EuclideanSpace ℂ (ManyBody.ComplConfig β J))
     (EuclideanSpace ℂ (ManyBody.RegionConfig β J)))
   ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),
     N ≤ D ^ 2 ∧
@@ -170,12 +170,12 @@ theorem exists_common_physical_aeval_mpo_middleFirst_family_fin
             Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
         ∀ P : Polynomial ℂ, P.natDegree ≤ k →
-          ∃ M : Fin N → Matrix ((Jᶜ : Finset (Fin L)) → Fin q) ((Jᶜ : Finset (Fin L)) → Fin q) ℂ,
+          ∃ M : Fin N → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ,
             Polynomial.aeval (∑ a, F a) P =
               (∑ r, M r ⊗ₖ W r).submatrix
-                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _))
-                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _)) ∧
             (Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
                 Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
@@ -184,7 +184,7 @@ theorem exists_common_physical_aeval_mpo_middleFirst_family_fin
                 (Matrix.toEuclideanCLM (𝕜 := ℂ)
                   (n := ManyBody.RegionConfig β J) (W r))
                 (Matrix.toEuclideanCLM (𝕜 := ℂ)
-                  (n := ManyBody.RegionConfig β Jᶜ) (M r))) ∘L
+                  (n := ManyBody.ComplConfig β J) (M r))) ∘L
                 Tm.toContinuousLinearEquiv.toContinuousLinearMap) ∧
             Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
                 Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
@@ -194,7 +194,7 @@ theorem exists_common_physical_aeval_mpo_middleFirst_family_fin
                 (Matrix.toEuclideanCLM (𝕜 := ℂ)
                   (n := ManyBody.RegionConfig β J) (W r))
                 (Matrix.toEuclideanCLM (𝕜 := ℂ)
-                  (n := ManyBody.RegionConfig β Jᶜ) (M r)) := by
+                  (n := ManyBody.ComplConfig β J) (M r)) := by
   intro Ksites eK Mphys Pmid J eJ D β tau U Phi T Tm
   obtain ⟨N, W, hN, hW, hdecomp⟩ :=
     exists_common_physical_aeval_mpo_clm_family_fin
@@ -205,12 +205,12 @@ theorem exists_common_physical_aeval_mpo_middleFirst_family_fin
   refine ⟨M, hM, ?_⟩
   exact TensorProduct.intertwining_sum_mapL_commIsometry
     (𝕜 := ℂ) (E := EuclideanSpace ℂ (Fin L → Fin q))
-    (L := EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ))
+    (L := EuclideanSpace ℂ (ManyBody.ComplConfig β J))
     (R := EuclideanSpace ℂ (ManyBody.RegionConfig β J)) (ι := Fin N) T
     (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
       (Polynomial.aeval (∑ a, F a) P))
     (fun r ↦ Matrix.toEuclideanCLM (𝕜 := ℂ)
-      (n := ManyBody.RegionConfig β Jᶜ) (M r))
+      (n := ManyBody.ComplConfig β J) (M r))
     (fun r ↦ Matrix.toEuclideanCLM (𝕜 := ℂ)
       (n := ManyBody.RegionConfig β J) (W r)) hT
 

@@ -121,25 +121,23 @@ threshold in AKLV, arXiv:1301.1162v1, Theorem `thm:Ht`, lines 879--963,
 using the exponential residual of its original nearest-neighbour construction. -/
 private theorem exists_aklv_cut_logarithmic_robustness {L q a s l r : ℕ}
     (hs : 1 ≤ s) (ha : a + s + 1 ≤ L) (hlr : l ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (hΩ : ‖Ω‖ = 1)
-    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
-    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+    (hground : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
-    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ (∑ i, h i))
-    (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s h j -
-      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians l r h j) :
+    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ Φ.hamiltonian)
+    (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s Φ j -
+      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians l r Φ j) :
     2 ≤ q ∧ g ≤ 1 ∧ ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
-        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
-        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+        (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, aklvLogarithmicThreshold g ≤ t →
-        let B := aklvTwoBlockHamiltonian l r h e t Finset.univ
+        let B := aklvTwoBlockHamiltonian l r Φ e t Finset.univ
         ∃ hB : B.IsHermitian,
           let lam := hB.eigenvalues
           ∃ (j0 : Fin L → Fin q) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -147,7 +145,7 @@ private theorem exists_aklv_cut_logarithmic_robustness {L q a s l r : ℕ}
               (lam j0 : ℂ) • φ ∧
             (∀ j, j ≠ j0 → lam j0 + 9 * g / 10 ≤ lam j) ∧
             ‖φ - Ω‖ ^ 2 ≤ Real.exp (-t / 16) / 100 := by
-  have hH : (∑ i, h i).IsHermitian :=
+  have hH : Φ.hamiltonian.IsHermitian :=
     (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
   obtain ⟨-, -, hgapI, hspan⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hg Ω).mp
     ⟨hΩ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
@@ -157,9 +155,9 @@ private theorem exists_aklv_cut_logarithmic_robustness {L q a s l r : ℕ}
   have hq2 : 2 ≤ q := hH.two_le_local_dimension_of_two_spectral_values
     hmu hexcited (by linarith)
   have hg1 := gap_le_one_of_positive_nearest_neighbor_terms
-    (by omega : 0 < L) hq2 h hsupp h0 h1 hΩ hgapI hspan
+    (by omega : 0 < L) hq2 Φ h0 h1 hΩ hgapI hspan
   obtain ⟨e, E0, hregional, hEeq, hE0, hE6, hcluster⟩ :=
-    exists_aklv_cut_scaled_low_cluster (by omega) hs ha hlr hrL h hsupp h0 h1
+    exists_aklv_cut_scaled_low_cluster (by omega) hs ha hlr hrL Φ h0 h1
       mu g Ω hΩ hground hgap hg hcut
   refine ⟨hq2, hg1, e, E0, hregional, hEeq, hE0, hE6, ?_⟩
   intro t ht B
@@ -202,23 +200,21 @@ threshold in AKLV, arXiv:1301.1162v1, Theorem `thm:Ht`, lines 879--963,
 using the exponential residual of its original nearest-neighbour construction. -/
 theorem exists_aklv_logarithmic_robustness {L q a s : ℕ}
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (hΩ : ‖Ω‖ = 1)
-    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
-    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+    (hground : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
-    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ (∑ i, h i)) :
+    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ Φ.hamiltonian) :
     2 ≤ q ∧ g ≤ 1 ∧ ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
-        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
-        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+        (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, aklvLogarithmicThreshold g ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t Finset.univ
+        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
         ∃ hB : B.IsHermitian,
           let lam := hB.eigenvalues
           ∃ (j0 : Fin L → Fin q) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -226,9 +222,9 @@ theorem exists_aklv_logarithmic_robustness {L q a s : ℕ}
               (lam j0 : ℂ) • φ ∧
             (∀ j, j ≠ j0 → lam j0 + 9 * g / 10 ≤ lam j) ∧
             ‖φ - Ω‖ ^ 2 ≤ Real.exp (-t / 16) / 100 :=
-  exists_aklv_cut_logarithmic_robustness (by omega) ha (by omega) (by omega) h hsupp h0 h1
+  exists_aklv_cut_logarithmic_robustness (by omega) ha (by omega) (by omega) Φ h0 h1
     mu g Ω hΩ hground hgap hg hexcited
-    (fun e he ↦ aklv_normalization_le_two_block_regions hs h h0 e he)
+    (fun e he ↦ aklv_normalization_le_two_block_regions hs Φ h0 e he)
 
 open Classical in
 /-- The reference arrangement of the AKLV exterior truncations, which clips the two
@@ -244,23 +240,21 @@ Every window of at least one interaction is admitted; for one or two interaction
 the enlarged exterior sums overlap, while the reference sums are disjoint. -/
 theorem exists_aklv_reference_logarithmic_robustness {L q a s : ℕ}
     (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (hΩ : ‖Ω‖ = 1)
-    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
-    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+    (hground : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
-    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ (∑ i, h i)) :
+    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ Φ.hamiltonian) :
     2 ≤ q ∧ g ≤ 1 ∧ ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
-        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
-        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+        (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, aklvLogarithmicThreshold g ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) h e t Finset.univ
+        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) Φ e t Finset.univ
         ∃ hB : B.IsHermitian,
           let lam := hB.eigenvalues
           ∃ (j0 : Fin L → Fin q) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -268,8 +262,8 @@ theorem exists_aklv_reference_logarithmic_robustness {L q a s : ℕ}
               (lam j0 : ℂ) • φ ∧
             (∀ j, j ≠ j0 → lam j0 + 9 * g / 10 ≤ lam j) ∧
             ‖φ - Ω‖ ^ 2 ≤ Real.exp (-t / 16) / 100 :=
-  exists_aklv_cut_logarithmic_robustness hs ha (by omega) (by omega) h hsupp h0 h1 mu g Ω hΩ hground
-    hgap hg hexcited (fun e he ↦ aklv_normalization_le_reference_regions h h0 e he)
+  exists_aklv_cut_logarithmic_robustness hs ha (by omega) (by omega) Φ h0 h1 mu g Ω hΩ hground
+    hgap hg hexcited (fun e he ↦ aklv_normalization_le_reference_regions Φ h0 e he)
 
 open Classical in
 /-- The actual two exterior truncations of the original positive-contraction
@@ -280,23 +274,21 @@ ground energy in `[0,6]`. The gap is the actual first excited energy difference.
 AKLV, arXiv:1301.1162v1, Theorem `thm:Ht`, lines 879--963. -/
 theorem exists_aklv_physical_robustness {L q a s : ℕ}
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (hΩ : ‖Ω‖ = 1)
-    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
-    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+    (hground : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
-    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ (∑ i, h i)) :
+    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ Φ.hamiltonian) :
     ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
-        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
-        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+        (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, (1024 / g) * (E0 / g + 1) ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t Finset.univ
+        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
         ∃ hB : B.IsHermitian,
           let lam := hB.eigenvalues
           ∃ (j0 : Fin L → Fin q) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -305,7 +297,7 @@ theorem exists_aklv_physical_robustness {L q a s : ℕ}
             (∀ j, j ≠ j0 → lam j0 + 9 * g / 10 ≤ lam j) ∧
             ‖φ - Ω‖ ^ 2 ≤ Real.exp (-t / 16) / 100 := by
   obtain ⟨_hq2, hg1, e, E0, hregional, hEeq, hE0, hE6, hsharp⟩ :=
-    exists_aklv_logarithmic_robustness hs ha h hsupp h0 h1 mu g Ω hΩ hground hgap hg hexcited
+    exists_aklv_logarithmic_robustness hs ha Φ h0 h1 mu g Ω hΩ hground hgap hg hexcited
   refine ⟨e, E0, hregional, hEeq, hE0, hE6, ?_⟩
   intro t ht
   exact hsharp t (aklvLogarithmicThreshold_le_of_polynomial hg hg1 hE0 ht)
@@ -321,23 +313,21 @@ Every window of at least one interaction is admitted, including windows of one o
 two interactions. AKLV, arXiv:1301.1162v1, Theorem `thm:Ht`, lines 879--963. -/
 theorem exists_aklv_reference_physical_robustness {L q a s : ℕ}
     (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (hΩ : ‖Ω‖ = 1)
-    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
-    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+    (hground : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
-    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ (∑ i, h i)) :
+    (hg : 0 < g) (hexcited : mu + g ∈ spectrum ℝ Φ.hamiltonian) :
     ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
-        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
-        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+        (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ t : ℝ, (1024 / g) * (E0 / g + 1) ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) h e t Finset.univ
+        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) Φ e t Finset.univ
         ∃ hB : B.IsHermitian,
           let lam := hB.eigenvalues
           ∃ (j0 : Fin L → Fin q) (φ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -346,7 +336,7 @@ theorem exists_aklv_reference_physical_robustness {L q a s : ℕ}
             (∀ j, j ≠ j0 → lam j0 + 9 * g / 10 ≤ lam j) ∧
             ‖φ - Ω‖ ^ 2 ≤ Real.exp (-t / 16) / 100 := by
   obtain ⟨_hq2, hg1, e, E0, hregional, hEeq, hE0, hE6, hsharp⟩ :=
-    exists_aklv_reference_logarithmic_robustness hs ha h hsupp h0 h1 mu g Ω hΩ hground hgap hg
+    exists_aklv_reference_logarithmic_robustness hs ha Φ h0 h1 mu g Ω hΩ hground hgap hg
       hexcited
   refine ⟨e, E0, hregional, hEeq, hE0, hE6, ?_⟩
   intro t ht

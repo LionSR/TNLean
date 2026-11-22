@@ -1475,6 +1475,38 @@ The following notions use different transfer objects and are not interchangeable
   translation-invariant states; a state that is extremal only among
   translation-invariant states need not satisfy this predicate.
 
+## Parent Hamiltonians on the ring
+
+### `MPSTensor.IsFrustrationFree`
+
+- **Declaration:** `MPSTensor.IsFrustrationFree A L N ψ : Prop`, for a tensor
+  `A`, a window length `L`, a ring of `N` sites and `ψ : NSiteSpace d N`: every
+  translated local term `MPSTensor.localTerm A L N i` annihilates `ψ`.
+- **Defined in:** `TNLean/MPS/ParentHamiltonian/Defs.lean`.
+- **Meaning:** for `L ≤ N` the local terms and the parent Hamiltonian are the
+  terms and the Hamiltonian of one interaction,
+  `MPSTensor.parentRingInteraction A hLN`, the translation-invariant interaction
+  `ManyBody.Interaction.translationInvariant hLN (LinearMap.toMatrix'
+  (parentInteraction A L))` whose term with index `i` is the local parent
+  projector placed on the window of `L` consecutive sites starting at `i`
+  (`ManyBody.placeAlong` along `ManyBody.ringWindow`). The predicate is
+  membership of `WithLp.toLp 2 ψ` in its zero space.
+- **Source:** Pérez-García, Verstraete, Wolf and Cirac, quant-ph/0608197,
+  `MPSarchive.tex`, lines 311–326; Cirac, Pérez-García, Schuch and Verstraete,
+  arXiv:2011.12127, `TN-Review-main.tex`, line 537.
+- **Sanctioned bridges:** `MPSTensor.isFrustrationFree_iff_mem_zeroSpace`
+  (with `ManyBody.Interaction.mem_zeroSpace_iff`);
+  `MPSTensor.toLp_mem_ker_parentHamiltonian_iff` identifies the kernel of the
+  parent Hamiltonian with the zero space (`ManyBody.Interaction.zeroSpace_eq_groundSpace`
+  for the positive terms `MPSTensor.posSemidef_parentRingInteraction_term`);
+  `MPSTensor.localTerm_of_le`, `MPSTensor.parentHamiltonian_of_le` and
+  `MPSTensor.parentHamiltonian_eq_sum_localTerm` unfold the linear-map forms.
+- **Caveat:** for `L > N` the local terms are `0` by convention and the
+  predicate holds for every vector; the Euclidean-space forms `localTermES`,
+  `parentHamiltonianES` and their open and periodic variants in
+  `MPS/ParentHamiltonian/Martingale/` are transports of the same linear maps,
+  not separate definitions of the Hamiltonian.
+
 ## Gauge relations between blocks
 
 ### `MPSTensor.IsGaugeRelated`
@@ -1720,14 +1752,16 @@ The circuit layer `TNLean/Circuit/` (namespace `QuantumCircuit`) imports nothing
 from `TNLean/MPS/`. Its local labels are `Fin d`. The notions that involve no
 geometry (operators acting on a set of sites, expectations, product vectors,
 placed operators, permutations of configurations and of sites, onsite
-channels) are stated for any finite type of sites `ι`. Layers, circuits and
-light cones are stated for a bond geometry `bond : β → Set ι` on such a type
-(`TNLean/Circuit/Geometry.lean`), with the ring `ringBond k = {k, k + 1}` on
-`Fin N` (addition modulo `N`), the open chain `openBond`, and the edges of a
-simple graph `edgeBond G` as instances; the ring-facing names (`Layer`,
-`IsLocalCircuitOfDepth`, `IsPreparedInDepth`, `IsCircuitOn`, `ChannelLayer`,
-`IsChannelPreparedInDepth`) abbreviate the general notions for `ringBond`.
-Measurement protocols and teleportation remain stated on the ring. The blueprint chapter is
+channels) are stated for any finite type of sites `ι`. Layers, unitary circuits,
+products of gates and light cones are QICLean's (`QICLean/Circuit/Core`,
+`QICLean/Circuit/Model/Unitary*`, `QICLean/Circuit/Compile`), stated for a geometry
+`Γ : QuantumCircuit.Geometry S` of cells with costs; the ring is `Geometry.ring N`
+(cells `{k, k + 1}`, addition modulo `N`), the open chain is
+`Geometry.graph (SimpleGraph.pathGraph n)`, and the edges of a simple graph are
+`Geometry.graph G`. TNLean keeps no copy of them.
+Measurement circuits, teleportation, GHZ-type states and the zero-register reflections are also
+QICLean's (`QICLean/Circuit/Model/Measurement.lean`, `QICLean/Circuit/Protocol/`); TNLean uses
+them on the ring. The blueprint chapter is
 `ch33_local_quantum_circuits.tex`; the preparation of matrix product states
 in `MPS/Preparation/` uses it.
 
@@ -1751,184 +1785,101 @@ in `MPS/Preparation/` uses it.
   (with `QuantumCircuit.prodOp_eq_rectKronecker`), `ManyBody.supportedOperators_mono`,
   `ManyBody.commute_of_mem_supportedOperators_of_disjoint`,
   `ManyBody.supportedOperators_induction`, and
-  `QuantumCircuit.embedOp_mem_supportedOperators` (an operator placed by an
-  injective map acts on its range).
+  `ManyBody.placeAlong_mem_supportedOperators` (an operator placed along an
+  injection acts on its image).
 - **Caveat:** membership says nothing about unitarity; for `D = ∅` the
   subalgebra consists of the scalar multiples of the identity.
 
-#### `QuantumCircuit.bondNeighbourhood` and `QuantumCircuit.lightCone`
-
-- **Declarations:**
-  `QuantumCircuit.bondNeighbourhood {ι β : Type*} (bond : β → Set ι) (X : Set ι) : Set ι`
-  and `QuantumCircuit.lightCone (bond : β → Set ι) (X : Set ι) : ℕ → Set ι`.
-- **Defined in:** `TNLean/Circuit/Geometry.lean`.
-- **Meaning:** `X` together with every bond meeting `X`, and its `r`-fold
-  iterate.
-- **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
-  light cone); arXiv:2103.13367, main text, paragraph "Quantum circuits and
-  LOCC" (gates on nearest-neighbour pairs of a lattice) and the graph
-  distance before Proposition `propQCA2`.
-- **Sanctioned bridges:** `QuantumCircuit.lightCone_ringBond` (on the ring,
-  the light cone of radius `r` is `neighbourhood X r`, the sites within ring
-  distance `r`, for every `N`), `QuantumCircuit.lightCone_openBond_subset`,
-  `QuantumCircuit.lightCone_edgeBond_subset` and
-  `QuantumCircuit.lightCone_edgeBond_subset_dist` (graph distance), with the
-  disjointness criteria `disjoint_lightCone_ringBond_of_isSeparatedBy`,
-  `disjoint_lightCone_openBond`, `disjoint_lightCone_edgeBond` and
-  `disjoint_lightCone_edgeBond_of_dist`.
-- **Caveat:** for the open chain and graphs only the inclusion in the metric
-  ball is proved; on the ring the equality holds.
-
-#### `QuantumCircuit.IsSeparatedBy`
+#### `QuantumCircuit.Geometry.neighbourhood` (QICLean)
 
 - **Declaration:**
-  `QuantumCircuit.IsSeparatedBy {N : ℕ} [NeZero N] (X Y : Set (Fin N)) (s : ℕ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Geometry.lean`.
-- **Meaning:** the sets `X` and `Y` of ring sites are at ring distance larger
-  than `s`: no `y ∈ Y` equals `x + m` with `x ∈ X` and `|m| ≤ s`, the addition
-  taken modulo `N`. Equivalently, `Y` misses the neighbourhood
-  `neighbourhood X s` of sites within ring distance `s` of `X`.
+  `QuantumCircuit.Geometry.neighbourhood (Γ : Geometry S) [Fintype Γ.Cell] (R : Finset S) : Finset S`.
+- **Defined in:** QICLean, `QICLean/Circuit/Geometry/Basic.lean`. TNLean has no copy.
+- **Meaning:** `R` together with every cell of `Γ` meeting `R`; its `r`-fold
+  iterate `Γ.neighbourhood^[r] R` is the light cone of radius `r`.
+- **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
+  light cone); arXiv:2103.13367, main text, paragraph "Quantum circuits and
+  LOCC" and the graph distance before Proposition `propQCA2`.
+- **Sanctioned bridges:** `Geometry.iterate_neighbourhood_ring` (on the ring, the
+  ring neighbourhood of radius `r`), `Geometry.iterate_neighbourhood_pathGraph_subset`,
+  `Geometry.iterate_neighbourhood_graph` and their disjointness forms.
+- **Caveat:** for the open chain only the inclusion in the metric ball is
+  proved; on the ring and on a graph the equality holds.
+
+#### `ManyBody.IsGraphSeparated` on the cycle (QICLean)
+
+- **Declaration:** `ManyBody.IsGraphSeparated (G : SimpleGraph V) (S T : Finset V) (s : ℕ) : Prop`,
+  used with `G = SimpleGraph.cycleGraph N` for the ring.
+- **Defined in:** QICLean, `QICLean/ManyBody/Sites/GraphBall.lean`; it replaces
+  TNLean's `QuantumCircuit.IsSeparatedBy`.
+- **Meaning:** every point of `S` is at graph distance larger than `s` from every
+  point of `T`; on the cycle, ring distance larger than `s`.
 - **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1
   (operators at a distance larger than `2T` have uncorrelated expectations in a
   state prepared by a local circuit of depth `T`).
-- **Sanctioned bridges:** `QuantumCircuit.IsSeparatedBy.symm`,
-  `QuantumCircuit.IsSeparatedBy.notMem_neighbourhood`,
-  `QuantumCircuit.isSeparatedBy_of_val_bounds` (two windows of consecutive
-  sites with gaps of at least `s` on both sides of the ring),
-  `QuantumCircuit.disjoint_neighbourhood_of_isSeparatedBy` and
-  `QuantumCircuit.disjoint_lightCone_ringBond_of_isSeparatedBy` (separation by
-  `2T` makes the light cones of radius `T` disjoint), and, for nonempty sets,
-  `MPSPreparation.isSeparatedBy_iff_lt_ringSupportDistance` (separation by `s`
-  is `s` strictly below the ring distance of the supports).
-- **Caveat:** the inequality is strict, so `IsSeparatedBy X Y (2 * T)`
-  excludes sets at ring distance exactly `2T`, whose light cones of radius `T`
-  share a site. If `X` or `Y` is empty the predicate holds for every `s`; if
-  both are nonempty it fails as soon as `N ≤ 2s + 1`, since the offsets
-  `|m| ≤ s` then reach every site of the ring.
+- **Sanctioned bridges:** `IsGraphSeparated.symm`,
+  `IsGraphSeparated.disjoint_graphNeighborhood`,
+  `isGraphSeparated_cycleGraph_of_val_bounds` (two windows of consecutive sites
+  with gaps of at least `s` on both sides of the ring), and, for nonempty sets,
+  `MPSPreparation.isGraphSeparated_iff_lt_ringSupportDistance`.
+- **Caveat:** the inequality is strict, so separation by `2T` excludes sets at
+  ring distance exactly `2T`, whose light cones of radius `T` share a site.
 
-#### `QuantumCircuit.BondLayer` and `QuantumCircuit.RingLayer`
+#### `QuantumCircuit.IsUnitaryCircuit` and `QuantumCircuit.IsGateProduct` (QICLean)
 
-- **Declarations:** `structure QuantumCircuit.BondLayer (d : ℕ) (bond : β → Set ι)`,
-  with fields `bonds : Finset β`, `gate : β → Matrix (ι → Fin d) (ι → Fin d) ℂ`,
-  and the conditions that every gate of a bond is unitary and lies in
-  `supportedOperators d (bond b)`, and that the bonds carrying gates are
-  pairwise disjoint; `QuantumCircuit.RingLayer (d N : ℕ) [NeZero N]` abbreviates
-  `BondLayer d ringBond` on `Fin N`.
-- **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
-- **Meaning:** one layer of a local circuit: unitaries on pairwise disjoint
-  bonds; on the ring, pairs of neighbouring sites. Its operator
-  `BondLayer.op` is the product of its gates, which commute.
+- **Declarations:**
+  `QuantumCircuit.IsUnitaryCircuit (Γ : Geometry S) (T : ℕ) (U : Matrix (Config X) (Config X) ℂ) : Prop`
+  and `QuantumCircuit.IsGateProduct (Γ : Geometry S) (K : ℕ) (U : Matrix (Config X) (Config X) ℂ) : Prop`.
+- **Defined in:** QICLean, `QICLean/Circuit/Model/Unitary.lean`. They replace
+  TNLean's `IsLocalCircuitOfDepth` (`Γ = Geometry.ring N`), `IsBondCircuitOfDepth`,
+  `IsPairProduct` (`Γ = Geometry.graph (SimpleGraph.pathGraph n)`) and
+  `IsWindowProduct` (`Γ = Geometry.window n m`).
+- **Meaning:** `U` is the operator of a unitary circuit of depth at most `T`,
+  respectively of gate count at most `K`; one-site unitaries form layers of
+  depth `0` and cost nothing.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
-  quantum circuits"); arXiv:2103.13367, main text, paragraph "Quantum circuits
-  and LOCC".
-- **Sanctioned bridges:** `BondLayer.op_mem_unitary`,
-  `BondLayer.conj_op_mem_supportedOperators` (the light cone of one layer),
-  and `BondLayer.adjoint` with `BondLayer.adjoint_op` (the layer of the adjoint
-  gates implements the adjoint).
-- **Caveat:** on the ring the pairs are taken modulo `N`, so for `N ≤ 2` they
-  degenerate; the open chain is the separate geometry `openBond`.
+  quantum circuits") and caption of Fig. 1; arXiv:2103.13367, Definition
+  "Depth-`ℓ` quantum circuits".
+- **Sanctioned bridges:** `.mul` (series composition; the factor applied first
+  is the right argument), `.conjTranspose`, `.mono`, `.pow`,
+  `IsGateProduct.isUnitaryCircuit`, the light cone
+  `IsUnitaryCircuit.conjTranspose_mul_mul_mem_supportedOperators`, and the
+  universality results `isGateProduct_pathGraph_unitaryGateCount` and
+  `isGateProduct_pathGraph_le_card_pow`.
+- **Caveat:** both bounds are upper bounds; the matrix is the last argument.
 
-#### `QuantumCircuit.IsLocalCircuitOfDepth`
+#### `QuantumCircuit.IsPreparedInDepth` (QICLean)
 
 - **Declaration:**
-  `QuantumCircuit.IsLocalCircuitOfDepth (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (T : ℕ) : Prop`.
-- **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
-- **Meaning:** `U = circuitOp Ls` for a list `Ls` of exactly `T` layers, the
-  head of the list applied first.
-- **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
-  quantum circuits").
-- **Sanctioned bridges:** it abbreviates `IsBondCircuitOfDepth ringBond U T`;
-  `IsBondCircuitOfDepth.mem_unitary`, `IsBondCircuitOfDepth.star`,
-  `IsBondCircuitOfDepth.mul` (depths add),
-  `IsBondCircuitOfDepth.conj_mem_supportedOperators` (the light cone of radius
-  `T` for any bond geometry), `QuantumCircuit.conj_circuitOp_mem_supportedOperators`
-  (on the ring, within ring distance `T`),
-  `QuantumCircuit.isLocalCircuitOfDepth_finKronecker` (one-site unitaries in
-  depth `2`), and `QuantumCircuit.IsBondCircuitOn.isBondCircuitOfDepth`.
-- **Caveat:** the depth is exact in the definition; a smaller depth is padded
-  with empty layers, as in `IsBondCircuitOn.mono`.
-
-#### `QuantumCircuit.IsPreparedInDepth`
-
-- **Declaration:**
-  `QuantumCircuit.IsPreparedInDepth (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
-- **Meaning:** `ψ = U *ᵥ productVector v` for a local circuit `U` of depth `T`
-  and a product vector `productVector v = ⊗ᵢ vᵢ`.
+  `QuantumCircuit.IsPreparedInDepth (Γ : Geometry S) (T : ℕ) (ψ : Config X → ℂ) : Prop`.
+- **Defined in:** QICLean, `QICLean/Circuit/Model/Unitary.lean`; TNLean's ring
+  version is `IsPreparedInDepth (Geometry.ring N)`.
+- **Meaning:** `ψ = U *ᵥ fun σ ↦ ∏ s, v s (σ s)` for a unitary circuit `U` of
+  depth at most `T` on `Γ`.
 - **Source:** arXiv:2307.01696, main text before Theorem 1 ("a sequence
   obtained from depth-`T` local quantum circuits applied to product states").
-- **Sanctioned bridges:** it abbreviates `IsBondPreparedInDepth ringBond T ψ`;
-  `IsBondPreparedInDepth.expect_mul_eq` (vanishing connected correlations of
-  operators on sets with disjoint light cones, for any bond geometry),
-  `QuantumCircuit.expect_mul_eq_of_isPreparedInDepth`
-  and `QuantumCircuit.expect_mul_mul_expect_one_of_isPreparedInDepth`
-  (on the ring, operators at ring distance larger than `2T`), `QuantumCircuit.IsPreparedInDepth.exists_eq_smul_mulVec_productVector_single_zero`
-  (a nonzero prepared vector is a multiple of a local circuit of depth `T + 2`
-  applied to `|0⋯0⟩`), and
-  `QuantumCircuit.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth`.
-- **Caveat:** no normalization is imposed and `ψ` may be zero. The separation
-  `IsSeparatedBy X Y (2 * T)` in the correlation bounds excludes operators at
-  ring distance exactly `2T`.
+- **Sanctioned bridges:** `IsPreparedInDepth.dotProduct_mul_eq` (vanishing
+  connected correlations for disjoint light cones), its ring forms in
+  `QICLean/Circuit/Model/UnitaryRing.lean`, and
+  `IsPreparedInDepth.exists_eq_smul_mulVec_prod_single` (a nonzero prepared
+  vector is a multiple of a circuit of depth `T` applied to a product basis vector).
+- **Caveat:** no normalization is imposed and `ψ` may be zero.
 
-#### `QuantumCircuit.IsNeighbourGate` and `QuantumCircuit.IsPairProduct`
-
-- **Declarations:**
-  `QuantumCircuit.IsNeighbourGate (Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) : Prop`
-  and
-  `QuantumCircuit.IsPairProduct (d n K : ℕ) (X : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/PairProduct.lean`.
-- **Meaning:** `IsNeighbourGate Z` says that `Z` is unitary and acts on two
-  neighbouring sites `{p, p + 1}` of the open chain of `n` sites.
-  `IsPairProduct d n K X` says that `X` is a product of at most `K` such gates.
-- **Source:** Malz--Styliaris--Wei--Cirac, arXiv:2307.01696, main text before
-  Theorem 1 (local circuits of two-site gates) and the caption of Fig. 1
-  (unitaries with constant support "can be further expressed with a low-depth
-  circuit of local gates").
-- **Sanctioned bridges:** `QuantumCircuit.exists_isPairProduct` (for `0 < d`
-  and `2 ≤ n`, one bound `K` covers every unitary on `n` sites), and
-  `QuantumCircuit.IsPairProduct.isCircuitOn`, which places such a product on
-  consecutive sites of the ring as a local circuit of depth `K`.
-- **Caveat:** the chain is open; the ring structure enters only through the
-  placement map of `IsPairProduct.isCircuitOn`.
-
-#### `QuantumCircuit.BondLayer.IsIn`
+#### `QuantumCircuit.IsUnitaryCircuitOn` (QICLean)
 
 - **Declaration:**
-  `QuantumCircuit.BondLayer.IsIn (L : BondLayer d bond) (R : Set ι) : Prop`.
-- **Defined in:** `TNLean/Circuit/Composition.lean`.
-- **Meaning:** every gate of the layer `L` acts on a bond contained in the set
-  of sites `R`.
-- **Source:** arXiv:2307.01696, paragraph "The sequential-RG circuit", where
-  the block unitaries act in parallel on disjoint blocks of sites; the source
-  has no separate name for this support condition.
-- **Sanctioned bridges:** `BondLayer.IsIn.mono` enlarges `R`;
-  `BondLayer.op_mem_supportedOperators` places the layer operator among the
-  operators supported on `R`; `BondLayer.union` and `BondLayer.union_op`
-  merge layers acting in disjoint sets; `BondLayer.empty_isIn` covers the
-  empty layer.
-- **Caveat:** the condition is on the bonds of the layer, not on its operator;
-  it is the per-layer ingredient of `IsBondCircuitOn`. `BondLayer.union_op`
-  needs every bond to be nonempty, as the ring bonds are.
-
-#### `QuantumCircuit.IsBondCircuitOn` and `QuantumCircuit.IsCircuitOn`
-
-- **Declarations:**
-  `QuantumCircuit.IsBondCircuitOn (bond : β → Set ι) (R : Set ι) (T : ℕ) (U : Matrix (ι → Fin d) (ι → Fin d) ℂ) : Prop`
-  and its ring abbreviation
-  `QuantumCircuit.IsCircuitOn (R : Set (Fin N)) (T : ℕ) (U : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Composition.lean`.
-- **Meaning:** `U` is the operator of a list of exactly `T` layers, each of
-  whose gates acts inside the set of sites `R`.
-- **Source:** arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local
-  quantum circuits"), restricted to gates inside `R` as in the parallel
-  application of block unitaries in the paragraph "The sequential-RG circuit".
-- **Sanctioned bridges:** `IsBondCircuitOn.isBondCircuitOfDepth` forgets the
-  support; `IsBondCircuitOn.mul` composes in series (depths add), and
-  `IsBondCircuitOn.par` (for nonempty bonds) and its ring form
-  `IsCircuitOn.par` run two circuits of the same depth on disjoint sets of
-  sites in parallel.
-- **Caveat:** the depth is exact in the definition; `IsBondCircuitOn.mono`
-  pads it with empty layers.
+  `QuantumCircuit.IsUnitaryCircuitOn (Γ : Geometry S) (R : Finset S) (T : ℕ) (U : Matrix (Config X) (Config X) ℂ) : Prop`.
+- **Defined in:** QICLean, `QICLean/Circuit/Model/UnitaryRegion.lean`; it
+  replaces TNLean's `IsBondCircuitOn` and `IsCircuitOn`.
+- **Meaning:** `U` is the operator of a unitary circuit of depth at most `T`
+  all of whose layers act inside `R`.
+- **Source:** arXiv:2307.01696, paragraph "The sequential-RG circuit" (block
+  unitaries applied in parallel on disjoint blocks).
+- **Sanctioned bridges:** `IsUnitaryCircuitOn.mul`, `IsUnitaryCircuitOn.par`
+  (depth `max T₁ T₂`, for nonempty cells), `IsUnitaryCircuitOn.finset_noncommProd`,
+  `IsUnitaryCircuitOn.list_prod`, and `IsGateProduct.isUnitaryCircuitOn_ring`
+  (a product of `K` neighbouring gates on consecutive ring sites).
+- **Caveat:** the cells must be nonempty for the parallel composition.
 
 #### `QuantumCircuit.IsSpecialTwo`, `QuantumCircuit.IsTwoLevelWord`, and `QuantumCircuit.FixesOutside`
 
@@ -1950,8 +1901,8 @@ in `MPS/Preparation/` uses it.
   unitary of determinant one is a two-level word of bounded length) and
   `QuantumCircuit.isTwoLevelWord_of_fixesOutside`.
 - **Caveat:** these predicates are proof-internal vocabulary for
-  `exists_isPairProduct`; statements about circuits should use
-  `IsPairProduct` or `IsCircuitOn`.
+  `isGateProduct_unitaryGateCount`; statements about circuits should use
+  `IsGateProduct` or `IsUnitaryCircuitOn`.
 
 #### `QuantumCircuit.AgreeOff`
 
@@ -1960,94 +1911,64 @@ in `MPS/Preparation/` uses it.
 - **Defined in:** `TNLean/Circuit/SiteEmbedding.lean`.
 - **Meaning:** the configurations `x` and `y` of the sites `ι` agree at every
   site outside the range of `e`; for chains, `e : Fin m → Fin n`.
-- **Source:** no separate source notion; it describes the entries of the
-  placement `QuantumCircuit.embedOp e X` of an operator on the sites `κ`.
+- **Source:** no separate source notion; it is the condition in the entries of
+  the placement `ManyBody.placeAlong w X` of an operator on the sites `κ`
+  (`ManyBody.placeAlong_apply`).
 - **Sanctioned bridges:** `QuantumCircuit.sum_agreeOff` and
   `QuantumCircuit.eq_extend_of_agreeOff` (for injective `e`).
-- **Caveat:** proof-internal vocabulary for the site embedding.
+- **Caveat:** proof-internal vocabulary for coordinates of placed operators.
 
 ### Local circuits assisted by measurements
 
-#### `QuantumCircuit.MeasurementProtocol.IsPreparationOf`
+#### `QuantumCircuit.IsOneRoundConversion`
 
 - **Declaration:**
-  `QuantumCircuit.MeasurementProtocol.IsPreparationOf [NeZero N] (P : MeasurementProtocol d N) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
-- **Meaning:** the protocol `P` (a product vector, a local circuit, a set of
-  sites measured in the computational basis, and for every outcome string a
-  unitary at every site) starts from a nonzero product vector, and for every
-  outcome `m` with `P.postMeasurement m ≠ 0` the corrected vector `P.output m`
-  is a scalar multiple of `ψ`.
-- **Source:** arXiv:2103.13367, main text, paragraph "State transformations
-  with QC and LOCC" (the scheme "apply `U ∈ LU` depending on the outcomes of
-  all previous measurements", and deterministic preparation).
-- **Sanctioned bridges:** `MeasurementProtocol.IsPreparationOf.ne_zero` (a
-  prepared vector is nonzero) and
-  `MeasurementProtocol.exists_postMeasurement_ne_zero`.
-- **Caveat:** ancillas are sites of the ring; the measurement is fixed in
-  advance and in the computational basis; the correction is one product of
-  single-site unitaries applied after all the measurements. Each of these
-  restricts the source's scheme, so every such protocol is one of the source.
-
-#### `QuantumCircuit.IsPreparedWithMeasurementsInDepth`
-
-- **Declaration:**
-  `QuantumCircuit.IsPreparedWithMeasurementsInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
-- **Meaning:** some protocol `P` whose circuit has at most `T` layers
-  satisfies `P.IsPreparationOf ψ`.
+  `QuantumCircuit.IsOneRoundConversion (Γ : Geometry S) (T₁ T₂ : ℕ) (φ ψ : Config X → ℂ) : Prop`,
+  used here at the ring `Geometry.ring N` with `X = Qudits (Fin N) d`.
+- **Defined in:** `QICLean/Circuit/Model/Measurement.lean` (QICLean dependency).
+- **Meaning:** `φ ≠ 0`, and a unitary circuit `U` of depth at most `T₁`, the
+  measurement of a region `D` in the computational basis, single-site
+  unitaries `V m s` chosen by the outcome `m`, and a unitary circuit `U'` of
+  depth at most `T₂` independent of the outcome give
+  `U' (⊗ₛ V m s) P_m U φ = z_m ψ` for every outcome `m` (`z_m = 0` for outcomes
+  of probability zero). A preparation with measurements in depth `T` is
+  `∃ v, IsOneRoundConversion (Geometry.ring N) T 0 (fun σ ↦ ∏ s, v s (σ s)) ψ`;
+  a preparation with measurements and a circuit in depth `T` is
+  `∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v, IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s)) ψ`.
 - **Source:** arXiv:2103.13367, Definition "Transformations under QC and
-  LOCC" (the class `QCcc_ℓ`).
-- **Sanctioned bridges:**
-  `QuantumCircuit.isPreparedWithMeasurementsInDepth_of_isPreparedInDepth` (a
-  nonzero vector prepared by a local circuit),
-  `QuantumCircuit.exists_isPreparedInDepth_of_isPreparationOf_of_measured_eq_empty`
-  (without measurements, preparation by a local circuit up to single-site
-  unitaries), and
-  `QuantumCircuit.isPreparedWithMeasurementsInDepth_withZeroAncillas_ghzState`
-  (GHZ-type states in depth `2`).
-- **Caveat:** the free local unitaries of the source between the layers of the
-  circuit, acting on a site and its ancillas, are counted here as gates, so the
-  depth bounds the source's depth. The light-cone bound of
-  `QuantumCircuit.expect_mul_eq_of_isPreparedInDepth` has no analogue here:
+  LOCC" (the class `QCcc_ℓ`, at `T₂ = 0`) and paragraph "State
+  transformations with QC and LOCC"; arXiv:2307.01696, paragraph "Long-range
+  MPS using measurements" ("First create `|χ_{N/q}⟩`, which can be done in
+  constant depth with measurements ... Subsequently, apply in parallel the
+  isometries `W`").
+- **Sanctioned bridges:** `IsUnitaryCircuit.isOneRoundConversion` (a unitary
+  circuit is one round without measurements),
+  `IsOneRoundConversion.isMeasurementConversion`,
+  `IsOneRoundConversion.mulVec` (a unitary circuit after one round),
+  `QuantumCircuit.isOneRoundConversion_withZeroAncillas_ghzState` (GHZ-type
+  states in depth `2`), and in TNLean
+  `MPSPreparation.exists_isOneRoundConversion_sum_blockIsometryState`,
+  `MPSPreparation.exists_isOneRoundConversion_le_log_repeatedBlockSum`
+  and
+  `MPSPreparation.exists_isOneRoundConversion_le_log_of_mpvState_ne_zero`.
+- **Caveat:** the measurement is fixed in advance and in the computational
+  basis; the correction is one product of single-site unitaries applied after
+  all the measurements; the circuit `U'` is one second round of the source's
+  multi-round scheme, with no measurement in it. Each of these restricts the
+  source's scheme. The light-cone bound of
+  `QuantumCircuit.IsPreparedInDepth.dotProduct_mul_mul` has no analogue here:
   GHZ-type states, whose connected correlations do not decay, are prepared in
   depth `2`.
-
-#### `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth`
-
-- **Declaration:**
-  `QuantumCircuit.IsPreparedWithMeasurementsAndCircuitInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Measurement/Protocol.lean`.
-- **Meaning:** `ψ = U φ` for a vector `φ` with
-  `IsPreparedWithMeasurementsInDepth T₁ φ` and a local circuit `U` of depth
-  `T₂`, with `T₁ + T₂ ≤ T`.
-- **Source:** arXiv:2307.01696, paragraph "Long-range MPS using measurements"
-  ("First create `|χ_{N/q}⟩`, which can be done in constant depth with
-  measurements ... Subsequently, apply in parallel the isometries `W`");
-  arXiv:2103.13367, paragraph "State transformations with QC and LOCC" ("a
-  more general scheme with multiple rounds of LOCC").
-- **Sanctioned bridges:**
-  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryState`
-  (the states `∑ⱼ αⱼ (⊗ₖ V_{j,k}) ⊗ₖ |ω_j⟩` of blocks with orthogonal blocked
-  states, in depth `O(L)`) and
-  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_repeatedBlockSum`
-  (error `ε` in depth `O(log(N/ε))` for direct sums of normal blocks with
-  orthogonal blocked states and block lengths dividing `N`), and
-  `MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`
-  (the same for blocks whose states may overlap, every multiplicity, every
-  nonzero complex weight and every `N ≥ 2` with `|φ_N(A)⟩ ≠ 0`).
-- **Caveat:** the circuit `U` is applied after the measurement and its
-  corrections and does not depend on the outcomes; it is one second round of
-  the source's multi-round scheme, with no measurement in it.
 
 #### `QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth`
 
 - **Declaration:**
   `QuantumCircuit.IsAsymptoticallyPreparedWithMeasurementsInDepth (f : ℕ → ℝ) (φ : (N : ℕ) → EuclideanSpace ℂ (Fin N → Fin d)) : Prop`.
 - **Defined in:** `TNLean/Circuit/Measurement/Asymptotic.lean`.
-- **Meaning:** there are unit vectors `ψ_N`, each prepared for all large `N`
-  with `IsPreparedWithMeasurementsAndCircuitInDepth T (ψ_N)` for some
-  `T ≤ f N`, with `‖|ψ_N⟩⟨ψ_N| - |φ_N⟩⟨φ_N|‖₁ → 0`.
+- **Meaning:** there are unit vectors `ψ_N`, each converted for all large `N`
+  from a product vector by `QuantumCircuit.IsOneRoundConversion (Geometry.ring N) T₁ T₂`
+  with `T₁ + T₂ ≤ T` for some `T ≤ f N`, with
+  `‖|ψ_N⟩⟨ψ_N| - |φ_N⟩⟨φ_N|‖₁ → 0`.
 - **Source:** arXiv:2103.13367, paragraph "Phases of matter": `Ψ ↦ Φ` when
   compositions of `k` channels of `QCcc` of depth `f(M)` map `|ψ_M⟩` to states
   `σ_M` with `‖σ_M - |φ_M⟩⟨φ_M|‖₁ → 0`.
@@ -2070,7 +1991,7 @@ in `MPS/Preparation/` uses it.
 #### `QuantumCircuit.IsLocalPerm`
 
 - **Declaration:**
-  `QuantumCircuit.IsLocalPerm {ι : Type*} (S : Set ι) (σ : Equiv.Perm (ι → Fin d)) : Prop`.
+  `QuantumCircuit.IsLocalPerm {ι : Type*} (S : Finset ι) (σ : Equiv.Perm (ι → Fin d)) : Prop`.
 - **Defined in:** `TNLean/Circuit/SitePermutation.lean`.
 - **Meaning:** the permutation `σ` of the configurations changes only the
   sites of `S`, and its new values on `S` depend only on the old values on
@@ -2078,90 +1999,87 @@ in `MPS/Preparation/` uses it.
 - **Source:** arXiv:2103.13367, Example 1 (the CNOT gates and Pauli
   corrections of the GHZ preparation, generalized to shifts of qudits).
 - **Sanctioned bridges:** `IsLocalPerm.permMatrix_mem_supportedOperators` (the
-  permutation matrix is a unitary acting on `S`),
-  `QuantumCircuit.isLocalPerm_shiftPerm`, and
-  `QuantumCircuit.exists_permLayer_op_mulVec` (a layer of such gates on
-  disjoint pairs acts as one permutation of the configurations).
+  permutation matrix is a unitary acting on `S`).
 - **Caveat:** only permutations of the computational basis are covered; a
-  general gate is a `QuantumCircuit.RingLayer` gate.
+  permutation of the sites is QICLean's `ManyBody.sitePermOp`.
 
-#### `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth`
+#### `QuantumCircuit.IsMeasurementConversion`
 
 - **Declaration:**
-  `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth [NeZero N] (T : ℕ) (ψ : (Fin N → Fin d) → ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Measurement/Rounds.lean`.
-- **Meaning:** some sequence of measurement rounds (`QuantumCircuit.MeasurementRound`:
-  a local circuit, a computational-basis measurement of a set of sites, and
-  outcome-dependent single-site unitaries), whose circuits have at most `T`
-  layers in total, takes a nonzero product vector to a scalar multiple of `ψ`
-  after every sequence of outcomes of nonzero probability.
+  `QuantumCircuit.IsMeasurementConversion (Γ : Geometry S) (T : ℕ) (φ : Config X → ℂ) (ψ : Config Z → ℂ) : Prop`,
+  used here at the ring `Geometry.ring N`.
+- **Defined in:** `QICLean/Circuit/Model/Measurement.lean` (QICLean dependency).
+- **Meaning:** `φ ≠ 0`, and some measurement circuit `c` (its gates and onsite
+  families satisfy `KrausFamily.IsUnitaryOrMeasurement`; later layers may
+  depend on earlier outcomes) of depth at most `T` maps `φ` on every branch `p`
+  to a scalar multiple of `ψ`. A preparation with measurement rounds in depth
+  `T` is
+  `∃ v, IsMeasurementConversion (Geometry.ring N) T (fun σ ↦ ∏ s, v s (σ s)) ψ`;
+  a list of rounds is one circuit composed by `Circuit.comp`.
 - **Source:** arXiv:2103.13367, paragraphs "State transformations with QC and
   LOCC" (one round, and "a more general scheme with multiple rounds of
   LOCC"); arXiv:2307.01696, paragraph "Tree-RG circuit with measurements".
-- **Sanctioned bridges:**
-  `QuantumCircuit.isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth`
-  (one round is a protocol of `QuantumCircuit.IsPreparedWithMeasurementsInDepth`),
-  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.isPreparedWithMeasurementRoundsInDepth`,
-  and `MPSPreparation.isPreparedWithMeasurementRoundsInDepth_treeOp` (binary
-  trees of two-site gates with `k` levels in depth `5k`).
-- **Caveat:** the depth counts the layers of all the rounds; measurements,
-  classical processing and single-site corrections are free, as in one round.
-  The circuit of a later round does not depend on earlier outcomes.
-  Every round is a protocol of `QCcc_ℓ` of no larger depth, but the number of
-  rounds is not bounded (the tree of `k` levels uses `2k` rounds), whereas in
-  the class `QCcc^{(k)}_ℓ` of the paragraph "Phases of matter" of
-  arXiv:2103.13367 the number `k` of composed transformations does not depend
-  on the system size.
+- **Sanctioned bridges:** `IsMeasurementConversion.trans` (depths add),
+  `IsMeasurementConversion.mono`, `IsMeasurementConversion.ne_zero`,
+  `Circuit.IsImplementationOn.isMeasurementConversion`,
+  `IsMeasurementConversion.isAdaptiveConversion`, and
+  `MPSPreparation.exists_isMeasurementConversion_treeOp` (binary trees
+  of two-site gates with `k` levels in depth `5k`).
+- **Caveat:** the depth counts the layers with a cell of positive cost;
+  measurements, classical processing and single-site corrections are free.
+  The number of rounds of measurements (`Circuit.rounds`) is not bounded (the
+  tree of `k` levels uses `2k` rounds), whereas in the class `QCcc^{(k)}_ℓ` of
+  the paragraph "Phases of matter" of arXiv:2103.13367 the number `k` of
+  composed transformations does not depend on the system size.
 
-#### `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn`
+#### `QuantumCircuit.Circuit.IsImplementationOn`
 
 - **Declaration:**
-  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn [NeZero N] (Rs : List (MeasurementRound d N)) (E : Set ((Fin N → Fin d) → ℂ)) (W : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Measurement/Rounds.lean`.
-- **Meaning:** for every `v ∈ E`, every output of the rounds `Rs` from `v` is a
-  scalar multiple of `W v`; the single-round form is
-  `QuantumCircuit.MeasurementRound.IsImplementationOn`, which asks for one
-  scalar per outcome.
+  `QuantumCircuit.Circuit.IsImplementationOn (ev : Interpretation G) (c : Circuit Γ G X Z) (E : Set (Config X → ℂ)) (W : Matrix (Config Z) (Config X) ℂ) : Prop`,
+  used here with `ev = KrausGate.ev` on the ring.
+- **Defined in:** `QICLean/Circuit/Model/Measurement.lean` (QICLean dependency).
+- **Meaning:** for every `v ∈ E` and every branch `p`, the Kraus operator of
+  `p` maps `v` to a scalar multiple of `W v`.
 - **Source:** arXiv:2307.01696, paragraph "Tree-RG circuit with measurements"
   ("correcting (without postselection) based on the measurement outcomes").
-- **Sanctioned bridges:**
-  `QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.append`
-  (implementations compose), `QuantumCircuit.TeleportHop.isImplementationOn_round`
-  (teleportation along chains of hops in one round of depth `2`),
-  `QuantumCircuit.LongRangeGate.isRoundsImplementationOn_rounds` (a layer of
-  two-site gates between distant sites in depth `5`), and
-  `MPSPreparation.isRoundsImplementationOn_treeRounds`.
-- **Caveat:** the scalar may depend on the outcomes and is not normalized; zero
-  outputs, of probability zero, are allowed.
+- **Sanctioned bridges:** `Circuit.IsImplementationOn.comp` (implementations
+  compose), `Circuit.IsImplementationOn.exists_smul_of_isometry` (one scalar
+  per branch on a subspace), `QuantumCircuit.TeleportHop.isImplementationOn_round`
+  (teleportation along chains of hops in one round of depth at most `2`),
+  `QuantumCircuit.LongRangeGate.isImplementationOn_rounds` (a layer of two-site
+  gates between distant sites in depth at most `5`), and
+  `MPSPreparation.isImplementationOn_treeRounds`.
+- **Caveat:** the scalar may depend on the branch and on `v`, and is not
+  normalized; zero outputs, of probability zero, are allowed.
 
 ### Local channel conversions
 
-#### `QuantumCircuit.IsLocalChannelProtocol`
+#### `QuantumCircuit.IsProtocol`
 
 - **Declaration:**
-  `QuantumCircuit.IsLocalChannelProtocol [NeZero N] : ℕ → (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ] Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ) → Prop`
-  (an inductive predicate, with the local dimensions `d`, `e` implicit).
-- **Defined in:** `TNLean/Circuit/Channel/Conversion.lean`.
-- **Meaning:** `IsLocalChannelProtocol T Ψ` says that
-  $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\cdots\circ L_1\circ\Phi_0$
-  alternates `T` layers `L_t` of local channels on pairs of neighbouring sites
-  of the ring (`QuantumCircuit.ChannelLayer`) with onsite channels $\Phi_t$
-  (`QuantumCircuit.OnsiteChannel d e (Fin N)`), each a tensor product of
-  one-site channels that may change the local dimension; onsite channels
-  `QuantumCircuit.OnsiteChannel d e ι` are defined for any type of sites `ι`. Attaching an ancilla in a fixed state
-  (`OnsiteChannel.attach`) and discarding it (`OnsiteChannel.discard`) are
-  onsite channels.
+  `QuantumCircuit.IsProtocol (Γ : Geometry S) (T : ℕ) (Φ : Matrix (Config X) (Config X) ℂ →ₗ[ℂ] Matrix (Config Z) (Config Z) ℂ) : Prop`,
+  used here at the ring `Geometry.ring N`.
+- **Defined in:** `QICLean/Circuit/Model/Protocol.lean` (QICLean dependency).
+- **Meaning:** `Φ` is the map of an unbranched circuit on `Γ` of depth at most
+  `T` whose gates and onsite families are trace preserving. On the ring this is
+  $\Psi=\Phi_T\circ L_T\circ\Phi_{T-1}\circ\cdots\circ L_1\circ\Phi_0$: layers
+  `L_t` of local channels on pairs of neighbouring sites alternate with onsite
+  channels $\Phi_t$, layers without cells (`QuantumCircuit.IsProtocol.ofOnsite`)
+  that may change the local bases. Attaching an ancilla in a fixed state
+  (`KrausFamily.attach`) and discarding it (`KrausFamily.traceRight`) are onsite
+  Kraus families. `QuantumCircuit.IsBoundedProtocol Γ B T Φ` adds a bound `B`
+  on every basis along the circuit.
 - **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, main text, paragraph
   "Quantum circuits and LOCC" (the circuits
   $V'=U_\ell V_\ell\cdots U_1V_1U_0$ with local operations $U_n$ on each site
   and its ancillas between the layers $V_n$), with channels in place of
   unitaries.
-- **Sanctioned bridges:** `IsLocalChannelProtocol.isKrausCPTP` (the map is a
-  channel), `IsLocalChannelProtocol.comp` (protocols compose and depths add),
-  `IsLocalChannelProtocol.channelCircuitMap_comp` (appending a local channel
-  circuit of `n` layers adds `n` to the depth), and
-  `IsLocalChannelProtocol.exists_dual` (light cone of radius `T` of the
-  Heisenberg dual). Grouping `k` consecutive sites is QICLean's
+- **Sanctioned bridges:** `IsProtocol.isKrausCPTP` (the map is a channel),
+  `IsProtocol.comp` (protocols compose and depths add), `IsProtocol.seq`
+  (a sequence of layers is a protocol of at most its length), and
+  `IsProtocol.traceAdjointMap_mem_supportedOperators_graphNeighborhood` (light
+  cone of radius `T` of the Heisenberg picture on the ring). Grouping `k` consecutive
+  sites is QICLean's
   `QuantumCircuit.IsProtocol.block` with `QuantumCircuit.Geometry.ringBlocking`:
   for positive block count and nonempty input bases it gives depth at most
   `2T` for even block counts and `3T` in general, with exact equality on all
@@ -2177,79 +2095,74 @@ in `MPS/Preparation/` uses it.
   simulation or inclusion in its LOCC relation is proved. See
   `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
 
-#### `QuantumCircuit.IsAdaptiveChannelProtocol`
+#### `QuantumCircuit.IsAdaptiveProtocol`
 
-- **Declaration:** `QuantumCircuit.IsAdaptiveChannelProtocol T Ψ : Prop`,
-  for `[NeZero N]`, a depth bound `T : ℕ`, and a linear map between chain
-  operators with possibly different local dimensions.
-- **Defined in:** `TNLean/Circuit/Measurement/AdaptiveConversion.lean`.
-- **Meaning:** a finite tree of onsite channels, nearest-neighbor channel
-  layers, and onsite instruments with outcome-dependent continuations.
-  Each branch has at most `T` nearest-neighbor layers; onsite operations
-  and communication of the complete outcome tuple cost zero depth.
-  `OnsiteChannel.feedforwardMap` sums unnormalized outcome operations,
-  including zero-probability outcomes, and never divides by probabilities.
+- **Declaration:**
+  `QuantumCircuit.IsAdaptiveProtocol (Γ : Geometry S) (T : ℕ) (Φ : Matrix (Config X) (Config X) ℂ →ₗ[ℂ] Matrix (Config Z) (Config Z) ℂ) : Prop`,
+  used here at the ring `Geometry.ring N`.
+- **Defined in:** `QICLean/Circuit/Model/Protocol.lean` (QICLean dependency).
+- **Meaning:** `Φ` is the map of a circuit of trace-preserving plain gates and
+  onsite families, of depth at most `T`, whose later layers may depend on the
+  outcomes of earlier ones. Onsite operations and communication of the
+  outcomes cost zero depth; the map sums the unnormalized branches, including
+  those of probability zero, and never divides by probabilities.
 - **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
   LOCC", motivates finite adaptive operations. The formal predicate uses
   enlarged-site gate costs rather than the source's fixed physical-qudit costs.
-- **Sanctioned bridges:** `IsAdaptiveChannelProtocol.isKrausCPTP`,
-  `IsAdaptiveChannelProtocol.comp` (additive depth bounds),
-  `IsAdaptiveChannelProtocol.onsite_comp`, and
-  `IsLocalChannelProtocol.adaptive` (deterministic local protocols are included),
-  and `MeasurementRound.adaptive` (the existing measurement round's average
-  channel has the same quantum-depth bound).
+- **Sanctioned bridges:** `IsAdaptiveProtocol.isKrausCPTP`,
+  `IsAdaptiveProtocol.comp` (additive depth bounds), `IsAdaptiveProtocol.step`
+  (classical feedforward), `IsProtocol.adaptive` (deterministic protocols are
+  included), and `Circuit.isAdaptiveProtocol_map` (the average map of a
+  measurement circuit has the same depth bound).
 - **Caveat:** intermediate onsite dimensions are unrestricted; a two-site
   gate on the enlarged spaces still costs one layer. No uniform-depth
   simulation into the source physical-qudit model is established. Also,
   this is an upper bound on quantum depth. The source fixes the number of
   composed `QCcc` blocks independently of system size; a block can already
-  contain sequential measurements/corrections at many sites. The tree does
+  contain sequential measurements/corrections at many sites. The circuit does
   not record a fixed-number source-block decomposition with the required
   internal measurement/control order and one-measurement-per-site rule. See
   `docs/paper-gaps/psc21_adaptive_channel_round_scope.tex`.
 
-#### `QuantumCircuit.IsAdaptiveChannelConversion`
+#### `QuantumCircuit.IsAdaptiveConversion`
 
-- **Declaration:** `QuantumCircuit.IsAdaptiveChannelConversion T ρ σ : Prop`,
-  for `[NeZero N]` and operators on `N`-site chains.
-- **Defined in:** `TNLean/Circuit/Measurement/AdaptiveConversion.lean`.
-- **Meaning:** there is a map `Ψ` with `IsAdaptiveChannelProtocol T Ψ`
-  and `Ψ ρ = σ`.
+- **Declaration:**
+  `QuantumCircuit.IsAdaptiveConversion (Γ : Geometry S) (T : ℕ) (ρ : Matrix (Config X) (Config X) ℂ) (σ : Matrix (Config Z) (Config Z) ℂ) : Prop`.
+- **Defined in:** `QICLean/Circuit/Model/Protocol.lean` (QICLean dependency).
+- **Meaning:** there is a map `Φ` with `IsAdaptiveProtocol Γ T Φ` and
+  `Φ ρ = σ`.
 - **Source:** arXiv:2103.13367, paragraph "State transformations with QC and
   LOCC", with the enlarged-site and finite-round scope of
-  `IsAdaptiveChannelProtocol`.
-- **Sanctioned bridges:** `IsAdaptiveChannelConversion.refl`,
-  `IsAdaptiveChannelConversion.mono`, `IsAdaptiveChannelConversion.trans`,
-  `IsAdaptiveChannelConversion.density`, and
-  `IsLocalChannelConversion.adaptive`.
+  `IsAdaptiveProtocol`.
+- **Sanctioned bridges:** `IsAdaptiveConversion.refl`,
+  `IsAdaptiveConversion.mono`, `IsAdaptiveConversion.trans`,
+  `IsAdaptiveConversion.density`, and `IsConversion.adaptive`.
 - **Caveat:** exact, directed conversion on arbitrary input operators;
   positivity and unit trace of the output follow from those of the input.
   No symmetry or asymptotic phase classification is asserted.
 
-#### `QuantumCircuit.IsLocalChannelConversion`
+#### `QuantumCircuit.IsConversion`
 
 - **Declaration:**
-  `QuantumCircuit.IsLocalChannelConversion [NeZero N] (T : ℕ) (ρ : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) (σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ) : Prop`.
-- **Defined in:** `TNLean/Circuit/Channel/Conversion.lean`.
-- **Meaning:** `σ = Ψ ρ` for a map `Ψ` with `IsLocalChannelProtocol T' Ψ` for
-  some `T' ≤ T`.
+  `QuantumCircuit.IsConversion (Γ : Geometry S) (T : ℕ) (ρ : Matrix (Config X) (Config X) ℂ) (σ : Matrix (Config Z) (Config Z) ℂ) : Prop`,
+  used here at the ring `Geometry.ring N`.
+- **Defined in:** `QICLean/Circuit/Model/Protocol.lean` (QICLean dependency).
+- **Meaning:** `σ = Φ ρ` for a map `Φ` with `IsProtocol Γ T Φ`.
 - **Source:** arXiv:2103.13367, main text, paragraph "Quantum circuits and
   LOCC" (circuits with ancillas attached to each site) and paragraph "Phases
   of matter" (a protocol "where ancillas are traced out at the end, defines a
   quantum channel"), without measurements or classical communication.
-- **Sanctioned bridges:** `IsLocalChannelConversion.refl` (depth `0`),
-  `IsLocalChannelConversion.mono`, `IsLocalChannelConversion.trans` (depths
-  add), `IsLocalChannelConversion.exists_isKrausCPTP`,
-  `IsLocalChannelConversion.density` (a conversion of a density matrix is a
-  density matrix), `QuantumCircuit.isLocalChannelConversion_circuit` (attach,
-  run a local channel circuit, discard),
-  `QuantumCircuit.IsChannelPreparedInDepth.exists_isLocalChannelConversion`,
-  and `QuantumCircuit.trace_mul_mul_eq_of_isLocalChannelConversion` (vanishing
-  connected correlations beyond ring distance `2T` from a product density).
+- **Sanctioned bridges:** `IsConversion.refl` (depth `0`),
+  `IsConversion.mono`, `IsConversion.trans` (depths add),
+  `IsConversion.density` (a conversion of a density matrix is a density
+  matrix), `QuantumCircuit.IsConversion.ofOnsite_seq` (attach, run a sequence
+  of channel layers, discard), and
+  `QuantumCircuit.IsConversion.trace_mul_mul_eq_of_isGraphSeparated` (vanishing
+  connected correlations beyond ring distance `2T` from a product input).
 - **Caveat:** the relation is directed and not symmetric: a channel need not be
   undone by another channel. Neither `ρ` nor `σ` is required to be a density
   matrix; positivity and unit trace of `σ` follow from those of `ρ` by
-  `IsLocalChannelConversion.density`. Conversions are exact; the approximate
+  `IsConversion.density`. Conversions are exact; the approximate
   and asymptotic local-channel relations below extend this relation without
   classical feedforward. The full phase equivalence in arXiv:2103.13367 and
   blocking of sites are not formalized here.
@@ -2260,8 +2173,8 @@ Approximate conversion in trace norm, asymptotic conversion in polylogarithmic d
 equivalence of local channel protocols are QICLean's `QuantumCircuit.IsApproxConversion`,
 `QuantumCircuit.IsAsymptoticConversion` and `QuantumCircuit.IsPhaseEquivalent`, defined in
 `QICLean/Circuit/Model/Approximate.lean` (QICLean dependency) for a circuit geometry and used
-here at the ring `Geometry.ring N`. The trace norm of a chain operator on the TNLean side is
-`QuantumCircuit.chainTraceNorm`. The scope of the local channel model relative to the source
+here at the ring `Geometry.ring N`, with the trace norm `Matrix.rectangularTraceNorm` of
+operators on the configurations. The scope of the local channel model relative to the source
 `QCcc` relation is recorded in `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
 
 ### Lieb–Robinson propagation on finite graphs
@@ -3155,127 +3068,65 @@ involve no boundary.
 
 ## Exact circuits with initialized auxiliaries
 
-### `QuantumCircuit.IsPhysicalPortUnitary`
+### `QuantumCircuit.IsUnitaryDilation` on `QuantumCircuit.Geometry.portRing`
 
-- **Declaration:** `QuantumCircuit.IsPhysicalPortUnitary P T U : Prop`,
-  for a fixed qudit dimension `d`, a finite `PhysicalPortLayout N W`,
-  and a unitary operator on the `W` qudit wires.
-- **Defined in:** `TNLean/Circuit/Channel/PhysicalPort.lean`.
-- **Meaning:** a circuit generated by free one-site unitaries, free wire
-  permutations preserving every spatial site, and counted nearest-neighbor
-  layers acting only on the one designated physical port per site.
-  Multiplication adds upper bounds, and the bound can be enlarged.
-- **Source:** the physical-qudit/onsite-ancilla distinction in
-  arXiv:2103.13367, Supplement pp. 7–8. The routing estimates are derived
-  comparisons, not claims that the paper states the same formal predicate.
-- **Sanctioned bridges:** `.mem_unitary`, `.conjTranspose`, `.selected_layer`,
-  `.register_matching`, `.appendEnvironment_comp`,
-  `PhysicalPortEmbedding.unitary`, and `IsPhysicalPortProtocol.unitary`.
-- **Caveat:** the physical dimension is fixed throughout the circuit. The
-  layout may include separate local memory; a counted gate cannot act
-  directly on all of an enlarged site's wires. This predicate alone does
-  not impose source preparation ancilla initialization or cleanup conditions.
+- **Declaration:** `QuantumCircuit.IsUnitaryDilation (Geometry.portRing N W) D d T Φ : Prop`,
+  for a set `D` of wires and a map `Φ` between operators on the wires.
+- **Defined in:** `QICLean/Circuit/Compile/Dilation.lean` and
+  `QICLean/Circuit/Geometry/Port.lean` (QICLean dependency).
+- **Meaning:** `Φ` is the partial trace over output environments of an unbranched circuit of
+  unitary gates of depth at most `T` on the ring with ports, applied after the preparation of
+  basis vectors on input environments. The environments at wires outside `D` have at most one
+  element, and every wire outside `D` has dimension at most `d` throughout. The ring with
+  ports has `W` wires per site; the cells of all wires of a site cost `0`, and only the cells
+  of two neighbouring ports cost `1`. This is the physical-port protocol of blueprint chapter
+  33.
+- **Source:** the physical-qudit/onsite-ancilla distinction in arXiv:2103.13367, Supplement
+  pp. 7–8 (proof of Proposition 2).
+- **Sanctioned bridges:** `isUnitaryDilation_id`, `IsUnitaryDilation.mono`,
+  `IsUnitaryDilation.comp`, `Layer.isUnitaryDilation`, `Circuit.isUnitaryDilation`,
+  `IsProtocol.isUnitaryDilation`, `Layer.exists_portRing_sites` (operations on whole sites are
+  free), `Layer.exists_portRing` (one matching layer costs `2k`), and the pure-output estimate
+  `IsUnitaryDilation.exists_unit_product_approx`.
+- **Caveat:** the environments are finite bases at the wires of `D`, not appended qudits;
+  they need not reset. Source pure-state conditions and the fixed number of composed `QCcc`
+  blocks with their internal measurement/control rules remain separate.
 
-### `QuantumCircuit.PhysicalPortEmbedding`
+### `QuantumCircuit.IsBoundedProtocol`
 
-- **Declaration:** `PhysicalPortEmbedding P Q`, for two wire layouts on the
-  same spatial sites.
-- **Defined in:** `TNLean/Circuit/Channel/PhysicalPortEmbedding.lean`.
-- **Meaning:** an injection of wires preserving each wire's spatial owner
-  and carrying every designated physical port to the corresponding port.
-  Additional wires are local memories, not new communication ports.
-- **Source:** the physical-qudit/onsite-ancilla distinction in
-  arXiv:2103.13367, Supplement pp. 7–8; this embedding is the finite spatial
-  construction used to retain that distinction when adding environments.
-- **Sanctioned bridges:** `.unitary` lifts an actual physical-port unitary
-  circuit at unchanged intersite depth. `PhysicalPortLayout.append` assigns
-  owners to fresh wires; `.appendEmbedding`, `.appendLeftEmbedding`, and
-  `.appendRightEmbedding` preserve the original ports. The maps
-  `appendEnvironmentInput` and `discardAppendedEnvironment` prepare literal
-  product-zero environment wires and discard precisely those wires.
-- **Caveat:** this embedding does not permit a free site-changing permutation.
-  A coordinate regrouping used to prove a matrix identity supplies no physical
-  gate by itself. The final discard does not assert that the environment resets.
-
-### `QuantumCircuit.IsPhysicalPortProtocol`
-
-- **Declaration:** `QuantumCircuit.IsPhysicalPortProtocol P T Φ : Prop`,
-  for a fixed qudit dimension and an endomorphism of the full wire operator
-  space of `PhysicalPortLayout N W`.
-- **Defined in:** `TNLean/Circuit/Channel/PhysicalPort.lean`.
-- **Meaning:** a finite composition of certified physical-port unitaries
-  and normalized Kraus channels supported within one spatial site.
-  Local channels cost zero; only physical-port intersite layers contribute
-  to the depth upper bound. The statement acts on arbitrary input operators.
-- **Source:** the reduced-channel resource convention motivated by
-  arXiv:2103.13367, Supplement pp. 7–8, with the scope recorded in
-  `docs/paper-gaps/psc21_physical_port_simulation_scope.tex`.
-- **Sanctioned bridges:** `.isKrausCPTP`, `.of_register_routing`,
-  `.of_routed_family`, `PortRegisters.dataChannelLift_word`,
-  `IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation`,
-  `.exists_appended_unitary_dilation`, and
-  `.exists_appended_unitary_dilation_reference`. These construct an
-  actual same-depth unitary on a port-preserving extension, with fresh local
-  product-zero environments initialized once and discarded only at the end.
-  The matching simulation and its protocol bound are QICLean's
-  `QuantumCircuit.Layer.exists_portRing` and
-  `QuantumCircuit.IsBoundedProtocol.exists_portRing`, stated for
-  `QuantumCircuit.IsProtocol (QuantumCircuit.Geometry.portRing N (2 * k + 1))`.
-  When the channel output of a pure input is pure or close to pure,
-  `QuantumCircuit.Circuit.exists_unit_product_approx`, applied to the
-  dilation `QuantumCircuit.IsProtocol.isUnitaryDilation`, derives a
-  normalized environment vector and a system/environment product output
-  within `√(2ε)`.
-- **Caveat:** source pure-state conditions and the fixed number of composed
-  `QCcc` blocks with their internal measurement/control rules remain separate.
-  The appended environments need not reset, and their total number is only
-  asserted finite for each protocol. The uniform `2 * Nat.clog d B` matching
-  bound requires a fixed `d ≥ 2` and one dimension bound `B` chosen independently of chain
-  length. It does not apply with the same constant to unrestricted
-  intermediate dimensions depending on `N`.
-
-
-### `QuantumCircuit.IsDimensionBoundedLocalChannelProtocol`
-
-- **Declaration:** `IsDimensionBoundedLocalChannelProtocol B T Ψ : Prop`,
-  for a native chain channel between possibly different local dimensions.
-- **Defined in:** `TNLean/Circuit/Channel/DimensionBoundedConversion.lean`.
-- **Meaning:** the native onsite/layer protocol constructors carry explicit
-  positivity and upper bounds by the same `B` for every intermediate local
-  dimension. Depth counts native pair-channel layers.
-- **Source:** a resource-refined abstraction for comparing the enlarged-site
-  channel model with the physical-qudit convention in arXiv:2103.13367,
-  Supplement pp. 7–8. The paper does not state this predicate.
-- **Sanctioned bridges:** `.toIsLocalChannelProtocol`, `.dimension_bounds`,
-  `.mono_bound`, `.comp`, `.exists_fixedRegisterWord`,
-  `.exists_physicalPortSimulation`, `.exists_physicalPortIO`, and
-  `.exists_physicalPortUnitaryIO`. A finite positive-input native protocol
-  admits some finite bound via `IsLocalChannelProtocol.exists_dimension_bound`.
-- **Caveat:** an existential bound separately for each chain length is not a
-  uniform family bound. For fixed physical `d ≥ 2` and `N ≥ 2`, the encoded
-  simulation has physical depth at most `2 * Nat.clog d B * T`; a uniform
-  constant requires `B` and `d` chosen independently of `N`. The exact channel
-  identity retains arbitrary port/scratch-reference correlations. When the
-  native input/output dimension is exactly the physical `d`, the port-I/O
-  theorem supplies product-zero designated memory, output on the original
-  ports, and exact data/scratch reset at the same intersite depth. The unitary
-  theorem additionally supplies fresh local product-zero environments and one
-  final trace; it does not assert reset of these discarded environments.
-  A full source QCcc witness and its pure-output system--ancilla conditions
-  remain separate. The bound does not count onsite operations as extra layers.
+- **Declaration:** `QuantumCircuit.IsBoundedProtocol Γ B T Φ : Prop`.
+- **Defined in:** `QICLean/Circuit/Model/Protocol.lean` (QICLean dependency).
+- **Meaning:** a protocol (`QuantumCircuit.IsProtocol`) every basis along which has between
+  `1` and `B` elements.
+- **Source:** a resource-refined abstraction for comparing the enlarged-site channel model
+  with the physical-qudit convention in arXiv:2103.13367, Supplement pp. 7–8. The paper does
+  not state this predicate.
+- **Sanctioned bridges:** `.isProtocol`, `.dimension_bounds`, `.mono_bound`, `.comp`,
+  `.exists_seq_encoded` (a sequence of layers on one fixed alphabet), `.exists_portRing` (on
+  the data embedding into the ring with ports, depth `2kT` for `B ≤ d ^ k`),
+  `.exists_portRing_of_code` (between any codes on the wires, in particular the port codes,
+  which give output on the original ports and zero designated memory) and
+  `.exists_portRing_unit_product_approx` (pure and approximately pure outputs). A protocol on
+  nonempty input bases admits some bound via `IsProtocol.exists_dimension_bound`.
+- **Caveat:** an existential bound separately for each chain length is not a uniform family
+  bound; a uniform constant requires `B` and `d` chosen independently of `N`. The compiled
+  channel identity holds on the codes, which fix every wire of a site; no identity with an
+  arbitrary state of the port and scratch wires carried along as a reference is available. The
+  bound does not count onsite operations as extra layers.
 
 ### `QuantumCircuit.IsCleanImplementation`
 
 - **Declaration:** `IsCleanImplementation J C Z`.
-- **Defined in:** `TNLean/Circuit/CleanUnitaryImplementation.lean`.
+- **Defined in:** QICLean, `QICLean/Circuit/Model/CleanWorkspace.lean`.
 - **Meaning:** the matrix identity $CJ=JZ$. When $J$ includes a logical
   register with its workspace initialized, this identity says that the
   workspace returns to its initialized state on every logical input.
 - **Source:** `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, Section 5.
 - **Sanctioned constructions:** `IsCleanImplementation.mul` composes
-  implementations using the same workspace; `IsCleanImplementation.embedOp`
-  places one in a larger register; `exists_isPairProduct_isCleanImplementation`
-  constructs a neighboring-pair circuit for an included logical unitary.
+  implementations using the same workspace; TNLean's
+  `IsCleanImplementation.placeAlong` places one in a larger register; `exists_isGateProduct_isCleanImplementation`
+  constructs a product of gates for an included logical unitary, given that
+  every unitary on the register is such a product.
 - **Caveat:** the identity alone does not assert unitarity. It specifies the
   initialized subspace, rather than the action on arbitrary workspace inputs.
 
@@ -3429,15 +3280,15 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `ManyBody.LowEnergyExample.IsGround` | Example-specific: a configuration of the `m + 3`-site spin-1/2 chain of Hastings' Appendix B example with spin `1` up, every spin `i ≥ 2` down and spin `0` free; `energy_eq_groundEnergy_iff` and `hamiltonian_mulVec_eq_iff` identify these with the ground space of `H = −S^z_1 + ∑_{i≥2} S^z_i` | Hastings, arXiv:cond-mat/0508554v3, lines 1655–1676, with the corrected sum (<https://sirui-lu.com/QICLean/paper-gaps/hastings05_low_energy_example.pdf>); not a general lattice predicate, and no bridge to `ManyBody.IsGapped` is stated. |
 | `TNLean.PEPS.AreaLaw.relabelState` | The same physical vector in configuration coordinates transported by a site bijection | Area-law Section 2; Euclidean norm is preserved, reductions are covariant and regional entropy is invariant when the bijection preserves the cut. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; proved, with the source's hypotheses, as `TNLean.PEPS.AreaLaw.uniformAreaLaw`. |
-| `TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped` | The frustration-free model on a planar domain: every term of a `ManyBody.PlaneInteraction` satisfies `0 ≤ h_X ≤ J`, `Ω` is a unit vector, and `H` is gapped at energy zero (`IsGapped H 0 Δ`) with ground space `span {Ω}`. Each `h_X Ω = 0` follows (`mulVec_eq_zero`), so the interaction is `ManyBody.Interaction.IsFrustrationFree` (`isFrustrationFree`); for `0 < Δ` the model is equivalent to `0 ≤ h_X ≤ J`, `h_X Ω = 0`, `‖Ω‖ = 1`, `Δ (1 − \|Ω⟩⟨Ω\|) ≤ H` (`iff_model`). The terms are Hermitian and `H Ω = 0` (`isHermitian`, `hamiltonian_mulVec_eq_zero`); with `0 ≤ J`, `‖h_X‖ ≤ J` (`norm_term_le`); so with `0 < J, Δ` it is a special case of the hypotheses of `UniformAreaLaw`; the converse fails, since a gapped instance need not have positive terms annihilating `Ω` | Frustration-free area-law note (`docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`), `eq:model`; the positivity `0 ≤ h_X` and the annihilation are what the gap and the sweep consequences use. |
+| `TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped` | The frustration-free model on a planar domain: every term of a `ManyBody.PlaneInteraction` satisfies `0 ≤ h_X ≤ J`, `Ω` is a unit vector, `H` is gapped at energy zero (`IsGapped H 0 Δ`), and the zero space `ManyBody.Interaction.zeroSpace` (the common kernel of the terms) is `span {Ω}`. The ground space at energy zero is `span {Ω}` (`groundSpace_eq`) and each `h_X Ω = 0` follows (`mulVec_eq_zero`), so the interaction is `ManyBody.Interaction.IsFrustrationFree` (`isFrustrationFree`); for `0 < Δ` the model is equivalent to `0 ≤ h_X ≤ J`, `h_X Ω = 0`, `‖Ω‖ = 1`, `Δ (1 − \|Ω⟩⟨Ω\|) ≤ H` (`iff_model`). The terms are Hermitian and `H Ω = 0` (`isHermitian`, `hamiltonian_mulVec_eq_zero`); with `0 ≤ J`, `‖h_X‖ ≤ J` (`norm_term_le`); so with `0 < J, Δ` it is a special case of the hypotheses of `UniformAreaLaw`; the converse fails, since a gapped instance need not have positive terms annihilating `Ω` | Frustration-free area-law note (`docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`), `eq:model`; the positivity `0 ≤ h_X` and the annihilation are what the gap and the sweep consequences use. |
 | `TNLean.PEPS.AreaLaw.FrustrationFree.FrustrationFreeAreaLaw` | The uniform boundary entropy bound of `UniformAreaLaw` restricted to instances of `IsFrustrationFreeGapped`, with the constant chosen before the domain, the Hamiltonian and the cut | Frustration-free note, `eq:goal`. `UniformAreaLaw.frustrationFreeAreaLaw` derives it from `UniformAreaLaw`; it is proved by that route (`frustrationFreeAreaLaw_of_uniformAreaLaw`). It is also proved by the note's sweep route, which does not use the general amplification (`frustrationFreeAreaLaw`). |
-| `TNLean.PEPS.AreaLaw.innerBoundary` | Sites in the cut adjacent to its complement within the induced domain | Area-law Corollary 1.2; every cut has at most four crossing edges per inner-boundary site. |
-| `TNLean.PEPS.AreaLaw.endpointBoundary` | Both endpoints of every crossing edge, with repetitions removed | Area-law Corollary 1.2; the number of crossing edges is at most twice the number of boundary endpoints. |
+| `ManyBody.innerBoundary` | Sites of a region adjacent to its complement, for any graph; the induced domain uses `innerBoundary (planeDomainGraph Λ) A` | Area-law Corollary 1.2; defined in `QICLean/ManyBody/Sites/GraphBoundary.lean` (QICLean dependency); in a graph of degree at most four every cut has at most four crossing edges per inner-boundary site. |
+| `ManyBody.endpointBoundary` | Both endpoints of every edge of the edge boundary, with repetitions removed | Area-law Corollary 1.2; defined in `QICLean/ManyBody/Sites/GraphBoundary.lean` (QICLean dependency); `two_mul_card_edgeBoundary_le_mul_card_endpointBoundary` gives `2 |∂A| ≤ 4 |Z_A|` on the induced domain. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw.vertex_boundary_bounds` | Inner-boundary and endpoint entropy bounds with constants four and two times the edge-boundary constant | Area-law Corollary 1.2; proved conditionally on `UniformAreaLaw`, with the same uniform quantifiers. The unconditional form is `TNLean.PEPS.AreaLaw.uniformAreaLaw_vertex_boundary_bounds`. |
-| `TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_edgeBoundary_eq_empty` | A cut with no crossing edge has zero regional entropy in a gapped ground vector | Area-law Lemma 2.2 (`lem:zero-boundary`), `01-preliminaries.tex`, lines 123–134; proved, using only the gapped ground-vector hypothesis with `Δ > 0`. |
-| `ManyBody.graphBall` | The closed ball `N_l(a) = {x : d_G(a,x) ≤ l}` of a finite graph in the extended graph distance | Area-law `03-quasilocal.tex`, line 17; sites in other connected components are at infinite distance and never belong to a ball. Defined in `QICLean/ManyBody/Dynamics/GraphLocalization.lean`. |
-| `TNLean.Lattice.cutLogBudget` | The parameter `ℬ_A = 1 + ∑ log²(e q^{|X|})` of a cut, summed over the admissible supports meeting both `A` and its complement | Area-law Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 47–55; the lattice instance of QICLean's `Entropy.cutLogBudget`, bounded by the number of crossing supports in `cutLogBudget_le_card`. |
-| `Entropy.concentrationWidth` | The width `32 √((1 + ϑ) ℬ) (M log(n+2) + e/2 + log 2)` at which the marginal tail of Lemma 3.1 is at most `(n+2)^{-M}`; on the lattice `ϑ = J/Δ` and `ℬ = ℬ_A` | Area-law `02-initial.tex`, lines 207–212; defined in `QICLean/Entropy/TypicalMarginalMass.lean` (QICLean dependency), used in `ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedState` at `Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M`. |
+| `TNLean.PEPS.AreaLaw.regionEntropy_eq_zero_of_edgeBoundary_eq_empty` | A cut with no crossing edge has zero regional entropy in a gapped ground vector | Area-law Lemma 2.2 (`lem:zero-boundary`), `01-preliminaries.tex`, lines 123–134; proved, using only the gapped ground-vector hypothesis with `Δ > 0`. |
+| `ManyBody.graphBall` | The closed ball `N_l(a) = {x : d_G(a,x) ≤ l}` of a finite graph in the extended graph distance | Area-law `03-quasilocal.tex`, line 17; sites in other connected components are at infinite distance and never belong to a ball. Defined in `QICLean/ManyBody/Sites/GraphBall.lean`, with the neighbourhood `ManyBody.graphNeighborhood G S l` of a region. |
+| `ManyBody.cutLogBudget` | The parameter `ℬ_A = 1 + ∑ log²(e d_X)` of a cut for a family of supports `D` and local dimensions `n`, summed over the supports meeting both `A` and its complement; the lattice budget is `cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) A`, the chain budget uses `ChainSupport L R`, the truncated constraints use the designated supports | Area-law Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 47–55; defined in `QICLean/Entropy/SupportedMarginalTails.lean` (QICLean dependency), bounded by the number of crossing supports in `cutLogBudget_le_card`. |
+| `Entropy.concentrationWidth` | The width `32 √((1 + ϑ) ℬ) (M log(n+2) + e/2 + log 2)` at which the marginal tail of Lemma 3.1 is at most `(n+2)^{-M}`; on the lattice `ϑ = J/Δ` and `ℬ = ℬ_A` | Area-law `02-initial.tex`, lines 207–212; defined in `QICLean/Entropy/TypicalMarginalMass.lean` (QICLean dependency), used in `ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_regionState` at `Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M`. |
 | `TNLean.PEPS.AreaLaw.tailParameterConstant` | The constant `C = v_R μ_R log²(e q^{v_R})`, with `v_R = 1 + 2R(R+1)` and `μ_R = 2^{v_R - 1}`, in `ℬ_A ≤ C(1 + |∂_Λ A|)` | Area-law `eq:initial-local-tail-parameter`, `02-initial.tex`, lines 202–206; depends only on `q` and `R`, at least one for `q ≥ 1`; the bound is `cutLogBudget_le_edgeBoundary`. |
 | `TNLean.PEPS.AreaLaw.typicalWidthConstant` | The constant `C_M = 32 √((1 + J/Δ) C) (M + (e/2 + log 2)/log 2)` with `C = tailParameterConstant q R` | Area-law `02-initial.tex`, lines 207–212; depends only on `q, R, J, Δ, M`; bounds the concentration width by `C_M √(1 + |∂_Λ A|) log(n+2)` in `concentrationWidth_le`. |
 | `TNLean.PEPS.AreaLaw.IntRect` | A product `[x₀,x₁] × [y₀,y₁]` of two nonempty finite integer intervals, with `size` the larger number of sites along an axis and `dilate d` the rectangle `Q^{+d}` | Area-law `02-initial.tex`, lines 222–232; an ambient rectangle, not a set of sites of the domain. |
@@ -3712,7 +3563,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - `ManyBody.regionEntropy_le_remainder_add_half_sum` (QICLean): exact normalized
   pure-state two-family cancellation, with coefficient `1/2` and the entire
   exterior-plus-earlier-same-family mutual-information assumptions.
-- `TNLean.PEPS.AreaLaw.regionalEntropy_le_residual_add_half_sum`: the finite-domain
+- `TNLean.PEPS.AreaLaw.regionEntropy_le_residual_add_half_sum`: the finite-domain
   specialization using the existing `OrderedTwoFamilyPartition` and regional
   entropy. It assumes no Hamiltonian, gap, geometry, nonempty family, or separate
   nonnegative error bound. Source: OpenAI (September 24, 2026), area-law Lemma 11.1.
@@ -3754,9 +3605,9 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - `biUnion_rectRegion_cappedDyadicPartition` and
   `pairwiseDisjoint_rectRegion_cappedDyadicPartition` identify the actual
   disjoint physical rectangle cover, including missing sites and disconnected domains.
-- `Template.regionalEntropy_core_le_of_safe_box`,
-  `Template.regionalEntropy_shell_le_of_safe_box`, and
-  `Template.regionalEntropy_prefix_le_of_safe_box` compose actual regional
+- `Template.regionEntropy_core_le_of_safe_box`,
+  `Template.regionEntropy_shell_le_of_safe_box`, and
+  `Template.regionEntropy_prefix_le_of_safe_box` compose actual regional
   subadditivity, derived safety, and the weighted covering estimates. A partial
   final row costs at most `n * log q`.
 - `exists_template_entropy_bounds_of_arbitrary_safe_box` assumes the safe-box
@@ -3838,7 +3689,7 @@ existing finite induced lattice domain, `Geometry.closedSquareSample Λ c r`
 samples the closed coordinate square at any real centre and clips it to `Λ`.
 `Geometry.nestedPatch Λ c u j` uses radius `u + 2j`, with
 `Geometry.nestedPatchCount u = floor(u / 2) + 1` for nonnegative `u`.
-These patches use `ManyBody.planeDomainGraph` and the unordered `Lattice.edgeBoundary`;
+These patches use `ManyBody.planeDomainGraph` and the unordered `ManyBody.edgeBoundary`;
 they are not graph-distance balls. The crossing-edge and two-site-support
 results are geometric statements, not an energy estimate or a proof of the
 source's Proposition 4.1.
@@ -3879,11 +3730,11 @@ source's Proposition 4.1.
 - **Declarations:** Geometry.latticeDyadicRect and its three rectangle identities;
   Geometry.biUnion_rectRegion_cappedDyadicPartition,
   Geometry.pairwiseDisjoint_rectRegion_cappedDyadicPartition,
-  Geometry.regionalEntropy_filter_le_sum_rectRegion,
-  Geometry.regionalEntropy_filter_le_weighted_cover_of_forall,
-  Geometry.regionalEntropy_filter_le_weighted_cover,
+  Geometry.regionEntropy_filter_le_sum_rectRegion,
+  Geometry.regionEntropy_filter_le_weighted_cover_of_forall,
+  Geometry.regionEntropy_filter_le_weighted_cover,
   IsSafe.isSafe_cappedDyadicPartition_shell, and
-  IntRect.regionalEntropy_shell_le_of_safe_box, all in
+  IntRect.regionEntropy_shell_le_of_safe_box, all in
   TNLean.PEPS.AreaLaw.
 - **Meaning:** the actual capped dyadic partition of Q.dilate(j) minus Q
   consists of safe integer squares when j ≤ L, 2^K ≤ L and
@@ -3904,8 +3755,8 @@ source's Proposition 4.1.
 
 ## Initial-exponent entropy of rectangle shells
 
-- **Declarations:** TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_rpow
-  and TNLean.PEPS.AreaLaw.exists_regionalEntropy_weak_rectangle_shell_le_rpow.
+- **Declarations:** TNLean.PEPS.AreaLaw.exists_regionEntropy_safe_rect_le_rpow
+  and TNLean.PEPS.AreaLaw.exists_regionEntropy_weak_rectangle_shell_le_rpow.
 - **Meaning:** for fixed q ≥ 1, R, J ≥ 0 and Δ > 0, one nonnegative constant
   C and one exponent 0 < e₀ < 1 bound the physical entropy of every safe
   rectangle and its actual dyadically covered shell. These witnesses precede
@@ -3927,7 +3778,7 @@ source's Proposition 4.1.
 ## Initial entropy of the rounded collar
 
 - **Declarations:** `TNLean.PEPS.AreaLaw.floor_rpow_ceil_mul_rpow_le` and
-  `TNLean.PEPS.AreaLaw.exists_regionalEntropy_initial_rounded_collar_le_rpow`.
+  `TNLean.PEPS.AreaLaw.exists_regionEntropy_initial_rounded_collar_le_rpow`.
 - **Defined in:** `TNLean/PEPS/AreaLaw/Scan/RoundedScalePower.lean` and
   `TNLean/PEPS/AreaLaw/InitialRoundedCollarEntropy.lean`.
 - **Meaning:** for fixed `q,R,J,Δ`, one initial constant `C` and exponent
@@ -3942,7 +3793,7 @@ source's Proposition 4.1.
 ## Uniform conditional entropy of rounded shells
 
 - **Declarations:** `Scan.rounded_shell_coefficient_uniform_le` and
-  `exists_regionalEntropy_rounded_shell_le_uniform_rpow`, in the
+  `exists_regionEntropy_rounded_shell_le_uniform_rpow`, in the
   `TNLean.PEPS.AreaLaw` namespace.
 - **Defined in:** `Scan/RoundedScalePower.lean` and `RoundedShellEntropy.lean`.
 - **Meaning:** fix the enlargement constant and initial exponent. One

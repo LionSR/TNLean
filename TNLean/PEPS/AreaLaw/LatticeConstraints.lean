@@ -51,7 +51,7 @@ open scoped Matrix Kronecker Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport graphBall planeDomainGraph)
+open ManyBody (AdmissibleSupport edgeBoundary graphBall planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -565,16 +565,20 @@ theorem exists_latticeCrossingBudget {q : ℕ} (hq : 1 ≤ q) (R : ℕ) :
     ∃ C : ℝ, 0 ≤ C ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
       ∀ (S₀ : Finset (Site Λ)) (r₀ : ℕ) (X : Finset (Site Λ)), X ⊆ S₀ →
-        (∀ i ∈ crossingLabels (planeDomainGraph Λ) S₀ r₀ a X,
+        (∀ i ∈ ManyBody.crossingTerms
+            (fun i ↦ designatedSupport (planeDomainGraph Λ) S₀ r₀ (a i)) X,
           designatedSupport (planeDomainGraph Λ) S₀ r₀ (a i) = graphBall (planeDomainGraph Λ) (a i)
               r₀) ∧
-        ((crossingLabels (planeDomainGraph Λ) S₀ r₀ a X).card : ℝ) ≤
-          C * (edgeBoundary Λ X).card * ((r₀ : ℝ) + 1) ^ 2 ∧
-        (∀ i ∈ crossingLabels (planeDomainGraph Λ) S₀ r₀ a X,
+        ((ManyBody.crossingTerms
+            (fun i ↦ designatedSupport (planeDomainGraph Λ) S₀ r₀ (a i)) X).card : ℝ) ≤
+          C * (edgeBoundary (planeDomainGraph Λ) X).card * ((r₀ : ℝ) + 1) ^ 2 ∧
+        (∀ i ∈ ManyBody.crossingTerms
+            (fun i ↦ designatedSupport (planeDomainGraph Λ) S₀ r₀ (a i)) X,
           Real.log ((q : ℝ) ^ (designatedSupport (planeDomainGraph Λ) S₀ r₀ (a i)).card) ≤
             C * ((r₀ : ℝ) + 1) ^ 2) ∧
-        cutBudget q (planeDomainGraph Λ) S₀ r₀ a X ≤
-          C * (1 + (edgeBoundary Λ X).card) * ((r₀ : ℝ) + 1) ^ 6 := by
+        ManyBody.cutLogBudget (fun i ↦ designatedSupport (planeDomainGraph Λ) S₀ r₀ (a i))
+            (fun _ ↦ q) X ≤
+          C * (1 + (edgeBoundary (planeDomainGraph Λ) X).card) * ((r₀ : ℝ) + 1) ^ 6 := by
   set μ : ℝ := ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ)
   have hμ : 0 ≤ μ := Nat.cast_nonneg _
   have hL : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
@@ -584,26 +588,27 @@ theorem exists_latticeCrossingBudget {q : ℕ} (hq : 1 ≤ q) (R : ℕ) :
   set G := planeDomainGraph Λ
   have hMult : ∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ := fun x => by
     simp only [μ]; exact_mod_cast card_anchor_fiber_le a ha x
-  have hb : ((cutEdges G X).card : ℝ) ≤ (edgeBoundary Λ X).card := by
-    exact_mod_cast card_cutEdges_le_card_edgeBoundary X
+  have hb : (((planeDomainGraph Λ).interedges X Xᶜ).card : ℝ) ≤ (edgeBoundary G X).card := by
+    exact_mod_cast card_interedges_compl_le_card_edgeBoundary X
   have hr : (0 : ℝ) ≤ ((r₀ : ℝ) + 1) := by positivity
   have h1 : 2 * μ * 2 ≤ max (max (2 * μ * 2) (2 * Real.log q)) K :=
     (le_max_left _ _).trans (le_max_left _ _)
   have h2 : 2 * Real.log q ≤ max (max (2 * μ * 2) (2 * Real.log q)) K :=
     (le_max_right _ _).trans (le_max_left _ _)
   have h3 : K ≤ max (max (2 * μ * 2) (2 * Real.log q)) K := le_max_right _ _
-  refine ⟨fun i hi => (truncationRadius_eq_of_mem_crossingLabels hX hi).2.2, ?_, fun i hi => ?_,
+  refine ⟨fun i hi => (truncationRadius_eq_of_mem_crossingTerms hX hi).2.2, ?_, fun i hi => ?_,
     ?_⟩
-  · refine (card_crossingLabels_le G S₀ r₀ a hX hμ card_graphBall_domainGraph_le hMult).trans ?_
-    calc 2 * μ * 2 * ((r₀ : ℝ) + 1) ^ 2 * (cutEdges G X).card
-        ≤ 2 * μ * 2 * ((r₀ : ℝ) + 1) ^ 2 * (edgeBoundary Λ X).card := by gcongr
+  · refine (card_crossingTerms_designatedSupport_le (planeDomainGraph Λ) S₀ r₀ a hX hμ
+      card_graphBall_domainGraph_le hMult).trans ?_
+    calc 2 * μ * 2 * ((r₀ : ℝ) + 1) ^ 2 * ((planeDomainGraph Λ).interedges X Xᶜ).card
+        ≤ 2 * μ * 2 * ((r₀ : ℝ) + 1) ^ 2 * (edgeBoundary G X).card := by gcongr
       _ ≤ _ := by
         rw [mul_right_comm]
         gcongr
-  · refine (log_dim_le_of_mem_crossingLabels hq hX card_graphBall_domainGraph_le hi).trans ?_
+  · refine (log_dim_le_of_mem_crossingTerms hq hX card_graphBall_domainGraph_le hi).trans ?_
     gcongr
-  · refine (cutBudget_le hq G S₀ r₀ a hX zero_le_two hμ card_graphBall_domainGraph_le
-      hMult).trans ?_
+  · refine (cutLogBudget_designatedSupport_le hq (planeDomainGraph Λ) S₀ r₀ a hX zero_le_two hμ
+      card_graphBall_domainGraph_le hMult).trans ?_
     gcongr
 
 /-- The explicit cut-budget coefficient `max 1 (4 μ_R (1 + 2 log q)²)` on a lattice domain,
@@ -615,15 +620,19 @@ noncomputable def latticeCutCoefficient (q R : ℕ) : ℝ :=
 /-- **The cut budget on a lattice domain, with an explicit coefficient**
 (Proposition 4.5, `eq:quasilocal-cut-budget`, `03-quasilocal.tex`, lines 434–451 and
 505–518): `ℬ_X ≤ latticeCutCoefficient q R (1 + b_X) (r₀ + 1)⁶` for every `X ⊆ S₀`. -/
-theorem cutBudget_le_latticeCutCoefficient {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
+theorem cutLogBudget_le_latticeCutCoefficient {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
     (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ) (ha : ∀ X, a X ∈ X.1)
     (S₀ : Finset (Site Λ)) (r₀ : ℕ) {X : Finset (Site Λ)} (hX : X ⊆ S₀) :
-    cutBudget q (planeDomainGraph Λ) S₀ r₀ a X ≤
-      latticeCutCoefficient q R * (1 + (edgeBoundary Λ X).card) * ((r₀ : ℝ) + 1) ^ 6 := by
-  refine (cutBudget_le hq _ S₀ r₀ a hX zero_le_two (Nat.cast_nonneg _)
-    card_graphBall_domainGraph_le fun x => by exact_mod_cast card_anchor_fiber_le a ha x).trans ?_
-  have hb : ((cutEdges (planeDomainGraph Λ) X).card : ℝ) ≤ (edgeBoundary Λ X).card := by
-    exact_mod_cast card_cutEdges_le_card_edgeBoundary X
+    ManyBody.cutLogBudget (fun i ↦ designatedSupport (planeDomainGraph Λ) S₀ r₀ (a i))
+        (fun _ ↦ q) X ≤
+      latticeCutCoefficient q R * (1 + (edgeBoundary (planeDomainGraph Λ) X).card) *
+        ((r₀ : ℝ) + 1) ^ 6 := by
+  refine (cutLogBudget_designatedSupport_le hq (planeDomainGraph Λ) S₀ r₀ a hX zero_le_two
+    (Nat.cast_nonneg _) card_graphBall_domainGraph_le
+    fun x => by exact_mod_cast card_anchor_fiber_le a ha x).trans ?_
+  have hb : (((planeDomainGraph Λ).interedges X Xᶜ).card : ℝ) ≤
+      (edgeBoundary (planeDomainGraph Λ) X).card := by
+    exact_mod_cast card_interedges_compl_le_card_edgeBoundary X
   unfold latticeCutCoefficient
   gcongr
 
@@ -647,11 +656,13 @@ sentence, `03-quasilocal.tex`, lines 452–455 and 519–520): with `r₀ = ⌈C
 theorem latticeCutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ) {C₁ C₂ : ℝ}
     (hC₁ : 0 ≤ C₁) (hC₂ : 0 ≤ C₂) (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ)
     (ha : ∀ X, a X ∈ X.1) (S₀ X : Finset (Site Λ)) (hX : X ⊆ S₀) {n D : ℝ} (hn : 2 ≤ n)
-    (hD : 1 ≤ D) (hb : ((edgeBoundary Λ X).card : ℝ) ≤ C₂ * n * D) :
-    cutBudget q (planeDomainGraph Λ) S₀ ⌈C₁ * Real.log n ^ 2⌉₊ a X ≤
+    (hD : 1 ≤ D) (hb : ((edgeBoundary (planeDomainGraph Λ) X).card : ℝ) ≤ C₂ * n * D) :
+    ManyBody.cutLogBudget
+        (fun i ↦ designatedSupport (planeDomainGraph Λ) S₀ ⌈C₁ * Real.log n ^ 2⌉₊ (a i))
+        (fun _ ↦ q) X ≤
       latticeCutBudgetConstant q R C₁ C₂ * (n * D * Real.log n ^ 12) :=
   le_of_cutBudget_le (zero_le_one.trans (le_max_left _ _)) hC₁ hC₂ hn hD hb
-    (cutBudget_le_latticeCutCoefficient hq R Λ a ha S₀ _ hX)
+    (cutLogBudget_le_latticeCutCoefficient hq R Λ a ha S₀ _ hX)
 
 /-- **The cut budget in terms of `n` on a lattice domain** (Proposition 4.5, last sentence,
 `03-quasilocal.tex`, lines 452–455 and 519–520). For `q ≥ 1`, `R`, `C₁ ≥ 0` and `C₂ ≥ 0` there
@@ -662,8 +673,10 @@ theorem exists_latticeCutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ) {C₁ 
     ∃ C : ℝ, 0 ≤ C ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
       ∀ (S₀ X : Finset (Site Λ)), X ⊆ S₀ → ∀ n D : ℝ, 2 ≤ n → 1 ≤ D →
-        ((edgeBoundary Λ X).card : ℝ) ≤ C₂ * n * D →
-        cutBudget q (planeDomainGraph Λ) S₀ ⌈C₁ * Real.log n ^ 2⌉₊ a X ≤
+        ((edgeBoundary (planeDomainGraph Λ) X).card : ℝ) ≤ C₂ * n * D →
+        ManyBody.cutLogBudget
+            (fun i ↦ designatedSupport (planeDomainGraph Λ) S₀ ⌈C₁ * Real.log n ^ 2⌉₊ (a i))
+            (fun _ ↦ q) X ≤
           C * (n * D * Real.log n ^ 12) :=
   ⟨_, latticeCutBudgetConstant_nonneg q R hC₁ hC₂, fun Λ a ha S₀ X hX _ _ hn hD hb =>
     latticeCutBudget_le_log hq R hC₁ hC₂ Λ a ha S₀ X hX hn hD hb⟩

@@ -44,6 +44,8 @@ bonds; fixed-length rescaling then accommodates arbitrary BNT copy weights.
 
 open scoped ComplexOrder
 
+open ManyBody
+
 namespace MPOTensor
 
 variable {d D : ℕ}
@@ -64,10 +66,10 @@ structure TranslationInvariantBondData (d : ℕ) where
   finite periodic chain. -/
   bond_comm :
     ∀ {N : ℕ}, ∀ hN : 2 ≤ N, ∀ i j : Fin N,
-      embedLocalOperator (d := d) 2 N hN i bond
-        * embedLocalOperator (d := d) 2 N hN j bond
-      = embedLocalOperator (d := d) 2 N hN j bond
-          * embedLocalOperator (d := d) 2 N hN i bond
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) bond
+        * placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) bond
+      = placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) bond
+          * placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) bond
 
 namespace TranslationInvariantBondData
 
@@ -93,7 +95,7 @@ def toCommutingFormData (data : TranslationInvariantBondData d) {N : ℕ}
 @[simp] theorem toCommutingFormData_bondAt
     (data : TranslationInvariantBondData d) {N : ℕ} (hN : 2 ≤ N) (i : Fin N) :
     (data.toCommutingFormData (N := N) hN).bondAt i =
-      embedLocalOperator (d := d) 2 N hN i data.bond := rfl
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) data.bond := rfl
 
 end TranslationInvariantBondData
 

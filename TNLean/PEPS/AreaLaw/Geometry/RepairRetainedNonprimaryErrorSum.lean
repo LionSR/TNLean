@@ -31,6 +31,7 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -76,7 +77,8 @@ theorem repairStage_retained_positive_rank_error_sum_le {Sstar : ℝ} (hSstar : 
       ⌈C_B * repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar N
         i.val.val⌉₊
     (∑ᶠ i : I, (((n i : ℝ) ^ 100)⁻¹)) ≤
-      repairRetainedCountConstant Sstar * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+      repairRetainedCountConstant Sstar * (2 * (C : ℝ) + 1) ^ 2 *
+        (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
   intro I n
   obtain ⟨hfinite, hbound⟩ :=
@@ -118,7 +120,7 @@ theorem exists_uniform_repairStage_retained_positive_rank_error_sum_bound
               ⌈C_B * repairStageCharacteristicLength o Λ A C k₀ hC h₀ Sstar N
                 i.val.val⌉₊
             (∑ᶠ i : I, (((n i : ℝ) ^ 100)⁻¹)) ≤
-              L * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
+              L * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card :=
   ⟨_, repairRetainedCountConstant_pos Sstar, fun _ hC_B ↦
     repairStage_retained_positive_rank_error_sum_le hSstar hC_B⟩
 

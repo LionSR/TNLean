@@ -2,7 +2,8 @@
 
 The generic theorem and physical regional-density proofs belong to QICLean.
 This consumer uses the existing finite-domain model data
-`OrderedTwoFamilyPartition`, `earlierSameFamily`, `reducedState`, and `regionalEntropy`.
+`OrderedTwoFamilyPartition`, `earlierSameFamily`, `ManyBody.regionState`, and
+`ManyBody.regionEntropy`.
 
 The generic adapter `Geometry.OrderedTwoFamilyPartition.entropy_le_residual_add_half_sum`
 formalizes
@@ -14,7 +15,7 @@ exterior-plus-earlier-same-family region. Its conclusion is
 `S(A) ≤ S(D) + (1/2) ∑ i, ε i`. No Hamiltonian, gap, geometry, nonempty-set or
 error-sign hypothesis is added.
 
-`regionalEntropy_le_residual_add_half_sum` is its specialization to a finite
+`regionEntropy_le_residual_add_half_sum` is its specialization to a finite
 domain in `ℤ × ℤ` with one local dimension `q`. It identifies the
 already-defined regional entropy with QICLean's construction. Neither model data
 nor generic entropy proofs are duplicated.

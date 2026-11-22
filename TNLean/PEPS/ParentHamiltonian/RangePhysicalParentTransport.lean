@@ -227,8 +227,11 @@ theorem map_ker_regionParentHamiltonian_physicalDeform_of_injOn (A : Tensor Γ d
       (RegionPhysicalConfig (d := e) (R i)) ℂ)
     (hH : ∀ i, IsRegionParentInteraction A (R i) (H i))
     (hK : ∀ i, IsRegionParentInteraction (physicalDeform A F) (R i) (K i)) :
-    (Matrix.mulVecLin (regionParentHamiltonian R H)).ker.map (globalPhysicalMap F) =
-      (Matrix.mulVecLin (regionParentHamiltonian R K)).ker := by
+    (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R H).hamiltonian).ker.map
+          (globalPhysicalMap F) =
+      (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin e) R K).hamiltonian).ker := by
   rw [ker_regionParentHamiltonian A R H hH,
     ker_regionParentHamiltonian (physicalDeform A F) R K hK]
   exact map_regionParentGroundSpace_physicalDeform_of_injOn A F hF R hcover

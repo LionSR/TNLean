@@ -30,6 +30,7 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 noncomputable section
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -61,7 +62,8 @@ theorem repairStage_markIndex_prefix_le {Sstar : ℝ} (hSstar : 1 < Sstar)
       (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀) (N : ℕ) :
     ∑ j ∈ Finset.range N,
         (Nat.card (repairStage o Λ A C k₀ hC h₀ Sstar j).markIndex : ℝ) ≤
-      repairMarkCountConstant Sstar * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+      repairMarkCountConstant Sstar * (2 * (C : ℝ) + 1) ^ 2 *
+        (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
   rw [repairMarkCountConstant]
   set K := repairDescendantLayerConstant Sstar 1
@@ -105,7 +107,7 @@ theorem exists_uniform_repairStage_markIndex_prefix_bound {Sstar : ℝ}
         ∀ N : ℕ,
           ∑ j ∈ Finset.range N,
               (Nat.card (repairStage o Λ A C k₀ hC h₀ Sstar j).markIndex : ℝ) ≤
-            M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
+            M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card :=
   ⟨_, repairMarkCountConstant_pos Sstar, repairStage_markIndex_prefix_le hSstar⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

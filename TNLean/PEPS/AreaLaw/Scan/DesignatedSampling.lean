@@ -22,7 +22,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -62,15 +62,16 @@ theorem designatedSupport_eq_ball_of_incidence [Finite I] (σ : PhysicalPartitio
     designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) = S.ball i := by
   classical
   cases nonempty_fintype I
-  have hcross : i ∈ crossingLabels S.graph (S.truncationSet L) S.r₀ S.anchor (middle σ) := by
+  have hcross : i ∈ ManyBody.crossingTerms
+      (fun j ↦ designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor j)) (middle σ) := by
     obtain ⟨x, hx⟩ := hsplit.2
     obtain ⟨y, hy⟩ := hsplit.1
-    apply Finset.mem_filter.mpr
-    refine ⟨Finset.mem_univ _, ⟨x, (Finset.mem_inter.mp hx).1, (Finset.mem_inter.mp hx).2⟩,
-      y, (Finset.mem_inter.mp hy).1, ?_⟩
+    refine ManyBody.mem_crossingTerms.mpr
+      ⟨⟨x, (Finset.mem_inter.mp hx).1, (Finset.mem_inter.mp hx).2⟩,
+        y, (Finset.mem_inter.mp hy).1, ?_⟩
     have hs := (Finset.mem_filter.mp (Finset.mem_inter.mp hy).2).2
     simp [middle, hs]
-  exact (truncationRadius_eq_of_mem_crossingLabels hsub hcross).2.2.trans
+  exact (truncationRadius_eq_of_mem_crossingTerms hsub hcross).2.2.trans
     (Finset.ext fun _ ↦ by simp [ball, ManyBody.mem_graphBall])
 
 /-- Splitting designated supports, including the variable-radius truncation case,

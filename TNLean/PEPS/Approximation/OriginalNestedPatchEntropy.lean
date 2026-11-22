@@ -33,6 +33,8 @@ Independently formalized from the manuscript; no upstream Lean text is reused.
 
 open TNLean.Lattice
 
+open ManyBody (edgeBoundary planeDomainGraph)
+
 namespace TNLean.PEPS.Approximation
 
 /-- The square entropy area law supplies a constant at each admissible `q`, `J`
@@ -70,11 +72,11 @@ theorem SquareEntropyAreaLawAt.closedSquareSample_entropy_le
   simp only [Finset.map_map, Function.Embedding.mk_trans_mk, Equiv.self_comp_symm,
     Function.Embedding.mk_id, Finset.map_refl] at hcut
   have hbound : ManyBody.regionEntropy (AreaLaw.rectangleAreaLawState Ω) D ≤
-      C_A * (Lattice.edgeBoundary (ManyBody.rectangularDomain L L) D).card := by
+      C_A * (edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L)) D).card := by
     simpa only [ManyBody.regionEntropy,
       AreaLaw.rectangleAreaLawState, AreaLaw.rectangleConfigurationEquiv] using hcut
   have hu : 0 ≤ u := by linarith
-  have hedge : ((Lattice.edgeBoundary (ManyBody.rectangularDomain L L) D).card : ℝ) ≤
+  have hedge : ((edgeBoundary (planeDomainGraph (ManyBody.rectangularDomain L L)) D).card : ℝ) ≤
       16 * u + 4 := by
     linarith [AreaLaw.Geometry.card_edgeBoundary_closedSquareSample_le
       (ManyBody.rectangularDomain L L) z hr]

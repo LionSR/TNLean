@@ -43,8 +43,7 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 def completePhysicalConfigEmbedding {d D N : ℕ} [NeZero d] :
     Cfg d N ↪ Cfg d (completeCircuitSiteCount d D N) :=
   (physicalGlobalConfigEmbedding (d := d) (D := D) (N := N)).trans
-    (zeroWorkspaceEmbedding (d := d) (n := globalSiteCount d D N)
-      (a := circuitPaddingCount N))
+    (workspaceEmbedding (n := globalSiteCount d D N) (0 : Fin (circuitPaddingCount N) → Fin d))
 
 /-- The padding uses at most one additional qudit.
 

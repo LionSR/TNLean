@@ -33,7 +33,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -90,10 +90,10 @@ theorem nestedPatch_mono (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ) (u : ℝ)
 /-- A crossing edge's support misses a square whose radius is smaller by at least one. -/
 theorem edgeBoundary_support_disjoint_of_add_one_le {Λ : Finset (ℤ × ℤ)}
     {c : ℝ × ℝ} {r s : ℝ} {e : Sym2 (Site Λ)}
-    (he : e ∈ edgeBoundary Λ (closedSquareSample Λ c r)) (hsr : s + 1 ≤ r) :
+    (he : e ∈ edgeBoundary (planeDomainGraph Λ) (closedSquareSample Λ c r)) (hsr : s + 1 ≤ r) :
     Disjoint e.toFinset (closedSquareSample Λ c s) := by
   classical
-  obtain ⟨hedge, x, hx, y, hy, rfl⟩ := Finset.mem_filter.mp he
+  obtain ⟨hedge, x, hx, y, hy, rfl⟩ := ManyBody.mem_edgeBoundary.mp he
   have hxy : (planeDomainGraph Λ).Adj x y := by simpa using hedge
   rw [Sym2.toFinset_mk_eq, Finset.disjoint_left]
   intro z hz hzs
@@ -105,10 +105,10 @@ theorem edgeBoundary_support_disjoint_of_add_one_le {Λ : Finset (ℤ × ℤ)}
 /-- A crossing edge's support lies in every square enlarged by at least one. -/
 theorem edgeBoundary_support_subset_of_add_one_le {Λ : Finset (ℤ × ℤ)}
     {c : ℝ × ℝ} {r s : ℝ} {e : Sym2 (Site Λ)}
-    (he : e ∈ edgeBoundary Λ (closedSquareSample Λ c r)) (hrs : r + 1 ≤ s) :
+    (he : e ∈ edgeBoundary (planeDomainGraph Λ) (closedSquareSample Λ c r)) (hrs : r + 1 ≤ s) :
     e.toFinset ⊆ closedSquareSample Λ c s := by
   classical
-  obtain ⟨hedge, x, hx, y, hy, rfl⟩ := Finset.mem_filter.mp he
+  obtain ⟨hedge, x, hx, y, hy, rfl⟩ := ManyBody.mem_edgeBoundary.mp he
   have hxy : (planeDomainGraph Λ).Adj x y := by simpa using hedge
   rw [Sym2.toFinset_mk_eq]
   simp only [Finset.insert_subset_iff, Finset.singleton_subset_iff]
@@ -119,7 +119,7 @@ theorem edgeBoundary_support_subset_of_add_one_le {Λ : Finset (ℤ × ℤ)}
 Source: polynomial-PEPS `03-patches.tex`, lines 222–228. -/
 theorem nestedPatch_crossing_disjoint_earlier {Λ : Finset (ℤ × ℤ)}
     {c : ℝ × ℝ} {u : ℝ} {i j : ℕ} {e : Sym2 (Site Λ)}
-    (he : e ∈ edgeBoundary Λ (nestedPatch Λ c u j)) (hij : i < j) :
+    (he : e ∈ edgeBoundary (planeDomainGraph Λ) (nestedPatch Λ c u j)) (hij : i < j) :
     Disjoint e.toFinset (nestedPatch Λ c u i) := by
   apply edgeBoundary_support_disjoint_of_add_one_le he
   linarith [nestedPatchRadius_add_two_le (u := u) hij]
@@ -128,7 +128,7 @@ theorem nestedPatch_crossing_disjoint_earlier {Λ : Finset (ℤ × ℤ)}
 Source: polynomial-PEPS `03-patches.tex`, lines 222–228. -/
 theorem nestedPatch_crossing_subset_later {Λ : Finset (ℤ × ℤ)}
     {c : ℝ × ℝ} {u : ℝ} {i j : ℕ} {e : Sym2 (Site Λ)}
-    (he : e ∈ edgeBoundary Λ (nestedPatch Λ c u i)) (hij : i < j) :
+    (he : e ∈ edgeBoundary (planeDomainGraph Λ) (nestedPatch Λ c u i)) (hij : i < j) :
     e.toFinset ⊆ nestedPatch Λ c u j := by
   apply edgeBoundary_support_subset_of_add_one_le he
   linarith [nestedPatchRadius_add_two_le (u := u) hij]
@@ -137,8 +137,8 @@ theorem nestedPatch_crossing_subset_later {Λ : Finset (ℤ × ℤ)}
 Source: polynomial-PEPS `03-patches.tex`, lines 218–228. -/
 theorem nestedPatch_crossing_unique {Λ : Finset (ℤ × ℤ)} {c : ℝ × ℝ}
     {u : ℝ} {i j : ℕ} {e : Sym2 (Site Λ)}
-    (hi : e ∈ edgeBoundary Λ (nestedPatch Λ c u i))
-    (hj : e ∈ edgeBoundary Λ (nestedPatch Λ c u j)) : i = j := by
+    (hi : e ∈ edgeBoundary (planeDomainGraph Λ) (nestedPatch Λ c u i))
+    (hj : e ∈ edgeBoundary (planeDomainGraph Λ) (nestedPatch Λ c u j)) : i = j := by
   classical
   wlog hij : i < j generalizing i j
   · rcases lt_trichotomy i j with h | h | h
@@ -146,14 +146,14 @@ theorem nestedPatch_crossing_unique {Λ : Finset (ℤ × ℤ)} {c : ℝ × ℝ}
     · exact h
     · exact (this hj hi h).symm
   have hs := nestedPatch_crossing_subset_later hi hij
-  obtain ⟨_, x, _, y, hy, rfl⟩ := Finset.mem_filter.mp hj
+  obtain ⟨_, x, _, y, hy, rfl⟩ := ManyBody.mem_edgeBoundary.mp hj
   exact False.elim (hy (hs (by simp [Sym2.toFinset_mk_eq])))
 
 /-- The crossing-edge sets of distinct selected patches are disjoint. -/
 theorem disjoint_edgeBoundary_nestedPatch (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ)
     (u : ℝ) {i j : ℕ} (hij : i ≠ j) :
-    Disjoint (edgeBoundary Λ (nestedPatch Λ c u i))
-      (edgeBoundary Λ (nestedPatch Λ c u j)) := by
+    Disjoint (edgeBoundary (planeDomainGraph Λ) (nestedPatch Λ c u i))
+      (edgeBoundary (planeDomainGraph Λ) (nestedPatch Λ c u j)) := by
   classical
   exact Finset.disjoint_left.mpr fun _ hi hj ↦ hij (nestedPatch_crossing_unique hi hj)
 
@@ -161,11 +161,12 @@ theorem disjoint_edgeBoundary_nestedPatch (Λ : Finset (ℤ × ℤ)) (c : ℝ ×
 Source: polynomial-PEPS `03-patches.tex`, lines 323–326. -/
 theorem card_edgeBoundary_nestedPatch_le (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ)
     {u : ℝ} (hu : 0 ≤ u) {j : ℕ} (hj : j < nestedPatchCount u) :
-    ((edgeBoundary Λ (nestedPatch Λ c u j)).card : ℝ) ≤ 16 * u + 4 := by
+    ((edgeBoundary (planeDomainGraph Λ) (nestedPatch Λ c u j)).card : ℝ) ≤ 16 * u + 4 := by
   have h := card_edgeBoundary_closedSquareSample_le Λ c
     (hu.trans (le_nestedPatchRadius u j))
   have hr := nestedPatchRadius_le_two_mul hu hj
-  change ((edgeBoundary Λ (closedSquareSample Λ c (nestedPatchRadius u j))).card : ℝ) ≤ _
+  change ((edgeBoundary (planeDomainGraph Λ)
+    (closedSquareSample Λ c (nestedPatchRadius u j))).card : ℝ) ≤ _
   linarith
 
 /-- The scalar budget of the source-selected family is at most `36 * κ²`.
@@ -194,7 +195,7 @@ supplies the counting and arithmetic only, not the analytic energy argument. -/
 theorem sum_card_edgeBoundary_nestedPatch_mul_sq_le (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ)
     {u : ℝ} (hu : 4 ≤ u) (κ : ℝ) :
     ∑ j : Fin (nestedPatchCount u),
-      ((edgeBoundary Λ (nestedPatch Λ c u j)).card : ℝ) *
+      ((edgeBoundary (planeDomainGraph Λ) (nestedPatch Λ c u j)).card : ℝ) *
         (κ / (nestedPatchCount u : ℝ)) ^ 2 ≤ 36 * κ ^ 2 := by
   calc
     _ ≤ ∑ _j : Fin (nestedPatchCount u),

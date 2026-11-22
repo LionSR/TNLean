@@ -1016,13 +1016,16 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 
 \begin{lemma}[Displacement characterization]
     \label{aux:ring-support-distance-separation}
-    \lean{MPSPreparation.isSeparatedBy_iff_lt_ringSupportDistance}\leanok
-    \uses{aux:ring-support-distance}
-    For nonempty supports and $r\in\mathbb N$, no displacement of absolute value
-    at most $r$ connects $X$ to $Y$ if and only if $r<d(X,Y)$.
+    \lean{MPSPreparation.isGraphSeparated_iff_lt_ringSupportDistance}\leanok
+    \uses{aux:ring-support-distance, aux:ring-support-distance-cycle}
+    For nonempty supports and $r\in\mathbb N$, every site of $X$ is at distance
+    larger than $r$ from every site of $Y$ in the cycle graph on $\Lambda$ if and
+    only if $r<d(X,Y)$.
 \end{lemma}
 \begin{proof}\leanok
-    Use the defining minimum and its minimizing displacement.
+    A minimizing displacement joins a site of $X$ to a site of $Y$ by a walk of
+    length $d(X,Y)$ in the cycle graph; conversely $d(X,Y)$ is at most the
+    cycle-graph distance of any two such sites.
 \end{proof}
 
 \begin{lemma}[Ring distance and cycle-graph distance]
@@ -1064,7 +1067,9 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 
 \begin{lemma}[Contractivity of cyclic local embedding]
     \label{aux:cyclic-local-embedding-norm}
-    \lean{MPOTensor.norm_embedLocalOperator_le}\leanok
+    \lean{ManyBody.Interaction.norm_translates_term_le}
+    \leanok
+    \uses{lem:qc_placement_norm}
     Embedding an operator on $L$ consecutive sites into an $N$-site ring,
     where $L\leq N$, does not increase its Hilbert-space operator norm.
 \end{lemma}
@@ -1085,7 +1090,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 
 \begin{lemma}[Support of a cyclic two-site embedding]
     \label{aux:cyclic-two-site-embedding-support}
-    \lean{MPSPreparation.embedLocalOperator_twoSite_mem_supportedOperators}\leanok
+    \lean{ManyBody.placeAlong_mem_supportedOperators, ManyBody.map_ringWindow_two}\leanok
     \uses{aux:permuted-operator-support}
     For $N\geq2$, the cyclic embedding of a two-site operator at $j$ belongs to
     $\mathcal A_{e_j}$, including the bond crossing from the last site to the first.
@@ -1097,7 +1102,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 
 \begin{lemma}[Translation-invariant finite-ring propagation bound]
     \label{aux:interaction-hamiltonian-lieb-robinson}
-    \lean{MPSTensor.norm_interactionHamiltonian_commutator_le_exp_abs_of_disjoint}\leanok
+    \lean{MPSTensor.norm_hamiltonian_translationInvariant_commutator_le_exp_abs_of_disjoint}\leanok
     \uses{aux:finite-ring-lieb-robinson,aux:cyclic-local-embedding-norm,
         aux:cyclic-two-site-embedding-support}
     Let $h$ be a Hermitian two-site interaction with $\|h\|\leq1$, and let
@@ -1118,9 +1123,9 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 
 \begin{lemma}[Gaussian-filtered finite-ring commutators]
     \label{lem:spt_finite_ring_gaussian_commutator}
-    \lean{MPSTensor.interactionHamiltonian_isHermitian,
-        MPSTensor.norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le,
-        MPSTensor.norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le_exp}
+    \lean{ManyBody.Interaction.isHermitian_translates_term,
+        MPSTensor.norm_gaussianFilteredTerm_hamiltonian_translationInvariant_commutator_le,
+        MPSTensor.norm_gaussianFilteredTerm_hamiltonian_translationInvariant_commutator_le_exp}
     \leanok
     \discussion{9879}
     \uses{aux:interaction-hamiltonian-lieb-robinson}
@@ -1239,7 +1244,7 @@ argument below.
 
 \begin{lemma}[Actual finite-ring regularized-frequency locality]
     \label{cor:spt_finite_ring_regularized_frequency_locality}
-    \lean{MPSTensor.norm_negativeFrequency_interactionHamiltonian_commutator_le}
+    \lean{MPSTensor.norm_negativeFrequency_hamiltonian_translationInvariant_commutator_le}
     \leanok
     \discussion{9879}
     \uses{aux:interaction-hamiltonian-lieb-robinson}

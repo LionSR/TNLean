@@ -10,9 +10,10 @@ energy bound are kept distinct.
     \label{lem:regional_barrier_hard_residual}
     \lean{TNLean.MPS.AreaLaw.norm_hard_residual_low_of_barrier}
     \leanok
-    Let $I,J$ be finite sets of bonds of an $L$-site qudit chain, and
-    let $0\leq h_i\leq I$ be supported on their designated neighbouring
-    sites. Put $A=\sum_{i\in I}h_i$, $Y=\sum_{i\in J}h_i$ and $C=|J|$.
+    Let the terms $h_i$ of an $L$-site qudit chain be supported on their
+    designated neighbouring sites, and let $I,J$ be finite sets of bonds
+    with $0\leq h_i\leq I$ for $i\in I\cup J$.
+    Put $A=\sum_{i\in I}h_i$, $Y=\sum_{i\in J}h_i$ and $C=|J|$.
     Let $B$ commute with $A$, and suppose that
     $b\mathbf1_{[c,\infty)}(A)\leq B$.
     Fix an orthonormal eigenbasis of $B+Y$ with real eigenvalues, and

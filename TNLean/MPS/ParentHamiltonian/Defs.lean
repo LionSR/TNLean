@@ -4,14 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.GroundSpace
+import QICLean.ManyBody.Hamiltonian.FrustrationFree
+import QICLean.ManyBody.Hamiltonian.Models
 
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 
 /-!
 # Parent interaction and parent Hamiltonian (definitions)
 
-This file introduces the parent interaction projector, translated local terms,
-and the finite-chain parent Hamiltonian.
+This file introduces the parent interaction projector, the parent interaction on the
+ring as a `ManyBody.Interaction`, its translated local terms, and the finite-chain
+parent Hamiltonian, which is the Hamiltonian of that interaction.
 
 ## Main definitions
 
@@ -26,14 +29,19 @@ and the finite-chain parent Hamiltonian.
 * `MPSTensor.replaceWindow L i σ τ` — replaces the \(L\) consecutive site values in
   \(\sigma\) starting at position \(i\) with values from \(\tau\).
 
-* `MPSTensor.localTerm A L N i` — the parent interaction embedded at site \(i\) on
-  the \(N\)-site periodic chain, acting as `parentInteraction` on the window
-  \(\{i, i+1, \ldots, i+L-1 \bmod N\}\) and as the identity on the complement.
+* `MPSTensor.parentRingInteraction A hLN` — the parent interaction on the ring of
+  \(N ≥ L\) sites: the translation-invariant interaction
+  (`ManyBody.Interaction.translationInvariant`) of the matrix of `parentInteraction A L`.
 
-* `MPSTensor.parentHamiltonian A L N` — the parent Hamiltonian \(H = ∑ᵢ hᵢ\).
+* `MPSTensor.localTerm A L N i` — its term with index \(i\), as a linear map: the
+  parent interaction placed on the window \(\{i, i+1, \ldots, i+L-1 \bmod N\}\) and the
+  identity on the complement.
+
+* `MPSTensor.parentHamiltonian A L N` — its Hamiltonian \(H = ∑ᵢ hᵢ\), as a linear map.
 
 * `MPSTensor.IsFrustrationFree` — the parent-Hamiltonian ground-state
-  condition \(hᵢ ψ = 0\) for every local term.
+  condition \(hᵢ ψ = 0\) for every local term, which is membership in the zero space of
+  the parent interaction on the ring (`MPSTensor.isFrustrationFree_iff_mem_zeroSpace`).
 -/
 
 open scoped BigOperators
@@ -182,37 +190,168 @@ second replacement. -/
   · simp [hoffset]
   · simp [hoffset]
 
-/-! ### Local term (site embedding) -/
+/-! ### Windows of the ring
 
-/-- Translated local term on an \(N\)-site periodic chain: embeds
-`parentInteraction A L` at site \(i\), acting on the window
-\(\{i, i+1, \ldots, i+L-1 \bmod N\}\) and as identity on the complement.
+The window of \(L \le N\) consecutive sites starting at \(i\) is the injection
+`ManyBody.ringWindow hLN i`, \(u \mapsto i + u\). Reading a configuration
+along it is extracting the window, its image is the set of sites of cyclic offset
+less than \(L\) from \(i\), and replacing the window writes the new values at its
+image and leaves the other sites unchanged. -/
+
+section RingWindow
+
+variable {L : ℕ} {α : Type*}
+
+/-- Reading a configuration along the window at `i` is extracting that window. -/
+theorem extractWindow_eq_comp_ringWindow (hLN : L ≤ N) (i : Fin N) (σ : Fin N → α) :
+    extractWindow L i σ = fun u ↦ σ (ManyBody.ringWindow hLN i u) :=
+  rfl
+
+/-- The window at `i` starts at `i`. -/
+@[simp] theorem ringWindow_zero (hLN : L ≤ N) (i : Fin N) (h : 0 < L) :
+    ManyBody.ringWindow hLN i ⟨0, h⟩ = i :=
+  Fin.ext (by rw [ManyBody.ringWindow_apply, Fin.val_add, Fin.val_castLE, Nat.add_zero,
+    Nat.mod_eq_of_lt i.isLt])
+
+/-- A site lies in the image of the window at `i` exactly when its cyclic offset from
+`i` is less than the window length. -/
+theorem exists_ringWindow_eq_iff (hLN : L ≤ N) (i k : Fin N) :
+    (∃ u, ManyBody.ringWindow hLN i u = k) ↔ (k.val + N - i.val) % N < L := by
+  constructor
+  · rintro ⟨u, rfl⟩
+    rw [ManyBody.ringWindow_apply, Fin.val_add, Fin.val_castLE,
+      offset_mod_eq i.isLt (Nat.lt_of_lt_of_le u.isLt hLN)]
+    exact u.isLt
+  · intro hk
+    refine ⟨⟨(k.val + N - i.val) % N, hk⟩, Fin.ext ?_⟩
+    rw [ManyBody.ringWindow_apply, Fin.val_add, Fin.val_castLE]
+    exact add_offset_mod_eq i.isLt k.isLt
+
+/-- A site lies outside the image of the window at `i` exactly when its cyclic offset
+from `i` is at least the window length. -/
+theorem forall_ringWindow_ne_iff (hLN : L ≤ N) (i k : Fin N) :
+    (∀ u, ManyBody.ringWindow hLN i u ≠ k) ↔ ¬ (k.val + N - i.val) % N < L := by
+  rw [← exists_ringWindow_eq_iff hLN, not_exists]
+
+/-- The image of the window at `i` is the set of sites of cyclic offset less than the
+window length. -/
+theorem mem_map_ringWindow_iff (hLN : L ≤ N) (i k : Fin N) :
+    k ∈ Finset.univ.map (ManyBody.ringWindow hLN i) ↔ (k.val + N - i.val) % N < L := by
+  simp only [Finset.mem_map, Finset.mem_univ, true_and]
+  exact exists_ringWindow_eq_iff hLN i k
+
+/-- Two configurations agree outside the window at `i` exactly when they agree at every
+site of cyclic offset at least the window length. -/
+theorem forall_ringWindow_ne_imp_iff (hLN : L ≤ N) (i : Fin N) (σ τ : Fin N → α) :
+    (∀ v, (∀ u, ManyBody.ringWindow hLN i u ≠ v) → σ v = τ v) ↔
+      ∀ k : Fin N, ¬ (k.val + N - i.val) % N < L → τ k = σ k := by
+  refine forall_congr' fun k ↦ ?_
+  rw [forall_ringWindow_ne_iff hLN, eq_comm]
+
+/-- Replacing the window at `i` writes the new values at the sites of the window. -/
+@[simp] theorem replaceWindow_ringWindow (hLN : L ≤ N) (i : Fin N) (σ : Fin N → α)
+    (τ : Fin L → α) (u : Fin L) :
+    replaceWindow L hLN i σ τ (ManyBody.ringWindow hLN i u) = τ u :=
+  congrFun (extractWindow_replaceWindow L hLN i σ τ) u
+
+/-- Replacing the window at `i` leaves the sites outside the window unchanged. -/
+theorem replaceWindow_of_forall_ringWindow_ne (hLN : L ≤ N) (i : Fin N) (σ : Fin N → α)
+    (τ : Fin L → α) {v : Fin N} (hv : ∀ u, ManyBody.ringWindow hLN i u ≠ v) :
+    replaceWindow L hLN i σ τ v = σ v := by
+  rw [replaceWindow, dite_eq_right ((forall_ringWindow_ne_iff hLN i v).mp hv)]
+
+/-- Two configurations agree outside the window at `i` exactly when replacing the window
+of the second by the window of the first gives the first. -/
+theorem forall_ringWindow_ne_imp_iff_replaceWindow (hLN : L ≤ N) (i : Fin N)
+    (σ τ : Fin N → α) :
+    (∀ v, (∀ u, ManyBody.ringWindow hLN i u ≠ v) → σ v = τ v) ↔
+      replaceWindow L hLN i τ (extractWindow L i σ) = σ := by
+  constructor
+  · intro h
+    funext v
+    by_cases hv : ∃ u, ManyBody.ringWindow hLN i u = v
+    · obtain ⟨u, rfl⟩ := hv
+      exact replaceWindow_ringWindow hLN i τ _ u
+    · rw [replaceWindow_of_forall_ringWindow_ne hLN i τ _ (not_exists.mp hv)]
+      exact (h v (not_exists.mp hv)).symm
+  · intro h v hv
+    exact (congrFun h v).symm.trans (replaceWindow_of_forall_ringWindow_ne hLN i τ _ hv)
+
+end RingWindow
+
+/-! ### The parent interaction on the ring -/
+
+/-- **The parent interaction on the ring.** On the ring of \(N \ge L\) sites, the
+translation-invariant interaction whose term with index \(i\) is the matrix of the canonical
+parent interaction \(h_L\) placed on the window of \(L\) consecutive sites starting at \(i\)
+(`ManyBody.Interaction.translationInvariant`). Its terms are the translated local terms and
+its Hamiltonian is the parent Hamiltonian; a vector is frustration free exactly when it lies in
+its zero space (`isFrustrationFree_iff_mem_zeroSpace`). -/
+noncomputable abbrev parentRingInteraction (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) :
+    ManyBody.Interaction (fun _ : Fin N ↦ Fin d)
+      (fun i ↦ Finset.univ.map (ManyBody.ringWindow hLN i)) :=
+  ManyBody.Interaction.translationInvariant hLN (LinearMap.toMatrix' (parentInteraction A L))
+
+/-! ### Local term and parent Hamiltonian -/
+
+/-- Translated local term on an \(N\)-site periodic chain: the term with index `i` of the
+parent interaction on the ring (`parentRingInteraction`), which acts as `parentInteraction A L`
+on the window \(\{i, i+1, \ldots, i+L-1 \bmod N\}\) and as the identity on the complement.
 
 **Important:** When \(L > N\) the definition returns `0`, which makes
 `parentHamiltonian` trivially zero and `IsFrustrationFree` vacuously true.
 The lemmas in `Basic.lean` carry an explicit \(L ≤ N\) hypothesis; the one-site
 two-site result below records the \(L > N\) convention separately.
 
-For \(f\) and output configuration \(\sigma\):
+For \(f\) and output configuration \(\sigma\) (`localTerm_apply_of_le`):
 ```
 (localTerm A L N i f)(σ) = (parentInteraction A L (fun τ ↦ f (replaceWindow L i σ τ)))
                              (extractWindow L i σ)
 ``` -/
 noncomputable def localTerm (A : MPSTensor d D) (L N : ℕ) (i : Fin N) :
     NSiteSpace d N →ₗ[ℂ] NSiteSpace d N :=
-  if hLN : L ≤ N then
-  LinearMap.pi fun σ =>
-    (LinearMap.proj (extractWindow L i σ) : NSiteSpace d L →ₗ[ℂ] ℂ).comp
-      ((parentInteraction A L).comp
-        (LinearMap.pi fun τ =>
-          (LinearMap.proj (replaceWindow L hLN i σ τ) : NSiteSpace d N →ₗ[ℂ] ℂ)))
-  else 0
+  if hLN : L ≤ N then Matrix.toLin' ((parentRingInteraction A hLN).term i) else 0
 
-/-- Parent Hamiltonian on an \(N\)-site periodic chain:
-sum of translated local interaction terms. -/
+/-- Parent Hamiltonian on an \(N\)-site periodic chain: the Hamiltonian of the parent
+interaction on the ring, the sum of the translated local terms
+(`parentHamiltonian_eq_sum_localTerm`). -/
 noncomputable def parentHamiltonian (A : MPSTensor d D) (L N : ℕ) :
     NSiteSpace d N →ₗ[ℂ] NSiteSpace d N :=
-  ∑ i : Fin N, localTerm A L N i
+  if hLN : L ≤ N then Matrix.toLin' (parentRingInteraction A hLN).hamiltonian else 0
+
+/-- For \(L ≤ N\), the translated local term is the term of the parent interaction on the
+ring. -/
+theorem localTerm_of_le (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) (i : Fin N) :
+    localTerm A L N i = Matrix.toLin' ((parentRingInteraction A hLN).term i) :=
+  dite_eq_left hLN
+
+/-- Pointwise formula for a translated local term when the window length is at
+most the chain length. -/
+@[simp] theorem localTerm_apply_of_le (A : MPSTensor d D) (L N : ℕ)
+    (hLN : L ≤ N) (i : Fin N) (ψ : NSiteSpace d N) (σ : Cfg d N) :
+    localTerm A L N i ψ σ =
+      parentInteraction A L
+        (fun τ => ψ (replaceWindow L hLN i σ τ)) (extractWindow L i σ) := by
+  rw [localTerm_of_le A hLN i, Matrix.toLin'_apply, ManyBody.Interaction.translates_term,
+    ManyBody.placeAlong_mulVec_apply_of _ _ ψ σ (replaceWindow L hLN i σ)
+      (replaceWindow_ringWindow hLN i σ)
+      (fun τ _ hv ↦ replaceWindow_of_forall_ringWindow_ne hLN i σ τ hv)]
+  exact (congrFun (LinearMap.congr_fun (Matrix.toLin'_toMatrix' (parentInteraction A L))
+    (fun τ ↦ ψ (replaceWindow L hLN i σ τ))) (extractWindow L i σ))
+
+/-- For \(L ≤ N\), the parent Hamiltonian is the Hamiltonian of the parent interaction on the
+ring. -/
+theorem parentHamiltonian_of_le (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N) :
+    parentHamiltonian A L N = Matrix.toLin' (parentRingInteraction A hLN).hamiltonian :=
+  dite_eq_left hLN
+
+/-- The parent Hamiltonian is the sum of the translated local terms. -/
+theorem parentHamiltonian_eq_sum_localTerm (A : MPSTensor d D) (L N : ℕ) :
+    parentHamiltonian A L N = ∑ i : Fin N, localTerm A L N i := by
+  by_cases hLN : L ≤ N
+  · rw [parentHamiltonian_of_le A hLN, ManyBody.Interaction.hamiltonian, map_sum]
+    exact Finset.sum_congr rfl fun i _ ↦ (localTerm_of_le A hLN i).symm
+  · simp [parentHamiltonian, localTerm, hLN]
 
 /-- The two-site parent Hamiltonian on a one-site periodic chain is zero under
 the project's convention for a local interaction larger than the chain.
@@ -226,11 +365,22 @@ only uses chain lengths greater than two. This restriction is documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 @[simp] theorem parentHamiltonian_two_one_eq_zero (A : MPSTensor d D) :
     parentHamiltonian A 2 1 = 0 := by
-  simp [parentHamiltonian, localTerm]
+  simp [parentHamiltonian]
 
 /-- Frustration-free ground-state condition for the parent model:
-every local term annihilates the candidate vector. -/
+every local term annihilates the candidate vector. For \(L ≤ N\) this is membership in the
+zero space of the parent interaction on the ring (`isFrustrationFree_iff_mem_zeroSpace`). -/
 def IsFrustrationFree (A : MPSTensor d D) (L N : ℕ) (ψ : NSiteSpace d N) : Prop :=
   ∀ i : Fin N, localTerm A L N i ψ = 0
+
+/-- For \(L ≤ N\), a vector is frustration free for the parent model exactly when it lies in
+the zero space of the parent interaction on the ring. -/
+theorem isFrustrationFree_iff_mem_zeroSpace (A : MPSTensor d D) {L : ℕ} (hLN : L ≤ N)
+    (ψ : NSiteSpace d N) :
+    IsFrustrationFree A L N ψ ↔
+      WithLp.toLp 2 ψ ∈ (parentRingInteraction A hLN).zeroSpace := by
+  rw [ManyBody.Interaction.mem_zeroSpace_iff]
+  refine forall_congr' fun i ↦ ?_
+  rw [localTerm_of_le A hLN i, Matrix.toLin'_apply]
 
 end MPSTensor

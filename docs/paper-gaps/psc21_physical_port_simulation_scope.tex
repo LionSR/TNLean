@@ -32,12 +32,13 @@ main text, p.~1, the source defines depth by nearest-neighbor pair-gate
 layers and treats local unitaries on each spin and its ancillas as free.
 The displayed constants therefore do not count onsite operations as extra
 gate layers. Every finite protocol in this reduced-channel model now has
-an explicit unitary realization with fresh local product-zero environments,
-unchanged physical ports and intersite depth, and one final environment trace.
+an explicit unitary realization with local environments prepared in basis
+states, unchanged physical ports and intersite depth, and one final
+environment trace.
 
 \section{The proved bounded matching theorem}
-Fix a physical dimension $d\ge2$, an upper bound $B$ on the local input
-dimension, and $m\le B$. The density witness below forces $m\ge1$, hence $B\ge1$. Set
+Fix a physical dimension $d\ge1$, a bound $B$ on every local dimension along
+the protocol, and $k$ with $B\le d^k$; for $d\ge2$ one may take
 \begin{align}
     k & =\lceil\log_d B\rceil.
 \end{align}
@@ -46,110 +47,100 @@ length. Its matrix $E$ is isometric. A completely positive trace-preserving
 decoder is obtained by completing $Y\mapsto E^\dagger YE$ outside the code:
 \begin{align}
     D(Y) & =E^\dagger YE+
-    \operatorname{tr}[(I-EE^\dagger)Y(I-EE^\dagger)]\rho,
+    \sum_{b\notin\operatorname{ran}E}\bra{b}Y\ket{b}\,\ketbra{x_0}{x_0},
 \end{align}
-where $\rho$ is a fixed density matrix. Then $D(EXE^\dagger)=X$ for every
-operator $X$, and the identity persists after tensoring with the identity
-on any finite reference. The two-site encoding is the tensor product of
-the separate onsite encodings.\footnote{Formal declarations:
-    \leanid{QuantumCircuit.registerDecoding_comp_encoding},
-    \leanid{QuantumCircuit.registerDecoding_encoding_reference}, and
-    \leanid{QuantumCircuit.registerEncoding_pair} in
-    \doclink{TNLean/Circuit/Channel/RegisterEncoding}.}
+where $x_0$ is a fixed basis vector. Then $D(EXE^\dagger)=X$ for every
+operator $X$. The sitewise encodings and decodings are onsite
+channels.\footnote{Formal declarations:
+    \leanid{KrausFamily.decode}, \leanid{KrausFamily.map_decode_map_embed} and
+    \leanid{QuantumCircuit.map_decodeCircuit_comp_map_encodeCircuit} in QICLean's
+    \path{QICLean/Channel/KrausFamilyEncoding} and
+    \path{QICLean/Circuit/Compile/Encoding}.}
 
 On a ring of $N\ge2$ sites, give each site one physical port, a $k$-qudit
 data register and a $k$-qudit scratch register. For an arbitrary matching
 of CPTP pair channels, extend each channel to its full two-register space
 by encoding its output after applying it to a completed decoding of the
 input. These extensions are CPTP on the entire register algebra and agree
-exactly with the original channels on encoded inputs. There are normalized
-finite Kraus representations whose actual placed matching channel has
-physical depth at most
+exactly with the original channels on encoded inputs. The placed matching
+layer has a realization on the ring with ports of physical depth at most
 \begin{align}
-    2k & =2\lceil\log_d B\rceil,
+    2k,
 \end{align}
-independently of $N$ and the number of selected bonds. Products of $L$
-such certified layers have depth at most $2kL$.\footnote{Formal declarations:
+independently of $N$ and the number of selected bonds, on the data
+embedding, which places the registers on the data qudits with the port and
+scratch qudits in $0$. Protocols of depth $T$ have depth at most
+$2kT$.\footnote{Formal declarations:
     \leanid{QuantumCircuit.Layer.exists_portRing} and
     \leanid{QuantumCircuit.IsBoundedProtocol.exists_portRing} in QICLean's
     \path{QICLean/Circuit/Compile/Port} and
     \path{QICLean/Circuit/Compile/PortProtocol}, on the ring with physical
     ports \leanid{QuantumCircuit.Geometry.portRing}.}
-For $B=1$, the data register has zero qudits and the bound is zero. A
-one-site ring's self-loop SWAP is separately proved to be the identity;
-the two-distinct-register statement assumes $N\ge2$.
+For $B=1$ one may take $k=0$, and the bound is zero.
 
 \section{Why the communication cost is uniform}
 To exchange one memory digit across a selected bond, swap that digit with
 the physical port locally at both endpoints, perform one physical-port
 SWAP, and undo the two local swaps. This exchanges the selected memory
-digits and restores the ports exactly, including when they carry arbitrary
-correlations. Every bond of a matching runs in parallel. Repeating over the
-$k$ digits moves each left data register into the right scratch register,
-while leaving the right data register in place.
+digits and restores the ports exactly. Every bond of a matching runs in
+parallel. Repeating over the $k$ digits moves each left data register into
+the right scratch register, while leaving the right data register in place.
 
 All pair channels can now be executed onsite. Reverse the one common
 routing afterward. The total cost is $k+k$, not $2k$ times the number of
-bonds. Conjugation by the routing preserves products of channel maps, so
-the resulting map is exactly the original placed family on the complete
-operator space. Outputs return to their original data registers and all
-other wires are restored.\footnote{Formal declarations:
-    \leanid{QuantumCircuit.IsPhysicalPortUnitary.register_matching} in
-    \doclink{TNLean/Circuit/Channel/PortRouting} and
-    \leanid{QuantumCircuit.IsPhysicalPortProtocol.of_routed_family} in
-    \doclink{TNLean/Circuit/Channel/PortChannelRouting}.}
+bonds. The routing is a unitary circuit with a single Kraus operator, so
+conjugation by it carries the onsite execution to the original placed
+family on the image of the data embedding. Outputs return to their original
+data registers.\footnote{Formal declaration: the proof of
+    \leanid{QuantumCircuit.Layer.exists_portRing} in QICLean's
+    \path{QICLean/Circuit/Compile/Port}, with the permutation layers
+    \leanid{QuantumCircuit.kraus_ofCells_permGate}.}
 This construction follows the same gather, execute locally, and return
 principle used in the source's proof of Theorem~1 (Supplement pp.~8--9),
 but the displayed channel-resource bound is a derived result.
 
 The completed decoder for a joint code need not factor into separated
 onsite operations outside that code. No such assertion is used: the joint
-extension is applied only after the registers have been colocated. Separate
-input/output encoding and decoding use products of local maps. Decoding after encoding
-is the identity on every chain operator, with any finite
-reference.\footnote{Formal declarations:
-    \leanid{QuantumCircuit.OnsiteChannel.decodeRegisters_encodeRegisters_reference}
-    in \doclink{TNLean/Circuit/Channel/OnsiteRegisterEncoding}.}
+extension is applied only after the registers have been colocated.
 
 \section{The encoded bounded-protocol compiler}
-The dimension bound now records every positive intermediate local space of
-an actual native protocol, not just its endpoint dimensions. For fixed
-$d\geq2$, $N\geq2$, and one common bound $B$, set
-$k=\lceil\log_d B\rceil$. A native protocol $\Psi$ of depth $T$ compiles into
-an explicit word on the alphabet $d^k$. Its onsite operations cost zero and
-its $T$ native matching layers cost at most $2kT$ in total.\footnote{Formal
-    constructive compiler:
-    \leanid{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation}
-    in \doclink{TNLean/Circuit/Channel/PhysicalProtocolCompilation}.}
-
-The resulting physical channel $\Gamma$ obeys the exact identity
+The dimension bound records every intermediate local space of an actual
+native protocol, not just its endpoint dimensions. For fixed $d$, $N\geq2$,
+one common bound $B\le d^k$, and sitewise codes $e$, $f$ of the input and
+output bases into the registers, a native protocol $\Psi$ of depth $T$
+compiles into a physical-port map $\Gamma$ of intersite depth at most $2kT$
+with
 \begin{align}
-    \Gamma\mathcal E_{\mathrm{in}}
-    =\mathcal E_{\mathrm{out}}(\Psi\otimes\operatorname{id}_{R}),
+    \Gamma\circ\iota\circ\mathcal E_e
+    =\iota\circ\mathcal E_f\circ\Psi,
 \end{align}
-where $R$ is the entire complementary port/scratch system. The equation
-holds on all joint input-reference operators. The maps $\mathcal E$ are
-product onsite codes transported through explicit sitewise digit and
-selected/complementary coordinate equivalences. Encoders and completed
-decoders are CPTP, and decoding after encoding is exactly the identity.
-The coordinate changes are not assumed free intersite gates.
+where $\iota$ is the data embedding. Its onsite operations cost zero.
+Encoders and completed decoders are CPTP, and decoding after encoding is
+exactly the identity.\footnote{Formal theorem:
+    \leanid{QuantumCircuit.IsBoundedProtocol.exists_portRing} in QICLean's
+    \path{QICLean/Circuit/Compile/PortProtocol}.}
 
-This is an encoded logical-input statement: the data occupy local data
-registers. The next construction supplies the original-port input/output
-interface when the native input and output dimensions both equal $d$.
+The identity concerns inputs in the code, in which the port and scratch
+qudits are in $0$. An earlier version of this note stated instead
+$\Gamma\mathcal E_{\mathrm{in}}=\mathcal E_{\mathrm{out}}(\Psi\otimes\operatorname{id}_R)$,
+with the port and scratch wires $R$ in an arbitrary state carried along as a
+reference. That version is not formalized: the construction routes the
+registers through the port and scratch wires, and its identity is proved
+only when those wires start in $0$.
 
 \section{Original-port input, output, and designated memory reset}
 Let $J_{\mathrm{port}}$ be the explicit product code that stores the input
 qudit on each original physical port and initializes its $2k$ data/scratch
-digits to zero. A second product code stores the register encoding on the
-data digits, with zero port and scratch digits. Completed channels on each
-whole spatial-site block convert these codes in both directions at zero
-intersite depth. They are CPTP on the entire physical operator space, not
-merely on the code.
+digits to zero. Changing one code of the sites into another, such as the
+port code into the data code, is free: it is realized on whole sites at
+zero intersite depth.\footnote{Formal declarations:
+    \leanid{QuantumCircuit.portWireEmbedding} and
+    \leanid{QuantumCircuit.exists_portRing_recode} in QICLean's
+    \path{QICLean/Circuit/Compile/PortCode}.}
 
 Compose this preprocessing and postprocessing with the encoded compiler.
 For a bounded native endomorphism $\Psi$ whose input/output dimension is
-$d$, the resulting physical-port protocol satisfies
+$d$, the resulting physical-port map satisfies
 \begin{align}
     \Gamma_{\mathrm{port}}J_{\mathrm{port}}
     = J_{\mathrm{port}}\Psi,
@@ -158,96 +149,87 @@ $d$, the resulting physical-port protocol satisfies
 \end{align}
 Thus the output returns to the same physical ports, and all designated
 data/scratch memory is again in its product zero state and uncorrelated
-with the output. The identity holds on all logical operators and persists
-with an arbitrary external reference.\footnote{Formal theorem:
-    \leanid{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortIO}
-    in \doclink{TNLean/Circuit/Channel/PhysicalPortIO}.}
-
-The explicit initializer is identified with the earlier physical encoding
-by splitting data from its complementary wires and preparing the latter
-in their zero configuration. This identity is checked on matrix units,
-so it includes off-diagonal coherences. The reset assertion concerns the
-designated data/scratch wires. The additional dilation environments in the
-unitary realization below are discarded; they are not asserted to reset.
+with the output. The identity holds on all logical operators.\footnote{Formal theorem:
+    \leanid{QuantumCircuit.IsBoundedProtocol.exists_portRing_of_code} in QICLean's
+    \path{QICLean/Circuit/Compile/PortCode}, with the port codes.}
+The reset assertion concerns the designated data/scratch wires. The
+dilation environments in the unitary realization below are discarded; they
+are not asserted to reset.
 
 \section{One unitary circuit and one final environment trace}
-Let $P$ assign the $W$ existing $d$-level wires to $N\geq1$ spatial sites
-and designate one communication port at each site. For every finite depth-$T$
-physical-port channel protocol $\Phi$, with $d\geq1$, there are finitely
-many appended environment wires, an explicit assignment of each new wire
-to a spatial site, and an actual unitary circuit $U$ on the enlarged layout
-such that
+Let $D$ be a set of wires containing a wire of every site. Every physical-port
+map above is a unitary dilation: there are finite environment bases at the
+wires, with at most one element at every wire outside $D$, basis vectors $e$
+of the input environments, and an unbranched circuit $U$ of unitary gates on
+the ring with ports with
 \begin{align}
-    \mathcal D_E\circ\operatorname{Ad}_U\circ\mathcal I_E & =\Phi,
+    \mathcal D_F\circ\operatorname{Ad}_U\circ\mathcal I_E & =\Phi,
                                                           & \operatorname{depth}_{\mathrm{intersite}}(U) & \leq T.
     \label{eq:scope_deferred_dilation}
 \end{align}
-Here $\mathcal I_E(X)=X\otimes\ketbra{0_E}{0_E}$ in the explicit
-original/environment coordinates, $\mathcal D_E$ discards exactly the
-appended wires, and $\operatorname{Ad}_U(Y)=UYU^\dagger$.
-Every original wire retains its spatial owner, and the designated physical
-ports are unchanged. All environments are initialized at the start and
-remain in the joint system until the one final discard. The identity
-holds on all original-wire operators, including their arbitrary external
-references.\footnote{Formal declarations:
-    \leanid{QuantumCircuit.PhysicalPortEmbedding.unitary} in
-    \doclink{TNLean/Circuit/Channel/PhysicalPortEmbedding}, and
-    \leanid{QuantumCircuit.IsPhysicalPortProtocol.exists_appended_unitary_dilation},
-    \leanid{QuantumCircuit.IsPhysicalPortProtocol.exists_appended_unitary_dilation_reference}
-    in \doclink{TNLean/Circuit/Channel/PhysicalPortDilation}.}
+Here $\mathcal I_E(X)=X\otimes\ketbra{e}{e}$, $\mathcal D_F$ traces out the
+output environments, and $\operatorname{Ad}_U(Y)=UYU^\dagger$. Every wire
+outside $D$ has dimension at most $d$ throughout the circuit; for $k\ge1$ and
+$D$ the wires other than the ports, every counted gate acts on the two port
+wires alone. All environments are prepared at the start and remain in the
+joint system until the one final trace.\footnote{Formal declarations:
+    \leanid{QuantumCircuit.IsUnitaryDilation},
+    \leanid{QuantumCircuit.IsUnitaryDilation.comp},
+    \leanid{QuantumCircuit.Layer.isUnitaryDilation} and
+    \leanid{QuantumCircuit.Circuit.isUnitaryDilation} in QICLean's
+    \path{QICLean/Circuit/Compile/Dilation}.}
 
-For a channel on $m$ qudits within one spatial site, $2m$ fresh qudits at
-that same site suffice. The retained output is the original local register;
-all other existing wires are untouched, including their correlations with
-that register. This uses the $d^{2m}$ Choi-rank bound, followed by a unitary
-extension of the fixed pure-input isometry. For composition, the two
-circuits use disjoint fresh environment blocks. The second circuit acts
-as the identity on the earlier environment, so its trace can be postponed
-even when that environment is correlated with the system. Only the
-original physical ports participate in counted intersite layers.\footnote{Formal
-    declarations: \leanid{QuantumCircuit.exists_selected_onsite_dilation} and
-    \leanid{QuantumCircuit.exists_onsite_appended_dilation} in
-    \doclink{TNLean/Circuit/Channel/PhysicalPortLocalDilation};
-    \leanid{QuantumCircuit.appendEnvironment_comp_channel} in
-    \doclink{TNLean/Circuit/Channel/PhysicalPortEnvironmentComposition}.
-    The finite-dimensional dilation and deferred-partial-trace identities are
-    proved in the companion QICLean library.}
+A trace-preserving Kraus family from $\C^\alpha$ to $\C^\beta$ with $r$
+operators, on a nonempty basis $\alpha$, is a unitary on the system and the
+environment $\beta\times[r]$ followed by the trace over $\alpha\times[r]$.
+The environment of a gate is placed at one site of its cell, a site of $D$
+when the cell meets $D$. For composition, the two circuits use the product
+of their environments. The second circuit acts as the identity on the earlier
+environment, so its trace can be postponed even when that environment is
+correlated with the system. Only the original physical ports participate in
+counted intersite layers.\footnote{Formal declarations:
+    \leanid{KrausFamily.IsTP.exists_unitary_dilation} in QICLean's
+    \path{QICLean/Channel/KrausFamilyDilation} and
+    \leanid{QuantumCircuit.map_traceCircuit_map_tensorRight} in
+    \path{QICLean/Circuit/Compile/Dilation}.}
+The source appends the environments as further qudits of dimension $d$ at
+the sites; here they are finite bases at the wires of $D$, and padding them
+into qudits is not formalized.
 
 Applying~(\ref{eq:scope_deferred_dilation}) to the bounded original-port
 protocol gives a unitary $U$ satisfying
 \begin{align}
-    \mathcal D_E\circ\operatorname{Ad}_U\circ\mathcal I_E\circ J_{\mathrm{port}}
+    \mathcal D_F\circ\operatorname{Ad}_U\circ\mathcal I_E\circ J_{\mathrm{port}}
                                                  & =J_{\mathrm{port}}\circ\Psi,\label{eq:scope_unitary_port_io} \\
     \operatorname{depth}_{\mathrm{intersite}}(U) & \leq2\lceil\log_d B\rceil T.
     \notag
 \end{align}
-Thus both the designated memory and the additional environments start in
-product-zero states. After the final environment trace, the output is on
-the original ports and the designated data/scratch memory is reset to
-zero. The discarded environment may contain information about the input;
-no reset of that environment is claimed.\footnote{Formal theorem:
-    \leanid{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPortUnitaryIO}
-    in \doclink{TNLean/Circuit/Channel/PhysicalPortUnitaryCompilation}.}
-The total number of environment wires is finite for each protocol; this
-existence theorem does not impose a uniform environment-size bound on an
-entire family.
+Thus the designated memory starts in the zero state and the environments in
+basis states. After the final environment trace, the output is on the
+original ports and the designated data/scratch memory is reset to zero. The
+discarded environment may contain information about the input; no reset of
+that environment is claimed.\footnote{Formal theorem:
+    \leanid{QuantumCircuit.IsBoundedProtocol.exists_portRing_of_code} in QICLean's
+    \path{QICLean/Circuit/Compile/PortCode}.}
+The environments are finite for each protocol; this existence theorem does
+not impose a uniform environment-size bound on an entire family.
 
 \section{Exact pure outputs of the unitary realization}
-Let $U$ and the appended environment $E$ be as
-in~(\ref{eq:scope_deferred_dilation}). If the physical-port channel sends
-$\ketbra{\psi}{\psi}$ to the normalized pure state $\ketbra{\phi}{\phi}$,
-the joint output of its unitary realization factors as
+Let $U$ and the environments be as in~(\ref{eq:scope_deferred_dilation}).
+If the physical-port channel sends $\ketbra{\psi}{\psi}$ to the normalized
+pure state $\ketbra{\phi}{\phi}$, the joint output of its unitary
+realization factors as
 \begin{align}
-    U(\psi\otimes\ket{0_E})=\phi\otimes\eta,
+    U(\psi\otimes e)=\phi\otimes\eta,
     \qquad \langle\eta,\eta\rangle=1.
     \label{eq:scope_pure_output_product}
 \end{align}
 The environment vector is derived from the joint output; its decoupling
-is not an input assumption. Write $C_{s,e}=(U(\psi\otimes\ket{0_E}))_{s,e}$
+is not an input assumption. Write $C_{s,f}=(U(\psi\otimes e))_{s,f}$
 for the coefficient matrix of the joint output in the explicit
-original/environment coordinates, and $P=\ketbra{\phi}{\phi}$. Then
+system/environment coordinates, and $P=\ketbra{\phi}{\phi}$. Then
 \begin{align}
-    CC^\dagger & =\operatorname{tr}_E\bigl(U(\ketbra{\psi}{\psi}\otimes\ketbra{0_E}{0_E})U^\dagger\bigr)
+    CC^\dagger & =\operatorname{tr}_F\bigl(U(\ketbra{\psi}{\psi}\otimes\ketbra{e}{e})U^\dagger\bigr)
     =\Phi(\ketbra{\psi}{\psi})=P,
     \label{eq:scope_pure_output_marginal} \\
     (I-P)CC^\dagger & =P-P^2=0,
@@ -257,19 +239,16 @@ original/environment coordinates, and $P=\ketbra{\phi}{\phi}$. Then
 \end{align}
 where~(\ref{eq:scope_pure_output_annihilation}) follows from $MM^\dagger=0$
 for $M=(I-P)C$, since $MM^\dagger=0$ forces $M=0$. Hence $C=PC$, and with
-$\eta=\phi^\dagger C$ every coefficient is $C_{s,e}=\phi_s\eta_e$. Taking
+$\eta=\phi^\dagger C$ every coefficient is $C_{s,f}=\phi_s\eta_f$. Taking
 the trace of~(\ref{eq:scope_pure_output_marginal}) gives
 $\langle\eta,\eta\rangle=\operatorname{tr}P=\langle\phi,\phi\rangle=1$.
-The unitary, spatial ownership, physical ports and intersite-depth bound
-are those of~(\ref{eq:scope_deferred_dilation}).\footnote{Formal theorems:
+The unitary, physical ports and intersite-depth bound are those
+of~(\ref{eq:scope_deferred_dilation}).\footnote{Formal theorems:
     \leanid{QuantumCircuit.Circuit.exists_unit_product_approx} at
-    $\varepsilon=0$, applied to the same-depth unitary dilation
-    \leanid{QuantumCircuit.IsProtocol.isUnitaryDilation} of a protocol on
-    \leanid{QuantumCircuit.Geometry.portRing}, in QICLean's
-    \path{QICLean/Circuit/Compile/DilationOutput} and
-    \path{QICLean/Circuit/Compile/Dilation}. The branch statement below is
-    not formalized.}
-The environment may remain internally entangled and need not reset to zero.
+    $\varepsilon=0$ and \leanid{QuantumCircuit.IsUnitaryDilation.exists_unit_product_approx}
+    in QICLean's \path{QICLean/Circuit/Compile/DilationOutput}. The branch
+    statement below is not formalized.}
+The environment may remain internally entangled and need not reset.
 The environment-column operators also realize the channel, and each
 branch sends the input vector to its environment amplitude times the target
 vector. Their amplitudes are normalized, so every branch of nonzero probability
@@ -291,7 +270,7 @@ isometry that places each qudit on its original port and initializes its
 data and scratch digits to zero. The bounded compiler and the exact
 pure-output theorem give the vector identity
 \begin{align}
-    U(V_{\rm port}\psi\otimes\ket{0_E})
+    U(V_{\rm port}\psi\otimes e)
      & =V_{\rm port}\phi\otimes\eta,
      & \langle\eta,\eta\rangle                 & =1,
      & \operatorname{depth}_{\rm intersite}(U) & \le2kT.
@@ -303,14 +282,12 @@ normalized environment are derived, not supplied as additional premises.
 The designated memory is zero in the final vector, while the
 additional environment need not reset or factor over sites. The dimension
 bound must be fixed independently of the chain length in a
-family.\footnote{No single formal theorem states this identity. Its
-    ingredients are \leanid{QuantumCircuit.IsBoundedProtocol.exists_portRing},
-    \leanid{QuantumCircuit.IsProtocol.isUnitaryDilation} and
-    \leanid{QuantumCircuit.Circuit.exists_unit_product_approx} in QICLean's
-    \path{QICLean/Circuit/Compile}; their composition with the port
-    isometry is not stated.}
-It does not settle the adaptive block count, measurement/control order,
-approximate pure-output estimates or unrestricted enlarged-site comparison.
+family.\footnote{Formal theorem:
+    \leanid{QuantumCircuit.IsBoundedProtocol.exists_portRing_unit_product_approx}
+    at $\varepsilon=0$ in QICLean's \path{QICLean/Circuit/Compile/PortCode},
+    with the port codes.}
+It does not settle the adaptive block count, measurement/control order
+or unrestricted enlarged-site comparison.
 
 \section{Approximate pure outputs from the actual bounded compiler}
 For unit input and target vectors, suppose the actual native channel
@@ -318,9 +295,9 @@ satisfies
 $\|\Psi(\ketbra{\psi}{\psi})-\ketbra{\phi}{\phi}\|_1\le\varepsilon$.
 With the same fixed $d,B$, $N\ge2$, and $k=\lceil\log_d B\rceil$, its
 actual compiled unitary admits a unit vector $\eta$ on its unchanged
-additional environment space with
+environment space with
 \begin{align}
-    \|U(V_{\rm port}\psi\otimes\ket{0_A})
+    \|U(V_{\rm port}\psi\otimes e)
     -V_{\rm port}\phi\otimes\eta\|_2 & \le\sqrt{2\varepsilon},
                                      & \operatorname{depth}_{\rm intersite}(U) & \le2kT.
 \end{align}
@@ -334,17 +311,15 @@ forces $\varepsilon\ge1$ and is included.
 
 The generic finite-dimensional estimate is
 \leanid{Matrix.exists_unit_product_approx_of_pure_marginal} in QICLean's
-\path{QICLean/Channel/PureMarginalApproximation}, and its reading on a
-unitary dilation is \leanid{QuantumCircuit.Circuit.exists_unit_product_approx}
-in QICLean's \path{QICLean/Circuit/Compile/DilationOutput}. The
-specialization to the bounded compiler and the port isometry is obtained by
-composing it with \leanid{QuantumCircuit.IsBoundedProtocol.exists_portRing}
-and \leanid{QuantumCircuit.IsProtocol.isUnitaryDilation}; no single formal
-theorem states it. The estimate supplies neither environment
-reset nor source adaptive measurement/control or block-count conditions.
+\path{QICLean/Channel/PureMarginalApproximation}, and its specialization to
+the bounded compiler and the port codes is
+\leanid{QuantumCircuit.IsBoundedProtocol.exists_portRing_unit_product_approx}
+in QICLean's \path{QICLean/Circuit/Compile/PortCode}. The estimate supplies
+neither environment reset nor source adaptive measurement/control or
+block-count conditions.
 
 \section{Remaining comparison and source conditions}
-The finite local-unitary dilation, product-zero environment initialization,
+The finite local-unitary dilation, basis-state environment initialization,
 and one final disposal are proved by~(\ref{eq:scope_deferred_dilation}).
 A full source protocol witness must still satisfy the source's final
 system--ancilla condition when claiming a pure-state preparation, together

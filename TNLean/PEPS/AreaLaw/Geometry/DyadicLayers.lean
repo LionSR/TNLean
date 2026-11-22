@@ -32,6 +32,7 @@ Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
 open TNLean.Lattice
+open ManyBody (ambientDilation edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -207,13 +208,13 @@ Source: area-law Section 11, `prop:two-families`, lines 151–185. -/
 theorem card_dyadicLayerIndices_boundary_le (o : ℝ × ℝ) (k : ℕ)
     (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C : ℕ) :
     (dyadicLayerIndices o k (boundaryEndpoints Λ A) C).card ≤
-      8 * (2 * C + 1) ^ 2 * (edgeBoundary Λ A).card := by
+      8 * (2 * C + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card := by
   have h := card_dyadicLayerIndices_le o k (boundaryEndpoints Λ A) C
   calc
     (dyadicLayerIndices o k (boundaryEndpoints Λ A) C).card ≤
         4 * (2 * C + 1) ^ 2 * (boundaryEndpoints Λ A).card := h
-    _ ≤ 4 * (2 * C + 1) ^ 2 * (2 * (edgeBoundary Λ A).card) :=
+    _ ≤ 4 * (2 * C + 1) ^ 2 * (2 * (edgeBoundary (planeDomainGraph Λ) A).card) :=
       Nat.mul_le_mul_left _ (card_boundaryEndpoints_le Λ A)
-    _ = 8 * (2 * C + 1) ^ 2 * (edgeBoundary Λ A).card := by ring
+    _ = 8 * (2 * C + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card := by ring
 
 end TNLean.PEPS.AreaLaw.Geometry

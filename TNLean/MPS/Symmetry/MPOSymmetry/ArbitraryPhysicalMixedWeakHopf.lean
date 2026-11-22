@@ -40,6 +40,8 @@ lines 2463–2466.
 
 open scoped Matrix
 
+open ManyBody
+
 namespace MPSTensor
 namespace MPOSymmetry
 
@@ -104,9 +106,10 @@ theorem
     {X : Matrix (Fin (χ₀ + χ₁)) (Fin (χ₀ + χ₁)) ℂ}
     (hX : X ∈ MPOTensor.commutingBoundaryAlgebra
       (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁)) :
-    Commute (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)
+    Commute (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) X N) :=
-  interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
+  hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁
     (exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq_of_weakHopf
       A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hW) hγ hN hX
@@ -116,7 +119,7 @@ the closed interval, the enlarged mixed path Hamiltonian commutes with the
 periodic common operator when that operator is the tensor of a weak-Hopf
 representation. Source: arXiv:2203.12563v3, lines 1279, 1582 and
 1687–1692, with `defphase`, lines 1253–1259. -/
-theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_weakHopf
+theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_weakHopf
     [NeZero D₀] [NeZero D₁]
     (hInj₀ : Kraus.IsInjective A₀) (hInj₁ : Kraus.IsInjective A₁)
     (h₀ : IsBiorthogonalDecomposition (MPOTensor.actTensor T₀ A₀)
@@ -125,9 +128,10 @@ theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_
       (fun _ : Fin m => A₁) V₁ W₁)
     (hW : Wh.tensor = arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁)
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
-    Commute (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)
+    Commute (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (MPOTensor.mpo (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) N) :=
-  interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
+  hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ h₀ h₁
     (exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq_of_weakHopf
       A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hW) hγ hN

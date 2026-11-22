@@ -76,7 +76,7 @@ theorem operatorBlock_isSupportedOn_of_threeSplit_left
       ((T → Fin q) × (E → Fin q)) ℂ)
     (hUL : P.submatrix (threeSplit q T E hTE).symm
         (threeSplit q T E hTE).symm =
-      UL ⊗ₖ (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ))
+      UL ⊗ₖ (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ))
     (a b : T → Fin q) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Matrix.operatorBlock UL a b)
       (Finset.univ.filter (fun e : E ↦ e.val ∈ D)) := by
@@ -88,7 +88,7 @@ theorem operatorBlock_isSupportedOn_of_threeSplit_left
       (Finset.univ.filter (fun e : E ↦ e.val ∈ D))
   · have hqpos : 0 < q := Nat.pos_of_ne_zero hq
     let g := threeSplit q T E hTE
-    let r₀ : ↥(T ∪ E)ᶜ → Fin q := fun _ ↦ ⟨0, hqpos⟩
+    let r₀ : {v // v ∉ T ∪ E} → Fin q := fun _ ↦ ⟨0, hqpos⟩
     let DE : Finset E := Finset.univ.filter (fun e : E ↦ e.val ∈ D)
     change ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Matrix.operatorBlock UL a b) DE
     have hslice (x y : E → Fin q) :
@@ -97,7 +97,7 @@ theorem operatorBlock_isSupportedOn_of_threeSplit_left
       have h := congrFun (congrFun hUL ((a, x), r₀)) ((b, y), r₀)
       change P (g.symm ((a, x), r₀)) (g.symm ((b, y), r₀)) =
         UL (a, x) (b, y) *
-          (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) r₀ r₀ at h
+          (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) r₀ r₀ at h
       simpa only [Matrix.operatorBlock, Matrix.one_apply_eq, mul_one] using h.symm
     have hkeep (c : T → Fin q) (x x' : E → Fin q)
         (hxx' : ∀ e ∈ DE, x e = x' e) :
@@ -164,7 +164,7 @@ private theorem isSupportedOn_of_threeSplit_middle
     (hW : P.submatrix (threeSplit q T E hTE).symm
         (threeSplit q T E hTE).symm =
       ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ W) ⊗ₖ
-        (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)) :
+        (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) W
       (Finset.univ.filter (fun e : E ↦ e.val ∈ D)) := by
   classical
@@ -214,27 +214,27 @@ theorem exists_threeSplit_two_window_factors_with_collars
     ∃ (HL : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → Matrix (T → Fin q) (T → Fin q) ℂ)
       (HM : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → Matrix (E → Fin q) (E → Fin q) ℂ)
       (HR : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
-        Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)
+        Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)
       (UL : Matrix ((T → Fin q) × (E → Fin q))
         ((T → Fin q) × (E → Fin q)) ℂ)
-      (VR : Matrix ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-        ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ),
+      (VR : Matrix ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+        ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ),
       (∀ r, r ≠ Sum.inl (Sum.inl p) → r ≠ Sum.inl (Sum.inr s) →
         (F r).submatrix g.symm g.symm =
           (HL r ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
-              (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
+              (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
             ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ HM r) ⊗ₖ
-              (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
+              (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
             (1 : Matrix ((T → Fin q) × (E → Fin q))
               ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ HR r) ∧
       (F (Sum.inl (Sum.inl p))).submatrix g.symm g.symm =
-        UL ⊗ₖ (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) ∧
+        UL ⊗ₖ (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) ∧
       (F (Sum.inl (Sum.inr s))).submatrix g.symm g.symm =
         ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ VR).reindex
           (Equiv.prodAssoc (T → Fin q) (E → Fin q)
-            (↥(T ∪ E)ᶜ → Fin q)).symm
+            ({v // v ∉ T ∪ E} → Fin q)).symm
           (Equiv.prodAssoc (T → Fin q) (E → Fin q)
-            (↥(T ∪ E)ᶜ → Fin q)).symm ∧
+            ({v // v ∉ T ∪ E} → Fin q)).symm ∧
       operatorSchmidtRank UL ≤ q ^ 2 ∧ operatorSchmidtRank VR ≤ q ^ 2 ∧
       HM (Sum.inr 0) = 0 ∧ HM (Sum.inr 2) = 0 ∧
       HL (Sum.inr 1) = 0 ∧ HR (Sum.inr 1) = 0 ∧
@@ -273,9 +273,9 @@ theorem exists_threeSplit_two_window_factors_with_collars
         (W : Matrix (E → Fin q) (E → Fin q) ℂ),
         (r ≠ p → (F (Sum.inl (Sum.inl r))).submatrix g.symm g.symm =
           (B ⊗ₖ (1 : Matrix (E → Fin q) (E → Fin q) ℂ)) ⊗ₖ
-              (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
+              (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
             ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ W) ⊗ₖ
-              (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)) ∧
+              (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)) ∧
         (r ≤ p → W = 0) ∧ ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) W C := by
     intro r
     by_cases hrp : r = p
@@ -320,10 +320,10 @@ theorem exists_threeSplit_two_window_factors_with_collars
           omega
   have hRight : ∀ r : Fin (2 * ℓ),
       ∃ (W : Matrix (E → Fin q) (E → Fin q) ℂ)
-        (B : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ),
+        (B : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ),
         (r ≠ s → (F (Sum.inl (Sum.inr r))).submatrix g.symm g.symm =
           ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ W) ⊗ₖ
-              (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
+              (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) +
             (1 : Matrix ((T → Fin q) × (E → Fin q))
               ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ B) ∧
         (s ≤ r → W = 0) ∧ ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) W C := by
@@ -400,7 +400,7 @@ theorem exists_threeSplit_two_window_factors_with_collars
       Matrix (E → Fin q) (E → Fin q) ℂ :=
     Sum.elim (Sum.elim LM RM) (fun j ↦ if j = 1 then BM else 0)
   let HR : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
-      Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ :=
+      Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ :=
     Sum.elim (Sum.elim (fun _ ↦ 0) RR) (fun j ↦ if j = 2 then BR else 0)
   refine ⟨HL, HM, HR, UL, VR, ?_, hUL, hVR, hULrank, hVRrank,
     ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩
@@ -440,18 +440,18 @@ support in the middle region. The two right configurations need not agree
 off the original support. Supporting locality algebra for ALVV,
 arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
 theorem leftBlock_isSupportedOn_of_threeSplit_right
-    {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
+    {V : Type*} [DecidableEq V] {q : ℕ}
     (T E D : Finset V) (hTE : Disjoint T E)
     (P : Matrix (V → Fin q) (V → Fin q) ℂ)
     (hP : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) P D)
-    (VR : Matrix ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-      ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
+    (VR : Matrix ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+      ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ)
     (hVR : P.submatrix (threeSplit q T E hTE).symm
         (threeSplit q T E hTE).symm =
       ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ VR).reindex
-        (Equiv.prodAssoc (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)).symm
-        (Equiv.prodAssoc (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)).symm)
-    (a b : ↥(T ∪ E)ᶜ → Fin q) :
+        (Equiv.prodAssoc (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)).symm
+        (Equiv.prodAssoc (T → Fin q) (E → Fin q) ({v // v ∉ T ∪ E} → Fin q)).symm)
+    (a b : {v // v ∉ T ∪ E} → Fin q) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (fun x y : E → Fin q ↦ VR (x, a) (y, b))
       (Finset.univ.filter (fun e : E ↦ e.val ∈ D)) := by
@@ -474,7 +474,7 @@ theorem leftBlock_isSupportedOn_of_threeSplit_right
       change P (g.symm ((ℓ₀, x), a)) (g.symm ((ℓ₀, y), b)) =
         (1 : Matrix (T → Fin q) (T → Fin q) ℂ) ℓ₀ ℓ₀ * VR (x, a) (y, b) at h
       simpa only [Matrix.one_apply_eq, one_mul] using h.symm
-    have hkeep (c : ↥(T ∪ E)ᶜ → Fin q) (x x' : E → Fin q)
+    have hkeep (c : {v // v ∉ T ∪ E} → Fin q) (x x' : E → Fin q)
         (hxx' : ∀ e ∈ DE, x e = x' e) :
         ∀ v ∈ D, g.symm ((ℓ₀, x), c) v = g.symm ((ℓ₀, x'), c) v := by
       intro v hvD
@@ -539,9 +539,9 @@ theorem eq_of_threeSplit_middle_lift_eq
     (W M : Matrix (E → Fin q) (E → Fin q) ℂ)
     (hWM :
       ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ W) ⊗ₖ
-          (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) =
+          (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) =
         ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ M) ⊗ₖ
-          (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)) :
+          (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ)) :
     W = M := by
   classical
   by_cases hq : q = 0
@@ -550,7 +550,7 @@ theorem eq_of_threeSplit_middle_lift_eq
     exact Fin.elim0 (x e₀)
   · have hqpos : 0 < q := Nat.pos_of_ne_zero hq
     let a : T → Fin q := fun _ ↦ ⟨0, hqpos⟩
-    let r : ↥(T ∪ E)ᶜ → Fin q := fun _ ↦ ⟨0, hqpos⟩
+    let r : {v // v ∉ T ∪ E} → Fin q := fun _ ↦ ⟨0, hqpos⟩
     ext x y
     have hxy := congrFun (congrFun hWM ((a, x), r)) ((a, y), r)
     simpa only [Matrix.kroneckerMap_apply, Matrix.one_apply_eq,
@@ -560,45 +560,42 @@ theorem eq_of_threeSplit_middle_lift_eq
 factor in threeSplit coordinates, including empty regions and local dimension
 zero. Supporting locality algebra for ALVV, arXiv:1602.08828v2,
 Proposition 5.7, lines 1324–1333. -/
-theorem embedOp_subtype_val_submatrix_threeSplit
+theorem place_submatrix_threeSplit
     {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
     (T E : Finset V) (hTE : Disjoint T E)
     (W : Matrix (E → Fin q) (E → Fin q) ℂ) :
-    (QuantumCircuit.embedOp (Subtype.val : E → V) W).submatrix
+    (ManyBody.place (X := fun _ ↦ Fin q) E W).submatrix
         (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
       ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ W) ⊗ₖ
-        (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) := by
+        (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) := by
   classical
   let g := threeSplit q T E hTE
   have hrestrict (t : T → Fin q) (e : E → Fin q)
-      (r : ↥(T ∪ E)ᶜ → Fin q) :
-      g.symm ((t, e), r) ∘ (Subtype.val : E → V) = e := by
+      (r : {v // v ∉ T ∪ E} → Fin q) :
+      (fun v : E ↦ g.symm ((t, e), r) v) = e := by
     funext v
     exact threeSplit_symm_apply_of_mem_right hTE t e r v.property
   ext ⟨⟨t, e⟩, r⟩ ⟨⟨t', e'⟩, r'⟩
-  have hagree : QuantumCircuit.AgreeOff (Subtype.val : E → V)
-      (g.symm ((t, e), r)) (g.symm ((t', e'), r')) ↔ t = t' ∧ r = r' := by
+  have hagree : (∀ v ∉ E, g.symm ((t, e), r) v = g.symm ((t', e'), r') v) ↔
+      t = t' ∧ r = r' := by
     constructor
     · intro h
       constructor
       · funext v
         have hvE : v.val ∉ E := fun hv ↦ Finset.disjoint_left.mp hTE v.property hv
-        have hp := h v.val (fun j hj ↦ hvE (hj ▸ j.property))
+        have hp := h v.val hvE
         rw [threeSplit_symm_apply_of_mem_left hTE t e r v.property,
           threeSplit_symm_apply_of_mem_left hTE t' e' r' v.property] at hp
         exact hp
       · funext v
-        have hvR : v.val ∉ T ∪ E := Finset.mem_compl.mp v.property
+        have hvR : v.val ∉ T ∪ E := v.property
         have hvE : v.val ∉ E := fun hv ↦ hvR (Finset.mem_union_right T hv)
-        have hp := h v.val (fun j hj ↦ hvE (hj ▸ j.property))
+        have hp := h v.val hvE
         rw [threeSplit_symm_apply_of_notMem hTE t e r hvR,
           threeSplit_symm_apply_of_notMem hTE t' e' r' hvR] at hp
         exact hp
     · rintro ⟨rfl, rfl⟩
-      intro v hoff
-      have hvE : v ∉ E := by
-        intro hv
-        exact hoff ⟨v, hv⟩ rfl
+      intro v hvE
       by_cases hvT : v ∈ T
       · rw [threeSplit_symm_apply_of_mem_left hTE t e r hvT,
           threeSplit_symm_apply_of_mem_left hTE t e' r hvT]
@@ -606,14 +603,17 @@ theorem embedOp_subtype_val_submatrix_threeSplit
           simpa only [Finset.mem_union, not_or] using And.intro hvT hvE
         rw [threeSplit_symm_apply_of_notMem hTE t e r hvR,
           threeSplit_symm_apply_of_notMem hTE t e' r hvR]
-  change QuantumCircuit.embedOp (Subtype.val : E → V) W
+  change ManyBody.place (X := fun _ ↦ Fin q) E W
       (g.symm ((t, e), r)) (g.symm ((t', e'), r')) =
     ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) t t' * W e e') *
-      (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) r r'
-  simp only [QuantumCircuit.embedOp_apply, hrestrict t e r,
-    hrestrict t' e' r', hagree]
-  by_cases ht : t = t' <;> by_cases hr : r = r' <;>
-    simp [Matrix.one_apply, ht, hr]
+      (1 : Matrix ({v // v ∉ T ∪ E} → Fin q) ({v // v ∉ T ∪ E} → Fin q) ℂ) r r'
+  rw [ManyBody.place_apply, hrestrict t e r, hrestrict t' e' r']
+  split_ifs with h
+  · obtain ⟨rfl, rfl⟩ := hagree.mp h
+    simp
+  · rcases not_and_or.mp fun h' ↦ h (hagree.mpr h') with ht | hr
+    · simp [Matrix.one_apply, ht]
+    · simp [Matrix.one_apply, hr]
 
 /-- The ordinary weighted sum is the weighted central term plus the two
 strict window tails, whose sum remains supported on the selected collar.

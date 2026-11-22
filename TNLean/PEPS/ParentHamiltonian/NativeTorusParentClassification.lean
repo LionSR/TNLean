@@ -64,7 +64,8 @@ theorem ker_torusPlaquetteParentHamiltonian_eq_nativeCommutingClosureSpan
     (H : (v : X) → Matrix (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v))
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hH : ∀ v, IsRegionParentInteraction A (torusPlaquetteRegion v) (H v)) :
-    (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion H)).ker =
+    (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+        torusPlaquetteRegion H).hamiltonian).ker =
       NativeTorus.commutingClosureSpan (graphBondAlphabet A) U (graphDependentTensor A) := by
   rw [ker_regionParentHamiltonian A torusPlaquetteRegion H hH,
     torusPlaquetteParentGroundSpace_eq_nativeCommutingClosureSpan A U hU hA]
@@ -82,7 +83,8 @@ theorem finrank_ker_torusPlaquetteParentHamiltonian
     (H : (v : X) → Matrix (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v))
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hH : ∀ v, IsRegionParentInteraction A (torusPlaquetteRegion v) (H v)) :
-    Module.finrank ℂ (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion H)).ker =
+    Module.finrank ℂ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace («X» := fun _ ↦ Fin d)
+        torusPlaquetteRegion H).hamiltonian).ker =
       Nat.card (CommutingPairConjugacyClass G) := by
   rw [ker_torusPlaquetteParentHamiltonian_eq_nativeCommutingClosureSpan A U hU hA H hH]
   exact NativeTorus.finrank_commutingClosureSpan (graphBondAlphabet A) U hU

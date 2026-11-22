@@ -53,7 +53,7 @@ theorem exists_isPreparedInDepth_le_log_eventually_of_rectangular_mixing
         K * Real.exp (-(r * ℓ j))) :
     ∃ N₀ : ℕ, ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
-        IsPreparedInDepth T (fun s => ψ s) ∧
+        IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
         1 - ‖⟪ψ, (‖state (A N)‖ : ℂ)⁻¹ • state (A N)⟫_ℂ‖ ≤ ε := by
   classical
   obtain ⟨Cpad, hCpad, hpad⟩ := exists_norm_transferMatrix_zeroPad_sub_cornerReferenceMap_le D

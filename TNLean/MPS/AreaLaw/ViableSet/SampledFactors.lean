@@ -41,49 +41,49 @@ noncomputable def sampledScale (L : ℕ) (E₀ : ℝ) (ℓ m : ℕ) : ℝ :=
 
 /-- The sampled projector is the sum of the scaled words. -/
 theorem sampledProjector_eq_sum_smul
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) :
-    sampledProjector h E₀ I = ∑ t, sampledScale L E₀ ℓ m • bondComplementWord h (I t) := by
+    sampledProjector Φ E₀ I = ∑ t, sampledScale L E₀ ℓ m • bondComplementWord Φ (I t) := by
   simp only [sampledProjector, sampledScale, Finset.smul_sum, smul_smul]
 
 /-- The chosen left factor of the word `I t` at the cut after `i` sites, scaled by
 `C^m / ℓ`. -/
 noncomputable def sampledLeftFactor
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (i : ℕ) (t : Fin ℓ)
     (j : Fin (operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L i) (bondComplementWord h (I t))))) : LeftBlockMatrix L q i :=
-  sampledScale L E₀ ℓ m • cutLeftFactor (bondComplementWord h (I t)) j
+      (leftBlock L i) (bondComplementWord Φ (I t))))) : LeftBlockMatrix L q i :=
+  sampledScale L E₀ ℓ m • cutLeftFactor (bondComplementWord Φ (I t)) j
 
 /-- **The left factors of the sampled projector** at the cut after `i` sites: the scaled
 chosen left factors of all its words. LVV13, `algo53.tex`, line 611 and lines 584--592. -/
 noncomputable def sampledFactors
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (i : ℕ) : Finset (LeftBlockMatrix L q i) :=
-  open Classical in Finset.univ.biUnion fun t ↦ Finset.univ.image (sampledLeftFactor h E₀ I i t)
+  open Classical in Finset.univ.biUnion fun t ↦ Finset.univ.image (sampledLeftFactor Φ E₀ I i t)
 
 /-- The sampled projector in cut coordinates is the sum of the scaled chosen decompositions
 of its words. -/
 theorem cutOperator_sampledProjector_eq_sum
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (i : ℕ) :
-    ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector h E₀ I) =
+    ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector Φ E₀ I) =
       ∑ p : (t : Fin ℓ) × Fin (operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-        (leftBlock L i) (bondComplementWord h (I t)))),
-        sampledLeftFactor h E₀ I i p.1 p.2 ⊗ₖ
-          cutRightFactor (bondComplementWord h (I p.1)) p.2 := by
+        (leftBlock L i) (bondComplementWord Φ (I t)))),
+        sampledLeftFactor Φ E₀ I i p.1 p.2 ⊗ₖ
+          cutRightFactor (bondComplementWord Φ (I p.1)) p.2 := by
   rw [Fintype.sum_sigma]
   have hlin : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
-      (sampledProjector h E₀ I) = ∑ t, sampledScale L E₀ ℓ m •
+      (sampledProjector Φ E₀ I) = ∑ t, sampledScale L E₀ ℓ m •
         ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
-          (bondComplementWord h (I t)) := by
+          (bondComplementWord Φ (I t)) := by
     rw [sampledProjector_eq_sum_smul]
     ext a b
     simp [Matrix.sum_apply]
   rw [hlin]
   refine Finset.sum_congr rfl fun t _ ↦ ?_
   have hdec := congrArg (fun M ↦ sampledScale L E₀ ℓ m • M)
-    (cutOperator_eq_sum_cutLeftFactor_kronecker (i := i) (bondComplementWord h (I t)))
+    (cutOperator_eq_sum_cutLeftFactor_kronecker (i := i) (bondComplementWord Φ (I t)))
   rw [hdec, Finset.smul_sum]
   refine Finset.sum_congr rfl fun j _ ↦ ?_
   simp only [sampledLeftFactor, Matrix.smul_kronecker]
@@ -91,15 +91,15 @@ theorem cutOperator_sampledProjector_eq_sum
 /-- The sampled factors number at most `ℓ D` when every word has rank at most `D` at the
 cut. -/
 theorem card_sampledFactors_le
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (i : ℕ) {D : ℕ}
     (hrank : ∀ t, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L i) (bondComplementWord h (I t))) ≤ D) :
-    (sampledFactors h E₀ I i).card ≤ ℓ * D := by
+      (leftBlock L i) (bondComplementWord Φ (I t))) ≤ D) :
+    (sampledFactors Φ E₀ I i).card ≤ ℓ * D := by
   classical
   calc
-    (sampledFactors h E₀ I i).card
-        ≤ ∑ t : Fin ℓ, (Finset.univ.image (sampledLeftFactor h E₀ I i t)).card :=
+    (sampledFactors Φ E₀ I i).card
+        ≤ ∑ t : Fin ℓ, (Finset.univ.image (sampledLeftFactor Φ E₀ I i t)).card :=
           Finset.card_biUnion_le
     _ ≤ ∑ _t : Fin ℓ, D := Finset.sum_le_sum fun t _ ↦
           Finset.card_image_le.trans (by
@@ -110,31 +110,31 @@ theorem card_sampledFactors_le
 /-- Every sampled factor has operator-Schmidt rank at most `D` at every internal cut when
 every word has rank at most `D` at every cut. -/
 theorem operatorSchmidtRank_of_mem_sampledFactors {i : ℕ} (hi : i ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) {D : ℕ}
     (hrank : ∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L k) (bondComplementWord h (I t))) ≤ D)
-    {A : LeftBlockMatrix L q i} (hA : A ∈ sampledFactors h E₀ I i) (k : ℕ) (hki : k < i) :
+      (leftBlock L k) (bondComplementWord Φ (I t))) ≤ D)
+    {A : LeftBlockMatrix L q i} (hA : A ∈ sampledFactors Φ E₀ I i) (k : ℕ) (hki : k < i) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
       (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ D := by
   classical
   simp only [sampledFactors, Finset.mem_biUnion, Finset.mem_univ, true_and,
     Finset.mem_image] at hA
   obtain ⟨t, j, -, rfl⟩ := hA
-  have hbase := operatorSchmidtRank_cutLeftFactor_le hi (bondComplementWord h (I t)) (hrank t)
+  have hbase := operatorSchmidtRank_cutLeftFactor_le hi (bondComplementWord Φ (I t)) (hrank t)
     j k hki
   have hsmul : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
-      ((sampledLeftFactor h E₀ I i t j).submatrix leftConfigOfFin leftConfigOfFin) =
+      ((sampledLeftFactor Φ E₀ I i t j).submatrix leftConfigOfFin leftConfigOfFin) =
       sampledScale L E₀ ℓ m • ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
-        ((cutLeftFactor (bondComplementWord h (I t)) j).submatrix leftConfigOfFin
+        ((cutLeftFactor (bondComplementWord Φ (I t)) j).submatrix leftConfigOfFin
           leftConfigOfFin) := by
     ext a b
     simp [sampledLeftFactor]
   rw [hsmul]
   have hcoe : sampledScale L E₀ ℓ m • ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
-      ((cutLeftFactor (bondComplementWord h (I t)) j).submatrix leftConfigOfFin leftConfigOfFin) =
+      ((cutLeftFactor (bondComplementWord Φ (I t)) j).submatrix leftConfigOfFin leftConfigOfFin) =
       ((sampledScale L E₀ ℓ m : ℝ) : ℂ) • ManyBody.cutOperator (X := fun _ ↦ Fin q)
-        (leftBlock i k) ((cutLeftFactor (bondComplementWord h (I t)) j).submatrix leftConfigOfFin
+        (leftBlock i k) ((cutLeftFactor (bondComplementWord Φ (I t)) j).submatrix leftConfigOfFin
           leftConfigOfFin) := by
     ext a b
     simp [Complex.real_smul]
@@ -144,13 +144,13 @@ theorem operatorSchmidtRank_of_mem_sampledFactors {i : ℕ} (hi : i ≤ L)
 /-- The error-reduced family of the sampled factors is the error-reduced family of the
 indexed scaled factors. -/
 theorem errorReductionSet_sampledFactors
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) {i : ℕ} (S : Finset (LeftBlockVector L q i)) :
-    errorReductionSet (sampledFactors h E₀ I i) id S =
+    errorReductionSet (sampledFactors Φ E₀ I i) id S =
       errorReductionSet (Finset.univ : Finset ((t : Fin ℓ) × Fin (operatorSchmidtRank
         (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
-          (bondComplementWord h (I t))))))
-        (fun p ↦ sampledLeftFactor h E₀ I i p.1 p.2) S := by
+          (bondComplementWord Φ (I t))))))
+        (fun p ↦ sampledLeftFactor Φ E₀ I i p.1 p.2) S := by
   classical
   ext v
   simp only [errorReductionSet, Finset.mem_image₂, sampledFactors, Finset.mem_biUnion,
@@ -168,22 +168,22 @@ every cut, and the sampled projector is within `η < 1/2` of the ground projecti
 `D max(1, b)` and is `4 η`-viable. LVV13, `algo53.tex`, Claim `c:errorreduction`, lines
 584--592. -/
 theorem isViableMPS_errorReductionSet_sampledFactors {i : ℕ} (hi : i ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) {D : ℕ}
     (hrank : ∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L k) (bondComplementWord h (I t))) ≤ D)
+      (leftBlock L k) (bondComplementWord Φ (I t))) ≤ D)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΓ : ‖Γ‖ = 1) {s b : ℕ}
     {S : Finset (LeftBlockVector L q i)} (hS : IsViableMPS Γ s b (1 / 2) S) {η : ℝ}
-    (hKP : ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤ η)
+    (hKP : ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤ η)
     (hη : η < 1 / 2) :
     IsViableMPS Γ (ℓ * D * s) (D * max 1 b) (4 * η)
-      (errorReductionSet (sampledFactors h E₀ I i) id S) := by
+      (errorReductionSet (sampledFactors Φ E₀ I i) id S) := by
   classical
   rw [errorReductionSet_sampledFactors]
   have hout := hS.errorReduction_of_norm_sub_groundProjection_le hi hΓ
-    (cutOperator_sampledProjector_eq_sum h E₀ I i)
-    (fun p _ k hk0 hki ↦ operatorSchmidtRank_of_mem_sampledFactors hi h E₀ I hrank
-      (A := sampledLeftFactor h E₀ I i p.1 p.2) (by
+    (cutOperator_sampledProjector_eq_sum Φ E₀ I i)
+    (fun p _ k hk0 hki ↦ operatorSchmidtRank_of_mem_sampledFactors hi Φ E₀ I hrank
+      (A := sampledLeftFactor Φ E₀ I i p.1 p.2) (by
         simp only [sampledFactors, Finset.mem_biUnion, Finset.mem_univ, true_and,
           Finset.mem_image]
         exact ⟨p.1, p.2, rfl⟩) k hki)
@@ -192,7 +192,7 @@ theorem isViableMPS_errorReductionSet_sampledFactors {i : ℕ} (hi : i ≤ L)
   calc
     (Finset.univ : Finset ((t : Fin ℓ) × Fin _)).card
         = ∑ t : Fin ℓ, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-            (leftBlock L i) (bondComplementWord h (I t))) := by
+            (leftBlock L i) (bondComplementWord Φ (I t))) := by
           rw [Finset.card_univ, Fintype.card_sigma]
           simp only [Fintype.card_fin]
     _ ≤ ∑ _t : Fin ℓ, D := Finset.sum_le_sum fun t _ ↦ hrank t i

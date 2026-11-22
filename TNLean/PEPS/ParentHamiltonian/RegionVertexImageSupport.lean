@@ -148,7 +148,8 @@ theorem ker_regionParentHamiltonian_eq_virtual_image_of_cover
     (H : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hH : ∀ i, IsRegionParentInteraction A (R i) (H i)) :
-    (Matrix.mulVecLin (regionParentHamiltonian R H)).ker =
+    (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R H).hamiltonian).ker =
       (vertexVirtualParentGroundSpace A R).map (globalVertexTensorMap A) := by
   rw [ker_regionParentHamiltonian A R H hH,
     vertexVirtualParentGroundSpace_map_globalVertexTensorMap_of_cover A hA R hcover]

@@ -56,19 +56,17 @@ and Theorem `t:ais`, lines 1010–1024. -/
 private theorem exists_five_region_physical_truncation_residual
     (L q a b ell : ℕ) (hq : 0 < q) (hell : 21 ≤ ell)
     (hab : a + 2 * ell ≤ b + 1) (hbL : b + 2 * ell ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let I : Fin 5 → Finset (Fin (L - 1)) := fun j ↦
       Finset.univ.filter (fun i ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-      fun j ↦ ∑ i ∈ I j, h i
+      fun j ↦ ∑ i ∈ I j, Φ.term i
     let J : Finset (Fin (L - 1)) := Finset.univ.filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ J, h i
+    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ J, Φ.term i
     ∃ (e : Fin 5 → ℝ) (E0 : ℝ) (x z : (Fin L → Fin q) → ℂ),
       let S := ∑ j, e j
       let B : Finset (Fin 5) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
@@ -80,7 +78,7 @@ private theorem exists_five_region_physical_truncation_residual
       star x ⬝ᵥ x = 1 ∧
       (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
-      B ∅ = (∑ i, h i) - (S : ℂ) • 1 ∧
+      B ∅ = Φ.hamiltonian - (S : ℂ) • 1 ∧
       star z ⬝ᵥ z = 1 ∧ B ∅ *ᵥ z = (E0 : ℂ) • z ∧
       (B ∅ - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 4 ∧
       ‖B K‖ ≤ 7 * (ell : ℝ) ∧
@@ -95,7 +93,7 @@ private theorem exists_five_region_physical_truncation_residual
   obtain ⟨e, E0, x, z, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0ge, hE0le, hnorm, hres⟩ :=
     exists_five_region_independent_truncation_residual L q a b ell (ell : ℝ) hq
-      (by omega) (Nat.cast_nonneg ell) hab hbL h hs h0 h1
+      (by omega) (Nat.cast_nonneg ell) hab hbL Φ h0 h1
   refine ⟨e, E0, x, z, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0ge, hE0le, ?_, ?_⟩
   · convert hnorm using 1
@@ -124,15 +122,13 @@ choice; no complete AGSP operator-family theorem is asserted here. -/
 private theorem exists_five_region_physical_low_cluster
     (L q a b ell : ℕ) (hq : 0 < q) (hell : 21 ≤ ell)
     (hab : a + 2 * ell ≤ b + 1) (hbL : b + 2 * ell ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (mu g xi : ℝ) (hg : 0 < g) (hg1 : g ≤ 1)
     (htail : (288 * Real.exp (11 / 8)) *
       Real.exp (-((ell : ℝ) - g) / 8) ≤ xi)
     (hxi : xi ≤ g / 1000000) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
@@ -141,11 +137,11 @@ private theorem exists_five_region_physical_low_cluster
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     let J : Finset (Fin (L - 1)) := Finset.univ.filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
+    let Y := ∑ i ∈ J, Φ.term i
     ∃ (e : Fin 5 → ℝ) (E0 : ℝ),
       let S := ∑ j, e j
       let K : Finset (Fin 5) := {0, 2, 4}
@@ -174,7 +170,7 @@ private theorem exists_five_region_physical_low_cluster
   obtain ⟨e, E0, x, z, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0ge, hE0le, hnorm, hres⟩ :=
     exists_five_region_physical_truncation_residual L q a b ell hq hell hab hbL
-      h hs h0 h1
+      Φ h0 h1
   let S : ℝ := ∑ j, e j
   let K : Finset (Fin 5) := {0, 2, 4}
   let Bcur : Finset (Fin 5) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun T ↦
@@ -305,11 +301,9 @@ theorem exists_five_region_dg_cluster_parameters :
       21 ≤ ell ∧ 2 ≤ D ∧
       Real.log (D : ℝ) ≤ 22 * (A + 1) * cA / g * u ^ 3 ∧
       ∀ (L a b : ℕ), a + 2 * ell ≤ b + 1 → b + 2 * ell ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu : ℝ),
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu : ℝ),
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
@@ -318,11 +312,11 @@ theorem exists_five_region_dg_cluster_parameters :
       let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
       let Areg : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
         ∑ i ∈ Finset.univ.filter
-          (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+          (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
       let J : Finset (Fin (L - 1)) := Finset.univ.filter
         (fun i ↦ i.val + 1 ∈
           ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-      let Y := ∑ i ∈ J, h i
+      let Y := ∑ i ∈ J, Φ.term i
       ∃ (e : Fin 5 → ℝ) (E0 : ℝ),
         let S := ∑ j, e j
         let K : Finset (Fin 5) := {0, 2, 4}
@@ -361,12 +355,12 @@ theorem exists_five_region_dg_cluster_parameters :
   obtain ⟨hell, hD, _hlower, _hupper, _hscale, _hcount, hlogD, htrade, htail⟩ :=
     hall q g hq hg hg1
   refine ⟨hell, hD, hlogD, ?_⟩
-  intro L a b hab hbL h hs h0 h1 mu H hH G hmu hgap k Areg J Y
+  intro L a b hab hbL Φ h0 h1 mu H hH G hmu hgap k Areg J Y
   let xi : ℝ := g / 1000000
   obtain ⟨e, E0, hground, horigin, hE0, hE4, hnorm,
     v, lam, heigen, hclosed, hband, hdim, hTG, hGT, hnewgap⟩ :=
     exists_five_region_physical_low_cluster L q a b ell (by omega) hell hab hbL
-      h hs h0 h1 mu g xi hg hg1 htail le_rfl hmu hgap
+      Φ h0 h1 mu g xi hg hg1 htail le_rfl hmu hgap
   refine ⟨e, E0, ?_⟩
   intro S K B ι eta0 eta1 upper R Delta
   obtain ⟨hsep, hendpoint, hR0, hR8, _hwidth, hsquare⟩ :=
@@ -405,16 +399,14 @@ and `t:ais`, lines 1010–1024. No simple-ground-space assumption is made. -/
 theorem exists_five_region_physical_scaled_low_cluster
     (L q a b ell : ℕ) (hq : 0 < q) (hell : 21 ≤ ell)
     (hab : a + 2 * ell ≤ b + 1) (hbL : b + 2 * ell ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (mu g xi tau : ℝ) (hg : 0 < g) (hg1 : g ≤ 1)
     (htau : 0 < tau) (htau1 : tau ≤ 1)
     (htail : (288 * Real.exp (11 / 8)) *
       Real.exp (-((ell : ℝ) - g) / 8) ≤ xi)
     (hxi : xi ≤ tau * g / 1000000) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
@@ -423,11 +415,11 @@ theorem exists_five_region_physical_scaled_low_cluster
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     let J : Finset (Fin (L - 1)) := Finset.univ.filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
+    let Y := ∑ i ∈ J, Φ.term i
     ∃ (e : Fin 5 → ℝ) (E0 : ℝ),
       let S := ∑ j, e j
       let K : Finset (Fin 5) := {0, 2, 4}
@@ -454,7 +446,7 @@ theorem exists_five_region_physical_scaled_low_cluster
   have hellR : (21 : ℝ) ≤ ell := by exact_mod_cast hell
   simpa only [show 3 * (ell : ℝ) + 4 * (ell : ℝ) = 7 * (ell : ℝ) by ring] using
     exists_five_region_independent_scaled_low_cluster L q a b ell (ell : ℝ)
-      hq (by omega) hellR hab hbL h hs h0 h1 mu g xi tau
+      hq (by omega) hellR hab hbL Φ h0 h1 mu g xi tau
       hg hg1 htau htau1 htail hxi
 
 end TNLean.MPS.AreaLaw

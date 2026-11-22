@@ -51,7 +51,8 @@ theorem exists_isPreparedInDepth_approximatingMPVState (d D : ℕ) :
     ∃ C : ℕ, ∀ (A : MPSTensor d D) (σ : Matrix (Fin D) (Fin D) ℂ), σ.PosSemidef →
       σ.trace = 1 → ∀ q, 3 * D ≤ q → Kraus.IsInjective (blockTensor A q) →
         ∀ (M : ℕ) [NeZero (M * q)],
-          IsPreparedInDepth (C * q) fun s => approximatingMPVState A σ q M s := by
+          IsPreparedInDepth (Geometry.ring (M * q)) (C * q)
+            fun s => approximatingMPVState A σ q M s := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_blockIsometryState d D
   refine ⟨C, fun A σ hσ htr q hq hinj M _ => ?_⟩
   have : NeZero M := ⟨fun h => NeZero.ne (M * q) (by rw [h, zero_mul])⟩

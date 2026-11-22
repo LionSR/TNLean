@@ -36,16 +36,14 @@ moment or residual bound is supplied. ALVV, arXiv:1602.08828v2,
 equal-order-and-scale residual, rather than the reverse spectral comparison. -/
 theorem exists_interval_physical_soft_truncation_residual
     (L q p r : ℕ) (hq : 0 < q) (hpr : p ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, p, r, r, r, L]
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     ∃ (e : Fin 5 → ℝ) (E0 : ℝ) (x z : (Fin L → Fin q) → ℂ),
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let Hc := H - (((∑ j, e j) : ℝ) : ℂ) • 1
       ∃ hHc : Hc.IsHermitian,
         star x ⬝ᵥ x = 1 ∧
@@ -63,7 +61,7 @@ theorem exists_interval_physical_soft_truncation_residual
               80 * Real.exp ((17 + eta) / 8 - (m : ℝ) / 16) := by
   intro k A
   obtain ⟨e, E0, x, z, hHc, hxunit, hx, he, hzunit, hz, hElow, hE0, hE2, hres⟩ :=
-    exists_interval_physical_scaled_soft_truncation_residual L q p r hq hpr hrL h hs h0 h1
+    exists_interval_physical_scaled_soft_truncation_residual L q p r hq hpr hrL Φ h0 h1
   refine ⟨e, E0, x, z, hHc, hxunit, hx, he, hzunit, hz, hElow, hE0, hE2, ?_⟩
   intro eps eta m hepslo hepshi heta hm
   exact hres eps eta m (m : ℝ) hepslo hepshi heta hm (Nat.cast_pos.mpr hm)

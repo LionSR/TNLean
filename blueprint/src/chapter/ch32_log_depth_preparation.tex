@@ -1136,11 +1136,11 @@ Chapter~\ref{ch:local_quantum_circuits}.
         MPSPreparation.pairwise_commute_pairSite,
         MPSPreparation.blockLayerOp, MPSPreparation.pairLayerOp,
         MPSPreparation.blockLayerOp_apply, MPSPreparation.pairLayerOp_apply,
-        MPSPreparation.productVector_single_zero_apply,
-        MPSPreparation.mulVec_productVector_single_zero,
+        MPSPreparation.prod_single_zero_apply,
+        MPSPreparation.mulVec_prod_single_zero,
         MPSPreparation.pairLayerOp_mulVec_apply,
-        MPSPreparation.isCircuitOn_blockLayerOp,
-        MPSPreparation.isCircuitOn_pairLayerOp,
+        MPSPreparation.isUnitaryCircuitOn_blockLayerOp,
+        MPSPreparation.isUnitaryCircuitOn_pairLayerOp,
         MPSPreparation.blockSite_const,
         MPSPreparation.blockedConfigEquiv_symm_eq_blockIndexEquiv}
     \leanok
@@ -1348,8 +1348,8 @@ Chapter~\ref{ch:local_quantum_circuits}.
 \begin{corollary}[Normal states are transformed into each other in depth $O(\log(N/\varepsilon))$]
     \label{cor:ldp_normal_states_circuit}
     \uses{def:qc_local_circuit}
-    \lean{MPSPreparation.exists_isLocalCircuitOfDepth_le_log_of_mpvState_ne_zero,
-        MPSPreparation.exists_isLocalCircuitOfDepth_le_log}
+    \lean{MPSPreparation.exists_isUnitaryCircuit_le_log_of_mpvState_ne_zero,
+        MPSPreparation.exists_isUnitaryCircuit_le_log}
     \leanok
     Let $A$ and $B$ be normal tensors with the same physical dimension $d$.
     There is a constant $c$ depending only on $A$ and $B$ such that, for every
@@ -1381,11 +1381,10 @@ Chapter~\ref{ch:local_quantum_circuits}.
     $U_B$ and unit vectors $\psi_A=aU_A\ket{0\cdots0}$,
     $\psi_B=bU_B\ket{0\cdots0}$ with $\varepsilon(\psi_A,\hat\phi_N(A))$ and
     $\varepsilon(\psi_B,\hat\phi_N(B))$ at most $\varepsilon/4$, of depths
-    $T_A+2$ and $T_B+2$ with $T_A,T_B$ at most a constant times
+    $T_A$ and $T_B$, each at most a constant times
     $\log(4N/\varepsilon)\le3\log(N/\varepsilon)$. Put $U=U_BU_A^\dagger$, a
-    local circuit of depth $T_A+T_B+4$ by
-    Lemma~\ref{lem:qc_circuit_inverse_composition}; the term $4$ is at most
-    $(4/\log2)\log(N/\varepsilon)$. Then $U\psi_A=(a/b)\psi_B$ is a unit
+    local circuit of depth $T_A+T_B$ by
+    Lemma~\ref{lem:qc_circuit_inverse_composition}. Then $U\psi_A=(a/b)\psi_B$ is a unit
     vector, and since $U$ is unitary,
     $\varepsilon(U\hat\phi_N(A),(a/b)\psi_B)=\varepsilon(\hat\phi_N(A),\psi_A)$.
     Lemma~\ref{lem:ldp_error_triangle} gives
@@ -1682,14 +1681,14 @@ $A$ along $w$.
 
 \begin{lemma}[Two windows on the ring]
     \label{lem:ldp_two_window_trace}
-    \lean{MPSTensor.chainWindowOperator_apply,
-        MPSTensor.chainWindowOperator_add_left,
-        MPSTensor.chainWindowOperator_add_right,
-        MPSTensor.chainWindowOperator_self, MPSTensor.chainWindowOperator_one,
-        MPSTensor.chainWindowOperator_zero_eq_appendObservable,
-        MPSTensor.chainWindowOperator_add_eq_appendObservable,
-        MPSTensor.inner_mpvState_chainWindowOperator_mul,
-        MPSTensor.inner_mpvState_chainWindowOperator_mul_eq_physicalTwoPointExpectation,
+    \lean{MPSTensor.placeAlong_chainWindow_apply,
+        MPSTensor.placeAlong_chainWindow_add_left,
+        MPSTensor.placeAlong_chainWindow_add_right,
+        MPSTensor.placeAlong_chainWindow_self,
+        MPSTensor.placeAlong_chainWindow_zero_eq_appendObservable,
+        MPSTensor.placeAlong_chainWindow_add_eq_appendObservable,
+        MPSTensor.inner_mpvState_placeAlong_chainWindow_mul,
+        MPSTensor.inner_mpvState_placeAlong_chainWindow_mul_eq_physicalTwoPointExpectation,
         MPSTensor.mpvExpectation_eq_div}
     \leanok
     \uses{lem:ldp_observable_transfer_products}
@@ -1878,7 +1877,7 @@ $A$ along $w$.
     \label{thm:ldp_decaying_correlations}
     \lean{MPSTensor.exists_decayingCorrelations,
         MPSTensor.mpvConnectedCorrelator, MPSTensor.mpvExpectation,
-        MPSTensor.chainWindowOperator}
+        ManyBody.chainWindow}
     \leanok
     \uses{def:normal, def:correlation_length}
     Let $A$ be normal and in the gauge (\ref{eq:ldp_normal_gauge}), with
@@ -2213,13 +2212,13 @@ $A$ along $w$.
     \label{lem:ldp_window_averages}
     \lean{MPSTensor.exists_norm_mpvExpectation_mul_sub_mul_le,
         MPSTensor.exists_norm_sub_inner_smul_sq_le_mpv,
-        MPSTensor.mpvExpectation_chainWindowOperator_eq,
-        MPSTensor.mpvExpectation_chainWindowOperator_mul_eq,
+        MPSTensor.mpvExpectation_placeAlong_chainWindow_eq,
+        MPSTensor.mpvExpectation_placeAlong_chainWindow_mul_eq,
         MPSTensor.norm_toContinuousLinearMap_physicalObservableTransfer_le,
         MPSPreparation.norm_sub_inner_smul_sq_le,
         MPSPreparation.norm_sub_inner_smul_sq_le_of_isPreparedInDepth,
         MPSTensor.exists_norm_sub_inner_smul_add_le_div_sqrt,
-        MPSPreparation.isSeparatedBy_window}
+        MPSPreparation.isGraphSeparated_window}
     \leanok
     \uses{lem:ldp_two_window_trace, lem:ldp_finite_size_correction,
         lem:qc_light_cone_correlations}

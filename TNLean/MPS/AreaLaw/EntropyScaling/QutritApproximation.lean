@@ -29,6 +29,7 @@ The printed bound follows. Documented in
 namespace TNLean.MPS.AreaLaw.EntropyScaling
 open Matrix
 open scoped ComplexOrder
+open ManyBody (cutMatrix)
 
 /-- The optimized scalar error dominates the lost squared fidelity. -/
 private theorem one_sub_le_error {f : ℝ} (hf₀ : 0 ≤ f) (hf₁ : f ≤ 1) :
@@ -44,7 +45,8 @@ private theorem one_sub_le_error {f : ℝ} (hf₀ : 0 ≤ f) (hf₁ : f ≤ 1) :
 coordinates, for every vector on the chain. -/
 private theorem middleMatrix_reindex (N : ℕ)
     (φ : EuclideanSpace ℂ (Fin (N + N) → Fin 3)) :
-    (cutMatrix φ N).reindex (qutritLeftConfigurationEquiv N) (qutritRightConfigurationEquiv N) =
+    (cutMatrix (leftBlock (N + N) N) φ).reindex (qutritLeftConfigurationEquiv N)
+        (qutritRightConfigurationEquiv N) =
       schmidtCoeffMatrix (WithLp.ofLp
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (qutritHalves N) φ)) := by
   ext a b

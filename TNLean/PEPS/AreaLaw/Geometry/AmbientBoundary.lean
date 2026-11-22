@@ -19,7 +19,8 @@ no upstream Lean proof text is reused.
 
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (ambientDilation ambientDilation_zero edgeBoundary mem_ambientDilation_iff
+  planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -62,13 +63,13 @@ def ambientBoundaryRegion (S : Finset (ℤ × ℤ)) :
 computed in a finite enclosure containing every crossing edge.
 Source: Lemma 9.4, the ambient boundary of the template dilations. -/
 noncomputable def ambientBoundary (S : Finset (ℤ × ℤ)) : Finset (Sym2 (ℤ × ℤ)) :=
-  (edgeBoundary (ambientDilation S 1) (ambientBoundaryRegion S)).image
+  (edgeBoundary (planeDomainGraph (ambientDilation S 1)) (ambientBoundaryRegion S)).image
     (Sym2.map Subtype.val)
 
 /-- Mapping endpoints back to the lattice neither identifies nor duplicates edges. -/
 theorem card_ambientBoundary (S : Finset (ℤ × ℤ)) :
     (ambientBoundary S).card =
-      (edgeBoundary (ambientDilation S 1) (ambientBoundaryRegion S)).card := by
+      (edgeBoundary (planeDomainGraph (ambientDilation S 1)) (ambientBoundaryRegion S)).card := by
   classical
   exact Finset.card_image_of_injective _ (Sym2.map.injective Subtype.val_injective)
 
@@ -81,10 +82,10 @@ theorem mem_ambientBoundary_iff {S : Finset (ℤ × ℤ)} {e : Sym2 (ℤ × ℤ)
   constructor
   · intro he
     obtain ⟨f, hf, rfl⟩ := Finset.mem_image.mp he
-    obtain ⟨hf, p, hp, q, hq, rfl⟩ := Finset.mem_filter.mp hf
+    obtain ⟨hf, p, hp, q, hq, rfl⟩ := ManyBody.mem_edgeBoundary.mp hf
     simp only [ambientBoundaryRegion, Finset.mem_filter, Finset.mem_univ, true_and] at hp hq
     have hadj : (planeDomainGraph (ambientDilation S 1)).Adj p q := by
-      simpa only [SimpleGraph.mem_edgeFinset, SimpleGraph.mem_edgeSet] using hf
+      simpa only [SimpleGraph.mem_edgeSet] using hf
     exact ⟨p.1, hp, q.1, hq, mem_latticeNeighbors_iff.mpr hadj, rfl⟩
   · rintro ⟨p, hp, q, hq, hpq, rfl⟩
     have hpD : p ∈ ambientDilation S 1 :=
@@ -95,13 +96,10 @@ theorem mem_ambientBoundary_iff {S : Finset (ℤ × ℤ)} {e : Sym2 (ℤ × ℤ)
     let a : Site (ambientDilation S 1) := ⟨p, hpD⟩
     let b : Site (ambientDilation S 1) := ⟨q, hqD⟩
     refine Finset.mem_image.mpr ⟨s(a, b), ?_, rfl⟩
-    apply Finset.mem_filter.mpr
-    constructor
-    · apply SimpleGraph.mem_edgeFinset.mpr
-      change (planeDomainGraph (ambientDilation S 1)).Adj a b
-      exact mem_latticeNeighbors_iff.mp hpq
-    · exact ⟨a, by simpa [ambientBoundaryRegion, a] using hp,
-        b, by simpa [ambientBoundaryRegion, b] using hq, rfl⟩
+    refine ManyBody.mk_mem_edgeBoundary_iff.mpr ⟨?_, Or.inl ⟨?_, ?_⟩⟩
+    · exact mem_latticeNeighbors_iff.mp hpq
+    · simpa [ambientBoundaryRegion, a] using hp
+    · simpa [ambientBoundaryRegion, b] using hq
 
 /-- The inside/outside orientation of an unordered crossing edge is unique. -/
 theorem ambientBoundary_orientation_unique {S : Finset (ℤ × ℤ)}

@@ -26,6 +26,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (ambientDilation_zero)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open ActualTerminals

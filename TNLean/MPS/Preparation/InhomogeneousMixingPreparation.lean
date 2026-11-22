@@ -54,7 +54,7 @@ private theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_ordered_mixing_
           K * Real.exp (-(r * ℓ j))) :
     ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
-        IsPreparedInDepth T (fun s => ψ s) ∧
+        IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
         1 - ‖⟪ψ, (‖chainState (A N)‖ : ℂ)⁻¹ • chainState (A N)⟫_ℂ‖ ≤ ε := by
   classical
   obtain ⟨Cp, hCp, hp⟩ := exists_isPairApproximable_of_ordered_mixing hσ htr
@@ -94,7 +94,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_ordered_mixing
           K * Real.exp (-(r * ℓ j))) :
     ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N],
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
-        IsPreparedInDepth T (fun s => ψ s) ∧
+        IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
         1 - ‖⟪ψ, (‖chainState (A N)‖ : ℂ)⁻¹ • chainState (A N)⟫_ℂ‖ ≤ ε := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_inhomogeneous_le_log_of_ordered_mixing_from
     d D hd A hσ htr K r hK hr 0 (fun N _ _ => hne N) hmix
@@ -121,7 +121,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_ordered_mixi
           K * Real.exp (-(r * ℓ j))) :
     ∃ N₀ : ℕ, ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
-        IsPreparedInDepth T (fun s => ψ s) ∧
+        IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
         1 - ‖⟪ψ, (‖chainState (A N)‖ : ℂ)⁻¹ • chainState (A N)⟫_ℂ‖ ≤ ε := by
   obtain ⟨Kn, hKn, hnorm⟩ := exists_abs_norm_chainState_sq_sub_one_le hσ.posSemidef htr
   let L := Kn * K + 1

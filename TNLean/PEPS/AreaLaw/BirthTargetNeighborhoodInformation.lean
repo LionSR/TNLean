@@ -27,6 +27,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped BigOperators
 open TNLean.Lattice
+open ManyBody (planeDomainGraph edgeBoundary)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -42,7 +43,7 @@ birth target and `N i` is the amplification neighborhood. The ordered partition,
 target containments, whole-union exclusion, amplified information estimate,
 residual bound and scale sum are explicit premises. This auxiliary implication
 does not construct the final partition or prove those estimates. -/
-theorem regionalEntropy_le_boundary_of_neighborhood_information_estimates
+theorem regionEntropy_le_boundary_of_neighborhood_information_estimates
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (hq : 1 ≤ q)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
     (P : Geometry.OrderedTwoFamilyPartition A)
@@ -56,10 +57,10 @@ theorem regionalEntropy_le_boundary_of_neighborhood_information_estimates
     (hMI : ∀ i,
       ManyBody.regionMutualInformation Ω (Y i) (N i)ᶜ ≤
         cI * (n i : ℝ) ^ (-100 : ℝ))
-    (hD : (P.residual.card : ℝ) ≤ cD * (edgeBoundary Λ A).card)
-    (hS : (∑ i, (n i : ℝ) ^ (-100 : ℝ)) ≤ cS * (edgeBoundary Λ A).card) :
+    (hD : (P.residual.card : ℝ) ≤ cD * (edgeBoundary (planeDomainGraph Λ) A).card)
+    (hS : (∑ i, (n i : ℝ) ^ (-100 : ℝ)) ≤ cS * (edgeBoundary (planeDomainGraph Λ) A).card) :
     ManyBody.regionEntropy Ω A ≤
-      (cD * Real.log q + cI * cS / 2) * (edgeBoundary Λ A).card := by
+      (cD * Real.log q + cI * cS / 2) * (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
   have hmono (i : Fin P.pieceCount) :
       ManyBody.regionMutualInformation Ω (Y i)
@@ -69,7 +70,7 @@ theorem regionalEntropy_le_boundary_of_neighborhood_information_estimates
       ManyBody.regionMutualInformation_mono_left (fun _ : Site Λ ↦ Fin q) Ω
         (Aᶜ ∪ P.earlierSameFamily i) (N i)ᶜ (Y i) (hJ i)
         (disjoint_compl_right_iff.mpr (hYN i)).symm
-  exact regionalEntropy_le_boundary_of_birth_information_estimates Λ q hq Ω hΩ A P
+  exact regionEntropy_le_boundary_of_birth_information_estimates Λ q hq Ω hΩ A P
     Y hYA hXY
     (fun i ↦ (disjoint_compl_right_iff.mpr (hYN i)).mono_right
       (Finset.subset_union_right.trans (hJ i)))

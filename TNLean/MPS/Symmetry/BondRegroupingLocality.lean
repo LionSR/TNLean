@@ -26,7 +26,8 @@ theorem incomingBondPerm_conj_local_apply {D N : ℕ} (hN : 1 ≤ N) (i : Fin N)
     (K : Matrix (Fin (D * D)) (Fin (D * D)) ℂ)
     (s t : Fin N → Fin (D * D)) :
     ((incomingBondPerm D N).permMatrix ℂ *
-      MPOTensor.embedLocalOperator 1 N hN i (MPOTensor.oneSiteOperator K) *
+      ManyBody.placeAlong (X := fun _ ↦ Fin (D * D)) (ManyBody.ringWindow hN i)
+        (MPOTensor.oneSiteOperator K) *
       ((incomingBondPerm D N).permMatrix ℂ).conjTranspose) s t =
       ∏ j, if j = i then
         K (finProdFinEquiv (incomingBondEquiv D N s j))

@@ -3,8 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.CleanUnitaryImplementation
-import TNLean.Circuit.ArbitrarySiteGateEmbedding
+import QICLean.Circuit.Compile.SwapRouting
+import QICLean.Circuit.Model.CleanWorkspace
+import QICLean.Circuit.Model.UnitaryPlacement
+import QICLean.ManyBody.Sites.PlaceAlong
 
 /-!
 # Placement of clean circuits in a common workspace
@@ -15,17 +17,58 @@ operator identity below holds on every logical input. The extra workspace
 sites remain zero, and the neighboring-pair decomposition is obtained by
 routing the actual local circuit.
 
+The clean identity is QICLean's `QuantumCircuit.IsCleanImplementation` along the basis inclusion
+`Matrix.basisInclusion (QuantumCircuit.workspaceEmbedding 0)` of a zero workspace, the placement
+is `ManyBody.placeAlong`, and the gates on neighbouring sites of an open chain are
+`QuantumCircuit.IsGateProduct (Geometry.graph (SimpleGraph.pathGraph n))`.
+
 These are the placement identities used for leaves, inverse child circuits,
 and repeated image reflections in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`.
+
+## Main results
+
+* `QuantumCircuit.IsGateProduct.placeAlong_pathGraph` — a product of gates on neighbouring sites
+  of an open chain, placed at arbitrary sites of a longer open chain.
+* `QuantumCircuit.IsCleanImplementation.placeAlong` — a clean implementation placed in a larger
+  register with a common workspace.
+* `QuantumCircuit.isGateProduct_isCleanImplementation_placeAlong` — both together.
 -/
 
-open QuantumCircuit
-
 open Matrix
-open scoped BigOperators
 
 namespace QuantumCircuit
+
+/-- **A circuit on an open chain placed at arbitrary sites.** Placing a product of `K` gates on
+neighbouring sites of the open chain of `m` sites along any injection into the open chain of `N`
+sites gives a product of at most `2 N K` gates on neighbouring sites: every gate of the short
+chain is a gate on an ordered pair of distinct sites of the long chain, routed by SWAP gates.
+Source: Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex` (placing a circuit at
+arbitrary distinct sites increases its gate count by at most `2 N` per gate). -/
+theorem IsGateProduct.placeAlong_pathGraph {α : Type} [Fintype α] [DecidableEq α] {m N K : ℕ}
+    (w : Fin m ↪ Fin N) {U : Matrix (Fin m → α) (Fin m → α) ℂ}
+    (hU : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph m)) K U) :
+    IsGateProduct (Geometry.graph (SimpleGraph.pathGraph N)) (2 * N * K)
+      (ManyBody.placeAlong (X := fun _ ↦ α) w U) := by
+  have h := (hU.isUnitaryCircuitOn_graph (Γ := Geometry.sitesAndPairs (Fin N) 0 1)
+    (X := fun _ : Fin N ↦ α) (ManyBody.windowEquiv w) fun u v huv ↦
+      ⟨Sum.inr ⟨(w u, w v), w.injective.ne huv.ne⟩, (Finset.insert_eq _ _).symm, rfl⟩).2
+  convert IsGateProduct.of_sitesAndPairs le_rfl h using 1
+  ext z z'
+  have hcfg : ∀ y : Fin N → α,
+      (ManyBody.siteConfigurationEquiv (ManyBody.windowEquiv w) fun _ ↦ Equiv.refl α).symm
+        (fun v : {v // v ∈ Finset.univ.map w} ↦ y v) = fun u ↦ y (w u) := fun y ↦
+    funext fun u ↦ by
+      rw [ManyBody.siteConfigurationEquiv_symm_apply]
+      rfl
+  have hoff : (∀ v ∉ Finset.univ.map w, z v = z' v) ↔ ∀ v, (∀ u, w u ≠ v) → z v = z' v := by
+    simp
+  rw [ManyBody.placeAlong_apply, ManyBody.place_apply, reindex_apply, submatrix_apply]
+  split_ifs with h₁ h₂ h₂
+  · exact congrArg₂ U (hcfg z).symm (hcfg z').symm
+  · exact absurd (hoff.mpr h₁) h₂
+  · exact absurd (hoff.mp h₂) h₁
+  · rfl
 
 variable {d m n b A K : ℕ}
 
@@ -70,55 +113,14 @@ def cleanImplementationSites (e : Fin m ↪ Fin n) (t : Fin b ↪ Fin A) :
 
 variable [NeZero d]
 
-/-- An initialized row inclusion vanishes off the zero-workspace subspace.
-Source: the initialized workspace in Section 5 of
-`docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem initializedBasisMatrix_zeroWorkspace_mul_apply
-    (Z : Matrix (Fin n → Fin d) (Fin m → Fin d) ℂ)
-    (z : Fin (n + A) → Fin d) (x : Fin m → Fin d) :
-    (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := n) (a := A)) * Z) z x =
-      if ∀ j, z (Fin.natAdd n j) = 0 then
-        Z (fun j ↦ z (Fin.castAdd A j)) x else 0 := by
-  classical
-  simp only [Matrix.mul_apply, initializedBasisMatrix, Matrix.submatrix_apply, id_eq,
-    Matrix.one_apply]
-  change (∑ y : (Fin n → Fin d), (if z = Fin.append y 0 then (1 : ℂ) else 0) * Z y x) = _
-  by_cases hz : ∀ j, z (Fin.natAdd n j) = 0
-  · rw [ite_eq_left hz]
-    let y : (Fin n → Fin d) := fun j ↦ z (Fin.castAdd A j)
-    have hzy : z = Fin.append y 0 := by
-      funext j
-      refine Fin.addCases (fun i ↦ ?_) (fun i ↦ ?_) j
-      · simp only [Fin.append_left, y]
-      · simpa only [Fin.append_right, Pi.zero_apply] using hz i
-    rw [Finset.sum_eq_single y]
-    · rw [ite_eq_left hzy, one_mul]
-    · intro y' _ hne
-      have hne' : z ≠ Fin.append y' 0 := by
-        intro h
-        apply hne
-        funext i
-        have hval := congrFun (h.symm.trans hzy) (Fin.castAdd A i)
-        simpa only [Fin.append_left] using hval
-      rw [ite_eq_right hne', zero_mul]
-    · simp
-  · rw [ite_eq_right hz]
-    apply Finset.sum_eq_zero
-    intro y _
-    have hne : z ≠ Fin.append y 0 := by
-      intro h
-      apply hz
-      intro j
-      simp only [h, Fin.append_right, Pi.zero_apply]
-    rw [ite_eq_right hne, zero_mul]
-
 private theorem cleanImplementationSites_agreeOff_iff
     (e : Fin m ↪ Fin n) (t : Fin b ↪ Fin A)
     (z : (Fin (n + A) → Fin d)) (x : (Fin n → Fin d)) :
-    (AgreeOff (cleanImplementationSites e t) z (Fin.append x 0) ∧
+    ((∀ v, (∀ u, cleanImplementationSites e t u ≠ v) →
+        z v = Fin.append x (0 : Fin A → Fin d) v) ∧
         ∀ j, z (Fin.natAdd n (t j)) = 0) ↔
       ((∀ j, z (Fin.natAdd n j) = 0) ∧
-        AgreeOff e (fun j ↦ z (Fin.castAdd A j)) x) := by
+        ∀ v, (∀ u, e u ≠ v) → z (Fin.castAdd A v) = x v) := by
   constructor
   · rintro ⟨hag, hzero⟩
     constructor
@@ -171,57 +173,56 @@ sites and scratch sites in a larger register. The entire larger workspace
 starts and ends in zero, for every logical input. Source: the common
 workspace argument in Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem IsCleanImplementation.embedOp
+theorem IsCleanImplementation.placeAlong
     (e : Fin m ↪ Fin n) (t : Fin b ↪ Fin A)
     {U : Matrix ((Fin (m + b) → Fin d)) ((Fin (m + b) → Fin d)) ℂ}
     {Z : Matrix ((Fin m → Fin d)) ((Fin m → Fin d)) ℂ}
     (hlocal : IsCleanImplementation
-      (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := m) (a := b))) U Z) :
+      (basisInclusion (workspaceEmbedding (n := m) (0 : Fin b → Fin d))) U Z) :
     IsCleanImplementation
-      (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := n) (a := A)))
-      (embedOp (cleanImplementationSites e t) U) (embedOp e Z) := by
+      (basisInclusion (workspaceEmbedding (n := n) (0 : Fin A → Fin d)))
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (cleanImplementationSites e t) U)
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) e Z) := by
   classical
-  change QuantumCircuit.embedOp (cleanImplementationSites e t) U *
-    initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := n) (a := A)) = _
-  rw [mul_initializedBasisMatrix]
+  unfold IsCleanImplementation at hlocal ⊢
   ext z x
-  change QuantumCircuit.embedOp (cleanImplementationSites e t) U z (Fin.append x 0) = _
-  rw [initializedBasisMatrix_zeroWorkspace_mul_apply]
-  have hrestrict : (Fin.append x (0 : (Fin A → Fin d))) ∘ cleanImplementationSites e t =
-      Fin.append (x ∘ e) 0 := by
+  have hrestrict :
+      (fun u ↦ Fin.append x (0 : Fin A → Fin d) (cleanImplementationSites e t u)) =
+        Fin.append (fun u ↦ x (e u)) (0 : Fin b → Fin d) := by
     funext j
     refine Fin.addCases (fun i ↦ ?_) (fun i ↦ ?_) j
-    · simp only [Function.comp_apply, cleanImplementationSites_castAdd, Fin.append_left]
-    · simp only [Function.comp_apply, cleanImplementationSites_natAdd, Fin.append_right,
-        Pi.zero_apply]
-  change U * initializedBasisMatrix
-      (zeroWorkspaceEmbedding (d := d) (n := m) (a := b)) = _ at hlocal
-  have hentry := congrArg (fun M ↦ M (z ∘ cleanImplementationSites e t) (x ∘ e)) hlocal
-  rw [mul_initializedBasisMatrix, initializedBasisMatrix_zeroWorkspace_mul_apply] at hentry
-  change U (z ∘ cleanImplementationSites e t) (Fin.append (x ∘ e) 0) = _ at hentry
-  simp only [Function.comp_apply, cleanImplementationSites_natAdd,
-    cleanImplementationSites_castAdd] at hentry
-  rw [embedOp_apply, hrestrict, hentry, embedOp_apply]
-  simp only [← ite_and, cleanImplementationSites_agreeOff_iff]
-  rfl
+    · simp only [cleanImplementationSites_castAdd, Fin.append_left]
+    · simp only [cleanImplementationSites_natAdd, Fin.append_right, Pi.zero_apply]
+  have hentry := congrArg (fun M ↦ M (fun u ↦ z (cleanImplementationSites e t u))
+    (fun u ↦ x (e u))) hlocal
+  rw [mul_basisInclusion_apply, basisInclusion_workspaceEmbedding_mul_apply,
+    workspaceEmbedding_apply] at hentry
+  simp only [cleanImplementationSites_natAdd, cleanImplementationSites_castAdd,
+    Pi.zero_apply] at hentry
+  rw [mul_basisInclusion_apply, basisInclusion_workspaceEmbedding_mul_apply,
+    workspaceEmbedding_apply, ManyBody.placeAlong_apply, hrestrict, hentry,
+    ManyBody.placeAlong_apply, ← ite_and, ← ite_and]
+  congr 1
+  exact propext (cleanImplementationSites_agreeOff_iff e t z x)
 
 /-- The routed circuit and the shared-pool cleanup equation follow from
 an actual local pair circuit and its local clean action. No larger-register
 circuit or cleanup witness is assumed. Source: Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem isPairProduct_isCleanImplementation_embedOp
-    (hd : 0 < d) (e : Fin m ↪ Fin n) (t : Fin b ↪ Fin A)
+theorem isGateProduct_isCleanImplementation_placeAlong
+    (e : Fin m ↪ Fin n) (t : Fin b ↪ Fin A)
     {U : Matrix ((Fin (m + b) → Fin d)) ((Fin (m + b) → Fin d)) ℂ}
     {Z : Matrix ((Fin m → Fin d)) ((Fin m → Fin d)) ℂ}
-    (hU : IsPairProduct d (m + b) K U)
+    (hU : IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (m + b))) K U)
     (hlocal : IsCleanImplementation
-      (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := m) (a := b))) U Z) :
-    IsPairProduct d (n + A) (K * (2 * (n + A)))
-        (embedOp (cleanImplementationSites e t) U) ∧
+      (basisInclusion (workspaceEmbedding (n := m) (0 : Fin b → Fin d))) U Z) :
+    IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (n + A))) (K * (2 * (n + A)))
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (cleanImplementationSites e t) U) ∧
       IsCleanImplementation
-        (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := n) (a := A)))
-        (embedOp (cleanImplementationSites e t) U) (embedOp e Z) :=
-  ⟨hU.embedOp_injective hd (cleanImplementationSites e t).injective,
-    hlocal.embedOp e t⟩
+        (basisInclusion (workspaceEmbedding (n := n) (0 : Fin A → Fin d)))
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) (cleanImplementationSites e t) U)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) e Z) :=
+  ⟨(hU.placeAlong_pathGraph (cleanImplementationSites e t)).mono (Nat.mul_comm _ _).le,
+    hlocal.placeAlong e t⟩
 
 end QuantumCircuit

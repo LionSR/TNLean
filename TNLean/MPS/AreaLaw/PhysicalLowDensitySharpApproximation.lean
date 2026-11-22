@@ -38,27 +38,25 @@ theorem exists_fixed_bandwidth_interval_low_energy_normalized_approximation
     (etaLD : ℝ) (hLD : 0 < etaLD) :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q p r : ℕ) (v : ℝ) (hq : 2 ≤ q), p ≤ r → r ≤ L → 0 < v →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ h0 : ∀ i, 0 ≤ h i, (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ h0 : ∀ i, 0 ≤ Φ.term i, (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let J := interval L p r
       let beta := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
       let G := fun c : ℝ ↦ Submodule.spectralSpanLE
         hRaw.eigenvectorBasis hRaw.eigenvalues (minEigenvalue hRaw + c)
-      let e := Tm.trans (Submodule.euclideanTensorEquiv (J → Fin q) (↥(Jᶜ) → Fin q)).symm
+      let e := Tm.trans (Submodule.euclideanTensorEquiv (J → Fin q) ({x // x ∉ J} → Fin q)).symm
       let b := min v (etaLD / 2)
       let g := min (b / 6) 1
       let u := 1 + Real.log (q : ℝ) + Real.log (1 / g)
@@ -82,7 +80,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_normalized_approximation
   have hkappa : 0 < kappa := by dsimp only [kappa]; positivity
   have hK : 0 < K := by dsimp only [K]; positivity
   refine ⟨K, hK, ?_⟩
-  intro L q p r v hq hpr hrL hv h hs h0 h1 config H hRaw
+  intro L q p r v hq hpr hrL hv Φ h0 h1 config H hRaw
     J betaCoord tau U Phi Tm G e b g u
   let : Nonempty (Fin L → Fin q) := config
   have hb : 0 < b := lt_min hv (by positivity)
@@ -118,7 +116,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_normalized_approximation
         (div_le_div_of_nonneg_left hKb.le hg hgb)
         (pow_le_pow_left₀ hbase0 hbase 3) (by positivity) (by positivity)
       _ = _ := by ring
-  obtain ⟨W0, hWdim, _hW0, happ⟩ := hactual L q p r v hq hpr hrL hv h hs h0 h1
+  obtain ⟨W0, hWdim, _hW0, happ⟩ := hactual L q p r v hq hpr hrL hv Φ h0 h1
   intro delta hdelta hdelta1 a ψ hψG hψ
   obtain ⟨ell, hell, hwindow, hvec⟩ := happ delta hdelta hdelta1
   let D1 : ℕ := (q * ell ^ 2) ^ (22 * ell)

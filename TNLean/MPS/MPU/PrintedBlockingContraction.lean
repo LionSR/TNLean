@@ -56,20 +56,26 @@ private theorem consecutive_pair_product_apply {d n p m : ℕ} (hp : p + 2 * m �
   let B := Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
     (finTwoArrowEquiv (Fin d)).symm A
   have hg (j : Fin m) : printedPairGate n (p + 2 * j.val) (by have := j.isLt; omega) A =
-      embedOp (e j) B := rfl
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨e j, he j⟩ B := rfl
   have hc : ((Finset.univ : Finset (Fin m)) : Set (Fin m)).Pairwise
-      (Function.onFun Commute fun j ↦ embedOp (e j) B) := by
+      (Function.onFun Commute fun j ↦
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨e j, he j⟩ B) := by
     intro j _ j' _ hne
-    exact commute_embedOp_of_disjoint (he j) (he j') (hd j j' hne) _ _
-  have hprod : (List.ofFn fun j : Fin m ↦ embedOp (e j) B).prod =
-      Finset.univ.noncommProd (fun j ↦ embedOp (e j) B) hc := by
+    refine ManyBody.commute_placeAlong_of_disjoint _ ?_ _ _
+    rw [← Finset.disjoint_coe]
+    simpa using hd j j' hne
+  have hprod : (List.ofFn fun j : Fin m ↦
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨e j, he j⟩ B).prod =
+      Finset.univ.noncommProd
+        (fun j ↦ ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨e j, he j⟩ B) hc := by
     have hc' : ((List.finRange m).toFinset : Set (Fin m)).Pairwise
-        (Function.onFun Commute fun j ↦ embedOp (e j) B) := by
+        (Function.onFun Commute fun j ↦
+          ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨e j, he j⟩ B) := by
       simpa only [List.toFinset_finRange] using hc
     simpa only [List.toFinset_finRange, List.ofFn_eq_map] using
       (Finset.noncommProd_toFinset (List.finRange m) _ hc' (List.nodup_finRange m)).symm
   simp_rw [hg]
-  rw [hprod, noncommProd_embedOp_apply e he (fun _ ↦ B) _
+  rw [hprod, noncommProd_placeAlong_apply e he (fun _ ↦ B) _
     (fun j _ j' _ hne ↦ hd j j' hne)]
   have hout : (∀ i : Fin n, (∀ j ∈ (Finset.univ : Finset (Fin m)), ∀ t, e j t ≠ i) →
       x i = y i) ↔ ∀ i : Fin n, i.val < p ∨ p + 2 * m ≤ i.val → x i = y i := by

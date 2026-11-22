@@ -25,6 +25,7 @@ Written from the manuscript; no upstream Lean text is reused.
 noncomputable section
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -67,7 +68,7 @@ assumption of Proposition two-families is at lines 102–105. -/
 theorem lattice_mem_current_or_terminal_before {a₀ : ℝ}
     (h : RepairMetricHypotheses (o := dyadicOrigin) (Λ := Λ) (A := A)
       (C := C) (k₀ := k₀) (hC := hC) (h₀ := h₀) (Sstar := Sstar) a₀)
-    (hSstar : 1 ≤ Sstar) (hboundary : 0 < (edgeBoundary Λ A).card)
+    (hSstar : 1 ≤ Sstar) (hboundary : 0 < (edgeBoundary (planeDomainGraph Λ) A).card)
     (j : ℕ) (z : ℤ × ℤ) :
     (∃ i : (𝔇 j).regionIndex, integerPoint z ∈ (𝔇 j).current i) ∨
       ∃ t < j, integerPoint z ∈

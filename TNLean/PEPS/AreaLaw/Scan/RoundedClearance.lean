@@ -148,7 +148,7 @@ theorem exists_safe_shell_cells_of_rounded_scales (X : ScannerExponents)
       let L := X.L n
       let r₀ := ⌈Cr * Real.log n ^ 2⌉₊
       1 ≤ L ∧ L ≤ Q.size ∧
-      (∀ e ∈ edgeBoundary Λ A, ∀ z ∈ e, ∀ p ∈ Q.toFinset,
+      (∀ e ∈ ManyBody.edgeBoundary (ManyBody.planeDomainGraph Λ) A, ∀ z ∈ e, ∀ p ∈ Q.toFinset,
         2 * L + 10 * r₀ < supDist p z.1) ∧
       ∀ j Kcap : ℕ, j ≤ L → 2 ^ Kcap ≤ L → ∀ k z,
         (k, z) ∈ cappedDyadicPartition ((Q.dilate j).toFinset \ Q.toFinset) Kcap →

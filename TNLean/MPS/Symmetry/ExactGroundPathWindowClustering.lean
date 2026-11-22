@@ -6,6 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.ExactGroundPathClustering
 import TNLean.MPS.Symmetry.PositiveRayExpectations
 import TNLean.MPS.Preparation.WindowSeparation
+import QICLean.ManyBody.Sites.PlaceAlong
+import QICLean.ManyBody.Sites.Lattice.Chain
 
 /-!
 # Physical clustering for the actual two-window MPS correlator
@@ -47,12 +49,6 @@ private theorem card_window_le (N a L : ℕ) : (window N a L).card ≤ L := by
   simpa only [Finset.card_range] using
     Finset.card_le_card_of_injOn (fun k : Fin N ↦ k.val - a) hMaps hInj
 
-private theorem norm_window_le {d N a L : ℕ} (ha : a < N) (haL : a + L ≤ N)
-    (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    ‖chainWindowOperator N a X‖ ≤ ‖X‖ := by
-  rw [chainWindowOperator_eq_embedLocalOperatorAlgHom ha haL]
-  exact MPOTensor.norm_embedLocalOperator_le L N (by omega) ⟨a, ha⟩ X
-
 variable {G : Type} [Group G] {d : ℕ}
   {U : G →* Matrix.unitaryGroup (Fin d) ℂ}
   {h₀ h₁ : MPOTensor.ChainOperator d 2}
@@ -87,29 +83,37 @@ theorem ExactMPSGroundPath.exists_uniform_window_correlation_bound
   have hF' : F'.Nonempty := by
     refine ⟨⟨L + t, by dsimp only [N]; omega⟩, ?_⟩
     simp [F', window, hL]
-  have hSep : IsSeparatedBy F F' t := by
-    exact isSeparatedBy_window (by omega) (by dsimp only [N]; omega)
+  have hSep : ManyBody.IsGraphSeparated (SimpleGraph.cycleGraph N) F F' t := by
+    exact isGraphSeparated_window (by omega) (by dsimp only [N]; omega)
   have hDist : (t : ℝ) ≤ ringSupportDistance (F : Set (Fin N))
       (F' : Set (Fin N)) hF hF' := by
-    exact_mod_cast ((isSeparatedBy_iff_lt_ringSupportDistance _ _ hF hF' t).mp hSep).le
+    exact_mod_cast ((isGraphSeparated_iff_lt_ringSupportDistance _ _ hF hF' t).mp hSep).le
   have hDisj : Disjoint (F : Set (Fin N)) (F' : Set (Fin N)) := by
     apply Set.disjoint_left.mpr
     intro k hk hk'
     simp only [F, F', window, Finset.mem_coe, Finset.mem_filter,
       Finset.mem_univ, true_and] at hk hk'
     omega
-  have hX : chainWindowOperator N 0 X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) F := by
-    exact chainWindowOperator_mem_supportedOperators_window (by omega)
-      (by dsimp only [N]; omega) X
-  have hY : chainWindowOperator N (L + t) Y ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) F' := by
-    exact chainWindowOperator_mem_supportedOperators_window (by dsimp only [N]; omega)
-      (by dsimp only [N]; omega) Y
-  have h := hEst γ hγ N hN (chainWindowOperator N 0 X)
-    (chainWindowOperator N (L + t) Y) F F' hF hF' hX hY hDisj t (by exact_mod_cast ht) hDist
-  have hNormX := norm_window_le (N := N) (a := 0) (by omega)
-    (by dsimp only [N]; omega) X
-  have hNormY := norm_window_le (N := N) (a := L + t) (by dsimp only [N]; omega)
-    (by dsimp only [N]; omega) Y
+  have h0 : 0 + L ≤ N := by dsimp only [N]; omega
+  have hLt : L + t + L ≤ N := by dsimp only [N]; omega
+  have hX : ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow 0 h0) X ∈
+      ManyBody.supportedOperators (fun _ ↦ Fin d) F := by
+    have hmem := ManyBody.placeAlong_mem_supportedOperators (X := fun _ ↦ Fin d)
+      (ManyBody.chainWindow 0 h0) X
+    rw [ManyBody.map_chainWindow] at hmem
+    exact hmem
+  have hY : ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (L + t) hLt) Y ∈
+      ManyBody.supportedOperators (fun _ ↦ Fin d) F' := by
+    have hmem := ManyBody.placeAlong_mem_supportedOperators (X := fun _ ↦ Fin d)
+      (ManyBody.chainWindow (L + t) hLt) Y
+    rw [ManyBody.map_chainWindow] at hmem
+    exact hmem
+  have h := hEst γ hγ N hN (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow 0 h0) X)
+    (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (L + t) hLt) Y)
+    F F' hF hF' hX hY hDisj t (by exact_mod_cast ht) hDist
+  have hNormX := ManyBody.norm_placeAlong_le (X := fun _ ↦ Fin d) (ManyBody.chainWindow 0 h0) X
+  have hNormY := ManyBody.norm_placeAlong_le (X := fun _ ↦ Fin d)
+    (ManyBody.chainWindow (L + t) hLt) Y
   have hCard : (F.card : ℝ) ≤ L := by exact_mod_cast card_window_le N 0 L
   change ‖mpvConnectedCorrelator (Q.tensor γ) N 0 (L + t) X Y‖ ≤ _
   simp only [mpvConnectedCorrelator, mpvExpectation_eq_inner_div_norm_sq]

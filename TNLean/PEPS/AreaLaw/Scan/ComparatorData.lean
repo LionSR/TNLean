@@ -219,8 +219,8 @@ theorem exists_prevector_labels
     (X : Finset ι) (E : Finset (ManyBody.RegionConfig β X))
     (hz : 0 < (ManyBody.regionState_posSemidef X Ω).isHermitian.spectralRestrictionMass
       E) :
-    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.splitEquiv β X) Ω
-    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.cutEquiv β X) Ω
+    let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
       (∀ k : ℕ, 0 < k →
@@ -234,10 +234,10 @@ theorem exists_prevector_labels
       (∀ᶠ k : ℕ in atTop,
         (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
           ‖WithLp.toLp 2
-            (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
-              (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
+            (((1 : Matrix (Fin k → ManyBody.ComplConfig β X)
+              (Fin k → ManyBody.ComplConfig β X) ℂ) ⊗ₖ
               labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-              (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
+              (fun x : (Fin k → ManyBody.ComplConfig β X) ×
                 (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) ∧
       Asymptotics.IsLittleO atTop
         (fun k : ℕ ↦ Real.log (ell k).dim - (k : ℝ) *
@@ -247,8 +247,8 @@ theorem exists_prevector_labels
   intro ΩX ψ
   have hψ : ‖WithLp.toLp 2 ψ‖ = 1 :=
     ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      ((Equiv.prodComm E (ManyBody.RegionConfig β Xᶜ)).trans
-        ((Equiv.refl (ManyBody.RegionConfig β Xᶜ)).prodCongr
+      ((Equiv.prodComm E (ManyBody.ComplConfig β X)).trans
+        ((Equiv.refl (ManyBody.ComplConfig β X)).prodCongr
           (Finset.equivFin E)))).norm_map
       (compressedTypicalPureState ΩX E)).trans
       (norm_compressedTypicalPureState ΩX E hz)
@@ -305,8 +305,8 @@ theorem vonNeumannEntropy_compressedTypicalPureState_eq_sum
     (hz : 0 < (ManyBody.regionState_posSemidef X Ω).isHermitian.spectralRestrictionMass
       E) :
     let p := (ManyBody.regionState_posSemidef X Ω).isHermitian.eigenvalues
-    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.splitEquiv β X) Ω
-    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.cutEquiv β X) Ω
+    let ψ : ManyBody.ComplConfig β X × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     vonNeumannEntropy (partialTraceLeft (vecMulVec ψ (star ψ)))
         (posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian =

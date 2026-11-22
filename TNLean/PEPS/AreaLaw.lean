@@ -17,7 +17,6 @@ import TNLean.PEPS.AreaLaw.AreaLawExplicitConstant
 import TNLean.PEPS.AreaLaw.AreaLawTheorem
 import TNLean.PEPS.AreaLaw.BirthTargetEntropy
 import TNLean.PEPS.AreaLaw.BirthTargetNeighborhoodInformation
-import TNLean.PEPS.AreaLaw.BoundaryConventions
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
 import TNLean.PEPS.AreaLaw.BoundaryTheorem
 import TNLean.PEPS.AreaLaw.BoundaryTheoremFromTwoFamilies
@@ -26,7 +25,6 @@ import TNLean.PEPS.AreaLaw.CollarInformation
 import TNLean.PEPS.AreaLaw.ConditionalEstimates
 import TNLean.PEPS.AreaLaw.CrossingBudget
 import TNLean.PEPS.AreaLaw.Cylinder
-import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
 import TNLean.PEPS.AreaLaw.EdgeCrossingBudget
 import TNLean.PEPS.AreaLaw.FiniteSetTruncation
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap

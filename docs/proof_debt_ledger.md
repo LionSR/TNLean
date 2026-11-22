@@ -1162,14 +1162,16 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
 ## D18. One-site long-range gates and register gates kept as two layer stacks  —  duplication, impact 3/10, effort 4/10
 - **Status**: open (recorded in the review of #8492)
 - **Evidence**: `QuantumCircuit.RegisterGate` at `s = 1`
-  (`Circuit/Teleportation/RegisterGates.lean`) is the same object as
-  `QuantumCircuit.LongRangeGate` (`Circuit/Teleportation/LongRangeGates.lean`): a
+  (QICLean `Circuit/Protocol/Teleportation/RegisterGates.lean`) is the same object as
+  `QuantumCircuit.LongRangeGate` (QICLean `Circuit/Protocol/Teleportation/LongRangeGates.lean`): a
   gate on the sites `a` and `a + 2L + 1`, with the same stretch, interior and
   zone, applied by a forward chain, a local gate and a backward chain. Both
   files carry the layer machinery (all-gate chain lists, site-permutation
   lemmas, the conjugation identity). The depths differ: `LongRangeGate` merges
-  the local gate into the backward round and has depth `5`, while
-  `RegisterGate` applies it in a round of its own and has depth `4s + K + 2`.
+  the local gate into the backward round and has depth at most `5`, while
+  `RegisterGate` applies it as a circuit between the rounds and has depth at
+  most `4s + K`. Both are now QICLean declarations, so the duplication is
+  QICLean's to remove.
 - **Remediation**: derive the one-site layer of `LongRangeGates` (and its use
   in `TreeMeasurement`) from `RegisterGate` at `s = 1`, after merging the local
   circuit into the last forward or first backward round so that the `s = 1`

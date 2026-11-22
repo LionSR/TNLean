@@ -119,9 +119,11 @@ theorem map_ker_regionParentHamiltonian_positiveMultiplicity_eq
       (blockMatrixRepresentation d D) 1 eX) (R i) (H i))
     (hK : ∀ i, IsRegionParentInteraction (numberedGraphDressedAveragingTensor
       (blockMultiplicityRepresentation d m D) 1 eY) (R i) (K i)) :
-    (Matrix.mulVecLin (regionParentHamiltonian R H)).ker.map
+    (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin p) R H).hamiltonian).ker.map
       (positiveMultiplicityParentMap d m hm eX eY) =
-      (Matrix.mulVecLin (regionParentHamiltonian R K)).ker := by
+      (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin q) R K).hamiltonian).ker := by
   rw [ker_regionParentHamiltonian _ R H hH, ker_regionParentHamiltonian _ R K hK]
   exact map_regionParentGroundSpace_positiveMultiplicity_eq d m D hm eX eY R hcover
 

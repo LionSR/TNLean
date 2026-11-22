@@ -27,6 +27,8 @@ Source: arXiv:2203.12563v3, Section 5 and Appendix B. See the separate note
 
 open scoped Matrix TensorProduct ComplexOrder
 
+open ManyBody
+
 noncomputable section
 
 namespace MPOTensor.WeakHopfRepresentation
@@ -229,13 +231,14 @@ theorem averageMatrix_mixedEndpointInteraction_commute
 include h₀ h₁ hW hInj₀ hInj₁ in
 /-- Every periodic completed active Hamiltonian commutes with the common MPO
 on rings of length at least two. -/
-theorem interactionHamiltonian_mixedWeakHopfCompletedInteraction_commute
+theorem hamiltonian_mixedWeakHopfCompletedInteraction_commute
     [NeZero D₀] [NeZero D₁] {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
-    Commute (interactionHamiltonian (mixedWeakHopfCompletedInteraction A₀ A₁ W γ) hN)
+    Commute (Interaction.translationInvariant hN
+        (mixedWeakHopfCompletedInteraction A₀ A₁ W γ)).hamiltonian
       (MPOTensor.mpo W.tensor N) := by
   rw [← MPOTensor.mpoWithBoundary_one]
   exact Commute.sum_left _ _ _ fun i _ =>
-    MPOTensor.embedLocalOperator_commute_mpoWithBoundary _ hN i _
+    MPOTensor.placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
       (mixedWeakHopfCompletedInteraction_commute
         A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ W h₀ h₁ hW hInj₀ hInj₁ hγ)
       (Subalgebra.one_mem _)
@@ -243,15 +246,15 @@ theorem interactionHamiltonian_mixedWeakHopfCompletedInteraction_commute
 include h₀ h₁ hW hInj₀ hInj₁ in
 /-- The periodic sum of literal active averages commutes with the periodic
 common MPO on every ring of length at least two. No spectral claim is made. -/
-theorem interactionHamiltonian_averageMatrix_mixedEndpointInteraction_commute
+theorem hamiltonian_averageMatrix_mixedEndpointInteraction_commute
     [FiniteDimensional ℂ H] [NeZero D₀] [NeZero D₁]
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) :
-    Commute (interactionHamiltonian
-      (W.averageMatrix 2 (mixedEndpointInteractionMatrix A₀ A₁ γ)) hN)
+    Commute (Interaction.translationInvariant hN
+      (W.averageMatrix 2 (mixedEndpointInteractionMatrix A₀ A₁ γ))).hamiltonian
       (MPOTensor.mpo W.tensor N) := by
   rw [← MPOTensor.mpoWithBoundary_one]
   exact Commute.sum_left _ _ _ fun i _ =>
-    MPOTensor.embedLocalOperator_commute_mpoWithBoundary _ hN i _
+    MPOTensor.placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
       (averageMatrix_mixedEndpointInteraction_commute
         A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ W h₀ h₁ hW hInj₀ hInj₁ hγ)
       (Subalgebra.one_mem _)

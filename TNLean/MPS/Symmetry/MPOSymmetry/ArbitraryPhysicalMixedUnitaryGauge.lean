@@ -47,6 +47,8 @@ lines 1687–1692 (the canonical parent).
 
 open scoped Matrix BigOperators ComplexOrder
 
+open ManyBody
+
 namespace MPOTensor
 
 variable {d : ℕ}
@@ -405,7 +407,7 @@ of a group whose action gauges are nonzero multiples of unitary matrices.
 Source: arXiv:2203.12563, Section 5, lines 1582 and 1687–1692, and
 `docs/paper-gaps/glm23_mixed_path_parent_commutation.tex`, paragraph
 "Unitary groups". -/
-theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_unitary
+theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_unitary
     {N : ℕ} [NeZero D₀] [NeZero D₁]
     (hInj₀ : Kraus.IsInjective A₀) (hInj₁ : Kraus.IsInjective A₁)
     (u₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ) (u₁ : G →* Matrix.unitaryGroup (Fin d₁) ℂ)
@@ -422,11 +424,12 @@ theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWith
     {X : Matrix (Fin (1 + 1)) (Fin (1 + 1)) ℂ}
     (hX : X ∈ commutingBoundaryAlgebra
       (arbitraryPhysicalMixedMPO A₀ A₁ (T₀ g) (T₁ g) (V₀ g) (V₁ g) (W₀ g) (W₁ g))) :
-    Commute (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)
+    Commute (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ (T₀ g) (T₁ g) (V₀ g) (V₁ g)
         (W₀ g) (W₁ g)) X N) :=
   Commute.sum_left _ _ _ fun i _ =>
-    embedLocalOperator_commute_mpoWithBoundary _ hN i _
+    placeAlong_ringWindow_commute_mpoWithBoundary _ hN i _
       (arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_unitary
         A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ u₀ u₁ hT₀ hT₁ h₀ h₁ hY₀ hY₁ hγ g) hX
 
@@ -437,7 +440,7 @@ representations of a group whose action gauges are nonzero multiples of
 unitary matrices. Source: arXiv:2203.12563, Section 5, lines 1582 and
 1687–1692, and `docs/paper-gaps/glm23_mixed_path_parent_commutation.tex`,
 paragraph "Unitary groups". -/
-theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary
+theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary
     {N : ℕ} [NeZero D₀] [NeZero D₁]
     (hInj₀ : Kraus.IsInjective A₀) (hInj₁ : Kraus.IsInjective A₁)
     (u₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ) (u₁ : G →* Matrix.unitaryGroup (Fin d₁) ℂ)
@@ -451,10 +454,11 @@ theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_
     (hY₁ : ∀ g, ∃ c : ℂ, c ≠ 0 ∧
       c • bondOneActionGauge (W₁ g 0) ∈ Matrix.unitaryGroup (Fin D₁) ℂ)
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) (g : G) :
-    Commute (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)
+    Commute (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (mpo (arbitraryPhysicalMixedMPO A₀ A₁ (T₀ g) (T₁ g) (V₀ g) (V₁ g) (W₀ g) (W₁ g)) N) := by
   rw [← mpoWithBoundary_one]
-  exact interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_unitary
+  exact hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_unitary
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ u₀ u₁ hT₀ hT₁ h₀ h₁ hY₀ hY₁ hγ hN g
     (Subalgebra.one_mem _)
 
@@ -468,7 +472,7 @@ arXiv:2203.12563, Section 5, lines 1582 and 1687–1692; arXiv:0802.0447,
 Lemma 1 and Theorem 2; and
 `docs/paper-gaps/glm23_mixed_path_parent_commutation.tex`, paragraph
 "Unitary groups". -/
-theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary_canonical
+theorem hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary_canonical
     {N : ℕ} [NeZero D₀] [NeZero D₁]
     (hInj₀ : Kraus.IsInjective A₀) (hInj₁ : Kraus.IsInjective A₁)
     (hNorm₀ : Kraus.transferMap A₀ 1 = 1) (hNorm₁ : Kraus.transferMap A₁ 1 = 1)
@@ -483,9 +487,10 @@ theorem interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_
     (h₁ : ∀ g, IsBiorthogonalDecomposition (MPOTensor.actTensor (T₁ g) A₁)
       (fun _ : Fin 1 => A₁) (V₁ g) (W₁ g))
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (hN : 2 ≤ N) (g : G) :
-    Commute (interactionHamiltonian (arbitraryPhysicalMixedInteraction A₀ A₁ γ) hN)
+    Commute (Interaction.translationInvariant hN
+        (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian
       (mpo (arbitraryPhysicalMixedMPO A₀ A₁ (T₀ g) (T₁ g) (V₀ g) (V₁ g) (W₀ g) (W₁ g)) N) :=
-  interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary
+  hamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary
     A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ hInj₀ hInj₁ u₀ u₁ hT₀ hT₁ h₀ h₁
     (fun g ↦ exists_smul_bondOneActionGauge_mem_unitaryGroup hInj₀ hNorm₀ hΛ₀ hΛfix₀
       (by rw [hT₀]; exact (u₀ g).2) (h₀ g))

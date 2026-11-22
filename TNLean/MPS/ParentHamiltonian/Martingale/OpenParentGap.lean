@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbientMartingaleBound
-import TNLean.MPS.ParentHamiltonian.Martingale.NachtergaeleFullRangeEstimate
+import QICLean.ManyBody.Hamiltonian.Martingale.NachtergaeleFullRangeEstimate
 
 /-!
 # Uniform gap for the nonwrapping open MPS parent Hamiltonian

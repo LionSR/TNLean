@@ -17,7 +17,7 @@ ambient depth at most `L + 2r₀`, contradicting that separation.
 
 This proves the spatial localization step for actual graph balls. Identifying
 a splitting truncated designated support with such a ball is a separate
-accepted result, `truncationRadius_eq_of_mem_crossingLabels` in
+accepted result, `truncationRadius_eq_of_mem_crossingTerms` in
 `CrossingBudget`: its hypothesis requires that the crossed compact set lie
 inside the truncation set. This module does not identify an arbitrary
 truncated support with the fixed-radius ball used by a charge.
@@ -29,7 +29,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (ambientDilation planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -59,7 +59,7 @@ theorem domainGraph_ball_subset_of_clearance (Λ T : Finset (ℤ × ℤ))
       _ = ((2 * r₀ : ℕ) : ℕ∞) := by simp [two_mul]
   obtain ⟨p, hp⟩ := SimpleGraph.exists_walk_of_edist_ne_top
     (ne_top_of_le_ne_top (ENat.natCast_ne_top (2 * r₀)) hyx)
-  obtain ⟨u, w, -, -, hcut, p', hp'⟩ := exists_edgeBoundary_of_walk p hyA hxA
+  obtain ⟨u, w, -, -, hcut, p', hp'⟩ := ManyBody.exists_edgeBoundary_of_walk p hyA hxA
   have hyd : (planeDomainGraph Λ).edist y u ≤ ((2 * r₀ : ℕ) : ℕ∞) := by
     calc
       (planeDomainGraph Λ).edist y u ≤ p'.length := SimpleGraph.edist_le _

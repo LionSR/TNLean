@@ -56,12 +56,10 @@ including the separate energy candidate of Figure `fig:algo1`, line 1631.
 -/
 theorem exists_physical_dg_interleaved_filter_family_with_word_powers :
     ∃ Ctail C Kref : ℝ, 21 ≤ Ctail ∧ 21 ≤ C ∧ 0 < Kref ∧ ∀ (L q : ℕ),
-    ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+    ∀ (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
     0 < gamma →
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -132,7 +130,7 @@ theorem exists_physical_dg_interleaved_filter_family_with_word_powers :
   obtain ⟨Ctail, C, hCtail, hC, hparameters⟩ := Real.exists_interleaved_physical_scalar_parameters
   obtain ⟨Kref, hKref, hreference⟩ := exists_physical_dg_common_reference_for_clipped_targets
   refine ⟨Ctail, C, Kref, hCtail, hC, hKref, ?_⟩
-  intro L q h hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g m w v ell D s a tau epsilon t Delta
   have hG : G ≠ ⊥ := hH.spectralSpanLE_ne_bot_of_mem_spectrum hmu le_rfl
   have hrG : 1 ≤ rG := Submodule.one_le_finrank_iff.mpr hG
@@ -147,7 +145,7 @@ theorem exists_physical_dg_interleaved_filter_family_with_word_powers :
   refine ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff, ?_⟩
   intro u bref
   obtain ⟨B, hB, hlogB, U, hdimU, _hUG, _hGU, hUMPS, hreferenceBudget, htargets⟩ :=
-    hreference L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hreference L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       a ha (haSmall.trans (by norm_num))
   refine ⟨B, hB, hlogB, U, hdimU, hUMPS, ?_⟩
   intro Dref xiMax
@@ -167,7 +165,7 @@ theorem exists_physical_dg_interleaved_filter_family_with_word_powers :
   obtain ⟨T, N, F, hN, hTG, hGT, hdimT, K, Rop, hdec, hKT, hKTo, hlow, hhigh, hwords⟩ :=
     exists_independent_long_middle_actual_dg_filter_family m q ell t g epsilon Delta
       hq (Nat.le_max_left q 50) (by omega) ht hg hg1 hepsilon hepsilon1 htail hfilter
-      L p endR hpr hrL hlong h hsupp h0 h1 mu hmu hgapg
+      L p endR hpr hrL hlong Φ h0 h1 mu hmu hgapg
   have hepsilonTau : epsilon / 200 = tau := by dsimp only [epsilon]; ring
   rw [hepsilonTau] at hTG hGT
   obtain ⟨hTU, hUT⟩ := htargets T hGT hTG
@@ -243,12 +241,10 @@ Figure `fig:merge-prime`, lines 1668–1670; the separate energy candidate uses
 this same family as in Figure `fig:algo1`, line 1631. -/
 theorem exists_physical_dg_interleaved_filter_family :
     ∃ Ctail C Kref : ℝ, 21 ≤ Ctail ∧ 21 ≤ C ∧ 0 < Kref ∧ ∀ (L q : ℕ),
-    ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+    ∀ (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
     0 < gamma →
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -308,11 +304,11 @@ theorem exists_physical_dg_interleaved_filter_family :
   obtain ⟨Ctail, C, Kref, hCtail, hC, hKref, hfamily⟩ :=
     exists_physical_dg_interleaved_filter_family_with_word_powers
   refine ⟨Ctail, C, Kref, hCtail, hC, hKref, ?_⟩
-  intro L q h hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g m w v ell D s a tau epsilon t Delta
   obtain ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff,
     B, hB, hlogB, U, hdimU, hUMPS, hxiMax, hinterval⟩ :=
-    hfamily L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hfamily L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff, ?_⟩
   intro u bref
   refine ⟨B, hB, hlogB, U, hdimU, hUMPS, ?_⟩

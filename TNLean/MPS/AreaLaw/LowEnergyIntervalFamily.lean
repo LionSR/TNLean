@@ -117,18 +117,16 @@ theorem exists_physical_low_energy_interval_family
       ∀ (p r : ℕ), p ≤ r → r ≤ L →
       let J := interval L p r
       let beta := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (_h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1),
-      let H := ∑ i, h i
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (_h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1),
+      let H := Φ.hamiltonian
       ∃ (s E0 : ℝ) (C : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (hC : C.IsHermitian) (z : (Fin L → Fin q) → ℂ),
         C = H - (s : ℂ) • 1 ∧ star z ⬝ᵥ z = 1 ∧ C *ᵥ z = (E0 : ℂ) • z ∧
@@ -142,11 +140,11 @@ theorem exists_physical_low_energy_interval_family
           Submodule.IsCloseTo (1 / 200) Tlo Glo ∧
           0 < Delta ∧ (D : ℝ) ^ 12 * Delta < 1 / 100000 ∧
           ∀ (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (delta : ℝ),
-            Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) delta S
+            Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) delta S
               (Thi.map Tm.toLinearEquiv.toLinearMap) → delta < 1 →
             let grow := ⨆ j, S.map (F j).toLinearMap
             Module.finrank ℂ grow ≤ D ^ 2 * Module.finrank ℂ S ∧
-              Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+              Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q))
                 (Delta / (1 - delta) ^ 2) grow (Tlo.map Tm.toLinearEquiv.toLinearMap)
  := by
   obtain ⟨Aconst, hA, hA21, hcounts, hscalar⟩ :=
@@ -173,7 +171,7 @@ theorem exists_physical_low_energy_interval_family
     positivity
   refine ⟨hell, Real.low_energy_count_le_source_scale L q mu etaLD Kcount (D : ℝ)
     hL (by omega) hmu hK (hband.trans hetaUpper) hlogD, ?_⟩
-  intro p r hpr hrL J beta tau U Phi Tm h hs h0 h1 H
+  intro p r hpr hrL J beta tau U Phi Tm Φ h0 h1 H
   have hell1 : 1 ≤ ell := by omega
   classical
   by_cases hshort : r - p ≤ 4 * ell
@@ -185,7 +183,7 @@ theorem exists_physical_low_energy_interval_family
     intro Gup Glo
     obtain ⟨F, Delta, hDelta, hbudget, hpair⟩ :=
       exists_strict_short_low_energy_pair_family
-        (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) L q ell J hq hell1
+        (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) L q ell J hq hell1
           ((card_interval_le (L := L) p r).trans hshort)
     have hsub : Glo ≤ Gup := Submodule.span_mono
       (Set.image_mono (fun j hj ↦ hj.trans
@@ -207,15 +205,15 @@ theorem exists_physical_low_energy_interval_family
     obtain ⟨t, e, E0, z, hO, hC, htformula, _ht, hcut, hcenter,
       hzunit, hz, hE0low, hE0, hE04, hnorm, hfamily⟩ :=
       exists_five_region_low_energy_family_on_larger_region L q a b ell J
-        eta w (1 / 200) hbuffer hw (by norm_num) hq hell1 hab hbL hsub hcollar h hs h0 h1
+        eta w (1 / 200) hbuffer hw (by norm_num) hq hell1 hab hbL hsub hcollar Φ h0 h1
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let Areg : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     let Cross : Finset (Fin (L - 1)) := Finset.univ.filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y := ∑ i ∈ Cross, h i
+    let Y := ∑ i ∈ Cross, Φ.term i
     let K : Finset (Fin 5) := {0, 2, 4}
     let B : Finset (Fin 5) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun T ↦
       (∑ j, ((if j ∈ T then cfc (fun r : ℝ ↦ min r (e j + t)) (Areg j)
@@ -265,18 +263,16 @@ theorem exists_physical_original_low_energy_interval_family
       ∀ (p r : ℕ), p ≤ r → r ≤ L →
       let J := interval L p r
       let beta := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (_h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1),
-      let H := ∑ i, h i
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (_h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1),
+      let H := Φ.hamiltonian
       ∃ (s E0 : ℝ) (C : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (hC : C.IsHermitian) (z : (Fin L → Fin q) → ℂ),
         C = H - (s : ℂ) • 1 ∧ star z ⬝ᵥ z = 1 ∧ C *ᵥ z = (E0 : ℂ) • z ∧
@@ -290,19 +286,19 @@ theorem exists_physical_original_low_energy_interval_family
           Submodule.IsCloseTo (1 / 200) Tlo Glo ∧
           0 < Delta ∧ (D : ℝ) ^ 12 * Delta < 1 / 100000 ∧
           (∀ (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (delta : ℝ),
-            Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) delta S
+            Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) delta S
               (Thi.map Tm.toLinearEquiv.toLinearMap) → delta < 1 →
             let grow := ⨆ j, S.map (F j).toLinearMap
             Module.finrank ℂ grow ≤ D ^ 2 * Module.finrank ℂ S ∧
-              Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+              Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q))
                 (Delta / (1 - delta) ^ 2) grow (Tlo.map Tm.toLinearEquiv.toLinearMap)) ∧
           ∀ (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (delta : ℝ),
             0 ≤ delta → 2 * (delta + 1 / 200) < 1 →
-            Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) delta S
+            Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q)) delta S
               (Gup.map Tm.toLinearEquiv.toLinearMap) →
             let grow := ⨆ j, S.map (F j).toLinearMap
             Module.finrank ℂ grow ≤ D ^ 2 * Module.finrank ℂ S ∧
-              Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+              Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q))
                 (2 * (Delta / (1 - 2 * (delta + 1 / 200)) ^ 2 + 1 / 200)) grow
                 (Glo.map Tm.toLinearEquiv.toLinearMap)
  := by
@@ -311,15 +307,15 @@ theorem exists_physical_original_low_energy_interval_family
   intro L q mu eta hL hq hmu hetaLower hetaUpper w g u ell D Kcount
   obtain ⟨hell, hlogD, hinterval⟩ := hall L q mu eta hL hq hmu hetaLower hetaUpper
   refine ⟨hell, hlogD, ?_⟩
-  intro p r hpr hrL J beta tau U Phi Tm h hs h0 h1 H
+  intro p r hpr hrL J beta tau U Phi Tm Φ h0 h1 H
   obtain ⟨s, E0, C, hC, z, hshift, hzunit, hz, hground, hfamily⟩ :=
-    hinterval p r hpr hrL h hs h0 h1
+    hinterval p r hpr hrL Φ h0 h1
   refine ⟨s, E0, C, hC, z, hshift, hzunit, hz, hground, ?_⟩
   intro Gup Glo
   obtain ⟨Tlo, Thi, Delta, F, hsub, hupper, hlower, hDelta, hbudget, hclip⟩ := hfamily
   refine ⟨Tlo, Thi, Delta, F, hsub, hupper, hlower, hDelta, hbudget, hclip, ?_⟩
   intro S delta hdelta hstartBudget hS grow
-  have hstart : Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+  have hstart : Submodule.IsViable (F := EuclideanSpace ℂ ({v // v ∉ J} → Fin q))
       (2 * (delta + 1 / 200)) S (Thi.map Tm.toLinearEquiv.toLinearMap) :=
     Submodule.IsCloseTo.trans hS ((Submodule.isCloseTo_map_iff Tm).mpr hupper) hdelta
   obtain ⟨hdim, hraw⟩ := hclip S (2 * (delta + 1 / 200)) hstart hstartBudget

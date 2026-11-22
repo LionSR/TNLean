@@ -25,6 +25,7 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 noncomputable section
 
 open TNLean.Lattice
+open ManyBody (ambientDilation edgeBoundary mem_ambientDilation_iff planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -38,7 +39,7 @@ with a coefficient depending only on the fixed initial scale and dilation.
 Source: area-law Section 11, `geometry:bad-sites`, lines 694–707. -/
 theorem card_repairStage_dummySites_le (j : ℕ) :
     ((𝔇 j).regionSites Λ A (𝔇 j).dummy).card ≤
-      2 * (2 * ((C + 1) * 2 ^ k₀) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+      2 * (2 * ((C + 1) * 2 ^ k₀) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
   refine (Finset.card_le_card_of_injOn
     (t := ambientDilation (boundaryEndpoints Λ A) ((C + 1) * 2 ^ k₀))

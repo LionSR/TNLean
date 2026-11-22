@@ -20,6 +20,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (ambientDilation)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- Summing actual ambient layers bounds the dilation without any ambient-domain

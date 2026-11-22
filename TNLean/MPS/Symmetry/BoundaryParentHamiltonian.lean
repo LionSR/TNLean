@@ -85,8 +85,8 @@ theorem IsBoundaryCompatible.localTermES_commute_mpoWithBoundary
     (hX : X ∈ commutingBoundaryAlgebra T) :
     Commute (MPSTensor.localTermES A L i)
       (Matrix.toEuclideanLin (mpoWithBoundary T X N)) := by
-  rw [MPSTensor.localTermES_eq_toEuclideanLin_embedLocalOperator A hLN i]
-  have hmat := embedLocalOperator_commute_mpoWithBoundary T hLN i
+  rw [MPSTensor.localTermES_eq_toEuclideanLin_placeAlong_ringWindow A hLN i]
+  have hmat := placeAlong_ringWindow_commute_mpoWithBoundary T hLN i
     (LinearMap.toMatrix' (MPSTensor.parentInteraction A L))
     (h.parentInteraction_matrix_commute_mpoWithBoundary hL hstar) hX
   apply (commute_iff_eq _ _).2
@@ -123,13 +123,13 @@ theorem IsBoundaryCompatible.parentHamiltonian_commute_mpoWithBoundary
     {X : Matrix (Fin D₁) (Fin D₁) ℂ} (hX : X ∈ commutingBoundaryAlgebra T) :
     Commute (MPSTensor.parentHamiltonian A L N)
       (Matrix.toLin' (mpoWithBoundary T X N)) := by
-  unfold MPSTensor.parentHamiltonian
+  rw [MPSTensor.parentHamiltonian_eq_sum_localTerm]
   apply (commute_iff_eq _ _).2
   rw [Finset.sum_mul, Finset.mul_sum]
   apply Finset.sum_congr rfl
   intro i _
-  rw [MPSTensor.localTerm_eq_toLin'_embedLocalOperator A hLN i]
-  have hmat := embedLocalOperator_commute_mpoWithBoundary T hLN i
+  rw [MPSTensor.localTerm_eq_toLin'_placeAlong_ringWindow A hLN i]
+  have hmat := placeAlong_ringWindow_commute_mpoWithBoundary T hLN i
     (LinearMap.toMatrix' (MPSTensor.parentInteraction A L))
     (h.parentInteraction_matrix_commute_mpoWithBoundary hL hstar) hX
   simpa only [Matrix.toLin'_mul, Module.End.mul_eq_comp] using

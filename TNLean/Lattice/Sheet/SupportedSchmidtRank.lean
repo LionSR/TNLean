@@ -42,14 +42,14 @@ theorem exists_threeSplit_eq_reindex_one_kronecker_rank_le
     {T E D : Finset ι} (hTE : Disjoint T E) (hDT : Disjoint D T)
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) :
-    ∃ V : Matrix ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-        ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ,
+    ∃ V : Matrix ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+        ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ,
       A.submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
         ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ V).reindex
           (Equiv.prodAssoc (T → Fin q) (E → Fin q)
-            (↥(T ∪ E)ᶜ → Fin q)).symm
+            ({v // v ∉ T ∪ E} → Fin q)).symm
           (Equiv.prodAssoc (T → Fin q) (E → Fin q)
-            (↥(T ∪ E)ᶜ → Fin q)).symm ∧
+            ({v // v ∉ T ∪ E} → Fin q)).symm ∧
         operatorSchmidtRank V ≤ q ^ (2 * (D ∩ E).card) := by
   classical
   by_cases hconfig : Nonempty (ι → Fin q)
@@ -59,9 +59,9 @@ theorem exists_threeSplit_eq_reindex_one_kronecker_rank_le
     have hDTset : Disjoint D T := hDT
     obtain ⟨V, hV⟩ :=
       exists_threeSplit_eq_reindex_one_kronecker hTE hDTset hA
-    let γ : (↥(T ∪ E)ᶜ → Fin q) → ((v : {v // v ∉ E}) → Fin q) :=
+    let γ : ({v // v ∉ T ∪ E} → Fin q) → ((v : {v // v ∉ E}) → Fin q) :=
       fun u v ↦ (threeSplit q T E hTE).symm ((t₀, e₀), u) v
-    have houtside (e : E → Fin q) (u : ↥(T ∪ E)ᶜ → Fin q)
+    have houtside (e : E → Fin q) (u : {v // v ∉ T ∪ E} → Fin q)
         (v : {v // v ∉ E}) :
         (threeSplit q T E hTE).symm ((t₀, e), u) v = γ u v := by
       dsimp only [γ]
@@ -73,7 +73,7 @@ theorem exists_threeSplit_eq_reindex_one_kronecker_rank_le
           exact ⟨hvT, v.property⟩
         rw [threeSplit_symm_apply_of_notMem hTE t₀ e u hvU,
           threeSplit_symm_apply_of_notMem hTE t₀ e₀ u hvU]
-    have hcut (e : E → Fin q) (u : ↥(T ∪ E)ᶜ → Fin q) :
+    have hcut (e : E → Fin q) (u : {v // v ∉ T ∪ E} → Fin q) :
         ManyBody.cutEquiv (fun _ ↦ Fin q) E
             ((threeSplit q T E hTE).symm ((t₀, e), u)) = (e, γ u) := by
       apply Prod.ext
@@ -83,13 +83,13 @@ theorem exists_threeSplit_eq_reindex_one_kronecker_rank_le
       · funext v
         change (threeSplit q T E hTE).symm ((t₀, e), u) v = γ u v
         exact houtside e u v
-    have hglue (e : E → Fin q) (u : ↥(T ∪ E)ᶜ → Fin q) :
+    have hglue (e : E → Fin q) (u : {v // v ∉ T ∪ E} → Fin q) :
         (ManyBody.cutEquiv (fun _ ↦ Fin q) E).symm (e, γ u) =
           (threeSplit q T E hTE).symm ((t₀, e), u) := by
       apply (ManyBody.cutEquiv (fun _ ↦ Fin q) E).injective
       rw [Equiv.apply_symm_apply, hcut]
     have hslice (e e' : E → Fin q)
-        (u u' : ↥(T ∪ E)ᶜ → Fin q) :
+        (u u' : {v // v ∉ T ∪ E} → Fin q) :
         A ((threeSplit q T E hTE).symm ((t₀, e), u))
             ((threeSplit q T E hTE).symm ((t₀, e'), u')) =
           V (e, u) (e', u') := by
@@ -127,8 +127,8 @@ theorem exists_threeSplit_eq_reindex_one_kronecker_rank_le
     refine ⟨0, ?_, ?_⟩
     · simp [hzero]
     · have hrank : operatorSchmidtRank
-          (0 : Matrix ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
-            ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ) ≤ 0 :=
+          (0 : Matrix ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q))
+            ((E → Fin q) × ({v // v ∉ T ∪ E} → Fin q)) ℂ) ≤ 0 :=
         operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition
           ⟨Fin.elim0, Fin.elim0, by simp⟩
       exact hrank.trans (Nat.zero_le _)

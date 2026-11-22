@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.AreaLaw.AKLV.ProjectionEnergy
 
 /-!
@@ -102,28 +103,26 @@ AKLV, arXiv:1301.1162v1, the approximate-eigenvector argument in Section 6.3.
 All tail estimates are derived from the original chain interactions. -/
 theorem norm_clipped_lowProjection_residual_le_exp {L q : ℕ}
     (I : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (a b : Fin (L - 1)) (z e t : ℝ) (ht : 0 ≤ t)
     (X N Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hX : X.PosSemidef) (hN : N.PosSemidef) (hY : Y.PosSemidef)
     (hXN : Commute X N) (hXY : Commute X Y) (hNY : Commute N Y)
-    (hB : X + N + Y = (∑ i ∈ I, h i) - (z : ℂ) • 1)
+    (hB : X + N + Y = (Φ.partialHamiltonian I) - (z : ℂ) • 1)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (he0 : 0 ≤ e) (he6 : e ≤ 6)
     (heig : Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-      (X + N + Y + (h a + h b)) Ω = (e : ℂ) • Ω) :
+      (X + N + Y + (Φ.term a + Φ.term b)) Ω = (e : ℂ) • Ω) :
     let ι := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
     let P := 1 - Matrix.spectralProjectionGE (X + N + Y) t
-    let K := twoSidedEnergyTruncation X (N + (h a + h b)) Y t
+    let K := twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
     ‖ι K (ι P Ω) - (e : ℂ) • ι P Ω‖ ≤ 10 * Real.exp (-(t - 40) / 16) := by
   intro ι P K
   let B := X + N + Y
-  let A := h a + h b
-  have hnorm (i : Fin (L - 1)) : ‖h i‖ ≤ 1 :=
-    (CStarAlgebra.norm_le_one_iff_of_nonneg (h i) (h0 i)).mpr (h1 i)
+  let A := Φ.term a + Φ.term b
+  have hnorm (i : Fin (L - 1)) : ‖Φ.term i‖ ≤ 1 :=
+    (CStarAlgebra.norm_le_one_iff_of_nonneg (Φ.term i) (h0 i)).mpr (h1 i)
   have hA : ‖A‖ ≤ 2 := (norm_add_le _ _).trans (by linarith [hnorm a, hnorm b])
   have hherm : B.IsHermitian := (hX.isHermitian.add hN.isHermitian).add hY.isHermitian
   have hagree : K * P = (B + A) * P := by
@@ -134,15 +133,15 @@ theorem norm_clipped_lowProjection_residual_le_exp {L q : ℕ}
   have hoff : ‖Matrix.spectralProjectionGE B t * A *
       (1 - Matrix.spectralProjectionGE B (t / 2))‖ ≤
         2 * Real.exp (-(t - t / 2) / 8) := by
-    rw [show B = (∑ i ∈ I, h i) - (z : ℂ) • 1 from hB]
-    exact norm_two_boundary_spectral_offDiagonal_le I h hs h0 h1 a b z t (t / 2)
+    rw [show B = (Φ.partialHamiltonian I) - (z : ℂ) • 1 from hB]
+    exact norm_two_boundary_spectral_offDiagonal_le I Φ h0 h1 a b z t (t / 2)
       (by linarith)
   have htail (s : ℝ) : ‖ι (Matrix.spectralProjectionGE B s) Ω‖ ≤
       2 * Real.exp (-(s - 20) / 8) := by
-    have heig' : ι (((∑ i ∈ I, h i) - (z : ℂ) • 1) + A) Ω = (e : ℂ) • Ω := by
+    have heig' : ι (((Φ.partialHamiltonian I) - (z : ℂ) • 1) + A) Ω = (e : ℂ) • Ω := by
       rw [← hB]
       exact heig
-    have h := norm_groundState_highProjection_le_exp I h hs h0 h1 a b z e s Ω
+    have h := norm_groundState_highProjection_le_exp I Φ h0 h1 a b z e s Ω
       he0 he6 heig'
     simpa only [← hB, hΩ, mul_one] using h
   have hres := hherm.norm_lowProjection_residual_le A K hA Ω e t (t / 2)

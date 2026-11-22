@@ -53,10 +53,8 @@ theorem exists_efficient_soft_low_density_family
     (hq : 2 ≤ q) (hell : 1 ≤ ell) (hm : 2 ≤ m) (hk : 1 ≤ k)
     (hscale : 3 * (m : ℝ) ≤ t) (hxi : 0 < xi)
     (N a b : ℕ) (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ N)
-    (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval (N + 1) i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction (N + 1) q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
   (by
     exact (show Prop from
     let Msoft := 3 * t * (1 + Real.log (m : ℝ)) + 4 * (ell : ℝ) + 34
@@ -64,12 +62,12 @@ theorem exists_efficient_soft_low_density_family
     let Sbulk : Finset (Fin 5) := {0, 2, 4}
     let cuts : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, N + 1]
     let A : Fin 5 → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ :=
-      fun j ↦ ∑ i ∈ Finset.univ.filter
-        (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ), h i
+      fun j ↦ Φ.partialHamiltonian (Finset.univ.filter
+        (fun i : Fin N ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ))
     let crossings := Finset.univ.filter
       (fun i : Fin N ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y := ∑ i ∈ crossings, h i
+    let Y := Φ.partialHamiltonian crossings
     let Ksites := interval (N + 1) (a + 2 * ell) (b + 1)
     let eK := intervalShiftOrderIso
       (hab.trans (Nat.le_succ b))
@@ -82,8 +80,8 @@ theorem exists_efficient_soft_low_density_family
         (Nat.le_mul_of_pos_left ell (by decide : 0 < 2)) b).trans hb))
     let beta := fun _ : Fin (N + 1) ↦ Fin q
     let midConfig := ManyBody.RegionConfig beta J
-    let extConfig := ManyBody.RegionConfig beta Jᶜ
-    let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let extConfig := ManyBody.ComplConfig beta J
+    let split := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
     let Tm := ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split).trans
       ((EuclideanSpace.basisFun extConfig ℂ).tensorProduct
         (EuclideanSpace.basisFun midConfig ℂ)).repr.symm).trans
@@ -97,7 +95,7 @@ theorem exists_efficient_soft_low_density_family
     ∃ (e : Fin 5 → ℝ) (x : (Fin (N + 1) → Fin q) → ℂ) (E : ℝ),
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧ 0 ≤ E ∧ E ≤ 4 ∧
-      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       (∃ z : (Fin (N + 1) → Fin q) → ℂ, star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E : ℂ) • z ∧
         (H - (E : ℂ) • 1).PosSemidef) ∧
       ∃ (bH : OrthonormalBasis (Fin (N + 1) → Fin q) ℂ
@@ -109,8 +107,8 @@ theorem exists_efficient_soft_low_density_family
         (C : Fin (m + 1) → Matrix (Fin bond) (Fin bond) ℂ),
         let Z := fun z : ℂ ↦ MPOTensor.traceChainOperator Acore
           (∑ j : Fin (m + 1), z ^ j.val • C j)
-        let Zphys := fun z : ℂ ↦ QuantumCircuit.embedOp
-          (Subtype.val : Ksites → Fin (N + 1)) (QuantumCircuit.embedOp eK (Z z))
+        let Zphys := fun z : ℂ ↦ ManyBody.place (X := fun _ ↦ Fin q) Ksites
+          (ManyBody.placeAlong (X := fun _ ↦ Fin q) eK.toEquiv.toEmbedding (Z z))
         ∃ (n : ℕ) (W : Fin n → Matrix midConfig midConfig ℂ),
           n ≤ D ∧
           (∀ i, IsOpenMPS ((b + ell + 1) - (a + ell)) (q * q)
@@ -176,7 +174,7 @@ theorem exists_efficient_soft_low_density_family
     beta midConfig extConfig split Tm heatWeight clusterBase order bond
   obtain ⟨e, x, E, hx, hxe, he, hE0, hE4, hground, bH, aH, hEigH, Acore, C, hrest⟩ :=
     exists_soft_low_density_polynomial_core q ell m k t xi hq hell hm hk hscale hxi
-      N a b hab hb h hs h0 h1
+      N a b hab hb Φ h0 h1
   refine ⟨e, x, E, hx, hxe, he, hE0, hE4, hground, bH, aH, hEigH, Acore, C, ?_⟩
   intro Z Zphys
   obtain ⟨n, W, hnD, hWbond, hcenter⟩ := hrest

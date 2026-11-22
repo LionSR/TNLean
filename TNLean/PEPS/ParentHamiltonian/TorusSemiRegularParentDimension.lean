@@ -83,7 +83,8 @@ theorem IsGInjective.finrank_torusParentKernel_of_isSemiRegular
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hP : ∀ v, IsRegionParentInteraction (groupBondTensor (torusNativeIncidentSite a))
       (torusPlaquetteRegion v) (P v)) :
-    Module.finrank ℂ (Matrix.mulVecLin (regionParentHamiltonian torusPlaquetteRegion P)).ker =
+    Module.finrank ℂ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d)
+        torusPlaquetteRegion P).hamiltonian).ker =
       Nat.card (CommutingPairConjugacyClass G) := by
   rw [ker_regionParentHamiltonian _ torusPlaquetteRegion P hP]
   exact ha.finrank_torusParentGroundSpace_of_isSemiRegular hU hSemi

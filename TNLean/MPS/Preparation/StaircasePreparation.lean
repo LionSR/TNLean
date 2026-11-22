@@ -16,7 +16,7 @@ at most `max 1 (N - k)` gates, each acting on at most `k + 1` consecutive sites
 (`MPSPreparation.exists_isWindowProduct_mulVec_eq_of_hasOBCRep`). For `D ≤ d` and `N ≥ 2` these
 are at most `N - 1` gates on neighbouring sites, the count of the sequential scheme without an
 ancilla of arXiv:quant-ph/0608197, Section 5.2
-(`MPSPreparation.exists_isPairProduct_mulVec_eq_of_hasOBCRep`).
+(`MPSPreparation.exists_isGateProduct_mulVec_eq_of_hasOBCRep`).
 
 ## Proof
 
@@ -71,21 +71,34 @@ theorem exists_unitary_apply_zero (hd : 0 < d) {M : ℕ} {v : Cfg d M → ℂ}
 /-- **Exact preparation of an open-boundary MPS by gates on `k + 1` consecutive sites.** A
 normalized open-boundary matrix product state of `N` sites with bond dimension `D ≤ d^k` is
 `U |0 ⋯ 0⟩` for a unitary `U` that is a product of at most `max 1 (N - k)` gates, each acting on
-at most `k + 1` consecutive sites of the open chain.
+at most `k + 1` consecutive sites of the open chain. On the empty chain the coefficient is `1`
+and `U = 1`.
 
 arXiv:quant-ph/0501096, eq. `induction` and the embedding of each isometry into a unitary;
 arXiv:2307.01696, eq. (14) and paragraph "The sequential-RG circuit" ("this sequential circuit
 comprises `q` sites"), with Fig. 1. -/
 theorem exists_isWindowProduct_mulVec_eq_of_hasOBCRep (hd : 0 < d) {N D k : ℕ}
     (hDk : D ≤ d ^ k) {ψ : Cfg d N → ℂ} (hψ : HasOBCRep D ψ) (hnorm : star ψ ⬝ᵥ ψ = 1) :
-    ∃ U : Matrix (Cfg d N) (Cfg d N) ℂ, IsWindowProduct d N (k + 1) (max 1 (N - k)) U ∧
-      U *ᵥ (productVector fun _ => Pi.single ⟨0, hd⟩ 1) = ψ := by
+    ∃ U : Matrix (Cfg d N) (Cfg d N) ℂ,
+      IsGateProduct (Geometry.window N (k + 1)) (max 1 (N - k)) U ∧
+      (U *ᵥ fun σ : Cfg d N => ∏ i, (Pi.single (⟨0, hd⟩ : Fin d) (1 : ℂ) : Fin d → ℂ) (σ i)) =
+        ψ := by
   classical
+  rcases Nat.eq_zero_or_pos N with rfl | hN
+  · -- On the empty chain every open-boundary coefficient is `1`, prepared by the empty circuit.
+    obtain ⟨B, rfl⟩ := hψ
+    refine ⟨1, IsGateProduct.one _ _ _, funext fun σ => ?_⟩
+    simp
   by_cases hNk : N ≤ k
   · obtain ⟨W, hW, hWψ⟩ := exists_unitary_apply_zero hd hnorm
-    refine ⟨W, (IsWindowProduct.of_isWindowGate (isWindowGate_of_le (by omega) hW)).mono
-      (le_max_left _ _), funext fun σ => ?_⟩
-    rw [mulVec_productVector_single_zero hd, hWψ]
+    have hWS : W ∈ ManyBody.supportedOperators (fun _ : Fin N ↦ Fin d)
+        (ManyBody.interval N (⟨0, hN⟩ : Fin N) ((⟨0, hN⟩ : Fin N) + (k + 1))) :=
+      ManyBody.supportedOperators_mono (fun p _ => ManyBody.mem_interval.mpr
+        ⟨Nat.zero_le _, show p.val < 0 + (k + 1) by have := p.isLt; omega⟩)
+        (show W ∈ ManyBody.supportedOperators _ Finset.univ by simp)
+    refine ⟨W, (IsGateProduct.window_of_mem_supportedOperators (m := k + 1) ⟨0, hN⟩ hW
+      hWS).mono (le_max_left _ _), funext fun σ => ?_⟩
+    rw [mulVec_prod_single_zero hd, hWψ]
   have hkN : k ≤ N := by omega
   obtain ⟨B, rfl⟩ := hψ
   have hD := B.bondBound_pos
@@ -115,19 +128,23 @@ theorem exists_isWindowProduct_mulVec_eq_of_hasOBCRep (hd : 0 < d) {N D k : ℕ}
     exact sum_extend_zero enc.injective r' (fun _ a => star a * a) (fun _ => by simp)
   obtain ⟨Wr, hWr, hWrv⟩ := exists_unitary_apply_zero hd hvn
   -- the staircase
-  obtain ⟨U, hU, hUQ⟩ := exists_staircase_isWindowProduct hd hD enc.injective N hkN b Q hb0
+  obtain ⟨U, hU, hUQ⟩ := exists_staircase_isWindowProduct hd hD enc.injective N hkN hN b Q hb0
     hrow hiso
   let last : Fin k → Fin N := fun j => ⟨N - k + j.val, by omega⟩
   have hlast : Function.Injective last := fun j j' h => Fin.ext (by
     have := congrArg Fin.val h
     simp only [last] at this
     omega)
-  refine ⟨U * embedOp last Wr, ?_, funext fun σ => ?_⟩
-  · refine hU _ (embedOp_mem_unitary hlast hWr)
-      (ManyBody.supportedOperators_mono ?_ (embedOp_mem_supportedOperators hlast Wr))
+  refine ⟨U * ManyBody.placeAlong (X := fun _ : Fin N ↦ Fin d) ⟨last, hlast⟩ Wr, ?_,
+    funext fun σ => ?_⟩
+  · refine hU _ (ManyBody.placeAlong_mem_unitaryGroup (X := fun _ : Fin N ↦ Fin d)
+      ⟨last, hlast⟩ hWr) (ManyBody.supportedOperators_mono ?_
+        (ManyBody.placeAlong_mem_supportedOperators (X := fun _ : Fin N ↦ Fin d)
+          ⟨last, hlast⟩ Wr))
     intro _ hj
-    obtain ⟨j, -, rfl⟩ := Finset.mem_image.mp hj
-    simp only [windowSites, Finset.mem_filter, Finset.mem_univ, true_and, last]
+    obtain ⟨j, -, rfl⟩ := Finset.mem_map.mp hj
+    rw [ManyBody.mem_interval, Function.Embedding.coeFn_mk]
+    simp only [last]
     omega
   have hext : ∀ u : Cfg d k,
       Function.extend last u (fun _ => (⟨0, hd⟩ : Fin d)) = inputCfg hd N u := by
@@ -144,8 +161,8 @@ theorem exists_isWindowProduct_mulVec_eq_of_hasOBCRep (hd : 0 < d) {N D k : ℕ}
         rintro ⟨j, rfl⟩
         exact hp (by simp only [last]; omega)), inputCfg, dite_eq_right hp]
   have hWr' : ∀ u, Wr u ((fun _ => (⟨0, hd⟩ : Fin d)) ∘ last) = v u := fun u => hWrv u
-  rw [mulVec_productVector_single_zero hd, mul_embedOp_apply hlast]
-  simp only [hWr', hext, hv]
+  rw [mulVec_prod_single_zero hd, ManyBody.mul_placeAlong_apply]
+  simp only [Function.Embedding.coeFn_mk, hWr', hext, hv]
   rw [sum_extend_zero enc.injective r' (fun u a => U σ (inputCfg hd N u) * a)
     (fun _ => mul_zero _), hψQ σ, mulVec, dotProduct]
   refine Finset.sum_congr rfl fun x _ => ?_
@@ -167,12 +184,14 @@ operations on the neighbouring pairs of sites; the case `k = 1` of
 **Local fix (two sites):** the hypothesis `N ≥ 2` is absent from the source theorem but needed
 by its scheme, since a chain of one site has no neighbouring pairs; documented in
 `docs/paper-gaps/pgvwc07_sequential_no_ancilla_two_sites.tex`. -/
-theorem exists_isPairProduct_mulVec_eq_of_hasOBCRep (hd : 0 < d) {N D : ℕ} (hN : 2 ≤ N)
+theorem exists_isGateProduct_mulVec_eq_of_hasOBCRep (hd : 0 < d) {N D : ℕ} (hN : 2 ≤ N)
     (hDd : D ≤ d) {ψ : Cfg d N → ℂ} (hψ : HasOBCRep D ψ) (hnorm : star ψ ⬝ᵥ ψ = 1) :
-    ∃ U : Matrix (Cfg d N) (Cfg d N) ℂ, IsPairProduct d N (N - 1) U ∧
-      U *ᵥ (productVector fun _ => Pi.single ⟨0, hd⟩ 1) = ψ := by
-  obtain ⟨U, hU, hUψ⟩ :=
-    exists_isWindowProduct_mulVec_eq_of_hasOBCRep hd (k := 1) (by simpa using hDd) hψ hnorm
-  exact ⟨U, (hU.isPairProduct_two hN).mono (by omega), hUψ⟩
+    ∃ U : Matrix (Cfg d N) (Cfg d N) ℂ,
+      IsGateProduct (Geometry.graph (SimpleGraph.pathGraph N)) (N - 1) U ∧
+      (U *ᵥ fun σ : Cfg d N => ∏ i, (Pi.single (⟨0, hd⟩ : Fin d) (1 : ℂ) : Fin d → ℂ) (σ i)) =
+        ψ := by
+  obtain ⟨U, hU, hUψ⟩ := exists_isWindowProduct_mulVec_eq_of_hasOBCRep hd (k := 1)
+    (by simpa using hDd) hψ hnorm
+  exact ⟨U, (IsGateProduct.of_window_two hN hU).mono (by omega), hUψ⟩
 
 end MPSPreparation

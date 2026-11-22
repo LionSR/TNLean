@@ -204,7 +204,7 @@ theorem place_empty_zeroVec :
     have ha0 : a = 0 := funext fun x => absurd x.2 (Finset.notMem_empty _)
     subst hab ha0
     simp [vecMulVec_apply, zeroVec]
-  rw [h, QuantumCircuit.place_eq_embedOp, embedOp_one]
+  rw [h, ManyBody.place_one]
 
 theorem branch_eq_op (t : p.Tag) : p.branch t = (p.encStep t).op := by
   rcases t with t | t

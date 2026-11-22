@@ -65,14 +65,16 @@ theorem exists_trimmed_witness_chain {k : ℕ}
     (hK0 : K.PosSemidef) (hK1 : (1 - K).PosSemidef) {E₀ δ : ℝ}
     (hH0 : (H - (E₀ : ℂ) • 1).PosSemidef) {ψ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hψ : ‖ψ‖ = 1) (hE : (⟪ψ, toEuclideanLin H ψ⟫_ℂ).re ≤ E₀ + δ) {D : ℕ}
-    {u : EuclideanSpace ℂ (Fin L → Fin q)} (hu : ‖u‖ = 1) (huD : (cutMatrix u k).rank ≤ D)
+    {u : EuclideanSpace ℂ (Fin L → Fin q)} (hu : ‖u‖ = 1)
+    (huD : (ManyBody.cutMatrix (leftBlock L k) u).rank ≤ D)
     {η : ℝ} (hη : 1 - η ≤ ‖⟪u, ψ⟫_ℂ‖) (hη2 : 2 * η < 1) {PV : LeftBlockMatrix L q k}
-    (hPV : PV * cutMatrix ψ k = cutMatrix ψ k) :
+    (hPV : PV * ManyBody.cutMatrix (leftBlock L k) ψ = ManyBody.cutMatrix (leftBlock L k) ψ) :
     ∃ (w : EuclideanSpace ℂ (Fin L → Fin q)) (m : ℕ) (W : Matrix (CutRight L q k) (Fin m) ℂ)
       (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ),
-      ‖w‖ = 1 ∧ (cutMatrix w k).rank ≤ D ∧
+      ‖w‖ = 1 ∧ (ManyBody.cutMatrix (leftBlock L k) w).rank ≤ D ∧
       (⟪w, toEuclideanLin H w⟫_ℂ).re ≤ E₀ + (δ + 2 * √(2 * η)) / (1 - 2 * η) ∧
-      PV * cutMatrix w k = cutMatrix w k ∧ Wᴴ * W = 1 ∧ m ≤ D ∧
+      PV * ManyBody.cutMatrix (leftBlock L k) w = ManyBody.cutMatrix (leftBlock L k) w ∧
+      Wᴴ * W = 1 ∧ m ≤ D ∧
       WithLp.ofLp w ∘ (gluingCut L q k).symm =
         ((1 : Matrix (CutLeft L q k × CutSite L q k) (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ
           x ∧
@@ -120,7 +122,8 @@ theorem exists_trimmed_witness_chain {k : ℕ}
   have hucD : HasSchmidtRankLE D (WithLp.ofLp uc) := huD
   have hη' : 1 - η ≤ ‖⟪uc, ψc⟫_ℂ‖ := by rw [inner_cutVector]; exact hη
   have hPVc : leftApply PV ψc = ψc := by
-    change toEuclid (PV * cutMatrix ψ k) = toEuclid (cutMatrix ψ k)
+    change toEuclid (PV * ManyBody.cutMatrix (leftBlock L k) ψ) =
+      toEuclid (ManyBody.cutMatrix (leftBlock L k) ψ)
     rw [hPV]
   obtain ⟨wc, m, W, xc, hwc1, hwcD, hwcE, hwcPV, hW, hmD, hwx, hxPV⟩ :=
     IsTrimmingProjection.exists_trimmed_witness hHc hHc0 (hK0.submatrix _) hK1c hψc hEc huc
@@ -130,8 +133,10 @@ theorem exists_trimmed_witness_chain {k : ℕ}
   have hwcw : ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) w = wc := by
     ext x
     simp [w, e]
-  have hcm : cutMatrix w k = schmidtCoeffMatrix (WithLp.ofLp wc) := by
-    rw [cutMatrix, hwcw]
+  have hcm : ManyBody.cutMatrix (leftBlock L k) w = schmidtCoeffMatrix (WithLp.ofLp wc) := by
+    change schmidtCoeffMatrix (WithLp.ofLp
+      (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) w)) = _
+    rw [hwcw]
   set Ssplit :=
     Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (L := L) (Nat.sub_le k 1))
   refine ⟨w, m, W, fun p ↦ WithLp.ofLp xc (Ssplit.symm p.1, p.2), ?_, ?_, ?_, ?_, hW, hmD, ?_, ?_⟩

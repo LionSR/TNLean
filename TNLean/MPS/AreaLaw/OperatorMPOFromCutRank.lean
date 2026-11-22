@@ -18,6 +18,7 @@ Supporting ALVV, arXiv:1602.08828v2, `thm:cluster`, source lines 1298–1303 and
 
 open Finset Matrix
 open TNLean.MPS.AreaLaw
+open ManyBody (cutMatrix)
 
 namespace MPOTensor
 
@@ -42,7 +43,7 @@ theorem rank_pairedOperator_cutMatrix_eq {L q : ℕ}
     (M : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (k : ℕ) :
     let ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) := WithLp.toLp 2
       (fun z ↦ M ((pairCfgEquiv q L).symm z).1 ((pairCfgEquiv q L).symm z).2)
-    (cutMatrix ψ k).rank = operatorSchmidtRank
+    (cutMatrix (leftBlock L k) ψ).rank = operatorSchmidtRank
       (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) M) := by
   classical
   let ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) := WithLp.toLp 2
@@ -51,7 +52,8 @@ theorem rank_pairedOperator_cutMatrix_eq {L q : ℕ}
   let e (V : Type) : (V → Fin (q * q)) ≃ ((V → Fin q) × (V → Fin q)) :=
     (Equiv.piCongrRight fun _ : V ↦ (finProdFinEquiv : Fin q × Fin q ≃ Fin (q * q)).symm).trans
       (Equiv.arrowProdEquivProdArrow V (fun _ ↦ Fin q) (fun _ ↦ Fin q))
-  have hmat : (cutMatrix ψ k).reindex (e {v : Fin L // v ∈ A}) (e {v : Fin L // v ∉ A}) =
+  have hmat : (cutMatrix (leftBlock L k) ψ).reindex (e {v : Fin L // v ∈ A})
+      (e {v : Fin L // v ∉ A}) =
       fun ij kl ↦ (ManyBody.cutOperator (X := fun _ ↦ Fin q) A M)
         (ij.1, kl.1) (ij.2, kl.2) := by
     ext ij kl
@@ -65,9 +67,9 @@ theorem rank_pairedOperator_cutMatrix_eq {L q : ℕ}
          (fun v ↦ finProdFinEquiv (kl.1 v, kl.2 v))))).2 = _
     rw [pairCfgEquiv_symm_glue]
     rfl
-  change (cutMatrix ψ k).rank = operatorSchmidtRank (ManyBody.cutOperator A M)
+  change (cutMatrix (leftBlock L k) ψ).rank = operatorSchmidtRank (ManyBody.cutOperator A M)
   rw [← Matrix.rank_reindex (e {v : Fin L // v ∈ A})
-    (e {v : Fin L // v ∉ A}) (cutMatrix ψ k), hmat,
+    (e {v : Fin L // v ∉ A}) (cutMatrix (leftBlock L k) ψ), hmat,
     Matrix.operatorSchmidtRank_eq_rank_realignment]
 
 /-- Every nonempty operator chain with cut ranks at most a positive integer has actual

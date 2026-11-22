@@ -3,8 +3,8 @@
 
 \begin{definition}[Inner boundary and boundary endpoints]
     \label{def:area_law_vertex_boundaries}
-    \lean{TNLean.PEPS.AreaLaw.innerBoundary,
-        TNLean.PEPS.AreaLaw.endpointBoundary}
+    \lean{ManyBody.innerBoundary,
+        ManyBody.endpointBoundary}
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}
     For a finite induced domain $\Lambda\subset\mathbb Z^2$ and $A\subseteq\Lambda$,
@@ -22,10 +22,10 @@
 
 \begin{lemma}[Boundaries of the empty and full cuts]
     \label{thm:area_law_vertex_boundaries_trivial}
-    \lean{TNLean.PEPS.AreaLaw.innerBoundary_empty,
-        TNLean.PEPS.AreaLaw.innerBoundary_univ,
-        TNLean.PEPS.AreaLaw.endpointBoundary_empty,
-        TNLean.PEPS.AreaLaw.endpointBoundary_univ}
+    \lean{ManyBody.innerBoundary_empty,
+        ManyBody.innerBoundary_univ,
+        ManyBody.endpointBoundary_empty,
+        ManyBody.endpointBoundary_univ}
     \leanok
     \uses{def:area_law_vertex_boundaries}
     Both $\partial_{\rm in}A$ and $Z_A$ are empty when $A=\varnothing$ or
@@ -38,7 +38,7 @@
 
 \begin{lemma}[Degree bound for induced lattice domains]
     \label{thm:area_law_lattice_degree}
-    \lean{TNLean.PEPS.AreaLaw.domainGraph_degree_le_four}
+    \lean{ManyBody.planeDomainGraph_degree_le_four}
     \leanok
     \uses{def:area_law_domain}
     Every site of a finite induced square-lattice domain has degree at most four.
@@ -50,8 +50,8 @@
 
 \begin{lemma}[Comparison of edge and vertex boundaries]
     \label{thm:area_law_vertex_boundary_counts}
-    \lean{TNLean.PEPS.AreaLaw.edgeBoundary_card_le_four_mul_innerBoundary_card,
-        TNLean.PEPS.AreaLaw.edgeBoundary_card_le_two_mul_endpointBoundary_card}
+    \lean{ManyBody.card_edgeBoundary_le_mul_card_innerBoundary,
+        ManyBody.two_mul_card_edgeBoundary_le_mul_card_endpointBoundary}
     \leanok
     \uses{def:area_law_vertex_boundaries}
     For every cut in a finite induced lattice domain,
@@ -75,8 +75,8 @@
 
 \begin{lemma}[Vertex bounds assuming the uniform edge area law]
     \label{thm:area_law_conditional_vertex_bounds}
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_four_mul_innerBoundary_card,
-        TNLean.PEPS.AreaLaw.regionalEntropy_le_two_mul_endpointBoundary_card,
+    \lean{TNLean.PEPS.AreaLaw.regionEntropy_le_four_mul_innerBoundary_card,
+        TNLean.PEPS.AreaLaw.regionEntropy_le_two_mul_endpointBoundary_card,
         TNLean.PEPS.AreaLaw.UniformAreaLaw.vertex_boundary_bounds}
     \leanok
     \uses{def:area_law_vertex_boundaries,def:area_law_ground_entropy}

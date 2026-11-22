@@ -56,22 +56,20 @@ No Hamiltonian identity, regional support, positivity or ground data is supplied
 private theorem actual_clipped_two_window_alphabet
     (L q a b ell : ℕ) (hell : 1 ≤ ell)
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
+    (Φ : ManyBody.BondInteraction L q)
     (e : Fin 5 → ℝ) (t : ℝ) :
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-        (fun i ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     let J := (Finset.univ : Finset (Fin (L - 1))).filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
+    let Y := ∑ i ∈ J, Φ.term i
     let WL : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-      fun r ↦ h ⟨a + r.val, by omega⟩
+      fun r ↦ Φ.term ⟨a + r.val, by omega⟩
     let WR : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-      fun r ↦ h ⟨b + r.val, by omega⟩
+      fun r ↦ Φ.term ⟨b + r.val, by omega⟩
     let C := fun j : Fin 5 ↦ cfc (fun r : ℝ ↦ min r (e j + t)) (A j)
     let S : ℝ := ∑ j, e j
     let PL := C 0 - (S : ℂ) • 1
@@ -95,7 +93,7 @@ private theorem actual_clipped_two_window_alphabet
     change _ ∈ ManyBody.supportedOperators _ _
     apply sum_mem
     intro i hi
-    exact (hs i).mono (internal_bond_support_subset hi)
+    exact (Φ.mem i).mono (internal_bond_support_subset hi)
   have hC (j : Fin 5) : C j ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (R j : Finset (Fin L)) :=
     ManyBody.cfc_mem_supportedOperators _
       (hA j)
@@ -106,33 +104,33 @@ private theorem actual_clipped_two_window_alphabet
     (hC 2),
     (hC 4), ?_⟩
   · intro r
-    exact hs ⟨a + r.val, by omega⟩
+    exact Φ.mem ⟨a + r.val, by omega⟩
   · intro r
-    exact hs ⟨b + r.val, by omega⟩
-  · have htotal : (∑ i, h i) = (∑ j, A j) + Y := by
+    exact Φ.mem ⟨b + r.val, by omega⟩
+  · have htotal : Φ.hamiltonian = (∑ j, A j) + Y := by
       have hraw := Finset.sum_five_internal_regions_add_crossings
         (A := Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (L := L)
         (k1 := a + 1) (k2 := a + 2 * ell) (k3 := b + 1) (k4 := b + 2 * ell)
         (by omega : a + 1 ≤ a + 2 * ell)
-        (hab.trans (Nat.le_succ b)) (by omega : b + 1 ≤ b + 2 * ell) h
+        (hab.trans (Nat.le_succ b)) (by omega : b + 1 ≤ b + 2 * ell) Φ.term
       rw [Fin.sum_univ_five]
-      change (∑ i, h i) =
+      change Φ.hamiltonian =
         (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-          (fun i ↦ 0 ≤ i.val ∧ i.val + 1 < a + 1), h i) +
+          (fun i ↦ 0 ≤ i.val ∧ i.val + 1 < a + 1), Φ.term i) +
         (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-          (fun i ↦ a + 1 ≤ i.val ∧ i.val + 1 < a + 2 * ell), h i) +
+          (fun i ↦ a + 1 ≤ i.val ∧ i.val + 1 < a + 2 * ell), Φ.term i) +
         (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-          (fun i ↦ a + 2 * ell ≤ i.val ∧ i.val + 1 < b + 1), h i) +
+          (fun i ↦ a + 2 * ell ≤ i.val ∧ i.val + 1 < b + 1), Φ.term i) +
         (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-          (fun i ↦ b + 1 ≤ i.val ∧ i.val + 1 < b + 2 * ell), h i) +
+          (fun i ↦ b + 1 ≤ i.val ∧ i.val + 1 < b + 2 * ell), Φ.term i) +
         (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-          (fun i ↦ b + 2 * ell ≤ i.val ∧ i.val + 1 < L), h i) +
+          (fun i ↦ b + 2 * ell ≤ i.val ∧ i.val + 1 < L), Φ.term i) +
         (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
           (fun i ↦ i.val + 1 ∈
-            ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)), h i)
+            ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)), Φ.term i)
       exact hraw
-    have hwin : (∑ i, h i) = A 0 + (∑ r, WL r) + A 2 + (∑ r, WR r) + A 4 :=
-      Fin.sum_univ_eq_actual_two_window_alphabet L a b ell hab hb h
+    have hwin : Φ.hamiltonian = A 0 + (∑ r, WL r) + A 2 + (∑ r, WR r) + A 4 :=
+      Fin.sum_univ_eq_actual_two_window_alphabet L a b ell hab hb Φ.term
     have hbulk : (∑ r, WL r) + (∑ r, WR r) = A 1 + A 3 + Y := by
       calc
         (∑ r, WL r) + (∑ r, WR r) =
@@ -178,18 +176,16 @@ private theorem exists_actual_clipped_polynomial_family_fin
     (L q a b ell degree : ℕ) (hell : 1 ≤ ell) (hq : 2 ≤ q)
     (hdegree : 1 ≤ degree)
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
+    (Φ : ManyBody.BondInteraction L q)
     (e : Fin 5 → ℝ) (t : ℝ) :
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-        (fun i ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     let Cross := (Finset.univ : Finset (Fin (L - 1))).filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y := ∑ i ∈ Cross, h i
+    let Y := ∑ i ∈ Cross, Φ.term i
     let K : Finset (Fin 5) := {0, 2, 4}
     let B := (∑ j, ((if j ∈ K then
       cfc (fun r : ℝ ↦ min r (e j + t)) (A j) else A j) - (e j : ℂ) • 1)) + Y
@@ -198,31 +194,30 @@ private theorem exists_actual_clipped_polynomial_family_fin
     ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),
       N ≤ D ^ 2 ∧
       ∀ Q : Polynomial ℂ, Q.natDegree ≤ degree →
-        ∃ M : Fin N → Matrix (↥(Jᶜ) → Fin q) (↥(Jᶜ) → Fin q) ℂ,
+        ∃ M : Fin N → Matrix ({v // v ∉ J} → Fin q) ({v // v ∉ J} → Fin q) ℂ,
           Polynomial.aeval B Q = (∑ r, M r ⊗ₖ W r).submatrix
-            ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+            ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
               (Equiv.prodComm _ _))
-            ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+            ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans
               (Equiv.prodComm _ _)) := by
   classical
   intro k A Cross Y K B J D
   let WL : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-    fun r ↦ h ⟨a + r.val, by omega⟩
+    fun r ↦ Φ.term ⟨a + r.val, by omega⟩
   let WR : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-    fun r ↦ h ⟨b + r.val, by omega⟩
+    fun r ↦ Φ.term ⟨b + r.val, by omega⟩
   let C := fun j : Fin 5 ↦ cfc (fun r : ℝ ↦ min r (e j + t)) (A j)
   let PL := C 0 - ((∑ j, e j : ℝ) : ℂ) • 1
   let Pmid := C 2
   let PR := C 4
   obtain ⟨hWL, hWR, hPL, hPmid, hPR, hsum⟩ :=
-    actual_clipped_two_window_alphabet L q a b ell hell hab hb h hs e t
+    actual_clipped_two_window_alphabet L q a b ell hell hab hb Φ e t
   obtain ⟨bond, Acore, C0, hcore⟩ :=
     exists_traceChainOperator_of_supported_interval
       (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega) Pmid hPmid
-  let Pcore := QuantumCircuit.embedOp
-    (Subtype.val : interval L (a + 2 * ell) (b + 1) → Fin L)
-    (QuantumCircuit.embedOp (intervalShiftOrderIso
-      (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega))
+  let Pcore := ManyBody.place (X := fun _ ↦ Fin q) (interval L (a + 2 * ell) (b + 1))
+    (ManyBody.placeAlong (X := fun _ ↦ Fin q) (intervalShiftOrderIso
+      (show a + 2 * ell ≤ b + 1 by omega) (show b + 1 ≤ L by omega)).toEquiv.toEmbedding
       (MPOTensor.traceChainOperator Acore C0))
   have hPcore : Pcore = Pmid := hcore.symm
   obtain ⟨N, W, hN, _hW, _hTrace, hdecomp⟩ :=
@@ -236,8 +231,8 @@ private theorem exists_actual_clipped_polynomial_family_fin
     exact hsum
   change Polynomial.aeval (∑ r, Sum.elim (Sum.elim WL WR) ![PL, Pcore, PR] r) Q =
     (∑ r, M r ⊗ₖ W r).submatrix
-      ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _))
-      ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _)) at hM
+      ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _))
+      ((ManyBody.cutEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _)) at hM
   exact ⟨M, hsumCore ▸ hM⟩
 end TNLean.MPS.AreaLaw
 end
@@ -261,36 +256,34 @@ theorem exists_actual_regional_clipped_polynomial_family_fin
     (L q a b ell degree : ℕ) (hell : 1 ≤ ell) (hq : 2 ≤ q)
     (hdegree : 1 ≤ degree)
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
+    (Φ : ManyBody.BondInteraction L q)
     (e : Fin 5 → ℝ) (t : ℝ) (Jtarget : Finset (Fin L)) :
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-        (fun i ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     let Cross := (Finset.univ : Finset (Fin (L - 1))).filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y := ∑ i ∈ Cross, h i
+    let Y := ∑ i ∈ Cross, Φ.term i
     let K : Finset (Fin 5) := {0, 2, 4}
     let B := (∑ j, ((if j ∈ K then
       cfc (fun r : ℝ ↦ min r (e j + t)) (A j) else A j) - (e j : ℂ) • 1)) + Y
     let J0 := interval L (a + ell) (b + ell + 1)
     let D0 := (q * degree) ^ (18 * ell + 2 * (degree / ell))
     let β := fun _ : Fin L ↦ Fin q
-    let tau := (ManyBody.splitEquiv β Jtarget).trans (Equiv.prodComm _ _)
+    let tau := (ManyBody.cutEquiv β Jtarget).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-    let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtargetᶜ) ℂ).tensorProduct
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig β Jtarget) ℂ).tensorProduct
       (EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtarget) ℂ)).repr
     let T := U.trans Phi.symm
     let Tm := T.trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtargetᶜ))
+      (EuclideanSpace ℂ (ManyBody.ComplConfig β Jtarget))
       (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtarget)))
     ∃ (N : ℕ) (W : Fin N → Matrix (Jtarget → Fin q) (Jtarget → Fin q) ℂ),
       N ≤ D0 ^ 2 * q ^ (2 * (J0 \ Jtarget).card + 2 * (Jtarget \ J0).card) ∧
       ∀ Q : Polynomial ℂ, Q.natDegree ≤ degree →
-        ∃ M : Fin N → Matrix (↥(Jtargetᶜ) → Fin q) (↥(Jtargetᶜ) → Fin q) ℂ,
+        ∃ M : Fin N → Matrix ({v // v ∉ Jtarget} → Fin q) ({v // v ∉ Jtarget} → Fin q) ℂ,
           Polynomial.aeval B Q = (∑ r, M r ⊗ₖ W r).submatrix tau tau ∧
           Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
               Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
@@ -298,14 +291,14 @@ theorem exists_actual_regional_clipped_polynomial_family_fin
               Tm.symm.toContinuousLinearEquiv.toContinuousLinearMap =
             ∑ r, TensorProduct.mapL
               (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Jtarget → Fin q) (W r))
-              (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := ↥(Jtargetᶜ) → Fin q) (M r)) := by
+              (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := {v // v ∉ Jtarget} → Fin q) (M r)) := by
   classical
   intro k A Cross Y K B J0 D0 β tau U Phi T Tm
   obtain ⟨N0, W0, hN0, hpoly⟩ :=
     exists_actual_clipped_polynomial_family_fin L q a b ell degree hell hq
-      hdegree hab hb h hs e t
+      hdegree hab hb Φ e t
   obtain ⟨N, W, hN, htransport⟩ :=
-    FiniteProduct.exists_changingRegional_family_fin q J0 Jtarget W0
+    exists_changingRegional_family_fin q J0 Jtarget W0
   refine ⟨N, W, ?_, ?_⟩
   · calc
       N = N0 * q ^ (2 * (J0 \ Jtarget).card + 2 * (Jtarget \ J0).card) := by
@@ -319,7 +312,7 @@ theorem exists_actual_regional_clipped_polynomial_family_fin
       hM0.trans hM
     have hconj := Matrix.toEuclideanCLM_middleFirst_conjugation_of_kronecker_sum
       (Z := Fin L → Fin q)
-      (X := ManyBody.RegionConfig β Jtargetᶜ)
+      (X := ManyBody.ComplConfig β Jtarget)
       (Y := ManyBody.RegionConfig β Jtarget) (ι := Fin N)
       tau M W (Polynomial.aeval B Q) hmatrix
     exact ⟨M, hmatrix, hconj⟩

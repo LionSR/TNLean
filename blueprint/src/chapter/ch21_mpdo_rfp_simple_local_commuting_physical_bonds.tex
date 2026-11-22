@@ -113,8 +113,8 @@
 
 \begin{lemma}[Two-site translation identities]
     \label{thm:mpdo_physical_two_site_translation_identities}
-    \lean{MPOTensor.PhysicalSectorFactorization.reindex_embedLocalOperator_two_zero,
-        MPOTensor.PhysicalSectorFactorization.reindex_embedLocalOperator_two_one}
+    \lean{MPOTensor.PhysicalSectorFactorization.reindex_placeAlong_ringWindow_two_zero,
+        MPOTensor.PhysicalSectorFactorization.reindex_placeAlong_ringWindow_two_one}
     \leanok
     \uses{def:mpdo_physical_two_site_bond}
     Identifying two-site configurations with ordered
@@ -173,8 +173,8 @@
 
 \begin{lemma}[Three-site translation identities]
     \label{thm:mpdo_three_site_pair_lifts}
-    \lean{MPOTensor.PhysicalSectorFactorization.reindex_embedLocalOperator_zero,
-        MPOTensor.PhysicalSectorFactorization.reindex_embedLocalOperator_one}
+    \lean{MPOTensor.PhysicalSectorFactorization.reindex_placeAlong_ringWindow_zero,
+        MPOTensor.PhysicalSectorFactorization.reindex_placeAlong_ringWindow_one}
     \leanok
     \uses{def:mpdo_physical_two_site_bond, def:mpdo_three_site_pair_lifts}
     Identifying three-site configurations with
@@ -258,7 +258,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
 
 \begin{lemma}[Agreement outside a cyclic window]
     \label{thm:mpdo_agreement_outside_cyclic_window}
-    \lean{MPOTensor.agreesOutsideWindow_iff}
+    \lean{MPSTensor.forall_ringWindow_ne_imp_iff}
     \leanok
     Let $W_i^L=\{i,i+1,\ldots,i+L-1\}$ be a cyclic window of length
     $L\leq N$. Two configurations agree outside $W_i^L$ precisely when their
@@ -274,7 +274,7 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
 
 \begin{lemma}[Multiplicativity of cyclic local embeddings]
     \label{thm:mpdo_cyclic_local_embedding_mul}
-    \lean{MPOTensor.embedLocalOperator_mul}
+    \lean{ManyBody.placeAlong_mul}
     \leanok
     Let $E_i^L$ embed an operator on $L$ consecutive sites into an
     $N$-site periodic chain at the cyclic window beginning at $i$. Then
@@ -290,20 +290,24 @@ $\eta_{k,l}^{(12)}\eta_{l,h}^{(23)}
 
 \begin{lemma}[Commutativity on disjoint cyclic windows]
     \label{thm:mpdo_disjoint_cyclic_local_embeddings_comm}
-    \lean{MPOTensor.embedLocalOperator_commute_of_not_cyclicWindowsOverlap}
+    \lean{MPOTensor.disjoint_map_ringWindow_of_not_cyclicWindowsOverlap}
     \leanok
-    \uses{lem:cyclic_window_support_offsets, lem:cyclic_windows_overlap_symmetry}
-    Let $L\leq N$, and let $W_i^L$ and $W_j^L$ be disjoint cyclic windows in
-    an $N$-site periodic chain. For arbitrary operators $B$ and $C$ on $L$
-    sites, $E_i^L(B)E_j^L(C)=E_j^L(C)E_i^L(B)$.
+    \uses{lem:cyclic_window_support_offsets, lem:cyclic_windows_overlap_symmetry,
+        lem:qc_placed_operators}
+    Let $L\leq N$, and let the cyclic windows $W_i^L$ and $W_j^L$ of an
+    $N$-site periodic chain have no common site. Then the embeddings of $L$
+    sites onto $W_i^L$ and onto $W_j^L$ have disjoint images. Consequently,
+    for arbitrary operators $B$ and $C$ on $L$ sites,
+    $E_i^L(B)E_j^L(C)=E_j^L(C)E_i^L(B)$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Evaluating both sides on a chain amplitude expresses the first order of
-    application as a double sum over replacements on $W_i^L$ and $W_j^L$. Since
-    the windows are disjoint, each replacement leaves the other restricted
-    configuration unchanged, so the two replacements commute and interchanging
-    the two finite sums gives the reverse order.
+    The embedding onto $W_i^L$ sends the $l$th site to $i+l$ with $l<L$, a
+    site of cyclic offset below $L$ from $i$, which lies in the cyclic support
+    of $W_i^L$ by Lemma~\ref{lem:cyclic_window_support_offsets}. A common site
+    of the two images would therefore be a common site of the two windows.
+    Operators placed along injections with disjoint images commute by
+    Lemma~\ref{lem:qc_placed_operators}.
 \end{proof}
 
 \begin{lemma}[Adjacent physical bonds on periodic chains]

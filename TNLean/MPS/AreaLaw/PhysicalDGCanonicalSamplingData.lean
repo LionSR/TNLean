@@ -42,12 +42,10 @@ size bounds on every history, while each long parent retains its true
 uniform failure estimate under viable bounded children. -/
 theorem exists_physical_dg_canonical_interval_sampling_data :
     ∃ Ctail C Kref : ℝ, 21 ≤ Ctail ∧ 21 ≤ C ∧ 0 < Kref ∧ ∀ (L q : ℕ),
-    ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+    ∀ (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
     0 < gamma →
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -138,11 +136,11 @@ theorem exists_physical_dg_canonical_interval_sampling_data :
   obtain ⟨Ctail, C, Kref, hCtail, hC, hKref, hfamily⟩ :=
     exists_physical_dg_canonical_interval_parent_failure
   refine ⟨Ctail, C, Kref, hCtail, hC, hKref, ?_⟩
-  intro L q h hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g m w v ell D s a tau epsilon t Delta
   obtain ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff,
     B, hB, hlogB, Uref, hdimU, hUMPS, hxiMax, hinterval⟩ :=
-    hfamily L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hfamily L q Φ h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   change 21 ≤ ell at hell
   change 2 ≤ D at hD
   change 1 ≤ s at hs

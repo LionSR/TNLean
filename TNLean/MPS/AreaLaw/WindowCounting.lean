@@ -152,13 +152,8 @@ theorem _root_.ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive
     (hq : 1 ≤ q) (h : ChainInteraction L q R)
     (hwindow : ∀ X : ChainSupport L R, h.term X ≠ 0 →
       ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) (l r : ℕ) :
-    Entropy.cutLogBudget
-      (ManyBody.crossingTerms
-        (fun X : {X : ChainSupport L R // h.term X ≠ 0} ↦ X.val.1)
-        (interval L l r))
-      (Entropy.supportDim (fun _ : Fin L ↦ q) ∘
-        (fun X : {X : ChainSupport L R // h.term X ≠ 0} ↦ X.val.1)) ≤
-      windowBudgetConst q R := by
+    ManyBody.cutLogBudget (fun X : {X : ChainSupport L R // h.term X ≠ 0} ↦ X.val.1)
+      (fun _ ↦ q) (interval L l r) ≤ windowBudgetConst q R := by
   classical
   unfold windowBudgetConst cutBudgetConst
   let A := {X : ChainSupport L R // h.term X ≠ 0}

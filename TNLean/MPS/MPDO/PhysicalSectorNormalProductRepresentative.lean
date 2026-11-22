@@ -63,7 +63,8 @@ noncomputable def fixedProductTensorData
     intro N hN
     change mpo K N =
       (List.ofFn fun i : Fin N ↦
-        embedLocalOperator (d := d) 2 N hN i F.physicalBond).prod
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
+          F.physicalBond).prod
     exact F.mpo_eq_product_physicalBond hN
 
 end PhysicalSectorFactorization

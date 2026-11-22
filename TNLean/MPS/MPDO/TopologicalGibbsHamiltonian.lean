@@ -64,43 +64,21 @@ namespace MPOTensor
 
 variable {d N : ℕ}
 
-/-- Embedding a diagonal two-site operator which depends only on its first
-site gives the corresponding diagonal one-site operator on the periodic
-chain.
+/-- Placing a diagonal two-site operator which depends only on its first
+site on the window of two consecutive sites starting at `i` gives the
+corresponding diagonal one-site operator on the periodic chain.
 
 Source: arXiv:1606.00608, Definition 4.8, lines 831--847, and the
 translation-invariant Hamiltonian at lines 1013--1016. -/
-theorem embedLocalOperator_twoSite_first_diagonal
+theorem placeAlong_ringWindow_twoSite_first_diagonal
     (hN : 2 ≤ N) (i : Fin N) (f : Fin d → ℂ) :
-    embedLocalOperator (d := d) 2 N hN i
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN i)
         (Matrix.diagonal fun x : Fin 2 → Fin d ↦
           f (x ⟨0, by omega⟩)) =
       Matrix.diagonal fun σ : Fin N → Fin d ↦ f (σ i) := by
-  ext σ τ
-  by_cases hστ : σ = τ
-  · subst τ
-    simp only [embedLocalOperator_apply, Matrix.diagonal_apply_eq]
-    rw [ite_eq_left]
-    · congr 2
-      apply Fin.ext
-      simp [MPSTensor.extractWindow, Nat.mod_eq_of_lt i.isLt]
-    · exact MPSTensor.replaceWindow_extractWindow 2 hN i σ
-  · simp only [embedLocalOperator_apply]
-    by_cases hAgree : AgreesOutsideWindow (d := d) 2 hN i σ τ
-    · rw [ite_eq_left hAgree]
-      have hWindow :
-          MPSTensor.extractWindow 2 i σ ≠
-            MPSTensor.extractWindow 2 i τ := by
-        intro hWindow
-        have hτ :
-            MPSTensor.replaceWindow 2 hN i τ
-                (MPSTensor.extractWindow 2 i σ) = τ := by
-          rw [hWindow]
-          exact MPSTensor.replaceWindow_extractWindow 2 hN i τ
-        exact hστ (hAgree.symm.trans hτ)
-      simp [hWindow, hστ]
-    · rw [ite_eq_right hAgree]
-      simp [hστ]
+  rw [ManyBody.placeAlong_diagonal]
+  beta_reduce
+  rw [MPSTensor.ringWindow_zero hN i]
 
 end MPOTensor
 
@@ -290,8 +268,8 @@ def topologicalGibbsHamiltonianSuccSucc
     Matrix (Fin (N + 2) → Fin H.verticalRetainedDim)
       (Fin (N + 2) → Fin H.verticalRetainedDim) ℂ :=
   ∑ i : Fin (N + 2),
-    MPOTensor.embedLocalOperator 2 (N + 2) (by omega) i
-      H.topologicalGibbsLocalTerm
+    ManyBody.placeAlong (X := fun _ ↦ Fin H.verticalRetainedDim)
+      (ManyBody.ringWindow (by omega : 2 ≤ N + 2) i) H.topologicalGibbsLocalTerm
 
 /-- The terminal eigenvalue family, zero-padded to the paper's `d`-element
 index.
@@ -359,14 +337,14 @@ coordinates.
 Source: arXiv:1606.00608, the translated local terms at lines 1013--1016. -/
 theorem topologicalGibbsBondSuccSucc_eq_diagonal
     (H : BNTFusionTensorClause M) (N : ℕ) (i : Fin (N + 2)) :
-    MPOTensor.embedLocalOperator 2 (N + 2) (by omega) i
-        H.topologicalGibbsLocalTerm =
+    ManyBody.placeAlong (X := fun _ ↦ Fin H.verticalRetainedDim)
+        (ManyBody.ringWindow (by omega : 2 ≤ N + 2) i) H.topologicalGibbsLocalTerm =
       Matrix.diagonal fun σ :
           Fin (N + 2) → Fin H.verticalRetainedDim ↦
         (H.retainedMultiplicityEnergyEntry (σ i) : ℂ) := by
   unfold topologicalGibbsLocalTerm
   simpa only using
-    (MPOTensor.embedLocalOperator_twoSite_first_diagonal
+    (MPOTensor.placeAlong_ringWindow_twoSite_first_diagonal
       (d := H.verticalRetainedDim) (by omega) i
       (fun r ↦ (H.retainedMultiplicityEnergyEntry r : ℂ)))
 
@@ -378,10 +356,10 @@ theorem topologicalGibbsBondSuccSucc_commute
     (H : BNTFusionTensorClause M) (N : ℕ)
     (i j : Fin (N + 2)) :
     Commute
-      (MPOTensor.embedLocalOperator 2 (N + 2) (by omega) i
-        H.topologicalGibbsLocalTerm)
-      (MPOTensor.embedLocalOperator 2 (N + 2) (by omega) j
-        H.topologicalGibbsLocalTerm) := by
+      (ManyBody.placeAlong (X := fun _ ↦ Fin H.verticalRetainedDim)
+        (ManyBody.ringWindow (by omega : 2 ≤ N + 2) i) H.topologicalGibbsLocalTerm)
+      (ManyBody.placeAlong (X := fun _ ↦ Fin H.verticalRetainedDim)
+        (ManyBody.ringWindow (by omega : 2 ≤ N + 2) j) H.topologicalGibbsLocalTerm) := by
   rw [H.topologicalGibbsBondSuccSucc_eq_diagonal N i,
     H.topologicalGibbsBondSuccSucc_eq_diagonal N j]
   exact Matrix.commute_diagonal _ _
@@ -601,10 +579,10 @@ def HasTopologicalGibbsDecomposition (H : BNTFusionTensorClause M)
     ∀ N : ℕ,
       (∀ i j : Fin (N + 2),
         Commute
-          (MPOTensor.embedLocalOperator 2 (N + 2) (by omega) i
-            H.topologicalGibbsLocalTerm)
-          (MPOTensor.embedLocalOperator 2 (N + 2) (by omega) j
-            H.topologicalGibbsLocalTerm)) ∧
+          (ManyBody.placeAlong (X := fun _ ↦ Fin H.verticalRetainedDim)
+            (ManyBody.ringWindow (by omega : 2 ≤ N + 2) i) H.topologicalGibbsLocalTerm)
+          (ManyBody.placeAlong (X := fun _ ↦ Fin H.verticalRetainedDim)
+            (ManyBody.ringWindow (by omega : 2 ≤ N + 2) j) H.topologicalGibbsLocalTerm)) ∧
       NormedSpace.exp (-H.topologicalGibbsHamiltonianSuccSucc N) =
           H.topologicalMultiplicityWeightFactorSucc (N + 1) ∧
       (∀ i : Fin d,

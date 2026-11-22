@@ -26,6 +26,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (ambientDilation ambientDilation_zero edgeBoundary planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- Both length bounds follow from the floor scale and the source exponent range. -/
@@ -55,7 +57,7 @@ theorem source_target_geometry (E : ScannerExponents) (T : Finset (ℤ × ℤ))
       ((2 * E.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) :
     ((S.truncationSet (E.L S.n)).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
       (S.A.filter fun x ↦ x.val ∈ T) ⊆ S.truncationSet (E.L S.n) ∧
-      (edgeBoundary Λ (S.A.filter fun x ↦ x.val ∈ T)).card ≤ 4 * S.n := by
+      (edgeBoundary (planeDomainGraph Λ) (S.A.filter fun x ↦ x.val ∈ T)).card ≤ 4 * S.n := by
   classical
   obtain ⟨hLpos, hLn⟩ := E.one_le_L_le hn
   have hcard : (S.truncationSet (E.L S.n)).card ≤ T.card + S.n * E.L S.n := by

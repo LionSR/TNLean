@@ -49,16 +49,14 @@ No simple-ground-space assumption is made. -/
 theorem exists_five_region_independent_scaled_low_cluster
     (L q a b ell : ℕ) (t : ℝ) (hq : 0 < q) (hell : 1 ≤ ell) (ht : 21 ≤ t)
     (hab : a + 2 * ell ≤ b + 1) (hbL : b + 2 * ell ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (mu g xi tau : ℝ) (hg : 0 < g) (hg1 : g ≤ 1)
     (htau : 0 < tau) (htau1 : tau ≤ 1)
     (htail : (288 * Real.exp (11 / 8)) *
       Real.exp (-(t - g) / 8) ≤ xi)
     (hxi : xi ≤ tau * g / 1000000) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
@@ -67,11 +65,11 @@ theorem exists_five_region_independent_scaled_low_cluster
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     let J : Finset (Fin (L - 1)) := Finset.univ.filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
+    let Y := ∑ i ∈ J, Φ.term i
     ∃ (e : Fin 5 → ℝ) (E0 : ℝ),
       let S := ∑ j, e j
       let K : Finset (Fin 5) := {0, 2, 4}
@@ -101,7 +99,7 @@ theorem exists_five_region_independent_scaled_low_cluster
     hE0ge, hE0le, hnorm, hres⟩ :=
     exists_five_region_independent_truncation_residual L q a b ell t hq hell
       (by linarith only [ht]) hab hbL
-      h hs h0 h1
+      Φ h0 h1
   let S : ℝ := ∑ j, e j
   let K : Finset (Fin 5) := {0, 2, 4}
   let Bcur : Finset (Fin 5) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun T ↦

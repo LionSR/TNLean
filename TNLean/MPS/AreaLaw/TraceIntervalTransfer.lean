@@ -51,9 +51,9 @@ theorem exists_traceChainOperator_changingRegionalMiddleFactor
       (interval T c d \ interval T u v))
     (ηr ηc : ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q)
       (interval T u v \ interval T c d)) :
-    let old := FiniteProduct.changingOldMiddleConfigEquiv
+    let old := changingOldMiddleConfigEquiv
       (fun _ : Fin T ↦ Fin q) (interval T c d) (interval T u v)
-    let new := FiniteProduct.changingNewMiddleConfigEquiv
+    let new := changingNewMiddleConfigEquiv
       (fun _ : Fin T ↦ Fin q) (interval T c d) (interval T u v)
     let Wphys := ((Matrix.single ηr ηc (1 : ℂ)) ⊗ₖ
       Matrix.operatorBlock (Vphys.reindex old old) αr αc).reindex new.symm new.symm
@@ -95,23 +95,23 @@ theorem changingRegionalMiddleFamily_trace_and_global_decomposition
     let B := J \ E
     let I := ι × (ManyBody.RegionConfig β A × ManyBody.RegionConfig β A) ×
       (ManyBody.RegionConfig β B × ManyBody.RegionConfig β B)
-    let W := FiniteProduct.changingRegionalMiddleFamily β E J V
+    let W := changingRegionalMiddleFamily β E J V
     let eJ := intervalShiftOrderIso huv hv
     Fintype.card I = Fintype.card ι * q ^ (2 * A.card + 2 * B.card) ∧
       (∀ r : I, ∃ Cnew : Matrix (Fin (D r.1)) (Fin (D r.1)) ℂ,
         ∃ Anew : Fin (v - u) → MPOTensor q (D r.1),
           (W r).submatrix (fun σ z ↦ σ (eJ.symm z))
             (fun σ z ↦ σ (eJ.symm z)) = MPOTensor.traceChainOperator Anew Cnew) ∧
-      ∀ M : ι → Matrix (ManyBody.RegionConfig β Eᶜ)
-          (ManyBody.RegionConfig β Eᶜ) ℂ,
-        ∃ Mnew : I → Matrix (ManyBody.RegionConfig β Jᶜ)
-            (ManyBody.RegionConfig β Jᶜ) ℂ,
+      ∀ M : ι → Matrix (ManyBody.ComplConfig β E)
+          (ManyBody.ComplConfig β E) ℂ,
+        ∃ Mnew : I → Matrix (ManyBody.ComplConfig β J)
+            (ManyBody.ComplConfig β J) ℂ,
           (∑ t, M t ⊗ₖ V t).submatrix
-            ((ManyBody.splitEquiv β E).trans (Equiv.prodComm _ _))
-            ((ManyBody.splitEquiv β E).trans (Equiv.prodComm _ _)) =
+            ((ManyBody.cutEquiv β E).trans (Equiv.prodComm _ _))
+            ((ManyBody.cutEquiv β E).trans (Equiv.prodComm _ _)) =
           (∑ r, Mnew r ⊗ₖ W r).submatrix
-            ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
-            ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
+            ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _))
+            ((ManyBody.cutEquiv β J).trans (Equiv.prodComm _ _)) := by
   let β := fun _ : Fin T ↦ Fin q
   let E := interval T c d
   let J := interval T u v
@@ -119,7 +119,7 @@ theorem changingRegionalMiddleFamily_trace_and_global_decomposition
   let B := J \ E
   let I := ι × (ManyBody.RegionConfig β A × ManyBody.RegionConfig β A) ×
     (ManyBody.RegionConfig β B × ManyBody.RegionConfig β B)
-  let W := FiniteProduct.changingRegionalMiddleFamily β E J V
+  let W := changingRegionalMiddleFamily β E J V
   let eJ := intervalShiftOrderIso huv hv
   have hcard : Fintype.card I = Fintype.card ι * q ^ (2 * A.card + 2 * B.card) := by
     calc
@@ -143,14 +143,14 @@ theorem changingRegionalMiddleFamily_trace_and_global_decomposition
     refine ⟨Cnew, Anew, ?_⟩
     convert hfactor using 1;
       (ext σ τ;
-        simp only [W, FiniteProduct.changingRegionalMiddleFamily, β, E, J, eJ,
+        simp only [W, changingRegionalMiddleFamily, β, E, J, eJ,
           Matrix.exchangedMiddleFamily, Matrix.exchangedMiddleFactor, Matrix.reindex_apply,
           Matrix.submatrix_apply, Matrix.kroneckerMap_apply, Matrix.single_apply,
           Equiv.symm_symm];
         split_ifs <;> rfl)
   refine ⟨hcard, hW, ?_⟩
   intro M
-  exact FiniteProduct.exists_changingRegional_exterior_family β E J V M
+  exact exists_changingRegional_exterior_family β E J V M
 
 end TNLean.MPS.AreaLaw
 

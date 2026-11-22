@@ -165,7 +165,8 @@ theorem exists_blockSumUnitary (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁)
       (∀ j, Kraus.IsInjective (blockTensor (A j) q)) →
       (∀ j j', j ≠ j' → (physicalMatrix (blockTensor (A j) q))ᴴ *
         physicalMatrix (blockTensor (A j') q) = 0) →
-      ∃ U : Matrix (Cfg d q) (Cfg d q) ℂ, IsPairProduct d q (C * q) U ∧
+      ∃ U : Matrix (Cfg d q) (Cfg d q) ℂ,
+        IsGateProduct (Geometry.graph (SimpleGraph.pathGraph q)) (C * q) U ∧
         ∀ j l r τ, U τ (blockInputCfg hd q dig (flatCoord Dj j l) (flatCoord Dj j r)) =
           polarIsoMatrix (blockTensor (A j) q) ((decodeBlockEquiv d q).symm τ)
             (finProdFinEquiv (l, r)) := by

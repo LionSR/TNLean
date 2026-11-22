@@ -67,14 +67,13 @@ theorem ChainSupport.edist_le {L R : ℕ} (X : ChainSupport L R)
     simp only [Nat.dist]
     omega)
 
-/-- The real-radius chain neighborhood of `S` is the union of the path-graph balls of radius
-`⌊ℓ⌋` about its sites. -/
-theorem biUnion_graphBall_pathGraph_eq_chainNeighborhood {L : ℕ} (S : Finset (Fin L))
+/-- The real-radius chain neighborhood of `S` is the path-graph neighbourhood of `S` of
+radius `⌊ℓ⌋`. -/
+theorem graphNeighborhood_pathGraph_eq_chainNeighborhood {L : ℕ} (S : Finset (Fin L))
     {ℓ : ℝ} (hℓ : 0 ≤ ℓ) :
-    (S.biUnion fun x ↦ ManyBody.graphBall (SimpleGraph.pathGraph L) x ⌊ℓ⌋₊) =
-      chainNeighborhood S ℓ := by
+    ManyBody.graphNeighborhood (SimpleGraph.pathGraph L) S ⌊ℓ⌋₊ = chainNeighborhood S ℓ := by
   ext y
-  simp only [Finset.mem_biUnion, ManyBody.mem_graphBall,
+  simp only [ManyBody.mem_graphNeighborhood,
     SimpleGraph.pathGraph_edist, ENat.natCast_le_natCast, Nat.le_floor_iff hℓ,
     mem_chainNeighborhood]
 
@@ -125,7 +124,7 @@ theorem norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
       (2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
         (1 - Real.exp (-(1 / 2)))) * (S.card : ℝ) ^ 2 * ‖A‖ *
           Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t| - ℓ / 2) := by
-  rw [← biUnion_graphBall_pathGraph_eq_chainNeighborhood S hℓ]
+  rw [← graphNeighborhood_pathGraph_eq_chainNeighborhood S hℓ]
   exact ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_two
     (SimpleGraph.pathGraph L)
     (⟨h, hSupport⟩ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) fun k ↦ (X k).1)
@@ -179,7 +178,7 @@ theorem norm_heisenberg_sub_regionExpectation_domainNeighborhood_le
     (ℓ : ℝ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A -
         ManyBody.regionExpectation
-          (S.biUnion fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x ⌊ℓ⌋₊)
+          (ManyBody.graphNeighborhood (lineDomainGraph Λ) S ⌊ℓ⌋₊)
           (ManyBody.heisenbergEvolution (∑ k, h k) t A)‖ ≤
       (2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
         (1 - Real.exp (-(1 / 2)))) * (S.card : ℝ) ^ 2 * ‖A‖ *

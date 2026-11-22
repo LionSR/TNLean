@@ -85,14 +85,17 @@ noncomputable def leafIntervalConfigEquiv (d D N : ℕ) (i : Fin N) :
 /-- A change of site enumeration represents the same placed operator.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-theorem embedOp_reindex_siteEquiv {d a b n : ℕ} (e : Fin b → Fin n)
+theorem placeAlong_reindex_siteEquiv {d a b n : ℕ} (e : Fin b ↪ Fin n)
     (η : Fin a ≃ Fin b) (Z : Matrix (Cfg d a) (Cfg d a) ℂ) :
-    embedOp (e ∘ η) Z = embedOp e
-      (Matrix.reindex (Equiv.arrowCongr η (Equiv.refl (Fin d)))
-        (Equiv.arrowCongr η (Equiv.refl (Fin d))) Z) := by
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (η.toEmbedding.trans e) Z =
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) e
+        (Matrix.reindex (Equiv.arrowCongr η (Equiv.refl (Fin d)))
+          (Equiv.arrowCongr η (Equiv.refl (Fin d))) Z) := by
   classical
   ext x y
-  have hag : AgreeOff (e ∘ η) x y ↔ AgreeOff e x y := by
+  rw [ManyBody.placeAlong_apply, ManyBody.placeAlong_apply]
+  have hag : (∀ v, (∀ u, (η.toEmbedding.trans e) u ≠ v) → x v = y v) ↔
+      (∀ v, (∀ u, e u ≠ v) → x v = y v) := by
     constructor
     · intro h s hs
       exact h s (fun q ↦ hs (η q))
@@ -101,8 +104,10 @@ theorem embedOp_reindex_siteEquiv {d a b n : ℕ} (e : Fin b → Fin n)
       intro q
       obtain ⟨p, rfl⟩ := η.surjective q
       exact hs p
-  simp only [embedOp_apply, hag, Matrix.reindex_apply, Matrix.submatrix_apply]
-  rfl
+  by_cases h : ∀ v, (∀ u, e u ≠ v) → x v = y v
+  · rw [ite_eq_left (hag.mpr h), ite_eq_left h]
+    rfl
+  · rw [ite_eq_right (mt hag.mp h), ite_eq_right h]
 
 /-- The existing initialized leaf input is the canonical initialized interval
 input after reindexing its sites.
@@ -173,10 +178,10 @@ theorem leafIntervalConfigEquiv_leafOutput {d D N : ℕ} [NeZero d] {ρ σ : Typ
 corresponding basis embedding.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-theorem initializedBasisMatrix_reindex_of_mapping {α β ι κ : Type*}
+theorem basisInclusion_reindex_of_mapping {α β ι κ : Type*}
     [DecidableEq ι] [DecidableEq κ] (e : ι ≃ κ) (f : α ≃ β) (g : α ↪ ι) (h : β ↪ κ)
     (hg : ∀ b, e (g (f.symm b)) = h b) :
-    Matrix.reindex e f (initializedBasisMatrix g) = initializedBasisMatrix h := by
+    Matrix.reindex e f (basisInclusion g) = basisInclusion h := by
   ext x b
   change (if e.symm x = g (f.symm b) then (1 : ℂ) else 0) =
     (if x = h b then (1 : ℂ) else 0)
@@ -194,13 +199,13 @@ theorem leafColumns_reindex_interval {d D N : ℕ} [NeZero d] {ρ σ : Type*}
       (Cfg d (1 + (cutBondRegisterWidth d D N i.succ + cutBondRegisterWidth d D N i.castSucc)))
       (Cfg d (1 + (cutBondRegisterWidth d D N i.succ + cutBondRegisterWidth d D N i.castSucc))) ℂ)
     (V : Matrix (Fin d × (ρ × σ)) (Fin d) ℂ)
-    (hcolumns : Z * initializedBasisMatrix (leafInputEmbedding (d := d)
+    (hcolumns : Z * basisInclusion (leafInputEmbedding (d := d)
       (qρ := cutBondRegisterWidth d D N i.succ)
       (qσ := cutBondRegisterWidth d D N i.castSucc)) =
-      initializedBasisMatrix (leafOutputEmbedding eρ eσ) * V) :
+      basisInclusion (leafOutputEmbedding eρ eσ) * V) :
     Matrix.reindex (leafIntervalConfigEquiv d D N i) (leafIntervalConfigEquiv d D N i) Z *
-        initializedBasisMatrix (intervalInputEmbedding (D := D) i.val (i.val + 1)) =
-      initializedBasisMatrix (show (CutIntervalConfig d N i.val (i.val + 1) × (ρ × σ)) ↪
+        basisInclusion (intervalInputEmbedding (D := D) i.val (i.val + 1)) =
+      basisInclusion (show (CutIntervalConfig d N i.val (i.val + 1) × (ρ × σ)) ↪
         Cfg d (intervalPacketCard d D N i.val (i.val + 1)) from
           intervalOutputEmbedding i.castSucc i.succ eρ eσ) *
         Matrix.reindex (Equiv.prodCongr (singleSiteIntervalConfigEquiv d N i) (Equiv.refl _))
@@ -208,11 +213,11 @@ theorem leafColumns_reindex_interval {d D N : ℕ} [NeZero d] {ρ σ : Type*}
   let E := leafIntervalConfigEquiv d D N i
   let F := singleSiteIntervalConfigEquiv d N i
   let G := Equiv.prodCongr F (Equiv.refl (ρ × σ))
-  have hin : Matrix.reindex E F (initializedBasisMatrix (leafInputEmbedding (d := d)
+  have hin : Matrix.reindex E F (basisInclusion (leafInputEmbedding (d := d)
       (qρ := cutBondRegisterWidth d D N i.succ)
       (qσ := cutBondRegisterWidth d D N i.castSucc))) =
-      initializedBasisMatrix (intervalInputEmbedding (D := D) i.val (i.val + 1)) := by
-    apply initializedBasisMatrix_reindex_of_mapping E F
+      basisInclusion (intervalInputEmbedding (D := D) i.val (i.val + 1)) := by
+    apply basisInclusion_reindex_of_mapping E F
       (leafInputEmbedding (d := d)
         (qρ := cutBondRegisterWidth d D N i.succ)
         (qσ := cutBondRegisterWidth d D N i.castSucc))
@@ -220,11 +225,11 @@ theorem leafColumns_reindex_interval {d D N : ℕ} [NeZero d] {ρ σ : Type*}
     intro b
     simpa only [E, F, Equiv.apply_symm_apply] using
       leafIntervalConfigEquiv_leafInput (D := D) i (F.symm b)
-  have hout : Matrix.reindex E G (initializedBasisMatrix (leafOutputEmbedding eρ eσ)) =
-      initializedBasisMatrix (show (CutIntervalConfig d N i.val (i.val + 1) × (ρ × σ)) ↪
+  have hout : Matrix.reindex E G (basisInclusion (leafOutputEmbedding eρ eσ)) =
+      basisInclusion (show (CutIntervalConfig d N i.val (i.val + 1) × (ρ × σ)) ↪
         Cfg d (intervalPacketCard d D N i.val (i.val + 1)) from
           intervalOutputEmbedding i.castSucc i.succ eρ eσ) := by
-    apply initializedBasisMatrix_reindex_of_mapping E G (leafOutputEmbedding eρ eσ)
+    apply basisInclusion_reindex_of_mapping E G (leafOutputEmbedding eρ eσ)
       (show (CutIntervalConfig d N i.val (i.val + 1) × (ρ × σ)) ↪
         Cfg d (intervalPacketCard d D N i.val (i.val + 1)) from
           intervalOutputEmbedding i.castSucc i.succ eρ eσ)
@@ -235,11 +240,11 @@ theorem leafColumns_reindex_interval {d D N : ℕ} [NeZero d] {ρ σ : Type*}
       leafIntervalConfigEquiv_leafOutput i eρ eσ (F.symm b, labels)
   have h := congrArg (Matrix.reindex E F) hcolumns
   have hm₁ := Matrix.reindexLinearEquiv_mul ℂ ℂ E E F Z
-    (initializedBasisMatrix (leafInputEmbedding (d := d)
+    (basisInclusion (leafInputEmbedding (d := d)
       (qρ := cutBondRegisterWidth d D N i.succ)
       (qσ := cutBondRegisterWidth d D N i.castSucc)))
   have hm₂ := Matrix.reindexLinearEquiv_mul ℂ ℂ E G F
-    (initializedBasisMatrix (leafOutputEmbedding eρ eσ)) V
+    (basisInclusion (leafOutputEmbedding eρ eσ)) V
   simp only [Matrix.coe_reindexLinearEquiv] at hm₁ hm₂
   rw [← hm₁, ← hm₂, hin, hout] at h
   exact h
@@ -278,17 +283,18 @@ theorem isMinimalIntervalColumnImplementation_leaf_of_columns {d D N : ℕ} [NeZ
     (Z : Matrix
       (Cfg d (1 + (cutBondRegisterWidth d D N i.succ + cutBondRegisterWidth d D N i.castSucc)))
       (Cfg d (1 + (cutBondRegisterWidth d D N i.succ + cutBondRegisterWidth d D N i.castSucc))) ℂ)
-    (hcolumns : Z * initializedBasisMatrix (leafInputEmbedding (d := d)
+    (hcolumns : Z * basisInclusion (leafInputEmbedding (d := d)
       (qρ := cutBondRegisterWidth d D N i.succ)
       (qσ := cutBondRegisterWidth d D N i.castSucc)) =
-      initializedBasisMatrix (leafOutputEmbedding
+      basisInclusion (leafOutputEmbedding
         (ρ := Fin (cutCoefficientRank (operatorCoefficientTensor U) (i.val + 1)))
         (σ := Fin (cutCoefficientRank (operatorCoefficientTensor U) i.val))
         (minimalCutBondRegisterEncoding hd U hU hbound i.succ)
         (minimalCutBondRegisterEncoding hd U hU hbound i.castSucc)) *
           minimalLeafInterval U B P i) :
     IsMinimalIntervalColumnImplementation hd U hU hbound B P i.castSucc i.succ
-      (Nat.le_succ i.val) (embedOp (leafConsecutiveSites d D N i) Z) := by
+      (Nat.le_succ i.val)
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (leafConsecutiveSites d D N i) Z) := by
   have hlocal := leafColumns_reindex_interval
     (ρ := Fin (cutCoefficientRank (operatorCoefficientTensor U) (i.val + 1)))
     (σ := Fin (cutCoefficientRank (operatorCoefficientTensor U) i.val)) i
@@ -298,7 +304,10 @@ theorem isMinimalIntervalColumnImplementation_leaf_of_columns {d D N : ℕ} [NeZ
   rw [minimalLeafInterval_reindex] at hlocal
   unfold IsMinimalIntervalColumnImplementation minimalIntervalInputEmbedding
     minimalIntervalOutputEmbedding
-  rw [leafConsecutiveSites_eq_comp_intervalPacketSites, embedOp_reindex_siteEquiv]
+  have hemb : leafConsecutiveSites d D N i = (leafIntervalSiteEquiv d D N i).toEmbedding.trans
+      (intervalPacketSites d D N i.val (i.val + 1)) :=
+    DFunLike.coe_injective (leafConsecutiveSites_eq_comp_intervalPacketSites i)
+  rw [hemb, placeAlong_reindex_siteEquiv]
   simp only [Fin.val_castSucc, Fin.val_succ]
   exact (placedColumns_iff_localColumns
     (intervalPacketSites d D N i.val (i.val + 1))
@@ -364,30 +373,31 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_columns_of_uni
                 cutBondRegisterWidth d D N i.castSucc)))
               (Cfg d (1 + (cutBondRegisterWidth d D N i.succ +
                 cutBondRegisterWidth d D N i.castSucc))) ℂ) ∧
-            Z * initializedBasisMatrix (leafInputEmbedding (d := d)
+            Z * basisInclusion (leafInputEmbedding (d := d)
                 (qρ := cutBondRegisterWidth d D N i.succ)
                 (qσ := cutBondRegisterWidth d D N i.castSucc)) =
-              initializedBasisMatrix (leafOutputEmbedding
+              basisInclusion (leafOutputEmbedding
                   (ρ := Fin (cutCoefficientRank (operatorCoefficientTensor U) (i.val + 1)))
                   (σ := Fin (cutCoefficientRank (operatorCoefficientTensor U) i.val))
                   (minimalCutBondRegisterEncoding hd U hU hbound i.succ)
                   (minimalCutBondRegisterEncoding hd U hU hbound i.castSucc)) *
                 minimalLeafInterval U B P i ∧
-            IsPairProduct d (globalSiteCount d D N)
+            IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (globalSiteCount d D N)))
               ((38 * (d ^ 4 * D ^ 2) ^ 6) * (2 * globalSiteCount d D N)) C ∧
             C ∈ unitary
               (Matrix (Cfg d (globalSiteCount d D N)) (Cfg d (globalSiteCount d D N)) ℂ) ∧
             IsCleanImplementation
-              (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d)
-                (n := logicalSiteCount d D N) (a := auxiliarySiteCount d D N)))
-              C (embedOp (leafConsecutiveSites d D N i) Z) ∧
-            embedOp (leafConsecutiveSites d D N i) Z ∈ unitary
+              (basisInclusion (workspaceEmbedding
+                (n := logicalSiteCount d D N) (0 : Fin (auxiliarySiteCount d D N) → Fin d)))
+              C (ManyBody.placeAlong (X := fun _ ↦ Fin d) (leafConsecutiveSites d D N i) Z) ∧
+            ManyBody.placeAlong (X := fun _ ↦ Fin d) (leafConsecutiveSites d D N i) Z ∈ unitary
               (Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ) ∧
-            embedOp (leafConsecutiveSites d D N i) Z ∈
+            ManyBody.placeAlong (X := fun _ ↦ Fin d) (leafConsecutiveSites d D N i) Z ∈
               ManyBody.supportedOperators (fun _ ↦ Fin d)
                   (intervalConsecutiveSupport d D N i.val (i.val + 1)) ∧
             IsMinimalIntervalColumnImplementation hd U hU hbound B P i.castSucc i.succ
-              (Nat.le_succ i.val) (embedOp (leafConsecutiveSites d D N i) Z) := by
+              (Nat.le_succ i.val)
+              (ManyBody.placeAlong (X := fun _ ↦ Fin d) (leafConsecutiveSites d D N i) Z) := by
   obtain ⟨B, hB0, hBN, P, hP, hIntervals, h0, hlast, hfull, hLeaves⟩ :=
     exists_normalized_minimalInterval_family_with_placed_leaf_circuits_of_unitary
       hd hN U hU hbound

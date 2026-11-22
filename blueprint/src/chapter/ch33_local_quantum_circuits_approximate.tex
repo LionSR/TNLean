@@ -13,8 +13,7 @@ in the source relation is asserted here
 \begin{definition}[Approximate local channel conversion]
     \label{def:qc_approx_local_channel_conversion}
     \uses{def:qc_local_channel_conversion}
-    \lean{QuantumCircuit.chainTraceNorm,
-        QuantumCircuit.IsApproxConversion}
+    \lean{QuantumCircuit.IsApproxConversion}
     \leanok
     A chain operator $\rho$ is approximately converted into $\sigma$ in
     depth $T$ with error $\varepsilon$ if there is a local channel protocol
@@ -26,10 +25,10 @@ in the source relation is asserted here
 \begin{lemma}[Trace norm of chain operators]
     \label{thm:qc_chain_trace_norm}
     \uses{def:qc_approx_local_channel_conversion}
-    \lean{QuantumCircuit.chainTraceNorm_nonneg,
+    \lean{Matrix.rectangularTraceNorm_nonneg,
         Matrix.rectangularTraceNorm_zero,
         Matrix.rectangularTraceNorm_eq_zero_iff,
-        QuantumCircuit.chainTraceNorm_add_le}
+        Matrix.rectangularTraceNorm_add_le}
     \leanok
     For chain operators $A,B$, the trace norm satisfies
     $\lVert A\rVert_1\ge0$, $\lVert0\rVert_1=0$,

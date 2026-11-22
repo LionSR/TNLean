@@ -22,37 +22,52 @@ in `docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
 
 open scoped Matrix MatrixOrder ComplexOrder
 
+open ManyBody
+
 namespace MPSTensor
 
 /-- Ordered affine interaction comparison preserves the smaller kernel
 when that kernel annihilates the larger interaction. Source context:
 arXiv:1010.3732, Section II.F.2, the parent-interaction comparison. -/
-theorem interactionHamiltonian_affine_ker_eq_of_order {d N : ℕ}
+theorem hamiltonian_translationInvariant_affine_ker_eq_of_order {d N : ℕ}
     (A B : MPOTensor.ChainOperator d 2) (hA : A.PosSemidef) (hAB : A ≤ B)
     (hN : 2 ≤ N)
-    (hker : LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian A hN)) ≤
-      LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian B hN)))
+    (hker : LinearMap.ker
+        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) ≤
+      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN B).hamiltonian))
     (t : ℝ) (ht : 0 ≤ t) :
     LinearMap.ker (Matrix.toEuclideanLin
-      (interactionHamiltonian (A + t • (B - A)) hN)) =
-    LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian A hN)) := by
-  have hHA := interactionHamiltonian_posSemidef hA hN
-  have hAB' := interactionHamiltonian_mono hAB hN
-  have hker' : ∀ x, (interactionHamiltonian A hN).mulVec x = 0 →
-      (interactionHamiltonian B hN).mulVec x = 0 := by
+      (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian) =
+    LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) := by
+  have hHA : (Interaction.translationInvariant hN A).hamiltonian.PosSemidef :=
+    Interaction.posSemidef_hamiltonian fun _ ↦ posSemidef_placeAlong (X := fun _ ↦ Fin d) _ hA
+  have hAB' : (Interaction.translationInvariant hN A).hamiltonian ≤
+      (Interaction.translationInvariant hN B).hamiltonian := by
+    simp only [Interaction.hamiltonian, Interaction.translates_term]
+    exact Finset.sum_le_sum fun _ _ ↦ placeAlong_le_placeAlong _ hAB
+  have hker' : ∀ x, (Interaction.translationInvariant hN A).hamiltonian.mulVec x = 0 →
+      (Interaction.translationInvariant hN B).hamiltonian.mulVec x = 0 := by
     intro x hx
     have hxES : WithLp.toLp 2 x ∈ LinearMap.ker
-        (Matrix.toEuclideanLin (interactionHamiltonian A hN)) := by
-      change WithLp.toLp 2 ((interactionHamiltonian A hN).mulVec x) = 0
+        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) := by
+      change WithLp.toLp 2 ((Interaction.translationInvariant hN A).hamiltonian.mulVec x) = 0
       simp [hx]
     simpa only [LinearMap.mem_ker, Matrix.toEuclideanLin, Matrix.toLpLin_apply,
       WithLp.ofLp_toLp, WithLp.toLp_eq_zero] using hker hxES
   have h := Matrix.gap_interpolation_of_le
-    (interactionHamiltonian A hN) (interactionHamiltonian B hN)
+    (Interaction.translationInvariant hN A).hamiltonian
+    (Interaction.translationInvariant hN B).hamiltonian
     hHA hAB' hker' 0 t ht
     (fun x _ => by simpa only [zero_mul, RCLike.re_eq_complex_re] using
       (RCLike.nonneg_iff.mp (hHA.dotProduct_mulVec_nonneg x.ofLp)).1)
-  rw [interactionHamiltonian_add_smul_sub]
+  have hsum : (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian =
+      (Interaction.translationInvariant hN A).hamiltonian +
+        t • ((Interaction.translationInvariant hN B).hamiltonian -
+          (Interaction.translationInvariant hN A).hamiltonian) := by
+    simp only [Interaction.hamiltonian, Interaction.translates_term,
+      RCLike.real_smul_eq_coe_smul (K := ℂ), placeAlong_add, placeAlong_smul, placeAlong_sub,
+      Finset.sum_add_distrib, Finset.sum_sub_distrib, Finset.smul_sum, smul_sub]
+  rw [hsum]
   exact h.2.1
 
 /-- A constant MPS representative realizes an ordered affine comparison
@@ -68,12 +83,13 @@ noncomputable def ExactMPSGroundPath.of_ordered_affine
     (hR : ∀ t, R.interaction t = A + t • (B - A))
     (hA : A.PosSemidef) (hAB : A ≤ B)
     (hker : ∀ (N : ℕ) (hN : 2 ≤ N),
-      LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian A hN)) ≤
-      LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian B hN)))
+      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) ≤
+        LinearMap.ker
+          (Matrix.toEuclideanLin (Interaction.translationInvariant hN B).hamiltonian))
     (hzero : ∀ (N : ℕ) (hN : 2 ≤ N),
-      (0 : ℂ) ∈ spectrum ℂ (interactionHamiltonian A hN))
+      (0 : ℂ) ∈ spectrum ℂ (Interaction.translationInvariant hN A).hamiltonian)
     (hline : ∀ (N : ℕ) (hN : 2 ≤ N),
-      LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian A hN)) =
+      LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) =
       Submodule.span ℂ {(WithLp.toLp 2 (mpv (N := N) (Q.tensor γ)))}) :
     ExactMPSGroundPath R where
   bondDimension := Q.bondDimension
@@ -85,21 +101,23 @@ noncomputable def ExactMPSGroundPath.of_ordered_affine
   ground_line := by
     intro t ht N hN
     rw [hR t]
-    have hkerEq := interactionHamiltonian_affine_ker_eq_of_order
+    have hkerEq := hamiltonian_translationInvariant_affine_ker_eq_of_order
       A B hA hAB hN (hker N hN) t ht.1
     have hz : (0 : ℂ) ∈ spectrum ℂ
-        (interactionHamiltonian (A + t • (B - A)) hN) := by
+        (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian := by
       have hzA := hzero N hN
       rw [← Matrix.spectrum_toLpLin (p := 2),
         ← Module.End.hasEigenvalue_iff_mem_spectrum,
         Module.End.hasEigenvalue_iff, Module.End.eigenspace_zero] at hzA ⊢
       change LinearMap.ker (Matrix.toEuclideanLin
-        (interactionHamiltonian (A + t • (B - A)) hN)) ≠ ⊥
+        (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian) ≠ ⊥
       rw [hkerEq]
       exact hzA
     refine ⟨0, hz, ?_, ?_⟩
-    · have hpos := interactionHamiltonian_posSemidef
-        (hA.add ((Matrix.le_iff.mp hAB).smul ht.1)) hN
+    · have hpos :
+          (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian.PosSemidef :=
+        Interaction.posSemidef_hamiltonian fun _ ↦
+          posSemidef_placeAlong (X := fun _ ↦ Fin d) _ (hA.add ((Matrix.le_iff.mp hAB).smul ht.1))
       intro z hz
       have hznonneg : (0 : ℂ) ≤ z :=
         (Matrix.posSemidef_iff_isHermitian_and_spectrum_nonneg.mp hpos).2 hz
@@ -126,9 +144,10 @@ noncomputable def commonPhysicalBondCanonicalParentComparisonExactMPSGroundPath
       LinearMap.toMatrix' (parentInteraction B 2))
     (hker : ∀ (N : ℕ) (hN : 2 ≤ N),
       LinearMap.ker (Matrix.toEuclideanLin
-        (interactionHamiltonian (normalizedBondInteraction D₀ D₁ γ) hN)) ≤
-        LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian
-          (LinearMap.toMatrix' (parentInteraction B 2)) hN)))
+        (Interaction.translationInvariant hN
+          (normalizedBondInteraction D₀ D₁ γ)).hamiltonian) ≤
+        LinearMap.ker (Matrix.toEuclideanLin (Interaction.translationInvariant hN
+          (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian))
     (hCov : ∀ g, GaugeEquiv B
       (rotatePhysical (sptFixedPointAction (ρ₀.directSum ρ₁) 1 g) B)) :
     ExactMPSGroundPath (commonPhysicalBondCanonicalParentComparisonPath
@@ -169,7 +188,7 @@ noncomputable def commonPhysicalLeftParentComparisonExactMPSGroundPath
       (Matrix.coordinateInclusion (Fin.castAddEmb D₁))
       (Matrix.coordinateInclusion_isometry (Fin.castAddEmb D₁))
       (weightedMatrixUnitInterpolation_zero_intertwine D₀ D₁))
-    (fun N hN => ker_interactionHamiltonian_normalizedBondInteraction_le_parent_of_mpv_eq
+    (fun N hN => ker_hamiltonian_translationInvariant_normalizedBondInteraction_le_parent_of_mpv_eq
       hD₀ hD₁ 0 hN _ (mpv_embeddedSptFixedPointLeft (by omega)))
     (fun g => ⟨sptGauge ρ₀ g, twistedTensor_embeddedSptFixedPointLeft ρ₀ ρ₁ g⟩)
 
@@ -195,7 +214,7 @@ noncomputable def commonPhysicalRightParentComparisonExactMPSGroundPath
       (Matrix.coordinateInclusion (Fin.natAddEmb D₀))
       (Matrix.coordinateInclusion_isometry (Fin.natAddEmb D₀))
       (weightedMatrixUnitInterpolation_one_intertwine D₀ D₁))
-    (fun N hN => ker_interactionHamiltonian_normalizedBondInteraction_le_parent_of_mpv_eq
+    (fun N hN => ker_hamiltonian_translationInvariant_normalizedBondInteraction_le_parent_of_mpv_eq
       hD₀ hD₁ 1 hN _ (mpv_embeddedSptFixedPointRight (by omega)))
     (fun g => ⟨sptGauge ρ₁ g, twistedTensor_embeddedSptFixedPointRight ρ₀ ρ₁ g⟩)
 

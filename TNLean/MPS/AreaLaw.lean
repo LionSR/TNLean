@@ -266,7 +266,6 @@ import TNLean.MPS.AreaLaw.ProtocolUniformPreparation
 import TNLean.MPS.AreaLaw.RangeOneCut
 import TNLean.MPS.AreaLaw.RangeOneSupport
 import TNLean.MPS.AreaLaw.RegionalBarrierResidual
-import TNLean.MPS.AreaLaw.RegionalBondRestriction
 import TNLean.MPS.AreaLaw.RegionalCentralEnergyEstimate
 import TNLean.MPS.AreaLaw.RegionalEnergyEstimate
 import TNLean.MPS.AreaLaw.RegionalEnergyMerge

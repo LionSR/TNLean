@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ToEuclideanLinApply
-import TNLean.Circuit.RingSeparation
+import QICLean.Circuit.Model.UnitaryRing
 import TNLean.MPS.Preparation.VarianceOfAverages
 import TNLean.MPS.Preparation.WindowOperatorSupport
 
@@ -25,9 +25,9 @@ that "every connected correlation for operators at a distance larger than `2T` v
 
 ## Main results
 
-* `MPSPreparation.isSeparatedBy_window`: two windows of the ring with gaps larger than `s`
+* `MPSPreparation.isGraphSeparated_window`: two windows of the ring with gaps larger than `s`
   on both sides are at ring distance larger than `s`.
-* `MPSPreparation.inner_toLp_toEuclideanLin`: the inner-product form of `expect`.
+* `MPSPreparation.inner_toLp_toEuclideanLin`: the inner-product form of `star ψ ⬝ᵥ (A *ᵥ ψ)`.
 * `MPSPreparation.norm_sub_inner_smul_sq_le_of_isPreparedInDepth`: the variance bound.
 -/
 
@@ -44,10 +44,12 @@ variable {d N : ℕ}
 def window (N a w : ℕ) : Finset (Fin N) := Finset.univ.filter fun k : Fin N ↦
     a ≤ k.val ∧ k.val < a + w
 
-theorem chainWindowOperator_mem_supportedOperators_window {L a : ℕ} (ha : a < N)
+/-- An operator placed on the window `a, …, a + L - 1` acts on the sites `window N a L`. -/
+theorem placeAlong_chainWindow_mem_supportedOperators_window {L a : ℕ}
     (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
-    chainWindowOperator N a X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (window N a L) :=
-  MPSTensor.chainWindowOperator_mem_supportedOperators ha haL X
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a haL) X ∈
+      ManyBody.supportedOperators (fun _ ↦ Fin d) (window N a L) :=
+  MPSTensor.placeAlong_chainWindow_mem_supportedOperators haL X
 
 section Ring
 
@@ -63,19 +65,20 @@ This is the separation of the translated observables in the chapter's proof of
 `thm:ldp_depth_lower_bound` ("the `2n` enlarged intervals are pairwise disjoint, also around
 the ring"; arXiv:2307.01696, Supplemental Material, proof of Theorem 1, "operators at a
 distance larger than `2T`"). -/
-theorem isSeparatedBy_window {a w b w' s : ℕ} (hab : a + w + s ≤ b)
+theorem isGraphSeparated_window {a w b w' s : ℕ} (hab : a + w + s ≤ b)
     (hba : b + w' + s ≤ a + N) :
-    IsSeparatedBy (window N a w) (window N b w') s := by
-  exact isSeparatedBy_of_val_bounds (fun _ h => (Finset.mem_filter.mp h).2)
-    (fun _ h => (Finset.mem_filter.mp h).2) hab hba
+    ManyBody.IsGraphSeparated (SimpleGraph.cycleGraph N) (window N a w) (window N b w') s := by
+  exact ManyBody.isGraphSeparated_cycleGraph_of_val_bounds
+    (fun _ h => (Finset.mem_filter.mp h).2) (fun _ h => (Finset.mem_filter.mp h).2) hab hba
 
 end Ring
 
-/-- The expectation `expect ψ A` is the inner product `⟪ψ, A ψ⟫` in `EuclideanSpace`. -/
+/-- The expectation `star ψ ⬝ᵥ (A *ᵥ ψ)` is the inner product `⟪ψ, A ψ⟫` in
+`EuclideanSpace`. -/
 theorem inner_toLp_toEuclideanLin (ψ : Cfg d N → ℂ) (A : Matrix (Cfg d N) (Cfg d N) ℂ) :
     ⟪(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N)),
-        Matrix.toEuclideanLin A (WithLp.toLp 2 ψ)⟫_ℂ = expect ψ A := by
-  simp only [Matrix.toLpLin_apply, PiLp.inner_apply, RCLike.inner_apply, expect, dotProduct,
+        Matrix.toEuclideanLin A (WithLp.toLp 2 ψ)⟫_ℂ = star ψ ⬝ᵥ (A *ᵥ ψ) := by
+  simp only [Matrix.toLpLin_apply, PiLp.inner_apply, RCLike.inner_apply, dotProduct,
     Pi.star_apply, RCLike.star_def]
   exact Finset.sum_congr rfl fun _ _ ↦ mul_comm _ _
 
@@ -84,7 +87,7 @@ theorem norm_toLp_eq_one {ψ : Cfg d N → ℂ} (hψ1 : star ψ ⬝ᵥ ψ = 1) :
     ‖(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N))‖ = 1 := by
   have h := inner_toLp_toEuclideanLin ψ 1
   simp only [Matrix.toEuclideanLin, Matrix.toLpLin_one, LinearMap.id_apply] at h
-  rw [expect_one, hψ1, inner_self_eq_norm_sq_to_K] at h
+  rw [Matrix.one_mulVec, hψ1, inner_self_eq_norm_sq_to_K] at h
   have h' : ‖(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N))‖ ^ 2 = 1 :=
     Complex.ofReal_injective (by push_cast; exact h)
   exact (pow_eq_one_iff_of_nonneg (norm_nonneg _) two_ne_zero).1 h'
@@ -139,14 +142,17 @@ This is "by factorization its variance there is at most `4/n`" in the chapter's 
 vanishing of connected correlations beyond the light cone (arXiv:2307.01696, Supplemental
 Material, proof of Theorem 1). -/
 theorem norm_sub_inner_smul_sq_le_of_isPreparedInDepth {T w Δ n : ℕ} (hw : 0 < w)
-    (hwΔ : w + 2 * T ≤ Δ) (hn : n * Δ ≤ N) {ψ : Cfg d N → ℂ} (hψ : IsPreparedInDepth T ψ)
+    (hwΔ : w + 2 * T ≤ Δ) (hn : n * Δ ≤ N) {ψ : Cfg d N → ℂ}
+    (hψ : IsPreparedInDepth (Geometry.ring N) T ψ)
     (hψ1 : star ψ ⬝ᵥ ψ = 1) {X : Matrix (Fin w → Fin d) (Fin w → Fin d) ℂ}
     (hX : X.IsHermitian) {M : ℝ} (hXM : ‖Matrix.toEuclideanCLM (n := Fin w → Fin d) (𝕜 := ℂ) X‖ ≤ M)
     (c : Fin n → ℝ) {γ : ℝ} (hc : ∀ k, |c k| ≤ γ) :
-    ‖(∑ k : Fin n, (c k : ℂ) • Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X))
+    ‖(∑ k : Fin n, (c k : ℂ) • Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+          (ManyBody.chainWindow (k.val * Δ) (window_lt_and_le hw (by omega) hn k.isLt).2) X))
           (WithLp.toLp 2 ψ) -
         ⟪(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N)),
-          (∑ k : Fin n, (c k : ℂ) • Matrix.toEuclideanLin (chainWindowOperator N (k.val * Δ) X))
+          (∑ k : Fin n, (c k : ℂ) • Matrix.toEuclideanLin (ManyBody.placeAlong (X := fun _ ↦ Fin d)
+            (ManyBody.chainWindow (k.val * Δ) (window_lt_and_le hw (by omega) hn k.isLt).2) X))
             (WithLp.toLp 2 ψ)⟫_ℂ • (WithLp.toLp 2 ψ : EuclideanSpace ℂ (Cfg d N))‖ ^ 2 ≤
       γ ^ 2 * (3 * n * (2 * M ^ 2)) := by
   classical
@@ -154,25 +160,27 @@ theorem norm_sub_inner_smul_sq_le_of_isPreparedInDepth {T w Δ n : ℕ} (hw : 0 
   have hχ : ‖χ‖ = 1 := norm_toLp_eq_one hψ1
   have hΔ : w ≤ Δ := by omega
   have hwin := fun k : Fin n ↦ window_lt_and_le (N := N) hw hΔ hn k.isLt
-  set Xk : Fin n → Matrix (Cfg d N) (Cfg d N) ℂ := fun k ↦ chainWindowOperator N (k.val * Δ) X
+  set Xk : Fin n → Matrix (Cfg d N) (Cfg d N) ℂ := fun k ↦
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow (k.val * Δ) (hwin k).2) X
   have hnorm : ∀ k, ‖Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) (Xk k)‖ ≤ M := fun k ↦
-    (norm_toEuclideanCLM_chainWindowOperator_le (hwin k).1 (hwin k).2 X).trans hXM
+    (norm_toEuclideanCLM_placeAlong_chainWindow_le (hwin k).2 X).trans hXM
   set f : ℕ → ℝ := fun j ↦ if j = 0 then 2 * M ^ 2 else 0
   have hM0 : 0 ≤ M := (norm_nonneg _).trans hXM
   have hf : ∀ j, 0 ≤ f j := fun j ↦ by simp only [f]; split_ifs <;> positivity
   have hmain := norm_sub_inner_smul_sq_le (fun k ↦ Matrix.toEuclideanLin (Xk k))
     (fun k ↦ Matrix.isSymmetric_toEuclideanLin_iff.mpr
-      (chainWindowOperator_isHermitian (hwin k).1 (hwin k).2 hX)) hχ c hc f hf
+      (ManyBody.isHermitian_placeAlong _ hX)) hχ c hc f hf
     (fun k ↦ by simpa [f] using norm_inner_sq_sub_le (Xk k) (hnorm k) hχ)
     (fun k l hkl ↦ by
-      have hsep : IsSeparatedBy (window N (k.val * Δ) w) (window N (l.val * Δ) w) (2 * T) := by
+      have hsep : ManyBody.IsGraphSeparated (SimpleGraph.cycleGraph N) (window N (k.val * Δ) w)
+          (window N (l.val * Δ) w) (2 * T) := by
         have h1 : (k.val + 1) * Δ ≤ l.val * Δ := Nat.mul_le_mul_right _ hkl
         have h2 : (l.val + 1) * Δ ≤ n * Δ := Nat.mul_le_mul_right _ l.isLt
         rw [Nat.succ_mul] at h1 h2
-        exact isSeparatedBy_window (by omega) (by omega)
-      have hfac := expect_mul_eq_of_isPreparedInDepth hψ hψ1 hsep
-        (chainWindowOperator_mem_supportedOperators_window (hwin k).1 (hwin k).2 X)
-        (chainWindowOperator_mem_supportedOperators_window (hwin l).1 (hwin l).2 X)
+        exact isGraphSeparated_window (by omega) (by omega)
+      have hfac := hψ.dotProduct_mul_eq_of_isGraphSeparated hψ1 hsep
+          (placeAlong_chainWindow_mem_supportedOperators_window (hwin k).2 X)
+          (placeAlong_chainWindow_mem_supportedOperators_window (hwin l).2 X)
       have hne : l.val - k.val ≠ 0 := by have := Fin.lt_def.mp hkl; omega
       simp only [f, hne, ite_false]
       rw [← Matrix.toEuclideanLin_mul_apply, inner_toLp_toEuclideanLin, inner_toLp_toEuclideanLin,

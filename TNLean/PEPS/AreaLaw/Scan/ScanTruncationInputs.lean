@@ -52,7 +52,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport ambientDilation edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -162,7 +162,9 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
         (∀ j ≤ X.L n, ManyBody.regionEntropy Ω (S.shell T j) ≤
           κ.Ce * (n * (X.L n : ℝ) ^ X.e + n)) →
         let B : Finset (Site Λ) → ℝ :=
-          fun Y ↦ cutBudget q S.graph (S.truncationSet (X.L n)) S.r₀ S.anchor Y
+          fun Y ↦ ManyBody.cutLogBudget
+            (fun i ↦ designatedSupport S.graph (S.truncationSet (X.L n)) S.r₀ (S.anchor i))
+            (fun _ ↦ q) Y
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
           (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e (κ.g / 2) ∧
             groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e = Submodule.span ℂ {Ωt}) ∧
@@ -193,7 +195,7 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
                 ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist band),
                   B Q ≤ Tr.Bmarg) := by
   classical
-  obtain ⟨Ctr, hCtr, hroot⟩ := exists_truncated_reducedState_moment_tail_bounds R hJ hΔ
+  obtain ⟨Ctr, hCtr, hroot⟩ := exists_truncated_regionState_moment_tail_bounds R hJ hΔ
     (show 0 ≤ CT + 1 by linarith)
   refine ⟨Ctr, hCtr, ?_⟩
   intro q _
@@ -236,8 +238,9 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
   have hBX : B Xs ≤ max 1 Clat * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 := by
     have hb := hlat Λ S.anchor hanchor (S.truncationSet (X.L S.n)) Xs hXsub
       (S.n : ℝ) 1 (by exact_mod_cast hn2) le_rfl
-      (by simpa only [mul_one] using (show ((edgeBoundary Λ Xs).card : ℝ) ≤ 4 * S.n by
-        exact_mod_cast hbdry))
+      (by simpa only [mul_one] using
+        (show ((edgeBoundary (planeDomainGraph Λ) Xs).card : ℝ) ≤ 4 * S.n by
+          exact_mod_cast hbdry))
     dsimp only [B]
     rw [hgraph, hSr]
     calc _ ≤ Clat * ((S.n : ℝ) * Real.log (S.n : ℝ) ^ 12) := by simpa only [mul_one] using hb
@@ -245,7 +248,7 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
           mul_le_mul_of_nonneg_right (le_max_right _ _) (by positivity)
       _ = _ := by ring
   have hBXpos : 0 < B Xs := lt_of_lt_of_le zero_lt_one
-    (one_le_cutBudget q S.graph (S.truncationSet (X.L S.n)) S.r₀ S.anchor Xs)
+    (Entropy.one_le_cutLogBudget _ _)
   have htypical : Entropy.surprisalTail (ManyBody.regionState_isHermitian Xs Ωt).eigenvalues
       (ManyBody.regionEntropy Ωt Xs) ((S.n : ℝ) ^ ((3 : ℝ) / 5)) ≤ (S.n : ℝ) ^ (-100 : ℝ) :=
     (htail Xs _).trans ((min_le_right _ _).trans (hscalar S.n hnN (B Xs) hBXpos hBX))
@@ -267,7 +270,7 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
     have hYc : (Y.card : ℝ) ≤ κ.C * S.n ^ 2 :=
       (by exact_mod_cast Finset.card_le_card hY : (Y.card : ℝ) ≤ _).trans
         (hcard.trans (mul_le_mul_of_nonneg_right hCT1 (by positivity)))
-    refine (abs_regionalEntropy_sub_le_sqrt_traceDistance Λ q Ωt Ω htrgs.1 hΩ Y).trans ?_
+    refine (abs_regionEntropy_sub_le_sqrt_traceDistance_card Λ q Ωt Ω htrgs.1 hΩ Y).trans ?_
     rw [hκq]
     gcongr
   refine ⟨e, Ωt, by rw [hκg]; exact htrgs, by rw [hκg]; exact hmom, ?_⟩

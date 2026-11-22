@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.FrustrationFree.Model
 import TNLean.PEPS.AreaLaw.FrustrationFree.PlanarSweep
-import TNLean.PEPS.AreaLaw.FrustrationFree.SweepContraction
+import QICLean.Analysis.SweepContraction
+import QICLean.ManyBody.Sites.Twirl
 
 /-!
 # The sweep of a frustration-free Hamiltonian
@@ -294,7 +295,7 @@ theorem exists_sweepOp_pow_lightCone
       supportedOperators (fun _ : Site Λ ↦ Fin q) U) (ξ : α → ℂ) :
     ∃ L : Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
       L ∈ supportedOperators (fun _ : Site Λ ↦ Fin q)
-          (graphNeighborhood Λ (R * (overlapDegreeBound R + 1) * t) U) ∧
+          (graphNeighborhood (planeDomainGraph Λ) U (R * (overlapDegreeBound R + 1) * t)) ∧
         L *ᵥ WithLp.ofLp Ω = WithLp.ofLp Ω ∧ Lᴴ *ᵥ WithLp.ofLp Ω = WithLp.ofLp Ω ∧
         ((hff.sweepOp c ^ t) ⊗ₖ (1 : Matrix α α ℂ)) *ᵥ
             (B *ᵥ (fun p : Configuration Λ q × α ↦ WithLp.ofLp Ω p.1 * ξ p.2)) =

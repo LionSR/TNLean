@@ -9,6 +9,7 @@ import TNLean.MPS.Preparation.SectorSpectralGap
 import TNLean.MPS.Preparation.BlockSumUnitary
 import TNLean.Spectral.MixedEigenvalueGap
 import TNLean.MPS.Preparation.RemainderBlocks
+import QICLean.Circuit.Compile.ImageReflection
 
 /-!
 # Coherent conversion of complete canonical sector encodings
@@ -51,7 +52,7 @@ theorem exists_log_depth_coherent_sectorEncoder_conversion
       (sectorEncoder A N).IsIsometry ∧ (sectorEncoder B N).IsIsometry ∧
       ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
         ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
-          IsLocalCircuitOfDepth U T ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
+          IsUnitaryCircuit (Geometry.ring N) T U ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
           ‖U * sectorEncoder A N - sectorEncoder B N‖ ≤ ε ∧
           ∀ (κ : Type) [Fintype κ] [DecidableEq κ] (ξ : EuclideanSpace ℂ (Fin b × κ)),
             ‖WithLp.toLp 2 (((U ⊗ₖ (1 : Matrix κ κ ℂ)) *
@@ -121,7 +122,7 @@ theorem exists_log_depth_coherent_sectorEncoder_conversion
   have happ : ∀ (N : ℕ) [NeZero N], L ≤ N → ∀ q : ℕ, L ≤ q → q ≤ N →
       (N : ℝ) * Real.exp (-(r * q)) ≤ 1 →
       ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
-        IsLocalCircuitOfDepth U T ∧ T ≤ (CA + CB) * q ∧
+        IsUnitaryCircuit (Geometry.ring N) T U ∧ T ≤ (CA + CB) * q ∧
         ‖U * sectorEncoder A N - sectorEncoder B N‖ ≤
           (KA + KB) * Real.sqrt ((N : ℝ) * Real.exp (-(r * q))) := by
     intro N _ _ q hLq hqN hsmall
@@ -136,19 +137,19 @@ theorem exists_log_depth_coherent_sectorEncoder_conversion
     exact (herr.trans (add_le_add heA heB)).trans_eq (by ring)
   have hexact : ∀ (N : ℕ) [NeZero N], L ≤ N →
       ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
-        IsLocalCircuitOfDepth U T ∧ T ≤ (CA + CB) * N ∧
+        IsUnitaryCircuit (Geometry.ring N) T U ∧ T ≤ (CA + CB) * N ∧
         U * sectorEncoder A N = sectorEncoder B N := by
     intro N _ hLN
     obtain ⟨UA, TA, hUA, hTA, heA⟩ := hAe N hLN
     obtain ⟨UB, TB, hUB, hTB, heB⟩ := hBe N hLN
-    refine ⟨UB * UAᴴ, TA + TB, hUA.star.mul hUB, by nlinarith, ?_⟩
+    refine ⟨UB * UAᴴ, TB + TA, hUB.mul hUA.conjTranspose, by nlinarith, ?_⟩
     let J : Matrix (Cfg d N) (Fin b) ℂ := registerEncoder
       (ℓ := fun _ : Fin 1 => N) (by simp) (fun _ => by omega) dig₀
     -- Normalize the `CStarMatrix` multiplication carried by the encoder hypotheses.
     have heA' : (UA * J : Matrix (Cfg d N) (Fin b) ℂ) = sectorEncoder A N := heA
     have heB' : (UB * J : Matrix (Cfg d N) (Fin b) ℂ) = sectorEncoder B N := heB
     have hunit : (UAᴴ * UA : Matrix (Cfg d N) (Cfg d N) ℂ) = 1 :=
-      Unitary.star_mul_self_of_mem hUA.mem_unitary
+      Unitary.star_mul_self_of_mem hUA.mem_unitaryGroup
     change (UB * UAᴴ : Matrix (Cfg d N) (Cfg d N) ℂ) * sectorEncoder A N =
       sectorEncoder B N
     rw [← heA', ← Matrix.mul_assoc, Matrix.mul_assoc UB UAᴴ UA, hunit, Matrix.mul_one]

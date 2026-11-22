@@ -13,8 +13,8 @@ state the two models separately following
         TNLean.Lattice.Configuration,
         TNLean.Lattice.StateSpace,
         ManyBody.planeDomainGraph,
-        TNLean.Lattice.graphNeighborhood,
-        TNLean.Lattice.configurationSplit,
+        ManyBody.graphNeighborhood,
+        ManyBody.cutEquiv,
         TNLean.Lattice.card_configuration
     }
     \leanok
@@ -47,12 +47,11 @@ state the two models separately following
         ManyBody.IsAdmissibleSupport,
         ManyBody.AdmissibleSupport,
         ManyBody.PlaneInteraction,
-        ManyBody.Interaction.hamiltonian,
         ManyBody.Interaction.isHermitian_hamiltonian,
         ManyBody.place_mem_supportedOperators,
-        TNLean.Lattice.edgeBoundary,
-        TNLean.Lattice.edgeBoundary_empty,
-        TNLean.Lattice.edgeBoundary_univ
+        ManyBody.edgeBoundary,
+        ManyBody.edgeBoundary_empty,
+        ManyBody.edgeBoundary_univ
     }
     \leanok
     \uses{def:area_law_domain, def:peps_regional_operator_extension}
@@ -165,11 +164,11 @@ state the two models separately following
     \label{thm:area_law_regional_state_identities}
     \lean{
         ManyBody.regionState_posSemidef,
-        TNLean.PEPS.AreaLaw.trace_reducedState_eq_norm_sq,
-        TNLean.PEPS.AreaLaw.trace_reducedState,
-        TNLean.PEPS.AreaLaw.regionalEntropy_nonneg,
-        TNLean.PEPS.AreaLaw.regionalEntropy_empty,
-        TNLean.PEPS.AreaLaw.regionalEntropy_univ
+        TNLean.PEPS.AreaLaw.trace_regionState_eq_norm_sq,
+        ManyBody.trace_regionState_eq_one,
+        TNLean.PEPS.AreaLaw.regionEntropy_nonneg,
+        ManyBody.regionEntropy_empty,
+        ManyBody.regionEntropy_univ
     }
     \leanok
     \uses{def:area_law_domain,def:area_law_ground_entropy}
@@ -214,7 +213,7 @@ state the two models separately following
 
 \begin{lemma}[Marginal trace norm from the full-system gap]
     \label{thm:peps_gap_marginal_trace_norm}
-    \lean{FiniteProduct.re_trace_abs_reducedPure_sub_le_sqrt_energy}
+    \lean{ManyBody.re_trace_abs_regionState_sub_le_sqrt_energy}
     \leanok
     \uses{def:area_law_ground_entropy}
     On $\mathcal H=\bigotimes_{v\in V}\mathcal H_v$, let $H$ be an operator,
@@ -251,7 +250,7 @@ state the two models separately following
 
 \begin{lemma}[A sufficient energy bound for marginal approximation]
     \label{thm:peps_gap_marginal_one_sixteenth}
-    \lean{FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy}
+    \lean{ManyBody.re_trace_abs_regionState_sub_le_one_sixteenth_of_energy}
     \leanok
     \uses{thm:peps_gap_marginal_trace_norm}
     Under the hypotheses of Lemma~\ref{thm:peps_gap_marginal_trace_norm}, if
@@ -867,8 +866,8 @@ state the two models separately following
         TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated,
         TNLean.PEPS.AreaLaw.Geometry.Template.core,
         TNLean.PEPS.AreaLaw.Geometry.Template.collar,
-        TNLean.Lattice.ambientDilation,
-        TNLean.Lattice.ambientDilation_zero
+        ManyBody.ambientDilation,
+        ManyBody.ambientDilation_zero
     }
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}
@@ -1262,7 +1261,7 @@ and template cut and cardinality bounds.
 
 \begin{definition}[Leaf quantities of the sharp comparisons]
     \label{def:area_law_collar_leaf_quantities}
-    \lean{FiniteProduct.collarPreQuantity,FiniteProduct.collarPostQuantity}
+    \lean{ManyBody.collarPreQuantity,ManyBody.collarPostQuantity}
     \leanok
     \uses{def:area_law_ground_entropy}
     For a vector $\psi$ on a finite site set $V$ and $X,U,Y,W\subseteq V$, set
@@ -1274,11 +1273,11 @@ and template cut and cardinality bounds.
 
 \begin{lemma}[Leaf entropy identity and its lower bound]
     \label{thm:area_law_collar_leaf_identity}
-    \lean{FiniteProduct.mutualInformation_comm,
-        FiniteProduct.mutualInformation_mono_right,
-        FiniteProduct.collarLeaf_entropy_identity,
-        FiniteProduct.two_mutualInformation_le_collarLeaf,
-        FiniteProduct.two_mutualInformation_le_collarLeaf_average}
+    \lean{ManyBody.regionMutualInformation_comm,
+        ManyBody.regionMutualInformation_mono_right,
+        ManyBody.collarLeaf_regionEntropy_identity,
+        ManyBody.two_regionMutualInformation_le_collarLeaf,
+        ManyBody.two_regionMutualInformation_le_collarLeaf_average}
     \leanok
     \uses{def:area_law_collar_leaf_quantities}
     For a partition $V=X\mathbin{\dot\cup}U\mathbin{\dot\cup}Y\mathbin{\dot\cup}W$
@@ -1305,8 +1304,8 @@ and template cut and cardinality bounds.
 
 \begin{lemma}[Transfer of mutual information to the original state]
     \label{thm:area_law_collar_transfer}
-    \lean{FiniteProduct.abs_mutualInformation_sub_le_of_traceDistance,
-        FiniteProduct.mutualInformation_le_add_of_traceDistance_le_rpow}
+    \lean{ManyBody.abs_regionMutualInformation_sub_le_of_traceDistance,
+        ManyBody.regionMutualInformation_le_add_of_traceDistance_le_rpow}
     \leanok
     \uses{def:area_law_ground_entropy}
     For unit vectors $\Omega,\widetilde\Omega$ with trace distance $\delta$ and

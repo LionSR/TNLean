@@ -33,6 +33,7 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 noncomputable section
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -47,7 +48,8 @@ theorem repairStage_positive_rank_prefix_le (o : ℝ × ℝ) (Λ : Finset (ℤ �
     let I : Type := {i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex //
       0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i}
     Finite I ∧ (Nat.card I : ℝ) ≤
-      initialBeltCountConstant * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card +
+      initialBeltCountConstant * (2 * (C : ℝ) + 1) ^ 2 *
+          (edgeBoundary (planeDomainGraph Λ) A).card +
         8 * ∑ j ∈ Finset.range N,
           (Nat.card (repairStage o Λ A C k₀ hC h₀ Sstar j).markIndex : ℝ) := by
   classical
@@ -136,7 +138,7 @@ theorem exists_uniform_repairStage_positive_rank_prefix_bound :
         let I : Type := {i : (repairStage o Λ A C k₀ hC h₀ Sstar N).regionIndex //
           0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i}
         Finite I ∧ (Nat.card I : ℝ) ≤
-          B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card +
+          B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card +
             8 * ∑ j ∈ Finset.range N,
               (Nat.card (repairStage o Λ A C k₀ hC h₀ Sstar j).markIndex : ℝ) :=
   ⟨_, initialBeltCountConstant_pos, repairStage_positive_rank_prefix_le⟩
@@ -170,7 +172,8 @@ theorem repairStage_retained_positive_rank_le {Sstar : ℝ} (hSstar : 1 < Sstar)
       {i : (repairStage o Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A //
         0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i.val}
     Finite I ∧ (Nat.card I : ℝ) ≤
-      repairRetainedCountConstant Sstar * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card := by
+      repairRetainedCountConstant Sstar * (2 * (C : ℝ) + 1) ^ 2 *
+        (edgeBoundary (planeDomainGraph Λ) A).card := by
   classical
   unfold repairRetainedCountConstant
   intro I
@@ -189,11 +192,11 @@ theorem repairStage_retained_positive_rank_le {Sstar : ℝ} (hSstar : 1 < Sstar)
   calc
     (Nat.card I : ℝ) ≤ (Nat.card R : ℝ) := by
       exact_mod_cast Nat.card_le_card_of_injective f hf
-    _ ≤ B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card +
+    _ ≤ B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card +
         8 * ∑ j ∈ Finset.range N,
           (Nat.card (repairStage o Λ A C k₀ hC h₀ Sstar j).markIndex : ℝ) := hcount
-    _ ≤ B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card +
-        8 * (M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card) :=
+    _ ≤ B * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card +
+        8 * (M * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card) :=
       _root_.add_le_add le_rfl (mul_le_mul_of_nonneg_left
         (hmark o Λ A C k₀ hC h₀ a₀ h N) (by norm_num))
     _ = _ := by ring
@@ -217,7 +220,7 @@ theorem exists_uniform_repairStage_retained_positive_rank_bound {Sstar : ℝ}
             {i : (repairStage o Λ A C k₀ hC h₀ Sstar N).RetainedRegionIndex Λ A //
               0 < repairStageBirthRank o Λ A C k₀ hC h₀ Sstar N i.val}
           Finite I ∧ (Nat.card I : ℝ) ≤
-            L * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary Λ A).card :=
+            L * (2 * (C : ℝ) + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card :=
   ⟨_, repairRetainedCountConstant_pos Sstar, repairStage_retained_positive_rank_le hSstar⟩
 
 end TNLean.PEPS.AreaLaw.Geometry

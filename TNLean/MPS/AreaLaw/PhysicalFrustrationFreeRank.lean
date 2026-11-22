@@ -32,33 +32,31 @@ local notation "T" => Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
 local notation "C" => fun k ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k)
 
 private noncomputable def outsidePiece
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (a b : ℕ)
+    (Φ : ManyBody.BondInteraction L q) (a b : ℕ)
     (P : Fin (L - 1) → Prop) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := by
   classical
-  exact ∑ i, if ¬ (a ≤ i.val ∧ i.val + 1 < b) ∧ P i then h i else 0
+  exact ∑ i, if ¬ (a ≤ i.val ∧ i.val + 1 < b) ∧ P i then Φ.term i else 0
 
 private theorem isSupportedOn_outsidePiece
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2))) (a b : ℕ)
+    (Φ : ManyBody.BondInteraction L q) (a b : ℕ)
     (P : Fin (L - 1) → Prop) (S : Finset (Fin L))
     (hside : ∀ i, P i → interval L i.val (i.val + 2) ⊆ S) :
-    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (outsidePiece h a b P) S := by
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (outsidePiece Φ a b P) S := by
   change _ ∈ ManyBody.supportedOperators _ _
   classical
   unfold outsidePiece
   apply sum_mem
   intro i _
   split_ifs with hi
-  · exact ((hs i).mono (hside i hi.2))
+  · exact ((Φ.mem i).mono (hside i hi.2))
   · exact zero_mem _
 
 private theorem outside_sum_split
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (a b k : ℕ) :
-    (∑ i, if a ≤ i.val ∧ i.val + 1 < b then 0 else h i) =
-      outsidePiece h a b (fun i ↦ i.val + 1 < k) +
-      outsidePiece h a b (fun i ↦ k ≤ i.val) +
-      outsidePiece h a b (fun i ↦ i.val + 1 = k) := by
+    (Φ : ManyBody.BondInteraction L q) (a b k : ℕ) :
+    (∑ i, if a ≤ i.val ∧ i.val + 1 < b then 0 else Φ.term i) =
+      outsidePiece Φ a b (fun i ↦ i.val + 1 < k) +
+      outsidePiece Φ a b (fun i ↦ k ≤ i.val) +
+      outsidePiece Φ a b (fun i ↦ i.val + 1 = k) := by
   classical
   unfold outsidePiece
   rw [← Finset.sum_add_distrib, ← Finset.sum_add_distrib]
@@ -67,9 +65,9 @@ private theorem outside_sum_split
   split_ifs <;> simp_all <;> omega
 
 private theorem outside_crossing_eq_zero
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (a b k : ℕ)
+    (Φ : ManyBody.BondInteraction L q) (a b k : ℕ)
     (hno : ¬ ∃ i : Fin (L - 1), ¬ (a ≤ i.val ∧ i.val + 1 < b) ∧ i.val + 1 = k) :
-    outsidePiece h a b (fun i ↦ i.val + 1 = k) = 0 := by
+    outsidePiece Φ a b (fun i ↦ i.val + 1 = k) = 0 := by
   classical
   unfold outsidePiece
   apply Finset.sum_eq_zero
@@ -77,9 +75,9 @@ private theorem outside_crossing_eq_zero
   exact ite_eq_right (fun hi ↦ hno ⟨i, hi⟩)
 
 private theorem outside_crossing_eq_term
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (a b k : ℕ)
+    (Φ : ManyBody.BondInteraction L q) (a b k : ℕ)
     (i : Fin (L - 1)) (hout : ¬ (a ≤ i.val ∧ i.val + 1 < b)) (hcross : i.val + 1 = k) :
-    outsidePiece h a b (fun j ↦ j.val + 1 = k) = h i := by
+    outsidePiece Φ a b (fun j ↦ j.val + 1 = k) = Φ.term i := by
   classical
   unfold outsidePiece
   rw [Finset.sum_eq_single i]
@@ -92,23 +90,19 @@ private theorem outside_crossing_eq_term
     exact False.elim (hi (Finset.mem_univ i))
 
 private theorem outside_left_supported
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2))) (a b k : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (a b k : ℕ) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (outsidePiece h a b (fun i ↦ i.val + 1 < k)) (leftBlock L k) := by
-  apply isSupportedOn_outsidePiece h hs a b _ _
+      (outsidePiece Φ a b (fun i ↦ i.val + 1 < k)) (leftBlock L k) := by
+  apply isSupportedOn_outsidePiece Φ a b _ _
   intro i hi v hv
   simp only [mem_interval, mem_leftBlock] at *
   omega
 
 private theorem outside_right_supported
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2))) (a b k : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (a b k : ℕ) :
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (outsidePiece h a b (fun i ↦ k ≤ i.val)) (leftBlock L k)ᶜ := by
-  apply isSupportedOn_outsidePiece h hs a b _ _
+      (outsidePiece Φ a b (fun i ↦ k ≤ i.val)) (leftBlock L k)ᶜ := by
+  apply isSupportedOn_outsidePiece Φ a b _ _
   intro i hi v hv
   simp only [Finset.mem_compl, mem_interval, mem_leftBlock] at *
   omega
@@ -117,44 +111,43 @@ private theorem outside_right_supported
 `q²+3` at every site cut in positive local dimension. This corrects the
 false additive constant in ALVV `thm:FF-tH`; see the module note. -/
 private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2))) (a b k : ℕ) :
-    operatorSchmidtRank (C k (physicalFrustrationFreeTruncation h a b)) ≤ q ^ 2 + 3 := by
+    (Φ : ManyBody.BondInteraction L q) (a b k : ℕ) :
+    operatorSchmidtRank (C k (physicalFrustrationFreeTruncation Φ a b)) ≤ q ^ 2 + 3 := by
   classical
   let cut := reindexAlgEquiv ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k))
-  let HL := outsidePiece h a b (fun i ↦ i.val + 1 < k)
-  let HR := outsidePiece h a b (fun i ↦ k ≤ i.val)
-  let HC := outsidePiece h a b (fun i ↦ i.val + 1 = k)
-  let Q := fun p ↦ (T).symm (physicalParityProduct (intervalBondRestriction a b h) p)
+  let HL := outsidePiece Φ a b (fun i ↦ i.val + 1 < k)
+  let HR := outsidePiece Φ a b (fun i ↦ k ≤ i.val)
+  let HC := outsidePiece Φ a b (fun i ↦ i.val + 1 = k)
+  let Q := fun p ↦ (T).symm (physicalParityProduct
+    (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) p)
   let U := ManyBody.supportedOperators (fun _ ↦ Fin q) (leftBlock L k : Finset (Fin L))
   let V := ManyBody.supportedOperators (fun _ ↦ Fin q) ((leftBlock L k)ᶜ : Finset (Fin L))
   have hHL : HL ∈ U :=
-    (outside_left_supported h hs a b k)
+    (outside_left_supported Φ a b k)
   have hHR : HR ∈ V :=
-    (outside_right_supported h hs a b k)
+    (outside_right_supported Φ a b k)
   have hU1 : (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ∈ U :=
     (one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) (leftBlock L k)))
   have hV1 : (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ∈ V :=
     (one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) (leftBlock L k)ᶜ))
   have hdisjoint : Disjoint (leftBlock L k)ᶜ (leftBlock L k) :=
     Finset.disjoint_left.mpr (fun _ hv hw ↦ (Finset.mem_compl.mp hv) hw)
-  have heq : physicalFrustrationFreeTruncation h a b =
+  have heq : physicalFrustrationFreeTruncation Φ a b =
       HL + HR + HC + 1 + 1 - Q 0 - Q 1 := by
-    simp only [physicalFrustrationFreeTruncation, outside_sum_split h a b k, map_sub, map_one]
+    simp only [physicalFrustrationFreeTruncation, outside_sum_split Φ a b k, map_sub, map_one]
     change HL + HR + HC + (1 - Q 0) + (1 - Q 1) = _
     abel
-  change operatorSchmidtRank (cut (physicalFrustrationFreeTruncation h a b)) ≤ q ^ 2 + 3
+  change operatorSchmidtRank (cut (physicalFrustrationFreeTruncation Φ a b)) ≤ q ^ 2 + 3
   by_cases hcross : ∃ i : Fin (L - 1), ¬ (a ≤ i.val ∧ i.val + 1 < b) ∧ i.val + 1 = k
   · obtain ⟨i, hout, hik⟩ := hcross
     have hside : b ≤ k ∨ k ≤ a := by omega
     have hQleft (hb : b ≤ k) (p : ℕ) : Q p ∈ U := by
-      apply (isSupportedOn_regionalParityProduct h hs a b p).mono
+      apply (isSupportedOn_regionalParityProduct Φ a b p).mono
       intro v hv
       simp only [mem_interval, mem_leftBlock] at *
       omega
     have hQright (ha : k ≤ a) (p : ℕ) : Q p ∈ V := by
-      apply (isSupportedOn_regionalParityProduct h hs a b p).mono
+      apply (isSupportedOn_regionalParityProduct Φ a b p).mono
       intro v hv
       simp only [Finset.mem_compl, mem_interval, mem_leftBlock] at *
       omega
@@ -181,19 +174,19 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
       ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
         hY
         (Or.inr hdisjoint)
-    have hterm : operatorSchmidtRank (cut (h i)) ≤ q ^ 2 :=
-      (hs i).operatorSchmidtRank_cutOperator_le_pow_card (A := leftBlock L k) hq |>.trans
+    have hterm : operatorSchmidtRank (cut (Φ.term i)) ≤ q ^ 2 :=
+      (Φ.mem i).operatorSchmidtRank_cutOperator_le_pow_card (A := leftBlock L k) hq |>.trans
         (Nat.pow_le_pow_right hq ((card_interval_le _ _).trans (by omega)))
-    have hdecomp : physicalFrustrationFreeTruncation h a b = X + Y + h i := by
-      rw [heq, show HC = h i from outside_crossing_eq_term h a b k i hout hik]
+    have hdecomp : physicalFrustrationFreeTruncation Φ a b = X + Y + Φ.term i := by
+      rw [heq, show HC = Φ.term i from outside_crossing_eq_term Φ a b k i hout hik]
       dsimp only [X, Y]
       split_ifs <;> abel
     rw [hdecomp, map_add, map_add]
-    have h := (operatorSchmidtRank_add_le (cut X + cut Y) (cut (h i))).trans
+    have h := (operatorSchmidtRank_add_le (cut X + cut Y) (cut (Φ.term i))).trans
       (Nat.add_le_add_right (operatorSchmidtRank_add_le (cut X) (cut Y)) _)
     omega
   · have hQ := sum_operatorSchmidtRank_physicalParityProduct_le hq
-      (intervalBondRestriction a b h) (intervalBondRestriction_supported a b h hs) k
+      (Φ.restrict fun i ↦ a ≤ i.val ∧ i.val + 1 < b) k
     change operatorSchmidtRank (cut (Q 0)) + operatorSchmidtRank (cut (Q 1)) ≤ q ^ 2 + 1 at hQ
     let X := HL + 1 + 1
     have hX : X ∈ U := add_mem (add_mem hHL hU1) hU1
@@ -205,9 +198,9 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
       ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
         hHR
         (Or.inr hdisjoint)
-    have hdecomp : cut (physicalFrustrationFreeTruncation h a b) =
+    have hdecomp : cut (physicalFrustrationFreeTruncation Φ a b) =
         cut X + cut HR + (-1 : ℂ) • cut (Q 0) + (-1 : ℂ) • cut (Q 1) := by
-      rw [heq, show HC = 0 from outside_crossing_eq_zero h a b k hcross]
+      rw [heq, show HC = 0 from outside_crossing_eq_zero Φ a b k hcross]
       simp only [map_add, map_sub, map_zero, map_one, neg_one_smul]
       dsimp only [X]
       rw [map_add, map_add, map_one]
@@ -228,16 +221,14 @@ terms and parity products; no decomposition or rank premise is supplied.
 This is the corrected rank assertion of ALVV `thm:FF-tH`, as recorded
 in `docs/paper-gaps/alvv16_frustration_free_truncation_rank.tex`. -/
 theorem operatorSchmidtRank_physicalFrustrationFreeTruncation_le
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2))) (a b k : ℕ) :
-    operatorSchmidtRank (C k (physicalFrustrationFreeTruncation h a b)) ≤ q ^ 2 + 3 := by
+    (Φ : ManyBody.BondInteraction L q) (a b k : ℕ) :
+    operatorSchmidtRank (C k (physicalFrustrationFreeTruncation Φ a b)) ≤ q ^ 2 + 3 := by
   classical
   by_cases hq : 1 ≤ q
-  · exact physicalFrustrationFreeTruncation_rank_le_of_pos hq h hs a b k
+  · exact physicalFrustrationFreeTruncation_rank_le_of_pos hq Φ a b k
   have hq0 : q = 0 := by omega
   subst q
-  have hzero : physicalFrustrationFreeTruncation h a b = 0 := by
+  have hzero : physicalFrustrationFreeTruncation Φ a b = 0 := by
     by_cases hL : L = 0
     · subst L
       simp [physicalFrustrationFreeTruncation, physicalParityProduct,

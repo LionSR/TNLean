@@ -70,8 +70,8 @@ def IsMinimalIntervalColumnImplementation {d D N : ℕ} [NeZero d]
       (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ)
     (j k : Fin (N + 1)) (hjk : j.val ≤ k.val)
     (X : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ) : Prop :=
-  X * initializedBasisMatrix (minimalIntervalInputEmbedding (D := D) j.val k.val) =
-    initializedBasisMatrix (minimalIntervalOutputEmbedding hd U hU hbound j k) *
+  X * basisInclusion (minimalIntervalInputEmbedding (D := D) j.val k.val) =
+    basisInclusion (minimalIntervalOutputEmbedding hd U hU hbound j k) *
       (vectorizedWeightedInterval (minimalOperatorInterval U B hjk)
         (CFC.sqrt (P j)) (CFC.sqrt (dualGramMetric (P k))) ⊗ₖ
           (1 : Matrix (OutsidePlacedConfig d (intervalPacketSites d D N j.val k.val))
@@ -98,13 +98,13 @@ theorem minimalIntervalChildColumns_of_supported_individual {d D N : ℕ} [NeZer
         (intervalConsecutiveSupport d D N m.val k.val))
     (hX : IsMinimalIntervalColumnImplementation hd U hU hbound B P j m (Nat.le_of_lt hjm) X)
     (hY : IsMinimalIntervalColumnImplementation hd U hU hbound B P m k (Nat.le_of_lt hmk) Y) :
-    (X * Y) * initializedBasisMatrix
+    (X * Y) * basisInclusion
       (jointPlacedBasisEmbedding (intervalPacketSites d D N j.val m.val)
         (intervalPacketSites d D N m.val k.val)
           (intervalPacketSites_disjoint (d := d) (D := D) (N := N) hjm hmk)
         (intervalInputEmbedding j.val m.val) (intervalInputEmbedding m.val k.val)
         (Function.Embedding.refl _)) =
-      initializedBasisMatrix
+      basisInclusion
         (jointPlacedBasisEmbedding (intervalPacketSites d D N j.val m.val)
           (intervalPacketSites d D N m.val k.val)
           (intervalPacketSites_disjoint (d := d) (D := D) (N := N) hjm hmk)

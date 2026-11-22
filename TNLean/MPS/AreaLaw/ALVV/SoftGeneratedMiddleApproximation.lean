@@ -7,8 +7,8 @@ import TNLean.MPS.AreaLaw.SoftTruncatedHamiltonianMPO
 import TNLean.MPS.AreaLaw.NativeIntervalMPOApproximation
 import TNLean.MPS.AreaLaw.RetainedCoreFamilies
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
-import TNLean.MPS.AreaLaw.RegionalBondRestriction
-import TNLean.Circuit.SiteEmbeddingNorm
+import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
+import QICLean.ManyBody.Sites.PlaceAlong
 import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.MPDO.TraceChainHermitian
 import QICLean.Analysis.PrincipalSubmatrixNorm
@@ -32,7 +32,7 @@ rather than the false printed physical-support estimate; see
 `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
-open ManyBody (interval mem_interval)
+open ManyBody (interval)
 
 open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder
@@ -49,16 +49,14 @@ The lower energy is a scalar parameter satisfying the defining order condition;
 no native Hamiltonian, heat approximation, operator tensor or rank bound is supplied. -/
 theorem exists_native_soft_middle_mpo_approximation {N q l r m : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ N + 1) (hm : 0 < m)
-    (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval (N + 1) i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction (N + 1) q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (p t xi : ℝ)
-    (hlo : (p : ℂ) • 1 ≤ ∑ i ∈ Finset.univ.filter
-      (fun i : Fin N ↦ l ≤ i.val ∧ i.val + 1 < r), h i)
+    (hlo : (p : ℂ) • 1 ≤ Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin N ↦ l ≤ i.val ∧ i.val + 1 < r)))
     (hscale : 3 * (m : ℝ) ≤ t) (hxi : 0 < xi) :
-    let A := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin N ↦ l ≤ i.val ∧ i.val + 1 < r), h i
+    let A := Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin N ↦ l ≤ i.val ∧ i.val + 1 < r))
     let P := (p : ℂ) • 1 + cfc (Real.softTruncation t m) (A - (p : ℂ) • 1)
     let sigma0 : Fin (N + 1) → Fin q := fun _ ↦ ⟨0, hq⟩
     let insert := insertInterval (L := r - l) l sigma0
@@ -71,42 +69,36 @@ theorem exists_native_soft_middle_mpo_approximation {N q l r m : ℕ}
     ∃ (Acore : Fin (r - l) → MPOTensor q bond)
       (C0 : Matrix (Fin bond) (Fin bond) ℂ),
       let Z := MPOTensor.traceChainOperator Acore C0
-      let Zphys := QuantumCircuit.embedOp
-        (Subtype.val : interval (N + 1) l r → Fin (N + 1))
-        (QuantumCircuit.embedOp eJ Z)
+      let Zphys := ManyBody.place (X := fun _ ↦ Fin q) (interval (N + 1) l r)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin q) eJ.toEquiv.toEmbedding Z)
       Z.IsHermitian ∧ Zphys.IsHermitian ∧
-        P = QuantumCircuit.embedOp
-          (Subtype.val : interval (N + 1) l r → Fin (N + 1))
-          (QuantumCircuit.embedOp eJ (P.submatrix insert insert)) ∧
+        P = ManyBody.place (X := fun _ ↦ Fin q) (interval (N + 1) l r)
+          (ManyBody.placeAlong (X := fun _ ↦ Fin q) eJ.toEquiv.toEmbedding
+            (P.submatrix insert insert)) ∧
         ‖P.submatrix insert insert - Z‖ ≤ xi ∧ ‖P - Zphys‖ ≤ xi := by
   classical
   intro A P sigma0 insert eJ W b order bond
-  let g := intervalBondRestriction (L := N + 1) l r h
+  let Ψ := Φ.restrict fun i : Fin N ↦ l ≤ i.val ∧ i.val + 1 < r
   have hgs (i : Fin N) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (g i) {i.castSucc, i.succ} := by
-    apply (intervalBondRestriction_supported (L := N + 1) (q := q) l r h hs i).mono
-    intro j hj
-    have hj' := mem_interval.mp hj
-    simp only [Finset.mem_insert, Finset.mem_singleton, Fin.ext_iff]
-    change j.val = i.val ∨ j.val = i.val + 1
-    omega
-  have hsumg : (∑ i, g i) = A :=
-    sum_intervalBondRestriction (L := N + 1) (q := q) l r h
+      (Ψ.term i) {i.castSucc, i.succ} :=
+    ManyBody.BondInteraction.term_mem_supportedOperators_chainBond Ψ i
+  have hsumg : (∑ i, Ψ.term i) = A := ManyBody.Interaction.hamiltonian_restrict Φ _
   obtain ⟨Aglobal, hGlobal⟩ :=
-    let hb : ∀ i : Fin N, 0 ≤ g i ∧ g i ≤ 1 := fun i ↦
-      intervalBondRestriction_bounds (L := N + 1) (q := q) l r h h0 h1 i
+    let hb : ∀ i : Fin N, 0 ≤ Ψ.term i ∧ Ψ.term i ≤ 1 := fun i ↦
+      ⟨ManyBody.Interaction.restrict_term_nonneg (h0 i),
+        ManyBody.Interaction.restrict_term_le_one (h1 i)⟩
     exists_softTruncatedHamiltonian_mpo_of_accuracy (N := N) (q := q) (m := m)
-      (by omega) hm g hgs
+      (by omega) hm Ψ.term hgs
       (fun i ↦ (hb i).1.posSemidef.isHermitian)
-      (fun i ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg (g i) (hb i).1).mpr (hb i).2)
+      (fun i ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg (Ψ.term i) (hb i).1).mpr (hb i).2)
       Finset.univ p t xi
       (hlo.trans_eq hsumg.symm) hscale hxi
   have hP : P.IsHermitian :=
     (isHermitian_one.smul (by simp [isSelfAdjoint_iff])).add
       (cfc_predicate (Real.softTruncation t m) (A - (p : ℂ) • 1))
   have hGlobalError : ‖P - MPOTensor.traceChainOperator Aglobal 1‖ ≤ xi := by
-    change ‖((∑ i, g i) - (∑ i, g i) + (p : ℂ) • 1 +
-      cfc (Real.softTruncation t m) ((∑ i, g i) - (p : ℂ) • 1)) -
+    change ‖((∑ i, Ψ.term i) - (∑ i, Ψ.term i) + (p : ℂ) • 1 +
+      cfc (Real.softTruncation t m) ((∑ i, Ψ.term i) - (p : ℂ) • 1)) -
       MPOTensor.traceChainOperator Aglobal 1‖ ≤ xi at hGlobal
     rw [sub_self, zero_add, hsumg] at hGlobal
     exact hGlobal
@@ -117,7 +109,7 @@ theorem exists_native_soft_middle_mpo_approximation {N q l r m : ℕ}
     change _ ∈ ManyBody.supportedOperators _ _
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval (N + 1) l r : Finset (Fin (N + 1)))
-    have hAs : A ∈ V := isSupportedOn_sum_internal_bonds (N + 1) q l r h hs
+    have hAs : A ∈ V := isSupportedOn_sum_internal_bonds (N + 1) q l r Φ
     have hp : (p : ℂ) • (1 : Matrix (Fin (N + 1) → Fin q)
         (Fin (N + 1) → Fin q) ℂ) ∈ V :=
       SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _))
@@ -125,12 +117,12 @@ theorem exists_native_soft_middle_mpo_approximation {N q l r m : ℕ}
   obtain ⟨Acore, C0, hZ, hZphys, hRecon, hNativeError, hPlacedError⟩ :=
     exists_native_interval_slice_of_mpo_approximation hq hlr hrL P hPs Ah hAh xi hAhError
   refine ⟨Acore, C0, hZ, ?_, ?_, hNativeError, ?_⟩
-  · simpa only [QuantumCircuit.embedOp_embedOp Subtype.val_injective,
-      eJ, insert, sigma0, Function.comp_def] using hZphys
-  · simpa only [QuantumCircuit.embedOp_embedOp Subtype.val_injective,
-      eJ, insert, sigma0, Function.comp_def] using hRecon
-  · simpa only [QuantumCircuit.embedOp_embedOp Subtype.val_injective,
-      eJ, insert, sigma0, Function.comp_def] using hPlacedError
+  · simpa only [← ManyBody.placeAlong_subtype, ManyBody.placeAlong_placeAlong,
+      eJ, insert, sigma0] using hZphys
+  · simpa only [← ManyBody.placeAlong_subtype, ManyBody.placeAlong_placeAlong,
+      eJ, insert, sigma0] using hRecon
+  · simpa only [← ManyBody.placeAlong_subtype, ManyBody.placeAlong_placeAlong,
+      eJ, insert, sigma0] using hPlacedError
 
 /-- Replacing only the middle term by its constructed native approximation
 preserves the exact exterior soft terms, all unchanged regions and the actual
@@ -145,20 +137,18 @@ the shifts and this condition are those already constructed by
 theorem exists_five_region_soft_middle_mpo_approximation {N q k1 k2 k3 k4 m : ℕ}
     (hq : 0 < q) (_h12 : k1 ≤ k2) (h23 : k2 ≤ k3)
     (h34 : k3 ≤ k4) (h4L : k4 ≤ N + 1) (hm : 0 < m)
-    (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval (N + 1) i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction (N + 1) q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (e p : Fin 5 → ℝ) (S : Finset (Fin 5)) (h2S : 2 ∈ S)
     (t xi : ℝ)
-    (hlo : (p 2 : ℂ) • 1 ≤ ∑ i ∈ Finset.univ.filter
-      (fun i : Fin N ↦ k2 ≤ i.val ∧ i.val + 1 < k3), h i)
+    (hlo : (p 2 : ℂ) • 1 ≤ Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin N ↦ k2 ≤ i.val ∧ i.val + 1 < k3)))
     (hscale : 3 * (m : ℝ) ≤ t) (hxi : 0 < xi) :
     let k : Fin 6 → ℕ := ![0, k1, k2, k3, k4, N + 1]
-    let A := fun j : Fin 5 ↦ ∑ i ∈ Finset.univ.filter
-      (fun i : Fin N ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
-    let Y := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin N ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ)), h i
+    let A := fun j : Fin 5 ↦ Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin N ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ))
+    let Y := Φ.partialHamiltonian (Finset.univ.filter
+      (fun i : Fin N ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ)))
     let F := fun j : Fin 5 ↦ (p j : ℂ) • 1 +
       cfc (Real.softTruncation t m) (A j - (p j : ℂ) • 1)
     let G := (∑ j, ((if j ∈ S then F j else A j) - (e j : ℂ) • 1)) + Y
@@ -171,9 +161,8 @@ theorem exists_five_region_soft_middle_mpo_approximation {N q k1 k2 k3 k4 m : �
     ∃ (Acore : Fin (k3 - k2) → MPOTensor q bond)
       (C0 : Matrix (Fin bond) (Fin bond) ℂ),
       let Z := MPOTensor.traceChainOperator Acore C0
-      let Zphys := QuantumCircuit.embedOp
-        (Subtype.val : interval (N + 1) k2 k3 → Fin (N + 1))
-        (QuantumCircuit.embedOp eJ Z)
+      let Zphys := ManyBody.place (X := fun _ ↦ Fin q) (interval (N + 1) k2 k3)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin q) eJ.toEquiv.toEmbedding Z)
       let Ghat := (∑ j, ((if j = 2 then Zphys else
         if j ∈ S then F j else A j) - (e j : ℂ) • 1)) + Y
       Z.IsHermitian ∧ G.IsHermitian ∧ Ghat.IsHermitian ∧
@@ -182,11 +171,10 @@ theorem exists_five_region_soft_middle_mpo_approximation {N q k1 k2 k3 k4 m : �
   intro k A Y F G eJ W b order bond
   obtain ⟨Acore, C0, hZ, hZphys, _hRecon, _hNativeError, hMiddleError⟩ :=
     exists_native_soft_middle_mpo_approximation hq h23 (h34.trans h4L) hm
-      h hs h0 h1 (p 2) t xi hlo hscale hxi
+      Φ h0 h1 (p 2) t xi hlo hscale hxi
   let Z := MPOTensor.traceChainOperator Acore C0
-  let Zphys := QuantumCircuit.embedOp
-    (Subtype.val : interval (N + 1) k2 k3 → Fin (N + 1))
-    (QuantumCircuit.embedOp eJ Z)
+  let Zphys := ManyBody.place (X := fun _ ↦ Fin q) (interval (N + 1) k2 k3)
+    (ManyBody.placeAlong (X := fun _ ↦ Fin q) eJ.toEquiv.toEmbedding Z)
   change Z.IsHermitian at hZ
   change Zphys.IsHermitian at hZphys
   change ‖F 2 - Zphys‖ ≤ xi at hMiddleError

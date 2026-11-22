@@ -109,34 +109,30 @@ factors of Huang's filter approximants over the energy mesh. They depend only on
 chain terms, the precision `c`, the gap `Delta` and the cut. Huang, arXiv:1406.6355v6,
 Section 5.4, Lemmas 18--19; LVV13, algo53.tex, Claim c:errorreduction, lines 580--592. -/
 noncomputable def gaussianFilterFactors {L q : ℕ}
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ i, 0 ≤ Φ.term i)
     (c Delta : ℝ) (i : ℕ) : Finset (LeftBlockMatrix L q i) :=
-  leftFilterFactors (huangFilterApproximant h h0 c Delta)
+  leftFilterFactors (huangFilterApproximant Φ h0 c Delta)
 
 /-- The Gaussian filter factors number at most `E R`, the energy count times the filter
 rank bound. -/
 theorem card_gaussianFilterFactors_le {L q i : ℕ} (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) :
-    (gaussianFilterFactors h h0 c Delta i).card ≤
+    (gaussianFilterFactors Φ h0 c Delta i).card ≤
       huangEnergyCount c Delta L * huangFilterRankBound q c Delta L :=
-  card_leftFilterFactors_le _ fun j ↦ (huangFilterApproximant_spec hq h hs h0 h1 hc hDelta j).1 i
+  card_leftFilterFactors_le _ fun j ↦ (huangFilterApproximant_spec hq Φ h0 h1 hc hDelta j).1 i
 
 /-- Every Gaussian filter factor has operator-Schmidt rank at most the filter rank bound
 at every internal left cut. -/
 theorem operatorSchmidtRank_of_mem_gaussianFilterFactors {L q i : ℕ} (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hi : i ≤ L)
-    {A : LeftBlockMatrix L q i} (hA : A ∈ gaussianFilterFactors h h0 c Delta i)
+    {A : LeftBlockMatrix L q i} (hA : A ∈ gaussianFilterFactors Φ h0 c Delta i)
     (k : ℕ) (hki : k < i) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
       (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ huangFilterRankBound q c Delta L :=
   operatorSchmidtRank_of_mem_leftFilterFactors hi _
-    (fun j ↦ (huangFilterApproximant_spec hq h hs h0 h1 hc hDelta j).1) hA k hki
+    (fun j ↦ (huangFilterApproximant_spec hq Φ h0 h1 hc hDelta j).1) hA k hki
 
 /-- **Error reduction by the Gaussian filter factors.** Applying every Gaussian filter
 factor to every member of a half-viable family `S` gives the family
@@ -145,23 +141,21 @@ factors are chosen before every ground pair and before `S`. Huang, arXiv:1406.63
 Section 5.4, Lemmas 18--19, composed with the deterministic LVV error-reduction step,
 `algo53.tex`, Claim `c:errorreduction`, lines 580--592. -/
 theorem isViable_errorReductionSet_gaussianFilterFactors {L q i : ℕ} (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hL : 1 ≤ L)
     (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (hΓ : ‖Γ‖ = 1)
-    (hHΓ : (∑ j, h j) *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ)
-    (hgap : ((∑ j, h j) - (E₀ : ℂ) • 1 - (Delta : ℂ) •
+    (hHΓ : Φ.hamiltonian *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ)
+    (hgap : (Φ.hamiltonian - (E₀ : ℂ) • 1 - (Delta : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ)))).PosSemidef)
     (S : Finset (LeftBlockVector L q i))
     (hviable : IsViable Γ (1 / 2) (S : Set (LeftBlockVector L q i))) :
-    IsViable Γ (c / L) (errorReductionSet (gaussianFilterFactors h h0 c Delta i) id S :
+    IsViable Γ (c / L) (errorReductionSet (gaussianFilterFactors Φ h0 c Delta i) id S :
       Set (LeftBlockVector L q i)) := by
   classical
   obtain ⟨j, a, ha, -, herror⟩ :=
-    exists_huangFilterApproximant_near_ground hq h hs h0 h1 hc hDelta E₀ Γ hΓ hHΓ hgap
+    exists_huangFilterApproximant_near_ground hq Φ h0 h1 hc hDelta E₀ Γ hΓ hHΓ hgap
   have ha0 : 0 < a := by linarith
-  set Q := huangFilterApproximant h h0 c Delta j with hQ
+  set Q := huangFilterApproximant Φ h0 c Delta j with hQ
   have hdecomp' : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) Q =
       ∑ k ∈ (Finset.univ : Finset (Fin _)), cutLeftFactor Q k ⊗ₖ cutRightFactor Q k := by
     simpa using cutOperator_eq_sum_cutLeftFactor_kronecker (i := i) Q
@@ -179,11 +173,11 @@ theorem isViable_errorReductionSet_gaussianFilterFactors {L q i : ℕ} (hq : 1 �
   refine ⟨v, hv1, by linarith, ?_⟩
   have hsubset : (errorReductionSet Finset.univ (cutLeftFactor Q) S :
       Set (LeftBlockVector L q i)) ⊆
-      errorReductionSet (gaussianFilterFactors h h0 c Delta i) id S := by
+      errorReductionSet (gaussianFilterFactors Φ h0 c Delta i) id S := by
     intro w hw
     obtain ⟨k, -, t, ht, rfl⟩ := Finset.mem_image₂.mp hw
     exact Finset.mem_image₂.mpr
-      ⟨_, cutLeftFactor_mem_leftFilterFactors (huangFilterApproximant h h0 c Delta) j k,
+      ⟨_, cutLeftFactor_mem_leftFilterFactors (huangFilterApproximant Φ h0 c Delta) j k,
         t, ht, rfl⟩
   intro z
   exact Submodule.span_mono hsubset (hvS z)
@@ -193,46 +187,44 @@ Gaussian approximant, the left factors of some cut decomposition of it. The chos
 `gaussianFilterFactors` are admissible; so is the answer of any solver returning a cut
 decomposition of each approximant. -/
 def IsAdmissibleFilterFactors {L q : ℕ}
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ i, 0 ≤ Φ.term i)
     (c Delta : ℝ) (i : ℕ) (F : Finset (LeftBlockMatrix L q i)) : Prop :=
   ∀ j : Fin (huangEnergyCount c Delta L), ∃ (ι : Type) (J : Finset ι)
     (A : ι → LeftBlockMatrix L q i) (B : ι → RightBlockMatrix L q i),
     ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
-        (huangFilterApproximant h h0 c Delta j) = ∑ t ∈ J, A t ⊗ₖ B t ∧
+        (huangFilterApproximant Φ h0 c Delta j) = ∑ t ∈ J, A t ⊗ₖ B t ∧
       ∀ t ∈ J, A t ∈ F
 
 /-- The chosen Gaussian filter factors are admissible. -/
 theorem isAdmissibleFilterFactors_gaussianFilterFactors {L q : ℕ}
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ i, 0 ≤ Φ.term i)
     (c Delta : ℝ) (i : ℕ) :
-    IsAdmissibleFilterFactors h h0 c Delta i (gaussianFilterFactors h h0 c Delta i) :=
-  fun j ↦ ⟨_, Finset.univ, cutLeftFactor (huangFilterApproximant h h0 c Delta j),
-    cutRightFactor (huangFilterApproximant h h0 c Delta j),
+    IsAdmissibleFilterFactors Φ h0 c Delta i (gaussianFilterFactors Φ h0 c Delta i) :=
+  fun j ↦ ⟨_, Finset.univ, cutLeftFactor (huangFilterApproximant Φ h0 c Delta j),
+    cutRightFactor (huangFilterApproximant Φ h0 c Delta j),
     (by
       simpa using cutOperator_eq_sum_cutLeftFactor_kronecker (i := i)
-        (huangFilterApproximant h h0 c Delta j)),
-    fun k _ ↦ cutLeftFactor_mem_leftFilterFactors (huangFilterApproximant h h0 c Delta) j k⟩
+        (huangFilterApproximant Φ h0 c Delta j)),
+    fun k _ ↦ cutLeftFactor_mem_leftFilterFactors (huangFilterApproximant Φ h0 c Delta) j k⟩
 
 /-- **Error reduction with any admissible filter factors.** For every ground pair with the
 prescribed gap, `1/2`-viability of the input family implies `c / L`-viability of its image
 under every admissible family of factors. Huang, arXiv:1406.6355v6, Section 5.4, Lemmas
 18--19, with LVV13, Claim `c:errorreduction`, lines 584--592. -/
 theorem isViable_errorReductionSet_of_isAdmissibleFilterFactors {L q i : ℕ} (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hL : 1 ≤ L)
     (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (hΓ : ‖Γ‖ = 1)
-    (hHΓ : (∑ j, h j) *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ)
-    (hgap : ((∑ j, h j) - (E₀ : ℂ) • 1 - (Delta : ℂ) •
+    (hHΓ : Φ.hamiltonian *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ)
+    (hgap : (Φ.hamiltonian - (E₀ : ℂ) • 1 - (Delta : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ)))).PosSemidef)
-    {F : Finset (LeftBlockMatrix L q i)} (hF : IsAdmissibleFilterFactors h h0 c Delta i F)
+    {F : Finset (LeftBlockMatrix L q i)} (hF : IsAdmissibleFilterFactors Φ h0 c Delta i F)
     (S : Finset (LeftBlockVector L q i))
     (hviable : IsViable Γ (1 / 2) (S : Set (LeftBlockVector L q i))) :
     IsViable Γ (c / L) (errorReductionSet F id S : Set (LeftBlockVector L q i)) := by
   classical
   obtain ⟨j, a, ha, -, herror⟩ :=
-    exists_huangFilterApproximant_near_ground hq h hs h0 h1 hc hDelta E₀ Γ hΓ hHΓ hgap
+    exists_huangFilterApproximant_near_ground hq Φ h0 h1 hc hDelta E₀ Γ hΓ hHΓ hgap
   have ha0 : 0 < a := by linarith
   obtain ⟨ι, J, A, B, hdecomp, hAF⟩ := hF j
   have hsmall := huangFilterEta_amplitude_budget hc L ha
@@ -259,9 +251,7 @@ theorem isViable_errorReductionSet_of_isAdmissibleFilterFactors {L q i : ℕ} (h
 pair and every input family: the existence form of `gaussianFilterFactors` and
 `isViable_errorReductionSet_gaussianFilterFactors`. -/
 theorem exists_positive_chain_error_reduction_factors {L q i : ℕ} (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hL : 1 ≤ L) (hi : i ≤ L) :
     ∃ F : Finset (LeftBlockMatrix L q i),
       F.card ≤ huangEnergyCount c Delta L * huangFilterRankBound q c Delta L ∧
@@ -269,16 +259,16 @@ theorem exists_positive_chain_error_reduction_factors {L q i : ℕ} (hq : 1 ≤ 
         (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
           (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ huangFilterRankBound q c Delta L) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)), ‖Γ‖ = 1 →
-        (∑ j, h j) *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ →
-        ((∑ j, h j) - (E₀ : ℂ) • 1 - (Delta : ℂ) •
+        Φ.hamiltonian *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ →
+        (Φ.hamiltonian - (E₀ : ℂ) • 1 - (Delta : ℂ) •
           (1 - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ)))).PosSemidef →
         ∀ S : Finset (LeftBlockVector L q i),
           IsViable Γ (1 / 2) (S : Set (LeftBlockVector L q i)) →
           IsViable Γ (c / L) (errorReductionSet F id S : Set (LeftBlockVector L q i)) :=
-  ⟨gaussianFilterFactors h h0 c Delta i, card_gaussianFilterFactors_le hq h hs h0 h1 hc hDelta,
+  ⟨gaussianFilterFactors Φ h0 c Delta i, card_gaussianFilterFactors_le hq Φ h0 h1 hc hDelta,
     fun _ hA k _ hki ↦
-      operatorSchmidtRank_of_mem_gaussianFilterFactors hq h hs h0 h1 hc hDelta hi hA k hki,
-    fun E₀ Γ hΓ hHΓ hgap S hviable ↦ isViable_errorReductionSet_gaussianFilterFactors hq h hs h0
+      operatorSchmidtRank_of_mem_gaussianFilterFactors hq Φ h0 h1 hc hDelta hi hA k hki,
+    fun E₀ Γ hΓ hHΓ hgap S hviable ↦ isViable_errorReductionSet_gaussianFilterFactors hq Φ h0
       h1 hc hDelta hL E₀ Γ hΓ hHΓ hgap S hviable⟩
 
 /-- Every member of the error-reduced family `{A j u : j ∈ J, u ∈ S}` is a matrix product
@@ -302,9 +292,7 @@ the existence form of `exists_positive_chain_error_reduction_factors`, with the 
 `{A u : A ∈ F, u ∈ S}` left unnamed. Huang, arXiv:1406.6355v6, Section 5.4,
 Lemmas 18--19, composed with the deterministic LVV error-reduction step. -/
 theorem exists_positive_chain_error_reduced_set {L q i s b : ℕ} (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hL : 1 ≤ L) (hi : i ≤ L)
     (S : Finset (LeftBlockVector L q i)) (hcard : S.card ≤ s)
     (hSmps : ∀ v ∈ S, IsLeftOpenMPS b v) :
@@ -312,13 +300,13 @@ theorem exists_positive_chain_error_reduced_set {L q i s b : ℕ} (hq : 1 ≤ q)
       T.card ≤ huangEnergyCount c Delta L * huangFilterRankBound q c Delta L * s ∧
       (∀ v ∈ T, IsLeftOpenMPS (huangFilterRankBound q c Delta L * max 1 b) v) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)), ‖Γ‖ = 1 →
-        (∑ j, h j) *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ →
-        ((∑ j, h j) - (E₀ : ℂ) • 1 - (Delta : ℂ) •
+        Φ.hamiltonian *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ →
+        (Φ.hamiltonian - (E₀ : ℂ) • 1 - (Delta : ℂ) •
           (1 - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ)))).PosSemidef →
         IsViable Γ (1 / 2) (S : Set (LeftBlockVector L q i)) →
         IsViable Γ (c / L) (T : Set (LeftBlockVector L q i)) := by
   obtain ⟨F, hFcard, hFrank, hgood⟩ :=
-    exists_positive_chain_error_reduction_factors hq h hs h0 h1 hc hDelta hL hi
+    exists_positive_chain_error_reduction_factors hq Φ h0 h1 hc hDelta hL hi
   exact ⟨errorReductionSet F id S,
     (card_errorReductionSet_le F id S).trans (Nat.mul_le_mul hFcard hcard),
     fun v hv ↦ isLeftOpenMPS_of_mem_errorReductionSet hi hFrank hSmps hv,

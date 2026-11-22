@@ -29,6 +29,7 @@ The distinction and the reciprocal-length convention are recorded in
 -/
 
 open ManyBody (interval ChainInteraction)
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -54,11 +55,11 @@ theorem renyiEntropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt (hq 
     (hfact : ∀ m : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       IsFactorizationAt Ω j m (C₁ * Real.exp (-(m / ξ'))) OB OL OR)
     {k r : ℕ} (hk : 1 ≤ k) (w : Fin r → ℝ) (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q))
-    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (ψ i) j).rank ≤ k)
+    (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k)
     (hnorm : ∑ i, w i * ‖ψ i‖ ^ 2 = 1) {P : ℝ} (hP : 0 < P)
     (hPdef : ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P) :
-    renyiEntropy (cutMatrix Ω j * (cutMatrix Ω j)ᴴ)
-        (posSemidef_self_mul_conjTranspose (cutMatrix Ω j)).isHermitian α ≤
+    renyiEntropy (cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ)
+        (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian α ≤
       Real.log k + ξ' * Real.log (2 * C₁ ^ 2 / P) * Real.log q + 4 * Real.log q -
         Real.log (1 - ((q : ℝ) ^ 2) ^ (1 - α) * Real.exp (-(2 * α / ξ'))) / (1 - α) := by
   classical
@@ -103,8 +104,9 @@ theorem renyiEntropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt (hq 
 unit vector is at most zero: the reduced density matrix acts on a space of dimension one. -/
 theorem renyiEntropy_cutMatrix_nonpos_of_one {Ω : EuclideanSpace ℂ (Fin L → Fin 1)} (hΩ : ‖Ω‖ = 1)
     (j : ℕ) {α : ℝ} (hα0 : 0 < α) (hα1 : α < 1) :
-    renyiEntropy (cutMatrix Ω j * (cutMatrix Ω j)ᴴ)
-        (posSemidef_self_mul_conjTranspose (cutMatrix Ω j)).isHermitian α ≤ 0 := by
+    renyiEntropy (cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ)
+        (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian α ≤
+          0 := by
   set Ψ := WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin 1) (leftBlock L j) Ω)
   have hΨ : star Ψ ⬝ᵥ Ψ = 1 := by
     rw [star_cutVector_dotProduct, inner_self_eq_norm_sq_to_K, hΩ]; norm_num
@@ -125,8 +127,8 @@ theorem renyiEntropy_cutMatrix_nonpos_of_one {Ω : EuclideanSpace ℂ (Fin L →
 its von Neumann entropy. -/
 theorem renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (j : ℕ) {α : ℝ} (hα : 1 < α) :
-    renyiEntropy (cutMatrix Ω j * (cutMatrix Ω j)ᴴ)
-        (posSemidef_self_mul_conjTranspose (cutMatrix Ω j)).isHermitian α ≤
+    renyiEntropy (cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ)
+        (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian α ≤
       ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) := by
   set Ψ := WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) Ω)
   have hΨ : star Ψ ⬝ᵥ Ψ = 1 := by
@@ -170,10 +172,11 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
       ((q : ℝ) ^ 2) ^ (1 - α) * Real.exp (-(2 * α / (6 * lemmaOneEndpointLength R J ΔE))) < 1 →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
-        (∀ i, (cutMatrix (ψ i) j).rank ≤ k) → ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
+        (∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k) →
+        ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
         ∀ {P : ℝ}, 0 < P → ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P →
-        renyiEntropy (cutMatrix Ω j * (cutMatrix Ω j)ᴴ)
-            (posSemidef_self_mul_conjTranspose (cutMatrix Ω j)).isHermitian α ≤
+        renyiEntropy (cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ)
+            (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian α ≤
           Real.log k + 6 * lemmaOneEndpointLength R J ΔE *
             Real.log (2 * (K * lemmaOneEndpointLength R J ΔE ^ 3) ^ 2 / P) * Real.log q +
             4 * Real.log q -
@@ -226,10 +229,11 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt (R : ℕ
       ∀ {α : ℝ}, 1 < α →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
-        (∀ i, (cutMatrix (ψ i) j).rank ≤ k) → ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
+        (∀ i, (cutMatrix (leftBlock L j) (ψ i)).rank ≤ k) →
+        ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
         ∀ {P : ℝ}, 0 < P → ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P →
-        renyiEntropy (cutMatrix Ω j * (cutMatrix Ω j)ᴴ)
-            (posSemidef_self_mul_conjTranspose (cutMatrix Ω j)).isHermitian α ≤
+        renyiEntropy (cutMatrix (leftBlock L j) Ω * (cutMatrix (leftBlock L j) Ω)ᴴ)
+            (posSemidef_self_mul_conjTranspose (cutMatrix (leftBlock L j) Ω)).isHermitian α ≤
           Real.log k + 6 * lemmaOneEndpointLength R J ΔE *
             Real.log (2 * (K * lemmaOneEndpointLength R J ΔE ^ 3) ^ 2 / P) * Real.log q +
             bootstrapRemainder (6 * lemmaOneEndpointLength R J ΔE) q := by

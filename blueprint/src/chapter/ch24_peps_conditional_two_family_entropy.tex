@@ -2,7 +2,7 @@
 
 \begin{lemma}[Labelled conditional information bound]
     \label{thm:peps_labelled_conditional_entropy}
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_conditional_le_residual_add_sum}
+    \lean{TNLean.PEPS.AreaLaw.regionEntropy_conditional_le_residual_add_sum}
     \leanok
     \uses{def:area_law_ground_entropy, def:area_law_two_family_partition}
     Let $\Omega$ be a normalized pure state on a finite domain, and let $G,B,C$
@@ -33,7 +33,7 @@
 % lines 197--222.
 \begin{lemma}[Counting form of the conditional information bound]
     \label{cor:peps_cell_information_counting_form}
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_conditional_le_card_residual_add_pieceCount}
+    \lean{TNLean.PEPS.AreaLaw.regionEntropy_conditional_le_card_residual_add_pieceCount}
     \leanok
     \uses{thm:peps_labelled_conditional_entropy}
     In the setting of Lemma~\ref{thm:peps_labelled_conditional_entropy}, if
@@ -54,7 +54,7 @@
 % lines 310--311.
 \begin{corollary}[Information of a small cell]
     \label{cor:peps_small_cell_information}
-    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_conditional_le_two_mul_card_mul_log}
+    \lean{TNLean.PEPS.AreaLaw.regionEntropy_conditional_le_two_mul_card_mul_log}
     \leanok
     \uses{cor:peps_cell_information_counting_form}
     Let $\Omega$ be a normalized pure state on a finite domain with local

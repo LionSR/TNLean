@@ -46,12 +46,10 @@ source lines 1080–1086. -/
 theorem exists_physical_dg_normalized_isOpenMPS_approximation :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q : ℕ),
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
       0 < gamma →
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -72,7 +70,7 @@ theorem exists_physical_dg_normalized_isOpenMPS_approximation :
   classical
   obtain ⟨K, hK, hfixed⟩ := exists_physical_dg_interval_normalized_approximation
   refine ⟨K + 1, by linarith only [hK], ?_⟩
-  intro L q h hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G g u
+  intro L q Φ h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G g u
   have hq : 2 ≤ q :=
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
   have hg : 0 < g := lt_min hgamma (by norm_num)
@@ -129,7 +127,7 @@ theorem exists_physical_dg_normalized_isOpenMPS_approximation :
       intro k hk
       have hkL : k ≤ L := (Finset.mem_Ico.mp hk).2.le
       obtain ⟨φ, hφ, hoverlap, hlogrank⟩ :=
-        hfixed L q 0 k (Nat.zero_le k) hkL h hs h0 h1 mu nu gamma hgamma
+        hfixed L q 0 k (Nat.zero_le k) hkL Φ h0 h1 mu nu gamma hgamma
           hmu hnu hmunu hgap deltaCut hcut hcut1 ψ hψG hψ
       rw [hrecip] at hlogrank
       have hregional := one_sub_regional_kyFanNorm_le_twice_error

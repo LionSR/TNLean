@@ -27,13 +27,14 @@ Independently proved from the manuscript; no upstream Lean proof text reused.
 -/
 
 open TNLean.Lattice
+open ManyBody (ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw
 
 /-- Adding a disjoint region changes entropy by at most its entropy.
 Source: Lemma 9.4, partial-row step; both signs follow from subadditivity and
 pure-state complementarity of the actual regional reductions. -/
-theorem abs_regionalEntropy_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
+theorem abs_regionEntropy_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (R B : Finset (Site Λ))
     (hRB : Disjoint R B) :
     |ManyBody.regionEntropy Ω (R ∪ B) - ManyBody.regionEntropy Ω R| ≤
@@ -45,7 +46,7 @@ theorem abs_regionalEntropy_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
 /-- Adding the sites of a region `Y` disjoint from `X` to the actual sites of
 `A` in `X` changes the regional entropy by at most `|Y| log q`.
 Source: Lemma 9.4, partial-row step, `08-scanner.tex`, lines 666–667. -/
-theorem abs_regionalEntropy_filter_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
+theorem abs_regionEntropy_filter_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (hq : 1 ≤ q) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
     (X Y : Finset (ℤ × ℤ)) (hXY : Disjoint X Y) :
     |ManyBody.regionEntropy Ω (A.filter fun x ↦ x.val ∈ X ∪ Y) -
@@ -65,7 +66,7 @@ theorem abs_regionalEntropy_filter_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : 
   rw [he]
   calc
     |ManyBody.regionEntropy Ω (R ∪ B) - ManyBody.regionEntropy Ω R| ≤
-        ManyBody.regionEntropy Ω B := abs_regionalEntropy_union_sub_le Λ q Ω hΩ R B hd
+        ManyBody.regionEntropy Ω B := abs_regionEntropy_union_sub_le Λ q Ω hΩ R B hd
     _ ≤ B.card * Real.log q := ManyBody.regionEntropy_le_card_mul_log hΩ B
     _ ≤ Y.card * Real.log q := mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
       (Real.log_nonneg (by exact_mod_cast hq))
@@ -91,7 +92,7 @@ theorem template_partial_row_entropy_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
   have hXY : Disjoint (ambientDilation T.points (j - 1) \ T.points) Y :=
     Finset.disjoint_left.mpr fun x hx hy ↦
       (Finset.mem_sdiff.mp (hY hy)).2 (Finset.mem_sdiff.mp hx).1
-  refine (abs_regionalEntropy_filter_union_sub_le Λ q hq Ω hΩ A _ Y hXY).trans ?_
+  refine (abs_regionEntropy_filter_union_sub_le Λ q hq Ω hΩ A _ Y hXY).trans ?_
   have hcard := (Finset.card_le_card hY).trans (template_layer_card_le T hC j hj hjs)
   exact mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
     (Real.log_nonneg (by exact_mod_cast hq))

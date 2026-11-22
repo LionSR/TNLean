@@ -23,6 +23,7 @@ lines 1276--1320. No physical-unit or normality assumption is needed.
 -/
 
 open scoped Matrix Kronecker BigOperators
+open ManyBody
 
 namespace MPOTensor
 
@@ -126,27 +127,29 @@ theorem mpoWithBoundary_reindex_windowComplement (T : MPOTensor d D)
   exact trace_mul_mul_eq_sum_matrixUnits X _ _
 
 /-- A local operator commuting with the entire arbitrary-boundary range commutes,
-when placed at any periodic window, with every globally commuting-boundary MPO.
+when placed on the window of `L` consecutive sites starting at `i`
+(`ManyBody.placeAlong` along `ManyBody.ringWindow`), with every globally
+commuting-boundary MPO.
 This is the finite-cut implication needed by the canonical-parent argument in
 GLM23, arXiv:2203.12563v3, Section 5, lines 1276--1320. -/
-theorem embedLocalOperator_commute_mpoWithBoundary (T : MPOTensor d D)
+theorem placeAlong_ringWindow_commute_mpoWithBoundary (T : MPOTensor d D)
     {L N : ℕ} (hLN : L ≤ N) (i : Fin N)
     (K : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ)
     (hcomm : ∀ Y : Matrix (Fin D) (Fin D) ℂ, Commute K (mpoWithBoundary T Y L))
     {X : Matrix (Fin D) (Fin D) ℂ} (hX : X ∈ commutingBoundaryAlgebra T) :
-    Commute (embedLocalOperator L N hLN i K) (mpoWithBoundary T X N) := by
+    Commute (placeAlong (X := fun _ ↦ Fin d) (ringWindow hLN i) K) (mpoWithBoundary T X N) := by
   classical
   let e := windowComplementEquiv (d := d) L N hLN i
   apply (commute_iff_eq _ _).2
   apply (Matrix.reindex e e).injective
   change (Matrix.reindexLinearEquiv ℂ ℂ e e)
-      (embedLocalOperator L N hLN i K * mpoWithBoundary T X N) =
+      (placeAlong (X := fun _ ↦ Fin d) (ringWindow hLN i) K * mpoWithBoundary T X N) =
     (Matrix.reindexLinearEquiv ℂ ℂ e e)
-      (mpoWithBoundary T X N * embedLocalOperator L N hLN i K)
+      (mpoWithBoundary T X N * placeAlong (X := fun _ ↦ Fin d) (ringWindow hLN i) K)
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ e e e,
     ← Matrix.reindexLinearEquiv_mul ℂ ℂ e e e]
   simp only [Matrix.coe_reindexLinearEquiv, e]
-  rw [reindex_embedLocalOperator_windowComplement,
+  rw [reindex_placeAlong_ringWindow_windowComplement,
     mpoWithBoundary_reindex_windowComplement T hX]
   simp only [Finset.mul_sum, Finset.sum_mul]
   refine Finset.sum_congr₂ fun a _ b _ ↦ ?_

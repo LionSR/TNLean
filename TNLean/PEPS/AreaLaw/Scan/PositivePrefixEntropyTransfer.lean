@@ -43,7 +43,7 @@ bound concerns only the compact region. The threshold is independent of
 the entropy coefficient and exponent as well as the supplied finite system.
 Source: `08-scanner.tex`, lines 353--357 and 399--404, at the manuscript
 revision stated in the module documentation. -/
-theorem regionalEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le
+theorem regionEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le
     (q : ℕ) (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) {n : ℕ}
     (hthr : truncationEntropyThreshold q g Cvol ≤ n) :
     ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : StateSpace Λ q),
@@ -70,7 +70,7 @@ theorem regionalEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le
   have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
   set R := positiveDepthPrefix A depth (j : ℤ) with hR
   -- Entropy continuity in the regional dimension.
-  have hcont := abs_regionalEntropy_sub_le_sqrt_traceDistance Λ q Ωt Ω hΩt hΩ R
+  have hcont := abs_regionEntropy_sub_le_sqrt_traceDistance_card Λ q Ωt Ω hΩt hΩ R
   set t := Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
       (Matrix.vecMulVec Ω (star Ω)) with ht
   -- The region is contained in the full prefix, so its volume is controlled.
@@ -138,7 +138,7 @@ bound concerns only the compact region. The threshold is independent of
 the entropy coefficient and exponent as well as the supplied finite system.
 Source: `08-scanner.tex`, lines 353--357 and 399--404, at the manuscript
 revision stated in the module documentation. -/
-theorem eventually_regionalEntropy_positiveDepthPrefix_le
+theorem eventually_regionEntropy_positiveDepthPrefix_le
     (q : ℕ) (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) :
     ∀ᶠ n : ℕ in atTop,
       ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : StateSpace Λ q),
@@ -156,6 +156,6 @@ theorem eventually_regionalEntropy_positiveDepthPrefix_le
         ManyBody.regionEntropy Ωt (positiveDepthPrefix A depth (j : ℤ)) ≤
           Ce * ((n : ℝ) * (L : ℝ) ^ e + n) + (n : ℝ) ^ (-247 : ℝ) :=
   eventually_atTop.2 ⟨_, fun _ =>
-    regionalEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le q hq g Cvol hg⟩
+    regionEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le q hq g Cvol hg⟩
 
 end TNLean.PEPS.AreaLaw.Scan

@@ -88,14 +88,14 @@ configurations of the $n$ sites.
     with pairwise disjoint stretches, such that no register of a gate of $G_{j'}$
     lies in the interior of a gate of $G_j$ for $j'<j$, and every matrix of a
     gate a product of at most $K$ unitaries on neighbouring sites. Then
-    measurement rounds of total depth $m(4s+K+2)$ implement the product of the
+    a measurement circuit of depth at most $m(4s+K)$ implements the product of the
     gates of $G_{m-1},\dots,G_0$, the list $G_0$ applied first, on the vectors
     with $\ket0$ at the interiors of all the gates.
 \end{lemma}
 \begin{proof}
     \leanok
-    By Lemma~\ref{thm:qc_register_layer} each list is applied in depth
-    $4s+K+2$ on the vectors with $\ket0$ at the interiors of its gates. The
+    By Lemma~\ref{thm:qc_register_layer} each list is applied in depth at most
+    $4s+K$ on the vectors with $\ket0$ at the interiors of its gates. The
     gates of $G_{j'}$ act on their registers only, which lie outside the
     interiors of the later lists, so they keep $\ket0$ there. Induction on the
     number of lists and Lemma~\ref{lem:qc_round_implementation_compose} then
@@ -157,7 +157,7 @@ configurations of the $n$ sites.
         MPSPreparation.registerLayersOp_treeLevelGates,
         MPSPreparation.treeCentralSites,
         MPSPreparation.exists_rounds_blockLayerOp_treeLevelsOp,
-        MPSPreparation.isCircuitOn_blockLayerOp_treeLeafOp}
+        MPSPreparation.isUnitaryCircuitOn_blockLayerOp_treeLeafOp}
     \leanok
     \uses{def:ldp_tree_layout, thm:ldp_register_layers,
         thm:ldp_register_tree_rounds, def:qc_local_circuit,
@@ -165,8 +165,8 @@ configurations of the $n$ sites.
     Cut a ring into blocks, each with a tree layout with $h+1$ coarse depths, and
     let a unitary $X_{j,p}$ on $2s$ sites act on the two registers of the node
     $p$ of depth $j\le h$ of every block. If every $X_{j,p}$ is a product of at
-    most $K$ unitaries on neighbouring sites, measurement rounds of total depth
-    $(h+1)(4s+K+2)$ implement the depths $0,\dots,h$ of the trees of all the
+    most $K$ unitaries on neighbouring sites, a measurement circuit of depth at most
+    $(h+1)(4s+K)$ implements the depths $0,\dots,h$ of the trees of all the
     blocks, the depth $0$ applied first, on the vectors with $\ket0$ at the
     sites $s,\dots,o_{2^{h+1}}-s-1$ of every block, $o_{2^{h+1}}$ the number of
     sites of its leaves. If every leaf carries a product of at most $K'$
@@ -239,10 +239,7 @@ configurations of the $n$ sites.
 
 \begin{lemma}[Coherent measurement implementation of bounded-leaf trees]
     \label{thm:ldp_supported_tree_rounds}
-    \lean{QuantumCircuit.MeasurementRound.OutcomeHistory,
-        QuantumCircuit.MeasurementRound.historyKraus,
-        QuantumCircuit.MeasurementRound.historyKraus_mulVec_mem_outputs,
-        QuantumCircuit.MeasurementRound.IsRoundsImplementationOn.exists_history_scalar,
+    \lean{QuantumCircuit.Circuit.IsImplementationOn.exists_smul_of_isometry,
         QuantumCircuit.zeroOnSubmodule, QuantumCircuit.mem_zeroOnSubmodule,
         MPSPreparation.exists_rounds_blockLayerOp_treeBlockOp,
         MPSPreparation.treeBlockOp_apply_supportedCfgPolarIso,
@@ -276,7 +273,7 @@ configurations of the $n$ sites.
     \uses{thm:ldp_unequal_tree_rounds, thm:qc_bounded_unitary_two_site_gates}
     Each node unitary acts on $2s$ sites, so a fixed number $K$ of
     nearest-neighbour gates suffices. Register teleportation applies every
-    coarse depth in depth $4s+K+2$, independently of register separation.
+    coarse depth in depth at most $4s+K$, independently of register separation.
     The finitely many leaf widths between $2$ and $c$ have a common exact
     synthesis bound, and the leaf windows are disjoint.
     Concatenating the coarse rounds and the leaf circuit gives $C(h+1)$.
@@ -320,7 +317,7 @@ configurations of the $n$ sites.
         MPSPreparation.blockInputCfg_eq_placeCfg,
         MPSPreparation.mul_self_le_pow_of_isInjective_blockTensor,
         MPSPreparation.le_pow_sub_one_of_mul_self_le,
-        MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState}
+        MPSPreparation.exists_isMeasurementConversion_blockIsometryState}
     \leanok
     \uses{thm:ldp_unequal_tree_isometry, thm:ldp_unequal_tree_rounds,
         lem:ldp_balanced_widths, def:ldp_block_isometry_state,
@@ -357,8 +354,8 @@ configurations of the $n$ sites.
 
 \begin{lemma}[Preparation with measurements in depth $O(\log\log(N/\varepsilon))$, every chain length]
     \label{thm:ldp_loglog_depth_every_length}
-    \lean{MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero,
-        MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log}
+    \lean{MPSPreparation.exists_isMeasurementConversion_le_log_log_of_mpvState_ne_zero,
+        MPSPreparation.exists_isMeasurementConversion_le_log_log}
     \leanok
     \uses{def:qc_measurement_rounds}
     Let $A$ be normal. There is a constant $c$ depending only on $A$ such that,

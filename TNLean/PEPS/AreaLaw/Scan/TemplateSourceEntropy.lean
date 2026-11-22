@@ -39,7 +39,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction)
+open ManyBody (IsGapped groundSpace AdmissibleSupport ambientDilation PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -108,7 +108,7 @@ theorem template_source_entropy_bounds
   intro Λ Ω hΩ A D₀ hD Ctpl n s₀ T hC hsep hbox
   have hn : (0 : ℝ) < n := by exact_mod_cast T.n_pos
   have hs₀n := template_pieceScale_le_size T (by linarith)
-  have hcoreEntropy := Template.regionalEntropy_core_le_of_safe_box Λ q D₀ Ω hΩ A T
+  have hcoreEntropy := Template.regionEntropy_core_le_of_safe_box Λ q D₀ Ω hΩ A T
     hC hsep hD (Nat.log 2 s₀) (Nat.pow_log_le_self 2 (Nat.ne_of_gt T.s₀_pos))
     (Nat.lt_pow_succ_log_self (by decide) s₀) e Cbox he hCbox hbox
   refine ⟨?_, ?_⟩
@@ -128,7 +128,7 @@ theorem template_source_entropy_bounds
         (Real.rpow_nonneg (Nat.cast_nonneg _) _)
     refine ⟨?_, ?_⟩
     · intro j hj
-      have hs := Template.regionalEntropy_shell_le_of_safe_box Λ q D₀ Ω hΩ A T
+      have hs := Template.regionEntropy_shell_le_of_safe_box Λ q D₀ Ω hΩ A T
         hC hsep hD j L (Nat.log 2 L) hj hL hlo hhi e Cbox he hCbox hbox
       rw [positiveDepthPrefix_eq_filter_ambientDilation]
       simp only [Int.toNat_natCast]
@@ -140,7 +140,7 @@ theorem template_source_entropy_bounds
         _ ≤ Ce * ((n : ℝ) * (L : ℝ) ^ e + n) := by
           nlinarith [mul_nonneg hCe hn.le]
     · intro j hj hjL Y hY
-      have hp := Template.regionalEntropy_prefix_le_of_safe_box Λ q D₀ hq Ω hΩ A T
+      have hp := Template.regionEntropy_prefix_le_of_safe_box Λ q D₀ hq Ω hΩ A T
         hC hsep hD j L (Nat.log 2 L) hj hjL hL hlo hhi Y hY e Cbox he hCbox hbox
       calc
         ManyBody.regionEntropy Ω
@@ -217,7 +217,7 @@ theorem template_final_source_entropy_bounds_of_boxEntropy
       ManyBody.regionEntropy Ω (rectRegion S.A Q) ≤
         Cbox * (Q.size : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
     intro Q hsafe
-    exact (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe le_rfl).trans
+    exact (regionEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe le_rfl).trans
       (hbox Q.size Q.one_le_size)
   obtain ⟨hcore, hprefix⟩ := hsource Λ Ω hΩ S.A D₀ hD T hC hsep hrect
   refine ⟨hcore, ?_⟩

@@ -32,6 +32,7 @@ Independently formalized; no OpenAI Lean proof text is reused.
 
 open scoped BigOperators
 open TNLean.Lattice
+open ManyBody (planeDomainGraph edgeBoundary)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -39,18 +40,18 @@ namespace TNLean.PEPS.AreaLaw
 proof of Theorem 1.1, `10-geometry.tex`, lines 846–857. The partition, its residual
 site bound, and the total information-error bound are inputs; this theorem does
 not assert their existence or prove the uniform ground-state area law. -/
-theorem regionalEntropy_le_boundary_of_partition_estimates
+theorem regionEntropy_le_boundary_of_partition_estimates
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (hq : 1 ≤ q)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
     (P : Geometry.OrderedTwoFamilyPartition A) (ε : Fin P.pieceCount → ℝ)
     (hε : ∀ i, ManyBody.regionMutualInformation Ω (P.piece i)
       (Aᶜ ∪ P.earlierSameFamily i) ≤ ε i)
     (cD cE : ℝ)
-    (hD : (P.residual.card : ℝ) ≤ cD * (edgeBoundary Λ A).card)
-    (hE : (∑ i, ε i) ≤ cE * (edgeBoundary Λ A).card) :
+    (hD : (P.residual.card : ℝ) ≤ cD * (edgeBoundary (planeDomainGraph Λ) A).card)
+    (hE : (∑ i, ε i) ≤ cE * (edgeBoundary (planeDomainGraph Λ) A).card) :
     ManyBody.regionEntropy Ω A ≤
-      (cD * Real.log q + cE / 2) * (edgeBoundary Λ A).card := by
-  have h := regionalEntropy_le_residual_add_half_sum Λ q Ω hΩ A P ε hε
+      (cD * Real.log q + cE / 2) * (edgeBoundary (planeDomainGraph Λ) A).card := by
+  have h := regionEntropy_le_residual_add_half_sum Λ q Ω hΩ A P ε hε
   have hdim := ManyBody.regionEntropy_le_card_mul_log hΩ P.residual
   have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   have hD' := mul_le_mul_of_nonneg_right hD hlog

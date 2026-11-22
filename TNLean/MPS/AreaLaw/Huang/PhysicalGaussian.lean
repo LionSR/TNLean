@@ -49,35 +49,34 @@ private theorem norm_weighted_sum_sub_le
 `eta / (‖H - E‖ + 1)` on the window `[-T, T]`. Huang, arXiv:1406.6355v6, Section 5.4,
 equation (22). -/
 noncomputable def positiveChainGaussianSampleCount {L q : ℕ}
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (energy T eta : ℝ) : ℕ :=
-  timeMeshCount T (eta / (‖(∑ i, h i) - (energy : ℂ) • 1‖ + 1))
+    (Φ : ManyBody.BondInteraction L q) (energy T eta : ℝ) : ℕ :=
+  timeMeshCount T (eta / (‖Φ.hamiltonian - (energy : ℂ) • 1‖ + 1))
 
 /-- **The Gaussian approximant of a positive chain.** The Gaussian quadrature, over the
 time mesh, of the phase-shifted positive-chain propagators at the mesh nodes: an
 approximation to the Gaussian filter `exp(-variance (H - E)² / 2)` with simultaneous
 cut-rank bounds. Huang, arXiv:1406.6355v6, Section 5.4, equation (22) and Lemma 19. -/
 noncomputable def positiveChainGaussianApproximant {L q : ℕ}
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ i, 0 ≤ Φ.term i)
     (variance : ℝ≥0) (energy T eta rho : ℝ) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  let delta := eta / (‖(∑ i, h i) - (energy : ℂ) • 1‖ + 1)
+  let delta := eta / (‖Φ.hamiltonian - (energy : ℂ) • 1‖ + 1)
   ∑ j : Fin (timeMeshCount T delta), timeMeshWeight variance T delta j •
     (Complex.exp (((-energy * timeMeshNode T delta j : ℝ) : ℂ) * Complex.I) •
-      positiveChainPropagator h h0 T rho (-timeMeshNode T delta j))
+      positiveChainPropagator Φ h0 T rho (-timeMeshNode T delta j))
 
 /-- The Gaussian approximant has at least one and at most polynomially many nodes,
 approximates the Gaussian filter to accuracy `2 exp(-T²/(2 variance)) + eta + rho`, and
 has cut rank at most the number of nodes times the propagator rank at every cut. Huang,
 arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
 theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (variance : ℝ≥0) (energy : ℝ) {T eta rho : ℝ}
     (hT : 0 ≤ T) (heta : 0 < eta) (hrho : 0 < rho) :
-    let H := ∑ i, h i
+    let H := Φ.hamiltonian
     let r := chainPropagationRadius L T rho
-    let N := positiveChainGaussianSampleCount h energy T eta
-    let Q := positiveChainGaussianApproximant h h0 variance energy T eta rho
+    let N := positiveChainGaussianSampleCount Φ energy T eta
+    let Q := positiveChainGaussianApproximant Φ h0 variance energy T eta rho
     1 ≤ N ∧ (N : ℝ) ≤ 2 * T * ((L : ℝ) + |energy| + 1) / eta + 2 ∧
       ‖GaussianFilter.gaussianIntertwiner variance (H - (energy : ℂ) • 1) 0 1 - Q‖ ≤
         2 * Real.exp (-T ^ 2 / (2 * (variance : ℝ))) + eta + rho ∧
@@ -93,11 +92,11 @@ theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
   have hcenter : Hcenter.IsHermitian :=
     hHerm.sub (isHermitian_one.smul
       (by simp [IsSelfAdjoint, Complex.conj_ofReal] : IsSelfAdjoint (energy : ℂ)))
-  have hnorm (i) : ‖h i‖ ≤ 1 :=
+  have hnorm (i) : ‖Φ.term i‖ ≤ 1 :=
     (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 i)).mpr (h1 i)
   have hHnorm : ‖H‖ ≤ (L : ℝ) := by
     calc
-      _ ≤ ∑ i, ‖h i‖ := norm_sum_le _ _
+      _ ≤ ∑ i, ‖Φ.term i‖ := norm_sum_le _ _
       _ ≤ ∑ _ : Fin (L - 1), (1 : ℝ) := Finset.sum_le_sum fun i _ ↦ hnorm i
       _ = ((L - 1 : ℕ) : ℝ) := by simp
       _ ≤ (L : ℝ) := by exact_mod_cast Nat.sub_le L 1
@@ -125,8 +124,8 @@ theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
         congr 1
         push_cast
         ring
-  obtain ⟨hKerror, hKrank⟩ := positiveChainPropagator_spec hq h hs h0 h1 hT hrho
-  let K := positiveChainPropagator h h0 T rho
+  obtain ⟨hKerror, hKrank⟩ := positiveChainPropagator_spec hq Φ h0 h1 hT hrho
+  let K := positiveChainPropagator Φ h0 T rho
   have hQdef : Q = ∑ j : Fin N, weights j • (phase (times j) • K (-times j)) := rfl
   have hsamples (j : Fin N) :
       ‖hermitianUnitaryPath Hcenter (times j) - phase (times j) • K (-times j)‖ ≤ rho := by
@@ -163,12 +162,11 @@ theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
 `positiveChainGaussianApproximant_spec`. Huang, arXiv:1406.6355v6, Section 5.4,
 Lemmas 18--19. -/
 theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (variance : ℝ≥0) (energy : ℝ) {T eta rho : ℝ}
     (hT : 0 ≤ T) (heta : 0 < eta) (hrho : 0 < rho) :
-    let H := ∑ i, h i
+    let H := Φ.hamiltonian
     let r := chainPropagationRadius L T rho
     ∃ (N : ℕ) (Q : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
       1 ≤ N ∧ (N : ℝ) ≤ 2 * T * ((L : ℝ) + |energy| + 1) / eta + 2 ∧
@@ -177,8 +175,8 @@ theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
       ∀ cut : ℕ, operatorSchmidtRank
         (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) Q) ≤
           N * q ^ (8 * r + 8) :=
-  ⟨positiveChainGaussianSampleCount h energy T eta,
-    positiveChainGaussianApproximant h h0 variance energy T eta rho,
-    positiveChainGaussianApproximant_spec hq h hs h0 h1 variance energy hT heta hrho⟩
+  ⟨positiveChainGaussianSampleCount Φ energy T eta,
+    positiveChainGaussianApproximant Φ h0 variance energy T eta rho,
+    positiveChainGaussianApproximant_spec hq Φ h0 h1 variance energy hT heta hrho⟩
 
 end TNLean.MPS.AreaLaw

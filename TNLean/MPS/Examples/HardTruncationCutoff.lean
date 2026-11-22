@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.WeightedGHZ
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SupportedMatrixElements
 import QICLean.Entropy.RegionUnion
@@ -190,8 +189,9 @@ theorem bondTerm_positive_contraction (K : ℕ) (i : Fin (K + 1)) :
 private theorem oneSite_mem {K : ℕ} (i : Fin (K + 2)) (S : Finset (Fin (K + 2)))
     (hi : i ∈ S) : oneSite K i ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) S := by
   apply ManyBody.supportedOperators_mono (Finset.singleton_subset_iff.mpr hi)
-  simpa only [oneSite, bit, Complex.ofReal_natCast] using
-    QuantumCircuit.diagonal_comp_eval_mem_supportedOperators i (fun x ↦ (x.val : ℂ))
+  rw [oneSite]
+  exact ManyBody.diagonal_mem_supportedOperators fun σ τ h ↦ by
+    simp only [bit, h i (Finset.mem_singleton_self i)]
 
 private theorem boundary_formula (K : ℕ) :
     boundary K = (1 - (1 / 4 : ℂ) • oneSite K 0) * (1 - oneSite K 1) := by

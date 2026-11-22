@@ -8,6 +8,8 @@ import TNLean.Algebra.SubmoduleStarProjectionMatrix
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.Matrix.Hermitian
 import QICLean.ManyBody.Sites.Placement
+import QICLean.ManyBody.Dynamics.InteractionOperations
+import QICLean.ManyBody.Hamiltonian.FrustrationFree
 import QICLean.Algebra.MatrixAux
 
 /-!
@@ -191,37 +193,6 @@ noncomputable def regionParentGroundSpace (A : Tensor Γ d) (R : ι → Finset V
     Submodule ℂ ((V → Fin d) → ℂ) :=
   ⨅ i, ⨅ τ, (regionGroundSpace A (R i)).comap (regionSliceMap (R i) τ)
 
-/-- The sum of a finite family of regional interactions extended to the full graph.
-Source: arXiv:2011.12127, parent Hamiltonian, lines 2003–2011. -/
-noncomputable def regionParentHamiltonian (R : ι → Finset V)
-    (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
-      (RegionPhysicalConfig (d := d) (R i)) ℂ) : Matrix (V → Fin d) (V → Fin d) ℂ :=
-  ∑ i, ManyBody.place (X := fun _ ↦ Fin _) (R i) (h i)
-
-/-- A finite parent Hamiltonian is positive semidefinite.
-Source: arXiv:2011.12127, lines 2008–2011. -/
-theorem regionParentHamiltonian_posSemidef (R : ι → Finset V)
-    (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
-      (RegionPhysicalConfig (d := d) (R i)) ℂ)
-    (hh : ∀ i, (h i).PosSemidef) : (regionParentHamiltonian R h).PosSemidef := by
-  exact Matrix.posSemidef_sum Finset.univ fun i _ => ManyBody.posSemidef_place
-      (X := fun _ ↦ Fin _) (hh i)
-
-/-- The kernel of the positive sum is the common kernel of its local terms.
-Source: arXiv:2011.12127, frustration-free ground space, lines 2008–2011. -/
-theorem regionParentHamiltonian_mulVec_eq_zero_iff (R : ι → Finset V)
-    (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
-      (RegionPhysicalConfig (d := d) (R i)) ℂ)
-    (hh : ∀ i, (h i).PosSemidef) (ψ : (V → Fin d) → ℂ) :
-    regionParentHamiltonian R h *ᵥ ψ = 0 ↔
-      ∀ i, ManyBody.place (X := fun _ ↦ Fin _) (R i) (h i) *ᵥ ψ = 0 := by
-  constructor
-  · intro hzero i
-    exact Matrix.PosSemidef.mulVec_eq_zero_of_sum_mulVec_eq_zero
-      (fun j => ManyBody.posSemidef_place (X := fun _ ↦ Fin _) (hh j)) hzero i
-  · intro hzero
-    simp [regionParentHamiltonian, Matrix.sum_mulVec, hzero]
-
 /-- The full ground space is the intersection of the regional PEPS conditions.
 This characterization is independent of the choice of positive interactions
 with those kernels. Source: arXiv:2011.12127, lines 2003–2011. -/
@@ -229,11 +200,14 @@ theorem ker_regionParentHamiltonian (A : Tensor Γ d) (R : ι → Finset V)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hh : ∀ i, IsRegionParentInteraction A (R i) (h i)) :
-    (Matrix.mulVecLin (regionParentHamiltonian R h)).ker =
+    (Matrix.mulVecLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian).ker =
       regionParentGroundSpace A R := by
   ext ψ
   simp only [LinearMap.mem_ker, Matrix.mulVecLin_apply,
-    regionParentHamiltonian_mulVec_eq_zero_iff R h (fun i => (hh i).1),
+    ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff
+      (Φ := ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h)
+      fun i ↦ ManyBody.posSemidef_place (X := fun _ ↦ Fin _) (hh i).1,
+    ManyBody.Interaction.ofPlace_term,
     place_mulVec_eq_zero_iff A _ (hh _), regionParentGroundSpace,
     Submodule.mem_iInf, Submodule.mem_comap, regionSliceMap, LinearMap.coe_mk,
     AddHom.coe_mk]
@@ -252,8 +226,10 @@ theorem regionParentHamiltonian_stateCoeff_eq_zero (A : Tensor Γ d) (R : ι →
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hh : ∀ i, IsRegionParentInteraction A (R i) (h i)) :
-    regionParentHamiltonian R h *ᵥ stateCoeff A = 0 := by
-  exact (regionParentHamiltonian_mulVec_eq_zero_iff R h (fun i => (hh i).1) _).mpr
+    (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian *ᵥ stateCoeff A = 0 := by
+  exact (ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff
+    (Φ := ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h)
+    fun i ↦ ManyBody.posSemidef_place (X := fun _ ↦ Fin _) (hh i).1).mpr
     (fun i => place_stateCoeff_eq_zero A (R i) (hh i))
 
 end TNLean.PEPS

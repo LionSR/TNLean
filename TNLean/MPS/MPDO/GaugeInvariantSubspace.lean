@@ -237,7 +237,8 @@ FBC25 (arXiv:2502.20257, lines 4325--4335). -/
 def placedGaussOperator (N : ℕ) (hN : 2 ≤ N) (j : Fin N)
     (R : G → G → Matrix.unitaryGroup (Fin 2 → Fin d) ℂ) (g : G) :
     MPOTensor.ChainOperator (Fintype.card (Fin d × G)) N :=
-  MPOTensor.embedLocalOperator 2 N hN j (gaussWindowOperator d G R g)
+  ManyBody.placeAlong (X := fun _ ↦ Fin (Fintype.card (Fin d × G))) (ManyBody.ringWindow hN j)
+    (gaussWindowOperator d G R g)
 
 /-- The gauged vector `∑_α Ψ_α ⊗ |α⟩` assembled from matter defect states
 indexed by gauge-label configurations, as in FBC25
@@ -275,28 +276,32 @@ def HasPrescribedDefectCovariance (hN : 2 ≤ N)
     (Dd : TNLean.Algebra.DefectMaps G (Fin 2 → Fin d))
     (Ψ : (Fin N → G) → (Fin N → Fin d) → ℂ) : Prop :=
   ∀ (α : Fin N → G) (j : Fin N) (g : G),
-    MPOTensor.embedLocalOperator 2 N hN j
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN j)
         (Dd.prescribed (MPSTensor.extractWindow 2 j α 0)
           (MPSTensor.extractWindow 2 j α 1)) *ᵥ Ψ α =
-      MPOTensor.embedLocalOperator 2 N hN j
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN j)
         (Dd.prescribed (MPSTensor.extractWindow 2 j α 0 * g⁻¹)
           (g * MPSTensor.extractWindow 2 j α 1)) *ᵥ
         Ψ (chainLabelAction hN j g α)
 
 end GaugedVector
 
-/-- A placed operator applied to a vector, evaluated at a configuration whose
-window has been replaced, is the local operator applied to the matter slice of
+/-- An operator placed on the window of `L` consecutive sites starting at `i`
+(`ManyBody.placeAlong` along `ManyBody.ringWindow`) applied to a vector, evaluated at a
+configuration whose window has been replaced, is the local operator applied to the matter slice of
 that vector over the same window. -/
-theorem embedLocalOperator_mulVec_replaceWindow {D' : ℕ} (L : ℕ) (M : ℕ)
+theorem placeAlong_ringWindow_mulVec_replaceWindow {D' : ℕ} (L : ℕ) (M : ℕ)
     (hLM : L ≤ M) (i : Fin M)
     (B : Matrix (Fin L → Fin D') (Fin L → Fin D') ℂ)
     (v : (Fin M → Fin D') → ℂ) (x : Fin M → Fin D') (r : Fin L → Fin D') :
-    (MPOTensor.embedLocalOperator L M hLM i B *ᵥ v)
+    (ManyBody.placeAlong (X := fun _ ↦ Fin D') (ManyBody.ringWindow hLM i) B *ᵥ v)
         (MPSTensor.replaceWindow L hLM i x r) =
       (B *ᵥ fun m ↦ v (MPSTensor.replaceWindow L hLM i x m)) r := by
-  rw [MPOTensor.embedLocalOperator_mulVec_apply]
-  simp only [MPSTensor.extractWindow_replaceWindow,
+  rw [ManyBody.placeAlong_mulVec_apply_of (ManyBody.ringWindow hLM i) B v _
+    (MPSTensor.replaceWindow L hLM i (MPSTensor.replaceWindow L hLM i x r))
+    (MPSTensor.replaceWindow_ringWindow hLM i _)
+    (fun τ _ hv ↦ MPSTensor.replaceWindow_of_forall_ringWindow_ne hLM i _ τ hv)]
+  simp only [MPSTensor.replaceWindow_ringWindow,
     MPSTensor.replaceWindow_replaceWindow_same, Matrix.mulVec, dotProduct]
 
 section Invariance
@@ -347,8 +352,8 @@ theorem placedGaussOperator_mulVec_gaugedVector (hN : 2 ≤ N)
     rw [hleft, hright] at h
     funext r
     have hr := congrFun h (MPSTensor.replaceWindow 2 hN j x r)
-    rw [embedLocalOperator_mulVec_replaceWindow,
-      embedLocalOperator_mulVec_replaceWindow] at hr
+    rw [placeAlong_ringWindow_mulVec_replaceWindow,
+      placeAlong_ringWindow_mulVec_replaceWindow] at hr
     exact hr
   have htransport :
       (Matrix.unitaryFactorizationComparison R (a * g) (g⁻¹ * b) a b :
@@ -415,7 +420,10 @@ theorem placedGaussOperator_mulVec_gaugedVector (hN : 2 ≤ N)
           (((TNLean.Algebra.gaussLegAction g).injective (hmove.trans hEq)).symm)
       rw [TNLean.Algebra.gaussOperator_apply_of_ne R g _ _ hne]
       simp [hpq]
-  rw [placedGaussOperator, MPOTensor.embedLocalOperator_mulVec_apply,
+  rw [placedGaussOperator, ManyBody.placeAlong_mulVec_apply_of (ManyBody.ringWindow hN j) _ _ σ
+      (MPSTensor.replaceWindow 2 hN j σ) (MPSTensor.replaceWindow_ringWindow hN j σ)
+      (fun τ _ hv ↦ MPSTensor.replaceWindow_of_forall_ringWindow_ne hN j σ τ hv),
+    ← MPSTensor.extractWindow_eq_comp_ringWindow hN,
     ← Equiv.sum_comp (gaussLocalCoordinateEquiv d G)
       (fun τ ↦ gaussWindowOperator d G R g (MPSTensor.extractWindow 2 j σ) τ *
         gaugedVector d G Ψ (MPSTensor.replaceWindow 2 hN j σ τ)),
@@ -446,11 +454,8 @@ theorem placedGaussProjector_eq_average (hN : 2 ≤ N) (j : Fin N)
     ext u v
     simp [gaussWindowProjector, gaussWindowOperator, Matrix.reindex_apply,
       TNLean.Algebra.gaussProjector_eq_average]
-  ext σ τ
-  by_cases hagree : MPOTensor.AgreesOutsideWindow
-      (d := Fintype.card (Fin d × G)) 2 hN j σ τ <;>
-    simp [placedGaussProjector, placedGaussOperator, hwindow, hagree,
-      Matrix.sum_apply, embedLocalOperator_apply]
+  rw [placedGaussProjector, hwindow, ManyBody.placeAlong_smul, ManyBody.placeAlong_sum]
+  rfl
 
 /-- The gauged vector is fixed by every placed Gauss projector of every
 completion. -/

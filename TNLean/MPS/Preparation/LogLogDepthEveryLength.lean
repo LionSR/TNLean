@@ -7,6 +7,7 @@ import TNLean.MPS.Preparation.LogDepthPreparation
 import TNLean.MPS.Preparation.LogLogDepthBound
 import TNLean.MPS.Preparation.UnequalTreePreparation
 import TNLean.MPS.Preparation.RemainderBlocks
+import QICLean.Circuit.Model.Measurement
 
 /-!
 # Preparation with measurements in depth `O(log log(N/ε))`, every chain length
@@ -15,11 +16,11 @@ The paragraph "Tree-RG circuit with measurements" of arXiv:2307.01696 concludes 
 a preparation algorithm for short-range correlated MPS with depth `O(log log(N/ε))`". This file
 proves it for normal tensors and every chain length `N ≥ 2`.
 
-* `MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero`:
+* `MPSPreparation.exists_isMeasurementConversion_le_log_log_of_mpvState_ne_zero`:
   for every normal tensor `A` there is `c`, depending only on `A`, such that for `N ≥ 2`,
   `0 < ε ≤ 1` and `|φ_N(A)⟩ ≠ 0`, a unit vector with error at most `ε` is prepared with
   measurement rounds in depth at most `c log(log(N/ε) + 1)`, which is `O(log log(N/ε))`.
-* `MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log`: the same for every
+* `MPSPreparation.exists_isMeasurementConversion_le_log_log`: the same for every
   `N ≥ N₀`, without the condition `|φ_N(A)⟩ ≠ 0`.
 
 The block length is `q = ⌈a log(N/ε) + b⌉`, chosen after Lemma 1 of the source. For a chain at
@@ -28,7 +29,7 @@ last one, which may be larger" (Supplemental Material, proof of Theorem 1), `q �
 approximating state of these blocks has error at most `ε` by Lemma 1'(i) for blocks of unequal
 lengths (`MPSTensor.exists_blockApproximationError_le_mul`), and it is prepared with measurements
 by trees of `h + 1` coarse depths with `2^{h+2} s ≤ q < 2^{h+3} s`, on leaves of unequal widths
-(`MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState`), in depth
+(`MPSPreparation.exists_isMeasurementConversion_blockIsometryState`), in depth
 `C (h + 1) = O(log q)`. A shorter chain is one block, and `|φ_N⟩` itself is the state of that block
 with the pair `ω ∝ P |𝟙⟩` (`MPSPreparation.blockIsometryState_normalizedTracePair`); a chain of
 fewer than `4s` sites is prepared in bounded depth
@@ -44,8 +45,8 @@ holds for every `N ≥ N₀`. Documented in
 
 ## Main results
 
-* `MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero`.
-* `MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_le_log_log`.
+* `MPSPreparation.exists_isMeasurementConversion_le_log_log_of_mpvState_ne_zero`.
+* `MPSPreparation.exists_isMeasurementConversion_le_log_log`.
 
 ## References
 
@@ -76,17 +77,18 @@ The block length is `q = ⌈a log(N/ε) + b⌉` (the sentence after Lemma 1: "$q
 the last one, which may be larger" (Supplemental Material, proof of Theorem 1), the error is at
 most `ε` by Lemma 1'(i) (`MPSTensor.exists_blockApproximationError_le_mul`), and the trees of the
 blocks have `O(log q)` depths
-(`exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState`). If `N < q`, then `|φ_N⟩`
+(`exists_isMeasurementConversion_blockIsometryState`). If `N < q`, then `|φ_N⟩`
 itself is prepared, by the tree of one block, or in bounded depth on fewer than `4s` sites.
 
 The periodic state is assumed nonzero, as the source's normalization `c_N > 0` presupposes; see
 the Local fix of the module docstring. -/
-theorem exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero {D : ℕ}
+theorem exists_isMeasurementConversion_le_log_log_of_mpvState_ne_zero {D : ℕ}
     (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N → mpvState A N ≠ 0 →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧
         (T : ℝ) ≤ c * Real.log (Real.log (N / ε) + 1) ∧
-        IsPreparedWithMeasurementRoundsInDepth T (fun x => ψ x) ∧
+        (∃ v : Fin N → Fin d → ℂ, IsMeasurementConversion (Geometry.ring N) T
+          (fun σ ↦ ∏ i, v i (σ i)) (fun x => ψ x)) ∧
         1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   classical
   -- Degenerate dimensions: the periodic state vanishes.
@@ -103,7 +105,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_
   set s := L + 2 with hsdef
   have hs0 : 0 < s := by omega
   have hinjs : ∀ m, s ≤ m → Kraus.IsInjective (blockTensor B m) := fun m hm => hinj m (by omega)
-  obtain ⟨C, hC⟩ := exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState d s (8 * s)
+  obtain ⟨C, hC⟩ := exists_isMeasurementConversion_blockIsometryState d s (8 * s)
     (by omega)
   obtain ⟨Ks, hKs⟩ := exists_isPreparedInDepth_of_norm_eq_one hd (4 * s)
   -- The quadratic unequal-block bound with `γ = 1/2`.
@@ -234,9 +236,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_
     · -- fewer than `4s` sites: bounded depth
       have hψ := norm_normalizedMPVState h0
       refine ⟨normalizedMPVState A N, Ks, hψ, hc _ (Or.inr le_rfl),
-        isPreparedWithMeasurementRoundsInDepth_of_isPreparedWithMeasurementsInDepth
-          (isPreparedWithMeasurementsInDepth_of_isPreparedInDepth
-            (hKs N hN (by omega) _ hψ) fun h' => ?_), hself _ hψ⟩
+        (hKs N hN (by omega) _ hψ).exists_isMeasurementConversion fun h' => ?_, hself _ hψ⟩
       have : normalizedMPVState A N = 0 := by
         ext x; exact congrFun h' x
       rw [this, norm_zero] at hψ
@@ -248,16 +248,17 @@ with `D ≥ 1` there are `c` and `N₀`, depending only on `A`, such that for ev
 `0 < ε ≤ 1`, some unit vector `|ψ⟩` with `1 - |⟨ψ|φ_N⟩| ≤ ε` is prepared with measurement rounds
 in depth at most `c log(log(N/ε) + 1)`.
 
-This is `exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero` together
+This is `exists_isMeasurementConversion_le_log_log_of_mpvState_ne_zero` together
 with `exists_mpvState_ne_zero_of_le`. -/
-theorem exists_isPreparedWithMeasurementRoundsInDepth_le_log_log {D : ℕ} [NeZero D]
+theorem exists_isMeasurementConversion_le_log_log {D : ℕ} [NeZero D]
     (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
     ∃ (c : ℝ) (N₀ : ℕ), ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧
         (T : ℝ) ≤ c * Real.log (Real.log (N / ε) + 1) ∧
-        IsPreparedWithMeasurementRoundsInDepth T (fun x => ψ x) ∧
+        (∃ v : Fin N → Fin d → ℂ, IsMeasurementConversion (Geometry.ring N) T
+          (fun σ ↦ ∏ i, v i (σ i)) (fun x => ψ x)) ∧
         1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
-  obtain ⟨c, hc⟩ := exists_isPreparedWithMeasurementRoundsInDepth_le_log_log_of_mpvState_ne_zero
+  obtain ⟨c, hc⟩ := exists_isMeasurementConversion_le_log_log_of_mpvState_ne_zero
     A hA
   obtain ⟨N₀, hN₀⟩ := exists_mpvState_ne_zero_of_le A hA
   exact ⟨c, max N₀ 2, fun ε hε hε1 N _ hN =>

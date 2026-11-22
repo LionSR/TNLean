@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.ResidueCoverGapCriterion
 import TNLean.Algebra.UniformSelectionBounds
-import TNLean.Algebra.OrthogonalKernelGap
+import QICLean.Analysis.OrthogonalKernelGap
 
 /-!
 # A uniform open gap from aligned gaps and residual covers

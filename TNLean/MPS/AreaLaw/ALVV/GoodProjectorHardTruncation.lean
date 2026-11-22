@@ -70,9 +70,9 @@ namespace TNLean.MPS.AreaLaw.ALVV
 with index in `[c, c + 2ℓ)`. Auxiliary to ALVV, arXiv:1602.08828v2, `c:goodagsphardtrunc`,
 lines 979–1005. -/
 private theorem sum_window_bonds {L q ℓ c : ℕ} (hc : c + 2 * ℓ ≤ L - 1)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    ∑ r : Fin (2 * ℓ), h ⟨c + r.val, by omega⟩ =
-      ∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦ c ≤ i.val ∧ i.val < c + 2 * ℓ), h i := by
+    (Φ : ManyBody.BondInteraction L q) :
+    ∑ r : Fin (2 * ℓ), Φ.term ⟨c + r.val, by omega⟩ =
+      ∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦ c ≤ i.val ∧ i.val < c + 2 * ℓ), Φ.term i := by
   refine Finset.sum_bij' (fun r _ ↦ ⟨c + r.val, by omega⟩)
     (fun i hi ↦ ⟨i.val - c, by simp only [Finset.mem_filter] at hi; omega⟩) ?_ ?_ ?_ ?_ ?_
   · intro r _
@@ -138,35 +138,33 @@ The constant and the cutoff are those of the module's local fix. -/
 theorem exists_three_bulk_hard_truncation_spectral_comparison
     (L q a b ell : ℕ) (t : ℝ) (hq : 0 < q) (hell : 1 ≤ ell) (ht0 : 0 ≤ t)
     (hab : a + 2 * ell ≤ b) (hbL : b + 2 * ell ≤ L - 1)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let I : Fin 5 → Finset (Fin (L - 1)) := fun j ↦
       Finset.univ.filter (fun i ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-      fun j ↦ ∑ i ∈ I j, h i
+      fun j ↦ ∑ i ∈ I j, Φ.term i
     let J : Finset (Fin (L - 1)) := Finset.univ.filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ J, h i
+    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ J, Φ.term i
     let K : Finset (Fin 5) := {0, 2, 4}
     let jmin : Fin (Fintype.card (Fin L → Fin q)) :=
       ⟨Fintype.card (Fin L → Fin q) - 1,
         Nat.sub_lt (Fintype.card_pos_iff.mpr ⟨fun _ ↦ (Fin.mk (0 : ℕ) hq : Fin q)⟩) one_pos⟩
     ∃ (e : Fin 5 → ℝ) (E0 : ℝ) (x : (Fin L → Fin q) → ℂ),
       let S := ∑ j, e j
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := (∑ i, h i) - (S : ℂ) • 1
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian - (S : ℂ) • 1
       let Ht : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
         (∑ j, ((if j ∈ K then cfc (fun r : ℝ ↦ min r (e j + t)) (A j) else A j) -
           (e j : ℂ) • 1)) + Y
       let F : ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) →
           Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
         Sum.elim (Sum.elim
-          (fun r ↦ h ⟨a + r.val, (Nat.add_lt_add_left r.isLt a).trans_le
+          (fun r ↦ Φ.term ⟨a + r.val, (Nat.add_lt_add_left r.isLt a).trans_le
             (hab.trans ((Nat.le_add_right b (2 * ell)).trans hbL))⟩)
-          (fun r ↦ h ⟨b + r.val, (Nat.add_lt_add_left r.isLt b).trans_le hbL⟩))
+          (fun r ↦ Φ.term ⟨b + r.val, (Nat.add_lt_add_left r.isLt b).trans_le hbL⟩))
           ![cfc (fun r : ℝ ↦ min r (e 0 + t)) (A 0) - ((e 0 + e 1 + e 3 : ℝ) : ℂ) • 1,
             cfc (fun r : ℝ ↦ min r (e 2 + t)) (A 2) - (e 2 : ℂ) • 1,
             cfc (fun r : ℝ ↦ min r (e 4 + t)) (A 4) - (e 4 : ℂ) • 1]
@@ -210,10 +208,10 @@ theorem exists_three_bulk_hard_truncation_spectral_comparison
   obtain ⟨e, E0, x, z, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low, hE0ge, hE0le4,
       hnorm, hres⟩ :=
     TNLean.MPS.AreaLaw.exists_five_region_independent_truncation_residual
-      L q a b ell t hq hell ht0 (by omega) (by omega) h hs h0 h1
+      L q a b ell t hq hell ht0 (by omega) (by omega) Φ h0 h1
   obtain ⟨_, _, hAs, hApos, hYpos, _, _, hHsum⟩ :=
     TNLean.MPS.AreaLaw.five_region_original_bond_data L q (a + 1) (a + 2 * ell) (b + 1)
-      (b + 2 * ell) (by omega) (by omega) (by omega) (by omega) h hs h0 h1
+      (b + 2 * ell) (by omega) (by omega) (by omega) (by omega) Φ h0 h1
   refine ⟨e, E0, x, ?_⟩
   intro S H Ht F
   let ι := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
@@ -224,7 +222,7 @@ theorem exists_three_bulk_hard_truncation_spectral_comparison
     · exact (hAh j).energyTruncation_le (e j + t)
     · exact le_rfl
   have hHB : H = (∑ j, (A j - (e j : ℂ) • 1)) + Y := by
-    change (∑ i, h i) - ((∑ j, e j : ℝ) : ℂ) • 1 = _
+    change Φ.hamiltonian - ((∑ j, e j : ℝ) : ℂ) • 1 = _
     rw [← hcenter]
     simp only [Finset.notMem_empty, ite_false]
     rfl
@@ -285,7 +283,7 @@ theorem exists_three_bulk_hard_truncation_spectral_comparison
     exact ⟨r1, r2⟩
   have hwin : ∑ r, F (Sum.inl (Sum.inl r)) + ∑ r, F (Sum.inl (Sum.inr r)) = A 1 + A 3 + Y := by
     simp only [F, Sum.elim_inl, Sum.elim_inr]
-    rw [sum_window_bonds (c := a) (by omega) h, sum_window_bonds (c := b) hbL h]
+    rw [sum_window_bonds (c := a) (by omega) Φ, sum_window_bonds (c := b) hbL Φ]
     have k1 : k (Fin.castSucc 1) = a + 1 := rfl
     have k2 : k (Fin.succ 1) = a + 2 * ell := rfl
     have k3 : k (Fin.castSucc 3) = b + 1 := rfl
@@ -319,7 +317,7 @@ theorem exists_three_bulk_hard_truncation_spectral_comparison
           ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L lo hi : Finset (Fin L)) :=
       sub_mem (ManyBody.cfc_mem_supportedOperators _ hR)
         (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
-    exact ⟨fun r ↦ hs ⟨a + r.val, _⟩, fun r ↦ hs ⟨b + r.val, _⟩,
+    exact ⟨fun r ↦ Φ.mem ⟨a + r.val, _⟩, fun r ↦ Φ.mem ⟨b + r.val, _⟩,
       hbulk 0 _ _ _ (hAs 0), hbulk 2 _ _ _ (hAs 2), hbulk 4 _ _ _ (hAs 4)⟩
   beta_reduce at hnorm
   refine ⟨hxunit, hx, hlo, hdecomp, hsupp.1, hsupp.2.1, hsupp.2.2.1, hsupp.2.2.2.1,

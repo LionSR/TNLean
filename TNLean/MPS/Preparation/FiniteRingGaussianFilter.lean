@@ -34,23 +34,12 @@ open scoped Matrix Matrix.Norms.L2Operator
 
 namespace MPSTensor
 
-/-- Cyclic embedding and summation preserve Hermiticity of a two-site
-interaction. Source: arXiv:1010.3732, Section II.C.1, lines 407–427. -/
-theorem interactionHamiltonian_isHermitian {d N : ℕ} (hN : 2 ≤ N)
-    {h : MPOTensor.ChainOperator d 2} (hHerm : h.IsHermitian) :
-    (interactionHamiltonian h hN).IsHermitian := by
-  change (∑ i : Fin N, MPOTensor.embedLocalOperator 2 N hN i h)ᴴ =
-    ∑ i : Fin N, MPOTensor.embedLocalOperator 2 N hN i h
-  rw [Matrix.conjTranspose_sum]
-  exact Finset.sum_congr rfl fun i _ ↦
-    MPOTensor.embedLocalOperator_isHermitian 2 N hN i hHerm
-
 /-- Gaussian averaging of the actual finite-ring dynamics gives the sum of
 the short-time propagation error and the Gaussian tail, uniformly in ring
 length and physical dimension. This is the periodic specialization of
 Hastings, arXiv:cond-mat/0508554v3, equation `lbnd`, lines 266–283.
 No clustering estimate is assumed. -/
-theorem norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le
+theorem norm_gaussianFilteredTerm_hamiltonian_translationInvariant_commutator_le
     {d N : ℕ} [NeZero N] (hN : 2 ≤ N)
     (h : MPOTensor.ChainOperator d 2) (hHerm : h.IsHermitian) (hNorm : ‖h‖ ≤ 1)
     (A B : MPOTensor.ChainOperator d N)
@@ -59,8 +48,10 @@ theorem norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le
     (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
     (hXY : Disjoint (X : Set (Fin N)) (Y : Set (Fin N)))
     (a : ℝ) (ha : 0 ≤ a) {q Δ T : ℝ} (hq : 0 ≤ q) (hT : 0 ≤ T) :
-    ‖ManyBody.gaussianFilteredTerm q Δ (interactionHamiltonian h hN) A * B -
-        B * ManyBody.gaussianFilteredTerm q Δ (interactionHamiltonian h hN) A‖ ≤
+    ‖ManyBody.gaussianFilteredTerm q Δ
+          (ManyBody.Interaction.translationInvariant hN h).hamiltonian A * B -
+        B * ManyBody.gaussianFilteredTerm q Δ
+          (ManyBody.Interaction.translationInvariant hN h).hamiltonian A‖ ≤
       2 * ‖A‖ * ‖B‖ * X.card *
           Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) *
           (Real.exp ((8 * Real.exp a) * T) - 1) +
@@ -69,14 +60,17 @@ theorem norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le
     apply sub_nonneg.mpr
     exact Real.one_le_exp (by positivity)
   refine ManyBody.norm_commutator_gaussianFilteredTerm_le hq
-    (interactionHamiltonian_isHermitian hN hHerm) A B hT (by positivity) ?_
+    (ManyBody.Interaction.isHermitian_hamiltonian
+      (ManyBody.Interaction.isHermitian_translates_term _ hHerm)) A B hT (by positivity) ?_
   intro t ht
   have htAbs : |t| ≤ T := abs_le.mpr ht
-  change ‖(exp (t • (Complex.I • interactionHamiltonian h hN)) * A *
-      exp ((-t) • (Complex.I • interactionHamiltonian h hN))) * B -
-    B * (exp (t • (Complex.I • interactionHamiltonian h hN)) * A *
-      exp ((-t) • (Complex.I • interactionHamiltonian h hN)))‖ ≤ _
-  refine (norm_interactionHamiltonian_commutator_le_exp_abs_of_disjoint hN h hHerm hNorm
+  change ‖(exp (t • (Complex.I • (ManyBody.Interaction.translationInvariant hN h).hamiltonian)) *
+      A * exp ((-t) • (Complex.I •
+        (ManyBody.Interaction.translationInvariant hN h).hamiltonian))) * B -
+    B * (exp (t • (Complex.I • (ManyBody.Interaction.translationInvariant hN h).hamiltonian)) *
+      A * exp ((-t) • (Complex.I •
+        (ManyBody.Interaction.translationInvariant hN h).hamiltonian)))‖ ≤ _
+  refine (norm_hamiltonian_translationInvariant_commutator_le_exp_abs_of_disjoint hN h hHerm hNorm
     A B X Y hX hY hA hB hXY a ha t).trans ?_
   gcongr
 
@@ -86,7 +80,7 @@ of the supports. The spectral filtering error for this same parameter is
 Hastings, arXiv:cond-mat/0508554v3, equation `lbnd`, with the actual periodic
 velocity `8 * exp 1`. It is a filtered commutator bound, not an ordinary
 connected-correlation estimate. -/
-theorem norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le_exp
+theorem norm_gaussianFilteredTerm_hamiltonian_translationInvariant_commutator_le_exp
     {d N : ℕ} [NeZero N] (hN : 2 ≤ N)
     (h : MPOTensor.ChainOperator d 2) (hHerm : h.IsHermitian) (hNorm : ‖h‖ ≤ 1)
     (A B : MPOTensor.ChainOperator d N)
@@ -97,8 +91,10 @@ theorem norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le_exp
     {ℓ Δ : ℝ} (hℓ : 0 < ℓ) (hΔ : 0 < Δ)
     (hDist : ℓ ≤ ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) :
     let q := ℓ / (16 * Real.exp 1) * Δ
-    ‖ManyBody.gaussianFilteredTerm q Δ (interactionHamiltonian h hN) A * B -
-        B * ManyBody.gaussianFilteredTerm q Δ (interactionHamiltonian h hN) A‖ ≤
+    ‖ManyBody.gaussianFilteredTerm q Δ
+          (ManyBody.Interaction.translationInvariant hN h).hamiltonian A * B -
+        B * ManyBody.gaussianFilteredTerm q Δ
+          (ManyBody.Interaction.translationInvariant hN h).hamiltonian A‖ ≤
       2 * ‖A‖ * ‖B‖ * X.card * Real.exp (-ℓ / 2) +
         2 * ‖A‖ * ‖B‖ * Real.exp (-ℓ * Δ / (32 * Real.exp 1)) := by
   let T := ℓ / (16 * Real.exp 1)
@@ -112,7 +108,7 @@ theorem norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le_exp
     dsimp [T]
     field_simp [ne_of_gt hℓ, ne_of_gt hΔ, ne_of_gt (Real.exp_pos (1 : ℝ))]
     ring
-  refine (norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le hN h hHerm hNorm
+  refine (norm_gaussianFilteredTerm_hamiltonian_translationInvariant_commutator_le hN h hHerm hNorm
     A B X Y hX hY hA hB hXY 1 (by norm_num) (mul_nonneg hT.le hΔ.le) hT.le).trans ?_
   rw [hTime, hTail]
   refine add_le_add ?_ le_rfl

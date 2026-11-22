@@ -37,6 +37,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
 
+open ManyBody (planeDomainGraph edgeBoundary ambientDilation)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The safe-box constant at clearance `2R + 10` obtained by subdivision from a safe-box
@@ -88,12 +90,13 @@ theorem sublinearCollarBound_real_of_boxEntropy_explicit
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
                 sublinearCollarConstant q J Δ Cbox *
                   (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) ∧
-              ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
+              ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
                 sublinearCollarConstant q J Δ Cbox * n ∧
-              ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+              ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
                 sublinearCollarConstant q J Δ Cbox * n ∧
-              ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+              ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦
+                  x.val ∈ ambientDilation T.points
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
                   A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
                 sublinearCollarConstant q J Δ Cbox * n ∧
@@ -160,12 +163,13 @@ theorem sublinearCollarBound_real_of_boxEntropy
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
                 sublinearCollarConstant q J Δ Cbox *
                   (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) ∧
-              ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
+              ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
                 sublinearCollarConstant q J Δ Cbox * n ∧
-              ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+              ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
                 sublinearCollarConstant q J Δ Cbox * n ∧
-              ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+              ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦
+                  x.val ∈ ambientDilation T.points
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
                   A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
                 sublinearCollarConstant q J Δ Cbox * n ∧
@@ -214,16 +218,17 @@ theorem sublinearCollarBound_real_of_initial
                 sublinearCollarConstant q J Δ
                   (Scan.physicalBoxBootstrapConstant q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een C₀) *
                     (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) ∧
-              ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
+              ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
                 sublinearCollarConstant q J Δ
                   (Scan.physicalBoxBootstrapConstant q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een C₀) *
                     n ∧
-              ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+              ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
                 sublinearCollarConstant q J Δ
                   (Scan.physicalBoxBootstrapConstant q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een C₀) *
                     n ∧
-              ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+              ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦
+                  x.val ∈ ambientDilation T.points
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
                   A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
                 sublinearCollarConstant q J Δ
@@ -295,14 +300,14 @@ theorem sublinearCollarBound_real_explicit
               sublinearCollarConstant q J Δ
                   (Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een) *
                 (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) ∧
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
               sublinearCollarConstant q J Δ
                 (Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een) * n ∧
-            ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T.points
+            ((edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.val ∈ ambientDilation T.points
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
               sublinearCollarConstant q J Δ
                 (Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een) * n ∧
-            ((edgeBoundary Λ ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
+            ((edgeBoundary (planeDomainGraph Λ) ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) \
                 A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤
               sublinearCollarConstant q J Δ

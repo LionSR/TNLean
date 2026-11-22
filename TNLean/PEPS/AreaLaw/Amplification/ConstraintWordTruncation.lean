@@ -55,7 +55,7 @@ open QuantumCircuit SpectralFilter Matrix MeasureTheory
 open scoped BigOperators NNReal Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace AdmissibleSupport exists_walk_length_le_iff_edist_le graphBall
+open ManyBody (IsGapped groundSpace AdmissibleSupport graphBall graphNeighborhood
   planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
@@ -185,31 +185,6 @@ section Lattice
 
 variable {Λ : Finset (ℤ × ℤ)}
 
-private theorem mem_graphNeighborhood_iff {R : ℕ} {X : Finset (Site Λ)} {y : Site Λ} :
-    y ∈ graphNeighborhood Λ R X ↔ ∃ x ∈ X, (planeDomainGraph Λ).edist x y ≤ R := by
-  classical
-  constructor
-  · intro h
-    obtain ⟨-, x, hx, hw⟩ := Finset.mem_filter.mp h
-    exact ⟨x, hx, (exists_walk_length_le_iff_edist_le Λ R x y).mp hw⟩
-  · rintro ⟨x, hx, hd⟩
-    exact Finset.mem_filter.mpr
-      ⟨Finset.mem_univ y, x, hx, (exists_walk_length_le_iff_edist_le Λ R x y).mpr hd⟩
-
-/-- A ball of radius `r` about a site within `r` of `S` lies in `N_{2r}(S)`.
-Source: area law, `09-amplification.tex`, lines 232–234. -/
-theorem graphBall_subset_graphNeighborhood_two_mul {S : Finset (Site Λ)} {r : ℕ}
-    {x : Site Λ} (hx : x ∈ graphNeighborhood Λ r S) :
-    graphBall (planeDomainGraph Λ) x r ⊆ graphNeighborhood Λ (2 * r) S := by
-  intro y hy
-  obtain ⟨s, hs, hd⟩ := mem_graphNeighborhood_iff.mp hx
-  refine mem_graphNeighborhood_iff.mpr ⟨s, hs, ?_⟩
-  calc (planeDomainGraph Λ).edist s y
-      ≤ (planeDomainGraph Λ).edist s x + (planeDomainGraph Λ).edist x y :=
-        SimpleGraph.edist_triangle
-    _ ≤ r + r := add_le_add hd (ManyBody.mem_graphBall.mp hy)
-    _ = ((2 * r : ℕ) : ℕ∞) := by push_cast; ring
-
 /-- With at most `μ` labels anchored at each site, at most `2 μ |S| (1 + r)²` labels have
 anchors in `N_r(S)`. Source: area law, `09-amplification.tex`, line 228, with the ball
 count of `01-preliminaries.tex`, lines 82–103. -/
@@ -217,14 +192,14 @@ theorem card_filter_anchor_mem_graphNeighborhood_le {κ : Type*} [Fintype κ]
     (a : κ → Site Λ) {μ : ℝ} (hμ : 0 ≤ μ)
     (hfiber : ∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ)
     (S : Finset (Site Λ)) (r : ℕ) :
-    ((Finset.univ.filter fun i => a i ∈ graphNeighborhood Λ r S).card : ℝ) ≤
+    ((Finset.univ.filter fun i => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r).card : ℝ) ≤
       2 * μ * S.card * (1 + (r : ℝ)) ^ 2 := by
   classical
-  have hsub : (Finset.univ.filter fun i => a i ∈ graphNeighborhood Λ r S) ⊆
+  have hsub : (Finset.univ.filter fun i => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r) ⊆
       S.biUnion fun s => (graphBall (planeDomainGraph Λ) s r).biUnion
         fun x => Finset.univ.filter fun i => a i = x := by
     intro i hi
-    obtain ⟨s, hs, hd⟩ := mem_graphNeighborhood_iff.mp (Finset.mem_filter.mp hi).2
+    obtain ⟨s, hs, hd⟩ := ManyBody.mem_graphNeighborhood.mp (Finset.mem_filter.mp hi).2
     simp only [Finset.mem_biUnion, Finset.mem_filter, Finset.mem_univ, true_and]
     exact ⟨s, hs, a i, ManyBody.mem_graphBall.mpr hd, rfl⟩
   have hcard := (Finset.card_le_card hsub).trans Finset.card_biUnion_le
@@ -240,7 +215,7 @@ theorem card_filter_anchor_mem_graphNeighborhood_le {κ : Type*} [Fintype κ]
           rw [Finset.sum_const, nsmul_eq_mul, mul_comm]
       _ ≤ μ * (2 * ((r : ℝ) + 1) ^ 2) :=
           mul_le_mul_of_nonneg_left (card_graphBall_domainGraph_le s r) hμ
-  calc ((Finset.univ.filter fun i => a i ∈ graphNeighborhood Λ r S).card : ℝ)
+  calc ((Finset.univ.filter fun i => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r).card : ℝ)
       ≤ ((∑ s ∈ S, ((graphBall (planeDomainGraph Λ) s r).biUnion
           fun x => Finset.univ.filter fun i => a i = x).card : ℕ) : ℝ) := by
         exact_mod_cast hcard
@@ -254,7 +229,7 @@ anchor multiplicity. Source: area law, `09-amplification.tex`, line 228, with th
 counts of `01-preliminaries.tex`, lines 82–103. -/
 theorem card_anchor_graphNeighborhood_le {R : ℕ} (a : AdmissibleSupport Λ R → Site Λ)
     (ha : ∀ X, a X ∈ X.1) (S : Finset (Site Λ)) (r : ℕ) :
-    ((Finset.univ.filter fun i => a i ∈ graphNeighborhood Λ r S).card : ℝ) ≤
+    ((Finset.univ.filter fun i => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r).card : ℝ) ≤
       2 * (2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) * S.card * (1 + (r : ℝ)) ^ 2 :=
   card_filter_anchor_mem_graphNeighborhood_le a (Nat.cast_nonneg _)
     (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) S r
@@ -264,17 +239,17 @@ anchored in `N_r(S)` is supported on `N_{2r}(S)`.
 Source: area law, `09-amplification.tex`, lines 232–234. -/
 theorem contractionWord_regionExpectation_mem_supportedOperators {q : ℕ}
     {κ : Type*} (a : κ → Site Λ) {S : Finset (Site Λ)} {r : ℕ}
-    (k : {i // a i ∈ graphNeighborhood Λ r S} →
+    (k : {i // a i ∈ graphNeighborhood (planeDomainGraph Λ) S r} →
       Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
-    ∀ (m : ℕ) (u : Fin m → {i // a i ∈ graphNeighborhood Λ r S}),
-      contractionWord (fun i : {i // a i ∈ graphNeighborhood Λ r S} =>
+    ∀ (m : ℕ) (u : Fin m → {i // a i ∈ graphNeighborhood (planeDomainGraph Λ) S r}),
+      contractionWord (fun i : {i // a i ∈ graphNeighborhood (planeDomainGraph Λ) S r} =>
           ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i))
         m u ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-            (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
-  have hmem (i : {i // a i ∈ graphNeighborhood Λ r S}) :
+            (graphNeighborhood (planeDomainGraph Λ) S (2 * r) : Finset (Site Λ)) := by
+  have hmem (i : {i // a i ∈ graphNeighborhood (planeDomainGraph Λ) S r}) :
       CFC.sqrt (1 - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i)) ∈
         ManyBody.supportedOperators (fun _ ↦ Fin q)
-            (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
+            (graphNeighborhood (planeDomainGraph Λ) S (2 * r) : Finset (Site Λ)) := by
     set K := graphBall (planeDomainGraph Λ) (a i) r
     have hK : CFC.sqrt (1 - ManyBody.regionExpectation K (k i)) ∈
         ManyBody.supportedOperators (fun _ ↦ Fin q) K :=
@@ -284,7 +259,7 @@ theorem contractionWord_regionExpectation_mem_supportedOperators {q : ℕ}
               (one_mem (ManyBody.supportedOperators _ _))
           (ManyBody.regionExpectation_mem_supportedOperators K (k i))))
     exact ManyBody.supportedOperators_mono
-      (by exact_mod_cast graphBall_subset_graphNeighborhood_two_mul i.2) hK
+      (by rw [two_mul]; exact_mod_cast ManyBody.graphBall_subset_graphNeighborhood_add i.2 r) hK
   intro m
   induction m with
   | zero => intro u; rw [contractionWord_zero]; exact (one_mem (ManyBody.supportedOperators _ _))
@@ -316,7 +291,7 @@ theorem domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 
           i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
       ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
-      let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
+      let P := fun i : κ => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r
       let kr := fun i : {i // P i} =>
         ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i)
       let D := fun w : PoissonWord.Word κ =>
@@ -331,7 +306,7 @@ theorem domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 
           Real.exp (-(c / 2 * (r : ℝ) ^ α)) ∧
       ∀ w, ‖L w‖ ≤ 1 ∧
         L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-            (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
+            (graphNeighborhood (planeDomainGraph Λ) S (2 * r) : Finset (Site Λ)) := by
   unfold constraintWordTruncationPrefactor
   intro q _ Λ κ _ a k hk₀ hk₁ hfiber htail S r t P kr D L
   have hkr₀ (i : {i // P i}) : 0 ≤ kr i := Matrix.nonneg_iff_posSemidef.mpr
@@ -382,7 +357,7 @@ theorem exists_domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) 
             i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
-        let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
+        let P := fun i : κ => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r
         let kr := fun i : {i // P i} =>
           ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i)
         let D := fun w : PoissonWord.Word κ =>
@@ -396,7 +371,7 @@ theorem exists_domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) 
           A * t * S.card * (1 + (r : ℝ)) ^ 2 * Real.exp (-(γ * (r : ℝ) ^ α)) ∧
         ∀ w, ‖L w‖ ≤ 1 ∧
           L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-              (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) :=
+              (graphNeighborhood (planeDomainGraph Λ) S (2 * r) : Finset (Site Λ)) :=
   ⟨_, _, constraintWordTruncationPrefactor_nonneg hμ C, half_pos hc,
     domainConstraintWord_truncation hC hμ⟩
 
@@ -438,7 +413,7 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
       ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
-      let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
+      let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r
       let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
         (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
       let kr := fun i : {i // P i} =>
@@ -455,7 +430,7 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
           S.card * (1 + (r : ℝ)) ^ 2 * Real.exp (-(c / 2 * (r : ℝ) ^ kernelExponent p)) ∧
       ∀ w, ‖L w‖ ≤ 1 ∧
         L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-            (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
+            (graphNeighborhood (planeDomainGraph Λ) S (2 * r) : Finset (Site Λ)) := by
   intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan S r t
   obtain ⟨-, hk, -, -, -, htail, -⟩ := hpos Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
   exact domainConstraintWord_truncation hC (Nat.cast_nonneg _) Λ (AdmissibleSupport Λ R) a _
@@ -476,7 +451,7 @@ theorem latticeConstraintWord_truncation_explicit {p : ℕ} (hp : 1 ≤ p) (R : 
       ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
-      let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
+      let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r
       let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
         (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
       let kr := fun i : {i // P i} =>
@@ -494,7 +469,7 @@ theorem latticeConstraintWord_truncation_explicit {p : ℕ} (hp : 1 ≤ p) (R : 
           Real.exp (-(latticePositiveConstraintRate R J Δ p / 2 * (r : ℝ) ^ kernelExponent p)) ∧
       ∀ w, ‖L w‖ ≤ 1 ∧
         L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-            (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) :=
+            (graphNeighborhood (planeDomainGraph Λ) S (2 * r) : Finset (Site Λ)) :=
   latticeConstraintWord_truncation_of_positiveConstraints R
     (latticePositiveConstraintConst_nonneg R J Δ p) (latticePositiveConstraints_explicit hp R hJ hΔ)
 
@@ -521,7 +496,7 @@ theorem exists_latticeConstraintWord_truncation {p : ℕ} (hp : 1 ≤ p) (R : �
         ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
-        let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
+        let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood (planeDomainGraph Λ) S r
         let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
           (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
         let kr := fun i : {i // P i} =>
@@ -538,7 +513,7 @@ theorem exists_latticeConstraintWord_truncation {p : ℕ} (hp : 1 ≤ p) (R : �
             Real.exp (-(c * (r : ℝ) ^ kernelExponent p)) ∧
         ∀ w, ‖L w‖ ≤ 1 ∧
           L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-              (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
+              (graphNeighborhood (planeDomainGraph Λ) S (2 * r) : Finset (Site Λ)) := by
   obtain ⟨C, c, hC, hc, hpos⟩ := exists_latticePositiveConstraints hp R hJ hΔ
   exact ⟨_, _, constraintWordTruncationPrefactor_nonneg (Nat.cast_nonneg _) C, half_pos hc,
     latticeConstraintWord_truncation_of_positiveConstraints R hC hpos⟩

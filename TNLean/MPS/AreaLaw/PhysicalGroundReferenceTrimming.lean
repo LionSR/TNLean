@@ -38,11 +38,9 @@ theorem exists_physical_ground_reference_trimming_profile
     (q : ℕ) (hq : 1 ≤ q) (gamma : ℝ) (hgamma : 0 < gamma) :
     ∃ C : ℝ, 0 < C ∧ ∃ P : ℕ,
       ∀ (L : ℕ)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu : ℝ),
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu : ℝ),
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H →
@@ -81,9 +79,9 @@ theorem exists_physical_ground_reference_trimming_profile
   obtain ⟨C, hC, P, href⟩ :=
     exists_physical_ground_reference_polynomial q hq gamma hgamma
   refine ⟨C, hC, P, ?_⟩
-  intro L h hs h0 h1 mu H hH hmu hgap G r Z
+  intro L Φ h0 h1 mu H hH hmu hgap G r Z
   obtain ⟨B, hB, hbound, U, hdim, hUG, hGU, hUMPS⟩ :=
-    href L h hs h0 h1 mu hmu hgap
+    href L Φ h0 h1 mu hmu hgap
   let d := r ^ 2 * B
   let bRef := d ^ 2
   let xi := 1 / (1000 * (d : ℝ) * Real.sqrt ((L : ℝ) + 1))

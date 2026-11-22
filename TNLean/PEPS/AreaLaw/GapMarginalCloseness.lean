@@ -25,7 +25,7 @@ open scoped InnerProductSpace Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Ope
 
 open ManyBody (IsGapped groundSpace)
 
-namespace FiniteProduct
+namespace ManyBody
 
 variable {V : Type*} [Fintype V] [DecidableEq V]
 variable (β : V → Type*) [∀ v, Fintype (β v)] [∀ v, DecidableEq (β v)]
@@ -37,7 +37,7 @@ The Hamiltonian and gap are those of the full system.
 Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 320–365,
 `eq:patch-energy-bound`, `eq:patch-kappa-choice`, `eq:patch-marginal-closeness`,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
-theorem re_trace_abs_reducedPure_sub_le_sqrt_energy
+theorem re_trace_abs_regionState_sub_le_sqrt_energy
     {H : Matrix ((v : V) → β v) ((v : V) → β v) ℂ}
     {E₀ Δ : ℝ} {Ω φ : EuclideanSpace ℂ ((v : V) → β v)} (hH : H.IsHermitian)
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped H E₀ Δ)
@@ -59,7 +59,7 @@ criterion, with no lower bound on any local dimension.
 Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 339–365,
 `eq:patch-kappa-choice` and `eq:patch-marginal-closeness`; revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
-theorem re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy
+theorem re_trace_abs_regionState_sub_le_one_sixteenth_of_energy
     {H : Matrix ((v : V) → β v) ((v : V) → β v) ℂ}
     {E₀ Δ : ℝ} {Ω φ : EuclideanSpace ℂ ((v : V) → β v)} (hH : H.IsHermitian)
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped H E₀ Δ)
@@ -68,9 +68,9 @@ theorem re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy
     (henergy : (⟪φ, Matrix.toEuclideanLin H φ⟫_ℂ).re - E₀ ≤ Δ / 1024)
     (R : Finset V) :
     (CFC.abs (ManyBody.regionState φ R - ManyBody.regionState Ω R)).trace.re ≤ (1 / 16 : ℝ) := by
-  refine (re_trace_abs_reducedPure_sub_le_sqrt_energy β hH hΩ hgap hspan hΔ hφ R).trans
+  refine (re_trace_abs_regionState_sub_le_sqrt_energy β hH hΩ hgap hspan hΔ hφ R).trans
     ((le_div_iff₀' (show (0 : ℝ) < 2 from zero_lt_two)).mp ?_)
   norm_num [Real.sqrt_le_iff, div_le_iff₀' hΔ]
   linarith
 
-end FiniteProduct
+end ManyBody

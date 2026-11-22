@@ -68,7 +68,7 @@ theorem chainGroundSpace_le_ker_parentHamiltonian
   rw [LinearMap.mem_ker]
   have hff : IsFrustrationFree A L N ψ :=
     isFrustrationFree_of_mem_chainGroundSpace A hN hLN hψ
-  rw [parentHamiltonian, LinearMap.sum_apply]
+  rw [parentHamiltonian_eq_sum_localTerm, LinearMap.sum_apply]
   exact Finset.sum_eq_zero fun i _ => hff i
 
 /-- In the nondegenerate range, the finite periodic parent-Hamiltonian kernel is

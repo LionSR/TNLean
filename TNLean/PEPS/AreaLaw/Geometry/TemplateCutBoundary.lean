@@ -24,7 +24,8 @@ Original formalization from the manuscript; no upstream Lean proof text reused.
 
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (ambientDilation ambientDilation_zero edgeBoundary mem_ambientDilation_iff
+  planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -33,22 +34,22 @@ crossing edges. Source: Lemma 9.4, final proof paragraph. -/
 theorem edgeBoundary_filter_image_subset_ambientBoundary
     (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (U : Finset (ℤ × ℤ))
     (hU : Disjoint U (boundaryEndpoints Λ A)) :
-    (edgeBoundary Λ (A.filter fun x ↦ x.1 ∈ U)).image (Sym2.map Subtype.val) ⊆
-      ambientBoundary U := by
+    (edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.1 ∈ U)).image
+        (Sym2.map Subtype.val) ⊆ ambientBoundary U := by
   classical
   intro e he
   obtain ⟨f, hf, rfl⟩ := Finset.mem_image.mp he
-  obtain ⟨hedge, p, hp, q, hq, rfl⟩ := Finset.mem_filter.mp hf
+  obtain ⟨hedge, p, hp, q, hq, rfl⟩ := ManyBody.mem_edgeBoundary.mp hf
   obtain ⟨hpA, hpU⟩ := Finset.mem_filter.mp hp
   have hqA : q ∈ A := by
     by_contra hn
-    have hcut : s(p, q) ∈ edgeBoundary Λ A :=
-      Finset.mem_filter.mpr ⟨hedge, p, hpA, q, hn, rfl⟩
+    have hcut : s(p, q) ∈ edgeBoundary (planeDomainGraph Λ) A :=
+      ManyBody.mem_edgeBoundary.mpr ⟨hedge, p, hpA, q, hn, rfl⟩
     exact Finset.disjoint_left.mp hU hpU
       (mem_boundaryEndpoints_of_mem_edgeBoundary hcut (by simp))
   have hqU : q.1 ∉ U := fun h ↦ hq (Finset.mem_filter.mpr ⟨hqA, h⟩)
   have hadj : (planeDomainGraph Λ).Adj p q := by
-    simpa only [SimpleGraph.mem_edgeFinset, SimpleGraph.mem_edgeSet] using hedge
+    simpa only [SimpleGraph.mem_edgeSet] using hedge
   exact mem_ambientBoundary_iff.mpr
     ⟨p.1, hpU, q.1, hqU, mem_latticeNeighbors_iff.mpr hadj, rfl⟩
 
@@ -57,7 +58,8 @@ empty or disconnected domains. Source: Lemma 9.4, physical boundary estimate. -/
 theorem card_edgeBoundary_filter_le_ambientBoundary
     (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (U : Finset (ℤ × ℤ))
     (hU : Disjoint U (boundaryEndpoints Λ A)) :
-    (edgeBoundary Λ (A.filter fun x ↦ x.1 ∈ U)).card ≤ (ambientBoundary U).card := by
+    (edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.1 ∈ U)).card ≤
+      (ambientBoundary U).card := by
   classical
   have h := Finset.card_le_card
     (edgeBoundary_filter_image_subset_ambientBoundary Λ A U hU)
@@ -90,7 +92,8 @@ theorem template_cut_boundary_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
     (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
     (j : ℕ) (hj : j ≤ s₀) :
-    (edgeBoundary Λ (A.filter fun x ↦ x.1 ∈ ambientDilation T.points j)).card ≤ 4 * n :=
+    (edgeBoundary (planeDomainGraph Λ)
+      (A.filter fun x ↦ x.1 ∈ ambientDilation T.points j)).card ≤ 4 * n :=
   (card_edgeBoundary_filter_le_ambientBoundary Λ A _
     (hsep.disjoint_ambientDilation hD j hj)).trans (template_boundary_card_le T hC j hj)
 
@@ -100,7 +103,7 @@ theorem template_core_boundary_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
     (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀) :
-    (edgeBoundary Λ (A.filter fun x ↦ x.1 ∈ T.points)).card ≤ 4 * n := by
+    (edgeBoundary (planeDomainGraph Λ) (A.filter fun x ↦ x.1 ∈ T.points)).card ≤ 4 * n := by
   simpa only [ambientDilation_zero] using
     template_cut_boundary_card_le T hC Λ A hsep hD 0 (Nat.zero_le s₀)
 
@@ -111,7 +114,7 @@ theorem template_shell_cut_boundary_card_le {Ctpl D₀ : ℝ} {n s₀ : ℕ}
     (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ))
     (hsep : T.IsSeparated D₀ (boundaryEndpoints Λ A)) (hD : 1 ≤ D₀)
     (j : ℕ) (hj : j ≤ s₀) :
-    (edgeBoundary Λ
+    (edgeBoundary (planeDomainGraph Λ)
       (A.filter fun x ↦ x.1 ∈ ambientDilation T.points j \ T.points)).card ≤ 8 * n :=
   (card_edgeBoundary_filter_le_ambientBoundary Λ A _
     ((hsep.disjoint_ambientDilation hD j hj).mono_left Finset.sdiff_subset)).trans

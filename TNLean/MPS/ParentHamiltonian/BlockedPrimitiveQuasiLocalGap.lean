@@ -90,7 +90,7 @@ theorem exists_pos_quasiLocalCommutator_limit_gap_of_blocked_primitive_family
   obtain ⟨γ, hγ, _hFinite, hGap⟩ :=
     exists_pos_multiblock_quasiLocalCommutator_gap_of_eventual_kernel
       μ B hμ ρ hP hρ hDistinct hK (blockedInteractionMatrix h L K)
-      (blockedInteractionMatrix_posSemidef h hh hR L K) hkerB
+      (blockedInteractionMatrix_posSemidef h hh L K) hkerB
   have hM : 0 < ((K * L + 1 - R : ℕ) : ℝ) := by
     exact_mod_cast Nat.sub_pos_of_lt
       ((Nat.lt_add_of_pos_right (NeZero.pos L)).trans_le hcover)

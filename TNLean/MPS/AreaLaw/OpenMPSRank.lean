@@ -29,6 +29,7 @@ Empty and one-site chains are represented directly, without a condition on `D`.
 -/
 
 open Matrix Module
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -44,12 +45,13 @@ sites, columns are full configurations, and the entry is the coefficient of the 
 configuration. It is a submatrix of the cut matrix. -/
 noncomputable def sliceMatrix (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
     Matrix (Fin k → Fin q) (Fin L → Fin q) ℂ :=
-  (cutMatrix ψ k).submatrix (fun a v ↦ a ⟨v.1.val, mem_leftBlock.mp v.2⟩) (fun x v ↦ x v.1)
+  (cutMatrix (leftBlock L k) ψ).submatrix (fun a v ↦ a ⟨v.1.val, mem_leftBlock.mp v.2⟩)
+    (fun x v ↦ x v.1)
 
 /-- The entries of the slice matrix are the coefficients at the glued configuration. -/
 theorem sliceMatrix_apply (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) (a : Fin k → Fin q)
     (x : Fin L → Fin q) : sliceMatrix ψ k a x = ψ (glueLeft k a x) := by
-  rw [sliceMatrix, submatrix_apply, cutMatrix_apply]
+  rw [sliceMatrix, submatrix_apply, ManyBody.cutMatrix_apply]
   have hglue : (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm
       (fun v ↦ a ⟨v.1.val, mem_leftBlock.mp v.2⟩, fun v ↦ x v.1) = glueLeft k a x := by
     funext i
@@ -62,7 +64,7 @@ theorem sliceMatrix_apply (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) 
 
 /-- The rank of the slice matrix is at most the rank of the cut matrix. -/
 theorem rank_sliceMatrix_le (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
-    (sliceMatrix ψ k).rank ≤ (cutMatrix ψ k).rank :=
+    (sliceMatrix ψ k).rank ≤ (cutMatrix (leftBlock L k) ψ).rank :=
   rank_submatrix_le _ _ _
 
 /-- The space of left slices after `k` sites: the column space of the slice matrix. -/
@@ -72,7 +74,7 @@ noncomputable def sliceSpace (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : �
 
 /-- The dimension of the slice space is at most the rank of the cut matrix. -/
 theorem finrank_sliceSpace_le (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
-    finrank ℂ (sliceSpace ψ k) ≤ (cutMatrix ψ k).rank := by
+    finrank ℂ (sliceSpace ψ k) ≤ (cutMatrix (leftBlock L k) ψ).rank := by
   rw [sliceSpace, ← rank_eq_finrank_span_cols]
   exact rank_sliceMatrix_le ψ k
 
@@ -105,7 +107,8 @@ theorem slice_mem_sliceSpace {ψ : EuclideanSpace ℂ (Fin L → Fin q)} {k : �
 /-- Square site matrices and bilinear boundary vectors obtained from the cut ranks.
 Source: the one-dimensional note, Part IIa, Proposition `prop:VC`, lines 39–62. -/
 private theorem exists_square_matrices_of_cutMatrix_rank_le {L q D : ℕ}
-    (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (h : ∀ k, (cutMatrix ψ k).rank ≤ D) :
+    (ψ : EuclideanSpace ℂ (Fin L → Fin q))
+    (h : ∀ k, (cutMatrix (leftBlock L k) ψ).rank ≤ D) :
     ∃ (A : Fin L → Fin q → Matrix (Fin D) (Fin D) ℂ) (vL vR : Fin D → ℂ),
       ∀ x, ψ x = vL ⬝ᵥ ((List.ofFn fun i ↦ A i (x i)).prod *ᵥ vR) := by
   classical
@@ -241,7 +244,7 @@ internal bond dimensions at most `D`, including the empty and one-site chains.
 Source: the one-dimensional note, Part IIa, Proposition `prop:VC`, lines 39–62. -/
 theorem isOpenMPS_of_internal_cutMatrix_rank_le {L q D : ℕ}
     (ψ : EuclideanSpace ℂ (Fin L → Fin q))
-    (h : ∀ k : ℕ, 0 < k → k < L → (cutMatrix ψ k).rank ≤ D) :
+    (h : ∀ k : ℕ, 0 < k → k < L → (cutMatrix (leftBlock L k) ψ).rank ≤ D) :
     IsOpenMPS L q D (fun x ↦ ψ x) := by
   classical
   rcases L with _ | (_ | L)
@@ -266,12 +269,13 @@ theorem isOpenMPS_of_internal_cutMatrix_rank_le {L q D : ℕ}
       Finset.card_singleton, one_smul, one_mul, B]
     exact congrArg (fun y ↦ ψ y) (funext fun i ↦ congrArg x (Fin.eq_zero i))
   · rcases Nat.eq_zero_or_pos D with rfl | hD
-    · obtain ⟨B, C, hBC⟩ := Matrix.exists_mul_eq_of_rank_le (cutMatrix ψ 1)
-        (h 1 (by omega) (by omega))
-      have hzero : cutMatrix ψ 1 = 0 :=
+    · obtain ⟨B, C, hBC⟩ := Matrix.exists_mul_eq_of_rank_le
+        (cutMatrix (leftBlock (L + 1 + 1) 1) ψ) (h 1 (by omega) (by omega))
+      have hzero : cutMatrix (leftBlock (L + 1 + 1) 1) ψ = 0 :=
         hBC.symm.trans (Matrix.ext fun a b ↦ by simp [Matrix.mul_apply])
       have hψzero (x : Fin (L + 1 + 1) → Fin q) : ψ x = 0 := by
-        simpa only [cutMatrix_apply, Prod.mk.eta, Equiv.symm_apply_apply, Matrix.zero_apply] using
+        simpa only [ManyBody.cutMatrix_apply, Prod.mk.eta, Equiv.symm_apply_apply,
+          Matrix.zero_apply] using
           congr_fun (congr_fun hzero
             ((ManyBody.cutEquiv (fun _ ↦ Fin q)
               (leftBlock (L + 1 + 1) 1)) x).1)
@@ -286,7 +290,7 @@ theorem isOpenMPS_of_internal_cutMatrix_rank_le {L q D : ℕ}
       refine ⟨Z, 0, ?_, fun x ↦ by simpa only [zero_mul] using hψzero x⟩
       intro k hk hkL
       simp [Z, show k.val ≠ 0 by omega, show k.val ≠ L + 1 + 1 by omega]
-    · have hall (k : ℕ) : (cutMatrix ψ k).rank ≤ D := by
+    · have hall (k : ℕ) : (cutMatrix (leftBlock (L + 1 + 1) k) ψ).rank ≤ D := by
         rcases Nat.eq_zero_or_pos k with rfl | hk
         · exact (rank_cutMatrix_zero_le ψ).trans hD
         · rcases le_or_gt (L + 1 + 1) k with hLk | hkL
@@ -299,7 +303,7 @@ theorem isOpenMPS_of_internal_cutMatrix_rank_le {L q D : ℕ}
 /-- A vector whose cut matrices all have rank at most `D` is an open-boundary matrix
 product state of bond dimension at most `D`. -/
 theorem isOpenMPS_of_cutMatrix_rank_le {L q D : ℕ} (ψ : EuclideanSpace ℂ (Fin L → Fin q))
-    (h : ∀ k, (cutMatrix ψ k).rank ≤ D) : IsOpenMPS L q D (fun x ↦ ψ x) := by
+    (h : ∀ k, (cutMatrix (leftBlock L k) ψ).rank ≤ D) : IsOpenMPS L q D (fun x ↦ ψ x) := by
   exact isOpenMPS_of_internal_cutMatrix_rank_le ψ fun k _ _ ↦ h k
 
 end TNLean.MPS.AreaLaw

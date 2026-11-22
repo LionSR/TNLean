@@ -32,7 +32,7 @@ site of the chain, with no encoded holes.
 | Note statement | Formal statement | Status |
 |---|---|---|
 | Setting: the chain of `L` sites, intervals, supports, Hamiltonians (`eq:ham`, `eq:gap`) | `ManyBody.interval`, `ManyBody.IsChainSupport`, `ManyBody.ChainInteraction`, `ManyBody.IsGapped`, `ManyBody.groundSpace` | Definitions. |
-| Lemma 3.1 (marginal tail bound) at a cut | `ManyBody.ChainInteraction.surprisalTail_regionState_le` with the budget `MPS.AreaLaw.cutLogBudget` | Proved, from the QICLean core. |
+| Lemma 3.1 (marginal tail bound) at a cut | `ManyBody.ChainInteraction.surprisalTail_regionState_le` with the budget `ManyBody.cutLogBudget` of the chain supports | Proved, from the QICLean core. |
 | Rényi entropies near one (`rem:renyi`) | `ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds` | Proved on the full closed order interval `[1-u₀, 1]`, with the linear coefficient `512e` and uniform bound `16e √((1 + J/Δ) B_R)`. The statement includes order one, zero eigenvalues and the spectral power formula. |
 | `eq:count`, `eq:BR`: split interactions and cut budget of an interval | `MPS.AreaLaw.card_crossingTerms_interval_le` (`N_R = 2·2^{2R}`), `MPS.AreaLaw.cutLogBudget_interval_le` (`B_R = 1 + N_R log²(e q^{R+1})`) | Proved; the constants are those of the note. |
 | Remark on sharper constants (`rem:sharper`, lines 706–709): full consecutive windows | `ManyBody.ChainInteraction.card_crossingTerms_interval_le_of_consecutive_terms`, `ManyBody.ChainInteraction.log_surprisalMoment_interval_le_of_consecutive_terms` | Proved when every nonzero term has a full `(R+1)`-site window as its designated support. Active crossing count `2R`; physical moment budget `1 + 2R log²(e q^(R+1))` for the original gapped vector. The original all-support Hamiltonian is retained; the restriction concerns every nonzero designated support and excludes shorter boundary windows unless their terms vanish. |
@@ -56,7 +56,7 @@ site of the chain, with no encoded holes.
 | Polynomial-range full-window area law on finite domains | `MPS.AreaLaw.domainAreaLaw_of_consecutive_terms_polynomial_range` | Proved on every finite `Λ ⊂ ℤ` when every nonzero designated physical support is a full `(R+1)`-site interval contained in `Λ`. The same absolute `C_abs`, fixed before all physical data, gives `S_Ω(A∩Λ) ≤ C_abs (1+J/Δ) R log³(q^R) card(∂_Λ A)`, including range zero, local dimension one and the empty domain. Sorted labelling preserves the original terms, `J`, sum and global gap; zero-entropy prefix flips preserve entropy and the exact physical boundary cardinality, with no component factor. |
 | Part II, `lem:reset` (information reset) | `ManyBody.ChainInteraction.information_reset` | Proved on the contiguous chain, with only the original full-system gap. The constants precede all system, region and information-bound data. |
 | Part II, `lem:logsep` (information at logarithmic separation) | `ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_separation` | Proved on the contiguous chain for a union of at most k₀ intervals and an arbitrary region at distance at least Dₚ log L, including empty or overlapping interval components. |
-| Matrix product states, cut matrices | `MPS.AreaLaw.IsOpenMPS`, `MPS.AreaLaw.cutMatrix` | Definitions. |
+| Matrix product states, cut matrices | `MPS.AreaLaw.IsOpenMPS`, `ManyBody.cutMatrix (leftBlock L k)` | Definitions; the cut matrix is QICLean's. |
 | Cut ranks bound the bond dimension | `MPS.AreaLaw.isOpenMPS_of_cutMatrix_rank_le` | Proved. |
 | Growth between two cuts | `MPS.AreaLaw.rank_cutMatrix_add_le`, `rank_cutMatrix_le_add`, `rank_cutMatrix_le_pow_min_mul`, `rank_cutMatrix_le_pow_forty_mul` | Proved for arbitrary vectors: moving `d` sites across a cut costs at most `q^d` in either direction. Endpoint rank bounds `R` on an interval of length at most `80w` give internal ranks at most `q^(40w) R` when `q ≥ 1`. The endpoint bounds remain hypotheses of this auxiliary result. |
 | Proposition 7.1 (`prop:VC`, sequential truncation at prescribed bond dimension) | `MPS.AreaLaw.isOpenMPS_sequentialTruncation_leadingEigenprojection`, with the general form `MPS.AreaLaw.prefixBasisProjection`, `MPS.AreaLaw.isOpenMPS_sequentialTruncation_prefixBasisProjection` | Proved. For a unit vector, projecting each internal cut onto the `D` leading eigenvectors of its marginal gives internal bond dimensions at most `D` and error at most `∑_k √ε_k(D)`, with `ε_k(D)` the sum of the discarded eigenvalues, as in the source. The general form holds for every vector and every ordered orthonormal basis at the internal cuts, which covers every choice within a repeated eigenvalue: `docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex` (resolved). |
@@ -222,10 +222,12 @@ R of the boundary positions, and bounds its norm by 2J N_R|∂D|.
 These assertions retain the original real J and include the empty chain,
 zero local dimension and zero range.
 
-The model `ManyBody.ChainInteraction.swappedDoubled` conjugates every
-doubled interaction by the actual paired swap. It retains the same supports
-and range, local dimension q² and term bound 2J; its operator identity is
-`ManyBody.ChainInteraction.swappedDoubled_hamiltonian`.
+The swapped model conjugates the doubled interaction `ManyBody.Interaction.doubled`
+by the exchange `ManyBody.pairSwapOp D` (`ManyBody.Interaction.conj`) and relabels
+it to local dimension q². It retains the same supports and range and has term
+bound 2J (`ManyBody.Interaction.norm_conj_term`,
+`ManyBody.Interaction.norm_doubled_term_le`); its operator identity is
+`TNLean.Lattice.hamiltonian_relabel_conj_pairSwapOp_doubled`.
 The theorem
 `ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped`
 constructs the two ground-state predicates for the actual paired tensor

@@ -20,6 +20,7 @@ Hamiltonian and of any choice of a viable witness.
 -/
 
 open Matrix
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -36,10 +37,11 @@ theorem isOpenMPS_of_mem_span {L q D : ℕ}
   apply (isOpenMPS_iff_internal_cutMatrix_rank_le
     (WithLp.toLp 2 (∑ w ∈ S, a w • w))).mpr
   intro k hk0 hkL
-  let A := fun w : (Fin L → Fin q) → ℂ ↦ a w • cutMatrix (WithLp.toLp 2 w) k
-  have hcut : cutMatrix (WithLp.toLp 2 (∑ w ∈ S, a w • w)) k = ∑ w ∈ S, A w := by
+  let A := fun w : (Fin L → Fin q) → ℂ ↦ a w • cutMatrix (leftBlock L k) (WithLp.toLp 2 w)
+  have hcut : cutMatrix (leftBlock L k) (WithLp.toLp 2 (∑ w ∈ S, a w • w)) =
+      ∑ w ∈ S, A w := by
     ext p r
-    simp [A, cutMatrix_apply, Finset.sum_apply, Matrix.sum_apply]
+    simp [A, ManyBody.cutMatrix_apply, Finset.sum_apply, Matrix.sum_apply]
   rw [hcut]
   have hA (w) (hw : w ∈ S) : (A w).rank ≤ D := by
     by_cases ha : a w = 0

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixReindexUnitary
 import TNLean.Circuit.EmbeddedProduct
-import TNLean.Circuit.PairProduct
+import QICLean.ManyBody.Sites.PlaceAlong
 
 /-!
 # The printed gates for arbitrary physical blocking
@@ -35,7 +35,7 @@ Source: arXiv:1703.09188, the site labels in lines 1657--1733. -/
 noncomputable def printedPairGate {d : ℕ} (n p : ℕ) (h : p + 2 ≤ n)
     (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
     Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ :=
-  embedOp (spinWindow n p 2 h)
+  ManyBody.placeAlong (X := fun _ ↦ Fin d) (spinWindow n p 2 h)
     (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
       (finTwoArrowEquiv (Fin d)).symm A)
 
@@ -49,7 +49,7 @@ theorem printedPairGate_apply {d : ℕ} (n p : ℕ) (h : p + 2 ≤ n)
         A (x ⟨p, by omega⟩, x ⟨p + 1, by omega⟩)
           (y ⟨p, by omega⟩, y ⟨p + 1, by omega⟩)
       else 0 := by
-  have hc : AgreeOff (spinWindow n p 2 h) x y ↔
+  have hc : (∀ v, (∀ u, spinWindow n p 2 h u ≠ v) → x v = y v) ↔
       ∀ i : Fin n, i.val < p ∨ p + 2 ≤ i.val → x i = y i := by
     constructor
     · intro hxy i hi
@@ -68,10 +68,11 @@ theorem printedPairGate_apply {d : ℕ} (n p : ℕ) (h : p + 2 ≤ n)
       apply Fin.ext
       change p + (i.val - p) = i.val
       omega
-  change (if AgreeOff (spinWindow n p 2 h) x y then
-    A (x ⟨p, by omega⟩, x ⟨p + 1, by omega⟩)
-      (y ⟨p, by omega⟩, y ⟨p + 1, by omega⟩) else 0) = _
-  simp only [hc]
+  rw [printedPairGate, ManyBody.placeAlong_apply]
+  by_cases hxy : ∀ v, (∀ u, spinWindow n p 2 h u ≠ v) → x v = y v
+  · rw [ite_eq_left hxy, ite_eq_left (hc.mp hxy)]
+    rfl
+  · rw [ite_eq_right hxy, ite_eq_right (mt hc.mpr hxy)]
 
 /-- Placing a gate inside a consecutively placed interval adds the offsets.
 Source: arXiv:1703.09188, the successive local placements in lines 1721--1729. -/
@@ -79,16 +80,16 @@ theorem printedPairGate_embed {d n m p q : ℕ} (hq : q + 2 ≤ m)
     (hp : p + q + 2 ≤ n) (f : Fin m → Fin n) (hf : Function.Injective f)
     (hpos : ∀ i, (f i).val = p + i.val)
     (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
-    embedOp f (printedPairGate m q hq A) = printedPairGate n (p + q) hp A := by
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨f, hf⟩ (printedPairGate m q hq A) =
+      printedPairGate n (p + q) hp A := by
+  have hw : (spinWindow m q 2 hq).trans ⟨f, hf⟩ = spinWindow n (p + q) 2 hp := by
+    refine Function.Embedding.ext fun i ↦ Fin.ext ?_
+    change (f (spinWindow m q 2 hq i)).val = p + q + i.val
+    rw [hpos]
+    change p + (q + i.val) = p + q + i.val
+    omega
   unfold printedPairGate
-  rw [embedOp_embedOp hf]
-  congr 1
-  funext i
-  apply Fin.ext
-  change (f (spinWindow m q 2 hq i)).val = p + q + i.val
-  rw [hpos]
-  change p + (q + i.val) = p + q + i.val
-  omega
+  rw [ManyBody.placeAlong_placeAlong, hw]
 
 /-- Disjoint original-spin pairs carry commuting gates.
 Source: arXiv:1703.09188, the disjoint layers in lines 1689--1733. -/
@@ -96,8 +97,9 @@ theorem printedPairGate_commute {d n p q : ℕ} (hp : p + 2 ≤ n) (hq : q + 2 �
     (hdisj : p + 2 ≤ q ∨ q + 2 ≤ p)
     (A B : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
     Commute (printedPairGate n p hp A) (printedPairGate n q hq B) := by
-  apply commute_embedOp_of_disjoint (spinWindow n p 2 hp).injective
-    (spinWindow n q 2 hq).injective
+  refine ManyBody.commute_placeAlong_of_disjoint _ ?_ _ _
+  rw [← Finset.disjoint_coe]
+  simp only [Finset.coe_map, Finset.coe_univ, Set.image_univ]
   refine Set.disjoint_left.mpr ?_
   rintro _ ⟨i, rfl⟩ ⟨j, hij⟩
   have hval := congrArg Fin.val hij
@@ -112,7 +114,7 @@ theorem printedPairGate_mem_unitaryGroup {d : ℕ} (n p : ℕ) (h : p + 2 ≤ n)
     (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
     (hA : A ∈ Matrix.unitaryGroup (Fin d × Fin d) ℂ) :
     printedPairGate n p h A ∈ Matrix.unitaryGroup (Fin n → Fin d) ℂ :=
-  embedOp_mem_unitary (spinWindow n p 2 h).injective
+  ManyBody.placeAlong_mem_unitaryGroup _
     (Matrix.reindex_mem_unitaryGroup (finTwoArrowEquiv (Fin d)).symm _ hA)
 
 /-- Equal placement offsets give the same ordered product of pair gates.
@@ -213,15 +215,18 @@ theorem printedCellLayer_embed {d k K a m b : ℕ} (h : a + m ≤ k)
     (hK : b + a + m ≤ K) (f : Fin (2 * k) → Fin (2 * K))
     (hf : Function.Injective f) (hpos : ∀ i, (f i).val = 2 * b + i.val)
     (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
-    embedOp f (printedCellLayer k a m h A) = printedCellLayer K (b + a) m hK A := by
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨f, hf⟩ (printedCellLayer k a m h A) =
+      printedCellLayer K (b + a) m hK A := by
   unfold printedCellLayer
-  rw [embedOp_list_prod hf, List.map_ofFn]
+  rw [← ManyBody.placeAlongHom_apply, map_list_prod, List.map_ofFn]
   congr 1
   apply congrArg List.ofFn
   funext j
+  simp only [Function.comp_apply, ManyBody.placeAlongHom_apply]
   have hj := j.isLt
   convert printedPairGate_embed (p := 2 * b) (q := 2 * (a + j.val))
-    (by omega) (by omega) f hf hpos A using 1 <;> congr 1
+    (by omega) (by omega) f hf hpos A using 1
+  congr 1
   omega
 
 /-- Consecutively embedding a shifted layer translates all of its links.
@@ -230,15 +235,18 @@ theorem printedLinkLayer_embed {d k K a m b : ℕ} (h : a + m + 1 ≤ k)
     (hK : b + a + m + 1 ≤ K) (f : Fin (2 * k) → Fin (2 * K))
     (hf : Function.Injective f) (hpos : ∀ i, (f i).val = 2 * b + i.val)
     (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
-    embedOp f (printedLinkLayer k a m h A) = printedLinkLayer K (b + a) m hK A := by
+    ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨f, hf⟩ (printedLinkLayer k a m h A) =
+      printedLinkLayer K (b + a) m hK A := by
   unfold printedLinkLayer
-  rw [embedOp_list_prod hf, List.map_ofFn]
+  rw [← ManyBody.placeAlongHom_apply, map_list_prod, List.map_ofFn]
   congr 1
   apply congrArg List.ofFn
   funext j
+  simp only [Function.comp_apply, ManyBody.placeAlongHom_apply]
   have hj := j.isLt
   convert printedPairGate_embed (p := 2 * b) (q := 2 * (a + j.val) + 1)
-    (by omega) (by omega) f hf hpos A using 1 <;> congr 1
+    (by omega) (by omega) f hf hpos A using 1
+  congr 1
   omega
 
 /-- A pair gate commutes with a cell layer lying wholly to either side.
@@ -277,7 +285,7 @@ theorem printedPairGate_commute_linkLayer {d k a m p : ℕ}
 @[simp] theorem printedPairGate_conjTranspose {d : ℕ} (n p : ℕ) (h : p + 2 ≤ n)
     (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
     (printedPairGate n p h A)ᴴ = printedPairGate n p h Aᴴ := by
-  rw [printedPairGate, embedOp_conjTranspose]
+  rw [printedPairGate, ← ManyBody.placeAlong_conjTranspose]
   rfl
 
 /-- Taking adjoints of a cell layer takes the adjoint of each disjoint gate.
@@ -363,7 +371,7 @@ theorem printedInputCircuit_succ {d : ℕ} (k : ℕ) (hk : 0 < k)
     (u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
     printedInputCircuit (k + 1) (by omega) u v =
       printedPairGate (2 * (k + 1)) (2 * k - 1) (by omega) v *
-        embedOp f (printedInputCircuit k hk u v) *
+        ManyBody.placeAlong (X := fun _ ↦ Fin d) ⟨f, hf⟩ (printedInputCircuit k hk u v) *
         printedPairGate (2 * (k + 1)) (2 * k) (by omega) u := by
   have hc := printedCellLayer_embed (b := 0) (a := 0) (m := k)
     (by omega) (by omega) f hf (by simpa using hpos) u
@@ -380,7 +388,7 @@ theorem printedInputCircuit_succ {d : ℕ} (k : ℕ) (hk : 0 < k)
     (k := k + 1) (p := 2 * k - 1) (a := 0) (m := k - 1)
     (by omega) (by omega) (Or.inr (by omega)) v v
   unfold printedInputCircuit
-  rw [← embedOp_mul hf, hc, hv]
+  rw [ManyBody.placeAlong_mul, hc, hv]
   have hlen : k + 1 - 1 = k := by omega
   have hlinks : printedLinkLayer (k + 1) 0 (k + 1 - 1) (by omega) v =
       printedLinkLayer (k + 1) 0 k (by omega) v := by congr 1

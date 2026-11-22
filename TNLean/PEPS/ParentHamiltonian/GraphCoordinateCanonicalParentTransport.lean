@@ -140,9 +140,11 @@ theorem map_ker_regionParentHamiltonian_coordinates_eq
       (R i) (H i))
     (hK : ∀ i, IsRegionParentInteraction (numberedGraphDressedAveragingTensor L 1 eY)
       (R i) (K i)) :
-    (Matrix.mulVecLin (regionParentHamiltonian R H)).ker.map
+    (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin p) R H).hamiltonian).ker.map
       (Matrix.mulVecLin (graphNumberedBondMatrix eX eY (bondCoordinateMatrix Q))) =
-      (Matrix.mulVecLin (regionParentHamiltonian R K)).ker := by
+      (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin q) R K).hamiltonian).ker := by
   rw [ker_regionParentHamiltonian _ R H hH, ker_regionParentHamiltonian _ R K hK]
   exact map_regionParentGroundSpace_coordinates_eq Q hQ U L hL eX eY R
 

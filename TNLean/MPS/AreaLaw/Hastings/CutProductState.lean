@@ -28,6 +28,7 @@ nonnegative combination of pure states whose cut matrices have rank at most one.
 
 open Matrix
 open scoped ComplexOrder InnerProductSpace Kronecker
+open ManyBody (cutMatrix)
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -84,7 +85,8 @@ Hastings, arXiv:0705.2024v4, `law16.tex` lines 427–440. -/
 theorem exists_cutProductState_decomposition (c : ℕ) {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) :
     ∃ (r : ℕ) (w : Fin r → ℝ) (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ i, 0 ≤ w i) ∧ (∀ i, (cutMatrix (ψ i) c).rank ≤ 1) ∧ ∑ i, w i * ‖ψ i‖ ^ 2 = 1 ∧
+      (∀ i, 0 ≤ w i) ∧ (∀ i, (cutMatrix (leftBlock L c) (ψ i)).rank ≤ 1) ∧
+      ∑ i, w i * ‖ψ i‖ ^ 2 = 1 ∧
       ∀ A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
         (cutProductState L q c Ω * A).trace = ∑ i, w i * ⟪ψ i, toEuclideanLin A (ψ i)⟫_ℂ := by
   set e := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L c)
@@ -113,9 +115,10 @@ theorem exists_cutProductState_decomposition (c : ℕ) {Ω : EuclideanSpace ℂ 
     refine Finset.sum_congr rfl fun ab _ ↦ ?_
     rw [Complex.ofReal_one, one_mul, Entropy.inner_toEuclideanLin_eq_trace]
   refine ⟨m * m', fun _ ↦ 1, fun i ↦ φ (f.symm i), fun _ ↦ zero_le_one, fun i ↦ ?_, ?_, htr⟩
-  · have hcut : cutMatrix (φ (f.symm i)) c = vecMulVec (u (f.symm i).1) (v (f.symm i).2) := by
+  · have hcut : cutMatrix (leftBlock L c) (φ (f.symm i)) =
+        vecMulVec (u (f.symm i).1) (v (f.symm i).2) := by
       ext a b
-      simp only [cutMatrix_apply, φ, e, Equiv.apply_symm_apply, vecMulVec_apply]
+      simp only [ManyBody.cutMatrix_apply, φ, e, Equiv.apply_symm_apply, vecMulVec_apply]
     rw [hcut]
     exact rank_vecMulVec_le _ _
   · have h1 := htr 1

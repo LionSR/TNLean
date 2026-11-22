@@ -58,7 +58,7 @@ theorem mutualInformation_cores_le_of_reset_unitary
   let Pe := sumArrowSitePair (ι) q
   let U' := Matrix.reindex Pe.symm Pe.symm U
   let Ψ := ManyBody.sumSitesProduct (X := fun _ : ι ⊕ ι ↦ Fin q) Ω Ω
-  let Φ := FiniteProduct.relabelSites (replicaSwap D) Ψ
+  let Φ := ManyBody.relabelSites (replicaSwap D) Ψ
   have hΨ : Ψ = WithLp.toLp 2 (ψ ∘ Pe) := by
     apply WithLp.ofLp_injective 2
     exact (doubledVector_comp_sumArrow e Ω).symm

@@ -109,7 +109,6 @@ import TNLean.MPS.ParentHamiltonian.CyclicWindow
 import TNLean.MPS.ParentHamiltonian.CyclicWindowIndex
 import TNLean.MPS.ParentHamiltonian.CyclicWindowPermutation
 import TNLean.MPS.ParentHamiltonian.CyclicWordSpan
-import TNLean.MPS.ParentHamiltonian.Decorrelation
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.ParentHamiltonian.DependentPairCoordinates
 import TNLean.MPS.ParentHamiltonian.EventualKernelGroundStateSupport
@@ -309,7 +308,6 @@ import TNLean.MPS.ParentHamiltonian.SuffixWindow
 import TNLean.MPS.ParentHamiltonian.SuppliedIsometryInsertion
 import TNLean.MPS.ParentHamiltonian.SuppliedIsometryParentGap
 import TNLean.MPS.ParentHamiltonian.TailVirtualGram
-import TNLean.MPS.ParentHamiltonian.TripartiteDecorrelation
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryIntersection
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryProduct
 import TNLean.MPS.ParentHamiltonian.UncleBoundaryTraceClosure

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.JointMixedEndpointBoundaryColumns
 import TNLean.MPS.Symmetry.MPOSymmetry.JointInsertedBoundary
 import Mathlib.LinearAlgebra.Matrix.Kronecker
-import TNLean.Algebra.FinCastAddNatAdd
+import QICLean.Algebra.FinCastAddNatAdd
 
 /-!
 # Actual joint edge coefficients with the original bulk tensor

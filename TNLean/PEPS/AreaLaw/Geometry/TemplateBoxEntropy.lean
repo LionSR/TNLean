@@ -33,12 +33,13 @@ an arbitrary exponent from the initial existential safe-box exponent.
 -/
 
 open TNLean.Lattice
+open ManyBody (ambientDilation)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- Core entropy from a uniform estimate on every safe native rectangle.
 The weighted count and safety are derived from the actual template. -/
-theorem Template.regionalEntropy_core_le_of_safe_box
+theorem Template.regionEntropy_core_le_of_safe_box
     (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     (A : Finset (Site Λ)) {Ctpl : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
@@ -49,14 +50,14 @@ theorem Template.regionalEntropy_core_le_of_safe_box
       ManyBody.regionEntropy Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e)) :
     ManyBody.regionEntropy Ω (A.filter fun x ↦ x.1 ∈ T.points) ≤
       C * (18 + 4 / ((2 : ℝ) ^ e - 1)) * n * (s₀ : ℝ) ^ e := by
-  have h := regionalEntropy_filter_le_weighted_cover Λ q D₀ Ω hΩ A T.points K e C
+  have h := regionEntropy_filter_le_weighted_cover Λ q D₀ Ω hΩ A T.points K e C
     (fun c hc ↦ hsep.isSafe_cappedDyadicPartition_core hD K c.1 c.2 hlo hc) hbox
   have hw := mul_le_mul_of_nonneg_left
     (T.sum_rpow_cappedDyadicPartition_core_le hC K hlo hhi e he) hCbox
   exact h.trans (by simpa only [mul_assoc] using hw)
 
 /-- Shell entropy from the same safe-box estimate, including the empty shell. -/
-theorem Template.regionalEntropy_shell_le_of_safe_box
+theorem Template.regionEntropy_shell_le_of_safe_box
     (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     (A : Finset (Site Λ)) {Ctpl : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
@@ -69,7 +70,7 @@ theorem Template.regionalEntropy_shell_le_of_safe_box
     ManyBody.regionEntropy Ω
       (A.filter fun x ↦ x.1 ∈ ambientDilation T.points j \ T.points) ≤
       C * (2 + 14 / ((2 : ℝ) ^ e - 1)) * n * (L : ℝ) ^ e := by
-  have h := regionalEntropy_filter_le_weighted_cover Λ q D₀ Ω hΩ A
+  have h := regionEntropy_filter_le_weighted_cover Λ q D₀ Ω hΩ A
     (ambientDilation T.points j \ T.points) K e C
     (fun c hc ↦ hsep.isSafe_cappedDyadicPartition_shell hD j K c.1 c.2
       (hj.trans hL) (hlo.trans hL) hc) hbox
@@ -79,7 +80,7 @@ theorem Template.regionalEntropy_shell_le_of_safe_box
 
 /-- A partial final row adds at most `n log q` to the shell entropy estimate.
 This includes arbitrary subsets of that row; no row-order hypothesis is added. -/
-theorem Template.regionalEntropy_prefix_le_of_safe_box
+theorem Template.regionEntropy_prefix_le_of_safe_box
     (Λ : Finset (ℤ × ℤ)) (q D₀ : ℕ) (hq : 1 ≤ q)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
     {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl)
@@ -94,7 +95,7 @@ theorem Template.regionalEntropy_prefix_le_of_safe_box
     ManyBody.regionEntropy Ω
       (A.filter fun x ↦ x.1 ∈ (ambientDilation T.points (j - 1) \ T.points) ∪ Y) ≤
       C * (2 + 14 / ((2 : ℝ) ^ e - 1)) * n * (L : ℝ) ^ e + n * Real.log q := by
-  have hs := Template.regionalEntropy_shell_le_of_safe_box Λ q D₀ Ω hΩ A T hC hsep hD
+  have hs := Template.regionEntropy_shell_le_of_safe_box Λ q D₀ Ω hΩ A T hC hsep hD
     (j - 1) L K (by omega) hL hlo hhi e C he hCbox hbox
   have hp := template_partial_row_entropy_le Λ q hq Ω hΩ T hC A j hj
     (hjL.trans hL) Y hY
@@ -131,15 +132,15 @@ theorem exists_template_entropy_bounds_of_arbitrary_safe_box
   refine ⟨C, hCbox, ?_⟩
   intro Ctpl n s₀ T hC hsep
   refine ⟨?_, ?_, ?_⟩
-  · exact Template.regionalEntropy_core_le_of_safe_box Λ q D₀ Ω hΩ A T hC hsep hD
+  · exact Template.regionEntropy_core_le_of_safe_box Λ q D₀ Ω hΩ A T hC hsep hD
       (Nat.log 2 s₀) (Nat.pow_log_le_self 2 (Nat.ne_of_gt T.s₀_pos))
       (Nat.lt_pow_succ_log_self (by decide) s₀) e C he hCbox hb
   · intro j L hLpos hj hL
-    exact Template.regionalEntropy_shell_le_of_safe_box Λ q D₀ Ω hΩ A T hC hsep hD
+    exact Template.regionEntropy_shell_le_of_safe_box Λ q D₀ Ω hΩ A T hC hsep hD
       j L (Nat.log 2 L) hj hL (Nat.pow_log_le_self 2 (by omega))
       (Nat.lt_pow_succ_log_self (by decide) L) e C he hCbox hb
   · intro j L hj hjL hL Y hY
-    exact Template.regionalEntropy_prefix_le_of_safe_box Λ q D₀ hq Ω hΩ A T hC hsep hD
+    exact Template.regionEntropy_prefix_le_of_safe_box Λ q D₀ hq Ω hΩ A T hC hsep hD
       j L (Nat.log 2 L) hj hjL hL (Nat.pow_log_le_self 2 (by omega))
       (Nat.lt_pow_succ_log_self (by decide) L) Y hY e C he hCbox hb
 

@@ -67,7 +67,7 @@ interval, each listed value three below the least eigenvalue of the compression 
 child-centred soft regional operator to that interval's actual terminal untrimmed image.
 Supporting ALVV, arXiv:1602.08828v2, Theorem `t:alg1` and its proof, lines 1779--1818. -/
 def IsTerminalRitzEnergyAssignment {L q width : ℕ} (hq : 0 < q) (hwidth : 1 ≤ width)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (ell : ℕ) (t : ℝ) (m D rounds : ℕ)
     (threshold N : LongIntervalIndex L width → ℕ)
     (F : ∀ J : LongIntervalIndex L width,
@@ -75,13 +75,13 @@ def IsTerminalRitzEnergyAssignment {L q width : ℕ} (hq : 0 < q) (hwidth : 1 �
         EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q))
     (xi : ℝ) (U : IntervalResamplingChoices L q rounds) : Prop :=
   let regional := fun (a b : ℕ) ↦ ∑ i ∈ Finset.univ.filter
-    (fun i : Fin (L - 1) ↦ a ≤ i.val ∧ i.val + 1 < b), h i
+    (fun i : Fin (L - 1) ↦ a ≤ i.val ∧ i.val + 1 < b), Φ.term i
   let S := fun (a b : ℕ) (U : IntervalResamplingChoices L q rounds) ↦
     balancedIntervalSpace (canonicalIntervalResamplingOperation
       D rounds threshold N F xi U) width hwidth a b
   ∃ (u v : LongIntervalIndex L width → ℕ) (estimate : ℕ → ℕ → ℝ),
-    IsRegionalLowerEnergyEstimate h 0 L (49 / 16) (estimate 0 L) ∧
-    (L - 0 ≤ width → IsRegionalLowerEnergyEstimate h 0 L 0 (estimate 0 L)) ∧
+    IsRegionalLowerEnergyEstimate Φ 0 L (49 / 16) (estimate 0 L) ∧
+    (L - 0 ≤ width → IsRegionalLowerEnergyEstimate Φ 0 L 0 (estimate 0 L)) ∧
     ∀ J : LongIntervalIndex L width,
       J.val ∈ balancedIntervalMergeList width hwidth 0 L →
       let l := J.val.1
@@ -92,15 +92,15 @@ def IsTerminalRitzEnergyAssignment {L q width : ℕ} (hq : 0 < q) (hwidth : 1 �
       let y0 := ((ManyBody.cutEquiv (fun _ ↦ Fin q) J') sigma0).2
       let native := fun x : J' → Fin q ↦
         (ManyBody.cutEquiv (fun _ ↦ Fin q) J').symm (x, y0)
-      IsRegionalLowerEnergyEstimate h l r (49 / 16) (estimate l r) ∧
-      (k - l ≤ width → IsRegionalLowerEnergyEstimate h l k 0 (estimate l k)) ∧
-      (r - k ≤ width → IsRegionalLowerEnergyEstimate h k r 0 (estimate k r)) ∧
+      IsRegionalLowerEnergyEstimate Φ l r (49 / 16) (estimate l r) ∧
+      (k - l ≤ width → IsRegionalLowerEnergyEstimate Φ l k 0 (estimate l k)) ∧
+      (r - k ≤ width → IsRegionalLowerEnergyEstimate Φ k r 0 (estimate k r)) ∧
       l ≤ u J ∧ u J ≤ v J ∧ v J ≤ r ∧ u J - l ≤ 2 * ell ∧ r - v J ≤ 2 * ell ∧
       ∃ eLeft eRight : ℝ,
-        IsRegionalLowerEnergyEstimate h l (u J) 0 eLeft ∧
-        IsRegionalLowerEnergyEstimate h (v J) r 0 eRight ∧
+        IsRegionalLowerEnergyEstimate Φ l (u J) 0 eLeft ∧
+        IsRegionalLowerEnergyEstimate Φ (v J) r 0 eRight ∧
         let center := estimate l k + estimate k r - eLeft - eRight - 2
-        IsRegionalLowerEnergyEstimate h (u J) (v J) 10 center ∧
+        IsRegionalLowerEnergyEstimate Φ (u J) (v J) 10 center ∧
         let R := regional l r - regional (u J) (v J) + (center : ℂ) • 1 +
           cfc (Real.softTruncation t m) (regional (u J) (v J) - (center : ℂ) • 1)
         let Rnat := R.submatrix native native
@@ -133,10 +133,8 @@ interval for the actual merged child candidate and the actual seed.
 Supporting ALVV, arXiv:1602.08828v2, Theorem `t:alg1` and its proof, lines 1779--1818. -/
 theorem exists_successful_tree_energy_induction
     {L q width ell : ℕ} (hq : 0 < q) (hwidth : 1 ≤ width)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (g : ℝ) (hg : 0 < g) (t Tcut : ℝ) (m D : ℕ) (hm : 2 ≤ m) (hD : 2 ≤ D)
     (ht : 156 + 2 * g ≤ t) (hTcut : 156 + 2 * g ≤ Tcut)
     (Delta : ℝ) (hDelta0 : 0 ≤ Delta) (mu : ℝ) (rounds : ℕ)
@@ -146,7 +144,7 @@ theorem exists_successful_tree_energy_induction
         EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q))
     (xi : ℝ) :
     let _ : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
-    let H := ∑ i, h i
+    let H := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
@@ -154,7 +152,7 @@ theorem exists_successful_tree_energy_induction
     let tau := 1 / ((D : ℝ) ^ 24 * Msoft ^ 10)
     let loss := Delta / (91 / 100 : ℝ) ^ 2
     let regional := fun (a b : ℕ) ↦ ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ a ≤ i.val ∧ i.val + 1 < b), h i
+      (fun i : Fin (L - 1) ↦ a ≤ i.val ∧ i.val + 1 < b), Φ.term i
     mu ∈ spectrum ℝ H →
     (∀ z ∈ spectrum ℝ H, mu ≤ z) →
     Delta ≤ 1 / ((D : ℝ) ^ 12 * Msoft ^ 10) →
@@ -177,7 +175,7 @@ theorem exists_successful_tree_energy_induction
                 (canonicalHalfSampledIntervalImage L q l r D (threshold J) rounds (F J) xi W V)
                 (T.map coords.toLinearEquiv.toLinearMap)) →
     ∀ U ∈ canonicalIntervalResamplingGood D rounds hwidth threshold N F xi G 0 L,
-    IsTerminalRitzEnergyAssignment hq hwidth h ell t m D rounds threshold N F xi U := by
+    IsTerminalRitzEnergyAssignment hq hwidth Φ ell t m D rounds threshold N F xi U := by
   classical
   intro config H hH G Msoft tau loss regional hmu hlow hDelta htail hcert U hU
   let S := fun (a b : ℕ) (U : IntervalResamplingChoices L q rounds) ↦
@@ -227,10 +225,10 @@ theorem exists_successful_tree_energy_induction
     let native := fun x : J' → Fin q ↦
       (ManyBody.cutEquiv (fun _ ↦ Fin q) J').symm (x, y0)
     ∃ eLeft eRight : ℝ,
-      IsRegionalLowerEnergyEstimate h l (u J) 0 eLeft ∧
-      IsRegionalLowerEnergyEstimate h (v J) r 0 eRight ∧
+      IsRegionalLowerEnergyEstimate Φ l (u J) 0 eLeft ∧
+      IsRegionalLowerEnergyEstimate Φ (v J) r 0 eRight ∧
       let center := p1 + p2 - eLeft - eRight - 2
-      IsRegionalLowerEnergyEstimate h (u J) (v J) 10 center ∧
+      IsRegionalLowerEnergyEstimate Φ (u J) (v J) 10 center ∧
       let R := regional l r - regional (u J) (v J) + (center : ℂ) • 1 +
         cfc (Real.softTruncation t m) (regional (u J) (v J) - (center : ℂ) • 1)
       let Rnat := R.submatrix native native
@@ -244,10 +242,10 @@ theorem exists_successful_tree_energy_induction
           (toEuclideanCLM (𝕜 := ℂ) (n := J' → Fin q) Rnat).toLinearMap
             (b j) = (energy j : ℂ) • b j) ∧
         Antitone energy ∧ p = energy (Fin.last n) - 3
-  have hleaf : ∀ l r : ℕ, l ≤ r → r ≤ L → ∃ p : ℝ, IsRegionalLowerEnergyEstimate h l r 0 p := by
+  have hleaf : ∀ l r : ℕ, l ≤ r → r ≤ L → ∃ p : ℝ, IsRegionalLowerEnergyEstimate Φ l r 0 p := by
     intro l r hlr hrL
     obtain ⟨eA, _eB, _eP, x, _z, hx, hAx, _hBx, hA, _hB, _rest⟩ :=
-      exists_adjacent_interval_energy_merge hq hlr le_rfl hrL h hs h0 h1
+      exists_adjacent_interval_energy_merge hq hlr le_rfl hrL Φ h0 h1
     exact ⟨eA, eA, x, hx, hAx, hA, by simp, le_rfl⟩
   have hnode : ∀ J : LongIntervalIndex L width,
       J.val ∈ balancedIntervalMergeList width hwidth 0 L →
@@ -255,9 +253,9 @@ theorem exists_successful_tree_energy_induction
       let r := J.val.2
       let k := l + (r - l) / 2
       ∀ p1 p2 : ℝ,
-        IsRegionalLowerEnergyEstimate h l k (49 / 16) p1 →
-        IsRegionalLowerEnergyEstimate h k r (49 / 16) p2 →
-        ∃ p : ℝ, IsRegionalLowerEnergyEstimate h l r (49 / 16) p ∧ Rel J p1 p2 p := by
+        IsRegionalLowerEnergyEstimate Φ l k (49 / 16) p1 →
+        IsRegionalLowerEnergyEstimate Φ k r (49 / 16) p2 →
+        ∃ p : ℝ, IsRegionalLowerEnergyEstimate Φ l r (49 / 16) p ∧ Rel J p1 p2 p := by
     intro J hJ l r k p1 p2 hp1 hp2
     have hlr : l ≤ r := J.property.1
     have hrL : r ≤ L := J.property.2.1
@@ -265,7 +263,7 @@ theorem exists_successful_tree_energy_induction
     obtain ⟨eP, xP, hxP, hPxP, hPmin, eLeft, eRight, xLeft, xRight, hxLeft, hLeft, hLeftMin,
         hxRight, hRight, hRightMin, hupdate⟩ :=
       exists_selected_soft_terminal_node_energy_update (ι := Fin (N J)) (ell := ell)
-        hq (hlu J) (huv J) (hvr J) hrL (hleft J) (hright J) h hs h0 h1 g hg t Tcut m D hm hD
+        hq (hlu J) (huv J) (hvr J) hrL (hleft J) (hright J) Φ h0 h1 g hg t Tcut m D hm hD
         ht hTcut Delta hDelta0 mu e2 x2 (F J) hmu hlow hx2 hMx2 hMmin hDelta htail
     obtain ⟨hcenter, _hc0, _hc1, _hRnat, eSoft, w, _hRlift, _hw, _hRw, _hRmin, _hRnorm,
         _heSoft, _heP, hfinal⟩ :=
@@ -279,7 +277,7 @@ theorem exists_successful_tree_energy_induction
       ⟨eRight, xRight, hxRight, hRight, hRightMin, by simp, le_rfl⟩, hcenter,
       n, b, energy, hY, heig, hanti, rfl⟩
   obtain ⟨estimate, hroot, hrootShort, hlisted⟩ :=
-    exists_root_energy_with_node_relation h width hwidth Rel hleaf 0 L (Nat.zero_le L) le_rfl
+    exists_root_energy_with_node_relation Φ width hwidth Rel hleaf 0 L (Nat.zero_le L) le_rfl
       hnode
   refine ⟨u, v, estimate, hroot, hrootShort, ?_⟩
   intro J hJ l r k J' sigma0 y0 native

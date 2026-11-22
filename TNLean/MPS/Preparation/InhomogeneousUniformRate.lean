@@ -51,7 +51,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate_from
         IsPairApproximable (A N) hN (K * ((N : ℝ) ^ k * Real.exp (-(r * q))))) :
     ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
-        IsPreparedInDepth T (fun s => ψ s) ∧
+        IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
         1 - ‖⟪ψ, (‖state (A N)‖ : ℂ)⁻¹ • state (A N)⟫_ℂ‖ ≤ ε := by
   classical
   obtain ⟨Cb, hCb⟩ := exists_isPreparedInDepth_of_isPairApproximable d D
@@ -159,7 +159,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate
         IsPairApproximable (A N) hN (K * ((N : ℝ) ^ k * Real.exp (-(r * q))))) :
     ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N],
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ C * Real.log (N / ε) ∧
-        IsPreparedInDepth T (fun s => ψ s) ∧
+        IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
         1 - ‖⟪ψ, (‖state (A N)‖ : ℂ)⁻¹ • state (A N)⟫_ℂ‖ ≤ ε := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_inhomogeneous_le_log_of_uniform_rate_from
     d D hd A K r k hK hr 0 (fun N _ q hq hqN _ => hrate N q hq hqN)

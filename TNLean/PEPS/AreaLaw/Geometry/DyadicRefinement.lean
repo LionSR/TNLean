@@ -22,6 +22,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open TNLean.Lattice
+open ManyBody (edgeBoundary planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
@@ -152,12 +153,12 @@ of cell sides. Source: area-law Section 11, `geometry:belt-count`, lines 200–2
 theorem card_fineLayerIndices_boundary_le (o : ℝ × ℝ) (k ℓ : ℕ)
     (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C : ℕ) :
     (fineLayerIndices o k ℓ (boundaryEndpoints Λ A) C).card ≤
-      8 * (2 * C + 1) ^ 2 * (edgeBoundary Λ A).card * 4 ^ (k - ℓ) := by
+      8 * (2 * C + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card * 4 ^ (k - ℓ) := by
   rw [card_fineLayerIndices]
   calc
     4 ^ (k - ℓ) * (dyadicLayerIndices o k (boundaryEndpoints Λ A) C).card ≤
-        4 ^ (k - ℓ) * (8 * (2 * C + 1) ^ 2 * (edgeBoundary Λ A).card) :=
+        4 ^ (k - ℓ) * (8 * (2 * C + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card) :=
       Nat.mul_le_mul_left _ (card_dyadicLayerIndices_boundary_le o k Λ A C)
-    _ = 8 * (2 * C + 1) ^ 2 * (edgeBoundary Λ A).card * 4 ^ (k - ℓ) := by ring
+    _ = 8 * (2 * C + 1) ^ 2 * (edgeBoundary (planeDomainGraph Λ) A).card * 4 ^ (k - ℓ) := by ring
 
 end TNLean.PEPS.AreaLaw.Geometry

@@ -43,17 +43,15 @@ theorem exists_five_region_soft_uniform_clusters {L q k1 k2 k3 k4 ell : ℕ}
     (hq : 0 < q) (h12 : k1 ≤ k2) (h23 : k2 ≤ k3)
     (h34 : k3 ≤ k4) (h4L : k4 ≤ L)
     (hwindow1 : k2 - k1 ≤ 2 * ell) (hwindow3 : k4 - k3 ≤ 2 * ell)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, k1, k2, k3, k4, L]
     let I := fun j : Fin 5 ↦ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-    let A := fun j : Fin 5 ↦ ∑ i ∈ I j, h i
+    let A := fun j : Fin 5 ↦ Φ.partialHamiltonian (I j)
     let J := Finset.univ.filter
       (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
+    let Y := Φ.partialHamiltonian J
     J.card ≤ 4 ∧ ∃ (e : Fin 5 → ℝ) (x : (Fin L → Fin q) → ℂ) (E : ℝ),
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧ 0 ≤ E ∧ E ≤ (J.card : ℝ) ∧
@@ -64,7 +62,7 @@ theorem exists_five_region_soft_uniform_clusters {L q k1 k2 k3 k4 ell : ℕ}
           cfc (Real.softTruncation t m) (A j - (p j : ℂ) • 1) else A j) - (e j : ℂ) • 1)) + Y
         let M := 3 * t * (1 + Real.log (m : ℝ)) + 4 * (ell : ℝ) + 34
         G.IsHermitian ∧ ‖G‖ ≤ M ∧
-        let Hraw := ∑ i, h i
+        let Hraw := Φ.hamiltonian
         let hRaw : Hraw.IsHermitian :=
           (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
         ∀ mu0 g tau T0 T1 : ℝ, mu0 ∈ spectrum ℝ Hraw → 0 < g →
@@ -90,7 +88,7 @@ theorem exists_five_region_soft_uniform_clusters {L q k1 k2 k3 k4 ell : ℕ}
   intro k I A J Y
   obtain ⟨hJ, e, x, z, E, hx, hxe, he, hz, hHz, hE, hE0, hEC,
     hH, bH, aH, hEigH, hfamily⟩ :=
-    exists_five_region_soft_clusters hq h12 h23 h34 h4L h hs h0 h1
+    exists_five_region_soft_clusters hq h12 h23 h34 h4L Φ h0 h1
   refine ⟨hJ, e, x, E, hx, hxe, he, hE0, hEC, ?_⟩
   intro p t m hpl hpu ht hm G M
   obtain ⟨mu, w, hG, hBpos, hGH, hw, hGw, hGlow, hmuD, hmuE, hmuC,
@@ -98,7 +96,7 @@ theorem exists_five_region_soft_uniform_clusters {L q k1 k2 k3 k4 ell : ℕ}
       hfamily {0, 2, 4} p t m hpl hpu ht hm
   change G.IsHermitian at hG
   have hnorm : ‖G‖ ≤ M := norm_five_region_soft_three_bulk_le
-    h12 h23 h34 h4L hwindow1 hwindow3 h hs h0 h1
+    h12 h23 h34 h4L hwindow1 hwindow3 Φ h0 h1
     e x hx hxe he p t m hpl hpu ht (by omega)
   refine ⟨hG, hnorm, ?_⟩
   intro Hraw hRaw mu0 g tau T0 T1 hmu0 hg htau htau1 hgap

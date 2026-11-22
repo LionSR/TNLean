@@ -30,7 +30,7 @@ namespace TNLean.PEPS.AreaLaw.Scan
 /-- The same actual trace-distance estimate controls the target entropy, uniformly over all
 regions of the supplied quadratic volume bound, at every `n` from the explicit threshold
 `truncationEntropyThreshold q g Cvol` on. Source: `08-scanner.tex`, lines 399–404. -/
-theorem abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le
+theorem abs_regionEntropy_sub_le_of_truncationEntropyThreshold_le
     (q : ℕ) (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) {n : ℕ}
     (hthr : truncationEntropyThreshold q g Cvol ≤ n) :
     ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : StateSpace Λ q),
@@ -70,7 +70,7 @@ theorem abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le
             Real.sqrt_mul h2g, hhalf]
   have hcard' : (X.card : ℝ) ≤ (max 4 Cvol) * (n : ℝ) ^ 2 :=
     hcard.trans (mul_le_mul_of_nonneg_right (le_max_right 4 Cvol) (sq_nonneg _))
-  have hcont := abs_regionalEntropy_sub_le_sqrt_traceDistance Λ q Ωt Ω hΩt hΩ X
+  have hcont := abs_regionEntropy_sub_le_sqrt_traceDistance_card Λ q Ωt Ω hΩt hΩ X
   refine hcont.trans ?_
   calc
     4 * Real.sqrt t * (1 + (X.card : ℝ) * Real.log q) ≤
@@ -83,7 +83,7 @@ theorem abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le
 /-- The same actual trace-distance estimate controls the target entropy,
 uniformly over all regions of the supplied quadratic volume bound.
 Source: `08-scanner.tex`, lines 399–404. -/
-theorem eventually_abs_regionalEntropy_sub_le_of_truncation
+theorem eventually_abs_regionEntropy_sub_le_of_truncation
     (q : ℕ) (hq : 1 ≤ q) (g Cvol : ℝ) (hg : 0 < g) :
     ∀ᶠ n : ℕ in atTop,
       ∀ (Λ : Finset (ℤ × ℤ)) (Ω Ωt : StateSpace Λ q),
@@ -95,6 +95,6 @@ theorem eventually_abs_regionalEntropy_sub_le_of_truncation
       |ManyBody.regionEntropy Ωt X - ManyBody.regionEntropy Ω X| ≤
         (n : ℝ) ^ (-247 : ℝ) :=
   eventually_atTop.2
-    ⟨_, fun _ => abs_regionalEntropy_sub_le_of_truncationEntropyThreshold_le q hq g Cvol hg⟩
+    ⟨_, fun _ => abs_regionEntropy_sub_le_of_truncationEntropyThreshold_le q hq g Cvol hg⟩
 
 end TNLean.PEPS.AreaLaw.Scan

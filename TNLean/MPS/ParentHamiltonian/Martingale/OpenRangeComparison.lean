@@ -321,7 +321,7 @@ theorem openParentHamiltonianES_eq_of_groundSpace_eq
     openParentHamiltonianES A L N = openParentHamiltonianES B L N := by
   have hParent : parentInteraction A L = parentInteraction B L :=
     parentInteraction_eq_of_groundSpace_eq h
-  unfold openParentHamiltonianES localTermES localTerm
+  unfold openParentHamiltonianES localTermES localTerm parentRingInteraction
   simp only [hParent]
 
 /-- A one-site injective tensor has a positive open-chain gap at its canonical

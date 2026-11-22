@@ -59,7 +59,7 @@ theorem exists_isPreparedInDepth_allLength_of_slope (d D : ℕ) (hd : 0 < d) :
           ∀ (N q : ℕ) [NeZero N], mpvState A N ≠ 0 →
             a * Real.log (N / ε) + b ≤ q →
               ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ T ≤ C * min N q ∧
-                IsPreparedInDepth T (fun s => ψ s) ∧
+                IsPreparedInDepth (Geometry.ring N) T (fun s => ψ s) ∧
                 1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   classical
   obtain ⟨Cb, hCb⟩ := exists_isPreparedInDepth_blockIsometryState d D

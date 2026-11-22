@@ -57,7 +57,8 @@ open scoped Matrix.Norms.L2Operator
 open Matrix Filter Topology
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction edgeBoundary
+  planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -111,7 +112,7 @@ theorem typicalProjection_failure_le_surprisalTail (Ω : StateSpace Λ q) (hΩ :
     (ManyBody.regionState_isHermitian Y Ω).commute_spectralSelection _,
     fun i hi ↦ ⟨(Entropy.mem_typicalSet.mp hi).1, Entropy.exp_le_of_mem_typicalSet hi⟩, ?_⟩
   have hm := Entropy.one_sub_surprisalTail_le_typicalMass hρ.eigenvalues_nonneg
-    (posSemidef_trace_one_eigenvalues_sum_one hρ (trace_reducedState Ω hΩ Y))
+    (posSemidef_trace_one_eigenvalues_sum_one hρ (ManyBody.trace_regionState_eq_one hΩ (D := Y)))
     (ManyBody.regionEntropy Ω Y) w
   rw [typicalProjection, trace_mul_spectralSelection, Complex.ofReal_re]
   change 1 - Entropy.typicalMass _ _ _ ≤ _
@@ -144,7 +145,7 @@ theorem typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ)
         (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
       (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-      ∀ Y : Finset (Site Λ), ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
+      ∀ Y : Finset (Site Λ), ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n →
         1 - (ManyBody.regionState Ω Y *
             typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
           2 * Real.exp (Real.exp 1 / 2) *
@@ -156,12 +157,12 @@ theorem typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ)
   have hnr : (1 : ℝ) ≤ n := by exact_mod_cast hn
   have hn0 : (0 : ℝ) < n := by linarith
   obtain ⟨-, -, -, hfail⟩ := typicalProjection_failure_le_surprisalTail Ω hΩ Y w
-  have htail := (h.surprisalTail_reducedState_le hh hhJ hJ hΔ hΩ hgap hspan Y w).trans
+  have htail := (h.surprisalTail_regionState_le hh hhJ hJ hΔ hΩ hgap hspan Y w).trans
     (min_le_right _ _)
   refine hfail.trans (htail.trans (mul_le_mul_of_nonneg_left ?_ (by positivity)))
   rw [Real.exp_le_exp, neg_le_neg_iff]
   -- the tail parameter is at most `C (1 + C₀) n`
-  set B := cutLogBudget Λ q R Y
+  set B := ManyBody.cutLogBudget (fun X : AdmissibleSupport Λ R ↦ X.1) (fun _ ↦ q) Y
   have hB1 : 1 ≤ B := Entropy.one_le_cutLogBudget _ _
   have hBn : B ≤ tailParameterConstant q R * (1 + C₀) * n := by
     refine (cutLogBudget_le_edgeBoundary hq R Y).trans ?_
@@ -198,7 +199,7 @@ theorem exists_typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ
           (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ Y : Finset (Site Λ), ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
+        ∀ Y : Finset (Site Λ), ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n →
           1 - (ManyBody.regionState Ω Y *
               typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
             C * Real.exp (-(c * (n : ℝ) ^ ((1 : ℝ) / 10))) :=
@@ -229,7 +230,7 @@ theorem typicalProjection_failure_le_inv_pow_of_threshold_le (hq : 1 ≤ q) (R :
         (E₀ : ℝ) (Ω : StateSpace Λ q)
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (Y : Finset (Site Λ))
-    (hY : ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n) :
+    (hY : ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n) :
     1 - (ManyBody.regionState Ω Y *
         typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
       (n : ℝ) ^ (-(2 * K : ℝ)) :=
@@ -251,7 +252,7 @@ theorem exists_typicalProjection_failure_le_inv_pow (hq : 1 ≤ q) (R : ℕ)
           (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∀ Y : Finset (Site Λ), ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
+        ∀ Y : Finset (Site Λ), ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n →
           1 - (ManyBody.regionState Ω Y *
               typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
             (n : ℝ) ^ (-(2 * K : ℝ)) :=
@@ -274,9 +275,9 @@ theorem typicalProjectors_three_cuts_of_threshold_le (hq : 1 ≤ q) (R : ℕ)
         (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ X Y S₀ : Finset (Site Λ),
-          ((edgeBoundary Λ X).card : ℝ) ≤ C₀ * n →
-          ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
-          ((edgeBoundary Λ S₀).card : ℝ) ≤ C₀ * n →
+          ((edgeBoundary (planeDomainGraph Λ) X).card : ℝ) ≤ C₀ * n →
+          ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n →
+          ((edgeBoundary (planeDomainGraph Λ) S₀).card : ℝ) ≤ C₀ * n →
           ∀ Z ∈ ({X, Y, S₀} : Finset (Finset (Site Λ))),
             let w := (n : ℝ) ^ ((3 : ℝ) / 5)
             let p := (ManyBody.regionState_isHermitian Z Ω).eigenvalues
@@ -289,7 +290,7 @@ theorem typicalProjectors_three_cuts_of_threshold_le (hq : 1 ≤ q) (R : ℕ)
                 (n : ℝ) ^ (-(2 * K : ℝ)) := by
   classical
   intro n hn Λ h hh hhJ E₀ Ω hΩ hgap hspan X Y S₀ hX hY hS Z hZ
-  have hZb : ((edgeBoundary Λ Z).card : ℝ) ≤ C₀ * n := by
+  have hZb : ((edgeBoundary (planeDomainGraph Λ) Z).card : ℝ) ≤ C₀ * n := by
     simp only [Finset.mem_insert, Finset.mem_singleton] at hZ
     rcases hZ with rfl | rfl | rfl <;> assumption
   obtain ⟨hproj, hcomm, hwin, -⟩ :=
@@ -316,9 +317,9 @@ theorem exists_typicalProjectors_three_cuts (hq : 1 ≤ q) (R : ℕ)
         (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ X Y S₀ : Finset (Site Λ),
-          ((edgeBoundary Λ X).card : ℝ) ≤ C₀ * n →
-          ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
-          ((edgeBoundary Λ S₀).card : ℝ) ≤ C₀ * n →
+          ((edgeBoundary (planeDomainGraph Λ) X).card : ℝ) ≤ C₀ * n →
+          ((edgeBoundary (planeDomainGraph Λ) Y).card : ℝ) ≤ C₀ * n →
+          ((edgeBoundary (planeDomainGraph Λ) S₀).card : ℝ) ≤ C₀ * n →
           ∀ Z ∈ ({X, Y, S₀} : Finset (Finset (Site Λ))),
             let w := (n : ℝ) ^ ((3 : ℝ) / 5)
             let p := (ManyBody.regionState_isHermitian Z Ω).eigenvalues

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.IntervalChildComposition
-import TNLean.Circuit.PairProduct
+import QICLean.ManyBody.Sites.PlaceAlong
 
 /-!
 # Joint columns from individually supported logical operators
@@ -34,10 +34,10 @@ open scoped Classical in
 /-- The placed initialized inclusion is the tensor product of its two component inclusions.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-theorem initializedBasisMatrix_placedBasisEmbedding {d a n : ℕ} {α τ : Type*}
+theorem basisInclusion_placedBasisEmbedding {d a n : ℕ} {α τ : Type*}
     (e : Fin a ↪ Fin n) (g : α ↪ Cfg d a) (t : τ ↪ OutsidePlacedConfig d e) :
-    (initializedBasisMatrix (placedBasisEmbedding e g t)).submatrix
-      (placedConfigEquiv d e).symm id = initializedBasisMatrix g ⊗ₖ initializedBasisMatrix t := by
+    (basisInclusion (placedBasisEmbedding e g t)).submatrix
+      (placedConfigEquiv d e).symm id = basisInclusion g ⊗ₖ basisInclusion t := by
   classical
   ext p q
   change (if (placedConfigEquiv d e).symm p =
@@ -50,17 +50,19 @@ open scoped Classical in
 /-- A placed operator is its local matrix tensored with the identity on all remaining sites.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
-theorem reindex_embedOp_placedConfigEquiv {d a n : ℕ}
+theorem reindex_placeAlong_placedConfigEquiv {d a n : ℕ}
     (e : Fin a ↪ Fin n) (X : Matrix (Cfg d a) (Cfg d a) ℂ) :
-    Matrix.reindex (placedConfigEquiv d e) (placedConfigEquiv d e) (embedOp e X) =
+    Matrix.reindex (placedConfigEquiv d e) (placedConfigEquiv d e)
+        (ManyBody.placeAlong (X := fun _ ↦ Fin d) e X) =
       X ⊗ₖ (1 : Matrix (OutsidePlacedConfig d e) (OutsidePlacedConfig d e) ℂ) := by
   classical
   ext p q
   obtain ⟨x, rfl⟩ := (placedConfigEquiv d e).surjective p
   obtain ⟨y, rfl⟩ := (placedConfigEquiv d e).surjective q
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_apply_apply,
-    Matrix.kroneckerMap_apply, Matrix.one_apply, placedConfigEquiv_fst, embedOp_apply]
-  have hAg : AgreeOff e x y ↔ (placedConfigEquiv d e x).2 = (placedConfigEquiv d e y).2 := by
+    Matrix.kroneckerMap_apply, Matrix.one_apply, placedConfigEquiv_fst, ManyBody.placeAlong_apply]
+  have hAg : (∀ v, (∀ u, e u ≠ v) → x v = y v) ↔
+      (placedConfigEquiv d e x).2 = (placedConfigEquiv d e y).2 := by
     constructor
     · intro h
       funext s
@@ -68,7 +70,7 @@ theorem reindex_embedOp_placedConfigEquiv {d a n : ℕ}
     · intro h s hs
       exact congrFun h ⟨s, by rintro ⟨i, hi⟩; exact hs i hi⟩
   simp only [hAg]
-  split_ifs <;> simp only [mul_one, mul_zero]
+  split_ifs <;> simp only [mul_one, mul_zero, Function.comp_def]
 
 open scoped Classical in
 /-- A global initialized-column identity with unrestricted spectator configurations is equivalent
@@ -78,44 +80,44 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem placedColumns_iff_localColumns {d a n : ℕ} [NeZero d] {α γ : Type*} [Fintype γ]
     (e : Fin a ↪ Fin n) (g : α ↪ Cfg d a) (g' : γ ↪ Cfg d a)
     (X : Matrix (Cfg d a) (Cfg d a) ℂ) (V : Matrix γ α ℂ) :
-    (embedOp e X) * initializedBasisMatrix
+    (ManyBody.placeAlong (X := fun _ ↦ Fin d) e X) * basisInclusion
         (placedBasisEmbedding e g (Function.Embedding.refl _)) =
-      initializedBasisMatrix (placedBasisEmbedding e g' (Function.Embedding.refl _)) *
+      basisInclusion (placedBasisEmbedding e g' (Function.Embedding.refl _)) *
         (V ⊗ₖ (1 : Matrix (OutsidePlacedConfig d e) (OutsidePlacedConfig d e) ℂ)) ↔
-      X * initializedBasisMatrix g = initializedBasisMatrix g' * V := by
+      X * basisInclusion g = basisInclusion g' * V := by
   classical
   have hrepr : Matrix.reindex (placedConfigEquiv d e) (Equiv.refl _)
-      ((embedOp e X) * initializedBasisMatrix
+      ((ManyBody.placeAlong (X := fun _ ↦ Fin d) e X) * basisInclusion
         (placedBasisEmbedding e g (Function.Embedding.refl _))) =
-        (X * initializedBasisMatrix g) ⊗ₖ
+        (X * basisInclusion g) ⊗ₖ
           (1 : Matrix (OutsidePlacedConfig d e) (OutsidePlacedConfig d e) ℂ) := by
-    change ((embedOp e X) * initializedBasisMatrix
+    change ((ManyBody.placeAlong (X := fun _ ↦ Fin d) e X) * basisInclusion
       (placedBasisEmbedding e g (Function.Embedding.refl _))).submatrix
         (placedConfigEquiv d e).symm id = _
     rw [← Matrix.submatrix_mul_equiv _ _ (placedConfigEquiv d e).symm
       (placedConfigEquiv d e).symm id]
     change Matrix.reindex (placedConfigEquiv d e) (placedConfigEquiv d e)
-      (embedOp e X) *
-      (initializedBasisMatrix (placedBasisEmbedding e g (Function.Embedding.refl _))).submatrix
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) e X) *
+      (basisInclusion (placedBasisEmbedding e g (Function.Embedding.refl _))).submatrix
         (placedConfigEquiv d e).symm id = _
-    rw [reindex_embedOp_placedConfigEquiv, initializedBasisMatrix_placedBasisEmbedding]
-    simp only [initializedBasisMatrix, Function.Embedding.coe_refl, Matrix.submatrix_id_id,
+    rw [reindex_placeAlong_placedConfigEquiv, basisInclusion_placedBasisEmbedding]
+    simp only [basisInclusion, Function.Embedding.coe_refl, Matrix.submatrix_id_id,
       ← Matrix.mul_kronecker_mul, Matrix.one_mul]
   have hrepr' : Matrix.reindex (placedConfigEquiv d e) (Equiv.refl _)
-      (initializedBasisMatrix (placedBasisEmbedding e g' (Function.Embedding.refl _)) *
+      (basisInclusion (placedBasisEmbedding e g' (Function.Embedding.refl _)) *
         (V ⊗ₖ (1 : Matrix (OutsidePlacedConfig d e) (OutsidePlacedConfig d e) ℂ))) =
-        (initializedBasisMatrix g' * V) ⊗ₖ
+        (basisInclusion g' * V) ⊗ₖ
           (1 : Matrix (OutsidePlacedConfig d e) (OutsidePlacedConfig d e) ℂ) := by
-    change (initializedBasisMatrix (placedBasisEmbedding e g' (Function.Embedding.refl _)) *
+    change (basisInclusion (placedBasisEmbedding e g' (Function.Embedding.refl _)) *
       (V ⊗ₖ (1 : Matrix (OutsidePlacedConfig d e) (OutsidePlacedConfig d e) ℂ))).submatrix
         (placedConfigEquiv d e).symm id = _
     rw [← Matrix.submatrix_mul_equiv _ _ (placedConfigEquiv d e).symm (Equiv.refl _) id]
-    change (initializedBasisMatrix
+    change (basisInclusion
       (placedBasisEmbedding e g' (Function.Embedding.refl _))).submatrix
         (placedConfigEquiv d e).symm id *
           (V ⊗ₖ (1 : Matrix (OutsidePlacedConfig d e) (OutsidePlacedConfig d e) ℂ)) = _
-    rw [initializedBasisMatrix_placedBasisEmbedding]
-    simp only [initializedBasisMatrix, Function.Embedding.coe_refl, Matrix.submatrix_id_id,
+    rw [basisInclusion_placedBasisEmbedding]
+    simp only [basisInclusion, Function.Embedding.coe_refl, Matrix.submatrix_id_id,
       ← Matrix.mul_kronecker_mul, Matrix.one_mul]
   constructor
   · intro h
@@ -144,18 +146,20 @@ theorem jointPlacedColumns_of_supported_individual {d a b n : ℕ} [NeZero d]
     (V : Matrix γ α ℂ) (W : Matrix δ β ℂ)
     (hSX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.image e))
     (hSY : Y ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.image f))
-    (hX : X * initializedBasisMatrix (placedBasisEmbedding e g (Function.Embedding.refl _)) =
-      initializedBasisMatrix (placedBasisEmbedding e g' (Function.Embedding.refl _)) *
+    (hX : X * basisInclusion (placedBasisEmbedding e g (Function.Embedding.refl _)) =
+      basisInclusion (placedBasisEmbedding e g' (Function.Embedding.refl _)) *
         (V ⊗ₖ (1 : Matrix (OutsidePlacedConfig d e) (OutsidePlacedConfig d e) ℂ)))
-    (hY : Y * initializedBasisMatrix (placedBasisEmbedding f k (Function.Embedding.refl _)) =
-      initializedBasisMatrix (placedBasisEmbedding f k' (Function.Embedding.refl _)) *
+    (hY : Y * basisInclusion (placedBasisEmbedding f k (Function.Embedding.refl _)) =
+      basisInclusion (placedBasisEmbedding f k' (Function.Embedding.refl _)) *
         (W ⊗ₖ (1 : Matrix (OutsidePlacedConfig d f) (OutsidePlacedConfig d f) ℂ))) :
-    (X * Y) * initializedBasisMatrix (jointPlacedBasisEmbedding e f h g k t) =
-      initializedBasisMatrix (jointPlacedBasisEmbedding e f h g' k' t) *
+    (X * Y) * basisInclusion (jointPlacedBasisEmbedding e f h g k t) =
+      basisInclusion (jointPlacedBasisEmbedding e f h g' k' t) *
         ((V ⊗ₖ W) ⊗ₖ (1 : Matrix τ τ ℂ)) := by
   classical
-  obtain ⟨X₀, rfl⟩ := exists_embedOp_eq_of_mem_supportedOperators e.injective hSX
-  obtain ⟨Y₀, rfl⟩ := exists_embedOp_eq_of_mem_supportedOperators f.injective hSY
+  obtain ⟨X₀, rfl⟩ := ManyBody.exists_eq_placeAlong_of_mem_supportedOperators
+    (X := fun _ ↦ Fin d) e (A := X) (by rwa [Finset.map_eq_image])
+  obtain ⟨Y₀, rfl⟩ := ManyBody.exists_eq_placeAlong_of_mem_supportedOperators
+    (X := fun _ ↦ Fin d) f (A := Y) (by rwa [Finset.map_eq_image])
   exact jointPlacedColumns_of_individual e f h g k g' k' t X₀ Y₀ V W
     ((placedColumns_iff_localColumns e g g' X₀ V).mp hX)
     ((placedColumns_iff_localColumns f k k' Y₀ W).mp hY)

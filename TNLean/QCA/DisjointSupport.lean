@@ -46,50 +46,13 @@ theorem localInclusion_commute_of_disjoint (hΛΓ : Disjoint Λ Γ)
     (A : LocalAlgebra d Λ) (B : LocalAlgebra d Γ) :
     Commute (localInclusion (d := d) Finset.subset_union_left A)
       (localInclusion Finset.subset_union_right B) := by
-  rw [commute_iff_eq]
-  ext x y
-  change (∑ z, localInclusion Finset.subset_union_left A x z *
-      localInclusion Finset.subset_union_right B z y) =
-    ∑ z, localInclusion Finset.subset_union_right B x z *
-      localInclusion Finset.subset_union_left A z y
-  simp only [localInclusion_apply]
-  simp_rw [Config.splitEquiv_snd_eq_iff_restrict_right hΛΓ,
-    Config.splitEquiv_snd_eq_iff_restrict_left hΛΓ]
-  let e := Config.disjointUnionEquiv (d := d) hΛΓ
-  change (∑ z, (A (e x).1 (e z).1 * if (e x).2 = (e z).2 then 1 else 0) *
-      (B (e z).2 (e y).2 * if (e z).1 = (e y).1 then 1 else 0)) =
-    ∑ z, (B (e x).2 (e z).2 * if (e x).1 = (e z).1 then 1 else 0) *
-      (A (e z).1 (e y).1 * if (e z).2 = (e y).2 then 1 else 0)
-  have hleft :
-      (∑ z : Config d (Λ ∪ Γ),
-        (A (e x).1 (e z).1 * if (e x).2 = (e z).2 then 1 else 0) *
-          (B (e z).2 (e y).2 * if (e z).1 = (e y).1 then 1 else 0)) =
-        ∑ p : Config d Λ × Config d Γ,
-          (A (e x).1 p.1 * if (e x).2 = p.2 then 1 else 0) *
-            (B p.2 (e y).2 * if p.1 = (e y).1 then 1 else 0) := by
-    exact Fintype.sum_equiv e _ _ fun _ ↦ rfl
-  have hright :
-      (∑ z : Config d (Λ ∪ Γ),
-        (B (e x).2 (e z).2 * if (e x).1 = (e z).1 then 1 else 0) *
-          (A (e z).1 (e y).1 * if (e z).2 = (e y).2 then 1 else 0)) =
-        ∑ p : Config d Λ × Config d Γ,
-          (B (e x).2 p.2 * if (e x).1 = p.1 then 1 else 0) *
-            (A p.1 (e y).1 * if p.2 = (e y).2 then 1 else 0) := by
-    exact Fintype.sum_equiv e _ _ fun _ ↦ rfl
-  calc
-    _ = ∑ p : Config d Λ × Config d Γ,
-        (A (e x).1 p.1 * if (e x).2 = p.2 then 1 else 0) *
-          (B p.2 (e y).2 * if p.1 = (e y).1 then 1 else 0) := hleft
-    _ = A (e x).1 (e y).1 * B (e x).2 (e y).2 := by
-      rw [Fintype.sum_prod_type]
-      simp
-    _ = B (e x).2 (e y).2 * A (e x).1 (e y).1 := mul_comm _ _
-    _ = ∑ p : Config d Λ × Config d Γ,
-        (B (e x).2 p.2 * if (e x).1 = p.1 then 1 else 0) *
-          (A p.1 (e y).1 * if p.2 = (e y).2 then 1 else 0) := by
-      rw [Fintype.sum_prod_type]
-      simp
-    _ = _ := hright.symm
+  have hA := ManyBody.subregionPlace_mem_supportedOperators (X := fun _ : ℤ ↦ Fin d)
+    (Finset.subset_union_left : Λ ⊆ Λ ∪ Γ) A
+  have hB := ManyBody.subregionPlace_mem_supportedOperators (X := fun _ : ℤ ↦ Fin d)
+    (Finset.subset_union_right : Γ ⊆ Λ ∪ Γ) B
+  exact ManyBody.commute_of_mem_supportedOperators_of_disjoint hA hB
+    (Finset.disjoint_left.mpr fun _ hwΛ hwΓ ↦
+      Finset.disjoint_left.mp hΛΓ (Finset.mem_subtype.mp hwΛ) (Finset.mem_subtype.mp hwΓ))
 
 /-- Canonical algebraic-local observables from disjoint regions commute.
 

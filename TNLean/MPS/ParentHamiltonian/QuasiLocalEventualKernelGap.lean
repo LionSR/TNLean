@@ -51,7 +51,7 @@ theorem quasiLocalExpectation_localCommutatorObservable_nonneg_of_eventual_kerne
     (hker : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
         groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N)
-    (a : ℤ) (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hk : 0 < k) :
+    (a : ℤ) (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
     0 ≤ quasiLocalExpectation (A α) hTP hρ hfix htr
       (quasiLocalIntervalObservable d (a - ((R - 1 : ℕ) : ℤ))
         ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X)) := by
@@ -71,7 +71,7 @@ theorem quasiLocalExpectation_localCommutatorObservable_nonneg_of_eventual_kerne
     exact groundSpaceES_block_le_toTensorFromBlocks μ A hμ α N
   have hnonneg := observableInsertionExpectation_adjoint_commutator_nonneg
     (A α) hρ (openInteractionMatrix h N) (bulkObservable X n n) hH hsupport
-  rw [← quasiLocalIntervalObservable_bulkObservable_commutator a h X hR hk
+  rw [← quasiLocalIntervalObservable_bulkObservable_commutator a h X hR
     (by dsimp [n]; omega : R - 1 ≤ n) (by dsimp [n]; omega : R - 1 ≤ n)]
   rw [quasiLocalExpectation_quasiLocalIntervalObservable]
   exact hnonneg
@@ -104,13 +104,13 @@ theorem exists_pos_multiblock_localCommutator_gap_of_eventual_kernel
   obtain ⟨γ, hγ, hgap⟩ := exists_openInteractionMatrix_gap_of_eventual_kernel
     μ A hμ ρ hP hρ hDistinct hR h hh hker
   refine ⟨γ, hγ, hgap, ?_⟩
-  intro α k X hk hcenter
+  intro α k X _ hcenter
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
   have hN : Tendsto N atTop atTop :=
     tendsto_atTop_mono (fun n => by dsimp [N]; omega) tendsto_id
   obtain ⟨ψ, hg, hu⟩ := (hP α).exists_eventually_unit_groundSpaceES (hρ α) N hN
   apply multiblock_localCommutator_gap_of_openInteraction_gap
-    A ρ hP hρ hDistinct α h (Matrix.isPositive_toEuclideanLin_iff.mpr hh) X hR hk hcenter ψ hγ.le
+    A ρ hP hρ hDistinct α h (Matrix.isPositive_toEuclideanLin_iff.mpr hh) X hR hcenter ψ hγ.le
   · filter_upwards [hN.eventually hker] with n hn
     rwa [groundSpaceES_toTensorFromBlocks_eq_iSup μ A hμ] at hn
   · exact Eventually.of_forall fun n => hgap (N n)
@@ -205,7 +205,7 @@ theorem exists_pos_multiblock_quasiLocalCommutator_limit_gap_of_eventual_kernel
         ((R - 1 + k) + (R - 1)) (localCommutatorObservable h X)), ?_, ?_⟩
   · exact tendsto_apply_quasiLocalIntervalObservable_commutator
       (quasiLocalExpectation (A α) (hP α).norm (hP α).fixedPoint_psd
-        (hP α).fixedPoint_is_fixed (hP α).trace_ne_zero) a h X (by omega) hk hℓ hr
+        (hP α).fixedPoint_is_fixed (hP α).trace_ne_zero) a h X (by omega) hℓ hr
   · rw [Complex.le_def]
     constructor
     · simpa only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
@@ -217,7 +217,7 @@ theorem exists_pos_multiblock_quasiLocalCommutator_limit_gap_of_eventual_kernel
       have henergy :=
         quasiLocalExpectation_localCommutatorObservable_nonneg_of_eventual_kernel
         μ A hμ α (hP α).norm (hP α).fixedPoint_psd (hP α).fixedPoint_is_fixed
-        (hP α).trace_ne_zero hR h hh hker a X hk
+        (hP α).trace_ne_zero hR h hh hker a X
       have henergyIm := (Complex.nonneg_iff.mp henergy).2
       simp only [Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im,
         ← hsquareIm, ← henergyIm, mul_zero, zero_mul, add_zero]

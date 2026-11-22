@@ -23,6 +23,8 @@ separately.
 
 open scoped Matrix Kronecker
 
+open ManyBody
+
 namespace MPOTensor.PhysicalSectorFactorization
 
 variable {d D : ℕ} {K : MPOTensor d D}
@@ -229,12 +231,12 @@ the original pair matrix after identifying configurations with ordered pairs.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8.  The source does not
 separately state the crossed finite-size case. -/
-theorem reindex_embedLocalOperator_two_zero
+theorem reindex_placeAlong_ringWindow_two_zero
     (F : PhysicalSectorFactorization K) :
     Matrix.reindex (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d))
-        (embedLocalOperator (d := d) 2 2 (by decide) (0 : Fin 2) F.physicalBond) =
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (0 : Fin 2)) F.physicalBond) =
       F.physicalPairBond := by
-  rw [MPOTensor.reindex_embedLocalOperator_two_zero]
+  rw [MPOTensor.reindex_placeAlong_ringWindow_two_zero]
   rfl
 
 /-- On the two-site periodic chain, the translate beginning at site one is
@@ -242,12 +244,12 @@ the pair matrix with its two tensor factors exchanged.
 
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8.  The source does not
 separately state the crossed finite-size case. -/
-theorem reindex_embedLocalOperator_two_one
+theorem reindex_placeAlong_ringWindow_two_one
     (F : PhysicalSectorFactorization K) :
     Matrix.reindex (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d))
-        (embedLocalOperator (d := d) 2 2 (by decide) (1 : Fin 2) F.physicalBond) =
+        (placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (1 : Fin 2)) F.physicalBond) =
       swapPairMatrix F.physicalPairBond := by
-  rw [MPOTensor.reindex_embedLocalOperator_two_one]
+  rw [MPOTensor.reindex_placeAlong_ringWindow_two_one]
   rfl
 
 /-- The two oppositely ordered translates of the physical bond commute on the
@@ -266,10 +268,10 @@ ordering separately.
 two is recorded in
 `docs/paper-gaps/cpgsv17_mpdo_sal_zcl_eta_local_structure.tex`. -/
 theorem physicalBond_two_zero_one_comm (F : PhysicalSectorFactorization K) :
-    embedLocalOperator (d := d) 2 2 (by decide) (0 : Fin 2) F.physicalBond *
-        embedLocalOperator (d := d) 2 2 (by decide) (1 : Fin 2) F.physicalBond =
-      embedLocalOperator (d := d) 2 2 (by decide) (1 : Fin 2) F.physicalBond *
-        embedLocalOperator (d := d) 2 2 (by decide) (0 : Fin 2) F.physicalBond := by
+    placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (0 : Fin 2)) F.physicalBond *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (1 : Fin 2)) F.physicalBond =
+      placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (1 : Fin 2)) F.physicalBond *
+        placeAlong (X := fun _ ↦ Fin d) (ringWindow le_rfl (0 : Fin 2)) F.physicalBond := by
   apply (Matrix.reindex (finTwoArrowEquiv (Fin d))
     (finTwoArrowEquiv (Fin d))).injective
   change (Matrix.reindexLinearEquiv ℂ ℂ (finTwoArrowEquiv (Fin d))
@@ -280,7 +282,7 @@ theorem physicalBond_two_zero_one_comm (F : PhysicalSectorFactorization K) :
       (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d)),
     ← Matrix.reindexLinearEquiv_mul ℂ ℂ (finTwoArrowEquiv (Fin d))
       (finTwoArrowEquiv (Fin d)) (finTwoArrowEquiv (Fin d)),
-    Matrix.coe_reindexLinearEquiv, F.reindex_embedLocalOperator_two_zero,
-    F.reindex_embedLocalOperator_two_one, F.physicalPairBond_swap_comm]
+    Matrix.coe_reindexLinearEquiv, F.reindex_placeAlong_ringWindow_two_zero,
+    F.reindex_placeAlong_ringWindow_two_one, F.physicalPairBond_swap_comm]
 
 end MPOTensor.PhysicalSectorFactorization

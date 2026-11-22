@@ -137,31 +137,30 @@ module docstring. LVV13, `algo53.tex`, lines 213--216. -/
 theorem exists_theorem_one_of_valid (hq : 2 ≤ q) {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ (o : {ι : Type} → LinearAlgebraQuery q ι → ι), IsValidOracle o →
       ∀ (L : ℕ), 1 ≤ L → ∀ {η : ℝ}, 0 < η → Delta * η ≤ 1 →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-          (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1),
       let R := lvvAccuracyParameter L Delta η
-      let ψ := FreeM.eval o (groundStateProgram hq h hs h0 h1 Delta R)
+      let ψ := FreeM.eval o (groundStateProgram hq Φ h0 h1 Delta R)
       (∀ (E : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-        ‖Γ‖ = 1 → IsGapped (∑ j, h j) E Delta →
-        groundSpace (∑ j, h j) E = Submodule.span ℂ {Γ} →
+        ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E Delta →
+        groundSpace Φ.hamiltonian E = Submodule.span ℂ {Γ} →
         ‖ψ‖ = 1 ∧ 1 - η ≤ ‖⟪Γ, ψ⟫_ℂ‖ ∧
           IsOpenMPS L q (lvvSuccessiveCardBound q (min Delta 1) (L + 2 * R ^ 2) *
             max 1 (lvvSuccessiveBondBound q (min Delta 1) (L + 2 * R ^ 2))) (fun x ↦ ψ x)) ∧
-      ((FreeM.cost o queryCost (groundStateProgram hq h hs h0 h1 Delta R) : ℕ) : ℝ) ≤
+      ((FreeM.cost o queryCost (groundStateProgram hq Φ h0 h1 Delta R) : ℕ) : ℝ) ≤
         P * (17 * L / (Delta * η) + 5 * L) ^ d := by
   obtain ⟨P, d, hP, hcost⟩ := exists_groundStateProgram_cost_polynomial_of_valid hq hDelta
-  refine ⟨P, d, hP, fun o hv L hL η hη hΔη h hs h0 h1 ↦ ?_⟩
+  refine ⟨P, d, hP, fun o hv L hL η hη hΔη Φ h0 h1 ↦ ?_⟩
   intro R ψ
   refine ⟨fun E Γ hΩ hgap hspan ↦ ?_, ?_⟩
-  · obtain ⟨hψ1, hover, hmps⟩ := groundStateProgram_spec_of_valid hv hL hq h hs h0 h1 hDelta
+  · obtain ⟨hψ1, hover, hmps⟩ := groundStateProgram_spec_of_valid hv hL hq Φ h0 h1 hDelta
       (one_le_lvvAccuracyParameter L Delta η) E Γ hΩ hgap hspan
     exact ⟨hψ1, le_trans (by linarith [four_mul_div_lvvAccuracyParameter_le (L := L) hDelta hη])
       hover, hmps⟩
-  · have hc := (hcost o hv L R hL h hs h0 h1).2
+  · have hc := (hcost o hv L R hL Φ h0 h1).2
     have hlen := padded_length_lvvAccuracyParameter_le hL hDelta hη hΔη
     calc
-      ((FreeM.cost o queryCost (groundStateProgram hq h hs h0 h1 Delta R) : ℕ) : ℝ)
+      ((FreeM.cost o queryCost (groundStateProgram hq Φ h0 h1 Delta R) : ℕ) : ℝ)
           ≤ ((P * (L + 2 * R ^ 2 + 1) ^ d : ℕ) : ℝ) := by exact_mod_cast hc
       _ = P * ((L + 2 * R ^ 2 + 1 : ℕ) : ℝ) ^ d := by push_cast; ring
       _ ≤ P * (17 * L / (Delta * η) + 5 * L) ^ d := by

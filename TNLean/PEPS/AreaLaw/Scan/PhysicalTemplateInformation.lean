@@ -35,7 +35,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace PlaneInteraction)
+open ManyBody (IsGapped ambientDilation groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

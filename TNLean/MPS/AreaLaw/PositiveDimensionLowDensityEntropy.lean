@@ -34,13 +34,11 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_of_pos_dimensio
     (etaLD : ℝ) (hLD : 0 < etaLD) :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q p r : ℕ) (v : ℝ) (hq : 0 < q), p ≤ r → r ≤ L → 0 < v →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ (h0 : ∀ i, 0 ≤ Φ.term i), (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let J := interval L p r
@@ -52,9 +50,9 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_of_pos_dimensio
   classical
   obtain ⟨K, hK, hactual⟩ := exists_fixed_bandwidth_interval_low_energy_entropy_bound etaLD hLD
   refine ⟨K, hK, ?_⟩
-  intro L q p r v hq hpr hrL hv h hs h0 h1 config H hRaw J G ψ hψG hψ
+  intro L q p r v hq hpr hrL hv Φ h0 h1 config H hRaw J G ψ hψG hψ
   by_cases hq2 : 2 ≤ q
-  · exact hactual L q p r v hq2 hpr hrL hv h hs h0 h1 ψ hψG hψ
+  · exact hactual L q p r v hq2 hpr hrL hv Φ h0 h1 ψ hψG hψ
   · have hq1 : q = 1 := by omega
     subst q
     have hzero : ManyBody.regionEntropy ψ J ≤ 0 := by

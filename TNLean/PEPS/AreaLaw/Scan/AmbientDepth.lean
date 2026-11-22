@@ -31,7 +31,7 @@ These are the geometric inputs to the scan, not the full histories lemma.
 
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (ambientDilation mem_ambientDilation_iff planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

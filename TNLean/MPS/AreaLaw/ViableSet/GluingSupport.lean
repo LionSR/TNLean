@@ -44,9 +44,10 @@ theorem mem_leftSupportSubmodule_of_gluingCut_fixed
   have hPY : P * Y = Y := by
     have h := congrArg (fun z ↦ schmidtCoeffMatrix (WithLp.ofLp z)) hleft
     simpa only [schmidtCoeffMatrix_ofLp_leftApply] using h
-  have hcm : cutMatrix (WithLp.toLp 2 (y ∘ gluingCut L q k)) k = Y.submatrix e id := by
+  have hcm : ManyBody.cutMatrix (leftBlock L k) (WithLp.toLp 2 (y ∘ gluingCut L q k)) =
+      Y.submatrix e id := by
     ext p r
-    rw [cutMatrix, Matrix.schmidtCoeffMatrix_apply]
+    rw [ManyBody.cutMatrix_apply]
     change y (gluingCut L q k ((ManyBody.cutEquiv (fun _ ↦ Fin q)
       (leftBlock L k)).symm (p, r))) = y (e p, r)
     rw [gluingCut, Entropy.threeCutEquiv_eq_trans]

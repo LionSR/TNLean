@@ -189,7 +189,7 @@ theorem ExactMPSGroundPath.exists_chain_character
   intro t g
   obtain ⟨E, _, _, hline⟩ := Q.ground_line t t.property N hN
   exact mem_span_mpv_of_commute_ground_line (Q.tensor t)
-    (interactionHamiltonian (P.interaction t) hN) (V g) E
+    (ManyBody.Interaction.translationInvariant hN (P.interaction t)).hamiltonian (V g) E
     (P.symmetric t t.property g N hN) hline
 
 /-- The constant finite-chain character acts on periodic MPS coefficients.

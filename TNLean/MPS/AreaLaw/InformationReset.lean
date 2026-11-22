@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.MPS.AreaLaw.ResetSupportSeparation
-import QICLean.ManyBody.Dynamics.GraphBall
+import QICLean.ManyBody.Sites.GraphBall
 import TNLean.Lattice.PhysicalBufferCoordinates
 import TNLean.Lattice.RegionalReset
 import TNLean.Lattice.RegionalResetEntropy
@@ -180,17 +180,17 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
   let Q := (D ∪ C)ᶜ
   let Pconf := Fin (Fintype.card (D → Fin q)) × Fin (Fintype.card (C → Fin q))
   let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) D C hDC
-  let g := (s.prodCongr s).trans (Equiv.doubledRegroup Pconf (Q → Fin q))
+  let g := (s.prodCongr s).trans (Equiv.doubledRegroup Pconf ({v // v ∉ D ∪ C} → Fin q))
   let ψ := fun c ↦ Ω (e.symm c).1 * Ω (e.symm c).2
   obtain ⟨hψn, hφn, W, z, hW, hz, hgauss⟩ :=
     hfilter q D C hDC e H E₀ Ω b hH hΩ hgap hspan hb hI
   let V := Matrix.reindex (g.symm.trans e) (g.symm.trans e)
     ((1 : Matrix (Pconf × Pconf) (Pconf × Pconf) ℂ) ⊗ₖ W)
   have hVsupp : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q := by
-    have hs := ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _)
-      (Matrix.reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
-    rw [← reindex_physicalBuffer_eq_place q D C hDC W] at hs
-    exact hs
+    obtain ⟨A, hA⟩ : ∃ A, V = ManyBody.place (X := fun _ ↦ Fin (q * q)) Q A :=
+      ⟨_, reindex_physicalBuffer_eq_place q D C hDC W⟩
+    rw [hA]
+    exact ManyBody.place_mem_supportedOperators A
   have hV : ‖V‖ ≤ 1 :=
     ((Matrix.l2_opNorm_reindex_equiv (g.symm.trans e) _).trans_le
       (Matrix.l2_opNorm_one_kronecker_le W)).trans hW
@@ -294,7 +294,7 @@ theorem _root_.ManyBody.ChainInteraction.information_reset (q : ℕ) (hq : 1 ≤
   obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq L h hh hhJ D (ℓ : ℝ) (Nat.cast_nonneg _)
   refine ⟨path, fun Q W hW η T hT ↦ ?_⟩
   obtain ⟨hs, -, herr⟩ := hint Q W hW η T hT
-  rw [hK, ← h.swappedDoubled_hamiltonian D]
+  rw [hK]
   exact ⟨hs, herr⟩
 
 /-- Information reset on an actual finite induced integer domain, using its
@@ -335,12 +335,12 @@ theorem _root_.ManyBody.DomainInteraction.information_reset (q : ℕ) (hq : 1 �
   simp only [Fintype.card_fin] at hreset'
   refine hreset' h.hamiltonian Ω E₀ (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hgap hspan
       D C R₀ C₀ hDC hR₀ hC₀ b hI
-    (fun ℓ A ↦ A.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x ℓ)) Z
+    (fun ℓ A ↦ ManyBody.graphNeighborhood (lineDomainGraph Λ) A ℓ) Z
     (fun ℓ ↦ ?_) (fun ℓ hℓ ↦ ?_)
   · obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq Λ h hh hhJ D ℓ
     refine ⟨path, fun Q W hW η T hT ↦ ?_⟩
     obtain ⟨hs, -, herr⟩ := hint Q W hW η T hT
-    rw [hK, ← h.swappedDoubled_hamiltonian D]
+    rw [hK]
     exact ⟨hs, herr⟩
   · have hrad : ((ℓ + R : ℕ) : ℝ) ≤ w := by simpa only [Nat.cast_add] using hℓ
     exact ManyBody.reset_graphNeighborhood_disjoint_cores (lineDomainGraph Λ)

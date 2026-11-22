@@ -100,10 +100,12 @@ theorem printedPairGate_unwind {d n p : ℕ} (hp : p + 4 ≤ n)
   have hf (i : Fin 4) : (f i).val = p + i.val := rfl
   have hshift (q : ℕ) (hq : q + 2 ≤ 4)
       (A : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
-      embedOp f (printedPairGate 4 q hq A) = printedPairGate n (p + q) (by omega) A :=
+      ManyBody.placeAlong (X := fun _ ↦ Fin d) f (printedPairGate 4 q hq A) =
+        printedPairGate n (p + q) (by omega) A :=
     printedPairGate_embed hq (by omega) f f.injective hf A
-  have h := congrArg (embedOp f) (local_unwind_four u v x ζ hlocal)
-  simp only [← embedOp_mul f.injective, embedOp_smul, ← embedOp_conjTranspose,
+  have h := congrArg (ManyBody.placeAlong (X := fun _ ↦ Fin d) f)
+    (local_unwind_four u v x ζ hlocal)
+  simp only [ManyBody.placeAlong_mul, ManyBody.placeAlong_smul, ManyBody.placeAlong_conjTranspose,
     hshift, Nat.add_zero] at h
   exact h
 

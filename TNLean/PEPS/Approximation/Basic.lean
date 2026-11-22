@@ -6,7 +6,9 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Sites.Lattice.Square
 import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.PEPS.NormalBlocking
-import TNLean.Circuit.LocalCircuit
+import TNLean.Circuit.SupportedOperators
+import QICLean.Circuit.Geometry
+import Mathlib.Data.Finset.NoncommProd
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Complex.Log

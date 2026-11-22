@@ -62,16 +62,16 @@ theorem inner_place_eq_trace_reducedPure (R : Finset V)
     inner ℂ ξ (WithLp.toLp 2 (ManyBody.place R K *ᵥ ξ)) =
       Matrix.trace (ManyBody.regionState ξ R * K) := by
   classical
-  let e := ManyBody.splitEquiv Out R
+  let e := ManyBody.cutEquiv Out R
   let P := Matrix.vecMulVec (WithLp.ofLp ξ) (star (WithLp.ofLp ξ))
   let Y := P.submatrix e.symm e.symm
   have hρ : ManyBody.regionState ξ R = Matrix.partialTraceRight Y := rfl
   have hpair : Matrix.trace (Matrix.partialTraceRight Y * K) =
       Matrix.trace (Y * (K ⊗ₖ 1)) := by
-    let s := Equiv.prodComm (ManyBody.RegionConfig Out Rᶜ)
+    let s := Equiv.prodComm (ManyBody.ComplConfig Out R)
       (ManyBody.RegionConfig Out R)
-    have hswap : (K ⊗ₖ (1 : Matrix (ManyBody.RegionConfig Out Rᶜ)
-        (ManyBody.RegionConfig Out Rᶜ) ℂ)).submatrix s s = 1 ⊗ₖ K := by
+    have hswap : (K ⊗ₖ (1 : Matrix (ManyBody.ComplConfig Out R)
+        (ManyBody.ComplConfig Out R) ℂ)).submatrix s s = 1 ⊗ₖ K := by
       ext p q
       exact mul_comm _ _
     calc
@@ -85,19 +85,18 @@ theorem inner_place_eq_trace_reducedPure (R : Finset V)
     ext ⟨a, c⟩ ⟨b, f⟩
     simp only [Matrix.submatrix_apply, ManyBody.place_apply, Matrix.kroneckerMap_apply,
       Matrix.one_apply]
-    have hR (x : ManyBody.RegionConfig Out R) (y : ManyBody.RegionConfig Out Rᶜ) :
+    have hR (x : ManyBody.RegionConfig Out R) (y : ManyBody.ComplConfig Out R) :
         (fun v : {v // v ∈ R} ↦ e.symm (x, y) v) = x :=
-      funext fun v ↦ ManyBody.splitEquiv_symm_apply_of_mem Out R x y v v.2
+      funext fun v ↦ ManyBody.cutEquiv_symm_apply_mem x y v.2
     rw [hR, hR]
     have hC : (∀ v ∉ R, e.symm (a, c) v = e.symm (b, f) v) ↔ c = f := by
       constructor
       · intro h
         funext v
-        have := h v (Finset.mem_compl.mp v.2)
-        simpa [e, ManyBody.splitEquiv_symm_apply_of_notMem _ _ _ _ _
-          (Finset.mem_compl.mp v.2)] using this
+        have := h v v.2
+        simpa [e, ManyBody.cutEquiv_symm_apply_not_mem _ _ v.2, v.2] using this
       · rintro rfl v hv
-        simp [e, ManyBody.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hv]
+        simp [e, ManyBody.cutEquiv_symm_apply_not_mem _ _ hv]
     by_cases h : c = f
     · rw [ite_eq_left (hC.mpr h), ite_eq_left h, mul_one]
     · rw [ite_eq_right (fun h' ↦ h (hC.mp h')), ite_eq_right h, mul_zero]
@@ -181,27 +180,26 @@ theorem reindex_reducedPure_eq_regionState (e : ∀ v, Out v ≃ Fin (n v))
       ManyBody.regionState (dependentGlobalFinIsometry e ξ) R := by
   classical
   let eR := dependentRegionFinEquiv e R
-  let eC := (ManyBody.complementEquiv Out R).symm.trans
-    (Equiv.piCongrRight fun v : {v // v ∉ R} ↦ e v.1)
+  let eC := Equiv.piCongrRight fun v : {v // v ∉ R} ↦ e v.1
   let P := Matrix.vecMulVec (WithLp.ofLp ξ) (star (WithLp.ofLp ξ))
-  let Y := P.submatrix (ManyBody.splitEquiv Out R).symm
-    (ManyBody.splitEquiv Out R).symm
+  let Y := P.submatrix (ManyBody.cutEquiv Out R).symm
+    (ManyBody.cutEquiv Out R).symm
   change (Matrix.partialTraceRight Y).submatrix eR.symm eR.symm = _
   rw [← Matrix.partialTraceRight_submatrix_prod_equiv eR eC]
   rw [ManyBody.regionState_eq_partialTraceRight_cutVector]
   congr 1
   ext p q
-  change ξ ((ManyBody.splitEquiv Out R).symm ((eR.prodCongr eC).symm p)) *
-      star (ξ ((ManyBody.splitEquiv Out R).symm ((eR.prodCongr eC).symm q))) =
+  change ξ ((ManyBody.cutEquiv Out R).symm ((eR.prodCongr eC).symm p)) *
+      star (ξ ((ManyBody.cutEquiv Out R).symm ((eR.prodCongr eC).symm q))) =
     ξ ((dependentGlobalFinEquiv e).symm ((ManyBody.cutEquiv (fun v ↦ Fin (n v)) R).symm p)) *
       star (ξ ((dependentGlobalFinEquiv e).symm ((ManyBody.cutEquiv (fun v ↦ Fin (n v)) R).symm q)))
   have h (z : (ManyBody.RegionConfig (fun v ↦ Fin (n v)) R) × ((v : {v // v ∉ R}) → Fin (n v))) :
-      (ManyBody.splitEquiv Out R).symm ((eR.prodCongr eC).symm z) =
+      (ManyBody.cutEquiv Out R).symm ((eR.prodCongr eC).symm z) =
         (dependentGlobalFinEquiv e).symm ((ManyBody.cutEquiv (fun v ↦ Fin (n v)) R).symm z) := by
     funext v
     by_cases hv : v ∈ R <;>
       simp [eR, eC, dependentRegionFinEquiv, dependentGlobalFinEquiv,
-        ManyBody.complementEquiv, ManyBody.splitEquiv, Equiv.piEquivPiSubtypeProd, hv]
+        ManyBody.cutEquiv, Equiv.piEquivPiSubtypeProd, hv]
   rw [h p, h q]
 
 end TNLean.PEPS

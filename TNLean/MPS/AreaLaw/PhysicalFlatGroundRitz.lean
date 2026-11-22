@@ -28,6 +28,7 @@ replaced by an extra excited-value hypothesis in such a formulation.
 -/
 
 open ManyBody (interval)
+open ManyBody (cutMatrix)
 
 open scoped InnerProductSpace Matrix.Norms.L2Operator
 
@@ -118,7 +119,7 @@ theorem flat_ground_same_root_ritz_exact {L q count : ℕ}
       have hvalue := (config ⟨0, by omega⟩).isLt
       omega
     calc
-      (cutMatrix v k).rank ≤
+      (cutMatrix (leftBlock L k) v).rank ≤
           Fintype.card ((w : {w : Fin L // w ∈ leftBlock L k}) → Fin q) :=
         Matrix.rank_le_card_height _
       _ = q ^ Fintype.card {w : Fin L // w ∈ leftBlock L k} := by simp

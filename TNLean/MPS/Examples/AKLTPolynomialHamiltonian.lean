@@ -285,8 +285,7 @@ lemma aklt_localTerm_two_apply {N : ℕ} (hN2 : 2 ≤ N) (i : Fin N) (ψ : NSite
         (1 / 3) * spinExchange spinOneOperator i (cyclicForwardSite i 1)
           (spinExchange spinOneOperator i (cyclicForwardSite i 1) ψ) σ + (2 / 3) * ψ σ) := by
   have hN : 0 < N := by omega
-  rw [localTerm, dite_eq_left hN2]
-  simp only [LinearMap.pi_apply, LinearMap.comp_apply, LinearMap.proj_apply]
+  rw [localTerm_apply_of_le _ 2 N hN2 i]
   rw [← akltBondTerm_shift_eq_parentInteraction]
   change 𝐐 (cyclicRestrictₗ hN 2 i σ ψ) (extractWindow 2 i σ) = _
   simp only [akltBondTerm, LinearMap.smul_apply, LinearMap.add_apply, LinearMap.comp_apply,
@@ -301,7 +300,8 @@ theorem akltHamiltonian_add_eq_parentHamiltonian {N : ℕ} (hN2 : 2 ≤ N) :
     akltHamiltonian N + (2 * N / 3 : ℂ) • LinearMap.id =
       (2 : ℂ) • parentHamiltonian akltTensor 2 N := by
   refine LinearMap.ext fun ψ => funext fun σ => ?_
-  simp only [akltHamiltonian, parentHamiltonian, LinearMap.add_apply, LinearMap.smul_apply,
+  simp only [akltHamiltonian, parentHamiltonian_eq_sum_localTerm, LinearMap.add_apply,
+    LinearMap.smul_apply,
     LinearMap.id_apply, LinearMap.sum_apply, LinearMap.comp_apply, Finset.sum_apply,
     Pi.add_apply, Pi.smul_apply, smul_eq_mul, aklt_localTerm_two_apply hN2, Finset.mul_sum,
     Finset.sum_add_distrib]

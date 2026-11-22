@@ -1590,7 +1590,7 @@ sequential circuit of~\cite[eq.~(14) and paragraph ``The sequential-RG
         MPSPreparation.exists_staircase}
     \leanok
     \uses{def:qc_window_gate, def:seqanc_isometry_on, def:seqanc_support}
-    Let $d\ge1$, let $r\le n$, and let $e$ be an injective map from the bond
+    Let $d\ge1$, let $r\le n$ with $n\ge1$, and let $e$ be an injective map from the bond
     levels $\{0,\dots,D'-1\}$, $D'\ge1$, to the configurations of $r$ sites.
     Let $Q_0,\dots,Q_{n-1}$ be square matrices of size $D'$ indexed by the
     physical index, with bonds $b_0=1,b_1,\dots,b_n$, such that $Q_p^i$ vanishes
@@ -1606,7 +1606,8 @@ sequential circuit of~\cite[eq.~(14) and paragraph ``The sequential-RG
     \end{align}
     where $e(x)$ occupies the last $r$ sites. If $r\ge2$, there are $K_0,K_1$,
     depending only on $d$ and $r$, such that $U$ is a product of at most
-    $K_0+(n-r)K_1$ gates on two neighbouring sites.
+    $K_0+(n-r)K_1$ gates on two neighbouring sites; one may take
+    $K_0=K_1=12\,(d^{r+1})^5$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -1622,7 +1623,9 @@ sequential circuit of~\cite[eq.~(14) and paragraph ``The sequential-RG
     them. Applying it first and the unitary of the shorter chain on the first
     $n$ sites afterwards gives~(\ref{eq:seqanc_staircase}) by the product rule
     $Q^\sigma=Q^{\sigma_0\cdots\sigma_{n-1}}Q_n^{\sigma_n}$ and the row support
-    of $Q_n$. A unitary $Z$ on the last $r$ sites acts inside the window of
+    of $Q_n$. Placed on the first $n$ sites, every gate on a window of the
+    shorter chain is a gate on a window of the same length of the longer
+    chain. A unitary $Z$ on the last $r$ sites acts inside the window of
     the new unitary, so their product is one gate; if $n=r$, the whole
     product acts on the $r+1$ sites of the chain and is one gate. The count
     of two-site gates follows from Lemma~\ref{lem:qc_window_products}.
@@ -1632,7 +1635,7 @@ sequential circuit of~\cite[eq.~(14) and paragraph ``The sequential-RG
     \label{thm:seqanc_staircase_preparation}
     \lean{MPSPreparation.exists_unitary_apply_zero,
         MPSPreparation.exists_isWindowProduct_mulVec_eq_of_hasOBCRep,
-        MPSPreparation.exists_isPairProduct_mulVec_eq_of_hasOBCRep}
+        MPSPreparation.exists_isGateProduct_mulVec_eq_of_hasOBCRep}
     \leanok
     \uses{def:seqanc_obc_rep, def:qc_window_gate}
     Let $d\ge1$, and let $\psi$ be a unit vector of $(\C^d)^{\otimes N}$ with an

@@ -321,7 +321,7 @@ private theorem exists_isOpenMPS_norm_sub_le_of_prefix_bounds
     rw [← hΦ₁def, norm_sub_rev Φ₀ Ω] at h
     linarith
   -- the matrix product structure
-  have hD : ∀ k, (cutMatrix Φ₀ k).rank ≤ ⌊Real.exp (C + w)⌋₊ := by
+  have hD : ∀ k, (ManyBody.cutMatrix (leftBlock L k) Φ₀).rank ≤ ⌊Real.exp (C + w)⌋₊ := by
     intro k
     apply Nat.le_floor
     refine (hrank k).trans (max_le ?_ ?_)

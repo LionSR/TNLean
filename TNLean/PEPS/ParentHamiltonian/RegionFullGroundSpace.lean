@@ -128,7 +128,8 @@ theorem ker_regionParentHamiltonian_eq_span_of_full_region (A : Tensor Γ d)
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hh : ∀ i, IsRegionParentInteraction A (R i) (h i))
     (hfull : ∃ i, R i = Finset.univ) :
-    (Matrix.mulVecLin (regionParentHamiltonian R h)).ker =
+    (Matrix.mulVecLin
+        (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian).ker =
       Submodule.span ℂ {stateCoeff A} := by
   rw [ker_regionParentHamiltonian A R h hh,
     regionParentGroundSpace_eq_span_of_full_region A R hfull]
@@ -191,7 +192,7 @@ theorem ker_place_univ_canonical (A : Tensor Γ d) :
       (canonicalRegionParentInteraction A Finset.univ))).ker =
       Submodule.span ℂ {stateCoeff A} := by
   classical
-  simpa only [regionParentHamiltonian, Fintype.sum_unique] using
+  simpa only [ManyBody.Interaction.hamiltonian_ofPlace, Fintype.sum_unique] using
     ker_regionParentHamiltonian_eq_span_of_full_region A (fun _ : Unit => Finset.univ)
       (fun _ => canonicalRegionParentInteraction A Finset.univ)
       (fun _ => isRegionParentInteraction_canonical A Finset.univ) ⟨(), rfl⟩

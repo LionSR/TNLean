@@ -35,27 +35,25 @@ theorem exists_fixed_bandwidth_interval_low_energy_strict_approximation
     (etaLD : ℝ) (hLD : 0 < etaLD) :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q p r : ℕ) (v : ℝ) (hq : 0 < q), p ≤ r → r ≤ L → 0 < v →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ h0 : ∀ i, 0 ≤ h i, (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ h0 : ∀ i, 0 ≤ Φ.term i, (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let J := interval L p r
       let beta := fun _ : Fin L ↦ Fin q
-      let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.cutEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.ComplConfig beta J) ℂ).tensorProduct
         (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.ComplConfig beta J))
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
       let G := fun c : ℝ ↦ Submodule.spectralSpanLE
         hRaw.eigenvectorBasis hRaw.eigenvalues (minEigenvalue hRaw + c)
-      let e := Tm.trans (Submodule.euclideanTensorEquiv (J → Fin q) (↥(Jᶜ) → Fin q)).symm
+      let e := Tm.trans (Submodule.euclideanTensorEquiv (J → Fin q) ({x // x ∉ J} → Fin q)).symm
       let b := min v (etaLD / 2)
       let g := min (b / 6) 1
       let u := 1 + Real.log (q : ℝ) + Real.log (1 / g)
@@ -72,11 +70,11 @@ theorem exists_fixed_bandwidth_interval_low_energy_strict_approximation
   obtain ⟨K, hK, hactual⟩ :=
     exists_fixed_bandwidth_interval_low_energy_normalized_approximation etaLD hLD
   refine ⟨K, hK, ?_⟩
-  intro L q p r v hq hpr hrL hv h hs h0 h1 config H hRaw
+  intro L q p r v hq hpr hrL hv Φ h0 h1 config H hRaw
     J beta tau U Phi Tm G e b g u delta hdelta hdelta1 a ψ hψG hψ
   by_cases hq2 : 2 ≤ q
   · obtain ⟨φ, hφ, hoverlap, hrank⟩ :=
-      hactual L q p r v hq2 hpr hrL hv h hs h0 h1
+      hactual L q p r v hq2 hpr hrL hv Φ h0 h1
         (delta / 2) (by positivity) (by linarith only [hdelta1]) ψ hψG hψ
     have hrecip : 1 / (delta / 2) = 2 / delta := by field_simp
     rw [hrecip] at hrank

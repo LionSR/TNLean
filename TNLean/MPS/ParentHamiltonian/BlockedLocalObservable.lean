@@ -35,20 +35,19 @@ theorem exists_blocked_quasiLocalIntervalObservable
   let c := (a % (L : ℤ)).toNat
   have hc : (c : ℤ) = a % (L : ℤ) :=
     Int.toNat_of_nonneg (Int.emod_nonneg a (by exact_mod_cast NeZero.ne L))
+  have hcL : c + k ≤ (c + k) * L := Nat.le_mul_of_pos_right (c + k) (NeZero.pos L)
   refine ⟨a / (L : ℤ), c + k, by omega,
     (Matrix.reindexLinearEquiv ℂ ℂ (blockedConfigEquiv d (c + k) L)
       (blockedConfigEquiv d (c + k) L)).symm
-      (chainWindowOperator ((c + k) * L) c X), ?_⟩
+      (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow c hcL) X), ?_⟩
   rw [quasiLocalBlocking_quasiLocalIntervalObservable]
   change quasiLocalIntervalObservable d ((a / (L : ℤ)) * L) ((c + k) * L)
     ((Matrix.reindexLinearEquiv ℂ ℂ (blockedConfigEquiv d (c + k) L)
       (blockedConfigEquiv d (c + k) L))
       ((Matrix.reindexLinearEquiv ℂ ℂ (blockedConfigEquiv d (c + k) L)
         (blockedConfigEquiv d (c + k) L)).symm
-          (chainWindowOperator ((c + k) * L) c X))) = _
-  rw [LinearEquiv.apply_symm_apply,
-    quasiLocalIntervalObservable_chainWindowOperator _ _ _ X hk
-      (Nat.le_mul_of_pos_right (c + k) (NeZero.pos L))]
+          (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow c hcL) X))) = _
+  rw [LinearEquiv.apply_symm_apply, quasiLocalIntervalObservable_placeAlong_chainWindow _ _ _ X hcL]
   simp only [hc, Int.ediv_mul_add_emod]
 
 end SpinChain
