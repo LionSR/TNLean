@@ -31,7 +31,7 @@ method:
 * the same facts for the matrices: the local parent interaction
   `LinearMap.toMatrix' (parentInteraction A L)` (whose operator is the orthogonal projection onto
   the complement of the local ground space) and the terms and Hamiltonian of the parent
-  interaction on the ring `parentRingInteraction A hLN`. Statements about the Euclidean-space
+  interaction on the ring `parentRingInteraction A L N`. Statements about the Euclidean-space
   operators `parentInteractionES`, `localTermESSummand`, `localTermES` and `parentHamiltonianES`
   are being replaced by these (TNLean issue 10948).
 -/

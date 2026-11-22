@@ -19,8 +19,9 @@ Section II.B (`Papers/1010.3732/paper_v3.tex`, lines 357--390).
 
 **Transitional (#10948).** The identities between the Euclidean-space operators
 (`parentInteractionES`, `localTermES`, `parentHamiltonianES`) and the matrices, and
-`localTerm_eq_toLin'_placeAlong_ringWindow` (which is `localTerm_of_le`), are kept until their
-last users are converted, then deleted with those operators.
+`localTerm_eq_toLin'_placeAlong_ringWindow` (which is `localTerm_eq_toLin'_term` read through
+`ManyBody.Interaction.translationInvariant_term_of_le`), are kept until their last users are
+converted, then deleted with those operators.
 `parentInteraction_toMatrix'_isStarProjection` is `isStarProjection_toMatrix'_parentInteraction`
 (Martingale/Transport.lean); its users move to that name in the cleanup.
 -/

@@ -1483,13 +1483,13 @@ The following notions use different transfer objects and are not interchangeable
   `A`, a window length `L`, a ring of `N` sites and `ψ : NSiteSpace d N`: every
   translated local term `MPSTensor.localTerm A L N i` annihilates `ψ`.
 - **Defined in:** `TNLean/MPS/ParentHamiltonian/Defs.lean`.
-- **Meaning:** for `L ≤ N` the local terms and the parent Hamiltonian are the
+- **Meaning:** the local terms and the parent Hamiltonian are the
   terms and the Hamiltonian of one interaction,
-  `MPSTensor.parentRingInteraction A hLN`, the translation-invariant interaction
-  `ManyBody.Interaction.translationInvariant hLN (LinearMap.toMatrix'
-  (parentInteraction A L))` whose term with index `i` is the local parent
-  projector placed on the window of `L` consecutive sites starting at `i`
-  (`ManyBody.placeAlong` along `ManyBody.ringWindow`). The predicate is
+  `MPSTensor.parentRingInteraction A L N`, the translation-invariant interaction
+  `ManyBody.Interaction.translationInvariant N (LinearMap.toMatrix'
+  (parentInteraction A L))` whose term with index `i` is, for `L ≤ N`, the local
+  parent projector placed on the window of `L` consecutive sites starting at `i`
+  (`ManyBody.placeAlong` along `ManyBody.ringWindow`), and zero for `L > N`. The predicate is
   membership of `WithLp.toLp 2 ψ` in its zero space.
 - **Source:** Pérez-García, Verstraete, Wolf and Cirac, quant-ph/0608197,
   `MPSarchive.tex`, lines 311–326; Cirac, Pérez-García, Schuch and Verstraete,
@@ -1499,8 +1499,8 @@ The following notions use different transfer objects and are not interchangeable
   `MPSTensor.toLp_mem_ker_parentHamiltonian_iff` identifies the kernel of the
   parent Hamiltonian with the zero space (`ManyBody.Interaction.zeroSpace_eq_groundSpace`
   for the positive terms `MPSTensor.posSemidef_parentRingInteraction_term`);
-  `MPSTensor.localTerm_of_le`, `MPSTensor.parentHamiltonian_of_le` and
-  `MPSTensor.parentHamiltonian_eq_sum_localTerm` unfold the linear-map forms.
+  `MPSTensor.localTerm_eq_toLin'_term`, `MPSTensor.parentHamiltonian_eq_toLin'_hamiltonian`
+  and `MPSTensor.parentHamiltonian_eq_sum_localTerm` unfold the linear-map forms.
 - **Caveat:** for `L > N` the local terms are `0` by convention and the
   predicate holds for every vector; the Euclidean-space forms `localTermES`,
   `parentHamiltonianES` and their open and periodic variants in
