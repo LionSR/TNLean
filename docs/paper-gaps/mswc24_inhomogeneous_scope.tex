@@ -3,7 +3,7 @@
 \usepackage{xurl}
 \usepackage[hidelinks]{hyperref}
 \input{command}
-\title{Inhomogeneous Matrix Product States: Block Length}
+\title{Inhomogeneous Matrix Product States: Rates and Block Length}
 \author{}
 \date{2026-10-02}
 \begin{document}
@@ -476,6 +476,91 @@ and $C$ chosen before $N,\varepsilon$. Dimension-one bonds and singular referenc
 are included. This local condition remains additional quantitative input;
 the paper's qualitative finite-correlation discussion does not provide its uniform
 window length and strength.
+
+\section{A vanishing GHZ branch and the accuracy quantifiers}
+The convergence assumption does not imply a depth bound uniform in the
+requested accuracy. There is a distinction between preparing one approximation
+with error $\delta_N\to0$ and preparing to every prescribed
+$0<\varepsilon\le1$ with one constant in $O(\log(N/\varepsilon))$.
+The source's sentence specifies the error
+$\varepsilon(\Omega,\phi_{\mathrm{pos}})$ of its chosen pairs.
+The example below concerns the latter, accuracy-uniform interpretation; it does
+not contradict preparation along that one supplied error schedule.
+
+For $N\ge1$ set $t_N=1/N$ and
+\begin{align}
+ \ket{\phi_N}
+ &=\frac{\ket{0}^{\otimes N}+t_N\ket{1}^{\otimes N}}
+          {\sqrt{1+t_N^2}}.
+ \label{eq:inhomogeneous_vanishing_ghz}
+\end{align}
+This is an inhomogeneous periodic MPS of bond dimension two: at one site take
+$A^0=\operatorname{diag}(1,0)$ and
+$A^1=\operatorname{diag}(0,t_N)$, and at every other site take
+$A^0=\operatorname{diag}(1,0)$ and
+$A^1=\operatorname{diag}(0,1)$.
+For any partition into nonempty consecutive blocks, a block not containing the
+distinguished site has physical matrix
+$\ket{0^{\ell}}\bra{00}+\ket{1^{\ell}}\bra{11}$.
+The block containing that site has physical matrix
+$\ket{0^{\ell}}\bra{00}+t_N\ket{1^{\ell}}\bra{11}$.
+Consequently their positive parts are, respectively,
+$\ket{00}\bra{00}+\ket{11}\bra{11}$ and
+$\ket{00}\bra{00}+t_N\ket{11}\bra{11}$.
+For $M$ blocks their contracted state, after normalization, is
+\begin{align}
+ \ket{\phi_{\mathrm{pos},N}}
+ &=\frac{\ket{00}^{\otimes M}+t_N\ket{11}^{\otimes M}}
+          {\sqrt{1+t_N^2}}.
+ \label{eq:inhomogeneous_vanishing_ghz_pos}
+\end{align}
+Choosing every nearest-neighbour pair as $\ket{00}$ gives
+$\varepsilon(\Omega,\phi_{\mathrm{pos},N})
+=1-(1+t_N^2)^{-1/2}\to0$.
+This holds, in particular, for blocks of logarithmically growing length.
+One may choose $q_N=\lceil\log N\rceil+6$ once $q_N\le N$, use blocks with
+$q_N\le\ell_k\le2q_N$, and absorb the remainder in the last block.
+The finitely many shorter chains use one block.
+Thus the example satisfies the source's positive-part approximation condition
+and even the additional eventual register-length and lower-growth conditions.
+
+For every unit vector $\ket\psi$ prepared from a product state by a
+nearest-neighbour unitary circuit of depth $T$, with $N>4T+4$,
+\begin{align}
+ 1-|\langle\psi|\phi_N\rangle|
+ &\ge \frac{2}{9}\frac{N^4}{(N^2+1)^4}
+ \ge \frac{1}{72N^4}.
+ \label{eq:inhomogeneous_vanishing_ghz_lower}
+\end{align}
+Indeed, two separated Pauli $Z$ observables have zero connected correlation
+in $\psi$ and connected correlation $4p_N(1-p_N)$ in $\phi_N$, where
+$p_N=(N^2+1)^{-1}$.
+For unit vectors at phase-aligned distance $\eta$, the difference of their
+connected correlations has modulus at most $6\eta$.
+Since $\eta^2=2(1-|\langle\psi|\phi_N\rangle|)$,
+squaring gives the first inequality in
+(\ref{eq:inhomogeneous_vanishing_ghz_lower}).
+The second uses $N^2+1\le2N^2$.
+
+Prescribing $\varepsilon_N=1/(144N^4)$ therefore forces $N\le4T+4$.
+For this schedule $\log(N/\varepsilon_N)=\log144+5\log N$.
+No fixed constant $C$ can give $T\le C\log(N/\varepsilon_N)$ for all
+sufficiently large $N$.
+Thus the qualitative hypothesis cannot yield the conclusion quantified
+uniformly over all requested accuracies.
+
+The general connected-correlation estimate and the weighted-GHZ lower bound
+used in (\ref{eq:inhomogeneous_vanishing_ghz_lower}) are the statements
+\leanid{MPSPreparation.norm_covariance_sq_le_overlap_error_of_isPreparedInDepth}
+and
+\leanid{MPSPreparation.weightedGHZ_infidelity_lower_bound_of_isPreparedInDepth}
+in \doclink{TNLean/MPS/Preparation/InhomogeneousRateObstruction}.
+The inhomogeneous tensor construction, its blocked positive parts,
+and the final asymptotic contradiction have not yet been formalized.
+The source-gap status remains open until these identifications are checked.
+The corrected accuracy-uniform theorem retains a quantitative hypothesis such
+as the uniform rate in the preceding section; the qualitative hypothesis
+supports preparation along a vanishing error schedule.
 
 \bibliography{references}
 \end{document}

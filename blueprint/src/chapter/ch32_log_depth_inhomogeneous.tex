@@ -767,3 +767,59 @@ into a single constant.
     Since $\log(N/\varepsilon)\ge\log2$, both bounds are a constant multiple
     of $\log(N/\varepsilon)$. The one-site case has depth zero.
 \end{proof}
+
+\begin{lemma}[Preparation error forced by a distant correlation]
+    \label{lem:ldp_distant_covariance_error}
+    \lean{MPSPreparation.norm_covariance_sq_le_overlap_error_of_isPreparedInDepth}
+    \leanok
+    \uses{lem:qc_light_cone_correlations, thm:ldp_covariance_stability,
+        lem:ldp_error_triangle}
+    Let $\psi,\phi$ be unit vectors on an $N$-qubit ring, with $\psi$
+    prepared from a product state by a depth-$T$ nearest-neighbour circuit.
+    Let $A,B$ be unitary observables supported on sets separated by more than
+    $2T$. Writing
+    $G_\phi(A,B)=\langle AB\rangle_\phi-\langle A\rangle_\phi\langle B\rangle_\phi$,
+    one has
+    \begin{align}
+        |G_\phi(A,B)|^2
+        \le72\bigl(1-|\langle\psi|\phi\rangle|\bigr).
+        \label{eq:ldp_distant_covariance_error}
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The backward light cones are disjoint, so $G_\psi(A,B)=0$.
+    Choose $|c|=1$ such that
+    $\eta=\|\psi-c\phi\|$ satisfies
+    $\eta^2=2(1-|\langle\psi|\phi\rangle|)$.
+    Connected correlations are unchanged by $c$ and vary by at most $6\eta$
+    between unit vectors. Hence $|G_\phi(A,B)|\le6\eta$, which gives
+    (\ref{eq:ldp_distant_covariance_error}) after squaring.
+\end{proof}
+
+\begin{lemma}[Preparation error of a weighted GHZ vector]
+    \label{lem:ldp_weighted_ghz_preparation_error}
+    \lean{MPSPreparation.weightedGHZ_infidelity_lower_bound_of_isPreparedInDepth}
+    \leanok
+    \uses{lem:ldp_distant_covariance_error, thm:ldp_weighted_ghz_covariance}
+    Let $\phi=a\ket{0}^{\otimes N}+b\ket{1}^{\otimes N}$,
+    where $|a|^2+|b|^2=1$. If a unit vector $\psi$ is prepared from a product
+    state in depth $T$ on the nearest-neighbour ring and $N>4T+4$, then
+    \begin{align}
+        1-|\langle\psi|\phi\rangle|
+        \ge\frac29\bigl(|a|^2|b|^2\bigr)^2.
+        \label{eq:ldp_weighted_ghz_preparation_error}
+    \end{align}
+    The amplitudes may depend on $N$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Choose two sites separated by more than $2T$, as in the proof of
+    Lemma~\ref{thm:ldp_sector_weight_obstruction}.
+    Their Pauli $Z$ observables have expectations $|a|^2-|b|^2$,
+    product expectation $1$, and connected correlation
+    $4|a|^2|b|^2$. Apply
+    (\ref{eq:ldp_distant_covariance_error}) and divide by $72$.
+\end{proof}
