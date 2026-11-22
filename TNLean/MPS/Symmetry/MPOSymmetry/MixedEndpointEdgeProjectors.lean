@@ -364,9 +364,11 @@ def mixedEndpointInteriorEdgeConstraintES
 /-- The actual interior constraint is exactly the ordinary `A₀` parent
 interaction, independently of injectivity and the second endpoint.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpointInteriorEdgeConstraintES_eq_parentInteractionES
+theorem mixedEndpointInteriorEdgeConstraintES_eq_toEuclideanLin_parentInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    mixedEndpointInteriorEdgeConstraintES A₀ A₁ = parentInteractionES A₀ 2 := by
+    mixedEndpointInteriorEdgeConstraintES A₀ A₁ =
+      Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A₀ 2)) := by
+  rw [toEuclideanLin_toMatrix'_parentInteraction]
   exact congrArg
     (fun S : Submodule ℂ (EuclideanSpace ℂ (Cfg (D₀ * D₀) 2)) =>
       Sᗮ.starProjection.toLinearMap)

@@ -176,10 +176,10 @@ chain described by the normalized sum has its two distinct boundary edges. -/
 theorem jointEndpointNormalizedBulkTerm_one_eq_zero
     (A : (x : Fin r) → MPSTensor d (D₀ x)) (E F : Fin r → ℕ) :
     jointEndpointNormalizedBulkTerm A E F 1 = 0 := by
-  let : IsEmpty (NonwrappingStart 2 1) := ⟨fun i ↦ by have h := i.2; omega⟩
+  have h0 : (parentChainInteraction (toTensorFromBlocks (fun _ ↦ 1) A) 2 1).hamiltonian = 0 :=
+    Finset.sum_of_isEmpty (ι := Fin 0) _
   ext v κ
-  rw [jointEndpointNormalizedBulkTerm, place_apply,
-    hamiltonian_parentChainInteraction_eq_sum_localTermES _ (by norm_num : 0 < 2)]
+  rw [jointEndpointNormalizedBulkTerm, place_apply, h0]
   simp
 
 /-- The first operator on an ordered-pair core uses the original left block. -/

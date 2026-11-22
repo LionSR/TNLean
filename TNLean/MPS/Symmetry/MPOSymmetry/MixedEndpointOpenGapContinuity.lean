@@ -12,7 +12,9 @@ import QICLean.Analysis.CompactKernelGap
 The open Hamiltonian and its exact extended kernel projection are continuous
 through both endpoints. Consequently every strictly smaller fixed-window gap
 persists in a parameter neighborhood. On a compact parameter set the gap is
-uniform for that fixed window. The bound here may depend on the window length;
+uniform for that fixed window. The gaps are stated for the matrix of the open-chain
+Hamiltonian: a nonzero kernel and a lower bound on the nonzero eigenvalues.
+The bound here may depend on the window length;
 a strict Knabe window or a uniform many-body gap is a separate assertion.
 
 Source: arXiv:2203.12563, Section 5, lines 1690–1692; the finite-window

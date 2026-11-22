@@ -20,7 +20,8 @@ at one, by exchanging the two physical and virtual sectors.
 For every fixed periodic length at least two, the vector is nonzero throughout
 the closed interpolation interval. The actual extended periodic Hamiltonian
 has exactly its span as kernel. Consequently the kernel projection is
-continuous through both endpoints, and the gap has a positive lower bound
+continuous through both endpoints, and the Hamiltonian is gapped at zero (a
+nonzero kernel and a lower bound on the nonzero eigenvalues) with one positive gap
 on the closed parameter interval for each fixed length. This bound may depend
 on the length and is not a thermodynamic uniform-gap assertion.
 

@@ -114,18 +114,48 @@ theorem toEuclideanLin_translationInvariant_term_physicalReindex_conj
   rw [LinearIsometryEquiv.symm_apply_apply]
   exact toEuclideanLin_translationInvariant_term_physicalReindex_apply e hh i w
 
-/-- The open-chain Hamiltonian of the translates of a local matrix of positive range is
-conjugated by the full-chain physical isometry when the local matrix is conjugated by the local
-physical isometry. -/
+private theorem chainTranslates_zero_term {d : ℕ} (K : Matrix (Cfg d 0) (Cfg d 0) ℂ)
+    (i : Fin (N + 1 - 0)) : (chainTranslates 0 N K).term i = K default default • 1 := by
+  have hK : K = K default default • 1 := by
+    ext a b
+    rw [Subsingleton.elim a default, Subsingleton.elim b default]
+    simp
+  rw [ManyBody.Interaction.chainTranslates, ManyBody.Interaction.ofPlaceAlong_term]
+  conv_lhs => rw [hK]
+  rw [ManyBody.placeAlong_smul, ManyBody.placeAlong_one]
+
+private theorem apply_default_eq_of_physicalReindex_conj (e : Fin d₁ ≃ Fin d₂)
+    {h' : Matrix (Cfg d₁ 0) (Cfg d₁ 0) ℂ} {h : Matrix (Cfg d₂ 0) (Cfg d₂ 0) ℂ}
+    (hh : Matrix.toEuclideanLin h' =
+      (physicalReindexLinearIsometryEquiv e 0).toLinearEquiv.conj (Matrix.toEuclideanLin h)) :
+    h' default default = h default default := by
+  have h1 := congrArg (fun T => T (physicalReindexLinearIsometryEquiv e 0
+    (WithLp.toLp 2 fun _ => 1)) default) hh
+  have h2 : h' default default = h (fun i ↦ e ((default : Cfg d₁ 0) i)) default := by
+    simpa [Matrix.toEuclideanLin, Matrix.toLpLin_apply, Matrix.mulVec, dotProduct,
+      LinearEquiv.conj_apply] using h1
+  rwa [Subsingleton.elim (fun i ↦ e ((default : Cfg d₁ 0) i)) default] at h2
+
+/-- The open-chain Hamiltonian of the translates of a local matrix is conjugated by the
+full-chain physical isometry when the local matrix is conjugated by the local physical
+isometry. This holds for every range, including range zero, where every window carries the
+same scalar. -/
 theorem toEuclideanLin_hamiltonian_chainTranslates_physicalReindex_conj
     (e : Fin d₁ ≃ Fin d₂)
     {h' : Matrix (Cfg d₁ R) (Cfg d₁ R) ℂ} {h : Matrix (Cfg d₂ R) (Cfg d₂ R) ℂ}
     (hh : Matrix.toEuclideanLin h' =
       (physicalReindexLinearIsometryEquiv e R).toLinearEquiv.conj (Matrix.toEuclideanLin h))
-    (hR : 0 < R) (N : ℕ) :
+    (N : ℕ) :
     Matrix.toEuclideanLin (chainTranslates R N h').hamiltonian =
       (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.conj
         (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) := by
+  rcases Nat.eq_zero_or_pos R with rfl | hR
+  · simp only [ManyBody.Interaction.hamiltonian, chainTranslates_zero_term,
+      apply_default_eq_of_physicalReindex_conj e hh, map_sum, map_smul]
+    refine Finset.sum_congr rfl fun i _ ↦ ?_
+    congr 1
+    ext v σ
+    simp [LinearEquiv.conj_apply]
   by_cases hRN : R ≤ N
   · have : NeZero N := ⟨by omega⟩
     simp only [ManyBody.Interaction.hamiltonian_chainTranslates_eq_sum_nonwrappingStart _ hR,
@@ -163,7 +193,7 @@ theorem mixedEndpoint_hamiltonian_chainTranslates_one_eq_conj_swap
         (Matrix.toEuclideanLin (chainTranslates 2 N
             (mixedEndpointParentInteraction A₁ A₀ 0)).hamiltonian) := by
   exact toEuclideanLin_hamiltonian_chainTranslates_physicalReindex_conj _
-    (mixedEndpointParentInteraction_one_eq_conj_swap A₀ A₁) (by norm_num) N
+    (mixedEndpointParentInteraction_one_eq_conj_swap A₀ A₁) N
 
 /-- Pointwise intertwining of the actual endpoint open Hamiltonians under
 the concrete sector-exchange isometry. -/

@@ -9,8 +9,9 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointPeriodicStateContinuity
 /-!
 # A uniform periodic gap along the closed mixed interpolation
 
-The actual extended mixed Hamiltonian has a positive norm gap uniform over
-the closed parameter interval and every periodic length at least two.
+The Hamiltonian of the translates of the extended mixed interaction is gapped at zero, with
+one positive gap for the closed parameter interval and every ring of at least two sites: its
+kernel is nonzero and every nonzero eigenvalue is at least the gap.
 Only positivity of the two endpoint bond dimensions and one-site
 injectivity of the two given endpoint tensors are required.
 

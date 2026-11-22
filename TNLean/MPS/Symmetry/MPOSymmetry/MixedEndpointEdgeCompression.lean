@@ -606,11 +606,13 @@ theorem mixedEndpointLastEdge_compression_eq_constraint
 
 /-- The actual compressed interior interaction is the ordinary endpoint
 parent term. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem mixedEndpointInteriorEdge_compression_eq_parentInteractionES
+theorem mixedEndpointInteriorEdge_compression_eq_toEuclideanLin_parentInteraction
     (A₀ : MPSTensor (D₀ * D₀) D₀) (A₁ : MPSTensor (D₁ * D₁) D₁) :
-    mixedEndpointEdgeCompression A₀ A₁ .interior = parentInteractionES A₀ 2 := by
+    mixedEndpointEdgeCompression A₀ A₁ .interior =
+      (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A₀ 2)) :
+      EuclideanSpace ℂ (Cfg (D₀ * D₀) 2) →ₗ[ℂ] EuclideanSpace ℂ (Cfg (D₀ * D₀) 2)) := by
   rw [mixedEndpointEdge_compression_eq_constraint]
-  exact mixedEndpointInteriorEdgeConstraintES_eq_parentInteractionES A₀ A₁
+  exact mixedEndpointInteriorEdgeConstraintES_eq_toEuclideanLin_parentInteraction A₀ A₁
 
 end
 
