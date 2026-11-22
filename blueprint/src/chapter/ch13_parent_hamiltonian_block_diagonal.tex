@@ -956,11 +956,8 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     every $\mu_j$ is nonzero.
     There is a positive integer $R_0$ such that, for every $R\geq R_0$,
     there are constants $\gamma_R>0$ and $N_R\in\mathbb N$ for which
-    the canonical periodic parent Hamiltonian $H_{R,N}$ satisfies
-    \begin{align}
-        \gamma_R\lVert v\rVert\leq\lVert H_{R,N}v\rVert
-    \end{align}
-    for every $N\geq N_R$ and every $v\perp\ker H_{R,N}$.
+    every nonzero eigenvalue of the canonical periodic parent Hamiltonian
+    $H_{R,N}$ is at least $\gamma_R$ for every $N\geq N_R$.
     In particular, at least one positive interaction range has a uniform
     eventual periodic gap.
 \end{lemma}
@@ -989,11 +986,9 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \end{align}
     there is a constant $\gamma_R>0$ such that the canonical periodic parent
     Hamiltonian $H_{R,N}$ of $B$ satisfies the block-injective
-    parent-Hamiltonian gap of \cite[Section~IV.C]{Cirac2021Matrix},
-    \begin{align}
-        \gamma_R\lVert v\rVert\leq\lVert H_{R,N}v\rVert
-    \end{align}
-    for every chain length $N\in\mathbb N$ and every $v\perp\ker H_{R,N}$.
+    parent-Hamiltonian gap of \cite[Section~IV.C]{Cirac2021Matrix}: for
+    every chain length $N\geq1$, every nonzero eigenvalue of $H_{R,N}$ is at
+    least $\gamma_R$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:normal-block-primitive-c1-normalization, thm:primitive-block-parent-uniform-gap-three-block-bound}

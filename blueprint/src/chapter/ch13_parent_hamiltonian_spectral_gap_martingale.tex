@@ -3829,12 +3829,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     Let $A$ be a primitive MPS tensor with nonzero physical and bond dimensions,
     and suppose that its fixed point is positive definite.  There is a blocking
     length $p>0$ such that $A$ is $p$-block injective and, with
-    $B=\operatorname{block}_p(A)$, for every $N\geq4$ and every
-    $v\in(\ker H_{N,2}(B))^\perp$,
-    \begin{align}
-        \frac{1}{8}\lVert v\rVert
-         & \leq \lVert H_{N,2}(B)v\rVert.
-    \end{align}
+    $B=\operatorname{block}_p(A)$, for every $N\geq4$, every nonzero
+    eigenvalue of $H_{N,2}(B)$ is at least $\tfrac18$.
 \end{lemma}
 
 \begin{proof}
@@ -4312,11 +4308,9 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         lem:right_spectator_quadratic_form_gap,
         thm:finite_range_cyclic_knabe, lem:quadratic_form_to_norm_bound}
     Let $1\leq R\leq m$, put $W=m+R-1$, and suppose that
-    $H^{\mathrm{open}}_{W,R}(A)$ has norm gap $\gamma$.  Thus, for every
-    $u\in(\ker H^{\mathrm{open}}_{W,R}(A))^\perp$,
     \begin{align}
-        \gamma\lVert u\rVert
-         & \leq\left\lVert H^{\mathrm{open}}_{W,R}(A)u\right\rVert.
+        \text{every nonzero eigenvalue of }H^{\mathrm{open}}_{W,R}(A)
+        \text{ is at least }\gamma.
         \label{eq:open_knabe_block_norm_gap}
     \end{align}
     If $(R-1)^2<m\gamma$, define
@@ -4325,11 +4319,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
          & =\frac{m\gamma-(R-1)^2}{m-R+1}.
         \label{eq:parent_hamiltonian_finite_range_knabe_delta}
     \end{align}
-    Then $\delta>0$, and for every $N\geq2m$ and every
-    $v\in(\ker H_{N,R}^{\mathrm{ES}}(A))^\perp$,
+    Then $\delta>0$, and for every $N\geq2m$,
     \begin{align}
-        \delta\lVert v\rVert
-         & \leq\left\lVert H_{N,R}^{\mathrm{ES}}(A)v\right\rVert.
+        \text{every nonzero eigenvalue of }H_{N,R}^{\mathrm{ES}}(A)
+        \text{ is at least }\delta.
         \label{eq:parent_hamiltonian_finite_range_knabe_gap}
     \end{align}
     As documented in
@@ -4347,7 +4340,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         thm:cyclic_knabe_block_open_parent_hamiltonian,
         lem:right_spectator_quadratic_form_gap,
         thm:finite_range_cyclic_knabe, lem:quadratic_form_to_norm_bound}
-    The norm gap (\ref{eq:open_knabe_block_norm_gap}) and positivity give
+    The gap (\ref{eq:open_knabe_block_norm_gap}) and positivity give
     $(H^{\mathrm{open}}_{W,R})^2\geq\gamma H^{\mathrm{open}}_{W,R}$ as a
     quadratic form.  Lemma~\ref{lem:right_spectator_quadratic_form_gap} gives
     the same inequality after adjoining the $N-W$ complementary sites, and
@@ -4401,11 +4394,10 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
          & =\frac{m\gamma_{\mathrm{open}}-l^2}{m-l}.
         \label{eq:primitive_finite_range_knabe_delta}
     \end{align}
-    For every $N\geq2m$ and every
-    $v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$,
+    For every $N\geq2m$,
     \begin{align}
-        \delta\lVert v\rVert
-         & \leq\left\lVert H_{N,l+1}^{\mathrm{ES}}(A)v\right\rVert.
+        \text{every nonzero eigenvalue of }H_{N,l+1}^{\mathrm{ES}}(A)
+        \text{ is at least }\delta.
         \label{eq:primitive_finite_range_knabe_gap}
     \end{align}
     Although \cite[lines~1460--1500]{PerezGarcia2007Matrix} and

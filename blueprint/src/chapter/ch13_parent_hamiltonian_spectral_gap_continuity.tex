@@ -229,13 +229,12 @@ is recorded in
     \uses{thm:open_parent_gap_continuity,
         thm:parent_hamiltonian_gap_from_open_knabe_block}
     Let $x\mapsto A_x$ be a continuous family of one-site injective tensors of
-    nonzero bond dimension, let $m\geq2$, and suppose
-    $\gamma\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{m+1,2}(A_{x_0})v\rVert$
-    for $v\perp G_{m+1}^{\mathrm{ES}}(A_{x_0})$ with $m\gamma>1$. Then there is
-    $\delta>0$ such that, for all $x$ near $x_0$ and all $N\geq2m$, the
-    periodic parent Hamiltonian $H_{N,2}(A_x)$ satisfies
-    $\delta\lVert v\rVert\leq\lVert H_{N,2}(A_x)v\rVert$ on the orthogonal
-    complement of its kernel.
+    nonzero bond dimension, let $m\geq2$, and suppose that every nonzero
+    eigenvalue of $H^{\mathrm{open}}_{m+1,2}(A_{x_0})$ is at least $\gamma$,
+    with $m\gamma>1$. Then there is
+    $\delta>0$ such that, for all $x$ near $x_0$ and all $N\geq2m$, every
+    nonzero eigenvalue of the periodic parent Hamiltonian $H_{N,2}(A_x)$ is
+    at least $\delta$.
 \end{lemma}
 
 \begin{proof}
@@ -330,9 +329,9 @@ is recorded in
         thm:continuous_finite_window_parent_hamiltonian}
     Let $x\mapsto A_x$ be a continuous family of one-site injective tensors of
     nonzero bond dimension, let $S$ be a compact parameter set, and let
-    $N\geq2$. Then there is $\delta>0$ such that
-    $\delta\lVert v\rVert\leq\lVert H_{N,2}(A_x)v\rVert$ for all $x\in S$ and
-    all $v$ orthogonal to the kernel of $H_{N,2}(A_x)$.
+    $N\geq2$. Then there is $\delta>0$ such that, for all $x\in S$, zero is
+    an eigenvalue of $H_{N,2}(A_x)$ and every other eigenvalue is at least
+    $\delta$.
 \end{lemma}
 
 \begin{proof}
@@ -359,10 +358,10 @@ is recorded in
     \cite{gap:spc11_uniform_gap_injective_scope}), let $x\mapsto A_x$ be a
     continuous family of one-site injective tensors of nonzero bond dimension,
     and let $S$ be a compact parameter set. Then there is $\delta>0$ such
-    that, for every $x\in S$, every $N\geq2$ and every
-    $v\perp\ker H_{N,2}(A_x)$,
+    that, for every $x\in S$ and every $N\geq2$,
     \begin{align}
-        \delta\lVert v\rVert & \leq\lVert H_{N,2}(A_x)v\rVert.
+        \text{zero is an eigenvalue of }H_{N,2}(A_x)
+        \text{ and every other eigenvalue is at least }\delta.
         \label{eq:compact_parent_gap}
     \end{align}
 \end{theorem}
@@ -399,11 +398,9 @@ is recorded in
     Let $x\mapsto A_x$ be continuous with nonzero fixed bond dimension,
     and let $S$ be compact. Suppose every $A_x$ is injective after the same
     positive length $p$. For every fixed interaction range $R>p$, there is
-    $\delta>0$ such that
-    \[
-        \delta\lVert v\rVert\leq\lVert H_{N,R}(A_x)v\rVert
-        \qquad(x\in S,\ N\geq R,\ v\perp\ker H_{N,R}(A_x)).
-    \]
+    $\delta>0$ such that, for every $x\in S$ and every $N\geq R$, zero is an
+    eigenvalue of $H_{N,R}(A_x)$ and every other eigenvalue is at least
+    $\delta$.
     If each $A_x$ is merely normal, the same assertion holds at the
     ranges $R\geq D^4+1$. No gap estimate or normalized gauge is
     assumed as a hypothesis.
@@ -497,12 +494,9 @@ is recorded in
         thm:parent_hamiltonian_gap_from_open_knabe_block}
     Under the preceding simultaneous spanning hypothesis, fix
     $R\geq S+1$. On a compact parameter set there is $\delta>0$ such
-    that the canonical periodic parent Hamiltonian of the weighted block
-    sum satisfies
-    \[
-        \delta\lVert v\rVert\leq\lVert H_{N,R}(x)v\rVert
-        \qquad(N\geq R,\ v\perp\ker H_{N,R}(x)).
-    \]
+    that, for every $N\geq R$, every nonzero eigenvalue of the canonical
+    periodic parent Hamiltonian $H_{N,R}(x)$ of the weighted block sum is at
+    least $\delta$.
     In particular, as for the two-site interaction of the initially blocked
     path in \cite[Appendix~A]{Schuch2011Phases} (see
     \cite{gap:spc11_uniform_gap_injective_scope}), for pairwise inequivalent
@@ -539,9 +533,13 @@ is recorded in
     Suppose the local ground-space projection and a positive parent
     interaction $h_x$ depend continuously on $x$, with the same local
     kernel. On a compact parameter set there is $\kappa>0$ such that
-    $h_x\geq\kappa P_{G_R(x)^\perp}$. Consequently every canonical
-    periodic gap uniform in the parameter and chain length transfers to
-    the chosen interactions. This applies, in particular, to compact
+    $h_x\geq\kappa P_{G_R(x)^\perp}$. Consequently, if every nonzero
+    eigenvalue of the canonical periodic parent Hamiltonians is at least
+    $\gamma>0$ uniformly in the parameter and in all chain lengths from some
+    length on,
+    then every nonzero eigenvalue of the sums of the cyclic translates of
+    $h_x$ is at least a positive constant, uniform in the same sense.
+    This applies, in particular, to compact
     normal families at every fixed range $R\geq D^4+1$.
 \end{lemma}
 

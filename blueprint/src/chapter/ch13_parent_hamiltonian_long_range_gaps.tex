@@ -238,10 +238,10 @@ tensors.
     \end{align}
     realizes the uniform gap of matrix product state parent Hamiltonians
     asserted at \cite[lines~2183--2187]{Cirac2021Matrix}: for every
-    $N\geq2m$ and every $v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$,
+    $N\geq2m$,
     \begin{align}
-        \delta\lVert v\rVert
-         & \leq\left\lVert H_{N,l+1}^{\mathrm{ES}}(A)v\right\rVert.
+        \text{every nonzero eigenvalue of }H_{N,l+1}^{\mathrm{ES}}(A)
+        \text{ is at least }\delta.
         \label{eq:normal_finite_range_knabe_gap}
     \end{align}
 \end{lemma}
@@ -428,12 +428,11 @@ tensors.
     \lean{MPSTensor.hamiltonian_parentRingInteraction_gap_of_eventual_gap}
     \leanok
     \uses{def:parent_hamiltonian_es}
-    Fix $A$ and $L$. Suppose $\delta>0$ and $M\in\mathbb N$ satisfy
-    $\delta\lVert v\rVert\leq\lVert H_{N,L}^{\mathrm{ES}}(A)v\rVert$
-    for every $N\geq M$ and every
-    $v\in(\ker H_{N,L}^{\mathrm{ES}}(A))^\perp$.
-    Then some $\gamma>0$ satisfies the inequality with $\gamma$ in place of
-    $\delta$ for every $N$.
+    Fix $A$ and $L$. Suppose $\delta>0$ and $M\in\mathbb N$ are such that,
+    for every $N\geq\max\{M,1\}$, every nonzero eigenvalue of
+    $H_{N,L}^{\mathrm{ES}}(A)$ is at least $\delta$.
+    Then there is $\gamma>0$ such that, for every $N\geq1$, every nonzero
+    eigenvalue of $H_{N,L}^{\mathrm{ES}}(A)$ is at least $\gamma$.
 \end{lemma}
 
 \begin{proof}
@@ -455,13 +454,9 @@ tensors.
     Let $D>0$ and let $A$ be a normal tensor. For the normal-tensor case of
     the uniform gap assertion in \cite[lines~2183--2187]{Cirac2021Matrix},
     there exist a suitable interaction range $l+1$ with $l>1$ and a constant
-    $\gamma>0$ such that $A$ is $l$-block injective and, for every $N$ and
-    every $v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$,
-    \begin{align}
-        \gamma\lVert v\rVert
-         & \leq \lVert H_{N,l+1}^{\mathrm{ES}}(A)v\rVert.
-        \notag
-    \end{align}
+    $\gamma>0$ such that $A$ is $l$-block injective and, for every
+    $N\geq1$, every nonzero eigenvalue of $H_{N,l+1}^{\mathrm{ES}}(A)$ is at
+    least $\gamma$.
 \end{lemma}
 
 \begin{proof}
@@ -513,11 +508,8 @@ tensors.
     For a tensor $A$ and a range $L>1$, assume the cyclic-window
     anticommutator estimate of Lemma~\ref{thm:anticommutator_gap_bound}.
     Then there exists $\gamma>0$
-    such that for every $N\ge2L$ and every vector
-    $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$ one has
-    $\gamma\|v\| \le \|H_{N,L}^{\mathrm{ES}}(A)v\|$.
-    By Lemma~\ref{lem:quadratic_form_to_norm_bound}, this implies the usual
-    uniform lower bound on every nonzero eigenvalue of the parent Hamiltonian.
+    such that, for every $N\ge2L$, every nonzero eigenvalue of
+    $H_{N,L}^{\mathrm{ES}}(A)$ is at least $\gamma$.
 \end{lemma}
 
 \begin{proof}
@@ -782,12 +774,11 @@ tensors.
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:parent_hamiltonian_es}
     Let $A$ be a tensor, let $p,R\geq 1$ be integers, and let $\gamma>0$.
-    Suppose that, for every sufficiently large integer $M$ and every
-    $u\perp\ker H^{\mathrm{open}}_{pM,R}(A)$,
-    $\gamma\lVert u\rVert\leq\lVert H^{\mathrm{open}}_{pM,R}(A)u\rVert$.
-    Then there is $\delta>0$ such that, for every sufficiently large $N$
-    and every $v\perp\ker H^{\mathrm{ES}}_{N,R}(A)$,
-    $\delta\lVert v\rVert\leq\lVert H^{\mathrm{ES}}_{N,R}(A)v\rVert$.
+    Suppose that, for every sufficiently large integer $M$, every nonzero
+    eigenvalue of $H^{\mathrm{open}}_{pM,R}(A)$ is at least $\gamma$.
+    Then there is $\delta>0$ such that, for every sufficiently large $N$,
+    every nonzero eigenvalue of $H^{\mathrm{ES}}_{N,R}(A)$ is at least
+    $\delta$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -967,13 +958,9 @@ tensors.
     $\mu_j\ne0$ for every $j$, and set
     $B=\bigoplus_{j=0}^{r-1}\mu_jA_j$.
     For every prescribed lower bound $R_*$, there exist
-    $R\geq\max\{1,R_*\}$, $\gamma>0$, and $N_0$ such that
-    the periodic range-$R$ parent Hamiltonian satisfies
-    \begin{align}
-        \gamma\|v\|\leq\|H_{R,N}v\|
-        \notag
-    \end{align}
-    for every $N\geq N_0$ and every $v\perp\ker H_{R,N}$.
+    $R\geq\max\{1,R_*\}$, $\gamma>0$, and $N_0$ such that, for every
+    $N\geq N_0$, every nonzero eigenvalue of the periodic range-$R$ parent
+    Hamiltonian $H_{R,N}$ is at least $\gamma$.
     In particular, the block sum admits a parent interaction with a
     uniform positive periodic gap.
 \end{lemma}
@@ -1170,12 +1157,9 @@ tensors.
     bond dimension, pairwise inequivalent under similarity and phase. Assume that
     each recorded invariant density is positive definite and that the physical
     dimension is positive. There exists $R_0\geq1$ such that, for every
-    $R\geq R_0$, there exist $\gamma_R>0$ and $N_R$ for which
-    \begin{align}
-        \gamma_R\|v\|\leq\|H_{R,N}(B)v\|
-        \notag
-    \end{align}
-    for every $N\geq N_R$ and every $v\perp\ker H_{R,N}(B)$.
+    $R\geq R_0$, there exist $\gamma_R>0$ and $N_R$ for which every nonzero
+    eigenvalue of $H_{R,N}(B)$ is at least $\gamma_R$ for every
+    $N\geq N_R$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:primitive_block_sum_parent_gap,thm:ph_primitive_blocks_open_kernel,thm:parent-gap-fixed-range-transfer}
@@ -1202,11 +1186,8 @@ tensors.
     range constructed by the overlap argument recorded
     in~\cite{gap:cpgsv21_block_parent_interaction_range}, for every
     $R\geq3(r-1)(L_0+1)+1$ there exist $\gamma_R>0$ and $N_R$ such that
-    \begin{align}
-        \gamma_R\|v\|\leq\|H_{R,N}(B)v\|
-        \notag
-    \end{align}
-    for every $N\geq N_R$ and every $v\perp\ker H_{R,N}(B)$.
+    every nonzero eigenvalue of $H_{R,N}(B)$ is at least $\gamma_R$ for
+    every $N\geq N_R$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:primitive_block_sum_parent_gap,thm:parent-gap-fixed-range-transfer,
@@ -1229,10 +1210,8 @@ tensors.
     dimensions, positive definite recorded invariant densities, and a common
     block-injectivity length $L_0\geq1$. For every
     $R\geq3(r-1)(L_0+1)+1$, there exists $\gamma_R>0$ such that, for every
-    $N\in\mathbb N$ and every $v\perp\ker H_{R,N}(B)$,
-    \begin{align}
-        \gamma_R\|v\|\leq\|H_{R,N}(B)v\|.
-    \end{align}
+    $N\geq1$, every nonzero eigenvalue of $H_{R,N}(B)$ is at least
+    $\gamma_R$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:primitive-block-parent-gap-three-block-bound,thm:parent_hamiltonian_eventual_gap}
@@ -2338,13 +2317,9 @@ tensors.
     $\mu_j$ is nonzero. Realizing the block-injective gap assertion of
     \cite[Section~IV.C]{Cirac2021Matrix} at the simultaneous injectivity range,
     for each interaction range $R\geq S+1$ there is a constant $\gamma_R>0$
-    such that
-    \begin{align}
-        \gamma_R\lVert v\rVert\leq\lVert H_{R,N}v\rVert
-    \end{align}
-    for every chain length $N\in\mathbb N$ and every
-    $v\perp\ker H_{R,N}$, where $H_{R,N}$ is the canonical periodic parent
-    Hamiltonian of $B$.
+    such that, for every chain length $N\geq1$, every nonzero eigenvalue of
+    $H_{R,N}$ is at least $\gamma_R$, where $H_{R,N}$ is the canonical
+    periodic parent Hamiltonian of $B$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -2372,11 +2347,11 @@ tensors.
 
 \begin{lemma}[Canonical parent Hamiltonians and normal representatives]
     \label{thm:canonical-parent-hamiltonian-representatives}
-    \lean{MPSTensor.CPSVCanonicalFormData.parentHamiltonianES_eq_representatives}
+    \lean{MPSTensor.CPSVCanonicalFormData.hamiltonian_parentRingInteraction_eq_representatives}
     \leanok
     Let $A$ be a tensor in canonical form, with distinct normal
     representatives $B_0,\ldots,B_{g-1}$, and set $B=\bigoplus_j B_j$.
-    For every positive interaction range $R$ and every chain length $N$,
+    For every positive interaction range $R$ and every chain length $N\geq1$,
     the canonical periodic parent Hamiltonians satisfy
     \begin{align}
         H_{R,N}(A)=H_{R,N}(B).\notag
@@ -2397,7 +2372,7 @@ tensors.
 
 \begin{lemma}[Canonical gap for every canonical decomposition]
     \label{thm:canonical-decomposition-gap-simultaneous-injectivity}
-    \lean{MPSTensor.CPSVCanonicalFormData.exists_parentHamiltonianES_uniform_gap_of_wordTupleSpanTop}
+    \lean{MPSTensor.CPSVCanonicalFormData.exists_parentRingInteraction_uniform_gap_of_wordTupleSpanTop}
     \leanok
     Let $A$ be a tensor in canonical form with positive physical dimension.
     Fix any canonical decomposition of
@@ -2405,10 +2380,8 @@ tensors.
     Let $S$ be a positive integer such that the simultaneous length-$S$ word
     tuples of $B_0,\ldots,B_{g-1}$ span the product of the block matrix
     algebras. Then, for every $R\geq S+1$, there exists $\gamma>0$ such that,
-    for every chain length $N$ and every vector $v\perp\ker H_{R,N}(A)$,
-    \begin{align}
-        \gamma\|v\|\leq\|H_{R,N}(A)v\|.\notag
-    \end{align}
+    for every chain length $N\geq1$, every nonzero eigenvalue of
+    $H_{R,N}(A)$ is at least $\gamma$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:canonical-parent-hamiltonian-representatives,thm:block-parent-uniform-gap-simultaneous-injectivity}
@@ -2428,11 +2401,8 @@ tensors.
     tensors $B_0,\ldots,B_{g-1}$ once, before $S$ and $R$, such that for every
     positive integer $S$ whose simultaneous length-$S$ word tuples span the
     product of the block matrix algebras and every $R\geq S+1$, there exists
-    $\gamma>0$ such that, for every chain length $N$ and every vector
-    $v\perp\ker H_{R,N}(A)$,
-    \begin{align}
-        \gamma\|v\|\leq\|H_{R,N}(A)v\|.\notag
-    \end{align}
+    $\gamma>0$ such that, for every chain length $N\geq1$, every nonzero
+    eigenvalue of $H_{R,N}(A)$ is at least $\gamma$.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:canonical-decomposition-gap-simultaneous-injectivity}
@@ -2444,15 +2414,13 @@ tensors.
 \begin{lemma}[A dimension bound for canonical parent gaps]
     \label{thm:canonical_parent_gap_bounded_range}
     \lean{MPSTensor.IsCPSVCanonicalForm.%
-        exists_parentHamiltonianES_uniform_gap_of_three_bondDim_pow_five_le}
+        exists_parentRingInteraction_uniform_gap_of_three_bondDim_pow_five_le}
     \leanok
     Let $A$ be a tensor in canonical form with positive physical dimension
     and positive bond dimension $D$. For every $R\geq3D^5$, there is
-    $\gamma>0$ (depending on $A$ and $R$, but not on $N$) such that
-    \begin{align}
-        \gamma\|v\|\leq\|H_{R,N}(A)v\|\notag
-    \end{align}
-    for every $N\in\mathbb N$ and every $v\perp\ker H_{R,N}(A)$.
+    $\gamma>0$ (depending on $A$ and $R$, but not on $N$) such that, for
+    every $N\geq1$, every nonzero eigenvalue of $H_{R,N}(A)$ is at least
+    $\gamma$.
     Combining the blocking estimate of
     \cite[lines~317--345]{Cirac2016MPDO_arXiv} with the gap assertion of
     \cite[Section~IV.C]{Cirac2021Matrix}, this sufficient range need not be
@@ -2583,16 +2551,16 @@ tensors.
     \label{thm:positive-parent-interaction-uniform-gap}
     \lean{MPSTensor.IsParentInteraction.exists_uniform_gap_of_canonical_gap}
     \leanok
-    Let $A$ be a matrix product tensor and let $R>0$. Suppose that the periodic
-    Hamiltonians formed from the orthogonal projection onto $G_R(A)^\perp$
-    have a positive gap uniformly in the chain length. Let $h$ be a fixed positive
+    Let $A$ be a matrix product tensor and let $R$ be an interaction range.
+    Suppose that there is $\gamma>0$ such that, for every chain length
+    $N\geq1$, every nonzero eigenvalue of the periodic Hamiltonian formed
+    from the orthogonal projection onto $G_R(A)^\perp$ is at least $\gamma$.
+    Let $h$ be a fixed positive
     operator on $R$ sites with kernel $G_R(A)$, and let $H_N(h)$ be the sum
-    of its cyclic translates. Then there is $\delta>0$ such that, for every chain
-    length $N$ and every $v\perp\ker H_N(h)$,
-    \begin{align}
-        \delta\lVert v\rVert\leq\lVert H_N(h)v\rVert.
-    \end{align}
-    For $N<R$ both periodic Hamiltonians are defined to be zero.
+    of its cyclic translates. Then there is $\delta>0$ such that, for every
+    chain length $N\geq1$, every nonzero eigenvalue of $H_N(h)$ is at least
+    $\delta$.
+    For $N<R$ both periodic Hamiltonians are zero.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -2617,10 +2585,9 @@ tensors.
     Suppose that $S>0$ and the tuples of length-$S$ words span the product of
     the block matrix algebras. For every $R\geq S+1$ and
     every fixed positive operator $h$ on $R$ sites with kernel $G_R(A)$,
-    there is $\gamma>0$ such that, for every $N$ and every $v\perp\ker H_N(h)$,
-    \begin{align}
-        \gamma\lVert v\rVert\leq\lVert H_N(h)v\rVert.
-    \end{align}
+    there is $\gamma>0$ such that, for every $N\geq1$, every nonzero
+    eigenvalue of the sum $H_N(h)$ of the cyclic translates of $h$ is at
+    least $\gamma$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -2640,11 +2607,9 @@ tensors.
     the following holds. Suppose that $S>0$ and the tuples of length-$S$ words
     span the product of the block matrix algebras. For
     every $R\geq S+1$ and every fixed positive operator $h$ on $R$ sites with
-    kernel $G_R(A)$, there is $\gamma>0$ such that, for every $N$ and every
-    $v\perp\ker H_N(h)$,
-    \begin{align}
-        \gamma\lVert v\rVert\leq\lVert H_N(h)v\rVert.
-    \end{align}
+    kernel $G_R(A)$, there is $\gamma>0$ such that, for every $N\geq1$,
+    every nonzero eigenvalue of the sum $H_N(h)$ of the cyclic translates of
+    $h$ is at least $\gamma$.
     The representatives are chosen once, independently of $S$, $R$, and $h$.
 \end{lemma}
 \begin{proof}
@@ -2666,11 +2631,9 @@ tensors.
     positive-interaction comparison of \cite[Section~IV.C]{Cirac2021Matrix}
     with the sufficient dimension bound of
     \cite[lines~317--345]{Cirac2016MPDO_arXiv}, there is $\gamma>0$
-    (depending on $A$, $R$, and $h$, but not on $N$) such that
-    \begin{align}
-        \gamma\|v\|\leq\|H_N(h)v\|\notag
-    \end{align}
-    for every $N\in\mathbb N$ and every $v\perp\ker H_N(h)$.
+    (depending on $A$, $R$, and $h$, but not on $N$) such that, for every
+    $N\geq1$, every nonzero eigenvalue of the sum $H_N(h)$ of the cyclic
+    translates of $h$ is at least $\gamma$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -2697,12 +2660,10 @@ shorter interaction range.
     \leanok
     \uses{def:parent_hamiltonian_es,def:open_parent_hamiltonian_es}
     Let $0<\eta<1$, $1\le R\le m$, and
-    $2(R-1)^2\le m\eta$. Suppose the open parent Hamiltonian on
-    $m+R-1$ sites has gap at least $1-\eta/2$. Then, for every
-    $N\ge2m$ and every $v\perp\ker H_{R,N}$,
-    \begin{align}
-        (1-\eta)\|v\| & \le\|H_{R,N}v\|.
-    \end{align}
+    $2(R-1)^2\le m\eta$. Suppose that every nonzero eigenvalue of the open
+    parent Hamiltonian on $m+R-1$ sites is at least $1-\eta/2$. Then, for
+    every $N\ge2m$, every nonzero eigenvalue of the periodic parent
+    Hamiltonian $H_{R,N}$ is at least $1-\eta$.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -2857,11 +2818,8 @@ shorter interaction range.
     Let $A$ be a normalized primitive tensor with positive bond dimension
     and a positive-definite invariant matrix. For every $0<\eta<1$,
     every sufficiently large integer $l$ has the following property.
-    If $m\ge l+1$, $2l^2\le m\eta$, and $N\ge2m$, then
-    \begin{align}
-        (1-\eta)\|v\| & \le\|H_{l+1,N}v\|
-    \end{align}
-    for every $v\perp\ker H_{l+1,N}$. One may take
+    If $m\ge l+1$, $2l^2\le m\eta$, and $N\ge2m$, then every nonzero
+    eigenvalue of $H_{l+1,N}$ is at least $1-\eta$. One may take
     $m=\max\{l+1,\lceil2l^2/\eta\rceil\}$.
     The threshold for $l$ depends on the tensor; no dimension-only
     bound on this threshold is asserted.
@@ -2995,12 +2953,7 @@ shorter interaction range.
     $\varepsilon_N=1-\cos(2\pi/N)>0$ for every $N\geq2$.
     These eigenvalues tend to zero. Consequently there are no
     $\delta>0$ and $N_0$ such that, for every $N\geq N_0$, every eigenvalue
-    of $H_{N,2}$ other than zero is at least $\delta$; equivalently there
-    are none with
-    \[
-        \delta\lVert v\rVert\leq\lVert H_{N,2}v\rVert
-        \qquad(N\geq N_0,\ v\perp\ker H_{N,2}).
-    \]
+    of $H_{N,2}$ other than zero is at least $\delta$.
     Thus the unrestricted assertion in
     \cite[Section~IV.C, lines~2183--2187]{Cirac2021Matrix} is false.
     The sufficient-range theorems remain valid, since this example
