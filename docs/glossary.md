@@ -1511,10 +1511,7 @@ The following notions use different transfer objects and are not interchangeable
   and `MPSTensor.parentHamiltonian_eq_sum_localTerm` relate the linear-map forms
   `MPSTensor.localTerm` and `MPSTensor.parentHamiltonian`.
 - **Caveat:** for `L > N` the terms are `0` by convention and the zero space is
-  the whole space; the Euclidean-space forms `localTermES`,
-  `parentHamiltonianES` and their open and periodic variants in
-  `MPS/ParentHamiltonian/Martingale/` are transports of the same linear maps,
-  not separate definitions of the Hamiltonian.
+  the whole space.
 
 ## Gauge relations between blocks
 
