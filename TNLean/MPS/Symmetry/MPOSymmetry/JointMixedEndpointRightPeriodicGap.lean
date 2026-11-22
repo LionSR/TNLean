@@ -26,41 +26,45 @@ over the intervening path is asserted.
 Source: GLM23, arXiv:2203.12563, Section 5, lines 1695–1777.
 -/
 
-open scoped BigOperators InnerProductSpace Matrix
+open scoped BigOperators InnerProductSpace Matrix ComplexOrder
+open ManyBody.Interaction (translationInvariant)
 
 namespace MPSTensor
 
-/-- A physical alphabet isometry conjugates the full periodic sum whenever
-it conjugates the local interaction. Both oriented terms are retained on a
-two-site ring, and zero or short chain spaces require no extra hypotheses. -/
-theorem periodicInteractionHamiltonianES_physicalReindex_conj
+/-- A physical alphabet isometry conjugates the Hamiltonian of the translates on the ring
+whenever it conjugates the local matrix. Both oriented terms are retained on a two-site ring,
+and short rings require no extra hypotheses. -/
+theorem toEuclideanLin_hamiltonian_translationInvariant_physicalReindex_conj
     {d₁ d₂ R : ℕ} (e : Fin d₁ ≃ Fin d₂)
-    (h : EuclideanSpace ℂ (Cfg d₂ R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d₂ R)) (N : ℕ) :
-    periodicInteractionHamiltonianES
-        ((physicalReindexLinearIsometryEquiv e R).toLinearEquiv.conj h) N =
+    {h' : Matrix (Cfg d₁ R) (Cfg d₁ R) ℂ} {h : Matrix (Cfg d₂ R) (Cfg d₂ R) ℂ}
+    (hh : Matrix.toEuclideanLin h' =
+      (physicalReindexLinearIsometryEquiv e R).toLinearEquiv.conj (Matrix.toEuclideanLin h))
+    (N : ℕ) [NeZero N] :
+    Matrix.toEuclideanLin (translationInvariant N h').hamiltonian =
       (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.conj
-        (periodicInteractionHamiltonianES h N) := by
-  simp only [periodicInteractionHamiltonianES, periodicLocalInteractionES_physicalReindex_conj,
-    map_sum]
+        (Matrix.toEuclideanLin (translationInvariant N h).hamiltonian) := by
+  simp only [ManyBody.Interaction.hamiltonian, map_sum]
+  exact Fintype.sum_congr _ _ fun i ↦
+    toEuclideanLin_translationInvariant_term_physicalReindex_conj e hh i
 
 namespace MPOSymmetry
 
 variable {d₀ d₁ r N : ℕ} {D₀ D₁ : Fin r → ℕ}
 
-/-- The actual periodic Hamiltonians for the original and reversed joint
-families at reflected parameters are conjugate by physical sector exchange.
+/-- The Hamiltonians of the translates of the extended interactions of the original and
+reversed joint families at reflected parameters are conjugate by physical sector exchange.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem jointMixedEndpoint_periodic_eq_conj_reflect_swap
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
-    (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (γ : ℝ) (N : ℕ) :
-    periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ γ)) N =
+    (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (γ : ℝ) (N : ℕ) [NeZero N] :
+    Matrix.toEuclideanLin
+        (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ γ)).hamiltonian =
       (physicalReindexLinearIsometryEquiv
         (jointMixedEndpointPhysicalSwap d₀ d₁ D₀ D₁) N).toLinearEquiv.conj
-          (periodicInteractionHamiltonianES
-            (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₁ A₀ (1 - γ))) N) := by
-  rw [jointMixedEndpointParentInteraction_eq_conj_reflect_swap,
-    periodicInteractionHamiltonianES_physicalReindex_conj]
+          (Matrix.toEuclideanLin (translationInvariant N
+            (jointMixedEndpointParentInteraction A₁ A₀ (1 - γ))).hamiltonian) :=
+  toEuclideanLin_hamiltonian_translationInvariant_physicalReindex_conj _
+    (jointMixedEndpointParentInteraction_eq_conj_reflect_swap A₀ A₁ γ) N
 
 /-- Sector exchange transports every actual periodic component vector.
 As a trace identity under a permutation, this includes length zero.
@@ -110,23 +114,25 @@ theorem blockPeriodicMpvMapES_jointMixed_reflect_swap
   intro x _
   rw [mpv_jointMixedEndpointInterpolation_reflect_swap]
 
-/-- The actual parameter-one ground space is exactly the span of the
-actual parameter-one component MPS vectors, including the two-site ring.
-Only the second endpoint block dimensions must be positive.
+/-- The kernel of the Hamiltonian of the translates of the extended interaction at parameter
+one is exactly the span of the actual parameter-one component MPS vectors, including the
+two-site ring. Only the second endpoint block dimensions must be positive.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem jointMixedEndpoint_periodic_groundSpace_one_eq_actual
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x))
     (h₀ : WordTupleSpanTop A₀ 1) (h₁ : WordTupleSpanTop A₁ 1)
     (hD₁ : ∀ x, 0 < D₁ x) (hN : 2 ≤ N) :
-    LinearMap.ker (periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 1)) N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin
+      (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 1)).hamiltonian) =
         (blockPeriodicMpvMapES (jointMixedEndpointInterpolation A₀ A₁ 1) N).range := by
+  have : NeZero N := ⟨by omega⟩
   let U := physicalReindexLinearIsometryEquiv (jointMixedEndpointPhysicalSwap d₀ d₁ D₀ D₁) N
-  have hConj : U.toLinearEquiv.conj (periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₁ A₀ 0)) N) =
-        periodicInteractionHamiltonianES
-          (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 1)) N := by
+  have hConj : U.toLinearEquiv.conj (Matrix.toEuclideanLin
+      (translationInvariant N (jointMixedEndpointParentInteraction A₁ A₀ 0)).hamiltonian) =
+        Matrix.toEuclideanLin
+          (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 1)).hamiltonian := by
     simpa only [sub_self] using (jointMixedEndpoint_periodic_eq_conj_reflect_swap A₀ A₁ 1 N).symm
   have hMap (c : EuclideanSpace ℂ (Fin r)) :
       U (blockPeriodicMpvMapES (jointMixedEndpointInterpolation A₁ A₀ 0) N c) =
@@ -141,65 +147,71 @@ theorem jointMixedEndpoint_periodic_groundSpace_one_eq_actual
     exact ⟨blockPeriodicMpvMapES (jointMixedEndpointInterpolation A₁ A₀ 0) N c,
       ⟨c, rfl⟩, hMap c⟩
 
-/-- Both actual endpoint kernels are the ranges of their actual component
-MPS maps. Empty labels and zero physical alphabets remain included.
-Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
+/-- Both endpoint kernels of the Hamiltonian of the translates of the extended interaction are
+the ranges of their actual component MPS maps. Empty labels and zero physical alphabets remain
+included. Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem jointMixedEndpoint_periodic_groundSpace_endpoints_eq_actual
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x))
     (h₀ : WordTupleSpanTop A₀ 1) (h₁ : WordTupleSpanTop A₁ 1)
     (hD₀ : ∀ x, 0 < D₀ x) (hD₁ : ∀ x, 0 < D₁ x)
     (γ : ℝ) (hγ : γ = 0 ∨ γ = 1) (hN : 2 ≤ N) :
-    LinearMap.ker (periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ γ)) N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin
+      (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ γ)).hamiltonian) =
         (blockPeriodicMpvMapES (jointMixedEndpointInterpolation A₀ A₁ γ) N).range := by
   rcases hγ with rfl | rfl
   · exact jointMixedEndpoint_periodic_groundSpace_eq_actual A₀ A₁ h₀ h₁ hD₀ hN
   · exact jointMixedEndpoint_periodic_groundSpace_one_eq_actual A₀ A₁ h₀ h₁ hD₁ hN
 
-/-- The actual second periodic endpoint has a strictly positive uniform
-gap, derived from the first endpoint of the reversed family with the same
-gap constant. No positivity of the first block dimensions is required.
+/-- Every nonzero eigenvalue of the Hamiltonian of the translates of the extended interaction
+at the second endpoint is at least one strictly positive constant, uniformly over rings of at
+least two sites. The bound is derived from the first endpoint of the reversed family with the
+same constant. No positivity of the first block dimensions is required.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem exists_uniform_jointMixedEndpoint_periodic_one_gap
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x))
     (h₀ : WordTupleSpanTop A₀ 1) (h₁ : WordTupleSpanTop A₁ 1)
     (hD₁ : ∀ x, 0 < D₁ x) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, 2 ≤ N →
-      ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 1)) N))ᗮ,
-        δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 1)) N v‖ := by
+    ∃ δ : ℝ, 0 < δ ∧ ∀ (N : ℕ) (hN : 2 ≤ N), haveI : NeZero N := ⟨by omega⟩;
+      ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 1)).hamiltonian) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨δ, hδ, hGap⟩ := exists_uniform_jointMixedEndpoint_periodic_gap A₁ A₀ h₁ h₀ hD₁
   refine ⟨δ, hδ, ?_⟩
   intro N hN
+  have : NeZero N := ⟨by omega⟩
   let U := physicalReindexLinearIsometryEquiv (jointMixedEndpointPhysicalSwap d₀ d₁ D₀ D₁) N
-  apply (U.norm_gap_iff_of_conj _ _ ?_ δ).mp (hGap N hN)
+  refine (ManyBody.forall_hasEigenvalue_iff_norm
+    (ManyBody.Interaction.posSemidef_hamiltonian_translationInvariant
+      (posSemidef_jointMixedEndpointParentInteraction A₀ A₁ 1))).mpr ?_
+  apply (U.norm_gap_iff_of_conj _ _ ?_ δ).mp
+    ((ManyBody.forall_hasEigenvalue_iff_norm
+      (ManyBody.Interaction.posSemidef_hamiltonian_translationInvariant
+        (posSemidef_jointMixedEndpointParentInteraction A₁ A₀ 0))).mp (hGap N hN))
   simpa only [sub_self] using (jointMixedEndpoint_periodic_eq_conj_reflect_swap A₀ A₁ 1 N).symm
 
-/-- One strictly positive constant bounds both actual periodic endpoints,
-uniformly over rings of at least two sites. This is a minimum of two
-common-parent endpoint bounds, and asserts no gap between the endpoints.
-Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
+/-- One strictly positive constant bounds the nonzero eigenvalues of the Hamiltonians of the
+translates of the extended interaction at both endpoints, uniformly over rings of at least two
+sites. This is a minimum of two common-parent endpoint bounds, and asserts no gap between the
+endpoints. Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem exists_uniform_jointMixedEndpoint_periodic_endpoints_gap
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x))
     (h₀ : WordTupleSpanTop A₀ 1) (h₁ : WordTupleSpanTop A₁ 1)
     (hD₀ : ∀ x, 0 < D₀ x) (hD₁ : ∀ x, 0 < D₁ x) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ γ : ℝ, γ = 0 ∨ γ = 1 → ∀ N : ℕ, 2 ≤ N →
-      ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ γ)) N))ᗮ,
-        δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ γ)) N v‖ := by
+    ∃ δ : ℝ, 0 < δ ∧ ∀ γ : ℝ, γ = 0 ∨ γ = 1 → ∀ (N : ℕ) (hN : 2 ≤ N),
+      haveI : NeZero N := ⟨by omega⟩;
+      ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ γ)).hamiltonian) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ := by
   obtain ⟨δ₀, hδ₀, hGap₀⟩ := exists_uniform_jointMixedEndpoint_periodic_gap A₀ A₁ h₀ h₁ hD₀
   obtain ⟨δ₁, hδ₁, hGap₁⟩ := exists_uniform_jointMixedEndpoint_periodic_one_gap A₀ A₁ h₀ h₁ hD₁
   refine ⟨min δ₀ δ₁, lt_min hδ₀ hδ₁, ?_⟩
-  rintro γ (rfl | rfl) N hN v hv
-  · exact (mul_le_mul_of_nonneg_right (min_le_left _ _) (norm_nonneg v)).trans
-      (hGap₀ N hN v hv)
-  · exact (mul_le_mul_of_nonneg_right (min_le_right _ _) (norm_nonneg v)).trans
-      (hGap₁ N hN v hv)
+  rintro γ (rfl | rfl) N hN
+  · exact ManyBody.forall_hasEigenvalue_mono (min_le_left _ _) (hGap₀ N hN)
+  · exact ManyBody.forall_hasEigenvalue_mono (min_le_right _ _) (hGap₁ N hN)
 
 end MPOSymmetry
 end MPSTensor

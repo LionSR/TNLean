@@ -21,13 +21,6 @@ one half of its squared norm for the actual extended Hamiltonian. These
 statements do not require injectivity and do not assert a whole-path gap.
 
 Source: arXiv:2203.12563, Section 5, lines 1690–1692.
-
-**Transitional (#10948).** `periodicLocalInteractionES_apply_fiber` and
-`periodicLocalInteractionES_commute_siteDiagonal`, stated for the Euclidean-space translate
-`periodicLocalInteractionES`, are kept for `MixedEndpointRightOpenTransport` and
-`JointMixedEndpointPeriodicSectors`; their restated forms are
-`toEuclideanLin_translationInvariant_term_apply_fiber` and
-`toEuclideanLin_translationInvariant_term_commute_siteDiagonal`.
 -/
 
 open scoped BigOperators ComplexOrder InnerProductSpace Matrix
@@ -39,110 +32,6 @@ theorem _root_.Matrix.toEuclideanLin_diagonal_apply {ι : Type*} [Fintype ι]
     [DecidableEq ι] (f : ι → ℂ) (v : EuclideanSpace ℂ ι) (i : ι) :
     Matrix.toEuclideanLin (Matrix.diagonal f) v i = f i * v i := by
   simp [Matrix.toEuclideanLin, Matrix.toLpLin_apply, Matrix.mulVec_diagonal]
-
-/-- A translated interaction acts on the active-coordinate fiber of a
-configuration. -/
-theorem periodicLocalInteractionES_apply_fiber {d R N : ℕ}
-    (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (hRN : R ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) (σ : Cfg d N) :
-    periodicLocalInteractionES h i v σ =
-      h (WithLp.toLp 2 fun ω => v ((cyclicActiveBlockConfigEquiv d R hRN i).symm
-        (ω, (cyclicActiveBlockConfigEquiv d R hRN i σ).2)))
-        (cyclicActiveBlockConfigEquiv d R hRN i σ).1 := by
-  unfold periodicLocalInteractionES
-  rw [dite_eq_left hRN]
-  change ((cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i).symm
-    (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - R))
-      (LinearMap.toContinuousLinearMap h)
-      (cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i v))) σ = _
-  rw [cyclicActiveBlockConfigLinearIsometryEquiv_symm_apply_apply]
-  have hfiber :
-      ContinuousLinearMap.rightFiber
-          (cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i v)
-          (cyclicActiveBlockConfigEquiv d R hRN i σ).2 =
-        (WithLp.toLp 2 (fun ω =>
-          v ((cyclicActiveBlockConfigEquiv d R hRN i).symm
-            (ω, (cyclicActiveBlockConfigEquiv d R hRN i σ).2))) :
-          EuclideanSpace ℂ (Cfg d R)) := by
-    apply PiLp.ext
-    intro ω
-    exact cyclicActiveBlockConfigLinearIsometryEquiv_apply_apply hRN i v _
-  change h
-      (ContinuousLinearMap.rightFiber
-        (cyclicActiveBlockConfigLinearIsometryEquiv d R hRN i v)
-        (cyclicActiveBlockConfigEquiv d R hRN i σ).2)
-      (cyclicActiveBlockConfigEquiv d R hRN i σ).1 = _
-  rw [hfiber]
-
-private theorem commute_periodicLocalInteractionES_diagonal {d R N : ℕ}
-    (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (hRN : R ≤ N) (i : Fin N) (f : Cfg d N → ℂ)
-    (hf : ∀ s : Cfg d (N - R), Commute
-      (Matrix.toEuclideanLin (Matrix.diagonal fun ω =>
-        f ((cyclicActiveBlockConfigEquiv d R hRN i).symm (ω, s)))) h) :
-    Commute (Matrix.toEuclideanLin (Matrix.diagonal f))
-      (periodicLocalInteractionES h i) := by
-  classical
-  apply (commute_iff_eq _ _).mpr
-  ext v σ
-  let e := cyclicActiveBlockConfigEquiv d R hRN i
-  let w : EuclideanSpace ℂ (Cfg d R) :=
-    WithLp.toLp 2 fun ω => v (e.symm (ω, (e σ).2))
-  have hw : (WithLp.toLp 2 fun ω =>
-      f (e.symm (ω, (e σ).2)) * v (e.symm (ω, (e σ).2))) =
-      Matrix.toEuclideanLin (Matrix.diagonal fun ω => f (e.symm (ω, (e σ).2))) w := by
-    apply PiLp.ext
-    intro ω
-    simp only [Matrix.toEuclideanLin_diagonal_apply]
-    rfl
-  have hc := congrArg (fun T => T w (e σ).1) (hf (e σ).2).eq
-  simp only [Module.End.mul_apply, Matrix.toEuclideanLin_diagonal_apply] at hc
-  simp only [Module.End.mul_apply, Matrix.toEuclideanLin_diagonal_apply,
-    periodicLocalInteractionES_apply_fiber h hRN]
-  change f σ * h w (e σ).1 = h _ (e σ).1
-  rw [hw]
-  simpa only [e, Prod.mk.eta, Equiv.symm_apply_apply] using hc
-
-/-- If a local interaction commutes with a chosen single-site diagonal
-observable at every local site, every translate commutes with that observable
-at every chain site, including spectator sites. -/
-theorem periodicLocalInteractionES_commute_siteDiagonal {d R N : ℕ}
-    (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (hRN : R ≤ N) (f : Fin d → ℂ)
-    (hf : ∀ r : Fin R,
-      Commute (Matrix.toEuclideanLin (Matrix.diagonal fun ω : Cfg d R => f (ω r))) h)
-    (i k : Fin N) :
-    Commute (Matrix.toEuclideanLin (Matrix.diagonal fun σ : Cfg d N => f (σ k)))
-      (periodicLocalInteractionES h i) := by
-  classical
-  apply commute_periodicLocalInteractionES_diagonal h hRN i
-  intro s
-  let x := (cyclicWindowIndexEquiv R N hRN i).symm k
-  have hk : cyclicWindowIndexEquiv R N hRN i x = k := by simp [x]
-  rcases x with r | r
-  · rw [← hk, cyclicWindowIndexEquiv_inl]
-    change Commute
-      (Matrix.toEuclideanLin (Matrix.diagonal fun ω : Cfg d R =>
-        f ((cyclicActiveBlockConfigEquiv d R hRN i).symm (ω, s)
-          (cyclicForwardSite i r.val)))) h
-    simpa only [cyclicActiveBlockConfigEquiv_symm_apply_window] using hf r
-  · rw [← hk, cyclicWindowIndexEquiv_inr]
-    have hsite :
-        (⟨(i.val + R + r.val) % N, Nat.mod_lt _ (Fin.pos i)⟩ : Fin N) =
-          cyclicForwardSite i (R + r.val) := by
-      apply Fin.ext
-      simp only [cyclicForwardSite, Fin.val_mk, Nat.add_assoc]
-    rw [hsite]
-    simp only [cyclicActiveBlockConfigEquiv_symm_apply_spectator]
-    apply (commute_iff_eq _ _).mpr
-    ext v ω
-    simp only [Module.End.mul_apply, Matrix.toEuclideanLin_diagonal_apply]
-    have hconst : Matrix.toEuclideanLin (Matrix.diagonal fun _ : Cfg d R => f (s r)) v =
-        f (s r) • v := by
-      apply PiLp.ext
-      intro τ
-      simp only [Matrix.toEuclideanLin_diagonal_apply, PiLp.smul_apply, smul_eq_mul]
-    simp only [hconst, map_smul, PiLp.smul_apply, smul_eq_mul]
 
 /-- A term of the translates of a local matrix on the ring acts on the active-coordinate fiber
 of a configuration. -/
@@ -175,14 +64,16 @@ theorem toEuclideanLin_translationInvariant_term_apply_fiber {d R N : ℕ}
   rfl
 
 private theorem commute_toEuclideanLin_diagonal_translationInvariant_term {d R N : ℕ}
-    [NeZero N] (h : Matrix (Cfg d R) (Cfg d R) ℂ)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hRN : R ≤ N) (i : Fin N) (f : Cfg d N → ℂ)
     (hf : ∀ s : Cfg d (N - R), Commute
       (Matrix.toEuclideanLin (Matrix.diagonal fun ω =>
         f ((cyclicActiveBlockConfigEquiv d R hRN i).symm (ω, s)))) (Matrix.toEuclideanLin h)) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
     Commute (Matrix.toEuclideanLin (Matrix.diagonal f))
       (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i)) := by
   classical
+  have : NeZero N := NeZero.of_pos i.pos
   apply (commute_iff_eq _ _).mpr
   ext v σ
   let e := cyclicActiveBlockConfigEquiv d R hRN i
@@ -206,16 +97,18 @@ private theorem commute_toEuclideanLin_diagonal_translationInvariant_term {d R N
 /-- If a local matrix commutes with a chosen single-site diagonal observable at every local
 site, every term of its translates on the ring commutes with that observable at every chain
 site, including spectator sites. -/
-theorem toEuclideanLin_translationInvariant_term_commute_siteDiagonal {d R N : ℕ} [NeZero N]
+theorem toEuclideanLin_translationInvariant_term_commute_siteDiagonal {d R N : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hRN : R ≤ N) (f : Fin d → ℂ)
     (hf : ∀ r : Fin R,
       Commute (Matrix.toEuclideanLin (Matrix.diagonal fun ω : Cfg d R => f (ω r)))
         (Matrix.toEuclideanLin h))
     (i k : Fin N) :
+    haveI : NeZero N := NeZero.of_pos i.pos;
     Commute (Matrix.toEuclideanLin (Matrix.diagonal fun σ : Cfg d N => f (σ k)))
       (Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant N h).term i)) := by
   classical
+  have : NeZero N := NeZero.of_pos i.pos
   apply commute_toEuclideanLin_diagonal_translationInvariant_term h hRN i
   intro s
   let x := (cyclicWindowIndexEquiv R N hRN i).symm k

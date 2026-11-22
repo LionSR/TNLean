@@ -45,7 +45,7 @@ theorem mixedEndpointChainRowSector_commute_localInteraction
     Commute (mixedEndpointChainRowSector D₀ D₁ k)
       (Matrix.toEuclideanLin ((translationInvariant N
           (mixedEndpointParentInteraction A₀ A₁ 0)).term i)) :=
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN
     (fun p => bondInterpolationWeight D₀ D₁ 0 (finProdFinEquiv.symm p).1)
     (mixedEndpointRowSector_commute_parentInteraction_zero A₀ A₁) i k
@@ -59,7 +59,7 @@ theorem mixedEndpointChainColumnSector_commute_localInteraction
     Commute (mixedEndpointChainColumnSector D₀ D₁ k)
       (Matrix.toEuclideanLin ((translationInvariant N
           (mixedEndpointParentInteraction A₀ A₁ 0)).term i)) :=
-  haveI : NeZero N := ⟨by omega⟩
+  have : NeZero N := ⟨by omega⟩
   toEuclideanLin_translationInvariant_term_commute_siteDiagonal _ hN
     (fun p => bondInterpolationWeight D₀ D₁ 0 (finProdFinEquiv.symm p).2)
     (mixedEndpointColumnSector_commute_parentInteraction_zero A₀ A₁) i k
@@ -116,11 +116,13 @@ theorem mixedEndpointOpenActiveProjection_commute_localInteraction
     rw [← map_sub, hT]
     exact S.starProjection_inner_eq_zero v (T w) (hS w hw)
 
-private theorem localExtension_isSymmetricProjection {d R L : ℕ} [NeZero L]
+private theorem localExtension_isSymmetricProjection {d R L : ℕ}
     {h : Matrix (Cfg d R) (Cfg d R) ℂ}
     (hh : (Matrix.toEuclideanLin h).IsSymmetricProjection) (hRL : R ≤ L) (i : Fin L) :
+    haveI : NeZero L := NeZero.of_pos i.pos;
     (Matrix.toEuclideanLin
       ((translationInvariant L h).term i)).IsSymmetricProjection := by
+  have : NeZero L := NeZero.of_pos i.pos
   refine ⟨?_, (Matrix.isPositive_toEuclideanLin_iff.mpr (Matrix.nonneg_iff_posSemidef.mp
     (ManyBody.Interaction.translationInvariant_term_nonneg (Matrix.nonneg_iff_posSemidef.mpr
       (Matrix.isPositive_toEuclideanLin_iff.mp hh.isPositive)) i))).isSymmetric⟩

@@ -27,63 +27,88 @@ concern the first endpoint on periodic chains. They assert no open-chain
 comparison, near-endpoint uniform gap, or classification of phases.
 -/
 
-open scoped Matrix BigOperators InnerProductSpace ComplexOrder
+open scoped Matrix BigOperators InnerProductSpace ComplexOrder MatrixOrder
+open ManyBody.Interaction (translationInvariant)
 
 namespace MPSTensor.MPOSymmetry
 
 variable {d₀ d₁ r N : ℕ} {D₀ D₁ : Fin r → ℕ}
 
-/-- The actual periodic endpoint lies below the joint canonical parent,
-whose excess is bounded by the explicit cyclic phase penalty.
+/-- The Hamiltonian of the translates of the extended joint endpoint interaction lies below
+the Hamiltonian of the parent interaction of the joint canonical tensor, whose excess is
+bounded by the explicit cyclic phase penalty.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem jointMixedEndpoint_periodic_comparison
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N) :
-    periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N ≤
-        parentHamiltonianES (toTensorFromBlocks (μ := fun _ => 1)
-          (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N ∧
-      parentHamiltonianES (toTensorFromBlocks (μ := fun _ => 1)
-        (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N ≤
-        periodicInteractionHamiltonianES
-          (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N +
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin
+      (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian ≤
+        Matrix.toEuclideanLin
+        (parentRingInteraction (toTensorFromBlocks (μ := fun _ => 1)
+          (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N).hamiltonian ∧
+      Matrix.toEuclideanLin
+        (parentRingInteraction (toTensorFromBlocks (μ := fun _ => 1)
+          (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N).hamiltonian ≤
+        Matrix.toEuclideanLin
+      (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian +
           jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N := by
-  have hE : Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction
-      (toTensorFromBlocks (μ := fun _ => 1) (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2)) =
-      parentInteractionES (toTensorFromBlocks (μ := fun _ => 1)
-        (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 :=
-    toEuclideanLin_toMatrix'_parentInteraction _ _
+  have : NeZero N := ⟨by omega⟩
+  let Rm : Matrix (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2)
+      (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2) ℂ :=
+    Matrix.diagonal fun ω => jointMixedRowWeight (ω 0)
+  let Cm : Matrix (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2)
+      (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2) ℂ :=
+    Matrix.diagonal fun ω => jointMixedColumnWeight (ω 1)
+  have hone : Matrix.toEuclideanLin (1 : Matrix (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2)
+      (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) 2) ℂ) = 1 :=
+    LinearMap.ext fun v => Matrix.toEuclideanLin_one_apply v
+  have hlocal : LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks (μ := fun _ => 1)
+      (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2) ≤
+      jointMixedEndpointParentInteraction A₀ A₁ 0 + (1 - Rm) + (1 - Cm) := by
+    rw [← Matrix.toEuclideanLin_le_toEuclideanLin_iff]
+    simpa only [map_add, map_sub, hone,
+      show Matrix.toEuclideanLin Rm = jointMixedRowSector d₀ d₁ D₀ D₁ 0 from rfl,
+      show Matrix.toEuclideanLin Cm = jointMixedColumnSector d₀ d₁ D₀ D₁ 1 from rfl] using
+      parentInteraction_jointMixedEndpointLeftTensor_le A₀ A₁
   constructor
-  · simpa only [hE,
-      periodicInteractionHamiltonianES_parentInteractionES _ (by decide : 0 < 2)] using
-      periodicInteractionHamiltonianES_mono
-        (jointMixedEndpointParentInteraction_zero_le_parentInteraction A₀ A₁) N
+  · exact Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr
+      (ManyBody.Interaction.hamiltonian_translationInvariant_mono
+        (Matrix.toEuclideanLin_le_toEuclideanLin_iff.mp
+          (jointMixedEndpointParentInteraction_zero_le_parentInteraction A₀ A₁)))
   · have h := Finset.sum_le_sum fun (i : Fin N) (_ : i ∈ Finset.univ) =>
-      periodicLocalInteractionES_mono
-        (parentInteraction_jointMixedEndpointLeftTensor_le A₀ A₁) i
-    simp only [hE, periodicLocalInteractionES_parentInteractionES _ (by decide : 0 < 2),
-      periodicLocalInteractionES_add, Finset.sum_add_distrib] at h
-    rw [← parentHamiltonianES_eq_sum_localTermES] at h
+      Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr
+        (ManyBody.Interaction.translationInvariant_term_mono (N := N) hlocal i)
+    simp only [ManyBody.Interaction.translationInvariant_term_add, map_add,
+      Finset.sum_add_distrib] at h
     rw [jointMixedPeriodicPhasePenalty_eq_sum_outer hN]
-    simpa only [periodicInteractionHamiltonianES, Finset.sum_add_distrib, add_assoc] using h
+    change Matrix.toEuclideanLin (∑ i, (parentRingInteraction (toTensorFromBlocks
+      (μ := fun _ => 1) (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N).term i) ≤
+      Matrix.toEuclideanLin (∑ i, (translationInvariant N
+        (jointMixedEndpointParentInteraction A₀ A₁ 0)).term i) + _
+    simpa only [map_sum, Finset.sum_add_distrib, add_assoc] using h
 
-/-- On the actual all-zero phase subspace the extended Hamiltonian agrees
-exactly with the common canonical parent. Source: arXiv:2203.12563,
-Section 5, lines 1695–1777. -/
+/-- On the actual all-zero phase subspace the Hamiltonian of the translates of the extended
+interaction agrees exactly with the Hamiltonian of the parent interaction of the joint
+canonical tensor. Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem jointMixedEndpoint_periodic_mul_activeProjection
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N) :
-    periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N *
+    haveI : NeZero N := ⟨by omega⟩;
+    Matrix.toEuclideanLin
+      (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian *
         jointMixedPeriodicActiveProjection d₀ d₁ D₀ D₁ N =
-      parentHamiltonianES (toTensorFromBlocks (μ := fun _ => 1)
-        (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N *
+      Matrix.toEuclideanLin
+        (parentRingInteraction (toTensorFromBlocks (μ := fun _ => 1)
+          (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N).hamiltonian *
           jointMixedPeriodicActiveProjection d₀ d₁ D₀ D₁ N := by
+  have : NeZero N := ⟨by omega⟩
   obtain ⟨hLower, hUpper⟩ := jointMixedEndpoint_periodic_comparison A₀ A₁ hN
-  have hDifference : parentHamiltonianES (toTensorFromBlocks (μ := fun _ => 1)
-      (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N -
-      periodicInteractionHamiltonianES
-        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N ≤
+  have hDifference : Matrix.toEuclideanLin
+        (parentRingInteraction (toTensorFromBlocks (μ := fun _ => 1)
+          (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N).hamiltonian -
+      Matrix.toEuclideanLin
+      (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian ≤
       jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N := by
     exact sub_le_iff_le_add.mpr (by simpa only [add_comm] using hUpper)
   apply LinearMap.ext
@@ -98,55 +123,67 @@ theorem jointMixedEndpoint_periodic_active_of_mem_ker
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N)
     (v : EuclideanSpace ℂ (Cfg (jointMixedPhysicalDim d₀ d₁ D₀ D₁) N))
-    (hv : v ∈ LinearMap.ker (periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N)) :
+    (hv : haveI : NeZero N := ⟨by omega⟩;
+      v ∈ LinearMap.ker (Matrix.toEuclideanLin
+      (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian)) :
     jointMixedPeriodicActiveProjection d₀ d₁ D₀ D₁ N v = v :=
   LinearMap.IsSymmetricProjection.apply_eq_self_of_one_sub_le_twice_of_mem_ker
     jointMixedPeriodicActiveProjection_isSymmetricProjection
     (one_sub_jointMixedPeriodicActiveProjection_le_twice A₀ A₁ hN) hv
 
-/-- The actual periodic extended endpoint and the common canonical parent
-have equal kernels. No injectivity is required for this identity.
+/-- The Hamiltonian of the translates of the extended joint endpoint interaction and the
+Hamiltonian of the parent interaction of the joint canonical tensor have equal kernels. No
+injectivity is required for this identity.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem jointMixedEndpoint_periodic_ker_eq
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N) :
-    LinearMap.ker (periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N) =
-        LinearMap.ker (parentHamiltonianES (toTensorFromBlocks (μ := fun _ => 1)
-          (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N) :=
-  (periodicInteractionHamiltonianES_isPositive
-    (Matrix.isPositive_toEuclideanLin_iff.mpr
-      (posSemidef_jointMixedEndpointParentInteraction A₀ A₁ 0)) N).ker_eq_of_le_of_eq_on_projection
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin
+      (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian) =
+        LinearMap.ker (Matrix.toEuclideanLin
+        (parentRingInteraction (toTensorFromBlocks (μ := fun _ => 1)
+          (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N).hamiltonian) :=
+  have : NeZero N := ⟨by omega⟩
+  (Matrix.isPositive_toEuclideanLin_iff.mpr
+    (ManyBody.Interaction.posSemidef_hamiltonian_translationInvariant
+      (posSemidef_jointMixedEndpointParentInteraction A₀ A₁ 0))).ker_eq_of_le_of_eq_on_projection
       jointMixedPeriodicActiveProjection_isSymmetricProjection
       (jointMixedEndpoint_periodic_comparison A₀ A₁ hN).1
       (jointMixedEndpoint_periodic_mul_activeProjection A₀ A₁ hN)
       (one_sub_jointMixedPeriodicActiveProjection_le_twice A₀ A₁ hN)
 
-/-- A gap for the common joint canonical parent transfers with the minimum
-of that gap and the derived inactive-sector penalty one half.
-Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
-theorem jointMixedEndpoint_periodic_norm_gap
+/-- If every nonzero eigenvalue of the Hamiltonian of the parent interaction of the joint
+canonical tensor is at least `δ`, every nonzero eigenvalue of the Hamiltonian of the translates
+of the extended interaction is at least the minimum of `δ` and the derived inactive-sector
+penalty one half. Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
+theorem jointMixedEndpoint_periodic_gap
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) (hN : 2 ≤ N)
     {δ : ℝ} (hδ : 0 ≤ δ)
-    (hGap : ∀ v ∈ (LinearMap.ker (parentHamiltonianES (toTensorFromBlocks (μ := fun _ => 1)
-      (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N))ᗮ,
-      δ * ‖v‖ ≤ ‖parentHamiltonianES (toTensorFromBlocks (μ := fun _ => 1)
-        (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N v‖) :
-    ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N))ᗮ,
-      min δ (1 / 2) * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N v‖ :=
-  (periodicInteractionHamiltonianES_isPositive
-    (Matrix.isPositive_toEuclideanLin_iff.mpr
-      (posSemidef_jointMixedEndpointParentInteraction A₀ A₁ 0)) N).norm_gap_of_reducing_projection
-      (parentHamiltonianES_isPositive _ 2 N)
+    (hGap : haveI : NeZero N := ⟨by omega⟩;
+      ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (parentRingInteraction (toTensorFromBlocks (μ := fun _ => 1)
+          (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N).hamiltonian) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ) :
+    haveI : NeZero N := ⟨by omega⟩;
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+      (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian) μ →
+      μ = 0 ∨ ((min δ (1 / 2) : ℝ) : ℂ) ≤ μ := by
+  have : NeZero N := ⟨by omega⟩
+  have hH := ManyBody.Interaction.posSemidef_hamiltonian_translationInvariant (N := N)
+    (posSemidef_jointMixedEndpointParentInteraction A₀ A₁ 0)
+  have hK := posSemidef_hamiltonian_parentRingInteraction (toTensorFromBlocks (μ := fun _ => 1)
+    (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 N
+  exact (ManyBody.forall_hasEigenvalue_iff_norm hH).mpr
+    ((Matrix.isPositive_toEuclideanLin_iff.mpr hH).norm_gap_of_reducing_projection
+      (Matrix.isPositive_toEuclideanLin_iff.mpr hK)
       jointMixedPeriodicActiveProjection_isSymmetricProjection
       (jointMixedPeriodicActiveProjection_commute A₀ A₁ hN)
       (jointMixedEndpoint_periodic_comparison A₀ A₁ hN).1
       (jointMixedEndpoint_periodic_mul_activeProjection A₀ A₁ hN)
-      (one_sub_jointMixedPeriodicActiveProjection_le_twice A₀ A₁ hN) hδ hGap
+      (one_sub_jointMixedPeriodicActiveProjection_le_twice A₀ A₁ hN) hδ
+      ((ManyBody.forall_hasEigenvalue_iff_norm hK).mp hGap))
 
 private theorem jointMixed_chain_eq_zero_of_physicalDim_eq_zero
     (hd : jointMixedPhysicalDim d₀ d₁ D₀ D₁ = 0) (hN : 0 < N)
@@ -199,17 +236,20 @@ theorem mpv_jointMixedEndpointInterpolation_zero
       jointMixedEndpointLeftTensor A₀ d₁ D₁ x from funext hcompress] at htrace
   exact htrace.symm
 
-/-- The ground space of the actual degenerate periodic endpoint is exactly
-the span of its embedded component MPS vectors, including the two-site ring.
+
+/-- The kernel of the Hamiltonian of the translates of the extended joint endpoint interaction
+is exactly the span of its embedded component MPS vectors, including the two-site ring.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem jointMixedEndpoint_periodic_groundSpace_eq
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x))
     (h₀ : WordTupleSpanTop A₀ 1) (h₁ : WordTupleSpanTop A₁ 1)
     (hD₀ : ∀ x, 0 < D₀ x) (hN : 2 ≤ N) :
-    LinearMap.ker (periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin
+      (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian) =
         (blockPeriodicMpvMapES (jointMixedEndpointLeftTensor A₀ d₁ D₁) N).range := by
+  have : NeZero N := ⟨by omega⟩
   by_cases hd : jointMixedPhysicalDim d₀ d₁ D₀ D₁ = 0
   · ext v
     rw [jointMixed_chain_eq_zero_of_physicalDim_eq_zero hd (by omega) v]
@@ -217,21 +257,22 @@ theorem jointMixedEndpoint_periodic_groundSpace_eq
   · let : NeZero (jointMixedPhysicalDim d₀ d₁ D₀ D₁) := ⟨hd⟩
     let : ∀ x, NeZero (D₀ x) := fun x => ⟨Nat.ne_of_gt (hD₀ x)⟩
     rw [jointMixedEndpoint_periodic_ker_eq A₀ A₁ hN]
-    exact ker_parentHamiltonianES_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES
+    exact ker_hamiltonian_parentRingInteraction_toTensorFromBlocks_eq_range_blockPeriodicMpvMapES
       (fun _ => 1) (jointMixedEndpointLeftTensor A₀ d₁ D₁) (fun _ => one_ne_zero)
       (by decide : 0 < 1) (wordTupleSpanTop_jointMixedEndpointLeftTensor A₀ A₁ h₀ h₁)
       (by decide : 1 + 1 ≤ 2) hN
 
-/-- The actual endpoint kernel is precisely the span of the component
-periodic vectors of the actual path tensor at parameter zero.
-Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
+/-- The kernel of the Hamiltonian of the translates of the extended joint endpoint interaction
+is precisely the span of the component periodic vectors of the actual path tensor at parameter
+zero. Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem jointMixedEndpoint_periodic_groundSpace_eq_actual
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x))
     (h₀ : WordTupleSpanTop A₀ 1) (h₁ : WordTupleSpanTop A₁ 1)
     (hD₀ : ∀ x, 0 < D₀ x) (hN : 2 ≤ N) :
-    LinearMap.ker (periodicInteractionHamiltonianES
-      (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N) =
+    haveI : NeZero N := ⟨by omega⟩;
+    LinearMap.ker (Matrix.toEuclideanLin
+      (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian) =
         (blockPeriodicMpvMapES (jointMixedEndpointInterpolation A₀ A₁ 0) N).range := by
   have hMap : blockPeriodicMpvMapES (jointMixedEndpointInterpolation A₀ A₁ 0) N =
       blockPeriodicMpvMapES (jointMixedEndpointLeftTensor A₀ d₁ D₁) N := by
@@ -248,26 +289,26 @@ theorem jointMixedEndpoint_periodic_groundSpace_eq_actual
   rw [hMap]
   exact jointMixedEndpoint_periodic_groundSpace_eq A₀ A₁ h₀ h₁ hD₀ hN
 
-/-- Simultaneous one-site spanning supplies an intrinsic gap for the actual
-periodic endpoint, uniform over all rings of at least two sites. This uses
-one common joint canonical gap, not separate gaps for individual blocks.
-No nonzero physical-dimension assumption is added.
+/-- Simultaneous one-site spanning supplies an intrinsic gap for the Hamiltonian of the
+translates of the extended joint endpoint interaction, uniform over all rings of at least two
+sites: every nonzero eigenvalue is at least one positive constant. This uses one common joint
+canonical gap, not separate gaps for individual blocks. No nonzero physical-dimension
+assumption is added, so the kernel may be zero and the statement is in eigenvalue form.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
 theorem exists_uniform_jointMixedEndpoint_periodic_gap
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x))
     (h₀ : WordTupleSpanTop A₀ 1) (h₁ : WordTupleSpanTop A₁ 1)
     (hD₀ : ∀ x, 0 < D₀ x) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ N : ℕ, 2 ≤ N →
-      ∀ v ∈ (LinearMap.ker (periodicInteractionHamiltonianES
-        (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N))ᗮ,
-        δ * ‖v‖ ≤ ‖periodicInteractionHamiltonianES
-          (Matrix.toEuclideanLin (jointMixedEndpointParentInteraction A₀ A₁ 0)) N v‖ := by
+    ∃ δ : ℝ, 0 < δ ∧ ∀ (N : ℕ) (hN : 2 ≤ N), haveI : NeZero N := ⟨by omega⟩;
+      ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+      (translationInvariant N (jointMixedEndpointParentInteraction A₀ A₁ 0)).hamiltonian) μ →
+        μ = 0 ∨ (δ : ℂ) ≤ μ := by
   by_cases hd : jointMixedPhysicalDim d₀ d₁ D₀ D₁ = 0
   · refine ⟨1, by norm_num, ?_⟩
-    intro N hN v _
-    rw [jointMixed_chain_eq_zero_of_physicalDim_eq_zero hd (by omega) v]
-    simp
+    intro N hN μ hμ
+    obtain ⟨v, hv⟩ := hμ.exists_hasEigenvector
+    exact absurd (jointMixed_chain_eq_zero_of_physicalDim_eq_zero hd (by omega) v) hv.2
   · let : NeZero (jointMixedPhysicalDim d₀ d₁ D₀ D₁) := ⟨hd⟩
     let : ∀ x, NeZero (D₀ x) := fun x => ⟨Nat.ne_of_gt (hD₀ x)⟩
     obtain ⟨δ, hδ, hGap⟩ :=
@@ -277,9 +318,6 @@ theorem exists_uniform_jointMixedEndpoint_periodic_gap
         (by decide : 1 + 1 ≤ 2)
     exact ⟨min δ (1 / 2), lt_min hδ (by norm_num), fun N hN =>
       haveI : NeZero N := ⟨by omega⟩
-      jointMixedEndpoint_periodic_norm_gap A₀ A₁ hN hδ.le (by
-        rw [parentHamiltonianES, parentHamiltonian_eq_toLin'_hamiltonian]
-        exact (ManyBody.forall_hasEigenvalue_iff_norm
-          (posSemidef_hamiltonian_parentRingInteraction _ 2 N)).mp (hGap N))⟩
+      jointMixedEndpoint_periodic_gap A₀ A₁ hN hδ.le (hGap N)⟩
 
 end MPSTensor.MPOSymmetry

@@ -77,13 +77,14 @@ preserved.
 
 \begin{lemma}[Conjugation of the periodic Hamiltonian and component vectors]
     \label{thm:mpo_joint_endpoint_swap_periodic}
-    \lean{MPSTensor.periodicInteractionHamiltonianES_physicalReindex_conj,
+    \lean{MPSTensor.toEuclideanLin_hamiltonian_translationInvariant_physicalReindex_conj,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_eq_conj_reflect_swap,
         MPSTensor.MPOSymmetry.mpv_jointMixedEndpointInterpolation_reflect_swap,
         MPSTensor.MPOSymmetry.blockPeriodicMpvMapES_jointMixed_reflect_swap}
     \leanok
     \uses{thm:mpo_joint_endpoint_swap_support}
-    For every $N\ge0$ and every real $\gamma$,
+    For every real $\gamma$, every $N\ge1$ in the first identity and
+    every $N\ge0$ in the second,
     \begin{align}
         H'_N(\gamma) & =U_N\widetilde H'_N(1-\gamma)U_N^{-1}, \\
         U_N\lvert V^{(N)}(\widetilde A_x(1-\gamma))\rangle
@@ -122,16 +123,16 @@ preserved.
         \{\lvert V^{(N)}(A_x(1))\rangle:x=0,\ldots,r-1\}.
         \label{eq:mpo_joint_right_periodic_kernel}
     \end{align}
-    There is a $\delta_1>0$, independent of $N$, such that
-    $\|H'_N(1)v\|\ge\delta_1\|v\|$ whenever $v\perp\ker H'_N(1)$.
+    There is a $\delta_1>0$, independent of $N$, such that every nonzero
+    eigenvalue of $H'_N(1)$ is at least $\delta_1$.
     Positivity of the first endpoint dimensions is unnecessary here.
 
     If also $D_0^x>0$ for every block, the component-span identity
     holds at both endpoints, and one $\delta_*>0$ satisfies
     \begin{align}
-        \|H'_N(\gamma)v\|\ge\delta_*\|v\|
+        \lambda\ge\delta_*
         \quad\text{for }\gamma\in\{0,1\},\ N\ge2,
-        \ v\perp\ker H'_N(\gamma).
+        \text{ and every nonzero eigenvalue }\lambda\text{ of }H'_N(\gamma).
         \label{eq:mpo_joint_both_periodic_gap}
     \end{align}
     Empty block families and zero physical alphabets are permitted.

@@ -19,11 +19,6 @@ The explicit sector exchange therefore identifies the actual second
 endpoint open Hamiltonian with the first endpoint of the reversed tensor
 pair. No support, kernel, reduction, or spectral-gap hypothesis is used.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692.
-
-**Transitional (#10948).** `periodicLocalInteractionES_physicalReindex_apply` and
-`periodicLocalInteractionES_physicalReindex_conj`, stated for the Euclidean-space translate
-`periodicLocalInteractionES`, are kept for `JointMixedEndpointRightPeriodicGap` and are deleted
-when that file is restated.
 -/
 
 open scoped BigOperators
@@ -140,76 +135,6 @@ theorem toEuclideanLin_hamiltonian_chainTranslates_physicalReindex_conj
   · have : IsEmpty (Fin (N + 1 - R)) := ⟨fun i ↦ hRN (by have := i.isLt; omega)⟩
     simp only [ManyBody.Interaction.hamiltonian, Finset.univ_eq_empty, Finset.sum_empty,
       map_zero]
-
-/-! ### Transitional: the Euclidean-space translate under physical reindexing -/
-
-private theorem localInteraction_apply_cyclicRestriction
-    {d : ℕ}
-    (h : EuclideanSpace ℂ (Cfg d R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d R))
-    (hRN : R ≤ N) (i : Fin N) (v : EuclideanSpace ℂ (Cfg d N)) (σ : Cfg d N) :
-    periodicLocalInteractionES h i v σ =
-      h (cyclicRestrictES (Fin.pos i) R i σ v) (extractWindow R i σ) := by
-  rw [periodicLocalInteractionES_apply_fiber h hRN]
-  change h (WithLp.toLp 2 fun ω => v
-    ((cyclicActiveBlockConfigEquiv d R hRN i).symm
-      (ω, (cyclicActiveBlockConfigEquiv d R hRN i σ).2))) (extractWindow R i σ) = _
-  apply congrArg (fun w : EuclideanSpace ℂ (Cfg d R) => h w (extractWindow R i σ))
-  apply PiLp.ext
-  intro ω
-  change v ((cyclicActiveBlockConfigEquiv d R hRN i).symm
-    (ω, (cyclicActiveBlockConfigEquiv d R hRN i σ).2)) =
-      v (cyclicCfg (Fin.pos i) R i ω σ)
-  rw [cyclicCfg_eq_join_cyclicActiveBlock hRN]
-
-/-- Extending a conjugated local interaction intertwines with the original
-extension under the actual full-chain physical reindexing isometry. -/
-theorem periodicLocalInteractionES_physicalReindex_apply
-    (e : Fin d₁ ≃ Fin d₂)
-    (h : EuclideanSpace ℂ (Cfg d₂ R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d₂ R))
-    (i : Fin N) (v : EuclideanSpace ℂ (Cfg d₂ N)) :
-    periodicLocalInteractionES
-        ((physicalReindexLinearIsometryEquiv e R).toLinearEquiv.conj h) i
-        (physicalReindexLinearIsometryEquiv e N v) =
-      physicalReindexLinearIsometryEquiv e N (periodicLocalInteractionES h i v) := by
-  by_cases hRN : R ≤ N
-  · apply PiLp.ext
-    intro σ
-    rw [localInteraction_apply_cyclicRestriction _ hRN, cyclicRestrictES_physicalReindex]
-    change physicalReindexLinearIsometryEquiv e R
-        (h ((physicalReindexLinearIsometryEquiv e R).symm
-          (physicalReindexLinearIsometryEquiv e R
-            (cyclicRestrictES (Fin.pos i) R i (fun k => e (σ k)) v))))
-        (extractWindow R i σ) =
-      periodicLocalInteractionES h i v (fun k => e (σ k))
-    rw [LinearIsometryEquiv.symm_apply_apply,
-      physicalReindexLinearIsometryEquiv_apply_apply,
-      localInteraction_apply_cyclicRestriction _ hRN]
-    rfl
-  · simp [periodicLocalInteractionES, hRN]
-
-/-- Physical alphabet reindexing conjugates the actual translated local
-operator. This also covers interaction lengths exceeding the chain length,
-where both extensions are zero by definition. -/
-theorem periodicLocalInteractionES_physicalReindex_conj
-    (e : Fin d₁ ≃ Fin d₂)
-    (h : EuclideanSpace ℂ (Cfg d₂ R) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d₂ R))
-    (i : Fin N) :
-    periodicLocalInteractionES
-        ((physicalReindexLinearIsometryEquiv e R).toLinearEquiv.conj h) i =
-      (physicalReindexLinearIsometryEquiv e N).toLinearEquiv.conj
-        (periodicLocalInteractionES h i) := by
-  apply LinearMap.ext
-  intro v
-  obtain ⟨w, rfl⟩ := (physicalReindexLinearIsometryEquiv e N).surjective v
-  change periodicLocalInteractionES
-      ((physicalReindexLinearIsometryEquiv e R).toLinearEquiv.conj h) i
-      (physicalReindexLinearIsometryEquiv e N w) =
-    physicalReindexLinearIsometryEquiv e N
-      (periodicLocalInteractionES h i
-        ((physicalReindexLinearIsometryEquiv e N).symm
-          (physicalReindexLinearIsometryEquiv e N w)))
-  rw [LinearIsometryEquiv.symm_apply_apply]
-  exact periodicLocalInteractionES_physicalReindex_apply e h i w
 
 namespace MPOSymmetry
 
