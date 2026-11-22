@@ -102,7 +102,7 @@ def check_declaration_names(source):
     """Check tag spelling against source; this is not Lean elaboration."""
     declarations = set()
     for stem in MODULES:
-        path = ROOT / "TNLean/PEPS/Examples" / f"{stem}.lean"
+        path = ROOT / "TNLean/PEPS/Examples/QuantumDouble" / f"{stem}.lean"
         declarations.update(re.findall(
             r"^(?:noncomputable )?(?:def|theorem|lemma|abbrev) (\w+)",
             path.read_text(), re.M))

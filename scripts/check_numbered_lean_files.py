@@ -85,10 +85,12 @@ def _debt_allowlist_from_source(source: str) -> frozenset[str]:
             not isinstance(value, ast.Call)
             or not isinstance(value.func, ast.Name)
             or value.func.id != "frozenset"
-            or len(value.args) != 1
+            or len(value.args) > 1
             or value.keywords
         ):
             raise ValueError("NUMBERED_DEBT_ALLOWLIST must be a literal frozenset")
+        if not value.args:
+            return frozenset()
         parsed = ast.literal_eval(value.args[0])
         if not isinstance(parsed, set) or not all(isinstance(path, str) for path in parsed):
             raise ValueError("NUMBERED_DEBT_ALLOWLIST must contain only literal paths")
