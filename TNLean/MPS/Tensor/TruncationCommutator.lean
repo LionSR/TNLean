@@ -111,6 +111,7 @@ noncomputable def onSiteTruncation (u : Matrix ι ι ℂ) (S : Finset (Fin N)) :
     Matrix (Fin N → ι) (Fin N → ι) ℂ :=
   Matrix.piKronecker fun k ↦ if k ∈ S then u else 1
 
+omit [Fintype ι] in
 /-- The truncation of an on-site symmetry to all sites is the symmetry `u^{⊗N}`. -/
 theorem onSiteTruncation_univ (u : Matrix ι ι ℂ) :
     onSiteTruncation u (Finset.univ : Finset (Fin N)) = Matrix.piKronecker fun _ : Fin N ↦ u := by

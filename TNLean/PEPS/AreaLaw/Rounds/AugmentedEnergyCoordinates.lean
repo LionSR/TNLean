@@ -115,6 +115,7 @@ def augmentedSumReplicaCopiesEquiv (q d k : ℕ) :
   (augmentedReplicaConfigurationEquiv q d k).symm.trans
     (globalReplicaCopiesEquiv (fun _ : V => Fin q) (Fin d) (Fin d) k)
 
+omit [DecidableEq V] in
 /-- The physical replica mean extended by the identities on C and R,
 expressed in the scanner coordinates. The equality also holds at k = 0,
 where the normalized replica sum is zero.
