@@ -110,13 +110,6 @@ private theorem continuous_ketLeftMul_braRightMul (M : MPOTensor d D) :
   unfold ketLeftMul braRightMul
   fun_prop
 
-/-! ### Sitewise powers -/
-
-private theorem tensorPower_transpose (V : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
-    (Matrix.piKronecker fun _ : Fin N ↦ V)ᵀ = (Matrix.piKronecker fun _ : Fin N ↦ Vᵀ) := by
-  ext s t
-  simp
-
 /-! ### The swap and the swap path -/
 
 private theorem shiftPhysicalSwap_conjTranspose' (d : ℕ) :
@@ -336,7 +329,7 @@ theorem shiftExampleU₂_strictlyEquivalentUnderSymmetry_shiftSwapTranspose (d :
       change (Matrix.piKronecker fun _ : Fin N ↦ (shiftPhysicalSwap d)) * _ * _ = _
       rw [hmpo]
       exact swapTranspose_invariant_of_sandwich _ _
-        (by rw [tensorPower_transpose, transpose_swapPathFin])
+        (by rw [Matrix.transpose_piKronecker, transpose_swapPathFin])
         (sitewise_swap_commute d N x) (shiftExampleU₂_swapTranspose_fixed d N)
   have h1 : W 1 = reindexPhysical (siteSwap d) (shiftExampleU₂ d) := by
     have hs : (swapPathFin d 1)ᴴ = swapPathFin d 1 := by
