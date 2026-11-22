@@ -1000,7 +1000,7 @@ out.
   Hamiltonian are positive semidefinite operators with kernel `𝒢_R`).
 - **Sanctioned bridges:** `TNLean.PEPS.isRegionParentInteraction_canonical`
   (the orthogonal projector onto the complement of the regional space);
-  `TNLean.PEPS.ker_regionParentHamiltonian` (for any such family of terms the
+  `TNLean.PEPS.ker_hamiltonian_ofPlace` (for any such family of terms the
   ground space of their sum is the intersection of the regional conditions);
   `TNLean.PEPS.IsRegionParentInteraction.mul_regionReducedDensity_eq_zero`.
 - **Caveat:** the predicate fixes only the kernel of each term. The resulting

@@ -144,7 +144,7 @@ theorem exists_graphSeamBoundary_of_mem_torusPlaquetteParentKernel [Finite G] (A
     ∃ M : CutConfig (torusGraphSeamCut c r) (graphBondAlphabet A) → ℂ,
       ∀ σ, cutCoeff graphEdgeTail graphEdgeHead (graphBondAlphabet A)
         (graphDependentTensor A) (torusGraphSeamCut c r) M σ = ψ σ := by
-  rw [ker_regionParentHamiltonian A torusPlaquetteRegion H hH] at hψ
+  rw [ker_hamiltonian_ofPlace A torusPlaquetteRegion H hH] at hψ
   exact (mem_cutSpace_iff _ _ _ _ _ _).mp
     (torusPlaquetteParentGroundSpace_le_graphSeamCut A U hU hA c r hψ)
 

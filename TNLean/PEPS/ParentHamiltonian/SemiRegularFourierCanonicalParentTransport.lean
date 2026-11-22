@@ -127,7 +127,7 @@ theorem map_ker_regionParentHamiltonian_semiRegular_fourier_eq [Fintype ι]
       (semiRegularFourierParentMap d Q eX eR eG) =
       (Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin r) R K).hamiltonian).ker := by
-  rw [ker_regionParentHamiltonian _ R H hH, ker_regionParentHamiltonian _ R K hK]
+  rw [ker_hamiltonian_ofPlace _ R H hH, ker_hamiltonian_ofPlace _ R K hK]
   exact map_regionParentGroundSpace_semiRegular_fourier_eq d D hd Q hQ hreg eX eR eG R hcover
 
 end TNLean.PEPS

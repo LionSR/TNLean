@@ -131,7 +131,7 @@ theorem ker_regionParentHamiltonian_eq_span_of_full_region (A : Tensor Γ d)
     (Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R h).hamiltonian).ker =
       Submodule.span ℂ {stateCoeff A} := by
-  rw [ker_regionParentHamiltonian A R h hh,
+  rw [ker_hamiltonian_ofPlace A R h hh,
     regionParentGroundSpace_eq_span_of_full_region A R hfull]
 
 /-- A nonzero PEPS has a one-dimensional common ground space when a full-region

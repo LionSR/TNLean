@@ -151,7 +151,7 @@ theorem ker_regionParentHamiltonian_eq_virtual_image_of_cover
     (Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R H).hamiltonian).ker =
       (vertexVirtualParentGroundSpace A R).map (globalVertexTensorMap A) := by
-  rw [ker_regionParentHamiltonian A R H hH,
+  rw [ker_hamiltonian_ofPlace A R H hH,
     vertexVirtualParentGroundSpace_map_globalVertexTensorMap_of_cover A hA R hcover]
 
 end TNLean.PEPS

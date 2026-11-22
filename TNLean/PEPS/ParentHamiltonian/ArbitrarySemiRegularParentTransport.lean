@@ -108,7 +108,7 @@ theorem nonempty_ker_regionParentHamiltonian_arbitrarySemiRegular_equiv
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin p) R H).hamiltonian).ker ≃ₗ[ℂ]
       (Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin _) R K).hamiltonian).ker) := by
-  rw [ker_regionParentHamiltonian _ R H hH, ker_regionParentHamiltonian _ R K hK]
+  rw [ker_hamiltonian_ofPlace _ R H hH, ker_hamiltonian_ofPlace _ R K hK]
   exact nonempty_canonicalSemiRegularParentEquiv U hU hSemi k hk eU R hcover
 
 end TNLean.PEPS

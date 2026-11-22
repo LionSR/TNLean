@@ -341,7 +341,7 @@ theorem map_ker_regionParentHamiltonian_oriented_copy_eq
         (fullMultiplicityBondMap (fun i => Fin (d i)) (fun i => Fin (m i))))) =
       (Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin q) R K).hamiltonian).ker := by
-  rw [ker_regionParentHamiltonian _ R H hH, ker_regionParentHamiltonian _ R K hK]
+  rw [ker_hamiltonian_ofPlace _ R H hH, ker_hamiltonian_ofPlace _ R K hK]
   exact map_regionParentGroundSpace_oriented_copy_eq o d m D hm eX eY R hcover
 
 end TNLean.PEPS

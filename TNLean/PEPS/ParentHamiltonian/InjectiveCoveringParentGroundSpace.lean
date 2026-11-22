@@ -102,7 +102,7 @@ theorem ker_regionParentHamiltonian_eq_span_of_isVertexInjective_of_cover
     (Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R H).hamiltonian).ker =
       Submodule.span ℂ {stateCoeff A} := by
-  rw [ker_regionParentHamiltonian A R H hH,
+  rw [ker_hamiltonian_ofPlace A R H hH,
     regionParentGroundSpace_eq_span_of_isVertexInjective_of_cover A hA R hvertices hedges]
 
 /-- An injective PEPS has a one-dimensional parent ground space on a

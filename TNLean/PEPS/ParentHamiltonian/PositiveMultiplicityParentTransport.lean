@@ -124,7 +124,7 @@ theorem map_ker_regionParentHamiltonian_positiveMultiplicity_eq
       (positiveMultiplicityParentMap d m hm eX eY) =
       (Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin q) R K).hamiltonian).ker := by
-  rw [ker_regionParentHamiltonian _ R H hH, ker_regionParentHamiltonian _ R K hK]
+  rw [ker_hamiltonian_ofPlace _ R H hH, ker_hamiltonian_ofPlace _ R K hK]
   exact map_regionParentGroundSpace_positiveMultiplicity_eq d m D hm eX eY R hcover
 
 end TNLean.PEPS

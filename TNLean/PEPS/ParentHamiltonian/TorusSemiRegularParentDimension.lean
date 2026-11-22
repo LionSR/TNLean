@@ -67,7 +67,7 @@ theorem IsGInjective.finrank_torusParentGroundSpace_of_isSemiRegular
   have hreg := hb.finrank_torusParentKernel
     (fun v : V => canonicalRegionParentInteraction B (torusPlaquetteRegion v))
     (fun v => isRegionParentInteraction_canonical B (torusPlaquetteRegion v))
-  rw [ker_regionParentHamiltonian B torusPlaquetteRegion _
+  rw [ker_hamiltonian_ofPlace B torusPlaquetteRegion _
     (fun v => isRegionParentInteraction_canonical B (torusPlaquetteRegion v))] at hreg
   exact hdim.trans (E.finrank_eq.symm.trans hreg)
 
@@ -86,7 +86,7 @@ theorem IsGInjective.finrank_torusParentKernel_of_isSemiRegular
     Module.finrank ℂ (Matrix.mulVecLin (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d)
         torusPlaquetteRegion P).hamiltonian).ker =
       Nat.card (CommutingPairConjugacyClass G) := by
-  rw [ker_regionParentHamiltonian _ torusPlaquetteRegion P hP]
+  rw [ker_hamiltonian_ofPlace _ torusPlaquetteRegion P hP]
   exact ha.finrank_torusParentGroundSpace_of_isSemiRegular hU hSemi
 
 end TNLean.PEPS

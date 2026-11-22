@@ -186,7 +186,7 @@ noncomputable def regionParentGroundSpace (A : Tensor Γ d) (R : ι → Finset V
 /-- The full ground space is the intersection of the regional PEPS conditions.
 This characterization is independent of the choice of positive interactions
 with those kernels. Source: arXiv:2011.12127, lines 2003–2011. -/
-theorem ker_regionParentHamiltonian (A : Tensor Γ d) (R : ι → Finset V)
+theorem ker_hamiltonian_ofPlace (A : Tensor Γ d) (R : ι → Finset V)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hh : ∀ i, IsRegionParentInteraction A (R i) (h i)) :

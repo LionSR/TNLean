@@ -248,7 +248,7 @@ theorem map_ker_regionParentHamiltonian_oriented_coordinates_eq
         (graphNumberedBondFamilyMatrix eX eY (graphOrientedBondCoordinateMatrix Q o))) =
       (Matrix.mulVecLin
         (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin q) R K).hamiltonian).ker := by
-  rw [ker_regionParentHamiltonian _ R H hH, ker_regionParentHamiltonian _ R K hK]
+  rw [ker_hamiltonian_ofPlace _ R H hH, ker_hamiltonian_ofPlace _ R K hK]
   exact map_regionParentGroundSpace_oriented_coordinates_eq Q hQ U L hL o eX eY R
 
 end TNLean.PEPS

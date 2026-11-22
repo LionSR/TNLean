@@ -160,8 +160,8 @@ theorem exists_ker_regionParentHamiltonian_transport_of_isGInjective
           (ManyBody.Interaction.ofPlace (X := fun _ ↦ Fin d) R H).hamiltonian).ker := by
   obtain ⟨F, _, hmap, hinj, hdim⟩ :=
     exists_regionParentGroundSpace_transport_of_isGInjective A b ρ hA hB R hcover
-  rw [ker_regionParentHamiltonian A R H hH,
-    ker_regionParentHamiltonian _ R K hK]
+  rw [ker_hamiltonian_ofPlace A R H hH,
+    ker_hamiltonian_ofPlace _ R K hK]
   exact ⟨F, hmap, hinj, hdim⟩
 
 end TNLean.PEPS
